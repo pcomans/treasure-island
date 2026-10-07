@@ -16418,3 +16418,423 @@ Final commit setup: first git commit failed before creating a commit because thi
 - Worked: explicit writer/Git handoff and the frozen nine-path scope allowed reuse of independent CODE/visual verdicts and completed stock fit/spray/full-suite evidence. Remote main matched local b9e88fa; only Building 2 changes catalog credit, preserving all prior 48 accepted units.
 - Did not: the interrupted coordinator required a fresh remote/base and intended-diff check; no engine rerun was needed. The initial whitespace wrapper mistook no-index exit1 with no diagnostics for failure; it was corrected to distinguish ordinary new-file differences. Commit initially lacked identity in this checkout; the existing devcontainer bot identity is supplied per command without changing global configuration. Runtime warning causes and unobserved ENE/NNW fidelity remain unresolved.
 - Next: retain one named integration owner and explicit release after terminal push/remote verification; reuse unchanged accepted evidence and keep unrelated checkout edits outside the commit.
+
+### building3_claude — Building 3 ENE first coherent study, 2026-10-07
+
+- Worked: fresh baseline before edit, exact source run/bottom sampling plus land/area triangle interpolation along the ENE face, then one coherent recomposition rendered cleanly on the first study capture (2 of 6 engine invocations; no parse/recovery run needed, removed-symbol grep before render was clean). Reusing the shared shots driver with a small out-of-Git `--views` file gave matched ENE front/oblique/portal views for before/after.
+- Did not: the first baseline launch wrapped the engine in `( … ) &` inside a background task, so the tool reported completion immediately; I had to recover the real Godot PID and poll it to terminal. NNW/SSE sides still use the generic wall material, so the pylon reads as ENE-only from the corner closeups.
+- Next: launch engines directly as the background command (no inner `&`) so the handle is the engine; after independent review, the remaining budget covers at most two corrective captures and the shared fit `--spray` run, which must exercise the new receiver-body box shapes.
+
+### building2_integrate — Building 3 Claude bootstrap and early-render handoff, 2026-10-07
+
+- Worked: the actual persisted ti-implementation role selected Opus 5.5 with max effort; one retained CLI handle reached terminal exit0 after fresh baseline and first-study captures. Both passed and the author froze after inspecting pixels, leaving four of six engine calls for review-driven work. The coordinator authored no model source.
+- Did not: the first baseline launch double-backgrounded its shell, requiring the modeler to recover and observe the real Godot PID rather than trust the early tool completion. Extended preflight/material selection delayed the first edit; no full workflow timing was instrumented.
+- Next: use one retained background handle for the whole engine command and keep reuse/preflight focused on changed risk seams. The approved guard experiment needed no guard-only repair or parse rerun in this first study; retain independent visual and technical checks before any acceptance.
+
+### building3_code — Building 3 first-study independent CODE review, 2026-10-07
+
+- Worked: bounded read-only review of the four assigned changed paths checked canonical source wall/roof/bottom preservation and matching visible/solid-box transforms on the existing wall/spray receiver without engine reruns or shared-code edits.
+- Did not: CODE HOLD found global UP/DOWN normals on sloped crown top/bottom strips, making their edge tangents nonorthogonal under enabled normal mapping. I also inferred possible source line drift from a truncated excerpt; complete snippets, unchanged line count and pre-review file metadata supplied no mutation evidence, so that concern was retracted.
+- Next: derive true outward strip normals and matching orthogonal tangents/handedness while preserving clockwise winding and profile positions. Verify complete actual excerpts and diff before reporting source drift. Fit/spray and independent visual acceptance remain separate pending checks; own RETRO follows ROOT's explicit writer GO and immediate release, with no source, engine, catalog or commit work.
+
+### mersea_visual027 — Building 3 first coherent ENE visual critique, 2026-10-07
+
+- What worked well: inspected actual first-study detail-ene-front/oblique/portal in /workspaces/landmark-progress-20261007/building3/, matched baseline detail-ene-front and both retained November2025 ENE originals in /workspaces/landmark-progress-20261006/building3-references/. Meaningful gain YES: broad pale closed infill, much smaller recessed blue portal/dark shutter and articulated pylons replace the old huge dark rectangle with a composition substantially closer to the observed exterior. Portal depth and cream/blue/dark material hierarchy are useful; retain silhouette and opening proportions.
+- What did not work well: first-pass whole visual HOLD for conspicuous assembly discontinuity: dark dashed crown-to-face joint and broken/dotted horizontal marks across fascia/pylons/lower headers, strongest in actual oblique/portal gameplay. The reference reads broad continuous cream fields and a restrained structural band. Stills do not establish cause or whether the separate CODE normal-basis defect explains those marks. Slight cool-white versus the warmer glared photo is not independently a failure under different daylight; physical PBR accuracy, unobserved sides, final context/island and stock mechanics are not established by this early comparison. November2025 zoom crops the right edge; ambiguous visitor SSE imagery remains excluded and prior accepted credit is protected.
+- What the team should change next time: coalesce one construction-continuity correction with the known technical basis repair: preserve observed massing/portal, make exposed crown/band/trim junctions continuous, and subordinate joint marks so they read as intentional assembly rather than cracks. No optical coefficient ladder, invented interior/fence/tree or exact-reflection criterion. Findings were delivered before polish; ready writer was released during pixel inspection, then reacquired only for this brief ROOT-authorized append, whitespace and immediate release. No reviewer engine/source/assets/catalog/acceptance mutation or new report framework.
+
+### building3_claude — Building 3 correction-001, 2026-10-07
+
+- Worked: one coalesced edit covered the basis HOLD and junction lines; a 1 mm collinearity check ruled out plane drift before changing geometry, and the existing sub-pixel-face lesson pointed at thin steps. The engine launched directly as the background command, and its PID was observed to terminal. Budget: 3/6 used, with no parse or recovery run.
+- Did not: no local image-crop tool (PIL/ImageMagick absent), so the line diagnosis rests on geometry plus full-frame pixels, not zoomed crops. The cause stays an inference.
+- Next: when a frame needs shallow relief, prefer flush colour joints or steps of ≥0.3 m over 4–20 cm lips. The remaining budget is review-driven work plus the fit `--spray` run.
+
+### building2_integrate — Building 3 correction transport, 2026-10-07
+
+- Worked: resumed the actual persistent Claude author once, combined independent code and pixel findings, and consumed terminal exit0 after one fresh fourteen-view capture. Actual Claude/Godot PIDs were absent and no Godot/Weston remained; the author froze at the planned independent-review boundary.
+- Did not: the modeler attempted diagnostic image crops but existing image tools were unavailable; it preserved that limit and used the original captures without installing tools. Junction-cause explanation remains an inference.
+- Next: keep one direct retained engine handle and coalesced changed-seam corrections. This correction used no guard-only repair or parse rerun; three of six calls remain for independently justified work and final fit/spray.
+
+### building3_code — Building 3 correction-001 independent CODE review, 2026-10-07
+
+- Worked: reused the prior bounded core findings and read complete changed functions. CODE PASS: crown quads now carry true outward plane normals, orthogonal tangents, derived handedness and clockwise winding; revised solid trim retains matching visual/collision transforms and canonical wall/spray ownership. Flush joints and the 0.30 m soffit chamfer leave native source positions, wall bottoms and receiver logic intact.
+- Did not: source correctness does not resolve the inferred cause of dotted junction pixels or establish final visual quality, stock fit or visible spray. No engine or mechanical check was replayed by this reviewer.
+- Next: keep the normal-channel fix separate from pixel acceptance and run the pending shared fit/spray against the final frozen source. Own RETRO uses the explicit writer window, followed by whitespace check and immediate release; no source, catalog, acceptance or commit edits.
+
+### building3_code — fit-bounds diagnosis and shared verification repair review, 2026-10-07
+
+- Worked: bounded read-only diagnosis matched the inherited headless MultiMesh identity-readback/origin contamination to the false PASS bounds. The retained rendered focused proof instead shows current B3 geometry, four local source-wall contacts, actual source-bound spray and all five active REST to SAFE_FINAL sequences. Source review passes the rendered island check, fail-closed headless harness, missing-wall INF, four-required-approach accounting and automation-only startup mouse configuration; ordinary play keeps its default controls.
+- Did not: the original headless PASS sampled remote approaches and sparse geometry, so it did not establish whole-building fit. Initial shared repair still reset unsafe state between buildings; CODE HOLD caught that continuation seam. The seven texture-RID warnings remain unexplained, and focused proof does not establish the pending full-suite result.
+- Next: retain the corrected sticky unsafe CODE PASS: preserve original failures, stop after unsafe source/setup/recovery/rest/final failures and mark remaining units untested; continue safe ordinary failures only after active supported rest and safe teardown. Reuse completed unchanged B3 evidence and keep source review, runtime proof and visual acceptance distinct. This combined pending entry uses explicit writer GO, whitespace check and immediate release; no reviewer engine, source, tests, catalog or commit work.
+
+### building2_integrate — Building 3 mechanics, shared verification and safety correction, 2026-10-07
+
+- Worked: refused the headless driver's misleading PASS after reading its inflated bounds and remote destinations. One rendered confirmation recovered four local approaches and native wall spray with all active REST→SAFE_FINAL evidence. The focused shared repair run retained the same geometry/contact outcomes and removed mouse-init ERRORs without changing normal-play defaults or the strict suite matcher. Independent CODE then passed the lifetime unsafe latch and caller stop.
+- Did not: the inherited dummy-renderer transform assumption and missing-hit-as-zero distance allowed sparse geometry and remote approaches to look successful. My first shared repair still reset unsafe state per building; independent review caught the cross-unit continuation hole. Pose preparation initially looked for the spray script in the wrong directory; file discovery located the actual shared controller before execution. Texture-RID warning causes remain unresolved.
+- Next: keep rendered visible-geometry checks, honest required-approach coverage, and sticky unsafe state across the complete driver. Reuse completed unaffected stock proof; run the pending complete suite after independent review. Mechanics and harness records are in the ordinary B3 note, with original insufficient output retained outside Git.
+
+### building2_integrate — final Building 3 independent-review fallback transport, 2026-10-07
+
+- Worked: after ROOT revoked the stalled reviewer, a read-only process/RETRO check found no active writer or engine. The supported persistent Codex parent spawned one actual independent Sol High child, whose own image calls covered both references and all baseline/final originals. Parent exit0 and the explicit whole-visual/context/island PASS were consumed; the reviewer wrote no repository files.
+- Did not: CLI JSON events omitted the actual spawn details, so the narrowly selected parent and child rollouts were needed to verify route and child identity. Prior silence was not treated as approval or a completed review. No full-workflow timing was measured.
+- Next: retain persistent delegation and verify the actual child and pixel scope before claiming a review started or finished. Preserve minor remaining joint roughness and source limits; independent visual PASS does not replace the pending full suite or ROOT acceptance.
+
+### 2026-10-07 — next_landmark_prep — Chapel next-target preparation and reference recovery
+
+- What worked well: compared the retained October5 live Chapel image with the unpromoted September29 revision003 original and current source adapter. Navy Chapel Building187, w291189336, has a reusable pitched-nave/low-wing/peaked-glazing composition that materially improves the older schematic front and blank side. Recovered two fresh screenshots of exact panorama -9-3R6HngS2KcuZw9K3C_w under /workspaces/landmark-progress-20261007/chapel-references/; actual UI displays51 California Ave and Image capture: Sep2025. Browser23900 exited0 and wrapper448047/Weston448051 were absent before slot release.
+- What did not work well: original September29 reference files were unavailable locally; the web tool could not access either retained Maps locator and exact searches returned no results. Browser recovery resolved the pixel gap, but the new screenshots are not byte-identical recovered originals. Fence/vehicle occlusion limits ground and lower-facade evidence; rear, opposite side, hidden roof junctions and dimensions remain unproved. No as-built or new acceptance claim; existing49/213 credit preserved.
+- What the team should change next time: give the next named author the actual dated SSE/context and detail pixels before modeling, selectively reuse the existing chapel adapter and archived composition, and keep work bounded to the observed SSE/partial-side relationships with reversible inference. Do not import obsolete per-building drivers or evidence frameworks, or treat the old draft PASS as current acceptance. No modeling, catalog change or engine work occurred in this research round.
+
+### final_b3_visual — final Building3 correction001 visual review, 2026-10-07
+
+- Worked: matched November 2025 ENE references and all baseline/final originals supported a whole-composition judgment of the curved crown, pale closed frontage, small blue portal and channeled pylons, plus context and all five island pairs.
+- Did not: minor segmentation remained along some lower panel/header joints; visual PASS does not mean flawless closure, and stills did not establish the technical cause or motion quality.
+- Next: retain ordinary oblique views alongside dated references to distinguish rough joints from substantial broken assembly, and keep visual acceptance separate from mechanical checks.
+
+### fit_route_review — bounded route-start independent CODE review, 2026-10-07
+
+- Worked: reading the complete start selector, settle helper and stock capsule separated central ground clearance from actual settled support. The bounded same-cardinal 5 m/2 m selection preserves all four required approaches, native target arrival, active REST, safe disable and lifetime unsafe HOLD. The correction inspects actual settling contacts before forward input and retains the original failure through released active rest and safe teardown.
+- Did not: initial CODE HOLD found that the clearance sweep stopped 5 cm above central ground while settling accepted any floor, leaving low neighboring support unqualified. Correction review still HOLD: its contact loop ignores up-dot below 0.7, although the stock 48-degree floor angle can accept support down to about 0.669; mixed ground and building/unknown support in that interval can escape rejection. No engine work or runtime result is claimed by this source review.
+- Next: derive the support-contact cutoff from the stock floor angle, then apply the existing native walkable-ground qualification to every actual floor contact. The shared RETRO writer was explicitly serialized while verdict delivery proceeded; this wait does not establish implementation idle time. Reserve a brief reviewer writer window after the verdict, keep the review bounded, and reuse unchanged mechanical evidence.
+
+Final narrowly scoped CODE PASS: support eligibility now derives from the stock player's actual normalized up direction and floor angle; wrong or absent native walkable support retains unsafe HOLD before forward input, with the unchanged four approaches and active REST/safe-disable review reused.
+
+### fit_route_review — independent Building 3 team-efficiency checkpoint, 2026-10-07
+
+- Worked: sampled recent actor RETRO entries and available bounded handoffs without engine work or another code review. Coalesced art correction, direct retained engine ownership and reuse of unchanged review/mechanical evidence reduced unnecessary replay. The two native support HOLDs addressed material safety seams and were necessary review, not churn.
+- Did not: the first double-backgrounded engine and truncated-snippet code claim caused documented recovery and rereading; both were already corrected. Final visual closure needed repeated status/writer transport before its actual own note and terminal 50852 exit0/release; elapsed cost and critical-path delay are unknown. The actual thread-limit failure prevented a new efficiency reviewer spawn, so ROOT reused this live independent reviewer.
+- Next: ROOT accepted one reversible experiment: the next external visual reviewer prepares its own brief RETRO draft during pixel review, delivers the substantive verdict promptly, requests an imminent append/check writer window, and combines own note/check, writer release and actual terminal/process evidence in the existing handoff when feasible. At the next checkpoint compare status-only follow-ups between verdict and writer release in ordinary RETRO; no timer or framework. Preserve independent CODE/visual, all four walk-ups, active supported rest, safe final state, full suite and reviewer-owned RETRO before commit.
+
+### building2_integrate — full-suite neighbor setup and native support repair, 2026-10-07
+
+- Worked: the complete suite's strict four-side requirement and sticky stop exposed Building600's east start on a neighboring roof and left45 units explicitly untested. Read-only source sampling distinguished that setup error from target collision failure. The minimal same-cardinal start selection preserves one stock approach per side and all actual arrival/rest gates; the final visual reviewer independently completed its own RETRO before release.
+- Did not: my first clearance proposal stopped5 cm above support, leaving a low neighboring ledge unqualified; its correction then reused0.7 rather than the stock48-degree floor threshold. Independent review caught both. The persistent reviewer's short RETRO follow-up took a long uninstrumented wait; no duplicate review or parent-authored substitute was used. The failed full suite remains retained, not relabeled successful.
+- Next: derive floor-contact eligibility from the actual controller and qualify every settled upward support before forward input. The final threshold-only independent CODE review passed. The one assigned rendered Building600 fit (79570) exited0: all four starts had actual native ground support, all four arrivals contacted the target, and every active REST and SAFE_FINAL passed. East rejected the neighboring roof at5 m and used2 m; no recovery was needed. Godot/Weston and wrapper454635 were absent after terminal. North/east AABB notes alone do not establish openings. The full-suite retry remains a separate ROOT assignment. Keep prior B3 visual/mechanical acceptance separate from island-suite completion.
+
+### 2026-10-07 — next_landmark_prep — Chapel ownership handoff
+
+- What worked well: reviewed the existing Chapel producer, paired live adapter and archived composition against the recovered September2025 references. ROOT accepted those actual pixels for bounded SSE runs9–10 and partial-side runs11–13. Recommend reusing current source-frame/mesh helpers and selected archived roof, gable, glazing and entry composition; next modeling is Astra LOW with independent Sol6.1 HIGH reviews.
+- What did not work well: the archived candidate adds wing windows on runs17–18 despite current protected scope0–8/14–33; omit those modules. The current live adapter partitions a combined collision stream through fixed triangle ranges, which cannot safely carry a changed composition without adaptation.
+- What the team should change next time: keep protected runs quiet and module-free, adapt the Chapel-only producer/adapter pair to explicit semantic wall/roof ownership, and independently verify native contact/render/spray coverage. Reuse architecture selectively without importing obsolete drivers or archive acceptance. This handoff performed no edits beyond its retrospective, new reference research, modeling or engine work; artist GO remains pending the current full-suite/commit checkpoint.
+
+### 2026-10-07 — next_landmark_prep — Chapel vertical-geometry decision reconciliation
+
+- What worked well: bounded comparison of current catalog protection, AGENTS whole-building authority and skill guidance distinguished source identity/footprint ownership from the older prototype's exact wall-top geometry. ROOT accepted reference-supported nave/wing vertical recomposition while preserving frozen XZ, source bottoms, native ownership and quiet module-free protected sides.
+- What did not work well: the live Chapel still consumes prototype JSON describing unattached geometry and no spray ownership, alongside exact-source-shell/roof retention. Those stale implementation descriptions could be mistaken for an enduring owner freeze on Y; the sampled decision notes contained no separate Chapel-specific owner decision imposing that freeze.
+- What the team should change next time: reconcile the Chapel producer, semantic wall/roof adapter and descriptive JSON together during the authorized study. Preserve the enduring protected motif boundary on runs0–8/14–33, omit archived17–18 windows, and independently verify fit and receiver ownership. This reconciliation made no source, asset, catalog or engine changes and grants no new facade scope or as-built claim.
+
+### building2_integrate — complete-suite route retry, 2026-10-07
+
+- Worked: the reviewed Building600 repair passed all four focused stock approaches with native ground support, target contact and active REST before safe disable. The complete suite retained strict checks and stopped on unsafe setup rather than crediting untested buildings.
+- Did not: retry1 exited1 on short arrivals for w96215652 and w96215653, then unsafe west start candidates on neighbor w96215688 for w96215658;33 buildings remained untested. The two bounded offsets do not establish safe starts for every dense island arrangement. No broader cause is established by the filtered suite log.
+- Next: diagnose these exact native route/setup failures before authorizing another source change or engine run. Preserve the failed log, four-side requirement, sticky unsafe stop and separate B3 art acceptance; do not promote the incomplete suite. Actual suite/Godot/Weston processes were absent before release.
+
+### building2_integrate — bounded island-route diagnosis, 2026-10-07
+
+- Worked: source/config comparison explains why the short-arrival endpoints cluster at the all-visible AABB center: attached ground extends1220/1227 bounds beyond architecture, and the shared walk stops within0.5 m of that center without necessarily reaching a wall.1239's west candidates extend toward1240's native support/ground. Existing family contacts retain source metadata; no missing target ownership was demonstrated.
+- Did not: tools/test.sh retains FAIL/NOTE summaries but filters actual start, contact, REST and SAFE_FINAL rows. Those exact runtime rows cannot be reconstructed from the failed log; safe continuation is code-derived evidence only. Neither a controller fault nor a building collision defect is established.
+- Next: select cardinal approach targets from actual architectural wall geometry while retaining all visible geometry in fit checks; ground/apron bounds must not define a wall destination. Keep native source contact, safe-start qualification, four sides and sticky HOLD. Authorize a bounded existing-driver diagnostic before claiming a definitive runtime remedy; no source edit or engine invocation occurred in this diagnosis.
+
+### approach_geometry_review — independent native approach-geometry CODE review, 2026-10-07
+
+- Worked: read complete changed helpers and native producers while reusing earlier active REST, settled-support, four-side and lifetime unsafe reviews. Full-span native crossings and removal of inside-AABB autoarrival preserve real target arrival; family attachment separates wall from ground/support and disables legacy receivers.
+- Did not: CODE HOLD found the Concave-only collector rejects Building3's active canonical BoxShape3D facade solids. It also collects separately tagged ground/support shapes on mixed wall bodies (1308 retains GroundFlushSupportSlabs and canopy/post shapes), so ground can still expand approach bounds and RID-only crossing/contact identity does not distinguish architectural walls. These are source-derived findings; no engine or runtime remedy is claimed.
+- Next: cover the actual transformed native box geometry while retaining fail-closed unknown shapes, and distinguish architectural shape roles from ground/support on mixed bodies in both bounds and crossing/arrival qualification. Keep all visible geometry in fit coverage and all four safe stock approaches; reuse unchanged evidence, then run the bounded diagnostic under a separate assignment. Reviewer wrote only this own retrospective entry and releases the serialized writer after its whitespace check.
+
+### building2_integrate — architectural approach shape correction, 2026-10-07
+
+- Worked: independent review isolated two concrete producer seams before an engine run. Native shape receiver_kind distinguishes mixed-body architecture from support; homogeneous SharedHousing family_role=wall provides the documented fallback. Bounds, crossing rays and slide arrivals now share qualified native shape indices, and transformed BoxShape geometry is covered alongside Concave shapes. All visible fit samples remain unchanged.
+- Did not: my initial body-only collector assumed Concave shapes and homogeneous receivers. It would reject the new B3 boxes and include1308 support shapes despite their explicit nonreceiver metadata. No engine result is claimed for either patch.
+- Next: review complete native producer coverage before restricting shape types or inheriting body identity. Keep the bounded correction frozen for independent re-review; use the existing focused drivers only after approval. The maintained Mesh producer collector does not consume native collision primitives, so no helper or per-building framework was added.
+
+### approach_geometry_review — native approach-geometry correction CODE review, 2026-10-07
+
+- Worked: CODE PASS closes both prior findings. Transformed BoxShape3D corners join Concave faces; explicit per-shape wall roles exclude mixed ground/support, with only the actual homogeneous SharedHousing wall-role fallback. Native shape-owner indices carry through source RID maps, crossing/proximity rays and every slide subcontact; stock floor-angle/up-direction filtering rejects floor and roof normals as wall arrival.
+- Did not: this source-only correction review establishes no new runtime result or definitive remedy for the earlier island failures. A first unqualified shape on a mixed target body fails the wall ray rather than excluding the whole body to look through it.
+- Next: reuse unchanged four-approach, full-visible fit, native support, active REST, safe final and sticky unsafe findings; obtain the separately assigned bounded runtime diagnostic before the full-suite retry. Only this own retrospective entry was written; its whitespace check precedes explicit writer release.
+
+### building2_integrate — native contact API compile correction, 2026-10-07
+
+- Worked: the first focused call exposed the exact Object-versus-int API mismatch before movement; the loop stopped and53/58 remained untested. Owned Godot459295 was stopped after the compile failure, session96095 exited143, and wrapper/Godot/Weston absence was verified.
+- Did not: I used get_collider_shape instead of get_collider_shape_index; independent source review also missed the typed API seam. No fit, arrival or support proof came from this failed invocation.
+- Next: verify return types at native identity boundaries. The one-line correction preserves shape qualification and all gates; freeze it for narrow independent re-review before another engine call. Failed log remains retained.
+
+### approach_geometry_review — native contact API correction CODE review, 2026-10-07
+
+- Worked: narrow CODE PASS at building_fit.gd:470. get_collider_shape_index(contact) supplies the native integer body-shape index required by the existing architectural shape map; all other reviewed logic is unchanged.
+- Did not: the earlier source review confused get_collider_shape's Object with the integer index API. The coordinator reports pinned Godot4.7.2 compilation rejected that argument before movement/fit; this reviewer performed no engine or compile check.
+- Next: verify native API return types when connecting body shape maps to contact getters. Reuse the unchanged source findings and consume the coordinator's separately assigned pinned compile check before runtime proof; own note/check and writer release remain one brief handoff.
+
+### building2_integrate — 1220 south aperture diagnosis, 2026-10-07
+
+- Worked: corrected runtime parsed and retained all-visible samples (roof0/6, wall0/15, ground0/15) plus north native wall contact and active REST before SAFE_FINAL. South stopped before placement when no qualified wall crossing was found;53/58 remained untested. Source reconstruction places the south ray through the scheduled near-3 door opening (station3.132 within3.04–3.96; derived chest3.575 m within door2.544–4.674 m).
+- Did not: the opaque door is a separate family support shape, not a qualified wall receiver. The retained log lacks the actual first-hit shape/normal, so source geometry supports the aperture explanation without proving the complete physics-ray cause. After FAIL the engine remained waiting in shutdown; cause unknown. Authorized stop yielded98523 exit143 and verified all owned Godot/Weston/wrapper PIDs absent.
+- Next: choose a bounded lateral same-cardinal wall crossing before player placement, preserving native support and one actual approach per side; never whitelist generic support or count a door aperture as wall contact. If further physics diagnosis is required, extend existing shared ray logging with endpoints, native shape/normal/role and rejection reason before one assigned run. No source edit or new engine occurred during diagnosis.
+
+### building2_integrate — bounded same-side lane selection, 2026-10-07
+
+- Worked: the south aperture evidence motivated a finite shared route correction: center and two quarter-span lanes, each paired with5 m/2 m native safe setup and qualified wall crossing before placement. Only one valid lane executes per cardinal side; failure of all candidates remains sticky HOLD. Chosen lane/margin and native wall shape/normal are logged.
+- Did not: prior center-only routing treated a valid architectural door aperture as a missing route. The earlier runtime first hit remains unconfirmed; this patch does not change the building or reclassify support as wall. No new runtime result is claimed.
+- Next: independent narrow review should check candidate pairing and same-side direction while reusing unchanged geometry/support/rest findings, then validate complete changed route behavior through the existing driver. No new per-building driver or selector was added.
+
+### approach_geometry_review — bounded cardinal lane-selection CODE review, 2026-10-07
+
+- Worked: CODE PASS. Each side checks only centre and plus/minus one-quarter architectural-span lanes at5 m/2 m margins; native ground, stock capsule clearance and qualified source-wall crossing must all pass before placement. The selected lane keeps a straight cardinal inward route, native destination and one actual approach per side; lane/margin/shape/normal/rejections are logged.
+- Did not: source inspection establishes no safe lane or completed movement for any particular building. All six rejected candidates retain sticky unsafe HOLD; failure after placement cannot trigger an unqualified retry or erase the failed case.
+- Next: reuse unchanged geometry/index/API, actual support, arrival, REST and safe-final reviews; consume the coordinator's separate pinned compile check and bounded runtime proof. This reviewer only appends its own note, checks whitespace and immediately releases the writer.
+
+### building2_integrate — lane-corrected 1220 focused run, 2026-10-07
+
+- Worked: source52 run30744 parsed and passed all visible samples (roof0/6, wall0/15, ground0/15). North reached its native wall. South rejected both central aperture rays, selected quarter-span lane and reached qualified native wall, proving the lane correction through actual stock movement; both completed active REST before SAFE_FINAL.
+- Did not: west central5 m setup passed the central land ray and clearance but actual settling included FamilyContact_ground, which the unchanged support policy rejects. The strict gate stopped before west forward input;2/4 sides passed,3 attempted, east and53/58 untested. This is setup qualification HOLD, not whole-building PASS. Seven Texture RID warnings persist with unknown cause.
+- Next: diagnose the native west footprint support before any repair or retry; do not whitelist arbitrary support or erase the failure. Failure cleanup proved active released supported stopped rest and safe disable. Run exited1 normally; wrapper461798 and all Godot/Weston processes were absent before ENGINE release.
+
+### building2_integrate — native full-descent setup preflight, 2026-10-07
+
+- Worked:30744's actual west FamilyContact_ground contact identified the remaining gap in the central-ray/above-ground setup check. The replacement queries the actual stock body from its drop pose through first support and near-rest, qualifying every returned native contact before placement; bounded lane selection and actual settled-support HOLD remain intact.
+- Did not: earlier clearance stopped5 cm above support and could not establish the capsule footprint's final support. Source review cannot claim this new native query predicts a successful runtime route; empty/saturated contact sets, blocked descent and unknown/nonwalkable support reject the candidate.
+- Next: independently review the native query and compile against pinned Godot before focused movement proof. Official PhysicsServer3D/PhysicsTestMotionParameters3D/PhysicsTestMotionResult3D API documentation was checked2026-10-07, including result getter types and32-contact limit. No engine was started during authoring.
+
+### approach_geometry_review — native stock descent-preflight CODE review, 2026-10-07
+
+- Worked: CODE PASS. Before selection or placement, the helper tests the real stock body RID from settle_player's identity +2 m pose, sweeps through the full descent plus snap and retests near rest at native returned travel. Every reported contact must have finite stock-floor normal and native walkable-ground identity; empty, saturated, unknown, nonfloor/nonground and nonfinite-travel results reject the candidate.
+- Did not: no engine or new support/movement outcome was observed by this reviewer. Native recovery contacts are deliberately included rather than ignored, and the two read-only queries do not replace the unchanged actual settled-support guard; the earlier FamilyContact_ground runtime HOLD remains retained.
+- Next: consume the coordinator's separate pinned compile check and bounded runtime proof. Preserve the actual support rejection, one route per side, stock input/rest, safe final and sticky failure behavior; do not whitelist family ground to obtain a start. Only this own note was appended, followed by whitespace check and immediate writer release.
+
+### building2_integrate — native-descent focused loop completion, 2026-10-07
+
+- Worked: all three fresh rendered checks passed four approaches and active REST before SAFE_FINAL:1220/session60209,1227/93308 and1239/54939 each exited0, with actual wrapper/Godot/Weston absence between runs.1220 west preflight rejected the actual offset FamilyContact_ground before placement and chose a valid quarter-span lane;1239 likewise selected a qualified same-side route. All visible fit samples passed.
+- Did not:1227 east arrived by the reviewed qualified native-wall proximity criterion, with support-only slide contact and final FamilyContact_ground support; it was not direct wall-touch proof. I briefly questioned this despite the existing accepted near-wall/support semantics, then retained the reviewed criterion instead of adding a new gate. Seven Texture RID warnings remain of unknown cause; earlier failed/partial runs remain retained.
+- Next: preserve the distinction between qualified proximity and direct contact, and between strict setup ground and safe final support. Reuse these completed focused proofs, then run the mandatory complete suite only under its separate assignment. Source stayed frozen throughout the three-call loop.
+
+### building2_integrate — pre-material complete-suite retry2, 2026-10-07
+
+- Worked: the suite retained all strict checks and native setup/arrival rules. Earlier focused52/53/58 proofs remain separate completed results. Retry2/session9499 exited1; all suite/Godot/Weston PIDs were absent before release, without restarting or killing this invocation. Other stages including world validation and determinism completed.
+- Did not: Building600 w34313548 south stopped short at(284.3,-337.4) without contact. w96215646 west rejected all six preflight starts on its own FamilyContact_support, then sticky unsafe left38 buildings explicitly untested. The filtered log does not expose exact route/contact/rest rows for diagnosis; no cause or repair is claimed. Complete suite remains HOLD.
+- Next: prioritize the owner's requested B3 PBR/detail-material pass on frozen approved geometry, then diagnose these exact shared-route failures under a separate assignment before final gates. The earlier visual PASS is historical geometry-study evidence, not current owner material-finish acceptance. No source repair, repeat engine, staging, commit or push followed this failure.
+
+### chapel_art — Building 3 material study001, 2026-10-07
+
+- Worked: reused existing CC0 plaster channels in a B3-only opaque shader, preserving the prior geometry patch. World-metre projection and an explicit world normal basis rendered both field meshes and scaled MultiMeshes without shader errors. Shared capture session42465 exited0; wrapper466013/Weston466017/Godot466039 were absent afterward. All14 source/context/island/detail images are in `/workspaces/landmark-progress-20261007/building3/material-001`; actual renderer was AMD Radeon780M RADV PHOENIX / Wayland.
+- Did not: first self-inspection shows only restrained warmer mottling and a muted blue portal at gameplay distance; this is not material-finish acceptance. Fourteen Texture RID warnings occurred at shutdown; cause is unestablished. New visible spray evidence remains outstanding; this capture was not a spray test.
+- Next: stop after the first coherent study for independent Sol High comparison with the dated November2025 references and correction001 baseline. If refinement is requested, prioritize readable reference-supported coating variation without coarse plaster or generic grunge. Keep roof/protected surfaces unchanged and verify stock spray before final acceptance. No image generation, download, suite, commit or push was performed.
+
+### final_b3_visual — early Building3 material001 visual and material-code review, 2026-10-07
+
+- Worked: independently inspected both November 2025 ENE references and all fourteen correction001/material001 image pairs. Scoped material CODE PASS: world-metre channel projection, explicit normal basis and opaque shading preserve a plausible scaled-MultiMesh material path; context/island comparisons show no visible regression.
+- Did not: EARLY visual HOLD: warmer paint, muted blue and faint mottling are modest gains, while ordinary panels remain nearly flat. Current git diff includes the prior geometry rewrite, so it cannot independently prove geometry unchanged since correction001; fresh spray proof and the fourteen Texture RID warnings' cause remain unresolved.
+- Next: strengthen restrained, uneven wear beneath the existing ENE cornice and pylon caps with short runoff and patchy coverage, retaining cleaner panel centers, fine coating grain and frozen geometry. Judge the same ordinary oblique against the reference before extended verification; do not equate PBR channel presence with finish acceptance.
+
+### chapel_art — Building 3 material study002, 2026-10-07
+
+- Worked: two-scale existing-map coverage and short runoff make restrained edge weathering visible beneath the cornice and pylon caps in actual front/oblique/portal views; clean centres and geometry are preserved. All14 shared captures saved under `/workspaces/landmark-progress-20261007/building3/material-002` and the driver printed PASS; actual renderer AMD Radeon780M RADV PHOENIX / Wayland.
+- Did not: capture session77937 remains live after PASS, with wrapper471708/Weston471712/Godot471733 present and Godot sleeping in futex_do_wait. Terminal result is unknown; saved images do not prove shutdown completion. No kill or duplicate invocation was performed. Material acceptance and fresh spray evidence remain open.
+- Next: release writer for independent frozen-source Sol High review while retaining engine ownership and observing the same live handle. Do not refine or invoke another engine until critique and confirmed engine release; one correction capture remains in the original budget.
+
+- Shutdown closure: after all14 captures and driver PASS, sampled Godot CPU ticks stayed unchanged while its main thread waited in futex_do_wait. Root authorized SIGTERM of only owned Godot471733; retained session77937 then exited143. Wrapper471708, Weston471712, helpers471731/471732 and Godot471733 were confirmed absent before engine release. Exact shutdown cause remains unknown. Saved capture success is separate from abnormal process termination; original images/log remain retained, with no rerun.
+
+### building2_integrate — shared route repair and B3 material-review transport, 2026-10-07
+
+- Worked: distance/stock-speed walk budgets plus bounded farther starts passed independent CODE and pinned compile; Building600 then completed all four native wall approaches with active REST/safe final (1394 exit0). Separate persistent Sol High review inspected all30 material001 originals, returned early visual HOLD/scoped material CODE PASS, wrote its own note and released; parent3732 exited0. Material002 review is read-only and pending.
+- Did not:1394 Gateview/source w96215646 still failed its actual west walk after a safe10 m setup (30300 exit1,3/4 sides). The initial corridor and five-lane variants then rejected west before placement (7675/50638 exit1,2/4 sides); new query points hit canopy underside atY5.575, not a proven post. Intermediate poses/slopes were not logged, so the whole-route floor-normal extrapolation is a concrete code risk rather than a proven runtime cause. All failed logs and safe-rest evidence remain; complete suite is HOLD.
+- Next: the frozen local capsule/snap-bounded query repair has independent Sol High CODE PASS only; require assigned compile/runtime evidence, preserving real supports, qualified wall arrival and actual four approaches. Keep material finish, abnormal capture shutdown and mechanics separate. All completed engine PIDs were absent before release; no automatic retry, geometry change, acceptance or integration followed a HOLD. Other reviewers' deferred notes remain their own work.
+
+### review_transport_efficiency — independent delegation efficiency checkpoint, 2026-10-07
+
+- Worked: local rollouts confirmed the persistent material parent's followup_task delivered a new Sol High child turn at04:28:16Z; the separate technical child completed CODE PASS at04:35:29Z through the same mechanism. Correct dispatch and observed identities avoided assuming the earlier ephemeral-thread failure had recurred.
+- Did not: at this checkpoint the material child had only inbound-task evidence while its parent/PID remained live; no transport failure or model-delay cause was established. Reserving RETRO throughout image inspection explicitly deferred the completed technical reviewer's append. Repeated status waits added no child-progress evidence.
+- Next: root accepted one future experiment: prepare the note during review, grant a brief exclusive append window after the verdict, then check/release before round closure. Preserve actual-image inspection, independent authorship and terminal observation; never silently revoke a live writer. No before/after benefit has yet been measured.
+
+### review_transport_efficiency — native corridor and five-lane CODE reviews, 2026-10-07
+
+- Worked: complete helpers and stock controller reads supported scoped CODE PASS for pre-placement native corridor filtering, followed by narrow CODE PASS for appending +/-0.125 lanes (at most15 candidates per side) and collision-point diagnostics. Descent support, native identity, one placement, actual arrival, recovery, active REST and safe-final gates remained intact; no geometry edit or post-placement retry was introduced.
+- Did not: these were source-only verdicts, with no compile, engine or walking proof from this reviewer. The corridor review did not catch the subsequently identified whole-route floor-slope extrapolation risk; its runtime cause remains unproved. Prior48 PASS/46 HOLD and failed7675 HOLD were not relabeled as successful routes.
+- Next: retain the original failed evidence and require separately assigned compile/runtime checks. The later local-query repair belongs to the separate approach_geometry_review reviewer; these notes supply no verdict on that repair and no visual/material acceptance.
+
+### building2_integrate — local corridor query HOLD, 2026-10-07
+
+- Worked: independent local-helper CODE PASS and pinned compile were followed by one authorized rendered source46 run. Session47174 exited1 with N/S native wall arrivals and active REST/safe final; all engine PIDs were absent before release. West remained unplaced and east untested, preserving aggregate HOLD.
+- Did not: three west candidates exhausted the stock slide budget within a0.3133 m local step. I added pose/contact diagnostics to collision rejections but omitted the exhausted-budget branch, leaving the actual repeated contact and residual unknown. Local source logic reconstructs remaining cardinal travel rather than using the stock engine's remainder handling; neither this difference nor numerical tangency is a proven runtime cause.
+- Next: obtain bounded existing-query pose/motion/travel/remainder/contact rows before another behavioral repair; do not increase budgets or ignore floors to force PASS. The maintained driver currently has no single-cardinal diagnostic mode. Any diagnostic-only extension must stay separate from the mandatory full four-side acceptance check. No automatic retry, source edit, full suite or integration followed this HOLD.
+
+### review_transport_efficiency — diagnostic-only entrypoint CODE review and parser repairs, 2026-10-07
+
+- Worked: complete driver/parser/helper reads confirmed candidate queries without target placement or movement input, disabled/zero/input-released and unchanged transform/recovery checks, and unconditional diagnostic exit1/whole-building HOLD. Final option-aware guard received CODE PASS: it rejects malformed diagnostic syntax and duplicate flags before loading while preserving ordinary source/routes/spray values. Existing query decisions and budgets remain unchanged.
+- Did not: initial CODE HOLD found --diagnose-side=west silently fell through to normal movement; the first repair then rejected a valid routes filename diagnose-routes.json by treating its value as a flag. Both original HOLD findings remain recorded. This reviewer performed no engine, compile or runtime check and established no diagnostic effectiveness or active-REST credit.
+- Next: distinguish flags from their consumed values before adding restrictive argument guards, and verify the frozen patch through separately assigned compile/diagnostic runs. Reuse unchanged disabled-state findings; retain whole-building HOLD and require the complete four actual approaches for acceptance.
+
+### building2_integrate — native motion completion and source46 fit, 2026-10-07
+
+- Worked: diagnostic52079 exited1 with stock transform/recovery unchanged and disabled inputs released. Its native trace showed collision-free completion (safe fraction1, zero remainder) despite0.000335–0.000519 m coordinate residuals. Independent CODE PASS and compile21951 preceded rendered95634 exit0: all four actual approaches and active REST/safe-final passed; engine PIDs were absent before release.
+- Did not: the prior helper mislabeled recovery-offset endpoint differences as exhausted slide budget. West's successful quarter-lane arrival uses qualified native wall proximity, not direct wall contact; its final support is FamilyContact_ground. Seven Texture RID warnings remain unexplained, and this focused result is not a complete-suite or material verdict.
+- Next: use native motion completion together with actual endpoint qualification rather than an arbitrary coordinate residual; preserve genuine partial-motion rejection. Keep the diagnostic HOLD and earlier failed runs, and obtain fresh Building3 fit/spray and the remaining independent material/full-suite gates before integration.
+
+### review_transport_efficiency — native motion completion CODE review, 2026-10-07
+
+- Worked: complete helpers supported CODE PASS for recognizing no-hit completion only with finite travel/remainder/fraction, zero native remainder and safe fraction1. Genuine collided partial motion retains continuation/exhaustion; actual recovered endpoint qualification remains within1.5 m, with support, drift, contact, one-placement and actual movement/REST gates unchanged.
+- Did not: this was source-only review with no compile, engine or walking proof. Earlier failed logs and the diagnostic trace remain separate evidence; the coordinator's later95634 result is its own runtime proof, not a result executed or independently established here.
+- Next: distinguish native completed motion from coordinate residual while requiring actual endpoint and four-approach verification. Reuse unchanged gates and preserve original HOLD evidence; a scoped CODE PASS supplies no material or complete-suite verdict.
+
+### building2_integrate — material002 native fit/spray HOLD, 2026-10-07
+
+- Worked: the exact existing source-bound spray plan ran through the maintained full driver once. Session15490 exited1 and all engine PIDs were absent at release. Roof0/38 and wall0/16 samples were bad; N/S reached canonical walls and completed active REST/safe-final.
+- Did not: west preflight rejected native lateral recovery of0.000122–0.000214 m against the helper's0.0001 m limit. West was never placed; east and spray were skipped by sticky unsafe, so this supplies no fresh material002 decal proof. Native-completion repair solved the earlier residual mismatch but left this independent precision assumption exposed.
+- Next: compare recovery limits with the actual stock safe_margin and bound cumulative drift from the original cardinal lane, not just each query. Keep the1.5 m qualified-wall arrival and all actual movement/rest gates unchanged; review any correction before a separately authorized run.
+
+### review_transport_efficiency — native-margin corridor CODE review, 2026-10-07
+
+- Worked: complete corridor/motion helpers supported CODE PASS. Finite positive stock safe_margin supplies the per-query lateral allowance; normalized up cross inward supplies the cardinal cross-lane axis, and displacement from the original queried lane origin is checked after every snap and sweep. Native completion, support/contact, positive progress, qualified wall within1.5 m, one placement and actual movement/REST gates remain intact.
+- Did not: source review ran no compile, engine or stock walk. The margin is this filter's acceptance bound, not proof that every native recovery displacement is bounded by safe_margin. Prior15490 HOLD and skipped east/spray remain separate evidence.
+- Next: separately verify the frozen repair through actual four-side movement and spray, retaining cumulative drift checks and original failures. Reuse unchanged gates; this CODE PASS supplies no runtime, material or complete-suite acceptance.
+
+### building2_integrate — material002 fit/spray and review closure, 2026-10-07
+
+- Worked: independent native-margin CODE PASS and compile46135 preceded rendered74233 exit0. All four Building3 approaches contacted canonical walls; four walks and the real source-bound spray completed active REST before safe disable. Roof0/38, wall0/16 and ground0/16 samples were bad. All engine PIDs and material review parent56543 were absent after their terminal results.
+- Did not: material002 remains independent VISUAL HOLD despite scoped material CODE PASS: broad pale fields still read flat. The existing spray check proves native decal/source/render-mask integrity, not projected-pixel readability; no spray screenshot was saved. Seven Texture RID warnings remain unexplained and the full suite remains open.
+- Next: preserve the failed15490 run and distinguish current mechanical PASS from material acceptance. Apply the independent bounded coating-variation recommendation through the assigned art owner, then review actual pixels and run remaining assigned gates; do not author the visual reviewer's deferred RETRO for them.
+
+### chapel_art — Building 3 material study003, 2026-10-07
+
+- Worked: added only pale-role, outward-face soft coating variation sampled from the existing diffuse map at12m and approximately19.7m spans with explicit blurred mip sampling. Actual front/oblique/portal pixels show readable low-contrast variation while retaining edge runoff, fine grain and blue/green paint; geometry and protected surfaces remain unchanged. Shared capture34557 exited0 normally, all14 images saved under `/workspaces/landmark-progress-20261007/building3/material-003`, and subsequent pgrep found no Godot/Weston processes. Renderer was AMD Radeon780M RADV PHOENIX / Wayland.
+- Did not: seven Texture RID shutdown warnings remain of unknown cause. Author pixel inspection is not independent finish acceptance; fresh affected mechanical/spray pixel proof remains separate.
+- Next: stop with all three authorized material captures used. Independent Sol High must judge whether the broad variation is believable coating rather than excessive mottling; any further art revision needs a new bounded assignment. No fit, spray, full suite, download, image generation, commit or push ran in this round.
+
+### building2_integrate — material003 fit and spray screenshot, 2026-10-07
+
+- Worked: independently reviewed optional screenshot support compiled in18504. Rendered30447 exited0 with roof0/38, wall0/16, ground0/16 bad, four actual canonical-wall arrivals and five active REST/safe-final proofs. The real source-bound decal was captured through the maintained viewport helper before cleanup; all engine PIDs were absent at release.
+- Did not: saving a source-matched spray image is not an independent visual verdict. Root viewed the image, but material003 recognition/finish/spray-pixel review is still pending in22488. Seven Texture RID warnings remain unexplained; no complete-suite claim follows from this focused run.
+- Next: retain the private screenshot and unchanged source for independent pixel/code review and the separately authorized complete suite. Preserve failed earlier attempts and keep mechanical proof separate from acceptance.
+
+### building2_integrate — material003 complete-suite HOLD, 2026-10-07
+
+- Worked: one complete tools/test.sh invocation39006 retained the failure and exited1; all engine processes were absent before release. The island driver stopped at w96215659 west with32 remaining buildings untested, preserving scored credit without claiming coverage. Other stages including validation/determinism completed.
+- Did not: west candidate queries encountered own FamilyContact_ground downward-facing contacts or lacked safe setup/wall crossing. The island engine spent its final observed interval in futex wait; completion timing matched the maintained timeout, but the suite does not print the individual island status, so timeout124/normal island exit is unknown.
+- Next: inspect actual source parking-surface triangles and native contact positions before changing geometry or query policy. Preserve four real approaches, native ownership and stock REST gates; no automatic retry, whitelist or lane growth follows this HOLD.
+
+### review_transport_efficiency — final integrated Building3 CODE review, 2026-10-07
+
+- Worked: complete patch review against34554aac connected B3 geometry/winding/normal bases, shader and canonical collision ownership with shared native approach selection/completion/drift bounds, unsafe-state propagation, diagnostic parsing and spray capture handling. FINAL CODE PASS reused unchanged bounded findings; normal stock defaults and strict suite routing remain intact.
+- Did not: source review performed no engine, tests or builds and establishes neither full-suite success nor visual/material acceptance. The coordinator's39006 suite HOLD is separate runtime evidence; this round did not diagnose or review a repair for source59. Known warning causes remain unresolved.
+- Next: consume the separately assigned runtime and material/visible-spray verdicts before promotion, preserving original failures and scoped claims. Record reviewer notes in the brief post-verdict writer window; do not replay unchanged review segments solely for bookkeeping.
+
+
+### final_b3_visual — Building3 material002 review, 2026-10-07
+
+- Worked: Matched originals separated believable edge-wear improvement from overall finish quality; scoped material code passed.
+- Did not: Broad pale fields remained nearly flat at ordinary distance, so local runoff improvement did not close the finish HOLD.
+- Next: Make soft coating variation readable across the ENE fields while preserving clean centres, restrained runoff and frozen geometry.
+
+### final_b3_visual — Building3 material003 review, 2026-10-07
+
+- Worked: Broad coating variation visibly improved ordinary gameplay finish. Review of 34 originals supported scoped recognition, finish, context/island, material CODE and spray-readability PASS.
+- Did not: One oversized image response was truncated; smaller batches were needed to complete actual pixel inspection. Stills leave motion and mechanical closure unresolved; whole integration remains full-suite HOLD.
+- Next: Keep image batches small and close the separate mechanical/full-suite checks without reopening passed material work absent new evidence.
+
+### chapel_art — source59 ParkingSurface rim repair, 2026-10-07
+
+- Worked: actual native WorldHarness rays at four seam endpoints and two failed-contact XZ points distinguished intact land (w26767313/w29399800) from the steep added ParkingSurface fold. Reconciled14 unique inner-rim Y values to their paired outer-rim Y across86 shared scalar occurrences; every XZ, outer elevation, triangle count, canonical wall/bottom and native ground stayed unchanged. Baseline26720, terrain45024, full-fit75508 and after-shots37243 each exited0 with no engine remaining between calls. All four stock approaches arrived at FamilyContact_wall, each with active supported released REST at zero velocity and subsequent SAFE_FINAL. Before/after west and southwest-context pixels show no visible site regression. Evidence: `/workspaces/landmark-progress-20261007/source59-seam/`.
+- Did not: the approximately2mm folded rim continued beyond the originally identified53/54 triangles, requiring an explicit same-strip scope extension. Only the six central runtime points were measured; the remaining boundary continuation is source-backed inference, not separately ray-sampled terrain. Texture RID warnings occurred with unknown cause. Independent code PASS is separate from pending visual/full-suite acceptance.
+- Next: retain the four completed bounded runs and fixed data for independent site review and the mandatory complete suite; do not weaken native support gates or rerun unchanged proofs. All four authorized engine calls are used; no commit or acceptance change was made.
+
+### approach_geometry_review — deferred duration, local-corridor and source59 CODE reviews, 2026-10-07
+
+- Worked: three bounded source-only CODE PASS verdicts. Distance-scaled duration and nine bounded same-cardinal candidates preserve native support/arrival; invalid distance or speed retains unsafe HOLD with REST/safe-final handling before forward input. Local capsule/snap-bounded sweeps refresh support and floor normals after every step, retain finite budgets, qualify native contacts and inward progress, and require final wall proximity. Source59 coherently reuses paired outer heights at all14 inner endpoints, removing the narrow steep ParkingSurface fold at both reported west contacts while preserving topology and native visual/contact correspondence.
+- Did not: these reviews observed no engine, completed route, compile or visual outcome. The prior canopy-underside failure remains retained, and source approval alone does not establish the local repair's runtime remedy. Source59's failed suite and32 untested units were unresolved at its review; no later full-suite or visual acceptance is supplied by this entry. Invalid setup and any failed active-rest proof retain HOLD.
+- Next: require the separately assigned runtime, four actual approaches, active REST/safe final and independent visual results before promotion. Preserve failed candidates and evidence without exclusions, support/canopy whitelists, collision exemptions, unsafe-placement retries or shared-test weakening. The three own deferred drafts were consolidated only after checking existing RETRO entries; this append/check window supplies no new review verdict.
+
+### building2_integrate — material verdict documentation and post-source59 suite, 2026-10-07
+
+- Worked: actual material003 independent scoped PASS was recorded in the existing catalog/note without changing49/213 credit or claiming integration. Source59 CODE PASS, focused fit and matched shots remained separate. Technical reviewer recorded its own deferred notes and released after whitespace0. Full suite89402 exited1 and all engine PIDs were absent at release.
+- Did not: the suite next stopped at w96215666 west with30 remaining buildings untested. All candidates failed the initial ground predicate before capsule/descent/movement; native FamilyContact_ground lacks the parent feature_kind required by that predicate, so source setting ground is categorically excluded. The log does not establish whether any excluded candidate also has unsafe slope or clearance.
+- Next: qualify proven native ground roles consistently through setup and actual support gates, without admitting canopy/roof or ignoring geometry. Review the smallest shared semantic correction and verify actual stock approaches before any new complete-suite claim. Keep source59 independent visual review and final actor-owned notes separate; no automatic retry or source edit followed this diagnosis.
+
+### chapel_art — Chapel whole-building preparation, 2026-10-07
+
+- Worked: reused the earlier direct inspection of the unchanged September2025 SSE originals, current Chapel producer/live adapter and September29 archived composition. Existing Chapel mesh/source-frame helpers fit the target; the repeated-bay housing family does not. Planned peaked glazing/opaque centre, slender canopy, nave/wing/tower recomposition and Chapel-specific existing-map PBR variants are grounded in the observed exterior; unsurveyed dimensions remain production inference.
+- Did not: the archive includes unsupported windows on protected17/18, and the live adapter partitions collision by fixed triangle ranges. Neither is safe to copy into revised geometry. Roof substrate and unseen facade details remain unestablished.
+- Next: on later modeling GO, preserve frozen XZ/source bottoms and quiet protected0–8/14–33, use semantic wall/roof collision ownership, inspect local canopy contact, and bring the first coherent actual-world render to independent review. No modeling edit, engine invocation, download, image generation or new external research occurred in this preparation round.
+
+### building2_integrate — source66 native ground qualification, 2026-10-07
+
+- Worked: one shared predicate change recognizes the proven live producer's homogeneous native parking/footway/path role with source and active-shape qualification. Focused11384 exited0 with four actual approaches and active REST/safe-final; the west2 m FamilyContact_ground setup passed full descent/settled-support checks while the5 m canopy remained rejected. Engine PIDs were absent at release.
+- Did not: the former terrain-ancestry predicate rejected legitimate family ground before evaluating clearance. West arrival in the successful run used qualified native wall proximity, not direct wall touch; scoped runtime PASS does not replace independent CODE93938 or a complete suite. Seven Texture RID warnings remain unexplained.
+- Next: retain the failed suite and apply the same semantic predicate consistently across setup and support checks. Close independent CODE and separately authorized complete-suite checks before integration; do not weaken unknown contacts, floor checks or actual stock movement/rest requirements.
+
+### approach_geometry_review — source66 family-ground qualification CODE review, 2026-10-07
+
+- Worked: CODE PASS confirms producer-based family-ground qualification across shared setup/support callers, preserving source identity and rejection of roof, support, inactive or unknown geometry.
+- Did not: source review establishes no completed source66 approach or suite result; suite89402's failure and30 untested units remain retained. Actual runtime evidence belongs to its separate executing round; this note supplies no suite or visual acceptance.
+- Next: consume separately assigned runtime evidence before integration; retain native descent, every settled-contact check, four actual approaches and active REST/safe final. Own source-only draft is appended after checking for duplicates, followed by whitespace check and immediate writer release.
+
+### building2_integrate — complete suite17352 and source98 diagnosis, 2026-10-07
+
+- Worked: the complete suite consumed terminal exit1 with validation/determinism reached and all engine processes absent. Source66's reviewed ground qualification advanced coverage; source98 east stopped before placement, retaining17 untested units and aggregate HOLD.
+- Did not: the finite generic lanes do not establish a route around every real facade. The source98 center contact matches a front-2 privacy-screen slat face/top after the producer's panel offset, not a presumed carport post. Offset-lane entry/window intersections explain missing qualified-wall rays by source inference; their actual first-hit identities were not logged.
+- Next: preserve screens, native ownership and all stock approach/rest gates. Propose architectural solid-wall candidate selection or one source-backed approach before further engine authorization; do not grow lanes blindly or reinterpret a missing wall crossing as arrival. Source59 independent site visual review remains pending.
+
+
+### final_b3_visual — source59 site visual regression review, 2026-10-07
+
+- Worked: All22 matched originals and the complete JSON diff supported a bounded SITE VISUAL PASS: no visible parking-edge, architectural, neighbouring-setting or island regression.
+- Did not: The height repair is too subtle at these poses to visually prove millimetre accuracy or complete rim collision continuity. The separately reported suite17352 failed at source98 with17 untested; this review supplies no suite PASS.
+- Next: Keep visual regression, sampled-ground inference and native mechanical/full-suite results separate; reuse unchanged architectural recognition evidence.
+
+### building2_integrate — native wall fallback and remaining-unit diagnostic experiment, 2026-10-07
+
+- Worked: source98 fallback CODE39679 passed; focused39168 exited0 with four actual approaches and active REST/safe final. East approached westward from the east to a corner/end wall, not the broad east facade. Original fifteen candidates and real privacy screens remained; qualified native face anchors supplied the bounded fallback. All engine processes were absent at release.
+- Did not: generic fractional lanes had aligned with screens/openings. The diagnostic parser's first review found malformed options could fall through to movement; the strict nonempty-argument correction passed9146 before any diagnostic invocation. No failed parser invocation was run.
+- Next: retain the accepted experiment: batch5686 completed68/68 unchanged, disabled, input-released queries across17 subsequent units and exposed one blocked unit (rooftop tower w1222720021, all four sides) before another full suite. Its expected exit1 supplies no fit, walking, active-REST or acceptance credit. Compare future suite discoveries without inventing timing savings; independent rooftop repair and complete-suite gates remain separate.
+
+### building2_integrate — scoped rooftop support and review HOLD, 2026-10-07
+
+- Worked: frozen OSM, live config and producer metadata distinguish the separately keyed rooftop tower from a ground-level building. Parent native roof support is bound to exact source/RID/shape and tower-base elevation; focused1254 exited0 with four LOCAL rooftop approaches and four active REST/safe-final checks. All engine processes were absent.
+- Did not: independent CODE43079 found the active walking loop did not requalify every reported floor subcontact against the new context, despite setup/prediction/final REST qualification. The gate remains HOLD. Roof sampling also retained4/44 bad samples within the existing driver tolerance; north/west arrival used qualified tower-wall proximity rather than direct wall contact.
+- Next: carry the same support identity through reported active floor subcontacts, preserving unsafe HOLD and active REST/safe teardown without requiring slide events every frame. Keep local rooftop approach proof distinct from ground-to-roof access, and retain the failed review before any separately assigned correction/check.
+
+### building2_integrate — rooftop active-support correction, 2026-10-07
+
+- Worked: the one-file correction applies the same rooftop support qualification to every reported floor subcontact during active walking, stationary spray waits and released braking. Independent49577 CODE PASS closed43079's HOLD; fresh77831 exited0 with four LOCAL roof approaches and four parent-roof-supported active REST/safe-final checks. All engine and review-parent processes were absent.
+- Did not: earlier1254's runtime result did not close the missing active-contact code seam. The corrected run still reports4/44 bad roof samples within the inherited tolerance; N/W arrival is qualified tower-wall proximity, not direct wall contact. Seven Texture RID warnings remain unexplained.
+- Next: retain both earlier HOLD and corrected evidence, without claiming ground-to-roof access or a full-suite PASS. Carry source-bound support identity through active physics waits and preserve failures through safe teardown without requiring incidental per-frame slide counts.
+
+### approach_geometry_review — deferred efficiency checkpoint, 2026-10-07
+
+- Worked: sampled ordinary notes and retained logs separated mandatory fit, stock REST, full-suite and visual gates from repeated discovery of setup blockers. The maintained diagnostic supports native candidate queries without placement or acceptance credit.
+- Did not: suites89402/17352 remained HOLD with30/17 units untested; review/writer waits and repeated-stage costs were unmeasured. This reviewer did not diagnose source98 or run an engine.
+- Next: the proposed bounded remaining-unit diagnostic experiment was separately implemented and executed. Supplied batch5686 completed68/68 unchanged, disabled, input-released queries and found the tower blocked on all four sides before another suite. Compare advance discoveries with the next suite's new setup blockers; no timing benefit or acceptance credit is established.
+
+### approach_geometry_review — deferred native anchors and batch parser reviews, 2026-10-07
+
+- Worked: source98 fallback CODE PASS retained transformed native Box/Concave faces, source/shape qualification, the original fifteen candidates first and at most eight deterministic deduplicated anchors. Separate batch-parser correction CODE PASS rejects unsupported nonempty arguments before world load and resolves a unique accepted source, preserving the empty-argument suite.
+- Did not: original source98 privacy-screen/crossing failures remain retained. Initial batch CODE HOLD found malformed diagnostic options could fall through to movement; that finding was closed only in island_test.gd. Source review ran no engine and supplied no route or batch runtime proof.
+- Next: retain actual four-approach and active REST/safe-final gates alongside separately supplied focused39168 runtime evidence. Diagnostic queries always remain HOLD/exit1 without fit, movement, REST or acceptance credit; check every maintained diagnostic entrypoint rather than transferring one parser's PASS to another.
+
+### approach_geometry_review — deferred rooftop HOLD and correction review, 2026-10-07
+
+- Worked: the live tower/config binding limits support to the related parent roof's native RID, shape index, contact elevation and stock floor angle. Correction CODE PASS qualifies reported floor subcontacts during walking, spray waits and released braking, preserving mismatch errors through active REST and safe teardown with empty-context behavior unchanged.
+- Did not: original CODE43079 HOLD found intermediate actual walking floor contacts unchecked despite qualified setup, prediction and final REST. Earlier runtime evidence did not close that code seam; this reviewer ran no engine and makes no full-suite or visual claim.
+- Next: trace support context through each active physics wait without requiring incidental events every frame. Supplied corrected77831 proves four LOCAL rooftop approaches separately; roof4/44 remains within the inherited tolerance, and neither that result nor CODE PASS proves ground-to-roof access.
+
+### approach_geometry_review — final integrated CODE review, 2026-10-07
+
+- Worked: complete patch connections against34554aac linked B3 canonical receiver solids, facade/material shader and UID with native architecture, producer-qualified ground, rooftop context, bounded candidate/corridor selection, actual contact qualification, sticky unsafe state and active REST/safe teardown. The rendered island test retains strict exit/error checks; unchanged scoped code and visual findings were reused.
+- Did not: final CODE HOLD found building_fit_test.gd:42 still detects diagnostics only through a diagnose prefix. With valid --source, malformed -diagnose-side or --diagnostic-side bypasses that branch and reaches normal fit/movement at line97. The corrected island batch parser does not protect this separate entrypoint. No engine, test or new visual check ran here; the concurrent full suite supplies no result to this verdict.
+- Next: validate the single-source entrypoint's supported flag/value grammar before world load, rejecting unsupported or malformed flags while preserving routes/spray filenames as consumed values. Re-review that bounded correction and consume the separately assigned full-suite result; preserve prior HOLD history and scoped CODE/runtime/visual separation.
+
+### building2_integrate — complete suite and final parser correction, 2026-10-07
+
+- Worked: suite48032 consumed exit0 with ALL TESTS PASS, including all49 scored island buildings, stock road traversal, junk, validation and determinism. The earlier diagnostic found one blocked rooftop unit in advance; after its scoped repair this suite found zero new setup blockers. All engine processes were absent at release; no timing savings are inferred.
+- Did not: final integrated46418 CODE HOLD found the separate single-building entrypoint still allowed malformed diagnostic flags into normal movement. The suite's empty-argument island path did not exercise that bug. Its later parser-only correction means48032 remains evidence for unchanged island/game code, not a claim that the suite reran afterward.
+- Next: exact supported flag/value validation passed independent53885. Three headless probes rejected -diagnose-side and --diagnostic-side before load, while the existing complete B3 spray plan reached the renderer guard; all exited1 as expected without world/movement. Preserve historical HOLD, keep reviewer-owned notes separate, and let ROOT decide final evidence reuse/integration without an automatic suite retry.
+
+### approach_geometry_review — final single-source parser correction CODE review, 2026-10-07
+
+- Worked: exact flag/value validation CODE53885 PASS closes malformed diagnostic fallthrough while preserving supported filenames, diagnostic conflicts and source binding; other integrated PASS findings were reused.
+- Did not: the previous prefix guard protected only some spellings, so integrated review remained HOLD until this correction. This reviewer ran no engine or tests; the three executed headless probes and suite48032 are separate evidence, not results established by this CODE review.
+- Next: validate each entrypoint's complete grammar before world load and keep source review separate from assigned runtime probes and suite results. Preserve the prior HOLD history; ROOT's accepted reuse of48032 for unchanged game/island/BuildingFit/material/data does not mean the suite reran after this standalone parser change.
+
+### building2_integrate — reviewed integration precommit, 2026-10-07
+
+- Worked: all independent author/reviewer notes are present; ROOT accepted the15-path scope, material003 and source59 verdicts, final CODE and suite48032 reuse with separate parser probes. The real remote main matched the reviewed base before integration.
+- Did not: earlier suite and review HOLDs required several shared verification corrections; final PASS does not erase their limitations or establish unknown warning causes. No new run is claimed after the parser-only correction.
+- Next: commit only the reviewed paths, preserve historical49/213 credit and reference limits, and verify a normal push against the actual remote SHA; stop on divergence rather than overwrite.

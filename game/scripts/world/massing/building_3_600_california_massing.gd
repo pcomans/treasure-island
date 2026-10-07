@@ -126,6 +126,24 @@ static func build_record(record: Dictionary, material: Material) -> Dictionary:
 				"source_keys": record.source_keys,
 			}
 		root.add_child(facade)
+		# Projecting ENE pylons, lower front, portal bay and cornices stay on the
+		# one canonical wall receiver body: solid, spray-eligible, same ownership.
+		var solid_index := 0
+		for solid: Dictionary in facade.solid_boxes():
+			var box_shape := BoxShape3D.new()
+			box_shape.size = solid.size as Vector3
+			box_shape.set_meta("receiver_kind", str(record.receiver_kind))
+			box_shape.set_meta("opaque", bool(record.opaque))
+			box_shape.set_meta("derived_object_key", object_key)
+			box_shape.set_meta("source_keys", record.source_keys.duplicate())
+			box_shape.set_meta("building_3_massing_override", true)
+			box_shape.set_meta("building_3_ene_facade_solid", true)
+			var box_node := CollisionShape3D.new()
+			box_node.name = "FacadeSolid_%03d" % solid_index
+			box_node.shape = box_shape
+			box_node.transform = solid.transform as Transform3D
+			body.add_child(box_node)
+			solid_index += 1
 
 	return {
 		"ok": true,

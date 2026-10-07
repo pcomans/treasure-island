@@ -77,7 +77,13 @@ for test in \
 do
   echo "== ${test}"
   # --fixed-fps 60: physics (the island test's walk-ups) runs as fast as the CPU allows.
-  output="$(timeout 600 tools/godot --headless --fixed-fps 60 --path . --audio-driver Dummy --script "${test}" 2>&1)"
+  display_args=(--headless)
+  # The dummy renderer does not retain the visible MultiMesh transforms that
+  # the shared island fit check compares against collision and stock movement.
+  if [ "${test}" = game/tests/shared/island_test.gd ]; then
+    display_args=()
+  fi
+  output="$(timeout 600 tools/godot "${display_args[@]}" --fixed-fps 60 --path . --audio-driver Dummy --script "${test}" 2>&1)"
   status=$?
   grep -E "^(PASS|FAIL|NOTE)|${godot_errors}" <<< "${output}"
   if [ "${status}" -ne 0 ] || grep -qE "${godot_errors}" <<< "${output}"; then

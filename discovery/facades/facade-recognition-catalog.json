@@ -1214,6 +1214,26 @@
           "review_id": "building-3-hero-massing-2026-09-04",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "building3-correction001-code-20261007",
+          "review_kind": "independent_code_review",
+          "status": "accept"
+        },
+        {
+          "review_id": "building3-correction001-whole-building-visual-20261007",
+          "review_kind": "independent_reference_recognition",
+          "status": "accept"
+        },
+        {
+          "review_id": "building3-material003-code-20261007",
+          "review_kind": "independent_code_review",
+          "status": "accept"
+        },
+        {
+          "review_id": "building3-material003-whole-building-visual-20261007",
+          "review_kind": "independent_reference_recognition",
+          "status": "accept"
         }
       ],
       "anchor_source_key": "w34313540",

@@ -287,3 +287,104 @@ Study032's nonreceiver fascia covered unchanged wall-layer2 boards; its revised 
 ## Compare site axes and furniture groups directly
 
 Mersea042 owner satellite feedback exposed bocce lanes aligned to the wrong container axis and all long tables on one side of the planter despite prior broad-layout PASS. Compare actual north-up reference/render lane axes and relative furniture groups explicitly, not only roof footprints or regional greens. State image-date/anchor uncertainty; retain frozen building identities, infer reversible site placement, and verify changed furniture-support routes with the stock controller.
+
+## Launch an engine as the tracked background command
+
+Building 3's first baseline wrapped `tools/godot` in `( … ) &` inside an already-backgrounded tool call. The tool reported completion while Godot was still rendering, and the real PID had to be recovered and polled before its EXIT 0 counted. The cause was the double backgrounding, which detached the engine from the tracked handle. Make the engine (plus its exit-status echo) the background command itself, record the actual Godot PID, and treat only that process's exit and absent Godot/Weston processes as terminal evidence.
+
+## Judge code drift from the complete snippet
+
+During the Building 3 first-study review, a reviewer inferred code drift from a truncated excerpt. After inspecting the complete snippet and diff, the reviewer retracted the finding. Before a CODE HOLD claims missing or changed code, read the full function or the actual `git diff` hunk. A truncated tool view is not evidence of absence. Retain genuine findings from the same review.
+
+## Visible MultiMesh checks need actual rendering
+
+Building 3's shared headless fit printed PASS with origin-contaminated bounds,
+sparse samples and three remote approaches. The unchanged rendered invocation
+restored the local bounds, meaningful surface coverage and four native wall
+contacts. This matches dummy-renderer MultiMesh identity readback; the original
+run did not log each instance getter, so that individual readback is inferred.
+Run these visible-geometry checks with rendering and fail closed on headless
+use. A missing source-wall ray hit is not zero distance or arrival evidence;
+report required approaches and their actual contacts, retaining failures.
+
+## Unsafe test state must survive across units
+
+Independent review found that BuildingFit reset its unsafe flag on every unit
+while the island loop continued unconditionally. That could resume movement
+after a setup, recovery, active-rest or safe-final failure. Latch unsafe state
+for the driver's lifetime, refuse later checks, and stop the caller with the
+remaining units explicitly untested. Ordinary fit failures may continue only
+after supported, input-released, stopped active REST and safe teardown; a new
+unit must never clear an unsafe result.
+
+## Preflight approach starts without weakening actual support checks
+
+Building600's fixed AABB-plus5 m east start landed on a neighboring roof,
+not on the target's approach ground. Select a bounded same-cardinal alternative
+using native support and stock-capsule clearance before placing the player;
+then still require the complete actual approach. The first repair left the last
+5 cm of settling unqualified, and a later0.7 contact cutoff omitted floors the
+stock48-degree controller accepts. Inspect actual settled native floor contacts
+before forward input, deriving eligibility from the real up_direction and
+floor_max_angle; any unknown or nonwalkable floor support remains unsafe even
+when another ground contact is valid. Keep active rest and safe teardown on HOLD.
+The1220 west setup later passed central-land and above-ground capsule queries
+but settled on adjacent FamilyContact_ground. Preflight the complete native
+body descent and near-rest contacts before placement, including the capsule's
+shape offset and safe margin; a clear central ray does not qualify its footprint.
+Reject unknown or nonwalkable contacts before trying another bounded candidate,
+while retaining the actual settled-support gate as the final check.
+
+## Distinguish collision shape objects from native shape indices
+
+The architectural-route repair passed source review but failed Godot4.7.2 parse
+before any fit: KinematicCollision3D.get_collider_shape returns Object, while
+our allowed native shape-index map requires int. Use get_collider_shape_index
+for that mapping and preserve the per-subcontact index. Check the actual API
+return type when connecting physics identity helpers; method names alone are
+not sufficient. The failed engine was stopped and remaining cases were not run.
+Official API checked2026-10-07: https://docs.godotengine.org/en/stable/classes/class_kinematiccollision3d.html
+
+## Keep predictive floor transport local and identify the actual contact
+
+1394's corridor filter rejected three lanes at native canopy contact points
+Y5.575, while local ground plus the stock capsule height is about4.7 m. The
+helper extrapolated a local floor-contact normal over the entire remaining
+route; missing intermediate pose/slope rows leave artificial upward travel a
+code-supported risk, not a proven runtime cause. Bound transport locally and
+refresh native support after each short sweep, retaining query pose/motion/travel
+and contact point on rejection. A mixed FamilyContact_support shape contains
+many meshes: body/shape identity alone did not establish the earlier inferred
+post as the corridor obstruction. Preserve actual stock movement and REST gates;
+more candidate lanes or a source CODE PASS cannot establish a runtime repair.
+
+## Qualify native ground by producer semantics, not only terrain ancestry
+
+The post-source59 suite rejected every source66 west start before descent because
+FamilyContact_ground lacks the nonbuilding parent feature_kind required by the
+shared predicate. Its live producer explicitly groups parking, footway and entry
+path tops separately from roofs/support. A source-bound, active native ground-role
+qualification let focused11384 select the2 m footway start and complete all four
+stock approaches with active REST/safe final; the5 m canopy remained rejected.
+Require the proven production scope, matching source identity, nonreceiver ground
+role and supported native shape, then still evaluate slope, full capsule descent
+and every settled support contact. Neither a body name nor a ground label alone
+proves traversability; unknown/support/roof contacts remain ineligible.
+
+A separately source-bound rooftop component needs its proven parent support
+context rather than blanket roof eligibility. Review43079 found that qualifying
+setup, prediction and final REST still left active walking floor subcontacts
+unchecked. Trace the same native body/shape/point/normal qualification through
+each active physics wait, retaining mismatch HOLD through safe teardown; do not
+require incidental slide events every frame.
+
+## Validate diagnostic entrypoint grammar before world loading
+
+The island batch parser and later integrated single-building review exposed the
+same failure: recognizing only a diagnostic-name prefix lets malformed flags
+fall through to normal movement. Validate each entrypoint's complete supported
+flag/value grammar before loading, consuming filenames as values and rejecting
+unknown, duplicate, missing or conflicting options. A corrected sibling parser
+is not evidence for another entrypoint. Verify rejection stage separately from
+valid-argument arrival at the existing renderer guard; those probes give no
+movement or fit credit.

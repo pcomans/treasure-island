@@ -6,6 +6,9 @@ extends Node3D
 @onready var hud: GameHUD = $Interface/HUD
 
 var _world_ready := false
+# Shared automation keeps the pointer visible while retaining normal startup.
+# Ordinary gameplay uses the default and captures the mouse as before.
+var capture_mouse_on_ready := true
 
 
 func _ready() -> void:
@@ -66,7 +69,8 @@ func _on_world_ready(_report: Dictionary) -> void:
 		player.get_spray_controller().tag_instances.oldest_tag_removed.connect(world_root.get_runtime_evidence().record_tag_eviction)
 	world_root.get_runtime_evidence().bind_runtime(player, world_root.get_boundary())
 	player.set_gameplay_enabled(true)
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	if capture_mouse_on_ready:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	hud.show_world_ready()
 	print("WORLD_READY")
 	# Launch check for exported builds: load the island, then exit cleanly.
