@@ -14,7 +14,8 @@ const PHYSICS_WORLD_SOLID := 1 << 0
 const RENDER_WORLD_VISIBLE := 1 << 0
 const RENDER_BUILDING_WALL := 1 << 1
 
-const ACCEPTED_CREAM := preload("res://game/resources/materials/world/navy_chapel_187/navy_chapel_primary.tres")
+const ACCEPTED_CREAM := preload("res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_inferred_cream_structure.tres")
+const TIMBER := preload("res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_timber.tres")
 const INFERRED_CREAM_STRUCTURE := preload("res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_inferred_cream_structure.tres")
 const PROTECTED_NEUTRAL := preload("res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_protected_neutral.tres")
 const PALE_TRIM := preload("res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_pale_trim.tres")
@@ -68,124 +69,175 @@ func configure_records(wall_record: Dictionary, roof_record: Dictionary) -> Dict
 	if not matches_record_pair(wall_record, roof_record):
 		return _failure("navy_chapel_source_contract", "The exact w291189336 wall+roof pair did not match the fail-closed prototype seam.")
 
-	var protected_wall := _bucket()
-	var accepted_cream := _bucket()
-	var inferred_cream := _bucket()
-	var roof := _bucket()
+	return _compose_study(wall_record, roof_record, config)
+
+
+# Reuse the Chapel source frame and complete mesh emitters. Exterior dimensions
+# are production inference from the September 2025 SSE view, never surveyed.
+func _compose_study(wall: Dictionary, roof_record: Dictionary, config: Dictionary) -> Dictionary:
+	var shell := _bucket()
+	var protected := _bucket()
+	var roofing := _bucket()
 	var trim := _bucket()
-	var opening := _bucket()
-	var collision := _bucket()
-
-	for run_index in range(WALL_RUN_COUNT):
-		var visual_bucket := accepted_cream if run_index in OBSERVED_SSE_RUNS else protected_wall
-		_append_record_wall_run(visual_bucket, wall_record, run_index)
-		_append_record_wall_run(collision, wall_record, run_index)
-	_append_record_mesh(roof, roof_record)
-	_append_record_mesh(collision, roof_record)
-
-	var inference := config.production_inference_m as Dictionary
-	var sse := _chain_basis(wall_record, OBSERVED_SSE_RUNS)
-	if sse.is_empty():
-		return _failure("navy_chapel_sse_chain", "The exact SSE run chain could not be resolved.")
-	var front_center := sse.start as Vector3
-	front_center = front_center.lerp(sse.end as Vector3, 0.5)
-	front_center.y = float(inference.main_gable_eave_y)
-	var tangent := sse.tangent as Vector3
-	var outward := sse.normal as Vector3
-	var inward := -outward
-
-	_append_gabled_roof(inferred_cream, protected_wall, roof, collision, front_center, tangent, outward, inference)
-	_append_belfry(inferred_cream, roof, trim, collision, front_center, tangent, outward, inference)
-	_append_front_composition(inferred_cream, trim, opening, collision, front_center, tangent, outward, inference)
-	_append_partial_side_openings(trim, opening, wall_record, inference)
-
-	var specs: Array[Dictionary] = [
-		{"name": "ProtectedExactWallAndRearClosure", "bucket": protected_wall, "material": PROTECTED_NEUTRAL, "layers": RENDER_BUILDING_WALL},
-		{"name": "AcceptedCreamExactSSERuns_9_10", "bucket": accepted_cream, "material": ACCEPTED_CREAM, "layers": RENDER_BUILDING_WALL},
-		{"name": "InferredCreamSSEGableBelfryEntry", "bucket": inferred_cream, "material": INFERRED_CREAM_STRUCTURE, "layers": RENDER_BUILDING_WALL},
-		{"name": "NeutralRoofAndCap", "bucket": roof, "material": NEUTRAL_ROOF, "layers": RENDER_WORLD_VISIBLE},
-		{"name": "ObservedPaleTrim", "bucket": trim, "material": PALE_TRIM, "layers": RENDER_BUILDING_WALL},
-		{"name": "OpaqueExteriorOpenings", "bucket": opening, "material": OPAQUE_OPENING, "layers": RENDER_BUILDING_WALL},
+	var cross := _bucket()
+	var glass := _bucket()
+	var wood := _bucket()
+	var inf := (config.production_inference_m as Dictionary).duplicate(true)
+	var frame := _chain_basis(wall, OBSERVED_SSE_RUNS)
+	var c: Vector3 = (frame.start as Vector3).lerp(frame.end as Vector3, 0.5)
+	c.y = 0.0
+	var t: Vector3 = frame.tangent
+	var n: Vector3 = frame.normal
+	var width := float(inf.main_gable_width)
+	var eave := float(inf.main_gable_eave_y)
+	var ridge := float(inf.main_gable_ridge_y)
+	var length := float(inf.main_gable_length)
+	var wing_junctions := [[], []]
+	for run in range(WALL_RUN_COUNT):
+		var f := _run_frame(wall, run)
+		var start: Vector3 = f.start
+		var finish: Vector3 = f.end
+		var cuts: Array[float] = [0.0, 1.0]
+		for side in range(2):
+			var axis: Vector3 = t if side == 0 else -t
+			var av := (start - c).dot(axis)
+			var bv := (finish - c).dot(axis)
+			if absf(bv - av) > 0.00001:
+				var fraction := (width * 0.5 + 0.10 - av) / (bv - av)
+				if fraction > 0.0 and fraction < 1.0:
+					cuts.append(fraction)
+					wing_junctions[side].append(start.lerp(finish, fraction))
+		cuts.sort()
+		for i in range(cuts.size() - 1):
+			var left := start.lerp(finish, cuts[i])
+			var right := start.lerp(finish, cuts[i + 1])
+			var middle := (left + right) * 0.5
+			var top := 8.0 if absf((middle - c).dot(t)) > width * 0.5 + 0.10 else eave
+			var bucket := shell if run in OBSERVED_SSE_RUNS or run in OBSERVED_PARTIAL_SIDE_RUNS else protected
+			_append_quad(bucket, left, right, Vector3(right.x, top, right.z), Vector3(left.x, top, left.z), f.normal)
+	# Neutral nave-side infill across the source-footprint wing projections.
+	# The roof helper supplies slopes/end gables, not these internal junctions.
+	# Derive both ends from the existing high/low perimeter-wall transitions;
+	# inset the infill 30mm beneath the unchanged eave, inside the footprint.
+	for side in range(2):
+		var joins: Array = wing_junctions[side]
+		assert(joins.size() == 2, "Chapel wing junction requires two source transitions")
+		var outward: Vector3 = t if side == 0 else -t
+		var first: Vector3 = joins[0]
+		var last: Vector3 = joins[1]
+		if (first - c).dot(n) < (last - c).dot(n):
+			var swap := first
+			first = last
+			last = swap
+		first.y = 8.0
+		last.y = 8.0
+		var front := first - outward * 0.13
+		var rear := last - outward * 0.13
+		var rise := Vector3.UP * (eave - 8.0)
+		_append_quad(protected, front, rear, rear + rise, front + rise, outward)
+		_append_quad(protected, first, front, front + rise, first + rise, n)
+		_append_quad(protected, rear, last, last + rise, rear + rise, -n)
+	# Lower source-footprint closure remains beneath the pitched nave/wing.
+	var lower := roof_record.duplicate(true)
+	for k in range(1, lower.vertices.size(), 3):
+		lower.vertices[k] = 8.0
+	_append_record_mesh(roofing, lower)
+	var unused := _bucket()
+	_append_gabled_roof(shell, protected, roofing, unused, c + Vector3.UP * eave, t, n, inf)
+	for wing: Array in [[1.0, 29.86, 7.93, 8.68], [-1.0, 29.705, 7.93, 9.0]]:
+		var direction: float = wing[0]
+		var wi := inf.duplicate(true)
+		wi.main_gable_width = wing[2]
+		wi.main_gable_length = wing[3]
+		wi.main_gable_eave_y = 8.0
+		wi.main_gable_ridge_y = 10.25
+		var wc := c + t * 8.18 * direction - n * float(wing[1]) + Vector3.UP * 8.0
+		_append_gabled_roof(protected, protected, roofing, unused, wc, -n, -t * direction, wi)
+	# No opening schedule on protected runs 17/18 or any other unseen face.
+	_append_belfry(shell, roofing, cross, unused, c, t, n, inf)
+	_append_box(trim, c + n * 0.85 + Vector3.UP * 7.25, t, n, 6.0, 0.16, 1.7)
+	for i in range(2):
+		var x: float = [-2.35, 2.35][i]
+		# Actual generated land corner minima; visible area is 40mm above land.
+		var base_y: float = [4.02523, 3.991914][i]
+		_append_box(trim, c + t * x + n * 1.35 + Vector3.UP * ((base_y + 7.24) * 0.5), t, n, 0.12, 7.24 - base_y, 0.12)
+	_append_box(wood, c + n * 0.045 + Vector3.UP * 5.395, t, n, 1.6, 2.80, 0.08)
+	_append_frame(trim, c + n * 0.11 + Vector3.UP * 5.42, t, n, 1.6, 2.75, 0.12, 0.15)
+	for x: float in [-1.55, 1.55]:
+		_study_window(glass, trim, c + t * x, 4.35, 6.96, 1.04, t, n, 2)
+	for x: float in [-5.7, 5.7]:
+		_study_window(glass, trim, c + t * x, 5.0, 6.25, 0.62, t, n, 1)
+	# Finite peaked glazing follows the observed gable, opaque central panel.
+	for column in range(7):
+		var x := (column - 3) * 0.57
+		_study_window(glass, trim, c + t * x, 8.05, ridge - 0.58 - absf(x) * 0.68, 0.48, t, n, 2)
+	_append_box(wood, c + n * 0.105 + Vector3.UP * 9.73, t, n, 1.02, 3.2, 0.07)
+	for station: float in [2.0, 5.4, 8.8]:
+		var f := _chain_frame(wall, OBSERVED_PARTIAL_SIDE_RUNS, station)
+		for x: float in [-0.62, 0.0, 0.62]:
+			_study_window(glass, trim, (f.wall_anchor as Vector3) + (f.tangent as Vector3) * x, 5.25, 9.1, 0.5, f.tangent, f.normal, 1)
+	# Thin eave/rake boards, not new hidden facade ornament.
+	for sign_value: float in [-1.0, 1.0]:
+		var start := c + t * width * 0.5 * sign_value + Vector3.UP * eave
+		_append_box(trim, start - n * length * 0.5, t, n, 0.16, 0.18, length + 0.16)
+		var end := c + Vector3.UP * ridge
+		var axis := (end - start).normalized()
+		_append_box(trim, (start + end) * 0.5 + n * 0.06, axis, n, start.distance_to(end) + 0.12, 0.16, 0.18)
+	var specs: Array = [
+		["ProtectedExactWallAndRearClosure", protected, PROTECTED_NEUTRAL, RENDER_BUILDING_WALL, false],
+		["InferredCreamSSEGableBelfryEntry", shell, INFERRED_CREAM_STRUCTURE, RENDER_BUILDING_WALL, false],
+		["NeutralRoofAndCap", roofing, NEUTRAL_ROOF, RENDER_WORLD_VISIBLE, true],
+		["ObservedPaleTrim", trim, PALE_TRIM, RENDER_BUILDING_WALL, false],
+		["ObservedCross", cross, PALE_TRIM, RENDER_WORLD_VISIBLE, true],
+		["OpaqueExteriorOpenings", glass, OPAQUE_OPENING, RENDER_BUILDING_WALL, false],
+		["ObservedOpaquePanelAndDoor", wood, TIMBER, RENDER_BUILDING_WALL, false],
 	]
+	var wall_faces := PackedVector3Array()
+	var roof_faces := PackedVector3Array()
 	var visual_triangles := 0
-	var mesh_instances := 0
-	var batch_triangles := {}
-	for spec in specs:
-		var bucket := spec.bucket as Dictionary
-		var triangle_count := int((bucket.indices as Array).size() / 3)
-		if triangle_count <= 0:
-			continue
-		var instance := _mesh_instance(str(spec.name), bucket, spec.material as Material, int(spec.layers))
-		instance.set_meta("material_role", str(spec.name))
-		add_child(instance)
-		mesh_instances += 1
-		visual_triangles += triangle_count
-		batch_triangles[str(spec.name)] = triangle_count
-
-	var body := _collision_body(collision)
-	if body == null:
-		_clear_children_now()
-		return _failure("navy_chapel_collision", "The standalone Chapel structural collision bucket was empty.")
-	add_child(body)
-
-	var collision_triangles := int((collision.indices as Array).size() / 3)
-	var metadata := {
-		"model_id": str(config.model_id),
-		"config_path": CONFIG_PATH,
-		"source_key": SOURCE_KEY,
-		"wall_object_key": WALL_KEY,
-		"roof_object_key": ROOF_KEY,
-		"interior_modeled": false,
-		"horizontal_source_footprint_changed": false,
-		"source_identity_changed": false,
-		"vertical_and_roof_geometry_truth_class": "reversible_production_inference",
-		"surveyed_vertical_dimensions": false,
-		"surveyed_opening_dimensions": false,
-		"surveyed_pane_count": false,
-		"surveyed_side_cadence": false,
-		"source_photography_shipped": false,
-		"observed_sse_run_indices": OBSERVED_SSE_RUNS.duplicate(),
-		"observed_partial_side_run_indices": OBSERVED_PARTIAL_SIDE_RUNS.duplicate(),
-		"protected_run_indices": PROTECTED_RUNS.duplicate(),
-		"protected_runs_have_modules": false,
-		"accepted_cream_run_indices": OBSERVED_SSE_RUNS.duplicate(),
-		"accepted_cream_scope_extended": false,
-		"new_structure_cream_truth_class": "reversible_production_inference_not_material_accepted",
-		"complete_sse_composition_count": 1,
-		"belfry_count": 1,
-		"pyramidal_cap_count": 1,
-		"cross_count": 1,
-		"tall_divided_window_count": 1,
-		"projecting_entry_count": 1,
-		"partial_side_opening_group_count": 3,
-		"entry_and_new_silhouette_collision_congruent": true,
-		"decorative_overlays_noncolliding_with_exact_wall_behind": true,
-		"landing_geometry_includes_pitched_roof_and_cap": true,
-		"spray_ownership": "none_standalone",
-		"mesh_instances": mesh_instances,
-		"surfaces": mesh_instances,
-		"visual_triangles": visual_triangles,
-		"visual_batch_triangles": batch_triangles,
-		"static_bodies": 1,
-		"shapes": 1,
-		"collision_triangles": collision_triangles,
-		"collision_face_vertices": collision_triangles * 3,
-	}
-	for key: String in metadata:
-		set_meta(key, metadata[key])
+	for spec: Array in specs:
+		var bucket: Dictionary = spec[1]
+		add_child(_mesh_instance(spec[0], bucket, spec[2], spec[3]))
+		var points: Array = bucket.vertices
+		var normals: Array = bucket.normals
+		var indices: Array = bucket.indices
+		visual_triangles += indices.size() / 3
+		for offset in range(0, indices.size(), 3):
+			# Semantic roof/cross objects reject spray; top/bottom faces of wall
+			# details also remain solid non-wall landing/occlusion surfaces.
+			var landing := bool(spec[4]) or absf((normals[int(indices[offset])] as Vector3).y) > 0.65
+			for corner in range(3):
+				if landing:
+					roof_faces.append(points[int(indices[offset + corner])])
+				else:
+					wall_faces.append(points[int(indices[offset + corner])])
+	var combined := _bucket()
+	for point: Vector3 in wall_faces + roof_faces:
+		(combined.vertices as Array).append(point)
+		(combined.indices as Array).append((combined.indices as Array).size())
+	add_child(_collision_body(combined))
+	set_meta("chapel_wall_faces", wall_faces)
+	set_meta("chapel_roof_faces", roof_faces)
+	set_meta("source_key", SOURCE_KEY)
+	set_meta("horizontal_source_footprint_changed", false)
+	set_meta("protected_runs_have_modules", false)
+	set_meta("vertical_and_roof_geometry_truth_class", "reversible_production_inference")
+	set_meta("observed_sse_run_indices", OBSERVED_SSE_RUNS)
+	set_meta("observed_partial_side_run_indices", OBSERVED_PARTIAL_SIDE_RUNS)
+	set_meta("protected_run_indices", PROTECTED_RUNS)
 	_configured = true
-	_last_result = {
-		"ok": true,
-		"node": self,
-		"metadata": metadata,
-		"mesh_instances": mesh_instances,
-		"surfaces": mesh_instances,
-		"visual_triangles": visual_triangles,
-		"collision_triangles": collision_triangles,
-		"static_bodies": 1,
-		"shapes": 1,
-	}
+	_last_result = {"ok": true, "node": self, "visual_triangles": visual_triangles, "metadata": {"source_key": SOURCE_KEY, "interior_modeled": false}}
 	return _last_result.duplicate(true)
+
+
+func _study_window(glass: Dictionary, trim: Dictionary, anchor: Vector3, bottom: float, top: float, width: float, t: Vector3, n: Vector3, dividers: int) -> void:
+	var center := Vector3(anchor.x, (bottom + top) * 0.5, anchor.z) + n * 0.035
+	_append_box(glass, center, t, n, width, top - bottom, 0.06)
+	_append_frame(trim, center + n * 0.055, t, n, width, top - bottom, 0.065, 0.12)
+	for i in range(1, dividers + 1):
+		var bar := center + n * 0.055
+		bar.y = lerpf(bottom, top, float(i) / float(dividers + 1))
+		_append_box(trim, bar, t, n, width, 0.055, 0.12)
 
 
 func get_build_result() -> Dictionary:
@@ -379,11 +431,17 @@ func _append_record_mesh(bucket: Dictionary, record: Dictionary) -> void:
 
 
 func _append_box(bucket: Dictionary, center: Vector3, tangent_value: Vector3, normal_value: Vector3, width: float, height: float, depth: float) -> void:
+	# Callers supply a board axis and outward face normal. Orthogonalize
+	# explicitly so pitched rake boards retain their requested cross-section.
+	assert(tangent_value.length_squared() > 0.000001)
 	var tangent := tangent_value.normalized()
-	var normal := normal_value.normalized()
+	var perpendicular := normal_value - tangent * normal_value.dot(tangent)
+	assert(perpendicular.length_squared() > 0.000001)
+	var normal := perpendicular.normalized()
+	var up := normal.cross(tangent).normalized()
 	var tx := tangent * width * 0.5
 	var nz := normal * depth * 0.5
-	var uy := Vector3.UP * height * 0.5
+	var uy := up * height * 0.5
 	var fbl := center - tx - uy + nz
 	var fbr := center + tx - uy + nz
 	var ftr := center + tx + uy + nz
@@ -394,8 +452,8 @@ func _append_box(bucket: Dictionary, center: Vector3, tangent_value: Vector3, no
 	var btl := center - tx + uy - nz
 	_append_quad(bucket, fbl, fbr, ftr, ftl, normal)
 	_append_quad(bucket, bbr, bbl, btl, btr, -normal)
-	_append_quad(bucket, ftl, ftr, btr, btl, Vector3.UP)
-	_append_quad(bucket, bbl, bbr, fbr, fbl, Vector3.DOWN)
+	_append_quad(bucket, ftl, ftr, btr, btl, up)
+	_append_quad(bucket, bbl, bbr, fbr, fbl, -up)
 	_append_quad(bucket, bbl, fbl, ftl, btl, -tangent)
 	_append_quad(bucket, fbr, bbr, btr, ftr, tangent)
 
@@ -519,10 +577,10 @@ static func _config_contract_matches(config: Dictionary) -> bool:
 		or protected.is_empty() \
 		or _int_array((protected[0] as Dictionary).get("run_indices", []) as Array) != PROTECTED_RUNS:
 		return false
-	if float(inference.get("main_gable_width", 0.0)) > 14.0 \
-		or float(inference.get("main_gable_length", 0.0)) > 20.0 \
-		or float(inference.get("main_gable_eave_y", 0.0)) != 14.04 \
-		or float(inference.get("main_gable_ridge_y", 0.0)) <= 14.04 \
+	if float(inference.get("main_gable_width", 0.0)) > 16.5 \
+		or float(inference.get("main_gable_length", 0.0)) > 43.0 \
+		or float(inference.get("main_gable_eave_y", 0.0)) <= 4.04 \
+		or float(inference.get("main_gable_ridge_y", 0.0)) <= float(inference.get("main_gable_eave_y", 0.0)) \
 		or float(inference.get("belfry_cap_apex_y", 0.0)) <= float(inference.get("belfry_wall_top_y", 0.0)) \
 		or float(inference.get("cross_vertical_center_y", 0.0)) <= float(inference.get("belfry_cap_apex_y", 0.0)) \
 		or (inference.get("side_window_chain_centers_m", []) as Array).size() != 3:

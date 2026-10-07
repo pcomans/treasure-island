@@ -11,7 +11,6 @@ const WALL_KEY := "building:w291189336:wall"
 const ROOF_KEY := "building:w291189336:roof"
 const PHYSICS_WORLD_SOLID := 1 << 0
 const PHYSICS_SPRAY_SURFACE := 1 << 2
-const WALL_COLLISION_TRIANGLE_RANGES := [[0, 67], [90, 103], [132, 143]]
 
 const PROTOTYPE := preload("res://game/scripts/world/facades/navy_chapel_187_standalone_hero_prototype.gd")
 
@@ -24,6 +23,8 @@ const EXECUTABLE_DEPENDENCIES := [
 	"res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_pale_trim.tres",
 	"res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_opaque_opening.tres",
 	"res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_neutral_roof.tres",
+	"res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_timber.tres",
+	"res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_coating.gdshader",
 ]
 
 
@@ -182,32 +183,19 @@ static func _apply_live_root_metadata(wall_root: Node3D, roof_root: Node3D) -> v
 
 
 static func _split_collision(root: Node3D) -> Dictionary:
+	var wall_faces: PackedVector3Array = root.get_meta("chapel_wall_faces", PackedVector3Array())
+	var roof_faces: PackedVector3Array = root.get_meta("chapel_roof_faces", PackedVector3Array())
+	if wall_faces.is_empty() or roof_faces.is_empty() or wall_faces.size() % 3 != 0 or roof_faces.size() % 3 != 0:
+		return {"ok": false, "message": "Chapel semantic wall/roof face partitions are incomplete."}
 	var original_bodies: Array[StaticBody3D] = []
 	for node: Node in _descendants(root):
 		if node is StaticBody3D:
 			original_bodies.append(node as StaticBody3D)
-	if original_bodies.size() != 1:
-		return {"ok": false, "message": "Approved Chapel factory no longer has one combined source collision body."}
-	var original_body := original_bodies[0]
-	if original_body.get_child_count() != 1:
-		return {"ok": false, "message": "Approved Chapel combined collision body no longer has one shape node."}
-	var original_shape_node := original_body.get_child(0) as CollisionShape3D
-	if original_shape_node == null or not (original_shape_node.shape is ConcavePolygonShape3D):
-		return {"ok": false, "message": "Approved Chapel combined collision shape is missing."}
-	var combined_faces := (original_shape_node.shape as ConcavePolygonShape3D).get_faces()
-	var wall_faces := PackedVector3Array()
-	var roof_faces := PackedVector3Array()
-	for triangle_index in combined_faces.size() / 3:
-		if _triangle_in_ranges(triangle_index, WALL_COLLISION_TRIANGLE_RANGES):
-			for corner in 3:
-				wall_faces.append(combined_faces[triangle_index * 3 + corner])
-		else:
-			for corner in 3:
-				roof_faces.append(combined_faces[triangle_index * 3 + corner])
-	if wall_faces.is_empty() or roof_faces.is_empty():
-		return {"ok": false, "message": "Chapel wall/roof collision partition left one side without collision."}
-	root.remove_child(original_body)
-	original_body.free()
+	if original_bodies.size() != 1 or original_bodies[0].get_parent() != root:
+		return {"ok": false, "message": "Chapel producer must supply one direct combined body before semantic replacement."}
+	root.remove_child(original_bodies[0])
+	original_bodies[0].free()
+
 	return {
 		"ok": true,
 		"wall_body": _collision_body("Collision", wall_faces, WALL_KEY, "building_wall", true),
@@ -246,14 +234,6 @@ static func _collision_body(node_name: String, faces: PackedVector3Array, object
 	return body
 
 
-static func _triangle_in_ranges(triangle_index: int, ranges: Array) -> bool:
-	for value: Variant in ranges:
-		var bounds := value as Array
-		if triangle_index >= int(bounds[0]) and triangle_index <= int(bounds[1]):
-			return true
-	return false
-
-
 static func runtime_dependency_closure_exists() -> bool:
 	for path: String in EXECUTABLE_DEPENDENCIES:
 		if not ResourceLoader.exists(path) and not FileAccess.file_exists(path):
@@ -262,76 +242,32 @@ static func runtime_dependency_closure_exists() -> bool:
 
 
 static func material_semantics_match(root: Node3D) -> bool:
+	var base := "res://game/resources/materials/world/navy_chapel_187/standalone_hero/"
 	var expected := {
-		"ProtectedExactWallAndRearClosure": {
-			"path": "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_protected_neutral.tres",
-			"name": "navy_chapel_protected_neutral_nonclaim", "color": Color(0.72, 0.71, 0.68, 1.0), "roughness": 0.9,
-		},
-		"InferredCreamSSEGableBelfryEntry": {
-			"path": "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_inferred_cream_structure.tres",
-			"name": "navy_chapel_inferred_cream_structure_not_material_accepted", "color": Color(0.82, 0.77, 0.65, 1.0), "roughness": 0.8,
-		},
-		"NeutralRoofAndCap": {
-			"path": "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_neutral_roof.tres",
-			"name": "navy_chapel_neutral_roof_color_unasserted", "color": Color(0.16, 0.17, 0.16, 1.0), "roughness": 0.86,
-		},
-		"ObservedPaleTrim": {
-			"path": "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_pale_trim.tres",
-			"name": "navy_chapel_observed_pale_trim_proxy", "color": Color(0.88, 0.85, 0.74, 1.0), "roughness": 0.8,
-		},
-		"OpaqueExteriorOpenings": {
-			"path": "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_opaque_opening.tres",
-			"name": "navy_chapel_opaque_opening_no_interior_claim", "color": Color(0.075, 0.095, 0.1, 1.0), "roughness": 0.5,
-		},
+		"ProtectedExactWallAndRearClosure": "navy_chapel_protected_neutral.tres",
+		"InferredCreamSSEGableBelfryEntry": "navy_chapel_inferred_cream_structure.tres",
+		"NeutralRoofAndCap": "navy_chapel_neutral_roof.tres",
+		"ObservedPaleTrim": "navy_chapel_pale_trim.tres",
+		"ObservedCross": "navy_chapel_pale_trim.tres",
+		"OpaqueExteriorOpenings": "navy_chapel_opaque_opening.tres",
+		"ObservedOpaquePanelAndDoor": "navy_chapel_timber.tres",
 	}
 	var seen := {}
 	for value: Node in root.find_children("*", "MeshInstance3D", true, false):
 		var instance := value as MeshInstance3D
-		if instance.mesh == null or instance.mesh.get_surface_count() != 1 or seen.has(instance.name):
+		if instance.mesh == null or instance.mesh.get_surface_count() != 1 or seen.has(instance.name) or not expected.has(instance.name):
 			return false
 		var material := instance.mesh.surface_get_material(0)
-		if instance.name == "AcceptedCreamExactSSERuns_9_10":
-			if not _accepted_shader_material_matches(material):
+		if material == null or material.resource_path != base + str(expected[instance.name]) or material.next_pass != null:
+			return false
+		if instance.name in ["InferredCreamSSEGableBelfryEntry", "ObservedPaleTrim", "ObservedCross", "ObservedOpaquePanelAndDoor"]:
+			if not material is ShaderMaterial or (material as ShaderMaterial).shader == null \
+				or (material as ShaderMaterial).shader.resource_path != base + "navy_chapel_coating.gdshader":
 				return false
-		else:
-			if not expected.has(instance.name) or not _standard_material_matches(material, expected[instance.name] as Dictionary):
-				return false
+		elif not material is StandardMaterial3D or (material as StandardMaterial3D).transparency != BaseMaterial3D.TRANSPARENCY_DISABLED:
+			return false
 		seen[instance.name] = true
-	return seen.size() == 6 and seen.has("AcceptedCreamExactSSERuns_9_10") and seen.size() == expected.size() + 1
-
-
-static func _standard_material_matches(material: Material, expected: Dictionary) -> bool:
-	if not (material is StandardMaterial3D):
-		return false
-	var standard := material as StandardMaterial3D
-	return standard.resource_path == str(expected.path) \
-		and standard.resource_name == str(expected.name) \
-		and standard.albedo_color.is_equal_approx(expected.color as Color) \
-		and is_equal_approx(standard.roughness, float(expected.roughness)) \
-		and is_zero_approx(standard.metallic) \
-		and standard.albedo_texture == null and standard.normal_texture == null \
-		and standard.next_pass == null
-
-
-static func _accepted_shader_material_matches(material: Material) -> bool:
-	if not (material is ShaderMaterial):
-		return false
-	var shader_material := material as ShaderMaterial
-	var shader := shader_material.shader
-	return shader_material.resource_path == "res://game/resources/materials/world/navy_chapel_187/navy_chapel_primary.tres" \
-		and shader_material.resource_name == "navy_chapel_sse_warm_cream_painted_prototype" \
-		and shader != null and shader.resource_path == "res://game/resources/materials/world/batch_02/batch_02_homogeneous_field.gdshader" \
-		and (shader_material.get_shader_parameter("base_color") as Color).is_equal_approx(Color(0.82, 0.77, 0.65, 1.0)) \
-		and (shader_material.get_shader_parameter("secondary_color") as Color).is_equal_approx(Color(0.76, 0.71, 0.60, 1.0)) \
-		and is_equal_approx(float(shader_material.get_shader_parameter("roughness_value")), 0.76) \
-		and int(shader_material.get_shader_parameter("field_kind")) == 4 \
-		and is_equal_approx(float(shader_material.get_shader_parameter("primary_scale_m")), 1.65) \
-		and is_equal_approx(float(shader_material.get_shader_parameter("secondary_scale_m")), 0.55) \
-		and is_zero_approx(float(shader_material.get_shader_parameter("relief_strength"))) \
-		and is_equal_approx(float(shader_material.get_shader_parameter("color_variation")), 0.025) \
-		and is_equal_approx(float(shader_material.get_shader_parameter("filter_start_cycles_per_pixel")), 0.12) \
-		and is_equal_approx(float(shader_material.get_shader_parameter("filter_end_cycles_per_pixel")), 0.34) \
-		and shader_material.next_pass == null
+	return seen.size() == expected.size()
 
 
 static func _measure(roots: Array) -> Dictionary:

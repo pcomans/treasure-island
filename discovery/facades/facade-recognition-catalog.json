@@ -9982,6 +9982,16 @@
           "review_id": "navy-chapel-187-live-replacement-2026-09-04",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "navy-chapel-belfry001-code-20261007",
+          "review_kind": "independent_code_review",
+          "status": "accept"
+        },
+        {
+          "review_id": "navy-chapel-belfry001-whole-building-visual-20261007",
+          "review_kind": "independent_reference_recognition",
+          "status": "accept"
         }
       ],
       "anchor_source_key": "w291189336",

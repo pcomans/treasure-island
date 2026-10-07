@@ -1,7 +1,19 @@
-[gd_resource type="StandardMaterial3D" format=3]
+[gd_resource type="ShaderMaterial" load_steps=5 format=3]
+
+[ext_resource type="Shader" path="res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_coating.gdshader" id="shader"]
+[ext_resource type="Texture2D" path="res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_diff_1k.jpg" id="1"]
+[ext_resource type="Texture2D" path="res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_nor_gl_1k.jpg" id="2"]
+[ext_resource type="Texture2D" path="res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_rough_1k.jpg" id="3"]
 
 [resource]
-resource_name = "navy_chapel_inferred_cream_structure_not_material_accepted"
-albedo_color = Color(0.82, 0.77, 0.65, 1)
-roughness = 0.8
-metallic = 0.0
+resource_name = "navy_chapel_inferred_cream_structure_coating_inference"
+shader = ExtResource("shader")
+shader_parameter/surface_color = ExtResource("1")
+shader_parameter/surface_normal = ExtResource("2")
+shader_parameter/surface_roughness = ExtResource("3")
+shader_parameter/paint_color = Color(0.82, 0.79, 0.69, 1)
+shader_parameter/tile_span_m = 1.5
+shader_parameter/relief_strength = 0.08
+shader_parameter/roughness_base = 0.85
+shader_parameter/variation_strength = 0.03
+shader_parameter/wear_strength = 0.01

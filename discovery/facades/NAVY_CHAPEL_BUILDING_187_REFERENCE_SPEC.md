@@ -1,5 +1,58 @@
 # Navy Chapel Building 187 / 51 California Avenue facade reference specification
 
+## Accepted whole-building study — 2026-10-07
+
+ROOT accepted the current belfry001 Chapel study for integration. All reviewer
+and integration notes are written; the exact Chapel-only commit is authorized.
+Push remains pending restoration of the existing DevPod credential forwarding. Existing recognition credit
+is retained:49 accepted units of213; no as-built claim is added. The historical
+research restrictions below describe the earlier handoff, not the later approved
+whole-building scope.
+
+Reuse decision: retain the existing Chapel producer/paired live adapter and
+shared material maps; adapt the maintained Building3 coating projection for
+Chapel-only cream, trim and timber variants. No new downloaded/generated texture
+or hidden-side reference was introduced. Source XZ/bottoms, canonical wall/roof
+identity, protected module-free runs0–8/14–33 and stock controls remain preserved.
+Reference-supported SSE composition and inferred proportions include the pitched
+nave, stepped gable glazing, shallow entry, side window groups and pyramidal
+belfry/cross. Opposite-side composition remains production inference.
+
+Independent GPT-6.1 Sol High `chapel_final_visual` (child
+`01a115d8-6fb7-7a81-a39e-9ee1524229f6`) passed current game-art recognition/fidelity,
+coating, roof-wing assembly, context and island appearance in11065 (exit0).
+Actual comparison covered all14 belfry001 originals, both dated September2025 SSE
+references and five closure001 comparisons. The prior weak cap/cross HOLD is
+closed; original002 coarse-coating/roof-wing HOLD and closure001 belfry HOLD
+remain historical. Calibrated color, microscopic relief and unseen-side as-built
+fidelity remain unproved; shaded coating reads cooler and nearly flat.
+
+Independent Sol High `approach_geometry_review` passed the semantic live
+adapter, corrected orthonormal rake frame, coating material, paired six-face
+wing closure and final belfry parameter/emitter bounds (24709 exit0). Source
+review and visual review are separate. Current fit52529 exited0: roof0/33 bad,
+wall0/20 bad, four actual native Chapel wall approaches with active supported,
+stopped, input-released REST before safe disable. Current full suite28674
+exited0, ALL TESTS PASS including all49 scored units, validation and determinism.
+Native spray59271 and its independently viewed image remain applicable to the
+unchanged lower coated wall; the belfry correction did not replay that spray.
+Seven Texture RID shutdown warnings retain unknown cause.
+
+Catalog reviews: `navy-chapel-belfry001-code-20261007` and
+`navy-chapel-belfry001-whole-building-visual-20261007`. These append to prior
+acceptance rather than replacing it or changing the scored inventory. Catalog
+edits only add those review records to an already accepted unit; the tested
+accepted-unit selection and gameplay inputs remain unchanged.
+
+Originals, private dated references and complete verdict/logs remain outside Git:
+`/workspaces/landmark-progress-20261007/chapel-study/README.md`,
+`belfry-001/independent-critique.txt`, `belfry-001/code-parent-result.txt`,
+`belfry-001/fit/run.log`, `belfry-001/full-suite.log`, and
+`closure-001/fit-spray/spray.png`. Integration must exclude concurrent unaccepted
+Building1 study source/material changes. No export or push is claimed here.
+
+## Historical reference handoff — 2026-08-29
+
 Checked: **2026-08-29**
 Mode: **research and implementation handoff only**
 Target: **`w291189336` / `building:w291189336:wall`**

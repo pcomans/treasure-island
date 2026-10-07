@@ -1,7 +1,7 @@
 {
   "schema_version": "ti.navy-chapel-187-standalone-hero-prototype/1",
   "model_id": "navy-chapel-187-standalone-hero-prototype-v1",
-  "scope": "standalone exterior-only recognition prototype; not connected to WorldChunkBuilder or any live recognition registry",
+  "scope": "source-bound exterior Chapel study through paired live adapter; reference-supported vertical production inference",
   "target": {
     "canonical_name": "Navy Chapel Building 187",
     "source_key": "w291189336",
@@ -11,7 +11,10 @@
     "chunk_path": "res://generated/world/chunks/x_-1__z_2.json",
     "geometry_sha256": "c62a89b238b4831fa2c16e3244c0bffdf17a80ec09498396bc8e582c5c9e696a",
     "source_height_m": 10.0,
-    "flat_base_y_range_m": [3.921, 4.04],
+    "flat_base_y_range_m": [
+      3.921,
+      4.04
+    ],
     "generated_top_y_m": 14.04,
     "wall_run_count": 34,
     "wall_vertices": 136,
@@ -20,9 +23,9 @@
     "roof_triangles": 18
   },
   "truth_boundary": {
-    "prototype_only": true,
-    "runtime_attachment": false,
-    "technical_evidence_status": "pending_independent_bar_raiser_review",
+    "prototype_only": false,
+    "runtime_attachment": true,
+    "technical_evidence_status": "study_pending_independent_review",
     "recognition_accepted": false,
     "believability_accepted": false,
     "as_built_claim": false,
@@ -40,14 +43,25 @@
     {
       "id": "NPS-TREASURE-ISLAND-NRHP-REGISTRATION",
       "truth_class": "primary_public_historic_record",
-      "supports": ["historic Navy Chapel identity and period institutional context"],
-      "does_not_support": ["current facade dimensions", "current pane count", "interior"]
+      "supports": [
+        "historic Navy Chapel identity and period institutional context"
+      ],
+      "does_not_support": [
+        "current facade dimensions",
+        "current pane count",
+        "interior"
+      ]
     },
     {
       "id": "TIDA-MAY-2026-HISTORIC-CHAPEL",
       "truth_class": "current_public_agency_record",
-      "supports": ["current surviving Navy Chapel identity"],
-      "does_not_support": ["facade geometry dimensions", "image licensing"]
+      "supports": [
+        "current surviving Navy Chapel identity"
+      ],
+      "does_not_support": [
+        "facade geometry dimensions",
+        "image licensing"
+      ]
     },
     {
       "id": "NC-SV01-2025-09",
@@ -73,22 +87,47 @@
     {
       "id": "NC-SSE-GABLE",
       "role": "observed public gable and entrance end",
-      "ordered_run_indices": [9, 10],
+      "ordered_run_indices": [
+        9,
+        10
+      ],
       "length_m": 16.362,
-      "start_xz_m": [-104.937, 651.058],
-      "end_xz_m": [-90.473, 643.41],
-      "outward_normal_xz": [0.467, 0.884],
+      "start_xz_m": [
+        -104.937,
+        651.058
+      ],
+      "end_xz_m": [
+        -90.473,
+        643.41
+      ],
+      "outward_normal_xz": [
+        0.467,
+        0.884
+      ],
       "field_material_policy": "accepted warm cream material",
       "module_policy": "one complete gable-window-entry composition"
     },
     {
       "id": "NC-ESE-PARTIAL-PUBLIC-SIDE",
       "role": "bounded observed partial long side immediately adjacent to SSE end",
-      "ordered_run_indices": [11, 12, 13],
+      "ordered_run_indices": [
+        11,
+        12,
+        13
+      ],
       "length_m": 11.829,
-      "start_xz_m": [-90.473, 643.41],
-      "end_xz_m": [-96.0, 632.951],
-      "outward_normal_xz": [0.884, -0.467],
+      "start_xz_m": [
+        -90.473,
+        643.41
+      ],
+      "end_xz_m": [
+        -96.0,
+        632.951
+      ],
+      "outward_normal_xz": [
+        0.884,
+        -0.467
+      ],
       "field_material_policy": "quiet neutral non-claim surrogate",
       "module_policy": "three complete tall narrow opening groups; count and cadence are reversible production inference"
     }
@@ -96,8 +135,38 @@
   "protected_regions": [
     {
       "id": "NC-UNOBSERVED-RUNS",
-      "run_indices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33],
-      "policy": "exact source wall shell only in a quiet neutral non-claim surrogate; no openings, plaques, or decorative schedule"
+      "run_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33
+      ],
+      "policy": "source XZ and wall-bottom preserved; quiet neutral module-free shell with reference-bounded vertical massing inference"
     },
     {
       "id": "NC-REAR-GABLE-CLOSURE",
@@ -106,22 +175,22 @@
     }
   ],
   "production_inference_m": {
-    "main_gable_width": 14.0,
-    "main_gable_length": 20.0,
+    "main_gable_width": 16.361515822196925,
+    "main_gable_length": 42.75,
     "main_gable_front_inset": 0.0,
-    "main_gable_eave_y": 14.04,
-    "main_gable_ridge_y": 18.4,
-    "belfry_center_inward_from_sse_m": 8.5,
-    "belfry_plan_width": 3.4,
-    "belfry_plan_depth": 3.4,
-    "belfry_base_y": 17.4,
-    "belfry_wall_top_y": 21.0,
-    "belfry_cap_apex_y": 23.3,
-    "cross_vertical_center_y": 24.05,
-    "cross_vertical_height": 1.5,
-    "cross_horizontal_center_y": 24.15,
-    "cross_horizontal_width": 0.9,
-    "cross_member_thickness": 0.16,
+    "main_gable_eave_y": 9.8,
+    "main_gable_ridge_y": 15.5,
+    "belfry_center_inward_from_sse_m": 15.0,
+    "belfry_plan_width": 4.0,
+    "belfry_plan_depth": 4.0,
+    "belfry_base_y": 13.6,
+    "belfry_wall_top_y": 17.6,
+    "belfry_cap_apex_y": 20.2,
+    "cross_vertical_center_y": 21.1,
+    "cross_vertical_height": 1.8,
+    "cross_horizontal_center_y": 21.45,
+    "cross_horizontal_width": 1.05,
+    "cross_member_thickness": 0.14,
     "entry_width": 5.4,
     "entry_height": 3.2,
     "entry_depth": 1.5,
@@ -138,17 +207,21 @@
     "side_window_width": 1.2,
     "side_window_bottom_y": 6.4,
     "side_window_top_y": 11.8,
-    "side_window_chain_centers_m": [2.1, 5.915, 9.73],
+    "side_window_chain_centers_m": [
+      2.1,
+      5.915,
+      9.73
+    ],
     "side_frame_projection": 0.2
   },
   "material_scope": {
     "accepted_cream": {
       "path": "res://game/resources/materials/world/navy_chapel_187/navy_chapel_primary.tres",
-      "application": "exact source wall runs 9 and 10 only; no new prototype geometry inherits accepted material status"
+      "application": "historical material credit retained; current study uses Chapel-only PBR coating variant without extending material acceptance"
     },
     "inferred_cream_structure": {
       "path": "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_inferred_cream_structure.tres",
-      "application": "SSE gable closure, projecting entry, and belfry walls as a reversible source-supported palette inference; explicitly not material-accepted or color-calibrated"
+      "application": "observed SSE and partial-side shell, gable and belfry in Chapel-only PBR coating variant; not as-built material claim"
     },
     "protected_neutral": {
       "path": "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_protected_neutral.tres",
@@ -168,44 +241,18 @@
     }
   },
   "collision_contract": {
-    "base_source_wall_shell": "exact generated wall geometry",
-    "base_source_roof": "exact generated roof geometry",
-    "new_structural_visible_geometry": ["pitched roof", "front and rear gable closure", "belfry wall volume", "pyramidal cap", "cross", "projecting entry volume"],
-    "new_structural_collision": "triangle-congruent with every listed structural visible element",
-    "decorative_overlays": "noncolliding; exact wall or structural collision remains immediately behind",
-    "landing_geometry": ["exact source roof", "pitched roof slopes", "belfry cap"],
-    "spray_ownership": "none in standalone prototype; future adapter must assign exact live ownership explicitly"
-  },
-  "prototype_topology": {
-    "render_batches": 6,
-    "surfaces": 6,
-    "exact_source_wall_triangles": 68,
-    "exact_source_roof_triangles": 18,
-    "new_structural_visual_triangles": 58,
-    "decorative_overlay_triangles": 396,
-    "total_visual_triangles": 540,
-    "visual_batch_triangles": {
-      "ProtectedExactWallAndRearClosure": 65,
-      "AcceptedCreamExactSSERuns_9_10": 4,
-      "InferredCreamSSEGableBelfryEntry": 25,
-      "NeutralRoofAndCap": 26,
-      "ObservedPaleTrim": 360,
-      "OpaqueExteriorOpenings": 60
-    },
-    "static_bodies": 1,
-    "collision_shapes": 1,
-    "collision_triangles": 144,
-    "collision_face_vertices": 432,
-    "navigation_nodes": 0,
-    "spray_owner_nodes": 0
+    "base_source_wall_shell": "exact source XZ and bottom elevations; inferred wall tops",
+    "base_source_roof": "exact source horizontal footprint lower closure plus inferred pitched roofs",
+    "structural_collision": "all emitted visible faces partitioned by semantic roof/cross role and wall-detail face orientation",
+    "spray_ownership": "paired live adapter exact wall receiver; roof/cap/cross and horizontal detail faces reject spray"
   },
   "future_integration_seam": {
     "matcher": "fail-closed wall+roof pair for w291189336",
     "factory": "NavyChapel187StandaloneHeroPrototype.configure_records(wall_record, roof_record)",
     "required_live_behavior": "intercept wall and roof together before generic visual and collision creation",
     "forbidden_partial_attach": "never attach hero visuals over retained generic wall or roof collision",
-    "registry_status": "not_registered",
-    "world_builder_status": "not_attached"
+    "registry_status": "paired_live_adapter",
+    "world_builder_status": "attached"
   },
   "blocked_claims": [
     "as-built or surveyed dimensional fidelity",

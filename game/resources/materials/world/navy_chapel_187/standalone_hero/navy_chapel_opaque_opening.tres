@@ -2,6 +2,6 @@
 
 [resource]
 resource_name = "navy_chapel_opaque_opening_no_interior_claim"
-albedo_color = Color(0.075, 0.095, 0.1, 1)
-roughness = 0.5
+albedo_color = Color(0.16, 0.215, 0.23, 1)
+roughness = 0.32
 metallic = 0.0

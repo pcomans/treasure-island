@@ -6,14 +6,14 @@
 [ext_resource type="Texture2D" path="res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_rough_1k.jpg" id="3"]
 
 [resource]
-resource_name = "navy_chapel_pale_trim_coating_inference"
+resource_name = "navy_chapel_timber_coating_inference"
 shader = ExtResource("shader")
 shader_parameter/surface_color = ExtResource("1")
 shader_parameter/surface_normal = ExtResource("2")
 shader_parameter/surface_roughness = ExtResource("3")
-shader_parameter/paint_color = Color(0.88, 0.85, 0.76, 1)
-shader_parameter/tile_span_m = 1.5
-shader_parameter/relief_strength = 0.035
+shader_parameter/paint_color = Color(0.36, 0.265, 0.18, 1)
+shader_parameter/tile_span_m = 0.6
+shader_parameter/relief_strength = 0.025
 shader_parameter/roughness_base = 0.78
-shader_parameter/variation_strength = 0.02
+shader_parameter/variation_strength = 0.025
 shader_parameter/wear_strength = 0

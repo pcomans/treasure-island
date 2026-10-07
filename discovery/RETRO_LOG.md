@@ -16838,3 +16838,121 @@ Final narrowly scoped CODE PASS: support eligibility now derives from the stock 
 - Worked: all independent author/reviewer notes are present; ROOT accepted the15-path scope, material003 and source59 verdicts, final CODE and suite48032 reuse with separate parser probes. The real remote main matched the reviewed base before integration.
 - Did not: earlier suite and review HOLDs required several shared verification corrections; final PASS does not erase their limitations or establish unknown warning causes. No new run is claimed after the parser-only correction.
 - Next: commit only the reviewed paths, preserve historical49/213 credit and reference limits, and verify a normal push against the actual remote SHA; stop on divergence rather than overwrite.
+
+### chapel_art — Chapel whole-building first coherent study, 2026-10-07
+
+- Worked: reused the Chapel source-frame/mesh helpers and selectively adapted September29 composition, omitting protected17/18 windows. Recomposition keeps source XZ/bottoms, quiet protected faces and native paired ownership while adding peaked glazing, opaque panel, thin canopy, lower nave/wing and restrained tower/cross. Native generated land corner sampling at canopy feet found left4.03023–4.03222/right3.996914–3.998979m; visible area is40mm above land, and post bases embed below native minima. Baseline53726 and replacement study002/79962 exited0 with engine absence; matched gameplay/context/island plus SSE details are retained in `/workspaces/landmark-progress-20261007/chapel-study/`.
+- Did not: study001/63714 exited1 before pixels because freeing a parent during descendant iteration invalidated later child entries; collect-then-free with an exact direct-body guard repaired that lifetime error. Initial full plaster diffuse is visibly too dark/green and coarsely repetitive for the reference cream paint despite geometry improvement. This is an author finish HOLD, not acceptance. Seven Texture RID shutdown warnings in002 have unknown cause.
+- Next: stop on the first coherent actual-world render for independent Sol High critique; correct material response only under a new bounded assignment. Actual walking/contact/spray and full technical gates remain pending. Historical recognition credit is unchanged; no new acceptance, commit, download, image generation or export occurred.
+
+### approach_geometry_review — Chapel study002 geometry CODE review, 2026-10-07
+
+- Worked: semantic face emission replaces brittle triangle ranges; body traversal completes before removal, preserving ownership and opaque roof rejection. No other scoped blockers were found.
+- Did not: CODE HOLD found new sloped rake boards reuse a box helper that assumes horizontal tangents, so its global-UP thickness axis and assigned normals disagree with the emitted/native face planes. This source review ran no engine or tests and supplies no Chapel fit/spray, material or visual acceptance.
+- Next: check each caller's geometric assumptions against the complete emitter; require an orthonormal board frame with corresponding face normals, then separate Chapel fit/spray and visual verdicts. Preserve the lifecycle failure history and scoped capture evidence without treating capture success as technical or material closure.
+
+### chapel_art — Chapel fit and rake-frame correction, 2026-10-07
+
+- Worked: frozen study002 fit9259 exited0, all four approaches contacted the exact Chapel wall receiver on native land, with active supported released zero-velocity REST and SAFE_FINAL. Engine absence was confirmed. Independent code critique isolated the pitched rake box frame; producer-only correction orthogonalizes tangent/normal, derives up from their cross product and uses it for thickness plus top/bottom normals. Offline horizontal/both-pitched six-face checks agree with the existing clockwise quad emitter.
+- Did not: study002 used global UP in a helper that received a sloped tangent, so its assigned normals did not match all board faces. The completed fit predates the correction and cannot validate the repaired rake geometry. Material/visual HOLD remains separate.
+- Next: obtain narrow independent source review before any separately authorized render/mechanical check; source preflight is not an engine result. No engine, material, shared-code or acceptance changes accompanied this repair.
+
+### approach_geometry_review — Chapel rake-frame correction CODE review, 2026-10-07
+
+- Worked: narrow CODE PASS closes the sloped-rake finding. The complete box helper normalizes the tangent, removes its component from the outward normal and derives up=normal.cross(tangent); all six faces now use matching frame axes/normals and the existing clockwise emitter. Horizontal and both pitched callers retain a right-handed frame, including the reversed right-rake axis.
+- Did not: the original geometry CODE HOLD remains historical evidence. This reviewer ran no engine or tests; supplied fit9259 predates the repair, and the author's offline checks are separate evidence. This correction supplies no repaired fit/spray, material or visual acceptance.
+- Next: reuse unchanged source-binding, semantic partition, native ownership and lifecycle findings, then require separately assigned affected runtime and visual/material checks. Check complete emitter assumptions when introducing a new orientation rather than treating capture or an earlier fit as proof of the corrected geometry.
+
+### chapel_art — Chapel coating correction material001, 2026-10-07
+
+- Worked: Chapel-only `navy_chapel_coating.gdshader` adapts the accepted Building3 world-space coating approach, separating warm paint colour from normalized diffuse variation while retaining aligned existing normal/roughness maps. Changed cream/trim/timber TRES and only exact shader-variant/dependency checks in the Chapel live adapter; geometry stayed frozen after the independently rechecked board-frame repair. Capture67841 exited0 (terminal chunkf417d0), no Godot/Weston remained, and14 originals are retained in `/workspaces/landmark-progress-20261007/chapel-study/material-001`.
+- Did not: the old coarse green mottling is gone in inspected SSE oblique/entry/context pixels, but the corrected coating may be too restrained/flat at gameplay distance. Author inspection is not independent finish acceptance. Seven Texture RID shutdown warnings remain of unknown cause.
+- Next: independent visual and shader/adapter review of this actual revision, then separately authorized affected fit/spray checks; prior study002 judgments are historical. No further capture, geometry edit, download, generation, acceptance or commit occurred.
+
+
+### final_b3_visual — Chapel study002 early visual critique, 2026-10-07
+
+- Worked: Small image batches completed27-original coverage and distinguished substantial architectural recognition gains from unresolved finish and assembly defects; surrounding site/island regression passed.
+- Did not: Coarse repeating coating contradicted the observed cream finish; the roof-to-west-wing gap remained visible despite source-derived collision partitions. Current source reads supplied intended correspondence, not runtime integrity or an independently retained incremental diff; mechanics remained separate.
+- Next: Correct restrained cream coating and continuous roof/wall closure, then judge the fresh whole result before final mechanical and acceptance gates. Later fixes do not rewrite this original study002 EARLY VISUAL HOLD.
+
+### 2026-10-07 — chapel_art (Astra Low) — roof-wing closure and final mechanics
+
+- Worked: reused source-derived high/low wall transitions to add six neutral junction quads beneath the unchanged nave eave, including short returns, in the Chapel producer only. Original perimeter XZ/bottoms, protected faces, materials and roof profile stayed unchanged; the same emitted triangles supply native wall collision. Closure capture37888 exited0/chunkd09844 with14 saved views; inspected west/context/SSE originals show the former light opening closed. Evidence remains outside Git in `/workspaces/landmark-progress-20261007/chapel-study/closure-001`.
+- Worked: current-source fit/spray59271 exited0/chunk251aea:4/4 actual native-land stock approaches reached exact Chapel walls, with active grounded supported input-released REST and safe disabled finals. One actual source-bound wall decal was placed; inspected `fit-spray/spray.png` visibly shows it on the cream wall beside the entry. Full `tools/test.sh`81678 exited0/chunk85c26f, ALL TESTS PASS including all49 scored buildings and determinism. Owned engine/Weston processes were absent at each release; source remained frozen after capture.
+- Did not: seven Texture RID warnings persist with unknown cause; capture/fit success does not explain them. Historical study002 fit predates board and closure corrections; current59271 supersedes its mechanical scope. Independent final whole-result visual judgment remains pending; no acceptance or credit change by author.
+- Next: preflight roof-to-wing side infill as well as roof end gables before first render. Keep actual visible spray pixels alongside source-binding mechanics, and reuse unchanged suite evidence rather than rerunning for notes. Own reference research remains separate from Chapel implementation and acceptance.
+
+
+### approach_geometry_review — Chapel material001 CODE PASS, 2026-10-07
+
+- Worked: Maintained B3 projection logic supports consistent map sampling and Chapel-only coating variants without changing geometry or ownership; scoped CODE PASS found no concrete blocker.
+- Did not: Source review and successful capture cannot establish finish quality, corrected fit/spray or the cause of shutdown warnings. This reviewer ran no engine or tests; runtime and visual verdicts remain separate.
+- Next: Review fresh material pixels independently and retain separate affected fit/spray checks; channel presence alone earns no material acceptance. Preserve the historical geometry and visual HOLD scopes.
+
+### approach_geometry_review — Chapel closure001 CODE PASS, 2026-10-07
+
+- Worked: Source-derived junctions and the existing emitter connect six neutral visible closure faces to canonical native wall collision; scoped CODE PASS preserves original perimeter XZ/bottoms, materials and protected exclusions.
+- Did not: Successful capture does not establish corrected fit/spray or independent visual acceptance. This reviewer ran no engine or tests; separately supplied runtime results do not become CODE-review evidence.
+- Next: Reuse unchanged frame/material/adapter findings and consume separately assigned affected runtime and visual checks. Keep the original study002 HOLD and final visual decision separate from this source-only correction.
+
+### approach_geometry_review — bounded Chapel OTHER-actor efficiency sample, 2026-10-07
+
+- Worked: Sampled author/coordinator notes and acknowledged dispatch/terminal evidence distinguish genuine ongoing independent review from absent dispatch; this sample does not independently assess this reviewer's own efficiency.
+- Did not: Supplied first93340 stale PREPARED/no-dispatch and inbound/outgoing labeling correction exposed handoff ambiguity; sampled coordinator logs contained repeated status-only messages with little added evidence. Underlying service scheduling/delivery delays and any time savings remain unknown.
+- Next: ROOT accepted one reversible experiment for the next building: send one acknowledged GO handoff after freeze/release and retain the same child through completion, observing whether coordination corrections decrease. Preserve fit, stock active REST/safe-final, full-suite, visual and source gates; add no timers or reporting framework.
+
+### building2_integrate — Chapel review transport and serialized handoffs, 2026-10-07
+
+- Worked: retained actual persistent reviewer handles and model routes, delivered scoped HOLDs promptly, and serialized actual author/reviewer-owned notes. Closure CODE, native fit/spray pixels and all49 suite PASS remain separate from pending final visual fidelity; a distinct authorized final reviewer prevented historical note transport from blocking current assessment.
+- Did not: the prepared technical prompt retained a preparation-only sentence, causing93340 to exit without dispatch before corrected51098. I initially described an inbound assignment event as outgoing child progress; actual role inspection corrected that claim. Repeated live-status polling established state but did not explain service delays or supply review progress.
+- Next: use the accepted one acknowledged GO handoff with explicit scope, ownership and terminal prerequisites; verify message direction and actual tools before claiming work. Observe coordination corrections at the next checkpoint without invented timing savings, and preserve existing notes, engine and independent acceptance gates.
+
+
+### chapel_final_visual — Chapel closure001 independent visual review, 2026-10-07
+
+- **What worked well:** Direct comparison covered all 14 closure001 original captures plus the fresh spray original, all 11 matched before views, six study002 views, two material001 views and both dated September 2025 SSE references. The verdict separated whole-building fidelity HOLD from scoped coating, roof-wing closure, site/island and visible spray PASS; no evidence was missing.
+- **What did not work well:** Corrected coating and closed roof-wing gaps did not resolve the belfry pyramid/cross silhouette mismatch against the SSE reference. The same gap persisted from study002, so a successful repair alone could not close whole-building fidelity. Shaded coating remained cooler and visually flat; these captures did not establish calibrated color or microsurface behavior.
+- **What to change next time:** Reassess the full reference-supported silhouette after each fix and make the remaining belfry issue the next bounded artistic priority, preserving successful closure and finish. Keep inferred opposite sides distinct from observed SSE fidelity and retain original002 EARLY HOLD. Fit/suite checks belong to separately reported verification; this reviewer ran no engines or tests and supplies no independent mechanical or integration PASS.
+
+### 2026-10-07 — chapel_art (Astra Low) — belfry crown correction
+
+- Worked: directly compared both retained September2025 SSE originals and current east/oblique gameplay pixels. Changed only six Chapel prototype JSON parameters: wall top19→17.6m, retaining4×4m plan/base13.6/apex20.2; cap rise becomes2.6m. Cross becomes1.8×1.05m with0.14m members and its bottom remains at the apex. These are reversible visual-production inferences, not surveyed dimensions. Existing producer preserves paired cap/cross native non-spray geometry and all nave/wing/closure/material/protected scope.
+- Worked: single shared capture3177 exited0/chunke3d551 with14 images under `/workspaces/landmark-progress-20261007/chapel-study/belfry-001`. Inspected east/SSE-oblique/context originals show a clearer pyramidal crown/cross and shorter plain shaft. Global engine scan was empty afterward; individual live PIDs were not recorded before the short capture completed. Current fit52529 exited0/chunkc581b9, roof0/33bad and walls0/20bad; all4 native-terrain stock approaches passed with active supported released REST and SAFE_FINAL. Owned wrapper523938/Weston523942/Godot523964/helpers were absent before the authorized suite.
+- Did not:7TextureRID warnings remain unexplained. Independent belfry visual verdict is pending; fullsuite28674 is still live at this note, so no current-suite PASS is claimed. Prior entry-wall spray59271 remains applicable only to unchanged wall/material/interaction scope, not the changed crown geometry.
+- Next: judge crown rise and cross visibility in ordinary gameplay from the first coherent study. Retain same live suite handle through terminal and report its actual outcome separately; no acceptance or further refinement by the author.
+- Closure during the same granted writer window: retained fullsuite28674 subsequently exited0/chunk494389, ALL TESTS PASS including49 scored buildings, world validation and determinism. Wrapper524603/Weston524607/Godot524628/helpers and global engines were absent; engine released. This supersedes the live-suite status above, while independent visual acceptance remains pending.
+
+
+### approach_geometry_review — Chapel belfry001 CODE PASS, 2026-10-07
+
+- Worked: Parameter-to-emitter review confirms coherent wall/cap/cross bounds and apex contact, preserved horizontal/source identity and protected geometry, and matching native canonical nonspray roof geometry; scoped CODE PASS found no blocker.
+- Did not: Capture success and earlier mechanics cannot establish this correction's fit/spray or independent visual acceptance. This reviewer ran no engine or tests; separately supplied current fit52529 and full suite28674 terminal0 remain runtime evidence rather than claims established by this source review.
+- Next: Reuse unchanged code findings while keeping affected runtime and fresh visual decisions separate; check actual emitted bounds when changing proportions. Preserve earlier HOLD history and the distinction between source-only PASS and independent whole-result acceptance.
+
+### 2026-10-07 — chapel_art (Astra Low) — Building1 references and baseline preparation
+
+- Worked: recovered and inspected the three exact stored September2025 panoramas outside Git in `/workspaces/landmark-progress-20261007/building1-references`; actual date UI and source URLs are retained in external REFERENCE_NOTES.md. Complete panorama URL restored the north view after a map-only abbreviated attempt. Owned browser87156 deliberately closed through wrapper TERM, terminal143/chunk070f64 and wrapper520830/Weston520834 absent. Reuse choice: existing Building1HeroModel/public-front configuration and target materials fit the crescent/pavilion structure; no replacement family needed.
+- Worked: one baseline78738 exited0/chunk446e36,14 actual shared views saved in `building1-study/before`; global Godot/Weston absence verified and engine released. Native generated-land triangle preflight covered seven public wall points and all three added camera positions across z2/z3 chunks. Source bottoms generally embed~20mm, centralrun32~0.20m; visible area is generally40mm above native land. This is source-contact preflight, not fresh stock walking proof. No building/catalog edits.
+- Did not: north detail pose sees a blank pavilion flank, not a matched photographic end; retain that camera limit rather than claiming all three matches. Current actual public-crescent/south/context originals expose coarse projecting frames, heavy blank base and schematic pale surfaces; reference cars/palms obscure much of the entrance/canopy. Individual live engine PIDs were not recorded before the short baseline finished. Seven TextureRID warnings remain unknown.
+- Next: bounded public-front study should reconcile central-versus-pavilion height hierarchy, refine narrow glazing/reveal/trim and canopy/base proportions, and use existing approved fine PBR maps with controlled cream. Preserve exact footprint/bottoms, protected70–92/97–109, separate towerw1222720021, prior credit and native spray ownership. Check source binding for each pavilion before placing motifs; no hidden-facade invention or acceptance from these preparation notes.
+
+
+### chapel_final_visual — Chapel belfry001 independent visual review, 2026-10-07
+
+- **What worked well:** All 14 current originals, both dated September 2025 SSE references and five fresh closure001 comparisons established a meaningful pyramidal-cap/cross correction and current visual PASS. Quiet coating, closed roof-wing assembly, context and island appearance remained coherent. The current fidelity HOLD closed while study002 and closure001 HOLDs remained historical; opposite sides remained production inference.
+- **What did not work well:** Static images still could not establish calibrated coating color, microscopic relief, continuous motion or mechanical integrity. The near entry view occluded the cap, and the south view reduced cross contrast against the neighboring tower; useful oblique views were needed to judge the silhouette fairly. Prior spray PASS was reusable only for the reported unchanged lower wall, with no new spray pixels.
+- **What to change next time:** Keep matched ordinary oblique views beside actual dated references, judge the whole result after a correction, and state evidence reuse limits explicitly. Keep visual and mechanical decisions separate: this reviewer ran no engines or tests; current fit was separately supplied and the owner's later terminal-zero, all-49 full-suite PASS arrived after review dispatch. Preserve the full verdict unchanged and leave final integration acceptance to its own gates.
+
+
+### building2_integrate — Chapel integration preparation, 2026-10-07
+
+- Worked: Root accepted the current belfry001 independent visual PASS, scoped code reviews, current fit52529 and full suite28674, with lower-wall spray59271 reused only for unchanged interaction/material scope. The actual reviewer wrote its own final note through retained45384 (terminal0); the Chapel note/catalog preserve observed SSE versus inferred sides and prior recognition credit.
+- Did not: The reviewer-note task remained live after the verdict, delaying integration; parent wait activity did not prove child writing or inspection. Existing DevPod credential forwarding remains unavailable, so no push success is claimed. Concurrent Building1 study sources are unaccepted and excluded from the Chapel commit.
+- Next: Integrate only the explicit14 Chapel paths after complete whitespace review and root commit GO. Keep all five Building1 source/resource paths unstaged, retain historical HOLDs, and reuse the unchanged Chapel fit/suite evidence rather than running a suite against unrelated new study edits.
+
+### 2026-10-07 — chapel_art (Astra Low) — Building1 study001 early render
+
+- Worked: reused Building1HeroModel and isolated public coating/trim resources from protected original faces/tower materials. Single capture28826 exited0/chunke650bb with14 originals; owned529305/529309/529330 and helpers absent at release. Preserved exact five source copies privately under `building1-study/study-001/source` before the separately authorized study002 changes.
+- Did not: slimmer frames and fine PBR supplied only modest gain. Actual crescent/south pixels retain heavy base, dominant central height and interrupted thin grids; author whole-building self-HOLD remains. Source analysis found a glass/host intersection and a sharp-return cadence risk. Lowering shared four_story_roof_y would also move the protected separate tower platform, so study001 retained it rather than silently altering tower ownership. Seven TextureRID warnings remain unexplained.
+- Next: authorized study002 addresses the six-metre front roof zone with closed native transition and retained rear/tower support, coherent lower entry band, host-aligned complete bays and distinct material regions. This round is in progress; no study002 render, mechanics or acceptance outcome is claimed here. Keep first-review scope frozen and inspect actual architectural gain, not material-only improvement.

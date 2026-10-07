@@ -388,3 +388,7 @@ unknown, duplicate, missing or conflicting options. A corrected sibling parser
 is not evidence for another entrypoint. Verify rejection stage separately from
 valid-argument arrival at the existing renderer guard; those probes give no
 movement or fit credit.
+
+## Collect owned nodes before freeing a descendant tree
+
+Chapel study001 iterated a descendant snapshot and freed its StaticBody parent; the later child entry was already invalid when tested with `is`, causing WORLD_FAILED before screenshots. Collect supported owner bodies while all nodes are alive, validate direct-parent ownership/no nested owners, then remove/free them after traversal. Study002 used that order and loaded/captured successfully; this establishes the cleanup repair, not geometry or art acceptance.
