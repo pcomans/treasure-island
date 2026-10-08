@@ -67,6 +67,10 @@ Review the first coherent native source-project result early; export is not a pr
 
 Lead the critique with a pixel-grounded verdict on meaningful visible change and one concrete highest-value next change/how to improve. If the compared images are nearly indistinguishable, say so plainly; do not substitute a feature list or let caveats dominate the direction. Keep uncertainty honest and proportionate to the evidence.
 
+## Separate architectural progress decision
+
+Whole-quality visual judgment remains independent of the mandatory [study scope/progress reviewer](../../../../.claude/agents/ti-study-progress-review.md). Between every architectural study, that distinct named reviewer judges appropriate scope and substantial overall progress from actual baseline/current gameplay and truthful references. Prioritize whole massing/volumes/sections before shared-family assemblies, supported variants and finish/detail work. PASS / RESCOPE / REWORK controls next-study advancement; a failed decision needs corrected scope or meaningful rework, not another isolated polish cycle. It neither substitutes for this whole all-side art gate nor calls for invented geometry on supported blank walls. Use ordinary evidence/handoffs, no numeric velocity or extra reporting layer.
+
 ## Evidence record
 
 For each candidate, record source/prompt, tool mode, dimensions, physical-span status, placement basis/confidence, correction count, applicable proof paths, numeric values, annotated semantic findings, exact-game-receiver captures, game-art and as-built verdicts, and rejection reasons. For generated raster candidates, use one small initial batch and at most one diagnosed correction round. Whole-building procedural/source iteration instead follows the finite owner/path/engine budget in AGENTS; stop when that budget or scope is exhausted. Neither permits indefinite generation.

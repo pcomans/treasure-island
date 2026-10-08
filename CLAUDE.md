@@ -6,7 +6,7 @@ The imported [project agreement](AGENTS.md) is the shared authority. The primary
 
 ## Persisted entrypoints
 
-Subagent dispatch must follow [AGENTS.md](AGENTS.md#bounded-subagent-execution): never use `ultra`; explicitly select a supported non-ultra effort instead of inheriting the parent’s effort. That section defines the routing: modeling in Claude Code on Opus 5.5 (effort `max`; other roles `high`, set in each role file's frontmatter), with `tools/generate-texture` for generated textures; Codex sessions use GPT-6.1 Sol High for visual critique and Astra Medium for other roles. Preserve independent review gates; the primary/root setting is unchanged.
+Subagent dispatch must follow [AGENTS.md](AGENTS.md#bounded-subagent-execution): never use `ultra`; explicitly select a supported non-ultra effort instead of inheriting the parent’s effort. That section defines the routing: modeling in Claude Code on Opus 5.5 (effort `max`; other roles `high`, set in each role file's frontmatter), with `tools/generate-texture` for generated textures; Codex sessions use GPT-6.1 Sol High for visual critique and mandatory architectural study scope/progress review, and Astra Medium for other roles. Preserve independent review gates; the primary/root setting is unchanged.
 
 | Role prompt | When used |
 |---|---|
@@ -14,6 +14,7 @@ Subagent dispatch must follow [AGENTS.md](AGENTS.md#bounded-subagent-execution):
 | [ti-reference-research](.claude/agents/ti-reference-research.md) | Exact target/side reference acquisition or source association within authorized access. |
 | [ti-code-review](.claude/agents/ti-code-review.md) | Independent review of a change's diff for sloppy or risky code and shared-code damage. |
 | [ti-visual-review](.claude/agents/ti-visual-review.md) | Separate per-unit visual bar raising against actual dated reference pixels. |
+| [ti-study-progress-review](.claude/agents/ti-study-progress-review.md) | Mandatory independent scope/progress decision between every architectural study, before next-study GO or promotion. |
 | [ti-efficiency-review](.claude/agents/ti-efficiency-review.md) | Bounded periodic review of other actors; at most one reversible experiment. |
 | [ti-documentation](.claude/agents/ti-documentation.md) | Serialized harness, handoff, lessons and authorized documentation publication. |
 
@@ -30,6 +31,12 @@ For model comparisons, use the canonical [blind shootout protocol](discovery/MOD
 ### Whole-building capture and review coverage
 
 Apply [all-side exterior coverage](AGENTS.md#whole-building-exterior-coverage) through the author, reference and visual roles above. Seek side-specific Street View/Maps-photo/web evidence before inference. Use the maintained `building_shots.gd -- --source KEY --island --out DIR` for four surrounding gameplay views, context and island views; add its existing `--views FILE` focused views only when the actual originals leave a side or junction obscured. Four filenames alone do not establish coverage: inspect the images. No new driver is needed for this requirement. Whole-quality review must address every exterior side and cannot promote a scoped facade PASS; disclose search gaps/inference in ordinary notes and preserve historical recognition credit.
+
+### Between-study scope and progress decision
+
+Apply [AGENTS' mandatory boundary](AGENTS.md#architectural-study-scope-and-progress-review) before every next architectural study or promotion, including pending studies and isolated assemblies. Dispatch a named `ti-study-progress-review` executor through the client's actual supported delegation tools, independent of the author and existing code/visual reviewers. In Codex explicitly select `gpt-6.1-sol` / `high`; Claude uses the role's `model: opus`, `effort: high`. A role file is instructions, not a fabricated callable agent. Reuse a free suitable actor; do not interrupt or duplicate a live review.
+
+Supply the whole completion objective, intended architectural section/family contribution, actual baseline/current gameplay originals, truthful dated references and unresolved larger gaps. Consume PASS / RESCOPE / REWORK before issuing next-study GO. Failed scope/progress means corrected scope or rework, not another detail-only study because checks passed. Use ordinary handoffs/RETRO, no extra packet or metrics. The existing capture drivers already provide the relevant views; no runtime driver change is required. Review may proceed from saved pixels while other independent gates run, and cannot replace or weaken them. ROOT also owns the canonical first complete post-push cycle and personally judges matched before/after gameplay plus references against the modern video-game quality bar; a reviewer/check PASS does not oblige ROOT to advance insufficient work. Execution remains delegated.
 
 ### Codex CLI delegated visual reviews
 
