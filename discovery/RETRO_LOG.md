@@ -17397,3 +17397,320 @@ Coordinator closure: independent browser CODE HOLD exposed failed-image overwrit
 - Worked: Complete narrow control-flow review confirms default capture never navigates, while explicit recovery reopens the unchanged actual resolved URL at most once. First failure and recovery failure remain separate, and stable dated panorama state plus actual decoded black/flat pixel checks still precede readiness; human target/side inspection remains required.
 - Did not: Whole-body no-imagery text had vetoed useful dated pixels; readiness/network success also failed to establish a working viewer in the retained Chapel reproduction. Six supplied author mocks and the same-session May2011 recovery do not prove universal Maps success, contemporary condition or a GPU/service cause. This was source CODE PASS, not runtime review.
 - Next: Keep actual target/side/date inspection, historical-condition/occlusion limits, failed originals and conservative HOLD. The later modified-helper browser proof belongs to building2_integrate's separate evidence, not this reviewer; source PASS supplies no reference sufficiency, art or runtime acceptance.
+
+### chapel_art — deferred B2 source003 architectural capture, 2026-10-07
+
+- Worked: Session58125 terminal0/0e1f0b, owned/global absence and temporary-display cleanup preceded SOURCE+ENGINE release. Inspected all11 originals against retained HABS2003 A6; private capture-result preserves exact evidence. No source edits during capture.
+- Did not: Removing outlined heads flattened the supported broad/narrow pier hierarchy; author SELF HOLD remains despite separate clean mechanics. Historical grayscale cadence/current survival are inference. One shutdown warning reports14 Texture RIDs, cause unknown; protocol warnings remain in raw log.
+- Next: Restore complete projecting pier/spandrel relationships under a bounded assignment, preserving the original roof, recesses and other sides; simpler geometry alone is not fidelity.
+
+### chapel_art — deferred B3 source003 architectural capture, 2026-10-07
+
+- Worked: Session8908 terminal0/5957bf produced14 originals, all directly inspected with Nov2025 ENE and2003 HABS references. Continuous bearing and calmer junctions improved the earlier applied feet. Prior party-wall source repair and its own note remain separate; no duplicate repair or new mechanics claim here.
+- Did not: Transient owned process identities were missed before completion; global absence7f746e and no remaining display temporary directory were observed, not reconstructed PIDs. Historical opaque-spandrel/pier proportions and occluded lower areas remain fidelity limits. One shutdown warning reports14 Texture RIDs, cause unknown. Whole quality remains open.
+- Next: Keep actual reference comparison and independent whole review separate from current scoped fit/spray; retain historical HOLDs and record launch identities immediately.
+
+### chapel_art — deferred Museum study006 capture and source preparation, 2026-10-07
+
+- Worked: Complete donor reuse and unchanged source/terrain preparation preceded session97396 terminal0/0bef01; owned/global absence and temporary cleanup9eac1e preceded release. All14 originals, three dated Sept2025 references and matched005 crescent were inspected. No obvious folded canopy spike appears at ordinary viewing scale.
+- Did not: Dark intermittent canopy edge, pavilion/glass/base proportions and plain faceted rear/core keep author SELF HOLD. The north detail pose mainly shows a return, limiting frontal judgment. Source preparation is not runtime REST; separate current mechanics and reused tower evidence retain their own limits. One shutdown warning reports7 Texture RIDs, cause unknown.
+- Next: Judge complete architectural composition rather than treating clean canopy loading or unchanged support as whole-building acceptance.
+
+### chapel_art — Chapel expanded references and all-sides001 first study, 2026-10-07
+
+- Worked: Reused the existing Chapel producer/helpers and approved cream PBR family. Jan2023 WSW, manually useful June2026 partial rear/wing and recovered May2011 occluded ENE retain distinct dates/side limits; automated failed June original remains failed. Baseline32337 terminal0/1f8a95 and study49266 terminal0/c05d84 retained14 views each. Study owned/global absence and temporary cleanup788b72 preceded SOURCE+ENGINE release and all14 direct image inspection. Exact three art paths passed whitespace211925; nine inset points were source-contained, with unchanged lower footprint/bottom contact evidence reused.
+- Did not: New WSW glazing appears broken/dashed; rearward blank field and observed tower-side openings remain substantive gaps. Pixels alone establish no cause or complete run association. Quiet rear coating is not proof of hidden architecture. New recess native integrity remains independently unverified. One shutdown warning reports7 Texture RIDs, cause unknown, alongside retained Wayland protocol warnings. Author SELF HOLD; no fit/spray/suite or acceptance claim.
+- Next: Freeze the first coherent study for independent review before the reserved correction. Root's later CODE warning about the retained Y8 cap crossing recess cavities is pending full review and is not claimed as a proven pixel cause. B2 next-round edits/engine were held before starting. Preserve accepted SSE/belfry, source identity and all unrelated buildings.
+
+### building2_integrate — Chapel aperture assembly lesson, 2026-10-07
+
+- Worked: Read the final independent all-sides001 CODE HOLD and checked existing lessons before adding one focused assembly lesson; retained the actual9.8 host and cap/frame evidence rather than the disproved negative-head/infill theories.
+- Did not: Outer-face cuts and paired visible/native emission left retained cap geometry inside the pocket and buried frame members; no pixel-cause or native player-hit proof follows the source calculations.
+- Next: Trace the complete cavity and retained solids/receiver roles, then inspect early pixels. This documentation round edits only LEARNINGS and my own RETRO entry; no source, engine, new validator or acceptance claim.
+
+### chapel_art — Chapel WSW cap and frame source correction, 2026-10-07
+
+- Worked: Preserved failed sources privately, cut the retained Y8 cap around the WSW pockets while keeping positive outside pieces in the paired visible/native roof stream, and placed complete frames inside their openings. The final correction derives planes from actual endpoint-plus-inward pocket quads; exact producer whitespace passed. No source perimeter, bottoms, SSE/belfry, material resource or receiver exemption changed.
+- Did not: The first cutter assumed serialized normals were perpendicular to source tangents. Independent source review found thin retained strips despite my near-zero result against the wrong rectangular domains. That source-double calculation did not prove emitted-boundary correspondence or Godot behavior. Broken pixels remain an unproved cause; this round ran no engine and establishes no fit, spray or visual acceptance.
+- Next: Derive clipping boundaries from the same emitted geometry, inspect complete host assemblies rather than only exterior faces, and distinguish source arithmetic from actual native/render evidence. Final exact-quad source was frozen awaiting independent CODE at handoff; Root subsequently received corrective CODE PASS before assigning the separate last capture. Preserve prior HOLDs and fresh runtime/whole-quality gates.
+
+### building2_integrate — Chapel WSW mechanics preparation, 2026-10-07
+
+- Worked: Reused the complete maintained donor/driver and selected a source-bound changed WSW opaque pier, distinguishing colliding LAND from visible area surfaces and preserving native wall/roof roles.
+- Did not: Generated LAND columns and sampled rim/camera points do not exhaust procedural roof, neighbor or full pitched-camera domains. This preparation ran no engine and supplies no native safety or aperture-interior proof.
+- Next: The mechanical executor must complete final frozen replacement-envelope/camera preflight before a separately authorized invocation, retaining unchanged setup, active REST, safe-final and spray gates; HOLD without launch if unresolved. The private current-gameplay-plan.txt retains complete fields and coverage limits.
+
+
+### approach_geometry_review — efficiency checkpoint004, 2026-10-07
+
+- Worked: Other actors reused complete donors and unchanged tower evidence, retained actual native proof, active REST/safe-final and terminal/PID checks, and released engine ownership before private inspection/narrative. The mechanical actor's own RETRO already supplies checkpoint003's missing-context to six-input/intended-marker comparison; native003 is not dependency proof and this reviewer does not claim that execution.
+- Did not: B3 capture missed live PID observation; B1 later captured descendants immediately. Parent waits/status continued alongside actual B2 custom-tool image calls, so silence or function-only filtering cannot establish inactivity or a service/model cause. No duplicate engine call, quantified wait cost or timing saving was established; my technical reviews were excluded from performance assessment.
+- Next: No new experiment is justified; retain changed-finding/blocker/release/terminal coalescing and verified early release, noting later handoffs qualitatively in ordinary RETRO. Preserve exclusive own attribution and every art/CODE/native-fit/spray/suite/source/inventory/REST/cleanup gate; this process review grants no acceptance.
+
+### approach_geometry_review — Chapel001/002 CODE HOLD to exact-quad PASS, 2026-10-07
+
+- Worked: Final narrow source CODE PASS confirms cap planes derive from actual source-interpolated pocket endpoints plus -normal*0.28, matching the emitted recess without assuming orthogonality. Finite complementary convex pieces feed the same visible/native nonspray roof stream. Settled frame-inside-opening, cream material/adapter routing, SSE/belfry and exact source XZ/bottom/native ownership findings were reused; actual WSW host tops9.8 rule out negative heads, and run5/30 infill was not the demonstrated obstruction.
+- Did not: Initial001 CODE HOLD found the retained full-footprint Y8 cap crossing Y5–8.85 pockets and outer frames buried behind uncut surrounds. First002 clipping still assumed perpendicular tangent/serialized normal, leaving about0.0017276m² of thin systematic cap strips in actual pockets despite near-zero residual against assumed rectangles. Both HOLDs remain historical source findings, not native obstruction or proof of the broken/dashed-pixel cause.
+- Next: Retain final exact-quad source PASS with its limits: source-double arithmetic is not Godot Float32 zero-residual, parse, contact or spray proof. Fresh authorized native fit/spray/capture, full suite and independent dated all-side whole-quality review remain separate; CODE supplies no runtime/art/suite acceptance or capture GO. Keep failed history and do not infer appearance from material channels or matching native faces.
+
+## final_b3_visual — Chapel all-sides002 WSW source-only mechanical preparation, 2026-10-07
+
+- Worked: Source arithmetic covered actual procedural roof/belfry/wing/cap/frame envelopes at all heights, the highest-Y300 column and full0.351m capsule domain. The complete pitched5.5m camera arm reached a checked7.377m nominal endpoint beyond the earlier6m sample; colliding LAND and visible-area roles stayed distinct, with exact complete donor fields and changed WSW opaque-pier coverage retained.
+- Did not: Old SSE donor evidence supplies no native proof at this proposed pose. Source doubles establish no native first-hit/support/REST/Decal/readability, broad safety or art acceptance. The permitted+25° unswept full-length camera crosses LAND and needs stock SpringArm clipping; the exact+12.155° aimed source domain clears it. The absent private output parent initially stopped the guarded write before minimal parent creation.
+- Next: After actual author terminal/slot release, ROOT full-preflight review and a distinct named engine transfer, use the complete maintained donor/current contract with all native source/receiver/identity, active supported stopped input-released REST BEFORE disabled safe-final, spray and fresh-PNG gates. Stop without relocation/retry on failed prerequisites; no engine, process inspection, source or shared-note edit occurred during preparation.
+
+### chapel_art — Chapel all-sides002 final capture, 2026-10-07
+
+- Worked: Frozen corrective source CODE PASS preceded the last authorized capture28110, terminal0/91ef30. Immediate owned process identities, global absence and temporary cleanup15eff8 supported early SOURCE+ENGINE release before all14 original-image inspection. Complete existing SSE/default/island views were reused without a retry.
+- Did not: West/south glazing still reads dashed or schematic at ordinary distance; missing observed tower-side openings and rearward coverage remain SELF HOLD. Source cap/frame repair does not prove the pixel cause or whole fidelity. Historical source HOLDs remain retained. One shutdown warning reports7 Texture RIDs, cause unknown, alongside separate protocol warnings; this capture is not native fit/spray or suite proof.
+- Next: Keep close-view and gameplay-distance evidence distinct, preserve dated reference/occlusion and inferred cadence limits, and use independent whole review before further art. Later independent WSW mechanics belong to their executor and do not retroactively turn this author capture into acceptance.
+
+### chapel_art — B2 source004 first coherent capture, 2026-10-07
+
+- Worked: Existing B2 closed-box/material family restored continuous broad/narrow pier projection through opaque heads, preserving original roof height, grouping and0.80m glazing recess. Only the NNW producer helper changed. Source containment/contact reasoning and whitespace preceded capture91981 terminal0/0d3cb8; immediate owned identities and cleanupc0a073 supported release before all11 direct image inspection and reopened HABS2003 A6 comparison.
+- Did not: The recovered depth improves003's flattened band, but the roof-edge silhouette remains straighter and lower pier terminations cast conspicuous small shadows. Whole quality stays OPEN; historic grayscale/current survival and exact dimensions remain inference. One shutdown warning reports14 Texture RIDs, cause unknown. Prior003 visual HOLD and unchanged-source mechanical limits remain; no author acceptance or new fit/spray claim.
+- Next: Judge the complete pier/spandrel/glazing assembly independently against dated pixels, retaining the other sides and native geometry. Source is frozen; the second assigned capture remains reserved for critique and Root confirmation, not an automatic refinement loop.
+
+### building2_integrate — B2 source004 gameplay preparation, 2026-10-07
+
+- Worked: Reused the complete maintained donor and traced current pier/source/controller geometry. New upper piers start atY10.35 above localLAND3.368, beyond the unchanged6m grounded spray range even vertically; selected the lower NNW painted host beneath a broad pier without claiming an upper-face Decal.
+- Did not: Generated highest-column/rim samples and the nominal full5.5m aimed-camera domain do not certify every procedural neighbor or swept native camera contact. No engine or native support/REST/spray proof was produced.
+- Next: The independent mechanical executor must finish unresolved frozen-domain preflight and retain unchanged setup, active REST, safe-final and receiver checks under separate GO. Report lower-host spray and changed upper-geometry coverage separately; the private current-gameplay-plan.txt retains complete fields and limits.
+
+
+### approach_geometry_review — B2 source004 NNW CODE PASS, 2026-10-07
+
+- Worked: Focused complete NNW/emitter review confirms continuous closed broad/narrow pier bodies attach into original solid host intervals, retain0.80m recess closure and unchanged21.36 eave, and share canonical visible/native wall faces. Actual generated source segments and conservative changed-envelope comparison found no adjacent footprint candidate; protected other sides/source bottoms/materials are unchanged.
+- Did not: Source continuity and author preflight do not prove restored dated-reference hierarchy, current pixels, native contact/spray or complete neighbor clearance. New0.45/0.30m upper projection needs fresh highest-hit setup coverage; historical003 visual HOLD and002 assertion-affected mechanical HOLD remain separate.
+- Next: Reuse unchanged source/roof/material evidence, then separately verify current native fit/spray/active REST/safe-final and independent whole-side/all-side visuals plus suite. Retain author engine ownership and source freeze; source CODE PASS grants no capture or acceptance GO.
+
+### approach_geometry_review — current-patch maintained full suite001, 2026-10-07
+
+- Worked: ran tools/test.sh exactly once on the frozen current patch; direct handle43698 exited0 with ALL TESTS PASS, including rendered fit of all49 scored buildings and generator determinism. Observed owned engine/Weston/tee/helper processes and temporary files were absent before early SOURCE ENGINE RELEASE.
+- Didn't: this regression PASS does not establish current spray/Decal or dated-reference whole-quality acceptance. The maintained suite filters raw diagnostics, so no exhaustive warning tally or invented transient PID coverage is claimed; preexisting stale runtime files were left untouched.
+- Next: preserve the full private result/log and separate visual/spray gates; account for the two import-generated shader UID sidecars in the intended patch. No retry, catalog promotion or shared-note write was performed by this assignment.
+
+## final_b3_visual — Chapel all-sides002 current native fit/spray, 2026-10-07
+
+- Worked: One clean current-main run passed sampled native fit, four own-wall stock arrivals and five active supported stopped input-released REST checks BEFORE disabled SAFE_FINAL. The changed WSW opaque pier received a canonical source-bound Decal; I inspected the readable fresh original after actual terminal, cleanup and early SOURCE+ENGINE release. All six owned PIDs were captured in the launching cell.
+- Did not: One pose/static tag proves neither every pocket/face/stair, all-pitch camera safety, dashed-pixel cause nor whole art/suite/catalog acceptance. Exact-quad CODE remains separate; historical source/visual/mechanical HOLDs and old SSE donor limits remain. Exact aimed +12.155° source clearance differs from +25° unswept terrain crossing/inherited orientation requiring stock clipping. Highest-hit, spray-property and camera/getter gates are not separately logged raw telemetry; one shutdown warning reports seven TextureRIDs, cause unknown, not seven errors.
+- Next: Reuse scoped current fit/receiver/readability evidence for separate whole-quality decisions, preserving complete maintained donor/current contract, native identity/REST/safety gates and serialized ownership. The earlier source-preparation note is retained without duplication; no retry, new engine or acceptance follows this note.
+
+## final_b3_visual — B2 source004 exact-pose mechanical source preflight, 2026-10-07
+
+- Worked: Actual procedural roof/wing/pylon/crown and upper 0.45/0.30m box projections clear the exact proposed NNW standing/all-height drop/0.351m rim domain. Continuous exact-triangle clipping bounds the complete nominal aimed camera hull with at least 1.426m terrain clearance; complete maintained donor/source/controller roles remain intact.
+- Did not: This was SOURCE-PREP GO only: arithmetic did not prove native highest hit, capsule, first hit, REST, Decal/pixels, every face/rim or all camera pitches. Lower-host spray cannot cover upper piers beyond grounded 6m range. Exact aimed -1.955° clearance differs from +25° unswept terrain crossing/inherited settling orientation requiring stock clipping; no raw camera getter observation occurred.
+- Next: The preparation required actual suite terminal/cleanup and distinct named ROOT GO before one rendered native call with unchanged aggregate/source/safety gates, four arrivals/five active supported stopped released REST checks before safe disable and original-PNG inspection. Keep this historical preparation separate from the later runtime result and changed upper sampled fit separate from lower-host spray; no art/suite/catalog promotion.
+
+## final_b3_visual — B2 source004 current-main native fit and lower NNW spray, 2026-10-07
+
+- Worked: One clean current-main run passed sampled roof/wall/base fit, four actual canonical stock wall arrivals and five active supported stopped input-released REST checks BEFORE disabled SAFE_FINAL. Exact NNW pose settled on native LAND, placed a source-bound lower-wall Decal and saved an actually inspected readable original; terminal0 and owned/global/temp cleanup preceded early release, PNG inspection and report.
+- Did not: Lower-host tag supplies no changed-upper-face coverage beyond grounded 6m range, all-pitch camera/stair/every-receiver or whole art/suite/catalog proof. Exact aimed source clearance is not inherited/+25° sweep/readback proof; native highest-query and Decal-property helper gates were not raw getter telemetry. Launching cell captured Godot only; all six owned processes were verified while live in immediate followup0ebc04. One seven-TextureRID warning remains unexplained, not seven errors; historical HOLDs remain retained.
+- Next: Reuse scoped current native mechanics and exact source preparation for separate whole-building visual judgment. Preserve complete source/receiver/REST/safe-final gates and named serialized ownership; no new call, retry, shared framework, acceptance or measured timing/service claim follows this note.
+
+### building2_integrate — B3 source004 mechanics preparation, 2026-10-07
+
+- Worked: Compared the actual narrower/shorter upper-aperture and reduced head-front delta, reusing the complete successful003 donor and applicable unchanged lower-bearing, party, roof, terrain and clearance evidence rather than replaying unchanged arithmetic.
+- Did not: A lower-bearing Decal cannot directly establish changed upper-aperture contact or fidelity; retained003 native hits remain historical and do not prove004 runtime. Upper geometry lies beyond grounded stock spray range.
+- Next: Require current independent CODE, source freeze and named engine GO before fresh native fit/support/active REST/safe-final/receiver checks. Bind any changed surrounding producers and report sampled upper geometry separately from one lower-host tag; this preparation ran no engine and added no driver or validator.
+
+### building2_integrate — four-building current-status reconciliation, 2026-10-07
+
+- Worked: Read actual current B2/B3 source/mechanical reports and B1/Chapel full visual findings, updated existing study notes with private screenshot-folder links, and separated each source/capture/native/whole-quality scope.
+- Did not: Passing mechanics or old suite001 cannot close current whole-building gaps; B3source004 files alone do not prove the pending author terminal/inspection report. Earlier Chapel accepted wording needed an explicit historical scope.
+- Next: Preserve49/213 credit, dated reference/privacy limits and historical HOLDs while directing correction toward B1 pavilion/crescent/core and Chapel complete opening families. No source/catalog/engine/Git operation or acceptance packet in this documentation round.
+
+
+### approach_geometry_review — efficiency checkpoint005, 2026-10-07
+
+- Worked: OTHER actors separated exact emitted-quad source repair, author capture and native Chapel mechanics; completed preparation was reused, and terminal/cleanup release preceded private inspection. B2 author upper-pier footprint/eave checks and mechanical complete drop/camera/neighbor-domain checks answered distinct safety questions. Actual B1 custom-image-call paths and parent updates identified the current study006 scope.
+- Did not: Wrong-domain near-zero arithmetic had not established actual Chapel pocket correspondence. Sparse messages or retained parent waits do not prove lost followups, inactivity, service/model causes or timing costs; encrypted inbound bodies prevent a complete prompt-consumption claim. My technical/suite/note work was excluded from efficiency scoring.
+- Next: No new experiment; retain existing changed-state coalescing, verified early release and explicit current target/round/output in ordinary handoffs. Record later qualitative ambiguity or reuse without new timers/frameworks, preserving every source/native/whole-quality/reference/REST/suite/cleanup/own-attribution gate and historical HOLD.
+
+### approach_geometry_review — B3source004 shared-schedule CODE PASS, 2026-10-07
+
+- Worked: Complete focused source review confirms the same1.75m-pier/eave-minus3.35 head schedule drives visible glazing and canonical closed recesses; actual aperture widths/heights and cut slices are positive, original sampled-top knots/endpoints remain, and visible/native closed-box ownership stays source w34313540. Changed upper geometry starts atY13 inside the old0.45m envelope; corrected run26/west lower party clips and actual chain bottoms remain unchanged.
+- Did not: Source arithmetic and author preflight do not prove native Float32 zero seams, current fit/spray/REST or whole architectural fidelity. Prior003 mechanics/suite predate004; historical003 visual HOLD and the disclosed tiny source-quantization sliver remain. No images/engine/tests or acceptance judgment occurred here. A lower-host spray does not establish changed upper-face coverage beyond grounded stock 6m range.
+- Next: Reuse unchanged ENE/material/source/roof/party-domain findings, then require separately authorized current native checks and independent dated all-side visuals. Keep complete shared schedule and sampled boundary semantics; no receiver exception, source/neighbor edit, framework or shared-note write was introduced by review.
+
+## final_b3_visual — B3 source004 exact-donor mechanical source preparation, 2026-10-07
+
+- Worked: The actual facade/layout delta stays within the previous 0.45 m projection envelope; the lower run18 painted receiver and party cuts remain unchanged. I reused the complete donor source `w34313540`, player `[466.0546641931019,537.8623091311493]` and target `[465.1165,5.5,536.096]`, including the outward highest-drop/capsule/camera column proof, and checked concrete remote producer changes without repeating unchanged arithmetic.
+- Did not: Source preparation alone establishes no new native first hit, REST, Decal, getter or pixel evidence. Historical eight rim samples are not continuous native proof; changed upper faces at Y13+ exceed the grounded 6 m spray range. All-pitch, tiny party-sliver precision and whole-quality limits remain, alongside historical001 setup HOLD with no Decal/PNG and unknown rejected-hit identity; its upper-relief cause remains inference.
+- Change: Reuse applicable unchanged proof while keeping source preparation separate from the maintained native four-arrival/five-REST and original-PNG gates. Preserve current-contract checks, complete donor fields and serialized ownership; lower-wall spray cannot supply upper-face, whole-art or full-suite acceptance.
+
+## final_b3_visual — B3 source004 current native fit and lower-bearing spray, 2026-10-07
+
+- Worked: One clean current-main rendered call passed sampled roof/wall/base fit, four canonical stock wall arrivals and five active, supported, stopped, input-released REST checks before disabled SAFE_FINAL. The exact donor pose produced a source-bound lower-bearing Decal; I inspected its fresh original PNG and found the tag readable. All six owned live PIDs were captured in the launching cell; terminal0, owned/global absence and temp cleanup preceded explicit early SOURCE+ENGINE release, then private pixel inspection/report.
+- Did not: The lower Y5.5 receiver does not cover changed upper Y13+ faces beyond grounded 6 m range. Samples and one still do not prove continuous party/sliver geometry, every receiver, all pitches, stairs, whole art or suite acceptance. Highest-query/spray/camera helper gates are not separately captured raw getter telemetry. Historical source/visual/mechanical HOLDs remain; one shutdown warning reports seven TextureRIDs with unknown cause, not seven errors.
+- Change: Retain current004 scoped mechanics and readable lower-wall pixels for separate visual/regression decisions, preserving full stock identity, active REST-before-disable safety and failed histories. Reuse completed evidence without automatic reruns, broader acceptance or timing/model/service claims.
+
+
+### approach_geometry_review — current-patch maintained full suite002, 2026-10-07
+
+- Worked: Exact tools/test.sh ran once after B3source004; direct handle30592 terminal0/21f4d2 ended ALL TESTS PASS, all49 scored fits and generator validation/determinism. Same-launch argv/parent-chain observation identified actual suite653401; current B3 four canonical arrivals recorded active supported released REST before safe disable. Verified owned/global/temp cleanup2c43a4 preceded EARLY SOURCE ENGINE RELEASE.
+- Did not: Regression/sample fit is not whole art, every upper-aperture/contact or grounded upper-face spray proof. Maintained output filters raw diagnostics and short-lived intermediate PIDs were not all observed; no exhaustive warning tally or invented IDs. Historical suite001/HOLDs remain distinct,53 preexisting stale runtime files and both normal shaderUID sidecars were left intact.
+- Next: Reuse current002 regression evidence within its frozen-patch scope alongside independent dated whole-quality and separate fit/spray findings; no catalog promotion or new engine call follows. Preserve real launcher identity, fresh outputs, terminal/cleanup/release and own attribution without reruns solely for bookkeeping. This tests the frozen patch before newly authorized B1study007 source edits; it supplies no retroactive claim for that later change.
+
+### building2_integrate — B1 study007 source preparation, 2026-10-07
+
+- Worked: Reused the complete successful005 pose and source-world drop/camera evidence; quantified new central0.52/entry0.50/pavilion0.69 projections against the retained domain and finite host margins.
+- Did not: An unchanged run6 Decal cannot prove new pavilion/head/entry contacts, true cavities or current fidelity. Retained native005 evidence is not007 execution; this preparation ran no engine.
+- Next: Require current independent CODE and separately authorized native fit/clean-load/active REST/safe-final/receiver checks, disclosing unsampled changed members, protected tower/local-only limits and any intervening world-domain changes. The private study007/current-gameplay-plan.txt retains complete fields and source-only limits.
+
+### chapel_art — B3 source004 composition and first capture, 2026-10-07
+
+- Worked: Reused the existing shared bay schedule/native consumer and approved materials; wider1.75m piers, lower heads at eave−3.35m and0.15m head fronts restored more solid-over-glass hierarchy. Actual70173 terminal0/a49897, owned/global/temp cleanupc10576 and early SOURCE+ENGINE release preceded direct inspection of all14 originals against HABS2003/modernNov2025ENE. Facade/layout changed; massing remained unchanged.
+- Did not: The render remained whole OPEN, with historical cadence/current survival and occluded lower details inferred; fine panel marks remained. Scoped CODE/native evidence is not whole fidelity or exhaustive party/contact proof. One shutdown warning reported seven TextureRIDs, cause unknown; no acceptance or automatic second capture.
+- Next: Keep continuous bearing, grids, sampled roof knots and party clips while independent whole review judges the complete head/pier/recess assembly. First of two newly authorized calls was used; the second remains reserved for critique/ROOT confirmation, distinct from the exhausted earlier capture budget.
+
+### chapel_art — B1 study007 first coherent articulation capture, 2026-10-07
+
+- Worked: Complete pavilion jamb/shared stepped head/sill, finer crescent grids and bounded entrance/transom reused the B1 family. Source arithmetic reduced proposed entry height to3.80m for clearance under the unchanged canopy. Actual83894 terminal0/bb529e, immediate owned PIDs and cleanup885776 preceded early release and all14 original-image inspection plus all three Sep2025 references. Only producer/publicfront JSON/public glass changed; repaired canopy, tower/support and protected geometry stayed fixed.
+- Did not: Gains were modest: head layering subtle, glass flat/dark, broad lower front sparse and inferred rear/core conspicuously blank. Canopy edge marks persisted without a proven cause. Outward layered glazing is not a true cavity; source arithmetic/reused land evidence is not fresh native proof. One shutdown warning reported seven TextureRIDs, unknown cause. Whole quality remains self-HOLD/open.
+- Next: Judge the complete pavilion–crescent unit through independent whole review and changed native-member checks before further refinement. One of two calls used; second reserved for critique/ROOT. Keep historic006 HOLD and scope limits rather than equating paired geometry or cleaner trim with acceptance.
+
+### chapel_art — Chapel next opening-family private proposal, 2026-10-07
+
+- Worked: Full current002 critique and directly reopened Jan2023WSW, Jun2026 manual-useful failed image, Sep2025SSE and Dec2016 front informed one coordinated hall/belfry-side/wing/entry proposal using the existing Chapel family. Exact cap/cross, source ownership and native pocket-boundary construction remain protected; proposal is private only.
+- Did not: Existing closed pockets still read as interrupted strokes at ordinary range; close spray pixels do not prove their distant appearance or cause. Jun2026 footer differs from contributorSep2026; May2011 remains historical/occluded. Exact observed wing host and belfry-face orientation require preflight resolution before construction, not automatic mirroring. Proposed belfry relief is explicitly not a structural cavity.
+- Next: Resolve those source associations, then bring a complete opening-family study to independent review under a distinct future GO. Proposed two NEW rendering calls are not authorization or leftover original budget. No implementation, engine, new research, hidden openings, acceptance or shared-system changes occurred in this planning round.
+
+## final_b3_visual — Building1 study007 exact-donor mechanical source preparation, 2026-10-07
+
+- Worked: Compared all three art deltas and unchanged trim with retained source; reused complete005 run6 donor player `[-58.21487214180852,710.7374337671531]` and target `[-56.439,6.5,709.8175]` with all-height column evidence. New maximum0.69m paired pavilion members stay outside the capsule/aimed camera domain; exact colliding LAND triangle clipping established positive clearance for the complete nominal aimed0.151m swept hull. Concrete remote producer changes remain outside this domain.
+- Did not: SOURCE-PREP GO is not007 native first-hit/support/REST/Decal/readability or CODE/whole-art/suite acceptance. The lower plain-wall tag does not test new paired heads/entry/cavity; eight historical rim samples are not continuous proof. Inherited camera orientation/+25-degree unswept terrain crossing and tower roof-miss/local-only/contact limits remain native or historical boundaries.
+- Change: After current independent CODE and a distinct named engine transfer, preserve the complete donor plan, clean load/four canonical arrivals/five active supported stopped input-released REST before disabled SAFE_FINAL and actual source-bound readable PNG gates. Stop on unsafe/setup/identity/recovery/save failure without relocating or replaying unrelated work; retain historical HOLDs and warning uncertainty.
+
+## final_b3_visual — Building1 study007 current parent fit and lower-run6 spray, 2026-10-07
+
+- Worked: Complete005 donor/output-only adaptation and completed source proof preceded one clean current-main rendered call: native roof0/29, wall0/15 and ground0/15 bad, FOUR canonical wall arrivals and FIVE ACTIVE supported stopped input-released REST checks BEFORE disabled SAFE_FINAL. One source-bound lower-run6 Decal was readable in my own fresh original PNG. All six owned live PIDs were captured in the launching cell; actual terminal0/owned-global-temp cleanup and early SOURCE+ENGINE release preceded pixels/report.
+- Did not: Lower run6 spray does not prove new paired pavilion/head/entry/crescent member contacts, true cavities, upper/every receiver, under-canopy access, whole-art or current post007 suite acceptance. Eight historical rim samples are not continuous proof; all-pitch/inherited orientation/getter-helper limits remain. Tower004 retains4/44 roof misses within threshold, LOCAL rooftop approaches only, north/west proximity rather than direct wall touch and no ground-to-roof/stair proof. Historical HOLDs remain; ONE warning reporting seven TextureRIDs has unknown cause, not seven errors.
+- Change: Reuse this current scoped parent result and unchanged tower evidence for separate wholevisual/integration decisions, retaining complete source identity/native safety/active REST-before-disable gates and original failed histories. Do not automatically repeat engines, broaden lower-wall coverage, or claim measured timing/model/service benefits.
+
+### approach_geometry_review — Building1 study007 source CODE review, 2026-10-07
+
+- Worked: focused source CODE PASS found finite closed paired pavilion stepped heads/jambs and finer crescent members under the unchanged r16681702 native wall/spray identity; actual end-host margins and20.25m eave clearance remain positive. Entry source tops clear canopy underside10.34m by at least0.079m; trim, protected runs, exact separate tower/support and local-frame2mm canopy are unchanged.
+- Did not: entry bases are6.198860/6.281/6.281m, not universal flat grade. Local generated-land samples show embed or up to0.03802m source gap; source sampling/paired emission do not prove native contact, new0.69m upper-projection standing/drop setup, spray or007 pixels. Outward layered glass retains opaque wall backing and is not a true cavity.
+- Change: retain historical canopy HOLD→source PASS and pre007 fit/tower/suite limits; current007 mechanical, post-change suite and independent whole-reference visual gates remain separate. This reviewer ran no engine/tests or image inspection and changed only private review/draft files.
+
+### building2_integrate — current four-building checkpoint, 2026-10-08
+
+- Worked: Reconciled the existing four notes against final B2 visual, current B3/B1 capture/CODE/native reports and retained Chapel verdict; linked current originals and separated queued whole reviews from passed mechanics.
+- Did not: Scoped NNW success does not close B2's SSE hierarchy gap; lower tags do not prove upper members, and suite002 predates B1study007. Chapel's private proposal is not implementation authorization.
+- Next: Preserve historical HOLDs/49credit/213inventory, dated-reference and inference limits while current whole reviews/corrections proceed. Only these four notes and my own entry changed; no source, catalog, engine or Git operation.
+
+### approach_geometry_review — efficiency checkpoint006, 2026-10-08
+
+- Worked: OTHER actors reused complete donors and unchanged tower/envelope evidence while adding actual changed-domain camera/LAND preparation and fresh four-arrival/five-active-REST native checks. Author whole self-HOLD, lower-spray/upper-member limits, pre007 suite boundary and terminal/cleanup early release remained separate; my CODE/suite/own-note performance was excluded.
+- Did not: The51 completed B2 parent wait records coexist with actual custom image batches and the necessary27-original whole-side/reference/context comparison. They do not establish lost tasks, duplicate engines, avoidable elapsed cost or model/service cause. At the checkpoint006 review-time snapshot, B2author005 had no retained ordinary completion receipt in the sampled directory; its then-live progress and quiet B3visual readiness remained unknown. This is historical scope, not an updated status claim.
+- Change: No new experiment justified; retain changed-state coalescing, explicit current target/round/output, donor reuse and verified early release. Observe later concrete ambiguity/duplicate work in ordinary RETRO without reducing whole-image/native/source/REST/suite/ownership gates or adding timers/frameworks. This checkpoint supplies no acceptance.
+
+### approach_geometry_review — B2source005 SSE source CODE HOLD, 2026-10-08
+
+- Worked: Focused complete delta/emitter review retains positive finite SSE upper stations/glass, source-controlled backs/reveals, original21.36 eave/21.91 crown, inward1.13m envelope and canonical paired visible/native w24274434 wall/spray identity. Other callers, NNW004, materials, LAND/source bottoms and thresholds are unchanged.
+- Did not: Splitting the outer recess atY10.35 emits a downward lower head and upward upper sill over the same common0.95m-deep cavity interval. Both go directly into native faces; they form an exposed zero-thickness two-sided shelf rather than cancelling or lying buried in solid. This source-derived CODE HOLD is not an executed contact failure or proved pixel cause; historical mechanics/visual/suite limits remain.
+- Change: Remove both shared caps only over their common cavity interval, retaining genuine shoulder undersides and complete back/jamb/head/sill closure in matching visible/native streams. Require separately assigned corrective review/native/whole-quality/post-change suite evidence; lower-NNW spray cannot prove changed upper SSE faces. No epsilon or collision exception; source-preparation/domain GO cannot override CODE HOLD. Corrective edits await actual terminal/cleanup/release, not printed capture PASS. Blocker relayed promptly; no engine/source operation by this reviewer.
+
+## final_b3_visual — B2source005 exact004 lower-NNW mechanical source preparation, 2026-10-08
+
+- Worked: Confirmed complete actual004 source w24274434 donor without rounding: player `[263.59008947877174,546.3048288477764]`, lower-NNW target `[264.5298127710014,5.3,548.0703089904122]`. New SSE geometry stays within its prior1.13m inward envelope, over85m clear of the full selected standing/camera domain. Reused004 highest-drop/capsule/complete colliding-LAND camera proof and checked actual remote B1study007 changes.
+- Did not: DOMAIN SOURCE-PREP GO does not supersede current CODE shelf HOLD or authorize execution. The independent source finding is an exposed zero-thickness opposing head/sill pair at sharedY10.35; no native contact failure or pixel cause is established. Historical004 native/lower-Decal PASS is not005 upper-SSE proof. Grounded6m range, source precision, all-pitch/getter/continuous native contact, current runtime/whole-art/suite limits and historical HOLDs remain; one seven-TextureRID warning has unknown cause.
+- Change: Keep domain preparation separate from the corrective shared-boundary work and its independent CODE decision. Only after actual author terminal/cleanup/release, CODE PASS, full preflight review and distinct named GO, retain the complete donor, four canonical arrivals/five ACTIVE supported stopped input-released REST before disabled SAFE_FINAL and actual source-bound readable PNG gates. No relocation, retry, upper-spray coverage or automatic acceptance.
+
+### building2_integrate — joined-recess boundary lesson, 2026-10-08
+
+- Worked: Read the full B2source005 CODE HOLD and relevant assembly lessons; recorded the shared-air head/sill problem and required two-face removal while retaining real shoulders.
+- Did not: Individually closed same-depth cavities emitted an internal two-sided native shelf; opposite normals provide no boolean cancellation. No executed hit or appearance cause was established.
+- Next: Trace the complete visible/native union boundary before capture, preserving genuine closure and receiver rules. Existing terminal-status guidance remains unchanged; this round adds only one lesson and my own notes, with no source, engine or new validation framework.
+
+### chapel_art — B2 source005 SSE composition and interrupted capture, 2026-10-08
+
+- Worked: Actual April2017 SSE/HABS2003 A3 comparison and final004 critique guided an SSE-only upper-window/pier/spandrel change in the existing family; NNW004 and lower openings stayed unchanged. All11 saved originals were directly inspected: taller upper glazing improved proportions over004, while depth remained schematic and middle-band marks remained. These pictures precede the seam repair; whole quality stays open.
+- Did not: Individually closed lower/upper cavities left opposing caps across common air atY10.35, independently reported as CODE HOLD; neither a native hit nor the pixel cause was established. Capture62181 saved11/driverPASS but did not exit normally: verified owned Godot remained in futex wait, then ONE ROOT-authorized SIGTERM produced actual143/138f1e. Cleanup634c95 confirmed owned/global/temp absence before release. Shutdown cause remains unknown; saved images are not clean-run PASS.
+- Next: Preserve failed source/images and actual termination evidence; judge complete architectural units against references and the full native union boundary. The original two-call extension is exhausted, with no automatic retry or acceptance from this round.
+
+### chapel_art — B2 source005 joined-cavity source correction, 2026-10-08
+
+- Worked: Saved the pre-correction producer privately, then omitted BOTH lower-head and upper-sill faces only over their common station interval. The lower head retains genuine narrowing shoulders; outer jambs/backs/top/bottoms and the visible/native triangle correspondence remain. Exact intended-source whitespace passed; source frozen for current corrective review.
+- Did not: This is source-only correction with independent corrective CODE pending, no fresh Godot/native/pixel proof. Earlier005 images and abnormal143 terminal cannot certify the corrected source or establish why dark marks appeared.
+- Next: Review the semantic boundary of connected recesses rather than assuming separately closed boxes form a valid union. Keep real shoulders, original dimensions/materials/source roles and historical HOLDs; wait for distinct authorization before any new engine call or capture budget.
+
+### approach_geometry_review — B2source005 joint-cap correction CODE PASS, 2026-10-08
+
+- Worked: Narrow source CODE PASS closes the prior Y10.35 shelf HOLD: both SSE outer units subtract the same upper station interval at the same0.95m depth/height through actual source segments. Both common cap orientations are omitted; only real0/.30m lower shoulder undersides remain, with unchanged paired visible/native back/jamb/head closure and canonical w24274434 ownership.
+- Did not: This source complement reasoning proves no Godot parse/native Float32 zero seam, executed contact, spray or pixel cause. Initial005 HOLD and author TERM143/all11 PRErepair originals remain historical; they cannot establish corrected native behavior/appearance. Lower-NNW preparation and grounded6m spray limits remain distinct from upper SSE coverage and whole quality.
+- Change: Retain unchanged full-cap defaults for nested glazing/NNW/other opening callers, source knots/bottoms/roof/crown/materials and stock controls. Require separately authorized corrected native/whole-reference/post-change suite evidence; CODE grants no engine GO. Reviewer ran no engine/images/tests and wrote only private verdict/draft.
+
+### chapel_art — B2 corrected-source006 capture, 2026-10-08
+
+- Worked: One separately authorized corrected-source capture completed actual11010 terminal0/eb082e; owned/global/temp cleanup554209 preceded early SOURCE+ENGINE release and direct inspection of all11 originals. The middle band appeared cleaner than005, with taller upper glazing and improved head balance versus004; existing NNW/WSW/ENE composition remained recognizable.
+- Did not: Cleaner pixels establish neither the sole earlier mark cause nor every native contact. Shaded SSE pier depth remains understated and historical detail simplified; whole quality stays open for independent review. Original005 TERM143/source HOLD and PRErepair images remain distinct. One shutdown warning reported14 TextureRIDs, cause unknown.
+- Next: Keep source CODE, clean capture termination, current native checks and whole-reference judgment separate. Retain dated inference/contact limits and historical failures; no further author engine budget, source change or acceptance follows this capture note.
+
+
+## final_b3_visual — Building2 corrected006 current native fit and lower-wall spray, 2026-10-08
+
+- Worked: One clean current-main rendered call passed sampled roof/wall/ground, four canonical wall arrivals and five active supported stopped input-released REST checks before SAFE_FINAL; native source-bound lower NNW Decal and own original-PNG readability passed. All six live owned PIDs were captured in the launch cell, then actual terminal/cleanup and early SOURCE+ENGINE RELEASE preceded PNG/report work.
+- Did not: The unchanged lower tag does not test new upper SSE, every corrected seam/cavity or all camera pitches; source/CODE PASS does not establish native Float32 zero or whole-art/post-change suite acceptance. Original005 CODE HOLD/TERM143/pre-repair evidence remain historical. One warning about seven leaked Texture RIDs has unknown cause.
+- Change: Retain the complete exact004 donor, current source-domain limits and every active REST/safe-final gate; distinguish sampled mechanics and one lower receiver from upper/reference/whole-building review, and require separately named future authority rather than treating an empty slot as GO.
+
+### chapel_final_visual — Building 2 all-sides003 — whole VISUAL HOLD, notes closure 2026-10-08
+
+- Worked: Directly inspected all11 current architecture originals, the actual clean one-pose spray, six dated reference originals and002 north (19 unique images). Removing outlined opaque caps improved cleanliness; public WSW/SSE/ENE recognition, quiet materials, site/island appearance and one-pose tag readability passed in scope, with completed unchanged historical comparisons explicitly reused.
+- Did not: NNW now reads as a flat head band rather than A6's projecting broad/narrow pier bodies continuing through spandrels and modulated upper edge. Whole VISUAL HOLD remains despite removal of the earlier artifacts and separate CODE/clean fit PASS. Historical002 HOLD and date/occlusion/current-condition limits are preserved; no tests were run by this reviewer.
+- Next: Restore coherent NNW pier/spandrel depth hierarchy while retaining the clean wall field/recess joins, supported grouped glazing and central entrance. Judge the full ordinary north/west-oblique composition against A6, preserving frozen source/native integrity and distinct other sides. No invented hidden motifs, survey claims or acceptance expansion; shared RETRO was not modified during this review.
+
+### chapel_final_visual — Hangar 3 / w34313540 all-sides003 — whole VISUAL HOLD, notes closure 2026-10-08
+
+- Worked: Directly inspected all14 current architecture originals, fresh one-pose spray, four dated reference originals and matched002 south (20 unique images), reusing unchanged earlier comparisons explicitly. Continuous bearing resolves applied foot tabs, shaded grids improve, and modern ENE recognition/quiet coating/site-island/one-pose spray support scoped PASS. Current roof pixels are post-topfix.
+- Did not: Whole VISUAL HOLD remains: broad tall flank glazing and thin opaque heads understate the historical projecting-pier/head/window hierarchy. Fine ENE panel seams remain schematic. Annex/roof/foreground occlusion limits lower-party and edge appearance; neither pixels nor separately reported CODE/native samples prove exhaustive ownership clearance or integration. No tests were run by this reviewer.
+- Next: Recompose the long-side upper pier/opaque-head/recessed-window relationship while preserving clean bearing/joins, readable grids, modern ENE and frozen source/native integrity. Judge whole composition against HABS side families with contemporary-survival/dimension/inference limits, avoiding invented lower openings or copied annexes. Preserve historical002 HOLD and private B2 draft; shared RETRO was not modified during this review.
+
+### chapel_final_visual — Building 1 study006 — whole VISUAL HOLD, notes closure 2026-10-08
+
+- Worked — chapel_final_visual directly compared all14 current study006 originals, three September2025 references, eight pertinent study005 views (all five islands included) and one actual spray pose. Crescent/pavilion recognition, quiet coating, site/island appearance and ONE-pose spray visibility/readability retain their scoped credit.
+- Did not — the narrow canopy repair did not close whole quality: intermittent lip marks, schematic pavilion/head/entry/base relief and glazing, plus a conspicuous blank faceted inferred rear/core keep VISUAL HOLD. North-pavilion front and canopy underside coverage are limited; reported CODE/fit and protected tower scope are not art acceptance or tests I ran.
+- Next — use one coherent bounded exterior articulation pass to restore reference-supported pavilion/crescent head-to-base hierarchy and clean joins, with restrained coherent inference on visible returns/core. Preserve source/native/protected scope, historical HOLDs and private references; compare the complete actual result without crediting neighbor changes or inventing hidden details. Shared RETRO was not modified during this image-review phase.
+
+### chapel_final_visual — Chapel all-sides002 — whole VISUAL HOLD, notes closure 2026-10-08
+
+- Worked — chapel_final_visual inspected all14 current originals alongside eight useful reference originals, the changed-WSW spray pose and eight pertinent before images including all five islands. SSE recognition, quiet coating, closed roof/wing appearance, site/island appearance and ONE-pose tag visibility/readability retain scoped PASS; manual failed-name pixels were judged with their actual side/date limits.
+- Did not — whole VISUAL HOLD persists: WSW opening groups fragment at ordinary range, exposed belfry-side framed motifs are missing, and observed wing openings plus inferred rear/return finish remain incomplete. The current source correction did not demonstrate a visible west/south cure versus001; no rendering cause, complete rear blank truth, present-day historical survival or mechanical acceptance was inferred.
+- Next — complete one coherent reference-grounded opening/frame/recess family across WSW, exposed belfry and observed wing regions, preserving SSE credit and restrained inference for hidden returns. Rejudge the complete actual exterior at ordinary camera distance while retaining source/native/ownership limits, historical HOLDs, separate mechanical gates and reference privacy. Shared RETRO remains untouched in this review phase.
+
+### chapel_final_visual — Building 2 all-sides004 — whole VISUAL HOLD / scoped NNW PASS, notes closure 2026-10-08
+
+- Worked — chapel_final_visual compared all11 current004 originals, all six useful dated references, the current lower-NNW spray pose and nine pertinent003 views (both contexts and all five islands). Continuous NNW pier/head bodies materially restore depth over003; recognition, quiet coating, site/island and ONE-pose spray receive scoped PASS.
+- Did not — whole VISUAL HOLD remains because actual April2017/A3 SSE pixels show a stronger continuous upper-glazing/head/pier/spandrel relationship than the current shallow two-row treatment. Successful NNW repair, historical public recognition and separate source/native PASS cannot substitute for whole-unit quality; no surveyed/historical survival, upper-face spray or current-suite claim was made.
+- Next — complete one bounded reference-grounded SSE bay-hierarchy pass while preserving successful004 NNW joins/grouping, source/native/ownership limits and historical002/003 HOLDs. Compare the complete current result at ordinary gameplay distance, attribute only target changes and retain private references. Shared RETRO was not modified during this review phase.
+
+### chapel_final_visual — Hangar 3 / w34313540 all-sides004 — whole VISUAL PASS, notes closure 2026-10-08
+
+- Worked — chapel_final_visual directly compared all14 current004 originals, one fresh lower-bearing spray pose, four dated references and nine matched003 views (28 unique images). Wider piers and substantial opaque heads restore coherent flank solid/recess hierarchy and close the prior003 whole visual HOLD; contemporary ENE, quiet finish and site/island appearance retain scoped PASS.
+- Did not — Fine ENE joint marks remain secondary stylization; historical2003 lower occlusion/current-condition uncertainty and hidden roof/party precision remain limits. One island batch delivered truncated output and was not counted until usable pixels arrived. Source/native PASS and the pre-B1study007 suite are separate; no tests were run by this reviewer or current integration acceptance claimed.
+- Next — Retain the balanced pier/head/window relationship when making bounded refinements, compare changed side composition directly with its dated pixels, and deliver image batches small enough to inspect without truncation. Keep modern ENE evidence ahead of historical attachments, lower-wall production inference explicit, and one-pose spray approval separate from upper/all-receiver coverage. Shared RETRO remains unmodified during this review.
+
+### building2_integrate — B3 all-side integration documentation, 2026-10-08
+
+- Worked: Reconciled ROOT-accepted004 whole visual, cumulative six-file CODE, current native fit/spray and suite003 into the existing B3 note/catalog, preserving historical49/213 recognition and private dated-reference scope.
+- Did not: Earlier ENE-only protection wording no longer described the explicitly rescoped all-side work; acceptance does not establish as-built detail, every upper receiver or exact native-zero party clearance. Catalog metadata postdates suite003.
+- Next: Keep the six B3 art paths isolated from unaccepted other-building and loader/wrapper work; obtain authorized metadata/current checks and explicit integration GO before staging/merge. Only B3 ordinary note/catalog and my own RETRO were edited here.
+
+### approach_geometry_review — current-patch maintained full suite003, 2026-10-08
+
+- Worked: Exact tools/test.sh ran once on frozen B1study007/corrected B2 SSE/B3source004/Chapel002; same handle41369 terminal0/74f792 ended ALL TESTS PASS/all49 scored fits plus generator validation/determinism. Actual persistent suite670901 was identified by executable/argv/parent chain; observed B2/B3 four arrivals retained ACTIVE supported stopped input-released REST before disabled SAFE_FINAL. Cleanup7f534e and early SOURCE+ENGINE release preceded private reporting.
+- Did not: Regression/sample fit does not establish every thin member/corrected Float32 seam, upper-face grounded6m spray, under-canopy access, selected Decal pixels or whole quality. Maintained log filters raw diagnostics; early import/intermediate PIDs and later raw contact/shutdown-warning telemetry were unobserved. An initial detector matched its own shell text; executable-qualified observation excluded that false match before the only launch. Historical HOLDs/suite002 scope remain;53 stale runtime files and two normal UID sidecars were left intact.
+- Change: Reuse this current003 regression within the frozen tested scope alongside separate current mechanics and independent dated whole-quality decisions, with no catalog promotion or new engine call. Preserve actual handles/process identity, fresh outputs, active REST safety, terminal/cleanup/early release and own attribution; source/runtime/art scopes stay distinct without bookkeeping reruns/frameworks.
+
+### approach_geometry_review — post-Hangar3 catalog full-suite004 regression, 2026-10-08
+
+- Worked: ran exact maintained tools/test.sh once against the frozen post-B3-catalog patch; real handle83390/root674830 terminal0 and ALL TESTS PASS, including all49 scored fits, stock route, generator validation/determinism. Observed B2/Hangar3 four arrivals retained released supported active REST before safe final.
+- Didn't establish: regression is not whole-art/catalog promotion or upper-spray proof; maintained log is filtered, some intermediate short-lived PIDs and later raw telemetry were unobserved. Actual Wayland warnings were separate from hard errors; no exhaustive shutdown-warning tally or hardware/getter claim.
+- Change: retain actual persistent-root/handle and terminal-cleanup boundary. Observed owned/global engines/browser/tee and suite temp/socket/FIFO/log were absent before early SOURCE+ENGINE RELEASE;53 old runtime artifacts and two normal UID sidecars stayed intact. No rerun/source edit/shared-note GO.
+
+### building2_integrate — B3 final integration preflight, 2026-10-08
+
+- Worked: Read the complete post-catalog suite004 PASS and reconciled the existing B3 note; reused the completed nine-path dependency/patch inspection and refreshed explicit tracked/new-file whitespace checks.
+- Did not: Regression and B3 whole-quality acceptance do not promote the unfinished buildings or expand one-pose/native-sampling limits. The shared worktree still contains unrelated art, harness and documentation changes.
+- Next: Keep staging limited to the approved nine B3 art/catalog/note/RETRO paths only after distinct commit GO; preserve all other dirty files and historical HOLDs. This round changed only the B3 note and my own entry, with no engine or catalog/source edit.

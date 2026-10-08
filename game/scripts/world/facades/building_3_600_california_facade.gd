@@ -7,6 +7,9 @@ const TARGET_RECEIVER_OBJECT_KEY := "building:w34313540:wall"
 const LAYOUT_PATH := "res://game/resources/facades/building_3_600_california_ene_layout.json"
 const RENDER_BUILDING_WALL := 1 << 1
 const PAINT_SHADER := preload("res://game/resources/materials/world/building_3/building_3_painted_surface.gdshader")
+const LONG_SIDE_CHAINS := [[10, 11], [13], [15, 16, 17, 18, 19], [22], [24, 25], [26], [36, 37, 38], [40, 41], [57, 58]]
+const BAY_RECESS_M := 0.55
+
 const PLASTER_TEXTURES := "res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_%s_1k.jpg"
 
 # ENE composition (Nov 2025 Street View, observed side only). Every value below
@@ -48,6 +51,9 @@ var _run_lengths: Array[float] = []
 var _run_bottoms: Array[Vector2] = []
 var _ground_y := 0.0
 var _errors: PackedStringArray = []
+var _material_prefix := ""
+var _party_start_u := INF
+var _party_roof_y := 0.0
 
 
 static func matches_target(record: Dictionary) -> bool:
@@ -106,8 +112,8 @@ func configure(record: Dictionary, runtime_massing: Dictionary = {}) -> Dictiona
 	set_meta("frozen_osm_nrhp_ref", "08000081")
 	set_meta("frozen_osm_nrhp_ref_role", "provenance_only_incorrect_for_building_3")
 	set_meta("maximum_relief_m", MAX_PROJECTION_M)
-	set_meta("composition", "ene_nov2025_closed_lower_front_recessed_blue_portal_channelled_pylons")
-	set_meta("styled_run_indices", _int_array(_side.run_indices as Array))
+	set_meta("composition", "all_side_habs2003_motifs_with_modern_ene_nov2025")
+	set_meta("styled_run_indices", range(59))
 	set_meta("styled_run_length_m", float(_side.length_m))
 	set_meta("excluded_run_indices", _int_array(_layout.excluded_run_indices as Array))
 	add_to_group("building_3_render_only_facade")
@@ -120,6 +126,7 @@ func configure(record: Dictionary, runtime_massing: Dictionary = {}) -> Dictiona
 	_build_lower_front(portal_u)
 	_build_portal(portal_u)
 	_build_crown_face()
+	_build_other_exteriors(record)
 	if not _errors.is_empty():
 		return {"ok": false, "message": "Building 3 ENE composition rejected: %s" % "; ".join(_errors)}
 	_flush_render_batches()
@@ -189,6 +196,9 @@ func _runtime_massing_matches() -> bool:
 ## lowest exact bottom, buried slightly, is where every grounded box starts, so
 ## nothing floats where the local land dips toward the portal.
 func _measure_runs(record: Dictionary) -> void:
+	_run_u_starts.clear()
+	_run_lengths.clear()
+	_run_bottoms.clear()
 	var raw_vertices: Array = record.vertices
 	var u := 0.0
 	_ground_y = INF
@@ -392,7 +402,8 @@ func _build_crown_face() -> void:
 		_side_point(u1, CROWN_SEAM_Y + half_joint, JOINT_OFFSET_M + 0.004),
 		_side_point(u0, CROWN_SEAM_Y + half_joint, JOINT_OFFSET_M + 0.004),
 	], normal)
-	_add_mesh("CrownJoints", joints, "seam", false)
+	if _material_prefix.is_empty():
+		_add_mesh("CrownJoints", joints, "seam", false)
 	var group := _empty_surface_group()
 	var points: Array[float] = [u0 - 0.4]
 	for local_index in _run_u_starts.size():
@@ -422,13 +433,140 @@ func _build_crown_face() -> void:
 	_signature_parts.append("crown-face:%d-flush-joints:chamfered-fascia:%d" % [CROWN_SEAM_COUNT, points.size()])
 
 
+
+## HABS2003 supports the long-side pier/window family and southwest end.
+## Complete units follow exact source host chains; cadence and current finish
+## are production inference. No photographed neighboring annex is instantiated.
+func _build_other_exteriors(record: Dictionary) -> void:
+	var ene := _side.duplicate(true)
+	_material_prefix = "all_"
+	_set_host_chain(record, range(10))
+	# Source bottoms are untouched. Only these added grounded relief solids
+	# extend below the lowest source bottom to meet the actual local terrain.
+	_ground_y = minf(_ground_y, 2.70)
+	_build_pylon(false)
+	_build_pylon(true)
+	_add_box("plaster_pale", PYLON_INNER_U, _length() - PYLON_INNER_U, _ground_y, LOWER_TOP_Y, -0.08, 0.40, true)
+	_add_box("plaster_light", PYLON_INNER_U, _length() - PYLON_INNER_U, LOWER_TOP_Y, CORNICE_TOP_Y, -0.08, 0.40, true)
+	_build_crown_face()
+	# Split at real footprint direction changes, not at generated chunk seams.
+	for chain: Array in LONG_SIDE_CHAINS:
+		_set_host_chain(record, chain)
+		_build_long_side_units()
+	# Curved northwest entrance and short returns keep their actual facets.
+	# Finite lower glazing units never bridge a corner or change the shell.
+	for run_index in range(43, 56):
+		_set_host_chain(record, [run_index])
+		var length := _length()
+		if length > 1.4:
+			_add_box("glass", 0.16, length - 0.16, 5.0, 9.5, 0.015, 0.06, true)
+			_add_box("window_frame", 0.10, 0.22, 4.9, 9.65, 0.06, 0.17, true)
+			_add_box("window_frame", length - 0.22, length - 0.10, 4.9, 9.65, 0.06, 0.17, true)
+			for y: float in [4.9, 7.2, 9.5]:
+				_add_box("window_frame", 0.10, length - 0.10, y, y + 0.15, 0.06, 0.17, true)
+		_add_box("plaster_light", 0.0, length, 10.0, 10.35, -0.04, 0.28, true)
+	_material_prefix = ""
+	_side = ene
+	_measure_runs(record)
+
+
+func _set_host_chain(record: Dictionary, runs: Array) -> void:
+	var raw: Array = record.vertices
+	var first := int(runs[0]) * 12
+	var last := int(runs[runs.size() - 1]) * 12
+	var start := Vector2(float(raw[first]), float(raw[first + 2]))
+	var end := Vector2(float(raw[last + 3]), float(raw[last + 5]))
+	var tangent := (end - start).normalized()
+	# Source polygon travels with the outward normal to its right.
+	var normal := Vector2(tangent.y, -tangent.x)
+	_side = {"run_indices": runs, "start_xz_m": [start.x, start.y], "end_xz_m": [end.x, end.y], "normal_xz": [normal.x, normal.y], "length_m": start.distance_to(end)}
+	_measure_runs(record)
+	_party_start_u = INF
+	_party_roof_y = 0.0
+	if runs == [26]:
+		# Frozen w1222514686 shares the complete reverse run26 boundary.
+		_party_start_u = -END_OVERHANG_M
+		_party_roof_y = 9.2
+	elif runs == range(10):
+		# w1222514685 starts at run6 and continues through the west corner.
+		# A 2mm inward station allowance covers frozen coordinate quantization.
+		var shared_start := Vector2(float(raw[6 * 12]), float(raw[6 * 12 + 2]))
+		_party_start_u = (shared_start - start).dot(tangent) - 0.002
+		_party_roof_y = 9.358
+	# Raw normals determine which side owns the exterior (never guess winding).
+	var normals: Array = record.normals
+	_side.normal_xz = [float(normals[first]), float(normals[first + 2])]
+	_signature_parts.append("all-side-host:%s" % str(runs))
+
+
+## One schedule drives both native recess removal and visible bay assemblies.
+## Dimensions are HABS-supported production inference, not measured openings.
+static func long_side_bays(length: float, top: float) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	if length < 2.5:
+		return result
+	var count := maxi(1, int(floor((length - 1.0) / 5.2)))
+	var pitch := (length - 1.0) / float(count)
+	for index in count:
+		var center := 0.5 + pitch * (float(index) + 0.5)
+		var half := (pitch - 1.75) * 0.5
+		result.append({"u0": center - half, "u1": center + half, "sill": 13.0, "head": top - 3.35})
+	return result
+
+
+func _build_long_side_units() -> void:
+	var length := _length()
+	var top := float(_runtime_massing.eave_y_m)
+	var bays := long_side_bays(length, top)
+	if bays.is_empty():
+		return
+	var last_u := 0.0
+	for bay: Dictionary in bays:
+		var u0 := float(bay.u0)
+		var u1 := float(bay.u1)
+		var sill := float(bay.sill)
+		var head := float(bay.head)
+		# Broad continuous pier bodies meet the lower shoulder, not a thin
+		# floating frame around each window. Canonical wall remains behind piers.
+		_add_box("plaster_light", last_u, u0, 13.0, top, -0.04, 0.45, true)
+		_add_box("plaster_pale", u0, u1, head, top, -0.04, 0.15, true)
+		# Glass is inside a real canonical closed recess, just forward of its back.
+		_add_box("glass", u0, u1, sill, head, -BAY_RECESS_M + 0.015, -BAY_RECESS_M + 0.045, true)
+		for column in 4:
+			var u := lerpf(u0, u1, float(column) / 3.0)
+			_add_box("window_frame", maxf(u0, u - 0.055), minf(u1, u + 0.055), sill, head, -BAY_RECESS_M + 0.045, -BAY_RECESS_M + 0.15, true)
+		for row in 7:
+			var y := lerpf(sill, head, float(row) / 6.0)
+			_add_box("window_frame", u0, u1, maxf(sill, y - 0.055), minf(head, y + 0.055), -BAY_RECESS_M + 0.045, -BAY_RECESS_M + 0.15, true)
+		last_u = u1
+	_add_box("plaster_light", last_u, length, 13.0, top, -0.04, 0.45, true)
+	# Continuous lower bearing wall meets pier fronts at the same plane.
+	# Pier bodies start at its top: no coplanar overlapping sill/pier fronts
+	# and no short projecting feet terminating above the lower wall.
+	_add_box("plaster_pale", 0.0, length, _ground_y, 13.0, -0.04, 0.45, true)
+
+
 func _add_box(material_key: String, u0: float, u1: float, y0: float, y1: float, d0: float, d1: float, solid: bool) -> void:
+	# Clip source-owned decorative solids at the actual annex height/domain.
+	# The canonical B3 wall remains below; no neighbor or receiver is replaced.
+	# Both render and native boxes use each resulting closed finite piece.
+	if _material_prefix == "all_" and u1 > _party_start_u and y0 < _party_roof_y:
+		if u0 < _party_start_u:
+			_add_unclipped_box(material_key, u0, _party_start_u, y0, y1, d0, d1, solid)
+		if y1 > _party_roof_y:
+			_add_unclipped_box(material_key, maxf(u0, _party_start_u), u1, _party_roof_y, y1, d0, d1, solid)
+		return
+	_add_unclipped_box(material_key, u0, u1, y0, y1, d0, d1, solid)
+
+
+func _add_unclipped_box(material_key: String, u0: float, u1: float, y0: float, y1: float, d0: float, d1: float, solid: bool) -> void:
 	if not (u1 > u0 and y1 > y0 and d1 > d0) \
 	or u0 < -END_OVERHANG_M or u1 > _length() + END_OVERHANG_M \
 	or d1 > MAX_PROJECTION_M or d0 < -MAX_HEAD_DEPTH_M \
 	or y0 < _ground_y - 0.001:
 		_errors.append("%s box out of bounds u[%.2f,%.2f] y[%.2f,%.2f] d[%.2f,%.2f]" % [material_key, u0, u1, y0, y1, d0, d1])
 		return
+	material_key = _material_prefix + material_key
 	var center := _side_point((u0 + u1) * 0.5, (y0 + y1) * 0.5, (d0 + d1) * 0.5)
 	var size := Vector3(u1 - u0, y1 - y0, d1 - d0)
 	var basis := _side_basis()
@@ -458,6 +596,17 @@ func _side_point(u: float, y: float, outward: float) -> Vector3:
 func _material(key: String) -> Material:
 	if _materials.has(key):
 		return _materials[key] as Material
+	var cache_key := key
+	var all_side := key.begins_with("all_")
+	if all_side:
+		key = key.trim_prefix("all_")
+	if key == "glass":
+		var glass := StandardMaterial3D.new()
+		glass.albedo_color = Color(0.115, 0.17, 0.19)
+		glass.roughness = 0.27
+		glass.metallic = 0.0
+		_materials[cache_key] = glass
+		return glass
 	var m := ShaderMaterial.new()
 	m.shader = PAINT_SHADER
 	m.resource_name = "building_3_ene_%s" % key
@@ -471,10 +620,13 @@ func _material(key: String) -> Material:
 		"trim_green": Color(0.235, 0.325, 0.275),
 		"door_dark": Color(0.10, 0.09, 0.08),
 		"door_line": Color(0.18, 0.17, 0.15),
+		"window_frame": Color(0.23, 0.255, 0.245),
 	}
 	if not tints.has(key):
 		_errors.append("unknown material %s" % key)
 		return m
+	if all_side and key == "window_frame":
+		tints[key] = Color(0.43, 0.46, 0.44)
 	var mineral := key.begins_with("plaster") or key == "seam"
 	m.set_shader_parameter("paint_color", tints[key])
 	m.set_shader_parameter("surface_color", load(PLASTER_TEXTURES % "diff"))
@@ -485,14 +637,15 @@ func _material(key: String) -> Material:
 	m.set_shader_parameter("color_variation", 0.22 if mineral else 0.075)
 	m.set_shader_parameter("coating_variation", 0.16 if key.begins_with("plaster") else 0.0)
 	m.set_shader_parameter("roughness_base", 0.86 if mineral else 0.63)
-	m.set_shader_parameter("stain_strength", 0.26 if mineral else 0.025)
+	m.set_shader_parameter("stain_strength", 0.0 if all_side else (0.26 if mineral else 0.025))
+	m.set_shader_parameter("coating_all_faces", all_side)
 	m.set_shader_parameter("facade_origin", _side_point(0.0, 0.0, 0.0))
 	m.set_shader_parameter("facade_tangent", _side_basis().x)
 	m.set_shader_parameter("facade_outward", _side_basis().z)
 	m.set_shader_parameter("facade_length", _length())
 	m.set_shader_parameter("ledge_y", CORNICE_TOP_Y)
 
-	_materials[key] = m
+	_materials[cache_key] = m
 	return m
 
 
@@ -505,7 +658,7 @@ func _add_mesh(node_name: String, group: Dictionary, material_key: String, casts
 	arrays[Mesh.ARRAY_INDEX] = group.indices
 	var mesh := ArrayMesh.new()
 	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
-	mesh.surface_set_material(0, _material(material_key))
+	mesh.surface_set_material(0, _material(_material_prefix + material_key))
 	var instance := MeshInstance3D.new()
 	instance.name = node_name
 	instance.mesh = mesh

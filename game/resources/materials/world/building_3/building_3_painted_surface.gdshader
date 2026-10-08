@@ -11,6 +11,7 @@ uniform float tile_span_m = 1.5;
 uniform float relief_strength = 0.13;
 uniform float color_variation = 0.22;
 uniform float coating_variation = 0.0;
+uniform bool coating_all_faces = false;
 uniform float roughness_base = 0.86;
 uniform float stain_strength = 0.14;
 uniform vec3 facade_origin;
@@ -61,7 +62,7 @@ void fragment() {
 	float coat_a = textureLod(surface_color, coating_uv + vec2(0.19, 0.43), 5.0).r;
 	float coat_b = textureLod(surface_color, coating_uv * 0.61 + vec2(0.67, 0.11), 5.0).r;
 	float coating = clamp((coat_a * 0.65 + coat_b * 0.35 - 0.30) * 7.0, -1.0, 1.0);
-	variation *= 1.0 + coating * coating_variation * face_mask;
+	variation *= 1.0 + coating * coating_variation * (coating_all_faces ? 1.0 : face_mask);
 	ALBEDO = paint_color.rgb * variation * (1.0 - stain);
 	ROUGHNESS = clamp(roughness_base + (texture(surface_roughness, uv).r - 0.5) * 0.15 + stain * 0.2, 0.4, 0.98);
 	METALLIC = 0.0;

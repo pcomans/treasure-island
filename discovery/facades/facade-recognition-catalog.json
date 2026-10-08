@@ -1234,6 +1234,21 @@
           "review_id": "building3-material003-whole-building-visual-20261007",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "building3-all-sides004-code-20261008",
+          "review_kind": "independent_code_review",
+          "status": "accept"
+        },
+        {
+          "review_id": "building3-all-sides004-whole-visual-20261008",
+          "review_kind": "independent_reference_recognition",
+          "status": "accept"
+        },
+        {
+          "review_id": "building3-all-sides004-native-fit-spray-20261007",
+          "review_kind": "independent_native_fit_spray",
+          "status": "accept"
         }
       ],
       "anchor_source_key": "w34313540",
@@ -1256,7 +1271,7 @@
       "legacy_adapter_ids": [],
       "protected_scopes": [
         {
-          "reason": "Long sides, WSW end, and minor returns have no admissible opening schedule in the accepted reference packet.",
+          "reason": "Historical unobserved-side art restriction was explicitly rescoped for all-side completion: HABS CA-2785-B-3/B-4 catalog2003 supports NW/SW and SE/NE structural motifs, alongside November2025 ENE pixels. Preserve source XZ/bottoms, canonical ownership and separate neighbors; current survival, lower occluded detail, cadence/dimensions and colors remain production inference, not as-built claims.",
           "receiver_key": "building:w34313540:wall",
           "run_indices": [
             0,
@@ -1370,6 +1385,20 @@
           "supports": [
             "broad curved crown with raised shoulder/pylon family",
             "one oversized central opening with subordinate upper band"
+          ]
+        },
+        {
+          "observation_id": "b3-habs2003-allside-and-ene-nov2025",
+          "observed_regions": [
+            "HABS2003 NW/SW and SE/NE exterior motifs",
+            "November2025 ENE public end"
+          ],
+          "pixels_packaged": false,
+          "source_locator": "https://www.loc.gov/pictures/item/ca3381.photos.225433p",
+          "supports": [
+            "Historical pier/head/recess and arched-end families; actual B-3/B-4 originals inspected privately",
+            "Modern ENE crown/pylons/portal; historical grayscale does not establish present colors or opening survival",
+            "Occluded lower fields and module dimensions/cadence remain production inference"
           ]
         }
       ],

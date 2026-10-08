@@ -33,7 +33,7 @@ static func matches_record(record: Dictionary) -> bool:
 		and bool(record.get("opaque", false))
 
 
-static func build_record(record: Dictionary, material: Material) -> Dictionary:
+static func build_record(record: Dictionary, _material: Material) -> Dictionary:
 	var config_result := _load_and_validate_config()
 	if not bool(config_result.get("ok", false)):
 		return config_result
@@ -56,7 +56,7 @@ static func build_record(record: Dictionary, material: Material) -> Dictionary:
 	var mesh := ArrayMesh.new()
 	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 	mesh.surface_set_name(0, "building_3_hero_%s" % ("wall" if object_key == TARGET_WALL_KEY else "roof"))
-	mesh.surface_set_material(0, material)
+	mesh.surface_set_material(0, load("res://game/resources/materials/world/building_3/building_3_shell_wall.tres") if object_key == TARGET_WALL_KEY else load("res://game/resources/materials/world/building_3/building_3_shell_roof.tres"))
 
 	var root := Node3D.new()
 	root.name = object_key.validate_node_name()
@@ -241,6 +241,7 @@ static func wall_geometry(record: Dictionary, contract: Dictionary = {}) -> Dict
 	var uvs := PackedVector2Array()
 	var tangents := PackedFloat32Array()
 	var indices := PackedInt32Array()
+	var recesses := _long_side_recesses(record, contract)
 	for run_index in 59:
 		var offset := run_index * 12
 		var start_bottom := Vector3(float(raw_vertices[offset]), float(raw_vertices[offset + 1]), float(raw_vertices[offset + 2]))
@@ -248,6 +249,9 @@ static func wall_geometry(record: Dictionary, contract: Dictionary = {}) -> Dict
 		var normal := Vector3(float(raw_normals[offset]), 0.0, float(raw_normals[offset + 2])).normalized()
 		var tangent := Vector3(normal.z, 0.0, -normal.x).normalized()
 		var run_length := Vector2(start_bottom.x, start_bottom.z).distance_to(Vector2(end_bottom.x, end_bottom.z))
+		if recesses.has(run_index):
+			_append_recessed_run(vertices, normals, uvs, tangents, indices, start_bottom, end_bottom, normal, recesses[run_index], contract, contract.wall_run_top_y_samples[run_index])
+			continue
 		for subdivision in subdivisions:
 			var first_fraction := float(subdivision) / float(subdivisions)
 			var second_fraction := float(subdivision + 1) / float(subdivisions)
@@ -267,6 +271,108 @@ static func wall_geometry(record: Dictionary, contract: Dictionary = {}) -> Dict
 			indices.append_array(PackedInt32Array([base, base + 2, base + 1, base, base + 3, base + 2]))
 	var signature := _geometry_signature(vertices, indices, "wall")
 	return {"ok": true, "vertices": vertices, "normals": normals, "uvs": uvs, "tangents": tangents, "indices": indices, "signature": signature}
+
+
+## Apertures are clipped to each exact source segment; shared boundaries do not
+## gain duplicate jambs. Outer footprint and bottom endpoints remain untouched.
+static func _long_side_recesses(record: Dictionary, contract: Dictionary) -> Dictionary:
+	var result := {}
+	var raw: Array = record.vertices
+	for chain: Array in Building3600CaliforniaFacade.LONG_SIDE_CHAINS:
+		var first := int(chain[0]) * 12
+		var last := int(chain[chain.size() - 1]) * 12
+		var origin := Vector2(float(raw[first]), float(raw[first + 2]))
+		var finish := Vector2(float(raw[last + 3]), float(raw[last + 5]))
+		var axis := (finish - origin).normalized()
+		var source_normals: Array = record.normals
+		var inward := -Vector3(float(source_normals[first]), 0.0, float(source_normals[first + 2])).normalized() * Building3600CaliforniaFacade.BAY_RECESS_M
+		var bays := Building3600CaliforniaFacade.long_side_bays(origin.distance_to(finish), float(contract.eave_y_m))
+		for run_value: Variant in chain:
+			var run := int(run_value)
+			var offset := run * 12
+			var a := Vector2(float(raw[offset]), float(raw[offset + 2]))
+			var b := Vector2(float(raw[offset + 3]), float(raw[offset + 5]))
+			var ua := (a - origin).dot(axis)
+			var ub := (b - origin).dot(axis)
+			var parts: Array[Dictionary] = []
+			for bay: Dictionary in bays:
+				var lo := maxf(ua, float(bay.u0))
+				var hi := minf(ub, float(bay.u1))
+				if hi - lo > 0.00001:
+					parts.append({"a": (lo - ua) / (ub - ua), "b": (hi - ua) / (ub - ua), "sill": bay.sill, "head": bay.head, "inward": inward, "left": absf(lo - float(bay.u0)) < 0.00001, "right": absf(hi - float(bay.u1)) < 0.00001})
+			if not parts.is_empty():
+				result[run] = parts
+	return result
+
+
+static func _wall_quad(vertices: PackedVector3Array, normals: PackedVector3Array, uvs: PackedVector2Array, tangents: PackedFloat32Array, indices: PackedInt32Array, points: Array[Vector3], facing: Vector3) -> void:
+	var n := (points[1] - points[0]).cross(points[2] - points[0]).normalized()
+	if n.dot(facing) < 0.0:
+		n = -n
+	var t := (points[1] - points[0]).normalized()
+	var v := n.cross(t).normalized()
+	var base := vertices.size()
+	for point: Vector3 in points:
+		vertices.append(point)
+		normals.append(n)
+		uvs.append(Vector2(point.dot(t), point.dot(v)))
+		tangents.append_array(PackedFloat32Array([t.x, t.y, t.z, 1.0]))
+	if (points[1] - points[0]).cross(points[2] - points[0]).dot(n) > 0.0:
+		indices.append_array(PackedInt32Array([base, base + 2, base + 1, base, base + 3, base + 2]))
+	else:
+		indices.append_array(PackedInt32Array([base, base + 1, base + 2, base, base + 2, base + 3]))
+
+
+## New aperture cuts subdivide the old wall polyline without changing its roof
+## coverage. Analytic resampling here would create a different outer profile.
+static func _interpolated_wall_top(samples: Array, fraction: float) -> float:
+	var position := clampf(fraction, 0.0, 1.0) * float(samples.size() - 1)
+	var first := mini(int(floor(position)), samples.size() - 2)
+	return lerpf(float(samples[first]), float(samples[first + 1]), position - float(first))
+
+
+static func _append_recessed_run(vertices: PackedVector3Array, normals: PackedVector3Array, uvs: PackedVector2Array, tangents: PackedFloat32Array, indices: PackedInt32Array, start: Vector3, finish: Vector3, normal: Vector3, bays: Array, contract: Dictionary, top_samples: Array) -> void:
+	var cuts: Array[float] = [0.0, 1.0]
+	for step in range(1, int(contract.wall_subdivisions)):
+		cuts.append(float(step) / float(contract.wall_subdivisions))
+	for bay: Dictionary in bays:
+		cuts.append(float(bay.a))
+		cuts.append(float(bay.b))
+	cuts.sort()
+	var unique: Array[float] = []
+	for cut: float in cuts:
+		if unique.is_empty() or cut - unique[-1] > 0.000001:
+			unique.append(cut)
+	var depth := -(bays[0].inward as Vector3)
+	var along := Vector3(finish.x - start.x, 0.0, finish.z - start.z).normalized()
+	for index in unique.size() - 1:
+		var fa := unique[index]
+		var fb := unique[index + 1]
+		var a := start.lerp(finish, fa)
+		var b := start.lerp(finish, fb)
+		var at := Vector3(a.x, _interpolated_wall_top(top_samples, fa), a.z)
+		var bt := Vector3(b.x, _interpolated_wall_top(top_samples, fb), b.z)
+		var active: Dictionary = {}
+		for bay: Dictionary in bays:
+			if (fa + fb) * 0.5 > float(bay.a) and (fa + fb) * 0.5 < float(bay.b):
+				active = bay
+				break
+		if active.is_empty():
+			_wall_quad(vertices, normals, uvs, tangents, indices, [a, b, bt, at], normal)
+			continue
+		var al := Vector3(a.x, float(active.sill), a.z)
+		var bl := Vector3(b.x, float(active.sill), b.z)
+		var ah := Vector3(a.x, float(active.head), a.z)
+		var bh := Vector3(b.x, float(active.head), b.z)
+		_wall_quad(vertices, normals, uvs, tangents, indices, [a, b, bl, al], normal)
+		_wall_quad(vertices, normals, uvs, tangents, indices, [ah, bh, bt, at], normal)
+		_wall_quad(vertices, normals, uvs, tangents, indices, [al - depth, bl - depth, bh - depth, ah - depth], normal)
+		_wall_quad(vertices, normals, uvs, tangents, indices, [al, bl, bl - depth, al - depth], Vector3.UP)
+		_wall_quad(vertices, normals, uvs, tangents, indices, [ah - depth, bh - depth, bh, ah], Vector3.DOWN)
+		if bool(active.left) and absf(fa - float(active.a)) < 0.000001:
+			_wall_quad(vertices, normals, uvs, tangents, indices, [al, al - depth, ah - depth, ah], along)
+		if bool(active.right) and absf(fb - float(active.b)) < 0.000001:
+			_wall_quad(vertices, normals, uvs, tangents, indices, [bl - depth, bl, bh, bh - depth], -along)
 
 
 static func roof_geometry(record: Dictionary, contract: Dictionary = {}) -> Dictionary:
