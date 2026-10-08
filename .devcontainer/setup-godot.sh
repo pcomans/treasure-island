@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Installs the pinned Godot 4.7.2 Linux editor and the Linux + macOS export
-# templates into /opt/godot/4.7.2/ (self-contained mode; a volume, see devcontainer.json).
+# Installs the pinned Godot 4.7.2 Linux editor and the Linux, macOS and Web
+# export templates into /opt/godot/4.7.2/ (self-contained mode; a volume, see devcontainer.json).
 # Skips anything already present, so it is safe to re-run.
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -33,10 +33,17 @@ fi
 # inside ${DEST}/editor_data instead of ~/.local/share.
 touch "${DEST}/_sc_"
 
-if [ ! -f "${TEMPLATES_DIR}/version.txt" ]; then
+# The templates the export presets use, all from the one archive above. Web is
+# the single-threaded ("nothreads") build, which needs no COOP/COEP headers.
+TEMPLATES=(version.txt linux_debug.x86_64 linux_release.x86_64 macos.zip
+  web_nothreads_debug.zip web_nothreads_release.zip)
+missing=()
+for name in "${TEMPLATES[@]}"; do
+  [ -f "${TEMPLATES_DIR}/${name}" ] || missing+=("templates/${name}")
+done
+if [ ${#missing[@]} -gt 0 ]; then
   fetch "${BASE}/${TEMPLATES_TPZ}" "${TEMPLATES_SHA256}" "${tmp}/templates.tpz"
-  unzip -q -o "${tmp}/templates.tpz" -d "${tmp}/t" \
-    'templates/version.txt' 'templates/linux_debug.x86_64' 'templates/linux_release.x86_64' 'templates/macos.zip'
+  unzip -q -o "${tmp}/templates.tpz" -d "${tmp}/t" "${missing[@]}"
   mkdir -p "${TEMPLATES_DIR}"
   mv "${tmp}"/t/templates/* "${TEMPLATES_DIR}/"
 fi

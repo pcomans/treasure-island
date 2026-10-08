@@ -60,6 +60,39 @@ evidence folders, no images outside `game/resources/`), and launches a Linux bui
 loads. Copy the zip to the Mac, unzip it, and right-click the app → Open the
 first time (it is not notarized).
 
+## Play in a browser
+
+```sh
+tools/build-web.sh   # -> build/web/ (index.html plus files named after the commit)
+```
+
+This exports the web build of the current commit, checks its data pack the same
+way as the Mac build, and writes a `vercel.json` that lets browsers cache the
+large files. Try it locally with
+`python3 -m http.server 8000 --bind 127.0.0.1 --directory build/web` and open
+http://127.0.0.1:8000/ (forward the port in VS Code first). To put it online for
+anyone with the link, deploy the folder as a static site:
+
+```sh
+npx vercel deploy build/web --prod
+```
+
+The build is about 130 MB (a 90 MB data pack and a 40 MB engine). Vercel's
+[limits](https://vercel.com/docs/limits) (checked 2026-10-08) cap CLI uploads at
+100 MB on the Hobby plan and 1 GB on Pro.
+
+Differences from the Mac build:
+
+- Godot's web export only has the Compatibility renderer (WebGL 2), so lighting
+  and materials are simpler.
+- Spray tags don't show: the Compatibility renderer doesn't draw decals. The same
+  goes for decal-painted facade art such as the Mersea mural, and the Mersea glass
+  shader fails to compile there, so that glazing may not draw.
+- Browsers only let a page capture the mouse after a click, so it isn't captured
+  when the island loads. Walking works straight away; for mouse look (and spray),
+  press `Esc` and click **Resume**. `Esc` releases the mouse again.
+- `Q` stops the game; reload the page to play again.
+
 ## Controls
 
 - `WASD` moves; hold `Shift` to run.
