@@ -17726,3 +17726,21 @@ Coordinator closure: independent browser CODE HOLD exposed failed-image overwrit
 - Worked: complete frozen ten-path review found coherent independent between-every-study scope/progress decisions, actual baseline/current/reference comparison, architecture-before-detail/shared-family hierarchy, explicit routing and a corrective RESCOPE/REWORK loop; source CODE PASS with no required correction.
 - Didn't: documents, source CODE or retained validator evidence do not demonstrate architectural progress, whole quality, native fit/spray/REST, full-suite or publication. Unrelated dirty art and earlier RETRO were excluded; no images/engine/tests/install or shared edits were performed.
 - Change: apply the new boundary to pending studies, retain every source/privacy/native/whole/suite/slot gate, and require ROOT's actual matched-pixel modern-game judgment after the first complete post-push cycle. Keep ordinary handoffs/own RETRO, with no scores/timers/packets and no automatic next-study or engine GO.
+
+### zoom_in_harness — persistent authoring priorities, 2026-10-08
+
+- Worked: extended the existing study-progress boundary with one canonical architecture → sections/shared modules → materials/detail pattern and linked entrypoints. Explicit zoom-level judgment preserves early material readability, outcome-driven iteration and all existing evidence/playability gates.
+- Did not: the initial `python` command was unavailable and made no changes; `python3` completed the narrow edit. Independent review remains separate from source whitespace and skill-validation PASS.
+- Next: use the container's `python3`, keep hierarchy wording canonical and judge the highest unresolved architectural level before assigning another detail study. RETRO waited for the integrator's writer release; no art/runtime edits or engine work occurred.
+
+### approach_geometry_review — zoom-in harness wording SOURCE CODE PASS, 2026-10-08
+
+- Worked: complete six-path diff and surrounding entrypoints consistently prioritize whole architecture, sections/shared modules and materials/details through one canonical pattern. Early material readability and revisiting larger levels remain allowed; scoped SOURCE CODE PASS with no required correction.
+- Didn't: documentation/source PASS does not demonstrate architectural efficacy, current whole/progress/native/suite acceptance or publication. Unrelated dirty art and the separate diagnostic-helper extension were excluded; no engine/images/tests or shared-note edits were performed.
+- Change: use the existing DISTINCT progress reviewer to require RESCOPE/REWORK when local detail substitutes for unresolved architecture, then permit ROOT-assigned corrected scope or same-scope rework. Preserve all source/privacy/native/REST/whole/suite/slot gates without rigid stages, new approvals, metrics or automatic engine GO.
+
+### building2_integrate — zoom-in harness isolated verification, 2026-10-08
+
+- Worked: isolated exactly six reviewed docs plus the author's current own entry on accepted96fe5b51; installed locked npm dependencies before ONE tools/test.sh4198. Actual terminal0/bfe48c ALL TESTS PASS included49 fits and validation/determinism; cleanup71524b and early engine release preceded publication preparation.
+- Did not: documentation, SOURCE CODE PASS and regression do not demonstrate building visual progress or promote held art. All dirty art, diagnostic helpers, runtime harness changes and unrelated RETRO stayed outside the isolated patch; no rerun was needed for the reviewer note.
+- Next: preserve only author, independent docs reviewer and this verification entry in the seven-path patch. Publish through an exact index-only application after ROOT review, keeping main working-tree changes intact; maintain the existing architectural scope/progress and all native/visual gates.
