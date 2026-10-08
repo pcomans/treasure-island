@@ -1,5 +1,6 @@
 ; Engine configuration file.
-; Godot 4.7.2, Forward+ (the default rendering method).
+; Godot 4.7.2, Forward+ (the default rendering method); web exports use
+; Compatibility (WebGL 2), the only renderer Godot's web platform has.
 config_version=5
 
 [application]
@@ -97,6 +98,7 @@ common/enable_pause_aware_picking=true
 
 [rendering]
 
+renderer/rendering_method.web="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
 textures/default_filters/use_nearest_mipmap_filter=false
 environment/defaults/default_clear_color=Color(0.46, 0.69, 0.86, 1)

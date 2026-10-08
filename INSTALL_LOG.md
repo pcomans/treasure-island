@@ -268,3 +268,18 @@ changed.
 - Setup exited 0. **Street View WORKS**, verified 2026-10-04 with agent-browser 0.38.2 / Chrome154.0.8037.92, headed Wayland on private Weston. From the exact SFFD Building600 Maps place card, enabled Browse Street View images, clicked Avenue M blue coverage and rotated toward the building: actual September2025 panorama `L_00cDY02FaeZrVa3MCCsg` at `37.8264049,-122.3677784` displayed the cream wall, blue windows, red entry and 600 marker. A full resolved `ifdNQ-gh7K1ryx3rVMvW2w` panorama URL also rendered. `tools/browser <session> <place-url>` supplies the reproducible headed launcher; the reference-research role records commands and closure.
 - Preserved failure scope: earlier headed attempts returned metadata HTTP500/tile403; fresh coordinate/API startup later stayed black despite HTTP200. Precise cause remains unproved; headless was not tested in this round. No proxy, account or access bypass was used. The managed Chrome version above is observed, not separately pinned.
 - Scope: container-global CLI and user-local `~/.agent-browser/browsers/`; no account connected, no private reference copied into game/Git. Remove CLI with `npm uninstall --global agent-browser`; browser cache is disposable.
+
+### 2026-10-08 — Godot 4.7.2 web export templates
+
+- Date and time (UTC): `2026-10-08T02:05:08Z` to `2026-10-08T02:06:29Z`.
+- Status: `completed`.
+- Exact package and version: Godot Engine `4.7.2-stable` single-threaded web export templates `web_nothreads_debug.zip` (10,232,720 bytes, SHA-256 `08962aefef811b603541d7951ac67ef00413aad2d978855183c28adee98f626a`) and `web_nothreads_release.zip` (10,245,903 bytes, SHA-256 `d3ee2f08cef0cf3cf6678a6355a92a8db48ccdd35cbd2e8bfd5f0e8a0b4032a0`), extracted from the official `Godot_v4.7.2-stable_export_templates.tpz`.
+- Publisher and source URL: Godot official builds, https://github.com/godotengine/godot-builds/releases/tag/4.7.2-stable. Checked 2026-10-08: the release publishes the web templates only inside that archive.
+- Checksum, signature, notarization, or registry integrity evidence: archive SHA-256 `f298490b8d44d934be425a5a65a51bf15f422428b229a06a6e11d9ffea248011`, GitHub's published asset digest and the pin already in `.devcontainer/setup-godot.sh`; the script checks it before extracting anything.
+- Exact command or installation method: `bash .devcontainer/setup-godot.sh`, which now installs every template its `TEMPLATES` list names that is missing (here only the two web files), so existing containers pick them up on a re-run.
+- Purpose: export the browser build (`tools/build-web.sh`, export preset `Web`, threads off).
+- Scope and install location: `/opt/godot/4.7.2/editor_data/export_templates/4.7.2.stable/` in the shared `/opt/godot` volume.
+- Authorizing decision or request: owner decision relayed by ROOT, 2026-10-08: official Godot 4.7.2 web export with the Compatibility renderer.
+- Trust and malware checks: official publisher only; a checksum mismatch stops the setup script.
+- Verification and result: setup exited 0 and printed `4.7.2.stable.official.ed1daf0bf`; the `Web` preset exported with these templates and the build ran in Chrome (WebGL 2, Compatibility renderer).
+- Removal steps: delete the two `web_nothreads_*.zip` files from the templates folder above.
