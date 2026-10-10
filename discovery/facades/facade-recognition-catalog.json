@@ -11048,9 +11048,18 @@
           "review_id": "fire-station48-quality-candidate-2026-09-11-001",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "station48-whole-building-2026-10-10-study003",
+          "review_kind": "independent_scoped_architectural_game_art",
+          "status": "pass",
+          "numerator_effect": 0,
+          "scope": "Whole low modular envelope/site and observed public entry architecture; Sep2025 WSW, May2019 NNW and official SFFD reference (capture date unknown). Scoped final visual and distinct progress PASS, CODE PASS, mechanics002 native/four approaches/stock ascent-descent/spray/active REST then SAFE PASS, full suite9971 terminal0 PASS. L1 complete; all-side L2 remains unknown because ENE/SSE openings are unsupported. Continuous 28.6-degree visible/native metal access within the existing footprint is production inference, not as-built discrete stairs. Separate vaulted apparatus and neighbours excluded; no whole modern-quality or as-built claim. Published with this change.",
+          "source_locator": "discovery/ISLAND_BUILDING_STAGE_CHECKLIST.md"
         }
       ],
       "anchor_source_key": "w764313741",
+      "stairs": [{"bottom": [134.34343428, -337.52681548], "top": [137.53108884, -339.19979452]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -11070,7 +11079,7 @@
       "legacy_adapter_ids": [],
       "protected_scopes": [
         {
-          "reason": "Protected4/7/10\u201323 and original6m source mass/roof retained. WSW/NNW lower details are fence/vehicle/equipment-occluded; no bays, entry, stairs, signage, hidden openings or surveyed cadence inferred.",
+          "reason": "Historical 2026-09-11 scope retained runs4/7/10–23 and the original6m mass. The 2026-10-10 authorized whole-envelope study supersedes height/roof preservation with a lower source-XZ-preserving modular envelope and observed public-entry family. Protected receiver ownership and frozen footprint remain; opposite-side openings and surveyed dimensions/cadence remain unknown. Entry anchor, access profile and dimensions are production inference; separate vaulted apparatus and neighbours excluded.",
           "receiver_key": "building:w764313741:wall",
           "run_indices": [
             4,

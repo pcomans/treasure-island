@@ -69,7 +69,7 @@ func _run() -> void:
 		quit(1)
 		return
 	var source_key := str(args.source)
-	var native_sources := {"chapel-indexed": "w291189336", "building2-indexed": "w24274434"}
+	var native_sources := {"chapel-indexed": "w291189336", "building2-indexed": "w24274434", "station48-indexed": "w764313741"}
 	var housing_native := str(args.get("native-producer", "")) == "housing-get-faces"
 	if args.has("native-producer") and ((not housing_native and str(native_sources.get(str(args["native-producer"]), "")) != source_key) or args.has("diagnose-side") or args.has("adjacent-source")):
 		push_error("native producer requires its supported source and cannot combine diagnostic/adjacent modes")
@@ -127,6 +127,8 @@ func _run() -> void:
 		var native_error := ""
 		if housing_native:
 			native_error = _check_housing_faces(h, source_key)
+		elif str(args["native-producer"]) == "station48-indexed":
+			native_error = _check_station48_indexed(h, source_key)
 		elif str(args["native-producer"]) == "building2-indexed":
 			native_error = _check_building2_indexed(h, source_key)
 		else:
@@ -524,4 +526,66 @@ func _check_housing_faces(h: WorldHarness, source: String) -> String:
 		if not result.ok:
 			return "complete housing visible/native ordered faces differ"
 	print("PASS: complete housing get_faces native partitions for " + source)
+	return ""
+
+
+# Station48 partitions indexed visual buckets into six named contact roles.
+# Public/protected wall subsets reorder source runs, so compare oriented multisets.
+func _check_station48_indexed(h:WorldHarness,source:String) -> String:
+	var groups:Dictionary={
+		"ExactClosedSourceWalls":["ProtectedExactNeutralWallRuns","ObservedWSWNNWPaleWallFields"],
+		"ExactSourceNeutralRoof":["ExactSourceNeutralRoof"],
+		"RaisedMetalAccess":["RaisedMetalAccess"],"ClosedEntryDoor":["ClosedEntryDoor"],
+		"EntrySurround":["EntrySurround"],"StationSign":["StationSign"]}
+	var decor:Array[String]=["CompletePaleWindowSurrounds","OpaqueHighWindowGlass","ThinWindowMullions","ThinStraightPublicRoofEdge"]
+	var roots:Dictionary={};var seen_meshes:Dictionary={};var seen_roles:Dictionary={}
+	for node:Node in h.main.find_children("*","StaticBody3D",true,false):
+		if source not in node.get_meta("source_keys",[]):continue
+		var body:=node as StaticBody3D
+		var key:=str(body.get_meta("derived_object_key",""))
+		var wall:=key=="building:"+source+":wall"
+		if not wall and key!="building:"+source+":roof":return "unexpected Station48 body source owner"
+		if roots.has(key):return "duplicate Station48 body source owner"
+		if body.get_meta("source_keys",[])!=[source] or str(body.get_meta("receiver_kind",""))!=("building_wall" if wall else "none") or body.get_meta("opaque",false)!=true:return "Station48 body source/receiver identity differs"
+		var root:=body.get_parent() as Node3D
+		if root==null or root.get_meta("source_keys",[])!=[source] or str(root.get_meta("derived_object_key",""))!=key:return "Station48 root identity differs"
+		roots[key]=root
+		if body.collision_layer!=5 or body.collision_mask!=0 or body.is_in_group("spray_receiver_wall")!=wall:return "Station48 collision layer/group differs"
+		if body.transform!=Transform3D.IDENTITY or body.is_set_as_top_level():return "Station48 body local transform differs"
+		var world:Variant=PhysicsServer3D.body_get_state(body.get_rid(),PhysicsServer3D.BODY_STATE_TRANSFORM)
+		if not world is Transform3D or not world.is_finite() or not world.is_equal_approx(body.global_transform):return "Station48 native world placement differs"
+		for owner in body.get_shape_owners():
+			if body.is_shape_owner_disabled(owner) or body.shape_owner_get_shape_count(owner)!=1:return "Station48 shape owner is disabled or ambiguous"
+			var holder:=body.shape_owner_get_owner(owner) as CollisionShape3D
+			if holder==null or holder.get_parent()!=body or holder.transform!=Transform3D.IDENTITY or not holder.shape is ConcavePolygonShape3D:return "unsupported Station48 native holder"
+			var role:=str(holder.name)
+			if not groups.has(role) or seen_roles.has(role) or (role=="ExactSourceNeutralRoof")==wall:return "Station48 contact role partition differs"
+			seen_roles[role]=true
+			var receiver:="building_wall" if role=="ExactClosedSourceWalls" else "none"
+			for object:Object in [holder,holder.shape]:
+				if object.get_meta("source_keys",[])!=[source] or str(object.get_meta("derived_object_key",""))!=key or str(object.get_meta("receiver_kind",""))!=receiver or object.get_meta("opaque",false)!=true:return "Station48 shape source/receiver identity differs"
+			var index:=body.shape_owner_get_shape_index(owner,0)
+			if PhysicsServer3D.body_get_shape(body.get_rid(),index)!=holder.shape.get_rid() or PhysicsServer3D.body_get_shape_transform(body.get_rid(),index)!=holder.transform:return "Station48 native shape RID/pose differs"
+			var faces:=PackedVector3Array()
+			for label:String in groups[role]:
+				var mesh:=root.get_node_or_null(label) as MeshInstance3D
+				if mesh==null or not mesh.mesh is ArrayMesh or not mesh.is_visible_in_tree() or mesh.is_set_as_top_level() or mesh.transform!=Transform3D.IDENTITY or seen_meshes.has(label):return "Station48 indexed visual missing, hidden or transformed"
+				if mesh.get_meta("source_keys",[])!=[source] or str(mesh.get_meta("derived_object_key",""))!=key or mesh.layers!=(2 if role=="ExactClosedSourceWalls" else 1):return "Station48 visual identity/layer differs"
+				if not mesh.global_transform.is_equal_approx(body.global_transform):return "Station48 visual/body placement differs"
+				seen_meshes[label]=true
+				var collected:=StudyGeometry.collect(mesh.mesh,[mesh.transform],StudyGeometry.INDEXED_ARRAYS)
+				if not collected.ok:return "Station48 indexed collection failed: "+str(collected.errors)
+				faces.append_array(collected.faces)
+			var compared:=StudyGeometry.compare_triangle_multiset(faces,holder.shape.get_faces())
+			print("STATION48_NATIVE role=%s result=%s native_owner=true" % [role,compared])
+			if not compared.ok:return "Station48 visible/native oriented faces differ"
+	if roots.size()!=2 or seen_roles.size()!=groups.size():return "Station48 complete source/contact coverage missing"
+	for root:Node3D in roots.values():
+		for visual:Node in root.find_children("*","GeometryInstance3D",true,false):
+			if visual is Label3D:
+				if str(visual.name)!="Station48Lettering" or str(visual.text)!="SFFD STATION 48":return "unexpected Station48 lettering visual"
+			elif visual is MeshInstance3D:
+				if str(visual.name) not in decor and not seen_meshes.has(str(visual.name)):return "unmapped Station48 visual geometry"
+			else:return "unsupported Station48 visual producer"
+	print("PASS: Station48 complete indexed wall/roof/entry native geometry")
 	return ""

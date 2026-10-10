@@ -1,8 +1,8 @@
 class_name FireStation48LiveReplacement
 extends RefCounted
 
-## Atomic supplied source pair with unchanged reviewed Station48 study002 construction.
-## Only receiver ownership and collision partition change at attachment.
+## Atomic supplied source pair with the bounded modular-envelope and entry study.
+## Source XZ/bottoms remain fixed; runtime visible and contact roles agree.
 const FACTORY := preload("res://game/scripts/world/facades/fire_station48_live_factory.gd")
 const ADAPTER_ID := "active-adapter:fire-station48-live:building:w764313741:wall"
 const SOURCE_KEY := "w764313741"
@@ -11,7 +11,7 @@ const ROOF_KEY := "building:w764313741:roof"
 const TARGET_CHUNK_ID := "x_0__z_-2"
 const WALL_MESHES := ["ProtectedExactNeutralWallRuns", "ObservedWSWNNWPaleWallFields"]
 const ROOF_MESHES := ["ExactSourceNeutralRoof"]
-const ACCEPTED_BATCHES := ["ProtectedExactNeutralWallRuns", "ObservedWSWNNWPaleWallFields", "ExactSourceNeutralRoof", "CompletePaleWindowSurrounds", "OpaqueHighWindowGlass", "ThinWindowMullions", "ThinStraightPublicRoofEdge"]
+const ACCEPTED_BATCHES := ["ProtectedExactNeutralWallRuns", "ObservedWSWNNWPaleWallFields", "ExactSourceNeutralRoof", "CompletePaleWindowSurrounds", "OpaqueHighWindowGlass", "ThinWindowMullions", "ThinStraightPublicRoofEdge", "RaisedMetalAccess", "ClosedEntryDoor", "EntrySurround", "StationSign"]
 const SOURCE_DEPENDENCIES := ["res://game/scripts/world/facades/fire_station48_live_factory.gd", "res://game/resources/facades/fire_station48_quality_study.json", "res://game/resources/facades/fire_station48_study_geometry.json", "res://game/resources/facades/fire_station48_upper_cladding.gdshader", "res://game/scripts/world/facades/site_12_housing_kit.gd"]
 static func claims_record(record: Dictionary) -> bool:
 	return str(record.get("object_key", "")) in [WALL_KEY, ROOF_KEY]
@@ -73,9 +73,9 @@ static func _build_pair(records:Dictionary, source_builder:Callable,tangent_buil
 	_configure_body(original,WALL_KEY,true);_configure_body(roof_body,ROOF_KEY,false)
 	for index in original.get_child_count():_configure_shape(original.get_child(index) as CollisionShape3D,WALL_KEY,"building_wall" if index==0 else "none")
 	_apply_metadata(wall_root,roof_root)
-	var meta:Dictionary={"adapter_id":ADAPTER_ID,"factory_calls":1,"partial_pair_allowed":false,"fallback_allowed":false,"stack_allowed":false,"mapped_public_run_indices":FACTORY.TARGET_RUNS.duplicate(),"protected_run_indices":FACTORY.PROTECTED_RUNS.duplicate(),"all_additions_render_only":true,"source_collision_only":true}
+	var meta:Dictionary={"adapter_id":ADAPTER_ID,"factory_calls":1,"partial_pair_allowed":false,"fallback_allowed":false,"stack_allowed":false,"mapped_public_run_indices":FACTORY.TARGET_RUNS.duplicate(),"protected_run_indices":FACTORY.PROTECTED_RUNS.duplicate(),"all_additions_render_only":false,"source_collision_only":false}
 	for root:Node3D in [wall_root,roof_root]:root.set_meta("fire_station48_live_replacement",meta.duplicate(true))
-	return {"ok":true,"wall_result":{"ok":true,"node":wall_root,"metadata":meta,"mesh_instances":6,"surfaces":6,"triangles":1080,"static_bodies":1,"shapes":1},"roof_result":{"ok":true,"node":roof_root,"metadata":meta,"mesh_instances":1,"surfaces":1,"triangles":10,"static_bodies":1,"shapes":1}}
+	return {"ok":true,"wall_result":_partition_result(wall_root,meta),"roof_result":_partition_result(roof_root,meta)}
 
 static func _factory_contract_matches(root:Node3D) -> bool:
 	var seen:Dictionary={}
@@ -85,10 +85,10 @@ static func _factory_contract_matches(root:Node3D) -> bool:
 			if not ACCEPTED_BATCHES.has(str(child.name)) or mesh==null or mesh.get_surface_count()!=1:return false
 			seen[str(child.name)]=true
 	var body:=root.get_node_or_null("ExactFootprintStructuralCollision_NoSprayOwnership") as StaticBody3D
-	if seen.size()!=ACCEPTED_BATCHES.size() or body==null or body.get_child_count()!=2 or body.collision_layer!=1 or body.collision_mask!=0:return false
-	var labels: Array=["ExactClosedSourceWalls","ExactSourceNeutralRoof"]
-	var groups:Array=[WALL_MESHES,["ExactSourceNeutralRoof"]]
-	for index in 2:
+	if seen.size()!=ACCEPTED_BATCHES.size() or body==null or body.get_child_count()!=6 or body.collision_layer!=1 or body.collision_mask!=0:return false
+	var labels: Array=["ExactClosedSourceWalls","ExactSourceNeutralRoof","RaisedMetalAccess","ClosedEntryDoor","EntrySurround","StationSign"]
+	var groups:Array=[WALL_MESHES,["ExactSourceNeutralRoof"],["RaisedMetalAccess"],["ClosedEntryDoor"],["EntrySurround"],["StationSign"]]
+	for index in labels.size():
 		var node:=body.get_child(index) as CollisionShape3D
 		if node==null or str(node.name)!=str(labels[index]) or not node.shape is ConcavePolygonShape3D:return false
 		var faces:PackedVector3Array=node.shape.get_faces()
@@ -181,3 +181,13 @@ static func _failure(code: String, message: String, record: Dictionary) -> Dicti
 	var source_keys_value: Variant = record.get("source_keys", [])
 	var source_keys := source_keys_value as Array if source_keys_value is Array else []
 	return {"ok": false, "code": code, "message": message, "source_keys": source_keys.duplicate()}
+
+static func _partition_result(root:Node3D,metadata:Dictionary) -> Dictionary:
+	var meshes:=0;var surfaces:=0;var triangles:=0;var bodies:=0;var shapes:=0
+	for node:Node in _descendants(root):
+		if node is MeshInstance3D:
+			meshes+=1;surfaces+=node.mesh.get_surface_count()
+			for index in node.mesh.get_surface_count():triangles+=node.mesh.surface_get_array_index_len(index)/3
+		elif node is StaticBody3D:bodies+=1
+		elif node is CollisionShape3D:shapes+=1
+	return {"ok":true,"node":root,"metadata":metadata,"mesh_instances":meshes,"surfaces":surfaces,"triangles":triangles,"static_bodies":bodies,"shapes":shapes}

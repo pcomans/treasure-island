@@ -18565,3 +18565,127 @@ What the team should change next time: reconcile each proposed complete stage ag
 - Worked: verified the explicit ten-path patch against the unchanged published base before staging. Completed independent scoped visual/CODE/progress reviews, both fresh combined native-fit/spray runs and the full suite remain applicable; subsequent edits only clarify documentation and stages.
 - Did not: observed fronts/end and whole-roof completion do not resolve rear/opposite-end openings. Both L1 completions are supported; L2 remains U and historical recognition credit stays unchanged.
 - Next: publish only the reviewed paths through a guarded normal fast-forward push, then label the existing private gallery with the actual result while preserving unknown-side limits. No runtime edits, replay, new assets, exports or source evidence packaging in this round.
+
+## station48_whole_building_art — first coherent whole-building study, 2026-10-10
+
+Worked: comparing the actual generated vertices with current gameplay corrected the apparent pitched-roof diagnosis: the roof was already flat, while diagonal generic finish and excessive fallback height obscured the modular form. Reused the existing factory/adapter and reached eleven actual-world candidate views in one capture (session8336 terminal0; AMD Radeon780M/Wayland), before refinement. Local LAND/source-bottom sampling gave concrete support elevations for the inferred entry.
+
+Did not work: the initial height override touched vertex arrays before validating complete input; independent CODE review caught this before promotion. Existing config comments and geometry metadata also retained obsolete window Ys/counts. Both were corrected without altering the captured geometry. Exact stock stair traversal remains unproved at this checkpoint.
+
+Change next time: perform source-stream preconditions before any copied-record override, and update the ordinary config truth alongside the geometry instead of carrying forward legacy study assertions. First render remains the checkpoint for independent whole-result critique; do not finish rails/materials before it.
+
+
+## station48_access_repair_fresh — 2026-10-10 access study002
+- Worked: reused the existing source worktree, exact flight frame and Chapel visible/native slope grammar; one tracked shared capture produced thirteen views, terminal0 and actual PID absence before source correction.
+- Did not work: closed side quads overlapped existing tread-box side rectangles; independent CODE found the coplanar duplication. Frontal gameplay shows a ramp-like access surface with weak tread articulation, so mechanical intent does not establish visual stair fidelity.
+- Next time: draw the full cross-section before emitting support plus trim, avoid overlapping coplanar faces, and inspect the focused entry view early. Keep the prior failed mechanics HOLD until actual stock ascent/descent and independent review close it.
+
+
+### chapel_final_integrator — Station48 current baseline, 2026-10-10
+
+- Worked: one maintained source+island capture produced all11 originals from clean published c553e9f, with terminal0 and owned engine absence. Directly comparing all saved views with actual dated/undated references separated existing upper-window work from the missing entrance/access architecture and unresolved opposite elevations.
+- Did not: capture PASS does not establish fidelity or source host association. Unmatched cameras cannot measure the protected fallback height; small island views cannot prove facade completeness. Roof coverage appears closed, so a roof-hole repair would misstate the observed issue.
+- Next: resolve the official doorway's exact host and terrain-supported access footprint before a whole-building L1/observed-entry scope. Keep unknown sides and protected runs explicit, reuse the current factory, and avoid a cosmetic window-only pass. No source/Git/gallery changes, further engine run, mechanics or acceptance in this round.
+
+
+### chapel_final_integrator — Station48 first-study gallery, 2026-10-10
+
+- Worked: added exactly four assigned original runtime PNGs for baseline/study comparison, retaining all53 prior originals; both existing HTML copies and served bytes match. Existing server delivers GET/HEAD200 and private routes404.
+- Did not: saved study images are not code, independent visual or runtime acceptance; labels preserve UNACCEPTED work in progress and inference limits.
+- Next: reconcile labels only from actual gate results; keep references private and existing historical comparisons intact. No engine/browser, new server, source/Git edits or publication in this round.
+
+
+### station48_independent_code — early review round, 2026-10-10
+Worked: early target-local review caught guard ordering while author was still adapting the collision adapter; dynamic native partitions preserve exact role ownership without fixed triangle pins. Did not work: first diff request included the huge geometry JSON and yielded mostly irrelevant vertex lines. Next time: read code diff separately and parse only geometry channel/bounds summaries for source inspection; keep final acceptance separate from active art work and delegated mechanics. No engine/test work or repository edits.
+
+### station48_independent_code — corrected source/native branch review, 2026-10-10
+Worked: review reused unchanged shared collector and oriented multiset; original ordered role branches were visibly untouched, avoiding redundant execution. Did not work: the new native branch checked root and holder metadata but omitted exact body metadata despite filtering source membership. Next time: mirror the complete existing body/root/shape ownership boundary when adapting a new producer; preserve per-shape nonreceiver overrides. Initial guard/provenance fixes verified by reading the actual corrected diff.
+
+### station48_independent_code — bounded recheck, 2026-10-10
+Worked: reused completed source findings and read only the changed risk seam. Did not work: dispatch preceded the author's fix readiness, so this recheck could not close the HOLD. Next time: coalesce reviewer recheck with the explicit written-fix handoff; engine GO still waits for the actual source verdict.
+
+### station48_independent_code — final narrow closure, 2026-10-10
+Worked: the actual written guard closed the precise ownership gap, and completed unchanged reviews were reused. Did not work: prior recheck ran before fix readiness; no extra source edit was necessary once author save was observed. Next time: dispatch narrow closure only after explicit written-fix readiness; keep CODE PASS distinct from runtime fit/stair/spray and whole-visual decisions. No engines/tests or Git mutations.
+
+### station48_independent_code — stair diagnosis, 2026-10-10
+Worked: projecting failed pose and route into the actual source host frame ruled out a catalog join error (<7mm endpoint discrepancy) without rerunning engines. Did not work: aggregate failed pose lacks first-contact/deflection evidence, so exact collision cause remains an inference. Next time: capture the affected stock approach/contact sequence early for ground-contacting stairs; preserve current HOLD and rework visible/native geometry rather than steering metadata around a failure.
+
+### station48_independent_code — changed access source review, 2026-10-10
+Worked: narrow review reused proven source/native bucket wiring and inspected the actual changed walking profile before mechanics. Did not work: closing new wedge sides down through retained closed boxes introduced coincident side-plane rectangles. Next time: compare new closure extents against retained component faces and emit only exposed wedge faces; retain the visible/contact top and finite author loop. No engine/tests performed.
+
+### station48_independent_code — access wedge closure, 2026-10-10
+Worked: one targeted closure edit removed duplicate exposed planes without altering the approved support profile or adding a helper/test. Did not work: study002 captured before the source closure correction, so those stills cannot certify final side finish. Next time: save the small geometry closure fix before final capture; reuse unchanged source evidence and keep final render/mechanics gates separate. No engine/tests performed.
+
+
+### station48_independent_visual — 2026-10-10 study001 review
+What worked well: direct paired all-side/context originals against dated target pixels made the low-envelope and public-entry architectural gain clear on the first coherent render; reused five baseline island frames and kept mechanical judgments separate.
+What did not work well: default entry framing is distant, so small railing/foot contacts and sign finish cannot earn exhaustive visual closure; opposite-side references remain unavailable and generic blank walls keep whole Level2/whole quality open.
+What to change next time: retain this scoped PASS without spending a second art iteration on tiny finish changes; choose a bounded evidence-led opposite-side/roof architecture scope next, and obtain one supported closer entrance frame only if needed by the actual mechanics/review handoff. Never translate public-entry improvement into complete all-side acceptance.
+
+
+### station48_final_visual_fresh — 2026-10-10
+What worked well: final corrected originals and three actual references made a prompt scoped judgment possible; unchanged envelope evidence was reused while all current sides were directly checked.
+What did not work well: smooth top suppresses discrete tread appearance; this must stay an explicit game-art inference, not an as-built stair-fidelity claim. Broad prior note reads produced avoidable truncated output before the focused views.
+What the team should change next time: hand over the few changed-seam images, one ordinary comparison and exact retained reference limits first; read only the pertinent existing verdict lines. Keep scoped finish separate from unknown whole L2 and close the bounded review without waiting for unrelated suite execution.
+Verdict: SCOPED changed-access VISUAL PASS; envelope L1C visually supported subject full-suite; whole/all-side L2 and modern whole-quality U. No engine/process ownership.
+
+
+### hourly_island_progress_review — Station48 study001 progress,2026-10-10
+- Worked: eight actual source-world originals and previously inspected real exterior originals established substantial low-envelope/entry improvement without waiting for mechanics or replaying prior acceptance checks.
+- Did not: static scoped visual PASS could not establish stairs; aggregate mechanics remains HOLD despite native/four-side/spray PASS. Opposite opening evidence and modern whole-island architecture remain incomplete.
+- Next: finish the named visible/native access repair and mandatory stock UP/DOWN/suite gates; move next to one source-grounded Northpoint-family L1 readiness comparison. Keep scoped architecture gains separate from stage completion and reuse unchanged evidence; no speed claims or expanded audit.
+
+### station48_final_progress_fresh — independent study003 checkpoint, 2026-10-10
+- Worked: five actual baseline/current gameplay originals plus two retained reference originals established meaningful whole-envelope/public-entry progress; the existing mechanics log established why the access repair was necessary, without an engine rerun or waiting on the live suite.
+- Did not: the corrected access still reads as a continuous incline; whole opposite-side L2 and modern island quality remain unresolved. Tests and scoped visuals cannot promote those unknowns.
+- Next: close existing gates, then one exact-ID/source-grounded Northpoint whole-family L1 readiness comparison. Reuse completed evidence, stop Station48 finish churn, and preserve independent per-building review and stock-walking gates.
+
+
+### chapel_final_integrator — Station48 body-guard handoff, 2026-10-10
+
+- Worked: actual process preflight found no Godot/Weston or related engine/test wrappers. The requested exact body source_keys, receiver_kind and opaque guard was already present at shared building_fit_test.gd:549, before layer/group checks, matching the adapter's body contract. Explicit-file whitespace check passed.
+- Did not: dispatch described the guard as missing, but current source had changed by inspection time. No authorship or independent CODE acceptance is claimed for those existing bytes.
+- Next: review the current guard directly and obtain named CODE PASS before any engine GO. No duplicate edit, engine launch or unrelated source change in this round; only this private RETRO appended.
+
+### chapel_final_integrator — Station48 mechanics001, 2026-10-10
+
+- Worked: one complete current native/fit/stair/spray invocation preserved source metadata checks and recorded active REST before SAFE. Native/four approaches and independent exact-wall spray passed; terminal1 and owned process absence retained.
+- Did not: stair ascent got stuck on LAND away from the target landing; descent remained unrun and aggregate HOLD. Actual cause is not yet diagnosed. The maintained driver safely continued independent spray after the supported rest, which does not erase stair failure.
+- Next: inspect flight/capsule path and catalog start/end joins before a bounded geometry correction; never weaken controller/test thresholds. No automatic retry, code change, full suite or acceptance in this round.
+
+### chapel_final_integrator — Station48 corrected access proof, 2026-10-10
+
+- Worked: one corrected13-image capture followed by one complete combined mechanics run, serialized with actual terminal/PID release. Current visible/native geometry, four approaches, stock stair UP/DOWN and exact-wall spray passed with active grounded released REST before SAFE. Source remained frozen; original failed mechanics001 retained.
+- Did not: earlier stair HOLD could not be cleared by native equality or appearance alone. This round supplies actual traversal closure; it does not supply independent visual acceptance or full-suite results. Existing Texture RID warnings persist despite terminal0.
+- Next: reuse this completed current proof while independent current-image review and any assigned full suite finish. Do not repeat unchanged cases solely for bookkeeping; no automatic rerun or source change in this round.
+
+### chapel_final_integrator — Station48 complete suite, 2026-10-10
+
+- Worked: one complete suite9971 exited0, all nine nested statuses0,49 scored fits including current stairs, and Node validation/determinism passed. Reused compatible local pinned dependencies; retained same handle until terminal and actual owned/global engine absence.
+- Did not: island subprocess buffers output, so live process observations established activity but not interim per-building results; no results were inferred before terminal.
+- Next: use completed unchanged mechanics/suite evidence for documentation closure without replay. ROOT reported repeated queued review followups failed to produce final verdicts (cause unknown); a named documentation writer should record its proposed one-bounded-handoff/fresh-owner-after-explicit-revocation experiment in ordinary lessons/RETRO. No source/docs edits while suite ran, and no publication in this round.
+
+
+### northpoint_family_readiness_fresh — local Northpoint pair readiness, 2026-10-10
+- Worked: exact catalog/checklist join separated detached1229 from accepted live1232; read current producers and opened actual historical gameplay rather than treating an old packet as current geometry. Shared housing kit/support already exist.
+- Did not: first broad combined reads truncated; narrowed reads resolved identity. Historical photos point to former Mac paths and were not locally available; prose side labels disagree with later mapped fronts. No direct dated-reference/current-baseline comparison or modeling readiness claimed.
+- Next: capture ONE two-unit all-side/context baseline batch after explicit release, recover actual original references, and settle side association before choosing L1 edits. Keep U unknown, preserve1232 credit, and do not transfer detached geometry automatically. Only existing private notes edited; canonical RETRO append awaits the named documentation/integration writer window.
+
+
+### station48_closure_notes — scoped closure, 2026-10-10
+
+- Worked: consolidated each actor's supplied own retrospective and retained earlier failures; matched the final scoped visual/progress decisions and terminal mechanics/suite evidence to only the supported L1 completion. Preserved all213 identities,49 historical credits, the existing stair route and unknown all-side L2/later stages.
+- Did not: broad initial note reads truncated useful content; focused excerpts and exact private draft paths resolved the handoff. Repeated busy-review followups elsewhere had not yielded a final verdict; their cause remains unknown, so no model-performance claim follows.
+- Next: use one bounded written-fix handoff, explicit prior-owner revocation and source/process preflight before a fresh owner; compare whether the next handoff reaches a verdict without duplicate busy followups. Keep observed completion separate from a causal speed claim. No engine, runtime source/test changes, staging, commit or publication in this documentation round.
+
+### chapel_final_integrator — Station48 current Study003 gallery, 2026-10-10
+
+- Worked: added exactly three current original PNGs, preserving all57 historical originals and existing WIP labels. Both HTML copies match served bytes; existing server GET/HEAD200 and private routes404 verified.
+- Did not: scoped gate PASS is not publication or complete L2/modern fidelity; labels explicitly retain those limits and distinguish the inferred metal incline from as-built discrete stairs.
+- Next: update publication labels only after actual authorized push, retaining historical images and unknown-side scope. No engine/browser, source/repo edits, new server or Git action in this round.
+
+### chapel_final_integrator — Station48 publication round, 2026-10-10
+
+- Worked: verified exact ten-path scope, clean initial index, all executing actors’ own retrospective sections and completed applicable native/stock ascent-descent/spray/full-suite evidence before publication. Only closure prose and own RETRO changed after tests.
+- Did not: scoped architecture PASS does not establish opposite-side L2, modern whole-building fidelity or as-built discrete stairs; those limits remain explicit.
+- Next: publish through normal fast-forward after checking the live base, then update only existing gallery labels from the actual commit. Preserve the earlier stair HOLD and current successful traversal without a bookkeeping rerun.

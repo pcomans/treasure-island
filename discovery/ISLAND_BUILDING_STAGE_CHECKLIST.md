@@ -26,7 +26,8 @@ Update affected rows in the ordinary study handoff after actual evidence changes
 Initial baseline stage1:5 C /0 I /208 U; stage2:5 C /2 I /206 U. After Chapel/B2 closure
 and B3 evidence reconciliation: stage1:8 C /0 I /205 U; stage2:8 C /0 I /205 U.
 After Mariner scoped roof/envelope closure: stage1:10 C /0 I /203 U;
-stage2:8 C /0 I /205 U.
+stage2:8 C /0 I /205 U. After Station48 envelope/site closure:
+stage1:11 C /0 I /202 U; stage2 remains8 C /0 I /205 U.
 Stage4:1 C /0 I /212 U; stages3/5 remain213 U each. These are evidence
 coverage counts, not an estimate that unknown buildings need new massing. No stage5 completion
 is inferred from generic visual acceptance. Unknown rows remain unchecked, not
@@ -52,9 +53,22 @@ Both rows complete L1 shape/site through coherent whole envelopes and fresh
 four-side fits. L2 remains U: roof/front and1212 end are repaired, but rear and
 opposite-end opening completeness is unresolved. Blank gameplay walls are not
 reference-verified absence; no concrete observed missing motif establishes I.
-The roof/envelope study is accepted for integration, not yet published; their
-L3/L4/L5 remain U. Current totals are L1:10 C/203 U, L2:8 C/205 U and
-19 C/1,046 U overall, preserving213 units/1,065 cells and49 historical recognition credits.
+The Mariner roof/envelope study was published in c553e9f; their L3/L4/L5 remain U.
+**S48** Station48 whole-building study003, 2026-10-10: scoped architectural
+VISUAL PASS (station48_final_visual_fresh), distinct PROGRESS PASS
+(station48_final_progress_fresh), CODE PASS, mechanics002 terminal0 native/four
+approaches/stock ascent-descent/spray/active supported released REST then SAFE,
+and suite9971 terminal0 with all nine nested statuses0 and49 scored fits PASS.
+Whole-envelope L1 is complete; L2 remains U because ENE/SSE opening completeness
+is unsupported. Sep2025 WSW, May2019 NNW and official SFFD exterior (capture
+date UNKNOWN) support the low modular envelope and public entry family.
+The continuous28.6-degree visible/native metal access slope within the existing
+footprint is production inference, not as-built discrete stairs. Initial
+mechanics001 ASCENT HOLD is retained; the existing route is unchanged. Separate
+vaulted apparatus and neighbours are excluded. L3/L4/L5 and whole modern-quality
+remain unclaimed. Scoped architecture is published with this change.
+Current totals are L1:11 C/202 U, L2:8 C/205 U and20 C/1,045 U overall,
+preserving213 units/1,065 cells and49 historical recognition credits.
 **U** no current stage-level conclusion established in this checklist pass.
 
 The retained34-building audit entries in [RETRO](RETRO_LOG.md) (2026-09-23,
@@ -275,7 +289,7 @@ before selecting another round.
 | physical-building:w291196382 / w291196382 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w291196386 / w291196386 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w545387426 / w545387426 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w764313741 / w764313741 | San Francisco Fire Station 48 | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w764313741 / w764313741 | San Francisco Fire Station 48 | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | S48 — whole envelope/site fit complete; observed entry scoped PASS; ENE/SSE openings unresolved |
 | physical-building:w1001544698 / w1001544698 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w1043836450 / w1043836450 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w1098437841 / w1098437841 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | M — retain complete site; inspect later stages |

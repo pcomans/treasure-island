@@ -30,6 +30,14 @@ func configure_records(wall:Dictionary,roof:Dictionary,source_builder:Callable,t
 	if not source_builder.is_valid() or not tangent_builder.is_valid():return {"ok":false,"message":"Original source and tangent producers required."}
 	_tangent_builder=tangent_builder
 	var baseline:bool=false
+	if not matches_record_pair(wall,roof) or not _valid_source_streams(wall,roof):
+		return {"ok":false,"message":"Complete finite source wall/roof streams required before the runtime height override."}
+	# Runtime game-art height override; frozen XZ and terrain-contact bottoms remain source-owned.
+	wall=wall.duplicate(true);roof=roof.duplicate(true)
+	for run in 26:
+		wall.vertices[run*12+7]=7.60;wall.vertices[run*12+10]=7.60
+	for index in range(1,roof.vertices.size(),3):roof.vertices[index]=7.60
+	wall.top_elevation_m=7.60;roof.top_elevation_m=7.60
 	var config:=_json(CONFIG_PATH)
 	if not matches_record_pair(wall,roof):return {"ok":false,"message":"Exact source wall and roof pair required."}
 	if not _same_numeric_runs(config.get("mapped_runs",[]),TARGET_RUNS) or not _same_numeric_runs(config.get("protected_runs",[]),PROTECTED_RUNS):return {"ok":false,"message":"Observed/protected scope changed."}
@@ -55,7 +63,7 @@ func configure_records(wall:Dictionary,roof:Dictionary,source_builder:Callable,t
 	_add_original_wall_subset("ProtectedExactNeutralWallRuns",wall_mesh,wall,PROTECTED_RUNS,wall_mesh.get_active_material(0))
 	_add_original_wall_subset("ObservedWSWNNWPaleWallFields",wall_mesh,wall,TARGET_RUNS,wall_mesh.get_active_material(0) if baseline else pale)
 	var roof_copy:=MeshInstance3D.new();roof_copy.name="ExactSourceNeutralRoof"
-	roof_copy.mesh=roof_mesh.mesh;roof_copy.layers=roof_mesh.layers;roof_copy.cast_shadow=roof_mesh.cast_shadow;roof_copy.transform=roof_mesh.transform
+	roof_copy.mesh=roof_mesh.mesh.duplicate();roof_copy.mesh.surface_set_material(0,_material("FS48_flat_membrane",Color(0.32,0.34,0.33),0.94));roof_copy.layers=roof_mesh.layers;roof_copy.cast_shadow=roof_mesh.cast_shadow;roof_copy.transform=roof_mesh.transform
 	add_child(roof_copy)
 	(original_wall.node as Node).free();(original_roof.node as Node).free()
 	var buckets:Dictionary={"source_walls":source_walls,"source_roof":source_roof}
@@ -70,6 +78,7 @@ func configure_records(wall:Dictionary,roof:Dictionary,source_builder:Callable,t
 			if label=="OpaqueHighWindowGlass":material=glass
 			elif label=="ThinStraightPublicRoofEdge":material=edge
 			_add_mesh(label,bucket,material)
+	_build_entry(wall,buckets,trim,glass)
 	var body:=StaticBody3D.new();body.name="ExactFootprintStructuralCollision_NoSprayOwnership";body.collision_layer=1;body.collision_mask=0
 	body.set_meta("receiver_kind","none");body.set_meta("derived_object_key","prototype:"+WALL_KEY);body.set_meta("source_keys",["w764313741"])
 	var counts:Dictionary={};var collision_total:=0
@@ -86,7 +95,7 @@ func configure_records(wall:Dictionary,roof:Dictionary,source_builder:Callable,t
 	for child:Node in get_children():
 		if child is MeshInstance3D:
 			var count:int=child.mesh.surface_get_array_index_len(0)/3;batches[str(child.name)]=count;total+=count
-	var metadata:Dictionary={"model_id":"fire-station48-first-coherent-study-002","source_key":"w764313741","mapped_public_run_indices":TARGET_RUNS,"protected_run_indices":PROTECTED_RUNS,"baseline_exact_source":baseline,"original52wall10roof_triangles_preserved":true,"source_roof_geometry_preserved":true,"interior_modeled":false,"source_terrain_untouched":true,"module_dimensions_and_counts":"production_inference","visual_batch_triangles":batches,"visual_triangles":total,"mesh_instances":batches.size(),"surfaces":batches.size(),"static_bodies":1,"shapes":counts.size(),"collision_triangles":collision_total,"collision_groups":counts,"complete_high_windows":0 if baseline else int(config.inference.window_count),"all_additions_render_only":true,"source_collision_only":true,"ground_detail_added":false}
+	var metadata:Dictionary={"model_id":"fire-station48-whole-building-20261010","source_key":"w764313741","mapped_public_run_indices":TARGET_RUNS,"protected_run_indices":PROTECTED_RUNS,"baseline_exact_source":baseline,"source_xz_and_wall_bottoms_preserved":true,"source_roof_geometry_preserved":false,"interior_modeled":false,"source_terrain_untouched":true,"module_dimensions_and_counts":"production_inference","visual_batch_triangles":batches,"visual_triangles":total,"mesh_instances":batches.size(),"surfaces":batches.size(),"static_bodies":1,"shapes":counts.size(),"collision_triangles":collision_total,"collision_groups":counts,"complete_high_windows":0 if baseline else int(config.inference.window_count),"all_additions_render_only":false,"source_collision_only":false,"ground_detail_added":true}
 	for key:String in metadata:set_meta(key,metadata[key])
 	_last_result={"ok":true,"node":self,"metadata":metadata};return _last_result
 
@@ -206,3 +215,85 @@ func _add_mesh(label: String,bucket: Dictionary,material: Material) -> void:
 	arrays[Mesh.ARRAY_TANGENT]=_tangent_builder.call(arrays[Mesh.ARRAY_VERTEX],arrays[Mesh.ARRAY_NORMAL],arrays[Mesh.ARRAY_TEX_UV],arrays[Mesh.ARRAY_INDEX])
 	var mesh:=ArrayMesh.new();mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays);mesh.surface_set_material(0,material)
 	var node:=MeshInstance3D.new();node.name=label;node.mesh=mesh;node.layers=1;add_child(node)
+
+# The observed entry/access family is placed on the long public host as production inference.
+# Station/depth are in that host frame; the terrain preflight supports these modest elevations.
+func _build_entry(wall:Dictionary,buckets:Dictionary,trim:Material,dark:Material) -> void:
+	var frame:=_joined_frame(wall,0,3)
+	var metal:=KIT.new_bucket();var door:=KIT.new_bucket();var surround:=KIT.new_bucket();var sign:=KIT.new_bucket()
+	_box(door,frame,26.7,5.55,0.035,1.05,2.10,0.07)
+	_box(surround,frame,26.09,5.55,0.07,0.12,2.34,0.14)
+	_box(surround,frame,27.31,5.55,0.07,0.12,2.34,0.14)
+	_box(surround,frame,26.7,6.66,0.07,1.34,0.12,0.14)
+	_box(sign,frame,26.7,7.04,0.075,3.55,0.33,0.15)
+	_box(metal,frame,27.04,5.48,0.105,0.035,0.24,0.08)
+	# Landing top 4.50, thin deck and posts seated below the sampled local land.
+	_box(metal,frame,26.5,4.43,0.88,5.0,0.14,1.76)
+	for station:float in [24.08,26.5,28.92]:
+		for depth:float in [0.14,1.62]:
+			_box(metal,frame,station,3.87,depth,0.07,1.14,0.07)
+	# Front railing leaves a 1.2m stair entry centred at station28.2.
+	for bounds:Vector2 in [Vector2(24.0,27.56),Vector2(28.84,29.0)]:
+		_box(metal,frame,(bounds.x+bounds.y)*0.5,5.51,1.70,bounds.y-bounds.x,0.045,0.045)
+		_box(metal,frame,(bounds.x+bounds.y)*0.5,4.87,1.70,bounds.y-bounds.x,0.035,0.035)
+		var count:=int(ceil((bounds.y-bounds.x)/0.16))
+		for i in count+1:
+			_box(metal,frame,lerpf(bounds.x,bounds.y,float(i)/maxi(count,1)),5.0,1.70,0.025,1.02,0.025)
+	for station:float in [24.0,29.0]:
+		_box(metal,frame,station,5.51,0.86,0.045,0.045,1.72)
+		for i in 11:_box(metal,frame,station,5.0,0.08+i*0.16,0.025,1.02,0.025)
+	# Reuse Chapel's visible/native sloping-support grammar. The metal walking
+	# surface is continuous, deck-flush and seated below local LAND (~3.32),
+	# within the existing 1.2m x 2.24m flight. Underlying tread ends retain the
+	# fabricated flight rhythm; they cannot project above the walking surface.
+	var slope_normal:Vector3=(Vector3.UP+frame.normal*(1.22/2.24)).normalized()
+	for step in 7:
+		var inner_depth:=1.76+float(step)*0.32
+		var outer_depth:=inner_depth+0.32
+		var inner_top:=lerpf(4.50,3.28,float(step)/7.0)
+		var top:=lerpf(4.50,3.28,float(step+1)/7.0)
+		var depth:=1.76+(float(step)+0.5)*0.32
+		_box(metal,frame,28.2,top-0.055,depth,1.2,0.11,0.32)
+		var a:=_point(frame,27.60,inner_top,inner_depth)
+		var b:=_point(frame,28.80,inner_top,inner_depth)
+		var c:=_point(frame,28.80,top,outer_depth)
+		var d:=_point(frame,27.60,top,outer_depth)
+		KIT.append_quad(metal,a,b,c,d,slope_normal,Vector2.ZERO,Vector2(1.2,0.32))
+		# Close the plate sides against each horizontal tread, so the physical
+		# sloping support is also visible fabrication rather than a hidden ramp.
+		_triangle(metal,a,d,_point(frame,27.60,top,inner_depth),-frame.tangent)
+		_triangle(metal,c,b,_point(frame,28.80,top,inner_depth),frame.tangent)
+		for station:float in [27.60,28.80]:
+			var mid_top:float=(inner_top+top)*0.5
+			_box(metal,frame,station,(mid_top+3.20)*0.5,depth,0.055,mid_top-3.20,0.055)
+			_box(metal,frame,station,mid_top+0.5,depth,0.035,1.0,0.035)
+			_box(metal,frame,station,mid_top+1.0,depth,0.045,0.045,0.36)
+	buckets["RaisedMetalAccess"]=metal
+	buckets["ClosedEntryDoor"]=door
+	buckets["EntrySurround"]=surround
+	buckets["StationSign"]=sign
+	_add_mesh("RaisedMetalAccess",metal,_material("FS48_galvanized_access",Color(0.52,0.56,0.56),0.56))
+	_add_mesh("ClosedEntryDoor",door,dark)
+	_add_mesh("EntrySurround",surround,trim)
+	_add_mesh("StationSign",sign,_material("FS48_station_sign",Color(0.27,0.085,0.055),0.86))
+	var label:=Label3D.new();label.name="Station48Lettering";label.text="SFFD STATION 48";label.font_size=64;label.pixel_size=0.004
+	label.position=_point(frame,26.7,7.04,0.158);label.no_depth_test=false;label.outline_size=0
+	label.modulate=Color(0.92,0.91,0.81);label.billboard=BaseMaterial3D.BILLBOARD_DISABLED
+	label.rotation.y=atan2(frame.normal.x,frame.normal.z);add_child(label)
+
+static func _box(bucket:Dictionary,frame:Dictionary,station:float,y:float,depth:float,width:float,height:float,thickness:float) -> void:
+	KIT.append_box(bucket,_point(frame,station,y,depth),frame.tangent,frame.normal,width,height,thickness)
+
+static func _valid_source_streams(wall:Dictionary,roof:Dictionary) -> bool:
+	for record:Dictionary in [wall,roof]:
+		for key:String in ["vertices","normals","uvs","indices"]:
+			if not record.get(key) is Array or record[key].is_empty():return false
+			for value:Variant in record[key]:
+				if not (value is int or value is float) or not is_finite(float(value)):return false
+		var vertices:int=record.vertices.size()/3
+		if record.vertices.size()%3!=0 or record.normals.size()!=record.vertices.size() or record.uvs.size()!=vertices*2 or record.indices.size()%3!=0:return false
+		for value:Variant in record.indices:
+			if float(value)!=floorf(float(value)) or int(value)<0 or int(value)>=vertices:return false
+	# Four vertices and six indices per scheduled wall run are this producer's layout.
+	var runs:int=TARGET_RUNS.size()+PROTECTED_RUNS.size()
+	return wall.vertices.size()==runs*12 and wall.indices.size()==runs*6
