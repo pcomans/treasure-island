@@ -105,6 +105,8 @@ The inherited 1410 source notes assigned the nearby 1412 paired-garage/two-stair
 
 New Maceo review requests sent through `send_message` did not restart the completed reviewer. Actual metadata measured 806.169 seconds between completion and restart; ROOT and authors repeated the same dispatch mistake while other authoring continued, so the interval is not whole-team idle time. Use `followup_task` for every new bounded assignment, busy or idle, and `send_message` only for active-work status or clarification. This fixes the observed wake-up failure without another monitoring layer or a claim about total workflow speed.
 
+During the Mersea dining handoff, ROOT interrupted the prior author and revoked its authority, but a subsequent source read found pending furniture/screen edits with a 2026-10-10 01:08:55 modification time. Whether a pending tool finished late or its delivery was delayed remains unknown. Interrupted status alone does not prove writing has settled. Before transferring ownership, inspect the actual source, live process identity and retained tool terminal state; reconcile arriving changes before the replacement writes. Preserve those changes and failures rather than restart or overwrite from agent status alone.
+
 ## Choose the next useful work after a held pilot
 
 The isolated1220 material-finish pilot passed technical preservation but received
