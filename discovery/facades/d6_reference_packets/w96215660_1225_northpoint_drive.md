@@ -1,6 +1,7 @@
 # D6 source packet — 1225 Northpoint Drive (`w96215660`)
 
-Checked: **2026-09-04**  
+Current study update: **2026-10-10** — scoped L1 shape/site complete; L2–5 unknown.
+Historical packet checked: **2026-09-04**
 Readiness: **component/end-side study ready; detailed long elevations remain appearance-blocked**
 
 Catalog provenance: `ti.facade-recognition-catalog/4`, checked 2026-09-04,
@@ -54,3 +55,47 @@ view/elevation that separates either exact long face of `w96215660`**. No
 panorama pixels are retained or proposed as texture inputs.
 
 Shared sources, currentness caveats, and rights boundary: [D6 index](README.md).
+
+## Current whole-shape/site study — 2026-10-10
+
+This addendum supersedes the September long-side appearance blocker only within
+the newly observed E/N scope. The historical source packet above remains retained.
+Four dated March2025 originals were acquired for the pair and compared with actual
+baseline/current gameplay; Apple layout context was inspected with date UNKNOWN.
+
+- [E frontage pano `cZKwwXV0NkUP-bf9I7id5Q`](https://www.google.com/maps/@?api=1&map_action=pano&pano=cZKwwXV0NkUP-bf9I7id5Q&heading=270&pitch=0&fov=90): camera37.8302586,-122.3746273 / localXZ[-319.8327,-723.2483], looking W270°. The ray crosses the exact E wall nearZ-723.25; provider1232 is camera-side context. Painted bay labels include1225. Observed stepped pale gray-blue two-storey row, shallow roof/eaves, pale trim, burgundy entries/privacy pieces, partial deep flat carport, grass islands and concrete entry links/long footway. Cars/canopy hide ground sequence; ends crop.
+- Retained March2025 N pano `ItRdW8bYgwQNwbFSpnGG_g`, camera37.8306259,-122.3746034 / localXZ[-317.7311,-764.1359], lookingSW210.7°: exact target is middle/right row, not foreground1227; shallow north gable and lawn/canopy relationship are partly tree-obscured.
+
+Reuse: WorldLoader → housing_family_live_attachment → housing_site_family with
+new source-bound w96215660 config, exact wall/roof identity in x_-2__z_-3.
+Observed E runs1–3,5–8,10–13 alone receive opening schedules; N9,14,15,21 support
+plain envelope/roof rather than invented openings. All other runs remain plain
+protected closure; annex/neighbor motifs excluded. Roof rise/join dimensions,
+module cadence, canopy endpoints/posts and site extents are production_inference.
+Only opaque source walls receive spray; roof/canopy/ground remain nonreceivers.
+
+Study001's brown frontage-to-road gap prompted early visual REWORK. Corrected
+study002 derives parking/open-end lawn from actual road boundaries15.4–16.6m
+outward and adds a0.95m street-edge footway, clipping against LAND and retained
+roads/buildings/paving. Final converted ground winding is checked for both siblings.
+Study002 capture38150 terminal0/c666a5 and owned/global absence937fcd preceded
+six-original independent review. Combined mechanics21139 terminal0/d83437;
+actual out/back/spray rests join ParkingSurface13 and FrontLawn15. East approach
+contact was support detail near the qualified wall, not a wall-touch claim.
+Ordinary E is distant/partly obscured and N neighbor-dominated; raised contexts
+support the scoped assembly, not a complete close-front/all-side fidelity claim.
+1225 reference_recognizable stays not_evaluated; no new credit.
+
+Current verification: independent northpoint_third_family_visual scoped PASS
+for the complete corrected target set, plus all five before/final island pairs;
+separate northpoint_third_family_code corrected CODE and distinct PROGRESS PASS.
+Combined shared building_fit_test verified native wall/roof/support/ground roles,
+four stock approaches, changed-site out-and-back, exact opaque wall spray and
+active grounded supported input-released zero-velocity REST before SAFE.
+One full suite28452 terminal0/ae7f99 ended ALL TESTS PASS, all49 scored fits and
+Node validation/determinism. Missing pinned local packages were installed through
+unchanged-lockfile npm ci before the suite; no test or runtime weakening.
+Owned/global runtime absence followed each actual terminal. L1 shape/site C is
+supported; L2–5 remain U, modern whole-quality and as-built fidelity unclaimed.
+Reference pixels and proof artifacts remain private/outside Git, never textures.
+See [stage checklist](../../ISLAND_BUILDING_STAGE_CHECKLIST.md) for current scope.

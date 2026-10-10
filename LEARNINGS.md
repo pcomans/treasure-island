@@ -53,6 +53,8 @@ Bring the first coherent actual source render to the separate visual reviewer be
 
 ## Validate the representation actually consumed
 
+1234 site001 oriented clipped lawn triangles before Float32 conversion, leaving four reversed slivers and four projected collapses in the consumed data. The author checked final winding only for sibling1225. Orient and validate the final converted triangles for every changed target; retain nonzero fragments and handle exact projected collapse explicitly. A shared authoring function or successful sibling check does not establish the other target’s geometry.
+
 The Building 2 first study repeated an older exact-cardinality guard pattern despite
 the current rule against snapshot-count assertions. Review rejected wall/roof vertex
 counts as validity gates; required indexed facade anchors, complete array strides,

@@ -5200,6 +5200,14 @@
           "review_id": "northern-1234-quality-candidate-2026-09-22-001",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "northpoint-1234-whole-shape-site-2026-10-10-study002",
+          "review_kind": "independent_scoped_architectural_game_art",
+          "status": "pass",
+          "numerator_effect": 0,
+          "scope": "Connected W/front and north lawn to actual road edge, subtracting frozen footprints/roads and all retained paving; all prior architecture, openings, roof and protected scopes unchanged. Independent northpoint_third_family_visual scoped PASS with complete target sets and five before/final island pairs; distinct PROGRESS and corrected CODE PASS. Native role coverage, four stock approaches, changed-site out-and-back, exact-source spray and active supported released REST before SAFE passed with clean terminal0 per unit. Full suite28452 terminal0/ae7f99 ALL TESTS PASS, all49 scored fits/validation/determinism; actual runtime release. Initial study001 site REWORK/Float32 HOLD retained and resolved. L1 complete; L2\u20135 unknown. Production-inference dimensions; no whole modern-quality/as-built claim, new recognition or historical-status change.",
+          "source_locator": "discovery/ISLAND_BUILDING_STAGE_CHECKLIST.md"
         }
       ],
       "anchor_source_key": "w96215659",
@@ -5318,7 +5326,16 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "northpoint-1225-whole-shape-site-2026-10-10-study002",
+          "review_kind": "independent_scoped_architectural_game_art",
+          "status": "pass",
+          "numerator_effect": 0,
+          "scope": "Whole shallow-gabled stepped envelope, observed E runs1\u20133,5\u20138,10\u201313, partial deep carport and road-connected lawn/footway/parking; N9,14,15,21 corroborated envelope only, no invented end/rear openings. Remaining runs and neighboring/annex ownership protected. Independent northpoint_third_family_visual scoped PASS with complete target sets and five before/final island pairs; distinct PROGRESS and corrected CODE PASS. Native role coverage, four stock approaches, changed-site out-and-back, exact-source spray and active supported released REST before SAFE passed with clean terminal0 per unit. Full suite28452 terminal0/ae7f99 ALL TESTS PASS, all49 scored fits/validation/determinism; actual runtime release. Initial study001 site REWORK/Float32 HOLD retained and resolved. L1 complete; L2\u20135 unknown. Production-inference dimensions; no whole modern-quality/as-built claim, new recognition or historical-status change.",
+          "source_locator": "discovery/ISLAND_BUILDING_STAGE_CHECKLIST.md"
+        }
+      ],
       "anchor_source_key": "w96215660",
       "claim_status": {
         "as_built_fidelity": "unclaimed",

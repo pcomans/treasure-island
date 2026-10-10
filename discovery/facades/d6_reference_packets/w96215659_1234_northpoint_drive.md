@@ -1,6 +1,7 @@
 # D6 source packet — 1234 Northpoint Drive (`w96215659`)
 
-Checked: **2026-09-04**  
+Current study update: **2026-10-10** — scoped L1 shape/site complete; L2–5 unknown.
+Historical packet checked: **2026-09-04**
 Readiness: **target-side prototype-ready; camera-side label caveat retained**
 
 Catalog provenance: `ti.facade-recognition-catalog/4`, checked 2026-09-04,
@@ -55,3 +56,47 @@ before live placement. No panorama pixels are retained or proposed as texture
 inputs.
 
 Shared sources, currentness caveats, and rights boundary: [D6 index](README.md).
+
+## Current retained-architecture/site study — 2026-10-10
+
+Four dated March2025 originals were acquired for the pair and compared with
+baseline/current gameplay. Retained Apple context has date UNKNOWN, not dated
+facade evidence. The original W pano above was reacquired; provider1232 remains
+camera-side context, with camera localXZ[-317.1596,-774.3662] west of the exact
+source footprint and lookingENE60.6°.
+
+- [N/front context pano `kTg6yZ_s4Mxm8SssPFhnfg`](https://www.google.com/maps/@?api=1&map_action=pano&pano=kTg6yZ_s4Mxm8SssPFhnfg&heading=120&pitch=0&fov=90): camera37.8309911,-122.3745776 / localXZ[-315.4625,-804.7898], lookingESE120°. Provider1227 is opposite-row camera context. Target north/front has broad connected lawn/paths reaching road, two unobstructed near bays and deep carport continuing south. Rear/full end crop; eaves/ridge are visible, not complete reference roof planes.
+
+Actual producer: WorldLoader → housing_family_live_attachment → housing_site_family,
+existing w96215659 config in x_-2__z_-4. This study changes local_ground only;
+all previous architecture, opening schedules, roof, canopy, paving and protected
+runs5–15,16,21 remain unchanged. Only source walls receive spray; roof/support/
+ground are solid nonreceivers. No neighbor or hidden-opening ownership transfer.
+
+Study001 exposed an insufficient north lawn and final-Float32 ground slivers:
+four reversed triangles and four exact projected collapses. These retained
+CODE HOLD/visual REWORK observations were resolved by orienting final converted
+data and the single combined site002 correction. New north/front lawn extends8m
+north and to actual road edge, subtracting frozen roads/buildings and all retained
+paving;8m is production_inference, not surveyed landscaping.
+Corrected capture97803 was recovered to actual terminal0/f61745/global3a6772
+absence before six-original final review. Earlier observer terminal HOLD is
+resolved; saved-file presence alone was never completion. Combined mechanics68586
+terminal0/14462e; out/back/spray rests join new FrontAndNorthLawn98/108/91.
+Current west default is severely neighbor-obscured and supplies no full-front
+fidelity claim; retained study001 west/current SW context still show architecture.
+Historical recognition credit remains accepted; no new credit or all-side claim.
+
+Current verification: independent northpoint_third_family_visual scoped PASS
+for the complete corrected target set, plus all five before/final island pairs;
+separate northpoint_third_family_code corrected CODE and distinct PROGRESS PASS.
+Combined shared building_fit_test verified native wall/roof/support/ground roles,
+four stock approaches, changed-site out-and-back, exact opaque wall spray and
+active grounded supported input-released zero-velocity REST before SAFE.
+One full suite28452 terminal0/ae7f99 ended ALL TESTS PASS, all49 scored fits and
+Node validation/determinism. Missing pinned local packages were installed through
+unchanged-lockfile npm ci before the suite; no test or runtime weakening.
+Owned/global runtime absence followed each actual terminal. L1 shape/site C is
+supported; L2–5 remain U, modern whole-quality and as-built fidelity unclaimed.
+Reference pixels and proof artifacts remain private/outside Git, never textures.
+See [stage checklist](../../ISLAND_BUILDING_STAGE_CHECKLIST.md) for current scope.

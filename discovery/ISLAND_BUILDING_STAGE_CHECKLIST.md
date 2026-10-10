@@ -105,8 +105,40 @@ are unchanged. Unseen openings, ordinary-view occlusion and simplified sites/
 materials keep L2–5 and modern whole-quality open; as-built fidelity is unclaimed.
 See [1227 D6](facades/d6_reference_packets/w96215653_1227_northpoint_drive.md) and
 [1239 D6](facades/d6_reference_packets/w96215658_1239_northpoint_drive.md).
-Current totals: L1:15 C/198 U; L2:8 C/205 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall24 C/1,041 U across213 units/1,065 cells.
+After NP2, totals were L1:15 C/198 U and24 C/1,041 U overall.
+**NP3** Third Northpoint pair, 2026-10-10:1225 study002 whole shallow-gabled
+stepped envelope, observed E frontage, partial deep carport and road-connected
+lawn/footway/parking;1234 study002 retained architecture with connected W/front
+and north lawn. Existing source-aware housing_site_family reused; three instance/
+registration configs only, no shared runtime change. March2025 target-bound
+E/N1225 and W/N1234 originals support the observed relationship; dimensions,
+module cadence, canopy endpoints and site extents remain production inference.
+Independent northpoint_third_family_visual scoped PASS for both complete six-view
+assemblies and all five baseline/final island pairs; distinct
+northpoint_third_family_code PROGRESS PASS and corrected CODE PASS.
+Study001 site REWORK and1234 final-Float32 winding/collapse HOLD remain history.
+Corrected captures38150 terminal0/c666a5 and97803 recovered terminal0/f61745
+with owned/global absence establish completion; observer's earlier terminal HOLD
+is resolved, not a failed capture or permission to rerun.
+Combined shared building_fit_test passed native wall/roof/support/ground coverage,
+four stock approaches, changed-site out-and-back, exact opaque source-wall spray
+and active grounded supported input-released zero-velocity REST before SAFE per
+unit:1225 handle21139 terminal0/d83437;1234 handle68586 terminal0/14462e.
+1225 east arrival contacted support detail near its qualified wall; canopy drop
+sites were safely rejected. Actual new-ground rest facets were joined explicitly.
+One full suite28452 terminal0/ae7f99 ended ALL TESTS PASS, including all49 scored
+fits and Node validation/determinism, after local pinned dependency installation.
+Every invocation reached actual terminal and owned/global runtime absence.
+ROOT accepts these bounded L1 gates. Both L1 are C; L2–5 remain U. Unknown rear/
+end openings and obscured ordinary frontage prevent all-side or modern whole-quality
+claims; as-built fidelity remains unclaimed.1234 historical recognition and1225
+not_evaluated remain unchanged. See [1225 D6](facades/d6_reference_packets/w96215660_1225_northpoint_drive.md)
+and [1234 D6](facades/d6_reference_packets/w96215659_1234_northpoint_drive.md).
+Current totals: L1:17 C/196 U; L2:8 C/205 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall26 C/1,039 U across213 units/1,065 cells.
+Next: bounded whole-family L1 readiness for1236 w96215668 and1240 w96215688;
+inspect their current complete envelope/site and dated target references before
+assigning art. Their U cells establish no defect; no current-pair finish polishing.
 **U** no current stage-level conclusion established in this checklist pass.
 
 The retained34-building audit entries in [RETRO](RETRO_LOG.md) (2026-09-23,
@@ -216,8 +248,8 @@ before selecting another round.
 | physical-building:w96215656 / w96215656 | 1224 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215657 / w96215657 | 1307 Gateview Avenue | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215658 / w96215658 | 1239 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP2 — L1 joined shallow-gable whole roof; scoped visual/CODE/progress/native/fit/spray/suite PASS; L2–5 unknown |
-| physical-building:w96215659 / w96215659 | 1234 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96215660 / w96215660 | 1225 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215659 / w96215659 | 1234 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP3 — scoped shape/site complete; unseen openings/whole-quality unknown |
+| physical-building:w96215660 / w96215660 | 1225 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP3 — scoped shape/site complete; unseen openings/whole-quality unknown |
 | physical-building:w96215661 / w96215661 | 1222 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215662 / w96215662 | 1139 Ozbourn Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215666 / w96215666 | 1215 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |

@@ -18952,3 +18952,80 @@ Own RETRO draft: Worked — direct raised-context comparisons made the complete 
 - Worked: ROOT accepted the exact eight-file closure patch and completed independent gates. Fresh origin/main and local HEAD both match reviewed ab0f744; staging starts empty and only the intended eight files are modified.
 - Did not: this linked worktree again lacks author identity. Read the devcontainer-defined bot identity and use it only for the commit command, without changing local/global configuration.
 - Next: commit the explicit reviewed set, publish with normal HEAD:main push, and verify actual terminal success plus remote equality before marking the existing gallery published. Reuse completed tests because subsequent edits are documentation only; preserve private references and unchanged82 originals.
+
+### northpoint_1225_1234_art — 2026-10-10 coherent source round
+- Worked: reused the live source-aware housing family and the complete existing roof authoring method; exact east-source frames gave 1225 its missing whole architecture without shared-runtime edits. 1234 architecture comparison remained exact while adding its site lawn.
+- Did not: the first private authoring invocation used earcut.flatten as a default-export member; installed earcut exposes named flatten, corrected before any config write. A repeat source-authoring pass initially included its own prior lawn in subtraction; the private author now removes that own key before recomposition. Both were source-only corrections, no extra engine run.
+- Next: keep the complete shared emitter/schema and actual LAND/AREA distinctions in preflight, then judge the early whole source render before refinement. Native contacts, fit/spray, independent code/visual and full suite remain separate pending gates.
+- Early independent CODE caught tiny reversed/collapsed Float32 lawn fragments on 1234: I checked final ground winding only on 1225 and relied on the shared author for 1234. Prevention is to validate the final converted triangles for every changed target, before capture. Both first captures nevertheless completed terminal0 and remain retained as study001; no mechanical or visual acceptance is claimed.
+
+- Early visual review found the large site composition gap that my initial fixed outward extent left: 1225 ground stopped 4–5m short of the real generated road, and 1234’s north lawn was too short. Combined one correction per target with the final-Float32 repair, deriving site extent from the actual frozen road polygon and subtracting retained access/paving/footprints before the remaining captures.
+
+
+### northpoint_third_family_visual — 1225 early independent review, 2026-10-10
+- Worked: direct March2025 reference pixels, all six completed current target originals and matched baseline/context/island views separated substantial whole-architecture gain from the missing continuous frontage setting; explicit early REWORK preceded refinement/mechanics.
+- Did not: broad first lessons/note reads truncated; ordinary north is neighbour-dominated and east is distant/blocked, so they cannot establish a complete close-front fidelity claim.
+- Next: select relevant lesson/target sections first, use the already useful target-bound contexts, and correct supported lawn/parking-to-road contact before material polish. Preserve unknown rear-opening coverage and pending mechanics/whole-quality gates. No engine/browser/source/Git action or new reporting framework.
+
+
+### northpoint_third_family_visual — 1234 early / 1225 corrective, 2026-10-10
+- Worked: actual dated N02 and completed1234 six-view set exposed insufficient north-lawn scope early; corrected1225 six-view whole assembly then directly showed the continuous road-edge site improvement, supporting scoped L1 PASS without material churn.
+- Did not: I accidentally typed an unprovided1234 handle in one status message; corrected immediately to the supplied terminal evidence and actual62335. Ordinary frontage framing remains limited, so a scoped L1 result cannot close all-side L2 or modern quality.
+- Next: copy actual handoff handles exactly or omit them; retain useful reference/baseline pixels and reassess the entire corrected assembly before a verdict. Mechanics/native/whole-suite remain separate. No engine/browser/source/Git or new report framework.
+
+
+### northpoint_third_family_visual — final scoped review, 2026-10-10
+- Worked: complete corrected six-view assemblies plus all five actual baseline/final island pairs support separate1225/1234 scoped PASS/L1 C decisions; broad continuous frontage/north-lawn corrections resolved the early substantive site gaps.
+- Did not: corrected1234 west default framing is now severely neighbour-obscured and cannot establish complete-front fidelity, despite useful retained study001 west/current SW context.
+- Next: inspect saved framing after site-bound changes and retain useful existing captures; scoped L1 completion does not supply all-side opening coverage, modern whole-quality or independent mechanics/full-suite. No engine/browser/source/Git action.
+
+
+### northpoint_1234_1225_readiness — reference/baseline round, 2026-10-10
+- Worked: exact retained pano plus one nearby road view separated1225 long face and recovered its major architecture/site gap within four views; complete shared baseline pairs supplied actual comparison.
+- Did not:1234 second coordinate load needed one resolved-URL recovery, retained failed original; hidden rear/utility evidence remains unavailable and Apple date UNKNOWN.
+- Next: reuse the sufficient scoped set, target1225 whole envelope/site and retain1234 architecture; no restart or unchanged baseline rerender for bookkeeping.
+
+### northpoint_third_family_code — source and corrected CODE review, 2026-10-10
+- Worked: traced final attachment/emitter, exact1234 architecture and finite final ground seams; caught consumed-Float32 winding/collapse before promotion. Corrected ground PASS reused unchanged roof/identity review, with local LAND/visibleAREA and road-derived bounds checked separately from native proof.
+- Did not: broad source reads truncated and metadata reads printed unnecessary boundary arrays; narrowed changed fields recovered the relevant data.
+- Next: validate final converted triangles for every changed sibling, preserve positive fragments and distinguish source inspection from actual native/stock contact. Original study001 HOLD retained; comparator reimplementation/repair0, no duplicate proof framework.
+
+### northpoint_third_family_code — independent progress checkpoints, 2026-10-10
+- Worked: direct dated reference/baseline/current comparison established1225 whole architecture/site gain; later personally inspected completed1234 corrective SW/N/NE originals, supporting current PROGRESS PASS separately from CODE/visual/native/suite. Road/site and Float32 repairs were necessary integrity/composition work, not polish.
+- Did not: original1234 capture owner returned before consuming terminal, requiring observer/original-author recovery; two failed extra-agent spawns added no review. Initial broad note reads truncated. At the later checkpoint all gates had passed but closure edits had not materialized, delaying next-family work.
+- Next: keep original capture handle through terminal/release; one named closure owner consolidates current verdicts/retros once for ROOT diff review, then1236 w96215668/1240 w96215688 whole-family L1 readiness. U is inspect, not defect; no extra proof/finish round or timing/model-performance claim.
+
+### northpoint_third_family_mechanics — source-only plan preparation, 2026-10-10
+- Worked: reused complete donor spray and return-from-actual-arrival route schemas, changing exact target/pose/output fields and preparing actual source-facet expectations while author captured.
+- Did not: apparent standing clearance cannot qualify a drop pose under canopy; preflight therefore checked complete highest-hit descent columns and source ownership.
+- Next: retain full shared native role/stock rest safety guards and source-facet joins; prepared plans are not native or movement acceptance. No engine/source/controller/Git edit in this preparation role.
+
+### northpoint_third_capture_observer — original-handle recovery, 2026-10-10
+- Worked: recovered exact97803 launch identity without duplicate engine run; kept observer Unknown process id distinct from failed capture and deferred pixels until actual terminal.
+- Did not: first substring scan hit unrelated image payload prefixes; restricted to structured tool-text fields. Missing python alias corrected to python3. PID absence alone lacked exit status, so observer HOLD required original author recovery.
+- Next: original owner consumes terminal before handoff; actual subsequent97803 terminal0/f61745 and release resolve the historical HOLD. Preserve both observations.
+
+### northpoint_third_family_code — independent mechanical execution, 2026-10-10
+- Worked: complete source-bound plans/shared native-stock driver ran each target once, clean terminal0 and actual owned/global absence before transfer. Four approaches, changed-site return from actual arrival and exact wall sprays passed; all7 active/released/grounded/supported zero-velocity REST records per target preceded SAFE. Actual rest positions joined changed ground facets.
+- Did not: supplied handoff assumed local pinned npm packages existed in this linked worktree; direct import exposed absence before costly suite.1225 east approach contacted support detail near qualified wall, so do not relabel it wall touch. Cleanup warnings remain in original logs.
+- Next: precheck executing-worktree dependencies and full overhead descent column, preserve exact contact roles, and retain original handles to terminal. No source/controller/test edits, driver copy, stair/rooftop/jetpack claim or weakened guard.
+
+### northpoint_third_family_code — full suite, 2026-10-10
+- Worked: unchanged-lockfile npm ci repaired only missing ignored installation; direct imports passed before the one authorized suite28452 terminal0/ae7f99 ALL TESTS PASS, all49 scored fits/validation/determinism and actual runtime release.
+- Did not: suite buffers child stdout, so repeated unchanged log tails during island checks added no information.
+- Next: retain original handle, observe in bounded waits and report meaningful milestones without repetitive tails or bookkeeping reruns. Suite PASS remains separate from recognition/visual claims.
+
+### northpoint_pair_docs_gallery — early third-family delivery, 2026-10-10
+- Worked: appended six original images to existing82, preserving prior payload/order; existing served/private-route checks passed without server change.
+- Did not: study001 retained site REWORK and Float32 HOLD; delivery did not settle either issue.
+- Next: preserve held/failed originals when appending corrections; never relabel them as final acceptance.
+
+### northpoint_third_family_visual_delivery — corrective gallery, 2026-10-10
+- Worked: appended exactly four untouched study002 originals, preserving prior88 payload/order;92 total, both copies/served bytes matched and private routes404.
+- Did not:1234 west remains obscured, so delivery used north/context and supplied no full-front fidelity claim. Delivery-time suite-pending label preceded actual suite completion.
+- Next: update only current status after root acceptance; preserve failed studies and reference privacy, with no recapture or image replacement.
+
+### northpoint_third_family_code — bounded documentation closure, 2026-10-10
+- Worked: accepted frozen runtime evidence and existing gallery delivery supported one nine-file closure; two scoped catalog records leave all claims/protected scopes and49 historical credits unchanged. Checklist now26 C/1,039 U, L1 17 C/196 U; L2–5 preserved. Consolidated actual named retros and moved author site-correction bullet out of independent visual section.
+- Did not: previous DOC queue never materialized checklist/catalog/D6 edits after all gates passed; transfer was necessary. My combined read again exceeded useful output, so narrowed exact source/reference fields before editing. Initial catalog serialization reformatted unrelated compact stairs/escapes; restored HEAD text outside the two target acceptance-record blocks before review. Changed historical header whitespace was also corrected.
+- Next: ROOT reviews this concrete patch, then explicit local commit GO; no test replay for documentation-only closure. Existing credential-helper12049 listener is absent, so no retry of inherited failed push or publication claim. Next major action is1236/1240 bounded whole-family readiness, not current finish polish.
