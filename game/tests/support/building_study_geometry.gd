@@ -87,3 +87,33 @@ static func face_values(faces: PackedVector3Array) -> Array:
 	for vertex in faces:
 		rows.append([vertex.x, vertex.y, vertex.z])
 	return rows
+
+
+# Exact oriented triangle multiset, for producers that reorder material buckets.
+# Preserve vertex order and duplicate multiplicity; no snapping or omitted faces.
+static func compare_triangle_multiset(render_faces: PackedVector3Array, collision_faces: PackedVector3Array) -> Dictionary:
+	var positive := not render_faces.is_empty() and render_faces.size() % 3 == 0
+	var complete := collision_faces.size() == render_faces.size() and collision_faces.size() % 3 == 0
+	var finite := true
+	var remaining := {}
+	if positive and complete:
+		for offset in range(0, render_faces.size(), 3):
+			var triangle := [render_faces[offset], render_faces[offset + 1], render_faces[offset + 2]]
+			for vertex: Vector3 in triangle:
+				finite = finite and vertex.is_finite()
+			remaining[triangle] = int(remaining.get(triangle, 0)) + 1
+		for offset in range(0, collision_faces.size(), 3):
+			var triangle := [collision_faces[offset], collision_faces[offset + 1], collision_faces[offset + 2]]
+			for vertex: Vector3 in triangle:
+				finite = finite and vertex.is_finite()
+			var count := int(remaining.get(triangle, 0))
+			if count <= 0:
+				complete = false
+				break
+			if count == 1:
+				remaining.erase(triangle)
+			else:
+				remaining[triangle] = count - 1
+	var predicates := {"positive_render_coverage": positive, "complete_native_coverage": complete,
+		"finite_faces": finite, "oriented_triangle_multiset_equal": positive and complete and remaining.is_empty()}
+	return {"ok": positive and complete and finite and remaining.is_empty(), "predicates": predicates}

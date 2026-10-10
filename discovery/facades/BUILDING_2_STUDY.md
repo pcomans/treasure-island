@@ -1,5 +1,73 @@
 # Building 2 — w24274434
 
+## Whole-family025 — 2026-10-10, current whole visual/CODE/progress and runtime gates PASS
+
+The current main-based study completes the reference-supported all-side opening
+and infill family while reusing the existing Building2HeroModel, closed recess
+emitter and exact source-owned wall/roof roles. It preserves frozen source
+`w24274434`, footprint, terrain, barrel/crown/pylons, blank upper ENE and stock
+controls. The prior schematic allowance is not the current quality verdict.
+
+The NNW side now reads as recessed tall glazing and opaque infill between
+projecting broad/narrow structural piers. WSW twin gridded fields and the blue
+three-door entrance gain actual nested masonry returns; SSE retains its two-row
+bay family with deeper infill/glass/door sections. ENE preserves the unequal
+smaller-service/larger-loading opening relationship established in024. Materials
+remain opaque and restrained; supplied B2 shaders are scoped to these materials.
+The builder applies a B2-only cosmetic next material pass to the exact existing
+LAND host, preserving its geometry/native identity and cached base material; no
+frozen horizontal layout or stock controls change.
+No new stair or platform is introduced. Absolute dimensions/anchors/depths are
+production inference, not surveyed/as-built reconstruction.
+
+Independent `b2_family025_visual` whole game-art VISUAL PASS compared all13 final
+originals, all13 previous024 originals and selected023 views directly with
+May2019 WSW, April2017 SSE and historical HABS A6/A7/A4 pixels. NNW gains are
+substantial; WSW and SSE gains are more restrained but coherent. Both contexts
+and five island pairs preserve scale/site/roof continuity without visible broad
+regression. Simplified panes/relief/masonry and wider-than-photograph ENE door
+spacing remain disclosed. A4's exact date/current survival is unresolved; its
+2003-series association is provisional. As-built fidelity remains unclaimed.
+Private originals stay outside Git/game. The separate `b2_025_progress_fresh`
+PROGRESS PASS directs closure then the next earlier-stage whole family, not
+another B2 pane/trim/material pass.
+
+Independent `b2_family024_code`025 source CODE and native-harness CODE PASS retain
+complete source/role guards. The optional `building2-indexed` shared adapter
+binds actual indexed material buckets and complete native wall/roof geometry,
+server RID/transforms and receiver layers. Its comparator allows triangle
+emission order to differ while preserving every exact oriented triangle and
+duplicate multiplicity; no count snapshot, tolerance or dropped-face exemption
+is used. Chapel's ordered comparator and stock movement thresholds are unchanged.
+
+Final capture55357 exited0 and produced13 actual source-world images; actual
+Godot/Weston absence preceded release. Native-fit001 handle45085 printed complete
+native/fit/four-approach PASS but stalled after PASS and ended124 at600 seconds.
+That run remains aggregate HOLD; post-case futex wait does not identify a cause.
+One separately authorized unchanged-source rendered fixed-fps60 variant002,
+handle80913, ended0 with complete native wall/roof and all four approaches PASS,
+each active input-released grounded supported REST before disabled SAFE_FINAL.
+This is one successful variant, not proof of a universal timing/teardown fix.
+
+Changed NNW closed-leaf spray43950 ended0: actual source-bound Tag_001 on
+`building:w24274434:wall` at(259.0289,5.299998,552.1711), then active released
+LAND REST at(257.6029,3.325177,549.492) and SAFE_FINAL. The maintained shared
+spray flow intrinsically reruns ordinary fit/approaches. One unchanged
+`tools/test.sh`62572 ended0 with ALL TESTS PASS,49 scored building fits and Node
+validation/determinism; nine nested script statuses were0. Actual owned processes
+were absent before every dependent launch and final release. Missing local
+Node dependencies were caught before suite and reused from a matching pinned
+worktree (earcut3.2.3/polygon-clipping0.15.7), without source/install changes.
+Known seven TextureRID warnings remain; no performance result is claimed.
+
+Current source is based on published458bc1f in
+`/workspaces/b2-whole-family-20261010`. Ordinary private evidence and supplied
+role notes are under `building2-study/whole-family-025/` in the retained landmark
+workspace. Current catalog records name these source/visual reviews, preserving
+historical49/213 recognition credit and as-built unclaimed; only B2 checklist
+Levels1/2 are newly complete. Commit/publication remain a separate ROOT action.
+The earlier study sections below retain their dated findings and HOLDs.
+
 Hall of Transportation / Building 2, 300 California Avenue. Study preparation
 2026-10-06 on baseline main `b9e88fa`; final Astra002 reviewed and accepted by
 ROOT on 2026-10-07. Catalog promotion recorded; full suite PASS, no commit.

@@ -18184,3 +18184,174 @@ Private RETRO — chapel_tower_astra: Worked: projected actual source lip corner
 - Worked: copied the frozen author import cache and pinned dependencies after manifest comparison, then ran one complete current native/fit62347 and one unchanged full suite50463. Both ended0; all native partitions, four approaches, stock UP/DOWN active REST/SAFE,49 scored fits and Node validation/determinism passed. Nine nested script statuses were0. Actual owned PID absence preceded dependent launch and final engine release. Final independent CODE and lip whole-visual PASS were retained separately.
 - Did not: early five-second handle polls added no useful evidence; later30-second waits avoided that churn. The pre-lip suite remains historical, and still-image acceptance does not establish survey fidelity. Known seven TextureRID warnings remain unexplained; no performance claim is made.
 - Next: keep the reviewed18-path integration separate from dirty canonical work. After successful gates, changed only Chapel's current acceptance records and Level1/2 checklist cells plus ordinary status/own role notes; preserve49 historical credits,213 identities and as-built unclaimed. Commit/publication awaits ROOT review; no Mac build or export was run.
+
+
+## B2 whole-family025 closure — retained own role entries, 2026-10-10
+
+Supplied drafts below retain historical HOLDs/pending gates at their original checkpoints. Final native002/spray001/full-suite001 passed; native001 timeout remains a failed aggregate run.
+
+
+### Supplied own entry: study-023/b2_aperture_art-retro-draft.txt
+
+### b2_aperture_art — B2 study023 closure — 2026-10-09
+- Worked: restoring the complete021 donor removed the unhelpful022 probe cleanly; comparison confirmed only three material factories changed. Independent pinned-source review caught unsupported CLEARCOAT_GLOSS before the sole engine launch. All13 actual views saved, and process/temp cleanup was verified before EARLY release and self-inspection.
+- Did not work: my recalled shader output name was outdated; the fresh look improved pane/frame value separation but remained opaque and schematic, with an over-dominant horizontal strip. This narrowly scoped material pass did not establish meaningful overall architecture completion. The original capture process needed its300s timeout during post-PASS shutdown; saved images were useful but exit124 is not clean success. I also used several short live-handle polls before switching to30s waits.
+- Change next time: check unfamiliar shader outputs against the pinned source during the existing pre-render code review; judge the highest unresolved site/building scale before spending another full capture on finish; use longer retained-handle waits. Respect the owner's pivot to Mersea whole-site architecture and preserve this B2 work without another window iteration or acceptance claim.
+
+
+### Supplied own entry: study-023/hall_window_code-dispatch-retro-draft.txt
+
+### hall_window_code — Completed-agent dispatch lesson correction — 2026-10-09
+
+- Worked: refined the existing dispatch lesson instead of adding another process layer. Recorded ROOT's new Mersea placement-preflight request sent after layout completion through send_message, the absence of restarted work, and the corrected followup_task dispatch. Existing dirty documentation was preserved; readback and whitespace passed.
+- Did not: a delivered status message was treated as a new assignment despite the existing lesson; silence did not establish tool execution or a model-service failure. No new timing claim was inferred.
+- Next: use followup_task for every new bounded assignment, busy or idle; reserve send_message for active-work clarification. Verify actual turn/tool activity before treating acknowledgment or silence as progress. No source/art/engine/tests or canonical RETRO edit in this round.
+
+
+### Supplied own entry: study-023/hall_window_code-hourly-retro-draft.txt
+
+### hall_window_code — Hourly coordinator progress event setup — 2026-10-09
+
+- Worked: installed CLI help and actual tools exposed existing-thread queue injection. A real setup probe was accepted and subsequently received in the actual coordinator stream, confirming end-to-end delivery; one singleton container-lifetime timer targets the existing coordinator hourly with whole-island/action/independent-review scope and every mandatory gate preserved. Runtime target/config stays outsideGit; no new agent/goal or hosted task in the wrong context.
+- Did not: no native recurring scheduler, cron or systemd service is available. Initial queue acceptance alone did not establish delivery while the coordinator turn remained active; actual receipt was confirmed after the turn boundary. Hourly events wait for safe next-turn boundaries. Timer lifetime ends with the container and has no restart durability; failures stop it.
+- Next: use the now-confirmed coordinator event for the assigned independent island-scope checkpoint and next whole-site Mersea work, judge actual substantial island progress rather than study counts, and use concrete REDIRECT/REWORK when detail loops displace major unfinished pieces. Keep one timer only and stop it when no longer wanted; no new metrics framework or invented timing proof.
+
+
+### Supplied own entry: whole-family-024/code-retro-draft.txt
+
+### b2_family024_code — independent whole-family code review, 2026-10-10
+
+- Worked: reading the complete main-relative patch alongside architecture-from-023.diff separated inherited held material/body changes from the new whole opening family. Tracing the actual emitter, LAND cache duplication and native body construction supported a source PASS without another engine run.
+- Did not: the first combined reads exceeded the output budget and truncated useful source; focused complete functions recovered the seams. New jamb boxes proved largely hidden behind the opaque host rather than supplying a visible profile; helper naming and geometry emission alone do not establish architectural contribution. Source geometry and capture success cannot establish current movement, spray or the loading threshold's terrain interaction.
+- Next: begin with the intended paths and narrow risk seams, reuse unchanged code evidence, and obtain one current bounded native/stock/spray proof. Keep source, visual and gameplay verdicts separate; transfer this own draft into ordinary RETRO before integration commit. No new lesson beyond existing complete-snippet and actual-support guidance was needed.
+
+
+### Supplied own entry: whole-family-024/progress-retro-draft.txt
+
+island_velocity_checkpoint_024 — own private RETRO draft — 2026-10-10
+
+- Worked: explicit fresh-capture terminal/freeze/release notification preceded current-image inspection. Matched023/024 cardinals and entrance originals beside actual WSW/SSE/A4/A6 references distinguished the real ENE hierarchy gain from nearly indistinguishable all-side surround work. Published Chapel closure and unchanged proofs needed no engine replay.
+- Did not: initial broad bundled reads/searches produced truncated historical output; focused role/checklist/note reads recovered the bounded evidence. Source additions looked like a complete construction family on paper but did not visibly complete that hierarchy in three ordinary sides; pixels do not establish the underlying cause.
+- Next: start with exact current notes and small matched image batches. Verify actual whole-assembly contribution before extended proof or finish work; issue one bounded architectural rework, preserve ENE/Chapel gains, and keep proposed housing work evidence-first until current pixels/references/priority membership resolve its unknowns. No total workflow timing or throughput was measured. Named documentation writer may transfer these own bytes into ordinary RETRO; no shared writer window or commit assigned here.
+
+
+### Supplied own entry: whole-family-025/code-retro-draft.txt
+
+### b2_family024_code — independent025 aperture delta review, 2026-10-10
+
+- Worked: complete donor-to-current diff plus the retained024 architecture patch bounded the new work without another full main-relative audit. Actual recursive cut/return/back construction directly resolved024's hidden-jamb source finding; terminal/release status arrived before review closure.
+- Did not: source-supported closure and below-land leaf backs still cannot establish current stock approach or spray behavior at the deeper apertures. Later native/fit evidence must cover changed seams rather than inherit unchanged-geometry credit.
+- Next: check intended architectural sections against the actual opaque host before emitting additive details, then render early. Keep one narrow independent source review, one bounded current mechanical proof and separate visual/progress decisions; transfer this own draft to ordinary RETRO before integration commit.
+
+
+### Supplied own entry: whole-family-025/harness-code-retro-draft.txt
+
+### b2_family024_code — independent B2 native-adapter review, 2026-10-10
+
+- Worked: reviewed the two-file actual delta and producer/material ownership contract, reusing the existing indexed collector. Exact oriented multiset comparison handles legitimate material regrouping without weakening Chapel's ordered check or stock gates.
+- Did not: the proposed invocation retained --headless despite the shared visible-world guard; source inspection caught it before the bounded engine attempt. Runtime multiset behavior and movement remain unproved by source review.
+- Next: obtain the supported complete invocation from the actual harness first, use one rendered native/fit run, and keep spray/full-suite credit separate. Transfer this own draft into ordinary RETRO before integration commit; no new framework or source lesson beyond existing rendered-geometry guidance was needed.
+
+
+### Supplied own entry: whole-family-025/visual-retro-draft.txt
+
+b2_family025_visual — whole-family025 independent visual — 2026-10-10
+
+Worked: prepared actual024/023 and dated originals before the fresh025 freeze, then opened every current gameplay/context/island original. Judging the complete elevation exposed a clear NNW construction gain and more moderate WSW/SSE gains without substituting emitted depth or helper names for visible improvement. Whole game-art PASS stays separate from as-built and pending mechanics/promotion.
+
+Did not: the preparation required a paused handoff because025 was not rendered yet; preparation alone supplied no current verdict. Shared pose/light makes some deeper front-facing sections visually subtle, and historical/A4 date-currentness limits remain unresolved rather than removable by more source complexity.
+
+Next: retain one whole-family comparison and state gains by side; advance a coherent visual PASS to required mechanics instead of commissioning another glass/trim microstudy. Transfer this named draft into existing shared RETRO before the final round commit. No new lesson beyond the existing actual-whole-result and actionable-critique guidance was exposed.
+
+
+### Supplied own entry: whole-family-025/progress-retro-draft.txt
+
+### b2_025_progress_fresh — independent Building2 whole-family025 progress review, 2026-10-10
+
+- Worked: directly opened30 current/prior/reference originals, including every gameplay side, both entrance details and representative context/island comparisons. Visible NNW recesses and WSW stepped edges establish meaningful Level2 progress separately from source complexity or completed checks.
+- Did not: initial inspection used the session's older content checkout and broad outputs truncated useful information; the025 author note identified the actual458bc1f worktree, after which focused role/checklist/RETRO reads resolved the current boundary. Static pictures still supply no native support, motion, spray or suite proof.
+- Next: start with the ordinary handoff's explicit source worktree and small matched pixel batches. Finish B2's required mechanical/suite closure without another finish loop, then inspect the next whole-family baseline and dated references before assigning repairs; keep unknown stage cells distinct from defects. This draft awaits the named serialized documentation writer; no shared-log edit or throughput claim.
+
+
+### Supplied own entry: whole-family-025/hourly-progress-retro-draft.txt
+
+### island_checkpoint_runtime025 — independent hourly progress checkpoint, 2026-10-10
+
+- Worked: direct024/025 all-side, entrance and island pairs plus023 and dated target pixels established substantive NNW structural-field improvement while retaining restrained WSW/SSE and truthful blankENE. Actual002 terminal/cleanup and activeREST/SAFE logs separated completed native-fit from001's shutdown timeout; no engine rerun or art-polish loop was needed.
+- Did not: early broad LEARNINGS/RETRO/checklist reads produced truncated output and one guessed023 directory/role path failed. Focused current-note and actual-path reads recovered the needed evidence; throughput and001 shutdown cause remain unknown rather than inferred from the successful fixed-fps variant.
+- Next: begin with the explicit current path/gate summary and small matched images. Reuse completed unchanged B2 evidence, finish only stock-spray/suite closure, then obtain current two-unit Mariner whole-family baselines and truthful headed-browser references before selecting any supported L1/L2 repair. Named documentation writer may append this draft under the normal serialized writer window; no shared RETRO edit/window or commit was assigned here.
+
+
+### Supplied own entry: whole-family-025/shutdown-code-retro-draft.txt
+
+### b2_family024_code — bounded live-fit shutdown source diagnosis, 2026-10-10
+
+- Worked: traced the new adapter's actual local ownership and shared final PASS/queue_free/quit boundary, separating completed geometry/movement evidence from unfinished process shutdown. Existing capture/Chapel paths supplied a narrow comparison without another engine invocation.
+- Did not: source inspection and futex waits cannot identify the current native teardown stage; no concrete adapter refcycle/RID defect was found. Last PASS and missing final warnings are insufficient for a cause claim.
+- Next: keep the retained live handle/timeout and seek one same-PID native thread backtrace only if an available debugger permits it. Record UNKNOWN when observation is insufficient, preserve code/runtime verdict separation, and avoid speculative cleanup edits or repeats. Transfer this own draft into ordinary RETRO before integration commit.
+
+
+### Supplied own entry: whole-family-025/runtime-retro-draft.txt
+
+### chapel_final_integrator — B2 whole-family025 native-fit001, 2026-10-10
+
+- Worked: resolved engine ownership from actual processes before one rendered supported fit; retained the same handle through terminal124 and verified owned PID absence before release. Complete native wall/roof and all four stock approach REST/SAFE cases printed PASS; failure remains aggregate HOLD and dependent spray/suite did not run.
+- Did not: process stayed in an unresolved post-PASS futex wait until600-second timeout. Static queue_free/quit code and CPU observations cannot identify the underlying cleanup blocker. Early ad-hoc /proc parsing mishandled spaces in thread names; ps -L corrected the observation. No debugger was available within the remaining window.
+- Next: investigate the actual teardown seam with one bounded authorized diagnostic before any replay. Preserve successful case evidence without substituting it for terminal success; keep runtime source frozen and do not weaken tests, ownership or controller thresholds. No source/Git/art changes.
+
+### chapel_final_integrator — B2 native-fit002 diagnostic variant, 2026-10-10
+
+- Worked: one authorized rendered fixed-fps60 retry reused the unchanged producer/native/stock checks and completed terminal0 after all native and four-side REST/SAFE checks. Same handle80913 was consumed to terminal, then owned-process absence preceded release.
+- Did not: one successful variant does not identify why001 hung; no unsupported universal fix or timing claim follows. Known seven TextureRID warnings remain.
+- Next: retain the failed001 and successful002 scopes together, use the already maintained rendered fixed-fps invocation for separately authorized dependent gates, and avoid replaying cases solely for bookkeeping. No source edit, spray, suite or publication in this round.
+
+### chapel_final_integrator — B2 changed-door spray and final suite, 2026-10-10
+
+- Worked: adapted the complete maintained spray-plan donor to the actual changed NNW leaf; one combined fit/spray43950 ended0 with exact source wall decal and active LAND REST/SAFE. Caught missing dependencies before suite and reused matching pinned local files. One unchanged suite62572 ended0 with49 scored fits, nine script statuses0 and Node validation/determinism. Actual PID absence preceded each dependent launch/release.
+- Did not: the shared --spray flow intrinsically repeats fit; this is a driver constraint, not an extra bookkeeping campaign.001's earlier shutdown timeout remains unexplained despite normal002/spray/suite exits.
+- Next: preserve the15-path integration boundary and own supplied role drafts; complete only authorized status/catalog/checklist bookkeeping after these gates, without replaying successful tests or asserting a universal teardown fix. No runtime/source edit, Mac build or export.
+
+
+### Supplied own entry: whole-family-025/gallery-retro-draft.txt
+
+### chapel_final_integrator — B2 whole-family025 gallery, 2026-10-10
+
+- Worked: added all13 actual025 originals as an embedded Building2 section, preserving both existing sections and their27 images exactly. Existing server PID1000286 returned matching GET/HEAD200 on both routes; no restart or reference photos.
+- Did not: visual/source CODE/native-harness source CODE PASS do not establish native fit, stock spray, suite or publication. Labels explicitly retain those pending gates and as-built unclaimed.
+- Next: update only bounded status labels after actual runtime/publication evidence. Readiness review confirmed the native invocation must render, because world_harness rejects headless geometry checks; the fit invocation itself supplies no spray credit. No engine, source/Git/catalog/checklist change or overlay.
+
+
+### chapel_tower_astra — supplied whole-family-024 author RETRO lines
+
+Own RETRO draft
+
+Root first GO specified whole-l2-family-20261010/capture-001; invocation used that output. Terminal exit1/26892b immediately, no images: shared building_shots cannot resolve external session main/player/world members. Actual startup logged Vulkan1.4.335 Forward+ AMD Radeon780M RADV PHOENIX; no DisplayServer report before script load failure. Inspection f3194c confirms no .godot/global class cache exists and no Godot/Weston/building_shots process remains. No import had occurred in this fresh worktree. ENGINE RELEASE, no retry or source repair. Root later clarified preferred024 output; use it only after explicit setup/failure followup. One render attempt consumed; no visual verdict. RETRO addition: fresh worktree source readiness must distinguish available dependencies from Godot imported class cache; run authorized one-time import before first shared script, rather than assume prior donor cache transferred.
+
+Own RETRO continuation: one-time import resolved initial shared-script class failure without source or driver repairs; second attempt produced complete images and clean exit. Missing import cost the first budgeted capture. Next fresh worktree should perform authorized cache initialization as setup, then capture the first coherent family before more source refinement. Current additions must be judged by ordinary visibility and reference relationships, not source line count.
+
+
+### chapel_tower_astra — supplied whole-family-025 author RETRO lines
+
+Own RETRO draft: actual024 comparison and cross-section inspection explained weak gain: the extra surfaces were hidden by host geometry. Reusing nested host cuts makes architecture functional rather than adding trim over solid walls. Next judge visible section depth at ordinary camera before further additions; source complexity is not improvement. No selfacceptance, commit or shared RETRO edit.
+
+Own RETRO result: removing hidden jamb boxes and cutting actual nested hosts made NNW depth visibly readable in the first capture. WSW benefits are moderate and SSE remains restrained in front-on lighting; do not infer gain from deeper numbers alone. Kept one capture, actual terminal/release and no material tuning loop.
+
+### chapel_final_integrator — B2 integration bookkeeping, 2026-10-10
+
+- Worked: retained the already tested isolated458bc1f-based candidate and its11 runtime paths, adding only ordinary study/status, current named review records, B2 Level1/2 cells and supplied own role drafts. No unnecessary checkout or test replay.
+- Did not: historical023/024/source notes include earlier HOLDs and pending runtime statements; retained their chronology rather than rewriting them as current success.001 shutdown cause remains unproved.
+- Next: review the explicit15-path patch, preserving213 identities/49 historical credits and all other checklist cells, then publish only after ROOT approval. No further runtime edit or engine run in bookkeeping.
+
+
+### next_landmark_readiness — B3 versus Mariner readiness, 2026-10-10
+- Worked: read current458bc1f producer/catalog/history and directly inspected004 whole-side originals beside HABS2003/Nov2025 references, catching the checklist's older blank-west premise before another B3 microstudy. Existing Mariner source-aware family/public_roof prevents a false flat-roof prescription from old front screenshots.
+- Did not: retained modern WSW image is mostly a neighboring shed; historical lower architecture is occluded, and Mariner dated originals remain unavailable. Neither blank-wall fidelity nor new missing openings are established. Initial broad text reads truncated and one massing path guess was wrong; narrower paths resolved it.
+- Next: reconcile later completed architecture before picking the next target; recover Mariner references and current all-side baseline as one bounded family readiness round, retaining unknown audit membership. No engine/source/catalog/checklist work performed; canonical RETRO append awaits a named writer window.
+
+Tiny follow-up: worked—combined direct original-pixel readiness with explicit004 whole review, raw native REST/safe-final and unchanged1905999→458bc1f B3 source to support L1/L2 C rather than substituting historical recognition. Limits remain scoped/older captures, not fresh current-world testing; next—apply narrow checklist reconciliation through its named writer, leaving unsupported L3/L5 U. No production edit or engine.
+
+### chapel_final_integrator — B3 stale-checklist reconciliation, 2026-10-10
+
+- Worked: applied ROOT-authorized B3 Levels1/2/4 completion from the named readiness review combining actual004/reference pixels, existing whole architecture/material/native REST/suite evidence and unchanged nine-path source1905999→458bc1f. Preserved B3 Levels3/5 unknown, its catalog/runtime and as-built/unseen inference limits.
+- Did not: the old checklist still pointed to the earlier blank-west/material HOLD after later004 completion; no new B3 render/test or recognition claim was justified by that stale cell.
+- Next: keep current human totals aligned with actual rows and retain the original baseline as historical. Current213 rows/1,065 cells have17 C,0 I,1,048 U; no test/runtime count gate added.

@@ -747,6 +747,13 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 	if POLYHAVEN_MATERIAL_TEXTURE_SET.has(str(record.material_key)) and not uvs.is_empty():
 		arrays[Mesh.ARRAY_TANGENT] = _tangents_for(vertices, normals, uvs, indices)
 	var placeholder_material := _material_for(str(record.material_key), str(record.feature_kind), is_context)
+	# Only this actual LAND host receives the B2 cosmetic material pass.
+	# Duplicate before partitioning; retain cached base and all node/native identity.
+	if not is_context and str(record.object_key) == "land:w26767313:x_0__z_2" and str(record.feature_kind) == "land_ground":
+		if placeholder_material.next_pass != null:
+			return {"ok": false, "code": "b2_frontage_existing_pass", "message": "B2 LAND already has a next pass; refusing to overwrite it.", "source_keys": record.source_keys}
+		placeholder_material = placeholder_material.duplicate() as StandardMaterial3D
+		placeholder_material.next_pass = BUILDING_2_HERO_MODEL.frontage_material()
 	var surface_plan: Dictionary
 	if not b201_prepared.is_empty():
 		surface_plan = D1_B201_LIVE_ATTACHMENT.partition_host(record, indices, placeholder_material, b201_prepared)

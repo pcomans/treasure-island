@@ -23,8 +23,9 @@ retaining per-building fit and independent all-side review. Do not keep polishin
 one building while major architectural families elsewhere remain incomplete.
 Update affected rows in the ordinary study handoff after actual evidence changes.
 
-Initial baseline stage1:5 C /0 I /208 U; stage2:5 C /2 I /206 U. After Chapel
-closure: stage1:6 C /0 I /207 U; stage2:6 C /1 I /206 U. These are evidence
+Initial baseline stage1:5 C /0 I /208 U; stage2:5 C /2 I /206 U. After Chapel/B2 closure
+and B3 evidence reconciliation: stage1:8 C /0 I /205 U; stage2:8 C /0 I /205 U.
+Stage4:1 C /0 I /212 U; stages3/5 remain213 U each. These are evidence
 coverage counts, not an estimate that unknown buildings need new massing. No stage5 completion
 is inferred from generic visual acceptance. Unknown rows remain unchecked, not
 failed; inspect their current evidence before choosing an assignment.
@@ -32,11 +33,15 @@ failed; inspect their current evidence before choosing an assignment.
 Evidence keys: **M** [Mersea final whole-site and mechanical closure](MERSEA_STUDY.md)
 (2026-10-10; four-source fit, whole-site visual and material composition);
 **F** [Building600 whole-study/fit](facades/BUILDING_600_STUDY.md) (2026-10-05;
-bounded observed/inferred exterior); **B3** [all-side lesson](../LEARNINGS.md#do-not-promote-one-facades-finish-to-whole-building-quality)
-(owner identified blank west openings/material coverage; inspect current work
-before reassignment); **Ch** [Chapel tower/entrance005 and lip004 closure](facades/NAVY_CHAPEL_BUILDING_187_REFERENCE_SPEC.md)
+bounded observed/inferred exterior); **B3** [all-sides004 whole architecture/material and fit closure](facades/BUILDING_3_HERO_MASSING_REPAIR.md)
+(Oct8 closure, reconciled2026-10-10; existing whole visual/CODE/native fit/REST/suite
+PASS, nine B3 runtime paths unchanged1905999→458bc1f; historical captures reused
+within bounded observed/inferred game-art scope, as-built unclaimed); **Ch** [Chapel tower/entrance005 and lip004 closure](facades/NAVY_CHAPEL_BUILDING_187_REFERENCE_SPEC.md)
 (2026-10-10; final whole game-art visual/CODE and integrated native/fit/stair/suite
 PASS; historical opening004 HOLD retained, as-built fidelity unclaimed).
+**B2** [Building2 whole-family025 closure](facades/BUILDING_2_STUDY.md)
+(2026-10-10; whole visual/CODE/progress, current native/fit/spray/suite PASS;
+initial shutdown timeout retained separately, as-built fidelity unclaimed).
 **U** no current stage-level conclusion established in this checklist pass.
 
 The retained34-building audit entries in [RETRO](RETRO_LOG.md) (2026-09-23,
@@ -65,7 +70,7 @@ before selecting another round.
 
 | Catalog unit / all source IDs | Name | 1 Shape/site | 2 Doors/windows/roof | 3 Secondary | 4 PBR/materials | 5 Decals/finish | Evidence / next family |
 |---|---|---|---|---|---|---|---|
-| physical-building:w24274434 / w24274434 | Building 2 | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect held whole-building work before new assignment |
+| physical-building:w24274434 / w24274434 | Building 2 | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | B2 — whole-family025 whole visual/CODE/progress, native/fit/spray/suite PASS; as-built unclaimed |
 | physical-building:w34313512 / w34313512 | 449 Avenue H | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313513 / w34313513 | Harvey Milk Memorial Administration Building, Job Corps Center | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313514 / w34313514 | Advanced Culinary Dormitory | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -76,7 +81,7 @@ before selecting another round.
 | physical-building:w34313525 / w34313525 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313528 / w34313528 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313535 / w34313535 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w34313540 / w34313540 | Building 3 | ☐ U | ☐ I | ☐ U | ☐ I | ☐ U | B3 — inspect whole west opening/roof family before material polish |
+| physical-building:w34313540 / w34313540 | Building 3 | ☑ C | ☑ C | ☐ U | ☑ C | ☐ U | B3 — existing004 whole architecture/material/native-fit/suite PASS; unchanged source, unseen inference retained |
 | physical-building:w34313544 / w34313544 | Naval Station Treasure Island | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313545 / w34313545 | 800 Avenue I, San Francisco, CA | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313546 / w34313546 | 850 Avenue H | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |

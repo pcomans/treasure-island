@@ -28,6 +28,8 @@ extends SceneTree
 ## Requires the existing recorded contact_mesh_paths producer; no wall exemption.
 ## Optional --native-producer chapel-indexed: complete live indexed wall/roof
 ## partition comparison before the ordinary fit, for the Chapel producer.
+## Optional --native-producer building2-indexed: complete B2 material-bucket
+## indexed triangles against actual wall/roof collision emission, order independent.
 ## Optional --diagnose-side north|south|west|east: native candidate queries only,
 ## without placement/movement. Always reports whole-building HOLD and exits1.
 
@@ -65,7 +67,8 @@ func _run() -> void:
 		quit(1)
 		return
 	var source_key := str(args.source)
-	if args.has("native-producer") and (str(args["native-producer"]) != "chapel-indexed" or source_key != "w291189336" or args.has("diagnose-side") or args.has("adjacent-source")):
+	var native_sources := {"chapel-indexed": "w291189336", "building2-indexed": "w24274434"}
+	if args.has("native-producer") and (str(native_sources.get(str(args["native-producer"]), "")) != source_key or args.has("diagnose-side") or args.has("adjacent-source")):
 		push_error("native producer requires its supported source and cannot combine diagnostic/adjacent modes")
 		quit(1)
 		return
@@ -118,7 +121,7 @@ func _run() -> void:
 			quit(1)
 			return
 	if args.has("native-producer"):
-		var native_error := _check_indexed_partition(h, source_key)
+		var native_error := _check_building2_indexed(h, source_key) if str(args["native-producer"]) == "building2-indexed" else _check_indexed_partition(h, source_key)
 		if native_error != "":
 			print("FAIL: native partition: " + native_error)
 			h.main.queue_free()
@@ -363,4 +366,74 @@ func _check_indexed_partition(h: WorldHarness, source: String) -> String:
 		if not result.ok:
 			return "complete ordered native partition faces differ"
 	print("PASS: complete indexed native wall/roof partitions for " + source)
+	return ""
+
+
+# B2 shares every emitted triangle between a material bucket and one collision
+# bucket. Material grouping changes triangle order, but not oriented triangles.
+func _check_building2_indexed(h: WorldHarness, source: String) -> String:
+	var roles := {
+		"wall": ["Building2Cream", "Building2SSEInfill", "Building2FieldGlass", "Building2FieldGlassBand", "Building2FieldGrid", "Building2EntryPanel", "Building2ReliefProxy", "Building2Doors", "Building2EntryGlass", "Building2EntryFrames", "Building2PylonInsets", "Building2Vents", "Building2WingGlass", "Building2WingMullions"],
+		"roof": ["Building2BarrelRoof", "Building2WingRoof"],
+	}
+	var keys := ["building:" + source + ":wall", "building:" + source + ":roof"]
+	for node: Node in h.main.find_children("*", "StaticBody3D", true, false):
+		if source in node.get_meta("source_keys", []) and str(node.get_meta("derived_object_key", "")) not in keys:
+			return "additional B2 native source owner"
+	for role: String in roles:
+		var key := "building:" + source + ":" + role
+		var wall := role == "wall"
+		var matches: Array[StaticBody3D] = []
+		for node: Node in h.main.find_children("*", "StaticBody3D", true, false):
+			if str(node.get_meta("derived_object_key", "")) == key:
+				matches.append(node as StaticBody3D)
+		if matches.size() != 1:
+			return "missing or duplicate B2 native owner: " + key
+		var body := matches[0]
+		var root := body.get_parent() as Node3D
+		if root == null or root.get_meta("derived_object_key", "") != key or root.get_meta("source_keys", []) != [source] or root.get_meta("building_2_hero_component", "") != "building_" + role:
+			return "B2 producer identity differs"
+		if body.transform != Transform3D.IDENTITY or body.is_set_as_top_level() or not root.global_transform.is_finite() or not body.global_transform.is_equal_approx(root.global_transform):
+			return "B2 native producer placement differs"
+		var server_pose: Variant = PhysicsServer3D.body_get_state(body.get_rid(), PhysicsServer3D.BODY_STATE_TRANSFORM)
+		if not server_pose is Transform3D or not server_pose.is_finite() or not server_pose.is_equal_approx(body.global_transform):
+			return "B2 server placement differs"
+		if body.collision_layer != (5 if wall else 1) or body.collision_mask != 0 or body.is_in_group("spray_receiver_wall") != wall:
+			return "B2 native collision/spray layer differs"
+		var owners := body.get_shape_owners()
+		if owners.size() != 1 or body.is_shape_owner_disabled(owners[0]) or body.shape_owner_get_shape_count(owners[0]) != 1:
+			return "B2 native shape ownership ambiguous"
+		var holder := body.shape_owner_get_owner(owners[0]) as CollisionShape3D
+		if holder == null or holder.get_parent() != body or holder.transform != Transform3D.IDENTITY or not holder.shape is ConcavePolygonShape3D:
+			return "unsupported B2 native shape"
+		for object: Object in [body, holder.shape]:
+			if object.get_meta("source_keys", []) != [source] or object.get_meta("derived_object_key", "") != key or object.get_meta("receiver_kind", "") != ("building_wall" if wall else "none") or object.get_meta("opaque", false) != true or object.get_meta("building_2_hero", false) != true:
+				return "B2 native source/receiver identity differs"
+		var shape_index := body.shape_owner_get_shape_index(owners[0], 0)
+		if PhysicsServer3D.body_get_shape(body.get_rid(), shape_index) != holder.shape.get_rid() or PhysicsServer3D.body_get_shape_transform(body.get_rid(), shape_index) != holder.transform:
+			return "B2 server shape RID/transform differs"
+		var seen := {}
+		var faces := PackedVector3Array()
+		for visual: Node in root.find_children("*", "GeometryInstance3D", true, false):
+			if not visual is MeshInstance3D:
+				return "unsupported B2 producer visual"
+			var mesh := visual as MeshInstance3D
+			var mesh_name := str(mesh.name)
+			if mesh.get_parent() != root or mesh_name not in roles[role] or seen.has(mesh_name) or not mesh.is_visible_in_tree() or not mesh.mesh is ArrayMesh:
+				return "unknown, hidden or duplicate B2 material bucket"
+			if mesh.transform != Transform3D.IDENTITY or mesh.is_set_as_top_level() or mesh.layers != (2 if wall else 1) or not mesh.global_transform.is_equal_approx(root.global_transform):
+				return "B2 visual placement/layer differs"
+			var one := StudyGeometry.collect(mesh.mesh, [mesh.transform], StudyGeometry.INDEXED_ARRAYS)
+			if not one.ok:
+				return "B2 indexed collection failed: " + str(one.errors)
+			seen[mesh_name] = true
+			faces.append_array(one.faces)
+		for mesh_name: String in roles[role]:
+			if not seen.has(mesh_name):
+				return "missing positive B2 material bucket: " + mesh_name
+		var result := StudyGeometry.compare_triangle_multiset(faces, (holder.shape as ConcavePolygonShape3D).get_faces())
+		print("B2_NATIVE key=%s predicates=%s server_owner=true" % [key, result.predicates])
+		if not result.ok:
+			return "complete B2 indexed/native triangles differ"
+	print("PASS: complete B2 indexed wall/roof native geometry for " + source)
 	return ""

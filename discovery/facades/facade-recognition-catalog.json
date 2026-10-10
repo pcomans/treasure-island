@@ -806,6 +806,16 @@
           "review_id": "building2-astra002-whole-building-visual-20261007",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "building2-whole-family025-visual-20261010",
+          "review_kind": "independent_reference_recognition",
+          "status": "accept"
+        },
+        {
+          "review_id": "building2-whole-family025-source-and-harness-code-20261010",
+          "review_kind": "independent_code_review",
+          "status": "accept"
         }
       ],
       "anchor_source_key": "w24274434",

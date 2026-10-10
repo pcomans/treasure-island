@@ -6,7 +6,8 @@ extends RefCounted
 ## wall run keeps its frozen horizontal points and exact bottom elevations; height,
 ## arch, pylons, facade depth and the SSE wing are reversible production inference
 ## from dated exterior references (WSW Street View May 2019, SSE visitor panorama
-## April 2017). NNW/ENE schedules are unobserved and deliberately understated. No
+## April 2017), plus HABS2003 NNW entrance and historical ENE end. Current
+## opposite-side colors and dimensions remain production inference. No
 ## interior, relief artwork or hidden detail is modeled.
 ##
 ## Visible faces and collision faces come from the same emitted triangles. Wall-side
@@ -49,7 +50,7 @@ const WING_SSE_RUNS := [16, 17, 18, 19, 20, 21]
 const WING_ENE_RUNS := [22]
 const WING_RETURN_RUNS := [23]
 
-const WALL_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_warm_ivory_exact_trial.tres")
+const WALL_MATERIAL := preload("res://game/resources/materials/world/building_2/building_2_mineral_wall.tres")
 const TRIM_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_light_trim.tres")
 const DARK_GLASS_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_bluegrey_glass.tres")
 const DOOR_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_blue_door.tres")
@@ -83,14 +84,16 @@ static func _build_wall(wall: Dictionary, frame: Dictionary) -> Dictionary:
 		"grid": _target(collision), "panel": _target(collision), "relief": _target(collision),
 		"door": _target(collision), "inset": _target(collision), "shadow": _target(collision),
 		"wing_glass": _target(collision), "wing_frame": _target(collision),
+		"sse_infill": _target(collision),
+		"entry_glass": _target(collision), "entry_frame": _target(collision),
 	}
 	var wsw_top := _arch_top(frame, frame.wsw_u0, frame.wsw_u1)
 	var ene_top := _arch_top(frame, frame.ene_u0, frame.ene_u1)
 
 	var counts := {}
 	counts["wsw_fields"] = _emit_wsw_composition(t, wall, frame, wsw_top)
-	_emit_face(t.cream, _arch_chain(wall, ENE_MAIN_RUNS, frame, frame.ene_u0, frame.ene_u1), ene_top, [], ARCH_STEP_M)
-	counts["nnw_panels"] = _emit_nnw_long_side(t, wall)
+	_emit_ene_end(t, wall, frame, ene_top)
+	counts["nnw_groups"] = _emit_nnw_long_side(t, wall)
 	counts["sse_bays"] = _emit_wing_bays(t, wall, WING_SSE_RUNS, 20, [4, 13])
 	counts["wing_wsw_bays"] = _emit_wing_bays(t, wall, WING_WSW_RUNS, 2, [])
 	counts["wing_ene_bays"] = _emit_wing_bays(t, wall, WING_ENE_RUNS, 2, [])
@@ -106,16 +109,19 @@ static func _build_wall(wall: Dictionary, frame: Dictionary) -> Dictionary:
 	var root := _hero_root("Building2HeroWall", wall, "building_wall")
 	var specs: Array[Dictionary] = [
 		{"name": "Building2Cream", "target": t.cream, "material": WALL_MATERIAL},
+		{"name": "Building2SSEInfill", "target": t.sse_infill, "material": _sse_infill_material()},
 		{"name": "Building2FieldGlass", "target": t.glass, "material": materials.field_glass},
 		{"name": "Building2FieldGlassBand", "target": t.glass_band, "material": materials.field_band},
 		{"name": "Building2FieldGrid", "target": t.grid, "material": materials.field_grid},
 		{"name": "Building2EntryPanel", "target": t.panel, "material": materials.entry_panel},
 		{"name": "Building2ReliefProxy", "target": t.relief, "material": TRIM_MATERIAL},
 		{"name": "Building2Doors", "target": t.door, "material": DOOR_MATERIAL},
+		{"name": "Building2EntryGlass", "target": t.entry_glass, "material": materials.entry_glass},
+		{"name": "Building2EntryFrames", "target": t.entry_frame, "material": materials.entry_frame},
 		{"name": "Building2PylonInsets", "target": t.inset, "material": materials.pylon_inset},
 		{"name": "Building2Vents", "target": t.shadow, "material": SHADOW_MATERIAL},
-		{"name": "Building2WingGlass", "target": t.wing_glass, "material": DARK_GLASS_MATERIAL},
-		{"name": "Building2WingMullions", "target": t.wing_frame, "material": TRIM_MATERIAL},
+		{"name": "Building2WingGlass", "target": t.wing_glass, "material": materials.wing_glass},
+		{"name": "Building2WingMullions", "target": t.wing_frame, "material": materials.window_frame},
 	]
 	var metadata := _common_metadata(wall, "building_wall")
 	metadata.merge({
@@ -126,16 +132,16 @@ static func _build_wall(wall: Dictionary, frame: Dictionary) -> Dictionary:
 		"pylon_count": pylons.size(),
 		"sse_wing_bays": int(counts.sse_bays),
 		"sse_wing_service_doors": 2,
-		"nnw_shallow_panels_without_openings": int(counts.nnw_panels),
-		"ene_end_schedule": "unobserved_plain",
-		"nnw_side_schedule": "unobserved_understated",
+		"nnw_grouped_window_units": int(counts.nnw_groups),
+		"ene_end_schedule": "historical_habs_a4_restrained_solid_end_service_openings",
+		"nnw_side_schedule": "habs_a6_2003_grouped_glazing_center_entrance_production_inference",
 		"exact_source_wall_runs": int((wall.vertices as Array).size() / 12.0),
 	}, true)
 	return _finish(root, specs, collision, RENDER_BUILDING_WALL, true, metadata)
 
 
 ## WSW monumental end: twin gridded glazing fields, central blue-grey recessed entry
-## with three dark doors and a nonliteral relief proxy, subordinate square vents.
+## with three paired doors and reference-supported sculptural relief, square vents.
 static func _emit_wsw_composition(t: Dictionary, wall: Dictionary, frame: Dictionary, top: Callable) -> int:
 	var chain := _arch_chain(wall, WSW_MAIN_RUNS, frame, frame.wsw_u0, frame.wsw_u1)
 	var length := _chain_length(chain)
@@ -145,24 +151,24 @@ static func _emit_wsw_composition(t: Dictionary, wall: Dictionary, frame: Dictio
 	var field_width := (length - 2.0 * margin - 2.0 * pier - panel_width) / 2.0
 	var field_y0 := BASE_Y + 0.6
 	var field_y1 := BASE_Y + 12.0
-	var field_depth := 0.9
+	var field_depth := 1.45
 	var left_s0 := margin
 	var panel_s0 := margin + field_width + pier
 	var right_s0 := panel_s0 + panel_width + pier
 	var panel_mid := panel_s0 + panel_width * 0.5
 	var panel_depth := 1.25
 
-	var door_width := 1.1
-	var door_gap := 0.22
+	var door_width := 1.62
+	var door_gap := 0.28
 	var doors: Array = []
 	var door_group := 3.0 * door_width + 2.0 * door_gap
 	for k in 3:
 		var s0 := panel_mid - door_group * 0.5 + float(k) * (door_width + door_gap)
-		doors.append(_opening(s0, s0 + door_width, 0.0, BASE_Y + 2.75, 0.18, t.panel, {"kind": "flat", "target": t.door}, true))
+		doors.append(_opening(s0, s0 + door_width, 0.0, BASE_Y + 2.85, 0.35, t.panel, {"kind": "flat", "target": t.entry_glass}, true))
 	var openings: Array = [
-		_opening(left_s0, left_s0 + field_width, field_y0, field_y1, field_depth, t.cream, {"kind": "flat", "target": t.glass}),
-		_opening(right_s0, right_s0 + field_width, field_y0, field_y1, field_depth, t.cream, {"kind": "flat", "target": t.glass}),
-		_opening(panel_s0, panel_s0 + panel_width, 0.0, field_y1, panel_depth, t.cream, {"kind": "face", "target": t.panel, "openings": doors}, true),
+		_opening(left_s0 - 0.38, left_s0 + field_width + 0.38, field_y0 - 0.30, field_y1 + 0.45, 0.55, t.cream, {"kind": "face", "target": t.cream, "openings": [_opening(left_s0, left_s0 + field_width, field_y0, field_y1, field_depth - 0.55, t.cream, {"kind": "flat", "target": t.glass})]}),
+		_opening(right_s0 - 0.38, right_s0 + field_width + 0.38, field_y0 - 0.30, field_y1 + 0.45, 0.55, t.cream, {"kind": "face", "target": t.cream, "openings": [_opening(right_s0, right_s0 + field_width, field_y0, field_y1, field_depth - 0.55, t.cream, {"kind": "flat", "target": t.glass})]}),
+		_opening(panel_s0 - 0.32, panel_s0 + panel_width + 0.32, 0.0, field_y1 + 0.45, 0.45, t.cream, {"kind": "face", "target": t.cream, "openings": [_opening(panel_s0, panel_s0 + panel_width, 0.0, field_y1, panel_depth - 0.45, t.cream, {"kind": "face", "target": t.panel, "openings": doors}, true)]}, true),
 	]
 	# Small square vents observed above the centre and the SSE field.
 	for vent_u: float in [36.5, 56.0]:
@@ -172,48 +178,309 @@ static func _emit_wsw_composition(t: Dictionary, wall: Dictionary, frame: Dictio
 
 	for s0: float in [left_s0, right_s0]:
 		_emit_glazing_grid(t, chain, s0, s0 + field_width, field_y0, field_y1, field_depth)
-	# Nonliteral relief proxy: stacked pale masses proud of the recessed blue panel.
-	var relief_front := panel_depth - 0.28
-	_chain_box(t.relief, chain, panel_mid - 0.55, panel_mid + 0.55, BASE_Y + 5.4, BASE_Y + 6.1, relief_front + 0.06, 0.22)
-	_chain_box(t.relief, chain, panel_mid - 0.72, panel_mid + 0.72, BASE_Y + 6.1, BASE_Y + 9.2, relief_front, 0.28)
-	_chain_box(t.relief, chain, panel_mid - 0.38, panel_mid + 0.38, BASE_Y + 9.2, BASE_Y + 10.1, relief_front + 0.03, 0.25)
-	# Dark lintel band tying the three doors together.
-	_chain_box(t.door, chain, panel_mid - door_group * 0.5 - 0.15, panel_mid + door_group * 0.5 + 0.15, BASE_Y + 2.75, BASE_Y + 3.05, panel_depth - 0.05, 0.05)
+	# HABS A7 (Dewey2003) and May2019: a narrow inner surround and three
+	# paired glazed doors beneath the mounted relief. All fit the unchanged
+	#5.8m source-host opening; dimensions/depth remain production inference.
+	var inner_border := 0.15
+	_chain_box(t.relief, chain, panel_s0, panel_s0 + inner_border, BASE_Y, field_y1, 0.97, 0.28)
+	_chain_box(t.relief, chain, panel_s0 + panel_width - inner_border, panel_s0 + panel_width, BASE_Y, field_y1, 0.97, 0.28)
+	_chain_box(t.relief, chain, panel_s0 + inner_border, panel_s0 + panel_width - inner_border, field_y1 - inner_border, field_y1, 0.97, 0.28)
+	for k in 3:
+		var s0 := panel_mid - door_group * 0.5 + float(k) * (door_width + door_gap)
+		var door_back := panel_depth + 0.35
+		_window_frame(t.entry_frame, chain, s0, s0 + door_width, BASE_Y, BASE_Y + 2.85, door_back, 2, 1, 0)
+		_chain_box(t.entry_frame, chain, s0 + 0.15, s0 + door_width - 0.15, BASE_Y + 2.45, BASE_Y + 2.55, door_back - 0.14, 0.14)
+		# Restrained lower rail and paired pull bars; no signage/interior claim.
+		for leaf in 2:
+			var handle_s := s0 + door_width * 0.5 + (-0.12 if leaf == 0 else 0.12)
+			_chain_box(t.entry_frame, chain, handle_s - 0.025, handle_s + 0.025, BASE_Y + 0.95, BASE_Y + 1.35, door_back - 0.20, 0.20)
+	_emit_entry_relief(t.relief, chain, panel_mid, panel_depth)
+
 	return 2
 
 
+## Author-created shallow sculpture from A7's observed overall silhouette:
+## standing draped figure, bent arms, globe at viewer-right and bracket below.
+## Restrained faceted volumes carry the pose; no invented face, fingers, globe
+## markings or unseen anatomy. Exact dimensions are game-art inference.
+static func _emit_entry_relief(target: Dictionary, chain: Array, station: float, host_depth: float) -> void:
+	var base := BASE_Y + 5.05
+	_chain_box(target, chain, station - 0.48, station + 0.48, base, base + 0.22, host_depth - 0.52, 0.52)
+	# One connected hem-to-neck volume: shifted hips, tapered waist and broad
+	# diagonal cloth planes replace the former overlapping round body lobes.
+	_entry_relief_body(target, chain, station, base)
+	_entry_relief_lobe(target, chain, Vector2(station - 0.14, base + 3.68), Vector2(0.27, 0.36), 0.94, 0.37)
+	# Simple solid ribbons establish the two asymmetric bent arms and drape.
+	_entry_relief_outline(target, chain, station, base, [Vector2(-0.34, 2.97), Vector2(-0.58, 2.66), Vector2(-0.87, 2.91), Vector2(-1.13, 3.24), Vector2(-1.24, 3.17), Vector2(-0.96, 2.68), Vector2(-0.56, 2.30), Vector2(-0.24, 2.66)], 0.70, host_depth)
+	_entry_relief_outline(target, chain, station, base, [Vector2(0.22, 3.00), Vector2(0.54, 2.69), Vector2(0.74, 2.73), Vector2(0.72, 3.43), Vector2(0.91, 3.45), Vector2(0.97, 2.62), Vector2(0.65, 2.44), Vector2(0.23, 2.68)], 0.68, host_depth)
+	_entry_relief_outline(target, chain, station, base, [Vector2(-0.85, 2.82), Vector2(-0.57, 2.62), Vector2(-0.69, 1.68), Vector2(-0.88, 1.82), Vector2(-1.00, 2.10)], 0.79, host_depth)
+	# Globe is observed in A7; geographic decoration is deliberately unresolved.
+	_entry_relief_lobe(target, chain, Vector2(station + 0.71, base + 3.60), Vector2(0.37, 0.37), 0.93, 0.40)
+
+
+## A7 supports the large weight shift and diagonal hip drape. These sparse
+## cross-sections describe a single closed volume, not separate anatomy beads.
+## Lower front ridges merge into the hip fold; the waist and shoulders have
+## broad quiet planes. No fine anatomy, garment ornament or fixed shadow.
+static func _entry_relief_body(target: Dictionary, chain: Array, station: float, base_y: float) -> void:
+	var seg := _seg_at(chain, station)
+	var tangent := _v3(((seg.b as Vector2) - (seg.a as Vector2)).normalized(), 0.0)
+	var normal := _v3(seg.normal as Vector2, 0.0)
+	var anchor := _v3(_seg_point(seg, station), base_y)
+	# Height, lateral centre, half-width, front depth, fold strength, tilt.
+	# The diagonal hip edge leads into a rightward hanging fold; the upper
+	# body returns left over the supporting leg rather than bulging centrally.
+	var sections: Array = [
+		[0.18, -0.03, 0.40, 0.78, 0.08, 0.00],
+		[0.44, 0.02, 0.48, 0.73, 0.13, 0.02],
+		[0.95, 0.08, 0.52, 0.67, 0.15, -0.08],
+		[1.42, 0.01, 0.48, 0.68, 0.13, -0.12],
+		[1.79, -0.10, 0.47, 0.63, 0.08, -0.25],
+		[1.99, -0.15, 0.44, 0.60, 0.03, -0.25],
+		[2.14, -0.17, 0.34, 0.75, 0.00, -0.16],
+		[2.44, -0.12, 0.30, 0.76, 0.00, -0.06],
+		[2.80, -0.08, 0.41, 0.66, 0.00, 0.02],
+		[3.07, -0.10, 0.42, 0.70, 0.00, 0.03],
+		[3.22, -0.11, 0.22, 0.79, 0.00, 0.00],
+		[3.41, -0.11, 0.13, 0.82, 0.00, 0.00],
+	]
+	var front_x := [-1.0, -0.72, -0.38, -0.04, 0.26, 0.62, 1.0]
+	var fold_profile := [0.0, -0.35, 0.65, -0.55, 0.65, -0.45, 0.0]
+	var rings: Array = []
+	for section: Array in sections:
+		var ring: Array[Vector3] = []
+		for index in front_x.size():
+			var u := float(front_x[index])
+			var depth := float(section[3]) + 0.27 * u * u + float(section[4]) * float(fold_profile[index])
+			ring.append(anchor + tangent * (float(section[1]) + u * float(section[2])) + Vector3.UP * (float(section[0]) + u * float(section[5])) - normal * depth)
+		# Closed rear is slightly buried in the unchanged blue host.
+		for u: float in [1.0, -1.0]:
+			ring.append(anchor + tangent * (float(section[1]) + u * float(section[2])) + Vector3.UP * (float(section[0]) + u * float(section[5])) - normal * 1.30)
+		rings.append(ring)
+	for index in rings.size() - 1:
+		var lower: Array = rings[index]
+		var upper: Array = rings[index + 1]
+		for corner in lower.size():
+			var next := (corner + 1) % lower.size()
+			var a: Vector3 = lower[corner]
+			var b: Vector3 = lower[next]
+			var c: Vector3 = upper[next]
+			var d: Vector3 = upper[corner]
+			var edge := b - a
+			var outward := normal * edge.dot(tangent) - tangent * edge.dot(normal)
+			var n0 := (b - a).cross(c - a).normalized()
+			var n1 := (c - a).cross(d - a).normalized()
+			if n0.dot(outward) < 0.0:
+				n0 = -n0
+			if n1.dot(outward) < 0.0:
+				n1 = -n1
+			_triangle(target, a, b, c, n0)
+			_triangle(target, a, c, d, n1)
+	# Caps lie inside the retained bracket and head junction respectively.
+	for end in 2:
+		var ring: Array = rings[0 if end == 0 else rings.size() - 1]
+		var center := Vector3.ZERO
+		for point: Vector3 in ring:
+			center += point
+		center /= float(ring.size())
+		for corner in ring.size():
+			_triangle(target, center, ring[corner], ring[(corner + 1) % ring.size()], Vector3.DOWN if end == 0 else Vector3.UP)
+
+
+static func _entry_relief_lobe(target: Dictionary, chain: Array, center: Vector2, radii: Vector2, depth: float, depth_radius: float) -> void:
+	var seg := _seg_at(chain, center.x)
+	var tangent := _v3(((seg.b as Vector2) - (seg.a as Vector2)).normalized(), 0.0)
+	var normal := _v3(seg.normal as Vector2, 0.0)
+	var anchor := _v3(_seg_point(seg, center.x), center.y) - normal * depth
+	var rings := 8
+	var sectors := 12
+	for ring in rings:
+		var p0 := -PI * 0.5 + PI * float(ring) / float(rings)
+		var p1 := -PI * 0.5 + PI * float(ring + 1) / float(rings)
+		for sector in sectors:
+			var a0 := TAU * float(sector) / float(sectors)
+			var a1 := TAU * float(sector + 1) / float(sectors)
+			var points: Array[Vector3] = []
+			for uv: Vector2 in [Vector2(p0, a0), Vector2(p0, a1), Vector2(p1, a1), Vector2(p1, a0)]:
+				points.append(anchor + tangent * radii.x * cos(uv.x) * cos(uv.y) + Vector3.UP * radii.y * sin(uv.x) + normal * depth_radius * cos(uv.x) * sin(uv.y))
+			if ring > 0:
+				var n0 := (points[1] - points[0]).cross(points[2] - points[0]).normalized()
+				if n0.dot((points[0] + points[1] + points[2]) / 3.0 - anchor) < 0.0:
+					n0 = -n0
+				_triangle(target, points[0], points[1], points[2], n0)
+			if ring < rings - 1:
+				var n1 := (points[2] - points[0]).cross(points[3] - points[0]).normalized()
+				if n1.dot((points[0] + points[2] + points[3]) / 3.0 - anchor) < 0.0:
+					n1 = -n1
+				_triangle(target, points[0], points[2], points[3], n1)
+
+
+static func _entry_relief_outline(target: Dictionary, chain: Array, station: float, base_y: float, outline: Array[Vector2], front_depth: float, back_depth: float) -> void:
+	var seg := _seg_at(chain, station)
+	var tangent := _v3(((seg.b as Vector2) - (seg.a as Vector2)).normalized(), 0.0)
+	var normal := _v3(seg.normal as Vector2, 0.0)
+	var anchor := _v3(_seg_point(seg, station), base_y)
+	var indices := Geometry2D.triangulate_polygon(PackedVector2Array(outline))
+	assert(not indices.is_empty(), "B2 entrance relief outline must triangulate")
+	for index in range(0, indices.size(), 3):
+		var face: Array[Vector3] = []
+		for corner in 3:
+			var uv := outline[indices[index + corner]]
+			face.append(anchor + tangent * uv.x + Vector3.UP * uv.y)
+		_triangle(target, face[0] - normal * front_depth, face[1] - normal * front_depth, face[2] - normal * front_depth, normal)
+		_triangle(target, face[0] - normal * back_depth, face[1] - normal * back_depth, face[2] - normal * back_depth, -normal)
+	for index in outline.size():
+		var a := outline[index]
+		var b := outline[(index + 1) % outline.size()]
+		var pa := anchor + tangent * a.x + Vector3.UP * a.y
+		var pb := anchor + tangent * b.x + Vector3.UP * b.y
+		# Polygon is clockwise in its station/height plane; orient each return
+		# away from that interior rather than relying on imported triangle order.
+		var outward := tangent * (b.y - a.y) - Vector3.UP * (b.x - a.x)
+		if Geometry2D.is_polygon_clockwise(PackedVector2Array(outline)):
+			outward = -outward
+		_quad(target, pa - normal * front_depth, pb - normal * front_depth, pb - normal * back_depth, pa - normal * back_depth, outward)
+
+
 static func _emit_glazing_grid(t: Dictionary, chain: Array, s0: float, s1: float, y0: float, y1: float, depth: float) -> void:
-	var columns := 24
 	var rows := 10
-	var bar := 0.1
-	var edge := 0.24
-	var bar_depth := 0.08
 	var row_height := (y1 - y0) / float(rows)
-	# Dark pane band four rows below the head and a thin dark kick row, as observed.
+	# Retain the observed WSW darker pane band and low kick row at their exact
+	# existing planes. The coating response is shared with the main panes.
 	_chain_box(t.glass_band, chain, s0, s1, y1 - 5.0 * row_height, y1 - 4.0 * row_height, depth - 0.015, 0.012)
 	_chain_box(t.glass_band, chain, s0, s1, y0, y0 + 0.45, depth - 0.015, 0.012)
-	var column_width := (s1 - s0) / float(columns)
-	for k in columns + 1:
-		var width := edge if k == 0 or k == columns else bar
-		var s := s0 + float(k) * column_width
-		_chain_box(t.grid, chain, clampf(s - width * 0.5, s0, s1 - width), clampf(s + width * 0.5, s0 + width, s1), y0, y1, depth - bar_depth, bar_depth)
-	for k in rows + 1:
-		var height := edge if k == 0 or k == rows else bar
-		var y := y0 + float(k) * row_height
-		_chain_box(t.grid, chain, s0, s1, clampf(y - height * 0.5, y0, y1 - height), clampf(y + height * 0.5, y0 + height, y1), depth - bar_depth - 0.01, bar_depth)
+	_window_frame(t.grid, chain, s0, s1, y0, y1, depth, 24, rows, 5)
 
 
-## NNW is unobserved: keep a continuous finished wall on the exact source
-## chain instead of unsupported shallow panels and their thin shadowed returns.
+## HABS A6 (2003) shows grouped gridded upper glazing, narrow ribs,
+## broad piers and one central entrance. Dimensions/current finish inferred.
+## Reuse the existing closed-reveal emitter: no opaque overlay or false hole.
 static func _emit_nnw_long_side(t: Dictionary, wall: Dictionary) -> int:
-	_emit_face(t.cream, _chain_from_runs(wall, NNW_RUNS), _const_top(EAVE_Y), [], 0.0)
-	return 0
+	var chain := _chain_from_runs(wall, NNW_RUNS)
+	var length := _chain_length(chain)
+	var groups := 7
+	var edge := 1.15
+	var broad_pier := 2.25
+	var pitch := (length - 2.0 * edge) / float(groups)
+	var group_width := pitch - broad_pier
+	var rib := 0.58
+	var window_width := (group_width - 2.0 * rib) / 3.0
+	var y0 := 10.6
+	var y1 := 17.65
+	var depth := 1.35
+	var openings: Array = []
+	var units: Array = []
+	for group in groups:
+		var left := edge + float(group) * pitch + broad_pier * 0.5
+		for window in 3:
+			var s0 := left + float(window) * (window_width + rib)
+			# One recessed opaque/glazed field between the real structural piers.
+			# Its nested cut exposes the return instead of burying trim in host.
+			var field := _opening(s0, s0 + window_width, y0 - 0.15, EAVE_Y, 0.55, t.cream, {"kind": "face", "target": t.cream, "openings": [_opening(s0, s0 + window_width, y0, y1, depth - 0.55, t.cream, {"kind": "flat", "target": t.wing_glass})]}, false, true)
+			field["open_head_interval"] = Vector2(s0, s0 + window_width)
+			openings.append(field)
+			units.append([s0, s0 + window_width])
+	var mid := length * 0.5
+	var entry: Array = [
+		_opening(mid - 1.35, mid + 1.35, 0.0, 8.42, 0.55, t.cream, {"kind": "flat", "target": t.door}, true),
+		_opening(mid - 1.35, mid + 1.35, 8.57, 10.05, 0.55, t.cream, {"kind": "flat", "target": t.wing_glass}),
+	]
+	openings.append(_opening(mid - 1.72, mid + 1.72, 0.0, 10.30, 0.50, t.cream, {"kind": "face", "target": t.cream, "openings": entry}, true))
+	_emit_face(t.cream, chain, _const_top(EAVE_Y), openings, 0.0)
+	# HABS A6's complete pier bodies continue through opaque spandrels.
+	# Depth is production inference; the original roof height stays fixed.
+	# Closed boxes overlap the solid host by 4cm, with no separate cap inserts.
+	for boundary in range(groups + 1):
+		var center := edge + float(boundary) * pitch
+		var pa := maxf(edge, center - broad_pier * 0.5)
+		var pb := minf(length - edge, center + broad_pier * 0.5)
+		_chain_box(t.cream, chain, pa, pb, y0 - 0.25, EAVE_Y, -0.45, 0.49)
+	for group in groups:
+		var left := edge + float(group) * pitch + broad_pier * 0.5
+		for divider in 2:
+			var pa := left + window_width + float(divider) * (window_width + rib)
+			_chain_box(t.cream, chain, pa, pa + rib, y0 - 0.25, EAVE_Y, -0.30, 0.34)
+	for unit: Array in units:
+		var a := float(unit[0])
+		var b := float(unit[1])
+		_window_mullions(t, chain, (a + b) * 0.5, b - a, y0, y1, depth, 4, 8)
+		_chain_box(t.wing_frame, chain, a, b, 13.95, 14.12, depth - 0.10, 0.10)
+	_chain_box(t.wing_frame, chain, mid - 0.045, mid + 0.045, BASE_Y, 10.05, 0.95, 0.10)
+	_chain_box(t.wing_frame, chain, mid - 1.35, mid + 1.35, 8.42, 8.57, 0.95, 0.10)
+	return groups
 
 
-## Two-tier ribbed wing: full-height piers on the frozen face line, bays recessed
-## behind them with grouped lower and upper glazing; stepped pier crowns.
+## Historical A4 supports a solid arched end with thin horizontal molding,
+## grooved existing pylons and unequal service/loading openings, not a WSW grid.
+static func _emit_ene_end(t: Dictionary, wall: Dictionary, frame: Dictionary, top: Callable) -> void:
+	var chain := _arch_chain(wall, ENE_MAIN_RUNS, frame, frame.ene_u0, frame.ene_u1)
+	var length := _chain_length(chain)
+	var openings: Array = []
+	# Native land across the complete revised units: service3.571..3.580m;
+	# loading4.710..5.065m. The retained loading threshold meets the rising
+	# grade at its right edge; the closed host continues to source bottoms.
+	# Unequal sizes and present survival remain production inference.
+	var units := [{"fraction": 0.18, "threshold": 3.61, "width": 2.1, "height": 2.9}, {"fraction": 0.78, "threshold": 4.95, "width": 4.8, "height": 5.8}]
+	for unit: Dictionary in units:
+		var mid := length * float(unit.fraction)
+		var threshold := float(unit.threshold)
+		var half := float(unit.width) * 0.5
+		openings.append(_opening(mid - half, mid + half, threshold, threshold + float(unit.height), 0.45, t.cream, {"kind": "flat", "target": t.door}))
+	_emit_face(t.cream, chain, top, openings, ARCH_STEP_M)
+	_ene_chamfered_molding(t.cream, chain, 0.35, length - 0.35)
+	for unit: Dictionary in units:
+		var mid := length * float(unit.fraction)
+		var threshold := float(unit.threshold)
+		var half := float(unit.width) * 0.5
+		var head := threshold + float(unit.height)
+		_chain_box(t.cream, chain, mid - half - 0.20, mid + half + 0.20, head, head + 0.25, -0.08, 0.20)
+		_chain_box(t.wing_frame, chain, mid - 0.04, mid + 0.04, threshold, head, 0.36, 0.09)
+		if float(unit.width) > 3.0:
+			for leaf in range(1, 7):
+				var station := mid - half + float(unit.width) * float(leaf) / 7.0
+				_chain_box(t.wing_frame, chain, station - 0.025, station + 0.025, threshold, head, 0.40, 0.05)
+
+
+## Closed continuous molding; sloped underside meets the wall rather than a
+## sub-pixel horizontal ledge. The same faces enter the native wall bucket.
+static func _ene_chamfered_molding(target: Dictionary, chain: Array, s0: float, s1: float) -> void:
+	for seg: Dictionary in chain:
+		var sa := maxf(s0, float(seg.s0))
+		var sb := minf(s1, float(seg.s1))
+		if sb - sa < EPS:
+			continue
+		var n := seg.normal as Vector2
+		var a := _seg_point(seg, sa)
+		var b := _seg_point(seg, sb)
+		var al := _v3(a + n * 0.24, 15.52)
+		var bl := _v3(b + n * 0.24, 15.52)
+		var ah := _v3(a + n * 0.24, 15.80)
+		var bh := _v3(b + n * 0.24, 15.80)
+		var ar := _v3(a - n * 0.04, 15.28)
+		var br := _v3(b - n * 0.04, 15.28)
+		var art := _v3(a - n * 0.04, 15.80)
+		var brt := _v3(b - n * 0.04, 15.80)
+		var normal := _v3(n, 0.0)
+		_quad(target, al, bl, bh, ah, normal)
+		_quad(target, ah, bh, brt, art, Vector3.UP)
+		var slope_normal := (bl - al).cross(ar - al).normalized()
+		if slope_normal.y > 0.0:
+			slope_normal = -slope_normal
+		_quad(target, al, bl, br, ar, slope_normal)
+		_quad(target, br, ar, art, brt, -normal)
+		var tangent := _v3(((seg.b as Vector2) - (seg.a as Vector2)).normalized(), 0.0)
+		if sa <= s0 + EPS:
+			_quad(target, ar, al, ah, art, -tangent)
+		if sb >= s1 - EPS:
+			_quad(target, bl, br, brt, bh, tangent)
+
+
+## Side returns retain the established two-tier wing family. SSE uses a complete
+## full-height assembly rather than independently joined lower/upper relief.
 static func _emit_wing_bays(t: Dictionary, wall: Dictionary, runs: Array, bay_count: int, service_bays: Array) -> int:
 	var chain := _chain_from_runs(wall, runs)
+	if runs == WING_SSE_RUNS:
+		return _emit_sse_assembly(t, chain, bay_count, service_bays)
 	var length := _chain_length(chain)
 	var pier := 0.9
 	var module := (length - pier) / float(bay_count)
@@ -234,9 +501,8 @@ static func _emit_wing_bays(t: Dictionary, wall: Dictionary, runs: Array, bay_co
 	_emit_face(t.cream, chain, _const_top(WING_TOP_Y), openings, 0.0)
 	for k in bay_count:
 		var mid := pier + float(k) * module + bay * 0.5
-		var lower_y0 := BASE_Y + 0.9
 		if k not in service_bays:
-			_window_mullions(t, chain, mid, window_width, lower_y0, BASE_Y + 4.8, bay_depth + 0.18, 4, 2)
+			_window_mullions(t, chain, mid, window_width, BASE_Y + 0.9, BASE_Y + 4.8, bay_depth + 0.18, 4, 2)
 		_window_mullions(t, chain, mid, window_width, BASE_Y + 9.0, BASE_Y + 13.1, bay_depth + 0.18, 3, 3)
 	for k in bay_count + 1:
 		var s0 := float(k) * module
@@ -244,15 +510,155 @@ static func _emit_wing_bays(t: Dictionary, wall: Dictionary, runs: Array, bay_co
 	return bay_count
 
 
+## April2017 and HABS2003 A3: full-height broad bodies and narrow ribs
+## stand forward of connecting pale infill, with upper/lower glazing behind it.
+## Reuse the B2 closed aperture family, now as one complete two-storey unit.
+## All dimensions and the modest cream/white coating distinction are reversible
+## production inference, not surveyed depths or a reconstruction of hidden work.
+static func _emit_sse_assembly(t: Dictionary, chain: Array, bay_count: int, service_bays: Array) -> int:
+	var length := _chain_length(chain)
+	var edge := 0.9
+	# Complete ENE corner bearing keeps this cavity behind the perpendicular
+	# return's deepest1.13m recess. Aperture, frames and top cap share it.
+	var end_bearing := 1.65
+	var module := (length - edge) / float(bay_count)
+	var narrow_body := 0.72
+	var broad_body := 2.7
+	var upper_sill := 11.70
+	var upper_head := 17.20
+	var field_depth := 1.40
+	var upper_glass_depth := 2.10
+	var lower_glass_depth := 1.90
+	var field_bottom := BASE_Y + 0.55
+	var openings: Array = []
+	var units: Array[Vector2] = []
+	for k in bay_count:
+		var left_width := broad_body if k > 0 and k % 3 == 0 else narrow_body
+		var right_width := broad_body if k + 1 < bay_count and (k + 1) % 3 == 0 else narrow_body
+		# The two full-width end bearings keep the exact frozen corner joins.
+		var a := edge if k == 0 else edge * 0.5 + float(k) * module + left_width * 0.5
+		var b := length - end_bearing if k == bay_count - 1 else edge * 0.5 + float(k + 1) * module - right_width * 0.5
+		assert(b - a > 2.0, "SSE grouped apertures must remain positive and usable")
+		units.append(Vector2(a, b))
+		var inner: Array = []
+		inner.append(_opening(a, b, upper_sill, upper_head, upper_glass_depth - field_depth, t.sse_infill, {"kind": "flat", "target": t.wing_glass}))
+		if k in service_bays:
+			var mid := (a + b) * 0.5
+			var half_width := minf(1.55, (b - a) * 0.5)
+			# Service doors retain their separate grade-reaching aperture below.
+			inner.append(_opening(mid - half_width, mid + half_width, field_bottom, BASE_Y + 3.5, lower_glass_depth - field_depth, t.sse_infill, {"kind": "flat", "target": t.door}, true))
+		else:
+			inner.append(_opening(a, b, BASE_Y + 0.9, BASE_Y + 4.8, lower_glass_depth - field_depth, t.sse_infill, {"kind": "flat", "target": t.wing_glass}))
+		var unit := _opening(a, b, field_bottom, WING_TOP_Y, field_depth, t.cream, {"kind": "face", "target": t.sse_infill, "openings": inner}, false, true)
+		# Roof already closes this cavity. No coincident top cap or shelf.
+		unit["open_head_interval"] = Vector2(a, b)
+		if k in service_bays:
+			var mid := (a + b) * 0.5
+			var half_width := minf(1.55, (b - a) * 0.5)
+			var door_span := Vector2(mid - half_width, mid + half_width)
+			# Union the lower door cut with the full unit at its true depth:
+			# omit both shared caps; the shoulders remain real solid closure.
+			unit["open_sill_interval"] = door_span
+			var foot := _opening(door_span.x, door_span.y, 0.0, field_bottom, lower_glass_depth, t.cream, {"kind": "flat", "target": t.door}, true)
+			foot["open_head_interval"] = door_span
+			openings.append(foot)
+		openings.append(unit)
+	# This one carved host carries broad/narrow bodies from exact source grade
+	# to roof. A continuous infill field connects each upper/lower pair; there
+	# are no applied pilaster boxes, floating ledges or exposed rear faces.
+	_emit_face(t.cream, chain, _const_top(WING_TOP_Y), openings, 0.0)
+	for k in bay_count:
+		var unit := units[k]
+		var mid := (unit.x + unit.y) * 0.5
+		var width := unit.y - unit.x
+		_window_mullions(t, chain, mid, width, upper_sill, upper_head, upper_glass_depth, 3, 6)
+		if k not in service_bays:
+			_window_mullions(t, chain, mid, width, BASE_Y + 0.9, BASE_Y + 4.8, lower_glass_depth, 4, 2)
+
+	for k in bay_count + 1:
+		var center := edge * 0.5 + float(k) * module
+		var width := broad_body if k > 0 and k < bay_count and k % 3 == 0 else narrow_body
+		var a := 0.0 if k == 0 else center - width * 0.5
+		var b := length if k == bay_count else center + width * 0.5
+		if k == 0:
+			b = edge
+		elif k == bay_count:
+			a = length - end_bearing
+		_chain_box(t.cream, chain, a, b, WING_TOP_Y, WING_TOP_Y + 0.25, 0.0, field_depth)
+	return bay_count
+
+
+static func _sse_infill_material() -> ShaderMaterial:
+	# A coating-color variant of the existing mapped mineral family, not a
+	# fixed shadow/AO tint. Geometry and the stock lighting provide the depth.
+	var material := WALL_MATERIAL.duplicate() as ShaderMaterial
+	material.resource_name = "building_2_sse_pale_infill_coating"
+	material.set_shader_parameter("cream_color", Color(0.91, 0.90, 0.86, 1.0))
+	return material
+
+
+static func _entry_panel_material(pylon: bool = false) -> ShaderMaterial:
+	# The observed blue inset uses the same mineral substrate with a quieter,
+	# less rough painted coating; no fixed shadow or reference pixels.
+	var material := WALL_MATERIAL.duplicate() as ShaderMaterial
+	material.resource_name = "building_2_pylon_blue_mineral_inset" if pylon else "building_2_blue_painted_mineral_inset"
+	material.set_shader_parameter("cream_color", Color(0.57, 0.65, 0.70, 1.0) if pylon else Color(0.49, 0.59, 0.66, 1.0))
+	material.set_shader_parameter("base_roughness", 0.62)
+	material.set_shader_parameter("normal_strength", 0.10)
+	material.set_shader_parameter("coating_coverage", 0.99)
+	material.set_shader_parameter("grain_contrast", 0.04)
+	material.set_shader_parameter("broad_contrast", 0.012)
+	return material
+
+
 static func _window_mullions(t: Dictionary, chain: Array, mid: float, width: float, y0: float, y1: float, depth: float, columns: int, rows: int) -> void:
-	var s0 := mid - width * 0.5
-	var bar := 0.07
+	# The same installed steel-window family serves the long-side variants.
+	# Existing tall fields retain their pane cadence; lower fields use the
+	# four-row organization visible in A3 rather than two oversize panes.
+	var pane_rows := 4 if rows == 2 else rows
+	_window_frame(t.wing_frame, chain, mid - width * 0.5, mid + width * 0.5, y0, y1, depth, columns, pane_rows, 0)
+
+
+## Complete installed frame inside the unchanged aperture. Deep outer members
+## support a lighter inner grid; broad WSW sash transoms subdivide the large field.
+## All profile dimensions are production inference. No extra window opening,
+## painted frame/shadow, fake interior or outward host projection is introduced.
+static func _window_frame(target: Dictionary, chain: Array, s0: float, s1: float, y0: float, y1: float, depth: float, columns: int, rows: int, sash_rows: int) -> void:
+	var perimeter := 0.15
+	var bar := 0.065
+	var sash := 0.13
+	var frame_depth := 0.14
+	var bar_depth := 0.075
+	# The perimeter is wholly inside the already closed glass/reveal domain.
+	_chain_box(target, chain, s0, s0 + perimeter, y0, y1, depth - frame_depth, frame_depth)
+	_chain_box(target, chain, s1 - perimeter, s1, y0, y1, depth - frame_depth, frame_depth)
+	_chain_box(target, chain, s0 + perimeter, s1 - perimeter, y0, y0 + perimeter, depth - frame_depth, frame_depth)
+	_chain_box(target, chain, s0 + perimeter, s1 - perimeter, y1 - perimeter, y1, depth - frame_depth, frame_depth)
 	for k in range(1, columns):
-		var s := s0 + width * float(k) / float(columns)
-		_chain_box(t.wing_frame, chain, s - bar * 0.5, s + bar * 0.5, y0, y1, depth - 0.05, 0.05)
+		var station := lerpf(s0, s1, float(k) / float(columns))
+		_chain_box(target, chain, station - bar * 0.5, station + bar * 0.5, y0 + perimeter, y1 - perimeter, depth - bar_depth, bar_depth)
 	for k in range(1, rows):
-		var y := y0 + (y1 - y0) * float(k) / float(rows)
-		_chain_box(t.wing_frame, chain, s0, s0 + width, y - bar * 0.5, y + bar * 0.5, depth - 0.05, 0.05)
+		var y := lerpf(y0, y1, float(k) / float(rows))
+		var primary := sash_rows > 0 and k % sash_rows == 0
+		var width := sash if primary else bar
+		var projection := frame_depth if primary else bar_depth
+		_chain_box(target, chain, s0 + perimeter, s1 - perimeter, y - width * 0.5, y + width * 0.5, depth - projection, projection)
+
+
+## Cosmetic finish belongs to this Material, never to the LAND node/receiver.
+## The exact LAND material instance is duplicated by the builder before attachment.
+static func frontage_material() -> ShaderMaterial:
+	var material := ShaderMaterial.new()
+	material.resource_name = "building_2_frontage_land_finish"
+	material.shader = preload("res://game/resources/materials/world/building_2/building_2_frontage.gdshader")
+	for kind in ["grass", "concrete"]:
+		var family := "sparse_grass" if kind == "grass" else "concrete_pavement"
+		for channel in ["diff", "nor_gl", "rough"]:
+			material.set_shader_parameter(kind + "_" + channel, load("res://game/resources/textures/world/polyhaven/" + family + "/" + family + "_" + channel + "_1k.jpg"))
+	material.set_meta("source_keys", [SOURCE_KEY])
+	material.set_meta("derived_object_key", "decoration:" + SOURCE_KEY + ":frontage_finish")
+	material.set_meta("receiver_kind", "none")
+	return material
 
 
 # --- Pylons --------------------------------------------------------------------------
@@ -645,9 +1051,24 @@ static func _emit_opening(chain: Array, top: Callable, opening: Dictionary) -> v
 		var pb := _seg_point(seg, sb)
 		var head_a := float(top.call(pa)) if to_top else float(opening.y1)
 		var head_b := float(top.call(pb)) if to_top else float(opening.y1)
-		_quad(reveal, _v3(pa, head_a), _v3(pb, head_b), _v3(pb + inward, head_b), _v3(pa + inward, head_a), Vector3.DOWN)
-		if not to_grade:
-			_quad(reveal, _v3(pa, opening.y0), _v3(pb, opening.y0), _v3(pb + inward, opening.y0), _v3(pa + inward, opening.y0), Vector3.UP)
+		for cap_kind: String in ["head", "sill"]:
+			if cap_kind == "sill" and to_grade:
+				continue
+			var intervals: Array[Vector2] = [Vector2(sa, sb)]
+			var open_key := "open_head_interval" if cap_kind == "head" else "open_sill_interval"
+			if opening.has(open_key):
+				var gap: Vector2 = opening[open_key]
+				intervals.clear()
+				if sa < minf(sb, gap.x):
+					intervals.append(Vector2(sa, minf(sb, gap.x)))
+				if maxf(sa, gap.y) < sb:
+					intervals.append(Vector2(maxf(sa, gap.y), sb))
+			for interval: Vector2 in intervals:
+				var ca := _seg_point(seg, interval.x)
+				var cb := _seg_point(seg, interval.y)
+				var ya := float(top.call(ca)) if cap_kind == "head" and to_top else float(opening.y1 if cap_kind == "head" else opening.y0)
+				var yb := float(top.call(cb)) if cap_kind == "head" and to_top else ya
+				_quad(reveal, _v3(ca, ya), _v3(cb, yb), _v3(cb + inward, yb), _v3(ca + inward, ya), Vector3.DOWN if cap_kind == "head" else Vector3.UP)
 		var bottom_a := _seg_bottom(seg, sa) if to_grade else float(opening.y0)
 		var bottom_b := _seg_bottom(seg, sb) if to_grade else float(opening.y0)
 		back_chain.append({"a": pa + inward, "b": pb + inward, "ya": bottom_a, "yb": bottom_b, "normal": seg.normal, "s0": sa, "s1": sb})
@@ -670,8 +1091,7 @@ static func _emit_opening(chain: Array, top: Callable, opening: Dictionary) -> v
 	_emit_face(back.target as Dictionary, back_chain, back_top, inner, 0.0)
 
 
-## Closed box spanning chain s0..s1 (split per segment), front face at an inward
-## depth from the chain face line and extending thickness further inward.
+## Closed box spanning chain s0..s1, extending inward from its front depth.
 static func _chain_box(target: Dictionary, chain: Array, s0: float, s1: float, y0: float, y1: float, front_depth: float, thickness: float) -> void:
 	for seg: Dictionary in chain:
 		var sa := maxf(s0, float(seg.s0))
@@ -749,14 +1169,42 @@ static func _triangle(target: Dictionary, a: Vector3, b: Vector3, c: Vector3, no
 
 static func _materials() -> Dictionary:
 	return {
-		"field_glass": _material("building_2_field_glazing_grey_green", Color(0.40, 0.47, 0.47), 0.12, 0.3),
-		"field_band": _material("building_2_field_dark_pane_band", Color(0.11, 0.15, 0.18), 0.1, 0.35),
-		"field_grid": _material("building_2_field_light_steel_grid", Color(0.70, 0.71, 0.68), 0.25, 0.55),
-		"entry_panel": _material("building_2_entry_blue_grey_panel", Color(0.50, 0.60, 0.69), 0.0, 0.8),
-		"pylon_inset": _material("building_2_pylon_blue_grey_inset", Color(0.62, 0.67, 0.70), 0.0, 0.82),
+		"field_glass": _window_glass_material("building_2_wsw_diffusing_glass", Color(0.82, 0.835, 0.79), 0.46, 1.0),
+		"field_band": _window_glass_material("building_2_wsw_dark_pane_band", Color(0.31, 0.36, 0.34), 0.25, 0.25),
+		"field_grid": _coated_frame_material("building_2_wsw_coated_steel_frames", Color(0.32, 0.36, 0.33)),
+		"wing_glass": _window_glass_material("building_2_side_glass", Color(0.64, 0.69, 0.65), 0.40, 0.75),
+		"window_frame": _coated_frame_material("building_2_side_coated_steel_frames", Color(0.37, 0.41, 0.38)),
+		"entry_glass": _window_glass_material("building_2_entry_door_glass", Color(0.25, 0.31, 0.29), 0.20, 0.12),
+		"entry_frame": _coated_frame_material("building_2_entry_dark_coated_frames", Color(0.13, 0.16, 0.145)),
+		"entry_panel": _entry_panel_material(),
+		"pylon_inset": _entry_panel_material(true),
 		"roof": _material("building_2_barrel_roof_weathered_grey", Color(0.47, 0.47, 0.45), 0.05, 0.88),
 		"wing_roof": _material("building_2_wing_roof_grey", Color(0.42, 0.42, 0.40), 0.0, 0.92),
 	}
+
+
+static func _window_glass_material(name: String, bulk_color: Color, surface_roughness: float, diffusion: float) -> ShaderMaterial:
+	# Reuse the installed aperture/profile family. An opaque diffusing-glass
+	# exterior proxy retains the existing solid receiver without inventing rooms.
+	# Bulk tint and rolled-surface response are production inference; actual
+	# profiles, recesses and dark sash rows supply all architectural divisions.
+	var material := ShaderMaterial.new()
+	material.resource_name = name
+	material.shader = preload("res://game/resources/materials/world/building_2/building_2_industrial_glass.gdshader")
+	material.set_shader_parameter("bulk_color", bulk_color)
+	material.set_shader_parameter("surface_roughness", surface_roughness)
+	material.set_shader_parameter("diffusion", diffusion)
+	return material
+
+
+static func _coated_frame_material(name: String, coating_color: Color) -> StandardMaterial3D:
+	# Existing solid profiles catch real light. Painted steel remains dielectric;
+	# its quieter satin response separates it from the rolled glass surface.
+	var material := _material(name, coating_color, 0.0, 0.38)
+	material.clearcoat_enabled = true
+	material.clearcoat = 0.25
+	material.clearcoat_roughness = 0.30
+	return material
 
 
 static func _material(resource_name: String, color: Color, metallic: float, roughness: float) -> StandardMaterial3D:
