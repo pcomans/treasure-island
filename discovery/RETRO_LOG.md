@@ -18355,3 +18355,213 @@ Tiny follow-up: worked—combined direct original-pixel readiness with explicit0
 - Worked: applied ROOT-authorized B3 Levels1/2/4 completion from the named readiness review combining actual004/reference pixels, existing whole architecture/material/native REST/suite evidence and unchanged nine-path source1905999→458bc1f. Preserved B3 Levels3/5 unknown, its catalog/runtime and as-built/unseen inference limits.
 - Did not: the old checklist still pointed to the earlier blank-west/material HOLD after later004 completion; no new B3 render/test or recognition claim was justified by that stale cell.
 - Next: keep current human totals aligned with actual rows and retain the original baseline as historical. Current213 rows/1,065 cells have17 C,0 I,1,048 U; no test/runtime count gate added.
+
+### mariner_whole_family_l2 — current baseline, 2026-10-10
+- Worked: one fresh d7c88e2 worktree, one necessary import and one shared capture per unit produced current all-side/context/island originals; actual reference comparison exposed incomplete visible roofs that legacy frontage frames concealed. Reused the source-aware family and existing capture driver.
+- Did not work: shared driver returned PASS for1219 south although the saved camera viewed through the opposite row from inside/behind its facade. That image cannot support facade fidelity. Roof-data presence also did not predict visible full coverage.
+- Change next time: keep these successful baseline outputs; use supported focused views with a complete donor manifest for1219 frontage and inspect pixels before accepting camera suitability. Diagnose consumed roof winding before adding geometry. No retries, production edit or credit change this round; engine handles12425/80034/57612 reached terminal0 and owned engine/Weston PIDs were absent before release.
+
+### mariner_whole_family_l2 — paired architectural studies, 2026-10-10
+- Worked: independent adapter review caught transform-list misuse before native execution. Corrected adapter used the actual packed get_faces then body-origin subtraction; both baseline native partitions and four approaches passed. Early paired study001 review correctly rejected mere roof closure: study002 adds coherent shallow gable/rake trim and gray roof planes while retaining frontage and1212's observed three end openings.
+- Did not work: first native invocation used headless and exited1 before geometry; retained. Private roof-data authoring repeated near-endpoint crossing insertion and exhausted Node memory (exit134), fixed by bounded interior crossing threshold before either config write. Study001 compared complete raw wall footprint area with a simplified source roof and failed by0.00405m2; shell incorrectly continued. Actual unchanged raw-ring comparison reconciled area within rounding. No failed proof was promoted.
+- Change next time: retain existing imports/baselines and use proven rendered fit invocation. Small process experiment: study001 had one preflight-failed dependent capture launch; study002 generator and whitespace preflight terminal0 were observed before a separate capture command, with zero such launches. This is a local process improvement, not workflow speed evidence. Keep independent visual review before the final mechanical suite; no material/window polish or hidden-side invention.
+
+### mariner_1219_roof_completion — final public roof revision — 2026-10-10
+- Worked: actual March2025 front and study002 comparison isolated the missing near roof plane; reusing existing public_roof channels kept1212 and producer untouched. Moving the inferred ridge forward at the same height plus a restrained closed eave produced a visible compact gray band in one final rendered capture. Source-only preflight passed before separate capture24556 terminal0; all owned PIDs absent and slot released.
+- Did not work: prior ordinary front had hidden the whole-roof gains; symmetry alone was not a useful readability default. Existing default south framing remains unusable, and the inferred asymmetric end needs independent visual judgment. No current native/fit/spray claim follows from source checks or screenshot PASS.
+- Next time: compare ordinary front roof projection early, preserving ridge height and reference limits; use the already complete focused donor instead of repeating invalid framing. This final pass had zero failed-preflight dependent launches and one capture; earlier failed chronology remains retained.
+
+
+### island_progress_checkpoint_oct10 — bounded next-family breadth readiness, 2026-10-10
+
+- Worked: compared two actual retained Mariner gameplay originals with current source-aware shared assets and per-instance schedules; discovered that later public_roof assemblies invalidate a blanket roof diagnosis from old captures. Kept stage unknown and historical credit separate.
+- Did not: the retained34-card audit and dated housing originals were unavailable at ordinary locators; broad initial filename searches included irrelevant matches and a guessed shared-asset filename was wrong. Exact shared paths and selected source fields supplied the usable evidence; no speculative modeling verdict followed.
+- Next: confirm exact approved-priority membership and capture the current source family before assigning a complete L1/L2 repair. If it is already sound, reuse its evidence and move onward; do not convert missing proof into invented openings or another material microstudy. Named writer may transfer this private draft into ordinary RETRO before commit.
+
+
+### chapel_final_integrator — Mariner pair readiness, 2026-10-10
+
+- Worked: actual frozen XML, source ledger, catalog and live instance/producer reads confirmed the exact pair and existing public roofs. Identified the legacy1219 run-label representation mismatch without guessing a physical-side defect. Existing late-September PNGs remain historical; missing dated originals and audit membership stay explicit.
+- Did not: initial numeric rg patterns matched unrelated vertex values and over-read source geometry; exact filenames and selected JSON fields supplied the needed evidence. The legacy Mac reference paths are unavailable locally, so this round cannot authorize modeling fidelity.
+- Next: resolve priority and recover actual dated originals, then capture current shared-driver whole views before naming a bounded L1/L2 architectural repair. Preserve shared reuse and per-unit review instead of commissioning finish changes from unknown cells. No engine/source/catalog/Git changes.
+
+
+## mariner_reference_readiness — 2026-10-10
+- Worked: existing D6/D7 locators and source geometry gave a bounded physical-side reconciliation; current1219 frontage faces the recorded south camera, so legacy run labels must not trigger relocation.
+- Did not work: both web-reader Maps requests were inaccessible and both official thumbnails returned403; no dated reference pixels recovered. No callable browser tool was available, and the assignment excluded headed launch.
+- Change next time: assign the existing tools/browser headed fallback explicitly when reference acquisition requires it; do not count URL/HTTP attempts as inspected pixels or repeat the already unsuccessful local-original search. Preserve the no-source-edit readiness boundary until current captures and dated references can be compared.
+
+## mariner_reference_readiness — headed fallback, 2026-10-10
+- Worked: one existing headed session recovered all three retained panoramas; capture guard and direct inspection confirmed March2025 fronts and September2025 end. Source coordinates prevented mistaking the Gateview camera label for target identity. Actual source normals kept1219 on its south frontage.
+- Did not work: manually shortening the historical full1212 URL led to a world map. Exact retained full URL succeeded; preserve failed frame and do not infer missing imagery. Four-attempt budget leaves other sides unresolved.
+- Change next time: use the complete retained locator without removing embedded fields. Compare1212's now-visible end windows with the current baseline before deciding any protected-region rescope; no invented whole-side coverage. Browser close and actual PID absence completed before slot release.
+
+
+2026-10-10 — b2_family024_code — bounded Mariner study002 source review
+
+Worked: parsed JSON comparison isolated the actual run13 opening and roof-envelope changes despite large serializer churn. Checking emission boundaries and the unchanged installer connected every new closure/edge face to its actual native role. Reused the corrected adapter review without replaying engine proof.
+
+Did not work: a remembered installer path omitted facades, causing one failed read; rg located the actual file. The ordinary author-note still described the baseline, so current scope came from frozen source and the supplied study002 handoff rather than treating that note as current proof.
+
+Next time: retain the narrow semantic delta and actual producer/installer path in the handoff, and update the ordinary task note at source freeze. Keep baseline fit evidence explicitly separate from fresh geometry checks. No new framework or source lesson was required; the existing packed-transform lesson already records the earlier adapter failure and correction.
+
+
+2026-10-10 — b2_family024_code — narrow1219 study003 rereview
+Worked: the saved-before config in /tmp allowed a direct semantic comparison, isolating four public_roof fields and preserving the earlier review rather than repeating it. Current top winding, height, overhang and source-neighbor clearance were checked against actual data.
+Did not work: the before copy was absent from the ordinary folder and omitted from the handoff; one bounded search found it. No reconstruction or replay was needed.
+Next time: include an available before-copy path in the narrow delta handoff. Keep source caps/clearance distinct from fresh native and stock-player proof, and retain prior HOLD/PASS chronology. No source lesson added because the existing source-volume and packed-transform lessons cover these seams.
+
+
+mariner_final_visual_fresh — independent1219 study003 visual round — 2026-10-10
+
+What worked well: direct March2025 reference/front/oblique comparison established the meaningful roof-band improvement immediately; bounded context/end/island inspection then tested the whole visible roof rather than only the previous defect. Supplied terminal/source limits and authoritative001/002 history allowed a prompt separate visual verdict without engine reruns or re-auditing unchanged1212.
+
+What did not work well: a broad LEARNINGS search returned a truncated excerpt; the subsequent targeted read recovered the relevant architecture/whole-result/framing lessons. A long breadth note also included unrelated Station48 history, adding avoidable review text.
+
+What the team should change next time: provide the exact relevant lesson ranges and compact target reference locator in the handoff; open current front/oblique beside the dated reference first, send the interim decision, then inspect changed roof seams/context before extending coverage. Reuse the unchanged sibling verdict and separate art from native/playability promotion.
+
+
+### chapel_final_integrator — Mariner baseline gallery, 2026-10-10
+
+- Worked: added exactly three assigned actual runtime PNG originals as a concise Mariner baseline section, preserving all40 existing images and complete prior sections. Both existing HTML copies match; existing server PID1000286 serves GET/HEAD200 on allowed routes, exact embedded image bytes delivered, and reference/directory/unrelated routes404.
+- Did not: these baseline pixels show roof coverage and1212 gable/opening gaps; they do not represent the underway repair or establish acceptance. Labels retain REWORK, construction inference and as-built unclaimed.
+- Next: replace current-study labels/images only after actual new source-world evidence is ready, retaining a clearly identified baseline. No reference images, engine/GUI, new server, Git or source changes in this round.
+
+### chapel_final_integrator — Mariner STUDY001 gallery append, 2026-10-10
+
+- Worked: added the four assigned actual study001 originals, including the verified1219 detail-public-front filename, retaining all43 earlier images and their sections. Both existing HTML copies match, allowed routes GET/HEAD200, private/directory/unrelated routes404, existing server1000286 retained.
+- Did not: closed holes and three added1212 windows do not close the study; pitched roof/gable readability and rake trim remain REWORK, with cycle2 underway. No acceptance, commitment or as-built claim is implied by saved pixels.
+- Next: keep baseline/study phases explicit and update current progress from actual new captures without exposing reference photos. No GUI/engine, new service, Git or source edits.
+
+### chapel_final_integrator — Mariner STUDY002 gallery append, 2026-10-10
+
+- Worked: appended the four assigned study002 PNG originals, verifying1219 detail-public-front exists; retained all47 prior images and complete sections. Both gallery copies match, allowed routes GET/HEAD200, private/directory/unrelated routes404; existing server1000286 reused.
+- Did not: source CODE PASS and coherent saved gable/roof images do not establish independent visual, fresh native fit, spray or suite acceptance. Labels retain every pending gate, construction inference and as-built unclaimed.
+- Next: reconcile current-study status only from ROOT's actual independent verdict and subsequent runtime evidence. No references embedded, engine/GUI, new service, source/code/Git edits or publication.
+
+### chapel_final_integrator — Mariner STUDY003 gallery append, 2026-10-10
+
+- Worked: appended exactly two original 1219 study003 runtime PNGs and preserved all51 prior embedded originals. Updated only scoped1212 study002 status to independent visual/source CODE and actual combined native fit/spray PASS60995 terminal0 with owned process absence. Both HTML copies match and existing server1000286 delivers GET/HEAD200; private/directory/source-image routes remain404.
+- Did not: source CODE and distinct progress PASS for1219 do not establish its pending independent visual or fresh runtime verdict; final suite and acceptance remain pending, as-built unclaimed.
+- Next: update each remaining status only after ROOT supplies actual independent and runtime results. No reference photos embedded, engine/GUI/server launches, source/docs/Git changes or publication.
+
+
+### b2_family024_code — independent Mariner shared-native adapter review, 2026-10-10
+
+- Worked: comparing the actual installer loop with the maintained collector implementation caught a transform-contract error before engine use; the one-file extension retained existing producer dispatch and complete stock checks.
+- Did not: the caller interpreted the transforms list as a sequential chain, although collect emits independent instances. The helper header is ambiguous; actual loop and existing consumers establish its contract. A composed-matrix shortcut also risks changing the installer's transform-then-subtract Float32 order.
+- Next: pass one mesh pose, then reproduce the installer's packed subtraction stage exactly and obtain narrow CODE rereview. Clarify the existing transform lesson/header when an authorized documentation/helper edit is assigned; no new collector or framework is needed. Transfer this own draft into ordinary RETRO before commit.
+
+Narrow correction rereview:
+- Worked: explicit author readiness preceded final rereview; the actual loop now collects one packed transformed stream and subtracts the body origin per Vector3, preserving installer order and all guards. Current HARNESS CODE SOURCE PASS follows the source fix without an engine attempt or helper rewrite.
+- Did not: an early read before readiness still found unchanged held code; that read supplied no correction verdict. No parser/runtime or per-unit fit proof exists from this source review.
+- Next: forward readiness once, inspect only the actual repaired seam plus full small diff, then execute the assigned rendered per-unit native/full-fit invocation. Retain the original HOLD without treating it as the current result.
+
+
+### mariner_checkpoint_independent — hourly scope/progress review, 2026-10-10
+- Worked: directly compared the five requested gameplay/reference originals and sent the interim scope verdict immediately afterward. The limited set clearly exposed neighborhood-scale roof holes and the reference-supported1212 end family, sufficient to support one two-unit architectural repair.
+- Did not work: the first broad LEARNINGS/skill read produced truncated output; focused relevant passages resolved the review basis. No new implementation or art progress can be inferred from a successful baseline driver.
+- Change next time: use the representative originals and a concise verdict before any expanded audit. Keep the next action on complete roof/end architecture, clear the native source HOLD first, and reuse completed B2 evidence rather than replaying it for bookkeeping. No engine, research, runtime/code/catalog edit, acceptance or timing claim in this round; this own entry is supplied for the named integration writer.
+
+### mariner_checkpoint_independent — STUDY001 hourly checkpoint2, 2026-10-10
+- Worked: seven original gameplay/reference images sufficed to establish substantial two-unit closure/end-opening progress and the remaining shallow-roof/gable composition gap. Sent the interim REWORK/continue verdict immediately after pixels, reused earlier baseline inspection and read exact native REST-to-SAFE evidence without rerunning anything.
+- Did not work: broad log tails included excessive corridor text; focused native/REST/PASS rows were clearer. Completed baseline mechanical checks and a public gallery do not close changed-study gates. The supplied headless startup failure, builder OOM and area-preflight failure preceding a capture are avoidable churn; this review did not establish the OOM cause.
+- Change next time: keep the paired architecture scope and make existing generation/preflight success a prerequisite for the dependent capture. Use the reviewed rendered invocation. Preserve failed records and required checks; do not wait for future images to issue the present checkpoint or restart accepted B2. No engine, research, runtime/catalog/code edit, acceptance, new framework or throughput/timing claim; own entry supplied for the named integration writer.
+
+### mariner_checkpoint_independent — final architecture checkpoint3, 2026-10-10
+- Worked: seven originals plus exact final1212 native/approach/spray REST-to-SAFE records established meaningful roof/gable progress and a concrete final-gate action. Prior001 gaps remained visible review history; no exhaustive image replay or engine work was needed.
+- Did not work: ROOT-reported old revoked owner resumption blocked coordination despite no engine launch. Completed fresh owner/capture and combined runtime are observed outcomes, not measured model-speed evidence;1219 visual/runtime and suite are still pending at this snapshot.
+- Change next time: retain a fresh bounded owner after revocation, with a concrete first handle/status before dependent work; observe in ordinary RETRO whether superseded-owner resumption repeats. Finish the paired gates then Station48 baseline/host association, preserving mandatory checks and avoiding polish/duplicate fit-spray. Own draft supplied for named integration; no implementation, acceptance, new framework or timing claim.
+
+
+### chapel_final_integrator — final Mariner runtime preparation, 2026-10-10
+
+- Worked: reused the complete actual B2 shared spray JSON schema, selected source-bound opaque wall patches, and distinguished noncolliding visible area from actual LAND and colliding family-ground roles before choosing starts. Combined native-fit-spray plans avoid a standalone fit/repeated spray campaign.
+- Did not:1219 frontage ground is itself a family contact mesh, so a simple outward pose would not establish LAND; chose a bounded outside-end oblique start instead. Source interpolation cannot prove stock settle, camera hit or clear full capsule, and1219 final roof/capture is still author-owned.
+- Next: wait for actual frozen final source and named engine transfer, then run exactly the two combined maintained checks with terminal/owned-PID release and all native/rest guards. No unreported final test was found; do not replay earlier baseline checks or confuse captured pixels with runtime proof. No engine/source/Git change in preparation.
+
+### chapel_final_integrator —1212 final combined native/fit/spray,2026-10-10
+
+- Worked: one supported combined invocation60995 passed every actual native role, four stock approaches and newENEwall spray with activeLANDREST/SAFE, then ended0. Same handle and recorded PID absence established release without repeated fits.
+- Did not: source interpolation alone could not prove stock support; actual LAND contact now supplies that proof.1219 visual003 still needs ROOT's verdict before its second runtime case. Known seven TextureRID warnings remain.
+- Next: reuse this completed1212 result unchanged and execute only the remaining1219 case after explicit visual/engine GO; preserve final roof-column preflight and all runtime guards. No source edit, suite or publication.
+
+### chapel_final_integrator — 1219 final003 combined runtime, 2026-10-10
+
+- Worked: one complete maintained rendered housing-native/fit/spray run78231 exited0; exact source wall tag and actual LAND supported active REST/SAFE passed alongside all four stock approaches. Retained fresh logs, PNG, terminal and owned process absence; reused unchanged1212 proof without repetition.
+- Did not: static station checks alone were insufficient; actual runtime supplied contact and receiver proof. Existing seven Texture RID shutdown warning remains, despite terminal0. Winding diagnostics include downward underside/edge faces, so they are not an upward-only roof claim.
+- Next: await separate ROOT full-suite assignment, preserving frozen source and independent verdicts. No source/controller/threshold edits, retry, suite, acceptance or publication in this round.
+
+### chapel_final_integrator — final suite preparation only, 2026-10-10
+
+- Worked: inspected complete maintained suite and proven B2 invocation before launch; reused compatible existing pinned local dependencies in the fresh isolated worktree. Fresh private output is ready without running tests during documentation edits.
+- Did not: ignored node_modules was absent initially; a complete suite would otherwise fail Node validation/determinism despite Godot success. No result is claimed for the pending suite.
+- Next: launch exactly one full suite only after writer freeze and ROOT GO; retain all nested statuses and terminal/process release. No source/docs/assets edited, installation, engine launch or tests in this preparation round.
+
+
+### mariner_whole_family_visual — 2026-10-10 — first-coherent Mariner pair
+- Worked: direct original-pixel comparison identified substantive roof closure and1212 opening gains; early1212 feedback reached root before waiting for the paired review.1219 donor-focused views supplied a valid public-front comparison despite the legacy south view remaining unusable.
+- Did not work: closure fixed roof holes but did not establish reference-like whole-roof form.1212 retained a straight strip under the low triangular cap;1219's roof planes nearly disappeared in ordinary frontage views. Island overviews lack the resolving scale for those defects.
+- Change next time: review the complete roof/gable/rake/eave composition immediately after the first coherent render, using ordinary target views beside the dated originals. Keep the closed envelope, but restore legible restrained planes and clean joints before polish. Do not replace actual terminal release with image-file presence. No new lesson added: existing whole-result/architecture-before-finish lessons cover this occurrence. Root's named documentation owner may append this draft to the shared RETRO before the round's final commit.
+
+### mariner_whole_family_visual — 2026-10-10 — STUDY002 rereview
+- Worked: integrated siding and rake trim resolved1212's cap-like end, and gray planar surfaces clarified both roof envelopes. Valid donor frontage views and actual dated originals kept the1219 judgment grounded after raised-view improvement.
+- Did not work:1219's coherent raised roof did not resolve the thin wall-top appearance in ordinary frontage views. Camera/light differences limit direct projection matching; no exact pitch or builder cause can be diagnosed from these pixels alone.
+- Change next time: preserve a successful unit while refining the sibling's one remaining public architecture gap; judge ordinary eave/near-plane readability and full-context form together. Do not close the whole scoped verdict solely because the last geometric defect disappears in a raised view. Existing whole-result lessons cover this outcome; no separate lesson/framework added. Shared RETRO append remains for root's named documentation owner before final commit.
+
+### mariner_final_notes — study consolidation, 2026-10-10
+
+- Worked: reconciled final1212 study002 and1219 study003 reviews with actual combined runtime notes, preserving distinct observed-front/end and inferred-roof claims. Reused existing per-unit notes/catalog/checklist and transferred supplied own actor retrospectives without changing historical recognition credit.
+- Did not: old1212 rear-long and1219 run-direction text remained misleading without an explicit superseding current binding. Earlier pending-gate statements are retained history, not current results; full suite is still pending at this documentation snapshot.
+- Next: update only suite-dependent closure after an actual terminal result; keep unknown elevations and later-stage cells unclaimed, inspect the exact intended diff and avoid replaying completed art/runtime evidence. No engine, source asset, commit or publication in this round.
+
+
+### chapel_final_integrator — final suite preparation only, 2026-10-10
+
+- Worked: inspected complete maintained suite and proven B2 invocation before launch; reused compatible existing pinned local dependencies in the fresh isolated worktree. Fresh private output is ready without running tests during documentation edits.
+- Did not: ignored node_modules was absent initially; a complete suite would otherwise fail Node validation/determinism despite Godot success. No result is claimed for the pending suite.
+- Next: launch exactly one full suite only after writer freeze and ROOT GO; retain all nested statuses and terminal/process release. No source/docs/assets edited, installation, engine launch or tests in this preparation round.
+
+### chapel_final_integrator — Mariner final complete suite, 2026-10-10
+
+- Worked: one complete maintained suite73786 exited0, all nine nested script statuses0, all49 scored fits and Node validation/determinism PASS. Source/docs freeze held; retained stdout/stderr, trace, actual terminal and owned PID absence.
+- Did not: maintained suite buffers island output until that subprocess exits, so live observations could establish running state but not per-building progress. Several early five-second polls supplied little information.
+- Next: prefer30-second observations during the known buffered stage, report only meaningful milestones, and reconcile pending documentation through its named writer. No test replay is needed for ordinary closure text alone; no publication performed in this round.
+
+
+### next_landmark_readiness — Station48 next whole-building readiness,2026-10-10
+- Worked: directly compared retained Sep2025/May2019 and official undated originals with old gameplay, then read current exact factory/config. This separates an already modeled upper-window family from the unresolved visible entrance/access family and avoids repeating the old material-first proposal.
+- Did not: existing official photo has no capture date/exact host join and dated street views obscure lower walls; old gameplay cannot prove current all-side completeness. Private design note's26-window wording disagrees with current13-window config, so it was corrected in this private handoff without pinning counts.
+- Next: one current whole-building baseline and bounded entrance/other-side source association, then a supported structural rescope or move on. Keep active Mariner ownership intact; no engine/GUI/source edits this round.
+
+### next_landmark_readiness — Station48 entrance source association,2026-10-10
+- Worked: combined actual official/Sep2025 pixels with complete frozen/source footprint runs to locate the entrance on the pale modular architectural unit and narrow a plausible run3 host, without confusing it with the vaulted facade.
+- Did not: exact host/anchor remains inference; no geolocated official camera or unobscured end/return coverage. Google and two distinct Apple read-only routes were inaccessible; this supplies no imagery-absence finding. Four-request cap respected.
+- Next: current whole baseline after Mariner release, then resolve only the remaining host/side questions before a bounded architecture assignment. Do not invent a separate apparatus ID or copy the upload-directory date into capture evidence. No engine/GUI/download/model edits.
+
+### mariner_final_notes — final suite closure bookkeeping, 2026-10-10
+
+- Worked: actual full-suite terminal0 and nested PASS evidence closed the remaining metadata without another runtime round. Updated only both scoped catalog explanations, ordinary study notes and four L1/L2 checklist cells; preserved later unknown stages, all213 identities and49 historical credits. Added latest supplied runtime and Station48 readiness own entries without duplicating the previous B3 entry.
+- Did not: earlier supplied notes necessarily retain their then-pending statements; the current closure explicitly supersedes those statuses without erasing failed chronology or upgrading hidden-side fidelity.
+- Next: integrate the explicit ten-file patch using the completed applicable suite; publish only through the named integrator. No source/runtime edit, test, staging, commit or push accompanied these closure changes.
+
+### mariner_final_notes — corrective stage clarification, 2026-10-10
+
+- Worked: ROOT's direct rear-view challenge and fresh independent visual clarification exposed the mismatch between scoped roof/front/end PASS and the checklist's complete all-side L2 definition. Preserved every valid art/code/native/fit/spray/suite result and both L1 completions while returning only the two unsupported L2 cells to U.
+- Did not: my earlier closure accepted the requested four-cell update without independently matching its stage scope to the explicit unknown rear/opening limits already in the notes. Blank rear1219 north/1212 south views and front/end-only references cannot establish complete L2; there is also no observed motif defect supporting I.
+- Next: compare each stage's complete requirements against actual side coverage before translating scoped PASS into checkboxes. Seek bounded rear/other-end evidence before any future L2 rescope; retain historical closure entries as corrected chronology. No runtime edits, tests, commit or publication in this correction.
+
+
+### mariner_final_visual_fresh — stage-coverage clarification round — 2026-10-10
+
+What worked well: rereading the actual C/I/U definitions beside both rear originals made the correct distinction clear: whole envelope/site fit supports L1, while fronts/end plus complete roof cannot close all-side opening coverage. Existing scoped PASSes and completed mechanical evidence remain useful without reopening the art loop.
+
+What did not work well: consolidation converted explicitly scoped observed-front/end and whole-roof PASSes into L2 C for both buildings, despite unknown blank rear elevations. The checklist's own rule excluded that inference. Modeled absence is not reference-supported absence.
+
+What the team should change next time: reconcile each proposed complete stage against its full definition and actual side coverage before checkbox updates. Keep L2 U until bounded rear/opposite-end source work resolves observed or honestly inferred opening families; preserve scoped gains and historical credit. The existing LEARNINGS lesson against promoting one facade's finish to whole-building quality applies directly.
+
+### chapel_final_integrator — Mariner publication round, 2026-10-10
+
+- Worked: verified the explicit ten-path patch against the unchanged published base before staging. Completed independent scoped visual/CODE/progress reviews, both fresh combined native-fit/spray runs and the full suite remain applicable; subsequent edits only clarify documentation and stages.
+- Did not: observed fronts/end and whole-roof completion do not resolve rear/opposite-end openings. Both L1 completions are supported; L2 remains U and historical recognition credit stays unchanged.
+- Next: publish only the reviewed paths through a guarded normal fast-forward push, then label the existing private gallery with the actual result while preserving unknown-side limits. No runtime edits, replay, new assets, exports or source evidence packaging in this round.

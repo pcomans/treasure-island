@@ -30,6 +30,8 @@ extends SceneTree
 ## partition comparison before the ordinary fit, for the Chapel producer.
 ## Optional --native-producer building2-indexed: complete B2 material-bucket
 ## indexed triangles against actual wall/roof collision emission, order independent.
+## Optional --native-producer housing-get-faces: complete live shared housing
+## role partitions using the installer's Mesh.get_faces() producer.
 ## Optional --diagnose-side north|south|west|east: native candidate queries only,
 ## without placement/movement. Always reports whole-building HOLD and exits1.
 
@@ -68,7 +70,8 @@ func _run() -> void:
 		return
 	var source_key := str(args.source)
 	var native_sources := {"chapel-indexed": "w291189336", "building2-indexed": "w24274434"}
-	if args.has("native-producer") and (str(native_sources.get(str(args["native-producer"]), "")) != source_key or args.has("diagnose-side") or args.has("adjacent-source")):
+	var housing_native := str(args.get("native-producer", "")) == "housing-get-faces"
+	if args.has("native-producer") and ((not housing_native and str(native_sources.get(str(args["native-producer"]), "")) != source_key) or args.has("diagnose-side") or args.has("adjacent-source")):
 		push_error("native producer requires its supported source and cannot combine diagnostic/adjacent modes")
 		quit(1)
 		return
@@ -121,7 +124,13 @@ func _run() -> void:
 			quit(1)
 			return
 	if args.has("native-producer"):
-		var native_error := _check_building2_indexed(h, source_key) if str(args["native-producer"]) == "building2-indexed" else _check_indexed_partition(h, source_key)
+		var native_error := ""
+		if housing_native:
+			native_error = _check_housing_faces(h, source_key)
+		elif str(args["native-producer"]) == "building2-indexed":
+			native_error = _check_building2_indexed(h, source_key)
+		else:
+			native_error = _check_indexed_partition(h, source_key)
 		if native_error != "":
 			print("FAIL: native partition: " + native_error)
 			h.main.queue_free()
@@ -436,4 +445,83 @@ func _check_building2_indexed(h: WorldHarness, source: String) -> String:
 		if not result.ok:
 			return "complete B2 indexed/native triangles differ"
 	print("PASS: complete B2 indexed wall/roof native geometry for " + source)
+	return ""
+
+
+# Shared housing installs every immediate mesh in a source-owned role bucket,
+# translating its world-space faces into the body's local origin in that order.
+func _check_housing_faces(h: WorldHarness, source: String) -> String:
+	var roots: Array[Node3D] = []
+	for node: Node in h.main.find_children("SharedHousing_*", "Node3D", true, false):
+		if node.get_meta("source_key", "") == source:
+			roots.append(node as Node3D)
+	if roots.size() != 1:
+		return "missing or duplicate shared housing producer"
+	var root := roots[0]
+	if root.global_transform != Transform3D.IDENTITY or not root.get_meta("build_valid", false) or root.get_meta("scope", "") != "approved_shared_family_normal_play":
+		return "unsupported housing producer placement or identity"
+	var meshes := {"wall": [], "roof": [], "support": [], "ground": []}
+	var bodies := {}
+	for node: Node in root.get_children():
+		if node is MeshInstance3D:
+			var role := str(node.get_meta("family_role", "support"))
+			if not meshes.has(role) or not node.is_visible_in_tree() or node.is_set_as_top_level() or not node.transform.is_finite() or node.layers != (2 if role == "wall" else 1):
+				return "unsupported housing visible role/placement/layer"
+			meshes[role].append(node)
+		elif node is StaticBody3D:
+			var role := str(node.get_meta("family_role", ""))
+			if not meshes.has(role) or bodies.has(role):
+				return "unknown or duplicate housing contact role"
+			bodies[role] = node
+		else:
+			return "unsupported housing producer child"
+	for node: Node in h.main.find_children("*", "StaticBody3D", true, false):
+		if source in node.get_meta("source_keys", []) and node.collision_layer != 0 and node.get_parent() != root:
+			return "additional active housing source body"
+	for role: String in meshes:
+		if meshes[role].is_empty():
+			if role in ["wall", "roof"] or bodies.has(role):
+				return "missing positive housing role coverage"
+			continue
+		if not bodies.has(role):
+			return "missing housing native role"
+		var body: StaticBody3D = bodies[role]
+		var wall := role == "wall"
+		var key := "building:" + source + (":roof" if role == "roof" else ":wall")
+		if body.get_meta("source_keys", []) != [source] or body.get_meta("derived_object_key", "") != key or body.get_meta("receiver_kind", "") != ("building_wall" if wall else "none") or bool(body.get_meta("opaque", false)) != wall:
+			return "housing source/receiver identity differs"
+		if body.is_set_as_top_level() or body.basis != Basis.IDENTITY or not body.position.is_finite() or body.collision_layer != (5 if wall else 1) or body.collision_mask != 0 or body.is_in_group("spray_receiver_wall") != wall:
+			return "housing body placement/layer differs"
+		var owners := body.get_shape_owners()
+		if owners.size() != 1 or body.is_shape_owner_disabled(owners[0]) or body.shape_owner_get_shape_count(owners[0]) != 1:
+			return "ambiguous housing shape owner"
+		var holder := body.shape_owner_get_owner(owners[0]) as CollisionShape3D
+		if holder == null or holder.get_parent() != body or holder.transform != Transform3D.IDENTITY or not holder.shape is ConcavePolygonShape3D or not holder.shape.backface_collision:
+			return "unsupported housing native shape"
+		var shape_index := body.shape_owner_get_shape_index(owners[0], 0)
+		var server_pose: Variant = PhysicsServer3D.body_get_state(body.get_rid(), PhysicsServer3D.BODY_STATE_TRANSFORM)
+		if not server_pose is Transform3D or not server_pose.is_equal_approx(body.global_transform) or PhysicsServer3D.body_get_shape(body.get_rid(), shape_index) != holder.shape.get_rid() or PhysicsServer3D.body_get_shape_transform(body.get_rid(), shape_index) != holder.transform:
+			return "housing native server ownership/placement differs"
+		var faces := PackedVector3Array()
+		var roof_up := 0
+		var roof_down := 0
+		for mesh: MeshInstance3D in meshes[role]:
+			var one := StudyGeometry.collect(mesh.mesh, [mesh.transform], StudyGeometry.MESH_GET_FACES)
+			if not one.ok:
+				return "housing get_faces collection failed: " + str(one.errors)
+			# The installer first stores transformed vertices in a packed array,
+			# then subtracts the body origin in a second packed-array pass.
+			for vertex: Vector3 in one.faces:
+				faces.append(vertex - body.position)
+			if role == "roof":
+				for i in range(0, one.faces.size(), 3):
+					var cross_y: float = (one.faces[i + 1] - one.faces[i]).cross(one.faces[i + 2] - one.faces[i]).y
+					if cross_y < -0.000001: roof_up += 1
+					elif cross_y > 0.000001: roof_down += 1
+		var collection := {"ok": not faces.is_empty(), "faces": faces, "local_faces": faces, "transforms": [], "producer": StudyGeometry.MESH_GET_FACES, "errors": [], "minimum_cross_length_squared": -1.0}
+		var result := StudyGeometry.compare(collection, holder.shape.get_faces(), faces.size())
+		print("HOUSING_NATIVE source=%s role=%s predicates=%s server_owner=true clockwise_up=%d clockwise_down=%d" % [source, role, result.predicates, roof_up, roof_down])
+		if not result.ok:
+			return "complete housing visible/native ordered faces differ"
+	print("PASS: complete housing get_faces native partitions for " + source)
 	return ""

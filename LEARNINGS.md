@@ -14,6 +14,13 @@ The owner clarified the work order: basic shape/footprint/ground fit and coarse 
 
 **Cause and prevention:** A scoped facade/finish improvement was promoted to whole quality without resolving the other visible sides. Before choosing scope, compare full target-reference and gameplay originals, using original-pixel crops for unclear architecture/opening/material families. Seek available Street View, Maps place photographs, relevant primary web and owner photos; Apple imagery may clarify layout. A failed black viewer or unread gallery is not a completed source attempt. After meaningful bounded attempts, record useful URL/date/side/context or actual search/access gaps, plus one concise observed/modeled/missing/inferred statement per observed side/unit in the ordinary note. Unresolved opening coverage cannot become acceptable finish inference. Review all actual gameplay sides and judge coherent inferred surfaces too; do not invent hidden detail or require surveyed counts. A scoped PASS or protected art boundary cannot exempt visibly unfinished sides; reopen whole-quality work through bounded scope while preserving source/gameplay invariants and historical credit.
 
+Mariner2026-10-10 exposed the same error in stage bookkeeping: scoped front/end/roof
+PASS plus full mechanical/suite success was translated into both units' L2 C.
+Actual1219 north and1212 south showed blank rears without reference-backed opening
+coverage. Retain supported L1 envelope/site C but keep complete all-side L2 U;
+compare each checkbox's full definition with actual side coverage before updating
+it. Unknown opening coverage is neither verified absence nor a proven motif defect.
+
 ## Judge the whole visible result after a fix
 
 **Observed:** In 1308 fidelity002, ordinary views 06/07 improved roof visibility and lawn coverage, yet the main roof still showed rounded, uneven humps and a heavy pale rim. Junction views 03/04 exposed near-black canopy tops and heavy edges. The dated March 2025 reference showed coherent planar roof surfaces, straight ridge/eave segments and readable gray roofing. The initial review closed the previous two gaps too narrowly; the owner caught the unresolved overall form. A focused sibling check of 1303 fidelity004 views 03/06 found a related uneven crest despite real roof-visibility and apron gains.
@@ -443,3 +450,9 @@ B2 source003 removed nested opaque-head recesses/cap marks, but fresh north pixe
 ## Recover resolved panoramas without treating background text as absence
 
 The Chapel ENE coordinate startup stayed black despite a resolved pano and tileHTTP200; reopening its exact actual full URL in the same headed browser recovered May2011 pixels. The modified helper reproduced this with one explicit `--recover-resolved` call, retaining the first black frame. Whole-body no-imagery text also falsely rejected useful June2026 Chapel pixels: compare actual capture-date UI and saved viewer pixels before declaring absence, keeping contributor dates separate. Default capture does not navigate; use the explicit one-recovery option only within the assigned budget, preserve failures, and stop challenges/unresolved results. This fixes demonstrated initialization/readiness cases, not every Maps request or architectural/date/side sufficiency; no GPU workaround was justified.
+
+## Inspect shared capture framing even when the driver passes
+
+Mariner1219 baseline on2026-10-10 returned screenshot PASS, but closeup-south showed the camera inside/behind the opposite row, with reverse-facing windows and the intended frontage beyond it. The shared center-ray test did not establish a useful complete facade view; the exact camera/collider cause remains unmeasured. Inspect saved pixels before using a default side view for fidelity. Retain invalid originals and use the supported focused-view mechanism with a complete donor manifest when a side needs a clear public viewpoint; do not treat PASS or a filename as framing proof.
+
+The Mariner native adapter initially treated `StudyGeometry.collect`'s transform list as a chain; it actually enumerates separate instances. Independent source review caught this before execution. Mirror the producer's ordered packed-array operations: collect once with the mesh transform, then subtract body origin in the next pass. Also inspect the maintained invocation: shared `building_fit_test` needs rendering and rejects `--headless` before geometry collection. Run its proven rendered `tools/godot` command. Keep dependent capture in a separate command after a successful preflight terminal result; a multiline shell without fail-fast continued Mariner study001 despite an area assertion.

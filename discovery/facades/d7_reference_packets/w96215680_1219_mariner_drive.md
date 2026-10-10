@@ -1,5 +1,7 @@
 # D7 source packet — 1219 Mariner Drive (`w96215680`)
 
+Current architectural result: see the 2026-10-10 update below. The legacy facing/run prose is historical; the current source-world public-front binding supersedes it.
+
 Checked: **2026-09-04**  
 Readiness: **target-side prototype-ready**
 
@@ -52,3 +54,53 @@ local. Prototype blocker: **none for a detached S-side study**. No panorama
 pixels are retained.
 
 Shared sources, lifecycle caveats, and rights boundary: [D7 index](README.md).
+
+## 2026-10-10 whole-family architectural study — current scoped result
+
+Published source `d7c88e2` plus the bounded Mariner patch; **roof/envelope study accepted for integration,
+full suite PASS; not yet published**. Historical recognition credit is preserved.
+Shared reuse, complete failure history, engine terminal/release records and
+pair-level limits are recorded in the [1212 current study](../1212_MARINER_DRIVE_REFERENCE_SPEC.md#2026-10-10-whole-family-architectural-study--current-scoped-result).
+Reuse remains the existing housing family/live attachment and source config.
+
+Final study003 source CODE **PASS**, `b2_family024_code`; independent whole-roof
+architectural game-art **PASS**, `mariner_final_visual_fresh`; separate whole-pair
+progress **PASS**, `mariner_checkpoint_independent`. Study001/002 visual REWORK
+is retained history, superseded only for the final scoped roof result. No
+unobserved-side fidelity or later-stage finish acceptance follows.
+
+March2025 frontage pixels checked2026-10-10 remain private; capture24556 ended0
+and owned processes were absent. Valid focused front/oblique views replace the
+invalid opposite-row closeup-south for comparison; raised contexts, both ends,
+rear and island comparisons found coherent inferred closure and no broad
+composition regression. The east end is partly occluded. Blank rear architecture
+is not reference-verified. Other-side access/observation limits remain unresolved.
+
+Fresh combined rendered native-fit/spray78231 ended0 (9e7ba1), owned-process
+absence202307: ordered wall/roof/support/ground source/server predicates, four
+stock approaches, actual correct front-wall Tag_001 and LAND active released
+supported REST before SAFE passed. Downward roof diagnostic faces include
+underside/edge geometry; they do not invalidate the scoped native result or
+establish upward-only roofing. No new stairs. Existing TextureRID warnings
+remain. Unchanged1212 proof was reused. The final complete suite73786 ended0 with all
+nested checks,49 scored fits, validation and determinism PASS; actual owned
+processes were absent before engine release. See the linked pair study for the
+ordinary closure record. No runtime changes followed the suite.
+
+1219 scope: the actual current public frontage is+Z runs0–13. Legacy D7 directional
+labels and its claimed16–23 public binding must not relocate the current frontage;
+protected14–25 stays untouched. March2025 supports the pale siding, broad upper
+openings, blue entries/screens, compact gray roof band and projecting eave.
+Study003 retains maximum ridge height, brings the inferred ridge forward and adds
+a closed0.30m eave/0.14m fascia. Exact dimensions and asymmetric hidden slope are
+production inference. The valid ordinary front now shows roofing above the siding;
+raised contexts and ends show coherent closure and step joins. Rear/opposite-end
+opening schedules remain unknown, not newly accepted or verified blank.
+
+Stage clarification: L1 shape/site C is supported by the coherent full envelope
+and fresh four-side fit. L2 remains U because the north rear and opposite-end
+opening completeness is unresolved. Independent `mariner_final_visual_fresh`
+inspected the current blank north rear directly; frontage/roof PASS does not prove
+complete all-side doors/windows/roof. No observed rear motif establishes failure,
+and blank gameplay pixels do not verify real-world absence. Bounded other-side
+source coverage must precede a future L2 rescope; no hidden motifs are authorized.

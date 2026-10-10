@@ -4386,6 +4386,14 @@
           "review_id": "northern-1212-quality-candidate-2026-09-14-001",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "mariner-whole-family-2026-10-10-1212-study002",
+          "review_kind": "independent_scoped_architectural_game_art",
+          "status": "pass",
+          "numerator_effect": 0,
+          "scope": "Observed public frontage and ENE run13 three-opening/gable family; complete roof closure is production inference. Native fit/spray, distinct progress and full suite PASS; roof/envelope study accepted for integration, not yet published. L1 shape/site complete; all-side L2 opening completeness unresolved. No unobserved-side or as-built fidelity claim.",
+          "source_locator": "discovery/facades/1212_MARINER_DRIVE_REFERENCE_SPEC.md"
         }
       ],
       "anchor_source_key": "w96215649",
@@ -4408,7 +4416,7 @@
       "legacy_adapter_ids": [],
       "protected_scopes": [
         {
-          "reason": "Preserve original source channels, original flat roof, unmapped/rear faces, collision and spray identity. Added public roof is separate and nonreceiver; crop/occlusion, hidden closure and unsurveyed cadence/dimensions remain unknown or production inference.",
+          "reason": "Preserve original source records, protected wall runs, collision and spray identity. 2026-10-10 opt-in full roof closure/orientation/trim is authorized construction inference, not surveyed hidden architecture. Only run13 is rescoped for the observed ENE three-opening/gable family; other protected runs remain unchanged.",
           "receiver_key": "building:w96215649:wall",
           "run_indices": [
             0,
@@ -4424,7 +4432,6 @@
             10,
             11,
             12,
-            13,
             18,
             23
           ]
@@ -4481,6 +4488,19 @@
             26,
             27
           ]
+        },
+        {
+          "complete_motif": true,
+          "cue_id": "mariner-1212-ene-three-openings-gable-20261010",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:w96215649:wall",
+          "reference_ids": [
+            "MARINER-20261010-1212-FRONT-END"
+          ],
+          "run_indices": [
+            13
+          ]
         }
       ],
       "reference_records": [
@@ -4494,6 +4514,18 @@
           "supports": [
             "Muted horizontal siding, pale complete trim, mixed broad/narrow windows, shallow pitched public roof and dark reddish doors with short screens.",
             "Captured full-public-front recognition scope retains crop/tree/hidden schedule and sparse motion limits."
+          ]
+        },
+        {
+          "observation_id": "MARINER-20261010-1212-FRONT-END",
+          "observed_regions": [
+            "Checked2026-10-10; March2025 public front; September2025 ENE run13 only, not rear long facade."
+          ],
+          "pixels_packaged": false,
+          "source_locator": "discovery/facades/1212_MARINER_DRIVE_REFERENCE_SPEC.md",
+          "supports": [
+            "Observed opening/siding/entry family and shallow roof silhouette; three complete ENE openings and siding-filled gable with sloping trim.",
+            "Exact pitch, anchors, ridge/step joins and hidden closure remain production inference; other sides unobserved."
           ]
         }
       ],
@@ -6603,6 +6635,14 @@
           "review_id": "northern-1219-quality-candidate-2026-09-13-001",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "mariner-whole-family-2026-10-10-1219-study003",
+          "review_kind": "independent_scoped_architectural_game_art",
+          "status": "pass",
+          "numerator_effect": 0,
+          "scope": "Observed public frontage and public roof/eave; complete roof closure is production inference. Native fit/spray, distinct progress and full suite PASS; roof/envelope study accepted for integration, not yet published. L1 shape/site complete; all-side L2 opening completeness unresolved. No unobserved-side or as-built fidelity claim.",
+          "source_locator": "discovery/facades/d7_reference_packets/w96215680_1219_mariner_drive.md"
         }
       ],
       "anchor_source_key": "w96215680",
@@ -6625,7 +6665,7 @@
       "legacy_adapter_ids": [],
       "protected_scopes": [
         {
-          "reason": "Preserve original source channels, original flat roof, unmapped/rear faces, collision and spray identity. Added public roof is separate and nonreceiver; crop/occlusion, hidden closure and unsurveyed cadence/dimensions remain unknown or production inference.",
+          "reason": "Preserve original source records, protected wall runs, collision and spray identity. 2026-10-10 opt-in full roof closure/orientation/trim is authorized construction inference, not surveyed hidden architecture. Protected runs14–25 remain untouched; actual public frontage is+Z runs0–13, overriding legacy directional labels.",
           "receiver_key": "building:w96215680:wall",
           "run_indices": [
             14,
@@ -6706,6 +6746,18 @@
           "supports": [
             "Muted horizontal siding, pale complete trim, mixed broad/narrow windows, low warm reddish pitched public roof and dark-blue doors with short screens.",
             "Captured full-public-front recognition scope retains crop/tree/hidden schedule and sparse motion limits."
+          ]
+        },
+        {
+          "observation_id": "MARINER-20261010-1219-FRONT",
+          "observed_regions": [
+            "Checked2026-10-10; March2025 public front; actual current+Z runs0–13, not legacy16–23 binding."
+          ],
+          "pixels_packaged": false,
+          "source_locator": "discovery/facades/d7_reference_packets/w96215680_1219_mariner_drive.md",
+          "supports": [
+            "Observed opening/siding/entry family and shallow roof silhouette; compact gray public roof band and projecting eave.",
+            "Exact pitch, anchors, ridge/step joins and hidden closure remain production inference; other sides unobserved."
           ]
         }
       ],

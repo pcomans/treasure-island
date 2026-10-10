@@ -164,7 +164,8 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 		var n := Vector3(-t.z,0,t.x)
 		if bool(cfg.get("vertical_seams",false)):
 			PARTS._panel(root,Vector3(a.x,(a.y+top)/2,a.z),t,n,Vector3(0.08,top-a.y,0.08),trim)
-		PARTS._beam(root,Vector3(a.x,top,a.z)+n*0.05,Vector3(b.x,top,b.z)+n*0.05,0.23,0.13,trim)
+		if not bool(cfg.get("public_roof",{}).get("replace_eave_trim",false)):
+			PARTS._beam(root,Vector3(a.x,top,a.z)+n*0.05,Vector3(b.x,top,b.z)+n*0.05,0.23,0.13,trim)
 	var roof_begin := root.get_child_count()
 	# Keep the frozen roof footprint; existing observed pitched surfaces are data.
 	if str(cfg.get("roof_kind","")) == "shallow_hip":
@@ -172,7 +173,15 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 	elif not bool(cfg.get("retain_production_roof",false)):
 		var roofpoints: Array = []
 		for i in range(0,roof.vertices.size(),3): roofpoints.append(Vector3(roof.vertices[i],roof.vertices[i+1],roof.vertices[i+2]))
-		PARTS._mesh(root,roofpoints,PackedInt32Array(roof.indices),roofing)
+		var roof_indices := PackedInt32Array(roof.indices)
+		# Source records retain their original channels; this opt-in corrects
+		# the consumed clockwise front when this family regenerates normals.
+		if bool(cfg.get("reverse_source_roof_winding",false)):
+			for i in range(0,roof_indices.size(),3):
+				var saved := roof_indices[i+1]
+				roof_indices[i+1] = roof_indices[i+2]
+				roof_indices[i+2] = saved
+		PARTS._mesh(root,roofpoints,roof_indices,roofing)
 		for triangle: Array in cfg.get("public_roof", {}).get("triangles", []):
 			var roof_material: Material = roofing
 			var facade: Dictionary = cfg.get("facade",{})
@@ -181,6 +190,12 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 				var station := center.x*float(facade.warm_roof_axis[0])+center.z*float(facade.warm_roof_axis[1])
 				if station <= float(facade.warm_roof_station_max): roof_material=warm_roof
 			PARTS._mesh(root,[vec(triangle[0]),vec(triangle[1]),vec(triangle[2])],PackedInt32Array([0,1,2]),roof_material)
+		# Optional full-envelope gable/step closures use the existing siding
+		# material and roof contact role; unconfigured instances are unchanged.
+		for triangle: Array in cfg.get("public_roof", {}).get("closure_triangles", []):
+			PARTS._mesh(root,[vec(triangle[0]),vec(triangle[1]),vec(triangle[2])],PackedInt32Array([0,1,2]),siding)
+		for triangle: Array in cfg.get("public_roof", {}).get("edge_triangles", []):
+			PARTS._mesh(root,[vec(triangle[0]),vec(triangle[1]),vec(triangle[2])],PackedInt32Array([0,1,2]),trim)
 	_tag_since(root,roof_begin,"roof")
 	for triangle: Array in cfg.get("shallow_band", {}).get("triangles", []):
 		PARTS._mesh(root,[vec(triangle[0]),vec(triangle[1]),vec(triangle[2])],PackedInt32Array([0,1,2]),siding)

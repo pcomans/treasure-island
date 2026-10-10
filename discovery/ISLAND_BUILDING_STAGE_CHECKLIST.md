@@ -25,6 +25,8 @@ Update affected rows in the ordinary study handoff after actual evidence changes
 
 Initial baseline stage1:5 C /0 I /208 U; stage2:5 C /2 I /206 U. After Chapel/B2 closure
 and B3 evidence reconciliation: stage1:8 C /0 I /205 U; stage2:8 C /0 I /205 U.
+After Mariner scoped roof/envelope closure: stage1:10 C /0 I /203 U;
+stage2:8 C /0 I /205 U.
 Stage4:1 C /0 I /212 U; stages3/5 remain213 U each. These are evidence
 coverage counts, not an estimate that unknown buildings need new massing. No stage5 completion
 is inferred from generic visual acceptance. Unknown rows remain unchecked, not
@@ -42,6 +44,17 @@ PASS; historical opening004 HOLD retained, as-built fidelity unclaimed).
 **B2** [Building2 whole-family025 closure](facades/BUILDING_2_STUDY.md)
 (2026-10-10; whole visual/CODE/progress, current native/fit/spray/suite PASS;
 initial shutdown timeout retained separately, as-built fidelity unclaimed).
+**Mar** Mariner1212 study002 /1219 study003: scoped architectural visual,
+CODE, distinct progress, fresh native/fit/spray/REST and full suite PASS.
+See [1212 current study](facades/1212_MARINER_DRIVE_REFERENCE_SPEC.md) and
+[1219 current study](facades/d7_reference_packets/w96215680_1219_mariner_drive.md).
+Both rows complete L1 shape/site through coherent whole envelopes and fresh
+four-side fits. L2 remains U: roof/front and1212 end are repaired, but rear and
+opposite-end opening completeness is unresolved. Blank gameplay walls are not
+reference-verified absence; no concrete observed missing motif establishes I.
+The roof/envelope study is accepted for integration, not yet published; their
+L3/L4/L5 remain U. Current totals are L1:10 C/203 U, L2:8 C/205 U and
+19 C/1,046 U overall, preserving213 units/1,065 cells and49 historical recognition credits.
 **U** no current stage-level conclusion established in this checklist pass.
 
 The retained34-building audit entries in [RETRO](RETRO_LOG.md) (2026-09-23,
@@ -143,7 +156,7 @@ before selecting another round.
 | physical-building:w96215645 / w96215645 | 1122 Reeves Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215646 / w96215646 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215648 / w96215648 | 1316 Gateview Avenue | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96215649 / w96215649 | 1212 Mariner Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215649 / w96215649 | 1212 Mariner Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar — L1 envelope/site complete; roof/front/1212 end repaired; rear/opposite-end opening completeness unresolved (L2 U); scoped gates/suite PASS |
 | physical-building:w96215651 / w96215651 | 1202 Mariner Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215652 / w96215652 | 1220 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215653 / w96215653 | 1227 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -167,7 +180,7 @@ before selecting another round.
 | physical-building:w96215676 / w96215676 | 1143 Ozbourn Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215677 / w96215677 | 1206 Mariner Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215678 / w96215678 | 1205 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96215680 / w96215680 | 1219 Mariner Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215680 / w96215680 | 1219 Mariner Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar — L1 envelope/site complete; roof/front/1212 end repaired; rear/opposite-end opening completeness unresolved (L2 U); scoped gates/suite PASS |
 | physical-building:w96215682 / w96215682 | 1221 Mariner Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215685 / w96215685 | 1226 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215688 / w96215688 | 1240 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
