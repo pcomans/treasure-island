@@ -1,0 +1,89 @@
+{
+  "source": "r133347",
+  "chunk": "x_0__z_1",
+  "status": "production_inference; June2021 east and September2025 north/east with undated Apple roof layout; courtyard and west/south untouched",
+  "chains": [
+    {
+      "runs": [
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "family": "grid_transom",
+      "bay_width": 1.7,
+      "muted_bays": [
+        8,
+        9,
+        10,
+        18,
+        19
+      ],
+      "solid_bays": [
+        11,
+        12
+      ]
+    },
+    {
+      "runs": [
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "family": "grid_transom",
+      "bay_width": 1.7,
+      "muted_bays": [
+        6,
+        7,
+        17,
+        18
+      ],
+      "solid_bays": [
+        12,
+        13
+      ]
+    }
+  ],
+  "palette": {
+    "frame": [
+      0.1,
+      0.125,
+      0.13
+    ],
+    "glazing": [
+      0.29,
+      0.37,
+      0.39
+    ],
+    "opaque": [
+      0.17,
+      0.19,
+      0.19
+    ],
+    "muted": [
+      0.44,
+      0.44,
+      0.39
+    ],
+    "screen": [
+      0.39,
+      0.29,
+      0.19
+    ]
+  },
+  "roof_screen": {
+    "center": [
+      241.8,
+      297.0
+    ],
+    "size": [
+      4.2,
+      2.2,
+      2.5
+    ]
+  },
+  "site": {}
+}

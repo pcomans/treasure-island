@@ -60,6 +60,14 @@ const QUALITY_SUPPORT_ASSEMBLIES := {
 			"ground_visual": ["ObservedPavedApron"],
 		},
 	},
+	"r133347": {
+		"assembly_name": "ObservedPanelHall",
+		"required": {
+			"wall": ["GridInfill", "GridTransom", "GridMullion"],
+			"detail": ["GridRoofEdge", "RoofScreenCore", "RoofScreenSlat", "RoofScreenCap"],
+			"ground_visual": [],
+		},
+	},
 }
 
 func _initialize() -> void:
@@ -90,7 +98,7 @@ func _run() -> void:
 		quit(1)
 		return
 	var source_key := str(args.source)
-	var native_sources := {"chapel-indexed": "w291189336", "building2-indexed": "w24274434", "station48-indexed": "w764313741", "northpoint1232-mixed": "w96215673", "ymca-mixed": "w34313547", "panel-hall-mixed": "w34313569"}
+	var native_sources := {"chapel-indexed": "w291189336", "building2-indexed": "w24274434", "station48-indexed": "w764313741", "northpoint1232-mixed": "w96215673", "ymca-mixed": "w34313547", "panel-hall-mixed": "w34313569", "personnel-support-mixed": "r133347"}
 	var housing_native := str(args.get("native-producer", "")) == "housing-get-faces"
 	if args.has("native-producer") and ((not housing_native and str(native_sources.get(str(args["native-producer"]), "")) != source_key) or args.has("diagnose-side") or args.has("adjacent-source")):
 		push_error("native producer requires its supported source and cannot combine diagnostic/adjacent modes")
@@ -150,7 +158,7 @@ func _run() -> void:
 			native_error = _check_housing_faces(h, source_key)
 		elif str(args["native-producer"]) == "northpoint1232-mixed":
 			native_error = _check_housing_faces(h, source_key, true)
-		elif str(args["native-producer"]) in ["ymca-mixed", "panel-hall-mixed"]:
+		elif str(args["native-producer"]) in ["ymca-mixed", "panel-hall-mixed", "personnel-support-mixed"]:
 			var descriptor: Dictionary = QUALITY_SUPPORT_ASSEMBLIES[source_key]
 			native_error = _check_quality_support_mixed(h, source_key, descriptor.assembly_name, descriptor.required)
 		elif str(args["native-producer"]) == "station48-indexed":
@@ -325,6 +333,9 @@ func _check_indexed_partition(h: WorldHarness, source: String) -> String:
 		var flight_decor := name_key == "WSWFlightDecor"
 		if mesh.get_parent() != roots[0] or not semantic_roles.has(name_key) or seen.has(name_key) or not mesh.mesh is ArrayMesh or mesh.is_visible_in_tree() == flight_support:
 			return "unsupported, hidden or duplicate indexed producer mesh"
+		var roof_visual := name_key in ["NeutralRoofAndCap", "RibbedMetalCap"]
+		if str(mesh.get_meta("physical_role", "")) != ("roof" if roof_visual else ""):
+			return "indexed producer explicit roof visual role differs"
 		if (flight_support or flight_decor) and mesh.get_meta("chapel_flight_role", "") != ("support" if flight_support else "decor"):
 			return "flight producer role differs"
 		seen[name_key] = true
@@ -410,7 +421,7 @@ func _check_indexed_partition(h: WorldHarness, source: String) -> String:
 # bucket. Material grouping changes triangle order, but not oriented triangles.
 func _check_building2_indexed(h: WorldHarness, source: String) -> String:
 	var roles := {
-		"wall": ["Building2Cream", "Building2SSEInfill", "Building2FieldGlass", "Building2FieldGlassBand", "Building2FieldGrid", "Building2EntryPanel", "Building2ReliefProxy", "Building2Doors", "Building2EntryGlass", "Building2EntryFrames", "Building2PylonInsets", "Building2Vents", "Building2WingGlass", "Building2WingMullions"],
+		"wall": ["Building2Cream", "Building2PylonRoof", "Building2SSEInfill", "Building2FieldGlass", "Building2FieldGlassBand", "Building2FieldGrid", "Building2EntryPanel", "Building2ReliefProxy", "Building2Doors", "Building2EntryGlass", "Building2EntryFrames", "Building2PylonInsets", "Building2Vents", "Building2WingGlass", "Building2WingMullions"],
 		"roof": ["Building2BarrelRoof", "Building2WingRoof"],
 	}
 	var keys := ["building:" + source + ":wall", "building:" + source + ":roof"]
@@ -458,6 +469,8 @@ func _check_building2_indexed(h: WorldHarness, source: String) -> String:
 			var mesh_name := str(mesh.name)
 			if mesh.get_parent() != root or mesh_name not in roles[role] or seen.has(mesh_name) or not mesh.is_visible_in_tree() or not mesh.mesh is ArrayMesh:
 				return "unknown, hidden or duplicate B2 material bucket"
+			if mesh_name == "Building2PylonRoof" and mesh.get_meta("physical_role", "") != "roof":
+				return "B2 pylon roof visual role differs"
 			if mesh.transform != Transform3D.IDENTITY or mesh.is_set_as_top_level() or mesh.layers != (2 if wall else 1) or not mesh.global_transform.is_equal_approx(root.global_transform):
 				return "B2 visual placement/layer differs"
 			var one := StudyGeometry.collect(mesh.mesh, [mesh.transform], StudyGeometry.INDEXED_ARRAYS)

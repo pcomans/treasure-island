@@ -27,6 +27,15 @@ If important structural questions remain unsupported, assign targeted better vie
 
 Every exterior side needs actual gameplay inspection and a reference comparison where evidence is available. Inferred sides still need a believable complete result; a scoped facade/finish PASS cannot establish whole-building PASS. Existing protected art boundaries require a bounded rescope when necessary, not silent omission or a lowered quality verdict. Preserve frozen source geometry/identity and gameplay invariants. See [whole-building exterior coverage](../../../AGENTS.md#whole-building-exterior-coverage).
 
+Apply the [advisory visual-completeness checks](../../../AGENTS.md#advisory-visual-completeness-checks)
+at the first coherent render and after relevant revisions: missing identified
+entrance, opening-free facade, substantial roof/footprint mismatch and unequal
+side completion prompt source-pixel investigation, not automatic rejection.
+Use existing semantic data only when it identifies actual doors/windows; generic
+geometry/detail is not evidence of either. Resolve flags in ordinary notes under
+the existing scope and review gates; intended missing/reversed roof triangles
+remain blocking integrity failures.
+
 ## Before every new building: compare and reuse
 
 This check happens before new building implementation, including whole-building studies. Inspect the target's actual dated exterior references and the existing shared family entrypoints and relevant building assets. Compare silhouette and massing, roof form, opening organization, canopies, stairs and other structural motifs; palette similarity alone is not a close match. Confirm target association rather than borrowing a neighboring building's identity.

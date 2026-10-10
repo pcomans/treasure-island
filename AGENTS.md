@@ -95,6 +95,48 @@ Owner clarification, 2026-10-07: every exterior side must be modeled and indepen
 
 Review actual gameplay views around the entire building against the available side-specific references, including materials, openings, roof edges and junctions. A public-facade or finish PASS cannot become whole-building PASS while other visible sides remain unfinished or unreviewed. Inferred sides still require coherent, believable modeling and an explicit visual judgment. Historical protected facade-art scope is not a reason to call an unfinished building done: assign a bounded rescope for supported finishes/details while preserving frozen OSM XZ, source identity, inventory, native integrity and approved gameplay. Preserve historical recognition credit while reopening an unsupported current whole-quality claim honestly.
 
+### Advisory visual-completeness checks
+
+During ordinary author self-inspection and independent visual review, flag these
+possible omissions per building, using existing gameplay/context/top-down views:
+
+- No exterior entrance or door has been identified anywhere on the building.
+- An exterior facade has no identified windows or other openings.
+- The top-down roof outline or covered size differs substantially from the
+  foundation/building footprint: exclude legitimate courtyard holes and account
+  for supported overhangs, setbacks and stepped roof levels before flagging it.
+- One side is detailed while other visible sides remain blank or apparently
+  unfinished.
+
+These are **advisory prompts for investigation**, not universal construction
+rules, automatic stage/recognition rejection or numeric coverage thresholds.
+Some buildings legitimately have blank walls, concealed entrances or differing
+roof outlines. A flag triggers comparison with actual dated, target-associated
+exterior pixels: Street View/photographs for doors and openings, Google/Apple
+layout imagery for roof/footprint relationships as appropriate. Record unknown
+imagery dates honestly. Then fix a demonstrated omission within authorized scope
+or record a reference-backed exception in the existing ordinary note/checklist.
+If useful evidence remains unavailable after meaningful bounded attempts, record
+that limit and any reversible choice explicitly as `production_inference`; do
+not invent source-backed absence or use unavailable evidence to waive existing
+whole-quality review. No additional report, checklist schema or evidence quota.
+
+Use programmatic door/window checks only where existing semantic data actually
+identifies those features; otherwise flag them through visual review. Generic
+`detail`, dark panels, recesses and mesh counts do not identify a door or window.
+These advisory checks add no universal door/window test or new runtime gate.
+Missing or reversed **intended roof triangles** remain a blocking geometry/fit
+integrity defect, distinct from an advisory architectural outline mismatch.
+Independent visual, native fit/playability, full-suite, source ownership,
+serialized engine and lowest-unfinished-stage requirements remain unchanged.
+
+For example: a polished east facade with a blank west facade formerly might
+receive only a scoped finish comment. Now flag the west side and compare its
+actual dated exterior: restore omitted openings if shown, or record a supported
+blank service-wall exception. If the side cannot be observed after bounded
+attempts, disclose that limit/inference; neither the flag nor an attractive east
+facade alone decides whole-building acceptance.
+
 ## Authoring
 
 For bounded mechanics drivers, preserve each case’s HOLD and the aggregate HOLD. Continue unrelated cases only after recording supported, stopped, input-released rest while the stock controller is still active, then verifying a safe disabled final state; stock disable zeroes velocity, so post-disable zero alone is not rest proof. Source, identity, controller, setup, recovery or unsafe-final failures stop execution; skip cases dependent on a failed prerequisite. Reuse completed unchanged cases instead of replaying them solely for bookkeeping.

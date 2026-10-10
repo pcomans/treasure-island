@@ -2,6 +2,8 @@ extends RefCounted
 ## The fit checks for one building in the loaded island; see building_fit_test.gd.
 
 const WorldHarness := preload("res://game/tests/shared/world_harness.gd")
+const StudyGeometry := preload("res://game/tests/support/building_study_geometry.gd")
+const GeneratedContract := preload("res://game/scripts/world/generated_world_contract.gd")
 const VISUAL_LAYER := 1 << 19
 const SAMPLE_FAILURE_LIMIT := 0.10
 ## Keep the existing short-route allowance; longer routes scale with stock speed.
@@ -23,6 +25,11 @@ var _support_context: Dictionary = {}
 var _adjacent_source := ""
 var _observe_adjacent_support := false
 var _observed_adjacent_support := false
+var _source_roofs_loaded := false
+var _source_roofs: Dictionary = {}
+var _source_roofs_error := ""
+var _composite_records: Dictionary = {}
+var _composite_records_error := ""
 
 
 func _init(harness: WorldHarness) -> void:
@@ -105,6 +112,10 @@ func check(source_key: String, walk_up: bool, prefix: String = "", stairs: Array
 		_unsafe = true
 		return [prefix + "source support: " + support.reason]
 	_support_context = support.context
+	var coverage_error := _source_roof_coverage(source_key, nodes)
+	if coverage_error != "":
+		_unsafe = true
+		return [prefix + "roof coverage: " + coverage_error]
 	var proxies := _add_visual_proxies(meshes)
 	await _h.tree.physics_frame
 	await _h.tree.physics_frame
@@ -173,6 +184,70 @@ func _support_under(from: Vector3, to: Vector3, seen_y: float, own: Array[RID]) 
 			return hit
 		others.append(hit.rid as RID)
 	return {}
+
+
+# Load the frozen required domain once per driver, independently of replacements.
+# Existing source roof triangulation already excludes legitimate courtyard holes.
+func _source_roof_coverage(source: String, nodes: Array[Node3D]) -> String:
+	if not _source_roofs_loaded:
+		_source_roofs_loaded = true
+		var manifest_path := _h.world.default_manifest_path
+		var manifest: Variant = JSON.parse_string(FileAccess.get_file_as_string(manifest_path))
+		if not manifest is Dictionary or not manifest.get("chunks") is Array:
+			_source_roofs_error = "source roof manifest unavailable"
+		else:
+			for entry: Dictionary in manifest.chunks:
+				var path := manifest_path.get_base_dir().path_join(str(entry.path))
+				var chunk: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+				if not chunk is Dictionary or not chunk.get("records") is Array:
+					_source_roofs_error = "source roof chunk unavailable: " + path
+					break
+				for record: Dictionary in chunk.records:
+					var object_key := str(record.get("object_key", ""))
+					if object_key in GeneratedContract.ISLE_HOUSE_COMPOSITE_PART_KEYS:
+						var fields := object_key.split(":")
+						var part := str(fields[2])
+						if _composite_records.has(object_key) or record.get("source_keys", []) != [part] or str(record.get("feature_kind", "")) != "building_part_" + str(fields[3]):
+							_composite_records_error = "ambiguous approved composite record: " + object_key
+						else:
+							_composite_records[object_key] = part
+					if str(record.get("feature_kind", "")) not in ["building_roof", "building_part_roof"]: continue
+					var vertices := PackedVector3Array()
+					for i in range(0, record.vertices.size(), 3):
+						vertices.append(Vector3(record.vertices[i], record.vertices[i+1], record.vertices[i+2]))
+					var arrays: Array = []; arrays.resize(Mesh.ARRAY_MAX)
+					arrays[Mesh.ARRAY_VERTEX] = vertices
+					arrays[Mesh.ARRAY_INDEX] = PackedInt32Array(record.indices)
+					var mesh := ArrayMesh.new()
+					mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+					var collection := StudyGeometry.collect(mesh, [Transform3D.IDENTITY], StudyGeometry.INDEXED_ARRAYS)
+					if not collection.ok:
+						_source_roofs_error = "source roof collection failed: " + str(record.object_key)
+						break
+					for key: String in record.source_keys:
+						var faces: PackedVector3Array = _source_roofs.get(key, PackedVector3Array())
+						faces.append_array(collection.faces)
+						_source_roofs[key] = faces
+	var authorized_parts: Dictionary = {}
+	if "building-composite:" + source == GeneratedContract.ISLE_HOUSE_COMPOSITE_KEY:
+		if _composite_records_error != "": return _composite_records_error
+		for key: String in GeneratedContract.ISLE_HOUSE_COMPOSITE_PART_KEYS:
+			if not _composite_records.has(key): return "missing approved composite record: " + key
+		authorized_parts = _composite_records
+	var visible := StudyGeometry.visible_roof_faces(nodes, source, _h.player.get_camera().cull_mask, authorized_parts)
+	if not visible.ok: return visible.reason
+	var coverage := StudyGeometry.roof_coverage(visible.intended_faces, visible.faces)
+	print("ROOF_COVERAGE source=%s domain=declared_roof_before_culling ok=%s interior_samples=%s missing=%s" % [source, coverage.ok, coverage.get("samples", 0), coverage.get("missing", [])])
+	# The frozen generic slab may include legitimate authored exterior insets.
+	# Its mismatch prompts source/visual review; it never decides fit success.
+	if _source_roofs_error != "":
+		print("ROOF_OUTLINE_ADVISORY source=%s unavailable=%s" % [source, _source_roofs_error])
+	elif not _source_roofs.has(source):
+		print("ROOF_OUTLINE_ADVISORY source=%s unavailable=no canonical roof domain" % source)
+	else:
+		var outline := StudyGeometry.roof_coverage(_source_roofs[source], visible.faces)
+		print("ROOF_OUTLINE_ADVISORY source=%s canonical_samples_covered=%s samples=%s uncovered=%s review=compare_references_and_authored_envelope" % [source, outline.ok, outline.get("samples", 0), outline.get("missing", [])])
+	return "" if coverage.ok else str(coverage.reason) + " for " + source
 
 
 func _check_roof(box: AABB, own: Array[RID]) -> void:

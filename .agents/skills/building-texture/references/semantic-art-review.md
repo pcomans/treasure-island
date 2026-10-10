@@ -50,6 +50,19 @@ For whole-building work, compare the complete actual-world composition with date
 
 Use the ordinary task note's concise per-observed-side/unit comparison of observed, modeled, missing and inferred when stating matches and gaps. Unsearched or occluded opening coverage remains unresolved; it cannot be classified as acceptable finish inference for whole acceptance. A failed black viewer or unread gallery is not proof that useful evidence is unavailable: apply the bounded source attempts in the skill's reference-sufficiency guidance. A scoped public-facade/material PASS does not pass the whole building. Unfinished visible side geometry or repetitive placeholder finish keeps whole-quality HOLD, even when the side was previously protected or called production inference. Request bounded rescoping rather than silently treating that side as exempt; retain source/gameplay invariants and historical recognition credit.
 
+Apply [AGENTS' advisory visual-completeness checks](../../../../AGENTS.md#advisory-visual-completeness-checks)
+while inspecting the existing complete view set. Identify a building with no known
+exterior door, a facade without openings, a substantial top-down roof/footprint
+mismatch (accounting for courtyard holes and supported overhangs), or a detailed
+side beside apparently unfinished sides. These flags initiate actual dated-source
+comparison and a correction or documented reference-backed exception; they are
+not automatic PASS/HOLD or stage/recognition rules. Where source evidence remains
+unavailable after bounded attempts, label uncertainty and production inference
+explicitly. Existing substantive whole-quality and geometry/fit gates still apply;
+never treat missing/reversed intended roof triangles as an optional art exception.
+Use actual door/window semantic data where available, otherwise visual judgment;
+a generic detail/recess/dark mesh must not silently count as an opening.
+
 Judge against the researched target and the intended gameplay view:
 
 - Does the candidate read as the declared material, coating, finish, relief scale, and weathering state?

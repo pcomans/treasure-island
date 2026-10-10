@@ -80,7 +80,7 @@ static func build_record(record: Dictionary) -> Dictionary:
 static func _build_wall(wall: Dictionary, frame: Dictionary) -> Dictionary:
 	var collision := _bucket()
 	var t := {
-		"cream": _target(collision), "glass": _target(collision), "glass_band": _target(collision),
+		"cream": _target(collision), "pylon_roof": _target(collision), "glass": _target(collision), "glass_band": _target(collision),
 		"grid": _target(collision), "panel": _target(collision), "relief": _target(collision),
 		"door": _target(collision), "inset": _target(collision), "shadow": _target(collision),
 		"wing_glass": _target(collision), "wing_frame": _target(collision),
@@ -109,6 +109,7 @@ static func _build_wall(wall: Dictionary, frame: Dictionary) -> Dictionary:
 	var root := _hero_root("Building2HeroWall", wall, "building_wall")
 	var specs: Array[Dictionary] = [
 		{"name": "Building2Cream", "target": t.cream, "material": WALL_MATERIAL},
+		{"name": "Building2PylonRoof", "target": t.pylon_roof, "material": WALL_MATERIAL, "physical_role": "roof"},
 		{"name": "Building2SSEInfill", "target": t.sse_infill, "material": _sse_infill_material()},
 		{"name": "Building2FieldGlass", "target": t.glass, "material": materials.field_glass},
 		{"name": "Building2FieldGlassBand", "target": t.glass_band, "material": materials.field_band},
@@ -731,7 +732,7 @@ static func _emit_pylon(t: Dictionary, wall: Dictionary, frame: Dictionary, spec
 		var third := _v3(vertices[k + 1].xz as Vector2, PYLON_SHAFT_TOP_Y)
 		# Collinear source points along one rectangle side give zero-area fan triangles.
 		if (second - first).cross(third - first).length() > 0.0001:
-			_triangle(t.cream, first, second, third, Vector3.UP)
+			_triangle(t.pylon_roof, first, second, third, Vector3.UP)
 	var u_min := INF
 	var u_max := -INF
 	var d_min := INF
@@ -757,7 +758,7 @@ static func _emit_pylon(t: Dictionary, wall: Dictionary, frame: Dictionary, spec
 		var slope_normal := (_v3(b2, PYLON_CROWN_TOP_Y) - _v3(a2, PYLON_CROWN_TOP_Y)).cross(apex - _v3(a2, PYLON_CROWN_TOP_Y))
 		if slope_normal.y < 0.0:
 			slope_normal = -slope_normal
-		_triangle(t.cream, _v3(a2, PYLON_CROWN_TOP_Y), _v3(b2, PYLON_CROWN_TOP_Y), apex, slope_normal)
+		_triangle(t.pylon_roof, _v3(a2, PYLON_CROWN_TOP_Y), _v3(b2, PYLON_CROWN_TOP_Y), apex, slope_normal)
 
 
 # --- Roof record: segmental barrel and flat wing roof -------------------------------
@@ -1223,7 +1224,10 @@ static func _finish(root: Node3D, specs: Array[Dictionary], collision: Dictionar
 		var bucket := (spec.target as Dictionary).vis as Dictionary
 		if (bucket.indices as Array).is_empty():
 			continue
-		root.add_child(_mesh_instance(str(spec.name), bucket, spec.material as Material, layers))
+		var mesh_instance := _mesh_instance(str(spec.name), bucket, spec.material as Material, layers)
+		if spec.has("physical_role"):
+			mesh_instance.set_meta("physical_role", str(spec.physical_role))
+		root.add_child(mesh_instance)
 		mesh_count += 1
 		triangle_count += int((bucket.indices as Array).size() / 3)
 	if (collision.indices as Array).is_empty():

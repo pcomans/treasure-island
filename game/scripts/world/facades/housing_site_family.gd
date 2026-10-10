@@ -38,6 +38,11 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 	warm_roof.set_shader_parameter("roof_color",color(cfg.get("facade",{}),"roof_warm_high_rgb",Color(0.55,0.37,0.25)))
 	var holes_by_run: Dictionary = {}
 	var vertices: Array = wall.vertices
+	var recess: Dictionary = cfg.get("lower_frontage_recess", {})
+	var recess_runs: Dictionary = {}
+	if not recess.is_empty():
+		for frame: Dictionary in cfg.target.frames:
+			for run in frame.runs: recess_runs[int(run)] = frame
 	# The target schedule carries complete motifs. A basis pins each motif to its
 	# actual stepped source edge; no row or opening receives a scale transform.
 	for frame: Dictionary in cfg.target.frames:
@@ -92,6 +97,9 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 					root.set_meta("build_valid",false)
 					push_error("Incomplete opening containment: %s %s %s" % [cfg.target.source_key,frame.id,station])
 				point.y = cy
+				var motif_begin := root.get_child_count()
+				var recessed: bool = not recess.is_empty() and group != "upper_windows"
+				if recessed: point -= n * float(recess.depth_m)
 				if group == "entries":
 					var entry_material := door
 					if str(motif.get("door_role","")) == "pale":
@@ -104,6 +112,10 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 						PARTS._panel(root,point+Vector3.UP*side*(height/2+0.025),t,n,Vector3(width+0.12,0.065,0.09),trim)
 				else:
 					PARTS._recessed_window(root,point,t,n,width,height,trim,dark,glass)
+				if recessed:
+					for child_index in range(motif_begin, root.get_child_count()):
+						var child := root.get_child(child_index)
+						child.set_meta("family_role", "support" if child.get_meta("construction_detail", "") == "door_threshold" else "wall")
 		if cfg.has("broad_band"):
 			var band: Dictionary = cfg.broad_band
 			var a := vec(frame.start)
@@ -129,6 +141,10 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 		var band_y := float(cfg.get("facade",{}).get("story_band_y",5.38))
 		if not cfg.has("broad_band"):
 			PARTS._beam(root,Vector3(fa.x,band_y,fa.z)+fn*0.11,Vector3(fb.x,band_y,fb.z)+fn*0.11,0.20,0.09,trim)
+			# Thin frontage trim keeps its visible geometry without stippled cast shadows.
+			if not recess.is_empty() and str(cfg.target.source_key) in ["w96215661", "w96215669", "w96215672"]:
+				var story_trim := root.get_child(-1) as MeshInstance3D
+				story_trim.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		for pipe: Dictionary in frame.get("pipes",[]):
 			var basis: Dictionary = pipe.get("basis",frame)
 			var p := vec(basis.start)+vec(basis.tangent)*float(pipe.get("local_station_m",pipe.station_m))
@@ -158,7 +174,10 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 		var holes: Array[Rect2] = []
 		for hole: Rect2 in holes_by_run.get(i/12, []): holes.append(hole)
 		var wall_begin := root.get_child_count()
-		PARTS._wall_with_openings(root,a,b,top,holes,siding)
+		if recess_runs.has(i/12):
+			_recessed_wall(root, a, b, top, holes, siding, trim, vertices, i/12, recess_runs[i/12], recess)
+		else:
+			PARTS._wall_with_openings(root,a,b,top,holes,siding)
 		_tag_since(root,wall_begin,"wall")
 		var t := Vector3(b.x-a.x,0,b.z-a.z).normalized()
 		var n := Vector3(-t.z,0,t.x)
@@ -174,10 +193,14 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 		var roofpoints: Array = []
 		for i in range(0,roof.vertices.size(),3): roofpoints.append(Vector3(roof.vertices[i],roof.vertices[i+1],roof.vertices[i+2]))
 		var roof_indices := PackedInt32Array(roof.indices)
-		# Source records retain their original channels; this opt-in corrects
-		# the consumed clockwise front when this family regenerates normals.
-		if bool(cfg.get("reverse_source_roof_winding",false)):
-			for i in range(0,roof_indices.size(),3):
+		# Regenerated source roofs must face the sky, as in _hip_piece below.
+		# Normalize actual orientation instead of applying an instance toggle;
+		# already clockwise triangles remain unchanged, including old opt-ins.
+		for i in range(0,roof_indices.size(),3):
+			var a: Vector3 = roofpoints[roof_indices[i]]
+			var b: Vector3 = roofpoints[roof_indices[i+1]]
+			var c: Vector3 = roofpoints[roof_indices[i+2]]
+			if (b-a).cross(c-a).y > 0:
 				var saved := roof_indices[i+1]
 				roof_indices[i+1] = roof_indices[i+2]
 				roof_indices[i+2] = saved
@@ -212,11 +235,11 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 			var ground_material: Material = concrete
 			if surface.has("material_rgb"): ground_material = PARTS._material(color(surface,"material_rgb",Color.GRAY),0.98)
 			for triangle: Array in surface.get("top_triangles",[]):
-				PARTS._mesh(root,[vec(triangle[0]),vec(triangle[1]),vec(triangle[2])],PackedInt32Array([0,1,2]),ground_material)
+				_ground_triangle(root,triangle,ground_material,not recess.is_empty())
 		for frame: Dictionary in cfg.target.frames:
 			for entry: Dictionary in frame.get("entries",[]):
 				for triangle: Array in entry.get("path_mesh",{}).get("top_triangles",[]):
-					PARTS._mesh(root,[vec(triangle[0]),vec(triangle[1]),vec(triangle[2])],PackedInt32Array([0,1,2]),concrete)
+					_ground_triangle(root,triangle,concrete,not recess.is_empty())
 	_tag_since(root,ground_begin,"ground")
 	var canopies: Array = cfg.get("carports", []).duplicate()
 	if cfg.has("carport") and not cfg.carport.is_empty(): canopies.append(cfg.carport)
@@ -389,3 +412,61 @@ static func _polygon_area(polygon: PackedVector2Array) -> float:
 static func _tag_since(root: Node3D, begin: int, role: String) -> void:
 	for i in range(begin,root.get_child_count()):
 		root.get_child(i).set_meta("family_role",role)
+
+# Keep the upper receiver and frozen roof in place. The complete lower wall,
+# openings and return shell move inward; dimensions are production inference.
+static func _recessed_wall(root: Node3D, a: Vector3, b: Vector3, top: float, holes: Array[Rect2], siding: Material, soffit: Material, vertices: Array, run: int, frame: Dictionary, recess: Dictionary) -> void:
+	var t := Vector3(b.x-a.x,0,b.z-a.z).normalized()
+	var n := Vector3(-t.z,0,t.x)
+	var length := Vector2(b.x-a.x,b.z-a.z).length()
+	var band := float(recess.band_y)
+	var depth := float(recess.depth_m)
+	var runs: Array[int] = []
+	for source_run in frame.runs: runs.append(int(source_run))
+	var position: int = runs.find(run)
+	var lo := 0.05 if position == 0 else 0.0
+	var hi := length-0.05 if position == runs.size()-1 else length
+	var outer_a := a.lerp(b,lo/length)
+	var outer_b := a.lerp(b,hi/length)
+	var inner_a := outer_a-n*depth
+	var inner_b := outer_b-n*depth
+	# Adjacent serialized source runs meet at a shared offset-line miter.
+	if position > 0:
+		var previous := runs[position-1]*12
+		var pt := Vector3(vertices[previous+3]-vertices[previous],0,vertices[previous+5]-vertices[previous+2]).normalized()
+		var pn := Vector3(-pt.z,0,pt.x)
+		inner_a = outer_a-(n+pn)*depth/(1.0+n.dot(pn))
+	if position < runs.size()-1:
+		var following := runs[position+1]*12
+		var nt := Vector3(vertices[following+3]-vertices[following],0,vertices[following+5]-vertices[following+2]).normalized()
+		var nn := Vector3(-nt.z,0,nt.x)
+		inner_b = outer_b-(n+nn)*depth/(1.0+n.dot(nn))
+	PARTS._wall_with_openings(root,Vector3(a.x,band,a.z),Vector3(b.x,band,b.z),top,_clipped_holes(holes,0,length,band,top),siding)
+	var shift := Vector3(inner_a.x-a.x,0,inner_a.z-a.z).dot(t)
+	PARTS._wall_with_openings(root,inner_a,inner_b,band,_clipped_holes(holes,shift,shift+inner_a.distance_to(Vector3(inner_b.x,inner_a.y,inner_b.z)),minf(a.y,b.y),band),siding)
+	if lo > 0:
+		PARTS._wall_with_openings(root,a,outer_a,band,[],siding)
+		PARTS._quad(root,[outer_a,inner_a,Vector3(inner_a.x,band,inner_a.z),Vector3(outer_a.x,band,outer_a.z)],siding,false)
+	if hi < length:
+		PARTS._wall_with_openings(root,outer_b,b,band,[],siding)
+		PARTS._quad(root,[inner_b,outer_b,Vector3(outer_b.x,band,outer_b.z),Vector3(inner_b.x,band,inner_b.z)],siding,false)
+	PARTS._quad(root,[Vector3(outer_a.x,band,outer_a.z),Vector3(outer_b.x,band,outer_b.z),Vector3(inner_b.x,band,inner_b.z),Vector3(inner_a.x,band,inner_a.z)],soffit,false)
+
+static func _clipped_holes(holes: Array[Rect2], start: float, end: float, bottom: float, top: float) -> Array[Rect2]:
+	var result: Array[Rect2] = []
+	var bounds := Rect2(start,bottom,end-start,top-bottom)
+	for hole: Rect2 in holes:
+		var clipped := hole.intersection(bounds)
+		if clipped.has_area():
+			clipped.position.x -= start
+			result.append(clipped)
+	return result
+
+static func _ground_triangle(root: Node3D, triangle: Array, material: Material, orient_up: bool) -> void:
+	# Determine winding after conversion to the actual native Vector3 precision.
+	# Thin clipped pieces can reverse orientation when their doubles are rounded.
+	var points: Array = [vec(triangle[0]),vec(triangle[1]),vec(triangle[2])]
+	var indices := PackedInt32Array([0,1,2])
+	if orient_up and (points[1]-points[0]).cross(points[2]-points[0]).y > 0:
+		indices = PackedInt32Array([0,2,1])
+	PARTS._mesh(root,points,indices,material)

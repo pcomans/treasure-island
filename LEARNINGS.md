@@ -501,6 +501,20 @@ cause remains unknown. A task-start/message receipt is not execution evidence:
 check for the first actual tool result, then resume or transfer the bounded role
 without repeatedly observing an unstarted task. Preserve independent review.
 
+Housing61/69/72 repeated this gap: bounded capture/visual-closure readiness
+requests produced no new corrected output or live handle despite a running agent
+status. Actual output/process checks confirmed no corrected files or engine;
+the cause remains unknown. Revoking queued GO assignments, interrupting the old
+owner and assigning one fresh bounded executor produced the three captures;
+named fit/visual owners then delivered four fit results and explicit REWORK.
+The ordinary hourly progress note, capture-closure note and private visual note
+retain this sequence. Distinguish waiting on a verified live handle from agent
+status or stated intent: inspect actual outputs/processes and normal/custom tool
+activity, coalesce or revoke old queued assignments before transfer, then reuse
+unchanged preflight and valuable completed partial inspections. Do not infer a
+provider failure, replay completed work, or substitute an arbitrary timer for
+execution evidence. Preserve independent judging and terminal/slot ownership.
+
 YMCA study001 added every requested entry cue but the pavilion still read as a
 small gray box beneath the tall hall. Study002's complete pavilion/canopy/glazing
 recomposition passed scoped visual review. Compare the whole entrance-to-hall
@@ -522,3 +536,80 @@ resumed phase had no subsequent tool events. The inactivity cause is unknown.
 Check both normal/custom tool calls and actual terminal/process state before
 transfer; silence or a task receipt alone proves neither inactivity nor failure.
 Do not erase a useful early verdict or invent a completed final review.
+
+## Investigate completeness cues without inventing universal architecture rules
+
+YMCA/Building461 scoped public-side gains coexisted with blank unreferenced rear
+surfaces; the retained housing roof before/after also exposed missing roof
+coverage despite earlier local detail work. These observations justify checking
+whole-building entrances, per-side openings, roof/footprint relationship and side
+completion before more polish, not a universal requirement for windows on every
+wall or identical roof/foundation outlines. Compare actual dated exterior/layout
+pixels, record supported exceptions or unavailable-source inference, and retain
+blocking integrity treatment for missing/reversed intended roof triangles.
+
+## Check required sky-facing roof coverage, not only supplied surfaces
+
+The housing attachment hid the source roof, then regenerated raw indices whose
+positive crossY faced away from the sky under the producer's clockwise convention;
+per-instance reversal fixed only some rows. Existing fit skipped empty visual-ray
+columns and native matching compared supplied faces, so both could miss absent
+upward coverage. Normalize actual winding without changing source vertices/holes,
+and compare eligible source-owned intended roof faces before culling with their
+sky-facing coverage after culling. Require a positive projected intended domain;
+keep material, transform, ownership and role failures blocking. Finite one-metre
+lattice/triangle-centroid sampling is not exhaustive crack or occlusion proof.
+Removed, hidden or unclassified whole meshes can escape when another roof remains;
+retain source review, supported native expected-positive checks and independent
+whole-building visual comparison. No supported native600 mode is implied.
+
+Suite004 later stopped at Isle House parent w1249412094 after43 preceding units:
+the collector expected a parent roof key, while the declared composite has
+child-owned roof branches w1282547786/787. Five later units were untested;
+this is an identity-domain failure, not evidence of absent physical roofs.
+Bind the parent to the existing GeneratedWorldContract's exact part keys and
+generated singleton child owners, retaining each branch's positive intended
+roof domain and rejecting foreign/mixed owners or untagged wall geometry.
+Composite contract001 passed ownership/culling fixtures; independent CODE and
+actual standard Isle House fit then passed, followed by suite005 ALL TESTS PASS
+for all49 scored units. These are distinct evidence scopes, not whole-art or
+indexed-native proof. Do not broaden parent membership
+to arbitrary descendants or claim an unsupported native Isle House producer mode.
+
+Suite002 exposed Building600 samples inside the frozen generic rectangle but
+outside its authored west coping/east fascia. That outline mismatch is advisory;
+forcing roof expansion would confuse intended rendering integrity with architecture.
+Keep canonical roof/foundation comparison as ROOF_OUTLINE_ADVISORY, investigate it
+against actual source/reference pixels, and preserve legitimate insets/courtyards.
+The intended-before-cull domain still catches a reversed broad roof even when a
+small upright roof survives. Neither domain establishes universal completeness.
+
+Coverage contract001 accepted an unverified `grow_enabled` property and failed
+with script errors despite exit0/partial ok. Use installed/official API evidence
+for new engine controls (`is_grow_enabled`/`set_grow_enabled`). Contract002 added
+Node3D fixtures during `_initialize`, before tree activation, producing transform
+errors; defer the unchanged test body into the active tree. Mirror real producer
+ancestry/roles in fixtures, retain failures, and require clean runtime output;
+source review and nominal terminal status alone are insufficient.
+
+## Tag actual roof-function batches inside mixed wall meshes
+
+The first strengthened coverage suite stopped at Building2;48 other accepted
+fits remained untested. Raised pixels showed closed pylon caps, and source
+investigation found shoulder/cap triangles mixed into Building2Cream under the
+wall owner. The roof-only collector correctly excluded unspecified wall faces,
+but lost genuine roof-function coverage. Split/tag those specific producer
+batches, preserving geometry/material/collision ownership; never qualify an
+entire upward wall/detail mesh. Exercise explicit roof versus identical upward
+untagged/foreign-source siblings in the existing live-tree fixture. Source-derived
+sample calculations are not runtime readback, and the proposed repair remains
+unproven until independent CODE and actual contract/fit/suite pass.
+
+## Recover incomplete image delivery before commissioning another render
+
+During B2 paired review, several second images arrived as tiny gray blocks.
+Reopening each same AFTER original singly at original detail displayed the full
+frame. Delivery cause is unknown; this did not establish invalid files or bad
+source renders. Try one existing-original single-image recovery before requesting
+recapture. Do not change source, add checksum proof or rerun the engine solely
+to work around an incompletely delivered image.

@@ -271,6 +271,8 @@ func _compose_study(wall: Dictionary, roof_record: Dictionary, config: Dictionar
 	for spec: Array in specs:
 		var bucket: Dictionary = spec[1]
 		var mesh := _mesh_instance(spec[0], bucket, spec[2], spec[3])
+		if spec[0] in ["NeutralRoofAndCap", "RibbedMetalCap"]:
+			mesh.set_meta("physical_role", "roof")
 		if spec.size() > 5:
 			mesh.set_meta("chapel_flight_role", spec[5])
 			mesh.visible = spec[5] != "support"

@@ -2,7 +2,7 @@ extends RefCounted
 ## Source-relative panel-hall facade family; each target provides observed chains.
 ## Generated source shells remain the backing wall and authority for footprint/roof.
 const SUPPORT := preload("res://game/scripts/world/facades/housing_quality_support.gd")
-const TARGETS := {"building:w34313569:wall": "res://game/resources/facades/austin461_observed.json"}
+const TARGETS := {"building:w34313569:wall": "res://game/resources/facades/austin461_observed.json", "building:r133347:wall": "res://game/resources/facades/personnel_support_observed.json"}
 
 static func matches_record(record: Dictionary) -> bool:
 	return TARGETS.has(str(record.get("object_key", "")))
@@ -29,6 +29,9 @@ static func build(record: Dictionary) -> Dictionary:
 		var length := Vector2(b.x-a.x,b.z-a.z).length()
 		var floor_y := minf(a.y,b.y)-.12
 		var split := top-4.0
+		if str(spec.get("family", "")) == "grid_transom":
+			_grid_chain(root,a,t,n,length,floor_y,top,spec,materials)
+			continue
 		var openings: Array[Rect2]=[]
 		if bool(spec.upper_slots):
 			var count := maxi(2,int(round(length/float(spec.bay_width))))
@@ -78,6 +81,8 @@ static func build(record: Dictionary) -> Dictionary:
 			_box(root,"PaleEndProjection",a,t,n,length-2.10,(floor_y+top-.18)/2.0,.73,Vector3(4.20,top-.18-floor_y,1.48),materials.upper,"wall")
 			_box(root,"ProjectionLowerField",a,t,n,length-2.10,(floor_y+split)/2.0,1.49,Vector3(4.20,split-floor_y,.045),materials.lower,"wall")
 			_box(root,"ProjectionCap",a,t,n,length-2.10,top-.12,.73,Vector3(4.30,.12,1.57),materials.coping,"detail")
+	if cfg.has("roof_screen"):
+		_roof_screen(root,top,cfg.roof_screen,materials)
 	for key: String in cfg.site:
 		var spec: Dictionary=cfg.site[key]
 		var points := PackedVector3Array(); var normals:=PackedVector3Array()
@@ -101,3 +106,45 @@ static func _box(root: Node3D,label:String,a:Vector3,t:Vector3,n:Vector3,s:float
 	var node:=MeshInstance3D.new(); node.name=label; node.mesh=mesh
 	node.transform=Transform3D(Basis(t,Vector3.UP,n),Vector3(a.x,y,a.z)+t*s+n*d)
 	node.set_meta("physical_role",role); node.set_meta("construction_detail",label); root.add_child(node)
+
+
+static func _grid_chain(root:Node3D,a:Vector3,t:Vector3,n:Vector3,length:float,floor_y:float,top:float,spec:Dictionary,m:Dictionary)->void:
+	# Complete source-bound exterior chain. Cadence/infill are production inference;
+	# the untouched opaque shell remains behind every closed panel.
+	var count := maxi(1,int(round(length/float(spec.bay_width))))
+	var step := length/count
+	var muted_bays: Array[int]=[]
+	var solid_bays: Array[int]=[]
+	for value: Variant in spec.muted_bays: muted_bays.append(int(value))
+	for value: Variant in spec.solid_bays: solid_bays.append(int(value))
+	var bottom := top-6.0
+	var bands: Array[float]=[floor_y,bottom+1.10,bottom+2.42,bottom+2.96,bottom+4.13,bottom+5.28,top-.20]
+	for i in count:
+		var center := (i+.5)*step
+		for j in range(bands.size()-1):
+			var key := "glazing" if j in [1,2,4,5] else "opaque"
+			if i in muted_bays and j < 4: key="muted"
+			if i in solid_bays: key="opaque"
+			_box(root,"GridInfill",a,t,n,center,(bands[j]+bands[j+1])/2.0,.075,Vector3(step-.10,bands[j+1]-bands[j]-.065,.10),m[key],"wall")
+		for y: float in bands:
+			_box(root,"GridTransom",a,t,n,center,y,.16,Vector3(step,.075,.22),m.frame,"wall")
+	for i in range(count+1):
+		var u := clampf(i*step,.065,length-.065)
+		_box(root,"GridMullion",a,t,n,u,(floor_y+top-.16)/2.0,.17,Vector3(.13,top-.16-floor_y,.24),m.frame,"wall")
+	_box(root,"GridRoofEdge",a,t,n,length/2.0,top-.11,.15,Vector3(length,.16,.58),m.frame,"detail")
+
+
+static func _roof_screen(root:Node3D,top:float,spec:Dictionary,m:Dictionary)->void:
+	# A closed rooftop screen, safely outside the protected courtyard hole.
+	var a := Vector3(float(spec.center[0]),top,float(spec.center[1]))
+	var t := Vector3(.984,0,-.176).normalized()
+	var n := Vector3(-t.z,0,t.x)
+	var width := float(spec.size[0]); var height := float(spec.size[1]); var depth := float(spec.size[2])
+	_box(root,"RoofScreenCore",a,t,n,0,top+height/2.0,0,Vector3(width,height,depth),m.screen,"detail")
+	for i in 9:
+		var y := top+.12+i*(height-.24)/8.0
+		for d:float in [-depth/2.0-.025,depth/2.0+.025]:
+			_box(root,"RoofScreenSlat",a,t,n,0,y,d,Vector3(width+.06,.055,.06),m.frame,"detail")
+		for u:float in [-width/2.0-.025,width/2.0+.025]:
+			_box(root,"RoofScreenSlat",a,t,n,u,y,0,Vector3(.06,.055,depth),m.frame,"detail")
+	_box(root,"RoofScreenCap",a,t,n,0,top+height+.045,0,Vector3(width+.14,.09,depth+.14),m.muted,"detail")

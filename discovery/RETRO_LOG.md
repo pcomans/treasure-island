@@ -19326,3 +19326,632 @@ completed final visual review. Final scoped L1 gates passed; whole quality remai
 ymca_closure_docs current-readiness correction: retained the earlier PSD pixel
 HOLD as history and appended actual recovered-source/baseline state plus the
 actor's now-available own drafts. No new doc path, model or stage change.
+
+### ymca_closure_docs — owner-authorized advisory completeness harness update
+- Worked: added one canonical AGENTS advisory section and linked it from existing
+  building-texture authoring and semantic visual-review entrypoints; current
+  implementation/visual roles already consume those files. Four omission cues
+  now lead to actual source-pixel comparison and ordinary-note resolution.
+- Did not: generic detail/recess geometry cannot support semantic door/window
+  counts, and architectural roof-outline differences are not proof of missing
+  triangles. No empirical coverage percentage or universal rejection rule added.
+- Next: use the concrete blank-west-side example to test review behavior: source
+  shows openings → correct them; source supports a blank wall → record exception;
+  evidence unavailable → disclose bounded attempts/inference. Keep existing
+  independent whole-quality/fit/suite/source/engine/stage gates unchanged.
+  This round changed harness/docs only; no runtime/tests/art/Git mutation or engine.
+
+## Shared housing roof coverage — closure preparation,2026-10-10
+
+Named actual private drafts consolidated below. Final visual/progress and suite
+remain separately reported; no new stage or recognition credit is assigned here.
+
+### northpoint_fourth_mechanics — diagnosis, maintained harness and focused proof
+- Worked: source roof/domain and courtyard comparison distinguished real housing
+  sky-backface omission from PSD's legitimate hole. Traced actual shared caller,
+  then added bounded required-domain coverage before movement, preserving stock,
+  native/rest logic. Contract003 and all five focused checks passed after fixes.
+- Did not: old fit skipped empty ray columns; native equivalence cannot prove
+  required upward coverage. First helper fixture omitted actual wall-owner family
+  ancestry. Contract001 API error and contract002 inactive-tree transform failure
+  correctly stopped dependent fits; partial ok/exit0 did not establish success.
+- Next: verify installed API names and scene activation when adding fixture nodes;
+  reflect production metadata/material semantics, retain errors and same handles.
+  Report finite1m/centroid sampling and canonical-domain limits, not exhaustive
+  coverage or measured overhead. Advisory outline checks remain distinct.
+
+### austin461_lower_family_art — shared winding correction
+- Worked: exact shared producer and before pixels established open envelopes;
+  orientation-only normalization restored sampled visible roofs without changed
+  coordinates, invented pitch, material/culling workaround or double reversal.
+  Before14602 terminal0/ae599f and after62792 terminal0/a5f3bb released normally.
+- Did not: prior material interpretation did not address this coverage defect;
+  native equality alone had not exposed sky-backface omission.
+- Next: compare source envelope to sky-facing coverage and raised bound captures,
+  preserve legitimate holes, and keep independent/native/suite gates separate.
+
+### austin461_code — independent roof, harness and API/lifecycle reviews
+- Worked: raw orientation review preserved source footprint/old opt-in behavior;
+  separate harness REWORK found omitted family ancestry and unsupported vertex
+  grow, then bounded corrected-seam reviews reused unchanged guards. Deferred
+  contract body retained full assertions. Advisory five-doc guidance CODE PASS.
+- Did not: initial source review accepted an invalid grow property and missed
+  active-tree timing for newly scene-backed fixtures, contributing to two
+  avoidable runtime failures. Source PASS was never runtime/whole-roof proof.
+- Next: validate new engine API names from installed/official evidence, inspect
+  tree activation and actual owner ancestry, retain failed candidates and review
+  only changed seams. Do not repeat unchanged producer audits or invent timing.
+
+### austin461_code — optional quiet generic material review
+- Worked: traced selection/cache boundaries to preserve authored D5 inputs and
+  native/source contracts; mechanical CODE PASS states the full generic scope.
+- Did not: texture banding diagnosis did not resolve the owner's roof-envelope
+  complaint. Optional quiet material has no implicit visual adoption/coverage credit.
+- Next: prioritize geometry repair and independently judge material adoption from
+  actual context/island pixels, without a color-polish loop or performance claim.
+
+### ymca_closure_docs — roof gallery and bounded next-family readiness
+- Worked: gallery104 preserved102 originals/order and exact before/after contexts;
+  GET/HEAD200 exact copies/private404. Read frozen checklist/catalog and existing
+  target packets/configs:1222 Bayside,1238 Northpoint and1201 Bayside all remain
+  L1–L5 U despite retained historical recognition credit. No new research or credit.
+- Did not: old prototype-ready prose says no panorama originals retained; it is
+  not current all-side sufficiency. Scoped filename search recovered gameplay
+  roof captures but no named target reference set, not an exhaustive absence claim.
+- Next: source-first readiness for the shared canopy-free blue-gray housing family:
+  reuse housing_site_family/live attachment and each exact instance config;
+  recover/inspect March2025 public-side pixels and useful side/layout coverage
+  before choosing L1 envelope/site or L2 whole opening work. Protect source XZ,
+  holes/identity, unchanged accepted siblings, stock controls and unknown faces.
+  Final visual/progress drafts will be consolidated only when actually delivered.
+
+### roof_checkpoint_progress_fresh — independent roof-family progress checkpoint
+- Worked: matched NE/SW contexts showed substantial envelope closure; fixed island
+  pair kept that gain separate from whole-island quality. Direct dated PSD east
+  comparison confirmed observed-face architecture progress. CONTINUE/scoped
+  PROGRESS PASS, without final visual/suite/stage/recognition acceptance.
+- Did not: broad historical searches exceeded useful output; no per-building
+  housing elevation refs supplied to the roof integrity comparison. Finite
+  canonical-domain checks cannot prove every wall-footprint point is covered.
+- Next: reuse successful proof and close roof gates, then source-first whole-family
+  L1 readiness for61/69/72; extend60/68 only with verified reference compatibility.
+  If L1 is sound, address whole supported entrances/windows/roof architecture.
+  Avoid isolated roof-color/public-facade polish and preserve explicit unknowns.
+
+ymca_closure_docs readiness detail: existing live configs for61/69/72 are under
+`game/resources/housing_family/`, using `housing_site_family.gd` and
+`housing_family_live_attachment.gd`. Their mapped/protected run lists differ from
+some older packet-facing partitions (notably69/72); resolve the actual current
+source/frame/reference joins before any authoring, without silently expanding
+protected regions. March2025 packet panos are pymolsv7OnDZ-dcCUNoB4Q (1222),
+jbUBJGVjgf9oHvuIBdiWkg (1238), and -0e5UfeRbgsLQ8MDw82Jsg (1201). These retained
+locators are a readiness starting point, not newly inspected source pixels.
+PSD currently has scoped visual/native PASS supplied by ROOT; full suite remains
+pending and no acceptance/count change is made in this preparation round.
+
+### psd_study002_visual — final bounded roof-coverage review
+- Worked: matched raised before/after views showed internal bodies disappear
+  beneath continuous roofs; all four ordinary sides and five island pairs were
+  inspected once. Scoped visible-coverage PASS; no further capture needed.
+- Did not: player-height views hide most roof surfaces. Small neighboring dark
+  junction marks cannot be diagnosed or source-bound from distant stills alone.
+- Next: retain raised comparison with source-owned/culling/native checks; keep
+  visible closure separate from material attractiveness and whole recognition.
+  Separate quiet generic-roof finish RETAIN removes false synchronized bands in
+  actual PSD/context/island comparisons; plain fields remain baseline finish,
+  not every-roof fidelity, modern island quality or new recognition acceptance.
+
+### northpoint_fourth_mechanics — suite001 HOLD, B2 investigation and fixture
+- Worked: preserved suite81033 terminal1/fe9ea3 and safe prerequisite stop at
+  Building2/w24274434; remaining48 accepted fits were untested. Actual source/
+  context investigation distinguished closed pylon caps from a roof-role blind
+  spot. Capture57232 terminal0/afad68 and process absence7ef37a released normally.
+- Did not: roof-function pylon shoulder/cap faces shared Building2Cream under the
+  wall owner, so the roof-only collector excluded them. Generic role fixtures
+  missed this mixed semantic mesh. Calculated missing locations are source-derived
+  double-precision analysis, not missing-position arrays read back from Godot.
+- Next: split/tag only genuine roof-function batches at the producer while keeping
+  vertical wall/other detail excluded and existing material/collision ownership.
+  The authorized14-line active-tree fixture uses identical upward wall geometry
+  to distinguish explicit roof, untagged wall and foreign-source rejection; it
+  is source-only pending independent CODE and engine proof. No full-suite PASS
+  or whole-quality claim; semantic fix/CODE/contract/fit/full-suite still pending.
+
+ymca_closure_docs final-draft consolidation: actual visual scoped PASS/quiet
+RETAIN and mechanics failure/investigation/fixture drafts are now retained.
+No acceptance/checklist/catalog change, runtime edit, Git or engine action.
+
+### b2_roof_role_visual_fresh — independent paired roof-role review
+- Worked: directly inspected all 11 original BEFORE/AFTER pairs: four gameplay
+  sides, NE/SW raised contexts and five island views. Nearly indistinguishable;
+  bounded visible-preservation PASS without new whole-quality/recognition claims.
+- Did not: several second images in a paired tool batch arrived as tiny gray
+  blocks. Each same AFTER file reopened singly at original detail displayed its
+  complete gameplay frame; delivery cause unknown, not evidence of a bad render.
+- Next: when delivery is visibly incomplete, reopen that existing original once
+  singly before requesting recapture. Keep semantic/native/mechanics evidence
+  separate from visual preservation; no engine/browser/Git/source edit occurred.
+
+### austin461_lower_family_art — B2 semantic producer correction
+- Worked: inspected target/bucket writer and preserved the same collision bucket;
+  only shaft shoulder/pyramid cap visual triangles moved to Building2PylonRoof
+  with explicit roof role. Source correction87c11e retained attributes/order,
+  material, source ownership and vertical Cream walls; no invented triangles.
+- Did not: former whole-Cream grouping hid genuine roof-function semantics from
+  required coverage, despite visually closed caps.
+- Next: define mixed geometry roles at producer batches and trace both render
+  semantics and native partition expectations; source reasoning needs runtime proof.
+
+### northpoint_fourth_mechanics — B2 contract, descriptor, fit and capture
+- Worked: contract004 terminal0/7c0de8 clean passed and was reused. Strict native
+  fit001 rejected the unlisted new visual bucket before coverage/movement;
+  descriptorf76315 adds positive PylonRoof with explicit roof semantics, retaining
+  the wall collision partition and complete native checks. Fit002 terminal0/21f716
+  then passed native partitions,8438 observed coverage samples/missing[], four
+  approaches with active supported released zero REST then SAFE. Capture11302
+  terminal0/795fd3 saved11 originals; process release46641d retained.
+- Did not: first producer split missed its existing native positive bucket list,
+  causing fit001 terminal1/3bca53 and skipped dependent capture. Collision equality
+  alone could not exempt a new visual bucket from required ownership checks.
+- Next: adapt producer semantic partitions and their maintained native descriptor
+  together; reuse unchanged contract, retain failure and verify fresh full suite.
+  Prior suite001 B2 FAIL/48 untested remains; replacement full suite pending.
+
+### austin461_code — B2 producer/fixture and native descriptor CODE
+- Worked: narrow producer/fixture review preserved common collision emission and
+  specific roof semantic ownership; descriptor review required PylonRoof plus
+  explicit role without weakening unknown-owner/native geometry checks. CODE PASS.
+- Did not: initial producer review did not follow the new visual bucket into the
+  positive native allowlist, contributing to avoidable fit preflight failure.
+- Next: inspect both interfaces at the same checkpoint, reuse unchanged contract
+  evidence and preserve actual failed fit rather than retroactively credit it.
+
+### austin461_code — bounded B2 reviewer/browser activity observations
+- Worked: normal/custom event and exact role metadata reads distinguished completed
+  housing visual PASS from no observed execution in the new B2 phase; real browser
+  session5568/PID ancestry and later capture handles established live author work.
+- Did not: absence of B2 tools explained neither internal cause nor delivery of a
+  reported later resume; those uncertainties remained explicit. Browser readiness
+  was real work, not an idle/stalled author to replace.
+- Next: one bounded reviewer transfer from ROOT dispatch evidence, preserve prior
+  useful verdict, and retain live browser/capture ownership to terminal/release
+  before engine work. No repeated polling, duplicated pixel review or cause claim.
+
+ymca_closure_docs B2 closure-preparation checkpoint: fresh independent
+b2_roof_role_visual_fresh own RETRO above is preserved once, not duplicated.
+All11 actual paired views passed bounded appearance preservation. Source/descriptor
+CODE, contract004, fit002 and visual are distinct completed gates; new full suite
+is pending browser5568 release/authorized execution. No new PSD/housing/whole
+quality/stage/recognition claim. Intended14-path patch remains unstaged; this
+round edits only LEARNINGS/RETRO and optional existing owner gallery delivery.
+
+
+## Roof integrity/advisory domain correction — 2026-10-10
+
+Latest private drafts consolidated once from the existing roof-coverage note and
+roof-coverage-code/hourly-progress drafts. Earlier suite001/B2 and visual entries
+remain above, including the single b2_roof_role_visual_fresh entry. No new stage,
+recognition or whole-quality credit; runtime closure remains pending actual proof.
+
+### northpoint_fourth_mechanics — suite002,600 diagnosis and intended-domain repair
+- Worked: retained suite002 handle66590 terminal1/569861 and release d08bf1.
+  B2 no longer failed; exact w34313548/Building600 roof-domain failure stopped
+  safely with45 remaining accepted fits untested. Source-bound capture13205
+  terminal0/fa21da released27e0c9; all11 originals were inspected. Actual authored
+  west coping/east fascia insets distinguished canonical-outline mismatch from
+  missing intended triangles, without enlarging architecture to satisfy a guard.
+- Did not: the original raw-domain blocker overreached legitimate authored bounds.
+  Some upward caps also live in wall batches; calculated missing sample locations
+  are source reconstruction, not runtime readback. Broad captures do not prove
+  fine seams; no supported600 native-producer mode or universal omission proof.
+- Next: after independent DESIGN PASS, dcec14 changed only the maintained collector,
+  fit integration and contract: positive intended-before-cull to sky-facing coverage
+  blocks rendering faults; canonical outline mismatch remains advisory. Preserve
+  role/material/transform guards and failed suite001/002. Run authorized contract005,
+  focused61/600/B2 and suite003; no execution credited merely from authorization.
+
+### austin461_code — intended-domain design, actual correction and advisory wording
+- Worked: independent DESIGN PASS and dcec14 CODE PASS checked both collector
+  operands, positive projected domain and reversed-broad-roof/small-upright fixture;
+  front-cull and inset cases preserve the intended integrity/advisory distinction.
+  Effective material, ownership, role, transform and native/stock guards remain.
+  Separate canonical DOC VERIFICATION PASS confirmed all four advisory cues and
+  dated-source investigation→authorized correction/reference-backed exception.
+- Did not: original strict raw-domain policy created false blockers. Supplied
+  intended geometry cannot detect every omitted/hidden/unclassified assembly;
+  source CODE does not prove runtime or the unmeasured second comparison's cost.
+  Guidance alone does not prove future authors actually seek missing references.
+- Next: consume actual contract/focused/suite results; investigate outline flags
+  with source/reference pixels and keep independent complete-view judgment.
+  Preserve unavailable-evidence inference limits and avoid universal door/window
+  counts, new automatic architecture gates or unsupported native600 claims.
+
+### roof_checkpoint_progress_fresh — efficiency follow-up and600 hourly checkpoint
+- Worked: exact source/RETRO seams separated necessary integrity closure from
+  avoidable API/lifecycle/descriptor failures. Existing61/69/72 March2025 fronts
+  and actual600 context/island originals supported next whole-volume/site scope;
+  diagnostic progress was kept separate from new modern-quality architecture.
+- Did not: broad historical filename/note reads overflowed again; exact current
+  evidence was sufficient. Late six-pair old-review overlap is ROOT-reported
+  activity, with cause/resume completeness unknown. At checkpoint no completed
+  contract005/focused/suite003 evidence was present; authorization was not PASS.
+- Next: try one combined producer-semantic/native-descriptor source handoff and
+  compare its next ordinary RETRO with B2's one stale-bucket failed fit. After
+  actual roof closure, use a coherent61/69/72 L1 frontage/site family with frozen
+  outer XZ, local contact preflight and early actual pixels. Keep rear/end sources
+  open; avoid ledge/color/window polish, repeated passed pairs or a timing framework.
+
+### roof_closure_docs — intended-domain closure preparation
+- Worked: checked the already consolidated actors before appending only latest
+  private drafts; preserved the single independent B2 visual entry and both
+  failed full suites. Refined the existing roof lesson to distinguish intended
+  rendering integrity from canonical architectural outline advisories.
+- Did not: initial combined historical reads produced truncated output; narrower
+  current draft sections were needed. Documentation cannot supply pending runtime
+  PASS, universal whole-mesh coverage or unsupported native600 completeness.
+- Next: consume the mechanics owner's actual terminal/release and final results
+  before closure wording or Git action. Reuse canonical advisory text already
+  independently passed; no new report/checklist/recognition mutation or engine run.
+
+
+### northpoint_fourth_mechanics — intended-domain focused proof checkpoint
+- Worked: contract005 returned clean failures[]/oktrue, terminal0/96883b and
+  release5d9aed. Housing61 terminal0/7f1a88 release7095f8 passed native partitions,
+  intended499 samples/missing[], canonical coverage and all four stock approaches
+  with active released supported zero REST then SAFE. Building600 standard fit
+  terminal0/87f47c release920c13 passed intended1912 samples/missing[] and all four
+  stock REST/SAFE approaches. Actual logs retain canonical1830-sample advisory
+  mismatch, distinct from intended-domain integrity; no native600 mode claimed.
+- Did not: focused success is not aggregate suite success or whole architecture
+  completeness. Prior suite001/002 failures remain. At this checkpoint B2 had log
+  PASS but its terminal/release was still pending; suite003 was not yet verified.
+- Next: retain the current handle and serialized ownership through actual B2
+  terminal/release, then the authorized full suite; preserve advisory investigation
+  and independent whole-view obligations instead of implying all omissions detected.
+
+### roof_checkpoint_progress_fresh — intended-domain focused-proof hourly checkpoint
+- Worked: actual contract005/housing61/600 logs and terminal/release evidence
+  distinguished completed integrity proof from live B2 and unstarted suite003.
+  Preparation retained exact per-run/contact/baseline prerequisites and protected
+  returns, enabling bounded whole-family art without repeated reference captures.
+- Did not: no new architectural edits/pixels existed this hour; runtime progress
+  does not establish modern island-quality gains. A long ordinary-note read again
+  repeated old history; exact current logs/preparation supplied sufficient evidence.
+- Next: finish mechanics, then69/72 baselines and exact contact/containment preflight
+  before combined61/69/72 inward lower-assembly/site rendering. Reuse61 donor and
+  unchanged proof, inspect whole-family progress early, retain unknown rear/ends
+  and every independent/native/stock/suite/slot gate; no new process experiment.
+
+### housing_three_art — source-only whole-family preparation
+- Worked: inspected all six retained originals and actual61 gameplay; reused
+  housing_site_family/northpoint_1232 components and61 footway/parking hierarchy.
+  Source-only LAND sampling across frontage/recess and18 doors found no missing
+  land; visible noncolliding AREA stayed separate. Complete lower assemblies
+  recess inward while upper walls/openings and roof outsideXZ remain frozen.
+- Did not: broad reads were noisy; frame-linear base estimates cannot replace exact
+  source-run knots.69/72 baselines, exact cap/reveal containment and moved-threshold
+  contact remain prerequisites. Rear/ends were unsearched, not unavailable/blank.
+  Existing helper opening support roles require careful source-owned wall/spray
+  treatment, with threshold support retained; source sampling is not playability.
+- Next: verify each actual run and protected return before edit; obtain69/72 whole
+  baselines under named engine GO, then judge combined volume/site progress early.
+  Initial0.35m recess/site dimensions are production inference, not surveyed.
+  No new base, roof/textures, project edits, engine ownership or stage credit.
+
+### roof_closure_docs — focused-proof and preparation update
+- Worked: consolidated only new actual proof and attributed progress/preparation
+  entries, checked retained logs and updated existing gallery status without new
+  images. HEAD8afeb677cadd3d2d48bda5cc93490842e0e33f15/intended14 paths retained.
+- Did not: an initial private-note tail repeated old history and truncated;
+  exact latest blocks and filtered live logs resolved current scope. B2 terminal
+  and suite003 were still pending at this checkpoint, so closure remains open.
+- Next: incorporate actual terminal results once delivered, preserve original
+  failed suites and unchanged independent visual evidence, then await separate
+  Git GO. No staging, commit, push, stage/catalog or engine action in this round.
+
+
+### roof_closure_docs — suite003 failure checkpoint
+- Worked: retained B2 original94668 terminal0/53d8b7 and release17d77e: complete
+  native PASS, intended8529 samples/missing[], canonical covered and four stock
+  REST/SAFE approaches. All four focused checks passed, separately from full suite.
+- Did not: suite003 actual log reports w291189336 FAIL, "roof coverage: missing
+  positive source roof domain"; unsafe stop leaves10 accepted fits untested.
+  Route/world validation passed and determinism was invoked; original97264 actual
+  terminal/release is still pending from its owner, despite the log's final FAILED
+  line. No aggregate PASS or failure-cause inference from the diagnostic alone.
+- Next: preserve suite001/002/003 and wait for mechanics terminal plus source-only
+  diagnosis. Distinguish an absent intended domain caused by source/role collection
+  from an actual missing roof before any correction. Gallery now states current
+  suite HOLD; no new images, credits, source change, engine run or Git action.
+
+
+### housing_three_art — exact recess preflight and two baselines
+- Worked: exact per-run wall/source-LAND triangle clipping resolved the earlier
+  frame-linear apparent72 gap: all three source wall bottoms stay below localLAND.
+  Tiny outside corner wedges required contained50mm frontage terminal strips/caps;
+  complete motifs retain clearance. These are source comparisons and construction
+  inference, not runtime contact or surveyed dimensions. Protected returns stay.
+  Two authorized baselines completed:69 original83913 terminal0/4781d7 released
+  65e8bf, then72 original31998 terminal0/6a925d released464df5. All22 originals
+  inspected; actual contexts confirm69/72 continuous frontage/site hierarchy is
+  the meaningful remaining L1 scope. Existing61 site remains the shared donor.
+- Did not: frame interpolation hid real serialized height knots; independently
+  offset run ends could make seams. Some successful standard cardinal captures
+  show occluding neighbors, so source identity/filename alone cannot prove useful
+  whole-side evidence. Baselines show no new architecture or quality improvement.
+  Both clean exits retain14 TextureRID shutdown warnings, without script errors.
+- Next: reuse these baselines and source knots/shared seam endpoints; verify actual
+  containment, stock contact and source-owned spray after any authorized edit.
+  Use bounded shared --views only where a changed assembly is occluded. Prioritize
+ 69/72 complete grass/short connector/footway/parking composition, with coherent
+  inward lower recess as a companion; isolated shallow recess is insufficient.
+  Rear/end L2 evidence remains unsearched/unresolved, not blank by assumption.
+
+### roof_closure_docs — baseline gallery and suite003 terminal update
+- Worked: appended only69 north/contextNE and72 east/contextNE original gameplay
+  PNGs to the existing gallery, marked BEFORE/WIP/no quality credit. All106 prior
+  embedded originals/order remain; total110. Both copies and served GET bytes
+  agree, GET/HEAD200 and private-reference404 verified. No private photos added.
+  Suite003 actual terminal1/6db372 and global absence/releasecaa91d now confirmed;
+  only island_test failed at w291189336, leaving10 untested. Other stages completed.
+- Did not: the missing-positive-domain diagnostic does not identify a missing roof
+  by itself. Initial source observation places Chapel visuals under wall ownership
+  and collision under roof ownership; classification diagnosis remains pending,
+  with no assumed cause or new engine authority. Earlier suites001/002 retained.
+- Next: wait for actual source diagnosis and bounded independent review, preserving
+  existing architecture/credit and all runtime gates. No Git, engine, catalog,
+  acceptance or source-code action. Current HEAD8afeb67 and frozen14-path patch.
+
+
+### housing_three_art_fresh — first candidate and bounded correction
+- Worked: reused exact preflight, baselines and six actual reference originals;
+  one four-path opt-in family pass kept upper receivers/roof repair and61 site.
+ 69/72 source LAND clipping created short connectors, continuous footway, grass
+  and road-bounded parking. Dimensions/bias are production inference, not survey.
+- Did not: first61 study001 parsed neither world nor PNG: Variant-derived recessed
+  inference failed. Owned shutdown ended143/ebb13f, absence85a861; failure retained.
+  Offline earcut.flatten API misuse was corrected before writing site data.
+- Next: concrete CODE correction926360 explicitly types bool, normalizes decoded
+  run IDs to Array[int] before chain indexing and orients supplied ground triangles
+  after Vector3 conversion, retaining every piece. Source whitespace passed;
+  unchanged threshold support retained. No native/playability/acceptance inferred.
+
+### austin461_code — Chapel semantics and housing four-path source review
+- Worked: Chapel b13916 CODE PASS reviewed producer and native descriptor together:
+  only NeutralRoofAndCap/RibbedMetalCap receive roof role; other existing buckets
+  remain untagged, with collision partition/order unchanged. Housing final926360
+  CODE PASS traced opt-in scope, exact source-plane upper preservation, complete
+  inward lower motifs, soffit/cap containment and protected returns. Actual role
+  reading disproved exploratory missing-support concern; threshold support exists.
+- Did not: initial housing candidate required bool/API-identity/native-precision
+  fixes. Final Float32 review found genuine parking winding faults; raw doubles
+  were insufficient. Broad config reads overflowed and read-only Git permission
+  needed clarification. Chapel review began before edited handoff, causing waiting.
+- Next: hand off actual producer plus maintained descriptor together, structurally
+  summarize large configs and normalize consumed ID/coordinate types before render.
+  Preserve CODE versus actual native/contact/spray/visual/suite distinctions; source
+  clipping does not prove exhaustive topology or native road-junction contact.
+
+### roof_checkpoint_progress_fresh — proposed scope and execution-start efficiency
+- Worked:69/72 actual gameplay/context versus March2025 fronts/Apple layout showed
+  whole frontage hierarchy is the substantial L1 scope while shells/roofs remain.
+  CONTINUE/adequate proposed scope grants no unrendered progress or all-side credit.
+  Retained preparation enables the first edit/render without new reference rounds.
+- Did not:72 north is neighbor-occluded; east/context answer the bounded question.
+  Recess alone is modest. No post-EDITGO transcript was available to establish
+  inactivity/cause; unchanged files or silence are not a service failure diagnosis.
+- Next: one execution-first followup, retaining all completed preflight and guards.
+  ROOT then revoked old author assignments after no-edit/no-engine evidence and
+  transferred sole ownership to housing_three_art_fresh with the same bounds.
+  Observe actual first patch/render evidence; do not replay readiness or infer cause.
+
+### roof_closure_docs — first housing study delivery checkpoint
+- Worked: appended61 study002 north/contextNE and69 study001 north/contextNE actual
+  originals, preserving all110 earlier gallery payloads/order (total114).61 capture
+ 14718 terminal0/33de8a releasee69847 and69 capture68355 terminal0/635755 releaseb8d886
+  each saved11 originals. Copies/served GET agree; GET/HEAD200/private404 checked.
+- Did not:72 terminal handoff is pending, so no old or missing72 image was inserted.
+  Visible band-speckle gap cause remains unknown; modest61 and scoped69 site gains
+  do not supply modern quality, native/fit/rest/spray/suite PASS or new credit.
+- Next: append72 east/contextNE only after actual terminal/release handoff; retain
+  failed61 parse and all three failed suites. Chapel semantic CODE PASS awaits
+  runtime. Current dirty paths were read directly (three new housing configs and
+  Chapel producer now included), not inferred from prior patch counts. No engine,
+  Git mutation, catalog/acceptance update or redundant LEARNINGS entry.
+
+
+### austin461_code — new soffit/cap orientation REWORK
+- Worked: actual69 north/east pixels plus exact _quad indices isolated a concrete
+  source fault while retaining uncertainty about speckle. New soffit and both
+  terminal caps inherit reversed wall-face indices and face inward. Bounded remedy
+  changes only those three calls' orientation flag, preserving coordinates,
+  materials, roles and complete emitted-mesh/native path; no lighting polish.
+- Did not: prior926360 CODE PASS followed ground/roof conventions but missed these
+  three new surface families' helper default. Native equality/backface collision
+  would preserve the defect. No broad coplanar duplicate or material-noise cause
+  was demonstrated; possible shadow sampling remains unproved, not a diagnosis.
+- Next: derive each new family's outward front from point order plus helper indices;
+  compare actual corrected pixels before attributing the visible speckle. Prior
+  CODE PASS is retained chronologically but superseded at this concrete risk seam.
+
+housing_three_visual interim evidence: actual all11 target61 and69 AFTER originals,
+reference originals and useful baseline views support nearly indistinguishable61
+companion change and substantive69 frontage/site composition progress.69 grass,
+short connectors, continuous footway and road-bounded apron improve reference
+hierarchy; ordinary views also show conspicuous dark under-band speckle, cause
+unknown. Blank rear/unsearched openings and neighbor occlusions remain explicit.
+This is not final modern finish/all-sideL2/whole-building acceptance or mechanics
+proof. The private note still awaits final72 verdict and the reviewer's own RETRO;
+no completed final review is invented or duplicated here.
+
+### roof_closure_docs — complete first-study gallery and REWORK status
+- Worked: actual72 original40021 terminal0/31a31f, absence464140/release permits its
+  east/contextNE originals. Existing current gallery now shows all six first-study
+  images; prior114 payloads/order preserved, total116. Exact copies/GET bytes,
+  GET/HEAD200 and private-reference404 verified. All33 first-study originals exist
+  but are explicitly not promotable final evidence pending the orientation repair.
+- Did not: source CODE had missed new soffit/cap fronts, so nominal capture success
+  did not close geometry. Specular/speckle cause is unknown; no coplanar/material
+  or service-failure explanation supplied. ROOT revoked all old queued edit/engine
+  assignments after an unexpected resume; no source change is known, and the fresh
+  author confirmed its runtime snapshot unchanged. Sole fresh ownership retained.
+- Next: consume actual corrected CODE/render handoffs before new delivery status.
+  Retain first failed parse, suites001/002/003 and prior scoped progress separately;
+  native/fit/rest/spray/full-suite and Chapel runtime remain pending. No engine,
+  Git, catalog/credit changes or redundant general winding lesson in this round.
+
+
+### housing_capture_closure — corrected three-building capture round
+Worked: retained original handles, fresh output directories, serial completion/absence checks produced all33 originals within3-invocation budget without imports or retries.
+Did not work: initial source-path read omitted facades/ and failed harmlessly; source evidence ID was initially mistaken for Git revision. ROOT clarified and actual corrected calls were read while capture1 ran. Source fix did not itself remove visible underband speckle.
+Next time: dispatch complete file path and distinguish tool evidence IDs from Git revisions; use a longer bounded handle poll rather than repeated short polls. Continue requiring actual original-pixel review after winding corrections.
+
+### hourly_housing_progress — hourly housing execution checkpoint, 2026-10-10
+- Worked: representative original reference/gameplay comparisons distinguish substantial69/72 site hierarchy from modest61 companion depth; fixed island views keep the broader placeholder-quality limit visible without repeating all-side acceptance review.
+- Did not: latest checkpoint has no corrected captures, new fit or suite. Source ea65f9 CODE PASS cannot prove pixels. ROOT supplied actual no-output/no-engine checks and restarted one same-owner assignment; the unstarted-work cause remains unknown. Prior site gains cannot be recounted as new checkpoint progress.
+- Next: REDIRECT directly to the existing three corrected captures and required gate closure, then meaningful missing-side/roof-architecture readiness for the same whole family. Reuse references/baselines, retain one source owner and serialized terminal/release gates, and stop additional readiness/polish loops before execution.
+
+### housing_capture_closure — corrected gallery documentation round
+- Worked: appended six actual corrected originals while preserving the existing116 image payloads/order and private-reference boundary; consolidated the executor and hourly reviewer entries once. All33 corrected captures passed, but visual/native/fit/spray/full-suite status remains pending.
+- Did not: initial tail of the embedded-image HTML produced oversized output; stripping data URLs before inspection resolved it. Existing footer count was stale and is now122. No new completion or acceptance was inferred from corrected source/capture PASS.
+- Next: inspect embedded galleries through structural summaries first; use the existing server and check actual HTTP/privacy responses without launching a duplicate.
+
+## housing_frontage_diagnostic — 2026-10-11 two caster probes
+
+- Worked: two noncumulative source69-only probes used the retained family and standard six-view shots. A new-soffit caster OFF retained the north frontage speckling; B retained-story-beam caster OFF visibly reduced it. Both terminal0; actual renderer AMD Radeon 780M Graphics (RADV PHOENIX), Wayland. Original candidate restored exactly; process absence checked before transfer. Private originals and logs: `/workspaces/landmark-progress-20261007/housing-three-study-20261010/caster-diagnostic-20261011/`.
+- Did not work: A did not remove the symptom; neither probe establishes the detailed shadow mechanism or a suitable permanent fix. Shutdown retained texture-RID warnings (A14, B7); screenshots nevertheless completed.
+- Next: independent paired pixel judgment should bound any corrective assignment to the demonstrated story-beam contribution; preserve casting elsewhere and do not treat diagnostic OFF as acceptance. No rerun, permanent source change, or acceptance claimed.
+
+
+### housing_capture_closure — missing-side readiness
+Worked: exact address searches followed by three targeted StreetView approaches yielded actual dated partial rear/end pixels; maintained resolved-black recovery saved61 without losing its first failed frame. Frozen footprint bearings prevented confusing camera address or neighboring housing with target, especially72 left tan row.
+Did not: web historical image retrieval403 prevented pixel use;69 tree obscures rear,61 crop and72 fence/contributor association limit full opening schedules. Broad config target dump produced oversized output; focused bounds/keys were sufficient. Initial helper polling was too frequent.
+Next: model complete reference-supported rear/roof families only within newly explicit run ownership; distinguish partial visible motifs from whole-side evidence and retain inference limits. Use original terminal handles and longer bounded polls; never let a nominal capturePASS or filename establish building association.
+
+
+### housing_chapel_fit_closure — executed four-fit closure
+- Worked: exact four authorized rendered shared-driver invocations passed without retries. Housing61/69/72 each passed native role partitions, positive intended roof coverage, sampled roof/wall/base fit, four approaches, eighteen route legs and twenty-three active supported released REST/SAFE pairs. Source-bound first-door sprays were placed and each original PNG was inspected as readable. Chapel passed indexed native partitions, positive intended roof coverage, four approaches and its catalog stair up/down, with six REST/SAFE pairs.
+- Did not: preparation misread stale config collision:none as current behavior. Actual candidate producer emits FamilyContact_ground for recessed-site geometry; native logs show this actual source-owned support. Door-route endpoint tolerance establishes near-door approach, not threshold-top landing. All four runs retain the same shutdown warning about seven texture RIDs; none has SCRIPT ERROR, ERROR or FAIL lines. This is scoped fit/contact/spray evidence, not full-suite or whole-art acceptance.
+- Change: prioritize actual current producer behavior and native support identities over stale configuration prose. Preserve completed proof without reruns. Polling/status requests were frequent during long route runs; next time coalesce status around completed frontage groups while retaining the original live handle and explicit terminal/absence transfers.
+- Original terminal and absence observations: w61 handle69748 terminal0/5cd832, absencee48295; w69 handle59437 terminal0/d034b0, absence1694f7; w72 handle46168 terminal0/98f64a, absence91a1b7; Chapel handle64723 terminal0/5c58de, absence7dfd73. Explicit final ENGINE RELEASE sent immediately after Chapel cleanup. No source edits, suite run, commits or acceptance credit.
+
+
+### austin461_code — VISUAL closure
+- Worked: four actual gameplay originals alongside four dated/unknown-date reference originals separated substantive site improvement from persistent front assembly finish, while preserving useful earlier review and avoiding another33-image cycle.
+- Did not: the prior source winding defect was corrected but did not explain or remove the visually distracting under-band; source uncertainty must not become a visual acceptance waiver. Close-ups at the provided distance cannot prove fine seams or hidden architecture.
+- Next: give the author one bounded local whole-frontage diagnostic with an explicit visible outcome, then compare corrected ordinary pixels. Keep scoped gains, visual REWORK, whole-quality unknowns and mechanical gates separate.
+
+
+### austin461_code — Housing three closure winding correction ea65f9
+- Worked: three actual call arguments were traced through the existing helper indices to physical outward directions without broad changes, API guessing or repeated preservation review.
+- Did not: a source winding repair cannot establish that the observed speckle disappears; previous source PASS had missed the defect and is explicitly superseded through retained REWORK/correction chronology.
+- Next: inspect the finite corrected captures before prescribing shadow/material changes, retain failed originals and reuse unchanged native/config evidence while running the required current-world gates.
+
+
+### austin461_code — Housing persistent under-band source diagnosis after ea65f9
+- Worked: changed-seam/source classification eliminated unsupported duplicate-material and legacy-geometry guesses while preserving the observed visual issue and corrected winding chronology.
+- Did not: source inspection cannot determine a live shadow/aliasing mechanism; repeated geometry edits based solely on persistent pixels would risk churn without evidence.
+- Next: stop this source diagnosis at explicit uncertainty, consume independent VISUAL and a named author's bounded local diagnostic if needed, and preserve engine ownership/current native proof. Avoid claiming that a demonstrated unrelated winding repair fixes every visual artifact.
+
+
+### austin461_code — Two local shadow diagnostic preparation
+- Worked: existing enum usages and exact emission references make two local probes concrete without guessed auto-generated names or a new driver.
+- Did not: shared shots has no single-PNG source mode, and two isolated caster toggles cannot exhaustively explain every shadow/aliasing mechanism. A first private append patch used context from the other note and failed without changing any file; corrected this draft context.
+- Next: let ROOT assign the named owner only after actual release, preserve noncumulative probe controls and restored property values, and infer no final solution from a diagnostic appearance change alone.
+
+
+### housing_capture_closure — focused-fit and diagnostic documentation checkpoint
+- Worked: consolidated actual completed capture/readiness, fit and source/visual reviewer entries once; the existing diagnostic executor entry was already present and was not duplicated. Current gallery status now separates four focused-fit PASS results from visual REWORK and pending production/full-suite closure; all122 image payloads/order retained.
+- Did not: near-door routes do not prove threshold-top landing, and diagnostic caster contribution is not a completed production solution. Partial rear references do not resolve all-side opening schedules.
+- Next: add production originals only after actual terminal/release handoff; preserve private references and reuse existing gallery server/privacy checks. No engine/browser/source-art/Git mutation or acceptance credit.
+
+
+### housing_capture_closure — resumed-execution lesson refinement
+- Worked: refined the existing resumed-executor lesson using the retained housing hourly note, actual capture terminal/absence note, four-fit result and independent visual REWORK. Preserved unknown cause and useful prior partial inspections instead of adding a new gate or audit.
+- Did not: running-agent status and repeated readiness requests had not established a live capture or delivered verdict; absence alone still cannot diagnose internal/provider failure. A later successful transfer does not retroactively establish why the old phase stalled.
+- Next: distinguish a verified live handle from intent/status, inspect actual outputs/process and both tool-event forms, revoke/coalesce queued GO before a sole-owner transfer, and reuse completed preflight. No arbitrary timer, source-art, engine, Git mutation or acceptance change.
+
+## housing_frontage_diagnostic — 2026-10-11 production trim-shadow study
+
+- Worked: reused the existing family; only retained thin story-trim casters were disabled for the exact61/69/72 targets with nonempty lower_frontage_recess. No temporary environment hooks remain. Geometry, materials and other casters unchanged. Frozen source produced 11 standard originals each at61study004,69study003,72study003 under the existing private housing-three-study directory; all three original handles terminal0 and process absence verified before each next run and final release. Ordinary north views show cleaner frontage trim, including the visible part of72 behind its neighboring building.
+- Did not work: this is a bounded game-art shadow approximation, not a physical-survey or exclusive mechanism claim.72 north remains partly neighbor-occluded; independent all-side/context/island judgment remains required. Existing shutdown texture-RID warnings persist.
+- Next: consume independent CODE and visual decisions before promotion; reuse unchanged geometry/mechanics evidence only if CODE confirms applicability, then execute the separately assigned full suite. Complete remaining rear openings/coarse roof through a new bounded assignment rather than adding detail here.
+
+
+### housing_capture_closure — production trim-shadow gallery delivery
+- Worked: actual terminal/release handoff permitted six new production originals; all122 earlier payloads/order remain intact, total128. The production author RETRO was already present exactly once and was retained without duplication.
+- Did not: cleaner capture appearance does not supply pending independent CODE/VISUAL, full-suite004 or all-sideL2 acceptance. Four focused fits remain retained with the threshold-top limitation; suite004 was prepared but not run at this checkpoint.
+- Next: update status from actual independent decisions and suite terminal evidence; keep historical attempts and private rear references distinct. No engine/browser/source-art/Git mutation or new credit.
+
+
+### austin461_code — A/B and production closure
+- Worked: noncumulative local probes identified caster contribution without global lighting changes; actual production pixels independently confirmed the scoped result across all three variants, with unchanged fit evidence reused rather than rerun for a render flag.
+- Did not: the initial soffit winding defect was real but did not explain the visible stipple, and even the successful B probe does not identify an exclusive low-level rendering cause. Multiple follow-up handoffs arrived while the review role remained active; coalesced them into one current source/production verdict.
+- Next: keep localized trim approximation explicitly scoped, finish required suite/closure, and choose source-supported all-side architectural work next rather than another isolated band polish. Preserve failed and diagnostic attempts without promoting them to whole-quality acceptance.
+
+
+### housing_capture_closure — integration preparation only
+- Worked: explicit current17 modified plus one untracked path inventory bounds the18-file candidate, including personnel_support_observed.json. Existing named author/mechanics/code/visual/progress/docs RETRO sections account for the executed roles; final A/B and production reviewer entry consolidated once. All128 gallery originals remain unchanged; scoped CODE/VISUAL PASS is distinct from running suite004 and open whole-quality/L2.
+- Did not: this preparation cannot establish a suite result or authorize commit/push. Earlier failed attempts and threshold-top/source limits remain retained; unused or interrupted role assignments receive no invented completed entry.
+- Next: await actual suite terminal/release and separate integration GO; stage only the explicit intended paths then. No staging/commit/remote/credential/engine action during preparation.
+
+
+## housing_chapel_fit_closure — full-suite004, 2026-10-10
+- Worked: ran unchanged tools/test.sh once on the frozen 18-path candidate, preserving original handle79129 and suitePID1173312 throughout. Earlier contracts and stock-player route passed; the island loop reached Isle House after 43 preceding accepted units without reported failures. Both final JavaScript validation and determinism phases completed without being listed as failures. Original handle returned terminal1/01b1b3; owned/global suite, Godot and Weston absence f71a1a preceded explicit ENGINE RELEASE.
+- Did not: full suite FAILED at Isle House parent w1249412094: missing positive source roof domain. The island loop stopped on its unsafe classification and left five subsequent buildings untested. This was not a timeout; no new invocation or weakened gate was attempted. Maintained script buffers/filter its island output, so this log does not retain individual preceding REST contacts or renderer getters; focused prior evidence remains separately scoped.
+- Cause pointer: current visible_roof_faces collector requires source membership and derived key ending :<source>:roof. Isle House uses composite child roof keys building-composite:w1249412094:w1282547786/87:roof and child source identities; parent anchor versus child producer classification needs bounded author review. This source evidence does not establish physically missing roof geometry or authorize relaxing source ownership.
+- Change: fix the composite identity/role seam with positive actual child coverage and independent review, then run only the newly authorized required verification. Preserve suite001–004 failures and completed unchanged focused proof. Frequent status requests during buffered execution supplied no new verdict; retain terminal/PID observation without diagnosing buffering as a stall.
+- No source, catalog, Git staging/commit/push, global configuration or LFS changes. Only suite's existing authorized internal fetch ran. No extra engine launches.
+
+
+## housing_chapel_fit_closure — composite repair preparation only
+- Worked: confirmed actual generated logical object declares parent w1249412094 and child sources w1282547786/787, with exact four physical roof/wall keys. Raw roof records carry singleton child source keys. Existing GeneratedWorldContract already declares and validates that exact membership. Identified three maintained paths for a bounded optional identity-map seam and behavior fixtures.
+- Did not: no current supported Isle House native-producer fit mode exists. Ordinary shared fit plus roof collector tests must not be described as complete indexed native partition proof. No source edit or engine invocation performed.
+- Change: keep explicit parent authorization separate from current per-branch child ownership, reject wrong parent/key/source and foreign descendants, and exercise positive separate roof domains plus culling/wall negatives in the existing contract. Await independent proposal review and ROOT EDIT GO.
+
+
+## housing_chapel_fit_closure — authorized composite edit, awaiting CODE
+- Worked: edited only the three authorized maintained paths. The fit caller binds existing GeneratedWorldContract exact part keys to singleton generated-record identities; the optional collector branch map preserves ordinary recursive logic and requires every authorized branch plus positive intended roof domains. Existing live-tree fixture now covers two disjoint parts and wrong parent/key/source, mixed owner, foreign descendant, untagged wall and reversed-roof cases. Explicit three-path whitespace check passed.
+- Did not: no runtime proof yet; GDScript parse and actual Isle House behavior remain untested until independent CODE and engine transfer. Complete indexed native proof remains unsupported and unclaimed.
+- Change: review the actual bounded diff once, then run the maintained geometry contract and ordinary fixed60 Isle House fit only after explicit GO. No source geometry, generated data, catalog or Git mutation was made.
+
+
+## housing_chapel_fit_closure — composite-contract001
+- Worked: one exact authorized headless geometry contract completed in the initial tool call, terminal0/2f8651; retained log46c56c contains clean Godot4.7.2 startup and {failures:[],ok:true}, with no errors. Actual global Godot/Weston absence93928b preceded ENGINE RELEASE.
+- Did not: no live handle was yielded because the test completed immediately. Fixture PASS validates ownership/culling behaviors only; actual Isle House fit and independent CODE remain separate.
+- Change: retain this completed proof without rerun, await actual CODE and explicit standard-fit GO. No further engine or source edit.
+
+
+### housing_capture_closure — suite004 failure and composite identity checkpoint
+- Worked: retained actual terminal1/01b1b3 and absencef71a1a,43 preceding completed units and five untested units (w1308007112, w1308007113, w1308007114, r16681702, r19685981); other phases including JS/determinism passed. Consolidated only existing executor suite/repair/contract RETRO entries once. Contract001 terminal0/2f8651, clean failures[]/oktrue46c56c and absence93928b remain scoped fixture proof.
+- Did not: missing collected parent roof domain does not demonstrate physically missing roof or complete native Isle House proof. Independent repair CODE, actual fit and full-suite closure remain pending; no commit/push or acceptance authorized.
+- Next: retain unchanged18-path integration list and128 gallery originals, consume actual independent repair verdict and newly assigned runtime results. Existing gallery server/privacy and intended-doc whitespace checked; no engine/browser/source-art/Git mutation.
+
+
+## housing_chapel_fit_closure — Isle House fit001
+- Worked: exact single authorized standard rendered fit passed at original39215 terminal0/33ddbb. Actual declared-before-culling domain now has 3136 positive samples with missing[]; all four stock approaches reached their walls and recorded active supported released stopped REST before SAFE_FINAL. Owned/global Godot/Weston absence5ae83e preceded explicit ENGINE RELEASE.
+- Did not: canonical parent source domain is unavailable and remains advisory; no forced roof extension or native-partition claim. Seven-texture-RID shutdown warning remains. Full-suite005 and independent CODE closure remain separate gates.
+- Change: reuse this completed focused result; no automatic fit/contract replay. Next suite requires distinct ROOT authorization. No further source changes or engine launches.
+
+
+## housing_chapel_fit_closure — full-suite005, 2026-10-10
+- Worked: one unchanged tools/test.sh invocation passed against the frozen composite identity repair and retained candidate. Original handle25471 ended terminal0/ecbe79; the log reports ALL TESTS PASS, including all49 scored building fits, junk/import, scene/startup/generated-world/gameplay/material/UV/geometry contracts, stock ferry route, JavaScript validation and generator determinism. No buildings remain untested. Actual global/owned suite, Godot and Weston absence32e2ca preceded explicit ENGINE RELEASE.
+- Did not: maintained suite output buffers and filters island detail, so its log does not retain individual REST contacts or renderer getters. Completed focused housing/Chapel/Isle House evidence remains separately available; do not invent new detail from aggregate PASS. Independent CODE and visual acceptance remain separate from this regression result.
+- Change: retain the completed suite and focused checks without bookkeeping reruns. Preserve prior suite001–004 failures as history, including the now-resolved composite identity seam. No timeout changes, source edits, new framework, retries, Git staging/commit/push, global configuration or LFS operations occurred; only the maintained suite's authorized internal fetch ran.
+
+
+### hourly_housing_progress — independent composite ownership CODE review, 2026-10-10
+- Worked: one bounded source pass traced exact generated constants, loaded singleton records, optional per-branch propagation and disjoint positive/negative fixtures. CODE PASS preserves ordinary source behavior and rejects omitted/ambiguous authorized parts without changing production geometry.
+- Did not: the first diff command used support/building_fit.gd instead of the actual shared path; corrected the read immediately. Initial baseline diff also included already-reviewed roof work, so only the new composite seam supplied this decision. No runtime results were inferred from source.
+- Next: give the concrete CODE verdict as soon as inspection completes, then finish ordinary notes; reuse independently completed contract/fit and await the existing live full suite. Keep unsupported native/canonical-outline/visual claims separate and avoid another proposal or runtime round.
+
+
+### housing_capture_closure — final regression closure documentation
+- Worked: consolidated actual composite CODE, contract, Isle standard fit and suite005 terminal0/ecbe79 ALL TESTS PASS with absence32e2ca. All49 scored units now fit; earlier suite failures remain historical. Both galleries retain128 original payloads/order and private references; stage counts,213 inventory and49 historical recognition credits unchanged.
+- Did not: aggregate regression PASS supplies no new native Isle House adapter, threshold-top proof, all-sideL2 or whole modern-quality acceptance. Separate checkpoint recommendation remains pending delivery at this edit.
+- Next: consume concrete checkpoint action when delivered; retain exact18-path integration scope and await separate Git mutation GO. No code/engine/browser/staging/commit/push.
+
+### housing_chapel_fit_closure — final integration and current checkpoint
+- Worked: reused completed independent CODE/visual decisions, focused housing/Chapel/Isle House checks and full-suite005 ALL TESTS PASS. Confirmed the existing eighteen-path candidate and that this role's prior private RETRO entries were already consolidated once; retained them without duplication. Final integration preserves all49 historical recognition credits and the213-unit inventory.
+- Did not: no new render or world improvement has occurred since the prior reviewed production captures. The rear study remains unapplied and unrendered; scoped frontage/roof-integrity PASS does not establish complete all-side L2, whole modern quality, or threshold-top landing.
+- Next / REDIRECT: assign the whole61/69/72 rear-opening schedules and shallow roof/eave forms as the next bounded architectural study. Keep existing scoped credit unchanged and use the exact intended eighteen-path commit; no engine or test reruns for integration bookkeeping.

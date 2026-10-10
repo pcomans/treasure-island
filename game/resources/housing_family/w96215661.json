@@ -4595,5 +4595,10 @@
     "source_top_y": 8.034,
     "roof_object_key": "building:w96215661:roof"
   },
-  "dimensions": "production_inference; retained observed-side schedules, hidden elevations unknown"
+  "dimensions": "production_inference; retained observed-side schedules, hidden elevations unknown",
+  "lower_frontage_recess": {
+    "depth_m": 0.35,
+    "band_y": 5.02,
+    "dimensions": "production_inference; inward lower frontage with complete soffits and 0.05m terminal source-plane strips; upper receiver and roof unchanged"
+  }
 }

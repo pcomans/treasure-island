@@ -111,6 +111,7 @@ const POLYHAVEN_MATERIAL_TEXTURE_SET := {
 }
 
 var _materials: Dictionary = {}
+var _generic_roof_material: StandardMaterial3D
 
 
 func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
@@ -749,6 +750,15 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 	if POLYHAVEN_MATERIAL_TEXTURE_SET.has(str(record.material_key)) and not uvs.is_empty():
 		arrays[Mesh.ARRAY_TANGENT] = _tangents_for(vertices, normals, uvs, indices)
 	var placeholder_material := _material_for(str(record.material_key), str(record.feature_kind), is_context)
+	# Quiet provisional finish for generated roof slabs only. Keep the authored
+	# roof inputs and Poly Haven cache intact; neither directional map is used.
+	if not is_context and str(record.feature_kind) in ["building_roof", "building_part_roof"]:
+		if _generic_roof_material == null:
+			_generic_roof_material = StandardMaterial3D.new()
+			_generic_roof_material.resource_name = "generic_roof_provisional"
+			_generic_roof_material.albedo_color = Color(.62, .62, .59)
+			_generic_roof_material.roughness = .96
+		placeholder_material = _generic_roof_material
 	# Only this actual LAND host receives the B2 cosmetic material pass.
 	# Duplicate before partitioning; retain cached base and all node/native identity.
 	if not is_context and str(record.object_key) == "land:w26767313:x_0__z_2" and str(record.feature_kind) == "land_ground":
