@@ -1632,7 +1632,15 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "ymca-study002-scoped-entry-site-20261010",
+          "review_kind": "scoped_architecture_and_site",
+          "status": "accepted",
+          "numerator_effect": 0,
+          "scope": "L1 basic envelope/site only; independent CODE and scoped VISUAL, native/four stock approaches/path/spray REST SAFE and full suite PASS. L2-L5, whole modern recognition and as-built remain open."
+        }
+      ],
       "anchor_source_key": "w34313547",
       "claim_status": {
         "as_built_fidelity": "unclaimed",

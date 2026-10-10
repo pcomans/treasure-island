@@ -41,6 +41,7 @@ const ISLE_HOUSE_HIGH_FACADE_SCENE := preload("res://game/scenes/world/facades/i
 const ISLE_HOUSE_LOW_LIVE_ATTACHMENT := preload("res://game/scripts/world/facades/isle_house_composite_repair_variant_c_live_attachment.gd")
 const D1_B201_LIVE_ATTACHMENT := preload("res://game/scripts/world/facades/d1_b201_live_attachment.gd")
 const D1_B225_LIVE_ATTACHMENT := preload("res://game/scripts/world/facades/d1_b225_live_attachment.gd")
+const YMCA_ENTRY_SITE := preload("res://game/scripts/world/facades/ymca_entry_site.gd")
 const ACCEPTED_MATERIAL_RUN_TRIALS := preload("res://game/scripts/world/facades/accepted_material_run_trials.gd")
 const W34313564_LIVE_MODULES := preload("res://game/scripts/world/facades/w34313564_live_modules.gd")
 const W34313515_LIVE_MODULES := preload("res://game/scripts/world/facades/w34313515_live_modules.gd")
@@ -824,6 +825,16 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 		collision_shape.shape = shape
 		body.add_child(collision_shape)
 		root.add_child(body)
+
+	if not is_context and YMCA_ENTRY_SITE.matches_record(record):
+		var entry_result := YMCA_ENTRY_SITE.build(record)
+		if not bool(entry_result.get("ok", false)):
+			root.free()
+			return entry_result
+		root.add_child(entry_result.node as Node3D)
+		mesh_instances += int(entry_result.mesh_instances)
+		surfaces += int(entry_result.surfaces)
+		triangle_count += int(entry_result.triangles)
 
 	if not is_context and W34313564_LIVE_MODULES.matches_record(record):
 		var live_module_result := W34313564_LIVE_MODULES.build(record)

@@ -19126,3 +19126,102 @@ Correction capture20548 terminal0(282ad7), actual Godot/Weston absent(3ee178), E
 - Worked: ROOT accepted the exact nine-file closure after current scoped visual/CODE/native/stock/site/spray and full-suite002 terminal0. Explicit file staging preserves unrelated next-family work; the source/test candidate remains frozen and no proof is replayed for docs alone. Own actual review/DOC retros are included under the correct actor name.
 - Did not: waiting for the new hourly review append would delay an already reviewed closure; ROOT interrupted that actor and reserved its private draft for the next round, preventing concurrent shared writes. Its early progress finding is separate from this committed record.
 - Next: observe the one commit's actual terminal/status, check the existing credential-helper listener once, and retain UNPUBLISHED if absent. Keep96 original gallery images and update status only. No new account, force push, engine run or unrelated staging.
+
+## YMCA observed entry/site closure — named draft consolidation, 2026-10-10
+
+The following entries consolidate the named actors' own retained private drafts;
+closure writer ymca_closure_docs did not execute their art/review/mechanics work.
+
+### northpoint_1240_end_art — dated recovery and baseline
+- Worked: exact dated panos recovered in two targets with one retained recovery;
+  the necessary closer aerial established L-body/site and shared baseline exposed
+  the entry/site gap. All handles reached terminal and released.
+- Did not: old ENE label could imply centre-ray alignment although the end is in
+  the oblique frame's right sector; earlier prose/gameplay could not replace refs.
+- Next: carry camera/side joins into placement and compose the full pavilion/site,
+  avoiding unjustified roof reconstruction or windows-only ornament.
+
+### ymca_whole_entry_art — study001 and corrected study002
+- Worked: source joins and shared collision helper enabled the complete entrance
+  family/site; independent first pixels redirected the one correction toward whole
+  pavilion/canopy/glazing scale and material composition before finish polish.
+- Did not: initial broad file reads overflowed output, and the human-scale entry
+  underread beside the retained tall hall. Study001 REWORK remains retained.
+- Next: compare complete projected pavilion/hall composition against dated pixels
+  first; preserve honest inferred dimensions and unknown rear scope. Native/stock
+  checks must cover the new producer rather than infer proof from helper reuse.
+
+### hourly_progress_ymca — independent study001 visual
+- Worked: early ordinary-front/reference comparison identified major composition
+  failure before the remaining correction; all-side/context/island checks kept
+  the scoped result honest.
+- Did not: a complete cue list still yielded a small gray entrance on a dark hall;
+  differing fallback poses prevented exact pixel-aligned scale claims.
+- Next: correct the whole public entry/readability family, then judge the whole
+  result while retaining rear and mechanics limits. Verdict: scoped REWORK.
+
+### ymca_study002_visual — independent final scoped visual
+- Worked: immediate front/reference inspection followed by finite all-side,
+  context and five island-pair comparison confirmed substantive entrance progress
+  without an engine rerun. Scoped VISUAL/L1 envelope-site PASS.
+- Did not: differing baseline/current poses and distant ordinary views cannot
+  establish survey proportions/material response; rear remains schematic and
+  unreferenced. Whole modern quality, L2, recognition and as-built remain open.
+- Next: obtain useful opposite-side evidence and complete architecture before
+  material/detail polish; retain separate scoped and whole-quality conclusions.
+
+### northpoint_third_family_code — independent CODE and executor observation
+- Worked: changed-producer/lifecycle review identified the necessary mixed native
+  adapter; final sampling reused four actual chunks and distinguished visible
+  area from LAND. ART and adapter CODE PASS0a3403/d322f9.
+- Did not: initial wrong-key summary and broad symbol reads overflowed output;
+  handoff waited too long before sending the critical producer seam. A resumed
+  visual task receipt had no subsequent actual tool call; cause unknown.
+- Next: report critical source/ownership risk early, finish one bounded seam
+  review, and use actual native/stock proof. Confirm resumed executor activity
+  instead of repeatedly observing an unstarted task; preserve independence.
+
+### northpoint_fourth_mechanics — native/stock proof and full suite
+- Worked: complete donor plans and mixed adapter passed the first authorized run:
+  native roles, four approaches, path out/back, pavilion spray, active supported
+  released REST then SAFE_FINAL;27409 terminal0/72f7f8 releasef64e58. Full suite
+ 37970 terminal0/d16a15 releasebe80a1 passed49 scored fits and determinism.
+- Did not: source preparation alone could not prove runtime rest/support; suite
+  output buffering required same-handle/process observation, not a restart.
+- Next: retain full producer roles in the shared driver, distinguish ground
+  visuals from LAND, observe the live handle to terminal and forward each normal
+  process observation once instead of duplicate status requests.
+
+### ymca_closure_docs — scoped closure and gallery delivery
+- Worked: reused actual named private verdicts and terminal evidence without
+  replaying engine/suite checks; surgical catalog insertion preserves historical
+  claims and one YMCA L1 change gives29 C/1036 U, L1 20 C/193 U.
+- Did not: initial command used the default checkout for one read, then an HTML
+  line search exposed enormous embedded-image output. No source edits resulted;
+  corrected to explicit worktree and payload-filtered gallery inspection.
+- Next: always specify worktree and strip embedded payloads before reading HTML;
+  retain literal original gameplay payloads/order and verify existing local
+  delivery directly. Runtime remains frozen; staging/commit/push awaits ROOT.
+
+Closure verification by ymca_closure_docs: explicit11 intended paths passed
+`git diff --check`; each new gd/uid/json also passed no-index whitespace check
+(exit1 denotes the new-file diff; no whitespace diagnostics). Checklist counted
+213 rows/29 C/1036 U. Parsed catalog comparison found only the new scoped YMCA
+record and retained not_evaluated. Both gallery copies match; original96 PNG
+payloads/order retained, exactly2 untouched study002 PNGs appended. Existing8765
+GET/HEAD200 and GET exact bytes; YMCA private source photo and review note404.
+No engine/suite rerun, browser/server restart, staging, commit or push.
+
+### ymca_closure_docs — approved integration
+- Worked: ROOT reviewed the actual five-document closure and retained frozen six
+  runtime/UID paths; corrected material/shader wording and explicitly associated
+  current totals with YMCA. Prior actual gates and gallery evidence reused.
+- Did not: source-photo textures would have been misleading wording for the
+  coefficient/palette adjustment; corrected before integration.
+- Next: commit only the explicit11 paths after complete and cached whitespace
+  checks; make one credential-listener observation before any remote operation,
+  and keep unpublished delivery truthful if it remains unavailable.
+
+Integration retained first commit failure: Git had no author identity in this
+worktree. Project post-create bot identity matched the parent commit; use that
+identity with command-local `git -c` only, without global configuration changes.

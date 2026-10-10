@@ -5,8 +5,8 @@
 [resource]
 resource_name = "ti_ymca_sse_ene_dark_aggregate_prototype"
 shader = ExtResource("1_shader")
-shader_parameter/base_color = Color(0.25, 0.22, 0.19, 1)
-shader_parameter/secondary_color = Color(0.16, 0.15, 0.14, 1)
+shader_parameter/base_color = Color(0.70, 0.68, 0.57, 1)
+shader_parameter/secondary_color = Color(0.59, 0.57, 0.47, 1)
 shader_parameter/roughness_value = 0.91
 shader_parameter/field_kind = 5
 shader_parameter/primary_scale_m = 0.42

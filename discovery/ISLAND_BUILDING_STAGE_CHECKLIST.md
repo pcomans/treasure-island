@@ -159,8 +159,8 @@ world validation/determinism; owned/global engine absence17b417 establishes
 release. ROOT accepts these bounded L1 gates. Only both L1 become C; historical
 accepted claims and49 credits remain unchanged. See [1236 D6](facades/d6_reference_packets/w96215668_1236_northpoint_drive.md)
 and [1240 D7](facades/d7_reference_packets/w96215688_1240_northpoint_drive.md).
-Current totals: L1:19 C/194 U; L2:8 C/205 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall28 C/1,037 U across213 units/1,065 cells.
+Current totals after YMCA closure below: L1:20 C/193 U; L2:8 C/205 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall29 C/1,036 U across213 units/1,065 cells.
 Next: inspect the next compatible unknown whole-family L1 envelope/site against
 current originals and dated references before assigning art; U establishes no
 defect. Continue major architecture/site coverage rather than current-pair polish.
@@ -207,7 +207,7 @@ before selecting another round.
 | physical-building:w34313544 / w34313544 | Naval Station Treasure Island | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313545 / w34313545 | 800 Avenue I, San Francisco, CA | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313546 / w34313546 | 850 Avenue H | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w34313547 / w34313547 | Treasure Island Community YMCA | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w34313547 / w34313547 | Treasure Island Community YMCA | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | YMCA — scoped envelope/entry/site closure; whole architecture and finish open |
 | physical-building:w34313548 / w34313548 | San Francisco Fire Dept Treasure Island Training Facility Building 600 | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | F — retain; inspect later stages |
 | physical-building:w34313549 / w34313549 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313550 / w34313550 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -405,3 +405,17 @@ before selecting another round.
 | physical-building:r133351 / r133351 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:r16681702 / r16681702 | Treasure Island Museum | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect held whole-building work before new assignment |
 | physical-building:r19685981 / r19685981 | Maceo May | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+
+**YMCA**, 2026-10-10, candidate on `0f058e9`: L1 basic envelope/site complete.
+Retained frozen L-shell/flat roof, observed SSE pavilion and ENE service motifs,
+front lawn/direct path passed independent CODE and study002 scoped VISUAL review,
+fresh native/four-side stock approaches, path out/back and pavilion spray with
+active supported input-released REST then SAFE_FINAL, plus full suite37970
+terminal0 (49 historical scored fits and world determinism). Study001 entrance
+composition REWORK is retained. L2–L5 remain U: unknown opposite-side openings,
+material finish and whole modern recognition/as-built fidelity remain open.
+See [YMCA reference packet](facades/p2_reference_packets/w34313547_treasure_island_ymca.md).
+Current totals after this one L1 change: **29 C / 0 I / 1036 U** across1065
+checkboxes/213 units; **L1:20 C /0 I /193 U**. Other stages unchanged;49
+historical recognition credits retained. These are scoped stage counts, not new
+recognition credit.

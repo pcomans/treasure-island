@@ -1,6 +1,6 @@
 # Source packet — Treasure Island Community YMCA (`w34313547`)
 
-Checked: **2026-09-04**
+Checked: **2026-09-04**; retained observations recovered **2026-10-10**
 Readiness: **reference-ready for observed SSE entry and ENE service language**
 
 ## Exact binding and present state
@@ -12,11 +12,10 @@ Readiness: **reference-ready for observed SSE entry and ENE service language**
 | Chunk / geometry hash | `x_0__z_-2` / `5a0bf16c56ca9ad76a818a19042cf1b2e582f6e0722df2078c07a7156bc17da7` |
 | Generated mass | `9 m`, base/top `4.102 / 13.102 m`; 30 runs / `267.240 m` visible wall |
 | Mapped observed scope | SSE runs `3..7`, `72.979 m`; ENE material-safe runs `8..11`, `28.067 m` |
-| Runtime/review | Exact homogeneous facade aggregate on runs `3..11` (`101.046 m`) is accepted/live; target-specific modules and whole-object recognition remain blocked. |
+| Runtime/review | Exact homogeneous facade aggregate on runs `3..11` (`101.046 m`) is accepted/live; target-specific entry/site study002 now passes scoped gates below; whole-object recognition remains open. |
 
 Binding authority: `discovery/FACADE_RECEIVER_INVENTORY.json`, YMCA facade
-mapping/evidence, and current status ledgers. The accepted aggregate does not
-automatically authorize entry/service modules or untouched sides.
+mapping/evidence, and current status ledgers. The accepted aggregate does not establish whole-object recognition or untouched-side fidelity.
 
 ## Identity and currentness
 
@@ -50,7 +49,7 @@ Observed regions: SSE entry side, ENE service region, and only a partial 2019 NN
 context. Ownership/extent of a mural and adjacent low wing is not proven; neither
 may be absorbed into this receiver. The side chains are mapped, but exact
 within-run placement/ownership for the distinctive portal and service modules
-still requires layout reconciliation.
+was reconciled for the bounded 2026-10-10 study below; unobserved ownership remains unknown.
 
 ## Implementation-ready recommendation
 
@@ -84,7 +83,62 @@ with cool joints, (2) the warm-white projected SSE vestibule and blue-grey canop
 or (3) the ENE high louver/dark-blue service door. Generic dark concrete, a YMCA
 logo, or accepted material alone does not establish whole-object recognition.
 
-No human dependency. Next bounded step: reconcile module placement inside the
-already mapped SSE `3..7` and ENE `8..11` chains, produce only the two non-repeating
-modules, and retain the current accepted aggregate elsewhere. Require before/after
-ordinary-distance evidence for whole-object status.
+## 2026-10-10 observed entry/site closure
+
+Candidate on `0f058e9`; scoped L1 basic envelope/site complete, L2–L5 unknown.
+Reuse: retain generated L-shell/flat roof and aggregate material; housing gable/
+carport base is structurally unsuitable. Source-bound additive entry/site geometry
+uses the existing collision/spray attachment lifecycle. No frozen footprint,
+source identity, main roof, neighbour, stock control or unseen architecture change.
+The material adjustment uses existing project material/shader coefficients and palette,
+with no new bitmap texture and never reference photos.
+
+Dated originals recovered and inspected privately: September2025 `sse01.png` and
+`ene02.png`, with the same Y-SV01/Y-SV02 pano IDs above, plus Apple satellite
+layout (imagery date UNKNOWN; checked2026-10-10),
+https://maps.apple.com/?ll=37.82648,-122.36848&z=19&t=k . Retained originals and
+resolved source URLs remain outside Git under
+`/workspaces/landmark-progress-20261007/ymca-references-20261010/` and the existing
+private `breadth-next-family-note.txt`; no reference image is exported or served.
+First SSE failed viewer capture is retained; one resolved-URL recovery succeeded.
+
+Exact source join: `x_0__z_-2.json`, `building:w34313547:wall`,
+X182.176..259.565/Z-338.651..-263.276. SSE camera XZ[241.512247,-253.869665],
+heading330 intersects run5 at[226.460534,-279.939997] within SSE3..7.
+ENE camera[277.652032,-303.117407],heading245 looks obliquely down SSE;
+its right sector exposes ENE8..11. Provider658 Avenue M is camera context,
+not building identity. Vegetation limits end detail; mural/adjacent low-wing
+ownership and opposite-side openings remain unsupported. Apple supports L-body
+and site context, not surveyed height or a horizontal-source change.
+
+Study001 was VISUAL REWORK: entry cues existed but the small gray pavilion
+underread beneath the tall hall. Study002 coherently widened/raised the complete
+pavilion, canopy and glazing, retaining a thin cap and connected direct path/lawn.
+Dimensions, anchors, cadence and lawn bounds are `production_inference`.
+Independent `ymca_study002_visual` inspected all six current originals beside the
+dated SSE/ENE references and Apple context, compared failed001 and baseline,
+and all five fixed baseline/current island pairs: SCOPED VISUAL PASS, including
+L1 envelope/site. The complete warm-pale entry/glazing/blue-gray cap now reads
+as architecture; ENE service door/high louver fit the observed motif family.
+No visible broad island regression. Different fallback poses prevent exact
+camera-aligned measurement. Cooler/flatter aggregate, schematic roof shading,
+uniform lawn and repetitive blank unknown north/west keep whole modern quality,
+all-side L2, recognition and as-built acceptance OPEN. No motion claim from stills.
+
+Independent `northpoint_third_family_code` ART/native-adapter CODE PASS
+(0a3403/d322f9): exact source lifecycle, complete retained indexed shell and new
+native wall/detail roles, source-owned spray, noncolliding ground visuals.
+Actual land/visible-area sampling supports the bounded drape; visual paving/lawn
+is not colliding support. `northpoint_fourth_mechanics` run27409 terminal0/72f7f8,
+releasef64e58 passed native roles, all four stock approaches, entry path out/back
+and pavilion spray, each with active supported input-released REST then SAFE_FINAL.
+Outward rest[235.7141,-262.567] joins LAND facet113/EntryPath3; return
+[228.4887,-276.1072] joins LAND112/EntryPath0. Spray rest[234.6163,-279.182]
+joins LAND112/FrontLawn109; placed receiver `building:w34313547:wall` at
+[233.2846,5.300004,-281.6848] is PavilionFlank's front plane plus projection offset.
+Full `tools/test.sh`37970 terminal0/d16a15, releasebe80a1: ALL TESTS PASS,
+49 scored fits, behaviour and world determinism. No rerun for bookkeeping.
+Study002 capture21741 terminal0/fb919e, releaseeb49ac; actual Wayland/AMD780M
+recorded by executor, with14 TextureRID shutdown warnings retained. Mechanics
+retained7 TextureRID warnings without failed terminal. Gate results remain
+separate; no new recognition numerator credit (49 historical credits/213 units).

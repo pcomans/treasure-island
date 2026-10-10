@@ -492,3 +492,17 @@ followup succeeded. This supports an active-concurrency constraint, not permanen
 or lifetime agent exhaustion. Inspect live roles, safely retire an unused role,
 and reuse the existing owner before retrying; preserve serialized engine ownership
 and independent review. A delivered coordination message is not executor activity.
+
+## Confirm executor activity after a resumed assignment
+
+YMCA study002 review was dispatched after study001 completed, but retained role
+history showed no subsequent tool/image call and no live handle or error. The
+cause remains unknown. A task-start/message receipt is not execution evidence:
+check for the first actual tool result, then resume or transfer the bounded role
+without repeatedly observing an unstarted task. Preserve independent review.
+
+YMCA study001 added every requested entry cue but the pavilion still read as a
+small gray box beneath the tall hall. Study002's complete pavilion/canopy/glazing
+recomposition passed scoped visual review. Compare the whole entrance-to-hall
+composition against dated pixels in the first coherent ordinary view before
+spending the remaining capture on detail or finish.
