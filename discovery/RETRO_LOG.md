@@ -17826,3 +17826,15 @@ Worked: representative before/final pixels beside owner references made architec
 - Worked: installed missing pinned dependencies in the isolated worktree with locked npm ci --ignore-scripts, without package changes. One maintained full suite69711 ended0/ae8520 with ALL TESTS PASS, all49 scored building fits and Node validation/determinism; private trace retained all nine nested statuses0. Actual owned-process absence preceded early engine release.
 - Did not: a fresh checkout did not inherit installed Node modules; preflight caught that before costly checks. No new runtime failure or Chapel acceptance is claimed.
 - Next: retain explicit model/effort at direct Codex dispatch and separate independent reviews; publish only the six reviewed routing docs, preserving all other worktrees and historical model-run facts.
+
+### b2_final_integration — island stage checklist preparation, 2026-10-10
+
+- Worked: populated one compact Markdown row per canonical physical unit with every source alias and five ordered stages, retaining49 historical credits separately. Existing Mersea/Building600 whole-study and fit notes support five stage1/2 completions; explicit Chapel/B3 gaps remain incomplete and unsupported rows remain unknown. Active assignment guidance now favors the lowest unfinished island stage and compatible whole-family reuse after Chapel closure.
+- Did not: the private34-card audit was not available through retained ordinary locators; its summary cannot supply per-unit stage verdicts. There is no measured whole-island authoring throughput supporting an eight-hour completion promise. Several initial broad note reads truncated output; narrower source reads supplied the usable evidence.
+- Next: inspect unknown approved priorities before dispatch and update only rows backed by actual study evidence. Measure completed family scope rather than treating accepted credit, baseline massing or narrow suite runtime as whole-stage completion. No engine, catalog mutation, commit or push in preparation.
+
+### b2_final_integration — island checklist publication verification, 2026-10-10
+
+- Worked: revised every stage cell to a visible checkbox:213 canonical rows ×5 stages =1,065 boxes, preserving10 complete,3 incomplete and1,052 unknown observations. Locked dependency setup preceded one unchanged suite5977, terminal0/cb1c70, ALL TESTS PASS including49 scored fits and Node validation/determinism; all nested statuses0 and owned-process absence preceded early release.
+- Did not: the first draft used plain C/I/U cells instead of the owner's requested checkboxes and included unnecessary deadline prose and row arithmetic. Corrected before publication; unknown remains an inspection need, not automatic failure.
+- Next: use the checklist after Chapel closure to choose the lowest unfinished approved island stage and bounded compatible family work. Update affected rows only from actual evidence; retain catalog credit and every existing per-building gate.

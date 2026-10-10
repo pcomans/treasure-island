@@ -35,6 +35,8 @@ Authors hand off the intended contribution to whole completion, baseline/current
 
 ### Zoom-in authoring pattern
 
+Finish the current Chapel study first, then select the lowest unfinished zoom stage island-wide among owner-approved landmark/audited priorities using the [working stage checklist](discovery/ISLAND_BUILDING_STAGE_CHECKLIST.md). Inspect unknown rows before assignment; unknown is not failure or permission to revoke historical credit. Prefer bounded compatible whole-family batches/shared reuse, with per-building gates intact. Do not spend disproportionate rounds polishing one building while major architectural families elsewhere remain incomplete. The catalog remains canonical for identity/acceptance; this human Markdown checklist introduces no runtime gate, score or new reporting framework.
+
 Keep reference and layout comparison active throughout. Before choosing work at each level, inspect full target-reference and actual whole-building/site gameplay originals, using faithful original-pixel crops where needed to resolve architecture/opening/material families. Follow the [source-sufficiency guidance](.agents/skills/building-texture/SKILL.md#reference-sufficiency-before-authoring); infer only after meaningful bounded source attempts leave evidence genuinely unavailable. Build in this order:
 
 1. **Basic building/site shape:** establish footprint/local ground fit, main volumes, massing, proportions, relative placement and coarse roof silhouette within the frozen source layout.
