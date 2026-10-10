@@ -34,7 +34,7 @@ Apply [all-side exterior coverage](AGENTS.md#whole-building-exterior-coverage) t
 
 ### Between-study scope and progress decision
 
-After finishing the current Chapel study, use the [island working checklist](discovery/ISLAND_BUILDING_STAGE_CHECKLIST.md) and canonical zoom order to choose the lowest unfinished stage across approved priorities, inspecting unknowns before assignment and batching compatible whole families. Historical credit and all per-building gates remain intact.
+Execute the owner-approved [eight-hour whole-island Level 2 push](AGENTS.md#zoom-in-authoring-pattern). After finishing the current Chapel study, use the [island working checklist](discovery/ISLAND_BUILDING_STAGE_CHECKLIST.md) and canonical zoom order to choose the lowest unfinished stage across approved priorities, inspecting unknowns before assignment and batching compatible whole families. Historical credit and all per-building gates remain intact.
 
 Apply [AGENTS' mandatory boundary](AGENTS.md#architectural-study-scope-and-progress-review) before every next architectural study or promotion, including pending studies and isolated assemblies. Dispatch a named `ti-study-progress-review` executor through the client's actual supported delegation tools, independent of the author and existing code/visual reviewers. For current independent review explicitly select `gpt-6.1-sol` / `high` in Codex; retained Claude frontmatter is only a historical/optional client adapter. A role file is instructions, not a fabricated callable agent. Reuse a free suitable actor; do not interrupt or duplicate a live review.
 

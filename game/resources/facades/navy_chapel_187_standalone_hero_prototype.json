@@ -25,7 +25,7 @@
   "truth_boundary": {
     "prototype_only": false,
     "runtime_attachment": true,
-    "technical_evidence_status": "study_pending_independent_review",
+    "technical_evidence_status": "whole_family_study_pending_independent_review",
     "recognition_accepted": false,
     "believability_accepted": false,
     "as_built_claim": false,
@@ -108,48 +108,174 @@
       "module_policy": "one complete gable-window-entry composition"
     },
     {
-      "id": "NC-ESE-PARTIAL-PUBLIC-SIDE",
-      "role": "bounded observed partial long side immediately adjacent to SSE end",
+      "id": "NC-ENE-HALL",
+      "role": "observed complete ENE tall-hall side from the SSE corner to the low-junction return 15 (Jul2023 Commons thewub; root rescope 2026-10-10)",
       "ordered_run_indices": [
         11,
         12,
-        13
+        13,
+        14
       ],
-      "length_m": 11.829,
+      "length_m": 20.964,
       "start_xz_m": [
         -90.473,
         643.41
       ],
       "end_xz_m": [
-        -96.0,
-        632.951
+        -100.268,
+        624.875
       ],
       "outward_normal_xz": [
         0.884,
         -0.467
       ],
-      "field_material_policy": "quiet neutral non-claim surrogate",
-      "module_policy": "three complete tall narrow opening groups; count and cadence are reversible production inference"
+      "field_material_policy": "quiet cream coating",
+      "module_policy": "four observed recessed three-light opening groups across the whole hall, wider ENE-only width variant, larger blank stretch at the SSE corner; widths, stations and spacing are reversible production inference from perspective, not measured"
+    },
+    {
+      "id": "NC-WSW-HALL",
+      "role": "observed WSW long hall side (Jan2023; Engeo2020 corroboration)",
+      "ordered_run_indices": [
+        6,
+        7,
+        8
+      ],
+      "length_m": 20.786,
+      "start_xz_m": [
+        -114.645,
+        632.679
+      ],
+      "end_xz_m": [
+        -104.937,
+        651.058
+      ],
+      "outward_normal_xz": [
+        -0.884,
+        0.467
+      ],
+      "field_material_policy": "quiet cream coating",
+      "module_policy": "five recessed three-light opening groups; count, cadence and dimensions are reversible production inference"
+    },
+    {
+      "id": "NC-SSE-WING-FRONT",
+      "role": "observed SSE-facing cross-wing front (Sep2025 oblique; root rescope 2026-10-10)",
+      "ordered_run_indices": [
+        17,
+        18
+      ],
+      "length_m": 7.269,
+      "start_xz_m": [
+        -101.332,
+        619.855
+      ],
+      "end_xz_m": [
+        -94.904,
+        616.46
+      ],
+      "outward_normal_xz": [
+        0.467,
+        0.884
+      ],
+      "field_material_policy": "quiet cream coating",
+      "module_policy": "one recessed four-light opening group within run 17; light count and size are reversible production inference; runs 19-21 stay module-free"
+    },
+    {
+      "id": "NC-WSW-WING-GABLE",
+      "role": "observed WSW low-wing outer gable end (Jul2016 Google Maps contributor photograph, Larry Olson)",
+      "ordered_run_indices": [
+        0,
+        1
+      ],
+      "length_m": 7.935,
+      "start_xz_m": [
+        -128.635,
+        625.488
+      ],
+      "end_xz_m": [
+        -124.924,
+        632.501
+      ],
+      "outward_normal_xz": [
+        -0.884,
+        0.468
+      ],
+      "field_material_policy": "quiet cream coating",
+      "module_policy": "one recessed tall narrow three-light group centred under the wing ridge; size and height are reversible production inference"
+    },
+    {
+      "id": "NC-WSW-WING-SIDE",
+      "role": "observed SSE-facing low side of the WSW wing (Jul2016)",
+      "ordered_run_indices": [
+        2
+      ],
+      "length_m": 7.817,
+      "start_xz_m": [
+        -124.924,
+        632.501
+      ],
+      "end_xz_m": [
+        -118.013,
+        628.849
+      ],
+      "outward_normal_xz": [
+        0.467,
+        0.884
+      ],
+      "field_material_policy": "quiet cream coating",
+      "module_policy": "one recessed three-light group plus one closed paired door at the junction end; door host allocation to run 2 is production association, sizes and stations are production inference"
+    },
+    {
+      "id": "NC-WSW-JUNCTION",
+      "role": "observed WSW-facing wing/hall junction projection (Jul2016); return run 5 preserved",
+      "ordered_run_indices": [
+        3,
+        4
+      ],
+      "length_m": 4.963,
+      "start_xz_m": [
+        -118.013,
+        628.849
+      ],
+      "end_xz_m": [
+        -115.691,
+        633.235
+      ],
+      "outward_normal_xz": [
+        -0.884,
+        0.468
+      ],
+      "field_material_policy": "quiet cream coating",
+      "module_policy": "one closed paired door perpendicular to the run-2 door, both on the shared raised platform and one short flight; Jul2016 relationship with inferred dimensions and no current-survival claim"
+    },
+    {
+      "id": "NC-ENE-JUNCTION-QUALIFIED",
+      "role": "partly obstructed ENE-facing low-junction projection (Jul2023); return run 15 preserved",
+      "ordered_run_indices": [
+        16
+      ],
+      "length_m": 4.934,
+      "start_xz_m": [
+        -99.028,
+        624.218
+      ],
+      "end_xz_m": [
+        -101.332,
+        619.855
+      ],
+      "outward_normal_xz": [
+        0.884,
+        -0.467
+      ],
+      "field_material_policy": "quiet cream coating",
+      "module_policy": "one closed paired door assembly as disclosed production inference; the photograph is partly obstructed and does not establish an exact door count or leaf arrangement; not mirrored from WSW"
     }
   ],
   "protected_regions": [
     {
       "id": "NC-UNOBSERVED-RUNS",
       "run_indices": [
-        0,
-        1,
-        2,
-        3,
-        4,
         5,
-        6,
-        7,
-        8,
-        14,
         15,
-        16,
-        17,
-        18,
         19,
         20,
         21,
@@ -166,12 +292,12 @@
         32,
         33
       ],
-      "policy": "source XZ and wall-bottom preserved; quiet neutral module-free shell with reference-bounded vertical massing inference"
+      "policy": "Exact source XZ/bottoms preserved; coherent quiet cream finish with eave/rake boards only, no ambiguous rear/wing opening schedule. Returns 5 and 15 and the ENE outer wing gable 19-21 stay protected."
     },
     {
       "id": "NC-REAR-GABLE-CLOSURE",
       "run_indices": [],
-      "policy": "structural roof closure only in quiet neutral; no rear facade claim or ornament"
+      "policy": "Source-owned closed rear/wing structure with quiet cream coating; no invented rear openings."
     }
   ],
   "production_inference_m": {
@@ -181,15 +307,18 @@
     "main_gable_eave_y": 9.8,
     "main_gable_ridge_y": 15.5,
     "belfry_center_inward_from_sse_m": 15.0,
-    "belfry_plan_width": 4.0,
-    "belfry_plan_depth": 4.0,
+    "belfry_plan_width": 6.4,
+    "belfry_plan_depth": 6.4,
     "belfry_base_y": 13.6,
-    "belfry_wall_top_y": 17.6,
-    "belfry_cap_apex_y": 20.2,
-    "cross_vertical_center_y": 21.1,
-    "cross_vertical_height": 1.8,
-    "cross_horizontal_center_y": 21.45,
-    "cross_horizontal_width": 1.05,
+    "belfry_wall_top_y": 20.1,
+    "belfry_wall_top_lip_policy": "flush with 6.4m tower body; inset curb and pitched cap retained; prevents far lip edge projecting outside the body silhouette in low gameplay views",
+    "belfry_cap_width": 6.05,
+    "belfry_cap_eave_y": 20.65,
+    "belfry_cap_apex_y": 23.35,
+    "cross_vertical_center_y": 24.35,
+    "cross_vertical_height": 2.0,
+    "cross_horizontal_center_y": 24.70,
+    "cross_horizontal_width": 1.15,
     "cross_member_thickness": 0.14,
     "entry_width": 5.4,
     "entry_height": 3.2,
@@ -208,42 +337,125 @@
     "side_window_bottom_y": 6.4,
     "side_window_top_y": 11.8,
     "side_window_chain_centers_m": [
-      2.1,
-      5.915,
-      9.73
+      5.5,
+      9.6,
+      13.7,
+      17.8
     ],
-    "side_frame_projection": 0.2
+    "side_frame_projection": 0.2,
+    "opening_group_recess_depth": 0.28,
+    "opening_group_hall_width": 2.16,
+    "opening_group_ene_hall_width": 2.75,
+    "opening_group_hall_bottom_y": 5.0,
+    "opening_group_hall_top_y": 8.85,
+    "opening_group_wsw_count": 5,
+    "opening_group_wing_chain_center_m": 3.3,
+    "opening_group_wing_width": 3.0,
+    "opening_group_wing_bottom_y": 5.5,
+    "opening_group_wing_top_y": 7.2,
+    "opening_group_wing_lights": 4,
+    "belfry_side_unit_width": 1.8,
+    "belfry_side_unit_height": 4.8,
+    "belfry_side_unit_center_y": 17.1,
+    "plinth_top_y": 4.55
   },
+  "wing_and_junction_assemblies": [
+    {
+      "id": "NC-WSW-WING-GABLE-TRIPLET",
+      "runs": [0, 1],
+      "kind": "window",
+      "center_m": 3.967,
+      "width_m": 1.4,
+      "bottom_y": 5.5,
+      "top_y": 7.4,
+      "lights": 3,
+      "basis": "Jul2016 observed tall narrow triplet; centre under wing ridge and size are production inference"
+    },
+    {
+      "id": "NC-WSW-WING-SIDE-TRIPLET",
+      "runs": [2],
+      "kind": "window",
+      "center_m": 3.7,
+      "width_m": 2.6,
+      "bottom_y": 5.9,
+      "top_y": 7.45,
+      "lights": 3,
+      "basis": "Jul2016 observed wide three-light window; station and size are production inference"
+    },
+    {
+      "id": "NC-WSW-WING-SIDE-DOOR",
+      "runs": [2],
+      "kind": "door",
+      "center_m": 6.7,
+      "width_m": 1.5,
+      "land_y": 4.03,
+      "support_y": 4.52,
+      "top_y": 7.0,
+      "leaves": 2,
+      "basis": "Jul2016 observed paired door at the wing/hall junction; run-2 host allocation is production association. land_y is interpolated LAND (4.029-4.035; visible area +0.04), distinct from inferred platform support_y4.52 for leaves and outer jambs. Closed back/reveals reach source bottoms4.009-4.015; current survival and dimensions unclaimed"
+    },
+    {
+      "id": "NC-WSW-JUNCTION-DOOR",
+      "runs": [3, 4],
+      "kind": "door",
+      "center_m": 2.3,
+      "width_m": 1.5,
+      "land_y": 4.025,
+      "support_y": 4.52,
+      "top_y": 7.0,
+      "leaves": 2,
+      "basis": "Jul2016 observed second paired door on the WSW-facing junction projection; host allocation is production association. land_y interpolated4.019-4.031 stays distinct from inferred common platform support_y4.52; closed back/reveals reach source bottoms3.999-4.011. Shared approach and one flight inferred from the historical image, not surveyed or verified current"
+    },
+    {
+      "id": "NC-ENE-JUNCTION-DOOR-QUALIFIED",
+      "runs": [16],
+      "kind": "door",
+      "center_m": 1.9,
+      "width_m": 1.5,
+      "land_y": 4.05,
+      "top_y": 6.45,
+      "leaves": 2,
+      "basis": "Jul2023 partly obstructed door at the low junction; single assembly, leaf count, size and station are production inference; no observed count claim. land_y interpolated 4.054-4.066; source bottoms 4.028-4.033"
+    }
+  ],
   "material_scope": {
+    "metal_cap": {
+      "path": "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_metal_cap.tres",
+      "application": "original neutral metal response with geometric standing seams on the pyramidal cap; Jul2016/Jul2023 observed family, unsurveyed proportions and rib cadence"
+    },
     "accepted_cream": {
       "path": "res://game/resources/materials/world/navy_chapel_187/navy_chapel_primary.tres",
       "application": "historical material credit retained; current study uses Chapel-only PBR coating variant without extending material acceptance"
     },
     "inferred_cream_structure": {
       "path": "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_inferred_cream_structure.tres",
-      "application": "observed SSE and partial-side shell, gable and belfry in Chapel-only PBR coating variant; not as-built material claim"
+      "application": "observed SSE/WSW/ENE/wing-front shell, gable, belfry and quiet rear/wing closure in Chapel-only warm-cream plaster coating with a slightly darker painted plinth band below plinth_top_y; not an as-built material or colour claim"
     },
     "protected_neutral": {
       "path": "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_protected_neutral.tres",
-      "application": "unobserved source runs and rear roof closure; diagnostic non-claim surrogate"
+      "application": "retained resource only; current quiet rear/wing closure routes to inferred_cream_structure"
     },
     "pale_trim": {
       "path": "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_pale_trim.tres",
-      "application": "observed public opening surrounds, divided-window bars, entry surround, and restrained cross"
+      "application": "whiter, smoother painted trim distinct from plaster: opening-group surrounds, mullions, sills/heads, belfry side-unit frames, gable fins/rails/two-tier lower panels, entry surround, corner/eave/rake boards and restrained cross"
     },
     "opaque_opening": {
       "path": "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_opaque_opening.tres",
-      "application": "nontransparent exterior opening proxy; no interior claim"
+      "application": "nontransparent exterior opening proxy with low-roughness glazing response; no interior claim"
     },
     "neutral_roof": {
       "path": "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_neutral_roof.tres",
-      "application": "roof and cap silhouette only; color is not asserted"
+      "application": "main and wing roofs retain original procedural coursed roofing; tower cap has its own metal variant"
+    },
+    "timber": {
+      "path": "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_timber.tres",
+      "application": "warm stained timber door leaves and gable central panel; anisotropic grain from existing plaster maps; species/finish not asserted"
     }
   },
   "collision_contract": {
     "base_source_wall_shell": "exact source XZ and bottom elevations; inferred wall tops",
-    "base_source_roof": "exact source horizontal footprint lower closure plus inferred pitched roofs",
-    "structural_collision": "all emitted visible faces partitioned by semantic roof/cross role and wall-detail face orientation",
+    "base_source_roof": "source horizontal footprint lower closure locally cut around closed hall wall pockets (WSW and ENE groups crossing the cap), plus inferred pitched roofs",
+    "structural_collision": "all emitted visible structural faces partitioned by semantic roof/cross role and wall-detail face orientation; WSWFlightDecor is the explicit non-spray visual stair subset, with dedicated WSWFlightSupport indexed nonreceiver surface through its nosings and grounded approach, following accepted Mersea stair support grammar",
     "spray_ownership": "paired live adapter exact wall receiver; roof/cap/cross and horizontal detail faces reject spray"
   },
   "future_integration_seam": {
@@ -261,5 +473,39 @@
     "transparent glazing, visible interior, operable entry, interior access, or occupancy",
     "recognition or believability acceptance before independent review",
     "plaque, sign, lettering, stained glass, or arbitrary accent color"
-  ]
+  ],
+  "whole_exterior_study": {
+    "observed_wsw_runs": [
+      6,
+      7,
+      8
+    ],
+    "observed_ene_hall_runs": [
+      11,
+      12,
+      13,
+      14
+    ],
+    "observed_wsw_wing_runs": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "qualified_ene_junction_runs": [
+      16
+    ],
+    "observed_sse_wing_front_runs": [
+      17,
+      18
+    ],
+    "observed_belfry_side_faces": [
+      "+t ENE (Jun2026 rear/ENE oblique)",
+      "-t WSW (Jan2023)"
+    ],
+    "reference": "Jul2016 Google Maps contributor (Larry Olson) WSW wing gable/side/junction doors; Jul2023 Commons thewub complete ENE hall and partly obstructed low junction; Sep2025 SSE + partial ENE + SSE wing front; Jan2023 WSW hall and belfry side; Jun2026 footer (Sep2026 contributor panel) partial rear/ENE-wing and belfry +t side; Dec2016 SSE entry/gable detail; Engeo2020 WSW aerial; undated museum belfry/roof",
+    "inference": "Shared recessed opening groups retain WSW hall, four ENE hall groups, wing-front and WSW wing groups. Closed door backs/reveals reach source bottoms. WSW run2 and runs3-4 leaves/outer jambs stand on a common platform at4.52 with one short flight; qualified ENE16 stays on local land4.05. LAND measurements remain separate from platform support. Jul2016 supports the raised approach relationship, not surveyed step dimensions or current survival; no canopy added. Tower body, outward divided side relief, opaque pyramidal metal cap and restrained ribs are unsurveyed production inference. Successful SSE composition and protected rear/returns remain unchanged; no hidden openings or interiors inferred.",
+    "material_hierarchy": "Tower-entry005 adds a distinct restrained matte metal cap above the taller square tower and a common pale raised WSW approach. Retained warm coursed main/wing roofing, warm-cream plaster versus whiter trim, plinth, lower-gable panels and timber entry; original procedural materials with no reference pixels; dimensions and cadence remain production inference"
+  }
 }

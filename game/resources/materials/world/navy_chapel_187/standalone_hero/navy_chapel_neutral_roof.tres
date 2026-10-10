@@ -1,18 +1,24 @@
-[gd_resource type="StandardMaterial3D" load_steps=3 format=3]
+[gd_resource type="ShaderMaterial" load_steps=5 format=3]
 
-[ext_resource type="Texture2D" path="res://game/resources/textures/world/polyhaven/bitumen/bitumen_nor_gl_1k.jpg" id="1"]
-[ext_resource type="Texture2D" path="res://game/resources/textures/world/polyhaven/bitumen/bitumen_rough_1k.jpg" id="2"]
+[ext_resource type="Shader" path="res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_coating.gdshader" id="shader"]
+[ext_resource type="Texture2D" path="res://game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg" id="1"]
+[ext_resource type="Texture2D" path="res://game/resources/textures/world/polyhaven/bitumen/bitumen_nor_gl_1k.jpg" id="2"]
+[ext_resource type="Texture2D" path="res://game/resources/textures/world/polyhaven/bitumen/bitumen_rough_1k.jpg" id="3"]
 
 [resource]
-resource_name = "navy_chapel_roof_finish_inference_substrate_unclaimed"
-albedo_color = Color(0.29, 0.255, 0.22, 1)
-roughness = 0.9
-roughness_texture = ExtResource("2")
-metallic = 0.0
-normal_enabled = true
-normal_texture = ExtResource("1")
-normal_scale = 0.10
-uv1_triplanar = true
-uv1_world_triplanar = true
-uv1_scale = Vector3(0.10, 0.10, 0.10)
-texture_filter = 5
+resource_name = "navy_chapel_roof_coursed_finish_inference_substrate_unclaimed"
+shader = ExtResource("shader")
+shader_parameter/surface_color = ExtResource("1")
+shader_parameter/surface_normal = ExtResource("2")
+shader_parameter/surface_roughness = ExtResource("3")
+shader_parameter/paint_color = Color(0.36, 0.25, 0.18, 1)
+shader_parameter/tile_span_m = 2.0
+shader_parameter/relief_strength = 0.12
+shader_parameter/roughness_base = 0.86
+shader_parameter/variation_strength = 0.05
+shader_parameter/wear_strength = 0.0
+shader_parameter/course_exposure_m = 0.34
+shader_parameter/tab_width_m = 0.95
+shader_parameter/course_shadow = 0.38
+shader_parameter/joint_shadow = 0.3
+shader_parameter/tab_variation = 0.14

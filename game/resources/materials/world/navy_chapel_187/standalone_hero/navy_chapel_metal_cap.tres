@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_coating.gdshader" id="shader"]
+
+[resource]
+resource_name = "navy_chapel_ribbed_metal_cap_inference"
+shader = ExtResource("shader")
+shader_parameter/paint_color = Color(0.64, 0.61, 0.54, 1)
+shader_parameter/relief_strength = 0.0
+shader_parameter/roughness_base = 0.72
+shader_parameter/variation_strength = 0.0
+shader_parameter/wear_strength = 0.0
+shader_parameter/metallic_response = 0.15

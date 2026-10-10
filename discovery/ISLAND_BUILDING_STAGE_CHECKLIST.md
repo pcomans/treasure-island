@@ -1,7 +1,7 @@
 # Island building-stage checklist
 
-Working baseline: 2026-10-10, published main `f4dd167`; named Chapel WIP noted
-separately. The [catalog](facades/facade-recognition-catalog.json) remains the
+Initial baseline: 2026-10-10, published main `f4dd167`; Chapel closure is
+recorded in the current row and evidence note below. The [catalog](facades/facade-recognition-catalog.json) remains the
 canonical identity/acceptance source:213 physical units,49 historical credits.
 This Markdown is a human working coverage list, not a new acceptance system,
 runtime contract, score or test. Source aliases are retained for composite units.
@@ -23,8 +23,9 @@ retaining per-building fit and independent all-side review. Do not keep polishin
 one building while major architectural families elsewhere remain incomplete.
 Update affected rows in the ordinary study handoff after actual evidence changes.
 
-Baseline stage1:5 C /0 I /208 U. Stage2:5 C /2 I /206 U. These are evidence coverage
-counts, not an estimate that208 buildings need new massing. No stage5 completion
+Initial baseline stage1:5 C /0 I /208 U; stage2:5 C /2 I /206 U. After Chapel
+closure: stage1:6 C /0 I /207 U; stage2:6 C /1 I /206 U. These are evidence
+coverage counts, not an estimate that unknown buildings need new massing. No stage5 completion
 is inferred from generic visual acceptance. Unknown rows remain unchecked, not
 failed; inspect their current evidence before choosing an assignment.
 
@@ -33,9 +34,9 @@ Evidence keys: **M** [Mersea final whole-site and mechanical closure](MERSEA_STU
 **F** [Building600 whole-study/fit](facades/BUILDING_600_STUDY.md) (2026-10-05;
 bounded observed/inferred exterior); **B3** [all-side lesson](../LEARNINGS.md#do-not-promote-one-facades-finish-to-whole-building-quality)
 (owner identified blank west openings/material coverage; inspect current work
-before reassignment); **Ch** private Chapel opening004 whole HOLD and tower005
-progress PASS, retained in the ordinary Chapel study workspace (not published
-acceptance; complete tower/cap/raised-entrance family still under review).
+before reassignment); **Ch** [Chapel tower/entrance005 and lip004 closure](facades/NAVY_CHAPEL_BUILDING_187_REFERENCE_SPEC.md)
+(2026-10-10; final whole game-art visual/CODE and integrated native/fit/stair/suite
+PASS; historical opening004 HOLD retained, as-built fidelity unclaimed).
 **U** no current stage-level conclusion established in this checklist pass.
 
 The retained34-building audit entries in [RETRO](RETRO_LOG.md) (2026-09-23,
@@ -44,8 +45,13 @@ substantial-rework and reference/view limits. Their private34-card artifact was
 not recovered by the earlier bounded local search; this checklist does not invent
 its per-building ranking or treat every accepted unit as an audited priority.
 
-No measured throughput supports an eight-hour promise for all213 units; use the
-checklist to choose bounded evidence-ready families while preserving every gate.
+The owner-approved operating plan is an eight-hour whole-island push toward
+Level 2 (sound shape/site fit plus complete doors/windows/roof), with Chapel first
+and bounded whole-family work at the lowest unfinished stage thereafter. Use all
+1,065 checkboxes across the 213 units to record evidence-backed progress; the
+window does not guarantee completion of every unit or relax any existing gate.
+Follow [canonical routing](../AGENTS.md#bounded-subagent-execution): Astra Low
+modeling and independent Sol High reviews. Preserve all 49 historical credits.
 Candidate reuse clusters already named in the catalog include Mariner,
 Northpoint, Bayside and Gateview; compare actual roofs/openings/site support before
 combining variants. Adapter names do not establish stage completion.
@@ -227,7 +233,7 @@ before selecting another round.
 | physical-building:w109905044 / w109905044 | Education Center Building 29D | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w110188516 / w110188516 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w111322535 / w111322535 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w291189336 / w291189336 | Navy Chapel Building 187 | ☐ U | ☐ I | ☐ U | ☐ U | ☐ U | Ch — finish current tower/cap + shared raised entrance first |
+| physical-building:w291189336 / w291189336 | Navy Chapel Building 187 | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Ch — lip004 whole visual/CODE and integrated native/fit/stairs/suite PASS; as-built unclaimed |
 | physical-building:w291189918 / w291189918 | Oasis - pizzeria & event venue | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w291189926 / w291189926 | US Dept of Labor Job Corps Dormitory Building 369 | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w291193741 / w291193741 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |

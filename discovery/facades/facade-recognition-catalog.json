@@ -10021,9 +10021,20 @@
           "review_id": "navy-chapel-belfry001-whole-building-visual-20261007",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "chapel-visual-lip004-20261010",
+          "review_kind": "independent_reference_recognition",
+          "status": "accept"
+        },
+        {
+          "review_id": "chapel-flight-code-final-lip-integration-20261010",
+          "review_kind": "independent_code_review",
+          "status": "accept"
         }
       ],
       "anchor_source_key": "w291189336",
+      "stairs": [{"bottom": [-120.3458, 632.5684], "top": [-118.25, 631.46]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",

@@ -23,6 +23,7 @@ const EXECUTABLE_DEPENDENCIES := [
 	"res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_pale_trim.tres",
 	"res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_opaque_opening.tres",
 	"res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_neutral_roof.tres",
+	"res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_metal_cap.tres",
 	"res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_timber.tres",
 	"res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_coating.gdshader",
 ]
@@ -244,9 +245,12 @@ static func runtime_dependency_closure_exists() -> bool:
 static func material_semantics_match(root: Node3D) -> bool:
 	var base := "res://game/resources/materials/world/navy_chapel_187/standalone_hero/"
 	var expected := {
-		"ProtectedExactWallAndRearClosure": "navy_chapel_protected_neutral.tres",
+		"QuietWallAndRearClosure": "navy_chapel_inferred_cream_structure.tres",
 		"InferredCreamSSEGableBelfryEntry": "navy_chapel_inferred_cream_structure.tres",
 		"NeutralRoofAndCap": "navy_chapel_neutral_roof.tres",
+		"RibbedMetalCap": "navy_chapel_metal_cap.tres",
+		"WSWFlightDecor": "navy_chapel_pale_trim.tres",
+		"WSWFlightSupport": "navy_chapel_pale_trim.tres",
 		"ObservedPaleTrim": "navy_chapel_pale_trim.tres",
 		"ObservedCross": "navy_chapel_pale_trim.tres",
 		"OpaqueExteriorOpenings": "navy_chapel_opaque_opening.tres",
@@ -260,7 +264,7 @@ static func material_semantics_match(root: Node3D) -> bool:
 		var material := instance.mesh.surface_get_material(0)
 		if material == null or material.resource_path != base + str(expected[instance.name]) or material.next_pass != null:
 			return false
-		if instance.name in ["InferredCreamSSEGableBelfryEntry", "ObservedPaleTrim", "ObservedCross", "ObservedOpaquePanelAndDoor"]:
+		if instance.name in ["QuietWallAndRearClosure", "InferredCreamSSEGableBelfryEntry", "NeutralRoofAndCap", "RibbedMetalCap", "WSWFlightDecor", "WSWFlightSupport", "ObservedPaleTrim", "ObservedCross", "ObservedOpaquePanelAndDoor"]:
 			if not material is ShaderMaterial or (material as ShaderMaterial).shader == null \
 				or (material as ShaderMaterial).shader.resource_path != base + "navy_chapel_coating.gdshader":
 				return false

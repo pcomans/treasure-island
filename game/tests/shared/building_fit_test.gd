@@ -26,6 +26,8 @@ extends SceneTree
 ## Optional --adjacent-source KEY: complete recorded nonreceiver roof/support
 ## mesh-to-native coverage for a neighboring POI, before ordinary building checks.
 ## Requires the existing recorded contact_mesh_paths producer; no wall exemption.
+## Optional --native-producer chapel-indexed: complete live indexed wall/roof
+## partition comparison before the ordinary fit, for the Chapel producer.
 ## Optional --diagnose-side north|south|west|east: native candidate queries only,
 ## without placement/movement. Always reports whole-building HOLD and exits1.
 
@@ -47,7 +49,7 @@ func _run() -> void:
 	var index := 0
 	while index < raw_args.size():
 		var flag := raw_args[index]
-		if flag not in ["--source", "--routes", "--spray", "--diagnose-side", "--adjacent-source"] or seen.has(flag):
+		if flag not in ["--source", "--routes", "--spray", "--diagnose-side", "--adjacent-source", "--native-producer"] or seen.has(flag):
 			push_error("unsupported or duplicate option: " + flag)
 			quit(1)
 			return
@@ -63,6 +65,10 @@ func _run() -> void:
 		quit(1)
 		return
 	var source_key := str(args.source)
+	if args.has("native-producer") and (str(args["native-producer"]) != "chapel-indexed" or source_key != "w291189336" or args.has("diagnose-side") or args.has("adjacent-source")):
+		push_error("native producer requires its supported source and cannot combine diagnostic/adjacent modes")
+		quit(1)
+		return
 	var adjacent_source := str(args.get("adjacent-source", ""))
 	if args.has("adjacent-source") and (adjacent_source == "" or adjacent_source == source_key):
 		push_error("adjacent source must be nonempty and distinct from the building")
@@ -108,6 +114,13 @@ func _run() -> void:
 		var adjacent_error := _check_adjacent_geometry(h, adjacent_source)
 		if adjacent_error != "":
 			print("FAIL: adjacent geometry: " + adjacent_error)
+			h.main.queue_free()
+			quit(1)
+			return
+	if args.has("native-producer"):
+		var native_error := _check_indexed_partition(h, source_key)
+		if native_error != "":
+			print("FAIL: native partition: " + native_error)
 			h.main.queue_free()
 			quit(1)
 			return
@@ -229,4 +242,125 @@ func _check_adjacent_geometry(h: WorldHarness, source: String) -> String:
 	if not roles.has("roof") or not roles.has("support"):
 		return "adjacent roof/support role coverage incomplete"
 	print("PASS: adjacent %s complete recorded roof/support native geometry" % source)
+	return ""
+
+
+# Existing indexed producer contract: semantic roof/cross or first indexed
+# normal.y above the producer cutoff belongs to the solid non-wall partition.
+# No metadata face arrays or regenerated prototype supply expected geometry.
+func _check_indexed_partition(h: WorldHarness, source: String) -> String:
+	var keys := ["building:" + source + ":wall", "building:" + source + ":roof"]
+	var roots: Array[Node3D] = []
+	var bodies: Array[StaticBody3D] = []
+	for key: String in keys:
+		var matches: Array[StaticBody3D] = []
+		for node: Node in h.main.find_children("*", "StaticBody3D", true, false):
+			if source in node.get_meta("source_keys", []) and str(node.get_meta("derived_object_key", "")) not in keys:
+				return "unsupported additional source native owner"
+			if str(node.get_meta("derived_object_key", "")) == key:
+				matches.append(node as StaticBody3D)
+		if matches.size() != 1:
+			return "missing or duplicate native partition owner: " + key
+		var body := matches[0]
+		var root := body.get_parent() as Node3D
+		if root == null or str(root.get_meta("derived_object_key", "")) != key or root.get_meta("source_keys", []) != [source]:
+			return "native partition producer identity differs"
+		roots.append(root)
+		bodies.append(body)
+	var semantic_roles := {"QuietWallAndRearClosure": false, "InferredCreamSSEGableBelfryEntry": false,
+		"NeutralRoofAndCap": true, "RibbedMetalCap": true, "ObservedPaleTrim": false, "ObservedCross": true,
+		"WSWFlightDecor": true, "WSWFlightSupport": true,
+		"OpaqueExteriorOpenings": false, "ObservedOpaquePanelAndDoor": false}
+	for root: Node3D in roots:
+		for visual: Node in root.find_children("*", "GeometryInstance3D", true, false):
+			if not visual is MeshInstance3D:
+				return "unsupported additional producer visual"
+	var seen := {}
+	var partitions: Array[PackedVector3Array] = [PackedVector3Array(), PackedVector3Array()]
+	var poses: Array[Transform3D] = []
+	for mesh_node: Node in roots[0].find_children("*", "MeshInstance3D", true, false):
+		var mesh := mesh_node as MeshInstance3D
+		var name_key := str(mesh.name)
+		var flight_support := name_key == "WSWFlightSupport"
+		var flight_decor := name_key == "WSWFlightDecor"
+		if mesh.get_parent() != roots[0] or not semantic_roles.has(name_key) or seen.has(name_key) or not mesh.mesh is ArrayMesh or mesh.is_visible_in_tree() == flight_support:
+			return "unsupported, hidden or duplicate indexed producer mesh"
+		if (flight_support or flight_decor) and mesh.get_meta("chapel_flight_role", "") != ("support" if flight_support else "decor"):
+			return "flight producer role differs"
+		seen[name_key] = true
+		var semantic_roof: bool = semantic_roles[name_key]
+		# This producer copies raw bucket positions/normals, without baking a
+		# per-mesh pose. Reject local edits outside that supported contract.
+		if mesh.transform != Transform3D.IDENTITY:
+			return "indexed producer requires identity local mesh transform"
+		if mesh.layers != (1 if semantic_roof else 2) or mesh.is_set_as_top_level():
+			return "indexed semantic render layer or ancestry differs"
+		var mesh_world := roots[0].global_transform * mesh.transform
+		if not mesh_world.is_finite() or not mesh.global_transform.is_finite() or not mesh_world.is_equal_approx(mesh.global_transform):
+			return "indexed mesh world placement differs"
+		# Both native holders use the same producer coordinate space. Bind it
+		# to actual live body placement before exact local-face comparison.
+		for body: StaticBody3D in bodies:
+			if not body.global_transform.is_finite() or not body.global_transform.is_equal_approx(roots[0].global_transform):
+				return "indexed native body differs from producer world space"
+		var one := StudyGeometry.collect(mesh.mesh, [mesh.transform], StudyGeometry.INDEXED_ARRAYS)
+		if not one.ok:
+			return "indexed collection failed: " + str(one.errors)
+		poses.append(mesh.transform)
+		var cursor := 0
+		for surface in mesh.mesh.get_surface_count():
+			var arrays := mesh.mesh.surface_get_arrays(surface)
+			var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+			var indices: PackedInt32Array = arrays[Mesh.ARRAY_INDEX]
+			if not arrays[Mesh.ARRAY_NORMAL] is PackedVector3Array or arrays[Mesh.ARRAY_NORMAL].size() != vertices.size():
+				return "missing complete indexed normals"
+			var normals: PackedVector3Array = arrays[Mesh.ARRAY_NORMAL]
+			for offset in range(0, indices.size(), 3):
+				var normal := normals[indices[offset]]
+				if not normal.is_finite() or normal.length_squared() == 0.0:
+					return "invalid indexed producer normal"
+				if flight_support and normal.dot(Vector3.UP) < cos(deg_to_rad(48.0)):
+					return "flight support is not a walkable upward face"
+				var partition := 1 if semantic_roof or absf(normal.y) > 0.65 else 0
+				for corner in range(3):
+					if not flight_decor:
+						partitions[partition].append(one.faces[cursor + corner])
+				cursor += 3
+		if cursor != one.faces.size():
+			return "incomplete indexed partition traversal"
+	for name_key: String in semantic_roles:
+		if not seen.has(name_key):
+			return "missing producer semantic mesh: " + name_key
+	if not roots[1].find_children("*", "MeshInstance3D", true, false).is_empty():
+		return "unexpected duplicate roof visuals"
+	for partition in range(2):
+		var body := bodies[partition]
+		var wall := partition == 0
+		var receiver := "building_wall" if wall else "none"
+		var ownership := "wall_like" if wall else "roof_cap_cross_landing"
+		var world: Variant = PhysicsServer3D.body_get_state(body.get_rid(), PhysicsServer3D.BODY_STATE_TRANSFORM)
+		if not world is Transform3D or not world.is_finite() or not world.is_equal_approx(body.global_transform):
+			return "native server/node world placement differs"
+		if body.collision_layer != 5 or body.collision_mask != 0 or body.is_in_group("spray_receiver_wall") != wall:
+			return "native partition collision/spray layer differs"
+		var owners := body.get_shape_owners()
+		if owners.size() != 1 or body.is_shape_owner_disabled(owners[0]) or body.shape_owner_get_shape_count(owners[0]) != 1:
+			return "ambiguous native partition holder"
+		var holder := body.shape_owner_get_owner(owners[0]) as CollisionShape3D
+		if holder == null or holder.get_parent() != body or holder.transform != Transform3D.IDENTITY or not holder.shape is ConcavePolygonShape3D:
+			return "unsupported native partition holder"
+		for object: Object in [body, holder.shape]:
+			if object.get_meta("source_keys", []) != [source] or str(object.get_meta("derived_object_key", "")) != keys[partition] or str(object.get_meta("receiver_kind", "")) != receiver or object.get_meta("opaque", false) != true or str(object.get_meta("ownership_partition", "")) != ownership:
+				return "native partition source/receiver ownership differs"
+		var shape_index := body.shape_owner_get_shape_index(owners[0], 0)
+		if PhysicsServer3D.body_get_shape(body.get_rid(), shape_index) != holder.shape.get_rid() or PhysicsServer3D.body_get_shape_transform(body.get_rid(), shape_index) != holder.transform:
+			return "native server shape RID/transform differs"
+		var faces := partitions[partition]
+		var collection := {"ok": not faces.is_empty(), "faces": faces, "local_faces": faces, "transforms": poses,
+			"producer": StudyGeometry.INDEXED_ARRAYS, "errors": [], "minimum_cross_length_squared": -1.0}
+		var result := StudyGeometry.compare(collection, (holder.shape as ConcavePolygonShape3D).get_faces(), faces.size())
+		print("NATIVE_PARTITION key=%s predicates=%s server_owner=true" % [keys[partition], result.predicates])
+		if not result.ok:
+			return "complete ordered native partition faces differ"
+	print("PASS: complete indexed native wall/roof partitions for " + source)
 	return ""

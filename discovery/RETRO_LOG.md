@@ -17838,3 +17838,349 @@ Worked: representative before/final pixels beside owner references made architec
 - Worked: revised every stage cell to a visible checkbox:213 canonical rows ×5 stages =1,065 boxes, preserving10 complete,3 incomplete and1,052 unknown observations. Locked dependency setup preceded one unchanged suite5977, terminal0/cb1c70, ALL TESTS PASS including49 scored fits and Node validation/determinism; all nested statuses0 and owned-process absence preceded early release.
 - Did not: the first draft used plain C/I/U cells instead of the owner's requested checkboxes and included unnecessary deadline prose and row arithmetic. Corrected before publication; unknown remains an inspection need, not automatic failure.
 - Next: use the checklist after Chapel closure to choose the lowest unfinished approved island stage and bounded compatible family work. Update affected rows only from actual evidence; retain catalog credit and every existing per-building gate.
+
+
+## Chapel whole-family003 retained role entries — 2026-10-10
+
+The following authored drafts are transcribed verbatim. PRIVATE DRAFT labels describe their retained source; runtime-pending and initial visual HOLD statements are historical checkpoints. Current corrected whole-visual review remains pending; later entries record completed runtime proof.
+
+
+## chapel_whole_family_art — Chapel whole-family003 (2026-10-10) — PRIVATE DRAFT, not appended
+
+- What worked well: Mapping every footprint run into the SSE (t,n) frame before modelling made the corrected wing17–18 / belfry ±t associations and all group stations checkable on paper; generalising the existing WSW recess + cap-pocket code into one chain-indexed group family delivered all observed sides in one coherent pass, and the single import + single capture both exited 0 with readable ordinary-distance gains.
+- What did not work well: My import command put `&` after an `&&` chain, so the variable and the true Godot PID were only in the background list (PID evidence is the list $! plus terminal/exit files, not the engine PID); no image tool was available to crop reference detail, so wing light count and belfry slat form rest on full-frame reading.
+- What the team should change next time: Launch engine runs with an explicit `cmd & pid=$!; wait $pid` on its own line and write pid/terminal files from the foreground; for the next Chapel round, address remaining inferred-side massing (rear/returns/base) and door legibility only after independent progress review decides scope.
+
+next_landmark_preflight — Claude runner, 2026-10-10
+- Worked: Actual ti-implementation session reported claude-opus-5-5; retained one handle63848 through terminal0 without restart. Author reused the coupled Chapel family and completed one import plus one14-view capture, then stopped for independent review.
+- Did not: Print-mode CLI exposes no live inbound steering channel; initial assignment must carry the early-render priority. Import shell captured the background group rather than exact Godot PID, although terminal0 and later empty process scans were retained. Art/native acceptance remains unproved.
+- Next: Reuse these complete baseline/current/reference originals for immediate progress and visual decisions; do not rerender for bookkeeping or infer fit/spray from clean screenshots. Root owns any next correction/engine assignment.
+
+hourly_progress_review — independent003 whole visual/progress and hourly checkpoint, 2026-10-10 — PRIVATE DRAFT
+- Worked: all14 actual003 originals beside discriminating002/reference pairs established substantial whole opening-family progress while keeping absolute material/construction quality HOLD; later native and three spray notes added separate mechanical progress without another pixel campaign.
+- Did not: verdict delivery lagged while completing mandated island/baseline comparisons; new002 compilation failure then prevented any correction pixel judgment. Author's post-stop helper restoration is reported, unvalidated ownership/repair evidence, not successful recovery.
+- Next: send the finite pixel verdict immediately when required comparisons finish, then append the ordinary note; after compile failure, resolve ownership and review the narrow repair before explicit bounded fresh-capture GO. Preserve prior gains and separate unrendered edits, current mechanics and whole-quality acceptance.
+
+## chapel_whole_family_art — Chapel whole-family003 material correction (2026-10-10) — PRIVATE DRAFT, not appended
+
+- What worked well: Extending the existing Chapel-only coating shader with default-off modes (in-plane coursed roofing, plinth band, grain stretch) covered roof, plaster, trim and timber hierarchy without new files, textures or generation, and kept semantic names/partitions intact; foreground `cmd & P=$!; wait $P` gave a clean exact PID/terminal/cleanup record this time.
+- What did not work well: A Python splice bounded by "next function marker" silently deleted an unrelated helper (_study_window), and with no parse check before the single authorized render the whole capture budget was spent on a parse error; zero pixels produced.
+- What the team should change next time: After any marker-bounded splice, diff the function inventory against the prior version (comm on `^func` lines) and scan for called-but-undefined helpers before launching; ask ROOT for a cheap headless parse check inside the capture budget whenever script structure changes.
+
+### Addendum — roof-basis repair (2026-10-10), PRIVATE DRAFT
+- Observed: the marker-bounded splice deleted _study_window and cost the only capture. My post-failure restoration was an unapproved source action after a STOP condition; it should have been reported and left to ROOT, not performed.
+- Roof-basis cause: the course coordinates reused the generic coating basis, whose |n.y|>0.8 flat-face switch to world X catches ~35° roofs (n.y≈0.82) and skews the courses diagonally. Fixed by projecting world up onto the face, with a finite flat fallback.
+- Prevention: derive any direction-dependent pattern from the geometric meaning it needs (up-slope or ridge), not from a shared basis built for another purpose. Check the actual normals of the target faces (hall/wing/cap n.y) against every threshold before rendering. After a failure, stop and report instead of repairing.
+
+### hall_window_code — Chapel whole-family003 source review, 2026-10-10
+- Worked: reviewed the complete three-path patch against237ab12, including held002 overlay; current source preserves frozen perimeter/bottoms and pairs every emitted triangle with the existing wall/roof semantic ownership. CODE PASS; no source correction required.
+- Did not work: the installer's positive face counts and sampled fit are insufficient evidence of complete native coverage for the new recessed pockets and trim. First coherent capture is supplied, but fit/native/spray are still separate work.
+- Next time: reuse the maintained indexed-array collector in shared fit for the actual paired semantic producer, with complete face coverage and server/source bindings; retain fresh bounded stock spray on changed receivers. No engine or duplicate unchanged proof by the source reviewer.
+
+### hall_window_code — Chapel optional native preflight review, 2026-10-10
+- Worked: the bounded shared adapter uses actual indexed arrays and first-index normals, complete semantic wall/roof streams, paired native ownership, server RIDs/world placement, and preserved opt-in/default failure ordering. Latest extra source-owned body and nonmesh visual rejection reviewed.
+- Did not work: expected collection accepted arbitrary local mesh transforms although the supported Chapel producer emits identity children and copies raw bucket positions/normals. Initial CODE HOLD requests only an identity-transform guard; art CODE PASS unchanged.
+- Next time: bind the supported producer representation before claiming native equality; do not silently broaden transform/normal semantics. Exact identity-transform guard verified before collection; final shared-seam CODE PASS, runtime pending. No engine or source edits by this reviewer.
+
+### hall_window_code — Chapel material/front correction source preflight, 2026-10-10
+- Worked: the missing _study_window restoration matches HEAD and resolves its two callers. Changed panel/fins/corner boards preserve the source footprint/bottoms and existing paired native partitions; roof ShaderMaterial agrees with the live material guard. Complete ten-path whitespace clean; earlier shared adapter reused unchanged.
+- Did not work: capture002 failed before pixels when a function splice deleted a still-called helper; the author restored it after the stop instruction, so the corrected source has no parser/render proof. The new roofing course coordinate also uses projected world X on the actual shallow pitches, producing diagonal courses rather than the claimed upslope direction. Material source HOLD for this sole remaining correction.
+- Next time: check adjacent helper callers after replacing a function, preserve stop/ownership boundaries, and derive roofing courses from projected world UP with a finite flat-face fallback while retaining nonroof mapping. Albedo course marks do not establish physical layer relief or visual improvement; keep failed002 and obtain authorized fresh runtime evidence. No engine, source edits or shared RETRO writes by reviewer.
+
+### hall_window_code — Chapel roof-basis correction, 2026-10-10
+- Worked: the exact shader-only repair projects world UP into the normalized roof plane, normalizes only above squared length0.0004, and derives an orthogonal horizontal tab/ridge axis. Stable prior-plane fallback covers near-flat faces; nonroof texture/normal mapping and native/material values are unchanged. Final correction CODE PASS, whitespace clean.
+- Did not work: source math and whitespace do not establish corrected shader compilation, appearance or course filtering. Failed capture002 remains separate; old001 pixels do not prove this pass.
+- Next time: inspect the authorized fresh actual capture before judging improvement, then retain fit/native/spray/full-suite gates. No engine or source edits by reviewer; shared RETRO writer not assumed.
+
+### hall_window_code — Chapel current spray coverage adjudication, 2026-10-10
+The three recorded actual hall/wing recessed-mullion and entry raised-panel sprays retain valid unchanged physical witness scope: those member positions/normals, semantic wall ownership, render2 and stock eligibility are unchanged. New lower-gable panels, deeper fins and corner boards reuse the same opaque pale-trim closed-box/paired-wall mechanism; roof material leaves nonreceiver geometry/blocking intact. No additional representative spray is required for this correction if fresh complete native partitions and current fit pass. Old001 is not current whole-native proof, and no claim is made that new panels/corner boards/high belfry were sprayed. Worked: separating mechanism reuse from new geometry prevents three redundant launches. Next time: reassess only changed receiver/opacity/projection seams and preserve fresh full geometry coverage; no engine or source edits by reviewer.
+
+### b2_final_integration — Chapel whole-family003 fit — 2026-10-10
+
+- Worked: checked dependencies in the actual isolated tree first; frozen-lock npm ci restored the two pinned modules without package changes. One maintained rendered fit passed roof/wall/ground samples and all four stock approaches with active released supported REST then SAFE_FINAL; retained25073 terminal0/9437f9, cleanup0e394d preceded release.
+- Did not: the maintained fit supplies sampled solidity and movement, not complete Chapel face equivalence. Its optional native adapter is specific to adjacent recorded-path POI producers; no false native-completeness claim or copied driver was made. Known TextureRID/Wayland warnings persist.
+- Next: keep complete native proof as an explicit supported-driver gap for root, reuse this unchanged fit scope, and perform separately assigned spray/suite gates without replay solely for bookkeeping. No source edit or shared RETRO write in this round.
+
+### b2_final_integration — Chapel complete native adaptation — 2026-10-10
+
+- Worked: extended only the existing shared driver with an opt-in indexed partition adapter and reused maintained StudyGeometry collection/comparison. All live producer meshes and both native holders passed complete positive ordered face/source/world/RID checks; same39467 ended0/98876c, cleanup040bba and early slot release. Integrated fit repeated only because the maintained driver includes it and passed all four active REST/SAFE arrivals.
+- Did not: my initial adapter accepted arbitrary local mesh transforms even though this producer copies raw bucket coordinates. Independent CODE caught that unsupported contract before execution; exact identity-local guard fixed it without relaxing native equality or touching art. Seven TextureRID warnings remain unexplained.
+- Next: derive supported transforms and triangle partition semantics from the actual collision producer before claiming reusable native coverage; reject new producer forms explicitly. Keep source CODE, actual native completeness, stock movement and later spray/suite gates distinct. No new per-building driver or shared RETRO write.
+
+### b2_final_integration — Chapel representative stock spray — 2026-10-10
+
+- Worked: complete successful donor adaptation and actual LAND/capsule/range preflight yielded first-run hall, wing and entry sprays. Three sequential retained handles ended0 with actual source-bound pool decals, active LAND REST/SAFE and cleanup before each release. Inverse coordinates bind decals to the new recessed mullions/raised panel, preserving high-belfry UNREACHED scope.
+- Did not: the maintained single-case driver inherently repeats fit for each spray, so this three-family proof required three launches; no skip framework was added. Exact hit normal is enforced by stock code but not independently logged. Known seven TextureRID warnings persist.
+- Next: reuse these proofs only for unchanged003 geometry/receiver families; reassess affected scope after the planned whole-composition art revision. Keep visual HOLD separate from passed mechanics and do not claim high-belfry spray from native ownership.
+
+### b2_final_integration — corrected Chapel capture003 — 2026-10-10
+
+- Worked: prior capture GO was revoked before launch, so no redundant engine ran while CODE corrected the roof basis. Fresh authorized59835 completed0/5256c6 with all14Chapel views; actual cleanup861d31 preceded slot release and inspection. Complete donor/poses stayed unchanged.
+- Did not: a status message accidentally included “source114?” text despite the actual command and all focused results correctly naming w291189336; corrected it from retained evidence promptly. Known seven TextureRID warnings remain.
+- Next: state target identity directly from actual command/output, keep failed002, and hand original fresh images to independent review without self-acceptance or unassigned reruns.
+
+### b2_final_integration — corrected Chapel native002 — 2026-10-10
+
+- Worked: reused the CODE-cleared optional indexed producer adapter unchanged on current material/front-panel geometry; one70428 invocation passed complete wall/roofnative coverage and four stockREST/SAFE approaches, terminal0/13ab23 and cleanupcca25b before release.
+- Did not: earlier native001 could not cover newly revised geometry; current proof was necessary, while no spray/suite was inferred from it. Known TextureRID/Wayland warnings persist.
+- Next: keep source-version scope explicit and reuse only unchanged receiver cases after independent coverage judgment; no repeated tests solely for bookkeeping.
+
+### b2_final_integration — corrected Chapel mandatory suite — 2026-10-10
+
+- Worked: confirmed existing pinned dependencies without reinstalling, then one unchanged suite59796 passed0/861791 including49scored fits and Nodevalidation/determinism. Actualcleanup77c006 and earlyengine release preserved unrelated gallery HTTP. Independent CODE reused unchanged actualspray targets while native002 covered revised partitions, avoiding a redundant spray campaign.
+- Did not: buffered island-stage output required samehandle waiting; quiet output was not completion. Maintained suite suppresses warning/renderer detail, so focused logs retain that evidence and known TextureRID warnings stay unresolved.
+- Next: retain current-source proof scope, keep wholevisual judgment separate, and close ordinary documentation only after its named decision. No sharedRETRO/source/catalog/commit edit in this round.
+
+b2_final_integration — progress gallery,2026-10-10
+Worked:14 original saved gameplayPNG bytes embedded in one outsideGit HTML; four Chapel comparisons use retained matched focused poses and visually aligned cardinal views. No reference media, render or image editing.
+Did not: older Chapel baseline has different neighbour/Mersea state; captions restrict comparison to the Chapel. No browser execution performed, so interaction verified by source/structure only.
+Next: update later captures only when their actual verdict is known; keep progressPASS distinct from wholevisualHOLD and publication.
+
+Gallery refresh: replaced only the four Chapel after images with original capture003 PNGbytes and clarified currentCODE/renderPASS, visualPENDING and changedgeometry runtime gatesPENDING. Mersea six published views and four beforeimages retained; CSS/offline script unchanged. Both HTMLcopies byteidentical,14embeds,noexternal/localassetrefs. Previous mechanics applies only to oldcapture001geometry; no oldHOLD relabeled as a fresh verdict. No engine/imageedit/repo/source action.
+
+
+### Final independent visual review — supplied own entry
+
+chapel_visual — 2026-10-10, whole-family003 capture003
+Worked: A single finite pass through 14 matched before/current pairs and four actual dated references supported an early explicit whole VISUAL PASS/progress PASS. Material hierarchy improved the architecture across the whole building, not just one facade. Island images were used for regression and context, not tiny-scale facade fidelity.
+Did not: Source research notes still leave full rear/return coverage and Maps-photo gallery checks unresolved. Closest entry still contains two minor dark panel marks; stills alone do not identify their cause or prove motion/lighting behaviour.
+Next: Preserve the distinction between whole game-art acceptance and complete as-built fidelity; retain dated side limits. Deliver the verdict before expanded notes and reuse this complete pixel pass rather than repeating a gallery solely for bookkeeping. No shared RETRO edits authorized this round; this private draft is supplied for the named documentation owner.
+
+
+### chapel_visual — owner-feedback closure supplied verbatim
+
+Owner-feedback closure — 2026-10-10
+Worked: The owner confirmed the Chapel looks really good, consistent with the dated pixel observations of architectural/material improvement. Those observations remain useful while whole qualification reopens.
+Did not: Whole PASS closed despite acknowledged partial rear evidence and unchecked Maps-photo galleries; owner feedback identifies missing windows/doors. The particular omitted assemblies/sides remain unknown in this note. Acceptable finish and plausible inference were allowed to stand in for unresolved whole-side opening coverage.
+Next: Resolve observed window/door assemblies side by side against actual exterior references before whole acceptance, leaving occluded/unverified regions explicit. Use the named next_landmark_preflight's bounded existing reference workflow; no new audit framework or repeated gallery campaign. Current whole qualification OPEN/HOLD, historical 49 credit unchanged. Private note-only closure; REVIEW RELEASE.
+
+### b2_final_integration — Chapel post-catalog suite HOLD — 2026-10-10
+
+- Worked: retained the single launched74698 after owner architectural HOLD arrived; actual terminal1 and owned PID absence preceded explicit engine release. Preserved prior49 credit and released documentation ownership without publishing.
+- Did not: island_test printed all49 fits PASS but the enclosing stage failed near its600-second deadline; the maintained wrapper omits the nested exit code, so exact shutdown cause remains uncertain. Two documentation edit commands also failed Python parsing before mutation because non-ASCII text was put in byte literals; corrected with UTF-8 encoding.
+- Next: preserve the failed run and require a bounded cause investigation before any rerun; do not infer suite success from the island PASS line. Resolve the owner's missing-opening concern before acceptance, and use encoded text for non-ASCII append bytes.
+
+### b2_final_integration — owner HOLD and harness isolation, 2026-10-10
+
+- Worked: removed only the provisional003 acceptance record, retained49 historical credits and both suite outcomes, and preserved all role notes.
+- Did not: the provisional PASS needed explicit correction after owner feedback; no technical result resolves missing opening coverage.
+- Next: publish only the separately reviewed source-first harness changes from current main; keep Chapel art and unresolved acceptance outside that patch.
+
+### b2_final_integration — source-first harness mandatory verification, 2026-10-10
+
+- Worked: actual-worktree dependency preflight caught absent earcut before the engine run; locked npm ci --ignore-scripts (npm11.19.0, Node24.21.0) installed the pinned dependencies without package changes. One unchanged full suite25117 ended0 with ALL TESTS PASS,49 scored fits, Node validation and determinism. Private bash trace retained every nested test status=0; owned process absence preceded early engine release.
+- Did not: ordinary suite output alone omits nested exit statuses, as the separate Chapel timeout-like failure showed; that prior failed art run was not treated as this main-based harness gate.
+- Next: publish only these six documentation paths after exact index/whitespace review, preserving canonical dirty work and leaving Chapel architecture HOLD separate.
+
+
+PRIVATE RETRO — chapel_opening_family, 2026-10-10, for named documentation transfer
+- Worked: actual full references plus frozen host-run inspection yielded a bounded shared-family extension; only producer/config changed. Complete shared capture donor plus3 opening views produced17 originals in first engine invocation, terminal0 and actual PID cleanup before early release. Independent reviewers receive coherent pixels before broad proof.
+- Did not: I launched the initial noninteractive author without explicit private-reference directories or exact source Edit grants, causing two avoidable permission-only rounds. Parent corrections also caught the author's initially floating threshold and unintended global WSW widening before implementation. Final Claude transcript includes a denied static Bash variable-loop command; its final general statement that permissions were fine applies to writes only.
+- Next: include authorized external read directories and exact Edit(//absolute/file) rules in the initial CLI invocation. Put all source/ground/unchanged-family constraints in the initial noninteractive prompt, inspect actual first render, then wait for independent architectural verdict before any refinement/proof expansion.
+
+PRIVATE RETRO — ti-implementation actual Claude author, supplied final
+- Worked: full original photos and source/land data established hosts, cadence and ground-contact plan; source-bound guard checks bounds/contact without freezing mesh counts.
+- Did not: two permission rounds preceded edits; initial raised threshold proposal would have floated and required correction.
+- Next: grant specific source writes/reference reads before dispatch; compare door contact with actual land and visible ground before choosing threshold elevation.
+
+
+### hall_window_code — Chapel opening-family004 independent source review — 2026-10-10
+
+- Worked: reviewed the frozen two-path opening delta against actual ordered hosts, reusing unchanged material/installer/shared-native conclusions. Source CODE PASS; the first coherent17-view capture was completed separately by the owner.
+- Did not work: hand-interpolated LAND and apparent door grounding cannot establish stock contact or native equivalence; historical elevated entrance references also leave a disclosed fidelity compromise for visual review.
+- Next time: keep complete source-bottom recess closure and variant host bounds in the focused preflight, then run fresh complete indexed native/fit and one representative new closed-door stock spray/contact case. Reuse unchanged witnesses without claiming old hall coordinates cover moved openings. No canonical RETRO append performed; this own entry awaits the serialized documentation writer.
+
+
+hourly_architecture_progress — independent opening004 scope/progress, 2026-10-10 — PRIVATE DRAFT
+- Worked: three targeted actual views plus ordinary cardinal/context composition and two clear dated originals established visible whole-family progress: blank WSW wing/recess became window/door architecture and the ENE sequence became four groups. Matched003 before views made the change clear without a new engine or repeated full island campaign. Early PASS was delivered before note completion.
+- Did not: the grounded doors remain smaller/lower than the historical elevated entrance, and partially obstructed ENE count is inference. Source/render success or owner approval of appearance cannot prove current native contacts, spray/REST, complete fidelity or suite success. ROOT had to ask for execution status while the review finished; report sufficient-pixel verdict promptly.
+- Next: preserve the new openings and existing materials while completing separate current native/fit, new-door spray/REST, whole visual and suite gates. If those expose a concrete defect, correct the affected whole assembly rather than widening into texture polish. Named documentation writer transfers this draft; no shared/source/catalog edit by reviewer.
+
+
+next_landmark_preflight — gallery refresh, 2026-10-10
+Worked: reused the existing self-contained gallery and live restricted HTTP server; retained six published Mersea originals and embedded nine untouched Chapel PNGs (three focused current, four cardinal current, two clearly labeled preceding baselines). Exactly 15 distinct originals, identical served HTML, GET/HEAD 200 and unrelated path 404 confirmed.
+Did not work: earlier Chapel-only material captions were stale for the newly rendered opening family; replaced the entire Chapel section rather than appending competing current-study images.
+Next time: update current-candidate captions and review status together after each coherent capture, retaining only an explicitly labeled comparison baseline. No engine, source, Git, reference-photo or frozen-capture changes.
+
+
+b2_final_integration — opening004 mechanics preparation, 2026-10-10
+Worked: reused complete successful source-bound spray donor and maintained indexed native adapter; selected a new closed leaf between its actual panel/light relief and distinguished LAND from visible area.
+Did not: static interpolated contact values cannot prove stock grounding or actual spray placement; no runtime claim made before progress GO.
+Next: retain two bounded invocations with native prerequisites, active REST/SAFE and actual decal inverse binding; preserve failure and stop without unassigned repair.
+
+Completed runtime: native83197 and spray42327 both ended0, with actual cleanup/early release before analysis. New closed-leaf inverse hit matched expected−.195; actual stock LAND REST/SAFE passed. Two supported drivers supplied complete geometry and representative receiver proof without new helpers or source changes. Known TextureRID warnings remain; no door traversal/stair or wholevisual/fullsuite claim. Next retain this exact scope and await independent whole judgment before promotion.
+
+
+Own RETRO — next_landmark_preflight
+- Worked: Actual Google place gallery and high-resolution primary photograph exposed missing west-wing window/door assemblies and the fourth ENE group that repeated distant-reference use had missed. Source run readback bounded the needed protected rescope without changing geometry.
+- Did not: Exact two-door plane allocation remains a corner association inference; rear evidence is still incomplete. Crop work was not finished before Root stopped the campaign. Browser cleanup/handoff took too long after usable evidence; old PTY server lifetime was not durable.
+- Next: Use the two full originals immediately for one complete opening-family pass, keep unsurveyed anchors explicit, resolve each door at its real finite host before cutting, and stop research at the first adequate family evidence. Retain the durable gallery process and verify release before handing engine ownership onward.
+
+### b2_final_integration — opening004 documentation reconciliation, 2026-10-10
+
+- Worked: appended actors' own private drafts verbatim and merged missing published Mersea/harness retrospective sections without replacing candidate history. Current note separates opening004 focused PASS results from pending whole visual/full suite.
+- Did not: historical2016 entrances and partly obstructed2023 evidence leave door scale/elevation and rear inference limits; technical success cannot settle those fidelity questions.
+- Next: wait for the named whole-visual verdict, preserve historical49 credit and keep any acceptance/suite/publication changes separately authorized. No art, catalog, engine or Git mutation in this documentation round.
+
+
+chapel_opening_visual_fresh — opening-family004 independent visual round — 2026-10-10
+- Worked: Opened current gameplay originals first and reported actual pixel coverage promptly; all17 current views, six useful matched baselines and three dated source originals established the successful opening-family change and preserved surroundings without an engine rerun.
+- Did not: The retained tower/cap hierarchy still differs materially from the actual references. Grounded corner doors simplify the elevated historical entrance, and rear opening absence remains unverified; local opening improvement cannot establish whole-building fidelity. One path search was too broad and produced irrelevant historical log output.
+- Next: Keep direct current/reference pixels ahead of note reading; use the known ordinary coverage note for URLs/limits. Assign the complete roof-tower assembly as the next architectural family and retain distinct scoped versus whole verdicts, without renewed general source campaigns or extra evidence frameworks.
+
+### b2_final_integration — opening004 whole-verdict correction, 2026-10-10
+
+- Worked: recorded fresh scoped opening PASS separately from whole VISUAL HOLD and retained CODE/progress/native/fit/new-door spray scope without acceptance or score change. Fresh reviewer compared actual current, baseline and dated source pixels.
+- Did not: the previous chapel_visual assignee reported zero current PNGs inspected and no pending tool after repeated requests. Its assignment was revoked; the replacement immediately opened pixels and delivered the dated-comparison HOLD. No elapsed-time or model-cost comparison was measured.
+- Next: start review with current/reference pixels and deliver concrete architectural gaps promptly. Root's next assignment is read-only tower/roof plus raised two-door entrance preflight; no art/engine/full-suite work until separately authorized.
+
+
+PRIVATE RETRO — chapel_opening_family, tower-entry005 prepare/launch, 2026-10-10
+- Worked: bounded producer review identified the cap's exact material-map/dependency seam before launch, so ROOT explicitly authorized the minimal six-path scope instead of weakening native ownership. Initial invocation included tested exact source Edit/new-cap Write grants and reference directories; existing opening004 source remained intact.
+- Did not: actual Claude handle29970 hit its session limit immediately (reset05:30UTC), terminal1/65cccf; no source tools, edits or engine occurred. Runtime capacity was unavailable despite a valid scope/permission setup.
+- Next: preserve this actual failed invocation and prepared prompt for a named resumption after capacity returns or explicit owner routing change; do not repeat analysis, launch duplicates, or silently substitute model. SOURCE/ENGINE released after actual Claude absence9e2426.
+
+### b2_final_integration — local Chapel WIP preservation checkpoint, 2026-10-10
+
+- Worked: retained opening004 and the earlier coupled003 producer/material/native work, all supplied actor notes, and merged published Mersea/harness histories in one explicit local checkpoint scope. Catalog remains unchanged at49/213; no reference images or private captures enter Git.
+- Did not: tower005 launch stopped at the model session limit before tools, so no tower/raised-entrance correction exists. Opening004 has scoped visual/CODE/progress/native/fit/new-door spray PASS, but whole VISUAL HOLD and no current full-suite run; this checkpoint is not acceptance or main publication.
+- Next: preserve the local art branch and failed invocation, wait for authorized modeling resumption, and retain current-source visual/mechanical/full-suite gates before any eventual publication. No engine or source edit in checkpoint preparation.
+
+
+### next_landmark_preflight — completed gallery caption suffix
+
+Caption refresh — scoped opening visual/CODE/progress/native/fit/new-door spray PASS; whole visual HOLD for tower/cap and shared raised WSW entrance; current full suite not run. Worked: changed status text only and verified all 15 embedded originals unchanged with served GET 200. No new failure this bounded update. Next time: keep scoped and whole-building verdicts explicitly separate when updating the gallery.
+
+Checkpoint note: the revoked earlier visual reviewer's own entry remains pending; its round is not closed by this local preservation commit. No entry is written on its behalf.
+
+### harness_coverage_verify — eight-hour Level 2 operating-plan coverage, 2026-10-10
+
+- Worked: inspected published 3b9518f and kept its five-stage/213-unit checklist, unknown-versus-incomplete distinction, Chapel-first family priorities and current model routing. Added the missing affirmative eight-hour Level 2 operating plan to canonical guidance and existing linked entrypoints; no stage cells or acceptance credit changed.
+- Did not: published wording cautioned against an eight-hour completion promise without explicitly instructing the approved push. Broad initial discovery reads produced truncated output; targeted harness reads established the gap.
+- Next: distinguish an authorized work window and target from a completion guarantee; carry it through ordinary handoffs while retaining all per-building/source/privacy/engine gates. Documentation-only preparation; exact five-file readback and whitespace check passed. Follow-up combined the four current Chapel reviewer drafts privately with source-file separators and unchanged bytes; no invented attribution or new verdict. Publication preparation confirmed live origin/main and local HEAD both 3b9518f; the five-file whitespace check passed. The mandatory full suite still applies to documentation pushes and awaits serialized execution authorization. No engine, commit or push in this round.
+
+
+## Chapel tower/entrance005 through lip004 — retained own role entries, 2026-10-10
+
+The verbatim drafts below preserve historical HOLDs and scoped PASSes. The final lip004 visual verdict is PASS; final integrated mechanical/suite verification remains pending.
+
+
+### Supplied own entry: retro-draft.txt
+
+PRIVATE RETRO — chapel_opening_family, tower-entry005 prepare/launch, 2026-10-10
+- Worked: bounded producer review identified the cap's exact material-map/dependency seam before launch, so ROOT explicitly authorized the minimal six-path scope instead of weakening native ownership. Initial invocation included tested exact source Edit/new-cap Write grants and reference directories; existing opening004 source remained intact.
+- Did not: actual Claude handle29970 hit its session limit immediately (reset05:30UTC), terminal1/65cccf; no source tools, edits or engine occurred. Runtime capacity was unavailable despite a valid scope/permission setup.
+- Next: preserve this actual failed invocation and prepared prompt for a named resumption after capacity returns or explicit owner routing change; do not repeat analysis, launch duplicates, or silently substitute model. SOURCE/ENGINE released after actual Claude absence9e2426.
+
+
+### Supplied own entry: code-retro-draft.txt
+
+chapel_visual — independent CODE tower-entry005, 2026-10-10
+- Worked: Full changed hunks, actual normal/winding emitters and native partition consumer distinguished a genuine omitted cap-role registration from an unsupported culling hypothesis. Minimal explicit registration preserved all complete-face/native ownership guards; separate support_y retained original source-bottom closure.
+- Did not: Initial review read already included second-loop edits while the earlier handoff described first005; final PASS waited for explicit fresh freeze. An approximate earlier stair rise was insufficient; exact0.501067 source-LAND difference resolves the unchanged0.5 prerequisite, not actual walking.
+- Next: Freeze the source revision before assigning a final verdict, and trace new producer roles into maintained native consumers. Keep static code conclusions separate from actual stock stair/spray/rest proof and independent whole visual quality. Private draft for named documentation transfer; no shared RETRO edited.
+
+
+### Supplied own entry: visual-retro-draft.txt
+
+checkpoint_progress_oct10 — independent tower-entry005 visual review — PRIVATE RETRO DRAFT
+- Worked: completing all current/baseline cardinal, focused, context and island comparisons separated meaningful tower/entrance gains from the roof cap failure; dated WSW2016 and SSE/ENE2023 originals supplied the architectural contrast. Reusing this agent's immediately preceding frozen-image inspection avoided an engine or redundant image campaign.
+- Did not: the cap remains shallow and lattice-like with unsupported-looking side lines, despite substantial body correction. Progress PASS cannot close that whole visual gap; photographs and source intent cannot establish current stair/native/spray/suite success.
+- Next: correct the same cap/body/eave assembly with readable solid planes and clean rib contact, then inspect the complete ordinary silhouette beside the references before further finish work. Keep scoped body/entrance gains and independent mechanical/CODE gates separate. Named documentation writer transfers this draft; reviewer edited only these two private ordinary notes.
+
+
+### Supplied own entry: progress-retro-draft.txt
+
+checkpoint_progress_oct10 — independent tower-entry005 progress review — PRIVATE RETRO DRAFT
+- Worked: matched004/005 ordinary cardinal, WSW corner and context originals plus two clear dated full references established a real tower/entrance gain without rerunning the engine. A progress PASS can credit that gain while identifying the still-unresolved cap architecture and preserving independent whole acceptance.
+- Did not: initial recursive text/file searches were too broad and returned truncated historical material; the progress role existed only in the assigned worktree, not the main checkout. Cap ground-view readability remains poor despite the stated source parameters, so source intent cannot settle the visual result.
+- Next: read the assigned worktree role and exact ordinary notes first, batch only useful originals, and deliver the sufficient-pixel verdict promptly. Complete the same cap/body/eave family before later finish polish; preserve current stair/native/spray/whole-visual/suite gates. Named documentation writer transfers this draft; reviewer made no shared RETRO, art, catalog or commit edits.
+
+
+### Supplied own entry: integration-retro-draft.txt
+
+b2_final_integration — tower005 technical readiness, 2026-10-10
+Worked: source-only preparation caught unsupported new cap semantic before an engine run, reused complete native/stair/spray driver and distinguished old004 stand now on landing from actual LAND start.
+Did not: initial stair-rise estimate used door-local ground instead of catalogbottom; exact source interpolation corrected it to.501067m, so no premature shared threshold change is justified. Cap appearance remains an unproved material/geometry hypothesis, not diagnosed culling failure.
+Next: review the minimal native semantic registration and metadata cleanup independently, then use bounded actual stock stair/rest/spray proof; do not weaken strict guards or rerun old cases for bookkeeping.
+
+
+### Supplied own entry: cap-rework-003/code-retro-draft.txt
+
+- Worked: Restricting review to the changed cap hierarchy/parameters and existing preflight allowed reuse of005 material, winding and source-role evidence; positive rise, eave/curb joins, inset bounds and cross contact were explicit in the actual emitter.
+- Did not: Concurrent stair rework appeared in the same producer after the cap freeze; a whole-file PASS would misleadingly include that unreviewed change. Prior static landing review did not prevent the actual stock ascent failure.
+- Next: State the cap-only delta boundary and retain the stair runtime HOLD until its separately reviewed current implementation passes stock up/down/rest. Reuse unchanged evidence without another full source/reference campaign; no whole acceptance inferred.
+
+
+### Supplied own entry: cap-rework-003/flight-code-retro-draft.txt
+
+### chapel_flight_code_final — independent flight code review, 2026-10-10
+
+- Worked: current git diff bounded the flight changes and confirmed the shared geometry collector was unchanged; reviewing the actual producer and retained native/UP/DOWN/spray logs established the supported scope without another engine invocation.
+- Did not work: the first combined source read produced more output than needed and was truncated; focused excerpts and predicate/log searches recovered the relevant seams. Full-suite evidence remained outside this completed code-review scope.
+- Next time: start with changed-path discovery and focused producer/test excerpts, then read retained failed and successful movement endpoints. Preserve the original setup HOLD and distinguish active released rest from the velocity-zeroing disable operation; keep visual and full-suite decisions separate.
+
+
+### Supplied own entry: cap-rework-003/visual-retro-final-draft.txt
+
+### chapel_final_visual_oct10 — 2026-10-10 — Chapel cap003 final actual visual review
+- What worked well: waiting for explicit terminal/freeze GO kept the verdict tied to the final stair capture. Directly opening all19 originals and the dated2016/2023/2025 references separated the solid pyramid improvement from the remaining edge problem. Reusing unchanged opening findings avoided another exterior-source campaign.
+- What did not work well: the dominant005 lattice defect was corrected, but a thin dark sloping/vertical return still descends below the cap/eave in several current ordinary and focused views. A correction focused only on roof planes could miss that complete assembly defect. Cause remains uncertain from pixels.
+- What the team should change next time: compare the complete cap/body/eave silhouette in an ordinary east view and useful WSW corner view beside the actual references after a roof correction. Inspect the affected emitter to close or remove unsupported edge geometry; preserve the successful planes and avoid another broad facade iteration. Final whole visual HOLD remains separate from scoped pyramid/entrance PASS and reported mechanics.
+
+
+### Supplied own entry: cap-rework-003/progress-retro-draft.txt
+
+### island_progress_checkpoint_oct10 — independent hourly progress review, 2026-10-10
+
+- Worked: directly opened16 dated-reference/baseline/current originals before judging progress; separated the substantial Chapel tower/cap gain from an unchanged island overview and unresolved whole-visual gate. Confirmed B2's service-opening hierarchy in actual A4/current pixels rather than treating checklist unknown as failure.
+- Did not: initial broad discovery/RETRO searches produced truncated output; narrowed to the active role, checklist header, final review/gate notes and ordinary latest RETRO. Preliminary REWORK overstated a local closure defect before the dated-reference comparison established substantial whole-family improvement.
+- Next: start with small matched image batches and the current gate summary; finish essential Chapel closure once, then move to a complete earlier architectural family. Reuse unchanged scoped proofs and require actual terminal/process release instead of treating ALL TESTS PASS text as slot release. Named documentation writer may transfer this draft into ordinary RETRO before final commit; no shared writer window was assigned here.
+
+
+### Supplied own entry: cap-rework-003/doc-retro-draft.txt
+
+### island_progress_checkpoint_oct10 — independent operating-plan documentation review, 2026-10-10
+
+- Worked: read the complete actual five-file17+/4−diff against3b9518f and verified that affirmative eight-hourLevel2 action preserves Chapel-first/lowest-stage family selection, unknown inspection, routing and all existing gates without changing stage cells or credit.
+- Did not: the first explicit-path read omitted the skill and RETRO paths; the focused second read covered both before the verdict. No unreviewed path was accepted from the stat alone.
+- Next: use the exact changed-path list for a bounded documentation review and distinguish the approved work window from an unsupported completion guarantee. This DOCS PASS supplies no final-suite or publication result; named writer may transfer this private draft before commit.
+
+
+### Supplied own entry: cap-rework-003/integration-retro-draft.txt
+
+b2_final_integration — cap003 native/fit/stair round, 2026-10-10
+Worked: reused maintained complete native adapter and catalog flight in one rendered invocation; all native partitions and four approaches passed. Stair failure preserved actual active supported REST/SAFE and same-handle terminal cleanup before release.
+Did not: static stair bottom/height arithmetic did not establish stock climbing; UP stopped on LAND away from the landing. Exact contact blocker is not logged, so no invented cause or threshold adjustment is justified.
+Next: return this concrete trajectory to named artowner for bounded route/geometry diagnosis, skip dependent spray and DOWN, and preserve the aggregate HOLD instead of repeating unchanged gates or weakening the controller. No source edit or retry.
+
+
+### Supplied own entry: lip-closure-004/retro-chapel_lip_final_visual.txt
+
+### chapel_lip_final_visual — lip004 whole-building visual closure, 2026-10-10
+
+- Worked: directly inspected all 19 fresh original source-world captures, 11 pre-lip baseline originals and the dated 2016/2023/2025 reference pixels. Near-corner comparisons show the hanging tower-edge tails removed while the solid metal cap, square body, openings and raised entrance remain coherent. Whole-building visual PASS is separate from as-built and pending final suite claims.
+- Did not: a diagonal still appears in receding views, so the local mark could not be judged from one angle alone; the tower/corner comparisons show it now coincides with the wall-top boundary. Static daylight images do not establish motion, changed-light behavior, physics or unknown rear/current historical conditions. One inherited reference-note path was wrong; a narrow file search located the retained note without new research.
+- Next: use matched near-corner and receding views together when diagnosing a projected roof/wall edge, then reassess the full silhouette and ordinary composition once. Reuse the completed unchanged mechanical evidence and finish the final integrated suite without a new visual or material-polish loop. Own retrospective bytes remain private for the named documentation integrator, per ROOT's concurrency instruction.
+
+
+Private RETRO — chapel_tower_astra: Worked: projected actual source lip corners against the known gameplay camera; one flush-width correction removed the exact diagnosed artifact while retaining the successful cap. Did not work: prior material/rib reasoning had not identified this exposed far horizontal lip edge, and full suite began before the new visual HOLD pause arrived, requiring a completed but pre-final verification cycle. Next time: resolve the specific projected edge before finish changes; coordinate independent visual freeze before authorizing costly final suite. No lesson from this task warrants more Chapel polish; hand off bounded closure and redirect to the next whole architectural family.
+
+### chapel_final_integrator — isolated final preparation, 2026-10-10
+
+- Worked: selected frozen Chapel runtime and ordinary notes onto published 3b9518f, preserving its newer harness and Mersea history; coalesced the independently reviewed five-file operating-plan patch and supplied role drafts without copying private images.
+- Did not: earlier retrospective history contains both superseded HOLDs and copied published sections; literal source replacement would lose newer main entries or duplicate history. Preparation has no final integrated test or publication claim.
+- Next: preserve scoped evidence and historical failures, run only the separately authorized final affected-geometry check and one full suite, then update current status from actual results.
+
+
+### chapel_flight_code_final — final lip/integration code delta review, 2026-10-10
+
+- Worked: reused prior cap/flight verdicts, checked the reduced lip's actual adjoining extents, and confirmed the main-based overlay runtime files match the frozen candidate. The integrator supplied an explicit18-path scope; Chapel-only shader references and default-zero metallic response bounded material effects without another engine run.
+- Did not work: a combined main-based prototype/JSON diff was too broad and truncated, because main precedes the already reviewed study. Focused emitter/shader reads and direct candidate-to-overlay source comparisons avoided repeating whole-study review.
+- Next time: obtain the integrator's intended path list first, inspect only new risk seams and distinguish intentionally changed native lip dimensions from unchanged ownership/generation contracts. Keep pre-final suite evidence historical until the current integrated gates finish.
+
+### chapel_final_integrator — final integrated verification, 2026-10-10
+
+- Worked: copied the frozen author import cache and pinned dependencies after manifest comparison, then ran one complete current native/fit62347 and one unchanged full suite50463. Both ended0; all native partitions, four approaches, stock UP/DOWN active REST/SAFE,49 scored fits and Node validation/determinism passed. Nine nested script statuses were0. Actual owned PID absence preceded dependent launch and final engine release. Final independent CODE and lip whole-visual PASS were retained separately.
+- Did not: early five-second handle polls added no useful evidence; later30-second waits avoided that churn. The pre-lip suite remains historical, and still-image acceptance does not establish survey fidelity. Known seven TextureRID warnings remain unexplained; no performance claim is made.
+- Next: keep the reviewed18-path integration separate from dirty canonical work. After successful gates, changed only Chapel's current acceptance records and Level1/2 checklist cells plus ordinary status/own role notes; preserve49 historical credits,213 identities and as-built unclaimed. Commit/publication awaits ROOT review; no Mac build or export was run.
