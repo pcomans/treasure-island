@@ -43,6 +43,25 @@ const StudyGeometry := preload("res://game/tests/support/building_study_geometry
 const Catalog := preload("res://game/tests/shared/catalog.gd")
 
 
+const QUALITY_SUPPORT_ASSEMBLIES := {
+	"w34313547": {
+		"assembly_name": "YMCAObservedEntrySite",
+		"required": {
+			"wall": ["PavilionFlank", "PavilionPier", "PavilionHeader", "ClosedGlazing", "ServiceDoorFrame", "BlueServiceDoor"],
+			"detail": ["FlatCanopy", "CanopyFascia", "GlazingMullion", "GlazingRail", "DoorLowerRail", "DoorPull", "ObservedCoping", "PanelJoint", "ServiceHandle", "HighLouverFrame", "HighLouverRecess", "LouverBlade"],
+			"ground_visual": ["EntryPath", "FrontLawn"],
+		},
+	},
+	"w34313569": {
+		"assembly_name": "ObservedPanelHall",
+		"required": {
+			"wall": ["PanelField", "ClosedSlot", "SlotReveal", "TerminalPier", "PaleEndProjection", "ProjectionLowerField"],
+			"detail": ["SlotSill", "ThinCoping", "ProjectionCap"],
+			"ground_visual": ["ObservedPavedApron"],
+		},
+	},
+}
+
 func _initialize() -> void:
 	call_deferred("_run")
 
@@ -71,7 +90,7 @@ func _run() -> void:
 		quit(1)
 		return
 	var source_key := str(args.source)
-	var native_sources := {"chapel-indexed": "w291189336", "building2-indexed": "w24274434", "station48-indexed": "w764313741", "northpoint1232-mixed": "w96215673", "ymca-mixed": "w34313547"}
+	var native_sources := {"chapel-indexed": "w291189336", "building2-indexed": "w24274434", "station48-indexed": "w764313741", "northpoint1232-mixed": "w96215673", "ymca-mixed": "w34313547", "panel-hall-mixed": "w34313569"}
 	var housing_native := str(args.get("native-producer", "")) == "housing-get-faces"
 	if args.has("native-producer") and ((not housing_native and str(native_sources.get(str(args["native-producer"]), "")) != source_key) or args.has("diagnose-side") or args.has("adjacent-source")):
 		push_error("native producer requires its supported source and cannot combine diagnostic/adjacent modes")
@@ -131,8 +150,9 @@ func _run() -> void:
 			native_error = _check_housing_faces(h, source_key)
 		elif str(args["native-producer"]) == "northpoint1232-mixed":
 			native_error = _check_housing_faces(h, source_key, true)
-		elif str(args["native-producer"]) == "ymca-mixed":
-			native_error = _check_ymca_mixed(h, source_key)
+		elif str(args["native-producer"]) in ["ymca-mixed", "panel-hall-mixed"]:
+			var descriptor: Dictionary = QUALITY_SUPPORT_ASSEMBLIES[source_key]
+			native_error = _check_quality_support_mixed(h, source_key, descriptor.assembly_name, descriptor.required)
 		elif str(args["native-producer"]) == "station48-indexed":
 			native_error = _check_station48_indexed(h, source_key)
 		elif str(args["native-producer"]) == "building2-indexed":
@@ -720,7 +740,7 @@ func _check_northpoint1232_retained(h: WorldHarness, family: Node3D, source: Str
 
 # Mixed retained indexed shell and the shared quality-support per-mesh producer.
 # Draped ground remains a positive visual role; route support must come from LAND.
-func _check_ymca_mixed(h: WorldHarness, source: String) -> String:
+func _check_quality_support_mixed(h: WorldHarness, source: String, assembly_name: String, required: Dictionary) -> String:
 	var verified_bodies: Array[StaticBody3D] = []
 	var assembly: Node3D
 	for role: String in ["wall", "roof"]:
@@ -730,111 +750,106 @@ func _check_ymca_mixed(h: WorldHarness, source: String) -> String:
 			if not node is CollisionObject3D and node.get_meta("derived_object_key", "") == key and node.has_node("Mesh") and node.has_node("Collision"):
 				roots.append(node as Node3D)
 		if roots.size() != 1:
-			return "YMCA retained producer missing or ambiguous: " + key
+			return "Quality-support retained producer missing or ambiguous: " + key
 		var root := roots[0]
 		var mesh := root.get_node("Mesh") as MeshInstance3D
 		var body := root.get_node("Collision") as StaticBody3D
 		if root.get_meta("source_keys", []) != [source] or root.is_set_as_top_level() or not root.global_transform.is_finite() or mesh == null or body == null:
-			return "YMCA retained source/placement differs"
+			return "Quality-support retained source/placement differs"
 		if mesh.transform != Transform3D.IDENTITY or mesh.is_set_as_top_level() or not mesh.is_visible_in_tree() or mesh.layers != (2 if role == "wall" else 1):
-			return "YMCA retained visual placement/layer differs"
-		var error := _check_ymca_native_owner(body, source, key, role == "wall")
+			return "Quality-support retained visual placement/layer differs"
+		var error := _check_quality_support_native_owner(body, source, key, role == "wall")
 		if error != "": return error
 		var owners := body.get_shape_owners()
 		if owners.size() != 1:
-			return "YMCA retained native coverage ambiguous"
+			return "Quality-support retained native coverage ambiguous"
 		var holder := body.shape_owner_get_owner(owners[0]) as CollisionShape3D
 		if holder.shape.backface_collision:
-			return "YMCA retained indexed producer backface differs"
+			return "Quality-support retained indexed producer backface differs"
 		var collection := StudyGeometry.collect(mesh.mesh, [mesh.transform], StudyGeometry.INDEXED_ARRAYS)
-		if not collection.ok: return "YMCA retained indexed collection failed: " + str(collection.errors)
+		if not collection.ok: return "Quality-support retained indexed collection failed: " + str(collection.errors)
 		var compared := StudyGeometry.compare_triangle_multiset(collection.faces, holder.shape.get_faces())
-		if not compared.ok: return "YMCA retained complete indexed/native faces differ"
+		if not compared.ok: return "Quality-support retained complete indexed/native faces differ"
 		verified_bodies.append(body)
 		for child: Node in root.get_children():
 			if child == mesh or child == body: continue
-			if role != "wall" or child.name != "YMCAObservedEntrySite" or not child is Node3D or assembly != null:
-				return "YMCA unknown retained producer child"
+			if role != "wall" or child.name != assembly_name or not child is Node3D or assembly != null:
+				return "Quality-support unknown retained producer child"
 			assembly = child as Node3D
-		print("YMCA_NATIVE retained=%s predicates=%s" % [key, compared.predicates])
+		print("QUALITY_SUPPORT_NATIVE retained=%s predicates=%s" % [key, compared.predicates])
 	if assembly == null or assembly.transform != Transform3D.IDENTITY or assembly.is_set_as_top_level():
-		return "YMCA assembly missing or moved"
-	var required := {
-		"wall": ["PavilionFlank", "PavilionPier", "PavilionHeader", "ClosedGlazing", "ServiceDoorFrame", "BlueServiceDoor"],
-		"detail": ["FlatCanopy", "CanopyFascia", "GlazingMullion", "GlazingRail", "DoorLowerRail", "DoorPull", "ObservedCoping", "PanelJoint", "ServiceHandle", "HighLouverFrame", "HighLouverRecess", "LouverBlade"],
-		"ground_visual": ["EntryPath", "FrontLawn"],
-	}
+		return "Quality-support assembly missing or moved"
 	var meshes := {"wall": [], "detail": [], "ground_visual": []}
 	var seen := {}
 	var roof_root := assembly.get_node_or_null("QualityRoof") as Node3D
 	if roof_root == null or roof_root.transform != Transform3D.IDENTITY or roof_root.is_set_as_top_level():
-		return "YMCA empty quality roof placement differs"
+		return "Quality-support empty quality roof placement differs"
 	for child: Node in assembly.get_children():
 		if child == roof_root or child is StaticBody3D: continue
-		if not child is MeshInstance3D: return "YMCA unknown assembly child"
+		if not child is MeshInstance3D: return "Quality-support unknown assembly child"
 		var mesh := child as MeshInstance3D
 		var role := str(mesh.get_meta("physical_role", ""))
 		var detail := str(mesh.name) if role == "ground_visual" else str(mesh.get_meta("construction_detail", ""))
 		if not required.has(role) or detail not in required[role] or not mesh.is_visible_in_tree() or mesh.is_set_as_top_level() or not mesh.transform.is_finite() or mesh.layers != (3 if role == "wall" else 1):
-			return "YMCA unknown/hidden/moved assembly visual role"
+			return "Quality-support unknown/hidden/moved assembly visual role"
 		meshes[role].append(mesh)
 		seen[detail] = true
 		if role == "ground_visual":
 			var ground := StudyGeometry.collect(mesh.mesh, [mesh.transform], StudyGeometry.MESH_GET_FACES)
-			if not ground.ok or ground.faces.is_empty(): return "YMCA missing positive ground visual"
-			print("YMCA_NATIVE ground_visual=%s positive=true collider=false LAND_route_required=true" % detail)
+			if not ground.ok or ground.faces.is_empty(): return "Quality-support missing positive ground visual"
+			print("QUALITY_SUPPORT_NATIVE ground_visual=%s positive=true collider=false LAND_route_required=true" % detail)
 	for role: String in required:
 		for detail: String in required[role]:
-			if not seen.has(detail): return "YMCA missing positive assembly component: " + detail
+			if not seen.has(detail): return "Quality-support missing positive assembly component: " + detail
 	for role: String in ["wall", "detail", "roof"]:
 		var parent: Node3D = roof_root if role == "roof" else assembly
 		var body := parent.get_node_or_null("CurrentGeometry_" + role) as StaticBody3D
 		if body == null or body.get_meta("physical_role", "") != role:
-			return "YMCA native role missing"
-		var error := _check_ymca_native_owner(body, source, "building:" + source + ":wall", role == "wall")
+			return "Quality-support native role missing"
+		var error := _check_quality_support_native_owner(body, source, "building:" + source + ":wall", role == "wall")
 		if error != "": return error
 		verified_bodies.append(body)
 		var owners := body.get_shape_owners()
 		if role == "roof":
 			if not owners.is_empty() or roof_root.get_child_count() != 1:
-				return "YMCA unexpected quality roof geometry; retained roof supplies coverage"
+				return "Quality-support unexpected quality roof geometry; retained roof supplies coverage"
 			continue
-		if owners.size() != meshes[role].size(): return "YMCA per-mesh native coverage differs"
+		if owners.size() != meshes[role].size(): return "Quality-support per-mesh native coverage differs"
 		for i in owners.size():
 			var holder := body.shape_owner_get_owner(owners[i]) as CollisionShape3D
 			var mesh: MeshInstance3D = meshes[role][i]
 			var shape := holder.shape as ConcavePolygonShape3D
 			if not shape.backface_collision or shape.get_meta("physical_role", "") != role or shape.get_meta("construction_detail", "") != mesh.get_meta("construction_detail", ""):
-				return "YMCA native per-mesh role/semantic identity differs"
+				return "Quality-support native per-mesh role/semantic identity differs"
 			var collection := StudyGeometry.collect(mesh.mesh, [mesh.transform], StudyGeometry.MESH_GET_FACES, 0.000000000001)
 			var compared := StudyGeometry.compare(collection, shape.get_faces(), collection.faces.size())
-			if not compared.ok: return "YMCA complete ordered visible/native mesh faces differ"
-			print("YMCA_NATIVE role=%s detail=%s predicates=%s rid=%s" % [role, mesh.get_meta("construction_detail"), compared.predicates, shape.get_rid()])
+			if not compared.ok: return "Quality-support complete ordered visible/native mesh faces differ"
+			print("QUALITY_SUPPORT_NATIVE role=%s detail=%s predicates=%s rid=%s" % [role, mesh.get_meta("construction_detail"), compared.predicates, shape.get_rid()])
 	for node: Node in h.main.find_children("*", "StaticBody3D", true, false):
 		if (source in node.get_meta("source_keys", []) or assembly.is_ancestor_of(node)) and node not in verified_bodies:
-			return "YMCA additional unverified native source owner"
-	print("PASS: YMCA retained shell/roof and complete assembly native coverage; ground visuals separate from LAND")
+			return "Quality-support additional unverified native source owner"
+	print("PASS: %s retained shell/roof and complete assembly native coverage; ground visuals separate from LAND" % source)
 	return ""
 
 
-func _check_ymca_native_owner(body: StaticBody3D, source: String, key: String, wall: bool) -> String:
+func _check_quality_support_native_owner(body: StaticBody3D, source: String, key: String, wall: bool) -> String:
 	if body.transform != Transform3D.IDENTITY or body.is_set_as_top_level() or body.collision_layer != 5 or body.collision_mask != 0 or body.is_in_group("spray_receiver_wall") != wall:
-		return "YMCA native body placement/layer/spray differs"
+		return "Quality-support native body placement/layer/spray differs"
 	var server_pose: Variant = PhysicsServer3D.body_get_state(body.get_rid(), PhysicsServer3D.BODY_STATE_TRANSFORM)
 	if not server_pose is Transform3D or not server_pose.is_finite() or not server_pose.is_equal_approx(body.global_transform):
-		return "YMCA native server placement differs"
+		return "Quality-support native server placement differs"
 	var objects: Array[Object] = [body]
 	var owners := body.get_shape_owners()
-	if body.get_child_count() != owners.size(): return "YMCA unknown native body child"
+	if body.get_child_count() != owners.size(): return "Quality-support unknown native body child"
 	for owner in owners:
 		var holder := body.shape_owner_get_owner(owner) as CollisionShape3D
 		if body.is_shape_owner_disabled(owner) or body.shape_owner_get_shape_count(owner) != 1 or holder == null or holder.get_parent() != body or holder.transform != Transform3D.IDENTITY or holder.is_set_as_top_level() or not holder.shape is ConcavePolygonShape3D:
-			return "YMCA native shape owner differs"
+			return "Quality-support native shape owner differs"
 		var index := body.shape_owner_get_shape_index(owner, 0)
 		if PhysicsServer3D.body_get_shape(body.get_rid(), index) != holder.shape.get_rid() or PhysicsServer3D.body_get_shape_transform(body.get_rid(), index) != holder.transform:
-			return "YMCA native shape RID/transform differs"
+			return "Quality-support native shape RID/transform differs"
 		objects.append(holder.shape)
 	for object: Object in objects:
 		if object.get_meta("source_keys", []) != [source] or object.get_meta("derived_object_key", "") != key or object.get_meta("receiver_kind", "") != ("building_wall" if wall else "none") or object.get_meta("opaque", false) != true:
-			return "YMCA native source/receiver identity differs"
+			return "Quality-support native source/receiver identity differs"
 	return ""

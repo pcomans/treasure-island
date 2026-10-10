@@ -19225,3 +19225,104 @@ No engine/suite rerun, browser/server restart, staging, commit or push.
 Integration retained first commit failure: Git had no author identity in this
 worktree. Project post-create bot identity matched the parent commit; use that
 identity with command-local `git -c` only, without global configuration changes.
+
+## Building461 scoped study002 closure — named draft consolidation,2026-10-10
+
+Entries below consolidate actual private drafts; closure writer did not execute
+other actors' work. Early001 visual REWORK remains an early finding, not a
+completed final visual review. Final scoped L1 gates passed; whole quality remains open.
+
+### ymca_whole_entry_art — dated-source recovery and first study
+- Worked: two dated views plus necessary aerial resolved modern opening families
+  without historical sign invention; exact camera joins and retained failed
+  viewer/recovery prevented provider-address confusion. Shared shell/lifecycle
+  enabled complete observed architecture/site in one coherent first edit/render.
+- Did not: requested closer pose snapped to road; actual resolved URL controls
+  side association. Fast render ended before initial PID sample; terminal and
+  actual global/wrapper absence established release, not invented PID evidence.
+- Next: carry observed SSE/ENE and obscured-door limits into composition, inspect
+  actual first pixels before polish, and extend the maintained native adapter.
+
+### austin461_lower_family_art — corrected lower row and PSD readiness
+- Worked: reused whole lower-row emitter and existing roles for one coherent
+  pale-infill/short-head correction and one capture, terminal before release.
+  PSD readiness established exact outer/inner source and recoverable URLs offline.
+- Did not: study001 conflated pale recess infill with dark openings. Chained
+  whitespace stopped at expected new-file diff exit1, then remaining JSON check
+  ran separately. PSD old readiness depended on prose; retained real pixels absent.
+- Next: separate depth/material identity at first composition and distinguish
+  diff additions from whitespace failure. Recover missing PSD Google/Apple pixels
+  before modeling; preserve courtyard and unknown faces. No PSD modeling GO.
+
+### austin461_code — source, adapter, correction and handoff diagnosis
+- Worked: exact producer/roles and site lifecycle reviewed early; parameterized
+  mixed descriptor retained YMCA positives and every predicate. Final changed
+  lower-row depth/dimensions/ClosedSlot ownership passed without new source blocker.
+- Did not: broad reads and initially wrong checkout overflowed output; corrected
+  authoritative f02652b worktree diff supplied evidence. First inactivity reader
+  omitted custom events; corrected tool history showed visual activity after
+  handoff, and only later resumed phases lacked tools. Cause remains unknown.
+- Next: inspect exact paths/diff, both event forms and actual terminal/process
+  state; suppress embedded bodies. Report native seams promptly; distinguish
+  source PASS from runtime/visual, and do not interrupt on silence alone.
+
+### checkpoint_461_progress — independent checkpoint and final visual
+- Worked: dated-reference/current comparison identified whole lower-family REWORK;
+  small context/island sample separated local progress from modern island quality.
+  Separately assigned final002 visual inspected all five available current views,
+  both contexts and all five island pairs: scoped L1 architecture/site PASS.
+- Did not: broad historical searches overflowed; missing north and schematic,
+  unreferenced rear prevent all-side/modern whole-quality closure. Different
+  cameras cannot establish measured proportions, colors or full workflow timing.
+- Next: inspect primary reference/gameplay first; retain scoped verdict and reuse
+  completed successful review/captures. Keep source/mechanics and whole-quality
+  claims separate; no new capture or cosmetic loop is indicated.
+
+### austin461_code — later hourly progress round
+- Worked: March/001/002 east comparison established substantial correction; actual
+  context/island sample and existing queue identified PSD without reranking.
+- Did not: broad RETRO search and lowercase filename lookup missed useful bounded
+  evidence; exact checklist/packet then resolved it. No causal timing claim supported.
+- Next: case-insensitive target-only search, source-first family readiness, and
+  engine transfer only after actual terminal/release; no finish-polish diversion.
+
+### northpoint_fourth_mechanics — shared descriptor, runtime and suite
+- Worked: parameterized complete mixed adapter without weakening checks or copying
+  a collector. First current-source native/four approaches/apron out-back/opaque
+  spray passed96107 terminal0/9471db; every active REST supported/released/zero
+  before SAFE. Actual endpoints join new apron and distinct LAND facets.
+  Full suite80401 terminal0/116992 ALL TESTS PASS3dc64b, release997a76:49 scored
+  fits,213 inventory, behaviour/world/determinism. Retained same live handle/PID.
+- Did not: source planning alone could not prove native/stock support; output
+  buffering required observing CPU/terminal, not restarting. Optional Wayland and
+  seven TextureRID shutdown warnings retained; no source retry or duplicate proof.
+- Next: retain complete positive descriptors/source roles and actual LAND joins;
+  keep final visual independent and reuse unchanged successful proof.
+
+### ymca_closure_docs — gallery delivery and final scoped documentation
+- Worked: existing8765 gallery retained98 prior payloads/order and appended two
+  untouched002 originals for100; GET/HEAD200 exact copies, private photo/note404.
+  Scoped final closure uses actual separate verdicts, one461 L1 change and catalog
+  numerator0; no recognition/as-built promotion. PSD stays readiness-HOLD.
+- Did not: initial broad ordinary-note reads included excess history; narrowed
+  reads to named drafts. Pending labels were historical delivery state, updated
+  only after final actual gates arrived rather than repeatedly refreshing.
+- Next: preserve image payloads on status-only updates, stage only explicit agreed
+  paths after ROOT review, and retain pending/whole-quality limits accurately.
+  No engine/browser/test replay or staging/commit/push in this documentation round.
+
+### austin461_lower_family_art — PSD recovered references and baseline
+- Worked: exact pano URLs yielded both dated originals first attempt; Apple
+  context independently joined courtyard topology. One shared source-baseline
+  capture supplied all side/context/island views with exact identity preflight,
+  actual terminal and process release. ROOT inspected all three source originals.
+- Did not: lower entrance detail remains obscured and Apple date unknown; short
+  polling caused several low-value waits, although no invocation was duplicated.
+- Next: retain the small source set and joins, request further evidence only for
+  a blocking structural question, and observe the same handle with a longer
+  bounded wait. First coherent art should precede expanded mechanical proof;
+  adequate source readiness is not modeling GO or courtyard/detail acceptance.
+
+ymca_closure_docs current-readiness correction: retained the earlier PSD pixel
+HOLD as history and appended actual recovered-source/baseline state plus the
+actor's now-available own drafts. No new doc path, model or stage change.

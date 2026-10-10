@@ -159,8 +159,8 @@ world validation/determinism; owned/global engine absence17b417 establishes
 release. ROOT accepts these bounded L1 gates. Only both L1 become C; historical
 accepted claims and49 credits remain unchanged. See [1236 D6](facades/d6_reference_packets/w96215668_1236_northpoint_drive.md)
 and [1240 D7](facades/d7_reference_packets/w96215688_1240_northpoint_drive.md).
-Current totals after YMCA closure below: L1:20 C/193 U; L2:8 C/205 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall29 C/1,036 U across213 units/1,065 cells.
+Current totals after Building461 closure below: L1:21 C/192 U; L2:8 C/205 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall30 C/1,035 U across213 units/1,065 cells.
 Next: inspect the next compatible unknown whole-family L1 envelope/site against
 current originals and dated references before assigning art; U establishes no
 defect. Continue major architecture/site coverage rather than current-pair polish.
@@ -218,7 +218,7 @@ before selecting another round.
 | physical-building:w34313558 / w34313558 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313560 / w34313560 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313564 / w34313564 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w34313569 / w34313569 | Bldg 461 | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w34313569 / w34313569 | Bldg 461 | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | B461 — scoped envelope/site complete; missing north and unknown rear keep whole quality open |
 | physical-building:w95934092 / w95934092 | 1318 Gateview Avenue | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w95934093 / w95934093 | 1432 Halibut Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w95934096 / w95934096 | 1412 Flounder Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -415,7 +415,21 @@ terminal0 (49 historical scored fits and world determinism). Study001 entrance
 composition REWORK is retained. L2–L5 remain U: unknown opposite-side openings,
 material finish and whole modern recognition/as-built fidelity remain open.
 See [YMCA reference packet](facades/p2_reference_packets/w34313547_treasure_island_ymca.md).
-Current totals after this one L1 change: **29 C / 0 I / 1036 U** across1065
+Totals after YMCA alone: **29 C / 0 I / 1036 U** across1065
 checkboxes/213 units; **L1:20 C /0 I /193 U**. Other stages unchanged;49
 historical recognition credits retained. These are scoped stage counts, not new
 recognition credit.
+
+**B461**, 2026-10-10, study002 WIP on`f02652b`: L1 basic architecture/site
+complete after ROOT acceptance of independent checkpoint_461_progress VISUAL
+(observed SSE/ENE, all five available views/both contexts/all five island pairs),
+austin461_code art/adapter CODE, native/four stock approaches/apron out-back/
+opaque spray with active supported released REST then SAFE96107 terminal0,
+and full suite80401 terminal0/116992, release997a76 (49 scored fits/determinism).
+Early study001 lower-family REWORK retained; no completed final001 verdict inferred.
+March/November2025 refs and unknown-date Apple context support the scoped envelope
+and observed architecture; missing north capture/unknown rear/schematic materials
+keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
+See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
+Current total **30 C /0 I /1035 U** across213 units/1065 cells;
+**L1:21 C /0 I /192 U**. All other stages unchanged;49 historical credits retained.

@@ -506,3 +506,19 @@ small gray box beneath the tall hall. Study002's complete pavilion/canopy/glazin
 recomposition passed scoped visual review. Compare the whole entrance-to-hall
 composition against dated pixels in the first coherent ordinary view before
 spending the remaining capture on detail or finish.
+
+## Distinguish recessed infill from dark openings in the first composition
+
+Building461 study001 modeled full-height dark lower backs, while actual March2025
+pixels showed pale recessed infill with short dark heads. Early visual REWORK and
+independent progress comparison identified the whole-family contradiction;
+study002 changed the complete row rather than polishing isolated edges. Treat
+recess depth and surface material identity separately, compare the full observed
+family at ordinary distance, and retain occluded door/unseen-side uncertainty.
+
+The461 handoff also exposed an invalid early interruption inference: the visual
+reviewer had actual island-image activity after its handoff, although a later
+resumed phase had no subsequent tool events. The inactivity cause is unknown.
+Check both normal/custom tool calls and actual terminal/process state before
+transfer; silence or a task receipt alone proves neither inactivity nor failure.
+Do not erase a useful early verdict or invent a completed final review.

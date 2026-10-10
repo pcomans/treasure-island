@@ -83,3 +83,45 @@ blue-window office texture or identity label does not pass.
 No human dependency: use the already mapped east+north prototype boundary for the
 next bounded review. Any request to cover the courtyard or claim exact all-side
 layouts requires new dated elevation evidence first.
+
+## 2026-10-10 readiness hold — no modeling authorization
+
+Named readiness owner austin461_lower_family_art found no retained actual PSD
+exterior/layout pixels in the bounded local search; existing PSD images are
+synthetic material prototypes. Earlier reference-ready prose is not sufficient
+current pixel evidence. Recover/inspect the retained June2021 east pano
+`GAuBhldmLlZOQwXj8qav3w` and September2025 north/corner pano
+`_rk3B0PasMLUEPCQCA_sJw`, plus useful Apple courtyard/roof context, before ROOT's
+source-sufficiency decision. No acquisition or modeling occurred in this round.
+Existing private lower-family-correction-note.txt retains the concrete readiness
+assignment and URLs. Exact source is relationr133347 (outerw34313505,
+innerw34313506), receiverbuilding:r133347:wall inx_0__z_1. Protect courtyard18–27,
+unknown south/west and frozen shell; outer east8–12/north13–17 remain the bounded
+candidate. Shared panel-hall integration is potentially reusable, but a two-tier
+grid/transom family must follow actual pixels, not inherited slot dimensions.
+All current stage/recognition claims remain unchanged; no new research undertaken.
+
+## 2026-10-10 recovered pixels and baseline — scoped readiness adequate
+
+The earlier missing-pixel HOLD above is retained as history. Actual private
+`psd-references-20261010/east01.png` (June2021), `northeast02.png` (September2025)
+and `apple-layout03.png` (imagery date UNKNOWN) are now acquired and inspected
+by the named author and ROOT. The two exact pano IDs above resolve the east and
+north/east corner, supporting the charcoal two-tier grid/transom family, varied
+blue-gray/dark/tan fields, thin roof edge and bounded roof-screen interpretation.
+Apple layout https://maps.apple.com/frame?z=19&map=satellite&center=37.821650%2C-122.368000&span=0.001684%2C0.001966
+supports outer rectangle/inner courtyard topology only, not courtyard elevations
+or measured screen heights. Lower doors/base remain occluded; detailed infill
+sequence and exact screen bounds remain production inference. Courtyard18–27 and
+unknown west/south remain protected. No physical fence/access restriction implied.
+
+Browser80677 terminal143/fee2ec followed intentional shutdown; global absence
+a30f03 confirms release. Current shared baseline38499 terminal0/c80a42 and
+release303081 contains all four closeups, two contexts and five fixed island
+views. Sourcef02652b plus tested461 WIP; exact PSD shell/roof/source/courtyard
+unchanged. Blank pale baseline lacks the observed complete grid/transom/screen
+family. Actual Wayland/AMD780M and14 TextureRID shutdown warnings retained in
+private ordinary source/baseline note. No model has been authored: source readiness
+is adequate for this bounded observed family, modeling still awaits ROOT GO.
+Reference originals remain private outside Git/game/gallery; no reacquisition or
+additional research was performed for this documentation update.

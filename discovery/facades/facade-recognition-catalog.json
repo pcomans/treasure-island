@@ -2051,7 +2051,15 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "building461-study002-scoped-architecture-site-20261010",
+          "review_kind": "scoped_architecture_and_site",
+          "status": "accepted",
+          "numerator_effect": 0,
+          "scope": "L1 envelope/site and observed SSE/ENE family only. Independent VISUAL/CODE/native-stock-apron-spray REST SAFE/full suite PASS. Missing north and unknown rear keep all-side L2, whole modern quality, recognition and as-built open."
+        }
+      ],
       "anchor_source_key": "w34313569",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
