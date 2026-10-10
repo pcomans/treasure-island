@@ -35,13 +35,15 @@ Authors hand off the intended contribution to whole completion, baseline/current
 
 ### Zoom-in authoring pattern
 
-Build from large architecture toward small detail, judging each level in the actual whole-building/site gameplay composition:
+Keep reference and layout comparison active throughout. Before choosing work at each level, inspect full target-reference and actual whole-building/site gameplay originals, using faithful original-pixel crops where needed to resolve architecture/opening/material families. Follow the [source-sufficiency guidance](.agents/skills/building-texture/SKILL.md#reference-sufficiency-before-authoring); infer only after meaningful bounded source attempts leave evidence genuinely unavailable. Build in this order:
 
-1. **Whole building/site:** establish the main volumes, massing, roof silhouette, proportions and relative placement within the frozen source layout.
-2. **Sections and shared modules:** resolve major architectural sections and their relationships, then design complete representative repeated assemblies in a suitable shared family and apply supported instance variants.
-3. **Materials and detail:** refine coherent PBR materials, surface response, decals and small details once the larger architecture reads convincingly.
+1. **Basic building/site shape:** establish footprint/local ground fit, main volumes, massing, proportions, relative placement and coarse roof silhouette within the frozen source layout.
+2. **Doors, windows and roof architecture:** resolve complete reference-supported entrance/door/window groups and roof forms across exterior sides, beyond the coarse silhouette. Design complete repeated assemblies in suitable shared families with supported instance variants.
+3. **Secondary architectural details:** resolve the smaller geometry and junctions after the major architectural families are complete.
+4. **Textures and materials:** refine coherent PBR materials and surface finish.
+5. **Decals and final finishing.**
 
-These are outcome-driven priorities, not a rigid waterfall or new approval stages. Introduce materials early when needed to read architecture, and return to a larger level whenever actual pixels expose a composition problem. Do not spend successive microstudies polishing detail while major pieces remain unresolved. The existing progress reviewer must require RESCOPE or REWORK when that happens. Aim for modern video-game quality; existing assets are a floor, not a ceiling. Truthful dated references, protected scope, native fit/playability and independent all-side review remain mandatory throughout.
+This order governs author scope and review: do not advance to extended later polish while substantive earlier architectural families remain missing or unresolved. Retain good existing materials and use minimal provisional materials when needed to see architecture; neither requires stripping sound finish nor permits texture studies to displace incomplete openings or roofs. Return to the earlier level whenever actual pixels expose such a gap. The existing progress reviewer must require RESCOPE or REWORK with a concrete REDIRECT to a bounded whole earlier family, appropriate to overall island completion. This adds no phase approval, survey/image quota or report framework. Aim for modern video-game quality; existing assets are a floor, not a ceiling. Truthful dated references, protected scope, native fit/playability and independent all-side review remain mandatory throughout.
 
 ## Current phase
 
