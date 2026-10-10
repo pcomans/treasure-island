@@ -180,6 +180,15 @@ positions and check the destination builder's winding convention before capture;
 not settle composition: the rear walk also needed to account for stepped entry
 paths, addressed separately in 003.
 
+61 rear recess reused exterior-facing terminal returns, but the visible surface
+was inside the exposed cavity; backface culling revealed a bright vertical gap.
+The61-only cavity-facing return flag reverses those two faces without moving
+vertices, leaving the downward soffit unchanged.003 actual pixels, independent
+CODE/scoped visual, fit003 and full-suite-rear002 passed. When reusing closures,
+derive the visible side from cavity ownership rather than a generic outward label;
+retain native roles and actual pixel review. This does not diagnose002's separate
+cleanup stall or grant whole-building fidelity.
+
 ## Probe exposed geometry and keep completion claims stage-bound
 
 The shared-family live integration retained positive clipping triangles, but its first-face ray sampled a 20 mm² fragment; a later wall centroid was 0.255 mm below actual land while the triangle's upper portion remained exposed. Neither miss demonstrated a usable wall gap. Select stable interior samples against canonical world terrain across chunk boundaries, keep all rendered/contact triangles, aggregate read-only failures, and explicitly leave tiny or unsampled regions unproved. Do not add collision backing solely to satisfy a degenerate probe. Ground overlaps require verification against the actual hit owner's triangles; wall and roof source ownership stays exact.
@@ -227,6 +236,14 @@ RGBA presence did not guarantee opaque navy: two transparent generated outputs r
 ## Preserve semantic roles independently of sibling names
 
 The Bulgarian Wall / 1445 Chinook integration classified meshes by `Node.name`. Godot auto-renamed repeated siblings, so later driveway/tread meshes escaped intended exclusions and stair treads became wall contacts. Actual stock ascent stalled on those contacts; descent had long airborne intervals. Preserve an explicit semantic label when constructing each mesh and use that metadata for role selection, with the intended positive coverage checked in the existing source review. The corrected 34-tread exclusion restored supported descents; both upper-landing ascents remained held at that stage, so fixing classification did not establish full stair acceptance. Native ordered geometry equality proves the consumed shapes agree, not that they received the intended role.
+
+Rear/roof001 exposed another semantic fallthrough: new rear motifs bypassed
+recess movement, and only recessed front motifs were tagged. The attachment
+therefore defaulted complete rear glazing/reveals/trim to support instead of
+wall/spray receivers. Source CODE required `recessed or is_rear`, retaining
+threshold support; direct readback passed. Trace every new semantic branch from
+emitter defaults to consumed attachment/contact roles before promotion. A complete
+visible mesh or metadata-only fix does not replace native/spray validation.
 
 ## Check junction end planes when combining solid building modules
 
@@ -473,6 +490,15 @@ The Chapel ENE coordinate startup stayed black despite a resolved pano and tileH
 Mariner1219 baseline on2026-10-10 returned screenshot PASS, but closeup-south showed the camera inside/behind the opposite row, with reverse-facing windows and the intended frontage beyond it. The shared center-ray test did not establish a useful complete facade view; the exact camera/collider cause remains unmeasured. Inspect saved pixels before using a default side view for fidelity. Retain invalid originals and use the supported focused-view mechanism with a complete donor manifest when a side needs a clear public viewpoint; do not treat PASS or a filename as framing proof.
 
 The Mariner native adapter initially treated `StudyGeometry.collect`'s transform list as a chain; it actually enumerates separate instances. Independent source review caught this before execution. Mirror the producer's ordered packed-array operations: collect once with the mesh transform, then subtract body origin in the next pass. Also inspect the maintained invocation: shared `building_fit_test` needs rendering and rejects `--headless` before geometry collection. Run its proven rendered `tools/godot` command. Keep dependent capture in a separate command after a successful preflight terminal result; a multiline shell without fail-fast continued Mariner study001 despite an area assertion.
+
+61 rear-roof002 showed why source binding and process completion are separate:
+its south foreground facade belonged to a neighbor, while the target rear was
+behind it. Use source-bound east/context evidence for the rear-volume correction.
+The capture saved11 originals and printed PASS, then stalled in cleanup until
+owned TERM ended143; the cause remains unknown. Retain those pixels and failure,
+consume the original handle and verify process absence before transfer. Fresh
+61 mechanics later exited naturally0; that does not rewrite capture exit status
+or justify an automatic rerender.
 
 ## Bind site corrections to the photographed end before extending a domain
 
