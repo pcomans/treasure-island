@@ -82,7 +82,7 @@ static func granular(c: String, other: String, scale_value: float) -> StandardMa
 	_materials[key] = m
 	return m
 
-static func chair(p: Node3D, pos: Vector3, yaw: float, m: Material) -> void:
+static func chair(p: Node3D, pos: Vector3, yaw: float, m: Material, floor_y: Callable = Callable()) -> void:
 	var g := Node3D.new();g.position = pos;g.rotation.y = yaw;p.add_child(g)
 	# Thin welded wire mesh, with tubular perimeter and gently reclined back.
 	for x in range(11):
@@ -92,8 +92,13 @@ static func chair(p: Node3D, pos: Vector3, yaw: float, m: Material) -> void:
 	for z in range(11):rod(g,Vector3(-0.21,0.46,-0.20+z*0.04),Vector3(0.21,0.46,-0.20+z*0.04),0.005,m)
 	for y in range(9):rod(g,Vector3(-0.21,0.52+y*0.04,0.21+y*0.007),Vector3(0.21,0.52+y*0.04,0.21+y*0.007),0.005,m)
 	for x in [-0.22,0.22]:
-		rod(g,Vector3(x*1.2,0.02,-0.23),Vector3(x,0.46,-0.19),0.016,m)
-		rod(g,Vector3(x*1.2,0.02,0.29),Vector3(x,0.87,0.27),0.016,m)
+		var front_foot:=Vector3(x*1.2,0.02,-0.23)
+		var rear_foot:=Vector3(x*1.2,0.02,0.29)
+		if floor_y.is_valid():
+			front_foot.y=float(floor_y.call(g.transform*front_foot))-pos.y
+			rear_foot.y=float(floor_y.call(g.transform*rear_foot))-pos.y
+		rod(g,front_foot,Vector3(x,0.46,-0.19),0.016,m)
+		rod(g,rear_foot,Vector3(x,0.87,0.27),0.016,m)
 		rod(g,Vector3(x,0.46,-0.21),Vector3(x,0.46,0.23),0.017,m)
 		rod(g,Vector3(x,0.65,-0.10),Vector3(x,0.65,0.23),0.014,m)
 		rod(g,Vector3(x,0.46,-0.10),Vector3(x,0.65,-0.10),0.014,m)
@@ -119,6 +124,7 @@ static func table(p: Node3D, x: float, z: float, long_table: bool = false) -> vo
 	# Coarse table body prevents walking through the substantial furnishing.
 	var contact := box(p,Vector3(x,0.41,z),Vector3(2.6 if long_table else 0.85,0.78,0.9 if long_table else 0.85),dark)
 	contact.visible = false;contact.set_meta("mersea_role","support")
+	contact.set_meta("native_contact_only",true)
 	cyl(p,Vector3(x,0.89,z),0.055,0.15,mat("316f71"))
 
 static func umbrella(p: Node3D, x: float, z: float, c: String) -> void:
@@ -462,7 +468,7 @@ static func terrain_y(land: Dictionary,x: float,z: float) -> float:
 static func site_point(x: float,z: float) -> Vector3:
 	return SITE_ORIGIN+Basis(Vector3.UP,SITE_YAW)*Vector3(x,0,z)
 
-static func skin(p: Node3D,land: Dictionary,polygon: PackedVector2Array,m: Material,bias: float) -> void:
+static func skin(p: Node3D,land: Dictionary,polygon: PackedVector2Array,m: Material,bias: float,role: String="decor") -> void:
 	# Clip actual terrain triangles; visual skin has no competing land collider.
 	var v: Array=land.vertices;var ix: Array=land.indices
 	var verts:=PackedVector3Array();var normals:=PackedVector3Array();var uvs:=PackedVector2Array()
@@ -477,7 +483,7 @@ static func skin(p: Node3D,land: Dictionary,polygon: PackedVector2Array,m: Mater
 	var arrays:=[];arrays.resize(Mesh.ARRAY_MAX);arrays[Mesh.ARRAY_VERTEX]=verts;arrays[Mesh.ARRAY_NORMAL]=normals;arrays[Mesh.ARRAY_TEX_UV]=uvs
 	var raw:=ArrayMesh.new();raw.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays)
 	var tool:=SurfaceTool.new();tool.create_from(raw,0);tool.generate_tangents();var mesh:=tool.commit()
-	var node:=MeshInstance3D.new();node.mesh=mesh;node.material_override=m;node.set_meta("mersea_role","decor");p.add_child(node)
+	var node:=MeshInstance3D.new();node.mesh=mesh;node.material_override=m;node.set_meta("mersea_role",role);p.add_child(node)
 
 static func rectangle(x: float,z: float,w: float,d: float) -> PackedVector2Array:
 	var points:=PackedVector2Array()
@@ -555,7 +561,10 @@ static func site(land: Dictionary) -> Node3D:
 	var surround:=PackedVector2Array()
 	for q in [Vector2(9,-2.8),Vector2(12,-3.0),Vector2(14,-1.7),Vector2(14.6,2),Vector2(16,4),Vector2(16.3,8),Vector2(14.8,11.2),Vector2(11.3,11.4),Vector2(8.6,9.4),Vector2(8.2,5.5),Vector2(9,2.4),Vector2(8.7,0)]:
 		var pt:=site_point(q.x,q.y);surround.append(Vector2(pt.x,pt.z))
-	skin(p,land,surround,surround_turf,0.025)
+	var deck_landing:=bar_golf_landing_polygon()
+	for piece: PackedVector2Array in Geometry2D.clip_polygons(surround,deck_landing):skin(p,land,piece,surround_turf,0.025)
+	# Expose actual LAND at the deck exit instead of burying support beneath turf.
+	skin(p,land,deck_landing,gravel,-0.050)
 	for lobe in [Vector4(12.0,7.0,3.3,3.0),Vector4(11.0,-0.5,1.45,1.75),Vector4(2.8,17.5,1.1,1.45)]:
 		var green:=PackedVector2Array()
 		for i in range(48):
@@ -568,7 +577,7 @@ static func site(land: Dictionary) -> Node3D:
 				local=Vector2(lobe.x+3.0*cos(angle)+0.35*cos(2.0*angle)+0.30*inflection,lobe.y+3.05*sin(angle)*(0.72+0.28*cos(angle))+0.30*inflection)
 			var pt:=site_point(local.x,local.y)
 			green.append(Vector2(pt.x,pt.z))
-		skin(p,land,green,turf,0.029)
+		for piece: PackedVector2Array in Geometry2D.clip_polygons(green,deck_landing):skin(p,land,piece,turf,0.029)
 	# A restrained winding neutral separator follows the western pocket and main green.
 	var neutral:=PackedVector2Array()
 	for q in [Vector2(9,1.6),Vector2(11,1.8),Vector2(13.1,2.8),Vector2(14.3,3.6),Vector2(14.7,3.1),Vector2(13.5,2.2),Vector2(11.2,1.2),Vector2(9,1.0)]:
@@ -599,13 +608,14 @@ static func site(land: Dictionary) -> Node3D:
 	bar_reflection.enable_shadows=false;bar_reflection.mesh_lod_threshold=4.0
 	p.add_child(bar_reflection)
 	string_lights(p,land)
+	dining_canopy(p,land)
 	return p
 
 static func build(records: Dictionary,land: Dictionary,mural_asset_path: String) -> Node3D:
 	var p:=Node3D.new();p.name="MerseaAssembly"
 	for source: String in SOURCES:p.add_child(building(source,records["building:"+source+":wall"],mural_asset_path))
 	p.add_child(site(land))
-	gold_platform(p.get_node("Mersea_w1308007114"),land)
+	gold_platform(p.get_node("Mersea_w1308007114"),land,p.get_node("MerseaSite_"+POI))
 	# Roof extractors belong to the actual kitchen's northern wing.
 	var host:Node3D=p.get_node("Mersea_w1308007114")
 	for pt in [Vector2(-414.0,133.3),Vector2(-403.1,133.2)]:
@@ -714,47 +724,26 @@ static func string_lights(parent: Node3D,land: Dictionary) -> void:
 
 static func gold_service(g: Node3D,x: float,w: float) -> void:
 	var trim := mat("74795b",0.0,0.66)
-	# Opaque lower service panel, deep framed opening and counter, no interior.
-	# S23 broad folded brass sheet and bright perimeter are one exterior assembly.
-	# Production-inference satin finish; actual local reflections supply lighting.
-	var brushed:=mat("b6a782",1.0,0.24).duplicate()
-	brushed.anisotropy_enabled=true;brushed.anisotropy=0.65
-	var edge_metal:=mat("e1ded3",1.0,0.10)
-	var face:=box(g,Vector3(x,0.89,-0.035),Vector3(w,1.58,0.10),brushed)
-	# Original color/non-color maps share one inferred4.8m by1.58m sheet.
-	# BoxMesh front UV spans1/3 by1/2; native3x2 scaling covers one map.
-	# The native roughness scalar multiplies map data; preserve satin, not mirror metal.
-	var sheet: StandardMaterial3D = brushed.duplicate()
-	sheet.albedo_color = Color.WHITE
-	sheet.albedo_texture = load("res://game/resources/mersea/brass_albedo.png")
-	sheet.roughness = 0.6
-	sheet.roughness_texture = load("res://game/resources/mersea/brass_roughness.png")
-	sheet.normal_enabled = true
-	sheet.normal_texture = load("res://game/resources/mersea/brass_normal.png")
-	sheet.normal_scale = 0.12
-	sheet.uv1_scale = Vector3(3.0,2.0,1.0)
-	sheet.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
-	face.material_override = sheet
-	face.set_meta("mersea_reflective_metal",true)
-	var folded:=Node3D.new();folded.name="FoldedServiceMetal";folded.set_meta("mersea_role","decor");g.add_child(folded)
-	# S23 narrow inset sheet edge above a rounded projecting bottom rail.
-	# Reuse the family cylinder grammar with smooth curved normals at this scale.
-	beveled_metal_border(folded,Vector3(x,1.24,0.014),Vector2(w-0.10,0.72),0.035,0.047,edge_metal)
-	var bottom_rail:=cyl(folded,Vector3(x,0.85,0.085),0.065,w-0.08,edge_metal)
-	bottom_rail.rotation.z=PI/2
-	(bottom_rail.mesh as CylinderMesh).radial_segments=32
-	bottom_rail.set_meta("mersea_reflective_metal",true)
-	# The shallow mounting strip intersects the rail rear and sheet, without floating ends.
-	box(folded,Vector3(x,0.85,0.043),Vector3(w-0.07,0.075,0.060),brushed).set_meta("mersea_reflective_metal",true)
-	# Fine physical vertical sheet join, not another container corrugation field.
-	box(folded,Vector3(x,0.89,0.019),Vector3(0.008,1.35,0.020),mat("847b60",0.82,0.36)).set_meta("mersea_reflective_metal",true)
-	for yy in [0.14,1.64]:
-		var border:=box(g,Vector3(x,yy,0.052),Vector3(w,0.065,0.025),edge_metal)
-		border.set_meta("mersea_reflective_metal",true)
-	var counter_finish:=mat("d2d5ce",1.0,0.14)
-	var counter:=box(g,Vector3(x,1.72,0.16),Vector3(w+0.22,0.09,0.57),counter_finish)
-	counter.set_meta("mersea_reflective_metal",true)
-	box(g,Vector3(x,2.20,-0.90),Vector3(w-0.10,0.94,0.035),mat("394238",0.0,0.88))
+	# October2026 owner exterior: closed sectional glazing, not an open gold hatch.
+	# Retain the approved olive portal; insert proportions fit its existing aperture.
+	var aluminium:=mat("b8c0b9",0.65,0.30)
+	var glass:=mat("829a9b",0.0,0.19).duplicate()
+	glass.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA
+	glass.albedo_color.a=0.82;glass.metallic_specular=0.70
+	var inner_width:float=w-0.28
+	var bottom:float=0.78
+	var top:float=2.47
+	# Existing floor/platform conceals the lower closure; no opening into an interior.
+	box(g,Vector3(x,0.44,-0.08),Vector3(w,0.68,0.12),trim)
+	for column in range(4):
+		for row in range(3):
+			var pane:=box(g,Vector3(x-inner_width/2+(column+0.5)*inner_width/4,bottom+(row+0.5)*(top-bottom)/3,-0.075),Vector3(inner_width/4-0.045,(top-bottom)/3-0.045,0.035),glass)
+			pane.set_meta("mersea_role","glass")
+	for column in range(5):
+		box(g,Vector3(x-inner_width/2+column*inner_width/4,(bottom+top)/2,-0.025),Vector3(0.055,top-bottom+0.055,0.10),aluminium)
+	for row in range(4):
+		box(g,Vector3(x,bottom+row*(top-bottom)/3,-0.025),Vector3(inner_width+0.055,0.055,0.10),aluminium)
+	box(g,Vector3(x+0.055,1.34,0.045),Vector3(0.035,0.15,0.055),mat("6e7871",0.75,0.3))
 	# S23/S08 connected stepped portal, authored as legitimate source114 wall faces.
 	# Dimensions are production inference; exposed structure receives spray/contact.
 	var portal:=Node3D.new();portal.name="BarStructuralPortal";portal.set_meta("mersea_role","wall");g.add_child(portal)
@@ -769,32 +758,19 @@ static func gold_service(g: Node3D,x: float,w: float) -> void:
 	# Continuous substantial head replaces disconnected shutter-like decorative strips.
 	box(portal,Vector3(x,2.75,0.09),Vector3(w+0.34,0.20,0.30),olive)
 	box(portal,Vector3(x,2.62,-0.48),Vector3(w-0.22,0.28,0.90),olive_return)
-	var reveal:=Node3D.new();reveal.name="BarExteriorReturns";reveal.set_meta("mersea_role","decor");g.add_child(reveal)
-	# The existing continuous counter surface and rounded nose remain exterior finish.
-	box(reveal,Vector3(x,1.72,-0.48),Vector3(w-0.12,0.085,0.87),counter_finish).set_meta("mersea_reflective_metal",true)
-	# One neutral-metal cap joins the exposed service ledge and shallow reveal.
-	# Thin folded sheet and rounded nose are exterior finish, not new contact geometry.
-	var ledge_metal:=mat("d2d5ce",1.0,0.14).duplicate()
-	ledge_metal.anisotropy_enabled=true;ledge_metal.anisotropy=0.55
-	box(reveal,Vector3(x,1.774,-0.225),Vector3(w+0.24,0.025,1.35),ledge_metal).set_meta("mersea_reflective_metal",true)
-	var ledge_nose:=cyl(reveal,Vector3(x,1.753,0.449),0.034,w+0.24,ledge_metal)
-	ledge_nose.rotation.z=PI/2
-	(ledge_nose.mesh as CylinderMesh).radial_segments=32
-	ledge_nose.set_meta("mersea_reflective_metal",true)
 	# A slim inset metal bead identifies the aperture without replacing the olive portal.
 	var inner_lip:=mat("aaa98b",0.65,0.30)
 	for side in [-1,1]:
 		box(portal,Vector3(x+side*(w/2-0.16),2.20,0.04),Vector3(0.025,0.91,0.045),inner_lip).set_meta("mersea_reflective_metal",true)
 	box(portal,Vector3(x,2.475,-0.015),Vector3(w-0.30,0.025,0.045),inner_lip).set_meta("mersea_reflective_metal",true)
-	box(reveal,Vector3(x,1.713,0.455),Vector3(w+0.20,0.090,0.030),counter_finish).set_meta("mersea_reflective_metal",true)
 	for yy in [2.90,3.10,3.30]:box(g,Vector3(x,yy,0.12),Vector3(w+0.32,0.185,0.15),olive)
 	# Raised serif lettering reuses the existing native TextMesh sign grammar.
 	# Portable system fallback; exact font appearance on Mac is not yet verified.
 	var sign_face:=Node3D.new();sign_face.name="GoldenHourRaisedSign";sign_face.set_meta("mersea_role","decor");g.add_child(sign_face)
 	var serif:=SystemFont.new();serif.font_names=PackedStringArray(["Georgia","Times New Roman","DejaVu Serif"]);serif.font_weight=600
-	var letters:=TextMesh.new();letters.text="GOLD BAR & MERSEA";letters.font=serif;letters.font_size=96;letters.pixel_size=0.007;letters.depth=0.045
+	var letters:=TextMesh.new();letters.text="BAR @ MERSEA";letters.font=serif;letters.font_size=96;letters.pixel_size=0.007;letters.depth=0.045
 	letters.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER;letters.vertical_alignment=VERTICAL_ALIGNMENT_CENTER
-	letters.material=mat("d7b468",0.85,0.23)
+	letters.material=mat("c8c8b5",0.55,0.33)
 	var letter_mesh:=MeshInstance3D.new();letter_mesh.mesh=letters
 	var letter_bounds:=letters.get_aabb()
 	var letter_scale:=minf((w-0.12)/maxf(letter_bounds.size.x,0.01),0.43/maxf(letter_bounds.size.y,0.01))
@@ -804,7 +780,7 @@ static func gold_service(g: Node3D,x: float,w: float) -> void:
 	letter_mesh.position=Vector3(x-ink_center.x*letter_scale,3.10-ink_center.y*letter_scale,0.194-letter_bounds.position.z*letter_scale)
 	letter_mesh.set_meta("mersea_role","decor");sign_face.add_child(letter_mesh)
 
-static func gold_platform(host: Node3D,land: Dictionary) -> void:
+static func gold_platform(host: Node3D,land: Dictionary,site_parent: Node3D) -> void:
 	# S23/S08 Golden Hour Bar platform motif, bound to verified114 waterfront edge0.
 	# Width/depth/anchors inferred within actual land; not a surveyed reconstruction.
 	var points: Array=POLYGONS.w1308007114
@@ -840,6 +816,103 @@ static func gold_platform(host: Node3D,land: Dictionary) -> void:
 		for i in range(3):
 			box(p,Vector3(-0.66+i*0.66,top-0.10-row*0.18,4.012),Vector3(0.64,0.16,0.035),concrete).set_meta("mersea_role","decor")
 	for xx in [-1.0,1.0]:box(p,Vector3(xx,top+0.001,2.0),Vector3(0.012,0.002,3.99),mat("636a60")).set_meta("mersea_role","decor")
+
+	bar_terrace(p,top)
+	bar_golf_deck(site_parent,frame,land,top,mat("5e6c5d",0.35,0.64))
+
+static func bar_terrace(p: Node3D,top: float) -> void:
+	# Reuse existing platform/stairs and Mersea outdoor furnishing grammar.
+	# Photo9865–9867: turf inset, masonry perimeter, barrel ledges, pipe rails and deck.
+	var turf:=ground_material("496535","688549",0.55)
+	box(p,Vector3(0,top+0.006,2.10),Vector3(3.35,0.012,3.35),turf).set_meta("mersea_role","decor")
+	var stone:=granular("7d8075","a1a293",1.8)
+	# Finite masonry faces retain the two1.65m stair mouths without new step geometry.
+	for row in range(3):
+		for column in range(5):
+			box(p,Vector3(-1.36+column*0.68,top-0.09-row*0.18,4.024),Vector3(0.66,0.17,0.055),stone)
+	for side: float in [-1.0,1.0]:
+		for column in range(7):
+			# Golf connector uses the negative-X side's rear1.4m opening.
+			var z:float=0.29+column*0.56
+			if side<0.0 and z<1.85:continue
+			box(p,Vector3(side*3.71,top-0.26,z),Vector3(0.075,0.51,0.54),stone)
+	var furniture:=Node3D.new();furniture.name="BarTerraceFurniture";furniture.position.y=top;p.add_child(furniture)
+	# Central arrangement leaves both stair lanes and the golf-side rear route clear.
+	var table_group:=Node3D.new();table_group.set_meta("mersea_role","decor");furniture.add_child(table_group)
+	table(table_group,0.0,1.55)
+	for x: float in [-0.73,0.73]:
+		var barrel:=Node3D.new();barrel.position=Vector3(x,0,3.48);barrel.set_meta("mersea_role","support");furniture.add_child(barrel)
+		var timber:=granular("393b33","555248",2.0)
+		cyl(barrel,Vector3(0,0.49,0),0.36,0.98,timber,0.32)
+		cyl(barrel,Vector3(0,0.49,0),0.38,0.54,timber,0.38)
+		for y: float in [0.13,0.36,0.67,0.89]:
+			cyl(barrel,Vector3(0,y,0),0.387 if y>0.2 and y<0.8 else 0.352,0.038,mat("333a35",0.55,0.5)).set_meta("mersea_role","decor")
+	for board in range(6):box(furniture,Vector3(0,1.015,3.20+board*0.095),Vector3(2.55,0.055,0.087),mat("514f43",0.0,0.85))
+	var rail:=mat("5e6c5d",0.35,0.64)
+	# Front rail occupies the solid central edge; stair lanes remain open at±2.6.
+	terrace_rail(p,Vector3(-1.62,top,3.94),Vector3(1.62,top,3.94),rail)
+	for side: float in [-1.0,1.0]:
+		terrace_rail(p,Vector3(side*3.60,top,1.92),Vector3(side*3.60,top,3.95),rail)
+		# Handrail follows the retained flight rather than creating a cross-mouth barrier.
+		terrace_rail(p,Vector3(side*1.69,top,3.94),Vector3(side*1.69,top-0.54,5.25),rail)
+
+static func terrace_rail(p: Node3D,a: Vector3,b: Vector3,material: Material) -> void:
+	for t: float in [0.0,0.5,1.0]:
+		var foot:=a.lerp(b,t)
+		rod(p,foot,foot+Vector3.UP*0.91,0.028,material)
+		cyl(p,foot+Vector3.UP*0.015,0.075,0.03,material)
+	for height: float in [0.48,0.91]:rod(p,a+Vector3.UP*height,b+Vector3.UP*height,0.029,material)
+
+static func bar_golf_landing_polygon() -> PackedVector2Array:
+	# Reuse the exact edge0 frame; bounded turf clearance includes a0.45m LAND exit.
+	var points: Array=POLYGONS.w1308007114
+	var frame:=edge_frame(Vector2(points[0][0],points[0][1]),Vector2(points[1][0],points[1][1]),0.0)
+	var polygon:=PackedVector2Array()
+	for q: Vector3 in [Vector3(-3.68,0,0.28),Vector3(-3.68,0,1.82),Vector3(-7.15,0,1.82),Vector3(-7.15,0,0.28)]:
+		var world:=frame*q;polygon.append(Vector2(world.x,world.z))
+	return polygon
+
+static func bar_golf_deck(p: Node3D,frame: Transform3D,land: Dictionary,top: float,rail: Material) -> void:
+	# Narrow sloping outdoor connector, outside frozen114 and the fixed canopy.
+	# A continuous visible/support deck lands on actual LAND; slat lines are finish only.
+	var near_x:float=-3.68
+	var far_x:float=-6.70
+	var left:float=0.35
+	var right:float=1.75
+	var far_a:=frame*Vector3(far_x,0,left)
+	var far_b:=frame*Vector3(far_x,0,right)
+	var far_y:float=maxf(terrain_y(land,far_a.x,far_a.z),terrain_y(land,far_b.x,far_b.z))+0.005
+	var deck:=Node3D.new();deck.name="BarGolfConnector";deck.transform=frame;deck.set_meta("source_keys",[POI]);deck.set_meta("derived_object_key","site:"+POI);deck.set_meta("mersea_role","support");p.add_child(deck)
+	var a:=Vector3(near_x,top,left);var b:=Vector3(near_x,top,right)
+	var c:=Vector3(far_x,far_y,right);var d:=Vector3(far_x,far_y,left)
+	var st:=SurfaceTool.new();st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	# Clockwise top, closed side fascias and underside; no invisible sloping proxy.
+	for vertex: Vector3 in [a,b,c,a,c,d,a,d,d-Vector3.UP*0.10,a,d-Vector3.UP*0.10,a-Vector3.UP*0.10,b,b-Vector3.UP*0.10,c-Vector3.UP*0.10,b,c-Vector3.UP*0.10,c,d,c,c-Vector3.UP*0.10,d,c-Vector3.UP*0.10,d-Vector3.UP*0.10,a,a-Vector3.UP*0.10,b-Vector3.UP*0.10,a,b-Vector3.UP*0.10,b,a-Vector3.UP*0.10,d-Vector3.UP*0.10,c-Vector3.UP*0.10,a-Vector3.UP*0.10,c-Vector3.UP*0.10,b-Vector3.UP*0.10]:
+		st.add_vertex(vertex)
+	st.generate_normals()
+	var mesh:=MeshInstance3D.new();mesh.mesh=st.commit();mesh.material_override=mat("817d69",0.0,0.88);deck.add_child(mesh)
+	var boards:=Node3D.new();boards.name="DeckPlankFaces";boards.set_meta("mersea_role","decor");deck.add_child(boards)
+	var pitch:float=atan2(top-far_y,near_x-far_x)
+	var plank_length:float=(near_x-far_x)/23.0
+	for i in range(23):
+		var t:float=(float(i)+0.5)/23.0
+		var x:float=lerpf(near_x,far_x,t);var y:float=lerpf(top,far_y,t)
+		var plank:=box(boards,Vector3(x,y+0.002,(left+right)/2),Vector3((plank_length-0.006)/cos(pitch),0.008,right-left-0.02),mat("898572" if i%3==0 else "777b6b",0.0,0.88))
+		plank.rotation.z=pitch
+	# Golf/waterfront-facing edge stays open; the counter belongs beside the kitchen.
+	terrace_rail(deck,b,c,rail)
+	var screen:=Node3D.new();screen.name="DeckCorrugatedCounter";screen.position.z=left;deck.add_child(screen)
+	var counter_top:float=top+0.53
+	var steel:=granular("8a9a91","a2afa4",2.2)
+	# Vertical finite corrugation modules meet the sloping deck beneath a level counter.
+	# Low end varies from0.53m at terrace to1.07m at golf; dimensions are inference.
+	var x:float=far_x
+	while x<near_x-0.0001:
+		var next:float=minf(near_x,x+0.28)
+		var lower:float=lerpf(far_y,top,(x-far_x)/(near_x-far_x))-0.015
+		corrugated_panel(screen,x,next,lower,counter_top-0.025,steel)
+		x=next
+	box(deck,Vector3((near_x+far_x)/2,counter_top,left),Vector3(near_x-far_x+0.04,0.055,0.32),mat("424b45",0.25,0.36))
 
 
 static func _settle_bar_reflection(probe: ReflectionProbe) -> void:
@@ -886,3 +959,133 @@ static func beveled_metal_border(p: Node3D,center: Vector3,size: Vector2,width: 
 	st.generate_normals()
 	var mesh:=MeshInstance3D.new();mesh.mesh=st.commit();mesh.material_override=material
 	mesh.set_meta("mersea_reflective_metal",true);p.add_child(mesh)
+
+
+static func dining_canopy(parent: Node3D,land: Dictionary) -> void:
+	# Owner photos 9878/9880/9882/9884, 2026-10-07; satellite rear-kitchen relation.
+	# Adjacent POI architecture, not a replacement for the frozen114 dining leg.
+	# Stepped bounds, beam cadence, shallow pitch and panel split are production inference.
+	var outline: Array[Vector2]=[Vector2(4.25,-1.45),Vector2(4.25,4.40),Vector2(9.65,4.40),Vector2(9.65,-4.45),Vector2(6.58,-4.45),Vector2(6.58,-1.45)]
+	var footprint:=PackedVector2Array()
+	for q in outline:
+		var world:=site_point(q.x,q.y);footprint.append(Vector2(world.x,world.z))
+	var apron:=Node3D.new();apron.name="CoveredDiningApron";parent.add_child(apron)
+	# Actual clipped LAND follows the site's small slope; visible concrete is also support.
+	# At LAND+0.11 it clears existing visual skins, without a raised perimeter barrier.
+	skin(apron,land,footprint,ground_material("a3a399","b6b5a8",0.08),0.055,"support")
+	var frame:=Node3D.new();frame.name="CoveredDiningFrame";frame.position=SITE_ORIGIN;frame.rotation.y=SITE_YAW
+	frame.set_meta("mersea_role","support");parent.add_child(frame)
+	var timber:=granular("586653","74816b",2.8)
+	timber.normal_scale=0.10;timber.roughness=0.79
+	var metal:=mat("a1a69a",0.65,0.4)
+	for q: Vector2 in [Vector2(4.39,-1.31),Vector2(4.39,1.45),Vector2(4.39,4.26),Vector2(9.51,-4.31),Vector2(9.51,-1.31),Vector2(9.51,1.45),Vector2(9.51,4.26),Vector2(6.72,-4.31),Vector2(6.72,-1.31)]:
+		var world:=site_point(q.x,q.y)
+		var bottom:=terrain_y(land,world.x,world.z)+0.105
+		var top:float=6.24-(q.x-4.25)*0.045
+		box(frame,Vector3(q.x,(bottom+top)/2,q.y),Vector3(0.18,top-bottom,0.18),timber)
+		box(frame,Vector3(q.x,bottom+0.10,q.y),Vector3(0.195,0.20,0.195),metal)
+	# Continuous deep edge beams trace the same footprint as the roof.
+	for i in outline.size():
+		var a:=outline[i];var b:=outline[(i+1)%outline.size()]
+		var start:=Vector3(a.x,6.10-(a.x-4.25)*0.045,a.y)
+		var end:=Vector3(b.x,6.10-(b.x-4.25)*0.045,b.y)
+		var along:=(end-start).normalized()
+		var across:=along.cross(Vector3.UP).normalized()
+		var beam:=box(frame,(start+end)/2,Vector3(start.distance_to(end),0.28,0.18),timber)
+		beam.basis=Basis(along,across.cross(along).normalized(),across)
+	# Roof strips span kitchen-to-golf; narrow transverse purlins support physical corrugation.
+	var roof:=Node3D.new();roof.name="CoveredDiningRoof";roof.set_meta("mersea_role","roof");frame.add_child(roof)
+	var clear:=mat("d0d9cd",0.0,0.32).duplicate()
+	clear.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA
+	clear.albedo_color=Color(0.68,0.77,0.73,0.32);clear.cull_mode=BaseMaterial3D.CULL_DISABLED
+	var dark:=mat("323e35",0.12,0.58)
+	var seams: Array[float]=[-4.45,-3.86,-3.27,-2.68,-2.09,-1.50,-1.45,-0.91,-0.32,0.27,0.86,1.45,2.04,2.63,3.22,3.81,4.40]
+	for band in range(seams.size()-1):
+		var z0:float=seams[band]
+		var z1:float=seams[band+1]
+		var left:float=6.58 if z0< -1.45 else 4.25
+		# Explicit corner seam keeps both spans complete without crossing the kitchen.
+		var zmid:float=(z0+z1)/2
+		var width:float=9.65-left
+		var xmid:float=(left+9.65)/2
+		var opaque_band:bool=band in [2,3,8,9]
+		var sheet:=box(roof,Vector3(xmid,6.245-(xmid-4.25)*0.045,zmid),Vector3(width,0.035,z1-z0),dark if opaque_band else clear)
+		sheet.rotation.z=-atan(0.045)
+		for offset in [0.12,0.31,0.50]:
+			if z0+offset>=z1:continue
+			var ridge:=box(roof,Vector3(xmid,6.275-(xmid-4.25)*0.045,z0+offset),Vector3(width,0.035,0.032),dark if opaque_band else clear)
+			ridge.rotation.z=-atan(0.045)
+		if band%2==0:
+			var rafter:=box(frame,Vector3(xmid,6.13-(xmid-4.25)*0.045,zmid),Vector3(width,0.22,0.10),timber)
+			rafter.rotation.z=-atan(0.045)
+	# Tall screened golf edge leaves both end approaches open. No invented room/interior.
+	var screen:=granular("344631","586b42",5.0)
+	for ends: Vector2 in [Vector2(-4.15,-1.50),Vector2(-1.18,1.27),Vector2(1.62,4.10)]:
+		var zmid:float=(ends.x+ends.y)/2
+		var world:=site_point(9.49,zmid)
+		var bottom:=terrain_y(land,world.x,world.z)+0.15
+		box(frame,Vector3(9.49,bottom+0.89,zmid),Vector3(0.10,1.78,ends.y-ends.x),screen)
+		for yy in [bottom+0.04,bottom+1.80]:box(frame,Vector3(9.49,yy,zmid),Vector3(0.14,0.10,ends.y-ends.x+0.04),mat("756149",0.0,0.85))
+
+	# Covered outdoor dining, photo9880/9882; two reused furniture groups leave the
+	# tested x7.5 circulation axis clear. Anchors/cadence are production inference.
+	for i in range(2):
+		covered_dining_table(frame,land,Vector2(8.65,0.40+i*2.50),"55aab0" if i==0 else "c66e59")
+	# Dense artificial foliage observed on the timber-backed screen in owner9880/9882.
+	# One batched leaf surface replaces pale box ornaments; no tree or new contact.
+	var leaves:=SurfaceTool.new();leaves.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var leaf_rng:=RandomNumberGenerator.new();leaf_rng.seed=11480
+	for ends: Vector2 in [Vector2(-4.15,-1.50),Vector2(-1.18,1.27),Vector2(1.62,4.10)]:
+		var world:=site_point(9.49,(ends.x+ends.y)/2)
+		var bottom:=terrain_y(land,world.x,world.z)+0.15
+		for side: float in [-1.0,1.0]:
+			for column in range(23):
+				for row in range(16):
+					var center:=Vector3(9.49+side*leaf_rng.randf_range(0.067,0.090),bottom+0.155+row*0.098+leaf_rng.randf_range(-0.010,0.010),lerpf(ends.x+0.16,ends.y-0.16,float(column)/22.0)+leaf_rng.randf_range(-0.010,0.010))
+					var angle:float=leaf_rng.randf_range(-PI,PI)
+					var along:=Vector3(0,cos(angle),sin(angle))
+					var across:=Vector3(0,-sin(angle),cos(angle))
+					var length:float=leaf_rng.randf_range(0.105,0.145)
+					var width:float=leaf_rng.randf_range(0.053,0.075)
+					var tint:=Color("263f20").lerp(Color("547137"),leaf_rng.randf())
+					# Six pointed-oval perimeter vertices around a shallow raised vein.
+					for edge in range(6):
+						var a:float=float(edge+1 if side>0.0 else edge)*TAU/6.0
+						var b:float=float(edge if side>0.0 else edge+1)*TAU/6.0
+						leaves.set_normal(Vector3(side,0,0))
+						leaves.set_color(tint.lightened(0.035));leaves.add_vertex(center+Vector3(side*0.017,0,0))
+						leaves.set_color(tint);leaves.add_vertex(center+along*cos(a)*length+across*sin(a)*width)
+						leaves.set_color(tint.darkened(0.08));leaves.add_vertex(center+along*cos(b)*length+across*sin(b)*width)
+	var leaf_material:=mat("ffffff",0.0,0.88).duplicate()
+	leaf_material.vertex_color_use_as_albedo=true;leaf_material.cull_mode=BaseMaterial3D.CULL_DISABLED
+	var foliage:=MeshInstance3D.new();foliage.name="CoveredDiningScreenLeaves"
+	foliage.mesh=leaves.commit();foliage.material_override=leaf_material
+	foliage.set_meta("mersea_role","decor");frame.add_child(foliage)
+	# Secondary longitudinal timber members tie the visible corrugated fields to
+	# the retained transverse rafters, with overlapping faces rather than air gaps.
+	for xx: float in [7.05,8.65]:
+		box(frame,Vector3(xx,6.13-(xx-4.25)*0.045,-0.025),Vector3(0.09,0.12,8.85),timber)
+
+
+static func covered_dining_table(frame: Node3D,land: Dictionary,seat: Vector2,color: String) -> void:
+	# Existing family wire chairs and native table-contact grammar; finite rectangular
+	# tops match owner9880/9882. Every leg endpoint samples the same apron LAND+.110.
+	var world:=site_point(seat.x,seat.y)
+	var base:float=terrain_y(land,world.x,world.z)+0.110
+	var group:=Node3D.new();group.name="CoveredDiningFurniture"
+	group.position=Vector3(seat.x,base,seat.y)
+	group.set_meta("mersea_role","decor");frame.add_child(group)
+	var floor_y:Callable=func(point: Vector3) -> float:
+		var foot_world:=site_point(seat.x+point.x,seat.y+point.z)
+		return terrain_y(land,foot_world.x,foot_world.z)+0.110-base
+	var metal:=mat("a9b1ae",0.85,0.34)
+	box(group,Vector3(0,0.79,0),Vector3(1.0,0.045,0.74),mat(color,0.0,0.40))
+	for x: float in [-0.39,0.39]:
+		for z: float in [-0.27,0.27]:
+			var foot:=Vector3(x,0,z);foot.y=float(floor_y.call(foot))
+			rod(group,foot,Vector3(x,0.7675,z),0.023,metal)
+	chair(group,Vector3(0,0,0.85),0,metal,floor_y)
+	chair(group,Vector3(0,0,-0.85),PI,metal,floor_y)
+	var contact:=box(group,Vector3(0,0.41,0),Vector3(0.85,0.78,0.65),mat("293431",0.0,0.62))
+	contact.visible=false;contact.set_meta("mersea_role","support")
+	contact.set_meta("native_contact_only",true)

@@ -20,6 +20,9 @@ var _closest := INF
 var _prefix := ""
 var _unsafe := false
 var _support_context: Dictionary = {}
+var _adjacent_source := ""
+var _observe_adjacent_support := false
+var _observed_adjacent_support := false
 
 
 func _init(harness: WorldHarness) -> void:
@@ -76,10 +79,12 @@ func _diagnostic_player_idle() -> bool:
 ## Runs the checks for one building and returns its failures (empty = pass).
 ## The walk-up and stairs are the slow part (seconds of simulated walking each).
 ## stairs: [{"bottom": [x, z], "top": [x, z]}, ...] from the building's catalog entry.
-func check(source_key: String, walk_up: bool, prefix: String = "", stairs: Array = [], routes: Array = [], spray_case: Dictionary = {}) -> Array[String]:
+func check(source_key: String, walk_up: bool, prefix: String = "", stairs: Array = [], routes: Array = [], spray_case: Dictionary = {}, adjacent_source: String = "") -> Array[String]:
 	if _unsafe:
 		return [prefix + "check not run: a previous unsafe failure stopped this driver"]
 	_failures = []
+	_adjacent_source = adjacent_source
+	_observe_adjacent_support = false
 	_prefix = prefix
 	var nodes := _h.building_nodes(source_key)
 	var meshes := _h.visual_meshes(nodes)
@@ -628,6 +633,14 @@ func _check_routes(routes: Array, box: AABB) -> void:
 			_failures.append(_prefix + "routes need unique names and finite start_xz/end_xz pairs")
 			_unsafe = true
 			return
+		if route.has("require_adjacent_support") and (not route.require_adjacent_support is bool or _adjacent_source == ""):
+			_failures.append(_prefix + "adjacent support observation needs a boolean and validated adjacent source")
+			_unsafe = true
+			return
+		if route.has("return_from_arrival") and not route.return_from_arrival is bool:
+			_failures.append(_prefix + "return_from_arrival must be boolean")
+			_unsafe = true
+			return
 		names[route.name] = true
 		for value: Array in [route.start_xz, route.end_xz]:
 			if not box.grow(15.0).has_point(Vector3(value[0], box.get_center().y, value[1])):
@@ -635,6 +648,7 @@ func _check_routes(routes: Array, box: AABB) -> void:
 				_unsafe = true
 				return
 	for route: Dictionary in routes:
+		_observe_adjacent_support = route.get("require_adjacent_support", false)
 		var start := Vector2(route.start_xz[0], route.start_xz[1])
 		var end := Vector2(route.end_xz[0], route.end_xz[1])
 		var problem := await _h.settle_player(start, _support_context)
@@ -642,24 +656,52 @@ func _check_routes(routes: Array, box: AABB) -> void:
 			_failures.append(_prefix + "route " + route.name + " setup: " + problem)
 			_unsafe = true
 			return
+		var return_from_arrival: bool = route.get("return_from_arrival", false)
+		if return_from_arrival and not _route_ground_at_player():
+			_failures.append(_prefix + "route " + route.name + ": turnaround needs ordinary ground at the settled start")
+			_unsafe = true
+			return
 		for target: Vector2 in [end, start]:
-			if target == start:
-				# Walk back along the same line, from the route's end point.
+			if target == start and not return_from_arrival:
+				# Default routes retain their established re-settle behavior.
 				problem = await _h.settle_player(end, _support_context)
 				if problem != "":
 					_failures.append(_prefix + "route " + route.name + " return setup: " + problem)
 					_unsafe = true
 					return
+			if target == start and return_from_arrival:
+				# Like stairs: previous leg already proved active REST and SAFE.
+				# Resume the stock controller at its actual arrival, without teleport.
+				print("ROUTE_TURNAROUND route=%s actual_start=%s" % [route.name, _h.player.global_position])
 			problem = await _walk_toward(Vector3(target.x, _h.player.global_position.y + 1.5, target.y))
 			var at := _h.player.global_position
 			var distance := _closest
+			if return_from_arrival and target == start and not _route_ground_at_player():
+				problem += ("; " if problem != "" else "") + "turnaround did not return to ordinary native ground"
+				_unsafe = true
 			print("ROUTE %s target=%s arrived=%s distance=%.3f contacts=%s" % [route.name, target, at, distance, _touched.map(func(body: Object) -> String: return str((body as Node).get_path()))])
+			if _observe_adjacent_support:
+				print("ROUTE_ADJACENT_SUPPORT route=%s source=%s observed_active_floor=%s; rest remains at route endpoint" % [route.name, _adjacent_source, _observed_adjacent_support])
+				if not _observed_adjacent_support and problem == "":
+					problem = "no observed active-controller adjacent support contact"
 			if problem != "" or distance > 0.75:
 				_failures.append(_prefix + "route " + route.name + ": " + (problem if problem != "" else "stopped short of destination"))
 				# The reverse leg depends on reaching the forward destination.
 				break
 		if _unsafe:
 			return
+
+	_observe_adjacent_support = false
+
+
+# Read-only support identity after initial settle or the completed return REST.
+# Uses the existing ordinary-ground policy; never broadens apron eligibility.
+func _route_ground_at_player() -> bool:
+	var at := _h.player.global_position
+	var hit := _h.ray(at + Vector3.UP * 0.2, at - Vector3.UP * 0.4, _h.player.collision_mask)
+	var valid := _h.is_walkable_ground(hit)
+	print("ROUTE_GROUND qualified=%s at=%s support=%s" % [valid, at, str((hit.collider as Node).get_path()) if not hit.is_empty() else "none"])
+	return valid
 
 
 func _numbers(value: Variant) -> bool:
@@ -783,6 +825,7 @@ func _walk_toward(target: Vector3, own: Array[RID] = [], wall_shapes: Dictionary
 	Input.action_press("move_forward")
 	_touched = []
 	_wall_touched = false
+	_observed_adjacent_support = false
 	var still_frames := 0
 	_closest = INF
 	var support_error := ""
@@ -802,6 +845,10 @@ func _walk_toward(target: Vector3, own: Array[RID] = [], wall_shapes: Dictionary
 			for contact in slide.get_collision_count():
 				var body := slide.get_collider(contact)
 				var normal := slide.get_normal(contact)
+				if _observe_adjacent_support and not _observed_adjacent_support and body is StaticBody3D and _h.player.is_physics_processing() and _h.player.is_on_floor() and normal.is_finite() and normal.dot(_h.player.up_direction.normalized()) >= cos(_h.player.floor_max_angle):
+					if body.get_meta("source_keys", []) == [_adjacent_source] and str(body.get_meta("derived_object_key", "")) == "site:" + _adjacent_source and str(body.get_meta("mersea_role", "")) == "support" and str(body.get_meta("receiver_kind", "")) == "none" and not body.is_in_group("spray_receiver_wall"):
+						_observed_adjacent_support = true
+						print("ACTIVE_ADJACENT_FLOOR source=%s body=%s shape=%s point=%s normal=%s player=%s" % [_adjacent_source, body.get_path(), slide.get_collider_shape_index(contact), slide.get_position(contact), normal, _h.player.global_position])
 				if body != null and normal.dot(Vector3.UP) < 0.7 and body not in _touched:
 					_touched.append(body)
 				if body is CollisionObject3D and _architectural_contact((body as CollisionObject3D).get_rid(), slide.get_collider_shape_index(contact), normal, wall_shapes):
