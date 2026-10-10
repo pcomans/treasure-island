@@ -18689,3 +18689,129 @@ Verdict: SCOPED changed-access VISUAL PASS; envelope L1C visually supported subj
 - Worked: verified exact ten-path scope, clean initial index, all executing actors’ own retrospective sections and completed applicable native/stock ascent-descent/spray/full-suite evidence before publication. Only closure prose and own RETRO changed after tests.
 - Did not: scoped architecture PASS does not establish opposite-side L2, modern whole-building fidelity or as-built discrete stairs; those limits remain explicit.
 - Next: publish through normal fast-forward after checking the live base, then update only existing gallery labels from the actual commit. Preserve the earlier stair HOLD and current successful traversal without a bookkeeping rerun.
+
+## northpoint_family_site_art — 2026-10-10 1229 site study001
+- Worked: reused live family local_ground schema and existing clipping dependencies for a complete frontage composition in one target-data edit and one actual-world render. Direct source LAND/visible-area separation and building/road subtraction preceded engine work;1232 scoped closure stayed frozen.
+- Did not work: first private preflight used old earcut.flatten API; corrected named export before source mutation. Expanded ground bounds pushed default east capture farther out, reducing ordinary frontage detail; default south remains neighbor-dominated. Existing near-3 door bottom is below LAND and deserves focused contact review rather than an unrequested opening edit.
+- Next: reviewers should use the useful raised context plus honest default-view limits; if closer site evidence is needed, adapt a complete focused-view donor under a new bounded GO. Keep source mechanical checks distinct from these pixels. Session63748 terminal0 and actual process absence recorded; no repeated capture or self-acceptance.
+
+
+### northpoint_site_visual_fresh — independent 1229 scoped site review, 2026-10-10
+What worked: direct March2025 frontage pixels plus actual east/context and island pairs gave an early explicit scoped PASS. Northeast context made the substantive lawn/path/forecourt gain legible despite changed default east framing. All four gameplay sides, both contexts and five island pairs were inspected once; no engine/research rerun was needed.
+What did not: changed site bounds alter default gameplay/context camera positions; the east pair cannot isolate pixel-size or distance gains. South remains neighbor-dominated. A coherent inferred apron still leaves a material road/parking continuity gap against the reference, and unknown protected sides prevent whole-building acceptance.
+Next time: retain scoped PASS separately from all-side L2 U. For a future road/apron task use a useful established frontage view and permitted ownership preflight, rather than retaking current captures just for bookkeeping or treating procedural green/gray blocks as completed modern site quality. Consolidate this draft into the existing RETRO before the round's final commit; no separate acceptance framework is required.
+
+
+### chapel_final_integrator — first1232 closure capture, 2026-10-10
+
+- Worked: one maintained capture from the actual frozen two-file candidate produced clear before/after proof of the south gable hole closing and improved east roof-wall continuity, with source identity/whitespace preflight and actual terminal/PID release. Existing roof/canopy/site were retained.
+- Did not: the default north camera remains imperfect; capture PASS does not certify all-side closure, native contacts or reference fidelity. North-end reference cannot establish south-end opening absence. Existing shutdown Texture RID warnings remain.
+- Next: hand these first coherent pixels to independent visual review, preserve unknown-side qualification, and use the planned shared retained-native reader for mechanics rather than repeat baselines or author a private driver. No source editing, import, tests, acceptance or publication in this round.
+
+
+### station48_access_repair_fresh — Northpoint readiness, 2026-10-10
+Worked: two cached-project captures completed under retained handles, with terminal/PID release between them; actual all-side pixels revealed1232 open roof boundary before any art change.
+Did not work: inherited readiness treated1229 as lacking live geometry and1232 as solely legacy quality-model appearance. Actual housing_family live manifest installs both, so those premises would have sent edits to wrong producers. Default1229 south/1232 north views do not isolate their target ends.
+Next time: trace WorldLoader and active appearance attachment before assigning source paths; use full source-bound focused-view donor for obstructed end views. Reuse baseline/source evidence rather than repeat captures or remass coherent buildings. Proposed lesson for later named documentation update: catalog adapter/old prototype status alone does not identify final visible/native producer when a post-load family attachment is active.
+
+
+## northpoint_family_code — early shared-seam review, 2026-10-10
+
+- What worked well: Reviewing the actual baseline7f9df9f diff first kept the early check to one optional helper path and its1232 data. The retained donor's complete wall emitter established winding/material continuity; the live attachment established the unchanged source receiver/contact path.
+- What did not work well: “No Git” initially obscured whether read-only diff/show were allowed; ROOT promptly clarified no mutations. The family-only native reader cannot cover1232's intentionally retained external roof and ground, as already recognized before implementation.
+- What the team should change next time: State “read-only Git allowed, no mutations” in review dispatches. Adapt retained native coverage from the actual producer and ordered transform/packing passes, while retaining positive role coverage and rejection of unknown bodies. Final CODE awaits completed1229 handoff and any authorized shared reader changes.
+
+## northpoint_family_code — completed final shared-seam review, 2026-10-10
+
+- What worked well: Early two-path review reused donor/attachment evidence; final semantic JSON comparison separated1229 numeric formatting from actual site changes. Reading the actual retained quality-support emitter established the mixed adapter's precise cutoff, shape order and metadata rather than assuming family shape tags.
+- What did not work well: The first large instruction/source batches were truncated; relevant complete functions were read before any verdict. Existing near-3 threshold and obstructed default capture are supplied risks for focused runtime/visual gates, not source CODE defects or grounds for redoing unrelated evidence.
+- What the team should change next time: Keep completed-path handoff explicit, batch only bounded source reads, and adapt retained producers from their actual transform/filter/packing order. Preserve regular default strictness and separate CODE from runtime fit/spray/REST and visual/progress acceptance. Final CODE PASS covers only the four frozen runtime paths against7f9df9f; no engine or repository writes performed.
+
+
+### chapel_final_integrator — Northpoint study gallery, 2026-10-10
+
+- Worked: added eight actual personally inspected before/after runtime originals and preserved all60 earlier images. Both HTML copies match served bytes; existing server GET/HEAD200 and private routes404.
+- Did not:1229 default camera frames differ, so the gallery labels this limitation and avoids matched-pose measurement claims. Scoped1232 visual and both technical PASS do not supply pending1229 visual/suite/publication or complete L2.
+- Next: reconcile labels only from actual independent verdicts and authorized publication; retain original comparisons and reference privacy. No engine/browser/server launch, source/repo/Git edits or acceptance in this delivery round.
+
+
+### chapel_final_integrator —1232 mixed-native checker support, 2026-10-10
+
+- Worked: actual producer tracing identified retained ground_visual contact ownership inside FamilyContact_support and separate retained roof shapes, avoiding a family-only positive result. Reused shared collection/comparison with exact producer transform/packed-array order and existing degeneracy filter; bounded edit to one maintained test file.
+- Did not: the regular housing-only mode cannot represent this retained producer configuration; bypassing its extra-body/positive-roof guard would silently omit real geometry. Ground's visual name alone also does not describe its final installed collision ownership.
+- Next: obtain independent CODE on the explicit mixed mode, then run the authorized combined native/fit/spray proof with no fabricated shape metadata, relaxed guards or repeated baseline. Whitespace passed; no engine execution or runtime verdict in this source-only round.
+
+
+### chapel_final_integrator — Northpoint pair mechanics, 2026-10-10
+
+- Worked: two complete serialized native/fit/spray invocations passed with actual terminals and owned process absence between runs. New mixed mode proved retained1232 roof plus family/support contacts without weakening regular1229 mode. Actual1229 east approach crossed the changed ground support; both sprays hit the exact eligible source wall and ended in active grounded released REST before SAFE.
+- Did not: a grounded spray cannot comfortably reach the new1232 upper gable, so direct spray scope is an unchanged eligible lower wall; complete native geometry supplies the closure contact evidence. Static LAND checks alone were not treated as runtime proof. Texture RID shutdown warnings remain despite terminal0.
+- Next: reuse these completed mechanics results, obtain independent scoped visual verdicts and the assigned full suite. No separate repeated fit/spray, source edits, promotion or publication in this round.
+
+
+### northpoint_progress_checkpoint_fresh — 2026-10-10
+What worked well: representative original before/after gameplay and raised contexts showed substantive closure/site gains directly; retained March2025 pixels kept progress separate from supplied technical PASS and historical credits.
+What did not work well: the first combined document read truncated the long ordinary note and lessons. A changed 1229 default camera also limits closeup comparison; context carries the strongest site evidence.
+What the team should change next time: read relevant headings/ranges first and judge coherent family gains before commissioning finish edits. After mandatory current publication checks, use one small next-family readiness assignment and reuse sound unchanged evidence; missing stage cells alone do not justify rebuilding.
+
+
+### northpoint_family_visual — first coherent closure round, 2026-10-10
+What worked: matched actual south/east and context pairs made the envelope gain explicit; actual dated front/north-end reference pixels kept the scoped PASS grounded without waiting for mechanics. All four gameplay sides and five island pairs were inspected once.
+What did not: default north framing does not isolate the target end; closure proof and north-end fidelity must remain separate. Broad existing site/blank-side gaps still prevent whole-quality acceptance.
+Next time: reuse these unchanged reference/whole-island observations; if north-end matching becomes the task, adapt the complete maintained focused-view donor instead of treating driverPASS as useful framing. No repeated archive audit, engine run or source mutation was needed for this early verdict.
+
+
+### northpoint_family_readiness_fresh — headed recovery, 2026-10-10
+- Worked: four-view cap recovered both March2025 fronts and1232 north-gable/site context; exact source normals resolved old packet cardinal-direction reversal. One supported actual-resolved recovery saved1232 end pixels and retained failed frame. Apple satellite showed useful layout in the same session.
+- Did not:1229 north-end coordinate snapped to a distant contributor shoreline pano; its end cannot be accepted by UI date alone. Historical packet prose is insufficient for exact annex/side transfer. Rear/opposite ends remain unobserved within budget.
+- Next: compare current shared baseline before prescribing L1 changes; use camera+source normals rather than provider address or old side labels. Keep protected ownership and source sufficiency scoped. Browser terminal143 cleanup and all owned PID absence verified before release. No repo/Git/engine work; own canonical retrospective awaits named documentation writer.
+
+
+### northpoint_closure_notes_fresh — evidence reconciliation, 2026-10-10
+
+- Worked: reconciled actual catalog identities and checklist definitions with actor-owned all-side visual, progress and native/stock mechanics notes; preserved the existing author retrospective and each actor’s own private wording.
+- Did not: initial broad reads/searches truncated output and a guessed study-root path was wrong; exact retained note paths and bounded reads resolved them. Earlier readiness incorrectly described1229 as detached-only, although both targets have live family attachment.
+- Next: record scoped L1 closure only after ROOT confirms the retained full-suite terminal; leave L2–5, modern whole-quality and new1229 recognition unclaimed. Trace final loader/registration/attachment before future author dispatches. No engine, runtime/source asset, Git mutation or publication performed.
+
+
+### northpoint_suite_runtime_fresh — Northpoint full suite — 2026-10-10
+
+- What worked well: one maintained tools/test.sh invocation passed through actual terminal 0; original session 77858 retained across buffered island-stage waits, then global PID absence confirmed before explicit slot release.
+- What did not work well: early short polls produced repeated unchanged buffered output; the first combined instruction read was oversized and truncated, so relevant lessons needed a focused read.
+- What to change next time: read targeted instructions first and use 50-second waits during the buffered island stage, retaining the same session rather than repeating status probes.
+
+
+### northpoint_next_pair_readiness — local-only readiness, 2026-10-10
+
+Worked — traced actual post-attachment family authority and preserved completed roof/screen/fit evidence. Did not — broad initial searches hit copied historical geometry and truncated; target private photo locators remain unavailable, preventing a truthful new fidelity comparison. Next — use selected fields and canonical worktree paths; obtain only target/site views that decide L1 scope, then inspect current complete render before authoring.
+
+
+### northpoint_family_handoff_owner — transparent successor art ownership, 2026-10-10
+
+ADOPT unchanged bounded Northpoint family candidate for ROOT's remaining promotion review: 1232/w96215673 complete retained-roof upper-wall closure and 1229/w96665911 observed ESE lawn/entry-path/forecourt composition. I did not originate the 1232 closure, execute its modeling round, or witness its author's private reasoning. ROOT reports that original author was interrupted and is unavailable because the tool thread cannot reopen. Its readiness retrospective exists; its closure retrospective remains absent. This is my own completed successor self-inspection and responsibility statement, not an entry attributed to that author, a reconstruction of missing history, independent acceptance, or a retrospective waiver.
+
+Personally read relevant LEARNINGS and building-texture skill, the existing private breadth-next-family-note.txt, supplied independent CODE/VISUAL/progress and mechanics handoffs, and current source excerpts/selected data from all four frozen paths in /workspaces/northpoint-whole-family-20261010: game/resources/housing_family/w96215673.json, game/resources/housing_family/w96665911.json, game/scripts/world/facades/housing_site_family.gd, game/tests/shared/building_fit_test.gd. Source revision is supplied published baseline 7f9df9f plus this frozen WIP; no Git operation or independent full-diff review performed. Verified directly that 1232 opts into retained production roof and finite source-coordinate closure triangles; shared emitter uses existing siding and wall role, defaulting to no closures for other configs. 1229 retains FootwaySurface and has FrontLawn/EntryPaths/PavedForecourt. Read exact-source mixed native branch ownership, hidden legacy wall/detail requirements, retained roof/ground classification and positive coverage checks. Reuse remains source-aware housing_site_family plus per-target variants and existing 1232 quality roof, not a new/copied base. Existing independent CODE PASS supplies complete patch preservation; my selected reads do not substitute for it.
+
+Protected runs remain declared 1232 0–9/19–23 and 1229 0/1/3/7/9/10/11. Closure fills the existing boundary without claiming new hidden openings; exact receiver remains building:<source>:wall, retained roof nonreceiver. Native geometry, contact, spray and active released grounded REST before SAFE are reused from named independent supplied PASS evidence, not re-executed or established by these static pixels. No engine, tests, runtime edits, research, download, image generation or Git action occurred here; running suite77858 belongs exclusively to its assigned owner and its result is not claimed.
+
+Personally viewed actual private March2025 1229-front-attempt01, 1232-front-attempt02 and 1232-north-end-attempt04 originals, with provider date visible. Last image's 1227 UI is camera context; retained frozen-source join identifies left-hand 1232 north end. Personally viewed all four current study001 gameplay sides and both contexts for each building, plus 1232 baseline south/east and 1229 baseline northeast context. South triangular sky opening and east upper-wall breaks in 1232 baseline are visibly closed in current images, retaining roof silhouette and frontage/canopy composition. 1229 raised context shows substantive continuous lawn/path/paving organization replacing bare frontage, supported by dated front pixels. No new conspicuous open seam or silhouette distortion appears in this bounded comparison. These are improvements in architecture/site, not whole-modern-quality completion.
+
+Limits stay explicit: 1232 north and 1229 south default captures do not isolate their target ends; 1229 east camera differs after site-bounds change. North-end reference supports closed shallow gable vocabulary, not unseen south/rear opening inventory. Protected blank elevations, 1232 broad brown site/blank frontage continuation, 1229 brown forecourt-to-road setback and simple procedural finishes remain substantive unresolved quality gaps. No complete all-side fidelity, measured/as-built accuracy, neutral-light material response or own island-pair verdict is claimed; existing independent island review is reused. All-side L2 and modern whole-building/world quality remain U. No new stage C, recognition acceptance or credit granted. I request no correction within the already bounded frozen repair; broader gaps require their own supported architecture/site scope, not opportunistic polish.
+
+What worked well: Existing originals and concise source/independent handoffs allowed actual successor inspection without another engine run. Three matched baseline views made the two improvements directly observable.
+What did not work well: Original 1232 author closure history was unavailable, and some initial broad local reads truncated. Those limits cannot be repaired by impersonating the author or treating written review notes as personal pixel inspection. A guessed builder path was wrong; the actual shared builder was located and read before adoption.
+What the team should change next time: Preserve a brief author handoff before interruption when possible; if unavailable, record named successor responsibility and original-history absence explicitly. Use canonical paths and selected source excerpts, reuse unchanged independent evidence, and keep the whole-quality unknowns visible.
+
+
+### northpoint_metadata_finish — scoped closure documentation, 2026-10-10
+
+- Worked: reconciled both source identities, physical-frontage corrections and active family registration; recorded ROOT-verified suite terminal and independent scoped verdicts without changing recognition claims. Consolidated each actor's own retrospective and the named successor's transparent adoption.
+- Did not: initial broad reads truncated; narrower source ranges resolved the facts. Original1232 author closure retrospective remains unavailable; the successor entry records its own inspection/responsibility, not invented original history.
+- Next: retain scoped L1 versus unknown L2–5 and use bounded1227/1239 evidence readiness before authoring. Reuse completed checks and preserve49 historical credits; no runtime edits, engine execution or Git mutation in this round.
+
+
+### northpoint_publish_integrator — reviewed family publication, 2026-10-10
+
+- Worked: exact ten-file candidate and clean staging area matched ROOT's reviewed boundary; complete whitespace check passed. Reused supplied independent CODE/scoped VISUAL/distinct PROGRESS, native fit/spray/rest/safe and full-suite terminal PASS without another engine run. Fetched origin/main remained the reviewed7f9df9f base.
+- Did not: local main worktree contains unrelated dirty work and cannot be used for integration; broad initial lessons output truncated. Relevant closure/coverage lessons and retained actor notes were read before publication. Initial commit failed because this linked worktree lacked author identity; retry uses the devcontainer-defined bot identity per command, without configuration changes.
+- Next: publish reviewed branch HEAD to origin/main with a normal fast-forward push and verify remote equality, preserving the dirty local main worktree. Keep both L1 C separate from L2–5 U,213 units and49 historical credits; successor ownership remains transparent.

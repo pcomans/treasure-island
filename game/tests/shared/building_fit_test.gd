@@ -30,6 +30,8 @@ extends SceneTree
 ## partition comparison before the ordinary fit, for the Chapel producer.
 ## Optional --native-producer building2-indexed: complete B2 material-bucket
 ## indexed triangles against actual wall/roof collision emission, order independent.
+## Optional --native-producer northpoint1232-mixed: shared family plus retained
+## quality roof and ground support for w96215673 only.
 ## Optional --native-producer housing-get-faces: complete live shared housing
 ## role partitions using the installer's Mesh.get_faces() producer.
 ## Optional --diagnose-side north|south|west|east: native candidate queries only,
@@ -69,7 +71,7 @@ func _run() -> void:
 		quit(1)
 		return
 	var source_key := str(args.source)
-	var native_sources := {"chapel-indexed": "w291189336", "building2-indexed": "w24274434", "station48-indexed": "w764313741"}
+	var native_sources := {"chapel-indexed": "w291189336", "building2-indexed": "w24274434", "station48-indexed": "w764313741", "northpoint1232-mixed": "w96215673"}
 	var housing_native := str(args.get("native-producer", "")) == "housing-get-faces"
 	if args.has("native-producer") and ((not housing_native and str(native_sources.get(str(args["native-producer"]), "")) != source_key) or args.has("diagnose-side") or args.has("adjacent-source")):
 		push_error("native producer requires its supported source and cannot combine diagnostic/adjacent modes")
@@ -127,6 +129,8 @@ func _run() -> void:
 		var native_error := ""
 		if housing_native:
 			native_error = _check_housing_faces(h, source_key)
+		elif str(args["native-producer"]) == "northpoint1232-mixed":
+			native_error = _check_housing_faces(h, source_key, true)
 		elif str(args["native-producer"]) == "station48-indexed":
 			native_error = _check_station48_indexed(h, source_key)
 		elif str(args["native-producer"]) == "building2-indexed":
@@ -452,7 +456,7 @@ func _check_building2_indexed(h: WorldHarness, source: String) -> String:
 
 # Shared housing installs every immediate mesh in a source-owned role bucket,
 # translating its world-space faces into the body's local origin in that order.
-func _check_housing_faces(h: WorldHarness, source: String) -> String:
+func _check_housing_faces(h: WorldHarness, source: String, retained_quality: bool = false) -> String:
 	var roots: Array[Node3D] = []
 	for node: Node in h.main.find_children("SharedHousing_*", "Node3D", true, false):
 		if node.get_meta("source_key", "") == source:
@@ -462,6 +466,11 @@ func _check_housing_faces(h: WorldHarness, source: String) -> String:
 	var root := roots[0]
 	if root.global_transform != Transform3D.IDENTITY or not root.get_meta("build_valid", false) or root.get_meta("scope", "") != "approved_shared_family_normal_play":
 		return "unsupported housing producer placement or identity"
+	var retained := {"error": "", "meshes": [], "body": null}
+	if retained_quality:
+		retained = _check_northpoint1232_retained(h, root, source)
+		if retained.error != "":
+			return str(retained.error)
 	var meshes := {"wall": [], "roof": [], "support": [], "ground": []}
 	var bodies := {}
 	for node: Node in root.get_children():
@@ -477,12 +486,14 @@ func _check_housing_faces(h: WorldHarness, source: String) -> String:
 			bodies[role] = node
 		else:
 			return "unsupported housing producer child"
+	# The installer appends retained ground_visual meshes after family meshes.
+	meshes.support.append_array(retained.meshes)
 	for node: Node in h.main.find_children("*", "StaticBody3D", true, false):
-		if source in node.get_meta("source_keys", []) and node.collision_layer != 0 and node.get_parent() != root:
+		if source in node.get_meta("source_keys", []) and node.collision_layer != 0 and node.get_parent() != root and node != retained.body:
 			return "additional active housing source body"
 	for role: String in meshes:
 		if meshes[role].is_empty():
-			if role in ["wall", "roof"] or bodies.has(role):
+			if role == "wall" or (role == "roof" and not retained_quality) or bodies.has(role):
 				return "missing positive housing role coverage"
 			continue
 		if not bodies.has(role):
@@ -508,7 +519,14 @@ func _check_housing_faces(h: WorldHarness, source: String) -> String:
 		var roof_up := 0
 		var roof_down := 0
 		for mesh: MeshInstance3D in meshes[role]:
-			var one := StudyGeometry.collect(mesh.mesh, [mesh.transform], StudyGeometry.MESH_GET_FACES)
+			var pose := mesh.transform
+			if mesh in retained.meshes:
+				pose = Transform3D.IDENTITY
+				var ancestor: Node3D = mesh
+				while ancestor != null:
+					pose = ancestor.transform * pose
+					ancestor = ancestor.get_parent() as Node3D
+			var one := StudyGeometry.collect(mesh.mesh, [pose], StudyGeometry.MESH_GET_FACES)
 			if not one.ok:
 				return "housing get_faces collection failed: " + str(one.errors)
 			# The installer first stores transformed vertices in a packed array,
@@ -589,3 +607,110 @@ func _check_station48_indexed(h:WorldHarness,source:String) -> String:
 			else:return "unsupported Station48 visual producer"
 	print("PASS: Station48 complete indexed wall/roof/entry native geometry")
 	return ""
+
+
+# This source deliberately retains the quality producer's separate roof body.
+# Its draped ground/shrubs had no legacy contacts, but the family installer now
+# appends them to FamilyContact_support. LAND itself remains a separate owner.
+func _check_northpoint1232_retained(h: WorldHarness, family: Node3D, source: String) -> Dictionary:
+	var result := {"error": "", "meshes": [], "body": null}
+	if source != "w96215673":
+		result.error = "mixed quality producer requires its exact source"
+		return result
+	var wall_key := "building:" + source + ":wall"
+	var roof_key := "building:" + source + ":roof"
+	var wall_root := family.get_parent() as Node3D
+	if wall_root == null or wall_root.name != "Northpoint1232LiveWall" or wall_root.get_meta("source_keys", []) != [source] or wall_root.get_meta("derived_object_key", "") != wall_key or wall_root.get_meta("receiver_kind", "") != "building_wall" or wall_root.is_set_as_top_level() or wall_root.global_transform != Transform3D.IDENTITY:
+		result.error = "retained quality wall owner differs"
+		return result
+	for child: Node in wall_root.get_children():
+		if child == family:
+			continue
+		if child is MeshInstance3D:
+			var mesh := child as MeshInstance3D
+			var role := str(mesh.get_meta("physical_role", ""))
+			if mesh.get_meta("source_keys", []) != [source] or mesh.get_meta("derived_object_key", "") != wall_key or mesh.is_set_as_top_level() or not mesh.transform.is_finite():
+				result.error = "retained quality wall mesh ownership/placement differs"
+				return result
+			if role == "ground_visual":
+				if not mesh.is_visible_in_tree() or mesh.layers != 1 or mesh.has_meta("family_role"):
+					result.error = "retained ground visual classification differs"
+					return result
+				result.meshes.append(mesh)
+			elif role not in ["wall", "detail"] or mesh.visible:
+				result.error = "unexpected visible legacy wall/detail geometry"
+				return result
+		elif child is StaticBody3D:
+			if child.get_meta("source_keys", []) != [source] or child.get_meta("derived_object_key", "") != wall_key or child.get_meta("physical_role", "") not in ["wall", "detail"] or child.collision_layer != 0 or child.collision_mask != 0 or child.is_in_group("spray_receiver_wall"):
+				result.error = "legacy wall/detail body not safely superseded"
+				return result
+		else:
+			result.error = "unknown retained wall-owner child"
+			return result
+	if result.meshes.is_empty():
+		result.error = "missing positive retained ground/support coverage"
+		return result
+	var roofs: Array[Node3D] = []
+	for node: Node in h.main.find_children("Northpoint1232LiveRoof", "Node3D", true, false):
+		roofs.append(node as Node3D)
+	if roofs.size() != 1:
+		result.error = "missing or duplicate retained quality roof"
+		return result
+	var roof := roofs[0]
+	if roof.get_meta("source_keys", []) != [source] or roof.get_meta("derived_object_key", "") != roof_key or roof.get_meta("receiver_kind", "") != "none" or roof.is_set_as_top_level() or roof.global_transform != Transform3D.IDENTITY:
+		result.error = "retained quality roof owner differs"
+		return result
+	var roof_meshes: Array[MeshInstance3D] = []
+	var body: StaticBody3D
+	for child: Node in roof.get_children():
+		if child is MeshInstance3D:
+			var mesh := child as MeshInstance3D
+			if mesh.get_meta("source_keys", []) != [source] or mesh.get_meta("derived_object_key", "") != roof_key or mesh.get_meta("physical_role", "") != "roof" or not mesh.is_visible_in_tree() or mesh.layers != 1 or mesh.is_set_as_top_level() or not mesh.transform.is_finite():
+				result.error = "retained roof visual identity/placement differs"
+				return result
+			roof_meshes.append(mesh)
+		elif child is StaticBody3D and body == null:
+			body = child as StaticBody3D
+		else:
+			result.error = "unknown or duplicate retained roof child"
+			return result
+	if body == null or roof_meshes.is_empty():
+		result.error = "missing positive retained roof native coverage"
+		return result
+	if body.get_meta("source_keys", []) != [source] or body.get_meta("derived_object_key", "") != roof_key or body.get_meta("receiver_kind", "") != "none" or body.get_meta("physical_role", "") != "roof" or body.get_meta("opaque", false) != true or body.collision_layer != 5 or body.collision_mask != 0 or body.is_in_group("spray_receiver_wall") or body.transform != Transform3D.IDENTITY or body.is_set_as_top_level():
+		result.error = "retained roof body identity/placement/layer differs"
+		return result
+	var server_pose: Variant = PhysicsServer3D.body_get_state(body.get_rid(), PhysicsServer3D.BODY_STATE_TRANSFORM)
+	var owners := body.get_shape_owners()
+	if not server_pose is Transform3D or not server_pose.is_equal_approx(body.global_transform) or owners.size() != roof_meshes.size() or body.get_child_count() != owners.size():
+		result.error = "retained roof native coverage/server placement differs"
+		return result
+	for i in roof_meshes.size():
+		var owner = owners[i]
+		var holder := body.shape_owner_get_owner(owner) as CollisionShape3D
+		if body.is_shape_owner_disabled(owner) or body.shape_owner_get_shape_count(owner) != 1 or holder == null or holder.get_parent() != body or holder.transform != Transform3D.IDENTITY or holder.is_set_as_top_level() or not holder.shape is ConcavePolygonShape3D or not holder.shape.backface_collision:
+			result.error = "retained roof shape owner differs"
+			return result
+		var shape := holder.shape as ConcavePolygonShape3D
+		if shape.get_meta("source_keys", []) != [source] or shape.get_meta("derived_object_key", "") != roof_key or shape.get_meta("receiver_kind", "") != "none" or shape.get_meta("physical_role", "") != "roof" or shape.get_meta("opaque", false) != true:
+			result.error = "retained roof shape metadata differs"
+			return result
+		var index := body.shape_owner_get_shape_index(owner, 0)
+		if PhysicsServer3D.body_get_shape(body.get_rid(), index) != shape.get_rid() or PhysicsServer3D.body_get_shape_transform(body.get_rid(), index) != holder.transform:
+			result.error = "retained roof shape RID/pose differs"
+			return result
+		var mesh := roof_meshes[i]
+		# Exactly the quality-support producer's get_faces transform and cutoff.
+		var collection := StudyGeometry.collect(mesh.mesh, [mesh.transform], StudyGeometry.MESH_GET_FACES, 0.000000000001)
+		var compared := StudyGeometry.compare(collection, shape.get_faces(), collection.faces.size())
+		if not compared.ok:
+			result.error = "retained quality roof ordered visible/native faces differ"
+			return result
+	for visual: Node in h.main.find_children("*", "GeometryInstance3D", true, false):
+		if source in visual.get_meta("source_keys", []) and visual.is_visible_in_tree():
+			if visual.get_parent() != wall_root and visual.get_parent() != roof:
+				result.error = "additional retained source visual outside verified producers"
+				return result
+	result.body = body
+	print("PASS: retained1232 roof per-mesh native faces/RIDs; retained ground_visual included in family support, LAND separate")
+	return result

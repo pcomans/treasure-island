@@ -53,3 +53,29 @@ endpoint placement still needs receiver-relative preflight. No panorama pixels
 are retained.
 
 Shared sources, lifecycle caveats, and rights boundary: [D7 index](README.md).
+
+## Current family study addendum — 2026-10-10
+
+The packet above retains its September research context. Current runtime authority
+is WorldLoader → housing_family_live_attachment → housing_site_family, with this
+source registered in game/resources/housing_family/live_instances.json and its
+same-key JSON config. Catalog/legacy adapter names alone do not identify the final
+visible/native producer. Reuse the existing source-aware family and instance
+variants; no new base was needed.
+
+March2025 originals recovered and inspected on2026-10-10 confirm the physical
+west frontage. Current source normals identify runs10–13,15–18,20–23 as west;
+the historical packet's assignment of1,3–5,7 to west is reversed. This correction
+does not authorize protected20–23. The north-end original's1227 provider label
+is camera context: the frozen-source join identifies1232 on the image left.
+Its closed shallow gable supports envelope vocabulary, not unseen south/rear
+openings; the low utility form's exact membership remains unjoined/excluded.
+
+Study001 closes the south gable sky hole and east upper-wall breaks beneath the
+retained production roof, preserving canopy/frontage and source identity. The
+mixed native check covers that retained roof and ground as well as family bodies.
+Independent scoped visual, CODE, distinct progress and native/four-approach/
+spray/active REST-before-SAFE PASS plus full suite77858 terminal0 support L1 C.
+L2–5 remain U; broad plain site and protected blank-side completeness remain open.
+Historical recognition stays accepted, with no new credit, whole modern-quality
+or as-built claim. Reference pixels stay private outside Git/game/gallery.

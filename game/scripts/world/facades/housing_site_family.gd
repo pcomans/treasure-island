@@ -197,6 +197,13 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 		for triangle: Array in cfg.get("public_roof", {}).get("edge_triangles", []):
 			PARTS._mesh(root,[vec(triangle[0]),vec(triangle[1]),vec(triangle[2])],PackedInt32Array([0,1,2]),trim)
 	_tag_since(root,roof_begin,"roof")
+	# A retained production roof can own a varying boundary above the family
+	# wall top. Target-supplied closures reproduce that boundary as visible,
+	# source-owned wall geometry, without reviving the hidden legacy wall body.
+	var closure_begin := root.get_child_count()
+	for triangle: Array in cfg.get("retained_roof_wall_closures", []):
+		PARTS._mesh(root,[vec(triangle[0]),vec(triangle[1]),vec(triangle[2])],PackedInt32Array([0,1,2]),siding)
+	_tag_since(root,closure_begin,"wall")
 	for triangle: Array in cfg.get("shallow_band", {}).get("triangles", []):
 		PARTS._mesh(root,[vec(triangle[0]),vec(triangle[1]),vec(triangle[2])],PackedInt32Array([0,1,2]),siding)
 	var ground_begin := root.get_child_count()

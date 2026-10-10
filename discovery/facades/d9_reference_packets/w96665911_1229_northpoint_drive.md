@@ -33,3 +33,30 @@ Written observation: a present two-storey pale-gray horizontal-sided row with a 
 Minimum cue: **weathered pale-gray gable end, long repeated side cadence, and low end utility enclosure**. Close confusion: 1232/1237/1238/1240/1241/1242 Northpoint and other pale Site 12 rows. Share pale siding, roof, trim, window, door, board-up, and utility-enclosure modules; keep the gable/end-annex silhouette and weathering distribution local. Prototype/component blocker: **none for a detached ESE-side study; the frozen `building=abandoned` tag and observed closures do not authorize an occupancy claim**. Hidden sides, exact module endpoints, interiors, occupancy, and post-capture changes remain unknown. No panorama pixels are retained or proposed as texture inputs.
 
 Shared sources, lifecycle caveats, registry-role boundary, and rights boundary: [D9 index](README.md).
+
+## Current family study addendum — 2026-10-10
+
+The packet above retains its September research context. Current runtime authority
+is WorldLoader → housing_family_live_attachment → housing_site_family, with this
+source registered in game/resources/housing_family/live_instances.json and its
+same-key JSON config. Catalog/legacy adapter names alone do not identify the final
+visible/native producer. Reuse the existing source-aware family and instance
+variants; no new base was needed.
+
+March2025 frontage originals recovered and inspected on2026-10-10 show the
+physical ESE front: camera east of the exact frozen footprint looking west.
+Current normals for runs2,4–6,8 face ESE, correcting their historical WNW label.
+The cropped front supports a pale two-storey row, shallow roof/eaves, mixed
+openings, grass, entry paths and paved foreground. It does not establish the old
+packet's end-utility/annex claim; do not author that annex from this prose.
+The attempted north-end panorama did not isolate the target and was rejected.
+
+Study001 reuses existing local_ground and entry-path grammar for continuous lawn,
+all five entry connections and bounded paved forecourt; the existing footway,
+body/roof/openings, frozen roads and neighbouring footprints are preserved.
+Placement is production inference. The brown forecourt-to-road setback and plain
+materials remain substantive quality gaps. Independent scoped visual, CODE,
+distinct progress and native/four-approach/spray/active REST-before-SAFE PASS plus
+full suite77858 terminal0 support L1 C only. L2–5 remain U; rear/end openings are
+unobserved. Recognition remains not_evaluated; no new credit, whole modern-quality
+or as-built claim. Reference pixels stay private outside Git/game/gallery.

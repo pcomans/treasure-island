@@ -67,7 +67,24 @@ footprint is production inference, not as-built discrete stairs. Initial
 mechanics001 ASCENT HOLD is retained; the existing route is unchanged. Separate
 vaulted apparatus and neighbours are excluded. L3/L4/L5 and whole modern-quality
 remain unclaimed. Scoped architecture is published with this change.
-Current totals are L1:11 C/202 U, L2:8 C/205 U and20 C/1,045 U overall,
+**NP** Northpoint pair study001, 2026-10-10:1232 retained-roof upper-wall
+closure and1229 observed ESE lawn/entry-path/forecourt composition. Reuse:
+active source-aware housing_site_family with existing instance variants and
+1232 retained quality roof; no new base. Independent northpoint_family_visual
+and northpoint_site_visual_fresh scoped VISUAL PASS, distinct
+northpoint_progress_checkpoint_fresh PROGRESS PASS and four-runtime-path CODE
+PASS. Each target passed complete native geometry, four stock approaches,
+exact-source wall spray and active grounded input-released REST before SAFE.
+One full suite77858 reached actual terminal0 (6312ad), ALL TESTS PASSED,
+all49 scored fits and generator determinism PASS; global process absence
+fec2ee exit1 confirmed engine release. No bookkeeping rerun was required.
+L1 is complete for both; L2–5 remain U. Unseen rear/opposite-end openings,
+plain sites/materials and the1229 apron-to-road gap remain unresolved; no
+whole modern-quality or as-built claim. See current addenda in
+[1232 D7](facades/d7_reference_packets/w96215673_1232_northpoint_drive.md) and
+[1229 D9](facades/d9_reference_packets/w96665911_1229_northpoint_drive.md).
+1232 historical recognition remains accepted;1229 remains not_evaluated.
+Current totals are L1:13 C/200 U, L2:8 C/205 U and22 C/1,043 U overall,
 preserving213 units/1,065 cells and49 historical recognition credits.
 **U** no current stage-level conclusion established in this checklist pass.
 
@@ -189,7 +206,7 @@ before selecting another round.
 | physical-building:w96215670 / w96215670 | 1246/1397 Gateview Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215671 / w96215671 | 1244 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215672 / w96215672 | 1201 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96215673 / w96215673 | 1232 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215673 / w96215673 | 1232 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP — L1 envelope/site closure; scoped visual/CODE/progress/native/fit/spray/suite PASS; all-side L2 unknown |
 | physical-building:w96215674 / w96215674 | 1241 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215676 / w96215676 | 1143 Ozbourn Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215677 / w96215677 | 1206 Mariner Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -223,7 +240,7 @@ before selecting another round.
 | physical-building:w96665908 / w96665908 | 1203 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665909 / w96665909 | 1149 Ozbourn Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665910 / w96665910 | 1110 Hutchins Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96665911 / w96665911 | 1229 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96665911 / w96665911 | 1229 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP — L1 envelope/site closure; scoped visual/CODE/progress/native/fit/spray/suite PASS; all-side L2 unknown |
 | physical-building:w96665912 / w96665912 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665915 / w96665915 | 1109 Keppler Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665916 / w96665916 | 1242 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |

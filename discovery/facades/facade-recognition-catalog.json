@@ -6187,6 +6187,14 @@
           "review_id": "northern-1232-whole-building-quality-candidate-2026-09-23-001",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "northpoint-1232-upper-wall-closure-2026-10-10-study001",
+          "review_kind": "independent_scoped_architectural_game_art",
+          "status": "pass",
+          "numerator_effect": 0,
+          "scope": "Retained-roof south gable/east upper-wall closure; March2025 west-front and north-end reference vocabulary, not unseen opening completeness. Independent scoped VISUAL, distinct PROGRESS, CODE, native/four approaches/exact-source spray/active REST then SAFE PASS; full suite77858 terminal0 PASS. L1 complete; L2–5 unknown. No whole modern-quality or as-built claim; historical recognition status unchanged.",
+          "source_locator": "discovery/ISLAND_BUILDING_STAGE_CHECKLIST.md"
         }
       ],
       "anchor_source_key": "w96215673",
@@ -8310,7 +8318,16 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "northpoint-1229-frontage-site-2026-10-10-study001",
+          "review_kind": "independent_scoped_architectural_game_art",
+          "status": "pass",
+          "numerator_effect": 0,
+          "scope": "Observed ESE lawn/entry-path/forecourt composition; March2025 cropped frontage, not end/rear or annex evidence. Independent scoped VISUAL, distinct PROGRESS, CODE, native/four approaches/exact-source spray/active REST then SAFE PASS; full suite77858 terminal0 PASS. L1 complete; L2–5 unknown. No whole modern-quality or as-built claim; historical recognition status unchanged.",
+          "source_locator": "discovery/ISLAND_BUILDING_STAGE_CHECKLIST.md"
+        }
+      ],
       "anchor_source_key": "w96665911",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
