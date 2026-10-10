@@ -31,6 +31,8 @@ it. Unknown opening coverage is neither verified absence nor a proven motif defe
 
 YMCA’s 43 isolated dark pixels matched the projected side of a valid 14cm-deep pilaster only 0.234–0.236 pixels wide; the source wall was more than 1.16m behind those hits. Localize persistent marks against actual native faces before removing valid closure geometry. Keep this subpixel face shading separate from shadow-dependent stippling: the later combined sampling candidate improved edges but left hatching. Stored AA configuration is not an observed viewport getter, and a completed rendering API request is not GPU-state readback. See the completed mark-localization and diagnostic entries in [RETRO](discovery/RETRO_LOG.md).
 
+Northpoint1239 closure-only PASS filled a roof aperture but left broad flat infill beside detached narrow banks; it did not establish L1 whole shape. The subsequent joined full-depth gable study passed a fresh whole-roof/reference comparison. Name the accepted scope explicitly, and require the complete visible assembly before promoting its stage.
+
 ## Make visual critique actionable
 
 In the first two-case blind taste comparison, the owner preferred Reviewer X (Astra Medium) over Reviewer Y (Astra Light/low) in both cases: Case A because it gave instructions for improvement, Case B because “nearly indistinguishable” was the most useful feedback. This is limited evidence about those critiques, not proof that all art tasks need Medium. Lead with a direct pixel-grounded judgment of meaningful visible change and one concrete highest-value next change explaining how to improve. Plainly call an imperceptible change “nearly indistinguishable” when the shown pixels support that judgment. Feature inventories and caveats should not displace actionable direction; retain honest uncertainty without implying unsupported confidence.
@@ -293,6 +295,9 @@ Mersea018's temporary key selected only tagged bar metal with render bit8. Indep
 Mersea019 lost its first bounded capture to a mistyped Environment enum before world load. Check unfamiliar static constants and property names against the installed engine commit API before launching; a correct conceptual plan does not prevent a parse failure. A temporary in-memory PackedScene resource override also needs a retained strong reference until the actual instance loads, plus logging of the live environment; a resource-cache assumption alone is insufficient.
 
 ## Check pinned dependencies in the actual worktree
+
+Northpoint suite001 repeated this omission: all49 island fits passed before missing earcut/polygon-clipping stopped Node checks. Pinned repair and full suite002 passed. Copied donor .godot cache also omitted Mersea imported textures; clean island evidence required import repair. Before expensive runs, check required packages and actual imported destinations in the executing worktree, not another checkout or the presence of a cache directory. Preserve target-scoped usable captures and replace only compromised evidence.
+
 Mersea021's full suite passed its Godot stages but failed Node validation/determinism because /workspaces/content-main lacked earcut and polygon-clipping, despite devcontainer post-create running npm ci in its primary checkout. Existing-lockfile npm ci in the actual worktree resolved the prerequisite; the authorized full retry passed. Inspect dependency installation in a new worktree before expensive complete checks, preserve the pinned lockfile, and distinguish missing tools/packages from source-data failures.
 
 ## Update behavioral configuration checks with an approved configuration change
@@ -316,6 +321,8 @@ Study032's nonreceiver fascia covered unchanged wall-layer2 boards; its revised 
 Mersea042 owner satellite feedback exposed bocce lanes aligned to the wrong container axis and all long tables on one side of the planter despite prior broad-layout PASS. Compare actual north-up reference/render lane axes and relative furniture groups explicitly, not only roof footprints or regional greens. State image-date/anchor uncertainty; retain frozen building identities, infer reversible site placement, and verify changed furniture-support routes with the stock controller.
 
 ## Launch an engine as the tracked background command
+Northpoint1227 printed functional PASS but remained alive in futex wait; owned SIGTERM later produced terminal143. Keep the original handle until actual terminal and owned/global process absence, and record functional success separately from shutdown success. A tool timeout or printed PASS is not slot release.
+
 
 Building 3's first baseline wrapped `tools/godot` in `( … ) &` inside an already-backgrounded tool call. The tool reported completion while Godot was still rendering, and the real PID had to be recovered and polled before its EXIT 0 counted. The cause was the double backgrounding, which detached the engine from the tracked handle. Make the engine (plus its exit-status echo) the background command itself, record the actual Godot PID, and treat only that process's exit and absent Godot/Weston processes as terminal evidence.
 
@@ -429,6 +436,8 @@ Building1 study003 CODE review found that localizing the parent roof to the exac
 On 2026-10-07 the coordinator reported no recent B3 image inspection because its rollout filter counted `function_call` but omitted `custom_tool_call`/`exec`. Actual image batches ran15:22–15:36 and the reviewer completed33 originals. Inspect both tool forms and their actual inputs/results before distinguishing child execution from parent-only waiting; model metadata, inbound assignments and elapsed silence alone establish neither inspection nor failure. Never restart a retained live task on that incomplete inference.
 
 ## Check the complete placement column, not only wall-foot clearance
+
+Northpoint1227 repeated the overhead omission: its ground-clear spray pose lay beneath an existing carport and setup rejected safely. Source-facet attribution also showed the first approach stood on existing parking, not new lawn. Check the complete overhead column and the actual contact/rest facets against changed geometry; shared ground-body identity alone cannot prove traversal of a new surface. Corrected execution used exposed lawn facets and retained the original HOLD.
 
 B3 all-sides001 fit11333 passed four stock approaches but spray setup rejected “on top of a building” before placement. Its reused wall-foot pose was0.358m outward; new upper relief projects0.60m, while the maintained settle helper starts a downward ray atY300. This supports an overhead-hit explanation, but the actual rejected hit identity was not logged. A previously safe low capsule/target does not prove the highest-hit support/drop/camera column remains clear after facade changes. Trace all native geometry above the proposed standing location and preserve the existing setup/support gates; choose an outward-cleared pose or a proven unchanged donor with explicit coverage limits. Source preflight is not fresh runtime ray or spray proof.
 

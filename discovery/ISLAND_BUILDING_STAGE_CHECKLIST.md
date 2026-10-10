@@ -84,8 +84,29 @@ whole modern-quality or as-built claim. See current addenda in
 [1232 D7](facades/d7_reference_packets/w96215673_1232_northpoint_drive.md) and
 [1229 D9](facades/d9_reference_packets/w96665911_1229_northpoint_drive.md).
 1232 historical recognition remains accepted;1229 remains not_evaluated.
-Current totals are L1:13 C/200 U, L2:8 C/205 U and22 C/1,043 U overall,
+After NP, totals were L1:13 C/200 U, L2:8 C/205 U and22 C/1,043 U overall,
 preserving213 units/1,065 cells and49 historical recognition credits.
+**NP2** Second Northpoint pair, 2026-10-10:1227 terrain-draped E-front lawn
+retains existing paths/partial carport;1239 joined full-depth shallow-gable planes,
+ridge, stepped closures and slim eaves replace the initial flat-closure study.
+Existing housing_site_family and instance variants reused; no shared runtime change.
+Independent northpoint_second_family_visual_final scoped lawn PASS and
+northpoint_roof_visual_fresh current roof PASS support L1 C, with CODE and distinct
+northpoint_checkpoint_progress PASS. The fresh roof reviewer inspected all six
+target views, two March2025 references and five before/current island pairs:
+no visible broad regression. Native geometry, four stock approaches, exact-wall
+spray and active supported input-released REST before SAFE passed per target.
+1227 functional PASS ended with authorized terminal143 cleanup after shutdown
+stalled; that result remains distinct from1239 clean terminal0 and full-suite002
+clean terminal0 (59807/678931), all49 scored fits/validation/determinism PASS.
+Original suite001 missing-dependency failure remains retained after pinned repair.
+Protected wall ownership, frozen geometry and49 historical recognition credits
+are unchanged. Unseen openings, ordinary-view occlusion and simplified sites/
+materials keep L2–5 and modern whole-quality open; as-built fidelity is unclaimed.
+See [1227 D6](facades/d6_reference_packets/w96215653_1227_northpoint_drive.md) and
+[1239 D6](facades/d6_reference_packets/w96215658_1239_northpoint_drive.md).
+Current totals: L1:15 C/198 U; L2:8 C/205 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall24 C/1,041 U across213 units/1,065 cells.
 **U** no current stage-level conclusion established in this checklist pass.
 
 The retained34-building audit entries in [RETRO](RETRO_LOG.md) (2026-09-23,
@@ -190,11 +211,11 @@ before selecting another round.
 | physical-building:w96215649 / w96215649 | 1212 Mariner Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar — L1 envelope/site complete; roof/front/1212 end repaired; rear/opposite-end opening completeness unresolved (L2 U); scoped gates/suite PASS |
 | physical-building:w96215651 / w96215651 | 1202 Mariner Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215652 / w96215652 | 1220 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96215653 / w96215653 | 1227 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215653 / w96215653 | 1227 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP2 — L1 frontage lawn/composition; retained whole shape; scoped visual/CODE/progress/native/fit/spray/suite PASS; L2–5 unknown |
 | physical-building:w96215655 / w96215655 | 1312 Gateview Avenue | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215656 / w96215656 | 1224 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215657 / w96215657 | 1307 Gateview Avenue | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96215658 / w96215658 | 1239 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215658 / w96215658 | 1239 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP2 — L1 joined shallow-gable whole roof; scoped visual/CODE/progress/native/fit/spray/suite PASS; L2–5 unknown |
 | physical-building:w96215659 / w96215659 | 1234 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215660 / w96215660 | 1225 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215661 / w96215661 | 1222 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |

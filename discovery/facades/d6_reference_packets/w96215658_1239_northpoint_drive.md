@@ -56,3 +56,33 @@ required before live placement. No panorama pixels are retained or proposed as
 texture inputs.
 
 Shared sources, currentness caveats, and rights boundary: [D6 index](README.md).
+
+
+## Current bounded L1 study — 2026-10-10
+
+This addendum supersedes historical prototype-readiness limits only within the
+observed/inferred scope below. Existing shared housing_site_family and exact
+instance variant are reused. Dated March2025 exterior pixels were compared with
+actual source-world gameplay/context captures; references remain private.
+
+Full-depth paired shallow-gable planes now share a straight ridge, with deliberate
+stepped end closures and slim eaves. The covered original source roof remains;
+roof rise/axis/offset are production inference, not measured dimensions.
+
+Protected wall runs9,19–33 and existing openings/site remain unchanged. The
+photographed low north utility structure has unresolved ownership and is excluded.
+Neighbour canopy is not assigned to1239; hidden opening schedules remain unknown.
+
+Independent northpoint_roof_visual_fresh scoped VISUAL PASS, CODE and distinct
+PROGRESS PASS; native geometry/four stock approaches/exact-wall spray and active
+supported input-released REST before SAFE passed. Full suite002 (59807) reached
+clean terminal0, ALL TESTS PASS, all49 scored fits/validation/determinism; engine
+release confirmed.1227 functional PASS separately required authorized shutdown143
+after the process stalled; no clean1227 shutdown is implied. Original suite001
+missing pinned Node dependencies and its repair remain retained.
+
+L1 shape/site complete; L2–5 remain U. The initial1239 flat-closure scoped PASS
+did not establish whole roof shape; only the subsequent joined-roof review
+supports its L1 completion. Simplified finishes, unseen sides and ordinary-view
+occlusion keep modern whole-quality open. No as-built claim or new recognition
+credit; historical accepted status and exact wall-only spray ownership remain.

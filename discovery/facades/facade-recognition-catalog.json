@@ -4811,6 +4811,14 @@
           "review_id": "northern-1227-quality-candidate-2026-09-14-001",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "northpoint-1227-front-lawn-2026-10-10-study001",
+          "review_kind": "independent_scoped_architectural_game_art",
+          "status": "pass",
+          "numerator_effect": 0,
+          "scope": "Observed E-front lawn with preserved paths/partial carport; independent northpoint_second_family_visual_final scoped visual PASS. Protected wall runs0–3,12,18–21 and existing architecture unchanged. Functional native/fit/lawn-route/spray/active REST then SAFE PASS; authorized terminal143 shutdown retained. CODE/distinct PROGRESS and full suite002 terminal0 PASS, all49 scored fits/validation/determinism. L1 complete; L2–5 unknown. No whole modern-quality/as-built claim or new recognition; historical status retained.",
+          "source_locator": "discovery/ISLAND_BUILDING_STAGE_CHECKLIST.md"
         }
       ],
       "anchor_source_key": "w96215653",
@@ -5040,6 +5048,14 @@
           "review_id": "northern-1239-quality-candidate-2026-09-14-001",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "northpoint-1239-joined-whole-roof-2026-10-10-study001",
+          "review_kind": "independent_scoped_architectural_game_art",
+          "status": "pass",
+          "numerator_effect": 0,
+          "scope": "Joined full-depth shallow-gable roof/stepped closures; independent northpoint_roof_visual_fresh scoped VISUAL PASS with six target views, two March2025 references and five before/current island pairs. Protected wall runs9,19–33 unchanged; roof nonreceiver. Current native/fit/spray/active REST then SAFE and terminal0 PASS. CODE/distinct PROGRESS and full suite002 terminal0 PASS, all49 scored fits/validation/determinism. L1 complete; L2–5 unknown. No whole modern-quality/as-built claim or new recognition; historical status retained.",
+          "source_locator": "discovery/ISLAND_BUILDING_STAGE_CHECKLIST.md"
         }
       ],
       "anchor_source_key": "w96215658",

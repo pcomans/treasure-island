@@ -56,3 +56,33 @@ Rear modules, carport, short facets, and live endpoint placement remain
 blocked. No panorama pixels are retained or proposed as texture inputs.
 
 Shared sources, currentness caveats, and rights boundary: [D6 index](README.md).
+
+
+## Current bounded L1 study — 2026-10-10
+
+This addendum supersedes historical prototype-readiness limits only within the
+observed/inferred scope below. Existing shared housing_site_family and exact
+instance variant are reused. Dated March2025 exterior pixels were compared with
+actual source-world gameplay/context captures; references remain private.
+
+A continuous E-front lawn now fits around the retained longitudinal/entry paths
+and partial carport apron. Local terrain/visible-area elevations and exact new
+lawn facets were checked; dimensions and clipped outline are production inference.
+
+Protected runs0–3,12,18–21, roof, openings, screens and partial carport remain
+unchanged. Missing east ordinary capture and occluded end views limit complete
+frontage/all-side judgment.
+
+Independent northpoint_second_family_visual_final scoped VISUAL PASS, CODE and distinct
+PROGRESS PASS; native geometry/four stock approaches/exact-wall spray and active
+supported input-released REST before SAFE passed. Full suite002 (59807) reached
+clean terminal0, ALL TESTS PASS, all49 scored fits/validation/determinism; engine
+release confirmed.1227 functional PASS separately required authorized shutdown143
+after the process stalled; no clean1227 shutdown is implied. Original suite001
+missing pinned Node dependencies and its repair remain retained.
+
+L1 shape/site complete; L2–5 remain U. The initial1239 flat-closure scoped PASS
+did not establish whole roof shape; only the subsequent joined-roof review
+supports its L1 completion. Simplified finishes, unseen sides and ordinary-view
+occlusion keep modern whole-quality open. No as-built claim or new recognition
+credit; historical accepted status and exact wall-only spray ownership remain.
