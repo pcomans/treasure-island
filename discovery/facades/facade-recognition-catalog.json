@@ -5687,6 +5687,14 @@
           "review_id": "housing-family-nine-w96215668-2026-09-26",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "northpoint-1236-whole-shape-site-2026-10-10-study002",
+          "review_kind": "independent_scoped_architectural_game_art",
+          "status": "pass",
+          "numerator_effect": 0,
+          "scope": "Connected frontage lawn, footway and parking with all retained boarded architecture/roof unchanged. Independent northpoint_fourth_visual scoped VISUAL PASS; separate CODE/progress, current native/four approaches/new-site route/exact-source spray/active REST then SAFE PASS. General candidate-preference mechanics004 terminal0 and full suite00243732 terminal0 PASS, all49 scored fits/validation/determinism. Earlier north HOLDs and suite001 FAIL retained. L1 complete; L2–5 unknown. No whole modern-quality/as-built claim or new recognition; historical accepted status preserved.",
+          "source_locator": "discovery/facades/d6_reference_packets/w96215668_1236_northpoint_drive.md"
         }
       ],
       "anchor_source_key": "w96215668",
@@ -7080,6 +7088,14 @@
           "review_id": "northern-1240-quality-candidate-2026-09-22-001",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "northpoint-1240-whole-shape-site-2026-10-10-study003",
+          "review_kind": "independent_scoped_architectural_game_art",
+          "status": "pass",
+          "numerator_effect": 0,
+          "scope": "Joined shallow whole-footprint roof and corrected connected front/north lawn to the curved-road edge; protected architecture, openings and carport retained. Independent northpoint_third_family_code in a separately assigned VISUAL role passed all five available study003 target views and five island pairs against March2025 references. Separate CODE, native/four approaches/corrected-site route/exact-source spray/active REST then SAFE and full suite00243732 terminal0 PASS, all49 scored fits/validation/determinism. Earlier wrong-end correction and suite001 FAIL retained. L1 complete; L2–5 unknown, east framing omitted and north oblique. No whole modern-quality/as-built claim or new recognition; historical accepted status preserved.",
+          "source_locator": "discovery/facades/d7_reference_packets/w96215688_1240_northpoint_drive.md"
         }
       ],
       "anchor_source_key": "w96215688",

@@ -19029,3 +19029,100 @@ Own RETRO draft: Worked — direct raised-context comparisons made the complete 
 - Worked: accepted frozen runtime evidence and existing gallery delivery supported one nine-file closure; two scoped catalog records leave all claims/protected scopes and49 historical credits unchanged. Checklist now26 C/1,039 U, L1 17 C/196 U; L2–5 preserved. Consolidated actual named retros and moved author site-correction bullet out of independent visual section.
 - Did not: previous DOC queue never materialized checklist/catalog/D6 edits after all gates passed; transfer was necessary. My combined read again exceeded useful output, so narrowed exact source/reference fields before editing. Initial catalog serialization reformatted unrelated compact stairs/escapes; restored HEAD text outside the two target acceptance-record blocks before review. Changed historical header whitespace was also corrected.
 - Next: ROOT reviews this concrete patch, then explicit local commit GO; no test replay for documentation-only closure. Existing credential-helper12049 listener is absent, so no retry of inherited failed push or publication claim. Next major action is1236/1240 bounded whole-family readiness, not current finish polish.
+
+## northpoint_fourth_family_art — first study preflight, 2026-10-10
+
+Worked: reused the existing housing_site_family and retained whole-footprint roof/site author helpers; changes are confined to 1236 local_ground and 1240 public_roof/local_ground. Actual LAND/visible-area drape, road/building/paving subtraction and consumed Float32 winding were checked before render. Did not: first shared building_shots invocation exited1 at parse because the fresh worktree could not resolve WorldHarness members; no screenshot or fidelity claim results. The source-roof and new-roof projected areas differ by0.004497m² and remain for independent interpretation. Next: initialize the worktree import cache once, then inspect first coherent source pixels before refinement. No fit/suite/acceptance or commit performed.
+
+First coherent captures now complete:1236 study002 handle26028 terminal0(d47bc1),1240 study001 handle63699 terminal0(91807d); each shared screenshotsPASS, actual Godot/Weston PID scans empty after terminal. Actual renderer AMD Radeon780M Graphics RADV PHOENIX/Wayland. Initial context/ordinary self-inspection shows continuous1236 site and complete1240 roof with retained canopy/lawn. No independent acceptance inferred. Final two configs frozen for CODE/visual review; one capture remains. Required fresh-worktree import12800 terminal0(c4637c) resolved parse failure; preserve failed001 record.
+
+
+### northpoint_fourth_visual — independent first-study pixels, 2026-10-10
+- Worked: personally inspected all four retained March2025 reference originals, all six baseline/current target views per building and all five island pairs per building after supplied terminal/release evidence. Recovered camera/frozen-source joins kept Google camera-address UI separate from target attribution. Whole1240 roof planes, stepped ends and setting were judged together, independently of mechanical1236 HOLD.
+- Did not:1240 study001 fixes the open roof but its ordinary north view still leaves the broad uncovered front/north road-edge domain brown; reference north-site04 shows connected lawn. Current east framing is neighbour-obscured and no longer matches baseline framing, limiting complete-front comparison.1236 retained unknown rear/end openings keep all-side quality unresolved.
+- Next: one bounded1240 target-owned front/north lawn correction to actual road/parking edge, subtracting retained paths and buildings, while preserving the coherent shallow roof/carport. Reuse unchanged1236 pixels and island evidence; re-review the complete corrected1240 assembly, not just added green area. Scoped1236 visualPASS/L1 supported conditional separate mechanics/suite;1240 visualREWORK/L1 open. No recognition credit, all-side L2 or as-built acceptance.
+
+## 2026-10-10 — northpoint_fourth_mechanics shared approach consistency round
+
+- Worked: bounded10-line shared-driver change reuses the strict native wall RID/shape/side-face ray and existing1.5m arrival distance during active grounded walking; successful stops logged actual native hits before released supported REST and SAFE_FINAL. Fresh1236 mechanics002 retained complete donor routes/spray. South/west/east stopped at1.489868/1.460726/1.473633m and passed final arrival; native role ownership, local-site out/back and stock spray passed.
+- Did not: north never obtained the qualifying nearby wall ray and stopped at the same retained support trim as001; aggregate fit remains HOLD. Source trim localization is inference because the aggregate support contact log lacks a primitive hit. No claimed repair of the north failure or full-suite acceptance.
+- Next: preserve both failed runs and diagnose the north qualification gap with existing source geometry; do not loosen arrival or alter artwork to satisfy a test. One authorized engine invocation only: handle12578 terminal1/9b0700, global Godot/Weston absent afac86, released. Longer handle observations replaced repeated short polling.
+
+northpoint_fourth_family_art —1240 scoped site correction2026-10-10
+Independentvisual accepted1236 scoped art but held1240 site. Actual source perimeter begins station-10.68m relative to first mapped frame; initial lawn stopped-7m and omitted terminal frontage/end ground. Expanded FrontAndNorthLawn alone to-17m (~6.3m beyond true end), using-10.9m inner depth through actual curvedroad boundary. Extent is production_inference. Retained roof/architecture/carport/footway/parking/entrypaths unchanged; subtracts host/neighbors/roads/paving. All emittedvertices sampled actual LAND/visibleAREA+25mm across loaded adjacentchunks; finalFloat32 positive winding and whitespacePASS. Worked: source-projection diagnosis explained missingdomain directly. Didnot: initial inferredextent followed mappedfrontage rather than completefrozenbody. Next: compare siteextent to entire footprint before firstcapture, especially uncoveredend. Finalallowedcapture20548 running; no furtherauthorenginebudget afterward.
+
+Correction capture20548 terminal0(282ad7), actual Godot/Weston absent(3ee178), ENGINE RELEASE. Shared screenshotsPASS; east ordinary view omitted as no clear view. Selfinspection found expanded green at station-negative end in context, but closeup-north still shows brown near curvedroad at opposite end. Possible wrong association of reviewer near-end pixels with source stationnegative; REWORK closure unclaimed. Budget4/4exhausted, source frozen pending independentvisual.
+
+## 2026-10-10 — northpoint_fourth_mechanics source-only wall-span preflight
+
+- Worked: retained the full native corridor and existing centre arrival check, then added source-agnostic lateral qualification at the recovered support-grade chest using the actual stock capsule radius. Parallel rays target the selected native centre-hit plane and end only one existing safe margin beyond it; same wall RID/shape/normal/plane required.
+- Did not: the initial proposed all-three1.5m ray limit would penalize valid oblique walls. CODE clarification corrected that design before implementation; only centre distance retains the existing arrival limit.
+- Next: independent CODE reviews the actual23-line addition before any engine proof. Whitespace passed; no engine, config, controller or acceptance mutation. Prior north001/002 HOLDs remain.
+
+### northpoint_1240_end_art — positive-end lawn correction, 2026-10-10
+- Worked: reused the existing source-clipped housing-site author and the exact public frame; retained March2025 north-site04 pixels and source mapping identify reference-right as positive station beyond33.2455. Changed only1240 FrontAndNorthLawn triangles, adding station33..43 through the actual curved road boundary, subtracting frozen footprints/paving/entry paths, and draping actual LAND/visibleAREA+25mm. Final Float32 finite positive triangles and other-field preservation passed.
+- Did not work: inherited study002 extended the opposite end; its brown reference-right corner remained visible. No claim about prior author's reasoning beyond that retained source/pixel evidence. The new extent is production inference, not surveyed.
+- Next: bind screen direction to the existing source frame and terminal before editing an end-specific domain. Retain the existing failed studies and use the single authorized actual-world study003 for independent review; mechanical/whole-unit acceptance remains separate.
+- Actual result: study003 handle85289 terminal0/56fe41; owned/global engine processes absent04c329. Self-inspected north and northeast originals show green at the corrected curved-road end. Shared camera fallback moved the north pose and omitted east; keep comparison limits explicit. Source is frozen for independent review; engine slot released, one-capture budget consumed.
+
+## 2026-10-10 — northpoint_fourth_mechanics final source-world mechanics
+
+- Worked:1236 mechanics003 rejected the old narrow candidate with the stricter shared native span check and selected an existing native-wall anchor automatically. Stock north stopped at qualified1.486206m, rested safely and passed final arrival; four sides/native roles/site route/spray passed.65900terminal0/6d1bc7, engineabsence3ed779. Current1240 mechanics002 moved the route onto the corrected positive-end lawn at station38, crossing current facets279–282; allnative/fourapproach/outback/sprayRESTSAFE checks passed.15045terminal0/fc1015, engineabsencec9423b.
+- Did not: earlier1236 north001/002 failures remain failures; neither source-only pier proposal nor support-name matching established passage. Both final runs still report7 texture RIDs leaked during shutdown, without script errors.
+- Next: independent current-source/visual reviews and mandatory fullsuite remain separate; no extra target run. Freshworktree dependencies were missing, caught before suite; authorized npm ci completed0/5d45fd from unchangedlock, installed earcut3.2.3/polygon-clipping0.15.7. Existing import cache retained. Private npm-ci.log records operation; no package/lock/globalconfig changes.
+
+## 2026-10-10 — northpoint_fourth_mechanics mandatory suite001 HOLD
+
+- Worked: ran the complete supported tools/test.sh once after dependency preflight. Junk/import, behavior contracts, stock route QA, generated validation and determinism completed; no check weakened or skipped. Original11181 terminal1/62b798, owned/global suite/Godot/Weston absent690739, slot released.
+- Did not: shared island fit stopped at accepted w34313540 north with no safe candidate;47 remaining buildings untested. New capsule-span qualification rejects lane-0.25 at lateral-0.35, while other candidates mostly hit existing cardinal-lane drift guards. The1236/1240 local passes do not establish global compatibility or suite acceptance.
+- Next: independent source-cause review of the actual rejected span before any correction or rerun. Preserve full-suite001/run.log and target001/002 failures, freeze source apart from this retrospective entry.
+
+## 2026-10-10 — northpoint_fourth_mechanics general candidate preference proof
+
+- Worked: restored original mandatory corridor guards and moved broadspan into finite candidate preference. B3 used its first fully qualified fallback: native shape17 hit at(488.7128,5.088545,409.8904),1.455811m, then activeREST/SAFE/finalarrival; all4sidesPASS.87709terminal0/66447c, enginesabsentadfa8d.1236 mechanics004 chose the existing broadnativeanchor, retained1.486206m northarrival and passed native4roles/all4sides/siteoutback/spray.76827terminal0/d416a3, enginesabsent16758e.
+- Did not: the earlier mandatoryspan rule overconstrained legitimate B3articulation; full-suite001 remainsFAIL and prior1236HOLDs remainhistorical.
+- Next: independent actualdiff CODEPASS received; rerun mandatorysuite only on ROOTassignment. Concise lesson records why preference cannot become an unsupported safety condition. No artwork/controller/tolerance/exclusion changes.
+
+## 2026-10-10 — northpoint_fourth_mechanics bounded gallery delivery
+
+- Worked: preserved92 original embedded gameplay payloads/order and appended4 untouched1236study002/1240study003 originals in both existing gallery copies. New northpoint-fourth section labels WIP45abd38 unpublished, scopedvisual/targetmechanicsPASS and fullsuite rerunpending after retained001FAIL, unchanged26C/1039U and49/213credit.
+- Did not: no browserpixel inspection was assigned; verification establishes originalpayload preservation and HTTPdelivery, not a newvisualverdict.
+- Next: retain same existingserver. GET200 exactmatchesbothcopies, HEAD200, private referencepath404 (2cc4b3); no serverrestart or privateimage exposure. Fullsuite002 follows frozen source.
+
+## 2026-10-10 — northpoint_fourth_mechanics complete suite002 PASS
+
+- Worked: one authorized tools/test.sh rerun after the independently reviewed general preference correction and focused B3/1236 passes. Actual log reports islandloads/all49scored buildingsfit, generatedvalidation/determinism and ALL TESTS PASS. Original43732 terminal0/79015b; owned/global suite/Godot/Weston absent17b417, slot released. No source mutation during run.
+- Did not: islandstage buffered output, so its header alone supplied no progress/result; retained livehandle and actualprocessCPU evidence avoided treating silence as failure or rerunning. Earlier fullsuite001 remains failed evidence.
+- Next: bounded documentation/gallery closure only, preserving49historicalcredits and213units unless separately authorized. No extra engine invocation follows this pass.
+
+
+## northpoint_third_family_code — fourth-family independent CODE/progress, 2026-10-10
+
+- Worked: bounded changed-seam review reused protected architecture/roles and independently checked final Float32 ground, actual three-chunk LAND/visibleAREA contact, target ownership and stepped whole-roof joins. Current1240 positive-end correction changed only the lawn tops against its inherited source; sample station38/depth5 is covered atY3.012986918. Separate progress review recognized substantial complete-envelope/site gains while keeping unknown stages and modern whole quality open.
+- Did not: the first1240 correction extended the wrong signed end; source-camera/end projection was needed before another coherent capture. My early hard-span CODE pass did not predict valid articulated Box-wall approaches elsewhere; the mandatory suite exposed that overconstraint. Initial observer output also included unwanted image/coordination prefixes, corrected to plaintext executor metadata only. None supplied acceptance.
+- Next: project the photographed region into the complete source frame before selecting domains; make broad wall span a candidate preference, retain every original native safety/center guard and actual final stock arrival. Focused B3/1236 and suite002 now pass; preserve old1236 north HOLDs and suite001 FAIL. No reviewer source/controller/engine changes.
+
+## northpoint_third_family_code — separate independent1240 VISUAL, 2026-10-10
+
+- Worked: personally opened study003 north beside March2025 north-site04, then the remaining four target originals, front03 and five actual baseline/current island pairs. Connected green frontage now wraps the uncovered positive end to curved-road/paving; roof/body/carport remain coherent. Scoped VISUAL PASS supports L1 with mandatory mechanical/suite gates, independently of the code verdict.1236 first-review visual PASS remains retained.
+- Did not: north is oblique, east is absent/obscured and south/west show unobserved blank rear; no all-side or modern whole-quality/as-built acceptance follows. The former visual role received followup messages but performed no retained executor pixel work, so role transfer was required.
+- Next: retain useful actual contexts and explicit unknown sides; current fullsuitePASS permits only the authorized two L1 updates, with no recognition credit. Do not infer whole exterior fidelity from missing default views.
+
+## northpoint_third_family_code — shared preference CODE and coordination, 2026-10-10
+
+- Worked: actual diff separated same-plane span preference from unchanged mandatory descent/capsule/support/cardinal-lane/strict center errors. The first fully mandatory-safe fallback survives only when no broad candidate is found; finite existing order and stock1.5m final qualification remain. B3 uses legitimate articulated walls and1236 keeps its broad native anchor. Both focused proofs and current suite002 passed.
+- Did not: hard full-width plane qualification exceeded an arrival contract that stops the player1.5m away. Repeated dispatch failures were initially discussed as thread exhaustion, but four active roles followed by successful owner reuse support concurrency capacity instead; no lifetime cause is established.
+- Next: verify live capacity and retire unused roles safely before dispatch retries; check actual executor activity after reassignment. Preserve every failed attempt and active REST before SAFE. Existing private ordinary code-review.txt contains the detailed actor-owned review drafts; no author history was fabricated.
+
+## northpoint_third_family_code — bounded fourth-family DOC closure, 2026-10-10
+
+- Worked: existing1236 D6/1240 D7 notes, scoped catalog records and checklist provide one nine-path closure after current suite43732 terminal0/79015b. Only both L1 change to C;28C/1037U overall, L1 19C/194U,213 units and49 historical credits, claims/protected scopes and L2–5 remain unchanged. Actual named retros were consolidated without assigning reviewer work to authors.
+- Did not: a guessed checklist path failed once before the actual existing filename was located; broad file/HTML searches returned unnecessary output, narrowed to exact docs and parsed text for editing. Current unpublished status still requires the existing credential path to recover; no new push retry is authorized here.
+- Next: ROOT reviews the precise nine-file patch and explicit whitespace checks before integration. Continue the next evidence-backed whole-family architecture/site study rather than current finish polish; do not repeat completed gates for documentation alone.
+
+
+## northpoint_third_family_code — fourth-family integration, 2026-10-10
+
+- Worked: ROOT accepted the exact nine-file closure after current scoped visual/CODE/native/stock/site/spray and full-suite002 terminal0. Explicit file staging preserves unrelated next-family work; the source/test candidate remains frozen and no proof is replayed for docs alone. Own actual review/DOC retros are included under the correct actor name.
+- Did not: waiting for the new hourly review append would delay an already reviewed closure; ROOT interrupted that actor and reserved its private draft for the next round, preventing concurrent shared writes. Its early progress finding is separate from this committed record.
+- Next: observe the one commit's actual terminal/status, check the existing credential-helper listener once, and retain UNPUBLISHED if absent. Keep96 original gallery images and update status only. No new account, force push, engine run or unrelated staging.

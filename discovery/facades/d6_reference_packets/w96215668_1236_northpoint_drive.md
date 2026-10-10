@@ -56,3 +56,46 @@ remain protected; no neighbor schedule may fill them. No panorama pixels are
 retained or proposed as texture inputs.
 
 Shared sources, currentness caveats, and rights boundary: [D6 index](README.md).
+
+
+## Current whole-family shape/site study — 2026-10-10
+
+L1 complete within scoped game-art limits; L2–5 remain unknown. The existing
+housing_site_family base, exact source identity, mapped15–16,18,20,22–25 and
+protected complement are retained. Only local_ground changed: connected lawn,
+footway and parking fit actual LAND/visibleAREA +25mm and subtract roads,
+frozen footprints and retained paving. Boarded architecture and roof are unchanged;
+extents are production inference, not survey measurements.
+
+March2025 front01 and end-site02 originals remain private outside Git/runtime.
+The first pano above uses camera localXZ[-290.578,-846.512], heading116.2;
+Google1231 is camera context. [End/site pano](https://www.google.com/maps/@?api=1&map_action=pano&pano=00-N3fPi1WZHZamlYavrRA&heading=180&pitch=0&fov=90),
+camera37.8314982,-122.3739857, was recovered once after a retained failed attempt.
+No panorama pixels become textures. Frozen snapshot2026-08-27 remains authoritative.
+
+Actual baseline001 and coherent study00226028 terminal0/d47bc1, with runtime
+release, supported independent northpoint_fourth_visual scoped PASS: whole body,
+roof and connected site are coherent; six target views and five island pairs
+were compared with dated originals. Initial study001 parse failure5bbb71 remains
+retained; worktree import12800 terminal0/c4637c resolved setup once.
+Unknown rear/end openings prevent all-side or whole modern-quality acceptance.
+
+Fit north00137569 and00212578 exited1 with unchanged trim contact and no qualified
+wall arrival; active supported released REST before SAFE was retained. They were
+not relabeled. A source-proposed pier alone was not movement proof. The general
+shared driver now prefers broad native wall candidates while retaining the first
+candidate passing every original mandatory descent/capsule/support/strict-center
+check. Strict native wall arrival stays1.5m, with stock controls unchanged.
+Current mechanics00476827 terminal0/d416a3 and release16758e passed native wall,
+roof/support/ground coverage, all four stock approaches, changed-site out/back and
+exact opaque source-wall spray; actual north wall distance1.486206m, followed by
+supported grounded released zero active REST then SAFE and final arrival.
+
+Full-suite00111181 terminal1/62b798 exposed an overly mandatory same-plane span
+check on articulated Building3; that failure and47 then-untested buildings remain
+history. Source-reviewed preference correction passed B3 ordinary fit87709
+terminal0/66447c and current1236. Full-suite00243732 terminal0/79015b ended
+ALL TESTS PASS including all49 scored fits and validation/determinism; global
+absence17b417 confirms release. Separate CODE/source and progress reviews passed
+the bounded study; no additional recognition credit, whole modern/as-built claim
+or publication is supplied. Historical accepted claim remains unchanged.

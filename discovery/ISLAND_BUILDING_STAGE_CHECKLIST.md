@@ -134,11 +134,36 @@ end openings and obscured ordinary frontage prevent all-side or modern whole-qua
 claims; as-built fidelity remains unclaimed.1234 historical recognition and1225
 not_evaluated remain unchanged. See [1225 D6](facades/d6_reference_packets/w96215660_1225_northpoint_drive.md)
 and [1234 D6](facades/d6_reference_packets/w96215659_1234_northpoint_drive.md).
-Current totals: L1:17 C/196 U; L2:8 C/205 U; L3/L5:213 U each;
+After NP3, totals were L1:17 C/196 U; L2:8 C/205 U; L3/L5:213 U each;
 L4:1 C/212 U. Overall26 C/1,039 U across213 units/1,065 cells.
-Next: bounded whole-family L1 readiness for1236 w96215668 and1240 w96215688;
-inspect their current complete envelope/site and dated target references before
-assigning art. Their U cells establish no defect; no current-pair finish polishing.
+**NP4** Northpoint1236/1240 whole-family envelope/site study, 2026-10-10:
+1236 retains its boarded frontage and roof while connected lawn, footway and
+parking meet the road.1240 has a joined shallow whole-footprint roof and connected
+front/north lawn, including the corrected positive-station curved-road end.
+Independent northpoint_fourth_visual passed1236 study002; the separately assigned
+VISUAL role of northpoint_third_family_code passed1240 study003 after personally
+comparing both March2025 references, all five available target views and five
+baseline/current island pairs. North is oblique and east was omitted; unobserved
+rear/end openings keep L2–5 U. Separate source/CODE and progress reviews retained
+these limits; whole modern-quality, recognition and as-built acceptance are open.
+Current native/four-side fit/new-site out-and-back/exact source-wall spray passed
+with stock supported, grounded, input-released zero active REST before SAFE:
+1236 mechanics004 handle76827 terminal0/d416a3, release16758e;1240 mechanics002
+handle15045 terminal0/fc1015, releasec9423b.1240 route contact facets279–282 join
+the corrected positive-end lawn. Failed1236 north001/002 and initial shared
+mandatory-span suite00111181 terminal1 remain retained. General broad-wall
+candidate preference preserves all original mandatory guards and strict1.5m
+arrival; articulated B3 fallback87709 terminal0/66447c and1236 both passed.
+Full suite00243732 terminal0/79015b ended ALL TESTS PASS, all49 scored fits and
+world validation/determinism; owned/global engine absence17b417 establishes
+release. ROOT accepts these bounded L1 gates. Only both L1 become C; historical
+accepted claims and49 credits remain unchanged. See [1236 D6](facades/d6_reference_packets/w96215668_1236_northpoint_drive.md)
+and [1240 D7](facades/d7_reference_packets/w96215688_1240_northpoint_drive.md).
+Current totals: L1:19 C/194 U; L2:8 C/205 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall28 C/1,037 U across213 units/1,065 cells.
+Next: inspect the next compatible unknown whole-family L1 envelope/site against
+current originals and dated references before assigning art; U establishes no
+defect. Continue major architecture/site coverage rather than current-pair polish.
 **U** no current stage-level conclusion established in this checklist pass.
 
 The retained34-building audit entries in [RETRO](RETRO_LOG.md) (2026-09-23,
@@ -254,7 +279,7 @@ before selecting another round.
 | physical-building:w96215662 / w96215662 | 1139 Ozbourn Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215666 / w96215666 | 1215 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215667 / w96215667 | 1248/1395 Gateview Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96215668 / w96215668 | 1236 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215668 / w96215668 | 1236 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP4 — L1 connected frontage lawn/footway/parking; retained boarded architecture; scoped visual/CODE/native/fit/spray/suite002 PASS; L2–5 unknown |
 | physical-building:w96215669 / w96215669 | 1238 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215670 / w96215670 | 1246/1397 Gateview Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215671 / w96215671 | 1244 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -267,7 +292,7 @@ before selecting another round.
 | physical-building:w96215680 / w96215680 | 1219 Mariner Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar — L1 envelope/site complete; roof/front/1212 end repaired; rear/opposite-end opening completeness unresolved (L2 U); scoped gates/suite PASS |
 | physical-building:w96215682 / w96215682 | 1221 Mariner Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215685 / w96215685 | 1226 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96215688 / w96215688 | 1240 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215688 / w96215688 | 1240 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP4 — L1 joined shallow whole roof and corrected front/north lawn; scoped visual/CODE/native/fit/spray/suite002 PASS; L2–5 unknown |
 | physical-building:w96215690 / w96215690 | 1141 Ozbourn Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215691 / w96215691 | 1204 Mariner Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215693 / w96215693 | 1208 Mariner Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |

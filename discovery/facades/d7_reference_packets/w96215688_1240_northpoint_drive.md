@@ -52,3 +52,53 @@ steps local. Prototype blocker: **none for a detached ENE-side study**. No
 panorama pixels are retained.
 
 Shared sources, lifecycle caveats, and rights boundary: [D7 index](README.md).
+
+
+## Current whole-family roof/site study — 2026-10-10
+
+L1 complete within scoped game-art limits; L2–5 remain unknown. Existing
+housing_site_family reuse retains target mapped15–16,18–21,23–25 and protected
+complement, opening schedules and partial carport. Only public_roof/local_ground
+changed: complete joined shallow planes/stepped closures and connected lawn to
+actual road/paving edges. Roof is solid nonreceiver; source wall alone receives
+spray. Pitch, ridge position, lawn width and extent are production inference;
+source-footprint representation was checked without an exact-area claim.
+
+March2025 front03 and [north/site04](https://www.google.com/maps/@?api=1&map_action=pano&pano=-beLMMM0walkjEnahL2Rsg&heading=240&pitch=0&fov=90)
+were acquired2026-10-10 and remain private outside Git/runtime. Front03 uses the
+historical pano above; Google1239 is camera context, not target identity. North
+camera37.8312197,-122.3729121/localXZ[-169.013,-830.2375], heading240, projects
+to station29.1043/depth11.823. Reference-right is the positive-station end near
+source terminal33.25. Current config/source joins govern this study's retained
+frontage; historical side labels above do not authorize hidden-side remodeling.
+Frozen snapshot2026-08-27 remains authoritative; no reference pixels become textures.
+
+Baseline001, first study00163699 terminal0/91807d and wrong-end study00220548
+terminal0/282ad7 are retained. Independent first-study visual REWORK identified
+brown front/north ground despite the coherent new whole roof. Study002 expanded
+the negative end and did not close that gap. Current study00385289 terminal0/56fe41,
+release04c329, adds positive station33..43 through the actual curved-road edge,
+subtracting frozen footprints, roads, paths and paving. Final Float32 top winding
+is positive/noncollapsed and drape follows actual maxLAND/visibleAREA +25mm.
+
+Independent northpoint_third_family_code, in a separately assigned VISUAL role
+independent of both authors, personally compared north against north-site04,
+all five available target views, front03 and five baseline/current island pairs:
+SCOPED VISUAL PASS. Connected lawn now wraps the uncovered end to the curved
+road; complete shallow roof/body/carport remain coherent. Island pairs show no
+broad visible regression. North is oblique and east omitted as obscured; protected
+rear/end openings remain unobserved, so no all-side/modern/as-built acceptance.
+Separate source/CODE and progress review retained these limits.
+
+Current mechanics00215045 terminal0/fc1015, releasec9423b, passed native roof/wall/
+support/ground coverage, all four stock approaches, corrected positive-end lawn
+out/back, exact opaque source-wall spray and released supported grounded zero
+active REST before SAFE. Actual route contacts facets279–282 join the changed
+lawn beyond station33.25; old-site route proof was not substituted.
+Shared-driver suite00111181 terminal1 is retained: the mandatory broad-span rule
+rejected legitimate B3 wall articulation. Source-reviewed preference correction
+retains all original mandatory guards and strict1.5m final arrival. B3 ordinary
+fit and1236 current combined proof passed. Full-suite00243732 terminal0/79015b
+ended ALL TESTS PASS, all49 scored fits and world validation/determinism;
+owned/global absence17b417 confirms release. Historical accepted claim and
+49 island credits are unchanged; current closure is unpublished work on45abd38.

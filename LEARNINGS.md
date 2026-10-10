@@ -473,3 +473,22 @@ The Chapel ENE coordinate startup stayed black despite a resolved pano and tileH
 Mariner1219 baseline on2026-10-10 returned screenshot PASS, but closeup-south showed the camera inside/behind the opposite row, with reverse-facing windows and the intended frontage beyond it. The shared center-ray test did not establish a useful complete facade view; the exact camera/collider cause remains unmeasured. Inspect saved pixels before using a default side view for fidelity. Retain invalid originals and use the supported focused-view mechanism with a complete donor manifest when a side needs a clear public viewpoint; do not treat PASS or a filename as framing proof.
 
 The Mariner native adapter initially treated `StudyGeometry.collect`'s transform list as a chain; it actually enumerates separate instances. Independent source review caught this before execution. Mirror the producer's ordered packed-array operations: collect once with the mesh transform, then subtract body origin in the next pass. Also inspect the maintained invocation: shared `building_fit_test` needs rendering and rejects `--headless` before geometry collection. Run its proven rendered `tools/godot` command. Keep dependent capture in a separate command after a successful preflight terminal result; a multiline shell without fail-fast continued Mariner study001 despite an area assertion.
+
+## Bind site corrections to the photographed end before extending a domain
+
+Observed:1240 site study002 expanded the source station-negative lawn, yet its closeup-north still showed brown at the curved-road end identified by visual review. The retained reference camera projects near positive station29.1 and looks toward the positive end near33.25; the first correction instead extended the negative end. The later positive-end correction resolved the visible gap. Prevention: project both frozen end coordinates into the existing capture/reference orientation before selecting signed station bounds; a wider lawn at another end does not close the requested site gap.
+
+## Use broad wall coverage to rank approaches, not to redefine arrival
+
+The2026-10-10 capsule-width same-plane preflight let1236 avoid a retained window jamb but made full-suite001 reject accepted Building3/w34313540. Its articulated pylon legitimately exposes different canonical wall shapes and normals to the centre and lateral rays. Requiring one solid plane across the capsule exceeded the existing1.5m approach criterion. Keep every native capsule/support/centre-wall preflight guard mandatory, prefer broad candidates, and retain the first fully qualified fallback. Focused B3 preference001 then reached native shape17 at1.455811m and passed;1236 mechanics004 retained its broad-anchor PASS. Actual stock approach, released supported REST and final qualification remain mandatory. Full-suite00243732 terminal0 subsequently passed all49 scored fits and validation/determinism; retained suite001 failure is not erased.
+
+
+## Check live role capacity before retrying a dispatch
+
+On2026-10-10 several fresh/resumed role dispatches failed while root, code,
+mechanics and an unused visual role occupied all four active slots. After the
+unused visual role was safely interrupted, the existing end-art owner's bounded
+followup succeeded. This supports an active-concurrency constraint, not permanent
+or lifetime agent exhaustion. Inspect live roles, safely retire an unused role,
+and reuse the existing owner before retrying; preserve serialized engine ownership
+and independent review. A delivered coordination message is not executor activity.

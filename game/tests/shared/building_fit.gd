@@ -247,6 +247,7 @@ func _check_walls(box: AABB, own: Array[RID]) -> void:
 ## Start selection is read-only: an obstructed candidate never moves the player.
 func _walk_start(center: Vector3, side: Vector3, half_depth: float, half_width: float, own: Array[RID], wall_shapes: Dictionary, wall_faces: Array[Dictionary]) -> Dictionary:
 	var rejected: Array[String] = []
+	var fallback: Dictionary = {}
 	var across := Vector3(side.z, 0.0, -side.x)
 	# Preserve the original fifteen candidates before trying native solid-wall
 	# anchors. Every proposal uses the same complete preflight before placement.
@@ -279,14 +280,33 @@ func _walk_start(center: Vector3, side: Vector3, half_depth: float, half_width: 
 			if crossing.is_empty():
 				rejected.append(candidate + ("%.1f m: no qualified native wall crossing" % margin))
 				continue
-			var corridor_error := _preflight_corridor(descent.pose, crossing.position, -side, own, wall_shapes)
+			var endpoint: Dictionary = {}
+			var corridor_error := _preflight_corridor(descent.pose, crossing.position, -side, own, wall_shapes, endpoint)
 			if corridor_error != "":
 				rejected.append(candidate + ("%.1f m: %s" % [margin, corridor_error]))
 				continue
-			print("%sWALK_START side=%s candidate=%s at=%s margin=%.1f support=%s rejected=%s" % [_prefix, _side_name(side), proposal.label, xz, margin, (ground.collider as Node).get_path(), rejected])
-			print("%sWALK_TARGET side=%s at=%s body=%s shape=%s normal=%s" % [_prefix, _side_name(side), crossing.position, (crossing.collider as Node).get_path(), crossing.shape, crossing.normal])
-			return {"ok": true, "xz": xz, "destination": (crossing.position as Vector3) - side}
+			var preference := _wall_span_preference(endpoint.pose, crossing.position, -side, own, wall_shapes)
+			var result := {"ok": true, "xz": xz, "destination": (crossing.position as Vector3) - side,
+				"start_log": "%sWALK_START side=%s candidate=%s at=%s margin=%.1f support=%s rejected=%s" % [_prefix, _side_name(side), proposal.label, xz, margin, (ground.collider as Node).get_path(), rejected],
+				"target_log": "%sWALK_TARGET side=%s at=%s body=%s shape=%s normal=%s" % [_prefix, _side_name(side), crossing.position, (crossing.collider as Node).get_path(), crossing.shape, crossing.normal],
+				"preference_reason": preference}
+			if preference == "":
+				return _selected_walk_start(result, "preferred broad wall")
+			# Articulated or narrow walls can still satisfy every mandatory
+			# capsule/support/centre-wall check. Preserve the first such lane.
+			if fallback.is_empty():
+				fallback = result
+			print("%sWALK_PREFERENCE side=%s candidate=%s margin=%.1f reason=%s" % [_prefix, _side_name(side), proposal.label, margin, preference])
+	if not fallback.is_empty():
+		return _selected_walk_start(fallback, "first mandatory-qualified fallback")
 	return {"ok": false, "reason": "; ".join(rejected)}
+
+
+func _selected_walk_start(result: Dictionary, selection: String) -> Dictionary:
+	print(result.start_log)
+	print(result.target_log)
+	print("%sWALK_SELECTION mode=%s reason=%s" % [_prefix, selection, result.preference_reason])
+	return result
 
 
 ## Geometry proposes lanes, never arrival. Qualified native rays and full stock
@@ -410,7 +430,7 @@ func _preflight_descent(ground: Vector3) -> Dictionary:
 ## Read-only obstruction filter, not a replacement for the actual stock walk.
 ## Re-anchor to native support after each short sweep instead of extrapolating
 ## one local contact normal across the whole route.
-func _preflight_corridor(pose: Transform3D, wall: Vector3, inward: Vector3, own: Array[RID], wall_shapes: Dictionary) -> String:
+func _preflight_corridor(pose: Transform3D, wall: Vector3, inward: Vector3, own: Array[RID], wall_shapes: Dictionary, endpoint: Dictionary) -> String:
 	var player := _h.player
 	var up := player.up_direction.normalized()
 	var capsule := player.collision_shape.shape as CapsuleShape3D
@@ -483,7 +503,37 @@ func _preflight_corridor(pose: Transform3D, wall: Vector3, inward: Vector3, own:
 	# not a substitute for the completed native sweeps or this wall query.
 	if _distance_to_walls(params.from.origin, wall + inward, own, wall_shapes) > ARRIVAL_DISTANCE_M:
 		return "corridor endpoint lacks qualified native wall proximity"
+	endpoint.pose = params.from
 	print("%sWALK_CORRIDOR start=%s end=%s qualified_wall=%s step_length=%.4f steps=%d" % [_prefix, pose.origin, params.from.origin, wall, step_length, steps])
+	return ""
+
+
+## Prefer a broad wall over a narrow pier, but articulated wall planes are
+## legitimate approach targets. This ranks already safe candidates only.
+func _wall_span_preference(pose: Transform3D, wall: Vector3, inward: Vector3, own: Array[RID], wall_shapes: Dictionary) -> String:
+	var player := _h.player
+	var capsule := player.collision_shape.shape as CapsuleShape3D
+	var lateral := player.up_direction.normalized().cross(inward).normalized()
+	var chest := pose.origin + Vector3.UP
+	var center_hit := _wall_hit(chest, Vector3(wall.x + inward.x, chest.y, wall.z + inward.z), own, wall_shapes)
+	if center_hit.is_empty() or chest.distance_to(center_hit.position as Vector3) > ARRIVAL_DISTANCE_M:
+		return "corridor endpoint lost its qualified native wall"
+	var plane_normal: Vector3 = center_hit.normal
+	var plane_point: Vector3 = center_hit.position
+	var denominator := inward.dot(plane_normal)
+	if not plane_normal.is_finite() or not is_finite(denominator) or is_zero_approx(denominator):
+		return "corridor endpoint has no intersecting native wall plane"
+	for offset: float in [-capsule.radius, capsule.radius]:
+		var origin := chest + lateral * offset
+		var plane_distance := (plane_point - origin).dot(plane_normal) / denominator
+		if not is_finite(plane_distance) or plane_distance <= 0.0:
+			return "corridor capsule span leaves the selected wall plane"
+		var hit := _wall_hit(origin, origin + inward * (plane_distance + player.safe_margin), own, wall_shapes)
+		if hit.is_empty() or hit.rid != center_hit.rid or int(hit.shape) != int(center_hit.shape) \
+				or not (hit.normal as Vector3).is_equal_approx(plane_normal) \
+				or absf(((hit.position as Vector3) - plane_point).dot(plane_normal)) > player.safe_margin:
+			return "corridor capsule span lacks the selected native wall at offset %.6f" % offset
+		print("%sWALK_PREFLIGHT_WALL_SPAN offset=%.6f rid=%s shape=%d position=%s plane_distance=%.6f" % [_prefix, offset, hit.rid, int(hit.shape), hit.position, plane_distance])
 	return ""
 
 
@@ -857,6 +907,16 @@ func _walk_toward(target: Vector3, own: Array[RID] = [], wall_shapes: Dictionary
 		var at := _h.player.global_position
 		var remaining := Vector2(at.x, at.z).distance_to(Vector2(target.x, target.z))
 		_closest = minf(_closest, remaining)
+		# Use the final approach's qualified wall proximity while still walking,
+		# before forward input can carry the capsule into an opening's trim.
+		# Released active rest and the final arrival check remain authoritative.
+		if not wall_shapes.is_empty() and _h.player.is_physics_processing() and _h.player.is_on_floor():
+			var chest := at + Vector3.UP
+			var wall := _wall_hit(chest, Vector3(target.x, chest.y, target.z), own, wall_shapes)
+			if not wall.is_empty() and chest.distance_to(wall.position as Vector3) <= ARRIVAL_DISTANCE_M:
+				print("%sWALK_NEAR_WALL active=true grounded=true rid=%s shape=%d position=%s distance=%.6f player=%s" % [_prefix, wall.rid, int(wall.shape), wall.position, chest.distance_to(wall.position as Vector3), at])
+				_h.release_input()
+				break
 		# Stop on arrival, on reaching the building, or once the player has
 		# passed the target and is walking away from it.
 		if remaining < 0.5 or (_wall_touched if not wall_shapes.is_empty() else _touched_own(own)) or remaining > _closest + 1.0:
