@@ -15457,7 +15457,7 @@ Study004 identity clarification: owner later acknowledged the connection; ROOT v
 
 - Worked: controlled same-pose cold comparison isolated the local UPDATE_ONCE probe: first capture black with it, normal without it; all25 CPU noise images were already ready in both. Probe-disabled run exited0 without the earlier texture warnings. This avoids a screenshot-delay-only workaround.
 - Did not work: first diagnostic again hung after savedPASS, requiring authorized exact ownedPID termination (terminal143). Leak/hang association remains uncertain. Study005 bar relocation draft is unrendered and mechanically unverified; prior112stairs evidence is superseded.
-- Next: latest owner routing moves modeling to Claude Opus5.5 max. Hand off the stable draft and private evidence rather than restart setup; finish114platform terrain/capsule preflight, scoped runtime probe/glass correction, early005pixels and moved-flight stock tests. Both diagnostic slots consumed, neither new substantive art iteration used. No redundant import preparation in this round.
+- Next: latest owner routing moves modeling to Claude Opus 5.5 max. Hand off the stable draft and private evidence rather than restart setup; finish114platform terrain/capsule preflight, scoped runtime probe/glass correction, early005pixels and moved-flight stock tests. Both diagnostic slots consumed, neither new substantive art iteration used. No redundant import preparation in this round.
 
 ### worktree — Mersea routing resumption correction
 
@@ -16311,13 +16311,13 @@ Final commit setup: first git commit failed before creating a commit because thi
 
 ### 2026-10-06 — Building 2 first-study preparation (`/root/landmark_art`)
 
-- Worked: recovered the exact May2019 WSW panorama immediately with the maintained headed browser/full locator; two complementary April2017 visitor angles added the long-side rib/window organization. ROOT inspected originals before authoring, and baseline shared shots completed before the first source edit. Claude persistent Opus5.5/MAX model identity and terminal lifecycle were confirmed.
+- Worked: recovered the exact May2019 WSW panorama immediately with the maintained headed browser/full locator; two complementary April2017 visitor angles added the long-side rib/window organization. ROOT inspected originals before authoring, and baseline shared shots completed before the first source edit. Claude persistent Opus 5.5/MAX model identity and terminal lifecycle were confirmed.
 - Did not work: the existing recommendation had reference locators but no retained originals; several opposite-side coordinate requests resolved to occluded yards, an interior or no panorama. Those captures were excluded instead of counted toward sufficiency.
 - Next time: distinguish locator readiness from actual retained-pixel readiness at dispatch; prioritize the architectural question a new view can answer. Reuse dated useful views and keep unseen elevations explicitly conservative.
 
 ### 2026-10-06 — Building 2 early render and interrupted correction (`/root/landmark_art`)
 
-- Worked: the same persistent Claude Opus5.5/MAX session produced a coherent first source, and the shared parse/capture drivers delivered actual pixels before extended polish. Independent review isolated the consequential SSE height/depth mismatch, while preserving the useful front.
+- Worked: the same persistent Claude Opus 5.5/MAX session produced a coherent first source, and the shared parse/capture drivers delivered actual pixels before extended polish. Independent review isolated the consequential SSE height/depth mismatch, while preserving the useful front.
 - Did not work: the corrective Claude turn hit its session cap after partially replacing a snapshot-count guard, leaving a deleted constant referenced in metadata. The SSE correction never ran; the first visual gain remains held.
 - Next time: preserve terminal errors and inspect partial diffs before any engine call after a harness interruption. ROOT authorized only a metadata repair and one recovery parse; modeling waits for an explicit owner routing choice. The local preparation/render times are not a full workflow performance comparison.
 
@@ -17814,3 +17814,15 @@ Worked: representative before/final pixels beside owner references made architec
 - Worked: actual-worktree dependency preflight caught absent earcut before the engine run; locked npm ci --ignore-scripts (npm11.19.0, Node24.21.0) installed the pinned dependencies without package changes. One unchanged full suite25117 ended0 with ALL TESTS PASS,49 scored fits, Node validation and determinism. Private bash trace retained every nested test status=0; owned process absence preceded early engine release.
 - Did not: ordinary suite output alone omits nested exit statuses, as the separate Chapel timeout-like failure showed; that prior failed art run was not treated as this main-based harness gate.
 - Next: publish only these six documentation paths after exact index/whitespace review, preserving canonical dirty work and leaving Chapel architecture HOLD separate.
+
+### b2_final_integration — general Astra Low modeling routing, 2026-10-10
+
+- Worked: prepared a separate main-based harness patch after the Chapel local WIP checkpoint released source ownership. Updated active agreement, persisted entrypoints, reusable implementation role, skill and routing lesson to the owner's general Astra Low modeling / independent Sol High review instruction. Historical Claude frontmatter and executed-round facts remain explicitly historical/optional.
+- Did not: the first Chapel note scoped the override only to that pass; the owner clarified general routing. That committed WIP history is retained rather than rewritten or overlaid onto held art.
+- Next: dispatch named Codex art owners with explicit gpt-6-astra/low and independent gpt-6.1-sol/high reviewers; review and publish this isolated harness patch separately. No engine, art, account configuration, commit or push in preparation.
+
+### b2_final_integration — general Astra routing publication verification, 2026-10-10
+
+- Worked: installed missing pinned dependencies in the isolated worktree with locked npm ci --ignore-scripts, without package changes. One maintained full suite69711 ended0/ae8520 with ALL TESTS PASS, all49 scored building fits and Node validation/determinism; private trace retained all nine nested statuses0. Actual owned-process absence preceded early engine release.
+- Did not: a fresh checkout did not inherit installed Node modules; preflight caught that before costly checks. No new runtime failure or Chapel acceptance is claimed.
+- Next: retain explicit model/effort at direct Codex dispatch and separate independent reviews; publish only the six reviewed routing docs, preserving all other worktrees and historical model-run facts.

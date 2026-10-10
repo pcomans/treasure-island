@@ -7,6 +7,8 @@ description: Author reference-grounded Godot building art with a mandatory exist
 
 Before authoring any new building, compare it with existing assets and reuse a suitable shared base. Build reference-grounded geometry and facade art within the assignment; apply the texture guidance only to applicable surfaces.
 
+Current owner routing (2026-10-10): named Codex art owners model with `gpt-6-astra` / `low`; independent reviewers use `gpt-6.1-sol` / `high`. Follow [canonical routing](../../../AGENTS.md#bounded-subagent-execution); do not invoke Claude for current modeling. This general override is not limited to one building.
+
 ## Mandatory root boundary
 
 - The primary `/root` agent is an **ORCHESTRATOR ONLY**, never an executor. It may define the bounded task contract, assign named subagents, monitor and coordinate them, review returned evidence, accept or reject results, update plans and goals, and communicate with the user.

@@ -2,7 +2,7 @@
 
 Keep this a short, living guide to mistakes worth preventing. Update an applicable lesson when new evidence changes it; preserve uncertainty and useful gains. Routine execution history belongs in `discovery/RETRO_LOG.md`.
 
-Retain the owner-authorized routing in [AGENTS.md](AGENTS.md#bounded-subagent-execution): never use `ultra` for subagents; explicitly select effort. The current Mersea study uses the task-specific Astra Low modeling and Sol High review override in AGENTS. The general default since 2026-10-05 is modeling on Claude Opus 5.5 (the owner judged its Building 600 the most faithful of three), with textures from Codex via `tools/generate-texture`; see AGENTS.md for the current roles. The Astra/Sol notes below are historical. This small sample does not establish a universal quality, cost or speed ranking; lower Sol effort is untested.
+Retain the current owner-authorized [routing](AGENTS.md#bounded-subagent-execution): since 2026-10-10, general modeling uses direct named Codex GPT Astra (`gpt-6-astra`) Low art owners; independent reviews use GPT-6.1 Sol High. This replaces the former Claude default and is not only a Chapel/Mersea/Building2 exception. Keep root orchestration, explicit non-ultra dispatch, separate reviewers and existing gates. Do not mistake retained Claude role frontmatter for current GPT routing. Earlier model choices and comparisons below are historical evidence, not a universal quality/cost/speed claim.
 
 ## Do not promote one facade's finish to whole-building quality
 
