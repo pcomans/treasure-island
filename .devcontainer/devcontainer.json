@@ -9,7 +9,9 @@
   },
   "mounts": [
     "source=/run/user/1000/ssh-agent.socket,target=/ssh-auth-sock,type=bind,relabel=shared",
-    "source=treasure-island-godot,target=/opt/godot,type=volume"
+    "source=treasure-island-godot,target=/opt/godot,type=volume",
+    "source=treasure-island-claude,target=/home/vscode/.claude,type=volume",
+    "source=treasure-island-codex,target=/home/vscode/.codex,type=volume"
   ],
   "containerEnv": {
     "SSH_AUTH_SOCK": "/ssh-auth-sock"
