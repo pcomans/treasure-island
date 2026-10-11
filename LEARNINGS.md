@@ -652,3 +652,17 @@ and joins. Source winding/domain checks establish different properties from
 reference resemblance. Independent review of all eleven corrected views and the
 retained gable reference subsequently passed the bounded roof/exterior scope;
 this does not establish as-built fidelity or the separate full-suite result.
+
+## Start canopy routes outside the actual canopy frame
+
+1215's first stock-route setup settled vertically onto the canopy roof rather than
+land beneath it. A stepped source-local offset of10.5m also did not establish an
+outside start: near2's actual global outer edge was9.22m in the canopy frame.
+These were setup-domain failures, not evidence that required under-canopy walking
+was impossible. The corrected setup subsequently passed all eight bidirectional
+routes with natural exit0; retain the earlier setup HOLD separately.
+Before a canopy route, transform the proposed start into the actual canopy frame
+and check its outside-edge clearance and unobstructed descent to local land.
+Then preserve the required under-canopy arrivals/retreats and stock controller,
+contact, supported-rest and safe-final requirements; do not relax thresholds to
+compensate for a roof-supported start.
