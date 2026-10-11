@@ -1071,7 +1071,7 @@
   "clamp_pipe_to_eave": true,
   "dimensions": "production inference from dated visible frontage; hidden elevations retain plain source geometry",
   "reference_digest": "fa607c115be9b22b284cb78569ff146fa90490f9c8f19e04ea97be077b7f6fa8",
-  "study_notes": "Corrected canonical source-facing partition; observed four upper motifs per broad section, varied1203 widths, target-specific entry/privacy palette. Dimensions/cadence behind cars/vegetation inferred from shared family; no surveyed or hidden opening claim.",
+  "study_notes": "Corrected canonical source-facing partition; observed four upper motifs per broad section, varied1203 widths, target-specific entry/privacy palette. Dimensions/cadence behind cars/vegetation inferred from shared family; no surveyed or hidden opening claim. Study001 2026-10-11: reuse housing_site_family with two rear section and two terminal rear_frames; full two-story window motifs only. March2025 front and partial east/front corner support family association, not hidden schedules; undated Apple is layout only. Rear/end counts, dimensions and cadence are production_inference. All prior roof, frontage, palette, siding, site and source fields preserved; short step returns4/12 excluded. No new roof or whole-building acceptance claim.",
   "local_ground": {
     "walk-0": {
       "top_triangles": [
@@ -6512,5 +6512,942 @@
         0.28
       ]
     }
-  }
+  },
+  "rear_frames": [
+    {
+      "id": "rear-west",
+      "elevation_role": "rear",
+      "runs": [
+        2,
+        3
+      ],
+      "start": [
+        -237.652,
+        2.578,
+        -561.367
+      ],
+      "end": [
+        -222.959,
+        2.544,
+        -562.124
+      ],
+      "length_m": 14.712487824973708,
+      "tangent": [
+        0.9986754228648778,
+        0,
+        -0.05145288879798374
+      ],
+      "normal": [
+        0.05145288879798374,
+        0,
+        0.9986754228648778
+      ],
+      "top_y": 8.57,
+      "upper_windows": [
+        {
+          "station_m": 1.9126234172465821,
+          "local_station_m": 1.912623415198281,
+          "basis": {
+            "source_run": 2,
+            "start": [
+              -237.652,
+              2.578,
+              -561.367
+            ],
+            "end": [
+              -224,
+              2.541,
+              -562.071
+            ],
+            "length_m": 13.670139721304963,
+            "tangent": [
+              0.9986730405339819,
+              0,
+              -0.05149910786229039
+            ],
+            "normal": [
+              0.05149910786229039,
+              0,
+              0.9986730405339819
+            ]
+          },
+          "width_m": 1.65,
+          "height_m": 1.12,
+          "center_y": 7.49,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 5.443620495240272,
+          "local_station_m": 5.4436204894104865,
+          "basis": {
+            "source_run": 2,
+            "start": [
+              -237.652,
+              2.578,
+              -561.367
+            ],
+            "end": [
+              -224,
+              2.541,
+              -562.071
+            ],
+            "length_m": 13.670139721304963,
+            "tangent": [
+              0.9986730405339819,
+              0,
+              -0.05149910786229039
+            ],
+            "normal": [
+              0.05149910786229039,
+              0,
+              0.9986730405339819
+            ]
+          },
+          "width_m": 1.65,
+          "height_m": 1.12,
+          "center_y": 7.49,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 8.974617573233962,
+          "local_station_m": 8.974617563622699,
+          "basis": {
+            "source_run": 2,
+            "start": [
+              -237.652,
+              2.578,
+              -561.367
+            ],
+            "end": [
+              -224,
+              2.541,
+              -562.071
+            ],
+            "length_m": 13.670139721304963,
+            "tangent": [
+              0.9986730405339819,
+              0,
+              -0.05149910786229039
+            ],
+            "normal": [
+              0.05149910786229039,
+              0,
+              0.9986730405339819
+            ]
+          },
+          "width_m": 1.65,
+          "height_m": 1.12,
+          "center_y": 7.49,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 12.505614651227651,
+          "local_station_m": 12.50561463783491,
+          "basis": {
+            "source_run": 2,
+            "start": [
+              -237.652,
+              2.578,
+              -561.367
+            ],
+            "end": [
+              -224,
+              2.541,
+              -562.071
+            ],
+            "length_m": 13.670139721304963,
+            "tangent": [
+              0.9986730405339819,
+              0,
+              -0.05149910786229039
+            ],
+            "normal": [
+              0.05149910786229039,
+              0,
+              0.9986730405339819
+            ]
+          },
+          "width_m": 1.65,
+          "height_m": 1.12,
+          "center_y": 7.49,
+          "glazing": "blue",
+          "wall_receiver": true
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 1.9126234172465821,
+          "local_station_m": 1.912623415198281,
+          "basis": {
+            "source_run": 2,
+            "start": [
+              -237.652,
+              2.578,
+              -561.367
+            ],
+            "end": [
+              -224,
+              2.541,
+              -562.071
+            ],
+            "length_m": 13.670139721304963,
+            "tangent": [
+              0.9986730405339819,
+              0,
+              -0.05149910786229039
+            ],
+            "normal": [
+              0.05149910786229039,
+              0,
+              0.9986730405339819
+            ]
+          },
+          "width_m": 1.8,
+          "height_m": 1.05,
+          "center_y": 4.12,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 5.443620495240272,
+          "local_station_m": 5.4436204894104865,
+          "basis": {
+            "source_run": 2,
+            "start": [
+              -237.652,
+              2.578,
+              -561.367
+            ],
+            "end": [
+              -224,
+              2.541,
+              -562.071
+            ],
+            "length_m": 13.670139721304963,
+            "tangent": [
+              0.9986730405339819,
+              0,
+              -0.05149910786229039
+            ],
+            "normal": [
+              0.05149910786229039,
+              0,
+              0.9986730405339819
+            ]
+          },
+          "width_m": 1.8,
+          "height_m": 1.05,
+          "center_y": 4.12,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 8.974617573233962,
+          "local_station_m": 8.974617563622699,
+          "basis": {
+            "source_run": 2,
+            "start": [
+              -237.652,
+              2.578,
+              -561.367
+            ],
+            "end": [
+              -224,
+              2.541,
+              -562.071
+            ],
+            "length_m": 13.670139721304963,
+            "tangent": [
+              0.9986730405339819,
+              0,
+              -0.05149910786229039
+            ],
+            "normal": [
+              0.05149910786229039,
+              0,
+              0.9986730405339819
+            ]
+          },
+          "width_m": 1.8,
+          "height_m": 1.05,
+          "center_y": 4.12,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 12.505614651227651,
+          "local_station_m": 12.50561463783491,
+          "basis": {
+            "source_run": 2,
+            "start": [
+              -237.652,
+              2.578,
+              -561.367
+            ],
+            "end": [
+              -224,
+              2.541,
+              -562.071
+            ],
+            "length_m": 13.670139721304963,
+            "tangent": [
+              0.9986730405339819,
+              0,
+              -0.05149910786229039
+            ],
+            "normal": [
+              0.05149910786229039,
+              0,
+              0.9986730405339819
+            ]
+          },
+          "width_m": 1.8,
+          "height_m": 1.05,
+          "center_y": 4.12,
+          "glazing": "blue",
+          "wall_receiver": true
+        }
+      ],
+      "entries": [],
+      "inference": "production_inference: two-story domestic opening assemblies; hidden rear and terminal counts, dimensions and cadence are not surveyed or as-built."
+    },
+    {
+      "id": "rear-east",
+      "elevation_role": "rear",
+      "runs": [
+        5
+      ],
+      "start": [
+        -223.055,
+        2.547,
+        -563.883
+      ],
+      "end": [
+        -207.615,
+        2.578,
+        -564.685
+      ],
+      "length_m": 15.460815114346325,
+      "tangent": [
+        0.9986536858378824,
+        0,
+        -0.05187307357784256
+      ],
+      "normal": [
+        0.05187307357784256,
+        0,
+        0.9986536858378824
+      ],
+      "top_y": 8.57,
+      "upper_windows": [
+        {
+          "station_m": 2.0099059648650224,
+          "local_station_m": 2.0099059648650326,
+          "basis": {
+            "source_run": 5,
+            "start": [
+              -223.055,
+              2.547,
+              -563.883
+            ],
+            "end": [
+              -207.615,
+              2.578,
+              -564.685
+            ],
+            "length_m": 15.460815114346325,
+            "tangent": [
+              0.9986536858378824,
+              0,
+              -0.05187307357784256
+            ],
+            "normal": [
+              0.05187307357784256,
+              0,
+              0.9986536858378824
+            ]
+          },
+          "width_m": 1.65,
+          "height_m": 1.12,
+          "center_y": 7.49,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 5.72050159230814,
+          "local_station_m": 5.720501592308131,
+          "basis": {
+            "source_run": 5,
+            "start": [
+              -223.055,
+              2.547,
+              -563.883
+            ],
+            "end": [
+              -207.615,
+              2.578,
+              -564.685
+            ],
+            "length_m": 15.460815114346325,
+            "tangent": [
+              0.9986536858378824,
+              0,
+              -0.05187307357784256
+            ],
+            "normal": [
+              0.05187307357784256,
+              0,
+              0.9986536858378824
+            ]
+          },
+          "width_m": 1.65,
+          "height_m": 1.12,
+          "center_y": 7.49,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 9.431097219751258,
+          "local_station_m": 9.431097219751251,
+          "basis": {
+            "source_run": 5,
+            "start": [
+              -223.055,
+              2.547,
+              -563.883
+            ],
+            "end": [
+              -207.615,
+              2.578,
+              -564.685
+            ],
+            "length_m": 15.460815114346325,
+            "tangent": [
+              0.9986536858378824,
+              0,
+              -0.05187307357784256
+            ],
+            "normal": [
+              0.05187307357784256,
+              0,
+              0.9986536858378824
+            ]
+          },
+          "width_m": 1.65,
+          "height_m": 1.12,
+          "center_y": 7.49,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 13.141692847194376,
+          "local_station_m": 13.141692847194372,
+          "basis": {
+            "source_run": 5,
+            "start": [
+              -223.055,
+              2.547,
+              -563.883
+            ],
+            "end": [
+              -207.615,
+              2.578,
+              -564.685
+            ],
+            "length_m": 15.460815114346325,
+            "tangent": [
+              0.9986536858378824,
+              0,
+              -0.05187307357784256
+            ],
+            "normal": [
+              0.05187307357784256,
+              0,
+              0.9986536858378824
+            ]
+          },
+          "width_m": 1.65,
+          "height_m": 1.12,
+          "center_y": 7.49,
+          "glazing": "blue",
+          "wall_receiver": true
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 2.0099059648650224,
+          "local_station_m": 2.0099059648650326,
+          "basis": {
+            "source_run": 5,
+            "start": [
+              -223.055,
+              2.547,
+              -563.883
+            ],
+            "end": [
+              -207.615,
+              2.578,
+              -564.685
+            ],
+            "length_m": 15.460815114346325,
+            "tangent": [
+              0.9986536858378824,
+              0,
+              -0.05187307357784256
+            ],
+            "normal": [
+              0.05187307357784256,
+              0,
+              0.9986536858378824
+            ]
+          },
+          "width_m": 1.8,
+          "height_m": 1.05,
+          "center_y": 4.12,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 5.72050159230814,
+          "local_station_m": 5.720501592308131,
+          "basis": {
+            "source_run": 5,
+            "start": [
+              -223.055,
+              2.547,
+              -563.883
+            ],
+            "end": [
+              -207.615,
+              2.578,
+              -564.685
+            ],
+            "length_m": 15.460815114346325,
+            "tangent": [
+              0.9986536858378824,
+              0,
+              -0.05187307357784256
+            ],
+            "normal": [
+              0.05187307357784256,
+              0,
+              0.9986536858378824
+            ]
+          },
+          "width_m": 1.8,
+          "height_m": 1.05,
+          "center_y": 4.12,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 9.431097219751258,
+          "local_station_m": 9.431097219751251,
+          "basis": {
+            "source_run": 5,
+            "start": [
+              -223.055,
+              2.547,
+              -563.883
+            ],
+            "end": [
+              -207.615,
+              2.578,
+              -564.685
+            ],
+            "length_m": 15.460815114346325,
+            "tangent": [
+              0.9986536858378824,
+              0,
+              -0.05187307357784256
+            ],
+            "normal": [
+              0.05187307357784256,
+              0,
+              0.9986536858378824
+            ]
+          },
+          "width_m": 1.8,
+          "height_m": 1.05,
+          "center_y": 4.12,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 13.141692847194376,
+          "local_station_m": 13.141692847194372,
+          "basis": {
+            "source_run": 5,
+            "start": [
+              -223.055,
+              2.547,
+              -563.883
+            ],
+            "end": [
+              -207.615,
+              2.578,
+              -564.685
+            ],
+            "length_m": 15.460815114346325,
+            "tangent": [
+              0.9986536858378824,
+              0,
+              -0.05187307357784256
+            ],
+            "normal": [
+              0.05187307357784256,
+              0,
+              0.9986536858378824
+            ]
+          },
+          "width_m": 1.8,
+          "height_m": 1.05,
+          "center_y": 4.12,
+          "glazing": "blue",
+          "wall_receiver": true
+        }
+      ],
+      "entries": [],
+      "inference": "production_inference: two-story domestic opening assemblies; hidden rear and terminal counts, dimensions and cadence are not surveyed or as-built."
+    },
+    {
+      "id": "terminal-west",
+      "elevation_role": "rear",
+      "runs": [
+        0,
+        1
+      ],
+      "start": [
+        -238.259,
+        2.578,
+        -573.078
+      ],
+      "end": [
+        -237.652,
+        2.578,
+        -561.367
+      ],
+      "length_m": 11.726720342875083,
+      "tangent": [
+        0.051762128050474074,
+        0,
+        0.9986594425026413
+      ],
+      "normal": [
+        -0.9986594425026413,
+        0,
+        0.051762128050474074
+      ],
+      "top_y": 8.57,
+      "upper_windows": [
+        {
+          "station_m": 3.400748899433774,
+          "local_station_m": 3.400748897558533,
+          "basis": {
+            "source_run": 0,
+            "start": [
+              -238.259,
+              2.578,
+              -573.078
+            ],
+            "end": [
+              -237.7,
+              2.578,
+              -562.3
+            ],
+            "length_m": 10.792486506825034,
+            "tangent": [
+              0.051795292924062764,
+              0,
+              0.9986577229616315
+            ],
+            "normal": [
+              -0.9986577229616315,
+              0,
+              0.051795292924062764
+            ]
+          },
+          "width_m": 1.35,
+          "height_m": 1.12,
+          "center_y": 7.49,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 8.32597144344131,
+          "local_station_m": 8.325971438850052,
+          "basis": {
+            "source_run": 0,
+            "start": [
+              -238.259,
+              2.578,
+              -573.078
+            ],
+            "end": [
+              -237.7,
+              2.578,
+              -562.3
+            ],
+            "length_m": 10.792486506825034,
+            "tangent": [
+              0.051795292924062764,
+              0,
+              0.9986577229616315
+            ],
+            "normal": [
+              -0.9986577229616315,
+              0,
+              0.051795292924062764
+            ]
+          },
+          "width_m": 1.35,
+          "height_m": 1.12,
+          "center_y": 7.49,
+          "glazing": "blue",
+          "wall_receiver": true
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 3.400748899433774,
+          "local_station_m": 3.400748897558533,
+          "basis": {
+            "source_run": 0,
+            "start": [
+              -238.259,
+              2.578,
+              -573.078
+            ],
+            "end": [
+              -237.7,
+              2.578,
+              -562.3
+            ],
+            "length_m": 10.792486506825034,
+            "tangent": [
+              0.051795292924062764,
+              0,
+              0.9986577229616315
+            ],
+            "normal": [
+              -0.9986577229616315,
+              0,
+              0.051795292924062764
+            ]
+          },
+          "width_m": 1.35,
+          "height_m": 1.05,
+          "center_y": 4.12,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 8.32597144344131,
+          "local_station_m": 8.325971438850052,
+          "basis": {
+            "source_run": 0,
+            "start": [
+              -238.259,
+              2.578,
+              -573.078
+            ],
+            "end": [
+              -237.7,
+              2.578,
+              -562.3
+            ],
+            "length_m": 10.792486506825034,
+            "tangent": [
+              0.051795292924062764,
+              0,
+              0.9986577229616315
+            ],
+            "normal": [
+              -0.9986577229616315,
+              0,
+              0.051795292924062764
+            ]
+          },
+          "width_m": 1.35,
+          "height_m": 1.05,
+          "center_y": 4.12,
+          "glazing": "blue",
+          "wall_receiver": true
+        }
+      ],
+      "entries": [],
+      "inference": "production_inference: two-story domestic opening assemblies; hidden rear and terminal counts, dimensions and cadence are not surveyed or as-built."
+    },
+    {
+      "id": "terminal-east",
+      "elevation_role": "rear",
+      "runs": [
+        6,
+        7
+      ],
+      "start": [
+        -207.615,
+        2.578,
+        -564.685
+      ],
+      "end": [
+        -208.204,
+        2.578,
+        -576.128
+      ],
+      "length_m": 11.45814862881444,
+      "tangent": [
+        -0.051404464986499455,
+        0,
+        -0.9986779165373848
+      ],
+      "normal": [
+        0.9986779165373848,
+        0,
+        -0.051404464986499455
+      ],
+      "top_y": 8.57,
+      "upper_windows": [
+        {
+          "station_m": 3.3228631023561874,
+          "local_station_m": 3.3228631001701854,
+          "basis": {
+            "source_run": 6,
+            "start": [
+              -207.615,
+              2.578,
+              -564.685
+            ],
+            "end": [
+              -208.197,
+              2.578,
+              -576
+            ],
+            "length_m": 11.329958031696377,
+            "tangent": [
+              -0.051368239703254555,
+              0,
+              -0.9986797804851107
+            ],
+            "normal": [
+              0.9986797804851107,
+              0,
+              -0.051368239703254555
+            ]
+          },
+          "width_m": 1.35,
+          "height_m": 1.12,
+          "center_y": 7.49,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 8.135285526458253,
+          "local_station_m": 8.135285521106251,
+          "basis": {
+            "source_run": 6,
+            "start": [
+              -207.615,
+              2.578,
+              -564.685
+            ],
+            "end": [
+              -208.197,
+              2.578,
+              -576
+            ],
+            "length_m": 11.329958031696377,
+            "tangent": [
+              -0.051368239703254555,
+              0,
+              -0.9986797804851107
+            ],
+            "normal": [
+              0.9986797804851107,
+              0,
+              -0.051368239703254555
+            ]
+          },
+          "width_m": 1.35,
+          "height_m": 1.12,
+          "center_y": 7.49,
+          "glazing": "blue",
+          "wall_receiver": true
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 3.3228631023561874,
+          "local_station_m": 3.3228631001701854,
+          "basis": {
+            "source_run": 6,
+            "start": [
+              -207.615,
+              2.578,
+              -564.685
+            ],
+            "end": [
+              -208.197,
+              2.578,
+              -576
+            ],
+            "length_m": 11.329958031696377,
+            "tangent": [
+              -0.051368239703254555,
+              0,
+              -0.9986797804851107
+            ],
+            "normal": [
+              0.9986797804851107,
+              0,
+              -0.051368239703254555
+            ]
+          },
+          "width_m": 1.35,
+          "height_m": 1.05,
+          "center_y": 4.12,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 8.135285526458253,
+          "local_station_m": 8.135285521106251,
+          "basis": {
+            "source_run": 6,
+            "start": [
+              -207.615,
+              2.578,
+              -564.685
+            ],
+            "end": [
+              -208.197,
+              2.578,
+              -576
+            ],
+            "length_m": 11.329958031696377,
+            "tangent": [
+              -0.051368239703254555,
+              0,
+              -0.9986797804851107
+            ],
+            "normal": [
+              0.9986797804851107,
+              0,
+              -0.051368239703254555
+            ]
+          },
+          "width_m": 1.35,
+          "height_m": 1.05,
+          "center_y": 4.12,
+          "glazing": "blue",
+          "wall_receiver": true
+        }
+      ],
+      "entries": [],
+      "inference": "production_inference: two-story domestic opening assemblies; hidden rear and terminal counts, dimensions and cadence are not surveyed or as-built."
+    }
+  ]
 }
