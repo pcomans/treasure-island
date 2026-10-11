@@ -159,8 +159,8 @@ world validation/determinism; owned/global engine absence17b417 establishes
 release. ROOT accepts these bounded L1 gates. Only both L1 become C; historical
 accepted claims and49 credits remain unchanged. See [1236 D6](facades/d6_reference_packets/w96215668_1236_northpoint_drive.md)
 and [1240 D7](facades/d7_reference_packets/w96215688_1240_northpoint_drive.md).
-Current totals after M1204 closure below: L1:22 C/191 U; L2:9 C/204 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall32 C/1,033 U across213 units/1,065 cells.
+Current totals after BG reconciliation below: L1:24 C/189 U; L2:11 C/202 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall36 C/1,029 U across213 units/1,065 cells.
 Next: inspect the next compatible unknown whole-family L1 envelope/site against
 current originals and dated references before assigning art; U establishes no
 defect. Continue major architecture/site coverage rather than current-pair polish.
@@ -281,7 +281,7 @@ before selecting another round.
 | physical-building:w96215667 / w96215667 | 1248/1395 Gateview Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215668 / w96215668 | 1236 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP4 — L1 connected frontage lawn/footway/parking; retained boarded architecture; scoped visual/CODE/native/fit/spray/suite002 PASS; L2–5 unknown |
 | physical-building:w96215669 / w96215669 | 1238 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96215670 / w96215670 | 1246/1397 Gateview Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215670 / w96215670 | 1246/1397 Gateview Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | BG — whole architecture; materials/site fidelity open |
 | physical-building:w96215671 / w96215671 | 1244 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215672 / w96215672 | 1201 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215673 / w96215673 | 1232 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP — L1 envelope/site closure; scoped visual/CODE/progress/native/fit/spray/suite PASS; all-side L2 unknown |
@@ -291,7 +291,7 @@ before selecting another round.
 | physical-building:w96215678 / w96215678 | 1205 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215680 / w96215680 | 1219 Mariner Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar — L1 envelope/site complete; roof/front/1212 end repaired; rear/opposite-end opening completeness unresolved (L2 U); scoped gates/suite PASS |
 | physical-building:w96215682 / w96215682 | 1221 Mariner Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96215685 / w96215685 | 1226 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215685 / w96215685 | 1226 Bayside Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | BG — whole architecture; materials/site fidelity open |
 | physical-building:w96215688 / w96215688 | 1240 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP4 — L1 joined shallow whole roof and corrected front/north lawn; scoped visual/CODE/native/fit/spray/suite002 PASS; L2–5 unknown |
 | physical-building:w96215690 / w96215690 | 1141 Ozbourn Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215691 / w96215691 | 1204 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | M1204 — whole architecture; materials/site fidelity open |
@@ -451,6 +451,25 @@ are in [RETRO](RETRO_LOG.md). Rear/end schedules and exact pitch remain inferenc
 Pale/flat roof/glazing and broad brown site treatment keep materials/setting and
 whole modern fidelity open. L3–L5 remain U; no as-built/reference_recognizable
 acceptance or recognition credit is added.
-Current total **32 C /0 I /1033 U** across213 units/1065 cells;
-**L1:22 C /0 I /191 U; L2:9 C /0 I /204 U**. L3/L5 remain213 U each,
-L4 remains1 C/212 U;49 historical recognition credits retained.
+After M1204, totals were32 C/1033 U: L1 22C/191U, L2 9C/204U; later stages and49 credits unchanged.
+
+
+**BG**, 2026-10-11, retained-study stage reconciliation: independent Sol High
+whole-stage review explicitly passes L1/L2 for1226 Bayside `w96215685` and
+1246/1397 Gateview `w96215670` from actual all-side, raised, island and dated
+reference comparisons. Reuse unchanged corrected CODE and committed whole-roof/
+end/rear studies, not new architecture or recognition acceptance. Bayside's
+emitted-edge closure repair and Gateview's concave roof-domain repair retain
+their original HOLD history. Bayside end7091/rear86072 and Gateview end12523/
+rear76956 reached natural0 with native geometry/four approaches/source-bound
+end-rear sprays and active supported released REST before SAFE; respectively
+eight and ten bidirectional route pairs passed. Their full suites39340 and54228
+reached natural0, all49 scored fits/world validation/determinism PASS. Sources
+remain unchanged in20fccef, whose later suite89593 also passed. Retained private
+roots are `bayside1226-whole-study-20261011` and `gateview70-whole-study-20261011`;
+ordinary review/runtime outcomes are in [RETRO](RETRO_LOG.md). Inferred unseen
+pitch/opening schedules are not surveyed facts. Materials/site/whole fidelity
+remain open; L3–L5 and49 recognition credits remain unchanged.
+Current total **36 C /0 I /1029 U** across213 units/1065 cells;
+**L1:24 C /0 I /189 U; L2:11 C /0 I /202 U**. L3/L5 remain213 U each;
+L4 remains1 C/212 U. These are scoped stage conclusions, not catalog acceptance.
