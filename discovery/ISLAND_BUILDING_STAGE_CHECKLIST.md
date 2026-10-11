@@ -159,8 +159,8 @@ world validation/determinism; owned/global engine absence17b417 establishes
 release. ROOT accepts these bounded L1 gates. Only both L1 become C; historical
 accepted claims and49 credits remain unchanged. See [1236 D6](facades/d6_reference_packets/w96215668_1236_northpoint_drive.md)
 and [1240 D7](facades/d7_reference_packets/w96215688_1240_northpoint_drive.md).
-Current totals after M1223 below: L1:29 C/184 U; L2:18 C/195 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall48 C/1,017 U across213 units/1,065 cells.
+Current totals after B1205 below: L1:30 C/183 U; L2:19 C/194 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall50 C/1,015 U across213 units/1,065 cells.
 Next: inspect the next compatible unknown whole-family L1 envelope/site against
 current originals and dated references before assigning art; U establishes no
 defect. Continue major architecture/site coverage rather than current-pair polish.
@@ -179,6 +179,18 @@ provided inspected correct-source spray. Suite71058 natural0/fb2466 passed all49
 fits/world validation/determinism; actual global release7b00b5. Only L1/L2 C;
 materials/site/higher fidelity and recognition acceptance remain open. Study001 HOLD
 and its original images remain retained;213 inventory/49 historical credits unchanged.
+
+**B1205** 1205 Bayside whole-west-rear study001, 2026-10-11: independent
+CODE/L1/all-side L2 architecture PASS explicitly includes the retained complete
+segmented hip/front/site and deliberate blank terminal game-art treatment.
+Private `bayside1205-whole-study-20261011/independent-review.txt` compares all11
+study/baseline originals, dated target front and undated layout. Fourteen rear
+windows/seven entries are inferred; contributor rear/end views remain unbound.
+`focused-validation.txt`:17701 natural0/7b12a9/global8f3bd6, four native roles/four
+approaches/seven entry return pairs and inspected correct-source spray, active
+supported stopped REST before SAFE. Suite16570 natural0/824e37/globalcc16d5,
+all49 fits/world validation/determinism PASS. Only L1/L2 C; higher material/site,
+real rear/end fidelity and recognition acceptance remain open;213/49 preserved.
 
 The retained34-building audit entries in [RETRO](RETRO_LOG.md) (2026-09-23,
 `building_audit_01_17`, `building_audit_18_34`, `benchmark_recovery`) establish
@@ -302,7 +314,7 @@ before selecting another round.
 | physical-building:w96215674 / w96215674 | 1241 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215676 / w96215676 | 1143 Ozbourn Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215677 / w96215677 | 1206 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | MP — complete inferred rear/end openings; coherent whole roof (1206 repaired,1208 hip retained); independent CODE/L1/L2/scoped visual and current native/fit/spray/suite002 PASS; L3–5 open |
-| physical-building:w96215678 / w96215678 | 1205 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215678 / w96215678 | 1205 Bayside Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | B1205 — retained whole hip/front plus complete west rear; CODE/L1/all-side L2/native/7 entry pairs/spray/suite PASS; blank ends inferred, material/site/fidelity open |
 | physical-building:w96215680 / w96215680 | 1219 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | M1219 — whole rear/all-side architecture CODE/visual/native/suite PASS; windowless ends inferred, fidelity/material/site open |
 | physical-building:w96215682 / w96215682 | 1221 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | M1221 — whole-depth roof/rear CODE/all-side architecture/native/routes/spray/suite PASS; material/site/fidelity open |
 | physical-building:w96215685 / w96215685 | 1226 Bayside Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | BG — whole architecture; materials/site fidelity open |
