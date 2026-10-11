@@ -666,3 +666,19 @@ and check its outside-edge clearance and unobstructed descent to local land.
 Then preserve the required under-canopy arrivals/retreats and stock controller,
 contact, supported-rest and safe-final requirements; do not relax thresholds to
 compensate for a roof-supported start.
+
+
+## Check concave roof unions as well as individual face winding
+
+Gateview70's first roof study had finite, nondegenerate clockwise faces, yet
+triangles34/36 overlapped about4.6375m² on effectively the same plane and triangle36
+extended about0.7774m² outside the frozen stepped wall domain. A skipped concave
+corner caused the defect; replacing that triangle's first vertex with triangle34's
+terminal removed the large duplicate/outside region. Independent source rereview
+passed the repair with rounding-scale residuals; actual capture, native checks and
+full suite supplied separate evidence. In the existing preflight, compare projected
+roof union and pair overlap against the intended source wall-ring domain, checking
+shared concave corners and adjoining closures. Correct winding alone cannot prove
+coverage or containment; preserve legitimate roof insets and explicit intended
+geometry rather than imposing a universal roof/foundation match. No new validator,
+checksum gate or acceptance framework is needed.
