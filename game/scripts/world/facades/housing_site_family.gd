@@ -121,7 +121,7 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 						PARTS._panel(root,point+Vector3.UP*side*(height/2+0.025),t,n,Vector3(width+0.12,0.065,0.09),trim)
 				else:
 					PARTS._recessed_window(root,point,t,n,width,height,trim,dark,glass)
-				if recessed or is_rear:
+				if recessed or is_rear or bool(motif.get("wall_receiver", false)):
 					for child_index in range(motif_begin, root.get_child_count()):
 						var child := root.get_child(child_index)
 						child.set_meta("family_role", "support" if child.get_meta("construction_detail", "") == "door_threshold" else "wall")

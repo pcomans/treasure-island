@@ -639,3 +639,16 @@ frame. Delivery cause is unknown; this did not establish invalid files or bad
 source renders. Try one existing-original single-image recovery before requesting
 recapture. Do not change source, add checksum proof or rerun the engine solely
 to work around an incompletely delivered image.
+
+## Reevaluate pitch together with ridge placement after full-gable evidence
+
+1220's bound March2025 NW-end reference replaced an earlier front-only ridge
+inference. Centering the ridge while retaining the old1.1m rise produced a
+visibly shallow first-study gable; independent review requested a whole-roof
+pitch correction. When new evidence reveals the full roof depth, reassess both
+ridge placement and rise against the complete observed gable before capture.
+Apply a consistent inferred pitch across source sections and inspect both ends
+and joins. Source winding/domain checks establish different properties from
+reference resemblance. Independent review of all eleven corrected views and the
+retained gable reference subsequently passed the bounded roof/exterior scope;
+this does not establish as-built fidelity or the separate full-suite result.

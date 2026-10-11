@@ -20068,3 +20068,143 @@ Next: locate/acquire actual reference originals and consume ROOT sufficiency bef
 - Worked: actual author correction/capture and independent003 visual RETRO consolidated once; existing code/validator entries retained. Gallery139 originals preserves137 earlier payloads/order. Current CODE/scoped visual,61fit003 and full-suite-rear002 all49/determinism PASS support the exact six-path candidate.
 - Did not: cavity returns inherited exterior-facing winding when the visible side was the recess cavity; source/fit success alone had not established visible closure. Capture002 termination143 remains unexplained. No all-sideL2/modern-quality or new stage/recognition credit.
 - Next: integrate only the six authorized paths after whitespace; next pair requires retained target pixels before authoring, not assumed readiness from historical prose. No engine or test replay in this integration round.
+
+### housing_return_code_closure — independent 1202 complete-architecture study001 CODE
+- Worked: bounded config comparison against189cde3 and actual emitter/contact reads isolated two concrete DATA correction seams before another capture. CODE REWORK:48/56 closure triangles and56/56 pale edge triangles have positive cross dot against their actual source-wall outward normal, while the emitter preserves [0,1,2] and Godot needs clockwise outward. Swap vertices1/2 only for positive dots; eight tiny eave-transition closure triangles already have negative dots and must not be blindly reversed. All36 pitched planes already face sky. New near-3 front22/23 motifs are nonrecessed/front, therefore untagged and consumed as support, unlike new rear/end wall receivers. A config-only repair can preserve original near-3 and place only the nine added motifs in a clearly disclosed front-continuation opening-only rear_frames branch with elevation_role=rear, preserving actual source bases/normals and containment; otherwise a new shared tag option requires scope authorization.
+- Did not: author conventional-outward winding does not establish Godot-visible outward faces. Matching projected area alone cannot prove domain coverage; existing polygon-clipping source inspection then showed source-minus-target and target-minus-source both empty. Roof/edge resampling leaves a maximum0.477mm source-derived boundary difference, so no exact-watertight claim. Source-derived calculations are not native/mechanical execution or a visual verdict.
+- Next: combine the two bounded fixes in DATA, independently read back once, then consume fresh pixels/native/fit/spray/full-suite gates. All opening widths pass the emitter's source-run containment calculation; mapped/protected runs partition the actual26-run wall. Materials/siding/carport/local_ground and original near-1/near-2 remain unchanged; original near-3 motifs are retained. Only own RETRO edited; read-only Git used after ROOT clarification, no source/engine/browser or Git mutation.
+
+### housing_return_code_closure — independent corrected1202 CODE readback
+- Worked: focused actual patch readback gives CODE PASS. All56 closures and56 pale edge triangles now have negative cross dot against source-wall outward normals; all36 roof planes remain clockwise-up. Exactly nine genuinely added front22/23 motifs opt into boolean wall_receiver=true; no baseline front motif changed. The sole shared-emitter delta extends the existing post-emission role condition with a defaultfalse opt-in, leaving front decoration/recess/geometry and every unconfigured instance behavior unchanged. Complete glazing/door/reveal/trim assemblies reach the source-owned wall/spray bucket; actual _entry threshold metadata retains support. Existing mesh-derived double-sided contacts and ordered native comparison consume this role/orientation directly, without an adapter change.
+- Did not: ROOT correctly rejected my earlier front-as-rear routing suggestion; that workaround would have muddied side semantics. The approved explicit receiver opt-in fixes the demonstrated need while preserving actual front identity. Pre-fix study001 pixels are not post-fix evidence, and CODE does not establish runtime spray, collision, fidelity or exact seam closure.
+- Next: retain prior source-domain/containment and protected carport/site findings rather than repeating them, then consume fresh corrected render/mechanics and independent visual/progress/full-suite gates. Only own RETRO edited; read-only Git/source inspection and source-derived normal calculations, no source/engine/browser or Git mutation.
+
+### housing_return_code_closure — independent 1220 whole-exterior CODE
+- Worked: bounded baseline189cde3/config/emitter review gives CODE PASS. Actual Float32 vertices preserve clockwise-up/nondegenerate110 pitched triangles;112 exterior closures and112 fascia triangles face source-outward, and26 internal section closures face from the higher filled roof volume toward the lower side using actual adjacent roof heights. All21 observed-NW/inferred-NE/SE motifs pass complete source-run/vertical containment, retain honest end/rear identity and use boolean wall_receiver=true; existing role tagging makes complete assemblies source-owned wall/spray contacts. Front target, facade/materials/siding/broad band and ground/local_ground are unchanged; mapped/protected runs partition the actual wall and leave plain returns protected. Existing emitter also retains the normalized source roof plane, preserving its coverage under the raised envelope; no adapter/default change introduced here.
+- Did not: author area totals alone do not prove exact domain equality. Independent polygon-union comparison found only small boundary differences: Float32 source-minus-pitched area0.000329m2 and pitched-minus-source0.000983m2, consistent with rounded clipping limits rather than a whole missing region; one joined projected region and no source-domain neighbor intersections. Five-millimetre outward fascia is disclosed. These source calculations do not prove native containment, watertight joins, terrain fit, spray or visual quality, and unavailable rear/SE evidence remains explicit inference rather than fidelity.
+- Next: inspect the actual complete roof/end/rear composition and consume native/fit/spray, independent visual/progress and current full-suite gates; preserve inventory/credit without promotion from CODE alone. Reused the actual shared emitter/contact semantics and relevant roof/section lessons; no new script, framework, source/engine/browser or Git mutation. Only own RETRO edited, with read-only baseline/source inspection and arithmetic.
+
+### pair_fit_native — 2026-10-11 housing1202/1220 bounded mechanics
+- Worked: reused the complete maintained housing-get-faces/shared building_fit_test and prior rear-spray donor without driver/source edits. Four rendered fixed60 invocations passed complete live wall/roof/support/ground ordered native faces/server ownership, intended roof1202=537/1220=732 samples missing[], four stock approaches each and five active supported released stopped REST/SAFE pairs each. Fresh1202 run22 window,run22 door,rear window and1220 NW-end lower-window source-bound sprays placed; all four actual originals inspected as readable. Exact commands/plans/logs/results retained under private housing-three-study-20261010/pair51-52-validation.
+- Did not:1220 study001 visual roof-pitch REWORK arrived during the fourth run; its mechanical PASS is explicitly prerevision only, not fidelity or future-source proof.1202 roof samples0/23bad,wall/base0/18bad;1220roof0/13,wall/base0/15. Startup logged Vulkan1.4.335/Forward+/AMD Radeon780M and Wayland driver messages, not a dedicated DisplayServer getter. SevenTextureRID warnings persist; no script/error/failure lines. The driver accepts one spray per invocation, so each distinct spray carried its full standard fit; no extra bookkeeping runs or suite.
+- Next: reuse unchanged1202 proof and refresh only changed1220 risks after named author revision/independentCODE. Original handles consumed naturally0:95610/183926,32354/2d40b2,59051/e52ec0,19144/c4aead; absence220954,bdea6f,2d1bd1,bceccf preceded next invocation or final explicit SOURCE/ENGINE RELEASE. All4 authorized calls consumed; no Git,acceptance,fullsuite or extra engine work. Finite roof sampling and representative sprays do not prove every seam/receiver target or threshold-top walking.
+
+### housing_return_code_closure — independent 1220 study002 roof delta CODE
+- Worked: actual revised Float32 geometry gives CODE PASS for the2.05m-rise roof. Eave remains8.385 and crest is10.435; all110 sky faces are clockwise/nondegenerate, all112 boundary closures and112 fascia faces point outward, and26 internal joins expose the higher filled volume toward the lower side with strictly positive sampled height margins. Current projected-domain union repeats the prior608.500470m2 area and small Float32 source-boundary differences (missing0.000329m2/outside0.000983m2), with one joined region; retained source roof emission stays unchanged. Baseline189cde3 comparison confirms protected front/source association/material/siding/broad-band/ground sections unchanged. Shared diff remains only the separately reviewed defaultfalse wall_receiver opt-in; current21 rear/end openings retain correct source identity and explicit wall ownership.
+- Did not: no retained first-study JSON exists, so a byte-for-byte prior-candidate delta cannot be claimed. Author-supplied unchanged-window/site/topology statements are identified as such; actual current geometry and baseline protected-section checks independently establish the reviewed risks. Visual REWORK requested a deeper whole roof, but source CODE cannot establish that the new silhouette now matches the reference.
+- Next: reuse unchanged prior containment/role findings, consume corrected actual pixels and fresh changed1220 native/fit/spray evidence plus independent visual/progress/current suite gates. Own RETRO only; read-only baseline/source inspection and arithmetic, no source/engine/browser or Git mutation, acceptance or credit.
+
+### pair_fit_native — revised1220 roof mechanical closure
+- Worked: one separately authorized rendered fixed60 run reused the complete successful1220 donor, changing only output path. Current roofcrest10.435 passed all four positive native role partitions/exact ordered faces/server ownership, clockwise roofup124/down0 and intended732samples missing[]. Roof0/13bad,wall/base0/16bad;4actual stock approaches and5supported active released stopped REST/SAFE pairs passed. Fresh NWend lower-window spray original inspected as readable.1202 unchanged proof reused without replay.
+- Did not: finite coverage and representative spray are not exhaustive seam/fidelity evidence. Existing7TextureRID warning persists; no script/error/failure. Startup reports Vulkan1.4.335/Forward+/AMD Radeon780M andWayland messages, not a dedicatedDisplayServer getter. No source/driver/Git/fullsuite action.
+- Next: consume independent visual/current regression gates separately. Original92871 natural0/20ce03, owned/globalabsencec41d93, explicit SOURCE/ENGINE RELEASE. Exact invocation/source scope/log/PNG in private pair51-52-validation/revised1220/result.txt. Priorstudy001 proof remains distinctly scoped; this run covers revisedroof.
+
+
+### mariner1202_whole_art — complete-architecture source/repair/capture rounds
+mariner1202_whole_art — study001,2026-10-11
+Worked: exact source-run comparison and a bounded alternate Street View recovered the NNW unequal window family; config-only reuse completed front/rear/end openings without changing shared builders/site or carport. First coherent render arrived before extended proof.
+Did not: wall closure/edge triangles followed conventional outward normals rather than the shared clockwise emitter convention. Static roof-facing preflight checked sky faces but missed closure orientation; ordinary end pixels exposed the loss. Second panorama showed an intervening row and was correctly excluded.
+Change next time: compare every newly supplied face class with its actual consuming emitter before first capture, including vertical closures rather than only sky roof triangles. Keep original failed pixels and fix the narrow cause during the one review-led revision. Shared fit/native/spray and independent review remain pending; no acceptance claim.
+
+Source-only independent-review repair
+Worked: reviewer distinguished48 reversed closures from8 already-clockwise submillimetre faces, so repair used actual source outward-normal binding rather than blanket reversal. Minimal opt-in reuse corrected9 new front motif receiver roles while preserving thresholds.
+Did not: author preflight also missed the shared emitter default-support behavior for non-recessed front motifs; geometric wall holes did not establish opening frame/pane spray ownership.
+Next time: inspect the consuming role-tag branch for new motif classes in addition to face winding and containment. Conditional winding and one-line opt-in repairs are source-only; native/render verification remains pending.
+
+Final review-led capture study002
+Worked: conditional winding repair restored visible pitched gables/edges in matched ordinary views; complete roof and opening families retained. One final shared capture produced all11 originals at terminal0 and released cleanly.
+Did not: delayed coordination messages requested process updates after the terminal/release had already been sent; no duplicate invocation occurred.
+Next time: use original handle/terminal identifiers in one compact release message and consume that before checkpoint escalation. Native playability remains a separate next-owner gate; author does not self-accept.
+
+
+### bayside1220_whole_art — bayside1220_whole_art
+Worked: one overhead plan plus a source-corner-bound terminal pano resolved target identity and changed meaningful roof architecture; the actual blue-dumpster association avoided camera-caption confusion.
+Did not: rear coordinate snapped to the wrong street position; successful capture and March2025 date did not make it a useful target rear. Earlier front-only inference placed the ridge too far forward once the full gable became visible.
+Next: revise the whole roof using the new gable evidence before render, retain rear/opposite-end limits, and inspect useful original pixels before treating capture readiness as source sufficiency. Keep clockwise winding/native roles separate from fidelity. Ready for documentation consolidation.
+
+
+### bayside1220_whole_art — central-roof/NW-end source round
+Worked: the new full-gable reference changed the whole roof proportion, and existing rear-frame APIs added the observed terminal group without shared-code edits or front/site side effects.
+Did not: double-precision perimeter split points can become identical Vector3 coordinates; a zero-length fascia edge required skipping before normalizing. The source-only check caught it before writing this revision, but actual render is still pending.
+Next: inspect the integrated whole-building roof/end at the first available engine slot; resolve the explicit hidden-region inference proposal once rather than repeat exhausted research.
+
+
+### bayside1220_whole_art — final inferred-family source round
+Worked: one explicit inference boundary completed all exterior opening families using instance schedules and existing APIs; observed and inferred regions remain separately described.
+Did not: references still cannot establish the rear/SE schedule, so source completeness is not fidelity or whole-building acceptance.
+Next: inspect all sides and roof in actual gameplay as one whole study, correct substantive composition/integrity defects within the assigned budget, and obtain independent verdicts rather than further speculative detail.
+
+
+### bayside1220_whole_art — first1220 whole-world capture
+Worked: one supported shared capture call delivered all11views and ended naturally; checking the original handle and actual global absence released the slot promptly. New NW-gable geometry is legible at gameplay distance.
+Did not: default north/east/south camera views include neighboring foreground obstruction; the two raised contexts and clear west view are needed to distinguish target architecture. The exit Texture RID warning remains despite terminal0 and is not concealed.
+Next: obtain the first independent whole/reference/context/island verdict before any additional capture or refinement; reserve remaining budget for demonstrated gaps only.
+
+
+### bayside1220_whole_art — roof-pitch correction
+Worked: the independent ordinary-gameplay gable comparison identified one substantive silhouette issue; a single whole-roof proportional correction improved both ends and all sections without unrelated polish. Source normal/domain checks preserved the previous containment work.
+Did not: retaining the earlier1.1m crest rise when centering the ridge flattened the roof; the first full-gable comparison should have reevaluated pitch together with ridge placement.
+Next: retain source freeze and hand the actual corrected originals directly to independent review/validator; no extra capture unless a concrete remaining defect warrants it.
+
+
+### hourly_pair_progress — independent pair checkpoint, 2026-10-11
+Worked: matched actual1202 baseline/study001 north and west views plus NE/SW contexts separated meaningful front-extension/rear architecture from the continuous-canopy foreground neighbor; actual March2025 front and Sep2025 rear/end references supported the target join. Actual1220 March2025 NW-end pixels support central full-depth gable architecture. CONTINUE the whole pair rather than frontage polish; previous61/69/72 closure is retained separately.
+Did not: broad initial file searches and combined long reads were noisy/truncated; exact existing note paths and useful original pixels resolved the checkpoint.1202 study001 still visibly loses the gable at ordinary end angles; corrected source CODE PASS is not corrected pixel proof.1220's source-only full exterior supplies no rendered progress verdict. Fixed1202 NE island before/after views are nearly indistinguishable, with broad generic masses/ground still dominant; modern whole-island quality remains open.
+Next: finish the corrected1202 and first1220 actual-world render within each named owner budget after explicit serialized slot transfer, inspect complete roofs/ends/rears at ordinary angles before finish refinement, then consume independent CODE/native/fit/spray/active REST-to-SAFE/visual/current-suite gates. Reuse unchanged older-family evidence; no recognition/stage promotion or scope expansion. No engine/browser/Git/source edit or research/download; only this attributed private RETRO changed. Exact hourly throughput is uninstrumented.
+
+
+### hourly_pair_progress — coalesced follow-up before corrected capture
+New bounded read finds no study002 outputs/terminal note yet; current1202 author RETRO/readiness still ends at source-only repair.1220 source note now explicitly records ROOT-approved NE/SE inference implemented and frozen, with unchanged roof/front/site and containment/roles source preflight, no native/render PASS. Thus no NEW rendered architecture since the earlier CONTINUE pixel verdict; further source completeness is useful preparation, not game-world velocity. Retain1202 study001 visual REWORK until fresh ordinary end/roof pixels and independent final verdict. Next action stays corrected1202 capture, explicit terminal/slot transfer, then first1220 whole-building render; no new research or finish loop. Process snapshot is inspection-only, not substitute for owner live-handle terminal/release. No engine/browser/Git/source mutation; own private RETRO only.
+
+
+### pair_progress_gallery — 1202 / 1220 whole-study gallery
+Worked: retained all 139 originals, added nine original gameplay PNGs (three matched 1202 baseline/Study002 pairs; three 1220 Study001 views), inspected selected pixels, labelled inference and pending gates. Both HTML copies match; existing PID1000286 serves updated gallery HTTP200; /refs/ and actual private reference path return404.
+Did not work well: initial broad metadata output included unnecessary base64 prefix and a verbose RETRO path listing. No privacy exposure or delivery change resulted.
+Next time: strip image payloads before template inspection and query only assigned RETRO paths. Current northeast 1220 caption explicitly locates central brown-roof target rather than orange foreground neighbour. No engine, browser, server restart, source/Git or credit changes.
+
+
+### bayside1220_visual — independent first-study review, 2026-10-10 UTC
+Worked: direct March2025 NW-gable pixels beside the ordinary west capture separated genuine centered-ridge/window progress from the remaining shallow roof silhouette. All11 actual originals and five matching fixed-island before/after pairs supplied useful whole/context scope; no engine rerun needed.
+Did not: the first combined lesson/reference/file read was unnecessarily broad and truncated. Captured north/east/south views have foreground occlusion, so those alone cannot establish complete target resemblance. A roof being closed and brown is insufficient evidence that its proportions match.
+Next: one consistent roof-pitch correction, then reassess the whole silhouette and joins at the same useful ordinary/context views. Preserve inferred rear/SE status, source exclusions and separate mechanics gates; avoid local finish refinement before the roof-form gap closes. Bounded REWORK recorded in existing1220 study directory; no engine/browser/research/source/Git action or recognition promotion.
+
+
+### hourly_pair_progress — final1202 study002 scoped visual gate
+Worked: reuse of the prior target/reference/baseline comparison let all11 fresh originals resolve the specific gable defect promptly while checking the complete front/rear/end/canopy/context and all five island pairs. North/south show opaque gables and continuous edges; SCOPED VISUAL PASS. Separate1220 source changes visible in surroundings were excluded from1202 credit.
+Did not: existing simplified canopy/site and hidden lower-rear/opposite-end inference cannot support wholeL2/as-built/modern-quality claims; distant island pairs are nearly indistinguishable and do not establish facade fidelity. No new blocking changed-delta issue was seen.
+Next: retain the actual corrected pixels and scoped verdict, consume remaining current suite/independent gates, then inspect1220 as its own whole building after explicit engine transfer. Do not repeat prior22 captures or start decorative refinement solely for closure. Only ordinary private visual note and this own RETRO edited; no engine/browser/Git/source/research action.
+
+
+### pair_progress_gallery — corrected1220 gallery and pair documentation
+Worked: inspected the two useful corrected1220 west/context originals and appended them while preserving all148 prior gameplay images. Both gallery copies retain target identification, inference and pending final visual/suite labels; CODE/mechanics passes remain separately scoped. Consolidated actual private author/progress/visual/gallery RETRO entries once under actor names; existing CODE/validator entries retained.
+Did not: initial combined documentation reads again produced truncated output; narrower actor-block extraction was sufficient. No final visual or suite result was invented.
+Next: use exact actor sections before requesting broad note tails. Reuse existing scoped-closure/executor-recovery lessons; add only the demonstrated pitch-and-ridge coupling lesson. No source, catalog, credit, engine, browser, server restart or Git action.
+
+
+### bayside1220_visual — corrected study002 final bounded review
+Worked: reused the bound reference/identity findings and prior five baseline inspections; actual March2025 bound10 beside fresh west pixels closed the shallow-gable defect immediately. All11 fresh originals showed retained complete roof/end/rear/front/context composition and no substantive island regression. Bounded whole-exterior VISUAL PASS, with inferred rear/SE and separate mechanics limits intact.
+Did not: whole-island distance makes the local change nearly indistinguishable and cannot establish facade fidelity. North/east/south remain partly occluded; the useful west and both contexts carry the architectural decision.
+Next: consume the remaining independent/current-suite gates and close this bounded study without using the spare capture for decorative polish. Retain the earlier REWORK and corrected PASS together; no L2/recognition/whole-modern/as-built promotion. Only own ordinary private note and this RETRO edited; no engine/browser/research/source/Git action.
+
+
+### pair_progress_gallery — final pair visual status reconciliation
+Worked: corrected1202 and1220 gallery sections now distinguish scoped VISUAL/CODE/mechanics PASS from the still-pending current suite. Preserved historical1220 REWORK and all150 images; consolidated final1220 visual RETRO once.
+Did not: earlier progress labels became stale after the final visual handoff; no suite or completion verdict was inferred from those passes.
+Next: apply only the actual terminal suite result when supplied, retaining inference limits and unchanged recognition credit. Documentation only; no Git, engine or server action.
+
+### pair_fit_native — frozen1202/revised1220 full regression
+- Worked: one authorized unchanged tools/test.sh invocation completed ALL TESTS PASS, including junk/import, behavior/contracts/routeQA, all49scored island fits and generatedworldvalidation/determinism. Retained original25378 to natural0/c0f79d; ownedwrapper1202579 and globalGodot/Weston absent9d01b6, then explicit ENGINE/SOURCE RELEASE. Source stayed frozen; no retries, source edits, skips, weakening orGit actions.
+- Did not: suite buffers and filters island output, so interim silence could not identify per-building progress; waited on the same live handle rather than inferring stall or rerunning. Aggregate PASS does not add recognition/stage/fidelity credit or replace separate reviewer decisions.
+- Next: preserve completed scoped1202/revised1220 proof and this regression result for authorized integration; no further engine work unless separately assigned. Exact invocation/full log/result retained in private pair51-52-validation/full-suite. SharedRETRO is validator's only repository edit.
+
+
+### pair_progress_gallery — pair precommit read-only preparation
+Worked: actual HEAD189cde3 has exactly the five enumerated intended modified paths, no staged changes and no untracked files. Explicit-path git diff --check passed; shared-code diff is the default-false wall_receiver opt-in. Pair author, CODE, visual/progress, mechanics and gallery RETRO entries are present.
+Did not: assignment described six paths but enumerated five; actual diff also has five. Full-suite terminal PASS was supplied later by ROOT; validator final RETRO remains to be included before commit authorization.
+Next: retain frozen source, consolidate the final suite actor entry and this own preparation entry only under the next documentation/commit GO. No test replay, authentication retry, staging, commit or push performed.
+
+
+### pair_progress_gallery — authorized pair integration
+Worked: final validator RETRO records original25378 natural0/c0f79d, all49 scored fits, world validation/determinism and ALL TESTS PASS with explicit release. Gallery now reflects scoped VISUAL/CODE/mechanics/current-suite PASS while preserving150 originals, inferred-region limits and unchanged credit. Explicit authorization limits the commit to five intended files.
+Did not: remote publishing remains blocked by the previously reported host credential-helper outage; no new push/authentication retry is authorized or attempted.
+Next: retain the reviewed local commit and publish only after the established host helper is restored and ROOT authorizes the named revision. No engine, test, source, global-config or hook change.
