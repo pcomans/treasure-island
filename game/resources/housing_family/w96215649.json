@@ -5794,5 +5794,307 @@
     "roof_object_key": "building:w96215649:roof"
   },
   "dimensions": "production_inference; retained observed-side schedules, hidden elevations unknown",
-  "reverse_source_roof_winding": true
+  "reverse_source_roof_winding": true,
+  "rear_frames": [
+    {
+      "id": "rear-west",
+      "elevation_role": "rear",
+      "runs": [
+        3,
+        4
+      ],
+      "start": [
+        -199.33999633789062,
+        2.632999897003174,
+        -567.344970703125
+      ],
+      "end": [
+        -185.51800537109375,
+        2.6500000953674316,
+        -571.1409912109375
+      ],
+      "length_m": 14.33377849633332,
+      "tangent": [
+        0.9642950022098246,
+        0,
+        -0.26483041500770704
+      ],
+      "normal": [
+        0.26483041500770704,
+        0,
+        0.9642950022098246
+      ],
+      "top_y": 8.65,
+      "upper_windows": [
+        {
+          "station_m": 1.791722312041665,
+          "width_m": 2.15,
+          "height_m": 1.35,
+          "center_y": 7.4,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 5.3751669361249945,
+          "width_m": 2.15,
+          "height_m": 1.35,
+          "center_y": 7.4,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 8.958611560208325,
+          "width_m": 2.15,
+          "height_m": 1.35,
+          "center_y": 7.4,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 12.542056184291654,
+          "width_m": 2.15,
+          "height_m": 1.35,
+          "center_y": 7.4,
+          "glazing": "blue",
+          "wall_receiver": true
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 1.791722312041665,
+          "width_m": 1.62,
+          "height_m": 1.06,
+          "center_y": 4.12,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 5.3751669361249945,
+          "width_m": 1.62,
+          "height_m": 1.06,
+          "center_y": 4.12,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 8.958611560208325,
+          "width_m": 1.62,
+          "height_m": 1.06,
+          "center_y": 4.12,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 12.542056184291654,
+          "width_m": 1.62,
+          "height_m": 1.06,
+          "center_y": 4.12,
+          "glazing": "blue",
+          "wall_receiver": true
+        }
+      ]
+    },
+    {
+      "id": "rear-middle",
+      "elevation_role": "rear",
+      "runs": [
+        6,
+        7
+      ],
+      "start": [
+        -185.8520050048828,
+        2.6500000953674316,
+        -572.3770141601562
+      ],
+      "end": [
+        -171.8350067138672,
+        2.6500000953674316,
+        -576.22900390625
+      ],
+      "length_m": 14.536645627322224,
+      "tangent": [
+        0.9642525965323182,
+        0,
+        -0.264984773299679
+      ],
+      "normal": [
+        0.264984773299679,
+        0,
+        0.9642525965323182
+      ],
+      "top_y": 8.65,
+      "upper_windows": [
+        {
+          "station_m": 1.817080703415278,
+          "width_m": 2.15,
+          "height_m": 1.35,
+          "center_y": 7.4,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 5.451242110245834,
+          "width_m": 2.15,
+          "height_m": 1.35,
+          "center_y": 7.4,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 9.08540351707639,
+          "width_m": 2.15,
+          "height_m": 1.35,
+          "center_y": 7.4,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 12.719564923906946,
+          "width_m": 2.15,
+          "height_m": 1.35,
+          "center_y": 7.4,
+          "glazing": "blue",
+          "wall_receiver": true
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 1.817080703415278,
+          "width_m": 1.62,
+          "height_m": 1.06,
+          "center_y": 4.12,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 5.451242110245834,
+          "width_m": 1.62,
+          "height_m": 1.06,
+          "center_y": 4.12,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 9.08540351707639,
+          "width_m": 1.62,
+          "height_m": 1.06,
+          "center_y": 4.12,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 12.719564923906946,
+          "width_m": 1.62,
+          "height_m": 1.06,
+          "center_y": 4.12,
+          "glazing": "blue",
+          "wall_receiver": true
+        }
+      ]
+    },
+    {
+      "id": "rear-east",
+      "elevation_role": "rear",
+      "runs": [
+        10,
+        11,
+        12
+      ],
+      "start": [
+        -171.53599548339844,
+        2.6500000953674316,
+        -575.1380004882812
+      ],
+      "end": [
+        -157.0279998779297,
+        2.6500000953674316,
+        -579.1229858398438
+      ],
+      "length_m": 15.045332988686832,
+      "tangent": [
+        0.9642854442887953,
+        0,
+        -0.2648652146522091
+      ],
+      "normal": [
+        0.2648652146522091,
+        0,
+        0.9642854442887953
+      ],
+      "top_y": 8.65,
+      "upper_windows": [
+        {
+          "station_m": 1.880666623585854,
+          "width_m": 2.15,
+          "height_m": 1.35,
+          "center_y": 7.4,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 5.641999870757562,
+          "width_m": 2.15,
+          "height_m": 1.35,
+          "center_y": 7.4,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 9.40333311792927,
+          "width_m": 2.15,
+          "height_m": 1.35,
+          "center_y": 7.4,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 13.164666365100977,
+          "width_m": 2.15,
+          "height_m": 1.35,
+          "center_y": 7.4,
+          "glazing": "blue",
+          "wall_receiver": true
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 1.880666623585854,
+          "width_m": 1.62,
+          "height_m": 1.06,
+          "center_y": 4.12,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 5.641999870757562,
+          "width_m": 1.62,
+          "height_m": 1.06,
+          "center_y": 4.12,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 9.40333311792927,
+          "width_m": 1.62,
+          "height_m": 1.06,
+          "center_y": 4.12,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 13.164666365100977,
+          "width_m": 1.62,
+          "height_m": 1.06,
+          "center_y": 4.12,
+          "glazing": "blue",
+          "wall_receiver": true
+        }
+      ]
+    }
+  ],
+  "study_notes": [
+    "2026-10-11 rear study001: reuse housing_site_family through housing_family_live_attachment; complete additive rear opening families on source wall runs3-4,6-7,10-12 only.",
+    "production_inference: hidden south/SSE rear window counts, cadence, dimensions and arrangement use the March2025 front and September2025 ENE family grammar, not surveyed rear evidence. Known south-rear attempt snapped to opposite neighbor; Apple layout is undated and supports section association only.",
+    "March2025 WSW upper end is observed blank and unchanged. Existing protected_runs metadata is retained; ROOT explicitly authorized only the three long rear hosts for this study. Short returns, both ends, frontage, roof, materials and site remain unchanged. No rear door, canopy or footprint extension is inferred."
+  ]
 }
