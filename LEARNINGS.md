@@ -761,3 +761,17 @@ unproved. Do not turn that into an arbitrary retry loop. Explicitly type values 
 Variant-returning helpers/dictionaries, including weakref(): inferred locals caused
 parse failures in the bounded fixtures. Preserve those failures and distinguish
 fixture behavior/lifecycle PASS from actual source routes/spray/full-suite results.
+
+
+## Classify consumed roof faces before diagnosing absent closure
+
+1227 study001 initially looked like a missing gable because an authored north-gable
+key was ignored. Actual emitter review corrected that diagnosis: vertical closure
+faces already existed among the consumed roof triangles but faced inward, and
+substantial roof tops faced downward. Adding panels would have duplicated geometry.
+The bounded repair preserved coordinates and roof shape, corrected top order, and
+moved/reoriented existing vertical faces into the supported closure role. Read the
+actual emitted index convention, classify top versus exterior closure faces, and
+check their three-dimensional boundary/winding before prescribing extra geometry.
+Projected coverage or native fit alone cannot establish a closed, visible envelope;
+compare repaired ground and raised views without introducing count pins or a new gate.

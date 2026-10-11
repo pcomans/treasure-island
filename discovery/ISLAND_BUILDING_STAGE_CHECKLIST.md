@@ -159,8 +159,8 @@ world validation/determinism; owned/global engine absence17b417 establishes
 release. ROOT accepts these bounded L1 gates. Only both L1 become C; historical
 accepted claims and49 credits remain unchanged. See [1236 D6](facades/d6_reference_packets/w96215668_1236_northpoint_drive.md)
 and [1240 D7](facades/d7_reference_packets/w96215688_1240_northpoint_drive.md).
-Current totals after NP1239 below: L1:31 C/182 U; L2:21 C/192 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall53 C/1,012 U across213 units/1,065 cells.
+Current totals after NP1227 below: L1:31 C/182 U; L2:22 C/191 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall54 C/1,011 U across213 units/1,065 cells.
 Next: inspect the next compatible unknown whole-family L1 envelope/site against
 current originals and dated references before assigning art; U establishes no
 defect. Continue major architecture/site coverage rather than current-pair polish.
@@ -309,7 +309,7 @@ before selecting another round.
 | physical-building:w96215649 / w96215649 | 1212 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | M1212 — whole three-section rear complete; prior roof/front/ends/site preserved; CODE/L2/scoped visual/native fit/spray/suite PASS; L1 retained, finish/fidelity open |
 | physical-building:w96215651 / w96215651 | 1202 Mariner Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215652 / w96215652 | 1220 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96215653 / w96215653 | 1227 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP2 — L1 frontage lawn/composition; retained whole shape; scoped visual/CODE/progress/native/fit/spray/suite PASS; L2–5 unknown |
+| physical-building:w96215653 / w96215653 | 1227 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP2/NP1227 — L1 retained; whole rear and corrected consumed roof winding/closures; independent CODE/all-side L2, native/routes/spray/suite PASS; L3–5/fidelity open |
 | physical-building:w96215655 / w96215655 | 1312 Gateview Avenue | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215656 / w96215656 | 1224 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215657 / w96215657 | 1307 Gateview Avenue | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -549,3 +549,6 @@ Current total **46 C /0 I /1019 U** across213 units/1065 cells; **L1:28 C /185 U
 **NP1239 — 1239 Northpoint whole ENE rear, 2026-10-11.**
 Four sections receive eight upper/eight lower windows and eight entries, retaining existing full roof/front/eight front entries/ends/site. Independent CODE, retained L1 and all-side L2 game-art architecture PASS compared all11 current originals, matched baseline/island views, March2025 front/end, May2024 rear and undated Apple. Exact counts/anchors and concealed lower schedules remain production inference; deliberate blank ends and utility/detail limits are not as-built claims. Private northpoint1239-whole-study-20261011 retains independent-review.txt, author-handoff.txt, focused-validation.txt and full-suite001.log.
 Combined2484 completed four native roles/four approaches/all16 entry return pairs and active REST/SAFE source spray placement, but screenshot stalled and required controlledTERM143/d09127/global4d9ec3; no aggregate invocation PASS. Minimal recovery98142 natural0/59c1d9/global6b2247 supplied independently inspected visible correct-source tag, reusing native/routes. Suite19641 natural0/1f2b03, ALL TESTS PASS/all49 scored fits/world validation/determinism, actualglobal8982e8. Only L2 becomes C; L1 retained. Higher stages/material/site/as-built fidelity and49 recognition credits unchanged. Actual213rows53C/1012U; L1:31C/182U, L2:21C/192U, L4:1C/212U, L3/L5:213U each.
+
+**NP1227 — whole west rear and corrected roof envelope, 2026-10-11.** Only L2 becomes C; L1 retained. Independent final CODE/L1 whole-envelope/all-side L2 architecture PASS compares all ten actual study002 originals, dated March front/rear and bound Apple layout. Raised NE/SW provide positive target front/end coverage despite absent default east and cropped end closeups. Study001 roof HOLD and initial missing-panel misdiagnosis remain historical: existing downward tops/inward vertical faces were corrected by coordinate-preserving order/consumed-role changes, not duplicate overlays.
+Current roof native29147 natural0/7755af/globale8b27a passed; unchanged14738 natural0/44d58b routes12 entry pairs/carport/source-visible spray/active REST-before-SAFE reused. Fullsuite19491 natural0/03c46e ALL TESTS PASS/0b2006 includes49 scored fits/world validation/determinism; actualglobalabsencea025bd. Private northpoint1227-whole-study-20261011 retains independent-review.txt, roof-winding-repair-handoff.txt and originals. Actual213rows54C/1011U; higher stages/material/site/hidden cadence/as-built fidelity remain open,49 recognition credits unchanged.

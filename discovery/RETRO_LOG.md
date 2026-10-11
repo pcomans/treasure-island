@@ -20969,3 +20969,36 @@ Next: preserve failed lifecycle separately from completed/recovered gates; any s
 Worked: saved final validator entries consumed alongside independent review; target L2-only change retains L1, actual213rows53C/1012U and49 recognition credits. Exact three-file whitelist, no integration geometry/study_notes change needed; current notes already declare inference. Own private retrospective written before local commit. Five study images plus personally inspected recovery PNG yield gallery253, higher material/site/fidelity open.
 Did not: preparation status was overtaken by completed runtime/suite; final summary now distinguishes historical pending/2484captureHOLD143 from required gates PASS. No duplicate test, new lesson or timing claim.
 Next: local commit and accurate gallery label, no push/auth retry/merge.1227 reference/baseline proposal stays separate ROOT GO; no automatic engine start.
+
+
+## 1227 Northpoint whole rear and consumed roof repair — 2026-10-11
+
+### northpoint1227_rear_astra_art — whole rear study
+Worked: shared complete assemblies added24 varied windows/6 inferred entries across all three west rear sections, preserving protected front/roof/carport/site. Collinear-host preflight corrected a serialization-seam assumption before source write. Capture24778 natural0/909086/global2d2d02 saved ten actual originals, all inspected.
+Did not: east driver view unavailable and north/south cropped; protected roof later failed independent review.
+Next: distinguish rear improvement from whole-envelope acceptance; hidden lower cadence remains production inference.
+
+### northpoint1227_roof_winding_repair — corrected consumed-face repair
+Worked: same-coordinate repair reversed22 downward tops and moved/reversed48 existing vertical faces into consumed closure_triangles; protected nonroof retained. One study002 capture87163 natural0/8e2241/global779589, all ten originals inspected. Own retrospective was recorded in the handoff and subsequently consolidated into the existing private log.
+Did not: unavailable python alias and literal-versus-Float32 elevation comparison required correction; no extra capture used.
+Next: python3 and actual consumed values; independent whole-envelope review and changed-roof native proof remain separate from author assertions.
+
+### bayside1226_visual_final_fresh — source scope, study001 HOLD and checkpoint
+Worked: actual March front/rear and Apple binding supported whole rear scope; direct consumed-face review caught downward tops and inward closures despite meaningful rear gain and mechanical PASS. Hourly REWORK kept whole roof integrity ahead of material polish.
+Did not: initial ignored-key observation incorrectly implied absent closure; existing vertical faces were omitted from that first diagnosis. Corrected to coordinate-preserving partition/winding repair, avoiding duplicate panels.
+Next: classify actual emitted faces and full envelope before prescriptions. Final saved repaired review independently verifies unchanged coordinates,44 sky-facing tops/48 outward closures and all ten actual originals; raised NE/SW provide sufficient positive front/end coverage. CODE/L1 whole-envelope/all-side L2 scoped architecture PASS; higher fidelity/material/site/recognition remain open.
+
+### bayside1226_final_validation — focused runtime and current roof native
+Worked:14738 natural0/44d58b/global0cb5ba completed four native roles/four approaches/12 entry pairs/carport both ways and inspected exact-source spray with active REST before SAFE. After repair,29147 natural0/7755af/globale8b27a verified current native roof/domain and four approaches, reusing unchanged routes/spray.
+Did not: mechanical/projected checks did not establish exterior closure orientation; seven TextureRID shutdown warnings retained.
+Next: fullsuite19491 natural0/03c46e ALL TESTS PASS/0b2006 passed49 fits/world validation/determinism with actualglobalreleasea025bd; no replay of unchanged focused cases.
+
+### gateview70_integration_docs — references, launchers, gallery and integration preparation
+Worked: reused March front, one target-bound rear and Apple; browser96121 controlled143/global5efa3f preceded baseline26834 natural0/global2cfdcb. Original author25505 natural0 and actual child completion retained. Obsolete closure-only attempt26165 stopped without edits/engine, natural0/c22fc5/global1f8aab; corrected proxy9612 natural0/821cfc, actual child completion/globalabsence dba451. Source frozen. Gallery263 own images preserves study001 HOLD and repaired candidate, matching HTTP200/private404.
+Did not: brief replacement failed safely before one launch; unavailable cross-session IPC was not invented. Oversized HTML search exposed embedded image output and a guessed image filename failed; use parsed text and actual saved filenames.
+Next: consolidate final saved reviewer/suite notes after completion, then ROOT GO for checklist/local commit. Eventual exact whitelist config653/checklist/RETRO/LEARNINGS; no stage or Git staging now. Initial missing-panel hypothesis is explicitly superseded by consumed-face evidence.
+
+### gateview70_integration_docs — 1227 final integration
+Worked: consumed saved final independent and validator suite retrospective before commit; marked only1227L2C, retainedL1 and all higher cells, actual213rows54C/1011U/49recognition unchanged. Four-path whitelist includes authorized consumed-face lesson; source geometry/study_notes unchanged during integration. Historical study001 HOLD/obsolete-scope STOP and warning/framing limits retained separately from completed scoped gates.
+Did not: preliminary opposite-compass1229 proposal inherited stale packet table; actual generated normals corrected private preparation before any acquisition/modeling. No extra engine or timing claim.
+Next: local commit and gallery263 accurate scoped-gate label; no push/auth retry, recognition promotion or automatic next-family engine start.
