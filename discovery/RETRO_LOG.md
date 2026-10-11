@@ -20940,3 +20940,32 @@ Next: actual source runtime stays separate. Completed80554 fourapproaches/front5
 Worked: consumed saved validator suite and restrictedalias own entries after their actual terminals; final independent architecture/sharedCODE and scoped runtime/recovery evidence complete. Only1241L1/L2 changed, actual213rows52C/1013U (L1=31,L2=20), higherstages/49recognition unchanged. Exact eight-file whitelist includes config74, four shared checker/test paths, checklist, RETRO and concise lessons; candidate geometry/checker code untouched by docs integration. Own private entry before commit; gallery247 retains private-photo isolation.
 Did not: source-only/fixture PASS could not replace actual retained-ground stock contact, and fullsuite omitted restrictedalias; both gaps required explicit evidence. Historical93158exit1/80554TERM143 and parse/resource failures remain distinct from successful later subsets/recovery.
 Next: local explicit-whitelist commit and accurate gallery labels, no push/auth retry/main merge. Nextfamily1239 stays separate ROOT assignment; higher material/site/whole-island quality open.
+
+
+## 2026-10-11 — 1239 whole ENE rear study, integration preparation
+Preparation initially retained pending runtime/suite; final ROOT GO consumed saved independent CODE/L1 retained/all-side L2 architecture, completed runtime subsets/recovery and full-suite PASS. Only1239L2 becomes C; higher quality/recognition unchanged.
+
+### northpoint1239_rear_astra_art — whole rear study001
+Worked: existing housing-family modules complete four rear sections with eight upper/eight lower windows and eight entries; full Float32 collinear envelopes and actual LAND preflight preserve protected roof/front/eight entries/ends/site. One capture60476 natural0/242eac/global73057c, all11 originals inspected and source frozen.
+Did not: broad initial source read truncated; narrowed fields/emitter ranges. Default west/south remain neighbor-occluded; concealed lower schedules/counts are inference, not measured.
+Next: independent/native/routes/spray/fullsuite gates on frozen candidate; no postcapture polish or duplicate capture.
+
+### bayside1226_visual_final_fresh — scope, independent review and checkpoint
+Worked: actual March front/end, May rear and Apple bind four-section target; all11 study/current island pairs and retained baseline views support CODE/L1 retained/all-side L2 architecture PASS. Independent full-envelope/collinear/LAND review confirms containment and grade seating. Whole-family breadth is substantive; checkpoint CONTINUE after completed1241 gates.
+Did not: neighbor-dominated west/south views do not prove target faces; protected terminal utility detail, hidden lower schedules and material/site fidelity remain open. Initial guessed emitter filenames required narrow actual preload lookup. No supported total timing/cost claim.
+Next: complete required per-building runtime/suite before stage closure; continue major whole-family breadth, not1239 roof/trim polish.
+
+### gateview70_integration_docs — reference, launcher, gallery and preparation
+Worked: reused two March originals, acquired only one usable May rear and one Apple layout. Browser69126 controlled143/9f281d/global81cece preceded baseline26208 natural0/67a3f9/global70b9cd, all11 inspected. Separate GO write/readback preceded actual named AstraLow child; child task_complete and proxy41151 natural0/982b2c/global97c122 verified. Five own gameplay images give gallery252 with matching HTTP200/private404 copies. Saved completed role notes consolidated once; exact eventual whitelist config658/checklist/RETRO, current L1C/L2U and52C/1013U unchanged.
+Did not: oversized source read and one logged image prefix corrected by targeted keys/text-only tool summaries. No unsupported live IPC or child self-routing gate claimed. Candidate runtime2484 remains separately owned/pending, no premature PASS.
+Next: explicit ROOT GO after actual runtime PNG/fullsuite before L2-only credit (conditional53C/1012U), local commit or final gallery labels. Existing NP2 unit1227 is a bounded next reference/baseline proposal, not modeling authorization; no new lesson/framework needed.
+
+### bayside1226_final_validation — 1239 runtime, recovery and suite
+Worked: exact standard housing-get-faces ownership, four native roles/domain/four approaches and all16 entry pairs completed with active REST before SAFE. Reused these successful2484 subsets; minimal98142 natural0/59c1d9/global6b2247 supplied inspected correct-source spray PNG. One fullsuite19641 natural0/1f2b03/global8982e8 passed all49 scored fits/world validation/determinism.
+Did not: combined2484 stalled after SAFE without PNG, required authorizedTERM143/d09127/global4d9ec3; no aggregate PASS. Recovery necessarily repeated four approaches, not native/routes; seven TextureRID warning retained. Shared screenshot-await cause remains unknown.
+Next: preserve failed lifecycle separately from completed/recovered gates; any shared stalled-await investigation is a later bounded assignment, no opportunistic fix/framework here.
+
+### gateview70_integration_docs — 1239 final integration
+Worked: saved final validator entries consumed alongside independent review; target L2-only change retains L1, actual213rows53C/1012U and49 recognition credits. Exact three-file whitelist, no integration geometry/study_notes change needed; current notes already declare inference. Own private retrospective written before local commit. Five study images plus personally inspected recovery PNG yield gallery253, higher material/site/fidelity open.
+Did not: preparation status was overtaken by completed runtime/suite; final summary now distinguishes historical pending/2484captureHOLD143 from required gates PASS. No duplicate test, new lesson or timing claim.
+Next: local commit and accurate gallery label, no push/auth retry/merge.1227 reference/baseline proposal stays separate ROOT GO; no automatic engine start.
