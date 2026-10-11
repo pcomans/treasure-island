@@ -20806,3 +20806,24 @@ Next: explicit existing-view coverage sufficiency avoids unsupported shot-count 
 Worked: baseline99433 natural0/2d36d3/global33122d, all11 inspected; complete source-bound rear donor targeted middle lower window2/runs6–7 on canonical LAND/unoccupied column. Focused58958 natural0/d0bf53/globala2c993 passed four native ordered positive server-owned roles, roof CWup54/down0, four stock approaches and visible exact-source rear tag with active released grounded supported stopped REST before SAFE. Suite2572 natural0/08cf76/ALL TESTS PASS01fe5e included all49 scored fits, world validation/determinism; globalabsence637833 released. No retries/skips/weakening.
 Did not: seven Texture RID warnings persist. Buffered island output needs original-handle/live CPU observation, not restart or invented per-building progress. Author1238 exit1 remains separate from focused/runtime PASS.
 Next: reuse unchanged roof/front/ends; explicit independent twelve-view sufficiency stands. No extra engine/test action follows completed suite; preserve hidden-side/material/site/recognition limits.
+
+
+### mariner1219_rear_astra_art — whole north rear, 2026-10-11
+Worked: reused shared housing_site_family and complete recessed-window emitter for12 reference-supported paired windows across three source-derived rear unions; all preexisting fields preserved. One capture37864 natural0/88444c/global8655a7, all13 inspected and frozen handoff delivered.
+Did not: generated-column preflight missed a live neighbor canopy in east focused framing. PIL absent; standard-library PNG dimensions recovered without installation. Initial broad JSON reads truncated.
+Next: account for live additive geometry, use sufficient west/raised coverage without rerun, retain hidden schedule inference; verified python3/emitter prevented prior setup failures.
+
+### gateview70_integration_docs — 1219 author launcher, 2026-10-11
+Worked: one actual named AstraLow child with externally verified routing; foreground7119 natural0/fd4608, owned/globalabsencea24a82. Current baseline/GO and exact target reference sparse cadence supported12 windows rather than blindly copying24.
+Did not: baseline-note was initially absent; actual originals/log/root terminal allowed progress. East image partially canopy-occluded despite generated-column clearance.
+Next: deliver formal handoff before optional notes and include live canopy envelopes; no speed/cost claim or new engine repetition.
+
+### bayside1226_visual_final_fresh — 1219 independent CODE/visual, 2026-10-11
+Worked: all13 candidate/all11 baseline originals, five island pairs and retained dated references inspected. Full Float32 complete-sill/trim host and actual-land checks passed; CODE/L1 retained/all-side L2/architecture visual PASS explicit. West focused/NE context supply positive whole rear; windowless ends deliberately assessed as plausible inference, real schedules unknown.
+Did not: review handoff stayed open across repeated prompts; final bounded evidence could have been delivered sooner. Island-scale gain remains subtle; materials/site/unfinished neighbors remain broader gaps.
+Next: finish remaining named views/seams in one finite pass, issue verdict then notes; no unsupported batch or duplicate native proof.
+
+### bayside1226_final_validation — 1219 baseline, runtime and integration, 2026-10-11
+Worked: baseline15083 natural0/058920/global1c5b4b, all11 inspected; source-bound rear plan distinguished LAND2.89434 from visiblearea2.91434. Focused92230 natural0/cf2915/globalf9d91c passed four positive ordered native/server roles, actual roofCW72up/22down, four stock approaches and visible correct rear tag with active released grounded supported stopped REST before SAFE. Suite80067 natural0/979c71/ALL TESTS PASS3fd914 passed all49 fits/world validation/determinism; globalabsence d8d9b9. Five inspected gallery originals retained216 prior, matching copies and HTTP200/private404. Consumed saved final review/own role notes before promoting only1219L2; recalculated213 rows44C/1021U, recognition49 unchanged.
+Did not: guessed emitter directory lookup failed once; rg corrected it. Seven Texture RID warnings retained; buffered island output needed actual same-handle observation. Initial integration read was too broad and truncated.
+Next: exact three-file whitespace/staging/local commit only; exclude concurrent1221 work, no tests replay or push under unchanged credential blocker. Preserve higher-stage/material/site/as-built limits.
