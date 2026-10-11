@@ -159,8 +159,8 @@ world validation/determinism; owned/global engine absence17b417 establishes
 release. ROOT accepts these bounded L1 gates. Only both L1 become C; historical
 accepted claims and49 credits remain unchanged. See [1236 D6](facades/d6_reference_packets/w96215668_1236_northpoint_drive.md)
 and [1240 D7](facades/d7_reference_packets/w96215688_1240_northpoint_drive.md).
-Current totals after NP1225 below: L1:31 C/182 U; L2:26 C/187 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall58 C/1,007 U across213 units/1,065 cells.
+Current totals after NP1236 below: L1:31 C/182 U; L2:27 C/186 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall59 C/1,006 U across213 units/1,065 cells.
 Next: inspect the next compatible unknown whole-family L1 envelope/site against
 current originals and dated references before assigning art; U establishes no
 defect. Continue major architecture/site coverage rather than current-pair polish.
@@ -320,7 +320,7 @@ before selecting another round.
 | physical-building:w96215662 / w96215662 | 1139 Ozbourn Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215666 / w96215666 | 1215 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215667 / w96215667 | 1248/1395 Gateview Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96215668 / w96215668 | 1236 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP4 — L1 connected frontage lawn/footway/parking; retained boarded architecture; scoped visual/CODE/native/fit/spray/suite002 PASS; L2–5 unknown |
+| physical-building:w96215668 / w96215668 | 1236 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP4/NP1236 — L1 retained; whole secured SSE rear CODE/all-side L2/native/routes/spray/suite PASS; higher materials/site/hidden fidelity open |
 | physical-building:w96215669 / w96215669 | 1238 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215670 / w96215670 | 1246/1397 Gateview Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | BG — whole architecture; materials/site fidelity open |
 | physical-building:w96215671 / w96215671 | 1244 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -566,3 +566,6 @@ Current native47050 natural0/91200b/global2ab98d passed full roof domain/four ap
 
 **NP1225 — whole west rear architecture, 2026-10-11.** Only L2 becomes C; L1 retained. Independent CODE/retained L1/all-side L2/scoped architecture visual PASS compares all11 baseline/study originals, five island pairs and actual March front/north plus bound Apple. Eighteen windows/six entries develop complete three-section rear unions; protected roof/front/carport/site/source remain unchanged. Consumed procedural/explicit roof evidence is reused with decoded preservation, not inferred from aggregate native counts. Hidden rear schedules and uncertain terminal service detail remain inference/fidelity limits; higher materials/site/recognition open.
 Focused99897 natural0/11496f/global4662c3 passed four native roles/four approaches/twelve entry pairs/carport both ways/source-visible spray active REST-before-SAFE. Current fullsuite84999 natural0/75dc01/global4145ad passed all49 scored fits/world validation/determinism. Retained private northpoint1225-whole-study-20261011/{independent-review.txt,focused-validation.txt,full-suite001.log} supplies ordinary evidence; three failed/unbound rear reference attempts and TextureRID warning remain historical. Inventory213/prior49 recognition credits unchanged.
+
+**NP1236 — whole four-section secured SSE rear, 2026-10-11.** Only L2 becomes C; L1 retained. Independent CODE/retainedL1/all-sideL2/scoped architecture visual PASS compares all11 baseline/study originals, five island pairs and dated March boarded frontage/oblique frontage plus bound Apple. Thirty-two boarded windows/eight pale entries complete four host unions; procedural segmented hip, original front/eight entries, ends/returns, connected ground/site/source remain unchanged. Boarded-specific complete envelopes and both LAND tiles checked; hidden rear cadence/count/anchors and terminal fidelity are production inference. Higher materials/site/recognition remain open.
+Focused31945 supplied native four roles/four approaches/sixteen entry pairs/source placement active REST-before-SAFE, but capture HOLD/no PNG ended controlled143/f836dc/globalab27d1. Minimal72483 natural0/cac37c/global92e445 supplied visible exact-source boarded-panel PNG/RESTSAFE without native/routes replay. Current94021 natural0/a867c1 ALL TESTS PASS9cde24/globalb501ca includes all49 scored fits/world validation/determinism. Retained private northpoint1236-whole-study-20261011/{independent-review.txt,focused-validation.txt,full-suite001.log} records scoped gates; historical HOLD and TextureRID warnings retained. Inventory213/prior49 recognition unchanged.

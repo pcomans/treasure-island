@@ -21168,3 +21168,45 @@ Next: integrate current99897/84999 with saved independent PASS; no further engin
 Worked: consumed actual final validator entry and all named completed roles before exact three-file integration. Only1225L2C, retained L1/all other cells; actual213rows58C/1007U and prior49 recognition unchanged. Source geometry untouched; intended config660/checklist/RETRO complete whitespace review before explicit staging.
 Limits: hidden rear/terminal fidelity, higher materials/site and recognition remain open; failed reference attempts and warnings retained.
 Next: local commit and gallery287 actual hash/scoped-gate label, no push/auth retry/merge or automatic next-family launch.
+
+## 1236 Northpoint whole SSE rear — 2026-10-11
+
+### northpoint1236_rear_astra_art — first coherent study
+Worked: reused complete boarded housing_site_family variants over four full SSE host unions;32 boarded windows/eight pale entries, only authorized rear_frames/protected_runs/study_notes. Per-footprint canonical LAND across the tile seam and complete boarded/entry envelopes checked before write. One capture9903 natural0/bb4e59/global4dadf2; all11 baseline/study originals and dated references directly compared, frozen handoff before own RETRO.
+Did not: initial unwritten .735 entry-spacing candidate failed clearance; .755 passed before source mutation. Static seating remains distinct from native walking; hidden schedules/anchors are inference, no occupancy claim.
+Next: independent whole-building and runtime gates, no unnecessary second capture or polish.
+
+### bayside1226_visual_final_fresh — roof prevention, hourly and final review
+Worked: identified actual segmented shallow_hip branch and normalized slope winding, distinguishing it from earlier literal inward-shell defects. Source-derived partition/section heights supported keeping roof protected without invented face inversion. Hourly CONTINUE recognized whole-elevation breadth, one coherent1225 capture and unchanged-proof reuse; no new timing/process experiment. Final all11 baseline/study, five island pairs and March boarded-front/oblique-front plus bound Apple comparison passed CODE/retainedL1/all-sideL2/scoped architecture visual. Independent40-assembly boarded-specific Float32 envelopes, collinear split holes and both LAND tiles passed; roof/front/site decoded unchanged permits producer-specific proof reuse. Both plain terminals deliberately assessed, foreground east neighbor excluded.
+Limits: boarded panel/jamb extents differ from glazed sill assemblies; old glazed-envelope assumptions would misstate geometry. Static threshold/jamb seating is not movement proof. Hidden rear/end fidelity, exact weathering/material/site and recognition remain open; island-scale presentation essentially unchanged.
+Next: separately assigned fit/native/front+rear routes/source-visible secured receiver spray RESTSAFE/current full suite, no added roof audit or polish.
+
+### bayside1226_final_validation — completed source/runtime preparation
+Worked: standard native producer/eight original entries/no owned canopy or stairs confirmed; actual16 entry pairs and boarded host5 spray bound to maintained complete schemas. Selected positions resolve LAND tiles-2/-1 acrossX=-256 and sampled source/support columns; no copied glazed target/1232 alias or invented interior access.
+Limits: source preparation is not runtime proof. Current31945 was live with native/four-approach subsets reported; full routes/PNG/suite remain pending at this consolidation.
+Next: preserve actual REST-before-SAFE, original terminal/release and saved final record before integration; no assumed completion from partial output.
+
+### gateview70_integration_docs — references, launcher, gallery and integration preparation
+Worked: reused personally inspected March boarded-front originals and bound Apple row; two rear attempts stopped at black/neighbor northstreet snaps without borrowed cadence. Browser69415 controlled143/7b7410/globalb44bf7 before baseline74464 natural0/7dd9f6/global1548c7, all11 personally inspected. Separate CURRENT GO readback before one proxy82505; actual AstraLow turn_context279da0. Child9903 natural0/all11, actual child completione229d4, proxy82505 natural0/3ba83d/global823dd4; frozen handoff relayed promptly. Five personally inspected own images added gallery287→292, master/mirror/servedHTTP200 and exact originals/privateMarch404 checked; prior1225bee6ab2 preserved.
+Limits: capture completed between observations; retained actual child results establish lifecycle, not invented timing. End-site filenames/camera captions do not prove rear/end identity. Cloud status tool/policy snapshot unavailable, no readiness claim or proxy change.
+Next: eventual exactconfig668/checklist/RETRO, onlyL2 after final runtime/suite/ROOTGO; currentL1/213rows/49recognition/higher limits retained. Existing lessons suffice; no checklist/staging/commit/source edit in preparation. Next1240 is one existing NP4 whole-family proposal, not research/modeling GO; actual firstfront12–14 coverage needs fresh baseline rather than metadata assumption.
+
+### bayside1226_final_validation — 1236 capture HOLD and minimal recovery
+Worked: original31945 completed native/four approaches/all16 entry returns/source placement active REST-before-SAFE. Two ordinary unchanged post-SAFE observations prompted ROOT capture HOLD; verified ownedGodot1395876 TERM gave original exit143/f836dc/globalab27d1, not natural success. Minimal maintained72483 natural0/cac37c/global92e445 then supplied actual1280x800 boarded-host5 PNG/RESTSAFE. Completed native/routes reused; only mandatory four fit approaches repeated.
+Did not: first screenshot never appeared after SAFE, aggregate capture HOLD retained; render-await cause unproved, seven TextureRID warnings retained.
+Next: current separately assigned full suite; no route replay or invented failed-parent PASS.
+
+### gateview70_integration_docs — 1236 focused gallery/preparation update
+Worked: consumed actual saved HOLD/recovery validator entries and personally inspected source-visible boarded panel PNG. Added one own recovery image292→293, matching served master/mirror HTTP200/private March404; labels independent/focused PASS and suite pending, historical143/HOLD explicit.
+Limits: no suite/stage/recognition acceptance from focused subsets. Exact eventualconfig668/checklist/RETRO unchanged; no geometry/engine/staging/commit.
+Next: saved suite terminal/release and ROOT final integration GO.
+
+### bayside1226_final_validation — 1236 final full suite
+Worked: retained original94021 through buffered island phase to natural0/a867c1 ALL TESTS PASS9cde24, all49/world validation/determinism; globalreleaseb501ca. No repeated native/routes/PNG or source changes.
+Limits: combined31945 capture HOLD/controlled143 remains historical;72483 supplied missing PNG. Suite summary does not erase cleanup warnings or replace independent review.
+Next: integrate successful subsets/recovery/current suite and independent PASS; no further engine.
+
+### gateview70_integration_docs — 1236 final local integration
+Worked: consumed actual saved final validator entry and consolidated every completed1236 named role before commit. Only1236L2C, L1/other stages retained; actual213rows59C/1006U/prior49 unchanged. Exactconfig668/checklist/RETRO whitespace then explicit staging; no geometry changes.
+Limits: historical31945HOLD/143, minimal recovery and hidden inference/higher material/site/recognition limits preserved. Future1240 preflight stays separate.
+Next: local commit and gallery293 actual hash/scoped gates; no push/auth retry/merge/engine or automatic next launch.
