@@ -717,3 +717,12 @@ and the completed handoff supported ROOT-authorized cleanup of the exact proxy;
 outer84230 then exited143 after TERM, separately from the natural0 capture.
 Retain both outcomes and owned-PID evidence; do not invent a completion event,
 replay finished work or add a new harness to replace these existing mechanisms.
+
+
+The same handoff requires an actually updated launch brief. In1221, a stale
+PREPARATION ONLY replacement failed (4e6b14), but an unconditional subsequent
+launch4963 still ran; it created no child, source edit or engine run. A separate
+awaited edit and readback corrected the brief before launch22120. Before launching,
+await the mutation, require its success, and read back the active authorization
+and target text. Never put an unconditional launch after a fallible replacement
+in the same shell sequence. Reuse the ordinary brief; no new approval framework.
