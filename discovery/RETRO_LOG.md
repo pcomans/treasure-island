@@ -21002,3 +21002,46 @@ Next: consolidate final saved reviewer/suite notes after completion, then ROOT G
 Worked: consumed saved final independent and validator suite retrospective before commit; marked only1227L2C, retainedL1 and all higher cells, actual213rows54C/1011U/49recognition unchanged. Four-path whitelist includes authorized consumed-face lesson; source geometry/study_notes unchanged during integration. Historical study001 HOLD/obsolete-scope STOP and warning/framing limits retained separately from completed scoped gates.
 Did not: preliminary opposite-compass1229 proposal inherited stale packet table; actual generated normals corrected private preparation before any acquisition/modeling. No extra engine or timing claim.
 Next: local commit and gallery263 accurate scoped-gate label; no push/auth retry, recognition promotion or automatic next-family engine start.
+
+
+## 1229 Northpoint whole WNW rear — 2026-10-11
+
+### Independent Sol High — reference scope
+Worked: actual March2025 target front, bound undated Apple and positive west/SW baseline establish SUFFICIENT whole WNW10–11 scope with shared-family reuse. Actual normals correct historical compass, current LANDx_-2__z_-4 and five front entries/no canopy or stairs confirmed.
+Did not: contributor attempts supply no defensible rear cadence; exclude neighbor rows, no measured hidden schedule.
+Next: infer bounded rear composition across full collinear host; independent all-side/code/runtime/suite remain required.
+
+### northpoint1229_rear_astra_art — study001
+Worked: actual full opening/entry emitters and canonical LAND informed fifteen windows/five rear entries across full10–11 union. Only rear_frames/protected_runs/study_notes changed. One capture41076 natural0/850bf9/global207e76, all11 compared with baseline/reference and source frozen; no second render needed.
+Did not: initial combined reads truncated; narrowed producer/lesson reads. South default remains oblique/cropped and hidden terminal fidelity unresolved.
+Next: independent whole-building assessment and native/routes/spray/suite; screenshot success is not acceptance.
+
+### gateview70_integration_docs — references, launcher and gallery preparation
+Worked: retained March front reused, one closer Apple acquired; browser68564 controlled143/9fc584/global7548a5 before baseline54001 natural0/282796/globale1b770, all11 inspected. SeparateGOwrite/readback12c51d preceded proxy29552; actual named AstraLowfc52b9, childtask_complete and proxy natural0/1ac271/globalc87244 verified. Personally inspected five study images for gallery263→268, HTTP200/matchingcopies/privatefront404.
+Did not: threeGoogle attempts yielded unbound contributor rows and one black view, preserved honestly. Old metadata/compass corrected from actual normals and LAND. Broad trace output included encrypted spawn payload; subsequent reads restricted to identity/model fields.
+Next: exact eventual config911/checklist/RETRO whitelist; conditional stage integration only after saved independent/runtime/suite PASS and ROOT GO. No source/checkbox/staging/commit/LEARNINGS edits in this round.
+
+### Independent Sol High — 1229 final CODE/all-side architecture
+Worked: saved final review verifies20 new complete assemblies, Float32 margins/actualLAND and seam-crossing hosts without duplicate holes; protected hip/front/site/shared code unchanged. All11actual originals/baseline/island and Marchfront/Apple support CODE/L1 retained/all-side L2 scoped architecture PASS.
+Limits: south foreground neighbor is not end proof; raisedSW supplies terminal composition. Contributor rear views remain unbound, hidden rear inference and higher material/site/fidelity/recognition open.
+Next: finish separately owned suite before authorized stage integration; no local polish mandate.
+
+### bayside1226_final_validation — 1229 combined focused runtime
+Worked: complete source plan led to43919 natural0/a97e6c/global873331, all four native roles/four approaches/ten entry pairs/source-visible1280x800PNG and active REST-before-SAFE PASS. No successful-case replay.
+Limits: sevenTextureRID warning and actual aggregate roof winding reported honestly, not an analytic architecture claim.
+Next: separately authorized full suite remains pending; no premature aggregate closure.
+
+### gateview70_integration_docs — 1229 runtime gallery and final preparation
+Worked: consumed saved reviewer/validator own entries, personally inspected correct-source sprayPNG and added it as269th own image. Matching HTTP200/mastermirror/privatefront404, architecture/runtimePASS and suitepending labels. Exact eventual config911/checklist/RETRO whitelist; no source/checkbox/staging/commit.
+Limits: current whole-family architecture does not establish hidden as-built rear or modern material/site quality.
+Next: saved suite result plusROOTGO for integration; next existing NP1232 opposite-face scope requires actual reference/baseline assessment, not U-only defect ranking.
+
+### bayside1226_final_validation — 1229 final suite
+Worked: one58884 natural0/3aca7f ALL TESTS PASS/90eb50 includes49 fits/world validation/determinism; original retained through buffered island phase, actualglobal407f29. Focused43919 evidence reused without redundant replay.
+Limits: filtered suite output does not establish raw warnings absent or independent architecture acceptance.
+Next: bounded integration of completed per-building evidence, no further engine.
+
+### gateview70_integration_docs — 1229 final integration
+Worked: saved final suite/independent/runtime own entries consumed before commit; only1229L2C retainingL1/higher cells, actual213rows55C/1010U and49 recognition unchanged. Exact config911/checklist/RETRO whitelist; no geometry/study_notes changes in integration. Gallery269 own images retains inference/privacy and higher-quality limits.
+Limits: unbound contributor rear views remain excluded; no measured rear or whole-modern-quality claim.
+Next: local commit and accurate gallery hash, no push/auth retry/merge. Next1232 local preparation confirms existingNP eastrear gap1/3–5/7, retained roof/ground mixed guards and actualMarchfront/end; sourcechunk corrected to-2/-3 after first guessed lookup failed. Separate ROOT reference/baseline GO required, no automatic scope expansion.

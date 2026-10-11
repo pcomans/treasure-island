@@ -159,8 +159,8 @@ world validation/determinism; owned/global engine absence17b417 establishes
 release. ROOT accepts these bounded L1 gates. Only both L1 become C; historical
 accepted claims and49 credits remain unchanged. See [1236 D6](facades/d6_reference_packets/w96215668_1236_northpoint_drive.md)
 and [1240 D7](facades/d7_reference_packets/w96215688_1240_northpoint_drive.md).
-Current totals after NP1227 below: L1:31 C/182 U; L2:22 C/191 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall54 C/1,011 U across213 units/1,065 cells.
+Current totals after NP1229 below: L1:31 C/182 U; L2:23 C/190 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall55 C/1,010 U across213 units/1,065 cells.
 Next: inspect the next compatible unknown whole-family L1 envelope/site against
 current originals and dated references before assigning art; U establishes no
 defect. Continue major architecture/site coverage rather than current-pair polish.
@@ -359,7 +359,7 @@ before selecting another round.
 | physical-building:w96665908 / w96665908 | 1203 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665909 / w96665909 | 1149 Ozbourn Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665910 / w96665910 | 1110 Hutchins Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96665911 / w96665911 | 1229 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP — L1 envelope/site closure; scoped visual/CODE/progress/native/fit/spray/suite PASS; all-side L2 unknown |
+| physical-building:w96665911 / w96665911 | 1229 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP/NP1229 — L1 retained; whole WNW rear architecture, independent CODE/all-side L2/native/routes/spray/suite PASS; higher/fidelity open |
 | physical-building:w96665912 / w96665912 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665915 / w96665915 | 1109 Keppler Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665916 / w96665916 | 1242 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -552,3 +552,6 @@ Combined2484 completed four native roles/four approaches/all16 entry return pair
 
 **NP1227 — whole west rear and corrected roof envelope, 2026-10-11.** Only L2 becomes C; L1 retained. Independent final CODE/L1 whole-envelope/all-side L2 architecture PASS compares all ten actual study002 originals, dated March front/rear and bound Apple layout. Raised NE/SW provide positive target front/end coverage despite absent default east and cropped end closeups. Study001 roof HOLD and initial missing-panel misdiagnosis remain historical: existing downward tops/inward vertical faces were corrected by coordinate-preserving order/consumed-role changes, not duplicate overlays.
 Current roof native29147 natural0/7755af/globale8b27a passed; unchanged14738 natural0/44d58b routes12 entry pairs/carport/source-visible spray/active REST-before-SAFE reused. Fullsuite19491 natural0/03c46e ALL TESTS PASS/0b2006 includes49 scored fits/world validation/determinism; actualglobalabsencea025bd. Private northpoint1227-whole-study-20261011 retains independent-review.txt, roof-winding-repair-handoff.txt and originals. Actual213rows54C/1011U; higher stages/material/site/hidden cadence/as-built fidelity remain open,49 recognition credits unchanged.
+
+**NP1229 — whole WNW rear architecture, 2026-10-11.** Only L2 becomes C; L1 retained. Independent CODE/L1 retained/all-side L2 scoped architecture PASS verifies20 complete new assemblies across rear10–11 collinear union, unchanged hip/front/site, all11 actual study/baseline and island pairs with Marchfront/Apple binding. Contributor rear views remain unbound; count/cadence/anchors are production inference and deliberate blank-end game-art treatment is not as-built fidelity.
+Focused43919 natural0/a97e6c/global873331 passed four native roles/four approaches/ten front+rear entry pairs and inspected correct-source spray with active REST before SAFE. Fullsuite58884 natural0/3aca7f ALL TESTS PASS/90eb50 includes49 scored fits/world validation/determinism; global407f29 released engine. Private northpoint1229-whole-study-20261011 retains independent-review.txt, author-handoff.txt and focused/full-suite evidence. Actual213rows55C/1010U; higher material/site/fidelity and49 recognition credits unchanged.
