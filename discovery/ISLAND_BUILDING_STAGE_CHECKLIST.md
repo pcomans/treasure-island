@@ -159,8 +159,8 @@ world validation/determinism; owned/global engine absence17b417 establishes
 release. ROOT accepts these bounded L1 gates. Only both L1 become C; historical
 accepted claims and49 credits remain unchanged. See [1236 D6](facades/d6_reference_packets/w96215668_1236_northpoint_drive.md)
 and [1240 D7](facades/d7_reference_packets/w96215688_1240_northpoint_drive.md).
-Current totals after BG reconciliation below: L1:24 C/189 U; L2:11 C/202 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall36 C/1,029 U across213 units/1,065 cells.
+Current totals after MP below: L1:26 C/187 U; L2:13 C/200 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall40 C/1,025 U across213 units/1,065 cells.
 Next: inspect the next compatible unknown whole-family L1 envelope/site against
 current originals and dated references before assigning art; U establishes no
 defect. Continue major architecture/site coverage rather than current-pair polish.
@@ -287,7 +287,7 @@ before selecting another round.
 | physical-building:w96215673 / w96215673 | 1232 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP — L1 envelope/site closure; scoped visual/CODE/progress/native/fit/spray/suite PASS; all-side L2 unknown |
 | physical-building:w96215674 / w96215674 | 1241 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215676 / w96215676 | 1143 Ozbourn Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96215677 / w96215677 | 1206 Mariner Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215677 / w96215677 | 1206 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | MP — complete inferred rear/end openings; coherent whole roof (1206 repaired,1208 hip retained); independent CODE/L1/L2/scoped visual and current native/fit/spray/suite002 PASS; L3–5 open |
 | physical-building:w96215678 / w96215678 | 1205 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215680 / w96215680 | 1219 Mariner Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar — L1 envelope/site complete; roof/front/1212 end repaired; rear/opposite-end opening completeness unresolved (L2 U); scoped gates/suite PASS |
 | physical-building:w96215682 / w96215682 | 1221 Mariner Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -295,7 +295,7 @@ before selecting another round.
 | physical-building:w96215688 / w96215688 | 1240 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP4 — L1 joined shallow whole roof and corrected front/north lawn; scoped visual/CODE/native/fit/spray/suite002 PASS; L2–5 unknown |
 | physical-building:w96215690 / w96215690 | 1141 Ozbourn Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215691 / w96215691 | 1204 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | M1204 — whole architecture; materials/site fidelity open |
-| physical-building:w96215693 / w96215693 | 1208 Mariner Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215693 / w96215693 | 1208 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | MP — complete inferred rear/end openings; coherent whole roof (1206 repaired,1208 hip retained); independent CODE/L1/L2/scoped visual and current native/fit/spray/suite002 PASS; L3–5 open |
 | physical-building:w96215694 / w96215694 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215698 / w96215698 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665883 / w96665883 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -470,6 +470,12 @@ roots are `bayside1226-whole-study-20261011` and `gateview70-whole-study-2026101
 ordinary review/runtime outcomes are in [RETRO](RETRO_LOG.md). Inferred unseen
 pitch/opening schedules are not surveyed facts. Materials/site/whole fidelity
 remain open; L3–L5 and49 recognition credits remain unchanged.
-Current total **36 C /0 I /1029 U** across213 units/1065 cells;
+Total after BG **36 C /0 I /1029 U** across213 units/1065 cells;
 **L1:24 C /0 I /189 U; L2:11 C /0 I /202 U**. L3/L5 remain213 U each;
 L4 remains1 C/212 U. These are scoped stage conclusions, not catalog acceptance.
+
+
+**MP — 1206/1208 Mariner whole-family architecture, 2026-10-11.**
+Both rows now have complete two-storey rear/end opening families.1206 retains a warm full-depth shallow roof with its west partition corrected;1208 retains its existing segmented hip. Independent bayside1226_visual_final_fresh final review explicitly passes both CODE/L1/L2/scoped architecture. The initial1206 triangle12/boundary-to-closure mismatch and study001 HOLD remain retained; repaired Float32 top/closure/rake correspondence and all14 final gameplay originals resolve it. Current1206 end00269475 natural0/339226 passed four native ordered/server/positive roles, four stock approaches and visible target spray with active released supported stopped REST before SAFE. Unchanged1206 rear and both1208 spray/fit proofs are reused. Current full-suite0021026 natural0/cc56e1 passed all49 scored fits, world validation and determinism; actual engine absencef2ea67 preceded release.
+Rear/end schedules and pitch are production inference, not surveyed hidden-side facts. Materials/site finish, broader recognition and as-built fidelity remain open. Only L1/L2 become C; L3–5 and49 historical recognition credits are unchanged.
+Current total **40 C /0 I /1025 U** across213 units/1065 cells; **L1:26 C /187 U; L2:13 C /200 U**. L3/L5 remain213 U each; L4:1 C /212 U.

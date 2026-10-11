@@ -696,6 +696,8 @@ geometry rather than imposing a universal roof/foundation match. No new validato
 checksum gate or acceptance framework is needed.
 
 
+Mariner1206 study001 passed projected roof union and focused native fit, yet top triangle12 [B,A,C] formed a near-vertical roofing strip: the emitted exterior edge A–C had no matching closure/rake while closures and eaves followed paired internal edges A–B–C. Direct source and west-terminal pixel review caught the kink. Repair002 repartitioned the terminal at unchanged peak height and matched actual consumed top boundaries to closure/eave endpoints. Check this three-dimensional assembly consistency as well as projected coverage and winding; native fit does not establish coherent roof construction. Preserve the failed view and confirm the correction in the same gameplay angle, without adding a new validator or framework.
+
 ## Preserve executor identity and actual lifecycle in a foreground CLI handoff
 
 A fresh Codex CLI session for1204 started as /root and correctly refused direct
