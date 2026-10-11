@@ -21045,3 +21045,55 @@ Next: bounded integration of completed per-building evidence, no further engine.
 Worked: saved final suite/independent/runtime own entries consumed before commit; only1229L2C retainingL1/higher cells, actual213rows55C/1010U and49 recognition unchanged. Exact config911/checklist/RETRO whitelist; no geometry/study_notes changes in integration. Gallery269 own images retains inference/privacy and higher-quality limits.
 Limits: unbound contributor rear views remain excluded; no measured rear or whole-modern-quality claim.
 Next: local commit and accurate gallery hash, no push/auth retry/merge. Next1232 local preparation confirms existingNP eastrear gap1/3–5/7, retained roof/ground mixed guards and actualMarchfront/end; sourcechunk corrected to-2/-3 after first guessed lookup failed. Separate ROOT reference/baseline GO required, no automatic scope expansion.
+
+## 1232 Northpoint both-face architecture — preparation through study002, 2026-10-11
+
+### Independent Sol High — scope, early pixels and hourly checkpoint
+Worked: dated March front/end-left, bound Apple layout and actual baseline west/east/raised views identified both whole east rear and blank third west-front section; SUFFICIENT scope supported explicit ROOT rescope20–23. Early study001 pixels showed substantive both-face gain and one concrete retained-trim/new-entry collision. Hourly REWORK stayed bounded to that complete entry and valid camera selection.
+Limits: black/neighbor rear attempts and cropped north default supply no hidden-face fidelity; counts/anchors remain inference. Early four-view feedback was not final CODE/all-side acceptance.
+Next: independently review frozen repaired study002, then required native/routes/spray/full-suite gates; no material/roof polish expansion.
+
+### northpoint1232_whole_astra_art — study001 and frozen STOP
+Worked: reused housing_site_family complete assemblies across east1/3–5/7 and west20–23, adding24 windows/eight entries while preserving existing four entries and retained roof/ground/canopy/site. All11 baseline/study originals and dated references inspected; capture60875 natural0/0faa51/global7be7c7.
+Did not: wall-host containment missed retained vertical trim through new entry11.25. Proposed shift12.25 remained unapplied when offline preflight sampled all28 arbitrary candidates using only target LAND tile-3 and stopped outside its coverage. This was incomplete lookup, not proof of unsafe terrain. Initial capture reused baseline reach instead of full required preflight; safe live driver rejections and seven TextureRID warning retained.
+Next: shift the complete entry without changing trim and check actually selected poses against their real canonical tiles/occupied columns; no speculative capture or shared changes.
+
+### northpoint1232_entry_camera_rework — bounded study002
+Worked: only the offending run23 entry station/local_station moved +1m to12.25/1.0724907522; bottom and every other study001 field preserved. Standard-library Float32 full-assembly/LAND preflight checked containment/contact, while camera planning selected actual canonical tiles including north tile-4 and preserved strict live rejection of neighbor/support candidates. Capture20419 natural0/4cb2a9/global976082; all33 baseline/study001/study002 originals compared. Matched west shows trim clear of complete doorway; both-face gain retained. Handoff preceded own retrospective.
+Limits: numpy probe unavailable, no install; hidden rear inference/north framing/material/site limits persist. Two of two captures consumed, no independent or runtime acceptance claimed.
+Next: frozen-source independent review and separately authorized runtime/suite.
+
+### gateview70_integration_docs — references, launchers and gallery preparation
+Worked: reused March front/end and one bound Apple; browser24961 controlled143/108cdd/globaldd2cd8 before baseline2829 natural0/241be8/global099ec6, all11 inspected. Actual blank third front reported before author scope. Actual AstraLow routing verified externally for both named children; original proxy70122 natural0/4617f2, actual child completion25905c/global12c0cd, then separately authorized proxy54053 natural0/9c3d82 with actual child completion/global37a74e. Separate successful GO readbacks preceded launches; no invented IPC or restart of a live handle. Personally inspected study002 west/east/NE/SW/south and added five own images269→274, preserving historical entry defect/STOP and pending final gates.
+Did not: first Google black and second neighbor-obstructed rear supplied no target rear evidence; no exhaustive absence claim. Initial camera preflight incorrectly generalized target-tile coverage to all arbitrary candidates. Routine warnings and stopped attempt retained without timing claims.
+Next: eventual exact config673/checklist/RETRO integration only after final gates and ROOT GO. Proposed lesson, not yet a LEARNINGS edit: resolve canonical LAND for actually selected supported poses and distinguish rejected outside-tile/neighbor candidates; do not require all arbitrary candidates to fit one target tile or substitute flat terrain. Keep occupied-column/live-camera checks intact. No source geometry, checklist, staging, commit or engine action in this preparation round.
+
+### bayside1226_final_validation — 1232 combined focused runtime
+Worked:51341 natural0/21ae6e/globald49887 supplied restricted native/roof fit, four approaches, twelve entry arrival/return pairs, carport both directions and actual source-visible spray with active REST-before-SAFE. No missing-PNG recovery or route replay.
+Limits: seven TextureRID cleanup warning retained without unsupported cause; mechanical PASS is distinct from final architecture/suite acceptance.
+Next: separately authorized full suite; preserve exact retained-ground semantics and reuse completed focused cases.
+
+### gateview70_integration_docs — 1232 focused gallery and next-family preparation
+Worked: personally inspected actual source-visible spray and added275th own gallery image, matching master/mirror/HTTP200 with actual private front404. Saved validator own note consolidated once. Next existing NP3 candidate1234/w96215659 has L1C/L2U and no rear_frames; actual dated front originals inspected and protected prior architecture/site distinguished from missing opposite-face scope.
+Limits: final review integration/suite pending at gallery update; no stage/source/Git mutation. One overly broad target-frame read truncated; subsequent reads bounded to keys and canonical packet. No hidden rear fidelity inferred from front photos.
+Next: ROOT may assign source-bound rear/reference/baseline assessment for1234; no modeling or new research authorization here. Camera-tile lesson remains proposed ordinary notes only.
+
+### Independent Sol High — 1232 final frozen study002 CODE/all-side visual
+Worked: all11 final originals, baseline/five island pairs and dated front/end-left/Apple support CODE/retained L1/all-side L2 scoped architecture PASS. Complete +1m entry shift clears retained trim; independent32-assembly Float32/source-host/realLAND review confirms full openings, positive threshold clearance and intentionally seated jamb feet. Existing front/four entries, mixed roof/ground/canopy/site/source fields preserved.
+Limits: cropped north default excluded; raised envelope and dated plain end support deliberate blank-terminal game art, not hidden as-built fidelity. Rear schedule/front anchors remain inference; higher material/site/fidelity and recognition open.
+Next: retain separate focused51341 PASS and await suite terminal plus ROOT integration GO; no further art capture or polish requested.
+
+### gateview70_integration_docs — 1232 final review integration preparation
+Worked: consumed saved final reviewer own entry and note; added authorized concise LEARNINGS refinement on selected-pose canonical tiles and complete-entry/retained-trim interference, preserving original prewrite STOP and both captures. Exact eventual four paths: config673, canonical checklist, RETRO and LEARNINGS.
+Limits: suite96058 still pending at preparation; no checkbox, staging, commit, geometry or engine action.
+Next: ROOT reviews lesson diff; final suite result and separate GO required before stage integration.
+
+### bayside1226_final_validation — 1232 full suite
+Worked: original96058 retained through buffered island phase to natural0/1e9dad, ALL TESTS PASS33358a including49 scored fits/world validation/determinism; actual global release1f9d1d. No redundant runtime replay.
+Limits: filtered suite summary does not erase focused TextureRID warning or supply independent fidelity acceptance.
+Next: completed gate records ready for ROOT-authorized integration; no further engine action.
+
+### gateview70_integration_docs — 1232 final local integration
+Worked: consumed saved independent, focused and full-suite actor entries before commit; ROOT approved concise camera/trim lesson. Only1232 L2 marked C, retaining L1, all other cells and49 recognition credits; actual213rows56C/1009U. Exact four paths config673/checklist/RETRO/LEARNINGS, geometry unchanged during integration.
+Limits: historical entry crossing/prewrite STOP and both natural captures preserved; higher material/site/hidden fidelity remain open. No new engine or recognition claim.
+Next: local commit and gallery275 actual hash/full-gate label; no push/auth retry or automatic next-family launch.
