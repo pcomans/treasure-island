@@ -21097,3 +21097,42 @@ Next: completed gate records ready for ROOT-authorized integration; no further e
 Worked: consumed saved independent, focused and full-suite actor entries before commit; ROOT approved concise camera/trim lesson. Only1232 L2 marked C, retaining L1, all other cells and49 recognition credits; actual213rows56C/1009U. Exact four paths config673/checklist/RETRO/LEARNINGS, geometry unchanged during integration.
 Limits: historical entry crossing/prewrite STOP and both natural captures preserved; higher material/site/hidden fidelity remain open. No new engine or recognition claim.
 Next: local commit and gallery275 actual hash/full-gate label; no push/auth retry or automatic next-family launch.
+
+## 1234 Northpoint whole east rear and roof repair — 2026-10-11
+
+### northpoint1234_rear_astra_art — study001
+Worked: reused complete housing_site_family assemblies across three east host unions;24 windows/six entries, only rear_frames/protected_runs/study_notes changed. Full Float32 host/trim envelopes and per-footprint LAND checked; capture67322 natural0/34c8b3/global23bcaa, all11 originals compared with baseline and retained references, frozen handoff before own notes.
+Limits: broad initial reads truncated and numpy unavailable; narrowed reads and standard-library Float32 used without installation. Hidden rear cadence is inference; source preflight is not native acceptance.
+Next: independent whole-building review, retaining protected front/roof/carport/site and mandatory mechanics.
+
+### bayside1226_visual_final_fresh — scope/progress, study001 HOLD and final study002
+Worked: direct dated front/north/Apple and all baseline/study originals established substantive whole-three-section rear gain. Independent30-assembly host/terrain checks passed; actual consumed protected roof classification caught pitched tops DOWN, distinct flat underside UP and exterior verticals inward, preventing false whole-envelope acceptance. Initial CODE/L1/whole-architecture HOLD retained despite rear scoped PASS.
+Final: retained pre-repair/current comparison verifies only classified order/role repair, unchanged coordinates/domain/heights/nonroof; pitched UP, underside DOWN, verticals OUT/SIDING with roof contact role, no duplicate faces. All11 repaired images show pale closed gable and joined shallow pitched planes; raised target coverage resolves partial west/south defaults. CODE/L1/all-side L2/scoped architecture visual PASS. Hourly CONTINUE recognized whole-face breadth, not local polish or timing improvement.
+Limits: native aggregate counts/light roof pixels alone concealed the inward shell; hidden rear/end fidelity, exact pitch, materials/site and recognition remain open. No extra capture/polish requested.
+Next: complete separate current native/suite gates, reuse confirmed unchanged rear/runtime cases.
+
+### northpoint1234_roof_repair — study002
+Worked: exact classified top/bottom/vertical reversal and existing-face partition preserved every coordinate and protected field; one remaining capture99135 natural0/93ab78/global9ceb0a, all11 actual1440x900 originals compared with prior sets/references. Handoff preceded RETRO; budget2/2 exhausted and source frozen.
+Limits: first process query matched its own shell, corrected by excluding the query process/parent; seven TextureRID warning retained. Analytical source assertions do not self-grant independent/native acceptance.
+Next: independent current-source review and separately assigned native/fullsuite, no further authoring.
+
+### bayside1226_final_validation — preparation, focused, historical suite and postroof native
+Worked: standard housing producer, six original/six rear entries and owned carport bound with per-position LAND-3/-4. Source preflight caught a front approach near a post; oblique start avoided it without moving geometry. Combined16699 natural0/fb9f86/global4e6156 passed four native roles/four approaches/twelve entry returns/carport both ways/source-visible PNG and active REST-before-SAFE. Historical pre-repair suite25366 natural0/902c50/global081b05 passed all49/world/determinism while independent roof HOLD remained separate.
+Postrepair: exact nonroof preservation permits unchanged entry/carport/spray reuse. Current47050 natural0/91200b/global2ab98d passed native/full roof domain/four approaches. Aggregate CW40up24down unchanged despite corrected classification illustrates why analytic review is distinct.
+Limits: warning retained; current full-suite00284968 pending at this preparation. No successful route replay or premature overall acceptance.
+Next: actual suite terminal/release and ROOT integration GO.
+
+### gateview70_integration_docs — references, launchers, gallery and integration preparation
+Worked: reused March front/north and bound Apple; three bounded Google attempts honestly black/neighbor-obstructed. Browser33377 owned143/dc9400/globala0f5f2 before baseline90818 natural0/7ae86d/global6d9e66, all11 inspected and complete blank rear identified. Separate GO readbacks preceded actual AstraLow children: rear proxy28464 natural0/b2b455/child completion and global203aa4; roof proxy74609 natural0/6049f3/child completion and globalc3efe3. Frozen handoffs delivered before notes. Personally inspected five repaired views plus earlier spray; gallery281 own images/matching HTTP200/private March404, historical HOLD and pre-repair spray distinction preserved.
+Did not: one trace sample exposed encrypted transport payload; restrict future reads to actual identity/tool evidence. Rear attempts did not establish observed hidden schedules. No timing or neighbor-credit claim.
+Next: eventual exact config659/checklist/RETRO whitelist, only1234L2C after suite/ROOT GO; existing L1/213 inventory/49 credits and higher limits retained. No duplicate LEARNINGS paragraph: existing consumed-face classification lesson applies. Preparation leaves checklist/staging/commit/source geometry untouched. Next1225 whole west-rear proposal remains private, not implementation GO.
+
+### bayside1226_final_validation — 1234 current full suite
+Worked:84968 natural0/8f62e3 ALL TESTS PASS a541ce, all49 scored fits/world validation/determinism; original retained through buffered island phase and globalrelease5f0a06. Nonroof preservation allowed route/carport/spray reuse without bookkeeping replay.
+Limits: historical25366 remains separate; filtered summary does not erase TextureRID warning or replace independent roof review.
+Next: integrate current47050/84968 with unchanged16699 and independent final PASS; no additional engine.
+
+### gateview70_integration_docs — 1234 final local integration
+Worked: saved final validator/reviewer and every named completed role consolidated before commit. Only1234L2C, L1/other cells retained; actual213rows57C/1008U,49 recognition unchanged. Exact config659/checklist/RETRO whitelist, complete whitespace check; no geometry changes in integration.
+Limits: historical roof HOLD/pre-repair suite and hidden inference/higher-quality limits preserved; no duplicate lesson or recognition claim.
+Next: local commit and gallery281 actual hash/scoped completed gates; no push/auth retry/merge or automatic1225 launch.
