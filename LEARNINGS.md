@@ -738,3 +738,26 @@ the interruptions removed; the exact per-dash raster cause was not established.
 Compare the complete emitted default beam volume with actual roof/eave/closure
 profiles before the first render, then inspect the whole silhouette after supported
 instance replacement. Projected roof coverage alone cannot establish this junction.
+
+
+## Qualify retained ground by exact native triangles and bound proof lifetime
+
+1241's retained legacy ground shares a support body with other details. Its actual
+setup hit was39.954mm above canonical LAND, so the ordinary-ground check rejected
+it; admitting that whole body would also admit thresholds/canopy/roof. The shared
+checker now verifies full ordered native ownership, exact source/RID/shape mapping,
+then only transformed retained ground_visual triangle interiors with matching
+upward normal/plane and LAND separation within existing stock snap/margin limits.
+Preserve foreign/outside/high-offset/non-ground rejection and active REST/SAFE;
+source AABBs or a support-body label alone are insufficient. When generalizing an
+alias, retain its old guards: review caught the missing1232 named-roof cardinality.
+
+Caching this proof first created a Resource → signal callback → cache → Resource
+cycle; one-shot callbacks that never fire still retain captures. Use a resource-free
+dirty token (or explicit disposal), and exercise actual shape/mesh weak-reference
+release. Fixture006 released both after exactly one process_frame without cleanup
+warnings;005's immediate mesh-release assertion failed, with exact deferred cause
+unproved. Do not turn that into an arbitrary retry loop. Explicitly type values from
+Variant-returning helpers/dictionaries, including weakref(): inferred locals caused
+parse failures in the bounded fixtures. Preserve those failures and distinguish
+fixture behavior/lifecycle PASS from actual source routes/spray/full-suite results.

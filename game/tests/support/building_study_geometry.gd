@@ -307,3 +307,168 @@ static func _roof_node(node: Node, source: String, inherited_roof: bool, render_
 			faces.append_array(sky_faces(collection.faces, cull.mode))
 			result.faces = faces
 	for child: Node in node.get_children(): _roof_node(child, source, roof, render_mask, result)
+
+
+# Inventory only: callers still verify native bodies/shapes and exact producer faces.
+# Never infer ownership from a display name or adopt foreign/untagged siblings.
+static func retained_housing_inventory(scene: Node, family: Node3D, source: String, require_family_roof: bool = true) -> Dictionary:
+	var result := {"ok": false, "reason": "invalid retained housing owner", "roof_owners": [], "ground_meshes": []}
+	if source.is_empty() or family == null or family.get_meta("source_key", "") != source:
+		return result
+	var wall := family.get_parent() as Node3D
+	if wall == null or wall.get_meta("source_keys", []) != [source] or wall.get_meta("derived_object_key", "") != "building:" + source + ":wall":
+		return result
+	for node: Node in scene.find_children("*", "Node3D", true, false):
+		if node == wall or node is GeometryInstance3D or node is CollisionObject3D or node is CollisionShape3D:
+			continue
+		if node.get_meta("derived_object_key", "") == "building:" + source + ":roof":
+			if node.get_meta("source_keys", []) != [source]:
+				result.reason = "mixed or foreign retained roof owner"; return result
+			result.roof_owners.append(node)
+	if result.roof_owners.size() != 1:
+		result.reason = "missing or duplicate retained roof owner"; return result
+	for owner: Node3D in [wall, result.roof_owners[0]]:
+		var roof := owner != wall
+		var positive_roof := false
+		for child: Node in owner.get_children():
+			if child == family: continue
+			if child is MeshInstance3D:
+				if child.get_meta("source_keys", []) != [source] or child.get_meta("derived_object_key", "") != owner.get_meta("derived_object_key", ""):
+					result.reason = "retained mesh source ownership differs"; return result
+				var role := str(child.get_meta("physical_role", ""))
+				if roof:
+					if role != "roof" or not child.is_visible_in_tree() or child.mesh == null:
+						result.reason = "missing or untagged retained roof mesh"; return result
+					positive_roof = true
+				elif role == "ground_visual" and child.is_visible_in_tree() and child.mesh != null:
+					result.ground_meshes.append(child)
+				elif role not in ["wall", "detail"] or child.visible:
+					result.reason = "unknown retained wall visual"; return result
+			elif not child is StaticBody3D:
+				result.reason = "unknown retained owner child"; return result
+		if roof and not positive_roof:
+			result.reason = "missing positive retained roof mesh"; return result
+	if result.ground_meshes.is_empty():
+		result.reason = "missing positive retained ground visual"; return result
+	var family_roof := false
+	for child: Node in family.get_children():
+		if child is MeshInstance3D and child.get_meta("family_role", "") == "roof" and child.is_visible_in_tree() and child.mesh != null:
+			if child.has_meta("source_keys") and child.get_meta("source_keys") != [source]:
+				result.reason = "foreign family roof"; return result
+			family_roof = true
+	if require_family_roof and not family_roof:
+		result.reason = "missing positive sectional family roof"; return result
+	for node: Node in scene.find_children("*", "StaticBody3D", true, false):
+		if source in node.get_meta("source_keys", []) and node.collision_layer != 0 and node.get_parent() != family and node.get_parent() != result.roof_owners[0]:
+			result.reason = "additional active retained source body"; return result
+	result.ok = true
+	result.reason = ""
+	return result
+
+
+# Qualify a hit against only the retained ground subset of a verified mixed
+# support bucket. The bucket itself is never treated as homogeneous ground.
+static func retained_ground_contact(scene: Node, family: Node3D, body: StaticBody3D,
+		hit: Dictionary, land: Dictionary, max_offset: float, tolerance: float, floor_cos: float, proof_cache: Dictionary = {}) -> bool:
+	if family == null or body == null or body.get_parent() != family or hit.get("collider") != body or (hit.has("rid") and hit.rid != body.get_rid()): return false
+	var source := str(family.get_meta("source_key", ""))
+	if family.global_transform != Transform3D.IDENTITY or family.get_meta("scope", "") != "approved_shared_family_normal_play" or not family.get_meta("build_valid", false): return false
+	if body.get_meta("source_keys", []) != [source] or body.get_meta("derived_object_key", "") != "building:" + source + ":wall" or body.get_meta("family_role", "") != "support" or body.get_meta("receiver_kind", "") != "none" or body.collision_layer != 1 or body.collision_mask != 0 or body.is_in_group("spray_receiver_wall"): return false
+	var owners := body.get_shape_owners()
+	if owners.size() != 1 or body.is_shape_owner_disabled(owners[0]) or body.shape_owner_get_shape_count(owners[0]) != 1: return false
+	var holder := body.shape_owner_get_owner(owners[0]) as CollisionShape3D
+	if holder == null or holder.get_parent() != body or holder.transform != Transform3D.IDENTITY or holder.is_set_as_top_level() or not holder.shape is ConcavePolygonShape3D or not holder.shape.backface_collision: return false
+	var index := body.shape_owner_get_shape_index(owners[0], 0)
+	if hit.get("shape", -1) != index or PhysicsServer3D.body_get_shape(body.get_rid(), index) != holder.shape.get_rid() or PhysicsServer3D.body_get_shape_transform(body.get_rid(), index) != holder.transform: return false
+	var server_pose: Variant = PhysicsServer3D.body_get_state(body.get_rid(), PhysicsServer3D.BODY_STATE_TRANSFORM)
+	if body.is_set_as_top_level() or body.basis != Basis.IDENTITY or not body.global_transform.is_finite() or not server_pose is Transform3D or not server_pose.is_equal_approx(body.global_transform): return false
+	var valid_cache: bool = proof_cache.get("scene") == scene and proof_cache.get("body") == body and proof_cache.get("holder") == holder and not proof_cache.get("token", {"dirty": true}).dirty
+	if valid_cache:
+		for entry: Dictionary in proof_cache.nodes:
+			if not is_instance_valid(entry.node) or _ground_proof_state(entry.node) != entry.state:
+				valid_cache = false
+				break
+	if not valid_cache:
+		var inventory := retained_housing_inventory(scene, family, source, false)
+		if not inventory.ok: return false
+		var expected := PackedVector3Array()
+		var ground_faces := PackedVector3Array()
+		var meshes: Array[MeshInstance3D] = []
+		for child: Node in family.get_children():
+			if child is MeshInstance3D and child.get_meta("family_role", "support") == "support": meshes.append(child)
+		meshes.append_array(inventory.ground_meshes)
+		for mesh: MeshInstance3D in meshes:
+			if not mesh.is_visible_in_tree() or mesh.layers != 1 or mesh.is_set_as_top_level(): return false
+			var retained: bool = mesh in inventory.ground_meshes
+			var pose := mesh.transform
+			if retained:
+				pose = Transform3D.IDENTITY
+				var ancestor: Node3D = mesh
+				while ancestor != null:
+					if ancestor.is_set_as_top_level(): return false
+					pose = ancestor.transform * pose
+					ancestor = ancestor.get_parent() as Node3D
+			var collection := collect(mesh.mesh, [pose], MESH_GET_FACES)
+			if not collection.ok: return false
+			if retained: ground_faces.append_array(collection.faces)
+			for vertex: Vector3 in collection.faces: expected.append(vertex - body.position)
+		if expected.is_empty() or expected != holder.shape.get_faces(): return false
+		# Cache belongs to the harness/world, never to a global singleton. Resource
+		# signals invalidate changed face arrays; descriptors catch replacement,
+		# transforms, metadata, visibility and ownership changes without get_faces.
+		proof_cache.clear()
+		var invalidation_token := {"dirty": false}
+		proof_cache.merge({"scene": scene, "body": body, "holder": holder, "token": invalidation_token, "faces": ground_faces, "nodes": []})
+		# Callbacks capture only this generation token, never the cache/resources.
+		var watched: Array[Node] = [family, body, holder]
+		for owner: Node in [family.get_parent(), inventory.roof_owners[0], family]:
+			if owner not in watched: watched.append(owner)
+			for child: Node in owner.get_children():
+				if child not in watched: watched.append(child)
+		for node: Node in watched:
+			proof_cache.nodes.append({"node": node, "state": _ground_proof_state(node)})
+			var resource: Resource = node.mesh if node is MeshInstance3D else (node.shape if node is CollisionShape3D else null)
+			if resource != null:
+				resource.changed.connect(func() -> void: invalidation_token.dirty = true, CONNECT_ONE_SHOT)
+		if scene.is_inside_tree():
+			scene.get_tree().tree_changed.connect(func() -> void: invalidation_token.dirty = true, CONNECT_ONE_SHOT)
+	var ground_faces: PackedVector3Array = proof_cache.faces
+	var land_body := land.get("collider") as CollisionObject3D
+	if land_body == null or land_body.get_parent() == null or land_body.get_parent().get_meta("feature_kind", "") != "land_ground" or (land_body.collision_layer & 1) == 0: return false
+	return ground_face_contact(hit.get("position", Vector3.INF), hit.get("normal", Vector3.ZERO), ground_faces,
+		land.get("position", Vector3.INF), land.get("normal", Vector3.ZERO), max_offset, tolerance, floor_cos)
+
+
+static func _ground_proof_state(node: Node) -> Array:
+	var metadata := {}
+	for key: StringName in node.get_meta_list(): metadata[key] = node.get_meta(key)
+	var state: Array = [node.get_parent(), node.get_children(), metadata.duplicate(true)]
+	if node is Node3D: state.append_array([node.global_transform, node.is_set_as_top_level(), node.is_visible_in_tree()])
+	if node is MeshInstance3D: state.append_array([node.mesh, node.layers])
+	if node is CollisionShape3D: state.append_array([node.shape, node.disabled])
+	if node is CollisionObject3D: state.append_array([node.get_rid(), node.collision_layer, node.collision_mask, node.is_in_group("spray_receiver_wall")])
+	return state
+
+
+static func ground_face_contact(point: Vector3, normal: Vector3, faces: PackedVector3Array,
+		land_point: Vector3, land_normal: Vector3, max_offset: float, tolerance: float, floor_cos: float) -> bool:
+	if not point.is_finite() or not normal.is_finite() or not land_point.is_finite() or not land_normal.is_finite() or tolerance <= 0 or max_offset < 0: return false
+	if normal.dot(Vector3.UP) < floor_cos or land_normal.dot(Vector3.UP) < floor_cos or Vector2(point.x-land_point.x, point.z-land_point.z).length() > tolerance: return false
+	if point.y < land_point.y - tolerance or point.y - land_point.y > max_offset + tolerance: return false
+	if faces.is_empty() or faces.size() % 3 != 0: return false
+	for i in range(0, faces.size(), 3):
+		var a := faces[i]; var b := faces[i+1]; var c := faces[i+2]
+		if not a.is_finite() or not b.is_finite() or not c.is_finite(): return false
+		var cross := (b-a).cross(c-a)
+		if cross.length_squared() <= 1e-20: continue
+		var up := cross.normalized()
+		if up.y < 0: up = -up
+		if up.dot(Vector3.UP) < floor_cos or up.dot(normal) < 0.9999 or absf(up.dot(point-a)) > tolerance: continue
+		var v0 := b-a; var v1 := c-a; var v2 := point-a
+		var d00 := v0.dot(v0); var d01 := v0.dot(v1); var d11 := v1.dot(v1)
+		var denominator := d00*d11-d01*d01
+		if denominator <= 1e-20: continue
+		var u := (d11*v2.dot(v0)-d01*v2.dot(v1))/denominator
+		var v := (d00*v2.dot(v1)-d01*v2.dot(v0))/denominator
+		if u >= 0 and v >= 0 and u+v <= 1: return true
+	return false

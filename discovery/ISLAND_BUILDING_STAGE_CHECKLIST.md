@@ -159,8 +159,8 @@ world validation/determinism; owned/global engine absence17b417 establishes
 release. ROOT accepts these bounded L1 gates. Only both L1 become C; historical
 accepted claims and49 credits remain unchanged. See [1236 D6](facades/d6_reference_packets/w96215668_1236_northpoint_drive.md)
 and [1240 D7](facades/d7_reference_packets/w96215688_1240_northpoint_drive.md).
-Current totals after B1205 below: L1:30 C/183 U; L2:19 C/194 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall50 C/1,015 U across213 units/1,065 cells.
+Current totals after NP1241 below: L1:31 C/182 U; L2:20 C/193 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall52 C/1,013 U across213 units/1,065 cells.
 Next: inspect the next compatible unknown whole-family L1 envelope/site against
 current originals and dated references before assigning art; U establishes no
 defect. Continue major architecture/site coverage rather than current-pair polish.
@@ -191,6 +191,21 @@ approaches/seven entry return pairs and inspected correct-source spray, active
 supported stopped REST before SAFE. Suite16570 natural0/824e37/globalcc16d5,
 all49 fits/world validation/determinism PASS. Only L1/L2 C; higher material/site,
 real rear/end fidelity and recognition acceptance remain open;213/49 preserved.
+
+**NP1241** 1241 Northpoint study001, 2026-10-11: independent CODE/L1/all-side
+L2 architecture PASS for full-depth shallow roof/18 rear windows/six entries;
+front/canopy/legacy ground and flat base retained. Private
+`northpoint1241-whole-study-20261011/independent-review.txt` and
+`final-shared-code-review.txt` separate architecture from retained-native/ground
+checker CODE PASS. `focused-validation.txt` preserves positive native93158 subsets,
+its route-setup exit1, completed11 entry return pairs/canopy both ways from80554,
+and80554 capture HOLD/controlled143. Recovery91367 natural0/fb02d0/global199676
+supplies inspected correct-source spray after active REST before SAFE, without
+replaying completed native/routes. Suite54050 natural0/8a04f4/global414b18 passed
+all49 fits/world validation/determinism; restricted1232 alias10687 natural0/974695/
+global373f4c separately passed native/four approaches. Fixture/parse/lifecycle
+failures remain in RETRO. Only L1/L2 C; inferred pitch/rear/blank ends, higher
+material/site/fidelity and recognition acceptance remain open;213/49 unchanged.
 
 The retained34-building audit entries in [RETRO](RETRO_LOG.md) (2026-09-23,
 `building_audit_01_17`, `building_audit_18_34`, `benchmark_recovery`) establish
@@ -311,7 +326,7 @@ before selecting another round.
 | physical-building:w96215671 / w96215671 | 1244 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215672 / w96215672 | 1201 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215673 / w96215673 | 1232 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP — L1 envelope/site closure; scoped visual/CODE/progress/native/fit/spray/suite PASS; all-side L2 unknown |
-| physical-building:w96215674 / w96215674 | 1241 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215674 / w96215674 | 1241 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP1241 — whole-depth roof/ENE rear; CODE/L1/all-side L2/native/routes/spray/suite/alias PASS; front/canopy/legacyground retained, higher fidelity open |
 | physical-building:w96215676 / w96215676 | 1143 Ozbourn Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215677 / w96215677 | 1206 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | MP — complete inferred rear/end openings; coherent whole roof (1206 repaired,1208 hip retained); independent CODE/L1/L2/scoped visual and current native/fit/spray/suite002 PASS; L3–5 open |
 | physical-building:w96215678 / w96215678 | 1205 Bayside Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | B1205 — retained whole hip/front plus complete west rear; CODE/L1/all-side L2/native/7 entry pairs/spray/suite PASS; blank ends inferred, material/site/fidelity open |
