@@ -159,12 +159,26 @@ world validation/determinism; owned/global engine absence17b417 establishes
 release. ROOT accepts these bounded L1 gates. Only both L1 become C; historical
 accepted claims and49 credits remain unchanged. See [1236 D6](facades/d6_reference_packets/w96215668_1236_northpoint_drive.md)
 and [1240 D7](facades/d7_reference_packets/w96215688_1240_northpoint_drive.md).
-Current totals after M1221 below: L1:28 C/185 U; L2:17 C/196 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall46 C/1,019 U across213 units/1,065 cells.
+Current totals after M1223 below: L1:29 C/184 U; L2:18 C/195 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall48 C/1,017 U across213 units/1,065 cells.
 Next: inspect the next compatible unknown whole-family L1 envelope/site against
 current originals and dated references before assigning art; U establishes no
 defect. Continue major architecture/site coverage rather than current-pair polish.
 **U** no current stage-level conclusion established in this checklist pass.
+
+**M1223** 1223 Mariner whole-building study002, 2026-10-11: independent
+CODE/L1/all-side L2 game-art architecture PASS after supported roof/eave repair;
+complete three-section roof, front/rear/end openings and detached canopy.
+Retained private `mariner1223-whole-study-20261011/final-independent-review.txt`
+compares all13 final/all11 baseline views, five island pairs and actual dated front
+plus undated layout. Hidden schedules/pitch/canopy extent remain production inference.
+`focused-validation.txt` retains four native roles/four approaches and13 bidirectional
+route pairs with active REST before SAFE from33568; that invocation stalled during
+screenshot capture and ended controlled143, not PASS. Recovery66128 natural0
+provided inspected correct-source spray. Suite71058 natural0/fb2466 passed all49
+fits/world validation/determinism; actual global release7b00b5. Only L1/L2 C;
+materials/site/higher fidelity and recognition acceptance remain open. Study001 HOLD
+and its original images remain retained;213 inventory/49 historical credits unchanged.
 
 The retained34-building audit entries in [RETRO](RETRO_LOG.md) (2026-09-23,
 `building_audit_01_17`, `building_audit_18_34`, `benchmark_recovery`) establish
@@ -344,7 +358,7 @@ before selecting another round.
 | physical-building:w96698648 / w96698648 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96698650 / w96698650 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96698651 / w96698651 | 1315 Gateview Avenue | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96698652 / w96698652 | 1223 Mariner Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96698652 / w96698652 | 1223 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | M1223 — whole roof/front/rear/end/canopy architecture CODE/L1/L2/native/routes/spray/suite PASS; material/site/fidelity open |
 | physical-building:w96698653 / w96698653 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96698654 / w96698654 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96698658 / w96698658 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |

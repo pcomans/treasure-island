@@ -726,3 +726,15 @@ awaited edit and readback corrected the brief before launch22120. Before launchi
 await the mutation, require its success, and read back the active authorization
 and target text. Never put an unconditional launch after a fallible replacement
 in the same shell sequence. Reuse the ordinary brief; no new approval framework.
+
+
+1223 study001's shallow roof intersected inherited default eave beams: `_beam`
+uses `_box` directly, so outward center0.05m minus half-depth0.115m gives65mm
+inward reach; beam top8.702m exceeded roof eave8.670m. The initial5mm estimate
+incorrectly borrowed `_panel` offset. Study002 used supported per-instance
+`replace_eave_trim` and partitioned the existing exterior profiles into siding
+and continuous trim, retaining full roof planes. Matched gameplay review found
+the interruptions removed; the exact per-dash raster cause was not established.
+Compare the complete emitted default beam volume with actual roof/eave/closure
+profiles before the first render, then inspect the whole silhouette after supported
+instance replacement. Projected roof coverage alone cannot establish this junction.
