@@ -223,6 +223,9 @@ route with adjacent source polygons; a visually clear platform does not prove
 its test approach is on open land. Failed fit002 remains retained.
 
 
+Mariner 1204 exposed the same distinction on vertical roof closures: all 30 closure quads faced inward through the actual `_quad` indices `[0, 2, 1, 0, 3, 2]`, despite valid roof-top winding, nondegenerate faces and roof-union coverage. Reordering each closure tuple to `[1, 0, 3, 2]` preserved its vertices and made the consumed Float32 front direction face outside the source wall ring. Check the indexed emitter’s exterior front direction against the actual polygon for closure faces as well as roof tops; mathematical normals or valid coverage alone do not establish visibility under backface culling.
+
+
 ## 2026-09-29 —1439 collision coordinate representation
 
 In the reviewed1439 experiment, recentering the same LAND body at(-296,0,17), with366 byte-identical world vertices and unchanged filters, resolved the prior retreat dip across the original133-row approach/retreat campaign. World-equivalent collision coordinates can affect an observed native contact outcome; preserve body identity, world geometry, original route and exact teardown when testing this possibility. This is route-specific evidence, not a universal Jolt root cause or approved loader change. See `evidence/building-quality-drafts/2026-09-29/1439-quality/local-origin009/INDEPENDENT_REVIEW.md`.
@@ -691,3 +694,22 @@ shared concave corners and adjoining closures. Correct winding alone cannot prov
 coverage or containment; preserve legitimate roof insets and explicit intended
 geometry rather than imposing a universal roof/foundation match. No new validator,
 checksum gate or acceptance framework is needed.
+
+
+## Preserve executor identity and actual lifecycle in a foreground CLI handoff
+
+A fresh Codex CLI session for1204 started as /root and correctly refused direct
+implementation. A bounded orchestration-only proxy then created a real named
+AstraLow child. Its first workspace-write shell failed at bwrap devpts mounting;
+ROOT-authorized command-local danger-full-access matched the existing workspace
+permission and later allowed the child's first shell. Preserve the actual
+permission boundary rather than changing global settings or silently bypassing it.
+The launcher verified model/effort from actual child turn_context; requiring the
+child to introspect unavailable routing caused another needless stop. Put routing
+verification with the launcher and confirm the first actual executor tool succeeds.
+After successful capture34766 natural0, all11 inspection and frozen-source handoff,
+the proxy still waited without a child task-complete event. Verified engine absence
+and the completed handoff supported ROOT-authorized cleanup of the exact proxy;
+outer84230 then exited143 after TERM, separately from the natural0 capture.
+Retain both outcomes and owned-PID evidence; do not invent a completion event,
+replay finished work or add a new harness to replace these existing mechanisms.

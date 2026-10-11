@@ -159,8 +159,8 @@ world validation/determinism; owned/global engine absence17b417 establishes
 release. ROOT accepts these bounded L1 gates. Only both L1 become C; historical
 accepted claims and49 credits remain unchanged. See [1236 D6](facades/d6_reference_packets/w96215668_1236_northpoint_drive.md)
 and [1240 D7](facades/d7_reference_packets/w96215688_1240_northpoint_drive.md).
-Current totals after Building461 closure below: L1:21 C/192 U; L2:8 C/205 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall30 C/1,035 U across213 units/1,065 cells.
+Current totals after M1204 closure below: L1:22 C/191 U; L2:9 C/204 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall32 C/1,033 U across213 units/1,065 cells.
 Next: inspect the next compatible unknown whole-family L1 envelope/site against
 current originals and dated references before assigning art; U establishes no
 defect. Continue major architecture/site coverage rather than current-pair polish.
@@ -294,7 +294,7 @@ before selecting another round.
 | physical-building:w96215685 / w96215685 | 1226 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215688 / w96215688 | 1240 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP4 — L1 joined shallow whole roof and corrected front/north lawn; scoped visual/CODE/native/fit/spray/suite002 PASS; L2–5 unknown |
 | physical-building:w96215690 / w96215690 | 1141 Ozbourn Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96215691 / w96215691 | 1204 Mariner Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215691 / w96215691 | 1204 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | M1204 — whole architecture; materials/site fidelity open |
 | physical-building:w96215693 / w96215693 | 1208 Mariner Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215694 / w96215694 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215698 / w96215698 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -431,5 +431,26 @@ March/November2025 refs and unknown-date Apple context support the scoped envelo
 and observed architecture; missing north capture/unknown rear/schematic materials
 keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
 See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
-Current total **30 C /0 I /1035 U** across213 units/1065 cells;
-**L1:21 C /0 I /192 U**. All other stages unchanged;49 historical credits retained.
+After B461, totals were30 C/1035 U, including L1:21 C/192 U; historical credits unchanged.
+
+
+**M1204**, 2026-10-11, corrected study002: source `w96215691` completes L1
+shape/site and L2 doors/windows/roof under canonical game-art inference rules.
+Independent `bayside1226_visual_final_fresh` explicitly passed both stages after
+all13 final/all11 baseline originals and actual March2025 front/east-oblique plus
+undated Apple layout comparison; focused ESE coverage closes the earlier end gap.
+Corrected CODE PASS resolves30 inward closure quads by tuple-order reversal,
+preserving the roof domain, protected front/two canopies/site and source identity.
+Focused end19567 and rear75004 exited naturally0, with four native roles/four
+approaches, eight bidirectional routes and source-bound end/rear spray PASS;
+active supported released REST preceded SAFE. Full suite89593 exited naturally0,
+ALL TESTS PASS, all49 scored fits/world validation/determinism; release813aa5.
+Retained private evidence is `mariner1204-whole-study-20261011/final-review.txt`,
+`native-fit-{end,rear}001/run.log` and `full-suite001.log`; ordinary role outcomes
+are in [RETRO](RETRO_LOG.md). Rear/end schedules and exact pitch remain inference.
+Pale/flat roof/glazing and broad brown site treatment keep materials/setting and
+whole modern fidelity open. L3–L5 remain U; no as-built/reference_recognizable
+acceptance or recognition credit is added.
+Current total **32 C /0 I /1033 U** across213 units/1065 cells;
+**L1:22 C /0 I /191 U; L2:9 C /0 I /204 U**. L3/L5 remain213 U each,
+L4 remains1 C/212 U;49 historical recognition credits retained.
