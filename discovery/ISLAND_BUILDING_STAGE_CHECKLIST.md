@@ -159,8 +159,8 @@ world validation/determinism; owned/global engine absence17b417 establishes
 release. ROOT accepts these bounded L1 gates. Only both L1 become C; historical
 accepted claims and49 credits remain unchanged. See [1236 D6](facades/d6_reference_packets/w96215668_1236_northpoint_drive.md)
 and [1240 D7](facades/d7_reference_packets/w96215688_1240_northpoint_drive.md).
-Current totals after GV1394 below: L1:33 C/180 U; L2:30 C/183 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall64 C/1,001 U across213 units/1,065 cells.
+Current totals after NP1242 below: L1:34 C/179 U; L2:31 C/182 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall66 C/999 U across213 units/1,065 cells.
 Next: inspect the next compatible unknown whole-family L1 envelope/site against
 current originals and dated references before assigning art; U establishes no
 defect. Continue major architecture/site coverage rather than current-pair polish.
@@ -362,7 +362,7 @@ before selecting another round.
 | physical-building:w96665911 / w96665911 | 1229 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP/NP1229 — L1 retained; whole WNW rear architecture, independent CODE/all-side L2/native/routes/spray/suite PASS; higher/fidelity open |
 | physical-building:w96665912 / w96665912 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665915 / w96665915 | 1109 Keppler Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96665916 / w96665916 | 1242 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96665916 / w96665916 | 1242 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP1242 — scoped whole-envelope/rear architecture complete; higher fidelity/site open |
 | physical-building:w96665918 / w96665918 | 1310 Gateview Avenue | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665919 / w96665919 | 1116 Hutchins Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665920 / w96665920 | 1131 Mason Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -582,3 +582,8 @@ Only w96665904 L1/L2 become C. Retained private northpoint1237-whole-study-20261
 ### GV1394 / frozen1230 — whole east rear and threshold contact, 2026-10-12
 Only w96215646 L1/L2 become C. Retained private gateview1394-whole-study-20261012/independent-review.txt passes CODE/default branches/L1/all-side L2/scoped visual after all11 final originals, baseline and March front/September rear comparison. Mixed upper motifs are observed; concealed lower cadence remains inference. Generic opt-in threshold underside seating preserves original tops/default callers/front/roof/canopy/site; original six-floating-threshold HOLD remains historical.
 Focused36074 completed native four roles/four approaches/twelve entry returns/canopy both ways/source active REST-before-SAFE, but screenshot frame1/frame_post_draw HOLD ended controlled143. Minimal41175 natural0 supplied the root-inspected correct-source visible PNG. Fullsuite31178 natural0/f791b1 ALL TESTS PASS3d2997 includes all49 fits/world validation/determinism; global519cc5. Phase-only screenshot diagnostics passed CODE/runtime without claiming a stall fix. Actual213rows64C/1001U; higher material/site/as-built fidelity and prior49 recognition unchanged. No reference_recognizable promotion.
+
+
+### NP1242 — whole WSW rear architecture, 2026-10-12
+Only916 L1/L2 become C after ROOT final integration GO and current full suite PASS. Saved independent bayside1226_visual_final_fresh private RETRO passes CODE/retainedL1/all-sideL2/scoped architecture after all11 matched originals, March front and undated layout. Whole rear18windows/sixentries complete; original front/roof/carport/site protected. Black rear reference supplies no hidden schedule proof; counts/cadence remain production inference.
+Focused18001 completed native/four approaches/twelve entry pairs/carport both ways/source RESTSAFE; frame1postdraw capture HOLD ended controlled143/17c76c/global94f7d1. Minimal3984 natural0/ab9b71/global7ae004 supplied inspected correct-source visible PNG without native/routes replay. Current suite90856 natural0/967d5b ALL TESTS PASS932b26 includes all49 scored fits/world contracts/determinism; globalreleasee4ce7c. Private northpoint1242-whole-study-20261012/focused-validation.txt and housing-three-study-20261010/RETRO.txt retain evidence. Higher stages/material/site/fidelity and213inventory/prior49 recognition unchanged; no recognition promotion.

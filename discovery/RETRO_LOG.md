@@ -21333,3 +21333,43 @@ Next: exact six-file integration, only646L1/L2 promotion after ROOT review. No s
 Worked: consumed all saved final role records and ROOT-approved gates; only646L1/L2 promoted, actual213rows64C/1001U, prior49 recognition/higher stages unchanged. Exact six-file complete whitespace and isolated staging precede one local commit; no code/geometry modifications during integration.
 Limits: six-threshold study001 HOLD and36074 controlled143/frame1 screenshot HOLD remain distinct from repaired contact and successful41175 PNG. Diagnostic markers are not a root-cause fix; hidden fidelity/material/site open.
 Next: one authorized ordinary non-force push to established same-branch upstream; actual terminal and remoteHEAD verification, no credentials/config/main merge/retry. Outcome remains in private ordinary RETRO.
+
+## 1242 Northpoint — integration preparation, 2026-10-12
+
+### northpoint1242_rear_astra_art — whole rear author
+Worked: reused housing complete broad paired modules for18windows/sixblueentries across WSW0–2/4–5/7. Float32 full-envelope/piecewise LAND checks and existing threshold-bottom option seat all supports; all other decoded fields, front-driven hip/carport/site preserved. First33450 natural0/23b31e/globalb1af77; all11 originals inspected, no second capture warranted.
+Limits: unseen rear cadence remains inference; numpy absent but stdlib sufficed. Handoff was delayed after inspection without reported new defect.
+Next: write short frozen handoff immediately after release; independent gates remain separate from author checks.
+
+### bayside1226_visual_final_fresh — scope, independent CODE/visual and checkpoints
+Worked: actual approved nine-addition membership/source and Marchfront/Apple plus all11 baseline/current comparisons support whole rear gain. Independent CODE/retainedL1/all-sideL2/scopedvisual PASS:24 full assemblies, minimum endpoint0.948263m, source-bottom/window0.908387m, interassembly1.035842m; six thresholds completely clipped to both LAND tiles and embedded25–36.14mm. Buried jamb feet distinguished from exposed unsupported trim. Original source fields and procedural hip/frame coupling protected. Checkpoint CONTINUE frozen mandatory gates, not local polish.
+Limits: default east/north neighbor obstruction excluded; raisedNE supplies targetfront. Black rear image is no evidence; hidden cadence/material/site/as-built/recognition remain open. Protected procedural branch differs from historical raw-roof winding defects; no invented roof repair or native claim.
+Next: completed source/visual scope plus current mechanics/suite before final promotion. Proxy-root comparison is not primary ROOT or independent review.
+
+### bayside1226_final_validation — binding, combined HOLD and recovery
+Worked: actual standard housing producer, sixfront+sixrear entries/carport and two LAND tiles bound.18001 completed native4roles/4approaches/twelve returns/carport both ways/source activeRESTSAFE. Minimal3984 natural0/ab9b71/global7ae004 supplied visible correct-source1280x800 PNG after prior release, omitting completed native/routes while retaining mandatory approaches.
+Did not:18001 frame1postdraw/noPNG HOLD required controlled ownedTERM143/17c76c/global94f7d1. Diagnostic markers and successful short recovery do not explain/fix underlying stall; TextureRID warning retained.
+Next: current fullsuite pending at this checkpoint, no source edits or bookkeeping replay.
+
+### gateview70_integration_docs — source binding, launch, gallery and provisional integration
+Worked: three navigations recovered Marchfront/undatedlayout; failedblack opposite retained. Browser29083 controlled143/global34e199 preceded baseline21530natural0/global2dcff9, all11 inspected. Separate GO/readback and actualnamedAstraLow7a96e0; childtask_complete/cfe28e thenproxy47817natural0/102152/globalee90d9. Gallery matched gameplay and recoveryPNG323, matchingHTTP200/privateMarch404. Only authorized provisional916L1/L2 cells changed,66C/999U/213/49 preserved; exact eventualconfig916/checklist/RETRO whitelist.
+Did not: closeout delay and early redundant polling reduced throughput; no invented hang/restart. Ambiguous proxyROOT attribution corrected in ordinary handoff. No standalone independent-review.txt exists; actual saved reviewer privateRETRO is the verdict source.
+Next: await current suite and ROOT final commit GO; no staging/push or higher-quality acceptance. Proposed1390/frozen1228 next family requires separate references/baseline assignment, not autonomous implementation.
+
+### bayside1226_final_validation — 1242 final suite
+Worked: original90856 natural0/967d5b, ALL TESTS PASS932b26 all49 fits/world contracts/determinism and routeQA; actualglobalabsencee4ce7c. No duplicate focused cases or engine replay.
+Limits: filtered summary does not erase cleanupwarnings or original18001captureHOLD143;3984PNG recovery remains separate.
+Next: integrate only after ROOT final decision, preserve independent fidelity limits.
+
+### bayside1226_visual_final_fresh — 1242 missingPNG checkpoint
+Worked: personally inspected actual1280x800 recoveryPNG and reopened whole-rear context. CONTINUE to current suite then bounded integration; successful unchanged native/twelve-entry/carport subsets reused while missingPNG alone recovered.
+Limits: this closes a proof gap, not another architecture unit or renderer root-cause fix. At checkpoint time suite remained live; final validator record above supersedes pending state. Hidden fidelity/material/site and recognition remain open.
+Next: no localpolish or repeated route bookkeeping; next approved whole-family evidence action through ROOT.
+
+### gateview70_integration_docs — 1242 final integration/publication intent
+Worked: consumed saved final suite, independentreview and completed actor notes; only916 L1/L2 complete, actual213rows66C/999U and49recognition/higher unchanged. Exactthree-file complete whitespace/isolatedstaging; no sourcegeometry changes during integration. Next698 actualwest normals/no rear_frames and explicit nine-addition membership reverified, references/baseline still separateGO.
+Limits: proxy comparison is not primaryROOT/independentreview, failedrearreference and18001HOLD143 remain historical. No hiddenas-built or material/site completion claim.
+Next: one authorized ordinary upstream push after localcommit, actualterminal/remoteHEADverification, no credentials/config/mainmerge/retry. Publication outcome in privateordinaryRETRO.
+
+### bayside1226_visual_final_fresh — 1242 final suite / next approved family checkpoint
+CONTINUE after actual suite90856 natural0/ALLPASS and focused record inspection: integrate verified1242, then ROOT assigns bounded1390/frozen1228 source698 dated-reference binding and one baseline. Actual approved nine-addition membership and absent west rear_frames independently verified; no U-only defect ranking, borrowed neighbor pixels or authoring GO. Successful PNG recovery/current suite close mandatory proof gaps, not another architecture unit; historical18001HOLD and higher material/site/fidelity limits remain. No extra experiment, engine or review replay.
