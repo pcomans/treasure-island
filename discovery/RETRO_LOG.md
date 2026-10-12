@@ -21210,3 +21210,57 @@ Next: integrate successful subsets/recovery/current suite and independent PASS; 
 Worked: consumed actual saved final validator entry and consolidated every completed1236 named role before commit. Only1236L2C, L1/other stages retained; actual213rows59C/1006U/prior49 unchanged. Exactconfig668/checklist/RETRO whitespace then explicit staging; no geometry changes.
 Limits: historical31945HOLD/143, minimal recovery and hidden inference/higher material/site/recognition limits preserved. Future1240 preflight stays separate.
 Next: local commit and gallery293 actual hash/scoped gates; no push/auth retry/merge/engine or automatic next launch.
+
+
+## 2026-10-12 — 1240 both-face study and observed-front repair preparation
+
+### northpoint1240_whole_astra_art — first coherent whole-scope author
+Worked: existing housing assemblies developed all three WSW rear sections and first ENE front12–14,24 windows/eight entries; original frames15–16/entries/roof/site decoded unchanged. Actual Float32 whole-host/LAND preflight and all10 baseline/study originals inspected. Capture41493 natural0/6afb2c/global81e371; source frozen before handoff.
+Did not: conservative jamb/source-base comparison stopped unwritten on2mm; actual door-hole containment and LAND-seated feet required separate interpretations. Initial alternating narrow front motif was later independently held against visible broad-paired reference. Broad initial reads truncated; default east blocked by neighboring roofs.
+Next: selected fields/complete emitter envelopes and truthful source motif comparison, independent gates rather than author acceptance.
+
+### bayside1226_visual_final_fresh — roof prevention, initial review and severity correction
+Worked: consumed roof classification distinguished valid internal height joins from perimeter closures; KEEP PROTECTED, no duplicate repair. Initial all10 pairs/March references/Apple review and32-assembly Float32 contact/containment checks passed CODE/retainedL1. ROOT direct photo comparison prompted reviewer correction: initial all-sideL2/architecture PASS is superseded HOLD because new alternating narrow uppers contradicted observed broad paired units. Corrected scope only two widths, with positive complete-envelope margins; rear progress and protected geometry remain valid.
+Did not: treated directly observed motif-family mismatch as unresolved exact fidelity instead of substantive architecture. Initial PASS remains historical, not current acceptance.
+Next: inspect repaired actual pixels against source family before final visual verdict; native/suite remain separate. No new recognition claim or timing claim.
+
+### bayside1226_final_validation — preparation and first combined capture HOLD
+Worked: exact standard producer, eleven entry return pairs, owned carport both directions and source-pane spray bound with per-pose LAND/occupied-column checks. Original58868 completed native/four approaches/eleven entry pairs/carport/source placement active REST-before-SAFE. Two unchanged post-SAFE observations led to explicit capture HOLD; owned Godot TERM yielded original143/146a99/global a5401a.
+Did not: no PNG appeared; aggregate invocation did not pass, render-await cause unproved. Architecture motif HOLD was independent of completed mechanics.
+Next: after frozen two-width repair, current native and missing PNG with unchanged routes reused only after exact contact comparison; final saved results and suite still pending at this consolidation.
+
+### northpoint1240_front_family_rework — exact observed-family correction
+Worked: only appended-front upper indices1/3 widths0.9→1.65 changed, all other decoded/text source unchanged. Existing paired module reused; full emitted Float32 sill/trim margins end0.415156m, adjacent0.579983m, retained1.758538m. Capture74517 natural0/8e77eb/global8887ae; all10 final and20 prior originals plus dated refs inspected, source frozen/handoff before own RETRO.
+Did not: read-only python/record-id assumptions failed before write and were corrected to python3/object_key. Default east remained unavailable and7 TextureRID shutdown warning retained. Historical broad/narrow notes need eventual truthful reconciliation for front only.
+Next: independent postrepair CODE/visual/native/suite; two-art-capture budget exhausted, no extra polish or self-acceptance.
+
+### gateview70_integration_docs — references, launcher, gallery and integration preparation
+Worked: personally inspected Marchfront/site/Apple and all10 fresh baseline originals; identified BOTH blank rear and first front. Two rear navigations retained black/frontage-snap and world-map failures, no hidden rear proof. Browser55044 controlled143/6f7686/global655239 before baseline63422 natural0/f46965/globalc287e9. Separate CURRENTGO write/readback before each proxy; actual AstraLow child metadata verified. First child complete62736d/proxy9962 natural0/5477bd; repair child completeba0963/proxy19822 natural0/e8ae29/globalba0963. Hand-offs delivered before notes. Five study001 and five repaired originals personally inspected/published as own-gameplay only, gallery293→303; master/mirror/servedHTTP200/privateMarch404. Historical wrong-front HOLD and58868 capture143 retained.
+Limits: source-independent review/native PNG/suite final records not yet consumed; no stage/checklist/Git action. localhost12049 listener returned on one read-only socket check, no credential/fetch/push action. Next1237 proposal has actual front/no-rear source and prior ordinary author history, but exact34-audit membership remains unverified: retained audit directory not found in finite depth4 workspace lookup. Proposal is not authorization.
+Next: ROOT review concise observed-motif lesson, consume actual saved final reviewer/validator records, then eventual exactconfig688/checklist/RETRO/LEARNINGS only. L2-only59→60 after final gates/GO;213/49/L1/higher limits retained. No new framework, source geometry, engine or recognition promotion.
+
+
+### bayside1226_final_validation — 1240 current native and missing PNG
+Worked:73382 natural0/094fd6 supplied current native/four approaches/source-visible1280x800PNG and globalrelease195ee0. Current bindings/HEAD protected fields support scoped reuse of eleven entry/carport routes without replay.
+Limits: no study001 JSON snapshot; exact two-token historical comparison remains attributed author d670b5, not invented independent reconstruction.58868 capture HOLD/143 and TextureRID warning retained.
+Next: separately owned current full suite and final independent visual; neither claimed here.
+
+### gateview70_integration_docs — 1240 focused gallery and next-scope evidence
+Worked: personally inspected recoveryPNG and added own image303→304, served/master/mirrorHTTP200/privateMarch404; native/fit/PNG PASS with actual route-binding reuse, final visual/suite pending. ROOT approved observed-motif lesson. Exact34 audit membership for1237 remains unproven, but canonical HOUSING_FAMILY_INSTANCES.md row33 and owner approval at131 explicitly include1237 among24 approved comparison-pair normal-game integrations. This is a specific retained approved-family basis, not an audit-card claim. Catalog1237 recognition not_evaluated/acceptance_records empty; no new credit.
+Next: ROOT may review whole-opposite-face1237 proposal on that family authority; current source has no rear_frames, actual fresh refs/baseline still separateGO. No engine/source/checklist/staging/commit or credential action.
+
+
+### bayside1226_visual_final_fresh — 1240 final corrected-family review
+Worked: all ten fresh study002 originals, prior pairs and reopened March pixels confirm repeated broad paired new-front uppers correct the substantive HOLD. Full Float32 module/hole checks retain end0.415155m/adjacent0.579983m/retained1.758594m/roofedge0.447500m. Final CODE/retainedL1/all-sideL2/scoped architecture visual PASS; historical wrong PASS and HOLD retained.
+Limits: exact historical two-token equality attributed author record, no fabricated old snapshot. Hidden fidelity/material/site/recognition and whole-island quality open.
+Next: preserve contact-bound runtime reuse/current native and suite, no extra art capture.
+
+### bayside1226_final_validation — 1240 final current suite
+Worked: original4069 natural0/f3deae, ALL TESTS PASS5cdaa5 all49/world validation/determinism, globalc3b6dc. Current73382 native/PNG and unchanged route bindings remain separate scoped proof.
+Limits: filtered suite summary does not erase cleanup warnings or historical58868 HOLD/143; short polls yielded no new evidence.
+Next: longer ordinary observations of buffered work; no rerun or source mutation.
+
+### gateview70_integration_docs — 1240 final integration and branch publication intent
+Worked: consumed actual final reviewer/validator entries before authorized four-file commit; only1240L2 becomes C, actual213rows60C/1005U, L1/49recognition/higher limits preserved. Approved observed-motif lesson and all completed actor notes consolidated. No geometry changes during integration; exact intended tracked/untracked whitespace and explicit staging only.
+Limits: original front-motif HOLD and58868 capture143 remain historical; final gates do not grant as-built/recognition/material/site acceptance. localhost12049 listener returned but does not alone establish authentication.
+Next: one local commit, then ROOT-authorized one ordinary non-force push of current same-named branch to established origin, setting upstream because none exists; no main merge/other branch/credential output or retry. Actual publication outcome stays in private ordinary RETRO without an unnecessary extra commit.

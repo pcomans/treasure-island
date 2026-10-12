@@ -159,8 +159,8 @@ world validation/determinism; owned/global engine absence17b417 establishes
 release. ROOT accepts these bounded L1 gates. Only both L1 become C; historical
 accepted claims and49 credits remain unchanged. See [1236 D6](facades/d6_reference_packets/w96215668_1236_northpoint_drive.md)
 and [1240 D7](facades/d7_reference_packets/w96215688_1240_northpoint_drive.md).
-Current totals after NP1236 below: L1:31 C/182 U; L2:27 C/186 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall59 C/1,006 U across213 units/1,065 cells.
+Current totals after NP1240 below: L1:31 C/182 U; L2:28 C/185 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall60 C/1,005 U across213 units/1,065 cells.
 Next: inspect the next compatible unknown whole-family L1 envelope/site against
 current originals and dated references before assigning art; U establishes no
 defect. Continue major architecture/site coverage rather than current-pair polish.
@@ -333,7 +333,7 @@ before selecting another round.
 | physical-building:w96215680 / w96215680 | 1219 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | M1219 — whole rear/all-side architecture CODE/visual/native/suite PASS; windowless ends inferred, fidelity/material/site open |
 | physical-building:w96215682 / w96215682 | 1221 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | M1221 — whole-depth roof/rear CODE/all-side architecture/native/routes/spray/suite PASS; material/site/fidelity open |
 | physical-building:w96215685 / w96215685 | 1226 Bayside Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | BG — whole architecture; materials/site fidelity open |
-| physical-building:w96215688 / w96215688 | 1240 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP4 — L1 joined shallow whole roof and corrected front/north lawn; scoped visual/CODE/native/fit/spray/suite002 PASS; L2–5 unknown |
+| physical-building:w96215688 / w96215688 | 1240 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP4/NP1240 — retained L1; whole WSW rear/first ENE front and observed broad-paired repair; CODE/all-side L2/native/routes/spray/suite PASS; higher fidelity/material/site open |
 | physical-building:w96215690 / w96215690 | 1141 Ozbourn Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215691 / w96215691 | 1204 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | M1204 — whole architecture; materials/site fidelity open |
 | physical-building:w96215693 / w96215693 | 1208 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | MP — complete inferred rear/end openings; coherent whole roof (1206 repaired,1208 hip retained); independent CODE/L1/L2/scoped visual and current native/fit/spray/suite002 PASS; L3–5 open |
@@ -569,3 +569,7 @@ Focused99897 natural0/11496f/global4662c3 passed four native roles/four approach
 
 **NP1236 — whole four-section secured SSE rear, 2026-10-11.** Only L2 becomes C; L1 retained. Independent CODE/retainedL1/all-sideL2/scoped architecture visual PASS compares all11 baseline/study originals, five island pairs and dated March boarded frontage/oblique frontage plus bound Apple. Thirty-two boarded windows/eight pale entries complete four host unions; procedural segmented hip, original front/eight entries, ends/returns, connected ground/site/source remain unchanged. Boarded-specific complete envelopes and both LAND tiles checked; hidden rear cadence/count/anchors and terminal fidelity are production inference. Higher materials/site/recognition remain open.
 Focused31945 supplied native four roles/four approaches/sixteen entry pairs/source placement active REST-before-SAFE, but capture HOLD/no PNG ended controlled143/f836dc/globalab27d1. Minimal72483 natural0/cac37c/global92e445 supplied visible exact-source boarded-panel PNG/RESTSAFE without native/routes replay. Current94021 natural0/a867c1 ALL TESTS PASS9cde24/globalb501ca includes all49 scored fits/world validation/determinism. Retained private northpoint1236-whole-study-20261011/{independent-review.txt,focused-validation.txt,full-suite001.log} records scoped gates; historical HOLD and TextureRID warnings retained. Inventory213/prior49 recognition unchanged.
+
+
+**NP1240 — whole WSW rear and first ENE front, 2026-10-12.** Only L2 becomes C; L1 retained. Final independent CODE/retainedL1/all-sideL2/scoped architecture visual PASS compares all ten study002 originals, prior baseline/study001 and dated March frontage/site plus bound layout. Two new-front upper widths corrected the observed broad-paired family; initial visual PASS was rescinded to HOLD before repair. Whole rear, lower entries, retained15–16/front/roof/carport/site remain intact. Default east is honestly unavailable; raised/north positive coverage supports bounded architecture, not hidden as-built fidelity.
+Current73382 native/four approaches/source-visible PNG PASS combines scoped unchanged eleven-entry/carport route reuse from58868 successful REST-before-SAFE subsets; historical58868 controlled143/captureHOLD is not aggregate PASS. Fullsuite4069 natural0/f3deae ALL TESTS PASS5cdaa5 includes49 fits/world validation/determinism; globalreleasec3b6dc. Higher materials/site/fidelity/recognition remain open;213 inventory and prior49 credit unchanged.

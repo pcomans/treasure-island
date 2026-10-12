@@ -777,3 +777,8 @@ actual emitted index convention, classify top versus exterior closure faces, and
 check their three-dimensional boundary/winding before prescribing extra geometry.
 Projected coverage or native fit alone cannot establish a closed, visible envelope;
 compare repaired ground and raised views without introducing count pins or a new gate.
+
+
+## Separate observed motif families from uncertain placement
+
+1240 study001 initially received architecture PASS while its new narrow alternating upper windows contradicted the dated uncovered frontage’s repeated broad paired units. The mismatch was mislabeled as exact as-built uncertainty; ROOT’s direct photo comparison and the reviewer’s revised HOLD led to a two-width correction using the existing broad module. Unknown anchors, counts or hidden schedules permit declared production inference, but do not erase an observed motif-type or width-family mismatch. Compare those visible families explicitly and keep all-side visual acceptance on HOLD for a substantive observed architecture gap even when complete coverage and mechanical checks pass.

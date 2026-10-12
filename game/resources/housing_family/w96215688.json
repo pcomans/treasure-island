@@ -1076,6 +1076,114 @@
           }
         ],
         "pipes": []
+      },
+      {
+        "id": "newfront12-14",
+        "runs": [
+          12,
+          13,
+          14
+        ],
+        "start": [
+          -170.745,
+          2.831,
+          -788.771
+        ],
+        "end": [
+          -173.348,
+          2.996,
+          -799.124
+        ],
+        "length_m": 10.67521512663803,
+        "tangent": [
+          -0.24383583554252714,
+          0,
+          -0.9698165214643838
+        ],
+        "normal": [
+          0.9698165214643838,
+          0,
+          -0.24383583554252714
+        ],
+        "top_y": 9.075,
+        "opening_eligible_station_m": [
+          0,
+          10.67521512663803
+        ],
+        "upper_windows": [
+          {
+            "station_m": 1.4,
+            "width_m": 1.65,
+            "height_m": 1.16,
+            "center_y": 7.865,
+            "glazing": "blue",
+            "wall_receiver": true
+          },
+          {
+            "station_m": 4,
+            "width_m": 1.65,
+            "height_m": 1.16,
+            "center_y": 7.865,
+            "glazing": "blue",
+            "wall_receiver": true
+          },
+          {
+            "station_m": 6.8,
+            "width_m": 1.65,
+            "height_m": 1.16,
+            "center_y": 7.865,
+            "glazing": "blue",
+            "wall_receiver": true
+          },
+          {
+            "station_m": 9.3,
+            "width_m": 1.65,
+            "height_m": 1.16,
+            "center_y": 7.865,
+            "glazing": "blue",
+            "wall_receiver": true
+          }
+        ],
+        "lower_windows": [
+          {
+            "station_m": 1.4,
+            "width_m": 1.65,
+            "height_m": 1.06,
+            "center_y": 4.184198670700717,
+            "glazing": "blue",
+            "wall_receiver": true
+          },
+          {
+            "station_m": 6.8,
+            "width_m": 1.65,
+            "height_m": 1.06,
+            "center_y": 4.272544723391839,
+            "glazing": "blue",
+            "wall_receiver": true
+          }
+        ],
+        "entries": [
+          {
+            "station_m": 4,
+            "width_m": 0.92,
+            "height_m": 2.13,
+            "bottom_y": 2.951028792975585,
+            "door_tone": "maroon",
+            "wall_receiver": true,
+            "threshold_inference": "production_inference: complete jamb feet seat/embed at minimum canonical LAND across both feet; threshold remains above actual local grade without added site geometry."
+          },
+          {
+            "station_m": 9.3,
+            "width_m": 0.92,
+            "height_m": 2.13,
+            "bottom_y": 3.0377395966603946,
+            "door_tone": "maroon",
+            "wall_receiver": true,
+            "threshold_inference": "production_inference: complete jamb feet seat/embed at minimum canonical LAND across both feet; threshold remains above actual local grade without added site geometry."
+          }
+        ],
+        "screens": [],
+        "pipes": []
       }
     ]
   },
@@ -1088,24 +1196,17 @@
     21,
     23,
     24,
-    25
-  ],
-  "protected_runs": [
-    0,
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    10,
-    11,
+    25,
     12,
     13,
-    14,
+    14
+  ],
+  "protected_runs": [
+    2,
+    6,
+    7,
+    10,
+    11,
     17,
     22,
     26,
@@ -12383,5 +12484,339 @@
       "status": "production_inference; fitted to actual LAND and visible area, 25mm surface lift"
     }
   },
-  "dimensions": "production_inference; retained observed-side schedules, hidden elevations unknown"
+  "dimensions": "production_inference; retained observed-side schedules, hidden elevations unknown",
+  "rear_frames": [
+    {
+      "id": "rear-1",
+      "runs": [
+        0,
+        1
+      ],
+      "start": [
+        -192.253,
+        3.075,
+        -828.646
+      ],
+      "end": [
+        -188.753,
+        3.075,
+        -814.753
+      ],
+      "length_m": 14.327087945566525,
+      "tangent": [
+        0.2442924907907098,
+        0,
+        0.9697015927300888
+      ],
+      "normal": [
+        -0.9697015927300888,
+        0,
+        0.2442924907907098
+      ],
+      "top_y": 9.075,
+      "opening_eligible_station_m": [
+        0,
+        14.327087945566525
+      ],
+      "upper_windows": [
+        {
+          "station_m": 1.8,
+          "width_m": 1.65,
+          "height_m": 1.16,
+          "center_y": 7.865,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 5,
+          "width_m": 0.9,
+          "height_m": 1.16,
+          "center_y": 7.865,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 9,
+          "width_m": 1.65,
+          "height_m": 1.16,
+          "center_y": 7.865,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 12.2,
+          "width_m": 0.9,
+          "height_m": 1.16,
+          "center_y": 7.865,
+          "glazing": "blue",
+          "wall_receiver": true
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 1.8,
+          "width_m": 1.65,
+          "height_m": 1.06,
+          "center_y": 4.459230323911761,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 9,
+          "width_m": 1.65,
+          "height_m": 1.06,
+          "center_y": 4.4637684268985325,
+          "glazing": "blue",
+          "wall_receiver": true
+        }
+      ],
+      "entries": [
+        {
+          "station_m": 5,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "bottom_y": 3.1966885332419044,
+          "door_tone": "maroon",
+          "wall_receiver": true,
+          "threshold_inference": "production_inference: complete jamb feet seat/embed at minimum canonical LAND across both feet; threshold remains above actual local grade without added site geometry."
+        },
+        {
+          "station_m": 12.2,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "bottom_y": 3.2012271478749246,
+          "door_tone": "maroon",
+          "wall_receiver": true,
+          "threshold_inference": "production_inference: complete jamb feet seat/embed at minimum canonical LAND across both feet; threshold remains above actual local grade without added site geometry."
+        }
+      ],
+      "screens": [],
+      "pipes": [],
+      "elevation_role": "rear"
+    },
+    {
+      "id": "rear-2",
+      "runs": [
+        3,
+        4,
+        5
+      ],
+      "start": [
+        -190.389,
+        3.075,
+        -814.341
+      ],
+      "end": [
+        -186.696,
+        3.075,
+        -799.669
+      ],
+      "length_m": 15.12963426524253,
+      "tangent": [
+        0.24409050048777323,
+        0,
+        0.9697524568525868
+      ],
+      "normal": [
+        -0.9697524568525868,
+        0,
+        0.24409050048777323
+      ],
+      "top_y": 9.075,
+      "opening_eligible_station_m": [
+        0,
+        15.12963426524253
+      ],
+      "upper_windows": [
+        {
+          "station_m": 1.8,
+          "width_m": 1.65,
+          "height_m": 1.16,
+          "center_y": 7.865,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 5,
+          "width_m": 0.9,
+          "height_m": 1.16,
+          "center_y": 7.865,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 9,
+          "width_m": 1.65,
+          "height_m": 1.16,
+          "center_y": 7.865,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 12.2,
+          "width_m": 0.9,
+          "height_m": 1.16,
+          "center_y": 7.865,
+          "glazing": "blue",
+          "wall_receiver": true
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 1.8,
+          "width_m": 1.65,
+          "height_m": 1.06,
+          "center_y": 4.495338504621323,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 9,
+          "width_m": 1.65,
+          "height_m": 1.06,
+          "center_y": 4.499901111317122,
+          "glazing": "blue",
+          "wall_receiver": true
+        }
+      ],
+      "entries": [
+        {
+          "station_m": 5,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "bottom_y": 3.232805771473686,
+          "door_tone": "maroon",
+          "wall_receiver": true,
+          "threshold_inference": "production_inference: complete jamb feet seat/embed at minimum canonical LAND across both feet; threshold remains above actual local grade without added site geometry."
+        },
+        {
+          "station_m": 12.2,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "bottom_y": 3.2410745192705055,
+          "door_tone": "maroon",
+          "wall_receiver": true,
+          "threshold_inference": "production_inference: complete jamb feet seat/embed at minimum canonical LAND across both feet; threshold remains above actual local grade without added site geometry."
+        }
+      ],
+      "screens": [],
+      "pipes": [],
+      "elevation_role": "rear"
+    },
+    {
+      "id": "rear-3",
+      "runs": [
+        8,
+        9
+      ],
+      "start": [
+        -184.858,
+        3.075,
+        -800.126
+      ],
+      "end": [
+        -181.323,
+        2.919,
+        -786.11
+      ],
+      "length_m": 14.454912002499322,
+      "tangent": [
+        0.24455354687657582,
+        0,
+        0.9696357886908291
+      ],
+      "normal": [
+        -0.9696357886908291,
+        0,
+        0.24455354687657582
+      ],
+      "top_y": 9.075,
+      "opening_eligible_station_m": [
+        0,
+        14.454912002499322
+      ],
+      "upper_windows": [
+        {
+          "station_m": 1.8,
+          "width_m": 1.65,
+          "height_m": 1.16,
+          "center_y": 7.865,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 5,
+          "width_m": 0.9,
+          "height_m": 1.16,
+          "center_y": 7.865,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 9,
+          "width_m": 1.65,
+          "height_m": 1.16,
+          "center_y": 7.865,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 12.2,
+          "width_m": 0.9,
+          "height_m": 1.16,
+          "center_y": 7.865,
+          "glazing": "blue",
+          "wall_receiver": true
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 1.8,
+          "width_m": 1.65,
+          "height_m": 1.06,
+          "center_y": 4.465872411280948,
+          "glazing": "blue",
+          "wall_receiver": true
+        },
+        {
+          "station_m": 9,
+          "width_m": 1.65,
+          "height_m": 1.06,
+          "center_y": 4.348029750797714,
+          "glazing": "blue",
+          "wall_receiver": true
+        }
+      ],
+      "entries": [
+        {
+          "station_m": 5,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "bottom_y": 3.139574194153902,
+          "door_tone": "maroon",
+          "wall_receiver": true,
+          "threshold_inference": "production_inference: complete jamb feet seat/embed at minimum canonical LAND across both feet; threshold remains above actual local grade without added site geometry."
+        },
+        {
+          "station_m": 12.2,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "bottom_y": 3.0217317267897035,
+          "door_tone": "maroon",
+          "wall_receiver": true,
+          "threshold_inference": "production_inference: complete jamb feet seat/embed at minimum canonical LAND across both feet; threshold remains above actual local grade without added site geometry."
+        }
+      ],
+      "screens": [],
+      "pipes": [],
+      "elevation_role": "rear"
+    }
+  ],
+  "study_notes": [
+    "2026-10-11 whole-building Level 2 study: reuse housing_site_family complete recessed windows and maroon entries; no new base.",
+    "March 2025 source-bound front03 and north-site04 support broad/narrow white frames, maroon entries and retained carport grammar; exact first-front counts and anchors are production_inference, not measured/as-built.",
+    "WSW complete host unions 0-1 / 3-5 / 8-9 receive coherent upper/lower openings and grade-seated entries. No usable dated hidden rear pixels were obtained; rear schedule, count and anchors are production_inference, not observed absence or as-built.",
+    "Append-only first ENE front12-14 completes 10.675m host; all existing target frames including retained15-16 upper opening and three entries/screens preserved. Ends10-11/26-27 and returns2/6-7/17/22 remain protected.",
+    "Roof including valid internal height joins, source XZ/identity, site ground/lawn/parking/footway, carport/posts and materials unchanged. Analytic preflight is not native/runtime acceptance."
+  ]
 }
