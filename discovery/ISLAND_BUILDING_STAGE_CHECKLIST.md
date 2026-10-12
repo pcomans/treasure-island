@@ -159,8 +159,8 @@ world validation/determinism; owned/global engine absence17b417 establishes
 release. ROOT accepts these bounded L1 gates. Only both L1 become C; historical
 accepted claims and49 credits remain unchanged. See [1236 D6](facades/d6_reference_packets/w96215668_1236_northpoint_drive.md)
 and [1240 D7](facades/d7_reference_packets/w96215688_1240_northpoint_drive.md).
-Current totals after NP1237 below: L1:32 C/181 U; L2:29 C/184 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall62 C/1,003 U across213 units/1,065 cells.
+Current totals after GV1394 below: L1:33 C/180 U; L2:30 C/183 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall64 C/1,001 U across213 units/1,065 cells.
 Next: inspect the next compatible unknown whole-family L1 envelope/site against
 current originals and dated references before assigning art; U establishes no
 defect. Continue major architecture/site coverage rather than current-pair polish.
@@ -304,7 +304,7 @@ before selecting another round.
 | physical-building:w95934143 / w95934143 | 1443 Chinook Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w95934144 / w95934144 | 1439 Chinook Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215645 / w96215645 | 1122 Reeves Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96215646 / w96215646 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215646 / w96215646 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | GV1394 — scoped whole-envelope/rear architecture complete; higher fidelity/site open |
 | physical-building:w96215648 / w96215648 | 1316 Gateview Avenue | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215649 / w96215649 | 1212 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | M1212 — whole three-section rear complete; prior roof/front/ends/site preserved; CODE/L2/scoped visual/native fit/spray/suite PASS; L1 retained, finish/fidelity open |
 | physical-building:w96215651 / w96215651 | 1202 Mariner Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -577,3 +577,8 @@ Current73382 native/four approaches/source-visible PNG PASS combines scoped unch
 
 ### NP1237 — whole ENE rear architecture closure, 2026-10-12
 Only w96665904 L1/L2 become C. Retained private northpoint1237-whole-study-20261012/independent-review.txt passes CODE/L1/all-side L2/scoped visual after all11 matched views and actual March front/undated layout; hidden rear schedule remains production inference, May distant row unbound. Procedural hip/front/site preserved. Focused62119 completed native/four approaches/13 entry returns/source RESTSAFE but capture HOLD required ownedTERM143;49925 natural0 supplied visible source PNG. Current suite10297 natural0/4a4a36 ALL TESTS PASS432af3 (all49 fits/world validation/determinism), global4812c3. Actual213rows62C/1003U; higher stages/material/site/fidelity and prior49 recognition credit unchanged. No reference_recognizable promotion.
+
+
+### GV1394 / frozen1230 — whole east rear and threshold contact, 2026-10-12
+Only w96215646 L1/L2 become C. Retained private gateview1394-whole-study-20261012/independent-review.txt passes CODE/default branches/L1/all-side L2/scoped visual after all11 final originals, baseline and March front/September rear comparison. Mixed upper motifs are observed; concealed lower cadence remains inference. Generic opt-in threshold underside seating preserves original tops/default callers/front/roof/canopy/site; original six-floating-threshold HOLD remains historical.
+Focused36074 completed native four roles/four approaches/twelve entry returns/canopy both ways/source active REST-before-SAFE, but screenshot frame1/frame_post_draw HOLD ended controlled143. Minimal41175 natural0 supplied the root-inspected correct-source visible PNG. Fullsuite31178 natural0/f791b1 ALL TESTS PASS3d2997 includes all49 fits/world validation/determinism; global519cc5. Phase-only screenshot diagnostics passed CODE/runtime without claiming a stall fix. Actual213rows64C/1001U; higher material/site/as-built fidelity and prior49 recognition unchanged. No reference_recognizable promotion.

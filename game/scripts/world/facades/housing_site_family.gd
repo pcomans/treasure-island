@@ -113,7 +113,12 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 					var entry_material := door
 					if str(motif.get("door_role","")) == "pale":
 						entry_material = PARTS._material(color(palette,"pale_door_rgb",Color(0.62,0.65,0.62)),0.85)
-					PARTS._entry(root,point,t,n,trim,entry_material,concrete)
+					var extend_threshold: bool = motif.has("threshold_bottom_y")
+					if extend_threshold and not (motif.threshold_bottom_y is float or motif.threshold_bottom_y is int):
+						root.set_meta("build_valid", false)
+						push_error("Threshold bottom must be numeric")
+						continue
+					PARTS._entry(root,point,t,n,trim,entry_material,concrete,float(motif.get("threshold_bottom_y", 0.0)),extend_threshold)
 				elif str(motif.get("glazing", "")) == "boarded":
 					PARTS._panel(root,point-n*0.03,t,n,Vector3(width,height,0.07),PARTS._material(color(palette,"closure_rgb",Color(0.48,0.40,0.28)),0.96))
 					for side in [-1.0,1.0]:

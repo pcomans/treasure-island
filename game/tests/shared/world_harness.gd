@@ -403,9 +403,15 @@ func clean_hud() -> void:
 func save_screenshot(path: String) -> String:
 	for _i in 4:
 		clean_hud()
+		print("SCREENSHOT_PHASE path=%s frame=%d phase=process_frame" % [path, _i + 1])
 		await tree.process_frame
+		print("SCREENSHOT_PHASE path=%s frame=%d phase=frame_post_draw" % [path, _i + 1])
 		await RenderingServer.frame_post_draw
-	var error := tree.root.get_texture().get_image().save_png(path)
+	print("SCREENSHOT_PHASE path=%s phase=readback" % path)
+	var image: Image = tree.root.get_texture().get_image()
+	print("SCREENSHOT_PHASE path=%s phase=save_png" % path)
+	var error: Error = image.save_png(path)
+	print("SCREENSHOT_PHASE path=%s phase=result error=%d" % [path, error])
 	return "" if error == OK else "could not save %s (error %d)" % [path, error]
 
 
