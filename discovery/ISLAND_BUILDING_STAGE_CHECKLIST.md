@@ -159,8 +159,8 @@ world validation/determinism; owned/global engine absence17b417 establishes
 release. ROOT accepts these bounded L1 gates. Only both L1 become C; historical
 accepted claims and49 credits remain unchanged. See [1236 D6](facades/d6_reference_packets/w96215668_1236_northpoint_drive.md)
 and [1240 D7](facades/d7_reference_packets/w96215688_1240_northpoint_drive.md).
-Current totals after NP1240 below: L1:31 C/182 U; L2:28 C/185 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall60 C/1,005 U across213 units/1,065 cells.
+Current totals after NP1237 below: L1:32 C/181 U; L2:29 C/184 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall62 C/1,003 U across213 units/1,065 cells.
 Next: inspect the next compatible unknown whole-family L1 envelope/site against
 current originals and dated references before assigning art; U establishes no
 defect. Continue major architecture/site coverage rather than current-pair polish.
@@ -353,7 +353,7 @@ before selecting another round.
 | physical-building:w96665900 / w96665900 | 1442 Chinook Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665902 / w96665902 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665903 / w96665903 | 1124 Reeves Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96665904 / w96665904 | 1237 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96665904 / w96665904 | 1237 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP1237 — whole ENE rear CODE/L1/all-side L2/native/routes/spray/suite PASS; higher material/site/fidelity open |
 | physical-building:w96665906 / w96665906 | 1147 Ozbourn Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665907 / w96665907 | 1129 Mason Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665908 / w96665908 | 1203 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -573,3 +573,7 @@ Focused31945 supplied native four roles/four approaches/sixteen entry pairs/sour
 
 **NP1240 — whole WSW rear and first ENE front, 2026-10-12.** Only L2 becomes C; L1 retained. Final independent CODE/retainedL1/all-sideL2/scoped architecture visual PASS compares all ten study002 originals, prior baseline/study001 and dated March frontage/site plus bound layout. Two new-front upper widths corrected the observed broad-paired family; initial visual PASS was rescinded to HOLD before repair. Whole rear, lower entries, retained15–16/front/roof/carport/site remain intact. Default east is honestly unavailable; raised/north positive coverage supports bounded architecture, not hidden as-built fidelity.
 Current73382 native/four approaches/source-visible PNG PASS combines scoped unchanged eleven-entry/carport route reuse from58868 successful REST-before-SAFE subsets; historical58868 controlled143/captureHOLD is not aggregate PASS. Fullsuite4069 natural0/f3deae ALL TESTS PASS5cdaa5 includes49 fits/world validation/determinism; globalreleasec3b6dc. Higher materials/site/fidelity/recognition remain open;213 inventory and prior49 credit unchanged.
+
+
+### NP1237 — whole ENE rear architecture closure, 2026-10-12
+Only w96665904 L1/L2 become C. Retained private northpoint1237-whole-study-20261012/independent-review.txt passes CODE/L1/all-side L2/scoped visual after all11 matched views and actual March front/undated layout; hidden rear schedule remains production inference, May distant row unbound. Procedural hip/front/site preserved. Focused62119 completed native/four approaches/13 entry returns/source RESTSAFE but capture HOLD required ownedTERM143;49925 natural0 supplied visible source PNG. Current suite10297 natural0/4a4a36 ALL TESTS PASS432af3 (all49 fits/world validation/determinism), global4812c3. Actual213rows62C/1003U; higher stages/material/site/fidelity and prior49 recognition credit unchanged. No reference_recognizable promotion.

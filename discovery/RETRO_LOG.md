@@ -21264,3 +21264,40 @@ Next: longer ordinary observations of buffered work; no rerun or source mutation
 Worked: consumed actual final reviewer/validator entries before authorized four-file commit; only1240L2 becomes C, actual213rows60C/1005U, L1/49recognition/higher limits preserved. Approved observed-motif lesson and all completed actor notes consolidated. No geometry changes during integration; exact intended tracked/untracked whitespace and explicit staging only.
 Limits: original front-motif HOLD and58868 capture143 remain historical; final gates do not grant as-built/recognition/material/site acceptance. localhost12049 listener returned but does not alone establish authentication.
 Next: one local commit, then ROOT-authorized one ordinary non-force push of current same-named branch to established origin, setting upstream because none exists; no main merge/other branch/credential output or retry. Actual publication outcome stays in private ordinary RETRO without an unnecessary extra commit.
+
+
+## 1237 Northpoint whole ENE rear — integration preparation, 2026-10-12
+
+### northpoint1237_rear_astra_art — whole rear author
+Worked: reused complete housing assemblies for12 broad paired upper windows,9 lower windows and6 grade-seated entries across three full collinear unions. Float32 envelopes/actual LAND/occupied-column screening preceded one coherent capture64068 natural0/18f374/globalf1f697; all11 baseline/study originals and actual references inspected. Other original source keys, including target.frames-driven hip segmentation/front/site, decoded unchanged.
+Limits: hidden rear schedule is production inference; distant May row is unbound. Optional numpy was unavailable; standard struct Float32 sufficed without installation. No native/visual selfacceptance.
+Next: independent whole-unit review/runtime gates on frozen source, no extra polish capture.
+
+### bayside1226_visual_final_fresh — roof prevention, independent CODE/visual and hourly checkpoint
+Worked: actual procedural hip branch justified keeping roof protected; ignored legacy sheets were not mistaken for consumed geometry. All11 matched views plus March front/unbound May/undated layout inspected. CODE/L1/all-side L2/scoped architecture PASS:27 complete modules, holes and actual piecewise wall-bottom/LAND margins checked; plain ends scrutinized with positive side/raised coverage. Observed broad paired motif retained. Checkpoint CONTINUE whole-family completion.
+Limits: source-run24 intermediate bottom differs from union-end interpolation; exact rear cadence/material/site/as-built/recognition remain open. Five island pairs nearly unchanged; source contact is not stock walking proof.
+Next: finish frozen source mechanics/current suite, preserving separate stage and recognition decisions.
+
+### bayside1226_final_validation — preparation, bindings and focused disposition
+Worked: actual standard housing producer/seven old plus six new entries/no canopy or stairs bound to canonical LAND and source receiver. Corrected absent canopy-origin lookup to actual frame basis. Original62119 completed four native roles/four approaches/13 entry returns and source placement active REST-before-SAFE. Minimal49925 natural0/dcce43/globalf7cf40 delivered inspected source-visible PNG; native/routes not replayed.
+Limits:62119 stalled after SAFE/noPNG; exact owned Godot TERM led terminal143/17c312/global3782d5, retained as capture HOLD rather than aggregate PASS. Cleanup warnings do not explain it. Current full suite pending at this preparation checkpoint.
+Next: preserve successful unchanged subsets and final suite terminal/release; no additional runtime from documentation work.
+
+### gateview70_integration_docs — references, launcher, gallery and integration preparation
+Worked: March front recovered, retained layout reused, uncertain second rear snap preserved; all11 fresh baseline inspected. Browser34857 intentional143, baseline90473 natural0; actual release before author. Separate GO write/readback then actual named AstraLow routing; child task_complete/proxy82608 natural0/1b2520/global9dd68f. Gallery310 own PNGs, served/mirror matching200/privateMarch404, independently passed architecture/focused runtime and pending suite labels. Approved24-family evidence supports next646 proposal, not an invented34-card claim.
+Limits: May image does not establish target rear cadence; current646 original not recovered in finite lookup. Launcher monitoring must select plain tool results, never raw encrypted collaboration payloads. No source geometry or stage promotion during preparation.
+Next: exact eventual config904/checklist/RETRO whitelist, only L1/L2 promotion after final suite and ROOT GO; current213rows60C/1005U and49recognition unchanged.
+
+### gateview70_integration_docs — separate read-only capture-helper finding
+Actual postSAFE path is building_fit.gd:903 to world_harness.gd:403–409: four unbounded process_frame/frame_post_draw waits then synchronous get_image/save_png, with no intermediate phase marker. clean_hud explicitly unpauses; wrapper simply waits for Godot. Existing logs cannot distinguish wait/readback/write or establish cause; TextureRID warning also occurs on successful captures. Proposed separately assigned smallest change is phase identification and bounded missing-render HOLD in the existing helper, preserving PNG/RESTSAFE. It is not a proven renderer cure and cannot itself rescue synchronous main-thread readback. No shared code or engine action performed.
+
+
+### bayside1226_final_validation — 1237 final current suite
+Worked: original10297 natural0/4a4a36, ALL TESTS PASS432af3 all49 fits/world validation/determinism, actualglobal4812c3. Delivered terminal before notes, no duplicate checks.
+Limits: filtered summary does not erase component warnings or historical62119captureHOLD143;49925 recovery is separate.
+Next: retain scoped subset reuse and original-handle observation, no bookkeeping reruns.
+
+### gateview70_integration_docs — 1237 final integration/publication intent
+Worked: consumed saved final reviewer/validator and all completed named notes before exact three-file local commit. Only1237L1/L2C; verified213rows62C/1003U, prior49 recognition/higher stages preserved. No source geometry modification during integration; complete intended whitespace and explicit staging.
+Limits: hidden rear cadence/material/site/fidelity remain open; historical captureHOLD143 and uncertain unimplemented capture-helper finding preserved.
+Next: one ROOT-authorized non-force push to established origin/northpoint-fourth-family-20261010, verify actual terminal/remoteHEAD; no credentials/config/merge/retries. Outcome retained privately without an unnecessary extra commit.
