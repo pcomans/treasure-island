@@ -1488,16 +1488,9 @@
     11,
     16,
     17,
-    18,
-    19,
-    20,
     21,
-    22,
     23,
-    24,
-    25,
-    26,
-    27
+    24
   ],
   "materials": {
     "siding_rgb": [
@@ -1567,7 +1560,7 @@
   "clamp_pipe_to_eave": true,
   "dimensions": "production inference from dated visible frontage; hidden elevations retain plain source geometry",
   "reference_digest": "d897e9abeea8107850de2b3a550b4d2e8c4e6ea651ca1d4a3b5914e2e29ab374",
-  "study_notes": "Corrected canonical source-facing partition; observed four upper motifs per broad section, varied1203 widths, target-specific entry/privacy palette. Dimensions/cadence behind cars/vegetation inferred from shared family; no surveyed or hidden opening claim.",
+  "study_notes": "Corrected canonical source-facing partition; observed four upper motifs per broad section, varied1203 widths, target-specific entry/privacy palette. Dimensions/cadence behind cars/vegetation inferred from shared family; no surveyed or hidden opening claim. 2026-10-12 whole west rear study001: reuse housing_site_family complete paired windows and blue entries over unions18-20/22/25-27. Twelve upper paired windows, six broad lower windows and six entries. All hidden rear counts/cadence/anchors are production_inference, not measured/as-built; March2025 front supplies motif vocabulary only. Threshold bottoms extend to canonical LAND across full producer-shifted footprints; protected front, ends, returns, roof/site/materials unchanged.",
   "local_ground": {
     "walk-0": {
       "top_triangles": [
@@ -12684,5 +12677,275 @@
       0.59
     ],
     "inference": "Observed freestanding parking canopy; bounded extent/post spacing production inference.1203 left frontage only, right frontage uncovered; hidden left endpoint not asserted."
-  }
+  },
+  "rear_frames": [
+    {
+      "id": "rear-west-1",
+      "elevation_role": "rear",
+      "runs": [
+        18,
+        19,
+        20
+      ],
+      "start": [
+        -318.1090087890625,
+        2.869999885559082,
+        -678.5419921875
+      ],
+      "end": [
+        -319.13800048828125,
+        2.993000030517578,
+        -664.2379760742188
+      ],
+      "length_m": 14.340979774271727,
+      "tangent": [
+        -0.07175184041261673,
+        0.0,
+        0.9974225163459778
+      ],
+      "normal": [
+        -0.9974225163459778,
+        0.0,
+        -0.07175184041261673
+      ],
+      "top_y": 8.99,
+      "upper_windows": [
+        {
+          "station_m": 1.7926224717839658,
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 7.91,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 5.377867415351897,
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 7.91,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 8.96311235891983,
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 7.91,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 12.54835730248776,
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 7.91,
+          "glazing": "blue"
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 1.7926224717839658,
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 4.4,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 8.96311235891983,
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 4.4,
+          "glazing": "blue"
+        }
+      ],
+      "entries": [
+        {
+          "station_m": 5.377867415351897,
+          "bottom_y": 3.010265987040668,
+          "threshold_bottom_y": 2.9494266611426063
+        },
+        {
+          "station_m": 12.54835730248776,
+          "bottom_y": 3.0248973683629283,
+          "threshold_bottom_y": 2.973116175408986
+        }
+      ],
+      "inference": "production_inference: hidden west count, cadence and anchors; observed March2025 east broad paired white window/blue entry family only, not as-built rear."
+    },
+    {
+      "id": "rear-west-2",
+      "elevation_role": "rear",
+      "runs": [
+        22
+      ],
+      "start": [
+        -317.87200927734375,
+        2.986999988555908,
+        -664.1489868164062
+      ],
+      "end": [
+        -318.9179992675781,
+        2.996000051498413,
+        -649.6439819335938
+      ],
+      "length_m": 14.542670377550506,
+      "tangent": [
+        -0.0719255805015564,
+        0.0,
+        0.997409999370575
+      ],
+      "normal": [
+        -0.997409999370575,
+        0.0,
+        -0.0719255805015564
+      ],
+      "top_y": 8.99,
+      "upper_windows": [
+        {
+          "station_m": 1.8178337971938132,
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 7.91,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 5.453501391581439,
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 7.91,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 9.089168985969065,
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 7.91,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 12.724836580356692,
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 7.91,
+          "glazing": "blue"
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 1.8178337971938132,
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 4.4,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 9.089168985969065,
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 4.4,
+          "glazing": "blue"
+        }
+      ],
+      "entries": [
+        {
+          "station_m": 5.453501391581439,
+          "bottom_y": 3.0323013497562097,
+          "threshold_bottom_y": 2.9805195226082013
+        },
+        {
+          "station_m": 12.724836580356692,
+          "bottom_y": 3.0464608997888827,
+          "threshold_bottom_y": 2.9946790726408743
+        }
+      ],
+      "inference": "production_inference: hidden west count, cadence and anchors; observed March2025 east broad paired white window/blue entry family only, not as-built rear."
+    },
+    {
+      "id": "rear-west-3",
+      "elevation_role": "rear",
+      "runs": [
+        25,
+        26,
+        27
+      ],
+      "start": [
+        -320.04400634765625,
+        2.996000051498413,
+        -649.7219848632812
+      ],
+      "end": [
+        -321.125,
+        2.984999895095825,
+        -634.7160034179688
+      ],
+      "length_m": 15.044867111858133,
+      "tangent": [
+        -0.07185132801532745,
+        0.0,
+        0.9974153637886047
+      ],
+      "normal": [
+        -0.9974153637886047,
+        0.0,
+        -0.07185132801532745
+      ],
+      "top_y": 8.99,
+      "upper_windows": [
+        {
+          "station_m": 1.8806083889822667,
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 7.91,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 5.6418251669468,
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 7.91,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 9.403041944911333,
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 7.91,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 13.164258722875866,
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 7.91,
+          "glazing": "blue"
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 1.8806083889822667,
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 4.4,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 9.403041944911333,
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 4.4,
+          "glazing": "blue"
+        }
+      ],
+      "entries": [
+        {
+          "station_m": 5.6418251669468,
+          "bottom_y": 3.056432350412535,
+          "threshold_bottom_y": 3.0001868905588616
+        },
+        {
+          "station_m": 13.164258722875866,
+          "bottom_y": 3.038892649370893,
+          "threshold_bottom_y": 2.979159824582748
+        }
+      ],
+      "inference": "production_inference: hidden west count, cadence and anchors; observed March2025 east broad paired white window/blue entry family only, not as-built rear."
+    }
+  ]
 }

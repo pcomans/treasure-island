@@ -21373,3 +21373,38 @@ Next: one authorized ordinary upstream push after localcommit, actualterminal/re
 
 ### bayside1226_visual_final_fresh — 1242 final suite / next approved family checkpoint
 CONTINUE after actual suite90856 natural0/ALLPASS and focused record inspection: integrate verified1242, then ROOT assigns bounded1390/frozen1228 source698 dated-reference binding and one baseline. Actual approved nine-addition membership and absent west rear_frames independently verified; no U-only defect ranking, borrowed neighbor pixels or authoring GO. Successful PNG recovery/current suite close mandatory proof gaps, not another architecture unit; historical18001HOLD and higher material/site/fidelity limits remain. No extra experiment, engine or review replay.
+
+## 1390 / frozen1228 Gateview — integration preparation, 2026-10-12
+
+### gateview1390_rear_astra_art — whole west author
+Worked: reused housing complete assemblies for twelve paired uppers, six broad lowers and six blue entries across all three west unions. Full Float32 envelopes and canonical LAND-clipped threshold bases preflighted; only rear_frames/protected_runs/study_notes changed, every other decoded field protected. Original79357 natural0/acdcdf/global7ffafa; all11 captures inspected,1/2 budget used, child completed before proxy50508 natural0.
+Limits: hidden rear cadence/counts/anchors are inference; first render is not independent acceptance.
+Next: frozen source to independent/runtime gates before extended refinement.
+
+### bayside1226_visual_final_fresh — independent architecture and checkpoints
+Worked: all11 baseline/current plus actual March front/Apple comparisons establish whole west gain and protected front/roof/site; CODE/L1/all-sideL2/scoped visual PASS. All24 complete assemblies checked: minimum endpoint.732646m, eave.417500m; six entire thresholds seated34.999–48.839mm with72–85.841mm top steps. Plain ends are deliberate family inference; positive NE target front excludes occluding neighbors. Consumed procedural hip/frame coupling unchanged, no invented raw-roof repair.
+Limits: black rear supplies no observation; hidden/as-built/material/site/recognition open. Markers locate first postdraw wait, not its cause.
+Next: CONTINUE mandatory gates, no local polish. ROOT approved one next-family reversible split experiment: native/routes without optional spray, then minimal spray after release; preserve mandatory approaches/RESTSAFE/visiblePNG, compare natural terminals/unplanned recovery and zero native/routes replay, no timing/framework claim.
+
+### bayside1226_final_validation — native/routes HOLD and PNG recovery
+Worked:70574 completed native4roles/four approaches/twelve entry pairs/carport both ways/source activeRESTSAFE. Minimal17713 natural0/3a91f0/global8cabb0 supplied personally inspected1280x800 correct middle-west pane PNG; completed native/routes omitted, mandatory four approaches retained.
+Did not: combined first-frame_post_draw/noPNG HOLD required exact-owned GodotTERM, same70574 terminal143/0e36bc/global2e9a34. Keep failed aggregate separate from successful subsets; seven TextureRID cleanup warning not diagnosed as cause.
+Next: current full suite pending, no source/helper change or replay for bookkeeping.
+
+### gateview70_integration_docs — references, launcher, gallery and provisional preparation
+Worked: bound actual March front by source ray and Apple left-row orientation; black opposite retained. Browser97558 controlled143/global3dcf8b before baseline95712 natural0/globaldda818, all11 inspected. Separate GO/readback and external real AstraLow routing8f223e; child completionaad9ac, proxy50508 natural0/89c8a1/global07543b. Six matched own views plus actual recoveryPNG bring gallery330, matching served copies/private photo404. Explicit provisional698L1/L2 only68C/997U; exactconfig/checklist/RETRO whitelist,213/49/higher unchanged.
+Limits: early polling and oversized log reads were unnecessary; no duplicate invocation. Proxy/author judgments explicitly distinct from primaryROOT/independent review.
+Next: suite/final ROOT GO before stage/commit/push; next approved1203 source908 has concrete missing SW0–2/4–5 and protected NE front/procedural hip/site, dated pixels still need recovery before baseline.
+
+### bayside1226_final_validation —1390 final suite
+Worked: original37564 natural0/966b3e, ALL TESTS PASS24f64d all49 scored fits/contracts/world validation/determinism, global580ad0. Actual live buffered island process was observed without restart; final note/log saved.
+Limits: buffered progress is not an incremental result; earlier70574HOLD143 and focused cleanup warnings remain separate.
+Next: integrate existing proof, no replay; approved split-case experiment belongs to next family only.
+
+### gateview70_integration_docs —1390 final integration/publication intent
+Worked: final saved suite and independent/runtime verdicts consumed; only698L1/L2 complete,68C/997U/213units/49recognition and higher stages preserved. Exact three-file whitespace and isolated staging precede local commit; geometry unchanged during integration.
+Limits: black rear/hidden schedule inference and70574captureHOLD143 remain,17713PNG recovery distinct; no diagnostic root-cause or whole-modern-quality claim.
+Next: one authorized ordinary same-upstream push with actual terminal/remoteHEAD equality; no credentials/config/main merge or extra engine. Gallery publication status only after verified success.
+
+### bayside1226_visual_final_fresh —1390 final suite / next-family checkpoint
+CONTINUE after actual full-suite001.log ALL49/world/determinism/ALL TESTS PASS and37564 natural0/global580ad0. This supersedes historical pending status; existing CODE/L1/all-sideL2 and focused successful subsets/recovery reused,70574HOLD143 preserved. Next approved1203 source-bound references/one baseline precede any whole-SW art scope. Future split native/routes then minimal spray experiment retains all gates and actual release, measures terminals/recovery/duplicated cases without unmeasured timing or renderer-fix claims. Higher material/site/fidelity and recognition remain open.

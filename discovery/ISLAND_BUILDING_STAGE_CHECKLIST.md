@@ -159,8 +159,8 @@ world validation/determinism; owned/global engine absence17b417 establishes
 release. ROOT accepts these bounded L1 gates. Only both L1 become C; historical
 accepted claims and49 credits remain unchanged. See [1236 D6](facades/d6_reference_packets/w96215668_1236_northpoint_drive.md)
 and [1240 D7](facades/d7_reference_packets/w96215688_1240_northpoint_drive.md).
-Current totals after NP1242 below: L1:34 C/179 U; L2:31 C/182 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall66 C/999 U across213 units/1,065 cells.
+Current totals after GV1390 below: L1:35 C/178 U; L2:32 C/181 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall68 C/997 U across213 units/1,065 cells.
 Next: inspect the next compatible unknown whole-family L1 envelope/site against
 current originals and dated references before assigning art; U establishes no
 defect. Continue major architecture/site coverage rather than current-pair polish.
@@ -338,7 +338,7 @@ before selecting another round.
 | physical-building:w96215691 / w96215691 | 1204 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | M1204 — whole architecture; materials/site fidelity open |
 | physical-building:w96215693 / w96215693 | 1208 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | MP — complete inferred rear/end openings; coherent whole roof (1206 repaired,1208 hip retained); independent CODE/L1/L2/scoped visual and current native/fit/spray/suite002 PASS; L3–5 open |
 | physical-building:w96215694 / w96215694 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96215698 / w96215698 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215698 / w96215698 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | GV1390 — scoped CODE/L1/all-side L2/native/routes/spray/suite PASS; higher quality open |
 | physical-building:w96665883 / w96665883 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665884 / w96665884 | 1145 Ozbourn Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665885 / w96665885 | 1118 Hutchins Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -587,3 +587,6 @@ Focused36074 completed native four roles/four approaches/twelve entry returns/ca
 ### NP1242 — whole WSW rear architecture, 2026-10-12
 Only916 L1/L2 become C after ROOT final integration GO and current full suite PASS. Saved independent bayside1226_visual_final_fresh private RETRO passes CODE/retainedL1/all-sideL2/scoped architecture after all11 matched originals, March front and undated layout. Whole rear18windows/sixentries complete; original front/roof/carport/site protected. Black rear reference supplies no hidden schedule proof; counts/cadence remain production inference.
 Focused18001 completed native/four approaches/twelve entry pairs/carport both ways/source RESTSAFE; frame1postdraw capture HOLD ended controlled143/17c76c/global94f7d1. Minimal3984 natural0/ab9b71/global7ae004 supplied inspected correct-source visible PNG without native/routes replay. Current suite90856 natural0/967d5b ALL TESTS PASS932b26 includes all49 scored fits/world contracts/determinism; globalreleasee4ce7c. Private northpoint1242-whole-study-20261012/focused-validation.txt and housing-three-study-20261010/RETRO.txt retain evidence. Higher stages/material/site/fidelity and213inventory/prior49 recognition unchanged; no recognition promotion.
+
+### GV1390 scoped architecture closure — 2026-10-12
+Only w96215698 L1/L2 checked on explicit independent CODE/L1/all-side L2/scoped visual and focused fit evidence. Current37564 natural0/966b3e ALL TESTS PASS24f64d includes all49 scored fits/world validation/determinism; global580ad0, primary ROOT reviewed full-suite001.log. Actual all11 before/after views plus March front/undated bound layout support whole west architecture; hidden rear and protected plain ends remain game-art inference, not as-built. Private gateview1390-whole-study-20261012 retains author-handoff.txt and focused-validation.txt; saved independent verdict is in ordinary housing-three-study-20261010/RETRO.txt.70574 native/four approaches/twelve entry returns/carport/source RESTSAFE succeeded but capture HOLD ended controlled143;17713 natural0 supplied inspected correct-source PNG. No diagnostic root-cause fix claim. Higher stages/material/site/fidelity and213inventory/49recognition unchanged. Actual68C/997U records scoped architecture stage coverage, not recognition acceptance.
