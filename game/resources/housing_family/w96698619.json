@@ -1475,13 +1475,8 @@
     7,
     9,
     10,
-    11,
-    12,
     13,
-    14,
-    15,
-    16,
-    17
+    15
   ],
   "materials": {
     "siding_rgb": [
@@ -1551,7 +1546,7 @@
   "clamp_pipe_to_eave": true,
   "dimensions": "production inference from dated visible frontage; hidden elevations retain plain source geometry",
   "reference_digest": "88cb57ac72504ac8b1e209f476b44c5ad918db591396b94e00394b636d728575",
-  "study_notes": "Corrected exact outward source runs. Visible lower family organization and material palette; upper opening schedule behind1254 canopy explicitly inferred from established family. No hidden-side opening claim; dimensions/cadence are production inference.",
+  "study_notes": "Corrected exact outward source runs. Visible lower family organization and material palette; upper opening schedule behind1254 canopy explicitly inferred from established family. No hidden-side opening claim; dimensions/cadence are production inference. 2026-10-13 whole NNW rear: three complete collinear host unions11\u201312/14/16\u201317 with paired upper/lower window and grade-seated burgundy-entry family. production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof. Source front, ends/returns, materials, canopy, roof and site retained.",
   "local_ground": {
     "walk-0": {
       "top_triangles": [
@@ -12668,5 +12663,1098 @@
       0.25
     ],
     "inference": "Observed deep continuous freestanding canopy; endpoint and post cadence are production inference, not surveyed."
-  }
+  },
+  "rear_frames": [
+    {
+      "id": "nnw-rear-1",
+      "elevation_role": "rear",
+      "runs": [
+        11,
+        12
+      ],
+      "start": [
+        -52.258,
+        3.097,
+        -561.768
+      ],
+      "end": [
+        -65.025,
+        3.097,
+        -555.245
+      ],
+      "length_m": 14.336869217786274,
+      "tangent": [
+        -0.8905012549197948,
+        0,
+        0.4549807852934787
+      ],
+      "normal": [
+        -0.4549807852934787,
+        0,
+        -0.8905012549197948
+      ],
+      "upper_windows": [
+        {
+          "station_m": 1.720424306134353,
+          "local_station_m": 1.720424306134353,
+          "basis": {
+            "source_run": 11,
+            "start": [
+              -52.258,
+              3.097,
+              -561.768
+            ],
+            "end": [
+              -64,
+              3.097,
+              -555.769
+            ],
+            "tangent": [
+              -0.8905104799095791,
+              0,
+              0.45496272943089655
+            ],
+            "normal": [
+              -0.45496272943089655,
+              0,
+              -0.8905104799095791
+            ],
+            "length_m": 13.185695468954234
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 7.85,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 5.304641610580921,
+          "local_station_m": 5.304641610580921,
+          "basis": {
+            "source_run": 11,
+            "start": [
+              -52.258,
+              3.097,
+              -561.768
+            ],
+            "end": [
+              -64,
+              3.097,
+              -555.769
+            ],
+            "tangent": [
+              -0.8905104799095791,
+              0,
+              0.45496272943089655
+            ],
+            "normal": [
+              -0.45496272943089655,
+              0,
+              -0.8905104799095791
+            ],
+            "length_m": 13.185695468954234
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 7.85,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 9.032227607205353,
+          "local_station_m": 9.032227607205353,
+          "basis": {
+            "source_run": 11,
+            "start": [
+              -52.258,
+              3.097,
+              -561.768
+            ],
+            "end": [
+              -64,
+              3.097,
+              -555.769
+            ],
+            "tangent": [
+              -0.8905104799095791,
+              0,
+              0.45496272943089655
+            ],
+            "normal": [
+              -0.45496272943089655,
+              0,
+              -0.8905104799095791
+            ],
+            "length_m": 13.185695468954234
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 7.85,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 12.616444911651922,
+          "local_station_m": 12.616444911651922,
+          "basis": {
+            "source_run": 11,
+            "start": [
+              -52.258,
+              3.097,
+              -561.768
+            ],
+            "end": [
+              -64,
+              3.097,
+              -555.769
+            ],
+            "tangent": [
+              -0.8905104799095791,
+              0,
+              0.45496272943089655
+            ],
+            "normal": [
+              -0.45496272943089655,
+              0,
+              -0.8905104799095791
+            ],
+            "length_m": 13.185695468954234
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 7.85,
+          "glazing": "blue"
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 1.720424306134353,
+          "local_station_m": 1.720424306134353,
+          "basis": {
+            "source_run": 11,
+            "start": [
+              -52.258,
+              3.097,
+              -561.768
+            ],
+            "end": [
+              -64,
+              3.097,
+              -555.769
+            ],
+            "tangent": [
+              -0.8905104799095791,
+              0,
+              0.45496272943089655
+            ],
+            "normal": [
+              -0.45496272943089655,
+              0,
+              -0.8905104799095791
+            ],
+            "length_m": 13.185695468954234
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "width_m": 1.8,
+          "height_m": 1.05,
+          "center_y": 4.547,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 5.304641610580921,
+          "local_station_m": 5.304641610580921,
+          "basis": {
+            "source_run": 11,
+            "start": [
+              -52.258,
+              3.097,
+              -561.768
+            ],
+            "end": [
+              -64,
+              3.097,
+              -555.769
+            ],
+            "tangent": [
+              -0.8905104799095791,
+              0,
+              0.45496272943089655
+            ],
+            "normal": [
+              -0.45496272943089655,
+              0,
+              -0.8905104799095791
+            ],
+            "length_m": 13.185695468954234
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "width_m": 1.8,
+          "height_m": 1.05,
+          "center_y": 4.547,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 9.032227607205353,
+          "local_station_m": 9.032227607205353,
+          "basis": {
+            "source_run": 11,
+            "start": [
+              -52.258,
+              3.097,
+              -561.768
+            ],
+            "end": [
+              -64,
+              3.097,
+              -555.769
+            ],
+            "tangent": [
+              -0.8905104799095791,
+              0,
+              0.45496272943089655
+            ],
+            "normal": [
+              -0.45496272943089655,
+              0,
+              -0.8905104799095791
+            ],
+            "length_m": 13.185695468954234
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "width_m": 1.8,
+          "height_m": 1.05,
+          "center_y": 4.547,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 12.616444911651922,
+          "local_station_m": 12.616444911651922,
+          "basis": {
+            "source_run": 11,
+            "start": [
+              -52.258,
+              3.097,
+              -561.768
+            ],
+            "end": [
+              -64,
+              3.097,
+              -555.769
+            ],
+            "tangent": [
+              -0.8905104799095791,
+              0,
+              0.45496272943089655
+            ],
+            "normal": [
+              -0.45496272943089655,
+              0,
+              -0.8905104799095791
+            ],
+            "length_m": 13.185695468954234
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "width_m": 1.8,
+          "height_m": 1.05,
+          "center_y": 4.547,
+          "glazing": "blue"
+        }
+      ],
+      "entries": [
+        {
+          "station_m": 3.512532958357637,
+          "local_station_m": 3.512532958357637,
+          "basis": {
+            "source_run": 11,
+            "start": [
+              -52.258,
+              3.097,
+              -561.768
+            ],
+            "end": [
+              -64,
+              3.097,
+              -555.769
+            ],
+            "tangent": [
+              -0.8905104799095791,
+              0,
+              0.45496272943089655
+            ],
+            "normal": [
+              -0.45496272943089655,
+              0,
+              -0.8905104799095791
+            ],
+            "length_m": 13.185695468954234
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "bottom_y": 3.2124568903177897,
+          "door_role": "burgundy",
+          "threshold_bottom_y": 3.1552692289741917
+        },
+        {
+          "station_m": 10.824336259428637,
+          "local_station_m": 10.824336259428637,
+          "basis": {
+            "source_run": 11,
+            "start": [
+              -52.258,
+              3.097,
+              -561.768
+            ],
+            "end": [
+              -64,
+              3.097,
+              -555.769
+            ],
+            "tangent": [
+              -0.8905104799095791,
+              0,
+              0.45496272943089655
+            ],
+            "normal": [
+              -0.45496272943089655,
+              0,
+              -0.8905104799095791
+            ],
+            "length_m": 13.185695468954234
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "bottom_y": 3.1921568528119133,
+          "door_role": "burgundy",
+          "threshold_bottom_y": 3.1349691914683153
+        }
+      ],
+      "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof."
+    },
+    {
+      "id": "nnw-rear-2",
+      "elevation_role": "rear",
+      "runs": [
+        14
+      ],
+      "start": [
+        -65.79,
+        3.097,
+        -556.748
+      ],
+      "end": [
+        -79.261,
+        3.085,
+        -549.857
+      ],
+      "length_m": 15.131216805002854,
+      "tangent": [
+        -0.890278698243624,
+        0,
+        0.4554161168136654
+      ],
+      "normal": [
+        -0.4554161168136654,
+        0,
+        -0.890278698243624
+      ],
+      "upper_windows": [
+        {
+          "station_m": 1.8157460166003423,
+          "local_station_m": 1.8157460166003423,
+          "basis": {
+            "source_run": 14,
+            "start": [
+              -65.79,
+              3.097,
+              -556.748
+            ],
+            "end": [
+              -79.261,
+              3.085,
+              -549.857
+            ],
+            "tangent": [
+              -0.890278698243624,
+              0,
+              0.4554161168136654
+            ],
+            "normal": [
+              -0.4554161168136654,
+              0,
+              -0.890278698243624
+            ],
+            "length_m": 15.131216805002854
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 7.85,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 5.598550217851056,
+          "local_station_m": 5.598550217851056,
+          "basis": {
+            "source_run": 14,
+            "start": [
+              -65.79,
+              3.097,
+              -556.748
+            ],
+            "end": [
+              -79.261,
+              3.085,
+              -549.857
+            ],
+            "tangent": [
+              -0.890278698243624,
+              0,
+              0.4554161168136654
+            ],
+            "normal": [
+              -0.4554161168136654,
+              0,
+              -0.890278698243624
+            ],
+            "length_m": 15.131216805002854
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 7.85,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 9.532666587151798,
+          "local_station_m": 9.532666587151798,
+          "basis": {
+            "source_run": 14,
+            "start": [
+              -65.79,
+              3.097,
+              -556.748
+            ],
+            "end": [
+              -79.261,
+              3.085,
+              -549.857
+            ],
+            "tangent": [
+              -0.890278698243624,
+              0,
+              0.4554161168136654
+            ],
+            "normal": [
+              -0.4554161168136654,
+              0,
+              -0.890278698243624
+            ],
+            "length_m": 15.131216805002854
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 7.85,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 13.31547078840251,
+          "local_station_m": 13.31547078840251,
+          "basis": {
+            "source_run": 14,
+            "start": [
+              -65.79,
+              3.097,
+              -556.748
+            ],
+            "end": [
+              -79.261,
+              3.085,
+              -549.857
+            ],
+            "tangent": [
+              -0.890278698243624,
+              0,
+              0.4554161168136654
+            ],
+            "normal": [
+              -0.4554161168136654,
+              0,
+              -0.890278698243624
+            ],
+            "length_m": 15.131216805002854
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 7.85,
+          "glazing": "blue"
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 1.8157460166003423,
+          "local_station_m": 1.8157460166003423,
+          "basis": {
+            "source_run": 14,
+            "start": [
+              -65.79,
+              3.097,
+              -556.748
+            ],
+            "end": [
+              -79.261,
+              3.085,
+              -549.857
+            ],
+            "tangent": [
+              -0.890278698243624,
+              0,
+              0.4554161168136654
+            ],
+            "normal": [
+              -0.4554161168136654,
+              0,
+              -0.890278698243624
+            ],
+            "length_m": 15.131216805002854
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "width_m": 1.8,
+          "height_m": 1.05,
+          "center_y": 4.54556,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 5.598550217851056,
+          "local_station_m": 5.598550217851056,
+          "basis": {
+            "source_run": 14,
+            "start": [
+              -65.79,
+              3.097,
+              -556.748
+            ],
+            "end": [
+              -79.261,
+              3.085,
+              -549.857
+            ],
+            "tangent": [
+              -0.890278698243624,
+              0,
+              0.4554161168136654
+            ],
+            "normal": [
+              -0.4554161168136654,
+              0,
+              -0.890278698243624
+            ],
+            "length_m": 15.131216805002854
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "width_m": 1.8,
+          "height_m": 1.05,
+          "center_y": 4.54256,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 9.532666587151798,
+          "local_station_m": 9.532666587151798,
+          "basis": {
+            "source_run": 14,
+            "start": [
+              -65.79,
+              3.097,
+              -556.748
+            ],
+            "end": [
+              -79.261,
+              3.085,
+              -549.857
+            ],
+            "tangent": [
+              -0.890278698243624,
+              0,
+              0.4554161168136654
+            ],
+            "normal": [
+              -0.4554161168136654,
+              0,
+              -0.890278698243624
+            ],
+            "length_m": 15.131216805002854
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "width_m": 1.8,
+          "height_m": 1.05,
+          "center_y": 4.53944,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 13.31547078840251,
+          "local_station_m": 13.31547078840251,
+          "basis": {
+            "source_run": 14,
+            "start": [
+              -65.79,
+              3.097,
+              -556.748
+            ],
+            "end": [
+              -79.261,
+              3.085,
+              -549.857
+            ],
+            "tangent": [
+              -0.890278698243624,
+              0,
+              0.4554161168136654
+            ],
+            "normal": [
+              -0.4554161168136654,
+              0,
+              -0.890278698243624
+            ],
+            "length_m": 15.131216805002854
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "width_m": 1.8,
+          "height_m": 1.05,
+          "center_y": 4.53644,
+          "glazing": "blue"
+        }
+      ],
+      "entries": [
+        {
+          "station_m": 3.707148117225699,
+          "local_station_m": 3.707148117225699,
+          "basis": {
+            "source_run": 14,
+            "start": [
+              -65.79,
+              3.097,
+              -556.748
+            ],
+            "end": [
+              -79.261,
+              3.085,
+              -549.857
+            ],
+            "tangent": [
+              -0.890278698243624,
+              0,
+              0.4554161168136654
+            ],
+            "normal": [
+              -0.4554161168136654,
+              0,
+              -0.890278698243624
+            ],
+            "length_m": 15.131216805002854
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "bottom_y": 3.1794550384761715,
+          "door_role": "burgundy",
+          "threshold_bottom_y": 3.122289576968854
+        },
+        {
+          "station_m": 11.424068687777154,
+          "local_station_m": 11.424068687777154,
+          "basis": {
+            "source_run": 14,
+            "start": [
+              -65.79,
+              3.097,
+              -556.748
+            ],
+            "end": [
+              -79.261,
+              3.085,
+              -549.857
+            ],
+            "tangent": [
+              -0.890278698243624,
+              0,
+              0.4554161168136654
+            ],
+            "normal": [
+              -0.4554161168136654,
+              0,
+              -0.890278698243624
+            ],
+            "length_m": 15.131216805002854
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "bottom_y": 3.158228261885406,
+          "door_role": "burgundy",
+          "threshold_bottom_y": 3.1010628003780885
+        }
+      ],
+      "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof."
+    },
+    {
+      "id": "nnw-rear-3",
+      "elevation_role": "rear",
+      "runs": [
+        16,
+        17
+      ],
+      "start": [
+        -78.4,
+        3.077,
+        -548.176
+      ],
+      "end": [
+        -91.282,
+        3.027,
+        -541.597
+      ],
+      "length_m": 14.46475596172516,
+      "tangent": [
+        -0.8905784539386586,
+        0,
+        0.4548296575425009
+      ],
+      "normal": [
+        -0.4548296575425009,
+        0,
+        -0.8905784539386586
+      ],
+      "upper_windows": [
+        {
+          "station_m": 1.7357707154070192,
+          "local_station_m": 1.7357707154070192,
+          "basis": {
+            "source_run": 16,
+            "start": [
+              -78.4,
+              3.077,
+              -548.176
+            ],
+            "end": [
+              -86.577,
+              3.052,
+              -544
+            ],
+            "tangent": [
+              -0.8905827381535312,
+              0,
+              0.454821268745162
+            ],
+            "normal": [
+              -0.454821268745162,
+              0,
+              -0.8905827381535312
+            ],
+            "length_m": 9.181628668161235
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 7.85,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 5.3519597058383095,
+          "local_station_m": 5.3519597058383095,
+          "basis": {
+            "source_run": 16,
+            "start": [
+              -78.4,
+              3.077,
+              -548.176
+            ],
+            "end": [
+              -86.577,
+              3.052,
+              -544
+            ],
+            "tangent": [
+              -0.8905827381535312,
+              0,
+              0.454821268745162
+            ],
+            "normal": [
+              -0.454821268745162,
+              0,
+              -0.8905827381535312
+            ],
+            "length_m": 9.181628668161235
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 7.85,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 9.11279625588685,
+          "local_station_m": 9.11279625588685,
+          "basis": {
+            "source_run": 16,
+            "start": [
+              -78.4,
+              3.077,
+              -548.176
+            ],
+            "end": [
+              -86.577,
+              3.052,
+              -544
+            ],
+            "tangent": [
+              -0.8905827381535312,
+              0,
+              0.454821268745162
+            ],
+            "normal": [
+              -0.454821268745162,
+              0,
+              -0.8905827381535312
+            ],
+            "length_m": 9.181628668161235
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 7.85,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 12.72898524631814,
+          "local_station_m": 3.547356578156906,
+          "basis": {
+            "source_run": 17,
+            "start": [
+              -86.577,
+              3.052,
+              -544
+            ],
+            "end": [
+              -91.282,
+              3.027,
+              -541.597
+            ],
+            "tangent": [
+              -0.8905710081473487,
+              0,
+              0.4548442364671833
+            ],
+            "normal": [
+              -0.4548442364671833,
+              0,
+              -0.8905710081473487
+            ],
+            "length_m": 5.283127293563925
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 7.85,
+          "glazing": "blue"
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 1.7357707154070192,
+          "local_station_m": 1.7357707154070192,
+          "basis": {
+            "source_run": 16,
+            "start": [
+              -78.4,
+              3.077,
+              -548.176
+            ],
+            "end": [
+              -86.577,
+              3.052,
+              -544
+            ],
+            "tangent": [
+              -0.8905827381535312,
+              0,
+              0.454821268745162
+            ],
+            "normal": [
+              -0.454821268745162,
+              0,
+              -0.8905827381535312
+            ],
+            "length_m": 9.181628668161235
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "width_m": 1.8,
+          "height_m": 1.05,
+          "center_y": 4.522273794067097,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 5.3519597058383095,
+          "local_station_m": 5.3519597058383095,
+          "basis": {
+            "source_run": 16,
+            "start": [
+              -78.4,
+              3.077,
+              -548.176
+            ],
+            "end": [
+              -86.577,
+              3.052,
+              -544
+            ],
+            "tangent": [
+              -0.8905827381535312,
+              0,
+              0.454821268745162
+            ],
+            "normal": [
+              -0.454821268745162,
+              0,
+              -0.8905827381535312
+            ],
+            "length_m": 9.181628668161235
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "width_m": 1.8,
+          "height_m": 1.05,
+          "center_y": 4.512427531706883,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 9.11279625588685,
+          "local_station_m": 9.11279625588685,
+          "basis": {
+            "source_run": 16,
+            "start": [
+              -78.4,
+              3.077,
+              -548.176
+            ],
+            "end": [
+              -86.577,
+              3.052,
+              -544
+            ],
+            "tangent": [
+              -0.8905827381535312,
+              0,
+              0.454821268745162
+            ],
+            "normal": [
+              -0.454821268745162,
+              0,
+              -0.8905827381535312
+            ],
+            "length_m": 9.181628668161235
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "width_m": 1.8,
+          "height_m": 1.05,
+          "center_y": 4.50218741885226,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 12.72898524631814,
+          "local_station_m": 3.547356578156906,
+          "basis": {
+            "source_run": 17,
+            "start": [
+              -86.577,
+              3.052,
+              -544
+            ],
+            "end": [
+              -91.282,
+              3.027,
+              -541.597
+            ],
+            "tangent": [
+              -0.8905710081473487,
+              0,
+              0.4548442364671833
+            ],
+            "normal": [
+              -0.4548442364671833,
+              0,
+              -0.8905710081473487
+            ],
+            "length_m": 5.283127293563925
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "width_m": 1.8,
+          "height_m": 1.05,
+          "center_y": 4.485213746418346,
+          "glazing": "blue"
+        }
+      ],
+      "entries": [
+        {
+          "station_m": 3.543865210622664,
+          "local_station_m": 3.543865210622664,
+          "basis": {
+            "source_run": 16,
+            "start": [
+              -78.4,
+              3.077,
+              -548.176
+            ],
+            "end": [
+              -86.577,
+              3.052,
+              -544
+            ],
+            "tangent": [
+              -0.8905827381535312,
+              0,
+              0.454821268745162
+            ],
+            "normal": [
+              -0.454821268745162,
+              0,
+              -0.8905827381535312
+            ],
+            "length_m": 9.181628668161235
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "bottom_y": 3.1302127510464084,
+          "door_role": "burgundy",
+          "threshold_bottom_y": 3.0730497538318677
+        },
+        {
+          "station_m": 10.920890751102496,
+          "local_station_m": 1.739262082941261,
+          "basis": {
+            "source_run": 17,
+            "start": [
+              -86.577,
+              3.052,
+              -544
+            ],
+            "end": [
+              -91.282,
+              3.027,
+              -541.597
+            ],
+            "tangent": [
+              -0.8905710081473487,
+              0,
+              0.4548442364671833
+            ],
+            "normal": [
+              -0.4548442364671833,
+              0,
+              -0.8905710081473487
+            ],
+            "length_m": 5.283127293563925
+          },
+          "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof.",
+          "bottom_y": 3.108939310230462,
+          "door_role": "burgundy",
+          "threshold_bottom_y": 3.0476383698793374
+        }
+      ],
+      "inference": "production_inference: hidden NNW rear schedule; counts, cadence, anchors, dimensions and upper organization are inferred. September2025 bound SSE reference supplies light siding, paired lower-window and burgundy-entry vocabulary only; unbound July contributor view supplies no target rear proof."
+    }
+  ]
 }

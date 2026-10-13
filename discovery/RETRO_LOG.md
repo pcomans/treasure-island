@@ -21443,3 +21443,48 @@ CONTINUE after actual final log and88875 terminal/release. Existing independent 
 Worked: consumed final validator/current reviewer entries before commit; only908L1/L2 finalized70C/995U/213units/49recognition, all higher stages unchanged. Exact three-file whitespace/isolated staging; no geometry changes during integration.
 Limits: black rear and hidden schedule remain inference; planned split success does not erase older capture HOLDs or diagnose rendering.
 Next: one authorized ordinary same-upstream push, original terminal and remoteHEAD equality/clean verification before gallery published label; no engine/authconfig/main merge.
+
+## 625 / frozen1254 13th Street — integration preparation, 2026-10-13
+
+### street13_625_rear_astra_art — whole NNW author
+Worked: reused complete housing variants for12 upper/12 lower paired windows and6 burgundy entries on three whole unions, full Float32 envelopes and shifted threshold footprints seated in canonical LAND. Only rear_frames/protected_runs/study_notes changed; protected decoded fields equal. Capture23493 natural0/c62e1b/global8ea5f8; all11 originals inspected,1/2 art budget used.
+Limits: optional numpy absent, standard library used without install; swept camera rectangle supplemented endpoint check, should be included initially. Upper/rear schedule is inference; neighbor-biased north shot earns no borrowed credit. Cleanup warning retained, no renderer diagnosis.
+Next: independent gates before acceptance; no extra polish.
+
+### bayside1226_visual_final_fresh — source checkpoint and independent architecture
+Worked: actual September front/corrected run3 ray and Apple establish source, west/raised establish blank then complete NNW family. Personally compared all11 before/after originals; CODE/L1/all-side L2/scoped visual PASS. All30 transformed assemblies fit complete collinear hosts/individual wall bottoms; minimum end margin.660417m, wall-bottom.006303m, eave.5775m, same-level gap.184609m. Six complete thresholds embed11.9996–21.3011mm, tops100–109.3mm above LAND. Protected procedural roof/front/site retained.
+Limits: July contributor rear unbound, upper/front canopy occlusion leaves schedules inferred; plain ends deliberately scrutinized, not photographed blank. Materials/site/fidelity/recognition remain OPEN. Narrowed an overbroad first read without engine replay.
+Next: CONTINUE mechanics/PNG/suite, no second art capture justified; provisional split experiment preserves every gate, no timing/fix claim.
+
+### bayside1226_final_validation — first split mechanics
+Worked:38634 natural0/54baf4/global1b3be7: native4roles/four approaches/twelve entry round trips/45.469m continuous canopy bothways, active REST-before-SAFE. No screenshot wait, recovery or route replay.
+Limits: no source-visible PNG from mechanics-only call; cleanup warnings remain.
+Next: assigned minimal PNG after release, mandatory approaches honestly repeated, then suite. These gates remain pending in this preparation.
+
+### gateview70_integration_docs — source, launcher, gallery and integration preparation
+Worked: bounded three navigations retained actual September front, unbound contributor rear and initial/loaded Apple; browser73072 owned143 preceded sole baseline65346 natural0/global2a2bb2, all11 inspected. Separate GO write/readback, actual named AstraLow routing708f83, child completion03:43:52 and same proxy51723 natural0/6d172f/global28bddf retained. Six matched own gallery images343, served200/mirror equality/private front404; prior a65e5c2 delivered unchanged.
+Limits: large image output truncated and optional PIL absent; smaller batches/native PNG header resolved without installation or engine rerun. Quiet author-final interval observed without restart/invented exit. Proxy/author judgment kept distinct from primary ROOT/independent review.
+Next: exact config619/checklist/RETRO integration only after PNG/suite/final ROOT GO. Provisional L1/L2 cells72C993U preserve213/49/higherOPEN; no staging/commit. Approved1249/643 next reference/baseline remains proposal, source-proven whole missing NNW and existing modules, no U-only ranking or new research.
+
+### bayside1226_final_validation —625 planned minimal PNG
+Worked:49308 natural0/c3d976/global80a344, correct rear2 lower pane visible with grounded avatar, exact source active REST-before-SAFE. Both planned focused legs natural0, zero stalls/unplanned recoveries/duplicated completed routes; minimal leg mandatory approaches repeated. Native/twelve entry pairs/canopy reused.
+Limits: Texture RID warning persists; two successful families do not prove renderer cause/fix or workflow speed. Full suite89025 running, no final integration claim.
+Next: retain supported split invocation schemas and actual original-terminal/global-release boundaries, all gates unchanged.
+
+### gateview70_integration_docs —625 planned PNG/gallery and1249 source recheck
+Worked: personally inspected actual1280x800 PNG and focused note, added own capture to matching gallery344; CODE/visual/native/PNG PASS, suite running, no pushed-candidate claim. HTTP200/private actual September front404. Reverified1249 approved nine-addition membership146, actual front-driven procedural shallow_hip/segmented roof and absent rear_frames; whole NNW10–11/14–16/18–19 source normals confirmed.
+Limits: retained1249 search yielded configs but no usable dated original; canonical corrected March pano URL is a locator, not newly inspected pixels. No new research or scope.
+Next: current suite/final ROOT GO before commit;1249 bounded reference/baseline only after separate assignment. No engine/source geometry/staging changes.
+
+### bayside1226_visual_final_fresh —625 planned PNG checkpoint
+CONTINUE after personally inspected correct rear pane1280x800 PNG and exact source active REST-before-SAFE. Existing independent all11/reference architecture PASS and38634 native/twelve entry pairs/canopy reused. Second planned49308 natural0/global80a344 repeats1203 split outcome: zero stalls/unplanned recovery/completed-route replay, mandatory four approaches repeated. Retain pattern provisionally, no renderer-cause or speed claim. Historical suite-pending checkpoint now superseded by actual final suite below; higher quality remains open.
+
+### bayside1226_final_validation —625 final suite
+Worked: original89025 natural0/70802d, ALL TESTS PASS all49 scored fits/contracts/world validation/determinism, global4a4399 release. Buffered live island process observed without restart; no focused replay.
+Limits: prior TextureRID cleanup warnings retained, no suite warning lines; timing unmeasured.
+Next: preserve original lifecycle and planned split outcomes without claiming a renderer fix.
+
+### gateview70_integration_docs —625 final integration/publication intent
+Worked: consumed saved final validator and latest independent checkpoint before commit. Only619L1/L2 finalized72C993U across213units,49recognition/all higher stages unchanged. Explicit three-file whitespace and isolated stage planned; no geometry changes during integration.
+Limits: upper/rear schedule inferred, July opposite unbound; scoped architecture does not establish hidden as-built/material/site fidelity.
+Next: one authorized ordinary established-upstream push, actual terminal/remoteHEAD equality/clean status before gallery pushed label. Next1249 source preparation ready, no browser/engine/art until separate GO.
