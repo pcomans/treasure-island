@@ -21523,3 +21523,42 @@ Next: retain approved split scheduling and explicit slot transfers with all gate
 Worked: consumed actual saved final reviewer and validator records before commit; only643L1/L2 finalized74C991U/213inventory49recognition, all higher stages unchanged. Exact three-path whitespace/no untracked; no source geometry edits.
 Limits: rear black/hidden cadence remain inference; scoped architecture does not establish material/site or as-built fidelity.
 Next: one ordinary established-upstream push, actual terminal/remoteHEAD equality/clean verification then gallery pushed label. Next1252 source preparation ready only, no new engine/browser/art.
+
+
+## 1252 Exposition — integration preparation,2026-10-13
+
+### exposition1252_rear_astra_art — whole WSW author
+Worked: personally inspected March front/Apple/all11 baseline and study, reused complete modules for24 paired windows/six blue entries across three full unions. Full shifted threshold footprints clipped to canonical LAND; only rear_frames/protected_runs/study_notes changed, all other decoded fields equal. Capture31569 natural0/044d0c, source frozen;1/2 budget used.
+Limits: hidden rear schedule inferred, July contributor unbound; actual1440x900 versus requested1600x900 and TextureRID warnings retained, no renderer fix claim.
+Next: independent and current native/runtime gates before promotion, no extra polish.
+
+### bayside1226_visual_final_fresh — independent CODE/visual and checkpoints
+Saved CODE/retainedL1/all-sideL2/scoped visual PASS after direct all11 baseline/study/March/Apple comparison. Three rear sections improve coherently, protected front/roof/site and deliberate plain ends assessed; no neighbor or unbound July credit. All30 Float32 full envelopes fit unions/source profiles: minimum host-end.659767m, eave.4175m, same-level gap.330605m. Six full threshold footprints seated24.999–34.565mm into canonical LAND, preserved tops75–100.411mm above it. Initial mixed-precision -12.1nm assertion corrected using actual consumed Float32 on both sides; minimum positive one-ULP wall-bottom margin, no tolerance relaxation/source rework. Hidden fidelity/material/site remain open.
+Next: preserve actual native/contact gates; no count-only acceptance. Next1238 already has front/rear families, so U is not a blank-face defect; locate actual pixels before nominating work.
+
+### bayside1226_final_validation — split mechanics and planned PNG
+Worked:52652 natural0/a6eeed/globale1bc2b native4roles/fullroof/four approaches/all12 entry pairs/45.478m owned canopy both directions, active REST-before-SAFE. Planned6034 natural0/c75700/global11a5f4 supplied personally inspected correct-source rear2 cyan PNG/grounded avatar/source REST-SAFE. Both legs natural0, zero stalls/unplanned recoveries/completed-route replay; mandatory four approaches repeated.
+Limits: seven TextureRID warning remains; separation does not establish renderer cause/fix or workflow timing. Full suite pending.
+Next: current suite and ROOT final integration GO; no replay merely for bookkeeping.
+
+### gateview70_integration_docs — reference, launcher, gallery and preparation
+Worked: actual March source-bound front and Apple within3 navigations, unbound July opposite retained honestly. Browser9440 controlled143/globalbb13b5 before sole baseline66084 natural0/global27f036/all11 inspected. Actual named AstraLow routing verified; child complete then SAMEproxy92079 natural0/00e5a7/global61a39d. Author and primary ROOT judgments kept distinct. Gallery matched W/SW/NE pairs and sourcePNG inspected, private photos excluded.
+Limits: no independently measured hidden schedule or higher recognition claim. Provisional648L1/L2 only76C989U/213inventory49credit; suite/finalGO pending, no staging/commit.
+Next: exact648config/checklist/RETRO; source geometry unchanged by docs. Finite1238 retained-evidence lookup before any new substantial-gap claim.
+
+
+### bayside1226_final_validation —1252 final suite
+Worked:62425 natural0/9e5fe6 ALL TESTS PASS/all49/contracts/world validation/determinism; globalc20369 released without focused replay/source changes. Buffered island output observed on same original PID.
+Limits: no suite warnings, prior TextureRID warning retained; no renderer cause or timing claim.
+Next: retain approved split mechanics/PNG and exact slot transfers, no redundant tests.
+
+### gateview70_integration_docs —1252 final integration intent
+Worked: consumed saved final gates and final validator record; only648L1/L2 finalized76C989U/213inventory49recognition, higher stages unchanged. Exact three-file integration, no source geometry edits. One ordinary established-upstream push authorized after commit, outcome verified separately.
+Limits: unseen rear cadence/as-built fidelity remain inference; scoped architecture does not close materials/site/recognition. Earlier candidate and failure history retained.
+Next: verify push terminal/remoteHEAD/clean before delivered gallery label;1238 existing-evidence comparison remains separate ROOT assignment.
+
+
+### bayside1226_visual_final_fresh —1252 current suite closure checkpoint
+Worked: independently read actual ALL TESTS PASS/all49/contracts/world/determinism and62425 natural0/globalc20369; reused saved allside/reference/CODE and current native/routes/canopy/visiblePNG evidence without repeated audits. CONTINUE integration then located1238 evidence comparison.
+Limits: suite closure adds no new architecture or recognition credit; cleanup warning and higher quality remain open. Retained1238 Oct10 gameplay is not automatically current-source or dated exterior proof.
+Next: source-ID directory lookup before absence claims, actual dated pixels before gap prescription; retain split validation provisionally without renderer-cause or speed claims.
