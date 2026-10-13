@@ -21408,3 +21408,38 @@ Next: one authorized ordinary same-upstream push with actual terminal/remoteHEAD
 
 ### bayside1226_visual_final_fresh —1390 final suite / next-family checkpoint
 CONTINUE after actual full-suite001.log ALL49/world/determinism/ALL TESTS PASS and37564 natural0/global580ad0. This supersedes historical pending status; existing CODE/L1/all-sideL2 and focused successful subsets/recovery reused,70574HOLD143 preserved. Next approved1203 source-bound references/one baseline precede any whole-SW art scope. Future split native/routes then minimal spray experiment retains all gates and actual release, measures terminals/recovery/duplicated cases without unmeasured timing or renderer-fix claims. Higher material/site/fidelity and recognition remain open.
+
+## 1203 Bayside — integration preparation, 2026-10-13
+
+### bayside1203_rear_astra_art — whole SW author
+Worked: reused complete mixed-width white window/pale-entry modules across both collinear rear unions;8uppers/8lowers/4entries. Only rear_frames/protected_runs/study_notes changed; front-driven hip/front/canopy/site preserved. Complete Float32 envelopes and shifted footprint LAND clipping seat thresholds; both tiles loaded, actual new footprints on tile-3. Capture11800 natural0/93d866/global56ea29, all11 before/after personally inspected,1/2 budget used.
+Limits: NumPy unavailable, stdlib sufficed; hidden schedules/anchors inference, no author acceptance.
+Next: early frozen handoff before independent/runtime checks; no extra art polish.
+
+### bayside1226_visual_final_fresh — independent CODE/visual and checkpoints
+Worked: actual March mixed-family/Apple and all11 matched gameplay views support CODE/retainedL1/all-sideL2/scoped visual PASS; plain ends deliberately reviewed, neighbors excluded. All20 assemblies independently checked: endpoint.51278m, full-envelope gap.21815m, eave.41750m; four complete LAND footprints seated25–37.93mm, preserved top steps115–127.93mm. Protected decoded inputs/procedural roof unchanged.
+Limits: black rear and hidden end/rear schedules are not observation; higher material/site/weathering/fidelity/recognition open. Oversized image batch was corrected with smaller saved-image batches, no rerender.
+Next: CONTINUE suite/integration then approved1254/625 source evidence; retain approved split scheduling on actual results, no new helper/framework or renderer-cause claim.
+
+### bayside1226_final_validation — planned split mechanics and PNG
+Worked: native/routes21807 natural0/c12fea/globale235ee passed four positive ordered roles/full domain/four approaches/eight entry pairs/carport both ways with active REST before SAFE. Separate planned38340 natural0/b8b2fa/global66fcf7 supplied personally inspected correct-pane1280x800 PNG. Both planned legs natural0; zero stalls/unplanned recoveries/duplicated completed native/routes. Mandatory four approaches repeated honestly.
+Limits: seven TextureRID cleanup warning persists; comparison with1390 combined HOLD/recovery is one-family observation, no root-cause fix or full-workflow timing claim.
+Next: retain ROOT-approved split if assigned; current suite pending, no source/helper edits or completed-case replay.
+
+### gateview70_integration_docs — source binding, launch, gallery and preparation
+Worked: corrected March pano/run13 identity excludes1205caption; loaded same Apple page after initial missing tiles, opposite black retained. Browser82262 owned143/global8d7be5 before baseline48551 natural0/global901c2d, all11 inspected. Separate CURRENTGO/readback, actualnamedAstraLow1f26a6, childcomplete then proxy5489 natural0/fdca22/globald46956. Six matched gameplay plus actual plannedPNG gallery337, matchingHTTP200/privateMarch404. Only authorized provisional908L1/L2 checked70C/995U; exact three-file whitelist,213/49/higher unchanged.
+Limits: private references not public, author/proxy/primaryROOT judgments distinct; no candidate pushed claim while suite pending.
+Next: suite/final ROOT GO before stage/commit/push. Next619 approved membership and absent wholeNNWfamily retained in ordinary note; no new engine/research/art.
+
+### bayside1226_final_validation —1203 final suite
+Worked: original88875 natural0/2240fc, ALL TESTS PASS all49 scored fits/contracts/world validation/determinism; globalbc6795 releases engine. Buffered live island process observed without restart; no focused replay.
+Limits: buffering is not intermediate completion, earlier focused cleanup warnings retained; workflow timing unmeasured.
+Next: preserve planned split scheduling when assigned, no renderer-fix claim or autonomous next-family invocation.
+
+### bayside1226_visual_final_fresh —1203 final suite checkpoint
+CONTINUE after actual final log and88875 terminal/release. Existing independent architecture and21807mechanics/38340PNG reused; full suite closes the pending gate, not another architecture/recognition claim. Retain approved split experiment provisionally: both planned legs natural0, zero stalls/unplanned recovery/completed-route replay, mandatory approaches repeated. One-family outcome is not causal renderer or speed proof. Next approved1254/625 dated source evidence and baseline only after ROOT assignment; higher material/site/fidelity remain open.
+
+### gateview70_integration_docs —1203 final integration/publication intent
+Worked: consumed final validator/current reviewer entries before commit; only908L1/L2 finalized70C/995U/213units/49recognition, all higher stages unchanged. Exact three-file whitespace/isolated staging; no geometry changes during integration.
+Limits: black rear and hidden schedule remain inference; planned split success does not erase older capture HOLDs or diagnose rendering.
+Next: one authorized ordinary same-upstream push, original terminal and remoteHEAD equality/clean verification before gallery published label; no engine/authconfig/main merge.

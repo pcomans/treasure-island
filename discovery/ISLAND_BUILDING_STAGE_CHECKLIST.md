@@ -159,8 +159,8 @@ world validation/determinism; owned/global engine absence17b417 establishes
 release. ROOT accepts these bounded L1 gates. Only both L1 become C; historical
 accepted claims and49 credits remain unchanged. See [1236 D6](facades/d6_reference_packets/w96215668_1236_northpoint_drive.md)
 and [1240 D7](facades/d7_reference_packets/w96215688_1240_northpoint_drive.md).
-Current totals after GV1390 below: L1:35 C/178 U; L2:32 C/181 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall68 C/997 U across213 units/1,065 cells.
+Current totals after B1203 below: L1:36 C/177 U; L2:33 C/180 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall70 C/995 U across213 units/1,065 cells.
 Next: inspect the next compatible unknown whole-family L1 envelope/site against
 current originals and dated references before assigning art; U establishes no
 defect. Continue major architecture/site coverage rather than current-pair polish.
@@ -356,7 +356,7 @@ before selecting another round.
 | physical-building:w96665904 / w96665904 | 1237 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP1237 — whole ENE rear CODE/L1/all-side L2/native/routes/spray/suite PASS; higher material/site/fidelity open |
 | physical-building:w96665906 / w96665906 | 1147 Ozbourn Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665907 / w96665907 | 1129 Mason Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96665908 / w96665908 | 1203 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96665908 / w96665908 | 1203 Bayside Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | B1203 — scoped CODE/L1/all-side L2/native/routes/PNG/suite PASS; higher quality open |
 | physical-building:w96665909 / w96665909 | 1149 Ozbourn Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665910 / w96665910 | 1110 Hutchins Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665911 / w96665911 | 1229 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP/NP1229 — L1 retained; whole WNW rear architecture, independent CODE/all-side L2/native/routes/spray/suite PASS; higher/fidelity open |
@@ -590,3 +590,6 @@ Focused18001 completed native/four approaches/twelve entry pairs/carport both wa
 
 ### GV1390 scoped architecture closure — 2026-10-12
 Only w96215698 L1/L2 checked on explicit independent CODE/L1/all-side L2/scoped visual and focused fit evidence. Current37564 natural0/966b3e ALL TESTS PASS24f64d includes all49 scored fits/world validation/determinism; global580ad0, primary ROOT reviewed full-suite001.log. Actual all11 before/after views plus March front/undated bound layout support whole west architecture; hidden rear and protected plain ends remain game-art inference, not as-built. Private gateview1390-whole-study-20261012 retains author-handoff.txt and focused-validation.txt; saved independent verdict is in ordinary housing-three-study-20261010/RETRO.txt.70574 native/four approaches/twelve entry returns/carport/source RESTSAFE succeeded but capture HOLD ended controlled143;17713 natural0 supplied inspected correct-source PNG. No diagnostic root-cause fix claim. Higher stages/material/site/fidelity and213inventory/49recognition unchanged. Actual68C/997U records scoped architecture stage coverage, not recognition acceptance.
+
+### B1203 scoped architecture closure — 2026-10-13
+Only w96665908 L1/L2 checked on saved independent CODE/retained L1/all-side L2/scoped visual and current focused evidence. All11 before/after views with actual March mixed-width frontage/undated layout establish complete compact SW architecture; protected front/hip/site unchanged, hidden rear/end schedules remain inference. Current fullsuite88875 natural0/2240fc ALL TESTS PASS includes all49 scored fits/world validation/determinism; globalbc6795, primary ROOT read actual full-suite001.log. Private bayside1203-whole-study-20261012 author-handoff.txt/focused-validation.txt and named independent ordinary RETRO retain evidence. Planned split mechanics21807 natural0/c12fea/globale235ee passed native4roles/four approaches/eight entry pairs/carport both ways; separate38340 natural0/b8b2fa/global66fcf7 supplied correct-source visible PNG/active RESTSAFE. Both planned legs natural0, no stalls/unplanned recoveries/completed-route replay; mandatory four approaches repeated. This is one-family scheduling evidence, not renderer fix or timing proof. Actual70C/995U/213units, prior49 recognition/higher stages/material/site/fidelity unchanged; no recognition acceptance.
