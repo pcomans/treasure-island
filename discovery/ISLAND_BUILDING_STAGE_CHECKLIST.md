@@ -159,8 +159,8 @@ world validation/determinism; owned/global engine absence17b417 establishes
 release. ROOT accepts these bounded L1 gates. Only both L1 become C; historical
 accepted claims and49 credits remain unchanged. See [1236 D6](facades/d6_reference_packets/w96215668_1236_northpoint_drive.md)
 and [1240 D7](facades/d7_reference_packets/w96215688_1240_northpoint_drive.md).
-Current totals after B625 below: L1:37 C/176 U; L2:34 C/179 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall72 C/993 U across213 units/1,065 cells.
+Current totals after B1249 below: L1:38 C/175 U; L2:35 C/178 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall74 C/991 U across213 units/1,065 cells.
 Next: inspect the next compatible unknown whole-family L1 envelope/site against
 current originals and dated references before assigning art; U establishes no
 defect. Continue major architecture/site coverage rather than current-pair polish.
@@ -380,7 +380,7 @@ before selecting another round.
 | physical-building:w96698627 / w96698627 | 1216/1430 Gateview Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96698634 / w96698634 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96698641 / w96698641 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96698643 / w96698643 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96698643 / w96698643 | 1249 Exposition Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | B1249 — whole architecture; materials/site fidelity open |
 | physical-building:w96698645 / w96698645 | 1214/1420 Gateview Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96698648 / w96698648 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96698650 / w96698650 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -595,3 +595,5 @@ Only w96215698 L1/L2 checked on explicit independent CODE/L1/all-side L2/scoped 
 Only w96665908 L1/L2 checked on saved independent CODE/retained L1/all-side L2/scoped visual and current focused evidence. All11 before/after views with actual March mixed-width frontage/undated layout establish complete compact SW architecture; protected front/hip/site unchanged, hidden rear/end schedules remain inference. Current fullsuite88875 natural0/2240fc ALL TESTS PASS includes all49 scored fits/world validation/determinism; globalbc6795, primary ROOT read actual full-suite001.log. Private bayside1203-whole-study-20261012 author-handoff.txt/focused-validation.txt and named independent ordinary RETRO retain evidence. Planned split mechanics21807 natural0/c12fea/globale235ee passed native4roles/four approaches/eight entry pairs/carport both ways; separate38340 natural0/b8b2fa/global66fcf7 supplied correct-source visible PNG/active RESTSAFE. Both planned legs natural0, no stalls/unplanned recoveries/completed-route replay; mandatory four approaches repeated. This is one-family scheduling evidence, not renderer fix or timing proof. Actual70C/995U/213units, prior49 recognition/higher stages/material/site/fidelity unchanged; no recognition acceptance.
 
 B625 —1254/current625 w96698619: independent CODE/L1/all-side L2 scoped architecture PASS from actual11 baseline/study001, September2025 bound front and undated layout. Hidden rear/upper schedule is production inference; unbound contributor rear supplies no measured target schedule. Mechanics38634 natural0/54baf4/global1b3be7 passed native/four approaches/twelve entry pairs/canopy bothways active REST-before-SAFE. Planned source-visible PNG49308 natural0/c3d976/global80a344 passed exact receiver/active REST-before-SAFE; full suite89025 natural0/70802d ALL TESTS PASS/global4a4399 passed all49 fits/world validation/determinism. ROOT finalized scoped architecture L1/L2 only; recognition unchanged. Higher materials/site/fidelity remain OPEN;213inventory49recognition unchanged.
+
+B1249 — source643 L1/L2 scoped independent PASS saved in reviewer RETRO and received by ROOT. Whole NNW mixed-window/green-entry family, protected front/proceduralroof/site retained. Mechanics14019 natural0/016308/global09879c native4roles/four approaches/twelve entry pairs active REST-before-SAFE; planned PNG3483 natural0/71b991/global37b6e2 correct source pane. Full suite12878 natural0/0788ac ALL TESTS PASS/global374cc1 passed all49/world validation/determinism; ROOT finalized scoped L1/L2 only, recognition unchanged. Hidden rear cadence/as-built/material/site fidelity and higher stages remain open;213inventory49recognition unchanged.
