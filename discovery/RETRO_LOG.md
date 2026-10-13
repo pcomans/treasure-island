@@ -21562,3 +21562,37 @@ Next: verify push terminal/remoteHEAD/clean before delivered gallery label;1238 
 Worked: independently read actual ALL TESTS PASS/all49/contracts/world/determinism and62425 natural0/globalc20369; reused saved allside/reference/CODE and current native/routes/canopy/visiblePNG evidence without repeated audits. CONTINUE integration then located1238 evidence comparison.
 Limits: suite closure adds no new architecture or recognition credit; cleanup warning and higher quality remain open. Retained1238 Oct10 gameplay is not automatically current-source or dated exterior proof.
 Next: source-ID directory lookup before absence claims, actual dated pixels before gap prescription; retain split validation provisionally without renderer-cause or speed claims.
+
+
+## 1238 Northpoint — current evidence stage-closure preparation, 2026-10-13
+
+### gateview70_integration_docs — dated recovery/current comparison and documentation
+Worked: recovered bound March front with one navigation; browser25447 controlled143/global3b65f5 before current capture80075 natural0/global9ccd76. Personally inspected all11 current images against dated front/retained rear-roof001; existing front/rear/sectional roof already present, no new art or substantial whole-family gap established. Correct source producer is shallow_sectional_roof, not donor hip/public fallback. Gallery adds current correct-source PNG; private originals excluded.
+Limits: old gameplay alone was not current proof; localized finish, concealed rear fidelity and higher materials/site/recognition remain OPEN. Provisional source669 L1/L2 cells only, suite/final ROOT integration pending; no staging/commit/push/source edit.
+Next: exact checklist/RETRO only after saved suite and ROOT GO.1201 browser remains unlaunched; Station48 ENE/SSE completeness is an existing evidence question, not a proved missing motif.
+
+### bayside1226_visual_final_fresh — independent current architecture and checkpoints
+Worked: directly compared recovered March front and all11 current/retained views; saved CODE/retainedL1/all-sideL2/scoped visual PASS for existing whole front/rear/sectional envelope. Current evidence resolves producer-era uncertainty without inventing an art assignment from U cells. Current mechanics checkpoint consumed actual source/support/routes, no historical fit promoted as current.
+Limits: no new architectural gain or whole-modern-quality/recognition claim; hidden schedule/material/site remain open. Station48 retained L1/public-entry scope does not establish ENE/SSE opening completeness.
+Next: close current mandatory runtime/suite gates, then finite1201 dated/current binding; no repeated local polish or broadened audit.
+
+### bayside1226_final_validation — current mechanics and planned PNG
+Worked:40154 natural0/95c3e7/globalf4f31f native four ordered roles/fullroof/four approaches/all six recessed front entry round trips, active supported grounded released stopped REST before SAFE.1517 natural0/13fa4d/globalfe5f68 supplied current rear closed-glazing correct-source PNG and REST/SAFE; mandatory four approaches repeated, completed routes not replayed. Both planned legs natural, zero stalls/recoveries; qualified FamilyContact_ground, no blanket exemption or Oct10 proof reuse.
+Limits: seven TextureRID cleanup warning persists; closed rear glazing is not doorway/access evidence. No renderer-cause fix or timing claim; full suite pending.
+Next: consume actual final suite record before final integration; preserve split scheduling and all mandatory gates.
+
+
+### bayside1226_final_validation —1238 current suite closure
+Worked:55253 natural0/da7105 ALL TESTS PASS/all49 scored fits/world validation/determinism; global424f52 RELEASE. Actual current source qualification and six entry pairs from40154 plus planned1517 source-visiblePNG close runtime gates without historical Oct10 proof substitution or repeated routes.
+Limits: no suite warning lines; earlier focused seven TextureRID warning remains. No renderer fix or timing claim.
+Next: preserve finite split scheduling and source ownership; no extra runtime replay for unchanged evidence.
+
+### bayside1226_visual_final_fresh —1238 final checkpoint
+Worked: personally inspected actual current source-pane PNG and independently read current full-suite ALL TESTS PASS tail after55253 terminal/release; reused current whole-unit CODE/scoped visual and mechanics. CONTINUE stage closure, then finite1201 evidence decision and separately scoped Station48 opening-evidence inspection.
+Limits: unchanged art/stage reconciliation supplies no new architectural gain; hidden fidelity/material/site/recognition remain open. Station48 ENE/SSE unsupported completeness is not proved absence.
+Next: one source-bound gap-or-none decision, no forced art or repeated local finish review.
+
+### gateview70_integration_docs —1238 final integration intent
+Worked: consumed actual saved final validator/reviewer entries before commit; only669 L1/L2 finalized,78C/987U across213rows, prior49 recognition unchanged. Exact checklist/RETRO whitelist; no art/source/helper changes. Own currentPNG inspected and gallery privacy verified.
+Limits: scoped architecture stage closure is evidence reconciliation, not new art or whole-quality acceptance. Historical pending records remain chronological.
+Next: one authorized ordinary established-upstream push after whitespace/commit, terminal and remoteHEAD equality before pushed gallery label.1201 browser awaits separate transfer; no engine action.

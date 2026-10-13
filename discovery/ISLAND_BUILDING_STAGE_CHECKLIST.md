@@ -321,7 +321,7 @@ before selecting another round.
 | physical-building:w96215666 / w96215666 | 1215 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215667 / w96215667 | 1248/1395 Gateview Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215668 / w96215668 | 1236 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP4/NP1236 — L1 retained; whole secured SSE rear CODE/all-side L2/native/routes/spray/suite PASS; higher materials/site/hidden fidelity open |
-| physical-building:w96215669 / w96215669 | 1238 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215669 / w96215669 | 1238 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 1238 — current CODE/architecture/native/routes/PNG/suite PASS; existing art unchanged; higher quality OPEN |
 | physical-building:w96215670 / w96215670 | 1246/1397 Gateview Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | BG — whole architecture; materials/site fidelity open |
 | physical-building:w96215671 / w96215671 | 1244 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215672 / w96215672 | 1201 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
