@@ -425,7 +425,7 @@ before selecting another round.
 | physical-building:w291196382 / w291196382 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w291196386 / w291196386 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w545387426 / w545387426 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w764313741 / w764313741 | San Francisco Fire Station 48 | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | S48 — whole envelope/site fit complete; observed entry scoped PASS; ENE/SSE openings unresolved |
+| physical-building:w764313741 / w764313741 | San Francisco Fire Station 48 | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | S48 — whole envelope and inferred ENE/SSE architecture scoped PASS; higher fidelity/material/site open |
 | physical-building:w1001544698 / w1001544698 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w1043836450 / w1043836450 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w1098437841 / w1098437841 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | M — retain complete site; inspect later stages |
@@ -600,3 +600,14 @@ B1249 — source643 L1/L2 scoped independent PASS saved in reviewer RETRO and re
 
 
 E1252 —1252 Exposition w96698648: only L1/L2 complete on saved independent CODE/retainedL1/all-sideL2/scoped visual PASS from all11 actual baseline/study/Marchfront/undated layout comparisons. Hidden rear schedule remains production inference; unbound July contributor excluded. Protected front/procedural roof/carport/site preserved.52652 natural0/a6eeed passed native4roles/four approaches/12entry pairs/canopy bothways active REST-before-SAFE; planned6034 natural0/c75700 supplied actual correct-source PNG. Current62425 natural0/9e5fe6 ALL TESTS PASS/all49/world validation/determinism, globalc20369; primary ROOT read actual log. Scoped architecture76C/989U/213rows; prior49 recognition and all higher material/site/fidelity stages unchanged. No recognition acceptance.
+
+Station48 study004, 2026-10-14: only S48 L2 is now complete; prior L1 retained.
+Independent CODE/all-side game-art architecture/visual PASS; six native roles,
+four stock approaches, catalog access ascent/descent and exact ENE wall spray
+with active REST before SAFE PASS; full suite15545 natural0, all49 scored fits,
+world validation and determinism PASS. Opposite composition is production
+inference, not observed hidden architecture or as-built fidelity. Custom
+door-turn was not tested. Capture64093 post-save shutdown HOLD/143 remains
+historical; current focused legs and suite exited naturally. Higher stages and
+recognition remain unchanged. Totals: **81 C / 0 I / 984 U**, 213 units; prior49
+recognition credit unchanged.

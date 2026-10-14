@@ -9,9 +9,9 @@ const SOURCE_KEY := "w764313741"
 const WALL_KEY := "building:w764313741:wall"
 const ROOF_KEY := "building:w764313741:roof"
 const TARGET_CHUNK_ID := "x_0__z_-2"
-const WALL_MESHES := ["ProtectedExactNeutralWallRuns", "ObservedWSWNNWPaleWallFields"]
+const WALL_MESHES := ["ProtectedExactNeutralWallRuns", "ObservedWSWNNWPaleWallFields", "InferredENESSEPaleWallFields"]
 const ROOF_MESHES := ["ExactSourceNeutralRoof"]
-const ACCEPTED_BATCHES := ["ProtectedExactNeutralWallRuns", "ObservedWSWNNWPaleWallFields", "ExactSourceNeutralRoof", "CompletePaleWindowSurrounds", "OpaqueHighWindowGlass", "ThinWindowMullions", "ThinStraightPublicRoofEdge", "RaisedMetalAccess", "ClosedEntryDoor", "EntrySurround", "StationSign"]
+const ACCEPTED_BATCHES := ["ProtectedExactNeutralWallRuns", "ObservedWSWNNWPaleWallFields", "InferredENESSEPaleWallFields", "ExactSourceNeutralRoof", "CompletePaleWindowSurrounds", "OpaqueHighWindowGlass", "ThinWindowMullions", "ThinStraightPublicRoofEdge", "RaisedMetalAccess", "ClosedEntryDoor", "EntrySurround", "StationSign"]
 const SOURCE_DEPENDENCIES := ["res://game/scripts/world/facades/fire_station48_live_factory.gd", "res://game/resources/facades/fire_station48_quality_study.json", "res://game/resources/facades/fire_station48_study_geometry.json", "res://game/resources/facades/fire_station48_upper_cladding.gdshader", "res://game/scripts/world/facades/site_12_housing_kit.gd"]
 static func claims_record(record: Dictionary) -> bool:
 	return str(record.get("object_key", "")) in [WALL_KEY, ROOF_KEY]
@@ -73,7 +73,7 @@ static func _build_pair(records:Dictionary, source_builder:Callable,tangent_buil
 	_configure_body(original,WALL_KEY,true);_configure_body(roof_body,ROOF_KEY,false)
 	for index in original.get_child_count():_configure_shape(original.get_child(index) as CollisionShape3D,WALL_KEY,"building_wall" if index==0 else "none")
 	_apply_metadata(wall_root,roof_root)
-	var meta:Dictionary={"adapter_id":ADAPTER_ID,"factory_calls":1,"partial_pair_allowed":false,"fallback_allowed":false,"stack_allowed":false,"mapped_public_run_indices":FACTORY.TARGET_RUNS.duplicate(),"protected_run_indices":FACTORY.PROTECTED_RUNS.duplicate(),"all_additions_render_only":false,"source_collision_only":false}
+	var meta:Dictionary={"adapter_id":ADAPTER_ID,"factory_calls":1,"partial_pair_allowed":false,"fallback_allowed":false,"stack_allowed":false,"mapped_public_run_indices":FACTORY.OBSERVED_RUNS.duplicate(),"inferred_run_indices":FACTORY.INFERRED_RUNS.duplicate(),"protected_run_indices":FACTORY.PROTECTED_RUNS.duplicate(),"all_additions_render_only":false,"source_collision_only":false}
 	for root:Node3D in [wall_root,roof_root]:root.set_meta("fire_station48_live_replacement",meta.duplicate(true))
 	return {"ok":true,"wall_result":_partition_result(wall_root,meta),"roof_result":_partition_result(roof_root,meta)}
 

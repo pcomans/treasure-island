@@ -21630,3 +21630,47 @@ Next: two source-bound rays under ROOT transfer, preserve failed/neighbor limits
 Worked: consumed saved final validator/current reviewer and own records before commit; only672 L1/L2 finalized80C985U/213inventory49recognition. Exact checklist/RETRO whitelist, no source/art/shared-code change. Current gallery sourcePNG inspected/privacy retained.
 Limits: higher material/site/hidden fidelity/recognition open; historical pending and warnings remain chronological.
 Next: authorized ordinary established-upstream push after whitespace/exactcommit; verify same terminal/remoteHEAD equality/clean before gallery pushed label. Station48 browser remains unlaunched until separate transfer.
+
+
+## Station48 study004 integration preparation — 2026-10-14
+
+### station48_opposite_family_art — whole inferred opposite composition
+Worked: reused Station48 paired high-window and closed-wall modules across whole ENE/SSE; fifteen inferred motifs with thirteen observed-side modules retained. Focused complete Float32 host/clearance and selected camera LAND/occupancy checks preceded one source-world study004; all16 originals inspected, source frozen, 1/2 capture budget used.
+Limits: unavailable shapely and a guessed player path were corrected without installation. Opposite references failed/occluded; schedule is production inference, not measured missing windows. Surrounding roof-era image differences are not this patch's gain. Screenshot saves/PASS preceded shutdown stall; original64093 ended143 after wrapper TERM, not natural invocation PASS. The author's earlier “ROOT-authorized” wording was incorrect as primary-ROOT provenance: proxy instruction preceded primary ROOT disposition.
+Next: independent review and current mechanical/suite gates; no extra art polish or second capture solely for bookkeeping.
+
+### gateview70_integration_docs — reference, launcher, gallery and lifecycle
+Worked: preserved failed opposite reference attempts, explicit whole-face rescope, separate GO write/readback and externally verified real Astra Low child through orchestration-only proxy69894. Actual child completion and proxy natural0/fadfde plus global absence recorded; gallery401 contains only own gameplay, matched historical/current views and truthful candidate labels.
+Limits: child terminated verified wrapper1701680 (Godot1701709/Weston1701684) before primary ROOT controlled-cleanup disposition. Launcher prematurely announced a possible signal, but actual check found Godot absent and sent none. Saved PASS/wait is not cleanup authority. Independent judgment is distinct from proxy judgment.
+Next: approved existing LEARNINGS refinement explicitly requires primary disposition where natural-terminal/report is assigned; preserve original terminal and owned/global absence, with shutdown HOLD143 visible.
+
+### bayside1226_visual_final_fresh — scoped independent review
+Worked: saved CODE PASS including exact inferred-wall checker mapping, retained L1 PASS, all-side L2 game-art architecture and scoped visual PASS after all16 current images, matched historical views and held dated/undated references. Complete geometry finite/nondegenerate/outward; positive host/end/eave margins, restrained two-face composition and retained public entry/access observed.
+Limits: hidden opposite photographic fidelity/recognition and materials/site higher quality remain OPEN. Static checks do not establish current runtime contact. Baseline-era surrounding roofs cannot prove exact island image equality.
+Next: current native/access/source-visible PNG/full suite before final stage closure, no optional motif polish.
+
+### bayside1226_final_validation — preparation, mapping and first mechanics
+Worked: bound actual station48-indexed six-role/atomic source ownership, catalog access slope and canonical LAND. Found new InferredENESSEPaleWallFields missing from ExactClosedSourceWalls; the frozen shared checker change adds only that target batch while preserving closed ownership/rejection semantics. First mechanics9332 natural0/707ffe/global e7b4a1 passed six native roles/full roof domain/four approaches/access ascent-descent with active REST before SAFE.
+Limits: an early roof1/24 diagnostic was prematurely described as aggregate failure; unchanged driver's final supported criterion passed. Preserve the raw diagnostic and seven TextureRID warnings. PNG and suite remain pending at this preparation; minimal PNG necessarily repeats catalog flight/four approaches, not a hidden replay.
+Next: separately assigned minimal correct-source PNG and suite; no renderer-cause/timing claim.
+
+### gateview70_integration_docs — integration preparation
+Worked: verified actual S48 L1C/L2U row and exact eight intended paths; prepared only L2 delta (80→81C,985→984U), retaining213inventory/49recognition and all higher stages. Consolidated saved records including lifecycle correction and actual newly completed first mechanics.
+Limits: final PNG/suite and ROOT integration GO pending; no commit/push or acceptance.
+Next: finalize only after saved remaining gates/ROOT GO; one next approved YMCA whole-opposite evidence decision, not U-only repair or material polish.
+
+
+### bayside1226_final_validation — Station48 planned PNG and final suite
+Worked: minimalPNG65534 natural0/052344/globalfc33a7 supplied intended inferred ENE source-wall cyan tag with grounded avatar and active REST before SAFE. Native9332 reused; mandatory approaches/catalog access flight repeated honestly. Suite15545 natural0/3e2dbf ALL TESTS PASS/all49/world validation/determinism/globalf1c420.
+Limits: seven focused TextureRID warnings and tolerated roof1/24 sample diagnostic retained; custom door-turn untested. Both planned focused legs and suite natural0, no observed stall/recovery, no renderer-cause or timing claim.
+Next: preserve exact closed source-wall eligibility and unchanged mandatory gates.
+
+### bayside1226_visual_final_fresh — current Station48 PNG checkpoint
+Worked: personally inspected intended ENE pale-wall PNG beneath high glazing, exact source receiver/active RESTSAFE and actual focused logs; reused prior independent all16/reference/CODE/L1/allsideL2 visual PASS.
+Limits: decorative glazing is not the eligible wall; custom door-turn untested. Suite was pending when this checkpoint was written; subsequent saved validator15545 ALLPASS supersedes that historical status.
+Next: integration then one bounded YMCA held-evidence decision, no local polish or invented opposite windows.
+
+### gateview70_integration_docs — Station48 final integration intent
+Worked: consumed saved final validator/reviewer/author/launcher records and ROOT final GO; only S48 L2 finalized, prior L1 retained,81C984U/213inventory49recognition/higherOPEN. Exact eight-path patch includes four target author files, one existing checker batch mapping, approved lifecycle lesson, checklist and RETRO.
+Limits: opposite schedule is inferred; historical capture64093 shutdown143 and cleanup-before-primary-disposition deviation preserved. No source geometry edits during integration.
+Next: whitespace/exact local commit then one authorized established-upstream non-force push, same terminal/remoteHEAD equality/clean verification before gallery pushed label. YMCA remains separate assignment.

@@ -5,30 +5,30 @@
     1,
     2,
     3,
+    4,
     5,
     6,
     8,
     9,
-    24,
-    25
-  ],
-  "protected_runs": [
-    4,
-    7,
     10,
     11,
     12,
     13,
     14,
     15,
-    16,
-    17,
     18,
     19,
     20,
     21,
     22,
-    23
+    23,
+    24,
+    25
+  ],
+  "protected_runs": [
+    7,
+    16,
+    17
   ],
   "geometry_path": "res://game/resources/facades/fire_station48_study_geometry.json",
   "truth_boundary": {
@@ -365,10 +365,190 @@
             -366.1977233886719
           ]
         ]
+      },
+      {
+        "chain": [
+          14,
+          15
+        ],
+        "station_m": 3.2,
+        "glazing_width_m": 2,
+        "glazing_height_m": 1.06,
+        "bottom_y": 5.319,
+        "top_y": 6.379,
+        "status": "production_inference; unobserved ENE/SSE schedule"
+      },
+      {
+        "chain": [
+          14,
+          15
+        ],
+        "station_m": 8.8,
+        "glazing_width_m": 2,
+        "glazing_height_m": 1.06,
+        "bottom_y": 5.319,
+        "top_y": 6.379,
+        "status": "production_inference; unobserved ENE/SSE schedule"
+      },
+      {
+        "chain": [
+          14,
+          15
+        ],
+        "station_m": 14.7,
+        "glazing_width_m": 2,
+        "glazing_height_m": 1.06,
+        "bottom_y": 5.319,
+        "top_y": 6.379,
+        "status": "production_inference; unobserved ENE/SSE schedule"
+      },
+      {
+        "chain": [
+          18,
+          18
+        ],
+        "station_m": 3.9,
+        "glazing_width_m": 2,
+        "glazing_height_m": 1.06,
+        "bottom_y": 5.319,
+        "top_y": 6.379,
+        "status": "production_inference; unobserved ENE/SSE schedule"
+      },
+      {
+        "chain": [
+          20,
+          23
+        ],
+        "station_m": 3.4,
+        "glazing_width_m": 2,
+        "glazing_height_m": 1.06,
+        "bottom_y": 5.319,
+        "top_y": 6.379,
+        "status": "production_inference; unobserved ENE/SSE schedule"
+      },
+      {
+        "chain": [
+          20,
+          23
+        ],
+        "station_m": 9.4,
+        "glazing_width_m": 2,
+        "glazing_height_m": 1.06,
+        "bottom_y": 5.319,
+        "top_y": 6.379,
+        "status": "production_inference; unobserved ENE/SSE schedule"
+      },
+      {
+        "chain": [
+          20,
+          23
+        ],
+        "station_m": 15.4,
+        "glazing_width_m": 2,
+        "glazing_height_m": 1.06,
+        "bottom_y": 5.319,
+        "top_y": 6.379,
+        "status": "production_inference; unobserved ENE/SSE schedule"
+      },
+      {
+        "chain": [
+          20,
+          23
+        ],
+        "station_m": 21.4,
+        "glazing_width_m": 2,
+        "glazing_height_m": 1.06,
+        "bottom_y": 5.319,
+        "top_y": 6.379,
+        "status": "production_inference; unobserved ENE/SSE schedule"
+      },
+      {
+        "chain": [
+          20,
+          23
+        ],
+        "station_m": 28.1,
+        "glazing_width_m": 2,
+        "glazing_height_m": 1.06,
+        "bottom_y": 5.319,
+        "top_y": 6.379,
+        "status": "production_inference; unobserved ENE/SSE schedule"
+      },
+      {
+        "chain": [
+          4,
+          4
+        ],
+        "station_m": 3.85,
+        "glazing_width_m": 2,
+        "glazing_height_m": 1.06,
+        "bottom_y": 5.319,
+        "top_y": 6.379,
+        "status": "production_inference; unobserved ENE/SSE schedule"
+      },
+      {
+        "chain": [
+          10,
+          13
+        ],
+        "station_m": 3.2,
+        "glazing_width_m": 2,
+        "glazing_height_m": 1.06,
+        "bottom_y": 5.319,
+        "top_y": 6.379,
+        "status": "production_inference; unobserved ENE/SSE schedule"
+      },
+      {
+        "chain": [
+          10,
+          13
+        ],
+        "station_m": 8.7,
+        "glazing_width_m": 2,
+        "glazing_height_m": 1.06,
+        "bottom_y": 5.319,
+        "top_y": 6.379,
+        "status": "production_inference; unobserved ENE/SSE schedule"
+      },
+      {
+        "chain": [
+          10,
+          13
+        ],
+        "station_m": 14.2,
+        "glazing_width_m": 2,
+        "glazing_height_m": 1.06,
+        "bottom_y": 5.319,
+        "top_y": 6.379,
+        "status": "production_inference; unobserved ENE/SSE schedule"
+      },
+      {
+        "chain": [
+          10,
+          13
+        ],
+        "station_m": 20.0,
+        "glazing_width_m": 2,
+        "glazing_height_m": 1.06,
+        "bottom_y": 5.319,
+        "top_y": 6.379,
+        "status": "production_inference; unobserved ENE/SSE schedule"
+      },
+      {
+        "chain": [
+          19,
+          19
+        ],
+        "station_m": 2.5,
+        "glazing_width_m": 2,
+        "glazing_height_m": 1.06,
+        "bottom_y": 5.319,
+        "top_y": 6.379,
+        "status": "production_inference; unobserved ENE/SSE schedule"
       }
     ],
-    "window_count": 13,
-    "all_dimensions_and_cadence": "reversible production inference; only observed public side motifs",
+    "window_count": 28,
+    "all_dimensions_and_cadence": "reversible production_inference; observed WSW/NNW motif family, unobserved ENE/SSE composition, counts and anchors",
     "ground_detail_added": true,
     "source6m_not_measured_height": true,
     "no_bays_signage_entry_stairs_equipment": false,
@@ -416,6 +596,33 @@
       6.81
     ],
     "head_line_relief_m": 0,
-    "scope": "Observed public faces only; fine vertical cladding and head joint are production inference. Hidden sides retain original neutral material."
-  }
+    "scope": "Observed WSW/NNW fixed; ENE/SSE pale closed-wall variant and high-window composition are production_inference. Protected NNW runs7/16/17 retain original neutral material."
+  },
+  "observed_runs": [
+    0,
+    1,
+    2,
+    3,
+    5,
+    6,
+    8,
+    9,
+    24,
+    25
+  ],
+  "inferred_runs": [
+    4,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23
+  ]
 }
