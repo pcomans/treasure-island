@@ -1,6 +1,6 @@
 {
   "source": "w34313547",
-  "status": "production_inference; Sep2025 observed SSE entrance and ENE service motifs; hidden rear unchanged",
+  "status": "production_inference; Sep2025 observed SSE entrance and ENE service motifs preserved; opposite solid-panel and sparse high closed-service composition inferred, not as-built",
   "origin": [
     226.460534,
     3.9165924706875006,
@@ -6342,5 +6342,99 @@
         ]
       ]
     }
+  },
+  "inferred_opposite": {
+    "provenance": "WSW/NNW/courtyard grammar unavailable after bounded references; panels, joint cadence and three high closed louvers are production_inference; no new entrance or access claim",
+    "panels": [
+      {
+        "run": 0,
+        "bottom_y": 3.859999895095825
+      },
+      {
+        "run": 1,
+        "bottom_y": 3.7690000534057617
+      },
+      {
+        "run": 2,
+        "bottom_y": 3.6760001182556152
+      },
+      {
+        "run": 12,
+        "bottom_y": 3.812000036239624
+      },
+      {
+        "run": 13,
+        "bottom_y": 3.8910000324249268
+      },
+      {
+        "run": 14,
+        "bottom_y": 4.066999912261963
+      },
+      {
+        "run": 15,
+        "bottom_y": 4.066999912261963
+      },
+      {
+        "run": 16,
+        "bottom_y": 4.064000129699707
+      },
+      {
+        "run": 17,
+        "bottom_y": 3.7200000286102295
+      },
+      {
+        "run": 18,
+        "bottom_y": 3.7130000591278076
+      },
+      {
+        "run": 19,
+        "bottom_y": 3.7130000591278076
+      },
+      {
+        "run": 20,
+        "bottom_y": 3.742000102996826
+      },
+      {
+        "run": 21,
+        "bottom_y": 3.742000102996826
+      },
+      {
+        "run": 22,
+        "bottom_y": 3.7809998989105225
+      },
+      {
+        "run": 23,
+        "bottom_y": 3.7890000343322754
+      },
+      {
+        "run": 24,
+        "bottom_y": 3.812000036239624
+      },
+      {
+        "run": 25,
+        "bottom_y": 4.066999912261963
+      },
+      {
+        "run": 26,
+        "bottom_y": 4.066999912261963
+      },
+      {
+        "run": 27,
+        "bottom_y": 4.007999897003174
+      },
+      {
+        "run": 28,
+        "bottom_y": 3.880000114440918
+      },
+      {
+        "run": 29,
+        "bottom_y": 3.86299991607666
+      }
+    ],
+    "louver_runs": [
+      1,
+      17,
+      24
+    ]
   }
 }

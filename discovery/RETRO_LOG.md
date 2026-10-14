@@ -21674,3 +21674,43 @@ Next: integration then one bounded YMCA held-evidence decision, no local polish 
 Worked: consumed saved final validator/reviewer/author/launcher records and ROOT final GO; only S48 L2 finalized, prior L1 retained,81C984U/213inventory49recognition/higherOPEN. Exact eight-path patch includes four target author files, one existing checker batch mapping, approved lifecycle lesson, checklist and RETRO.
 Limits: opposite schedule is inferred; historical capture64093 shutdown143 and cleanup-before-primary-disposition deviation preserved. No source geometry edits during integration.
 Next: whitespace/exact local commit then one authorized established-upstream non-force push, same terminal/remoteHEAD equality/clean verification before gallery pushed label. YMCA remains separate assignment.
+
+## YMCA whole-opposite architecture integration — 2026-10-14
+
+### ymca_opposite_family_art / ymca_opposite_service_rework — whole opposite study and dispatch repair
+Worked: reused target panel/service variants across explicitly inferred opposite L-shell, preserved public3–11/site/generated roof/source ownership. Study00480066 natural0 showed coherent panels but missing three configured louvers; independent HOLD prompted one typed finite-integral membership normalization shared by emission/joint exclusion. Study00587758 natural0 restored all three; all11 originals inspected and source frozen, total2/2 captures.
+Limits: no opposite measured schedule; May2019 occlusion/blackWSW retained. Runtime type comparison was not instrumented; controlled correction supports cause. Complete corner arithmetic finished after capture, containing-envelope check before.
+Next: consume actual native complete component proof, not intended configuration counts.
+
+### gateview70_integration_docs — YMCA evidence, launch and gallery rounds
+Worked: held Sep2025/reference and current003 comparisons established solid-wall vocabulary; two finite opposite attempts stopped at evidence limits. Both real named AstraLow children externally verified; separate GO readbacks and original proxy58222/3844 natural terminals/global absence preserved, no unauthorized cleanup. Actual11 study005 plus baseline/HOLD comparisons delivered privately in own-gameplay gallery.
+Limits: unseen schedule inferred, proxy judgement never primary independent acceptance. Oversized embeddedHTML/config reads corrected to bounded structural extraction. Handoff interval produced avoidable repeated proxy waiting.
+Next: preserve original handles and deliver concrete terminal/freeze promptly; no more art budget.
+
+### bayside1226_visual_final_fresh — YMCA scope, first HOLD and final architecture review
+Worked: directly compared dated Sep2025 public/service refs, opposite limits and all11 current/study005 originals. Initial missing-louver HOLD prevented false completion; final three-path CODE/retainedL1/allsideL2/scopedvisual PASS after actual restored assemblies and Float32 host/LAND checks.
+Limits: hidden composition inferred; higher material/site/fidelity/recognition remains open. Static review does not replace runtime.
+Next: current native/path/sourcePNG/fullsuite gates before final integration.
+
+### bayside1226_final_validation — YMCA planned mechanics and PNG
+Worked:77887 natural0/global0a6fe2 proved retained shell/roof and all added roles, positive per-instance frame/recess/blades, four approaches and publicEntryPath out/back activeREST beforeSAFE.53426 natural0/global2f5f3a supplied source-visible inferred-panel PNG; native/path omitted, mandatory approaches repeated.
+Limits: runtime labels lack run IDs; association to1/17/24 follows deterministic producer order. No invented rear entry/stair/door-leaf route proof. Seven TextureRID warnings retained; no stall/recovery or timing/fix claim.
+Next: full suite pending, preserve split evidence without replay.
+
+### gateview70_integration_docs — YMCA integration preparation
+Worked: consolidated completed named rounds and provisional L2-only scoped delta82C983U/213rows; priorL1/49recognition/higherOPEN retained. Exact intended five paths are target factory/config, existing checker descriptor, checklist and RETRO.
+Limits: suite/finalROOTGO pending; no staging/commit/push/source geometry edit.
+Next: consume actual final validator record before authorized final integration.
+
+
+### bayside1226_final_validation — YMCA final current full suite
+Worked: original64874 natural0/04f3ca, ALL TESTS PASS/all49 scored fits/contracts/world validation/determinism; global987567 release. No warning/error/failure lines in suite log. Prior native77887 and correct source-panel PNG53426 complete unchanged focused proof.
+Limits: buffered island output required the same livehandle; focused TextureRID warnings remain historical, no renderer-fix/timing claim.
+Next: integrate current verified stage with prior HOLD and inference boundaries intact; no mechanics replay.
+
+### bayside1226_visual_final_fresh — final gates and bounded integration executor
+Worked: personally inspected source-panel PNG/RESTSAFE and verified actual final suite tail. Reused saved independent all11/reference/CODE/L1/all-sideL2 visual and native/EntryPath evidence. ROOT delegated exact five-file delivery after two documentation model-capacity dispatch failures before execution; source/art authored by separate agents and acceptance reused, not self-granted. Worktree had exactly the five authorized modified files, no staged/untracked files or competing Git/engine process. Only YMCA L2 finalizes82C983U/213inventory49recognition, higher quality open.
+Did not work: an initial grep matched embedded gallery base64; a subsequent costly regex read was terminated as an owned read-only process. Corrected to bounded section-text extraction, no engine or validation rerun.
+Next: explicit five-path whitespace/staging/localcommit and one ordinary established-upstream non-force push; verify same terminal/remote equality/clean before private gallery pushed label. Then ONE existing Building461 whole-opposite evidence comparison preserving its shared producer's personnel-support instance; no art GO/local polish/scope expansion.
+
+Integration identity correction: first commit attempt exited128 because this worktree lacked user identity. Reused the existing project bot declared in post-create.sh and prior commit through command-local options only; no Git configuration/authentication changes. Exact staged five paths and213rows82C983U0I verified before retry.

@@ -248,7 +248,7 @@ before selecting another round.
 | physical-building:w34313544 / w34313544 | Naval Station Treasure Island | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313545 / w34313545 | 800 Avenue I, San Francisco, CA | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313546 / w34313546 | 850 Avenue H | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w34313547 / w34313547 | Treasure Island Community YMCA | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | YMCA — scoped envelope/entry/site closure; whole architecture and finish open |
+| physical-building:w34313547 / w34313547 | Treasure Island Community YMCA | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | YMCA — inferred opposite panel/service architecture CODE/L2/native/path/source PNG/full suite PASS; higher fidelity/material/site open |
 | physical-building:w34313548 / w34313548 | San Francisco Fire Dept Treasure Island Training Facility Building 600 | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | F — retain; inspect later stages |
 | physical-building:w34313549 / w34313549 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313550 / w34313550 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -611,3 +611,6 @@ door-turn was not tested. Capture64093 post-save shutdown HOLD/143 remains
 historical; current focused legs and suite exited naturally. Higher stages and
 recognition remain unchanged. Totals: **81 C / 0 I / 984 U**, 213 units; prior49
 recognition credit unchanged.
+
+
+YMCA opposite closure, 2026-10-14: prior L1 retained; only L2 completes on final study005 scoped independent CODE/all-side architecture visual PASS and current native required louver assemblies, four approaches, public EntryPath round trip and source-panel PNG/RESTSAFE. Study004 missing-service HOLD remains historical. Current64874 natural0/04f3ca ALL TESTS PASS includes all49 scored fits/contracts/world validation/determinism; global987567. Hidden opposite composition is production inference, not measured/as-built. Totals: **82 C / 0 I / 983 U**,213 units; prior49 recognition and higher material/site/fidelity stages unchanged.

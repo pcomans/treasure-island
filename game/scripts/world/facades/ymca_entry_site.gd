@@ -1,6 +1,6 @@
 extends RefCounted
 ## Observed public entrance/end assembly. Dimensions are production inference.
-## The generated shell, roof, rear and source footprint remain untouched.
+## Generated shell/roof/source footprint stay intact; opposite panels are inferred.
 const SUPPORT := preload("res://game/scripts/world/facades/housing_quality_support.gd")
 const CONFIG := "res://game/resources/facades/ymca_entry_site.json"
 const SOURCE := "building:w34313547:wall"
@@ -12,6 +12,26 @@ static func build(record: Dictionary) -> Dictionary:
 	var cfg: Variant = JSON.parse_string(FileAccess.get_file_as_string(CONFIG))
 	if not cfg is Dictionary or cfg.get("source", "") != "w34313547" or record.get("source_keys", []) != ["w34313547"] or record.get("receiver_kind", "") != "building_wall":
 		return {"ok": false, "message": "YMCA exact source and site configuration required."}
+	# JSON numbers are floats; validate identity before normalizing membership once.
+	var opposite: Variant = cfg.get("inferred_opposite")
+	if not opposite is Dictionary or not opposite.get("louver_runs") is Array or not opposite.get("panels") is Array:
+		return {"ok": false, "message": "YMCA inferred service run configuration required."}
+	var louver_runs: Array[int] = []
+	for raw_run: Variant in opposite.louver_runs:
+		if not (raw_run is int or raw_run is float):
+			return {"ok": false, "message": "YMCA service run IDs must be numeric integers."}
+		var value := float(raw_run)
+		if not is_finite(value) or value != floor(value) or value < 0 or value >= record.vertices.size() / 12:
+			return {"ok": false, "message": "YMCA service run ID must be finite, integral and within the source wall."}
+		var run_id := int(value)
+		var has_panel := false
+		for panel: Dictionary in opposite.panels:
+			if panel.get("run") == raw_run:
+				has_panel = true
+				break
+		if not has_panel or run_id in louver_runs:
+			return {"ok": false, "message": "YMCA service run IDs require unique configured panel hosts."}
+		louver_runs.append(run_id)
 	var root := Node3D.new()
 	root.name = "YMCAObservedEntrySite"
 	var o := _vec(cfg.origin)
@@ -93,6 +113,35 @@ static func build(record: Dictionary) -> Dictionary:
 		var instance := MeshInstance3D.new(); instance.name=key; instance.mesh=mesh
 		instance.set_meta("physical_role","ground_visual")
 		root.add_child(instance)
+	# Separate inferred opposite composition; never extend the observed run loop.
+	# Reuse the aggregate/panel/coping and closed high-service vocabulary.
+	var aggregate := preload("res://game/resources/materials/world/ti_ymca/ti_ymca_primary.tres")
+	for spec: Dictionary in cfg.inferred_opposite.panels:
+		var run := int(spec.run)
+		var pa := _vec(vertices.slice(run*12,run*12+3))
+		var pb := _vec(vertices.slice(run*12+3,run*12+6))
+		var pt := Vector3(pb.x-pa.x,0,pb.z-pa.z).normalized()
+		var pn := Vector3(-pt.z,0,pt.x)
+		var span := Vector2(pb.x-pa.x,pb.z-pa.z).length()
+		var bottom := float(spec.bottom_y)
+		var top := float(record.top_elevation_m)-.10
+		var middle := Vector3((pa.x+pb.x)/2.0,(bottom+top)/2.0,(pa.z+pb.z)/2.0)
+		# Full closed shallow panel backing, embedded into the retained source wall.
+		# Bottom comes from complete-footprint canonical LAND/source-base preflight.
+		_box(root,"InferredOppositeSolidPanel",middle+pn*.02,pt,pn,Vector3(span-.05,top-bottom,.09),aggregate,"wall")
+		_box(root,"InferredOppositeCoping",Vector3(middle.x,top+.045,middle.z)+pn*.035,pt,pn,Vector3(span-.05,.10,.13),coping,"detail")
+		var bays := maxi(1,int(ceil(span/4.6)))
+		for j in range(1,bays):
+			if run in louver_runs and absf(span*(float(j)/bays-.5)) < .70: continue
+			var jp := pa.lerp(pb,float(j)/bays)
+			_box(root,"InferredOppositePanelJoint",Vector3(jp.x,(bottom+top)/2.0,jp.z)+pn*.066,pt,pn,Vector3(.045,top-bottom,.024),joint,"detail")
+		if run in louver_runs:
+			# High, closed service assembly, not a new window or traversable entrance.
+			var lp := Vector3(middle.x,10.12,middle.z)
+			_box(root,"InferredOppositeHighServiceFrame",lp+pn*.13,pt,pn,Vector3(1.20,1.26,.14),frame,"detail")
+			_box(root,"InferredOppositeClosedServiceRecess",lp+pn*.205,pt,pn,Vector3(1.04,1.10,.055),blue,"detail")
+			for j in 8:
+				_box(root,"InferredOppositeServiceBlade",lp+pn*.247+Vector3(0,-.46+j*.13,0),pt,pn,Vector3(1.04,.052,.07),frame,"detail")
 	var result := SUPPORT.attach(root,record,record,{})
 	if not bool(result.get("ok",false)): return result
 	var meshes := 0; var triangles := 0
