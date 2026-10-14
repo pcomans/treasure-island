@@ -55,8 +55,8 @@ const QUALITY_SUPPORT_ASSEMBLIES := {
 	"w34313569": {
 		"assembly_name": "ObservedPanelHall",
 		"required": {
-			"wall": ["PanelField", "ClosedSlot", "SlotReveal", "TerminalPier", "PaleEndProjection", "ProjectionLowerField"],
-			"detail": ["SlotSill", "ThinCoping", "ProjectionCap"],
+			"wall": ["PanelField", "ClosedSlot", "SlotReveal", "TerminalPier", "PaleEndProjection", "ProjectionLowerField", "InferredAustinField", "InferredAustinClosedBack", "InferredAustinReveal", "InferredAustinServiceHead", "InferredAustinPier"],
+			"detail": ["SlotSill", "ThinCoping", "ProjectionCap", "InferredAustinSill", "InferredAustinCoping"],
 			"ground_visual": ["ObservedPavedApron"],
 		},
 	},

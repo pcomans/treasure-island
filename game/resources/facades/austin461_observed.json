@@ -28,6 +28,73 @@
       "terminal_projection": true
     }
   ],
+  "inferred_opposite_status": "production_inference; complete opposite institutional composition. Exact hidden opening/entrance schedule UNKNOWN. March/November2025 observed vocabulary and distant obscured May2024 near-end context only; no measured access or historical entrance claim.",
+  "inferred_opposite": [
+    {
+      "run": 11,
+      "composition": "hall"
+    },
+    {
+      "run": 12,
+      "composition": "hall"
+    },
+    {
+      "run": 13,
+      "composition": "solid"
+    },
+    {
+      "run": 14,
+      "composition": "hall"
+    },
+    {
+      "run": 15,
+      "composition": "solid"
+    },
+    {
+      "run": 16,
+      "composition": "service"
+    },
+    {
+      "run": 17,
+      "composition": "infill"
+    },
+    {
+      "run": 18,
+      "composition": "solid"
+    },
+    {
+      "run": 19,
+      "composition": "solid"
+    },
+    {
+      "run": 20,
+      "composition": "solid"
+    },
+    {
+      "run": 21,
+      "composition": "solid"
+    },
+    {
+      "run": 22,
+      "composition": "solid"
+    },
+    {
+      "run": 23,
+      "composition": "solid"
+    },
+    {
+      "run": 24,
+      "composition": "infill"
+    },
+    {
+      "run": 25,
+      "composition": "service"
+    },
+    {
+      "run": 26,
+      "composition": "solid"
+    }
+  ],
   "palette": {
     "upper": [
       0.68,

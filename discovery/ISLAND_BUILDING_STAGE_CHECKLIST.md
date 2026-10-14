@@ -259,7 +259,7 @@ before selecting another round.
 | physical-building:w34313558 / w34313558 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313560 / w34313560 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313564 / w34313564 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w34313569 / w34313569 | Bldg 461 | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | B461 — scoped envelope/site complete; missing north and unknown rear keep whole quality open |
+| physical-building:w34313569 / w34313569 | Bldg 461 | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | B461 — study005 all-side game-art architecture and current fit/suite complete; opposite inferred, edge finish/higher quality open |
 | physical-building:w95934092 / w95934092 | 1318 Gateview Avenue | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w95934093 / w95934093 | 1432 Halibut Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w95934096 / w95934096 | 1412 Flounder Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -473,6 +473,33 @@ and observed architecture; missing north capture/unknown rear/schematic material
 keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
 See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
 After B461, totals were30 C/1035 U, including L1:21 C/192 U; historical credits unchanged.
+
+**B461 current preparation**, 2026-10-14, source base `fcc319c` plus frozen
+uncommitted study005: retained L1 and all-side L2/scoped architecture visual and
+CODE PASS (`bayside1226_visual_final_fresh`). The whole opposite long/stepped
+institutional composition on runs11–26 is explicit production inference using
+the observed lower infill/short-head/upper-slot/service vocabulary; public0–10,
+the entire shared `r133347` instance, source backing/roof/site remain protected.
+All12 actual study005 views, matched current003/study004 views and retained
+March/November2025 references were compared independently. Missing defaultnorth
+is covered within the game-art scope by two positive focused obliques plus
+west/raised views; neither a surveyed hidden schedule nor modern as-built
+fidelity is claimed. Study004's broad patterned terminal-cap band was repaired
+in study005; residual narrow edge modulation remains **finish OPEN**, without
+a demonstrated new exposed-plane/contact breach. Both static preflight HOLDs
+and the corrected extra Pier-only containment requirement remain historical.
+Current native/mechanics59458 natural0/b5e65f proved all seven inferred families,
+retained complete roof, four approaches and10m apron out/back with active
+supported released stopped REST before SAFE. Minimal correct-source spray
+PNG87934 natural0/30ef8e was inspected separately; native/apron were reused,
+mandatory approaches repeated. Generated quality roof remains empty. Seven
+focused TextureRID warnings retained; no renderer cause or clean-finish claim.
+Final current suite37687 natural0/7264cc, ALL TESTS PASS6ba258/global release9d141a,
+passed all49 scored fits/contracts/world validation/determinism. Final ROOT
+integration GO confirms this **L2-only stage update**, without recognition
+promotion or closure of higher-stage/edge-finish/as-built limits.
+Totals now **83 C /0 I /982 U**,213 units/49 historical credits unchanged;
+L1 remains C for this unit and L3–L5 remain U.
 
 
 **M1204**, 2026-10-11, corrected study002: source `w96215691` completes L1

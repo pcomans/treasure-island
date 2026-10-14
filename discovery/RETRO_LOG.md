@@ -21714,3 +21714,46 @@ Did not work: an initial grep matched embedded gallery base64; a subsequent cost
 Next: explicit five-path whitespace/staging/localcommit and one ordinary established-upstream non-force push; verify same terminal/remote equality/clean before private gallery pushed label. Then ONE existing Building461 whole-opposite evidence comparison preserving its shared producer's personnel-support instance; no art GO/local polish/scope expansion.
 
 Integration identity correction: first commit attempt exited128 because this worktree lacked user identity. Reused the existing project bot declared in post-create.sh and prior commit through command-local options only; no Git configuration/authentication changes. Exact staged five paths and213rows82C983U0I verified before retry.
+
+## Austin461 whole opposite architecture preparation — 2026-10-14
+
+### austin461_opposite_family_art — first whole composition
+Worked: reused panel-hall lower infill/short heads, sparse upper slots, pale projection and closed service vocabulary in an Austin-only inferred11–26 branch. Per-run source transforms preserve stepped noncollinear runs; observed0–10, shared r133347, backing/roof/site/controls protected. Study00472288 natural0/773d98/all12 originals/source freeze supplied the first coherent render;1/2 art budget used.
+Limits: opposite references did not supply a measured schedule. Broad patterned terminal bands remained and independent review held the first study. An unavailable historical-source comparison was not a preservation PASS.
+Next: repair the demonstrated seam within the same family, with independent review before further refinement.
+
+### austin461_terminal_cap_rework / austin461_terminal_cap_final — bounded seam repair
+Worked: initial station-only preflight stopped without edits/capture at run24 Field bottom1.975536mm below fixed Pier bottom. Independent localLAND review established that the Pier and complete affected footprint remain buried; ROOT allowed only that terminal-lower clamp plus .04m positive station burial. Final child changed only necessary GDScript cap coordinates, preserving JSON/Piers/interior fields/no-Pier18/20/26/motifs/source bounds. Actual full-footprint LAND burial remained at least.1302198699m.
+Limits: reconstructed strict Pier-only rear-plane containment at nominal shared.01 depth then produced6–73µm Float32 differences. That extra certificate was not a mandatory native invariant or exposed seam/contact/source breach; ROOT rescinded it, without weakening native/visual/movement checks or declaring a tolerance PASS. Two static stops used no additional capture.
+Next: assess the actual rendered repair promptly rather than extending an unsupported micron certificate.
+
+### building461_evidence_sol — references, author launch, capture and gallery
+Worked: current003 original8639 natural0/ec1b43 reused as baseline. Exactly two opposite browser attempts retained black/unbound long01 and limited May2024 end02; March/November2025 public references and unknown-date Apple context stayed private. Separate GO write/readbacks and external actual turn_context verified three named AstraLow art children through the same AstraMedium orchestration-only parent; original proxies99379/75039/12832 reached natural0 with global release. Capture-only study00594142 natural0/74dab1/globalcc0835/all12 originals completed remaining budget2/2. No new source edit/proxy/retry; gallery retains current003, study004 HOLD and actual study005 comparisons.
+Did not work: initial JSON-stream monitoring hid actual child dispatch and caused avoidable waiting; immediate parent-rollout lookup resolved later launches. Optional crop stopped at missingPIL without installation. A broad glob in this preparation matched checkpoint directories and overflowed output; exact filenames replaced it.
+Limits: defaultnorth omission and focused camera coverage limits retained; actual Wayland/RADV Radeon780M runtime and seven TextureRID cleanup warnings recorded, not pinned. Narrow remaining edge transitions were sent to independent review, never self-accepted. No opposite measured schedule, new real access, clean finish or modern whole-island claim.
+Next: use actual parent routing and original terminal/global release once, keep source photos private, and close the finite loop without extra architecture audits.
+
+### bayside1226_visual_final_fresh — initial HOLD and final architecture review
+Worked: independent actual-reference/all12 and matched current003/004/005 comparison identified the broad coplanar terminal band and later confirmed its removal. Current terminal-cap CODE, retainedL1/all-sideL2 and scoped game-art architecture PASS; seven-family target descriptor and protected shared instance/source boundaries read separately.
+Limits: residual narrow speckled Pier/upper/shadow transitions remain finish OPEN; no demonstrated new hole/exposed-plane/contact defect or renderer cause. Hidden schedules/materials/site/as-built/recognition remain open. Static review is not runtime proof.
+Next: consume current native/sourcePNG/suite gates, avoid speculative edge polish or more art captures.
+
+### bayside1226_final_validation — planned current mechanics and source PNG
+Worked:59458 natural0/b5e65f/global9abf6f proved seven positive inferred native families/ordered RIDs, retained full roof, four approaches and10m apron out/back with canonicalLAND active supported grounded released stopped REST before SAFE.87934 natural0/30ef8e/global33b685 supplied personally inspected1280x800 inferredrun11 source-wall cyan tag/grounded avatar. Native/apron reused; mandatory four approaches repeated honestly.
+Limits: east approach uses tile0/-4 while apron uses-1/-4; visible apron is not collision support. r133347 source preservation is distinct from runtime regression; no stairs/customdoorroute proof. Seven TextureRID warnings; zero observed stalls/unplanned recoveries/completed-route replays, timing unknown. Full suite pending.
+Next: finish the existing suite gate without replaying completed focused cases.
+
+### building461_evidence_sol — integration and next-target preparation
+Worked: verified actual B461 priorL1C/L2U and prepared only L2U→C, totals83C982U/213units49historicalcredits, higher stages open. Consolidated saved author/reviewer/validator/lifecycle corrections into ordinary tracked RETRO; exact five-path patch includes factory/config/checker/checklist/RETRO only. Inspected new sourcePNG and reused already inspected all12 art originals for gallery delivery. One next existing Batch06 targetw34313520 source/retained gameplay comparison identifies the old five-run field plus one complete three-tier bay, without treating U as a defect.
+Limits: no stored September2025 reference pixels or current all-side target captures were identified in its exact retained source packet; historical August gameplay is not current whole-unit proof. Full suite/finalROOTGO pending; no staging/commit/push/acceptance.
+Next: ROOT may assign one bounded current/reference whole-unit comparison for w34313520, keeping wing20–21/hidden sides unknown and r133347 protected; no automatic authoring or cadence claim.
+
+### bayside1226_final_validation — Austin final current full suite
+Worked: original37687 natural0/7264cc, ALL TESTS PASS6ba258/all49 scored fits/contracts/world validation/determinism; owned suite/island absent and fresh global9d141a release. Same original handle retained through buffered island output. No warning/error/failure lines in suite; completed focused native/apron/sourcePNG reused.
+Limits: earlier focused seven TextureRID warnings and independent finish OPEN remain separate; no renderer fix/timing or additional r133347 native claim.
+Next: authorized five-path integration, no focused case replay.
+
+### building461_evidence_sol — final Austin integration intent
+Worked: consumed saved validator full-suite log/focused closeout and final ROOT GO, retaining separate independent CODE/L1/all-sideL2 architecture/native/sourcePNG/RESTSAFE findings. Exact five-path patch finalizes only461L2C/83C982U/213units49credits, higher stages/edge finish open, study004 and both static HOLDs retained. Documentation changes only; no source/art/runtime rerun or unchanged-image review.
+Limits: opposite schedule remains production inference; no clean-finish/as-built/recognition acceptance. Worktree identity unset, so reuse existing post-create project bot through command-local options only.
+Next: final whitespace/exact staging/commit and one ordinary non-force established-upstream push; same terminal/remote equality/clean proof precedes gallery pushed label. Next-target evidence requires its separate assignment.
