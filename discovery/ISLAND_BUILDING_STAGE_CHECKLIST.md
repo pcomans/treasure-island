@@ -324,7 +324,7 @@ before selecting another round.
 | physical-building:w96215669 / w96215669 | 1238 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 1238 — current CODE/architecture/native/routes/PNG/suite PASS; existing art unchanged; higher quality OPEN |
 | physical-building:w96215670 / w96215670 | 1246/1397 Gateview Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | BG — whole architecture; materials/site fidelity open |
 | physical-building:w96215671 / w96215671 | 1244 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96215672 / w96215672 | 1201 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215672 / w96215672 | 1201 Bayside Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 1201 — current CODE/architecture/native/routes/PNG/suite PASS; unchanged art/higher OPEN |
 | physical-building:w96215673 / w96215673 | 1232 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP/NP1232 — L1 retained; whole east rear/third west front, corrected complete entry; CODE/all-side L2/native/routes/spray/suite PASS; higher fidelity/material/site open |
 | physical-building:w96215674 / w96215674 | 1241 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP1241 — whole-depth roof/ENE rear; CODE/L1/all-side L2/native/routes/spray/suite/alias PASS; front/canopy/legacyground retained, higher fidelity open |
 | physical-building:w96215676 / w96215676 | 1143 Ozbourn Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
