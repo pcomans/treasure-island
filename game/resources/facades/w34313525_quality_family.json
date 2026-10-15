@@ -1,0 +1,117 @@
+{
+  "source_key": "w34313525",
+  "receiver_key": "building:w34313525:wall",
+  "runs": [
+    24,
+    25,
+    26,
+    27,
+    28,
+    29
+  ],
+  "observed_runs": [
+    25,
+    26
+  ],
+  "production_inference_runs": [
+    24,
+    27,
+    28,
+    29
+  ],
+  "eave_projection_m": 0.62,
+  "rafter_spacing_m": 0.85,
+  "repair_fields": [
+    {
+      "center_m": 19,
+      "width_m": 8
+    },
+    {
+      "center_m": 46,
+      "width_m": 13
+    },
+    {
+      "center_m": 80,
+      "width_m": 9
+    },
+    {
+      "center_m": 105,
+      "width_m": 6
+    }
+  ],
+  "groups": [
+    {
+      "center_m": 5,
+      "width_scale": 1.15,
+      "service_leaf": false
+    },
+    {
+      "center_m": 12,
+      "width_scale": 1.35,
+      "service_leaf": true
+    },
+    {
+      "center_m": 22,
+      "width_scale": 1.1,
+      "service_leaf": false
+    },
+    {
+      "center_m": 30,
+      "width_scale": 1.35,
+      "service_leaf": true
+    },
+    {
+      "center_m": 37,
+      "width_scale": 1.2,
+      "service_leaf": false
+    },
+    {
+      "center_m": 45,
+      "width_scale": 1.3,
+      "service_leaf": true
+    },
+    {
+      "center_m": 53,
+      "width_scale": 1.15,
+      "service_leaf": false
+    },
+    {
+      "center_m": 61,
+      "width_scale": 1.3,
+      "service_leaf": true
+    },
+    {
+      "center_m": 70,
+      "width_scale": 1.1,
+      "service_leaf": false
+    },
+    {
+      "center_m": 77,
+      "width_scale": 1.35,
+      "service_leaf": false
+    },
+    {
+      "center_m": 86,
+      "width_scale": 1.2,
+      "service_leaf": true
+    },
+    {
+      "center_m": 94,
+      "width_scale": 1.35,
+      "service_leaf": false
+    },
+    {
+      "center_m": 103,
+      "width_scale": 1.15,
+      "service_leaf": true
+    },
+    {
+      "center_m": 110,
+      "width_scale": 1.1,
+      "service_leaf": false
+    }
+  ],
+  "placement_role": "production_inference; closed service leaves are visual only, no interior access",
+  "high_group_height_scale": 1.65,
+  "high_group_below_roof_m": 1.2
+}

@@ -28,7 +28,198 @@ static func matches_record(record: Dictionary) -> bool:
 		and bool(record.get("opaque", false))
 
 
+
+const FAMILY_PATH := "res://game/resources/facades/w34313525_quality_family.json"
+const QUALITY_SUPPORT := preload("res://game/scripts/world/facades/housing_quality_support.gd")
+
+
 static func build(record: Dictionary) -> Dictionary:
+	var legacy := _legacy_build(record)
+	if not bool(legacy.get("ok", false)): return legacy
+	var root := legacy.node as Node3D
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(FAMILY_PATH))
+	if not parsed is Dictionary:
+		root.free()
+		return _failure("w34313525_family", "Missing target family configuration.", record)
+	var cfg: Dictionary = parsed
+	var raw_runs: Variant = cfg.get("runs")
+	if not raw_runs is Array:
+		root.free()
+		return _failure("w34313525_family", "Family runs must be a numeric array.", record)
+	for value: Variant in raw_runs:
+		if not (value is int or value is float) or not is_finite(float(value)) or float(value) != floorf(float(value)) or float(value) < 0.0 or float(value) >= 30.0:
+			root.free()
+			return _failure("w34313525_family", "Family run must be a finite integral source index.", record)
+	var runs: Array[int] = _int_array(raw_runs as Array)
+	if cfg.get("source_key") != SOURCE_KEY or cfg.get("receiver_key") != RECEIVER_KEY or runs != [24, 25, 26, 27, 28, 29]:
+		root.free()
+		return _failure("w34313525_family", "Family source or protected boundary differs.", record)
+	# Replace both old NNW exemplars; retain the exact SSE modules unchanged.
+	for child: Node in root.get_children():
+		if str(child.get_meta("placement_id", "")).begins_with("CAL-NNW-"):
+			root.remove_child(child)
+			child.free()
+	if not _flatten_retained_sse(root):
+		root.free()
+		return _failure("w34313525_family", "Retained SSE geometry changed during native migration.", record)
+	var first := REVIEWED_CALIBRATION.run_frame(record, 24)
+	var last := REVIEWED_CALIBRATION.run_frame(record, 29)
+	var origin: Vector3 = first.start
+	var delta: Vector3 = last.end - origin
+	delta.y = 0.0
+	var length_m: float = delta.length()
+	var tangent: Vector3 = delta.normalized()
+	var normal: Vector3 = tangent.cross(Vector3.UP).normalized()
+	if normal.dot(first.normal as Vector3) < 0.0: normal = -normal
+	var basis := Basis(tangent, Vector3.UP, normal)
+	var top := float(record.top_elevation_m)
+	var base := float(record.flat_base_elevation_m)
+	var pale := _family_material(Color(0.78, 0.80, 0.79))
+	var cool := _family_material(Color(0.62, 0.68, 0.70))
+	var trim := _family_material(Color(0.73, 0.75, 0.72))
+	var soffit := _family_material(Color(0.39, 0.43, 0.43))
+	var pane := _family_material(Color(0.40, 0.52, 0.57))
+	for run: int in range(24, 30):
+		var frame := REVIEWED_CALIBRATION.run_frame(record, run)
+		for point: Vector3 in [frame.start, frame.end]:
+			if absf((point - origin).dot(normal)) > 0.025:
+				root.free()
+				return _failure("w34313525_family", "NNW host is not planar.", record)
+		_family_host(root, frame, normal, pale)
+	# Broad patch fields are subordinate to the complete opening/eave rhythm.
+	for patch: Dictionary in cfg.repair_fields:
+		_family_box(root, "Repair%d" % root.get_child_count(), basis, origin,
+			Vector3(float(patch.center_m), base + 2.10, 0.045), Vector3(float(patch.width_m), 4.10, 0.025), cool, "wall", "NNWRepairField")
+	var modules := REVIEWED_CALIBRATION._accepted_standalone_modules()
+	for index: int in cfg.groups.size():
+		var group: Dictionary = cfg.groups[index]
+		var along := float(group.center_m)
+		var scale_x := float(group.width_scale)
+		if along - 1.75 * scale_x < 0.2 or along + 1.75 * scale_x > length_m - 0.2:
+			REVIEWED_CALIBRATION._free_modules(modules)
+			root.free()
+			return _failure("w34313525_family", "Complete opening escapes NNW host.", record)
+		_family_module(root, modules["W34313525-HIGH-GROUP"], basis, origin, Vector3(along, top - float(cfg.high_group_below_roof_m), 0.12), Vector3(scale_x, float(cfg.high_group_height_scale), 1.0), "High%02d" % index, "NNWHighOpening", pane)
+		if bool(group.service_leaf):
+			_family_module(root, modules["W34313525-PERSONNEL"], basis, origin, Vector3(along - 0.60, base + 1.42, 0.12), Vector3(1.15, 1.15, 1.0), "Service%02d" % index, "NNWClosedServiceLeaf")
+	REVIEWED_CALIBRATION._free_modules(modules)
+	var projection := float(cfg.eave_projection_m)
+	# Closed shallow eave contacts the retained roof edge; no new roof plane.
+	_family_box(root, "NNWEave", basis, origin, Vector3(length_m * 0.5, top - 0.08, projection * 0.5), Vector3(length_m, 0.16, projection), soffit, "detail", "NNWEaveSoffit")
+	_family_box(root, "NNWFascia", basis, origin, Vector3(length_m * 0.5, top - 0.14, projection - 0.035), Vector3(length_m, 0.28, 0.07), pale, "detail", "NNWEaveFascia")
+	var rafters := int(floor((length_m - 0.4) / float(cfg.rafter_spacing_m)))
+	for index: int in rafters + 1:
+		var along: float = 0.2 + (length_m - 0.4) * float(index) / float(rafters)
+		_family_box(root, "NNWRafter%03d" % index, basis, origin, Vector3(along, top - 0.25, projection * 0.5 - 0.01), Vector3(0.14, 0.18, projection - 0.02), trim, "detail", "NNWExposedRafter")
+	var support := QUALITY_SUPPORT.attach(root, record, record, {})
+	if not bool(support.get("ok", false)): return support
+	var counts := _render_topology(root)
+	var metadata := {"source_key": SOURCE_KEY, "receiver_key": RECEIVER_KEY, "observed_runs": [25, 26], "production_inference_runs": [24, 27, 28, 29], "protected_runs": "0–23", "placement_role": "production_inference", "completed_nnw_study": true, "reference_recognizable": false}
+	for key: String in metadata: root.set_meta(key, metadata[key])
+	return {"ok": true, "node": root, "metadata": metadata, "mesh_instances": counts.mesh_instances, "surfaces": counts.surfaces, "triangles": counts.triangles}
+
+
+
+static func _flatten_retained_sse(root: Node3D) -> bool:
+	var retained := {
+		"CAL-SSE-ROLLUP-PALE-01": {"detail": "RetainedSSERollupPale", "run": 9},
+		"CAL-SSE-ROLLUP-GRAY-01": {"detail": "RetainedSSERollupGray", "run": 10},
+	}
+	for child: Node in root.get_children():
+		var module := child as Node3D
+		var placement := str(module.get_meta("placement_id", ""))
+		if not retained.has(placement): return false
+		var spec: Dictionary = retained[placement]
+		for part: Node in module.get_children():
+			var mesh := part as MeshInstance3D
+			if mesh == null or mesh.mesh == null: return false
+			var source_mesh: Mesh = mesh.mesh
+			var source_material: Material = mesh.material_override
+			var composed: Transform3D = module.transform * mesh.transform
+			var before_bounds: AABB = composed * source_mesh.get_aabb()
+			var before_faces := PackedVector3Array()
+			for vertex: Vector3 in source_mesh.get_faces(): before_faces.append(composed * vertex)
+			module.remove_child(mesh)
+			mesh.transform = composed
+			mesh.name = placement.replace("-", "_") + "_" + str(mesh.name)
+			_family_tag(mesh, "wall", str(spec.detail))
+			mesh.set_meta("host_runs", [int(spec.run)])
+			mesh.set_meta("placement_id", placement)
+			mesh.set_meta("complete_motif", true)
+			root.add_child(mesh)
+			if mesh.mesh != source_mesh or mesh.material_override != source_material or not (mesh.transform * mesh.mesh.get_aabb()).is_equal_approx(before_bounds): return false
+			var after_faces: PackedVector3Array = mesh.mesh.get_faces()
+			for index: int in after_faces.size():
+				if not (mesh.transform * after_faces[index]).is_equal_approx(before_faces[index]): return false
+			if mesh.get_meta("source_keys") != [SOURCE_KEY] or mesh.get_meta("derived_object_key") != RECEIVER_KEY: return false
+		root.remove_child(module)
+		module.free()
+	return true
+
+
+static func _family_material(color: Color) -> StandardMaterial3D:
+	var material := StandardMaterial3D.new()
+	material.albedo_color = color
+	material.roughness = 0.85
+	return material
+
+
+static func _family_tag(mesh: MeshInstance3D, role: String, detail: String) -> void:
+	mesh.layers = 3 if role == "wall" else 1
+	mesh.set_meta("physical_role", role)
+	mesh.set_meta("construction_detail", detail)
+	mesh.set_meta("source_keys", [SOURCE_KEY])
+	mesh.set_meta("derived_object_key", RECEIVER_KEY)
+	mesh.set_meta("placement_status", "production_inference")
+	mesh.set_meta("host_runs", [24, 25, 26, 27, 28, 29])
+
+
+static func _family_box(root: Node3D, label: String, basis: Basis, origin: Vector3, center: Vector3, size: Vector3, material: Material, role: String, detail: String) -> void:
+	var mesh := MeshInstance3D.new()
+	var box := BoxMesh.new()
+	box.size = size
+	mesh.mesh = box
+	mesh.name = label
+	var position := origin + basis.x * center.x + basis.z * center.z
+	position.y = center.y
+	mesh.transform = Transform3D(basis, position)
+	mesh.material_override = material
+	_family_tag(mesh, role, detail)
+	root.add_child(mesh)
+
+
+static func _family_module(root: Node3D, source: Node3D, basis: Basis, origin: Vector3, center: Vector3, scale_m: Vector3, label: String, detail: String, pane: Material = null) -> void:
+	var position := origin + basis.x * center.x + basis.z * center.z
+	position.y = center.y
+	var placement := Transform3D(Basis(basis.x * scale_m.x, basis.y * scale_m.y, basis.z * scale_m.z), position)
+	for child: Node in source.get_children():
+		var mesh := child.duplicate() as MeshInstance3D
+		mesh.name = label + str(child.name)
+		if pane != null and str(child.name) == "OpaqueWindowOrGrilleFace": mesh.material_override = pane
+		mesh.transform = placement * (child as Node3D).transform
+		_family_tag(mesh, "wall", detail)
+		root.add_child(mesh)
+
+
+static func _family_host(root: Node3D, frame: Dictionary, normal: Vector3, material: Material) -> void:
+	var points := PackedVector3Array()
+	for point: Vector3 in [frame.start, frame.end, frame.top_end, frame.top_start]: points.append(point + normal * 0.025)
+	var arrays: Array = []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = points
+	arrays[Mesh.ARRAY_NORMAL] = PackedVector3Array([normal, normal, normal, normal])
+	arrays[Mesh.ARRAY_INDEX] = PackedInt32Array([0, 2, 1, 0, 3, 2])
+	var surface := ArrayMesh.new()
+	surface.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	var mesh := MeshInstance3D.new()
+	mesh.name = "NNWHost%d" % int(frame.run_index)
+	mesh.mesh = surface
+	mesh.material_override = material
+	_family_tag(mesh, "wall", "NNWPaleHost")
+	root.add_child(mesh)
+
+
+static func _legacy_build(record: Dictionary) -> Dictionary:
 	if not matches_record(record):
 		return _failure("w34313525_live_module_receiver", "Live four-motif target receiver identity does not match.", record)
 	var registry_value: Variant = JSON.parse_string(FileAccess.get_file_as_string(REGISTRY_PATH))

@@ -44,6 +44,14 @@ const Catalog := preload("res://game/tests/shared/catalog.gd")
 
 
 const QUALITY_SUPPORT_ASSEMBLIES := {
+	"w34313525": {
+		"assembly_name": "W34313525LiveModules",
+		"required": {
+			"wall": ["NNWPaleHost", "NNWRepairField", "NNWHighOpening", "NNWClosedServiceLeaf", "RetainedSSERollupPale", "RetainedSSERollupGray"],
+			"detail": ["NNWEaveSoffit", "NNWEaveFascia", "NNWExposedRafter"],
+			"ground_visual": [],
+		},
+	},
 	"w34313515": {
 		"assembly_name": "W34313515LiveModules",
 		"required": {
@@ -116,7 +124,7 @@ func _run() -> void:
 		quit(1)
 		return
 	var source_key := str(args.source)
-	var native_sources := {"chapel-indexed": "w291189336", "building2-indexed": "w24274434", "station48-indexed": "w764313741", "northpoint1232-mixed": "w96215673", "ymca-mixed": "w34313547", "panel-hall-mixed": "w34313569", "personnel-support-mixed": "r133347", "w34313520-mixed": "w34313520", "w34313515-mixed": "w34313515"}
+	var native_sources := {"chapel-indexed": "w291189336", "building2-indexed": "w24274434", "station48-indexed": "w764313741", "northpoint1232-mixed": "w96215673", "ymca-mixed": "w34313547", "panel-hall-mixed": "w34313569", "personnel-support-mixed": "r133347", "w34313520-mixed": "w34313520", "w34313515-mixed": "w34313515", "w34313525-mixed": "w34313525"}
 	var housing_native := str(args.get("native-producer", "")) in ["housing-get-faces", "housing-retained-get-faces"]
 	if args.has("native-producer") and ((not housing_native and str(native_sources.get(str(args["native-producer"]), "")) != source_key) or args.has("diagnose-side") or args.has("adjacent-source")):
 		push_error("native producer requires its supported source and cannot combine diagnostic/adjacent modes")
@@ -176,7 +184,7 @@ func _run() -> void:
 			native_error = _check_housing_faces(h, source_key, str(args["native-producer"]) == "housing-retained-get-faces", str(args["native-producer"]) == "housing-retained-get-faces")
 		elif str(args["native-producer"]) == "northpoint1232-mixed":
 			native_error = _check_housing_faces(h, source_key, true)
-		elif str(args["native-producer"]) in ["ymca-mixed", "panel-hall-mixed", "personnel-support-mixed", "w34313520-mixed", "w34313515-mixed"]:
+		elif str(args["native-producer"]) in ["ymca-mixed", "panel-hall-mixed", "personnel-support-mixed", "w34313520-mixed", "w34313515-mixed", "w34313525-mixed"]:
 			var descriptor: Dictionary = QUALITY_SUPPORT_ASSEMBLIES[source_key]
 			native_error = _check_quality_support_mixed(h, source_key, descriptor.assembly_name, descriptor.required)
 		elif str(args["native-producer"]) == "station48-indexed":
