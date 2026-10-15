@@ -238,7 +238,7 @@ before selecting another round.
 | physical-building:w34313513 / w34313513 | Harvey Milk Memorial Administration Building, Job Corps Center | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313514 / w34313514 | Advanced Culinary Dormitory | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313515 / w34313515 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w34313520 / w34313520 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w34313520 / w34313520 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | W34313520 — study004 observed-corner CODE/architecture/native/fit/PNG/suite PASS; whole-unit L2 and dashed finish OPEN; no stage promotion |
 | physical-building:w34313521 / w34313521 | US Dept of Labor Job Corps Food Service Building 368 | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313523 / w34313523 | Education Center Building 29B | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313525 / w34313525 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -641,3 +641,30 @@ recognition credit unchanged.
 
 
 YMCA opposite closure, 2026-10-14: prior L1 retained; only L2 completes on final study005 scoped independent CODE/all-side architecture visual PASS and current native required louver assemblies, four approaches, public EntryPath round trip and source-panel PNG/RESTSAFE. Study004 missing-service HOLD remains historical. Current64874 natural0/04f3ca ALL TESTS PASS includes all49 scored fits/contracts/world validation/determinism; global987567. Hidden opposite composition is production inference, not measured/as-built. Totals: **82 C / 0 I / 983 U**,213 units; prior49 recognition and higher material/site/fidelity stages unchanged.
+
+W34313520 observed-corner preparation, 2026-10-14, study004 on source base
+`96ddf26`: independent current three-path CODE, retained architectural-envelope
+L1 review and observed-corner L2/scoped architecture visual PASS. Complete
+multi-light bays/pale piers/solid bands/roof edge now compose WSW0–5 and only
+the uppermost SSE6–10 tier above9.20m. Counts, cadence, scale and anchors are
+production inference supported by the actual September2025 corner reference;
+neighbouring low-wing pixels do not supply target ownership or access.
+**Whole-unit all-side L2 remains OPEN**: protected11–33, uncertain wing20–21
+and lower SSE are outside this bounded study. Dashed band-edge finish remains
+OPEN after the necessary box-material correction; its cause is unisolated.
+Prior001 parse/002 basis failures and003 shutdown143 HOLD are retained;
+00417001 natural0/1f0578/global77e28c does not rewrite them. Current exact
+eight-wall-family/RoofDrip native descriptor is source restricted. Current
+native13767 natural0/91c042/global releasee2f02e passed every required family,
+retained full generated roof and four stock approaches/active REST before SAFE.
+Separate sourcePNG85591 natural0/343ac9/globalc5520f shows cyan on the intended
+WSW pale host below divided glazing; native reused, mandatory approaches
+repeated honestly. Full suite39674 natural0/43886d, ALL TESTS PASS5d6f61/global
+release8e8119, passed all49 scored fits/contracts/world validation/determinism.
+Final ROOT GO authorizes this scoped delivery. No stairs/door route is invented
+for closed glazing; earlier focused warnings and shutdown HOLD remain retained.
+**All stage cells remain unchanged**; any later L1 completion needs applicable
+whole-unit fit/verdicts and explicit final ROOT GO. No L2, recognition, higher
+quality, as-built or clean-finish promotion. Totals remain **83 C /0 I /982 U**,
+213 units/49 historical credits unchanged. This is scoped architecture delivery,
+not whole-unit stage or recognition promotion.

@@ -1,17 +1,15 @@
 class_name W34313520LiveModules
 extends RefCounted
+## Observed institutional corner only. Cadence and scale are production inference.
+## The generated source shell remains the authoritative closed backing.
 
 const RECEIVER_KEY := "building:w34313520:wall"
 const SOURCE_KEY := "w34313520"
-const REGISTRY_PATH := "res://game/resources/facades/w34313520_exact_receiver_calibration.json"
-const REVIEWED_HELPER_PATH := "res://game/tests/support/w34313520_exact_receiver_calibration.gd"
-const ART_REVIEW_PATH := "res://discovery/facades/W34313520_EXACT_RECEIVER_CALIBRATION_ART_REVIEW.md"
-const PLACEMENT_ROLE := "stylized/reference-derived production inference"
-const ACTUAL_WORLD_REVIEW_STATUS := "pending_independent_actual_world_art_review"
-const RENDER_BUILDING_WALL := 1 << 1
-const EXPECTED_PLACEMENT_ID := "CAL-SSE-BAY-01"
-
-const REVIEWED_CALIBRATION := preload("res://game/tests/support/w34313520_exact_receiver_calibration.gd")
+const REGISTRY_PATH := "res://game/resources/facades/w34313520_quality_family.json"
+const CALIBRATION := preload("res://game/tests/support/w34313520_exact_receiver_calibration.gd")
+const QUALITY_SUPPORT := preload("res://game/scripts/world/facades/housing_quality_support.gd")
+const PALE := preload("res://game/resources/materials/world/w34313520/w34313520_pale_exact_trial.tres")
+const FRAME := preload("res://game/resources/materials/world/w34313520/w34313520_bay_frame.tres")
 
 
 static func matches_record(record: Dictionary) -> bool:
@@ -25,169 +23,221 @@ static func matches_record(record: Dictionary) -> bool:
 
 static func build(record: Dictionary) -> Dictionary:
 	if not matches_record(record):
-		return _failure("w34313520_live_module_receiver", "Live BAY target receiver identity does not match.", record)
-	var registry_value: Variant = JSON.parse_string(FileAccess.get_file_as_string(REGISTRY_PATH))
-	if not (registry_value is Dictionary):
-		return _failure("w34313520_live_module_registry", "Reviewed exact-receiver registry did not parse.", record)
-	var registry := registry_value as Dictionary
-	if not _registry_matches_exact_live_scope(registry):
-		return _failure("w34313520_live_module_scope", "Reviewed registry no longer matches the exact authorized field and one-BAY scope.", record)
-	var reviewed := REVIEWED_CALIBRATION.build(record, registry)
-	if not bool(reviewed.get("ok", false)):
-		return reviewed
-	var detached_root := reviewed.get("node") as Node3D
-	if detached_root == null:
-		return _failure("w34313520_live_module_geometry", "Reviewed calibration did not produce a detached root.", record)
-	var detached_field := detached_root.get_node_or_null("DetachedExactSSEFieldRuns06To10") as MeshInstance3D
-	var bay := detached_root.get_node_or_null("CAL_SSE_BAY_01") as Node3D
-	if detached_field == null or bay == null \
-	or not _detached_field_matches_reviewed_scope(detached_field) \
-	or not _promote_bay_to_live(bay, registry):
-		detached_root.free()
-		return _failure("w34313520_live_module_geometry", "Reviewed field/BAY output failed the exact render-only live attachment contract.", record)
-	var reviewed_transform := bay.transform
-	detached_root.remove_child(bay)
-	detached_root.free()
-	var live_root := Node3D.new()
-	live_root.name = "W34313520LiveModules"
-	live_root.add_child(bay)
-	if not bay.transform.is_equal_approx(reviewed_transform):
-		live_root.free()
-		return _failure("w34313520_live_module_transform", "Live BAY transform drifted while detaching the reviewed motif from its capture-only field.", record)
-	var topology := _render_topology(live_root)
-	if int(topology.mesh_instances) == 0 or int(topology.triangles) == 0:
-		live_root.free()
-		return _failure("w34313520_live_module_topology", "Reviewed BAY produced no render geometry.", record)
-	var resolved := (reviewed.get("resolved_placement", {}) as Dictionary).duplicate(true)
-	var metadata := {
-		"source_key": SOURCE_KEY,
-		"receiver_key": RECEIVER_KEY,
-		"placement_review_verdict": "ACCEPT_WITH_DOCUMENTED_LIMITATION",
-		"placement_role": PLACEMENT_ROLE,
-		"module_instances": 1,
-		"motif_instance_counts": {"W34313520-BAY": 1},
-		"asset_classification": "module_atlas",
-		"complete_motif": true,
-		"module_not_seamless_tile": true,
-		"mesh_instances": int(topology.mesh_instances),
-		"surfaces": int(topology.surfaces),
-		"triangles": int(topology.triangles),
-		"field_meshes": 0,
-		"backing_meshes": 0,
-		"collision_nodes": 0,
-		"navigation_nodes": 0,
-		"spray_nodes": 0,
-		"surveyed_dimensions": false,
-		"surveyed_coordinates": false,
-		"surveyed_scale": false,
-		"surveyed_count": false,
-		"surveyed_cadence": false,
-		"cadence_inferred": false,
-		"total_opening_count_inferred": false,
-		"completed_sse_elevation": false,
-		"reviewed_registry_path": REGISTRY_PATH,
-		"reviewed_geometry_helper_path": REVIEWED_HELPER_PATH,
-		"independent_calibration_review_path": ART_REVIEW_PATH,
-		"resolved_placement": resolved,
-	}
-	for key: String in metadata:
-		live_root.set_meta(key, metadata[key])
-	return {
-		"ok": true,
-		"node": live_root,
-		"mesh_instances": int(topology.mesh_instances),
-		"surfaces": int(topology.surfaces),
-		"triangles": int(topology.triangles),
-		"metadata": metadata,
-		"resolved_placement": resolved,
-	}
+		return _failure("Receiver identity differs.", record)
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(REGISTRY_PATH))
+	if not parsed is Dictionary:
+		return _failure("Quality family configuration is missing.", record)
+	var cfg: Dictionary = parsed
+	if cfg.get("source_key") != SOURCE_KEY or cfg.get("receiver_key") != RECEIVER_KEY:
+		return _failure("Quality family source identity differs.", record)
+	var root := Node3D.new()
+	root.name = "W34313520LiveModules"
+	var nominal_base := float(record.get("flat_base_elevation_m", 0.0))
+	var top := float(record.get("top_elevation_m", 0.0))
+	var scale_values: Array = cfg.bay_scale
+	var bay_scale := Vector3(scale_values[0], scale_values[1], scale_values[2])
+	var center_y := nominal_base + float(cfg.center_height_above_nominal_base_m)
+	# The wall-tangent shader is valid only on vertical host faces.
+	# Projecting boxes need a material defined for their horizontal caps too.
+	var pale_boxes := StandardMaterial3D.new()
+	pale_boxes.albedo_color = Color(0.76, 0.755, 0.715)
+	pale_boxes.roughness = 0.8
+	var mullion_material := StandardMaterial3D.new()
+	mullion_material.albedo_color = Color(0.36, 0.39, 0.38)
+	mullion_material.metallic = 0.15
+	mullion_material.roughness = 0.5
+	var module_count := 0
+	for chain: Dictionary in cfg.chains:
+		var runs: Array[int] = []
+		for value: Variant in chain.runs: runs.append(int(value))
+		if (str(chain.name) == "WSW" and runs != [0, 1, 2, 3, 4, 5]) \
+		or (str(chain.name) == "SSEUpper" and runs != [6, 7, 8, 9, 10]) \
+		or str(chain.name) not in ["WSW", "SSEUpper"]:
+			root.free()
+			return _failure("Unobserved run requested.", record)
+		var minimum_y := nominal_base + 0.12 if chain.minimum_y_m == null else float(chain.minimum_y_m)
+		if str(chain.name) == "SSEUpper" and minimum_y < 9.2:
+			root.free()
+			return _failure("Protected SSE lower band requested.", record)
+		var first := CALIBRATION.run_frame(record, runs.front())
+		var last := CALIBRATION.run_frame(record, runs.back())
+		if first.is_empty() or last.is_empty():
+			root.free()
+			return _failure("Observed host chain is missing.", record)
+		var origin: Vector3 = first.start
+		var delta: Vector3 = last.end - origin
+		delta.y = 0.0
+		var length_m := delta.length()
+		var tangent := delta.normalized()
+		var normal: Vector3 = tangent.cross(Vector3.UP).normalized()
+		if normal.dot(first.normal as Vector3) < 0.0:
+			normal = -normal
+		var basis := Basis(tangent, Vector3.UP, normal)
+		# A thin source-owned pale host, separately from complete window motifs.
+		# Each run preserves its source bottom/top; only the observed band is clad.
+		for run: int in runs:
+			var frame := CALIBRATION.run_frame(record, run)
+			if not _host_matches(frame, origin, tangent, normal, top):
+				root.free()
+				return _failure("Host chain is not continuous and planar.", record)
+			frame.normal = normal
+			_add_host(root, frame, minimum_y, str(chain.name), run)
+		var count := int(chain.bay_count)
+		var margin := float(chain.end_margin_m)
+		if count < 2 or margin < 2.5 or length_m <= margin * 2.0:
+			root.free()
+			return _failure("Invalid complete-bay domain.", record)
+		var cadence := (length_m - margin * 2.0) / float(count - 1)
+		var half_width := 2.86 * bay_scale.x
+		if cadence <= half_width * 2.0 + 0.8:
+			root.free()
+			return _failure("Complete motifs overlap.", record)
+		for i in count:
+			var along := margin + cadence * i
+			var bay := CALIBRATION._accepted_standalone_bay()
+			if bay == null:
+				root.free()
+				return _failure("Reusable three-tier BAY is unavailable.", record)
+			var placed_origin := origin + tangent * along + normal * float(cfg.wall_offset_m)
+			placed_origin.y = center_y
+			var placement := Transform3D(Basis(basis.x * bay_scale.x, basis.y * bay_scale.y, basis.z * bay_scale.z), placed_origin)
+			for child: Node in bay.get_children():
+				var mesh := child as MeshInstance3D
+				var tier := int(str(child.name).substr(4, 2))
+				if not chain.tiers.has(float(tier)):
+					continue
+				var transform := placement * mesh.transform
+				var bounds := transform * mesh.mesh.get_aabb()
+				if bounds.position.y < minimum_y or bounds.end.y > top - 0.35:
+					bay.free()
+					root.free()
+					return _failure("Complete tier escapes its allowed vertical band.", record)
+				bay.remove_child(mesh)
+				mesh.name = "%s_Bay%02d_%s" % [chain.name, i + 1, mesh.name]
+				mesh.transform = transform
+				_tag(mesh, "wall", "CompleteBayFrame" if "Frame" in str(mesh.name) else "CompleteBayGlazing")
+				mesh.set_meta("host_runs", runs)
+				mesh.set_meta("complete_tier", tier)
+				root.add_child(mesh)
+			bay.free()
+			_add_internal_lights(root, "%s_Bay%02d" % [chain.name, i + 1], placement, chain.tiers, runs, mullion_material)
+			module_count += 1
+		# Reference-supported broad piers and horizontal solid bands organize the
+		# complete elevation; bays remain independent complete assemblies.
+		for i in range(count - 1):
+			var along := margin + cadence * (i + 0.5)
+			_add_box(root, "%s_Pier%02d" % [chain.name, i], basis, origin, Vector3(along, (minimum_y + top - 0.28) * 0.5, 0.11), Vector3(0.48, top - 0.28 - minimum_y, 0.15), pale_boxes, "wall", "PalePier")
+		for tier_gap: int in [0, 1]:
+			var band_y: float = center_y + (-1.525 + 3.05 * tier_gap) * bay_scale.y
+			if band_y - 0.40 >= minimum_y:
+				_add_box(root, "%s_SolidBand%d" % [chain.name, tier_gap], basis, origin, Vector3(length_m * 0.5, band_y, 0.14), Vector3(length_m - 0.20, 0.8, 0.16), pale_boxes, "wall", "SolidStoreyBand")
+		# Finite end piers and a shallow continuous cap; no new roof shape.
+		for along in [0.65, length_m - 0.65]:
+			_add_box(root, "%s_EndPier_%s" % [chain.name, str(along)], basis, origin, Vector3(along, (minimum_y + top - 0.28) * 0.5, 0.12), Vector3(1.1, top - 0.28 - minimum_y, 0.18), pale_boxes, "wall", "PaleEndPier")
+		_add_box(root, str(chain.name) + "RoofEdge", basis, origin, Vector3(length_m * 0.5, top - 0.14, 0.14), Vector3(length_m - 0.20, 0.28, 0.23), pale_boxes, "wall", "ObservedRoofEdge")
+		_add_box(root, str(chain.name) + "RoofDrip", basis, origin, Vector3(length_m * 0.5, top - 0.315, 0.18), Vector3(length_m - 0.22, 0.045, 0.20), FRAME, "detail", "RoofDrip")
+	var support := QUALITY_SUPPORT.attach(root, record, record, {})
+	if not bool(support.get("ok", false)):
+		return support
+	var topology := _render_topology(root)
+	var metadata := {"source_key": SOURCE_KEY, "receiver_key": RECEIVER_KEY,
+		"placement_role": "production_inference", "module_instances": module_count,
+		"observed_runs": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+		"sse_minimum_y_m": 9.2, "complete_motif": true,
+		"surveyed_dimensions": false, "surveyed_count": false, "surveyed_cadence": false,
+		"completed_sse_elevation": false, "independent_review": "pending",
+		"native_producer": "Mesh.get_faces transformed per source-owned mesh",
+		"source_shell_retained": true}
+	for key: String in metadata: root.set_meta(key, metadata[key])
+	return {"ok": true, "node": root, "metadata": metadata,
+		"mesh_instances": topology.mesh_instances, "surfaces": topology.surfaces, "triangles": topology.triangles}
 
 
-static func _registry_matches_exact_live_scope(registry: Dictionary) -> bool:
-	var field := registry.get("exact_field_scope", {}) as Dictionary
-	var module := registry.get("module_contract", {}) as Dictionary
-	var policy := registry.get("placement_policy", {}) as Dictionary
-	var placement := registry.get("placement", {}) as Dictionary
-	var parameters := field.get("material_parameters", {}) as Dictionary
-	return str((registry.get("target", {}) as Dictionary).get("receiver_key", "")) == RECEIVER_KEY \
-		and _int_array(field.get("exact_ordered_runs", []) as Array) == [6, 7, 8, 9, 10] \
-		and str(field.get("material_id", "")) == "W34313520-MAT-PALE" \
-		and str(field.get("asset_kind", "")) == "homogeneous_material_tile" \
-		and is_equal_approx(float(field.get("physical_wall_length_m", -1.0)), 68.156) \
-		and is_equal_approx(float(parameters.get("primary_scale_m", -1.0)), 0.95) \
-		and is_equal_approx(float(parameters.get("secondary_scale_m", -1.0)), 0.29) \
-		and str(module.get("motif_id", "")) == "W34313520-BAY" \
-		and str(module.get("asset_kind", "")) == "module_atlas" \
-		and bool(module.get("complete_motif", false)) \
-		and bool(module.get("module_not_seamless_wall_tile", false)) \
-		and not bool(module.get("module_owns_field_geometry", true)) \
-		and int(module.get("field_or_backing_meshes", -1)) == 0 \
-		and int(policy.get("placement_count", -1)) == 1 \
-		and int(policy.get("collision_nodes", -1)) == 0 \
-		and int(policy.get("navigation_nodes", -1)) == 0 \
-		and int(policy.get("spray_nodes", -1)) == 0 \
-		and str(placement.get("placement_id", "")) == EXPECTED_PLACEMENT_ID \
-		and str(placement.get("motif_id", "")) == "W34313520-BAY" \
-		and str(placement.get("face", "")) == "SSE" \
-		and str(placement.get("region", "")) == "observed_long_SSE_outer_elevation" \
-		and int(placement.get("anchor_run", -1)) == 7 \
-		and _int_array(placement.get("exact_ordered_runs", []) as Array) == [7] \
-		and is_equal_approx(float(placement.get("along_run_center_m", -1.0)), 15.894477)
+static func _add_internal_lights(root: Node3D, prefix: String, placement: Transform3D, tiers: Array, runs: Array[int], material: Material) -> void:
+	# Preserve the prototype's 5.6 x 1.55 opening and 0.12 outer frame.
+	# Two full mullions and three joined rail sections form six complete lights.
+	# Internal spacing is production inference, not a surveyed pane schedule.
+	var inner_half_width := 2.74
+	var inner_height := 1.43
+	var division := 5.6 / 6.0
+	var bar_width := 0.055
+	for value: Variant in tiers:
+		var tier := int(value)
+		var center_y: float = -3.05 + (tier - 1) * 3.05
+		for side: int in [-1, 1]:
+			_add_partition(root, "%s_Tier%02d_Mullion%d" % [prefix, tier, side], placement, Vector3(side * division, center_y, 0.215), Vector3(bar_width, inner_height, 0.065), material, runs, tier)
+		var intervals: Array[Vector2] = [Vector2(-inner_half_width, -division - bar_width * 0.5), Vector2(-division + bar_width * 0.5, division - bar_width * 0.5), Vector2(division + bar_width * 0.5, inner_half_width)]
+		for index in intervals.size():
+			var interval: Vector2 = intervals[index]
+			_add_partition(root, "%s_Tier%02d_Rail%d" % [prefix, tier, index], placement, Vector3((interval.x + interval.y) * 0.5, center_y, 0.215), Vector3(interval.y - interval.x, bar_width, 0.065), material, runs, tier)
 
 
-static func _detached_field_matches_reviewed_scope(field: MeshInstance3D) -> bool:
-	var mesh := field.mesh as ArrayMesh
-	return mesh != null \
-		and field.material_override != null \
-		and field.material_override.resource_path == "res://game/resources/materials/world/w34313520/w34313520_pale_exact_trial.tres" \
-		and mesh.get_surface_count() > 0 \
-		and _count_triangles(field) > 0 \
-		and field.get_meta("exact_ordered_runs", []) == [6, 7, 8, 9, 10]
+static func _add_partition(root: Node3D, node_name: String, placement: Transform3D, center: Vector3, size: Vector3, material: Material, runs: Array[int], tier: int) -> void:
+	var instance := MeshInstance3D.new()
+	instance.name = node_name
+	var mesh := BoxMesh.new()
+	mesh.size = size
+	instance.mesh = mesh
+	instance.transform = placement * Transform3D(Basis.IDENTITY, center)
+	instance.material_override = material
+	_tag(instance, "wall", "CompleteBayMullion")
+	instance.set_meta("host_runs", runs)
+	instance.set_meta("complete_tier", tier)
+	root.add_child(instance)
 
 
-static func _promote_bay_to_live(bay: Node3D, registry: Dictionary) -> bool:
-	var placement := registry.get("placement", {}) as Dictionary
-	if bay.get_child_count() == 0 \
-	or _count_type(bay, CollisionObject3D) != 0 \
-	or _count_type(bay, CollisionShape3D) != 0 \
-	or _count_type(bay, NavigationRegion3D) != 0 \
-	or _count_type(bay, Decal) != 0 \
-	or str(bay.get_meta("placement_id", "")) != EXPECTED_PLACEMENT_ID:
-		return false
-	bay.set_meta("placement_role", PLACEMENT_ROLE)
-	bay.set_meta("host_material_id", "W34313520-MAT-PALE")
-	bay.set_meta("run_ownership", [7])
-	bay.set_meta("exact_ordered_runs", [7])
-	bay.set_meta("anchor_run", 7)
-	bay.set_meta("along_run_center_m", 15.894477)
-	bay.set_meta("along_run_center_uncertainty_m", float(placement.get("center_uncertainty_half_span_m", -1.0)))
-	bay.set_meta("coordinates_surveyed", false)
-	bay.set_meta("dimensions_surveyed", false)
-	bay.set_meta("scale_surveyed", false)
-	bay.set_meta("count_surveyed", false)
-	bay.set_meta("cadence_inferred", false)
-	bay.set_meta("total_opening_count_inferred", false)
-	bay.set_meta("completed_sse_elevation", false)
-	bay.set_meta("complete_motif", true)
-	bay.set_meta("module_not_seamless_tile", true)
-	bay.set_meta("module_owns_field_geometry", false)
-	for child: Node in bay.get_children():
-		var mesh_instance := child as MeshInstance3D
-		if mesh_instance == null or not (mesh_instance.mesh is BoxMesh) \
-		or mesh_instance.material_override == null \
-		or "field" in str(mesh_instance.name).to_lower() \
-		or "backing" in str(mesh_instance.name).to_lower() \
-		or "surround" in str(mesh_instance.name).to_lower():
-			return false
-		mesh_instance.layers = RENDER_BUILDING_WALL
-		var box := mesh_instance.mesh as BoxMesh
-		var back_clearance := REVIEWED_CALIBRATION.BAY_WALL_OFFSET_M + mesh_instance.position.z - box.size.z * 0.5
-		var front_depth := REVIEWED_CALIBRATION.BAY_WALL_OFFSET_M + mesh_instance.position.z + box.size.z * 0.5
-		# The reviewed source resolves to 0.315 m at the outer frame face; the
-		# registry's 0.31 m value is rounded evidence prose, not a rescale order.
-		if back_clearance < 0.001 or front_depth > 0.316:
-			return false
-	return true
+static func _host_matches(frame: Dictionary, origin: Vector3, tangent: Vector3, normal: Vector3, top: float) -> bool:
+	if frame.is_empty(): return false
+	for point: Vector3 in [frame.start, frame.end]:
+		if absf((point - origin).dot(normal)) > 0.025: return false
+	return (frame.tangent as Vector3).dot(tangent) > 0.9999 \
+		and is_equal_approx(float((frame.top_start as Vector3).y), top) \
+		and is_equal_approx(float((frame.top_end as Vector3).y), top)
+
+
+static func _add_host(root: Node3D, frame: Dictionary, minimum_y: float, chain: String, run: int) -> void:
+	var points := PackedVector3Array()
+	for source: Vector3 in [frame.start, frame.end, frame.top_end, frame.top_start]:
+		var point := source + (frame.normal as Vector3) * 0.025
+		point.y = maxf(point.y, minimum_y)
+		points.append(point)
+	var arrays: Array = []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = points
+	arrays[Mesh.ARRAY_NORMAL] = PackedVector3Array([frame.normal, frame.normal, frame.normal, frame.normal])
+	arrays[Mesh.ARRAY_INDEX] = PackedInt32Array([0, 2, 1, 0, 3, 2])
+	var mesh := ArrayMesh.new()
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	var instance := MeshInstance3D.new()
+	instance.name = "%s_PaleHostRun%02d" % [chain, run]
+	instance.mesh = mesh
+	instance.material_override = PALE
+	_tag(instance, "wall", "ObservedPaleHost")
+	instance.set_meta("host_runs", [run])
+	root.add_child(instance)
+
+
+static func _add_box(root: Node3D, node_name: String, basis: Basis, origin: Vector3, center: Vector3, size: Vector3, material: Material, role: String, detail: String) -> void:
+	var instance := MeshInstance3D.new()
+	instance.name = node_name
+	var mesh := BoxMesh.new()
+	mesh.size = size
+	instance.mesh = mesh
+	var placed := origin + basis.x * center.x + basis.z * center.z
+	placed.y = center.y
+	instance.transform = Transform3D(basis, placed)
+	instance.material_override = material
+	_tag(instance, role, detail)
+	root.add_child(instance)
+
+
+static func _tag(mesh: MeshInstance3D, role: String, detail: String) -> void:
+	mesh.layers = 3 if role == "wall" else 1
+	mesh.set_meta("physical_role", role)
+	mesh.set_meta("construction_detail", detail)
+	mesh.set_meta("source_keys", [SOURCE_KEY])
+	mesh.set_meta("derived_object_key", RECEIVER_KEY)
+	mesh.set_meta("placement_status", "production_inference")
 
 
 static func _render_topology(node: Node) -> Dictionary:
@@ -197,40 +247,12 @@ static func _render_topology(node: Node) -> Dictionary:
 		if mesh != null:
 			result.mesh_instances = 1
 			result.surfaces = mesh.get_surface_count()
-			result.triangles = _count_triangles(node)
+			result.triangles = mesh.get_faces().size() / 3
 	for child: Node in node.get_children():
-		var child_result := _render_topology(child)
-		result.mesh_instances += int(child_result.mesh_instances)
-		result.surfaces += int(child_result.surfaces)
-		result.triangles += int(child_result.triangles)
+		var counts := _render_topology(child)
+		for key: String in result: result[key] += int(counts[key])
 	return result
 
 
-static func _count_triangles(node: Node) -> int:
-	var count := 0
-	if node is MeshInstance3D and (node as MeshInstance3D).mesh != null:
-		var mesh := (node as MeshInstance3D).mesh
-		for surface_index in mesh.get_surface_count():
-			var arrays := mesh.surface_get_arrays(surface_index)
-			count += int((arrays[Mesh.ARRAY_INDEX] as PackedInt32Array).size() / 3)
-	for child: Node in node.get_children():
-		count += _count_triangles(child)
-	return count
-
-
-static func _count_type(node: Node, node_type: Variant) -> int:
-	var count := 1 if is_instance_of(node, node_type) else 0
-	for child: Node in node.get_children():
-		count += _count_type(child, node_type)
-	return count
-
-
-static func _int_array(values: Array) -> Array[int]:
-	var result: Array[int] = []
-	for value: Variant in values:
-		result.append(int(value))
-	return result
-
-
-static func _failure(code: String, message: String, record: Dictionary) -> Dictionary:
-	return {"ok": false, "code": code, "message": message, "source_keys": record.get("source_keys", [])}
+static func _failure(message: String, record: Dictionary) -> Dictionary:
+	return {"ok": false, "code": "w34313520_quality_family", "message": message, "source_keys": record.get("source_keys", [])}

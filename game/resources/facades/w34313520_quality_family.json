@@ -1,0 +1,58 @@
+{
+  "source_key": "w34313520",
+  "receiver_key": "building:w34313520:wall",
+  "placement_status": "production_inference_not_surveyed",
+  "reference": "Google Street View September 2025; private retained source-note.txt",
+  "base_family": "existing W34313520-BAY complete framed tiers; institutional family, not housing",
+  "center_height_above_nominal_base_m": 5.5,
+  "bay_scale": [
+    0.68,
+    1.12,
+    1.0
+  ],
+  "wall_offset_m": 0.06,
+  "chains": [
+    {
+      "name": "WSW",
+      "runs": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "bay_count": 11,
+      "end_margin_m": 3.4,
+      "tiers": [
+        1,
+        2,
+        3
+      ],
+      "minimum_y_m": null
+    },
+    {
+      "name": "SSEUpper",
+      "runs": [
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "bay_count": 11,
+      "end_margin_m": 4.2,
+      "tiers": [
+        3
+      ],
+      "minimum_y_m": 9.2
+    }
+  ],
+  "protected": "SSE below Y9.2, hidden runs11..33 including wing20..21; neighbor w34313521; source wall/roof/backing/terrain unchanged",
+  "measured_claims": false,
+  "window_partition": {
+    "columns": 3,
+    "rows": 2,
+    "status": "reference_supported_multilight_family; reversible internal cadence production_inference"
+  }
+}
