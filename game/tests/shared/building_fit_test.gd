@@ -44,6 +44,16 @@ const Catalog := preload("res://game/tests/shared/catalog.gd")
 
 
 const QUALITY_SUPPORT_ASSEMBLIES := {
+	"w34313515": {
+		"assembly_name": "W34313515LiveModules",
+		"required": {
+			"wall": ["FamilyFrame", "FamilyGlazing", "FamilyMullion", "FamilyFloorBand", "FamilyPier", "FamilyRoofEdge", "FamilySolidField"],
+			"detail": ["StairSidewall", "StairCanopy", "StairLanding", "StairStringer", "StairRail", "StairColumn", "StairGroundApproach"],
+			"stair_visual": ["StairTread"],
+			"stair_support": ["StairNosingSupport"],
+			"ground_visual": [],
+		},
+	},
 	"w34313520": {
 		"assembly_name": "W34313520LiveModules",
 		"required": {
@@ -106,7 +116,7 @@ func _run() -> void:
 		quit(1)
 		return
 	var source_key := str(args.source)
-	var native_sources := {"chapel-indexed": "w291189336", "building2-indexed": "w24274434", "station48-indexed": "w764313741", "northpoint1232-mixed": "w96215673", "ymca-mixed": "w34313547", "panel-hall-mixed": "w34313569", "personnel-support-mixed": "r133347", "w34313520-mixed": "w34313520"}
+	var native_sources := {"chapel-indexed": "w291189336", "building2-indexed": "w24274434", "station48-indexed": "w764313741", "northpoint1232-mixed": "w96215673", "ymca-mixed": "w34313547", "panel-hall-mixed": "w34313569", "personnel-support-mixed": "r133347", "w34313520-mixed": "w34313520", "w34313515-mixed": "w34313515"}
 	var housing_native := str(args.get("native-producer", "")) in ["housing-get-faces", "housing-retained-get-faces"]
 	if args.has("native-producer") and ((not housing_native and str(native_sources.get(str(args["native-producer"]), "")) != source_key) or args.has("diagnose-side") or args.has("adjacent-source")):
 		push_error("native producer requires its supported source and cannot combine diagnostic/adjacent modes")
@@ -166,7 +176,7 @@ func _run() -> void:
 			native_error = _check_housing_faces(h, source_key, str(args["native-producer"]) == "housing-retained-get-faces", str(args["native-producer"]) == "housing-retained-get-faces")
 		elif str(args["native-producer"]) == "northpoint1232-mixed":
 			native_error = _check_housing_faces(h, source_key, true)
-		elif str(args["native-producer"]) in ["ymca-mixed", "panel-hall-mixed", "personnel-support-mixed", "w34313520-mixed"]:
+		elif str(args["native-producer"]) in ["ymca-mixed", "panel-hall-mixed", "personnel-support-mixed", "w34313520-mixed", "w34313515-mixed"]:
 			var descriptor: Dictionary = QUALITY_SUPPORT_ASSEMBLIES[source_key]
 			native_error = _check_quality_support_mixed(h, source_key, descriptor.assembly_name, descriptor.required)
 		elif str(args["native-producer"]) == "station48-indexed":
@@ -807,7 +817,12 @@ func _check_quality_support_mixed(h: WorldHarness, source: String, assembly_name
 		print("QUALITY_SUPPORT_NATIVE retained=%s predicates=%s" % [key, compared.predicates])
 	if assembly == null or assembly.transform != Transform3D.IDENTITY or assembly.is_set_as_top_level():
 		return "Quality-support assembly missing or moved"
-	var meshes := {"wall": [], "detail": [], "ground_visual": []}
+	var stair_mode := required.has("stair_support") or required.has("stair_visual")
+	if stair_mode:
+		if not required.has("stair_support") or not required.has("stair_visual"): return "Both explicit stair roles are required"
+		var stair_error := preload("res://game/scripts/world/facades/housing_quality_support.gd").stair_support_error(assembly, source, "building:" + source + ":wall")
+		if stair_error != "": return stair_error
+	var meshes := {"wall": [], "detail": [], "ground_visual": [], "stair_visual": [], "stair_support": []}
 	var seen := {}
 	var roof_root := assembly.get_node_or_null("QualityRoof") as Node3D
 	if roof_root == null or roof_root.transform != Transform3D.IDENTITY or roof_root.is_set_as_top_level():
@@ -818,18 +833,23 @@ func _check_quality_support_mixed(h: WorldHarness, source: String, assembly_name
 		var mesh := child as MeshInstance3D
 		var role := str(mesh.get_meta("physical_role", ""))
 		var detail := str(mesh.name) if role == "ground_visual" else str(mesh.get_meta("construction_detail", ""))
-		if not required.has(role) or detail not in required[role] or not mesh.is_visible_in_tree() or mesh.is_set_as_top_level() or not mesh.transform.is_finite() or mesh.layers != (3 if role == "wall" else 1):
+		if not required.has(role) or detail not in required[role] or (mesh.is_visible_in_tree() if role == "stair_support" else not mesh.is_visible_in_tree()) or mesh.is_set_as_top_level() or not mesh.transform.is_finite() or mesh.layers != (3 if role == "wall" else 1):
 			return "Quality-support unknown/hidden/moved assembly visual role"
 		meshes[role].append(mesh)
 		seen[detail] = true
-		if role == "ground_visual":
+		if role in ["ground_visual", "stair_visual"]:
 			var ground := StudyGeometry.collect(mesh.mesh, [mesh.transform], StudyGeometry.MESH_GET_FACES)
 			if not ground.ok or ground.faces.is_empty(): return "Quality-support missing positive ground visual"
-			print("QUALITY_SUPPORT_NATIVE ground_visual=%s positive=true collider=false LAND_route_required=true" % detail)
+			if role == "ground_visual":
+				print("QUALITY_SUPPORT_NATIVE ground_visual=%s positive=true collider=false LAND_route_required=true" % detail)
+			else:
+				print("QUALITY_SUPPORT_NATIVE stair_visual=%s positive=true collider=false paired_support_required=true" % detail)
 	for role: String in required:
 		for detail: String in required[role]:
 			if not seen.has(detail): return "Quality-support missing positive assembly component: " + detail
-	for role: String in ["wall", "detail", "roof"]:
+	var native_roles: Array[String] = ["wall", "detail", "roof"]
+	if stair_mode: native_roles.append("stair_support")
+	for role: String in native_roles:
 		var parent: Node3D = roof_root if role == "roof" else assembly
 		var body := parent.get_node_or_null("CurrentGeometry_" + role) as StaticBody3D
 		if body == null or body.get_meta("physical_role", "") != role:
@@ -849,6 +869,10 @@ func _check_quality_support_mixed(h: WorldHarness, source: String, assembly_name
 			var shape := holder.shape as ConcavePolygonShape3D
 			if not shape.backface_collision or shape.get_meta("physical_role", "") != role or shape.get_meta("construction_detail", "") != mesh.get_meta("construction_detail", ""):
 				return "Quality-support native per-mesh role/semantic identity differs"
+			if stair_mode:
+				for key: String in ["stair_flight_id", "stair_flight_ids"]:
+					if shape.has_meta(key) != mesh.has_meta(key): return "Stair native flight identity presence differs"
+					if shape.has_meta(key) and shape.get_meta(key) != mesh.get_meta(key): return "Stair native flight identity differs"
 			var collection := StudyGeometry.collect(mesh.mesh, [mesh.transform], StudyGeometry.MESH_GET_FACES, 0.000000000001)
 			var compared := StudyGeometry.compare(collection, shape.get_faces(), collection.faces.size())
 			if not compared.ok: return "Quality-support complete ordered visible/native mesh faces differ"

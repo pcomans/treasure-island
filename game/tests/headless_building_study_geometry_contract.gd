@@ -49,6 +49,7 @@ func _run() -> void:
 	check(not Geometry.collect(mesh, [collapsed], Geometry.MESH_GET_FACES, 1e-12).ok, "Explicit producer cutoff ignored")
 	_check_architecture_advisories()
 	_check_opening_advisory_caller()
+	await _check_explicit_stair_support()
 	_check_roof_coverage()
 	_check_composite_roof_identity()
 	await _check_retained_housing_inventory()
@@ -369,16 +370,108 @@ func _check_opening_advisory_caller() -> void:
 	# Exercise the real metadata/enum caller, not only the pure predicate. Its
 	# printed outputs and absence of SCRIPT ERROR are retained in the fixture log.
 	var fit := preload("res://game/tests/shared/building_fit.gd").new(null)
-	for source: String in ["w34313520", "w34313547", "unclassified_fixture"]:
+	for source: String in ["w34313520", "w34313547", "w34313515", "unclassified_fixture"]:
 		var assembly := Node3D.new()
 		assembly.set_meta("source_keys", [source])
 		root.add_child(assembly)
 		var mesh := MeshInstance3D.new()
 		mesh.mesh = BoxMesh.new()
-		mesh.set_meta("construction_detail", "RemainingBayGlazing" if source == "w34313520" else "BlueServiceDoor")
-		mesh.set_meta("host_runs", [0])
+		mesh.set_meta("construction_detail", "RemainingBayGlazing" if source == "w34313520" else ("FamilyGlazing" if source == "w34313515" else "BlueServiceDoor"))
+		if source != "w34313515": mesh.set_meta("host_runs", [0])
 		assembly.add_child(mesh)
 		fit._source_facade_runs[source] = ["0"]
 		var nodes: Array[Node3D] = [assembly]
 		fit._emit_opening_advisory(source, nodes)
 		assembly.free()
+
+
+func _check_explicit_stair_support() -> void:
+	var installer := preload("res://game/scripts/world/facades/housing_quality_support.gd")
+	var model := Node3D.new()
+	check(installer.stair_support_error(model, "fixture", "building:fixture:wall") == "", "Legacy models need no stair metadata")
+	var tread := MeshInstance3D.new()
+	tread.mesh = BoxMesh.new()
+	tread.name = "Tread"
+	var landing := MeshInstance3D.new()
+	landing.mesh = BoxMesh.new()
+	landing.position.x = 1.0
+	landing.name = "Landing"
+	var ramp := MeshInstance3D.new()
+	ramp.mesh = BoxMesh.new()
+	ramp.position.x = 0.5
+	ramp.visible = false
+	ramp.name = "Nosing"
+	for mesh: MeshInstance3D in [tread, landing, ramp]:
+		model.add_child(mesh)
+		mesh.set_meta("source_keys", ["fixture"])
+		mesh.set_meta("derived_object_key", "building:fixture:wall")
+		mesh.set_meta("stair_flight_id", "flight")
+	tread.set_meta("physical_role", "stair_visual")
+	tread.set_meta("construction_detail", "StairTread")
+	landing.set_meta("physical_role", "detail")
+	landing.set_meta("construction_detail", "StairLanding")
+	landing.set_meta("stair_flight_ids", ["flight", "adjacent"])
+	ramp.set_meta("physical_role", "stair_support")
+	ramp.set_meta("construction_detail", "StairNosingSupport")
+	check(installer.stair_support_error(model, "fixture", "building:fixture:wall") == "", "Explicit support fits the paired visible tread and shared landing envelope")
+	ramp.position.x = 10.0
+	check(installer.stair_support_error(model, "fixture", "building:fixture:wall") != "", "Support outside its visible flight must fail")
+	ramp.position.x = 0.5
+	ramp.set_meta("source_keys", ["foreign"])
+	check(installer.stair_support_error(model, "fixture", "building:fixture:wall") != "", "Foreign stair support must fail")
+	ramp.set_meta("source_keys", ["fixture"])
+	tread.visible = false
+	check(installer.stair_support_error(model, "fixture", "building:fixture:wall") != "", "Hidden treads cannot establish visible support coverage")
+	tread.visible = true
+	ramp.set_meta("stair_flight_id", "unpaired")
+	check(installer.stair_support_error(model, "fixture", "building:fixture:wall") != "", "Unpaired support cannot borrow another flight")
+	ramp.set_meta("stair_flight_id", "flight")
+	var record := {"object_key": "building:fixture:wall", "source_keys": ["fixture"]}
+	var result: Dictionary = installer.attach(model, record, record, {})
+	check(result.ok, "Actual installer accepts the explicit paired support")
+	if result.ok:
+		var body := model.get_node("CurrentGeometry_stair_support") as StaticBody3D
+		check(body.get_meta("receiver_kind") == "none" and not body.is_in_group("spray_receiver_wall"), "Explicit stair support must not become a spray wall")
+		check(not model.has_node("CurrentGeometry_stair_visual"), "Visible treads must not retain conflicting step collision")
+		var shape := body.get_child(0) as CollisionShape3D
+		var native_shape := shape.shape as ConcavePolygonShape3D
+		check(native_shape != null and not native_shape.get_faces().is_empty() and native_shape.get_meta("stair_flight_id") == "flight", "Actual native support retains positive faces and exact flight identity")
+		root.add_child(model)
+		await physics_frame
+		await physics_frame
+		var harness := preload("res://game/tests/shared/world_harness.gd").new(self)
+		harness.player = PlayerController.new()
+		# Exercise the real scene/native context caller: ramp lacks optional list;
+		# landing carries the list. Presence mismatch and value mismatch fail.
+		var qualified := harness._stair_support_context_in(model, "fixture", "flight", 2.0, 3.5)
+		check(qualified.ok, "Actual native context accepts absent optional flight list without engine errors")
+		native_shape.set_meta("stair_flight_ids", ["flight"])
+		check(not harness._stair_support_context_in(model, "fixture", "flight", 2.0, 3.5).ok, "Actual native context rejects asymmetric optional metadata presence")
+		native_shape.remove_meta("stair_flight_ids")
+		native_shape.set_meta("stair_flight_id", "foreign")
+		check(not harness._stair_support_context_in(model, "fixture", "flight", 2.0, 3.5).ok, "Actual native context rejects different present flight identity")
+		native_shape.set_meta("stair_flight_id", "flight")
+		var index := body.shape_owner_get_shape_index(body.get_shape_owners()[0], 0)
+		var context := {"kind": "stair", "source": "fixture", "key": "building:fixture:wall", "minimum_y": 2.0, "maximum_y": 3.5, "shapes": {body.get_rid(): [index]}}
+		var contact := {"collider": body, "shape": index, "position": Vector3(0, 2.0, 0), "normal": Vector3.UP}
+		check(harness.is_approach_support(contact, context), "Level-aware motion contact may omit RID and use the qualified flight")
+		contact.rid = body.get_rid()
+		check(harness.is_approach_support(contact, context), "Level-aware ray contact must accept the exact native RID")
+		contact.position.y = 5.0
+		check(not harness.is_approach_support(contact, context), "Repeated XZ upper flight cannot stand in for the expected level")
+		contact.position.y = 2.0
+		contact.normal = Vector3.DOWN
+		check(not harness.is_approach_support(contact, context), "Backface support cannot count as a walkable landing")
+		contact.normal = Vector3.UP
+		contact.rid = RID()
+		check(not harness.is_approach_support(contact, context), "Explicit mismatched ray RID must fail")
+		contact.erase("rid")
+		body.set_meta("source_keys", ["foreign"])
+		check(not harness.is_approach_support(contact, context), "Foreign flight support must fail")
+		body.set_meta("source_keys", ["fixture"])
+		var legacy := {"source": "fixture", "key": "building:fixture:wall", "elevation": 2.0, "shapes": {body.get_rid(): [index]}}
+		check(harness.is_approach_support(contact, legacy), "Legacy single-elevation support remains accepted")
+		contact.position.y = 3.0
+		check(not harness.is_approach_support(contact, legacy), "Legacy elevation guard remains restrictive")
+		harness.player.free()
+		model.free()

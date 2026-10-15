@@ -995,6 +995,118 @@
           "source_key": "w34313515"
         }
       ],
+      "stairs": [
+        {
+          "flight_id": "Stack28_Flight0",
+          "next_flight_id": "Stack28_Flight1",
+          "bottom": [
+            -111.978984097,
+            258.756119182
+          ],
+          "top": [
+            -110.192439607,
+            262.109961573
+          ],
+          "bottom_y": 3.257,
+          "top_y": 4.832
+        },
+        {
+          "flight_id": "Stack28_Flight1",
+          "next_flight_id": "Stack28_Flight2",
+          "bottom": [
+            -111.428065751,
+            262.768162175
+          ],
+          "top": [
+            -113.214610241,
+            259.414319784
+          ],
+          "bottom_y": 4.832,
+          "top_y": 6.407
+        },
+        {
+          "flight_id": "Stack28_Flight2",
+          "next_flight_id": "Stack28_Flight3",
+          "bottom": [
+            -111.978984097,
+            258.756119182
+          ],
+          "top": [
+            -110.192439607,
+            262.109961573
+          ],
+          "bottom_y": 6.407,
+          "top_y": 7.982
+        },
+        {
+          "flight_id": "Stack28_Flight3",
+          "bottom": [
+            -111.428065751,
+            262.768162175
+          ],
+          "top": [
+            -113.214610241,
+            259.414319784
+          ],
+          "bottom_y": 7.982,
+          "top_y": 9.557
+        },
+        {
+          "flight_id": "Stack67_Flight0",
+          "next_flight_id": "Stack67_Flight1",
+          "bottom": [
+            -93.643395909,
+            293.177133197
+          ],
+          "top": [
+            -91.856851419,
+            296.530975588
+          ],
+          "bottom_y": 3.041,
+          "top_y": 4.616
+        },
+        {
+          "flight_id": "Stack67_Flight1",
+          "next_flight_id": "Stack67_Flight2",
+          "bottom": [
+            -93.092477563,
+            297.189176189
+          ],
+          "top": [
+            -94.879022053,
+            293.835333798
+          ],
+          "bottom_y": 4.616,
+          "top_y": 6.191
+        },
+        {
+          "flight_id": "Stack67_Flight2",
+          "next_flight_id": "Stack67_Flight3",
+          "bottom": [
+            -93.643395909,
+            293.177133197
+          ],
+          "top": [
+            -91.856851419,
+            296.530975588
+          ],
+          "bottom_y": 6.191,
+          "top_y": 7.766
+        },
+        {
+          "flight_id": "Stack67_Flight3",
+          "bottom": [
+            -93.092477563,
+            297.189176189
+          ],
+          "top": [
+            -94.879022053,
+            293.835333798
+          ],
+          "bottom_y": 7.766,
+          "top_y": 9.341
+        }
+      ],
       "unit_id": "physical-building:w34313515",
       "unit_kind": "standalone_building"
     },

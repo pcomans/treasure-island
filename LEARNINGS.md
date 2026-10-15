@@ -814,3 +814,14 @@ with typed values. Exercise the actual metadata caller across target, alternate
 producer and unknown branches, and inspect SCRIPT ERROR as failure even when the
 engine exits0 or later fit prints PASS. Preserve successful native/movement subsets
 but do not proceed to dependent proof with missing advisory output.
+
+
+## Optional Godot metadata needs presence checks, not a null default
+
+The first w34313515 native/stair run completed movement but emitted missing-key
+errors from `get_meta(key, null)` in both native and level-support callers. A null
+default does not suppress Godot's missing-metadata error. Compare `has_meta` parity
+first, then read and compare values only when present; do not erase identity guards.
+Exercise the actual scene/native caller with absent optional fields as well as
+mismatched presence/value, rather than only its pure contact predicate. Treat engine
+errors as aggregate HOLD even when exit status and later fit output say PASS.

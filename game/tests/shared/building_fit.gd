@@ -131,7 +131,7 @@ func check(source_key: String, walk_up: bool, prefix: String = "", stairs: Array
 		for stair: Dictionary in stairs:
 			if _unsafe:
 				break
-			await _check_stairs(stair)
+			await _check_stairs(stair, source_key, stairs)
 		if not _unsafe:
 			await _check_routes(routes, box)
 	if not _unsafe and not spray_case.is_empty():
@@ -273,7 +273,7 @@ func _emit_opening_advisory(source: String, nodes: Array[Node3D]) -> void:
 	var semantics: Array = []
 	var complete := false
 	# Explicit producer semantic enums. A frame/name alone is not an opening.
-	var known_windows: Array = ["CompleteBayGlazing", "RemainingBayGlazing"] if source == "w34313520" else (["ClosedGlazing"] if source == "w34313547" else [])
+	var known_windows: Array = ["CompleteBayGlazing", "RemainingBayGlazing"] if source == "w34313520" else (["ClosedGlazing"] if source == "w34313547" else (["FamilyGlazing"] if source == "w34313515" else []))
 	var known_doors: Array = ["BlueServiceDoor"] if source == "w34313547" else []
 	var source_meshes: Array[MeshInstance3D] = []
 	for root: Node3D in nodes:
@@ -775,7 +775,10 @@ func _check_walk_up(box: AABB, own: Array[RID], wall_shapes: Dictionary, wall_fa
 
 
 ## Walks from the bottom of a stair flight to its top and back down.
-func _check_stairs(stair: Dictionary) -> void:
+func _check_stairs(stair: Dictionary, source: String = "", flights: Array = []) -> void:
+	if stair.has("bottom_y") or stair.has("top_y") or stair.has("flight_id"):
+		await _check_level_stairs(stair, source, flights)
+		return
 	var bottom := Vector2(stair.bottom[0], stair.bottom[1])
 	var top := Vector2(stair.top[0], stair.top[1])
 	var name := "stairs (%.1f, %.1f) -> (%.1f, %.1f)" % [bottom.x, bottom.y, top.x, top.y]
@@ -798,6 +801,66 @@ func _check_stairs(stair: Dictionary) -> void:
 			_failures.append(_prefix + "%s: reached the top position without climbing (y %.1f)" % [name, at.y])
 			return
 	print("%s%s: walked up and down" % [_prefix, name])
+
+
+## Explicit levels disambiguate stacked flights without changing old XZ stairs.
+func _check_level_stairs(stair: Dictionary, source: String, flights: Array) -> void:
+	if not _numbers(stair.get("bottom")) or not _numbers(stair.get("top")) or not stair.get("flight_id") is String or not (stair.get("bottom_y") is float or stair.get("bottom_y") is int) or not (stair.get("top_y") is float or stair.get("top_y") is int):
+		_failures.append(_prefix + "invalid level-aware stair specification")
+		_unsafe = true
+		return
+	var proof := _h.stair_support_context(source, stair.flight_id, float(stair.bottom_y), float(stair.top_y))
+	if not proof.ok:
+		_failures.append(_prefix + "stair setup: " + str(proof.reason))
+		_unsafe = true
+		return
+	var previous := _support_context
+	_support_context = proof.context
+	var bottom := Vector3(stair.bottom[0], stair.bottom_y, stair.bottom[1])
+	var top := Vector3(stair.top[0], stair.top_y, stair.top[1])
+	var setup_recoveries: int = _h.world.get_runtime_evidence().recovery_count
+	var problem := await _h.settle_player(Vector2(bottom.x, bottom.z), _support_context, bottom.y)
+	if problem == "":
+		# Establish released, active rest at the requested native landing as well
+		# as at every walked destination. Disable is never itself rest evidence.
+		_h.player.set_gameplay_enabled(true)
+		problem = await _rest_and_disable(setup_recoveries)
+	if problem == "": problem = await _walk_stair_destination(top)
+	if problem == "" and stair.has("next_flight_id"):
+		var next_flight: Dictionary = {}
+		for candidate: Dictionary in flights:
+			if candidate.get("flight_id", "") == stair.next_flight_id:
+				if not next_flight.is_empty():
+					problem = "ambiguous connected flight identity"
+					break
+				next_flight = candidate
+		if problem == "" and (next_flight.is_empty() or stair.next_flight_id not in _support_context.shared_flights or not _numbers(next_flight.get("bottom")) or not (next_flight.get("bottom_y") is float or next_flight.get("bottom_y") is int)):
+			problem = "missing qualified shared landing/next flight"
+		if problem == "":
+			var turn := Vector3(next_flight.bottom[0], next_flight.bottom_y, next_flight.bottom[1])
+			if not turn.is_finite() or absf(turn.y - top.y) > 0.01:
+				problem = "connected landing levels differ"
+			else:
+				problem = await _walk_stair_destination(turn)
+				if problem == "": problem = await _walk_stair_destination(top)
+				if problem == "": print("%sSTAIR_LANDING_TURN flight=%s next=%s both_directions=true REST_SAFE=true" % [_prefix, stair.flight_id, next_flight.flight_id])
+
+	if problem == "": problem = await _walk_stair_destination(bottom)
+	if problem != "":
+		_failures.append(_prefix + "stair " + str(stair.flight_id) + ": " + problem)
+		_unsafe = true
+	else:
+		print("%sSTAIR_LEVEL_PASS flight=%s bottom=%s top=%s up_down=true native_support=true REST_SAFE=true" % [_prefix, stair.flight_id, bottom, top])
+	_support_context = previous
+
+
+func _walk_stair_destination(destination: Vector3) -> String:
+	var problem := await _walk_toward(destination + Vector3.UP * 1.5, [], {}, 0.15)
+	if problem != "": return problem
+	var at := _h.player.global_position
+	if Vector2(at.x, at.z).distance_to(Vector2(destination.x, destination.z)) > 0.25 or absf(at.y - destination.y) > 0.08:
+		return "wrong stair landing destination: actual=%s expected=%s" % [at, destination]
+	return ""
 
 
 func _check_routes(routes: Array, box: AABB) -> void:
@@ -981,7 +1044,7 @@ func _spray_screenshot_path_valid(path: String) -> bool:
 
 ## Holds forward toward target until the player bumps into the building
 ## (own), arrives, or stops moving; returns a problem or "".
-func _walk_toward(target: Vector3, own: Array[RID] = [], wall_shapes: Dictionary = {}) -> String:
+func _walk_toward(target: Vector3, own: Array[RID] = [], wall_shapes: Dictionary = {}, arrival_distance: float = 0.5) -> String:
 	var evidence := _h.world.get_runtime_evidence()
 	var recoveries := evidence.recovery_count
 	var start := _h.player.global_position
@@ -1044,7 +1107,7 @@ func _walk_toward(target: Vector3, own: Array[RID] = [], wall_shapes: Dictionary
 				break
 		# Stop on arrival, on reaching the building, or once the player has
 		# passed the target and is walking away from it.
-		if remaining < 0.5 or (_wall_touched if not wall_shapes.is_empty() else _touched_own(own)) or remaining > _closest + 1.0:
+		if remaining < arrival_distance or (_wall_touched if not wall_shapes.is_empty() else _touched_own(own)) or remaining > _closest + 1.0:
 			break
 		still_frames = still_frames + 1 if Vector2(_h.player.velocity.x, _h.player.velocity.z).length() < 0.2 else 0
 		if frame > 60 and still_frames > 60:
@@ -1108,7 +1171,11 @@ func _rest_and_disable(recoveries: int) -> String:
 					continue
 				floor_seen = true
 				supported = supported and _h.is_approach_support({"collider": slide.get_collider(contact), "normal": normal, "shape": slide.get_collider_shape_index(contact), "position": slide.get_position(contact)}, _support_context)
-		supported = supported and floor_seen
+		# Floor snap can establish grounded rest without a slide event. Stairs
+		# still require the exact qualified active ray and reject every wrong
+		# reported floor contact; keep the legacy rooftop rule unchanged.
+		if _support_context.get("kind", "") != "stair":
+			supported = supported and floor_seen
 	print("REST active=%s released=%s grounded=%s supported=%s velocity=%s at=%s support=%s" % [active, released, grounded, supported, _h.player.velocity, at, str((support.collider as Node).get_path()) if supported else "none"])
 	_h.player.set_gameplay_enabled(false)
 	var safe_final := not _h.player.is_physics_processing() and _h.player.velocity == Vector3.ZERO and released

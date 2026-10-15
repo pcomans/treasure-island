@@ -321,13 +321,17 @@ func is_approach_support(hit: Dictionary, context: Dictionary = {}) -> bool:
 	if context.is_empty():
 		return is_walkable_ground(hit)
 	var body := hit.get("collider") as CollisionObject3D
-	if body == null or not context.shapes.has(body.get_rid()) or int(hit.get("shape", -1)) not in context.shapes[body.get_rid()]:
+	if body == null or (hit.has("rid") and hit.rid != body.get_rid()) or not context.shapes.has(body.get_rid()) or int(hit.get("shape", -1)) not in context.shapes[body.get_rid()]:
 		return false
 	if (body.collision_layer & player.collision_mask) == 0 or body.get_meta("source_keys", []) != [context.source] or str(body.get_meta("derived_object_key", "")) != str(context.key):
 		return false
 	var point: Vector3 = hit.get("position", Vector3(INF, INF, INF))
 	var normal: Vector3 = hit.get("normal", Vector3.ZERO)
-	return point.is_finite() and normal.is_finite() and normal.dot(player.up_direction.normalized()) >= cos(player.floor_max_angle) and absf(point.y - float(context.elevation)) <= player.safe_margin
+	if not point.is_finite() or not normal.is_finite() or normal.dot(player.up_direction.normalized()) < cos(player.floor_max_angle):
+		return false
+	if context.get("kind", "") == "stair":
+		return point.y >= float(context.minimum_y) - player.safe_margin and point.y <= float(context.maximum_y) + player.safe_margin
+	return absf(point.y - float(context.elevation)) <= player.safe_margin
 
 
 ## Why settle_player can't place the player somewhere.
@@ -339,10 +343,12 @@ const NOT_SETTLED := "did not settle on the ground"
 
 ## Drops the stock player at xz and lets physics settle it. Returns "" on
 ## success, or one of the reasons above.
-func settle_player(xz: Vector2, support_context: Dictionary = {}) -> String:
+func settle_player(xz: Vector2, support_context: Dictionary = {}, level_y: Variant = null) -> String:
 	if not world.get_boundary().contains_position(Vector3(xz.x, 0.0, xz.y)):
 		return OFF_ISLAND
-	var hit := ray(Vector3(xz.x, 300.0, xz.y), Vector3(xz.x, -50.0, xz.y), player.collision_mask)
+	if level_y != null and (not (level_y is float or level_y is int) or not is_finite(float(level_y)) or support_context.get("kind", "") != "stair"):
+		return "invalid explicit stair level/context"
+	var hit := ray(Vector3(xz.x, 300.0 if level_y == null else float(level_y) + 0.1, xz.y), Vector3(xz.x, -50.0 if level_y == null else float(level_y) - 0.1, xz.y), player.collision_mask)
 	if hit.is_empty():
 		return OFF_ISLAND
 	if not is_approach_support(hit, support_context):
@@ -362,14 +368,32 @@ func settle_player(xz: Vector2, support_context: Dictionary = {}) -> String:
 		if underneath.is_empty(): print("SETTLE_CANONICAL_LAND missing=true")
 		return STEEP if (hit.normal as Vector3).dot(Vector3.UP) < 0.7 else ON_BUILDING
 	var y := float((hit.position as Vector3).y)
+	var drop := 2.0
+	if level_y != null:
+		if absf(y - float(level_y)) > 0.05: return "stair support differs from requested level"
+		drop = maxf(player.safe_margin * 4.0, 0.02)
+		var clear := PhysicsShapeQueryParameters3D.new()
+		clear.shape = player.collision_shape.shape
+		clear.transform = Transform3D(Basis.IDENTITY, Vector3(xz.x, y + drop, xz.y)) * player.collision_shape.transform
+		clear.margin = player.safe_margin
+		clear.collision_mask = player.collision_mask
+		clear.exclude = [player.get_rid()]
+		clear.collide_with_areas = false
+		if not player.get_world_3d().direct_space_state.intersect_shape(clear, 1).is_empty(): return "stair level capsule/headroom obstructed"
 	release_input()
 	player.set_gameplay_enabled(false)
-	player.global_transform = Transform3D(Basis.IDENTITY, Vector3(xz.x, y + 2.0, xz.y))
+	player.global_transform = Transform3D(Basis.IDENTITY, Vector3(xz.x, y + drop, xz.y))
 	player.velocity = Vector3.DOWN * 0.1
 	player.set_gameplay_enabled(true)
 	for _frame in 240:
 		await tree.physics_frame
 		if player.is_on_floor() and absf(player.velocity.y) <= 0.05:
+			if level_y != null:
+				var feet := player.global_position
+				var settled := ray(feet + Vector3.UP * 0.1, feet - Vector3.UP * 0.15, player.collision_mask)
+				if absf(feet.y - float(level_y)) > 0.05 or not is_approach_support(settled, support_context):
+					player.set_gameplay_enabled(false)
+					return "stair level settled on unexpected support"
 			player.set_gameplay_enabled(false)
 			return ""
 	player.set_gameplay_enabled(false)
@@ -429,3 +453,65 @@ static func user_args() -> Dictionary:
 			args[key] = true
 			i += 1
 	return args
+
+
+## Qualify explicit flight support once, before movement. A role name alone is
+## insufficient: compare the complete ordered producer meshes to native shapes.
+func stair_support_context(source: String, flight: String, bottom_y: float, top_y: float) -> Dictionary:
+	return _stair_support_context_in(main, source, flight, bottom_y, top_y)
+
+
+# Same actual native caller, with its scene root explicit for the contract fixture.
+func _stair_support_context_in(scene: Node, source: String, flight: String, bottom_y: float, top_y: float) -> Dictionary:
+	if flight.is_empty() or not is_finite(bottom_y) or not is_finite(top_y) or top_y <= bottom_y:
+		return {"ok": false, "reason": "invalid flight identity/levels"}
+	var key := "building:" + source + ":wall"
+	var shapes := {}
+	var shared: Array = []
+	var ramp_found := false
+	var landing_found := false
+	for candidate: Node in scene.find_children("*", "StaticBody3D", true, false):
+		var body := candidate as StaticBody3D
+		var role := str(body.get_meta("physical_role", ""))
+		if body.get_meta("source_keys", []) != [source] or role not in ["stair_support", "detail"]: continue
+		var assembly := body.get_parent() as Node3D
+		if assembly == null or body.transform != Transform3D.IDENTITY or body.is_set_as_top_level() or body.collision_layer != 5 or body.collision_mask != 0 or body.is_in_group("spray_receiver_wall") or body.get_meta("receiver_kind", "") != "none" or str(body.get_meta("derived_object_key", "")) != key:
+			return {"ok": false, "reason": "stair body ownership/placement differs"}
+		var server_pose: Variant = PhysicsServer3D.body_get_state(body.get_rid(), PhysicsServer3D.BODY_STATE_TRANSFORM)
+		if not server_pose is Transform3D or not server_pose.is_equal_approx(body.global_transform): return {"ok": false, "reason": "stair server transform differs"}
+		var meshes: Array[MeshInstance3D] = []
+		for child: Node in assembly.get_children():
+			if child is MeshInstance3D and str(child.get_meta("physical_role", "")) == role: meshes.append(child as MeshInstance3D)
+		var owners := body.get_shape_owners()
+		if owners.size() != meshes.size() or body.get_child_count() != owners.size(): return {"ok": false, "reason": "stair ordered native coverage differs"}
+		var allowed: Array[int] = []
+		for i in owners.size():
+			var mesh := meshes[i]
+			var holder := body.shape_owner_get_owner(owners[i]) as CollisionShape3D
+			if holder == null or holder.disabled or holder.transform != Transform3D.IDENTITY or holder.is_set_as_top_level() or body.shape_owner_get_shape_count(owners[i]) != 1 or not holder.shape is ConcavePolygonShape3D: return {"ok": false, "reason": "invalid stair native shape owner"}
+			var shape := holder.shape as ConcavePolygonShape3D
+			var index := body.shape_owner_get_shape_index(owners[i], 0)
+			if PhysicsServer3D.body_get_shape(body.get_rid(), index) != shape.get_rid() or PhysicsServer3D.body_get_shape_transform(body.get_rid(), index) != holder.transform or not shape.backface_collision: return {"ok": false, "reason": "stair native RID/pose/backfaces differ"}
+			if mesh.mesh == null or not mesh.transform.is_finite() or mesh.is_set_as_top_level() or mesh.get_meta("source_keys", []) != [source] or mesh.get_meta("derived_object_key", "") != key or shape.get_meta("source_keys", []) != [source] or shape.get_meta("derived_object_key", "") != key or shape.get_meta("physical_role", "") != role or shape.get_meta("receiver_kind", "") != "none": return {"ok": false, "reason": "stair mesh/shape identity differs"}
+			for field: String in ["construction_detail", "stair_flight_id", "stair_flight_ids"]:
+				if shape.has_meta(field) != mesh.has_meta(field): return {"ok": false, "reason": "stair flight semantics presence differs"}
+				if shape.has_meta(field) and shape.get_meta(field) != mesh.get_meta(field): return {"ok": false, "reason": "stair flight semantics differ"}
+			var collection := StudyGeometry.collect(mesh.mesh, [mesh.transform], StudyGeometry.MESH_GET_FACES, 0.000000000001)
+			if not StudyGeometry.compare(collection, shape.get_faces(), collection.faces.size()).ok: return {"ok": false, "reason": "stair ordered native faces differ"}
+			var ids: Variant = mesh.get_meta("stair_flight_ids", [])
+			if not ids is Array: return {"ok": false, "reason": "invalid shared landing identities"}
+			if str(mesh.get_meta("stair_flight_id", "")) != flight and flight not in ids: continue
+			var detail := str(mesh.get_meta("construction_detail", ""))
+			if role == "stair_support":
+				if mesh.visible or ramp_found: return {"ok": false, "reason": "ambiguous or visible stair support"}
+				ramp_found = true
+			elif detail not in ["StairLanding", "StairGroundApproach"]: continue
+			else:
+				if not mesh.is_visible_in_tree(): return {"ok": false, "reason": "hidden stair landing"}
+				landing_found = true
+				for id: Variant in ids:
+					if id != flight and id not in shared: shared.append(id)
+			allowed.append(index)
+		if not allowed.is_empty(): shapes[body.get_rid()] = allowed
+	if not ramp_found or not landing_found: return {"ok": false, "reason": "missing positive flight ramp/landing support"}
+	return {"ok": true, "context": {"kind": "stair", "source": source, "key": key, "flight_id": flight, "minimum_y": bottom_y, "maximum_y": top_y, "shapes": shapes, "shared_flights": shared}}

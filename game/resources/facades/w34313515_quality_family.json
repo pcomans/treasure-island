@@ -1,0 +1,188 @@
+{
+  "source_key": "w34313515",
+  "receiver_key": "building:w34313515:wall",
+  "placement_status": "production_inference",
+  "source_shell_retained": true,
+  "chains": [
+    {
+      "name": "WSW",
+      "runs": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "evidence": "September 2025 observed grammar; inferred cadence",
+      "bays": [
+        [
+          5.5,
+          5.1
+        ],
+        [
+          19.5,
+          5.1
+        ],
+        [
+          23.5,
+          1.2
+        ],
+        [
+          32.5,
+          1.2
+        ],
+        [
+          36.5,
+          5.1
+        ],
+        [
+          50.5,
+          5.1
+        ],
+        [
+          62.5,
+          1.2
+        ],
+        [
+          71.5,
+          1.2
+        ],
+        [
+          76,
+          5.1
+        ],
+        [
+          90,
+          5.1
+        ]
+      ],
+      "stacks": [
+        28,
+        67
+      ],
+      "solid_intervals_m": [
+        [
+          8.4,
+          16.6
+        ],
+        [
+          39.4,
+          47.6
+        ],
+        [
+          53.4,
+          61.6
+        ],
+        [
+          78.9,
+          87.1
+        ]
+      ]
+    },
+    {
+      "name": "NNW",
+      "runs": [
+        43,
+        44,
+        45,
+        46,
+        47
+      ],
+      "evidence": "limited observed corner; compatible return production inference",
+      "bays": [
+        [
+          5,
+          4.4
+        ],
+        [
+          12,
+          4.4
+        ],
+        [
+          19,
+          4.4
+        ],
+        [
+          26,
+          4.4
+        ],
+        [
+          33,
+          4.4
+        ],
+        [
+          40,
+          4.4
+        ],
+        [
+          47,
+          4.4
+        ],
+        [
+          54,
+          4.4
+        ],
+        [
+          61,
+          4.4
+        ]
+      ],
+      "stacks": []
+    }
+  ],
+  "stairs": [
+    {
+      "anchor_m": 28.0,
+      "land_min_m": 2.9120485,
+      "land_max_m": 3.2066319,
+      "base_y_m": 3.257
+    },
+    {
+      "anchor_m": 67.0,
+      "land_min_m": 2.9517486,
+      "land_max_m": 2.9905144,
+      "base_y_m": 3.041
+    }
+  ],
+  "stair_adaptation": "outward 5.4 by 3.0 metre real stack; retained source wall is rear backing, no interior access",
+  "protected_unobserved_runs": [
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42
+  ]
+}
