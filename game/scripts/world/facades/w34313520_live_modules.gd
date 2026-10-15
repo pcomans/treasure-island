@@ -1,6 +1,7 @@
 class_name W34313520LiveModules
 extends RefCounted
-## Observed institutional corner only. Cadence and scale are production inference.
+## Institutional family: delivered corner plus separately bounded remaining chains.
+## Cadence and scale are production inference; hidden-side schedules are not as-built.
 ## The generated source shell remains the authoritative closed backing.
 
 const RECEIVER_KEY := "building:w34313520:wall"
@@ -136,6 +137,10 @@ static func build(record: Dictionary) -> Dictionary:
 			_add_box(root, "%s_EndPier_%s" % [chain.name, str(along)], basis, origin, Vector3(along, (minimum_y + top - 0.28) * 0.5, 0.12), Vector3(1.1, top - 0.28 - minimum_y, 0.18), pale_boxes, "wall", "PaleEndPier")
 		_add_box(root, str(chain.name) + "RoofEdge", basis, origin, Vector3(length_m * 0.5, top - 0.14, 0.14), Vector3(length_m - 0.20, 0.28, 0.23), pale_boxes, "wall", "ObservedRoofEdge")
 		_add_box(root, str(chain.name) + "RoofDrip", basis, origin, Vector3(length_m * 0.5, top - 0.315, 0.18), Vector3(length_m - 0.22, 0.045, 0.20), FRAME, "detail", "RoofDrip")
+	var remaining := _build_remaining(root, record, cfg.get("remaining_chains", []), pale_boxes, mullion_material)
+	if not bool(remaining.get("ok", false)):
+		root.free()
+		return _failure(str(remaining.get("message", "Remaining family failed.")), record)
 	var support := QUALITY_SUPPORT.attach(root, record, record, {})
 	if not bool(support.get("ok", false)):
 		return support
@@ -147,10 +152,114 @@ static func build(record: Dictionary) -> Dictionary:
 		"surveyed_dimensions": false, "surveyed_count": false, "surveyed_cadence": false,
 		"completed_sse_elevation": false, "independent_review": "pending",
 		"native_producer": "Mesh.get_faces transformed per source-owned mesh",
-		"source_shell_retained": true}
+		"source_shell_retained": true,
+		"remaining_runs": remaining.get("runs", []),
+		"remaining_placement_status": "production_inference",
+		"remaining_observed_motif_runs": [24, 25, 26, 27, 28]}
 	for key: String in metadata: root.set_meta(key, metadata[key])
 	return {"ok": true, "node": root, "metadata": metadata,
 		"mesh_instances": topology.mesh_instances, "surfaces": topology.surfaces, "triangles": topology.triangles}
+
+
+static func _build_remaining(root: Node3D, record: Dictionary, chains: Array, pale: Material, mullions: Material) -> Dictionary:
+	var allowed := {"ENEEndA": [11, 12, 13], "NNWCourtyard": [14, 15, 16, 17], "ENEReturnA": [18, 19], "ENEEndB": [22, 23], "NNWOuter": [24, 25, 26, 27, 28], "ENEReturnB": [29, 30, 31], "NNWReturn": [32, 33]}
+	var seen: Array[String] = []
+	var all_runs: Array[int] = []
+	var top := float(record.top_elevation_m)
+	var center_y := float(record.flat_base_elevation_m) + 5.5
+	for item: Variant in chains:
+		if not item is Dictionary: return {"ok": false, "message": "Remaining chain is not an object."}
+		var chain: Dictionary = item
+		var label := str(chain.get("name", ""))
+		if not allowed.has(label) or label in seen: return {"ok": false, "message": "Unknown or duplicate remaining chain."}
+		var runs: Array[int] = []
+		for value: Variant in chain.get("runs", []):
+			if not (value is float or value is int) or not is_finite(float(value)) or float(value) != floorf(float(value)):
+				return {"ok": false, "message": "Remaining run must be a finite integer."}
+			runs.append(int(value))
+		if runs != allowed[label]: return {"ok": false, "message": "Remaining chain escaped its exact source partition."}
+		seen.append(label)
+		all_runs.append_array(runs)
+		var first := CALIBRATION.run_frame(record, runs.front())
+		var last := CALIBRATION.run_frame(record, runs.back())
+		if first.is_empty() or last.is_empty(): return {"ok": false, "message": "Remaining source host missing."}
+		var origin: Vector3 = first.start
+		var delta: Vector3 = last.end - origin
+		delta.y = 0.0
+		var length_m := delta.length()
+		var tangent := delta.normalized()
+		var normal := tangent.cross(Vector3.UP).normalized()
+		if normal.dot(first.normal as Vector3) < 0.0: normal = -normal
+		var basis := Basis(tangent, Vector3.UP, normal)
+		var bottom := -INF
+		for run: int in runs:
+			var frame := CALIBRATION.run_frame(record, run)
+			if not _host_matches(frame, origin, tangent, normal, top): return {"ok": false, "message": "Remaining host is not one source-planar chain."}
+			bottom = maxf(bottom, maxf((frame.start as Vector3).y, (frame.end as Vector3).y))
+		var count := int(chain.get("bay_count", 0))
+		var margin := float(chain.get("end_margin_m", 0.0))
+		var width_scale := float(chain.get("width_scale", 0.0))
+		if count < 2 or not is_finite(margin) or not is_finite(width_scale) or width_scale <= 0.0 or margin <= 2.86 * width_scale or length_m <= margin * 2.0:
+			return {"ok": false, "message": "Remaining complete opening domain invalid."}
+		var cadence := (length_m - 2.0 * margin) / float(count - 1)
+		if cadence <= 5.72 * width_scale + 0.8: return {"ok": false, "message": "Remaining complete bays overlap."}
+		var tiers: Array = chain.get("tiers", [])
+		var unique_tiers: Array[int] = []
+		for value: Variant in tiers:
+			if not (value is float or value is int) or not is_finite(float(value)) or float(value) != floorf(float(value)) or int(value) not in [1, 2, 3] or int(value) in unique_tiers:
+				return {"ok": false, "message": "Remaining tier selection invalid."}
+			unique_tiers.append(int(value))
+		if unique_tiers.is_empty(): return {"ok": false, "message": "Remaining opening family missing."}
+		var assembly := Node3D.new()
+		for run: int in runs:
+			var frame := CALIBRATION.run_frame(record, run)
+			frame.normal = normal
+			_add_host(assembly, frame, -INF, label, run)
+		for i in count:
+			var bay := CALIBRATION._accepted_standalone_bay()
+			if bay == null:
+				assembly.free()
+				return {"ok": false, "message": "Existing divided bay base unavailable."}
+			var anchor := origin + tangent * (margin + cadence * i) + normal * 0.06
+			anchor.y = center_y
+			var placement := Transform3D(Basis(basis.x * width_scale, basis.y * 1.12, basis.z), anchor)
+			for child: Node in bay.get_children():
+				var mesh := child as MeshInstance3D
+				var tier := int(str(child.name).substr(4, 2))
+				if tier not in unique_tiers: continue
+				var transformed := placement * mesh.transform
+				var bounds := transformed * mesh.mesh.get_aabb()
+				if bounds.position.y < bottom or bounds.end.y > top - 0.35:
+					bay.free()
+					assembly.free()
+					return {"ok": false, "message": "Remaining full tier escaped source host."}
+				bay.remove_child(mesh)
+				mesh.name = "%s_Bay%02d_%s" % [label, i + 1, mesh.name]
+				mesh.transform = transformed
+				_tag(mesh, "wall", "CompleteBayFrame" if "Frame" in str(mesh.name) else "CompleteBayGlazing")
+				mesh.set_meta("complete_tier", tier)
+				assembly.add_child(mesh)
+			bay.free()
+			_add_internal_lights(assembly, "%s_Bay%02d" % [label, i + 1], placement, tiers, runs, mullions)
+		for i in range(count - 1):
+			_add_box(assembly, "%s_Pier%02d" % [label, i], basis, origin, Vector3(margin + cadence * (i + 0.5), (bottom + top - 0.28) * 0.5, 0.11), Vector3(0.42, top - 0.28 - bottom, 0.15), pale, "wall", "PalePier")
+		for gap: int in [0, 1]:
+			var y: float = center_y + (-1.525 + gap * 3.05) * 1.12
+			_add_box(assembly, "%s_Band%d" % [label, gap], basis, origin, Vector3(length_m * 0.5, y, 0.14), Vector3(length_m - 0.20, 0.8, 0.16), pale, "wall", "SolidStoreyBand")
+		for along: float in [0.65, length_m - 0.65]:
+			_add_box(assembly, "%s_End_%s" % [label, str(along)], basis, origin, Vector3(along, (bottom + top - 0.28) * 0.5, 0.12), Vector3(1.1, top - 0.28 - bottom, 0.18), pale, "wall", "PaleEndPier")
+		_add_box(assembly, label + "RoofEdge", basis, origin, Vector3(length_m * 0.5, top - 0.14, 0.14), Vector3(length_m - 0.20, 0.28, 0.23), pale, "wall", "ObservedRoofEdge")
+		_add_box(assembly, label + "RoofDrip", basis, origin, Vector3(length_m * 0.5, top - 0.315, 0.18), Vector3(length_m - 0.22, 0.045, 0.20), FRAME, "detail", "RoofDrip")
+		var labels := {"ObservedPaleHost": "RemainingPaleHost", "CompleteBayFrame": "RemainingBayFrame", "CompleteBayGlazing": "RemainingBayGlazing", "CompleteBayMullion": "RemainingBayMullion", "PalePier": "RemainingPalePier", "SolidStoreyBand": "RemainingSolidBand", "PaleEndPier": "RemainingEndPier", "ObservedRoofEdge": "RemainingRoofEdge", "RoofDrip": "RemainingRoofDrip"}
+		for child: Node in assembly.get_children():
+			child.set_meta("construction_detail", labels[str(child.get_meta("construction_detail"))])
+			child.set_meta("host_runs", runs)
+			child.set_meta("evidence_scope", str(chain.provenance))
+			assembly.remove_child(child)
+			root.add_child(child)
+		assembly.free()
+	if seen.size() != allowed.size(): return {"ok": false, "message": "Incomplete remaining architectural family."}
+	return {"ok": true, "runs": all_runs}
 
 
 static func _add_internal_lights(root: Node3D, prefix: String, placement: Transform3D, tiers: Array, runs: Array[int], material: Material) -> void:

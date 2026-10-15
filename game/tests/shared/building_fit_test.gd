@@ -47,8 +47,8 @@ const QUALITY_SUPPORT_ASSEMBLIES := {
 	"w34313520": {
 		"assembly_name": "W34313520LiveModules",
 		"required": {
-			"wall": ["ObservedPaleHost", "CompleteBayFrame", "CompleteBayGlazing", "CompleteBayMullion", "PalePier", "SolidStoreyBand", "PaleEndPier", "ObservedRoofEdge"],
-			"detail": ["RoofDrip"],
+			"wall": ["ObservedPaleHost", "CompleteBayFrame", "CompleteBayGlazing", "CompleteBayMullion", "PalePier", "SolidStoreyBand", "PaleEndPier", "ObservedRoofEdge", "RemainingPaleHost", "RemainingBayFrame", "RemainingBayGlazing", "RemainingBayMullion", "RemainingPalePier", "RemainingSolidBand", "RemainingEndPier", "RemainingRoofEdge"],
+			"detail": ["RoofDrip", "RemainingRoofDrip"],
 			"ground_visual": [],
 		},
 	},

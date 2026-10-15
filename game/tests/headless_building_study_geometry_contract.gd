@@ -47,6 +47,8 @@ func _run() -> void:
 	var collapsed := Transform3D(Basis(Vector3.ZERO,Vector3.ZERO,Vector3.ZERO),Vector3.ZERO)
 	check(Geometry.collect(mesh, [collapsed], Geometry.INDEXED_ARRAYS).faces.size() == 3, "Default silently filters faces")
 	check(not Geometry.collect(mesh, [collapsed], Geometry.MESH_GET_FACES, 1e-12).ok, "Explicit producer cutoff ignored")
+	_check_architecture_advisories()
+	_check_opening_advisory_caller()
 	_check_roof_coverage()
 	_check_composite_roof_identity()
 	await _check_retained_housing_inventory()
@@ -332,3 +334,51 @@ func _check_retained_housing_inventory() -> void:
 	await process_frame
 	check(shape_lifetime.get_ref() == null, "Retained proof keeps changed shape alive after teardown")
 	check(mesh_lifetime.get_ref() == null, "Retained proof keeps mesh alive after teardown")
+
+
+func _check_architecture_advisories() -> void:
+	var footprint := _roof_rect(0,0,4,4,0)
+	var half := Geometry.footprint_advisory(footprint, _roof_rect(0,0,2,4,9))
+	check(half.status == "REVIEW" and not half.blocking and is_equal_approx(float(half.deficit_fraction), 0.5), "Roof deficit must be measured nonblocking review")
+	check(is_equal_approx(float(half.roof_to_foundation_ratio), 0.5), "Projected area ratio lost")
+	var overhang := Geometry.footprint_advisory(footprint, _roof_rect(-1,-1,5,5,9))
+	check(overhang.status == "WITHIN_TOLERANCE" and float(overhang.overhang_m2_informational) > 0.0 and not overhang.blocking, "Overhang must remain informational")
+	var duplicate := footprint.duplicate(); duplicate.append_array(footprint)
+	check(is_equal_approx(float(Geometry.footprint_advisory(footprint, duplicate).roof_to_foundation_ratio), 1.0), "Overlapping projected faces must not double-count area")
+	check(Geometry.footprint_advisory(PackedVector3Array(), footprint).status == "UNKNOWN", "Missing canonical footprint must be UNKNOWN")
+	var unknown := Geometry.opening_advisory([], ["0", "90"])
+	check(unknown.door == "UNKNOWN" and unknown.window_by_orientation["90"] == "UNKNOWN" and not unknown.blocking, "Unclassified facade must not imply missing openings")
+	var observed := Geometry.opening_advisory([{"kind":"door", "sides":["0"]}, {"kind":"window", "sides":["90"]}], ["0", "90"])
+	check(observed.door == "IDENTIFIED" and observed.window_by_orientation["90"] == "IDENTIFIED" and observed.window_by_orientation["0"] == "UNKNOWN", "Known opening evidence must be useful without inventing completeness")
+	var complete := Geometry.opening_advisory([], ["0"], true)
+	check(complete.door == "REVIEW_NONE_IDENTIFIED" and complete.window_by_orientation["0"] == "REVIEW_NONE_IDENTIFIED" and not complete.blocking, "Explicit complete absence must flag review, never block")
+	var ambiguous := Geometry.opening_advisory([{"kind":"unknown"}], ["0"], true)
+	check(ambiguous.door == "UNKNOWN", "Ambiguous inventory must override absence inference")
+
+	var unlocalized := Geometry.opening_advisory([{"kind":"window", "sides":[]}], ["0", "90"], true)
+	check(unlocalized.window_by_orientation["0"] == "UNKNOWN" and unlocalized.window_by_orientation["90"] == "UNKNOWN", "Complete inventory cannot locate a window with unknown orientation")
+	var invalid_side := Geometry.opening_advisory([{"kind":"window", "sides":["invalid"]}], ["0"], true)
+	check(invalid_side.window_by_orientation["0"] == "UNKNOWN", "Invalid host orientation cannot prove missing windows")
+	var limited := Geometry.footprint_advisory(footprint, footprint, 0.05, 1.0, 20)
+	check(limited.status == "UNKNOWN" and limited.reason == "advisory_work_budget_exhausted" and not limited.blocking, "Total raster work exhaustion must remain nonblocking UNKNOWN")
+	var narrow := Geometry.footprint_advisory(_roof_rect(0,0,10000000,0.001,0), _roof_rect(0,0,10000000,0.001,2))
+	check(narrow.status == "UNKNOWN" and narrow.reason == "advisory_work_budget_exhausted", "Long narrow domains must be bounded before creating ranges")
+
+
+func _check_opening_advisory_caller() -> void:
+	# Exercise the real metadata/enum caller, not only the pure predicate. Its
+	# printed outputs and absence of SCRIPT ERROR are retained in the fixture log.
+	var fit := preload("res://game/tests/shared/building_fit.gd").new(null)
+	for source: String in ["w34313520", "w34313547", "unclassified_fixture"]:
+		var assembly := Node3D.new()
+		assembly.set_meta("source_keys", [source])
+		root.add_child(assembly)
+		var mesh := MeshInstance3D.new()
+		mesh.mesh = BoxMesh.new()
+		mesh.set_meta("construction_detail", "RemainingBayGlazing" if source == "w34313520" else "BlueServiceDoor")
+		mesh.set_meta("host_runs", [0])
+		assembly.add_child(mesh)
+		fit._source_facade_runs[source] = ["0"]
+		var nodes: Array[Node3D] = [assembly]
+		fit._emit_opening_advisory(source, nodes)
+		assembly.free()

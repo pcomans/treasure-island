@@ -472,3 +472,95 @@ static func ground_face_contact(point: Vector3, normal: Vector3, faces: PackedVe
 		var v := (d00*v2.dot(v1)-d01*v2.dot(v0))/denominator
 		if u >= 0 and v >= 0 and u+v <= 1: return true
 	return false
+
+
+# Review prompts only: sampled union areas avoid double-counting stacked roofs.
+# The frozen source-roof triangulation is the canonical horizontal footprint,
+# not a survey of footing dimensions. Courtyard holes remain excluded.
+static func footprint_advisory(canonical: PackedVector3Array, roof: PackedVector3Array,
+		deficit_tolerance: float = 0.05, cell_m: float = 1.0, max_visits: int = 200000) -> Dictionary:
+	var result := {"blocking": false, "status": "UNKNOWN", "basis": "canonical_source_footprint_projection", "measurement": "sampled_union_area", "deficit_tolerance": deficit_tolerance}
+	if canonical.is_empty() or roof.is_empty() or canonical.size() % 3 != 0 or roof.size() % 3 != 0 or not is_finite(cell_m) or cell_m <= 0.0 or not is_finite(deficit_tolerance) or deficit_tolerance < 0.0 or deficit_tolerance > 1.0:
+		return result
+	if max_visits <= 0 or canonical.size() + roof.size() > max_visits:
+		result.reason = "advisory_work_budget_exhausted"
+		return result
+	var budget := {"remaining": max_visits - canonical.size() - roof.size()}
+	var lo := Vector2(INF, INF)
+	var hi := Vector2(-INF, -INF)
+	for faces: PackedVector3Array in [canonical, roof]:
+		for p: Vector3 in faces:
+			if not p.is_finite(): return result
+			lo = lo.min(Vector2(p.x, p.z)); hi = hi.max(Vector2(p.x, p.z))
+	# Bound diagnostic cost for large composite buildings without changing fit.
+	var step := maxf(cell_m, sqrt((hi.x-lo.x)*(hi.y-lo.y)/40000.0))
+	if not is_finite(step) or step <= 0.0: return result
+	var foundation := _projected_cells(canonical, step, budget)
+	var roof_projection := _projected_cells(roof, step, budget)
+	if not foundation.ok or not roof_projection.ok:
+		result.reason = "advisory_work_budget_exhausted"
+		return result
+	var foundation_cells: Dictionary = foundation.cells
+	var roof_cells: Dictionary = roof_projection.cells
+	if foundation_cells.is_empty() or roof_cells.is_empty(): return result
+	var overlap := 0
+	for key: Vector2i in foundation_cells:
+		if roof_cells.has(key): overlap += 1
+	var deficit := float(foundation_cells.size()-overlap)/float(foundation_cells.size())
+	result.merge({"status": "REVIEW" if deficit > deficit_tolerance else "WITHIN_TOLERANCE", "cell_m": step,
+		"foundation_projected_m2": foundation_cells.size()*step*step, "roof_projected_m2": roof_cells.size()*step*step,
+		"uncovered_foundation_m2": (foundation_cells.size()-overlap)*step*step, "deficit_fraction": deficit,
+		"roof_to_foundation_ratio": float(roof_cells.size())/float(foundation_cells.size()),
+		"overhang_m2_informational": (roof_cells.size()-overlap)*step*step}, true)
+	return result
+
+
+static func _projected_cells(faces: PackedVector3Array, step: float, budget: Dictionary) -> Dictionary:
+	var cells := {}
+	for i in range(0, faces.size(), 3):
+		if int(budget.remaining) <= 0: return {"ok": false, "cells": {}}
+		budget.remaining = int(budget.remaining) - 1
+		var tri := PackedVector2Array([Vector2(faces[i].x,faces[i].z), Vector2(faces[i+1].x,faces[i+1].z), Vector2(faces[i+2].x,faces[i+2].z)])
+		if absf((tri[1]-tri[0]).cross(tri[2]-tri[0])) < 1e-10: continue
+		var lo := tri[0].min(tri[1]).min(tri[2])/step
+		var hi := tri[0].max(tri[1]).max(tri[2])/step
+		var width: float = ceilf(hi.x) - floorf(lo.x)
+		var height: float = ceilf(hi.y) - floorf(lo.y)
+		var visits := width * height
+		# Check before constructing ranges; a long thin triangle can have huge width.
+		if not is_finite(visits) or width > float(budget.remaining) or height > float(budget.remaining) or visits > float(budget.remaining): return {"ok": false, "cells": {}}
+		budget.remaining = int(budget.remaining) - int(visits)
+		for x in range(int(floor(lo.x)), int(ceil(hi.x))):
+			for z in range(int(floor(lo.y)), int(ceil(hi.y))):
+				if Geometry2D.is_point_in_polygon(Vector2(x+0.5,z+0.5)*step, tri): cells[Vector2i(x,z)] = true
+	return {"ok": true, "cells": cells}
+
+
+# Explicit semantic values only; node names/substrings never establish an opening.
+# Unknown inventory cannot establish absence, even if no door was identified.
+static func opening_advisory(semantics: Array, side_ids: Array, inventory_complete: bool = false) -> Dictionary:
+	var doors := 0
+	var windows := {}
+	var identified_windows := 0
+	var unlocalized_windows := 0
+	var unknown := 0
+	for item: Dictionary in semantics:
+		var kind := str(item.get("kind", "unknown"))
+		if kind == "door": doors += 1
+		elif kind == "window":
+			identified_windows += 1
+			var localized := false
+			for side: String in item.get("sides", []):
+				if side in side_ids:
+					windows[side] = true
+					localized = true
+			if not localized: unlocalized_windows += 1
+		else: unknown += 1
+	var sides := {}
+	for side: String in side_ids:
+		sides[side] = "IDENTIFIED" if windows.has(side) else ("REVIEW_NONE_IDENTIFIED" if inventory_complete and unknown == 0 and unlocalized_windows == 0 else "UNKNOWN")
+	return {"blocking": false, "door": "IDENTIFIED" if doors > 0 else ("REVIEW_NONE_IDENTIFIED" if inventory_complete and unknown == 0 else "UNKNOWN"),
+		"window_by_orientation": sides, "identified_door_components": doors, "identified_window_components": identified_windows,
+		"door_inspection_prompt": doors == 0, "window_inspection_orientations": side_ids.filter(func(side: String) -> bool: return not windows.has(side)),
+		"unlocalized_window_components": unlocalized_windows, "inventory_complete": inventory_complete, "unclassified": unknown, "scope": "explicit_source_owned_opening_semantics; orientation groups combine stepped parallel chains",
+		"note": "Inspect UNKNOWN or REVIEW sides/entrance against references; components are not a surveyed opening count. Blank sides may be legitimate. No recognition decision."}

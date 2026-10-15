@@ -782,3 +782,35 @@ compare repaired ground and raised views without introducing count pins or a new
 ## Separate observed motif families from uncertain placement
 
 1240 study001 initially received architecture PASS while its new narrow alternating upper windows contradicted the dated uncovered frontage’s repeated broad paired units. The mismatch was mislabeled as exact as-built uncertainty; ROOT’s direct photo comparison and the reviewer’s revised HOLD led to a two-width correction using the existing broad module. Unknown anchors, counts or hidden schedules permit declared production inference, but do not erase an observed motif-type or width-family mismatch. Compare those visible families explicitly and keep all-side visual acceptance on HOLD for a substantive observed architecture gap even when complete coverage and mechanical checks pass.
+
+
+## Keep architecture completeness advisories separate from required fit
+
+The existing roof-outline warning did not report relative projected size, and
+named native families did not supply generic door/per-side-window review prompts.
+The shared advisory now reports sampled union footprint deficit/ratio and
+informational overhang, using the canonical source-roof projection as the frozen
+horizontal footprint (not surveyed footing geometry). Configurable tolerance and
+sampling resolution affect only this prompt; required oriented native and visible
+roof coverage remain unchanged. Opening prompts use explicit source-owned semantic
+metadata and known producer labels, never node-name substring guesses. Identified
+components are not surveyed door/window counts; unknown inventory/host orientation
+stays UNKNOWN with an inspection prompt, not a fabricated missing-opening claim.
+Parallel stepped chains share orientation groups, not a claim that every wall run
+has been reviewed. All outcomes are nonblocking and confer no recognition credit.
+
+Independent review caught two advisory edge cases: a known window without a usable
+host orientation cannot establish absence on other sides even with complete
+inventory, and bounding raster cell size alone does not bound work repeated across
+triangles. Retain orientation uncertainty and a total candidate-visit budget that
+returns advisory UNKNOWN. Review also caught `visual_meshes` returning geometry
+rows `[Mesh, Transform3D, name]`, not nodes: inspect the concrete helper return shape
+before metadata traversal; use actual source-owned nodes without changing the helper.
+
+A real-source run then caught typed `Array[String]` enum locals receiving untyped
+ternary array literals, despite pure-predicate fixture PASS. Membership enums now
+use explicit `Array`; analogous new typed arrays are initialized directly or filled
+with typed values. Exercise the actual metadata caller across target, alternate
+producer and unknown branches, and inspect SCRIPT ERROR as failure even when the
+engine exits0 or later fit prints PASS. Preserve successful native/movement subsets
+but do not proceed to dependent proof with missing advisory output.

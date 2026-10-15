@@ -27,6 +27,10 @@ var _observe_adjacent_support := false
 var _observed_adjacent_support := false
 var _source_roofs_loaded := false
 var _source_roofs: Dictionary = {}
+var _source_facade_runs: Dictionary = {}
+## Advisory thresholds only; never alter required fit/roof coverage.
+var advisory_footprint_deficit_tolerance: float = 0.05
+var advisory_footprint_cell_m: float = 1.0
 var _source_roofs_error := ""
 var _composite_records: Dictionary = {}
 var _composite_records_error := ""
@@ -211,6 +215,15 @@ func _source_roof_coverage(source: String, nodes: Array[Node3D]) -> String:
 							_composite_records_error = "ambiguous approved composite record: " + object_key
 						else:
 							_composite_records[object_key] = part
+					if str(record.get("feature_kind", "")) == "building_wall" and record.get("source_keys", []).size() == 1:
+						var normals: Array = record.get("normals", [])
+						var runs: Array[String] = []
+						# Generated walls serialize four vertices per exterior run.
+						if normals.size() == record.vertices.size() and normals.size() % 12 == 0:
+							for offset in range(0, normals.size(), 12):
+								var n := Vector2(float(normals[offset]), float(normals[offset+2]))
+								runs.append(str(posmod(int(round(rad_to_deg(atan2(n.x, -n.y))/15.0))*15, 360)) if n.is_finite() and n.length() > 0.5 else "unknown")
+						_source_facade_runs[str(record.source_keys[0])] = runs
 					if str(record.get("feature_kind", "")) not in ["building_roof", "building_part_roof"]: continue
 					var vertices := PackedVector3Array()
 					for i in range(0, record.vertices.size(), 3):
@@ -247,7 +260,44 @@ func _source_roof_coverage(source: String, nodes: Array[Node3D]) -> String:
 	else:
 		var outline := StudyGeometry.roof_coverage(_source_roofs[source], visible.faces)
 		print("ROOF_OUTLINE_ADVISORY source=%s canonical_samples_covered=%s samples=%s uncovered=%s review=compare_references_and_authored_envelope" % [source, outline.ok, outline.get("samples", 0), outline.get("missing", [])])
+	print("FOOTPRINT_SIZE_ADVISORY source=%s result=%s" % [source, StudyGeometry.footprint_advisory(_source_roofs.get(source, PackedVector3Array()) if _source_roofs_error == "" else PackedVector3Array(), visible.faces, advisory_footprint_deficit_tolerance, advisory_footprint_cell_m)])
+	_emit_opening_advisory(source, nodes)
 	return "" if coverage.ok else str(coverage.reason) + " for " + source
+
+
+func _emit_opening_advisory(source: String, nodes: Array[Node3D]) -> void:
+	var runs: Array = _source_facade_runs.get(source, [])
+	var sides: Array[String] = []
+	for side: String in runs:
+		if side != "unknown" and side not in sides: sides.append(side)
+	var semantics: Array = []
+	var complete := false
+	# Explicit producer semantic enums. A frame/name alone is not an opening.
+	var known_windows: Array = ["CompleteBayGlazing", "RemainingBayGlazing"] if source == "w34313520" else (["ClosedGlazing"] if source == "w34313547" else [])
+	var known_doors: Array = ["BlueServiceDoor"] if source == "w34313547" else []
+	var source_meshes: Array[MeshInstance3D] = []
+	for root: Node3D in nodes:
+		for child: Node in root.find_children("*", "MeshInstance3D", true, false):
+			if child is MeshInstance3D and child.is_visible_in_tree() and child not in source_meshes: source_meshes.append(child)
+	for mesh: MeshInstance3D in source_meshes:
+		var owner: Node = mesh
+		while owner != null and not owner.has_meta("source_keys"): owner = owner.get_parent()
+		if owner == null or owner.get_meta("source_keys", []) != [source]: continue
+		if owner.get_meta("opening_inventory_complete", false) == true: complete = true
+		var kind := str(mesh.get_meta("opening_kind", "unknown"))
+		var detail := str(mesh.get_meta("construction_detail", ""))
+		if kind not in ["door", "window"]:
+			kind = "window" if detail in known_windows else ("door" if detail in known_doors else "unknown")
+		if kind == "unknown":
+			semantics.append({"kind": "unknown", "sides": []})
+			continue
+		var host_sides: Array[String] = []
+		for value: Variant in mesh.get_meta("host_runs", []):
+			if not (value is int or value is float): continue
+			var index := int(value)
+			if float(value) == float(index) and index >= 0 and index < runs.size() and runs[index] != "unknown" and runs[index] not in host_sides: host_sides.append(runs[index])
+		semantics.append({"kind": kind, "sides": host_sides})
+	print("OPENING_ADVISORY source=%s orientation_bucket_degrees=15 result=%s" % [source, StudyGeometry.opening_advisory(semantics, sides, complete)])
 
 
 func _check_roof(box: AABB, own: Array[RID]) -> void:

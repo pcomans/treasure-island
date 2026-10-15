@@ -48,11 +48,128 @@
       "minimum_y_m": 9.2
     }
   ],
-  "protected": "SSE below Y9.2, hidden runs11..33 including wing20..21; neighbor w34313521; source wall/roof/backing/terrain unchanged",
+  "protected": "Delivered chains0..10 unchanged; all6..10 belowY9.2 and ambiguouswing20..21 protected; neighbor w34313521 and source walls/roof/backing/terrain unchanged",
   "measured_claims": false,
   "window_partition": {
     "columns": 3,
     "rows": 2,
     "status": "reference_supported_multilight_family; reversible internal cadence production_inference"
-  }
+  },
+  "remaining_chains": [
+    {
+      "name": "ENEEndA",
+      "runs": [
+        11,
+        12,
+        13
+      ],
+      "bay_count": 3,
+      "end_margin_m": 3.1,
+      "tiers": [
+        2,
+        3
+      ],
+      "width_scale": 0.4,
+      "provenance": "production_inference institutional service/courtyard composition; no observed access claim"
+    },
+    {
+      "name": "NNWCourtyard",
+      "runs": [
+        14,
+        15,
+        16,
+        17
+      ],
+      "bay_count": 9,
+      "end_margin_m": 3.1,
+      "tiers": [
+        1,
+        2,
+        3
+      ],
+      "width_scale": 0.48,
+      "provenance": "production_inference institutional service/courtyard composition; no observed access claim"
+    },
+    {
+      "name": "ENEReturnA",
+      "runs": [
+        18,
+        19
+      ],
+      "bay_count": 2,
+      "end_margin_m": 3.2,
+      "tiers": [
+        2,
+        3
+      ],
+      "width_scale": 0.38,
+      "provenance": "production_inference institutional service/courtyard composition; no observed access claim"
+    },
+    {
+      "name": "ENEEndB",
+      "runs": [
+        22,
+        23
+      ],
+      "bay_count": 3,
+      "end_margin_m": 3.0,
+      "tiers": [
+        2,
+        3
+      ],
+      "width_scale": 0.4,
+      "provenance": "production_inference institutional service/courtyard composition; no observed access claim"
+    },
+    {
+      "name": "NNWOuter",
+      "runs": [
+        24,
+        25,
+        26,
+        27,
+        28
+      ],
+      "bay_count": 13,
+      "end_margin_m": 2.5,
+      "tiers": [
+        1,
+        2,
+        3
+      ],
+      "width_scale": 0.38,
+      "provenance": "July 2023 observed compact three-tier motif; count and anchors production_inference"
+    },
+    {
+      "name": "ENEReturnB",
+      "runs": [
+        29,
+        30,
+        31
+      ],
+      "bay_count": 2,
+      "end_margin_m": 3.5,
+      "tiers": [
+        2,
+        3
+      ],
+      "width_scale": 0.38,
+      "provenance": "production_inference institutional service/courtyard composition; no observed access claim"
+    },
+    {
+      "name": "NNWReturn",
+      "runs": [
+        32,
+        33
+      ],
+      "bay_count": 2,
+      "end_margin_m": 3.0,
+      "tiers": [
+        1,
+        2,
+        3
+      ],
+      "width_scale": 0.38,
+      "provenance": "production_inference institutional service/courtyard composition; no observed access claim"
+    }
+  ]
 }
