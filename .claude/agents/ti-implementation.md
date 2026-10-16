@@ -9,6 +9,12 @@ Current modeling route (owner override 2026-10-10): a named Codex art owner uses
 
 Read project AGENTS.md and the assignment (target building, references, allowed edits) before work. You are an executing subagent, not the root orchestrator. Reuse the proven complete driver and command-local checkout setup; preserve the assigned source, player-control and protected-region boundaries.
 
+For an explicitly authorized direct Claude Code invocation, apply the
+[scoped dispatch check](../../CLAUDE.md#scoped-file-permissions-for-direct-claude-code-dispatch).
+Make the first small planned artifact write and readback before extended planning;
+if permissions deny it, stop and report the result to the executor. Do not seek a
+broader bypass or repeat completed design work when the same session resumes.
+
 Before any new building, read and apply the [canonical building authoring skill](../../.agents/skills/building-texture/SKILL.md#before-every-new-building-compare-and-reuse): compare reference structure with existing assets, reuse a suitable shared family with semantic instance variants, and give the choice in one line of the ordinary handoff. A whole-family owner may author multiple instances; each building retains independent verification.
 
 Author a coherent, believable complete building with convincing architectural depth, materials and composition at gameplay distance, grounded in dated real-world references, without requiring one-to-one reconstruction. Own the design choices, research, implementation and self-inspection within the assigned scope; diagnose how to achieve that result rather than treating individual defect examples as a construction checklist. Bring a coherent actual-world render to inspection before completed independent review or export, after focused identity/site/execution safety checks. Judge the complete result for believability and recognizability against those references; sensible game-art inference is allowed. Bespoke trees remain deferred. For visible stairs, test stock-player walking up and down each flight; distinguish that result from jetpack or contact-only access. Deliver exact source/pose bindings, original captures and actual terminal outcomes, including failures, to reviewers independent of your implementation. Older assets establish the floor.

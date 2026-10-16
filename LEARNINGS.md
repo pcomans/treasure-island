@@ -613,3 +613,19 @@ frame. Delivery cause is unknown; this did not establish invalid files or bad
 source renders. Try one existing-original single-image recovery before requesting
 recapture. Do not change source, add checksum proof or rerun the engine solely
 to work around an incompletely delivered image.
+
+
+## Verify Claude file scopes before long authoring
+
+On 2026-10-16, Building 1's first Claude Code 2.1.294 invocation completed
+extensive read-only design but could not write source, materials or notes in
+`dontAsk` mode. The executor supplied single-slash absolute-looking paths and
+`Write(path)` rules. Official semantics instead require `Edit(//absolute/path)`
+for all native file writes; a single slash is working-directory-relative in CLI
+rules and `Write(path)` is ignored. The corrected same-session launch created the
+approved shader at 15:27:35.435 UTC (tool `toolu_01LrPiV8EVmijGE7qGY4GpZ8`,
+`author-recovery-stream.jsonl` in the private Building 1 Opus study). Before long
+planning, require the first planned in-scope native artifact write and readback
+in the same author call. Use the canonical CLAUDE dispatch guidance, preserve
+exact file/subtree limits and failed evidence, and resume rather than repeat
+completed design. This corrects invocation guidance, not global runtime policy.

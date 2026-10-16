@@ -19955,3 +19955,15 @@ Next: model complete reference-supported rear/roof families only within newly ex
 - Worked: reused completed independent CODE/visual decisions, focused housing/Chapel/Isle House checks and full-suite005 ALL TESTS PASS. Confirmed the existing eighteen-path candidate and that this role's prior private RETRO entries were already consolidated once; retained them without duplication. Final integration preserves all49 historical recognition credits and the213-unit inventory.
 - Did not: no new render or world improvement has occurred since the prior reviewed production captures. The rear study remains unapplied and unrendered; scoped frontage/roof-integrity PASS does not establish complete all-side L2, whole modern quality, or threshold-top landing.
 - Next / REDIRECT: assign the whole61/69/72 rear-opening schedules and shallow roof/eave forms as the next bounded architectural study. Keep existing scoped credit unchanged and use the exact intended eighteen-path commit; no engine or test reruns for integration bookkeeping.
+
+
+## 2026-10-16 — building1_texture_environment: Claude scoped-write harness fix
+
+- Worked: checked the actual owner's failed and successful direct CLI arguments
+  and official permissions documentation, then isolated the fix from clean general
+  harness `f4dd167`; all study art and live author processes remained untouched.
+- Did not work: accepted CLI syntax had been mistaken for effective native-write
+  access, allowing extensive planning before the first permission failure.
+- Next time: use the corrected canonical Edit absolute-path rules and verify the
+  first planned native artifact write/readback within the same author call. Keep
+  this as dispatch guidance rather than adding an unused launcher or ACL framework.

@@ -56,6 +56,47 @@ Adapt workspace/output paths. The prompt must tell the orchestrator to use its a
 
 Verify the actual spawn result and child identity, not an orchestrator's statement that review started. Retain the CLI handle/PID through its terminal result and the child's explicit verdict. A failed spawn or image load is not a visual verdict; do not duplicate a live review. If container sandbox setup fails before execution, report the exact error and use only an explicitly authorized supported sandbox fallback—do not change account/global configuration. Study026 verified persistent child startup after an ephemeral run failed with a missing rollout; this establishes delegation support, not visual completion or a performance claim.
 
+### Scoped file permissions for direct Claude Code dispatch
+
+When an assignment explicitly uses Claude Code, its named executor must configure
+permissions before launching the author. The project currently uses direct CLI
+invocations, not a reusable launcher. Role instructions describe scope; they do
+not grant tool permissions. Keep the assignment's model/effort and protected paths.
+
+For CLI file scopes, use `Edit(//absolute/path)`: the extra leading slash makes
+this filesystem-absolute. A single `/` anchors at the primary working directory.
+`Edit` path rules govern both native Edit and Write, including new files;
+`Write(path)` rules are not consulted. For example, the permission portion of an
+existing launch is:
+
+```bash
+--permission-mode dontAsk --allowedTools \
+  'Edit(//absolute/exact/file)' \
+  'Edit(//absolute/material/subtree/**)'
+```
+
+Replace these illustrative paths with the authorized exact files and bounded
+material/note directories before launching; never grant the whole repository.
+Quote each complete rule as its own CLI argument, including paths with spaces.
+Use `/**` only when the entire named subtree is authorized; an exact-file rule
+must not gain a wildcard. Paths use gitignore syntax: escape literal pattern
+characters such as `*`, `?`, `[` and `]` with backslashes inside the quoted rule.
+Compare the resulting scopes with the assignment, including nested files and
+sibling/outside directories, before dispatch. Keep necessary read permissions
+separate. Do not repair denied writes with broad Bash, `acceptEdits`, global
+settings or a permission bypass; existing deny rules and protected paths remain.
+
+In the **same author call**, require the first small planned, approved artifact
+write and native readback before extended design/planning. Inspect its actual
+Write/Edit tool result and readback: accepted startup syntax or a shell touch is
+not permission proof. On denial, stop authoring, retain the failed result, correct
+only the scoped launch rules, and resume the same session without repeating its
+completed analysis. This is a dispatch check, not an extra paid probe call.
+
+Verified against Claude Code 2.1.294 and [official permission documentation](https://code.claude.com/docs/en/permissions#read-and-edit)
+on 2026-10-16. Building 1's corrected same-session invocation successfully created
+its first approved shader with native Write; see the [lesson](LEARNINGS.md#verify-claude-file-scopes-before-long-authoring).
+
 ### Delivering visual galleries in VS Code
 
 For HTML galleries outside the remote workspace, prefer a static server bound to
