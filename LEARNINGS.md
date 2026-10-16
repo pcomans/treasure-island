@@ -21,6 +21,16 @@ coverage. Retain supported L1 envelope/site C but keep complete all-side L2 U;
 compare each checkbox's full definition with actual side coverage before updating
 it. Unknown opening coverage is neither verified absence nor a proven motif defect.
 
+On 2026-10-16, the Building 1 follow-up discussion exposed a shared-context gap:
+the author, reviewer and coordinator needed to know and focus on the same active
+zoom level. Existing coarse-to-fine ordering did not make that current assignment
+explicit. The initial proposed fix repeated macro-first prioritization, which the
+owner rejected as missing the point. Declare the active level and expected result
+in the ordinary task note, carry it through all three roles' prompts/handoffs,
+park other-level observations, and make coordinator transitions explicit. This
+aligns scope; it does not make plain walls defects, excuse unsafe geometry or
+convert in-level completion into whole-building acceptance.
+
 ## Judge the whole visible result after a fix
 
 **Observed:** In 1308 fidelity002, ordinary views 06/07 improved roof visibility and lawn coverage, yet the main roof still showed rounded, uneven humps and a heavy pale rim. Junction views 03/04 exposed near-black canopy tops and heavy edges. The dated March 2025 reference showed coherent planar roof surfaces, straight ridge/eave segments and readable gray roofing. The initial review closed the previous two gaps too narrowly; the owner caught the unresolved overall form. A focused sibling check of 1303 fidelity004 views 03/06 found a related uneven crest despite real roof-visibility and apron gains.

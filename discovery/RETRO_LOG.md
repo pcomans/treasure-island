@@ -19967,3 +19967,26 @@ Next: model complete reference-supported rear/roof families only within newly ex
 - Next time: use the corrected canonical Edit absolute-path rules and verify the
   first planned native artifact write/readback within the same author call. Keep
   this as dispatch guidance rather than adding an unused launcher or ACL framework.
+
+
+## 2026-10-16 — building1_texture_environment: shared active zoom level
+
+- Worked: the owner's correction separated stage alignment from generic
+  prioritization. Started clean at `97db633`, leaving the rejected broad-priority
+  draft untouched, and put one shared contract beside existing zoom definitions.
+- Did not work: the earlier proposed solution strengthened macro-first selection
+  instead of ensuring all three roles worked on the same declared level.
+- Next time: carry the active level in existing task notes, prompts and handoffs;
+  record other-level observations without silently turning them into assignments.
+- Manual scenario walkthroughs: level-2 assembly work plus a glazing critique
+  keeps the author/reviewer/ROOT at level 2 and parks finish; a fit failure causes
+  HOLD/repair without changing artistic level; a supported ROOT transition updates
+  the note and next prompts together. In-level PASS never grants whole acceptance.
+  Checked cross-links and intended-file whitespace; no new tests or engine runs
+  are needed for this instruction-only change.
+
+## 2026-10-16 — shared_zoom_review_sol: independent instruction review
+
+- Worked: the nine-file diff makes the ordinary task note the shared active-level source, propagates it through author/reviewer/ROOT handoffs, and requires an explicit supported transition. In-level PASS remains separate from whole acceptance; fit, source, spray, privacy and suite gates remain intact.
+- Did not work: no concrete defect found in this focused review; no engine or art review was needed for instruction changes.
+- Next time: keep out-of-level findings in the ordinary critique and verify the next brief preserves the declared level or records the transition, rather than expanding the review into unrelated project history.

@@ -82,6 +82,14 @@ Lead the critique with a pixel-grounded verdict on meaningful visible change and
 
 ## Separate architectural progress decision
 
+Apply the [shared active zoom level](../../../../AGENTS.md#shared-active-zoom-level)
+when giving the ordinary verdict: name and judge the assigned level, and retain
+out-of-level observations separately in the same critique. A recommendation to
+rescope is not a level transition; ROOT records that explicitly. Keep in-level
+PASS separate from whole-quality HOLD/acceptance and mechanical findings. All-side,
+context and island regression comparisons remain required without silently
+changing the artistic focus.
+
 Whole-quality visual judgment remains independent of the mandatory [study scope/progress reviewer](../../../../.claude/agents/ti-study-progress-review.md). Between every architectural study, that distinct named reviewer judges appropriate scope and substantial overall progress from actual baseline/current gameplay and truthful references. Apply the skill's explicit zoom-in order: basic massing/footprint/ground fit and coarse roof silhouette; complete doors/entrances/windows/roof architecture across sides; secondary details; textures/PBR/material finish; then decals/final finishing. Keep reference/layout comparison active throughout and inspect full references/gameplay and useful original-pixel crops before choosing the level. Minimal provisional or existing materials may make architecture readable, but later polish cannot replace a substantively missing earlier family. Require RESCOPE or REWORK with a concrete REDIRECT to the bounded whole earlier family, at the scope needed for overall island completion. PASS / RESCOPE / REWORK controls next-study advancement; a failed decision needs corrected scope or meaningful rework, not another isolated polish cycle. This adds no phase approval, survey quota or requirement to strip sound materials. It neither substitutes for this whole all-side art gate nor calls for invented geometry on supported blank walls. Use ordinary evidence/handoffs, no numeric velocity or extra reporting layer.
 
 ## Evidence record

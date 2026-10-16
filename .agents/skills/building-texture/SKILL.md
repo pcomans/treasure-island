@@ -52,6 +52,11 @@ Record the choice in about one line of the ordinary assignment or handoff: base/
 
 Follow the owner-approved [eight-hour whole-island Level 2 push](../../../AGENTS.md#zoom-in-authoring-pattern). Finish the current Chapel study first; then use the [island working checklist](../../../discovery/ISLAND_BUILDING_STAGE_CHECKLIST.md) to choose the lowest unfinished stage among approved landmark/audited priorities. Inspect unknowns before modeling, and favor bounded shared-family batches over disproportionate polish on one building. Preserve per-unit evidence and gates; catalog identity/credit remains canonical.
 
+Apply the [shared active zoom-level contract](../../../AGENTS.md#shared-active-zoom-level):
+author, reviewer and coordinator carry the same declared level from the ordinary
+task note. The ordering below guides explicit scope/transition decisions, not a
+silent switch of an already assigned round when another-level defect is noticed.
+
 Apply the owner's explicit order within the canonical [zoom-in pattern](../../../AGENTS.md#zoom-in-authoring-pattern):
 
 1. Whole-building/site basic shape: footprint and local ground fit, major volumes, proportions and coarse roof silhouette.

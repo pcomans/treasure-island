@@ -5,6 +5,12 @@ model: opus
 effort: high
 ---
 
+Read the [shared active zoom level](../../AGENTS.md#shared-active-zoom-level)
+from the task note and assignment, and name it in your verdict. Judge the assigned
+level; park other-level findings in the same critique without silently changing
+focus. Distinguish an in-level verdict from whole-quality acceptance, retaining
+all existing whole-quality HOLDs and immediate identity/safety/fit findings.
+
 Follow the independent visual critique/bar-raiser routing and discretionary non-ultra escalation in [AGENTS.md](../../AGENTS.md#bounded-subagent-execution); select effort explicitly at dispatch.
 
 Read project AGENTS.md, the assignment, the screenshots from `game/tests/shared/building_shots.gd` and the [canonical visual review guidance](../../.agents/skills/building-texture/references/semantic-art-review.md#absolute-art-gate). Apply its direct dated reference-pixel comparison and separate fidelity/finish findings; notes-only review cannot close whole-unit recognition. Remain separate from implementation and source/mechanical judgment. Inspect actual native originals at useful detail, ordinary gameplay views, relevant changed light and the supplied bounded motion samples. Do not wait for export before reviewing a coherent source render.

@@ -5,6 +5,12 @@ model: opus
 effort: max
 ---
 
+Read the [shared active zoom level](../../AGENTS.md#shared-active-zoom-level)
+in the ordinary task note and assignment. Name that level in your handoff and
+focus authoring/self-inspection on its expected result within protected scope.
+Record other-level issues without silently adopting them as the task; report a
+missing or conflicting level to the coordinator before dependent work.
+
 Current modeling route (owner override 2026-10-10): a named Codex art owner uses `gpt-6-astra` with reasoning effort `low`; independent reviewers use `gpt-6.1-sol` / `high`. Follow [AGENTS.md](../../AGENTS.md#bounded-subagent-execution), including its root boundary and explicit dispatch selection. Read this role body as reusable instructions; do not launch Claude for current modeling. The `model: opus` / `effort: max` frontmatter above remains the historical/optional Claude adapter and does not configure a GPT model.
 
 Read project AGENTS.md and the assignment (target building, references, allowed edits) before work. You are an executing subagent, not the root orchestrator. Reuse the proven complete driver and command-local checkout setup; preserve the assigned source, player-control and protected-region boundaries.

@@ -49,6 +49,48 @@ Keep reference and layout comparison active throughout. Before choosing work at 
 
 This order governs author scope and review: do not advance to extended later polish while substantive earlier architectural families remain missing or unresolved. Retain good existing materials and use minimal provisional materials when needed to see architecture; neither requires stripping sound finish nor permits texture studies to displace incomplete openings or roofs. Return to the earlier level whenever actual pixels expose such a gap. The existing progress reviewer must require RESCOPE or REWORK with a concrete REDIRECT to a bounded whole earlier family, appropriate to overall island completion. This adds no phase approval, survey/image quota or report framework. Aim for modern video-game quality; existing assets are a floor, not a ceiling. Truthful dated references, protected scope, native fit/playability and independent all-side review remain mandatory throughout.
 
+#### Shared active zoom level
+
+Each round has one declared active level from the five levels above. This is an
+architectural work stage, not camera distance or a quality score. Before dispatch,
+ROOT records it in the existing ordinary task note: level, target and bounded
+scope, expected result, authoring/review focus, appropriate views and protected
+constraints. Include that same context in author and reviewer prompts; all three
+roles identify the active level in their normal handoffs, verdicts and follow-ups.
+The task note is the shared source of truth, not a new registry or report.
+
+Authors focus on the declared result and retain design autonomy within scope.
+Reviewers judge that level explicitly and park out-of-level observations in the
+same ordinary critique; those observations do not automatically become tasks or
+change the verdict's scope. They may recommend RESCOPE under the existing review
+rules, but cannot silently switch levels. ROOT keeps follow-up work at the active
+level unless it explicitly records an old-level -> new-level transition, with its
+reason and supporting evidence, in the task note and next prompts. Apply existing
+owner strategy, authorization and review decisions to that transition; no extra
+approval stage is introduced. A missing or inconsistent declaration must be
+reconciled before dependent authoring/review, rather than guessed from a quoted
+defect. Immediate identity, safety or fit failures still cause the required HOLD
+or repair; they do not silently change the artistic level.
+
+Completion is relative to the declared level. For example, level 1 completes the
+assigned footprint/local ground fit, principal volumes, proportions, relative
+placement and coarse roof silhouette; it does not establish finished openings,
+materials or whole-building acceptance. A reference-supported plain wall is not
+an automatic defect or evidence of unfinished work. Useful near views support
+in-level diagnosis, while ordinary gameplay, all-side/context/island comparisons
+and all mandatory source, ownership, native fit/playability, independent review
+and full-suite checks remain applicable. A regression check does not silently
+expand the artistic focus. Whole-quality reviewers must still disclose incomplete
+other levels and withhold whole acceptance where required; an in-level PASS is
+explicitly scoped and cannot replace that judgment.
+
+Example: during level 2 entrance/window/roof architecture, an author completes the
+assigned major assemblies; the reviewer gives a level-2 verdict and parks a glazing
+finish observation. ROOT's next brief stays at level 2 for unresolved assembly
+work. Glazing finish becomes the focus only after an explicit supported transition
+to level 4, accounting for level 3 under the existing strategy. Preserve the finite
+edit/render/review loop and ordinary notes; add no checklist, image quota or gate.
+
 ## Current phase
 
 Implementation authorized for named executing subagents. On 2026-08-27 the owner explicitly approved the exact Godot bundle in `discovery/APPROACH_PROPOSAL.md`, including its vetted, logged downloads. Build and verify the first playable while preserving the approved product brief and the source-ID coverage contract; this authorization never makes the primary `/root` agent an executor.

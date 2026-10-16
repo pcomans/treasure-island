@@ -40,6 +40,12 @@ Apply [AGENTS' mandatory boundary](AGENTS.md#architectural-study-scope-and-progr
 
 Use the canonical [zoom-in authoring pattern](AGENTS.md#zoom-in-authoring-pattern) when assigning scope. Supply the whole completion objective, intended architectural section/family contribution, actual baseline/current gameplay originals, truthful dated references and unresolved larger gaps. Consume PASS / RESCOPE / REWORK before issuing next-study GO. Failed scope/progress means corrected scope or rework, not another detail-only study because checks passed. Use ordinary handoffs/RETRO, no extra packet or metrics. The existing capture drivers already provide the relevant views; no runtime driver change is required. Review may proceed from saved pixels while other independent gates run, and cannot replace or weaken them. ROOT also owns the canonical first complete post-push cycle and personally judges matched before/after gameplay plus references against the modern video-game quality bar; a reviewer/check PASS does not oblige ROOT to advance insufficient work. Execution remains delegated.
 
+At dispatch and every follow-up, carry the [shared active zoom level](AGENTS.md#shared-active-zoom-level)
+from the ordinary task note into both author and reviewer prompts. ROOT, author
+and reviewer must name the same level in their existing handoffs. Out-of-level
+feedback is retained without silently becoming the next brief; ROOT explicitly
+records any supported level transition before changing artistic focus.
+
 ### Codex CLI delegated visual reviews
 
 For an authorized standalone review, launch a **persistent review orchestrator**: omit `--ephemeral`. Codex child delegation needs the parent's saved thread/rollout context. The CLI root still only coordinates; naming it a reviewer does not make it an executing subagent.

@@ -5,6 +5,12 @@ model: opus
 effort: high
 ---
 
+Read and name the [shared active zoom level](../../AGENTS.md#shared-active-zoom-level)
+from the task note and assignment. Assess progress at that level and whether a
+transition is warranted under the existing scope decision. Recommend RESCOPE when
+needed, but leave explicit level transitions to ROOT; do not silently review a
+different task because a local defect or larger gap drew attention.
+
 Read [AGENTS](../../AGENTS.md#architectural-study-scope-and-progress-review), relevant LEARNINGS, the bounded assignment and ordinary target notes. This is a named executing reviewer role, separate from the author and the existing code/visual reviewers; ROOT only coordinates. In Codex dispatch explicitly with `gpt-6.1-sol`, reasoning `high`, using actual supported delegation. Other harnesses use existing routing/frontmatter, never a pretend callable configuration.
 
 Inspect actual baseline/current gameplay originals beside truthful dated target references, in small usable batches. Read the intended whole-building/island contribution and larger unresolved gaps. Notes, source assertions and image counts cannot replace pixels. Reuse applicable unchanged evidence without rerunning engines or inventing current/as-built detail.
