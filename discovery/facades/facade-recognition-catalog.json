@@ -36,7 +36,13 @@
         "game/resources/materials/world/building_1/building_1_projecting_base_stone.tres",
         "game/resources/materials/world/building_1/building_1_reveal_shadow.tres",
         "game/resources/materials/world/building_1/building_1_roof_metal.tres",
-        "game/resources/materials/world/building_1/building_1_warm_ivory_exact_trial.tres"
+        "game/resources/materials/world/building_1/building_1_warm_ivory_exact_trial.tres",
+        "game/resources/materials/world/building_1/building_1_public_glazing.tres",
+        "game/resources/materials/world/building_1/building_1_public_stucco.gdshader",
+        "game/resources/materials/world/building_1/building_1_public_stucco_base.tres",
+        "game/resources/materials/world/building_1/building_1_public_stucco_field.tres",
+        "game/resources/materials/world/building_1/building_1_public_stucco_trim.tres",
+        "game/resources/materials/world/building_1/building_1_public_window_metal.tres"
       ],
       "runtime_config_path": "game/resources/facades/building_1_hero_model.json",
       "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
@@ -12250,6 +12256,11 @@
           "review_id": "building-1-hero-2026-09-04:main",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "building1-opus-candidate005-2026-10-16:shared_zoom_review_sol",
+          "review_kind": "independent_reference_recognition",
+          "status": "accept"
         }
       ],
       "anchor_source_key": "r16681702",
@@ -12272,7 +12283,7 @@
       "legacy_adapter_ids": [],
       "protected_scopes": [
         {
-          "reason": "Rear and inner returns remain austere; no unsupported facade cadence is claimed.",
+          "reason": "Original rear and inner-return wall faces, material, collision and source ownership remain protected. Owner-released lower ribbon on runs 70\u201383 includes disclosed continuity inference on 78\u201379; only the reference-visible drum-end opening pair is added on the exposed central-tier join derived from runs 40/41 and bounded by run 38. The remaining upper drum stays blank; no hidden annex or interior is inferred.",
           "receiver_key": "building:r16681702:wall",
           "run_indices": [
             70,

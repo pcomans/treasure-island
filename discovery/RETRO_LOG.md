@@ -20022,3 +20022,119 @@ Next: model complete reference-supported rear/roof families only within newly ex
 - Worked: created a clean integration branch from fetched main bebe233, preserving the dirty content-main worktree and all unrelated building improvements. Applied only the three approved harness commits; independent seam review passed.
 - Did not work: append-only learning/retrospective changes and the skill scope paragraph conflicted across parallel history. Retained both current-main guidance and approved new contracts without replacing entire files.
 - Next time: check ancestry and exact overlap first, preserve current acceptance records, and validate the complete integrated state before a fast-forward push. No Mac build is inferred from code shipping.
+
+## 2026-10-16 — building1_opus_owner — first-candidate checkpoint, review held
+
+- Worked: clean isolated b801c2e source kept the Opus study independent of Gemini art. Same Claude Opus 5.5 Max session opened actual references and baseline images, authored a coherent public-family pass, and produced16 actual source-world captures. Shared rendered fit passed roof/wall/ground samples and all4 stock walk-ups with active supported rest before safe disable. Existing assets supplied public-only stucco materials; no image generation was needed.
+- Did not work: the executor initially used single-slash absolute-looking Claude Edit rules and path-scoped Write rules. Current CLI interprets the former as project-relative and ignores the latter for file authorization; all first attempted writes were denied. The original expensive read/design call ended without edits. Correcting to scoped Edit(//absolute/path) in the same session produced a native successful Write at2026-10-16T15:27:35.435Z. All original usage and failed calls are retained; cumulative session output includes thinking and must not be added twice.
+- Next time: use the maintained corrected harness permission guidance and verify the first already-needed native write before extensive author work. Preserve whole-building review as its own gate. Candidate001 is a first study, not accepted: normal independent review and further art/engine work are held by ROOT while canonical process/plan work proceeds. Spray and full suite remain open.
+
+### Claude Opus art-author retrospective (attributed from its same-session handoff)
+
+- Worked: actual reference pixels plus source coordinates identified the west-end pavilion faces; material consumer inspection exposed shared Building2 resources, so the pass adds public-only variants.
+- Did not work: initial file permissions prevented every attempted write; no source-ready or retrospective file could be written in that invocation.
+- Next time: establish actual scoped native write capability before dispatching substantial author work, then use early rendered feedback.
+
+
+## 2026-10-16T16:23:32+00:00 — building1_texture_environment: shared Level 1 handoff
+
+- Worked: appended the same explicit Level 1 scope to the existing private task note and continuation prompt, preserving their historical contents and aligning with the independent review assignment.
+- Did not work: earlier handoffs lacked a shared active stage; no new art result is claimed by this synchronization.
+- Next time: preserve the declared level through author/reviewer/coordinator handoffs and record any ROOT transition explicitly. Author remains held; no model, engine or art work ran.
+
+## 2026-10-16 — shared_zoom_review_sol: candidate001 Level 1 visual assessment
+
+- Worked: all 16 existing source-world originals beside the three dated public references supported a bounded principal-massing PASS without spending an engine slot. The shared Level 1 declaration kept opening/finish observations separate from the verdict.
+- Did not work: the default checkout was an older dirty tree; using the assigned private note and source worktree avoided touching unrelated work. No matched baseline/Gemini comparison or rear reference was inspected, so this review cannot claim improvement, rear fidelity or whole acceptance.
+- Next time: deliver the first concrete finding promptly after sufficient pixels, then append the concise verdict. ROOT may consider a declared Level 2 public-family assembly round; retain all independent source, fit, spray, suite and whole-quality gates.
+
+
+## 2026-10-16T17:23:44+00:00 — building1_texture_environment: explicit Level 2 transition
+
+- Worked: ROOT's accepted scoped Level 1 evidence was preserved while the same explicit Level 2 scope was appended to ordinary note and continuation prompt. Existing same-session identity and source-ready/capture boundaries were reused.
+- Did not work: historical prompt text still described a clean pre-author checkout; the new continuation explicitly supersedes that stale state without erasing history.
+- Next time: transition level, expected result and parked findings together; keep author execution and engine-slot permission explicit. No model, engine or art invocation ran in this handoff round.
+
+## 2026-10-16 — shared_zoom_review_sol: coalesced hourly checkpoint
+
+- Worked: reused the completed 16-frame/three-reference visual review and ordinary gate notes; ROOT's explicit Level 2 transition keeps the next task on complete public-family assemblies instead of glazing finish.
+- Did not work: assigning the same visual reviewer to the mandatory separate progress role conflicts with AGENTS' role separation. Reported that boundary before claiming a second gate.
+- Next time: use another named reviewer for the distinct progress decision and reuse existing pixels; this checkpoint adds no art, engine result or whole-island improvement claim.
+
+## 2026-10-16 — shared_zoom_review_sol: candidate002 Level 2 review
+
+- Worked: actual matched forecourt, pavilion and context pixels showed separated entrance assemblies and removal of protruding tier blades; all 16 current frames and three dated references were inspected without a new engine run. Fit002 was reported separately rather than inferred from stills.
+- Did not work: completion of the north public junction remains unresolved; the author's acknowledged cornice/base-only region cannot become a supported blank wall merely because the reference is partly occluded. Scoped improvement alone does not close a requested whole-family stage.
+- Next time: resolve remaining public-family junctions within the same Level 2 composition and disclose reversible inference; preserve accepted massing and keep glazing finish parked. Matched island overviews were nearly indistinguishable, so no broad island-quality improvement is claimed.
+
+
+## 2026-10-16T18:35:44+00:00 — building1_texture_environment: Level 2 candidate002 execution
+
+- Worked: resumed the original Opus session, retained full raw usage, awaited native terminal before source capture, and used shared shots/fit drivers. Candidate002 rendered16originals without runtime errors; fit002 passed all four stock walk-ups with active rest then safe final.
+- Did not work: coherent whole-family closure remained incomplete at northjunction runs17–20; visual reviewer kept Level2 HOLD despite clear assembly improvements and mechanical PASS. Two read-only Bash requests were denied during authoring; native source edits succeeded and the failures remain retained.
+- Next time: carry unresolved in-level architecture explicitly into the same-level handoff, park finish, and use the remaining bounded capture for a coherent correction rather than repeating successful native checks for bookkeeping.
+
+## 2026-10-16 — shared_zoom_review_sol: candidate003 Level 2 visual PASS
+
+- Worked: matched forecourt originals made the north-junction completion visible, and the author separated partial reference evidence from reversible inference. All 16 current views retained coherent public-family assemblies, accepted massing and surrounding context.
+- Did not work: these three public references still cannot establish protected rear/SE fidelity or hidden roof construction; island views are nearly indistinguishable at their scale, so no broad island improvement is claimed.
+- Next time: retain the completed public-family result while closing independent source/CODE, spray, suite and whole-quality/progress gates. Keep Level 3 detail and Level 4 finish parked until ROOT explicitly changes focus; no more capture work was requested in the exhausted tranche.
+
+
+## 2026-10-16T19:15:15+00:00 — building1_texture_environment: Level 2 final correction and capture
+
+- Worked: retained the original Opus session and same active level, used the distinct progress GO to address the northjunction assembly, then captured candidate003 through the shared driver. Independent scoped Level2 visual PASS and final fit003 PASS are recorded separately; all handles reached terminal and engine PIDs were absent before release.
+- Did not work: candidate002 needed one more in-level architectural closure pass. The author's parked-finish note called material work Level3; the executor clarified canonical Level4 in the ordinary handoff without changing active Level2.
+- Next time: preserve explicit level labels and inference limits across author/reviewer handoffs. Keep the bounded capture budget visible and do not promote scoped visual/mechanical success into whole acceptance. Both authorized correction captures are consumed; no extra source/model/engine iteration was started.
+- Author retrospective retained in private AUTHOR_RETRO.md: reference visibility was limited at the northjunction, so the final pass disclosed low-resolution observations and lower-floor inference rather than treating occlusion as proof of blankness. No new image generation was used in these Level2 rounds.
+
+
+## 2026-10-16T19:25:26+00:00 — building1_texture_environment: candidate003 gallery delivery
+
+- Worked: reused the exact allowlisted page and embedded original frames; checked HTTP, private-route404s, five loaded browser images and the rendered page. Scoped passes and open gates are visible together.
+- Did not work: the prior gallery server was no longer running; the unchanged server needed a retained live handle.
+- Next time: verify the delivery process is live before handing over its URL, and keep scoped-level success distinct from whole-building acceptance. No extra art or engine cycle was needed.
+
+## 2026-10-16 — independent_checkpoint_sol: candidate004 CODE/source review
+
+- Worked: reviewed the complete Building1 facade/config patch from `b801c2e` plus the new public materials, and directly compared unchanged tower builders, source/receiver/collision-body functions, target, vertical values and massing chains. No generated/shared-consumer edits or blocking CODE defect found; CODE PASS is separate from visual and whole acceptance.
+- Did not work: asking about unlogged canopy/clip branch flags risked adding a metadata-only rerun without a demonstrated material defect. WORLD_READY is not branch evidence; no flag PASS is claimed. Existing004 native fit/support and actual source-bound spray supply their sampled scopes, not exhaustive topology proof.
+- Next time: concentrate on changed geometry/ownership seams, retain explicit fallback and comparison limits, and request extra native work only for a concrete uncovered risk. Review only any new final correction delta. No engine/model/source edit was performed by this reviewer; full-suite and visual closure remain with their assigned owners.
+
+## 2026-10-16 — shared_zoom_review_sol: candidate004 bounded SE/rear review
+
+- Worked: direct rear-reference comparison separated authentic drum blankness from two concrete Level2 gaps: exposed ribbon interruption and the missing observed end-window pair. Scoped released-host work passed without claiming whole acceptance or inventing finish work.
+- Did not work: the review took too long to finalize after sufficient evidence; five current island frames remained uninspected when ROOT bounded the round. Reported11-frame coverage explicitly instead of claiming all16.
+- Next time: send concrete verdict before extended notes, release RETRO windows during inspection, and inspect the final candidate's complete all-side/context/island set for whole-quality closure. No Stage3–5 refinement is required absent an actual substantive gap.
+
+
+## 2026-10-16T20:59:34+00:00 — building1_texture_environment: candidate004 and completion handoff
+
+- Worked: exact host mapping preceded source writes; existing shared capture/fit/spray produced current-source evidence without a new driver. CODE separated source preservation from unobserved runtime flags.
+- Did not work: conservative visible-host limits left a ribbon gap where the frozen world lacks the reference annex; the observed drum pair also needed explicit bounded release. Waiting for polished visual notes delayed a correction already supported by concrete findings.
+- Next time: carry concrete independent REWORK evidence into authorized continuation promptly, preserving final independent review. Disclose continuity inference, retain broad authentic plainness, and avoid metadata-only reruns that do not prove geometry.
+
+## 2026-10-16 — independent_checkpoint_sol: candidate004 distinct progress decision
+
+- Worked: personally compared actual003/004 east gameplay originals,004 northeast context and the dated18July2023 rear reference. New SE upper windows and the long podium ribbon are substantial Level2 family progress. GO for the ROOT-released same-Level2 correction: continue the visible ribbon through78–79 as disclosed inference and add only the observed small/tall drum-end pair after exact host/producer binding. Preserve existing masses, public gains, blank drum elsewhere, tower and all verification gates.
+- Did not work: briefly waited for the polished visual note after concrete independent REWORK findings and personal pixels already established the correction; ROOT removed that redundant acknowledgment dependency. Neither readiness nor CODE PASS supplies whole acceptance.
+- Next time: consume sufficient actual review evidence and dispatch the authorized correction promptly; finish ordinary notes alongside ongoing work. Review only the resulting source delta and use the remaining capture for independent comparison. No engine/model/source edit by this reviewer.
+
+## 2026-10-16 — independent_checkpoint_sol: candidate005 narrow CODE delta
+
+- Worked: reused CODE004 PASS and reconstructed only004→005 source/config edits from retained native Edit inputs in memory. The new frame derives the same40/41 inner-partition join as the wall producer, bounded by run38 intersection; identity/fit guards fail closed. The pair reuses the window module within that exposed bay;78–79 uses the already-reviewed ribbon emitter with explicit inference disclosure. CODE005 PASS; no new collision, material, roof, tower or shared-consumer changes in this delta.
+- Did not work: no blocking defect found. Source review does not establish rendered recognition or native005 fit/spray, which remain separate executor/reviewer evidence.
+- Next time: keep final review to changed seams instead of replaying the baseline audit, and consume fresh capture/fit results through the assigned independent gates. No engine, model or source edit ran in this review; intended-source and own-RETRO whitespace checks passed.
+
+
+## 2026-10-16T21:19:03+00:00 — building1_texture_environment: candidate005 completion
+
+- Worked: exact host binding and bounded continuity inference closed the two remaining assembly gaps; independent whole visual and CODE passed, current fit passed, and unchanged actual spray evidence was reused. Gallery serves original005pixels with privacy routes intact.
+- Did not work: fresh study checkout lacked pinned Node packages, so the full suite failed only validation/determinism after every engine/island check passed. Installed lockfile dependencies and reran those failed components successfully; retained original failure.
+- Next time: verify local npm dependencies before the complete suite; carry accepted concrete findings forward without waiting for polished notes. Final shipping still requires the full integrated-state suite and remote fast-forward verification. Author's private AUTHOR_RETRO records exact-host derivation and disclosed inference; no extra material-generation or art-polish round was added.
+
+## 2026-10-16 — shared_zoom_review_sol: candidate005 whole-building visual PASS
+
+- Worked: all16current originals, four dated references and five matched candidate001 island views resolved the two concrete rear gaps and supported Level2 closure plus whole-building game-art PASS. No further Stage3–5 refinement is needed.
+- Did not work: exact as-built fidelity remains limited by unseen faces, inferred cadence/continuity, simplified detail and dated viewpoints; these limits do not establish a new substantive art defect.
+- Next time: give the explicit verdict before bookkeeping, then promptly append this short retrospective and release the writer window so accepted work can ship. Review ID: building1-opus-candidate005-2026-10-16:shared_zoom_review_sol.

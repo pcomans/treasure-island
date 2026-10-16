@@ -1,5 +1,5 @@
 {
-  "schema_version": "ti.building-1-hero-model/1",
+  "schema_version": "ti.building-1-hero-model/2",
   "model_id": "TREASURE-ISLAND-BUILDING-1-HERO-01",
   "target": {
     "building_source_key": "r16681702",
@@ -17,7 +17,8 @@
     "primary_nps_sections": "Section 7, pages 5-7",
     "museum_reference_ids": ["TIM-BUILDING-THE-BAY-BRIDGE-AND-TREASURE-ISLAND", "TIM-SCULPTURES-AND-ISLAND"],
     "local_horizontal_authority": "generated/world/chunks/x_-1__z_2.json and generated/world/chunks/x_0__z_2.json",
-    "checked": "2026-09-04",
+    "public_family_reference_observations": "September 2025 Street View views from the WSW forecourt, the northwest (California Ave) and the southwest (17 Treasure Island Rd), plus an 18 July 2023 photograph of the rear from the east; private originals, not shipped",
+    "checked": "2026-10-16",
     "source_photography_shipped": false
   },
   "vertical_production_inference_m": {
@@ -40,21 +41,47 @@
   },
   "facade_schedule": {
     "central_runs": [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43],
+    "crescent_field_runs": [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37],
     "central_window_count": 11,
     "central_lights_per_window": 18,
-    "north_wing_window_runs": [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
-    "south_wing_window_runs": [44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56],
+    "north_wing_window_runs": [9, 10, 11, 12, 13, 14, 15, 16],
+    "south_wing_window_runs": [44, 45, 46, 47, 48, 49, 50, 51],
     "upper_windows_per_wing": 8,
     "upper_lights_per_window": 10,
     "lower_windows_per_wing": 7,
-    "north_end_run": 93,
-    "south_end_run": 60,
+    "lower_lights_per_window": 6,
+    "north_face_window_runs": [93, 94, 95, 96],
+    "north_face_windows_per_floor": 6,
+    "north_pavilion": {
+      "center_runs": [6],
+      "flank_runs": [[3, 4], [8]],
+      "corner_runs": [0, 1],
+      "entry": {"recess_half_width": 1.15, "door_half_width": 0.8, "height": 3.1, "transom_height": 0.6, "jamb_width": 0.32, "jamb_front": 0.34, "hood_overhang": 0.12, "hood_height": 0.42, "hood_front": 0.55}
+    },
+    "south_pavilion": {
+      "center_runs": [54, 55, 56],
+      "flank_runs": [[52], [58]],
+      "corner_runs": [60],
+      "entry": {"recess_half_width": 1.9, "door_half_width": 1.15, "height": 3.2, "transom_height": 0.65, "jamb_width": 0.32, "jamb_front": 0.34, "hood_overhang": 0.12, "hood_height": 0.42, "hood_front": 0.55}
+    },
     "tall_windows_per_end": 2,
     "lights_per_tall_end_window": 20,
-    "small_flanking_windows_per_end": 2,
     "relief_proxies_per_end": 1,
     "entrance_groups": 3,
-    "doors_per_entrance_group": 3
+    "entrance_bays": [2, 5, 8],
+    "doors_per_entrance_group": 3,
+    "junction_windows": [
+      {"run": 38, "glass_width": 0.9, "columns": 1},
+      {"run": 43, "glass_width": 1.2, "columns": 2}
+    ],
+    "north_junction_windows": [
+      {"run": 17, "glass_width": 1.8, "columns": 2},
+      {"run": 20, "glass_width": 2.0, "columns": 2}
+    ],
+    "se_face_runs": [63, 64, 65, 66, 67, 68, 69],
+    "rear_ribbon_host_chains": [[70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83]],
+    "drum_end_openings": {"join_runs": [40, 41], "occluding_inner_run": 38},
+    "protected_seam_piers": {"north_run_start": 93, "south_run_end": 69}
   },
   "truth_boundary": {
     "role": "source_anchored_recognizability_hero_production_inference",
@@ -65,6 +92,7 @@
     "surveyed_cadence": false,
     "interior_modeled": false,
     "as_built_fidelity_claimed": false,
+    "pavilion_runs_bound_to_frozen_stepped_west_ends": true,
     "visual_review_status": "pending_independent_original_detail_review"
   }
 }

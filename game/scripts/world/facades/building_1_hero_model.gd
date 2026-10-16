@@ -12,22 +12,54 @@ const TOWER_SOURCE_KEY := "w1222720021"
 const TOWER_WALL_KEY := "building:w1222720021:wall"
 const TOWER_ROOF_KEY := "building:w1222720021:roof"
 const TARGET_KEYS := [BUILDING_WALL_KEY, BUILDING_ROOF_KEY, TOWER_WALL_KEY, TOWER_ROOF_KEY]
-const NORTH_WING_WINDOW_RUNS := [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
-const SOUTH_WING_WINDOW_RUNS := [44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56]
+const CRESCENT_FIELD_RUNS := [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37]
+const NORTH_WING_WINDOW_RUNS := [9, 10, 11, 12, 13, 14, 15, 16]
+const SOUTH_WING_WINDOW_RUNS := [44, 45, 46, 47, 48, 49, 50, 51]
+const NORTH_FACE_WINDOW_RUNS := [93, 94, 95, 96]
+const ENTRANCE_BAYS := [2, 5, 8]
+const JUNCTION_WINDOW_RUNS := [38, 43]
+const NORTH_JUNCTION_WINDOW_RUNS := [17, 20]
+const PAVILION_ENTRY_KEYS := ["recess_half_width", "door_half_width", "height", "transom_height", "jamb_width", "jamb_front", "hood_overhang", "hood_height", "hood_front"]
+# Frozen stepped west ends of both wings: a projecting centre face, two flanks
+# and the recessed corner bay. Identity is rechecked against actual coordinates.
+const NORTH_PAVILION_RUNS := {"center_runs": [6], "flank_runs": [[3, 4], [8]], "corner_runs": [0, 1]}
+const SOUTH_PAVILION_RUNS := {"center_runs": [54, 55, 56], "flank_runs": [[52], [58]], "corner_runs": [60]}
+# Catalog protected scope: the austere rear and inner returns keep their exact
+# faces, original material and collision. Only the released lower-ribbon hosts
+# below carry relief, and only the ribbon.
+const PROTECTED_RUNS := [70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109]
+# SE face of the south wing, released for its narrow-window and ribbon assembly.
+const SE_FACE_RUNS := [63, 64, 65, 66, 67, 68, 69]
+# Podium runs carrying the lower ribbon. The dated 2023 rear view shows it on
+# runs 70-77 and 80-83; across 78-79, hidden there by an unmapped annex, it
+# continues as released production inference. Later runs pass the silhouette
+# and stay unreleased.
+const REAR_RIBBON_HOST_CHAINS := [[70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83]]
+# The drum-end bay with the observed small and tall openings: the exposed east
+# part of the central tier's join between runs 40 and 41, where run 38's inner
+# face crosses it. Every other drum face stays blank.
+const DRUM_END_JOIN_RUNS := [40, 41]
+const DRUM_END_OCCLUDING_RUN := 38
 const PHYSICS_WORLD_SOLID := 1 << 0
 const PHYSICS_SPRAY_SURFACE := 1 << 2
 const RENDER_WORLD_VISIBLE := 1 << 0
 const RENDER_BUILDING_WALL := 1 << 1
 const VISUAL_REVIEW_STATUS := "pending_independent_original_detail_review"
 
+# Original resources stay on protected runs, inner tier faces and the tower;
+# Building 2 and calibration code share them, so this pass does not edit them.
 const WALL_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_warm_ivory_exact_trial.tres")
 const TRIM_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_light_trim.tres")
 const GLASS_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_bluegrey_glass.tres")
 const BRONZE_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_bronze.tres")
 const ROOF_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_roof_metal.tres")
-const BASE_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_projecting_base_stone.tres")
 const REVEAL_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_reveal_shadow.tres")
-const CANOPY_UNDERSIDE_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_canopy_underside.tres")
+# Public-only variants for the crescent, wings and pavilions.
+const PUBLIC_WALL_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_stucco_field.tres")
+const PUBLIC_TRIM_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_stucco_trim.tres")
+const PUBLIC_BASE_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_stucco_base.tres")
+const PUBLIC_FRAME_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_window_metal.tres")
+const PUBLIC_GLASS_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_glazing.tres")
 
 
 static func matches_record(record: Dictionary) -> bool:
@@ -62,87 +94,195 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	var two_y := float(vertical.two_story_roof_y)
 	var three_y := float(vertical.three_story_roof_y)
 	var four_y := float(vertical.four_story_roof_y)
-	var wall := _bucket()
-	var base := _bucket()
-	var trim := _bucket()
-	var glass := _bucket()
-	var reveal := _bucket()
-	var bronze := _bucket()
+	var north_pavilion := schedule.north_pavilion as Dictionary
+	var south_pavilion := schedule.south_pavilion as Dictionary
+	if not _pavilion_identity_valid(record, north_pavilion) or not _pavilion_identity_valid(record, south_pavilion):
+		return _failure("building_1_hero_pavilion_identity", "Building 1 pavilion runs no longer bind to the frozen stepped west ends.", record)
+	if _crown_rise(front, three_y) > float(front.pavilion_crown_max_rise_above_roof) + 0.0001:
+		return _failure("building_1_hero_crown_rise", "Building 1 pavilion crowns exceed the approved rise above the public roof.", record)
+	var se_runs := _int_array(schedule.se_face_runs)
+	var ribbon := front.podium_ribbon as Dictionary
+	if not _rear_hosts_valid(record, se_runs, schedule.rear_ribbon_host_chains as Array) or float(ribbon.top) + float(ribbon.head_height) >= two_y:
+		return _failure("building_1_hero_rear_ribbon_identity", "Building 1 SE and rear ribbon hosts no longer bind to the frozen podium below the blank drum.", record)
+	var drum_openings := front.drum_end_openings as Dictionary
+	var drum_frame := _drum_end_frame(record, schedule.drum_end_openings as Dictionary, float(vertical.central_inward_depth))
+	if not _drum_openings_fit(drum_frame, drum_openings, front.wing_window_style as Dictionary, two_y, four_y):
+		return _failure("building_1_hero_drum_opening_identity", "Building 1 drum-end openings no longer bind to the exposed central-tier join at the SE end.", record)
+	var north_runs := _int_array(chains.north_three_story_runs)
+	var central_runs := _int_array(chains.central_four_story_runs)
+	var south_runs := _int_array(chains.south_three_story_runs)
+	var north_depth := float(vertical.north_wing_inward_depth)
+	var central_depth := float(vertical.central_inward_depth)
+	var original := _bucket()
+	var buckets := {
+		"wall": _bucket(),
+		"trim": _bucket(),
+		"base": _bucket(),
+		"frame": _bucket(),
+		"glass": _bucket(),
+		"reveal": _bucket(),
+		"bronze": _bucket(),
+	}
 	var collision := _bucket()
 
-	_append_exact_base_walls(wall, collision, record, two_y)
-	_append_strip_walls(wall, collision, record, _int_array(chains.north_three_story_runs), two_y, three_y, float(vertical.north_wing_inward_depth))
-	_append_strip_walls(wall, collision, record, _int_array(chains.central_four_story_runs), two_y, four_y, float(vertical.central_inward_depth))
-	_append_strip_walls(wall, collision, record, _int_array(chains.south_three_story_runs), two_y, three_y, float(vertical.south_wing_inward_depth))
+	# Exact source walls and stepped tiers keep their outer geometry, collision
+	# and emission order. Public outer faces take the public coating; protected
+	# runs and inner tier faces keep the original material. The 11 m wing tiers'
+	# inner partitions are clipped to the frozen footprint; the central tier that
+	# carries the separate tower is unchanged.
+	var tier_clip := _tier_clip(record)
+	_append_exact_base_walls(buckets.wall, original, collision, record, two_y)
+	_append_strip_walls(buckets.wall, original, collision, record, north_runs, two_y, three_y, north_depth, tier_clip)
+	_append_strip_walls(buckets.wall, original, collision, record, central_runs, two_y, four_y, central_depth)
+	_append_strip_walls(buckets.wall, original, collision, record, south_runs, two_y, three_y, float(vertical.south_wing_inward_depth), tier_clip)
+	_append_projecting_base(buckets.base, collision, record, central_runs, front)
 
-	var central_runs := _int_array(schedule.central_runs)
-	_append_projecting_base(base, trim, collision, record, central_runs, front)
-	_append_public_front_window_schedule(glass, reveal, trim, record, central_runs, int(schedule.central_window_count), front)
-	_append_public_front_pilasters(trim, record, central_runs, int(schedule.central_window_count), front)
-	_append_entry_groups(glass, reveal, bronze, record, central_runs, int(schedule.entrance_groups), int(schedule.doors_per_entrance_group), front)
+	# Everything below appends after the accepted collision prefix.
+	# Crescent: rusticated projecting base, eleven pier-framed two-story bays and
+	# three glazed-bronze entrance groups under the bays the dated view shows.
+	var field_runs := _int_array(schedule.crescent_field_runs)
+	var crescent := _crescent_layout(record, field_runs, int(schedule.central_window_count), front)
+	_append_base_rustication(buckets.base, record, central_runs, front)
+	_append_crescent_bays(buckets, record, field_runs, crescent, front)
+	_append_entry_composition(buckets, collision, record, field_runs, crescent, schedule.entrance_bays as Array, int(schedule.doors_per_entrance_group), front)
+	_append_junction_windows(buckets, record, schedule.junction_windows as Array, front)
 
-	var north_window_runs := _int_array(schedule.north_wing_window_runs)
-	var south_window_runs := _int_array(schedule.south_wing_window_runs)
-	for wing_runs: Array[int] in [north_window_runs, south_window_runs]:
-		_append_window_schedule(glass, trim, record, wing_runs, int(schedule.upper_windows_per_wing), 2.2, 2.35, 2.8, 2, 5, 0.13, 16.9)
-		_append_window_schedule(glass, trim, record, wing_runs, int(schedule.lower_windows_per_wing), 2.5, 2.05, 2.45, 2, 3, 0.23, 10.35)
-		_append_chain_band(trim, record, wing_runs, 19.55, 0.22, 0.16)
+	# Wings, the north face and both west-end pavilions share one floor schedule.
+	var floors := front.window_floors as Array
+	var wing_style := front.wing_window_style as Dictionary
+	for wing_runs: Array[int] in [_int_array(schedule.north_wing_window_runs), _int_array(schedule.south_wing_window_runs)]:
+		_append_wing_facade(buckets, record, wing_runs, int(schedule.upper_windows_per_wing), int(schedule.lower_windows_per_wing), floors, front)
+	var north_face := _int_array(schedule.north_face_window_runs)
+	var north_face_centers := _evenly_spaced(_chain_length(record, north_face), int(schedule.north_face_windows_per_floor), float(front.north_face_window_margin_m))
+	_append_window_grid(buckets, record, north_face, north_face_centers, float(front.north_face_window_width), floors, wing_style)
+	_append_north_junction_bays(buckets, record, schedule.north_junction_windows as Array, floors, wing_style)
+	_append_pavilion(buckets, collision, record, north_pavilion, floors, front)
+	_append_pavilion(buckets, collision, record, south_pavilion, floors, front)
 
-	_append_end_composition(glass, trim, record, int(schedule.north_end_run), front)
-	_append_end_composition(glass, trim, record, int(schedule.south_end_run), front)
+	# SE face and the visible podium (dated 2023 rear view): one lower ribbon
+	# wraps from the SE face across the bound rear hosts, butting the protected
+	# seam pier. Above the SE ribbon, a podium-line string course and one narrow
+	# window over each bay.
+	var seam_width := float(front.junction_pier_width)
+	var se_end := _chain_length(record, se_runs) - seam_width
+	var se_start := float(ribbon.end_inset_m)
+	var se_layout := _ribbon_layout(se_start, se_end, true, false, ribbon)
+	var se_windows: Array[float] = []
+	for bay in int(se_layout.bays):
+		se_windows.append(float(se_layout.first) + float(se_layout.pitch) * (float(bay) + 0.5))
+	var se_y := front.se_narrow_window_y as Array
+	var se_floor := [{"bottom": float(se_y[0]), "top": float(se_y[1]), "rows": int(front.se_narrow_window_rows)}]
+	_append_window_grid(buckets, record, se_runs, se_windows, float(front.se_narrow_window_width), se_floor, wing_style)
+	var string_course := front.se_podium_string_course as Array
+	_append_path_band(buckets.trim, _chain_points(record, se_runs, se_start, se_end), float(string_course[0]), float(string_course[1]), float(string_course[2]), -0.03)
+	_append_ribbon(buckets, record, se_runs, se_start, se_end, true, false, ribbon)
+	var rear_chains := schedule.rear_ribbon_host_chains as Array
+	var rear_hosts: Array[int] = []
+	for chain_index in rear_chains.size():
+		var host := _int_array(rear_chains[chain_index] as Array)
+		rear_hosts.append_array(host)
+		# The first host chain continues the SE ribbon past the seam pier.
+		_append_ribbon(buckets, record, host, 0.0, _chain_length(record, host), chain_index > 0, true, ribbon)
+	# Only the drum-end bay's observed tall and small openings; the rest of the
+	# drum stays blank.
+	_append_drum_end_openings(buckets, drum_frame, drum_openings, wing_style)
 
-	# Append only after the accepted trim, preserving its complete array prefix.
-	for wing_runs: Array[int] in [north_window_runs, south_window_runs]:
-		_append_wing_jamb_schedule_v2(trim, record, wing_runs, int(schedule.upper_windows_per_wing), 2.2, 2.35, 2.8, 0.13, 16.9, front)
-		_append_wing_jamb_schedule_v2(trim, record, wing_runs, int(schedule.lower_windows_per_wing), 2.5, 2.05, 2.45, 0.23, 10.35, front)
+	# Cornices wrap each tier's exposed end caps; plinths ground the wing and
+	# pavilion walls; piers stand at the two protected-run seams.
+	var cornice_back := float(front.cornice_back)
+	var inner_trim := float(front.cornice_inner_trim)
+	var butt_trim := float(front.cornice_butt_trim)
+	var wing_cornice := front.wing_cornice as Array
+	var north_path := _chain_points(record, north_runs, 0.0, _chain_length(record, north_runs) - butt_trim)
+	var north_cap := _strip_cap(record, north_runs[0], true, north_depth - inner_trim)
+	_prepend_point(north_path, north_cap.point as Vector3, north_cap.normal as Vector3)
+	_append_cornice(buckets.trim, north_path, wing_cornice, cornice_back)
+	var central_path := _chain_points(record, central_runs, 0.0, _chain_length(record, central_runs))
+	var central_first := _strip_cap(record, central_runs[0], true, central_depth - inner_trim)
+	var central_last := _strip_cap(record, central_runs[central_runs.size() - 1], false, central_depth - inner_trim)
+	_prepend_point(central_path, central_first.point as Vector3, central_first.normal as Vector3)
+	_append_point(central_path, central_last.point as Vector3, central_last.normal as Vector3)
+	_append_cornice(buckets.trim, central_path, front.crescent_cornice as Array, cornice_back)
+	var south_path := _chain_points(record, south_runs, 0.0, _chain_length(record, south_runs))
+	var south_return := _strip_cap(record, south_runs[south_runs.size() - 1], false, float(front.cornice_return_length))
+	_append_point(south_path, south_return.point as Vector3, south_return.normal as Vector3)
+	_append_cornice(buckets.trim, south_path, wing_cornice, cornice_back)
+	var seams := schedule.protected_seam_piers as Dictionary
+	_append_seam_pier(buckets.trim, collision, record, int(seams.north_run_start), true, front)
+	_append_seam_pier(buckets.trim, collision, record, int(seams.south_run_end), false, front)
+	var seam_trim := float(front.plinth_seam_trim)
+	_append_plinth(buckets.base, record, north_runs, seam_trim, butt_trim, [_pavilion_door_gap(record, north_runs, north_pavilion)], front)
+	_append_plinth(buckets.base, record, south_runs, 0.0, seam_trim, [_pavilion_door_gap(record, south_runs, south_pavilion)], front)
 
 	var root := _hero_root("Building1HeroWall", record, "building_wall")
 	var specs: Array[Dictionary] = [
-		{"name": "HeroIvory", "bucket": wall, "material": WALL_MATERIAL, "layers": RENDER_BUILDING_WALL},
-		{"name": "HeroProjectingBase", "bucket": base, "material": BASE_MATERIAL, "layers": RENDER_BUILDING_WALL},
-		{"name": "HeroPublicFrontReveals", "bucket": reveal, "material": REVEAL_MATERIAL, "layers": RENDER_BUILDING_WALL},
-		{"name": "HeroGlass", "bucket": glass, "material": GLASS_MATERIAL, "layers": RENDER_BUILDING_WALL},
-		{"name": "HeroTrim", "bucket": trim, "material": TRIM_MATERIAL, "layers": RENDER_BUILDING_WALL},
-		{"name": "HeroBronze", "bucket": bronze, "material": BRONZE_MATERIAL, "layers": RENDER_BUILDING_WALL},
+		{"name": "HeroOriginalIvory", "bucket": original, "material": WALL_MATERIAL, "layers": RENDER_BUILDING_WALL},
+		{"name": "HeroPublicStucco", "bucket": buckets.wall, "material": PUBLIC_WALL_MATERIAL, "layers": RENDER_BUILDING_WALL},
+		{"name": "HeroPublicBase", "bucket": buckets.base, "material": PUBLIC_BASE_MATERIAL, "layers": RENDER_BUILDING_WALL},
+		{"name": "HeroPublicTrim", "bucket": buckets.trim, "material": PUBLIC_TRIM_MATERIAL, "layers": RENDER_BUILDING_WALL},
+		{"name": "HeroEntryReveals", "bucket": buckets.reveal, "material": REVEAL_MATERIAL, "layers": RENDER_BUILDING_WALL},
+		{"name": "HeroGlazing", "bucket": buckets.glass, "material": PUBLIC_GLASS_MATERIAL, "layers": RENDER_BUILDING_WALL},
+		{"name": "HeroWindowMetal", "bucket": buckets.frame, "material": PUBLIC_FRAME_MATERIAL, "layers": RENDER_BUILDING_WALL},
+		{"name": "HeroBronze", "bucket": buckets.bronze, "material": BRONZE_MATERIAL, "layers": RENDER_BUILDING_WALL},
 	]
+	var crescent_style := front.crescent_window_style as Dictionary
+	var crescent_cornice := front.crescent_cornice as Array
 	var metadata := _common_metadata(config, record, "building_wall")
 	metadata.merge({
 		"exact_outer_and_inner_run_count": 110,
+		"protected_runs_original_faces_and_material": true,
+		"public_family_pass_id": str(bar_config.pass_id),
+		"public_front_believability_config_path": BAR_CONFIG_PATH,
 		"central_window_count": int(schedule.central_window_count),
 		"central_lights_per_window": int(schedule.central_lights_per_window),
+		"crescent_pier_count": int(schedule.central_window_count) + 1,
+		"crescent_reeds_per_pier": int(front.crescent_pier_reeds),
+		"crescent_window_glass_width_m": float(crescent.glass),
+		"crescent_bay_pitch_m": float(crescent.pitch),
 		"upper_windows_per_wing": int(schedule.upper_windows_per_wing),
 		"upper_lights_per_window": int(schedule.upper_lights_per_window),
 		"lower_windows_per_wing": int(schedule.lower_windows_per_wing),
-		"wing_window_quality_candidate_id": "building-1-wing-window-returns-v2-2026-09-08",
-		"wing_jamb_return_openings": 2 * (int(schedule.upper_windows_per_wing) + int(schedule.lower_windows_per_wing)),
-		"wing_jamb_return_strips_per_opening": 4,
-		"wing_dark_backing_boxes": 0,
-		"wing_glazing_and_existing_frame_geometry_preserved": true,
+		"lower_lights_per_window": int(schedule.lower_lights_per_window),
+		"north_face_windows_per_floor": int(schedule.north_face_windows_per_floor),
+		"pavilion_runs_bound_to_stepped_west_ends": true,
+		"tall_windows_per_pavilion": int(schedule.tall_windows_per_end),
+		"lights_per_tall_pavilion_window": int(schedule.lights_per_tall_end_window),
+		"abstract_winged_relief_count": 2,
+		"pavilion_crowns_solid_with_congruent_collision": true,
+		"pavilion_crown_rise_above_roof_m": _crown_rise(front, three_y),
+		"chest_height_relief_collision_congruent": true,
 		"entrance_groups": int(schedule.entrance_groups),
 		"doors_per_entrance_group": int(schedule.doors_per_entrance_group),
-		"end_composition_count": 2,
-		"relief_proxy_count": 0,
-		"neutral_end_relief_location_field_count": 2,
-		"misleading_cruciform_proxy_count": 0,
-		"public_front_believability_pass": true,
-		"public_front_believability_config_path": BAR_CONFIG_PATH,
-		"recognition_status": "accepted_before_quality_hardening_and_preserved",
-		"public_front_depth_created_by_geometry": true,
-		"scalar_material_value_separation": true,
-		"image_texture_used_for_pass": false,
-		"genai_texture_candidate_consumed": false,
-		"central_recessed_glazing_field_count": int(schedule.central_window_count),
-		"central_pilaster_count": int(front.pilaster_count),
-		"fluting_ribs_per_pilaster": int(front.pilaster_flutes_per_pilaster),
-		"public_front_depth_bands_m": [
-			float(front.window_reveal_center_projection) + float(front.window_reveal_depth) * 0.5,
-			float(front.window_frame_center_projection) + float(front.window_frame_depth) * 0.5,
-			float(front.pilaster_flute_center_projection) + float(front.pilaster_flute_depth) * 0.5,
+		"entrance_bays": _int_array(schedule.entrance_bays as Array),
+		"entrance_groups_aligned_with_crescent_bays": true,
+		"south_junction_window_count": (schedule.junction_windows as Array).size(),
+		"north_junction_window_runs": _junction_window_runs(schedule.north_junction_windows as Array),
+		"se_face_runs": se_runs,
+		"se_narrow_window_count": se_windows.size(),
+		"rear_ribbon_host_runs": rear_hosts,
+		"rear_ribbon_host_faces_material_and_collision_unchanged": true,
+		"drum_end_opening_host_runs": DRUM_END_JOIN_RUNS.duplicate(),
+		"drum_end_opening_host_exposed_m": float(drum_frame.length_m),
+		"drum_end_opening_count": 2,
+		"upper_drum_blank_except_drum_end_openings": true,
+		"wing_tier_partitions_clipped_to_frozen_footprint": not tier_clip.is_empty(),
+		"central_tier_walls_unchanged": true,
+		"public_depth_bands_m": [
+			0.035,
+			float(crescent_style.jamb_front),
+			float(front.crescent_pier_depth),
+			float(front.crescent_pier_reed_front),
+			float((crescent_cornice[crescent_cornice.size() - 1] as Array)[2]),
 		],
+		"existing_cc0_plaster_maps_used": true,
+		"genai_texture_candidate_consumed": false,
 		"horizontal_source_geometry_changed": false,
-		"vertical_massing_changed": false,
-		"collision_geometry_changed": false,
+		"source_wall_bottoms_changed": false,
+		"tier_massing_changed": false,
+		"base_wall_outer_tier_and_projecting_base_collision_preserved": true,
 		"spray_ownership_changed": false,
+		"recognition_status": "accepted_before_quality_hardening_and_preserved",
+		"visual_review_status": VISUAL_REVIEW_STATUS,
 	}, true)
 	return _finish_record(root, specs, collision, true, metadata)
 
@@ -157,29 +297,33 @@ static func _build_building_roof(record: Dictionary, wall_record: Dictionary, co
 	var four_y := float(vertical.four_story_roof_y)
 	var roof := _bucket()
 	var canopy := _bucket()
-	var canopy_underside := _bucket()
+	var soffit := _bucket()
 	var collision := _bucket()
+	var tier_clip := _tier_clip(wall_record)
+	var field_runs := _int_array(schedule.crescent_field_runs)
+	var crescent := _crescent_layout(wall_record, field_runs, int(schedule.central_window_count), front)
 	_append_record_roof(roof, collision, record, two_y)
-	_append_strip_roof(roof, collision, wall_record, _int_array(chains.north_three_story_runs), three_y, float(vertical.north_wing_inward_depth))
+	_append_strip_roof(roof, collision, wall_record, _int_array(chains.north_three_story_runs), three_y, float(vertical.north_wing_inward_depth), tier_clip)
 	_append_strip_roof(roof, collision, wall_record, _int_array(chains.central_four_story_runs), four_y, float(vertical.central_inward_depth))
-	_append_strip_roof(roof, collision, wall_record, _int_array(chains.south_three_story_runs), three_y, float(vertical.south_wing_inward_depth))
-	_append_canopy(canopy, canopy_underside, collision, wall_record, _int_array(schedule.central_runs), front)
+	_append_strip_roof(roof, collision, wall_record, _int_array(chains.south_three_story_runs), three_y, float(vertical.south_wing_inward_depth), tier_clip)
+	var continuous := _append_canopy(canopy, soffit, collision, wall_record, _int_array(schedule.central_runs), field_runs, crescent, front)
 	var root := _hero_root("Building1HeroRoof", record, "building_roof")
 	var specs: Array[Dictionary] = [
 		{"name": "HeroSteppedRoof", "bucket": roof, "material": ROOF_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
-		{"name": "HeroEntranceCanopy", "bucket": canopy, "material": WALL_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
-		{"name": "HeroEntranceCanopyUnderside", "bucket": canopy_underside, "material": CANOPY_UNDERSIDE_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
+		{"name": "HeroEntranceCanopy", "bucket": canopy, "material": PUBLIC_TRIM_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
+		{"name": "HeroEntranceCanopySoffit", "bucket": soffit, "material": PUBLIC_WALL_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
 	]
 	var metadata := _common_metadata(config, record, "building_roof")
 	metadata["reachable_roof_tier_y"] = [two_y, three_y, four_y]
 	metadata["canopy_collision_congruent"] = true
-	metadata["canopy_primary_slab_collision_congruent"] = true
-	metadata["canopy_visual_depth_accents_noncolliding"] = true
-	metadata["public_front_believability_pass"] = true
+	metadata["canopy_continuous_exact_union"] = continuous
+	metadata["canopy_horizontal_domain"] = "exact_union_of_accepted_per_run_slabs" if continuous else "accepted_per_run_slabs_fallback"
+	metadata["wing_tier_roofs_clipped_to_frozen_footprint"] = not tier_clip.is_empty()
+	metadata["central_tier_roof_unchanged"] = true
+	metadata["public_family_pass_id"] = str(bar_config.pass_id)
 	metadata["public_front_believability_config_path"] = BAR_CONFIG_PATH
 	metadata["recognition_status"] = "accepted_before_quality_hardening_and_preserved"
-	metadata["collision_geometry_changed"] = false
-	metadata["roof_traversal_changed"] = false
+	metadata["roof_tiers_changed"] = false
 	metadata["genai_texture_candidate_consumed"] = false
 	return _finish_record(root, specs, collision, false, metadata)
 
@@ -275,16 +419,17 @@ static func _build_tower_roof(record: Dictionary, config: Dictionary) -> Diction
 	return _finish_record(root, specs, collision, false, metadata)
 
 
-static func _append_exact_base_walls(visual: Dictionary, collision: Dictionary, record: Dictionary, top_y: float) -> void:
+static func _append_exact_base_walls(public_visual: Dictionary, original_visual: Dictionary, collision: Dictionary, record: Dictionary, top_y: float) -> void:
 	for run_index in range(110):
 		var frame := _run_frame(record, run_index)
 		var start := frame.start as Vector3
 		var end := frame.end as Vector3
+		var visual := original_visual if run_index in PROTECTED_RUNS else public_visual
 		_append_vertical_face(visual, start, end, start.y, top_y, frame.normal as Vector3, end.y)
 		_append_vertical_face(collision, start, end, start.y, top_y, frame.normal as Vector3, end.y)
 
 
-static func _append_strip_walls(visual: Dictionary, collision: Dictionary, record: Dictionary, runs: Array[int], low_y: float, high_y: float, depth: float) -> void:
+static func _append_strip_walls(public_visual: Dictionary, original_visual: Dictionary, collision: Dictionary, record: Dictionary, runs: Array[int], low_y: float, high_y: float, depth: float, clip: Dictionary = {}) -> void:
 	var frames: Array[Dictionary] = []
 	for run_index in runs:
 		frames.append(_run_frame(record, run_index))
@@ -297,17 +442,16 @@ static func _append_strip_walls(visual: Dictionary, collision: Dictionary, recor
 		var outer_end := Vector3(end_source.x, low_y, end_source.z)
 		var inner_start := outer_start - normal * depth
 		var inner_end := outer_end - normal * depth
-		_append_vertical_face(visual, outer_start, outer_end, low_y, high_y, normal)
+		_append_vertical_face(public_visual, outer_start, outer_end, low_y, high_y, normal)
 		_append_vertical_face(collision, outer_start, outer_end, low_y, high_y, normal)
-		_append_vertical_face(visual, inner_end, inner_start, low_y, high_y, -normal)
-		_append_vertical_face(collision, inner_end, inner_start, low_y, high_y, -normal)
+		_append_partition(original_visual, collision, inner_end, inner_start, low_y, high_y, -normal, clip)
 		if index == 0:
 			var first_normal := -(frame.tangent as Vector3)
-			_append_vertical_face(visual, inner_start, outer_start, low_y, high_y, first_normal)
+			_append_vertical_face(public_visual, inner_start, outer_start, low_y, high_y, first_normal)
 			_append_vertical_face(collision, inner_start, outer_start, low_y, high_y, first_normal)
 		if index == frames.size() - 1:
 			var last_normal := frame.tangent as Vector3
-			_append_vertical_face(visual, outer_end, inner_end, low_y, high_y, last_normal)
+			_append_vertical_face(public_visual, outer_end, inner_end, low_y, high_y, last_normal)
 			_append_vertical_face(collision, outer_end, inner_end, low_y, high_y, last_normal)
 		if index > 0:
 			var previous := frames[index - 1]
@@ -316,11 +460,10 @@ static func _append_strip_walls(visual: Dictionary, collision: Dictionary, recor
 			var join := inner_start - previous_inner
 			if join.length_squared() > 0.000001:
 				var join_normal := Vector3(join.z, 0.0, -join.x).normalized()
-				_append_vertical_face(visual, previous_inner, inner_start, low_y, high_y, join_normal)
-				_append_vertical_face(collision, previous_inner, inner_start, low_y, high_y, join_normal)
+				_append_partition(original_visual, collision, previous_inner, inner_start, low_y, high_y, join_normal, clip)
 
 
-static func _append_strip_roof(visual: Dictionary, collision: Dictionary, record: Dictionary, runs: Array[int], top_y: float, depth: float) -> void:
+static func _append_strip_roof(visual: Dictionary, collision: Dictionary, record: Dictionary, runs: Array[int], top_y: float, depth: float, clip: Dictionary = {}) -> void:
 	var frames: Array[Dictionary] = []
 	for run_index in runs:
 		frames.append(_run_frame(record, run_index))
@@ -333,16 +476,110 @@ static func _append_strip_roof(visual: Dictionary, collision: Dictionary, record
 		var outer_end := Vector3(end_source.x, top_y, end_source.z)
 		var inner_end := outer_end - normal * depth
 		var inner_start := outer_start - normal * depth
-		_append_quad(visual, outer_start, outer_end, inner_end, inner_start, Vector3.UP)
-		_append_quad(collision, outer_start, outer_end, inner_end, inner_start, Vector3.UP)
+		_append_roof_piece(visual, collision, [outer_start, outer_end, inner_end, inner_start], top_y, clip)
 		if index > 0:
 			var previous := frames[index - 1]
 			var join_source := previous.end as Vector3
 			var join_outer := Vector3(join_source.x, top_y, join_source.z)
 			var previous_inner := join_outer - (previous.normal as Vector3) * depth
 			var current_inner := join_outer - normal * depth
-			_append_triangle(visual, join_outer, previous_inner, current_inner, Vector3.UP)
-			_append_triangle(collision, join_outer, previous_inner, current_inner, Vector3.UP)
+			_append_roof_piece(visual, collision, [join_outer, previous_inner, current_inner], top_y, clip)
+
+
+## Outer footprint ring (runs 0-96) in local XZ, oriented as an outer boundary,
+## with a 0.12 m inset copy. The 11 m wing tiers are deeper than the stepped
+## west ends and corner returns, so some inner partitions and roof pieces stood
+## outside the frozen footprint or doubled an exact outer wall. Their walls are
+## clipped to the inset ring and their roofs to the exact ring. Empty (no
+## clipping) unless an interior probe proves the native clipper keeps solids.
+static func _tier_clip(record: Dictionary) -> Dictionary:
+	var origin := _run_frame(record, 0).start as Vector3
+	var ring := PackedVector2Array()
+	for run_index in range(97):
+		var start := _run_frame(record, run_index).start as Vector3
+		ring.append(Vector2(start.x - origin.x, start.z - origin.z))
+	var closing := _run_frame(record, 96).end as Vector3
+	if Vector2(closing.x - origin.x, closing.z - origin.z).distance_to(ring[0]) > 0.001:
+		return {}
+	if Geometry2D.is_polygon_clockwise(ring):
+		ring.reverse()
+	var area := absf(_ring_area(ring))
+	var inset := PackedVector2Array()
+	var inset_area := INF
+	for delta in [-0.12, 0.12]:
+		for candidate: PackedVector2Array in Geometry2D.offset_polygon(ring, float(delta), Geometry2D.JOIN_MITER):
+			var candidate_area := absf(_ring_area(candidate))
+			if candidate_area < area and candidate_area > area * 0.9 and candidate_area < inset_area:
+				inset = candidate
+				inset_area = candidate_area
+	if inset.is_empty():
+		return {}
+	if Geometry2D.is_polygon_clockwise(inset):
+		inset.reverse()
+	var probe_frame := _run_frame(record, 6)
+	var probe_point := (probe_frame.start as Vector3).lerp(probe_frame.end as Vector3, 0.5) - (probe_frame.normal as Vector3) * 3.0
+	var probe := Vector2(probe_point.x - origin.x, probe_point.z - origin.z)
+	var square := PackedVector2Array([probe + Vector2(-0.5, -0.5), probe + Vector2(0.5, -0.5), probe + Vector2(0.5, 0.5), probe + Vector2(-0.5, 0.5)])
+	for boundary: PackedVector2Array in [ring, inset]:
+		var kept := Geometry2D.intersect_polygons(square, boundary)
+		if kept.size() != 1 or absf(absf(_ring_area(kept[0])) - 1.0) > 0.01:
+			return {}
+	return {"origin": origin, "ring": ring, "inset": inset}
+
+
+## Vertical tier partition kept only inside the inset frozen footprint.
+static func _append_partition(visual: Dictionary, collision: Dictionary, a: Vector3, b: Vector3, low_y: float, high_y: float, normal: Vector3, clip: Dictionary) -> void:
+	if clip.is_empty():
+		_append_vertical_face(visual, a, b, low_y, high_y, normal)
+		_append_vertical_face(collision, a, b, low_y, high_y, normal)
+		return
+	var origin := clip.origin as Vector3
+	var segment := PackedVector2Array([Vector2(a.x - origin.x, a.z - origin.z), Vector2(b.x - origin.x, b.z - origin.z)])
+	for piece: PackedVector2Array in Geometry2D.intersect_polyline_with_polygon(segment, clip.inset as PackedVector2Array):
+		for index in range(piece.size() - 1):
+			var start := Vector3(piece[index].x + origin.x, low_y, piece[index].y + origin.z)
+			var end := Vector3(piece[index + 1].x + origin.x, low_y, piece[index + 1].y + origin.z)
+			if start.distance_to(end) < 0.05:
+				continue
+			_append_vertical_face(visual, start, end, low_y, high_y, normal)
+			_append_vertical_face(collision, start, end, low_y, high_y, normal)
+
+
+## Horizontal tier roof piece kept only inside the exact frozen footprint. If a
+## clipped piece cannot be triangulated, the accepted unclipped piece is kept
+## rather than opening a roof hole.
+static func _append_roof_piece(visual: Dictionary, collision: Dictionary, corners: Array, top_y: float, clip: Dictionary) -> void:
+	if clip.is_empty():
+		_append_roof_corners(visual, collision, corners)
+		return
+	var origin := clip.origin as Vector3
+	var polygon := PackedVector2Array()
+	for corner_value in corners:
+		var corner := corner_value as Vector3
+		polygon.append(Vector2(corner.x - origin.x, corner.z - origin.z))
+	if absf(_ring_area(polygon)) < 0.000001:
+		return
+	var triangles: Array[Vector3] = []
+	for piece: PackedVector2Array in Geometry2D.intersect_polygons(polygon, clip.ring as PackedVector2Array):
+		var indices := Geometry2D.triangulate_polygon(piece)
+		if indices.is_empty():
+			_append_roof_corners(visual, collision, corners)
+			return
+		for index_value in indices:
+			var point := piece[index_value]
+			triangles.append(Vector3(point.x + origin.x, top_y, point.y + origin.z))
+	for offset in range(0, triangles.size(), 3):
+		_append_triangle(visual, triangles[offset], triangles[offset + 1], triangles[offset + 2], Vector3.UP)
+		_append_triangle(collision, triangles[offset], triangles[offset + 1], triangles[offset + 2], Vector3.UP)
+
+
+static func _append_roof_corners(visual: Dictionary, collision: Dictionary, corners: Array) -> void:
+	if corners.size() == 4:
+		_append_quad(visual, corners[0] as Vector3, corners[1] as Vector3, corners[2] as Vector3, corners[3] as Vector3, Vector3.UP)
+		_append_quad(collision, corners[0] as Vector3, corners[1] as Vector3, corners[2] as Vector3, corners[3] as Vector3, Vector3.UP)
+	else:
+		_append_triangle(visual, corners[0] as Vector3, corners[1] as Vector3, corners[2] as Vector3, Vector3.UP)
+		_append_triangle(collision, corners[0] as Vector3, corners[1] as Vector3, corners[2] as Vector3, Vector3.UP)
 
 
 static func _append_record_roof(visual: Dictionary, collision: Dictionary, record: Dictionary, top_y: float) -> void:
@@ -370,7 +607,7 @@ static func _append_scaled_record_roof(visual: Dictionary, collision: Dictionary
 		_append_triangle(collision, points[0], points[1], points[2], Vector3.UP)
 
 
-static func _append_projecting_base(base: Dictionary, trim: Dictionary, collision: Dictionary, record: Dictionary, runs: Array[int], front: Dictionary) -> void:
+static func _append_projecting_base(base: Dictionary, collision: Dictionary, record: Dictionary, runs: Array[int], front: Dictionary) -> void:
 	var projection := float(front.projecting_base_depth)
 	var top_y := float(front.projecting_base_top_y)
 	for run_index in runs:
@@ -382,280 +619,911 @@ static func _append_projecting_base(base: Dictionary, trim: Dictionary, collisio
 		# Preserve the accepted sprayable collision plane byte-for-geometry: the
 		# believability accents below remain visual-only.
 		_append_vertical_face(collision, start, end, start.y, top_y, normal, end.y)
-		for groove_y in [7.7, 9.65, 11.6]:
-			var center := start.lerp(end, 0.5)
-			center.y = groove_y
-			_append_wall_bar(trim, center, frame.tangent as Vector3, normal, groove_y, float(frame.length_m) + 0.08, 0.10, 0.14)
-		var cap_center := (frame.start as Vector3).lerp(frame.end as Vector3, 0.5) + normal * float(front.projecting_base_cap_center_projection)
-		cap_center.y = float(front.projecting_base_cap_center_y)
-		_append_box(
-			base,
-			cap_center,
-			frame.tangent as Vector3,
-			normal,
-			float(frame.length_m) + 0.08,
-			float(front.projecting_base_cap_height),
-			float(front.projecting_base_cap_depth)
-		)
+	# Visual completion only: close the open base ends and the notches the
+	# per-run offset planes leave at convex junction corners, then cap the whole
+	# base with one mitered band instead of overlapping per-run boxes.
+	var cap_y := front.projecting_base_cap_y as Array
+	var cap_bottom := float(cap_y[0])
+	var first := _run_frame(record, runs[0])
+	var last := _run_frame(record, runs[runs.size() - 1])
+	var first_start := first.start as Vector3
+	var last_end := last.end as Vector3
+	_append_vertical_face(base, first_start, first_start + (first.normal as Vector3) * projection, first_start.y, cap_bottom, -(first.tangent as Vector3))
+	_append_vertical_face(base, last_end + (last.normal as Vector3) * projection, last_end, last_end.y, cap_bottom, last.tangent as Vector3)
+	for index in range(1, runs.size()):
+		var previous := _run_frame(record, runs[index - 1])
+		var current := _run_frame(record, runs[index])
+		var previous_normal := previous.normal as Vector3
+		var current_normal := current.normal as Vector3
+		if (current.tangent as Vector3).dot(previous_normal) > -0.05:
+			continue
+		var corner := previous.end as Vector3
+		var miter := corner + _miter_between(previous_normal, current_normal) * projection
+		_append_vertical_face(base, corner + previous_normal * projection, miter, corner.y, cap_bottom, previous_normal)
+		_append_vertical_face(base, miter, corner + current_normal * projection, corner.y, cap_bottom, current_normal)
+	var path := _chain_points(record, runs, 0.0, _chain_length(record, runs))
+	_append_path_band(base, path, cap_bottom, float(cap_y[1]), float(front.projecting_base_cap_front), 0.0)
 
 
-static func _append_public_front_window_schedule(glass: Dictionary, reveal: Dictionary, trim: Dictionary, record: Dictionary, runs: Array[int], count: int, front: Dictionary) -> void:
-	var length := _chain_length(record, runs)
-	var margin := float(front.central_window_margin_along_chain)
+## Rusticated courses on the accepted projecting base: mitered bands proud of
+## the base plane, so the joints read as recessed without touching collision.
+static func _append_base_rustication(base: Dictionary, record: Dictionary, runs: Array[int], front: Dictionary) -> void:
+	var trim := float(front.rustication_end_trim)
+	var path := _chain_points(record, runs, trim, _chain_length(record, runs) - trim)
+	var tops := front.rustication_course_tops_y as Array
+	var joint := float(front.rustication_joint_height)
+	var face := float(front.rustication_front)
+	var back := float(front.rustication_back)
+	for index in tops.size():
+		if index == 0:
+			_append_path_band(base, path, -0.06, float(tops[0]), face, back, true)
+		else:
+			_append_path_band(base, path, float(tops[index - 1]) + joint, float(tops[index]), face, back)
+
+
+static func _crescent_layout(record: Dictionary, runs: Array[int], count: int, front: Dictionary) -> Dictionary:
+	var start := float(front.crescent_field_start_m)
+	var end := _chain_length(record, runs) - float(front.crescent_field_end_trim_m)
+	var pier := float(front.crescent_pier_width)
+	var surround := float((front.crescent_window_style as Dictionary).surround)
+	var glass := ((end - start) - float(count + 1) * pier - float(count) * 2.0 * surround) / float(count)
+	var pitch := pier + glass + 2.0 * surround
+	var piers: Array[float] = []
+	var windows: Array[float] = []
+	for index in count + 1:
+		piers.append(start + pier * 0.5 + float(index) * pitch)
 	for index in count:
-		var chain_m := margin if count == 1 else lerpf(margin, length - margin, float(index) / float(count - 1))
-		var frame := _chain_frame(record, runs, chain_m)
-		_append_public_front_window(glass, reveal, trim, frame, front)
+		windows.append(start + pier + surround + glass * 0.5 + float(index) * pitch)
+	return {"piers": piers, "windows": windows, "glass": glass, "pitch": pitch, "pier": pier, "surround": surround}
 
 
-static func _append_public_front_window(glass: Dictionary, reveal: Dictionary, trim: Dictionary, frame: Dictionary, front: Dictionary) -> void:
-	var anchor := frame.wall_anchor as Vector3
-	var tangent := frame.tangent as Vector3
-	var normal := frame.normal as Vector3
-	var width := float(front.central_window_width)
-	var height := float(front.central_window_height)
-	var border := float(front.window_reveal_border)
-	anchor.y = 19.55
-	_append_box(
-		reveal,
-		anchor + normal * float(front.window_reveal_center_projection),
-		tangent,
-		normal,
-		width + border * 2.0,
-		height + border * 2.0,
-		float(front.window_reveal_depth)
-	)
-	_append_box(
-		glass,
-		anchor + normal * float(front.window_glass_center_projection),
-		tangent,
-		normal,
-		width,
-		height,
-		float(front.window_glass_depth)
-	)
-	var columns := 3
-	var rows := 6
-	for column in range(columns + 1):
-		var lateral := -width * 0.5 + width * float(column) / float(columns)
-		var bar_width := float(front.window_outer_frame_width) if column in [0, columns] else float(front.window_internal_frame_width)
-		_append_box(
-			trim,
-			anchor + tangent * lateral + normal * float(front.window_frame_center_projection),
-			tangent,
-			normal,
-			bar_width,
-			height + float(front.window_outer_frame_width),
-			float(front.window_frame_depth)
-		)
-	for row in range(rows + 1):
-		var vertical := -height * 0.5 + height * float(row) / float(rows)
-		var bar_height := float(front.window_outer_frame_width) if row in [0, rows] else float(front.window_internal_frame_width)
-		_append_box(
-			trim,
-			anchor + Vector3.UP * vertical + normal * float(front.window_frame_center_projection),
-			tangent,
-			normal,
-			width + float(front.window_outer_frame_width),
-			bar_height,
-			float(front.window_frame_depth)
-		)
+## Eleven complete two-story bays: dark eighteen-light glazing behind pale
+## surrounds, a reeded head band between broad fluted piers with capitals, and
+## one reeded sill band riding the canopy. Piers project past the windows so
+## the glazing reads recessed; nothing cuts the exact wall or its collision.
+static func _append_crescent_bays(buckets: Dictionary, record: Dictionary, runs: Array[int], layout: Dictionary, front: Dictionary) -> void:
+	var glass := float(layout.glass)
+	var surround := float(layout.surround)
+	var pier := float(layout.pier)
+	var window_y := front.crescent_window_y as Array
+	var style := front.crescent_window_style as Dictionary
+	var reed_height := float(front.crescent_head_reed_height)
+	var reed_front := float(front.crescent_head_reed_front)
+	for center_value in layout.windows as Array:
+		var center_m := float(center_value)
+		var reach := glass * 0.5 + surround + 0.12
+		var frame := _span_frame(record, runs, center_m - reach, center_m + reach)
+		var center := center_m - float(frame.mid_m)
+		_append_window_module(buckets, frame, center, glass, float(window_y[0]), float(window_y[1]), 3, 6, style)
+		var head_reach := glass * 0.5 + surround + 0.04
+		for bottom_value in front.crescent_head_reed_bottoms_y as Array:
+			var bottom := float(bottom_value)
+			_append_frame_box(buckets.trim, frame, center - head_reach, center + head_reach, bottom, bottom + reed_height, float(frame.lo) - 0.03, float(frame.hi) + reed_front)
+	var pier_y := front.crescent_pier_y as Array
+	var capital_y := front.crescent_capital_y as Array
+	var overhang := float(front.crescent_capital_overhang)
+	for center_value in layout.piers as Array:
+		var center_m := float(center_value)
+		var frame := _span_frame(record, runs, center_m - pier * 0.5 - 0.1, center_m + pier * 0.5 + 0.1)
+		var center := center_m - float(frame.mid_m)
+		_append_fluted_pier(buckets.trim, frame, center, pier, float(pier_y[0]), float(pier_y[1]), float(front.crescent_pier_depth), int(front.crescent_pier_reeds), float(front.crescent_pier_reed_width), float(front.crescent_pier_reed_gap), float(front.crescent_pier_reed_front))
+		_append_frame_box(buckets.trim, frame, center - pier * 0.5 - overhang, center + pier * 0.5 + overhang, float(capital_y[0]), float(capital_y[1]), float(frame.lo) - 0.03, float(frame.hi) + float(front.crescent_capital_front))
+	var path := _chain_points(record, runs, float(front.crescent_band_start_trim_m), _chain_length(record, runs))
+	for level_value in front.crescent_sill_band as Array:
+		var level := level_value as Array
+		_append_path_band(buckets.trim, path, float(level[0]), float(level[1]), float(level[2]), -0.05)
 
 
-static func _append_public_front_pilasters(trim: Dictionary, record: Dictionary, runs: Array[int], window_count: int, front: Dictionary) -> void:
-	var chain_length := _chain_length(record, runs)
-	var margin := float(front.central_window_margin_along_chain)
-	var spacing := (chain_length - margin * 2.0) / float(window_count - 1)
-	var count := int(front.pilaster_count)
-	for index in count:
-		var chain_m := margin + (float(index) - 0.5) * spacing
-		var frame := _chain_frame(record, runs, chain_m)
-		var anchor := frame.wall_anchor as Vector3
-		var tangent := frame.tangent as Vector3
-		var normal := frame.normal as Vector3
-		anchor.y = float(front.pilaster_center_y)
-		_append_box(
-			trim,
-			anchor + normal * float(front.pilaster_center_projection),
-			tangent,
-			normal,
-			float(front.pilaster_width),
-			float(front.pilaster_height),
-			float(front.pilaster_depth)
-		)
-		var rib_offset := float(front.pilaster_width) * 0.27
-		for sign_value in [-1.0, 1.0]:
-			_append_box(
-				trim,
-				anchor + tangent * rib_offset * float(sign_value) + normal * float(front.pilaster_flute_center_projection),
-				tangent,
-				normal,
-				float(front.pilaster_flute_width),
-				float(front.pilaster_height),
-				float(front.pilaster_flute_depth)
-			)
-
-
-static func _append_window_schedule(glass: Dictionary, trim: Dictionary, record: Dictionary, runs: Array[int], count: int, margin_m: float, width: float, height: float, columns: int, rows: int, projection: float, center_y: float = 19.55) -> void:
-	var length := _chain_length(record, runs)
-	for index in count:
-		var chain_m := margin_m if count == 1 else lerpf(margin_m, length - margin_m, float(index) / float(count - 1))
-		var frame := _chain_frame(record, runs, chain_m)
-		_append_window(glass, trim, frame, center_y, width, height, columns, rows, projection)
-
-
-static func _append_wing_jamb_schedule_v2(trim: Dictionary, record: Dictionary, runs: Array[int], count: int, margin_m: float, width: float, height: float, projection: float, center_y: float, front: Dictionary) -> void:
-	var length := _chain_length(record, runs)
-	for index in count:
-		var chain_m := margin_m if count == 1 else lerpf(margin_m, length - margin_m, float(index) / float(count - 1))
-		var frame := _chain_frame(record, runs, chain_m)
-		_append_wing_jamb_returns_v2(trim, frame, center_y, width, height, projection, front)
-
-
-static func _append_wing_jamb_returns_v2(trim: Dictionary, frame: Dictionary, center_y: float, width: float, height: float, projection: float, front: Dictionary) -> void:
-	var anchor := frame.wall_anchor as Vector3
-	var tangent := frame.tangent as Vector3
-	var normal := frame.normal as Vector3
-	# Light returns connect the host to the backs of existing perimeter bars.
-	# Their silhouettes match those bars; darkness stays on the deeper glazing.
-	var return_front := projection - 0.14 * 0.5 + float(front.wing_window_jamb_frame_overlap)
-	var return_rear := -float(front.wing_window_jamb_rear_overlap)
-	var return_depth := return_front - return_rear
-	var return_center := (return_front + return_rear) * 0.5
-	anchor.y = center_y
-	for side in [-1.0, 1.0]:
-		_append_box(trim, anchor + tangent * (float(side) * width * 0.5) + normal * return_center, tangent, normal, 0.105, height + 0.16, return_depth)
-	for side in [-1.0, 1.0]:
-		_append_box(trim, anchor + Vector3.UP * (float(side) * height * 0.5) + normal * return_center, tangent, normal, width + 0.16, 0.105, return_depth)
-
-
-static func _append_window(glass: Dictionary, trim: Dictionary, frame: Dictionary, center_y: float, width: float, height: float, columns: int, rows: int, projection: float) -> void:
-	var anchor := frame.wall_anchor as Vector3
-	var tangent := frame.tangent as Vector3
-	var normal := frame.normal as Vector3
-	anchor.y = center_y
-	_append_box(glass, anchor + normal * maxf(0.035, projection - 0.10), tangent, normal, width, height, 0.07)
-	var trim_depth := 0.14
-	for column in range(columns + 1):
-		var lateral := -width * 0.5 + width * float(column) / float(columns)
-		_append_box(trim, anchor + tangent * lateral + normal * projection, tangent, normal, 0.105, height + 0.16, trim_depth)
-	for row in range(rows + 1):
-		var vertical := -height * 0.5 + height * float(row) / float(rows)
-		_append_box(trim, anchor + Vector3.UP * vertical + normal * projection, tangent, normal, width + 0.16, 0.105, trim_depth)
-
-
-static func _append_entry_groups(glass: Dictionary, reveal: Dictionary, bronze: Dictionary, record: Dictionary, runs: Array[int], group_count: int, doors_per_group: int, front: Dictionary) -> void:
-	var frame := _chain_frame(record, runs, _chain_length(record, runs) * 0.5)
-	var center := frame.wall_anchor as Vector3
-	var tangent := frame.tangent as Vector3
-	var normal := frame.normal as Vector3
+## Three glazed-bronze triple-door groups under the crescent bays the dated WSW
+## view shows as dark entrance openings (bays 2, 5 and 8): doors and a
+## bronze-barred transom set in a dark reveal, framed by a solid pale portal
+## whose jambs reach the ground and whose head sits just under the canopy.
+## Bronze relief stays shallow for oblique gameplay rays; nothing is cut from
+## the accepted projecting-base plane or its collision.
+static func _append_entry_composition(buckets: Dictionary, collision: Dictionary, record: Dictionary, runs: Array[int], layout: Dictionary, bays: Array, doors_per_group: int, front: Dictionary) -> void:
+	var windows := layout.windows as Array
+	var base_face := float(front.projecting_base_depth)
 	var group_width := float(front.entrance_group_width)
-	var gap := float(front.entrance_group_gap)
-	var height := float(front.entrance_height)
-	var total := float(group_count) * group_width + float(group_count - 1) * gap
-	var base_y := float(frame.base_y)
-	for group_index in group_count:
-		var lateral := -total * 0.5 + group_width * 0.5 + float(group_index) * (group_width + gap)
-		var anchor := center + tangent * lateral
-		anchor.y = base_y + height * 0.5
-		_append_box(
-			reveal,
-			anchor + normal * float(front.entrance_reveal_center_projection),
-			tangent,
-			normal,
-			group_width + float(front.entrance_reveal_border) * 2.0,
-			height + float(front.entrance_reveal_border) * 2.0,
-			float(front.entrance_reveal_depth)
-		)
-		_append_box(
-			glass,
-			anchor + normal * float(front.entrance_glass_center_projection),
-			tangent,
-			normal,
-			group_width,
-			height,
-			float(front.entrance_glass_depth)
-		)
+	var half := group_width * 0.5
+	var door_height := float(front.entrance_door_height)
+	var border := float(front.entrance_reveal_border)
+	var bar := float(front.entrance_frame_width)
+	var bronze_front := float(front.entrance_frame_front)
+	var jamb_width := float(front.entrance_portal_jamb_width)
+	var jamb_front := float(front.entrance_portal_front)
+	var head_y := front.entrance_portal_head_y as Array
+	var head_bottom := float(head_y[0])
+	var frames: Array[Dictionary] = []
+	var entry_base := -INF
+	for bay_value in bays:
+		var center_m := float(windows[int(bay_value)])
+		var reach := half + border + jamb_width + 0.1
+		var frame := _span_frame(record, runs, center_m - reach, center_m + reach)
+		frame["center"] = center_m - float(frame.mid_m)
+		frames.append(frame)
+		entry_base = maxf(entry_base, maxf(float(frame.base_a), float(frame.base_b)))
+	# One level transom line for all three groups despite the sloping base.
+	var transom_top := entry_base + float(front.entrance_transom_top_above_base)
+	for frame in frames:
+		var center := float(frame.center)
+		var face := base_face + float(frame.hi)
+		var back := base_face + float(frame.lo) - 0.02
+		var base_y := minf(float(frame.base_a), float(frame.base_b))
+		var door_top := base_y + door_height
+		var transom_bottom := door_top + bar
+		# The reveal front clears the rustication courses so they cannot streak
+		# through the dark opening.
+		_append_frame_box(buckets.reveal, frame, center - half - border, center + half + border, base_y - border, head_bottom + 0.03, back, face + 0.06)
+		_append_frame_box(buckets.glass, frame, center - half, center + half, base_y, door_top, face + 0.05, face + 0.1)
+		_append_frame_box(buckets.glass, frame, center - half, center + half, transom_bottom, transom_top, face + 0.05, face + 0.1)
 		for leaf in range(doors_per_group + 1):
-			var leaf_lateral := -group_width * 0.5 + group_width * float(leaf) / float(doors_per_group)
-			_append_box(
-				bronze,
-				anchor + tangent * leaf_lateral + normal * float(front.entrance_frame_center_projection),
-				tangent,
-				normal,
-				float(front.entrance_frame_width),
-				height + float(front.entrance_frame_width),
-				float(front.entrance_frame_depth)
-			)
-		for rail_y in [-height * 0.5, 0.95, height * 0.5]:
-			_append_box(
-				bronze,
-				anchor + Vector3.UP * float(rail_y) + normal * float(front.entrance_frame_center_projection),
-				tangent,
-				normal,
-				group_width + float(front.entrance_frame_width),
-				float(front.entrance_frame_width),
-				float(front.entrance_frame_depth)
-			)
+			var x := center - half + group_width * float(leaf) / float(doors_per_group)
+			_append_frame_box(buckets.bronze, frame, x - bar * 0.5, x + bar * 0.5, base_y - bar * 0.5, transom_top + bar * 0.5, face + 0.09, face + bronze_front)
+		for rail in [base_y, base_y + 0.95, door_top + bar * 0.5, (transom_bottom + transom_top) * 0.5, transom_top]:
+			var y := float(rail)
+			_append_frame_box(buckets.bronze, frame, center - half - bar * 0.5, center + half + bar * 0.5, y - bar * 0.5, y + bar * 0.5, face + 0.092, face + bronze_front - 0.004)
+		for side in [-1.0, 1.0]:
+			var inner := center + float(side) * (half + border)
+			var outer := center + float(side) * (half + border + jamb_width)
+			for target: Dictionary in [buckets.trim, collision]:
+				_append_frame_box(target, frame, minf(inner, outer), maxf(inner, outer), base_y - 0.06, head_bottom + 0.02, back, face + jamb_front)
+		var head_reach := half + border + jamb_width + 0.08
+		_append_frame_box(buckets.trim, frame, center - head_reach, center + head_reach, head_bottom, float(head_y[1]), back, face + float(front.entrance_portal_head_front))
 
 
-static func _append_chain_band(bucket: Dictionary, record: Dictionary, runs: Array[int], center_y: float, height: float, projection: float) -> void:
+## Tall crescent-height glazing on the south junction block's west faces,
+## where the dated WSW view shows windows on the block that ends the crescent.
+static func _append_junction_windows(buckets: Dictionary, record: Dictionary, specs: Array, front: Dictionary) -> void:
+	var window_y := front.crescent_window_y as Array
+	# Same family as the crescent bays; the sill returns past free-standing jambs.
+	var style := (front.crescent_window_style as Dictionary).duplicate()
+	style["sill_overhang"] = 0.06
+	for spec_value in specs:
+		var spec := spec_value as Dictionary
+		var runs: Array[int] = [int(spec.run)]
+		var frame := _span_frame(record, runs, 0.0, _chain_length(record, runs))
+		_append_window_module(buckets, frame, 0.0, float(spec.glass_width), float(window_y[0]), float(window_y[1]), int(spec.columns), 6, style)
+
+
+## Wing face: eight aligned upper bays on the second and third floors and seven
+## lower ground-floor bays centred between them.
+static func _append_wing_facade(buckets: Dictionary, record: Dictionary, runs: Array[int], upper_count: int, lower_count: int, floors: Array, front: Dictionary) -> void:
+	var length := _chain_length(record, runs)
+	var upper := _evenly_spaced(length, upper_count, float(front.wing_window_margin_m))
+	var lower: Array[float] = []
+	for index in mini(lower_count, upper.size() - 1):
+		lower.append((upper[index] + upper[index + 1]) * 0.5)
+	var glass := float(front.wing_window_width)
+	var style := front.wing_window_style as Dictionary
+	_append_window_grid(buckets, record, runs, upper, glass, [floors[1], floors[2]], style)
+	_append_window_grid(buckets, record, runs, lower, glass, [floors[0]], style)
+
+
+## Aligned bays on one exact run chain, one complete window per listed floor.
+static func _append_window_grid(buckets: Dictionary, record: Dictionary, runs: Array[int], centers: Array, glass: float, floors: Array, style: Dictionary, columns: int = 2) -> void:
+	for center_value in centers:
+		for floor_value in floors:
+			var floor_spec := floor_value as Dictionary
+			_append_chain_window(buckets, record, runs, float(center_value), glass, float(floor_spec.bottom), float(floor_spec.top), columns, int(floor_spec.rows), style)
+
+
+## North crescent-wing junction: one stacked wing-family bay on each face long
+## enough for a complete window (runs 17 and 20). The dated SW view shows
+## wing-scale openings continuing there to the first crescent bay, with plain
+## wall at the short jog faces between them (runs 18-19); its lowest floor is
+## hidden by parked cars, so that floor follows the wing schedule.
+static func _append_north_junction_bays(buckets: Dictionary, record: Dictionary, specs: Array, floors: Array, style: Dictionary) -> void:
+	for spec_value in specs:
+		var spec := spec_value as Dictionary
+		var runs: Array[int] = [int(spec.run)]
+		_append_window_grid(buckets, record, runs, [_chain_length(record, runs) * 0.5], float(spec.glass_width), floors, style, int(spec.columns))
+
+
+## Even bay layout for a podium ribbon between chain metres. Pier centres run
+## from `first` to `last` at `pitch`; a butted end has no pier of its own.
+static func _ribbon_layout(from_m: float, to_m: float, start_pier: bool, end_pier: bool, ribbon: Dictionary) -> Dictionary:
+	var pier := float(ribbon.pier_width)
+	var first := from_m + (pier * 0.5 if start_pier else 0.0)
+	var last := to_m - (pier * 0.5 if end_pier else 0.0)
+	var bays := maxi(1, roundi((last - first) / float(ribbon.bay_pitch)))
+	return {"first": first, "last": last, "bays": bays, "pitch": (last - first) / float(bays)}
+
+
+## Continuous lower ribbon on a podium chain: dark glazing between a sill and a
+## head band, with transom bars, narrow piers at an even bay pitch and light
+## mullions in each bay. Bands follow the exact runs with mitered corners;
+## piers and mullions use short chord frames. A free end closes with a pier
+## that buries the glazing end; a butted end stops against an existing pier.
+static func _append_ribbon(buckets: Dictionary, record: Dictionary, runs: Array[int], from_m: float, to_m: float, start_pier: bool, end_pier: bool, ribbon: Dictionary) -> void:
+	var layout := _ribbon_layout(from_m, to_m, start_pier, end_pier, ribbon)
+	var first := float(layout.first)
+	var pitch := float(layout.pitch)
+	var bays := int(layout.bays)
+	var bottom := float(ribbon.bottom)
+	var top := float(ribbon.top)
+	var bar := float(ribbon.bar)
+	var pier := float(ribbon.pier_width)
+	var band := _chain_points(record, runs, from_m, to_m)
+	var glazing := _chain_points(record, runs, first, float(layout.last))
+	_append_path_band(buckets.glass, glazing, bottom, top, 0.035, -0.03)
+	_append_path_band(buckets.trim, band, bottom - float(ribbon.sill_height), bottom, float(ribbon.sill_front), -0.03)
+	_append_path_band(buckets.trim, band, top, top + float(ribbon.head_height), float(ribbon.head_front), -0.03)
+	var rows := int(ribbon.rows)
+	for row in range(1, rows):
+		var y := lerpf(bottom, top, float(row) / float(rows))
+		_append_path_band(buckets.frame, glazing, y - bar * 0.5, y + bar * 0.5, 0.074, 0.033)
+	for index in range(bays + 1):
+		if (index == 0 and not start_pier) or (index == bays and not end_pier):
+			continue
+		var center_m := first + pitch * float(index)
+		var frame := _span_frame(record, runs, center_m - pier * 0.5, center_m + pier * 0.5)
+		_append_frame_box(buckets.trim, frame, -pier * 0.5, pier * 0.5, bottom, top, float(frame.lo) - 0.03, float(frame.hi) + float(ribbon.pier_front))
+	var columns := int(ribbon.columns)
+	for index in range(bays):
+		var left := first + pitch * float(index) + (pier * 0.5 if index > 0 or start_pier else 0.0)
+		var right := first + pitch * float(index + 1) - (pier * 0.5 if index < bays - 1 or end_pier else 0.0)
+		for column in range(1, columns):
+			var mullion_m := lerpf(left, right, float(column) / float(columns))
+			var frame := _span_frame(record, runs, mullion_m - bar, mullion_m + bar)
+			_append_frame_box(buckets.frame, frame, -bar * 0.5, bar * 0.5, bottom, top, float(frame.hi) + 0.03, float(frame.hi) + 0.078)
+
+
+## The drum-end bay's observed pair, centred on the exposed join: a tall
+## multi-light window with a projecting head just above the podium roof, and a
+## small square window high in the bay.
+static func _append_drum_end_openings(buckets: Dictionary, frame: Dictionary, openings: Dictionary, style: Dictionary) -> void:
+	for key: String in ["tall", "small"]:
+		var opening := openings[key] as Dictionary
+		var y_range := opening.y as Array
+		_append_window_module(buckets, frame, 0.0, float(opening.glass_width), float(y_range[0]), float(y_range[1]), int(opening.columns), int(opening.rows), style)
+	var tall := openings.tall as Dictionary
+	var half := float(tall.glass_width) * 0.5 + float(style.surround) + float(openings.head_overhang)
+	var head_bottom := float((tall.y as Array)[1]) + float(style.head_height)
+	_append_frame_box(buckets.trim, frame, -half, half, head_bottom, head_bottom + float(openings.head_height), -0.03, float(openings.head_front))
+
+
+static func _append_chain_window(buckets: Dictionary, record: Dictionary, runs: Array[int], center_m: float, glass: float, bottom: float, top: float, columns: int, rows: int, style: Dictionary) -> void:
+	var reach := glass * 0.5 + float(style.surround) + float(style.sill_overhang) + 0.05
+	var frame := _span_frame(record, runs, center_m - reach, center_m + reach)
+	_append_window_module(buckets, frame, center_m - float(frame.mid_m), glass, bottom, top, columns, rows, style)
+
+
+## One complete window: dark glazing set back behind pale jambs, a head and a
+## projecting sill, carrying a dark metal glazing grid. Depths are measured from
+## the module span's exact wall points; no source wall or collision is cut.
+static func _append_window_module(buckets: Dictionary, frame: Dictionary, center: float, glass_width: float, bottom: float, top: float, columns: int, rows: int, style: Dictionary) -> void:
+	var back := float(frame.lo) - 0.03
+	var wall := float(frame.hi)
+	var half := glass_width * 0.5
+	var surround := float(style.surround)
+	var edge_bar := float(style.edge_bar)
+	var bar := float(style.bar)
+	var transom_row := int(style.get("transom_row", -1))
+	var transom_bar := float(style.get("transom_bar", bar))
+	_append_frame_box(buckets.glass, frame, center - half, center + half, bottom, top, back, wall + 0.035)
+	for column in range(columns + 1):
+		var x := center - half + glass_width * float(column) / float(columns)
+		var width := edge_bar if column == 0 or column == columns else bar
+		_append_frame_box(buckets.frame, frame, x - width * 0.5, x + width * 0.5, bottom, top, wall + 0.03, wall + 0.078)
+	for row in range(rows + 1):
+		var y := lerpf(bottom, top, float(row) / float(rows))
+		var height := edge_bar if row == 0 or row == rows else (transom_bar if row == transom_row else bar)
+		_append_frame_box(buckets.frame, frame, center - half, center + half, y - height * 0.5, y + height * 0.5, wall + 0.033, wall + 0.074)
+	var jamb_front := wall + float(style.jamb_front)
+	for side in [-1.0, 1.0]:
+		var inner := center + float(side) * half
+		var outer := center + float(side) * (half + surround + 0.03)
+		_append_frame_box(buckets.trim, frame, minf(inner, outer), maxf(inner, outer), bottom - 0.04, top + 0.04, back, jamb_front)
+	_append_frame_box(buckets.trim, frame, center - half - surround - 0.01, center + half + surround + 0.01, top, top + float(style.head_height), back, wall + float(style.head_front))
+	var sill_reach := half + surround + float(style.sill_overhang)
+	_append_frame_box(buckets.trim, frame, center - sill_reach, center + sill_reach, bottom - float(style.sill_height), bottom, back, wall + float(style.sill_front))
+
+
+static func _append_fluted_pier(trim: Dictionary, frame: Dictionary, center: float, width: float, bottom: float, top: float, depth: float, reeds: int, reed_width: float, reed_gap: float, reed_front: float) -> void:
+	var back := float(frame.lo) - 0.03
+	var wall := float(frame.hi)
+	_append_frame_box(trim, frame, center - width * 0.5, center + width * 0.5, bottom, top, back, wall + depth)
+	var total := float(reeds) * reed_width + float(maxi(reeds - 1, 0)) * reed_gap
+	for reed in reeds:
+		var x := center - total * 0.5 + reed_width * 0.5 + float(reed) * (reed_width + reed_gap)
+		_append_frame_box(trim, frame, x - reed_width * 0.5, x + reed_width * 0.5, bottom + 0.12, top - 0.1, wall + depth - 0.02, wall + reed_front)
+
+
+## Projecting west-end pavilion on its frozen centre face: paired two-story
+## twenty-light windows on a fluted mullion pier, solid fins up to the cornice,
+## an abstract winged relief, a pale-portal entry and the stepped crown at the
+## dated-reference raised head. Flanks and the recessed corner bay carry the
+## wing floor schedule.
+static func _append_pavilion(buckets: Dictionary, collision: Dictionary, record: Dictionary, spec: Dictionary, floors: Array, front: Dictionary) -> void:
+	var center_runs := _int_array(spec.center_runs)
+	var length := _chain_length(record, center_runs)
+	var frame := _span_frame(record, center_runs, 0.0, length)
+	var wall := float(frame.hi)
+	var base_mid := lerpf(float(frame.base_a), float(frame.base_b), 0.5)
+	var base_low := minf(float(frame.base_a), float(frame.base_b))
+	var tall_y := front.pavilion_tall_window_y as Array
+	var tall_bottom := float(tall_y[0])
+	var tall_top := float(tall_y[1])
+	var offset := float(front.pavilion_tall_window_offset)
+	var tall_style := front.pavilion_tall_window_style as Dictionary
+	for side in [-1.0, 1.0]:
+		_append_window_module(buckets, frame, float(side) * offset, float(front.pavilion_tall_window_width), tall_bottom, tall_top, 2, 10, tall_style)
+	_append_fluted_pier(buckets.trim, frame, 0.0, float(front.pavilion_mullion_pier_width), tall_bottom - 0.2, tall_top + 0.3, 0.27, 2, 0.11, 0.1, 0.32)
+	# Fins reach chest height on an oblique face, so they are solid pilasters.
+	var fin_center := float(front.pavilion_fin_center)
+	var fin_width := float(front.pavilion_fin_width)
+	var fin_top := float(front.pavilion_fin_top_y)
+	for side in [-1.0, 1.0]:
+		var x := float(side) * fin_center
+		_append_fluted_pier(buckets.trim, frame, x, fin_width, base_low - 0.06, fin_top, 0.24, 2, 0.12, 0.1, 0.29)
+		_append_frame_box(collision, frame, x - fin_width * 0.5, x + fin_width * 0.5, base_low - 0.06, fin_top, float(frame.lo) - 0.03, wall + 0.24)
+	_append_winged_emblem(buckets.trim, frame, front.pavilion_emblem as Dictionary)
+	_append_pavilion_entry(buckets, collision, frame, base_mid, base_low, spec.entry as Dictionary)
+	# Stepped crown: solid parapet masonry seated into the existing public roof,
+	# its sidewalls, tops and lips all in the wall body's collision.
+	var crown_bottom := float(front.pavilion_crown_bottom_y)
+	var lip := front.pavilion_crown_lip as Dictionary
+	for crown_step in _crown_steps(front, length):
+		var half := float(crown_step.half_width)
+		var top := float(crown_step.top)
+		var step_back := wall + float(crown_step.back)
+		var step_front := wall + float(crown_step.front)
+		for target: Dictionary in [buckets.trim, collision]:
+			_append_frame_box(target, frame, -half, half, crown_bottom, top, step_back, step_front)
+			_append_frame_box(target, frame, -half - float(lip.overhang), half + float(lip.overhang), top, top + float(lip.height), step_back + float(lip.back_inset), step_front + float(lip.front))
+	var style := front.wing_window_style as Dictionary
+	for flank_value in spec.flank_runs as Array:
+		var flank := _int_array(flank_value as Array)
+		_append_window_grid(buckets, record, flank, [_chain_length(record, flank) * 0.5], float(front.flank_window_width), floors, style)
+	var corner := _int_array(spec.corner_runs)
+	var corner_length := _chain_length(record, corner)
+	_append_window_grid(buckets, record, corner, [corner_length * 0.25, corner_length * 0.75], float(front.corner_bay_window_width), floors, style)
+
+
+## Recessed pavilion entry: bronze leaves and a three-light transom in a dark
+## reveal behind solid pale portal jambs and a projecting hood. Instance widths
+## follow the dated views: a narrower north door, a wider south porch. Heights
+## follow the face's mid base; bottoms seat below its lowest source bottom so
+## the downhill jamb still meets the sloping ground.
+static func _append_pavilion_entry(buckets: Dictionary, collision: Dictionary, frame: Dictionary, base_y: float, ground_y: float, entry: Dictionary) -> void:
+	var wall := float(frame.hi)
+	var back := float(frame.lo) - 0.03
+	var recess := float(entry.recess_half_width)
+	var door := float(entry.door_half_width)
+	var top := base_y + float(entry.height)
+	var transom := top - float(entry.transom_height)
+	var jamb := float(entry.jamb_width)
+	_append_frame_box(buckets.reveal, frame, -recess, recess, ground_y - 0.1, top, back, wall + 0.03)
+	_append_frame_box(buckets.bronze, frame, -door, door, ground_y - 0.12, transom - 0.04, wall + 0.02, wall + 0.06)
+	_append_frame_box(buckets.glass, frame, -door, door, transom + 0.04, top - 0.06, wall + 0.02, wall + 0.05)
+	_append_frame_box(buckets.frame, frame, -door - 0.06, door + 0.06, transom - 0.04, transom + 0.04, wall + 0.03, wall + 0.09)
+	_append_frame_box(buckets.frame, frame, -0.04, 0.04, ground_y - 0.12, transom, wall + 0.05, wall + 0.1)
+	for mullion in [-door / 3.0, door / 3.0]:
+		_append_frame_box(buckets.frame, frame, float(mullion) - 0.035, float(mullion) + 0.035, transom, top - 0.06, wall + 0.03, wall + 0.08)
+	for side in [-1.0, 1.0]:
+		var inner := float(side) * recess
+		var outer := float(side) * (recess + jamb)
+		for target: Dictionary in [buckets.trim, collision]:
+			_append_frame_box(target, frame, minf(inner, outer), maxf(inner, outer), ground_y - 0.08, top + 0.06, back, wall + float(entry.jamb_front))
+	var hood_reach := recess + jamb + float(entry.hood_overhang)
+	_append_frame_box(buckets.trim, frame, -hood_reach, hood_reach, top, top + float(entry.hood_height), back, wall + float(entry.hood_front))
+
+
+## Abstract winged-disc aviation relief in pale stucco: a roundel with a raised
+## boss and three tapering feather bars each side. A rights-safe neutral proxy
+## for the documented airplane reliefs, not a copied emblem.
+static func _append_winged_emblem(trim: Dictionary, frame: Dictionary, emblem: Dictionary) -> void:
+	var wall := float(frame.hi)
+	var back := float(frame.lo) - 0.03
+	var center_y := float(emblem.y)
+	var radius := float(emblem.radius)
+	var feather_half := float(emblem.feather_height) * 0.5
+	_append_frame_disc(trim, frame, center_y, radius, back, wall + float(emblem.disc_front), 24)
+	_append_frame_disc(trim, frame, center_y, radius * 0.55, wall + float(emblem.disc_front) - 0.03, wall + float(emblem.boss_front), 16)
+	for feather_value in emblem.feathers as Array:
+		var feather := feather_value as Array
+		var y := center_y + float(feather[0])
+		for side in [-1.0, 1.0]:
+			var inner := float(side) * radius * 0.6
+			var outer := float(side) * float(feather[1])
+			_append_frame_box(trim, frame, minf(inner, outer), maxf(inner, outer), y - feather_half, y + feather_half, back, wall + float(emblem.feather_front))
+
+
+static func _append_frame_disc(bucket: Dictionary, frame: Dictionary, center_y: float, radius: float, back: float, front_depth: float, segments: int) -> void:
+	var tangent := frame.tangent as Vector3
+	var normal := frame.normal as Vector3
+	var anchor := frame.anchor as Vector3
+	var origin := Vector3(anchor.x, center_y, anchor.z)
+	var face_center := origin + normal * front_depth
+	for index in segments:
+		var first_angle := TAU * float(index) / float(segments)
+		var second_angle := TAU * float(index + 1) / float(segments)
+		var first := tangent * (cos(first_angle) * radius) + Vector3.UP * (sin(first_angle) * radius)
+		var second := tangent * (cos(second_angle) * radius) + Vector3.UP * (sin(second_angle) * radius)
+		_append_triangle(bucket, face_center, origin + first + normal * front_depth, origin + second + normal * front_depth, normal)
+		_append_quad(bucket, origin + first + normal * back, origin + second + normal * back, origin + second + normal * front_depth, origin + first + normal * front_depth, (first + second).normalized())
+
+
+static func _crown_steps(front: Dictionary, face_length: float) -> Array:
+	var shoulder := front.pavilion_crown_shoulder as Dictionary
+	var steps: Array = [{
+		"half_width": face_length * 0.5 - float(shoulder.inset),
+		"top": float(shoulder.top),
+		"back": float(shoulder.back),
+		"front": float(shoulder.front),
+	}]
+	steps.append_array(front.pavilion_crown_steps as Array)
+	return steps
+
+
+static func _crown_rise(front: Dictionary, roof_y: float) -> float:
+	var highest := -INF
+	for crown_step in _crown_steps(front, 0.0):
+		highest = maxf(highest, float(crown_step.top))
+	return highest + float((front.pavilion_crown_lip as Dictionary).height) - roof_y
+
+
+## Pier at a protected-run seam: it stops at the exact junction without touching
+## the protected wall, so the public coating ends at an inner corner.
+static func _append_seam_pier(trim: Dictionary, collision: Dictionary, record: Dictionary, run_index: int, at_start: bool, front: Dictionary) -> void:
+	var runs: Array[int] = [run_index]
+	var width := float(front.junction_pier_width)
+	var length := float(_run_frame(record, run_index).length_m)
+	var from_m := 0.0 if at_start else length - width
+	var frame := _span_frame(record, runs, from_m, from_m + width)
+	var base := minf(float(frame.base_a), float(frame.base_b))
+	var wall := float(frame.hi)
+	for target: Dictionary in [trim, collision]:
+		_append_frame_box(target, frame, -width * 0.5, width * 0.5, base - 0.06, float(front.junction_pier_top_y), wall + 0.005, wall + float(front.junction_pier_front))
+
+
+## Plinth gap at a pavilion entry, ending inside its solid portal jambs.
+static func _pavilion_door_gap(record: Dictionary, chain: Array[int], spec: Dictionary) -> Vector2:
+	var center_runs := _int_array(spec.center_runs)
+	var entry := spec.entry as Dictionary
+	var center := _chain_start_of(record, chain, center_runs[0]) + _chain_length(record, center_runs) * 0.5
+	var half := float(entry.recess_half_width) + float(entry.jamb_width) * 0.5
+	return Vector2(center - half, center + half)
+
+
+## Low water-table plinth following the exact source wall bottoms, interrupted
+## at pavilion doors and stopping inside the seam piers.
+static func _append_plinth(base: Dictionary, record: Dictionary, runs: Array[int], start_trim: float, end_trim: float, gaps: Array, front: Dictionary) -> void:
+	var cuts: Array[float] = [start_trim]
+	for gap_value in gaps:
+		var gap := gap_value as Vector2
+		cuts.append(gap.x)
+		cuts.append(gap.y)
+	cuts.append(_chain_length(record, runs) - end_trim)
+	var height := float(front.plinth_height_above_base)
+	for index in range(0, cuts.size(), 2):
+		var path := _chain_points(record, runs, cuts[index], cuts[index + 1])
+		_append_path_band(base, path, -0.06, height, float(front.plinth_front), -0.04, true, true)
+
+
+static func _append_cornice(trim: Dictionary, path: Dictionary, profile: Array, back: float) -> void:
+	for level_value in profile:
+		var level := level_value as Array
+		_append_path_band(trim, path, float(level[0]), float(level[1]), float(level[2]), back)
+
+
+## End point of a stepped tier's end cap `depth` inward from the exact outer
+## corner, with the cap's outward normal.
+static func _strip_cap(record: Dictionary, run_index: int, at_start: bool, depth: float) -> Dictionary:
+	var frame := _run_frame(record, run_index)
+	var corner := (frame.start if at_start else frame.end) as Vector3
+	var tangent := frame.tangent as Vector3
+	return {"point": corner - (frame.normal as Vector3) * depth, "normal": -tangent if at_start else tangent}
+
+
+static func _prepend_point(path: Dictionary, point: Vector3, normal: Vector3) -> void:
+	(path.points as Array).push_front(point)
+	(path.normals as Array).push_front(normal)
+
+
+static func _append_point(path: Dictionary, point: Vector3, normal: Vector3) -> void:
+	(path.points as Array).append(point)
+	(path.normals as Array).append(normal)
+
+
+## The accepted canopy footprint is the union of one slab per central run. A
+## single closed prism over that exact union replaces the overlapping boxes, so
+## no duplicate coplanar faces remain at kinks while the horizontal domain,
+## source ownership and roof role stay unchanged. If the native union is not one
+## simple polygon, the accepted per-run slabs are emitted unchanged instead.
+static func _append_canopy(visual: Dictionary, soffit: Dictionary, collision: Dictionary, record: Dictionary, runs: Array[int], rim_runs: Array[int], layout: Dictionary, front: Dictionary) -> bool:
+	var center_y := float(front.canopy_center_y)
+	var height := float(front.canopy_primary_height)
+	var bottom_y := center_y - height * 0.5
+	var union := _canopy_union(record, runs, front)
+	if union.is_empty():
+		_append_canopy_slabs(visual, soffit, collision, record, runs, front)
+		return false
+	_append_canopy_prism(visual, soffit, collision, union, bottom_y, center_y + height * 0.5)
+	# Deeper leading fascia inside the same footprint along the smooth crescent
+	# field; visual only, like the accepted leading edge it replaces.
+	var rim_y := front.canopy_rim_y as Array
+	var rim_path := _chain_points(record, rim_runs, 0.0, _chain_length(record, rim_runs))
+	_append_path_band(visual, rim_path, float(rim_y[0]), float(rim_y[1]), float(front.canopy_rim_front), float(front.canopy_rim_back), false, false, true)
+	# Coffered soffit: transverse ribs under each crescent pier and one spine,
+	# visual only beneath the closed slab and seated 0.01 m into it.
+	var ribs := front.canopy_soffit_ribs as Dictionary
+	var rib_half := float(ribs.width) * 0.5
+	for center_value in layout.piers as Array:
+		var center_m := float(center_value)
+		var frame := _span_frame(record, rim_runs, center_m - rib_half - 0.1, center_m + rib_half + 0.1)
+		var center := center_m - float(frame.mid_m)
+		_append_frame_box(soffit, frame, center - rib_half, center + rib_half, float(ribs.bottom_y), bottom_y + 0.01, float(ribs.back), float(ribs.front))
+	_append_path_band(soffit, rim_path, float(ribs.spine_bottom_y), bottom_y + 0.01, float(ribs.spine_front), float(ribs.spine_back), false, false, true)
+	return true
+
+
+static func _canopy_union(record: Dictionary, runs: Array[int], front: Dictionary) -> Dictionary:
+	# Local coordinates keep the native polygon union and triangulation well
+	# conditioned; the slab rectangles are exactly the accepted per-run boxes.
+	var origin := _run_frame(record, runs[0]).start as Vector3
+	var center := float(front.canopy_primary_center_projection)
+	var half_depth := float(front.canopy_primary_depth) * 0.5
+	var extension := float(front.canopy_run_extension)
+	var merged := PackedVector2Array()
 	for run_index in runs:
 		var frame := _run_frame(record, run_index)
-		var center := (frame.start as Vector3).lerp(frame.end as Vector3, 0.5)
-		center.y = center_y
-		_append_wall_bar(bucket, center, frame.tangent as Vector3, frame.normal as Vector3, center_y, float(frame.length_m) + 0.06, height, projection)
+		var tangent := frame.tangent as Vector3
+		var normal := frame.normal as Vector3
+		var start := (frame.start as Vector3) - tangent * extension
+		var end := (frame.end as Vector3) + tangent * extension
+		var rectangle := PackedVector2Array()
+		for corner: Vector3 in [start + normal * (center - half_depth), end + normal * (center - half_depth), end + normal * (center + half_depth), start + normal * (center + half_depth)]:
+			rectangle.append(Vector2(corner.x - origin.x, corner.z - origin.z))
+		if merged.is_empty():
+			merged = rectangle
+			continue
+		var union := Geometry2D.merge_polygons(merged, rectangle)
+		if union.size() != 1:
+			return {}
+		merged = union[0]
+	merged = _simplified_ring(merged)
+	if merged.size() < 3:
+		return {}
+	var triangles := Geometry2D.triangulate_polygon(merged)
+	if triangles.is_empty():
+		return {}
+	return {"polygon": merged, "indices": triangles, "origin": origin}
 
 
-static func _append_end_composition(glass: Dictionary, trim: Dictionary, record: Dictionary, run_index: int, front: Dictionary) -> void:
-	var frame := _run_frame(record, run_index)
-	var length := float(frame.length_m)
-	var tall_width := clampf(length * 0.17, 0.95, 1.65)
-	var flank_width := clampf(length * 0.085, 0.55, 0.82)
-	for sign_value in [-1.0, 1.0]:
-		var tall_frame := frame.duplicate(true)
-		tall_frame["wall_anchor"] = (frame.start as Vector3).lerp(frame.end as Vector3, 0.5) + (frame.tangent as Vector3) * (length * 0.19 * float(sign_value))
-		_append_window(glass, trim, tall_frame, 14.2, tall_width, 11.25, 4, 5, 0.16)
-		var flank_frame := frame.duplicate(true)
-		flank_frame["wall_anchor"] = (frame.start as Vector3).lerp(frame.end as Vector3, 0.5) + (frame.tangent as Vector3) * (length * 0.405 * float(sign_value))
-		_append_window(glass, trim, flank_frame, 15.05, flank_width, 3.35, 2, 3, 0.15)
-	var center := (frame.start as Vector3).lerp(frame.end as Vector3, 0.5)
-	var tangent := frame.tangent as Vector3
-	var normal := frame.normal as Vector3
-	center.y = 14.25
-	# Preserve the documented relief location as a quiet, low-contrast field.
-	# The previous high-contrast bar proxy suggested a cruciform symbol and is
-	# intentionally absent; no sculpture or as-built ornament is claimed.
-	_append_box(
-		trim,
-		center + normal * float(front.end_relief_field_center_projection),
-		tangent,
-		normal,
-		clampf(length * 0.13, 0.72, 1.15),
-		float(front.end_relief_field_height),
-		float(front.end_relief_field_depth)
-	)
+## Drop duplicate and truly collinear vertices (sine below 5e-4) that the native
+## union leaves where neighbouring accepted slabs share an edge line.
+static func _simplified_ring(points: PackedVector2Array) -> PackedVector2Array:
+	var result := PackedVector2Array()
+	var count := points.size()
+	for index in count:
+		var previous := points[(index + count - 1) % count]
+		var current := points[index]
+		var next := points[(index + 1) % count]
+		var incoming := current - previous
+		var outgoing := next - current
+		if incoming.length() < 0.0005:
+			continue
+		if absf(incoming.cross(outgoing)) <= 0.0005 * incoming.length() * outgoing.length() and incoming.dot(outgoing) > 0.0:
+			continue
+		result.append(current)
+	return result
 
 
-static func _append_canopy(visual: Dictionary, underside: Dictionary, collision: Dictionary, record: Dictionary, runs: Array[int], front: Dictionary) -> void:
+static func _ring_area(points: PackedVector2Array) -> float:
+	var area := 0.0
+	for index in points.size():
+		var a := points[index]
+		var b := points[(index + 1) % points.size()]
+		area += a.x * b.y - b.x * a.y
+	return area * 0.5
+
+
+static func _append_canopy_prism(visual: Dictionary, soffit: Dictionary, collision: Dictionary, union: Dictionary, bottom_y: float, top_y: float) -> void:
+	var polygon := union.polygon as PackedVector2Array
+	var indices := union.indices as PackedInt32Array
+	var origin := union.origin as Vector3
+	var points: Array[Vector3] = []
+	for point in polygon:
+		points.append(Vector3(point.x + origin.x, 0.0, point.y + origin.z))
+	for offset in range(0, indices.size(), 3):
+		var a := points[indices[offset]]
+		var b := points[indices[offset + 1]]
+		var c := points[indices[offset + 2]]
+		for target: Dictionary in [visual, collision]:
+			_append_triangle(target, _lifted(a, top_y), _lifted(b, top_y), _lifted(c, top_y), Vector3.UP)
+		for target: Dictionary in [soffit, collision]:
+			_append_triangle(target, _lifted(a, bottom_y), _lifted(b, bottom_y), _lifted(c, bottom_y), Vector3.DOWN)
+	var outward_sign := 1.0 if _ring_area(polygon) > 0.0 else -1.0
+	for index in points.size():
+		var a := points[index]
+		var b := points[(index + 1) % points.size()]
+		var outward := Vector3(b.z - a.z, 0.0, a.x - b.x).normalized() * outward_sign
+		for target: Dictionary in [visual, collision]:
+			_append_quad(target, _lifted(a, bottom_y), _lifted(b, bottom_y), _lifted(b, top_y), _lifted(a, top_y), outward)
+
+
+## Accepted per-run canopy slabs, kept as the exact fallback representation.
+static func _append_canopy_slabs(visual: Dictionary, underside: Dictionary, collision: Dictionary, record: Dictionary, runs: Array[int], front: Dictionary) -> void:
+	var center_y := float(front.canopy_center_y)
+	var extension := float(front.canopy_run_extension)
 	for run_index in runs:
 		var frame := _run_frame(record, run_index)
 		var wall_center := (frame.start as Vector3).lerp(frame.end as Vector3, 0.5)
 		var normal := frame.normal as Vector3
 		var tangent := frame.tangent as Vector3
 		var center := wall_center + normal * float(front.canopy_primary_center_projection)
-		center.y = 12.6
-		var width := float(frame.length_m) + 0.12
+		center.y = center_y
+		var width := float(frame.length_m) + extension * 2.0
 		_append_box(visual, center, tangent, normal, width, float(front.canopy_primary_height), float(front.canopy_primary_depth))
-		# Keep the accepted reachable/spray-blocking primary canopy collision
-		# exactly congruent; the leading edge and underside are visual accents.
 		_append_box(collision, center, tangent, normal, width, float(front.canopy_primary_height), float(front.canopy_primary_depth))
 		var leading_edge := wall_center + normal * float(front.canopy_leading_edge_center_projection)
-		leading_edge.y = 12.6
+		leading_edge.y = center_y
 		_append_box(visual, leading_edge, tangent, normal, width + 0.04, float(front.canopy_leading_edge_height), float(front.canopy_leading_edge_depth))
 		var underside_center := wall_center + normal * float(front.canopy_underside_center_projection)
-		underside_center.y = 12.35
+		underside_center.y = center_y - 0.25
 		_append_box(underside, underside_center, tangent, normal, width - 0.04, float(front.canopy_underside_height), float(front.canopy_underside_depth))
+
+
+## Continuous mitered relief band over an exact wall path. `front`/`back` are
+## signed metres from each run's exact plane along its outward normal; interior
+## vertices use the miter of adjacent normals, so the band neither overlaps nor
+## opens at kinks. Bottom and top may follow the exact source wall bottoms.
+## Back faces stay buried behind the wall and are omitted unless requested.
+static func _append_path_band(bucket: Dictionary, path: Dictionary, bottom: float, top: float, front: float, back: float, bottom_on_base: bool = false, top_on_base: bool = false, emit_back: bool = false) -> void:
+	var points := path.points as Array
+	var normals := path.normals as Array
+	if points.size() < 2 or normals.size() != points.size() - 1:
+		return
+	var fronts: Array[Vector3] = []
+	var backs: Array[Vector3] = []
+	var lows: Array[float] = []
+	var highs: Array[float] = []
+	for index in points.size():
+		var point := points[index] as Vector3
+		var miter := _miter_offset(normals, index)
+		var flat := Vector3(point.x, 0.0, point.z)
+		fronts.append(flat + miter * front)
+		backs.append(flat + miter * back)
+		lows.append(point.y + bottom if bottom_on_base else bottom)
+		highs.append(point.y + top if top_on_base else top)
+	for segment in normals.size():
+		var a := segment
+		var b := segment + 1
+		var normal := normals[segment] as Vector3
+		_append_quad(bucket, _lifted(fronts[a], lows[a]), _lifted(fronts[b], lows[b]), _lifted(fronts[b], highs[b]), _lifted(fronts[a], highs[a]), normal)
+		_append_quad(bucket, _lifted(backs[a], highs[a]), _lifted(backs[b], highs[b]), _lifted(fronts[b], highs[b]), _lifted(fronts[a], highs[a]), Vector3.UP)
+		_append_quad(bucket, _lifted(fronts[a], lows[a]), _lifted(fronts[b], lows[b]), _lifted(backs[b], lows[b]), _lifted(backs[a], lows[a]), Vector3.DOWN)
+		if emit_back:
+			_append_quad(bucket, _lifted(backs[b], lows[b]), _lifted(backs[a], lows[a]), _lifted(backs[a], highs[a]), _lifted(backs[b], highs[b]), -normal)
+	var last := points.size() - 1
+	var first_direction := _flat_direction(points[0] as Vector3, points[1] as Vector3)
+	var last_direction := _flat_direction(points[last - 1] as Vector3, points[last] as Vector3)
+	_append_quad(bucket, _lifted(backs[0], lows[0]), _lifted(fronts[0], lows[0]), _lifted(fronts[0], highs[0]), _lifted(backs[0], highs[0]), -first_direction)
+	_append_quad(bucket, _lifted(fronts[last], lows[last]), _lifted(backs[last], lows[last]), _lifted(backs[last], highs[last]), _lifted(fronts[last], highs[last]), last_direction)
+
+
+## Unit miter at a path vertex: a point displaced d along it lies d from both
+## adjacent exact wall planes. Clamped so a reflex fold cannot explode a band.
+static func _miter_offset(normals: Array, index: int) -> Vector3:
+	if index <= 0:
+		return normals[0] as Vector3
+	if index >= normals.size():
+		return normals[normals.size() - 1] as Vector3
+	return _miter_between(normals[index - 1] as Vector3, normals[index] as Vector3)
+
+
+static func _miter_between(previous: Vector3, current: Vector3) -> Vector3:
+	return (previous + current) / maxf(1.0 + previous.dot(current), 0.25)
+
+
+static func _lifted(point: Vector3, y: float) -> Vector3:
+	return Vector3(point.x, y, point.z)
+
+
+static func _flat_direction(origin_point: Vector3, target_point: Vector3) -> Vector3:
+	return Vector3(target_point.x - origin_point.x, 0.0, target_point.z - origin_point.z).normalized()
+
+
+## Exact chain polyline between two chain metres: interior run vertices,
+## per-segment outward normals and interpolated source bottoms at the cuts.
+## Collinear source splits merge into one segment, so a short split ending at
+## a corner (run 4 is 0.19 m) cannot fold a mitered band back on itself.
+static func _chain_points(record: Dictionary, runs: Array[int], from_m: float, to_m: float) -> Dictionary:
+	var points: Array = []
+	var normals: Array = []
+	var accumulated := 0.0
+	for run_index in runs:
+		var frame := _run_frame(record, run_index)
+		var length := float(frame.length_m)
+		var run_start := accumulated
+		accumulated += length
+		if accumulated <= from_m + 0.0001 or run_start >= to_m - 0.0001:
+			continue
+		var start := frame.start as Vector3
+		var end := frame.end as Vector3
+		var normal := frame.normal as Vector3
+		if points.is_empty():
+			points.append(start.lerp(end, clampf((from_m - run_start) / length, 0.0, 1.0)))
+		elif (normals[normals.size() - 1] as Vector3).dot(normal) > 0.9999:
+			points.pop_back()
+			normals.pop_back()
+		points.append(start.lerp(end, clampf((to_m - run_start) / length, 0.0, 1.0)))
+		normals.append(normal)
+	return {"points": points, "normals": normals}
+
+
+## Chord frame for a finite applied module spanning exact chain metres. Its
+## lateral axis follows the chord; `lo`/`hi` bound the exact wall polyline in
+## the span along the outward normal, so a module embeds behind the deepest wall
+## point and measures projections from the most forward one.
+static func _span_frame(record: Dictionary, runs: Array[int], from_m: float, to_m: float) -> Dictionary:
+	var length := _chain_length(record, runs)
+	var low_m := clampf(from_m, 0.0, length)
+	var high_m := clampf(to_m, low_m + 0.001, length)
+	var first := _chain_frame(record, runs, low_m)
+	var last := _chain_frame(record, runs, high_m)
+	var a := first.wall_anchor as Vector3
+	var b := last.wall_anchor as Vector3
+	var tangent := Vector3(b.x - a.x, 0.0, b.z - a.z).normalized()
+	var normal := Vector3(-tangent.z, 0.0, tangent.x)
+	if normal.dot((first.normal as Vector3) + (last.normal as Vector3)) < 0.0:
+		normal = -normal
+	var lo := 0.0
+	var hi := 0.0
+	var accumulated := 0.0
+	for run_index in runs:
+		var frame := _run_frame(record, run_index)
+		accumulated += float(frame.length_m)
+		if accumulated > low_m + 0.0001 and accumulated < high_m - 0.0001:
+			var offset := ((frame.end as Vector3) - a).dot(normal)
+			lo = minf(lo, offset)
+			hi = maxf(hi, offset)
+	return {
+		"anchor": a.lerp(b, 0.5),
+		"tangent": tangent,
+		"normal": normal,
+		"lo": lo,
+		"hi": hi,
+		"mid_m": (low_m + high_m) * 0.5,
+		"base_a": float(first.base_y),
+		"base_b": float(last.base_y),
+	}
+
+
+## Box in a module frame: lateral metres along the frame tangent from its
+## anchor, absolute Y, and signed depth along its outward normal.
+static func _append_frame_box(bucket: Dictionary, frame: Dictionary, lateral_min: float, lateral_max: float, y_min: float, y_max: float, depth_min: float, depth_max: float) -> void:
+	var tangent := frame.tangent as Vector3
+	var normal := frame.normal as Vector3
+	var center := (frame.anchor as Vector3) + tangent * ((lateral_min + lateral_max) * 0.5) + normal * ((depth_min + depth_max) * 0.5)
+	center.y = (y_min + y_max) * 0.5
+	_append_box(bucket, center, tangent, normal, lateral_max - lateral_min, y_max - y_min, depth_max - depth_min)
+
+
+static func _evenly_spaced(length: float, count: int, margin: float) -> Array[float]:
+	var result: Array[float] = []
+	for index in count:
+		result.append(length * 0.5 if count == 1 else lerpf(margin, length - margin, float(index) / float(count - 1)))
+	return result
+
+
+static func _chain_start_of(record: Dictionary, runs: Array[int], target_run: int) -> float:
+	var accumulated := 0.0
+	for run_index in runs:
+		if run_index == target_run:
+			return accumulated
+		accumulated += float(_run_frame(record, run_index).length_m)
+	return -1.0
+
+
+## Relocated pavilion compositions must still bind to the frozen footprint's
+## stepped west ends: a straight west-facing centre face projecting 1-2.5 m past
+## both flanks, with its corner bay recessed further behind them.
+static func _pavilion_identity_valid(record: Dictionary, spec: Dictionary) -> bool:
+	var center_runs := _int_array(spec.get("center_runs", []) as Array)
+	var corner_runs := _int_array(spec.get("corner_runs", []) as Array)
+	var flanks := spec.get("flank_runs", []) as Array
+	if center_runs.is_empty() or corner_runs.is_empty() or flanks.size() != 2:
+		return false
+	var center_length := _chain_length(record, center_runs)
+	var frame := _span_frame(record, center_runs, 0.0, center_length)
+	var normal := frame.normal as Vector3
+	var anchor := frame.anchor as Vector3
+	if normal.x > -0.8 or center_length < 8.0 or float(frame.lo) < -0.08 or float(frame.hi) > 0.08:
+		return false
+	for flank_value in flanks:
+		var flank := _int_array(flank_value as Array)
+		var flank_anchor := _span_frame(record, flank, 0.0, _chain_length(record, flank)).anchor as Vector3
+		var projection := (anchor - flank_anchor).dot(normal)
+		if projection < 1.0 or projection > 2.5:
+			return false
+	var corner_anchor := _span_frame(record, corner_runs, 0.0, _chain_length(record, corner_runs)).anchor as Vector3
+	return (anchor - corner_anchor).dot(normal) > 2.5
+
+
+## The SE face and rear ribbon hosts must still be the frozen chains the dated
+## rear view binds. Each chain is contiguous and faces out of the SE face or
+## the east/north-east podium. The first rear chain starts at the SE face's
+## protected seam, and every rear host is a protected run.
+static func _rear_hosts_valid(record: Dictionary, se_runs: Array[int], chains: Array) -> bool:
+	if se_runs.is_empty() or not _chain_contiguous(record, se_runs):
+		return false
+	for run_index in se_runs:
+		var normal := _run_frame(record, run_index).normal as Vector3
+		if run_index in PROTECTED_RUNS or normal.x < 0.4 or normal.z < 0.3:
+			return false
+	var seam := _run_frame(record, se_runs[se_runs.size() - 1]).end as Vector3
+	for chain_index in chains.size():
+		var host := _int_array(chains[chain_index] as Array)
+		if host.is_empty() or not _chain_contiguous(record, host):
+			return false
+		var host_start := _run_frame(record, host[0]).start as Vector3
+		if chain_index == 0 and Vector2(seam.x - host_start.x, seam.z - host_start.z).length() > 0.001:
+			return false
+		for run_index in host:
+			if run_index not in PROTECTED_RUNS or (_run_frame(record, run_index).normal as Vector3).x < 0.5:
+				return false
+	return true
+
+
+static func _chain_contiguous(record: Dictionary, runs: Array[int]) -> bool:
+	for index in range(1, runs.size()):
+		var previous := _run_frame(record, runs[index - 1]).end as Vector3
+		var current := _run_frame(record, runs[index]).start as Vector3
+		if Vector2(previous.x - current.x, previous.z - current.z).length() > 0.001:
+			return false
+	return true
+
+
+## Frame on the drum-end bay. Its host is the exposed east part of the central
+## tier's join between the inner ends of runs 40 and 41, from where run 38's
+## inner face crosses it to the join's end. The inner offsets are the same ones
+## the strip walls use to emit that join. Empty when the host no longer
+## resolves.
+static func _drum_end_frame(record: Dictionary, spec: Dictionary, depth: float) -> Dictionary:
+	if _int_array(spec.get("join_runs", []) as Array) != _int_array(DRUM_END_JOIN_RUNS) or int(spec.get("occluding_inner_run", -1)) != DRUM_END_OCCLUDING_RUN:
+		return {}
+	var previous := _run_frame(record, int(DRUM_END_JOIN_RUNS[0]))
+	var current := _run_frame(record, int(DRUM_END_JOIN_RUNS[1]))
+	var occluding := _run_frame(record, DRUM_END_OCCLUDING_RUN)
+	if previous.is_empty() or current.is_empty() or occluding.is_empty():
+		return {}
+	var join_from := (previous.end as Vector3) - (previous.normal as Vector3) * depth
+	var join_to := (current.start as Vector3) - (current.normal as Vector3) * depth
+	var occluding_from := (occluding.start as Vector3) - (occluding.normal as Vector3) * depth
+	var occluding_to := (occluding.end as Vector3) - (occluding.normal as Vector3) * depth
+	var crossing: Variant = Geometry2D.segment_intersects_segment(Vector2(join_from.x, join_from.z), Vector2(join_to.x, join_to.z), Vector2(occluding_from.x, occluding_from.z), Vector2(occluding_to.x, occluding_to.z))
+	if not crossing is Vector2:
+		return {}
+	var exposed_from := Vector3((crossing as Vector2).x, 0.0, (crossing as Vector2).y)
+	var exposed_to := Vector3(join_to.x, 0.0, join_to.z)
+	var join := join_to - join_from
+	return {
+		"anchor": exposed_from.lerp(exposed_to, 0.5),
+		"tangent": (exposed_to - exposed_from).normalized(),
+		"normal": Vector3(join.z, 0.0, -join.x).normalized(),
+		"lo": 0.0,
+		"hi": 0.0,
+		"length_m": exposed_from.distance_to(exposed_to),
+	}
+
+
+## The drum-end pair must face out of the rear and fit the exposed bay with its
+## surrounds and head. It sits between the podium roof and the drum top, with
+## the small window clear above the tall one's head.
+static func _drum_openings_fit(frame: Dictionary, openings: Dictionary, style: Dictionary, low_y: float, high_y: float) -> bool:
+	if frame.is_empty() or (frame.normal as Vector3).x < 0.5:
+		return false
+	var tall := openings.tall as Dictionary
+	var small := openings.small as Dictionary
+	var tall_y := tall.y as Array
+	var small_y := small.y as Array
+	var side := float(style.surround) + maxf(float(style.sill_overhang), float(openings.head_overhang)) + float(openings.edge_margin_m)
+	return float(frame.length_m) >= maxf(float(tall.glass_width), float(small.glass_width)) + 2.0 * side \
+		and float(tall_y[0]) - float(style.sill_height) > low_y \
+		and float(small_y[0]) - float(style.sill_height) > float(tall_y[1]) + float(style.head_height) + float(openings.head_height) \
+		and float(small_y[1]) + float(style.head_height) < high_y
 
 
 static func _append_wall_bar(bucket: Dictionary, anchor: Vector3, tangent: Vector3, normal: Vector3, center_y: float, width: float, height: float, projection: float) -> void:
@@ -961,7 +1829,11 @@ static func _config_valid(config: Dictionary) -> bool:
 	var target := config.get("target", {}) as Dictionary
 	var vertical := config.get("vertical_production_inference_m", {}) as Dictionary
 	var schedule := config.get("facade_schedule", {}) as Dictionary
-	return str(config.get("schema_version", "")) == "ti.building-1-hero-model/1" \
+	var seams := schedule.get("protected_seam_piers", {}) as Dictionary
+	var central_runs: Array[int] = []
+	for run_index in range(21, 44):
+		central_runs.append(run_index)
+	return str(config.get("schema_version", "")) == "ti.building-1-hero-model/2" \
 		and str(target.get("building_source_key", "")) == BUILDING_SOURCE_KEY \
 		and str(target.get("tower_source_key", "")) == TOWER_SOURCE_KEY \
 		and bool(target.get("tower_remains_separately_reviewable", false)) \
@@ -969,19 +1841,75 @@ static func _config_valid(config: Dictionary) -> bool:
 		and float(vertical.get("three_story_roof_y", 0.0)) < float(vertical.get("four_story_roof_y", 0.0)) \
 		and float(vertical.get("four_story_roof_y", 0.0)) < float(vertical.get("tower_glass_top_y", 0.0)) \
 		and float(vertical.get("tower_glass_top_y", 0.0)) < float(vertical.get("tower_roof_peak_y", 0.0)) \
+		and _int_array(schedule.get("central_runs", []) as Array) == central_runs \
+		and _int_array(schedule.get("crescent_field_runs", []) as Array) == CRESCENT_FIELD_RUNS \
 		and int(schedule.get("central_window_count", 0)) == 11 \
 		and int(schedule.get("central_lights_per_window", 0)) == 18 \
 		and int(schedule.get("upper_windows_per_wing", 0)) == 8 \
 		and int(schedule.get("upper_lights_per_window", 0)) == 10 \
 		and int(schedule.get("lower_windows_per_wing", 0)) == 7 \
+		and int(schedule.get("north_face_windows_per_floor", 0)) > 0 \
 		and _int_array(schedule.get("north_wing_window_runs", []) as Array) == NORTH_WING_WINDOW_RUNS \
 		and _int_array(schedule.get("south_wing_window_runs", []) as Array) == SOUTH_WING_WINDOW_RUNS \
-		and int(schedule.get("north_end_run", -1)) == 93 \
-		and int(schedule.get("south_end_run", -1)) == 60 \
+		and _int_array(schedule.get("north_face_window_runs", []) as Array) == NORTH_FACE_WINDOW_RUNS \
+		and _pavilion_runs_match(schedule.get("north_pavilion", {}) as Dictionary, NORTH_PAVILION_RUNS) \
+		and _pavilion_runs_match(schedule.get("south_pavilion", {}) as Dictionary, SOUTH_PAVILION_RUNS) \
+		and _pavilion_entry_valid(schedule.get("north_pavilion", {}) as Dictionary) \
+		and _pavilion_entry_valid(schedule.get("south_pavilion", {}) as Dictionary) \
+		and _int_array(schedule.get("entrance_bays", []) as Array) == ENTRANCE_BAYS \
+		and _junction_window_runs(schedule.get("junction_windows", []) as Array) == JUNCTION_WINDOW_RUNS \
+		and _junction_window_runs(schedule.get("north_junction_windows", []) as Array) == NORTH_JUNCTION_WINDOW_RUNS \
+		and _int_array(schedule.get("se_face_runs", []) as Array) == SE_FACE_RUNS \
+		and _chains_equal(schedule.get("rear_ribbon_host_chains", []) as Array, REAR_RIBBON_HOST_CHAINS) \
+		and schedule.get("drum_end_openings", null) is Dictionary \
+		and int(seams.get("north_run_start", -1)) == 93 \
+		and int(seams.get("south_run_end", -1)) == 69 \
 		and int(schedule.get("tall_windows_per_end", 0)) == 2 \
 		and int(schedule.get("lights_per_tall_end_window", 0)) == 20 \
 		and int(schedule.get("entrance_groups", 0)) == 3 \
 		and int(schedule.get("doors_per_entrance_group", 0)) == 3
+
+
+static func _pavilion_entry_valid(config: Dictionary) -> bool:
+	var entry := config.get("entry", {}) as Dictionary
+	for key: String in PAVILION_ENTRY_KEYS:
+		if not entry.has(key):
+			return false
+	return float(entry.door_half_width) < float(entry.recess_half_width) \
+		and float(entry.transom_height) < float(entry.height)
+
+
+static func _junction_window_runs(specs: Array) -> Array[int]:
+	var runs: Array[int] = []
+	for spec_value in specs:
+		var spec := spec_value as Dictionary
+		if not spec.has("run") or not spec.has("glass_width") or not spec.has("columns"):
+			return []
+		runs.append(int(spec.run))
+	return runs
+
+
+static func _chains_equal(chains: Array, expected: Array) -> bool:
+	if chains.size() != expected.size():
+		return false
+	for index in chains.size():
+		if not chains[index] is Array or _int_array(chains[index] as Array) != _int_array(expected[index] as Array):
+			return false
+	return true
+
+
+static func _pavilion_runs_match(config: Dictionary, expected: Dictionary) -> bool:
+	if _int_array(config.get("center_runs", []) as Array) != _int_array(expected.center_runs as Array) \
+		or _int_array(config.get("corner_runs", []) as Array) != _int_array(expected.corner_runs as Array):
+		return false
+	var flanks := config.get("flank_runs", []) as Array
+	var expected_flanks := expected.flank_runs as Array
+	if flanks.size() != expected_flanks.size():
+		return false
+	for index in flanks.size():
+		if _int_array(flanks[index] as Array) != _int_array(expected_flanks[index] as Array):
+			return false
+	return true
 
 
 static func _bar_config_valid(config: Dictionary) -> bool:
@@ -989,28 +1917,38 @@ static func _bar_config_valid(config: Dictionary) -> bool:
 		return false
 	var target := config.get("target", {}) as Dictionary
 	var geometry := config.get("geometry_production_inference_m", {}) as Dictionary
+	var crescent_style := geometry.get("crescent_window_style", {}) as Dictionary
 	var expected_runs: Array[int] = []
 	for run_index in range(21, 44):
 		expected_runs.append(run_index)
-	return str(config.get("schema_version", "")) == "ti.building-1-public-front-believability/3" \
-		and str(config.get("pass_id", "")) == "building-1-wing-window-returns-v2-2026-09-08" \
+	return str(config.get("schema_version", "")) == "ti.building-1-public-front-believability/4" \
+		and str(config.get("pass_id", "")) == "building-1-public-family-opus-2026-10-16" \
 		and str(target.get("building_source_key", "")) == BUILDING_SOURCE_KEY \
 		and str(target.get("wall_object_key", "")) == BUILDING_WALL_KEY \
 		and str(target.get("roof_object_key", "")) == BUILDING_ROOF_KEY \
 		and _int_array(target.get("public_front_chain_runs", []) as Array) == expected_runs \
-		and int(geometry.get("pilaster_count", 0)) == 12 \
-		and int(geometry.get("pilaster_flutes_per_pilaster", 0)) == 2 \
-		and is_equal_approx(float(geometry.get("wing_window_jamb_frame_overlap", -1.0)), 0.005) \
-		and is_equal_approx(float(geometry.get("wing_window_jamb_rear_overlap", -1.0)), 0.01) \
-		and float(geometry.get("window_reveal_center_projection", -1.0)) + float(geometry.get("window_reveal_depth", 0.0)) * 0.5 \
-			< float(geometry.get("window_frame_center_projection", -1.0)) + float(geometry.get("window_frame_depth", 0.0)) * 0.5 \
-		and float(geometry.get("window_frame_center_projection", -1.0)) + float(geometry.get("window_frame_depth", 0.0)) * 0.5 \
-			< float(geometry.get("pilaster_flute_center_projection", -1.0)) + float(geometry.get("pilaster_flute_depth", 0.0)) * 0.5 \
 		and is_equal_approx(float(geometry.get("projecting_base_depth", -1.0)), 0.28) \
 		and is_equal_approx(float(geometry.get("projecting_base_top_y", -1.0)), 12.45) \
+		and is_equal_approx(float(geometry.get("canopy_center_y", -1.0)), 12.6) \
 		and is_equal_approx(float(geometry.get("canopy_primary_center_projection", -1.0)), 1.08) \
 		and is_equal_approx(float(geometry.get("canopy_primary_depth", -1.0)), 2.25) \
-		and is_equal_approx(float(geometry.get("canopy_primary_height", -1.0)), 0.42)
+		and is_equal_approx(float(geometry.get("canopy_primary_height", -1.0)), 0.42) \
+		and is_equal_approx(float(geometry.get("canopy_run_extension", -1.0)), 0.06) \
+		and float(geometry.get("canopy_rim_front", 9.0)) < 1.08 + 2.25 * 0.5 \
+		and float(geometry.get("crescent_pier_depth", 0.0)) > float(crescent_style.get("jamb_front", 1.0)) \
+		and float(geometry.get("crescent_pier_reed_front", 0.0)) > float(geometry.get("crescent_pier_depth", 1.0)) \
+		and int(geometry.get("crescent_pier_reeds", 0)) > 0 \
+		and (geometry.get("crescent_cornice", []) as Array).size() == 3 \
+		and (geometry.get("wing_cornice", []) as Array).size() == 3 \
+		and (geometry.get("window_floors", []) as Array).size() == 3 \
+		and (geometry.get("entrance_portal_head_y", []) as Array).size() == 2 \
+		and float(geometry.get("entrance_portal_front", 0.0)) > float(geometry.get("entrance_frame_front", 1.0)) \
+		and geometry.get("canopy_soffit_ribs", null) is Dictionary \
+		and geometry.get("pavilion_emblem", null) is Dictionary \
+		and geometry.get("podium_ribbon", null) is Dictionary \
+		and geometry.get("drum_end_openings", null) is Dictionary \
+		and (geometry.get("se_narrow_window_y", []) as Array).size() == 2 \
+		and (geometry.get("se_podium_string_course", []) as Array).size() == 3
 
 
 static func _json(path: String) -> Dictionary:

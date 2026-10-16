@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "building_1_public_dark_reflective_glazing_opaque_proxy"
+albedo_color = Color(0.07, 0.085, 0.095, 1)
+metallic = 0.0
+metallic_specular = 0.6
+roughness = 0.1

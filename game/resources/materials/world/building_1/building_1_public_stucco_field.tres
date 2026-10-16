@@ -1,0 +1,20 @@
+[gd_resource type="ShaderMaterial" load_steps=5 format=3]
+
+[ext_resource type="Shader" path="res://game/resources/materials/world/building_1/building_1_public_stucco.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" path="res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_diff_1k.jpg" id="2_color"]
+[ext_resource type="Texture2D" path="res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_nor_gl_1k.jpg" id="3_normal"]
+[ext_resource type="Texture2D" path="res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_rough_1k.jpg" id="4_roughness"]
+
+[resource]
+resource_name = "building_1_public_painted_stucco_field"
+shader = ExtResource("1_shader")
+shader_parameter/surface_color = ExtResource("2_color")
+shader_parameter/surface_normal = ExtResource("3_normal")
+shader_parameter/surface_roughness = ExtResource("4_roughness")
+shader_parameter/paint_color = Color(0.845, 0.8, 0.665, 1)
+shader_parameter/tile_span_m = 2.6
+shader_parameter/relief_strength = 0.12
+shader_parameter/grain_variation = 0.2
+shader_parameter/broad_variation = 0.1
+shader_parameter/roughness_base = 0.84
+shader_parameter/roughness_variation = 0.12
