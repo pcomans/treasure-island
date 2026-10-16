@@ -403,7 +403,7 @@ before selecting another round.
 | physical-building:w1473253276 / w1473253276 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:r133347 / r133347 | Treasure Island Personnel Support Detachment | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:r133351 / r133351 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:r16681702 / r16681702 | Treasure Island Museum | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect held whole-building work before new assignment |
+| physical-building:r16681702 / r16681702 | Treasure Island Museum | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Opus005 — whole-building game-art visual/CODE and native fit PASS; no further art blocker identified; higher stages not separately scored, as-built unclaimed |
 | physical-building:r19685981 / r19685981 | Maceo May | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 
 **YMCA**, 2026-10-10, candidate on `0f058e9`: L1 basic envelope/site complete.
