@@ -138,6 +138,8 @@ During Station48 closure, repeated followups to busy reviewers did not produce f
 
 ## Choose the next useful work after a held pilot
 
+During the 2026-10-16 Building 1 work, completed scoped reviews and explicit next-scope decisions repeatedly ended in coordinator holds until the owner prompted continuation, despite authorization to keep completing the building. The reviews were necessary; treating their handoff boundaries as the end of authorized work caused the stall. Consume the actual result, preserve the shared level and mandatory gates, and dispatch the next concrete authorized review, validation or correction before ending. Renew an exhausted finite tranche within existing authorization or redirect; ask the owner only for a genuine unresolved decision/resource boundary. No reminder timer or new approval framework is needed. See [the continuation rule](AGENTS.md#continue-authorized-work-across-routine-handoffs).
+
 The isolated1220 material-finish pilot passed technical preservation but received
 a separate visual HOLD: additional microsurface detail did not establish a useful
 whole-view improvement. A failed finish pilot does not automatically make another

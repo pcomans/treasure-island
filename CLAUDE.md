@@ -46,6 +46,11 @@ and reviewer must name the same level in their existing handoffs. Out-of-level
 feedback is retained without silently becoming the next brief; ROOT explicitly
 records any supported level transition before changing artistic focus.
 
+Apply [authorized continuation across routine handoffs](AGENTS.md#continue-authorized-work-across-routine-handoffs)
+when consuming results: dispatch the next concrete authorized action, including
+any still-required review or validation, instead of ending at readiness and
+waiting for another owner “Continue.” Existing gates and decision boundaries remain.
+
 ### Codex CLI delegated visual reviews
 
 For an authorized standalone review, launch a **persistent review orchestrator**: omit `--ephemeral`. Codex child delegation needs the parent's saved thread/rollout context. The CLI root still only coordinates; naming it a reviewer does not make it an executing subagent.

@@ -19990,3 +19990,16 @@ Next: model complete reference-supported rear/roof families only within newly ex
 - Worked: the nine-file diff makes the ordinary task note the shared active-level source, propagates it through author/reviewer/ROOT handoffs, and requires an explicit supported transition. In-level PASS remains separate from whole acceptance; fit, source, spray, privacy and suite gates remain intact.
 - Did not work: no concrete defect found in this focused review; no engine or art review was needed for instruction changes.
 - Next time: keep out-of-level findings in the ordinary critique and verify the next brief preserves the declared level or records the transition, rather than expanding the review into unrelated project history.
+
+## 2026-10-16 — independent_checkpoint_sol: continue authorized work across routine handoffs
+
+- Worked: isolated the four-file instruction change at `237c403`, reusing the existing shared-level contract and mandatory gates. Owner authorization already covers continued building work; a canonical ROOT continuation rule and one CLAUDE link address the coordinator boundary without a timer or framework. Live SE/rear authoring was untouched.
+- Did not work: Building 1 handoffs repeatedly stopped after useful review/scope evidence and awaited another owner prompt. Required independent review was not the defect; ROOT failed to carry the authorized objective through the next executable assignment. No unmeasured idle-time or speed claim is made.
+- Before → after: scoped Level 2 PASS → list remaining work → end until owner says “Continue”; now consume PASS → record the supported shared-level/scope decision and dispatch the required progress/CODE/validation or next bounded author action. REWORK dispatches the same-level correction; an exhausted tranche is renewed or redirected within authorization. Genuine owner decisions and all source, privacy, acceptance and serialized-engine gates still stop dependent work.
+- Validation: focused instruction diff and intended-file whitespace checks; independent review before the authorized separate documentation commit. No engine, art test, model call, live-process interruption or push.
+
+## 2026-10-16 — shared_zoom_review_sol: independent continuation-patch review
+
+- Worked: the four-file diff requires actual results to lead to executable authorized work, covers same-level correction and bounded tranche renewal, and preserves shared-level transitions and every existing gate.
+- Did not work: no concrete defect found; no engine, art or broader project review was needed for this instruction change.
+- Next time: distinguish readiness from execution and genuine owner decisions from routine handoffs; retain live-handle ownership while waiting instead of duplicating work.
