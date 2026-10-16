@@ -20003,3 +20003,22 @@ Next: model complete reference-supported rear/roof families only within newly ex
 - Worked: the four-file diff requires actual results to lead to executable authorized work, covers same-level correction and bounded tranche renewal, and preserves shared-level transitions and every existing gate.
 - Did not work: no concrete defect found; no engine, art or broader project review was needed for this instruction change.
 - Next time: distinguish readiness from execution and genuine owner decisions from routine handoffs; retain live-handle ownership while waiting instead of duplicating work.
+
+## 2026-10-16 — independent_checkpoint_sol: integrated harness conflict seams
+
+- Worked: bounded review of the three harness cherry-picks onto latest-main `bebe233` found only additive instruction changes. Latest-main routing, island/checklist strategy, advisory guidance and recent lessons/RETRO remain; shared active-level links and routine-continuation semantics agree across roles. Integration seam PASS; prior independent patch reviews remain applicable.
+- Did not work: no blocking contradiction or dropped main improvement found. The historical generic modeling route is retained; Building1's explicit session Opus override remains separate authorization, not a reason to rewrite unrelated routing.
+- Next time: resolve append conflicts by retaining both current lessons and approved additions, then review the actual merged diff rather than replaying unrelated art checks. Nine intended instruction files passed whitespace; no engine/model/art change or acceptance claim from this reviewer.
+
+## 2026-10-16 — independent_checkpoint_sol: final Building1 progress decision
+
+- Worked: GO for completion/ship uses prior direct004 whole-family comparison, retained CODE005 delta PASS and ROOT-delivered independent005 whole-building game-art visual PASS. Fresh fit005 records four stock approaches, supported active REST and safe final; unchanged004 stock spray remains scoped to its actual source receiver. No additional artistic stage is justified by the completed verdict.
+- Did not work: the original full study suite exited1 on two missing-dependency components; focused validation/determinism retries passed after setup repair. Keep the original failure intact rather than calling that invocation ALL TESTS PASS. Final latest-main integration suite is still required before push.
+- Next time: consume concrete completed reviews and continue catalog/commit/integration without a new release approval or holding execution for ordinary notes. Preserve213 inventory, historical recognition credit, protected/tower/source/privacy boundaries and disclosed production inference; game-art completion is not as-built verification. No engine/model/source edit was performed by this reviewer.
+
+
+## 2026-10-16 — building1_texture_environment: isolated Building1 integration
+
+- Worked: created a clean integration branch from fetched main bebe233, preserving the dirty content-main worktree and all unrelated building improvements. Applied only the three approved harness commits; independent seam review passed.
+- Did not work: append-only learning/retrospective changes and the skill scope paragraph conflicted across parallel history. Retained both current-main guidance and approved new contracts without replacing entire files.
+- Next time: check ancestry and exact overlap first, preserve current acceptance records, and validate the complete integrated state before a fast-forward push. No Mac build is inferred from code shipping.
