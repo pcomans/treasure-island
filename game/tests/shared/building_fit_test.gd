@@ -44,6 +44,20 @@ const Catalog := preload("res://game/tests/shared/catalog.gd")
 
 
 const QUALITY_SUPPORT_ASSEMBLIES := {
+	"w34313564": {
+		"assembly_name": "W34313564LiveModules",
+		"required": {
+			"wall": ["SSEPlinth", "SSESurround", "SSEClosedDoor", "SSEWindow", "RetainedENEWindow", "RetainedNNWDoor", "RetainedNNWWindow"],
+			"detail": ["SSEEave", "SSEFascia"],
+			"ground_visual": [],
+		},
+		"retained_calibration": {
+			"helper": "res://game/tests/support/w34313564_module_calibration.gd",
+			"registry": "res://game/resources/facades/w34313564_module_calibration.json",
+			"chunk": "res://generated/world/chunks/x_0__z_-3.json",
+			"placements": ["CAL-ENE-HWIN-01", "CAL-NNW-PDOOR-01", "CAL-NNW-HWIN-01"],
+		},
+	},
 	"w34313547": {
 		"assembly_name": "YMCAObservedEntrySite",
 		"required": {
@@ -98,7 +112,7 @@ func _run() -> void:
 		quit(1)
 		return
 	var source_key := str(args.source)
-	var native_sources := {"chapel-indexed": "w291189336", "building2-indexed": "w24274434", "station48-indexed": "w764313741", "northpoint1232-mixed": "w96215673", "ymca-mixed": "w34313547", "panel-hall-mixed": "w34313569", "personnel-support-mixed": "r133347"}
+	var native_sources := {"chapel-indexed": "w291189336", "building2-indexed": "w24274434", "station48-indexed": "w764313741", "northpoint1232-mixed": "w96215673", "ymca-mixed": "w34313547", "panel-hall-mixed": "w34313569", "personnel-support-mixed": "r133347", "w34313564-mixed": "w34313564"}
 	var housing_native := str(args.get("native-producer", "")) == "housing-get-faces"
 	if args.has("native-producer") and ((not housing_native and str(native_sources.get(str(args["native-producer"]), "")) != source_key) or args.has("diagnose-side") or args.has("adjacent-source")):
 		push_error("native producer requires its supported source and cannot combine diagnostic/adjacent modes")
@@ -158,9 +172,11 @@ func _run() -> void:
 			native_error = _check_housing_faces(h, source_key)
 		elif str(args["native-producer"]) == "northpoint1232-mixed":
 			native_error = _check_housing_faces(h, source_key, true)
-		elif str(args["native-producer"]) in ["ymca-mixed", "panel-hall-mixed", "personnel-support-mixed"]:
+		elif str(args["native-producer"]) in ["ymca-mixed", "panel-hall-mixed", "personnel-support-mixed", "w34313564-mixed"]:
 			var descriptor: Dictionary = QUALITY_SUPPORT_ASSEMBLIES[source_key]
 			native_error = _check_quality_support_mixed(h, source_key, descriptor.assembly_name, descriptor.required)
+			if native_error == "" and descriptor.has("retained_calibration"):
+				native_error = _check_retained_calibration(h, source_key, descriptor)
 		elif str(args["native-producer"]) == "station48-indexed":
 			native_error = _check_station48_indexed(h, source_key)
 		elif str(args["native-producer"]) == "building2-indexed":
@@ -865,4 +881,60 @@ func _check_quality_support_native_owner(body: StaticBody3D, source: String, key
 	for object: Object in objects:
 		if object.get_meta("source_keys", []) != [source] or object.get_meta("derived_object_key", "") != key or object.get_meta("receiver_kind", "") != ("building_wall" if wall else "none") or object.get_meta("opaque", false) != true:
 			return "Quality-support native source/receiver identity differs"
+	return ""
+
+
+# Compare protected donor motifs in their actual composed placement, separately
+# from the current visual-to-native comparison. No historical face count is pinned.
+func _check_retained_calibration(h: WorldHarness, source: String, descriptor: Dictionary) -> String:
+	var spec: Dictionary = descriptor.retained_calibration
+	var chunk: Variant = JSON.parse_string(FileAccess.get_file_as_string(spec.chunk))
+	var registry: Variant = JSON.parse_string(FileAccess.get_file_as_string(spec.registry))
+	if not chunk is Dictionary or not chunk.get("records") is Array or not registry is Dictionary:
+		return "Retained calibration source/registry unavailable"
+	var record: Dictionary = {}
+	for candidate: Dictionary in chunk.records:
+		if candidate.get("object_key", "") == "building:" + source + ":wall":
+			if not record.is_empty(): return "Retained calibration ambiguous source record"
+			record = candidate
+	if record.is_empty(): return "Retained calibration missing source record"
+	var helper: Script = load(spec.helper)
+	if helper == null: return "Retained calibration helper unavailable"
+	var result: Dictionary = helper.build(record, registry)
+	if not result.get("ok", false): return "Retained calibration donor construction failed"
+	var donor := result.get("node") as Node3D
+	if donor == null: return "Retained calibration donor absent"
+	var assemblies := h.main.find_children(descriptor.assembly_name, "Node3D", true, false)
+	var error := "Retained calibration assembly ambiguous"
+	if assemblies.size() == 1:
+		error = _compare_retained_parts(donor, assemblies[0], spec.placements)
+	donor.free()
+	if error == "": print("PASS: %s protected calibration motifs retain composed faces and original materials" % source)
+	return error
+
+
+func _compare_retained_parts(donor: Node3D, actual: Node3D, placements: Array) -> String:
+	var expected := {}
+	var seen := {}
+	for module: Node3D in donor.get_children():
+		var placement := str(module.get_meta("placement_id", ""))
+		if placement not in placements: continue
+		if seen.has(placement): return "Retained calibration duplicate placement"
+		seen[placement] = true
+		if module.get_child_count() == 0: return "Retained calibration empty motif"
+		for part: MeshInstance3D in module.get_children():
+			var part_name := placement.replace("-", "_") + "_" + str(part.name)
+			var current := actual.get_node_or_null(NodePath(part_name)) as MeshInstance3D
+			if current == null or current.get_meta("placement_id", "") != placement or current.material_override != part.material_override or current.get_meta("host_runs", []) != module.get_meta("run_ownership", []):
+				return "Retained calibration missing part or changed material: " + part_name
+			var baseline := StudyGeometry.collect(part.mesh, [module.transform * part.transform], StudyGeometry.MESH_GET_FACES)
+			var present := StudyGeometry.collect(current.mesh, [current.transform], StudyGeometry.MESH_GET_FACES)
+			if not present.ok or not StudyGeometry.compare(baseline, present.faces, baseline.faces.size()).ok:
+				return "Retained calibration composed faces differ: " + part_name
+			expected[part_name] = true
+	for placement: String in placements:
+		if not seen.has(placement): return "Retained calibration missing protected motif: " + placement
+	for child: Node in actual.get_children():
+		if str(child.get_meta("placement_id", "")) in placements and not expected.has(str(child.name)):
+			return "Retained calibration unexpected protected part"
 	return ""

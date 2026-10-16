@@ -1,0 +1,132 @@
+{
+  "source_key": "w34313564",
+  "runs": [
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "placement_status": "production_inference",
+  "reference": "reference-sse002 Sep2025; varied openings/eave/base observed, cadence inferred",
+  "plinth_top_y_m": 4.1,
+  "openings": [
+    {
+      "run": 5,
+      "center_m": 3,
+      "width_m": 3.8,
+      "height_m": 1.9,
+      "kind": "window",
+      "center_y_m": 6.8,
+      "panes": 2
+    },
+    {
+      "run": 5,
+      "center_m": 9,
+      "width_m": 3.8,
+      "height_m": 1.9,
+      "kind": "window",
+      "center_y_m": 6.8,
+      "panes": 2
+    },
+    {
+      "run": 5,
+      "center_m": 16,
+      "width_m": 1.3,
+      "height_m": 2.9,
+      "kind": "door",
+      "center_y_m": 6.8,
+      "panes": 2
+    },
+    {
+      "run": 6,
+      "center_m": 3,
+      "width_m": 3.7,
+      "height_m": 1.9,
+      "kind": "window",
+      "center_y_m": 6.8,
+      "panes": 2
+    },
+    {
+      "run": 6,
+      "center_m": 10,
+      "width_m": 3.7,
+      "height_m": 1.9,
+      "kind": "window",
+      "center_y_m": 6.8,
+      "panes": 2
+    },
+    {
+      "run": 6,
+      "center_m": 15.3,
+      "width_m": 1.3,
+      "height_m": 2.9,
+      "kind": "door",
+      "center_y_m": 6.8,
+      "panes": 2
+    },
+    {
+      "run": 7,
+      "center_m": 3,
+      "width_m": 3.7,
+      "height_m": 1.9,
+      "kind": "window",
+      "center_y_m": 6.8,
+      "panes": 2
+    },
+    {
+      "run": 7,
+      "center_m": 9.2,
+      "width_m": 1.3,
+      "height_m": 2.9,
+      "kind": "door",
+      "center_y_m": 6.8,
+      "panes": 2
+    },
+    {
+      "run": 7,
+      "center_m": 15,
+      "width_m": 2.5,
+      "height_m": 1.45,
+      "kind": "window",
+      "center_y_m": 6.5,
+      "panes": 2
+    },
+    {
+      "run": 8,
+      "center_m": 3,
+      "width_m": 1.6,
+      "height_m": 1.6,
+      "kind": "window",
+      "center_y_m": 6.8,
+      "panes": 2
+    },
+    {
+      "run": 8,
+      "center_m": 10,
+      "width_m": 1.8,
+      "height_m": 1.2,
+      "kind": "window",
+      "center_y_m": 6.5,
+      "panes": 2
+    },
+    {
+      "run": 8,
+      "center_m": 17,
+      "width_m": 1.4,
+      "height_m": 2.9,
+      "kind": "door",
+      "center_y_m": 6.8,
+      "panes": 2
+    },
+    {
+      "run": 9,
+      "center_m": 4,
+      "width_m": 3.5,
+      "height_m": 1.3,
+      "kind": "window",
+      "center_y_m": 6.5,
+      "panes": 2
+    }
+  ]
+}

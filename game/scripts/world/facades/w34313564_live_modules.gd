@@ -46,6 +46,11 @@ static func build(record: Dictionary) -> Dictionary:
 			live_root.free()
 		return _failure("w34313564_live_module_geometry", "Reviewed module output failed the render-only live attachment contract.", record)
 	live_root.name = "W34313564LiveModules"
+	if not _build_sse_family(live_root, record):
+		live_root.free()
+		return _failure("w34313564_family", "SSE family escaped source scope.", record)
+	var support := QUALITY_SUPPORT.attach(live_root, record, record, {})
+	if not bool(support.get("ok", false)): return support
 	var topology := _render_topology(live_root)
 	if int(topology.mesh_instances) == 0 or int(topology.triangles) == 0:
 		live_root.free()
@@ -55,17 +60,19 @@ static func build(record: Dictionary) -> Dictionary:
 		"receiver_key": RECEIVER_KEY,
 		"placement_role": PLACEMENT_ROLE,
 		"position_uncertainty_m": POSITION_UNCERTAINTY_M,
-		"module_instances": EXPECTED_PLACEMENTS.size(),
-		"motif_instance_counts": {"W34313564-HWIN": 3, "W34313564-PDOOR": 2},
+		"retained_module_instances": 3,
+		"observed_family_runs": [5,6,7,8,9],
+		"reference_recognizable": false,
+		"sse_family_config": FAMILY_PATH,
 		"mesh_instances": int(topology.mesh_instances),
 		"surfaces": int(topology.surfaces),
 		"triangles": int(topology.triangles),
 		"field_meshes": 0,
-		"collision_nodes": 0,
+		"collision_geometry": "shared_quality_support_current_visible_faces",
 		"navigation_nodes": 0,
 		"spray_nodes": 0,
-		"cadence_inferred": false,
-		"total_opening_count_inferred": false,
+		"cadence_inferred": true,
+		"total_opening_count_inferred": true,
 		"reviewed_registry_path": REGISTRY_PATH,
 		"reviewed_geometry_helper_path": REVIEWED_HELPER_PATH,
 	}
@@ -196,3 +203,124 @@ static func _int_array(values: Array) -> Array[int]:
 
 static func _failure(code: String, message: String, record: Dictionary) -> Dictionary:
 	return {"ok": false, "code": code, "message": message, "source_keys": record.get("source_keys", [])}
+
+
+const FAMILY_PATH := "res://game/resources/facades/w34313564_quality_family.json"
+const QUALITY_SUPPORT := preload("res://game/scripts/world/facades/housing_quality_support.gd")
+const FAMILY_PALE := preload("res://game/resources/materials/world/w34313564/w34313564_pale_exact_trial.tres")
+const FAMILY_PLINTH := preload("res://game/resources/materials/world/w34313564/w34313564_plinth_field.tres")
+const FAMILY_TAN := preload("res://game/resources/materials/world/w34313564/w34313564_tan_exact_trial.tres")
+
+
+static func _build_sse_family(root: Node3D, record: Dictionary) -> bool:
+	var cfg: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(FAMILY_PATH))
+	if cfg.get("source_key") != SOURCE_KEY or _int_array(cfg.get("runs", [])) != [5,6,7,8,9]: return false
+	# This unique target material is also used by its five accepted SSE host runs.
+	# Updating that resource changes their color without adding a second wall skin.
+	FAMILY_TAN.set_shader_parameter("base_color", Color(0.88,0.68,0.39))
+	FAMILY_TAN.set_shader_parameter("secondary_color", Color(0.80,0.61,0.35))
+	var pale := FAMILY_PALE.duplicate() as ShaderMaterial
+	pale.set_shader_parameter("base_color", Color(0.94,0.93,0.87))
+	pale.set_shader_parameter("secondary_color", Color(0.87,0.86,0.81))
+	var plinth := FAMILY_PLINTH.duplicate() as ShaderMaterial
+	plinth.set_shader_parameter("base_color", Color(0.93,0.92,0.86))
+	plinth.set_shader_parameter("secondary_color", Color(0.86,0.85,0.80))
+	var door_leaf := REVIEWED_CALIBRATION.DOOR.duplicate() as StandardMaterial3D
+	door_leaf.albedo_color = Color(0.94,0.93,0.87)
+	# Deliberately migrate the two SSE exemplars; retain all other native faces.
+	for child: Node in root.get_children():
+		var module := child as Node3D
+		var placement := str(module.get_meta("placement_id", ""))
+		if placement.begins_with("CAL-SSE-"):
+			root.remove_child(module)
+			module.free()
+			continue
+		var detail := "RetainedENEWindow" if placement == "CAL-ENE-HWIN-01" else ("RetainedNNWDoor" if placement == "CAL-NNW-PDOOR-01" else "RetainedNNWWindow")
+		var run := int(EXPECTED_PLACEMENTS[placement].anchor_run)
+		for part: Node in module.get_children():
+			var mesh := part as MeshInstance3D
+			if mesh == null: return false
+			var composed := module.transform * mesh.transform
+			module.remove_child(mesh)
+			mesh.transform = composed
+			mesh.name = placement.replace("-", "_") + "_" + str(mesh.name)
+			_family_tag(mesh, "wall", detail, run)
+			mesh.set_meta("placement_id", placement)
+			if "Glass" in str(mesh.name): mesh.set_meta("opening_kind", "window")
+			if "Leaf" in str(mesh.name): mesh.set_meta("opening_kind", "door")
+			root.add_child(mesh)
+		root.remove_child(module)
+		module.free()
+	var plinth_top := float(cfg.plinth_top_y_m)
+	for run: int in range(5,10):
+		var f := REVIEWED_CALIBRATION._run_frame(record, run)
+		var tangent: Vector3 = f.tangent
+		var normal: Vector3 = tangent.cross(Vector3.UP).normalized()
+		if normal.dot(f.normal as Vector3) < 0.0: normal = -normal
+		var basis := Basis(tangent, Vector3.UP, normal)
+		var start: Vector3 = f.start
+		var length_m := float(f.length_m)
+		var top := float((f.top_start as Vector3).y)
+		# Short vertical strips follow the sloping source bottom, buried into LAND.
+		var count := int(ceil(length_m / 1.0))
+		for index: int in count:
+			var lo := 0.001 + (length_m - 0.002) * float(index) / count
+			var hi := 0.001 + (length_m - 0.002) * float(index + 1) / count
+			var base := lerpf(start.y, (f.end as Vector3).y, (lo+hi)*0.5/length_m) - 0.20
+			_family_box(root, "Plinth%d_%d" % [run,index], basis, start, Vector3((lo+hi)*0.5,(base+plinth_top)*0.5,0.025), Vector3(hi-lo,plinth_top-base,0.10), plinth, "wall", "SSEPlinth", run)
+		# Closed roof-edge extension, rear edge buried in retained roof backing.
+		_family_box(root,"Eave%d" % run,basis,start,Vector3(length_m*0.5,top-0.10,0.46),Vector3(length_m-0.002,0.20,1.22),FAMILY_TAN,"detail","SSEEave",run)
+		_family_box(root,"Fascia%d" % run,basis,start,Vector3(length_m*0.5,top-0.12,1.12),Vector3(length_m-0.002,0.24,0.10),pale,"detail","SSEFascia",run)
+	for spec: Dictionary in cfg.openings:
+		var run := int(spec.run)
+		if run < 5 or run > 9: return false
+		var f := REVIEWED_CALIBRATION._run_frame(record, run)
+		var center := float(spec.center_m)
+		var width := float(spec.width_m)
+		var height := float(spec.height_m)
+		if center-width*0.5-0.12 < 0.12 or center+width*0.5+0.12 > float(f.length_m)-0.12: return false
+		var tangent: Vector3 = f.tangent
+		var normal: Vector3 = tangent.cross(Vector3.UP).normalized()
+		if normal.dot(f.normal as Vector3) < 0.0: normal = -normal
+		var basis := Basis(tangent, Vector3.UP, normal)
+		var origin: Vector3 = f.start + tangent*center + normal*0.075
+		var door := str(spec.kind) == "door"
+		var contract := {"opening_m":[width,height],"frame_thickness_m":0.08,"pane_count":int(spec.get("panes",2)),"base_clearance_assumption_m":0.0}
+		var module := REVIEWED_CALIBRATION._build_door(contract) if door else REVIEWED_CALIBRATION._build_window(contract)
+		origin.y = plinth_top+0.02 if door else float(spec.center_y_m)
+		var placement := Transform3D(basis,origin)
+		var surround_y := origin.y+height*0.5 if door else origin.y
+		_family_box(root,"Surround%d" % root.get_child_count(),basis,f.start,Vector3(center,surround_y,0.055),Vector3(width+0.24,height+0.24,0.06),pale,"wall","SSESurround",run)
+		for part: Node in module.get_children():
+			var mesh := part as MeshInstance3D
+			module.remove_child(mesh)
+			mesh.transform = placement * mesh.transform
+			mesh.name = "SSE%d_%d_%s" % [run,root.get_child_count(),mesh.name]
+			_family_tag(mesh,"wall","SSEClosedDoor" if door else "SSEWindow",run)
+			if "Glass" in str(mesh.name): mesh.set_meta("opening_kind","window")
+			if "Leaf" in str(mesh.name):
+				mesh.set_meta("opening_kind","door")
+				mesh.material_override = door_leaf
+			root.add_child(mesh)
+		module.free()
+	return true
+
+
+static func _family_tag(mesh: MeshInstance3D, role: String, detail: String, run: int) -> void:
+	mesh.layers = 3 if role == "wall" else 1
+	mesh.set_meta("physical_role",role)
+	mesh.set_meta("construction_detail",detail)
+	mesh.set_meta("source_keys",[SOURCE_KEY])
+	mesh.set_meta("derived_object_key",RECEIVER_KEY)
+	mesh.set_meta("placement_status","production_inference")
+	mesh.set_meta("host_runs",[run])
+	mesh.set_meta("complete_motif",true)
+
+
+static func _family_box(root: Node3D, label: String, basis: Basis, origin: Vector3, center: Vector3, size: Vector3, material: Material, role: String, detail: String, run: int) -> void:
+	var mesh := REVIEWED_CALIBRATION._box(label,Vector3.ZERO,size,material)
+	var position := origin + basis.x*center.x + basis.z*center.z
+	position.y = center.y
+	mesh.transform = Transform3D(basis,position)
+	_family_tag(mesh,role,detail,run)
+	root.add_child(mesh)

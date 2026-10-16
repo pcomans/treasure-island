@@ -20151,3 +20151,43 @@ Next: model complete reference-supported rear/roof families only within newly ex
 - Worked: kept the integrated suite failure despite its all49 island PASS line; retained a sole longer-observation diagnostic with full output and actual numeric status instead of assuming successful shutdown.
 - Did not work: the existing suite filtered out child status and nonmatching output, leaving timeout versus cleanup failure unresolved.
 - Next time: print captured process status and a bounded raw tail on failure. The reviewed three-line change preserves timeout, assertions and every test; no speculative lifecycle fix or relaxed acceptance is included.
+
+## 2026-10-16 — independent_checkpoint_sol: w34313564 SSE source/native-adapter review
+
+- Worked: frozen two-file Level2 SSE5–9 source CODE PASS. Source identity and protected backing remain;7/8 migrate deliberately into the complete opening/eave/base family. TAN runtime recolor is target-unique to5–9; pale/plinth/door variants duplicate resources. Retained12/16/17 parts compose original module*mesh transforms/materials. Eave/fascia share only their1.07m boundary, and surround front0.085 clears plinth0.075. No whole-building recognition/stage credit follows.
+- Dependency result: current-main housing_quality_support already supports this wall/detail/empty-roof producer; old branch differences are unrelated stairs. Minimal shared building_fit_test descriptor/alias and optional retained-calibration hook CODE PASS, using existing collect/compare and unchanged generic mixed-native check. Donor part keys, original material, host runs, complete composed faces, positive motif coverage and unexpected-part rejection are checked without historical count/hash assertions. No runtime support, broad old-branch geometry/advisory/stair backport or per-building driver is needed.
+- Did not work: branch age made two unchanged target paths look sufficient while shared verification capabilities differed. No native/fit/spray/current-render/suite PASS can be inferred from source preflight or retained002 images. Initial broad note reads also produced truncated history; selected exact source seams resolved the real dependency.
+- Next action / CONTINUE: remain at Level2 observed wholeSSE elevation, consume assigned independent visual decision, then perform the owner's bounded clean-main native/retained-equivalence, fit/spray/render and full-suite validation. Preserve0–4,10–19/source roof/site/neighbors; whole all-side quality stays open. B1/B2 are closed, goal tracker unchanged. No engine/model/art edit by this reviewer; tracked/new source whitespace and focused adapter review passed.
+
+## building1_texture_environment — w34313564 SSE integration preflight, 2026-10-16
+
+- Worked: compared the frozen target and its actual current-main dependencies before copying; independent CODE confirmed runtime support already handles wall/detail roles. The maintained fit adapter compares protected donor parts in their composed transforms and original materials.
+- Did not work: the old worktree contains unrelated stair and advisory helper changes, so treating its shared-support diff as a required backport would broaden this task unnecessarily.
+- Next time: inspect the actual producer paths first and port only a demonstrated missing adapter. Installed pinned npm dependencies in the isolated checkout before validation; frozen source and visual/runtime verdicts remain separate.
+
+### building1_texture_environment — w34313564 actual native checkpoint
+- Worked: the small maintained fit adapter passed actual retained shell/roof, complete assembly native geometry and protected donor faces/materials; stock4/4walkups and actual source-bound spray finished with active supported rest and safe disable.
+- Did not work: I repeated a documented unsupported headless invocation before reading this driver's explicit rendered-mode requirement. It failed closed before world load; retained the failed log and corrected the invocation without changing tests.
+- Next time: check the maintained invocation before engine launch; the existing LEARNINGS entry now records this recurrence. Reused exact frozen-study visual evidence rather than holding integration for another old-pixel review; fresh integrated visual remains required.
+
+### building1_texture_environment — w34313564 integrated validation
+- Worked: one fresh shared11view capture completed, and the complete integrated tools/test.sh exited0 with ALL TESTS PASS, including49 scored-building fit and determinism. No runtime support backport or art correction was needed.
+- Did not work: the refreshed visual review has not yet returned a concrete finding; reused valid frozen-study evidence to complete independent mechanical validation instead of leaving the engine slot idle.
+- Next: keep fresh integrated visual acceptance distinct from technical PASS and keep this SSE-only improvement separate from whole-building recognition credit. Released the engine slot after actual terminal/PID absence.
+
+## 2026-10-16 — independent_checkpoint_sol: matched island baseline reconciliation
+
+- Worked: independently confirmed52 game/generated/project changes between historical Building1 art2214234 and current mainf52f248, including unrelated housing roof/site and landmark work. Current34364 integration remains scoped to its producer/newfamily config and maintained fit adapter. CONTINUE with the single authorized clean-f52 same-runtime island-only control, then independent matched-five-view comparison against integrated001; executor reports control86528 terminal0/PIDs absent. Existing current CODE/native/protected-donor/fit/spray/scoped-SSE visual and full-suite PASS remain retained.
+- Did not work: an empty Building1-specific diff was incorrectly useful as a whole-world baseline assumption; it establishes only Building1 parity. Historical B1005 island differences cannot be attributed to34364 or used to clear its regression gate. Exact brightness contribution remains unproved until the proper paired comparison.
+- Next time: bind island comparisons to the same world source and camera/settings context, not only unchanged target paths. Preserve mismatched historical frames honestly; no target art correction, broad backport, full-suite bookkeeping replay or whole-credit claim follows. Comparison HOLD remains until independent current-main control review. No engine/model/source edit or goal change by this reviewer.
+
+### building1_texture_environment — matched island control and scoped delivery
+- Worked: clean f52 island-only control86528 exited0; independent visual comparison of all five matched views passed with stable broad appearance. Existing integrated native/fit/spray/CODE and full-suite18818 exit0 remain applicable because runtime source did not change.
+- Did not work: I incorrectly generalized a Building1-only unchanged diff into whole-world baseline parity. The historical study predates52 runtime-file changes, making that initial island comparison invalid.
+- Next: compare complete world/capture revisions before reusing island baselines. Final review w34313564-sse-integrated001-20261016:shared_zoom_review_sol passes scoped SSE Level2 and island regression only; all-side and whole-building recognition stay open, catalog unchanged.
+
+## 2026-10-16 — shared_zoom_review_sol: w34313564 integrated SSE visual PASS
+
+- Worked: all11 current originals plus dated SSE pixels supported scoped Level2 PASS; five clean-f52 island controls resolved the comparison without attributing unrelated main changes to this facade.
+- Did not work: supplied historical B1005 baseline differed across many unrelated roofs. Flagging that difference before a global regression claim prevented false attribution; exact source reconciliation was performed by the independent CODE reviewer.
+- Next time: match the whole runtime baseline before island comparison, give the concrete scoped verdict promptly, and retain unknown opposite-side coverage as OPEN. Review ID w34313564-sse-integrated001-20261016:shared_zoom_review_sol; no new whole-building credit.

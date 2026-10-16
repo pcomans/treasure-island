@@ -484,7 +484,7 @@ The Chapel ENE coordinate startup stayed black despite a resolved pano and tileH
 
 Mariner1219 baseline on2026-10-10 returned screenshot PASS, but closeup-south showed the camera inside/behind the opposite row, with reverse-facing windows and the intended frontage beyond it. The shared center-ray test did not establish a useful complete facade view; the exact camera/collider cause remains unmeasured. Inspect saved pixels before using a default side view for fidelity. Retain invalid originals and use the supported focused-view mechanism with a complete donor manifest when a side needs a clear public viewpoint; do not treat PASS or a filename as framing proof.
 
-The Mariner native adapter initially treated `StudyGeometry.collect`'s transform list as a chain; it actually enumerates separate instances. Independent source review caught this before execution. Mirror the producer's ordered packed-array operations: collect once with the mesh transform, then subtract body origin in the next pass. Also inspect the maintained invocation: shared `building_fit_test` needs rendering and rejects `--headless` before geometry collection. Run its proven rendered `tools/godot` command. Keep dependent capture in a separate command after a successful preflight terminal result; a multiline shell without fail-fast continued Mariner study001 despite an area assertion.
+The Mariner native adapter initially treated `StudyGeometry.collect`'s transform list as a chain; it actually enumerates separate instances. Independent source review caught this before execution. Mirror the producer's ordered packed-array operations: collect once with the mesh transform, then subtract body origin in the next pass. Also inspect the maintained invocation: shared `building_fit_test` needs rendering and rejects `--headless` before geometry collection. Run its proven rendered `tools/godot` command. The w34313564 integration repeated this rejected headless invocation; before running a maintained driver, check its actual mode requirement rather than inferring headless compatibility from the absence of requested PNGs. Keep dependent capture in a separate command after a successful preflight terminal result; a multiline shell without fail-fast continued Mariner study001 despite an area assertion.
 
 ## Bind site corrections to the photographed end before extending a domain
 
@@ -641,3 +641,7 @@ planning, require the first planned in-scope native artifact write and readback
 in the same author call. Use the canonical CLAUDE dispatch guidance, preserve
 exact file/subtree limits and failed evidence, and resume rather than repeat
 completed design. This corrects invocation guidance, not global runtime policy.
+
+## Match whole-island baselines to the whole runtime revision
+
+The w34313564 integration reused Building1 candidate005 island images after checking only Building1 source parity. Independent visual review found widespread unrelated roof differences: the full study-to-main diff included52 runtime files from previously shipped families. A target-only unchanged diff cannot establish an unchanged world baseline. Before reusing island images, compare the complete runtime/world/settings/capture revision; if it differs materially, use a bounded clean-main island-only control with the maintained driver. Keep historical images and their original revision labels.
