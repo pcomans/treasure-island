@@ -87,6 +87,9 @@ do
   status=$?
   grep -E "^(PASS|FAIL|NOTE)|${godot_errors}" <<< "${output}"
   if [ "${status}" -ne 0 ] || grep -qE "${godot_errors}" <<< "${output}"; then
+    echo "FAIL: ${test} process status=${status} (nonzero exit or engine error output)"
+    echo "Last 30 raw output lines:"
+    tail -n 30 <<< "${output}"
     failed+=("${test}")
   fi
 done

@@ -20138,3 +20138,16 @@ Next: model complete reference-supported rear/roof families only within newly ex
 - Worked: all16current originals, four dated references and five matched candidate001 island views resolved the two concrete rear gaps and supported Level2 closure plus whole-building game-art PASS. No further Stage3–5 refinement is needed.
 - Did not work: exact as-built fidelity remains limited by unseen faces, inferred cadence/continuity, simplified detail and dated viewpoints; these limits do not establish a new substantive art defect.
 - Next time: give the explicit verdict before bookkeeping, then promptly append this short retrospective and release the writer window so accepted work can ship. Review ID: building1-opus-candidate005-2026-10-16:shared_zoom_review_sol.
+
+## 2026-10-16 — independent_checkpoint_sol: integrated suite failure diagnosis
+
+- Worked: bounded read-only wrapper/driver/log review separated island test-body49PASS from process completion. Reviewed the three-line failure-diagnostic patch: it prints the already captured numeric status and last30raw output lines only in the existing failure branch; CODE PASS, bash syntax and whitespace PASS. Timeout, test list, assertions/error matching and aggregate failure remain unchanged.
+- Did not work: original suite filtering omitted numeric childstatus and shutdown output, so timeout versus signal/engine/cleanup failure cannot be recovered from that log. An unguarded Weston kill under the wrapper's set-e is a separate possible status-override risk; a minimal shell-only EXIT-trap demonstration exited1, but this does not prove that cause occurred in the island run.
+- Next time: retain actionable failure diagnostics before repeating expensive tests. Use the executor's one maintained diagnostic for actual status/elapsed, without lifecycle edits or changing timeout merely to pass. No engine or duplicate island invocation from this reviewer.
+
+
+## 2026-10-16 — building1_texture_environment: preserve suite failure diagnostics
+
+- Worked: kept the integrated suite failure despite its all49 island PASS line; retained a sole longer-observation diagnostic with full output and actual numeric status instead of assuming successful shutdown.
+- Did not work: the existing suite filtered out child status and nonmatching output, leaving timeout versus cleanup failure unresolved.
+- Next time: print captured process status and a bounded raw tail on failure. The reviewed three-line change preserves timeout, assertions and every test; no speculative lifecycle fix or relaxed acceptance is included.
