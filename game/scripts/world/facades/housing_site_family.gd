@@ -4,6 +4,9 @@ extends RefCounted
 const PARTS = preload("res://game/scripts/world/facades/northpoint_1232_quality_model.gd")
 const SIDING = preload("res://game/resources/housing_family/siding.gdshader")
 const ROOF = preload("res://game/resources/housing_family/roof.gdshader")
+# Opt-in garage-court motifs (garage doors, piers, loggias, stairs, vents,
+# per-run siding colour); each runs only for its own config key.
+const GARAGE_COURT = preload("res://game/scripts/world/facades/housing_garage_court.gd")
 
 static func vec(a: Array) -> Vector3:
 	return Vector3(a[0], a[1], a[2])
@@ -74,7 +77,7 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 	opening_frames.append_array(cfg.get("rear_frames", []))
 	for frame: Dictionary in opening_frames:
 		var is_rear: bool = str(frame.get("elevation_role", "front")) == "rear"
-		for group in ["upper_windows", "lower_windows", "entries"]:
+		for group in ["upper_windows", "lower_windows", "entries", "garage_doors", "loggias"]:
 			for motif: Dictionary in frame.get(group, []):
 				var basis: Dictionary = motif.get("basis", frame)
 				var start := vec(basis.start)
@@ -134,6 +137,10 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 					if str(motif.get("door_role","")) == "pale":
 						entry_material = PARTS._material(color(palette,"pale_door_rgb",Color(0.62,0.65,0.62)),0.85)
 					PARTS._entry(root,point,t,n,trim,entry_material,concrete)
+				elif group == "garage_doors":
+					GARAGE_COURT.garage_door(root,point,t,n,width,height,motif,palette,trim)
+				elif group == "loggias":
+					GARAGE_COURT.loggia(root,point,t,n,width,height,motif,palette,siding,trim,dark,concrete)
 				elif str(motif.get("glazing", "")) == "boarded":
 					PARTS._panel(root,point-n*0.03,t,n,Vector3(width,height,0.07),PARTS._material(color(palette,"closure_rgb",Color(0.48,0.40,0.28)),0.96))
 					for side in [-1.0,1.0]:
@@ -147,6 +154,7 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 						child.set_meta("family_role", "support" if child.get_meta("construction_detail", "") == "door_threshold" else "wall")
 		# Rear schedules own their openings and optional lower setback only; front trim/site stay intact.
 		if is_rear: continue
+		GARAGE_COURT.piers(root,frame,palette)
 		if cfg.has("broad_band"):
 			var band: Dictionary = cfg.broad_band
 			var a := vec(frame.start)
@@ -213,6 +221,7 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 		else:
 			PARTS._wall_with_openings(root,a,b,top,holes,siding)
 		_tag_since(root,wall_begin,"wall")
+		GARAGE_COURT.run_siding(root,wall_begin,i/12,cfg,siding)
 		var t := Vector3(b.x-a.x,0,b.z-a.z).normalized()
 		var n := Vector3(-t.z,0,t.x)
 		if bool(cfg.get("vertical_seams",false)):
@@ -233,6 +242,9 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 			PARTS._mesh(root, points, indices, roofing)
 		for closure: Array in shallow.closures:
 			PARTS._quad(root, [vec(closure[0]), vec(closure[1]), vec(closure[2]), vec(closure[3])], siding)
+		# Opt-in triangular closures (gablets, soffits), wound as authored.
+		for triangle: Array in shallow.get("closure_triangles", []):
+			PARTS._mesh(root, [vec(triangle[0]), vec(triangle[1]), vec(triangle[2])], PackedInt32Array([0, 1, 2]), siding)
 		for edge: Array in shallow.eaves:
 			PARTS._beam(root, vec(edge[0]), vec(edge[1]), 0.20, 0.12, trim)
 	elif str(cfg.get("roof_kind","")) == "shallow_hip":
@@ -289,6 +301,7 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 				for triangle: Array in entry.get("path_mesh",{}).get("top_triangles",[]):
 					_ground_triangle(root,triangle,concrete,not recess.is_empty())
 	_tag_since(root,ground_begin,"ground")
+	GARAGE_COURT.extras(root,cfg,palette,trim)
 	var canopies: Array = cfg.get("carports", []).duplicate()
 	if cfg.has("carport") and not cfg.carport.is_empty(): canopies.append(cfg.carport)
 	for canopy: Dictionary in canopies:

@@ -527,7 +527,12 @@ func _check_housing_faces(h: WorldHarness, source: String, retained_quality: boo
 	for node: Node in root.get_children():
 		if node is MeshInstance3D:
 			var role := str(node.get_meta("family_role", "support"))
-			if not meshes.has(role) or not node.is_visible_in_tree() or node.is_set_as_top_level() or not node.transform.is_finite() or node.layers != (2 if role == "wall" else 1):
+			# A stair walking surface through the tread nosings is collision-only
+			# (the Mersea / Bulgarian-wall stair grammar). Only a support-role mesh
+			# explicitly tagged collision_only may be hidden; its faces must still
+			# match the support collision below. Every other mesh must be visible.
+			var collision_only: bool = role == "support" and node.get_meta("collision_only", false) is bool and node.get_meta("collision_only", false)
+			if not meshes.has(role) or node.is_visible_in_tree() == collision_only or node.is_set_as_top_level() or not node.transform.is_finite() or node.layers != (2 if role == "wall" else 1):
 				return "unsupported housing visible role/placement/layer"
 			meshes[role].append(node)
 		elif node is StaticBody3D:
