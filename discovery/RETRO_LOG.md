@@ -20677,3 +20677,7 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the 420f34d wrapper passed B6. All 160 draw-and-quit runs exited with the script's 7; there were 3 NOTE releases, no hangs and no stray stderr. The two-engine test used separate worktrees and caches, with the same maintained invocations solo and paired. Concurrent shots were pixel-identical to solo (AE 0 on all 13 PNGs, ×3) and concurrent fit logs were byte-identical. The paired suite printed ALL TESTS PASS, and per-job wall time grew by 0–7%.
 - What did not work well: the first resource sampler read the wrong DRM card (card0 has no mem_info), so VRAM/GTT needed a second sampler mid-run. A judgment problem too: a per-pair throughput target of 1.4× can't be met when one job is five times longer than the other. Pair wall time only gained 1.15–1.20×, while per-job slowdown (the real capacity measure) was close to zero.
 - What the team should change next time: judge parallel slots by each job's slowdown against its solo time, not by the wall time of one mismatched pair. Check sysfs paths on the actual card before a long sampling run.
+
+## code-review (godot shutdown fix rework, 2026-10-17)
+
+- What worked well: the rework answered each finding with a stand-in test that reproduced the old failure (the previous wrapper's 360-byte stderr against 0 bytes now) and a fresh 160-run engine pass, so the re-review was a short diff read plus checks of the evidence. Next time: keep that "old wrapper fails, new wrapper passes" pairing for every shared-tooling fix.
