@@ -103,10 +103,15 @@ static func garage_door(root: Node3D, point: Vector3, t: Vector3, n: Vector3, wi
 	# The leaf closes the opening down to its sill, under the head jamb.
 	_box(leaf, point - n * (setback + 0.02) - Vector3.UP * 0.0225, t, n, Vector3(width - 0.1, height - 0.055, 0.04))
 	var face := point - n * (setback - 0.004)
-	for k in range(1, 4):
-		_box(lines, face + Vector3.UP * (-height * 0.5 + height * float(k) / 4.0), t, n, Vector3(width - 0.14, 0.022, 0.012))
-	for k: float in [-1.0, 1.0]:
-		_box(lines, face + t * k * (width - 0.1) / 6.0, t, n, Vector3(0.02, height - 0.09, 0.012))
+	# Opt-in panel style from the photo: "grid" (default) adds two stiles to
+	# the horizontal section joints, "joints" keeps the joints only;
+	# joint_count defaults to three (four sections).
+	var joints := int(motif.get("joint_count", 3))
+	for k in range(1, joints + 1):
+		_box(lines, face + Vector3.UP * (-height * 0.5 + height * float(k) / float(joints + 1)), t, n, Vector3(width - 0.14, 0.022, 0.012))
+	if str(motif.get("panel_style", "grid")) == "grid":
+		for k: float in [-1.0, 1.0]:
+			_box(lines, face + t * k * (width - 0.1) / 6.0, t, n, Vector3(0.02, height - 0.09, 0.012))
 	for side: float in [-1.0, 1.0]:
 		_box(frame, point + t * side * (width * 0.5 + 0.05) + n * 0.015, t, n, Vector3(0.10, height + 0.10, 0.03))
 	_box(frame, point + Vector3.UP * (height * 0.5 + 0.05) + n * 0.015, t, n, Vector3(width + 0.2, 0.10, 0.03))
