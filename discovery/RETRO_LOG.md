@@ -20587,3 +20587,27 @@ Decision round (PASS, Level 2 with 1223 Level 1):
   - Derive the story band from the highest door head on sloped rows from the start.
   - Record carport placement per row from the registered overhead instead of a road-distance default.
   - Run the camera/player-in-footprint check while writing a views plan, not after.
+
+## progress-review (Exposition tail, 2026-10-17)
+
+- What worked well: four slabs became four distinct rows in one round, each recognizable from its dated reference pose: 1247 cream with blue doors and a carport strip, 1250 grey-blue with maroon doors, 1251 greige with brown stepped gables and ochre doors (the 1244 sibling donor paid off), and 1253 blue-grey with maroon doors and a regular rear rhythm. The compact 1440 px before/after composites in `final/compare/` were the right review size. Footprint ownership was checked before modeling the 1250 annex, which lies outside the footprint and was correctly left out.
+- What did not work well: the island overviews barely change for a four-row batch, while the large plain institutional boxes in the centre-north stay the most visible untouched masses at raised and island distance. Row-by-row housing batches now give diminishing whole-island return per round.
+- What the team should change next time: weigh the remaining families by visible area at raised and island distance, not by unit count, and interleave large-footprint buildings with the remaining housing clusters.
+
+## code-review (Exposition tail, 2026-10-17)
+
+- What worked well: the scratch checks reused from the Gateview reviews (openings, pads, frames and bases, site overlap against roads, all 38 other configs and every wall, area clearance, and the field set against 1243) covered all four Exposition rows in two runs with no edits, so the review took minutes and attention stayed on the named neighbours.
+- What did not work well: nothing material in this round. The checks are still private to the reviewer, so the author could not have run them before handoff.
+- What the team should change next time: same as my Gateview Court entry. Decide whether a small read-only config preflight should sit next to the private author generator, so batches like this arrive pre-checked.
+
+## visual-review (Exposition tail, 2026-10-17)
+
+- What worked well: fifteen reference-matched before/after views made it fast to compare each unit's front, end and rear against its dated photo. 1251 and 1253 match their March 2025 fronts closely, and the 1250 blank NE gable and 1253 blank SSE gable are confirmed by photos rather than assumed.
+- What did not work well: the 1247 carport extent (stations 6.0–28.5) was inferred and never checked against the one photo that shows it. In ref01 the canopy fronts the near, camera-side section; in the matched render that section has no carport and the canopy fronts the middle and far sections. The compare file names also differ from the reference names (for example, 1250's "ssw-front-ref02" is paired with the photo "ssw-end02"), which cost time pairing them.
+- What the team should change next time: project every inferred site element that a dated photo shows (carports, canopies) from that photo's camera before the first render, as was done for the 1218 rear cadence. Give each compare file the exact reference filename it is matched to.
+
+## modeler-northpoint (Exposition 1247 carport projection, fix001, 2026-10-17)
+
+- What worked well: I fitted the ref01 camera to three frozen corners (rms 2.4 px) and confirmed it on a fourth point (protected 1249's SW corner lands at x 932, where 1249 starts in the photo). That made the projection decisive. The photo shows two canopies. The far strip matches the modeled carport (photo x 308–472, model 319–491). The near canopy sits in the gap between 1247 and 1249, over the SW end of 1249's configured parking apron, so it is a neighbouring-site element and 1247 stays unchanged.
+- What did not work well: my Exposition preflight had already noted "a flat structure NE of the NE gable", but I never projected it. Nothing in the evidence showed whose canopy it was, and a review round went on it. Separately, the generator's pad-versus-apron overlap check intersected all pad triangles at once, which only measured their common area. I fixed it to sum per triangle, and byte-identical regeneration shows nothing was hiding behind it.
+- What the team should change next time: before the first render, project every photographed site element (carport, canopy, shed) from its dated camera. Record its station range and nearest-footprint owner in the task note, and put the projection overlay in the compare set.
