@@ -38,6 +38,14 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 	warm_roof.set_shader_parameter("roof_color",color(cfg.get("facade",{}),"roof_warm_high_rgb",Color(0.55,0.37,0.25)))
 	var holes_by_run: Dictionary = {}
 	var vertices: Array = wall.vertices
+	# Opt-in open canopy bays. Authored host runs use the frozen 12-float run
+	# layout and follow the source ring, so frames and motifs can open them;
+	# listed source runs emit no wall. Unset keys keep the source ring as-is.
+	if cfg.has("virtual_wall_runs"):
+		vertices = vertices.duplicate()
+		for run: Array in cfg.virtual_wall_runs: vertices.append_array(run)
+	var skip_wall_runs: Dictionary = {}
+	for run in cfg.get("skip_wall_runs", []): skip_wall_runs[int(run)] = true
 	var recess: Dictionary = cfg.get("lower_frontage_recess", {})
 	var rear_recess: Dictionary = cfg.get("lower_rear_recess", {})
 	var rear_recess_runs: Dictionary = {}
@@ -179,6 +187,7 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 				var return_height := float(screen.get("return_height_m",h))
 				_screen(root,point-t*(width/2-0.045)-n*(length/2+0.035)+Vector3.UP*(return_height-h)/2,-n,t,length,return_height,screen_material,true)
 	for i in range(0, vertices.size(), 12):
+		if skip_wall_runs.has(i/12): continue
 		var a := Vector3(vertices[i],vertices[i+1],vertices[i+2])
 		var b := Vector3(vertices[i+3],vertices[i+4],vertices[i+5])
 		var top := float(cfg.get("wall_top_y", maxf(float(vertices[i+7]),float(vertices[i+10]))))
@@ -271,11 +280,14 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 	var canopies: Array = cfg.get("carports", []).duplicate()
 	if cfg.has("carport") and not cfg.carport.is_empty(): canopies.append(cfg.carport)
 	for canopy: Dictionary in canopies:
-		_canopy(root,canopy,palette,roofing,trim)
+		_canopy(root,canopy,palette,roofing,trim,siding)
 	return root
 
-static func _canopy(root: Node3D, cfg: Dictionary, palette: Dictionary, roof: Material, trim: Material) -> void:
+static func _canopy(root: Node3D, cfg: Dictionary, palette: Dictionary, roof: Material, trim: Material, siding: Material = null) -> void:
 	if not cfg.has("frame") or not cfg.has("station_m"): return
+	if str(cfg.get("form", "flat")) == "gable":
+		_gable_canopy(root, cfg, palette, roof, trim, siding)
+		return
 	var frame: Dictionary = cfg.frame
 	var start := vec(frame.start)
 	var t := vec(frame.tangent)
@@ -299,6 +311,91 @@ static func _canopy(root: Node3D, cfg: Dictionary, palette: Dictionary, roof: Ma
 		var bottom := float(post.bottom_y)
 		p.y = (a.y+bottom)/2
 		PARTS._panel(root,p,t,n,Vector3(0.09,a.y-bottom,0.09),steel)
+
+# Opt-in gable-front canopy over an open bay: the ridge runs along the frame
+# normal from the host wall to the bay front. Its two roof planes carry the
+# bay's roof role; gable ends, soffit, trim and posts keep the flat carport's
+# support role. The gables take the instance siding unless gable_rgb is set;
+# roof_rgb gives the canopy its own roofing colour. Dimensions are
+# instance-config production inference.
+static func _gable_canopy(root: Node3D, cfg: Dictionary, palette: Dictionary, roof: Material, trim: Material, siding: Material) -> void:
+	var frame: Dictionary = cfg.frame
+	var o := vec(frame.start)
+	var t := vec(frame.tangent)
+	var n := vec(frame.normal)
+	var s0 := float(cfg.station_m[0])
+	var s1 := float(cfg.station_m[1])
+	var d0 := float(cfg.depth_m[0])
+	var d1 := float(cfg.depth_m[1])
+	var eave := float(cfg.eave_y)
+	var ridge := float(cfg.ridge_y)
+	var soffit := float(cfg.get("soffit_y", eave - 0.16))
+	var mid := (s0 + s1) * 0.5
+	var gable: Material = siding if siding != null else trim
+	if cfg.has("gable_rgb"): gable = PARTS._material(color(cfg, "gable_rgb", Color.WHITE), 0.9)
+	var roofing := roof
+	if cfg.has("roof_rgb"):
+		var own_roof := ShaderMaterial.new()
+		own_roof.shader = ROOF
+		own_roof.set_shader_parameter("roof_color", color(cfg, "roof_rgb", Color(0.52, 0.54, 0.52)))
+		roofing = own_roof
+	var under := PARTS._material(color(cfg, "soffit_rgb", Color(0.78, 0.78, 0.75)), 0.95)
+	var steel := PARTS._material(color(palette, "carport_post_rgb", Color(0.35, 0.3, 0.25)), 0.9)
+	var l0 := _bay_point(o, t, n, s0, eave, d0)
+	var l1 := _bay_point(o, t, n, s0, eave, d1)
+	var r0 := _bay_point(o, t, n, s1, eave, d0)
+	var r1 := _bay_point(o, t, n, s1, eave, d1)
+	var k0 := _bay_point(o, t, n, mid, ridge, d0)
+	var k1 := _bay_point(o, t, n, mid, ridge, d1)
+	var sl0 := _bay_point(o, t, n, s0, soffit, d0)
+	var sl1 := _bay_point(o, t, n, s0, soffit, d1)
+	var sr0 := _bay_point(o, t, n, s1, soffit, d0)
+	var sr1 := _bay_point(o, t, n, s1, soffit, d1)
+	for plane: Array in [[l0, l1, k1, k0], [k0, k1, r1, r0]]:
+		_facing(root, plane, Vector3.UP, roofing)
+		root.get_child(-1).set_meta("family_role", "roof")
+	_facing(root, [sl0, sr0, sr1, sl1], Vector3.DOWN, under)
+	_facing(root, [sl0, sl1, l1, l0], -t, trim)
+	_facing(root, [sr0, sr1, r1, r0], t, trim)
+	_facing(root, [sl1, sr1, r1, l1], n, trim)
+	_facing(root, [l1, r1, k1], n, gable)
+	_facing(root, [sl0, sr0, r0, l0], -n, gable)
+	_facing(root, [l0, r0, k0], -n, gable)
+	# Rake boards stand just proud of the front gable; eave boards follow each side.
+	var edge := float(cfg.get("trim_width_m", 0.07))
+	_edge_beam(root, l1 + n * (edge * 0.5 + 0.005), k1 + n * (edge * 0.5 + 0.005), edge, trim)
+	_edge_beam(root, k1 + n * (edge * 0.5 + 0.005), r1 + n * (edge * 0.5 + 0.005), edge, trim)
+	_edge_beam(root, l0 - t * edge * 0.5, l1 - t * edge * 0.5, edge, trim)
+	_edge_beam(root, r0 + t * edge * 0.5, r1 + t * edge * 0.5, edge, trim)
+	var post_width := float(cfg.get("post_width_m", 0.12))
+	for post: Dictionary in cfg.get("posts", []):
+		var bottom := float(post.bottom_y)
+		var center := _bay_point(o, t, n, float(post.station_m), (bottom + soffit) * 0.5, float(post.depth_m))
+		var node := PARTS._box(root, center, Vector3(post_width, soffit - bottom, post_width), steel)
+		node.basis = Basis(t, Vector3.UP, n)
+
+static func _bay_point(o: Vector3, t: Vector3, n: Vector3, station: float, y: float, depth: float) -> Vector3:
+	var p := o + t * station + n * depth
+	p.y = y
+	return p
+
+# One planar convex polygon whose rendered face points along outward
+# (the producer's clockwise convention: rendered normal is -(b-a)x(c-a)).
+static func _facing(root: Node3D, pts: Array, outward: Vector3, m: Material) -> void:
+	var a: Vector3 = pts[0]
+	var b: Vector3 = pts[1]
+	var c: Vector3 = pts[2]
+	var flip := (b - a).cross(c - a).dot(outward) > 0.0
+	var indices := PackedInt32Array()
+	for i in range(1, pts.size() - 1):
+		indices.append_array(PackedInt32Array([0, i + 1, i]) if flip else PackedInt32Array([0, i, i + 1]))
+	PARTS._mesh(root, pts, indices, m)
+
+static func _edge_beam(root: Node3D, a: Vector3, b: Vector3, width: float, m: Material) -> void:
+	var x := (b - a).normalized()
+	var z := x.cross(Vector3.UP).normalized()
+	var node := PARTS._box(root, (a + b) * 0.5, Vector3(a.distance_to(b), width, width), m)
+	node.basis = Basis(x, z.cross(x), z)
 
 static func _hip_roof(root: Node3D, wall: Dictionary, cfg: Dictionary, material: Material, trim: Material) -> void:
 	# Four planar slopes clipped to the frozen outline. Pitch/height are bounded
