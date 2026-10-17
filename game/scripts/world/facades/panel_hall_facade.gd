@@ -28,7 +28,9 @@ static func build(record: Dictionary) -> Dictionary:
 		var n := Vector3(-t.z,0,t.x)
 		var length := Vector2(b.x-a.x,b.z-a.z).length()
 		var floor_y := minf(a.y,b.y)-.12
-		var split := top-4.0
+		# Opt-in keys (split_below_top, slot_size, slot_top_offset, split_fascia, storefronts);
+		# absent keys keep the original Bldg 461 / 550 4th St geometry exactly.
+		var split := top-float(spec.get("split_below_top",4.0))
 		if str(spec.get("family", "")) == "grid_transom":
 			_grid_chain(root,a,t,n,length,floor_y,top,spec,materials)
 			continue
@@ -37,24 +39,36 @@ static func build(record: Dictionary) -> Dictionary:
 			var count := maxi(2,int(round(length/float(spec.bay_width))))
 			for i in count:
 				var s := length*(i+.5)/count
-				openings.append(Rect2(s-.38,top-2.00,.76,1.78))
+				if spec.has("slot_size") or spec.has("slot_top_offset"):
+					var size: Array=spec.get("slot_size",[.76,1.78])
+					var slot_top := top-float(spec.get("slot_top_offset",.22))
+					openings.append(Rect2(s-float(size[0])/2.0,slot_top-float(size[1]),float(size[0]),float(size[1])))
+				else:
+					openings.append(Rect2(s-.38,top-2.00,.76,1.78))
 		if bool(spec.lower_row):
 			var start := float(spec.row_start); var end := float(spec.row_end)
 			var count := maxi(1,int(round((end-start)/float(spec.bay_width))))
 			for i in count:
 				var s := start+(end-start)*(i+.5)/count
 				openings.append(Rect2(s-.56,floor_y+.48,1.12,split-floor_y-.58))
+		# Storefront ranges are glazed lower bays [start,end] metres along the chain.
+		var fronts: Array[Rect2]=[]
+		for range_value: Variant in spec.get("storefronts",[]):
+			var r: Array=range_value
+			fronts.append(Rect2(float(r[0]),floor_y+.10,float(r[1])-float(r[0]),split-.50-floor_y))
+		var cut_holes: Array[Rect2]=openings.duplicate()
+		cut_holes.append_array(fronts)
 		# Split the two fields around complete recess bounds, not painted windows.
 		for field: Array in [[floor_y,split,"lower"],[split,top-.16,"upper"]]:
 			var cuts: Array[float]=[0.0,length]
-			for hole: Rect2 in openings:
+			for hole: Rect2 in cut_holes:
 				if hole.end.y>float(field[0]) and hole.position.y<float(field[1]): cuts.append(hole.position.x); cuts.append(hole.end.x)
 			cuts.sort()
 			for j in range(cuts.size()-1):
 				var left := cuts[j]; var right := cuts[j+1]
 				if right-left<.001: continue
 				var spans: Array[Vector2]=[Vector2(field[0],field[1])]
-				for hole: Rect2 in openings:
+				for hole: Rect2 in cut_holes:
 					if (left+right)/2.0>hole.position.x and (left+right)/2.0<hole.end.x:
 						spans=[]
 						if hole.position.y>float(field[0]): spans.append(Vector2(field[0],minf(hole.position.y,field[1])))
@@ -74,6 +88,16 @@ static func build(record: Dictionary) -> Dictionary:
 			_box(root,"SlotSill",a,t,n,hole.get_center().x,hole.position.y,.22,Vector3(hole.size.x+.10,.09,.34),materials.structure,"detail")
 			for s: float in [hole.position.x-.065,hole.end.x+.065]:
 				_box(root,"SlotReveal",a,t,n,s,hole.get_center().y,.23,Vector3(.13,hole.size.y,.34),materials.lower,"wall")
+		# Observed storefronts: recessed dark glazing, pilasters about every 3 m and a fascia
+		# over the range. Positions and dimensions are production inference.
+		for front: Rect2 in fronts:
+			_box(root,"StorefrontGlazing",a,t,n,front.get_center().x,front.get_center().y,.035,Vector3(front.size.x,front.size.y,.045),materials.recess,"wall")
+			var bays := maxi(1,int(round(front.size.x/3.0)))
+			for i in bays+1:
+				_box(root,"StorefrontPilaster",a,t,n,front.position.x+front.size.x*i/bays,(floor_y+split)/2.0,.22,Vector3(.34,split-floor_y,.40),materials.get("pilaster",materials.structure),"wall")
+			_box(root,"StorefrontFascia",a,t,n,front.get_center().x,split-.22,.30,Vector3(front.size.x+.60,.44,.56),materials.get("fascia",materials.coping),"detail")
+		if bool(spec.get("split_fascia",false)):
+			_box(root,"SplitFascia",a,t,n,length/2.0,split-.12,.30,Vector3(length,.30,.48),materials.get("fascia",materials.coping),"detail")
 		for s: float in [.16,length-.16]:
 			_box(root,"TerminalPier",a,t,n,s,(floor_y+top-.16)/2.0,.24,Vector3(.32,top-.16-floor_y,.46),materials.structure,"wall")
 		_box(root,"ThinCoping",a,t,n,length/2.0,top-.065,.18,Vector3(length,.13,.52),materials.coping,"detail")
