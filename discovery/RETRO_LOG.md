@@ -20659,3 +20659,15 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - Worked: the stall investigator's draft carried the mechanism, observed counts and the remaining unknowns, so the existing Housing61 shutdown entry could be extended in place rather than duplicated; nothing linked to its old heading.
 - Did not work: the earlier entry had blamed no cause and recommended Dummy audio as the invocation, which kept two later stalls looking like unrelated bad luck; the cause only surfaced from a dedicated reproduction script.
 - Next time: when a lifecycle failure repeats, ask for a minimal reproduction with a nonzero-exit script early, and keep the open ppoll and 1223 routes+spray hangs in the same entry until they are explained.
+
+## code-review (godot shutdown fix, 2026-10-17)
+
+- What worked well: the evidence was concrete enough to check: the A/B counts, strace `exit_group(7)` and a clean run log. A two-line bash experiment confirmed how the monitor behaves at the edges, so the review rested on observed shell semantics, not guesses.
+- What did not work well: in `read ... < file 2>/dev/null` the input redirection is applied before stderr is silenced. A vanished or unreadable `/proc` file therefore still prints a bash error. The 160-run experiment never hit that window, so its clean logs could not show the gap.
+- What the team should change next time: give background monitors in shared tooling one up-front stderr policy (`exec 3>&2 2>/dev/null`, with the deliberate NOTE sent to `>&3`), and test at least once with the watched files made unreadable, not only on the happy path.
+
+## stall-investigator (godot shutdown fix rework, 2026-10-17)
+
+- What worked well: a Python stand-in for `GODOT_BIN` (a thread renamed "Wayland Events" blocked in `poll`, made non-dumpable partway) exercised the monitor's `/proc` read paths without the engine. The f47ceec/fe2ce41/fixed wrappers could be compared directly: the old monitor printed `Permission denied` lines, the fixed one prints nothing.
+- What did not work well: redirecting only `sleep`'s stdout and stderr left captured runs waiting about 2.1 s, because the orphaned sleep inherited the monitor's saved fd 3 (the capture pipe). Timing a `$(...)` capture against the pre-patch wrapper (about 125 ms) exposed it.
+- What the team should change next time: when a background helper duplicates a caller's descriptor (`exec 3>&2`), close it explicitly (`3>&-`) for every child that can outlive the helper, and time a captured run against the unpatched wrapper.

@@ -72,14 +72,20 @@ has_flag --rendering-driver || extra+=(--rendering-driver vulkan)
 # _poll_events_thread). If the main thread reads the roundtrip reply itself, the
 # events thread goes back into poll and the main thread waits in pthread_join
 # forever: this headless Weston never sends anything to wake it.
-# Only in that exact state (the events thread in poll, and the main thread in a
-# futex wait on an address inside the events thread's own stack mapping, where
-# glibc keeps the thread descriptor that pthread_join waits on), three samples in
-# a row, close our private Weston: poll returns HUP, the thread exits and Godot
-# finishes its normal shutdown with its own exit status.
+# Only in that exact state, three samples in a row, close our private Weston:
+# poll returns HUP, the thread exits and Godot finishes its normal shutdown with
+# its own exit status. The state: the events thread in poll, and the main thread
+# in a futex wait on the thread descriptor that pthread_join waits on. glibc keeps
+# that descriptor in the events thread's own stack mapping; with the pinned Godot
+# and glibc it sat exactly 0x2320 above the polling thread's stack pointer in
+# every observed hang, so the address must be within 0x400 of that offset. If a
+# different build moves it, the release simply stops firing.
 release_wayland_exit_hang() {
+  # /proc files can vanish or refuse access while Godot exits; keep the run's
+  # stderr (saved as fd 3) for the NOTE alone.
+  exec 3>&2 2>/dev/null
   set +eu
-  local pid=$1 events="" task hits=0 main_nr uaddr ev_nr ev_sp
+  local pid=$1 events="" task hits=0 main_nr uaddr ev_nr ev_sp offset
   mapping_of() {
     local lo hi rest
     while IFS='- ' read -r lo hi rest; do
@@ -87,7 +93,9 @@ release_wayland_exit_hang() {
     done < "/proc/${pid}/maps"
   }
   while kill -0 "${pid}" 2>/dev/null; do
-    sleep 2
+    # Detached from the run's output (including the saved fd 3), so an orphaned
+    # sleep can't hold a caller's capture pipe open.
+    sleep 2 >/dev/null 2>&1 3>&-
     if [ -z "${events}" ]; then
       for task in /proc/"${pid}"/task/*; do
         [ "$(cat "${task}/comm" 2>/dev/null)" = "Wayland Events" ] && events="${task##*/}"
@@ -95,16 +103,21 @@ release_wayland_exit_hang() {
       continue
     fi
     # /proc/<tid>/syscall: number, six arguments, stack pointer, program counter.
-    read -r main_nr uaddr _ < "/proc/${pid}/task/${pid}/syscall" 2>/dev/null
-    read -r ev_nr _ _ _ _ _ _ ev_sp _ < "/proc/${pid}/task/${events}/syscall" 2>/dev/null
+    main_nr="" uaddr="" ev_nr="" ev_sp="" offset=-1
+    read -r main_nr uaddr _ < "/proc/${pid}/task/${pid}/syscall"
+    read -r ev_nr _ _ _ _ _ _ ev_sp _ < "/proc/${pid}/task/${events}/syscall"
+    case "${uaddr}/${ev_sp}" in
+      0x*/0x*) offset=$((uaddr - ev_sp)) ;;
+    esac
     if [ "${main_nr}" = 202 ] && { [ "${ev_nr}" = 7 ] || [ "${ev_nr}" = 271 ]; } \
+      && [ "${offset}" -ge $((0x2320 - 0x400)) ] && [ "${offset}" -le $((0x2320 + 0x400)) ] \
       && [ -n "$(mapping_of "${uaddr}")" ] && [ "$(mapping_of "${uaddr}")" = "$(mapping_of "${ev_sp}")" ]; then
       hits=$((hits + 1))
     else
       hits=0
     fi
     if [ "${hits}" -ge 3 ]; then
-      echo "NOTE: tools/godot: Godot hung joining its Wayland events thread at exit; closing the private Weston so shutdown can finish" >&2
+      echo "NOTE: tools/godot: Godot hung joining its Wayland events thread at exit; closing the private Weston so shutdown can finish" >&3
       kill "${weston_pid}" 2>/dev/null
       return
     fi
