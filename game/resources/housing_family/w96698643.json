@@ -1473,16 +1473,9 @@
     3,
     6,
     9,
-    10,
-    11,
     12,
     13,
-    14,
-    15,
-    16,
-    17,
-    18,
-    19
+    17
   ],
   "materials": {
     "siding_rgb": [
@@ -1552,7 +1545,7 @@
   "clamp_pipe_to_eave": true,
   "dimensions": "production inference from dated visible frontage; hidden elevations retain plain source geometry",
   "reference_digest": "2b992747d4bcbab9bc85282ad5fa849f59bd8001c52697f6bb260e6cad350a69",
-  "study_notes": "Corrected exact outward source runs. Visible lower family organization and material palette; upper opening schedule behind1254 canopy explicitly inferred from established family. No hidden-side opening claim; dimensions/cadence are production inference.",
+  "study_notes": "Corrected exact outward source runs. Visible lower family organization and material palette; upper opening schedule behind1254 canopy explicitly inferred from established family. No hidden-side opening claim; dimensions/cadence are production inference. 2026-10-13 whole NNW rear: complete collinear unions10\u201311/14\u201316/18\u201319 use shared complete mixed broad/narrow paired windows and green entries. March2025 SSE photo supports motif family only; hidden rear counts/cadence/anchors and dimensions are production_inference, not measured/asbuilt. Black rear capture supplies no evidence. Front/ends/roof/site remain protected.",
   "local_ground": {
     "walk-0": {
       "top_triangles": [
@@ -9555,5 +9548,320 @@
         0.28
       ]
     }
-  }
+  },
+  "rear_frames": [
+    {
+      "id": "rear-1",
+      "elevation_role": "rear",
+      "runs": [
+        10,
+        11
+      ],
+      "start": [
+        -76.157,
+        3.221,
+        -686.88
+      ],
+      "end": [
+        -88.802,
+        3.221,
+        -680.112
+      ],
+      "length_m": 14.342309751222103,
+      "tangent": [
+        -0.8816571542057606,
+        0,
+        0.47189051954643013
+      ],
+      "normal": [
+        -0.47189051954643013,
+        0,
+        -0.8816571542057606
+      ],
+      "top_y": 9.21,
+      "upper_windows": [
+        {
+          "station_m": 1.7210771701466523,
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 8.13,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 5.306654607952178,
+          "width_m": 0.9,
+          "height_m": 1.12,
+          "center_y": 8.13,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 9.035655143269926,
+          "width_m": 0.9,
+          "height_m": 1.12,
+          "center_y": 8.13,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 12.621232581075452,
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 8.13,
+          "glazing": "blue"
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 1.7210771701466523,
+          "width_m": 1.85,
+          "height_m": 1.05,
+          "center_y": 4.641,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 5.306654607952178,
+          "width_m": 0.9,
+          "height_m": 1.05,
+          "center_y": 4.641,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 9.035655143269926,
+          "width_m": 0.9,
+          "height_m": 1.05,
+          "center_y": 4.641,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 12.621232581075452,
+          "width_m": 1.85,
+          "height_m": 1.05,
+          "center_y": 4.641,
+          "glazing": "blue"
+        }
+      ],
+      "entries": [
+        {
+          "station_m": 3.8007120840738575,
+          "bottom_y": 3.2785,
+          "threshold_bottom_y": 3.271979613433464,
+          "door_role": "green"
+        },
+        {
+          "station_m": 10.541597667148245,
+          "bottom_y": 3.2785,
+          "threshold_bottom_y": 3.273305240389723,
+          "door_role": "green"
+        }
+      ]
+    },
+    {
+      "id": "rear-2",
+      "elevation_role": "rear",
+      "runs": [
+        14,
+        15,
+        16
+      ],
+      "start": [
+        -88.204,
+        3.221,
+        -678.988
+      ],
+      "end": [
+        -101.024,
+        3.111,
+        -672.13
+      ],
+      "length_m": 14.539070259132838,
+      "tangent": [
+        -0.8817620227089155,
+        0,
+        0.4716945360169885
+      ],
+      "normal": [
+        -0.4716945360169885,
+        0,
+        -0.8817620227089155
+      ],
+      "top_y": 9.21,
+      "upper_windows": [
+        {
+          "station_m": 1.7446884310959405,
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 8.13,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 5.37945599587915,
+          "width_m": 0.9,
+          "height_m": 1.12,
+          "center_y": 8.13,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 9.159614263253689,
+          "width_m": 0.9,
+          "height_m": 1.12,
+          "center_y": 8.13,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 12.794381828036897,
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 8.13,
+          "glazing": "blue"
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 1.7446884310959405,
+          "width_m": 1.85,
+          "height_m": 1.05,
+          "center_y": 4.641,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 5.37945599587915,
+          "width_m": 0.9,
+          "height_m": 1.05,
+          "center_y": 4.632070020825866,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 9.159614263253689,
+          "width_m": 0.9,
+          "height_m": 1.05,
+          "center_y": 4.6178585011020505,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 12.794381828036897,
+          "width_m": 1.85,
+          "height_m": 1.05,
+          "center_y": 4.559170324681746,
+          "glazing": "blue"
+        }
+      ],
+      "entries": [
+        {
+          "station_m": 3.8528536186702023,
+          "bottom_y": 3.275071158717865,
+          "threshold_bottom_y": 3.2405707615080726,
+          "door_role": "green"
+        },
+        {
+          "station_m": 10.686216640462636,
+          "bottom_y": 3.239961317224132,
+          "threshold_bottom_y": 3.167786844893035,
+          "door_role": "green"
+        }
+      ]
+    },
+    {
+      "id": "rear-3",
+      "elevation_role": "rear",
+      "runs": [
+        18,
+        19
+      ],
+      "start": [
+        -101.552,
+        3.089,
+        -673.132
+      ],
+      "end": [
+        -114.821,
+        2.863,
+        -666.041
+      ],
+      "length_m": 15.044887570201324,
+      "tangent": [
+        -0.8819607283926304,
+        0,
+        0.47132289735715227
+      ],
+      "normal": [
+        -0.47132289735715227,
+        0,
+        -0.8819607283926304
+      ],
+      "top_y": 9.21,
+      "upper_windows": [
+        {
+          "station_m": 1.8053865084241587,
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 8.13,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 5.56660840097449,
+          "width_m": 0.9,
+          "height_m": 1.12,
+          "center_y": 8.13,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 9.478279169226834,
+          "width_m": 0.9,
+          "height_m": 1.12,
+          "center_y": 8.13,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 13.239501061777165,
+          "width_m": 1.85,
+          "height_m": 1.12,
+          "center_y": 8.13,
+          "glazing": "blue"
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 1.8053865084241587,
+          "width_m": 1.85,
+          "height_m": 1.05,
+          "center_y": 4.479691927554384,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 5.56660840097449,
+          "width_m": 0.9,
+          "height_m": 1.05,
+          "center_y": 4.423197086980416,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 9.478279169226834,
+          "width_m": 0.9,
+          "height_m": 1.05,
+          "center_y": 4.365337971718657,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 13.239501061777165,
+          "width_m": 1.85,
+          "height_m": 1.05,
+          "center_y": 4.309704207043889,
+          "glazing": "blue"
+        }
+      ],
+      "entries": [
+        {
+          "station_m": 3.986895206103351,
+          "bottom_y": 3.092538744483511,
+          "threshold_bottom_y": 3.0206217302968437,
+          "door_role": "green"
+        },
+        {
+          "station_m": 11.057992364097972,
+          "bottom_y": 2.9879472668949467,
+          "threshold_bottom_y": 2.915816562721366,
+          "door_role": "green"
+        }
+      ]
+    }
+  ]
 }
