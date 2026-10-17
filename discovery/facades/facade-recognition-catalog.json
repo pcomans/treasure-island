@@ -2175,6 +2175,7 @@
     {
       "acceptance_records": [],
       "anchor_source_key": "w95934096",
+      "stairs": [{"bottom": [-362.841, -332.5718], "top": [-364.3744, -327.342]}, {"bottom": [-371.2445, -335.0358], "top": [-372.778, -329.806]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -2355,6 +2356,7 @@
     {
       "acceptance_records": [],
       "anchor_source_key": "w95934101",
+      "stairs": [{"bottom": [-313.2627, -302.4469], "top": [-308.3725, -304.8529]}, {"bottom": [-309.4008, -294.5979], "top": [-304.5106, -297.0039]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -2733,6 +2735,7 @@
     {
       "acceptance_records": [],
       "anchor_source_key": "w95934110",
+      "stairs": [{"bottom": [-331.0598, -337.4021], "top": [-326.1696, -339.8079]}, {"bottom": [-327.1979, -329.5521], "top": [-322.3076, -331.958]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -2841,6 +2844,7 @@
     {
       "acceptance_records": [],
       "anchor_source_key": "w95934115",
+      "stairs": [{"bottom": [-358.3927, -374.9443], "top": [-356.7873, -380.1525]}, {"bottom": [-350.0264, -372.3654], "top": [-348.421, -377.5736]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -3446,6 +3450,7 @@
     {
       "acceptance_records": [],
       "anchor_source_key": "w95934124",
+      "stairs": [{"bottom": [-328.7166, -284.2009], "top": [-333.5934, -281.7679]}, {"bottom": [-332.6233, -292.0315], "top": [-337.5, -289.5984]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
