@@ -20554,3 +20554,13 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: projecting the frozen rear vertices through the dated photo's camera tied the photo's upper windows to stations on each rear section. The ENE corner and the middle/ENE downspout step served as anchors. A 1218-only generator option replaced 12 evenly spaced upper windows with 6 photo-mapped sliders, and a structural diff against 6539db3 confirmed nothing else changed. Then one shots run, one native run and one rear spray each exited 0.
 - What did not work well: the original family generator applied a two-per-unit rear upper module to 1218, even though its only dated rear photo shows widely spaced single sliders. The cadence was never counted before generating, so it took a review round to catch.
 - What the team should change next time: where a dated rear photo exists, count and map its upper-window cadence in the offline preflight, and record it per unit in the spec, before choosing a shared rear module.
+
+## visual-review (1218 cadence delta, 2026-10-17)
+
+- What worked well: stacking the reference band, then before, then after at the matched rear04 pose made the cadence change countable in one image, and a fuzzed compare of every fix001 shot against the final set confirmed the change touched only the rear.
+- What did not work well: the cadence correction cost a separate engine round that a preflight count against the one dated rear photo would have avoided.
+- What the team should change next time: before the first render of any side that has a dated photo, count that side's openings against the photo, as already recommended in the Gateview Court entry.
+
+## code-review (1218 cadence delta, 2026-10-17)
+
+- What worked well: a structural JSON diff isolated the delta at once (three rear frames' `upper_windows` reduced to two each, plus their `inference` text), and the existing opening script confirmed containment and clearance in one run. What didn't: nothing material. Next time: keep a one-line delta statement in the commit message, as this one had, so the scope check is a confirmation rather than a search.

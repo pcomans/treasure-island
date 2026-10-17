@@ -218,8 +218,15 @@ sides. L2 C for 1205, 1226 and 1246/1397. L1 C from explicit earlier verdicts:
 1205's 2026-10-11 independent review and the 2026-10-11 branch whole-stage review
 `fc3c88f` for 1226 and 1397. 1203 Bayside (`a65e5c2`) is excluded: its config
 needs the unmerged producer change from `36a6152` (`threshold_bottom_y`).
-Current totals after Mar17e: L1:34 C/179 U; L2:24 C/189 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall59 C/0 I/1,006 U across213 units/1,065 cells;49 historical
+**Mar17f** Gateview Court rows, 2026-10-17: `6539db3` authors 1248/1395, 1214/1420,
+1216/1430 and 1218/1440 on the shared housing kit with their registrations
+(CODE, visual L1/L2 for all four and progress PASS); `970359e` spaces 1218's rear
+upper windows one per unit (CODE and visual PASS; 1218 Level 2 complete on all
+sides). L1/L2 C for all four. Parked: fences, vent pipes, post bands, carport-top
+and canopy finish, and a colour re-check after the lighting decision; 1248 carport
+segmentation; 1397's side of the north court has no carports yet (future 1397 round).
+Current totals after Mar17f: L1:38 C/175 U; L2:28 C/185 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall67 C/0 I/998 U across213 units/1,065 cells;49 historical
 recognition credits unchanged.
 **U** no current stage-level conclusion established in this checklist pass.
 
@@ -334,10 +341,10 @@ before selecting another round.
 | physical-building:w96215661 / w96215661 | 1222 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — `b9b51dc` scoped rear/low-roof PASS; all-side L2 and stage credit open |
 | physical-building:w96215662 / w96215662 | 1139 Ozbourn Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215666 / w96215666 | 1215 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96215667 / w96215667 | 1248/1395 Gateview Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215667 / w96215667 | 1248/1395 Gateview Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17f `6539db3` + `970359e` — CODE, visual L1/L2 and progress PASS; 1218 cadence delta CODE and visual PASS. Parked: fences, vent pipes, post bands, carport-top and canopy finish; colour re-check after the lighting decision; carport segmentation (photo shows short segments) |
 | physical-building:w96215668 / w96215668 | 1236 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP4 — L1 connected frontage lawn/footway/parking; retained boarded architecture; scoped visual/CODE/native/fit/spray/suite002 PASS; L2–5 unknown |
 | physical-building:w96215669 / w96215669 | 1238 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — `b9b51dc` scoped rear/low-roof PASS; all-side L2 and stage credit open |
-| physical-building:w96215670 / w96215670 | 1246/1397 Gateview Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17e `20b5768` + `9dd2214` — CODE, visual and progress PASS; front-access delta CODE and visual PASS; all-side L2 complete. L1 from the 2026-10-11 branch whole-stage review (`fc3c88f`) explicitly passing L1/L2. Parked: eave/rake overhangs, door hoods/lights, yard fences (L3); warm grey vs cool blue-grey and roof colour (L4) |
+| physical-building:w96215670 / w96215670 | 1246/1397 Gateview Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17e `20b5768` + `9dd2214` — CODE, visual and progress PASS; front-access delta CODE and visual PASS; all-side L2 complete. L1 from the 2026-10-11 branch whole-stage review (`fc3c88f`) explicitly passing L1/L2. Parked: eave/rake overhangs, door hoods/lights, yard fences (L3); warm grey vs cool blue-grey and roof colour (L4); north-court carports not yet (future 1397 round) |
 | physical-building:w96215671 / w96215671 | 1244 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17d `b69fd3b` + cleanup `9d5df86` — CODE, visual L1/L2 and progress PASS (cleanup: CODE and visual PASS); fit/native/routes, rear+end spray and both full suites exit 0. Parked: slightly cool shade tone (L4), fences, boxes, vent pipes |
 | physical-building:w96215672 / w96215672 | 1201 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — `b9b51dc` scoped rear/low-roof PASS; all-side L2 and stage credit open |
 | physical-building:w96215673 / w96215673 | 1232 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP — L1 envelope/site closure; scoped visual/CODE/progress/native/fit/spray/suite PASS; all-side L2 unknown |
@@ -392,11 +399,11 @@ before selecting another round.
 | physical-building:w96665936 / w96665936 | 1128 Reeves Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96698611 / w96698611 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96698619 / w96698619 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96698627 / w96698627 | 1216/1430 Gateview Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96698627 / w96698627 | 1216/1430 Gateview Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17f `6539db3` + `970359e` — CODE, visual L1/L2 and progress PASS; 1218 cadence delta CODE and visual PASS. Parked: fences, vent pipes, post bands, carport-top and canopy finish; colour re-check after the lighting decision |
 | physical-building:w96698634 / w96698634 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96698641 / w96698641 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96698643 / w96698643 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96698645 / w96698645 | 1214/1420 Gateview Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96698645 / w96698645 | 1214/1420 Gateview Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17f `6539db3` + `970359e` — CODE, visual L1/L2 and progress PASS; 1218 cadence delta CODE and visual PASS. Parked: fences, vent pipes, post bands, carport-top and canopy finish; colour re-check after the lighting decision |
 | physical-building:w96698648 / w96698648 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96698650 / w96698650 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96698651 / w96698651 | 1315 Gateview Avenue | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -407,7 +414,7 @@ before selecting another round.
 | physical-building:w96698660 / w96698660 | 810 Avenue D | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96698662 / w96698662 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96698663 / w96698663 | 1243 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17d `b69fd3b` + cleanup `9d5df86` — CODE, visual L1/L2 and progress PASS (cleanup: CODE and visual PASS); fit/native/routes, rear+end spray and both full suites exit 0. Parked: canopy top colour (shared), NNE annex outside footprint, fences, boxes, vent pipes, post bands |
-| physical-building:w96698667 / w96698667 | 1218/1440 Gateview Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96698667 / w96698667 | 1218/1440 Gateview Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17f `6539db3` + `970359e` — CODE, visual L1/L2 and progress PASS; 1218 rear-cadence delta CODE and visual PASS. Parked: fences, vent pipes, post bands, carport-top and canopy finish; colour re-check after the lighting decision; Level 2 complete on all sides after the rear-cadence fix |
 | physical-building:w96698672 / w96698672 | 1245 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17d `b69fd3b` + cleanup `9d5df86` — CODE, visual L1/L2 and progress PASS (cleanup: CODE and visual PASS); fit/native/routes, rear+end spray and both full suites exit 0. Parked: step eave return (L3), fences, boxes |
 | physical-building:w96698673 / w96698673 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w109905031 / w109905031 | Education Center Building 29A | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -487,7 +494,7 @@ March/November2025 refs and unknown-date Apple context support the scoped envelo
 and observed architecture; missing north capture/unknown rear/schematic materials
 keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
 See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
-Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar17e for current totals);
+Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar17f for current totals);
 **L1:21 C /0 I /192 U**. All other stages unchanged;49 historical credits retained.
 
 ## Island environment layers
