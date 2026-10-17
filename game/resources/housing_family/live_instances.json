@@ -349,6 +349,18 @@
       "source_key": "w95934115",
       "config": "res://game/resources/housing_family/w95934115.json",
       "chunk": "res://generated/world/chunks/x_-2__z_-2.json"
+    },
+    {
+      "source_key": "w1272162518",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w1272162518.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_1.json"
+    },
+    {
+      "source_key": "w1212173437",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w1212173437.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_0.json"
     }
   ],
   "expected_visible_active_topology": {

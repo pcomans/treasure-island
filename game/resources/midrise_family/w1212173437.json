@@ -1,0 +1,2657 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w1212173437",
+    "address": "Star View Court",
+    "edge_normals": [
+      [
+        -0.886,
+        0.464
+      ],
+      [
+        0.465,
+        0.885
+      ],
+      [
+        0.887,
+        -0.462
+      ],
+      [
+        -0.763,
+        -0.647
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": 2,
+    "above_terrain": 0.05,
+    "basis": "median frozen terrain along the photographed ENE (Seven Seas) stoop front plus clearance"
+  },
+  "levels": {
+    "ground_h": 4.0,
+    "storey_h": 2.95,
+    "parapet_h": 1.0
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.58,
+        0.58,
+        0.56
+      ],
+      "roughness": 0.95
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "rail_glass": {
+      "rgb": [
+        0.56,
+        0.66,
+        0.68
+      ],
+      "alpha": 0.35,
+      "roughness": 0.08
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "screen": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.6,
+      "metallic": 0.35
+    },
+    "door": {
+      "rgb": [
+        0.19,
+        0.19,
+        0.2
+      ],
+      "roughness": 0.6
+    },
+    "garage": {
+      "rgb": [
+        0.44,
+        0.45,
+        0.45
+      ],
+      "roughness": 0.7,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.66,
+        0.65,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.73,
+        0.74,
+        0.74
+      ],
+      "roughness": 0.45,
+      "metallic": 0.3
+    },
+    "roof": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "deck": {
+      "rgb": [
+        0.63,
+        0.61,
+        0.57
+      ],
+      "roughness": 0.95
+    },
+    "pv": {
+      "rgb": [
+        0.07,
+        0.09,
+        0.15
+      ],
+      "roughness": 0.25,
+      "metallic": 0.3
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "planter": {
+      "rgb": [
+        0.52,
+        0.51,
+        0.49
+      ],
+      "roughness": 0.95
+    },
+    "planting": {
+      "rgb": [
+        0.27,
+        0.35,
+        0.19
+      ],
+      "roughness": 1.0
+    },
+    "band_frame": {
+      "rgb": [
+        0.2,
+        0.21,
+        0.22
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "spandrel": {
+      "rgb": [
+        0.6,
+        0.61,
+        0.62
+      ],
+      "roughness": 0.8
+    },
+    "concrete": {
+      "rgb": [
+        0.74,
+        0.73,
+        0.7
+      ],
+      "roughness": 0.95
+    },
+    "render": {
+      "rgb": [
+        0.88,
+        0.88,
+        0.86
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.84,
+        0.84,
+        0.82
+      ],
+      "roughness": 0.9
+    },
+    "block": {
+      "rgb": [
+        0.6,
+        0.575,
+        0.56
+      ],
+      "roughness": 1.0
+    },
+    "panel_grey": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.85
+    }
+  },
+  "schemes": {
+    "sv_ene": {
+      "material": "render",
+      "parapet_material": "render",
+      "plinth": {
+        "material": "block",
+        "top": 0.0
+      },
+      "base": {
+        "material": "block",
+        "storeys": 2
+      },
+      "bands": [
+        {
+          "storey": 1,
+          "offset": -0.11,
+          "h": 0.22,
+          "material": "concrete"
+        },
+        {
+          "storey": 2,
+          "offset": -0.32,
+          "h": 0.32,
+          "material": "concrete"
+        }
+      ],
+      "end_pilasters": {
+        "w": 0.45,
+        "material": "concrete",
+        "to_storey": 2
+      },
+      "module": 3.0,
+      "window": {
+        "w": 0.95,
+        "h": 1.6,
+        "sill": 0.75,
+        "depth": 0.16,
+        "mullions": [],
+        "transoms": [
+          0.3
+        ],
+        "frame_w": 0.08
+      },
+      "window_storeys": {
+        "1": {
+          "w": 1.6,
+          "h": 1.85,
+          "sill": 0.6,
+          "depth": 0.18,
+          "mullions": [
+            0.5
+          ],
+          "transoms": [
+            0.3
+          ],
+          "frame_w": 0.08
+        }
+      },
+      "ground": {
+        "kind": "window",
+        "w": 1.6,
+        "h": 2.1,
+        "sill": 0.8,
+        "depth": 0.18,
+        "mullions": [
+          0.5
+        ],
+        "transoms": [
+          0.75
+        ]
+      },
+      "stagger": {
+        "from_storey": 2,
+        "seed": 3,
+        "offsets": [
+          -0.55,
+          0.0,
+          0.45,
+          -0.25,
+          0.3
+        ],
+        "mix": [
+          {
+            "w": 0.95
+          },
+          {
+            "w": 0.95,
+            "h": 1.7
+          },
+          {
+            "w": 1.9,
+            "mullions": [
+              0.5
+            ]
+          }
+        ]
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 5.6,
+          "to": 7.2,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.85,
+            "leaf_h": 2.35
+          },
+          "window_storeys": {
+            "1": {
+              "w": 1.1,
+              "h": 1.85,
+              "sill": 0.6,
+              "depth": 0.18,
+              "mullions": []
+            }
+          },
+          "canopy": {
+            "depth": 1.0,
+            "w": 1.8,
+            "t": 0.12
+          },
+          "screens": true,
+          "screen_h": 1.1,
+          "landing": {
+            "w": 1.9,
+            "depth": 1.5
+          }
+        },
+        {
+          "type": "entry",
+          "from": 14.4,
+          "to": 16.0,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.85,
+            "leaf_h": 2.35
+          },
+          "window_storeys": {
+            "1": {
+              "w": 1.1,
+              "h": 1.85,
+              "sill": 0.6,
+              "depth": 0.18,
+              "mullions": []
+            }
+          },
+          "canopy": {
+            "depth": 1.0,
+            "w": 1.8,
+            "t": 0.12
+          },
+          "screens": true,
+          "screen_h": 1.1,
+          "landing": {
+            "w": 1.9,
+            "depth": 1.5
+          }
+        },
+        {
+          "type": "entry",
+          "from": 27.172,
+          "to": 28.772,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.85,
+            "leaf_h": 2.35
+          },
+          "window_storeys": {
+            "1": {
+              "w": 1.1,
+              "h": 1.85,
+              "sill": 0.6,
+              "depth": 0.18,
+              "mullions": []
+            }
+          },
+          "canopy": {
+            "depth": 1.0,
+            "w": 1.8,
+            "t": 0.12
+          },
+          "screens": true,
+          "screen_h": 1.1,
+          "landing": {
+            "w": 1.9,
+            "depth": 1.5
+          }
+        },
+        {
+          "type": "entry",
+          "from": 35.972,
+          "to": 37.572,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.85,
+            "leaf_h": 2.35
+          },
+          "window_storeys": {
+            "1": {
+              "w": 1.1,
+              "h": 1.85,
+              "sill": 0.6,
+              "depth": 0.18,
+              "mullions": []
+            }
+          },
+          "canopy": {
+            "depth": 1.0,
+            "w": 1.8,
+            "t": 0.12
+          },
+          "screens": true,
+          "screen_h": 1.1,
+          "landing": {
+            "w": 1.9,
+            "depth": 1.5
+          }
+        },
+        {
+          "type": "entry",
+          "from": 48.745,
+          "to": 50.345,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.85,
+            "leaf_h": 2.35
+          },
+          "window_storeys": {
+            "1": {
+              "w": 1.1,
+              "h": 1.85,
+              "sill": 0.6,
+              "depth": 0.18,
+              "mullions": []
+            }
+          },
+          "canopy": {
+            "depth": 1.0,
+            "w": 1.8,
+            "t": 0.12
+          },
+          "screens": true,
+          "screen_h": 1.1,
+          "landing": {
+            "w": 1.9,
+            "depth": 1.5
+          }
+        },
+        {
+          "type": "entry",
+          "from": 57.545,
+          "to": 59.145,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.85,
+            "leaf_h": 2.35
+          },
+          "window_storeys": {
+            "1": {
+              "w": 1.1,
+              "h": 1.85,
+              "sill": 0.6,
+              "depth": 0.18,
+              "mullions": []
+            }
+          },
+          "canopy": {
+            "depth": 1.0,
+            "w": 1.8,
+            "t": 0.12
+          },
+          "screens": true,
+          "screen_h": 1.1,
+          "landing": {
+            "w": 1.9,
+            "depth": 1.5
+          }
+        },
+        {
+          "type": "entry",
+          "from": 70.317,
+          "to": 71.917,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.85,
+            "leaf_h": 2.35
+          },
+          "window_storeys": {
+            "1": {
+              "w": 1.1,
+              "h": 1.85,
+              "sill": 0.6,
+              "depth": 0.18,
+              "mullions": []
+            }
+          },
+          "canopy": {
+            "depth": 1.0,
+            "w": 1.8,
+            "t": 0.12
+          },
+          "screens": true,
+          "screen_h": 1.1,
+          "landing": {
+            "w": 1.9,
+            "depth": 1.5
+          }
+        },
+        {
+          "type": "entry",
+          "from": 79.117,
+          "to": 80.717,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.85,
+            "leaf_h": 2.35
+          },
+          "window_storeys": {
+            "1": {
+              "w": 1.1,
+              "h": 1.85,
+              "sill": 0.6,
+              "depth": 0.18,
+              "mullions": []
+            }
+          },
+          "canopy": {
+            "depth": 1.0,
+            "w": 1.8,
+            "t": 0.12
+          },
+          "screens": true,
+          "screen_h": 1.1,
+          "landing": {
+            "w": 1.9,
+            "depth": 1.5
+          }
+        },
+        {
+          "type": "entry",
+          "from": 91.89,
+          "to": 93.49,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.85,
+            "leaf_h": 2.35
+          },
+          "window_storeys": {
+            "1": {
+              "w": 1.1,
+              "h": 1.85,
+              "sill": 0.6,
+              "depth": 0.18,
+              "mullions": []
+            }
+          },
+          "canopy": {
+            "depth": 1.0,
+            "w": 1.8,
+            "t": 0.12
+          },
+          "screens": true,
+          "screen_h": 1.1,
+          "landing": {
+            "w": 1.9,
+            "depth": 1.5
+          }
+        },
+        {
+          "type": "entry",
+          "from": 100.69,
+          "to": 102.29,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.85,
+            "leaf_h": 2.35
+          },
+          "window_storeys": {
+            "1": {
+              "w": 1.1,
+              "h": 1.85,
+              "sill": 0.6,
+              "depth": 0.18,
+              "mullions": []
+            }
+          },
+          "canopy": {
+            "depth": 1.0,
+            "w": 1.8,
+            "t": 0.12
+          },
+          "screens": true,
+          "screen_h": 1.1,
+          "landing": {
+            "w": 1.9,
+            "depth": 1.5
+          }
+        }
+      ]
+    },
+    "sv_nnw_ene": {
+      "material": "render",
+      "parapet_material": "render",
+      "plinth": {
+        "material": "block",
+        "top": 0.0
+      },
+      "base": {
+        "material": "block",
+        "storeys": 2
+      },
+      "bands": [
+        {
+          "storey": 2,
+          "offset": -0.32,
+          "h": 0.32,
+          "material": "concrete"
+        }
+      ],
+      "module": 3.0,
+      "window": {
+        "w": 0.95,
+        "h": 1.6,
+        "sill": 0.75,
+        "depth": 0.16,
+        "mullions": [],
+        "transoms": [
+          0.3
+        ],
+        "frame_w": 0.08
+      },
+      "window_storeys": {
+        "1": {
+          "w": 1.6,
+          "h": 1.85,
+          "sill": 0.6,
+          "depth": 0.18,
+          "mullions": [
+            0.5
+          ],
+          "transoms": [
+            0.3
+          ],
+          "frame_w": 0.08
+        }
+      },
+      "ground": {
+        "kind": "window",
+        "w": 1.6,
+        "h": 2.1,
+        "sill": 0.8,
+        "depth": 0.18,
+        "mullions": [
+          0.5
+        ]
+      },
+      "stagger": {
+        "from_storey": 2,
+        "seed": 7,
+        "offsets": [
+          -0.4,
+          0.0,
+          0.4
+        ],
+        "mix": [
+          {
+            "w": 0.95
+          },
+          {
+            "w": 1.9,
+            "mullions": [
+              0.5
+            ]
+          }
+        ]
+      }
+    },
+    "sv_sse_ene": {
+      "material": "render",
+      "parapet_material": "render",
+      "plinth": {
+        "material": "block",
+        "top": 0.0
+      },
+      "base": {
+        "material": "block",
+        "storeys": 2
+      },
+      "bands": [
+        {
+          "storey": 2,
+          "offset": -0.32,
+          "h": 0.32,
+          "material": "concrete"
+        }
+      ],
+      "module": 3.0,
+      "window": {
+        "w": 0.95,
+        "h": 1.6,
+        "sill": 0.75,
+        "depth": 0.16,
+        "mullions": [],
+        "transoms": [
+          0.3
+        ],
+        "frame_w": 0.08
+      },
+      "window_storeys": {
+        "1": {
+          "w": 1.6,
+          "h": 1.85,
+          "sill": 0.6,
+          "depth": 0.18,
+          "mullions": [
+            0.5
+          ],
+          "transoms": [
+            0.3
+          ],
+          "frame_w": 0.08
+        }
+      },
+      "ground": {
+        "kind": "window",
+        "w": 1.6,
+        "h": 2.1,
+        "sill": 0.8,
+        "depth": 0.18,
+        "mullions": [
+          0.5
+        ]
+      },
+      "stagger": {
+        "from_storey": 2,
+        "seed": 11,
+        "offsets": [
+          -0.4,
+          0.0,
+          0.4
+        ],
+        "mix": [
+          {
+            "w": 0.95
+          },
+          {
+            "w": 1.9,
+            "mullions": [
+              0.5
+            ]
+          }
+        ]
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 33.0,
+          "to": 36.0,
+          "door": {
+            "kind": "unit",
+            "w": 1.1,
+            "h": 2.85,
+            "leaf_h": 2.35
+          },
+          "canopy": {
+            "depth": 1.0,
+            "w": 1.8,
+            "t": 0.12
+          },
+          "landing": {
+            "w": 2.0,
+            "depth": 1.5
+          }
+        }
+      ]
+    },
+    "sv_sse_link": {
+      "material": "block",
+      "parapet_material": "block",
+      "plinth": {
+        "material": "block",
+        "top": 0.0
+      },
+      "module": 3.0,
+      "window": {
+        "w": 1.6,
+        "h": 1.85,
+        "sill": 0.6,
+        "depth": 0.18,
+        "mullions": [
+          0.5
+        ],
+        "transoms": [
+          0.3
+        ],
+        "frame_w": 0.08
+      },
+      "ground": {
+        "kind": "blank"
+      },
+      "features": [
+        {
+          "type": "vents",
+          "from": 12.0,
+          "to": 16.2,
+          "count": 2,
+          "w": 1.2,
+          "h": 0.9,
+          "y": 2.3
+        },
+        {
+          "type": "garage",
+          "from": 16.6,
+          "to": 22.8,
+          "w": 5.4,
+          "h": 3.0
+        },
+        {
+          "type": "entry",
+          "from": 23.2,
+          "to": 25.4,
+          "door": {
+            "kind": "unit",
+            "w": 1.1,
+            "h": 2.6
+          },
+          "landing": {
+            "w": 2.0,
+            "depth": 1.4
+          }
+        }
+      ]
+    },
+    "sv_wsw": {
+      "material": "render",
+      "parapet_material": "render",
+      "plinth": {
+        "material": "block",
+        "top": 0.0
+      },
+      "module": 2.9,
+      "window": {
+        "w": 0.9,
+        "h": 1.5,
+        "sill": 0.8,
+        "depth": 0.16,
+        "mullions": []
+      },
+      "ground": {
+        "kind": "patio",
+        "w": 1.7,
+        "h": 2.5,
+        "sill": 0.05,
+        "depth": 0.18,
+        "mullions": [
+          0.5
+        ]
+      },
+      "features": [
+        {
+          "type": "band",
+          "from": 1.0,
+          "to": 2.8,
+          "w": 1.5,
+          "storeys": [
+            1,
+            3
+          ],
+          "window": {
+            "sill": 0.85,
+            "h": 1.6
+          },
+          "ground": {
+            "kind": "patio",
+            "w": 1.2,
+            "h": 2.5,
+            "sill": 0.05,
+            "depth": 0.18,
+            "mullions": []
+          }
+        },
+        {
+          "type": "band",
+          "from": 8.43,
+          "to": 10.23,
+          "w": 1.5,
+          "storeys": [
+            1,
+            3
+          ],
+          "window": {
+            "sill": 0.85,
+            "h": 1.6
+          },
+          "ground": {
+            "kind": "patio",
+            "w": 1.2,
+            "h": 2.5,
+            "sill": 0.05,
+            "depth": 0.18,
+            "mullions": []
+          }
+        },
+        {
+          "type": "band",
+          "from": 15.86,
+          "to": 17.66,
+          "w": 1.5,
+          "storeys": [
+            1,
+            3
+          ],
+          "window": {
+            "sill": 0.85,
+            "h": 1.6
+          },
+          "ground": {
+            "kind": "patio",
+            "w": 1.2,
+            "h": 2.5,
+            "sill": 0.05,
+            "depth": 0.18,
+            "mullions": []
+          }
+        },
+        {
+          "type": "band",
+          "from": 23.29,
+          "to": 25.09,
+          "w": 1.5,
+          "storeys": [
+            1,
+            3
+          ],
+          "window": {
+            "sill": 0.85,
+            "h": 1.6
+          },
+          "ground": {
+            "kind": "patio",
+            "w": 1.2,
+            "h": 2.5,
+            "sill": 0.05,
+            "depth": 0.18,
+            "mullions": []
+          }
+        },
+        {
+          "type": "band",
+          "from": 30.72,
+          "to": 32.52,
+          "w": 1.5,
+          "storeys": [
+            1,
+            3
+          ],
+          "window": {
+            "sill": 0.85,
+            "h": 1.6
+          },
+          "ground": {
+            "kind": "patio",
+            "w": 1.2,
+            "h": 2.5,
+            "sill": 0.05,
+            "depth": 0.18,
+            "mullions": []
+          }
+        },
+        {
+          "type": "band",
+          "from": 38.15,
+          "to": 39.95,
+          "w": 1.5,
+          "storeys": [
+            1,
+            3
+          ],
+          "window": {
+            "sill": 0.85,
+            "h": 1.6
+          },
+          "ground": {
+            "kind": "patio",
+            "w": 1.2,
+            "h": 2.5,
+            "sill": 0.05,
+            "depth": 0.18,
+            "mullions": []
+          }
+        },
+        {
+          "type": "band",
+          "from": 45.58,
+          "to": 47.38,
+          "w": 1.5,
+          "storeys": [
+            1,
+            3
+          ],
+          "window": {
+            "sill": 0.85,
+            "h": 1.6
+          },
+          "ground": {
+            "kind": "patio",
+            "w": 1.2,
+            "h": 2.5,
+            "sill": 0.05,
+            "depth": 0.18,
+            "mullions": []
+          }
+        },
+        {
+          "type": "band",
+          "from": 53.01,
+          "to": 54.81,
+          "w": 1.5,
+          "storeys": [
+            1,
+            3
+          ],
+          "window": {
+            "sill": 0.85,
+            "h": 1.6
+          },
+          "ground": {
+            "kind": "patio",
+            "w": 1.2,
+            "h": 2.5,
+            "sill": 0.05,
+            "depth": 0.18,
+            "mullions": []
+          }
+        },
+        {
+          "type": "band",
+          "from": 60.44,
+          "to": 62.24,
+          "w": 1.5,
+          "storeys": [
+            1,
+            3
+          ],
+          "window": {
+            "sill": 0.85,
+            "h": 1.6
+          },
+          "ground": {
+            "kind": "patio",
+            "w": 1.2,
+            "h": 2.5,
+            "sill": 0.05,
+            "depth": 0.18,
+            "mullions": []
+          }
+        },
+        {
+          "type": "band",
+          "from": 67.87,
+          "to": 69.67,
+          "w": 1.5,
+          "storeys": [
+            1,
+            3
+          ],
+          "window": {
+            "sill": 0.85,
+            "h": 1.6
+          },
+          "ground": {
+            "kind": "patio",
+            "w": 1.2,
+            "h": 2.5,
+            "sill": 0.05,
+            "depth": 0.18,
+            "mullions": []
+          }
+        },
+        {
+          "type": "band",
+          "from": 75.3,
+          "to": 77.1,
+          "w": 1.5,
+          "storeys": [
+            1,
+            3
+          ],
+          "window": {
+            "sill": 0.85,
+            "h": 1.6
+          },
+          "ground": {
+            "kind": "patio",
+            "w": 1.2,
+            "h": 2.5,
+            "sill": 0.05,
+            "depth": 0.18,
+            "mullions": []
+          }
+        },
+        {
+          "type": "band",
+          "from": 82.73,
+          "to": 84.53,
+          "w": 1.5,
+          "storeys": [
+            1,
+            3
+          ],
+          "window": {
+            "sill": 0.85,
+            "h": 1.6
+          },
+          "ground": {
+            "kind": "patio",
+            "w": 1.2,
+            "h": 2.5,
+            "sill": 0.05,
+            "depth": 0.18,
+            "mullions": []
+          }
+        }
+      ]
+    },
+    "sv_sse_wsw": {
+      "material": "render",
+      "parapet_material": "render",
+      "plinth": {
+        "material": "block",
+        "top": 0.0
+      },
+      "module": 2.9,
+      "window": {
+        "w": 0.9,
+        "h": 1.5,
+        "sill": 0.8,
+        "depth": 0.16,
+        "mullions": []
+      },
+      "ground": {
+        "kind": "patio",
+        "w": 1.7,
+        "h": 2.5,
+        "sill": 0.05,
+        "depth": 0.18,
+        "mullions": [
+          0.5
+        ]
+      },
+      "features": [
+        {
+          "type": "band",
+          "from": 4.6,
+          "to": 6.4,
+          "w": 1.5,
+          "storeys": [
+            1,
+            3
+          ],
+          "window": {
+            "sill": 0.85,
+            "h": 1.6
+          },
+          "ground": {
+            "kind": "patio",
+            "w": 1.2,
+            "h": 2.5,
+            "sill": 0.05,
+            "depth": 0.18,
+            "mullions": []
+          }
+        }
+      ]
+    },
+    "sv_nnw_wsw": {
+      "material": "render",
+      "parapet_material": "render",
+      "plinth": {
+        "material": "block",
+        "top": 0.0
+      },
+      "module": 2.9,
+      "window": {
+        "w": 0.9,
+        "h": 1.5,
+        "sill": 0.8,
+        "depth": 0.16,
+        "mullions": []
+      },
+      "ground": {
+        "kind": "storefront",
+        "pier": 0.3,
+        "head": 0.55
+      },
+      "features": [
+        {
+          "type": "band",
+          "from": 39.4,
+          "to": 41.2,
+          "w": 1.5,
+          "storeys": [
+            1,
+            3
+          ],
+          "window": {
+            "sill": 0.85,
+            "h": 1.6
+          }
+        },
+        {
+          "type": "band",
+          "from": 45.0,
+          "to": 46.8,
+          "w": 1.5,
+          "storeys": [
+            1,
+            3
+          ],
+          "window": {
+            "sill": 0.85,
+            "h": 1.6
+          }
+        }
+      ]
+    },
+    "sv_nnw_link": {
+      "material": "render",
+      "parapet_material": "render",
+      "plinth": {
+        "material": "block",
+        "top": 0.0
+      },
+      "module": 3.0,
+      "window": {
+        "w": 0.95,
+        "h": 1.6,
+        "sill": 0.75,
+        "depth": 0.16,
+        "mullions": [],
+        "transoms": [
+          0.3
+        ],
+        "frame_w": 0.08
+      },
+      "ground": {
+        "kind": "window",
+        "w": 1.6,
+        "h": 2.3,
+        "sill": 0.6,
+        "depth": 0.18,
+        "mullions": [
+          0.5
+        ]
+      },
+      "features": [
+        {
+          "type": "bays",
+          "from": 22.0,
+          "to": 32.6,
+          "material": "panel_grey",
+          "material_to": 2,
+          "module": 3.5,
+          "ground": {
+            "kind": "storefront",
+            "pier": 0.35,
+            "head": 0.5
+          },
+          "window_storeys": {
+            "1": {
+              "w": 2.8,
+              "h": 2.4,
+              "sill": 0.3,
+              "depth": 0.3,
+              "mullions": [
+                0.5
+              ],
+              "transoms": [
+                0.8
+              ]
+            }
+          }
+        },
+        {
+          "type": "entry",
+          "from": 25.6,
+          "to": 28.9,
+          "door": {
+            "kind": "lobby",
+            "w": 3.0,
+            "h": 3.1,
+            "recess": 0.45
+          },
+          "canopy": {
+            "depth": 1.6,
+            "w": 4.2,
+            "t": 0.2,
+            "material": "panel_grey"
+          },
+          "landing": {
+            "w": 4.0,
+            "depth": 1.8
+          }
+        },
+        {
+          "type": "band",
+          "from": 34.6,
+          "to": 37.4,
+          "w": 2.4,
+          "storeys": [
+            0,
+            5
+          ],
+          "bottom": 0.12,
+          "window": {
+            "sill": 0.1,
+            "h": 2.55
+          },
+          "spandrel": "band_frame"
+        }
+      ]
+    },
+    "sv_court": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 3.0,
+      "window": {
+        "w": 1.2,
+        "h": 1.5,
+        "sill": 0.8,
+        "depth": 0.16,
+        "mullions": []
+      },
+      "ground": {
+        "kind": "blank"
+      }
+    },
+    "sv_return": {
+      "material": "render",
+      "parapet_material": "render",
+      "plinth": {
+        "material": "block",
+        "top": 0.0
+      },
+      "module": 40.0,
+      "ground": {
+        "kind": "blank"
+      }
+    }
+  },
+  "blocks": [
+    {
+      "id": "unit00",
+      "storeys": 4,
+      "clip": [
+        {
+          "edge": 0,
+          "max": 11.0
+        },
+        {
+          "edge": 0,
+          "s_max": 7.43
+        },
+        {
+          "edge": 0,
+          "taper": [
+            0.0,
+            0.0,
+            7.43,
+            0.7
+          ]
+        }
+      ],
+      "parapet": {
+        "h": 0.9,
+        "t": 0.3
+      },
+      "faces": {
+        "e0": "sv_wsw",
+        "e1": "sv_sse_wsw",
+        "e3": "sv_nnw_wsw",
+        "court": "sv_court",
+        "return": "sv_return"
+      },
+      "roof_items": [
+        {
+          "kind": "pv",
+          "edge": 0,
+          "s": [
+            0.8,
+            6.63
+          ],
+          "d": [
+            2.2,
+            8.4
+          ],
+          "rows": 2,
+          "gap": 0.9,
+          "h": 0.45
+        }
+      ]
+    },
+    {
+      "id": "unit01",
+      "storeys": 4,
+      "clip": [
+        {
+          "edge": 0,
+          "max": 11.0
+        },
+        {
+          "edge": 0,
+          "s_min": 7.43
+        },
+        {
+          "edge": 0,
+          "s_max": 14.86
+        },
+        {
+          "edge": 0,
+          "taper": [
+            7.43,
+            0.0,
+            14.86,
+            0.7
+          ]
+        }
+      ],
+      "parapet": {
+        "h": 0.9,
+        "t": 0.3
+      },
+      "faces": {
+        "e0": "sv_wsw",
+        "e1": "sv_sse_wsw",
+        "e3": "sv_nnw_wsw",
+        "court": "sv_court",
+        "return": "sv_return"
+      },
+      "roof_items": [
+        {
+          "kind": "pv",
+          "edge": 0,
+          "s": [
+            8.23,
+            14.06
+          ],
+          "d": [
+            2.2,
+            8.4
+          ],
+          "rows": 2,
+          "gap": 0.9,
+          "h": 0.45
+        }
+      ]
+    },
+    {
+      "id": "unit02",
+      "storeys": 4,
+      "clip": [
+        {
+          "edge": 0,
+          "max": 11.0
+        },
+        {
+          "edge": 0,
+          "s_min": 14.86
+        },
+        {
+          "edge": 0,
+          "s_max": 22.29
+        },
+        {
+          "edge": 0,
+          "taper": [
+            14.86,
+            0.0,
+            22.29,
+            0.7
+          ]
+        }
+      ],
+      "parapet": {
+        "h": 0.9,
+        "t": 0.3
+      },
+      "faces": {
+        "e0": "sv_wsw",
+        "e1": "sv_sse_wsw",
+        "e3": "sv_nnw_wsw",
+        "court": "sv_court",
+        "return": "sv_return"
+      },
+      "roof_items": [
+        {
+          "kind": "pv",
+          "edge": 0,
+          "s": [
+            15.66,
+            21.49
+          ],
+          "d": [
+            2.2,
+            8.4
+          ],
+          "rows": 2,
+          "gap": 0.9,
+          "h": 0.45
+        }
+      ]
+    },
+    {
+      "id": "unit03",
+      "storeys": 4,
+      "clip": [
+        {
+          "edge": 0,
+          "max": 11.0
+        },
+        {
+          "edge": 0,
+          "s_min": 22.29
+        },
+        {
+          "edge": 0,
+          "s_max": 29.72
+        },
+        {
+          "edge": 0,
+          "taper": [
+            22.29,
+            0.0,
+            29.72,
+            0.7
+          ]
+        }
+      ],
+      "parapet": {
+        "h": 0.9,
+        "t": 0.3
+      },
+      "faces": {
+        "e0": "sv_wsw",
+        "e1": "sv_sse_wsw",
+        "e3": "sv_nnw_wsw",
+        "court": "sv_court",
+        "return": "sv_return"
+      },
+      "roof_items": [
+        {
+          "kind": "pv",
+          "edge": 0,
+          "s": [
+            23.09,
+            28.92
+          ],
+          "d": [
+            2.2,
+            8.4
+          ],
+          "rows": 2,
+          "gap": 0.9,
+          "h": 0.45
+        }
+      ]
+    },
+    {
+      "id": "unit04",
+      "storeys": 4,
+      "clip": [
+        {
+          "edge": 0,
+          "max": 11.0
+        },
+        {
+          "edge": 0,
+          "s_min": 29.72
+        },
+        {
+          "edge": 0,
+          "s_max": 37.15
+        },
+        {
+          "edge": 0,
+          "taper": [
+            29.72,
+            0.0,
+            37.15,
+            0.7
+          ]
+        }
+      ],
+      "parapet": {
+        "h": 0.9,
+        "t": 0.3
+      },
+      "faces": {
+        "e0": "sv_wsw",
+        "e1": "sv_sse_wsw",
+        "e3": "sv_nnw_wsw",
+        "court": "sv_court",
+        "return": "sv_return"
+      },
+      "roof_items": [
+        {
+          "kind": "pv",
+          "edge": 0,
+          "s": [
+            30.52,
+            36.35
+          ],
+          "d": [
+            2.2,
+            8.4
+          ],
+          "rows": 2,
+          "gap": 0.9,
+          "h": 0.45
+        }
+      ]
+    },
+    {
+      "id": "unit05",
+      "storeys": 4,
+      "clip": [
+        {
+          "edge": 0,
+          "max": 11.0
+        },
+        {
+          "edge": 0,
+          "s_min": 37.15
+        },
+        {
+          "edge": 0,
+          "s_max": 44.58
+        },
+        {
+          "edge": 0,
+          "taper": [
+            37.15,
+            0.0,
+            44.58,
+            0.7
+          ]
+        }
+      ],
+      "parapet": {
+        "h": 0.9,
+        "t": 0.3
+      },
+      "faces": {
+        "e0": "sv_wsw",
+        "e1": "sv_sse_wsw",
+        "e3": "sv_nnw_wsw",
+        "court": "sv_court",
+        "return": "sv_return"
+      },
+      "roof_items": [
+        {
+          "kind": "pv",
+          "edge": 0,
+          "s": [
+            37.95,
+            43.78
+          ],
+          "d": [
+            2.2,
+            8.4
+          ],
+          "rows": 2,
+          "gap": 0.9,
+          "h": 0.45
+        }
+      ]
+    },
+    {
+      "id": "unit06",
+      "storeys": 4,
+      "clip": [
+        {
+          "edge": 0,
+          "max": 11.0
+        },
+        {
+          "edge": 0,
+          "s_min": 44.58
+        },
+        {
+          "edge": 0,
+          "s_max": 52.01
+        },
+        {
+          "edge": 0,
+          "taper": [
+            44.58,
+            0.0,
+            52.01,
+            0.7
+          ]
+        }
+      ],
+      "parapet": {
+        "h": 0.9,
+        "t": 0.3
+      },
+      "faces": {
+        "e0": "sv_wsw",
+        "e1": "sv_sse_wsw",
+        "e3": "sv_nnw_wsw",
+        "court": "sv_court",
+        "return": "sv_return"
+      },
+      "roof_items": [
+        {
+          "kind": "pv",
+          "edge": 0,
+          "s": [
+            45.38,
+            51.21
+          ],
+          "d": [
+            2.2,
+            8.4
+          ],
+          "rows": 2,
+          "gap": 0.9,
+          "h": 0.45
+        }
+      ]
+    },
+    {
+      "id": "unit07",
+      "storeys": 4,
+      "clip": [
+        {
+          "edge": 0,
+          "max": 11.0
+        },
+        {
+          "edge": 0,
+          "s_min": 52.01
+        },
+        {
+          "edge": 0,
+          "s_max": 59.44
+        },
+        {
+          "edge": 0,
+          "taper": [
+            52.01,
+            0.0,
+            59.44,
+            0.7
+          ]
+        }
+      ],
+      "parapet": {
+        "h": 0.9,
+        "t": 0.3
+      },
+      "faces": {
+        "e0": "sv_wsw",
+        "e1": "sv_sse_wsw",
+        "e3": "sv_nnw_wsw",
+        "court": "sv_court",
+        "return": "sv_return"
+      },
+      "roof_items": [
+        {
+          "kind": "pv",
+          "edge": 0,
+          "s": [
+            52.81,
+            58.64
+          ],
+          "d": [
+            2.2,
+            8.4
+          ],
+          "rows": 2,
+          "gap": 0.9,
+          "h": 0.45
+        }
+      ]
+    },
+    {
+      "id": "unit08",
+      "storeys": 4,
+      "clip": [
+        {
+          "edge": 0,
+          "max": 11.0
+        },
+        {
+          "edge": 0,
+          "s_min": 59.44
+        },
+        {
+          "edge": 0,
+          "s_max": 66.87
+        },
+        {
+          "edge": 0,
+          "taper": [
+            59.44,
+            0.0,
+            66.87,
+            0.7
+          ]
+        }
+      ],
+      "parapet": {
+        "h": 0.9,
+        "t": 0.3
+      },
+      "faces": {
+        "e0": "sv_wsw",
+        "e1": "sv_sse_wsw",
+        "e3": "sv_nnw_wsw",
+        "court": "sv_court",
+        "return": "sv_return"
+      },
+      "roof_items": [
+        {
+          "kind": "pv",
+          "edge": 0,
+          "s": [
+            60.24,
+            66.07
+          ],
+          "d": [
+            2.2,
+            8.4
+          ],
+          "rows": 2,
+          "gap": 0.9,
+          "h": 0.45
+        }
+      ]
+    },
+    {
+      "id": "unit09",
+      "storeys": 4,
+      "clip": [
+        {
+          "edge": 0,
+          "max": 11.0
+        },
+        {
+          "edge": 0,
+          "s_min": 66.87
+        },
+        {
+          "edge": 0,
+          "s_max": 74.3
+        },
+        {
+          "edge": 0,
+          "taper": [
+            66.87,
+            0.0,
+            74.3,
+            0.7
+          ]
+        }
+      ],
+      "parapet": {
+        "h": 0.9,
+        "t": 0.3
+      },
+      "faces": {
+        "e0": "sv_wsw",
+        "e1": "sv_sse_wsw",
+        "e3": "sv_nnw_wsw",
+        "court": "sv_court",
+        "return": "sv_return"
+      },
+      "roof_items": [
+        {
+          "kind": "pv",
+          "edge": 0,
+          "s": [
+            67.67,
+            73.5
+          ],
+          "d": [
+            2.2,
+            8.4
+          ],
+          "rows": 2,
+          "gap": 0.9,
+          "h": 0.45
+        }
+      ]
+    },
+    {
+      "id": "unit10",
+      "storeys": 4,
+      "clip": [
+        {
+          "edge": 0,
+          "max": 11.0
+        },
+        {
+          "edge": 0,
+          "s_min": 74.3
+        },
+        {
+          "edge": 0,
+          "s_max": 81.73
+        },
+        {
+          "edge": 0,
+          "taper": [
+            74.3,
+            0.0,
+            81.73,
+            0.7
+          ]
+        }
+      ],
+      "parapet": {
+        "h": 0.9,
+        "t": 0.3
+      },
+      "faces": {
+        "e0": "sv_wsw",
+        "e1": "sv_sse_wsw",
+        "e3": "sv_nnw_wsw",
+        "court": "sv_court",
+        "return": "sv_return"
+      },
+      "roof_items": [
+        {
+          "kind": "pv",
+          "edge": 0,
+          "s": [
+            75.1,
+            80.93
+          ],
+          "d": [
+            2.2,
+            8.4
+          ],
+          "rows": 2,
+          "gap": 0.9,
+          "h": 0.45
+        }
+      ]
+    },
+    {
+      "id": "unit11",
+      "storeys": 4,
+      "clip": [
+        {
+          "edge": 0,
+          "max": 11.0
+        },
+        {
+          "edge": 0,
+          "s_min": 81.73
+        }
+      ],
+      "parapet": {
+        "h": 0.9,
+        "t": 0.3
+      },
+      "faces": {
+        "e0": "sv_wsw",
+        "e1": "sv_sse_wsw",
+        "e3": "sv_nnw_wsw",
+        "court": "sv_court",
+        "return": "sv_return"
+      },
+      "roof_items": [
+        {
+          "kind": "pv",
+          "edge": 0,
+          "s": [
+            82.53,
+            88.36
+          ],
+          "d": [
+            2.2,
+            8.4
+          ],
+          "rows": 2,
+          "gap": 0.9,
+          "h": 0.45
+        }
+      ]
+    },
+    {
+      "id": "ene0",
+      "storeys": 7,
+      "clip": [
+        {
+          "edge": 2,
+          "max": 17.5
+        },
+        {
+          "edge": 2,
+          "s_max": 21.572
+        },
+        {
+          "edge": 2,
+          "taper": [
+            0.0,
+            0.0,
+            21.572,
+            1.2
+          ]
+        }
+      ],
+      "parapet": {
+        "h": 1.0,
+        "t": 0.3
+      },
+      "faces": {
+        "e1": "sv_sse_ene",
+        "e2": "sv_ene",
+        "e3": "sv_nnw_ene",
+        "court": "sv_court",
+        "return": "sv_return"
+      },
+      "roof_items": []
+    },
+    {
+      "id": "base0",
+      "storeys": 2,
+      "clip": [
+        {
+          "edge": 2,
+          "s_max": 21.572
+        },
+        {
+          "edge": 2,
+          "taper": [
+            0.0,
+            0.0,
+            21.572,
+            1.2
+          ],
+          "taper_keep": "outer"
+        }
+      ],
+      "parapet": {
+        "h": 0.0
+      },
+      "faces": {
+        "e2": "sv_ene",
+        "court": "sv_court",
+        "return": "sv_return"
+      }
+    },
+    {
+      "id": "ene1",
+      "storeys": 7,
+      "clip": [
+        {
+          "edge": 2,
+          "max": 17.5
+        },
+        {
+          "edge": 2,
+          "s_min": 21.572
+        },
+        {
+          "edge": 2,
+          "s_max": 43.145
+        },
+        {
+          "edge": 2,
+          "taper": [
+            21.572,
+            0.0,
+            43.145,
+            1.2
+          ]
+        }
+      ],
+      "parapet": {
+        "h": 1.0,
+        "t": 0.3
+      },
+      "faces": {
+        "e1": "sv_sse_ene",
+        "e2": "sv_ene",
+        "e3": "sv_nnw_ene",
+        "court": "sv_court",
+        "return": "sv_return"
+      },
+      "roof_items": [
+        {
+          "kind": "box",
+          "edge": 2,
+          "s": [
+            28.0,
+            33.0
+          ],
+          "d": [
+            6.0,
+            11.0
+          ],
+          "h": 3.0,
+          "material": "render",
+          "top": "roof"
+        }
+      ]
+    },
+    {
+      "id": "base1",
+      "storeys": 2,
+      "clip": [
+        {
+          "edge": 2,
+          "s_min": 21.572
+        },
+        {
+          "edge": 2,
+          "s_max": 43.145
+        },
+        {
+          "edge": 2,
+          "taper": [
+            21.572,
+            0.0,
+            43.145,
+            1.2
+          ],
+          "taper_keep": "outer"
+        }
+      ],
+      "parapet": {
+        "h": 0.0
+      },
+      "faces": {
+        "e2": "sv_ene",
+        "court": "sv_court",
+        "return": "sv_return"
+      }
+    },
+    {
+      "id": "ene2",
+      "storeys": 7,
+      "clip": [
+        {
+          "edge": 2,
+          "max": 17.5
+        },
+        {
+          "edge": 2,
+          "s_min": 43.145
+        },
+        {
+          "edge": 2,
+          "s_max": 64.717
+        },
+        {
+          "edge": 2,
+          "taper": [
+            43.145,
+            0.0,
+            64.717,
+            1.2
+          ]
+        }
+      ],
+      "parapet": {
+        "h": 1.0,
+        "t": 0.3
+      },
+      "faces": {
+        "e1": "sv_sse_ene",
+        "e2": "sv_ene",
+        "e3": "sv_nnw_ene",
+        "court": "sv_court",
+        "return": "sv_return"
+      },
+      "roof_items": [
+        {
+          "kind": "box",
+          "edge": 2,
+          "s": [
+            47.0,
+            54.0
+          ],
+          "d": [
+            5.0,
+            10.5
+          ],
+          "h": 1.6,
+          "material": "mech"
+        }
+      ]
+    },
+    {
+      "id": "base2",
+      "storeys": 2,
+      "clip": [
+        {
+          "edge": 2,
+          "s_min": 43.145
+        },
+        {
+          "edge": 2,
+          "s_max": 64.717
+        },
+        {
+          "edge": 2,
+          "taper": [
+            43.145,
+            0.0,
+            64.717,
+            1.2
+          ],
+          "taper_keep": "outer"
+        }
+      ],
+      "parapet": {
+        "h": 0.0
+      },
+      "faces": {
+        "e2": "sv_ene",
+        "court": "sv_court",
+        "return": "sv_return"
+      }
+    },
+    {
+      "id": "ene3",
+      "storeys": 7,
+      "clip": [
+        {
+          "edge": 2,
+          "max": 17.5
+        },
+        {
+          "edge": 2,
+          "s_min": 64.717
+        },
+        {
+          "edge": 2,
+          "s_max": 86.29
+        },
+        {
+          "edge": 2,
+          "taper": [
+            64.717,
+            0.0,
+            86.29,
+            1.2
+          ]
+        }
+      ],
+      "parapet": {
+        "h": 1.0,
+        "t": 0.3
+      },
+      "faces": {
+        "e1": "sv_sse_ene",
+        "e2": "sv_ene",
+        "e3": "sv_nnw_ene",
+        "court": "sv_court",
+        "return": "sv_return"
+      },
+      "roof_items": []
+    },
+    {
+      "id": "base3",
+      "storeys": 2,
+      "clip": [
+        {
+          "edge": 2,
+          "s_min": 64.717
+        },
+        {
+          "edge": 2,
+          "s_max": 86.29
+        },
+        {
+          "edge": 2,
+          "taper": [
+            64.717,
+            0.0,
+            86.29,
+            1.2
+          ],
+          "taper_keep": "outer"
+        }
+      ],
+      "parapet": {
+        "h": 0.0
+      },
+      "faces": {
+        "e2": "sv_ene",
+        "court": "sv_court",
+        "return": "sv_return"
+      }
+    },
+    {
+      "id": "ene4",
+      "storeys": 7,
+      "clip": [
+        {
+          "edge": 2,
+          "max": 17.5
+        },
+        {
+          "edge": 2,
+          "s_min": 86.29
+        }
+      ],
+      "parapet": {
+        "h": 1.0,
+        "t": 0.3
+      },
+      "faces": {
+        "e1": "sv_sse_ene",
+        "e2": "sv_ene",
+        "e3": "sv_nnw_ene",
+        "court": "sv_court",
+        "return": "sv_return"
+      },
+      "roof_items": [
+        {
+          "kind": "pv",
+          "edge": 2,
+          "s": [
+            88.0,
+            99.5
+          ],
+          "d": [
+            3.0,
+            14.5
+          ],
+          "rows": 3,
+          "gap": 1.0,
+          "h": 0.45
+        }
+      ]
+    },
+    {
+      "id": "nlink",
+      "storeys": 6,
+      "clip": [
+        {
+          "edge": 0,
+          "min": 11.0
+        },
+        {
+          "edge": 2,
+          "min": 17.5
+        },
+        {
+          "edge": 3,
+          "max": 12.0
+        }
+      ],
+      "parapet": {
+        "h": 0.9,
+        "t": 0.3
+      },
+      "faces": {
+        "e3": "sv_nnw_link",
+        "court": "sv_court",
+        "return": "sv_court"
+      },
+      "roof_items": [
+        {
+          "kind": "box",
+          "edge": 3,
+          "s": [
+            25.0,
+            30.0
+          ],
+          "d": [
+            4.0,
+            8.0
+          ],
+          "h": 3.0,
+          "material": "render",
+          "top": "roof"
+        }
+      ]
+    },
+    {
+      "id": "slink",
+      "storeys": 2,
+      "clip": [
+        {
+          "edge": 0,
+          "min": 11.0
+        },
+        {
+          "edge": 2,
+          "min": 17.5
+        },
+        {
+          "edge": 1,
+          "max": 8.0
+        }
+      ],
+      "parapet": {
+        "h": 0.9,
+        "t": 0.3
+      },
+      "faces": {
+        "e1": "sv_sse_link",
+        "court": "sv_court",
+        "return": "sv_court"
+      }
+    },
+    {
+      "id": "deck",
+      "storeys": 1,
+      "clip": [
+        {
+          "edge": 0,
+          "min": 11.0
+        },
+        {
+          "edge": 2,
+          "min": 17.5
+        },
+        {
+          "edge": 3,
+          "min": 12.0
+        },
+        {
+          "edge": 1,
+          "min": 8.0
+        }
+      ],
+      "roof_material": "deck",
+      "parapet": {
+        "kind": "railing",
+        "h": 1.1,
+        "curb": 0.35,
+        "t": 0.3
+      },
+      "faces": {
+        "default": "sv_court"
+      },
+      "roof_items": [
+        {
+          "kind": "box",
+          "edge": 0,
+          "s": [
+            22.0,
+            34.0
+          ],
+          "d": [
+            16.0,
+            23.0
+          ],
+          "h": 0.55,
+          "material": "planter",
+          "top": "planting"
+        },
+        {
+          "kind": "box",
+          "edge": 0,
+          "s": [
+            43.0,
+            55.0
+          ],
+          "d": [
+            16.0,
+            23.0
+          ],
+          "h": 0.55,
+          "material": "planter",
+          "top": "planting"
+        },
+        {
+          "kind": "box",
+          "edge": 0,
+          "s": [
+            64.0,
+            76.0
+          ],
+          "d": [
+            16.0,
+            23.0
+          ],
+          "h": 0.55,
+          "material": "planter",
+          "top": "planting"
+        }
+      ]
+    }
+  ],
+  "aprons": [
+    {
+      "edge": 0,
+      "s0": 0.0,
+      "s1": 7.43,
+      "d0": 0.0,
+      "d1": 0.7,
+      "lift": 0.11,
+      "material": "paving"
+    },
+    {
+      "edge": 0,
+      "s0": 7.43,
+      "s1": 14.86,
+      "d0": 0.0,
+      "d1": 0.7,
+      "lift": 0.11,
+      "material": "paving"
+    },
+    {
+      "edge": 0,
+      "s0": 14.86,
+      "s1": 22.29,
+      "d0": 0.0,
+      "d1": 0.7,
+      "lift": 0.11,
+      "material": "paving"
+    },
+    {
+      "edge": 0,
+      "s0": 22.29,
+      "s1": 29.72,
+      "d0": 0.0,
+      "d1": 0.7,
+      "lift": 0.11,
+      "material": "paving"
+    },
+    {
+      "edge": 0,
+      "s0": 29.72,
+      "s1": 37.15,
+      "d0": 0.0,
+      "d1": 0.7,
+      "lift": 0.11,
+      "material": "paving"
+    },
+    {
+      "edge": 0,
+      "s0": 37.15,
+      "s1": 44.58,
+      "d0": 0.0,
+      "d1": 0.7,
+      "lift": 0.11,
+      "material": "paving"
+    },
+    {
+      "edge": 0,
+      "s0": 44.58,
+      "s1": 52.01,
+      "d0": 0.0,
+      "d1": 0.7,
+      "lift": 0.11,
+      "material": "paving"
+    },
+    {
+      "edge": 0,
+      "s0": 52.01,
+      "s1": 59.44,
+      "d0": 0.0,
+      "d1": 0.7,
+      "lift": 0.11,
+      "material": "paving"
+    },
+    {
+      "edge": 0,
+      "s0": 59.44,
+      "s1": 66.87,
+      "d0": 0.0,
+      "d1": 0.7,
+      "lift": 0.11,
+      "material": "paving"
+    },
+    {
+      "edge": 0,
+      "s0": 66.87,
+      "s1": 74.3,
+      "d0": 0.0,
+      "d1": 0.7,
+      "lift": 0.11,
+      "material": "paving"
+    },
+    {
+      "edge": 0,
+      "s0": 74.3,
+      "s1": 81.73,
+      "d0": 0.0,
+      "d1": 0.7,
+      "lift": 0.11,
+      "material": "paving"
+    }
+  ],
+  "study_notes": {
+    "observed": "Sep 2025 Seven Seas frontage (white render with staggered punched windows over a two-storey grey split-face base, metal-canopied stoops, stepped segments); Nov 2025 NW corner (4-storey white unit block with dark window bands and storefront base, grey-framed two-storey glazed entrance box on the taller wing, stepped units along the paseo); undated Apple overhead: 4-storey WSW block and 7-storey ENE block around a landscaped courtyard, PV strip on the WSW block.",
+    "inferred": "WSW paseo units beyond the first few, SSE end (side entrance, south-link garage/service door/louvres) and courtyard faces. Storey heights, bay cadence, step depths, stagger and roof items are production inference.",
+    "footprint": "Frozen OSM quadrilateral kept as the outer ring. The ENE block steps in a sawtooth above a continuous two-storey base on the footprint line; WSW units step 0.7 m with paved wedges, so every outer extent stays the frozen edge. Floor at the median frozen terrain along the Seven Seas front; the block plinth shows where the paseo terrain drops."
+  }
+}
