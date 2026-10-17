@@ -66,9 +66,21 @@ static func build(record: Dictionary) -> Dictionary:
 		for panel_value: Variant in spec.get("infill_panels",[]):
 			var p: Array=panel_value
 			panels.append(Rect2(float(p[0]),floor_y+.10,float(p[1])-float(p[0]),float(p[2])))
+		# Optional rows of dark slots hung under the split, for lower windows or transoms:
+		# [{"size":[w,h],"offset":below_split,"bay":b,"range":[start,end]}]. Production inference.
+		var split_openings: Array[Rect2]=[]
+		for row_value: Variant in spec.get("split_slots",[]):
+			var row: Dictionary=row_value
+			var span: Array=row.get("range",[0.0,length])
+			var row_count := maxi(1,int(round((float(span[1])-float(span[0]))/float(row["bay"]))))
+			var slot_top := split-float(row["offset"])
+			for i in row_count:
+				var s := float(span[0])+(float(span[1])-float(span[0]))*(i+.5)/row_count
+				split_openings.append(Rect2(s-float(row["size"][0])/2.0,slot_top-float(row["size"][1]),float(row["size"][0]),float(row["size"][1])))
 		var cut_holes: Array[Rect2]=openings.duplicate()
 		cut_holes.append_array(fronts)
 		cut_holes.append_array(panels)
+		cut_holes.append_array(split_openings)
 		# Split the two fields around complete recess bounds, not painted windows.
 		for field: Array in [[floor_y,split,"lower"],[split,top-.16,"upper"]]:
 			var cuts: Array[float]=[0.0,length]
@@ -80,12 +92,14 @@ static func build(record: Dictionary) -> Dictionary:
 				if right-left<.001: continue
 				var spans: Array[Vector2]=[Vector2(field[0],field[1])]
 				for hole: Rect2 in cut_holes:
-					# Only holes that reach into this field shape it, so a storefront below
-					# cannot refill an upper slot above it in the same stretch.
+					# Every hole that reaches into this field is cut out of the remaining spans,
+					# so stacked holes (a transom over a roll-up door) both stay open.
 					if (left+right)/2.0>hole.position.x and (left+right)/2.0<hole.end.x and hole.end.y>float(field[0]) and hole.position.y<float(field[1]):
-						spans=[]
-						if hole.position.y>float(field[0]): spans.append(Vector2(field[0],minf(hole.position.y,field[1])))
-						if hole.end.y<float(field[1]): spans.append(Vector2(maxf(hole.end.y,field[0]),field[1]))
+						var kept: Array[Vector2]=[]
+						for span: Vector2 in spans:
+							if hole.position.y>span.x: kept.append(Vector2(span.x,minf(hole.position.y,span.y)))
+							if hole.end.y<span.y: kept.append(Vector2(maxf(hole.end.y,span.x),span.y))
+						spans=kept
 				for span: Vector2 in spans:
 					if span.y-span.x>.001: _box(root,"PanelField",a,t,n,(left+right)/2.0,(span.x+span.y)/2.0,.16,Vector3(right-left,span.y-span.x,.30),materials[field[2]],"wall")
 		for hole: Rect2 in openings:
@@ -98,6 +112,11 @@ static func build(record: Dictionary) -> Dictionary:
 				_box(root,"ClosedSlot",a,t,n,hole.get_center().x,hole.end.y-head_height/2.0,.035,Vector3(hole.size.x,head_height,.045),materials.recess,"wall")
 			else:
 				_box(root,"ClosedSlot",a,t,n,hole.get_center().x,hole.get_center().y,.035,Vector3(hole.size.x,hole.size.y,.045),materials.recess,"wall")
+			_box(root,"SlotSill",a,t,n,hole.get_center().x,hole.position.y,.22,Vector3(hole.size.x+.10,.09,.34),materials.structure,"detail")
+			for s: float in [hole.position.x-.065,hole.end.x+.065]:
+				_box(root,"SlotReveal",a,t,n,s,hole.get_center().y,.23,Vector3(.13,hole.size.y,.34),materials.lower,"wall")
+		for hole: Rect2 in split_openings:
+			_box(root,"ClosedSlot",a,t,n,hole.get_center().x,hole.get_center().y,.035,Vector3(hole.size.x,hole.size.y,.045),materials.recess,"wall")
 			_box(root,"SlotSill",a,t,n,hole.get_center().x,hole.position.y,.22,Vector3(hole.size.x+.10,.09,.34),materials.structure,"detail")
 			for s: float in [hole.position.x-.065,hole.end.x+.065]:
 				_box(root,"SlotReveal",a,t,n,s,hole.get_center().y,.23,Vector3(.13,hole.size.y,.34),materials.lower,"wall")
@@ -168,6 +187,27 @@ static func _chain_problem(spec: Dictionary,v: Array,top: float)->String:
 				return "infill_panels height must be positive and stay below the coping"
 			if count==2 and split-.50<=floor_y+.10:
 				return "storefronts need a lower field taller than 0.6 m"
+	var rows: Variant=spec.get("split_slots",[])
+	if not rows is Array:
+		return "split_slots must be a list"
+	for row: Variant in rows:
+		if not row is Dictionary:
+			return "split_slots rows must be dictionaries"
+		if not _numbers(row.get("size"),2) or float(row["size"][0])<=0.0 or float(row["size"][1])<=0.0:
+			return "split_slots size needs two positive numbers"
+		if not _numbers([row.get("offset")],1) or float(row["offset"])<0.0:
+			return "split_slots offset must be a number of at least 0"
+		if not _numbers([row.get("bay")],1) or float(row["bay"])<=0.0:
+			return "split_slots bay must be positive"
+		var span: Variant=row.get("range",[0.0,length])
+		if not _numbers(span,2) or float(span[0])<0.0 or float(span[0])>=float(span[1]) or float(span[1])>length:
+			return "split_slots range must lie within 0..%.2f m" % length
+		var row_count := maxi(1,int(round((float(span[1])-float(span[0]))/float(row["bay"]))))
+		if float(row["size"][0])+.26>(float(span[1])-float(span[0]))/row_count:
+			return "split_slots are wider than their spacing"
+		var slot_top := split-float(row["offset"])
+		if slot_top>top-.16 or slot_top-float(row["size"][1])<floor_y+.10:
+			return "split_slots must stay inside the wall height"
 	return ""
 
 static func _numbers(value: Variant,count: int)->bool:
