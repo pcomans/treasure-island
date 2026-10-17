@@ -7527,5 +7527,196 @@
     "roof_object_key": "building:w96215680:roof"
   },
   "dimensions": "production_inference; retained observed-side schedules, hidden elevations unknown",
-  "reverse_source_roof_winding": true
+  "reverse_source_roof_winding": true,
+  "rear_frames": [
+    {
+      "id": "north-rear-east",
+      "elevation_role": "rear",
+      "runs": [
+        16,
+        17
+      ],
+      "start": [
+        -296.109,
+        2.786,
+        -617.562
+      ],
+      "end": [
+        -310.415,
+        2.825,
+        -618.441
+      ],
+      "length_m": 14.332978650650436,
+      "tangent": [
+        -0.998117721981734,
+        0,
+        -0.06132709895302396
+      ],
+      "normal": [
+        0.06132709895302396,
+        0,
+        -0.998117721981734
+      ],
+      "top_y": 8.836,
+      "upper_windows": [
+        {
+          "station_m": 4.2998935951951305,
+          "width_m": 2.02,
+          "height_m": 1.28,
+          "center_y": 7.48,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 11.036393561000835,
+          "width_m": 2.02,
+          "height_m": 1.28,
+          "center_y": 7.48,
+          "glazing": "blue"
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 4.2998935951951305,
+          "width_m": 2.02,
+          "height_m": 1.2,
+          "center_y": 4.12,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 11.036393561000835,
+          "width_m": 2.02,
+          "height_m": 1.2,
+          "center_y": 4.12,
+          "glazing": "blue"
+        }
+      ]
+    },
+    {
+      "id": "north-rear-central",
+      "elevation_role": "rear",
+      "runs": [
+        19,
+        20
+      ],
+      "start": [
+        -310.31,
+        2.836,
+        -620.122
+      ],
+      "end": [
+        -325.408,
+        2.836,
+        -621.046
+      ],
+      "length_m": 15.126248047681903,
+      "tangent": [
+        -0.9981325145804271,
+        0,
+        -0.06108586855692181
+      ],
+      "normal": [
+        0.06108586855692181,
+        0,
+        -0.9981325145804271
+      ],
+      "top_y": 8.836,
+      "upper_windows": [
+        {
+          "station_m": 4.537874414304571,
+          "width_m": 2.02,
+          "height_m": 1.28,
+          "center_y": 7.48,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 11.647210996715065,
+          "width_m": 2.02,
+          "height_m": 1.28,
+          "center_y": 7.48,
+          "glazing": "blue"
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 4.537874414304571,
+          "width_m": 2.02,
+          "height_m": 1.2,
+          "center_y": 4.12,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 11.647210996715065,
+          "width_m": 2.02,
+          "height_m": 1.2,
+          "center_y": 4.12,
+          "glazing": "blue"
+        }
+      ]
+    },
+    {
+      "id": "north-rear-west",
+      "elevation_role": "rear",
+      "runs": [
+        22,
+        23
+      ],
+      "start": [
+        -325.522,
+        2.827,
+        -619.165
+      ],
+      "end": [
+        -339.96,
+        2.733,
+        -620.055
+      ],
+      "length_m": 14.465405075558708,
+      "tangent": [
+        -0.9981054747229288,
+        0,
+        -0.06152610281918505
+      ],
+      "normal": [
+        0.06152610281918505,
+        0,
+        -0.9981054747229288
+      ],
+      "top_y": 8.836,
+      "upper_windows": [
+        {
+          "station_m": 4.3396215226676125,
+          "width_m": 2.02,
+          "height_m": 1.28,
+          "center_y": 7.48,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 11.138361908180206,
+          "width_m": 2.02,
+          "height_m": 1.28,
+          "center_y": 7.48,
+          "glazing": "blue"
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 4.3396215226676125,
+          "width_m": 2.02,
+          "height_m": 1.2,
+          "center_y": 4.12,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 11.138361908180206,
+          "width_m": 2.02,
+          "height_m": 1.2,
+          "center_y": 4.12,
+          "glazing": "blue"
+        }
+      ]
+    }
+  ],
+  "study_notes": {
+    "rear_study001": "2026-10-11: reuse housing_site_family through existing live attachment; sparse paired-window north-rear instance variant, no new base. March2025 retained 1219-north-east-attempt04 shows two widely separated paired upper motifs on the visible long section and partial lower openings beyond the fence. Foreground canopy belongs to a neighbor. Two upper plus two lower complete windows per section (12 total); exact dimensions, cadence, anchors, obscured lower and western arrangements are reversible production_inference, not surveyed/as-built. Front003 supports shared paired-window vocabulary; Apple layout (date unknown) supports stepped three-section identity only. Rear hosts16-17/19-20/22-23 only; protected_runs retained verbatim; unknown ends and short returns untouched. Existing L1C/L2U and independent review/native gates remain open."
+  }
 }
