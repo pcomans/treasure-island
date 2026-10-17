@@ -233,8 +233,18 @@ belongs to the neighbouring 1249 site; re-judged with that evidence, 1247 is
 visual L1/L2 PASS. L1/L2 C for all four. Parked: fences, boxes, vent pipes,
 carport-top finish, colour re-check after lighting. 1249's near canopy at stations
 42.8–50.8 (gap toward 1247) is not yet modeled; future 1249 delta.
-Current totals after Mar17g: L1:42 C/171 U; L2:32 C/181 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall75 C/0 I/990 U across213 units/1,065 cells;49 historical
+**Mar17h** Keppler Court, 2026-10-17: `574d1d8` models 1109 (`w96665915`), 1111
+(`w96665890`), 1113 (`w96665921`), 1115 (`w96665887`) and 1117 (`w96665928`) with
+their registrations. CODE PASS-with-notes (non-blocking lows: unused `source_run: 0`
+on screen bases, 0.14 m screens as copings, fence posts on path edges, 1117's 5.3 m
+eave as stated inference; grounded samples are the grazing-sill mechanism, not a
+gap); visual L2 PASS for all five with whole-unit acceptance withheld and clean
+island pairs; progress PASS at L1+L2 for all five. L1/L2 C for all five. Parked:
+colour pass for 1109 (over-saturated blue vs muted blue-grey) and 1111 (greige reads
+blue); pale blue-grey yard/front pads read as stickers in shade; 1113 keeps the newer
+white; 1115 roof break. The 1249 near-canopy delta stays open.
+Current totals after Mar17h: L1:47 C/166 U; L2:37 C/176 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall85 C/0 I/980 U across213 units/1,065 cells;49 historical
 recognition credits unchanged.
 **U** no current stage-level conclusion established in this checklist pass.
 
@@ -373,9 +383,9 @@ before selecting another round.
 | physical-building:w96665884 / w96665884 | 1145 Ozbourn Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665885 / w96665885 | 1118 Hutchins Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665886 / w96665886 | 1447 Chinook Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96665887 / w96665887 | 1115 Keppler Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96665887 / w96665887 | 1115 Keppler Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17h `574d1d8` — CODE PASS-with-notes (non-blocking lows; grounded samples are grazing sills), visual L2 PASS (whole-unit acceptance withheld), progress L1+L2 PASS. Parked: pale blue-grey yard/front pads read as stickers in shade; roof break |
 | physical-building:w96665889 / w96665889 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96665890 / w96665890 | 1111 Keppler Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96665890 / w96665890 | 1111 Keppler Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17h `574d1d8` — CODE PASS-with-notes (non-blocking lows; grounded samples are grazing sills), visual L2 PASS (whole-unit acceptance withheld), progress L1+L2 PASS. Parked: pale blue-grey yard/front pads read as stickers in shade; colour pass (greige reads blue) |
 | physical-building:w96665892 / w96665892 | 1137 Mason Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665893 / w96665893 | 1210 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17 `5172811` — L1/L2 rear/terminal PASS; integrated visual/native/fit/spray/suite PASS; materials/site open |
 | physical-building:w96665897 / w96665897 | 1112 Hutchins Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -391,17 +401,17 @@ before selecting another round.
 | physical-building:w96665910 / w96665910 | 1110 Hutchins Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665911 / w96665911 | 1229 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP — L1 envelope/site closure; scoped visual/CODE/progress/native/fit/spray/suite PASS; all-side L2 unknown |
 | physical-building:w96665912 / w96665912 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96665915 / w96665915 | 1109 Keppler Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96665915 / w96665915 | 1109 Keppler Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17h `574d1d8` — CODE PASS-with-notes (non-blocking lows; grounded samples are grazing sills), visual L2 PASS (whole-unit acceptance withheld), progress L1+L2 PASS. Parked: pale blue-grey yard/front pads read as stickers in shade; colour pass (over-saturated blue vs muted blue-grey) |
 | physical-building:w96665916 / w96665916 | 1242 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665918 / w96665918 | 1310 Gateview Avenue | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665919 / w96665919 | 1116 Hutchins Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665920 / w96665920 | 1131 Mason Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96665921 / w96665921 | 1113 Keppler Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96665921 / w96665921 | 1113 Keppler Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17h `574d1d8` — CODE PASS-with-notes (non-blocking lows; grounded samples are grazing sills), visual L2 PASS (whole-unit acceptance withheld), progress L1+L2 PASS. Parked: pale blue-grey yard/front pads read as stickers in shade; keeps the newer white |
 | physical-building:w96665922 / w96665922 | 1114 Hutchins Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665923 / w96665923 | 1120 Reeves Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665924 / w96665924 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665925 / w96665925 | 1107 Bigelow Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96665928 / w96665928 | 1117 Keppler Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96665928 / w96665928 | 1117 Keppler Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17h `574d1d8` — CODE PASS-with-notes (non-blocking lows; grounded samples are grazing sills), visual L2 PASS (whole-unit acceptance withheld), progress L1+L2 PASS. Parked: pale blue-grey yard/front pads read as stickers in shade; 5.3 m eave is stated inference |
 | physical-building:w96665933 / w96665933 | 1105 Bigelow Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665935 / w96665935 | 1135 Mason Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665936 / w96665936 | 1128 Reeves Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -502,7 +512,7 @@ March/November2025 refs and unknown-date Apple context support the scoped envelo
 and observed architecture; missing north capture/unknown rear/schematic materials
 keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
 See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
-Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar17g for current totals);
+Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar17h for current totals);
 **L1:21 C /0 I /192 U**. All other stages unchanged;49 historical credits retained.
 
 ## Island environment layers
