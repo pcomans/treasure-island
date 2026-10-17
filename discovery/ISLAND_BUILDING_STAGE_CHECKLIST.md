@@ -492,7 +492,10 @@ cells are separate from the 1,065 building cells.
 
 | Layer | 1 Shape/layout | 2 Major features | 3 Secondary | 4 PBR/materials | 5 Decals/finish | Evidence / next |
 |---|---|---|---|---|---|---|
-| Terrain and ground surfaces | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| Terrain and ground surfaces | ☐ U | ☑ C | ☐ U | ☐ U | ☐ U | Mar17 ground cover `41b1949` (CODE, visual and progress PASS) + round 2 `0f38929` (CODE and visual PASS): lawn, dry field, bare soil and paved families. L1: no visible terrain-shape defect noted by progress review; not formally reviewed. Parked: housing-site lawn mats (Northpoint FrontLawn 1225–1240 most visible; 1230 Gateview strips low priority), sand patches (shoreline layer), north field greener than the overhead; vegetation deferred |
 | Roads and paths | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | Shoreline and water | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | Lighting, sky and atmosphere | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+
+Environment layer totals after Mar17 ground cover: L2:1 C/3 U; L1 and L3–L5:4 U
+each. Overall1 C/0 I/19 U across4 layers/20 cells.
