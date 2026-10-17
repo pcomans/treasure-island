@@ -253,8 +253,21 @@ L1/L2 C for all 14. Parked: colour pass (1306 white/cream with brown carport roo
 1301 cream with brown carport roofs; 1314 reads olive; the 1310/1305/901 whites;
 dark doors; near-black canopy undersides; drive concrete reads blue); gable-generator
 closure-overlap dedupe (low); 1318 pergolas (L3); fences and site.
-Current totals after Mar17i: L1:61 C/152 U; L2:51 C/162 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall113 C/0 I/952 U across213 units/1,065 cells;49 historical
+**Mar17j** Flounder Court, 2026-10-17: `fb8a010` adds opt-in garage-court motifs
+to the shared housing kit (`housing_garage_court.gd`, brick shader); `8eb5444`
+models 1409 (`w95934101`), 1410 (`w95934124`), 1411 (`w95934110`), 1412
+(`w95934096`) and 1413 (`w95934115`) with registrations and catalog stairs;
+`615d621` adds the opt-in door panel style; `fa945e5` and `4f519a3` add drives,
+court paving, the turning circle and palette. CODE PASS on every commit (low notes
+only), visual L2 PASS for all five, progress L1+L2 PASS. L1/L2 C for all five.
+Parked: colour pass (1410 reads greyer than the photo's warm yellow; 1412/1413
+garage doors should be white; cream slightly dark and cool); 1409's vertical-board
+garage zone; stucco lap lines; 1-pixel road-edge dots; the turning-circle disc is
+config-only, tagged for a later roads Level 2 generator pass; code lows (gable vents
+on the roof role, loggia parts as spray receivers, the 1413 apron 9.4 mm above the
+area).
+Current totals after Mar17j: L1:66 C/147 U; L2:56 C/157 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall123 C/0 I/942 U across213 units/1,065 cells;49 historical
 recognition credits unchanged.
 **U** no current stage-level conclusion established in this checklist pass.
 
@@ -312,12 +325,12 @@ before selecting another round.
 | physical-building:w34313569 / w34313569 | Bldg 461 | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | B461 — scoped envelope/site complete; missing north and unknown rear keep whole quality open |
 | physical-building:w95934092 / w95934092 | 1318 Gateview Avenue | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17i Gateview Ave A `904f940`+`487a1ef`+`35a990e`+`45344f4` — CODE, visual and progress PASS (guards CODE PASS; drives CODE/visual/progress PASS). Parked: gable-generator closure-overlap dedupe (low); fences and site; colour pass; 1318 pergolas (L3) |
 | physical-building:w95934093 / w95934093 | 1432 Halibut Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w95934096 / w95934096 | 1412 Flounder Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w95934096 / w95934096 | 1412 Flounder Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17j Flounder Court `fb8a010`+`8eb5444`+`615d621`+`fa945e5`+`4f519a3` — CODE PASS (low notes only), visual L2 PASS, progress L1+L2 PASS; catalog stairs walked by the fit. Parked: cream slightly dark and cool; stucco lap lines; 1-pixel road-edge dots; turning-circle disc is config-only (roads L2 generator pass); code lows (gable vents on the roof role, loggia parts as spray receivers); garage doors should be white |
 | physical-building:w95934097 / w95934097 | 1404 Sturgeon Street | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w95934098 / w95934098 | 1435 Halibut Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w95934099 / w95934099 | 1433 Halibut Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w95934100 / w95934100 | 1430 Halibut Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w95934101 / w95934101 | 1409 Flounder Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w95934101 / w95934101 | 1409 Flounder Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17j Flounder Court `fb8a010`+`8eb5444`+`615d621`+`fa945e5`+`4f519a3` — CODE PASS (low notes only), visual L2 PASS, progress L1+L2 PASS; catalog stairs walked by the fit. Parked: cream slightly dark and cool; stucco lap lines; 1-pixel road-edge dots; turning-circle disc is config-only (roads L2 generator pass); code lows (gable vents on the roof role, loggia parts as spray receivers); vertical-board garage zone |
 | physical-building:w95934102 / w95934102 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 1306 Gateview Avenue: Mar17i Gateview Ave B `818d35c`+`54409a2`+`13d2d3d` (on Batch A) — CODE PASS after rework, visual and progress PASS; drive-fix junctions accepted on the 0 m² overlap check. Parked: gable-generator closure-overlap dedupe (low); fences and site; colour pass (white/cream with brown carport roofs) |
 | physical-building:w95934103 / w95934103 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | "1307" Gateview Avenue (shore row): Mar17i Gateview Ave B `818d35c`+`54409a2`+`13d2d3d` (on Batch A) — CODE PASS after rework, visual and progress PASS; drive-fix junctions accepted on the 0 m² overlap check. Parked: gable-generator closure-overlap dedupe (low); fences and site; colour pass |
 | physical-building:w95934104 / w95934104 | 1403 Sturgeon Street | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -325,10 +338,10 @@ before selecting another round.
 | physical-building:w95934106 / w95934106 | 1305 Gateview Avenue | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17i Gateview Ave B `818d35c`+`54409a2`+`13d2d3d` (on Batch A) — CODE PASS after rework, visual and progress PASS; drive-fix junctions accepted on the 0 m² overlap check. Parked: gable-generator closure-overlap dedupe (low); fences and site; colour pass (whites) |
 | physical-building:w95934107 / w95934107 | 1420 Striped Bass Street | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w95934108 / w95934108 | 1405 Sturgeon Street | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w95934110 / w95934110 | 1411 Flounder Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w95934110 / w95934110 | 1411 Flounder Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17j Flounder Court `fb8a010`+`8eb5444`+`615d621`+`fa945e5`+`4f519a3` — CODE PASS (low notes only), visual L2 PASS, progress L1+L2 PASS; catalog stairs walked by the fit. Parked: cream slightly dark and cool; stucco lap lines; 1-pixel road-edge dots; turning-circle disc is config-only (roads L2 generator pass); code lows (gable vents on the roof role, loggia parts as spray receivers) |
 | physical-building:w95934112 / w95934112 | 1418 Striped Bass Street | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w95934113 / w95934113 | 1437 Chinook Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w95934115 / w95934115 | 1413 Flounder Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w95934115 / w95934115 | 1413 Flounder Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17j Flounder Court `fb8a010`+`8eb5444`+`615d621`+`fa945e5`+`4f519a3` — CODE PASS (low notes only), visual L2 PASS, progress L1+L2 PASS; catalog stairs walked by the fit. Parked: cream slightly dark and cool; stucco lap lines; 1-pixel road-edge dots; turning-circle disc is config-only (roads L2 generator pass); code lows (gable vents on the roof role, loggia parts as spray receivers); garage doors should be white; apron 9.4 mm above the area (code low) |
 | physical-building:w95934116 / w95934116 | 905F Avenue B, 94130 | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17i Gateview Ave B `818d35c`+`54409a2`+`13d2d3d` (on Batch A) — CODE PASS after rework, visual and progress PASS; drive-fix junctions accepted on the 0 m² overlap check. Parked: gable-generator closure-overlap dedupe (low); fences and site; colour pass |
 | physical-building:w95934117 / w95934117 | 1444 Croaker Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w95934118 / w95934118 | 1419 Striped Bass Street | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -337,7 +350,7 @@ before selecting another round.
 | physical-building:w95934121 / w95934121 | 1445 Chinook Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w95934122 / w95934122 | 1434 Halibut Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w95934123 / w95934123 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w95934124 / w95934124 | 1410 Flounder Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w95934124 / w95934124 | 1410 Flounder Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17j Flounder Court `fb8a010`+`8eb5444`+`615d621`+`fa945e5`+`4f519a3` — CODE PASS (low notes only), visual L2 PASS, progress L1+L2 PASS; catalog stairs walked by the fit. Parked: cream slightly dark and cool; stucco lap lines; 1-pixel road-edge dots; turning-circle disc is config-only (roads L2 generator pass); code lows (gable vents on the roof role, loggia parts as spray receivers); colour pass (reads greyer than the photo's warm yellow) |
 | physical-building:w95934125 / w95934125 | 1317 Gateview Avenue | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w95934126 / w95934126 | 1400 Sturgeon Street | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w95934128 / w95934128 | 1406 Sturgeon Street | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -522,7 +535,7 @@ March/November2025 refs and unknown-date Apple context support the scoped envelo
 and observed architecture; missing north capture/unknown rear/schematic materials
 keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
 See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
-Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar17i for current totals);
+Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar17j for current totals);
 **L1:21 C /0 I /192 U**. All other stages unchanged;49 historical credits retained.
 
 ## Island environment layers
