@@ -519,7 +519,7 @@ cells are separate from the 1,065 building cells.
 | Terrain and ground surfaces | ☐ U | ☑ C | ☐ U | ☐ U | ☐ U | Mar17 ground cover `41b1949` (CODE, visual and progress PASS) + round 2 `0f38929` (CODE and visual PASS): lawn, dry field, bare soil and paved families. L1: no visible terrain-shape defect noted by progress review; not formally reviewed. Parked: housing-site lawn mats (Northpoint FrontLawn 1225–1240 most visible; 1230 Gateview strips low priority), sand patches (shoreline layer), north field greener than the overhead; vegetation deferred |
 | Roads and paths | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | Shoreline and water | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| Lighting, sky and atmosphere | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| Lighting, sky and atmosphere | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar17 lighting finalize `e09c1e3` (SSE sun, real sky, lighter haze; CODE PASS with one low test gap, visual PASS; Chapel, Building 1 and Mersea 114 re-checks still pass) + `b83f3cb` (ambient-energy guard; headless contract passes); owner approval 2026-10-17 for colour and lighting changes that ease modeling and colour matching, and correct sun position. Parked: colour pass for palettes tuned under the old light (1244 confirmed peach; 1243, 1245, 1216 to check), lawn reads lime-yellow in sun, asphalt/parking reads purple-navy; Chapel porch shadow smudges (finish) |
 
-Environment layer totals after Mar17 ground cover: L2:1 C/3 U; L1 and L3–L5:4 U
-each. Overall1 C/0 I/19 U across4 layers/20 cells.
+Environment layer totals after Mar17 lighting: L1:1 C/3 U; L2:1 C/3 U; L3–L5:4 U
+each. Overall2 C/0 I/18 U across4 layers/20 cells.
