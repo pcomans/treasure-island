@@ -1967,11 +1967,7 @@
     7,
     9,
     10,
-    11,
-    12,
-    13,
-    14,
-    15
+    11
   ],
   "facade": {
     "story_band_y": 5.387,
@@ -2906,7 +2902,201 @@
   "segmented_roof": true,
   "roof_rise_m": 1.25,
   "wall_top_y": 8.09,
-  "study_notes": "Observed run5 lower group completed from retained March2025 frontage. Pale solid-front screens with taller slatted returns; shallow muted tan roof/apron proportions are bounded art inference. Shrub-obscured details and backs remain unknown. Final source-relative vertical composition lowers upper groups/eave 0.35m without resizing motifs; 1.25m roof rise and 0.32m eave depth are explicit shallow-roof art inference, not measured geometry.",
+  "study_notes": "Observed run5 lower group completed from retained March2025 frontage. Pale solid-front screens with taller slatted returns; shallow muted tan roof/apron proportions are bounded art inference. Shrub-obscured details and backs remain unknown. Final source-relative vertical composition lowers upper groups/eave 0.35m without resizing motifs; 1.25m roof rise and 0.32m eave depth are explicit shallow-roof art inference, not measured geometry. Rear study001: existing housing_site_family complete paired windows and green-gray closed entries reused across full west collinear hosts12\u201315. Seven upper pairs, seven lower pairs and seven entries form a restrained residential bay rhythm; counts, cadence and anchors are reversible production_inference from target-bound March2025 front family and undated layout, not an observed rear schedule. North/south terminals deliberately retain coherent blank siding as source-uncertain end-wall inference; no reference-backed absence claim. Roof, front, site and short returns remain unchanged.",
   "clamp_pipe_to_eave": true,
-  "roof_eave_depth_m": 0.32
+  "roof_eave_depth_m": 0.32,
+  "rear_frames": [
+    {
+      "id": "west-rear",
+      "elevation_role": "rear",
+      "runs": [
+        12,
+        13,
+        14,
+        15
+      ],
+      "start": [
+        -549.3770141601562,
+        2.6679999828338623,
+        -733.7459716796875
+      ],
+      "end": [
+        -551.2769775390625,
+        2.7149999141693115,
+        -690.6539916992188
+      ],
+      "length_m": 43.13384517381107,
+      "tangent": [
+        -0.04404808732563037,
+        0,
+        0.9990294119809254
+      ],
+      "normal": [
+        -0.9990294119809254,
+        0,
+        -0.04404808732563037
+      ],
+      "top_y": 8.09,
+      "upper_windows": [
+        {
+          "station_m": 3.0,
+          "width_m": 1.9,
+          "height_m": 1.18,
+          "center_y": 7.267,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 9.2,
+          "width_m": 1.9,
+          "height_m": 1.18,
+          "center_y": 7.267,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 15.4,
+          "width_m": 1.9,
+          "height_m": 1.18,
+          "center_y": 7.267,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 21.6,
+          "width_m": 1.9,
+          "height_m": 1.18,
+          "center_y": 7.267,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 27.8,
+          "width_m": 1.9,
+          "height_m": 1.18,
+          "center_y": 7.267,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 34.0,
+          "width_m": 1.9,
+          "height_m": 1.18,
+          "center_y": 7.267,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 40.2,
+          "width_m": 1.9,
+          "height_m": 1.18,
+          "center_y": 7.267,
+          "glazing": "blue"
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 2.4,
+          "width_m": 1.5,
+          "height_m": 1.12,
+          "center_y": 4.097158,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 8.6,
+          "width_m": 1.5,
+          "height_m": 1.12,
+          "center_y": 4.106418,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 14.8,
+          "width_m": 1.5,
+          "height_m": 1.12,
+          "center_y": 4.156136,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 21.0,
+          "width_m": 1.5,
+          "height_m": 1.12,
+          "center_y": 4.205853,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 27.2,
+          "width_m": 1.5,
+          "height_m": 1.12,
+          "center_y": 4.25557,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 33.4,
+          "width_m": 1.5,
+          "height_m": 1.12,
+          "center_y": 4.301559,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 39.6,
+          "width_m": 1.5,
+          "height_m": 1.12,
+          "center_y": 4.279064,
+          "glazing": "blue"
+        }
+      ],
+      "entries": [
+        {
+          "station_m": 4.6,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "bottom_y": 2.613558,
+          "door_tone": "green",
+          "threshold_inference": "production_inference; closed rear entry at sampled canonical LAND, no new path or apron"
+        },
+        {
+          "station_m": 10.799999999999999,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "bottom_y": 2.663275,
+          "door_tone": "green",
+          "threshold_inference": "production_inference; closed rear entry at sampled canonical LAND, no new path or apron"
+        },
+        {
+          "station_m": 17.0,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "bottom_y": 2.712993,
+          "door_tone": "green",
+          "threshold_inference": "production_inference; closed rear entry at sampled canonical LAND, no new path or apron"
+        },
+        {
+          "station_m": 23.200000000000003,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "bottom_y": 2.76271,
+          "door_tone": "green",
+          "threshold_inference": "production_inference; closed rear entry at sampled canonical LAND, no new path or apron"
+        },
+        {
+          "station_m": 29.400000000000002,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "bottom_y": 2.812237,
+          "door_tone": "green",
+          "threshold_inference": "production_inference; closed rear entry at sampled canonical LAND, no new path or apron"
+        },
+        {
+          "station_m": 35.6,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "bottom_y": 2.855567,
+          "door_tone": "green",
+          "threshold_inference": "production_inference; closed rear entry at sampled canonical LAND, no new path or apron"
+        },
+        {
+          "station_m": 41.800000000000004,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "bottom_y": 2.778873,
+          "door_tone": "green",
+          "threshold_inference": "production_inference; closed rear entry at sampled canonical LAND, no new path or apron"
+        }
+      ]
+    }
+  ]
 }
