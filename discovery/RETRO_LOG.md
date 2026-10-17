@@ -20564,3 +20564,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 ## code-review (1218 cadence delta, 2026-10-17)
 
 - What worked well: a structural JSON diff isolated the delta at once (three rear frames' `upper_windows` reduced to two each, plus their `inference` text), and the existing opening script confirmed containment and clearance in one run. What didn't: nothing material. Next time: keep a one-line delta statement in the commit message, as this one had, so the scope check is a confirmation rather than a search.
+
+## 2026-10-17 — docs: geometry-first refinement of the breadth-first goal
+
+- Worked: the owner's sentence fit as one refinement paragraph under the existing goal, with the environment-layer paragraph and CLAUDE's between-study line adjusted rather than restated; completed ground cover and the parked lighting branch are named so neither is reopened or merged by accident.
+- Did not work: the breadth-first wording written earlier the same day treated environment layers as peers in "lowest unfinished level", which the owner's first concrete lighting proposal showed was not his priority; I wrote the general rule before any environment work tested it.
+- Next time: when recording a new priority ordering, state which kinds of work it sequences after which, not only the level order, and flag role prompts that repeat the ordering (`ti-study-progress-review` still says "including its environment layers").
