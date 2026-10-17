@@ -51,6 +51,7 @@ const W34313520_LIVE_MODULES := preload("res://game/scripts/world/facades/w34313
 const W34313525_LIVE_MODULES := preload("res://game/scripts/world/facades/w34313525_live_modules.gd")
 const BUILDING_1_HERO_MODEL := preload("res://game/scripts/world/facades/building_1_hero_model.gd")
 const BUILDING_2_HERO_MODEL := preload("res://game/scripts/world/facades/building_2_hero_model.gd")
+const GROUND_COVER := preload("res://game/scripts/world/ground_cover.gd")
 const POLYHAVEN_TEXTURE_SETS := {
 	"clean_asphalt": {
 		"albedo": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"),
@@ -100,9 +101,6 @@ const POLYHAVEN_MATERIAL_TEXTURE_SET := {
 	"road_path": "clean_asphalt",
 	"road_path_pedestrian": "concrete_pavement",
 	"major_area_paved": "concrete_floor_03",
-	"land_ground": "sparse_grass",
-	"major_area_landuse": "sparse_grass",
-	"major_area_leisure": "sparse_grass",
 	"context_ybi": "sparse_grass",
 	"building_wall": "plaster_grey_04",
 	"building_part_wall": "plaster_grey_04",
@@ -747,9 +745,18 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 	if not uvs.is_empty():
 		arrays[Mesh.ARRAY_TEX_UV] = uvs
 	arrays[Mesh.ARRAY_INDEX] = indices
-	if POLYHAVEN_MATERIAL_TEXTURE_SET.has(str(record.material_key)) and not uvs.is_empty():
+	# Land and area records use the shared ground-cover families; parking,
+	# overlays, roads, buildings and context keep their generated material.
+	var ground_family := GROUND_COVER.family_for(record, is_context)
+	if (POLYHAVEN_MATERIAL_TEXTURE_SET.has(str(record.material_key)) or ground_family != "") and not uvs.is_empty():
 		arrays[Mesh.ARRAY_TANGENT] = _tangents_for(vertices, normals, uvs, indices)
-	var placeholder_material := _material_for(str(record.material_key), str(record.feature_kind), is_context)
+	var placeholder_material: Material
+	if ground_family == GROUND_COVER.PAVED:
+		placeholder_material = _material_for("major_area_paved", "major_area", false)
+	elif ground_family != "":
+		placeholder_material = GROUND_COVER.material(ground_family)
+	else:
+		placeholder_material = _material_for(str(record.material_key), str(record.feature_kind), is_context)
 	# Quiet provisional finish for generated roof slabs only. Keep the authored
 	# roof inputs and Poly Haven cache intact; neither directional map is used.
 	if not is_context and str(record.feature_kind) in ["building_roof", "building_part_roof"]:
@@ -764,7 +771,7 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 	if not is_context and str(record.object_key) == "land:w26767313:x_0__z_2" and str(record.feature_kind) == "land_ground":
 		if placeholder_material.next_pass != null:
 			return {"ok": false, "code": "b2_frontage_existing_pass", "message": "B2 LAND already has a next pass; refusing to overwrite it.", "source_keys": record.source_keys}
-		placeholder_material = placeholder_material.duplicate() as StandardMaterial3D
+		placeholder_material = placeholder_material.duplicate() as Material
 		placeholder_material.next_pass = BUILDING_2_HERO_MODEL.frontage_material()
 	var surface_plan: Dictionary
 	if not b201_prepared.is_empty():
@@ -1017,12 +1024,6 @@ func _polyhaven_tint_for(material_key: String, fallback: Color) -> Color:
 			return Color("d8d6cf")
 		"major_area_paved":
 			return Color("adb0ae")
-		"land_ground":
-			return Color("f2f3ee")
-		"major_area_landuse":
-			return Color("f4ebdd")
-		"major_area_leisure":
-			return Color("eaf8e5")
 		"context_ybi":
 			return Color("d2d8cb")
 		"building_wall", "building_part_wall":
