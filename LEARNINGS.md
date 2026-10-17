@@ -659,3 +659,15 @@ Still unexplained: a rarer exit hang with the main thread in an endless `ppoll` 
 ## Update checklist rows in the delivery that earns them
 
 On 2026-10-17 the stage checklist still showed U or stale L2 for seven Mariner/Bayside units after five recovery deliveries (`a078c63`, `23b2e5a`, `b2acc5a`, `5172811`, `cdcd7c3`) whose independent reviews recorded explicit stage verdicts: L1/L2 PASS for 1206, 1208, 1210 and 1221, L2 PASS for 1212 and 1219, and L2 only for 1220; the running totals had also stopped at Building461. Author tasks correctly excluded checklist edits, but no delivery step picked them up, so the next level choice read stale rows. When a delivery's verdicts change a stage, the integrating executor updates those rows, cites the commit and adjusts the totals in the same commit. Leave a cell U when the verdict is only scoped, and say why in the row.
+
+## Compare shots across commits only through fixed cameras
+
+A 2026-10-17 Gateview B rework recheck showed 9–28% AE on closeups and up to 237k changed pixels on context views between the same units' before and after, although the real change was four reshaped drives. `building_shots.gd` places its closeup and context cameras from the source's visual-mesh bounds (about lines 110–144), so any change to the source's own geometry, including attached drives, pads and canopies, moves those cameras, and the cascaded shadows re-fit with them. Rendering itself is deterministic: same-code pairs are AE 0, and the sun and sky are static. Compare across commits with the island views and focused `--views`, which use fixed poses. When the source changed, judge closeup and context pairs by eye, not by AE.
+
+## Inferred non-residential sides still need entrances
+
+The 2026-10-17 halls review sent 850 Avenue H back for about 150 m of blank ochre wall with no entrance on any side; its real sides are hidden behind an unmodeled container wall. The 575 Avenue D inferred sides also had no doors. "Plain because unobserved" becomes a blank wall in game. Give every inferred side of a non-residential building a believable personnel entrance and service openings, labelled `production_inference`.
+
+## Track unmodeled inventory by checklist status, including off-tip finals
+
+A 2026-10-17 inventory treated "has a config" as "done" and missed 17 reviewed Level 2 housing finals sitting off-tip on `origin/northpoint-fourth-family-20261010`. List remaining work by the checklist's L2 status, and check older branches for reviewed finals before authoring anew.

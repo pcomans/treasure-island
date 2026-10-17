@@ -243,6 +243,8 @@ For building screenshots and fit checks, use the shared `game/tests/shared/build
 
 Engine work runs in at most two concurrent slots (owner-approved 2026-10-17 after measurement). Each slot owns a separate worktree with its own `.godot` import cache (and `node_modules` for suite runs); slots never share a worktree, cache or output directory. Never run two `tools/test.sh` at once: serialize suites with `flock` on a shared lock file outside the repo. Each slot's owner tracks its own process handles to terminal and proves absence of every owned PID before release; a printed PASS is not slot release. ROOT assigns and releases each slot explicitly, with SLOT GO, a finite budget and stop conditions; the next owner of a slot starts only after its explicit release. Preserve failed attempts. Measured on the 780M APU, paired shots/fit/suite jobs were pixel- and result-identical to solo, with 0–7% per-job slowdown and at least 15 GiB MemAvailable; shots alongside shots is not yet measured.
 
+A headless `tools/godot --headless --check-only` script parse of a second or two needs no slot: it renders nothing, uses no GPU or display and does not contend with the slots. Anything that renders, imports, fit-tests or runs the suite still needs SLOT GO. Give an engine-starting driver argument validation before its first use, and never probe one with `--help`.
+
 The devcontainer installs Git LFS with `--skip-smudge`, so evidence AVIs stay LFS pointers in a checkout. Do not hydrate or download LFS assets without authorization; an LFS pointer is not a usable runtime asset. Do not change global Git configuration or hooks.
 
 ## Timing claims

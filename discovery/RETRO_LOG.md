@@ -20796,3 +20796,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the fix was narrowly scoped (four drives in three configs, with only `top_triangles` and `inference` changed), so an exact plan-view polygon clip over every ground surface of all registered configs could confirm zero cross-config overlap directly. The same strict-interior road pass showed drives still meet roads only along shared edges.
 - What did not work well: my first REWORK pass used SAT plus point sampling, which needed a second interior pass to separate real overlap from shared edges. Running the exact polygon-area clip from the start would have been faster and gave a number the author's own check could be compared against.
 - What the team should change next time: report ground overlap as area (m²) in both author and reviewer checks, the way this fix did, so a recheck compares one number instead of re-deriving the method.
+
+## 2026-10-17 — docs: slot and inventory lessons
+
+- Worked: the coordinator's evidence was concrete enough (AE figures, camera code lines, named units and branch) to write each lesson straight from it; the check-only exemption went into the existing Engine slots subsection rather than a new rule, and I confirmed the camera-from-bounds code in `building_shots.gd` before citing it.
+- Did not work: I did not independently re-derive the AE numbers, the halls review or the 17 off-tip finals; they rest on the reports relayed to me. Three of the lessons describe mistakes that existing rules already discourage (shared-family reuse, all-side coverage, island baselines), so the gap was in applying them, not in missing policy.
+- Next time: when a lesson repeats an existing rule, link it from that rule's entry instead of adding a new heading, and have the reviewer who found the problem name the retained evidence path so docs can cite it.
