@@ -11,14 +11,18 @@ static func build(record: Dictionary) -> Dictionary:
 	var cfg: Variant = JSON.parse_string(FileAccess.get_file_as_string(TARGETS[str(record.object_key)]))
 	if not cfg is Dictionary or record.get("source_keys", []) != [cfg.get("source", "")] or record.get("receiver_kind", "") != "building_wall":
 		return {"ok":false,"message":"Panel hall exact source configuration required."}
+	var v: Array=record.vertices
+	var top := float(record.top_elevation_m)
+	for spec: Dictionary in cfg.chains:
+		var problem := _chain_problem(spec,v,top)
+		if problem != "":
+			return {"ok":false,"message":"Panel hall chain %s: %s" % [str(spec.get("runs",[])),problem]}
 	var root := Node3D.new(); root.name="ObservedPanelHall"
 	var materials := {}
 	for key: String in cfg.palette:
 		var rgb: Array=cfg.palette[key]
 		var mat := StandardMaterial3D.new(); mat.albedo_color=Color(rgb[0],rgb[1],rgb[2]); mat.roughness=.9
 		materials[key]=mat
-	var v: Array=record.vertices
-	var top := float(record.top_elevation_m)
 	for spec: Dictionary in cfg.chains:
 		var first := int(spec.runs[0])*12
 		var last := int(spec.runs[-1])*12
@@ -135,6 +139,44 @@ static func build(record: Dictionary) -> Dictionary:
 		if child is MeshInstance3D:
 			count+=1; triangles+=(child as MeshInstance3D).mesh.get_faces().size()/3
 	return {"ok":true,"node":root,"mesh_instances":count,"surfaces":count,"triangles":triangles}
+
+## Opt-in chain data is checked before any geometry exists, so a malformed entry
+## fails the build like a source mismatch instead of making negative or stray boxes.
+static func _chain_problem(spec: Dictionary,v: Array,top: float)->String:
+	var first := int(spec.runs[0])*12
+	var last := int(spec.runs[-1])*12
+	var length := Vector2(float(v[last+3])-float(v[first]),float(v[last+5])-float(v[first+2])).length()
+	var floor_y := minf(float(v[first+1]),float(v[last+4]))-.12
+	if spec.has("slot_size") and (not _numbers(spec.slot_size,2) or float(spec.slot_size[0])<=0.0 or float(spec.slot_size[1])<=0.0):
+		return "slot_size needs two positive numbers"
+	if spec.has("slot_top_offset") and (not _numbers([spec.slot_top_offset],1) or float(spec.slot_top_offset)<0.0):
+		return "slot_top_offset must be a number of at least 0"
+	if spec.has("split_below_top") and (not _numbers([spec.split_below_top],1) or float(spec.split_below_top)<=0.0):
+		return "split_below_top must be a positive number"
+	var split := top-float(spec.get("split_below_top",4.0))
+	for key: String in ["storefronts","infill_panels"]:
+		var entries: Variant=spec.get(key,[])
+		if not entries is Array:
+			return key+" must be a list"
+		var count := 3 if key=="infill_panels" else 2
+		for entry: Variant in entries:
+			if not _numbers(entry,count):
+				return "%s entries need %d numbers" % [key,count]
+			if float(entry[0])<0.0 or float(entry[0])>=float(entry[1]) or float(entry[1])>length:
+				return "%s %s must lie within 0..%.2f m" % [key,str(entry),length]
+			if count==3 and (float(entry[2])<=0.0 or floor_y+.10+float(entry[2])>top-.16):
+				return "infill_panels height must be positive and stay below the coping"
+			if count==2 and split-.50<=floor_y+.10:
+				return "storefronts need a lower field taller than 0.6 m"
+	return ""
+
+static func _numbers(value: Variant,count: int)->bool:
+	if not value is Array or (value as Array).size()!=count:
+		return false
+	for item: Variant in value:
+		if not (item is float or item is int):
+			return false
+	return true
 
 static func _box(root: Node3D,label:String,a:Vector3,t:Vector3,n:Vector3,s:float,y:float,d:float,size:Vector3,mat:Material,role:String)->void:
 	var mesh:=BoxMesh.new(); mesh.size=size; mesh.material=mat
