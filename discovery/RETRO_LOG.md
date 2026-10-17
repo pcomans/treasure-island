@@ -20705,3 +20705,16 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the six labelled handoff pairs (gameplay, two island views and three landmarks) let me judge the whole layer quickly. Placing the dated Chapel SSE and Building 1 photos beside the matched poses showed directly that the sunlit cream fronts now match where before they read green-grey.
 - What did not work well: the Northpoint and Gateview palette checks rely only on iteration-1 pairs (r1/r2), and the final `after/pairs` cover only the three landmarks. The ground and asphalt palettes, which shift visibly under the new sun (lime lawn, purple-navy asphalt, mauve parking), were never flagged as candidates for the colour pass.
 - What the team should change next time: for a global lighting change, capture one final matched pose per palette family (housing cream/white, blue-grey, lawn, asphalt, concrete) beside its dated photo. Then the follow-up colour pass gets a complete list of what reads wrong instead of a sampled one.
+
+## modeler-northpoint (Keppler Court 1109/1111/1113/1115/1117 family study, Level 1 + 2, Slot A, 2026-10-17)
+
+- What worked well:
+  - Fitting one lot pano's camera per photo turned the five Apr 2019 lot views into station maps. The near-frontal 1111 view fit at 0.2 px and gave a mirrored-pair module that matched the other rows within about 0.5–2.5 m.
+  - Decoupling front/rear frames from roof sections handled every footprint without per-row special cases: single-section rectangles, cut stations within a straight front, and the 1113 three-section step. So did building courts from the kit's existing screen panels with a gate gap and a gate-entered route.
+  - All 37 tracked runs, plus the suite under the flock lock, exited 0. The own-worktree absence check ignored the other slot's Godot as intended.
+- What did not work well:
+  - The fit check's grounded count (2/20 on 1109) gave no positions until a temporary instrumented copy printed them. They turned out to be a grazing-ray artifact: rotated rows plus 0.26 m window sills meeting the 1.0 m allowance. That cost one extra engine run to show it wasn't a floating wall.
+  - My iter1 timing note compared different buildings and suggested a 35–58% two-slot slowdown. Same-job solo/paired pairs later showed 1–7%.
+- What the team should change next time:
+  - Have `building_fit.gd` print the first few bad positions even when a check passes under its limit, so near-limit counts can be read without a debug copy.
+  - Judge slot slowdown only from the same job run solo and paired. A light process sampler beside the jobs makes that cheap.
