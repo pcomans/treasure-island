@@ -20681,3 +20681,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 ## code-review (godot shutdown fix rework, 2026-10-17)
 
 - What worked well: the rework answered each finding with a stand-in test that reproduced the old failure (the previous wrapper's 360-byte stderr against 0 bytes now) and a fresh 160-run engine pass, so the re-review was a short diff read plus checks of the evidence. Next time: keep that "old wrapper fails, new wrapper passes" pairing for every shared-tooling fix.
+
+## 2026-10-17 — docs: two engine slots
+
+- Worked: the single-slot rule lived in one AGENTS sentence plus a handful of "serialized engine" phrases, so a short "Engine slots" subsection with one anchor replaced it and the other mentions now link there; SLOT GO, release, finite budgets and failed-attempt preservation carried over unchanged.
+- Did not work: I started on 3e48e1b while the shutdown fix was being stacked, so the uncommitted edits had to be moved onto the new HEAD; the code reviewer's nits on my earlier shutdown lesson also arrived through that stacking rather than with the original review.
+- Next time: ask for the stacking base before starting a docs change that touches LEARNINGS, and keep the capacity lesson's measurements next to the investigator's RETRO so later slot changes compare per-job slowdown, not pair wall time.

@@ -14,7 +14,7 @@ was `154.0.8037.92` when verified on 2026-10-04. Install through
 `.devcontainer/setup-browser.sh`, already called by `post-create.sh`. The Chrome
 version is the observed managed download, not a separately pinned dependency.
 
-1. Hold the serialized browser/render slot and start
+1. Hold an assigned [engine/browser slot](../../AGENTS.md#engine-slots) and start
    `tools/browser <target-reference> '<supplied-place-url>'`. This foreground
    launcher runs a headed Chrome on private GPU-backed Weston without Xvfb.
    Retain its live tool handle. It prints the `XDG_RUNTIME_DIR=... agent-browser
