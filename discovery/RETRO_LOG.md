@@ -20570,3 +20570,20 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - Worked: the owner's sentence fit as one refinement paragraph under the existing goal, with the environment-layer paragraph and CLAUDE's between-study line adjusted rather than restated; completed ground cover and the parked lighting branch are named so neither is reopened or merged by accident.
 - Did not work: the breadth-first wording written earlier the same day treated environment layers as peers in "lowest unfinished level", which the owner's first concrete lighting proposal showed was not his priority; I wrote the general rule before any environment work tested it.
 - Next time: when recording a new priority ordering, state which kinds of work it sequences after which, not only the level order, and flag role prompts that repeat the ordering (`ti-study-progress-review` still says "including its environment layers").
+
+## modeler-northpoint (Exposition tail 1247/1250/1251/1253 family study, Level 1 + 2, 2026-10-17)
+
+- What worked well: reusing the reviewed Gateview/Northpoint generator and launchers made this a config-only study. ROOT accepted the one render iteration unchanged, and every one of the 25 engine runs (import, 12 shots, 12 fit) plus the single `tools/test.sh` exited 0. No watchdog TERM was needed, and there were no post-PASS stalls. The offline preflight caught every real problem before any engine run, so each run was productive:
+  - band clearance at the 1247 NE section, where grade sits about 0.2 m above the frozen base;
+  - four oblique camera poses inside neighbours;
+  - two route starts under the canopy margin.
+
+  Running native+routes and each spray as separate invocations avoided the known routes+spray hang.
+- What did not work well:
+  - The generator's story band (flat base + 2.55 m) silently assumed flat grade. It only surfaced as a door-head clearance failure, and the fix leaves 1247's band 0.06 m higher than a flat-grade sibling would have.
+  - The carport depth rule assumed a road distance. The 1247 strip sits by its own front, away from any road, so it needed a per-row override read from the registered overhead.
+  - I chose oblique poses by eye and only checked their positions after writing the views plan.
+- What the team should change next time:
+  - Derive the story band from the highest door head on sloped rows from the start.
+  - Record carport placement per row from the registered overhead instead of a road-distance default.
+  - Run the camera/player-in-footprint check while writing a views plan, not after.
