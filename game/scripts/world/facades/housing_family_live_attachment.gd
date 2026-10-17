@@ -1,6 +1,10 @@
 extends RefCounted
 ## Approved family appearance, with source-owned contacts matching installed meshes.
+## An instance's optional "family" ("housing" default, or "midrise") picks the
+## producer; both return the same role-tagged mesh contract. The mid-rise
+## producer also reads the chunks' frozen land to seat walls and landings.
 const FAMILY = preload("res://game/scripts/world/facades/housing_site_family.gd")
+const MIDRISE = preload("res://game/scripts/world/facades/midrise_family.gd")
 const CONFIG := "res://game/resources/housing_family/live_instances.json"
 
 static func install(buildings: Node3D, chunks: Array, candidate_manifest: Dictionary = {}) -> Dictionary:
@@ -32,11 +36,12 @@ static func install(buildings: Node3D, chunks: Array, candidate_manifest: Dictio
 		var wall_key := "building:"+source+":wall"
 		var roof_key := "building:"+source+":roof"
 		var cfg: Variant = JSON.parse_string(FileAccess.get_file_as_string(item.config))
-		if seen.has(source) or not records.has(wall_key) or not records.has(roof_key) or not nodes.has(wall_key) or not nodes.has(roof_key) or not cfg is Dictionary or str(cfg.get("target",{}).get("source_key",""))!=source:
+		var family := str(item.get("family", "housing"))
+		if seen.has(source) or family not in ["housing", "midrise"] or not records.has(wall_key) or not records.has(roof_key) or not nodes.has(wall_key) or not nodes.has(roof_key) or not cfg is Dictionary or str(cfg.get("target",{}).get("source_key",""))!=source:
 			for plan: Dictionary in plans: plan.model.free()
 			return {"ok":false,"message":"Family source/pair identity failed: "+source,"source_keys":[source]}
 		seen[source]=true
-		var model := FAMILY.build(records[wall_key],records[roof_key],cfg)
+		var model: Node3D = MIDRISE.build(records[wall_key],records[roof_key],cfg,chunks) if family == "midrise" else FAMILY.build(records[wall_key],records[roof_key],cfg)
 		if not bool(model.get_meta("build_valid",false)):
 			model.free()
 			for plan: Dictionary in plans: plan.model.free()

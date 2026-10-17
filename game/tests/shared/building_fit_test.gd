@@ -33,7 +33,7 @@ extends SceneTree
 ## Optional --native-producer northpoint1232-mixed: shared family plus retained
 ## quality roof and ground support for w96215673 only.
 ## Optional --native-producer housing-get-faces: complete live shared housing
-## role partitions using the installer's Mesh.get_faces() producer.
+## or mid-rise family role partitions using the installer's Mesh.get_faces() producer.
 ## Optional --diagnose-side north|south|west|east: native candidate queries only,
 ## without placement/movement. Always reports whole-building HOLD and exits1.
 
@@ -507,11 +507,13 @@ func _check_building2_indexed(h: WorldHarness, source: String) -> String:
 
 # Shared housing installs every immediate mesh in a source-owned role bucket,
 # translating its world-space faces into the body's local origin in that order.
+# The same installer attaches mid-rise family producers (SharedMidrise_*).
 func _check_housing_faces(h: WorldHarness, source: String, retained_quality: bool = false) -> String:
 	var roots: Array[Node3D] = []
-	for node: Node in h.main.find_children("SharedHousing_*", "Node3D", true, false):
-		if node.get_meta("source_key", "") == source:
-			roots.append(node as Node3D)
+	for pattern: String in ["SharedHousing_*", "SharedMidrise_*"]:
+		for node: Node in h.main.find_children(pattern, "Node3D", true, false):
+			if node.get_meta("source_key", "") == source:
+				roots.append(node as Node3D)
 	if roots.size() != 1:
 		return "missing or duplicate shared housing producer"
 	var root := roots[0]
