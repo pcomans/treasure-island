@@ -1749,8 +1749,8 @@
       "top_y": 8.9,
       "upper_windows": [
         {
-          "station_m": 1.75,
-          "local_station_m": 1.75,
+          "station_m": 6.452968070004685,
+          "local_station_m": 6.452968070004685,
           "basis": {
             "source_run": 2,
             "start": [
@@ -1776,14 +1776,14 @@
             "length_m": 14.339929044454857
           },
           "wall_receiver": true,
-          "width_m": 1.4,
+          "width_m": 1.7,
           "height_m": 1.1,
           "center_y": 8.05,
           "glazing": "blue"
         },
         {
-          "station_m": 5.419964522227428,
-          "local_station_m": 5.419964522227428,
+          "station_m": 11.471943235563884,
+          "local_station_m": 11.471943235563884,
           "basis": {
             "source_run": 2,
             "start": [
@@ -1809,73 +1809,7 @@
             "length_m": 14.339929044454857
           },
           "wall_receiver": true,
-          "width_m": 1.4,
-          "height_m": 1.1,
-          "center_y": 8.05,
-          "glazing": "blue"
-        },
-        {
-          "station_m": 12.589929044454856,
-          "local_station_m": 12.589929044454856,
-          "basis": {
-            "source_run": 2,
-            "start": [
-              -159.261,
-              2.906,
-              -497.348
-            ],
-            "end": [
-              -146.423,
-              3.036,
-              -503.737
-            ],
-            "tangent": [
-              0.8952624493608881,
-              0,
-              -0.4455391641195455
-            ],
-            "normal": [
-              0.4455391641195455,
-              0,
-              0.8952624493608881
-            ],
-            "length_m": 14.339929044454857
-          },
-          "wall_receiver": true,
-          "width_m": 1.4,
-          "height_m": 1.1,
-          "center_y": 8.05,
-          "glazing": "blue"
-        },
-        {
-          "station_m": 8.919964522227428,
-          "local_station_m": 8.919964522227428,
-          "basis": {
-            "source_run": 2,
-            "start": [
-              -159.261,
-              2.906,
-              -497.348
-            ],
-            "end": [
-              -146.423,
-              3.036,
-              -503.737
-            ],
-            "tangent": [
-              0.8952624493608881,
-              0,
-              -0.4455391641195455
-            ],
-            "normal": [
-              0.4455391641195455,
-              0,
-              0.8952624493608881
-            ],
-            "length_m": 14.339929044454857
-          },
-          "wall_receiver": true,
-          "width_m": 1.4,
+          "width_m": 1.7,
           "height_m": 1.1,
           "center_y": 8.05,
           "glazing": "blue"
@@ -2016,7 +1950,7 @@
         }
       ],
       "elevation_role": "rear",
-      "inference": "production_inference: one yard door and one head-aligned window per unit below rear upper windows; unit count matches the front (two per stepped section)"
+      "inference": "Mar2025 SSE rear (1218-sse-rear04): widely spaced upper sliders, one per unit; positions mapped from the photo along each rear section (ENE corner and middle/ENE downspout step as anchors); the WSW section second window is hidden by a tree and inferred; lower rear storey (one yard door and head-aligned window per unit) remains production_inference."
     },
     {
       "id": "rear-middle",
@@ -2047,8 +1981,8 @@
       "top_y": 8.9,
       "upper_windows": [
         {
-          "station_m": 1.7500001577156998,
-          "local_station_m": 1.7500001577156998,
+          "station_m": 4.068270558161045,
+          "local_station_m": 4.068270558161045,
           "basis": {
             "source_run": 4,
             "start": [
@@ -2074,14 +2008,14 @@
             "length_m": 14.529537707718015
           },
           "wall_receiver": true,
-          "width_m": 1.4,
+          "width_m": 1.7,
           "height_m": 1.1,
           "center_y": 8.05,
           "glazing": "blue"
         },
         {
-          "station_m": 5.5147686961433084,
-          "local_station_m": 5.5147686961433084,
+          "station_m": 11.623630166174413,
+          "local_station_m": 11.623630166174413,
           "basis": {
             "source_run": 4,
             "start": [
@@ -2107,73 +2041,7 @@
             "length_m": 14.529537707718015
           },
           "wall_receiver": true,
-          "width_m": 1.4,
-          "height_m": 1.1,
-          "center_y": 8.05,
-          "glazing": "blue"
-        },
-        {
-          "station_m": 12.779537550002313,
-          "local_station_m": 12.779537550002313,
-          "basis": {
-            "source_run": 4,
-            "start": [
-              -146.986,
-              3.045,
-              -504.884
-            ],
-            "end": [
-              -133.981,
-              3.15,
-              -511.363
-            ],
-            "tangent": [
-              0.8950732130377284,
-              0,
-              -0.44591921163179016
-            ],
-            "normal": [
-              0.44591921163179016,
-              0,
-              0.8950732130377284
-            ],
-            "length_m": 14.529537707718015
-          },
-          "wall_receiver": true,
-          "width_m": 1.4,
-          "height_m": 1.1,
-          "center_y": 8.05,
-          "glazing": "blue"
-        },
-        {
-          "station_m": 9.014769011574709,
-          "local_station_m": 9.014769011574709,
-          "basis": {
-            "source_run": 4,
-            "start": [
-              -146.986,
-              3.045,
-              -504.884
-            ],
-            "end": [
-              -133.981,
-              3.15,
-              -511.363
-            ],
-            "tangent": [
-              0.8950732130377284,
-              0,
-              -0.44591921163179016
-            ],
-            "normal": [
-              0.44591921163179016,
-              0,
-              0.8950732130377284
-            ],
-            "length_m": 14.529537707718015
-          },
-          "wall_receiver": true,
-          "width_m": 1.4,
+          "width_m": 1.7,
           "height_m": 1.1,
           "center_y": 8.05,
           "glazing": "blue"
@@ -2314,7 +2182,7 @@
         }
       ],
       "elevation_role": "rear",
-      "inference": "production_inference: one yard door and one head-aligned window per unit below rear upper windows; unit count matches the front (two per stepped section)"
+      "inference": "Mar2025 SSE rear (1218-sse-rear04): widely spaced upper sliders, one per unit; positions mapped from the photo along each rear section (ENE corner and middle/ENE downspout step as anchors); the WSW section second window is hidden by a tree and inferred; lower rear storey (one yard door and head-aligned window per unit) remains production_inference."
     },
     {
       "id": "rear-ene",
@@ -2348,41 +2216,8 @@
       "top_y": 8.9,
       "upper_windows": [
         {
-          "station_m": 1.7500000286496908,
-          "local_station_m": 1.7500000286496908,
-          "basis": {
-            "source_run": 6,
-            "start": [
-              -133.471,
-              3.15,
-              -510.35
-            ],
-            "end": [
-              -130.154,
-              3.15,
-              -512
-            ],
-            "tangent": [
-              0.8953430545241293,
-              0,
-              -0.4453771600737986
-            ],
-            "normal": [
-              0.4453771600737986,
-              0,
-              0.8953430545241293
-            ],
-            "length_m": 3.704725225978301
-          },
-          "wall_receiver": true,
-          "width_m": 1.4,
-          "height_m": 1.1,
-          "center_y": 8.05,
-          "glazing": "blue"
-        },
-        {
-          "station_m": 5.772819391491019,
-          "local_station_m": 2.068094165512719,
+          "station_m": 3.9118660565186056,
+          "local_station_m": 0.20714083054030502,
           "basis": {
             "source_run": 7,
             "start": [
@@ -2408,14 +2243,14 @@
             "length_m": 2.405567916314158
           },
           "wall_receiver": true,
-          "width_m": 1.4,
+          "width_m": 1.7,
           "height_m": 1.1,
           "center_y": 8.05,
           "glazing": "blue"
         },
         {
-          "station_m": 13.295638684733833,
-          "local_station_m": 4.8039289472191395,
+          "station_m": 11.585141827632548,
+          "local_station_m": 3.093432090117855,
           "basis": {
             "source_run": 9,
             "start": [
@@ -2441,40 +2276,7 @@
             "length_m": 6.5539289742871425
           },
           "wall_receiver": true,
-          "width_m": 1.4,
-          "height_m": 1.1,
-          "center_y": 8.05,
-          "glazing": "blue"
-        },
-        {
-          "station_m": 9.272819425458339,
-          "local_station_m": 0.7811096879436465,
-          "basis": {
-            "source_run": 9,
-            "start": [
-              -125.868,
-              3.15,
-              -514.132
-            ],
-            "end": [
-              -120,
-              3.144,
-              -517.051
-            ],
-            "tangent": [
-              0.8953407983244501,
-              0,
-              -0.44538169569004066
-            ],
-            "normal": [
-              0.44538169569004066,
-              0,
-              0.8953407983244501
-            ],
-            "length_m": 6.5539289742871425
-          },
-          "wall_receiver": true,
-          "width_m": 1.4,
+          "width_m": 1.7,
           "height_m": 1.1,
           "center_y": 8.05,
           "glazing": "blue"
@@ -2615,7 +2417,7 @@
         }
       ],
       "elevation_role": "rear",
-      "inference": "production_inference: one yard door and one head-aligned window per unit below rear upper windows; unit count matches the front (two per stepped section)"
+      "inference": "Mar2025 SSE rear (1218-sse-rear04): widely spaced upper sliders, one per unit; positions mapped from the photo along each rear section (ENE corner and middle/ENE downspout step as anchors); the WSW section second window is hidden by a tree and inferred; lower rear storey (one yard door and head-aligned window per unit) remains production_inference."
     },
     {
       "id": "wsw-end",
