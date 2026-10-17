@@ -1,5 +1,6 @@
 extends SceneTree
 
+const NativeFitDriver = preload("res://game/tests/shared/building_fit_test.gd")
 const Geometry = preload("res://game/tests/support/building_study_geometry.gd")
 var failures: Array[String] = []
 
@@ -48,6 +49,7 @@ func _run() -> void:
 	check(not Geometry.collect(mesh, [collapsed], Geometry.MESH_GET_FACES, 1e-12).ok, "Explicit producer cutoff ignored")
 	_check_roof_coverage()
 	_check_composite_roof_identity()
+	await _check_retained_housing_inventory()
 	print(JSON.stringify({"ok":failures.is_empty(), "failures":failures}))
 	quit(0 if failures.is_empty() else 1)
 
@@ -210,3 +212,123 @@ func _check_composite_roof_identity() -> void:
 	observed = Geometry.visible_roof_faces(nodes, "parent", 0xFFFFF, authorized)
 	check(observed.ok and Geometry.roof_coverage(required, observed.intended_faces).ok and not Geometry.roof_coverage(observed.intended_faces, observed.faces).ok, "Reversed composite roof lost blocking intended domain")
 	for node: Node3D in nodes: node.free()
+
+
+func _check_retained_housing_inventory() -> void:
+	var legacy_domain := _roof_rect(0,0,2,4,7)
+	var sectional_domain := _roof_rect(2,0,4,4,8)
+	var combined := legacy_domain.duplicate(); combined.append_array(sectional_domain)
+	check(Geometry.roof_coverage(_roof_rect(0,0,4,4,9), combined).ok, "Both retained roof domains rejected")
+	check(not Geometry.roof_coverage(combined, legacy_domain).ok and not Geometry.roof_coverage(combined, sectional_domain).ok, "One roof producer concealed missing other domain")
+	var scene := Node3D.new(); root.add_child(scene)
+	var wall := Node3D.new(); scene.add_child(wall)
+	wall.set_meta("source_keys", ["fixture"]); wall.set_meta("derived_object_key", "building:fixture:wall")
+	var family := Node3D.new(); wall.add_child(family); family.set_meta("source_key", "fixture")
+	var roof := Node3D.new(); scene.add_child(roof)
+	roof.set_meta("source_keys", ["fixture"]); roof.set_meta("derived_object_key", "building:fixture:roof")
+	var ground := MeshInstance3D.new(); wall.add_child(ground)
+	var top := MeshInstance3D.new(); roof.add_child(top)
+	for pair in [[ground, "ground_visual", "building:fixture:wall"], [top, "roof", "building:fixture:roof"]]:
+		var node: MeshInstance3D = pair[0]
+		node.mesh = BoxMesh.new(); node.set_meta("physical_role", pair[1])
+		node.set_meta("source_keys", ["fixture"]); node.set_meta("derived_object_key", pair[2])
+	var sectional := MeshInstance3D.new(); family.add_child(sectional)
+	sectional.mesh = BoxMesh.new(); sectional.set_meta("family_role", "roof")
+	check(Geometry.retained_housing_inventory(scene, family, "fixture").ok, "Valid retained housing inventory rejected")
+	sectional.visible = false
+	check(not Geometry.retained_housing_inventory(scene, family, "fixture").ok, "Missing sectional roof accepted")
+	sectional.visible = true
+	sectional.set_meta("source_keys", ["other"])
+	check(not Geometry.retained_housing_inventory(scene, family, "fixture").ok, "Foreign sectional roof accepted")
+	sectional.remove_meta("source_keys")
+	var extra_body := StaticBody3D.new(); scene.add_child(extra_body)
+	extra_body.set_meta("source_keys", ["fixture"])
+	check(not Geometry.retained_housing_inventory(scene, family, "fixture").ok, "Additional active native owner accepted")
+	extra_body.free()
+
+	for wrong in [["other"], ["fixture", "other"]]:
+		roof.set_meta("source_keys", wrong)
+		check(not Geometry.retained_housing_inventory(scene, family, "fixture").ok, "Foreign/mixed retained roof accepted")
+	roof.set_meta("source_keys", ["fixture"])
+	for node: MeshInstance3D in [ground, top]:
+		var role = node.get_meta("physical_role")
+		node.remove_meta("physical_role")
+		check(not Geometry.retained_housing_inventory(scene, family, "fixture").ok, "Untagged retained mesh accepted")
+		node.set_meta("physical_role", role)
+		node.visible = false
+		check(not Geometry.retained_housing_inventory(scene, family, "fixture").ok, "Missing retained visual accepted")
+		node.visible = true
+	var duplicate := Node3D.new(); scene.add_child(duplicate)
+	duplicate.set_meta("source_keys", ["fixture"]); duplicate.set_meta("derived_object_key", "building:fixture:roof")
+	check(not Geometry.retained_housing_inventory(scene, family, "fixture").ok, "Duplicate retained roof accepted")
+	duplicate.free()
+	var unclassified := Node3D.new(); wall.add_child(unclassified)
+	check(not Geometry.retained_housing_inventory(scene, family, "fixture").ok, "Unknown retained child accepted")
+	unclassified.free()
+	# Match retained ground ancestry, then append in producer order.
+	ground.position = Vector3(2,3,4)
+	var first := Geometry.collect(top.mesh, [top.transform], Geometry.MESH_GET_FACES)
+	var second := Geometry.collect(ground.mesh, [wall.transform * ground.transform], Geometry.MESH_GET_FACES)
+	var faces: PackedVector3Array = first.faces.duplicate(); faces.append_array(second.faces)
+	var collection := first.duplicate(); collection.faces = faces
+	check(Geometry.compare(collection, faces, faces.size()).ok, "Positive ordered retained append rejected")
+	var swapped: PackedVector3Array = second.faces.duplicate(); swapped.append_array(first.faces)
+	check(not Geometry.compare(collection, swapped, faces.size()).ok, "Reordered retained append accepted")
+	check(not Geometry.compare(collection, first.faces, faces.size()).ok, "Omitted retained ground accepted")
+	# Exercise the actual retained-ground predicate against real native shape owners.
+	family.set_meta("scope", "approved_shared_family_normal_play"); family.set_meta("build_valid", true)
+	var support_mesh := MeshInstance3D.new(); family.add_child(support_mesh)
+	support_mesh.mesh = BoxMesh.new(); support_mesh.position = Vector3(10,0,0)
+	support_mesh.set_meta("family_role", "support")
+	var support := StaticBody3D.new(); family.add_child(support)
+	support.collision_layer = 1; support.collision_mask = 0
+	support.set_meta("source_keys", ["fixture"]); support.set_meta("derived_object_key", "building:fixture:wall")
+	support.set_meta("family_role", "support"); support.set_meta("receiver_kind", "none")
+	var support_faces: PackedVector3Array = Geometry.collect(support_mesh.mesh, [support_mesh.transform], Geometry.MESH_GET_FACES).faces
+	support_faces.append_array(second.faces)
+	var holder := CollisionShape3D.new(); var shape := ConcavePolygonShape3D.new()
+	shape.set_faces(support_faces); shape.backface_collision = true; holder.shape = shape; support.add_child(holder)
+	var land_owner := Node3D.new(); scene.add_child(land_owner); land_owner.set_meta("feature_kind", "land_ground")
+	var land_body := StaticBody3D.new(); land_owner.add_child(land_body)
+	await physics_frame
+	await physics_frame
+	var hit := {"collider": support, "rid": support.get_rid(), "shape": support.shape_owner_get_shape_index(support.get_shape_owners()[0], 0), "position": Vector3(2,3.5,4), "normal": Vector3.UP}
+	var land_hit := {"collider": land_body, "position": Vector3(2,3.46,4), "normal": Vector3.UP}
+	var proof_cache := {}
+	check(Geometry.retained_ground_contact(scene, family, support, hit, land_hit, .35, .001, .7, proof_cache), "Actual retained ground native contact rejected")
+	var motion_hit := hit.duplicate()
+	motion_hit.erase("rid")
+	check(Geometry.retained_ground_contact(scene, family, support, motion_hit, land_hit, .35, .001, .7, proof_cache), "Motion contact without RID rejected")
+	motion_hit.rid = land_body.get_rid()
+	check(not Geometry.retained_ground_contact(scene, family, support, motion_hit, land_hit, .35, .001, .7, proof_cache), "Explicit wrong RID accepted")
+	ground.position.x += 1
+	check(not Geometry.retained_ground_contact(scene, family, support, hit, land_hit, .35, .001, .7, proof_cache), "Changed ground transform reused stale proof")
+	ground.position.x -= 1
+	land_hit.position.y = 0
+	check(not Geometry.retained_ground_contact(scene, family, support, hit, land_hit, .35, .001, .7, proof_cache), "Elevated retained ground accepted")
+	land_hit.position.y = 3.46
+	hit.position.x = 3; land_hit.position.x = 3
+	check(not Geometry.retained_ground_contact(scene, family, support, hit, land_hit, .35, .001, .7, proof_cache), "Outside ground face accepted")
+	hit.position = Vector3(10,.5,0); land_hit.position = Vector3(10,.46,0)
+	check(not Geometry.retained_ground_contact(scene, family, support, hit, land_hit, .35, .001, .7, proof_cache), "Other support face accepted as ground")
+	hit.position = Vector3(2,3.5,4); land_hit.position = Vector3(2,3.46,4)
+	ground.remove_meta("physical_role")
+	check(not Geometry.retained_ground_contact(scene, family, support, hit, land_hit, .35, .001, .7, proof_cache), "Untagged contact accepted")
+	ground.set_meta("physical_role", "ground_visual")
+	support.set_meta("source_keys", ["other"])
+	check(not Geometry.retained_ground_contact(scene, family, support, hit, land_hit, .35, .001, .7, proof_cache), "Foreign support contact accepted")
+	support.set_meta("source_keys", ["fixture"])
+	hit.shape = -1
+	check(not Geometry.retained_ground_contact(scene, family, support, hit, land_hit, .35, .001, .7, proof_cache), "Wrong native shape accepted")
+	hit.shape = support.shape_owner_get_shape_index(support.get_shape_owners()[0], 0)
+	shape.set_faces(second.faces)
+	check(not Geometry.retained_ground_contact(scene, family, support, hit, land_hit, .35, .001, .7, proof_cache), "Incomplete native bucket accepted")
+	# Teardown must release both changed resources and still-connected callbacks.
+	var shape_lifetime: WeakRef = weakref(shape)
+	var mesh_lifetime: WeakRef = weakref(ground.mesh)
+	proof_cache.clear()
+	scene.free()
+	shape = null
+	await process_frame
+	check(shape_lifetime.get_ref() == null, "Retained proof keeps changed shape alive after teardown")
+	check(mesh_lifetime.get_ref() == null, "Retained proof keeps mesh alive after teardown")

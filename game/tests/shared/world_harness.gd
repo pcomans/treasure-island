@@ -3,12 +3,14 @@ extends RefCounted
 ## find a building by OSM source key, place the stock player and aim its camera.
 
 const WORLD_SOLID_MASK := 1
+const StudyGeometry := preload("res://game/tests/support/building_study_geometry.gd")
 
 var tree: SceneTree
 var main: GameMain
 var world: WorldLoader
 var player: PlayerController
 var hud: GameHUD
+var retained_ground_proof: Dictionary = {}
 
 
 func _init(scene_tree: SceneTree) -> void:
@@ -216,6 +218,17 @@ func is_walkable_ground(hit: Dictionary) -> bool:
 	var source := str(record.get_meta("source_key", ""))
 	if source.is_empty() or body.get_meta("source_keys", []) != [source] or str(body.get_meta("derived_object_key", "")) != "building:" + source + ":wall":
 		return false
+	if str(body.get_meta("family_role", "")) == "support":
+		var point: Vector3 = hit.position
+		var excluded: Array[RID] = [body.get_rid()]
+		var land := ray(Vector3(point.x, point.y + player.safe_margin, point.z), Vector3(point.x, -50, point.z), WORLD_SOLID_MASK, excluded)
+		while not land.is_empty():
+			var obstacle := land.get("collider") as CollisionObject3D
+			if obstacle == null or obstacle.get_rid() in excluded: return false
+			if obstacle.get_parent() != null and obstacle.get_parent().get_meta("feature_kind", "") == "land_ground": break
+			excluded.append(obstacle.get_rid())
+			land = ray(Vector3(point.x, point.y + player.safe_margin, point.z), Vector3(point.x, -50, point.z), WORLD_SOLID_MASK, excluded)
+		return StudyGeometry.retained_ground_contact(main, record as Node3D, body, hit, land, player.floor_snap_length, player.safe_margin, cos(player.floor_max_angle), retained_ground_proof)
 	if str(body.get_meta("family_role", "")) != "ground" or str(body.get_meta("receiver_kind", "")) != "none" or body.collision_layer != WORLD_SOLID_MASK or body.is_in_group("spray_receiver_wall"):
 		return false
 	var owners := body.get_shape_owners()

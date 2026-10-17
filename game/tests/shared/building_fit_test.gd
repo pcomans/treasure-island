@@ -156,7 +156,7 @@ func _run() -> void:
 		return
 	var source_key := str(args.source)
 	var native_sources := {"chapel-indexed": "w291189336", "building2-indexed": "w24274434", "station48-indexed": "w764313741", "northpoint1232-mixed": "w96215673", "ymca-mixed": "w34313547", "panel-hall-mixed": "w34313569", "personnel-support-mixed": "r133347", "job-corps-368-mixed": "w34313521", "building-202-mixed": "w34313546", "panel-hall-528-mixed": "w34313528", "avenue-h-449-mixed": "w34313512", "panel-hall-516-mixed": "w110188516", "w34313564-mixed": "w34313564"}
-	var housing_native := str(args.get("native-producer", "")) == "housing-get-faces"
+	var housing_native := str(args.get("native-producer", "")) in ["housing-get-faces", "housing-retained-get-faces"]
 	if args.has("native-producer") and ((not housing_native and str(native_sources.get(str(args["native-producer"]), "")) != source_key) or args.has("diagnose-side") or args.has("adjacent-source")):
 		push_error("native producer requires its supported source and cannot combine diagnostic/adjacent modes")
 		quit(1)
@@ -212,7 +212,7 @@ func _run() -> void:
 	if args.has("native-producer"):
 		var native_error := ""
 		if housing_native:
-			native_error = _check_housing_faces(h, source_key)
+			native_error = _check_housing_faces(h, source_key, str(args["native-producer"]) == "housing-retained-get-faces", str(args["native-producer"]) == "housing-retained-get-faces")
 		elif str(args["native-producer"]) == "northpoint1232-mixed":
 			native_error = _check_housing_faces(h, source_key, true)
 		elif str(args["native-producer"]) in ["ymca-mixed", "panel-hall-mixed", "personnel-support-mixed", "job-corps-368-mixed", "building-202-mixed", "panel-hall-528-mixed", "avenue-h-449-mixed", "panel-hall-516-mixed", "w34313564-mixed"]:
@@ -551,7 +551,7 @@ func _check_building2_indexed(h: WorldHarness, source: String) -> String:
 # Shared housing installs every immediate mesh in a source-owned role bucket,
 # translating its world-space faces into the body's local origin in that order.
 # The same installer attaches mid-rise family producers (SharedMidrise_*).
-func _check_housing_faces(h: WorldHarness, source: String, retained_quality: bool = false) -> String:
+func _check_housing_faces(h: WorldHarness, source: String, retained_quality: bool = false, require_family_roof: bool = false) -> String:
 	var roots: Array[Node3D] = []
 	for pattern: String in ["SharedHousing_*", "SharedMidrise_*"]:
 		for node: Node in h.main.find_children(pattern, "Node3D", true, false):
@@ -564,7 +564,7 @@ func _check_housing_faces(h: WorldHarness, source: String, retained_quality: boo
 		return "unsupported housing producer placement or identity"
 	var retained := {"error": "", "meshes": [], "body": null}
 	if retained_quality:
-		retained = _check_northpoint1232_retained(h, root, source)
+		retained = _check_housing_retained(h, root, source, require_family_roof)
 		if retained.error != "":
 			return str(retained.error)
 	var meshes := {"wall": [], "roof": [], "support": [], "ground": []}
@@ -594,7 +594,7 @@ func _check_housing_faces(h: WorldHarness, source: String, retained_quality: boo
 			return "additional active housing source body"
 	for role: String in meshes:
 		if meshes[role].is_empty():
-			if role == "wall" or (role == "roof" and not retained_quality) or bodies.has(role):
+			if role == "wall" or (role == "roof" and (not retained_quality or require_family_roof)) or bodies.has(role):
 				return "missing positive housing role coverage"
 			continue
 		if not bodies.has(role):
@@ -713,15 +713,22 @@ func _check_station48_indexed(h:WorldHarness,source:String) -> String:
 # This source deliberately retains the quality producer's separate roof body.
 # Its draped ground/shrubs had no legacy contacts, but the family installer now
 # appends them to FamilyContact_support. LAND itself remains a separate owner.
-func _check_northpoint1232_retained(h: WorldHarness, family: Node3D, source: String) -> Dictionary:
+func _check_housing_retained(h: WorldHarness, family: Node3D, source: String, require_family_roof: bool) -> Dictionary:
 	var result := {"error": "", "meshes": [], "body": null}
-	if source != "w96215673":
-		result.error = "mixed quality producer requires its exact source"
+	var inventory := StudyGeometry.retained_housing_inventory(h.main, family, source, require_family_roof)
+	if not inventory.ok:
+		result.error = inventory.reason
 		return result
 	var wall_key := "building:" + source + ":wall"
 	var roof_key := "building:" + source + ":roof"
+	if not require_family_roof and h.main.find_children("Northpoint1232LiveRoof", "Node3D", true, false).size() != 1:
+		result.error = "missing or duplicate retained1232 named roof"
+		return result
+	if not require_family_roof and (source != "w96215673" or family.get_parent().name != "Northpoint1232LiveWall" or inventory.roof_owners[0].name != "Northpoint1232LiveRoof"):
+		result.error = "retained1232 alias owner differs"
+		return result
 	var wall_root := family.get_parent() as Node3D
-	if wall_root == null or wall_root.name != "Northpoint1232LiveWall" or wall_root.get_meta("source_keys", []) != [source] or wall_root.get_meta("derived_object_key", "") != wall_key or wall_root.get_meta("receiver_kind", "") != "building_wall" or wall_root.is_set_as_top_level() or wall_root.global_transform != Transform3D.IDENTITY:
+	if wall_root == null or wall_root.get_meta("source_keys", []) != [source] or wall_root.get_meta("derived_object_key", "") != wall_key or wall_root.get_meta("receiver_kind", "") != "building_wall" or wall_root.is_set_as_top_level() or wall_root.global_transform != Transform3D.IDENTITY:
 		result.error = "retained quality wall owner differs"
 		return result
 	for child: Node in wall_root.get_children():
@@ -752,8 +759,8 @@ func _check_northpoint1232_retained(h: WorldHarness, family: Node3D, source: Str
 		result.error = "missing positive retained ground/support coverage"
 		return result
 	var roofs: Array[Node3D] = []
-	for node: Node in h.main.find_children("Northpoint1232LiveRoof", "Node3D", true, false):
-		roofs.append(node as Node3D)
+	for node: Node3D in inventory.roof_owners:
+		roofs.append(node)
 	if roofs.size() != 1:
 		result.error = "missing or duplicate retained quality roof"
 		return result
@@ -813,7 +820,7 @@ func _check_northpoint1232_retained(h: WorldHarness, family: Node3D, source: Str
 				result.error = "additional retained source visual outside verified producers"
 				return result
 	result.body = body
-	print("PASS: retained1232 roof per-mesh native faces/RIDs; retained ground_visual included in family support, LAND separate")
+	print("PASS: retained housing roof per-mesh native faces/RIDs; positive retained ground_visual mapped to FamilyContact_support, LAND separate source=" + source)
 	return result
 
 
