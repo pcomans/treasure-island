@@ -20784,3 +20784,15 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: reusing the saved checks (ring split and bays, opening coverage, pads, site overlap against roads, all other configs and every wall) covered 14 units across two branches without engine runs. The cross-config ground pass found two drive-on-drive overlaps between neighbouring Batch B rows that per-unit fits cannot see.
 - What did not work well: the cross-config overlap scan is slow (minutes per batch) and private to the reviewer, so the author's per-unit gates went green while neighbouring generated drives intersected. A plain SAT overlap also flagged drive and road edges that only touch, and I needed a strict-interior sample pass to tell a shared edge from real overlap.
 - What the team should change next time: when an author generator emits site surfaces for adjacent units in one batch, clip each new surface against the batch's other units (and existing configs) before writing the JSON, and record a one-line "no cross-unit ground overlap" result in the task note.
+
+## visual-review (Gateview B1 drive fix, 2026-10-17)
+
+- What worked well: the before|after set covered all three units' standard views, so I could confirm by eye that nothing else changed: the matched fronts, carports, ends and rears are geometrically identical. An opened 6%-fuzz mask was empty for every detail view.
+- What did not work well: none of the 21 pairs frames either fixed junction (1307 bay 3 / 1305 bay 1, and 1305 bay 2 / 1303 bay 1). At the raised context distance a drive is only a few pixels wide, so the actual fix couldn't be judged from pixels.
+- What the team should change next time: for a localized geometry fix, add one view framed on each fixed junction (a low raised oblique or a short top-down overhead) instead of rerunning only the standard set.
+
+## code-review (Gateview B1 drive fix, 2026-10-17)
+
+- What worked well: the fix was narrowly scoped (four drives in three configs, with only `top_triangles` and `inference` changed), so an exact plan-view polygon clip over every ground surface of all registered configs could confirm zero cross-config overlap directly. The same strict-interior road pass showed drives still meet roads only along shared edges.
+- What did not work well: my first REWORK pass used SAT plus point sampling, which needed a second interior pass to separate real overlap from shared edges. Running the exact polygon-area clip from the start would have been faster and gave a number the author's own check could be compared against.
+- What the team should change next time: report ground overlap as area (m²) in both author and reviewer checks, the way this fix did, so a recheck compares one number instead of re-deriving the method.
