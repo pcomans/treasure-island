@@ -56,8 +56,15 @@ static func build(record: Dictionary) -> Dictionary:
 		for range_value: Variant in spec.get("storefronts",[]):
 			var r: Array=range_value
 			fronts.append(Rect2(float(r[0]),floor_y+.10,float(r[1])-float(r[0]),split-.50-floor_y))
+		# Infilled or boarded openings [start,end,height] metres: flush panels in palette
+		# "infill" (default "lower"). Positions and sizes are production inference.
+		var panels: Array[Rect2]=[]
+		for panel_value: Variant in spec.get("infill_panels",[]):
+			var p: Array=panel_value
+			panels.append(Rect2(float(p[0]),floor_y+.10,float(p[1])-float(p[0]),float(p[2])))
 		var cut_holes: Array[Rect2]=openings.duplicate()
 		cut_holes.append_array(fronts)
+		cut_holes.append_array(panels)
 		# Split the two fields around complete recess bounds, not painted windows.
 		for field: Array in [[floor_y,split,"lower"],[split,top-.16,"upper"]]:
 			var cuts: Array[float]=[0.0,length]
@@ -69,7 +76,9 @@ static func build(record: Dictionary) -> Dictionary:
 				if right-left<.001: continue
 				var spans: Array[Vector2]=[Vector2(field[0],field[1])]
 				for hole: Rect2 in cut_holes:
-					if (left+right)/2.0>hole.position.x and (left+right)/2.0<hole.end.x:
+					# Only holes that reach into this field shape it, so a storefront below
+					# cannot refill an upper slot above it in the same stretch.
+					if (left+right)/2.0>hole.position.x and (left+right)/2.0<hole.end.x and hole.end.y>float(field[0]) and hole.position.y<float(field[1]):
 						spans=[]
 						if hole.position.y>float(field[0]): spans.append(Vector2(field[0],minf(hole.position.y,field[1])))
 						if hole.end.y<float(field[1]): spans.append(Vector2(maxf(hole.end.y,field[0]),field[1]))
@@ -96,6 +105,8 @@ static func build(record: Dictionary) -> Dictionary:
 			for i in bays+1:
 				_box(root,"StorefrontPilaster",a,t,n,front.position.x+front.size.x*i/bays,(floor_y+split)/2.0,.22,Vector3(.34,split-floor_y,.40),materials.get("pilaster",materials.structure),"wall")
 			_box(root,"StorefrontFascia",a,t,n,front.get_center().x,split-.22,.30,Vector3(front.size.x+.60,.44,.56),materials.get("fascia",materials.coping),"detail")
+		for panel: Rect2 in panels:
+			_box(root,"InfillPanel",a,t,n,panel.get_center().x,panel.get_center().y,.035,Vector3(panel.size.x,panel.size.y,.045),materials.get("infill",materials.lower),"wall")
 		if bool(spec.get("split_fascia",false)):
 			_box(root,"SplitFascia",a,t,n,length/2.0,split-.12,.30,Vector3(length,.30,.48),materials.get("fascia",materials.coping),"detail")
 		for s: float in [.16,length-.16]:
