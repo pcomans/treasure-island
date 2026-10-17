@@ -645,3 +645,7 @@ completed design. This corrects invocation guidance, not global runtime policy.
 ## Match whole-island baselines to the whole runtime revision
 
 The w34313564 integration reused Building1 candidate005 island images after checking only Building1 source parity. Independent visual review found widespread unrelated roof differences: the full study-to-main diff included52 runtime files from previously shipped families. A target-only unchanged diff cannot establish an unchanged world baseline. Before reusing island images, compare the complete runtime/world/settings/capture revision; if it differs materially, use a bounded clean-main island-only control with the maintained driver. Keep historical images and their original revision labels.
+
+## Retain the maintained engine invocation through shutdown
+
+Housing61 recovery printed complete native/fit/recess/spray PASS but stalled after its final line when launched without the suite's `--audio-driver Dummy`; the owned process required TERM and returned143. One unchanged-source run with Dummy exited0. A later69 capture also stalled with Dummy, so the audio setting is not a demonstrated cure and the shutdown cause remains unknown. Reuse the complete suite-supported invocation without attributing the stall to audio. Keep a saved PNG/body PASS separate from process completion, preserve the failed run, and verify terminal status and PID absence before starting another engine.

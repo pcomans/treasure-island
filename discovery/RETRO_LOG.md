@@ -20191,3 +20191,41 @@ Next: model complete reference-supported rear/roof families only within newly ex
 - Worked: all11 current originals plus dated SSE pixels supported scoped Level2 PASS; five clean-f52 island controls resolved the comparison without attributing unrelated main changes to this facade.
 - Did not work: supplied historical B1005 baseline differed across many unrelated roofs. Flagging that difference before a global regression claim prevented false attribution; exact source reconciliation was performed by the independent CODE reviewer.
 - Next time: match the whole runtime baseline before island comparison, give the concrete scoped verdict promptly, and retain unknown opposite-side coverage as OPEN. Review ID w34313564-sse-integrated001-20261016:shared_zoom_review_sol; no new whole-building credit.
+
+## building1_texture_environment — housing61/69/72 reviewed rear-family recovery, 2026-10-16
+
+- Worked: recovered exact final commit189cde3, including61's cavity-facing return correction, rather than commissioning another author run. The four runtime paths match its parent in currentmain1438, so the transfer preserves later unrelated work and unchanged front/site data. Located actual final55240suite log and complete successful native/route/spray donors.
+- Did not work: the private rear-architecture draft predates61's final recess/return closure and is unsafe as a recovery source. One broad historical RETRO read was unnecessarily large; exact commit and named note sections were sufficient.
+- Next: keep final source, final003pixels and historical runtime outcomes distinct; validate current integration using maintained drivers and matched1438 island evidence. Reuse unchanged front-site routes and retain whole/allside recognition as open. No new geometry or modeling call.
+
+## 2026-10-16 — independent_checkpoint_sol: recovered61/69/72 rear-family current CODE
+
+- Worked: recovered final committed189cde3, including61lower_rear_recess/cavity-facing returns, instead of the stale pre-repair private draft. Actual1438delta is exactly three instance configs plus the shared opt-in emitter; direct comparison to189cde3 is empty. Front targetframes remain identical; releases and geometry affect only the declared rear/low-roof fields. CODE PASS: absent new opt-ins retain old paths, rear assemblies skip front trim/site, and the cavity return flag defaultsfalse for existing front consumers. Maintained housing-get-faces covers current wall/roof/support/ground roles; actual native/stock/recess-route/spray and fresh visual/suite gates remain required.
+- Did not work: stale prose mislabeled this already-rendered/reviewed family unrendered, and the draft lacked61's final correction. Historical raw55240 was initially unlocated; executor recovered the genuine full-suite-rear002 log under the PSD roof-coverage study. Neither historical PASS nor import proves current-main fit/visual acceptance.
+- Next action / CONTINUE Level2: first coherent current-main rear-family captures after focused source/native safety, independent reference comparison and matched1438 island baseline, then complete per-target current mechanics and full suite before delivery. Preserve fronts/sites, frozen XZ/source/receiver ownership, neighboring buildings and historical credit. No new modeling/reference hunt or local finish study is needed merely to recover completed architecture. No engine/model/source edit by this reviewer; intended-file whitespace passed.
+
+### building1_texture_environment — recovered61 mechanical lifecycle
+- Worked: exact recovered61 native partitions and intended roof618positive samples passed; four stock approaches, affected rear recess actual-arrival return and actual rear spray completed with supported active REST/SAFE. Fresh Dummy-audio run28474 exited0.
+- Did not work: first60711 printed bodyPASS then stalled in teardown; after bounded unchanged-output observation, terminated only ownednative2099732 and consumed143. Cause is not proved; retained failedlog/PNG and verified absence before one justified fresh supported-invocation retry.
+- Next: use the complete maintained suite invocation, including Dummy audio, and distinguish native/body evidence from clean process closure. No source/assertion/timeout changes or art-model retry.
+
+### building1_texture_environment — recovered69 capture shutdown
+- Worked:69native/positive roof648samples, four stock approaches and rear spray passed with clean30408exit0. Sharedcapture64035 saved all six local originals; reused the same frozen world's five island views from61 rather than repeating them.
+- Did not work: capture printedPASS then stalled in futex wait with no further output even with Dummy audio. After bounded observation, stopped only ownednative2100679, consumed143 and confirmed allenginePIDs absent. This disproves treating Dummy as a demonstrated fix; precise shutdown cause remains unknown.
+- Next: retain valid completed pixels separately from failed process closure, do not rerender solely for bookkeeping, and require independent visual and complete integratedsuite. No art/runtime/test change followed this lifecycle issue.
+
+### building1_texture_environment — recovered three-building integrated validation
+- Worked: all three current native partitions/intended roof coverage, four stock approaches and actual rear spray checks passed cleanly;61's affected recess route and actual-arrival return passed. Complete integrated tools/test.sh56602 exited0 with ALL TESTS PASS, including all49 scored fits and world determinism.
+- Worked: one local capture per building supplied the family review; reused the unchanged family's five island views from61 and matched them to current1438 world evidence.61/72 capture processes exited0;69 saved pixels and later143 shutdown are explicitly separate.
+- Next: retain independent scoped per-building/island visual verdicts before delivery and preserve existing213inventory/49credit. Do not commission duplicate modeling or expand a recovery into material polish. Engine slot released after terminal and actual process absence.
+
+### building1_texture_environment — recovered rear-family delivery closure
+- Worked: independent fresh per-building rear/low-roof visual PASS for61/69/72 and matched1438 five-island regression PASS closed the recovery without new modeling. CurrentCODE/native/fit/spray/fullsuite56602exit0 remain applicable.
+- Limits:69capture saved complete pixels but ended143 after shutdown stall; clean69mechanics and fullsuite remain separate. Allside/wholecredit stays open, catalog and stage counts unchanged.
+- Next: preserve the exact reviewed source and historical failed attempts, then ship only the six intended paths. Retained final commit recovery avoided a duplicate author cycle.
+
+## 2026-10-16 — shared_zoom_review_sol: housing61/69/72 recovery visual PASS
+
+- Worked:23fresh local/shared-island originals, three dated refs and three decisive retained-final matches supported individual scoped rear/low-roof PASS and shared1438island regression PASS.61closure remained intact;69/72 inference limits stayed explicit.
+- Did not work: the initial broad readiness read was truncated and the supplied visual-note parent path was wrong; a focused exact-path excerpt resolved it.69pixel evidence came from a teardown143 run, retained separately from clean native/fit results.
+- Next time: use precise short reference/review excerpts and send the verdict before bookkeeping. All-sideLevel2/wholecredit stays OPEN; no new art refinement or evidence framework is needed for this recovered family.

@@ -39,13 +39,21 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 	var holes_by_run: Dictionary = {}
 	var vertices: Array = wall.vertices
 	var recess: Dictionary = cfg.get("lower_frontage_recess", {})
+	var rear_recess: Dictionary = cfg.get("lower_rear_recess", {})
+	var rear_recess_runs: Dictionary = {}
+	if not rear_recess.is_empty():
+		for frame: Dictionary in cfg.get("rear_frames", []):
+			for run in frame.runs: rear_recess_runs[int(run)] = frame
 	var recess_runs: Dictionary = {}
 	if not recess.is_empty():
 		for frame: Dictionary in cfg.target.frames:
 			for run in frame.runs: recess_runs[int(run)] = frame
 	# The target schedule carries complete motifs. A basis pins each motif to its
 	# actual stepped source edge; no row or opening receives a scale transform.
-	for frame: Dictionary in cfg.target.frames:
+	var opening_frames: Array = cfg.target.frames.duplicate()
+	opening_frames.append_array(cfg.get("rear_frames", []))
+	for frame: Dictionary in opening_frames:
+		var is_rear: bool = str(frame.get("elevation_role", "front")) == "rear"
 		for group in ["upper_windows", "lower_windows", "entries"]:
 			for motif: Dictionary in frame.get(group, []):
 				var basis: Dictionary = motif.get("basis", frame)
@@ -98,8 +106,9 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 					push_error("Incomplete opening containment: %s %s %s" % [cfg.target.source_key,frame.id,station])
 				point.y = cy
 				var motif_begin := root.get_child_count()
-				var recessed: bool = not recess.is_empty() and group != "upper_windows"
-				if recessed: point -= n * float(recess.depth_m)
+				var active_recess: Dictionary = rear_recess if is_rear else recess
+				var recessed: bool = not active_recess.is_empty() and group != "upper_windows"
+				if recessed: point -= n * float(active_recess.depth_m)
 				if group == "entries":
 					var entry_material := door
 					if str(motif.get("door_role","")) == "pale":
@@ -112,10 +121,12 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 						PARTS._panel(root,point+Vector3.UP*side*(height/2+0.025),t,n,Vector3(width+0.12,0.065,0.09),trim)
 				else:
 					PARTS._recessed_window(root,point,t,n,width,height,trim,dark,glass)
-				if recessed:
+				if recessed or is_rear:
 					for child_index in range(motif_begin, root.get_child_count()):
 						var child := root.get_child(child_index)
 						child.set_meta("family_role", "support" if child.get_meta("construction_detail", "") == "door_threshold" else "wall")
+		# Rear schedules own their openings and optional lower setback only; front trim/site stay intact.
+		if is_rear: continue
 		if cfg.has("broad_band"):
 			var band: Dictionary = cfg.broad_band
 			var a := vec(frame.start)
@@ -176,6 +187,8 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 		var wall_begin := root.get_child_count()
 		if recess_runs.has(i/12):
 			_recessed_wall(root, a, b, top, holes, siding, trim, vertices, i/12, recess_runs[i/12], recess)
+		elif rear_recess_runs.has(i/12):
+			_recessed_wall(root, a, b, top, holes, siding, trim, vertices, i/12, rear_recess_runs[i/12], rear_recess)
 		else:
 			PARTS._wall_with_openings(root,a,b,top,holes,siding)
 		_tag_since(root,wall_begin,"wall")
@@ -187,7 +200,21 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 			PARTS._beam(root,Vector3(a.x,top,a.z)+n*0.05,Vector3(b.x,top,b.z)+n*0.05,0.23,0.13,trim)
 	var roof_begin := root.get_child_count()
 	# Keep the frozen roof footprint; existing observed pitched surfaces are data.
-	if str(cfg.get("roof_kind","")) == "shallow_hip":
+	if cfg.has("shallow_sectional_roof"):
+		# Source-triangle subdivision keeps the complete stepped roof footprint.
+		# Rise and ridge/eave dimensions are reversible game-art inference.
+		var shallow: Dictionary = cfg.shallow_sectional_roof
+		for triangle: Array in shallow.triangles:
+			var points: Array = [vec(triangle[0]), vec(triangle[1]), vec(triangle[2])]
+			var indices := PackedInt32Array([0, 1, 2])
+			if (points[1]-points[0]).cross(points[2]-points[0]).y > 0:
+				indices = PackedInt32Array([0, 2, 1])
+			PARTS._mesh(root, points, indices, roofing)
+		for closure: Array in shallow.closures:
+			PARTS._quad(root, [vec(closure[0]), vec(closure[1]), vec(closure[2]), vec(closure[3])], siding)
+		for edge: Array in shallow.eaves:
+			PARTS._beam(root, vec(edge[0]), vec(edge[1]), 0.20, 0.12, trim)
+	elif str(cfg.get("roof_kind","")) == "shallow_hip":
 		_hip_roof(root,wall,cfg,roofing,trim)
 	elif not bool(cfg.get("retain_production_roof",false)):
 		var roofpoints: Array = []
@@ -421,6 +448,8 @@ static func _recessed_wall(root: Node3D, a: Vector3, b: Vector3, top: float, hol
 	var length := Vector2(b.x-a.x,b.z-a.z).length()
 	var band := float(recess.band_y)
 	var depth := float(recess.depth_m)
+	# Rear cavity ends face the exposed setback, not the solid building interior.
+	var cavity_facing_returns := bool(recess.get("cavity_facing_returns", false))
 	var runs: Array[int] = []
 	for source_run in frame.runs: runs.append(int(source_run))
 	var position: int = runs.find(run)
@@ -446,10 +475,10 @@ static func _recessed_wall(root: Node3D, a: Vector3, b: Vector3, top: float, hol
 	PARTS._wall_with_openings(root,inner_a,inner_b,band,_clipped_holes(holes,shift,shift+inner_a.distance_to(Vector3(inner_b.x,inner_a.y,inner_b.z)),minf(a.y,b.y),band),siding)
 	if lo > 0:
 		PARTS._wall_with_openings(root,a,outer_a,band,[],siding)
-		PARTS._quad(root,[outer_a,inner_a,Vector3(inner_a.x,band,inner_a.z),Vector3(outer_a.x,band,outer_a.z)],siding,false)
+		PARTS._quad(root,[outer_a,inner_a,Vector3(inner_a.x,band,inner_a.z),Vector3(outer_a.x,band,outer_a.z)],siding,cavity_facing_returns)
 	if hi < length:
 		PARTS._wall_with_openings(root,outer_b,b,band,[],siding)
-		PARTS._quad(root,[inner_b,outer_b,Vector3(outer_b.x,band,outer_b.z),Vector3(inner_b.x,band,inner_b.z)],siding,false)
+		PARTS._quad(root,[inner_b,outer_b,Vector3(outer_b.x,band,outer_b.z),Vector3(inner_b.x,band,inner_b.z)],siding,cavity_facing_returns)
 	PARTS._quad(root,[Vector3(outer_a.x,band,outer_a.z),Vector3(outer_b.x,band,outer_b.z),Vector3(inner_b.x,band,inner_b.z),Vector3(inner_a.x,band,inner_a.z)],soffit,false)
 
 static func _clipped_holes(holes: Array[Rect2], start: float, end: float, bottom: float, top: float) -> Array[Rect2]:
