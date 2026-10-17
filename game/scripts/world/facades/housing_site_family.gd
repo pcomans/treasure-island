@@ -245,8 +245,22 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bo
 		# Opt-in triangular closures (gablets, soffits), wound as authored.
 		for triangle: Array in shallow.get("closure_triangles", []):
 			PARTS._mesh(root, [vec(triangle[0]), vec(triangle[1]), vec(triangle[2])], PackedInt32Array([0, 1, 2]), siding)
+		# Optional facade.eave_rgb colours only these eave fascia beams; without it they keep the trim material.
+		var eave: Material = trim
+		var facade_cfg: Dictionary = cfg.get("facade", {})
+		if facade_cfg.has("eave_rgb"):
+			var rgb: Variant = facade_cfg.eave_rgb
+			var valid: bool = rgb is Array and (rgb as Array).size() == 3
+			if valid:
+				for channel: Variant in rgb:
+					valid = valid and (channel is float or channel is int) and float(channel) >= 0.0 and float(channel) <= 1.0
+			if valid:
+				eave = PARTS._material(Color(float(rgb[0]), float(rgb[1]), float(rgb[2])), 0.8)
+			else:
+				root.set_meta("build_valid",false)
+				push_error("Invalid facade.eave_rgb: %s %s" % [cfg.target.source_key, rgb])
 		for edge: Array in shallow.eaves:
-			PARTS._beam(root, vec(edge[0]), vec(edge[1]), 0.20, 0.12, trim)
+			PARTS._beam(root, vec(edge[0]), vec(edge[1]), 0.20, 0.12, eave)
 	elif str(cfg.get("roof_kind","")) == "shallow_hip":
 		_hip_roof(root,wall,cfg,roofing,trim)
 	elif not bool(cfg.get("retain_production_roof",false)):
