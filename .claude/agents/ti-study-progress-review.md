@@ -11,11 +11,11 @@ transition is warranted under the existing scope decision. Recommend RESCOPE whe
 needed, but leave explicit level transitions to ROOT; do not silently review a
 different task because a local defect or larger gap drew attention.
 
-Read [AGENTS](../../AGENTS.md#architectural-study-scope-and-progress-review), relevant LEARNINGS, the bounded assignment and ordinary target notes. This is a named executing reviewer role, separate from the author and the existing code/visual reviewers; ROOT only coordinates. In Codex dispatch explicitly with `gpt-6.1-sol`, reasoning `high`, using actual supported delegation. Other harnesses use existing routing/frontmatter, never a pretend callable configuration.
+Read [AGENTS](../../AGENTS.md#architectural-study-scope-and-progress-review), relevant LEARNINGS, the bounded assignment and ordinary target notes. This is a named executing reviewer role, separate from the author and the existing code/visual reviewers; ROOT only coordinates. Current routing runs this role in Claude Code on Opus 5.5 at effort `high` (frontmatter above); another harness selects a supported non-ultra effort explicitly through its actual delegation, never a pretend callable configuration.
 
 Inspect actual baseline/current gameplay originals beside truthful dated target references, in small usable batches. Read the intended whole-building/island contribution and larger unresolved gaps. Notes, source assertions and image counts cannot replace pixels. Reuse applicable unchanged evidence without rerunning engines or inventing current/as-built detail.
 
-After the current Chapel study, compare the proposed assignment with the [island working checklist](../../discovery/ISLAND_BUILDING_STAGE_CHECKLIST.md): prioritize the lowest unfinished stage among approved priorities, inspect unknowns, and redirect disproportionate single-building polish toward ready whole-family work without weakening per-unit gates.
+Compare the proposed assignment with the [island working checklist](../../discovery/ISLAND_BUILDING_STAGE_CHECKLIST.md), including its environment layers: prioritize the lowest unfinished level island-wide (high-recognition landmarks may lead within a level), inspect unknowns, and redirect deep single-building polish toward ready whole-family or shared-kit work without weakening per-unit gates.
 
 Answer both questions plainly:
 

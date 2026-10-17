@@ -14,14 +14,17 @@ to remodel or revoke credit. Simple generated massing, a historical recognition
 credit, a scoped facade PASS or a source adapter alone does not complete a stage.
 C does not imply as-built fidelity, survey precision or unseen-side observation.
 
-Finish the current Chapel family first. Then, among approved landmarks/audited
-priorities, choose the lowest unfinished stage island-wide: basic shape/site fit;
+Owner goal (2026-10-17): a recognizable, believable Treasure Island at modern
+AAA video-game quality, [breadth first](../AGENTS.md#zoom-in-authoring-pattern).
+Choose the lowest unfinished level island-wide, across these building rows and the
+[island environment layers](#island-environment-layers): basic shape/site fit;
 complete doors/windows/roof; secondary architecture; PBR/textures/materials;
-decals/finish. Inspect U before scheduling it; do not blindly treat U as I. Group
-reference-supported compatible instances into bounded shared-family batches,
-retaining per-building fit and independent all-side review. Do not keep polishing
-one building while major architectural families elsewhere remain incomplete.
-Update affected rows in the ordinary study handoff after actual evidence changes.
+decals/finish. High-recognition landmarks may lead within a level. Inspect U
+before scheduling it; do not blindly treat U as I. Group reference-supported
+compatible instances into bounded shared-kit/family batches, retaining per-building
+fit and independent all-side review. Do not keep polishing one building while
+earlier levels elsewhere remain unfinished. Each delivery updates its own rows in
+the same commit after actual evidence changes.
 
 Initial baseline stage1:5 C /0 I /208 U; stage2:5 C /2 I /206 U. After Chapel/B2 closure
 and B3 evidence reconciliation: stage1:8 C /0 I /205 U; stage2:8 C /0 I /205 U.
@@ -54,6 +57,7 @@ four-side fits. L2 remains U: roof/front and1212 end are repaired, but rear and
 opposite-end opening completeness is unresolved. Blank gameplay walls are not
 reference-verified absence; no concrete observed missing motif establishes I.
 The Mariner roof/envelope study was published in c553e9f; their L3/L4/L5 remain U.
+Their L2 is now C under **Mar17** below.
 **S48** Station48 whole-building study003, 2026-10-10: scoped architectural
 VISUAL PASS (station48_final_visual_fresh), distinct PROGRESS PASS
 (station48_final_progress_fresh), CODE PASS, mechanics002 terminal0 native/four
@@ -159,11 +163,32 @@ world validation/determinism; owned/global engine absence17b417 establishes
 release. ROOT accepts these bounded L1 gates. Only both L1 become C; historical
 accepted claims and49 credits remain unchanged. See [1236 D6](facades/d6_reference_packets/w96215668_1236_northpoint_drive.md)
 and [1240 D7](facades/d7_reference_packets/w96215688_1240_northpoint_drive.md).
-Current totals after Building461 closure below: L1:21 C/192 U; L2:8 C/205 U; L3/L5:213 U each;
+Totals after Building461 closure below (before Building 1 and Mar17): L1:21 C/192 U; L2:8 C/205 U; L3/L5:213 U each;
 L4:1 C/212 U. Overall30 C/1,035 U across213 units/1,065 cells.
 Next: inspect the next compatible unknown whole-family L1 envelope/site against
 current originals and dated references before assigning art; U establishes no
 defect. Continue major architecture/site coverage rather than current-pair polish.
+**Mar17** Mariner/Bayside recovery deliveries, 2026-10-17, reconciled from the
+delivery commits' RETRO verdicts and ordinary task notes. Each target has an
+independent Level 2 architecture verdict, a current integrated visual PASS with
+matched-island no-regression, current native/four stock approaches/changed
+rear-or-end spray with REST/SAFE, and a full suite exit 0. Rear/end schedules,
+pitch and dimensions remain production inference; materials/site, as-built and
+recognition stay open, and the catalog is unchanged. 1212/1219 `b2acc5a`: L2
+PASS / all-side L2 PASS (mariner1212-1219-integrated001; suite 65959). 1210
+`5172811`: L1/L2 PASS (mariner1210-integrated001; suite 52226). 1206/1208
+`cdcd7c3`: L1/L2 PASS, 1206 repaired roof002 (mariner1206-1208-integrated001;
+suite 71336). 1221 `23b2e5a`: L1 / all-side L2 PASS (mariner1221-integrated001;
+suite 77792). 1220 `a078c63`: L1/L2 from the bounded whole-exterior Level 2 PASS
+on whole-exterior study002 with native fit (housing1202-1220-integrated001; suite
+53818). Rows left U for lack of an explicit stage verdict: 1202 `a078c63`
+(scoped Level 2 PASS only; the study002 review states it is not whole L2);
+1222/1238/1201 `b9b51dc` (scoped rear/low-roof PASS, all-side L2 open, stage
+counts left unchanged by that delivery); w34313564 `1438e22` (scoped SSE Level 2
+only). 1204/1223 are still in review and unchanged.
+Current totals after Mar17: L1:27 C/186 U; L2:16 C/197 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall44 C/0 I/1,021 U across213 units/1,065 cells;49 historical
+recognition credits unchanged.
 **U** no current stage-level conclusion established in this checklist pass.
 
 The retained34-building audit entries in [RETRO](RETRO_LOG.md) (2026-09-23,
@@ -172,13 +197,12 @@ substantial-rework and reference/view limits. Their private34-card artifact was
 not recovered by the earlier bounded local search; this checklist does not invent
 its per-building ranking or treat every accepted unit as an audited priority.
 
-The owner-approved operating plan is an eight-hour whole-island push toward
-Level 2 (sound shape/site fit plus complete doors/windows/roof), with Chapel first
-and bounded whole-family work at the lowest unfinished stage thereafter. Use all
-1,065 checkboxes across the 213 units to record evidence-backed progress; the
-window does not guarantee completion of every unit or relax any existing gate.
-Follow [canonical routing](../AGENTS.md#bounded-subagent-execution): Astra Low
-modeling and independent Sol High reviews. Preserve all 49 historical credits.
+The 2026-10-10 eight-hour Level 2 push (Chapel first, then whole families) is
+superseded by the 2026-10-17 breadth-first AAA goal above. Use all 1,065 building
+checkboxes and the environment-layer rows to record evidence-backed progress; the
+goal does not relax any existing gate. Follow [canonical routing](../AGENTS.md#bounded-subagent-execution):
+every role on Opus 5.5 in Claude Code, modeling at `max` and reviews at `high`.
+Preserve all 49 historical credits.
 Candidate reuse clusters already named in the catalog include Mariner,
 Northpoint, Bayside and Gateview; compare actual roofs/openings/site support before
 combining variants. Adapter names do not establish stage completion.
@@ -217,7 +241,7 @@ before selecting another round.
 | physical-building:w34313557 / w34313557 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313558 / w34313558 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313560 / w34313560 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w34313564 / w34313564 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w34313564 / w34313564 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — `1438e22` scoped SSE L2 facade PASS; all-side and whole-building open |
 | physical-building:w34313569 / w34313569 | Bldg 461 | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | B461 — scoped envelope/site complete; missing north and unknown rear keep whole quality open |
 | physical-building:w95934092 / w95934092 | 1318 Gateview Avenue | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w95934093 / w95934093 | 1432 Halibut Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -265,9 +289,9 @@ before selecting another round.
 | physical-building:w96215645 / w96215645 | 1122 Reeves Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215646 / w96215646 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215648 / w96215648 | 1316 Gateview Avenue | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96215649 / w96215649 | 1212 Mariner Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar — L1 envelope/site complete; roof/front/1212 end repaired; rear/opposite-end opening completeness unresolved (L2 U); scoped gates/suite PASS |
-| physical-building:w96215651 / w96215651 | 1202 Mariner Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96215652 / w96215652 | 1220 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215649 / w96215649 | 1212 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar/Mar17 `b2acc5a` — L1 retained; rear L2 PASS completes L2; integrated visual/native/fit/spray/suite PASS; materials/site open |
+| physical-building:w96215651 / w96215651 | 1202 Mariner Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — `a078c63` scoped L2 PASS only (not whole L2); integrated visual/native/fit/spray/suite PASS; stage verdict needed |
+| physical-building:w96215652 / w96215652 | 1220 Bayside Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17 `a078c63` — bounded whole-exterior L2 PASS (study002 roof pitch); integrated visual/native/fit/spray/suite PASS; materials/site open |
 | physical-building:w96215653 / w96215653 | 1227 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP2 — L1 frontage lawn/composition; retained whole shape; scoped visual/CODE/progress/native/fit/spray/suite PASS; L2–5 unknown |
 | physical-building:w96215655 / w96215655 | 1312 Gateview Avenue | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215656 / w96215656 | 1224 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -275,27 +299,27 @@ before selecting another round.
 | physical-building:w96215658 / w96215658 | 1239 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP2 — L1 joined shallow-gable whole roof; scoped visual/CODE/progress/native/fit/spray/suite PASS; L2–5 unknown |
 | physical-building:w96215659 / w96215659 | 1234 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP3 — scoped shape/site complete; unseen openings/whole-quality unknown |
 | physical-building:w96215660 / w96215660 | 1225 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP3 — scoped shape/site complete; unseen openings/whole-quality unknown |
-| physical-building:w96215661 / w96215661 | 1222 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215661 / w96215661 | 1222 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — `b9b51dc` scoped rear/low-roof PASS; all-side L2 and stage credit open |
 | physical-building:w96215662 / w96215662 | 1139 Ozbourn Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215666 / w96215666 | 1215 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215667 / w96215667 | 1248/1395 Gateview Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215668 / w96215668 | 1236 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP4 — L1 connected frontage lawn/footway/parking; retained boarded architecture; scoped visual/CODE/native/fit/spray/suite002 PASS; L2–5 unknown |
-| physical-building:w96215669 / w96215669 | 1238 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215669 / w96215669 | 1238 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — `b9b51dc` scoped rear/low-roof PASS; all-side L2 and stage credit open |
 | physical-building:w96215670 / w96215670 | 1246/1397 Gateview Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215671 / w96215671 | 1244 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96215672 / w96215672 | 1201 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215672 / w96215672 | 1201 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — `b9b51dc` scoped rear/low-roof PASS; all-side L2 and stage credit open |
 | physical-building:w96215673 / w96215673 | 1232 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP — L1 envelope/site closure; scoped visual/CODE/progress/native/fit/spray/suite PASS; all-side L2 unknown |
 | physical-building:w96215674 / w96215674 | 1241 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215676 / w96215676 | 1143 Ozbourn Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96215677 / w96215677 | 1206 Mariner Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215677 / w96215677 | 1206 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17 `cdcd7c3` — L1/L2 PASS incl. repaired roof002; integrated visual/native/fit/rear+end spray/suite PASS; materials/site open |
 | physical-building:w96215678 / w96215678 | 1205 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96215680 / w96215680 | 1219 Mariner Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar — L1 envelope/site complete; roof/front/1212 end repaired; rear/opposite-end opening completeness unresolved (L2 U); scoped gates/suite PASS |
-| physical-building:w96215682 / w96215682 | 1221 Mariner Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215680 / w96215680 | 1219 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar/Mar17 `b2acc5a` — L1 retained; all-side L2 PASS; integrated visual/native/fit/spray/suite PASS; materials/site open |
+| physical-building:w96215682 / w96215682 | 1221 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17 `23b2e5a` — L1/all-side L2 whole-depth roof/rear PASS; integrated visual/native/fit/spray/suite PASS; materials/site open |
 | physical-building:w96215685 / w96215685 | 1226 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215688 / w96215688 | 1240 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP4 — L1 joined shallow whole roof and corrected front/north lawn; scoped visual/CODE/native/fit/spray/suite002 PASS; L2–5 unknown |
 | physical-building:w96215690 / w96215690 | 1141 Ozbourn Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215691 / w96215691 | 1204 Mariner Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96215693 / w96215693 | 1208 Mariner Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215693 / w96215693 | 1208 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17 `cdcd7c3` — L1/L2 PASS; integrated visual/native/fit/rear+end spray/suite PASS; materials/site open |
 | physical-building:w96215694 / w96215694 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215698 / w96215698 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665883 / w96665883 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -306,7 +330,7 @@ before selecting another round.
 | physical-building:w96665889 / w96665889 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665890 / w96665890 | 1111 Keppler Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665892 / w96665892 | 1137 Mason Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96665893 / w96665893 | 1210 Mariner Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96665893 / w96665893 | 1210 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17 `5172811` — L1/L2 rear/terminal PASS; integrated visual/native/fit/spray/suite PASS; materials/site open |
 | physical-building:w96665897 / w96665897 | 1112 Hutchins Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665899 / w96665899 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665900 / w96665900 | 1442 Chinook Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -431,5 +455,21 @@ March/November2025 refs and unknown-date Apple context support the scoped envelo
 and observed architecture; missing north capture/unknown rear/schematic materials
 keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
 See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
-Current total **30 C /0 I /1035 U** across213 units/1065 cells;
+Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar17 for current totals);
 **L1:21 C /0 I /192 U**. All other stages unchanged;49 historical credits retained.
+
+## Island environment layers
+
+These layers dominate the look at gameplay distance, so the same five levels
+apply to them, read by analogy: 1 basic shape/layout and fit; 2 major features;
+3 secondary detail; 4 PBR/materials; 5 decals/finish. Every cell stays U until
+a study progress review inspects current gameplay originals and references for
+that layer. Vegetation stays deferred to the future vegetation pass. These 20
+cells are separate from the 1,065 building cells.
+
+| Layer | 1 Shape/layout | 2 Major features | 3 Secondary | 4 PBR/materials | 5 Decals/finish | Evidence / next |
+|---|---|---|---|---|---|---|
+| Terrain and ground surfaces | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| Roads and paths | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| Shoreline and water | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| Lighting, sky and atmosphere | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |

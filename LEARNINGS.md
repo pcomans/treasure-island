@@ -2,7 +2,7 @@
 
 Keep this a short, living guide to mistakes worth preventing. Update an applicable lesson when new evidence changes it; preserve uncertainty and useful gains. Routine execution history belongs in `discovery/RETRO_LOG.md`.
 
-Retain the current owner-authorized [routing](AGENTS.md#bounded-subagent-execution): since 2026-10-10, general modeling uses direct named Codex GPT Astra (`gpt-6-astra`) Low art owners; independent reviews use GPT-6.1 Sol High. This replaces the former Claude default and is not only a Chapel/Mersea/Building2 exception. Keep root orchestration, explicit non-ultra dispatch, separate reviewers and existing gates. Do not mistake retained Claude role frontmatter for current GPT routing. Earlier model choices and comparisons below are historical evidence, not a universal quality/cost/speed claim.
+Retain the current owner-authorized [routing](AGENTS.md#bounded-subagent-execution): since 2026-10-17, every role runs in Claude Code on Opus 5.5, `ti-implementation` at effort `max` and every other role, reviewers included, at `high`, set by each role file's frontmatter. This supersedes the 2026-10-10 Codex Astra Low modeling / Sol High review routing. Keep root orchestration, explicit non-ultra dispatch, separate reviewers and existing gates. Earlier model choices and comparisons below are historical evidence, not a universal quality/cost/speed claim.
 
 ## Do not promote one facade's finish to whole-building quality
 
@@ -649,3 +649,7 @@ The w34313564 integration reused Building1 candidate005 island images after chec
 ## Retain the maintained engine invocation through shutdown
 
 Housing61 recovery printed complete native/fit/recess/spray PASS but stalled after its final line when launched without the suite's `--audio-driver Dummy`; the owned process required TERM and returned143. One unchanged-source run with Dummy exited0. A later69 capture also stalled with Dummy, so the audio setting is not a demonstrated cure and the shutdown cause remains unknown. Reuse the complete suite-supported invocation without attributing the stall to audio. Keep a saved PNG/body PASS separate from process completion, preserve the failed run, and verify terminal status and PID absence before starting another engine.
+
+## Update checklist rows in the delivery that earns them
+
+On 2026-10-17 the stage checklist still showed U or stale L2 for seven Mariner/Bayside units (1206, 1208, 1210, 1212, 1219, 1220, 1221) after five recovery deliveries (`a078c63`, `23b2e5a`, `b2acc5a`, `5172811`, `cdcd7c3`) whose independent reviews recorded explicit L1/L2 PASS; the running totals had also stopped at Building461. Author tasks correctly excluded checklist edits, but no delivery step picked them up, so the next level choice read stale rows. When a delivery's verdicts change a stage, the integrating executor updates those rows, cites the commit and adjusts the totals in the same commit. Leave a cell U when the verdict is only scoped, and say why in the row.

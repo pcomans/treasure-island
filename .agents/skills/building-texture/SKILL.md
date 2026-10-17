@@ -7,7 +7,7 @@ description: Author reference-grounded Godot building art with a mandatory exist
 
 Before authoring any new building, compare it with existing assets and reuse a suitable shared base. Build reference-grounded geometry and facade art within the assignment; apply the texture guidance only to applicable surfaces.
 
-Current owner routing (2026-10-10): named Codex art owners model with `gpt-6-astra` / `low`; independent reviewers use `gpt-6.1-sol` / `high`. Follow [canonical routing](../../../AGENTS.md#bounded-subagent-execution); do not invoke Claude for current modeling. This general override is not limited to one building.
+Current owner routing (2026-10-17): every role runs in Claude Code on Opus 5.5; modeling (`ti-implementation`) at effort `max`, independent reviewers and other roles at `high`. Codex generates textures through `tools/generate-texture`. Follow [canonical routing](../../../AGENTS.md#bounded-subagent-execution).
 
 ## Mandatory root boundary
 
@@ -50,7 +50,7 @@ Record the choice in about one line of the ordinary assignment or handoff: base/
 
 ## Architectural scope before detail iterations
 
-Follow the owner-approved [eight-hour whole-island Level 2 push](../../../AGENTS.md#zoom-in-authoring-pattern). Finish the current Chapel study first; then use the [island working checklist](../../../discovery/ISLAND_BUILDING_STAGE_CHECKLIST.md) to choose the lowest unfinished stage among approved landmark/audited priorities. Inspect unknowns before modeling, and favor bounded shared-family batches over disproportionate polish on one building. Preserve per-unit evidence and gates; catalog identity/credit remains canonical.
+Follow the owner's [modern AAA quality goal, breadth first](../../../AGENTS.md#zoom-in-authoring-pattern): use the [island working checklist](../../../discovery/ISLAND_BUILDING_STAGE_CHECKLIST.md) to choose the lowest unfinished level island-wide; high-recognition landmarks may lead within a level. Inspect unknowns before modeling, and reach breadth through shared kits and families with instance variants rather than deep polish on one building. Preserve per-unit evidence and gates; catalog identity/credit remains canonical.
 
 Apply the [shared active zoom-level contract](../../../AGENTS.md#shared-active-zoom-level):
 author, reviewer and coordinator carry the same declared level from the ordinary

@@ -6,7 +6,7 @@ The imported [project agreement](AGENTS.md) is the shared authority. The primary
 
 ## Persisted entrypoints
 
-Subagent dispatch follows [AGENTS.md](AGENTS.md#bounded-subagent-execution): the general owner override of 2026-10-10 selects direct named Codex art owners using `gpt-6-astra` / `low` for modeling and independent `gpt-6.1-sol` / `high` reviewers. Coordination/documentation and other execution roles remain Astra Medium unless assigned otherwise. Select non-ultra effort explicitly; root remains orchestrator-only. Use `tools/generate-texture` for generated textures. These reusable role instructions do not require launching Claude: retained Claude frontmatter describes only its historical/optional client adapter, not the current modeling route.
+Subagent dispatch follows [AGENTS.md](AGENTS.md#bounded-subagent-execution): under the owner's 2026-10-17 routing every role runs in Claude Code on Opus 5.5 (`claude-opus-5-5`), `ti-implementation` at effort `max` and every other role, reviewers included, at `high`. Each role file's frontmatter sets that selection; never use `ultra`, and root remains orchestrator-only. Keep reviewers independent of the author. Codex generates textures through `tools/generate-texture`. The 2026-10-10 Astra Low / Sol High Codex routing is superseded.
 
 | Role prompt | When used |
 |---|---|
@@ -34,11 +34,11 @@ Apply [all-side exterior coverage](AGENTS.md#whole-building-exterior-coverage) t
 
 ### Between-study scope and progress decision
 
-Execute the owner-approved [eight-hour whole-island Level 2 push](AGENTS.md#zoom-in-authoring-pattern). After finishing the current Chapel study, use the [island working checklist](discovery/ISLAND_BUILDING_STAGE_CHECKLIST.md) and canonical zoom order to choose the lowest unfinished stage across approved priorities, inspecting unknowns before assignment and batching compatible whole families. Historical credit and all per-building gates remain intact.
+Pursue the owner's [modern AAA quality goal breadth first](AGENTS.md#zoom-in-authoring-pattern). Use the [island working checklist](discovery/ISLAND_BUILDING_STAGE_CHECKLIST.md), including its environment layers, and the canonical zoom order to choose the lowest unfinished level island-wide; high-recognition landmarks may lead within a level. Inspect unknowns before assignment and batch compatible whole families on shared kits. Historical credit and all per-building gates remain intact.
 
-Apply [AGENTS' mandatory boundary](AGENTS.md#architectural-study-scope-and-progress-review) before every next architectural study or promotion, including pending studies and isolated assemblies. Dispatch a named `ti-study-progress-review` executor through the client's actual supported delegation tools, independent of the author and existing code/visual reviewers. For current independent review explicitly select `gpt-6.1-sol` / `high` in Codex; retained Claude frontmatter is only a historical/optional client adapter. A role file is instructions, not a fabricated callable agent. Reuse a free suitable actor; do not interrupt or duplicate a live review.
+Apply [AGENTS' mandatory boundary](AGENTS.md#architectural-study-scope-and-progress-review) before every next architectural study or promotion, including pending studies and isolated assemblies. Dispatch a named `ti-study-progress-review` executor through the client's actual supported delegation tools, independent of the author and existing code/visual reviewers. In Claude Code its frontmatter selects Opus 5.5 / `high`. A role file is instructions, not a fabricated callable agent. Reuse a free suitable actor; do not interrupt or duplicate a live review.
 
-Use the canonical [zoom-in authoring pattern](AGENTS.md#zoom-in-authoring-pattern) when assigning scope. Supply the whole completion objective, intended architectural section/family contribution, actual baseline/current gameplay originals, truthful dated references and unresolved larger gaps. Consume PASS / RESCOPE / REWORK before issuing next-study GO. Failed scope/progress means corrected scope or rework, not another detail-only study because checks passed. Use ordinary handoffs/RETRO, no extra packet or metrics. The existing capture drivers already provide the relevant views; no runtime driver change is required. Review may proceed from saved pixels while other independent gates run, and cannot replace or weaken them. ROOT also owns the canonical first complete post-push cycle and personally judges matched before/after gameplay plus references against the modern video-game quality bar; a reviewer/check PASS does not oblige ROOT to advance insufficient work. Execution remains delegated.
+Use the canonical [zoom-in authoring pattern](AGENTS.md#zoom-in-authoring-pattern) when assigning scope. Supply the whole completion objective, intended architectural section/family contribution, actual baseline/current gameplay originals, truthful dated references and unresolved larger gaps. Consume PASS / RESCOPE / REWORK before issuing next-study GO. Failed scope/progress means corrected scope or rework, not another detail-only study because checks passed. Use ordinary handoffs/RETRO, no extra packet or metrics. The existing capture drivers already provide the relevant views; no runtime driver change is required. Review may proceed from saved pixels while other independent gates run, and cannot replace or weaken them. ROOT also owns the canonical first complete post-push cycle and personally judges matched before/after gameplay plus references against the modern AAA video-game quality goal; a reviewer/check PASS does not oblige ROOT to advance insufficient work. Execution remains delegated.
 
 At dispatch and every follow-up, carry the [shared active zoom level](AGENTS.md#shared-active-zoom-level)
 from the ordinary task note into both author and reviewer prompts. ROOT, author
@@ -53,9 +53,9 @@ waiting for another owner “Continue.” Existing gates and decision boundaries
 
 ### Codex CLI delegated visual reviews
 
-For an authorized standalone review, launch a **persistent review orchestrator**: omit `--ephemeral`. Codex child delegation needs the parent's saved thread/rollout context. The CLI root still only coordinates; naming it a reviewer does not make it an executing subagent.
+Optional since the 2026-10-17 routing, which runs visual review on Opus in Claude Code; use this only when an assignment explicitly selects Codex review. For an authorized standalone review, launch a **persistent review orchestrator**: omit `--ephemeral`. Codex child delegation needs the parent's saved thread/rollout context. The CLI root still only coordinates; naming it a reviewer does not make it an executing subagent.
 
-Use the installed CLI's supported arguments, current AGENTS routing and an environment-authorized sandbox. For example, with a private bounded prompt already written by an executor:
+Use the installed CLI's supported arguments, the assignment's explicit Codex model/effort and an environment-authorized sandbox. For example, with a private bounded prompt already written by an executor:
 
 ```bash
 codex exec -m gpt-6.1-sol -c 'model_reasoning_effort="high"' \
@@ -69,9 +69,9 @@ Verify the actual spawn result and child identity, not an orchestrator's stateme
 
 ### Scoped file permissions for direct Claude Code dispatch
 
-When an assignment explicitly uses Claude Code, its named executor must configure
-permissions before launching the author. The project currently uses direct CLI
-invocations, not a reusable launcher. Role instructions describe scope; they do
+When an assignment launches an author through a direct Claude Code CLI invocation,
+its named executor must configure permissions before launching it. There is no
+reusable launcher. Role instructions describe scope; they do
 not grant tool permissions. Keep the assignment's model/effort and protected paths.
 
 For CLI file scopes, use `Edit(//absolute/path)`: the extra leading slash makes
