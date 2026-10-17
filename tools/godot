@@ -40,9 +40,13 @@ weston --backend=headless --renderer=gl --socket="${WAYLAND_DISPLAY}" \
   --width=1920 --height=1080 >"${weston_log}" 2>&1 &
 weston_pid=$!
 godot_pid=""
+monitor_pid=""
 cleanup() {
-  [ -n "${godot_pid}" ] && kill "${godot_pid}" 2>/dev/null
-  kill "${weston_pid}" 2>/dev/null
+  # Under set -e a failed kill here (a process already gone, e.g. Weston closed
+  # by release_wayland_exit_hang) would replace the exit status with 1.
+  [ -z "${monitor_pid}" ] || kill "${monitor_pid}" 2>/dev/null || true
+  [ -z "${godot_pid}" ] || kill "${godot_pid}" 2>/dev/null || true
+  kill "${weston_pid}" 2>/dev/null || true
   rm -f "${weston_log}"
 }
 trap cleanup EXIT
@@ -62,9 +66,58 @@ export LIBDECOR_PLUGIN_DIR="${LIBDECOR_PLUGIN_DIR:-/nonexistent}"
 extra=()
 has_flag --display-driver || extra+=(--display-driver wayland)
 has_flag --rendering-driver || extra+=(--rendering-driver vulkan)
+# Godot 4.7.2 can hang at exit on Wayland. WaylandThread::destroy() sets
+# thread_done, does one roundtrip and joins the "Wayland Events" thread, but that
+# thread checks thread_done only after its poll(-1) returns (wayland_thread.cpp,
+# _poll_events_thread). If the main thread reads the roundtrip reply itself, the
+# events thread goes back into poll and the main thread waits in pthread_join
+# forever: this headless Weston never sends anything to wake it.
+# Only in that exact state (the events thread in poll, and the main thread in a
+# futex wait on an address inside the events thread's own stack mapping, where
+# glibc keeps the thread descriptor that pthread_join waits on), three samples in
+# a row, close our private Weston: poll returns HUP, the thread exits and Godot
+# finishes its normal shutdown with its own exit status.
+release_wayland_exit_hang() {
+  set +eu
+  local pid=$1 events="" task hits=0 main_nr uaddr ev_nr ev_sp
+  mapping_of() {
+    local lo hi rest
+    while IFS='- ' read -r lo hi rest; do
+      if (( $1 >= 0x${lo} && $1 < 0x${hi} )); then echo "${lo}"; return; fi
+    done < "/proc/${pid}/maps"
+  }
+  while kill -0 "${pid}" 2>/dev/null; do
+    sleep 2
+    if [ -z "${events}" ]; then
+      for task in /proc/"${pid}"/task/*; do
+        [ "$(cat "${task}/comm" 2>/dev/null)" = "Wayland Events" ] && events="${task##*/}"
+      done
+      continue
+    fi
+    # /proc/<tid>/syscall: number, six arguments, stack pointer, program counter.
+    read -r main_nr uaddr _ < "/proc/${pid}/task/${pid}/syscall" 2>/dev/null
+    read -r ev_nr _ _ _ _ _ _ ev_sp _ < "/proc/${pid}/task/${events}/syscall" 2>/dev/null
+    if [ "${main_nr}" = 202 ] && { [ "${ev_nr}" = 7 ] || [ "${ev_nr}" = 271 ]; } \
+      && [ -n "$(mapping_of "${uaddr}")" ] && [ "$(mapping_of "${uaddr}")" = "$(mapping_of "${ev_sp}")" ]; then
+      hits=$((hits + 1))
+    else
+      hits=0
+    fi
+    if [ "${hits}" -ge 3 ]; then
+      echo "NOTE: tools/godot: Godot hung joining its Wayland events thread at exit; closing the private Weston so shutdown can finish" >&2
+      kill "${weston_pid}" 2>/dev/null
+      return
+    fi
+  done
+}
 "${bin}" "${extra[@]}" "$@" &
 godot_pid=$!
+release_wayland_exit_hang "${godot_pid}" &
+monitor_pid=$!
 status=0
 wait "${godot_pid}" || status=$?
 godot_pid=""
+# The monitor may already have returned after a release.
+kill "${monitor_pid}" 2>/dev/null || true
+monitor_pid=""
 exit "${status}"
