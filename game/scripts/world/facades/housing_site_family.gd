@@ -43,9 +43,21 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 	# listed source runs emit no wall. Unset keys keep the source ring as-is.
 	if cfg.has("virtual_wall_runs"):
 		vertices = vertices.duplicate()
-		for run: Array in cfg.virtual_wall_runs: vertices.append_array(run)
+		for run: Array in cfg.virtual_wall_runs:
+			# A short or long run would shift every later run index.
+			if run.size() != 12:
+				root.set_meta("build_valid",false)
+				push_error("Invalid virtual wall run size: %s %s" % [cfg.target.source_key,run.size()])
+				continue
+			vertices.append_array(run)
 	var skip_wall_runs: Dictionary = {}
 	for run in cfg.get("skip_wall_runs", []): skip_wall_runs[int(run)] = true
+	# A skipped run builds no wall, so no frame may cut openings in it.
+	for frame: Dictionary in cfg.target.frames + cfg.get("rear_frames", []):
+		for run in frame.get("runs", []):
+			if skip_wall_runs.has(int(run)):
+				root.set_meta("build_valid",false)
+				push_error("Frame uses a skipped wall run: %s %s %s" % [cfg.target.source_key,frame.id,run])
 	var recess: Dictionary = cfg.get("lower_frontage_recess", {})
 	var rear_recess: Dictionary = cfg.get("lower_rear_recess", {})
 	var rear_recess_runs: Dictionary = {}
