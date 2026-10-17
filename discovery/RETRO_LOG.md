@@ -20297,3 +20297,26 @@ Next: model complete reference-supported rear/roof families only within newly ex
 - What worked well: inspected all13 current originals, March2025 front/end references, undated layout, decisive retained study001 west-rear match and five matched LOCALb2 island baselines; scoped Level2 rear/terminal architecture PASS and island no-visible-regression PASS. Review ID mariner1210-integrated001-20261017:w96665893:shared_zoom_review_sol.
 - What did not work well: default sides borrow foreground-neighbor occlusion, while avatar hides parts of lower terminal windows; complementary focused/raised views establish target coverage. Real rear/end schedules remain production inference, with no new as-built, material/site, recognition or shipped-main credit.
 - What the team should change next time: retain complete terminal-focused views, compare against the validated full local parent world, reuse unchanged historical evidence, and append this concise retrospective before notifying final PASS.
+
+### independent_checkpoint_sol — 2026-10-17 — final authorized 1206/1208 local recovery CODE
+
+- Worked: actual two-JSON recovery matches final fa790fa, including repaired 1206 roof002; current producer/attachment match that reviewed revision. Changed fields are only released rear/end frames plus 1206 roof/study notes; front, site, materials, source/protection and 1208 hip remain unchanged.
+- Did not work: historical 1206 study001 was a roof HOLD, so its pixels cannot represent the recovered final; use repair0021206 alongside final study0011208. Current runtime/visual/suite results are still pending, and the parent remains local/unpushed.
+- Next time: retain final repair provenance at first handoff and append these three bullets before PASS. Reuse maintained housing-get-faces and unchanged front/site routes; refresh roof/native, approaches and changed rear/end spray. This is the second and last authorized additional recovery; no automatic third.
+
+## 2026-10-17 — building1_texture_environment: final bounded1206/1208 local recovery
+
+- Worked: exactfa790fa twoJSON recovery preserves newerlocalworld and allprotectedfront/site/material fields; independentCODE confirms repaired1206roof and unchanged1208hip/sharedproducer. Complete retainedfocusedviews and wholeLOCAL517runtime-parity baseline avoid new art or duplicate control capture.
+- Did not work: earlier1206study001 roofHOLD is still adjacent to finalrepair002 evidence; choosing a generic latestfolder or copying earliergeometry would resurrect the repaired terminalstrip defect. Exactfinalcommit and explicit final-review binding resolve that ambiguity.
+- Next time: recover the actual reviewed finalgeometry, refresh per-building native/fit/rear+endreceiver and actualvisual/fullsuite gates, labelthevalidatedstackLOCAL untilnormalpush, and stop after this SECOND/LAST authorizedrecovery rather than assuming an automaticthird. OwnRETRO precedesfinalnotification.
+
+### shared_zoom_review_sol — 1206/1208 integrated001 visual review, 2026-10-17
+- What worked well: inspected all23 current originals, both March2025 fronts, undated layout, decisive retained1206 repair002/1208 study001 matches and five matched LOCAL517 island pairs; each scoped Level2 rear/end architecture PASS,1206 repaired whole-roof PASS, island no-visible-regression PASS. Review IDs mariner1206-1208-integrated001-20261017:w96215677:shared_zoom_review_sol and mariner1206-1208-integrated001-20261017:w96215693:shared_zoom_review_sol.
+- What did not work well: default side/front views have neighbor/canopy occlusion; focused end/rear and clear-front views are necessary target evidence. Rear/end schedules and shallow pitch remain declared inference; simplified materials/site and broad modern/as-built/recognition fidelity stay open, without shipped-main credit from this LOCAL review.
+- What the team should change next time: preserve complete useful focus views, compare repaired final candidates rather than superseded HOLDs, retain matched full-parent island evidence, and write the three retrospective bullets before final PASS notification.
+
+### independent_checkpoint_sol — 2026-10-17 — last-pair progress closure
+
+- Worked: current two-JSON recovery has CODE PASS, all four native/approach/rear-end spray runs passed, and integrated full-suite71336 exited0/all49PASS. Independent visual note now records all23 originals plus dated fronts, retained repaired finals and five matched LOCAL517 island pairs: both scoped rear/end families and1206 roof PASS. These are substantive architecture recoveries, with no evidence of local finish churn.
+- Did not work: delivery remains separate from validated local architecture.1212/1219 b2 and1210 517 are local commits; the current pair is not yet committed or shipped at this checkpoint. Broader materials/site/as-built/recognition and whole-island modern quality remain open; no credit follows from these scoped results.
+- Next: CONTINUE exact last-pair local commit, then ONE normal credential-bridge/fresh-remote check and fast-forward push if available. Preserve validated parent and original failures; if delivery stays blocked report the transport boundary without art reruns, authentication workarounds or a third family. Literal three bullets precede this progress decision; no engine/model/new scope or goal-state change.
