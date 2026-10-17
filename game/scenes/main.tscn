@@ -6,13 +6,13 @@
 [ext_resource type="PackedScene" path="res://game/scenes/ui/hud.tscn" id="4_hud"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_daylight"]
-sky_top_color = Color(0.30, 0.47, 0.66, 1)
-sky_horizon_color = Color(0.72, 0.79, 0.83, 1)
-sky_curve = 0.25
+sky_top_color = Color(0.24, 0.44, 0.78, 1)
+sky_horizon_color = Color(0.72, 0.80, 0.88, 1)
+sky_curve = 0.09
 sky_energy_multiplier = 1.0
-ground_bottom_color = Color(0.18, 0.20, 0.17, 1)
-ground_horizon_color = Color(0.72, 0.79, 0.83, 1)
-ground_curve = 0.10
+ground_bottom_color = Color(0.40, 0.40, 0.37, 1)
+ground_horizon_color = Color(0.50, 0.68, 0.84, 1)
+ground_curve = 0.3
 ground_energy_multiplier = 1.0
 
 [sub_resource type="Sky" id="Sky_daylight"]
@@ -24,14 +24,15 @@ sky = SubResource("Sky_daylight")
 background_color = Color(0.46, 0.69, 0.86, 1)
 ambient_light_source = 3
 reflected_light_source = 2
-ambient_light_color = Color(0.71, 0.77, 0.82, 1)
-ambient_light_energy = 0.65
-ambient_light_sky_contribution = 1.0
+ambient_light_color = Color(0.64, 0.60, 0.53, 1)
+ambient_light_energy = 0.75
+ambient_light_sky_contribution = 0.45
 tonemap_mode = 2
 fog_enabled = true
-fog_light_color = Color(0.72, 0.79, 0.84, 1)
-fog_light_energy = 0.55
-fog_density = 0.00035
+fog_light_color = Color(0.72, 0.80, 0.88, 1)
+fog_light_energy = 0.85
+fog_density = 0.00012
+fog_sky_affect = 0.0
 fog_height = 0.0
 fog_height_density = 0.0
 
@@ -42,8 +43,11 @@ script = ExtResource("1_main")
 environment = SubResource("Environment_main")
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
-rotation_degrees = Vector3(-52, 152, 0)
+rotation_degrees = Vector3(-52, 28, 0)
+light_color = Color(1, 0.97, 0.92, 1)
+light_energy = 1.1
 shadow_enabled = true
+shadow_blur = 0.5
 directional_shadow_max_distance = 800.0
 
 [node name="WorldRoot" parent="." instance=ExtResource("2_world")]

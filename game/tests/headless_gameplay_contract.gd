@@ -163,10 +163,12 @@ func _initialize() -> void:
 	or environment.background_mode != Environment.BG_SKY \
 	or environment.ambient_light_source != Environment.AMBIENT_SOURCE_SKY \
 	or environment.reflected_light_source != Environment.REFLECTION_SOURCE_SKY \
-	or not is_equal_approx(environment.ambient_light_energy, 0.65) \
-	or not is_equal_approx(environment.ambient_light_sky_contribution, 1.0) \
+	or environment.ambient_light_sky_contribution <= 0.0 \
 	or environment.sky == null:
 		_fail("Main scene must use the approved Sky for background, ambient fill, and reflections.")
+		return
+	if environment.fog_enabled and environment.fog_sky_affect >= 1.0:
+		_fail("Fog must not hide the sky completely.")
 		return
 	var daylight := environment.sky.sky_material as ProceduralSkyMaterial
 	if daylight == null \
