@@ -209,8 +209,17 @@ PASS. Fit/native/routes, rear and end spray and both full suites exit 0. L1/L2 C
 for all three. Parked per row: 1243 canopy top colour (shared), NNE annex outside
 footprint, fences, boxes, vent pipes, post bands; 1244 slightly cool shade tone
 (L4), fences, boxes, vent pipes; 1245 step eave return (L3), fences, boxes.
-Current totals after Mar17d: L1:31 C/182 U; L2:21 C/192 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall53 C/0 I/1,012 U across213 units/1,065 cells;49 historical
+**Mar17e** Bayside/Gateview Level 2 batch, 2026-10-17: `20b5768` recovers the
+reviewed 1205 final and adds rear yard doors to 1226 and 1397 (CODE, visual and
+progress PASS; 1397's grounded 1/18 is a sill-probe artifact); `9dd2214` adds one
+front entry per unit on 1226 and 1397 and a planar 1226 rear pad (CODE and visual
+PASS). The visual reviewer confirms all three units are Level 2 complete on all
+sides. L2 C for 1205, 1226 and 1246/1397. L1 C from explicit earlier verdicts:
+1205's 2026-10-11 independent review and the 2026-10-11 branch whole-stage review
+`fc3c88f` for 1226 and 1397. 1203 Bayside (`a65e5c2`) is excluded: its config
+needs the unmerged producer change from `36a6152` (`threshold_bottom_y`).
+Current totals after Mar17e: L1:34 C/179 U; L2:24 C/189 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall59 C/0 I/1,006 U across213 units/1,065 cells;49 historical
 recognition credits unchanged.
 **U** no current stage-level conclusion established in this checklist pass.
 
@@ -328,17 +337,17 @@ before selecting another round.
 | physical-building:w96215667 / w96215667 | 1248/1395 Gateview Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215668 / w96215668 | 1236 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP4 — L1 connected frontage lawn/footway/parking; retained boarded architecture; scoped visual/CODE/native/fit/spray/suite002 PASS; L2–5 unknown |
 | physical-building:w96215669 / w96215669 | 1238 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — `b9b51dc` scoped rear/low-roof PASS; all-side L2 and stage credit open |
-| physical-building:w96215670 / w96215670 | 1246/1397 Gateview Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215670 / w96215670 | 1246/1397 Gateview Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17e `20b5768` + `9dd2214` — CODE, visual and progress PASS; front-access delta CODE and visual PASS; all-side L2 complete. L1 from the 2026-10-11 branch whole-stage review (`fc3c88f`) explicitly passing L1/L2. Parked: eave/rake overhangs, door hoods/lights, yard fences (L3); warm grey vs cool blue-grey and roof colour (L4) |
 | physical-building:w96215671 / w96215671 | 1244 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17d `b69fd3b` + cleanup `9d5df86` — CODE, visual L1/L2 and progress PASS (cleanup: CODE and visual PASS); fit/native/routes, rear+end spray and both full suites exit 0. Parked: slightly cool shade tone (L4), fences, boxes, vent pipes |
 | physical-building:w96215672 / w96215672 | 1201 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — `b9b51dc` scoped rear/low-roof PASS; all-side L2 and stage credit open |
 | physical-building:w96215673 / w96215673 | 1232 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP — L1 envelope/site closure; scoped visual/CODE/progress/native/fit/spray/suite PASS; all-side L2 unknown |
 | physical-building:w96215674 / w96215674 | 1241 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215676 / w96215676 | 1143 Ozbourn Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215677 / w96215677 | 1206 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17 `cdcd7c3` — L1/L2 PASS incl. repaired roof002; integrated visual/native/fit/rear+end spray/suite PASS; materials/site open |
-| physical-building:w96215678 / w96215678 | 1205 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215678 / w96215678 | 1205 Bayside Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17e `20b5768` + `9dd2214` — CODE, visual and progress PASS; front-access delta CODE and visual PASS; all-side L2 complete. L1 from the 2026-10-11 independent review's explicit L1 PASS. Parked: eave/rake overhangs, door hoods/lights, yard fences (L3), door pads (L3); roof colour (L4) |
 | physical-building:w96215680 / w96215680 | 1219 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar/Mar17 `b2acc5a` — L1 retained; all-side L2 PASS; integrated visual/native/fit/spray/suite PASS; materials/site open |
 | physical-building:w96215682 / w96215682 | 1221 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17 `23b2e5a` — L1/all-side L2 whole-depth roof/rear PASS; integrated visual/native/fit/spray/suite PASS; materials/site open |
-| physical-building:w96215685 / w96215685 | 1226 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215685 / w96215685 | 1226 Bayside Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17e `20b5768` + `9dd2214` — CODE, visual and progress PASS; front-access delta CODE and visual PASS; all-side L2 complete. L1 from the 2026-10-11 branch whole-stage review (`fc3c88f`) explicitly passing L1/L2. Parked: eave/rake overhangs, door hoods/lights, yard fences (L3); roof colour (L4) |
 | physical-building:w96215688 / w96215688 | 1240 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP4 — L1 joined shallow whole roof and corrected front/north lawn; scoped visual/CODE/native/fit/spray/suite002 PASS; L2–5 unknown |
 | physical-building:w96215690 / w96215690 | 1141 Ozbourn Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215691 / w96215691 | 1204 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17c rear-entrance rework `dcf1bca` — CODE, visual L2 and progress PASS; fit/native/14 routes, rear+end spray and full suite exit 0. L1 from the 2026-10-11 final review's explicit L1 PASS (massing unchanged by the rework). Parked: yard fences, door hoods and lights, eave line, roof colour, glazing finish, site |
@@ -478,7 +487,7 @@ March/November2025 refs and unknown-date Apple context support the scoped envelo
 and observed architecture; missing north capture/unknown rear/schematic materials
 keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
 See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
-Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar17d for current totals);
+Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar17e for current totals);
 **L1:21 C /0 I /192 U**. All other stages unchanged;49 historical credits retained.
 
 ## Island environment layers
