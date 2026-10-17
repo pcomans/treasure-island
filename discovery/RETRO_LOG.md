@@ -20718,3 +20718,21 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What the team should change next time:
   - Have `building_fit.gd` print the first few bad positions even when a check passes under its limit, so near-limit counts can be read without a debug copy.
   - Judge slot slowdown only from the same job run solo and paired. A light process sampler beside the jobs makes that cheap.
+
+## progress-review (Keppler Court, 2026-10-17)
+
+- What worked well: five slabs around the Keppler lot became the observed walled-privacy-court rows in one round, on the shared kit with no new code. Fitting the unit module from the one near-frontal Apr 2019 view, then checking it against three other lot views, made door and court positions defensible. The ref-vs-render composites were the right review artifact.
+- What did not work well: palette is now the most visible mismatch. 1111 renders blue-grey against greige/beige walls in the reference, and 1109 renders saturated blue against pale blue-grey. Siding colours have now drifted blue in the same way across four families.
+- What the team should change next time: run the owner-approved colour pass once over every row delivered so far, against each row's dated reference, rather than tuning per family. Until then, record each new row's reference-vs-render colour delta in its task note.
+
+## visual-review (Keppler Court, 2026-10-17)
+
+- What worked well: the reference-named side-by-side pairs (dated photo left, matched render right) are the best review format so far. Each unit's front and rear could be judged directly, and fitting the module to the 1111 front camera (rms 0.2 px) shows in the result: court walls, ochre doors and windows sit where the photo puts them.
+- What did not work well: the shots ran on the pre-lighting base, so every hue judgement has to be repeated after the colour pass. 1109's saturated cornflower blue and the 1113 front/rear colour conflict can't be settled from these pixels. The flat pale-blue rear pads also stand out in shaded foreground views, and no matched view checks them against the grass.
+- What the team should change next time: rebase family studies onto the current lighting before final shots, so palette and geometry are judged together once. Add one shaded close view of the rear pads to the standard view set.
+
+## code-review (Keppler Court, 2026-10-17)
+
+- What worked well: the author's diagnostic printed the two bad 1109 grounded positions, so I could check them directly against the frozen wall runs and land. Both lie about 0.33 m off 17.3°-rotated walls beside lower-window sills, and the wall bottoms sit below grade. That confirmed the grazing-sill explanation instead of taking it on trust.
+- What did not work well: the court fences reuse `screens` with rotated bases that still carry `source_run: 0`, and 0.14 m-tall "screens" act as copings. Both are valid for the producer, but my generic basis check flagged them, and I had to read the producer's `_screen` to clear them.
+- What the team should change next time: when a kit feature is reused for a new purpose (screens as court walls and copings), name the purpose in its `inference` text and drop basis fields the producer ignores, so reviewers don't have to reverse-engineer the intent.
