@@ -747,7 +747,9 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 	arrays[Mesh.ARRAY_INDEX] = indices
 	# Land and area records use the shared ground-cover families; parking,
 	# overlays, roads, buildings and context keep their generated material.
-	var ground_family := GROUND_COVER.family_for(record, is_context)
+	# The ground-cover shader needs UVs and tangents, so a record without UVs
+	# falls back to the builder's own material.
+	var ground_family := "" if uvs.is_empty() else GROUND_COVER.family_for(record, is_context)
 	if (POLYHAVEN_MATERIAL_TEXTURE_SET.has(str(record.material_key)) or ground_family != "") and not uvs.is_empty():
 		arrays[Mesh.ARRAY_TANGENT] = _tangents_for(vertices, normals, uvs, indices)
 	var placeholder_material: Material

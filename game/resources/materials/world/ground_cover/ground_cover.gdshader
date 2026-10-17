@@ -14,15 +14,15 @@ uniform sampler2D detail_normal : hint_normal, filter_linear_mipmap_anisotropic,
 uniform sampler2D detail_roughness : filter_linear_mipmap_anisotropic, repeat_enable;
 
 // Late-spring palettes: gap (ground between tufts), blade (tufts), straw.
-uniform vec3 lawn_gap : source_color = vec3(0.31, 0.36, 0.15);
-uniform vec3 lawn_blade : source_color = vec3(0.52, 0.57, 0.27);
-uniform vec3 lawn_straw : source_color = vec3(0.66, 0.63, 0.38);
+uniform vec3 lawn_gap : source_color = vec3(0.37, 0.43, 0.19);
+uniform vec3 lawn_blade : source_color = vec3(0.44, 0.52, 0.235);
+uniform vec3 lawn_straw : source_color = vec3(0.57, 0.58, 0.33);
 uniform vec3 dry_gap : source_color = vec3(0.48, 0.42, 0.29);
 uniform vec3 dry_blade : source_color = vec3(0.55, 0.53, 0.32);
 uniform vec3 dry_straw : source_color = vec3(0.76, 0.69, 0.50);
-uniform vec3 soil_gap : source_color = vec3(0.58, 0.54, 0.46);
-uniform vec3 soil_blade : source_color = vec3(0.53, 0.52, 0.37);
-uniform vec3 soil_straw : source_color = vec3(0.74, 0.70, 0.60);
+uniform vec3 soil_gap : source_color = vec3(0.52, 0.45, 0.34);
+uniform vec3 soil_blade : source_color = vec3(0.49, 0.44, 0.32);
+uniform vec3 soil_straw : source_color = vec3(0.555, 0.485, 0.375);
 
 // Family mix. A point turns dry where the patch noise exceeds dry_threshold and
 // bare where the bare noise exceeds bare_threshold; above 1 disables a layer,
@@ -43,6 +43,7 @@ uniform float fade_end_m = 110.0;
 
 // Average share of gap, blade and straw pixels in sparse_grass_diff_1k under
 // the masks in tuft_masks(); the distance fade lands on these layer means.
+// Measured on the lossless (compress/mode=0) import; recompute if that changes.
 const vec3 LAYER_SHARE = vec3(0.6108, 0.3586, 0.0305);
 
 float hash12(vec2 p) {
@@ -62,7 +63,8 @@ float value_noise(vec2 p) {
 	return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
 }
 
-// x: grass tuft, y: straw blade, z: signed soil grain.
+// x: grass tuft, y: straw blade, z: signed soil grain. The thresholds are
+// calibrated on the lossless (compress/mode=0) sparse_grass_diff_1k import.
 vec3 tuft_masks(vec3 s) {
 	float tuft = clamp((s.g - 0.72 * s.r + 0.02) / 0.10, 0.0, 1.0);
 	float lum = dot(s, vec3(0.2126, 0.7152, 0.0722));
@@ -97,8 +99,8 @@ void fragment() {
 	float fade = smoothstep(fade_start_m, fade_end_m, length(VERTEX));
 
 	vec3 dry = cover_layer(dry_gap, dry_blade, dry_straw, m, 0.6, fade);
-	vec3 green = mix(cover_layer(lawn_gap, lawn_blade, lawn_straw, m, 0.5, fade), dry, green_dryness);
-	vec3 soil = cover_layer(soil_gap, soil_blade, soil_straw, m, 0.9, fade);
+	vec3 green = mix(cover_layer(lawn_gap, lawn_blade, lawn_straw, m, 0.25, fade), dry, green_dryness);
+	vec3 soil = cover_layer(soil_gap, soil_blade, soil_straw, m, 0.4, fade);
 	ALBEDO = mix(mix(green, dry, dry_w), soil, bare_w) * (0.94 + 0.12 * n_fine);
 	// Matte, with a gentle normal fade, so distant ground does not turn paler
 	// than near ground through grazing-angle sky reflection or flatter normals.

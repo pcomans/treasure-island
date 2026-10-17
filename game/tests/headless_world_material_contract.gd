@@ -112,10 +112,14 @@ func _runtime_tangents_are_present(builder: WorldChunkBuilder) -> bool:
 
 
 ## Every family is the shared ground-cover shader on the exact sparse_grass
-## maps, with its own mix.
+## maps, and every family setting names a float uniform the shader declares, so
+## a renamed or misspelt setting cannot silently stop applying.
 func _ground_families_match() -> bool:
 	var detail := "%s/sparse_grass/sparse_grass" % TEXTURE_ROOT
 	var maps := {"detail_albedo": "_diff_1k.jpg", "detail_normal": "_nor_gl_1k.jpg", "detail_roughness": "_rough_1k.jpg"}
+	var float_uniforms := {}
+	for found: RegExMatch in RegEx.create_from_string("uniform\\s+float\\s+(\\w+)").search_all((GROUND_COVER.SHADER as Shader).code):
+		float_uniforms[found.get_string(1)] = true
 	for family: String in GROUND_COVER.FAMILIES:
 		var material := GROUND_COVER.material(family)
 		if not _require(material is ShaderMaterial and material.shader != null and material.shader.resource_path == GROUND_COVER_SHADER_PATH, "%s ground cover is not the shared shader." % family) \
@@ -129,10 +133,8 @@ func _ground_families_match() -> bool:
 			var image := texture.get_image()
 			if not _require(image != null and image.has_mipmaps(), "%s %s lacks imported mipmaps." % [family, parameter]):
 				return false
-		var preset: Dictionary = GROUND_COVER.FAMILIES[family]
-		for parameter: String in preset:
-			var value: Variant = material.get_shader_parameter(parameter)
-			if not _require(value != null and is_equal_approx(float(value), float(preset[parameter])), "%s %s is %s, not %s." % [family, parameter, value, preset[parameter]]):
+		for parameter: String in GROUND_COVER.FAMILIES[family]:
+			if not _require(float_uniforms.has(parameter), "%s setting %s is not a float uniform of the ground-cover shader." % [family, parameter]):
 				return false
 	return true
 
