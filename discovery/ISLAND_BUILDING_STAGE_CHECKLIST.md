@@ -194,8 +194,15 @@ clean-exit fit/native/26 route legs (`fit-1223-routes002`), end and rear spray
 L1/L2 C. Parked: L3 eave/rake overhang and the canopy's site placement/extent (the
 photo shows a detached carport over parking). 1204 stays U: L2 REWORK, rear has no
 ground-floor yard access; rework assigned.
-Current totals after Mar17b: L1:27 C/186 U; L2:17 C/196 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall45 C/0 I/1,020 U across213 units/1,065 cells;49 historical
+**Mar17c** 1204 rear-entrance rework, 2026-10-17 (evidence in the private
+`mariner1204-rear-rework-20261017` task directory): `dcf1bca` gives each townhouse
+unit a rear yard door with pad, with independent CODE, visual L2 and progress PASS;
+fit/native/14 routes, rear and end spray and full suite all exit 0. L2 C. L1 C from
+the 2026-10-11 final review's explicit L1 architecture PASS; the rework leaves
+massing, roof and site unchanged. Parked: yard fences, door hoods and lights, eave
+line, roof colour, glazing finish, site.
+Current totals after Mar17c: L1:28 C/185 U; L2:18 C/195 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall47 C/0 I/1,018 U across213 units/1,065 cells;49 historical
 recognition credits unchanged.
 **U** no current stage-level conclusion established in this checklist pass.
 
@@ -326,7 +333,7 @@ before selecting another round.
 | physical-building:w96215685 / w96215685 | 1226 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215688 / w96215688 | 1240 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP4 — L1 joined shallow whole roof and corrected front/north lawn; scoped visual/CODE/native/fit/spray/suite002 PASS; L2–5 unknown |
 | physical-building:w96215690 / w96215690 | 1141 Ozbourn Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96215691 / w96215691 | 1204 Mariner Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — L2 REWORK 2026-10-17: rear has no ground-floor yard access; rework assigned. |
+| physical-building:w96215691 / w96215691 | 1204 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17c rear-entrance rework `dcf1bca` — CODE, visual L2 and progress PASS; fit/native/14 routes, rear+end spray and full suite exit 0. L1 from the 2026-10-11 final review's explicit L1 PASS (massing unchanged by the rework). Parked: yard fences, door hoods and lights, eave line, roof colour, glazing finish, site |
 | physical-building:w96215693 / w96215693 | 1208 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17 `cdcd7c3` — L1/L2 PASS; integrated visual/native/fit/rear+end spray/suite PASS; materials/site open |
 | physical-building:w96215694 / w96215694 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215698 / w96215698 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -463,7 +470,7 @@ March/November2025 refs and unknown-date Apple context support the scoped envelo
 and observed architecture; missing north capture/unknown rear/schematic materials
 keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
 See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
-Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar17b for current totals);
+Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar17c for current totals);
 **L1:21 C /0 I /192 U**. All other stages unchanged;49 historical credits retained.
 
 ## Island environment layers
