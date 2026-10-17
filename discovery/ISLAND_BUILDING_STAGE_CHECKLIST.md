@@ -266,8 +266,15 @@ garage zone; stucco lap lines; 1-pixel road-edge dots; the turning-circle disc i
 config-only, tagged for a later roads Level 2 generator pass; code lows (gable vents
 on the roof role, loggia parts as spray receivers, the 1413 apron 9.4 mm above the
 area).
-Current totals after Mar17j: L1:66 C/147 U; L2:56 C/157 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall123 C/0 I/942 U across213 units/1,065 cells;49 historical
+**Mar17k** mid-rises, 2026-10-17: `3f44801` adds a shared modern mid-rise family
+behind the housing installer (`midrise_family.gd`); `6e2cead` models 490 Avenue of
+the Palms (`w1272162518`) and Star View Court (`w1212173437`) with registrations.
+CODE PASS on both commits with two lows, visual L2 PASS for both, progress L1+L2
+PASS. L1/L2 C for both. Parked: colour pass (490 brick reads charcoal where it
+should be warm grey-taupe; 490 white reads slightly blue-grey); code lows (the root
+`scope` string; indexing for `_ground_y`); landscaping, signage, materials.
+Current totals after Mar17k: L1:68 C/145 U; L2:58 C/155 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall127 C/0 I/938 U across213 units/1,065 cells;49 historical
 recognition credits unchanged.
 **U** no current stage-level conclusion established in this checklist pass.
 
@@ -492,14 +499,14 @@ before selecting another round.
 | physical-building:w1001544698 / w1001544698 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w1043836450 / w1043836450 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w1098437841 / w1098437841 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | M — retain complete site; inspect later stages |
-| physical-building:w1212173437 / w1212173437 | Star View Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w1212173437 / w1212173437 | Star View Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17k mid-rise family `3f44801` + `6e2cead` — CODE PASS (two lows), visual L2 PASS, progress L1+L2 PASS. Parked: code lows (misleading root `scope` string at `midrise_family.gd:146`; `_ground_y` linear scan needs indexing); landscaping, signage, materials |
 | physical-building:w1222514685 / w1222514685 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w1222514686 / w1222514686 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w1222514695 / w1222514695 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w1222720021 / w1222720021 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w1249412093 / w1249412093 | Hawkins | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w1249412094 / w1249412094, w1282547786, w1282547787 | Isle House | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w1272162518 / w1272162518 | 490 Avenue of the Palms | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w1272162518 / w1272162518 | 490 Avenue of the Palms | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17k mid-rise family `3f44801` + `6e2cead` — CODE PASS (two lows), visual L2 PASS, progress L1+L2 PASS. Parked: code lows (misleading root `scope` string at `midrise_family.gd:146`; `_ground_y` linear scan needs indexing); landscaping, signage, materials; colour pass (brick reads charcoal, should be warm grey-taupe; white reads slightly blue-grey) |
 | physical-building:w1308007112 / w1308007112 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | M — retain complete site; inspect later stages |
 | physical-building:w1308007113 / w1308007113 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | M — retain complete site; inspect later stages |
 | physical-building:w1308007114 / w1308007114 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | M — retain complete site; inspect later stages |
@@ -535,7 +542,7 @@ March/November2025 refs and unknown-date Apple context support the scoped envelo
 and observed architecture; missing north capture/unknown rear/schematic materials
 keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
 See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
-Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar17j for current totals);
+Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar17k for current totals);
 **L1:21 C /0 I /192 U**. All other stages unchanged;49 historical credits retained.
 
 ## Island environment layers
