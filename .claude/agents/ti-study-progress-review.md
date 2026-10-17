@@ -15,7 +15,7 @@ Read [AGENTS](../../AGENTS.md#architectural-study-scope-and-progress-review), re
 
 Inspect actual baseline/current gameplay originals beside truthful dated target references, in small usable batches. Read the intended whole-building/island contribution and larger unresolved gaps. Notes, source assertions and image counts cannot replace pixels. Reuse applicable unchanged evidence without rerunning engines or inventing current/as-built detail.
 
-Compare the proposed assignment with the [island working checklist](../../discovery/ISLAND_BUILDING_STAGE_CHECKLIST.md): prioritize the lowest unfinished level island-wide (high-recognition landmarks may lead within a level), with [geometry first](../../AGENTS.md#zoom-in-authoring-pattern) (building Levels 1–2 across the island before environment-layer, lighting and material work), inspect unknowns, and redirect deep single-building polish toward ready whole-family or shared-kit work without weakening per-unit gates.
+Compare the proposed assignment with the [island working checklist](../../discovery/ISLAND_BUILDING_STAGE_CHECKLIST.md): prioritize the lowest unfinished level island-wide (high-recognition landmarks may lead within a level), with [geometry first](../../AGENTS.md#zoom-in-authoring-pattern) (building Levels 1–2 across the island before other environment-layer and material work; lighting and colour changes that ease modeling and photo colour matching are approved), inspect unknowns, and redirect deep single-building polish toward ready whole-family or shared-kit work without weakening per-unit gates.
 
 Answer both questions plainly:
 
