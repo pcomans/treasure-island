@@ -164,6 +164,7 @@ func _initialize() -> void:
 	or environment.ambient_light_source != Environment.AMBIENT_SOURCE_SKY \
 	or environment.reflected_light_source != Environment.REFLECTION_SOURCE_SKY \
 	or environment.ambient_light_sky_contribution <= 0.0 \
+	or environment.ambient_light_energy <= 0.0 \
 	or environment.sky == null:
 		_fail("Main scene must use the approved Sky for background, ambient fill, and reflections.")
 		return
