@@ -20416,3 +20416,15 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the code, visual and progress findings were concrete enough to fix in the private generator without new geometry types. Step returns lost their rake overhang, so the step jogs and caps disappeared. Step and rake boards moved to 1 cm under the roof edge, eave-box ends at step returns got flush siding caps, and entry paths now stop at the apron edge. A structural JSON diff against b69fd3b then confirmed that only the intended fields changed before any engine run.
 - What did not work well: my first pass centred the boards on the roof edge and extended overhangs onto step returns. Those choices produced the pale fins and boxes that only raised and oblique crops showed. Palette calibration was done on shaded fronts alone, which left 1244 khaki-tan and the 1245 roof near-white in sun.
 - What the team should change next time: for stepped rows, keep overhangs off step returns from the start and place boards with their top just under the roof edge. Check every new ground surface against the config's other surfaces, such as path pads against the apron. Calibrate palettes in both shade and sun, using the raised context view next to the overhead.
+
+## visual-review (Northpoint cleanup delta, 2026-10-17)
+
+- What worked well: the stacked final003-over-cleanup004 delta crops, matched to the reference cameras, answered each targeted item at a glance. A fuzzed per-image compare of every original against final003 showed the change concentrated where expected: 1244's palette at 5–13%, against about 0.05–4% elsewhere. That made the regression check fast.
+- What did not work well: the delta crops are narrow. Judging whether 1244's new off-white reads as cream in shade or sun still needed the full originals and the context view. The author's note that 1243's step gable is real projection geometry had to be taken on trust, because no top-down or plan crop showed the 1.94 m front projection.
+- What the team should change next time: whenever a palette changes, add one full-frame matched-reference view per changed material to the delta set. When a junction is kept as "real geometry", include a top-down crop that shows the source step.
+
+## code-review (Northpoint cleanup delta, 2026-10-17)
+
+- What worked well: diffing the configs field by field and comparing roof faces as sets (removed versus added triangles and closures) showed the delta was exactly the paths, roof steps and palette. The same-config coplanar-overlap and ground-overlap scripts from the b69fd3b review ran unchanged, so verifying the fix cost minutes.
+- What did not work well: the delta rewrote eave endpoints for every step. Telling the intended 1 cm drop from an accidental change took a distance-to-roof-edge measurement rather than a readable diff.
+- What the team should change next time: when the private generator changes a construction rule, such as eave inset or rake treatment, note in the commit the rule and the value it applies (for example, eave beam top 1 cm under the roof edge), so a reviewer checks one stated value instead of inferring it.
