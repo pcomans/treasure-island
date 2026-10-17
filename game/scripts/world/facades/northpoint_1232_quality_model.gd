@@ -219,13 +219,28 @@ static func _recessed_window(root:Node3D,p:Vector3,t:Vector3,n:Vector3,w:float,h
 		_panel(root,p+t*side*w*0.25-n*0.255,t,n,Vector3(w/2.0-0.045,h-0.07,0.02),pane)
 	_panel(root,p-n*0.22,t,n,Vector3(0.045,h,0.045),trim)
 	_panel(root,p-Vector3(0,h/2.0+0.07,0)+n*0.10,t,n,Vector3(w+0.27,0.065,0.32),trim)
-static func _entry(root:Node3D,p:Vector3,t:Vector3,n:Vector3,trim:Material,door:Material,concrete:Material)->void:
+static func _entry(root:Node3D,p:Vector3,t:Vector3,n:Vector3,trim:Material,door:Material,concrete:Material,threshold_bottom_y:float=0.0,extend_threshold:bool=false)->void:
+	var threshold_center: Vector3 = p+Vector3(0,-1.035,0)+n*0.04
+	var threshold_height: float = 0.06
+	if extend_threshold:
+		var threshold_top: float = threshold_center.y + Vector3(0,0.06,0).y / 2.0
+		var old_bottom: float = threshold_center.y - Vector3(0,0.06,0).y / 2.0
+		if not is_finite(threshold_bottom_y) or threshold_bottom_y > old_bottom:
+			root.set_meta("build_valid", false)
+			push_error("Threshold bottom must be finite and extend downward")
+			return
+		threshold_height = threshold_top - threshold_bottom_y
+		threshold_center.y = (threshold_top + threshold_bottom_y) / 2.0
+		if not is_finite(Vector3(0,threshold_height,0).y) or not is_finite(threshold_center.y) or threshold_height <= 0.0:
+			root.set_meta("build_valid", false)
+			push_error("Threshold extension cannot form finite positive geometry")
+			return
 	var reveal:=_material(Color(0.34,0.38,0.36),0.88)
 	for side in [-1.0,1.0]:
 		_panel(root,p+t*side*0.48-n*0.14,t,n,Vector3(0.075,2.20,0.40),reveal)
 		_panel(root,p+t*side*0.53+n*0.04,t,n,Vector3(0.085,2.24,0.10),trim)
 	_panel(root,p+Vector3(0,1.10,0)-n*0.12,t,n,Vector3(1.10,0.11,0.42),trim)
 	_panel(root,p-n*0.32,t,n,Vector3(0.92,2.13,0.06),door)
-	_panel(root,p+Vector3(0,-1.035,0)+n*0.04,t,n,Vector3(1.10,0.06,0.50),concrete)
+	_panel(root,threshold_center,t,n,Vector3(1.10,threshold_height,0.50),concrete)
 	root.get_child(-1).set_meta("construction_detail", "door_threshold")
 	_panel(root,p+t*0.30-n*0.26,t,n,Vector3(0.035,0.12,0.055),trim)

@@ -136,7 +136,12 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bo
 					var entry_material := door
 					if str(motif.get("door_role","")) == "pale":
 						entry_material = PARTS._material(color(palette,"pale_door_rgb",Color(0.62,0.65,0.62)),0.85)
-					PARTS._entry(root,point,t,n,trim,entry_material,concrete)
+					var extend_threshold: bool = motif.has("threshold_bottom_y")
+					if extend_threshold and not (motif.threshold_bottom_y is float or motif.threshold_bottom_y is int):
+						root.set_meta("build_valid", false)
+						push_error("Threshold bottom must be numeric")
+						continue
+					PARTS._entry(root,point,t,n,trim,entry_material,concrete,float(motif.get("threshold_bottom_y", 0.0)),extend_threshold)
 				elif group == "garage_doors":
 					GARAGE_COURT.garage_door(root,point,t,n,width,height,motif,palette,trim)
 				elif group == "loggias":
