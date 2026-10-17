@@ -1,0 +1,168 @@
+{
+ "source": "w34313546",
+ "chunk": "x_0__z_-2",
+ "status": "production_inference; September2025 east end: ochre stucco, flat parapet with thin dark coping, two high windows (uniform placement, +-1 m); pale grey boarded/infilled panel at lower centre (stations 4.4-7.6 m, 1.75 m tall, from the fitted Sep2025 camera); March2025 north parapet above the container wall; other sides unobserved and plain; container wall, fences and ochre painted-out door at the left parked",
+ "chains": [
+  {
+   "runs": [
+    12,
+    13
+   ],
+   "upper_slots": true,
+   "lower_row": false,
+   "bay_width": 5.6,
+   "slot_size": [
+    1.4,
+    1.05
+   ],
+   "slot_top_offset": 1.0,
+   "infill_panels": [
+    [
+     4.4,
+     7.6,
+     1.75
+    ]
+   ]
+  },
+  {
+   "runs": [
+    0,
+    1
+   ],
+   "upper_slots": false,
+   "lower_row": false,
+   "bay_width": 6.0
+  },
+  {
+   "runs": [
+    2,
+    3
+   ],
+   "upper_slots": false,
+   "lower_row": false,
+   "bay_width": 6.0
+  },
+  {
+   "runs": [
+    4,
+    5
+   ],
+   "upper_slots": false,
+   "lower_row": false,
+   "bay_width": 6.0
+  },
+  {
+   "runs": [
+    6,
+    7
+   ],
+   "upper_slots": false,
+   "lower_row": false,
+   "bay_width": 6.0
+  },
+  {
+   "runs": [
+    8,
+    9
+   ],
+   "upper_slots": false,
+   "lower_row": false,
+   "bay_width": 6.0
+  },
+  {
+   "runs": [
+    10,
+    11
+   ],
+   "upper_slots": false,
+   "lower_row": false,
+   "bay_width": 6.0
+  },
+  {
+   "runs": [
+    14,
+    15
+   ],
+   "upper_slots": false,
+   "lower_row": false,
+   "bay_width": 6.0
+  },
+  {
+   "runs": [
+    16
+   ],
+   "upper_slots": false,
+   "lower_row": false,
+   "bay_width": 6.0
+  },
+  {
+   "runs": [
+    17
+   ],
+   "upper_slots": false,
+   "lower_row": false,
+   "bay_width": 6.0
+  },
+  {
+   "runs": [
+    18
+   ],
+   "upper_slots": false,
+   "lower_row": false,
+   "bay_width": 6.0
+  },
+  {
+   "runs": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "upper_slots": false,
+   "lower_row": false,
+   "bay_width": 6.0
+  },
+  {
+   "runs": [
+    23,
+    24
+   ],
+   "upper_slots": false,
+   "lower_row": false,
+   "bay_width": 6.0
+  }
+ ],
+ "palette": {
+  "upper": [
+   0.8,
+   0.63,
+   0.43
+  ],
+  "lower": [
+   0.8,
+   0.63,
+   0.43
+  ],
+  "structure": [
+   0.76,
+   0.6,
+   0.41
+  ],
+  "recess": [
+   0.55,
+   0.45,
+   0.33
+  ],
+  "coping": [
+   0.33,
+   0.32,
+   0.3
+  ],
+  "infill": [
+   0.74,
+   0.74,
+   0.71
+  ]
+ },
+ "site": {}
+}

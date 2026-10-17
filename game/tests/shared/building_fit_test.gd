@@ -82,6 +82,22 @@ const QUALITY_SUPPORT_ASSEMBLIES := {
 			"ground_visual": [],
 		},
 	},
+	"w34313521": {
+		"assembly_name": "ObservedPanelHall",
+		"required": {
+			"wall": ["PanelField", "ClosedSlot", "SlotReveal", "TerminalPier", "StorefrontGlazing", "StorefrontPilaster"],
+			"detail": ["SlotSill", "ThinCoping", "StorefrontFascia", "SplitFascia"],
+			"ground_visual": [],
+		},
+	},
+	"w34313546": {
+		"assembly_name": "ObservedPanelHall",
+		"required": {
+			"wall": ["PanelField", "ClosedSlot", "SlotReveal", "TerminalPier", "InfillPanel"],
+			"detail": ["SlotSill", "ThinCoping"],
+			"ground_visual": [],
+		},
+	},
 }
 
 func _initialize() -> void:
@@ -112,7 +128,7 @@ func _run() -> void:
 		quit(1)
 		return
 	var source_key := str(args.source)
-	var native_sources := {"chapel-indexed": "w291189336", "building2-indexed": "w24274434", "station48-indexed": "w764313741", "northpoint1232-mixed": "w96215673", "ymca-mixed": "w34313547", "panel-hall-mixed": "w34313569", "personnel-support-mixed": "r133347", "w34313564-mixed": "w34313564"}
+	var native_sources := {"chapel-indexed": "w291189336", "building2-indexed": "w24274434", "station48-indexed": "w764313741", "northpoint1232-mixed": "w96215673", "ymca-mixed": "w34313547", "panel-hall-mixed": "w34313569", "personnel-support-mixed": "r133347", "job-corps-368-mixed": "w34313521", "building-202-mixed": "w34313546", "w34313564-mixed": "w34313564"}
 	var housing_native := str(args.get("native-producer", "")) == "housing-get-faces"
 	if args.has("native-producer") and ((not housing_native and str(native_sources.get(str(args["native-producer"]), "")) != source_key) or args.has("diagnose-side") or args.has("adjacent-source")):
 		push_error("native producer requires its supported source and cannot combine diagnostic/adjacent modes")
@@ -172,7 +188,7 @@ func _run() -> void:
 			native_error = _check_housing_faces(h, source_key)
 		elif str(args["native-producer"]) == "northpoint1232-mixed":
 			native_error = _check_housing_faces(h, source_key, true)
-		elif str(args["native-producer"]) in ["ymca-mixed", "panel-hall-mixed", "personnel-support-mixed", "w34313564-mixed"]:
+		elif str(args["native-producer"]) in ["ymca-mixed", "panel-hall-mixed", "personnel-support-mixed", "job-corps-368-mixed", "building-202-mixed", "w34313564-mixed"]:
 			var descriptor: Dictionary = QUALITY_SUPPORT_ASSEMBLIES[source_key]
 			native_error = _check_quality_support_mixed(h, source_key, descriptor.assembly_name, descriptor.required)
 			if native_error == "" and descriptor.has("retained_calibration"):

@@ -1,0 +1,287 @@
+{
+ "source": "w34313521",
+ "chunk": "x_-1__z_0",
+ "status": "production_inference; September2025 WSW front on Seven Seas: CAFETERIA and CULINARY ARTS glazed sections with blue pilasters and two lower-storey windows (iter2: stations from the calibrated Sep2025 camera, f about 405 px), blue-grey lower fascia and grouped upper window band (positions from camera geometry, +-3 m); NW oblique; the flat 6 m source shell is kept (real ~4 m front wing with set-back upper storey is disclosed Level 1 inference); other sides unobserved (no imagery on Avenue D or north) and plainer; ramp, fence and sign text parked",
+ "chains": [
+  {
+   "runs": [
+    0,
+    1,
+    2,
+    3,
+    4
+   ],
+   "upper_slots": true,
+   "lower_row": false,
+   "bay_width": 4.6,
+   "split_below_top": 2.7,
+   "split_fascia": true,
+   "slot_size": [
+    3.4,
+    1.25
+   ],
+   "slot_top_offset": 0.55,
+   "storefronts": [
+    [
+     5.3,
+     23.3
+    ],
+    [
+     27.2,
+     30.0
+    ],
+    [
+     37.5,
+     50.0
+    ]
+   ]
+  },
+  {
+   "runs": [
+    5,
+    6,
+    7
+   ],
+   "upper_slots": true,
+   "lower_row": false,
+   "bay_width": 4.6,
+   "split_below_top": 2.7,
+   "split_fascia": true,
+   "slot_size": [
+    3.4,
+    1.25
+   ],
+   "slot_top_offset": 0.55,
+   "storefronts": [
+    [
+     0.6,
+     2.8
+    ],
+    [
+     8.7,
+     12.3
+    ]
+   ]
+  },
+  {
+   "runs": [
+    8,
+    9,
+    10
+   ],
+   "upper_slots": true,
+   "lower_row": false,
+   "bay_width": 9.2,
+   "split_below_top": 2.7,
+   "split_fascia": true,
+   "slot_size": [
+    3.4,
+    1.25
+   ],
+   "slot_top_offset": 0.55
+  },
+  {
+   "runs": [
+    11,
+    12,
+    13
+   ],
+   "upper_slots": true,
+   "lower_row": false,
+   "bay_width": 9.2,
+   "split_below_top": 2.7,
+   "split_fascia": true,
+   "slot_size": [
+    3.4,
+    1.25
+   ],
+   "slot_top_offset": 0.55
+  },
+  {
+   "runs": [
+    14,
+    15,
+    16
+   ],
+   "upper_slots": true,
+   "lower_row": false,
+   "bay_width": 9.2,
+   "split_below_top": 2.7,
+   "split_fascia": true,
+   "slot_size": [
+    3.4,
+    1.25
+   ],
+   "slot_top_offset": 0.55
+  },
+  {
+   "runs": [
+    17,
+    18,
+    19,
+    20
+   ],
+   "upper_slots": true,
+   "lower_row": false,
+   "bay_width": 9.2,
+   "split_below_top": 2.7,
+   "split_fascia": true,
+   "slot_size": [
+    3.4,
+    1.25
+   ],
+   "slot_top_offset": 0.55
+  },
+  {
+   "runs": [
+    21,
+    22,
+    23
+   ],
+   "upper_slots": true,
+   "lower_row": false,
+   "bay_width": 9.2,
+   "split_below_top": 2.7,
+   "split_fascia": true,
+   "slot_size": [
+    3.4,
+    1.25
+   ],
+   "slot_top_offset": 0.55
+  },
+  {
+   "runs": [
+    24
+   ],
+   "upper_slots": false,
+   "lower_row": false,
+   "bay_width": 9.2,
+   "split_below_top": 2.7,
+   "split_fascia": true,
+   "slot_size": [
+    3.4,
+    1.25
+   ],
+   "slot_top_offset": 0.55
+  },
+  {
+   "runs": [
+    25
+   ],
+   "upper_slots": false,
+   "lower_row": false,
+   "bay_width": 9.2,
+   "split_below_top": 2.7,
+   "split_fascia": true,
+   "slot_size": [
+    3.4,
+    1.25
+   ],
+   "slot_top_offset": 0.55
+  },
+  {
+   "runs": [
+    26
+   ],
+   "upper_slots": false,
+   "lower_row": false,
+   "bay_width": 9.2,
+   "split_below_top": 2.7,
+   "split_fascia": true,
+   "slot_size": [
+    3.4,
+    1.25
+   ],
+   "slot_top_offset": 0.55
+  },
+  {
+   "runs": [
+    27,
+    28
+   ],
+   "upper_slots": true,
+   "lower_row": false,
+   "bay_width": 9.2,
+   "split_below_top": 2.7,
+   "split_fascia": true,
+   "slot_size": [
+    3.4,
+    1.25
+   ],
+   "slot_top_offset": 0.55
+  },
+  {
+   "runs": [
+    29,
+    30,
+    31
+   ],
+   "upper_slots": true,
+   "lower_row": false,
+   "bay_width": 9.2,
+   "split_below_top": 2.7,
+   "split_fascia": true,
+   "slot_size": [
+    3.4,
+    1.25
+   ],
+   "slot_top_offset": 0.55
+  },
+  {
+   "runs": [
+    32,
+    33,
+    34,
+    35
+   ],
+   "upper_slots": true,
+   "lower_row": false,
+   "bay_width": 9.2,
+   "split_below_top": 2.7,
+   "split_fascia": true,
+   "slot_size": [
+    3.4,
+    1.25
+   ],
+   "slot_top_offset": 0.55
+  }
+ ],
+ "palette": {
+  "upper": [
+   0.8,
+   0.78,
+   0.72
+  ],
+  "lower": [
+   0.82,
+   0.81,
+   0.77
+  ],
+  "structure": [
+   0.78,
+   0.77,
+   0.72
+  ],
+  "recess": [
+   0.2,
+   0.25,
+   0.29
+  ],
+  "coping": [
+   0.48,
+   0.5,
+   0.5
+  ],
+  "fascia": [
+   0.58,
+   0.62,
+   0.62
+  ],
+  "pilaster": [
+   0.44,
+   0.48,
+   0.54
+  ]
+ },
+ "site": {}
+}
