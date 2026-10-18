@@ -85,7 +85,7 @@ const QUALITY_SUPPORT_ASSEMBLIES := {
 	"w34313521": {
 		"assembly_name": "ObservedPanelHall",
 		"required": {
-			"wall": ["PanelField", "ClosedSlot", "SlotReveal", "TerminalPier", "StorefrontGlazing", "StorefrontPilaster"],
+			"wall": ["PanelField", "ClosedSlot", "SlotReveal", "TerminalPier", "StorefrontGlazing", "StorefrontPilaster", "InfillPanel"],
 			"detail": ["SlotSill", "ThinCoping", "StorefrontFascia", "SplitFascia"],
 			"ground_visual": [],
 		},
@@ -93,8 +93,8 @@ const QUALITY_SUPPORT_ASSEMBLIES := {
 	"w34313546": {
 		"assembly_name": "ObservedPanelHall",
 		"required": {
-			"wall": ["PanelField", "ClosedSlot", "SlotReveal", "TerminalPier", "InfillPanel"],
-			"detail": ["SlotSill", "ThinCoping"],
+			"wall": ["PanelField", "ClosedSlot", "SlotReveal", "TerminalPier", "InfillPanel", "StorefrontGlazing", "StorefrontPilaster"],
+			"detail": ["SlotSill", "ThinCoping", "StorefrontFascia"],
 			"ground_visual": [],
 		},
 	},

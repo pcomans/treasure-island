@@ -1,7 +1,7 @@
 {
  "source": "w34313546",
  "chunk": "x_0__z_-2",
- "status": "production_inference; September2025 east end: ochre stucco, flat parapet with thin dark coping, two high windows (uniform placement, +-1 m); pale grey boarded/infilled panel at lower centre (stations 4.4-7.6 m, 1.75 m tall, from the fitted Sep2025 camera); March2025 north parapet above the container wall; other sides unobserved and plain; container wall, fences and ochre painted-out door at the left parked",
+ "status": "production_inference; September2025 east end: ochre stucco, flat parapet with thin dark coping, two high screened windows (uniform placement, +-1 m), the painted-out door at the left as a door, and the pale grey boarded panel at lower centre (stations 4.4-7.6 m, 1.75 m tall, from the fitted Sep2025 camera); March2025 north parapet above the container wall. The other sides are hidden by the unmodeled container wall in reality but visible in game, so they carry a restrained inferred service grammar (production inference): the same high screened windows at the east-end cadence, personnel doors, a double-door main entrance on the south side by the east end, and one pale roll-up door on each long side. Container wall and fences parked",
  "chains": [
   {
    "runs": [
@@ -16,6 +16,13 @@
     1.05
    ],
    "slot_top_offset": 1.0,
+   "split_below_top": 1.6,
+   "storefronts": [
+    [
+     0.4,
+     1.6
+    ]
+   ],
    "infill_panels": [
     [
      4.4,
@@ -29,87 +36,156 @@
     0,
     1
    ],
-   "upper_slots": false,
+   "upper_slots": true,
    "lower_row": false,
-   "bay_width": 6.0
+   "bay_width": 5.6,
+   "slot_size": [
+    1.4,
+    1.05
+   ],
+   "slot_top_offset": 1.0,
+   "split_below_top": 1.6
   },
   {
    "runs": [
     2,
     3
    ],
-   "upper_slots": false,
+   "upper_slots": true,
    "lower_row": false,
-   "bay_width": 6.0
+   "bay_width": 5.6,
+   "slot_size": [
+    1.4,
+    1.05
+   ],
+   "slot_top_offset": 1.0,
+   "split_below_top": 1.6
   },
   {
    "runs": [
     4,
     5
    ],
-   "upper_slots": false,
+   "upper_slots": true,
    "lower_row": false,
-   "bay_width": 6.0
+   "bay_width": 5.6,
+   "slot_size": [
+    1.4,
+    1.05
+   ],
+   "slot_top_offset": 1.0,
+   "split_below_top": 1.6
   },
   {
    "runs": [
     6,
     7
    ],
-   "upper_slots": false,
+   "upper_slots": true,
    "lower_row": false,
-   "bay_width": 6.0
+   "bay_width": 5.6,
+   "slot_size": [
+    1.4,
+    1.05
+   ],
+   "slot_top_offset": 1.0,
+   "split_below_top": 1.6,
+   "storefronts": [
+    [
+     26.0,
+     27.3
+    ]
+   ],
+   "infill_panels": [
+    [
+     14.8,
+     18.0,
+     3.0
+    ]
+   ]
   },
   {
    "runs": [
     8,
     9
    ],
-   "upper_slots": false,
+   "upper_slots": true,
    "lower_row": false,
-   "bay_width": 6.0
+   "bay_width": 5.6,
+   "slot_size": [
+    1.4,
+    1.05
+   ],
+   "slot_top_offset": 1.0,
+   "split_below_top": 1.6
   },
   {
    "runs": [
     10,
     11
    ],
-   "upper_slots": false,
+   "upper_slots": true,
    "lower_row": false,
-   "bay_width": 6.0
+   "bay_width": 5.6,
+   "slot_size": [
+    1.4,
+    1.05
+   ],
+   "slot_top_offset": 1.0,
+   "split_below_top": 1.6,
+   "storefronts": [
+    [
+     5.6,
+     7.4
+    ]
+   ]
   },
   {
    "runs": [
     14,
     15
    ],
-   "upper_slots": false,
+   "upper_slots": true,
    "lower_row": false,
-   "bay_width": 6.0
+   "bay_width": 5.6,
+   "slot_size": [
+    1.4,
+    1.05
+   ],
+   "slot_top_offset": 1.0,
+   "split_below_top": 1.6
   },
   {
    "runs": [
     16
    ],
-   "upper_slots": false,
+   "upper_slots": true,
    "lower_row": false,
-   "bay_width": 6.0
+   "bay_width": 5.6,
+   "slot_size": [
+    1.4,
+    1.05
+   ],
+   "slot_top_offset": 1.0,
+   "split_below_top": 1.6
   },
   {
+   "upper_slots": false,
+   "lower_row": false,
+   "bay_width": 6.0,
+   "split_below_top": 1.6,
    "runs": [
     17
-   ],
-   "upper_slots": false,
-   "lower_row": false,
-   "bay_width": 6.0
+   ]
   },
   {
-   "runs": [
-    18
-   ],
    "upper_slots": false,
    "lower_row": false,
-   "bay_width": 6.0
+   "bay_width": 6.0,
+   "split_below_top": 1.6,
+   "runs": [
+    18
+   ]
   },
   {
    "runs": [
@@ -118,35 +194,70 @@
     21,
     22
    ],
-   "upper_slots": false,
+   "upper_slots": true,
    "lower_row": false,
-   "bay_width": 6.0
+   "bay_width": 5.6,
+   "slot_size": [
+    1.4,
+    1.05
+   ],
+   "slot_top_offset": 1.0,
+   "split_below_top": 1.6,
+   "storefronts": [
+    [
+     9.6,
+     10.9
+    ],
+    [
+     41.9,
+     43.2
+    ]
+   ],
+   "infill_panels": [
+    [
+     25.3,
+     28.5,
+     3.0
+    ]
+   ]
   },
   {
    "runs": [
     23,
     24
    ],
-   "upper_slots": false,
+   "upper_slots": true,
    "lower_row": false,
-   "bay_width": 6.0
+   "bay_width": 5.6,
+   "slot_size": [
+    1.4,
+    1.05
+   ],
+   "slot_top_offset": 1.0,
+   "split_below_top": 1.6,
+   "storefronts": [
+    [
+     10.2,
+     11.5
+    ]
+   ]
   }
  ],
  "palette": {
   "upper": [
-   0.8,
-   0.63,
-   0.43
+   0.82,
+   0.67,
+   0.48
   ],
   "lower": [
-   0.8,
-   0.63,
-   0.43
+   0.82,
+   0.67,
+   0.48
   ],
   "structure": [
-   0.76,
-   0.6,
-   0.41
+   0.78,
+   0.64,
+   0.46
   ],
   "recess": [
    0.55,

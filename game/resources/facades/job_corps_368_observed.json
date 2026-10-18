@@ -1,7 +1,7 @@
 {
  "source": "w34313521",
  "chunk": "x_-1__z_0",
- "status": "production_inference; September2025 WSW front on Seven Seas: CAFETERIA and CULINARY ARTS glazed sections with blue pilasters and two lower-storey windows (iter2: stations from the calibrated Sep2025 camera, f about 405 px), blue-grey lower fascia and grouped upper window band (positions from camera geometry, +-3 m); NW oblique; the flat 6 m source shell is kept (real ~4 m front wing with set-back upper storey is disclosed Level 1 inference); other sides unobserved (no imagery on Avenue D or north) and plainer; ramp, fence and sign text parked",
+ "status": "production_inference; September2025 WSW front on Seven Seas: CAFETERIA and CULINARY ARTS glazed sections with blue pilasters and two lower-storey windows (iter2: stations from the calibrated Sep2025 camera, f about 405 px), blue-grey lower fascia and grouped upper window band (positions from camera geometry, +-3 m); NW oblique; the flat 6 m source shell is kept (real ~4 m front wing with set-back upper storey is disclosed Level 1 inference); other sides unobserved (no imagery on Avenue D or north): inferred lower-storey windows (3.0 x 1.5 m, sill about 1.1 m) under the clerestory slots, one personnel door and one blue-grey loading door on each of the three inferred long sides (production inference); ramp, fence and sign text parked",
  "chains": [
   {
    "runs": [
@@ -78,7 +78,57 @@
     3.4,
     1.25
    ],
-   "slot_top_offset": 0.55
+   "slot_top_offset": 0.55,
+   "split_slots": [
+    {
+     "size": [
+      3.0,
+      1.5
+     ],
+     "offset": 0.74,
+     "bay": 8.86,
+     "range": [
+      0.02,
+      8.88
+     ]
+    },
+    {
+     "size": [
+      3.0,
+      1.5
+     ],
+     "offset": 0.74,
+     "bay": 9.16,
+     "range": [
+      8.77,
+      17.93
+     ]
+    },
+    {
+     "size": [
+      3.0,
+      1.5
+     ],
+     "offset": 0.74,
+     "bay": 9.16,
+     "range": [
+      17.67,
+      26.83
+     ]
+    },
+    {
+     "size": [
+      3.0,
+      1.5
+     ],
+     "offset": 0.74,
+     "bay": 8.84,
+     "range": [
+      26.73,
+      35.57
+     ]
+    }
+   ]
   },
   {
    "runs": [
@@ -95,7 +145,45 @@
     3.4,
     1.25
    ],
-   "slot_top_offset": 0.55
+   "slot_top_offset": 0.55,
+   "split_slots": [
+    {
+     "size": [
+      3.0,
+      1.5
+     ],
+     "offset": 0.74,
+     "bay": 9.16,
+     "range": [
+      0.46,
+      9.62
+     ]
+    },
+    {
+     "size": [
+      3.0,
+      1.5
+     ],
+     "offset": 0.74,
+     "bay": 9.16,
+     "range": [
+      10.53,
+      19.69
+     ]
+    },
+    {
+     "size": [
+      3.0,
+      1.5
+     ],
+     "offset": 0.74,
+     "bay": 9.16,
+     "range": [
+      20.6,
+      29.76
+     ]
+    }
+   ]
   },
   {
    "runs": [
@@ -112,7 +200,70 @@
     3.4,
     1.25
    ],
-   "slot_top_offset": 0.55
+   "slot_top_offset": 0.55,
+   "storefronts": [
+    [
+     16.51,
+     17.71
+    ]
+   ],
+   "infill_panels": [
+    [
+     28.34,
+     31.54,
+     3.0
+    ]
+   ],
+   "split_slots": [
+    {
+     "size": [
+      3.0,
+      1.5
+     ],
+     "offset": 0.74,
+     "bay": 8.52,
+     "range": [
+      0.02,
+      8.54
+     ]
+    },
+    {
+     "size": [
+      3.0,
+      1.5
+     ],
+     "offset": 0.74,
+     "bay": 9.16,
+     "range": [
+      8.25,
+      17.41
+     ]
+    },
+    {
+     "size": [
+      3.0,
+      1.5
+     ],
+     "offset": 0.74,
+     "bay": 9.16,
+     "range": [
+      16.8,
+      25.96
+     ]
+    },
+    {
+     "size": [
+      3.0,
+      1.5
+     ],
+     "offset": 0.74,
+     "bay": 8.5,
+     "range": [
+      34.24,
+      42.74
+     ]
+    }
+   ]
   },
   {
    "runs": [
@@ -130,7 +281,70 @@
     3.4,
     1.25
    ],
-   "slot_top_offset": 0.55
+   "slot_top_offset": 0.55,
+   "storefronts": [
+    [
+     16.67,
+     17.87
+    ]
+   ],
+   "infill_panels": [
+    [
+     28.62,
+     31.82,
+     3.0
+    ]
+   ],
+   "split_slots": [
+    {
+     "size": [
+      3.0,
+      1.5
+     ],
+     "offset": 0.74,
+     "bay": 8.6,
+     "range": [
+      0.02,
+      8.62
+     ]
+    },
+    {
+     "size": [
+      3.0,
+      1.5
+     ],
+     "offset": 0.74,
+     "bay": 9.16,
+     "range": [
+      8.37,
+      17.53
+     ]
+    },
+    {
+     "size": [
+      3.0,
+      1.5
+     ],
+     "offset": 0.74,
+     "bay": 9.16,
+     "range": [
+      17.01,
+      26.17
+     ]
+    },
+    {
+     "size": [
+      3.0,
+      1.5
+     ],
+     "offset": 0.74,
+     "bay": 8.58,
+     "range": [
+      34.57,
+      43.15
+     ]
+    }
+   ]
   },
   {
    "runs": [
@@ -147,7 +361,33 @@
     3.4,
     1.25
    ],
-   "slot_top_offset": 0.55
+   "slot_top_offset": 0.55,
+   "split_slots": [
+    {
+     "size": [
+      3.0,
+      1.5
+     ],
+     "offset": 0.74,
+     "bay": 8.96,
+     "range": [
+      0.02,
+      8.98
+     ]
+    },
+    {
+     "size": [
+      3.0,
+      1.5
+     ],
+     "offset": 0.74,
+     "bay": 8.96,
+     "range": [
+      9.02,
+      17.98
+     ]
+    }
+   ]
   },
   {
    "runs": [
@@ -208,7 +448,33 @@
     3.4,
     1.25
    ],
-   "slot_top_offset": 0.55
+   "slot_top_offset": 0.55,
+   "split_slots": [
+    {
+     "size": [
+      3.0,
+      1.5
+     ],
+     "offset": 0.74,
+     "bay": 6.6,
+     "range": [
+      0.02,
+      6.62
+     ]
+    },
+    {
+     "size": [
+      3.0,
+      1.5
+     ],
+     "offset": 0.74,
+     "bay": 6.58,
+     "range": [
+      6.66,
+      13.24
+     ]
+    }
+   ]
   },
   {
    "runs": [
@@ -225,7 +491,33 @@
     3.4,
     1.25
    ],
-   "slot_top_offset": 0.55
+   "slot_top_offset": 0.55,
+   "split_slots": [
+    {
+     "size": [
+      3.0,
+      1.5
+     ],
+     "offset": 0.74,
+     "bay": 8.98,
+     "range": [
+      0.02,
+      9.0
+     ]
+    },
+    {
+     "size": [
+      3.0,
+      1.5
+     ],
+     "offset": 0.74,
+     "bay": 8.98,
+     "range": [
+      9.05,
+      18.03
+     ]
+    }
+   ]
   },
   {
    "runs": [
@@ -243,23 +535,74 @@
     3.4,
     1.25
    ],
-   "slot_top_offset": 0.55
+   "slot_top_offset": 0.55,
+   "storefronts": [
+    [
+     8.44,
+     9.64
+    ]
+   ],
+   "infill_panels": [
+    [
+     21.0,
+     24.2,
+     3.0
+    ]
+   ],
+   "split_slots": [
+    {
+     "size": [
+      3.0,
+      1.5
+     ],
+     "offset": 0.74,
+     "bay": 9.0,
+     "range": [
+      0.02,
+      9.02
+     ]
+    },
+    {
+     "size": [
+      3.0,
+      1.5
+     ],
+     "offset": 0.74,
+     "bay": 9.16,
+     "range": [
+      8.98,
+      18.14
+     ]
+    },
+    {
+     "size": [
+      3.0,
+      1.5
+     ],
+     "offset": 0.74,
+     "bay": 8.98,
+     "range": [
+      27.15,
+      36.13
+     ]
+    }
+   ]
   }
  ],
  "palette": {
   "upper": [
-   0.8,
-   0.78,
-   0.72
+   0.88,
+   0.84,
+   0.73
   ],
   "lower": [
-   0.82,
-   0.81,
-   0.77
+   0.89,
+   0.86,
+   0.76
   ],
   "structure": [
-   0.78,
-   0.77,
+   0.85,
+   0.82,
    0.72
   ],
   "recess": [
@@ -281,6 +624,11 @@
    0.44,
    0.48,
    0.54
+  ],
+  "infill": [
+   0.55,
+   0.6,
+   0.66
   ]
  },
  "site": {}
