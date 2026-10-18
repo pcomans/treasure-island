@@ -671,3 +671,14 @@ The 2026-10-17 halls review sent 850 Avenue H back for about 150 m of blank ochr
 ## Track unmodeled inventory by checklist status, including off-tip finals
 
 A 2026-10-17 inventory treated "has a config" as "done" and missed 17 reviewed Level 2 housing finals sitting off-tip on `origin/northpoint-fourth-family-20261010`. List remaining work by the checklist's L2 status, and check older branches for reviewed finals before authoring anew.
+
+## Merging meshes changes what normals, winding and shaders see
+
+The 2026-10-18 housing mesh merge rendered three things differently from the per-part nodes (AE parity against a same-code control that was AE 0):
+- Sloped rake beams use a sheared `Basis(t, UP, n)`, so their normals need the inverse transpose.
+- One court return per court has a mirroring basis, so merged triangles came out inside-out until the winding was reversed.
+- The roof, siding and brick shaders pattern by object-space `VERTEX`, so moved parts shifted their pattern once merged.
+
+Separately, `get_faces()` snaps vertices to 0.0001 in mesh space, so contacts from merged meshes differ from per-part contacts by about one float32 ULP.
+
+Before batching parts, check each basis's determinant and shear. Keep moved parts with object-space shaders separate. Prove the result with AE parity against a rerun control.
