@@ -2,7 +2,7 @@ extends RefCounted
 ## Source-relative panel-hall facade family; each target provides observed chains.
 ## Generated source shells remain the backing wall and authority for footprint/roof.
 const SUPPORT := preload("res://game/scripts/world/facades/housing_quality_support.gd")
-const TARGETS := {"building:w34313569:wall": "res://game/resources/facades/austin461_observed.json", "building:r133347:wall": "res://game/resources/facades/personnel_support_observed.json", "building:w34313521:wall": "res://game/resources/facades/job_corps_368_observed.json", "building:w34313546:wall": "res://game/resources/facades/building_202_observed.json"}
+const TARGETS := {"building:w34313569:wall": "res://game/resources/facades/austin461_observed.json", "building:r133347:wall": "res://game/resources/facades/personnel_support_observed.json", "building:w34313521:wall": "res://game/resources/facades/job_corps_368_observed.json", "building:w34313546:wall": "res://game/resources/facades/building_202_observed.json", "building:w34313528:wall": "res://game/resources/facades/panel_hall_528_observed.json", "building:w34313512:wall": "res://game/resources/facades/panel_hall_449_observed.json", "building:w1043836450:wall": "res://game/resources/facades/panel_hall_450_observed.json", "building:w110188516:wall": "res://game/resources/facades/panel_hall_516_observed.json"}
 
 static func matches_record(record: Dictionary) -> bool:
 	return TARGETS.has(str(record.get("object_key", "")))

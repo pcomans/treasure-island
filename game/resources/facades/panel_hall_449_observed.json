@@ -1,0 +1,376 @@
+{
+ "source": "w34313512",
+ "chunk": "x_0__z_0",
+ "status": "production_inference; March2025 state before demolition (ENE close, Jan2023 and Jun2021 for confirmation; NNW end at ~65 m): two storeys of weathered off-white horizontal siding, a near-continuous upper window band (largely boarded, blue-grey frames) under the eave, a deep ledge at the storey line (split fascia), a continuous boarded transom band under it, doors and boarded roll-up bays (ENE stations 30-50 m from the calibrated camera; the rhythm continues along the side). WSW and SSE are unobserved and get the same band, transoms, two or one doors and boarded bays. The flat 10 m source shell is kept (the low hipped roof with wide eaves is a disclosed Level 1 inference); the NNW lower projecting bay is parked.",
+ "chains": [
+  {
+   "upper_slots": true,
+   "lower_row": false,
+   "bay_width": 3.3,
+   "slot_size": [
+    3.0,
+    3.2
+   ],
+   "slot_top_offset": 1.3,
+   "split_below_top": 5.9,
+   "split_fascia": true,
+   "runs": [
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16
+   ],
+   "storefronts": [
+    [
+     14.5,
+     15.7
+    ],
+    [
+     32.4,
+     34.9
+    ],
+    [
+     45.5,
+     47.3
+    ],
+    [
+     64.5,
+     65.7
+    ]
+   ],
+   "infill_panels": [
+    [
+     8.0,
+     11.0,
+     3.0
+    ],
+    [
+     20.0,
+     23.0,
+     3.0
+    ],
+    [
+     35.3,
+     38.3,
+     3.0
+    ],
+    [
+     41.9,
+     44.9,
+     3.0
+    ],
+    [
+     58.0,
+     61.0,
+     3.0
+    ],
+    [
+     70.0,
+     73.0,
+     3.0
+    ]
+   ],
+   "split_slots": [
+    {
+     "size": [
+      3.0,
+      0.9
+     ],
+     "offset": 0.25,
+     "bay": 3.4,
+     "range": [
+      0.4,
+      14.0
+     ]
+    },
+    {
+     "size": [
+      3.0,
+      0.9
+     ],
+     "offset": 0.25,
+     "bay": 3.925,
+     "range": [
+      16.2,
+      31.9
+     ]
+    },
+    {
+     "size": [
+      3.0,
+      0.9
+     ],
+     "offset": 0.25,
+     "bay": 4.8,
+     "range": [
+      35.4,
+      45.0
+     ]
+    },
+    {
+     "size": [
+      3.0,
+      0.9
+     ],
+     "offset": 0.25,
+     "bay": 4.05,
+     "range": [
+      47.8,
+      64.0
+     ]
+    },
+    {
+     "size": [
+      3.0,
+      0.9
+     ],
+     "offset": 0.25,
+     "bay": 4.103,
+     "range": [
+      66.2,
+      78.51
+     ]
+    }
+   ]
+  },
+  {
+   "upper_slots": true,
+   "lower_row": false,
+   "bay_width": 3.3,
+   "slot_size": [
+    3.0,
+    3.2
+   ],
+   "slot_top_offset": 1.3,
+   "split_below_top": 5.9,
+   "split_fascia": true,
+   "runs": [
+    17,
+    18,
+    19
+   ],
+   "storefronts": [
+    [
+     9.0,
+     10.2
+    ]
+   ],
+   "infill_panels": [
+    [
+     20.0,
+     23.0,
+     3.0
+    ]
+   ],
+   "split_slots": [
+    {
+     "size": [
+      3.0,
+      0.9
+     ],
+     "offset": 0.25,
+     "bay": 4.05,
+     "range": [
+      0.4,
+      8.5
+     ]
+    },
+    {
+     "size": [
+      3.0,
+      0.9
+     ],
+     "offset": 0.25,
+     "bay": 3.84,
+     "range": [
+      10.7,
+      33.74
+     ]
+    }
+   ]
+  },
+  {
+   "upper_slots": true,
+   "lower_row": false,
+   "bay_width": 3.3,
+   "slot_size": [
+    3.0,
+    3.2
+   ],
+   "slot_top_offset": 1.3,
+   "split_below_top": 5.9,
+   "split_fascia": true,
+   "runs": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "storefronts": [
+    [
+     18.0,
+     19.2
+    ],
+    [
+     52.0,
+     53.2
+    ]
+   ],
+   "infill_panels": [
+    [
+     30.0,
+     33.0,
+     3.0
+    ],
+    [
+     64.0,
+     67.0,
+     3.0
+    ]
+   ],
+   "split_slots": [
+    {
+     "size": [
+      3.0,
+      0.9
+     ],
+     "offset": 0.25,
+     "bay": 3.42,
+     "range": [
+      0.4,
+      17.5
+     ]
+    },
+    {
+     "size": [
+      3.0,
+      0.9
+     ],
+     "offset": 0.25,
+     "bay": 3.533,
+     "range": [
+      19.7,
+      51.5
+     ]
+    },
+    {
+     "size": [
+      3.0,
+      0.9
+     ],
+     "offset": 0.25,
+     "bay": 3.544,
+     "range": [
+      53.7,
+      78.51
+     ]
+    }
+   ]
+  },
+  {
+   "upper_slots": true,
+   "lower_row": false,
+   "bay_width": 3.3,
+   "slot_size": [
+    3.0,
+    3.2
+   ],
+   "slot_top_offset": 1.3,
+   "split_below_top": 5.9,
+   "split_fascia": true,
+   "runs": [
+    8,
+    9
+   ],
+   "storefronts": [
+    [
+     22.0,
+     23.2
+    ]
+   ],
+   "infill_panels": [
+    [
+     9.0,
+     12.0,
+     3.0
+    ]
+   ],
+   "split_slots": [
+    {
+     "size": [
+      3.0,
+      0.9
+     ],
+     "offset": 0.25,
+     "bay": 3.517,
+     "range": [
+      0.4,
+      21.5
+     ]
+    },
+    {
+     "size": [
+      3.0,
+      0.9
+     ],
+     "offset": 0.25,
+     "bay": 3.346,
+     "range": [
+      23.7,
+      33.74
+     ]
+    }
+   ]
+  }
+ ],
+ "palette": {
+  "upper": [
+   0.76,
+   0.73,
+   0.64
+  ],
+  "lower": [
+   0.7,
+   0.74,
+   0.76
+  ],
+  "structure": [
+   0.66,
+   0.7,
+   0.74
+  ],
+  "recess": [
+   0.5,
+   0.48,
+   0.42
+  ],
+  "coping": [
+   0.62,
+   0.62,
+   0.6
+  ],
+  "pilaster": [
+   0.66,
+   0.7,
+   0.74
+  ],
+  "fascia": [
+   0.82,
+   0.8,
+   0.74
+  ],
+  "infill": [
+   0.52,
+   0.45,
+   0.36
+  ]
+ },
+ "site": {}
+}
