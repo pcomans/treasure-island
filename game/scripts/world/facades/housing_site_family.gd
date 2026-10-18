@@ -15,7 +15,7 @@ static func color(cfg: Dictionary, key: String, fallback: Color) -> Color:
 	var a: Array = cfg.get(key, [])
 	return Color(a[0], a[1], a[2]) if a.size() == 3 else fallback
 
-static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D:
+static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bool = true) -> Node3D:
 	var root := Node3D.new()
 	root.set_meta("build_valid",true)
 	root.name = "SharedHousing_" + str(cfg.target.source_key)
@@ -306,7 +306,146 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 	if cfg.has("carport") and not cfg.carport.is_empty(): canopies.append(cfg.carport)
 	for canopy: Dictionary in canopies:
 		_canopy(root,canopy,palette,roofing,trim,siding)
+	if merge: _merge_parts(root)
 	return root
+
+# The parts above are one node and one mesh each (thousands per instance), which
+# exhausts renderer resource IDs at island scale. Combine them into one
+# MeshInstance3D per (role, shadow, visibility, collision_only) group, with one
+# surface per (material, vertex attributes) in first-appearance order. Each
+# part's vertices move by its own transform; normals use that transform's
+# inverse transpose (renormalized) as the renderer did for sheared beams, and a
+# mirroring transform reverses the triangle winding. Each role keeps its parts'
+# child order, so contacts and their faces stay deterministic. Standard
+# materials merge by the only properties the kit sets (albedo, roughness,
+# metallic); shader materials merge only with themselves.
+const MAX_SURFACES := 256
+
+static func _merge_parts(root: Node3D) -> void:
+	var groups: Array[Dictionary] = []
+	var group_index: Dictionary = {}
+	for child: Node in root.get_children():
+		var part := child as MeshInstance3D
+		if part == null or not _mergeable_part(part):
+			continue
+		var role := str(part.get_meta("family_role", "support"))
+		var collision_only := bool(part.get_meta("collision_only", false))
+		var node_key := [role, int(part.cast_shadow), part.visible, collision_only]
+		if not group_index.has(node_key):
+			group_index[node_key] = groups.size()
+			groups.append({"role": role, "cast_shadow": part.cast_shadow, "visible": part.visible, "collision_only": collision_only, "surfaces": [], "surface_index": {}})
+		var group: Dictionary = groups[group_index[node_key]]
+		for s in part.mesh.get_surface_count():
+			var material: Material = part.material_override if part.material_override != null else part.mesh.surface_get_material(s)
+			var arrays := part.mesh.surface_get_arrays(s)
+			var surface_key := [_material_key(material), _attribute_key(arrays)]
+			if not group.surface_index.has(surface_key):
+				group.surface_index[surface_key] = group.surfaces.size()
+				group.surfaces.append({"material": material, "parts": []})
+			(group.surfaces[group.surface_index[surface_key]].parts as Array).append([arrays, part.transform])
+		root.remove_child(part)
+		part.free()
+	for group: Dictionary in groups:
+		var surfaces: Array = group.surfaces
+		for first in range(0, surfaces.size(), MAX_SURFACES):
+			var mesh := ArrayMesh.new()
+			for surface: Dictionary in surfaces.slice(first, first + MAX_SURFACES):
+				mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, _merged_arrays(surface.parts))
+				mesh.surface_set_material(mesh.get_surface_count() - 1, surface.material)
+			var node := MeshInstance3D.new()
+			node.name = "Merged_%s_%d" % [group.role, root.get_child_count()]
+			node.mesh = mesh
+			node.cast_shadow = group.cast_shadow
+			node.visible = group.visible
+			node.set_meta("family_role", group.role)
+			if group.collision_only: node.set_meta("collision_only", true)
+			root.add_child(node)
+
+# The kit's roof, siding and brick shaders pattern by object-space VERTEX, so a
+# moved part with a shader material stays its own node (identity-space parts
+# keep the same VERTEX when merged).
+static func _mergeable_part(part: MeshInstance3D) -> bool:
+	if part.mesh == null or not _mergeable(part.mesh, part.transform):
+		return false
+	if part.transform != Transform3D.IDENTITY:
+		if part.material_override is ShaderMaterial:
+			return false
+		for s in part.mesh.get_surface_count():
+			if part.material_override == null and part.mesh.surface_get_material(s) is ShaderMaterial:
+				return false
+	return true
+
+# Only triangle parts with attributes the merge carries (vertex, normal,
+# tangent, UV, colour, index), an invertible transform, and indexed geometry
+# when the transform mirrors, are merged; anything else stays its own node.
+static func _mergeable(mesh: Mesh, transform: Transform3D) -> bool:
+	var det := transform.basis.determinant()
+	if absf(det) < 1e-9:
+		return false
+	if mesh is ArrayMesh:
+		for s in mesh.get_surface_count():
+			if (mesh as ArrayMesh).surface_get_primitive_type(s) != Mesh.PRIMITIVE_TRIANGLES:
+				return false
+	elif not mesh is BoxMesh:
+		return false
+	for s in mesh.get_surface_count():
+		var arrays := mesh.surface_get_arrays(s)
+		for a in Mesh.ARRAY_MAX:
+			if arrays[a] != null and a not in [Mesh.ARRAY_VERTEX, Mesh.ARRAY_NORMAL, Mesh.ARRAY_TANGENT, Mesh.ARRAY_TEX_UV, Mesh.ARRAY_COLOR, Mesh.ARRAY_INDEX]:
+				return false
+		if det < 0.0 and arrays[Mesh.ARRAY_INDEX] == null:
+			return false
+	return true
+
+# Parts merge only with parts carrying the same vertex attributes and indexing.
+static func _attribute_key(arrays: Array) -> Array:
+	var present: Array[bool] = []
+	for attribute in arrays: present.append(attribute != null)
+	return present
+
+static func _merged_arrays(parts: Array) -> Array:
+	var vertices := PackedVector3Array()
+	var normals := PackedVector3Array()
+	var tangents := PackedFloat32Array()
+	var uvs := PackedVector2Array()
+	var colors := PackedColorArray()
+	var indices := PackedInt32Array()
+	for item: Array in parts:
+		var arrays: Array = item[0]
+		var xform: Transform3D = item[1]
+		var normal_basis := xform.basis.inverse().transposed()
+		var base := vertices.size()
+		for v: Vector3 in arrays[Mesh.ARRAY_VERTEX]: vertices.append(xform * v)
+		if arrays[Mesh.ARRAY_NORMAL] != null:
+			for n: Vector3 in arrays[Mesh.ARRAY_NORMAL]: normals.append((normal_basis * n).normalized())
+		if arrays[Mesh.ARRAY_TANGENT] != null:
+			var t: PackedFloat32Array = arrays[Mesh.ARRAY_TANGENT]
+			for i in range(0, t.size(), 4):
+				var d := (xform.basis * Vector3(t[i], t[i + 1], t[i + 2])).normalized()
+				tangents.append_array(PackedFloat32Array([d.x, d.y, d.z, t[i + 3]]))
+		if arrays[Mesh.ARRAY_TEX_UV] != null: uvs.append_array(arrays[Mesh.ARRAY_TEX_UV])
+		if arrays[Mesh.ARRAY_COLOR] != null: colors.append_array(arrays[Mesh.ARRAY_COLOR])
+		if arrays[Mesh.ARRAY_INDEX] != null:
+			var source: PackedInt32Array = arrays[Mesh.ARRAY_INDEX]
+			if xform.basis.determinant() < 0.0:
+				for i in range(0, source.size(), 3): indices.append_array(PackedInt32Array([base + source[i], base + source[i + 2], base + source[i + 1]]))
+			else:
+				for i: int in source: indices.append(base + i)
+	var out: Array = []
+	out.resize(Mesh.ARRAY_MAX)
+	out[Mesh.ARRAY_VERTEX] = vertices
+	if not normals.is_empty(): out[Mesh.ARRAY_NORMAL] = normals
+	if not tangents.is_empty(): out[Mesh.ARRAY_TANGENT] = tangents
+	if not uvs.is_empty(): out[Mesh.ARRAY_TEX_UV] = uvs
+	if not colors.is_empty(): out[Mesh.ARRAY_COLOR] = colors
+	if not indices.is_empty(): out[Mesh.ARRAY_INDEX] = indices
+	return out
+
+static func _material_key(material: Material) -> Variant:
+	var standard := material as StandardMaterial3D
+	if standard != null and standard.get_class() == "StandardMaterial3D":
+		return ["standard", standard.albedo_color, standard.roughness, standard.metallic]
+	return material
 
 static func _canopy(root: Node3D, cfg: Dictionary, palette: Dictionary, roof: Material, trim: Material, siding: Material = null) -> void:
 	if not cfg.has("frame") or not cfg.has("station_m"): return
