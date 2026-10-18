@@ -273,8 +273,20 @@ CODE PASS on both commits with two lows, visual L2 PASS for both, progress L1+L2
 PASS. L1/L2 C for both. Parked: colour pass (490 brick reads charcoal where it
 should be warm grey-taupe; 490 white reads slightly blue-grey); code lows (the root
 `scope` string; indexing for `_ground_y`); landscaping, signage, materials.
-Current totals after Mar17k: L1:68 C/145 U; L2:58 C/155 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall127 C/0 I/938 U across213 units/1,065 cells;49 historical
+**Mar17l** large halls rounds 1 and 2, 2026-10-17: panel-hall route extensions
+(`265bbbd` slot size, split height, fascia and storefronts; `309f46f` field shaping and
+`infill_panels`; `45e90b1` validation; `f5ed8f0` `split_slots`) and hall configs
+(`05ada20` and `9e6f5f7` 575 Avenue D and 850 Avenue H; `ad9a8e4` 528, 449 Avenue H,
+516 and 450). `a4ceb26` returns 450 (`w1043836450`) to its generated shell after its
+visual REWORK. CODE PASS on every commit (one medium-low finding on per-box mesh
+count, two low validation gaps); visual and progress PASS for 575, 850, 528, 449 and
+516. L1/L2 C for those five; 450 stays U. Parked: 450 roof-owning redo on the
+`midrise_family` pitched roof; L1 deltas (575 set-back clerestory, 449 hipped roof,
+516 roof monitor); L3 (850 door hoods, 449 multi-pane sash, 516 white trim); colour
+pass (449 off-white over light blue-grey, 575 cream); panel-hall per-box mesh
+merging; the two validation gaps.
+Current totals after Mar17l: L1:73 C/140 U; L2:63 C/150 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall137 C/0 I/928 U across213 units/1,065 cells;49 historical
 recognition credits unchanged.
 **U** no current stage-level conclusion established in this checklist pass.
 
@@ -304,20 +316,20 @@ before selecting another round.
 | Catalog unit / all source IDs | Name | 1 Shape/site | 2 Doors/windows/roof | 3 Secondary | 4 PBR/materials | 5 Decals/finish | Evidence / next family |
 |---|---|---|---|---|---|---|---|
 | physical-building:w24274434 / w24274434 | Building 2 | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | B2 — whole-family025 whole visual/CODE/progress, native/fit/spray/suite PASS; as-built unclaimed |
-| physical-building:w34313512 / w34313512 | 449 Avenue H | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w34313512 / w34313512 | 449 Avenue H | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17l panel halls `265bbbd`…`a4ceb26` — CODE PASS on every commit, visual and progress PASS. Parked: panel-hall per-box mesh merging (medium-low); two validation gaps (low); hipped roof (L1 delta); multi-pane sash (L3); colour pass (off-white over light blue-grey) |
 | physical-building:w34313513 / w34313513 | Harvey Milk Memorial Administration Building, Job Corps Center | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313514 / w34313514 | Advanced Culinary Dormitory | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313515 / w34313515 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313520 / w34313520 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w34313521 / w34313521 | US Dept of Labor Job Corps Food Service Building 368 | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w34313521 / w34313521 | US Dept of Labor Job Corps Food Service Building 368 | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 575 Avenue D (Bldg 368): Mar17l panel halls `265bbbd`…`a4ceb26` — CODE PASS on every commit, visual and progress PASS. Parked: panel-hall per-box mesh merging (medium-low); two validation gaps (low); set-back clerestory (L1 delta); colour pass (cream) |
 | physical-building:w34313523 / w34313523 | Education Center Building 29B | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313525 / w34313525 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w34313528 / w34313528 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w34313528 / w34313528 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 528: Mar17l panel halls `265bbbd`…`a4ceb26` — CODE PASS on every commit, visual and progress PASS. Parked: panel-hall per-box mesh merging (medium-low); two validation gaps (low) |
 | physical-building:w34313535 / w34313535 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313540 / w34313540 | Building 3 | ☑ C | ☑ C | ☐ U | ☑ C | ☐ U | B3 — existing004 whole architecture/material/native-fit/suite PASS; unchanged source, unseen inference retained |
 | physical-building:w34313544 / w34313544 | Naval Station Treasure Island | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313545 / w34313545 | 800 Avenue I, San Francisco, CA | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w34313546 / w34313546 | 850 Avenue H | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w34313546 / w34313546 | 850 Avenue H | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 850 Avenue H (Bldg 202): Mar17l panel halls `265bbbd`…`a4ceb26` — CODE PASS on every commit, visual and progress PASS. Parked: panel-hall per-box mesh merging (medium-low); two validation gaps (low); door hoods (L3) |
 | physical-building:w34313547 / w34313547 | Treasure Island Community YMCA | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | YMCA — scoped envelope/entry/site closure; whole architecture and finish open |
 | physical-building:w34313548 / w34313548 | San Francisco Fire Dept Treasure Island Training Facility Building 600 | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | F — retain; inspect later stages |
 | physical-building:w34313549 / w34313549 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -469,7 +481,7 @@ before selecting another round.
 | physical-building:w109905037 / w109905037 | Education Center Building 29C | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w109905040 / w109905040 | Education Center Building 29E | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w109905044 / w109905044 | Education Center Building 29D | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w110188516 / w110188516 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w110188516 / w110188516 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 516: Mar17l panel halls `265bbbd`…`a4ceb26` — CODE PASS on every commit, visual and progress PASS. Parked: panel-hall per-box mesh merging (medium-low); two validation gaps (low); roof monitor (L1 delta); white trim (L3) |
 | physical-building:w111322535 / w111322535 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w291189336 / w291189336 | Navy Chapel Building 187 | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Ch — lip004 whole visual/CODE and integrated native/fit/stairs/suite PASS; as-built unclaimed |
 | physical-building:w291189918 / w291189918 | Oasis - pizzeria & event venue | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -497,7 +509,7 @@ before selecting another round.
 | physical-building:w545387426 / w545387426 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w764313741 / w764313741 | San Francisco Fire Station 48 | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | S48 — whole envelope/site fit complete; observed entry scoped PASS; ENE/SSE openings unresolved |
 | physical-building:w1001544698 / w1001544698 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w1043836450 / w1043836450 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w1043836450 / w1043836450 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — 450: panel-hall attempt got visual REWORK and was returned to its generated shell (`a4ceb26`); parked for a roof-owning redo on the `midrise_family` pitched roof |
 | physical-building:w1098437841 / w1098437841 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | M — retain complete site; inspect later stages |
 | physical-building:w1212173437 / w1212173437 | Star View Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17k mid-rise family `3f44801` + `6e2cead` — CODE PASS (two lows), visual L2 PASS, progress L1+L2 PASS. Parked: code lows (misleading root `scope` string at `midrise_family.gd:146`; `_ground_y` linear scan needs indexing); landscaping, signage, materials |
 | physical-building:w1222514685 / w1222514685 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -542,7 +554,7 @@ March/November2025 refs and unknown-date Apple context support the scoped envelo
 and observed architecture; missing north capture/unknown rear/schematic materials
 keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
 See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
-Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar17k for current totals);
+Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar17l for current totals);
 **L1:21 C /0 I /192 U**. All other stages unchanged;49 historical credits retained.
 
 ## Island environment layers
