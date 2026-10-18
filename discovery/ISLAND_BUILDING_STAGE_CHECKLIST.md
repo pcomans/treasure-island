@@ -285,9 +285,19 @@ count, two low validation gaps); visual and progress PASS for 575, 850, 528, 449
 516 roof monitor); L3 (850 door hoods, 449 multi-pane sash, 516 white trim); colour
 pass (449 off-white over light blue-grey, 575 cream); panel-hall per-box mesh
 merging; the two validation gaps.
-Current totals after Mar17l: L1:73 C/140 U; L2:63 C/150 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall137 C/0 I/928 U across213 units/1,065 cells;49 historical
-recognition credits unchanged.
+**Mar18a** housing mesh merge, 2026-10-18 (no row changes): `11d5754` merges the
+housing kit's parts into a few meshes per instance, taking the registered housing
+from 117,669 meshes to 315 nodes and 5,279 surfaces. That removes the renderer's
+per-owner resource-ID limit that blackened Site 12's walls. CODE PASS; visual PASS
+under the residual-class ruling (classes 1–4, where class 4 is shadow-penumbra
+sampling noise: soft-edged, about ≤20/255, no geometry outline). Parked follow-ups:
+merge-key guards for properties the merge would silently drop and for mirrored-tangent
+handedness (`w`); the 1318 context ground-overlay coplanar flip (a tan patch is now
+hidden under lawn), where the overlays should be biased or clipped so the intended one
+wins deterministically.
+Current totals after Mar18a (unchanged): L1:73 C/140 U; L2:63 C/150 U; L3/L5:213 U
+each; L4:1 C/212 U. Overall137 C/0 I/928 U across213 units/1,065 cells;49
+historical recognition credits unchanged.
 **U** no current stage-level conclusion established in this checklist pass.
 
 The retained34-building audit entries in [RETRO](RETRO_LOG.md) (2026-09-23,
@@ -554,7 +564,7 @@ March/November2025 refs and unknown-date Apple context support the scoped envelo
 and observed architecture; missing north capture/unknown rear/schematic materials
 keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
 See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
-Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar17l for current totals);
+Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar18a for current totals);
 **L1:21 C /0 I /192 U**. All other stages unchanged;49 historical credits retained.
 
 ## Island environment layers
