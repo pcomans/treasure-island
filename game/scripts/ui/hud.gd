@@ -21,6 +21,8 @@ var _evidence: RuntimeEvidence
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	if OS.has_feature("web"):
+		$PausePanel/PauseLayout/Controls.text = "WASD move • Shift run • Space jetpack • Mouse look\nR recover • F3 debug • Spray unavailable in browser"
 	resume_button.pressed.connect(func() -> void: resume_requested.emit())
 	exit_button.pressed.connect(func() -> void: exit_requested.emit())
 	feedback_panel.hide()

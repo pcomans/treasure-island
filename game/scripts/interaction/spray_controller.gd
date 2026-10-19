@@ -46,6 +46,9 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func attempt_spray() -> void:
+	if OS.has_feature("web"):
+		feedback_requested.emit("Spray is unavailable in the browser build", false)
+		return
 	if _player == null or _camera == null or _player.get_world_3d() == null:
 		_reject("Aim at an exterior building wall", "no_hit")
 		return

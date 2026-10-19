@@ -13,6 +13,10 @@ var capture_mouse_on_ready := true
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	if OS.has_feature("web"):
+		# Keep the complete island while avoiding distant shadow passes in WebGL.
+		$Sun.shadow_enabled = false
+		get_viewport().scaling_3d_scale = 0.75
 	get_tree().paused = false
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	player.hide()
@@ -69,9 +73,12 @@ func _on_world_ready(_report: Dictionary) -> void:
 		player.get_spray_controller().tag_instances.oldest_tag_removed.connect(world_root.get_runtime_evidence().record_tag_eviction)
 	world_root.get_runtime_evidence().bind_runtime(player, world_root.get_boundary())
 	player.set_gameplay_enabled(true)
-	if capture_mouse_on_ready:
+	if capture_mouse_on_ready and not OS.has_feature("web"):
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	hud.show_world_ready()
+	if OS.has_feature("web"):
+		# Browser pointer lock must originate in a user click (Resume).
+		_set_paused(true)
 	print("WORLD_READY")
 	# Launch check for exported builds: load the island, then exit cleanly.
 	if OS.get_cmdline_user_args().has("--quit-on-ready"):

@@ -3,8 +3,7 @@
 #
 #   tools/build-web.sh            -> build/web/ (index.html and the files it loads)
 #
-# build/web is a static site: serve it locally or deploy it to Vercel (see
-# README, "Play in a browser"). Godot's web platform only has the Compatibility
+# build/web is a static site: serve it locally or deploy it to Vercel. Godot's web platform only has the Compatibility
 # renderer (WebGL 2). Before handing it over this
 #   1. exports the single-threaded web build, which needs no special headers,
 #   2. checks the data pack contains only game files (no reference photos,

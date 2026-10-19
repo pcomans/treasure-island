@@ -20922,3 +20922,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - Worked: reused the existing web exporter from 160efbc on an isolated branch based on c5809e6, preserving the newer island art and protected branch. Existing web templates are installed.
 - Did not: Vercel connector project creation returned 403 forbidden; the team lists no projects and local CLI authentication is absent. Deployment remains blocked pending account permission.
 - Next: validate the actual browser runtime and frame rate before any performance claim; use complete CDP key events and retain the known container pointer-lock limitation.
+
+### web_review — isolated browser export code review, 2026-10-19
+
+- Worked: the five-file baseline kept native presets and runtime code intact; checking the renderer boundary against the actual spray implementation exposed a concrete browser-only gap without another engine run.
+- Did not: successful export and content audit cannot establish playable browser parity. Compatibility does not render Decal nodes, while the unchanged spray path still reports a successful placement.
+- Next: verify each required interaction in the actual browser before delivery; resolve or explicitly scope the spray limitation and stalled startup before calling the port playable. Review baseline 0ef9830 is HOLD, with no visual verdict.
