@@ -59,6 +59,8 @@ func _on_world_ready(_report: Dictionary) -> void:
 		_on_world_failed("player_grounding", "Player could not settle on generated land before its first visible frame.", [])
 		return
 	_world_ready = true
+	if OS.has_feature("web"):
+		_apply_web_detail_distances()
 	if not player.feedback_requested.is_connected(hud.show_feedback):
 		player.feedback_requested.connect(hud.show_feedback)
 	if not player.spray_result.is_connected(world_root.get_runtime_evidence().record_spray):
@@ -107,3 +109,19 @@ func _resume_game() -> void:
 
 func _exit_game() -> void:
 	get_tree().quit()
+
+
+func _apply_web_detail_distances() -> void:
+	# Distance LOD for small building details only. Keep the complete world and
+	# collision inventory, terrain, roads and large architectural silhouettes.
+	for node in world_root.get_node("PlayableWorld/Buildings").find_children("*", "GeometryInstance3D", true, false):
+		var geometry := node as GeometryInstance3D
+		var bounds := geometry.get_aabb()
+		var world_size := (geometry.global_transform * bounds).size
+		var longest := maxf(world_size.x, maxf(world_size.y, world_size.z))
+		if longest <= 12.0:
+			geometry.visibility_range_end = 200.0
+			geometry.visibility_range_end_margin = 20.0
+		elif longest <= 50.0:
+			geometry.visibility_range_end = 500.0
+			geometry.visibility_range_end_margin = 40.0

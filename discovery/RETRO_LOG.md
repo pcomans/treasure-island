@@ -20928,3 +20928,15 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - Worked: the five-file baseline kept native presets and runtime code intact; checking the renderer boundary against the actual spray implementation exposed a concrete browser-only gap without another engine run.
 - Did not: successful export and content audit cannot establish playable browser parity. Compatibility does not render Decal nodes, while the unchanged spray path still reports a successful placement.
 - Next: verify each required interaction in the actual browser before delivery; resolve or explicitly scope the spray limitation and stalled startup before calling the port playable. Review baseline 0ef9830 is HOLD, with no visual verdict.
+
+### web_review — browser followup source review, 2026-10-19
+
+- Worked: complete c5809e6..2226762 review found the web-only conditions preserve native rendering and spray; the owner-approved spray omission now has truthful controls and feedback, and startup uses the existing pause/Resume path.
+- Did not: source review alone cannot prove browser pointer lock, performance or shader compilation. The unused custom Mersea shader is still constructed before selecting the web material, so the author must inspect the actual browser log for remaining PREMUL errors.
+- Next: keep source PASS separate from runtime and visual acceptance; reuse the reviewed export/audit protections and verify the current browser run rather than repeat native tests for these feature-gated changes.
+
+### web_visual — independent browser still-image review, 2026-10-19
+
+- Worked: directly inspected `/tmp/ti-web-20261019-baseline-fps.png` and `/tmp/ti-web-20261019-revision-paused.png` for source `2226762`. Both show a coherent shoreline, paths, building facades, capsule player and readable debug HUD; the revision pause panel clearly says spray is unavailable in the browser. Scoped still-image PASS; no building recognition or acceptance change.
+- Did not: the revision has coarser facade/roof edges and lacks the baseline capsule contact shadow. Its paused state and darker image prevent a clean attribution of colour/material differences; this single view does not establish all glass surfaces or whole-island parity. The visible 13 FPS is no proof of playable performance, and stills cannot verify motion or pointer lock.
+- Next: preserve the distinction between visual coherence and browser playability. If material parity needs diagnosis, reuse this camera with matching unpaused states; retain the existing runtime/performance and pointer-lock blockers separately rather than expanding a still-image PASS.
