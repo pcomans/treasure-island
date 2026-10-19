@@ -20916,3 +20916,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the merge is one self-contained pass at the end of `build()` with an explicit eligibility gate. I could check each property that survives (role, shadow, visibility, `collision_only`, material identity, transform maths, winding) against every place the installer and fit test read it. Simulating the queued kit commits onto this branch showed both conflicts come from the earlier Flounder edit, not from the merge.
 - What did not work well: the merge drops any per-part property it does not key on (GeometryInstance overlay/transparency/visibility range, `physical_role`/`construction_detail` meta, StandardMaterial settings beyond albedo/roughness/metallic). The kit does not set those today, so I had to grep three producer files to prove that.
 - What the team should change next time: when a new kit feature introduces a material or node property, update `_material_key` or `_mergeable_part` in the same commit, and add a one-line test fixture that merges two parts differing only in that property.
+
+### browser_deploy — isolated browser export preparation, 2026-10-19
+
+- Worked: reused the existing web exporter from 160efbc on an isolated branch based on c5809e6, preserving the newer island art and protected branch. Existing web templates are installed.
+- Did not: Vercel connector project creation returned 403 forbidden; the team lists no projects and local CLI authentication is absent. Deployment remains blocked pending account permission.
+- Next: validate the actual browser runtime and frame rate before any performance claim; use complete CDP key events and retain the known container pointer-lock limitation.
