@@ -682,3 +682,17 @@ The 2026-10-18 housing mesh merge rendered three things differently from the per
 Separately, `get_faces()` snaps vertices to 0.0001 in mesh space, so contacts from merged meshes differ from per-part contacts by about one float32 ULP.
 
 Before batching parts, check each basis's determinant and shear. Keep moved parts with object-space shaders separate. Prove the result with AE parity against a rerun control.
+
+
+## Verify the browser runtime separately from export success
+
+The 2026-10-19 browser export passed its pack audit but actual WebGL rendering
+reported an unsupported Mersea premultiplied-alpha shader, and Chrome154 on
+headless Weston crashed on a real Resume pointer-lock request. A web-only
+existing StandardMaterial glass fallback cleared the observed shader error.
+Native content-audit PASS does not establish browser rendering or input support.
+Use actual browser console/pixels; preserve environment-specific input failures
+and label any test-only browser shim. In the same run, the Vercel connector saw
+no projects and denied creation, while the owner's authenticated CLI saw their
+projects and deployed successfully. An empty connector list need not mean the
+account has no projects; use the prescribed same-team authenticated CLI fallback.

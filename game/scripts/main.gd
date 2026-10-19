@@ -112,8 +112,8 @@ func _exit_game() -> void:
 
 
 func _apply_web_detail_distances() -> void:
-	# Distance LOD for small building details only. Keep the complete world and
-	# collision inventory, terrain, roads and large architectural silhouettes.
+	# Distance culling by building mesh size. Keep the complete loaded world,
+	# collision inventory, terrain and roads; distant small meshes can disappear.
 	for node in world_root.get_node("PlayableWorld/Buildings").find_children("*", "GeometryInstance3D", true, false):
 		var geometry := node as GeometryInstance3D
 		var bounds := geometry.get_aabb()

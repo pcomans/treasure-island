@@ -76,3 +76,34 @@ first time (it is not notarized).
 - [LEARNINGS.md](LEARNINGS.md): lessons from earlier work.
 - [HUMAN.md](HUMAN.md): things only the owner can do.
 - Older records: Git history and `evidence/`.
+
+
+## Browser build
+
+`tools/build-web.sh` exports the committed checkout to `build/web` and audits the
+pack for game-only content. Native builds retain Forward+; the browser uses
+Godot's Compatibility/WebGL 2 renderer and single-threaded WebAssembly.
+
+Open https://treasure-island-five.vercel.app/ and wait for the island to load,
+then click **Resume**. WASD moves, Shift runs, Space rises with the jetpack,
+releasing Space descends slowly, mouse movement looks around, and Esc pauses.
+Spray is omitted in the browser build by owner approval. F3 shows actual FPS.
+
+To deploy a new exported build to the existing Vercel project, run the CLI from
+`build/web`, verify the linked `treasure-island` project, then deploy production.
+Do not upload the source checkout, reference imagery or evidence directory.
+The web exporter writes immutable caching for commit-named assets and the WASM
+content type. The source branch is `web/vercel-20261019`; the delivery branch is
+untouched.
+
+Browser performance and pointer lock need checking on the playing machine.
+The development container's Chrome 154 on headless Weston has a reproducible
+pointer-lock crash; this is not evidence that the owner's Mac browser crashes.
+
+In the Linux development browser, mesh-size distance culling increased the
+observed spawn frame rate from13 to39–40FPS. Distant small building meshes can
+disappear; complete source inventory and collisions remain loaded. Initial
+world construction took about90seconds. These measurements used Chrome154,
+AMD Radeon780M and headless Weston; they do not predict Mac performance.
+Traversal smoke checks required a test-only pointer-lock override because of
+the container crash. That override is not in the deployed game.

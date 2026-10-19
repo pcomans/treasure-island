@@ -276,3 +276,14 @@ changed.
 - Actual scoped command: `sudo apt-get install -y --no-install-recommends python3-yaml`, exit0; two new packages, zero upgrades/removals. Did not rerun the full post-create script or alter unrelated packages/configuration.
 - Earlier quick-validator/import attempts failed with missing `yaml` (84a55e/67c0c8), not PASS. After installation, `python3 /home/vscode/.codex/skills/.system/skill-creator/scripts/quick_validate.py /workspaces/content-main/.agents/skills/building-texture` returned `Skill is valid!`, exit0 (dc31ee); setup shell syntax passed. This validates skill structure, not workflow efficacy, game runtime or independent review.
 - Container-only dependency; no account, credentials or reference assets. To remove deliberately, remove the package from setup and uninstall `python3-yaml`; retain libyaml if another package needs it.
+
+
+## Browser deployment tooling — 2026-10-19
+
+Used existing Godot4.7.2 web_nothreads templates and the checked-in exporter;
+no template download or LFS hydration was required. After the owner completed
+`npx vercel login`, used Vercel CLI64.5.0 through npx for the authorized new
+`treasure-island` static project and production deploy. No global Git config,
+account connections or paid resources were created by the executor. Credentials
+were neither printed nor committed.
+The Vercel platform ran its own CLI64.3.1 for the static build.
