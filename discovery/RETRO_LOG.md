@@ -21061,3 +21061,15 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the matched 6th St pose (`detail-sside-2019-matched`) next to the Apr 2019 photo let me judge 29E's gallery directly. The post rhythm, eave line, blue door and long low gable all line up. The comb layout with courtyard wings reads clearly in both raised contexts.
 - What did not work well: the palette chose "tan boards on cream siding". The photo's strongest cue is pale boards in white frames against dark, peeling weathered siding, and with that choice the boarded windows almost vanish at gameplay distance. This is an opening-readability problem that palette produced, and no preflight caught it.
 - What the team should change next time: add a contrast check to the swatch step for openings. Each opening family (glazing, boards, doors) should differ from its wall by a visible luminance step in sun and in shade, matched against the reference crop.
+
+## visual-review (29E palette recheck, 2026-10-21)
+
+- What worked well: a palette-only fix verified at the same matched pose. The pale boards now read as a clear window rhythm against the darker siding, as in the Apr 2019 photo, and one comparison closed the REWORK.
+- What did not work well: the siding came out flat mid grey-brown rather than the photo's patchy dark weathering with pale exposed boards. That is acceptable at Level 2, but the colour pass will have to revisit it.
+- What the team should change next time: when a palette fix targets contrast, record the target luminance step from the reference crop alongside the new albedo, so the recheck can confirm it by number as well as by eye.
+
+## code-review (Education 29A-E configs, 2026-10-21)
+
+- What worked well: rebuilding each ring from kept plus virtual runs, then sampling the gallery bay against the sectional roof and the walkway slabs, showed the setback is fully roofed and its slab area matches the bay area exactly (for example 121.8 m² on 29A). The "canopy" entries are post-and-beam lines, not the walkway roof, which the generic canopy-coverage check would otherwise have misread.
+- What did not work well: entries carry no `ground_label`, so pairing each door with its pad needed a spatial lookup in front of every door instead of a key match.
+- What the team should change next time: give every entry a `ground_label` naming its pad or the walkway slab it stands on. Pairing then becomes a key check, and an unpaired door is visible at a glance.
