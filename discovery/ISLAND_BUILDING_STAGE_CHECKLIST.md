@@ -310,8 +310,16 @@ PASS for all 20, progress PASS. L1/L2 C for all 20. Parked: colour pass (1120, 1
 and 1145 warm white or cream; 1137's siding slightly light); rear fences on 1116,
 1129 and 1139, and the front fence on 1108; 1147 keeps the module layout;
 `eave_rgb` applies only with the shallow roof.
-Current totals after Mar21b: L1:124 C/89 U; L2:99 C/114 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall224 C/0 I/841 U across213 units/1,065 cells;49 historical
+**Mar21c** sheds follow-ups, 2026-10-21: `f357466` range-checks the mid-rise
+outbuilding fields (CODE PASS); `b85a505` lets the fit test skip only site-blocked
+walk-up sides in `building_fit.gd` (CODE PASS); `51349c3` models 450
+(`w1043836450`, 680 Avenue I) on the mid-rise family, visual L1+L2 PASS, resolving
+its earlier REWORK. 450 L1/L2 C; shelter `w1222514695` L1 C (site-blocked west side
+skipped under the new rule); `w291196386` stays uncredited (the north gap is real
+but too narrow for the stock player). Parked for 450: ramp length (foundation-exposure
+trade-off); colour pass (roof grey-brown, lighter glazing).
+Current totals after Mar21c: L1:126 C/87 U; L2:100 C/113 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall227 C/0 I/838 U across213 units/1,065 cells;49 historical
 recognition credits unchanged.
 **U** no current stage-level conclusion established in this checklist pass.
 
@@ -530,16 +538,16 @@ before selecting another round.
 | physical-building:w291196379 / w291196379 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1 PASS (L2 not passed). Parked: validation lows |
 | physical-building:w291196381 / w291196381 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1+L2 PASS. Parked: validation lows |
 | physical-building:w291196382 / w291196382 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1+L2 PASS. Parked: validation lows |
-| physical-building:w291196386 / w291196386 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — Mar21a sheds: no stage change; walk-up blocked by a neighbour or the boundary, fit-test allowance pending |
+| physical-building:w291196386 / w291196386 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — Mar21c: stays uncredited; the north gap is real but too narrow for the stock player |
 | physical-building:w545387426 / w545387426 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1 PASS (L2 not passed). Parked: validation lows |
 | physical-building:w764313741 / w764313741 | San Francisco Fire Station 48 | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | S48 — whole envelope/site fit complete; observed entry scoped PASS; ENE/SSE openings unresolved |
 | physical-building:w1001544698 / w1001544698 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1+L2 PASS. Parked: validation lows |
-| physical-building:w1043836450 / w1043836450 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — 450: panel-hall attempt got visual REWORK and was returned to its generated shell (`a4ceb26`); parked for a roof-owning redo on the `midrise_family` pitched roof |
+| physical-building:w1043836450 / w1043836450 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 450 (680 Avenue I): Mar21c redo on the mid-rise family `51349c3` — visual L1+L2 PASS, resolving the earlier panel-hall REWORK; config code-trivial. Parked: ramp length (foundation-exposure trade-off); colour pass (roof grey-brown, lighter glazing) |
 | physical-building:w1098437841 / w1098437841 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | M — retain complete site; inspect later stages |
 | physical-building:w1212173437 / w1212173437 | Star View Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17k mid-rise family `3f44801` + `6e2cead` — CODE PASS (two lows), visual L2 PASS, progress L1+L2 PASS. Parked: code lows (misleading root `scope` string at `midrise_family.gd:146`; `_ground_y` linear scan needs indexing); landscaping, signage, materials |
 | physical-building:w1222514685 / w1222514685 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w1222514686 / w1222514686 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w1222514695 / w1222514695 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — Mar21a sheds: no stage change; walk-up blocked by a neighbour or the boundary, fit-test allowance pending |
+| physical-building:w1222514695 / w1222514695 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21c shelter: L1 C under the blocked-side walk-up rule (`b85a505`, CODE PASS); the site-blocked west side is skipped |
 | physical-building:w1222720021 / w1222720021 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w1249412093 / w1249412093 | Hawkins | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w1249412094 / w1249412094, w1282547786, w1282547787 | Isle House | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -579,7 +587,7 @@ March/November2025 refs and unknown-date Apple context support the scoped envelo
 and observed architecture; missing north capture/unknown rear/schematic materials
 keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
 See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
-Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar21b for current totals);
+Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar21c for current totals);
 **L1:21 C /0 I /192 U**. All other stages unchanged;49 historical credits retained.
 
 ## Island environment layers
