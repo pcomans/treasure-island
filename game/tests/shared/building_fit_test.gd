@@ -12,8 +12,9 @@ extends SceneTree
 ##    recovery. Ending up under the building (carport, arcade) is only noted;
 ##    walking through walls is check 2. A side is skipped (WALK_UP_SKIPPED, with
 ##    the reason) only when every candidate start on it lies outside the playable
-##    boundary or inside another building's frozen footprint; every other side
-##    must still pass, and at least two sides must pass.
+##    boundary, inside another building's frozen footprint, or was rejected by
+##    another building's body (ground ray, drop pose or corridor); every other
+##    side must still pass, and at least two sides must pass.
 ## 5. Stairs: each flight listed in the building's catalog entry as
 ##    "stairs": [{"bottom": [x, z], "top": [x, z]}] is walked up and back down.
 ## A check with nothing to sample fails: it would otherwise pass untested.
