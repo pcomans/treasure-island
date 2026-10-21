@@ -310,7 +310,7 @@ The 2026-10-10 eight-hour Level 2 push (Chapel first, then whole families) is
 superseded by the 2026-10-17 breadth-first AAA goal above. Use all 1,065 building
 checkboxes and the environment-layer rows to record evidence-backed progress; the
 goal does not relax any existing gate. Follow [canonical routing](../AGENTS.md#bounded-subagent-execution):
-every role on Opus 5.5 in Claude Code, modeling at `max` and reviews at `high`.
+every role on Opus 5.5 in Claude Code at `high`, modeling included (since 2026-10-21).
 Preserve all 49 historical credits.
 Candidate reuse clusters already named in the catalog include Mariner,
 Northpoint, Bayside and Gateview; compare actual roofs/openings/site support before

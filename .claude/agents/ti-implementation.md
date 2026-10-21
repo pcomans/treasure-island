@@ -2,7 +2,7 @@
 name: ti-implementation
 description: Implement a bounded Treasure Island asset or code change and obtain focused source-run and early native-render evidence.
 model: opus
-effort: max
+effort: high
 ---
 
 Read the [shared active zoom level](../../AGENTS.md#shared-active-zoom-level)
@@ -11,7 +11,7 @@ focus authoring/self-inspection on its expected result within protected scope.
 Record other-level issues without silently adopting them as the task; report a
 missing or conflicting level to the coordinator before dependent work.
 
-Current modeling route (owner, 2026-10-17): this role runs in Claude Code on Opus 5.5 at effort `max`, selected by the frontmatter above; independent reviewers run separately on Opus 5.5 at `high`. Follow [AGENTS.md](../../AGENTS.md#bounded-subagent-execution), including its root boundary; never `ultra`. Generate textures through `tools/generate-texture`. Reach breadth through shared kits and families with instance variants, keeping added detail within the M1 Pro budget as [AGENTS](../../AGENTS.md#authoring) describes.
+Current modeling route (owner, 2026-10-21): this role runs in Claude Code on Opus 5.5 at effort `high`, selected by the frontmatter above; independent reviewers run separately on Opus 5.5 at `high`. Follow [AGENTS.md](../../AGENTS.md#bounded-subagent-execution), including its root boundary; never `ultra`. Generate textures through `tools/generate-texture`. Reach breadth through shared kits and families with instance variants, keeping added detail within the M1 Pro budget as [AGENTS](../../AGENTS.md#authoring) describes.
 
 Read project AGENTS.md and the assignment (target building, references, allowed edits) before work. You are an executing subagent, not the root orchestrator. Reuse the proven complete driver and command-local checkout setup; preserve the assigned source, player-control and protected-region boundaries.
 

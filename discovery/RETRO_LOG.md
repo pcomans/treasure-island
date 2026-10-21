@@ -20940,3 +20940,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: grouping 33 small units into seven reference modules on one extended mid-rise producer turned the largest remaining count of plain boxes into one delivery. Credit follows evidence: L1+L2 only where a dated photo supports a module, L1 only for the low-detail E plant and the no-imagery units, and none where the walk-up gate is still open.
 - What did not work well: the counts in the task note disagree. Its assignment line says 21 Level 2 units, but the module table holds 17 (16 after 386). Three E units (741, 754, 744) also appear in the no-imagery list. Credit had to be reconstructed from the reference note's module table.
 - What the team should change next time: keep one per-unit table, with key, module and credited level, in the task note from the start, so the checklist update is a copy rather than a reconstruction. Close the boundary and neighbour-blocked walk-up allowance in code review before the next fringe batch.
+
+## 2026-10-21 — docs: modeling effort max to high
+
+- Worked: the live role file and the delivery branch changed together, so the next dispatch picks up `high` while the canonical routing, role body, skill, LEARNINGS header and checklist line all say the same thing.
+- Did not work: the requested rationale said Anthropic's effort curve "flattens after high", but the cited page publishes no `max` figure; its only data above `high` is a single `xhigh` run for Opus 5.5 (96.7% vs 95.3% at about 2.5 times the cost). I recorded those numbers rather than a general claim.
+- Next time: check a cited source before relaying its conclusion, and judge the rollback signal against the send-back and fit-failure counts already visible in ordinary handoffs, not a new tracker.
