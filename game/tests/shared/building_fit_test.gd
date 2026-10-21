@@ -10,7 +10,10 @@ extends SceneTree
 ## 4. Walk-up: from each side the stock player walks up to the building, arrives
 ##    next to it (within 1.5 m), stays on the ground and never needs a fall
 ##    recovery. Ending up under the building (carport, arcade) is only noted;
-##    walking through walls is check 2.
+##    walking through walls is check 2. A side is skipped (WALK_UP_SKIPPED, with
+##    the reason) only when every candidate start on it lies outside the playable
+##    boundary or inside another building's frozen footprint; every other side
+##    must still pass, and at least two sides must pass.
 ## 5. Stairs: each flight listed in the building's catalog entry as
 ##    "stairs": [{"bottom": [x, z], "top": [x, z]}] is walked up and back down.
 ## A check with nothing to sample fails: it would otherwise pass untested.

@@ -23,6 +23,7 @@ var _prefix := ""
 var _unsafe := false
 var _support_context: Dictionary = {}
 var _adjacent_source := ""
+var _source := ""
 var _observe_adjacent_support := false
 var _observed_adjacent_support := false
 var _source_roofs_loaded := false
@@ -91,6 +92,7 @@ func check(source_key: String, walk_up: bool, prefix: String = "", stairs: Array
 		return [prefix + "check not run: a previous unsafe failure stopped this driver"]
 	_failures = []
 	_adjacent_source = adjacent_source
+	_source = source_key
 	_observe_adjacent_support = false
 	_prefix = prefix
 	var nodes := _h.building_nodes(source_key)
@@ -327,6 +329,7 @@ func _walk_start(center: Vector3, side: Vector3, half_depth: float, half_width: 
 	# Preserve the original fifteen candidates before trying native solid-wall
 	# anchors. Every proposal uses the same complete preflight before placement.
 	var candidates: Array[Dictionary] = []
+	var points: Array[Vector2] = []
 	for lane: float in [0.0, -0.25, 0.25, -0.125, 0.125]:
 		candidates.append({"offset": half_width * 2.0 * lane, "label": "lane %.2f" % lane})
 	for anchor: float in _wall_anchors(center, side, wall_faces, wall_shapes, candidates):
@@ -336,6 +339,7 @@ func _walk_start(center: Vector3, side: Vector3, half_depth: float, half_width: 
 		for margin: float in [5.0, 2.0, 10.0]:
 			var candidate := str(proposal.label) + " / "
 			var xz := Vector2(lane_center.x, lane_center.z) + Vector2(side.x, side.z) * (half_depth + margin)
+			points.append(xz)
 			var point := Vector3(xz.x, 0.0, xz.y)
 			if not _h.world.get_boundary().contains_position(point):
 				rejected.append(candidate + ("%.1f m: outside playable boundary" % margin))
@@ -374,7 +378,37 @@ func _walk_start(center: Vector3, side: Vector3, half_depth: float, half_width: 
 			print("%sWALK_PREFERENCE side=%s candidate=%s margin=%.1f reason=%s" % [_prefix, _side_name(side), proposal.label, margin, preference])
 	if not fallback.is_empty():
 		return _selected_walk_start(fallback, "first mandatory-qualified fallback")
-	return {"ok": false, "reason": "; ".join(rejected)}
+	return {"ok": false, "reason": "; ".join(rejected), "points": points}
+
+
+## A side is site-blocked only when every candidate start on it lies outside the
+## playable boundary or inside another building's frozen roof footprint. Returns
+## the reason, or "" when any candidate is ordinary ground (the side must pass)
+## or the frozen footprints are unavailable (fail closed).
+func _site_blocked(points: Array) -> String:
+	if points.is_empty() or _source_roofs_error != "" or _source_roofs.is_empty():
+		return ""
+	var outside := 0
+	var occupants: Dictionary = {}
+	for xz: Vector2 in points:
+		if not _h.world.get_boundary().contains_position(Vector3(xz.x, 0.0, xz.y)):
+			outside += 1
+			continue
+		var owner := ""
+		for key: String in _source_roofs:
+			if key == _source:
+				continue
+			var faces: PackedVector3Array = _source_roofs[key]
+			for i in range(0, faces.size() - 2, 3):
+				if Geometry2D.point_is_inside_triangle(xz, Vector2(faces[i].x, faces[i].z), Vector2(faces[i + 1].x, faces[i + 1].z), Vector2(faces[i + 2].x, faces[i + 2].z)):
+					owner = key
+					break
+			if owner != "":
+				break
+		if owner == "":
+			return ""
+		occupants[owner] = int(occupants.get(owner, 0)) + 1
+	return "all %d candidate starts blocked: %d outside the playable boundary, inside other footprints %s" % [points.size(), outside, occupants]
 
 
 func _selected_walk_start(result: Dictionary, selection: String) -> Dictionary:
@@ -654,6 +688,7 @@ func _check_walk_up(box: AABB, own: Array[RID], wall_shapes: Dictionary, wall_fa
 	var center := box.get_center()
 	var passed := 0
 	var attempted := 0
+	var skipped: Array[String] = []
 	var sides := [Vector3.FORWARD, Vector3.BACK, Vector3.LEFT, Vector3.RIGHT]
 	for side: Vector3 in sides:
 		if _unsafe:
@@ -663,6 +698,11 @@ func _check_walk_up(box: AABB, own: Array[RID], wall_shapes: Dictionary, wall_fa
 		var half_width := absf(side.z) * box.size.x * 0.5 + absf(side.x) * box.size.z * 0.5
 		var setup := _walk_start(center, side, half_depth, half_width, own, wall_shapes, wall_faces)
 		if not setup.ok:
+			var blocked := _site_blocked(setup.get("points", []))
+			if blocked != "":
+				skipped.append(_side_name(side))
+				print("%sWALK_UP_SKIPPED side=%s reason=%s" % [_prefix, _side_name(side), blocked])
+				continue
 			_failures.append(_prefix + "%s: no safe same-side start: %s" % [name, setup.reason])
 			_unsafe = true
 			break
@@ -719,8 +759,9 @@ func _check_walk_up(box: AABB, own: Array[RID], wall_shapes: Dictionary, wall_fa
 		if arrived:
 			passed += 1
 		print("%sWALK_UP side=%s arrived=%s at=%s contacts=%s" % [_prefix, _side_name(side), arrived, at, _touched.map(func(body: Object) -> String: return str((body as Node).get_path()))])
-	print("%swalk-up: %d of %d required sides passed; %d attempted" % [_prefix, passed, sides.size(), attempted])
-	if passed != sides.size():
+	var required := sides.size() - skipped.size()
+	print("%swalk-up: %d of %d required sides passed; %d attempted; site-blocked sides skipped=%s" % [_prefix, passed, required, attempted, skipped])
+	if passed != required or passed < 2:
 		_failures.append(_prefix + "walk-up: required approaches incomplete; remaining cases were not accepted")
 
 
