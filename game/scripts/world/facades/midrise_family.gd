@@ -509,8 +509,14 @@ static func _clip(poly: PackedVector2Array, point: Vector2, normal: Vector2) -> 
 		var a := clean[(i + clean.size() - 1) % clean.size()]
 		var b := clean[i]
 		var c := clean[(i + 1) % clean.size()]
-		if absf((b - a).cross(c - b)) > 1e-6:
-			result.append(b)
+		var turn := (b - a).cross(c - b)
+		# Clipping a concave ring along one of its own edges can leave a zero-width
+		# spike (the outline runs out along the cut and back). In single precision
+		# its tip survives the absolute collinear test, so also drop a vertex where
+		# the outline reverses within 1e-4 rad; a valid outline never has one.
+		if absf(turn) <= 1e-6 or ((b - a).dot(c - b) < 0.0 and absf(turn) <= 1e-4 * (b - a).length() * (c - b).length()):
+			continue
+		result.append(b)
 	return result
 
 
