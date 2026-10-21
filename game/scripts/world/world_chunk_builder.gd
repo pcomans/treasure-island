@@ -1026,7 +1026,7 @@ func _polyhaven_tint_for(material_key: String, fallback: Color) -> Color:
 		"road_path":
 			return Color(1.18, 1.12, 0.97)
 		"road_path_pedestrian":
-			return Color("d8d6cf")
+			return Color(1.12, 1.20, 1.28)
 		"major_area_paved":
 			return Color(0.70, 0.76, 0.74)
 		"context_ybi":
