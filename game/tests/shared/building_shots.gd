@@ -14,6 +14,10 @@ extends SceneTree
 ## --views FILE adds source-bound focused gameplay views without replacing these
 ## defaults: {"source": "KEY", "views": [{"name": "entrance",
 ## "player_xz": [x,z], "target_xyz": [x,y,z]}]}.
+## --views-batch FILE: only the focused views of several buildings in one world load,
+## [{"source": "KEY", "plan": "views.json"}, ...], each plan a --views file for its
+## source, saved to OUT/KEY/detail-NAME.png. Fixed-pose views only (no closeup,
+## context, island or overhead shots); any bad entry fails the run.
 
 const WorldHarness := preload("res://game/tests/shared/world_harness.gd")
 
@@ -28,9 +32,15 @@ func _initialize() -> void:
 func _run() -> void:
 	var args := WorldHarness.user_args()
 	var out := str(args.get("out", ""))
-	if out == "" or (not args.has("source") and not args.has("island") and not args.has("overhead")):
+	if out == "" or (not args.has("source") and not args.has("island") and not args.has("overhead") and not args.has("views-batch")):
 		_fail("usage: -- [--source KEY] [--island] [--overhead center_x,center_z,width,depth] --out DIR")
 		return
+	var batch: Array[Dictionary] = []
+	if args.has("views-batch"):
+		batch = _batch_entries(args["views-batch"])
+		if batch.is_empty() or args.has("source") or args.has("views") or args.has("island") or args.has("overhead"):
+			_fail("--views-batch needs a nonempty list of unique {source, plan} entries and no other shot option")
+			return
 	DirAccess.make_dir_recursive_absolute(out)
 	_h = WorldHarness.new(self)
 	var error := await _h.load_world()
@@ -46,6 +56,12 @@ func _run() -> void:
 		await _island_shots(out)
 	if args.has("overhead"):
 		await _overhead_shot(str(args.overhead), out)
+	for entry: Dictionary in batch:
+		var folder := out.path_join(entry.source)
+		DirAccess.make_dir_recursive_absolute(folder)
+		await _focused_views(entry.source, entry.plan, folder)
+		if not _errors.is_empty():
+			break
 	if _errors.is_empty():
 		print("PASS: screenshots in %s" % out)
 	else:
@@ -90,6 +106,27 @@ func _focused_views(source: String, path: String, out: String) -> void:
 		if error != "":
 			_errors.append(error)
 		print("FOCUSED_VIEW %s source=%s player=%s target=%s" % [name, source, _h.player.global_position, target])
+
+
+## The --views-batch list, or empty when it is not a nonempty list of unique,
+## filename-safe sources each paired with a plan path.
+func _batch_entries(path: Variant) -> Array[Dictionary]:
+	var entries: Array[Dictionary] = []
+	if not path is String:
+		return entries
+	var list: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	if not list is Array:
+		return entries
+	var seen := {}
+	for entry: Variant in list:
+		if not entry is Dictionary or not entry.get("source") is String or not entry.get("plan") is String:
+			return [] as Array[Dictionary]
+		var source: String = entry.source
+		if source == "" or source.validate_filename() != source or seen.has(source) or str(entry.plan) == "":
+			return [] as Array[Dictionary]
+		seen[source] = true
+		entries.append({"source": source, "plan": str(entry.plan)})
+	return entries
 
 
 func _numbers(value: Variant, size: int) -> bool:
