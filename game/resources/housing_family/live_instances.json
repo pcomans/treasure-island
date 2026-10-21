@@ -780,6 +780,31 @@
       "source_key": "w95934120",
       "config": "res://game/resources/housing_family/w95934120.json",
       "chunk": "res://generated/world/chunks/x_-2__z_-1.json"
+    },
+    {
+      "source_key": "w109905031",
+      "config": "res://game/resources/housing_family/w109905031.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-1.json"
+    },
+    {
+      "source_key": "w34313523",
+      "config": "res://game/resources/housing_family/w34313523.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-1.json"
+    },
+    {
+      "source_key": "w109905037",
+      "config": "res://game/resources/housing_family/w109905037.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-1.json"
+    },
+    {
+      "source_key": "w109905044",
+      "config": "res://game/resources/housing_family/w109905044.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-1.json"
+    },
+    {
+      "source_key": "w109905040",
+      "config": "res://game/resources/housing_family/w109905040.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-1.json"
     }
   ],
   "expected_visible_active_topology": {
