@@ -21151,3 +21151,13 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the before batch ran while I did the offline decisions, so slot time went to rendering, not waiting. Every new row turned out to have been authored under the current lighting, so the pass could concentrate on the reviewers' flagged items and the path standard instead of re-solving 89 palettes. All edits went through one value-guarded script (112 edits, refusing any stale value).
 - What did not work well: 535's first cream value still read grey on its shaded face; I picked it from the photo without checking the face's game light, so it needed the one allowed iteration. A generated view for the Gateview 1308 apron looked at a plain shell side and proved nothing.
 - What the team should change next time: run the light-model check on the face the review camera actually sees before choosing a value, and take apron checks from the building's own reviewed poses rather than a generated long-side view.
+
+## code-review (colour pass part 2, 2026-10-21)
+
+- What worked well: the recursive JSON diff with palette keys normalised proved the 85-file config commit changes only `materials.path_rgb` (48), `materials.siding_rgb` (4) and palette colours (57 mid-rise entries plus 449's `lower` and `upper`), all valid, and that the shared commit is the single footway tint line. Next time: list the expected per-key counts in the request so the check is a direct comparison.
+
+## visual-review (colour pass part 2, 2026-10-21)
+
+- What worked well: the footway fix reached the material key I flagged (the 1204 world footway tint), so paths now read as neutral concrete everywhere I looked: Flounder, Sturgeon and Mariner. Captions with old and new albedo, including 535's "iteration 2" note, made each change traceable.
+- What did not work well: 535 still reads grey after two albedo raises. That suggests its visible wall uses a different material or a strong weathering multiplier, not the key being edited. 490's row compares against an earlier render instead of the dated photo, so the darker wing's hue couldn't be checked against the reference.
+- What the team should change next time: when a value change doesn't show after one iteration, confirm with a headless material dump which key the visible surface uses before raising the value again. Keep the dated photo in the left column of every triptych.

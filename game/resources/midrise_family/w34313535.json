@@ -170,9 +170,13 @@
       "roughness": 0.95
     },
     "metal_grey": {
-      "rgb": [0.9, 0.85, 0.72],
-      "roughness": 0.6,
-      "metallic": 0.1
+      "rgb": [
+        0.92,
+        0.86,
+        0.7
+      ],
+      "roughness": 0.85,
+      "metallic": 0.0
     },
     "roof_metal": {
       "rgb": [
