@@ -46,7 +46,7 @@ Entry landings are flat walkable pads at the highest terrain under them plus 0.1
 
 ## Outbuilding fields
 
-All are opt-in; configs without them build as before. Materials are shared across instances by value and never changed after creation.
+All are opt-in; configs without them build as before. Materials are shared across instances by value and never changed after creation. Out-of-range values fail the build (`build_valid` false): `pitch_deg` outside (0, 60], roof `t` outside (0, 1] m, `overhang` outside [0, 3] m, `floor_raise` outside [0, 10] m, knee `h` outside (0, 4] m or `t` outside (0, 1] m, deck `t` outside (0, 2] m; so does any non-finite vertex.
 
 | Field | Meaning |
 |---|---|

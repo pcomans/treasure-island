@@ -405,7 +405,11 @@ static func _make_blocks(ctx: Ctx) -> void:
 			return
 		block.poly = poly
 		total += absf(_area(poly))
-		var floor_y := float(item.get("floor_y", ctx.floor_y + float(item.get("floor_raise", 0.0))))
+		var raise := float(item.get("floor_raise", 0.0))
+		if not _in_range(raise, 0.0, 10.0):
+			ctx.errors.append("block %s floor_raise must be 0-10 m" % block.id)
+			return
+		var floor_y := float(item.get("floor_y", ctx.floor_y + raise))
 		var ground_h := float(item.get("ground_h", levels.get("ground_h", 4.0)))
 		var storey_h := float(item.get("storey_h", levels.get("storey_h", 3.0)))
 		block.storeys = int(item.get("storeys", 0))
@@ -424,6 +428,12 @@ static func _make_blocks(ctx: Ctx) -> void:
 		var roof_cfg: Dictionary = item.get("roof", {})
 		block.form = str(roof_cfg.get("form", "flat"))
 		if block.form != "flat":
+			var pitch := float(roof_cfg.get("pitch_deg", 15.0))
+			var slab := float(roof_cfg.get("t", 0.15))
+			var overhang := float(roof_cfg.get("overhang", 0.0))
+			if not (_in_range(pitch, 0.0, 60.0) and pitch > 0.0) or not (_in_range(slab, 0.0, 1.0) and slab > 0.0) or not _in_range(overhang, 0.0, 3.0):
+				ctx.errors.append("block %s roof needs pitch_deg in (0, 60], t in (0, 1] and overhang in [0, 3] m" % block.id)
+				return
 			if block.form not in ["gable", "mono", "pyramid"] or not _convex(poly):
 				ctx.errors.append("block %s needs a convex outline for a gable, mono or pyramid roof" % block.id)
 				return
@@ -1779,6 +1789,13 @@ static func _open_face(ctx: Ctx, face: Face) -> void:
 	var posts := ctx.bucket("support", str(spec.get("post_material", "metal")))
 	var t := float((block.cfg.get("roof", {}) as Dictionary).get("t", 0.15))
 	var knee: Dictionary = spec.get("knee", {})
+	if not knee.is_empty() and not (_in_range(float(knee.get("h", 1.2)), 0.0, 4.0) and float(knee.get("h", 1.2)) > 0.0 and _in_range(float(knee.get("t", 0.15)), 0.0, 1.0) and float(knee.get("t", 0.15)) > 0.0):
+		ctx.errors.append("block %s open knee wall needs h in (0, 4] and t in (0, 1] m" % block.id)
+		return
+	var deck: Dictionary = block.cfg.get("deck", {})
+	if not deck.is_empty() and not (_in_range(float(deck.get("t", 0.3)), 0.0, 2.0) and float(deck.get("t", 0.3)) > 0.0):
+		ctx.errors.append("block %s deck needs t in (0, 2] m" % block.id)
+		return
 	var gap: Array = knee.get("gap", [])
 	var g0 := INF
 	var g1 := -INF
@@ -1801,7 +1818,6 @@ static func _open_face(ctx: Ctx, face: Face) -> void:
 			var mid := face.a + face.d * (s0 + w * 0.5) - face.n * (w * 0.5)
 			var y0 := float(span.y) if not bool(span.ground) else _ground_y(ctx, mid) - BURY_M
 			_box(posts, face, s0, s0 + w, y0, _roof_under(block, mid) + t * 0.5, 0.0, w)
-		var deck: Dictionary = block.cfg.get("deck", {})
 		if block.form == "flat" and not deck.is_empty():
 			var dy := block.roof_y - float(deck.get("t", 0.3))
 			ctx.bucket("support", str(deck.get("material", "slab"))).quad(face.point(a, dy, 0.0), face.point(b, dy, 0.0), face.point(b, block.wall_top, 0.0), face.point(a, block.wall_top, 0.0), face.out3())
@@ -2005,6 +2021,11 @@ static func _make_materials(ctx: Ctx) -> void:
 		ctx.materials[key] = _material_cache[cache_key]
 
 
+## True when value is finite and lo <= value <= hi.
+static func _in_range(value: float, lo: float, hi: float) -> bool:
+	return is_finite(value) and value >= lo and value <= hi
+
+
 static func _emit(ctx: Ctx, root: Node3D) -> int:
 	var keys: Array = ctx.buckets.keys()
 	keys.sort()
@@ -2018,6 +2039,14 @@ static func _emit(ctx: Ctx, root: Node3D) -> int:
 		var mat := parts[1]
 		if role not in ROLES or not ctx.materials.has(mat):
 			ctx.errors.append("unknown role or palette key: " + key)
+			continue
+		var finite := true
+		for v: Vector3 in bucket.vertices:
+			if not v.is_finite():
+				finite = false
+				break
+		if not finite:
+			ctx.errors.append("non-finite vertex in " + key)
 			continue
 		var arrays: Array = []
 		arrays.resize(Mesh.ARRAY_MAX)
