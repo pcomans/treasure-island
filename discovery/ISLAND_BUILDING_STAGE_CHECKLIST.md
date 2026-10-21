@@ -336,8 +336,18 @@ PASS (lows parked), visual L2 PASS for all 23, progress PASS. L1/L2 C for all 23
 from Apr 2019. Parked: colour pass (Chinook whites read grey; 1435 doors
 oversaturated; 1420 siding too brown); 1442 and 1447 have no imagery at any date;
 the garage-court key validation follow-up.
-Current totals after Mar21e: L1:158 C/55 U; L2:140 C/73 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall299 C/0 I/766 U across213 units/1,065 cells;49 historical
+**Mar21f** Education 29A–E and the fit-test extension, 2026-10-21: `fed49fc` lets the
+fit test skip walk-up sides blocked by other buildings' bodies; `35f8f5f` models the
+Education 29A–E barracks on the housing family; `8b36a2c` sets pale boarded windows on
+darker weathered siding. CODE PASS on all, visual PASS for all five after the palette
+fix, progress PASS. L1/L2 C on 29A (`w109905031`), 29B (`w34313523`), 29C
+(`w109905037`, north side skipped as blocked), 29D (`w109905044`) and 29E
+(`w109905040`), and on shed 386 (`w291196386`), which now passes with its north and
+east sides skipped as blocked by 372. Education is modeled as its Apr 2019 state; all
+sides have been behind fencing since 2025. Parked: rafter tails; peeling-paint texture;
+the `door_tone`/`ground_label` lows.
+Current totals after Mar21f: L1:164 C/49 U; L2:146 C/67 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall311 C/0 I/754 U across213 units/1,065 cells;49 historical
 recognition credits unchanged.
 **U** no current stage-level conclusion established in this checklist pass.
 
@@ -373,7 +383,7 @@ before selecting another round.
 | physical-building:w34313515 / w34313515 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313520 / w34313520 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313521 / w34313521 | US Dept of Labor Job Corps Food Service Building 368 | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 575 Avenue D (Bldg 368): Mar17l panel halls `265bbbd`…`a4ceb26` — CODE PASS on every commit, visual and progress PASS. Parked: panel-hall per-box mesh merging (medium-low); two validation gaps (low); set-back clerestory (L1 delta); colour pass (cream) |
-| physical-building:w34313523 / w34313523 | Education Center Building 29B | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w34313523 / w34313523 | Education Center Building 29B | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Education 29B: Mar21f Education 29A–E (`35f8f5f`, `8b36a2c`; fit-test extension `fed49fc`) — CODE PASS, visual PASS after the palette fix, progress PASS. Apr 2019 state; all sides behind fencing since 2025. Parked: rafter tails; peeling-paint texture; `door_tone`/`ground_label` lows |
 | physical-building:w34313525 / w34313525 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313528 / w34313528 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 528: Mar17l panel halls `265bbbd`…`a4ceb26` — CODE PASS on every commit, visual and progress PASS. Parked: panel-hall per-box mesh merging (medium-low); two validation gaps (low) |
 | physical-building:w34313535 / w34313535 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1+L2 PASS. Parked: validation lows; colour pass (to cream) |
@@ -528,10 +538,10 @@ before selecting another round.
 | physical-building:w96698667 / w96698667 | 1218/1440 Gateview Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17f `6539db3` + `970359e` — CODE, visual L1/L2 and progress PASS; 1218 rear-cadence delta CODE and visual PASS. Parked: fences, vent pipes, post bands, carport-top and canopy finish; colour re-check after the lighting decision; Level 2 complete on all sides after the rear-cadence fix |
 | physical-building:w96698672 / w96698672 | 1245 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17d `b69fd3b` + cleanup `9d5df86` — CODE, visual L1/L2 and progress PASS (cleanup: CODE and visual PASS); fit/native/routes, rear+end spray and both full suites exit 0. Parked: step eave return (L3), fences, boxes |
 | physical-building:w96698673 / w96698673 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 1247 Exposition Drive: Mar17g `f9be475` + `e4285b9` — CODE and progress PASS; visual L1/L2 PASS after re-judging with the 1249 carport-ownership evidence (`e4285b9`). Parked: fences, boxes, vent pipes, carport-top finish; colour re-check after lighting |
-| physical-building:w109905031 / w109905031 | Education Center Building 29A | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w109905037 / w109905037 | Education Center Building 29C | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w109905040 / w109905040 | Education Center Building 29E | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w109905044 / w109905044 | Education Center Building 29D | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w109905031 / w109905031 | Education Center Building 29A | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Education 29A: Mar21f Education 29A–E (`35f8f5f`, `8b36a2c`; fit-test extension `fed49fc`) — CODE PASS, visual PASS after the palette fix, progress PASS. Apr 2019 state; all sides behind fencing since 2025. Parked: rafter tails; peeling-paint texture; `door_tone`/`ground_label` lows |
+| physical-building:w109905037 / w109905037 | Education Center Building 29C | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Education 29C (north side skipped: blocked): Mar21f Education 29A–E (`35f8f5f`, `8b36a2c`; fit-test extension `fed49fc`) — CODE PASS, visual PASS after the palette fix, progress PASS. Apr 2019 state; all sides behind fencing since 2025. Parked: rafter tails; peeling-paint texture; `door_tone`/`ground_label` lows |
+| physical-building:w109905040 / w109905040 | Education Center Building 29E | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Education 29E: Mar21f Education 29A–E (`35f8f5f`, `8b36a2c`; fit-test extension `fed49fc`) — CODE PASS, visual PASS after the palette fix, progress PASS. Apr 2019 state; all sides behind fencing since 2025. Parked: rafter tails; peeling-paint texture; `door_tone`/`ground_label` lows |
+| physical-building:w109905044 / w109905044 | Education Center Building 29D | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Education 29D: Mar21f Education 29A–E (`35f8f5f`, `8b36a2c`; fit-test extension `fed49fc`) — CODE PASS, visual PASS after the palette fix, progress PASS. Apr 2019 state; all sides behind fencing since 2025. Parked: rafter tails; peeling-paint texture; `door_tone`/`ground_label` lows |
 | physical-building:w110188516 / w110188516 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 516: Mar17l panel halls `265bbbd`…`a4ceb26` — CODE PASS on every commit, visual and progress PASS. Parked: panel-hall per-box mesh merging (medium-low); two validation gaps (low); roof monitor (L1 delta); white trim (L3) |
 | physical-building:w111322535 / w111322535 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1+L2 PASS. Parked: validation lows |
 | physical-building:w291189336 / w291189336 | Navy Chapel Building 187 | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Ch — lip004 whole visual/CODE and integrated native/fit/stairs/suite PASS; as-built unclaimed |
@@ -556,7 +566,7 @@ before selecting another round.
 | physical-building:w291196379 / w291196379 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1 PASS (L2 not passed). Parked: validation lows |
 | physical-building:w291196381 / w291196381 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1+L2 PASS. Parked: validation lows |
 | physical-building:w291196382 / w291196382 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1+L2 PASS. Parked: validation lows |
-| physical-building:w291196386 / w291196386 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — Mar21c: stays uncredited; the north gap is real but too narrow for the stock player |
+| physical-building:w291196386 / w291196386 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Shed 386: Mar21f — now passes under the body-blocked walk-up rule (`fed49fc`, CODE PASS); north and east skipped as blocked by 372. Sheds verdicts as in Mar21a |
 | physical-building:w545387426 / w545387426 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1 PASS (L2 not passed). Parked: validation lows |
 | physical-building:w764313741 / w764313741 | San Francisco Fire Station 48 | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | S48 — whole envelope/site fit complete; observed entry scoped PASS; ENE/SSE openings unresolved |
 | physical-building:w1001544698 / w1001544698 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1+L2 PASS. Parked: validation lows |
@@ -605,7 +615,7 @@ March/November2025 refs and unknown-date Apple context support the scoped envelo
 and observed architecture; missing north capture/unknown rear/schematic materials
 keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
 See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
-Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar21e for current totals);
+Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar21f for current totals);
 **L1:21 C /0 I /192 U**. All other stages unchanged;49 historical credits retained.
 
 ## Island environment layers
