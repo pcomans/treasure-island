@@ -21037,3 +21037,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the branch base lacked Site 12, the sheds and 450, so I built the real stacking target read-only with `git merge-tree` and `git archive` onto delivery HEAD 4e79f2a, unioned the two `live_instances` lists (149 unique), and ran the exact overlap check against that. The "no overlap with any config" answer therefore covers what will actually land.
 - What did not work well: the turning-circle carrier decision for the configless 1444, 1445, 1442 and 1447 is recorded only in the private task note. The configs carry the node ID and a generic split rule, so a later generator pass has to rediscover who carries those shares.
 - What the team should change next time: write carrier-of-record for shares belonging to configless units into the carrying piece's own data (for example a `carries_for` list of source keys), and validate the new kit keys' shapes in the producer instead of relying on authored configs being well formed.
+
+## code-review (garage-court guards 34fd2cf, 2026-10-21)
+
+- What worked well: the guards share `_number`, `_rgb` and `_invalid` helpers and leave each valid branch's geometry code untouched, so identical valid builds follow from the diff. Scanning every registered config (18 stile, 162 shutter, 10 two-tone and 5 gablet users, none on HEAD) showed no guard can fire on existing data, and the author's six broken copies show each one firing.
+- What did not work well: nothing material.
+- What the team should change next time: keep shipping the broken-copy guard check as evidence for each new opt-in key; it is cheaper to review than reasoning about every malformed shape.
