@@ -21073,3 +21073,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: rebuilding each ring from kept plus virtual runs, then sampling the gallery bay against the sectional roof and the walkway slabs, showed the setback is fully roofed and its slab area matches the bay area exactly (for example 121.8 m² on 29A). The "canopy" entries are post-and-beam lines, not the walkway roof, which the generic canopy-coverage check would otherwise have misread.
 - What did not work well: entries carry no `ground_label`, so pairing each door with its pad needed a spatial lookup in front of every door instead of a key match.
 - What the team should change next time: give every entry a `ground_label` naming its pad or the walkway slab it stands on. Pairing then becomes a key check, and an unpaired door is visible at a glance.
+
+## modeler-sky (colour pass part 1, 2026-10-21)
+
+- What worked well: deciding every row offline against its own dated photo with the validated light model, then applying the numbers with a value-guarded tool, made the slot round a fixed sequence: one before batch, one apply, one after batch, no iteration needed. The batch mode cut 59 per-building world loads to one (about 4 minutes per set). The before/after sheet puts the dated reference next to both renders for every row.
+- What did not work well: batch views do not match per-row views pixel for pixel (a 1-level lawn shading shift, because per-row focused views come after the context camera), so the planned AE proof could not pass and both sets had to stay in batch mode. Two generated front views stood on carport canopies that the footprint check could not see, which stopped the first before batch; canopy rectangles from the housing configs found both.
+- What the team should change next time: compare before and after only within one capture mode; include housing canopies (and any other family-generated roofs) in the offline position check for every view, route and spray plan.

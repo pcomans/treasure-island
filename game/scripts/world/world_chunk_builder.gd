@@ -1018,14 +1018,17 @@ func _apply_polyhaven_textures(material: StandardMaterial3D, material_key: Strin
 	material.heightmap_enabled = false
 
 
+## Paving tints multiply the Poly Haven maps. Roads and paved areas read as neutral
+## grey under the SSE sun (the dark clean_asphalt map needs channels above 1);
+## walks stay lighter than the asphalt, as in the dated photos.
 func _polyhaven_tint_for(material_key: String, fallback: Color) -> Color:
 	match material_key:
 		"road_path":
-			return Color("b0b4b8")
+			return Color(1.34, 1.28, 1.13)
 		"road_path_pedestrian":
 			return Color("d8d6cf")
 		"major_area_paved":
-			return Color("adb0ae")
+			return Color(0.79, 0.86, 0.84)
 		"context_ybi":
 			return Color("d2d8cb")
 		"building_wall", "building_part_wall":
