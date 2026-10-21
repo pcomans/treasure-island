@@ -21079,3 +21079,21 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: deciding every row offline against its own dated photo with the validated light model, then applying the numbers with a value-guarded tool, made the slot round a fixed sequence: one before batch, one apply, one after batch, no iteration needed. The batch mode cut 59 per-building world loads to one (about 4 minutes per set). The before/after sheet puts the dated reference next to both renders for every row.
 - What did not work well: batch views do not match per-row views pixel for pixel (a 1-level lawn shading shift, because per-row focused views come after the context camera), so the planned AE proof could not pass and both sets had to stay in batch mode. Two generated front views stood on carport canopies that the footprint check could not see, which stopped the first before batch; canopy rectangles from the housing configs found both.
 - What the team should change next time: compare before and after only within one capture mode; include housing canopies (and any other family-generated roofs) in the offline position check for every view, route and spray plan.
+
+## code-review (colour pass part 1, 2026-10-21)
+
+- What worked well: a recursive JSON walk over all 57 configs proved the palette commit touches only `materials.siding_rgb` (44) and `materials.path_rgb` (33), all valid colours. The `--views-batch` addition reuses `_focused_views` unchanged, so the batch inherits every per-plan check, including that the plan's source must match.
+- What did not work well: the road tint now uses albedo channels above 1. That is legitimate for a dark texture multiplier, but nothing in the contract test records the intent or bounds it, so a later tint could push surfaces brighter than physically plausible without any signal.
+- What the team should change next time: when a tint is deliberately above 1, state in the commit the resulting effective albedo range (texture mean × tint), so reviewers can judge plausibility from a number.
+
+## visual-review (colour pass part 1, 2026-10-21)
+
+- What worked well: the 12-page reference | before | after sheet, with each row's albedo change in its caption, let me judge 67 rows at the matched pose in one pass. The blue drift is visibly gone on the cream and white rows, and 1244 now reads off-white as in its photo.
+- What did not work well: a single asphalt value was tuned at gameplay height and never checked from above. In the island overviews the road network now nearly dissolves into the ground. Several medium blue-grey rows (1204, 1212) were lifted toward pale along with the drifted rows, so they overshot.
+- What the team should change next time: check every global ground tint in one raised or island view before accepting it. For each row, compare the albedo's value (lightness) against the photo as well as its hue, so correcting hue drift doesn't also lift rows that were already the right darkness.
+
+## modeler-sky (colour pass iteration 2, 2026-10-21)
+
+- What worked well: the reviewer's adjustments were exact values or directions, so one guarded edit, one batch after-set and a ten-item sheet closed the round in about 15 minutes of slot time.
+- What did not work well: my first path standard (the world-walk albedo average, 0.43/0.39/0.34) read brownish against the photos' neutral concrete; it matched the world walk material numerically but not visually, and the reviewer had to correct it.
+- What the team should change next time: judge a shared standard colour against the dated photos' walks, not only against another in-game material's average.
