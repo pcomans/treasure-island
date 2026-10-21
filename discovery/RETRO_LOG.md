@@ -21133,3 +21133,15 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the rework stayed config-only. A 5 m glazed storefront group (the producer's lobby door kind, with mullions for the double door and sidelights) under a 6.6 m canopy replaced the single door, and the fit, all five door routes and four-side walk-up passed again.
 - What did not work well: the deeper canopy put the existing spray start under it ("spray setup: on top of a building"), costing one extra fit run. My spray picker avoids openings but not canopies.
 - What the team should change next time: when a change adds or enlarges overhead parts (canopies, eaves, decks), re-pick the spray start and check that open sky is above it before the fit run.
+
+## visual-review (Ship Shape entrance recheck, 2026-10-21)
+
+- What worked well: a bounded config fix verified at the same matched pose. The 5 m glazed storefront under its canopy is now the facade's focal point, as in the Apr 2019 photo.
+- What did not work well: the storefront's mullions are dark on dark glass, so at ordinary distance the door, sidelights and transom read as one black panel. The photo has light aluminium frames.
+- What the team should change next time: for glazed entrance groups, set a contrasting frame colour from the reference at the same time as the geometry, so the door subdivision reads at gameplay distance.
+
+## progress-review (institutional batch, 2026-10-21)
+
+- What worked well: 14 plain boxes moved in one batch on the extended mid-rise family, with exact tiling (611's 13 blocks), offline preflight of every side's lane, and three stale explicit-target registry lines superseded rather than duplicated. Ship Shape's rework r3 shows a real glazed double entrance under a canopy band where r2 had a single dark door, matching the Apr 2019 front.
+- What did not work well: credit leans on module inference in places. w34313556 has no reference at all and w34313557 is fenced, yet both take L2 through the A1 module. Several named landmarks (Naval Station Treasure Island, Advanced Culinary Dormitory, Oasis) take only L1 for lack of imagery, so they are now the most conspicuous unfinished L2 units in the inventory.
+- What the team should change next time: give the L1-only named landmarks one targeted reference pass (official, venue or historic photos, not only Street View) before any finish work, because they matter more for recognition than their size suggests. Record module-only L2 credit (no unit-specific image) in the checklist evidence column.
