@@ -659,6 +659,12 @@
       "source_key": "w96665936",
       "config": "res://game/resources/housing_family/w96665936.json",
       "chunk": "res://generated/world/chunks/x_-2__z_-3.json"
+    },
+    {
+      "source_key": "w1043836450",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w1043836450.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-1.json"
     }
   ],
   "expected_visible_active_topology": {
