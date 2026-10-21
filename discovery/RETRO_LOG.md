@@ -21097,3 +21097,13 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the reviewer's adjustments were exact values or directions, so one guarded edit, one batch after-set and a ten-item sheet closed the round in about 15 minutes of slot time.
 - What did not work well: my first path standard (the world-walk albedo average, 0.43/0.39/0.34) read brownish against the photos' neutral concrete; it matched the world walk material numerically but not visually, and the reviewer had to correct it.
 - What the team should change next time: judge a shared standard colour against the dated photos' walks, not only against another in-game material's average.
+
+## visual-review (colour pass iteration 2, 2026-10-21)
+
+- What worked well: a ten-row recheck sheet limited to the flagged rows, with the part-1 render as the middle column, made every adjustment checkable in one pass. 1212, 1205, 1397 and 1314 now land on their photos' hue and value.
+- What did not work well: the 1226 matched pose is on the shaded side, so the cream change can't be confirmed in sun. The 1204 view still shows brown paver paths, which turn out to be a different footway material from the one the path tint changed, so "paths are neutral now" isn't true island-wide.
+- What the team should change next time: when a global tint is changed, list every material key that renders as that surface (paths, footways, paver areas). For any row changed by value, include one sunlit view.
+
+## code-review (colour pass 5aae3fd, 2026-10-21)
+
+- What worked well: the same recursive JSON diff confirmed the scope in one run (6 `siding_rgb`, 33 `path_rgb` all set to 0.56/0.55/0.52, and two tint lines), with no other key touched. Next time: state the expected counts in the request, as this one did, so the check is a straight comparison.
