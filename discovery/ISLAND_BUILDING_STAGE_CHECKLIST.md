@@ -318,8 +318,17 @@ its earlier REWORK. 450 L1/L2 C; shelter `w1222514695` L1 C (site-blocked west s
 skipped under the new rule); `w291196386` stays uncredited (the north gap is real
 but too narrow for the stock player). Parked for 450: ramp length (foundation-exposure
 trade-off); colour pass (roof grey-brown, lighter glazing).
-Current totals after Mar21c: L1:126 C/87 U; L2:100 C/113 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall227 C/0 I/838 U across213 units/1,065 cells;49 historical
+**Mar21d** Northpoint Groups 1+2 recovery, 2026-10-21: reviewed finals from
+`northpoint-fourth-family-20261010` with their shared landings (`30d56b5` 7831deb
+test/shared parts plus 1241; `1af88a9` 36a6152 seated entry thresholds; `5d55a9e`
+Group 1; `960b0e3` Group 2). CODE, visual (all 17) and progress PASS; every parity
+gameplay view AE 0; all 17 native+routes fits, the 1411 stair walks, 18 sprays and
+the full suite pass. L2 C on 1225, 1227, 1229, 1232, 1234, 1236, 1239 and 1240
+(L1 already C); L1/L2 C on 1203, 1237, 1241, 1242, Gateview 1394 and 1390, 625 13th
+Street, 1249 and 1252. Parked: the 1240/1242 lawn sliver; the 1249 near canopy;
+colour pass (cream rows read peach, especially 1242; blue-grey rows read cool).
+Current totals after Mar21d: L1:135 C/78 U; L2:117 C/96 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall253 C/0 I/812 U across213 units/1,065 cells;49 historical
 recognition credits unchanged.
 **U** no current stage-level conclusion established in this checklist pass.
 
@@ -419,41 +428,41 @@ before selecting another round.
 | physical-building:w95934143 / w95934143 | 1443 Chinook Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w95934144 / w95934144 | 1439 Chinook Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215645 / w96215645 | 1122 Reeves Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21b Site 12 `8c70237` (`eave_rgb`) + `8d0549f` — CODE, visual L2 and progress PASS |
-| physical-building:w96215646 / w96215646 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215646 / w96215646 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Gateview 1394: Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS |
 | physical-building:w96215648 / w96215648 | 1316 Gateview Avenue | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17i Gateview Ave A `904f940`+`487a1ef`+`35a990e`+`45344f4` — CODE, visual and progress PASS (guards CODE PASS; drives CODE/visual/progress PASS). Parked: gable-generator closure-overlap dedupe (low); fences and site; colour pass |
 | physical-building:w96215649 / w96215649 | 1212 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar/Mar17 `b2acc5a` — L1 retained; rear L2 PASS completes L2; integrated visual/native/fit/spray/suite PASS; materials/site open |
 | physical-building:w96215651 / w96215651 | 1202 Mariner Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — `a078c63` scoped L2 PASS only (not whole L2); integrated visual/native/fit/spray/suite PASS; stage verdict needed |
 | physical-building:w96215652 / w96215652 | 1220 Bayside Drive | ☐ U | ☑ C | ☐ U | ☐ U | ☐ U | Mar17 `a078c63` — bounded whole-exterior L2 PASS (study002 roof pitch); L1 not explicitly reviewed (U); integrated visual/native/fit/spray/suite PASS; materials/site open |
-| physical-building:w96215653 / w96215653 | 1227 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP2 — L1 frontage lawn/composition; retained whole shape; scoped visual/CODE/progress/native/fit/spray/suite PASS; L2–5 unknown |
+| physical-building:w96215653 / w96215653 | 1227 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP2 — L1 frontage lawn/composition; retained whole shape; scoped visual/CODE/progress/native/fit/spray/suite PASS; L2–5 unknown; L2 C: Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS |
 | physical-building:w96215655 / w96215655 | 1312 Gateview Avenue | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17i Gateview Ave A `904f940`+`487a1ef`+`35a990e`+`45344f4` — CODE, visual and progress PASS (guards CODE PASS; drives CODE/visual/progress PASS). Parked: gable-generator closure-overlap dedupe (low); fences and site; colour pass |
 | physical-building:w96215656 / w96215656 | 1224 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215657 / w96215657 | 1307 Gateview Avenue | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17i Gateview Ave B `818d35c`+`54409a2`+`13d2d3d` (on Batch A) — CODE PASS after rework, visual and progress PASS; drive-fix junctions accepted on the 0 m² overlap check. Parked: gable-generator closure-overlap dedupe (low); fences and site; colour pass |
-| physical-building:w96215658 / w96215658 | 1239 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP2 — L1 joined shallow-gable whole roof; scoped visual/CODE/progress/native/fit/spray/suite PASS; L2–5 unknown |
-| physical-building:w96215659 / w96215659 | 1234 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP3 — scoped shape/site complete; unseen openings/whole-quality unknown |
-| physical-building:w96215660 / w96215660 | 1225 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP3 — scoped shape/site complete; unseen openings/whole-quality unknown |
+| physical-building:w96215658 / w96215658 | 1239 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP2 — L1 joined shallow-gable whole roof; scoped visual/CODE/progress/native/fit/spray/suite PASS; L2–5 unknown; L2 C: Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS |
+| physical-building:w96215659 / w96215659 | 1234 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP3 — scoped shape/site complete; unseen openings/whole-quality unknown; L2 C: Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS |
+| physical-building:w96215660 / w96215660 | 1225 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP3 — scoped shape/site complete; unseen openings/whole-quality unknown; L2 C: Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS |
 | physical-building:w96215661 / w96215661 | 1222 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — `b9b51dc` scoped rear/low-roof PASS; all-side L2 and stage credit open |
 | physical-building:w96215662 / w96215662 | 1139 Ozbourn Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21b Site 12 `8c70237` (`eave_rgb`) + `8d0549f` — CODE, visual L2 and progress PASS. Parked: rear fence |
 | physical-building:w96215666 / w96215666 | 1215 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96215667 / w96215667 | 1248/1395 Gateview Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17f `6539db3` + `970359e` — CODE, visual L1/L2 and progress PASS; 1218 cadence delta CODE and visual PASS. Parked: fences, vent pipes, post bands, carport-top and canopy finish; colour re-check after the lighting decision; carport segmentation (photo shows short segments) |
-| physical-building:w96215668 / w96215668 | 1236 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP4 — L1 connected frontage lawn/footway/parking; retained boarded architecture; scoped visual/CODE/native/fit/spray/suite002 PASS; L2–5 unknown |
+| physical-building:w96215668 / w96215668 | 1236 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP4 — L1 connected frontage lawn/footway/parking; retained boarded architecture; scoped visual/CODE/native/fit/spray/suite002 PASS; L2–5 unknown; L2 C: Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS |
 | physical-building:w96215669 / w96215669 | 1238 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — `b9b51dc` scoped rear/low-roof PASS; all-side L2 and stage credit open |
 | physical-building:w96215670 / w96215670 | 1246/1397 Gateview Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17e `20b5768` + `9dd2214` — CODE, visual and progress PASS; front-access delta CODE and visual PASS; all-side L2 complete. L1 from the 2026-10-11 branch whole-stage review (`fc3c88f`) explicitly passing L1/L2. Parked: eave/rake overhangs, door hoods/lights, yard fences (L3); warm grey vs cool blue-grey and roof colour (L4); north-court carports not yet (future 1397 round) |
 | physical-building:w96215671 / w96215671 | 1244 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17d `b69fd3b` + cleanup `9d5df86` — CODE, visual L1/L2 and progress PASS (cleanup: CODE and visual PASS); fit/native/routes, rear+end spray and both full suites exit 0. Parked: slightly cool shade tone (L4), fences, boxes, vent pipes |
 | physical-building:w96215672 / w96215672 | 1201 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — `b9b51dc` scoped rear/low-roof PASS; all-side L2 and stage credit open |
-| physical-building:w96215673 / w96215673 | 1232 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP — L1 envelope/site closure; scoped visual/CODE/progress/native/fit/spray/suite PASS; all-side L2 unknown |
-| physical-building:w96215674 / w96215674 | 1241 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215673 / w96215673 | 1232 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP — L1 envelope/site closure; scoped visual/CODE/progress/native/fit/spray/suite PASS; all-side L2 unknown; L2 C: Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS |
+| physical-building:w96215674 / w96215674 | 1241 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS |
 | physical-building:w96215676 / w96215676 | 1143 Ozbourn Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21b Site 12 `8c70237` (`eave_rgb`) + `8d0549f` — CODE, visual L2 and progress PASS. Parked: colour pass (warm white or cream) |
 | physical-building:w96215677 / w96215677 | 1206 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17 `cdcd7c3` — L1/L2 PASS incl. repaired roof002; integrated visual/native/fit/rear+end spray/suite PASS; materials/site open |
 | physical-building:w96215678 / w96215678 | 1205 Bayside Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17e `20b5768` + `9dd2214` — CODE, visual and progress PASS; front-access delta CODE and visual PASS; all-side L2 complete. L1 from the 2026-10-11 independent review's explicit L1 PASS. Parked: eave/rake overhangs, door hoods/lights, yard fences (L3), door pads (L3); roof colour (L4) |
 | physical-building:w96215680 / w96215680 | 1219 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar/Mar17 `b2acc5a` — L1 retained; all-side L2 PASS; integrated visual/native/fit/spray/suite PASS; materials/site open |
 | physical-building:w96215682 / w96215682 | 1221 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17 `23b2e5a` — L1/all-side L2 whole-depth roof/rear PASS; integrated visual/native/fit/spray/suite PASS; materials/site open |
 | physical-building:w96215685 / w96215685 | 1226 Bayside Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17e `20b5768` + `9dd2214` — CODE, visual and progress PASS; front-access delta CODE and visual PASS; all-side L2 complete. L1 from the 2026-10-11 branch whole-stage review (`fc3c88f`) explicitly passing L1/L2. Parked: eave/rake overhangs, door hoods/lights, yard fences (L3); roof colour (L4) |
-| physical-building:w96215688 / w96215688 | 1240 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP4 — L1 joined shallow whole roof and corrected front/north lawn; scoped visual/CODE/native/fit/spray/suite002 PASS; L2–5 unknown |
+| physical-building:w96215688 / w96215688 | 1240 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP4 — L1 joined shallow whole roof and corrected front/north lawn; scoped visual/CODE/native/fit/spray/suite002 PASS; L2–5 unknown; L2 C: Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS. Parked: 1240/1242 lawn sliver |
 | physical-building:w96215690 / w96215690 | 1141 Ozbourn Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21b Site 12 `8c70237` (`eave_rgb`) + `8d0549f` — CODE, visual L2 and progress PASS |
 | physical-building:w96215691 / w96215691 | 1204 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17c rear-entrance rework `dcf1bca` — CODE, visual L2 and progress PASS; fit/native/14 routes, rear+end spray and full suite exit 0. L1 from the 2026-10-11 final review's explicit L1 PASS (massing unchanged by the rework). Parked: yard fences, door hoods and lights, eave line, roof colour, glazing finish, site |
 | physical-building:w96215693 / w96215693 | 1208 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17 `cdcd7c3` — L1/L2 PASS; integrated visual/native/fit/rear+end spray/suite PASS; materials/site open |
 | physical-building:w96215694 / w96215694 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 1251 Exposition Drive: Mar17g `f9be475` + `e4285b9` — CODE and progress PASS; visual L1/L2 PASS. Parked: fences, boxes, vent pipes, carport-top finish; colour re-check after lighting |
-| physical-building:w96215698 / w96215698 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215698 / w96215698 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Gateview 1390: Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS |
 | physical-building:w96665883 / w96665883 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665884 / w96665884 | 1145 Ozbourn Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21b Site 12 `8c70237` (`eave_rgb`) + `8d0549f` — CODE, visual L2 and progress PASS. Parked: colour pass (warm white or cream) |
 | physical-building:w96665885 / w96665885 | 1118 Hutchins Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21b Site 12 `8c70237` (`eave_rgb`) + `8d0549f` — CODE, visual L2 and progress PASS |
@@ -468,16 +477,16 @@ before selecting another round.
 | physical-building:w96665900 / w96665900 | 1442 Chinook Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665902 / w96665902 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96665903 / w96665903 | 1124 Reeves Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21b Site 12 `8c70237` (`eave_rgb`) + `8d0549f` — CODE, visual L2 and progress PASS |
-| physical-building:w96665904 / w96665904 | 1237 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96665904 / w96665904 | 1237 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS |
 | physical-building:w96665906 / w96665906 | 1147 Ozbourn Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21b Site 12 `8c70237` (`eave_rgb`) + `8d0549f` — CODE, visual L2 and progress PASS. Parked: keeps the module layout |
 | physical-building:w96665907 / w96665907 | 1129 Mason Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21b Site 12 `8c70237` (`eave_rgb`) + `8d0549f` — CODE, visual L2 and progress PASS. Parked: rear fence |
-| physical-building:w96665908 / w96665908 | 1203 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96665908 / w96665908 | 1203 Bayside Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS |
 | physical-building:w96665909 / w96665909 | 1149 Ozbourn Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21b Site 12 `8c70237` (`eave_rgb`) + `8d0549f` — CODE, visual L2 and progress PASS |
 | physical-building:w96665910 / w96665910 | 1110 Hutchins Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21b Site 12 `8c70237` (`eave_rgb`) + `8d0549f` — CODE, visual L2 and progress PASS |
-| physical-building:w96665911 / w96665911 | 1229 Northpoint Drive | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | NP — L1 envelope/site closure; scoped visual/CODE/progress/native/fit/spray/suite PASS; all-side L2 unknown |
+| physical-building:w96665911 / w96665911 | 1229 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP — L1 envelope/site closure; scoped visual/CODE/progress/native/fit/spray/suite PASS; all-side L2 unknown; L2 C: Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS |
 | physical-building:w96665912 / w96665912 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 901/1304 Avenue B: Mar17i Gateview Ave B `818d35c`+`54409a2`+`13d2d3d` (on Batch A) — CODE PASS after rework, visual and progress PASS; drive-fix junctions accepted on the 0 m² overlap check. Parked: gable-generator closure-overlap dedupe (low); fences and site; colour pass (whites) |
 | physical-building:w96665915 / w96665915 | 1109 Keppler Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17h `574d1d8` — CODE PASS-with-notes (non-blocking lows; grounded samples are grazing sills), visual L2 PASS (whole-unit acceptance withheld), progress L1+L2 PASS. Parked: pale blue-grey yard/front pads read as stickers in shade; colour pass (over-saturated blue vs muted blue-grey) |
-| physical-building:w96665916 / w96665916 | 1242 Northpoint Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96665916 / w96665916 | 1242 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS. Parked: 1240/1242 lawn sliver; colour pass (cream reads peach) |
 | physical-building:w96665918 / w96665918 | 1310 Gateview Avenue | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17i Gateview Ave B `818d35c`+`54409a2`+`13d2d3d` (on Batch A) — CODE PASS after rework, visual and progress PASS; drive-fix junctions accepted on the 0 m² overlap check. Parked: gable-generator closure-overlap dedupe (low); fences and site; colour pass (whites) |
 | physical-building:w96665919 / w96665919 | 1116 Hutchins Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21b Site 12 `8c70237` (`eave_rgb`) + `8d0549f` — CODE, visual L2 and progress PASS. Parked: rear fence |
 | physical-building:w96665920 / w96665920 | 1131 Mason Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21b Site 12 `8c70237` (`eave_rgb`) + `8d0549f` — CODE, visual L2 and progress PASS |
@@ -491,13 +500,13 @@ before selecting another round.
 | physical-building:w96665935 / w96665935 | 1135 Mason Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21b Site 12 `8c70237` (`eave_rgb`) + `8d0549f` — CODE, visual L2 and progress PASS |
 | physical-building:w96665936 / w96665936 | 1128 Reeves Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21b Site 12 `8c70237` (`eave_rgb`) + `8d0549f` — CODE, visual L2 and progress PASS |
 | physical-building:w96698611 / w96698611 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w96698619 / w96698619 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96698619 / w96698619 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 625 13th Street: Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS |
 | physical-building:w96698627 / w96698627 | 1216/1430 Gateview Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17f `6539db3` + `970359e` — CODE, visual L1/L2 and progress PASS; 1218 cadence delta CODE and visual PASS. Parked: fences, vent pipes, post bands, carport-top and canopy finish; colour re-check after the lighting decision |
 | physical-building:w96698634 / w96698634 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 1253 Exposition Drive: Mar17g `f9be475` + `e4285b9` — CODE and progress PASS; visual L1/L2 PASS. Parked: fences, boxes, vent pipes, carport-top finish; colour re-check after lighting |
 | physical-building:w96698641 / w96698641 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1+L2 PASS. Parked: validation lows; colour pass (frames to gold) |
-| physical-building:w96698643 / w96698643 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — 1249 Exposition Drive: inspect before assignment; near canopy at stations 42.8–50.8 (gap toward 1247) not yet modeled; future 1249 delta |
+| physical-building:w96698643 / w96698643 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 1249 Exposition Drive: Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS. Parked: near canopy at stations 42.8–50.8 (future 1249 delta) |
 | physical-building:w96698645 / w96698645 | 1214/1420 Gateview Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17f `6539db3` + `970359e` — CODE, visual L1/L2 and progress PASS; 1218 cadence delta CODE and visual PASS. Parked: fences, vent pipes, post bands, carport-top and canopy finish; colour re-check after the lighting decision |
-| physical-building:w96698648 / w96698648 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96698648 / w96698648 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 1252 Exposition Drive: Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS |
 | physical-building:w96698650 / w96698650 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w96698651 / w96698651 | 1315 Gateview Avenue | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17i Gateview Ave A `904f940`+`487a1ef`+`35a990e`+`45344f4` — CODE, visual and progress PASS (guards CODE PASS; drives CODE/visual/progress PASS). Parked: gable-generator closure-overlap dedupe (low); fences and site; colour pass |
 | physical-building:w96698652 / w96698652 | 1223 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17b recovery of reviewed final `b6e7092` (byte-exact) — CODE, visual L1/L2 and progress PASS; fit/native/26 route legs, end/rear spray and full suite exit 0. Parked L3: eave/rake overhang; canopy site placement/extent (photo shows a detached carport over parking) |
@@ -587,7 +596,7 @@ March/November2025 refs and unknown-date Apple context support the scoped envelo
 and observed architecture; missing north capture/unknown rear/schematic materials
 keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
 See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
-Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar21c for current totals);
+Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar21d for current totals);
 **L1:21 C /0 I /192 U**. All other stages unchanged;49 historical credits retained.
 
 ## Island environment layers
