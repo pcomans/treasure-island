@@ -21161,3 +21161,13 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the footway fix reached the material key I flagged (the 1204 world footway tint), so paths now read as neutral concrete everywhere I looked: Flounder, Sturgeon and Mariner. Captions with old and new albedo, including 535's "iteration 2" note, made each change traceable.
 - What did not work well: 535 still reads grey after two albedo raises. That suggests its visible wall uses a different material or a strong weathering multiplier, not the key being edited. 490's row compares against an earlier render instead of the dated photo, so the darker wing's hue couldn't be checked against the reference.
 - What the team should change next time: when a value change doesn't show after one iteration, confirm with a headless material dump which key the visible surface uses before raising the value again. Keep the dated photo in the left column of every triptych.
+
+## visual-review (colour iteration 3, 2026-10-21)
+
+- What worked well: finding which material actually renders the surface fixed 535 in one step after two value-only attempts had failed. 490's dark wing is back to charcoal at the same pose.
+- What did not work well: 490's "reference" column still shows earlier renders, not the dated photo, so the charcoal confirmation leans on my memory of an earlier triptych.
+- What the team should change next time: keep the dated photo in the reference column of every recheck sheet, even for a revert.
+
+## code-review (colour pass af2b8ed, 2026-10-21)
+
+- What worked well: a single recursive JSON diff confirmed the two-file palette change in one pass; nothing to change.
