@@ -233,25 +233,33 @@
         },
         {
           "type": "entry",
-          "from": 12.9,
-          "to": 16.3,
+          "from": 11.7,
+          "to": 17.5,
           "door": {
-            "kind": "unit",
-            "w": 2.0,
-            "h": 2.5,
-            "leaf_h": 2.5,
-            "material": "glass"
+            "kind": "lobby",
+            "w": 5.0,
+            "h": 2.9,
+            "mullions": [
+              0.2,
+              0.4,
+              0.5,
+              0.6,
+              0.8
+            ],
+            "transoms": [
+              0.78
+            ]
           },
           "landing": {
-            "w": 3.4,
-            "depth": 1.8
+            "w": 5.8,
+            "depth": 2.0
           },
           "canopy": {
-            "w": 5.0,
-            "depth": 2.2,
-            "t": 0.25,
+            "w": 6.6,
+            "depth": 2.8,
+            "t": 0.3,
             "material": "fascia",
-            "gap": 0.35
+            "gap": 0.3
           }
         },
         {
@@ -482,7 +490,7 @@
   ],
   "study_notes": {
     "observed": "Apr/May 2019 photos: one-storey tan stucco box with a flat roof, green service doors (ENE), a glazed entrance under a canopy (WSW) and a blue/orange mural wall (NNW).",
-    "inferred": "Window and door positions, canopy size, roof units; the mural is parked (plain stucco).",
+    "inferred": "Window and door positions, storefront mullions, canopy size, roof units; the mural and the entrance sign are parked (plain stucco).",
     "footprint": "Frozen 4-edge ring kept as one block."
   }
 }
