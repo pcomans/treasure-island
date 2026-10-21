@@ -1,0 +1,559 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w34313549",
+    "address": "649 Avenue N plant compound",
+    "edge_normals": [
+      [
+        -0.8832343779788974,
+        0.4689318005384474
+      ],
+      [
+        0.46892227940238135,
+        0.8832394329286226
+      ],
+      [
+        0.8838640087085045,
+        -0.46774396213070746
+      ],
+      [
+        0.46899804651037436,
+        0.883199203107347
+      ],
+      [
+        0.8833595947562615,
+        -0.46869587831775694
+      ],
+      [
+        -0.4688903562929291,
+        -0.8832563805461526
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": "ring",
+    "above_terrain": 0.05,
+    "basis": "median frozen terrain around the ring"
+  },
+  "levels": {
+    "ground_h": 3.4,
+    "storey_h": 3.2,
+    "parapet_h": 0.4
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.66,
+        0.65,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.73,
+        0.74,
+        0.74
+      ],
+      "roughness": 0.45,
+      "metallic": 0.3
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.62,
+        0.61,
+        0.58
+      ],
+      "roughness": 0.95
+    },
+    "render": {
+      "rgb": [
+        0.86,
+        0.86,
+        0.83
+      ],
+      "roughness": 0.9
+    },
+    "silver": {
+      "rgb": [
+        0.8,
+        0.81,
+        0.82
+      ],
+      "roughness": 0.5,
+      "metallic": 0.3
+    }
+  },
+  "schemes": {
+    "front": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 1.3,
+          "to": 3.9,
+          "door": {
+            "kind": "unit",
+            "w": 1.8,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 2.6,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "vents",
+          "from": 4.6,
+          "to": 7.4,
+          "count": 1,
+          "w": 1.6,
+          "h": 0.7,
+          "y": 2.4
+        },
+        {
+          "type": "blank",
+          "from": 8.6,
+          "to": 11.4
+        },
+        {
+          "type": "ladder",
+          "from": 9.4,
+          "to": 10.6
+        }
+      ]
+    },
+    "wsw": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 4.0,
+      "ground": {
+        "w": 1.4,
+        "h": 0.9,
+        "sill": 1.6,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "window": {
+        "w": 1.4,
+        "h": 1.1,
+        "sill": 1.0,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame"
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 1.7,
+          "to": 4.3,
+          "door": {
+            "kind": "unit",
+            "w": 1.8,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 2.6,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "vents",
+          "from": 5.5,
+          "to": 8.5,
+          "count": 1,
+          "w": 1.6,
+          "h": 0.7,
+          "y": 2.4
+        },
+        {
+          "type": "bays",
+          "from": 9.5,
+          "to": 16.0,
+          "module": 3.25
+        }
+      ]
+    },
+    "tall_side": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 4.0,
+      "ground": {
+        "w": 1.4,
+        "h": 0.9,
+        "sill": 1.6,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "window": {
+        "w": 1.4,
+        "h": 1.1,
+        "sill": 1.0,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame"
+      },
+      "features": [
+        {
+          "type": "bays",
+          "from": 1.0,
+          "to": 9.0,
+          "module": 4.0
+        },
+        {
+          "type": "entry",
+          "from": 10.6,
+          "to": 12.4,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "vents",
+          "from": 13.0,
+          "to": 15.8,
+          "count": 1,
+          "w": 1.6,
+          "h": 0.7,
+          "y": 2.4
+        }
+      ]
+    },
+    "low_side": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "features": [
+        {
+          "type": "vents",
+          "from": 3.0,
+          "to": 6.0,
+          "count": 1,
+          "w": 1.6,
+          "h": 0.7,
+          "y": 2.4
+        },
+        {
+          "type": "entry",
+          "from": 8.1,
+          "to": 9.9,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "garage",
+          "from": 13.0,
+          "to": 17.2,
+          "w": 3.6,
+          "h": 3.4
+        },
+        {
+          "type": "vents",
+          "from": 19.0,
+          "to": 22.0,
+          "count": 1,
+          "w": 1.6,
+          "h": 0.7,
+          "y": 2.4
+        }
+      ]
+    },
+    "plain": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 4.0,
+      "ground": {
+        "w": 1.4,
+        "h": 0.9,
+        "sill": 1.6,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "window": {
+        "w": 1.4,
+        "h": 1.1,
+        "sill": 1.0,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame"
+      }
+    }
+  },
+  "blocks": [
+    {
+      "id": "tall",
+      "storeys": 2,
+      "ground_h": 3.4,
+      "storey_h": 3.2,
+      "clip": [
+        {
+          "edge": 0,
+          "max": 16.43
+        }
+      ],
+      "parapet": {
+        "kind": "railing",
+        "style": "pipe",
+        "h": 1.1,
+        "curb": 0.4,
+        "t": 0.25
+      },
+      "faces": {
+        "e0": "wsw",
+        "e1": "tall_side",
+        "e5": "tall_side",
+        "default": "plain"
+      },
+      "roof_items": [
+        {
+          "kind": "box",
+          "edge": 0,
+          "s": [
+            2.0,
+            6.5
+          ],
+          "d": [
+            3.0,
+            6.0
+          ],
+          "h": 1.6,
+          "material": "mech"
+        },
+        {
+          "kind": "cylinder",
+          "edge": 0,
+          "s": [
+            9.0,
+            10.6
+          ],
+          "d": [
+            4.0,
+            5.6
+          ],
+          "h": 2.2,
+          "sides": 12,
+          "material": "silver",
+          "top": "mech"
+        },
+        {
+          "kind": "box",
+          "edge": 0,
+          "s": [
+            8.0,
+            14.0
+          ],
+          "d": [
+            10.0,
+            11.0
+          ],
+          "h": 0.9,
+          "material": "silver"
+        }
+      ]
+    },
+    {
+      "id": "low",
+      "storeys": 1,
+      "ground_h": 4.2,
+      "clip": [
+        {
+          "edge": 0,
+          "min": 16.43
+        }
+      ],
+      "parapet": {
+        "h": 0.4,
+        "t": 0.2
+      },
+      "faces": {
+        "e3": "low_side",
+        "e5": "low_side",
+        "e4": "front",
+        "default": "plain"
+      }
+    }
+  ],
+  "study_notes": {
+    "observed": "Nov 2025 Avenue N (~63 m): tall white block with exterior steel stairs and ducting; Nov 2025 10th St: low white wall behind trees (medium association).",
+    "inferred": "Two-storey tall part and one-storey low wing, windows, doors, louvres, roll-up, roof plant and ducts inside a pipe rail. The exterior steel stair is not modelled (no stair walk test); a caged ladder marks the access point.",
+    "footprint": "Frozen L-shaped ring split into the tall square part and the low wing."
+  }
+}

@@ -1,0 +1,453 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w96665924",
+    "address": "Avenue D (849 Avenue D candidate)",
+    "edge_normals": [
+      [
+        -0.8854883178145769,
+        0.4646616392751942
+      ],
+      [
+        0.4649606294275973,
+        0.8853313577877453
+      ],
+      [
+        0.885390114985849,
+        -0.46484873269198584
+      ],
+      [
+        0.4655599361088113,
+        0.8850163534592792
+      ],
+      [
+        0.8852882315293844,
+        -0.46504273687003783
+      ],
+      [
+        -0.4649534528726658,
+        -0.8853351267524552
+      ],
+      [
+        -0.8853432695353204,
+        0.464937947567747
+      ],
+      [
+        -0.4647440328528316,
+        -0.8854450767425871
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": "ring",
+    "above_terrain": 0.1,
+    "basis": "median frozen terrain around the ring (no imagery)"
+  },
+  "levels": {
+    "ground_h": 5.6,
+    "storey_h": 3.0,
+    "parapet_h": 0.5
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.66,
+        0.65,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.73,
+        0.74,
+        0.74
+      ],
+      "roughness": 0.45,
+      "metallic": 0.3
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.62,
+        0.61,
+        0.58
+      ],
+      "roughness": 0.95
+    },
+    "metal_grey": {
+      "rgb": [
+        0.7,
+        0.71,
+        0.7
+      ],
+      "roughness": 0.6,
+      "metallic": 0.1
+    }
+  },
+  "schemes": {
+    "plain": {
+      "material": "metal_grey",
+      "parapet_material": "metal_grey",
+      "module": 3.6,
+      "window": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      }
+    },
+    "side0": {
+      "material": "metal_grey",
+      "parapet_material": "metal_grey",
+      "module": 3.6,
+      "window": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 5.432,
+          "to": 7.232,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "side1": {
+      "material": "metal_grey",
+      "parapet_material": "metal_grey",
+      "module": 3.6,
+      "window": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "garage",
+          "from": 7.409,
+          "to": 11.209,
+          "w": 3.2,
+          "h": 3.4
+        },
+        {
+          "type": "entry",
+          "from": 19.048,
+          "to": 20.848,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "side2": {
+      "material": "metal_grey",
+      "parapet_material": "metal_grey",
+      "module": 3.6,
+      "window": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 5.111,
+          "to": 6.911,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "side5": {
+      "material": "metal_grey",
+      "parapet_material": "metal_grey",
+      "module": 3.6,
+      "window": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 5.468,
+          "to": 7.268,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    }
+  },
+  "blocks": [
+    {
+      "id": "block",
+      "storeys": 1,
+      "ground_h": 5.6,
+      "storey_h": 3.0,
+      "parapet": {
+        "h": 0.5,
+        "t": 0.25
+      },
+      "faces": {
+        "default": "plain",
+        "e0": "side0",
+        "e1": "side1",
+        "e2": "side2",
+        "e5": "side5"
+      }
+    }
+  ],
+  "study_notes": {
+    "observed": "Avenue D views: storage fence and containers only.",
+    "inferred": "One-storey metal warehouse with a roll-up and doors (Level 1).",
+    "footprint": "Frozen ring kept as one block (Level 1)."
+  }
+}

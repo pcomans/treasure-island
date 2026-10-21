@@ -21107,3 +21107,13 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 ## code-review (colour pass 5aae3fd, 2026-10-21)
 
 - What worked well: the same recursive JSON diff confirmed the scope in one run (6 `siding_rgb`, 33 `path_rgb` all set to 0.56/0.55/0.52, and two tint lines), with no other key touched. Next time: state the expected counts in the request, as this one did, so the check is a straight comparison.
+
+## code-review (mid-rise spike drop 9efcf82, 2026-10-21)
+
+- What worked well: the new test is a closed-form angle bound (direction reversal, `dot < 0`, with `|sin| <= 1e-4`), so a vertex is dropped only at a turn within 1e-4 rad of 180°, and any real corner (even a 1° interior angle, `sin` about 0.017) survives. The 48/49 identical headless counts plus the 450 sliver parity matched that reading. What didn't: the worktree also held unrelated uncommitted registry and `live_instances` edits, which made the scope check noisier. Next time: review shared fixes from a worktree holding only the reviewed commit.
+
+## modeler-midrise (institutional batch on the mid-rise family, 14 units, 2026-10-21)
+
+- What worked well: one config author on the shared producer covered school pavilions with deep eaves, a stucco hall with an entrance canopy, a tall plant block, a pinwheel building under hipped roofs and six Level 1 blocks. All 14 passed four-side fits (no site-blocked sides), six combined fit-and-spray runs placed their decals, and the suite passed. Clipping blocks along the footprint's own edges kept the 13-block pinwheel tiled exactly, and per-unit review sheets made the face mix-up obvious at the first render.
+- What did not work well: I read the pass2 file suffix as the camera's view direction. It is the camera's position, so Ship Shape's entrance and green doors (and 549's photographed face) landed on opposite faces until the first render showed it. My float64 preflight mirror passed 611, but the engine's single-precision clip kept a zero-width spike, and one invalid build fails the whole world load; that cost a stopped batch, and the first batch also ran before the new worktree had ever been imported.
+- What the team should change next time: treat `side<X>_<bearing>` as the camera's position (the bearing from the building), and check one matched view against the photo before the full render. Run the headless build check, which uses the engine's own precision, before any rendering batch, and import a fresh worktree first. Treat `build_valid=false` as a world-load blocker, not a per-building note.

@@ -1,0 +1,489 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w34313544",
+    "address": "450 4th St (Naval Station Treasure Island)",
+    "edge_normals": [
+      [
+        -0.8815087747739471,
+        0.4721676397176482
+      ],
+      [
+        0.4718794158885634,
+        0.8816630971412313
+      ],
+      [
+        -0.8813085731233873,
+        0.4725412140112426
+      ],
+      [
+        0.4719219650929999,
+        0.8816403228430296
+      ],
+      [
+        0.8812074319969102,
+        -0.4727297978691536
+      ],
+      [
+        0.4721475063657838,
+        0.881519558621686
+      ],
+      [
+        0.8814414082738503,
+        -0.4722933873983541
+      ],
+      [
+        -0.4734797746673989,
+        -0.8808046905988348
+      ],
+      [
+        0.881793322395099,
+        -0.47163602129122095
+      ],
+      [
+        -0.4723073303857145,
+        -0.8814339372090909
+      ],
+      [
+        0.50677126480242,
+        -0.862080556079625
+      ],
+      [
+        0.19725257832513438,
+        -0.9803527020129474
+      ],
+      [
+        -0.1319694638895767,
+        -0.9912537821368944
+      ],
+      [
+        -0.44632221436068475,
+        -0.894872326629992
+      ],
+      [
+        -0.7170360534491663,
+        -0.6970360808839411
+      ],
+      [
+        -0.9023102404999527,
+        -0.4310872648187575
+      ],
+      [
+        -0.993937607823471,
+        -0.10994558542368246
+      ],
+      [
+        -0.9741682131237116,
+        0.22582358720770268
+      ],
+      [
+        -0.47219598594694,
+        -0.881493590932797
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": "ring",
+    "above_terrain": 0.1,
+    "basis": "median frozen terrain around the ring (no imagery)"
+  },
+  "levels": {
+    "ground_h": 3.6,
+    "storey_h": 3.4,
+    "parapet_h": 0.5
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.66,
+        0.65,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.73,
+        0.74,
+        0.74
+      ],
+      "roughness": 0.45,
+      "metallic": 0.3
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.62,
+        0.61,
+        0.58
+      ],
+      "roughness": 0.95
+    },
+    "render": {
+      "rgb": [
+        0.86,
+        0.86,
+        0.83
+      ],
+      "roughness": 0.9
+    }
+  },
+  "schemes": {
+    "plain": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 3.6,
+      "window": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      }
+    },
+    "side0": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 3.6,
+      "window": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 8.493,
+          "to": 10.293,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "side3": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 3.6,
+      "window": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 10.972,
+          "to": 12.772,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "side6": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 3.6,
+      "window": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 6.522,
+          "to": 8.322,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "side9": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 3.6,
+      "window": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 10.517,
+          "to": 12.317,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    }
+  },
+  "blocks": [
+    {
+      "id": "block",
+      "storeys": 2,
+      "ground_h": 3.6,
+      "storey_h": 3.4,
+      "parapet": {
+        "h": 0.5,
+        "t": 0.25
+      },
+      "faces": {
+        "default": "plain",
+        "e0": "side0",
+        "e3": "side3",
+        "e6": "side6",
+        "e9": "side9"
+      }
+    }
+  ],
+  "study_notes": {
+    "observed": "No panorama on any side (Job Corps campus interior).",
+    "inferred": "Two-storey flat-roofed administration block with windows and a door per side (Level 1).",
+    "footprint": "Frozen ring kept as one block (Level 1)."
+  }
+}
