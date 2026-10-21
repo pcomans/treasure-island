@@ -346,9 +346,16 @@ fix, progress PASS. L1/L2 C on 29A (`w109905031`), 29B (`w34313523`), 29C
 east sides skipped as blocked by 372. Education is modeled as its Apr 2019 state; all
 sides have been behind fencing since 2025. Parked: rafter tails; peeling-paint texture;
 the `door_tone`/`ground_label` lows.
-Current totals after Mar21f: L1:164 C/49 U; L2:146 C/67 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall311 C/0 I/754 U across213 units/1,065 cells;49 historical
-recognition credits unchanged.
+**Mar21g** colour pass part 1, 2026-10-21 (no level changes): `33048ea` adds opt-in
+`--views-batch` to `building_shots.gd`; `522d61b` and `ade474a` re-tune 44 housing rows'
+siding to the dated photos and move paths to the 0.56/0.55/0.52 concrete standard;
+`8589a92` and `ade474a` darken the road and paved tints one step for the SSE-sun
+lighting. CODE PASS on all four commits; visual PASS on part 1 and on iteration 2.
+Pending second pass: the undecided rows, the remaining paths, the 1204 footway
+material and the mid-rise items.
+Current totals after Mar21g (unchanged): L1:164 C/49 U; L2:146 C/67 U; L3/L5:213 U
+each; L4:1 C/212 U. Overall311 C/0 I/754 U across213 units/1,065 cells;49
+historical recognition credits unchanged.
 **U** no current stage-level conclusion established in this checklist pass.
 
 The retained34-building audit entries in [RETRO](RETRO_LOG.md) (2026-09-23,
@@ -615,7 +622,7 @@ March/November2025 refs and unknown-date Apple context support the scoped envelo
 and observed architecture; missing north capture/unknown rear/schematic materials
 keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
 See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
-Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar21f for current totals);
+Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar21g for current totals);
 **L1:21 C /0 I /192 U**. All other stages unchanged;49 historical credits retained.
 
 ## Island environment layers
