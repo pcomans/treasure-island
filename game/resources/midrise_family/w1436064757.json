@@ -1,0 +1,322 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w1436064757",
+    "address": "Treasure Island (Halibut lots)",
+    "edge_normals": [
+      [
+        -0.9705432149350681,
+        0.24092710089050265
+      ],
+      [
+        -0.8406066223560005,
+        0.5416461081289484
+      ],
+      [
+        -0.6232037050564435,
+        0.7820595514434443
+      ],
+      [
+        -0.3490188799496531,
+        0.937115692664833
+      ],
+      [
+        -0.01926087462980647,
+        0.9998144921476657
+      ],
+      [
+        0.31046611324799256,
+        0.9505844478659877
+      ],
+      [
+        0.589220146404251,
+        0.8079725360873061
+      ],
+      [
+        0.8213699656732989,
+        0.5703958094953395
+      ],
+      [
+        0.9561197514122298,
+        0.29297614401076405
+      ],
+      [
+        0.9989539843205875,
+        -0.04572676688793392
+      ],
+      [
+        0.9353175910864987,
+        -0.3538092760289774
+      ],
+      [
+        0.7613057840015004,
+        -0.6483930160372341
+      ],
+      [
+        0.5149988902931555,
+        -0.8571908439763098
+      ],
+      [
+        0.2089442413042141,
+        -0.9779275556122785
+      ],
+      [
+        -0.13128169468206152,
+        -0.9913451047145015
+      ],
+      [
+        -0.45746414921864087,
+        -0.8892280653351339
+      ],
+      [
+        -0.722308010198305,
+        -0.6915714991259873
+      ],
+      [
+        -0.908257841017405,
+        -0.4184109155249203
+      ],
+      [
+        -0.9943156487853757,
+        -0.10647248743462993
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": "ring",
+    "above_terrain": 0.05,
+    "basis": "median frozen terrain around the ring"
+  },
+  "levels": {
+    "ground_h": 2.5,
+    "storey_h": 3.0,
+    "parapet_h": 0.0
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.66,
+        0.65,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.73,
+        0.74,
+        0.74
+      ],
+      "roughness": 0.45,
+      "metallic": 0.3
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.62,
+        0.61,
+        0.58
+      ],
+      "roughness": 0.95
+    },
+    "render": {
+      "rgb": [
+        0.86,
+        0.86,
+        0.83
+      ],
+      "roughness": 0.9
+    },
+    "timber": {
+      "rgb": [
+        0.45,
+        0.36,
+        0.27
+      ],
+      "roughness": 0.9
+    },
+    "roof_green": {
+      "rgb": [
+        0.2,
+        0.42,
+        0.28
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    }
+  },
+  "schemes": {
+    "open": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "open": {
+        "post_w": 0.14,
+        "module": 99.0,
+        "post_every": 3,
+        "post_material": "timber",
+        "knee": {
+          "h": 1.2,
+          "material": "timber",
+          "t": 0.1
+        }
+      }
+    },
+    "entry": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "open": {
+        "post_w": 0.14,
+        "module": 99.0,
+        "post_every": 3,
+        "post_material": "timber"
+      }
+    }
+  },
+  "blocks": [
+    {
+      "id": "gazebo",
+      "storeys": 1,
+      "ground_h": 2.5,
+      "parapet": {
+        "h": 0.0
+      },
+      "roof": {
+        "form": "pyramid",
+        "pitch_deg": 32.0,
+        "overhang": 0.35,
+        "t": 0.1,
+        "under": "timber",
+        "fascia": "timber"
+      },
+      "roof_material": "roof_green",
+      "faces": {
+        "default": "open",
+        "e7": "entry",
+        "e8": "entry"
+      }
+    }
+  ],
+  "study_notes": {
+    "observed": "Mar 2025: the gazebo lot shows cleared slabs; the frozen OSM snapshot (authoritative) still maps a 9 m2 gazebo.",
+    "inferred": "Open timber pavilion with a knee rail, an entrance gap and a pyramid roof (Level 1).",
+    "footprint": "Frozen 19-edge ring kept as one block."
+  }
+}

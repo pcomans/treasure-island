@@ -1,0 +1,546 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w291196367",
+    "address": "899 13th St",
+    "edge_normals": [
+      [
+        -0.8813035310852315,
+        0.4725506174969007
+      ],
+      [
+        0.4725119949538487,
+        0.8813242392132047
+      ],
+      [
+        0.880975546690451,
+        -0.4731617969928056
+      ],
+      [
+        0.47236651631456844,
+        0.8814022204787316
+      ],
+      [
+        0.8810146183981177,
+        -0.4730890425372574
+      ],
+      [
+        0.47320572286831436,
+        0.8809519531987406
+      ],
+      [
+        0.8812176171371102,
+        -0.4727108114346376
+      ],
+      [
+        -0.4732158045081784,
+        -0.8809465377443045
+      ],
+      [
+        0.8811962974273727,
+        -0.4727505530407018
+      ],
+      [
+        0.4704277089037648,
+        0.882438536497333
+      ],
+      [
+        0.8814329994936685,
+        -0.47230908037385283
+      ],
+      [
+        -0.4728613865787906,
+        -0.88113682767365
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": 0,
+    "above_terrain": 0.05,
+    "basis": "median frozen terrain along the photographed WSW long side"
+  },
+  "levels": {
+    "ground_h": 4.2,
+    "storey_h": 3.0,
+    "parapet_h": 0.0
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.66,
+        0.65,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.73,
+        0.74,
+        0.74
+      ],
+      "roughness": 0.45,
+      "metallic": 0.3
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.62,
+        0.61,
+        0.58
+      ],
+      "roughness": 0.95
+    },
+    "beige": {
+      "rgb": [
+        0.78,
+        0.72,
+        0.6
+      ],
+      "roughness": 0.8
+    },
+    "roof_rust": {
+      "rgb": [
+        0.47,
+        0.3,
+        0.2
+      ],
+      "roughness": 0.85,
+      "metallic": 0.1
+    },
+    "timber": {
+      "rgb": [
+        0.45,
+        0.36,
+        0.27
+      ],
+      "roughness": 0.9
+    },
+    "fascia": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.7
+    }
+  },
+  "schemes": {
+    "long_front": {
+      "material": "beige",
+      "parapet_material": "beige",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 8.0,
+          "to": 9.8,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "garage",
+          "from": 13.9,
+          "to": 18.1,
+          "w": 3.6,
+          "h": 3.2
+        },
+        {
+          "type": "entry",
+          "from": 27.0,
+          "to": 28.8,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "gable_s": {
+      "material": "beige",
+      "parapet_material": "beige",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "garage",
+          "from": 4.25,
+          "to": 8.45,
+          "w": 3.6,
+          "h": 3.2
+        }
+      ]
+    },
+    "gable_n": {
+      "material": "beige",
+      "parapet_material": "beige",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 3.0,
+          "to": 4.8,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "inner": {
+      "material": "beige",
+      "parapet_material": "beige",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      }
+    },
+    "leanto": {
+      "material": "beige",
+      "parapet_material": "beige",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "vents",
+          "from": 0.6,
+          "to": 2.2,
+          "count": 1,
+          "w": 0.9,
+          "h": 0.5,
+          "y": 1.8
+        }
+      ]
+    },
+    "leanto_door": {
+      "material": "beige",
+      "parapet_material": "beige",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 1.0,
+          "to": 2.6,
+          "door": {
+            "kind": "unit",
+            "w": 0.9,
+            "h": 2.1,
+            "leaf_h": 2.1
+          },
+          "landing": {
+            "w": 1.6,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "carport": {
+      "material": "beige",
+      "parapet_material": "beige",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "open": {
+        "post_w": 0.18,
+        "module": 3.6,
+        "post_material": "timber"
+      }
+    }
+  },
+  "blocks": [
+    {
+      "id": "shed",
+      "storeys": 1,
+      "ground_h": 4.2,
+      "clip": [
+        {
+          "edge": 0,
+          "max": 12.69
+        }
+      ],
+      "parapet": {
+        "h": 0.0
+      },
+      "roof": {
+        "form": "gable",
+        "ridge_edge": 0,
+        "pitch_deg": 15.0,
+        "overhang": 0.3,
+        "t": 0.12,
+        "under": "soffit",
+        "fascia": "fascia"
+      },
+      "roof_material": "roof_rust",
+      "faces": {
+        "e0": "long_front",
+        "e1": "gable_s",
+        "e11": "gable_n",
+        "default": "inner"
+      }
+    },
+    {
+      "id": "leanto_s",
+      "storeys": 1,
+      "ground_h": 2.9,
+      "clip": [
+        {
+          "edge": 0,
+          "min": 12.69,
+          "max": 16.133,
+          "s_min": 22.567,
+          "s_max": 31.363
+        }
+      ],
+      "parapet": {
+        "h": 0.0
+      },
+      "roof": {
+        "form": "mono",
+        "low_edge": 4,
+        "pitch_deg": 8.0,
+        "overhang": 0.25,
+        "t": 0.1,
+        "under": "soffit",
+        "fascia": "fascia"
+      },
+      "roof_material": "roof_rust",
+      "faces": {
+        "e4": "leanto",
+        "default": "leanto_door"
+      }
+    },
+    {
+      "id": "carport",
+      "storeys": 1,
+      "ground_h": 3.0,
+      "clip": [
+        {
+          "edge": 0,
+          "min": 12.69,
+          "max": 21.4,
+          "s_min": 15.487,
+          "s_max": 22.567
+        }
+      ],
+      "parapet": {
+        "h": 0.0
+      },
+      "roof": {
+        "form": "gable",
+        "ridge_edge": 6,
+        "pitch_deg": 14.0,
+        "overhang": 0.3,
+        "t": 0.12,
+        "under": "soffit",
+        "fascia": "fascia"
+      },
+      "roof_material": "roof_rust",
+      "faces": {
+        "default": "carport"
+      }
+    },
+    {
+      "id": "leanto_n",
+      "storeys": 1,
+      "ground_h": 2.9,
+      "clip": [
+        {
+          "edge": 0,
+          "min": 12.69,
+          "max": 15.606,
+          "s_max": 5.05
+        }
+      ],
+      "parapet": {
+        "h": 0.0
+      },
+      "roof": {
+        "form": "mono",
+        "low_edge": 10,
+        "pitch_deg": 8.0,
+        "overhang": 0.25,
+        "t": 0.1,
+        "under": "soffit",
+        "fascia": "fascia"
+      },
+      "roof_material": "roof_rust",
+      "faces": {
+        "e10": "leanto_door",
+        "default": "leanto"
+      }
+    }
+  ],
+  "study_notes": {
+    "observed": "Sep 2025 899 13th St: long beige corrugated shed with a rusty gable roof and an open gabled carport on timber posts beside parking.",
+    "inferred": "Lean-to annexes in the other two steps of the ENE side, doors, roll-ups and louvres; pitches and heights.",
+    "footprint": "Frozen 12-edge ring kept; the 12.69 m WSW strip is the gable shed, the stepped ENE side splits into two lean-tos and the open carport."
+  }
+}

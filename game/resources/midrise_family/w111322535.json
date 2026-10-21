@@ -1,0 +1,367 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w111322535",
+    "address": "400 Avenue H",
+    "edge_normals": [
+      [
+        -0.8859049369599824,
+        0.4638668372172445
+      ],
+      [
+        0.46360688267246375,
+        0.8860410026283887
+      ],
+      [
+        -0.8874548816325689,
+        0.46089460082162276
+      ],
+      [
+        0.4639127541203798,
+        0.8858808929898218
+      ],
+      [
+        0.8861026106200623,
+        -0.46348911902256146
+      ],
+      [
+        -0.46303525130506035,
+        -0.8863398648649736
+      ],
+      [
+        -0.8874402336742142,
+        0.4609228044437117
+      ],
+      [
+        -0.463446288001633,
+        -0.886125012702783
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": 0,
+    "above_terrain": 0.05,
+    "basis": "median frozen terrain along the photographed WSW front"
+  },
+  "levels": {
+    "ground_h": 6.3,
+    "storey_h": 3.0,
+    "parapet_h": 0.35
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.66,
+        0.65,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.73,
+        0.74,
+        0.74
+      ],
+      "roughness": 0.45,
+      "metallic": 0.3
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.62,
+        0.61,
+        0.58
+      ],
+      "roughness": 0.95
+    },
+    "beige": {
+      "rgb": [
+        0.78,
+        0.72,
+        0.6
+      ],
+      "roughness": 0.8
+    }
+  },
+  "schemes": {
+    "front": {
+      "material": "beige",
+      "parapet_material": "beige",
+      "module": 60.0,
+      "ground": {
+        "w": 1.0,
+        "h": 0.9,
+        "sill": 1.4,
+        "depth": 0.1,
+        "mullions": [],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "window": {
+        "w": 1.0,
+        "h": 0.9,
+        "sill": 1.4,
+        "depth": 0.1,
+        "mullions": [],
+        "frame": "frame_light"
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 2.2,
+          "to": 3.8,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "bays",
+          "from": 5.0,
+          "to": 7.4,
+          "module": 2.4
+        },
+        {
+          "type": "vents",
+          "from": 8.6,
+          "to": 11.6,
+          "count": 1,
+          "w": 1.4,
+          "h": 0.8,
+          "y": 3.6
+        }
+      ]
+    },
+    "side": {
+      "material": "beige",
+      "parapet_material": "beige",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "vents",
+          "from": 3.0,
+          "to": 6.0,
+          "count": 1,
+          "w": 1.2,
+          "h": 0.7,
+          "y": 3.4
+        },
+        {
+          "type": "entry",
+          "from": 8.5,
+          "to": 10.1,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "back": {
+      "material": "beige",
+      "parapet_material": "beige",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "garage",
+          "from": 6.9,
+          "to": 11.1,
+          "w": 3.6,
+          "h": 3.6
+        }
+      ]
+    },
+    "plain": {
+      "material": "beige",
+      "parapet_material": "beige",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      }
+    }
+  },
+  "blocks": [
+    {
+      "id": "box",
+      "storeys": 1,
+      "ground_h": 6.3,
+      "parapet": {
+        "h": 0.35,
+        "t": 0.2
+      },
+      "faces": {
+        "e0": "front",
+        "e1": "side",
+        "e4": "back",
+        "e7": "side",
+        "default": "plain"
+      },
+      "roof_items": [
+        {
+          "kind": "box",
+          "edge": 4,
+          "s": [
+            5.0,
+            7.5
+          ],
+          "d": [
+            4.0,
+            6.0
+          ],
+          "h": 1.2,
+          "material": "mech"
+        }
+      ]
+    }
+  ],
+  "study_notes": {
+    "observed": "Sep 2025 400 Avenue H: beige corrugated flat-roof utility box with a door, small window and signs in a fenced yard.",
+    "inferred": "Louvres, side doors and a rear roll-up; roof unit; heights. Signs not modelled.",
+    "footprint": "Frozen ring with its two jogs kept as one block."
+  }
+}

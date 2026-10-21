@@ -1,0 +1,491 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w291196369",
+    "address": "Avenue M treatment plant",
+    "edge_normals": [
+      [
+        -0.8780499013609819,
+        0.4785690866739829
+      ],
+      [
+        0.4994105487594772,
+        0.8663654562525896
+      ],
+      [
+        -0.3480512514736947,
+        0.9374755070654353
+      ],
+      [
+        -0.19667230354314094,
+        0.980469277957772
+      ],
+      [
+        0.19667230354314094,
+        0.980469277957772
+      ],
+      [
+        0.5564845900125773,
+        0.8308579307429963
+      ],
+      [
+        0.8316554901400124,
+        0.5552919463849405
+      ],
+      [
+        0.9808998174342758,
+        0.19451361946507606
+      ],
+      [
+        0.9808998174342758,
+        -0.19451361946507606
+      ],
+      [
+        0.8329877642991033,
+        -0.5532914101339201
+      ],
+      [
+        0.5573646351655672,
+        -0.8302678263468688
+      ],
+      [
+        0.19754127913166067,
+        -0.9802945695243993
+      ],
+      [
+        -0.19698120401351815,
+        -0.9804072650003083
+      ],
+      [
+        -0.5550714262340251,
+        -0.8318026880087159
+      ],
+      [
+        -0.8315074267511972,
+        -0.5555136355280601
+      ],
+      [
+        -0.9812740143921378,
+        -0.1926169999733629
+      ],
+      [
+        -0.4441706990488198,
+        -0.8959421801134729
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": "ring",
+    "above_terrain": 0.05,
+    "basis": "median frozen terrain around the whole ring"
+  },
+  "levels": {
+    "ground_h": 1.5,
+    "storey_h": 3.0,
+    "parapet_h": 0.3
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.66,
+        0.65,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.73,
+        0.74,
+        0.74
+      ],
+      "roughness": 0.45,
+      "metallic": 0.3
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.62,
+        0.61,
+        0.58
+      ],
+      "roughness": 0.95
+    },
+    "board": {
+      "rgb": [
+        0.52,
+        0.51,
+        0.48
+      ],
+      "roughness": 0.95
+    },
+    "water": {
+      "rgb": [
+        0.17,
+        0.21,
+        0.19
+      ],
+      "roughness": 0.15
+    },
+    "render": {
+      "rgb": [
+        0.86,
+        0.86,
+        0.83
+      ],
+      "roughness": 0.9
+    }
+  },
+  "schemes": {
+    "rim": {
+      "material": "concrete",
+      "parapet_material": "concrete",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "board",
+        "top": 0.15
+      }
+    },
+    "rim_ladder": {
+      "material": "concrete",
+      "parapet_material": "concrete",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "board",
+        "top": 0.15
+      },
+      "features": [
+        {
+          "type": "ladder",
+          "from": 0.95,
+          "to": 2.15
+        }
+      ]
+    },
+    "wing_front": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 3.2,
+      "window": {
+        "w": 1.2,
+        "h": 1.0,
+        "sill": 1.2,
+        "depth": 0.15,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "kind": "window",
+        "w": 1.2,
+        "h": 1.0,
+        "sill": 1.2,
+        "depth": 0.15,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 1.2,
+          "to": 2.8,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "vents",
+          "from": 6.2,
+          "to": 8.6,
+          "count": 2,
+          "w": 0.9,
+          "h": 0.6,
+          "y": 1.9
+        }
+      ]
+    },
+    "wing_side": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 3.2,
+      "window": {
+        "w": 1.2,
+        "h": 1.0,
+        "sill": 1.2,
+        "depth": 0.15,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "features": [
+        {
+          "type": "vents",
+          "from": 2.0,
+          "to": 5.5,
+          "count": 2,
+          "w": 1.0,
+          "h": 0.6,
+          "y": 1.8
+        }
+      ]
+    },
+    "wing_side2": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 3.2,
+      "window": {
+        "w": 1.2,
+        "h": 1.0,
+        "sill": 1.2,
+        "depth": 0.15,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 4.6,
+          "to": 6.2,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "wing_back": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      }
+    }
+  },
+  "blocks": [
+    {
+      "id": "basin",
+      "storeys": 1,
+      "ground_h": 1.5,
+      "clip": [
+        {
+          "edge": 0,
+          "min": 7.96
+        }
+      ],
+      "roof_material": "water",
+      "parapet": {
+        "kind": "railing",
+        "style": "pipe",
+        "h": 1.1,
+        "curb": 0.5,
+        "t": 0.25
+      },
+      "faces": {
+        "default": "rim",
+        "e10": "rim_ladder"
+      },
+      "roof_items": [
+        {
+          "kind": "cylinder",
+          "edge": 8,
+          "s": [
+            0.5,
+            2.6
+          ],
+          "d": [
+            6.75,
+            8.85
+          ],
+          "h": 1.6,
+          "sides": 14,
+          "material": "concrete",
+          "top": "concrete"
+        }
+      ]
+    },
+    {
+      "id": "wing",
+      "storeys": 1,
+      "ground_h": 3.3,
+      "clip": [
+        {
+          "edge": 0,
+          "max": 7.96
+        }
+      ],
+      "parapet": {
+        "h": 0.3,
+        "t": 0.25
+      },
+      "faces": {
+        "e0": "wing_front",
+        "e1": "wing_side2",
+        "e16": "wing_side",
+        "default": "wing_back"
+      }
+    }
+  ],
+  "study_notes": {
+    "observed": "Sep 2025 14th St: low round concrete structures with guard rails inside the fenced plant; OSM height 2 m.",
+    "inferred": "Open round basin with a pipe rail, centre column and ladder; the rectangular wing as a small render pump house with doors, louvres and windows.",
+    "footprint": "Frozen ring kept; the wing is everything within 7.96 m of edge 0, the basin the rest."
+  }
+}

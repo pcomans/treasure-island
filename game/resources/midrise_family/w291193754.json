@@ -1,0 +1,1622 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w291193754",
+    "address": "Avenue M-N plant compound",
+    "edge_normals": [
+      [
+        -0.9631822238203452,
+        0.26884940713435546
+      ],
+      [
+        -0.6537293179902536,
+        0.7567284709854638
+      ],
+      [
+        -0.891639888590381,
+        0.4527453026531948
+      ],
+      [
+        -0.45547580431379203,
+        -0.8902481629774386
+      ],
+      [
+        -0.8936964527485858,
+        0.4486720966859815
+      ],
+      [
+        0.4507924649497721,
+        0.8926287882118235
+      ],
+      [
+        -0.8969254728078008,
+        0.44218174569796864
+      ],
+      [
+        0.4553730289515749,
+        0.8903007382359446
+      ],
+      [
+        0.9039581548594,
+        -0.42762092355635367
+      ],
+      [
+        0.47336327239434456,
+        0.8808673068902703
+      ],
+      [
+        -0.9029597842715955,
+        0.4297250609263947
+      ],
+      [
+        -0.4734322589514439,
+        -0.8808302311933515
+      ],
+      [
+        -0.8849660896809514,
+        0.4656554736227272
+      ],
+      [
+        -0.47012388253094656,
+        -0.8826004390855632
+      ],
+      [
+        -0.8841325988631157,
+        0.467236072695113
+      ],
+      [
+        0.46792971104953457,
+        0.8837656847361178
+      ],
+      [
+        -0.8908948732039575,
+        0.4542095605542717
+      ],
+      [
+        -0.980154812588554,
+        -0.198233557601877
+      ],
+      [
+        -0.9700074582258414,
+        0.24307515501639115
+      ],
+      [
+        -0.700094664954081,
+        0.7140500403352926
+      ],
+      [
+        -0.25896931395432254,
+        0.9658855493432064
+      ],
+      [
+        0.2595541629355412,
+        0.9657285521837027
+      ],
+      [
+        0.7116539498779978,
+        0.7025301812897751
+      ],
+      [
+        0.9637855391078847,
+        0.2666785229569941
+      ],
+      [
+        0.9637855391078942,
+        -0.26667852295695993
+      ],
+      [
+        0.7110903860865933,
+        -0.7031006064676802
+      ],
+      [
+        0.8924024124316774,
+        -0.4512404395509363
+      ],
+      [
+        0.4562536340197949,
+        0.8898497746494805
+      ],
+      [
+        -0.8910314590785071,
+        0.45394155893950344
+      ],
+      [
+        0.4538748681025114,
+        0.891065431999765
+      ],
+      [
+        -0.8904765227779812,
+        0.4550291884937005
+      ],
+      [
+        0.45260972723678855,
+        0.8917087163477992
+      ],
+      [
+        -0.889991191362431,
+        0.45597771798332526
+      ],
+      [
+        0.4591370187995541,
+        0.888365464191319
+      ],
+      [
+        0.8907763466762254,
+        -0.454441965714168
+      ],
+      [
+        0.4540440674652879,
+        0.8909792280404617
+      ],
+      [
+        -0.8895670181435353,
+        0.4568046849926333
+      ],
+      [
+        0.45548057693714494,
+        0.890245721154
+      ],
+      [
+        0.8897863742271861,
+        -0.45637726525281463
+      ],
+      [
+        -0.47031393438034,
+        -0.8824991802419337
+      ],
+      [
+        0.8901410607130816,
+        -0.4556850798880628
+      ],
+      [
+        0.455685620757109,
+        0.8901407838287201
+      ],
+      [
+        0.8900871534631993,
+        -0.4557903676469907
+      ],
+      [
+        0.4558920320607516,
+        0.8900350864452022
+      ],
+      [
+        0.8898410951726005,
+        -0.45627056155534196
+      ],
+      [
+        -0.4528281124031829,
+        -0.8915978356957639
+      ],
+      [
+        0.8907721983495759,
+        -0.4544500969825663
+      ],
+      [
+        -0.45537601524933347,
+        -0.8902992107913151
+      ],
+      [
+        -0.8907069204655764,
+        0.45457802612393106
+      ],
+      [
+        -0.4565423188669063,
+        -0.8897016978086689
+      ],
+      [
+        0.8888031674085004,
+        -0.4582891331949921
+      ],
+      [
+        -0.454586831175477,
+        -0.8907024266958289
+      ],
+      [
+        -0.890724407145446,
+        0.4545437608365048
+      ],
+      [
+        -0.4524061075236803,
+        -0.8918120395438
+      ],
+      [
+        -0.8899407632975601,
+        0.4560761316067262
+      ],
+      [
+        -0.4575679741667645,
+        -0.8891746448347047
+      ],
+      [
+        -0.8921279826223075,
+        0.4517827604305546
+      ],
+      [
+        -0.4539167988711682,
+        -0.891044072817137
+      ],
+      [
+        0.8915929698194316,
+        -0.45283769296356724
+      ],
+      [
+        0.9954703026448922,
+        -0.09507300643235592
+      ],
+      [
+        0.968460526712472,
+        -0.2491670287172871
+      ],
+      [
+        0.7094598623578492,
+        -0.7047458433387044
+      ],
+      [
+        0.24027356783605203,
+        -0.9707052140579725
+      ],
+      [
+        -0.23533060078954157,
+        -0.9719153812611638
+      ],
+      [
+        -0.7219882051154626,
+        -0.6919053632355749
+      ],
+      [
+        -0.9631822238203549,
+        -0.26884940713432104
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": "ring",
+    "above_terrain": 0.05,
+    "basis": "median frozen terrain around the ring"
+  },
+  "levels": {
+    "ground_h": 7.7,
+    "storey_h": 3.0,
+    "parapet_h": 0.3
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.66,
+        0.65,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.73,
+        0.74,
+        0.74
+      ],
+      "roughness": 0.45,
+      "metallic": 0.3
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.62,
+        0.61,
+        0.58
+      ],
+      "roughness": 0.95
+    },
+    "plant_metal": {
+      "rgb": [
+        0.76,
+        0.74,
+        0.69
+      ],
+      "roughness": 0.6,
+      "metallic": 0.15
+    },
+    "trim": {
+      "rgb": [
+        0.5,
+        0.5,
+        0.48
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "silver": {
+      "rgb": [
+        0.8,
+        0.81,
+        0.82
+      ],
+      "roughness": 0.5,
+      "metallic": 0.3
+    }
+  },
+  "schemes": {
+    "plain": {
+      "material": "plant_metal",
+      "parapet_material": "trim",
+      "module": 4.5,
+      "window": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim"
+      },
+      "ground": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 3.0,
+          "h": 0.12,
+          "material": "trim"
+        },
+        {
+          "storey": 0,
+          "offset": 6.0,
+          "h": 0.12,
+          "material": "trim"
+        }
+      ]
+    },
+    "side48": {
+      "material": "plant_metal",
+      "parapet_material": "trim",
+      "module": 4.5,
+      "window": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim"
+      },
+      "ground": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 3.0,
+          "h": 0.12,
+          "material": "trim"
+        },
+        {
+          "storey": 0,
+          "offset": 6.0,
+          "h": 0.12,
+          "material": "trim"
+        }
+      ],
+      "features": [
+        {
+          "type": "entry",
+          "from": 0.598,
+          "to": 2.198,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "vents",
+          "from": 2.564,
+          "to": 4.195,
+          "count": 1,
+          "w": 1.0,
+          "h": 0.6,
+          "y": 2.4
+        }
+      ]
+    },
+    "side37": {
+      "material": "plant_metal",
+      "parapet_material": "trim",
+      "module": 4.5,
+      "window": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim"
+      },
+      "ground": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 3.0,
+          "h": 0.12,
+          "material": "trim"
+        },
+        {
+          "storey": 0,
+          "offset": 6.0,
+          "h": 0.12,
+          "material": "trim"
+        }
+      ],
+      "features": [
+        {
+          "type": "entry",
+          "from": 1.517,
+          "to": 3.117,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "vents",
+          "from": 4.248,
+          "to": 6.951,
+          "count": 1,
+          "w": 1.0,
+          "h": 0.6,
+          "y": 2.4
+        }
+      ]
+    },
+    "side51": {
+      "material": "plant_metal",
+      "parapet_material": "trim",
+      "module": 4.5,
+      "window": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim"
+      },
+      "ground": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 3.0,
+          "h": 0.12,
+          "material": "trim"
+        },
+        {
+          "storey": 0,
+          "offset": 6.0,
+          "h": 0.12,
+          "material": "trim"
+        }
+      ],
+      "features": [
+        {
+          "type": "entry",
+          "from": 0.743,
+          "to": 2.343,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "vents",
+          "from": 2.829,
+          "to": 4.629,
+          "count": 1,
+          "w": 1.0,
+          "h": 0.6,
+          "y": 2.4
+        }
+      ]
+    },
+    "side44": {
+      "material": "plant_metal",
+      "parapet_material": "trim",
+      "module": 4.5,
+      "window": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim"
+      },
+      "ground": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 3.0,
+          "h": 0.12,
+          "material": "trim"
+        },
+        {
+          "storey": 0,
+          "offset": 6.0,
+          "h": 0.12,
+          "material": "trim"
+        }
+      ],
+      "features": [
+        {
+          "type": "entry",
+          "from": 1.05,
+          "to": 2.65,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "vents",
+          "from": 3.392,
+          "to": 5.551,
+          "count": 1,
+          "w": 1.0,
+          "h": 0.6,
+          "y": 2.4
+        }
+      ]
+    },
+    "lv5": {
+      "material": "plant_metal",
+      "parapet_material": "trim",
+      "module": 4.5,
+      "window": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim"
+      },
+      "ground": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 3.0,
+          "h": 0.12,
+          "material": "trim"
+        },
+        {
+          "storey": 0,
+          "offset": 6.0,
+          "h": 0.12,
+          "material": "trim"
+        }
+      ],
+      "features": [
+        {
+          "type": "vents",
+          "from": 0.603,
+          "to": 2.412,
+          "count": 1,
+          "w": 1.0,
+          "h": 0.6,
+          "y": 2.4
+        }
+      ]
+    },
+    "lv13": {
+      "material": "plant_metal",
+      "parapet_material": "trim",
+      "module": 4.5,
+      "window": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim"
+      },
+      "ground": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 3.0,
+          "h": 0.12,
+          "material": "trim"
+        },
+        {
+          "storey": 0,
+          "offset": 6.0,
+          "h": 0.12,
+          "material": "trim"
+        }
+      ],
+      "features": [
+        {
+          "type": "vents",
+          "from": 0.805,
+          "to": 3.22,
+          "count": 1,
+          "w": 1.0,
+          "h": 0.6,
+          "y": 2.4
+        }
+      ]
+    },
+    "lv27": {
+      "material": "plant_metal",
+      "parapet_material": "trim",
+      "module": 4.5,
+      "window": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim"
+      },
+      "ground": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 3.0,
+          "h": 0.12,
+          "material": "trim"
+        },
+        {
+          "storey": 0,
+          "offset": 6.0,
+          "h": 0.12,
+          "material": "trim"
+        }
+      ],
+      "features": [
+        {
+          "type": "vents",
+          "from": 0.644,
+          "to": 2.578,
+          "count": 1,
+          "w": 1.0,
+          "h": 0.6,
+          "y": 2.4
+        }
+      ]
+    },
+    "lv29": {
+      "material": "plant_metal",
+      "parapet_material": "trim",
+      "module": 4.5,
+      "window": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim"
+      },
+      "ground": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 3.0,
+          "h": 0.12,
+          "material": "trim"
+        },
+        {
+          "storey": 0,
+          "offset": 6.0,
+          "h": 0.12,
+          "material": "trim"
+        }
+      ],
+      "features": [
+        {
+          "type": "vents",
+          "from": 0.647,
+          "to": 2.589,
+          "count": 1,
+          "w": 1.0,
+          "h": 0.6,
+          "y": 2.4
+        }
+      ]
+    },
+    "lv30": {
+      "material": "plant_metal",
+      "parapet_material": "trim",
+      "module": 4.5,
+      "window": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim"
+      },
+      "ground": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 3.0,
+          "h": 0.12,
+          "material": "trim"
+        },
+        {
+          "storey": 0,
+          "offset": 6.0,
+          "h": 0.12,
+          "material": "trim"
+        }
+      ],
+      "features": [
+        {
+          "type": "vents",
+          "from": 0.603,
+          "to": 2.41,
+          "count": 1,
+          "w": 1.0,
+          "h": 0.6,
+          "y": 2.4
+        }
+      ]
+    },
+    "lv32": {
+      "material": "plant_metal",
+      "parapet_material": "trim",
+      "module": 4.5,
+      "window": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim"
+      },
+      "ground": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 3.0,
+          "h": 0.12,
+          "material": "trim"
+        },
+        {
+          "storey": 0,
+          "offset": 6.0,
+          "h": 0.12,
+          "material": "trim"
+        }
+      ],
+      "features": [
+        {
+          "type": "vents",
+          "from": 0.683,
+          "to": 2.732,
+          "count": 1,
+          "w": 1.0,
+          "h": 0.6,
+          "y": 2.4
+        }
+      ]
+    },
+    "lv34": {
+      "material": "plant_metal",
+      "parapet_material": "trim",
+      "module": 4.5,
+      "window": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim"
+      },
+      "ground": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 3.0,
+          "h": 0.12,
+          "material": "trim"
+        },
+        {
+          "storey": 0,
+          "offset": 6.0,
+          "h": 0.12,
+          "material": "trim"
+        }
+      ],
+      "features": [
+        {
+          "type": "vents",
+          "from": 0.685,
+          "to": 2.739,
+          "count": 1,
+          "w": 1.0,
+          "h": 0.6,
+          "y": 2.4
+        }
+      ]
+    },
+    "lv38": {
+      "material": "plant_metal",
+      "parapet_material": "trim",
+      "module": 4.5,
+      "window": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim"
+      },
+      "ground": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 3.0,
+          "h": 0.12,
+          "material": "trim"
+        },
+        {
+          "storey": 0,
+          "offset": 6.0,
+          "h": 0.12,
+          "material": "trim"
+        }
+      ],
+      "features": [
+        {
+          "type": "vents",
+          "from": 0.871,
+          "to": 3.483,
+          "count": 1,
+          "w": 1.0,
+          "h": 0.6,
+          "y": 2.4
+        }
+      ]
+    },
+    "lv41": {
+      "material": "plant_metal",
+      "parapet_material": "trim",
+      "module": 4.5,
+      "window": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim"
+      },
+      "ground": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 3.0,
+          "h": 0.12,
+          "material": "trim"
+        },
+        {
+          "storey": 0,
+          "offset": 6.0,
+          "h": 0.12,
+          "material": "trim"
+        }
+      ],
+      "features": [
+        {
+          "type": "vents",
+          "from": 0.65,
+          "to": 2.6,
+          "count": 1,
+          "w": 1.0,
+          "h": 0.6,
+          "y": 2.4
+        }
+      ]
+    },
+    "lv42": {
+      "material": "plant_metal",
+      "parapet_material": "trim",
+      "module": 4.5,
+      "window": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim"
+      },
+      "ground": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 3.0,
+          "h": 0.12,
+          "material": "trim"
+        },
+        {
+          "storey": 0,
+          "offset": 6.0,
+          "h": 0.12,
+          "material": "trim"
+        }
+      ],
+      "features": [
+        {
+          "type": "vents",
+          "from": 0.633,
+          "to": 2.531,
+          "count": 1,
+          "w": 1.0,
+          "h": 0.6,
+          "y": 2.4
+        }
+      ]
+    },
+    "lv46": {
+      "material": "plant_metal",
+      "parapet_material": "trim",
+      "module": 4.5,
+      "window": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim"
+      },
+      "ground": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 3.0,
+          "h": 0.12,
+          "material": "trim"
+        },
+        {
+          "storey": 0,
+          "offset": 6.0,
+          "h": 0.12,
+          "material": "trim"
+        }
+      ],
+      "features": [
+        {
+          "type": "vents",
+          "from": 0.96,
+          "to": 3.839,
+          "count": 1,
+          "w": 1.0,
+          "h": 0.6,
+          "y": 2.4
+        }
+      ]
+    },
+    "lv47": {
+      "material": "plant_metal",
+      "parapet_material": "trim",
+      "module": 4.5,
+      "window": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim"
+      },
+      "ground": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 3.0,
+          "h": 0.12,
+          "material": "trim"
+        },
+        {
+          "storey": 0,
+          "offset": 6.0,
+          "h": 0.12,
+          "material": "trim"
+        }
+      ],
+      "features": [
+        {
+          "type": "vents",
+          "from": 0.997,
+          "to": 3.99,
+          "count": 1,
+          "w": 1.0,
+          "h": 0.6,
+          "y": 2.4
+        }
+      ]
+    },
+    "lv52": {
+      "material": "plant_metal",
+      "parapet_material": "trim",
+      "module": 4.5,
+      "window": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim"
+      },
+      "ground": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 3.0,
+          "h": 0.12,
+          "material": "trim"
+        },
+        {
+          "storey": 0,
+          "offset": 6.0,
+          "h": 0.12,
+          "material": "trim"
+        }
+      ],
+      "features": [
+        {
+          "type": "vents",
+          "from": 0.882,
+          "to": 3.529,
+          "count": 1,
+          "w": 1.0,
+          "h": 0.6,
+          "y": 2.4
+        }
+      ]
+    },
+    "lv53": {
+      "material": "plant_metal",
+      "parapet_material": "trim",
+      "module": 4.5,
+      "window": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim"
+      },
+      "ground": {
+        "w": 1.6,
+        "h": 0.9,
+        "sill": 4.77,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 3.0,
+          "h": 0.12,
+          "material": "trim"
+        },
+        {
+          "storey": 0,
+          "offset": 6.0,
+          "h": 0.12,
+          "material": "trim"
+        }
+      ],
+      "features": [
+        {
+          "type": "vents",
+          "from": 0.615,
+          "to": 2.462,
+          "count": 1,
+          "w": 1.0,
+          "h": 0.6,
+          "y": 2.4
+        }
+      ]
+    }
+  },
+  "blocks": [
+    {
+      "id": "plant",
+      "storeys": 1,
+      "ground_h": 7.7,
+      "parapet": {
+        "kind": "railing",
+        "style": "pipe",
+        "h": 1.1,
+        "curb": 0.3,
+        "t": 0.2
+      },
+      "faces": {
+        "default": "plain",
+        "e48": "side48",
+        "e37": "side37",
+        "e51": "side51",
+        "e44": "side44",
+        "e5": "lv5",
+        "e13": "lv13",
+        "e27": "lv27",
+        "e29": "lv29",
+        "e30": "lv30",
+        "e32": "lv32",
+        "e34": "lv34",
+        "e38": "lv38",
+        "e41": "lv41",
+        "e42": "lv42",
+        "e46": "lv46",
+        "e47": "lv47",
+        "e52": "lv52",
+        "e53": "lv53"
+      },
+      "roof_items": [
+        {
+          "kind": "cylinder",
+          "edge": 37,
+          "s": [
+            0.831,
+            3.031
+          ],
+          "d": [
+            1.8,
+            4.0
+          ],
+          "h": 1.4,
+          "sides": 12,
+          "material": "silver",
+          "top": "mech"
+        },
+        {
+          "kind": "cylinder",
+          "edge": 37,
+          "s": [
+            3.062,
+            4.662
+          ],
+          "d": [
+            1.8,
+            3.4
+          ],
+          "h": 0.9,
+          "sides": 12,
+          "material": "silver",
+          "top": "mech"
+        }
+      ]
+    }
+  ],
+  "study_notes": {
+    "observed": "Nov 2025 649 Avenue N: metal process building behind palms (obscured).",
+    "inferred": "Low-detail industrial massing: warm metal cladding with trim bands, high strip windows, a service door per side, louvres, a roll-up on the longest side of the larger blocks, roof plant inside a pipe guard rail; process towers, ducts and stairs not modelled.",
+    "footprint": "Frozen ring with its jogs kept as one block; OSM height."
+  }
+}

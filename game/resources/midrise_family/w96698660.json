@@ -1,0 +1,284 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w96698660",
+    "address": "810 Avenue D (storage yard)",
+    "edge_normals": [
+      [
+        -0.3148292528501401,
+        0.9491483243149211
+      ],
+      [
+        0.9494435793250673,
+        0.3139377162406653
+      ],
+      [
+        0.3144904895834642,
+        -0.9492606238339146
+      ],
+      [
+        -0.9489421042989743,
+        -0.31545028560556826
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": "ring",
+    "above_terrain": 0.05,
+    "basis": "median frozen terrain around the ring"
+  },
+  "levels": {
+    "ground_h": 3.0,
+    "storey_h": 3.0,
+    "parapet_h": 0.2
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.66,
+        0.65,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.73,
+        0.74,
+        0.74
+      ],
+      "roughness": 0.45,
+      "metallic": 0.3
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.62,
+        0.61,
+        0.58
+      ],
+      "roughness": 0.95
+    },
+    "metal_white": {
+      "rgb": [
+        0.85,
+        0.86,
+        0.85
+      ],
+      "roughness": 0.6,
+      "metallic": 0.1
+    }
+  },
+  "schemes": {
+    "row": {
+      "material": "metal_white",
+      "parapet_material": "metal_white",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      },
+      "features": [
+        {
+          "type": "garage",
+          "from": 0.9,
+          "to": 3.8,
+          "w": 2.3,
+          "h": 2.4
+        },
+        {
+          "type": "garage",
+          "from": 4.4,
+          "to": 7.3,
+          "w": 2.3,
+          "h": 2.4
+        },
+        {
+          "type": "garage",
+          "from": 7.9,
+          "to": 10.8,
+          "w": 2.3,
+          "h": 2.4
+        },
+        {
+          "type": "garage",
+          "from": 11.4,
+          "to": 14.3,
+          "w": 2.3,
+          "h": 2.4
+        },
+        {
+          "type": "garage",
+          "from": 14.9,
+          "to": 17.8,
+          "w": 2.3,
+          "h": 2.4
+        }
+      ]
+    },
+    "end": {
+      "material": "metal_white",
+      "parapet_material": "metal_white",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 2.8,
+          "to": 4.6,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    }
+  },
+  "blocks": [
+    {
+      "id": "storage",
+      "storeys": 1,
+      "ground_h": 3.0,
+      "parapet": {
+        "h": 0.2,
+        "t": 0.15
+      },
+      "faces": {
+        "e0": "row",
+        "e2": "row",
+        "e1": "end",
+        "e3": "end"
+      }
+    }
+  ],
+  "study_notes": {
+    "observed": "Sep 2025 9th St: rental storage yard behind a green fence (\"now renting spaces\"); building itself not visible.",
+    "inferred": "Self-storage row with roll-up doors on both long sides and end doors (Level 1).",
+    "footprint": "Frozen rectangle kept as one block."
+  }
+}

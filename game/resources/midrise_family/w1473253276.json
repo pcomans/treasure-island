@@ -1,0 +1,298 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w1473253276",
+    "address": "Treasure Island (security booth)",
+    "edge_normals": [
+      [
+        -0.8866728315771363,
+        0.46239732886661794
+      ],
+      [
+        0.4619385397778192,
+        0.8869119378314492
+      ],
+      [
+        0.8866030512436781,
+        -0.4625311119539961
+      ],
+      [
+        -0.462041583957128,
+        -0.8868582607690974
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": "ring",
+    "above_terrain": 0.1,
+    "basis": "median frozen terrain around the ring (no imagery)"
+  },
+  "levels": {
+    "ground_h": 2.7,
+    "storey_h": 3.0,
+    "parapet_h": 0.0
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.66,
+        0.65,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.73,
+        0.74,
+        0.74
+      ],
+      "roughness": 0.45,
+      "metallic": 0.3
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.62,
+        0.61,
+        0.58
+      ],
+      "roughness": 0.95
+    },
+    "render": {
+      "rgb": [
+        0.86,
+        0.86,
+        0.83
+      ],
+      "roughness": 0.9
+    },
+    "roof_metal": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.5,
+      "metallic": 0.3
+    },
+    "fascia": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.7
+    }
+  },
+  "schemes": {
+    "side": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 1.9,
+      "window": {
+        "w": 1.2,
+        "h": 1.1,
+        "sill": 1.0,
+        "depth": 0.08,
+        "mullions": [],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.2,
+        "h": 1.1,
+        "sill": 1.0,
+        "depth": 0.08,
+        "mullions": [],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      }
+    },
+    "door": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 1.9,
+      "window": {
+        "w": 1.2,
+        "h": 1.1,
+        "sill": 1.0,
+        "depth": 0.08,
+        "mullions": [],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.2,
+        "h": 1.1,
+        "sill": 1.0,
+        "depth": 0.08,
+        "mullions": [],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 0.4,
+          "to": 2.0,
+          "door": {
+            "kind": "unit",
+            "w": 0.9,
+            "h": 2.1,
+            "leaf_h": 2.1
+          },
+          "landing": {
+            "w": 1.6,
+            "depth": 1.2
+          }
+        }
+      ]
+    }
+  },
+  "blocks": [
+    {
+      "id": "booth",
+      "storeys": 1,
+      "ground_h": 2.7,
+      "parapet": {
+        "h": 0.0
+      },
+      "roof": {
+        "form": "mono",
+        "low_edge": 2,
+        "pitch_deg": 3.0,
+        "overhang": 0.5,
+        "t": 0.15,
+        "under": "soffit",
+        "fascia": "fascia"
+      },
+      "roof_material": "roof_metal",
+      "faces": {
+        "e1": "door",
+        "default": "side"
+      }
+    }
+  ],
+  "study_notes": {
+    "observed": "No panorama (23 m2 security booth per the reference note).",
+    "inferred": "Glazed booth with a door and an overhanging mono-pitch roof; all dimensions (Level 1).",
+    "footprint": "Frozen rectangle kept as one block."
+  }
+}
