@@ -362,9 +362,15 @@ under a deeper canopy. CODE, visual and progress PASS. L1/L2 C on `w34313556` an
 `w96698662`, `w291189918`, `w96665889` and `w96665924`. Parked: colour pass (611 roof
 dark brown; Ship Shape light aluminium frames); the 549 stair; the Ship Shape mural
 and sign; landmarks waiting on a reference pass.
-Current totals after Mar21h: L1:178 C/35 U; L2:154 C/59 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall333 C/0 I/732 U across213 units/1,065 cells;49 historical
-recognition credits unchanged.
+**Mar21i** colour pass part 2, 2026-10-21 (no level changes): `4807241` brings the path
+standard, Site 12, the sheds, the mid-rises and 449 to the dated photos; `3fd74b5`
+moves world footways from brown pavers to neutral concrete; `d6b4f83` sets matte
+cream on 535 and charcoal on the 490 wing. CODE PASS on all three; visual PASS on
+part 2 and iteration 3. Colour pass part 2 is done: paths and footways are at the
+concrete standard. Still pending: the 611 roof and the Ship Shape frames.
+Current totals after Mar21i (unchanged): L1:178 C/35 U; L2:154 C/59 U; L3/L5:213 U
+each; L4:1 C/212 U. Overall333 C/0 I/732 U across213 units/1,065 cells;49
+historical recognition credits unchanged.
 **U** no current stage-level conclusion established in this checklist pass.
 
 The retained34-building audit entries in [RETRO](RETRO_LOG.md) (2026-09-23,
@@ -631,7 +637,7 @@ March/November2025 refs and unknown-date Apple context support the scoped envelo
 and observed architecture; missing north capture/unknown rear/schematic materials
 keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
 See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
-Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar21h for current totals);
+Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar21i for current totals);
 **L1:21 C /0 I /192 U**. All other stages unchanged;49 historical credits retained.
 
 ## Island environment layers
