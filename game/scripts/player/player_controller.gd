@@ -84,6 +84,10 @@ func get_recovery_controller() -> RecoveryController:
 	return recovery_controller
 
 
+# Only the browser touch adapter supplies this vector; native input stays unchanged.
+var touch_input_vector := Vector2.ZERO
+
+
 func _physics_process(delta: float) -> void:
 	if _startup_settling:
 		velocity.x = 0.0
@@ -99,11 +103,12 @@ func _physics_process(delta: float) -> void:
 		return
 	if not _gameplay_enabled:
 		return
-	var input_vector := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+	var using_touch := not touch_input_vector.is_zero_approx()
+	var input_vector := touch_input_vector if using_touch else Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	if input_vector.length_squared() > 1.0:
 		input_vector = input_vector.normalized()
 	var direction := camera_rig.planar_right() * input_vector.x + camera_rig.planar_forward() * -input_vector.y
-	if direction.length_squared() > 0.0001:
+	if direction.length_squared() > 0.0001 and not using_touch:
 		direction = direction.normalized()
 	var target_speed := run_speed_mps if Input.is_action_pressed("run") else walk_speed_mps
 	var target_velocity := direction * target_speed

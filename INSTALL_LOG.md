@@ -287,3 +287,9 @@ no template download or LFS hydration was required. After the owner completed
 account connections or paid resources were created by the executor. Credentials
 were neither printed nor committed.
 The Vercel platform ran its own CLI64.3.1 for the static build.
+
+2026-10-22: Vendored MIT mobile input from selgesel/godot4-third-person-controller
+revision c809ec20fd8170f4a81f3d8964e8a9838f8b29da: three adapted input scripts,
+LICENSE and five UI PNGs from official raw/media.githubusercontent.com endpoints.
+Provenance/adaptations: game/scripts/vendor/selgesel/README.md. No installation,
+account or full-controller dependency; Virtual Joystick DX was not integrated.

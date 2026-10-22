@@ -118,7 +118,9 @@ upward and release it to descend, and hold **RUN** while moving to run. The
 the same time. Pausing, losing focus, resizing or cancelling a finger releases
 held touch input. Desktop mouse and keyboard controls are retained.
 
-This uses a small built-in Godot touch adapter, with no third-party plugin and
-no changes to stock movement physics. Touch mode avoids pointer lock; it does
+This ports the MIT mobile input layer from Selgesel’s Godot4 third-person
+controller (see game/scripts/vendor/selgesel/README.md): its analog thumbstick,
+virtual buttons and swipe camera. Stock movement physics is retained; stick
+magnitude controls touch speed. Touch mode avoids pointer lock; it does
 not fix iPad trackpad capture. Physical iPad Safari validation remains with the
 owner; Chromium touch emulation checks are recorded in RETRO.

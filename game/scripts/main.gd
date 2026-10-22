@@ -30,6 +30,7 @@ func _ready() -> void:
 		_touch_controls = TOUCH_CONTROLS.new()
 		_touch_controls.name = "TouchControls"
 		_touch_controls.camera_rig = player.camera_rig
+		_touch_controls.player = player
 		hud.add_child(_touch_controls)
 		_touch_controls.set_gameplay_active(false)
 		_touch_controls.pause_requested.connect(func() -> void: _set_paused(true))
