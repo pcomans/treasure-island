@@ -10248,7 +10248,7 @@
         }
       ],
       "anchor_source_key": "w291189336",
-      "stairs": [{"bottom": [-120.3458, 632.5684], "top": [-118.25, 631.46]}],
+      "stairs": [{"bottom": [-120.3458, 632.5684], "top": [-118.25, 631.46]}, {"bottom": [-96.022, 650.416], "top": [-97.331, 647.941]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
