@@ -143,7 +143,7 @@ static func _forbidden_tokens() -> Array[String]:
 
 static func _approved_output_matches(node: Node3D) -> bool:
 	if node.get_meta("quiet_nnw_run_indices", []) != [10, 11, 12] \
-		or int(node.get_meta("quiet_nnw_opening_count", -1)) != 0 \
+		or int(node.get_meta("quiet_nnw_opening_count", -1)) != 5 \
 		or node.get_meta("upper_band_ids", []) != ["TRANSFER-PLINTH", "PODIUM-BODY", "PODIUM-CROWN", "TOP-SHADOW-CAP"]:
 		return false
 	if node.get_node_or_null("IsleHouse39BrutonLowLiveAttachment") != null \

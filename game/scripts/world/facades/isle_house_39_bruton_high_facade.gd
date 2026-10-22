@@ -12,7 +12,8 @@ const RENDER_BUILDING_WALL := 1 << 1
 const EXTERIOR_FIELD_RUN_INDICES := [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 const NEW_EXTERIOR_FIELD_RUN_INDICES := [0, 1, 2, 3, 4]
 const SHARED_TOWER_FIELD_RUN_INDICES := [10, 11, 12]
-const MODULE_FREE_RUN_INDICES := [0, 1, 2, 3, 4, 8, 9, 10, 11, 12]
+const MODULE_FREE_RUN_INDICES := [8, 9, 10, 11, 12]
+const INFERRED_MODULE_RUN_INDICES := [0, 1, 2, 3, 4]
 const RUN_STARTS := [
 	Vector3(-133.374, 4.065, 548.466), Vector3(-133.067, 4.074, 549.067),
 	Vector3(-128.000, 3.932, 558.996), Vector3(-125.636, 3.923, 563.627),
@@ -53,6 +54,10 @@ const MATERIALS := {
 var _layout: Dictionary = {}
 var _contract: Dictionary = {}
 var _se: Dictionary = {}
+# Side that module and box placement currently follow: the observed SE side, or
+# one of the owner-approved inferred WSW/SW sides (production inference).
+var _active_side: Dictionary = {}
+var _active_node_name := "High_SE_Runs_5_7"
 var _ene: Dictionary = {}
 var _boxes_by_material: Dictionary = {}
 var _module_counts: Dictionary = {}
@@ -81,6 +86,7 @@ func configure(record: Dictionary) -> Dictionary:
 	_layout = parsed as Dictionary
 	_contract = _layout.render_contract as Dictionary
 	_se = _layout.observed_high_se as Dictionary
+	_active_side = _se
 	_ene = _layout.partial_high_ene as Dictionary
 	var target := _layout.target as Dictionary
 	if str(target.parent_source_key) != TARGET_PARENT_SOURCE_KEY \
@@ -94,7 +100,8 @@ func configure(record: Dictionary) -> Dictionary:
 	or not _record_massing_matches(record, target) \
 	or not _all_runs_match(record, target) \
 	or not _exact_runs_match(record, _se) \
-	or not _exact_runs_match(record, _ene):
+	or not _exact_runs_match(record, _ene) \
+	or not _inferred_sides_match(record):
 		return {"ok": false, "message": "Isle House layout identity, scoped runs, or high receiver massing did not match."}
 
 	name = "IsleHouse39BrutonHighFacade"
@@ -113,6 +120,7 @@ func configure(record: Dictionary) -> Dictionary:
 	set_meta("exterior_field_run_indices", EXTERIOR_FIELD_RUN_INDICES.duplicate())
 	set_meta("new_exterior_field_run_indices", NEW_EXTERIOR_FIELD_RUN_INDICES.duplicate())
 	set_meta("material_only_run_indices", MODULE_FREE_RUN_INDICES.duplicate())
+	set_meta("inferred_module_run_indices", INFERRED_MODULE_RUN_INDICES.duplicate())
 	set_meta("preserved_partial_material_only_run_indices", _int_array(_ene.run_indices as Array))
 	set_meta("shared_tower_field_run_indices", SHARED_TOWER_FIELD_RUN_INDICES.duplicate())
 	set_meta("excluded_high_run_indices", _int_array(_layout.excluded_high_run_indices as Array))
@@ -120,7 +128,7 @@ func configure(record: Dictionary) -> Dictionary:
 	set_meta("low_part_policy", str(_layout.low_part_policy))
 	add_to_group("isle_house_high_render_only_facade")
 
-	_add_side_node("High_WSW_SW_Runs_0_4", {"run_indices": NEW_EXTERIOR_FIELD_RUN_INDICES, "length_m": 28.385}, "material_only")
+	_add_side_node("High_WSW_SW_Runs_0_4", {"run_indices": NEW_EXTERIOR_FIELD_RUN_INDICES, "length_m": 28.385}, "inferred_complete_modules")
 	_add_side_node("High_SE_Runs_5_7", _se, "observed_complete_modules")
 	_add_side_node("High_ENE_Runs_8_9", _ene, "material_only")
 	_add_side_node("High_Shared_Runs_10_12", {"run_indices": SHARED_TOWER_FIELD_RUN_INDICES, "length_m": 49.092}, "tower_field_only")
@@ -133,6 +141,7 @@ func configure(record: Dictionary) -> Dictionary:
 	_build_podium_modules()
 	for module_value: Variant in _se.single_modules:
 		_build_single_module(module_value as Dictionary)
+	_build_inferred_sides()
 	_module_library.free()
 	_flush_render_batches()
 	set_meta("module_counts", _module_counts.duplicate(true))
@@ -190,6 +199,20 @@ func _exact_runs_match(record: Dictionary, side: Dictionary) -> bool:
 		or not is_equal_approx(float(raw_vertices[offset + 5]), float(end[1])):
 			return false
 	return true
+
+
+func _inferred_sides_match(record: Dictionary) -> bool:
+	var inferred: Variant = _layout.get("inferred_high_wsw", null)
+	if not (inferred is Dictionary) or not ((inferred as Dictionary).get("sides", null) is Array):
+		return false
+	var indices: Array[int] = []
+	for side_value: Variant in (inferred as Dictionary).sides:
+		var side := side_value as Dictionary
+		if not _exact_runs_match(record, side):
+			return false
+		for run_value: Variant in side.runs:
+			indices.append(int((run_value as Dictionary).index))
+	return indices == INFERRED_MODULE_RUN_INDICES
 
 
 func _add_side_node(node_name: String, side: Dictionary, policy: String) -> void:
@@ -272,6 +295,29 @@ func _build_tower_modules() -> void:
 			_build_framed_glazing(u, y, width, height, 0.085, "dark_charcoal")
 
 
+# Owner-approved openings on the unphotographed WSW/SW tower face (2026-10-22):
+# the observed SE tower and podium window families on each collinear run group.
+func _build_inferred_sides() -> void:
+	var tower := _se.tower_window as Dictionary
+	for side_value: Variant in (_layout.inferred_high_wsw as Dictionary).sides:
+		var side := side_value as Dictionary
+		_active_side = side
+		_active_node_name = "High_WSW_SW_Runs_0_4"
+		for u_value: Variant in side.tower_window_columns_u_m:
+			for y_value: Variant in _se.tower_window_rows_y_m:
+				_new_module("IH-TW", float(u_value), float(y_value), float(tower.width_m), float(tower.height_m))
+				_build_framed_glazing(float(u_value), float(y_value), float(tower.width_m), float(tower.height_m), 0.085, "dark_charcoal")
+		var podium := side.podium_window as Dictionary
+		for u_value: Variant in podium.columns_u_m:
+			for y_value: Variant in _se.podium_window_rows_y_m:
+				_new_module(str(podium.kind), float(u_value), float(y_value), float(podium.width_m), float(podium.height_m))
+				_build_framed_glazing(float(u_value), float(y_value), float(podium.width_m), float(podium.height_m), 0.13, "dark_charcoal")
+		for module_value: Variant in side.single_modules:
+			_build_single_module(module_value as Dictionary)
+	_active_side = _se
+	_active_node_name = "High_SE_Runs_5_7"
+
+
 func _build_podium_modules() -> void:
 	for family_value: Variant in _se.podium_window_families:
 		var family := family_value as Dictionary
@@ -323,30 +369,30 @@ func _build_framed_glazing(u: float, y: float, width: float, height: float, stro
 func _new_module(kind: String, u: float, y: float, width: float, height: float) -> void:
 	var template := _module_library.get_node(kind.replace("-", "_")) as Node3D
 	assert(template != null and bool(template.get_meta("complete_motif", false)))
-	assert(u - width * 0.5 >= -0.0001 and u + width * 0.5 <= float(_se.length_m) + 0.0001)
+	assert(u - width * 0.5 >= -0.0001 and u + width * 0.5 <= float(_active_side.length_m) + 0.0001)
 	var module := template.duplicate() as Node3D
 	var count := int(_module_counts.get(kind, 0)) + 1
 	_module_counts[kind] = count
 	module.name = "Module_%s_%03d" % [kind.replace("-", "_"), count]
 	module.set_meta("module_kind", kind)
-	module.set_meta("run_scope", "high_se_5_7")
+	module.set_meta("run_scope", "high_se_5_7" if _active_side == _se else "high_wsw_sw_0_4_inferred")
 	module.set_meta("side_u_m", u)
 	module.set_meta("width_m", width)
 	module.set_meta("height_m", height)
 	module.set_meta("render_only", true)
-	module.transform = Transform3D(_side_basis(_se), _side_point(_se, u, y, float(_contract.field_offset_m)))
-	(_side_nodes["High_SE_Runs_5_7"] as Node3D).add_child(module)
+	module.transform = Transform3D(_side_basis(_active_side), _side_point(_active_side, u, y, float(_contract.field_offset_m)))
+	(_side_nodes[_active_node_name] as Node3D).add_child(module)
 
 
 func _add_box(material_key: String, u: float, y: float, width: float, height: float, inner: float, outer: float) -> void:
 	assert(width > 0.0 and height > 0.0 and outer >= inner)
 	assert(outer <= float(_contract.maximum_relief_m) + 0.0001)
-	assert(u - width * 0.5 >= -0.0001 and u + width * 0.5 <= float(_se.length_m) + 0.0001)
-	var basis := _side_basis(_se)
+	assert(u - width * 0.5 >= -0.0001 and u + width * 0.5 <= float(_active_side.length_m) + 0.0001)
+	var basis := _side_basis(_active_side)
 	basis.x *= width
 	basis.y *= height
 	basis.z *= outer - inner
-	var transform := Transform3D(basis, _side_point(_se, u, y, (inner + outer) * 0.5))
+	var transform := Transform3D(basis, _side_point(_active_side, u, y, (inner + outer) * 0.5))
 	if not _boxes_by_material.has(material_key):
 		_boxes_by_material[material_key] = []
 	(_boxes_by_material[material_key] as Array).append(transform)
@@ -376,13 +422,13 @@ func _add_facade_bar(material_key: String, from: Vector2, to: Vector2, stroke: f
 	if length <= 0.0001:
 		return
 	var local_direction := delta / length
-	var tangent := _side_basis(_se).x
-	var normal := _side_basis(_se).z
+	var tangent := _side_basis(_active_side).x
+	var normal := _side_basis(_active_side).z
 	var direction := tangent * local_direction.x + Vector3.UP * local_direction.y
 	var perpendicular := tangent * -local_direction.y + Vector3.UP * local_direction.x
 	var basis := Basis(direction * length, perpendicular * stroke, normal * (outer - inner))
 	var midpoint := (from + to) * 0.5
-	var origin := _side_point(_se, midpoint.x, midpoint.y, (inner + outer) * 0.5)
+	var origin := _side_point(_active_side, midpoint.x, midpoint.y, (inner + outer) * 0.5)
 	if not _boxes_by_material.has(material_key):
 		_boxes_by_material[material_key] = []
 	(_boxes_by_material[material_key] as Array).append(Transform3D(basis, origin))

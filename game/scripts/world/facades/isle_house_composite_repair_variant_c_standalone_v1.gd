@@ -210,7 +210,7 @@ static func validate_variant_c_config_dictionary(config: Dictionary) -> bool:
 	var fallback := render.get("protected_nnw_fallback", {}) as Dictionary
 	if _int_array(fallback.get("run_indices", []) as Array) != [10, 11, 12] \
 	or str(fallback.get("material_key", "")) != "quiet_return" \
-	or int(fallback.get("opening_count", -1)) != 0 \
+	or int(fallback.get("opening_count", -1)) != (config.get("inferred_nnw_placements", []) as Array).size() \
 	or "homogeneous" not in str(fallback.get("treatment", "")):
 		return false
 	var sides := config.get("public_sides", []) as Array
@@ -277,6 +277,28 @@ static func validate_variant_c_config_dictionary(config: Dictionary) -> bool:
 	for value: Variant in counts.values():
 		if int(value) != 2:
 			return false
+	# Owner-approved openings on the unphotographed NNW return (2026-10-22): the
+	# same module family on the quiet field, with the public clearance rules.
+	for value: Variant in config.get("inferred_nnw_placements", []) as Array:
+		var placement := value as Dictionary
+		var variant_id := str(placement.get("variant_id", ""))
+		var run_index := int(placement.get("run_index", -1))
+		if not variants_by_id.has(variant_id) or run_index not in _int_array(fallback.get("run_indices", []) as Array) \
+		or str(placement.get("side_id", "")) != str((runs[run_index] as Dictionary).get("side_id", "")):
+			return false
+		var width := float((variants_by_id[variant_id] as Dictionary).get("width_m", 0.0))
+		var center := float(placement.get("run_u_m", -1.0))
+		var interval := Vector2(center - width * 0.5, center + width * 0.5)
+		if interval.x < minimum_clearance - 0.0001 \
+		or interval.y > float((runs[run_index] as Dictionary).get("length_m", 0.0)) - minimum_clearance + 0.0001:
+			return false
+		if not intervals.has(run_index):
+			intervals[run_index] = []
+		for other_value: Variant in intervals[run_index] as Array:
+			var other := other_value as Vector2
+			if interval.x < other.y + 0.45 and interval.y > other.x - 0.45:
+				return false
+		(intervals[run_index] as Array).append(interval)
 	var text := JSON.stringify(config).to_lower()
 	for forbidden: String in _forbidden_tokens():
 		if forbidden in text:
@@ -331,9 +353,10 @@ func _build_variant_c_overlay(low_wall: Dictionary) -> Dictionary:
 	for value: Variant in ((_config.get("module_family", {}) as Dictionary).get("variants", []) as Array):
 		var variant := value as Dictionary
 		variants_by_id[str(variant.get("id", ""))] = variant
-	for value: Variant in _config.get("placements", []) as Array:
+	for value: Variant in (_config.get("placements", []) as Array) + (_config.get("inferred_nnw_placements", []) as Array):
 		var placement := value as Dictionary
 		_build_variant_c_module(overlay, low_wall, placement, variants_by_id[str(placement.get("variant_id", ""))] as Dictionary)
+	var nnw_openings := (_config.get("inferred_nnw_placements", []) as Array).size()
 	_flush_variant_c_batches(overlay)
 	var topology := _topology_for(overlay)
 	overlay.set_meta("topology", topology.duplicate(true))
@@ -350,7 +373,7 @@ func _build_variant_c_overlay(low_wall: Dictionary) -> Dictionary:
 	overlay.set_meta("module_max_y_m", _module_max_y_m)
 	overlay.set_meta("public_side_chain_totals_m", fields_result.get("side_chain_totals_m", {}).duplicate(true))
 	overlay.set_meta("quiet_nnw_run_indices", [10, 11, 12])
-	overlay.set_meta("quiet_nnw_opening_count", 0)
+	overlay.set_meta("quiet_nnw_opening_count", nnw_openings)
 	overlay.set_meta("upper_band_ids", fields_result.get("upper_band_ids", []).duplicate())
 	if _count_type(overlay, CollisionObject3D) != 0 \
 	or _count_type(overlay, CollisionShape3D) != 0 \
@@ -451,7 +474,7 @@ func _build_variant_c_fields(parent: Node3D, low_wall: Dictionary) -> Dictionary
 	fields.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	fields.set_meta("public_run_indices", PUBLIC_RUNS.duplicate())
 	fields.set_meta("quiet_nnw_run_indices", [10, 11, 12])
-	fields.set_meta("quiet_nnw_opening_count", 0)
+	fields.set_meta("quiet_nnw_opening_count", (_config.get("inferred_nnw_placements", []) as Array).size())
 	fields.set_meta("upper_schedule_claimed", false)
 	fields.set_meta("literal_seven_story_geometry_claimed", false)
 	fields.set_meta("protected_return_opening_schedule_claimed", false)

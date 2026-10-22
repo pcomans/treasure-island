@@ -84,7 +84,7 @@
       "offset_m": 0.022,
       "material_key": "quiet_return",
       "treatment": "single quiet scalar homogeneous field",
-      "opening_count": 0,
+      "opening_count": 5,
       "schedule_claimed": false,
       "truth_class": "source_safe_low_realm_neutral_fallback_not_as_built"
     }
@@ -168,6 +168,13 @@
     {"id": "IH-C-GW-PAUSE-02", "side_id": "LOW-ENE-GARDEN-WALK", "run_index": 8, "run_u_m": 3.55, "variant_id": "OFFSET-ENTRY-PAUSE", "truth_class": "reversible_production_inference"},
     {"id": "IH-C-GW-LAYER-03", "side_id": "LOW-ENE-GARDEN-WALK", "run_index": 8, "run_u_m": 13.45, "variant_id": "LAYERED-PATIO-RECESS", "truth_class": "reversible_production_inference"},
     {"id": "IH-C-GW-WIDE-04", "side_id": "LOW-ENE-GARDEN-WALK", "run_index": 9, "run_u_m": 5.00, "variant_id": "WIDE-GALLERY-ENTRY", "truth_class": "reversible_production_inference"}
+  ],
+  "inferred_nnw_placements": [
+    {"id": "IH-C-NNW-PAUSE-01", "side_id": "LOW-NNW-PROTECTED", "run_index": 10, "run_u_m": 5.4, "variant_id": "OFFSET-ENTRY-PAUSE", "truth_class": "owner_approved_production_inference_unphotographed_side"},
+    {"id": "IH-C-NNW-SPLIT-02", "side_id": "LOW-NNW-PROTECTED", "run_index": 11, "run_u_m": 5.0, "variant_id": "SPLIT-GALLERY-CLUSTER", "truth_class": "owner_approved_production_inference_unphotographed_side"},
+    {"id": "IH-C-NNW-PAUSE-03", "side_id": "LOW-NNW-PROTECTED", "run_index": 11, "run_u_m": 12.6, "variant_id": "OFFSET-ENTRY-PAUSE", "truth_class": "owner_approved_production_inference_unphotographed_side"},
+    {"id": "IH-C-NNW-LAYER-04", "side_id": "LOW-NNW-PROTECTED", "run_index": 12, "run_u_m": 4.25, "variant_id": "LAYERED-PATIO-RECESS", "truth_class": "owner_approved_production_inference_unphotographed_side"},
+    {"id": "IH-C-NNW-WIDE-05", "side_id": "LOW-NNW-PROTECTED", "run_index": 12, "run_u_m": 10.7, "variant_id": "WIDE-GALLERY-ENTRY", "truth_class": "owner_approved_production_inference_unphotographed_side"}
   ],
   "provenance": [
     {"id": "DBA-COMPLETED-PROJECT", "truth_class": "verified_fact_and_reference_observation", "supports": ["completed folded light tower", "seventh-story podium", "active ground and live-work gallery"]},
