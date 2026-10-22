@@ -21221,3 +21221,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 ## code-review (C-set runtime retirement + mid-rise configs, 2026-10-22)
 
 - What worked well: grepping the committed tree (`git grep <commit>`) for every removed symbol, meta key and native-mode name showed the only remaining references sit inside the intentionally kept prototype files. The `metadata_for` default rewrite keeps every other trial target's values unchanged. What didn't: the worktree held uncommitted `midrise_family.gd` and `r133351.json` work while under review, so the scope check had to rely on commit objects rather than the working tree. Next time: either keep unrelated WIP out of a worktree under review, or have the request name the commit range so reviewers know to ignore the working tree.
+
+## modeler-midrise (no-photo Level 1 batch, 6 units, 2026-10-22)
+
+- What worked well: massing only, with roof forms from the undated overheads, kept this batch to one config script on the shared producer: two flat blocks, two Bigelow rows and two Chinook duplexes, gabled over convex pieces with flat connectors. All six passed four-side fits with no skipped sides, and the suite passed. Taking the before shots with the registry checked out and restoring it afterwards replaced a separate state script.
+- What did not work well: my plan for the fish-street duplexes first split them into rectangles that met the footprint's 5–9 cm steps. Using a gabled main rectangle plus one flat, non-convex extension avoided the slivers.
+- What the team should change next time: for stepped footprints, choose the gabled part as the largest rectangle fully inside the ring and leave the steps to one flat piece. A flat roof may be non-convex; a pitched roof may not.

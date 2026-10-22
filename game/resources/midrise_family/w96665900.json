@@ -1,0 +1,579 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w96665900",
+    "address": "1442 Chinook Court",
+    "edge_normals": [
+      [
+        -0.8923998766417216,
+        0.4512454544589229
+      ],
+      [
+        0.45163094037475915,
+        0.8922048496260322
+      ],
+      [
+        0.8925446764077981,
+        -0.4509589788618239
+      ],
+      [
+        0.45005147152869773,
+        0.8930026164434536
+      ],
+      [
+        0.8935918025888272,
+        -0.448880485592825
+      ],
+      [
+        0.44973299309102466,
+        0.8931630505822485
+      ],
+      [
+        0.8923174195648006,
+        -0.45140848767077435
+      ],
+      [
+        -0.45238442770858317,
+        -0.8918230371361673
+      ],
+      [
+        0.8929704922365954,
+        -0.4501152074688574
+      ],
+      [
+        -0.45245172080506235,
+        -0.891788898978081
+      ],
+      [
+        0.8929424425069612,
+        -0.4501708501999016
+      ],
+      [
+        -0.45101471965573686,
+        -0.8925165111379493
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": "ring",
+    "above_terrain": 0.15,
+    "basis": "median frozen terrain around the ring"
+  },
+  "levels": {
+    "ground_h": 2.8,
+    "storey_h": 2.7,
+    "parapet_h": 0.0
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.66,
+        0.65,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.73,
+        0.74,
+        0.74
+      ],
+      "roughness": 0.45,
+      "metallic": 0.3
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.62,
+        0.61,
+        0.58
+      ],
+      "roughness": 0.95
+    },
+    "siding_tan": {
+      "rgb": [
+        0.78,
+        0.72,
+        0.62
+      ],
+      "roughness": 0.85
+    },
+    "roof_brown": {
+      "rgb": [
+        0.36,
+        0.28,
+        0.23
+      ],
+      "roughness": 0.85
+    },
+    "trim_white": {
+      "rgb": [
+        0.92,
+        0.92,
+        0.9
+      ],
+      "roughness": 0.6
+    },
+    "boarded": {
+      "rgb": [
+        0.84,
+        0.83,
+        0.79
+      ],
+      "roughness": 0.9
+    },
+    "fascia": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.7
+    }
+  },
+  "schemes": {
+    "plain": {
+      "material": "siding_tan",
+      "parapet_material": "siding_tan",
+      "module": 3.2,
+      "window": {
+        "w": 1.2,
+        "h": 1.2,
+        "sill": 0.9,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim_white"
+      },
+      "ground": {
+        "w": 1.2,
+        "h": 1.2,
+        "sill": 0.9,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim_white",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "bands": [
+        {
+          "storey": 1,
+          "offset": -0.12,
+          "h": 0.22,
+          "material": "trim_white"
+        }
+      ]
+    },
+    "door0": {
+      "material": "siding_tan",
+      "parapet_material": "siding_tan",
+      "module": 3.2,
+      "window": {
+        "w": 1.2,
+        "h": 1.2,
+        "sill": 0.9,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim_white"
+      },
+      "ground": {
+        "w": 1.2,
+        "h": 1.2,
+        "sill": 0.9,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim_white",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "bands": [
+        {
+          "storey": 1,
+          "offset": -0.12,
+          "h": 0.22,
+          "material": "trim_white"
+        }
+      ],
+      "features": [
+        {
+          "type": "entry",
+          "from": 8.43,
+          "to": 10.23,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "door1": {
+      "material": "siding_tan",
+      "parapet_material": "siding_tan",
+      "module": 3.2,
+      "window": {
+        "w": 1.2,
+        "h": 1.2,
+        "sill": 0.9,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim_white"
+      },
+      "ground": {
+        "w": 1.2,
+        "h": 1.2,
+        "sill": 0.9,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim_white",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "bands": [
+        {
+          "storey": 1,
+          "offset": -0.12,
+          "h": 0.22,
+          "material": "trim_white"
+        }
+      ],
+      "features": [
+        {
+          "type": "entry",
+          "from": 3.405,
+          "to": 5.205,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "door6": {
+      "material": "siding_tan",
+      "parapet_material": "siding_tan",
+      "module": 3.2,
+      "window": {
+        "w": 1.2,
+        "h": 1.2,
+        "sill": 0.9,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim_white"
+      },
+      "ground": {
+        "w": 1.2,
+        "h": 1.2,
+        "sill": 0.9,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim_white",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "bands": [
+        {
+          "storey": 1,
+          "offset": -0.12,
+          "h": 0.22,
+          "material": "trim_white"
+        }
+      ],
+      "features": [
+        {
+          "type": "entry",
+          "from": 3.934,
+          "to": 5.734,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "door11": {
+      "material": "siding_tan",
+      "parapet_material": "siding_tan",
+      "module": 3.2,
+      "window": {
+        "w": 1.2,
+        "h": 1.2,
+        "sill": 0.9,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim_white"
+      },
+      "ground": {
+        "w": 1.2,
+        "h": 1.2,
+        "sill": 0.9,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim_white",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "bands": [
+        {
+          "storey": 1,
+          "offset": -0.12,
+          "h": 0.22,
+          "material": "trim_white"
+        }
+      ],
+      "features": [
+        {
+          "type": "entry",
+          "from": 4.987,
+          "to": 6.787,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    }
+  },
+  "blocks": [
+    {
+      "id": "house",
+      "storeys": 2,
+      "ground_h": 2.8,
+      "storey_h": 2.7,
+      "parapet": {
+        "h": 0.0
+      },
+      "clip": [
+        {
+          "edge": 11,
+          "min": 0.0
+        },
+        {
+          "edge": 1,
+          "min": 0.0
+        },
+        {
+          "edge": 10,
+          "min": 0.0
+        }
+      ],
+      "roof": {
+        "form": "gable",
+        "ridge_edge": 0,
+        "pitch_deg": 18.0,
+        "overhang": 0.4,
+        "t": 0.15,
+        "under": "soffit",
+        "fascia": "fascia"
+      },
+      "roof_material": "roof_brown",
+      "faces": {
+        "default": "plain",
+        "e0": "door0",
+        "e1": "door1",
+        "e6": "door6",
+        "e11": "door11"
+      }
+    },
+    {
+      "id": "rear",
+      "storeys": 1,
+      "ground_h": 3.0,
+      "parapet": {
+        "h": 0.25,
+        "t": 0.15
+      },
+      "clip": [
+        {
+          "edge": 10,
+          "max": 0.0
+        }
+      ],
+      "roof_material": "roof_brown",
+      "faces": {
+        "default": "plain",
+        "e0": "door0",
+        "e1": "door1",
+        "e6": "door6",
+        "e11": "door11"
+      }
+    }
+  ],
+  "study_notes": {
+    "observed": "No reference at any date; the lot is cleared today (Mar 2025, Apple overhead pads) but the unit is in the frozen OSM snapshot.",
+    "inferred": "Level 1 massing: two storeys under the overhead roof colour, gable ridges along the long axis, flat lower connectors, windows and one entrance per accessible side. Fish-street duplex type: brown roof, tan siding, a one-storey rear extension.",
+    "footprint": "Frozen ring split into convex gabled rows and flat connector pieces."
+  }
+}

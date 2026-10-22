@@ -1,0 +1,509 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w34313513",
+    "address": "655 Avenue H (Harvey Milk administration)",
+    "edge_normals": [
+      [
+        -0.8813926725781426,
+        0.47238433158346704
+      ],
+      [
+        -0.4725876964770591,
+        -0.881283648514204
+      ],
+      [
+        -0.8813790653777747,
+        0.47240971953781863
+      ],
+      [
+        0.4721128077850624,
+        0.8815381425243634
+      ],
+      [
+        -0.8815346030949219,
+        0.4721194166164727
+      ],
+      [
+        -0.5205149778997227,
+        -0.8538525386634692
+      ],
+      [
+        -0.8758701341564069,
+        -0.48254689729894434
+      ],
+      [
+        -0.9932028380055388,
+        -0.1163964027697744
+      ],
+      [
+        -0.9840358979557935,
+        0.17797008606598752
+      ],
+      [
+        -0.8351708648198801,
+        0.5499905695155267
+      ],
+      [
+        -0.534715853999196,
+        0.8450319257175497
+      ],
+      [
+        -0.1966980474873316,
+        0.9804641136291891
+      ],
+      [
+        0.34481746267961616,
+        0.9386697595167277
+      ],
+      [
+        0.4725537909196783,
+        0.8813018295041949
+      ],
+      [
+        0.8811894526628016,
+        -0.4727633113047504
+      ],
+      [
+        0.4723707284954455,
+        0.8813999630478109
+      ],
+      [
+        0.8811249792209904,
+        -0.4728834644950161
+      ],
+      [
+        -0.4706087440329762,
+        -0.8823420028762683
+      ],
+      [
+        0.8813952642421956,
+        -0.4723794959261358
+      ],
+      [
+        0.4749552131812468,
+        0.880009968961691
+      ],
+      [
+        0.881498495234335,
+        -0.4721868305020834
+      ],
+      [
+        -0.47233521485798985,
+        -0.8814189950330414
+      ],
+      [
+        0.8812663169876273,
+        -0.472620014962404
+      ],
+      [
+        -0.4724882346856737,
+        -0.8813369775991562
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": "ring",
+    "above_terrain": 0.1,
+    "basis": "median frozen terrain around the ring (no imagery)"
+  },
+  "levels": {
+    "ground_h": 4.6,
+    "storey_h": 4.0,
+    "parapet_h": 0.5
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.66,
+        0.65,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.73,
+        0.74,
+        0.74
+      ],
+      "roughness": 0.45,
+      "metallic": 0.3
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.62,
+        0.61,
+        0.58
+      ],
+      "roughness": 0.95
+    },
+    "render": {
+      "rgb": [
+        0.86,
+        0.86,
+        0.83
+      ],
+      "roughness": 0.9
+    }
+  },
+  "schemes": {
+    "plain": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 3.6,
+      "window": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      }
+    },
+    "side2": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 3.6,
+      "window": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 5.908,
+          "to": 7.708,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "side23": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 3.6,
+      "window": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 18.355,
+          "to": 20.155,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "side13": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 3.6,
+      "window": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 16.456,
+          "to": 18.256,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "side14": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 3.6,
+      "window": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 5.193,
+          "to": 6.993,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    }
+  },
+  "blocks": [
+    {
+      "id": "block",
+      "storeys": 2,
+      "ground_h": 4.6,
+      "storey_h": 4.0,
+      "parapet": {
+        "h": 0.5,
+        "t": 0.25
+      },
+      "faces": {
+        "default": "plain",
+        "e2": "side2",
+        "e23": "side23",
+        "e13": "side13",
+        "e14": "side14"
+      }
+    }
+  ],
+  "study_notes": {
+    "observed": "Undated Apple overhead: large white flat roof with irregular wings and skylights; Apr 2011 (~117 m): long low pale building with a dark window band.",
+    "inferred": "Two-storey flat-roofed block with windows and a door per side (Level 1); skylights not modelled.",
+    "footprint": "Frozen ring kept as one block (Level 1)."
+  }
+}
