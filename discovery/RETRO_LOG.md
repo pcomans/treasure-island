@@ -21420,3 +21420,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the private headless panel-hall digest proved the shared terminal_piers opt-in changed none of the 7 instances before Austin's config used it. It needed no engine slot, and one combined import + shots + fit batch then passed first time. The spare run was not needed.
 - What did not work well: the first digest compared different hashes for unchanged halls, because auto-generated "@Class@N" node names shift with how many nodes were built earlier in the same process. Separately, the first plain chains reused the family's terminal piers without checking the junction angles, so the visual reviewer had to find the doubled and torn piers at the 16-degree bend and the inside corners.
 - What the team should change next time: normalise auto-generated node names in any digest, or build each instance in its own process. Before adding adjacent chains, list each junction's turn angle (inside, outside, shallow) and decide which chain owns each corner pier.
+
+## visual-review-institutional-finals, Austin re-review (2026-10-22)
+
+- What worked well: re-checking the exact native crops from the first review made the before/after comparison direct and quick.
+- What did not work well: nothing new.
+- What the team should change next time: when a family's piers are drawn per chain, assign each pier to one corner as soon as a wall is split into chains, rather than fixing doubled piers after the review.
