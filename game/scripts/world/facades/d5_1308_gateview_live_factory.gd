@@ -41,7 +41,13 @@ func configure_records(wall: Dictionary, roof: Dictionary, neutral_wall: Standar
 	if not _same_numeric_runs(config.get("mapped_runs",[]),TARGET_RUNS) or not _same_numeric_runs(config.get("protected_runs",[]),PROTECTED_RUNS) or str(config.get("schema_version",""))!="ti.d5-1308-gateview-live-factory/1":return {"ok":false,"message":"1308 scope changed."}
 	var inf:Dictionary=config.inference
 	var protected:=KIT.new_bucket();var mapped:=KIT.new_bucket()
-	for run in 34:_append_source_run(protected if run in PROTECTED_RUNS else mapped,wall,run,true)
+	# Owner-approved (2026-10-22): the unphotographed ENE rear and NNW end runs take
+	# the front's lap siding; they stay protected runs in scope and collision.
+	var rear_siding:Array[int]=[]
+	for value:Variant in (config.get("inferred_sides",{}) as Dictionary).get("siding_runs",[]):
+		if int(value) not in PROTECTED_RUNS:return {"ok":false,"message":"1308 siding run is not a protected run."}
+		rear_siding.append(int(value))
+	for run in 34:_append_source_run(protected if run in PROTECTED_RUNS and run not in rear_siding else mapped,wall,run,true)
 	_add_mesh("ProtectedExactNeutralWallRuns",protected,neutral_wall)
 	_add_mesh("ObservedWSWSSEHorizontalSidingFields",mapped,neutral_wall if baseline else _siding_material(inf))
 	var walls:=KIT.new_bucket();_merge(walls,protected);_merge(walls,mapped)
@@ -59,6 +65,16 @@ func configure_records(wall: Dictionary, roof: Dictionary, neutral_wall: Standar
 			var width:=minf(float(inf.slider_width_m),pitch-.40)
 			for i in count:
 				var center:=_point(f,pitch*(float(i)+.5),float(inf.upper_window_bottom)+float(inf.upper_window_height)*.5,.025)
+				KIT.append_grouped_opening(glazing,trim,center,f.tangent,f.normal,width,float(inf.upper_window_height),.040,.085,.085,.055)
+				KIT.append_box(trim,center+(f.normal as Vector3)*.025,f.tangent,f.normal,.055,float(inf.upper_window_height),.05)
+		# Inferred sliders at explicit stations, where a canopy keeps part of a run clear.
+		for entry:Dictionary in (config.get("inferred_sides",{}) as Dictionary).get("upper_windows_at_stations",[]):
+			var f:=_joined_frame(wall,int(entry.runs[0]),int(entry.runs[-1]))
+			var width:=float(inf.slider_width_m)
+			for station_value:Variant in entry.stations_m:
+				var station:=float(station_value)
+				if station-width*.5<.2 or station+width*.5>float(f.length_m)-.2:return {"ok":false,"message":"1308 inferred slider does not fit its run."}
+				var center:=_point(f,station,float(inf.upper_window_bottom)+float(inf.upper_window_height)*.5,.025)
 				KIT.append_grouped_opening(glazing,trim,center,f.tangent,f.normal,width,float(inf.upper_window_height),.040,.085,.085,.055)
 				KIT.append_box(trim,center+(f.normal as Vector3)*.025,f.tangent,f.normal,.055,float(inf.upper_window_height),.05)
 		for canopy_index in inf.canopy_groups.size():
