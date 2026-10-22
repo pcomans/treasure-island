@@ -5,7 +5,10 @@ extends Node3D
 @onready var player: PlayerController = $Player
 @onready var hud: GameHUD = $Interface/HUD
 
+const TOUCH_CONTROLS := preload("res://game/scripts/ui/touch_controls.gd")
+
 var _world_ready := false
+var _touch_controls: TouchControls
 # Shared automation keeps the pointer visible while retaining normal startup.
 # Ordinary gameplay uses the default and captures the mouse as before.
 var capture_mouse_on_ready := true
@@ -21,6 +24,14 @@ func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	player.hide()
 	player.set_gameplay_enabled(false)
+	if OS.has_feature("web") and bool(JavaScriptBridge.eval("navigator.maxTouchPoints > 0")):
+		_touch_controls = TOUCH_CONTROLS.new()
+		_touch_controls.name = "TouchControls"
+		_touch_controls.camera_rig = player.camera_rig
+		hud.add_child(_touch_controls)
+		_touch_controls.set_gameplay_active(false)
+		_touch_controls.pause_requested.connect(func() -> void: _set_paused(true))
+		hud.set_touch_instructions()
 	hud.show_loading()
 	hud.bind_evidence(world_root.get_runtime_evidence())
 	world_root.load_progress.connect(hud.update_load_progress)
@@ -89,6 +100,8 @@ func _on_world_ready(_report: Dictionary) -> void:
 
 func _on_world_failed(code: String, message: String, source_keys: Array) -> void:
 	_world_ready = false
+	if _touch_controls != null:
+		_touch_controls.set_gameplay_active(false)
 	player.hide()
 	player.set_gameplay_enabled(false)
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -98,7 +111,9 @@ func _on_world_failed(code: String, message: String, source_keys: Array) -> void
 
 func _set_paused(paused: bool) -> void:
 	get_tree().paused = paused
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if paused else Input.MOUSE_MODE_CAPTURED
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if paused or _touch_controls != null else Input.MOUSE_MODE_CAPTURED
+	if _touch_controls != null:
+		_touch_controls.set_gameplay_active(not paused and _world_ready)
 	hud.set_paused(paused)
 
 

@@ -84,3 +84,8 @@ func set_paused(paused: bool) -> void:
 
 func toggle_debug() -> void:
 	debug_panel.visible = not debug_panel.visible
+
+
+func set_touch_instructions() -> void:
+	$PausePanel/PauseLayout/Controls.text = "Left stick: move • Drag right side: look\nHold RISE: jetpack • Release: descend • Hold RUN: run"
+	resume_button.text = "Play / Resume"
