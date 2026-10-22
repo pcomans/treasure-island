@@ -21237,3 +21237,15 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 ## code-review (no-photo mid-rise configs 3f34a6c, 2026-10-22)
 
 - What worked well: static validation (registration, schema, palette, range-checked fields) plus the author's headless CHECK lines and a footprint clearance scan covered all six units quickly; the closest other-config ground is 8.2 m away, beyond any landing. Next time: have the headless check also emit landing and ramp footprints, so overlap is proven rather than bounded by distance.
+
+## code-review (Chinook rebuild shared commits + configs, 2026-10-22)
+
+- What worked well: extracting the moved court and house blocks and diffing them as text showed the refactor is verbatim (only the house-null guards are new). An exact name match between the `_build_record` call arguments and its 24-parameter signature ruled out a shifted-argument bug after the three parameters were removed.
+- What did not work well: the catalog still carries `accepted` records for 1439, 1441 and 1444 whose reviews were of the retired d2 replacements. Nothing in the code path flags that the accepted art changed underneath the credit.
+- What the team should change next time: when a change retires the art behind an accepted unit, name the governance step in the hand-off (re-review, record update, or owner sign-off), so code review isn't the first place it surfaces.
+
+## modeler-ground — Chinook 1439/1441/1445 and Croaker 1444 rebuild (2026-10-22)
+
+- What worked well: reading how each existing runtime installs (d2 adapters inside `world_chunk_builder.gd`, the Bulgarian attachment after the housing installer) before writing configs exposed that both would have built a hidden duplicate; the approved supersedes became three small reviewable commits. The proofs were decisive and cheap: a SHA-256 over the court's meshes, transforms and collision faces matched before/after, and an ownership census showed exactly one SharedHousing model and nothing else active per key. The fish-street generator carried over with a 4-unit specs file.
+- What did not work well: polygon-clipping failed three times on these plans (near-coincident points, world-scale half-planes), and a lot-line bisector did not separate 1445's apron from fish 1443's committed apron, so the generator gained snapping, local-frame clipping and neighbour-ground subtraction mid-prep. Heading/distance-only reference cameras landed beside neighbour walls again (1441, 1445) despite the fish-street lesson, and I repeated a `//` comment inside a one-line JS function once.
+- What the team should change next time: compute heading/distance cameras by road membership along the heading line in the generator itself (not per spec), snap all polygon-clipping inputs by default, and subtract committed neighbours' ground directly instead of relying on lot-line bisectors.
