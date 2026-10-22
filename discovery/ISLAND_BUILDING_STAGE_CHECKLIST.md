@@ -476,7 +476,8 @@ L2 PASS for the Winery hall at r1 and r2, and for 686 at r2 after its r1 REWORK 
 added); fit and suite PASS with the 686 stair walked up and down. L2 C on both; the
 catalog accepts them, and 686 gains a catalog `stairs` entry.
 **Mar22n** shared-code robustness pass `f5e9450`…`0e7b42b` (mid-rise `_spans` deck cover, `"posts": false`, stair_bay grade sampling and back-edge check; Isle House guard and metadata renames; 1317 computed module count; D1 door-top check): CODE PASS on all 9 commits; w291193766 still visual L2 PASS with its slits closed. No level or score change.
-Current totals after Mar22n (unchanged): L1:213 C/0 U; L2:192 C/21 U; L3/L5:213 U each;
+**Mar22o** Building 1 L3 in progress (`621c8d6`…`b0602c9`): tower base storey, north ring, SE shoulder, rear podium, crescent flutes and grid; emblem, window reveals, drum banding, crowns and cab trim. CODE PASS (`4d03edb` REWORK, fixed by `e83bae3`); visual L3/L1/L2 progress PASS through r7; ROOT released protected runs 70–92. The shared `building_fit.gd` rooftop-approach walk-up skip affects only w1222720021. No level or score change; L3 not yet marked.
+Current totals after Mar22o (unchanged): L1:213 C/0 U; L2:192 C/21 U; L3/L5:213 U each;
 L4:1 C/212 U. Overall406 C/0 I/659 U across213 units/1,065 cells; catalog
 recognition score 63/213.
 **U** no current stage-level conclusion established in this checklist pass.
@@ -745,7 +746,7 @@ March/November2025 refs and unknown-date Apple context support the scoped envelo
 and observed architecture; missing north capture/unknown rear/schematic materials
 keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
 See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
-Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar22n for current totals);
+Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar22o for current totals);
 **L1:21 C /0 I /192 U**. All other stages unchanged;49 historical credits retained.
 
 ## Island environment layers

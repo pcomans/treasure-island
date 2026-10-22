@@ -11661,6 +11661,16 @@
           "review_id": "building-1-tower-grounded-correction-2026-09-04",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "code-review-b1l3-20261022",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-b1l3-r7-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
         }
       ],
       "anchor_source_key": "w1222720021",
@@ -12391,6 +12401,16 @@
           "review_id": "building1-opus-candidate005-2026-10-16:shared_zoom_review_sol",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "code-review-b1l3-20261022",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-b1l3-r7-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
         }
       ],
       "anchor_source_key": "r16681702",
