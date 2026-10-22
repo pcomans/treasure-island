@@ -456,9 +456,17 @@ sides with one pier per corner. CODE PASS on all; visual L2 PASS for Station 48
 round-1 REWORK. The Austin palette also lightens the accepted front's piers, sills and
 coping (ROOT approved; re-review passed). L2 C on all three; they were already
 accepted, and the catalog adds acceptance records for these reviews.
-Current totals after Mar22k: L1:213 C/0 U; L2:189 C/24 U; L3/L5:213 U each;
+Totals after Mar22k: L1:213 C/0 U; L2:189 C/24 U; L3/L5:213 U each;
 L4:1 C/212 U. Overall403 C/0 I/662 U across213 units/1,065 cells; catalog
 recognition score 60/213 (YMCA and Austin Hall accepted after the instfinals reviews).
+**Mar22l** Culinary Dormitory, 2026-10-22: `a458d6f` brings the Advanced Culinary
+Dormitory (`w34313514`, 487–489) to L2 on the mid-rise family; r3 `084b564` reworks the
+breezeway into a gallery facing the gate. CODE PASS on both; visual REWORK on the first
+version, then L2 PASS on r3 under the visual-first process; fit and suite PASS. L2 C;
+catalog accepted. Parked (L3): the projecting gallery, the cantilever and the gate.
+Current totals after Mar22l: L1:213 C/0 U; L2:190 C/23 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall404 C/0 I/661 U across213 units/1,065 cells; catalog
+recognition score 61/213.
 **U** no current stage-level conclusion established in this checklist pass.
 
 The retained34-building audit entries in [RETRO](RETRO_LOG.md) (2026-09-23,
@@ -489,7 +497,7 @@ before selecting another round.
 | physical-building:w24274434 / w24274434 | Building 2 | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | B2 — whole-family025 whole visual/CODE/progress, native/fit/spray/suite PASS; as-built unclaimed |
 | physical-building:w34313512 / w34313512 | 449 Avenue H | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17l panel halls `265bbbd`…`a4ceb26` — CODE PASS on every commit, visual and progress PASS. Parked: panel-hall per-box mesh merging (medium-low); two validation gaps (low); hipped roof (L1 delta); multi-pane sash (L3); colour pass (off-white over light blue-grey) |
 | physical-building:w34313513 / w34313513 | Harvey Milk Memorial Administration Building, Job Corps Center | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22e L1 no-photo batch `fd6d31a` on the mid-rise family — CODE and visual PASS; massing only, no imagery (owner 2026-10-21); Mar22i reopened at L2 from the owner-accepted 2018-09 survey photos (`b6ea6bf` hood, `4aa004e`…`a783900`) — CODE PASS, visual L2 PASS 655 Avenue H; catalog accepted |
-| physical-building:w34313514 / w34313514 | Advanced Culinary Dormitory | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21h institutional batch on the mid-rise family (`bf57964`, `6c5a131`, `a45788d`) — CODE, visual and progress PASS; L1 only (L2 not passed) |
+| physical-building:w34313514 / w34313514 | Advanced Culinary Dormitory | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21h institutional batch on the mid-rise family (`bf57964`, `6c5a131`, `a45788d`) — CODE, visual and progress PASS; L1 only (L2 not passed); Mar22l Culinary Dorm 487–489 at L2 (`a458d6f`, r3 `084b564`) — CODE PASS; visual REWORK then L2 PASS on r3 (visual-first process); fit and suite PASS; catalog accepted. Parked (L3): projecting gallery, cantilever, gate |
 | physical-building:w34313515 / w34313515 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22h inst3 on the mid-rise family (`b7ddf49`…`e8a173d`) — CODE PASS (rework re-checked), visual L2 PASS round 2 (2018 survey photos); catalog accepted |
 | physical-building:w34313520 / w34313520 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22h inst3 on the mid-rise family (`b7ddf49`…`e8a173d`) — CODE PASS (rework re-checked), visual L2 PASS round 2 (2018 survey photos); catalog accepted |
 | physical-building:w34313521 / w34313521 | US Dept of Labor Job Corps Food Service Building 368 | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 575 Avenue D (Bldg 368): Mar17l panel halls `265bbbd`…`a4ceb26` — CODE PASS on every commit, visual and progress PASS. Parked: panel-hall per-box mesh merging (medium-low); two validation gaps (low); set-back clerestory (L1 delta); colour pass (cream) |
@@ -725,7 +733,7 @@ March/November2025 refs and unknown-date Apple context support the scoped envelo
 and observed architecture; missing north capture/unknown rear/schematic materials
 keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
 See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
-Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar22k for current totals);
+Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar22l for current totals);
 **L1:21 C /0 I /192 U**. All other stages unchanged;49 historical credits retained.
 
 ## Island environment layers
