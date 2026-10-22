@@ -464,9 +464,20 @@ Dormitory (`w34313514`, 487–489) to L2 on the mid-rise family; r3 `084b564` re
 breezeway into a gallery facing the gate. CODE PASS on both; visual REWORK on the first
 version, then L2 PASS on r3 under the visual-first process; fit and suite PASS. L2 C;
 catalog accepted. Parked (L3): the projecting gallery, the cantilever and the gate.
-Current totals after Mar22l: L1:213 C/0 U; L2:190 C/23 U; L3/L5:213 U each;
+Totals after Mar22l: L1:213 C/0 U; L2:190 C/23 U; L3/L5:213 U each;
 L4:1 C/212 U. Overall404 C/0 I/661 U across213 units/1,065 cells; catalog
 recognition score 61/213.
+**Mar22m** Building 3 annexes, 2026-10-22: `1ab0240` adds opt-in `pergola` blocks and
+`730a77e` opt-in walkable exterior stairs (`ext_stairs`) to the mid-rise family (a digest
+re-run shows the other 63 mid-rise instances byte-identical); `90cc079` and `2957425`
+bring the former Building 111 (`w1222514686`, modelled pre-demolition) and the Winery
+hall (`w1222514685`) to L2; `bc4f1e5` is a docs/comment fix. CODE PASS on all; visual
+L2 PASS for the Winery hall at r1 and r2, and for 686 at r2 after its r1 REWORK (stair
+added); fit and suite PASS with the 686 stair walked up and down. L2 C on both; the
+catalog accepts them, and 686 gains a catalog `stairs` entry.
+Current totals after Mar22m: L1:213 C/0 U; L2:192 C/21 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall406 C/0 I/659 U across213 units/1,065 cells; catalog
+recognition score 63/213.
 **U** no current stage-level conclusion established in this checklist pass.
 
 The retained34-building audit entries in [RETRO](RETRO_LOG.md) (2026-09-23,
@@ -691,8 +702,8 @@ before selecting another round.
 | physical-building:w1043836450 / w1043836450 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 450 (680 Avenue I): Mar21c redo on the mid-rise family `51349c3` — visual L1+L2 PASS, resolving the earlier panel-hall REWORK; config code-trivial. Parked: ramp length (foundation-exposure trade-off); colour pass (roof grey-brown, lighter glazing) |
 | physical-building:w1098437841 / w1098437841 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | M — retain complete site; inspect later stages |
 | physical-building:w1212173437 / w1212173437 | Star View Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17k mid-rise family `3f44801` + `6e2cead` — CODE PASS (two lows), visual L2 PASS, progress L1+L2 PASS. Parked: code lows (misleading root `scope` string at `midrise_family.gd:146`; `_ground_y` linear scan needs indexing); landscaping, signage, materials |
-| physical-building:w1222514685 / w1222514685 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar22d C-set (`fc3db5d` runtime retirement, `68e7453` mid-rise configs) — CODE, visual and evidence-based progress PASS (Building 3 annex); L1 only |
-| physical-building:w1222514686 / w1222514686 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar22d C-set (`fc3db5d` runtime retirement, `68e7453` mid-rise configs) — CODE, visual and evidence-based progress PASS (Building 3 annex); L1 only |
+| physical-building:w1222514685 / w1222514685 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22d C-set (`fc3db5d` runtime retirement, `68e7453` mid-rise configs) — CODE, visual and evidence-based progress PASS (Building 3 annex); Mar22m Building 3 annexes (`1ab0240` pergola, `730a77e` ext_stairs, `90cc079`, `2957425`) — CODE PASS, visual Winery hall (Building 3 SW corrugated annex), L2 PASS at r1 and r2; fit and suite PASS; catalog accepted |
+| physical-building:w1222514686 / w1222514686 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22d C-set (`fc3db5d` runtime retirement, `68e7453` mid-rise configs) — CODE, visual and evidence-based progress PASS (Building 3 annex); Mar22m Building 3 annexes (`1ab0240` pergola, `730a77e` ext_stairs, `90cc079`, `2957425`) — CODE PASS, visual former Building 111 (modelled pre-demolition), REWORK at r1 then L2 PASS at r2 after the walkable exterior stair; stair walked up and down; fit and suite PASS; catalog accepted |
 | physical-building:w1222514695 / w1222514695 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21c shelter: L1 C under the blocked-side walk-up rule (`b85a505`, CODE PASS); the site-blocked west side is skipped |
 | physical-building:w1222720021 / w1222720021 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22c Building 1 tower: L1/L2 C from the review-only sweep `/workspaces/landmark-progress-20261007/review-sweep-20261022/` (visual review; assets unchanged) |
 | physical-building:w1249412093 / w1249412093 | Hawkins | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22c Hawkins: L1 C from the review-only sweep `/workspaces/landmark-progress-20261007/review-sweep-20261022/` (visual review; assets unchanged); L2 gap: blank sides; openings pass approved by owner 2026-10-22; Mar22h blank sides filled (`7a87d82`…`58831fe`, D1 inferred openings) — CODE PASS, visual PASS Hawkins (round 1): L2 C |
@@ -733,7 +744,7 @@ March/November2025 refs and unknown-date Apple context support the scoped envelo
 and observed architecture; missing north capture/unknown rear/schematic materials
 keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
 See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
-Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar22l for current totals);
+Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar22m for current totals);
 **L1:21 C /0 I /192 U**. All other stages unchanged;49 historical credits retained.
 
 ## Island environment layers

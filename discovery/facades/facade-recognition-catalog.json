@@ -11524,13 +11524,24 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "code-review-b3annex-20261022",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-b3annex-w1222514685-r1-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w1222514685",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -11560,14 +11571,25 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "code-review-b3annex-20261022",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-b3annex-w1222514686-r2-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w1222514686",
       "stairs": [{"bottom": [524.5825, 500.932], "top": [529.587, 498.2033]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
