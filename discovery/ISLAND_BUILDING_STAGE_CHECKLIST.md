@@ -400,8 +400,13 @@ family. CODE, visual and evidence-based progress PASS. L1/L2 C on Dorm 369,
 `w291196370` and `w34313564`; L1 C on the two annexes. Parked: colour pass (Dorm 369
 warmer grey-beige; 370 pale blue with a red deck); 564's dock canopy (L3); the retired
 `legacy_adapters` and prototype cleanup (low); Dorm 369's landings next to Oasis.
-Current totals after Mar22d: L1:199 C/14 U; L2:165 C/48 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall365 C/0 I/700 U across213 units/1,065 cells;49 historical
+**Mar22e** L1 no-photo batch, 2026-10-22: `fd6d31a` masses six units with no usable
+imagery on the mid-rise family (owner approved massing only, 2026-10-21). CODE and
+visual PASS. L1 C on 655 Avenue H (`w34313513`), `w96698650`, 1105 and 1107 Bigelow
+Court (`w96665933`, `w96665925`) and 1442 and 1447 Chinook Court (`w96665900`,
+`w96665886`). Parked: 1107's warmer siding (colour pass).
+Current totals after Mar22e: L1:205 C/8 U; L2:165 C/48 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall371 C/0 I/694 U across213 units/1,065 cells;49 historical
 recognition credits unchanged.
 **U** no current stage-level conclusion established in this checklist pass.
 
@@ -432,7 +437,7 @@ before selecting another round.
 |---|---|---|---|---|---|---|---|
 | physical-building:w24274434 / w24274434 | Building 2 | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | B2 — whole-family025 whole visual/CODE/progress, native/fit/spray/suite PASS; as-built unclaimed |
 | physical-building:w34313512 / w34313512 | 449 Avenue H | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17l panel halls `265bbbd`…`a4ceb26` — CODE PASS on every commit, visual and progress PASS. Parked: panel-hall per-box mesh merging (medium-low); two validation gaps (low); hipped roof (L1 delta); multi-pane sash (L3); colour pass (off-white over light blue-grey) |
-| physical-building:w34313513 / w34313513 | Harvey Milk Memorial Administration Building, Job Corps Center | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w34313513 / w34313513 | Harvey Milk Memorial Administration Building, Job Corps Center | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar22e L1 no-photo batch `fd6d31a` on the mid-rise family — CODE and visual PASS; massing only, no imagery (owner 2026-10-21) |
 | physical-building:w34313514 / w34313514 | Advanced Culinary Dormitory | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21h institutional batch on the mid-rise family (`bf57964`, `6c5a131`, `a45788d`) — CODE, visual and progress PASS; L1 only (L2 not passed) |
 | physical-building:w34313515 / w34313515 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w34313520 / w34313520 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
@@ -539,7 +544,7 @@ before selecting another round.
 | physical-building:w96665883 / w96665883 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21h institutional batch on the mid-rise family (`bf57964`, `6c5a131`, `a45788d`) — CODE, visual and progress PASS |
 | physical-building:w96665884 / w96665884 | 1145 Ozbourn Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21b Site 12 `8c70237` (`eave_rgb`) + `8d0549f` — CODE, visual L2 and progress PASS. Parked: colour pass (warm white or cream) |
 | physical-building:w96665885 / w96665885 | 1118 Hutchins Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21b Site 12 `8c70237` (`eave_rgb`) + `8d0549f` — CODE, visual L2 and progress PASS |
-| physical-building:w96665886 / w96665886 | 1447 Chinook Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96665886 / w96665886 | 1447 Chinook Court | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar22e L1 no-photo batch `fd6d31a` on the mid-rise family — CODE and visual PASS; massing only, no imagery (owner 2026-10-21) |
 | physical-building:w96665887 / w96665887 | 1115 Keppler Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17h `574d1d8` — CODE PASS-with-notes (non-blocking lows; grounded samples are grazing sills), visual L2 PASS (whole-unit acceptance withheld), progress L1+L2 PASS. Parked: pale blue-grey yard/front pads read as stickers in shade; roof break |
 | physical-building:w96665889 / w96665889 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21h institutional batch on the mid-rise family (`bf57964`, `6c5a131`, `a45788d`) — CODE, visual and progress PASS; L1 only (L2 not passed) |
 | physical-building:w96665890 / w96665890 | 1111 Keppler Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17h `574d1d8` — CODE PASS-with-notes (non-blocking lows; grounded samples are grazing sills), visual L2 PASS (whole-unit acceptance withheld), progress L1+L2 PASS. Parked: pale blue-grey yard/front pads read as stickers in shade; colour pass (greige reads blue) |
@@ -547,7 +552,7 @@ before selecting another round.
 | physical-building:w96665893 / w96665893 | 1210 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17 `5172811` — L1/L2 rear/terminal PASS; integrated visual/native/fit/spray/suite PASS; materials/site open |
 | physical-building:w96665897 / w96665897 | 1112 Hutchins Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21b Site 12 `8c70237` (`eave_rgb`) + `8d0549f` — CODE, visual L2 and progress PASS |
 | physical-building:w96665899 / w96665899 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 1108 Halyburton Court: Mar21b Site 12 `8c70237` (`eave_rgb`) + `8d0549f` — CODE, visual L2 and progress PASS. Parked: front fence |
-| physical-building:w96665900 / w96665900 | 1442 Chinook Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96665900 / w96665900 | 1442 Chinook Court | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar22e L1 no-photo batch `fd6d31a` on the mid-rise family — CODE and visual PASS; massing only, no imagery (owner 2026-10-21) |
 | physical-building:w96665902 / w96665902 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21h institutional batch on the mid-rise family (`bf57964`, `6c5a131`, `a45788d`) — CODE, visual and progress PASS |
 | physical-building:w96665903 / w96665903 | 1124 Reeves Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21b Site 12 `8c70237` (`eave_rgb`) + `8d0549f` — CODE, visual L2 and progress PASS |
 | physical-building:w96665904 / w96665904 | 1237 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS |
@@ -567,9 +572,9 @@ before selecting another round.
 | physical-building:w96665922 / w96665922 | 1114 Hutchins Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21b Site 12 `8c70237` (`eave_rgb`) + `8d0549f` — CODE, visual L2 and progress PASS |
 | physical-building:w96665923 / w96665923 | 1120 Reeves Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21b Site 12 `8c70237` (`eave_rgb`) + `8d0549f` — CODE, visual L2 and progress PASS. Parked: colour pass (warm white or cream) |
 | physical-building:w96665924 / w96665924 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21h institutional batch on the mid-rise family (`bf57964`, `6c5a131`, `a45788d`) — CODE, visual and progress PASS; L1 only (L2 not passed) |
-| physical-building:w96665925 / w96665925 | 1107 Bigelow Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96665925 / w96665925 | 1107 Bigelow Court | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar22e L1 no-photo batch `fd6d31a` on the mid-rise family — CODE and visual PASS; massing only, no imagery (owner 2026-10-21). Parked: warmer siding (colour pass) |
 | physical-building:w96665928 / w96665928 | 1117 Keppler Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17h `574d1d8` — CODE PASS-with-notes (non-blocking lows; grounded samples are grazing sills), visual L2 PASS (whole-unit acceptance withheld), progress L1+L2 PASS. Parked: pale blue-grey yard/front pads read as stickers in shade; 5.3 m eave is stated inference |
-| physical-building:w96665933 / w96665933 | 1105 Bigelow Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96665933 / w96665933 | 1105 Bigelow Court | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar22e L1 no-photo batch `fd6d31a` on the mid-rise family — CODE and visual PASS; massing only, no imagery (owner 2026-10-21) |
 | physical-building:w96665935 / w96665935 | 1135 Mason Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21b Site 12 `8c70237` (`eave_rgb`) + `8d0549f` — CODE, visual L2 and progress PASS |
 | physical-building:w96665936 / w96665936 | 1128 Reeves Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21b Site 12 `8c70237` (`eave_rgb`) + `8d0549f` — CODE, visual L2 and progress PASS |
 | physical-building:w96698611 / w96698611 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21h institutional batch on the mid-rise family (`bf57964`, `6c5a131`, `a45788d`) — CODE, visual and progress PASS. Parked: colour pass (roof dark brown) |
@@ -580,7 +585,7 @@ before selecting another round.
 | physical-building:w96698643 / w96698643 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 1249 Exposition Drive: Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS. Parked: near canopy at stations 42.8–50.8 (future 1249 delta) |
 | physical-building:w96698645 / w96698645 | 1214/1420 Gateview Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17f `6539db3` + `970359e` — CODE, visual L1/L2 and progress PASS; 1218 cadence delta CODE and visual PASS. Parked: fences, vent pipes, post bands, carport-top and canopy finish; colour re-check after the lighting decision |
 | physical-building:w96698648 / w96698648 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 1252 Exposition Drive: Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS |
-| physical-building:w96698650 / w96698650 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96698650 / w96698650 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar22e L1 no-photo batch `fd6d31a` on the mid-rise family — CODE and visual PASS; massing only, no imagery (owner 2026-10-21) |
 | physical-building:w96698651 / w96698651 | 1315 Gateview Avenue | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17i Gateview Ave A `904f940`+`487a1ef`+`35a990e`+`45344f4` — CODE, visual and progress PASS (guards CODE PASS; drives CODE/visual/progress PASS). Parked: gable-generator closure-overlap dedupe (low); fences and site; colour pass |
 | physical-building:w96698652 / w96698652 | 1223 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17b recovery of reviewed final `b6e7092` (byte-exact) — CODE, visual L1/L2 and progress PASS; fit/native/26 route legs, end/rear spray and full suite exit 0. Parked L3: eave/rake overhang; canopy site placement/extent (photo shows a detached carport over parking) |
 | physical-building:w96698653 / w96698653 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1 PASS (L2 not passed). Parked: validation lows |
@@ -669,7 +674,7 @@ March/November2025 refs and unknown-date Apple context support the scoped envelo
 and observed architecture; missing north capture/unknown rear/schematic materials
 keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
 See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
-Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar22d for current totals);
+Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar22e for current totals);
 **L1:21 C /0 I /192 U**. All other stages unchanged;49 historical credits retained.
 
 ## Island environment layers
