@@ -21281,3 +21281,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the rework stayed config-only: cream walls, pale blue fascia panels, lighter windows, and a centred glazed double-door group under a canopy on the photographed SSE front. The fit, all five door routes and the spray passed on the first run.
 - What did not work well: the ENE door first disappeared because the producer keys a face by the first same-facing footprint edge it lies inside of (e8, not e36), and the door's station is measured in that edge's frame. It took a mirror check of each face's key and start to place it.
 - What the team should change next time: when placing features on a many-edged footprint, read face keys and starts from the mirror plan first, instead of assuming the face is keyed by its own edge.
+
+## visual-review (r133351 rework recheck, 2026-10-22)
+
+- What worked well: a config-only rework (cream walls, a centred glazed entrance under a canopy, lighter windows) turned the saturated blue stripe into the photo's low cream retail front at the same matched pose, and was confirmed in one pass.
+- What did not work well: the close-ups are framed too far away to confirm the per-face doors I asked for, and the south close-up is blocked by a neighbouring blue canopy building.
+- What the team should change next time: when a rework adds openings on several faces, add one near view per face so each can be confirmed directly.
