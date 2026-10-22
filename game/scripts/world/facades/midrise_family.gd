@@ -483,6 +483,13 @@ static func _make_blocks(ctx: Ctx) -> void:
 			block.railing = false
 			block.top_y = block.roof_y
 			block.wall_top = block.roof_y
+		# The deck underside also sets what the block hides of its neighbours (_spans).
+		if item.has("deck"):
+			var deck: Variant = item.deck
+			var deck_t := float((deck as Dictionary).get("t", 0.3)) if deck is Dictionary else NAN
+			if not (_in_range(deck_t, 0.0, 2.0) and deck_t > 0.0):
+				ctx.errors.append("block %s deck needs t in (0, 2] m" % block.id)
+				return
 		ctx.blocks.append(block)
 	if total > footprint_area + 0.05:
 		ctx.errors.append("blocks overlap or exceed the footprint (%.3f > %.3f m2)" % [total, footprint_area])
@@ -745,7 +752,7 @@ static func _spans(ctx: Ctx, block: Block, i: int) -> Array:
 			var lo := maxf(0.0, minf((qa - a).dot(d), (qb - a).dot(d)))
 			var hi := minf(length, maxf((qa - a).dot(d), (qb - a).dot(d)))
 			if hi - lo > 0.001:
-				covers.append([lo, hi, other.roof_y])
+				covers.append([lo, hi, other.roof_y, _cover_floor(other)])
 	var cuts: Array = [0.0, length]
 	for cover: Array in covers:
 		cuts.append(cover[0])
@@ -758,10 +765,19 @@ static func _spans(ctx: Ctx, block: Block, i: int) -> Array:
 		if s1 - s0 < 0.001:
 			continue
 		var mid := (s0 + s1) * 0.5
-		var bottom := -INF
+		# A cover hides the band from its floor (cover[3]) up to its roof (cover[2]).
+		# A span has one bottom, so the face shows above the bands that join up from
+		# the ground. A deck band clear of them leaves the wall below the deck
+		# exposed; that wall then runs on through the slab band, closing the slab end.
+		var bands: Array = []
 		for cover: Array in covers:
 			if float(cover[0]) <= mid and mid <= float(cover[1]):
-				bottom = maxf(bottom, float(cover[2]))
+				bands.append(cover)
+		bands.sort_custom(func(p: Array, q: Array) -> bool: return float(p[3]) < float(q[3]))
+		var bottom := -INF
+		for band: Array in bands:
+			if float(band[3]) <= bottom + 0.000001:
+				bottom = maxf(bottom, float(band[2]))
 		if bottom >= block.roof_y - 0.000001:
 			continue
 		var ground := bottom == -INF
@@ -770,6 +786,15 @@ static func _spans(ctx: Ctx, block: Block, i: int) -> Array:
 		else:
 			spans.append({"s0": s0, "s1": s1, "ground": ground, "y": 0.0 if ground else bottom})
 	return spans
+
+
+## Lowest level a block hides of a neighbour's wall: the deck underside of a flat
+## deck block (open beneath it), else the ground (-INF).
+static func _cover_floor(block: Block) -> float:
+	var deck: Dictionary = block.cfg.get("deck", {})
+	if block.form != "flat" or deck.is_empty():
+		return -INF
+	return block.roof_y - float(deck.get("t", 0.3))
 
 
 static func _block_faces(ctx: Ctx, block: Block) -> void:
