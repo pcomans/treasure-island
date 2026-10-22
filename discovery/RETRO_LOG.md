@@ -21183,3 +21183,19 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the 1226/1397 tools (`yard_doors.py`, `align_heads.py`) carried over unchanged, so prep was configs-only. A path-level diff against the reviewed finals proved the only changes were siding, 12 window `center_y` values, 6 doors and 6 pads per unit. Stashing the new configs let `before.sh` refuse a dirty worktree, and one chained job (before, apply, after, fits) ran unattended to terminal in Slot A with no waits in between. All 6 fits, 4 shot runs and the suite passed first time.
 - What did not work well: the evidence dirs for 1215/1224 had no Apple-layout yard reading of their own, so yard support rests on the study source notes and one undated layout image. The pad/route overlap check was a new small sampler script (`pad_overlap.py`) instead of a shared helper. 1215 still has 5 front doors for 6 units, which is outside this scope.
 - What the team should change next time: keep one maintained plan-overlap sampler (pads and routes against registered configs' ground, roads and footprints) for config-only rounds, instead of per-round copies. List each row's front and rear unit counts together in the checklist, so front-entry gaps like 1215 near-1 are scheduled with their rear.
+
+## visual-review (Bayside 1215/1224, 2026-10-22)
+
+- What worked well: the before/after door-pair detail per rear section made the change unambiguous. A blank rear became a per-unit rhythm of yard doors, head-aligned windows and upper windows on both rows. A matched island pair from the same invocation family made the regression check a single numeric step.
+- What did not work well: 1224's closeups don't frame its photographed front, so the front comparison relied on the earlier colour-pass triptych. The known pink roof and the 1215 front-door shortfall carry over untouched, because recovery scope excluded them.
+- What the team should change next time: include the matched front pose in every recovery shot plan. When a recovery leaves a known Level 2 gap (front doors), queue the bounded fix in the same task note so it isn't dropped.
+
+## progress-review (Bayside 1215/1224, 2026-10-22)
+
+- What worked well: recovering the reviewed off-tip finals (1d19eaa, 12b41f6) with main's palette kept, then adding the proven yard-door pattern on layout-supported yards, closed both rows in one slot with no new art base. Before/after rear obliques show flat-capped blank boxes becoming gabled sections with W D D W rear bays, and both raised contexts read as pitched rows. Six fits and the suite were all EXIT 0.
+- What did not work well: 1215's front still has 5 entries for 6 units, an inherited reviewed-front gap deliberately left out of scope. The delivery HEAD still shows 178/154 because the 1201/1238 edit hasn't landed, so the totals are computed against a pending base.
+- What the team should change next time: during a recovery, check front-entry versus unit count and either fix it or record why it matches the dated photo. Land checklist edits before the next review is counted against them.
+
+## code-review (Bayside 1215/1224 recovery, 2026-10-22)
+
+- What worked well: diffing each config against its final, the colour commit and main pinned the delta to exactly the declared exceptions, and the exact overlap pass surfaced a parking-over-road overlap that turned out to be unchanged on main. What didn't: that pre-existing overlap (0.07 and 0.86 m² of `ParkingSurface` over `road_path`) has never been flagged because earlier reviews did not use exact area clipping. Next time: route pre-existing overlaps found during a recovery to a modeler as a parked item rather than leaving them in review notes.
