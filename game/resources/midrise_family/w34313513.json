@@ -5,100 +5,100 @@
     "address": "655 Avenue H (Harvey Milk administration)",
     "edge_normals": [
       [
-        -0.8813926725781426,
-        0.47238433158346704
+        -0.881,
+        0.472
       ],
       [
-        -0.4725876964770591,
-        -0.881283648514204
+        -0.473,
+        -0.881
       ],
       [
-        -0.8813790653777747,
-        0.47240971953781863
+        -0.881,
+        0.472
       ],
       [
-        0.4721128077850624,
-        0.8815381425243634
+        0.472,
+        0.882
       ],
       [
-        -0.8815346030949219,
-        0.4721194166164727
+        -0.882,
+        0.472
       ],
       [
-        -0.5205149778997227,
-        -0.8538525386634692
+        -0.521,
+        -0.854
       ],
       [
-        -0.8758701341564069,
-        -0.48254689729894434
+        -0.876,
+        -0.483
       ],
       [
-        -0.9932028380055388,
-        -0.1163964027697744
+        -0.993,
+        -0.116
       ],
       [
-        -0.9840358979557935,
-        0.17797008606598752
+        -0.984,
+        0.178
       ],
       [
-        -0.8351708648198801,
-        0.5499905695155267
+        -0.835,
+        0.55
       ],
       [
-        -0.534715853999196,
-        0.8450319257175497
+        -0.535,
+        0.845
       ],
       [
-        -0.1966980474873316,
-        0.9804641136291891
+        -0.197,
+        0.98
       ],
       [
-        0.34481746267961616,
-        0.9386697595167277
+        0.345,
+        0.939
       ],
       [
-        0.4725537909196783,
-        0.8813018295041949
+        0.473,
+        0.881
       ],
       [
-        0.8811894526628016,
-        -0.4727633113047504
+        0.881,
+        -0.473
       ],
       [
-        0.4723707284954455,
-        0.8813999630478109
+        0.472,
+        0.881
       ],
       [
-        0.8811249792209904,
-        -0.4728834644950161
+        0.881,
+        -0.473
       ],
       [
-        -0.4706087440329762,
-        -0.8823420028762683
+        -0.471,
+        -0.882
       ],
       [
-        0.8813952642421956,
-        -0.4723794959261358
+        0.881,
+        -0.472
       ],
       [
-        0.4749552131812468,
-        0.880009968961691
+        0.475,
+        0.88
       ],
       [
-        0.881498495234335,
-        -0.4721868305020834
+        0.881,
+        -0.472
       ],
       [
-        -0.47233521485798985,
-        -0.8814189950330414
+        -0.472,
+        -0.881
       ],
       [
-        0.8812663169876273,
-        -0.472620014962404
+        0.881,
+        -0.473
       ],
       [
-        -0.4724882346856737,
-        -0.8813369775991562
+        -0.472,
+        -0.881
       ]
     ]
   },
@@ -108,9 +108,9 @@
     "basis": "median frozen terrain around the ring (no imagery)"
   },
   "levels": {
-    "ground_h": 4.6,
-    "storey_h": 4.0,
-    "parapet_h": 0.5
+    "ground_h": 4.2,
+    "storey_h": 3.8,
+    "parapet_h": 1.6
   },
   "palette": {
     "frame": {
@@ -209,12 +209,11 @@
     },
     "coping": {
       "rgb": [
-        0.73,
-        0.74,
-        0.74
+        0.86,
+        0.83,
+        0.75
       ],
-      "roughness": 0.45,
-      "metallic": 0.3
+      "roughness": 0.7
     },
     "roof": {
       "rgb": [
@@ -256,254 +255,436 @@
         0.83
       ],
       "roughness": 0.9
+    },
+    "beige": {
+      "rgb": [
+        0.84,
+        0.8,
+        0.71
+      ],
+      "roughness": 0.85
+    },
+    "taupe": {
+      "rgb": [
+        0.62,
+        0.56,
+        0.48
+      ],
+      "roughness": 0.85
+    },
+    "sign": {
+      "rgb": [
+        0.9,
+        0.88,
+        0.82
+      ],
+      "roughness": 0.7
+    },
+    "cw_frame": {
+      "rgb": [
+        0.2,
+        0.24,
+        0.3
+      ],
+      "roughness": 0.5,
+      "metallic": 0.35
+    },
+    "cw_glass": {
+      "rgb": [
+        0.26,
+        0.36,
+        0.38
+      ],
+      "roughness": 0.15,
+      "metallic": 0.35
+    },
+    "navy": {
+      "rgb": [
+        0.11,
+        0.15,
+        0.32
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
     }
   },
   "schemes": {
-    "plain": {
-      "material": "render",
-      "parapet_material": "render",
-      "module": 3.6,
+    "flank_sse": {
+      "material": "cw_frame",
+      "parapet_material": "beige",
+      "module": 1.9,
       "window": {
-        "w": 1.4,
-        "h": 1.3,
-        "sill": 0.95,
-        "depth": 0.12,
+        "w": 1.5,
+        "h": 3.3,
+        "sill": 0.3,
+        "depth": 0.08,
         "mullions": [
           0.5
         ],
-        "frame": "frame_light"
+        "transoms": [
+          0.35,
+          0.7
+        ],
+        "frame": "cw_frame",
+        "glass": "cw_glass",
+        "frame_w": 0.05
       },
       "ground": {
-        "w": 1.4,
-        "h": 1.3,
-        "sill": 0.95,
-        "depth": 0.12,
-        "mullions": [
-          0.5
+        "kind": "storefront",
+        "pier": 0.1,
+        "sill": 0.1,
+        "head": 0.3,
+        "depth": 0.08,
+        "transoms": [
+          0.72
         ],
-        "frame": "frame_light",
-        "kind": "window"
+        "frame": "cw_frame",
+        "glass": "cw_glass",
+        "mullion_step": 1.9,
+        "frame_w": 0.05
       },
       "plinth": {
         "material": "concrete",
-        "top": 0.2
-      }
-    },
-    "side2": {
-      "material": "render",
-      "parapet_material": "render",
-      "module": 3.6,
-      "window": {
-        "w": 1.4,
-        "h": 1.3,
-        "sill": 0.95,
-        "depth": 0.12,
-        "mullions": [
-          0.5
-        ],
-        "frame": "frame_light"
+        "top": 0.1
       },
-      "ground": {
-        "w": 1.4,
-        "h": 1.3,
-        "sill": 0.95,
-        "depth": 0.12,
-        "mullions": [
-          0.5
-        ],
-        "frame": "frame_light",
-        "kind": "window"
-      },
-      "plinth": {
-        "material": "concrete",
-        "top": 0.2
+      "bands": [
+        {
+          "storey": 2,
+          "offset": 0.55,
+          "h": 0.55,
+          "material": "taupe"
+        }
+      ],
+      "end_pilasters": {
+        "w": 0.55,
+        "to_storey": 2,
+        "material": "navy"
       },
       "features": [
         {
+          "type": "blank",
+          "from": 0.0,
+          "to": 0.8
+        },
+        {
+          "type": "blank",
+          "from": 16.61,
+          "to": 17.41
+        }
+      ]
+    },
+    "flank_nnw": {
+      "material": "cw_frame",
+      "parapet_material": "beige",
+      "module": 1.9,
+      "window": {
+        "w": 1.5,
+        "h": 3.3,
+        "sill": 0.3,
+        "depth": 0.08,
+        "mullions": [
+          0.5
+        ],
+        "transoms": [
+          0.35,
+          0.7
+        ],
+        "frame": "cw_frame",
+        "glass": "cw_glass",
+        "frame_w": 0.05
+      },
+      "ground": {
+        "kind": "storefront",
+        "pier": 0.1,
+        "sill": 0.1,
+        "head": 0.3,
+        "depth": 0.08,
+        "transoms": [
+          0.72
+        ],
+        "frame": "cw_frame",
+        "glass": "cw_glass",
+        "mullion_step": 1.9,
+        "frame_w": 0.05
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.1
+      },
+      "bands": [
+        {
+          "storey": 2,
+          "offset": 0.55,
+          "h": 0.55,
+          "material": "taupe"
+        }
+      ]
+    },
+    "centre": {
+      "material": "cw_frame",
+      "parapet_material": "beige",
+      "module": 2.15,
+      "window": {
+        "w": 1.75,
+        "h": 2.6,
+        "sill": 1.0,
+        "depth": 0.08,
+        "mullions": [
+          0.5
+        ],
+        "transoms": [
+          0.35,
+          0.7
+        ],
+        "frame": "cw_frame",
+        "glass": "cw_glass",
+        "frame_w": 0.05
+      },
+      "ground": {
+        "kind": "storefront",
+        "pier": 0.1,
+        "sill": 0.1,
+        "head": 0.9,
+        "depth": 0.08,
+        "transoms": [
+          0.72
+        ],
+        "frame": "cw_frame",
+        "glass": "cw_glass",
+        "mullion_step": 1.9,
+        "frame_w": 0.05
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.1
+      },
+      "bands": [
+        {
+          "storey": 1,
+          "offset": -0.9,
+          "h": 1.9,
+          "material": "sign"
+        },
+        {
+          "storey": 2,
+          "offset": 0.55,
+          "h": 0.55,
+          "material": "taupe"
+        }
+      ],
+      "features": [
+        {
           "type": "entry",
-          "from": 5.908,
-          "to": 7.708,
+          "from": 2.65,
+          "to": 5.95,
           "door": {
-            "kind": "unit",
-            "w": 1.0,
-            "h": 2.2,
-            "leaf_h": 2.2,
-            "material": "door"
+            "kind": "lobby",
+            "w": 3.0,
+            "h": 3.2,
+            "mullions": [
+              0.25,
+              0.5,
+              0.75
+            ],
+            "transoms": [
+              0.8
+            ]
           },
           "landing": {
-            "w": 1.8,
-            "depth": 1.2
+            "w": 4.2,
+            "depth": 2.0
           }
         }
       ]
     },
-    "side23": {
-      "material": "render",
-      "parapet_material": "render",
-      "module": 3.6,
-      "window": {
-        "w": 1.4,
-        "h": 1.3,
-        "sill": 0.95,
-        "depth": 0.12,
-        "mullions": [
-          0.5
-        ],
-        "frame": "frame_light"
-      },
+    "box_front": {
+      "material": "beige",
+      "parapet_material": "beige",
+      "ground_material": "cw_frame",
+      "module": 2.25,
       "ground": {
-        "w": 1.4,
-        "h": 1.3,
-        "sill": 0.95,
-        "depth": 0.12,
-        "mullions": [
-          0.5
-        ],
-        "frame": "frame_light",
-        "kind": "window"
+        "kind": "storefront",
+        "pier": 0.1,
+        "sill": 0.1,
+        "head": 0.45,
+        "depth": 0.08,
+        "transoms": [],
+        "frame": "cw_frame",
+        "glass": "cw_glass",
+        "mullion_step": 1.9,
+        "frame_w": 0.05
       },
+      "upper": "blank",
       "plinth": {
         "material": "concrete",
-        "top": 0.2
+        "top": 0.1
       },
-      "features": [
+      "bands": [
         {
-          "type": "entry",
-          "from": 18.355,
-          "to": 20.155,
-          "door": {
-            "kind": "unit",
-            "w": 1.0,
-            "h": 2.2,
-            "leaf_h": 2.2,
-            "material": "door"
-          },
-          "landing": {
-            "w": 1.8,
-            "depth": 1.2
-          }
+          "storey": 1,
+          "offset": -0.45,
+          "h": 0.45,
+          "material": "beige"
+        },
+        {
+          "storey": 1,
+          "offset": 1.45,
+          "h": 0.95,
+          "material": "taupe"
         }
       ]
     },
-    "side13": {
-      "material": "render",
-      "parapet_material": "render",
-      "module": 3.6,
-      "window": {
-        "w": 1.4,
-        "h": 1.3,
-        "sill": 0.95,
-        "depth": 0.12,
-        "mullions": [
-          0.5
-        ],
-        "frame": "frame_light"
-      },
+    "box_step": {
+      "material": "beige",
+      "parapet_material": "beige",
+      "module": 60.0,
       "ground": {
-        "w": 1.4,
-        "h": 1.3,
-        "sill": 0.95,
-        "depth": 0.12,
-        "mullions": [
-          0.5
-        ],
-        "frame": "frame_light",
-        "kind": "window"
+        "kind": "blank"
       },
+      "upper": "blank",
       "plinth": {
         "material": "concrete",
-        "top": 0.2
+        "top": 0.1
       },
-      "features": [
+      "bands": [
         {
-          "type": "entry",
-          "from": 16.456,
-          "to": 18.256,
-          "door": {
-            "kind": "unit",
-            "w": 1.0,
-            "h": 2.2,
-            "leaf_h": 2.2,
-            "material": "door"
-          },
-          "landing": {
-            "w": 1.8,
-            "depth": 1.2
-          }
+          "storey": 1,
+          "offset": 1.45,
+          "h": 0.95,
+          "material": "taupe"
         }
       ]
     },
-    "side14": {
-      "material": "render",
-      "parapet_material": "render",
-      "module": 3.6,
-      "window": {
-        "w": 1.4,
-        "h": 1.3,
-        "sill": 0.95,
-        "depth": 0.12,
-        "mullions": [
-          0.5
-        ],
-        "frame": "frame_light"
-      },
+    "blank_side": {
+      "material": "beige",
+      "parapet_material": "beige",
+      "module": 60.0,
       "ground": {
-        "w": 1.4,
-        "h": 1.3,
-        "sill": 0.95,
-        "depth": 0.12,
-        "mullions": [
-          0.5
-        ],
-        "frame": "frame_light",
-        "kind": "window"
+        "kind": "blank"
       },
+      "upper": "blank",
       "plinth": {
         "material": "concrete",
-        "top": 0.2
+        "top": 0.15
       },
-      "features": [
+      "bands": [
         {
-          "type": "entry",
-          "from": 5.193,
-          "to": 6.993,
-          "door": {
-            "kind": "unit",
-            "w": 1.0,
-            "h": 2.2,
-            "leaf_h": 2.2,
-            "material": "door"
-          },
-          "landing": {
-            "w": 1.8,
-            "depth": 1.2
-          }
+          "storey": 2,
+          "offset": 0.55,
+          "h": 0.55,
+          "material": "taupe"
         }
       ]
     }
   },
   "blocks": [
     {
-      "id": "block",
-      "storeys": 2,
-      "ground_h": 4.6,
-      "storey_h": 4.0,
-      "parapet": {
-        "h": 0.5,
-        "t": 0.25
-      },
+      "id": "main",
+      "clip": [
+        {
+          "edge": 22,
+          "min": 0.0
+        }
+      ],
       "faces": {
-        "default": "plain",
-        "e2": "side2",
-        "e23": "side23",
-        "e13": "side13",
-        "e14": "side14"
+        "default": "blank_side",
+        "e14": "flank_sse",
+        "e22": "flank_nnw"
+      },
+      "storeys": 2,
+      "ground_h": 4.2,
+      "storey_h": 3.8,
+      "parapet": {
+        "h": 1.6,
+        "t": 0.3
+      }
+    },
+    {
+      "id": "centre",
+      "clip": [
+        {
+          "edge": 22,
+          "max": 0.0
+        },
+        {
+          "edge": 17,
+          "max": 0.0
+        },
+        {
+          "edge": 19,
+          "max": 0.0
+        }
+      ],
+      "faces": {
+        "default": "blank_side",
+        "e18": "centre"
+      },
+      "storeys": 2,
+      "ground_h": 4.2,
+      "storey_h": 3.8,
+      "parapet": {
+        "h": 1.6,
+        "t": 0.3
+      }
+    },
+    {
+      "id": "box_s",
+      "clip": [
+        {
+          "edge": 22,
+          "max": 0.0
+        },
+        {
+          "edge": 17,
+          "min": 0.0
+        }
+      ],
+      "faces": {
+        "default": "blank_side",
+        "e16": "box_front",
+        "e20": "box_front",
+        "e17": "box_step",
+        "e19": "box_step"
+      },
+      "storeys": 2,
+      "ground_h": 3.2,
+      "storey_h": 3.4,
+      "parapet": {
+        "h": 0.8,
+        "t": 0.3
+      }
+    },
+    {
+      "id": "box_n",
+      "clip": [
+        {
+          "edge": 22,
+          "max": 0.0
+        },
+        {
+          "edge": 19,
+          "min": 0.0
+        }
+      ],
+      "faces": {
+        "default": "blank_side",
+        "e16": "box_front",
+        "e20": "box_front",
+        "e17": "box_step",
+        "e19": "box_step"
+      },
+      "storeys": 2,
+      "ground_h": 3.2,
+      "storey_h": 3.4,
+      "parapet": {
+        "h": 0.8,
+        "t": 0.3
       }
     }
   ],
   "study_notes": {
-    "observed": "Undated Apple overhead: large white flat roof with irregular wings and skylights; Apr 2011 (~117 m): long low pale building with a dark window band.",
-    "inferred": "Two-storey flat-roofed block with windows and a door per side (Level 1); skylights not modelled.",
-    "footprint": "Frozen ring kept as one block (Level 1)."
+    "observed": "Job Corps field survey photo (<=2018-09, p.217) from the ENE parking lot: the ENE entrance front with curtain-wall flanks under a tall light-beige parapet with a taupe stripe, a navy column at the SSE flank end, a lower projecting block with dark ribbon glazing under blank banded stucco, and the recessed glazed centre with the HARVEY MILK MEMORIAL ADMINISTRATION BUILDING sign spandrel over the glazed entrance.",
+    "inferred": "Storey heights, module widths, the projecting block height and the sign band size; lettering not modelled. The unphotographed NNW, SSE and WSW sides are plain banded beige walls with no openings (owner rule); the photographed centre entrance is the one entrance.",
+    "footprint": "Frozen ring split into the main block, the recessed centre and the two projecting fronts of the ENE block."
   }
 }
