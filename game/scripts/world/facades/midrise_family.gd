@@ -1385,6 +1385,7 @@ static func _assembly(ctx: Ctx, face: Face, bay: Dictionary, o: Dictionary) -> v
 					mullions.append(float(m) / float(count))
 				glazing = _merge(spec, {"mullions": mullions})
 			_glazing(ctx, face, glazing, s0, s1, y0, y1, depth)
+			_hood(ctx, face, spec, s0, s1, y1)
 		"patio":
 			var depth := float(spec.get("depth", 0.18))
 			_reveals(ctx, face, wall_mat, s0, s1, y0, y1, depth, true)
@@ -1426,6 +1427,32 @@ static func _assembly(ctx: Ctx, face: Face, bay: Dictionary, o: Dictionary) -> v
 			while y < y1 - 0.05:
 				_rect(slats, face, s0, s1, y, y + 0.045, 0.06, out)
 				y += 0.12
+
+
+## Opt-in box hood over a window head (window `hood`): a box `depth` out from the
+## wall and `h` tall, `gap` above the head and `over` wider than the opening on each
+## side, with optional side cheeks `cheek` down the jambs (`t` thick). Support role.
+static func _hood(ctx: Ctx, face: Face, spec: Dictionary, s0: float, s1: float, y1: float) -> void:
+	var hood: Dictionary = spec.get("hood", {})
+	if hood.is_empty():
+		return
+	var depth := float(hood.get("depth", 0.5))
+	var h := float(hood.get("h", 0.3))
+	var over := float(hood.get("over", 0.1))
+	var gap := float(hood.get("gap", 0.05))
+	var cheek := float(hood.get("cheek", 0.0))
+	var t := float(hood.get("t", 0.06))
+	if not (_in_range(depth, 0.05, 2.0) and _in_range(h, 0.05, 1.0) and _in_range(over, 0.0, 1.0) and _in_range(gap, 0.0, 1.0) and _in_range(cheek, 0.0, 3.0) and _in_range(t, 0.02, 0.5)):
+		ctx.errors.append("window hood needs depth 0.05-2, h 0.05-1, over 0-1, gap 0-1, cheek 0-3 and t 0.02-0.5 m")
+		return
+	var bucket := ctx.bucket("support", str(hood.get("material", "metal")))
+	var a := s0 - over
+	var b := s1 + over
+	var y := y1 + gap
+	_box(bucket, face, a, b, y, y + h, -depth, 0.02, false)
+	if cheek > 0.0:
+		_box(bucket, face, a, a + t, y - cheek, y, -depth, 0.02, false)
+		_box(bucket, face, b - t, b, y - cheek, y, -depth, 0.02, false)
 
 
 ## Recessed loggia (one storey) or framed multi-storey recess: back wall, soffit,

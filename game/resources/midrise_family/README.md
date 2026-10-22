@@ -36,7 +36,7 @@ A scheme fills one face with bays. Single-bay `features` sit at their stations (
 | `base` | `material` for the lowest `storeys`. |
 | `bands` | Horizontal stripes: `storey`, `offset`, `h`, `material`. |
 | `end_pilasters` | Stripes `w` wide at both face ends, up to `to_storey`. |
-| `window`, `window_storeys` | Upper-storey window `w`, `h`, `sill`, `depth`, `mullions`/`transoms` (fractions), `frame`, `frame_w`, `glass`; per-storey overrides by index. |
+| `window`, `window_storeys` | Upper-storey window `w`, `h`, `sill`, `depth`, `mullions`/`transoms` (fractions), `frame`, `frame_w`, `glass`; per-storey overrides by index. Opt-in `hood`: a box over the head (`depth`, `h`, `over` each side, `gap`, side `cheek` length and thickness `t`, `material`), support role; also on `ground` windows and storefronts. |
 | `ground` | Ground-storey `kind`: `window`, `patio` (railing over a tall plinth), `storefront` (`pier`, `head`) or `blank`. |
 | `stagger` | Deterministic window `offsets` and `mix` variants from `from_storey`. |
 
