@@ -483,6 +483,11 @@ static func _make_blocks(ctx: Ctx) -> void:
 			for p: Vector2 in hole:
 				if Geometry2D.is_point_in_polygon(p, block.poly):
 					inside += 1
+			# Every vertex inside is not enough for a concave block: no edge may cross.
+			for i in hole.size():
+				for j in block.poly.size():
+					if Geometry2D.segment_intersects_segment(hole[i], hole[(i + 1) % hole.size()], block.poly[j], block.poly[(j + 1) % block.poly.size()]) != null:
+						inside = -1
 			if inside == hole.size():
 				owner = block
 			elif inside > 0:
@@ -1558,7 +1563,19 @@ static func _roof(ctx: Ctx, block: Block) -> void:
 		var p0 := block.poly[0]
 		var tris: Array = []
 		if not block.holes.is_empty():
-			for piece: PackedVector2Array in _pieces_around_holes(block):
+			var pieces := _pieces_around_holes(block)
+			# Fail closed: the pieces must cover exactly the block minus its courtyards
+			# (a cut line that missed a non-convex courtyard would roof it over).
+			var expected := absf(_area(block.poly))
+			for hole: PackedVector2Array in block.holes:
+				expected -= absf(_area(hole))
+			var covered := 0.0
+			for piece: PackedVector2Array in pieces:
+				covered += absf(_area(piece))
+			if absf(covered - expected) > 0.05:
+				ctx.errors.append("block %s roof does not leave its courtyard open (%.2f of %.2f m2)" % [block.id, covered, expected])
+				return
+			for piece: PackedVector2Array in pieces:
 				var piece_indices := Geometry2D.triangulate_polygon(piece)
 				if piece_indices.is_empty():
 					ctx.errors.append("block %s roof around its courtyard does not triangulate" % block.id)
