@@ -122,7 +122,7 @@ func configure(record: Dictionary, runtime_massing: Dictionary = {}) -> Dictiona
 
 	for side_value: Variant in _layout.get("sides", []):
 		var side := side_value as Dictionary
-		if str(side.module_policy) == "observed_complete_modules":
+		if str(side.module_policy) in ["observed_complete_modules", "inferred_complete_modules"]:
 			_build_upper_facade(side, target, massing)
 			_build_ground_facade(side, target)
 		else:
