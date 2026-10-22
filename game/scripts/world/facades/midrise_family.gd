@@ -872,7 +872,7 @@ static func _bays(ctx: Ctx, face: Face) -> Array:
 			if hi - lo > 0.05:
 				ranges.append({"s0": lo, "s1": hi, "f": feature})
 			continue
-		if kind not in ["loggia", "frame", "entry", "garage", "vents", "band", "corner", "ladder"]:
+		if kind not in ["loggia", "frame", "entry", "garage", "vents", "band", "corner", "ladder", "stair_bay", "top_box"]:
 			ctx.errors.append("unknown facade feature type " + kind)
 			return []
 		if s1 <= 0.01 or s0 >= face.length - 0.01:
@@ -1055,6 +1055,18 @@ static func _openings(ctx: Ctx, face: Face, bay: Dictionary) -> Array:
 			var y0 := 0.04 + maxf(_ground_y(ctx, face.a + face.d * center), maxf(_ground_y(ctx, face.a + face.d * (center - w * 0.5)), _ground_y(ctx, face.a + face.d * (center + w * 0.5))))
 			out.append({"s0": center - w * 0.5, "s1": center + w * 0.5, "y0": y0, "y1": y0 + float(feature.get("h", 3.0)), "kind": "garage", "spec": feature, "k": 0})
 			claimed[0] = true
+		"stair_bay":
+			var bay_opening := _stair_bay_opening(ctx, face, feature, s0, s1)
+			if bay_opening.is_empty():
+				return []
+			out.append(bay_opening)
+			for k in block.storeys:
+				claimed[k] = true
+		"top_box":
+			# The wall behind a projecting top-floor box stays blank; the box itself is
+			# added after the wall strips (see _top_box).
+			for k in block.storeys:
+				claimed[k] = true
 		"vents":
 			var count := int(feature.get("count", 2))
 			var w := float(feature.get("w", 1.4))
@@ -1156,6 +1168,8 @@ static func _facade(ctx: Ctx, face: Face) -> void:
 	for bay: Dictionary in bays:
 		if str(bay.kind) == "ladder":
 			_ladder(ctx, face, bay)
+		elif str(bay.kind) == "top_box":
+			_top_box(ctx, face, bay)
 
 
 ## Wall surface of one bay strip with rectangular holes and material zones.
@@ -1333,10 +1347,10 @@ static func _reveals(ctx: Ctx, face: Face, mat: String, s0: float, s1: float, y0
 
 
 ## Glazing with a perimeter frame, mullions (fractions of width) and transoms (of height).
-static func _glazing(ctx: Ctx, face: Face, spec: Dictionary, s0: float, s1: float, y0: float, y1: float, depth: float) -> void:
+static func _glazing(ctx: Ctx, face: Face, spec: Dictionary, s0: float, s1: float, y0: float, y1: float, depth: float, role: String = "wall") -> void:
 	var out := face.out3()
-	_rect(ctx.bucket("wall", str(spec.get("glass", "glass"))), face, s0, s1, y0, y1, depth, out)
-	var frame := ctx.bucket("wall", str(spec.get("frame", "frame")))
+	_rect(ctx.bucket(role, str(spec.get("glass", "glass"))), face, s0, s1, y0, y1, depth, out)
+	var frame := ctx.bucket(role, str(spec.get("frame", "frame")))
 	var fw := float(spec.get("frame_w", 0.06))
 	var fd := depth - 0.015
 	_rect(frame, face, s0, s0 + fw, y0, y1, fd, out)
@@ -1388,6 +1402,8 @@ static func _assembly(ctx: Ctx, face: Face, bay: Dictionary, o: Dictionary) -> v
 			_loggia(ctx, face, spec, wall_mat, s0, s1, y0, y1, ks)
 		"band":
 			_band(ctx, face, spec, s0, s1, y0, y1)
+		"stair_bay":
+			_stair_bay(ctx, face, spec, wall_mat, s0, s1, y0, y1)
 		"door":
 			_door(ctx, face, spec, wall_mat, s0, s1, y0, y1, float(o.get("drop", 0.25)))
 		"garage":
@@ -1491,6 +1507,112 @@ static func _band(ctx: Ctx, face: Face, spec: Dictionary, s0: float, s1: float, 
 	frame.tri(face.point(s1, y0, 0.0), face.point(s1, y1, depth), face.point(s1, y1, 0.0), -along)
 	frame.quad(face.point(s0, y1, 0.0), face.point(s1, y1, 0.0), face.point(s1, y1, depth), face.point(s0, y1, depth), Vector3.DOWN)
 	frame.quad(face.point(s0, y0, 0.0), face.point(s1, y0, 0.0), face.point(s1, y0, depth), face.point(s0, y0, depth), Vector3.UP)
+
+
+## Opt-in open stair bay ("stair_bay" feature): the opening of a full-height
+## recess from the highest grade under it to just below the roof. Invalid
+## parameters, or a recess whose back corners leave the block, fail the build.
+static func _stair_bay_opening(ctx: Ctx, face: Face, feature: Dictionary, s0: float, s1: float) -> Dictionary:
+	var block := face.block
+	var pier := float(feature.get("pier", 0.2))
+	var depth := float(feature.get("depth", 2.0))
+	var a := s0 + pier
+	var b := s1 - pier
+	var label := "%s/%s stair_bay at %.2f" % [block.id, face.key, s0]
+	if block.storeys < 2 or b - a < 2.0 or depth < 1.2 or depth > 4.0:
+		ctx.errors.append(label + " needs two storeys, a clear width of at least 2 m and a depth of 1.2-4 m")
+		return {}
+	for p: Vector2 in [face.a + face.d * a - face.n * depth, face.a + face.d * b - face.n * depth]:
+		if not Geometry2D.is_point_in_polygon(p, block.poly):
+			ctx.errors.append(label + " recess leaves its block")
+			return {}
+	# Recess floor: above the frozen grade along both its front and back lines.
+	var y0 := block.floors[0]
+	var s := a
+	while s <= b + 0.001:
+		for d: float in [0.0, depth]:
+			y0 = maxf(y0, _ground_y(ctx, face.a + face.d * minf(s, b) - face.n * d))
+		s += 0.5
+	y0 += 0.02
+	var y1 := block.roof_y - float(feature.get("head", 0.35))
+	if y0 >= block.floors[1] - 0.5 or y1 <= block.floors[block.storeys - 1] + 1.0:
+		ctx.errors.append(label + " has no room between grade and roof")
+		return {}
+	return {"s0": a, "s1": b, "y0": y0, "y1": y1, "kind": "stair_bay", "spec": feature, "k": 0}
+
+
+## Open stair bay: side reveals and soffit, a dark back wall, the recess floor
+## behind a solid ground-floor guard (the bay is not a walkable route), and per
+## storey two stepped flights around a half landing under a full floor landing.
+static func _stair_bay(ctx: Ctx, face: Face, spec: Dictionary, wall_mat: String, s0: float, s1: float, y0: float, y1: float) -> void:
+	var block := face.block
+	var depth := float(spec.get("depth", 2.0))
+	var out := face.out3()
+	var side_mat := str(spec.get("side", wall_mat))
+	var slab := ctx.bucket("support", str(spec.get("slab", "slab")))
+	_reveals(ctx, face, side_mat, s0, s1, y0, y1, depth, false, str(spec.get("soffit", "soffit")))
+	_rect(ctx.bucket("wall", str(spec.get("back", "render"))), face, s0, s1, y0, y1, depth, out)
+	var guard_t := 0.2
+	_box(ctx.bucket("wall", side_mat), face, s0, s1, y0, y0 + float(spec.get("guard_h", 1.1)), 0.0, guard_t)
+	slab.quad(face.point(s0, y0, guard_t), face.point(s1, y0, guard_t), face.point(s1, y0, depth), face.point(s0, y0, depth), Vector3.UP)
+	var t := 0.2
+	var land := minf(1.3, (s1 - s0) * 0.3)
+	var mid_d := depth * 0.5
+	for k in range(block.storeys - 1):
+		var ya := y0 if k == 0 else block.floors[k]
+		var yb := block.floors[k + 1]
+		if yb - ya < 1.0:
+			continue
+		var ym := (ya + yb) * 0.5
+		_flight(slab, face, s0 + 0.1, s1 - land, ya, ym, guard_t + 0.05, mid_d - 0.05, t)
+		_box(slab, face, s1 - land, s1, ym - t, ym, guard_t + 0.05, depth, false)
+		_flight(slab, face, s1 - land, s0 + land, ym, yb, mid_d + 0.05, depth, t)
+		_box(slab, face, s0, s1, yb - t, yb, 0.05, depth, false)
+
+
+## A straight stepped flight in face coordinates from (sa, ya) up to (sb, yb),
+## between depths d0 < d1, with a sloped soffit `t` below the step nosings.
+static func _flight(bucket: Bucket, face: Face, sa: float, sb: float, ya: float, yb: float, d0: float, d1: float, t: float) -> void:
+	var out := face.out3()
+	var along := face.dir3()
+	var steps := maxi(2, int(round((yb - ya) / 0.18)))
+	var rise := (yb - ya) / float(steps)
+	var run := (sb - sa) / float(steps)
+	var down := -along * signf(sb - sa)
+	for i in steps:
+		var sx := sa + run * float(i)
+		var sy := ya + rise * float(i)
+		bucket.quad(face.point(sx, sy, d0), face.point(sx, sy + rise, d0), face.point(sx, sy + rise, d1), face.point(sx, sy, d1), down)
+		bucket.quad(face.point(sx, sy + rise, d0), face.point(sx + run, sy + rise, d0), face.point(sx + run, sy + rise, d1), face.point(sx, sy + rise, d1), Vector3.UP)
+		for d: float in [d0, d1]:
+			var facing := out if d == d0 else -out
+			bucket.quad(face.point(sx, sy - t, d), face.point(sx + run, sy + rise - t, d), face.point(sx + run, sy + rise, d), face.point(sx, sy + rise, d), facing)
+	bucket.quad(face.point(sa, ya - t, d0), face.point(sb, yb - t, d0), face.point(sb, yb - t, d1), face.point(sa, ya - t, d1), Vector3.DOWN)
+
+
+## Opt-in projecting top-floor box ("top_box" feature) on an otherwise blank
+## wall: a support-role box out from the wall up to the wall top, with one
+## window band on its front. Invalid parameters fail the build.
+static func _top_box(ctx: Ctx, face: Face, bay: Dictionary) -> void:
+	var block := face.block
+	var spec: Dictionary = bay.f
+	var k := int(spec.get("storey", block.storeys - 1))
+	var project := float(spec.get("project", 0.6))
+	var pier := float(spec.get("pier", 0.0))
+	var s0 := float(bay.s0) + pier
+	var s1 := float(bay.s1) - pier
+	if k < 0 or k >= block.storeys or project <= 0.05 or project > 2.0 or s1 - s0 < 1.0:
+		ctx.errors.append("%s/%s top_box at %.2f needs a valid storey, a projection of 0.05-2 m and a width of at least 1 m" % [block.id, face.key, float(bay.s0)])
+		return
+	var y0 := block.floors[k] - float(spec.get("below", 0.15))
+	var y1 := block.wall_top
+	_box(ctx.bucket("support", str(spec.get("material", face.scheme.get("material", "render")))), face, s0, s1, y0, y1, -project, 0.0, false)
+	var window: Dictionary = spec.get("window", {})
+	var inset := float(window.get("inset", 0.3))
+	var wy0 := block.floors[k] + float(window.get("sill", 0.9))
+	var wy1 := minf(wy0 + float(window.get("h", 1.2)), y1 - 0.2)
+	if s1 - s0 - 2.0 * inset > 0.5 and wy1 - wy0 > 0.3:
+		_glazing(ctx, face, window, s0 + inset, s1 - inset, wy0, wy1, -project - 0.01, "support")
 
 
 static func _door(ctx: Ctx, face: Face, spec: Dictionary, wall_mat: String, s0: float, s1: float, y0: float, y1: float, drop: float) -> void:
