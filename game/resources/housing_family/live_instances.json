@@ -889,6 +889,36 @@
       "family": "midrise",
       "config": "res://game/resources/midrise_family/w96665924.json",
       "chunk": "res://generated/world/chunks/x_-1__z_-1.json"
+    },
+    {
+      "source_key": "w291189926",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w291189926.json",
+      "chunk": "res://generated/world/chunks/x_0__z_1.json"
+    },
+    {
+      "source_key": "w291196370",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w291196370.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-3.json"
+    },
+    {
+      "source_key": "w34313564",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w34313564.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-3.json"
+    },
+    {
+      "source_key": "w1222514685",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w1222514685.json",
+      "chunk": "res://generated/world/chunks/x_1__z_2.json"
+    },
+    {
+      "source_key": "w1222514686",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w1222514686.json",
+      "chunk": "res://generated/world/chunks/x_2__z_1.json"
     }
   ],
   "expected_visible_active_topology": {

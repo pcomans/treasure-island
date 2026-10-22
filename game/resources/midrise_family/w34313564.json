@@ -1,0 +1,742 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w34313564",
+    "address": "710 13th St (w34313564)",
+    "edge_normals": [
+      [
+        -0.8820200911046039,
+        0.47121179833258237
+      ],
+      [
+        0.47121000768258126,
+        0.8820210477419356
+      ],
+      [
+        0.882010523648275,
+        -0.471229706378636
+      ],
+      [
+        -0.4712142530809163,
+        -0.8820187796716089
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": 1,
+    "above_terrain": 0.2,
+    "basis": "median frozen terrain along the photographed SSE front"
+  },
+  "levels": {
+    "ground_h": 4.4,
+    "storey_h": 3.0,
+    "parapet_h": 0.6
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.66,
+        0.65,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.73,
+        0.74,
+        0.74
+      ],
+      "roughness": 0.45,
+      "metallic": 0.3
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.62,
+        0.61,
+        0.58
+      ],
+      "roughness": 0.95
+    },
+    "tan564": {
+      "rgb": [
+        0.8,
+        0.63,
+        0.4
+      ],
+      "roughness": 0.9
+    },
+    "pale564": {
+      "rgb": [
+        0.9,
+        0.89,
+        0.84
+      ],
+      "roughness": 0.9
+    },
+    "white_band": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.85
+    },
+    "fascia": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.7
+    }
+  },
+  "schemes": {
+    "sse": {
+      "material": "tan564",
+      "parapet_material": "tan564",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "white_band",
+        "top": 0.9
+      },
+      "features": [
+        {
+          "type": "bays",
+          "from": 11.048,
+          "to": 15.448,
+          "module": 4.4,
+          "window": {
+            "w": 3.8,
+            "h": 1.9,
+            "sill": 1.9,
+            "depth": 0.12,
+            "mullions": [
+              0.5
+            ],
+            "frame": "frame_light"
+          },
+          "ground": {
+            "w": 3.8,
+            "h": 1.9,
+            "sill": 1.9,
+            "depth": 0.12,
+            "mullions": [
+              0.5
+            ],
+            "frame": "frame_light",
+            "kind": "window"
+          }
+        },
+        {
+          "type": "bays",
+          "from": 17.048,
+          "to": 21.448,
+          "module": 4.4,
+          "window": {
+            "w": 3.8,
+            "h": 1.9,
+            "sill": 1.9,
+            "depth": 0.12,
+            "mullions": [
+              0.5
+            ],
+            "frame": "frame_light"
+          },
+          "ground": {
+            "w": 3.8,
+            "h": 1.9,
+            "sill": 1.9,
+            "depth": 0.12,
+            "mullions": [
+              0.5
+            ],
+            "frame": "frame_light",
+            "kind": "window"
+          }
+        },
+        {
+          "type": "entry",
+          "from": 25.148,
+          "to": 27.348,
+          "door": {
+            "kind": "unit",
+            "w": 1.3,
+            "h": 2.3,
+            "leaf_h": 2.3,
+            "material": "pale564"
+          },
+          "landing": {
+            "w": 2.1,
+            "depth": 1.4
+          }
+        },
+        {
+          "type": "bays",
+          "from": 31.548,
+          "to": 35.848,
+          "module": 4.3,
+          "window": {
+            "w": 3.7,
+            "h": 1.9,
+            "sill": 1.9,
+            "depth": 0.12,
+            "mullions": [
+              0.5
+            ],
+            "frame": "frame_light"
+          },
+          "ground": {
+            "w": 3.7,
+            "h": 1.9,
+            "sill": 1.9,
+            "depth": 0.12,
+            "mullions": [
+              0.5
+            ],
+            "frame": "frame_light",
+            "kind": "window"
+          }
+        },
+        {
+          "type": "bays",
+          "from": 38.548,
+          "to": 42.848,
+          "module": 4.3,
+          "window": {
+            "w": 3.7,
+            "h": 1.9,
+            "sill": 1.9,
+            "depth": 0.12,
+            "mullions": [
+              0.5
+            ],
+            "frame": "frame_light"
+          },
+          "ground": {
+            "w": 3.7,
+            "h": 1.9,
+            "sill": 1.9,
+            "depth": 0.12,
+            "mullions": [
+              0.5
+            ],
+            "frame": "frame_light",
+            "kind": "window"
+          }
+        },
+        {
+          "type": "entry",
+          "from": 44.898,
+          "to": 47.098,
+          "door": {
+            "kind": "unit",
+            "w": 1.3,
+            "h": 2.3,
+            "leaf_h": 2.3,
+            "material": "pale564"
+          },
+          "landing": {
+            "w": 2.1,
+            "depth": 1.4
+          }
+        },
+        {
+          "type": "bays",
+          "from": 49.376,
+          "to": 53.676,
+          "module": 4.3,
+          "window": {
+            "w": 3.7,
+            "h": 1.9,
+            "sill": 1.9,
+            "depth": 0.12,
+            "mullions": [
+              0.5
+            ],
+            "frame": "frame_light"
+          },
+          "ground": {
+            "w": 3.7,
+            "h": 1.9,
+            "sill": 1.9,
+            "depth": 0.12,
+            "mullions": [
+              0.5
+            ],
+            "frame": "frame_light",
+            "kind": "window"
+          }
+        },
+        {
+          "type": "entry",
+          "from": 55.226,
+          "to": 58.026,
+          "door": {
+            "kind": "unit",
+            "w": 1.4,
+            "h": 2.3,
+            "leaf_h": 2.3,
+            "material": "pale564"
+          },
+          "landing": {
+            "at": "floor",
+            "w": 10.0,
+            "depth": 2.4
+          },
+          "ramp": {
+            "dir": -1,
+            "w": 1.4,
+            "slope": 0.083
+          },
+          "rails": false,
+          "canopy": {
+            "w": 60.0,
+            "depth": 2.6,
+            "t": 0.25,
+            "material": "fascia",
+            "gap": 0.4
+          }
+        },
+        {
+          "type": "bays",
+          "from": 61.976,
+          "to": 65.076,
+          "module": 3.1,
+          "window": {
+            "w": 2.5,
+            "h": 1.45,
+            "sill": 1.83,
+            "depth": 0.12,
+            "mullions": [
+              0.5
+            ],
+            "frame": "frame_light"
+          },
+          "ground": {
+            "w": 2.5,
+            "h": 1.45,
+            "sill": 1.83,
+            "depth": 0.12,
+            "mullions": [
+              0.5
+            ],
+            "frame": "frame_light",
+            "kind": "window"
+          }
+        },
+        {
+          "type": "bays",
+          "from": 68.878,
+          "to": 71.078,
+          "module": 2.2,
+          "window": {
+            "w": 1.6,
+            "h": 1.6,
+            "sill": 2.05,
+            "depth": 0.12,
+            "mullions": [
+              0.5
+            ],
+            "frame": "frame_light"
+          },
+          "ground": {
+            "w": 1.6,
+            "h": 1.6,
+            "sill": 2.05,
+            "depth": 0.12,
+            "mullions": [
+              0.5
+            ],
+            "frame": "frame_light",
+            "kind": "window"
+          }
+        },
+        {
+          "type": "bays",
+          "from": 75.778,
+          "to": 78.178,
+          "module": 2.4,
+          "window": {
+            "w": 1.8,
+            "h": 1.2,
+            "sill": 1.95,
+            "depth": 0.12,
+            "mullions": [
+              0.5
+            ],
+            "frame": "frame_light"
+          },
+          "ground": {
+            "w": 1.8,
+            "h": 1.2,
+            "sill": 1.95,
+            "depth": 0.12,
+            "mullions": [
+              0.5
+            ],
+            "frame": "frame_light",
+            "kind": "window"
+          }
+        },
+        {
+          "type": "entry",
+          "from": 82.878,
+          "to": 85.078,
+          "door": {
+            "kind": "unit",
+            "w": 1.4,
+            "h": 2.3,
+            "leaf_h": 2.3,
+            "material": "pale564"
+          },
+          "landing": {
+            "w": 2.2,
+            "depth": 1.4
+          }
+        },
+        {
+          "type": "bays",
+          "from": 90.093,
+          "to": 94.193,
+          "module": 4.1,
+          "window": {
+            "w": 3.5,
+            "h": 1.3,
+            "sill": 1.9,
+            "depth": 0.12,
+            "mullions": [
+              0.5
+            ],
+            "frame": "frame_light"
+          },
+          "ground": {
+            "w": 3.5,
+            "h": 1.3,
+            "sill": 1.9,
+            "depth": 0.12,
+            "mullions": [
+              0.5
+            ],
+            "frame": "frame_light",
+            "kind": "window"
+          }
+        }
+      ]
+    },
+    "wsw": {
+      "material": "tan564",
+      "parapet_material": "tan564",
+      "module": 5.5,
+      "ground": {
+        "w": 2.6,
+        "h": 1.2,
+        "sill": 1.4,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "white_band",
+        "top": 0.9
+      },
+      "window": {
+        "w": 2.6,
+        "h": 1.2,
+        "sill": 1.4,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "features": [
+        {
+          "type": "vents",
+          "from": 4.0,
+          "to": 7.0,
+          "count": 1,
+          "w": 1.6,
+          "h": 0.7,
+          "y": 1.0
+        },
+        {
+          "type": "entry",
+          "from": 20.8,
+          "to": 22.6,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "vents",
+          "from": 30.0,
+          "to": 33.0,
+          "count": 1,
+          "w": 1.6,
+          "h": 0.7,
+          "y": 1.0
+        }
+      ]
+    },
+    "ene": {
+      "material": "pale564",
+      "parapet_material": "pale564",
+      "module": 7.0,
+      "ground": {
+        "w": 2.6,
+        "h": 1.2,
+        "sill": 1.4,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "white_band",
+        "top": 0.5
+      },
+      "window": {
+        "w": 2.6,
+        "h": 1.2,
+        "sill": 1.4,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 20.8,
+          "to": 22.6,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "nnw": {
+      "material": "pale564",
+      "parapet_material": "pale564",
+      "module": 7.0,
+      "ground": {
+        "w": 2.6,
+        "h": 1.2,
+        "sill": 1.4,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "white_band",
+        "top": 0.5
+      },
+      "window": {
+        "w": 2.6,
+        "h": 1.2,
+        "sill": 1.4,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 31.1,
+          "to": 32.9,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "entry",
+          "from": 65.1,
+          "to": 66.9,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    }
+  },
+  "blocks": [
+    {
+      "id": "hall",
+      "storeys": 1,
+      "ground_h": 4.4,
+      "parapet": {
+        "h": 0.6,
+        "t": 0.25
+      },
+      "faces": {
+        "e1": "sse",
+        "e0": "wsw",
+        "e2": "ene",
+        "e3": "nnw"
+      }
+    }
+  ],
+  "study_notes": {
+    "observed": "Sep 2025, all four sides: one-storey building; SSE tan stucco with a white base, paired windows, doors and a long covered porch with a central wooden deck and ramp; WSW tan end with paired windows and low vents; ENE and NNW pale with windows and doors.",
+    "inferred": "SSE openings keep the reviewed Batch 06 SSE family positions (production inference); porch roof as one long canopy, deck and ramp heights, other cadence.",
+    "footprint": "Frozen 4-edge ring kept as one block."
+  }
+}

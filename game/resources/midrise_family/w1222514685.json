@@ -1,0 +1,379 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w1222514685",
+    "address": "600 California Ave annex (SW corner)",
+    "edge_normals": [
+      [
+        -0.884293379875058,
+        0.4669317062581491
+      ],
+      [
+        0.4667919890599012,
+        0.8843671403605524
+      ],
+      [
+        0.8841767602853394,
+        -0.467152498196597
+      ],
+      [
+        -0.4670924516687367,
+        -0.8842084831045723
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": "ring",
+    "above_terrain": 0.1,
+    "basis": "median frozen terrain around the ring"
+  },
+  "levels": {
+    "ground_h": 5.852,
+    "storey_h": 3.0,
+    "parapet_h": 0.0
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.66,
+        0.65,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.73,
+        0.74,
+        0.74
+      ],
+      "roughness": 0.45,
+      "metallic": 0.3
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.62,
+        0.61,
+        0.58
+      ],
+      "roughness": 0.95
+    },
+    "metal_grey": {
+      "rgb": [
+        0.7,
+        0.71,
+        0.7
+      ],
+      "roughness": 0.6,
+      "metallic": 0.1
+    }
+  },
+  "schemes": {
+    "plain": {
+      "material": "metal_grey",
+      "parapet_material": "metal_grey",
+      "module": 4.0,
+      "window": {
+        "w": 1.4,
+        "h": 1.2,
+        "sill": 1.0,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.4,
+        "h": 1.2,
+        "sill": 1.0,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      }
+    },
+    "door0": {
+      "material": "metal_grey",
+      "parapet_material": "metal_grey",
+      "module": 4.0,
+      "window": {
+        "w": 1.4,
+        "h": 1.2,
+        "sill": 1.0,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.4,
+        "h": 1.2,
+        "sill": 1.0,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 9.599,
+          "to": 11.399,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "door1": {
+      "material": "metal_grey",
+      "parapet_material": "metal_grey",
+      "module": 4.0,
+      "window": {
+        "w": 1.4,
+        "h": 1.2,
+        "sill": 1.0,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.4,
+        "h": 1.2,
+        "sill": 1.0,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 4.341,
+          "to": 6.141,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "door3": {
+      "material": "metal_grey",
+      "parapet_material": "metal_grey",
+      "module": 4.0,
+      "window": {
+        "w": 1.4,
+        "h": 1.2,
+        "sill": 1.0,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.4,
+        "h": 1.2,
+        "sill": 1.0,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 4.338,
+          "to": 6.138,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    }
+  },
+  "blocks": [
+    {
+      "id": "annex",
+      "storeys": 1,
+      "ground_h": 5.852,
+      "parapet": {
+        "h": 0.0
+      },
+      "faces": {
+        "default": "plain",
+        "e0": "door0",
+        "e1": "door1",
+        "e3": "door3"
+      }
+    }
+  ],
+  "study_notes": {
+    "observed": "Jun 2019 contributor view (medium-low association): a dark green corrugated annex against the hangar; no reference otherwise.",
+    "inferred": "Level 1 massing at the frozen roof height (Building 3 party line), windows and one entrance per accessible side; the hangar side is a party wall (no door).",
+    "footprint": "Frozen 4-edge ring kept as one block."
+  }
+}
