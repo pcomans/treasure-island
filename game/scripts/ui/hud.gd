@@ -87,5 +87,11 @@ func toggle_debug() -> void:
 
 
 func set_touch_instructions() -> void:
-	$PausePanel/PauseLayout/Controls.text = "Left stick: move • Drag right side: look\nHold RISE: jetpack • Release: descend • Hold RUN: run"
+	$PausePanel/PauseLayout/Controls.text = "Left stick: move • Right drag: look\nHold RISE: jetpack • Release: descend\nHold RUN while moving to run"
 	resume_button.text = "Play / Resume"
+	resume_button.custom_minimum_size.y = 64.0
+	exit_button.custom_minimum_size.y = 64.0
+	pause_panel.offset_left = -240.0
+	pause_panel.offset_right = 240.0
+	pause_panel.offset_top = -165.0
+	pause_panel.offset_bottom = 165.0

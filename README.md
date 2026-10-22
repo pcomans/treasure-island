@@ -107,3 +107,18 @@ world construction took about90seconds. These measurements used Chrome154,
 AMD Radeon780M and headless Weston; they do not predict Mac performance.
 Traversal smoke checks required a test-only pointer-lock override because of
 the container crash. That override is not in the deployed game.
+
+
+### Touch controls
+
+On a touch-capable browser, tap **Play / Resume** after loading. Drag the left
+movement stick to walk, drag the right side to look, hold **RISE** to jetpack
+upward and release it to descend, and hold **RUN** while moving to run. The
+**II** button pauses. Movement, look and buttons accept different fingers at
+the same time. Pausing, losing focus, resizing or cancelling a finger releases
+held touch input. Desktop mouse and keyboard controls are retained.
+
+This uses a small built-in Godot touch adapter, with no third-party plugin and
+no changes to stock movement physics. Touch mode avoids pointer lock; it does
+not fix iPad trackpad capture. Physical iPad Safari validation remains with the
+owner; Chromium touch emulation checks are recorded in RETRO.

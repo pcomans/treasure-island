@@ -696,3 +696,12 @@ and label any test-only browser shim. In the same run, the Vercel connector saw
 no projects and denied creation, while the owner's authenticated CLI saw their
 projects and deployed successfully. An empty connector list need not mean the
 account has no projects; use the prescribed same-team authenticated CLI fallback.
+
+## Keep browser emulation attached through verification
+
+On 2026-10-22, a CDP setup connection enabled touch emulation then closed before
+Godot loaded; the ready page reported `navigator.maxTouchPoints=0` and selected
+desktop controls. CDP emulation was scoped to that connection. Keep one session
+attached through navigation and gestures, and verify the actual capability
+value before interpreting a touch test. A screenshot timeout during synchronous
+world loading is not a browser exit; inspect the existing process and console.

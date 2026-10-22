@@ -9,6 +9,8 @@ const TOUCH_CONTROLS := preload("res://game/scripts/ui/touch_controls.gd")
 
 var _world_ready := false
 var _touch_controls: TouchControls
+var _web_blur_callback: JavaScriptObject
+var _web_visibility_callback: JavaScriptObject
 # Shared automation keeps the pointer visible while retaining normal startup.
 # Ordinary gameplay uses the default and captures the mouse as before.
 var capture_mouse_on_ready := true
@@ -32,6 +34,10 @@ func _ready() -> void:
 		_touch_controls.set_gameplay_active(false)
 		_touch_controls.pause_requested.connect(func() -> void: _set_paused(true))
 		hud.set_touch_instructions()
+		_web_blur_callback = JavaScriptBridge.create_callback(_on_web_blur)
+		_web_visibility_callback = JavaScriptBridge.create_callback(_on_web_visibility)
+		JavaScriptBridge.get_interface("window").addEventListener("blur", _web_blur_callback)
+		JavaScriptBridge.get_interface("document").addEventListener("visibilitychange", _web_visibility_callback)
 	hud.show_loading()
 	hud.bind_evidence(world_root.get_runtime_evidence())
 	world_root.load_progress.connect(hud.update_load_progress)
@@ -140,3 +146,19 @@ func _apply_web_detail_distances() -> void:
 		elif longest <= 50.0:
 			geometry.visibility_range_end = 500.0
 			geometry.visibility_range_end_margin = 40.0
+
+
+func _on_web_blur(_arguments: Array) -> void:
+	if _world_ready:
+		_set_paused.call_deferred(true)
+
+
+func _on_web_visibility(_arguments: Array) -> void:
+	if bool(JavaScriptBridge.get_interface("document").hidden):
+		_on_web_blur([])
+
+
+func _exit_tree() -> void:
+	if _web_blur_callback != null:
+		JavaScriptBridge.get_interface("window").removeEventListener("blur", _web_blur_callback)
+		JavaScriptBridge.get_interface("document").removeEventListener("visibilitychange", _web_visibility_callback)
