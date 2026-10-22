@@ -720,3 +720,19 @@ controls as "pretty jaznky". Emulation proves event routing, not comfortable
 thumb reach, camera sensitivity or combined-input feel. Keep device feel
 acceptance separate and use the owner's specific problematic gesture before
 choosing tuning or a joystick plugin; a plugin alone does not prove Safari UX.
+
+## Check per-finger camera deltas with simultaneous touch input
+
+On 2026-10-22, both custom and upstream-derived swipe handlers using the event's
+relative delta jumped sharply during a Chromium four-finger move, although the
+look finger moved only8CSSpx. Single-finger tests missed it; the physical iPad
+cause remains unproven. Derive camera displacement from that claimed finger's
+previous/current logical positions and reset its history on release/cancel and
+lifecycle boundaries. Test another finger moving far away and a misleading
+relative value; an8logicalpx look stroke at0.1degrees/pixel must remain0.8degrees.
+
+For upstream UI art stored with Git LFS, inspect the downloaded file type before
+import. Raw GitHub links can return pointer text. On this port, replacing pointer
+bytes with the authorized PNGs did not clear Godot's generated `valid=false`
+sidecars; remove only the newly failed sidecars and import again, then check
+runtime loading as well as the import log's exit status.
