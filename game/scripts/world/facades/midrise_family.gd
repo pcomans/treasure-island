@@ -386,12 +386,14 @@ static func _ground_y(ctx: Ctx, p: Vector2) -> float:
 	return ctx.floor_y
 
 
-## Highest frozen terrain along a face between two stations (ends and 0.5 m steps).
-static func _ground_max(ctx: Ctx, face: Face, s0: float, s1: float) -> float:
-	var high := maxf(_ground_y(ctx, face.a + face.d * s0), _ground_y(ctx, face.a + face.d * s1))
+## Highest frozen terrain along a face between two stations (ends and 0.5 m steps),
+## on a line `inward` metres behind the face.
+static func _ground_max(ctx: Ctx, face: Face, s0: float, s1: float, inward := 0.0) -> float:
+	var back := face.n * inward
+	var high := maxf(_ground_y(ctx, face.a + face.d * s0 - back), _ground_y(ctx, face.a + face.d * s1 - back))
 	var s := s0 + 0.5
 	while s < s1:
-		high = maxf(high, _ground_y(ctx, face.a + face.d * s))
+		high = maxf(high, _ground_y(ctx, face.a + face.d * s - back))
 		s += 0.5
 	return high
 
@@ -1588,18 +1590,20 @@ static func _stair_bay_opening(ctx: Ctx, face: Face, feature: Dictionary, s0: fl
 	if block.storeys < 2 or b - a < 2.0 or depth < 1.2 or depth > 4.0:
 		ctx.errors.append(label + " needs two storeys, a clear width of at least 2 m and a depth of 1.2-4 m")
 		return {}
-	for p: Vector2 in [face.a + face.d * a - face.n * depth, face.a + face.d * b - face.n * depth]:
-		if not Geometry2D.is_point_in_polygon(p, block.poly):
+	var back0 := face.a + face.d * a - face.n * depth
+	var back1 := face.a + face.d * b - face.n * depth
+	if not Geometry2D.is_point_in_polygon(back0, block.poly) or not Geometry2D.is_point_in_polygon(back1, block.poly):
+		ctx.errors.append(label + " recess leaves its block")
+		return {}
+	# Both back corners inside is not enough for a concave block: the back wall may
+	# not cross the outline either.
+	for i in block.poly.size():
+		if Geometry2D.segment_intersects_segment(back0, back1, block.poly[i], block.poly[(i + 1) % block.poly.size()]) != null:
 			ctx.errors.append(label + " recess leaves its block")
 			return {}
-	# Recess floor: above the frozen grade along both its front and back lines.
-	var y0 := block.floors[0]
-	var s := a
-	while s <= b + 0.001:
-		for d: float in [0.0, depth]:
-			y0 = maxf(y0, _ground_y(ctx, face.a + face.d * minf(s, b) - face.n * d))
-		s += 0.5
-	y0 += 0.02
+	# Recess floor: above the frozen grade along both its front and back lines,
+	# sampled from end to end as for openings.
+	var y0 := maxf(block.floors[0], maxf(_ground_max(ctx, face, a, b), _ground_max(ctx, face, a, b, depth))) + 0.02
 	var y1 := block.roof_y - float(feature.get("head", 0.35))
 	if y0 >= block.floors[1] - 0.5 or y1 <= block.floors[block.storeys - 1] + 1.0:
 		ctx.errors.append(label + " has no room between grade and roof")
