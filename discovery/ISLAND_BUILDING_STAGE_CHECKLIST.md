@@ -458,7 +458,7 @@ coping (ROOT approved; re-review passed). L2 C on all three; they were already
 accepted, and the catalog adds acceptance records for these reviews.
 Current totals after Mar22k: L1:213 C/0 U; L2:189 C/24 U; L3/L5:213 U each;
 L4:1 C/212 U. Overall403 C/0 I/662 U across213 units/1,065 cells; catalog
-recognition score 58/213.
+recognition score 60/213 (YMCA and Austin Hall accepted after the instfinals reviews).
 **U** no current stage-level conclusion established in this checklist pass.
 
 The retained34-building audit entries in [RETRO](RETRO_LOG.md) (2026-09-23,
