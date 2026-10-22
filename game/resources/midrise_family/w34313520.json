@@ -224,6 +224,14 @@
         0.26
       ],
       "roughness": 0.8
+    },
+    "inst_bluegrey": {
+      "rgb": [
+        0.7,
+        0.75,
+        0.79
+      ],
+      "roughness": 0.9
     }
   },
   "schemes": {
@@ -232,7 +240,7 @@
       "parapet_material": "inst_band",
       "module": 5.2,
       "window": {
-        "w": 3.8,
+        "w": 3.6,
         "h": 1.5,
         "sill": 0.9,
         "depth": 0.14,
@@ -244,7 +252,7 @@
         "frame": "frame"
       },
       "ground": {
-        "w": 3.8,
+        "w": 3.6,
         "h": 1.5,
         "sill": 0.9,
         "depth": 0.14,
@@ -280,7 +288,7 @@
       "parapet_material": "inst_band",
       "module": 5.2,
       "window": {
-        "w": 3.8,
+        "w": 3.6,
         "h": 1.5,
         "sill": 0.9,
         "depth": 0.14,
@@ -292,7 +300,7 @@
         "frame": "frame"
       },
       "ground": {
-        "w": 3.8,
+        "w": 3.6,
         "h": 1.5,
         "sill": 0.9,
         "depth": 0.14,
@@ -351,12 +359,12 @@
         }
       ]
     },
-    "door2": {
+    "door4": {
       "material": "inst_pale",
       "parapet_material": "inst_band",
       "module": 5.2,
       "window": {
-        "w": 3.8,
+        "w": 3.6,
         "h": 1.5,
         "sill": 0.9,
         "depth": 0.14,
@@ -368,7 +376,7 @@
         "frame": "frame"
       },
       "ground": {
-        "w": 3.8,
+        "w": 3.6,
         "h": 1.5,
         "sill": 0.9,
         "depth": 0.14,
@@ -401,8 +409,8 @@
       "features": [
         {
           "type": "entry",
-          "from": 5.757,
-          "to": 7.557,
+          "from": 5.949,
+          "to": 7.749,
           "door": {
             "kind": "unit",
             "w": 1.0,
@@ -432,7 +440,7 @@
       "parapet_material": "inst_band",
       "module": 5.2,
       "window": {
-        "w": 3.8,
+        "w": 3.6,
         "h": 1.5,
         "sill": 0.9,
         "depth": 0.14,
@@ -444,7 +452,7 @@
         "frame": "frame"
       },
       "ground": {
-        "w": 3.8,
+        "w": 3.6,
         "h": 1.5,
         "sill": 0.9,
         "depth": 0.14,
@@ -503,12 +511,12 @@
         }
       ]
     },
-    "stacks0": {
+    "blank2": {
       "material": "inst_pale",
       "parapet_material": "inst_band",
       "module": 5.2,
       "window": {
-        "w": 3.8,
+        "w": 3.6,
         "h": 1.5,
         "sill": 0.9,
         "depth": 0.14,
@@ -520,7 +528,7 @@
         "frame": "frame"
       },
       "ground": {
-        "w": 3.8,
+        "w": 3.6,
         "h": 1.5,
         "sill": 0.9,
         "depth": 0.14,
@@ -552,33 +560,179 @@
       ],
       "features": [
         {
-          "type": "band",
-          "from": 31.1,
-          "to": 34.9,
-          "w": 3.4,
-          "storeys": [
-            0,
-            2
-          ],
-          "bottom": 0.0,
-          "top": 0.3,
-          "frame": "inst_base",
-          "spandrel": "stair_dark",
-          "depth": 0.6,
-          "border": 0.15,
-          "window": {
-            "sill": 1.2,
-            "h": 1.4,
-            "mullions": [
-              0.5
-            ],
-            "transoms": []
-          }
+          "type": "blank",
+          "from": 0.0,
+          "to": 1000.0,
+          "material": "inst_pale"
+        }
+      ]
+    },
+    "blank9": {
+      "material": "inst_pale",
+      "parapet_material": "inst_band",
+      "module": 5.2,
+      "window": {
+        "w": 3.6,
+        "h": 1.5,
+        "sill": 0.9,
+        "depth": 0.14,
+        "mullions": [
+          0.25,
+          0.5,
+          0.75
+        ],
+        "frame": "frame"
+      },
+      "ground": {
+        "w": 3.6,
+        "h": 1.5,
+        "sill": 0.9,
+        "depth": 0.14,
+        "mullions": [
+          0.25,
+          0.5,
+          0.75
+        ],
+        "frame": "frame",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.25
+      },
+      "bands": [
+        {
+          "storey": 1,
+          "offset": -0.15,
+          "h": 0.3,
+          "material": "inst_band"
+        },
+        {
+          "storey": 2,
+          "offset": -0.15,
+          "h": 0.3,
+          "material": "inst_band"
+        }
+      ],
+      "features": [
+        {
+          "type": "blank",
+          "from": 0.0,
+          "to": 1000.0,
+          "material": "inst_bluegrey"
+        }
+      ]
+    },
+    "front0": {
+      "material": "inst_pale",
+      "parapet_material": "inst_band",
+      "module": 5.2,
+      "window": {
+        "w": 3.6,
+        "h": 1.5,
+        "sill": 0.9,
+        "depth": 0.14,
+        "mullions": [
+          0.25,
+          0.5,
+          0.75
+        ],
+        "frame": "frame"
+      },
+      "ground": {
+        "w": 3.6,
+        "h": 1.5,
+        "sill": 0.9,
+        "depth": 0.14,
+        "mullions": [
+          0.25,
+          0.5,
+          0.75
+        ],
+        "frame": "frame",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.25
+      },
+      "bands": [
+        {
+          "storey": 1,
+          "offset": -0.15,
+          "h": 0.3,
+          "material": "inst_band"
+        },
+        {
+          "storey": 2,
+          "offset": -0.15,
+          "h": 0.3,
+          "material": "inst_band"
+        }
+      ],
+      "features": [
+        {
+          "type": "stair_bay",
+          "from": 1.4,
+          "to": 5.8,
+          "depth": 2.2,
+          "pier": 0.2,
+          "back": "stair_dark",
+          "slab": "slab",
+          "soffit": "soffit",
+          "head": 0.35,
+          "guard_h": 1.1
         },
         {
           "type": "entry",
-          "from": 35.7,
-          "to": 38.3,
+          "from": 24.8,
+          "to": 30.4,
+          "door": {
+            "kind": "lobby",
+            "w": 2.4,
+            "h": 2.8,
+            "mullions": [
+              0.5
+            ],
+            "transoms": [
+              0.8
+            ]
+          },
+          "landing": {
+            "w": 3.6,
+            "depth": 2.4
+          },
+          "window_storeys": {
+            "1": {
+              "w": 4.8,
+              "mullions": [
+                0.5
+              ]
+            },
+            "2": {
+              "w": 4.8,
+              "mullions": [
+                0.5
+              ]
+            }
+          }
+        },
+        {
+          "type": "stair_bay",
+          "from": 30.4,
+          "to": 35.6,
+          "depth": 2.2,
+          "pier": 0.2,
+          "back": "stair_dark",
+          "slab": "slab",
+          "soffit": "soffit",
+          "head": 0.35,
+          "guard_h": 1.1
+        },
+        {
+          "type": "entry",
+          "from": 55.2,
+          "to": 57.8,
           "door": {
             "kind": "unit",
             "w": 1.8,
@@ -607,12 +761,12 @@
         }
       ]
     },
-    "entries1": {
+    "front1": {
       "material": "inst_pale",
       "parapet_material": "inst_band",
       "module": 5.2,
       "window": {
-        "w": 3.8,
+        "w": 3.6,
         "h": 1.5,
         "sill": 0.9,
         "depth": 0.14,
@@ -624,7 +778,7 @@
         "frame": "frame"
       },
       "ground": {
-        "w": 3.8,
+        "w": 3.6,
         "h": 1.5,
         "sill": 0.9,
         "depth": 0.14,
@@ -701,16 +855,18 @@
       "faces": {
         "default": "plain",
         "e5": "door5",
-        "e2": "door2",
+        "e4": "door4",
         "e7": "door7",
-        "e0": "stacks0",
-        "e1": "entries1"
+        "e2": "blank2",
+        "e9": "blank9",
+        "e0": "front0",
+        "e1": "front1"
       }
     }
   ],
   "study_notes": {
-    "observed": "Sep 2025 Seven Seas Ave (WSW, centred) and the SSE corner: pale three-storey mass with repeated dark three-tier window groups, pale piers and solid bands, a flat roof edge and a central recessed stair stack.",
-    "inferred": "Window cadence, doors on every side; ENE, the remaining SSE and the courtyard faces are unseen and keep the same grammar.",
+    "observed": "Sep 2025 Seven Seas Ave (WSW, centred) and the SSE corner, plus Sep 2018 survey photos 363 (blank light blue-grey NNW stub end, the WSW face with its end stair landings) and the 363 entrance close-up: pale three-storey mass with repeated dark window groups, floor bands, a central open stair bay, an end stair bay at the NNW end and a glazed entrance.",
+    "inferred": "Window cadence, flight layout, doors on every accessible side; the blank ENE wing ends follow the w34313515 family (inference); the entrance steps are represented by a wide landing because the floor sits at grade; ENE, the remaining SSE and the courtyard faces are unseen.",
     "footprint": "Frozen 10-edge stepped plan kept as one block."
   }
 }
