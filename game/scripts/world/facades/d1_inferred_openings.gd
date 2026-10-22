@@ -153,6 +153,8 @@ static func _add_group(boxes: Dictionary, group: Dictionary, side: Dictionary, m
 		var bottom_y := _bottom_y(side, u) - 0.04
 		if top_y - bottom_y < 1.9:
 			return "inferred door at %.2f on %s is lower than 1.9 m" % [u, str(group.get("runs", []))]
+		if top_y + FRAME_THICKNESS_M > float(side.top_y) - 0.05:
+			return "inferred door at %.2f on %s rises above its wall top" % [u, str(group.get("runs", []))]
 		_add_box(boxes, leaf, side, u, (bottom_y + top_y) * 0.5, 0.06, Vector3(width, top_y - bottom_y, 0.09))
 		_add_frame(boxes, frame, side, u, (bottom_y + top_y) * 0.5, Vector2(width, top_y - bottom_y), 0)
 	return ""
