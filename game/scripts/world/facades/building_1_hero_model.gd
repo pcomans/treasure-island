@@ -40,8 +40,8 @@ const REAR_RIBBON_HOST_CHAINS := [[70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 8
 # The drum-end bay with the observed small and tall openings: the exposed east
 # part of the central tier's join between runs 40 and 41, where run 38's inner
 # face crosses it. Every other drum face stays blank.
-const DRUM_END_JOIN_RUNS := [40, 41]
-const DRUM_END_OCCLUDING_RUN := 38
+# SE shoulder block carrying the observed small and tall drum-end openings.
+const SE_SHOULDER_RUNS := [69, 70]
 const PHYSICS_WORLD_SOLID := 1 << 0
 const PHYSICS_SPRAY_SURFACE := 1 << 2
 const RENDER_WORLD_VISIBLE := 1 << 0
@@ -109,9 +109,11 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	if not _rear_hosts_valid(record, se_runs, schedule.rear_ribbon_host_chains as Array) or float(ribbon.top) + float(ribbon.head_height) >= two_y or float(se_ribbon.top) + float(se_ribbon.head_height) >= two_y:
 		return _failure("building_1_hero_rear_ribbon_identity", "Building 1 SE and rear ribbon hosts no longer bind to the frozen podium below the blank drum.", record)
 	var drum_openings := front.drum_end_openings as Dictionary
-	var drum_frame := _drum_end_frame(record, schedule.drum_end_openings as Dictionary, float(vertical.central_inward_depth))
-	if not _drum_openings_fit(drum_frame, drum_openings, front.wing_window_style as Dictionary, two_y, four_y):
-		return _failure("building_1_hero_drum_opening_identity", "Building 1 drum-end openings no longer bind to the exposed central-tier join at the SE end.", record)
+	var shoulder := front.se_shoulder as Dictionary
+	var shoulder_runs := _int_array(shoulder.runs as Array)
+	var shoulder_frame := _span_frame(record, shoulder_runs, 0.0, _chain_length(record, shoulder_runs))
+	if shoulder_runs != _int_array(SE_SHOULDER_RUNS) or not _drum_openings_fit(shoulder_frame, _chain_length(record, shoulder_runs), drum_openings, front.wing_window_style as Dictionary, two_y, float(shoulder.top_y)):
+		return _failure("building_1_hero_drum_opening_identity", "Building 1 drum-end openings no longer fit the SE shoulder block on runs 69-70.", record)
 	var north_runs := _int_array(chains.north_three_story_runs)
 	var central_runs := _int_array(chains.central_four_story_runs)
 	var south_runs := _int_array(chains.south_three_story_runs)
@@ -344,10 +346,10 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 		"se_narrow_window_count": se_windows.size(),
 		"rear_ribbon_host_runs": rear_hosts,
 		"rear_podium_lowered_to_north_ring_terrace_by_root_release": true,
-		"drum_end_opening_host_runs": DRUM_END_JOIN_RUNS.duplicate(),
-		"drum_end_opening_host_exposed_m": float(drum_frame.length_m),
+		"drum_end_opening_host_runs": SE_SHOULDER_RUNS.duplicate(),
+		"drum_end_opening_host_width_m": _chain_length(record, shoulder_runs),
 		"drum_end_opening_count": 2,
-		"upper_drum_blank_except_drum_end_openings": true,
+		"upper_drum_blank": true,
 		"wing_tier_partitions_clipped_to_frozen_footprint": not tier_clip.is_empty(),
 		"central_tier_walls_unchanged": true,
 		"public_depth_bands_m": [
@@ -456,6 +458,8 @@ static func _build_tower_wall(record: Dictionary, config: Dictionary, front: Dic
 	# Base storey under the cab (2023 rear view). ROOT 2026-10-22: the tower
 	# record owns the cab and this storey; the frozen OSM way traces only the
 	# cab, and the storey stands on r16681702's central roof at the tower base.
+	if not _tower_base_block_fits(front.tower_base_block as Dictionary, center):
+		return _failure("building_1_tower_base_block_placement", "Tower base storey no longer stands on Building 1's frozen roof around the cab.", record)
 	var base_block := {"wall": _bucket(), "glass": _bucket(), "trim": _bucket()}
 	_append_tower_base_block(base_block, collision, front.tower_base_block as Dictionary, float(vertical.four_story_roof_y), float(vertical.tower_platform_top_y))
 	var root := _hero_root("Building1ObservationTowerHeroWall", record, "tower_wall")
@@ -1059,20 +1063,6 @@ static func _append_ribbon(buckets: Dictionary, record: Dictionary, runs: Array[
 			_append_frame_box(buckets.frame, frame, -bar * 0.5, bar * 0.5, bottom, top, float(frame.hi) + 0.03, float(frame.hi) + 0.078)
 
 
-## The drum-end bay's observed pair, centred on the exposed join: a tall
-## multi-light window with a projecting head just above the podium roof, and a
-## small square window high in the bay.
-static func _append_drum_end_openings(buckets: Dictionary, frame: Dictionary, openings: Dictionary, style: Dictionary) -> void:
-	for key: String in ["tall", "small"]:
-		var opening := openings[key] as Dictionary
-		var y_range := opening.y as Array
-		_append_window_module(buckets, frame, 0.0, float(opening.glass_width), float(y_range[0]), float(y_range[1]), int(opening.columns), int(opening.rows), style)
-	var tall := openings.tall as Dictionary
-	var half := float(tall.glass_width) * 0.5 + float(style.surround) + float(openings.head_overhang)
-	var head_bottom := float((tall.y as Array)[1]) + float(style.head_height)
-	_append_frame_box(buckets.trim, frame, -half, half, head_bottom, head_bottom + float(openings.head_height), -0.03, float(openings.head_front))
-
-
 static func _append_chain_window(buckets: Dictionary, record: Dictionary, runs: Array[int], center_m: float, glass: float, bottom: float, top: float, columns: int, rows: int, style: Dictionary) -> void:
 	var reach := glass * 0.5 + float(style.surround) + float(style.sill_overhang) + 0.05
 	var frame := _span_frame(record, runs, center_m - reach, center_m + reach)
@@ -1348,6 +1338,44 @@ static func _append_se_shoulder(buckets: Dictionary, collision: Dictionary, reco
 	var step_wall := float(step_frame.hi)
 	for target: Dictionary in [buckets.wall, collision]:
 		_append_frame_box(target, step_frame, -step_half, step_half + 0.3, tier_top_y - 0.05, float(step.top_y), step_wall - float(step.depth), step_wall)
+
+
+## The base storey's configured placement must still hold the cab: the cab's
+## plan centroid lies inside it, and all four corners (parapet included) lie on
+## r16681702's frozen roof. Fails closed when that roof cannot be read.
+static func _tower_base_block_fits(block: Dictionary, cab_center: Vector3) -> bool:
+	var roof := _record_from_chunk(MAIN_CHUNK_PATH, BUILDING_ROOF_KEY)
+	if roof.is_empty():
+		return false
+	var values := roof.vertices as Array
+	var indices := roof.indices as Array
+	var triangles: Array[PackedVector2Array] = []
+	for offset in range(0, indices.size(), 3):
+		var triangle := PackedVector2Array()
+		for index_offset in 3:
+			var vertex := int(indices[offset + index_offset]) * 3
+			triangle.append(Vector2(float(values[vertex]), float(values[vertex + 2])))
+		triangles.append(triangle)
+	var center_xz := block.center_xz as Array
+	var tangent_xz := block.tangent_xz as Array
+	var center := Vector2(float(center_xz[0]), float(center_xz[1]))
+	var tangent := Vector2(float(tangent_xz[0]), float(tangent_xz[1])).normalized()
+	var normal := Vector2(tangent.y, -tangent.x)
+	var half_length := float(block.length) * 0.5 + float(block.parapet_thickness) * 0.5
+	var half_depth := float(block.depth) * 0.5 + float(block.parapet_thickness) * 0.5
+	var cab := Vector2(cab_center.x, cab_center.z) - center
+	if absf(cab.dot(tangent)) > float(block.length) * 0.5 or absf(cab.dot(normal)) > float(block.depth) * 0.5:
+		return false
+	for corner in [tangent * half_length + normal * half_depth, tangent * half_length - normal * half_depth, -tangent * half_length + normal * half_depth, -tangent * half_length - normal * half_depth]:
+		var point: Vector2 = center + corner
+		var inside := false
+		for triangle in triangles:
+			if Geometry2D.point_is_inside_triangle(point, triangle[0], triangle[1], triangle[2]):
+				inside = true
+				break
+		if not inside:
+			return false
+	return true
 
 
 ## Rectangular base storey under the observation cab, emitted by the tower
@@ -2002,43 +2030,10 @@ static func _chain_contiguous(record: Dictionary, runs: Array[int]) -> bool:
 	return true
 
 
-## Frame on the drum-end bay. Its host is the exposed east part of the central
-## tier's join between the inner ends of runs 40 and 41, from where run 38's
-## inner face crosses it to the join's end. The inner offsets are the same ones
-## the strip walls use to emit that join. Empty when the host no longer
-## resolves.
-static func _drum_end_frame(record: Dictionary, spec: Dictionary, depth: float) -> Dictionary:
-	if _int_array(spec.get("join_runs", []) as Array) != _int_array(DRUM_END_JOIN_RUNS) or int(spec.get("occluding_inner_run", -1)) != DRUM_END_OCCLUDING_RUN:
-		return {}
-	var previous := _run_frame(record, int(DRUM_END_JOIN_RUNS[0]))
-	var current := _run_frame(record, int(DRUM_END_JOIN_RUNS[1]))
-	var occluding := _run_frame(record, DRUM_END_OCCLUDING_RUN)
-	if previous.is_empty() or current.is_empty() or occluding.is_empty():
-		return {}
-	var join_from := (previous.end as Vector3) - (previous.normal as Vector3) * depth
-	var join_to := (current.start as Vector3) - (current.normal as Vector3) * depth
-	var occluding_from := (occluding.start as Vector3) - (occluding.normal as Vector3) * depth
-	var occluding_to := (occluding.end as Vector3) - (occluding.normal as Vector3) * depth
-	var crossing: Variant = Geometry2D.segment_intersects_segment(Vector2(join_from.x, join_from.z), Vector2(join_to.x, join_to.z), Vector2(occluding_from.x, occluding_from.z), Vector2(occluding_to.x, occluding_to.z))
-	if not crossing is Vector2:
-		return {}
-	var exposed_from := Vector3((crossing as Vector2).x, 0.0, (crossing as Vector2).y)
-	var exposed_to := Vector3(join_to.x, 0.0, join_to.z)
-	var join := join_to - join_from
-	return {
-		"anchor": exposed_from.lerp(exposed_to, 0.5),
-		"tangent": (exposed_to - exposed_from).normalized(),
-		"normal": Vector3(join.z, 0.0, -join.x).normalized(),
-		"lo": 0.0,
-		"hi": 0.0,
-		"length_m": exposed_from.distance_to(exposed_to),
-	}
-
-
-## The drum-end pair must face out of the rear and fit the exposed bay with its
-## surrounds and head. It sits between the podium roof and the drum top, with
-## the small window clear above the tall one's head.
-static func _drum_openings_fit(frame: Dictionary, openings: Dictionary, style: Dictionary, low_y: float, high_y: float) -> bool:
+## The observed drum-end pair must face out of the rear and fit the SE shoulder
+## face with its surrounds and head. It sits between the podium roof and the
+## shoulder top, with the small window clear above the tall one's head.
+static func _drum_openings_fit(frame: Dictionary, width: float, openings: Dictionary, style: Dictionary, low_y: float, high_y: float) -> bool:
 	if frame.is_empty() or (frame.normal as Vector3).x < 0.5:
 		return false
 	var tall := openings.tall as Dictionary
@@ -2046,7 +2041,7 @@ static func _drum_openings_fit(frame: Dictionary, openings: Dictionary, style: D
 	var tall_y := tall.y as Array
 	var small_y := small.y as Array
 	var side := float(style.surround) + maxf(float(style.sill_overhang), float(openings.head_overhang)) + float(openings.edge_margin_m)
-	return float(frame.length_m) >= maxf(float(tall.glass_width), float(small.glass_width)) + 2.0 * side \
+	return width >= maxf(float(tall.glass_width), float(small.glass_width)) + 2.0 * side \
 		and float(tall_y[0]) - float(style.sill_height) > low_y \
 		and float(small_y[0]) - float(style.sill_height) > float(tall_y[1]) + float(style.head_height) + float(openings.head_height) \
 		and float(small_y[1]) + float(style.head_height) < high_y
@@ -2387,7 +2382,6 @@ static func _config_valid(config: Dictionary) -> bool:
 		and _junction_window_runs(schedule.get("north_junction_windows", []) as Array) == NORTH_JUNCTION_WINDOW_RUNS \
 		and _int_array(schedule.get("se_face_runs", []) as Array) == SE_FACE_RUNS \
 		and _chains_equal(schedule.get("rear_ribbon_host_chains", []) as Array, REAR_RIBBON_HOST_CHAINS) \
-		and schedule.get("drum_end_openings", null) is Dictionary \
 		and int(seams.get("north_run_start", -1)) == 96 \
 		and int(seams.get("south_run_end", -1)) == 69 \
 		and int(schedule.get("tall_windows_per_end", 0)) == 2 \

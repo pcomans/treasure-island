@@ -80,7 +80,6 @@
     ],
     "se_face_runs": [63, 64, 65, 66, 67, 68, 69],
     "rear_ribbon_host_chains": [[70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83]],
-    "drum_end_openings": {"join_runs": [40, 41], "occluding_inner_run": 38},
     "protected_seam_piers": {"north_run_start": 96, "south_run_end": 69}
   },
   "truth_boundary": {
