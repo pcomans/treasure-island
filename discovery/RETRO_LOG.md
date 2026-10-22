@@ -21275,3 +21275,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 ## code-review (courtyard guards 55a68cf + r133351 c6042ca, 2026-10-22)
 
 - What worked well: both guards I asked for are now cheap, explicit invariants (any hole edge crossing a block edge disqualifies that block; roof piece area must equal block minus courtyards within 0.05 m²), and r133351's headless CHECK shows it builds cleanly under them. Next time: pair each new fail-closed guard with one broken-copy case in the evidence, as the fish-streets guards did.
+
+## modeler-midrise (r133351 entrance and colour rework, 2026-10-22)
+
+- What worked well: the rework stayed config-only: cream walls, pale blue fascia panels, lighter windows, and a centred glazed double-door group under a canopy on the photographed SSE front. The fit, all five door routes and the spray passed on the first run.
+- What did not work well: the ENE door first disappeared because the producer keys a face by the first same-facing footprint edge it lies inside of (e8, not e36), and the door's station is measured in that edge's frame. It took a mirror check of each face's key and start to place it.
+- What the team should change next time: when placing features on a many-edged footprint, read face keys and starts from the mirror plan first, instead of assuming the face is keyed by its own edge.
