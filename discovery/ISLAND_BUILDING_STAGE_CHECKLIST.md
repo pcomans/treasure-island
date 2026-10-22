@@ -405,8 +405,20 @@ imagery on the mid-rise family (owner approved massing only, 2026-10-21). CODE a
 visual PASS. L1 C on 655 Avenue H (`w34313513`), `w96698650`, 1105 and 1107 Bigelow
 Court (`w96665933`, `w96665925`) and 1442 and 1447 Chinook Court (`w96665900`,
 `w96665886`). Parked: 1107's warmer siding (colour pass).
-Current totals after Mar22e: L1:205 C/8 U; L2:165 C/48 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall371 C/0 I/694 U across213 units/1,065 cells;49 historical
+**Mar22f** courtyard code and the Chinook/Croaker rebuild, 2026-10-22: `a8f4382` and
+`84f0e6d` build courtyard holes natively in the mid-rise family and fail closed on
+roofed-over or block-crossing courtyards (CODE PASS; r133351's config waits for its
+rework). `b2f583b` installs only the Bulgarian-wall mural court when the housing
+family owns 1445; `5b32d9f` retires the d2 live replacements for 1439, 1441 and 1444;
+`d2507ea` rebuilds Chinook 1439 (`w95934144`), 1441 (`w95934105`), 1445 (`w95934121`)
+and Croaker 1444 (`w95934117`) on the garage-court kit (owner approved 2026-10-22).
+CODE PASS; visual L1+L2 PASS on all four. L1/L2 C on all four. The catalog adds
+`visual-review-chinook-rebuild-<unit>-20261022` acceptance records for 1439, 1441 and
+1444, keeping their earlier records, and retires their d2 `active_runtime_adapters`;
+1445 stays `not_evaluated`. Parked: colour pass (1439 warmer cream; 1441 brown balcony
+rails; 1445 lower storey pink).
+Current totals after Mar22f: L1:209 C/4 U; L2:169 C/44 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall379 C/0 I/686 U across213 units/1,065 cells;49 historical
 recognition credits unchanged.
 **U** no current stage-level conclusion established in this checklist pass.
 
@@ -473,7 +485,7 @@ before selecting another round.
 | physical-building:w95934102 / w95934102 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 1306 Gateview Avenue: Mar17i Gateview Ave B `818d35c`+`54409a2`+`13d2d3d` (on Batch A) — CODE PASS after rework, visual and progress PASS; drive-fix junctions accepted on the 0 m² overlap check. Parked: gable-generator closure-overlap dedupe (low); fences and site; colour pass (white/cream with brown carport roofs) |
 | physical-building:w95934103 / w95934103 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | "1307" Gateview Avenue (shore row): Mar17i Gateview Ave B `818d35c`+`54409a2`+`13d2d3d` (on Batch A) — CODE PASS after rework, visual and progress PASS; drive-fix junctions accepted on the 0 m² overlap check. Parked: gable-generator closure-overlap dedupe (low); fences and site; colour pass |
 | physical-building:w95934104 / w95934104 | 1403 Sturgeon Street | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21e fish streets on the garage-court kit (`02d39f1`…`fcfe956`) — CODE PASS (lows parked), visual L2 PASS, progress PASS |
-| physical-building:w95934105 / w95934105 | 1441 Chinook Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | Mar22c: photo check pending; possible rebuild on the fish-street kit (owner approved) |
+| physical-building:w95934105 / w95934105 | 1441 Chinook Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22f rebuilt on the garage-court kit (owner approved 2026-10-22): `b2f583b` Bulgarian wall mural-court only, `5b32d9f` d2 live replacements retired, `d2507ea` rebuild — CODE PASS; visual L1+L2 PASS. Parked: brown balcony rails (colour pass) |
 | physical-building:w95934106 / w95934106 | 1305 Gateview Avenue | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17i Gateview Ave B `818d35c`+`54409a2`+`13d2d3d` (on Batch A) — CODE PASS after rework, visual and progress PASS; drive-fix junctions accepted on the 0 m² overlap check. Parked: gable-generator closure-overlap dedupe (low); fences and site; colour pass (whites) |
 | physical-building:w95934107 / w95934107 | 1420 Striped Bass Street | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21e fish streets on the garage-court kit (`02d39f1`…`fcfe956`) — CODE PASS (lows parked), visual L2 PASS, progress PASS. Parked: colour pass (siding too brown) |
 | physical-building:w95934108 / w95934108 | 1405 Sturgeon Street | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21e fish streets on the garage-court kit (`02d39f1`…`fcfe956`) — CODE PASS (lows parked), visual L2 PASS, progress PASS |
@@ -482,11 +494,11 @@ before selecting another round.
 | physical-building:w95934113 / w95934113 | 1437 Chinook Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21e fish streets on the garage-court kit (`02d39f1`…`fcfe956`) — CODE PASS (lows parked), visual L2 PASS, progress PASS. Parked: colour pass (Chinook whites read grey) |
 | physical-building:w95934115 / w95934115 | 1413 Flounder Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17j Flounder Court `fb8a010`+`8eb5444`+`615d621`+`fa945e5`+`4f519a3` — CODE PASS (low notes only), visual L2 PASS, progress L1+L2 PASS; catalog stairs walked by the fit. Parked: cream slightly dark and cool; stucco lap lines; 1-pixel road-edge dots; turning-circle disc is config-only (roads L2 generator pass); code lows (gable vents on the roof role, loggia parts as spray receivers); garage doors should be white; apron 9.4 mm above the area (code low) |
 | physical-building:w95934116 / w95934116 | 905F Avenue B, 94130 | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17i Gateview Ave B `818d35c`+`54409a2`+`13d2d3d` (on Batch A) — CODE PASS after rework, visual and progress PASS; drive-fix junctions accepted on the 0 m² overlap check. Parked: gable-generator closure-overlap dedupe (low); fences and site; colour pass |
-| physical-building:w95934117 / w95934117 | 1444 Croaker Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | Mar22c: photo check pending; possible rebuild on the fish-street kit (owner approved) |
+| physical-building:w95934117 / w95934117 | 1444 Croaker Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22f rebuilt on the garage-court kit (owner approved 2026-10-22): `b2f583b` Bulgarian wall mural-court only, `5b32d9f` d2 live replacements retired, `d2507ea` rebuild — CODE PASS; visual L1+L2 PASS |
 | physical-building:w95934118 / w95934118 | 1419 Striped Bass Street | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21e fish streets on the garage-court kit (`02d39f1`…`fcfe956`) — CODE PASS (lows parked), visual L2 PASS, progress PASS |
 | physical-building:w95934119 / w95934119 | 148 12th Street | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar22c B225: L1 C from the review-only sweep `/workspaces/landmark-progress-20261007/review-sweep-20261022/` (visual review; assets unchanged); L2 gap: blank sides; openings pass approved by owner 2026-10-22 |
 | physical-building:w95934120 / w95934120 | 1449 Croaker Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21e fish streets on the garage-court kit (`02d39f1`…`fcfe956`) — CODE PASS (lows parked), visual L2 PASS, progress PASS |
-| physical-building:w95934121 / w95934121 | 1445 Chinook Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — review-only (Bulgarian house); Mar22c: photo check pending; possible rebuild on the fish-street kit (owner approved) |
+| physical-building:w95934121 / w95934121 | 1445 Chinook Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22f rebuilt on the garage-court kit (owner approved 2026-10-22): `b2f583b` Bulgarian wall mural-court only, `5b32d9f` d2 live replacements retired, `d2507ea` rebuild — CODE PASS; visual L1+L2 PASS. Parked: lower storey pink (colour pass); catalog stays not_evaluated |
 | physical-building:w95934122 / w95934122 | 1434 Halibut Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21e fish streets on the garage-court kit (`02d39f1`…`fcfe956`) — CODE PASS (lows parked), visual L2 PASS, progress PASS. In frozen OSM, since demolished; modeled from Apr 2019 |
 | physical-building:w95934123 / w95934123 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar22c Gateview 1308: L1 C from the review-only sweep `/workspaces/landmark-progress-20261007/review-sweep-20261022/` (visual review; assets unchanged); L2 gap: blank sides; openings pass approved by owner 2026-10-22 |
 | physical-building:w95934124 / w95934124 | 1410 Flounder Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17j Flounder Court `fb8a010`+`8eb5444`+`615d621`+`fa945e5`+`4f519a3` — CODE PASS (low notes only), visual L2 PASS, progress L1+L2 PASS; catalog stairs walked by the fit. Parked: cream slightly dark and cool; stucco lap lines; 1-pixel road-edge dots; turning-circle disc is config-only (roads L2 generator pass); code lows (gable vents on the roof role, loggia parts as spray receivers); colour pass (reads greyer than the photo's warm yellow) |
@@ -504,7 +516,7 @@ before selecting another round.
 | physical-building:w95934140 / w95934140 | 1408 Sturgeon Street | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21e fish streets on the garage-court kit (`02d39f1`…`fcfe956`) — CODE PASS (lows parked), visual L2 PASS, progress PASS |
 | physical-building:w95934142 / w95934142 | 1402 Sturgeon Street | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21e fish streets on the garage-court kit (`02d39f1`…`fcfe956`) — CODE PASS (lows parked), visual L2 PASS, progress PASS |
 | physical-building:w95934143 / w95934143 | 1443 Chinook Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21e fish streets on the garage-court kit (`02d39f1`…`fcfe956`) — CODE PASS (lows parked), visual L2 PASS, progress PASS. Parked: colour pass (Chinook whites read grey) |
-| physical-building:w95934144 / w95934144 | 1439 Chinook Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | Mar22c: photo check pending; possible rebuild on the fish-street kit (owner approved) |
+| physical-building:w95934144 / w95934144 | 1439 Chinook Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22f rebuilt on the garage-court kit (owner approved 2026-10-22): `b2f583b` Bulgarian wall mural-court only, `5b32d9f` d2 live replacements retired, `d2507ea` rebuild — CODE PASS; visual L1+L2 PASS. Parked: warmer cream (colour pass) |
 | physical-building:w96215645 / w96215645 | 1122 Reeves Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21b Site 12 `8c70237` (`eave_rgb`) + `8d0549f` — CODE, visual L2 and progress PASS |
 | physical-building:w96215646 / w96215646 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Gateview 1394: Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS |
 | physical-building:w96215648 / w96215648 | 1316 Gateview Avenue | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17i Gateview Ave A `904f940`+`487a1ef`+`35a990e`+`45344f4` — CODE, visual and progress PASS (guards CODE PASS; drives CODE/visual/progress PASS). Parked: gable-generator closure-overlap dedupe (low); fences and site; colour pass |
@@ -674,7 +686,7 @@ March/November2025 refs and unknown-date Apple context support the scoped envelo
 and observed architecture; missing north capture/unknown rear/schematic materials
 keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
 See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
-Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar22e for current totals);
+Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar22f for current totals);
 **L1:21 C /0 I /192 U**. All other stages unchanged;49 historical credits retained.
 
 ## Island environment layers

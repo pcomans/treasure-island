@@ -185,60 +185,6 @@
       "whole_building_recognizability_imported": false
     },
     {
-      "adapter_id": "active-adapter:d2-1441-live:building:w95934105:wall",
-      "content_classification": "active_target_specific_paired_wall_roof_replacement",
-      "receiver_key": "building:w95934105:wall",
-      "recognition_acceptance_authority": "physical_unit_claim_and_independent_acceptance_record",
-      "recognition_acceptance_status": "accepted",
-      "review_status": "independent_exact_current_live_pass",
-      "review_status_scope": "runtime_asset_original_detail_provenance_only_not_reference_recognition",
-      "runtime_adapter_path": "game/scripts/world/facades/d2_1441_chinook_live_replacement.gd",
-      "runtime_asset_paths": [
-        "game/resources/facades/d2_1441_chinook_standalone_hero_prototype.json",
-        "game/resources/materials/world/site_12_housing/site_12_dark_metal.tres",
-        "game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres",
-        "game/resources/materials/world/site_12_housing/site_12_opaque_opening.tres",
-        "game/resources/materials/world/site_12_housing/site_12_protected_neutral.tres",
-        "game/resources/materials/world/site_12_housing/site_12_void_shadow.tres",
-        "game/resources/materials/world/site_12_housing/site_12_warm_ivory_stucco.tres",
-        "game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg",
-        "game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png",
-        "game/scripts/world/facades/d2_1441_chinook_standalone_hero_prototype.gd",
-        "game/scripts/world/facades/site_12_housing_kit.gd"
-      ],
-      "runtime_config_path": "game/resources/facades/d2_1441_chinook_live_replacement.json",
-      "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
-      "source_key": "w95934105",
-      "whole_building_recognizability_imported": false
-    },
-    {
-      "adapter_id": "active-adapter:d2-1444-live:building:w95934117:wall",
-      "content_classification": "active_target_specific_paired_wall_roof_replacement",
-      "receiver_key": "building:w95934117:wall",
-      "recognition_acceptance_authority": "physical_unit_claim_and_independent_acceptance_record",
-      "recognition_acceptance_status": "accepted",
-      "review_status": "independent_exact_current_live_pass",
-      "review_status_scope": "runtime_asset_original_detail_provenance_only_not_reference_recognition",
-      "runtime_adapter_path": "game/scripts/world/facades/d2_1444_croaker_quality_v2_live_replacement.gd",
-      "runtime_asset_paths": [
-        "game/resources/facades/d2_1444_croaker_quality_v2_prototype.json",
-        "game/resources/materials/world/site_12_housing/site_12_dark_metal.tres",
-        "game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres",
-        "game/resources/materials/world/site_12_housing/site_12_opaque_opening.tres",
-        "game/resources/materials/world/site_12_housing/site_12_protected_neutral.tres",
-        "game/resources/materials/world/site_12_housing/d2_1444_quality_v2_recess_backing.tres",
-        "game/resources/materials/world/site_12_housing/site_12_ochre_tan_stucco.tres",
-        "game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg",
-        "game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png",
-        "game/scripts/world/facades/d2_1444_croaker_quality_v2_prototype.gd",
-        "game/scripts/world/facades/site_12_housing_kit.gd"
-      ],
-      "runtime_config_path": "game/resources/facades/d2_1444_croaker_quality_v2_live_replacement.json",
-      "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
-      "source_key": "w95934117",
-      "whole_building_recognizability_imported": false
-    },
-    {
       "adapter_id": "active-adapter:d1-b225-live:building:w95934119:wall",
       "content_classification": "active_target_specific_receiver_host_partition_plus_render_only_attachment",
       "receiver_key": "building:w95934119:wall",
@@ -299,33 +245,6 @@
       "runtime_config_path": "game/resources/facades/d5_1317_gateview_live_replacement.json",
       "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
       "source_key": "w95934125",
-      "whole_building_recognizability_imported": false
-    },
-    {
-      "adapter_id": "active-adapter:d2-1439-live:building:w95934144:wall",
-      "content_classification": "active_target_specific_paired_wall_roof_replacement",
-      "receiver_key": "building:w95934144:wall",
-      "recognition_acceptance_authority": "physical_unit_claim_and_independent_acceptance_record",
-      "recognition_acceptance_status": "accepted",
-      "review_status": "independent_exact_current_live_pass",
-      "review_status_scope": "runtime_asset_original_detail_provenance_only_not_reference_recognition",
-      "runtime_adapter_path": "game/scripts/world/facades/d2_1439_chinook_quality_v2_live_replacement.gd",
-      "runtime_asset_paths": [
-        "game/resources/facades/d2_1439_chinook_quality_v2_prototype.json",
-        "game/resources/materials/world/site_12_housing/site_12_dark_metal.tres",
-        "game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres",
-        "game/resources/materials/world/site_12_housing/site_12_opaque_opening.tres",
-        "game/resources/materials/world/site_12_housing/site_12_protected_neutral.tres",
-        "game/resources/materials/world/site_12_housing/d2_1439_quality_v2_recess_backing.tres",
-        "game/resources/materials/world/site_12_housing/site_12_warm_ivory_stucco.tres",
-        "game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg",
-        "game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png",
-        "game/scripts/world/facades/d2_1439_chinook_quality_v2_prototype.gd",
-        "game/scripts/world/facades/site_12_housing_kit.gd"
-      ],
-      "runtime_config_path": "game/resources/facades/d2_1439_chinook_quality_v2_live_replacement.json",
-      "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
-      "source_key": "w95934144",
       "whole_building_recognizability_imported": false
     },
     {
@@ -2512,6 +2431,11 @@
           "review_id": "d2-1441-production-v8-staging-2026-09-05-009",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "visual-review-chinook-rebuild-1441-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
         }
       ],
       "anchor_source_key": "w95934105",
@@ -2933,6 +2857,11 @@
           "review_id": "d2-1444-quality-v2-promotion-candidate-2026-09-09-001",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "visual-review-chinook-rebuild-1444-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
         }
       ],
       "anchor_source_key": "w95934117",
@@ -4121,6 +4050,11 @@
           "review_id": "d2-1439-quality-v2-promotion-candidate-2026-09-09-001",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "visual-review-chinook-rebuild-1439-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
         }
       ],
       "anchor_source_key": "w95934144",
