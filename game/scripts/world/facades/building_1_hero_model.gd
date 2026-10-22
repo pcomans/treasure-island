@@ -37,9 +37,6 @@ const SE_FACE_RUNS := [63, 64, 65, 66, 67, 68, 69]
 # continues as released production inference. Later runs pass the silhouette
 # and stay unreleased.
 const REAR_RIBBON_HOST_CHAINS := [[70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83]]
-# The drum-end bay with the observed small and tall openings: the exposed east
-# part of the central tier's join between runs 40 and 41, where run 38's inner
-# face crosses it. Every other drum face stays blank.
 # SE shoulder block carrying the observed small and tall drum-end openings.
 const SE_SHOULDER_RUNS := [69, 70]
 const PHYSICS_WORLD_SOLID := 1 << 0
