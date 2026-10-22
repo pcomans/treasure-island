@@ -143,9 +143,9 @@ static func _forbidden_tokens() -> Array[String]:
 
 static func _approved_output_matches(node: Node3D) -> bool:
 	var nnw_openings := _built_nnw_module_count(node)
-	if node.get_meta("quiet_nnw_run_indices", []) != [10, 11, 12] \
+	if node.get_meta("nnw_run_indices", []) != [10, 11, 12] \
 		or nnw_openings != _configured_nnw_opening_count() \
-		or int(node.get_meta("quiet_nnw_opening_count", -1)) != nnw_openings \
+		or int(node.get_meta("nnw_opening_count", -1)) != nnw_openings \
 		or node.get_meta("upper_band_ids", []) != ["TRANSFER-PLINTH", "PODIUM-BODY", "PODIUM-CROWN", "TOP-SHADOW-CAP"]:
 		return false
 	if node.get_node_or_null("IsleHouse39BrutonLowLiveAttachment") != null \

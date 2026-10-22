@@ -388,8 +388,8 @@ func _build_variant_c_overlay(low_wall: Dictionary) -> Dictionary:
 	overlay.set_meta("module_min_y_m", _module_min_y_m)
 	overlay.set_meta("module_max_y_m", _module_max_y_m)
 	overlay.set_meta("public_side_chain_totals_m", fields_result.get("side_chain_totals_m", {}).duplicate(true))
-	overlay.set_meta("quiet_nnw_run_indices", [10, 11, 12])
-	overlay.set_meta("quiet_nnw_opening_count", nnw_openings)
+	overlay.set_meta("nnw_run_indices", [10, 11, 12])
+	overlay.set_meta("nnw_opening_count", nnw_openings)
 	overlay.set_meta("upper_band_ids", fields_result.get("upper_band_ids", []).duplicate())
 	if _count_type(overlay, CollisionObject3D) != 0 \
 	or _count_type(overlay, CollisionShape3D) != 0 \
@@ -479,8 +479,8 @@ func _build_variant_c_fields(parent: Node3D, low_wall: Dictionary) -> Dictionary
 	fields.layers = RENDER_BUILDING_WALL
 	fields.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	fields.set_meta("public_run_indices", PUBLIC_RUNS.duplicate())
-	fields.set_meta("quiet_nnw_run_indices", [10, 11, 12])
-	fields.set_meta("quiet_nnw_opening_count", (_config.get("inferred_nnw_placements", []) as Array).size())
+	fields.set_meta("nnw_run_indices", [10, 11, 12])
+	fields.set_meta("nnw_opening_count", (_config.get("inferred_nnw_placements", []) as Array).size())
 	fields.set_meta("upper_schedule_claimed", false)
 	fields.set_meta("literal_seven_story_geometry_claimed", false)
 	fields.set_meta("protected_return_opening_schedule_claimed", false)
