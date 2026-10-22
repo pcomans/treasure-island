@@ -637,7 +637,7 @@ func _check_housing_faces(h: WorldHarness, source: String, retained_quality: boo
 # Public/protected wall subsets reorder source runs, so compare oriented multisets.
 func _check_station48_indexed(h:WorldHarness,source:String) -> String:
 	var groups:Dictionary={
-		"ExactClosedSourceWalls":["ProtectedExactNeutralWallRuns","ObservedWSWNNWPaleWallFields"],
+		"ExactClosedSourceWalls":["ProtectedExactNeutralWallRuns","ObservedWSWNNWPaleWallFields","InferredENESSEPaleWallFields"],
 		"ExactSourceNeutralRoof":["ExactSourceNeutralRoof"],
 		"RaisedMetalAccess":["RaisedMetalAccess"],"ClosedEntryDoor":["ClosedEntryDoor"],
 		"EntrySurround":["EntrySurround"],"StationSign":["StationSign"]}

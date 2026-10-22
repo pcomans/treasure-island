@@ -6,8 +6,11 @@ const UPPER_CLADDING := preload("res://game/resources/facades/fire_station48_upp
 const CONFIG_PATH := "res://game/resources/facades/fire_station48_quality_study.json"
 const WALL_KEY := "building:w764313741:wall"
 const ROOF_KEY := "building:w764313741:roof"
-const TARGET_RUNS := [0,1,2,3,5,6,8,9,24,25]
-const PROTECTED_RUNS := [4,7,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+const OBSERVED_RUNS := [0,1,2,3,5,6,8,9,24,25]
+# Unphotographed ENE/SSE runs: plain closed walls in the observed pale finish, no openings.
+const INFERRED_RUNS := [4,10,11,12,13,14,15,18,19,20,21,22,23]
+const TARGET_RUNS := [0,1,2,3,4,5,6,8,9,10,11,12,13,14,15,18,19,20,21,22,23,24,25]
+const PROTECTED_RUNS := [7,16,17]
 var _tangent_builder:Callable
 var _last_result:Dictionary={}
 
@@ -40,7 +43,8 @@ func configure_records(wall:Dictionary,roof:Dictionary,source_builder:Callable,t
 	wall.top_elevation_m=7.60;roof.top_elevation_m=7.60
 	var config:=_json(CONFIG_PATH)
 	if not matches_record_pair(wall,roof):return {"ok":false,"message":"Exact source wall and roof pair required."}
-	if not _same_numeric_runs(config.get("mapped_runs",[]),TARGET_RUNS) or not _same_numeric_runs(config.get("protected_runs",[]),PROTECTED_RUNS):return {"ok":false,"message":"Observed/protected scope changed."}
+	if not _same_numeric_runs(config.get("mapped_runs",[]),TARGET_RUNS) or not _same_numeric_runs(config.get("protected_runs",[]),PROTECTED_RUNS):return {"ok":false,"message":"Mapped/protected scope changed."}
+	if not _same_numeric_runs(config.get("observed_runs",[]),OBSERVED_RUNS) or not _same_numeric_runs(config.get("inferred_runs",[]),INFERRED_RUNS):return {"ok":false,"message":"Observed/inferred scope changed."}
 	if str(config.get("schema_version",""))!="ti.fire-station48-quality-study/1":return {"ok":false,"message":"Configured emission changed."}
 	# Use the ordinary builder's consumed original streams/material partitions.
 	var original_wall:Dictionary=source_builder.call(wall,false)
@@ -61,7 +65,8 @@ func configure_records(wall:Dictionary,roof:Dictionary,source_builder:Callable,t
 	_append_source_roof(source_roof,roof)
 	var pale:=_public_wall_material(config)
 	_add_original_wall_subset("ProtectedExactNeutralWallRuns",wall_mesh,wall,PROTECTED_RUNS,wall_mesh.get_active_material(0))
-	_add_original_wall_subset("ObservedWSWNNWPaleWallFields",wall_mesh,wall,TARGET_RUNS,wall_mesh.get_active_material(0) if baseline else pale)
+	_add_original_wall_subset("ObservedWSWNNWPaleWallFields",wall_mesh,wall,OBSERVED_RUNS,wall_mesh.get_active_material(0) if baseline else pale)
+	_add_original_wall_subset("InferredENESSEPaleWallFields",wall_mesh,wall,INFERRED_RUNS,wall_mesh.get_active_material(0) if baseline else pale)
 	var roof_copy:=MeshInstance3D.new();roof_copy.name="ExactSourceNeutralRoof"
 	roof_copy.mesh=roof_mesh.mesh.duplicate();roof_copy.mesh.surface_set_material(0,_material("FS48_flat_membrane",Color(0.32,0.34,0.33),0.94));roof_copy.layers=roof_mesh.layers;roof_copy.cast_shadow=roof_mesh.cast_shadow;roof_copy.transform=roof_mesh.transform
 	add_child(roof_copy)
@@ -95,7 +100,7 @@ func configure_records(wall:Dictionary,roof:Dictionary,source_builder:Callable,t
 	for child:Node in get_children():
 		if child is MeshInstance3D:
 			var count:int=child.mesh.surface_get_array_index_len(0)/3;batches[str(child.name)]=count;total+=count
-	var metadata:Dictionary={"model_id":"fire-station48-whole-building-20261010","source_key":"w764313741","mapped_public_run_indices":TARGET_RUNS,"protected_run_indices":PROTECTED_RUNS,"baseline_exact_source":baseline,"source_xz_and_wall_bottoms_preserved":true,"source_roof_geometry_preserved":false,"interior_modeled":false,"source_terrain_untouched":true,"module_dimensions_and_counts":"production_inference","visual_batch_triangles":batches,"visual_triangles":total,"mesh_instances":batches.size(),"surfaces":batches.size(),"static_bodies":1,"shapes":counts.size(),"collision_triangles":collision_total,"collision_groups":counts,"complete_high_windows":0 if baseline else int(config.inference.window_count),"all_additions_render_only":false,"source_collision_only":false,"ground_detail_added":true}
+	var metadata:Dictionary={"model_id":"fire-station48-whole-building-20261010","source_key":"w764313741","mapped_public_run_indices":OBSERVED_RUNS,"inferred_run_indices":INFERRED_RUNS,"protected_run_indices":PROTECTED_RUNS,"baseline_exact_source":baseline,"source_xz_and_wall_bottoms_preserved":true,"source_roof_geometry_preserved":false,"interior_modeled":false,"source_terrain_untouched":true,"module_dimensions_and_counts":"production_inference","visual_batch_triangles":batches,"visual_triangles":total,"mesh_instances":batches.size(),"surfaces":batches.size(),"static_bodies":1,"shapes":counts.size(),"collision_triangles":collision_total,"collision_groups":counts,"complete_high_windows":0 if baseline else int(config.inference.window_count),"all_additions_render_only":false,"source_collision_only":false,"ground_detail_added":true}
 	for key:String in metadata:set_meta(key,metadata[key])
 	_last_result={"ok":true,"node":self,"metadata":metadata};return _last_result
 
