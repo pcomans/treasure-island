@@ -7,6 +7,7 @@ extends RefCounted
 ## partition and this helper adds only non-coplanar render detail batches.
 
 const METER_UV := preload("res://game/scripts/world/facades/facade_meter_uv_adapter.gd")
+const INFERRED_OPENINGS := preload("res://game/scripts/world/facades/d1_inferred_openings.gd")
 const CONFIG_PATH := "res://game/resources/facades/d1_current/d1_b201_live_attachment.json"
 const SOURCE_KEY := "w34313545"
 const RECEIVER_KEY := "building:w34313545:wall"
@@ -118,6 +119,12 @@ static func build_prepared(record: Dictionary, prepared: Dictionary) -> Dictiona
 	var root_node := _build_render_attachment(prepared.get("chain", {}) as Dictionary, prepared.get("materials", {}) as Dictionary)
 	if root_node == null:
 		return _failure("d1_b201_live_geometry", "Approved B201 render geometry failed to build.", record)
+	# Owner-approved openings on the unphotographed sides (2026-10-22), render only.
+	var inferred := INFERRED_OPENINGS.build(record, (prepared.get("config", {}) as Dictionary).get("inferred_openings", {}) as Dictionary, prepared.get("materials", {}) as Dictionary, root_node.transform)
+	if not bool(inferred.get("ok", false)):
+		root_node.free()
+		return _failure("d1_b201_live_inferred_openings", "B201 inferred openings failed: %s" % str(inferred.get("message", "unknown")), record)
+	root_node.add_child(inferred.node as Node3D)
 	var topology := render_topology(root_node)
 	if int(topology.get("triangles", 0)) <= 0 \
 	or _count_type(root_node, CollisionObject3D) != 0 \

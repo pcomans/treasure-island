@@ -107,9 +107,9 @@
   "runtime_contract": {
     "attachment_mode": "receiver_host_material_partition_plus_receiver_relative_render_only_details",
     "standalone_scene_instantiation": false,
-    "mesh_instances": 6,
-    "surfaces": 6,
-    "triangles": 2064,
+    "mesh_instances": 9,
+    "surfaces": 9,
+    "triangles": 3276,
     "collision_nodes": 0,
     "navigation_nodes": 0,
     "spray_nodes": 0,
@@ -119,5 +119,72 @@
     "host_collision_and_spray_geometry_preserved": true,
     "recognition_status": "pending_independent_live_visual_static_and_package_review",
     "reference_recognizable": false
+  },
+  "inferred_openings": {
+    "inference": "production_inference: owner-approved openings on an unphotographed side (2026-10-22), in this building's own clerestory and service-door style; render only, host wall/collision/spray unchanged; counts and positions are not as-built",
+    "groups": [
+      {
+        "side": "NNW (Avenue I rear)",
+        "runs": [
+          35,
+          36,
+          37,
+          38,
+          39
+        ],
+        "glass_material": "shared_dark_glass",
+        "frame_material": "shared_pale_frame",
+        "windows": {
+          "widths_m": [
+            5.39,
+            5.39,
+            5.39,
+            5.39,
+            5.39,
+            5.39,
+            5.39,
+            5.39,
+            5.39,
+            5.39,
+            5.39,
+            5.39,
+            5.39
+          ],
+          "panes": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "gap_m": 0.88,
+          "center_y_m": 7.062,
+          "height_m": 1.05,
+          "end_margin_m": 1.35
+        },
+        "doors": [
+          {
+            "u_m": 20.5,
+            "width_m": 1.34,
+            "top_y_m": 5.612,
+            "leaf_material": "b201_service_leaf"
+          },
+          {
+            "u_m": 62.5,
+            "width_m": 1.34,
+            "top_y_m": 5.612,
+            "leaf_material": "b201_service_leaf"
+          }
+        ]
+      }
+    ]
   }
 }
