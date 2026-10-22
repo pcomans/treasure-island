@@ -21171,3 +21171,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 ## code-review (colour pass af2b8ed, 2026-10-21)
 
 - What worked well: a single recursive JSON diff confirmed the two-file palette change in one pass; nothing to change.
+
+## progress-review (L1-U reconciliation at fc6b5c1, 2026-10-21)
+
+- What worked well: cross-checking each row's live asset (catalog claim, game config or factory, and the off-tip branch checklist and RETRO) separated the cases quickly. Only 1201 and 1238 have prior stage-level evidence on today's geometry: their off-tip closures 9faa903 and 89105ba, on configs that differ from the reviewed ones only by palette.
+- What did not work well: historical recognition acceptance (Hawkins, Isle House, Maceo May, Chinook 1439/1441/1444, 1317, 1308, B201, B225, the Building 1 tower) never recorded a stage-level all-side verdict, so none of it can be copied into L1/L2 without a fresh review. Reviewed work for 1215 and 1224 (1d19eaa, 12b41f6) and for the batch-06 institutional facades is still off-tip, so tip pixels lag reviewed work.
+- What the team should change next time: run one review-only sweep of the accepted bespoke units against current captures, since most should close without modeling. Recover the remaining off-tip reviewed configs before authoring their units again.
