@@ -434,10 +434,16 @@ three on the mid-rise family, adds opt-in `stair_bay` and `top_box` features to
 PASS (round 1; rework `effaa36` REWORK, then `83f8833`/`958a2c7` re-checked PASS);
 visual L2 PASS for w34313525 (round 1) and w34313515/w34313520 (round 2). L1/L2 C on
 all three; the catalog now accepts them (52 accepted).
-Current totals after Mar22h: L1:213 C/0 U; L2:180 C/33 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall394 C/0 I/671 U across213 units/1,065 cells; catalog
-recognition score 52/213 (49 historical credits plus w34313515, w34313520 and
-w34313525).
+**Mar22i** reopen4, 2026-10-22: `b6ea6bf` adds an opt-in window `hood` to the mid-rise
+family; `44cda13`, `4aa004e`, `e873898` and `67ed3ed` model 488 (`w96698662`), 655
+Avenue H (`w34313513`), 450 4th St (`w34313544`) and the Oasis (`w291189918`) at L2
+from the 2018-09 survey photos, whose date the owner accepted; `a783900` darkens the
+450 hall after its visual REWORK. CODE PASS on the hood and all four configs; visual L2
+PASS on all four (450 after the re-review). L2 C on all four (L1 already C); the
+catalog now accepts them.
+Current totals after Mar22i: L1:213 C/0 U; L2:184 C/29 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall398 C/0 I/667 U across213 units/1,065 cells; catalog
+recognition score 56/213.
 **U** no current stage-level conclusion established in this checklist pass.
 
 The retained34-building audit entries in [RETRO](RETRO_LOG.md) (2026-09-23,
@@ -467,7 +473,7 @@ before selecting another round.
 |---|---|---|---|---|---|---|---|
 | physical-building:w24274434 / w24274434 | Building 2 | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | B2 — whole-family025 whole visual/CODE/progress, native/fit/spray/suite PASS; as-built unclaimed |
 | physical-building:w34313512 / w34313512 | 449 Avenue H | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17l panel halls `265bbbd`…`a4ceb26` — CODE PASS on every commit, visual and progress PASS. Parked: panel-hall per-box mesh merging (medium-low); two validation gaps (low); hipped roof (L1 delta); multi-pane sash (L3); colour pass (off-white over light blue-grey) |
-| physical-building:w34313513 / w34313513 | Harvey Milk Memorial Administration Building, Job Corps Center | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar22e L1 no-photo batch `fd6d31a` on the mid-rise family — CODE and visual PASS; massing only, no imagery (owner 2026-10-21) |
+| physical-building:w34313513 / w34313513 | Harvey Milk Memorial Administration Building, Job Corps Center | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22e L1 no-photo batch `fd6d31a` on the mid-rise family — CODE and visual PASS; massing only, no imagery (owner 2026-10-21); Mar22i reopened at L2 from the owner-accepted 2018-09 survey photos (`b6ea6bf` hood, `4aa004e`…`a783900`) — CODE PASS, visual L2 PASS 655 Avenue H; catalog accepted |
 | physical-building:w34313514 / w34313514 | Advanced Culinary Dormitory | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21h institutional batch on the mid-rise family (`bf57964`, `6c5a131`, `a45788d`) — CODE, visual and progress PASS; L1 only (L2 not passed) |
 | physical-building:w34313515 / w34313515 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22h inst3 on the mid-rise family (`b7ddf49`…`e8a173d`) — CODE PASS (rework re-checked), visual L2 PASS round 2 (2018 survey photos); catalog accepted |
 | physical-building:w34313520 / w34313520 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22h inst3 on the mid-rise family (`b7ddf49`…`e8a173d`) — CODE PASS (rework re-checked), visual L2 PASS round 2 (2018 survey photos); catalog accepted |
@@ -477,7 +483,7 @@ before selecting another round.
 | physical-building:w34313528 / w34313528 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 528: Mar17l panel halls `265bbbd`…`a4ceb26` — CODE PASS on every commit, visual and progress PASS. Parked: panel-hall per-box mesh merging (medium-low); two validation gaps (low) |
 | physical-building:w34313535 / w34313535 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1+L2 PASS. Parked: validation lows; colour pass (to cream) |
 | physical-building:w34313540 / w34313540 | Building 3 | ☑ C | ☑ C | ☐ U | ☑ C | ☐ U | B3 — existing004 whole architecture/material/native-fit/suite PASS; unchanged source, unseen inference retained |
-| physical-building:w34313544 / w34313544 | Naval Station Treasure Island | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21h institutional batch on the mid-rise family (`bf57964`, `6c5a131`, `a45788d`) — CODE, visual and progress PASS; L1 only (L2 not passed) |
+| physical-building:w34313544 / w34313544 | Naval Station Treasure Island | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21h institutional batch on the mid-rise family (`bf57964`, `6c5a131`, `a45788d`) — CODE, visual and progress PASS; L1 only (L2 not passed); Mar22i reopened at L2 from the owner-accepted 2018-09 survey photos (`b6ea6bf` hood, `4aa004e`…`a783900`) — CODE PASS, visual L2 PASS 450 4th St (REWORK fixed in `a783900`, re-reviewed PASS); catalog accepted |
 | physical-building:w34313545 / w34313545 | 800 Avenue I, San Francisco, CA | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22c B201: L1 C from the review-only sweep `/workspaces/landmark-progress-20261007/review-sweep-20261022/` (visual review; assets unchanged); L2 gap: blank sides; openings pass approved by owner 2026-10-22; Mar22h blank sides filled (`7a87d82`…`58831fe`, D1 inferred openings) — CODE PASS, visual PASS B201 (round 2): L2 C |
 | physical-building:w34313546 / w34313546 | 850 Avenue H | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 850 Avenue H (Bldg 202): Mar17l panel halls `265bbbd`…`a4ceb26` — CODE PASS on every commit, visual and progress PASS. Parked: panel-hall per-box mesh merging (medium-low); two validation gaps (low); door hoods (L3) |
 | physical-building:w34313547 / w34313547 | Treasure Island Community YMCA | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | YMCA — scoped envelope/entry/site closure; whole architecture and finish open |
@@ -622,7 +628,7 @@ before selecting another round.
 | physical-building:w96698654 / w96698654 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1+L2 PASS. Parked: validation lows |
 | physical-building:w96698658 / w96698658 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 1250 Exposition Drive: Mar17g `f9be475` + `e4285b9` — CODE and progress PASS; visual L1/L2 PASS. Parked: fences, boxes, vent pipes, carport-top finish; colour re-check after lighting |
 | physical-building:w96698660 / w96698660 | 810 Avenue D | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1 PASS (L2 not passed). Parked: validation lows |
-| physical-building:w96698662 / w96698662 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21h institutional batch on the mid-rise family (`bf57964`, `6c5a131`, `a45788d`) — CODE, visual and progress PASS; L1 only (L2 not passed) |
+| physical-building:w96698662 / w96698662 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21h institutional batch on the mid-rise family (`bf57964`, `6c5a131`, `a45788d`) — CODE, visual and progress PASS; L1 only (L2 not passed); Mar22i reopened at L2 from the owner-accepted 2018-09 survey photos (`b6ea6bf` hood, `4aa004e`…`a783900`) — CODE PASS, visual L2 PASS 488; catalog accepted |
 | physical-building:w96698663 / w96698663 | 1243 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17d `b69fd3b` + cleanup `9d5df86` — CODE, visual L1/L2 and progress PASS (cleanup: CODE and visual PASS); fit/native/routes, rear+end spray and both full suites exit 0. Parked: canopy top colour (shared), NNE annex outside footprint, fences, boxes, vent pipes, post bands |
 | physical-building:w96698667 / w96698667 | 1218/1440 Gateview Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17f `6539db3` + `970359e` — CODE, visual L1/L2 and progress PASS; 1218 rear-cadence delta CODE and visual PASS. Parked: fences, vent pipes, post bands, carport-top and canopy finish; colour re-check after the lighting decision; Level 2 complete on all sides after the rear-cadence fix |
 | physical-building:w96698672 / w96698672 | 1245 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17d `b69fd3b` + cleanup `9d5df86` — CODE, visual L1/L2 and progress PASS (cleanup: CODE and visual PASS); fit/native/routes, rear+end spray and both full suites exit 0. Parked: step eave return (L3), fences, boxes |
@@ -634,7 +640,7 @@ before selecting another round.
 | physical-building:w110188516 / w110188516 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 516: Mar17l panel halls `265bbbd`…`a4ceb26` — CODE PASS on every commit, visual and progress PASS. Parked: panel-hall per-box mesh merging (medium-low); two validation gaps (low); roof monitor (L1 delta); white trim (L3) |
 | physical-building:w111322535 / w111322535 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1+L2 PASS. Parked: validation lows |
 | physical-building:w291189336 / w291189336 | Navy Chapel Building 187 | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Ch — lip004 whole visual/CODE and integrated native/fit/stairs/suite PASS; as-built unclaimed |
-| physical-building:w291189918 / w291189918 | Oasis - pizzeria & event venue | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21h institutional batch on the mid-rise family (`bf57964`, `6c5a131`, `a45788d`) — CODE, visual and progress PASS; L1 only (L2 not passed) |
+| physical-building:w291189918 / w291189918 | Oasis - pizzeria & event venue | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21h institutional batch on the mid-rise family (`bf57964`, `6c5a131`, `a45788d`) — CODE, visual and progress PASS; L1 only (L2 not passed); Mar22i reopened at L2 from the owner-accepted 2018-09 survey photos (`b6ea6bf` hood, `4aa004e`…`a783900`) — CODE PASS, visual L2 PASS Oasis; catalog accepted |
 | physical-building:w291189926 / w291189926 | US Dept of Labor Job Corps Dormitory Building 369 | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22d C-set (`fc3db5d` runtime retirement, `68e7453` mid-rise configs) — CODE, visual and evidence-based progress PASS. Parked: colour pass (warmer grey-beige); landings next to Oasis |
 | physical-building:w291193741 / w291193741 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1 PASS (L2 not passed). Parked: validation lows |
 | physical-building:w291193744 / w291193744 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1 PASS (L2 not passed). Parked: validation lows |
@@ -704,7 +710,7 @@ March/November2025 refs and unknown-date Apple context support the scoped envelo
 and observed architecture; missing north capture/unknown rear/schematic materials
 keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
 See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
-Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar22h for current totals);
+Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar22i for current totals);
 **L1:21 C /0 I /192 U**. All other stages unchanged;49 historical credits retained.
 
 ## Island environment layers
