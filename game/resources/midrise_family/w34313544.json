@@ -238,12 +238,12 @@
     },
     "gym_green": {
       "rgb": [
-        0.5,
-        0.63,
-        0.55
+        0.12,
+        0.36,
+        0.25
       ],
-      "roughness": 0.75,
-      "metallic": 0.05
+      "roughness": 0.7,
+      "metallic": 0.1
     },
     "roof_green": {
       "rgb": [
@@ -396,6 +396,19 @@
       "material": "drum_white",
       "parapet_material": "drum_white",
       "gable_material": "drum_white",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      }
+    },
+    "drum_back": {
+      "material": "gym_green",
+      "parapet_material": "gym_green",
+      "gable_material": "gym_green",
       "module": 60.0,
       "ground": {
         "kind": "blank"
@@ -596,7 +609,8 @@
       },
       "roof_material": "skylight",
       "faces": {
-        "default": "drum"
+        "default": "drum",
+        "court": "drum_back"
       }
     },
     {
