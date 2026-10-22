@@ -21227,3 +21227,13 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: massing only, with roof forms from the undated overheads, kept this batch to one config script on the shared producer: two flat blocks, two Bigelow rows and two Chinook duplexes, gabled over convex pieces with flat connectors. All six passed four-side fits with no skipped sides, and the suite passed. Taking the before shots with the registry checked out and restoring it afterwards replaced a separate state script.
 - What did not work well: my plan for the fish-street duplexes first split them into rectangles that met the footprint's 5–9 cm steps. Using a gabled main rectangle plus one flat, non-convex extension avoided the slivers.
 - What the team should change next time: for stepped footprints, choose the gabled part as the largest rectangle fully inside the ring and leave the steps to one flat piece. A flat roof may be non-convex; a pitched roof may not.
+
+## visual-review (L1 no-photo batch, 2026-10-22)
+
+- What worked well: the before/after rows on all four sides made the Level 1 change (textured slab to believable gabled or flat massing with simple openings) obvious, and the raised contexts confirmed each unit sits in its family neighbourhood. 1107's single Feb 2018 photo was used where it existed.
+- What did not work well: with no photos, "fits its neighbourhood" could only be judged against neighbouring models, which are themselves partly inferred. 1442 and 1447 sit beside Chinook garage courts whose real form is still in doubt.
+- What the team should change next time: before closing a no-photo Level 1 unit, record one line naming its nearest photographed neighbour and the family choice it took from it, so a later photo capture can check the inference quickly.
+
+## code-review (no-photo mid-rise configs 3f34a6c, 2026-10-22)
+
+- What worked well: static validation (registration, schema, palette, range-checked fields) plus the author's headless CHECK lines and a footprint clearance scan covered all six units quickly; the closest other-config ground is 8.2 m away, beyond any landing. Next time: have the headless check also emit landing and ramp footprints, so overlap is proven rather than bounded by distance.
