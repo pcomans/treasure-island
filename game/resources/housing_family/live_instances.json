@@ -993,6 +993,12 @@
       "family": "midrise",
       "config": "res://game/resources/midrise_family/w34313520.json",
       "chunk": "res://generated/world/chunks/x_-1__z_0.json"
+    },
+    {
+      "source_key": "w34313525",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w34313525.json",
+      "chunk": "res://generated/world/chunks/x_1__z_-1.json"
     }
   ],
   "expected_visible_active_topology": {

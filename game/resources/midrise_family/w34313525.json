@@ -1,0 +1,632 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w34313525",
+    "address": "8th St / Avenue M warehouse (w34313525)",
+    "edge_normals": [
+      [
+        -0.8813748097680869,
+        0.47241765918122547
+      ],
+      [
+        0.472323196429625,
+        0.8814254353684728
+      ],
+      [
+        0.881595414842035,
+        -0.4720058522195464
+      ],
+      [
+        0.47242571461634075,
+        0.8813704920005206
+      ],
+      [
+        0.881313350254332,
+        -0.4725323043596968
+      ],
+      [
+        -0.47232822844360217,
+        -0.8814227388803447
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": 5,
+    "above_terrain": 0.05,
+    "basis": "median frozen terrain along the photographed NNW (8th St) front"
+  },
+  "levels": {
+    "ground_h": 4.4,
+    "storey_h": 3.0,
+    "parapet_h": 0.35
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.66,
+        0.65,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.73,
+        0.74,
+        0.74
+      ],
+      "roughness": 0.45,
+      "metallic": 0.3
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.62,
+        0.61,
+        0.58
+      ],
+      "roughness": 0.95
+    },
+    "wh_bluegrey": {
+      "rgb": [
+        0.64,
+        0.7,
+        0.75
+      ],
+      "roughness": 0.85
+    },
+    "wh_pale": {
+      "rgb": [
+        0.9,
+        0.89,
+        0.83
+      ],
+      "roughness": 0.9
+    },
+    "wh_white": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.85
+    },
+    "wh_blue": {
+      "rgb": [
+        0.22,
+        0.4,
+        0.62
+      ],
+      "roughness": 0.6,
+      "metallic": 0.1
+    },
+    "boarded": {
+      "rgb": [
+        0.66,
+        0.55,
+        0.42
+      ],
+      "roughness": 0.9
+    },
+    "eave_dark": {
+      "rgb": [
+        0.3,
+        0.3,
+        0.3
+      ],
+      "roughness": 0.8
+    },
+    "door_pale": {
+      "rgb": [
+        0.8,
+        0.83,
+        0.85
+      ],
+      "roughness": 0.6
+    }
+  },
+  "schemes": {
+    "nnw": {
+      "material": "wh_bluegrey",
+      "parapet_material": "wh_bluegrey",
+      "module": 7.0,
+      "window": {
+        "w": 2.8,
+        "h": 1.2,
+        "sill": 2.0,
+        "depth": 0.12,
+        "mullions": [
+          0.33,
+          0.67
+        ],
+        "frame": "frame"
+      },
+      "ground": {
+        "w": 2.8,
+        "h": 1.2,
+        "sill": 2.0,
+        "depth": 0.12,
+        "mullions": [
+          0.33,
+          0.67
+        ],
+        "frame": "frame",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.25
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 16.7,
+          "to": 19.3,
+          "door": {
+            "kind": "unit",
+            "w": 1.8,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door_pale"
+          },
+          "landing": {
+            "w": 2.6,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "garage",
+          "from": 33.6,
+          "to": 38.4,
+          "w": 4.0,
+          "h": 3.4,
+          "material": "garage"
+        },
+        {
+          "type": "entry",
+          "from": 55.853,
+          "to": 58.453,
+          "door": {
+            "kind": "unit",
+            "w": 1.8,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door_pale"
+          },
+          "landing": {
+            "w": 2.6,
+            "depth": 1.2
+          },
+          "canopy": {
+            "w": 113.306,
+            "depth": 1.5,
+            "t": 0.2,
+            "material": "eave_dark",
+            "gap": 1.85
+          }
+        },
+        {
+          "type": "entry",
+          "from": 93.006,
+          "to": 95.606,
+          "door": {
+            "kind": "unit",
+            "w": 1.8,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door_pale"
+          },
+          "landing": {
+            "w": 2.6,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "wsw": {
+      "material": "wh_pale",
+      "parapet_material": "wh_blue",
+      "module": 7.0,
+      "window": {
+        "w": 2.8,
+        "h": 1.2,
+        "sill": 2.0,
+        "depth": 0.12,
+        "mullions": [
+          0.33,
+          0.67
+        ],
+        "frame": "wh_blue"
+      },
+      "ground": {
+        "w": 2.8,
+        "h": 1.2,
+        "sill": 2.0,
+        "depth": 0.12,
+        "mullions": [
+          0.33,
+          0.67
+        ],
+        "frame": "wh_blue",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.25
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 8.7,
+          "to": 11.3,
+          "door": {
+            "kind": "unit",
+            "w": 1.8,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door_pale"
+          },
+          "landing": {
+            "w": 2.6,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "garage",
+          "from": 36.699,
+          "to": 41.499,
+          "w": 4.0,
+          "h": 3.4,
+          "material": "wh_blue"
+        },
+        {
+          "type": "entry",
+          "from": 44.799,
+          "to": 47.399,
+          "door": {
+            "kind": "unit",
+            "w": 1.8,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door_pale"
+          },
+          "landing": {
+            "w": 2.6,
+            "depth": 1.2
+          },
+          "canopy": {
+            "w": 24.0,
+            "depth": 1.5,
+            "t": 0.2,
+            "material": "eave_dark",
+            "gap": 1.85
+          }
+        },
+        {
+          "type": "entry",
+          "from": 55.763,
+          "to": 58.363,
+          "door": {
+            "kind": "unit",
+            "w": 1.8,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door_pale"
+          },
+          "landing": {
+            "w": 2.6,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "sse": {
+      "material": "wh_white",
+      "parapet_material": "wh_white",
+      "module": 7.0,
+      "window": {
+        "w": 2.8,
+        "h": 1.2,
+        "sill": 2.0,
+        "depth": 0.12,
+        "mullions": [
+          0.33,
+          0.67
+        ],
+        "frame": "frame",
+        "glass": "boarded"
+      },
+      "ground": {
+        "w": 2.8,
+        "h": 1.2,
+        "sill": 2.0,
+        "depth": 0.12,
+        "mullions": [
+          0.33,
+          0.67
+        ],
+        "frame": "frame",
+        "glass": "boarded",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.25
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 23.7,
+          "to": 26.3,
+          "door": {
+            "kind": "unit",
+            "w": 1.8,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door_pale"
+          },
+          "landing": {
+            "w": 2.6,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "entry",
+          "from": 68.7,
+          "to": 71.3,
+          "door": {
+            "kind": "unit",
+            "w": 1.8,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door_pale"
+          },
+          "landing": {
+            "w": 2.6,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "ene": {
+      "material": "wh_bluegrey",
+      "parapet_material": "wh_bluegrey",
+      "module": 7.0,
+      "window": {
+        "w": 2.8,
+        "h": 1.2,
+        "sill": 2.0,
+        "depth": 0.12,
+        "mullions": [
+          0.33,
+          0.67
+        ],
+        "frame": "frame"
+      },
+      "ground": {
+        "w": 2.8,
+        "h": 1.2,
+        "sill": 2.0,
+        "depth": 0.12,
+        "mullions": [
+          0.33,
+          0.67
+        ],
+        "frame": "frame",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.25
+      },
+      "features": [
+        {
+          "type": "garage",
+          "from": 29.6,
+          "to": 34.4,
+          "w": 4.0,
+          "h": 3.4,
+          "material": "garage"
+        },
+        {
+          "type": "entry",
+          "from": 40.7,
+          "to": 43.3,
+          "door": {
+            "kind": "unit",
+            "w": 1.8,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door_pale"
+          },
+          "landing": {
+            "w": 2.6,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "plain": {
+      "material": "wh_bluegrey",
+      "parapet_material": "wh_bluegrey",
+      "module": 7.0,
+      "window": {
+        "w": 2.8,
+        "h": 1.2,
+        "sill": 2.0,
+        "depth": 0.12,
+        "mullions": [
+          0.33,
+          0.67
+        ],
+        "frame": "frame"
+      },
+      "ground": {
+        "w": 2.8,
+        "h": 1.2,
+        "sill": 2.0,
+        "depth": 0.12,
+        "mullions": [
+          0.33,
+          0.67
+        ],
+        "frame": "frame",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.25
+      }
+    }
+  },
+  "blocks": [
+    {
+      "id": "warehouse",
+      "storeys": 1,
+      "ground_h": 4.4,
+      "parapet": {
+        "h": 0.35,
+        "t": 0.2
+      },
+      "faces": {
+        "e5": "nnw",
+        "e0": "wsw",
+        "e1": "sse",
+        "e4": "ene",
+        "default": "plain"
+      },
+      "roof_items": [
+        {
+          "kind": "box",
+          "edge": 4,
+          "s": [
+            6.0,
+            26.0
+          ],
+          "d": [
+            2.0,
+            12.0
+          ],
+          "h": 2.6,
+          "material": "wh_bluegrey",
+          "top": "roof"
+        }
+      ]
+    }
+  ],
+  "study_notes": {
+    "observed": "Mar 2025, all four sides: low flat-roofed warehouse; NNW blue-grey with dark high window bands, personnel doors and a projecting eave; WSW pale with blue-framed high windows, a blue roll-up and a projecting rafter eave; SSE white with boarded high windows; ENE blue-grey with an upper clerestory block.",
+    "inferred": "Opening positions and sizes, eave as a long flat canopy (rafters not modelled), the ENE clerestory as a roof block; paint fields per side.",
+    "footprint": "Frozen 6-edge ring kept as one block."
+  }
+}
