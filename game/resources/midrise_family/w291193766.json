@@ -638,7 +638,7 @@
       "open": {
         "post_w": 0.3,
         "module": 60.0,
-        "post_every": 100000,
+        "posts": false,
         "post_material": "metal"
       }
     },

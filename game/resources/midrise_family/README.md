@@ -52,7 +52,7 @@ All are opt-in; configs without them build as before. Materials are shared acros
 |---|---|
 | block `roof` | `form`: `gable` (ridge parallel to footprint edge `ridge_edge`), `mono` (falls toward edge `low_edge`) or `pyramid` (hip or pavilion); `pitch_deg`, `overhang`, slab thickness `t`, and `under`/`fascia` materials (the top is `roof_material`). The block outline must be convex; its walls stop at the eave and the gable or lean-to infill above it follows the roof. |
 | parapet `style: "pipe"` | Posts and top and mid rails instead of glass panels, over the `curb` (tank tops, basin rims, roofs). |
-| scheme `open` | Posts (`post_w`, `module`, `post_material`; `post_every` keeps one face start in n) instead of a wall, optionally over a `knee` wall (`h`, `t`, `material`, entrance `gap` in stations). |
+| scheme `open` | Posts (`post_w`, `module`, `post_material`; `post_every` keeps one face start in n; `posts: false` leaves the side without posts, for a deck carried by its neighbours) instead of a wall, optionally over a `knee` wall (`h`, `t`, `material`, entrance `gap` in stations). |
 | scheme `gable_material` | Material of the infill above the eave. |
 | feature `vents` `windows: true` | Keeps the ground-storey window in the louvres' bay (louvres under windows). |
 | target `holes` | Number of courtyard holes: further closed rings after the outer ring in the wall record. Each hole must lie wholly inside one flat block, which builds full-height courtyard walls (face key `hole`, else `default`), parapets and its roof around it. Absent means a single ring, as before. |

@@ -2151,7 +2151,8 @@ static func _apron(ctx: Ctx, apron: Dictionary) -> void:
 ## Open side: posts (support) at the face start and every `module` along it,
 ## optionally over a knee wall (wall role, both faces and a cap) with an
 ## entrance `gap` in footprint stations. `post_every` keeps one face start in n
-## (pavilions with many short faces).
+## (pavilions with many short faces); `posts: false` leaves the side without posts
+## (a deck carried by its neighbours).
 static func _open_face(ctx: Ctx, face: Face) -> void:
 	var block := face.block
 	var spec: Dictionary = face.scheme.open
@@ -2167,6 +2168,11 @@ static func _open_face(ctx: Ctx, face: Face) -> void:
 	if not deck.is_empty() and not (_in_range(float(deck.get("t", 0.3)), 0.0, 2.0) and float(deck.get("t", 0.3)) > 0.0):
 		ctx.errors.append("block %s deck needs t in (0, 2] m" % block.id)
 		return
+	var posts_value: Variant = spec.get("posts", true)
+	if not posts_value is bool:
+		ctx.errors.append("block %s open posts must be true or false" % block.id)
+		return
+	var with_posts: bool = posts_value
 	var gap: Array = knee.get("gap", [])
 	var g0 := INF
 	var g1 := -INF
@@ -2179,7 +2185,7 @@ static func _open_face(ctx: Ctx, face: Face) -> void:
 		var b := float(span.s1)
 		var stations: Array = []
 		var x := a
-		while x < b - 0.05:
+		while with_posts and x < b - 0.05:
 			stations.append(x)
 			x += module
 		for i in stations.size():
