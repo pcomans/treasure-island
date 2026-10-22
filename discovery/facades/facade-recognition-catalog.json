@@ -1619,6 +1619,16 @@
           "status": "accepted",
           "numerator_effect": 0,
           "scope": "L1 basic envelope/site only; independent CODE and scoped VISUAL, native/four stock approaches/path/spray REST SAFE and full suite PASS. L2-L5, whole modern recognition and as-built remain open."
+        },
+        {
+          "review_id": "code-review-instfinals-20261022",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-instfinals-w34313547-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
         }
       ],
       "anchor_source_key": "w34313547",
@@ -2038,6 +2048,16 @@
           "status": "accepted",
           "numerator_effect": 0,
           "scope": "L1 envelope/site and observed SSE/ENE family only. Independent VISUAL/CODE/native-stock-apron-spray REST SAFE/full suite PASS. Missing north and unknown rear keep all-side L2, whole modern quality, recognition and as-built open."
+        },
+        {
+          "review_id": "code-review-instfinals-2d4b743-20261022",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-instfinals-w34313569-2d4b743-recheck-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
         }
       ],
       "anchor_source_key": "w34313569",
@@ -11209,6 +11229,16 @@
           "numerator_effect": 0,
           "scope": "Whole low modular envelope/site and observed public entry architecture; Sep2025 WSW, May2019 NNW and official SFFD reference (capture date unknown). Scoped final visual and distinct progress PASS, CODE PASS, mechanics002 native/four approaches/stock ascent-descent/spray/active REST then SAFE PASS, full suite9971 terminal0 PASS. L1 complete; all-side L2 remains unknown because ENE/SSE openings are unsupported. Continuous 28.6-degree visible/native metal access within the existing footprint is production inference, not as-built discrete stairs. Separate vaulted apparatus and neighbours excluded; no whole modern-quality or as-built claim. Published with this change.",
           "source_locator": "discovery/ISLAND_BUILDING_STAGE_CHECKLIST.md"
+        },
+        {
+          "review_id": "code-review-instfinals-20261022",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-instfinals-w764313741-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
         }
       ],
       "anchor_source_key": "w764313741",

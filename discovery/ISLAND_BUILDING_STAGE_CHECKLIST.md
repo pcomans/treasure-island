@@ -447,8 +447,17 @@ family; `5279519` recomposes 766's ducts around a riser and a dominant vessel af
 round-1 visual REWORK. CODE PASS on all three; visual L2 PASS for 760 (round 1) and 766
 (after the rework). L2 C on both, and the catalog accepts them. w291193770 stays L1
 with no acceptance, because no photo shows it.
-Current totals after Mar22j: L1:213 C/0 U; L2:186 C/27 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall400 C/0 I/665 U across213 units/1,065 cells; catalog
+**Mar22k** institutional finals, 2026-10-22: `557d216`, `eab45fe` and `40ce410` give
+Station 48, YMCA and Austin Hall plain walls on their unphotographed sides; `497150f`
+adds an opt-in panel-hall `terminal_piers` per chain (digest proof that the 7 halls are
+unchanged); `0eae518` fixes code-review nits; `2d4b743` reworks Austin to two-tone plain
+sides with one pier per corner. CODE PASS on all; visual L2 PASS for Station 48
+(`w764313741`) and YMCA (`w34313547`), and for Austin Hall (`w34313569`) after its
+round-1 REWORK. The Austin palette also lightens the accepted front's piers, sills and
+coping (ROOT approved; re-review passed). L2 C on all three; they were already
+accepted, and the catalog adds acceptance records for these reviews.
+Current totals after Mar22k: L1:213 C/0 U; L2:189 C/24 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall403 C/0 I/662 U across213 units/1,065 cells; catalog
 recognition score 58/213.
 **U** no current stage-level conclusion established in this checklist pass.
 
@@ -492,7 +501,7 @@ before selecting another round.
 | physical-building:w34313544 / w34313544 | Naval Station Treasure Island | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21h institutional batch on the mid-rise family (`bf57964`, `6c5a131`, `a45788d`) — CODE, visual and progress PASS; L1 only (L2 not passed); Mar22i reopened at L2 from the owner-accepted 2018-09 survey photos (`b6ea6bf` hood, `4aa004e`…`a783900`) — CODE PASS, visual L2 PASS 450 4th St (REWORK fixed in `a783900`, re-reviewed PASS); catalog accepted |
 | physical-building:w34313545 / w34313545 | 800 Avenue I, San Francisco, CA | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22c B201: L1 C from the review-only sweep `/workspaces/landmark-progress-20261007/review-sweep-20261022/` (visual review; assets unchanged); L2 gap: blank sides; openings pass approved by owner 2026-10-22; Mar22h blank sides filled (`7a87d82`…`58831fe`, D1 inferred openings) — CODE PASS, visual PASS B201 (round 2): L2 C |
 | physical-building:w34313546 / w34313546 | 850 Avenue H | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 850 Avenue H (Bldg 202): Mar17l panel halls `265bbbd`…`a4ceb26` — CODE PASS on every commit, visual and progress PASS. Parked: panel-hall per-box mesh merging (medium-low); two validation gaps (low); door hoods (L3) |
-| physical-building:w34313547 / w34313547 | Treasure Island Community YMCA | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | YMCA — scoped envelope/entry/site closure; whole architecture and finish open |
+| physical-building:w34313547 / w34313547 | Treasure Island Community YMCA | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | YMCA — scoped envelope/entry/site closure; whole architecture and finish open; Mar22k institutional finals (`557d216`…`2d4b743`) — CODE PASS, visual L2 PASS YMCA (plain aggregate panel walls) |
 | physical-building:w34313548 / w34313548 | San Francisco Fire Dept Treasure Island Training Facility Building 600 | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | F — retain; inspect later stages |
 | physical-building:w34313549 / w34313549 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21h institutional batch on the mid-rise family (`bf57964`, `6c5a131`, `a45788d`) — CODE, visual and progress PASS. Parked: stair |
 | physical-building:w34313550 / w34313550 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1+L2 PASS. Parked: validation lows |
@@ -503,7 +512,7 @@ before selecting another round.
 | physical-building:w34313558 / w34313558 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21h institutional batch on the mid-rise family (`bf57964`, `6c5a131`, `a45788d`) — CODE, visual and progress PASS |
 | physical-building:w34313560 / w34313560 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21h institutional batch on the mid-rise family (`bf57964`, `6c5a131`, `a45788d`) — CODE, visual and progress PASS |
 | physical-building:w34313564 / w34313564 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | `1438e22` scoped SSE L2 facade PASS; all-side and whole-building open; Mar22d C-set (`fc3db5d` runtime retirement, `68e7453` mid-rise configs) — CODE, visual and evidence-based progress PASS. Parked: dock canopy (L3) |
-| physical-building:w34313569 / w34313569 | Bldg 461 | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | B461 — scoped envelope/site complete; missing north and unknown rear keep whole quality open |
+| physical-building:w34313569 / w34313569 | Bldg 461 | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | B461 — scoped envelope/site complete; missing north and unknown rear keep whole quality open; Mar22k institutional finals (`557d216`…`2d4b743`) — CODE PASS, visual L2 PASS Austin Hall (round-1 REWORK; PASS after `2d4b743`, owner-approved palette change on the front) |
 | physical-building:w95934092 / w95934092 | 1318 Gateview Avenue | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17i Gateview Ave A `904f940`+`487a1ef`+`35a990e`+`45344f4` — CODE, visual and progress PASS (guards CODE PASS; drives CODE/visual/progress PASS). Parked: gable-generator closure-overlap dedupe (low); fences and site; colour pass; 1318 pergolas (L3) |
 | physical-building:w95934093 / w95934093 | 1432 Halibut Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21e fish streets on the garage-court kit (`02d39f1`…`fcfe956`) — CODE PASS (lows parked), visual L2 PASS, progress PASS. In frozen OSM, since demolished; modeled from Apr 2019 |
 | physical-building:w95934096 / w95934096 | 1412 Flounder Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17j Flounder Court `fb8a010`+`8eb5444`+`615d621`+`fa945e5`+`4f519a3` — CODE PASS (low notes only), visual L2 PASS, progress L1+L2 PASS; catalog stairs walked by the fit. Parked: cream slightly dark and cool; stucco lap lines; 1-pixel road-edge dots; turning-circle disc is config-only (roads L2 generator pass); code lows (gable vents on the roof role, loggia parts as spray receivers); garage doors should be white |
@@ -669,7 +678,7 @@ before selecting another round.
 | physical-building:w291196382 / w291196382 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1+L2 PASS. Parked: validation lows |
 | physical-building:w291196386 / w291196386 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Shed 386: Mar21f — now passes under the body-blocked walk-up rule (`fed49fc`, CODE PASS); north and east skipped as blocked by 372. Sheds verdicts as in Mar21a |
 | physical-building:w545387426 / w545387426 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1 PASS (L2 not passed). Parked: validation lows |
-| physical-building:w764313741 / w764313741 | San Francisco Fire Station 48 | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | S48 — whole envelope/site fit complete; observed entry scoped PASS; ENE/SSE openings unresolved |
+| physical-building:w764313741 / w764313741 | San Francisco Fire Station 48 | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | S48 — whole envelope/site fit complete; observed entry scoped PASS; ENE/SSE openings unresolved; Mar22k institutional finals (`557d216`…`2d4b743`) — CODE PASS, visual L2 PASS Station 48 (plain pale ENE/SSE walls) |
 | physical-building:w1001544698 / w1001544698 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1+L2 PASS. Parked: validation lows |
 | physical-building:w1043836450 / w1043836450 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 450 (680 Avenue I): Mar21c redo on the mid-rise family `51349c3` — visual L1+L2 PASS, resolving the earlier panel-hall REWORK; config code-trivial. Parked: ramp length (foundation-exposure trade-off); colour pass (roof grey-brown, lighter glazing) |
 | physical-building:w1098437841 / w1098437841 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | M — retain complete site; inspect later stages |
@@ -716,7 +725,7 @@ March/November2025 refs and unknown-date Apple context support the scoped envelo
 and observed architecture; missing north capture/unknown rear/schematic materials
 keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
 See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
-Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar22j for current totals);
+Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar22k for current totals);
 **L1:21 C /0 I /192 U**. All other stages unchanged;49 historical credits retained.
 
 ## Island environment layers
