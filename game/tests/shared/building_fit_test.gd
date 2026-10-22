@@ -10,7 +10,11 @@ extends SceneTree
 ## 4. Walk-up: from each side the stock player walks up to the building, arrives
 ##    next to it (within 1.5 m), stays on the ground and never needs a fall
 ##    recovery. Ending up under the building (carport, arcade) is only noted;
-##    walking through walls is check 2.
+##    walking through walls is check 2. A side is skipped (WALK_UP_SKIPPED, with
+##    the reason) only when every candidate start on it lies outside the playable
+##    boundary, inside another building's frozen footprint, or was rejected by
+##    another building's body (ground ray, drop pose or corridor); every other
+##    side must still pass, and at least two sides must pass.
 ## 5. Stairs: each flight listed in the building's catalog entry as
 ##    "stairs": [{"bottom": [x, z], "top": [x, z]}] is walked up and back down.
 ## A check with nothing to sample fails: it would otherwise pass untested.
@@ -44,25 +48,11 @@ const Catalog := preload("res://game/tests/shared/catalog.gd")
 
 
 const QUALITY_SUPPORT_ASSEMBLIES := {
-	"w34313564": {
-		"assembly_name": "W34313564LiveModules",
-		"required": {
-			"wall": ["SSEPlinth", "SSESurround", "SSEClosedDoor", "SSEWindow", "RetainedENEWindow", "RetainedNNWDoor", "RetainedNNWWindow"],
-			"detail": ["SSEEave", "SSEFascia"],
-			"ground_visual": [],
-		},
-		"retained_calibration": {
-			"helper": "res://game/tests/support/w34313564_module_calibration.gd",
-			"registry": "res://game/resources/facades/w34313564_module_calibration.json",
-			"chunk": "res://generated/world/chunks/x_0__z_-3.json",
-			"placements": ["CAL-ENE-HWIN-01", "CAL-NNW-PDOOR-01", "CAL-NNW-HWIN-01"],
-		},
-	},
 	"w34313547": {
 		"assembly_name": "YMCAObservedEntrySite",
 		"required": {
-			"wall": ["PavilionFlank", "PavilionPier", "PavilionHeader", "ClosedGlazing", "ServiceDoorFrame", "BlueServiceDoor"],
-			"detail": ["FlatCanopy", "CanopyFascia", "GlazingMullion", "GlazingRail", "DoorLowerRail", "DoorPull", "ObservedCoping", "PanelJoint", "ServiceHandle", "HighLouverFrame", "HighLouverRecess", "LouverBlade"],
+			"wall": ["PavilionFlank", "PavilionPier", "PavilionHeader", "ClosedGlazing", "ServiceDoorFrame", "BlueServiceDoor", "InferredOppositeSolidPanel"],
+			"detail": ["FlatCanopy", "CanopyFascia", "GlazingMullion", "GlazingRail", "DoorLowerRail", "DoorPull", "ObservedCoping", "PanelJoint", "ServiceHandle", "HighLouverFrame", "HighLouverRecess", "LouverBlade", "InferredOppositeCoping", "InferredOppositePanelJoint"],
 			"ground_visual": ["EntryPath", "FrontLawn"],
 		},
 	},
@@ -152,8 +142,8 @@ func _run() -> void:
 		quit(1)
 		return
 	var source_key := str(args.source)
-	var native_sources := {"chapel-indexed": "w291189336", "building2-indexed": "w24274434", "station48-indexed": "w764313741", "northpoint1232-mixed": "w96215673", "ymca-mixed": "w34313547", "panel-hall-mixed": "w34313569", "personnel-support-mixed": "r133347", "job-corps-368-mixed": "w34313521", "building-202-mixed": "w34313546", "panel-hall-528-mixed": "w34313528", "avenue-h-449-mixed": "w34313512", "panel-hall-516-mixed": "w110188516", "w34313564-mixed": "w34313564"}
-	var housing_native := str(args.get("native-producer", "")) == "housing-get-faces"
+	var native_sources := {"chapel-indexed": "w291189336", "building2-indexed": "w24274434", "station48-indexed": "w764313741", "northpoint1232-mixed": "w96215673", "ymca-mixed": "w34313547", "panel-hall-mixed": "w34313569", "personnel-support-mixed": "r133347", "job-corps-368-mixed": "w34313521", "building-202-mixed": "w34313546", "panel-hall-528-mixed": "w34313528", "avenue-h-449-mixed": "w34313512", "panel-hall-516-mixed": "w110188516"}
+	var housing_native := str(args.get("native-producer", "")) in ["housing-get-faces", "housing-retained-get-faces"]
 	if args.has("native-producer") and ((not housing_native and str(native_sources.get(str(args["native-producer"]), "")) != source_key) or args.has("diagnose-side") or args.has("adjacent-source")):
 		push_error("native producer requires its supported source and cannot combine diagnostic/adjacent modes")
 		quit(1)
@@ -209,14 +199,12 @@ func _run() -> void:
 	if args.has("native-producer"):
 		var native_error := ""
 		if housing_native:
-			native_error = _check_housing_faces(h, source_key)
+			native_error = _check_housing_faces(h, source_key, str(args["native-producer"]) == "housing-retained-get-faces", str(args["native-producer"]) == "housing-retained-get-faces")
 		elif str(args["native-producer"]) == "northpoint1232-mixed":
 			native_error = _check_housing_faces(h, source_key, true)
-		elif str(args["native-producer"]) in ["ymca-mixed", "panel-hall-mixed", "personnel-support-mixed", "job-corps-368-mixed", "building-202-mixed", "panel-hall-528-mixed", "avenue-h-449-mixed", "panel-hall-516-mixed", "w34313564-mixed"]:
+		elif str(args["native-producer"]) in ["ymca-mixed", "panel-hall-mixed", "personnel-support-mixed", "job-corps-368-mixed", "building-202-mixed", "panel-hall-528-mixed", "avenue-h-449-mixed", "panel-hall-516-mixed"]:
 			var descriptor: Dictionary = QUALITY_SUPPORT_ASSEMBLIES[source_key]
 			native_error = _check_quality_support_mixed(h, source_key, descriptor.assembly_name, descriptor.required)
-			if native_error == "" and descriptor.has("retained_calibration"):
-				native_error = _check_retained_calibration(h, source_key, descriptor)
 		elif str(args["native-producer"]) == "station48-indexed":
 			native_error = _check_station48_indexed(h, source_key)
 		elif str(args["native-producer"]) == "building2-indexed":
@@ -548,7 +536,7 @@ func _check_building2_indexed(h: WorldHarness, source: String) -> String:
 # Shared housing installs every immediate mesh in a source-owned role bucket,
 # translating its world-space faces into the body's local origin in that order.
 # The same installer attaches mid-rise family producers (SharedMidrise_*).
-func _check_housing_faces(h: WorldHarness, source: String, retained_quality: bool = false) -> String:
+func _check_housing_faces(h: WorldHarness, source: String, retained_quality: bool = false, require_family_roof: bool = false) -> String:
 	var roots: Array[Node3D] = []
 	for pattern: String in ["SharedHousing_*", "SharedMidrise_*"]:
 		for node: Node in h.main.find_children(pattern, "Node3D", true, false):
@@ -561,7 +549,7 @@ func _check_housing_faces(h: WorldHarness, source: String, retained_quality: boo
 		return "unsupported housing producer placement or identity"
 	var retained := {"error": "", "meshes": [], "body": null}
 	if retained_quality:
-		retained = _check_northpoint1232_retained(h, root, source)
+		retained = _check_housing_retained(h, root, source, require_family_roof)
 		if retained.error != "":
 			return str(retained.error)
 	var meshes := {"wall": [], "roof": [], "support": [], "ground": []}
@@ -591,7 +579,7 @@ func _check_housing_faces(h: WorldHarness, source: String, retained_quality: boo
 			return "additional active housing source body"
 	for role: String in meshes:
 		if meshes[role].is_empty():
-			if role == "wall" or (role == "roof" and not retained_quality) or bodies.has(role):
+			if role == "wall" or (role == "roof" and (not retained_quality or require_family_roof)) or bodies.has(role):
 				return "missing positive housing role coverage"
 			continue
 		if not bodies.has(role):
@@ -649,7 +637,7 @@ func _check_housing_faces(h: WorldHarness, source: String, retained_quality: boo
 # Public/protected wall subsets reorder source runs, so compare oriented multisets.
 func _check_station48_indexed(h:WorldHarness,source:String) -> String:
 	var groups:Dictionary={
-		"ExactClosedSourceWalls":["ProtectedExactNeutralWallRuns","ObservedWSWNNWPaleWallFields"],
+		"ExactClosedSourceWalls":["ProtectedExactNeutralWallRuns","ObservedWSWNNWPaleWallFields","InferredENESSEPaleWallFields"],
 		"ExactSourceNeutralRoof":["ExactSourceNeutralRoof"],
 		"RaisedMetalAccess":["RaisedMetalAccess"],"ClosedEntryDoor":["ClosedEntryDoor"],
 		"EntrySurround":["EntrySurround"],"StationSign":["StationSign"]}
@@ -710,15 +698,22 @@ func _check_station48_indexed(h:WorldHarness,source:String) -> String:
 # This source deliberately retains the quality producer's separate roof body.
 # Its draped ground/shrubs had no legacy contacts, but the family installer now
 # appends them to FamilyContact_support. LAND itself remains a separate owner.
-func _check_northpoint1232_retained(h: WorldHarness, family: Node3D, source: String) -> Dictionary:
+func _check_housing_retained(h: WorldHarness, family: Node3D, source: String, require_family_roof: bool) -> Dictionary:
 	var result := {"error": "", "meshes": [], "body": null}
-	if source != "w96215673":
-		result.error = "mixed quality producer requires its exact source"
+	var inventory := StudyGeometry.retained_housing_inventory(h.main, family, source, require_family_roof)
+	if not inventory.ok:
+		result.error = inventory.reason
 		return result
 	var wall_key := "building:" + source + ":wall"
 	var roof_key := "building:" + source + ":roof"
+	if not require_family_roof and h.main.find_children("Northpoint1232LiveRoof", "Node3D", true, false).size() != 1:
+		result.error = "missing or duplicate retained1232 named roof"
+		return result
+	if not require_family_roof and (source != "w96215673" or family.get_parent().name != "Northpoint1232LiveWall" or inventory.roof_owners[0].name != "Northpoint1232LiveRoof"):
+		result.error = "retained1232 alias owner differs"
+		return result
 	var wall_root := family.get_parent() as Node3D
-	if wall_root == null or wall_root.name != "Northpoint1232LiveWall" or wall_root.get_meta("source_keys", []) != [source] or wall_root.get_meta("derived_object_key", "") != wall_key or wall_root.get_meta("receiver_kind", "") != "building_wall" or wall_root.is_set_as_top_level() or wall_root.global_transform != Transform3D.IDENTITY:
+	if wall_root == null or wall_root.get_meta("source_keys", []) != [source] or wall_root.get_meta("derived_object_key", "") != wall_key or wall_root.get_meta("receiver_kind", "") != "building_wall" or wall_root.is_set_as_top_level() or wall_root.global_transform != Transform3D.IDENTITY:
 		result.error = "retained quality wall owner differs"
 		return result
 	for child: Node in wall_root.get_children():
@@ -749,8 +744,8 @@ func _check_northpoint1232_retained(h: WorldHarness, family: Node3D, source: Str
 		result.error = "missing positive retained ground/support coverage"
 		return result
 	var roofs: Array[Node3D] = []
-	for node: Node in h.main.find_children("Northpoint1232LiveRoof", "Node3D", true, false):
-		roofs.append(node as Node3D)
+	for node: Node3D in inventory.roof_owners:
+		roofs.append(node)
 	if roofs.size() != 1:
 		result.error = "missing or duplicate retained quality roof"
 		return result
@@ -810,7 +805,7 @@ func _check_northpoint1232_retained(h: WorldHarness, family: Node3D, source: Str
 				result.error = "additional retained source visual outside verified producers"
 				return result
 	result.body = body
-	print("PASS: retained1232 roof per-mesh native faces/RIDs; retained ground_visual included in family support, LAND separate")
+	print("PASS: retained housing roof per-mesh native faces/RIDs; positive retained ground_visual mapped to FamilyContact_support, LAND separate source=" + source)
 	return result
 
 
@@ -928,60 +923,4 @@ func _check_quality_support_native_owner(body: StaticBody3D, source: String, key
 	for object: Object in objects:
 		if object.get_meta("source_keys", []) != [source] or object.get_meta("derived_object_key", "") != key or object.get_meta("receiver_kind", "") != ("building_wall" if wall else "none") or object.get_meta("opaque", false) != true:
 			return "Quality-support native source/receiver identity differs"
-	return ""
-
-
-# Compare protected donor motifs in their actual composed placement, separately
-# from the current visual-to-native comparison. No historical face count is pinned.
-func _check_retained_calibration(h: WorldHarness, source: String, descriptor: Dictionary) -> String:
-	var spec: Dictionary = descriptor.retained_calibration
-	var chunk: Variant = JSON.parse_string(FileAccess.get_file_as_string(spec.chunk))
-	var registry: Variant = JSON.parse_string(FileAccess.get_file_as_string(spec.registry))
-	if not chunk is Dictionary or not chunk.get("records") is Array or not registry is Dictionary:
-		return "Retained calibration source/registry unavailable"
-	var record: Dictionary = {}
-	for candidate: Dictionary in chunk.records:
-		if candidate.get("object_key", "") == "building:" + source + ":wall":
-			if not record.is_empty(): return "Retained calibration ambiguous source record"
-			record = candidate
-	if record.is_empty(): return "Retained calibration missing source record"
-	var helper: Script = load(spec.helper)
-	if helper == null: return "Retained calibration helper unavailable"
-	var result: Dictionary = helper.build(record, registry)
-	if not result.get("ok", false): return "Retained calibration donor construction failed"
-	var donor := result.get("node") as Node3D
-	if donor == null: return "Retained calibration donor absent"
-	var assemblies := h.main.find_children(descriptor.assembly_name, "Node3D", true, false)
-	var error := "Retained calibration assembly ambiguous"
-	if assemblies.size() == 1:
-		error = _compare_retained_parts(donor, assemblies[0], spec.placements)
-	donor.free()
-	if error == "": print("PASS: %s protected calibration motifs retain composed faces and original materials" % source)
-	return error
-
-
-func _compare_retained_parts(donor: Node3D, actual: Node3D, placements: Array) -> String:
-	var expected := {}
-	var seen := {}
-	for module: Node3D in donor.get_children():
-		var placement := str(module.get_meta("placement_id", ""))
-		if placement not in placements: continue
-		if seen.has(placement): return "Retained calibration duplicate placement"
-		seen[placement] = true
-		if module.get_child_count() == 0: return "Retained calibration empty motif"
-		for part: MeshInstance3D in module.get_children():
-			var part_name := placement.replace("-", "_") + "_" + str(part.name)
-			var current := actual.get_node_or_null(NodePath(part_name)) as MeshInstance3D
-			if current == null or current.get_meta("placement_id", "") != placement or current.material_override != part.material_override or current.get_meta("host_runs", []) != module.get_meta("run_ownership", []):
-				return "Retained calibration missing part or changed material: " + part_name
-			var baseline := StudyGeometry.collect(part.mesh, [module.transform * part.transform], StudyGeometry.MESH_GET_FACES)
-			var present := StudyGeometry.collect(current.mesh, [current.transform], StudyGeometry.MESH_GET_FACES)
-			if not present.ok or not StudyGeometry.compare(baseline, present.faces, baseline.faces.size()).ok:
-				return "Retained calibration composed faces differ: " + part_name
-			expected[part_name] = true
-	for placement: String in placements:
-		if not seen.has(placement): return "Retained calibration missing protected motif: " + placement
-	for child: Node in actual.get_children():
-		if str(child.get_meta("placement_id", "")) in placements and not expected.has(str(child.name)):
-			return "Retained calibration unexpected protected part"
 	return ""

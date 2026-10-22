@@ -1,0 +1,379 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w291196374",
+    "address": "1220 Avenue M",
+    "edge_normals": [
+      [
+        -0.8924246444933944,
+        0.4511964692911929
+      ],
+      [
+        0.45396385572446624,
+        0.8910200994903403
+      ],
+      [
+        0.8926379582608351,
+        -0.45077430657916556
+      ],
+      [
+        -0.4548405313339315,
+        -0.8905729004724245
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": 0,
+    "above_terrain": 0.05,
+    "basis": "median frozen terrain along the photographed WSW gable front"
+  },
+  "levels": {
+    "ground_h": 3.8,
+    "storey_h": 3.0,
+    "parapet_h": 0.0
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.56,
+        0.55,
+        0.52
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.73,
+        0.74,
+        0.74
+      ],
+      "roughness": 0.45,
+      "metallic": 0.3
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.62,
+        0.61,
+        0.58
+      ],
+      "roughness": 0.95
+    },
+    "metal_white": {
+      "rgb": [
+        0.85,
+        0.86,
+        0.85
+      ],
+      "roughness": 0.6,
+      "metallic": 0.1
+    },
+    "roof_metal": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.5,
+      "metallic": 0.3
+    },
+    "fascia": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.7
+    }
+  },
+  "schemes": {
+    "gable_front": {
+      "material": "metal_white",
+      "parapet_material": "metal_white",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "garage",
+          "from": 2.665,
+          "to": 6.865,
+          "w": 3.6,
+          "h": 3.2
+        }
+      ]
+    },
+    "side": {
+      "material": "metal_white",
+      "parapet_material": "metal_white",
+      "module": 60.0,
+      "ground": {
+        "w": 1.2,
+        "h": 1.0,
+        "sill": 1.3,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "window": {
+        "w": 1.2,
+        "h": 1.0,
+        "sill": 1.3,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 5.6,
+          "to": 7.4,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "bays",
+          "from": 1.0,
+          "to": 3.6,
+          "module": 2.6
+        }
+      ]
+    },
+    "gable_back": {
+      "material": "metal_white",
+      "parapet_material": "metal_white",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "vents",
+          "from": 3.5,
+          "to": 6.0,
+          "count": 1,
+          "w": 1.2,
+          "h": 0.8,
+          "y": 2.0
+        }
+      ]
+    },
+    "side_back": {
+      "material": "metal_white",
+      "parapet_material": "metal_white",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "vents",
+          "from": 1.0,
+          "to": 3.6,
+          "count": 1,
+          "w": 1.0,
+          "h": 0.6,
+          "y": 2.0
+        },
+        {
+          "type": "vents",
+          "from": 5.6,
+          "to": 8.2,
+          "count": 1,
+          "w": 1.0,
+          "h": 0.6,
+          "y": 2.0
+        }
+      ]
+    }
+  },
+  "blocks": [
+    {
+      "id": "shed",
+      "storeys": 1,
+      "ground_h": 3.8,
+      "parapet": {
+        "h": 0.0
+      },
+      "roof": {
+        "form": "gable",
+        "ridge_edge": 1,
+        "pitch_deg": 15.0,
+        "overhang": 0.25,
+        "t": 0.12,
+        "under": "soffit",
+        "fascia": "fascia"
+      },
+      "roof_material": "roof_metal",
+      "faces": {
+        "e0": "gable_front",
+        "e1": "side",
+        "e2": "gable_back",
+        "e3": "side_back"
+      },
+      "roof_items": [
+        {
+          "kind": "cylinder",
+          "edge": 1,
+          "s": [
+            4.2,
+            4.8
+          ],
+          "d": [
+            4.2,
+            4.8
+          ],
+          "h": 0.7,
+          "sides": 10,
+          "material": "metal",
+          "top": "metal"
+        }
+      ]
+    }
+  ],
+  "study_notes": {
+    "observed": "Nov 2025 1220 Avenue M: white corrugated metal shed, low gable end to the street with a large roll-up door and a roof vent cowl.",
+    "inferred": "Side door and windows, rear louvres and door; pitch, eave height and opening sizes.",
+    "footprint": "Frozen rectangle kept as one gable block (ridge along edge 1)."
+  }
+}

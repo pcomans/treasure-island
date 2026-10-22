@@ -1,0 +1,513 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w291196372",
+    "address": "Avenue M treatment plant",
+    "edge_normals": [
+      [
+        -0.9851242140248845,
+        0.17184377481262866
+      ],
+      [
+        -0.8607505432411152,
+        0.5090270153048116
+      ],
+      [
+        -0.6081885903055504,
+        0.7937925664946399
+      ],
+      [
+        -0.21906634383081544,
+        0.9757099656150893
+      ],
+      [
+        0.22029284041052719,
+        0.9754337827161114
+      ],
+      [
+        -0.887027416906408,
+        0.46171675479274693
+      ],
+      [
+        -0.5604965119186337,
+        -0.8281567847497507
+      ],
+      [
+        -0.8348531495515488,
+        -0.5504727229244509
+      ],
+      [
+        -0.9806678886907748,
+        -0.19567956482672896
+      ],
+      [
+        -0.9804575924159645,
+        0.19673055043355694
+      ],
+      [
+        -0.8348531495515488,
+        0.5504727229244509
+      ],
+      [
+        -0.561669729697671,
+        0.8273615381085498
+      ],
+      [
+        -0.19983371437572692,
+        0.9798298253262147
+      ],
+      [
+        0.19911500032872076,
+        0.9799761306501773
+      ],
+      [
+        0.5581997325774191,
+        0.8297066099233499
+      ],
+      [
+        0.8342793663068261,
+        0.5513419437651017
+      ],
+      [
+        0.9812426487124685,
+        0.19277672148820021
+      ],
+      [
+        0.9814447360897136,
+        -0.19174522158789922
+      ],
+      [
+        0.8346430275428105,
+        -0.5507912640684958
+      ],
+      [
+        0.5581997325773831,
+        -0.8297066099233742
+      ],
+      [
+        0.19911500032872076,
+        -0.9799761306501773
+      ],
+      [
+        -0.19739554168475734,
+        -0.9803239261198216
+      ],
+      [
+        0.8875199640542124,
+        -0.46076926265237095
+      ],
+      [
+        0.5965064194244585,
+        0.8026083052058532
+      ],
+      [
+        0.864954957552408,
+        0.5018495007524787
+      ],
+      [
+        0.9849123357847838,
+        0.17305401127671477
+      ],
+      [
+        0.985548890759753,
+        -0.16939121559933482
+      ],
+      [
+        0.8620020770723392,
+        -0.5069047436382628
+      ],
+      [
+        0.6081885903055497,
+        -0.7937925664946406
+      ],
+      [
+        0.2190663438308158,
+        -0.9757099656150893
+      ],
+      [
+        -0.21999432501178973,
+        -0.9755011516972222
+      ],
+      [
+        -0.6029574601855956,
+        -0.7977733394934529
+      ],
+      [
+        -0.8632380431935666,
+        -0.5047970689131841
+      ],
+      [
+        -0.9849723389735223,
+        -0.17271216360473415
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": "ring",
+    "above_terrain": 0.05,
+    "basis": "median frozen terrain around the whole ring"
+  },
+  "levels": {
+    "ground_h": 4.6,
+    "storey_h": 3.0,
+    "parapet_h": 0.3
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.56,
+        0.55,
+        0.52
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.73,
+        0.74,
+        0.74
+      ],
+      "roughness": 0.45,
+      "metallic": 0.3
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.66,
+        0.63,
+        0.56
+      ],
+      "roughness": 0.95
+    },
+    "board": {
+      "rgb": [
+        0.62,
+        0.59,
+        0.52
+      ],
+      "roughness": 0.95
+    }
+  },
+  "schemes": {
+    "tank": {
+      "material": "concrete",
+      "parapet_material": "concrete",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 1.2,
+          "h": 0.05,
+          "material": "board"
+        },
+        {
+          "storey": 0,
+          "offset": 2.4,
+          "h": 0.05,
+          "material": "board"
+        },
+        {
+          "storey": 0,
+          "offset": 3.6,
+          "h": 0.05,
+          "material": "board"
+        }
+      ],
+      "plinth": {
+        "material": "board",
+        "top": 0.15
+      }
+    },
+    "tank_ladder": {
+      "material": "concrete",
+      "parapet_material": "concrete",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 1.2,
+          "h": 0.05,
+          "material": "board"
+        },
+        {
+          "storey": 0,
+          "offset": 2.4,
+          "h": 0.05,
+          "material": "board"
+        },
+        {
+          "storey": 0,
+          "offset": 3.6,
+          "h": 0.05,
+          "material": "board"
+        }
+      ],
+      "plinth": {
+        "material": "board",
+        "top": 0.15
+      },
+      "features": [
+        {
+          "type": "ladder",
+          "from": 0.5,
+          "to": 1.7
+        }
+      ]
+    },
+    "link": {
+      "material": "concrete",
+      "parapet_material": "concrete",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "board",
+        "top": 0.15
+      }
+    },
+    "link_door": {
+      "material": "concrete",
+      "parapet_material": "concrete",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "board",
+        "top": 0.15
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 1.9,
+          "to": 3.5,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "link_louvre": {
+      "material": "concrete",
+      "parapet_material": "concrete",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "board",
+        "top": 0.15
+      },
+      "features": [
+        {
+          "type": "vents",
+          "from": 2.2,
+          "to": 4.2,
+          "count": 1,
+          "w": 1.0,
+          "h": 0.6,
+          "y": 2.4
+        }
+      ]
+    }
+  },
+  "blocks": [
+    {
+      "id": "tank_a",
+      "storeys": 1,
+      "ground_h": 4.6,
+      "clip": [
+        {
+          "edge": 5,
+          "s_max": 0.0
+        }
+      ],
+      "parapet": {
+        "kind": "railing",
+        "style": "pipe",
+        "h": 1.1,
+        "curb": 0.4,
+        "t": 0.25
+      },
+      "faces": {
+        "default": "tank",
+        "e32": "tank_ladder"
+      }
+    },
+    {
+      "id": "link",
+      "storeys": 1,
+      "ground_h": 4.6,
+      "clip": [
+        {
+          "edge": 5,
+          "s_min": 0.0,
+          "s_max": 6.4
+        }
+      ],
+      "parapet": {
+        "kind": "railing",
+        "style": "pipe",
+        "h": 1.1,
+        "curb": 0.4,
+        "t": 0.25
+      },
+      "faces": {
+        "e22": "link_door",
+        "e5": "link_louvre",
+        "default": "link"
+      }
+    },
+    {
+      "id": "tank_b",
+      "storeys": 1,
+      "ground_h": 4.6,
+      "clip": [
+        {
+          "edge": 5,
+          "s_min": 6.4
+        }
+      ],
+      "parapet": {
+        "kind": "railing",
+        "style": "pipe",
+        "h": 1.1,
+        "curb": 0.4,
+        "t": 0.25
+      },
+      "faces": {
+        "default": "tank",
+        "e15": "tank_ladder"
+      }
+    }
+  ],
+  "study_notes": {
+    "observed": "Nov 2025 467 Avenue M: two round grey concrete tanks behind the white louvred block (w291196386); OSM height 5 m.",
+    "inferred": "The narrow footprint link as a concrete valve gallery with a door, joining the tank tops under one pipe rail; ladders and line spacing.",
+    "footprint": "Frozen ring kept; station cuts along edge 5 split tank A, the link and tank B."
+  }
+}

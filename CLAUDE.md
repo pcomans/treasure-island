@@ -6,7 +6,7 @@ The imported [project agreement](AGENTS.md) is the shared authority. The primary
 
 ## Persisted entrypoints
 
-Subagent dispatch follows [AGENTS.md](AGENTS.md#bounded-subagent-execution): under the owner's 2026-10-17 routing every role runs in Claude Code on Opus 5.5 (`claude-opus-5-5`), `ti-implementation` at effort `max` and every other role, reviewers included, at `high`. Each role file's frontmatter sets that selection; never use `ultra`, and root remains orchestrator-only. Keep reviewers independent of the author. Codex generates textures through `tools/generate-texture`. The 2026-10-10 Astra Low / Sol High Codex routing is superseded.
+Subagent dispatch follows [AGENTS.md](AGENTS.md#bounded-subagent-execution): under the owner's 2026-10-17 routing every role runs in Claude Code on Opus 5.5 (`claude-opus-5-5`), every role, modeling and reviewers included, at effort `high` (modeling moved from `max` on 2026-10-21; see AGENTS for the rationale and rollback signal). Each role file's frontmatter sets that selection; never use `ultra`, and root remains orchestrator-only. Keep reviewers independent of the author. Codex generates textures through `tools/generate-texture`. The 2026-10-10 Astra Low / Sol High Codex routing is superseded.
 
 | Role prompt | When used |
 |---|---|

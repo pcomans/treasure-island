@@ -13,6 +13,10 @@ extends RefCounted
 ## schemes (bays, windows, loggias, bands, entries) and roof items. Blocks tile
 ## the footprint as 2.5D extrusions; walls are emitted only where a block rises
 ## above its neighbours or the ground, so the outer ring stays the footprint.
+## Opt-in outbuilding fields (pitched roofs, pipe railings, open post sides,
+## raised entries with ramps, cylinders and caged ladders, a whole-ring floor
+## anchor) cover sheds, tanks, trailers and pavilions; configs without them build
+## as before.
 ## Dimensions, cadence and unseen sides are production inference.
 ## See game/resources/midrise_family/README.md for the config fields.
 
@@ -24,6 +28,18 @@ const BURY_M := 0.25
 const COLLINEAR_M := 0.002
 const MIN_PIER_M := 0.18
 const GRADE_CLEARANCE_M := 0.25
+## Walls of a pitched block rise this far into the roof slab, so the eave line
+## has no shared edge to crack open.
+const PITCH_TUCK_M := 0.02
+const RAIL_H_M := 1.07
+const RAIL_BAR_M := 0.045
+## Bucket key suffix of a collision-only stair walking surface.
+const WALK_TAG := "walk"
+## Exterior stair (ext_stairs): tread nosing projection and the riser target.
+const STAIR_NOSE_M := 0.03
+const STAIR_RISE_M := 0.18
+## Materials shared by value across instances; never mutated after creation.
+static var _material_cache: Dictionary = {}
 
 
 class Bucket:
@@ -90,6 +106,12 @@ class Block:
 	var top_y := 0.0
 	var wall_top := 0.0
 	var railing := false
+	var form := "flat"
+	## Pitched roof facets [u: Vector2, c: float, k: float]: underside height is
+	## roof_y + k * (u.dot(p) - c) for the lowest facet.
+	var planes: Array = []
+	## Courtyard holes inside this block (flat blocks only).
+	var holes: Array[PackedVector2Array] = []
 
 
 ## One exposed block edge with its facade scheme and station mapping.
@@ -104,6 +126,8 @@ class Face:
 	var scheme: Dictionary = {}
 	var spans: Array = []
 	var index := 0
+	var poly_index := 0
+	var top_xs: Array = []
 
 	func point(s: float, y: float, depth: float) -> Vector3:
 		var p := a + d * s - n * depth
@@ -130,6 +154,8 @@ class Ctx:
 	var land: Array = []
 	var terrain_misses := 0
 	var levels := PackedFloat64Array()
+	## Inner rings of a multi-ring wall record (courtyard holes, opt-in via target.holes).
+	var holes: Array[PackedVector2Array] = []
 
 	func bucket(role: String, mat: String) -> Bucket:
 		var key := role + "|" + mat
@@ -188,17 +214,23 @@ static func _build_all(ctx: Ctx, wall: Dictionary, roof: Dictionary, chunks: Arr
 	# Floor at the median frozen terrain along the photographed street side plus a
 	# small clearance. Higher terrain elsewhere meets the walls (ground-storey sills
 	# rise above it); lower terrain exposes the plinth.
+	# "ring" samples every edge, for buildings with no single street side (tanks).
 	var floor_cfg: Dictionary = ctx.cfg.get("floor", {})
-	var anchor := int(floor_cfg.get("anchor_edge", -1))
-	if anchor < 0 or anchor >= ctx.edges.size():
-		ctx.errors.append("floor needs the photographed street side as anchor_edge")
-		return
-	var street: Edge = ctx.edges[anchor]
-	var count := maxi(8, ceili(street.length))
+	var anchor_value: Variant = floor_cfg.get("anchor_edge", -1)
+	var lines: Array = ctx.edges
+	if not (anchor_value is String and anchor_value == "ring"):
+		var anchor := int(anchor_value)
+		if anchor < 0 or anchor >= ctx.edges.size():
+			ctx.errors.append("floor needs the photographed street side (or \"ring\") as anchor_edge")
+			return
+		lines = [ctx.edges[anchor]]
 	var grades: Array[float] = []
-	for i in count:
-		grades.append(_ground_y(ctx, street.at(street.length * (float(i) + 0.5) / float(count), 0.0)))
+	for street: Edge in lines:
+		var samples := maxi(8, ceili(street.length))
+		for i in samples:
+			grades.append(_ground_y(ctx, street.at(street.length * (float(i) + 0.5) / float(samples), 0.0)))
 	grades.sort()
+	var count := grades.size()
 	var middle := count >> 1
 	var median := grades[middle] if count % 2 == 1 else (grades[middle - 1] + grades[middle]) * 0.5
 	ctx.floor_y = median + float(floor_cfg.get("above_terrain", 0.05))
@@ -220,6 +252,8 @@ static func _build_all(ctx: Ctx, wall: Dictionary, roof: Dictionary, chunks: Arr
 		_roof(ctx, block)
 	for apron: Dictionary in ctx.cfg.get("aprons", []):
 		_apron(ctx, apron)
+	for stair: Variant in ctx.cfg.get("ext_stairs", []):
+		_ext_stair(ctx, stair)
 
 
 # ------------------------------------------------------------------ footprint
@@ -232,22 +266,44 @@ static func _footprint(ctx: Ctx, wall: Dictionary) -> Array:
 		return []
 	var groups: Array = []
 	var previous_end := Vector3(INF, INF, INF)
+	# Opt-in: target.holes names how many further closed rings (courtyard holes)
+	# follow the outer ring. Without it a second ring stays an error, as before.
+	var target: Dictionary = ctx.cfg.target
+	var hole_count := int(target.get("holes", 0))
+	var ring_start := Vector2(INF, INF)
+	var in_outer := true
+	var hole := PackedVector2Array()
 	for i in range(0, v.size(), 12):
 		var a := Vector3(float(v[i]), float(v[i + 1]), float(v[i + 2]))
 		var b := Vector3(float(v[i + 3]), float(v[i + 4]), float(v[i + 5]))
 		var normal := Vector2(float(nr[i]), float(nr[i + 2])).normalized()
-		if previous_end.is_finite() and Vector2(previous_end.x, previous_end.z).distance_to(Vector2(a.x, a.z)) > 0.001:
-			ctx.errors.append("wall runs are not contiguous")
-			return []
+		if not ring_start.is_finite():
+			ring_start = Vector2(a.x, a.z)
+		elif Vector2(previous_end.x, previous_end.z).distance_to(Vector2(a.x, a.z)) > 0.001:
+			# A new ring may start only where the previous one closed.
+			if hole_count == 0 or Vector2(previous_end.x, previous_end.z).distance_to(ring_start) > 0.001:
+				ctx.errors.append("wall runs are not contiguous")
+				return []
+			if not in_outer:
+				ctx.holes.append(hole)
+			in_outer = false
+			hole = PackedVector2Array()
+			ring_start = Vector2(a.x, a.z)
 		previous_end = b
+		if not in_outer:
+			hole.append(Vector2(a.x, a.z))
+			continue
 		if groups.is_empty() or (groups[-1].n as Vector2).dot(normal) < 0.9999:
 			groups.append({"n": normal, "points": [a]})
 		(groups[-1].points as Array).append(b)
-	var first: Vector3 = (groups[0].points as Array)[0]
-	if Vector2(previous_end.x, previous_end.z).distance_to(Vector2(first.x, first.z)) > 0.001:
+	if Vector2(previous_end.x, previous_end.z).distance_to(ring_start) > 0.001:
 		ctx.errors.append("wall ring is not closed")
 		return []
-	var target: Dictionary = ctx.cfg.target
+	if not in_outer:
+		ctx.holes.append(hole)
+	if ctx.holes.size() != hole_count:
+		ctx.errors.append("footprint has %d holes, config expects %d" % [ctx.holes.size(), hole_count])
+		return []
 	var expected: Array = target.get("edge_normals", [])
 	if groups.size() != expected.size():
 		ctx.errors.append("footprint has %d edges, config expects %d" % [groups.size(), expected.size()])
@@ -310,19 +366,22 @@ static func _collect_land(ctx: Ctx, chunks: Array) -> void:
 
 
 ## Frozen terrain elevation under a plan point (barycentric on its land triangle).
+## A footprint clipped at the shore runs along the land boundary, so a miss gets
+## a second pass with a small barycentric tolerance before it counts.
 static func _ground_y(ctx: Ctx, p: Vector2) -> float:
-	for tri: PackedVector3Array in ctx.land:
-		var a := tri[0]
-		var b := tri[1]
-		var c := tri[2]
-		var den := (b.z - c.z) * (a.x - c.x) + (c.x - b.x) * (a.z - c.z)
-		if absf(den) < 1e-9:
-			continue
-		var w1 := ((b.z - c.z) * (p.x - c.x) + (c.x - b.x) * (p.y - c.z)) / den
-		var w2 := ((c.z - a.z) * (p.x - c.x) + (a.x - c.x) * (p.y - c.z)) / den
-		var w3 := 1.0 - w1 - w2
-		if w1 >= -1e-7 and w2 >= -1e-7 and w3 >= -1e-7:
-			return w1 * a.y + w2 * b.y + w3 * c.y
+	for tolerance: float in [1e-7, 1e-4]:
+		for tri: PackedVector3Array in ctx.land:
+			var a := tri[0]
+			var b := tri[1]
+			var c := tri[2]
+			var den := (b.z - c.z) * (a.x - c.x) + (c.x - b.x) * (a.z - c.z)
+			if absf(den) < 1e-9:
+				continue
+			var w1 := ((b.z - c.z) * (p.x - c.x) + (c.x - b.x) * (p.y - c.z)) / den
+			var w2 := ((c.z - a.z) * (p.x - c.x) + (a.x - c.x) * (p.y - c.z)) / den
+			var w3 := 1.0 - w1 - w2
+			if w1 >= -tolerance and w2 >= -tolerance and w3 >= -tolerance:
+				return w1 * a.y + w2 * b.y + w3 * c.y
 	ctx.terrain_misses += 1
 	return ctx.floor_y
 
@@ -379,7 +438,11 @@ static func _make_blocks(ctx: Ctx) -> void:
 			return
 		block.poly = poly
 		total += absf(_area(poly))
-		var floor_y := float(item.get("floor_y", ctx.floor_y))
+		var raise := float(item.get("floor_raise", 0.0))
+		if not _in_range(raise, 0.0, 10.0):
+			ctx.errors.append("block %s floor_raise must be 0-10 m" % block.id)
+			return
+		var floor_y := float(item.get("floor_y", ctx.floor_y + raise))
 		var ground_h := float(item.get("ground_h", levels.get("ground_h", 4.0)))
 		var storey_h := float(item.get("storey_h", levels.get("storey_h", 3.0)))
 		block.storeys = int(item.get("storeys", 0))
@@ -395,10 +458,58 @@ static func _make_blocks(ctx: Ctx) -> void:
 		var parapet_h := float(parapet.get("h", levels.get("parapet_h", 1.0)))
 		block.top_y = block.roof_y + parapet_h
 		block.wall_top = block.roof_y + float(parapet.get("curb", 0.3)) if block.railing else block.top_y
+		var roof_cfg: Dictionary = item.get("roof", {})
+		block.form = str(roof_cfg.get("form", "flat"))
+		if block.form != "flat":
+			var pitch := float(roof_cfg.get("pitch_deg", 15.0))
+			var slab := float(roof_cfg.get("t", 0.15))
+			var overhang := float(roof_cfg.get("overhang", 0.0))
+			if not (_in_range(pitch, 0.0, 60.0) and pitch > 0.0) or not (_in_range(slab, 0.0, 1.0) and slab > 0.0) or not _in_range(overhang, 0.0, 3.0):
+				ctx.errors.append("block %s roof needs pitch_deg in (0, 60], t in (0, 1] and overhang in [0, 3] m" % block.id)
+				return
+			if block.form not in ["gable", "mono", "pyramid"] or not _convex(poly):
+				ctx.errors.append("block %s needs a convex outline for a gable, mono or pyramid roof" % block.id)
+				return
+			block.railing = false
+			block.top_y = block.roof_y + PITCH_TUCK_M
+			block.wall_top = block.top_y
+			block.planes = _roof_planes(ctx, block, roof_cfg)
+			if block.planes.is_empty():
+				ctx.errors.append("block %s roof needs a valid ridge_edge or low_edge" % block.id)
+				return
+		if item.has("pergola"):
+			if not _pergola_valid(ctx, block):
+				return
+			block.railing = false
+			block.top_y = block.roof_y
+			block.wall_top = block.roof_y
 		ctx.blocks.append(block)
 	if total > footprint_area + 0.05:
 		ctx.errors.append("blocks overlap or exceed the footprint (%.3f > %.3f m2)" % [total, footprint_area])
 		return
+	# A hole (courtyard) lies wholly inside one flat block, which builds its walls,
+	# parapets and roof around it.
+	for hole: PackedVector2Array in ctx.holes:
+		var owner: Block = null
+		for block: Block in ctx.blocks:
+			var inside := 0
+			for p: Vector2 in hole:
+				if Geometry2D.is_point_in_polygon(p, block.poly):
+					inside += 1
+			# Every vertex inside is not enough for a concave block: no edge may cross.
+			for i in hole.size():
+				for j in block.poly.size():
+					if Geometry2D.segment_intersects_segment(hole[i], hole[(i + 1) % hole.size()], block.poly[j], block.poly[(j + 1) % block.poly.size()]) != null:
+						inside = -1
+			if inside == hole.size():
+				owner = block
+			elif inside > 0:
+				ctx.errors.append("footprint hole crosses block %s" % block.id)
+				return
+		if owner == null or owner.form != "flat":
+			ctx.errors.append("footprint hole needs one flat block around it")
+			return
+		owner.holes.append(hole)
 	for i in ctx.blocks.size():
 		for j in range(i + 1, ctx.blocks.size()):
 			for piece: PackedVector2Array in Geometry2D.intersect_polygons((ctx.blocks[i] as Block).poly, (ctx.blocks[j] as Block).poly):
@@ -460,8 +571,14 @@ static func _clip(poly: PackedVector2Array, point: Vector2, normal: Vector2) -> 
 		var a := clean[(i + clean.size() - 1) % clean.size()]
 		var b := clean[i]
 		var c := clean[(i + 1) % clean.size()]
-		if absf((b - a).cross(c - b)) > 1e-6:
-			result.append(b)
+		var turn := (b - a).cross(c - b)
+		# Clipping a concave ring along one of its own edges can leave a zero-width
+		# spike (the outline runs out along the cut and back). In single precision
+		# its tip survives the absolute collinear test, so also drop a vertex where
+		# the outline reverses within 1e-4 rad; a valid outline never has one.
+		if absf(turn) <= 1e-6 or ((b - a).dot(c - b) < 0.0 and absf(turn) <= 1e-4 * (b - a).length() * (c - b).length()):
+			continue
+		result.append(b)
 	return result
 
 
@@ -481,14 +598,129 @@ static func _centroid(poly: PackedVector2Array) -> Vector2:
 	return sum / float(poly.size())
 
 
+## Outward normal of edge i from the polygon's winding (also for non-convex blocks).
 static func _outward(poly: PackedVector2Array, i: int) -> Vector2:
-	var a := poly[i]
-	var b := poly[(i + 1) % poly.size()]
-	var d := (b - a).normalized()
+	var d := (poly[(i + 1) % poly.size()] - poly[i]).normalized()
 	var n := Vector2(d.y, -d.x)
-	if (_centroid(poly) - (a + b) * 0.5).dot(n) > 0.0:
-		n = -n
-	return n
+	return n if _area(poly) > 0.0 else -n
+
+
+static func _convex(poly: PackedVector2Array) -> bool:
+	var sign := 0.0
+	for i in poly.size():
+		var a := poly[(i + poly.size() - 1) % poly.size()]
+		var b := poly[i]
+		var c := poly[(i + 1) % poly.size()]
+		var z := (b - a).cross(c - b)
+		# Plan points are single precision: a turn under 1e-4 rad counts as straight.
+		if absf(z) <= 1e-4 * (b - a).length() * (c - b).length():
+			continue
+		if sign == 0.0:
+			sign = signf(z)
+		elif signf(z) != sign:
+			return false
+	return true
+
+
+# ------------------------------------------------------------------- courtyards
+
+## Courtyard hole edges oriented like the outer faces (outward = into the courtyard),
+## as [a, b, outward] triples.
+static func _hole_edges(block: Block, hole: PackedVector2Array) -> Array:
+	var a0 := block.poly[0]
+	var d0 := (block.poly[1] - a0).normalized()
+	var turn := signf(d0.cross(_outward(block.poly, 0)))
+	var out: Array = []
+	for i in hole.size():
+		var a := hole[i]
+		var b := hole[(i + 1) % hole.size()]
+		if a.distance_to(b) < 0.001:
+			continue
+		var n := -_outward(hole, i)
+		if signf((b - a).normalized().cross(n)) != turn:
+			var swap := a
+			a = b
+			b = swap
+		out.append([a, b, n])
+	return out
+
+
+## Full-height courtyard walls along a hole (face key "hole", else the default scheme).
+static func _hole_faces(ctx: Ctx, block: Block, hole: PackedVector2Array, faces_cfg: Dictionary, schemes: Dictionary) -> void:
+	for edge: Array in _hole_edges(block, hole):
+		var face := Face.new()
+		face.block = block
+		face.a = edge[0]
+		var b: Vector2 = edge[1]
+		face.length = face.a.distance_to(b)
+		face.d = (b - face.a) / face.length
+		face.n = edge[2]
+		face.spans = [{"s0": 0.0, "s1": face.length, "ground": true, "y": 0.0}]
+		face.index = ctx.faces
+		ctx.faces += 1
+		face.key = "hole"
+		var scheme_name := str(faces_cfg.get("hole", faces_cfg.get("default", "")))
+		if not schemes.has(scheme_name) or (schemes[scheme_name] as Dictionary).has("open"):
+			ctx.errors.append("block %s courtyard needs a closed wall scheme" % block.id)
+			return
+		face.scheme = schemes[scheme_name]
+		_facade(ctx, face)
+
+
+## Parapets along a courtyard's edges, mitred at its corners.
+static func _hole_parapets(ctx: Ctx, block: Block, hole: PackedVector2Array) -> void:
+	if block.wall_top <= block.roof_y + 0.01:
+		return
+	var t := float((block.cfg.get("parapet", {}) as Dictionary).get("t", 0.3))
+	var edges := _hole_edges(block, hole)
+	var count := edges.size()
+	for i in count:
+		var a: Vector2 = edges[i][0]
+		var b: Vector2 = edges[i][1]
+		var n: Vector2 = edges[i][2]
+		var d := (b - a).normalized()
+		var inner0 := a - n * t
+		var inner1 := b - n * t
+		# Mitre with the edge meeting each end (edges keep the ring order or its reverse).
+		for other: Array in edges:
+			if (other[1] as Vector2).distance_to(a) < 0.001:
+				var no: Vector2 = other[2]
+				inner0 = a - (no + n) * t / (1.0 + no.dot(n))
+			if (other[0] as Vector2).distance_to(b) < 0.001:
+				var nf: Vector2 = other[2]
+				inner1 = b - (nf + n) * t / (1.0 + nf.dot(n))
+		_parapet_run(ctx, block, a, b, inner0, inner1, n, d, false, false)
+
+
+## The block outline minus its courtyards as hole-free pieces: each hole is cut by
+## a line through it, so every Clipper piece has the courtyard as a notch.
+static func _pieces_around_holes(block: Block) -> Array[PackedVector2Array]:
+	var pieces: Array[PackedVector2Array] = [block.poly]
+	for hole: PackedVector2Array in block.holes:
+		var centre := Vector2.ZERO
+		for p: Vector2 in hole:
+			centre += p
+		centre /= float(hole.size())
+		var along := (hole[1] - hole[0]).normalized()
+		var across := Vector2(-along.y, along.x)
+		var reach := 1.0e4
+		var halves: Array[PackedVector2Array] = [
+			PackedVector2Array([centre - along * reach, centre + along * reach, centre + along * reach + across * reach, centre - along * reach + across * reach]),
+			PackedVector2Array([centre - along * reach, centre - along * reach - across * reach, centre + along * reach - across * reach, centre + along * reach]),
+		]
+		var next: Array[PackedVector2Array] = []
+		for piece: PackedVector2Array in pieces:
+			if not Geometry2D.is_point_in_polygon(centre, piece):
+				next.append(piece)
+				continue
+			for half: PackedVector2Array in halves:
+				for part: PackedVector2Array in Geometry2D.intersect_polygons(piece, half):
+					for rest: PackedVector2Array in Geometry2D.clip_polygons(part, hole):
+						if not Geometry2D.is_polygon_clockwise(rest) == Geometry2D.is_polygon_clockwise(part):
+							continue
+						next.append(rest)
+		pieces = next
+	return pieces
 
 
 # ------------------------------------------------------------------- exposure
@@ -502,7 +734,8 @@ static func _spans(ctx: Ctx, block: Block, i: int) -> Array:
 	var side := Vector2(-d.y, d.x)
 	var covers: Array = []
 	for other: Block in ctx.blocks:
-		if other == block:
+		# An open pergola has no roof slab, so it never hides a neighbour's wall.
+		if other == block or other.cfg.has("pergola"):
 			continue
 		for j in other.poly.size():
 			var qa := other.poly[j]
@@ -554,6 +787,7 @@ static func _block_faces(ctx: Ctx, block: Block) -> void:
 		face.d = (b - face.a) / face.length
 		face.n = _outward(block.poly, i)
 		face.spans = spans
+		face.poly_index = i
 		face.index = ctx.faces
 		ctx.faces += 1
 		face.key = "return"
@@ -579,7 +813,14 @@ static func _block_faces(ctx: Ctx, block: Block) -> void:
 			ctx.errors.append("block %s face %s has no scheme" % [block.id, face.key])
 			return
 		face.scheme = schemes[scheme_name]
-		_facade(ctx, face)
+		if face.scheme.has("open"):
+			_open_face(ctx, face)
+		else:
+			_facade(ctx, face)
+			if block.form != "flat":
+				_infill(ctx, face)
+	for hole: PackedVector2Array in block.holes:
+		_hole_faces(ctx, block, hole, faces_cfg, schemes)
 
 
 ## Every level at which a wall material can change on this block (floors, plinth
@@ -645,7 +886,7 @@ static func _bays(ctx: Ctx, face: Face) -> Array:
 			if hi - lo > 0.05:
 				ranges.append({"s0": lo, "s1": hi, "f": feature})
 			continue
-		if kind not in ["loggia", "frame", "entry", "garage", "vents", "band", "corner"]:
+		if kind not in ["loggia", "frame", "entry", "garage", "vents", "band", "corner", "ladder", "stair_bay", "top_box"]:
 			ctx.errors.append("unknown facade feature type " + kind)
 			return []
 		if s1 <= 0.01 or s0 >= face.length - 0.01:
@@ -813,6 +1054,9 @@ static func _openings(ctx: Ctx, face: Face, bay: Dictionary) -> Array:
 			var w := float(door.get("w", 1.1))
 			var inside := float(door.get("recess", 2.2)) if str(door.get("kind", "unit")) == "porch" else 0.0
 			var land := _landing(ctx, face, center, float(landing.get("w", w + 1.0)), float(landing.get("depth", 1.6)), inside)
+			if str(landing.get("at", "grade")) == "floor":
+				var lowest := minf(float(land.y) - 0.1, float(land.y) - float(land.drop) + 0.12)
+				land = {"y": block.floors[0], "drop": maxf(0.25, block.floors[0] - lowest + 0.12)}
 			var y0 := float(land.y)
 			# A door on higher local grade stops under the second-storey floor.
 			var y1 := y0 + float(door.get("h", 2.9))
@@ -825,6 +1069,18 @@ static func _openings(ctx: Ctx, face: Face, bay: Dictionary) -> Array:
 			var y0 := 0.04 + maxf(_ground_y(ctx, face.a + face.d * center), maxf(_ground_y(ctx, face.a + face.d * (center - w * 0.5)), _ground_y(ctx, face.a + face.d * (center + w * 0.5))))
 			out.append({"s0": center - w * 0.5, "s1": center + w * 0.5, "y0": y0, "y1": y0 + float(feature.get("h", 3.0)), "kind": "garage", "spec": feature, "k": 0})
 			claimed[0] = true
+		"stair_bay":
+			var bay_opening := _stair_bay_opening(ctx, face, feature, s0, s1)
+			if bay_opening.is_empty():
+				return []
+			out.append(bay_opening)
+			for k in block.storeys:
+				claimed[k] = true
+		"top_box":
+			# The wall behind a projecting top-floor box stays blank; the box itself is
+			# added after the wall strips (see _top_box).
+			for k in block.storeys:
+				claimed[k] = true
 		"vents":
 			var count := int(feature.get("count", 2))
 			var w := float(feature.get("w", 1.4))
@@ -833,7 +1089,9 @@ static func _openings(ctx: Ctx, face: Face, bay: Dictionary) -> Array:
 			for v in count:
 				var c := s0 + (s1 - s0) * (float(v) + 0.5) / float(count)
 				out.append({"s0": c - w * 0.5, "s1": c + w * 0.5, "y0": y, "y1": y + h, "kind": "vent", "spec": feature, "k": 0})
-			claimed[0] = true
+			# Opt-in: ground-storey windows still fill the bay (louvres under windows).
+			if not bool(feature.get("windows", false)):
+				claimed[0] = true
 	for k in block.storeys:
 		if claimed.has(k) or k in skip_storeys:
 			continue
@@ -921,6 +1179,11 @@ static func _facade(ctx: Ctx, face: Face) -> void:
 			_wall_strip(ctx, face, bay, x0, x1, span, holes)
 			for opening: Dictionary in holes:
 				_assembly(ctx, face, bay, opening)
+	for bay: Dictionary in bays:
+		if str(bay.kind) == "ladder":
+			_ladder(ctx, face, bay)
+		elif str(bay.kind) == "top_box":
+			_top_box(ctx, face, bay)
 
 
 ## Wall surface of one bay strip with rectangular holes and material zones.
@@ -965,6 +1228,7 @@ static func _wall_strip(ctx: Ctx, face: Face, bay: Dictionary, x0: float, x1: fl
 		elif x == x1:
 			cut_xs[cut_xs.size() - 1] = x1
 	xs = cut_xs
+	face.top_xs.append_array(xs)
 	for k in range(block.storeys + 1):
 		ys.append(block.floors[k])
 	var plinth: Dictionary = face.scheme.get("plinth", {})
@@ -1097,10 +1361,10 @@ static func _reveals(ctx: Ctx, face: Face, mat: String, s0: float, s1: float, y0
 
 
 ## Glazing with a perimeter frame, mullions (fractions of width) and transoms (of height).
-static func _glazing(ctx: Ctx, face: Face, spec: Dictionary, s0: float, s1: float, y0: float, y1: float, depth: float) -> void:
+static func _glazing(ctx: Ctx, face: Face, spec: Dictionary, s0: float, s1: float, y0: float, y1: float, depth: float, role: String = "wall") -> void:
 	var out := face.out3()
-	_rect(ctx.bucket("wall", str(spec.get("glass", "glass"))), face, s0, s1, y0, y1, depth, out)
-	var frame := ctx.bucket("wall", str(spec.get("frame", "frame")))
+	_rect(ctx.bucket(role, str(spec.get("glass", "glass"))), face, s0, s1, y0, y1, depth, out)
+	var frame := ctx.bucket(role, str(spec.get("frame", "frame")))
 	var fw := float(spec.get("frame_w", 0.06))
 	var fd := depth - 0.015
 	_rect(frame, face, s0, s0 + fw, y0, y1, fd, out)
@@ -1135,6 +1399,7 @@ static func _assembly(ctx: Ctx, face: Face, bay: Dictionary, o: Dictionary) -> v
 					mullions.append(float(m) / float(count))
 				glazing = _merge(spec, {"mullions": mullions})
 			_glazing(ctx, face, glazing, s0, s1, y0, y1, depth)
+			_hood(ctx, face, spec, s0, s1, y1)
 		"patio":
 			var depth := float(spec.get("depth", 0.18))
 			_reveals(ctx, face, wall_mat, s0, s1, y0, y1, depth, true)
@@ -1152,6 +1417,8 @@ static func _assembly(ctx: Ctx, face: Face, bay: Dictionary, o: Dictionary) -> v
 			_loggia(ctx, face, spec, wall_mat, s0, s1, y0, y1, ks)
 		"band":
 			_band(ctx, face, spec, s0, s1, y0, y1)
+		"stair_bay":
+			_stair_bay(ctx, face, spec, wall_mat, s0, s1, y0, y1)
 		"door":
 			_door(ctx, face, spec, wall_mat, s0, s1, y0, y1, float(o.get("drop", 0.25)))
 		"garage":
@@ -1174,6 +1441,32 @@ static func _assembly(ctx: Ctx, face: Face, bay: Dictionary, o: Dictionary) -> v
 			while y < y1 - 0.05:
 				_rect(slats, face, s0, s1, y, y + 0.045, 0.06, out)
 				y += 0.12
+
+
+## Opt-in box hood over a window head (window `hood`): a box `depth` out from the
+## wall and `h` tall, `gap` above the head and `over` wider than the opening on each
+## side, with optional side cheeks `cheek` down the jambs (`t` thick). Support role.
+static func _hood(ctx: Ctx, face: Face, spec: Dictionary, s0: float, s1: float, y1: float) -> void:
+	var hood: Dictionary = spec.get("hood", {})
+	if hood.is_empty():
+		return
+	var depth := float(hood.get("depth", 0.5))
+	var h := float(hood.get("h", 0.3))
+	var over := float(hood.get("over", 0.1))
+	var gap := float(hood.get("gap", 0.05))
+	var cheek := float(hood.get("cheek", 0.0))
+	var t := float(hood.get("t", 0.06))
+	if not (_in_range(depth, 0.05, 2.0) and _in_range(h, 0.05, 1.0) and _in_range(over, 0.0, 1.0) and _in_range(gap, 0.0, 1.0) and _in_range(cheek, 0.0, 3.0) and _in_range(t, 0.02, 0.5)):
+		ctx.errors.append("window hood needs depth 0.05-2, h 0.05-1, over 0-1, gap 0-1, cheek 0-3 and t 0.02-0.5 m")
+		return
+	var bucket := ctx.bucket("support", str(hood.get("material", "metal")))
+	var a := s0 - over
+	var b := s1 + over
+	var y := y1 + gap
+	_box(bucket, face, a, b, y, y + h, -depth, 0.02, false)
+	if cheek > 0.0:
+		_box(bucket, face, a, a + t, y - cheek, y, -depth, 0.02, false)
+		_box(bucket, face, b - t, b, y - cheek, y, -depth, 0.02, false)
 
 
 ## Recessed loggia (one storey) or framed multi-storey recess: back wall, soffit,
@@ -1257,6 +1550,112 @@ static func _band(ctx: Ctx, face: Face, spec: Dictionary, s0: float, s1: float, 
 	frame.quad(face.point(s0, y0, 0.0), face.point(s1, y0, 0.0), face.point(s1, y0, depth), face.point(s0, y0, depth), Vector3.UP)
 
 
+## Opt-in open stair bay ("stair_bay" feature): the opening of a full-height
+## recess from the highest grade under it to just below the roof. Invalid
+## parameters, or a recess whose back corners leave the block, fail the build.
+static func _stair_bay_opening(ctx: Ctx, face: Face, feature: Dictionary, s0: float, s1: float) -> Dictionary:
+	var block := face.block
+	var pier := float(feature.get("pier", 0.2))
+	var depth := float(feature.get("depth", 2.0))
+	var a := s0 + pier
+	var b := s1 - pier
+	var label := "%s/%s stair_bay at %.2f" % [block.id, face.key, s0]
+	if block.storeys < 2 or b - a < 2.0 or depth < 1.2 or depth > 4.0:
+		ctx.errors.append(label + " needs two storeys, a clear width of at least 2 m and a depth of 1.2-4 m")
+		return {}
+	for p: Vector2 in [face.a + face.d * a - face.n * depth, face.a + face.d * b - face.n * depth]:
+		if not Geometry2D.is_point_in_polygon(p, block.poly):
+			ctx.errors.append(label + " recess leaves its block")
+			return {}
+	# Recess floor: above the frozen grade along both its front and back lines.
+	var y0 := block.floors[0]
+	var s := a
+	while s <= b + 0.001:
+		for d: float in [0.0, depth]:
+			y0 = maxf(y0, _ground_y(ctx, face.a + face.d * minf(s, b) - face.n * d))
+		s += 0.5
+	y0 += 0.02
+	var y1 := block.roof_y - float(feature.get("head", 0.35))
+	if y0 >= block.floors[1] - 0.5 or y1 <= block.floors[block.storeys - 1] + 1.0:
+		ctx.errors.append(label + " has no room between grade and roof")
+		return {}
+	return {"s0": a, "s1": b, "y0": y0, "y1": y1, "kind": "stair_bay", "spec": feature, "k": 0}
+
+
+## Open stair bay: side reveals and soffit, a dark back wall, the recess floor
+## behind a solid ground-floor guard (the bay is not a walkable route), and per
+## storey two stepped flights around a half landing under a full floor landing.
+static func _stair_bay(ctx: Ctx, face: Face, spec: Dictionary, wall_mat: String, s0: float, s1: float, y0: float, y1: float) -> void:
+	var block := face.block
+	var depth := float(spec.get("depth", 2.0))
+	var out := face.out3()
+	var side_mat := str(spec.get("side", wall_mat))
+	var slab := ctx.bucket("support", str(spec.get("slab", "slab")))
+	_reveals(ctx, face, side_mat, s0, s1, y0, y1, depth, false, str(spec.get("soffit", "soffit")))
+	_rect(ctx.bucket("wall", str(spec.get("back", "render"))), face, s0, s1, y0, y1, depth, out)
+	var guard_t := 0.2
+	_box(ctx.bucket("wall", side_mat), face, s0, s1, y0, y0 + float(spec.get("guard_h", 1.1)), 0.0, guard_t)
+	slab.quad(face.point(s0, y0, guard_t), face.point(s1, y0, guard_t), face.point(s1, y0, depth), face.point(s0, y0, depth), Vector3.UP)
+	var t := 0.2
+	var land := minf(1.3, (s1 - s0) * 0.3)
+	var mid_d := depth * 0.5
+	for k in range(block.storeys - 1):
+		var ya := y0 if k == 0 else block.floors[k]
+		var yb := block.floors[k + 1]
+		if yb - ya < 1.0:
+			continue
+		var ym := (ya + yb) * 0.5
+		_flight(slab, face, s0 + 0.1, s1 - land, ya, ym, guard_t + 0.05, mid_d - 0.05, t)
+		_box(slab, face, s1 - land, s1, ym - t, ym, guard_t + 0.05, depth, false)
+		_flight(slab, face, s1 - land, s0 + land, ym, yb, mid_d + 0.05, depth, t)
+		_box(slab, face, s0, s1, yb - t, yb, 0.05, depth, false)
+
+
+## A straight stepped flight in face coordinates from (sa, ya) up to (sb, yb),
+## between depths d0 < d1, with a sloped soffit `t` below the step nosings.
+static func _flight(bucket: Bucket, face: Face, sa: float, sb: float, ya: float, yb: float, d0: float, d1: float, t: float) -> void:
+	var out := face.out3()
+	var along := face.dir3()
+	var steps := maxi(2, int(round((yb - ya) / 0.18)))
+	var rise := (yb - ya) / float(steps)
+	var run := (sb - sa) / float(steps)
+	var down := -along * signf(sb - sa)
+	for i in steps:
+		var sx := sa + run * float(i)
+		var sy := ya + rise * float(i)
+		bucket.quad(face.point(sx, sy, d0), face.point(sx, sy + rise, d0), face.point(sx, sy + rise, d1), face.point(sx, sy, d1), down)
+		bucket.quad(face.point(sx, sy + rise, d0), face.point(sx + run, sy + rise, d0), face.point(sx + run, sy + rise, d1), face.point(sx, sy + rise, d1), Vector3.UP)
+		for d: float in [d0, d1]:
+			var facing := out if d == d0 else -out
+			bucket.quad(face.point(sx, sy - t, d), face.point(sx + run, sy + rise - t, d), face.point(sx + run, sy + rise, d), face.point(sx, sy + rise, d), facing)
+	bucket.quad(face.point(sa, ya - t, d0), face.point(sb, yb - t, d0), face.point(sb, yb - t, d1), face.point(sa, ya - t, d1), Vector3.DOWN)
+
+
+## Opt-in projecting top-floor box ("top_box" feature) on an otherwise blank
+## wall: a support-role box out from the wall up to the wall top, with one
+## window band on its front. Invalid parameters fail the build.
+static func _top_box(ctx: Ctx, face: Face, bay: Dictionary) -> void:
+	var block := face.block
+	var spec: Dictionary = bay.f
+	var k := int(spec.get("storey", block.storeys - 1))
+	var project := float(spec.get("project", 0.6))
+	var pier := float(spec.get("pier", 0.0))
+	var s0 := float(bay.s0) + pier
+	var s1 := float(bay.s1) - pier
+	if k < 0 or k >= block.storeys or project <= 0.05 or project > 2.0 or s1 - s0 < 1.0:
+		ctx.errors.append("%s/%s top_box at %.2f needs a valid storey, a projection of 0.05-2 m and a width of at least 1 m" % [block.id, face.key, float(bay.s0)])
+		return
+	var y0 := block.floors[k] - float(spec.get("below", 0.15))
+	var y1 := block.wall_top
+	_box(ctx.bucket("support", str(spec.get("material", face.scheme.get("material", "render")))), face, s0, s1, y0, y1, -project, 0.0, false)
+	var window: Dictionary = spec.get("window", {})
+	var inset := float(window.get("inset", 0.3))
+	var wy0 := block.floors[k] + float(window.get("sill", 0.9))
+	var wy1 := minf(wy0 + float(window.get("h", 1.2)), y1 - 0.2)
+	if s1 - s0 - 2.0 * inset > 0.5 and wy1 - wy0 > 0.3:
+		_glazing(ctx, face, window, s0 + inset, s1 - inset, wy0, wy1, -project - 0.01, "support")
+
+
 static func _door(ctx: Ctx, face: Face, spec: Dictionary, wall_mat: String, s0: float, s1: float, y0: float, y1: float, drop: float) -> void:
 	var door: Dictionary = spec.get("door", {})
 	var kind := str(door.get("kind", "unit"))
@@ -1284,6 +1683,11 @@ static func _door(ctx: Ctx, face: Face, spec: Dictionary, wall_mat: String, s0: 
 			_glazing(ctx, face, {}, s0, s1, leaf_top, y1, depth)
 		_box(ctx.bucket("wall", "frame"), face, s1 - 0.22, s1 - 0.12, y0 + 1.0, y0 + 1.04, depth - 0.06, depth)
 	_pad(ctx, face, c - land_w * 0.5, c + land_w * 0.5, -land_d, 0.0, y0, drop)
+	var ramp: Dictionary = spec.get("ramp", {})
+	if not ramp.is_empty():
+		_ramp(ctx, face, ramp, c, land_w, land_d, y0)
+	if bool(spec.get("rails", not ramp.is_empty())):
+		_deck_rails(ctx, face, ramp, c, land_w, land_d, y0)
 	var canopy: Dictionary = spec.get("canopy", {})
 	if not canopy.is_empty():
 		var cw := float(canopy.get("w", s1 - s0 + 0.8))
@@ -1314,16 +1718,238 @@ static func _pad(ctx: Ctx, face: Face, s0: float, s1: float, d0: float, d1: floa
 # ---------------------------------------------------------------------- roofs
 
 static func _roof(ctx: Ctx, block: Block) -> void:
-	var roof_mat := str(block.cfg.get("roof_material", "roof"))
-	var bucket := ctx.bucket("roof", roof_mat)
-	var p0 := block.poly[0]
-	for i in range(1, block.poly.size() - 1):
-		var p1 := block.poly[i]
-		var p2 := block.poly[i + 1]
-		bucket.tri(Vector3(p0.x, block.roof_y, p0.y), Vector3(p1.x, block.roof_y, p1.y), Vector3(p2.x, block.roof_y, p2.y), Vector3.UP)
-	_parapets(ctx, block)
+	if block.cfg.has("pergola"):
+		_pergola(ctx, block)
+		return
+	if block.form != "flat":
+		_pitched_roof(ctx, block)
+	else:
+		var roof_mat := str(block.cfg.get("roof_material", "roof"))
+		var bucket := ctx.bucket("roof", roof_mat)
+		var p0 := block.poly[0]
+		var tris: Array = []
+		if not block.holes.is_empty():
+			var pieces := _pieces_around_holes(block)
+			# Fail closed: the pieces must cover exactly the block minus its courtyards
+			# (a cut line that missed a non-convex courtyard would roof it over).
+			var expected := absf(_area(block.poly))
+			for hole: PackedVector2Array in block.holes:
+				expected -= absf(_area(hole))
+			var covered := 0.0
+			for piece: PackedVector2Array in pieces:
+				covered += absf(_area(piece))
+			if absf(covered - expected) > 0.05:
+				ctx.errors.append("block %s roof does not leave its courtyard open (%.2f of %.2f m2)" % [block.id, covered, expected])
+				return
+			for piece: PackedVector2Array in pieces:
+				var piece_indices := Geometry2D.triangulate_polygon(piece)
+				if piece_indices.is_empty():
+					ctx.errors.append("block %s roof around its courtyard does not triangulate" % block.id)
+					return
+				for i in range(0, piece_indices.size(), 3):
+					tris.append([piece[piece_indices[i]], piece[piece_indices[i + 1]], piece[piece_indices[i + 2]]])
+		elif _convex(block.poly):
+			for i in range(1, block.poly.size() - 1):
+				tris.append([p0, block.poly[i], block.poly[i + 1]])
+		else:
+			var indices := Geometry2D.triangulate_polygon(block.poly)
+			if indices.is_empty():
+				ctx.errors.append("block %s outline does not triangulate" % block.id)
+				return
+			for i in range(0, indices.size(), 3):
+				tris.append([block.poly[indices[i]], block.poly[indices[i + 1]], block.poly[indices[i + 2]]])
+		for t: Array in tris:
+			var q0: Vector2 = t[0]
+			var q1: Vector2 = t[1]
+			var q2: Vector2 = t[2]
+			bucket.tri(Vector3(q0.x, block.roof_y, q0.y), Vector3(q1.x, block.roof_y, q1.y), Vector3(q2.x, block.roof_y, q2.y), Vector3.UP)
+		# Opt-in deck slab over open sides: underside (fascia comes with the open faces).
+		var deck: Dictionary = block.cfg.get("deck", {})
+		if not deck.is_empty():
+			var under_y := block.roof_y - float(deck.get("t", 0.3))
+			var under := ctx.bucket("support", str(deck.get("material", "slab")))
+			for t: Array in tris:
+				var q0: Vector2 = t[0]
+				var q1: Vector2 = t[1]
+				var q2: Vector2 = t[2]
+				under.tri(Vector3(q0.x, under_y, q0.y), Vector3(q1.x, under_y, q1.y), Vector3(q2.x, under_y, q2.y), Vector3.DOWN)
+		_parapets(ctx, block)
+		for hole: PackedVector2Array in block.holes:
+			_hole_parapets(ctx, block, hole)
 	for item: Dictionary in block.cfg.get("roof_items", []):
 		_roof_item(ctx, block, item)
+
+
+## Facet planes [u, c, k] of a pitched roof; the underside is the lowest facet.
+static func _roof_planes(ctx: Ctx, block: Block, roof_cfg: Dictionary) -> Array:
+	var k := tan(deg_to_rad(float(roof_cfg.get("pitch_deg", 15.0))))
+	var planes: Array = []
+	match block.form:
+		"gable":
+			var e := int(roof_cfg.get("ridge_edge", -1))
+			if e < 0 or e >= ctx.edges.size():
+				return []
+			var ridge: Vector2 = (ctx.edges[e] as Edge).d
+			var w := Vector2(-ridge.y, ridge.x)
+			var lo := INF
+			var hi := -INF
+			for p: Vector2 in block.poly:
+				lo = minf(lo, w.dot(p))
+				hi = maxf(hi, w.dot(p))
+			planes = [[w, lo, k], [-w, -hi, k]]
+		"mono":
+			var e := int(roof_cfg.get("low_edge", -1))
+			if e < 0 or e >= ctx.edges.size():
+				return []
+			var u: Vector2 = -(ctx.edges[e] as Edge).n
+			var lo := INF
+			for p: Vector2 in block.poly:
+				lo = minf(lo, u.dot(p))
+			planes = [[u, lo, k]]
+		"pyramid":
+			for i in block.poly.size():
+				var u := -_outward(block.poly, i)
+				planes.append([u, u.dot(block.poly[i]), k])
+	return planes
+
+
+## Underside height of the block's roof at p: the eave on the walls, rising inward.
+static func _roof_under(block: Block, p: Vector2) -> float:
+	if block.form == "flat":
+		return block.roof_y
+	var h := INF
+	for plane: Array in block.planes:
+		h = minf(h, float(plane[2]) * ((plane[0] as Vector2).dot(p) - float(plane[1])))
+	return block.roof_y + h
+
+
+## Convex outline grown outward by `by` (mitred corners).
+static func _grow_convex(poly: PackedVector2Array, by: float) -> PackedVector2Array:
+	if by <= 0.0:
+		return poly
+	var out := PackedVector2Array()
+	var count := poly.size()
+	for i in count:
+		var n0 := _outward(poly, (i + count - 1) % count)
+		var n1 := _outward(poly, i)
+		out.append(poly[i] + (n0 + n1) * (by / (1.0 + n0.dot(n1))))
+	return out
+
+
+## Pitched roof slab: top (roof role), underside and fascia (support) over the
+## outline grown by the overhang. Each facet is the outline clipped to where its
+## plane is lowest; facets share snapped vertices, so ridges and hips do not crack.
+static func _pitched_roof(ctx: Ctx, block: Block) -> void:
+	var roof_cfg: Dictionary = block.cfg.get("roof", {})
+	var t := float(roof_cfg.get("t", 0.15))
+	var top := ctx.bucket("roof", str(block.cfg.get("roof_material", "roof")))
+	var under := ctx.bucket("support", str(roof_cfg.get("under", "soffit")))
+	var fascia := ctx.bucket("support", str(roof_cfg.get("fascia", "coping")))
+	var outline := _grow_convex(block.poly, float(roof_cfg.get("overhang", 0.3)))
+	var canon: Array = []
+	for j in block.planes.size():
+		var pj: Array = block.planes[j]
+		var facet := outline
+		for i in block.planes.size():
+			if i == j:
+				continue
+			var pi: Array = block.planes[i]
+			var normal: Vector2 = (pi[0] as Vector2) * float(pi[2]) - (pj[0] as Vector2) * float(pj[2])
+			if normal.length_squared() < 1e-12:
+				continue
+			var offset := float(pi[2]) * float(pi[1]) - float(pj[2]) * float(pj[1])
+			facet = _clip(facet, normal * (offset / normal.length_squared()), normal)
+			if facet.size() < 3:
+				break
+		if facet.size() < 3:
+			continue
+		var snapped := PackedVector2Array()
+		for p: Vector2 in facet:
+			var found := p
+			for q: Vector2 in canon:
+				if q.distance_to(p) < 0.0005:
+					found = q
+					break
+			if found == p:
+				canon.append(p)
+			snapped.append(found)
+		for i in range(1, snapped.size() - 1):
+			var a := snapped[0]
+			var b := snapped[i]
+			var c := snapped[i + 1]
+			top.tri(Vector3(a.x, _roof_under(block, a) + t, a.y), Vector3(b.x, _roof_under(block, b) + t, b.y), Vector3(c.x, _roof_under(block, c) + t, c.y), Vector3.UP)
+			under.tri(Vector3(a.x, _roof_under(block, a), a.y), Vector3(b.x, _roof_under(block, b), b.y), Vector3(c.x, _roof_under(block, c), c.y), Vector3.DOWN)
+		# Fascia along the facet edges that lie on the outline.
+		for i in snapped.size():
+			var a := snapped[i]
+			var b := snapped[(i + 1) % snapped.size()]
+			var m := (a + b) * 0.5
+			for e in outline.size():
+				var oa := outline[e]
+				var ob := outline[(e + 1) % outline.size()]
+				if Geometry2D.get_closest_point_to_segment(m, oa, ob).distance_to(m) > 0.001:
+					continue
+				var n := _outward(outline, e)
+				var ya := _roof_under(block, a)
+				var yb := _roof_under(block, b)
+				fascia.quad(Vector3(a.x, ya, a.y), Vector3(b.x, yb, b.y), Vector3(b.x, yb + t, b.y), Vector3(a.x, ya + t, a.y), Vector3(n.x, 0.0, n.y))
+				break
+
+
+## Wall above the eave under a pitched roof (gable ends, lean-to sides): columns
+## on the wall strips' own top vertices, rising into the roof slab; a ridge or
+## hip crossing a column only adds a vertex to its hidden top.
+static func _infill(ctx: Ctx, face: Face) -> void:
+	var block := face.block
+	var t := float((block.cfg.get("roof", {}) as Dictionary).get("t", 0.15))
+	var xs: Array = face.top_xs.duplicate()
+	xs.sort()
+	var kinks: Array = []
+	for i in block.planes.size():
+		for j in range(i + 1, block.planes.size()):
+			var pi: Array = block.planes[i]
+			var pj: Array = block.planes[j]
+			var gi := float(pi[2]) * (pi[0] as Vector2).dot(face.d)
+			var gj := float(pj[2]) * (pj[0] as Vector2).dot(face.d)
+			if absf(gi - gj) < 1e-9:
+				continue
+			var hi0 := float(pi[2]) * ((pi[0] as Vector2).dot(face.a) - float(pi[1]))
+			var hj0 := float(pj[2]) * ((pj[0] as Vector2).dot(face.a) - float(pj[1]))
+			kinks.append((hj0 - hi0) / (gi - gj))
+	kinks.sort()
+	var material := str(face.scheme.get("gable_material", face.scheme.get("parapet_material", face.scheme.get("material", "render"))))
+	var bucket := ctx.bucket("wall", material)
+	var bottom := block.wall_top
+	var out := face.out3()
+	for i in range(xs.size() - 1):
+		var xa: float = xs[i]
+		var xb: float = xs[i + 1]
+		if xb - xa < 0.001:
+			continue
+		var exposed := false
+		for span: Dictionary in face.spans:
+			if float(span.s0) <= (xa + xb) * 0.5 and (xa + xb) * 0.5 <= float(span.s1):
+				exposed = true
+		if not exposed:
+			continue
+		# Hidden top polyline from xb back to xa, with any kinks between.
+		var top: Array = [xb]
+		for k in range(kinks.size() - 1, -1, -1):
+			if float(kinks[k]) > xa + 0.001 and float(kinks[k]) < xb - 0.001:
+				top.append(kinks[k])
+		top.append(xa)
+		var highest := -INF
+		for x: float in top:
+			highest = maxf(highest, _roof_under(block, face.a + face.d * x))
+		if highest + t * 0.5 <= bottom + 0.005:
+			continue
+		var anchor := face.point(xa, bottom, 0.0)
+		var previous := face.point(xb, bottom, 0.0)
+		for x: float in top:
+			var y := maxf(bottom, _roof_under(block, face.a + face.d * x) + t * 0.5)
+			var point := face.point(x, y, 0.0)
+			bucket.tri(anchor, previous, point, out)
+			previous = point
 
 
 ## Inner parapet faces and coping along every edge run exposed at roof level.
@@ -1383,6 +2009,9 @@ static func _parapet_run(ctx: Ctx, block: Block, o0: Vector2, o1: Vector2, i0: V
 		var rail_top := block.roof_y + float((block.cfg.get("parapet", {}) as Dictionary).get("h", 1.1))
 		var mid0 := (o0 + i0) * 0.5
 		var mid1 := (o1 + i1) * 0.5
+		if str((block.cfg.get("parapet", {}) as Dictionary).get("style", "glass")) == "pipe":
+			_pipe_run(ctx.bucket("support", "rail"), mid0, mid1, n, top, rail_top)
+			return
 		var glass := ctx.bucket("support", "rail_glass")
 		var facing := Vector3(n.x, 0.0, n.y)
 		glass.quad(Vector3(mid0.x, top, mid0.y), Vector3(mid1.x, top, mid1.y), Vector3(mid1.x, rail_top, mid1.y), Vector3(mid0.x, rail_top, mid0.y), facing)
@@ -1414,13 +2043,25 @@ static func _roof_item(ctx: Ctx, block: Block, item: Dictionary) -> void:
 		var d0 := float(dd[0]) + (row_d + gap) * float(r)
 		var corners := [edge.at(float(s[0]), d0), edge.at(float(s[1]), d0), edge.at(float(s[1]), d0 + row_d), edge.at(float(s[0]), d0 + row_d)]
 		for corner: Vector2 in corners:
-			if not Geometry2D.is_point_in_polygon(corner, block.poly):
+			if not Geometry2D.is_point_in_polygon(corner, block.poly) or block.holes.any(func(h: PackedVector2Array) -> bool: return Geometry2D.is_point_in_polygon(corner, h)):
 				ctx.errors.append("roof item %s leaves block %s" % [kind, block.id])
 				return
 		var h := float(item.get("h", 0.45 if kind == "pv" else 2.0))
 		var top_mat := str(item.get("top", "pv" if kind == "pv" else item.get("material", "mech")))
 		var side_mat := str(item.get("material", "metal" if kind == "pv" else "mech"))
-		_prism(ctx, corners, block.roof_y, block.roof_y + h, side_mat, top_mat)
+		var center: Vector2 = (corners[0] + corners[2]) * 0.5
+		var base := block.roof_y
+		if block.form != "flat":
+			base = _roof_under(block, center) + float((block.cfg.get("roof", {}) as Dictionary).get("t", 0.15)) - 0.05
+		if kind == "cylinder":
+			var radius := minf(absf(float(s[1]) - float(s[0])), absf(row_d)) * 0.5
+			var sides := maxi(6, int(item.get("sides", 12)))
+			var ring: Array = []
+			for i in sides:
+				ring.append(center + Vector2(cos(TAU * float(i) / float(sides)), sin(TAU * float(i) / float(sides))) * radius)
+			_prism(ctx, ring, base, base + h, side_mat, top_mat)
+		else:
+			_prism(ctx, corners, base, base + h, side_mat, top_mat)
 
 
 ## Vertical prism over a convex quad: sides and top, support role.
@@ -1480,6 +2121,393 @@ static func _apron(ctx: Ctx, apron: Dictionary) -> void:
 		ground.quad(Vector3(oa.x, ya, oa.y), Vector3(ob.x, yb, ob.y), Vector3(xb.x, yb - 0.25, xb.y), Vector3(xa.x, ya - 0.25, xa.y), Vector3(edge.n.x, 1.0, edge.n.y))
 
 
+# ------------------------------------------------------------------ outbuilding parts
+
+## Open side: posts (support) at the face start and every `module` along it,
+## optionally over a knee wall (wall role, both faces and a cap) with an
+## entrance `gap` in footprint stations. `post_every` keeps one face start in n
+## (pavilions with many short faces).
+static func _open_face(ctx: Ctx, face: Face) -> void:
+	var block := face.block
+	var spec: Dictionary = face.scheme.open
+	var w := float(spec.get("post_w", 0.15))
+	var module := maxf(0.5, float(spec.get("module", 3.0)))
+	var posts := ctx.bucket("support", str(spec.get("post_material", "metal")))
+	var t := float((block.cfg.get("roof", {}) as Dictionary).get("t", 0.15))
+	var knee: Dictionary = spec.get("knee", {})
+	if not knee.is_empty() and not (_in_range(float(knee.get("h", 1.2)), 0.0, 4.0) and float(knee.get("h", 1.2)) > 0.0 and _in_range(float(knee.get("t", 0.15)), 0.0, 1.0) and float(knee.get("t", 0.15)) > 0.0):
+		ctx.errors.append("block %s open knee wall needs h in (0, 4] and t in (0, 1] m" % block.id)
+		return
+	var deck: Dictionary = block.cfg.get("deck", {})
+	if not deck.is_empty() and not (_in_range(float(deck.get("t", 0.3)), 0.0, 2.0) and float(deck.get("t", 0.3)) > 0.0):
+		ctx.errors.append("block %s deck needs t in (0, 2] m" % block.id)
+		return
+	var gap: Array = knee.get("gap", [])
+	var g0 := INF
+	var g1 := -INF
+	if gap.size() == 2:
+		g0 = minf(_local_station(ctx, face, float(gap[0])), _local_station(ctx, face, float(gap[1])))
+		g1 = maxf(_local_station(ctx, face, float(gap[0])), _local_station(ctx, face, float(gap[1])))
+	var every := maxi(1, int(spec.get("post_every", 1)))
+	for span: Dictionary in face.spans:
+		var a := float(span.s0)
+		var b := float(span.s1)
+		var stations: Array = []
+		var x := a
+		while x < b - 0.05:
+			stations.append(x)
+			x += module
+		for i in stations.size():
+			if i == 0 and a < 0.001 and face.index % every != 0:
+				continue
+			var s0 := clampf(float(stations[i]), a, b - w)
+			var mid := face.a + face.d * (s0 + w * 0.5) - face.n * (w * 0.5)
+			var y0 := float(span.y) if not bool(span.ground) else _ground_y(ctx, mid) - BURY_M
+			_box(posts, face, s0, s0 + w, y0, _roof_under(block, mid) + t * 0.5, 0.0, w)
+		if block.form == "flat" and not deck.is_empty():
+			var dy := block.roof_y - float(deck.get("t", 0.3))
+			ctx.bucket("support", str(deck.get("material", "slab"))).quad(face.point(a, dy, 0.0), face.point(b, dy, 0.0), face.point(b, block.wall_top, 0.0), face.point(a, block.wall_top, 0.0), face.out3())
+		if knee.is_empty():
+			continue
+		var kh := block.floors[0] + float(knee.get("h", 1.2))
+		var kt := float(knee.get("t", 0.15))
+		var wall := ctx.bucket("wall", str(knee.get("material", face.scheme.get("material", "render"))))
+		# At a block corner the inner face is mitred onto the neighbouring edge, so
+		# the knee wall never pokes past it.
+		var count := block.poly.size()
+		var corner0 := block.poly[face.poly_index]
+		var corner1 := block.poly[(face.poly_index + 1) % count]
+		var before := (corner0 - block.poly[(face.poly_index + count - 1) % count]).normalized()
+		var after := (block.poly[(face.poly_index + 2) % count] - corner1).normalized()
+		var pieces: Array = [[a, b]]
+		if g1 > g0:
+			pieces = [[a, minf(b, g0)], [maxf(a, g1), b]]
+		for piece: Array in pieces:
+			var p0 := float(piece[0])
+			var p1 := float(piece[1])
+			if p1 - p0 < 0.05:
+				continue
+			var q0 := p0
+			var q1 := p1
+			if p0 < 0.001:
+				var hit: Variant = Geometry2D.line_intersects_line(face.a - face.n * kt, face.d, corner0, before)
+				if hit != null:
+					q0 = ((hit as Vector2) - face.a).dot(face.d)
+			if p1 > face.length - 0.001:
+				var hit: Variant = Geometry2D.line_intersects_line(face.a - face.n * kt, face.d, corner1, after)
+				if hit != null:
+					q1 = ((hit as Vector2) - face.a).dot(face.d)
+			var y_a := float(span.y) if not bool(span.ground) else _ground_y(ctx, face.a + face.d * p0) - BURY_M
+			var y_b := float(span.y) if not bool(span.ground) else _ground_y(ctx, face.a + face.d * p1) - BURY_M
+			var out := face.out3()
+			wall.quad(face.point(p0, y_a, 0.0), face.point(p1, y_b, 0.0), face.point(p1, kh, 0.0), face.point(p0, kh, 0.0), out)
+			wall.quad(face.point(q0, y_a, kt), face.point(q1, y_b, kt), face.point(q1, kh, kt), face.point(q0, kh, kt), -out)
+			wall.quad(face.point(p0, kh, 0.0), face.point(p1, kh, 0.0), face.point(q1, kh, kt), face.point(q0, kh, kt), Vector3.UP)
+			wall.quad(face.point(p0, y_a, 0.0), face.point(p0, kh, 0.0), face.point(q0, kh, kt), face.point(q0, y_a, kt), -face.dir3())
+			wall.quad(face.point(p1, y_b, 0.0), face.point(p1, kh, 0.0), face.point(q1, kh, kt), face.point(q1, y_b, kt), face.dir3())
+
+
+## Opt-in pergola ("pergola" on a flat block, normally with open sides): checks
+## its fields. A pergola has no roof slab, deck, parapet or roof items, and its
+## outline must be convex.
+static func _pergola_valid(ctx: Ctx, block: Block) -> bool:
+	var spec: Variant = block.cfg.get("pergola")
+	var ok := spec is Dictionary and block.form == "flat" and not block.cfg.has("deck") and not block.cfg.has("roof_items") and _convex(block.poly)
+	if ok:
+		var edge := int(spec.get("rafter_edge", -1))
+		ok = edge >= 0 and edge < ctx.edges.size() \
+			and _in_range(float(spec.get("beam_w", 0.2)), 0.02, 1.0) and _in_range(float(spec.get("beam_h", 0.3)), 0.02, 1.0) \
+			and _in_range(float(spec.get("rafter_w", 0.08)), 0.02, 0.5) and _in_range(float(spec.get("rafter_h", 0.2)), 0.02, 1.0) \
+			and _in_range(float(spec.get("spacing", 0.6)), 0.2, 5.0)
+	if not ok:
+		ctx.errors.append("block %s pergola needs a flat convex block without deck or roof items, a valid rafter_edge, beam_w/beam_h 0.02-1, rafter_w 0.02-0.5, rafter_h 0.02-1 and spacing 0.2-5 m" % block.id)
+	return ok
+
+
+## Open pergola over its block (support role): beams round the outline just
+## under the roof line and rafters on them across the block, at right angles to
+## footprint edge `rafter_edge`, every `spacing` along it.
+static func _pergola(ctx: Ctx, block: Block) -> void:
+	var spec: Dictionary = block.cfg.pergola
+	var bucket := ctx.bucket("support", str(spec.get("material", "timber")))
+	var half := float(spec.get("beam_w", 0.2)) * 0.5
+	var y0 := block.roof_y - float(spec.get("beam_h", 0.3))
+	var count := block.poly.size()
+	for i in count:
+		var n := _outward(block.poly, i)
+		_plan_box(bucket, block.poly[i] - n * half, block.poly[(i + 1) % count] - n * half, n, y0, block.roof_y, half)
+	var edge: Edge = ctx.edges[int(spec.rafter_edge)]
+	var rafter_half := float(spec.get("rafter_w", 0.08)) * 0.5
+	var rafter_top := block.roof_y + float(spec.get("rafter_h", 0.2))
+	var spacing := float(spec.get("spacing", 0.6))
+	var lo := INF
+	var hi := -INF
+	for p: Vector2 in block.poly:
+		lo = minf(lo, edge.station(p))
+		hi = maxf(hi, edge.station(p))
+	var s := lo + spacing * 0.5
+	while s < hi - rafter_half:
+		# The rafter line edge.at(s, t) for all t, clipped to the convex outline.
+		var q := edge.at(s, 0.0)
+		var t0 := -INF
+		var t1 := INF
+		for i in count:
+			var m := _outward(block.poly, i)
+			var rate := -m.dot(edge.n)
+			var room := m.dot(block.poly[i] - q)
+			if absf(rate) < 1e-9:
+				if room < 0.0:
+					t1 = -INF
+			elif rate > 0.0:
+				t1 = minf(t1, room / rate)
+			else:
+				t0 = maxf(t0, room / rate)
+		if t1 - t0 > 0.1:
+			_plan_box(bucket, edge.at(s, t0), edge.at(s, t1), edge.d, block.roof_y, rafter_top, rafter_half)
+		s += spacing
+
+
+## Opt-in exterior stair ("ext_stairs" entry): one straight open steel flight
+## along footprint edge `edge`, outside the wall (`gap` out, `w` clear width),
+## from grade at station `foot` up to a landing at floor `storey` of block
+## `block` that starts at station `top` and runs to `landing_end`, `landing_depth`
+## out from the wall, on two posts. Open treads, channel stringers, an outer
+## handrail and landing rails are support role. The stock controller has no
+## step-up, so the walking surface is a collision-only ramp through the tread
+## nosings (the housing_garage_court `_stair` grammar), flush with the landing
+## deck at the top. Invalid input fails the build.
+static func _ext_stair(ctx: Ctx, spec: Variant) -> void:
+	var label := "ext_stair"
+	if not spec is Dictionary:
+		ctx.errors.append(label + " needs a dictionary")
+		return
+	var k := int(spec.get("edge", -1))
+	var block: Block = null
+	for candidate: Block in ctx.blocks:
+		if candidate.id == str(spec.get("block", "")):
+			block = candidate
+	var storey := int(spec.get("storey", 1))
+	if k < 0 or k >= ctx.edges.size() or block == null or storey < 1 or storey >= block.storeys:
+		ctx.errors.append(label + " needs a footprint edge, a block id and an upper storey below its roof")
+		return
+	var edge: Edge = ctx.edges[k]
+	var face := Face.new()
+	face.a = edge.start
+	face.d = edge.d
+	face.n = edge.n
+	face.length = edge.length
+	var foot := float(spec.get("foot", -1.0))
+	var top := float(spec.get("top", -1.0))
+	var end := float(spec.get("landing_end", -1.0))
+	var w := float(spec.get("w", 0.9))
+	var gap := float(spec.get("gap", 0.1))
+	var outer := gap + w
+	var landing_depth := float(spec.get("landing_depth", outer))
+	var sg := signf(top - foot)
+	var run := absf(top - foot)
+	var y_top := block.floors[storey]
+	var y0 := -INF
+	for o: float in [gap, outer]:
+		y0 = maxf(y0, _ground_y(ctx, edge.at(foot, -o)))
+	var rise := y_top - y0
+	var risers := int(round(rise / STAIR_RISE_M))
+	var going := run / float(maxi(1, risers))
+	for value: float in [foot, top, end]:
+		if not _in_range(value, 0.0, edge.length):
+			ctx.errors.append(label + " stations must lie on the footprint edge")
+			return
+	if sg == 0.0 or signf(end - top) != sg or absf(end - top) < 0.8 or not _in_range(w, 0.6, 1.6) or not _in_range(gap, 0.0, 0.5) \
+			or not _in_range(landing_depth, outer, 3.0) or not _in_range(rise, 1.0, 6.0) or not _in_range(going, 0.22, 0.36) \
+			or not is_finite(y0) or ctx.terrain_misses > 0:
+		ctx.errors.append(label + " needs a run along the edge, a landing of at least 0.8 m beyond it, w 0.6-1.6, gap 0-0.5, landing_depth from gap+w to 3, a rise of 1-6 m and goings of 0.22-0.36 m")
+		return
+	var rise_k := rise / float(risers)
+	var at := func(t: float) -> float: return foot + sg * t
+	var steel := ctx.bucket("support", str(spec.get("material", "rail")))
+	var treads := ctx.bucket("support", str(spec.get("tread_material", spec.get("material", "rail"))))
+	# Open treads: tread i tops out at y0 + i*rise_k, its nosing on the walking line.
+	for i in range(1, risers):
+		var a: float = at.call(going * float(i) - STAIR_NOSE_M)
+		var b: float = at.call(minf(run, going * float(i + 1)))
+		_box(treads, face, minf(a, b), maxf(a, b), y0 + rise_k * float(i) - 0.045, y0 + rise_k * float(i), -outer, -gap, false)
+	# Landing deck, flush with the top of the walking surface.
+	var l0: float = at.call(run - STAIR_NOSE_M)
+	_box(treads, face, minf(l0, end), maxf(l0, end), y_top - 0.16, y_top, -landing_depth, 0.0, false)
+	# Channel stringers on both sides: top edge about 0.04 above the nosing line
+	# (0.06 over the foot line, less the nosing offset), 0.26 deep.
+	for d: Array in [[-outer - 0.04, -outer], [-gap, -gap + 0.04 if gap >= 0.04 else 0.0]]:
+		_sloped_box(steel, face, at.call(-0.15), at.call(run), y0 - 0.15 * rise_k / going + 0.06, y_top + 0.06, float(d[0]), float(d[1]), 0.26)
+	# Outer handrail along the flight, rails round the open landing edges.
+	_pipe_slope(steel, face.point(at.call(going * 0.5), y0 + rise_k * 0.5, -outer + 0.03), face.point(at.call(run), y_top, -outer + 0.03), face.out3())
+	if bool(spec.get("rails", true)):
+		var p_corner := edge.at(end, -landing_depth + 0.03)
+		_pipe_run(steel, edge.at(l0, -landing_depth + 0.03), p_corner, -edge.n, y_top, y_top + RAIL_H_M)
+		_pipe_run(steel, p_corner, edge.at(end, -0.05), edge.d * sg, y_top, y_top + RAIL_H_M)
+	# Landing posts down into the ground at the outer corners.
+	for s: float in [l0 + sg * 0.06, end - sg * 0.06]:
+		var c := edge.at(s, -landing_depth + 0.06)
+		_plan_box(steel, c - edge.d * 0.04, c + edge.d * 0.04, edge.n, _ground_y(ctx, c) - BURY_M, y_top - 0.16, 0.04)
+	# Collision-only walking surface through the nosings, the full clear width.
+	var walk := ctx.bucket("support", str(spec.get("material", "rail")) + "|" + WALK_TAG)
+	# It starts STAIR_NOSE_M before the foot so every tread nosing lies on it.
+	var w0: float = at.call(-STAIR_NOSE_M)
+	walk.quad(face.point(w0, y0, -outer + 0.02), face.point(w0, y0, -gap - 0.02), face.point(l0, y_top, -gap - 0.02), face.point(l0, y_top, -outer + 0.02), Vector3.UP)
+
+
+## Sloped box in face coordinates: its top edge runs from (sa, ya) to (sb, yb)
+## between depths d0 < d1, `h` deep below it. Support parts (stringers).
+static func _sloped_box(bucket: Bucket, face: Face, sa: float, sb: float, ya: float, yb: float, d0: float, d1: float, h: float) -> void:
+	var out := face.out3()
+	var along := face.dir3() * signf(sb - sa)
+	var corners := [[sa, ya], [sb, yb], [sb, yb - h], [sa, ya - h]]
+	for side: Array in [[d0, out], [d1, -out]]:
+		var d := float(side[0])
+		var pts: Array = []
+		for c: Array in corners:
+			pts.append(face.point(float(c[0]), float(c[1]), d))
+		bucket.quad(pts[0], pts[1], pts[2], pts[3], side[1])
+	bucket.quad(face.point(sa, ya, d0), face.point(sb, yb, d0), face.point(sb, yb, d1), face.point(sa, ya, d1), Vector3.UP)
+	bucket.quad(face.point(sa, ya - h, d0), face.point(sb, yb - h, d0), face.point(sb, yb - h, d1), face.point(sa, ya - h, d1), Vector3.DOWN)
+	bucket.quad(face.point(sa, ya - h, d0), face.point(sa, ya, d0), face.point(sa, ya, d1), face.point(sa, ya - h, d1), -along)
+	bucket.quad(face.point(sb, yb - h, d0), face.point(sb, yb, d0), face.point(sb, yb, d1), face.point(sb, yb - h, d1), along)
+
+
+## Caged steel ladder (support role) centred on its bay, from 0.3 m above grade
+## to 1 m over the wall top. Not walkable; it is a climbing fixture.
+static func _ladder(ctx: Ctx, face: Face, bay: Dictionary) -> void:
+	var metal := ctx.bucket("support", "rail" if ctx.materials.has("rail") else "metal")
+	var c := (float(bay.s0) + float(bay.s1)) * 0.5
+	var y0 := _ground_y(ctx, face.a + face.d * c) + 0.3
+	var y1 := face.block.wall_top + 1.0
+	var half := 0.25
+	var rail := -0.18
+	for side: float in [-1.0, 1.0]:
+		_box(metal, face, c + side * half - 0.025, c + side * half + 0.025, y0, y1, rail - 0.025, rail + 0.025, false)
+	var y := y0 + 0.2
+	while y < y1 - 0.1:
+		_box(metal, face, c - half, c + half, y, y + 0.03, rail - 0.015, rail + 0.015, false)
+		y += 0.3
+	var cage0 := y0 + 2.1
+	var reach := rail - 0.72
+	var hoop := cage0
+	while hoop < y1 - 0.05:
+		for side: float in [-1.0, 1.0]:
+			_box(metal, face, c + side * 0.38 - 0.02, c + side * 0.38 + 0.02, hoop, hoop + 0.04, reach, rail, false)
+		_box(metal, face, c - 0.38, c + 0.38, hoop, hoop + 0.04, reach - 0.04, reach, false)
+		hoop += 0.9
+	for bar: float in [-0.38, -0.13, 0.13, 0.38]:
+		var depth := reach if absf(bar) < 0.3 else (rail + reach) * 0.5
+		_box(metal, face, c + bar - 0.015, c + bar + 0.015, cage0, y1, depth - 0.03, depth, false)
+
+
+## Walkable ramp from a raised deck along the facade to the local grade (slope
+## at most 1:12 by default), with a side skirt; `dir` picks the facade direction.
+static func _ramp(ctx: Ctx, face: Face, ramp: Dictionary, c: float, land_w: float, land_d: float, y0: float) -> void:
+	var sgn := -1.0 if float(ramp.get("dir", 1)) < 0.0 else 1.0
+	var rw := minf(float(ramp.get("w", 1.2)), land_d)
+	var slope := maxf(0.02, float(ramp.get("slope", 0.083)))
+	var s0 := c + sgn * land_w * 0.5
+	var length := 1.0
+	for _i in 30:
+		var probe := face.a + face.d * (s0 + sgn * length) + face.n * (rw * 0.5)
+		length = maxf(0.5, (y0 - _ground_y(ctx, probe)) / slope)
+	var s1 := s0 + sgn * length
+	var g1 := _ground_y(ctx, face.a + face.d * s1 + face.n * (rw * 0.5)) + 0.02
+	var ground := ctx.bucket("ground", "paving")
+	ground.quad(face.point(s0, y0, 0.0), face.point(s1, g1, 0.0), face.point(s1, g1, -rw), face.point(s0, y0, -rw), Vector3.UP)
+	var skirt := ctx.bucket("support", "slab")
+	var base0 := _ground_y(ctx, face.a + face.d * s0 + face.n * rw) - BURY_M
+	var base1 := _ground_y(ctx, face.a + face.d * s1 + face.n * rw) - BURY_M
+	skirt.quad(face.point(s0, base0, -rw), face.point(s1, base1, -rw), face.point(s1, g1, -rw), face.point(s0, y0, -rw), face.out3())
+	var rails := ctx.bucket("support", "rail" if ctx.materials.has("rail") else "metal")
+	var p0 := face.point(s0, y0, -rw + 0.05)
+	var p1 := face.point(s1, g1, -rw + 0.05)
+	_pipe_slope(rails, p0, p1, face.out3())
+
+
+## Pipe rails round a raised deck: its outer edge and the open side(s) the ramp
+## does not use.
+static func _deck_rails(ctx: Ctx, face: Face, ramp: Dictionary, c: float, land_w: float, land_d: float, y0: float) -> void:
+	var rails := ctx.bucket("support", "rail" if ctx.materials.has("rail") else "metal")
+	var a := face.a + face.d * (c - land_w * 0.5)
+	var b := face.a + face.d * (c + land_w * 0.5)
+	var front := face.n * (land_d - 0.05)
+	_pipe_run(rails, a + front, b + front, face.n, y0, y0 + RAIL_H_M)
+	var rw := minf(float(ramp.get("w", 1.2)), land_d) if not ramp.is_empty() else 0.0
+	var ramp_side := 0.0 if ramp.is_empty() else (-1.0 if float(ramp.get("dir", 1)) < 0.0 else 1.0)
+	for side: float in [-1.0, 1.0]:
+		var edge := a if side < 0.0 else b
+		var inset := face.d * (0.05 * -side)
+		var start := 0.0 if side != ramp_side else rw
+		var p0 := edge + inset + face.n * start
+		var p1 := edge + inset + face.n * (land_d - 0.05)
+		if p0.distance_to(p1) > 0.2:
+			_pipe_run(rails, p0, p1, face.d * side, y0, y0 + RAIL_H_M)
+
+
+## Level pipe rail along p0 -> p1 (plan points): posts at most 1.8 m apart, a top
+## rail and a mid rail. `n` is the side the rail faces.
+static func _pipe_run(bucket: Bucket, p0: Vector2, p1: Vector2, n: Vector2, y0: float, y1: float) -> void:
+	var length := p0.distance_to(p1)
+	if length < 0.05:
+		return
+	var d := (p1 - p0) / length
+	var count := maxi(1, ceili(length / 1.8))
+	var half := RAIL_BAR_M * 0.5
+	for i in count + 1:
+		var p := p0.lerp(p1, float(i) / float(count))
+		_plan_box(bucket, p - d * half, p + d * half, n, y0, y1, half)
+	_plan_box(bucket, p0, p1, n, y1 - RAIL_BAR_M, y1, half)
+	_plan_box(bucket, p0, p1, n, (y0 + y1) * 0.5 - half, (y0 + y1) * 0.5 + half, half)
+
+
+## Sloping pipe rail between two walking-surface points (world), facing `out`.
+static func _pipe_slope(bucket: Bucket, p0: Vector3, p1: Vector3, out: Vector3) -> void:
+	var plan := Vector2(p1.x - p0.x, p1.z - p0.z)
+	var length := plan.length()
+	if length < 0.05:
+		return
+	var count := maxi(1, ceili(length / 1.8))
+	var half := RAIL_BAR_M * 0.5
+	var d := plan / length
+	var n := Vector2(out.x, out.z).normalized()
+	for i in count + 1:
+		var p := p0.lerp(p1, float(i) / float(count))
+		var q := Vector2(p.x, p.z)
+		_plan_box(bucket, q - d * half, q + d * half, n, p.y, p.y + RAIL_H_M, half)
+	for h: float in [RAIL_H_M, RAIL_H_M * 0.5]:
+		var a := p0 + Vector3.UP * h
+		var b := p1 + Vector3.UP * h
+		var side := Vector3(n.x, 0.0, n.y) * half
+		bucket.quad(a + side - Vector3.UP * half, b + side - Vector3.UP * half, b + side + Vector3.UP * half, a + side + Vector3.UP * half, out)
+		bucket.quad(a - side - Vector3.UP * half, b - side - Vector3.UP * half, b - side + Vector3.UP * half, a - side + Vector3.UP * half, -out)
+		bucket.quad(a + side + Vector3.UP * half, b + side + Vector3.UP * half, b - side + Vector3.UP * half, a - side + Vector3.UP * half, Vector3.UP)
+		bucket.quad(a + side - Vector3.UP * half, b + side - Vector3.UP * half, b - side - Vector3.UP * half, a - side - Vector3.UP * half, Vector3.DOWN)
+
+
+## Closed box over the plan segment p0 -> p1, `half` wide either side, y0..y1.
+static func _plan_box(bucket: Bucket, p0: Vector2, p1: Vector2, n: Vector2, y0: float, y1: float, half: float) -> void:
+	var length := p0.distance_to(p1)
+	if length < 1e-4:
+		return
+	var d := (p1 - p0) / length
+	var side := Vector2(-d.y, d.x) * half
+	if side.dot(n) < 0.0:
+		side = -side
+	var a0 := p0 + side
+	var a1 := p1 + side
+	var b0 := p0 - side
+	var b1 := p1 - side
+	var out := Vector3(side.x, 0.0, side.y)
+	var along := Vector3(d.x, 0.0, d.y)
+	bucket.quad(Vector3(a0.x, y0, a0.y), Vector3(a1.x, y0, a1.y), Vector3(a1.x, y1, a1.y), Vector3(a0.x, y1, a0.y), out)
+	bucket.quad(Vector3(b0.x, y0, b0.y), Vector3(b1.x, y0, b1.y), Vector3(b1.x, y1, b1.y), Vector3(b0.x, y1, b0.y), -out)
+	bucket.quad(Vector3(a0.x, y1, a0.y), Vector3(a1.x, y1, a1.y), Vector3(b1.x, y1, b1.y), Vector3(b0.x, y1, b0.y), Vector3.UP)
+	bucket.quad(Vector3(a0.x, y0, a0.y), Vector3(a1.x, y0, a1.y), Vector3(b1.x, y0, b1.y), Vector3(b0.x, y0, b0.y), Vector3.DOWN)
+	bucket.quad(Vector3(a0.x, y0, a0.y), Vector3(b0.x, y0, b0.y), Vector3(b0.x, y1, b0.y), Vector3(a0.x, y1, a0.y), -along)
+	bucket.quad(Vector3(a1.x, y0, a1.y), Vector3(b1.x, y0, b1.y), Vector3(b1.x, y1, b1.y), Vector3(a1.x, y1, a1.y), along)
+
+
 # ------------------------------------------------------------------ emission
 
 static func _make_materials(ctx: Ctx) -> void:
@@ -1490,15 +2518,23 @@ static func _make_materials(ctx: Ctx) -> void:
 		if rgb.size() != 3:
 			ctx.errors.append("palette %s needs rgb" % key)
 			return
-		var material := StandardMaterial3D.new()
-		material.resource_name = "Midrise_" + key
-		material.albedo_color = Color(float(rgb[0]), float(rgb[1]), float(rgb[2]), float(entry.get("alpha", 1.0)))
-		material.roughness = float(entry.get("roughness", 0.9))
-		material.metallic = float(entry.get("metallic", 0.0))
-		if float(entry.get("alpha", 1.0)) < 1.0:
-			material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-			material.cull_mode = BaseMaterial3D.CULL_BACK
-		ctx.materials[key] = material
+		var cache_key := "%s|%s|%s|%s|%s|%s|%s" % [key, rgb[0], rgb[1], rgb[2], entry.get("alpha", 1.0), entry.get("roughness", 0.9), entry.get("metallic", 0.0)]
+		if not _material_cache.has(cache_key):
+			var material := StandardMaterial3D.new()
+			material.resource_name = "Midrise_" + key
+			material.albedo_color = Color(float(rgb[0]), float(rgb[1]), float(rgb[2]), float(entry.get("alpha", 1.0)))
+			material.roughness = float(entry.get("roughness", 0.9))
+			material.metallic = float(entry.get("metallic", 0.0))
+			if float(entry.get("alpha", 1.0)) < 1.0:
+				material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+				material.cull_mode = BaseMaterial3D.CULL_BACK
+			_material_cache[cache_key] = material
+		ctx.materials[key] = _material_cache[cache_key]
+
+
+## True when value is finite and lo <= value <= hi.
+static func _in_range(value: float, lo: float, hi: float) -> bool:
+	return is_finite(value) and value >= lo and value <= hi
 
 
 static func _emit(ctx: Ctx, root: Node3D) -> int:
@@ -1512,8 +2548,18 @@ static func _emit(ctx: Ctx, root: Node3D) -> int:
 		var parts := key.split("|")
 		var role := parts[0]
 		var mat := parts[1]
-		if role not in ROLES or not ctx.materials.has(mat):
+		# "support|<mat>|walk": a collision-only stair walking surface (see _ext_stair).
+		var walk := parts.size() == 3 and parts[2] == WALK_TAG and role == "support"
+		if role not in ROLES or not ctx.materials.has(mat) or (parts.size() != 2 and not walk):
 			ctx.errors.append("unknown role or palette key: " + key)
+			continue
+		var finite := true
+		for v: Vector3 in bucket.vertices:
+			if not v.is_finite():
+				finite = false
+				break
+		if not finite:
+			ctx.errors.append("non-finite vertex in " + key)
 			continue
 		var arrays: Array = []
 		arrays.resize(Mesh.ARRAY_MAX)
@@ -1527,6 +2573,10 @@ static func _emit(ctx: Ctx, root: Node3D) -> int:
 		node.name = "Midrise_%s_%s" % [role, mat]
 		node.mesh = mesh
 		node.set_meta("family_role", role)
+		if walk:
+			node.name += "_walk"
+			node.visible = false
+			node.set_meta("collision_only", true)
 		root.add_child(node)
 		triangles += int(bucket.vertices.size() / 3.0)
 	return triangles

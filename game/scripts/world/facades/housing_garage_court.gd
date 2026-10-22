@@ -1,18 +1,40 @@
 extends RefCounted
 ## Opt-in garage-court motifs for the shared housing kit (housing_site_family):
-## single-car garage doors, garage-bank piers, recessed loggias, exterior open
-## stairs and gable vents. The kit calls these only for config keys that are
-## present, so configs without them build exactly as before. Dimensions are
-## instance-config production inference, not survey.
+## single-car garage doors, garage-bank piers, window shutters, recessed
+## loggias, exterior open stairs, gable vents and coloured gablets. The kit
+## calls these only for config keys that are present, so configs without them
+## build exactly as before. Dimensions are instance-config production
+## inference, not survey.
 
 const PARTS = preload("res://game/scripts/world/facades/northpoint_1232_quality_model.gd")
 const BRICK = preload("res://game/resources/housing_family/brick.gdshader")
+const SIDING = preload("res://game/resources/housing_family/siding.gdshader")
 const NOSE := 0.025
 const STEEL := 0.05
 
 
 static func _vec(a: Array) -> Vector3:
 	return Vector3(a[0], a[1], a[2])
+
+
+static func _number(value: Variant) -> bool:
+	return (value is float or value is int) and is_finite(float(value))
+
+
+# Three numbers in [0, 1].
+static func _rgb(value: Variant) -> bool:
+	if not value is Array or (value as Array).size() != 3:
+		return false
+	for channel: Variant in value:
+		if not _number(channel) or float(channel) < 0.0 or float(channel) > 1.0:
+			return false
+	return true
+
+
+# Invalid opt-in data fails the whole build closed, like the kit's other guards.
+static func _invalid(root: Node3D, message: String) -> void:
+	root.set_meta("build_valid", false)
+	push_error("%s: %s" % [message, root.get_meta("source_key", "")])
 
 
 static func _color(cfg: Dictionary, key: String, fallback: Color) -> Color:
@@ -109,7 +131,15 @@ static func garage_door(root: Node3D, point: Vector3, t: Vector3, n: Vector3, wi
 	var joints := int(motif.get("joint_count", 3))
 	for k in range(1, joints + 1):
 		_box(lines, face + Vector3.UP * (-height * 0.5 + height * float(k) / float(joints + 1)), t, n, Vector3(width - 0.14, 0.022, 0.012))
-	if str(motif.get("panel_style", "grid")) == "grid":
+	if motif.has("stiles"):
+		# Opt-in explicit stile count, evenly spaced (one stile: a two-leaf door).
+		if not _number(motif.stiles):
+			_invalid(root, "Invalid garage door stiles %s" % [motif.stiles])
+			return
+		var stiles := int(motif.stiles)
+		for k in range(1, stiles + 1):
+			_box(lines, face + t * (width - 0.1) * (float(k) / float(stiles + 1) - 0.5), t, n, Vector3(0.02, height - 0.09, 0.012))
+	elif str(motif.get("panel_style", "grid")) == "grid":
 		for k: float in [-1.0, 1.0]:
 			_box(lines, face + t * k * (width - 0.1) / 6.0, t, n, Vector3(0.02, height - 0.09, 0.012))
 	for side: float in [-1.0, 1.0]:
@@ -148,21 +178,61 @@ static func piers(root: Node3D, frame: Dictionary, palette: Dictionary) -> void:
 			material = PARTS._material(_color(pier, "material_rgb", _color(palette, "siding_rgb", Color.GRAY)), 0.9)
 		var node := _commit(root, bucket, material, "GaragePier")
 		node.set_meta("family_role", "wall")
+	# Opt-in window shutters on the front frame's wall face, in palette shutter_rgb.
+	var shutters := _bucket()
+	for shutter: Dictionary in frame.get("shutters", []):
+		var complete := true
+		for key: String in ["local_station_m", "bottom_y", "top_y", "width_m"]:
+			complete = complete and shutter.has(key) and _number(shutter[key])
+		if not complete:
+			_invalid(root, "Invalid shutter in frame %s" % [frame.get("id", "")])
+			continue
+		var basis: Dictionary = shutter.get("basis", frame)
+		var t := _vec(basis.tangent)
+		var n := _vec(basis.normal)
+		var p := _vec(basis.start) + t * float(shutter.local_station_m)
+		var bottom := float(shutter.bottom_y)
+		var top := float(shutter.top_y)
+		p.y = (bottom + top) * 0.5
+		_box(shutters, p + n * 0.025, t, n, Vector3(float(shutter.width_m), top - bottom, 0.05))
+	var shutter_node := _commit(root, shutters, PARTS._material(_color(palette, "shutter_rgb", Color(0.45, 0.4, 0.35)), 0.85), "WindowShutters")
+	if shutter_node != null:
+		shutter_node.set_meta("family_role", "wall")
 
 
-## Opt-in per-run wall colour: cfg.run_siding_rgb {"<run>": [r, g, b]} repaints
-## the siding of that source run's wall pieces (built since begin) with the
-## same siding shader in another colour. Unlisted runs keep the instance siding.
+## Opt-in wall colours on the siding of the wall pieces built since begin for
+## one source run: cfg.run_siding_rgb {"<run>": [r, g, b]} repaints the whole
+## run; cfg.lower_siding_rgb repaints the lower storey (pieces at or below the
+## recess band) of front-frame runs, for a two-tone upper/garage zone. Both
+## keep the siding shader; runs without them keep the instance siding.
 static func run_siding(root: Node3D, begin: int, run: int, cfg: Dictionary, siding: ShaderMaterial) -> void:
 	var colors: Dictionary = cfg.get("run_siding_rgb", {})
-	if not colors.has(str(run)):
+	var run_material := siding
+	if colors.has(str(run)):
+		run_material = siding.duplicate() as ShaderMaterial
+		run_material.set_shader_parameter("wall_color", _color(colors, str(run), Color.GRAY))
+		for i in range(begin, root.get_child_count()):
+			var child := root.get_child(i) as MeshInstance3D
+			if child != null and child.material_override == siding:
+				child.material_override = run_material
+	# extras() reports an invalid lower_siding_rgb once; here it is simply not applied.
+	var lower: Variant = cfg.get("lower_siding_rgb", [])
+	if not _rgb(lower) or cfg.get("lower_frontage_recess", {}).is_empty():
 		return
-	var material := siding.duplicate() as ShaderMaterial
-	material.set_shader_parameter("wall_color", _color(colors, str(run), Color.GRAY))
+	var front_run := false
+	for frame: Dictionary in cfg.target.frames:
+		for frame_run in frame.runs:
+			if int(frame_run) == run:
+				front_run = true
+	if not front_run:
+		return
+	var band := float(cfg.lower_frontage_recess.band_y)
+	var lower_material := siding.duplicate() as ShaderMaterial
+	lower_material.set_shader_parameter("wall_color", Color(lower[0], lower[1], lower[2]))
 	for i in range(begin, root.get_child_count()):
 		var child := root.get_child(i) as MeshInstance3D
-		if child != null and child.material_override == siding:
-			child.material_override = material
+		if child != null and child.material_override == run_material and child.mesh.get_aabb().end.y <= band + 0.001:
+			child.material_override = lower_material
 
 
 # ---------- recessed loggia (balcony with railing, or porch without) ----------
@@ -220,10 +290,23 @@ static func loggia(root: Node3D, point: Vector3, t: Vector3, n: Vector3, width: 
 
 # ---------- exterior open stairs and gable vents ----------
 
-## Stairs and vents named by the instance config, tagged with their roles.
+## Stairs, vents and gablets named by the instance config, tagged with their roles.
 static func extras(root: Node3D, cfg: Dictionary, palette: Dictionary, trim: Material) -> void:
 	for spec: Dictionary in cfg.get("exterior_stairs", []):
 		_stair(root, spec, palette)
+	if cfg.has("lower_siding_rgb") and not _rgb(cfg.lower_siding_rgb):
+		_invalid(root, "Invalid lower_siding_rgb %s" % [cfg.lower_siding_rgb])
+	# Opt-in gablets in their own siding colour (roof role, wound as authored).
+	var gablets: Dictionary = cfg.get("gablets", {})
+	if not gablets.is_empty() and not _rgb(gablets.get("rgb")):
+		_invalid(root, "Invalid gablets rgb %s" % [gablets.get("rgb")])
+	elif not gablets.is_empty():
+		var gablet_siding := ShaderMaterial.new()
+		gablet_siding.shader = SIDING
+		gablet_siding.set_shader_parameter("wall_color", _color(gablets, "rgb", Color.GRAY))
+		for triangle: Array in gablets.get("triangles", []):
+			PARTS._mesh(root, [_vec(triangle[0]), _vec(triangle[1]), _vec(triangle[2])], PackedInt32Array([0, 1, 2]), gablet_siding)
+			root.get_child(-1).set_meta("family_role", "roof")
 	var louver_frame := _bucket()
 	var louver_back := _bucket()
 	for vent: Dictionary in cfg.get("gable_vents", []):

@@ -1482,14 +1482,8 @@
     23
   ],
   "protected_runs": [
-    0,
-    1,
-    2,
     3,
-    4,
-    5,
     6,
-    7,
     8,
     9,
     14,
@@ -1499,9 +1493,9 @@
   ],
   "materials": {
     "siding_rgb": [
-      0.35,
-      0.42,
-      0.47
+      0.6,
+      0.66,
+      0.7
     ],
     "trim_rgb": [
       0.73,
@@ -1565,7 +1559,7 @@
   "clamp_pipe_to_eave": true,
   "dimensions": "production_inference; dated visible frontage only; hidden elevations plain",
   "reference_digest": "2469cb18ae25cd497f2f66a2f4040f54fdcc2e3353916bdf065a2b249a28e00a",
-  "study_notes": "Exact frozen source edges; target-local observed-front motif schedule. Dimensions and positions inferred, not surveyed. No unseen opening schedule.",
+  "study_notes": "Exact frozen source edges; target-local observed-front motif schedule. Dimensions and positions inferred, not surveyed. No unseen opening schedule. 2026-10-12 whole WSW rear study001: complete broad paired upper/lower windows and six grade-seated blue entries across collinear unions 0-2/4-5/7. March2025 front01 supports motif family, not hidden rear counts/cadence/anchors; all rear layout production_inference. Original dimensions hidden-elevations-plain wording describes prior baseline; this rear schedule supersedes it only on authored hosts. ENE target.frames, roof, ends/returns, materials and site unchanged.",
   "local_ground": {
     "walk-0": {
       "top_triangles": [
@@ -12241,5 +12235,277 @@
       0.61
     ],
     "inference": "Observed freestanding canopy. Extent/post cadence inferred from visible parking structure; no attachment to housing."
-  }
+  },
+  "rear_frames": [
+    {
+      "id": "rear-1",
+      "elevation_role": "rear",
+      "runs": [
+        0,
+        1,
+        2
+      ],
+      "start": [
+        -181.24400329589844,
+        2.8540000915527344,
+        -781.4240112304688
+      ],
+      "end": [
+        -177.6300048828125,
+        2.9089999198913574,
+        -767.5419921875
+      ],
+      "length_m": 14.34473552349902,
+      "tangent": [
+        0.25193899869918823,
+        0.0,
+        0.9677430987358093
+      ],
+      "normal": [
+        -0.9677430987358093,
+        0.0,
+        0.25193899869918823
+      ],
+      "top_y": 8.82,
+      "upper_windows": [
+        {
+          "station_m": 2.008262973289863,
+          "width_m": 1.85,
+          "height_m": 1.1,
+          "center_y": 7.72,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 5.164104788459647,
+          "width_m": 1.85,
+          "height_m": 1.1,
+          "center_y": 7.72,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 9.180630735039372,
+          "width_m": 1.85,
+          "height_m": 1.1,
+          "center_y": 7.72,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 12.336472550209157,
+          "width_m": 1.85,
+          "height_m": 1.1,
+          "center_y": 7.72,
+          "glazing": "blue"
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 2.151710328524853,
+          "width_m": 1.9,
+          "height_m": 1.08,
+          "center_y": 4.388895655084553,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 9.324078090274364,
+          "width_m": 1.9,
+          "height_m": 1.08,
+          "center_y": 4.432216377522223,
+          "glazing": "blue"
+        }
+      ],
+      "entries": [
+        {
+          "station_m": 5.164104788459647,
+          "bottom_y": 2.890592206259407,
+          "threshold_bottom_y": 2.8294504882610227,
+          "door_role": "blue"
+        },
+        {
+          "station_m": 12.336472550209157,
+          "bottom_y": 2.9457639653039904,
+          "threshold_bottom_y": 2.884622247305606,
+          "door_role": "blue"
+        }
+      ]
+    },
+    {
+      "id": "rear-2",
+      "elevation_role": "rear",
+      "runs": [
+        4,
+        5
+      ],
+      "start": [
+        -176.3990020751953,
+        2.9170000553131104,
+        -767.864990234375
+      ],
+      "end": [
+        -172.74099731445312,
+        2.9539999961853027,
+        -753.7940063476562
+      ],
+      "length_m": 14.538692732495285,
+      "tangent": [
+        0.2516047954559326,
+        0.0,
+        0.9678300619125366
+      ],
+      "normal": [
+        -0.9678300619125366,
+        0.0,
+        0.2516047954559326
+      ],
+      "top_y": 8.82,
+      "upper_windows": [
+        {
+          "station_m": 2.0354169825493402,
+          "width_m": 1.85,
+          "height_m": 1.1,
+          "center_y": 7.72,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 5.233929383698302,
+          "width_m": 1.85,
+          "height_m": 1.1,
+          "center_y": 7.72,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 9.304763348796982,
+          "width_m": 1.85,
+          "height_m": 1.1,
+          "center_y": 7.72,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 12.503275749945946,
+          "width_m": 1.85,
+          "height_m": 1.1,
+          "center_y": 7.72,
+          "glazing": "blue"
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 2.180803909874293,
+          "width_m": 1.9,
+          "height_m": 1.08,
+          "center_y": 4.476419285914317,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 9.450150276121935,
+          "width_m": 1.9,
+          "height_m": 1.08,
+          "center_y": 4.493188449339555,
+          "glazing": "blue"
+        }
+      ],
+      "entries": [
+        {
+          "station_m": 5.233929383698302,
+          "bottom_y": 2.9765856634108103,
+          "threshold_bottom_y": 2.9206670853452352,
+          "door_role": "blue"
+        },
+        {
+          "station_m": 12.503275749945946,
+          "bottom_y": 2.993354967979735,
+          "threshold_bottom_y": 2.93743638991416,
+          "door_role": "blue"
+        }
+      ]
+    },
+    {
+      "id": "rear-3",
+      "elevation_role": "rear",
+      "runs": [
+        7
+      ],
+      "start": [
+        -173.83099365234375,
+        2.944999933242798,
+        -753.5159912109375
+      ],
+      "end": [
+        -170.04200744628906,
+        2.986999988555908,
+        -738.9550170898438
+      ],
+      "length_m": 15.045875973994821,
+      "tangent": [
+        0.2518288791179657,
+        0.0,
+        0.9677717685699463
+      ],
+      "normal": [
+        -0.9677717685699463,
+        0.0,
+        0.2518288791179657
+      ],
+      "top_y": 8.82,
+      "upper_windows": [
+        {
+          "station_m": 2.1064226363592753,
+          "width_m": 1.85,
+          "height_m": 1.1,
+          "center_y": 7.72,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 5.416515350638136,
+          "width_m": 1.85,
+          "height_m": 1.1,
+          "center_y": 7.72,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 9.629360623356686,
+          "width_m": 1.85,
+          "height_m": 1.1,
+          "center_y": 7.72,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 12.939453337635547,
+          "width_m": 1.85,
+          "height_m": 1.1,
+          "center_y": 7.72,
+          "glazing": "blue"
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 2.256881396099223,
+          "width_m": 1.9,
+          "height_m": 1.08,
+          "center_y": 4.514167238463329,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 9.779819383096633,
+          "width_m": 1.9,
+          "height_m": 1.08,
+          "center_y": 4.553324047365691,
+          "glazing": "blue"
+        }
+      ],
+      "entries": [
+        {
+          "station_m": 5.416515350638136,
+          "bottom_y": 3.022024424951178,
+          "threshold_bottom_y": 2.9620679365228626,
+          "door_role": "blue"
+        },
+        {
+          "station_m": 12.939453337635547,
+          "bottom_y": 3.06118123385354,
+          "threshold_bottom_y": 3.0012247454252248,
+          "door_role": "blue"
+        }
+      ]
+    }
+  ]
 }

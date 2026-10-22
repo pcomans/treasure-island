@@ -1,0 +1,588 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w96698662",
+    "address": "Job Corps campus",
+    "edge_normals": [
+      [
+        -0.883,
+        0.469
+      ],
+      [
+        0.47,
+        0.883
+      ],
+      [
+        -0.884,
+        0.467
+      ],
+      [
+        0.469,
+        0.883
+      ],
+      [
+        0.882,
+        -0.472
+      ],
+      [
+        0.471,
+        0.882
+      ],
+      [
+        0.883,
+        -0.469
+      ],
+      [
+        -0.469,
+        -0.883
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": "ring",
+    "above_terrain": 0.1,
+    "basis": "median frozen terrain around the ring (no imagery)"
+  },
+  "levels": {
+    "ground_h": 3.0,
+    "storey_h": 3.0,
+    "parapet_h": 0.35
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.66,
+        0.65,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.86,
+        0.86,
+        0.84
+      ],
+      "roughness": 0.6
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.62,
+        0.61,
+        0.58
+      ],
+      "roughness": 0.95
+    },
+    "beige": {
+      "rgb": [
+        0.78,
+        0.72,
+        0.6
+      ],
+      "roughness": 0.8
+    },
+    "stucco": {
+      "rgb": [
+        0.83,
+        0.83,
+        0.81
+      ],
+      "roughness": 0.95
+    },
+    "hood_blue": {
+      "rgb": [
+        0.36,
+        0.46,
+        0.66
+      ],
+      "roughness": 0.6,
+      "metallic": 0.1
+    },
+    "win_frame": {
+      "rgb": [
+        0.32,
+        0.34,
+        0.36
+      ],
+      "roughness": 0.5,
+      "metallic": 0.3
+    },
+    "win_glass": {
+      "rgb": [
+        0.2,
+        0.24,
+        0.3
+      ],
+      "roughness": 0.2,
+      "metallic": 0.2
+    }
+  },
+  "schemes": {
+    "sse_e1": {
+      "material": "stucco",
+      "parapet_material": "stucco",
+      "module": 60.0,
+      "window": {
+        "w": 2.0,
+        "h": 1.5,
+        "sill": 0.85,
+        "depth": 0.25,
+        "mullions": [
+          0.333,
+          0.667
+        ],
+        "transoms": [
+          0.62
+        ],
+        "frame": "win_frame",
+        "glass": "win_glass",
+        "hood": {
+          "material": "hood_blue",
+          "depth": 0.65,
+          "h": 0.4,
+          "over": 0.1,
+          "gap": 0.04,
+          "cheek": 0.5
+        }
+      },
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "features": [
+        {
+          "type": "bays",
+          "from": 0.8,
+          "to": 3.6,
+          "module": 2.8,
+          "ground": {
+            "w": 2.0,
+            "h": 1.5,
+            "sill": 0.85,
+            "depth": 0.25,
+            "mullions": [
+              0.333,
+              0.667
+            ],
+            "transoms": [
+              0.62
+            ],
+            "frame": "win_frame",
+            "glass": "win_glass",
+            "hood": {
+              "material": "hood_blue",
+              "depth": 0.65,
+              "h": 0.4,
+              "over": 0.1,
+              "gap": 0.04,
+              "cheek": 0.5
+            },
+            "kind": "window"
+          },
+          "upper": "window"
+        },
+        {
+          "type": "bays",
+          "from": 5.2,
+          "to": 8.0,
+          "module": 2.8,
+          "ground": {
+            "w": 2.0,
+            "h": 1.5,
+            "sill": 0.85,
+            "depth": 0.25,
+            "mullions": [
+              0.333,
+              0.667
+            ],
+            "transoms": [
+              0.62
+            ],
+            "frame": "win_frame",
+            "glass": "win_glass",
+            "hood": {
+              "material": "hood_blue",
+              "depth": 0.65,
+              "h": 0.4,
+              "over": 0.1,
+              "gap": 0.04,
+              "cheek": 0.5
+            },
+            "kind": "window"
+          },
+          "upper": "window"
+        },
+        {
+          "type": "vents",
+          "from": 24.9,
+          "to": 25.7,
+          "count": 1,
+          "w": 0.45,
+          "h": 0.22,
+          "y": 4.9
+        }
+      ]
+    },
+    "sse_e3": {
+      "material": "stucco",
+      "parapet_material": "stucco",
+      "module": 60.0,
+      "window": {
+        "w": 2.0,
+        "h": 1.5,
+        "sill": 0.85,
+        "depth": 0.25,
+        "mullions": [
+          0.333,
+          0.667
+        ],
+        "transoms": [
+          0.62
+        ],
+        "frame": "win_frame",
+        "glass": "win_glass",
+        "hood": {
+          "material": "hood_blue",
+          "depth": 0.65,
+          "h": 0.4,
+          "over": 0.1,
+          "gap": 0.04,
+          "cheek": 0.5
+        }
+      },
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "features": [
+        {
+          "type": "bays",
+          "from": 2.6,
+          "to": 5.4,
+          "module": 2.8,
+          "ground": {
+            "w": 2.0,
+            "h": 1.5,
+            "sill": 0.85,
+            "depth": 0.25,
+            "mullions": [
+              0.333,
+              0.667
+            ],
+            "transoms": [
+              0.62
+            ],
+            "frame": "win_frame",
+            "glass": "win_glass",
+            "hood": {
+              "material": "hood_blue",
+              "depth": 0.65,
+              "h": 0.4,
+              "over": 0.1,
+              "gap": 0.04,
+              "cheek": 0.5
+            },
+            "kind": "window"
+          },
+          "upper": "window"
+        },
+        {
+          "type": "vents",
+          "from": 7.1,
+          "to": 7.9,
+          "count": 1,
+          "w": 0.45,
+          "h": 0.22,
+          "y": 2.3
+        },
+        {
+          "type": "bays",
+          "from": 9.6,
+          "to": 12.4,
+          "module": 2.8,
+          "ground": {
+            "w": 2.0,
+            "h": 1.5,
+            "sill": 0.85,
+            "depth": 0.25,
+            "mullions": [
+              0.333,
+              0.667
+            ],
+            "transoms": [
+              0.62
+            ],
+            "frame": "win_frame",
+            "glass": "win_glass",
+            "hood": {
+              "material": "hood_blue",
+              "depth": 0.65,
+              "h": 0.4,
+              "over": 0.1,
+              "gap": 0.04,
+              "cheek": 0.5
+            },
+            "kind": "window"
+          },
+          "upper": "window"
+        }
+      ]
+    },
+    "ene_end": {
+      "material": "stucco",
+      "parapet_material": "stucco",
+      "module": 60.0,
+      "window": {
+        "w": 2.0,
+        "h": 1.5,
+        "sill": 0.85,
+        "depth": 0.25,
+        "mullions": [
+          0.333,
+          0.667
+        ],
+        "transoms": [
+          0.62
+        ],
+        "frame": "win_frame",
+        "glass": "win_glass",
+        "hood": {
+          "material": "hood_blue",
+          "depth": 0.65,
+          "h": 0.4,
+          "over": 0.1,
+          "gap": 0.04,
+          "cheek": 0.5
+        }
+      },
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "features": [
+        {
+          "type": "vents",
+          "from": 0.4,
+          "to": 1.2,
+          "count": 1,
+          "w": 0.45,
+          "h": 0.22,
+          "y": 5.0
+        }
+      ]
+    },
+    "step": {
+      "material": "stucco",
+      "parapet_material": "stucco",
+      "module": 60.0,
+      "window": {
+        "w": 2.0,
+        "h": 1.5,
+        "sill": 0.85,
+        "depth": 0.25,
+        "mullions": [
+          0.333,
+          0.667
+        ],
+        "transoms": [
+          0.62
+        ],
+        "frame": "win_frame",
+        "glass": "win_glass",
+        "hood": {
+          "material": "hood_blue",
+          "depth": 0.65,
+          "h": 0.4,
+          "over": 0.1,
+          "gap": 0.04,
+          "cheek": 0.5
+        }
+      },
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank"
+    },
+    "blank_side": {
+      "material": "stucco",
+      "parapet_material": "stucco",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      }
+    },
+    "door_e7": {
+      "material": "stucco",
+      "parapet_material": "stucco",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 8.602,
+          "to": 10.402,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "material": "door",
+            "leaf_h": 2.2
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    }
+  },
+  "blocks": [
+    {
+      "id": "block",
+      "storeys": 2,
+      "ground_h": 3.0,
+      "storey_h": 3.0,
+      "parapet": {
+        "h": 0.35,
+        "t": 0.25
+      },
+      "faces": {
+        "default": "blank_side",
+        "e7": "door_e7",
+        "e1": "sse_e1",
+        "e3": "sse_e3",
+        "e6": "ene_end",
+        "e2": "step",
+        "e4": "step"
+      }
+    }
+  ],
+  "study_notes": {
+    "observed": "Job Corps field survey photo (<=2018-09, p.251) from the SE lot: white stucco two-storey block, flat roof with a thin light coping, the blank ENE end with a high louvre and the painted 488, and the SSE face with wide multi-light windows on both storeys, each under a blue box hood spanning its head, plain stucco with small vents between them.",
+    "inferred": "Window count and stations, window and hood sizes; the 488 numerals are not modelled. The unphotographed NNW and WSW sides are plain white stucco (owner rule) except the one kept Level 1 door on the NNW side.",
+    "footprint": "Frozen ring kept as one block."
+  }
+}

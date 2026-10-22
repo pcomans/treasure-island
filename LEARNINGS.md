@@ -2,7 +2,7 @@
 
 Keep this a short, living guide to mistakes worth preventing. Update an applicable lesson when new evidence changes it; preserve uncertainty and useful gains. Routine execution history belongs in `discovery/RETRO_LOG.md`.
 
-Retain the current owner-authorized [routing](AGENTS.md#bounded-subagent-execution): since 2026-10-17, every role runs in Claude Code on Opus 5.5, `ti-implementation` at effort `max` and every other role, reviewers included, at `high`, set by each role file's frontmatter. This supersedes the 2026-10-10 Codex Astra Low modeling / Sol High review routing. Keep root orchestration, explicit non-ultra dispatch, separate reviewers and existing gates. Earlier model choices and comparisons below are historical evidence, not a universal quality/cost/speed claim.
+Retain the current owner-authorized [routing](AGENTS.md#bounded-subagent-execution): since 2026-10-21, every role runs in Claude Code on Opus 5.5 at effort `high`, modeling included, set by each role file's frontmatter. This supersedes the 2026-10-10 Codex Astra Low modeling / Sol High review routing. Keep root orchestration, explicit non-ultra dispatch, separate reviewers and existing gates. Earlier model choices and comparisons below are historical evidence, not a universal quality/cost/speed claim.
 
 ## Do not promote one facade's finish to whole-building quality
 

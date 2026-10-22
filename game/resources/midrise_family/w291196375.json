@@ -1,0 +1,477 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w291196375",
+    "address": "Avenue M treatment plant",
+    "edge_normals": [
+      [
+        -0.2867762192700211,
+        0.9579975991938565
+      ],
+      [
+        0.9580525281921464,
+        0.2865926608003711
+      ],
+      [
+        0.2868277333071568,
+        -0.9579821769771495
+      ],
+      [
+        -0.9580570651082702,
+        -0.28657749387578874
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": "ring",
+    "above_terrain": 0.05,
+    "basis": "median frozen terrain around the ring (no imagery)"
+  },
+  "levels": {
+    "ground_h": 3.8,
+    "storey_h": 3.0,
+    "parapet_h": 0.3
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.56,
+        0.55,
+        0.52
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.73,
+        0.74,
+        0.74
+      ],
+      "roughness": 0.45,
+      "metallic": 0.3
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.62,
+        0.61,
+        0.58
+      ],
+      "roughness": 0.95
+    },
+    "render": {
+      "rgb": [
+        0.86,
+        0.86,
+        0.83
+      ],
+      "roughness": 0.9
+    },
+    "roof_metal": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.5,
+      "metallic": 0.3
+    },
+    "fascia": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.7
+    }
+  },
+  "schemes": {
+    "plain": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 3.6,
+      "window": {
+        "w": 1.4,
+        "h": 1.1,
+        "sill": 1.1,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.4,
+        "h": 1.1,
+        "sill": 1.1,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      }
+    },
+    "side0": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 3.6,
+      "window": {
+        "w": 1.4,
+        "h": 1.1,
+        "sill": 1.1,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.4,
+        "h": 1.1,
+        "sill": 1.1,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 4.445,
+          "to": 6.245,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "vents",
+          "from": 11.045,
+          "to": 16.39,
+          "count": 1,
+          "w": 1.0,
+          "h": 0.6,
+          "y": 2.4
+        }
+      ]
+    },
+    "side1": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 3.6,
+      "window": {
+        "w": 1.4,
+        "h": 1.1,
+        "sill": 1.1,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.4,
+        "h": 1.1,
+        "sill": 1.1,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 4.531,
+          "to": 6.331,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "vents",
+          "from": 11.223,
+          "to": 16.654,
+          "count": 1,
+          "w": 1.0,
+          "h": 0.6,
+          "y": 2.4
+        }
+      ]
+    },
+    "side2": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 3.6,
+      "window": {
+        "w": 1.4,
+        "h": 1.1,
+        "sill": 1.1,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.4,
+        "h": 1.1,
+        "sill": 1.1,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 4.445,
+          "to": 6.245,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "vents",
+          "from": 11.046,
+          "to": 16.39,
+          "count": 1,
+          "w": 1.0,
+          "h": 0.6,
+          "y": 2.4
+        }
+      ]
+    },
+    "side3": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 3.6,
+      "window": {
+        "w": 1.4,
+        "h": 1.1,
+        "sill": 1.1,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.4,
+        "h": 1.1,
+        "sill": 1.1,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 4.531,
+          "to": 6.331,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "vents",
+          "from": 11.224,
+          "to": 16.655,
+          "count": 1,
+          "w": 1.0,
+          "h": 0.6,
+          "y": 2.4
+        }
+      ]
+    }
+  },
+  "blocks": [
+    {
+      "id": "block",
+      "storeys": 1,
+      "ground_h": 3.8,
+      "parapet": {
+        "h": 0.3,
+        "t": 0.2
+      },
+      "faces": {
+        "default": "plain",
+        "e0": "side0",
+        "e1": "side1",
+        "e2": "side2",
+        "e3": "side3"
+      }
+    }
+  ],
+  "study_notes": {
+    "observed": "No panorama.",
+    "inferred": "Flat-roof plant building with doors and louvres (Level 1).",
+    "footprint": "Frozen ring kept as one block (Level 1)."
+  }
+}

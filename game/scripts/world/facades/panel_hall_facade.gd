@@ -32,7 +32,7 @@ static func build(record: Dictionary) -> Dictionary:
 		var n := Vector3(-t.z,0,t.x)
 		var length := Vector2(b.x-a.x,b.z-a.z).length()
 		var floor_y := minf(a.y,b.y)-.12
-		# Opt-in keys (split_below_top, slot_size, slot_top_offset, split_fascia, storefronts);
+		# Opt-in keys (split_below_top, slot_size, slot_top_offset, split_fascia, storefronts, terminal_piers);
 		# absent keys keep the original Bldg 461 / 550 4th St geometry exactly.
 		var split := top-float(spec.get("split_below_top",4.0))
 		if str(spec.get("family", "")) == "grid_transom":
@@ -132,8 +132,11 @@ static func build(record: Dictionary) -> Dictionary:
 			_box(root,"InfillPanel",a,t,n,panel.get_center().x,panel.get_center().y,.035,Vector3(panel.size.x,panel.size.y,.045),materials.get("infill",materials.lower),"wall")
 		if bool(spec.get("split_fascia",false)):
 			_box(root,"SplitFascia",a,t,n,length/2.0,split-.12,.30,Vector3(length,.30,.48),materials.get("fascia",materials.coping),"detail")
-		for s: float in [.16,length-.16]:
-			_box(root,"TerminalPier",a,t,n,s,(floor_y+top-.16)/2.0,.24,Vector3(.32,top-.16-floor_y,.46),materials.structure,"wall")
+		# Opt-in terminal_piers [start, end] lets a chain leave a shared corner to its neighbour.
+		var piers: Array=spec.get("terminal_piers",[true,true])
+		for end_index in 2:
+			if bool(piers[end_index]):
+				_box(root,"TerminalPier",a,t,n,[.16,length-.16][end_index],(floor_y+top-.16)/2.0,.24,Vector3(.32,top-.16-floor_y,.46),materials.structure,"wall")
 		_box(root,"ThinCoping",a,t,n,length/2.0,top-.065,.18,Vector3(length,.13,.52),materials.coping,"detail")
 		if bool(spec.get("terminal_projection",false)):
 			_box(root,"PaleEndProjection",a,t,n,length-2.10,(floor_y+top-.18)/2.0,.73,Vector3(4.20,top-.18-floor_y,1.48),materials.upper,"wall")
@@ -172,6 +175,8 @@ static func _chain_problem(spec: Dictionary,v: Array,top: float)->String:
 		return "slot_top_offset must be a number of at least 0"
 	if spec.has("split_below_top") and (not _numbers([spec.split_below_top],1) or float(spec.split_below_top)<=0.0):
 		return "split_below_top must be a positive number"
+	if spec.has("terminal_piers") and (not spec.terminal_piers is Array or spec.terminal_piers.size()!=2 or not spec.terminal_piers[0] is bool or not spec.terminal_piers[1] is bool):
+		return "terminal_piers needs two booleans [start, end]"
 	var split := top-float(spec.get("split_below_top",4.0))
 	for key: String in ["storefronts","infill_panels"]:
 		var entries: Variant=spec.get(key,[])

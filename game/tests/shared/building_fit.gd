@@ -23,6 +23,7 @@ var _prefix := ""
 var _unsafe := false
 var _support_context: Dictionary = {}
 var _adjacent_source := ""
+var _source := ""
 var _observe_adjacent_support := false
 var _observed_adjacent_support := false
 var _source_roofs_loaded := false
@@ -91,6 +92,7 @@ func check(source_key: String, walk_up: bool, prefix: String = "", stairs: Array
 		return [prefix + "check not run: a previous unsafe failure stopped this driver"]
 	_failures = []
 	_adjacent_source = adjacent_source
+	_source = source_key
 	_observe_adjacent_support = false
 	_prefix = prefix
 	var nodes := _h.building_nodes(source_key)
@@ -327,6 +329,8 @@ func _walk_start(center: Vector3, side: Vector3, half_depth: float, half_width: 
 	# Preserve the original fifteen candidates before trying native solid-wall
 	# anchors. Every proposal uses the same complete preflight before placement.
 	var candidates: Array[Dictionary] = []
+	var points: Array[Vector2] = []
+	var blockers: Array[String] = []
 	for lane: float in [0.0, -0.25, 0.25, -0.125, 0.125]:
 		candidates.append({"offset": half_width * 2.0 * lane, "label": "lane %.2f" % lane})
 	for anchor: float in _wall_anchors(center, side, wall_faces, wall_shapes, candidates):
@@ -336,6 +340,8 @@ func _walk_start(center: Vector3, side: Vector3, half_depth: float, half_width: 
 		for margin: float in [5.0, 2.0, 10.0]:
 			var candidate := str(proposal.label) + " / "
 			var xz := Vector2(lane_center.x, lane_center.z) + Vector2(side.x, side.z) * (half_depth + margin)
+			points.append(xz)
+			blockers.append("")
 			var point := Vector3(xz.x, 0.0, xz.y)
 			if not _h.world.get_boundary().contains_position(point):
 				rejected.append(candidate + ("%.1f m: outside playable boundary" % margin))
@@ -343,10 +349,13 @@ func _walk_start(center: Vector3, side: Vector3, half_depth: float, half_width: 
 			var ground := _h.ray(point + Vector3.UP * 300.0, point + Vector3.DOWN * 50.0, _h.player.collision_mask)
 			if not _h.is_approach_support(ground, _support_context):
 				var hit_name := "no support" if ground.is_empty() else str((ground.collider as Node).get_path())
+				if not ground.is_empty():
+					blockers[blockers.size() - 1] = _other_building(ground.collider)
 				rejected.append(candidate + ("%.1f m: no walkable ground (%s)" % [margin, hit_name]))
 				continue
 			var descent := _preflight_descent(ground.position)
 			if not descent.ok:
+				blockers[blockers.size() - 1] = _other_building(descent.get("blocker"))
 				rejected.append(candidate + ("%.1f m: %s" % [margin, descent.reason]))
 				continue
 			var chest := Vector3(xz.x, (ground.position as Vector3).y + 1.0, xz.y)
@@ -358,6 +367,7 @@ func _walk_start(center: Vector3, side: Vector3, half_depth: float, half_width: 
 			var endpoint: Dictionary = {}
 			var corridor_error := _preflight_corridor(descent.pose, crossing.position, -side, own, wall_shapes, endpoint)
 			if corridor_error != "":
+				blockers[blockers.size() - 1] = _other_building(endpoint.get("blocker"))
 				rejected.append(candidate + ("%.1f m: %s" % [margin, corridor_error]))
 				continue
 			var preference := _wall_span_preference(endpoint.pose, crossing.position, -side, own, wall_shapes)
@@ -374,7 +384,60 @@ func _walk_start(center: Vector3, side: Vector3, half_depth: float, half_width: 
 			print("%sWALK_PREFERENCE side=%s candidate=%s margin=%.1f reason=%s" % [_prefix, _side_name(side), proposal.label, margin, preference])
 	if not fallback.is_empty():
 		return _selected_walk_start(fallback, "first mandatory-qualified fallback")
-	return {"ok": false, "reason": "; ".join(rejected)}
+	return {"ok": false, "reason": "; ".join(rejected), "points": points, "blockers": blockers}
+
+
+## A side is site-blocked only when every candidate start on it lies outside the
+## playable boundary, inside another building's frozen roof footprint, or was
+## rejected by another building's body (its ground ray hit that building, or the
+## drop pose or corridor was obstructed by it). Returns the reason, or "" when any
+## candidate is ordinary ground, was rejected by the own building or an unknown
+## body, or the frozen footprints are unavailable (fail closed).
+func _site_blocked(points: Array, blockers: Array) -> String:
+	if points.is_empty() or blockers.size() != points.size() or _source_roofs_error != "" or _source_roofs.is_empty():
+		return ""
+	var outside := 0
+	var occupants: Dictionary = {}
+	var behind: Dictionary = {}
+	for index in points.size():
+		var xz: Vector2 = points[index]
+		if not _h.world.get_boundary().contains_position(Vector3(xz.x, 0.0, xz.y)):
+			outside += 1
+			continue
+		var owner := ""
+		for key: String in _source_roofs:
+			if key == _source:
+				continue
+			var faces: PackedVector3Array = _source_roofs[key]
+			for i in range(0, faces.size() - 2, 3):
+				if Geometry2D.point_is_inside_triangle(xz, Vector2(faces[i].x, faces[i].z), Vector2(faces[i + 1].x, faces[i + 1].z), Vector2(faces[i + 2].x, faces[i + 2].z)):
+					owner = key
+					break
+			if owner != "":
+				break
+		if owner != "":
+			occupants[owner] = int(occupants.get(owner, 0)) + 1
+			continue
+		var blocker := str(blockers[index])
+		if blocker == "":
+			return ""
+		behind[blocker] = int(behind.get(blocker, 0)) + 1
+	return "all %d candidate starts blocked: %d outside the playable boundary, inside other footprints %s, rejected by other buildings %s" % [points.size(), outside, occupants, behind]
+
+
+## The other building that owns this collider, from its generated or family
+## building metadata; "" for the own building, ground, unknown or unowned bodies.
+func _other_building(collider: Variant) -> String:
+	if not collider is Node:
+		return ""
+	var node := collider as Node
+	if not str(node.get_meta("derived_object_key", "")).begins_with("building:"):
+		return ""
+	var keys: Variant = node.get_meta("source_keys", [])
+	if not keys is Array or (keys as Array).size() != 1:
+		return ""
+	var key := str((keys as Array)[0])
+	return "" if key == "" or key == _source else key
 
 
 func _selected_walk_start(result: Dictionary, selection: String) -> Dictionary:
@@ -468,8 +531,9 @@ func _preflight_descent(ground: Vector3) -> Dictionary:
 	clear.collision_mask = player.collision_mask
 	clear.exclude = [player.get_rid()]
 	clear.collide_with_areas = false
-	if not player.get_world_3d().direct_space_state.intersect_shape(clear, 1).is_empty():
-		return {"ok": false, "reason": "stock drop pose is obstructed"}
+	var obstruction := player.get_world_3d().direct_space_state.intersect_shape(clear, 1)
+	if not obstruction.is_empty():
+		return {"ok": false, "reason": "stock drop pose is obstructed by %s" % (str((obstruction[0].collider as Node).get_path()) if obstruction[0].collider is Node else "unknown"), "blocker": obstruction[0].collider}
 	var params := PhysicsTestMotionParameters3D.new()
 	params.from = pose
 	params.margin = player.safe_margin
@@ -536,6 +600,7 @@ func _preflight_corridor(pose: Transform3D, wall: Vector3, inward: Vector3, own:
 		params.motion = -up * snap
 		var support := _corridor_motion(params, inward, true)
 		if not support.ok:
+			endpoint.blocker = support.get("blocker")
 			return support.reason
 		var down := support.travel as Vector3
 		if (down - up * down.dot(up)).length() > lane_margin or absf(down.dot(up)) > snap + player.safe_margin:
@@ -558,6 +623,7 @@ func _preflight_corridor(pose: Transform3D, wall: Vector3, inward: Vector3, own:
 			params.motion = (inward + up * slope) * remaining
 			var sweep := _corridor_motion(params, inward, false)
 			if not sweep.ok:
+				endpoint.blocker = sweep.get("blocker")
 				return sweep.reason
 			query_rows.append(str(sweep.details))
 			var travel := sweep.travel as Vector3
@@ -643,7 +709,7 @@ func _corridor_motion(params: PhysicsTestMotionParameters3D, inward: Vector3, re
 			if not body is CollisionObject3D or not normal.is_finite() or not point.is_finite():
 				return {"ok": false, "reason": "corridor has unknown native contact: " + context}
 			if normal.dot(up) < cos(_h.player.floor_max_angle):
-				return {"ok": false, "reason": "corridor obstructed by %s shape=%d point=%s normal=%s %s" % [(body as Node).get_path(), result.get_collider_shape(contact), point, normal, context]}
+				return {"ok": false, "reason": "corridor obstructed by %s shape=%d point=%s normal=%s %s" % [(body as Node).get_path(), result.get_collider_shape(contact), point, normal, context], "blocker": body}
 			if not _support_context.is_empty() and not _h.is_approach_support({"collider": body, "normal": normal, "shape": result.get_collider_shape(contact), "position": point}, _support_context):
 				return {"ok": false, "reason": "corridor left qualified rooftop support: " + details}
 			slope = maxf(slope, -inward.dot(normal) / up.dot(normal))
@@ -654,6 +720,7 @@ func _check_walk_up(box: AABB, own: Array[RID], wall_shapes: Dictionary, wall_fa
 	var center := box.get_center()
 	var passed := 0
 	var attempted := 0
+	var skipped: Array[String] = []
 	var sides := [Vector3.FORWARD, Vector3.BACK, Vector3.LEFT, Vector3.RIGHT]
 	for side: Vector3 in sides:
 		if _unsafe:
@@ -663,6 +730,11 @@ func _check_walk_up(box: AABB, own: Array[RID], wall_shapes: Dictionary, wall_fa
 		var half_width := absf(side.z) * box.size.x * 0.5 + absf(side.x) * box.size.z * 0.5
 		var setup := _walk_start(center, side, half_depth, half_width, own, wall_shapes, wall_faces)
 		if not setup.ok:
+			var blocked := _site_blocked(setup.get("points", []), setup.get("blockers", []))
+			if blocked != "":
+				skipped.append(_side_name(side))
+				print("%sWALK_UP_SKIPPED side=%s reason=%s" % [_prefix, _side_name(side), blocked])
+				continue
 			_failures.append(_prefix + "%s: no safe same-side start: %s" % [name, setup.reason])
 			_unsafe = true
 			break
@@ -719,8 +791,9 @@ func _check_walk_up(box: AABB, own: Array[RID], wall_shapes: Dictionary, wall_fa
 		if arrived:
 			passed += 1
 		print("%sWALK_UP side=%s arrived=%s at=%s contacts=%s" % [_prefix, _side_name(side), arrived, at, _touched.map(func(body: Object) -> String: return str((body as Node).get_path()))])
-	print("%swalk-up: %d of %d required sides passed; %d attempted" % [_prefix, passed, sides.size(), attempted])
-	if passed != sides.size():
+	var required := sides.size() - skipped.size()
+	print("%swalk-up: %d of %d required sides passed; %d attempted; site-blocked sides skipped=%s" % [_prefix, passed, required, attempted, skipped])
+	if passed != required or passed < 2:
 		_failures.append(_prefix + "walk-up: required approaches incomplete; remaining cases were not accepted")
 
 

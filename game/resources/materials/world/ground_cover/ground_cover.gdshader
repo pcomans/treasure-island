@@ -14,9 +14,10 @@ uniform sampler2D detail_normal : hint_normal, filter_linear_mipmap_anisotropic,
 uniform sampler2D detail_roughness : filter_linear_mipmap_anisotropic, repeat_enable;
 
 // Late-spring palettes: gap (ground between tufts), blade (tufts), straw.
-uniform vec3 lawn_gap : source_color = vec3(0.37, 0.43, 0.19);
-uniform vec3 lawn_blade : source_color = vec3(0.44, 0.52, 0.235);
-uniform vec3 lawn_straw : source_color = vec3(0.57, 0.58, 0.33);
+// The lawn colours match the dated March 2025 sunlit lawns under the SSE sun.
+uniform vec3 lawn_gap : source_color = vec3(0.334, 0.41, 0.131);
+uniform vec3 lawn_blade : source_color = vec3(0.431, 0.537, 0.182);
+uniform vec3 lawn_straw : source_color = vec3(0.537, 0.575, 0.248);
 uniform vec3 dry_gap : source_color = vec3(0.48, 0.42, 0.29);
 uniform vec3 dry_blade : source_color = vec3(0.55, 0.53, 0.32);
 uniform vec3 dry_straw : source_color = vec3(0.76, 0.69, 0.50);

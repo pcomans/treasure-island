@@ -1380,9 +1380,9 @@
       0.38
     ],
     "path_rgb": [
-      0.43,
-      0.39,
-      0.34
+      0.56,
+      0.55,
+      0.52
     ],
     "vent_rgb": [
       0.17,
@@ -10399,7 +10399,9 @@
           ]
         ]
       ],
-      "inference": "production_inference: asphalt turning circle at the end of Flounder Court (OSM way 8916874 ends at node 65305930, highway=turning_circle; the world draws only the ribbon), 13.5 m radius from the dated Mar2025 fronts and the Apple overhead; the half on this unit's side of the 1412/1413 lot line; road ribbon and footprints clipped out"
+      "inference": "production_inference: asphalt turning circle at the end of Flounder Court (OSM way 8916874 ends at node 65305930, highway=turning_circle; the world draws only the ribbon), 13.5 m radius from the dated Mar2025 fronts and the Apple overhead; the half on this unit's side of the 1412/1413 lot line; road ribbon and footprints clipped out",
+      "osm_turning_circle_node": 65305930,
+      "radius_rule": "disc of radius 13.5 m (the Flounder Court measurement) around the OSM highway=turning_circle node, minus every OSM road/footway surface and every building footprint, split at lot lines between the adjacent configured units"
     }
   },
   "dimensions": "production_inference; frozen source footprint, receiver identity and varying wall bottoms retained exactly",

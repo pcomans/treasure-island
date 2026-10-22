@@ -3329,11 +3329,11 @@
   "source_reference": "May2019 pano41oK-opOSuzljFvf41TCCQ; actual frontage235/FOV75 and number247/FOV40;1317 only, suffix unknown. Temporary external images are review-only, never runtime inputs.",
   "geometry_path": "res://game/resources/facades/d5_1317_quality_study_geometry.json",
   "batches": {
-    "UpperWarmBoardedFields": 96,
-    "UpperDarkOpaqueFields": 48,
-    "PaleUpperFrames": 576,
-    "PaleGroundFrames": 504,
-    "ClosedGroundBoardedFields": 144,
+    "UpperWarmBoardedFields": 192,
+    "UpperDarkOpaqueFields": 96,
+    "PaleUpperFrames": 1152,
+    "PaleGroundFrames": 1008,
+    "ClosedGroundBoardedFields": 288,
     "BrownCanopyTopsAndSides": 39,
     "PaleCanopyFrontGables": 9,
     "SlimCanopyTrim": 144,
@@ -3363,13 +3363,13 @@
   },
   "expected": {
     "meshes": 14,
-    "render_triangles": 1938,
+    "render_triangles": 3306,
     "bodies": 1,
     "shapes": 5,
-    "collision_triangles": 1038
+    "collision_triangles": 1686
   },
   "frame_collision_scope": "Ground framing is matching visible solid non-spray geometry. Upper fields/frames and canopy trim remain render decoration against the exact closed source/structure.",
-  "geometry_sha256": "48ba2658a74b4e51ab43fb07b3940a737ffa351350081063c45908e878a5bcf9",
+  "geometry_sha256": "7e9ce3eeeceaa4f69c8a3f397381b89995f5b396072e49f9693df3f4b551616a",
   "porch_approaches": {
     "groups": [
       {
@@ -3589,5 +3589,243 @@
     ],
     "collision": "none; unchanged colliding source land provides support",
     "scope": "Three restrained local porch/approach material surfaces ending at exact existing sidewalk. Original areas, roads, wall bottoms and land untouched. Existing sidewalk sits above these area surfaces; edge height is reported, not a new traversal PASS."
+  },
+  "inferred_rear_modules": {
+    "inference": "production_inference: owner-approved openings on the unphotographed WSW rear (2026-10-22): per unit an entry, a ground window and two upper windows in the accepted boarded family, baked into the existing buckets by tools/bake_1317_rear_modules.py; the rear runs take the front's lap siding; counts and positions are not as-built",
+    "siding_runs": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "modules": [
+      {
+        "group": "rear-A",
+        "unit": 0,
+        "runs": [
+          0,
+          1
+        ],
+        "kind": "upper",
+        "station_m": 2.134,
+        "finish": "boarded_warm_brown"
+      },
+      {
+        "group": "rear-A",
+        "unit": 0,
+        "runs": [
+          0,
+          1
+        ],
+        "kind": "upper",
+        "station_m": 5.768,
+        "finish": "boarded_warm_brown"
+      },
+      {
+        "group": "rear-A",
+        "unit": 0,
+        "runs": [
+          0,
+          1
+        ],
+        "kind": "ground",
+        "station_m": 3.951,
+        "door_station_m": 3.431,
+        "window_station_m": 4.501,
+        "visible_datum_y": 2.4821,
+        "door_bottom_y": 2.4421
+      },
+      {
+        "group": "rear-A",
+        "unit": 1,
+        "runs": [
+          0,
+          1
+        ],
+        "kind": "upper",
+        "station_m": 10.036,
+        "finish": "boarded_warm_brown"
+      },
+      {
+        "group": "rear-A",
+        "unit": 1,
+        "runs": [
+          0,
+          1
+        ],
+        "kind": "upper",
+        "station_m": 13.671,
+        "finish": "boarded_warm_brown"
+      },
+      {
+        "group": "rear-A",
+        "unit": 1,
+        "runs": [
+          0,
+          1
+        ],
+        "kind": "ground",
+        "station_m": 11.853,
+        "door_station_m": 11.333,
+        "window_station_m": 12.403,
+        "visible_datum_y": 2.3693,
+        "door_bottom_y": 2.3293
+      },
+      {
+        "group": "rear-B",
+        "unit": 0,
+        "runs": [
+          3,
+          4,
+          5
+        ],
+        "kind": "upper",
+        "station_m": 1.993,
+        "finish": "dark_opaque_closed"
+      },
+      {
+        "group": "rear-B",
+        "unit": 0,
+        "runs": [
+          3,
+          4,
+          5
+        ],
+        "kind": "upper",
+        "station_m": 5.388,
+        "finish": "dark_opaque_closed"
+      },
+      {
+        "group": "rear-B",
+        "unit": 0,
+        "runs": [
+          3,
+          4,
+          5
+        ],
+        "kind": "ground",
+        "station_m": 3.69,
+        "door_station_m": 3.17,
+        "window_station_m": 4.24,
+        "visible_datum_y": 2.2077,
+        "door_bottom_y": 2.1677
+      },
+      {
+        "group": "rear-B",
+        "unit": 1,
+        "runs": [
+          3,
+          4,
+          5
+        ],
+        "kind": "upper",
+        "station_m": 9.373,
+        "finish": "dark_opaque_closed"
+      },
+      {
+        "group": "rear-B",
+        "unit": 1,
+        "runs": [
+          3,
+          4,
+          5
+        ],
+        "kind": "upper",
+        "station_m": 12.768,
+        "finish": "dark_opaque_closed"
+      },
+      {
+        "group": "rear-B",
+        "unit": 1,
+        "runs": [
+          3,
+          4,
+          5
+        ],
+        "kind": "ground",
+        "station_m": 11.071,
+        "door_station_m": 10.551,
+        "window_station_m": 11.621,
+        "visible_datum_y": 2.269,
+        "door_bottom_y": 2.229
+      },
+      {
+        "group": "rear-C",
+        "unit": 0,
+        "runs": [
+          7,
+          8
+        ],
+        "kind": "upper",
+        "station_m": 2.246,
+        "finish": "boarded_warm_brown"
+      },
+      {
+        "group": "rear-C",
+        "unit": 0,
+        "runs": [
+          7,
+          8
+        ],
+        "kind": "upper",
+        "station_m": 6.073,
+        "finish": "boarded_warm_brown"
+      },
+      {
+        "group": "rear-C",
+        "unit": 0,
+        "runs": [
+          7,
+          8
+        ],
+        "kind": "ground",
+        "station_m": 4.16,
+        "door_station_m": 3.64,
+        "window_station_m": 4.71,
+        "visible_datum_y": 2.3165,
+        "door_bottom_y": 2.2765
+      },
+      {
+        "group": "rear-C",
+        "unit": 1,
+        "runs": [
+          7,
+          8
+        ],
+        "kind": "upper",
+        "station_m": 10.566,
+        "finish": "boarded_warm_brown"
+      },
+      {
+        "group": "rear-C",
+        "unit": 1,
+        "runs": [
+          7,
+          8
+        ],
+        "kind": "upper",
+        "station_m": 14.393,
+        "finish": "boarded_warm_brown"
+      },
+      {
+        "group": "rear-C",
+        "unit": 1,
+        "runs": [
+          7,
+          8
+        ],
+        "kind": "ground",
+        "station_m": 12.48,
+        "door_station_m": 11.96,
+        "window_station_m": 13.03,
+        "visible_datum_y": 2.364,
+        "door_bottom_y": 2.324
+      }
+    ]
   }
 }

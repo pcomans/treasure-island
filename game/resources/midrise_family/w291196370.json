@@ -1,0 +1,743 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w291196370",
+    "address": "13th St (w291196370)",
+    "edge_normals": [
+      [
+        -0.8840706493598677,
+        0.4673532785168215
+      ],
+      [
+        0.4673189287908829,
+        0.8840888070741206
+      ],
+      [
+        0.907562518381306,
+        -0.4199169861167581
+      ],
+      [
+        0.46856201448015417,
+        0.8834306076802523
+      ],
+      [
+        0.8842840615600535,
+        -0.4669493532181574
+      ],
+      [
+        0.4682743143423338,
+        0.8835831406988348
+      ],
+      [
+        0.884366977273157,
+        -0.4667922980392236
+      ],
+      [
+        -0.46584910271673896,
+        -0.8848641779945718
+      ],
+      [
+        0.8840137295567518,
+        -0.46746093521829407
+      ],
+      [
+        -0.46875978165226834,
+        -0.8833256857497792
+      ],
+      [
+        0.8840438198517587,
+        -0.4674040271348881
+      ],
+      [
+        -0.4672914478306011,
+        -0.8841033326395623
+      ],
+      [
+        0.8847332334715345,
+        -0.46609774252940006
+      ],
+      [
+        -0.46623020829347867,
+        -0.884663434801405
+      ],
+      [
+        0.8843540886671821,
+        -0.46681671548653636
+      ],
+      [
+        -0.46743551672591815,
+        -0.8840271702290455
+      ],
+      [
+        -0.8834269076455501,
+        0.4685689904889361
+      ],
+      [
+        -0.46338848060713034,
+        -0.8861552437584597
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": 1,
+    "above_terrain": 0.45,
+    "basis": "median frozen terrain along the photographed SSE front; floor raised to the deck"
+  },
+  "levels": {
+    "ground_h": 5.0,
+    "storey_h": 3.0,
+    "parapet_h": 0.5
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.66,
+        0.65,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.73,
+        0.74,
+        0.74
+      ],
+      "roughness": 0.45,
+      "metallic": 0.3
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.62,
+        0.61,
+        0.58
+      ],
+      "roughness": 0.95
+    },
+    "siding_blue": {
+      "rgb": [
+        0.4,
+        0.51,
+        0.66
+      ],
+      "roughness": 0.8
+    },
+    "siding_line": {
+      "rgb": [
+        0.33,
+        0.42,
+        0.55
+      ],
+      "roughness": 0.8
+    }
+  },
+  "schemes": {
+    "plain": {
+      "material": "siding_blue",
+      "parapet_material": "siding_blue",
+      "module": 5.0,
+      "window": {
+        "w": 1.1,
+        "h": 0.8,
+        "sill": 2.3,
+        "depth": 0.1,
+        "mullions": [],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.1,
+        "h": 0.8,
+        "sill": 2.3,
+        "depth": 0.1,
+        "mullions": [],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 1.2,
+          "h": 0.05,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 2.0,
+          "h": 0.05,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 2.8,
+          "h": 0.05,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 3.6,
+          "h": 0.05,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 4.4,
+          "h": 0.05,
+          "material": "siding_line"
+        }
+      ]
+    },
+    "front": {
+      "material": "siding_blue",
+      "parapet_material": "siding_blue",
+      "module": 5.0,
+      "window": {
+        "w": 1.1,
+        "h": 0.8,
+        "sill": 2.3,
+        "depth": 0.1,
+        "mullions": [],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.1,
+        "h": 0.8,
+        "sill": 2.3,
+        "depth": 0.1,
+        "mullions": [],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 1.2,
+          "h": 0.05,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 2.0,
+          "h": 0.05,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 2.8,
+          "h": 0.05,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 3.6,
+          "h": 0.05,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 4.4,
+          "h": 0.05,
+          "material": "siding_line"
+        }
+      ],
+      "features": [
+        {
+          "type": "bays",
+          "from": 2.0,
+          "to": 16.0,
+          "module": 4.5
+        },
+        {
+          "type": "entry",
+          "from": 20.95,
+          "to": 22.35,
+          "door": {
+            "kind": "unit",
+            "w": 1.1,
+            "h": 2.9,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "at": "floor",
+            "w": 12.0,
+            "depth": 2.2
+          },
+          "ramp": {
+            "dir": -1,
+            "w": 1.4,
+            "slope": 0.083
+          }
+        },
+        {
+          "type": "bays",
+          "from": 28.0,
+          "to": 41.0,
+          "module": 4.5
+        }
+      ]
+    },
+    "door0": {
+      "material": "siding_blue",
+      "parapet_material": "siding_blue",
+      "module": 5.0,
+      "window": {
+        "w": 1.1,
+        "h": 0.8,
+        "sill": 2.3,
+        "depth": 0.1,
+        "mullions": [],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.1,
+        "h": 0.8,
+        "sill": 2.3,
+        "depth": 0.1,
+        "mullions": [],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 1.2,
+          "h": 0.05,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 2.0,
+          "h": 0.05,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 2.8,
+          "h": 0.05,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 3.6,
+          "h": 0.05,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 4.4,
+          "h": 0.05,
+          "material": "siding_line"
+        }
+      ],
+      "features": [
+        {
+          "type": "entry",
+          "from": 25.974,
+          "to": 27.774,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "door5": {
+      "material": "siding_blue",
+      "parapet_material": "siding_blue",
+      "module": 5.0,
+      "window": {
+        "w": 1.1,
+        "h": 0.8,
+        "sill": 2.3,
+        "depth": 0.1,
+        "mullions": [],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.1,
+        "h": 0.8,
+        "sill": 2.3,
+        "depth": 0.1,
+        "mullions": [],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 1.2,
+          "h": 0.05,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 2.0,
+          "h": 0.05,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 2.8,
+          "h": 0.05,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 3.6,
+          "h": 0.05,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 4.4,
+          "h": 0.05,
+          "material": "siding_line"
+        }
+      ],
+      "features": [
+        {
+          "type": "entry",
+          "from": 1.12,
+          "to": 2.92,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "door8": {
+      "material": "siding_blue",
+      "parapet_material": "siding_blue",
+      "module": 5.0,
+      "window": {
+        "w": 1.1,
+        "h": 0.8,
+        "sill": 2.3,
+        "depth": 0.1,
+        "mullions": [],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.1,
+        "h": 0.8,
+        "sill": 2.3,
+        "depth": 0.1,
+        "mullions": [],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 1.2,
+          "h": 0.05,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 2.0,
+          "h": 0.05,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 2.8,
+          "h": 0.05,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 3.6,
+          "h": 0.05,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 4.4,
+          "h": 0.05,
+          "material": "siding_line"
+        }
+      ],
+      "features": [
+        {
+          "type": "entry",
+          "from": 18.206,
+          "to": 20.006,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "door11": {
+      "material": "siding_blue",
+      "parapet_material": "siding_blue",
+      "module": 5.0,
+      "window": {
+        "w": 1.1,
+        "h": 0.8,
+        "sill": 2.3,
+        "depth": 0.1,
+        "mullions": [],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.1,
+        "h": 0.8,
+        "sill": 2.3,
+        "depth": 0.1,
+        "mullions": [],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 1.2,
+          "h": 0.05,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 2.0,
+          "h": 0.05,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 2.8,
+          "h": 0.05,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 3.6,
+          "h": 0.05,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 4.4,
+          "h": 0.05,
+          "material": "siding_line"
+        }
+      ],
+      "features": [
+        {
+          "type": "entry",
+          "from": 10.915,
+          "to": 12.715,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    }
+  },
+  "blocks": [
+    {
+      "id": "hall",
+      "storeys": 1,
+      "ground_h": 5.0,
+      "parapet": {
+        "h": 0.5,
+        "t": 0.2
+      },
+      "faces": {
+        "default": "plain",
+        "e0": "door0",
+        "e5": "door5",
+        "e8": "door8",
+        "e11": "door11",
+        "e1": "front"
+      },
+      "roof_items": [
+        {
+          "kind": "box",
+          "edge": 1,
+          "s": [
+            10.0,
+            12.4
+          ],
+          "d": [
+            8.0,
+            10.0
+          ],
+          "h": 1.2,
+          "material": "mech"
+        }
+      ]
+    }
+  ],
+  "study_notes": {
+    "observed": "Sep 2025 13th St (SSE) and ENE oblique: long one-storey building in cool blue-grey horizontal siding, a central door with a transom light, a railed deck with a ramp along the front, flat roof.",
+    "inferred": "Siding courses as thin lines, small high windows, the deck as a raised entry landing with a ramp, doors on the other sides; WSW and NNW are unseen.",
+    "footprint": "Frozen 18-edge ring kept as one block."
+  }
+}

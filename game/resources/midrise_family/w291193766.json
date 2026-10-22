@@ -1,0 +1,1021 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w291193766",
+    "address": "649 Avenue N plant compound (Compound E): concrete box, ducts and vessels",
+    "edge_normals": [
+      [
+        -0.8907832003553076,
+        0.4544285311957823
+      ],
+      [
+        0.4552432380592027,
+        0.8903671120393947
+      ],
+      [
+        -0.8908580331082383,
+        0.45428181214585384
+      ],
+      [
+        -0.4532715917892598,
+        -0.8913724609145329
+      ],
+      [
+        -0.8911314674576013,
+        0.453745201304501
+      ],
+      [
+        0.45363443963991823,
+        0.891187856275307
+      ],
+      [
+        -0.8901925230619083,
+        0.45558453868044496
+      ],
+      [
+        -0.4552409988436585,
+        -0.890368256943063
+      ],
+      [
+        -0.8902903031143142,
+        0.45539343010261213
+      ],
+      [
+        -0.45455602311224,
+        -0.890718149502066
+      ],
+      [
+        -0.8879881530151996,
+        0.4598663285180318
+      ],
+      [
+        0.45583219662603114,
+        0.8900657326956741
+      ],
+      [
+        -0.8824818186902292,
+        0.4703465102253713
+      ],
+      [
+        0.4550577841940678,
+        0.8904619099346054
+      ],
+      [
+        -0.8907343577650482,
+        0.45452426106522337
+      ],
+      [
+        -0.9955434090014459,
+        -0.09430440495427425
+      ],
+      [
+        -0.907399459865726,
+        0.4202692235167699
+      ],
+      [
+        -0.3593280206204517,
+        0.933211323118718
+      ],
+      [
+        -0.9112856498886911,
+        0.41177477376224225
+      ],
+      [
+        0.49639227092712024,
+        0.868098331621376
+      ],
+      [
+        -0.8932994278543409,
+        0.44946204755808605
+      ],
+      [
+        -0.5573158843410725,
+        -0.8303005510422886
+      ],
+      [
+        0.25509475796684156,
+        -0.9669160586409964
+      ],
+      [
+        -0.255094757966863,
+        -0.9669160586409907
+      ],
+      [
+        -0.701838507992881,
+        -0.7123360925141492
+      ],
+      [
+        -0.9680778729450054,
+        -0.2506496198167356
+      ],
+      [
+        -0.9671139819648578,
+        0.25434336218599624
+      ],
+      [
+        -0.7078642596783385,
+        0.7063484903856153
+      ],
+      [
+        -0.25509475796684156,
+        0.9669160586409964
+      ],
+      [
+        0.2517468111550988,
+        0.9677931303089721
+      ],
+      [
+        0.7078642596783816,
+        0.7063484903855721
+      ],
+      [
+        0.9637855391078506,
+        0.26667852295711764
+      ],
+      [
+        0.466221243939773,
+        0.8846681590852306
+      ],
+      [
+        -0.8885614360815121,
+        0.4587576422347218
+      ],
+      [
+        0.4527854396507816,
+        0.8916195072115956
+      ],
+      [
+        0.8894425929825456,
+        -0.45704690545772825
+      ],
+      [
+        0.40817357481097183,
+        0.9129043393620341
+      ],
+      [
+        0.8893725859277715,
+        -0.45718311801744016
+      ],
+      [
+        0.9955768288145581,
+        0.0939509336172238
+      ],
+      [
+        0.4383894024680143,
+        0.8987851421801194
+      ],
+      [
+        -0.3668849466035131,
+        0.930266325283108
+      ],
+      [
+        -0.9115050564507429,
+        0.4112888669350633
+      ],
+      [
+        0.4977429737012393,
+        0.8673245829163655
+      ],
+      [
+        -0.894714050088541,
+        0.446639416726916
+      ],
+      [
+        0.40372552377474125,
+        0.9148801568800204
+      ],
+      [
+        -0.8888074756911842,
+        0.4582807776412458
+      ],
+      [
+        0.4627814659400957,
+        0.8864723993347656
+      ],
+      [
+        0.8897517555566514,
+        -0.45644475403257395
+      ],
+      [
+        0.48030901926612596,
+        0.8770993364560323
+      ],
+      [
+        -0.2707015355086014,
+        0.9626633257132451
+      ],
+      [
+        0.26717933752341494,
+        0.9636468241013142
+      ],
+      [
+        0.7078642596782956,
+        0.7063484903856584
+      ],
+      [
+        0.9648327211642599,
+        0.26286464229859746
+      ],
+      [
+        0.9636699477372379,
+        -0.2670959225224322
+      ],
+      [
+        0.7078642596782956,
+        -0.7063484903856584
+      ],
+      [
+        0.2550947579669227,
+        -0.9669160586409749
+      ],
+      [
+        -0.25509475796694414,
+        -0.9669160586409692
+      ],
+      [
+        -0.7010763463913197,
+        -0.7130862195629631
+      ],
+      [
+        -0.9783806647144747,
+        -0.20681217302872304
+      ],
+      [
+        -0.4268636113435956,
+        -0.9043160162856255
+      ],
+      [
+        0.8764085868030712,
+        -0.4815682599360588
+      ],
+      [
+        0.49855550876481936,
+        0.8668577765009968
+      ],
+      [
+        0.8833804476698331,
+        -0.4686565743427113
+      ],
+      [
+        0.9959908885079951,
+        0.08945473720857132
+      ],
+      [
+        0.8413864608091546,
+        -0.5404339215547493
+      ],
+      [
+        0.5013632867299624,
+        -0.8652368778082273
+      ],
+      [
+        0.8893032951515544,
+        -0.45731788641227167
+      ],
+      [
+        0.4472135954998878,
+        0.8944271909999509
+      ],
+      [
+        0.8901218714081198,
+        -0.45572256257607724
+      ],
+      [
+        -0.4558532567681607,
+        -0.8900549467835462
+      ],
+      [
+        0.8903381188315685,
+        -0.45529993867280927
+      ],
+      [
+        -0.45611332277347233,
+        -0.8899217026168889
+      ],
+      [
+        -0.889751755556643,
+        0.45644475403259005
+      ],
+      [
+        -0.45476006384497947,
+        -0.8906139928901354
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": "ring",
+    "above_terrain": 0.05,
+    "basis": "median frozen terrain around the ring"
+  },
+  "levels": {
+    "ground_h": 10.4,
+    "storey_h": 3.0,
+    "parapet_h": 0.4
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.22,
+        0.24,
+        0.25
+      ],
+      "roughness": 0.6,
+      "metallic": 0.3
+    },
+    "glass": {
+      "rgb": [
+        0.42,
+        0.6,
+        0.72
+      ],
+      "roughness": 0.55,
+      "metallic": 0.15
+    },
+    "slab": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.6,
+      "metallic": 0.12
+    },
+    "metal": {
+      "rgb": [
+        0.6,
+        0.6,
+        0.59
+      ],
+      "roughness": 0.6,
+      "metallic": 0.15
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.6,
+        0.72
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.09,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.55,
+        0.54,
+        0.51
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.58,
+        0.58,
+        0.56
+      ],
+      "roughness": 0.8,
+      "metallic": 0.1
+    },
+    "parapet": {
+      "rgb": [
+        0.5,
+        0.5,
+        0.48
+      ],
+      "roughness": 0.95
+    },
+    "roof": {
+      "rgb": [
+        0.5,
+        0.5,
+        0.48
+      ],
+      "roughness": 0.95
+    },
+    "soffit": {
+      "rgb": [
+        0.4,
+        0.4,
+        0.39
+      ],
+      "roughness": 0.95
+    },
+    "render": {
+      "rgb": [
+        0.33,
+        0.34,
+        0.33
+      ],
+      "roughness": 0.95
+    },
+    "rail": {
+      "rgb": [
+        0.68,
+        0.68,
+        0.66
+      ],
+      "roughness": 0.55,
+      "metallic": 0.15
+    },
+    "rail_glass": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.6,
+      "metallic": 0.1,
+      "alpha": 0.28
+    },
+    "mech": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.6,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.67,
+        0.66,
+        0.62
+      ],
+      "roughness": 0.97
+    },
+    "concrete_dark": {
+      "rgb": [
+        0.55,
+        0.54,
+        0.51
+      ],
+      "roughness": 0.97
+    },
+    "plant_white": {
+      "rgb": [
+        0.95,
+        0.95,
+        0.93
+      ],
+      "roughness": 0.5,
+      "metallic": 0.05
+    },
+    "seam": {
+      "rgb": [
+        0.7,
+        0.7,
+        0.68
+      ],
+      "roughness": 0.5,
+      "metallic": 0.25
+    },
+    "steel_grey": {
+      "rgb": [
+        0.55,
+        0.56,
+        0.55
+      ],
+      "roughness": 0.65,
+      "metallic": 0.1
+    },
+    "tank_grey": {
+      "rgb": [
+        0.5,
+        0.51,
+        0.5
+      ],
+      "roughness": 0.65,
+      "metallic": 0.1
+    },
+    "stair_back": {
+      "rgb": [
+        0.46,
+        0.46,
+        0.44
+      ],
+      "roughness": 0.97
+    },
+    "door_grey": {
+      "rgb": [
+        0.46,
+        0.48,
+        0.49
+      ],
+      "roughness": 0.6,
+      "metallic": 0.25
+    },
+    "louvre": {
+      "rgb": [
+        0.1,
+        0.16,
+        0.13
+      ],
+      "roughness": 0.8
+    },
+    "louvre_frame": {
+      "rgb": [
+        0.3,
+        0.47,
+        0.38
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "duct": {
+      "rgb": [
+        0.88,
+        0.88,
+        0.87
+      ],
+      "roughness": 0.5,
+      "metallic": 0.1
+    }
+  },
+  "schemes": {
+    "box": {
+      "material": "concrete",
+      "parapet_material": "concrete",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "plinth": {
+        "material": "concrete_dark",
+        "top": 0.45
+      }
+    },
+    "box_nnw": {
+      "material": "concrete",
+      "parapet_material": "concrete",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "plinth": {
+        "material": "concrete_dark",
+        "top": 0.45
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 1.4,
+          "to": 3.0,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door_grey"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "plant": {
+      "material": "steel_grey",
+      "parapet_material": "steel_grey",
+      "module": 3.4,
+      "ground": {
+        "kind": "window",
+        "w": 1.3,
+        "h": 0.95,
+        "sill": 0.35,
+        "depth": 0.1,
+        "glass": "louvre",
+        "frame": "louvre_frame",
+        "frame_w": 0.07,
+        "transoms": [
+          0.17,
+          0.34,
+          0.5,
+          0.67,
+          0.84
+        ]
+      },
+      "upper": "blank",
+      "plinth": {
+        "material": "concrete_dark",
+        "top": 0.25
+      }
+    },
+    "plant_plain": {
+      "material": "steel_grey",
+      "parapet_material": "steel_grey",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "plinth": {
+        "material": "concrete_dark",
+        "top": 0.25
+      }
+    },
+    "duct_arm": {
+      "material": "duct",
+      "open": {
+        "post_w": 0.3,
+        "module": 60.0,
+        "post_every": 100000,
+        "post_material": "metal"
+      }
+    },
+    "riser": {
+      "material": "plant_white",
+      "parapet_material": "plant_white",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "plinth": {
+        "material": "concrete_dark",
+        "top": 0.25
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 2.0,
+          "h": 0.08,
+          "material": "seam"
+        },
+        {
+          "storey": 0,
+          "offset": 4.2,
+          "h": 0.08,
+          "material": "seam"
+        },
+        {
+          "storey": 0,
+          "offset": 6.4,
+          "h": 0.08,
+          "material": "seam"
+        },
+        {
+          "storey": 0,
+          "offset": 8.6,
+          "h": 0.08,
+          "material": "seam"
+        }
+      ]
+    },
+    "low_duct": {
+      "material": "steel_grey",
+      "parapet_material": "steel_grey",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "plinth": {
+        "material": "concrete_dark",
+        "top": 0.25
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 1.3,
+          "h": 0.08,
+          "material": "seam"
+        }
+      ]
+    },
+    "vessel": {
+      "material": "plant_white",
+      "parapet_material": "plant_white",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "plinth": {
+        "material": "concrete_dark",
+        "top": 0.25
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 1.5,
+          "h": 0.08,
+          "material": "seam"
+        },
+        {
+          "storey": 0,
+          "offset": 4.0,
+          "h": 0.08,
+          "material": "seam"
+        },
+        {
+          "storey": 0,
+          "offset": 6.5,
+          "h": 0.08,
+          "material": "seam"
+        },
+        {
+          "storey": 0,
+          "offset": 9.0,
+          "h": 0.08,
+          "material": "seam"
+        },
+        {
+          "storey": 0,
+          "offset": 11.5,
+          "h": 0.08,
+          "material": "seam"
+        },
+        {
+          "storey": 0,
+          "offset": 13.2,
+          "h": 0.08,
+          "material": "seam"
+        }
+      ]
+    },
+    "tank": {
+      "material": "tank_grey",
+      "parapet_material": "tank_grey",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "plinth": {
+        "material": "concrete_dark",
+        "top": 0.25
+      },
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 1.2,
+          "h": 0.08,
+          "material": "seam"
+        }
+      ]
+    }
+  },
+  "blocks": [
+    {
+      "id": "box",
+      "storeys": 1,
+      "clip": [
+        {
+          "edge": 70,
+          "s_min": 0.004
+        }
+      ],
+      "parapet": {
+        "h": 0.4,
+        "t": 0.3
+      },
+      "faces": {
+        "default": "box",
+        "e71": "box_nnw"
+      },
+      "roof_material": "roof",
+      "roof_items": [
+        {
+          "kind": "box",
+          "edge": 70,
+          "s": [
+            5.5,
+            7.5
+          ],
+          "d": [
+            2.0,
+            3.6
+          ],
+          "h": 1.2,
+          "material": "mech"
+        }
+      ]
+    },
+    {
+      "id": "plant",
+      "storeys": 1,
+      "ground_h": 4.4,
+      "clip": [
+        {
+          "edge": 70,
+          "s_max": -0.075,
+          "s_min": -11.4,
+          "min": 2.05
+        }
+      ],
+      "parapet": {
+        "h": 0.25,
+        "t": 0.15
+      },
+      "faces": {
+        "default": "plant_plain",
+        "e70": "plant"
+      },
+      "roof_material": "roof"
+    },
+    {
+      "id": "riser",
+      "storeys": 1,
+      "ground_h": 11.4,
+      "clip": [
+        {
+          "edge": 70,
+          "s_max": -9.7,
+          "s_min": -11.4,
+          "max": 2.0
+        }
+      ],
+      "parapet": {
+        "h": 0.25,
+        "t": 0.12
+      },
+      "faces": {
+        "default": "riser"
+      },
+      "roof_material": "plant_white"
+    },
+    {
+      "id": "arm_low",
+      "storeys": 1,
+      "ground_h": 6.0,
+      "clip": [
+        {
+          "edge": 70,
+          "s_max": -0.075,
+          "s_min": -9.65,
+          "max": -0.45
+        }
+      ],
+      "parapet": {
+        "h": 0.0
+      },
+      "deck": {
+        "t": 1.0,
+        "material": "duct"
+      },
+      "faces": {
+        "default": "duct_arm"
+      },
+      "roof_material": "duct"
+    },
+    {
+      "id": "arm_mid",
+      "storeys": 1,
+      "ground_h": 8.1,
+      "clip": [
+        {
+          "edge": 70,
+          "s_max": -0.075,
+          "s_min": -9.65,
+          "min": -0.4,
+          "max": 0.8
+        }
+      ],
+      "parapet": {
+        "h": 0.0
+      },
+      "deck": {
+        "t": 1.05,
+        "material": "duct"
+      },
+      "faces": {
+        "default": "duct_arm"
+      },
+      "roof_material": "duct"
+    },
+    {
+      "id": "arm_high",
+      "storeys": 1,
+      "ground_h": 10.2,
+      "clip": [
+        {
+          "edge": 70,
+          "s_max": -0.075,
+          "s_min": -9.65,
+          "min": 0.85,
+          "max": 2.0
+        }
+      ],
+      "parapet": {
+        "h": 0.0
+      },
+      "deck": {
+        "t": 1.2,
+        "material": "duct"
+      },
+      "faces": {
+        "default": "duct_arm"
+      },
+      "roof_material": "duct"
+    },
+    {
+      "id": "east_duct",
+      "storeys": 1,
+      "ground_h": 2.6,
+      "clip": [
+        {
+          "edge": 70,
+          "s_max": -11.5,
+          "max": 2.0,
+          "min": -4.05
+        }
+      ],
+      "parapet": {
+        "h": 0.15,
+        "t": 0.12
+      },
+      "faces": {
+        "default": "low_duct"
+      },
+      "roof_material": "steel_grey"
+    },
+    {
+      "id": "east_tank",
+      "storeys": 1,
+      "ground_h": 2.4,
+      "clip": [
+        {
+          "edge": 70,
+          "max": -4.1
+        }
+      ],
+      "parapet": {
+        "h": 0.15,
+        "t": 0.12
+      },
+      "faces": {
+        "default": "tank"
+      },
+      "roof_material": "tank_grey"
+    },
+    {
+      "id": "south_duct",
+      "storeys": 1,
+      "ground_h": 2.8,
+      "clip": [
+        {
+          "edge": 70,
+          "s_max": -11.45,
+          "min": 2.0,
+          "max": 10.12
+        }
+      ],
+      "parapet": {
+        "h": 0.15,
+        "t": 0.12
+      },
+      "faces": {
+        "default": "low_duct"
+      },
+      "roof_material": "steel_grey"
+    },
+    {
+      "id": "vessel",
+      "storeys": 1,
+      "ground_h": 14.4,
+      "clip": [
+        {
+          "edge": 70,
+          "s_max": -11.45,
+          "min": 10.17
+        }
+      ],
+      "parapet": {
+        "kind": "railing",
+        "style": "pipe",
+        "h": 1.0,
+        "curb": 0.15,
+        "t": 0.12
+      },
+      "faces": {
+        "default": "vessel"
+      },
+      "roof_material": "mech"
+    }
+  ],
+  "study_notes": {
+    "observed": "Nov 2025 649 Avenue N (same panorama at headings 243 and 246, 17-30 m, behind palms): a plain weathered concrete box about 11 m tall at the NNW end; white sheet-metal ducts bridging at two to three levels with a vertical riser; a tall white cylindrical vessel at the SSE end; a low dark plant enclosure under the ducts; a low dark round tank toward the street.",
+    "inferred": "Duct arm levels and widths, vessel, riser and tank heights and the louvres are production inference. WSW, SSE and NNW sides are unphotographed: plain walls in the photographed materials with one inferred personnel door on the NNW face of the box. The three duct arms span from the riser to the box without a post field (walkable underneath).",
+    "footprint": "Frozen ring split along the box ENE face frame (edge e70): concrete box, low plant room, a full-height white riser and three stacked duct arms over the former bridge strip, two low duct housings, the round lobes as a tall vessel and a low tank."
+  }
+}

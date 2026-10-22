@@ -1,0 +1,884 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w34313514",
+    "address": "Advanced Culinary Dormitory",
+    "edge_normals": [
+      [
+        -0.8834979173997847,
+        0.4684350861648212
+      ],
+      [
+        -0.47002508152662376,
+        -0.8826530590984719
+      ],
+      [
+        -0.8835923020738287,
+        0.4682570274068208
+      ],
+      [
+        0.4684596336549162,
+        0.8834849017588822
+      ],
+      [
+        -0.8832250435861357,
+        0.4689493814712508
+      ],
+      [
+        -0.46754232015764624,
+        -0.8839706889154215
+      ],
+      [
+        -0.8835982463274844,
+        0.46824581053864667
+      ],
+      [
+        0.4686270802323359,
+        0.883396094440606
+      ],
+      [
+        0.8835923020738244,
+        -0.4682570274068287
+      ],
+      [
+        0.4689740540166027,
+        0.8832119432272372
+      ],
+      [
+        0.8835915934622799,
+        -0.46825836454118885
+      ],
+      [
+        -0.4668095831553322,
+        -0.8843578535153883
+      ],
+      [
+        0.8834974162493006,
+        -0.4684360313648067
+      ],
+      [
+        0.4685690930744149,
+        0.8834268532342789
+      ],
+      [
+        -0.8837783398113808,
+        0.4679058089832177
+      ],
+      [
+        -0.4694170011199467,
+        -0.8829766016489655
+      ],
+      [
+        -0.8844777799500728,
+        0.46658231511126785
+      ],
+      [
+        0.4699385229569503,
+        0.88269914729824
+      ],
+      [
+        -0.8841219758046068,
+        0.4672561737412981
+      ],
+      [
+        0.46846100410403624,
+        0.8834841750896493
+      ],
+      [
+        0.8834564538365123,
+        -0.46851328068115045
+      ],
+      [
+        -0.4676596389547151,
+        -0.8839086276831704
+      ],
+      [
+        0.8834567695736131,
+        -0.4685126853080459
+      ],
+      [
+        -0.46837065901935665,
+        -0.8835320739903977
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": "ring",
+    "above_terrain": 0.1,
+    "basis": "median frozen terrain around the ring (no imagery)"
+  },
+  "levels": {
+    "ground_h": 3.0,
+    "storey_h": 3.0,
+    "parapet_h": 0.35
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.79
+      ],
+      "roughness": 0.6,
+      "metallic": 0.1
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.86,
+        0.86,
+        0.84
+      ],
+      "roughness": 0.5,
+      "metallic": 0.3
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.8
+    },
+    "paving": {
+      "rgb": [
+        0.66,
+        0.65,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.86,
+        0.86,
+        0.84
+      ],
+      "roughness": 0.6
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.62,
+        0.61,
+        0.58
+      ],
+      "roughness": 0.95
+    },
+    "beige": {
+      "rgb": [
+        0.78,
+        0.72,
+        0.6
+      ],
+      "roughness": 0.8
+    },
+    "stucco": {
+      "rgb": [
+        0.83,
+        0.83,
+        0.81
+      ],
+      "roughness": 0.95
+    },
+    "hood_blue": {
+      "rgb": [
+        0.36,
+        0.46,
+        0.66
+      ],
+      "roughness": 0.6,
+      "metallic": 0.1
+    },
+    "win_frame": {
+      "rgb": [
+        0.32,
+        0.34,
+        0.36
+      ],
+      "roughness": 0.5,
+      "metallic": 0.3
+    },
+    "win_glass": {
+      "rgb": [
+        0.2,
+        0.24,
+        0.3
+      ],
+      "roughness": 0.2,
+      "metallic": 0.2
+    },
+    "flue": {
+      "rgb": [
+        0.78,
+        0.79,
+        0.8
+      ],
+      "roughness": 0.3,
+      "metallic": 0.8
+    },
+    "rail_glass": {
+      "rgb": [
+        0.87,
+        0.87,
+        0.85
+      ],
+      "roughness": 0.9
+    }
+  },
+  "schemes": {
+    "plain": {
+      "material": "stucco",
+      "parapet_material": "stucco",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      }
+    },
+    "wsw_489": {
+      "material": "stucco",
+      "parapet_material": "stucco",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      },
+      "window": {
+        "w": 0.95,
+        "h": 1.45,
+        "sill": 0.85,
+        "depth": 0.22,
+        "transoms": [
+          0.6
+        ],
+        "frame": "win_frame",
+        "glass": "win_glass",
+        "hood": {
+          "material": "hood_blue",
+          "depth": 0.6,
+          "h": 0.4,
+          "over": 0.1,
+          "gap": 0.04,
+          "cheek": 0.5
+        }
+      },
+      "features": [
+        {
+          "type": "bays",
+          "from": 1.5,
+          "to": 4.14,
+          "module": 1.32,
+          "ground": {
+            "w": 0.95,
+            "h": 1.45,
+            "sill": 0.85,
+            "depth": 0.22,
+            "transoms": [
+              0.6
+            ],
+            "frame": "win_frame",
+            "glass": "win_glass",
+            "hood": {
+              "material": "hood_blue",
+              "depth": 0.6,
+              "h": 0.4,
+              "over": 0.1,
+              "gap": 0.04,
+              "cheek": 0.5
+            },
+            "kind": "window"
+          },
+          "upper": "window"
+        },
+        {
+          "type": "bays",
+          "from": 6.6,
+          "to": 9.24,
+          "module": 1.32,
+          "ground": {
+            "w": 0.95,
+            "h": 1.45,
+            "sill": 0.85,
+            "depth": 0.22,
+            "transoms": [
+              0.6
+            ],
+            "frame": "win_frame",
+            "glass": "win_glass",
+            "hood": {
+              "material": "hood_blue",
+              "depth": 0.6,
+              "h": 0.4,
+              "over": 0.1,
+              "gap": 0.04,
+              "cheek": 0.5
+            },
+            "kind": "window"
+          },
+          "upper": "window"
+        },
+        {
+          "type": "bays",
+          "from": 11.7,
+          "to": 14.34,
+          "module": 1.32,
+          "ground": {
+            "w": 0.95,
+            "h": 1.45,
+            "sill": 0.85,
+            "depth": 0.22,
+            "transoms": [
+              0.6
+            ],
+            "frame": "win_frame",
+            "glass": "win_glass",
+            "hood": {
+              "material": "hood_blue",
+              "depth": 0.6,
+              "h": 0.4,
+              "over": 0.1,
+              "gap": 0.04,
+              "cheek": 0.5
+            },
+            "kind": "window"
+          },
+          "upper": "window"
+        },
+        {
+          "type": "bays",
+          "from": 16.8,
+          "to": 19.44,
+          "module": 1.32,
+          "ground": {
+            "w": 0.95,
+            "h": 1.45,
+            "sill": 0.85,
+            "depth": 0.22,
+            "transoms": [
+              0.6
+            ],
+            "frame": "win_frame",
+            "glass": "win_glass",
+            "hood": {
+              "material": "hood_blue",
+              "depth": 0.6,
+              "h": 0.4,
+              "over": 0.1,
+              "gap": 0.04,
+              "cheek": 0.5
+            },
+            "kind": "window"
+          },
+          "upper": "window"
+        },
+        {
+          "type": "bays",
+          "from": 21.9,
+          "to": 24.54,
+          "module": 1.32,
+          "ground": {
+            "w": 0.95,
+            "h": 1.45,
+            "sill": 0.85,
+            "depth": 0.22,
+            "transoms": [
+              0.6
+            ],
+            "frame": "win_frame",
+            "glass": "win_glass",
+            "hood": {
+              "material": "hood_blue",
+              "depth": 0.6,
+              "h": 0.4,
+              "over": 0.1,
+              "gap": 0.04,
+              "cheek": 0.5
+            },
+            "kind": "window"
+          },
+          "upper": "window"
+        },
+        {
+          "type": "bays",
+          "from": 27.0,
+          "to": 29.64,
+          "module": 1.32,
+          "ground": {
+            "w": 0.95,
+            "h": 1.45,
+            "sill": 0.85,
+            "depth": 0.22,
+            "transoms": [
+              0.6
+            ],
+            "frame": "win_frame",
+            "glass": "win_glass",
+            "hood": {
+              "material": "hood_blue",
+              "depth": 0.6,
+              "h": 0.4,
+              "over": 0.1,
+              "gap": 0.04,
+              "cheek": 0.5
+            },
+            "kind": "window"
+          },
+          "upper": "window"
+        },
+        {
+          "type": "bays",
+          "from": 32.1,
+          "to": 34.74,
+          "module": 1.32,
+          "ground": {
+            "w": 0.95,
+            "h": 1.45,
+            "sill": 0.85,
+            "depth": 0.22,
+            "transoms": [
+              0.6
+            ],
+            "frame": "win_frame",
+            "glass": "win_glass",
+            "hood": {
+              "material": "hood_blue",
+              "depth": 0.6,
+              "h": 0.4,
+              "over": 0.1,
+              "gap": 0.04,
+              "cheek": 0.5
+            },
+            "kind": "window"
+          },
+          "upper": "window"
+        },
+        {
+          "type": "bays",
+          "from": 37.2,
+          "to": 39.84,
+          "module": 1.32,
+          "ground": {
+            "w": 0.95,
+            "h": 1.45,
+            "sill": 0.85,
+            "depth": 0.22,
+            "transoms": [
+              0.6
+            ],
+            "frame": "win_frame",
+            "glass": "win_glass",
+            "hood": {
+              "material": "hood_blue",
+              "depth": 0.6,
+              "h": 0.4,
+              "over": 0.1,
+              "gap": 0.04,
+              "cheek": 0.5
+            },
+            "kind": "window"
+          },
+          "upper": "window"
+        },
+        {
+          "type": "vents",
+          "from": 4.95,
+          "to": 5.55,
+          "count": 1,
+          "w": 0.35,
+          "h": 0.22,
+          "y": 2.7
+        }
+      ]
+    },
+    "notch_back": {
+      "material": "stucco",
+      "parapet_material": "stucco",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      },
+      "features": [
+        {
+          "type": "stair_bay",
+          "from": 0.35,
+          "to": 2.75,
+          "depth": 1.5,
+          "pier": 0.15,
+          "head": 0.35,
+          "guard_h": 1.0,
+          "side": "stucco",
+          "back": "stucco",
+          "soffit": "stucco",
+          "slab": "coping"
+        },
+        {
+          "type": "loggia",
+          "from": 2.75,
+          "to": 4.45,
+          "storeys": [
+            0,
+            1
+          ],
+          "depth": 1.5,
+          "pier": 0.15,
+          "head": 0.35,
+          "frame": "win_frame",
+          "glass_fraction": 0.45,
+          "rail_h": 1.0,
+          "side": "stucco",
+          "back": "stucco",
+          "soffit": "stucco",
+          "slab": "coping"
+        }
+      ]
+    },
+    "notch_door": {
+      "material": "stucco",
+      "parapet_material": "stucco",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 0.6,
+          "to": 2.4,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "court_487": {
+      "material": "stucco",
+      "parapet_material": "stucco",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      },
+      "features": [
+        {
+          "type": "vents",
+          "from": 13.4,
+          "to": 14.0,
+          "count": 1,
+          "w": 0.5,
+          "h": 1.1,
+          "y": 2.0
+        }
+      ]
+    },
+    "door_487": {
+      "material": "stucco",
+      "parapet_material": "stucco",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 13.716,
+          "to": 15.516,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    }
+  },
+  "blocks": [
+    {
+      "id": "north_487",
+      "storeys": 1,
+      "ground_h": 4.0,
+      "storey_h": 3.0,
+      "clip": [
+        {
+          "edge": 23,
+          "max": 13.45
+        },
+        {
+          "edge": 23,
+          "s_min": 1.65
+        }
+      ],
+      "parapet": {
+        "h": 0.35,
+        "t": 0.25
+      },
+      "faces": {
+        "default": "plain",
+        "e13": "court_487",
+        "e23": "door_487"
+      },
+      "roof_items": [
+        {
+          "kind": "cylinder",
+          "edge": 13,
+          "s": [
+            11.6,
+            12.4
+          ],
+          "d": [
+            2.6,
+            3.4
+          ],
+          "h": 2.6,
+          "sides": 12,
+          "material": "flue",
+          "top": "mech"
+        },
+        {
+          "kind": "cylinder",
+          "edge": 13,
+          "s": [
+            17.8,
+            18.3
+          ],
+          "d": [
+            3.0,
+            3.5
+          ],
+          "h": 1.1,
+          "sides": 12,
+          "material": "flue",
+          "top": "mech"
+        }
+      ]
+    },
+    {
+      "id": "corner_487",
+      "storeys": 1,
+      "ground_h": 4.0,
+      "storey_h": 3.0,
+      "clip": [
+        {
+          "edge": 23,
+          "max": 6.95
+        },
+        {
+          "edge": 23,
+          "s_max": 1.65
+        }
+      ],
+      "parapet": {
+        "h": 0.35,
+        "t": 0.25
+      },
+      "faces": {
+        "default": "plain"
+      }
+    },
+    {
+      "id": "east_n",
+      "storeys": 2,
+      "ground_h": 3.0,
+      "storey_h": 3.0,
+      "clip": [
+        {
+          "edge": 23,
+          "s_max": 1.65
+        },
+        {
+          "edge": 23,
+          "min": 6.95
+        },
+        {
+          "edge": 23,
+          "max": 13.45
+        }
+      ],
+      "parapet": {
+        "h": 0.35,
+        "t": 0.25
+      },
+      "faces": {
+        "default": "plain"
+      }
+    },
+    {
+      "id": "east",
+      "storeys": 2,
+      "ground_h": 3.0,
+      "storey_h": 3.0,
+      "clip": [
+        {
+          "edge": 23,
+          "s_max": 6.0
+        },
+        {
+          "edge": 23,
+          "min": 13.45
+        }
+      ],
+      "parapet": {
+        "h": 0.35,
+        "t": 0.25
+      },
+      "faces": {
+        "default": "plain"
+      }
+    },
+    {
+      "id": "west_489",
+      "storeys": 2,
+      "ground_h": 3.0,
+      "storey_h": 3.0,
+      "clip": [
+        {
+          "edge": 23,
+          "s_min": 10.0
+        },
+        {
+          "edge": 23,
+          "min": 13.45
+        }
+      ],
+      "parapet": {
+        "h": 0.35,
+        "t": 0.25
+      },
+      "faces": {
+        "default": "plain",
+        "e6": "wsw_489",
+        "e4": "notch_back",
+        "e5": "notch_door"
+      }
+    }
+  ],
+  "study_notes": {
+    "observed": "Job Corps field survey photos (<=2018-09, pp.237/265). WSW side bound at medium from outer-489 (camera on the Avenue D sidewalk at the NW corner, looking SSE) and courtyard-489 (same pine and gate): the north wing's west end is a one-storey blank white stucco block; the 4.5 m slot between it and the west wing (footprint edges e1-e5) is a gated breezeway with an open stair; the west wing's WSW face is two-storey white stucco with pairs of windows, each under its own blue box hood, on both storeys. Courtyard-487 (camera SE of the courtyard looking NW) shows the north wing's courtyard face as a blank one-storey block with a tall louvre and steel flue stacks on the roof.",
+    "inferred": "North wing one storey throughout (seen at its west end and courtyard face); the east wing keeps the Level 1 two storeys. Window-pair stations past the second pair, window and hood sizes, flue and louvre positions, the stair bay and door in the breezeway. Unbound sides are plain white stucco (owner rule) with one door per building: 487 on the 5th Street face, 489 in the breezeway.",
+    "footprint": "Frozen ring split into five blocks: one-storey north wing (487) with its NE corner, two-storey east wing in two parts, two-storey west wing (489) with the link behind the breezeway."
+  }
+}

@@ -1,0 +1,496 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w96665902",
+    "address": "850 Avenue I (Ship Shape)",
+    "edge_normals": [
+      [
+        -0.8838185694799615,
+        0.46782981546967944
+      ],
+      [
+        0.4676867879068458,
+        0.8838942631431528
+      ],
+      [
+        0.8839453066066233,
+        -0.46759030670889934
+      ],
+      [
+        -0.4674809225515608,
+        -0.8840031600906989
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": 0,
+    "above_terrain": 0.05,
+    "basis": "median frozen terrain along the photographed WSW entrance front"
+  },
+  "levels": {
+    "ground_h": 4.2,
+    "storey_h": 3.0,
+    "parapet_h": 0.45
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.66,
+        0.65,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.73,
+        0.74,
+        0.74
+      ],
+      "roughness": 0.45,
+      "metallic": 0.3
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.62,
+        0.61,
+        0.58
+      ],
+      "roughness": 0.95
+    },
+    "tan": {
+      "rgb": [
+        0.74,
+        0.64,
+        0.48
+      ],
+      "roughness": 0.9
+    },
+    "door_green": {
+      "rgb": [
+        0.2,
+        0.36,
+        0.24
+      ],
+      "roughness": 0.6
+    },
+    "fascia": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.7
+    }
+  },
+  "schemes": {
+    "front": {
+      "material": "tan",
+      "parapet_material": "tan",
+      "module": 60.0,
+      "ground": {
+        "w": 1.6,
+        "h": 1.2,
+        "sill": 1.2,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      },
+      "window": {
+        "w": 1.6,
+        "h": 1.2,
+        "sill": 1.2,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "features": [
+        {
+          "type": "bays",
+          "from": 3.0,
+          "to": 9.0,
+          "module": 3.0
+        },
+        {
+          "type": "entry",
+          "from": 11.7,
+          "to": 17.5,
+          "door": {
+            "kind": "lobby",
+            "w": 5.0,
+            "h": 2.9,
+            "mullions": [
+              0.2,
+              0.4,
+              0.5,
+              0.6,
+              0.8
+            ],
+            "transoms": [
+              0.78
+            ]
+          },
+          "landing": {
+            "w": 5.8,
+            "depth": 2.0
+          },
+          "canopy": {
+            "w": 6.6,
+            "depth": 2.8,
+            "t": 0.3,
+            "material": "fascia",
+            "gap": 0.3
+          }
+        },
+        {
+          "type": "bays",
+          "from": 20.0,
+          "to": 26.0,
+          "module": 3.0
+        }
+      ]
+    },
+    "service": {
+      "material": "tan",
+      "parapet_material": "tan",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 2.7,
+          "to": 5.3,
+          "door": {
+            "kind": "unit",
+            "w": 1.8,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door_green"
+          },
+          "landing": {
+            "w": 2.6,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "vents",
+          "from": 8.0,
+          "to": 11.0,
+          "count": 1,
+          "w": 1.6,
+          "h": 0.7,
+          "y": 2.4
+        },
+        {
+          "type": "entry",
+          "from": 14.1,
+          "to": 15.9,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door_green"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "entry",
+          "from": 19.7,
+          "to": 22.3,
+          "door": {
+            "kind": "unit",
+            "w": 1.8,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door_green"
+          },
+          "landing": {
+            "w": 2.6,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "vents",
+          "from": 24.5,
+          "to": 27.5,
+          "count": 1,
+          "w": 1.6,
+          "h": 0.7,
+          "y": 2.4
+        }
+      ]
+    },
+    "side": {
+      "material": "tan",
+      "parapet_material": "tan",
+      "module": 60.0,
+      "ground": {
+        "w": 1.6,
+        "h": 1.2,
+        "sill": 1.2,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      },
+      "window": {
+        "w": 1.6,
+        "h": 1.2,
+        "sill": 1.2,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "features": [
+        {
+          "type": "bays",
+          "from": 1.5,
+          "to": 9.5,
+          "module": 4.0
+        },
+        {
+          "type": "entry",
+          "from": 11.6,
+          "to": 13.4,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door_green"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "bays",
+          "from": 14.5,
+          "to": 17.0,
+          "module": 2.5
+        }
+      ]
+    },
+    "mural": {
+      "material": "tan",
+      "parapet_material": "tan",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 24.6,
+          "to": 26.4,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door_green"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    }
+  },
+  "blocks": [
+    {
+      "id": "hall",
+      "storeys": 1,
+      "ground_h": 4.2,
+      "parapet": {
+        "h": 0.45,
+        "t": 0.25
+      },
+      "faces": {
+        "e0": "front",
+        "e2": "service",
+        "e1": "side",
+        "e3": "mural"
+      },
+      "roof_items": [
+        {
+          "kind": "box",
+          "edge": 0,
+          "s": [
+            6.0,
+            8.4
+          ],
+          "d": [
+            5.0,
+            7.0
+          ],
+          "h": 1.2,
+          "material": "mech"
+        },
+        {
+          "kind": "box",
+          "edge": 0,
+          "s": [
+            18.0,
+            20.4
+          ],
+          "d": [
+            9.0,
+            11.0
+          ],
+          "h": 1.2,
+          "material": "mech"
+        }
+      ]
+    }
+  ],
+  "study_notes": {
+    "observed": "Apr/May 2019 photos: one-storey tan stucco box with a flat roof, green service doors (ENE), a glazed entrance under a canopy (WSW) and a blue/orange mural wall (NNW).",
+    "inferred": "Window and door positions, storefront mullions, canopy size, roof units; the mural and the entrance sign are parked (plain stucco).",
+    "footprint": "Frozen 4-edge ring kept as one block."
+  }
+}

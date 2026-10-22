@@ -1,6 +1,6 @@
 extends RefCounted
 ## Observed public entrance/end assembly. Dimensions are production inference.
-## The generated shell, roof, rear and source footprint remain untouched.
+## Generated shell/roof/source footprint stay intact; unphotographed sides get plain panels.
 const SUPPORT := preload("res://game/scripts/world/facades/housing_quality_support.gd")
 const CONFIG := "res://game/resources/facades/ymca_entry_site.json"
 const SOURCE := "building:w34313547:wall"
@@ -93,6 +93,33 @@ static func build(record: Dictionary) -> Dictionary:
 		var instance := MeshInstance3D.new(); instance.name=key; instance.mesh=mesh
 		instance.set_meta("physical_role","ground_visual")
 		root.add_child(instance)
+	# Unphotographed WSW/NNW/courtyard runs: plain aggregate panels, joints and coping
+	# continuing the observed wall. No openings, louvers or doors; production inference.
+	var aggregate := preload("res://game/resources/materials/world/ti_ymca/ti_ymca_primary.tres")
+	var plain: Variant = cfg.get("inferred_opposite", {}).get("panels")
+	if not plain is Array:
+		root.free()
+		return {"ok": false, "message": "YMCA plain-side panel configuration required."}
+	for spec: Dictionary in plain:
+		var run := int(spec.run)
+		if run < 0 or run >= vertices.size() / 12 or (run >= 3 and run <= 11):
+			root.free()
+			return {"ok": false, "message": "YMCA plain panels must sit on unobserved source runs."}
+		var pa := _vec(vertices.slice(run*12,run*12+3))
+		var pb := _vec(vertices.slice(run*12+3,run*12+6))
+		var pt := Vector3(pb.x-pa.x,0,pb.z-pa.z).normalized()
+		var pn := Vector3(-pt.z,0,pt.x)
+		var span := Vector2(pb.x-pa.x,pb.z-pa.z).length()
+		var bottom := float(spec.bottom_y)
+		var top := float(record.top_elevation_m)-.10
+		var middle := Vector3((pa.x+pb.x)/2.0,(bottom+top)/2.0,(pa.z+pb.z)/2.0)
+		# Closed shallow panel embedded in the retained source wall; bottom below local land.
+		_box(root,"InferredOppositeSolidPanel",middle+pn*.02,pt,pn,Vector3(span-.05,top-bottom,.09),aggregate,"wall")
+		_box(root,"InferredOppositeCoping",Vector3(middle.x,top+.045,middle.z)+pn*.035,pt,pn,Vector3(span-.05,.10,.13),coping,"detail")
+		var bays := maxi(1,int(ceil(span/4.6)))
+		for j in range(1,bays):
+			var jp := pa.lerp(pb,float(j)/bays)
+			_box(root,"InferredOppositePanelJoint",Vector3(jp.x,(bottom+top)/2.0,jp.z)+pn*.066,pt,pn,Vector3(.045,top-bottom,.024),joint,"detail")
 	var result := SUPPORT.attach(root,record,record,{})
 	if not bool(result.get("ok",false)): return result
 	var meshes := 0; var triangles := 0

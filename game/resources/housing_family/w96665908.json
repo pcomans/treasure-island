@@ -985,12 +985,7 @@
     14
   ],
   "protected_runs": [
-    0,
-    1,
-    2,
     3,
-    4,
-    5,
     6,
     7,
     8,
@@ -999,9 +994,9 @@
   ],
   "materials": {
     "siding_rgb": [
-      0.57,
-      0.59,
-      0.55
+      0.82,
+      0.81,
+      0.76
     ],
     "trim_rgb": [
       0.78,
@@ -1065,7 +1060,7 @@
   "clamp_pipe_to_eave": true,
   "dimensions": "production inference from dated visible frontage; hidden elevations retain plain source geometry",
   "reference_digest": "bae3b12739f22a35886748d13889aa7d614d77b19bc4b4ca1d7d758de61222b7",
-  "study_notes": "Corrected canonical source-facing partition; observed four upper motifs per broad section, varied1203 widths, target-specific entry/privacy palette. Dimensions/cadence behind cars/vegetation inferred from shared family; no surveyed or hidden opening claim.",
+  "study_notes": "Corrected canonical source-facing partition; observed four upper motifs per broad section, varied1203 widths, target-specific entry/privacy palette. Dimensions/cadence behind cars/vegetation inferred from shared family; no surveyed or hidden opening claim. 2026-10-12 whole southwest rear study: shared housing complete mixed broad/narrow white window and pale entry modules across collinear unions 0-2 and 4-5. Hidden rear counts, cadence, dimensions and anchors are production_inference, not measured/as-built; March 2025 front establishes mixed motif family only, undated Apple layout establishes compact two-section association, failed black rear image supplies no evidence. All front, ends/returns, roof and site retained.",
   "local_ground": {
     "walk-0": {
       "top_triangles": [
@@ -5524,5 +5519,216 @@
       0.59
     ],
     "inference": "Observed freestanding parking canopy; bounded extent/post spacing production inference.1203 left frontage only, right frontage uncovered; hidden left endpoint not asserted."
-  }
+  },
+  "rear_frames": [
+    {
+      "id": "southwest-rear-1",
+      "elevation_role": "rear",
+      "runs": [
+        0,
+        1,
+        2
+      ],
+      "start": [
+        -540.373,
+        2.361,
+        -678.487
+      ],
+      "end": [
+        -527.993,
+        2.41,
+        -670.026
+      ],
+      "length_m": 14.995096565210913,
+      "tangent": [
+        0.8256032194365442,
+        0,
+        0.5642511179040883
+      ],
+      "normal": [
+        -0.5642511179040883,
+        0,
+        0.8256032194365442
+      ],
+      "top_y": 8.4,
+      "upper_windows": [
+        {
+          "station_m": 1.7994115878253094,
+          "width_m": 1.95,
+          "height_m": 1.12,
+          "center_y": 7.32,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 5.548185729128038,
+          "width_m": 0.9,
+          "height_m": 1.12,
+          "center_y": 7.32,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 9.446910836082875,
+          "width_m": 0.9,
+          "height_m": 1.12,
+          "center_y": 7.32,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 13.195684977385604,
+          "width_m": 1.95,
+          "height_m": 1.12,
+          "center_y": 7.32,
+          "glazing": "blue"
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 1.7994115878253094,
+          "width_m": 1.8,
+          "height_m": 1.05,
+          "center_y": 3.8600000000000003,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 6.447891523040693,
+          "width_m": 0.8,
+          "height_m": 1.05,
+          "center_y": 3.8600000000000003,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 9.147008904778657,
+          "width_m": 0.8,
+          "height_m": 1.05,
+          "center_y": 3.8600000000000003,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 13.195684977385604,
+          "width_m": 1.8,
+          "height_m": 1.05,
+          "center_y": 3.8843204259334927,
+          "glazing": "blue"
+        }
+      ],
+      "entries": [
+        {
+          "station_m": 4.27360252108511,
+          "bottom_y": 2.4062549718202537,
+          "threshold_bottom_y": 2.3133237974539953,
+          "door_role": "pale"
+        },
+        {
+          "station_m": 11.17134694108213,
+          "bottom_y": 2.471268470045907,
+          "threshold_bottom_y": 2.380168726535976,
+          "door_role": "pale"
+        }
+      ]
+    },
+    {
+      "id": "southwest-rear-2",
+      "elevation_role": "rear",
+      "runs": [
+        4,
+        5
+      ],
+      "start": [
+        -526.841,
+        2.41,
+        -671.719
+      ],
+      "end": [
+        -515.673,
+        2.41,
+        -664.093
+      ],
+      "length_m": 13.523316900819914,
+      "tangent": [
+        0.825832898977831,
+        0,
+        0.5639149075577552
+      ],
+      "normal": [
+        -0.5639149075577552,
+        0,
+        0.825832898977831
+      ],
+      "top_y": 8.4,
+      "upper_windows": [
+        {
+          "station_m": 1.6227980280983896,
+          "width_m": 1.95,
+          "height_m": 1.12,
+          "center_y": 7.32,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 5.003627253303368,
+          "width_m": 0.9,
+          "height_m": 1.12,
+          "center_y": 7.32,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 8.519689647516547,
+          "width_m": 0.9,
+          "height_m": 1.12,
+          "center_y": 7.32,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 11.900518872721525,
+          "width_m": 1.95,
+          "height_m": 1.12,
+          "center_y": 7.32,
+          "glazing": "blue"
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 1.6227980280983896,
+          "width_m": 1.8,
+          "height_m": 1.05,
+          "center_y": 3.9070927262466286,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 5.815026267352563,
+          "width_m": 0.8,
+          "height_m": 1.05,
+          "center_y": 3.9336924629089483,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 8.249223309500147,
+          "width_m": 0.8,
+          "height_m": 1.05,
+          "center_y": 3.951229247659467,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 11.900518872721525,
+          "width_m": 1.8,
+          "height_m": 1.05,
+          "center_y": 3.9657446687062476,
+          "glazing": "blue"
+        }
+      ],
+      "entries": [
+        {
+          "station_m": 3.854145316733675,
+          "bottom_y": 2.524700749517415,
+          "threshold_bottom_y": 2.4363220549886138,
+          "door_role": "pale"
+        },
+        {
+          "station_m": 10.074871091110836,
+          "bottom_y": 2.568323663899428,
+          "threshold_bottom_y": 2.481138225887753,
+          "door_role": "pale"
+        }
+      ]
+    }
+  ]
 }

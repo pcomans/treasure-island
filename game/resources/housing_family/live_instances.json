@@ -361,6 +361,644 @@
       "family": "midrise",
       "config": "res://game/resources/midrise_family/w1212173437.json",
       "chunk": "res://generated/world/chunks/x_-1__z_0.json"
+    },
+    {
+      "source_key": "w291196371",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w291196371.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-3.json"
+    },
+    {
+      "source_key": "w291196369",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w291196369.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-3.json"
+    },
+    {
+      "source_key": "w291196372",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w291196372.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-4.json"
+    },
+    {
+      "source_key": "w291196382",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w291196382.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-4.json"
+    },
+    {
+      "source_key": "w291196366",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w291196366.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-4.json"
+    },
+    {
+      "source_key": "w291196386",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w291196386.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-4.json"
+    },
+    {
+      "source_key": "w291196374",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w291196374.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-3.json"
+    },
+    {
+      "source_key": "w291196381",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w291196381.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-3.json"
+    },
+    {
+      "source_key": "w34313535",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w34313535.json",
+      "chunk": "res://generated/world/chunks/x_1__z_0.json"
+    },
+    {
+      "source_key": "w111322535",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w111322535.json",
+      "chunk": "res://generated/world/chunks/x_1__z_0.json"
+    },
+    {
+      "source_key": "w96698641",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w96698641.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_-1.json"
+    },
+    {
+      "source_key": "w96698654",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w96698654.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_-1.json"
+    },
+    {
+      "source_key": "w1001544698",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w1001544698.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_0.json"
+    },
+    {
+      "source_key": "w34313554",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w34313554.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-2.json"
+    },
+    {
+      "source_key": "w34313555",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w34313555.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-2.json"
+    },
+    {
+      "source_key": "w34313550",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w34313550.json",
+      "chunk": "res://generated/world/chunks/x_1__z_-2.json"
+    },
+    {
+      "source_key": "w291196367",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w291196367.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-3.json"
+    },
+    {
+      "source_key": "w291193744",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w291193744.json",
+      "chunk": "res://generated/world/chunks/x_1__z_-2.json"
+    },
+    {
+      "source_key": "w291193760",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w291193760.json",
+      "chunk": "res://generated/world/chunks/x_1__z_-2.json"
+    },
+    {
+      "source_key": "w291193766",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w291193766.json",
+      "chunk": "res://generated/world/chunks/x_1__z_-2.json"
+    },
+    {
+      "source_key": "w291193770",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w291193770.json",
+      "chunk": "res://generated/world/chunks/x_1__z_-2.json"
+    },
+    {
+      "source_key": "w291193741",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w291193741.json",
+      "chunk": "res://generated/world/chunks/x_1__z_-2.json"
+    },
+    {
+      "source_key": "w291193754",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w291193754.json",
+      "chunk": "res://generated/world/chunks/x_1__z_-2.json"
+    },
+    {
+      "source_key": "w291196379",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w291196379.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-4.json"
+    },
+    {
+      "source_key": "w291196375",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w291196375.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-4.json"
+    },
+    {
+      "source_key": "w1473253276",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w1473253276.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_0.json"
+    },
+    {
+      "source_key": "w1222514695",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w1222514695.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_3.json"
+    },
+    {
+      "source_key": "w545387426",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w545387426.json",
+      "chunk": "res://generated/world/chunks/x_1__z_2.json"
+    },
+    {
+      "source_key": "w96698653",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w96698653.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_-1.json"
+    },
+    {
+      "source_key": "w96698660",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w96698660.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_-1.json"
+    },
+    {
+      "source_key": "w291196373",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w291196373.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-4.json"
+    },
+    {
+      "source_key": "w291196377",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w291196377.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-3.json"
+    },
+    {
+      "source_key": "w1436064757",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w1436064757.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-1.json"
+    },
+    {
+      "source_key": "w96665910",
+      "config": "res://game/resources/housing_family/w96665910.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-2.json"
+    },
+    {
+      "source_key": "w96665897",
+      "config": "res://game/resources/housing_family/w96665897.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-3.json"
+    },
+    {
+      "source_key": "w96665922",
+      "config": "res://game/resources/housing_family/w96665922.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-3.json"
+    },
+    {
+      "source_key": "w96665919",
+      "config": "res://game/resources/housing_family/w96665919.json",
+      "chunk": "res://generated/world/chunks/x_-3__z_-2.json"
+    },
+    {
+      "source_key": "w96665885",
+      "config": "res://game/resources/housing_family/w96665885.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-2.json"
+    },
+    {
+      "source_key": "w96665907",
+      "config": "res://game/resources/housing_family/w96665907.json",
+      "chunk": "res://generated/world/chunks/x_-3__z_-2.json"
+    },
+    {
+      "source_key": "w96665920",
+      "config": "res://game/resources/housing_family/w96665920.json",
+      "chunk": "res://generated/world/chunks/x_-3__z_-2.json"
+    },
+    {
+      "source_key": "w96665935",
+      "config": "res://game/resources/housing_family/w96665935.json",
+      "chunk": "res://generated/world/chunks/x_-3__z_-3.json"
+    },
+    {
+      "source_key": "w96665892",
+      "config": "res://game/resources/housing_family/w96665892.json",
+      "chunk": "res://generated/world/chunks/x_-3__z_-3.json"
+    },
+    {
+      "source_key": "w96215662",
+      "config": "res://game/resources/housing_family/w96215662.json",
+      "chunk": "res://generated/world/chunks/x_-3__z_-3.json"
+    },
+    {
+      "source_key": "w96215690",
+      "config": "res://game/resources/housing_family/w96215690.json",
+      "chunk": "res://generated/world/chunks/x_-3__z_-3.json"
+    },
+    {
+      "source_key": "w96215676",
+      "config": "res://game/resources/housing_family/w96215676.json",
+      "chunk": "res://generated/world/chunks/x_-3__z_-3.json"
+    },
+    {
+      "source_key": "w96665884",
+      "config": "res://game/resources/housing_family/w96665884.json",
+      "chunk": "res://generated/world/chunks/x_-3__z_-3.json"
+    },
+    {
+      "source_key": "w96665906",
+      "config": "res://game/resources/housing_family/w96665906.json",
+      "chunk": "res://generated/world/chunks/x_-3__z_-3.json"
+    },
+    {
+      "source_key": "w96665909",
+      "config": "res://game/resources/housing_family/w96665909.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-3.json"
+    },
+    {
+      "source_key": "w96665899",
+      "config": "res://game/resources/housing_family/w96665899.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-2.json"
+    },
+    {
+      "source_key": "w96665923",
+      "config": "res://game/resources/housing_family/w96665923.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-3.json"
+    },
+    {
+      "source_key": "w96215645",
+      "config": "res://game/resources/housing_family/w96215645.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-3.json"
+    },
+    {
+      "source_key": "w96665903",
+      "config": "res://game/resources/housing_family/w96665903.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-3.json"
+    },
+    {
+      "source_key": "w96665936",
+      "config": "res://game/resources/housing_family/w96665936.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-3.json"
+    },
+    {
+      "source_key": "w1043836450",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w1043836450.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-1.json"
+    },
+    {
+      "source_key": "w95934126",
+      "config": "res://game/resources/housing_family/w95934126.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-2.json"
+    },
+    {
+      "source_key": "w95934142",
+      "config": "res://game/resources/housing_family/w95934142.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-2.json"
+    },
+    {
+      "source_key": "w95934104",
+      "config": "res://game/resources/housing_family/w95934104.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-2.json"
+    },
+    {
+      "source_key": "w95934097",
+      "config": "res://game/resources/housing_family/w95934097.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-2.json"
+    },
+    {
+      "source_key": "w95934108",
+      "config": "res://game/resources/housing_family/w95934108.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-1.json"
+    },
+    {
+      "source_key": "w95934128",
+      "config": "res://game/resources/housing_family/w95934128.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-2.json"
+    },
+    {
+      "source_key": "w95934140",
+      "config": "res://game/resources/housing_family/w95934140.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-2.json"
+    },
+    {
+      "source_key": "w95934130",
+      "config": "res://game/resources/housing_family/w95934130.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-1.json"
+    },
+    {
+      "source_key": "w95934112",
+      "config": "res://game/resources/housing_family/w95934112.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-2.json"
+    },
+    {
+      "source_key": "w95934118",
+      "config": "res://game/resources/housing_family/w95934118.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-2.json"
+    },
+    {
+      "source_key": "w95934107",
+      "config": "res://game/resources/housing_family/w95934107.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-1.json"
+    },
+    {
+      "source_key": "w95934100",
+      "config": "res://game/resources/housing_family/w95934100.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-1.json"
+    },
+    {
+      "source_key": "w95934135",
+      "config": "res://game/resources/housing_family/w95934135.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-1.json"
+    },
+    {
+      "source_key": "w95934093",
+      "config": "res://game/resources/housing_family/w95934093.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-1.json"
+    },
+    {
+      "source_key": "w95934099",
+      "config": "res://game/resources/housing_family/w95934099.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-1.json"
+    },
+    {
+      "source_key": "w95934122",
+      "config": "res://game/resources/housing_family/w95934122.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-1.json"
+    },
+    {
+      "source_key": "w95934098",
+      "config": "res://game/resources/housing_family/w95934098.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-1.json"
+    },
+    {
+      "source_key": "w95934137",
+      "config": "res://game/resources/housing_family/w95934137.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-1.json"
+    },
+    {
+      "source_key": "w95934113",
+      "config": "res://game/resources/housing_family/w95934113.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_0.json"
+    },
+    {
+      "source_key": "w95934131",
+      "config": "res://game/resources/housing_family/w95934131.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-1.json"
+    },
+    {
+      "source_key": "w95934129",
+      "config": "res://game/resources/housing_family/w95934129.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-1.json"
+    },
+    {
+      "source_key": "w95934143",
+      "config": "res://game/resources/housing_family/w95934143.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_-1.json"
+    },
+    {
+      "source_key": "w95934120",
+      "config": "res://game/resources/housing_family/w95934120.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-1.json"
+    },
+    {
+      "source_key": "w109905031",
+      "config": "res://game/resources/housing_family/w109905031.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-1.json"
+    },
+    {
+      "source_key": "w34313523",
+      "config": "res://game/resources/housing_family/w34313523.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-1.json"
+    },
+    {
+      "source_key": "w109905037",
+      "config": "res://game/resources/housing_family/w109905037.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-1.json"
+    },
+    {
+      "source_key": "w109905044",
+      "config": "res://game/resources/housing_family/w109905044.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-1.json"
+    },
+    {
+      "source_key": "w109905040",
+      "config": "res://game/resources/housing_family/w109905040.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-1.json"
+    },
+    {
+      "source_key": "w34313556",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w34313556.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_-2.json"
+    },
+    {
+      "source_key": "w34313557",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w34313557.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-2.json"
+    },
+    {
+      "source_key": "w34313558",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w34313558.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-2.json"
+    },
+    {
+      "source_key": "w34313560",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w34313560.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-2.json"
+    },
+    {
+      "source_key": "w96665883",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w96665883.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-2.json"
+    },
+    {
+      "source_key": "w96665902",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w96665902.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-2.json"
+    },
+    {
+      "source_key": "w34313549",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w34313549.json",
+      "chunk": "res://generated/world/chunks/x_1__z_-2.json"
+    },
+    {
+      "source_key": "w96698611",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w96698611.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_-1.json"
+    },
+    {
+      "source_key": "w34313544",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w34313544.json",
+      "chunk": "res://generated/world/chunks/x_0__z_1.json"
+    },
+    {
+      "source_key": "w34313514",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w34313514.json",
+      "chunk": "res://generated/world/chunks/x_0__z_1.json"
+    },
+    {
+      "source_key": "w96698662",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w96698662.json",
+      "chunk": "res://generated/world/chunks/x_0__z_1.json"
+    },
+    {
+      "source_key": "w291189918",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w291189918.json",
+      "chunk": "res://generated/world/chunks/x_0__z_1.json"
+    },
+    {
+      "source_key": "w96665889",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w96665889.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_-3.json"
+    },
+    {
+      "source_key": "w96665924",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w96665924.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_-1.json"
+    },
+    {
+      "source_key": "w291189926",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w291189926.json",
+      "chunk": "res://generated/world/chunks/x_0__z_1.json"
+    },
+    {
+      "source_key": "w291196370",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w291196370.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-3.json"
+    },
+    {
+      "source_key": "w34313564",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w34313564.json",
+      "chunk": "res://generated/world/chunks/x_0__z_-3.json"
+    },
+    {
+      "source_key": "w1222514685",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w1222514685.json",
+      "chunk": "res://generated/world/chunks/x_1__z_2.json"
+    },
+    {
+      "source_key": "w1222514686",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w1222514686.json",
+      "chunk": "res://generated/world/chunks/x_2__z_1.json"
+    },
+    {
+      "source_key": "w34313513",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w34313513.json",
+      "chunk": "res://generated/world/chunks/x_0__z_0.json"
+    },
+    {
+      "source_key": "w96698650",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w96698650.json",
+      "chunk": "res://generated/world/chunks/x_1__z_-1.json"
+    },
+    {
+      "source_key": "w96665933",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w96665933.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-2.json"
+    },
+    {
+      "source_key": "w96665925",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w96665925.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-2.json"
+    },
+    {
+      "source_key": "w96665900",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w96665900.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-1.json"
+    },
+    {
+      "source_key": "w96665886",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w96665886.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_-1.json"
+    },
+    {
+      "source_key": "w95934144",
+      "config": "res://game/resources/housing_family/w95934144.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_0.json"
+    },
+    {
+      "source_key": "w95934105",
+      "config": "res://game/resources/housing_family/w95934105.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_-1.json"
+    },
+    {
+      "source_key": "w95934121",
+      "config": "res://game/resources/housing_family/w95934121.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_-1.json"
+    },
+    {
+      "source_key": "w95934117",
+      "config": "res://game/resources/housing_family/w95934117.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-1.json"
+    },
+    {
+      "source_key": "r133351",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/r133351.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-2.json"
+    },
+    {
+      "source_key": "w34313515",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w34313515.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_1.json"
+    },
+    {
+      "source_key": "w34313520",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w34313520.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_0.json"
+    },
+    {
+      "source_key": "w34313525",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/w34313525.json",
+      "chunk": "res://generated/world/chunks/x_1__z_-1.json"
     }
   ],
   "expected_visible_active_topology": {

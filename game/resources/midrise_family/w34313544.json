@@ -1,0 +1,640 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w34313544",
+    "address": "450 4th St (Naval Station Treasure Island)",
+    "edge_normals": [
+      [
+        -0.882,
+        0.472
+      ],
+      [
+        0.472,
+        0.882
+      ],
+      [
+        -0.881,
+        0.473
+      ],
+      [
+        0.472,
+        0.882
+      ],
+      [
+        0.881,
+        -0.473
+      ],
+      [
+        0.472,
+        0.882
+      ],
+      [
+        0.881,
+        -0.472
+      ],
+      [
+        -0.473,
+        -0.881
+      ],
+      [
+        0.882,
+        -0.472
+      ],
+      [
+        -0.472,
+        -0.881
+      ],
+      [
+        0.507,
+        -0.862
+      ],
+      [
+        0.197,
+        -0.98
+      ],
+      [
+        -0.132,
+        -0.991
+      ],
+      [
+        -0.446,
+        -0.895
+      ],
+      [
+        -0.717,
+        -0.697
+      ],
+      [
+        -0.902,
+        -0.431
+      ],
+      [
+        -0.994,
+        -0.11
+      ],
+      [
+        -0.974,
+        0.226
+      ],
+      [
+        -0.472,
+        -0.881
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": "ring",
+    "above_terrain": 0.1,
+    "basis": "median frozen terrain around the ring (no imagery)"
+  },
+  "levels": {
+    "ground_h": 7.0,
+    "storey_h": 3.4,
+    "parapet_h": 0.5
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.66,
+        0.65,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.86,
+        0.85,
+        0.8
+      ],
+      "roughness": 0.6
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.62,
+        0.61,
+        0.58
+      ],
+      "roughness": 0.95
+    },
+    "render": {
+      "rgb": [
+        0.86,
+        0.86,
+        0.83
+      ],
+      "roughness": 0.9
+    },
+    "gym_green": {
+      "rgb": [
+        0.12,
+        0.36,
+        0.25
+      ],
+      "roughness": 0.7,
+      "metallic": 0.1
+    },
+    "roof_green": {
+      "rgb": [
+        0.28,
+        0.56,
+        0.38
+      ],
+      "roughness": 0.5,
+      "metallic": 0.25
+    },
+    "cream": {
+      "rgb": [
+        0.88,
+        0.85,
+        0.76
+      ],
+      "roughness": 0.9
+    },
+    "grey_conc": {
+      "rgb": [
+        0.62,
+        0.62,
+        0.6
+      ],
+      "roughness": 0.95
+    },
+    "drum_white": {
+      "rgb": [
+        0.92,
+        0.92,
+        0.9
+      ],
+      "roughness": 0.85
+    },
+    "skylight": {
+      "rgb": [
+        0.62,
+        0.7,
+        0.74
+      ],
+      "roughness": 0.2,
+      "metallic": 0.5
+    },
+    "door_red": {
+      "rgb": [
+        0.62,
+        0.16,
+        0.14
+      ],
+      "roughness": 0.6
+    },
+    "green_trim": {
+      "rgb": [
+        0.12,
+        0.27,
+        0.2
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "fascia": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.7
+    },
+    "dark_frame": {
+      "rgb": [
+        0.1,
+        0.12,
+        0.11
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    }
+  },
+  "schemes": {
+    "hall_nnw": {
+      "material": "gym_green",
+      "parapet_material": "gym_green",
+      "gable_material": "gym_green",
+      "module": 2.4,
+      "ground": {
+        "w": 1.9,
+        "h": 1.15,
+        "sill": 5.25,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "dark_frame",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      },
+      "features": [
+        {
+          "type": "blank",
+          "from": 22.3,
+          "to": 34.0
+        }
+      ]
+    },
+    "hall_sse": {
+      "material": "gym_green",
+      "parapet_material": "gym_green",
+      "gable_material": "gym_green",
+      "module": 2.4,
+      "ground": {
+        "w": 1.9,
+        "h": 1.15,
+        "sill": 5.25,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "dark_frame",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      },
+      "features": [
+        {
+          "type": "blank",
+          "from": 0.0,
+          "to": 3.0
+        }
+      ]
+    },
+    "hall_plain": {
+      "material": "gym_green",
+      "parapet_material": "gym_green",
+      "gable_material": "gym_green",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      }
+    },
+    "drum": {
+      "material": "drum_white",
+      "parapet_material": "drum_white",
+      "gable_material": "drum_white",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      }
+    },
+    "drum_back": {
+      "material": "gym_green",
+      "parapet_material": "gym_green",
+      "gable_material": "gym_green",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      }
+    },
+    "annex_plain": {
+      "material": "cream",
+      "parapet_material": "cream",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      }
+    },
+    "annex_wsw": {
+      "material": "cream",
+      "parapet_material": "cream",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      },
+      "features": [
+        {
+          "type": "bays",
+          "from": 0.0,
+          "to": 11.6,
+          "module": 60.0,
+          "material": "grey_conc"
+        },
+        {
+          "type": "entry",
+          "from": 8.5,
+          "to": 10.3,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "material": "door_red",
+            "leaf_h": 2.2
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          },
+          "material": "grey_conc"
+        },
+        {
+          "type": "bays",
+          "from": 19.2,
+          "to": 22.0,
+          "module": 2.8,
+          "ground": {
+            "kind": "window",
+            "w": 2.4,
+            "h": 1.5,
+            "sill": 1.15,
+            "depth": 0.12,
+            "mullions": [
+              0.333,
+              0.667
+            ],
+            "transoms": [
+              0.5
+            ],
+            "frame": "dark_frame"
+          }
+        },
+        {
+          "type": "entry",
+          "from": 23.5,
+          "to": 26.6,
+          "door": {
+            "kind": "porch",
+            "w": 2.9,
+            "h": 2.7,
+            "recess": 2.0,
+            "door_w": 1.8,
+            "back": "cream"
+          },
+          "landing": {
+            "w": 3.1,
+            "depth": 1.2
+          }
+        }
+      ]
+    }
+  },
+  "blocks": [
+    {
+      "id": "hall",
+      "storeys": 1,
+      "ground_h": 7.0,
+      "parapet": {
+        "h": 0.0
+      },
+      "clip": [
+        {
+          "edge": 9,
+          "min": 0.0
+        },
+        {
+          "edge": 8,
+          "min": 0.0
+        },
+        {
+          "edge": 2,
+          "min": 0.0
+        }
+      ],
+      "roof": {
+        "form": "gable",
+        "ridge_edge": 9,
+        "pitch_deg": 12.0,
+        "overhang": 0.6,
+        "t": 0.2,
+        "under": "green_trim",
+        "fascia": "green_trim"
+      },
+      "roof_material": "roof_green",
+      "faces": {
+        "default": "hall_plain",
+        "e9": "hall_nnw",
+        "e3": "hall_sse"
+      }
+    },
+    {
+      "id": "annex",
+      "storeys": 1,
+      "ground_h": 4.8,
+      "parapet": {
+        "h": 0.5,
+        "t": 0.25
+      },
+      "clip": [
+        {
+          "edge": 9,
+          "min": 0.0
+        },
+        {
+          "edge": 2,
+          "max": 0.0
+        }
+      ],
+      "faces": {
+        "default": "annex_plain",
+        "e0": "annex_wsw"
+      },
+      "roof_items": [
+        {
+          "kind": "box",
+          "edge": 0,
+          "s": [
+            14.0,
+            17.5
+          ],
+          "d": [
+            6.0,
+            8.5
+          ],
+          "h": 1.4,
+          "material": "mech",
+          "top": "mech"
+        }
+      ]
+    },
+    {
+      "id": "drum",
+      "storeys": 1,
+      "ground_h": 6.0,
+      "parapet": {
+        "h": 0.0
+      },
+      "clip": [
+        {
+          "edge": 9,
+          "max": 0.0
+        }
+      ],
+      "roof": {
+        "form": "mono",
+        "low_edge": 13,
+        "pitch_deg": 30.0,
+        "overhang": 0.1,
+        "t": 0.12,
+        "under": "drum_white",
+        "fascia": "drum_white"
+      },
+      "roof_material": "skylight",
+      "faces": {
+        "default": "drum",
+        "court": "drum_back"
+      }
+    },
+    {
+      "id": "strip",
+      "storeys": 1,
+      "ground_h": 4.5,
+      "parapet": {
+        "h": 0.5,
+        "t": 0.25
+      },
+      "clip": [
+        {
+          "edge": 8,
+          "max": 0.0
+        }
+      ],
+      "faces": {
+        "default": "annex_plain"
+      }
+    }
+  ],
+  "study_notes": {
+    "observed": "Job Corps field survey photos (<=2018-09, p.279): from the NW, the green standing-seam gable roof of the gym hall with dark green walls and a clerestory row under the NNW eave, the white drum with a slanted glazed top on the NNW footprint arc, the lower white flat-roofed annex with roof plant and the hall gable above it at the WSW end; from the SW, the annex WSW end (grey concrete NNW part with a red door, cream SSE part with a gridded window and a dark recessed corner entry) and, partly, the hall SSE eave side (green walls, clerestory).",
+    "inferred": "Hall eave height, roof pitch and clerestory cadence; drum height and glazing slope; annex height; stations of the door, window and corner entry. The hall SSE clerestory follows the partial SSE view. The unphotographed ENE strip, annex SSE face and hall ENE gable are plain walls (owner rule); the photographed WSW porch and red door are the entrances.",
+    "footprint": "Frozen ring split into the convex gym hall (gable ridge along e9), the WSW annex, the NNW drum cap (mono roof) and the ENE strip."
+  }
+}

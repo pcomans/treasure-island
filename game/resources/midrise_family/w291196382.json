@@ -1,0 +1,263 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w291196382",
+    "address": "Avenue M treatment plant",
+    "edge_normals": [
+      [
+        -0.8819787995070781,
+        0.47128908031064476
+      ],
+      [
+        0.4709659232691792,
+        0.8821514037392957
+      ],
+      [
+        0.8819866520744133,
+        -0.47127438458138987
+      ],
+      [
+        -0.47104682273305887,
+        -0.8821082080975611
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": "ring",
+    "above_terrain": 0.05,
+    "basis": "median frozen terrain around the ring; the rim stands 1.9 m above the floor so it clears chest height at the high corner of the 1.3 m slope"
+  },
+  "levels": {
+    "ground_h": 1.45,
+    "storey_h": 3.0,
+    "parapet_h": 0.3
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.56,
+        0.55,
+        0.52
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.73,
+        0.74,
+        0.74
+      ],
+      "roughness": 0.45,
+      "metallic": 0.3
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.66,
+        0.63,
+        0.56
+      ],
+      "roughness": 0.95
+    },
+    "board": {
+      "rgb": [
+        0.62,
+        0.59,
+        0.52
+      ],
+      "roughness": 0.95
+    },
+    "water": {
+      "rgb": [
+        0.17,
+        0.21,
+        0.19
+      ],
+      "roughness": 0.15
+    }
+  },
+  "schemes": {
+    "rim": {
+      "material": "concrete",
+      "parapet_material": "concrete",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "board",
+        "top": 0.15
+      }
+    },
+    "rim_ladder": {
+      "material": "concrete",
+      "parapet_material": "concrete",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "board",
+        "top": 0.15
+      },
+      "features": [
+        {
+          "type": "ladder",
+          "from": 6.9,
+          "to": 8.1
+        }
+      ]
+    }
+  },
+  "blocks": [
+    {
+      "id": "basin",
+      "storeys": 1,
+      "ground_h": 1.45,
+      "roof_material": "water",
+      "parapet": {
+        "kind": "railing",
+        "style": "pipe",
+        "h": 1.1,
+        "curb": 0.45,
+        "t": 0.25
+      },
+      "faces": {
+        "default": "rim",
+        "e3": "rim_ladder"
+      },
+      "roof_items": [
+        {
+          "kind": "box",
+          "edge": 0,
+          "s": [
+            13.4,
+            14.9
+          ],
+          "d": [
+            0.2,
+            9.4
+          ],
+          "h": 0.45,
+          "material": "concrete",
+          "top": "concrete"
+        }
+      ]
+    }
+  ],
+  "study_notes": {
+    "observed": "Nov 2025 1298 Avenue M: low concrete structures with rails inside the plant fence; OSM height 1 m.",
+    "inferred": "Open rectangular basin with a pipe rail, a cross beam and a ladder; rim 1.9 m above the floor (above the OSM 1 m tag) to clear the 1.3 m terrain slope.",
+    "footprint": "Frozen rectangle kept as one block."
+  }
+}

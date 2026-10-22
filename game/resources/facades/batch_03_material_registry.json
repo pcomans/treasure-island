@@ -90,11 +90,11 @@
     }
   ],
   "explicit_excluded_targets": {
-    "w34313513": "Harvey Milk Recreation Center: no official target-identifiable public elevation evidence",
-    "w34313544": "Naval Station administration building: no official target-identifiable public elevation evidence",
+    "w34313513": "superseded 2026-10-21: Level 1 massing by the shared mid-rise family (game/resources/midrise_family/w34313513.json); no Batch 03 facade assets",
+    "w34313544": "superseded 2026-10-21: Level 1 massing by the shared mid-rise family (game/resources/midrise_family/w34313544.json); no Batch 03 facade assets",
     "w34313521": "Job Corps Food Service Building 368: no official elevation; excluded contributor-image path was not used",
     "w109905031": "Education Center Building 29A: official viewpoints are facade-occluded by containers and fence",
-    "w34313514": "Advanced Culinary Academy: no official frontage and target identity remains uncertain"
+    "w34313514": "superseded 2026-10-21: Level 1 massing by the shared mid-rise family (game/resources/midrise_family/w34313514.json); no Batch 03 facade assets"
   },
   "forbidden_content": [
     "windows",

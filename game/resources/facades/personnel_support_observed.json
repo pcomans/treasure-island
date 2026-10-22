@@ -1,7 +1,7 @@
 {
   "source": "r133347",
   "chunk": "x_0__z_1",
-  "status": "production_inference; June2021 east and September2025 north/east with undated Apple roof layout; courtyard and west/south untouched",
+  "status": "production_inference; June2021 east and September2025 north/east with undated Apple roof layout; west and south (unphotographed) carry the same grid family by owner-approved inference (2026-10-22); courtyard untouched",
   "chains": [
     {
       "runs": [
@@ -45,6 +45,52 @@
         12,
         13
       ]
+    },
+    {
+      "runs": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "family": "grid_transom",
+      "bay_width": 1.7,
+      "muted_bays": [
+        5,
+        6,
+        7,
+        20,
+        21,
+        22
+      ],
+      "solid_bays": [
+        13,
+        14
+      ],
+      "inference": "owner-approved openings on the unphotographed west side (2026-10-22): the east/north grid family; bay pattern is production inference"
+    },
+    {
+      "runs": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "family": "grid_transom",
+      "bay_width": 1.7,
+      "muted_bays": [
+        4,
+        5,
+        6,
+        22,
+        23,
+        24
+      ],
+      "solid_bays": [
+        14,
+        15
+      ],
+      "inference": "owner-approved openings on the unphotographed south side (2026-10-22): the east/north grid family; bay pattern is production inference"
     }
   ],
   "palette": {

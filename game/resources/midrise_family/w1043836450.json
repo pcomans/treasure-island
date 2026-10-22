@@ -1,0 +1,669 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w1043836450",
+    "address": "680 Avenue I",
+    "edge_normals": [
+      [
+        -0.8849008465716866,
+        0.46577944537808064
+      ],
+      [
+        0.4660848934307205,
+        0.8847400025519778
+      ],
+      [
+        -0.8845588413917252,
+        0.46642861845702466
+      ],
+      [
+        0.4667295504919833,
+        0.8844000942432961
+      ],
+      [
+        0.883460379828887,
+        -0.4685058775219352
+      ],
+      [
+        0.4662935475132762,
+        0.8846300512346865
+      ],
+      [
+        0.8852740207938576,
+        -0.4650697884269374
+      ],
+      [
+        0.46480764688349324,
+        0.8854116846973672
+      ],
+      [
+        0.8846702251466876,
+        -0.4662173235079422
+      ],
+      [
+        -0.46625461934946877,
+        -0.884650569397478
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": 8,
+    "above_terrain": 0.35,
+    "basis": "median frozen terrain along the photographed ENE front; floor raised (ramped entry in the photo)"
+  },
+  "levels": {
+    "ground_h": 3.0,
+    "storey_h": 1.7,
+    "parapet_h": 0.0
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.34,
+        0.37,
+        0.38
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.56,
+        0.55,
+        0.52
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.73,
+        0.74,
+        0.74
+      ],
+      "roughness": 0.45,
+      "metallic": 0.3
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.62,
+        0.61,
+        0.58
+      ],
+      "roughness": 0.95
+    },
+    "board_green": {
+      "rgb": [
+        0.44,
+        0.5,
+        0.42
+      ],
+      "roughness": 0.85
+    },
+    "roof_brown": {
+      "rgb": [
+        0.4,
+        0.37,
+        0.34
+      ],
+      "roughness": 0.85
+    },
+    "trim_white": {
+      "rgb": [
+        0.92,
+        0.92,
+        0.9
+      ],
+      "roughness": 0.6
+    },
+    "fascia_dark": {
+      "rgb": [
+        0.24,
+        0.22,
+        0.2
+      ],
+      "roughness": 0.7
+    }
+  },
+  "schemes": {
+    "ene_front": {
+      "material": "board_green",
+      "parapet_material": "board_green",
+      "module": 3.6,
+      "window": {
+        "w": 1.5,
+        "h": 1.4,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim_white"
+      },
+      "ground": {
+        "w": 1.5,
+        "h": 1.4,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim_white",
+        "kind": "window"
+      },
+      "gable_material": "board_green",
+      "plinth": {
+        "material": "concrete",
+        "top": 0.0
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 14.5,
+          "to": 16.3,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "glass"
+          },
+          "landing": {
+            "w": 2.0,
+            "depth": 1.5,
+            "at": "floor"
+          },
+          "ramp": {
+            "dir": -1,
+            "w": 1.5,
+            "slope": 0.083
+          }
+        }
+      ]
+    },
+    "side": {
+      "material": "board_green",
+      "parapet_material": "board_green",
+      "module": 3.6,
+      "window": {
+        "w": 1.5,
+        "h": 1.4,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim_white"
+      },
+      "ground": {
+        "w": 1.5,
+        "h": 1.4,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim_white",
+        "kind": "window"
+      },
+      "gable_material": "board_green",
+      "plinth": {
+        "material": "concrete",
+        "top": 0.0
+      }
+    },
+    "service": {
+      "material": "board_green",
+      "parapet_material": "board_green",
+      "module": 3.6,
+      "window": {
+        "w": 1.5,
+        "h": 1.4,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim_white"
+      },
+      "ground": {
+        "w": 1.5,
+        "h": 1.4,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim_white",
+        "kind": "window"
+      },
+      "gable_material": "board_green",
+      "plinth": {
+        "material": "concrete",
+        "top": 0.0
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 2.1,
+          "to": 3.9,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "glass"
+          },
+          "landing": {
+            "w": 2.0,
+            "depth": 1.5
+          }
+        }
+      ]
+    },
+    "rear": {
+      "material": "board_green",
+      "parapet_material": "board_green",
+      "module": 3.6,
+      "window": {
+        "w": 1.5,
+        "h": 1.4,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim_white"
+      },
+      "ground": {
+        "w": 1.5,
+        "h": 1.4,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim_white",
+        "kind": "window"
+      },
+      "gable_material": "board_green",
+      "plinth": {
+        "material": "concrete",
+        "top": 0.0
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 7.1,
+          "to": 8.9,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "glass"
+          },
+          "landing": {
+            "w": 2.0,
+            "depth": 1.5
+          }
+        },
+        {
+          "type": "garage",
+          "from": 12.2,
+          "to": 15.8,
+          "w": 3.0,
+          "h": 2.4
+        }
+      ]
+    },
+    "clerestory": {
+      "material": "board_green",
+      "parapet_material": "board_green",
+      "module": 3.0,
+      "window": {
+        "w": 1.2,
+        "h": 0.55,
+        "sill": 0.45,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim_white"
+      },
+      "ground": {
+        "w": 1.5,
+        "h": 1.4,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim_white",
+        "kind": "window"
+      },
+      "gable_material": "board_green",
+      "plinth": {
+        "material": "concrete",
+        "top": 0.0
+      }
+    },
+    "blank": {
+      "material": "board_green",
+      "parapet_material": "board_green",
+      "module": 60.0,
+      "window": {
+        "w": 1.5,
+        "h": 1.4,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "trim_white"
+      },
+      "ground": {
+        "kind": "blank"
+      },
+      "gable_material": "board_green",
+      "plinth": {
+        "material": "concrete",
+        "top": 0.0
+      }
+    }
+  },
+  "blocks": [
+    {
+      "id": "north",
+      "storeys": 1,
+      "ground_h": 3.0,
+      "parapet": {
+        "h": 0.0
+      },
+      "clip": [
+        {
+          "edge": 9,
+          "max": 6.5
+        },
+        {
+          "edge": 2,
+          "min": 0.0
+        }
+      ],
+      "roof": {
+        "overhang": 0.45,
+        "t": 0.15,
+        "under": "soffit",
+        "fascia": "fascia_dark",
+        "form": "mono",
+        "low_edge": 9,
+        "pitch_deg": 12.0
+      },
+      "roof_material": "roof_brown",
+      "faces": {
+        "e8": "ene_front",
+        "e9": "side",
+        "default": "blank"
+      }
+    },
+    {
+      "id": "center",
+      "storeys": 2,
+      "ground_h": 3.0,
+      "storey_h": 1.7,
+      "parapet": {
+        "h": 0.0
+      },
+      "clip": [
+        {
+          "edge": 9,
+          "min": 6.5,
+          "max": 11.5
+        },
+        {
+          "edge": 2,
+          "min": 0.0
+        }
+      ],
+      "roof": {
+        "overhang": 0.45,
+        "t": 0.15,
+        "under": "soffit",
+        "fascia": "fascia_dark",
+        "form": "gable",
+        "ridge_edge": 9,
+        "pitch_deg": 20.0
+      },
+      "roof_material": "roof_brown",
+      "faces": {
+        "e8": "clerestory",
+        "court": "clerestory",
+        "e0": "side",
+        "e2": "side",
+        "default": "blank"
+      }
+    },
+    {
+      "id": "south",
+      "storeys": 1,
+      "ground_h": 3.0,
+      "parapet": {
+        "h": 0.0
+      },
+      "clip": [
+        {
+          "edge": 9,
+          "min": 11.5
+        },
+        {
+          "edge": 7,
+          "min": 0.0
+        },
+        {
+          "edge": 2,
+          "min": 0.0
+        }
+      ],
+      "roof": {
+        "overhang": 0.45,
+        "t": 0.15,
+        "under": "soffit",
+        "fascia": "fascia_dark",
+        "form": "mono",
+        "low_edge": 5,
+        "pitch_deg": 12.0
+      },
+      "roof_material": "roof_brown",
+      "faces": {
+        "e8": "side",
+        "e2": "service",
+        "default": "blank"
+      }
+    },
+    {
+      "id": "rear",
+      "storeys": 1,
+      "ground_h": 2.7,
+      "parapet": {
+        "h": 0.25,
+        "t": 0.15
+      },
+      "clip": [
+        {
+          "edge": 7,
+          "max": 0.0
+        },
+        {
+          "edge": 9,
+          "s_max": 21.96
+        }
+      ],
+      "roof_material": "roof_brown",
+      "faces": {
+        "e5": "rear",
+        "default": "blank"
+      }
+    },
+    {
+      "id": "bump",
+      "storeys": 1,
+      "ground_h": 2.7,
+      "parapet": {
+        "h": 0.25,
+        "t": 0.15
+      },
+      "clip": [
+        {
+          "edge": 7,
+          "max": 0.0
+        },
+        {
+          "edge": 9,
+          "s_min": 21.96
+        }
+      ],
+      "roof_material": "roof_brown",
+      "faces": {
+        "e3": "side",
+        "e2": "side",
+        "default": "blank"
+      }
+    },
+    {
+      "id": "wing",
+      "storeys": 1,
+      "ground_h": 3.0,
+      "parapet": {
+        "h": 0.0
+      },
+      "clip": [
+        {
+          "edge": 2,
+          "max": 0.0
+        }
+      ],
+      "roof": {
+        "overhang": 0.45,
+        "t": 0.15,
+        "under": "soffit",
+        "fascia": "fascia_dark",
+        "form": "mono",
+        "low_edge": 0,
+        "pitch_deg": 12.0
+      },
+      "roof_material": "roof_brown",
+      "faces": {
+        "e0": "service",
+        "e1": "side",
+        "e9": "side",
+        "default": "blank"
+      }
+    }
+  ],
+  "study_notes": {
+    "observed": "Mar 2025 680 Avenue I (ENE, ~26 m): green-grey vertical-board single-storey building with low dark pitched roofs, a raised central gable with small white-trimmed windows, large white-trimmed windows, a glazed door and a long railed access ramp along the front.",
+    "inferred": "Roof split (mono wings either side of a gabled clerestory), heights and pitches, window cadence, rear and side doors and the rear roll-up; NNW, WSW and SSE sides are unseen (trees). Vertical boarding is a flat colour (textures deferred).",
+    "footprint": "Frozen 10-edge ring split into six convex blocks: north, clerestory and south bands, a rear strip, the SSE bump and the WSW wing."
+  }
+}

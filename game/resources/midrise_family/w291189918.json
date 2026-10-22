@@ -1,0 +1,492 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w291189918",
+    "address": "Oasis (401 California Ave)",
+    "edge_normals": [
+      [
+        -0.883,
+        0.469
+      ],
+      [
+        0.468,
+        0.884
+      ],
+      [
+        -0.883,
+        0.469
+      ],
+      [
+        0.469,
+        0.883
+      ],
+      [
+        -0.884,
+        0.468
+      ],
+      [
+        0.469,
+        0.883
+      ],
+      [
+        0.883,
+        -0.469
+      ],
+      [
+        -0.471,
+        -0.882
+      ],
+      [
+        0.883,
+        -0.469
+      ],
+      [
+        0.469,
+        0.883
+      ],
+      [
+        0.883,
+        -0.469
+      ],
+      [
+        -0.469,
+        -0.883
+      ],
+      [
+        0.882,
+        -0.47
+      ],
+      [
+        -0.469,
+        -0.883
+      ],
+      [
+        0.883,
+        -0.469
+      ],
+      [
+        -0.469,
+        -0.883
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": "ring",
+    "above_terrain": 0.1,
+    "basis": "median frozen terrain around the ring (no imagery)"
+  },
+  "levels": {
+    "ground_h": 4.0,
+    "storey_h": 3.0,
+    "parapet_h": 0.35
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.66,
+        0.65,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.1,
+        0.16,
+        0.13
+      ],
+      "roughness": 0.6,
+      "metallic": 0.15
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.62,
+        0.61,
+        0.58
+      ],
+      "roughness": 0.95
+    },
+    "render": {
+      "rgb": [
+        0.86,
+        0.86,
+        0.83
+      ],
+      "roughness": 0.9
+    },
+    "oasis_cream": {
+      "rgb": [
+        0.98,
+        0.93,
+        0.74
+      ],
+      "roughness": 0.9
+    },
+    "fascia_dark": {
+      "rgb": [
+        0.1,
+        0.16,
+        0.13
+      ],
+      "roughness": 0.6,
+      "metallic": 0.15
+    },
+    "ribbon_frame": {
+      "rgb": [
+        0.08,
+        0.09,
+        0.09
+      ],
+      "roughness": 0.5,
+      "metallic": 0.2
+    },
+    "ribbon_glass": {
+      "rgb": [
+        0.55,
+        0.58,
+        0.6
+      ],
+      "roughness": 0.25,
+      "metallic": 0.15
+    }
+  },
+  "schemes": {
+    "ene_e6": {
+      "material": "oasis_cream",
+      "parapet_material": "fascia_dark",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      },
+      "features": [
+        {
+          "type": "bays",
+          "from": 1.6,
+          "to": 5.0,
+          "module": 3.4,
+          "ground": {
+            "kind": "window",
+            "w": 3.0,
+            "h": 1.05,
+            "sill": 2.35,
+            "depth": 0.12,
+            "mullions": [
+              0.333,
+              0.667
+            ],
+            "frame": "ribbon_frame",
+            "glass": "ribbon_glass",
+            "frame_w": 0.08,
+            "bar_w": 0.08
+          }
+        },
+        {
+          "type": "bays",
+          "from": 6.2,
+          "to": 9.4,
+          "module": 3.2,
+          "ground": {
+            "kind": "window",
+            "w": 2.8,
+            "h": 1.05,
+            "sill": 2.35,
+            "depth": 0.12,
+            "mullions": [
+              0.333,
+              0.667
+            ],
+            "frame": "ribbon_frame",
+            "glass": "ribbon_glass",
+            "frame_w": 0.08,
+            "bar_w": 0.08
+          }
+        },
+        {
+          "type": "bays",
+          "from": 13.18,
+          "to": 16.58,
+          "module": 3.4,
+          "ground": {
+            "kind": "window",
+            "w": 3.0,
+            "h": 1.05,
+            "sill": 2.35,
+            "depth": 0.12,
+            "mullions": [
+              0.333,
+              0.667
+            ],
+            "frame": "ribbon_frame",
+            "glass": "ribbon_glass",
+            "frame_w": 0.08,
+            "bar_w": 0.08
+          }
+        },
+        {
+          "type": "bays",
+          "from": 18.58,
+          "to": 21.98,
+          "module": 3.4,
+          "ground": {
+            "kind": "window",
+            "w": 3.0,
+            "h": 1.05,
+            "sill": 2.35,
+            "depth": 0.12,
+            "mullions": [
+              0.333,
+              0.667
+            ],
+            "frame": "ribbon_frame",
+            "glass": "ribbon_glass",
+            "frame_w": 0.08,
+            "bar_w": 0.08
+          }
+        },
+        {
+          "type": "bays",
+          "from": 23.38,
+          "to": 28.98,
+          "module": 5.6,
+          "ground": {
+            "kind": "window",
+            "w": 5.2,
+            "h": 1.05,
+            "sill": 2.35,
+            "depth": 0.12,
+            "mullions": [
+              0.25,
+              0.5,
+              0.75
+            ],
+            "frame": "ribbon_frame",
+            "glass": "ribbon_glass",
+            "frame_w": 0.08,
+            "bar_w": 0.08
+          }
+        },
+        {
+          "type": "bays",
+          "from": 30.98,
+          "to": 34.38,
+          "module": 3.4,
+          "ground": {
+            "kind": "window",
+            "w": 3.0,
+            "h": 1.05,
+            "sill": 2.35,
+            "depth": 0.12,
+            "mullions": [
+              0.333,
+              0.667
+            ],
+            "frame": "ribbon_frame",
+            "glass": "ribbon_glass",
+            "frame_w": 0.08,
+            "bar_w": 0.08
+          }
+        },
+        {
+          "type": "bays",
+          "from": 35.18,
+          "to": 37.58,
+          "module": 2.4,
+          "ground": {
+            "kind": "window",
+            "w": 2.0,
+            "h": 1.05,
+            "sill": 2.35,
+            "depth": 0.12,
+            "mullions": [
+              0.5
+            ],
+            "frame": "ribbon_frame",
+            "glass": "ribbon_glass",
+            "frame_w": 0.08,
+            "bar_w": 0.08
+          }
+        }
+      ]
+    },
+    "blank": {
+      "material": "oasis_cream",
+      "parapet_material": "fascia_dark",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      }
+    },
+    "door_e2": {
+      "material": "oasis_cream",
+      "parapet_material": "fascia_dark",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 9.22,
+          "to": 11.02,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "material": "door",
+            "leaf_h": 2.2
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    }
+  },
+  "blocks": [
+    {
+      "id": "block",
+      "storeys": 1,
+      "ground_h": 4.0,
+      "storey_h": 3.0,
+      "parapet": {
+        "h": 0.35,
+        "t": 0.25
+      },
+      "faces": {
+        "default": "blank",
+        "e2": "door_e2",
+        "e6": "ene_e6"
+      }
+    }
+  ],
+  "study_notes": {
+    "observed": "Job Corps field survey photo (<=2018-09, p.181, shared with Dorm 369), from the ESE: the low ENE face of the hall attached to the dorm, cream stucco under a dark fascia, groups of high dark-framed ribbon windows between pilasters, and a blank SSE-facing step at its NNW end. Identity from the attachment geometry (medium); a later remodel for the event venue is possible.",
+    "inferred": "Wall height, window group stations and pane counts; pilasters not modelled (Level 3). The unseen ENE projection (e10) and the other sides are plain cream walls (owner rule) except the one kept Level 1 door on the WSW side.",
+    "footprint": "Frozen ring kept as one block."
+  }
+}

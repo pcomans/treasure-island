@@ -1,0 +1,493 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w96665889",
+    "address": "Treasure Island (Building 292 candidate)",
+    "edge_normals": [
+      [
+        -0.8844856571393291,
+        0.46656738239487894
+      ],
+      [
+        0.46653252496041986,
+        0.8845040436052598
+      ],
+      [
+        0.8845284841967908,
+        -0.46648618483780163
+      ],
+      [
+        -0.46625027666125957,
+        -0.8846528581954048
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": "ring",
+    "above_terrain": 0.1,
+    "basis": "median frozen terrain around the ring (no imagery)"
+  },
+  "levels": {
+    "ground_h": 3.7,
+    "storey_h": 3.0,
+    "parapet_h": 0.5
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.66,
+        0.65,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.73,
+        0.74,
+        0.74
+      ],
+      "roughness": 0.45,
+      "metallic": 0.3
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.62,
+        0.61,
+        0.58
+      ],
+      "roughness": 0.95
+    },
+    "render": {
+      "rgb": [
+        0.86,
+        0.86,
+        0.83
+      ],
+      "roughness": 0.9
+    }
+  },
+  "schemes": {
+    "plain": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 3.6,
+      "window": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      }
+    },
+    "side0": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 3.6,
+      "window": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 17.46,
+          "to": 19.26,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "entry",
+          "from": 45.0,
+          "to": 46.8,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "entry",
+          "from": 72.54,
+          "to": 74.34,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "side1": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 3.6,
+      "window": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 4.289,
+          "to": 6.089,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "side2": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 3.6,
+      "window": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 17.459,
+          "to": 19.259,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "entry",
+          "from": 44.998,
+          "to": 46.798,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "entry",
+          "from": 72.538,
+          "to": 74.338,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "side3": {
+      "material": "render",
+      "parapet_material": "render",
+      "module": 3.6,
+      "window": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 4.294,
+          "to": 6.094,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    }
+  },
+  "blocks": [
+    {
+      "id": "block",
+      "storeys": 1,
+      "ground_h": 3.7,
+      "storey_h": 3.0,
+      "parapet": {
+        "h": 0.5,
+        "t": 0.25
+      },
+      "faces": {
+        "default": "plain",
+        "e0": "side0",
+        "e1": "side1",
+        "e2": "side2",
+        "e3": "side3"
+      }
+    }
+  ],
+  "study_notes": {
+    "observed": "Sep 2025: trees only.",
+    "inferred": "Long one-storey flat-roofed building with windows and three doors on each long side (Level 1).",
+    "footprint": "Frozen ring kept as one block (Level 1)."
+  }
+}

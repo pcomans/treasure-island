@@ -1,0 +1,549 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w1001544698",
+    "address": "Treasure Island (Avenue of the Palms lot)",
+    "edge_normals": [
+      [
+        -0.5644608540327466,
+        0.825459838068832
+      ],
+      [
+        0.8255711475498687,
+        0.5642980421135564
+      ],
+      [
+        -0.5636591804589902,
+        0.826007462608117
+      ],
+      [
+        0.8256270118344384,
+        0.5642163036720366
+      ],
+      [
+        0.5639882872790764,
+        -0.8257827873066949
+      ],
+      [
+        -0.8257056091084839,
+        -0.5641012737858226
+      ],
+      [
+        -0.5626353345237479,
+        0.8267051955475726
+      ],
+      [
+        -0.8257688189336172,
+        -0.5640087390076317
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": 4,
+    "above_terrain": 0.05,
+    "basis": "median frozen terrain along the photographed NE end"
+  },
+  "levels": {
+    "ground_h": 3.6,
+    "storey_h": 3.0,
+    "parapet_h": 0.0
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.56,
+        0.55,
+        0.52
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.73,
+        0.74,
+        0.74
+      ],
+      "roughness": 0.45,
+      "metallic": 0.3
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.62,
+        0.61,
+        0.58
+      ],
+      "roughness": 0.95
+    },
+    "tent": {
+      "rgb": [
+        0.93,
+        0.93,
+        0.92
+      ],
+      "roughness": 0.9
+    },
+    "trailer": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.7
+    },
+    "container": {
+      "rgb": [
+        0.55,
+        0.57,
+        0.58
+      ],
+      "roughness": 0.7,
+      "metallic": 0.2
+    },
+    "yellow": {
+      "rgb": [
+        0.93,
+        0.78,
+        0.1
+      ],
+      "roughness": 0.7
+    }
+  },
+  "schemes": {
+    "tent_side": {
+      "material": "tent",
+      "parapet_material": "tent",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 14.0,
+          "to": 16.0,
+          "door": {
+            "kind": "unit",
+            "w": 1.2,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 2.0,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "tent_side2": {
+      "material": "tent",
+      "parapet_material": "tent",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 20.0,
+          "to": 22.0,
+          "door": {
+            "kind": "unit",
+            "w": 1.2,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 2.0,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "tent_end": {
+      "material": "tent",
+      "parapet_material": "tent",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "features": [
+        {
+          "type": "garage",
+          "from": 6.2,
+          "to": 10.8,
+          "w": 4.0,
+          "h": 3.2
+        }
+      ]
+    },
+    "tent_gable": {
+      "material": "tent",
+      "parapet_material": "tent",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      }
+    },
+    "annex_end": {
+      "material": "tent",
+      "parapet_material": "tent",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 5.4,
+          "to": 7.4,
+          "door": {
+            "kind": "unit",
+            "w": 1.2,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 2.0,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "trailer_front": {
+      "material": "trailer",
+      "parapet_material": "trailer",
+      "module": 2.4,
+      "window": {
+        "w": 0.6,
+        "h": 1.0,
+        "sill": 0.9,
+        "depth": 0.06,
+        "mullions": [],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "kind": "window",
+        "w": 0.6,
+        "h": 1.0,
+        "sill": 0.9,
+        "depth": 0.06,
+        "mullions": [],
+        "frame": "frame_light"
+      },
+      "plinth": {
+        "material": "trailer",
+        "top": 0.0
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 6.2,
+          "to": 8.0,
+          "door": {
+            "kind": "unit",
+            "w": 0.95,
+            "h": 2.1,
+            "leaf_h": 2.1,
+            "material": "door"
+          },
+          "landing": {
+            "at": "floor",
+            "w": 3.0,
+            "depth": 1.8
+          },
+          "ramp": {
+            "dir": -1,
+            "w": 1.2,
+            "slope": 0.083
+          }
+        }
+      ]
+    },
+    "trailer_side": {
+      "material": "trailer",
+      "parapet_material": "trailer",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "trailer",
+        "top": 0.0
+      },
+      "features": [
+        {
+          "type": "vents",
+          "from": 1.0,
+          "to": 2.6,
+          "count": 1,
+          "w": 0.6,
+          "h": 0.4,
+          "y": 1.9
+        }
+      ]
+    },
+    "container": {
+      "material": "container",
+      "parapet_material": "container",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "features": [
+        {
+          "type": "garage",
+          "from": 12.65,
+          "to": 15.55,
+          "w": 2.3,
+          "h": 2.3
+        }
+      ]
+    },
+    "container_plain": {
+      "material": "container",
+      "parapet_material": "container",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      }
+    }
+  },
+  "blocks": [
+    {
+      "id": "trailer",
+      "storeys": 1,
+      "ground_h": 2.7,
+      "floor_raise": 0.75,
+      "clip": [
+        {
+          "edge": 4,
+          "max": 3.6
+        },
+        {
+          "edge": 4,
+          "s_max": 11.0
+        }
+      ],
+      "parapet": {
+        "h": 0.2,
+        "t": 0.15
+      },
+      "faces": {
+        "e4": "trailer_front",
+        "default": "trailer_side"
+      }
+    },
+    {
+      "id": "container",
+      "storeys": 1,
+      "ground_h": 2.6,
+      "clip": [
+        {
+          "edge": 4,
+          "max": 3.6
+        },
+        {
+          "edge": 4,
+          "s_min": 11.6
+        }
+      ],
+      "parapet": {
+        "h": 0.0
+      },
+      "faces": {
+        "e4": "container",
+        "default": "container_plain"
+      }
+    },
+    {
+      "id": "gap",
+      "storeys": 1,
+      "ground_h": 2.6,
+      "clip": [
+        {
+          "edge": 4,
+          "max": 3.6
+        },
+        {
+          "edge": 4,
+          "s_min": 11.0,
+          "s_max": 11.6
+        }
+      ],
+      "parapet": {
+        "h": 0.0
+      },
+      "faces": {
+        "default": "container_plain"
+      }
+    },
+    {
+      "id": "tent",
+      "storeys": 1,
+      "ground_h": 3.6,
+      "clip": [
+        {
+          "edge": 4,
+          "min": 3.6,
+          "max": 32.59
+        }
+      ],
+      "parapet": {
+        "h": 0.0
+      },
+      "roof": {
+        "form": "gable",
+        "ridge_edge": 3,
+        "pitch_deg": 16.0,
+        "overhang": 0.15,
+        "t": 0.1,
+        "under": "tent",
+        "fascia": "tent"
+      },
+      "roof_material": "tent",
+      "faces": {
+        "e3": "tent_side",
+        "e5": "tent_side2",
+        "default": "tent_gable"
+      }
+    },
+    {
+      "id": "annex",
+      "storeys": 1,
+      "ground_h": 3.0,
+      "clip": [
+        {
+          "edge": 4,
+          "min": 32.59
+        }
+      ],
+      "parapet": {
+        "h": 0.3,
+        "t": 0.15
+      },
+      "faces": {
+        "e0": "annex_end",
+        "default": "tent_gable"
+      }
+    }
+  ],
+  "study_notes": {
+    "observed": "Sep 2025: large white gable tent (sprung structure) with a white office trailer on a railed deck and ramp in front, and a grey container to the right.",
+    "inferred": "Trailer and container placed in the first 3.6 m of the NE end; the narrower SW part as a lower annex; doors, roll-ups and pitches. The trailer steps in the photo are omitted (ramp only).",
+    "footprint": "Frozen ring kept; trailer, container and a 0.6 m service gap along edge 4, the gable tent to the edge-3 step, a flat-roofed annex beyond."
+  }
+}

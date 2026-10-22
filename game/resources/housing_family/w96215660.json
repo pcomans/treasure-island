@@ -1415,14 +1415,8 @@
     9,
     14,
     15,
-    16,
-    17,
-    18,
     19,
-    20,
-    21,
-    22,
-    23
+    21
   ],
   "materials": {
     "siding_rgb": [
@@ -1466,9 +1460,9 @@
       0.61
     ],
     "path_rgb": [
-      0.62,
-      0.62,
-      0.57
+      0.56,
+      0.55,
+      0.52
     ],
     "metal_rgb": [
       0.35,
@@ -8091,5 +8085,282 @@
     "geometry_inference": "March 2025 east frontage shallow planes and north gable are observed. Exact pitch, ridge, section joins and hidden closures are production_inference; frozen footprint retained.",
     "source_top_y": 8.237,
     "roof_object_key": "building:w96215660:roof"
-  }
+  },
+  "rear_frames": [
+    {
+      "id": "west-1",
+      "elevation_role": "rear",
+      "runs": [
+        16,
+        17,
+        18
+      ],
+      "start": [
+        -346.7130126953125,
+        2.071000099182129,
+        -749.1190185546875
+      ],
+      "end": [
+        -347.3290100097656,
+        2.174999952316284,
+        -734.7919921875
+      ],
+      "length_m": 14.340262801549326,
+      "tangent": [
+        -0.04295578971505165,
+        0,
+        0.9990769624710083
+      ],
+      "normal": [
+        -0.9990769624710083,
+        0,
+        -0.04295578971505165
+      ],
+      "top_y": 8.237,
+      "upper_windows": [
+        {
+          "station_m": 2.2,
+          "width_m": 1.85,
+          "height_m": 1.22,
+          "center_y": 6.96,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 5.3,
+          "width_m": 1.05,
+          "height_m": 1.22,
+          "center_y": 6.96,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 8.9,
+          "width_m": 1.85,
+          "height_m": 1.22,
+          "center_y": 6.96,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 12.0,
+          "width_m": 1.05,
+          "height_m": 1.22,
+          "center_y": 6.96,
+          "glazing": "blue"
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 2.2,
+          "width_m": 1.85,
+          "height_m": 1.08,
+          "center_y": 3.62,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 8.9,
+          "width_m": 1.85,
+          "height_m": 1.08,
+          "center_y": 3.62,
+          "glazing": "blue"
+        }
+      ],
+      "entries": [
+        {
+          "station_m": 5.3,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "bottom_y": 2.126009464263916
+        },
+        {
+          "station_m": 12.0,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "bottom_y": 2.176450252532959
+        }
+      ]
+    },
+    {
+      "id": "west-2",
+      "elevation_role": "rear",
+      "runs": [
+        20
+      ],
+      "start": [
+        -346.0979919433594,
+        2.177999973297119,
+        -734.7360229492188
+      ],
+      "end": [
+        -346.8009948730469,
+        2.2269999980926514,
+        -720.208984375
+      ],
+      "length_m": 14.544038739496974,
+      "tangent": [
+        -0.04833615571260452,
+        0,
+        0.9988311529159546
+      ],
+      "normal": [
+        -0.9988311529159546,
+        0,
+        -0.04833615571260452
+      ],
+      "top_y": 8.237,
+      "upper_windows": [
+        {
+          "station_m": 2.2,
+          "width_m": 1.85,
+          "height_m": 1.22,
+          "center_y": 6.96,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 5.3,
+          "width_m": 1.05,
+          "height_m": 1.22,
+          "center_y": 6.96,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 8.9,
+          "width_m": 1.85,
+          "height_m": 1.22,
+          "center_y": 6.96,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 12.0,
+          "width_m": 1.05,
+          "height_m": 1.22,
+          "center_y": 6.96,
+          "glazing": "blue"
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 2.2,
+          "width_m": 1.85,
+          "height_m": 1.08,
+          "center_y": 3.62,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 8.9,
+          "width_m": 1.85,
+          "height_m": 1.08,
+          "center_y": 3.62,
+          "glazing": "blue"
+        }
+      ],
+      "entries": [
+        {
+          "station_m": 5.3,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "bottom_y": 2.2111318111419678
+        },
+        {
+          "station_m": 12.0,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "bottom_y": 2.2339742183685303
+        }
+      ]
+    },
+    {
+      "id": "west-3",
+      "elevation_role": "rear",
+      "runs": [
+        22,
+        23
+      ],
+      "start": [
+        -347.9440002441406,
+        2.2239999771118164,
+        -720.2650146484375
+      ],
+      "end": [
+        -348.64801025390625,
+        2.236999988555908,
+        -705.2369995117188
+      ],
+      "length_m": 15.04449630407406,
+      "tangent": [
+        -0.046795185655355453,
+        0,
+        0.9989045262336731
+      ],
+      "normal": [
+        -0.9989045262336731,
+        0,
+        -0.046795185655355453
+      ],
+      "top_y": 8.237,
+      "upper_windows": [
+        {
+          "station_m": 2.2,
+          "width_m": 1.85,
+          "height_m": 1.22,
+          "center_y": 6.96,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 5.3,
+          "width_m": 1.05,
+          "height_m": 1.22,
+          "center_y": 6.96,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 8.9,
+          "width_m": 1.85,
+          "height_m": 1.22,
+          "center_y": 6.96,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 12.0,
+          "width_m": 1.05,
+          "height_m": 1.22,
+          "center_y": 6.96,
+          "glazing": "blue"
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 2.2,
+          "width_m": 1.85,
+          "height_m": 1.08,
+          "center_y": 3.62,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 8.9,
+          "width_m": 1.85,
+          "height_m": 1.08,
+          "center_y": 3.62,
+          "glazing": "blue"
+        }
+      ],
+      "entries": [
+        {
+          "station_m": 5.3,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "bottom_y": 2.257753849029541
+        },
+        {
+          "station_m": 12.0,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "bottom_y": 2.280623197555542
+        }
+      ]
+    }
+  ],
+  "study_notes": [
+    "Reuse housing_site_family complete opening/entry assemblies; existing stepped housing structure fits, no new base.",
+    "2026-10-11 whole WEST rear: three collinear source host unions 16-18 / 20 / 22-23, complete upper broad/narrow and lower window/entry groups. March 2025 east-front references support motif vocabulary only; unseen rear count, cadence, dimensions and anchors are production_inference, not as-built.",
+    "All ends/short returns, east fronts and six entries/screens, public_roof including closure_triangles/edge_triangles/replace_eave_trim and reverse_source_roof_winding, carport/site/materials/source geometry remain unchanged. Rear entry thresholds seated into actual canonical LAND; no new path or stair."
+  ]
 }

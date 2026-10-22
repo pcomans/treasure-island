@@ -1722,9 +1722,9 @@
   },
   "materials": {
     "siding_rgb": [
-      0.58,
-      0.64,
-      0.67
+      0.78,
+      0.83,
+      0.85
     ],
     "trim_rgb": [
       0.86,
@@ -1902,7 +1902,7 @@
       0.24
     ]
   },
-  "study_notes": "Source-owned W groups15\u201318/20\u201323/1\u20134 only. March2025 direct pano association from retained D5/pilot. Hidden N/S/E motifs and cropped canopy endpoints unknown. All dimensions/cadence and shallow roof proportions are bounded art inference; original collisions remain unchanged.",
+  "study_notes": "Source-owned W groups15\u201318/20\u201323/1\u20134 only. March2025 direct pano association from retained D5/pilot. Hidden N/S/E motifs and cropped canopy endpoints unknown. All dimensions/cadence and shallow roof proportions are bounded art inference; original collisions remain unchanged. | 2026-10-12 whole east rear study001: reuse housing_site_family complete recessed paired-pane windows and pale entry assemblies; no new base. September2025 source-camera/ray-bound rear03 supports mixed broad/narrow upper motifs. Whole collinear unions6-7/9/11-13 receive upper/lower and entry families. Exact counts/cadence/dimensions/anchors and fence-concealed lower openings/entries are production_inference, not measured/as-built. Ends5/14 and returns0/8/10/19 remain protected and blank. All west frames, roof, continuous carport/posts, materials, site and source geometry retained. Historic collision text is not a runtime claim: current attachment collects emitted wall/support geometry; native/stock acceptance remains pending. | 2026-10-12 study002 contact rework: generic opt-in threshold_bottom_y extends only six rear concrete undersides to full Float32 shifted-footprint canonical LAND minimum minus 5mm. Original entry anchors, jambs, holes and threshold tops retained. Bases are production_inference site seating, not surveyed architecture; independent native and stock verification pending.",
   "local_ground": {
     "parking": {
       "top_triangles": [
@@ -3094,5 +3094,1029 @@
       ],
       "inference": "Observed parking/walk/lawn roles; inferred bounds clipped to source visible-area triangles with 0.025 m visual bias. No collision replacement."
     }
-  }
+  },
+  "rear_frames": [
+    {
+      "id": "east-rear-1",
+      "elevation_role": "rear",
+      "runs": [
+        6,
+        7
+      ],
+      "start": [
+        -268.279,
+        2.764,
+        -630.909
+      ],
+      "end": [
+        -267.153,
+        2.853,
+        -645.202
+      ],
+      "tangent": [
+        0.07853649029723422,
+        0,
+        -0.9969112396255709
+      ],
+      "normal": [
+        0.9969112396255709,
+        0,
+        0.07853649029723422
+      ],
+      "length_m": 14.337284436042975,
+      "upper_windows": [
+        {
+          "station_m": 1.85,
+          "local_station_m": 1.85,
+          "width_m": 1.55,
+          "height_m": 1.05,
+          "center_y": 7.25,
+          "glazing": "blue",
+          "basis": {
+            "source_run": 6,
+            "start": [
+              -268.279,
+              2.764,
+              -630.909
+            ],
+            "end": [
+              -267.563,
+              2.823,
+              -640
+            ],
+            "tangent": [
+              0.07851607075275362,
+              0,
+              -0.996912848063234
+            ],
+            "normal": [
+              0.996912848063234,
+              0,
+              0.07851607075275362
+            ],
+            "length_m": 9.11915220840184
+          },
+          "inference": "production_inference: September2025 rear mixed upper size families; exact counts, cadence, anchors and dimensions inferred. Fence-concealed lower windows and entries inferred, not measured/as-built."
+        },
+        {
+          "station_m": 5,
+          "local_station_m": 5,
+          "width_m": 0.85,
+          "height_m": 1.05,
+          "center_y": 7.25,
+          "glazing": "blue",
+          "basis": {
+            "source_run": 6,
+            "start": [
+              -268.279,
+              2.764,
+              -630.909
+            ],
+            "end": [
+              -267.563,
+              2.823,
+              -640
+            ],
+            "tangent": [
+              0.07851607075275362,
+              0,
+              -0.996912848063234
+            ],
+            "normal": [
+              0.996912848063234,
+              0,
+              0.07851607075275362
+            ],
+            "length_m": 9.11915220840184
+          },
+          "inference": "production_inference: September2025 rear mixed upper size families; exact counts, cadence, anchors and dimensions inferred. Fence-concealed lower windows and entries inferred, not measured/as-built."
+        },
+        {
+          "station_m": 9.237284436042975,
+          "local_station_m": 0.1181322276411354,
+          "width_m": 0.85,
+          "height_m": 1.05,
+          "center_y": 7.25,
+          "glazing": "blue",
+          "basis": {
+            "source_run": 7,
+            "start": [
+              -267.563,
+              2.823,
+              -640
+            ],
+            "end": [
+              -267.153,
+              2.853,
+              -645.202
+            ],
+            "tangent": [
+              0.07857217519616873,
+              0,
+              -0.99690842773293
+            ],
+            "normal": [
+              0.99690842773293,
+              0,
+              0.07857217519616873
+            ],
+            "length_m": 5.218132232897127
+          },
+          "inference": "production_inference: September2025 rear mixed upper size families; exact counts, cadence, anchors and dimensions inferred. Fence-concealed lower windows and entries inferred, not measured/as-built."
+        },
+        {
+          "station_m": 12.537284436042974,
+          "local_station_m": 3.4181322276411343,
+          "width_m": 1.55,
+          "height_m": 1.05,
+          "center_y": 7.25,
+          "glazing": "blue",
+          "basis": {
+            "source_run": 7,
+            "start": [
+              -267.563,
+              2.823,
+              -640
+            ],
+            "end": [
+              -267.153,
+              2.853,
+              -645.202
+            ],
+            "tangent": [
+              0.07857217519616873,
+              0,
+              -0.99690842773293
+            ],
+            "normal": [
+              0.99690842773293,
+              0,
+              0.07857217519616873
+            ],
+            "length_m": 5.218132232897127
+          },
+          "inference": "production_inference: September2025 rear mixed upper size families; exact counts, cadence, anchors and dimensions inferred. Fence-concealed lower windows and entries inferred, not measured/as-built."
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 1.85,
+          "local_station_m": 1.85,
+          "width_m": 1.45,
+          "height_m": 1.1,
+          "center_y": 4.156178113937378,
+          "glazing": "blue",
+          "basis": {
+            "source_run": 6,
+            "start": [
+              -268.279,
+              2.764,
+              -630.909
+            ],
+            "end": [
+              -267.563,
+              2.823,
+              -640
+            ],
+            "tangent": [
+              0.07851607075275362,
+              0,
+              -0.996912848063234
+            ],
+            "normal": [
+              0.996912848063234,
+              0,
+              0.07851607075275362
+            ],
+            "length_m": 9.11915220840184
+          },
+          "inference": "production_inference: September2025 rear mixed upper size families; exact counts, cadence, anchors and dimensions inferred. Fence-concealed lower windows and entries inferred, not measured/as-built."
+        },
+        {
+          "station_m": 7.168642218021487,
+          "local_station_m": 7.168642218021487,
+          "width_m": 1.45,
+          "height_m": 1.1,
+          "center_y": 4.1904421806335455,
+          "glazing": "blue",
+          "basis": {
+            "source_run": 6,
+            "start": [
+              -268.279,
+              2.764,
+              -630.909
+            ],
+            "end": [
+              -267.563,
+              2.823,
+              -640
+            ],
+            "tangent": [
+              0.07851607075275362,
+              0,
+              -0.996912848063234
+            ],
+            "normal": [
+              0.996912848063234,
+              0,
+              0.07851607075275362
+            ],
+            "length_m": 9.11915220840184
+          },
+          "inference": "production_inference: September2025 rear mixed upper size families; exact counts, cadence, anchors and dimensions inferred. Fence-concealed lower windows and entries inferred, not measured/as-built."
+        },
+        {
+          "station_m": 12.537284436042974,
+          "local_station_m": 3.4181322276411343,
+          "width_m": 1.45,
+          "height_m": 1.1,
+          "center_y": 4.222578770637512,
+          "glazing": "blue",
+          "basis": {
+            "source_run": 7,
+            "start": [
+              -267.563,
+              2.823,
+              -640
+            ],
+            "end": [
+              -267.153,
+              2.853,
+              -645.202
+            ],
+            "tangent": [
+              0.07857217519616873,
+              0,
+              -0.99690842773293
+            ],
+            "normal": [
+              0.99690842773293,
+              0,
+              0.07857217519616873
+            ],
+            "length_m": 5.218132232897127
+          },
+          "inference": "production_inference: September2025 rear mixed upper size families; exact counts, cadence, anchors and dimensions inferred. Fence-concealed lower windows and entries inferred, not measured/as-built."
+        }
+      ],
+      "entries": [
+        {
+          "station_m": 4.35,
+          "local_station_m": 4.35,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "center_y": 3.9188479657985047,
+          "glazing": "blue",
+          "basis": {
+            "source_run": 6,
+            "start": [
+              -268.279,
+              2.764,
+              -630.909
+            ],
+            "end": [
+              -267.563,
+              2.823,
+              -640
+            ],
+            "tangent": [
+              0.07851607075275362,
+              0,
+              -0.996912848063234
+            ],
+            "normal": [
+              0.996912848063234,
+              0,
+              0.07851607075275362
+            ],
+            "length_m": 9.11915220840184
+          },
+          "inference": "production_inference: September2025 rear mixed upper size families; exact counts, cadence, anchors and dimensions inferred. Fence-concealed lower windows and entries inferred, not measured/as-built.",
+          "bottom_y": 2.8538479657985047,
+          "door_role": "pale",
+          "threshold_bottom_y": 2.801862419
+        },
+        {
+          "station_m": 10.337284436042975,
+          "local_station_m": 1.218132227641135,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "center_y": 3.956294668547862,
+          "glazing": "blue",
+          "basis": {
+            "source_run": 7,
+            "start": [
+              -267.563,
+              2.823,
+              -640
+            ],
+            "end": [
+              -267.153,
+              2.853,
+              -645.202
+            ],
+            "tangent": [
+              0.07857217519616873,
+              0,
+              -0.99690842773293
+            ],
+            "normal": [
+              0.99690842773293,
+              0,
+              0.07857217519616873
+            ],
+            "length_m": 5.218132232897127
+          },
+          "inference": "production_inference: September2025 rear mixed upper size families; exact counts, cadence, anchors and dimensions inferred. Fence-concealed lower windows and entries inferred, not measured/as-built.",
+          "bottom_y": 2.891294668547862,
+          "door_role": "pale",
+          "threshold_bottom_y": 2.839975223
+        }
+      ]
+    },
+    {
+      "id": "east-rear-2",
+      "elevation_role": "rear",
+      "runs": [
+        9
+      ],
+      "start": [
+        -268.428,
+        2.86,
+        -645.302
+      ],
+      "end": [
+        -267.276,
+        2.943,
+        -659.796
+      ],
+      "tangent": [
+        0.07923129644606396,
+        0,
+        -0.9968562592788771
+      ],
+      "normal": [
+        0.9968562592788771,
+        0,
+        0.07923129644606396
+      ],
+      "length_m": 14.539709075493938,
+      "upper_windows": [
+        {
+          "station_m": 1.85,
+          "local_station_m": 1.85,
+          "width_m": 1.55,
+          "height_m": 1.05,
+          "center_y": 7.25,
+          "glazing": "blue",
+          "basis": {
+            "source_run": 9,
+            "start": [
+              -268.428,
+              2.86,
+              -645.302
+            ],
+            "end": [
+              -267.276,
+              2.943,
+              -659.796
+            ],
+            "tangent": [
+              0.07923129644606396,
+              0,
+              -0.9968562592788771
+            ],
+            "normal": [
+              0.9968562592788771,
+              0,
+              0.07923129644606396
+            ],
+            "length_m": 14.539709075493938
+          },
+          "inference": "production_inference: September2025 rear mixed upper size families; exact counts, cadence, anchors and dimensions inferred. Fence-concealed lower windows and entries inferred, not measured/as-built."
+        },
+        {
+          "station_m": 5,
+          "local_station_m": 5,
+          "width_m": 0.85,
+          "height_m": 1.05,
+          "center_y": 7.25,
+          "glazing": "blue",
+          "basis": {
+            "source_run": 9,
+            "start": [
+              -268.428,
+              2.86,
+              -645.302
+            ],
+            "end": [
+              -267.276,
+              2.943,
+              -659.796
+            ],
+            "tangent": [
+              0.07923129644606396,
+              0,
+              -0.9968562592788771
+            ],
+            "normal": [
+              0.9968562592788771,
+              0,
+              0.07923129644606396
+            ],
+            "length_m": 14.539709075493938
+          },
+          "inference": "production_inference: September2025 rear mixed upper size families; exact counts, cadence, anchors and dimensions inferred. Fence-concealed lower windows and entries inferred, not measured/as-built."
+        },
+        {
+          "station_m": 9.439709075493939,
+          "local_station_m": 9.439709075493939,
+          "width_m": 0.85,
+          "height_m": 1.05,
+          "center_y": 7.25,
+          "glazing": "blue",
+          "basis": {
+            "source_run": 9,
+            "start": [
+              -268.428,
+              2.86,
+              -645.302
+            ],
+            "end": [
+              -267.276,
+              2.943,
+              -659.796
+            ],
+            "tangent": [
+              0.07923129644606396,
+              0,
+              -0.9968562592788771
+            ],
+            "normal": [
+              0.9968562592788771,
+              0,
+              0.07923129644606396
+            ],
+            "length_m": 14.539709075493938
+          },
+          "inference": "production_inference: September2025 rear mixed upper size families; exact counts, cadence, anchors and dimensions inferred. Fence-concealed lower windows and entries inferred, not measured/as-built."
+        },
+        {
+          "station_m": 12.739709075493938,
+          "local_station_m": 12.739709075493938,
+          "width_m": 1.55,
+          "height_m": 1.05,
+          "center_y": 7.25,
+          "glazing": "blue",
+          "basis": {
+            "source_run": 9,
+            "start": [
+              -268.428,
+              2.86,
+              -645.302
+            ],
+            "end": [
+              -267.276,
+              2.943,
+              -659.796
+            ],
+            "tangent": [
+              0.07923129644606396,
+              0,
+              -0.9968562592788771
+            ],
+            "normal": [
+              0.9968562592788771,
+              0,
+              0.07923129644606396
+            ],
+            "length_m": 14.539709075493938
+          },
+          "inference": "production_inference: September2025 rear mixed upper size families; exact counts, cadence, anchors and dimensions inferred. Fence-concealed lower windows and entries inferred, not measured/as-built."
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 1.85,
+          "local_station_m": 1.85,
+          "width_m": 1.45,
+          "height_m": 1.1,
+          "center_y": 4.250258539199829,
+          "glazing": "blue",
+          "basis": {
+            "source_run": 9,
+            "start": [
+              -268.428,
+              2.86,
+              -645.302
+            ],
+            "end": [
+              -267.276,
+              2.943,
+              -659.796
+            ],
+            "tangent": [
+              0.07923129644606396,
+              0,
+              -0.9968562592788771
+            ],
+            "normal": [
+              0.9968562592788771,
+              0,
+              0.07923129644606396
+            ],
+            "length_m": 14.539709075493938
+          },
+          "inference": "production_inference: September2025 rear mixed upper size families; exact counts, cadence, anchors and dimensions inferred. Fence-concealed lower windows and entries inferred, not measured/as-built."
+        },
+        {
+          "station_m": 7.269854537746969,
+          "local_station_m": 7.269854537746969,
+          "width_m": 1.45,
+          "height_m": 1.1,
+          "center_y": 4.281270916938782,
+          "glazing": "blue",
+          "basis": {
+            "source_run": 9,
+            "start": [
+              -268.428,
+              2.86,
+              -645.302
+            ],
+            "end": [
+              -267.276,
+              2.943,
+              -659.796
+            ],
+            "tangent": [
+              0.07923129644606396,
+              0,
+              -0.9968562592788771
+            ],
+            "normal": [
+              0.9968562592788771,
+              0,
+              0.07923129644606396
+            ],
+            "length_m": 14.539709075493938
+          },
+          "inference": "production_inference: September2025 rear mixed upper size families; exact counts, cadence, anchors and dimensions inferred. Fence-concealed lower windows and entries inferred, not measured/as-built."
+        },
+        {
+          "station_m": 12.739709075493938,
+          "local_station_m": 12.739709075493938,
+          "width_m": 1.45,
+          "height_m": 1.1,
+          "center_y": 4.3125691318511965,
+          "glazing": "blue",
+          "basis": {
+            "source_run": 9,
+            "start": [
+              -268.428,
+              2.86,
+              -645.302
+            ],
+            "end": [
+              -267.276,
+              2.943,
+              -659.796
+            ],
+            "tangent": [
+              0.07923129644606396,
+              0,
+              -0.9968562592788771
+            ],
+            "normal": [
+              0.9968562592788771,
+              0,
+              0.07923129644606396
+            ],
+            "length_m": 14.539709075493938
+          },
+          "inference": "production_inference: September2025 rear mixed upper size families; exact counts, cadence, anchors and dimensions inferred. Fence-concealed lower windows and entries inferred, not measured/as-built."
+        }
+      ],
+      "entries": [
+        {
+          "station_m": 4.35,
+          "local_station_m": 4.35,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "center_y": 4.011100226985347,
+          "glazing": "blue",
+          "basis": {
+            "source_run": 9,
+            "start": [
+              -268.428,
+              2.86,
+              -645.302
+            ],
+            "end": [
+              -267.276,
+              2.943,
+              -659.796
+            ],
+            "tangent": [
+              0.07923129644606396,
+              0,
+              -0.9968562592788771
+            ],
+            "normal": [
+              0.9968562592788771,
+              0,
+              0.07923129644606396
+            ],
+            "length_m": 14.539709075493938
+          },
+          "inference": "production_inference: September2025 rear mixed upper size families; exact counts, cadence, anchors and dimensions inferred. Fence-concealed lower windows and entries inferred, not measured/as-built.",
+          "bottom_y": 2.9461002269853465,
+          "door_role": "pale",
+          "threshold_bottom_y": 2.894556214
+        },
+        {
+          "station_m": 10.539709075493938,
+          "local_station_m": 10.539709075493938,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "center_y": 4.046434078887245,
+          "glazing": "blue",
+          "basis": {
+            "source_run": 9,
+            "start": [
+              -268.428,
+              2.86,
+              -645.302
+            ],
+            "end": [
+              -267.276,
+              2.943,
+              -659.796
+            ],
+            "tangent": [
+              0.07923129644606396,
+              0,
+              -0.9968562592788771
+            ],
+            "normal": [
+              0.9968562592788771,
+              0,
+              0.07923129644606396
+            ],
+            "length_m": 14.539709075493938
+          },
+          "inference": "production_inference: September2025 rear mixed upper size families; exact counts, cadence, anchors and dimensions inferred. Fence-concealed lower windows and entries inferred, not measured/as-built.",
+          "bottom_y": 2.9814340788872453,
+          "door_role": "pale",
+          "threshold_bottom_y": 2.929973788
+        }
+      ]
+    },
+    {
+      "id": "east-rear-3",
+      "elevation_role": "rear",
+      "runs": [
+        11,
+        12,
+        13
+      ],
+      "start": [
+        -266.151,
+        2.937,
+        -659.707
+      ],
+      "end": [
+        -264.964,
+        2.912,
+        -674.702
+      ],
+      "tangent": [
+        0.07891286171820071,
+        0,
+        -0.9968815176616749
+      ],
+      "normal": [
+        0.9968815176616749,
+        0,
+        0.07891286171820071
+      ],
+      "length_m": 15.041907924196323,
+      "upper_windows": [
+        {
+          "station_m": 1.85,
+          "local_station_m": 1.85,
+          "width_m": 1.55,
+          "height_m": 1.05,
+          "center_y": 7.25,
+          "glazing": "blue",
+          "basis": {
+            "source_run": 11,
+            "start": [
+              -266.151,
+              2.937,
+              -659.707
+            ],
+            "end": [
+              -265.966,
+              2.949,
+              -662.034
+            ],
+            "tangent": [
+              0.07925144463660626,
+              0,
+              -0.9968546576723263
+            ],
+            "normal": [
+              0.9968546576723263,
+              0,
+              0.07925144463660626
+            ],
+            "length_m": 2.334342305661274
+          },
+          "inference": "production_inference: September2025 rear mixed upper size families; exact counts, cadence, anchors and dimensions inferred. Fence-concealed lower windows and entries inferred, not measured/as-built."
+        },
+        {
+          "station_m": 5,
+          "local_station_m": 2.665657694338726,
+          "width_m": 0.85,
+          "height_m": 1.05,
+          "center_y": 7.25,
+          "glazing": "blue",
+          "basis": {
+            "source_run": 12,
+            "start": [
+              -265.966,
+              2.949,
+              -662.034
+            ],
+            "end": [
+              -265.177,
+              2.92,
+              -672
+            ],
+            "tangent": [
+              0.07892222881389065,
+              0,
+              -0.9968807761207193
+            ],
+            "normal": [
+              0.9968807761207193,
+              0,
+              0.07892222881389065
+            ],
+            "length_m": 9.997183453353257
+          },
+          "inference": "production_inference: September2025 rear mixed upper size families; exact counts, cadence, anchors and dimensions inferred. Fence-concealed lower windows and entries inferred, not measured/as-built."
+        },
+        {
+          "station_m": 9.941907924196324,
+          "local_station_m": 7.60756561853505,
+          "width_m": 0.85,
+          "height_m": 1.05,
+          "center_y": 7.25,
+          "glazing": "blue",
+          "basis": {
+            "source_run": 12,
+            "start": [
+              -265.966,
+              2.949,
+              -662.034
+            ],
+            "end": [
+              -265.177,
+              2.92,
+              -672
+            ],
+            "tangent": [
+              0.07892222881389065,
+              0,
+              -0.9968807761207193
+            ],
+            "normal": [
+              0.9968807761207193,
+              0,
+              0.07892222881389065
+            ],
+            "length_m": 9.997183453353257
+          },
+          "inference": "production_inference: September2025 rear mixed upper size families; exact counts, cadence, anchors and dimensions inferred. Fence-concealed lower windows and entries inferred, not measured/as-built."
+        },
+        {
+          "station_m": 13.241907924196322,
+          "local_station_m": 0.910382165181792,
+          "width_m": 1.55,
+          "height_m": 1.05,
+          "center_y": 7.25,
+          "glazing": "blue",
+          "basis": {
+            "source_run": 13,
+            "start": [
+              -265.177,
+              2.92,
+              -672
+            ],
+            "end": [
+              -264.964,
+              2.912,
+              -674.702
+            ],
+            "tangent": [
+              0.07858669552938598,
+              0,
+              -0.9969072831942656
+            ],
+            "normal": [
+              0.9969072831942656,
+              0,
+              0.07858669552938598
+            ],
+            "length_m": 2.7103824453386647
+          },
+          "inference": "production_inference: September2025 rear mixed upper size families; exact counts, cadence, anchors and dimensions inferred. Fence-concealed lower windows and entries inferred, not measured/as-built."
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 1.85,
+          "local_station_m": 1.85,
+          "width_m": 1.45,
+          "height_m": 1.1,
+          "center_y": 4.327459564208985,
+          "glazing": "blue",
+          "basis": {
+            "source_run": 11,
+            "start": [
+              -266.151,
+              2.937,
+              -659.707
+            ],
+            "end": [
+              -265.966,
+              2.949,
+              -662.034
+            ],
+            "tangent": [
+              0.07925144463660626,
+              0,
+              -0.9968546576723263
+            ],
+            "normal": [
+              0.9968546576723263,
+              0,
+              0.07925144463660626
+            ],
+            "length_m": 2.334342305661274
+          },
+          "inference": "production_inference: September2025 rear mixed upper size families; exact counts, cadence, anchors and dimensions inferred. Fence-concealed lower windows and entries inferred, not measured/as-built."
+        },
+        {
+          "station_m": 7.520953962098162,
+          "local_station_m": 5.186611656436888,
+          "width_m": 1.45,
+          "height_m": 1.1,
+          "center_y": 4.314538093566894,
+          "glazing": "blue",
+          "basis": {
+            "source_run": 12,
+            "start": [
+              -265.966,
+              2.949,
+              -662.034
+            ],
+            "end": [
+              -265.177,
+              2.92,
+              -672
+            ],
+            "tangent": [
+              0.07892222881389065,
+              0,
+              -0.9968807761207193
+            ],
+            "normal": [
+              0.9968807761207193,
+              0,
+              0.07892222881389065
+            ],
+            "length_m": 9.997183453353257
+          },
+          "inference": "production_inference: September2025 rear mixed upper size families; exact counts, cadence, anchors and dimensions inferred. Fence-concealed lower windows and entries inferred, not measured/as-built."
+        },
+        {
+          "station_m": 13.241907924196322,
+          "local_station_m": 0.910382165181792,
+          "width_m": 1.45,
+          "height_m": 1.1,
+          "center_y": 4.297283351898193,
+          "glazing": "blue",
+          "basis": {
+            "source_run": 13,
+            "start": [
+              -265.177,
+              2.92,
+              -672
+            ],
+            "end": [
+              -264.964,
+              2.912,
+              -674.702
+            ],
+            "tangent": [
+              0.07858669552938598,
+              0,
+              -0.9969072831942656
+            ],
+            "normal": [
+              0.9969072831942656,
+              0,
+              0.07858669552938598
+            ],
+            "length_m": 2.7103824453386647
+          },
+          "inference": "production_inference: September2025 rear mixed upper size families; exact counts, cadence, anchors and dimensions inferred. Fence-concealed lower windows and entries inferred, not measured/as-built."
+        }
+      ],
+      "entries": [
+        {
+          "station_m": 4.35,
+          "local_station_m": 2.0156576943387257,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "center_y": 4.067813665401101,
+          "glazing": "blue",
+          "basis": {
+            "source_run": 12,
+            "start": [
+              -265.966,
+              2.949,
+              -662.034
+            ],
+            "end": [
+              -265.177,
+              2.92,
+              -672
+            ],
+            "tangent": [
+              0.07892222881389065,
+              0,
+              -0.9968807761207193
+            ],
+            "normal": [
+              0.9968807761207193,
+              0,
+              0.07892222881389065
+            ],
+            "length_m": 9.997183453353257
+          },
+          "inference": "production_inference: September2025 rear mixed upper size families; exact counts, cadence, anchors and dimensions inferred. Fence-concealed lower windows and entries inferred, not measured/as-built.",
+          "bottom_y": 3.0028136654011006,
+          "door_role": "pale",
+          "threshold_bottom_y": 2.956727096
+        },
+        {
+          "station_m": 11.041907924196323,
+          "local_station_m": 8.70756561853505,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "center_y": 4.048401705718258,
+          "glazing": "blue",
+          "basis": {
+            "source_run": 12,
+            "start": [
+              -265.966,
+              2.949,
+              -662.034
+            ],
+            "end": [
+              -265.177,
+              2.92,
+              -672
+            ],
+            "tangent": [
+              0.07892222881389065,
+              0,
+              -0.9968807761207193
+            ],
+            "normal": [
+              0.9968807761207193,
+              0,
+              0.07892222881389065
+            ],
+            "length_m": 9.997183453353257
+          },
+          "inference": "production_inference: September2025 rear mixed upper size families; exact counts, cadence, anchors and dimensions inferred. Fence-concealed lower windows and entries inferred, not measured/as-built.",
+          "bottom_y": 2.9834017057182582,
+          "door_role": "pale",
+          "threshold_bottom_y": 2.936479584
+        }
+      ]
+    }
+  ],
+  "protected_runs": [
+    0,
+    5,
+    8,
+    10,
+    14,
+    19
+  ]
 }

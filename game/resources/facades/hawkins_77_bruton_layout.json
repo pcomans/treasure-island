@@ -131,16 +131,29 @@
       "normal_xz": [0.886, -0.463],
       "length_m": 60.138,
       "observation": "unobserved",
-      "module_policy": "material_only",
+      "module_policy": "inferred_complete_modules",
+      "inference": "production_inference: owner-approved openings on an unphotographed side (2026-10-22); main-volume W-P cadence at the observed SE 6 m pitch, ground G-W windows under each bay and one D-S service door; counts and positions are not as-built",
       "base_material": "base_smooth",
       "upper_material": "pearl_plain",
-      "upper_windows": [],
+      "upper_windows": [3.0, 9.0, 15.0, 21.0, 27.0, 33.0, 39.0, 45.0, 51.0, 57.0],
       "connector_u_m": null,
       "connector_center_u_m": null,
-      "main_upper_windows": [],
+      "main_upper_windows": [3.0, 9.0, 15.0, 21.0, 27.0, 33.0, 39.0, 45.0, 51.0, 57.0],
       "companion_upper_windows": [],
       "ground_material_regions": [],
-      "ground_modules": []
+      "ground_modules": [
+        {"kind": "G-W", "u_m": 3.0, "width_m": 1.55, "height_m": 2.2, "center_y_m": 5.54, "region": "main"},
+        {"kind": "G-W", "u_m": 9.0, "width_m": 1.55, "height_m": 2.2, "center_y_m": 5.54, "region": "main"},
+        {"kind": "G-W", "u_m": 15.0, "width_m": 1.55, "height_m": 2.2, "center_y_m": 5.54, "region": "main"},
+        {"kind": "G-W", "u_m": 21.0, "width_m": 1.55, "height_m": 2.2, "center_y_m": 5.54, "region": "main"},
+        {"kind": "G-W", "u_m": 27.0, "width_m": 1.55, "height_m": 2.2, "center_y_m": 5.54, "region": "main"},
+        {"kind": "G-W", "u_m": 33.0, "width_m": 1.55, "height_m": 2.2, "center_y_m": 5.54, "region": "main"},
+        {"kind": "G-W", "u_m": 39.0, "width_m": 1.55, "height_m": 2.2, "center_y_m": 5.54, "region": "main"},
+        {"kind": "G-W", "u_m": 45.0, "width_m": 1.55, "height_m": 2.2, "center_y_m": 5.54, "region": "main"},
+        {"kind": "G-W", "u_m": 51.0, "width_m": 1.55, "height_m": 2.2, "center_y_m": 5.54, "region": "main"},
+        {"kind": "G-W", "u_m": 57.0, "width_m": 1.55, "height_m": 2.2, "center_y_m": 5.54, "region": "main"},
+        {"kind": "D-S", "u_m": 30.0, "width_m": 1.5, "height_m": 2.35, "center_y_m": 5.73}
+      ]
     },
     {
       "side_id": "side_nnw",
@@ -149,16 +162,28 @@
       "normal_xz": [-0.44, -0.898],
       "length_m": 55.007,
       "observation": "unobserved",
-      "module_policy": "material_only",
+      "module_policy": "inferred_complete_modules",
+      "inference": "production_inference: owner-approved openings on an unphotographed side (2026-10-22); main-volume W-P cadence at the observed SE 6 m pitch, ground G-W windows under each bay and one D-S service door; counts and positions are not as-built",
       "base_material": "base_smooth",
       "upper_material": "pearl_plain",
-      "upper_windows": [],
+      "upper_windows": [3.5, 9.5, 15.5, 21.5, 27.5, 33.5, 39.5, 45.5, 51.5],
       "connector_u_m": null,
       "connector_center_u_m": null,
-      "main_upper_windows": [],
+      "main_upper_windows": [3.5, 9.5, 15.5, 21.5, 27.5, 33.5, 39.5, 45.5, 51.5],
       "companion_upper_windows": [],
       "ground_material_regions": [],
-      "ground_modules": []
+      "ground_modules": [
+        {"kind": "G-W", "u_m": 3.5, "width_m": 1.55, "height_m": 2.2, "center_y_m": 5.54, "region": "main"},
+        {"kind": "G-W", "u_m": 9.5, "width_m": 1.55, "height_m": 2.2, "center_y_m": 5.54, "region": "main"},
+        {"kind": "G-W", "u_m": 15.5, "width_m": 1.55, "height_m": 2.2, "center_y_m": 5.54, "region": "main"},
+        {"kind": "G-W", "u_m": 21.5, "width_m": 1.55, "height_m": 2.2, "center_y_m": 5.54, "region": "main"},
+        {"kind": "G-W", "u_m": 27.5, "width_m": 1.55, "height_m": 2.2, "center_y_m": 5.54, "region": "main"},
+        {"kind": "G-W", "u_m": 33.5, "width_m": 1.55, "height_m": 2.2, "center_y_m": 5.54, "region": "main"},
+        {"kind": "G-W", "u_m": 39.5, "width_m": 1.55, "height_m": 2.2, "center_y_m": 5.54, "region": "main"},
+        {"kind": "G-W", "u_m": 45.5, "width_m": 1.55, "height_m": 2.2, "center_y_m": 5.54, "region": "main"},
+        {"kind": "G-W", "u_m": 51.5, "width_m": 1.55, "height_m": 2.2, "center_y_m": 5.54, "region": "main"},
+        {"kind": "D-S", "u_m": 24.5, "width_m": 1.5, "height_m": 2.35, "center_y_m": 5.73}
+      ]
     }
   ]
 }

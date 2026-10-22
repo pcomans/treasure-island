@@ -1,0 +1,787 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w34313560",
+    "address": "Treasure Island school campus (13th St / Avenue I)",
+    "edge_normals": [
+      [
+        -0.8883473868013773,
+        0.4591719943149452
+      ],
+      [
+        0.45906645428661264,
+        0.8884019307434655
+      ],
+      [
+        0.8883381264481024,
+        -0.45918990962201606
+      ],
+      [
+        -0.45903331009119963,
+        -0.8884190566544128
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": "ring",
+    "above_terrain": 0.15,
+    "basis": "median frozen terrain around the ring"
+  },
+  "levels": {
+    "ground_h": 3.4,
+    "storey_h": 3.0,
+    "parapet_h": 0.0
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.66,
+        0.65,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.73,
+        0.74,
+        0.74
+      ],
+      "roughness": 0.45,
+      "metallic": 0.3
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.62,
+        0.61,
+        0.58
+      ],
+      "roughness": 0.95
+    },
+    "cream": {
+      "rgb": [
+        0.86,
+        0.83,
+        0.74
+      ],
+      "roughness": 0.85
+    },
+    "teal": {
+      "rgb": [
+        0.16,
+        0.36,
+        0.52
+      ],
+      "roughness": 0.6
+    },
+    "soffit_light": {
+      "rgb": [
+        0.8,
+        0.79,
+        0.74
+      ],
+      "roughness": 0.9
+    },
+    "fascia_cream": {
+      "rgb": [
+        0.84,
+        0.82,
+        0.75
+      ],
+      "roughness": 0.8
+    }
+  },
+  "schemes": {
+    "e0": {
+      "material": "cream",
+      "parapet_material": "cream",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "teal",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "band",
+          "from": 0.8,
+          "to": 4.25,
+          "w": 3.05,
+          "storeys": [
+            0,
+            0
+          ],
+          "bottom": 0.2,
+          "top": 0.45,
+          "frame": "teal",
+          "spandrel": "teal",
+          "window": {
+            "sill": 0.95,
+            "h": 1.5,
+            "mullions": [
+              0.333,
+              0.667
+            ],
+            "transoms": [
+              0.5
+            ]
+          },
+          "depth": 0.1,
+          "border": 0.08
+        },
+        {
+          "type": "band",
+          "from": 5.35,
+          "to": 8.8,
+          "w": 3.05,
+          "storeys": [
+            0,
+            0
+          ],
+          "bottom": 0.2,
+          "top": 0.45,
+          "frame": "teal",
+          "spandrel": "teal",
+          "window": {
+            "sill": 0.95,
+            "h": 1.5,
+            "mullions": [
+              0.333,
+              0.667
+            ],
+            "transoms": [
+              0.5
+            ]
+          },
+          "depth": 0.1,
+          "border": 0.08
+        },
+        {
+          "type": "entry",
+          "from": 9.0,
+          "to": 10.8,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "teal"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "entry",
+          "from": 12.3,
+          "to": 14.1,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "teal"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "garage",
+          "from": 14.6,
+          "to": 17.8,
+          "w": 2.6,
+          "h": 2.4
+        },
+        {
+          "type": "band",
+          "from": 18.4,
+          "to": 21.969,
+          "w": 3.169,
+          "storeys": [
+            0,
+            0
+          ],
+          "bottom": 0.2,
+          "top": 0.45,
+          "frame": "teal",
+          "spandrel": "teal",
+          "window": {
+            "sill": 0.95,
+            "h": 1.5,
+            "mullions": [
+              0.333,
+              0.667
+            ],
+            "transoms": [
+              0.5
+            ]
+          },
+          "depth": 0.1,
+          "border": 0.08
+        }
+      ]
+    },
+    "e1": {
+      "material": "cream",
+      "parapet_material": "cream",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "teal",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "band",
+          "from": 0.8,
+          "to": 4.257,
+          "w": 3.057,
+          "storeys": [
+            0,
+            0
+          ],
+          "bottom": 0.2,
+          "top": 0.45,
+          "frame": "teal",
+          "spandrel": "teal",
+          "window": {
+            "sill": 0.95,
+            "h": 1.5,
+            "mullions": [
+              0.333,
+              0.667
+            ],
+            "transoms": [
+              0.5
+            ]
+          },
+          "depth": 0.1,
+          "border": 0.08
+        },
+        {
+          "type": "band",
+          "from": 5.357,
+          "to": 8.814,
+          "w": 3.057,
+          "storeys": [
+            0,
+            0
+          ],
+          "bottom": 0.2,
+          "top": 0.45,
+          "frame": "teal",
+          "spandrel": "teal",
+          "window": {
+            "sill": 0.95,
+            "h": 1.5,
+            "mullions": [
+              0.333,
+              0.667
+            ],
+            "transoms": [
+              0.5
+            ]
+          },
+          "depth": 0.1,
+          "border": 0.08
+        },
+        {
+          "type": "entry",
+          "from": 9.014,
+          "to": 10.814,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "teal"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "band",
+          "from": 11.214,
+          "to": 16.564,
+          "w": 4.95,
+          "storeys": [
+            0,
+            0
+          ],
+          "bottom": 0.2,
+          "top": 0.45,
+          "frame": "teal",
+          "spandrel": "teal",
+          "window": {
+            "sill": 0.95,
+            "h": 1.5,
+            "mullions": [
+              0.25,
+              0.5,
+              0.75
+            ],
+            "transoms": [
+              0.5
+            ]
+          },
+          "depth": 0.1,
+          "border": 0.08
+        },
+        {
+          "type": "band",
+          "from": 17.664,
+          "to": 23.014,
+          "w": 4.95,
+          "storeys": [
+            0,
+            0
+          ],
+          "bottom": 0.2,
+          "top": 0.45,
+          "frame": "teal",
+          "spandrel": "teal",
+          "window": {
+            "sill": 0.95,
+            "h": 1.5,
+            "mullions": [
+              0.25,
+              0.5,
+              0.75
+            ],
+            "transoms": [
+              0.5
+            ]
+          },
+          "depth": 0.1,
+          "border": 0.08
+        }
+      ]
+    },
+    "e2": {
+      "material": "cream",
+      "parapet_material": "cream",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "teal",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "band",
+          "from": 0.8,
+          "to": 4.25,
+          "w": 3.05,
+          "storeys": [
+            0,
+            0
+          ],
+          "bottom": 0.2,
+          "top": 0.45,
+          "frame": "teal",
+          "spandrel": "teal",
+          "window": {
+            "sill": 0.95,
+            "h": 1.5,
+            "mullions": [
+              0.333,
+              0.667
+            ],
+            "transoms": [
+              0.5
+            ]
+          },
+          "depth": 0.1,
+          "border": 0.08
+        },
+        {
+          "type": "band",
+          "from": 5.35,
+          "to": 8.8,
+          "w": 3.05,
+          "storeys": [
+            0,
+            0
+          ],
+          "bottom": 0.2,
+          "top": 0.45,
+          "frame": "teal",
+          "spandrel": "teal",
+          "window": {
+            "sill": 0.95,
+            "h": 1.5,
+            "mullions": [
+              0.333,
+              0.667
+            ],
+            "transoms": [
+              0.5
+            ]
+          },
+          "depth": 0.1,
+          "border": 0.08
+        },
+        {
+          "type": "entry",
+          "from": 9.0,
+          "to": 10.8,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "teal"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "entry",
+          "from": 12.3,
+          "to": 14.1,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "teal"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "garage",
+          "from": 14.6,
+          "to": 17.8,
+          "w": 2.6,
+          "h": 2.4
+        },
+        {
+          "type": "band",
+          "from": 18.4,
+          "to": 21.968,
+          "w": 3.168,
+          "storeys": [
+            0,
+            0
+          ],
+          "bottom": 0.2,
+          "top": 0.45,
+          "frame": "teal",
+          "spandrel": "teal",
+          "window": {
+            "sill": 0.95,
+            "h": 1.5,
+            "mullions": [
+              0.333,
+              0.667
+            ],
+            "transoms": [
+              0.5
+            ]
+          },
+          "depth": 0.1,
+          "border": 0.08
+        }
+      ]
+    },
+    "e3": {
+      "material": "cream",
+      "parapet_material": "cream",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "teal",
+        "top": 0.2
+      },
+      "features": [
+        {
+          "type": "band",
+          "from": 0.8,
+          "to": 4.257,
+          "w": 3.057,
+          "storeys": [
+            0,
+            0
+          ],
+          "bottom": 0.2,
+          "top": 0.45,
+          "frame": "teal",
+          "spandrel": "teal",
+          "window": {
+            "sill": 0.95,
+            "h": 1.5,
+            "mullions": [
+              0.333,
+              0.667
+            ],
+            "transoms": [
+              0.5
+            ]
+          },
+          "depth": 0.1,
+          "border": 0.08
+        },
+        {
+          "type": "band",
+          "from": 5.357,
+          "to": 8.813,
+          "w": 3.057,
+          "storeys": [
+            0,
+            0
+          ],
+          "bottom": 0.2,
+          "top": 0.45,
+          "frame": "teal",
+          "spandrel": "teal",
+          "window": {
+            "sill": 0.95,
+            "h": 1.5,
+            "mullions": [
+              0.333,
+              0.667
+            ],
+            "transoms": [
+              0.5
+            ]
+          },
+          "depth": 0.1,
+          "border": 0.08
+        },
+        {
+          "type": "entry",
+          "from": 9.013,
+          "to": 10.813,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "teal"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        },
+        {
+          "type": "band",
+          "from": 11.213,
+          "to": 16.563,
+          "w": 4.95,
+          "storeys": [
+            0,
+            0
+          ],
+          "bottom": 0.2,
+          "top": 0.45,
+          "frame": "teal",
+          "spandrel": "teal",
+          "window": {
+            "sill": 0.95,
+            "h": 1.5,
+            "mullions": [
+              0.25,
+              0.5,
+              0.75
+            ],
+            "transoms": [
+              0.5
+            ]
+          },
+          "depth": 0.1,
+          "border": 0.08
+        },
+        {
+          "type": "band",
+          "from": 17.663,
+          "to": 23.013,
+          "w": 4.95,
+          "storeys": [
+            0,
+            0
+          ],
+          "bottom": 0.2,
+          "top": 0.45,
+          "frame": "teal",
+          "spandrel": "teal",
+          "window": {
+            "sill": 0.95,
+            "h": 1.5,
+            "mullions": [
+              0.25,
+              0.5,
+              0.75
+            ],
+            "transoms": [
+              0.5
+            ]
+          },
+          "depth": 0.1,
+          "border": 0.08
+        }
+      ]
+    }
+  },
+  "blocks": [
+    {
+      "id": "pavilion",
+      "storeys": 1,
+      "ground_h": 3.4,
+      "parapet": {
+        "h": 0.0
+      },
+      "roof": {
+        "form": "mono",
+        "low_edge": 3,
+        "pitch_deg": 1.5,
+        "overhang": 1.4,
+        "t": 0.45,
+        "under": "soffit_light",
+        "fascia": "fascia_cream"
+      },
+      "roof_material": "roof",
+      "faces": {
+        "e0": "e0",
+        "e1": "e1",
+        "e2": "e2",
+        "e3": "e3"
+      }
+    }
+  ],
+  "study_notes": {
+    "observed": "Mar 2025 13th St (560, 24 m) and Jun/Mar 2021 frames: one-storey flat-roofed pavilions with deep overhanging eaves, white/cream walls, blue/teal window ribbons, panels and doors, behind a black mesh fence.",
+    "association": "high (photographed SSE and WSW sides)",
+    "inferred": "Deep flat eave (a 1.5 degree mono slab), window ribbon lengths and door positions, unseen sides; the black mesh fence is not modelled.",
+    "footprint": "Frozen 4-edge ring kept as one block."
+  }
+}

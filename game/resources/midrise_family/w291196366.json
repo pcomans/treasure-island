@@ -1,0 +1,292 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "w291196366",
+    "address": "Avenue M treatment plant",
+    "edge_normals": [
+      [
+        -0.8872765988647975,
+        0.4612377229877421
+      ],
+      [
+        0.4393508399621252,
+        0.8983155567085406
+      ],
+      [
+        -0.8860143856301462,
+        0.46365774926818015
+      ],
+      [
+        0.46167177745404564,
+        0.8870508271245917
+      ],
+      [
+        0.8871840096421755,
+        -0.46141579192224486
+      ],
+      [
+        0.4636457324722522,
+        0.8860206740027394
+      ],
+      [
+        0.8866813816468515,
+        -0.46238093325831514
+      ],
+      [
+        -0.4607199222920258,
+        -0.8875455780990799
+      ],
+      [
+        -0.8861614915744898,
+        0.46337653247707267
+      ],
+      [
+        -0.46165082414366343,
+        -0.8870617321063267
+      ]
+    ]
+  },
+  "floor": {
+    "anchor_edge": "ring",
+    "above_terrain": 0.05,
+    "basis": "median frozen terrain around the ring"
+  },
+  "levels": {
+    "ground_h": 3.6,
+    "storey_h": 3.0,
+    "parapet_h": 0.2
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.56,
+        0.55,
+        0.52
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.73,
+        0.74,
+        0.74
+      ],
+      "roughness": 0.45,
+      "metallic": 0.3
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.62,
+        0.61,
+        0.58
+      ],
+      "roughness": 0.95
+    },
+    "metal_white": {
+      "rgb": [
+        0.85,
+        0.86,
+        0.85
+      ],
+      "roughness": 0.6,
+      "metallic": 0.1
+    }
+  },
+  "schemes": {
+    "open": {
+      "material": "concrete",
+      "parapet_material": "concrete",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "open": {
+        "post_w": 0.35,
+        "module": 2.6,
+        "post_material": "concrete",
+        "knee": {
+          "h": 1.25,
+          "t": 0.2,
+          "material": "concrete"
+        }
+      }
+    },
+    "gate": {
+      "material": "concrete",
+      "parapet_material": "concrete",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "open": {
+        "post_w": 0.35,
+        "module": 2.6,
+        "post_material": "concrete",
+        "knee": {
+          "h": 1.25,
+          "t": 0.2,
+          "material": "concrete",
+          "gap": [
+            1.4,
+            2.8
+          ]
+        }
+      }
+    }
+  },
+  "blocks": [
+    {
+      "id": "deck",
+      "storeys": 1,
+      "ground_h": 3.6,
+      "parapet": {
+        "kind": "railing",
+        "style": "pipe",
+        "h": 1.1,
+        "curb": 0.2,
+        "t": 0.2
+      },
+      "deck": {
+        "t": 0.35,
+        "material": "concrete"
+      },
+      "roof_material": "concrete",
+      "faces": {
+        "e7": "gate",
+        "default": "open"
+      },
+      "roof_items": [
+        {
+          "kind": "box",
+          "edge": 6,
+          "s": [
+            0.5,
+            4.6
+          ],
+          "d": [
+            0.45,
+            3.5
+          ],
+          "h": 2.8,
+          "material": "metal_white"
+        }
+      ]
+    }
+  ],
+  "study_notes": {
+    "observed": "Nov 2025 1298 Avenue M: corrugated white hut on a concrete deck carried on columns, pipe guard rail on the deck edge, beside the tanks; OSM height 5 m.",
+    "inferred": "Column spacing, deck and curb heights, the low containment curb with a gap, hut size; the stair to the deck is not modelled (no stairs).",
+    "footprint": "Frozen T-shaped ring kept as one open deck block."
+  }
+}

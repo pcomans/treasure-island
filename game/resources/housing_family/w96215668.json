@@ -1675,17 +1675,9 @@
   "protected_runs": [
     0,
     1,
-    2,
-    3,
     4,
-    5,
     6,
-    7,
-    8,
-    9,
     10,
-    11,
-    12,
     13,
     14,
     17,
@@ -1694,9 +1686,9 @@
   ],
   "materials": {
     "siding_rgb": [
-      0.66,
-      0.68,
-      0.62
+      0.84,
+      0.86,
+      0.82
     ],
     "trim_rgb": [
       0.77,
@@ -1755,7 +1747,7 @@
   "clamp_pipe_to_eave": true,
   "dimensions": "production_inference; dated visible frontage only; hidden elevations plain",
   "reference_digest": "380d594d26360deb60d617bfc420d7890c2d7d9809d74c9f0596354e8ac07db1",
-  "study_notes": "Exact frozen source edges; target-local observed-front motif schedule. Dimensions and positions inferred, not surveyed. No unseen opening schedule.",
+  "study_notes": "Exact frozen source edges and protected target-local NNW observed-front schedule retained. SSE rear whole four sections reuse housing_site_family complete boarded broad/narrow upper/lower assemblies and paired pale secured entries. Rear counts, cadence, anchors and entry allocation are production_inference, not measured or as-built; March 2025 NNW references support weathered/boarded grammar only, retained undated Apple layout supports row/site relationship only. Ends/short returns, front, roof, materials and local ground unchanged.",
   "local_ground": {
     "walk-0": {
       "top_triangles": [
@@ -6922,5 +6914,415 @@
     }
   },
   "weathering_strength": 0.82,
-  "weathering_base_y": 2.3
+  "weathering_base_y": 2.3,
+  "rear_frames": [
+    {
+      "id": "rear-1",
+      "elevation_role": "rear",
+      "runs": [
+        2,
+        3
+      ],
+      "start": [
+        -291.510009765625,
+        2.3989999294281006,
+        -817.7919921875
+      ],
+      "end": [
+        -278.8479919433594,
+        2.4519999027252197,
+        -824.1480102539062
+      ],
+      "length_m": 14.167768384324152,
+      "tangent": [
+        0.8937199711799622,
+        0,
+        -0.44862520694732666
+      ],
+      "normal": [
+        0.44862520694732666,
+        0,
+        0.8937199711799622
+      ],
+      "top_y": 8.3,
+      "upper_windows": [
+        {
+          "station_m": 1.6292933225631714,
+          "width_m": 2.3,
+          "height_m": 1.1,
+          "center_y": 7.2,
+          "glazing": "boarded"
+        },
+        {
+          "station_m": 5.17123556137085,
+          "width_m": 1,
+          "height_m": 1.1,
+          "center_y": 7.2,
+          "glazing": "boarded"
+        },
+        {
+          "station_m": 8.713177680969238,
+          "width_m": 1,
+          "height_m": 1.1,
+          "center_y": 7.2,
+          "glazing": "boarded"
+        },
+        {
+          "station_m": 12.255119323730469,
+          "width_m": 2.3,
+          "height_m": 1.1,
+          "center_y": 7.2,
+          "glazing": "boarded"
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 1.7001322507858276,
+          "width_m": 1.9,
+          "height_m": 1.08,
+          "center_y": 3.8411248076507944,
+          "glazing": "boarded"
+        },
+        {
+          "station_m": 5.38375186920166,
+          "width_m": 0.95,
+          "height_m": 1.08,
+          "center_y": 3.8733647088219185,
+          "glazing": "boarded"
+        },
+        {
+          "station_m": 8.784016609191895,
+          "width_m": 1.9,
+          "height_m": 1.08,
+          "center_y": 3.8809604998417853,
+          "glazing": "boarded"
+        },
+        {
+          "station_m": 12.467636108398438,
+          "width_m": 0.95,
+          "height_m": 1.08,
+          "center_y": 3.8891891694960576,
+          "glazing": "boarded"
+        }
+      ],
+      "entries": [
+        {
+          "station_m": 3.8961362838745117,
+          "bottom_y": 2.4611158718962973,
+          "door_role": "pale"
+        },
+        {
+          "station_m": 10.696664810180664,
+          "bottom_y": 2.4837101963429222,
+          "door_role": "pale"
+        }
+      ]
+    },
+    {
+      "id": "rear-2",
+      "elevation_role": "rear",
+      "runs": [
+        5
+      ],
+      "start": [
+        -279.5509948730469,
+        2.4519999027252197,
+        -825.406005859375
+      ],
+      "end": [
+        -266.8890075683594,
+        2.4519999027252197,
+        -831.7739868164062
+      ],
+      "length_m": 14.173112007360277,
+      "tangent": [
+        0.893380880355835,
+        0,
+        -0.4493001103401184
+      ],
+      "normal": [
+        0.4493001103401184,
+        0,
+        0.893380880355835
+      ],
+      "top_y": 8.3,
+      "upper_windows": [
+        {
+          "station_m": 1.6299078464508057,
+          "width_m": 2.3,
+          "height_m": 1.1,
+          "center_y": 7.2,
+          "glazing": "boarded"
+        },
+        {
+          "station_m": 5.1731858253479,
+          "width_m": 1,
+          "height_m": 1.1,
+          "center_y": 7.2,
+          "glazing": "boarded"
+        },
+        {
+          "station_m": 8.716464042663574,
+          "width_m": 1,
+          "height_m": 1.1,
+          "center_y": 7.2,
+          "glazing": "boarded"
+        },
+        {
+          "station_m": 12.25974178314209,
+          "width_m": 2.3,
+          "height_m": 1.1,
+          "center_y": 7.2,
+          "glazing": "boarded"
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 1.7007734775543213,
+          "width_m": 1.9,
+          "height_m": 1.08,
+          "center_y": 3.894624649486468,
+          "glazing": "boarded"
+        },
+        {
+          "station_m": 5.385782718658447,
+          "width_m": 0.95,
+          "height_m": 1.08,
+          "center_y": 3.902852540952517,
+          "glazing": "boarded"
+        },
+        {
+          "station_m": 8.78732967376709,
+          "width_m": 1.9,
+          "height_m": 1.08,
+          "center_y": 3.9104475499683757,
+          "glazing": "boarded"
+        },
+        {
+          "station_m": 12.472338676452637,
+          "width_m": 0.95,
+          "height_m": 1.08,
+          "center_y": 3.918675441434425,
+          "glazing": "boarded"
+        }
+      ],
+      "entries": [
+        {
+          "station_m": 3.8976058959960938,
+          "bottom_y": 2.4980071399452335,
+          "door_role": "pale"
+        },
+        {
+          "station_m": 10.700699806213379,
+          "bottom_y": 2.513197142718358,
+          "door_role": "pale"
+        }
+      ]
+    },
+    {
+      "id": "rear-3",
+      "elevation_role": "rear",
+      "runs": [
+        7,
+        8,
+        9
+      ],
+      "start": [
+        -266.36199951171875,
+        2.4519999027252197,
+        -830.6939697265625
+      ],
+      "end": [
+        -254.13900756835938,
+        2.4519999027252197,
+        -836.8389892578125
+      ],
+      "length_m": 13.680745487248572,
+      "tangent": [
+        0.8934448957443237,
+        0,
+        -0.44917285442352295
+      ],
+      "normal": [
+        0.44917285442352295,
+        0,
+        0.8934448957443237
+      ],
+      "top_y": 8.3,
+      "upper_windows": [
+        {
+          "station_m": 1.573285698890686,
+          "width_m": 2.3,
+          "height_m": 1.1,
+          "center_y": 7.2,
+          "glazing": "boarded"
+        },
+        {
+          "station_m": 4.993472099304199,
+          "width_m": 1,
+          "height_m": 1.1,
+          "center_y": 7.2,
+          "glazing": "boarded"
+        },
+        {
+          "station_m": 8.413658142089844,
+          "width_m": 1,
+          "height_m": 1.1,
+          "center_y": 7.2,
+          "glazing": "boarded"
+        },
+        {
+          "station_m": 11.833845138549805,
+          "width_m": 2.3,
+          "height_m": 1.1,
+          "center_y": 7.2,
+          "glazing": "boarded"
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 1.641689419746399,
+          "width_m": 1.9,
+          "height_m": 1.08,
+          "center_y": 3.9277922495229176,
+          "glazing": "boarded"
+        },
+        {
+          "station_m": 5.198683261871338,
+          "width_m": 0.95,
+          "height_m": 1.08,
+          "center_y": 3.9197847184867896,
+          "glazing": "boarded"
+        },
+        {
+          "station_m": 8.482062339782715,
+          "width_m": 1.9,
+          "height_m": 1.08,
+          "center_y": 3.904256220409843,
+          "glazing": "boarded"
+        },
+        {
+          "station_m": 12.039055824279785,
+          "width_m": 0.95,
+          "height_m": 1.08,
+          "center_y": 3.892708103143741,
+          "glazing": "boarded"
+        }
+      ],
+      "entries": [
+        {
+          "station_m": 3.762205123901367,
+          "bottom_y": 2.5207739649052137,
+          "door_role": "pale"
+        },
+        {
+          "station_m": 10.328963279724121,
+          "bottom_y": 2.4897189714682035,
+          "door_role": "pale"
+        }
+      ]
+    },
+    {
+      "id": "rear-4",
+      "elevation_role": "rear",
+      "runs": [
+        11,
+        12
+      ],
+      "start": [
+        -254.93099975585938,
+        2.4489998817443848,
+        -838.3079833984375
+      ],
+      "end": [
+        -242.0050048828125,
+        2.4519999027252197,
+        -844.8309936523438
+      ],
+      "length_m": 14.47863965400756,
+      "tangent": [
+        0.892763078212738,
+        0,
+        -0.4505264461040497
+      ],
+      "normal": [
+        0.4505264461040497,
+        0,
+        0.892763078212738
+      ],
+      "top_y": 8.3,
+      "upper_windows": [
+        {
+          "station_m": 1.665043592453003,
+          "width_m": 2.3,
+          "height_m": 1.1,
+          "center_y": 7.2,
+          "glazing": "boarded"
+        },
+        {
+          "station_m": 5.284703254699707,
+          "width_m": 1,
+          "height_m": 1.1,
+          "center_y": 7.2,
+          "glazing": "boarded"
+        },
+        {
+          "station_m": 8.904363632202148,
+          "width_m": 1,
+          "height_m": 1.1,
+          "center_y": 7.2,
+          "glazing": "boarded"
+        },
+        {
+          "station_m": 12.524023056030273,
+          "width_m": 2.3,
+          "height_m": 1.1,
+          "center_y": 7.2,
+          "glazing": "boarded"
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 1.7374367713928223,
+          "width_m": 1.9,
+          "height_m": 1.08,
+          "center_y": 3.8812425000900475,
+          "glazing": "boarded"
+        },
+        {
+          "station_m": 5.501883029937744,
+          "width_m": 0.95,
+          "height_m": 1.08,
+          "center_y": 3.9083029695783806,
+          "glazing": "boarded"
+        },
+        {
+          "station_m": 8.976757049560547,
+          "width_m": 1.9,
+          "height_m": 1.08,
+          "center_y": 3.933282231875546,
+          "glazing": "boarded"
+        },
+        {
+          "station_m": 12.741203308105469,
+          "width_m": 0.95,
+          "height_m": 1.08,
+          "center_y": 3.951242508452333,
+          "glazing": "boarded"
+        }
+      ],
+      "entries": [
+        {
+          "station_m": 3.98162579536438,
+          "bottom_y": 2.488954686278822,
+          "door_role": "pale"
+        },
+        {
+          "station_m": 10.93137264251709,
+          "bottom_y": 2.5389124937097503,
+          "door_role": "pale"
+        }
+      ]
+    }
+  ]
 }

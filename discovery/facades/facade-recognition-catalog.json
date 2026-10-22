@@ -185,60 +185,6 @@
       "whole_building_recognizability_imported": false
     },
     {
-      "adapter_id": "active-adapter:d2-1441-live:building:w95934105:wall",
-      "content_classification": "active_target_specific_paired_wall_roof_replacement",
-      "receiver_key": "building:w95934105:wall",
-      "recognition_acceptance_authority": "physical_unit_claim_and_independent_acceptance_record",
-      "recognition_acceptance_status": "accepted",
-      "review_status": "independent_exact_current_live_pass",
-      "review_status_scope": "runtime_asset_original_detail_provenance_only_not_reference_recognition",
-      "runtime_adapter_path": "game/scripts/world/facades/d2_1441_chinook_live_replacement.gd",
-      "runtime_asset_paths": [
-        "game/resources/facades/d2_1441_chinook_standalone_hero_prototype.json",
-        "game/resources/materials/world/site_12_housing/site_12_dark_metal.tres",
-        "game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres",
-        "game/resources/materials/world/site_12_housing/site_12_opaque_opening.tres",
-        "game/resources/materials/world/site_12_housing/site_12_protected_neutral.tres",
-        "game/resources/materials/world/site_12_housing/site_12_void_shadow.tres",
-        "game/resources/materials/world/site_12_housing/site_12_warm_ivory_stucco.tres",
-        "game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg",
-        "game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png",
-        "game/scripts/world/facades/d2_1441_chinook_standalone_hero_prototype.gd",
-        "game/scripts/world/facades/site_12_housing_kit.gd"
-      ],
-      "runtime_config_path": "game/resources/facades/d2_1441_chinook_live_replacement.json",
-      "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
-      "source_key": "w95934105",
-      "whole_building_recognizability_imported": false
-    },
-    {
-      "adapter_id": "active-adapter:d2-1444-live:building:w95934117:wall",
-      "content_classification": "active_target_specific_paired_wall_roof_replacement",
-      "receiver_key": "building:w95934117:wall",
-      "recognition_acceptance_authority": "physical_unit_claim_and_independent_acceptance_record",
-      "recognition_acceptance_status": "accepted",
-      "review_status": "independent_exact_current_live_pass",
-      "review_status_scope": "runtime_asset_original_detail_provenance_only_not_reference_recognition",
-      "runtime_adapter_path": "game/scripts/world/facades/d2_1444_croaker_quality_v2_live_replacement.gd",
-      "runtime_asset_paths": [
-        "game/resources/facades/d2_1444_croaker_quality_v2_prototype.json",
-        "game/resources/materials/world/site_12_housing/site_12_dark_metal.tres",
-        "game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres",
-        "game/resources/materials/world/site_12_housing/site_12_opaque_opening.tres",
-        "game/resources/materials/world/site_12_housing/site_12_protected_neutral.tres",
-        "game/resources/materials/world/site_12_housing/d2_1444_quality_v2_recess_backing.tres",
-        "game/resources/materials/world/site_12_housing/site_12_ochre_tan_stucco.tres",
-        "game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg",
-        "game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png",
-        "game/scripts/world/facades/d2_1444_croaker_quality_v2_prototype.gd",
-        "game/scripts/world/facades/site_12_housing_kit.gd"
-      ],
-      "runtime_config_path": "game/resources/facades/d2_1444_croaker_quality_v2_live_replacement.json",
-      "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
-      "source_key": "w95934117",
-      "whole_building_recognizability_imported": false
-    },
-    {
       "adapter_id": "active-adapter:d1-b225-live:building:w95934119:wall",
       "content_classification": "active_target_specific_receiver_host_partition_plus_render_only_attachment",
       "receiver_key": "building:w95934119:wall",
@@ -299,33 +245,6 @@
       "runtime_config_path": "game/resources/facades/d5_1317_gateview_live_replacement.json",
       "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
       "source_key": "w95934125",
-      "whole_building_recognizability_imported": false
-    },
-    {
-      "adapter_id": "active-adapter:d2-1439-live:building:w95934144:wall",
-      "content_classification": "active_target_specific_paired_wall_roof_replacement",
-      "receiver_key": "building:w95934144:wall",
-      "recognition_acceptance_authority": "physical_unit_claim_and_independent_acceptance_record",
-      "recognition_acceptance_status": "accepted",
-      "review_status": "independent_exact_current_live_pass",
-      "review_status_scope": "runtime_asset_original_detail_provenance_only_not_reference_recognition",
-      "runtime_adapter_path": "game/scripts/world/facades/d2_1439_chinook_quality_v2_live_replacement.gd",
-      "runtime_asset_paths": [
-        "game/resources/facades/d2_1439_chinook_quality_v2_prototype.json",
-        "game/resources/materials/world/site_12_housing/site_12_dark_metal.tres",
-        "game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres",
-        "game/resources/materials/world/site_12_housing/site_12_opaque_opening.tres",
-        "game/resources/materials/world/site_12_housing/site_12_protected_neutral.tres",
-        "game/resources/materials/world/site_12_housing/d2_1439_quality_v2_recess_backing.tres",
-        "game/resources/materials/world/site_12_housing/site_12_warm_ivory_stucco.tres",
-        "game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg",
-        "game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png",
-        "game/scripts/world/facades/d2_1439_chinook_quality_v2_prototype.gd",
-        "game/scripts/world/facades/site_12_housing_kit.gd"
-      ],
-      "runtime_config_path": "game/resources/facades/d2_1439_chinook_quality_v2_live_replacement.json",
-      "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
-      "source_key": "w95934144",
       "whole_building_recognizability_imported": false
     },
     {
@@ -895,13 +814,24 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "code-review-reopen4-20261022",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-reopen4-w34313513-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w34313513",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -931,13 +861,24 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "code-review-culinary-r3-084b564-20261022",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-culinary-w34313514-r3-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w34313514",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -967,13 +908,24 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "code-review-inst3-rework-20261022",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-inst3-w34313515-round2-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w34313515",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -1005,13 +957,24 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "code-review-inst3-rework-20261022",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-inst3-w34313520-round2-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w34313520",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -1115,13 +1078,24 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "code-review-inst3-round1-20261022",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-inst3-w34313525-round1-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w34313525",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -1429,13 +1403,24 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "code-review-reopen4-20261022",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-reopen4-w34313544-a783900-recheck-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w34313544",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -1645,6 +1630,16 @@
           "status": "accepted",
           "numerator_effect": 0,
           "scope": "L1 basic envelope/site only; independent CODE and scoped VISUAL, native/four stock approaches/path/spray REST SAFE and full suite PASS. L2-L5, whole modern recognition and as-built remain open."
+        },
+        {
+          "review_id": "code-review-instfinals-20261022",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-instfinals-w34313547-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
         }
       ],
       "anchor_source_key": "w34313547",
@@ -1652,7 +1647,7 @@
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -2064,6 +2059,16 @@
           "status": "accepted",
           "numerator_effect": 0,
           "scope": "L1 envelope/site and observed SSE/ENE family only. Independent VISUAL/CODE/native-stock-apron-spray REST SAFE/full suite PASS. Missing north and unknown rear keep all-side L2, whole modern quality, recognition and as-built open."
+        },
+        {
+          "review_id": "code-review-instfinals-2d4b743-20261022",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-instfinals-w34313569-2d4b743-recheck-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
         }
       ],
       "anchor_source_key": "w34313569",
@@ -2071,7 +2076,7 @@
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -2139,6 +2144,7 @@
     {
       "acceptance_records": [],
       "anchor_source_key": "w95934093",
+      "stairs": [{"bottom": [-356.5662, -126.2527], "top": [-358.9787, -131.1397]}, {"bottom": [-348.7124, -130.1298], "top": [-351.1249, -135.0168]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -2212,6 +2218,7 @@
     {
       "acceptance_records": [],
       "anchor_source_key": "w95934097",
+      "stairs": [{"bottom": [-430.0957, -310.2726], "top": [-428.5478, -315.7792]}, {"bottom": [-421.6696, -307.904], "top": [-420.1217, -313.4106]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -2248,6 +2255,7 @@
     {
       "acceptance_records": [],
       "anchor_source_key": "w95934098",
+      "stairs": [{"bottom": [-287.4659, -116.3387], "top": [-284.7969, -111.2796]}, {"bottom": [-295.2135, -112.2513], "top": [-292.5444, -107.1922]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -2284,6 +2292,7 @@
     {
       "acceptance_records": [],
       "anchor_source_key": "w95934099",
+      "stairs": [{"bottom": [-334.5935, -110.568], "top": [-332.1968, -105.6732]}, {"bottom": [-342.4532, -106.7196], "top": [-340.0565, -101.8248]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -2320,6 +2329,7 @@
     {
       "acceptance_records": [],
       "anchor_source_key": "w95934100",
+      "stairs": [{"bottom": [-392.0484, -107.3662], "top": [-394.4675, -112.2498]}, {"bottom": [-384.2027, -111.2525], "top": [-386.6219, -116.1362]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -2465,6 +2475,7 @@
     {
       "acceptance_records": [],
       "anchor_source_key": "w95934104",
+      "stairs": [{"bottom": [-423.1706, -283.0838], "top": [-424.775, -277.5935]}, {"bottom": [-431.5658, -285.5371], "top": [-433.1702, -280.0468]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -2506,9 +2517,15 @@
           "review_id": "d2-1441-production-v8-staging-2026-09-05-009",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "visual-review-chinook-rebuild-1441-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
         }
       ],
       "anchor_source_key": "w95934105",
+      "stairs": [{"bottom": [-255.4593, -24.1933], "top": [-252.7811, -19.139]}, {"bottom": [-263.1911, -20.0962], "top": [-260.5129, -15.0419]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -2663,6 +2680,7 @@
     {
       "acceptance_records": [],
       "anchor_source_key": "w95934107",
+      "stairs": [{"bottom": [-444.819, -221.4675], "top": [-449.4521, -219.151]}, {"bottom": [-448.493, -229.4194], "top": [-453.3677, -226.9821]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -2699,6 +2717,7 @@
     {
       "acceptance_records": [],
       "anchor_source_key": "w95934108",
+      "stairs": [{"bottom": [-387.2349, -252.2974], "top": [-392.1114, -249.8639]}, {"bottom": [-391.1424, -260.1279], "top": [-396.019, -257.6945]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -2772,6 +2791,7 @@
     {
       "acceptance_records": [],
       "anchor_source_key": "w95934112",
+      "stairs": [{"bottom": [-475.8018, -298.2976], "top": [-477.3309, -293.0665]}, {"bottom": [-484.1213, -301.0109], "top": [-485.7262, -295.5207]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -2808,6 +2828,7 @@
     {
       "acceptance_records": [],
       "anchor_source_key": "w95934113",
+      "stairs": [{"bottom": [-324.9292, 12.6858], "top": [-322.333, 17.7827]}, {"bottom": [-332.7291, 16.6587], "top": [-330.133, 21.7556]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -2922,9 +2943,15 @@
           "review_id": "d2-1444-quality-v2-promotion-candidate-2026-09-09-001",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "visual-review-chinook-rebuild-1444-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
         }
       ],
       "anchor_source_key": "w95934117",
+      "stairs": [{"bottom": [-354.5437, -47.5505], "top": [-359.6964, -45.0669]}, {"bottom": [-357.8597, -55.6737], "top": [-363.4988, -52.9557]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -3039,6 +3066,7 @@
     {
       "acceptance_records": [],
       "anchor_source_key": "w95934118",
+      "stairs": [{"bottom": [-462.054, -257.3311], "top": [-467.1701, -254.773]}, {"bottom": [-466.211, -265.0414], "top": [-471.0857, -262.6041]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -3199,6 +3227,7 @@
     {
       "acceptance_records": [],
       "anchor_source_key": "w95934120",
+      "stairs": [{"bottom": [-320.5582, -72.3063], "top": [-315.4388, -74.1756]}, {"bottom": [-317.5555, -64.0833], "top": [-312.4361, -65.9527]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -3235,6 +3264,7 @@
     {
       "acceptance_records": [],
       "anchor_source_key": "w95934121",
+      "stairs": [{"bottom": [-217.5514, -78.0719], "top": [-212.1374, -78.6971]}, {"bottom": [-216.816, -69.3503], "top": [-211.1337, -70.0065]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -3271,6 +3301,7 @@
     {
       "acceptance_records": [],
       "anchor_source_key": "w95934122",
+      "stairs": [{"bottom": [-314.2721, -147.6632], "top": [-316.8066, -152.7911]}, {"bottom": [-306.427, -151.5408], "top": [-308.9615, -156.6686]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -3622,6 +3653,7 @@
     {
       "acceptance_records": [],
       "anchor_source_key": "w95934126",
+      "stairs": [{"bottom": [-506.0216, -332.7296], "top": [-504.5468, -337.9762]}, {"bottom": [-497.6686, -330.101], "top": [-496.1207, -335.6076]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -3658,6 +3690,7 @@
     {
       "acceptance_records": [],
       "anchor_source_key": "w95934128",
+      "stairs": [{"bottom": [-392.8321, -297.8527], "top": [-390.5166, -303.083]}, {"bottom": [-384.7197, -294.5565], "top": [-382.5135, -299.54]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -3694,6 +3727,7 @@
     {
       "acceptance_records": [],
       "anchor_source_key": "w95934129",
+      "stairs": [{"bottom": [-257.4148, -50.648], "top": [-260.0792, -55.7096]}, {"bottom": [-249.6669, -54.7266], "top": [-252.3313, -59.7881]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -3730,6 +3764,7 @@
     {
       "acceptance_records": [],
       "anchor_source_key": "w95934130",
+      "stairs": [{"bottom": [-429.2542, -240.0772], "top": [-424.3629, -242.481]}, {"bottom": [-425.3917, -232.2176], "top": [-420.5005, -234.6213]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -3766,6 +3801,7 @@
     {
       "acceptance_records": [],
       "anchor_source_key": "w95934131",
+      "stairs": [{"bottom": [-292.4291, -31.9134], "top": [-294.9614, -36.7394]}, {"bottom": [-284.6741, -35.9827], "top": [-287.2064, -40.8087]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -3838,6 +3874,7 @@
     {
       "acceptance_records": [],
       "anchor_source_key": "w95934135",
+      "stairs": [{"bottom": [-368.964, -92.1706], "top": [-366.4745, -87.3224]}, {"bottom": [-376.8804, -88.4091], "top": [-374.2676, -83.3207]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -3910,6 +3947,7 @@
     {
       "acceptance_records": [],
       "anchor_source_key": "w95934137",
+      "stairs": [{"bottom": [-340.5447, -6.328], "top": [-342.9577, -11.2147]}, {"bottom": [-332.5714, -9.9639], "top": [-335.1038, -15.0928]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -3982,6 +4020,7 @@
     {
       "acceptance_records": [],
       "anchor_source_key": "w95934140",
+      "stairs": [{"bottom": [-369.9443, -271.4364], "top": [-365.053, -273.84]}, {"bottom": [-366.0818, -263.5758], "top": [-361.1904, -265.9794]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -4018,6 +4057,7 @@
     {
       "acceptance_records": [],
       "anchor_source_key": "w95934142",
+      "stairs": [{"bottom": [-468.0282, -321.3594], "top": [-466.4816, -326.8663]}, {"bottom": [-459.5202, -319.2504], "top": [-458.0466, -324.4974]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -4054,6 +4094,7 @@
     {
       "acceptance_records": [],
       "anchor_source_key": "w95934143",
+      "stairs": [{"bottom": [-222.0475, -44.005], "top": [-218.5476, -39.4807]}, {"bottom": [-228.9736, -38.6472], "top": [-225.4737, -34.1229]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -4095,9 +4136,15 @@
           "review_id": "d2-1439-quality-v2-promotion-candidate-2026-09-09-001",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "visual-review-chinook-rebuild-1439-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
         }
       ],
       "anchor_source_key": "w95934144",
+      "stairs": [{"bottom": [-290.2846, -5.5866], "top": [-287.811, -0.7303]}, {"bottom": [-298.2071, -1.8543], "top": [-295.611, 3.2426]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -9765,13 +9812,24 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "code-review-reopen4-20261022",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-reopen4-w96698662-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w96698662",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -10302,13 +10360,24 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "code-review-reopen4-20261022",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-reopen4-w291189918-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w291189918",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -10484,13 +10553,24 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "code-review-compounde-20261022",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-compounde-w291193760-round1-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w291193760",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -10520,13 +10600,24 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "code-review-compounde-acf04f0-rework-20261022",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-compounde-w291193766-acf04f0-recheck-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w291193766",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -11149,6 +11240,16 @@
           "numerator_effect": 0,
           "scope": "Whole low modular envelope/site and observed public entry architecture; Sep2025 WSW, May2019 NNW and official SFFD reference (capture date unknown). Scoped final visual and distinct progress PASS, CODE PASS, mechanics002 native/four approaches/stock ascent-descent/spray/active REST then SAFE PASS, full suite9971 terminal0 PASS. L1 complete; all-side L2 remains unknown because ENE/SSE openings are unsupported. Continuous 28.6-degree visible/native metal access within the existing footprint is production inference, not as-built discrete stairs. Separate vaulted apparatus and neighbours excluded; no whole modern-quality or as-built claim. Published with this change.",
           "source_locator": "discovery/ISLAND_BUILDING_STAGE_CHECKLIST.md"
+        },
+        {
+          "review_id": "code-review-instfinals-20261022",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-instfinals-w764313741-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
         }
       ],
       "anchor_source_key": "w764313741",
@@ -11423,13 +11524,24 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "code-review-b3annex-20261022",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-b3annex-w1222514685-r1-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w1222514685",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -11459,13 +11571,25 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "code-review-b3annex-20261022",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-b3annex-w1222514686-r2-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w1222514686",
+      "stairs": [{"bottom": [524.5825, 500.932], "top": [529.587, 498.2033]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {

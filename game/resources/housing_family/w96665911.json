@@ -1117,9 +1117,7 @@
     1,
     3,
     7,
-    9,
-    10,
-    11
+    9
   ],
   "source_association": {
     "sha256": "834ab568a5da1bd689f3983594ac82d2f66b1fca7900aaa4798af1a142d10165"
@@ -1155,9 +1153,9 @@
   },
   "materials": {
     "siding_rgb": [
-      0.72,
-      0.72,
-      0.65
+      0.92,
+      0.92,
+      0.88
     ],
     "trim_rgb": [
       0.85,
@@ -4123,5 +4121,183 @@
   "roof_rise_m": 1.1,
   "wall_top_y": 7.64,
   "segmented_roof": true,
-  "study_notes": "Reference-relative eave height and segmented shallow hips, 1.10 m rise (~10–12 degree shallow pitch, explicitly inferred from visible roof cap proportions rather than measured). Projecting apron and observed lower closures/doors on near-1 and northern portion near-3; far southern/tree-hidden region remains unknown. Dimensions/cadence are bounded production inference."
+  "study_notes": "Reference-relative eave height and segmented shallow hips, 1.10 m rise (~10\u201312 degree shallow pitch, explicitly inferred from visible roof cap proportions rather than measured). Projecting apron and observed lower closures/doors on near-1 and northern portion near-3; far southern/tree-hidden region remains unknown. Dimensions/cadence are bounded production inference. Rear study001 (2026-10-11): reuse housing_site_family complete residential windows and entries across WNW collinear runs10\u201311. March2025 target front supplies broad/narrow opening vocabulary only; hidden rear five-group count, cadence, anchors and door placement are production_inference, not observed/as-built. Existing roof, front and site unchanged. Canonical LAND x_-2__z_-4 sampled under complete entry feet/thresholds before placement.",
+  "rear_frames": [
+    {
+      "id": "wnw-rear-whole",
+      "elevation_role": "rear",
+      "runs": [
+        10,
+        11
+      ],
+      "start": [
+        -331.86199951171875,
+        2.0439999103546143,
+        -849.4959716796875
+      ],
+      "end": [
+        -345.8429870605469,
+        1.9140000343322754,
+        -809.2869873046875
+      ],
+      "length_m": 42.57029994385148,
+      "tangent": [
+        -0.3284211754798889,
+        0,
+        0.9445313811302185
+      ],
+      "normal": [
+        -0.9445313811302185,
+        0,
+        -0.3284211754798889
+      ],
+      "top_y": 8.044,
+      "upper_windows": [
+        {
+          "station_m": 2.5,
+          "width_m": 1.8,
+          "height_m": 1.18,
+          "center_y": 6.824,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 5.95,
+          "width_m": 0.85,
+          "height_m": 1.18,
+          "center_y": 6.824,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 10.75,
+          "width_m": 1.8,
+          "height_m": 1.18,
+          "center_y": 6.824,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 14.2,
+          "width_m": 0.85,
+          "height_m": 1.18,
+          "center_y": 6.824,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 19.0,
+          "width_m": 1.8,
+          "height_m": 1.18,
+          "center_y": 6.824,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 22.45,
+          "width_m": 0.85,
+          "height_m": 1.18,
+          "center_y": 6.824,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 27.25,
+          "width_m": 1.8,
+          "height_m": 1.18,
+          "center_y": 6.824,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 30.7,
+          "width_m": 0.85,
+          "height_m": 1.18,
+          "center_y": 6.824,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 35.5,
+          "width_m": 1.8,
+          "height_m": 1.18,
+          "center_y": 6.824,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 38.95,
+          "width_m": 0.85,
+          "height_m": 1.18,
+          "center_y": 6.824,
+          "glazing": "blue"
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 2.5,
+          "width_m": 1.65,
+          "height_m": 1.05,
+          "center_y": 3.45,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 10.75,
+          "width_m": 1.65,
+          "height_m": 1.05,
+          "center_y": 3.45,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 19.0,
+          "width_m": 1.65,
+          "height_m": 1.05,
+          "center_y": 3.45,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 27.25,
+          "width_m": 1.65,
+          "height_m": 1.05,
+          "center_y": 3.45,
+          "glazing": "blue"
+        },
+        {
+          "station_m": 35.5,
+          "width_m": 1.65,
+          "height_m": 1.05,
+          "center_y": 3.45,
+          "glazing": "blue"
+        }
+      ],
+      "entries": [
+        {
+          "station_m": 5.95,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "bottom_y": 2.178943096219733,
+          "threshold_inference": "production_inference: complete shared entry feet above canonical LAND and source wall bottom; no added ground/path."
+        },
+        {
+          "station_m": 14.2,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "bottom_y": 2.101907872333264,
+          "threshold_inference": "production_inference: complete shared entry feet above canonical LAND and source wall bottom; no added ground/path."
+        },
+        {
+          "station_m": 22.45,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "bottom_y": 2.0488760840701943,
+          "threshold_inference": "production_inference: complete shared entry feet above canonical LAND and source wall bottom; no added ground/path."
+        },
+        {
+          "station_m": 30.7,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "bottom_y": 2.028822919395985,
+          "threshold_inference": "production_inference: complete shared entry feet above canonical LAND and source wall bottom; no added ground/path."
+        },
+        {
+          "station_m": 38.95,
+          "width_m": 0.92,
+          "height_m": 2.13,
+          "bottom_y": 2.0087696803351136,
+          "threshold_inference": "production_inference: complete shared entry feet above canonical LAND and source wall bottom; no added ground/path."
+        }
+      ]
+    }
+  ]
 }
