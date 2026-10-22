@@ -1611,7 +1611,7 @@ static func _stair_bay_opening(ctx: Ctx, face: Face, feature: Dictionary, s0: fl
 	return {"s0": a, "s1": b, "y0": y0, "y1": y1, "kind": "stair_bay", "spec": feature, "k": 0}
 
 
-## Open stair bay: side reveals and soffit, a dark back wall, the recess floor
+## Open stair bay: side reveals and soffit, a back wall (default render), the recess floor
 ## behind a solid ground-floor guard (the bay is not a walkable route), and per
 ## storey two stepped flights around a half landing under a full floor landing.
 static func _stair_bay(ctx: Ctx, face: Face, spec: Dictionary, wall_mat: String, s0: float, s1: float, y0: float, y1: float) -> void:
