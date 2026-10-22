@@ -377,8 +377,15 @@ all-side verdict stay U pending a review-only sweep. Parked: the off-tip
 institutional finals (`e5a7d08`/`e66e1c0`, `df80790`, `b656ad6`) and Station48/YMCA/
 Austin (`c70b05a`/`fcc319c`/`96ddf26`) are off-tip reviewed work; recover them only
 with a dedicated test-infra merge, or re-author on the mid-rise family if cheaper.
-Current totals after Mar22a: L1:180 C/33 U; L2:156 C/57 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall337 C/0 I/728 U across213 units/1,065 cells;49 historical
+**Mar22b** Bayside 1215/1224, 2026-10-22: `fa2689a` recovers the reviewed finals
+(`1d19eaa`, `12b41f6`), keeps main's colour-pass `siding_rgb`, and adds rear yard
+doors on pads. CODE, visual and progress PASS. L1/L2 C on 1215 (`w96215666`) and 1224
+(`w96215656`). Parked: 1215 has 5 front doors for 6 units; 1224's pink roof (colour
+pass); the pre-existing `ParkingSurface`/`road_path` overlap on both (0.07 m² and
+0.86 m²); the off-tip institutional finals and Station48/YMCA/Austin (recover only with
+a dedicated test-infra merge, or re-author); 1445 is review-only (Bulgarian house).
+Current totals after Mar22b: L1:182 C/31 U; L2:158 C/55 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall341 C/0 I/724 U across213 units/1,065 cells;49 historical
 recognition credits unchanged.
 **U** no current stage-level conclusion established in this checklist pass.
 
@@ -458,7 +465,7 @@ before selecting another round.
 | physical-building:w95934118 / w95934118 | 1419 Striped Bass Street | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21e fish streets on the garage-court kit (`02d39f1`…`fcfe956`) — CODE PASS (lows parked), visual L2 PASS, progress PASS |
 | physical-building:w95934119 / w95934119 | 148 12th Street | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w95934120 / w95934120 | 1449 Croaker Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21e fish streets on the garage-court kit (`02d39f1`…`fcfe956`) — CODE PASS (lows parked), visual L2 PASS, progress PASS |
-| physical-building:w95934121 / w95934121 | 1445 Chinook Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w95934121 / w95934121 | 1445 Chinook Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — review-only (Bulgarian house) |
 | physical-building:w95934122 / w95934122 | 1434 Halibut Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21e fish streets on the garage-court kit (`02d39f1`…`fcfe956`) — CODE PASS (lows parked), visual L2 PASS, progress PASS. In frozen OSM, since demolished; modeled from Apr 2019 |
 | physical-building:w95934123 / w95934123 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w95934124 / w95934124 | 1410 Flounder Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17j Flounder Court `fb8a010`+`8eb5444`+`615d621`+`fa945e5`+`4f519a3` — CODE PASS (low notes only), visual L2 PASS, progress L1+L2 PASS; catalog stairs walked by the fit. Parked: cream slightly dark and cool; stucco lap lines; 1-pixel road-edge dots; turning-circle disc is config-only (roads L2 generator pass); code lows (gable vents on the roof role, loggia parts as spray receivers); colour pass (reads greyer than the photo's warm yellow) |
@@ -485,14 +492,14 @@ before selecting another round.
 | physical-building:w96215652 / w96215652 | 1220 Bayside Drive | ☐ U | ☑ C | ☐ U | ☐ U | ☐ U | Mar17 `a078c63` — bounded whole-exterior L2 PASS (study002 roof pitch); L1 not explicitly reviewed (U); integrated visual/native/fit/spray/suite PASS; materials/site open |
 | physical-building:w96215653 / w96215653 | 1227 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP2 — L1 frontage lawn/composition; retained whole shape; scoped visual/CODE/progress/native/fit/spray/suite PASS; L2–5 unknown; L2 C: Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS |
 | physical-building:w96215655 / w96215655 | 1312 Gateview Avenue | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17i Gateview Ave A `904f940`+`487a1ef`+`35a990e`+`45344f4` — CODE, visual and progress PASS (guards CODE PASS; drives CODE/visual/progress PASS). Parked: gable-generator closure-overlap dedupe (low); fences and site; colour pass |
-| physical-building:w96215656 / w96215656 | 1224 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215656 / w96215656 | 1224 Bayside Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22b merged recovery `fa2689a` (reviewed final + main `siding_rgb` + rear yard doors on pads) — CODE, visual and progress PASS. Parked: pink roof (colour pass); pre-existing `ParkingSurface`/`road_path` overlap (0.86 m²) |
 | physical-building:w96215657 / w96215657 | 1307 Gateview Avenue | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17i Gateview Ave B `818d35c`+`54409a2`+`13d2d3d` (on Batch A) — CODE PASS after rework, visual and progress PASS; drive-fix junctions accepted on the 0 m² overlap check. Parked: gable-generator closure-overlap dedupe (low); fences and site; colour pass |
 | physical-building:w96215658 / w96215658 | 1239 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP2 — L1 joined shallow-gable whole roof; scoped visual/CODE/progress/native/fit/spray/suite PASS; L2–5 unknown; L2 C: Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS |
 | physical-building:w96215659 / w96215659 | 1234 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP3 — scoped shape/site complete; unseen openings/whole-quality unknown; L2 C: Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS |
 | physical-building:w96215660 / w96215660 | 1225 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP3 — scoped shape/site complete; unseen openings/whole-quality unknown; L2 C: Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS |
 | physical-building:w96215661 / w96215661 | 1222 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — `b9b51dc` scoped rear/low-roof PASS; all-side L2 and stage credit open |
 | physical-building:w96215662 / w96215662 | 1139 Ozbourn Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21b Site 12 `8c70237` (`eave_rgb`) + `8d0549f` — CODE, visual L2 and progress PASS. Parked: rear fence |
-| physical-building:w96215666 / w96215666 | 1215 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w96215666 / w96215666 | 1215 Bayside Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22b merged recovery `fa2689a` (reviewed final + main `siding_rgb` + rear yard doors on pads) — CODE, visual and progress PASS. Parked: 5 front doors for 6 units; pre-existing `ParkingSurface`/`road_path` overlap (0.07 m²) |
 | physical-building:w96215667 / w96215667 | 1248/1395 Gateview Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17f `6539db3` + `970359e` — CODE, visual L1/L2 and progress PASS; 1218 cadence delta CODE and visual PASS. Parked: fences, vent pipes, post bands, carport-top and canopy finish; colour re-check after the lighting decision; carport segmentation (photo shows short segments) |
 | physical-building:w96215668 / w96215668 | 1236 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP4 — L1 connected frontage lawn/footway/parking; retained boarded architecture; scoped visual/CODE/native/fit/spray/suite002 PASS; L2–5 unknown; L2 C: Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS |
 | physical-building:w96215669 / w96215669 | 1238 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22a L1-U reconciliation (progress review at `fc6b5c1`): `89105ba` (off-tip stage closure on today's geometry; config differs from the reviewed one only by palette) + `b9b51dc` scoped rear/low-roof PASS |
@@ -646,7 +653,7 @@ March/November2025 refs and unknown-date Apple context support the scoped envelo
 and observed architecture; missing north capture/unknown rear/schematic materials
 keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
 See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
-Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar22a for current totals);
+Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar22b for current totals);
 **L1:21 C /0 I /192 U**. All other stages unchanged;49 historical credits retained.
 
 ## Island environment layers
