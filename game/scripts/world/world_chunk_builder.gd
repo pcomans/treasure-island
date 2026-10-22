@@ -41,9 +41,6 @@ const D1_B225_LIVE_ATTACHMENT := preload("res://game/scripts/world/facades/d1_b2
 const PANEL_HALL_FACADE := preload("res://game/scripts/world/facades/panel_hall_facade.gd")
 const YMCA_ENTRY_SITE := preload("res://game/scripts/world/facades/ymca_entry_site.gd")
 const ACCEPTED_MATERIAL_RUN_TRIALS := preload("res://game/scripts/world/facades/accepted_material_run_trials.gd")
-const W34313515_LIVE_MODULES := preload("res://game/scripts/world/facades/w34313515_live_modules.gd")
-const W34313520_LIVE_MODULES := preload("res://game/scripts/world/facades/w34313520_live_modules.gd")
-const W34313525_LIVE_MODULES := preload("res://game/scripts/world/facades/w34313525_live_modules.gd")
 const BUILDING_1_HERO_MODEL := preload("res://game/scripts/world/facades/building_1_hero_model.gd")
 const BUILDING_2_HERO_MODEL := preload("res://game/scripts/world/facades/building_2_hero_model.gd")
 const GROUND_COVER := preload("res://game/scripts/world/ground_cover.gd")
@@ -804,39 +801,6 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 		mesh_instances += int(entry_result.mesh_instances)
 		surfaces += int(entry_result.surfaces)
 		triangle_count += int(entry_result.triangles)
-
-	if not is_context and W34313515_LIVE_MODULES.matches_record(record):
-		var live_module_result := W34313515_LIVE_MODULES.build(record)
-		if not bool(live_module_result.get("ok", false)):
-			root.free()
-			return live_module_result
-		root.add_child(live_module_result.node as Node3D)
-		root.set_meta("w34313515_live_modules", (live_module_result.metadata as Dictionary).duplicate(true))
-		mesh_instances += int(live_module_result.mesh_instances)
-		surfaces += int(live_module_result.surfaces)
-		triangle_count += int(live_module_result.triangles)
-
-	if not is_context and W34313520_LIVE_MODULES.matches_record(record):
-		var live_module_result := W34313520_LIVE_MODULES.build(record)
-		if not bool(live_module_result.get("ok", false)):
-			root.free()
-			return live_module_result
-		root.add_child(live_module_result.node as Node3D)
-		root.set_meta("w34313520_live_modules", (live_module_result.metadata as Dictionary).duplicate(true))
-		mesh_instances += int(live_module_result.mesh_instances)
-		surfaces += int(live_module_result.surfaces)
-		triangle_count += int(live_module_result.triangles)
-
-	if not is_context and W34313525_LIVE_MODULES.matches_record(record):
-		var live_module_result := W34313525_LIVE_MODULES.build(record)
-		if not bool(live_module_result.get("ok", false)):
-			root.free()
-			return live_module_result
-		root.add_child(live_module_result.node as Node3D)
-		root.set_meta("w34313525_live_modules", (live_module_result.metadata as Dictionary).duplicate(true))
-		mesh_instances += int(live_module_result.mesh_instances)
-		surfaces += int(live_module_result.surfaces)
-		triangle_count += int(live_module_result.triangles)
 
 	if not is_context and IsleHouse39BrutonHighFacade.matches_target(record):
 		var isle_house_facade := ISLE_HOUSE_HIGH_FACADE_SCENE.instantiate() as IsleHouse39BrutonHighFacade
