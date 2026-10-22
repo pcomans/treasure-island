@@ -705,3 +705,18 @@ desktop controls. CDP emulation was scoped to that connection. Keep one session
 attached through navigation and gestures, and verify the actual capability
 value before interpreting a touch test. A screenshot timeout during synchronous
 world loading is not a browser exit; inspect the existing process and console.
+
+A new worktree may lack Git author identity even when prior bot commits exist.
+Before a build that requires a committed tree, check `git var GIT_AUTHOR_IDENT`;
+if absent, use the established bot identity on that commit command with `git -c`
+rather than changing global configuration. The web build's dirty-tree refusal
+on 2026-10-22 prevented an incorrectly named export after a failed commit.
+
+## Touch emulation does not establish device ergonomics
+
+The 2026-10-22 custom touch adapter passed bounded Chromium gesture/release
+checks and independent layout review, but the owner described actual iPad
+controls as "pretty jaznky". Emulation proves event routing, not comfortable
+thumb reach, camera sensitivity or combined-input feel. Keep device feel
+acceptance separate and use the owner's specific problematic gesture before
+choosing tuning or a joystick plugin; a plugin alone does not prove Safari UX.
