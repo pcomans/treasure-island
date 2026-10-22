@@ -98,10 +98,12 @@ static func build(record: Dictionary) -> Dictionary:
 	var aggregate := preload("res://game/resources/materials/world/ti_ymca/ti_ymca_primary.tres")
 	var plain: Variant = cfg.get("inferred_opposite", {}).get("panels")
 	if not plain is Array:
+		root.free()
 		return {"ok": false, "message": "YMCA plain-side panel configuration required."}
 	for spec: Dictionary in plain:
 		var run := int(spec.run)
 		if run < 0 or run >= vertices.size() / 12 or (run >= 3 and run <= 11):
+			root.free()
 			return {"ok": false, "message": "YMCA plain panels must sit on unobserved source runs."}
 		var pa := _vec(vertices.slice(run*12,run*12+3))
 		var pb := _vec(vertices.slice(run*12+3,run*12+6))

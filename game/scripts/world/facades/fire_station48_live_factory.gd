@@ -9,7 +9,7 @@ const ROOF_KEY := "building:w764313741:roof"
 const OBSERVED_RUNS := [0,1,2,3,5,6,8,9,24,25]
 # Unphotographed ENE/SSE runs: plain closed walls in the observed pale finish, no openings.
 const INFERRED_RUNS := [4,10,11,12,13,14,15,18,19,20,21,22,23]
-const TARGET_RUNS := [0,1,2,3,4,5,6,8,9,10,11,12,13,14,15,18,19,20,21,22,23,24,25]
+const TARGET_RUNS := OBSERVED_RUNS + INFERRED_RUNS
 const PROTECTED_RUNS := [7,16,17]
 var _tangent_builder:Callable
 var _last_result:Dictionary={}
@@ -43,7 +43,8 @@ func configure_records(wall:Dictionary,roof:Dictionary,source_builder:Callable,t
 	wall.top_elevation_m=7.60;roof.top_elevation_m=7.60
 	var config:=_json(CONFIG_PATH)
 	if not matches_record_pair(wall,roof):return {"ok":false,"message":"Exact source wall and roof pair required."}
-	if not _same_numeric_runs(config.get("mapped_runs",[]),TARGET_RUNS) or not _same_numeric_runs(config.get("protected_runs",[]),PROTECTED_RUNS):return {"ok":false,"message":"Mapped/protected scope changed."}
+	var target_runs:Array=TARGET_RUNS.duplicate();target_runs.sort()
+	if not _same_numeric_runs(config.get("mapped_runs",[]),target_runs) or not _same_numeric_runs(config.get("protected_runs",[]),PROTECTED_RUNS):return {"ok":false,"message":"Mapped/protected scope changed."}
 	if not _same_numeric_runs(config.get("observed_runs",[]),OBSERVED_RUNS) or not _same_numeric_runs(config.get("inferred_runs",[]),INFERRED_RUNS):return {"ok":false,"message":"Observed/inferred scope changed."}
 	if str(config.get("schema_version",""))!="ti.fire-station48-quality-study/1":return {"ok":false,"message":"Configured emission changed."}
 	# Use the ordinary builder's consumed original streams/material partitions.
