@@ -886,13 +886,24 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "code-review-inst3-rework-20261022",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-inst3-w34313515-round2-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w34313515",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -924,13 +935,24 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "code-review-inst3-rework-20261022",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-inst3-w34313520-round2-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w34313520",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -1034,13 +1056,24 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "code-review-inst3-round1-20261022",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-inst3-w34313525-round1-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w34313525",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
