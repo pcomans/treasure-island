@@ -21255,3 +21255,13 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the rebuild acted on the sweep's finding that 1445's dated photo shows the garage-court family. Reference | render pairs at matched poses for all four fronts, plus rears for 1441 and 1444, made the replacement of the old flat boxes directly verifiable, and the island pair shows the dark flat-roof cluster replaced by gabled courts.
 - What did not work well: the earlier accepted models carried recognition credit despite contradicting their photos, because the earlier review had no dated photo in hand. Credit rested on renders, not references.
 - What the team should change next time: any acceptance record should name the dated reference file it was judged against. A unit whose credit has no such file should be queued for a reference check before it's treated as protected.
+
+## code-review (mid-rise courtyard holes 778733f, 2026-10-22)
+
+- What worked well: the ring parser keeps the old single-ring path exactly (with `holes` absent, any ring break is still "not contiguous", and closure is checked against the same first point). Simulating the roof cut line for the first real user (r133351) confirmed it splits that courtyard. What didn't: the roof cutter silently drops any inner ring Clipper returns, so a courtyard the cut line misses would be roofed over without an error; I only caught that by reading the code. Next time: give each new opt-in geometry path one cheap invariant that fails the build (here, roof area = block area − courtyard area), so silent fallbacks become errors.
+
+## modeler-midrise (r133351 courtyard ring, 2026-10-22)
+
+- What worked well: building the courtyard natively, with the outer ring as one block, courtyard walls and parapets from the hole's own edges and Clipper roof pieces cut through the hole, solved what config clipping could not. The engine check (no wall vertex outside the footprint), identical counts on 55 buildings and AE 0 on 490/Star View made the proof quick. The overhead shot confirmed the courtyard opens to the ground. Fits, spray, final shots and suite all passed first time.
+- What did not work well: the first, approved design (cut the ring around the courtyard with clip lines) only failed in the engine, because my float64 preflight mirror hides the bridge edges that clipping a concave ring leaves. Code review then found that the roof pieces could silently roof over a non-convex courtyard, so a guard came as a follow-up commit.
+- What the team should change next time: for any new geometry feature, run the engine's own check before asking for design approval of a config-only approach. Write fail-closed area checks into a producer whenever it builds pieces with Clipper.

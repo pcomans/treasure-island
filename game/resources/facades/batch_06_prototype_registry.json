@@ -114,7 +114,7 @@
   "nonselected_and_blocked": {
     "w34313525": "deferred from first set: partial source-edge mappings despite two-side coverage",
     "w34313520": "deferred: one-side coverage",
-    "r133351": "deferred: relation ownership and inner/outer complexity",
+    "r133351": "superseded 2026-10-22: courtyard ring modelled by the shared mid-rise family (game/resources/midrise_family/r133351.json, native courtyard support); no Batch 06 facade assets",
     "w1222514695": "superseded 2026-10-18: Level 1 shelter massing by the shared mid-rise family (game/resources/midrise_family/w1222514695.json); no Batch 06 facade assets",
     "w1222720021": "reference-blocked; zero assets and zero mapped runs"
   },

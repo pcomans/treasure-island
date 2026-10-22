@@ -1,0 +1,716 @@
+{
+  "schema_version": "ti.midrise-family/1",
+  "target": {
+    "source_key": "r133351",
+    "address": "13th St (r133351)",
+    "edge_normals": [
+      [
+        -0.8823838501232978,
+        0.4705302764345623
+      ],
+      [
+        -0.46042736002807516,
+        -0.8876973843250736
+      ],
+      [
+        -0.8894177713016539,
+        0.4570952068145091
+      ],
+      [
+        -0.44929607387296155,
+        -0.8933829179038193
+      ],
+      [
+        -0.8838302979338796,
+        0.46780765754112
+      ],
+      [
+        0.4674207836114955,
+        0.884034960308706
+      ],
+      [
+        -0.876901967339828,
+        0.4806692622537241
+      ],
+      [
+        0.47003334513376727,
+        0.8826486585626021
+      ],
+      [
+        0.8910931607142833,
+        -0.4538204258605253
+      ],
+      [
+        0.4720278992783918,
+        0.8815836105003475
+      ],
+      [
+        -0.8686689248437924,
+        0.49539307525512477
+      ],
+      [
+        0.46393648547051636,
+        0.8858684650947145
+      ],
+      [
+        -0.8852192475627306,
+        0.46517403597414275
+      ],
+      [
+        0.47648215157392404,
+        0.8791841440969486
+      ],
+      [
+        0.8879622289616574,
+        -0.45991638363668347
+      ],
+      [
+        0.4622414634544757,
+        0.8867540975171553
+      ],
+      [
+        0.8872729367308368,
+        -0.4612447677156202
+      ],
+      [
+        0.4866899329104349,
+        0.8735747874129819
+      ],
+      [
+        -0.8760111201719153,
+        0.48229090530005464
+      ],
+      [
+        0.469394417247572,
+        0.8829886075464464
+      ],
+      [
+        0.8838749602319584,
+        -0.46772326719434637
+      ],
+      [
+        0.4738131279119415,
+        0.8806254140202303
+      ],
+      [
+        0.8838507711563838,
+        -0.46776897537808754
+      ],
+      [
+        -0.46889043328111635,
+        -0.8832563396757744
+      ],
+      [
+        0.872185862114161,
+        -0.48917463336540423
+      ],
+      [
+        -0.483124262660073,
+        -0.8755517956289969
+      ],
+      [
+        -0.88622599748191,
+        0.4632531504341806
+      ],
+      [
+        -0.46370268034247514,
+        -0.8859908714220505
+      ],
+      [
+        0.8726005753189305,
+        -0.48843447457470845
+      ],
+      [
+        -0.4732905397716498,
+        -0.8809063883084629
+      ],
+      [
+        0.8765731122639685,
+        -0.4812687179277914
+      ],
+      [
+        -0.46416243660226886,
+        -0.8857500959342001
+      ],
+      [
+        -0.8793604598749092,
+        0.4761566775847928
+      ],
+      [
+        -0.47225192470729827,
+        -0.8814636235320504
+      ],
+      [
+        -0.8818825645358114,
+        0.47146913193521006
+      ],
+      [
+        -0.47233502838275293,
+        -0.8814190949614513
+      ],
+      [
+        0.8813114842747855,
+        -0.47253578455538625
+      ],
+      [
+        -0.469316125867764,
+        -0.8830302225861089
+      ]
+    ],
+    "holes": 1
+  },
+  "floor": {
+    "anchor_edge": "ring",
+    "above_terrain": 0.1,
+    "basis": "median frozen terrain around the outer ring"
+  },
+  "levels": {
+    "ground_h": 2.75,
+    "storey_h": 3.0,
+    "parapet_h": 0.25
+  },
+  "palette": {
+    "frame": {
+      "rgb": [
+        0.16,
+        0.17,
+        0.18
+      ],
+      "roughness": 0.55,
+      "metallic": 0.2
+    },
+    "frame_light": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.88
+      ],
+      "roughness": 0.6
+    },
+    "glass": {
+      "rgb": [
+        0.22,
+        0.22,
+        0.21
+      ],
+      "roughness": 0.4,
+      "metallic": 0.05
+    },
+    "soffit": {
+      "rgb": [
+        0.55,
+        0.55,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "slab": {
+      "rgb": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "metal": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.19
+      ],
+      "roughness": 0.5,
+      "metallic": 0.45
+    },
+    "rail": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.45,
+      "metallic": 0.5
+    },
+    "door": {
+      "rgb": [
+        0.42,
+        0.43,
+        0.44
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "garage": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.73
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "vent_back": {
+      "rgb": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "roughness": 0.9
+    },
+    "paving": {
+      "rgb": [
+        0.66,
+        0.65,
+        0.62
+      ],
+      "roughness": 0.95
+    },
+    "coping": {
+      "rgb": [
+        0.73,
+        0.74,
+        0.74
+      ],
+      "roughness": 0.45,
+      "metallic": 0.3
+    },
+    "roof": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "parapet": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9
+    },
+    "mech": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.63
+      ],
+      "roughness": 0.7,
+      "metallic": 0.15
+    },
+    "concrete": {
+      "rgb": [
+        0.62,
+        0.61,
+        0.58
+      ],
+      "roughness": 0.95
+    },
+    "school_white": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.87
+      ],
+      "roughness": 0.85
+    },
+    "teal": {
+      "rgb": [
+        0.16,
+        0.36,
+        0.52
+      ],
+      "roughness": 0.6
+    },
+    "olive": {
+      "rgb": [
+        0.56,
+        0.53,
+        0.4
+      ],
+      "roughness": 0.9
+    },
+    "olive_trim": {
+      "rgb": [
+        0.36,
+        0.29,
+        0.22
+      ],
+      "roughness": 0.8
+    }
+  },
+  "schemes": {
+    "school": {
+      "material": "school_white",
+      "parapet_material": "school_white",
+      "module": 4.2,
+      "window": {
+        "w": 2.6,
+        "h": 1.4,
+        "sill": 0.9,
+        "depth": 0.12,
+        "mullions": [
+          0.33,
+          0.67
+        ],
+        "frame": "teal"
+      },
+      "ground": {
+        "w": 2.6,
+        "h": 1.4,
+        "sill": 0.9,
+        "depth": 0.12,
+        "mullions": [
+          0.33,
+          0.67
+        ],
+        "frame": "teal",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "teal",
+        "top": 0.85
+      },
+      "bands": [
+        {
+          "storey": 1,
+          "offset": -0.45,
+          "h": 0.25,
+          "material": "teal"
+        }
+      ]
+    },
+    "olive": {
+      "material": "olive",
+      "parapet_material": "olive_trim",
+      "module": 4.2,
+      "window": {
+        "w": 2.6,
+        "h": 1.4,
+        "sill": 0.9,
+        "depth": 0.12,
+        "mullions": [
+          0.33,
+          0.67
+        ],
+        "frame": "olive_trim"
+      },
+      "ground": {
+        "w": 2.6,
+        "h": 1.4,
+        "sill": 0.9,
+        "depth": 0.12,
+        "mullions": [
+          0.33,
+          0.67
+        ],
+        "frame": "olive_trim",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "olive_trim",
+        "top": 0.3
+      },
+      "bands": []
+    },
+    "door0": {
+      "material": "school_white",
+      "parapet_material": "school_white",
+      "module": 4.2,
+      "window": {
+        "w": 2.6,
+        "h": 1.4,
+        "sill": 0.9,
+        "depth": 0.12,
+        "mullions": [
+          0.33,
+          0.67
+        ],
+        "frame": "teal"
+      },
+      "ground": {
+        "w": 2.6,
+        "h": 1.4,
+        "sill": 0.9,
+        "depth": 0.12,
+        "mullions": [
+          0.33,
+          0.67
+        ],
+        "frame": "teal",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "teal",
+        "top": 0.85
+      },
+      "bands": [
+        {
+          "storey": 1,
+          "offset": -0.45,
+          "h": 0.25,
+          "material": "teal"
+        }
+      ],
+      "features": [
+        {
+          "type": "entry",
+          "from": 19.16,
+          "to": 20.96,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "door37": {
+      "material": "school_white",
+      "parapet_material": "school_white",
+      "module": 4.2,
+      "window": {
+        "w": 2.6,
+        "h": 1.4,
+        "sill": 0.9,
+        "depth": 0.12,
+        "mullions": [
+          0.33,
+          0.67
+        ],
+        "frame": "teal"
+      },
+      "ground": {
+        "w": 2.6,
+        "h": 1.4,
+        "sill": 0.9,
+        "depth": 0.12,
+        "mullions": [
+          0.33,
+          0.67
+        ],
+        "frame": "teal",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "teal",
+        "top": 0.85
+      },
+      "bands": [
+        {
+          "storey": 1,
+          "offset": -0.45,
+          "h": 0.25,
+          "material": "teal"
+        }
+      ],
+      "features": [
+        {
+          "type": "entry",
+          "from": 7.9,
+          "to": 9.7,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "door7": {
+      "material": "school_white",
+      "parapet_material": "school_white",
+      "module": 4.2,
+      "window": {
+        "w": 2.6,
+        "h": 1.4,
+        "sill": 0.9,
+        "depth": 0.12,
+        "mullions": [
+          0.33,
+          0.67
+        ],
+        "frame": "teal"
+      },
+      "ground": {
+        "w": 2.6,
+        "h": 1.4,
+        "sill": 0.9,
+        "depth": 0.12,
+        "mullions": [
+          0.33,
+          0.67
+        ],
+        "frame": "teal",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "teal",
+        "top": 0.85
+      },
+      "bands": [
+        {
+          "storey": 1,
+          "offset": -0.45,
+          "h": 0.25,
+          "material": "teal"
+        }
+      ],
+      "features": [
+        {
+          "type": "entry",
+          "from": 7.646,
+          "to": 9.446,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "door36": {
+      "material": "school_white",
+      "parapet_material": "school_white",
+      "module": 4.2,
+      "window": {
+        "w": 2.6,
+        "h": 1.4,
+        "sill": 0.9,
+        "depth": 0.12,
+        "mullions": [
+          0.33,
+          0.67
+        ],
+        "frame": "teal"
+      },
+      "ground": {
+        "w": 2.6,
+        "h": 1.4,
+        "sill": 0.9,
+        "depth": 0.12,
+        "mullions": [
+          0.33,
+          0.67
+        ],
+        "frame": "teal",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "teal",
+        "top": 0.85
+      },
+      "bands": [
+        {
+          "storey": 1,
+          "offset": -0.45,
+          "h": 0.25,
+          "material": "teal"
+        }
+      ],
+      "features": [
+        {
+          "type": "entry",
+          "from": 19.18,
+          "to": 20.98,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
+    },
+    "plain": {
+      "material": "school_white",
+      "parapet_material": "school_white",
+      "module": 4.2,
+      "window": {
+        "w": 2.6,
+        "h": 1.4,
+        "sill": 0.9,
+        "depth": 0.12,
+        "mullions": [
+          0.33,
+          0.67
+        ],
+        "frame": "teal"
+      },
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "teal",
+        "top": 0.85
+      },
+      "bands": [
+        {
+          "storey": 1,
+          "offset": -0.45,
+          "h": 0.25,
+          "material": "teal"
+        }
+      ],
+      "upper": "blank"
+    }
+  },
+  "blocks": [
+    {
+      "id": "hall",
+      "storeys": 1,
+      "ground_h": 2.75,
+      "parapet": {
+        "h": 0.25,
+        "t": 0.2
+      },
+      "clip": [],
+      "faces": {
+        "default": "school",
+        "hole": "school",
+        "e0": "door0",
+        "e37": "door37",
+        "e7": "door7",
+        "e36": "door36",
+        "e2": "plain",
+        "e3": "plain",
+        "e10": "plain",
+        "e34": "plain",
+        "e4": "olive",
+        "e6": "olive",
+        "e12": "olive",
+        "e18": "olive",
+        "e26": "olive",
+        "e32": "olive"
+      }
+    }
+  ],
+  "study_notes": {
+    "observed": "Mar 2025 13th St (south frontage): low one-storey flat-roofed building, white walls with window bands over blue panels and a blue band; a darker olive wing with brown trim to the west.",
+    "inferred": "Window cadence, the olive treatment on the WSW-facing faces, doors on every side; north, courtyard and re-entrant sides are unseen.",
+    "footprint": "Frozen relation r133351: outer ring (61 edges) kept as one block around its inner courtyard ring."
+  }
+}
