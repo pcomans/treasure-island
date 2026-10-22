@@ -441,9 +441,15 @@ from the 2018-09 survey photos, whose date the owner accepted; `a783900` darkens
 450 hall after its visual REWORK. CODE PASS on the hood and all four configs; visual L2
 PASS on all four (450 after the re-review). L2 C on all four (L1 already C); the
 catalog now accepts them.
-Current totals after Mar22i: L1:213 C/0 U; L2:184 C/29 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall398 C/0 I/667 U across213 units/1,065 cells; catalog
-recognition score 56/213.
+**Mar22j** Compound E, 2026-10-22: `38641d2` models the w291193760 concrete process
+building and `cd9114f` the w291193766 box, ducts and vessels at L2 on the mid-rise
+family; `5279519` recomposes 766's ducts around a riser and a dominant vessel after its
+round-1 visual REWORK. CODE PASS on all three; visual L2 PASS for 760 (round 1) and 766
+(after the rework). L2 C on both, and the catalog accepts them. w291193770 stays L1
+with no acceptance, because no photo shows it.
+Current totals after Mar22j: L1:213 C/0 U; L2:186 C/27 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall400 C/0 I/665 U across213 units/1,065 cells; catalog
+recognition score 58/213.
 **U** no current stage-level conclusion established in this checklist pass.
 
 The retained34-building audit entries in [RETRO](RETRO_LOG.md) (2026-09-23,
@@ -645,8 +651,8 @@ before selecting another round.
 | physical-building:w291193741 / w291193741 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1 PASS (L2 not passed). Parked: validation lows |
 | physical-building:w291193744 / w291193744 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1 PASS (L2 not passed). Parked: validation lows |
 | physical-building:w291193754 / w291193754 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1 PASS (L2 not passed). Parked: validation lows |
-| physical-building:w291193760 / w291193760 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1 PASS (L2 not passed). Parked: validation lows |
-| physical-building:w291193766 / w291193766 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1 PASS (L2 not passed). Parked: validation lows |
+| physical-building:w291193760 / w291193760 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1 PASS (L2 not passed). Parked: validation lows; Mar22j Compound E on the mid-rise family (`38641d2`, `cd9114f`, `5279519`) — CODE PASS, visual L2 PASS round 1; catalog accepted |
+| physical-building:w291193766 / w291193766 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1 PASS (L2 not passed). Parked: validation lows; Mar22j Compound E on the mid-rise family (`38641d2`, `cd9114f`, `5279519`) — CODE PASS, visual L2 PASS after the `5279519` rework (round-1 REWORK); catalog accepted |
 | physical-building:w291193770 / w291193770 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1 PASS (L2 not passed). Parked: validation lows |
 | physical-building:w291196366 / w291196366 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1+L2 PASS. Parked: validation lows |
 | physical-building:w291196367 / w291196367 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1+L2 PASS. Parked: validation lows; colour pass (roof to grey corrugated) |
@@ -710,7 +716,7 @@ March/November2025 refs and unknown-date Apple context support the scoped envelo
 and observed architecture; missing north capture/unknown rear/schematic materials
 keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
 See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
-Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar22i for current totals);
+Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar22j for current totals);
 **L1:21 C /0 I /192 U**. All other stages unchanged;49 historical credits retained.
 
 ## Island environment layers
