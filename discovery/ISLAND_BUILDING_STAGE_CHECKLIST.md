@@ -393,8 +393,15 @@ Hawkins (`w1249412093`), Isle House (`w1249412094`), B201 (`w34313545`), B225
 Support (`r133347`); their L2 gap is blank sides, and an openings pass is approved by
 the owner (2026-10-22). No change on Chinook 1439/1441/1445 and Croaker 1444: photo
 check pending, with a possible rebuild on the fish-street kit (owner approved).
-Current totals after Mar22c: L1:194 C/19 U; L2:162 C/51 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall357 C/0 I/708 U across213 units/1,065 cells;49 historical
+**Mar22d** C-set, 2026-10-22: `fc3db5d` retires the w34313564 and w291196370
+live-module runtime; `68e7453` models Dorm 369 (`w291189926`), `w291196370`,
+`w34313564` and two Building 3 annexes (`w1222514685`, `w1222514686`) on the mid-rise
+family. CODE, visual and evidence-based progress PASS. L1/L2 C on Dorm 369,
+`w291196370` and `w34313564`; L1 C on the two annexes. Parked: colour pass (Dorm 369
+warmer grey-beige; 370 pale blue with a red deck); 564's dock canopy (L3); the retired
+`legacy_adapters` and prototype cleanup (low); Dorm 369's landings next to Oasis.
+Current totals after Mar22d: L1:199 C/14 U; L2:165 C/48 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall365 C/0 I/700 U across213 units/1,065 cells;49 historical
 recognition credits unchanged.
 **U** no current stage-level conclusion established in this checklist pass.
 
@@ -448,7 +455,7 @@ before selecting another round.
 | physical-building:w34313557 / w34313557 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21h institutional batch on the mid-rise family (`bf57964`, `6c5a131`, `a45788d`) — CODE, visual and progress PASS; module-inferred |
 | physical-building:w34313558 / w34313558 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21h institutional batch on the mid-rise family (`bf57964`, `6c5a131`, `a45788d`) — CODE, visual and progress PASS |
 | physical-building:w34313560 / w34313560 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21h institutional batch on the mid-rise family (`bf57964`, `6c5a131`, `a45788d`) — CODE, visual and progress PASS |
-| physical-building:w34313564 / w34313564 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — `1438e22` scoped SSE L2 facade PASS; all-side and whole-building open |
+| physical-building:w34313564 / w34313564 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | `1438e22` scoped SSE L2 facade PASS; all-side and whole-building open; Mar22d C-set (`fc3db5d` runtime retirement, `68e7453` mid-rise configs) — CODE, visual and evidence-based progress PASS. Parked: dock canopy (L3) |
 | physical-building:w34313569 / w34313569 | Bldg 461 | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | B461 — scoped envelope/site complete; missing north and unknown rear keep whole quality open |
 | physical-building:w95934092 / w95934092 | 1318 Gateview Avenue | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17i Gateview Ave A `904f940`+`487a1ef`+`35a990e`+`45344f4` — CODE, visual and progress PASS (guards CODE PASS; drives CODE/visual/progress PASS). Parked: gable-generator closure-overlap dedupe (low); fences and site; colour pass; 1318 pergolas (L3) |
 | physical-building:w95934093 / w95934093 | 1432 Halibut Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21e fish streets on the garage-court kit (`02d39f1`…`fcfe956`) — CODE PASS (lows parked), visual L2 PASS, progress PASS. In frozen OSM, since demolished; modeled from Apr 2019 |
@@ -593,7 +600,7 @@ before selecting another round.
 | physical-building:w111322535 / w111322535 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1+L2 PASS. Parked: validation lows |
 | physical-building:w291189336 / w291189336 | Navy Chapel Building 187 | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Ch — lip004 whole visual/CODE and integrated native/fit/stairs/suite PASS; as-built unclaimed |
 | physical-building:w291189918 / w291189918 | Oasis - pizzeria & event venue | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21h institutional batch on the mid-rise family (`bf57964`, `6c5a131`, `a45788d`) — CODE, visual and progress PASS; L1 only (L2 not passed) |
-| physical-building:w291189926 / w291189926 | US Dept of Labor Job Corps Dormitory Building 369 | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w291189926 / w291189926 | US Dept of Labor Job Corps Dormitory Building 369 | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22d C-set (`fc3db5d` runtime retirement, `68e7453` mid-rise configs) — CODE, visual and evidence-based progress PASS. Parked: colour pass (warmer grey-beige); landings next to Oasis |
 | physical-building:w291193741 / w291193741 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1 PASS (L2 not passed). Parked: validation lows |
 | physical-building:w291193744 / w291193744 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1 PASS (L2 not passed). Parked: validation lows |
 | physical-building:w291193754 / w291193754 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1 PASS (L2 not passed). Parked: validation lows |
@@ -603,7 +610,7 @@ before selecting another round.
 | physical-building:w291196366 / w291196366 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1+L2 PASS. Parked: validation lows |
 | physical-building:w291196367 / w291196367 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1+L2 PASS. Parked: validation lows; colour pass (roof to grey corrugated) |
 | physical-building:w291196369 / w291196369 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1+L2 PASS. Parked: validation lows |
-| physical-building:w291196370 / w291196370 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w291196370 / w291196370 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22d C-set (`fc3db5d` runtime retirement, `68e7453` mid-rise configs) — CODE, visual and evidence-based progress PASS. Parked: colour pass (pale blue with a red deck) |
 | physical-building:w291196371 / w291196371 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1+L2 PASS. Parked: validation lows |
 | physical-building:w291196372 / w291196372 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1+L2 PASS. Parked: validation lows |
 | physical-building:w291196373 / w291196373 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1 PASS (L2 not passed). Parked: validation lows |
@@ -620,8 +627,8 @@ before selecting another round.
 | physical-building:w1043836450 / w1043836450 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 450 (680 Avenue I): Mar21c redo on the mid-rise family `51349c3` — visual L1+L2 PASS, resolving the earlier panel-hall REWORK; config code-trivial. Parked: ramp length (foundation-exposure trade-off); colour pass (roof grey-brown, lighter glazing) |
 | physical-building:w1098437841 / w1098437841 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | M — retain complete site; inspect later stages |
 | physical-building:w1212173437 / w1212173437 | Star View Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17k mid-rise family `3f44801` + `6e2cead` — CODE PASS (two lows), visual L2 PASS, progress L1+L2 PASS. Parked: code lows (misleading root `scope` string at `midrise_family.gd:146`; `_ground_y` linear scan needs indexing); landscaping, signage, materials |
-| physical-building:w1222514685 / w1222514685 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w1222514686 / w1222514686 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w1222514685 / w1222514685 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar22d C-set (`fc3db5d` runtime retirement, `68e7453` mid-rise configs) — CODE, visual and evidence-based progress PASS (Building 3 annex); L1 only |
+| physical-building:w1222514686 / w1222514686 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar22d C-set (`fc3db5d` runtime retirement, `68e7453` mid-rise configs) — CODE, visual and evidence-based progress PASS (Building 3 annex); L1 only |
 | physical-building:w1222514695 / w1222514695 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21c shelter: L1 C under the blocked-side walk-up rule (`b85a505`, CODE PASS); the site-blocked west side is skipped |
 | physical-building:w1222720021 / w1222720021 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22c Building 1 tower: L1/L2 C from the review-only sweep `/workspaces/landmark-progress-20261007/review-sweep-20261022/` (visual review; assets unchanged) |
 | physical-building:w1249412093 / w1249412093 | Hawkins | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar22c Hawkins: L1 C from the review-only sweep `/workspaces/landmark-progress-20261007/review-sweep-20261022/` (visual review; assets unchanged); L2 gap: blank sides; openings pass approved by owner 2026-10-22 |
@@ -662,7 +669,7 @@ March/November2025 refs and unknown-date Apple context support the scoped envelo
 and observed architecture; missing north capture/unknown rear/schematic materials
 keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
 See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
-Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar22c for current totals);
+Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar22d for current totals);
 **L1:21 C /0 I /192 U**. All other stages unchanged;49 historical credits retained.
 
 ## Island environment layers
