@@ -1,4 +1,3 @@
-class_name D1InferredOpenings
 extends RefCounted
 
 ## Render-only openings for the unphotographed sides of the D1 attachments
@@ -10,7 +9,7 @@ extends RefCounted
 ## Counts and positions are production inference, not as-built.
 
 const RENDER_BUILDING_WALL := 1 << 1
-const MAX_SIDE_CHORD_DEVIATION_M := 0.05
+const MAX_SIDE_CHORD_DEVIATION_M := 0.01
 const FRAME_DEPTH_M := 0.12
 const FRAME_THICKNESS_M := 0.10
 
@@ -79,6 +78,7 @@ static func _side(vertices: Array, normals: Array, runs: Array) -> Dictionary:
 	if runs.is_empty():
 		return {"ok": false, "message": "inferred opening group has no runs"}
 	var points: Array[Vector3] = []
+	var top_y := INF
 	var normal := Vector3.ZERO
 	for index in runs.size():
 		var run := int(runs[index])
@@ -93,6 +93,7 @@ static func _side(vertices: Array, normals: Array, runs: Array) -> Dictionary:
 			points.append(start)
 		points.append(end)
 		normal += Vector3(float(normals[offset]), 0.0, float(normals[offset + 2]))
+		top_y = minf(top_y, minf(float(vertices[offset + 7]), float(vertices[offset + 10])))
 	var first := points[0]
 	var last := points[points.size() - 1]
 	var chord := Vector3(last.x - first.x, 0.0, last.z - first.z)
@@ -100,14 +101,16 @@ static func _side(vertices: Array, normals: Array, runs: Array) -> Dictionary:
 	if length <= 1.0 or normal.length() <= 0.0:
 		return {"ok": false, "message": "inferred opening side %s is degenerate" % str(runs)}
 	var tangent := chord / length
-	var outward := normal.normalized()
-	if absf(outward.dot(tangent)) > 0.02 or outward.cross(tangent).y <= 0.0:
+	# Place along the exact chord; the record normals (3 decimals) only pick the side.
+	var outward := Vector3(-tangent.z, 0.0, tangent.x)
+	var record_normal := normal.normalized()
+	if absf(record_normal.dot(tangent)) > 0.02 or record_normal.dot(outward) <= 0.0:
 		return {"ok": false, "message": "inferred opening side %s normal does not face out of its runs" % str(runs)}
 	for point in points:
 		var along := Vector3(point.x - first.x, 0.0, point.z - first.z)
 		if absf(along.dot(outward)) > MAX_SIDE_CHORD_DEVIATION_M:
 			return {"ok": false, "message": "inferred opening side %s is not straight" % str(runs)}
-	return {"ok": true, "start": first, "tangent": tangent, "outward": outward, "length": length, "points": points}
+	return {"ok": true, "start": first, "tangent": tangent, "outward": outward, "length": length, "points": points, "top_y": top_y}
 
 
 static func _add_group(boxes: Dictionary, group: Dictionary, side: Dictionary, materials: Dictionary) -> String:
@@ -131,14 +134,13 @@ static func _add_group(boxes: Dictionary, group: Dictionary, side: Dictionary, m
 		var margin := float(windows.get("end_margin_m", 1.0))
 		if total > length - margin * 2.0:
 			return "inferred window row on %s is longer than its side" % str(group.get("runs", []))
+		if center_y + height * 0.5 + FRAME_THICKNESS_M > float(side.top_y) - 0.05:
+			return "inferred window row on %s rises above its wall top" % str(group.get("runs", []))
 		var cursor := (length - total) * 0.5
-		var skip := windows.get("skip_u_ranges_m", []) as Array
 		for index in widths.size():
 			var width := float(widths[index])
 			var u := cursor + width * 0.5
 			cursor += width + gap
-			if _skipped(u, width, skip):
-				continue
 			_add_opening(boxes, side, glass, frame, u, center_y, Vector2(width, height), int(panes[index]) - 1)
 	for door_value: Variant in group.get("doors", []) as Array:
 		var door := door_value as Dictionary
@@ -154,14 +156,6 @@ static func _add_group(boxes: Dictionary, group: Dictionary, side: Dictionary, m
 		_add_box(boxes, leaf, side, u, (bottom_y + top_y) * 0.5, 0.06, Vector3(width, top_y - bottom_y, 0.09))
 		_add_frame(boxes, frame, side, u, (bottom_y + top_y) * 0.5, Vector2(width, top_y - bottom_y), 0)
 	return ""
-
-
-static func _skipped(u: float, width: float, ranges: Array) -> bool:
-	for range_value: Variant in ranges:
-		var span := range_value as Array
-		if u + width * 0.5 > float(span[0]) and u - width * 0.5 < float(span[1]):
-			return true
-	return false
 
 
 static func _bottom_y(side: Dictionary, u: float) -> float:
