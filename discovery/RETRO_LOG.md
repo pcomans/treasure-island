@@ -21199,3 +21199,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 ## code-review (Bayside 1215/1224 recovery, 2026-10-22)
 
 - What worked well: diffing each config against its final, the colour commit and main pinned the delta to exactly the declared exceptions, and the exact overlap pass surfaced a parking-over-road overlap that turned out to be unchanged on main. What didn't: that pre-existing overlap (0.07 and 0.86 m² of `ParkingSurface` over `road_path`) has never been flagged because earlier reviews did not use exact area clipping. Next time: route pre-existing overlaps found during a recovery to a modeler as a parked item rather than leaving them in review notes.
+
+## visual-review (review-only sweep, 2026-10-22)
+
+- What worked well: one sheet per unit with dated photos (or a clearly labelled "prior render, not a photo") over the current shots let me sweep 16 older units in a single pass. The labels kept me from mistaking an old render for evidence, and they exposed which accepted units have never been checked against a dated photo.
+- What did not work well: half the sweep (Hawkins, Isle House, Maceo May, 1439, 1441, 1444, 1308, B201, B225, 1222) has no retained dated photo, so their L2 can only be judged for completeness, not fidelity. The 1445 photo shows that Chinook is a pink garage-court family, which casts doubt on the older flat-box 1439/1441/1444 that historical credit still protects. Several close-ups (1445, 1308, PSD) land on blank sides or neighbours instead of the target's faces.
+- What the team should change next time: before re-reviewing a historical unit, run one bounded dated-reference capture for it. Frame review poses on the target's photographed face (as `detail-front-generic` does for Mariner and Bayside) rather than relying on default closeups alone.

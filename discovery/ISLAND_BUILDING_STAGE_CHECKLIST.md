@@ -384,8 +384,17 @@ doors on pads. CODE, visual and progress PASS. L1/L2 C on 1215 (`w96215666`) and
 pass); the pre-existing `ParkingSurface`/`road_path` overlap on both (0.07 m² and
 0.86 m²); the off-tip institutional finals and Station48/YMCA/Austin (recover only with
 a dedicated test-infra merge, or re-author); 1445 is review-only (Bulgarian house).
-Current totals after Mar22b: L1:182 C/31 U; L2:158 C/55 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall341 C/0 I/724 U across213 units/1,065 cells;49 historical
+**Mar22c** review-only sweep, 2026-10-22 (`/workspaces/landmark-progress-20261007/
+review-sweep-20261022/`; visual review on unchanged assets): L1/L2 C on Maceo May
+(`r19685981`), the Building 1 tower (`w1222720021`), 1220 Bayside (`w96215652`, L1
+added), 1222 Bayside (`w96215661`) and 1202 Mariner (`w96215651`). L1 C only on
+Hawkins (`w1249412093`), Isle House (`w1249412094`), B201 (`w34313545`), B225
+(`w95934119`), Gateview 1317 (`w95934125`), Gateview 1308 (`w95934123`) and Personnel
+Support (`r133347`); their L2 gap is blank sides, and an openings pass is approved by
+the owner (2026-10-22). No change on Chinook 1439/1441/1445 and Croaker 1444: photo
+check pending, with a possible rebuild on the fish-street kit (owner approved).
+Current totals after Mar22c: L1:194 C/19 U; L2:162 C/51 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall357 C/0 I/708 U across213 units/1,065 cells;49 historical
 recognition credits unchanged.
 **U** no current stage-level conclusion established in this checklist pass.
 
@@ -427,7 +436,7 @@ before selecting another round.
 | physical-building:w34313535 / w34313535 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1+L2 PASS. Parked: validation lows; colour pass (to cream) |
 | physical-building:w34313540 / w34313540 | Building 3 | ☑ C | ☑ C | ☐ U | ☑ C | ☐ U | B3 — existing004 whole architecture/material/native-fit/suite PASS; unchanged source, unseen inference retained |
 | physical-building:w34313544 / w34313544 | Naval Station Treasure Island | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21h institutional batch on the mid-rise family (`bf57964`, `6c5a131`, `a45788d`) — CODE, visual and progress PASS; L1 only (L2 not passed) |
-| physical-building:w34313545 / w34313545 | 800 Avenue I, San Francisco, CA | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w34313545 / w34313545 | 800 Avenue I, San Francisco, CA | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar22c B201: L1 C from the review-only sweep `/workspaces/landmark-progress-20261007/review-sweep-20261022/` (visual review; assets unchanged); L2 gap: blank sides; openings pass approved by owner 2026-10-22 |
 | physical-building:w34313546 / w34313546 | 850 Avenue H | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 850 Avenue H (Bldg 202): Mar17l panel halls `265bbbd`…`a4ceb26` — CODE PASS on every commit, visual and progress PASS. Parked: panel-hall per-box mesh merging (medium-low); two validation gaps (low); door hoods (L3) |
 | physical-building:w34313547 / w34313547 | Treasure Island Community YMCA | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | YMCA — scoped envelope/entry/site closure; whole architecture and finish open |
 | physical-building:w34313548 / w34313548 | San Francisco Fire Dept Treasure Island Training Facility Building 600 | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | F — retain; inspect later stages |
@@ -452,7 +461,7 @@ before selecting another round.
 | physical-building:w95934102 / w95934102 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | 1306 Gateview Avenue: Mar17i Gateview Ave B `818d35c`+`54409a2`+`13d2d3d` (on Batch A) — CODE PASS after rework, visual and progress PASS; drive-fix junctions accepted on the 0 m² overlap check. Parked: gable-generator closure-overlap dedupe (low); fences and site; colour pass (white/cream with brown carport roofs) |
 | physical-building:w95934103 / w95934103 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | "1307" Gateview Avenue (shore row): Mar17i Gateview Ave B `818d35c`+`54409a2`+`13d2d3d` (on Batch A) — CODE PASS after rework, visual and progress PASS; drive-fix junctions accepted on the 0 m² overlap check. Parked: gable-generator closure-overlap dedupe (low); fences and site; colour pass |
 | physical-building:w95934104 / w95934104 | 1403 Sturgeon Street | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21e fish streets on the garage-court kit (`02d39f1`…`fcfe956`) — CODE PASS (lows parked), visual L2 PASS, progress PASS |
-| physical-building:w95934105 / w95934105 | 1441 Chinook Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w95934105 / w95934105 | 1441 Chinook Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | Mar22c: photo check pending; possible rebuild on the fish-street kit (owner approved) |
 | physical-building:w95934106 / w95934106 | 1305 Gateview Avenue | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17i Gateview Ave B `818d35c`+`54409a2`+`13d2d3d` (on Batch A) — CODE PASS after rework, visual and progress PASS; drive-fix junctions accepted on the 0 m² overlap check. Parked: gable-generator closure-overlap dedupe (low); fences and site; colour pass (whites) |
 | physical-building:w95934107 / w95934107 | 1420 Striped Bass Street | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21e fish streets on the garage-court kit (`02d39f1`…`fcfe956`) — CODE PASS (lows parked), visual L2 PASS, progress PASS. Parked: colour pass (siding too brown) |
 | physical-building:w95934108 / w95934108 | 1405 Sturgeon Street | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21e fish streets on the garage-court kit (`02d39f1`…`fcfe956`) — CODE PASS (lows parked), visual L2 PASS, progress PASS |
@@ -461,15 +470,15 @@ before selecting another round.
 | physical-building:w95934113 / w95934113 | 1437 Chinook Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21e fish streets on the garage-court kit (`02d39f1`…`fcfe956`) — CODE PASS (lows parked), visual L2 PASS, progress PASS. Parked: colour pass (Chinook whites read grey) |
 | physical-building:w95934115 / w95934115 | 1413 Flounder Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17j Flounder Court `fb8a010`+`8eb5444`+`615d621`+`fa945e5`+`4f519a3` — CODE PASS (low notes only), visual L2 PASS, progress L1+L2 PASS; catalog stairs walked by the fit. Parked: cream slightly dark and cool; stucco lap lines; 1-pixel road-edge dots; turning-circle disc is config-only (roads L2 generator pass); code lows (gable vents on the roof role, loggia parts as spray receivers); garage doors should be white; apron 9.4 mm above the area (code low) |
 | physical-building:w95934116 / w95934116 | 905F Avenue B, 94130 | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17i Gateview Ave B `818d35c`+`54409a2`+`13d2d3d` (on Batch A) — CODE PASS after rework, visual and progress PASS; drive-fix junctions accepted on the 0 m² overlap check. Parked: gable-generator closure-overlap dedupe (low); fences and site; colour pass |
-| physical-building:w95934117 / w95934117 | 1444 Croaker Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w95934117 / w95934117 | 1444 Croaker Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | Mar22c: photo check pending; possible rebuild on the fish-street kit (owner approved) |
 | physical-building:w95934118 / w95934118 | 1419 Striped Bass Street | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21e fish streets on the garage-court kit (`02d39f1`…`fcfe956`) — CODE PASS (lows parked), visual L2 PASS, progress PASS |
-| physical-building:w95934119 / w95934119 | 148 12th Street | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w95934119 / w95934119 | 148 12th Street | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar22c B225: L1 C from the review-only sweep `/workspaces/landmark-progress-20261007/review-sweep-20261022/` (visual review; assets unchanged); L2 gap: blank sides; openings pass approved by owner 2026-10-22 |
 | physical-building:w95934120 / w95934120 | 1449 Croaker Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21e fish streets on the garage-court kit (`02d39f1`…`fcfe956`) — CODE PASS (lows parked), visual L2 PASS, progress PASS |
-| physical-building:w95934121 / w95934121 | 1445 Chinook Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — review-only (Bulgarian house) |
+| physical-building:w95934121 / w95934121 | 1445 Chinook Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — review-only (Bulgarian house); Mar22c: photo check pending; possible rebuild on the fish-street kit (owner approved) |
 | physical-building:w95934122 / w95934122 | 1434 Halibut Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21e fish streets on the garage-court kit (`02d39f1`…`fcfe956`) — CODE PASS (lows parked), visual L2 PASS, progress PASS. In frozen OSM, since demolished; modeled from Apr 2019 |
-| physical-building:w95934123 / w95934123 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w95934123 / w95934123 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar22c Gateview 1308: L1 C from the review-only sweep `/workspaces/landmark-progress-20261007/review-sweep-20261022/` (visual review; assets unchanged); L2 gap: blank sides; openings pass approved by owner 2026-10-22 |
 | physical-building:w95934124 / w95934124 | 1410 Flounder Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17j Flounder Court `fb8a010`+`8eb5444`+`615d621`+`fa945e5`+`4f519a3` — CODE PASS (low notes only), visual L2 PASS, progress L1+L2 PASS; catalog stairs walked by the fit. Parked: cream slightly dark and cool; stucco lap lines; 1-pixel road-edge dots; turning-circle disc is config-only (roads L2 generator pass); code lows (gable vents on the roof role, loggia parts as spray receivers); colour pass (reads greyer than the photo's warm yellow) |
-| physical-building:w95934125 / w95934125 | 1317 Gateview Avenue | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w95934125 / w95934125 | 1317 Gateview Avenue | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar22c Gateview 1317: L1 C from the review-only sweep `/workspaces/landmark-progress-20261007/review-sweep-20261022/` (visual review; assets unchanged); L2 gap: blank sides; openings pass approved by owner 2026-10-22 |
 | physical-building:w95934126 / w95934126 | 1400 Sturgeon Street | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21e fish streets on the garage-court kit (`02d39f1`…`fcfe956`) — CODE PASS (lows parked), visual L2 PASS, progress PASS |
 | physical-building:w95934128 / w95934128 | 1406 Sturgeon Street | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21e fish streets on the garage-court kit (`02d39f1`…`fcfe956`) — CODE PASS (lows parked), visual L2 PASS, progress PASS |
 | physical-building:w95934129 / w95934129 | 1440 Chinook Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21e fish streets on the garage-court kit (`02d39f1`…`fcfe956`) — CODE PASS (lows parked), visual L2 PASS, progress PASS. Parked: colour pass (Chinook whites read grey) |
@@ -483,13 +492,13 @@ before selecting another round.
 | physical-building:w95934140 / w95934140 | 1408 Sturgeon Street | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21e fish streets on the garage-court kit (`02d39f1`…`fcfe956`) — CODE PASS (lows parked), visual L2 PASS, progress PASS |
 | physical-building:w95934142 / w95934142 | 1402 Sturgeon Street | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21e fish streets on the garage-court kit (`02d39f1`…`fcfe956`) — CODE PASS (lows parked), visual L2 PASS, progress PASS |
 | physical-building:w95934143 / w95934143 | 1443 Chinook Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21e fish streets on the garage-court kit (`02d39f1`…`fcfe956`) — CODE PASS (lows parked), visual L2 PASS, progress PASS. Parked: colour pass (Chinook whites read grey) |
-| physical-building:w95934144 / w95934144 | 1439 Chinook Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w95934144 / w95934144 | 1439 Chinook Court | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | Mar22c: photo check pending; possible rebuild on the fish-street kit (owner approved) |
 | physical-building:w96215645 / w96215645 | 1122 Reeves Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21b Site 12 `8c70237` (`eave_rgb`) + `8d0549f` — CODE, visual L2 and progress PASS |
 | physical-building:w96215646 / w96215646 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Gateview 1394: Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS |
 | physical-building:w96215648 / w96215648 | 1316 Gateview Avenue | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17i Gateview Ave A `904f940`+`487a1ef`+`35a990e`+`45344f4` — CODE, visual and progress PASS (guards CODE PASS; drives CODE/visual/progress PASS). Parked: gable-generator closure-overlap dedupe (low); fences and site; colour pass |
 | physical-building:w96215649 / w96215649 | 1212 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar/Mar17 `b2acc5a` — L1 retained; rear L2 PASS completes L2; integrated visual/native/fit/spray/suite PASS; materials/site open |
-| physical-building:w96215651 / w96215651 | 1202 Mariner Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — `a078c63` scoped L2 PASS only (not whole L2); integrated visual/native/fit/spray/suite PASS; stage verdict needed |
-| physical-building:w96215652 / w96215652 | 1220 Bayside Drive | ☐ U | ☑ C | ☐ U | ☐ U | ☐ U | Mar17 `a078c63` — bounded whole-exterior L2 PASS (study002 roof pitch); L1 not explicitly reviewed (U); integrated visual/native/fit/spray/suite PASS; materials/site open |
+| physical-building:w96215651 / w96215651 | 1202 Mariner Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | U — `a078c63` scoped L2 PASS only (not whole L2); integrated visual/native/fit/spray/suite PASS; stage verdict needed; Mar22c 1202 Mariner: L1/L2 C from the review-only sweep `/workspaces/landmark-progress-20261007/review-sweep-20261022/` (visual review; assets unchanged) |
+| physical-building:w96215652 / w96215652 | 1220 Bayside Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17 `a078c63` — bounded whole-exterior L2 PASS (study002 roof pitch); L1 not explicitly reviewed (U); integrated visual/native/fit/spray/suite PASS; materials/site open; Mar22c 1220 Bayside: L1/L2 C from the review-only sweep `/workspaces/landmark-progress-20261007/review-sweep-20261022/` (visual review; assets unchanged) |
 | physical-building:w96215653 / w96215653 | 1227 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP2 — L1 frontage lawn/composition; retained whole shape; scoped visual/CODE/progress/native/fit/spray/suite PASS; L2–5 unknown; L2 C: Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS |
 | physical-building:w96215655 / w96215655 | 1312 Gateview Avenue | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17i Gateview Ave A `904f940`+`487a1ef`+`35a990e`+`45344f4` — CODE, visual and progress PASS (guards CODE PASS; drives CODE/visual/progress PASS). Parked: gable-generator closure-overlap dedupe (low); fences and site; colour pass |
 | physical-building:w96215656 / w96215656 | 1224 Bayside Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22b merged recovery `fa2689a` (reviewed final + main `siding_rgb` + rear yard doors on pads) — CODE, visual and progress PASS. Parked: pink roof (colour pass); pre-existing `ParkingSurface`/`road_path` overlap (0.86 m²) |
@@ -497,7 +506,7 @@ before selecting another round.
 | physical-building:w96215658 / w96215658 | 1239 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP2 — L1 joined shallow-gable whole roof; scoped visual/CODE/progress/native/fit/spray/suite PASS; L2–5 unknown; L2 C: Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS |
 | physical-building:w96215659 / w96215659 | 1234 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP3 — scoped shape/site complete; unseen openings/whole-quality unknown; L2 C: Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS |
 | physical-building:w96215660 / w96215660 | 1225 Northpoint Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | NP3 — scoped shape/site complete; unseen openings/whole-quality unknown; L2 C: Mar21d recovery of reviewed finals (`30d56b5`…`960b0e3`) — CODE, visual and progress PASS |
-| physical-building:w96215661 / w96215661 | 1222 Bayside Drive | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — `b9b51dc` scoped rear/low-roof PASS; all-side L2 and stage credit open |
+| physical-building:w96215661 / w96215661 | 1222 Bayside Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | U — `b9b51dc` scoped rear/low-roof PASS; all-side L2 and stage credit open; Mar22c 1222 Bayside: L1/L2 C from the review-only sweep `/workspaces/landmark-progress-20261007/review-sweep-20261022/` (visual review; assets unchanged) |
 | physical-building:w96215662 / w96215662 | 1139 Ozbourn Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar21b Site 12 `8c70237` (`eave_rgb`) + `8d0549f` — CODE, visual L2 and progress PASS. Parked: rear fence |
 | physical-building:w96215666 / w96215666 | 1215 Bayside Drive | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22b merged recovery `fa2689a` (reviewed final + main `siding_rgb` + rear yard doors on pads) — CODE, visual and progress PASS. Parked: 5 front doors for 6 units; pre-existing `ParkingSurface`/`road_path` overlap (0.07 m²) |
 | physical-building:w96215667 / w96215667 | 1248/1395 Gateview Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17f `6539db3` + `970359e` — CODE, visual L1/L2 and progress PASS; 1218 cadence delta CODE and visual PASS. Parked: fences, vent pipes, post bands, carport-top and canopy finish; colour re-check after the lighting decision; carport segmentation (photo shows short segments) |
@@ -614,19 +623,19 @@ before selecting another round.
 | physical-building:w1222514685 / w1222514685 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w1222514686 / w1222514686 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:w1222514695 / w1222514695 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21c shelter: L1 C under the blocked-side walk-up rule (`b85a505`, CODE PASS); the site-blocked west side is skipped |
-| physical-building:w1222720021 / w1222720021 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w1249412093 / w1249412093 | Hawkins | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
-| physical-building:w1249412094 / w1249412094, w1282547786, w1282547787 | Isle House | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:w1222720021 / w1222720021 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22c Building 1 tower: L1/L2 C from the review-only sweep `/workspaces/landmark-progress-20261007/review-sweep-20261022/` (visual review; assets unchanged) |
+| physical-building:w1249412093 / w1249412093 | Hawkins | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar22c Hawkins: L1 C from the review-only sweep `/workspaces/landmark-progress-20261007/review-sweep-20261022/` (visual review; assets unchanged); L2 gap: blank sides; openings pass approved by owner 2026-10-22 |
+| physical-building:w1249412094 / w1249412094, w1282547786, w1282547787 | Isle House | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar22c Isle House: L1 C from the review-only sweep `/workspaces/landmark-progress-20261007/review-sweep-20261022/` (visual review; assets unchanged); L2 gap: blank sides; openings pass approved by owner 2026-10-22 |
 | physical-building:w1272162518 / w1272162518 | 490 Avenue of the Palms | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17k mid-rise family `3f44801` + `6e2cead` — CODE PASS (two lows), visual L2 PASS, progress L1+L2 PASS. Parked: code lows (misleading root `scope` string at `midrise_family.gd:146`; `_ground_y` linear scan needs indexing); landscaping, signage, materials; colour pass (brick reads charcoal, should be warm grey-taupe; white reads slightly blue-grey) |
 | physical-building:w1308007112 / w1308007112 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | M — retain complete site; inspect later stages |
 | physical-building:w1308007113 / w1308007113 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | M — retain complete site; inspect later stages |
 | physical-building:w1308007114 / w1308007114 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | M — retain complete site; inspect later stages |
 | physical-building:w1436064757 / w1436064757 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1 PASS (L2 not passed). Parked: validation lows |
 | physical-building:w1473253276 / w1473253276 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1 PASS (L2 not passed). Parked: validation lows |
-| physical-building:r133347 / r133347 | Treasure Island Personnel Support Detachment | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:r133347 / r133347 | Treasure Island Personnel Support Detachment | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar22c Personnel Support: L1 C from the review-only sweep `/workspaces/landmark-progress-20261007/review-sweep-20261022/` (visual review; assets unchanged); L2 gap: blank sides; openings pass approved by owner 2026-10-22 |
 | physical-building:r133351 / r133351 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
 | physical-building:r16681702 / r16681702 | Treasure Island Museum | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Opus005 — whole-building game-art visual/CODE and native fit PASS; no further art blocker identified; higher stages not separately scored, as-built unclaimed |
-| physical-building:r19685981 / r19685981 | Maceo May | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:r19685981 / r19685981 | Maceo May | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22c Maceo May: L1/L2 C from the review-only sweep `/workspaces/landmark-progress-20261007/review-sweep-20261022/` (visual review; assets unchanged) |
 
 **YMCA**, 2026-10-10, candidate on `0f058e9`: L1 basic envelope/site complete.
 Retained frozen L-shell/flat roof, observed SSE pavilion and ENE service motifs,
@@ -653,7 +662,7 @@ March/November2025 refs and unknown-date Apple context support the scoped envelo
 and observed architecture; missing north capture/unknown rear/schematic materials
 keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
 See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
-Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar22b for current totals);
+Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar22c for current totals);
 **L1:21 C /0 I /192 U**. All other stages unchanged;49 historical credits retained.
 
 ## Island environment layers
