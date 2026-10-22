@@ -33,6 +33,11 @@ const GRADE_CLEARANCE_M := 0.25
 const PITCH_TUCK_M := 0.02
 const RAIL_H_M := 1.07
 const RAIL_BAR_M := 0.045
+## Bucket key suffix of a collision-only stair walking surface.
+const WALK_TAG := "walk"
+## Exterior stair (ext_stairs): tread nosing projection and the riser target.
+const STAIR_NOSE_M := 0.03
+const STAIR_RISE_M := 0.18
 ## Materials shared by value across instances; never mutated after creation.
 static var _material_cache: Dictionary = {}
 
@@ -247,6 +252,8 @@ static func _build_all(ctx: Ctx, wall: Dictionary, roof: Dictionary, chunks: Arr
 		_roof(ctx, block)
 	for apron: Dictionary in ctx.cfg.get("aprons", []):
 		_apron(ctx, apron)
+	for stair: Variant in ctx.cfg.get("ext_stairs", []):
+		_ext_stair(ctx, stair)
 
 
 # ------------------------------------------------------------------ footprint
@@ -2260,6 +2267,110 @@ static func _pergola(ctx: Ctx, block: Block) -> void:
 		s += spacing
 
 
+## Opt-in exterior stair ("ext_stairs" entry): one straight open steel flight
+## along footprint edge `edge`, outside the wall (`gap` out, `w` clear width),
+## from grade at station `foot` up to a landing at floor `storey` of block
+## `block` that starts at station `top` and runs to `landing_end`, `landing_depth`
+## out from the wall, on two posts. Open treads, channel stringers, an outer
+## handrail and landing rails are support role. The stock controller has no
+## step-up, so the walking surface is a collision-only ramp through the tread
+## nosings (the housing_garage_court `_stair` grammar), flush with the landing
+## deck at the top. Invalid input fails the build.
+static func _ext_stair(ctx: Ctx, spec: Variant) -> void:
+	var label := "ext_stair"
+	if not spec is Dictionary:
+		ctx.errors.append(label + " needs a dictionary")
+		return
+	var k := int(spec.get("edge", -1))
+	var block: Block = null
+	for candidate: Block in ctx.blocks:
+		if candidate.id == str(spec.get("block", "")):
+			block = candidate
+	var storey := int(spec.get("storey", 1))
+	if k < 0 or k >= ctx.edges.size() or block == null or storey < 1 or storey >= block.storeys:
+		ctx.errors.append(label + " needs a footprint edge, a block id and an upper storey below its roof")
+		return
+	var edge: Edge = ctx.edges[k]
+	var face := Face.new()
+	face.a = edge.start
+	face.d = edge.d
+	face.n = edge.n
+	face.length = edge.length
+	var foot := float(spec.get("foot", -1.0))
+	var top := float(spec.get("top", -1.0))
+	var end := float(spec.get("landing_end", -1.0))
+	var w := float(spec.get("w", 0.9))
+	var gap := float(spec.get("gap", 0.1))
+	var outer := gap + w
+	var landing_depth := float(spec.get("landing_depth", outer))
+	var sg := signf(top - foot)
+	var run := absf(top - foot)
+	var y_top := block.floors[storey]
+	var y0 := -INF
+	for o: float in [gap, outer]:
+		y0 = maxf(y0, _ground_y(ctx, edge.at(foot, -o)))
+	var rise := y_top - y0
+	var risers := int(round(rise / STAIR_RISE_M))
+	var going := run / float(maxi(1, risers))
+	for value: float in [foot, top, end]:
+		if not _in_range(value, 0.0, edge.length):
+			ctx.errors.append(label + " stations must lie on the footprint edge")
+			return
+	if sg == 0.0 or signf(end - top) != sg or absf(end - top) < 0.8 or not _in_range(w, 0.6, 1.6) or not _in_range(gap, 0.0, 0.5) \
+			or not _in_range(landing_depth, outer, 3.0) or not _in_range(rise, 1.0, 6.0) or not _in_range(going, 0.22, 0.36) \
+			or not is_finite(y0) or ctx.terrain_misses > 0:
+		ctx.errors.append(label + " needs a run along the edge, a landing of at least 0.8 m beyond it, w 0.6-1.6, gap 0-0.5, landing_depth from gap+w to 3, a rise of 1-6 m and goings of 0.22-0.36 m")
+		return
+	var rise_k := rise / float(risers)
+	var at := func(t: float) -> float: return foot + sg * t
+	var steel := ctx.bucket("support", str(spec.get("material", "rail")))
+	var treads := ctx.bucket("support", str(spec.get("tread_material", spec.get("material", "rail"))))
+	# Open treads: tread i tops out at y0 + i*rise_k, its nosing on the walking line.
+	for i in range(1, risers):
+		var a: float = at.call(going * float(i) - STAIR_NOSE_M)
+		var b: float = at.call(minf(run, going * float(i + 1)))
+		_box(treads, face, minf(a, b), maxf(a, b), y0 + rise_k * float(i) - 0.045, y0 + rise_k * float(i), -outer, -gap, false)
+	# Landing deck, flush with the top of the walking surface.
+	var l0: float = at.call(run - STAIR_NOSE_M)
+	_box(treads, face, minf(l0, end), maxf(l0, end), y_top - 0.16, y_top, -landing_depth, 0.0, false)
+	# Channel stringers on both sides: top edge 0.06 above the nosing line, 0.26 deep.
+	for d: Array in [[-outer - 0.04, -outer], [-gap, -gap + 0.04 if gap >= 0.04 else 0.0]]:
+		_sloped_box(steel, face, at.call(-0.15), at.call(run), y0 - 0.15 * rise_k / going + 0.06, y_top + 0.06, float(d[0]), float(d[1]), 0.26)
+	# Outer handrail along the flight, rails round the open landing edges.
+	_pipe_slope(steel, face.point(at.call(going * 0.5), y0 + rise_k * 0.5, -outer + 0.03), face.point(at.call(run), y_top, -outer + 0.03), face.out3())
+	if bool(spec.get("rails", true)):
+		var p_corner := edge.at(end, -landing_depth + 0.03)
+		_pipe_run(steel, edge.at(l0, -landing_depth + 0.03), p_corner, -edge.n, y_top, y_top + RAIL_H_M)
+		_pipe_run(steel, p_corner, edge.at(end, -0.05), edge.d * sg, y_top, y_top + RAIL_H_M)
+	# Landing posts down into the ground at the outer corners.
+	for s: float in [l0 + sg * 0.06, end - sg * 0.06]:
+		var c := edge.at(s, -landing_depth + 0.06)
+		_plan_box(steel, c - edge.d * 0.04, c + edge.d * 0.04, edge.n, _ground_y(ctx, c) - BURY_M, y_top - 0.16, 0.04)
+	# Collision-only walking surface through the nosings, the full clear width.
+	var walk := ctx.bucket("support", str(spec.get("material", "rail")) + "|" + WALK_TAG)
+	# It starts STAIR_NOSE_M before the foot so every tread nosing lies on it.
+	var w0: float = at.call(-STAIR_NOSE_M)
+	walk.quad(face.point(w0, y0, -outer + 0.02), face.point(w0, y0, -gap - 0.02), face.point(l0, y_top, -gap - 0.02), face.point(l0, y_top, -outer + 0.02), Vector3.UP)
+
+
+## Sloped box in face coordinates: its top edge runs from (sa, ya) to (sb, yb)
+## between depths d0 < d1, `h` deep below it. Support parts (stringers).
+static func _sloped_box(bucket: Bucket, face: Face, sa: float, sb: float, ya: float, yb: float, d0: float, d1: float, h: float) -> void:
+	var out := face.out3()
+	var along := face.dir3() * signf(sb - sa)
+	var corners := [[sa, ya], [sb, yb], [sb, yb - h], [sa, ya - h]]
+	for side: Array in [[d0, out], [d1, -out]]:
+		var d := float(side[0])
+		var pts: Array = []
+		for c: Array in corners:
+			pts.append(face.point(float(c[0]), float(c[1]), d))
+		bucket.quad(pts[0], pts[1], pts[2], pts[3], side[1])
+	bucket.quad(face.point(sa, ya, d0), face.point(sb, yb, d0), face.point(sb, yb, d1), face.point(sa, ya, d1), Vector3.UP)
+	bucket.quad(face.point(sa, ya - h, d0), face.point(sb, yb - h, d0), face.point(sb, yb - h, d1), face.point(sa, ya - h, d1), Vector3.DOWN)
+	bucket.quad(face.point(sa, ya - h, d0), face.point(sa, ya, d0), face.point(sa, ya, d1), face.point(sa, ya - h, d1), -along)
+	bucket.quad(face.point(sb, yb - h, d0), face.point(sb, yb, d0), face.point(sb, yb, d1), face.point(sb, yb - h, d1), along)
+
+
 ## Caged steel ladder (support role) centred on its bay, from 0.3 m above grade
 ## to 1 m over the wall top. Not walkable; it is a climbing fixture.
 static func _ladder(ctx: Ctx, face: Face, bay: Dictionary) -> void:
@@ -2436,7 +2547,9 @@ static func _emit(ctx: Ctx, root: Node3D) -> int:
 		var parts := key.split("|")
 		var role := parts[0]
 		var mat := parts[1]
-		if role not in ROLES or not ctx.materials.has(mat):
+		# "support|<mat>|walk": a collision-only stair walking surface (see _ext_stair).
+		var walk := parts.size() == 3 and parts[2] == WALK_TAG and role == "support"
+		if role not in ROLES or not ctx.materials.has(mat) or (parts.size() != 2 and not walk):
 			ctx.errors.append("unknown role or palette key: " + key)
 			continue
 		var finite := true
@@ -2459,6 +2572,10 @@ static func _emit(ctx: Ctx, root: Node3D) -> int:
 		node.name = "Midrise_%s_%s" % [role, mat]
 		node.mesh = mesh
 		node.set_meta("family_role", role)
+		if walk:
+			node.name += "_walk"
+			node.visible = false
+			node.set_meta("collision_only", true)
 		root.add_child(node)
 		triangles += int(bucket.vertices.size() / 3.0)
 	return triangles
