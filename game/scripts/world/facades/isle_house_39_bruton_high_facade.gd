@@ -12,8 +12,8 @@ const RENDER_BUILDING_WALL := 1 << 1
 const EXTERIOR_FIELD_RUN_INDICES := [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 const NEW_EXTERIOR_FIELD_RUN_INDICES := [0, 1, 2, 3, 4]
 const SHARED_TOWER_FIELD_RUN_INDICES := [10, 11, 12]
-const MODULE_FREE_RUN_INDICES := [8, 9, 10, 11, 12]
-const INFERRED_MODULE_RUN_INDICES := [0, 1, 2, 3, 4]
+const MODULE_FREE_RUN_INDICES := []
+const INFERRED_MODULE_RUN_INDICES := [0, 1, 2, 3, 4, 8, 9, 10, 11, 12]
 const RUN_STARTS := [
 	Vector3(-133.374, 4.065, 548.466), Vector3(-133.067, 4.074, 549.067),
 	Vector3(-128.000, 3.932, 558.996), Vector3(-125.636, 3.923, 563.627),
@@ -55,7 +55,7 @@ var _layout: Dictionary = {}
 var _contract: Dictionary = {}
 var _se: Dictionary = {}
 # Side that module and box placement currently follow: the observed SE side, or
-# one of the owner-approved inferred WSW/SW sides (production inference).
+# one of the owner-approved inferred sides (production inference).
 var _active_side: Dictionary = {}
 var _active_node_name := "High_SE_Runs_5_7"
 var _ene: Dictionary = {}
@@ -130,8 +130,8 @@ func configure(record: Dictionary) -> Dictionary:
 
 	_add_side_node("High_WSW_SW_Runs_0_4", {"run_indices": NEW_EXTERIOR_FIELD_RUN_INDICES, "length_m": 28.385}, "inferred_complete_modules")
 	_add_side_node("High_SE_Runs_5_7", _se, "observed_complete_modules")
-	_add_side_node("High_ENE_Runs_8_9", _ene, "material_only")
-	_add_side_node("High_Shared_Runs_10_12", {"run_indices": SHARED_TOWER_FIELD_RUN_INDICES, "length_m": 49.092}, "tower_field_only")
+	_add_side_node("High_ENE_Runs_8_9", _ene, "inferred_complete_modules")
+	_add_side_node("High_Shared_Runs_10_12", {"run_indices": SHARED_TOWER_FIELD_RUN_INDICES, "length_m": 49.092}, "inferred_complete_modules")
 	var field_result := _build_fields(record, target)
 	if not bool(field_result.get("ok", false)):
 		return field_result
@@ -202,13 +202,15 @@ func _exact_runs_match(record: Dictionary, side: Dictionary) -> bool:
 
 
 func _inferred_sides_match(record: Dictionary) -> bool:
-	var inferred: Variant = _layout.get("inferred_high_wsw", null)
+	var inferred: Variant = _layout.get("inferred_high_sides", null)
 	if not (inferred is Dictionary) or not ((inferred as Dictionary).get("sides", null) is Array):
 		return false
 	var indices: Array[int] = []
 	for side_value: Variant in (inferred as Dictionary).sides:
 		var side := side_value as Dictionary
 		if not _exact_runs_match(record, side):
+			return false
+		if str(side.get("node", "")) not in ["High_WSW_SW_Runs_0_4", "High_ENE_Runs_8_9", "High_Shared_Runs_10_12"]:
 			return false
 		for run_value: Variant in side.runs:
 			indices.append(int((run_value as Dictionary).index))
@@ -295,24 +297,25 @@ func _build_tower_modules() -> void:
 			_build_framed_glazing(u, y, width, height, 0.085, "dark_charcoal")
 
 
-# Owner-approved openings on the unphotographed WSW/SW tower face (2026-10-22):
-# the observed SE tower and podium window families on each collinear run group.
+# Owner-approved openings on the unphotographed tower faces (2026-10-22): the
+# observed SE tower window grid on each straight run group, with the SE podium
+# row and ground glazing where the face reaches the ground.
 func _build_inferred_sides() -> void:
 	var tower := _se.tower_window as Dictionary
-	for side_value: Variant in (_layout.inferred_high_wsw as Dictionary).sides:
+	for side_value: Variant in (_layout.inferred_high_sides as Dictionary).sides:
 		var side := side_value as Dictionary
 		_active_side = side
-		_active_node_name = "High_WSW_SW_Runs_0_4"
+		_active_node_name = str(side.node)
 		for u_value: Variant in side.tower_window_columns_u_m:
 			for y_value: Variant in _se.tower_window_rows_y_m:
 				_new_module("IH-TW", float(u_value), float(y_value), float(tower.width_m), float(tower.height_m))
 				_build_framed_glazing(float(u_value), float(y_value), float(tower.width_m), float(tower.height_m), 0.085, "dark_charcoal")
-		var podium := side.podium_window as Dictionary
-		for u_value: Variant in podium.columns_u_m:
+		var podium := side.get("podium_window", {}) as Dictionary
+		for u_value: Variant in podium.get("columns_u_m", []):
 			for y_value: Variant in _se.podium_window_rows_y_m:
 				_new_module(str(podium.kind), float(u_value), float(y_value), float(podium.width_m), float(podium.height_m))
 				_build_framed_glazing(float(u_value), float(y_value), float(podium.width_m), float(podium.height_m), 0.13, "dark_charcoal")
-		for module_value: Variant in side.single_modules:
+		for module_value: Variant in side.get("single_modules", []):
 			_build_single_module(module_value as Dictionary)
 	_active_side = _se
 	_active_node_name = "High_SE_Runs_5_7"
@@ -375,7 +378,7 @@ func _new_module(kind: String, u: float, y: float, width: float, height: float) 
 	_module_counts[kind] = count
 	module.name = "Module_%s_%03d" % [kind.replace("-", "_"), count]
 	module.set_meta("module_kind", kind)
-	module.set_meta("run_scope", "high_se_5_7" if _active_side == _se else "high_wsw_sw_0_4_inferred")
+	module.set_meta("run_scope", "high_se_5_7" if _active_side == _se else "inferred_" + str(_active_side.get("id", "")).to_lower())
 	module.set_meta("side_u_m", u)
 	module.set_meta("width_m", width)
 	module.set_meta("height_m", height)

@@ -143,7 +143,7 @@ static func _forbidden_tokens() -> Array[String]:
 
 static func _approved_output_matches(node: Node3D) -> bool:
 	if node.get_meta("quiet_nnw_run_indices", []) != [10, 11, 12] \
-		or int(node.get_meta("quiet_nnw_opening_count", -1)) != 5 \
+		or int(node.get_meta("quiet_nnw_opening_count", -1)) != _configured_nnw_opening_count() \
 		or node.get_meta("upper_band_ids", []) != ["TRANSFER-PLINTH", "PODIUM-BODY", "PODIUM-CROWN", "TOP-SHADOW-CAP"]:
 		return false
 	if node.get_node_or_null("IsleHouse39BrutonLowLiveAttachment") != null \
@@ -155,6 +155,13 @@ static func _approved_output_matches(node: Node3D) -> bool:
 		or _any_node_in_group(node, "spray_receiver_wall"):
 		return false
 	return true
+
+
+static func _configured_nnw_opening_count() -> int:
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://game/resources/facades/isle_house_composite_repair_variant_c_standalone_v1.json"))
+	if not (parsed is Dictionary):
+		return -1
+	return ((parsed as Dictionary).get("inferred_nnw_placements", []) as Array).size()
 
 
 static func _topology_for(node: Node) -> Dictionary:

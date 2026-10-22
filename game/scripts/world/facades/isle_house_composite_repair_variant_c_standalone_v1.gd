@@ -208,11 +208,21 @@ static func validate_variant_c_config_dictionary(config: Dictionary) -> bool:
 	if not is_equal_approx(cursor, 19.103):
 		return false
 	var fallback := render.get("protected_nnw_fallback", {}) as Dictionary
+	var carried := str(fallback.get("treatment", "")) == "public_family_fields"
 	if _int_array(fallback.get("run_indices", []) as Array) != [10, 11, 12] \
-	or str(fallback.get("material_key", "")) != "quiet_return" \
 	or int(fallback.get("opening_count", -1)) != (config.get("inferred_nnw_placements", []) as Array).size() \
-	or "homogeneous" not in str(fallback.get("treatment", "")):
+	or (not carried and (str(fallback.get("material_key", "")) != "quiet_return" or "homogeneous" not in str(fallback.get("treatment", "")))):
 		return false
+	# Owner-approved upper window rows on the NNW return (2026-10-22): inside the
+	# PODIUM-BODY band, clear of the run ends.
+	var upper := config.get("inferred_nnw_upper_windows", {}) as Dictionary
+	if not upper.is_empty():
+		var half_h := float(upper.get("height_m", 0.0)) * 0.5
+		if float(upper.get("width_m", 0.0)) <= 0.0 or half_h <= 0.0 or float(upper.get("pitch_m", 0.0)) <= float(upper.get("width_m", 0.0)):
+			return false
+		for row_value: Variant in upper.get("rows_y_m", []) as Array:
+			if float(row_value) - half_h < 11.45 or float(row_value) + half_h > 17.38:
+				return false
 	var sides := config.get("public_sides", []) as Array
 	if sides.size() != 2 \
 	or _int_array((sides[0] as Dictionary).get("ordered_run_indices", []) as Array) != [0, 1, 2, 3, 4] \
@@ -413,38 +423,24 @@ func _build_variant_c_fields(parent: Node3D, low_wall: Dictionary) -> Dictionary
 		return _failure("variant_c_uv_coverage", "Metre-UV plan did not cover all and only public runs.")
 	var bands := render.get("upper_massing_bands", []) as Array
 	for run_index_value: Variant in PUBLIC_RUNS:
-		var run_index := int(run_index_value)
-		var offset := run_index * 12
-		var start := Vector3(float(raw_vertices[offset]), float(raw_vertices[offset + 1]), float(raw_vertices[offset + 2]))
-		var end := Vector3(float(raw_vertices[offset + 3]), float(raw_vertices[offset + 4]), float(raw_vertices[offset + 5]))
-		var normal := Vector3(float(raw_normals[offset]), 0.0, float(raw_normals[offset + 2])).normalized()
-		var entry := entries_by_run[run_index] as Dictionary
-		var lower_outward := normal * float(render.get("lower_field_offset_m", 0.0))
-		var lower_top := float(render.get("live_work_band_top_y_m", 0.0))
-		var lower_corners := [start + lower_outward, end + lower_outward, Vector3(end.x, lower_top, end.z) + lower_outward, Vector3(start.x, lower_top, start.z) + lower_outward]
-		var lower_uvs := METER_UV.vertical_quad_uvs(lower_corners, float(entry.get("u_start_m", 0.0))) as PackedVector2Array
-		if lower_uvs.size() != 4:
+		if not _emit_public_run_fields(groups, raw_vertices, raw_normals, int(run_index_value), entries_by_run[int(run_index_value)] as Dictionary, render, bands):
 			return _failure("variant_c_uv_quad", "Metre-UV helper refused a public lower quad.")
-		_append_quad(groups.brick_field as Dictionary, lower_corners, normal, lower_uvs)
-		for band_value: Variant in bands:
-			var band := band_value as Dictionary
-			var outward := normal * float(band.get("offset_m", 0.0))
-			var bottom_y := float(band.get("bottom_y_m", 0.0))
-			var top_y := float(band.get("top_y_m", 0.0))
-			var corners := [Vector3(start.x, bottom_y, start.z) + outward, Vector3(end.x, bottom_y, end.z) + outward, Vector3(end.x, top_y, end.z) + outward, Vector3(start.x, top_y, start.z) + outward]
-			var material_key := str(band.get("material_key", ""))
-			_append_quad(groups[material_key] as Dictionary, corners, normal, _plain_uvs(float(entry.get("u_start_m", 0.0)), float(entry.get("u_end_m", 0.0)), bottom_y, top_y))
-		var tangent := (end - start).normalized()
-		var length := start.distance_to(end)
-		var midpoint := (start + end) * 0.5
-		# The cap config stores absolute world Y. Keep the run basis origin at Y=0
-		# so the frozen receiver's ~4.1 m base elevation is not added twice.
-		var run_transform := Transform3D(Basis(tangent, Vector3.UP, normal), Vector3(midpoint.x, 0.0, midpoint.z))
-		for cap_value: Variant in render.get("upper_relief_caps", []) as Array:
-			var cap := cap_value as Dictionary
-			_add_c_box(str(cap.get("material_key", "")), "UPPER-RUN-%02d" % run_index, str(cap.get("id", "")), run_transform, Vector3(0.0, float(cap.get("center_y_m", 0.0)), float(cap.get("outward_center_m", 0.0))), Vector3(length + 0.04, float(cap.get("height_m", 0.0)), float(cap.get("depth_m", 0.0))), "upper_relief")
 	var fallback := render.get("protected_nnw_fallback", {}) as Dictionary
-	for run_index_value: Variant in fallback.get("run_indices", []) as Array:
+	var nnw_runs := fallback.get("run_indices", []) as Array
+	if str(fallback.get("treatment", "")) == "public_family_fields":
+		# Owner-approved (2026-10-22): the public brick base and upper bands carried
+		# round the NNW corner, with podium window rows; production inference.
+		var nnw_plan := METER_UV.plan_side_chain(runs, nnw_runs, "LOW-NNW-PROTECTED") as Dictionary
+		if not bool(nnw_plan.get("ok", false)):
+			return _failure("variant_c_uv_plan", "Metre-UV helper refused the NNW return chain.")
+		side_chain_totals_m["LOW-NNW-PROTECTED"] = float(nnw_plan.get("total_u_m", 0.0))
+		for entry_value: Variant in nnw_plan.get("entries", []) as Array:
+			var entry := entry_value as Dictionary
+			if not _emit_public_run_fields(groups, raw_vertices, raw_normals, int(entry.get("run_index", -1)), entry, render, bands):
+				return _failure("variant_c_uv_quad", "Metre-UV helper refused an NNW lower quad.")
+		_add_nnw_upper_windows(raw_vertices, raw_normals, nnw_runs)
+		nnw_runs = []
+	for run_index_value: Variant in nnw_runs:
 		var run_index := int(run_index_value)
 		var offset := run_index * 12
 		var start := Vector3(float(raw_vertices[offset]), float(raw_vertices[offset + 1]), float(raw_vertices[offset + 2]))
@@ -455,8 +451,12 @@ func _build_variant_c_fields(parent: Node3D, low_wall: Dictionary) -> Dictionary
 		var corners := [start + outward, end + outward, Vector3(end.x, top_y, end.z) + outward, Vector3(start.x, top_y, start.z) + outward]
 		_append_quad(groups.quiet_return as Dictionary, corners, normal, _plain_uvs(0.0, start.distance_to(end), minf(start.y, end.y), top_y))
 	var mesh := ArrayMesh.new()
+	var field_triangles := 0
 	for material_key: String in ["brick_field", "transition", "podium_mid", "podium_light", "quiet_return"]:
 		var group := groups[material_key] as Dictionary
+		if (group.indices as PackedInt32Array).is_empty():
+			continue
+		field_triangles += (group.indices as PackedInt32Array).size() / 3
 		var arrays: Array = []
 		arrays.resize(Mesh.ARRAY_MAX)
 		arrays[Mesh.ARRAY_VERTEX] = group.vertices
@@ -482,7 +482,66 @@ func _build_variant_c_fields(parent: Node3D, low_wall: Dictionary) -> Dictionary
 	fields.set_meta("public_side_chain_totals_m", side_chain_totals_m.duplicate(true))
 	fields.set_meta("upper_band_ids", ["TRANSFER-PLINTH", "PODIUM-BODY", "PODIUM-CROWN", "TOP-SHADOW-CAP"])
 	parent.add_child(fields)
-	return {"ok": true, "surfaces": 5, "triangles": 106, "side_chain_totals_m": side_chain_totals_m, "upper_band_ids": fields.get_meta("upper_band_ids")}
+	return {"ok": true, "surfaces": mesh.get_surface_count(), "triangles": field_triangles, "side_chain_totals_m": side_chain_totals_m, "upper_band_ids": fields.get_meta("upper_band_ids")}
+
+
+func _emit_public_run_fields(groups: Dictionary, raw_vertices: Array, raw_normals: Array, run_index: int, entry: Dictionary, render: Dictionary, bands: Array) -> bool:
+	var offset := run_index * 12
+	var start := Vector3(float(raw_vertices[offset]), float(raw_vertices[offset + 1]), float(raw_vertices[offset + 2]))
+	var end := Vector3(float(raw_vertices[offset + 3]), float(raw_vertices[offset + 4]), float(raw_vertices[offset + 5]))
+	var normal := Vector3(float(raw_normals[offset]), 0.0, float(raw_normals[offset + 2])).normalized()
+	var lower_outward := normal * float(render.get("lower_field_offset_m", 0.0))
+	var lower_top := float(render.get("live_work_band_top_y_m", 0.0))
+	var lower_corners := [start + lower_outward, end + lower_outward, Vector3(end.x, lower_top, end.z) + lower_outward, Vector3(start.x, lower_top, start.z) + lower_outward]
+	var lower_uvs := METER_UV.vertical_quad_uvs(lower_corners, float(entry.get("u_start_m", 0.0))) as PackedVector2Array
+	if lower_uvs.size() != 4:
+		return false
+	_append_quad(groups.brick_field as Dictionary, lower_corners, normal, lower_uvs)
+	for band_value: Variant in bands:
+		var band := band_value as Dictionary
+		var outward := normal * float(band.get("offset_m", 0.0))
+		var bottom_y := float(band.get("bottom_y_m", 0.0))
+		var top_y := float(band.get("top_y_m", 0.0))
+		var corners := [Vector3(start.x, bottom_y, start.z) + outward, Vector3(end.x, bottom_y, end.z) + outward, Vector3(end.x, top_y, end.z) + outward, Vector3(start.x, top_y, start.z) + outward]
+		var material_key := str(band.get("material_key", ""))
+		_append_quad(groups[material_key] as Dictionary, corners, normal, _plain_uvs(float(entry.get("u_start_m", 0.0)), float(entry.get("u_end_m", 0.0)), bottom_y, top_y))
+	var tangent := (end - start).normalized()
+	var length := start.distance_to(end)
+	var midpoint := (start + end) * 0.5
+	# The cap config stores absolute world Y. Keep the run basis origin at Y=0
+	# so the frozen receiver's ~4.1 m base elevation is not added twice.
+	var run_transform := Transform3D(Basis(tangent, Vector3.UP, normal), Vector3(midpoint.x, 0.0, midpoint.z))
+	for cap_value: Variant in render.get("upper_relief_caps", []) as Array:
+		var cap := cap_value as Dictionary
+		_add_c_box(str(cap.get("material_key", "")), "UPPER-RUN-%02d" % run_index, str(cap.get("id", "")), run_transform, Vector3(0.0, float(cap.get("center_y_m", 0.0)), float(cap.get("outward_center_m", 0.0))), Vector3(length + 0.04, float(cap.get("height_m", 0.0)), float(cap.get("depth_m", 0.0))), "upper_relief")
+	return true
+
+
+func _add_nnw_upper_windows(raw_vertices: Array, raw_normals: Array, run_indices: Array) -> void:
+	var upper := _config.get("inferred_nnw_upper_windows", {}) as Dictionary
+	if upper.is_empty():
+		return
+	var width := float(upper.get("width_m", 0.0))
+	var height := float(upper.get("height_m", 0.0))
+	var pitch := float(upper.get("pitch_m", 0.0))
+	var margin := float(upper.get("end_margin_m", 0.0))
+	for run_value: Variant in run_indices:
+		var offset := int(run_value) * 12
+		var start := Vector3(float(raw_vertices[offset]), 0.0, float(raw_vertices[offset + 2]))
+		var end := Vector3(float(raw_vertices[offset + 3]), 0.0, float(raw_vertices[offset + 5]))
+		var tangent := (end - start).normalized()
+		var normal := Vector3(float(raw_normals[offset]), 0.0, float(raw_normals[offset + 2])).normalized()
+		var length := start.distance_to(end)
+		var count := int(floor((length - margin * 2.0 - width) / pitch)) + 1
+		if count <= 0:
+			continue
+		var first := (length - pitch * float(count - 1)) * 0.5
+		for index in count:
+			var u := first + pitch * float(index)
+			var module_transform := Transform3D(Basis(tangent, Vector3.UP, normal), start + tangent * u)
+			for row_value: Variant in upper.get("rows_y_m", []) as Array:
+				var placement := {"id": "IH-C-NNW-UPPER-%02d-%02d" % [int(run_value), index]}
+				_add_framed_panel_c(placement, module_transform, {"id": "UPPER", "x_m": 0.0, "y_m": float(row_value), "width_m": width, "height_m": height})
 
 
 func _build_variant_c_module(parent: Node3D, low_wall: Dictionary, placement: Dictionary, variant: Dictionary) -> void:
