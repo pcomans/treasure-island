@@ -21265,3 +21265,13 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: building the courtyard natively, with the outer ring as one block, courtyard walls and parapets from the hole's own edges and Clipper roof pieces cut through the hole, solved what config clipping could not. The engine check (no wall vertex outside the footprint), identical counts on 55 buildings and AE 0 on 490/Star View made the proof quick. The overhead shot confirmed the courtyard opens to the ground. Fits, spray, final shots and suite all passed first time.
 - What did not work well: the first, approved design (cut the ring around the courtyard with clip lines) only failed in the engine, because my float64 preflight mirror hides the bridge edges that clipping a concave ring leaves. Code review then found that the roof pieces could silently roof over a non-convex courtyard, so a guard came as a follow-up commit.
 - What the team should change next time: for any new geometry feature, run the engine's own check before asking for design approval of a config-only approach. Write fail-closed area checks into a producer whenever it builds pieces with Clipper.
+
+## visual-review (r133351 courtyard ring, 2026-10-22)
+
+- What worked well: the overhead confirmed the ring's footprint and roof coverage at a glance, and the Mar 2025 south-side matched pose made the facade comparison direct.
+- What did not work well: the render took "blue" from the photo's pale blue fascia panels and turned it into a saturated blue base band, while the photo's main read is cream walls with a glazed central entrance. Hue and the entrance were both lost even though the matched pose framed them.
+- What the team should change next time: when a matched photo has one focal element (the entrance), name it in the plan and check it at the first render, along with the dominant wall hue sampled from the photo.
+
+## code-review (courtyard guards 55a68cf + r133351 c6042ca, 2026-10-22)
+
+- What worked well: both guards I asked for are now cheap, explicit invariants (any hole edge crossing a block edge disqualifies that block; roof piece area must equal block minus courtyards within 0.05 m²), and r133351's headless CHECK shows it builds cleanly under them. Next time: pair each new fail-closed guard with one broken-copy case in the evidence, as the fish-streets guards did.
