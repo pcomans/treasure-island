@@ -1,7 +1,7 @@
 {
   "source": "w34313569",
   "chunk": "x_-1__z_-4",
-  "status": "production_inference from March and November 2025 observed SSE/ENE; unknown rear and historical entrances excluded",
+  "status": "production_inference from March and November 2025 observed SSE/ENE; unphotographed north, west end and SW runs are plain light-concrete walls with no openings; historical entrances excluded",
   "chains": [
     {
       "runs": [
@@ -26,6 +26,116 @@
       "row_start": 7.2,
       "row_end": 27,
       "terminal_projection": true
+    },
+    {
+      "runs": [
+        0,
+        1
+      ],
+      "upper_slots": false,
+      "lower_row": false,
+      "bay_width": 8.8,
+      "split_below_top": 8.7,
+      "status": "plain closed wall in the photographed front's light concrete (whole height in the upper tone), terminal piers and coping; no openings; production_inference"
+    },
+    {
+      "runs": [
+        2,
+        3
+      ],
+      "upper_slots": false,
+      "lower_row": false,
+      "bay_width": 8.8,
+      "split_below_top": 8.7,
+      "status": "plain closed wall in the photographed front's light concrete (whole height in the upper tone), terminal piers and coping; no openings; production_inference"
+    },
+    {
+      "runs": [
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "upper_slots": false,
+      "lower_row": false,
+      "bay_width": 8.8,
+      "split_below_top": 8.7,
+      "status": "plain closed wall in the photographed front's light concrete (whole height in the upper tone), terminal piers and coping; no openings; production_inference"
+    },
+    {
+      "runs": [
+        16
+      ],
+      "upper_slots": false,
+      "lower_row": false,
+      "bay_width": 8.8,
+      "split_below_top": 8.7,
+      "status": "plain closed wall in the photographed front's light concrete (whole height in the upper tone), terminal piers and coping; no openings; production_inference"
+    },
+    {
+      "runs": [
+        17,
+        18
+      ],
+      "upper_slots": false,
+      "lower_row": false,
+      "bay_width": 8.8,
+      "split_below_top": 8.7,
+      "status": "plain closed wall in the photographed front's light concrete (whole height in the upper tone), terminal piers and coping; no openings; production_inference"
+    },
+    {
+      "runs": [
+        19
+      ],
+      "upper_slots": false,
+      "lower_row": false,
+      "bay_width": 8.8,
+      "split_below_top": 8.7,
+      "status": "plain closed wall in the photographed front's light concrete (whole height in the upper tone), terminal piers and coping; no openings; production_inference"
+    },
+    {
+      "runs": [
+        20,
+        21
+      ],
+      "upper_slots": false,
+      "lower_row": false,
+      "bay_width": 8.8,
+      "split_below_top": 8.7,
+      "status": "plain closed wall in the photographed front's light concrete (whole height in the upper tone), terminal piers and coping; no openings; production_inference"
+    },
+    {
+      "runs": [
+        22
+      ],
+      "upper_slots": false,
+      "lower_row": false,
+      "bay_width": 8.8,
+      "split_below_top": 8.7,
+      "status": "plain closed wall in the photographed front's light concrete (whole height in the upper tone), terminal piers and coping; no openings; production_inference"
+    },
+    {
+      "runs": [
+        23,
+        24
+      ],
+      "upper_slots": false,
+      "lower_row": false,
+      "bay_width": 8.8,
+      "split_below_top": 8.7,
+      "status": "plain closed wall in the photographed front's light concrete (whole height in the upper tone), terminal piers and coping; no openings; production_inference"
+    },
+    {
+      "runs": [
+        25,
+        26
+      ],
+      "upper_slots": false,
+      "lower_row": false,
+      "bay_width": 8.8,
+      "split_below_top": 8.7,
+      "status": "plain closed wall in the photographed front's light concrete (whole height in the upper tone), terminal piers and coping; no openings; production_inference"
     }
   ],
   "palette": {
