@@ -470,6 +470,12 @@ static func _make_blocks(ctx: Ctx) -> void:
 			if block.planes.is_empty():
 				ctx.errors.append("block %s roof needs a valid ridge_edge or low_edge" % block.id)
 				return
+		if item.has("pergola"):
+			if not _pergola_valid(ctx, block):
+				return
+			block.railing = false
+			block.top_y = block.roof_y
+			block.wall_top = block.roof_y
 		ctx.blocks.append(block)
 	if total > footprint_area + 0.05:
 		ctx.errors.append("blocks overlap or exceed the footprint (%.3f > %.3f m2)" % [total, footprint_area])
@@ -721,7 +727,8 @@ static func _spans(ctx: Ctx, block: Block, i: int) -> Array:
 	var side := Vector2(-d.y, d.x)
 	var covers: Array = []
 	for other: Block in ctx.blocks:
-		if other == block:
+		# An open pergola has no roof slab, so it never hides a neighbour's wall.
+		if other == block or other.cfg.has("pergola"):
 			continue
 		for j in other.poly.size():
 			var qa := other.poly[j]
@@ -1704,6 +1711,9 @@ static func _pad(ctx: Ctx, face: Face, s0: float, s1: float, d0: float, d1: floa
 # ---------------------------------------------------------------------- roofs
 
 static func _roof(ctx: Ctx, block: Block) -> void:
+	if block.cfg.has("pergola"):
+		_pergola(ctx, block)
+		return
 	if block.form != "flat":
 		_pitched_roof(ctx, block)
 	else:
@@ -2188,6 +2198,66 @@ static func _open_face(ctx: Ctx, face: Face) -> void:
 			wall.quad(face.point(p0, kh, 0.0), face.point(p1, kh, 0.0), face.point(q1, kh, kt), face.point(q0, kh, kt), Vector3.UP)
 			wall.quad(face.point(p0, y_a, 0.0), face.point(p0, kh, 0.0), face.point(q0, kh, kt), face.point(q0, y_a, kt), -face.dir3())
 			wall.quad(face.point(p1, y_b, 0.0), face.point(p1, kh, 0.0), face.point(q1, kh, kt), face.point(q1, y_b, kt), face.dir3())
+
+
+## Opt-in pergola ("pergola" on a flat block, normally with open sides): checks
+## its fields. A pergola has no roof slab, deck, parapet or roof items, and its
+## outline must be convex.
+static func _pergola_valid(ctx: Ctx, block: Block) -> bool:
+	var spec: Variant = block.cfg.get("pergola")
+	var ok := spec is Dictionary and block.form == "flat" and not block.cfg.has("deck") and not block.cfg.has("roof_items") and _convex(block.poly)
+	if ok:
+		var edge := int(spec.get("rafter_edge", -1))
+		ok = edge >= 0 and edge < ctx.edges.size() \
+			and _in_range(float(spec.get("beam_w", 0.2)), 0.02, 1.0) and _in_range(float(spec.get("beam_h", 0.3)), 0.02, 1.0) \
+			and _in_range(float(spec.get("rafter_w", 0.08)), 0.02, 0.5) and _in_range(float(spec.get("rafter_h", 0.2)), 0.02, 1.0) \
+			and _in_range(float(spec.get("spacing", 0.6)), 0.2, 5.0)
+	if not ok:
+		ctx.errors.append("block %s pergola needs a flat convex block without deck or roof items, a valid rafter_edge, beam_w/beam_h 0.02-1, rafter_w 0.02-0.5, rafter_h 0.02-1 and spacing 0.2-5 m" % block.id)
+	return ok
+
+
+## Open pergola over its block (support role): beams round the outline just
+## under the roof line and rafters on them across the block, at right angles to
+## footprint edge `rafter_edge`, every `spacing` along it.
+static func _pergola(ctx: Ctx, block: Block) -> void:
+	var spec: Dictionary = block.cfg.pergola
+	var bucket := ctx.bucket("support", str(spec.get("material", "timber")))
+	var half := float(spec.get("beam_w", 0.2)) * 0.5
+	var y0 := block.roof_y - float(spec.get("beam_h", 0.3))
+	var count := block.poly.size()
+	for i in count:
+		var n := _outward(block.poly, i)
+		_plan_box(bucket, block.poly[i] - n * half, block.poly[(i + 1) % count] - n * half, n, y0, block.roof_y, half)
+	var edge: Edge = ctx.edges[int(spec.rafter_edge)]
+	var rafter_half := float(spec.get("rafter_w", 0.08)) * 0.5
+	var rafter_top := block.roof_y + float(spec.get("rafter_h", 0.2))
+	var spacing := float(spec.get("spacing", 0.6))
+	var lo := INF
+	var hi := -INF
+	for p: Vector2 in block.poly:
+		lo = minf(lo, edge.station(p))
+		hi = maxf(hi, edge.station(p))
+	var s := lo + spacing * 0.5
+	while s < hi - rafter_half:
+		# The rafter line edge.at(s, t) for all t, clipped to the convex outline.
+		var q := edge.at(s, 0.0)
+		var t0 := -INF
+		var t1 := INF
+		for i in count:
+			var m := _outward(block.poly, i)
+			var rate := -m.dot(edge.n)
+			var room := m.dot(block.poly[i] - q)
+			if absf(rate) < 1e-9:
+				if room < 0.0:
+					t1 = -INF
+			elif rate > 0.0:
+				t1 = minf(t1, room / rate)
+			else:
+				t0 = maxf(t0, room / rate)
+		if t1 - t0 > 0.1:
+			_plan_box(bucket, edge.at(s, t0), edge.at(s, t1), edge.d, block.roof_y, rafter_top, rafter_half)
+		s += spacing
 
 
 ## Caged steel ladder (support role) centred on its bay, from 0.3 m above grade
