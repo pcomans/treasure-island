@@ -55,6 +55,7 @@ All are opt-in; configs without them build as before. Materials are shared acros
 | scheme `open` | Posts (`post_w`, `module`, `post_material`; `post_every` keeps one face start in n) instead of a wall, optionally over a `knee` wall (`h`, `t`, `material`, entrance `gap` in stations). |
 | scheme `gable_material` | Material of the infill above the eave. |
 | feature `vents` `windows: true` | Keeps the ground-storey window in the louvres' bay (louvres under windows). |
+| target `holes` | Number of courtyard holes: further closed rings after the outer ring in the wall record. Each hole must lie wholly inside one flat block, which builds full-height courtyard walls (face key `hole`, else `default`), parapets and its roof around it. Absent means a single ring, as before. |
 | block `deck` | A flat roof carried as a slab over `open` sides: thickness `t` and `material` of its underside and of the fascia on the open faces. |
 | feature `ladder` | Caged steel ladder centred on the bay, from 0.3 m above grade to 1 m over the wall top (a fixture, not walkable). |
 | entry `landing.at: "floor"` | Deck at the floor level with skirts to grade; with `ramp` (`dir` ±1 along the face, `w`, `slope`, default 1:12) a walkable ramp runs along the facade to grade. `rails` (default with a ramp) adds pipe rails. |

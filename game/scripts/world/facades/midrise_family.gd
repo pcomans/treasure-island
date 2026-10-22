@@ -105,6 +105,8 @@ class Block:
 	## Pitched roof facets [u: Vector2, c: float, k: float]: underside height is
 	## roof_y + k * (u.dot(p) - c) for the lowest facet.
 	var planes: Array = []
+	## Courtyard holes inside this block (flat blocks only).
+	var holes: Array[PackedVector2Array] = []
 
 
 ## One exposed block edge with its facade scheme and station mapping.
@@ -147,6 +149,8 @@ class Ctx:
 	var land: Array = []
 	var terrain_misses := 0
 	var levels := PackedFloat64Array()
+	## Inner rings of a multi-ring wall record (courtyard holes, opt-in via target.holes).
+	var holes: Array[PackedVector2Array] = []
 
 	func bucket(role: String, mat: String) -> Bucket:
 		var key := role + "|" + mat
@@ -255,22 +259,44 @@ static func _footprint(ctx: Ctx, wall: Dictionary) -> Array:
 		return []
 	var groups: Array = []
 	var previous_end := Vector3(INF, INF, INF)
+	# Opt-in: target.holes names how many further closed rings (courtyard holes)
+	# follow the outer ring. Without it a second ring stays an error, as before.
+	var target: Dictionary = ctx.cfg.target
+	var hole_count := int(target.get("holes", 0))
+	var ring_start := Vector2(INF, INF)
+	var in_outer := true
+	var hole := PackedVector2Array()
 	for i in range(0, v.size(), 12):
 		var a := Vector3(float(v[i]), float(v[i + 1]), float(v[i + 2]))
 		var b := Vector3(float(v[i + 3]), float(v[i + 4]), float(v[i + 5]))
 		var normal := Vector2(float(nr[i]), float(nr[i + 2])).normalized()
-		if previous_end.is_finite() and Vector2(previous_end.x, previous_end.z).distance_to(Vector2(a.x, a.z)) > 0.001:
-			ctx.errors.append("wall runs are not contiguous")
-			return []
+		if not ring_start.is_finite():
+			ring_start = Vector2(a.x, a.z)
+		elif Vector2(previous_end.x, previous_end.z).distance_to(Vector2(a.x, a.z)) > 0.001:
+			# A new ring may start only where the previous one closed.
+			if hole_count == 0 or Vector2(previous_end.x, previous_end.z).distance_to(ring_start) > 0.001:
+				ctx.errors.append("wall runs are not contiguous")
+				return []
+			if not in_outer:
+				ctx.holes.append(hole)
+			in_outer = false
+			hole = PackedVector2Array()
+			ring_start = Vector2(a.x, a.z)
 		previous_end = b
+		if not in_outer:
+			hole.append(Vector2(a.x, a.z))
+			continue
 		if groups.is_empty() or (groups[-1].n as Vector2).dot(normal) < 0.9999:
 			groups.append({"n": normal, "points": [a]})
 		(groups[-1].points as Array).append(b)
-	var first: Vector3 = (groups[0].points as Array)[0]
-	if Vector2(previous_end.x, previous_end.z).distance_to(Vector2(first.x, first.z)) > 0.001:
+	if Vector2(previous_end.x, previous_end.z).distance_to(ring_start) > 0.001:
 		ctx.errors.append("wall ring is not closed")
 		return []
-	var target: Dictionary = ctx.cfg.target
+	if not in_outer:
+		ctx.holes.append(hole)
+	if ctx.holes.size() != hole_count:
+		ctx.errors.append("footprint has %d holes, config expects %d" % [ctx.holes.size(), hole_count])
+		return []
 	var expected: Array = target.get("edge_normals", [])
 	if groups.size() != expected.size():
 		ctx.errors.append("footprint has %d edges, config expects %d" % [groups.size(), expected.size()])
@@ -448,6 +474,24 @@ static func _make_blocks(ctx: Ctx) -> void:
 	if total > footprint_area + 0.05:
 		ctx.errors.append("blocks overlap or exceed the footprint (%.3f > %.3f m2)" % [total, footprint_area])
 		return
+	# A hole (courtyard) lies wholly inside one flat block, which builds its walls,
+	# parapets and roof around it.
+	for hole: PackedVector2Array in ctx.holes:
+		var owner: Block = null
+		for block: Block in ctx.blocks:
+			var inside := 0
+			for p: Vector2 in hole:
+				if Geometry2D.is_point_in_polygon(p, block.poly):
+					inside += 1
+			if inside == hole.size():
+				owner = block
+			elif inside > 0:
+				ctx.errors.append("footprint hole crosses block %s" % block.id)
+				return
+		if owner == null or owner.form != "flat":
+			ctx.errors.append("footprint hole needs one flat block around it")
+			return
+		owner.holes.append(hole)
 	for i in ctx.blocks.size():
 		for j in range(i + 1, ctx.blocks.size()):
 			for piece: PackedVector2Array in Geometry2D.intersect_polygons((ctx.blocks[i] as Block).poly, (ctx.blocks[j] as Block).poly):
@@ -560,6 +604,107 @@ static func _convex(poly: PackedVector2Array) -> bool:
 	return true
 
 
+# ------------------------------------------------------------------- courtyards
+
+## Courtyard hole edges oriented like the outer faces (outward = into the courtyard),
+## as [a, b, outward] triples.
+static func _hole_edges(block: Block, hole: PackedVector2Array) -> Array:
+	var a0 := block.poly[0]
+	var d0 := (block.poly[1] - a0).normalized()
+	var turn := signf(d0.cross(_outward(block.poly, 0)))
+	var out: Array = []
+	for i in hole.size():
+		var a := hole[i]
+		var b := hole[(i + 1) % hole.size()]
+		if a.distance_to(b) < 0.001:
+			continue
+		var n := -_outward(hole, i)
+		if signf((b - a).normalized().cross(n)) != turn:
+			var swap := a
+			a = b
+			b = swap
+		out.append([a, b, n])
+	return out
+
+
+## Full-height courtyard walls along a hole (face key "hole", else the default scheme).
+static func _hole_faces(ctx: Ctx, block: Block, hole: PackedVector2Array, faces_cfg: Dictionary, schemes: Dictionary) -> void:
+	for edge: Array in _hole_edges(block, hole):
+		var face := Face.new()
+		face.block = block
+		face.a = edge[0]
+		var b: Vector2 = edge[1]
+		face.length = face.a.distance_to(b)
+		face.d = (b - face.a) / face.length
+		face.n = edge[2]
+		face.spans = [{"s0": 0.0, "s1": face.length, "ground": true, "y": 0.0}]
+		face.index = ctx.faces
+		ctx.faces += 1
+		face.key = "hole"
+		var scheme_name := str(faces_cfg.get("hole", faces_cfg.get("default", "")))
+		if not schemes.has(scheme_name) or (schemes[scheme_name] as Dictionary).has("open"):
+			ctx.errors.append("block %s courtyard needs a closed wall scheme" % block.id)
+			return
+		face.scheme = schemes[scheme_name]
+		_facade(ctx, face)
+
+
+## Parapets along a courtyard's edges, mitred at its corners.
+static func _hole_parapets(ctx: Ctx, block: Block, hole: PackedVector2Array) -> void:
+	if block.wall_top <= block.roof_y + 0.01:
+		return
+	var t := float((block.cfg.get("parapet", {}) as Dictionary).get("t", 0.3))
+	var edges := _hole_edges(block, hole)
+	var count := edges.size()
+	for i in count:
+		var a: Vector2 = edges[i][0]
+		var b: Vector2 = edges[i][1]
+		var n: Vector2 = edges[i][2]
+		var d := (b - a).normalized()
+		var inner0 := a - n * t
+		var inner1 := b - n * t
+		# Mitre with the edge meeting each end (edges keep the ring order or its reverse).
+		for other: Array in edges:
+			if (other[1] as Vector2).distance_to(a) < 0.001:
+				var no: Vector2 = other[2]
+				inner0 = a - (no + n) * t / (1.0 + no.dot(n))
+			if (other[0] as Vector2).distance_to(b) < 0.001:
+				var nf: Vector2 = other[2]
+				inner1 = b - (nf + n) * t / (1.0 + nf.dot(n))
+		_parapet_run(ctx, block, a, b, inner0, inner1, n, d, false, false)
+
+
+## The block outline minus its courtyards as hole-free pieces: each hole is cut by
+## a line through it, so every Clipper piece has the courtyard as a notch.
+static func _pieces_around_holes(block: Block) -> Array[PackedVector2Array]:
+	var pieces: Array[PackedVector2Array] = [block.poly]
+	for hole: PackedVector2Array in block.holes:
+		var centre := Vector2.ZERO
+		for p: Vector2 in hole:
+			centre += p
+		centre /= float(hole.size())
+		var along := (hole[1] - hole[0]).normalized()
+		var across := Vector2(-along.y, along.x)
+		var reach := 1.0e4
+		var halves: Array[PackedVector2Array] = [
+			PackedVector2Array([centre - along * reach, centre + along * reach, centre + along * reach + across * reach, centre - along * reach + across * reach]),
+			PackedVector2Array([centre - along * reach, centre - along * reach - across * reach, centre + along * reach - across * reach, centre + along * reach]),
+		]
+		var next: Array[PackedVector2Array] = []
+		for piece: PackedVector2Array in pieces:
+			if not Geometry2D.is_point_in_polygon(centre, piece):
+				next.append(piece)
+				continue
+			for half: PackedVector2Array in halves:
+				for part: PackedVector2Array in Geometry2D.intersect_polygons(piece, half):
+					for rest: PackedVector2Array in Geometry2D.clip_polygons(part, hole):
+						if not Geometry2D.is_polygon_clockwise(rest) == Geometry2D.is_polygon_clockwise(part):
+							continue
+						next.append(rest)
+		pieces = next
+	return pieces
+
+
 # ------------------------------------------------------------------- exposure
 
 ## Station intervals of block edge i that rise above neighbours or the ground.
@@ -655,6 +800,8 @@ static func _block_faces(ctx: Ctx, block: Block) -> void:
 			_facade(ctx, face)
 			if block.form != "flat":
 				_infill(ctx, face)
+	for hole: PackedVector2Array in block.holes:
+		_hole_faces(ctx, block, hole, faces_cfg, schemes)
 
 
 ## Every level at which a wall material can change on this block (floors, plinth
@@ -1410,7 +1557,15 @@ static func _roof(ctx: Ctx, block: Block) -> void:
 		var bucket := ctx.bucket("roof", roof_mat)
 		var p0 := block.poly[0]
 		var tris: Array = []
-		if _convex(block.poly):
+		if not block.holes.is_empty():
+			for piece: PackedVector2Array in _pieces_around_holes(block):
+				var piece_indices := Geometry2D.triangulate_polygon(piece)
+				if piece_indices.is_empty():
+					ctx.errors.append("block %s roof around its courtyard does not triangulate" % block.id)
+					return
+				for i in range(0, piece_indices.size(), 3):
+					tris.append([piece[piece_indices[i]], piece[piece_indices[i + 1]], piece[piece_indices[i + 2]]])
+		elif _convex(block.poly):
 			for i in range(1, block.poly.size() - 1):
 				tris.append([p0, block.poly[i], block.poly[i + 1]])
 		else:
@@ -1436,6 +1591,8 @@ static func _roof(ctx: Ctx, block: Block) -> void:
 				var q2: Vector2 = t[2]
 				under.tri(Vector3(q0.x, under_y, q0.y), Vector3(q1.x, under_y, q1.y), Vector3(q2.x, under_y, q2.y), Vector3.DOWN)
 		_parapets(ctx, block)
+		for hole: PackedVector2Array in block.holes:
+			_hole_parapets(ctx, block, hole)
 	for item: Dictionary in block.cfg.get("roof_items", []):
 		_roof_item(ctx, block, item)
 
@@ -1703,7 +1860,7 @@ static func _roof_item(ctx: Ctx, block: Block, item: Dictionary) -> void:
 		var d0 := float(dd[0]) + (row_d + gap) * float(r)
 		var corners := [edge.at(float(s[0]), d0), edge.at(float(s[1]), d0), edge.at(float(s[1]), d0 + row_d), edge.at(float(s[0]), d0 + row_d)]
 		for corner: Vector2 in corners:
-			if not Geometry2D.is_point_in_polygon(corner, block.poly):
+			if not Geometry2D.is_point_in_polygon(corner, block.poly) or block.holes.any(func(h: PackedVector2Array) -> bool: return Geometry2D.is_point_in_polygon(corner, h)):
 				ctx.errors.append("roof item %s leaves block %s" % [kind, block.id])
 				return
 		var h := float(item.get("h", 0.45 if kind == "pv" else 2.0))
