@@ -217,11 +217,17 @@ static func validate_variant_c_config_dictionary(config: Dictionary) -> bool:
 	# PODIUM-BODY band, clear of the run ends.
 	var upper := config.get("inferred_nnw_upper_windows", {}) as Dictionary
 	if not upper.is_empty():
+		var body := {}
+		for value: Variant in bands:
+			if str((value as Dictionary).get("id", "")) == "PODIUM-BODY":
+				body = value as Dictionary
+		if body.is_empty():
+			return false
 		var half_h := float(upper.get("height_m", 0.0)) * 0.5
 		if float(upper.get("width_m", 0.0)) <= 0.0 or half_h <= 0.0 or float(upper.get("pitch_m", 0.0)) <= float(upper.get("width_m", 0.0)):
 			return false
 		for row_value: Variant in upper.get("rows_y_m", []) as Array:
-			if float(row_value) - half_h < 11.45 or float(row_value) + half_h > 17.38:
+			if float(row_value) - half_h < float(body.bottom_y_m) or float(row_value) + half_h > float(body.top_y_m):
 				return false
 	var sides := config.get("public_sides", []) as Array
 	if sides.size() != 2 \
