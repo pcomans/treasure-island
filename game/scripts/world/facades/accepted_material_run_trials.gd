@@ -106,17 +106,16 @@ static func _validate_target_record(record: Dictionary, indices: PackedInt32Arra
 			"message": "Accepted material exact-run receiver drifted for %s." % object_key,
 			"source_keys": record.get("source_keys", []),
 		}
-	if target.has("accepted_runs"):
-		var accepted_runs := target.accepted_runs as Array
-		var seen := {}
-		for run_value: Variant in accepted_runs:
-			var run_index := int(run_value)
-			if run_index < 0 or run_index >= expected_runs or seen.has(run_index):
-				return {
-					"ok": false,
-					"code": "accepted_material_run_scope",
-					"message": "Accepted material run scope is invalid for %s." % object_key,
-					"source_keys": record.get("source_keys", []),
-				}
-			seen[run_index] = true
+	var accepted_runs := target.accepted_runs as Array
+	var seen := {}
+	for run_value: Variant in accepted_runs:
+		var run_index := int(run_value)
+		if run_index < 0 or run_index >= expected_runs or seen.has(run_index):
+			return {
+				"ok": false,
+				"code": "accepted_material_run_scope",
+				"message": "Accepted material run scope is invalid for %s." % object_key,
+				"source_keys": record.get("source_keys", []),
+			}
+		seen[run_index] = true
 	return {"ok": true}
