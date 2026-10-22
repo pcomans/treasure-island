@@ -14,7 +14,9 @@ handled-input API, keep one owner finger and handle cancellation.
 
 MobileControls retains movement/camera output and upstream0.1 degrees per logical
 pixel camera math. Swimming/player-state, extra buttons and pinch zoom were
-removed. Explicit routing excludes stick/buttons from one right-side look finger;
+removed. Look deltas use the tracked finger’s previous/current logical positions: the
+first hosted four-finger trial produced a large jump from event.relative despite
+a small owner-finger move. Explicit routing excludes stick/buttons from one right-side look finger;
 pause/focus releases all. touch_controls.gd supplies layout and stock-camera/vector
 mapping. Player physics is retained; only touch movement preserves analog strength.
 This older upstream template does not claim Godot4.7 web or iPad Safari support;

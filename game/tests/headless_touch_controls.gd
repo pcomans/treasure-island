@@ -31,6 +31,28 @@ func _run() -> void:
 	if Input.is_action_pressed("jetpack") or not (controls.get_movement_vector().y < -0.1):
 		_fail("Releasing rise also released movement, or left rise held")
 		return
+	# A browser may supply a relative value polluted by another finger. The
+	# camera must follow only the look owner's actual positions.
+	_touch(controls, 8, Vector2(900, 440), true)
+	var before := controls.get_camera_rotation()
+	var look := InputEventScreenDrag.new()
+	look.index = 8
+	look.position = Vector2(908, 440)
+	look.relative = Vector2(700, 600)
+	controls._input(drag) # independent movement finger, far from look
+	controls._input(look)
+	if not is_equal_approx(controls.get_camera_rotation().x - before.x, -0.8) or not is_equal_approx(controls.get_camera_rotation().y, before.y):
+		_fail("Camera jumped from another finger or misleading relative delta")
+		return
+	_touch(controls, 8, look.position, false, true)
+	_touch(controls, 9, Vector2(1200, 300), true)
+	before = controls.get_camera_rotation()
+	look.index = 9
+	look.position = Vector2(1208, 300)
+	controls._input(look)
+	if not is_equal_approx(controls.get_camera_rotation().x - before.x, -0.8):
+		_fail("Look reacquisition retained stale finger origin")
+		return
 	controls.set_gameplay_active(false)
 	if (controls.get_movement_vector().y < -0.1):
 		_fail("Pause left movement held")

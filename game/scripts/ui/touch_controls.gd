@@ -97,6 +97,11 @@ func _exit_tree() -> void:
 	_release_all()
 
 func _draw() -> void:
+	# Keep the upstream stick texture readable over pale paths and grass.
+	var stick_center := Vector2(130, size.y - 140)
+	draw_circle(stick_center, 94, Color(0.02, 0.06, 0.09, 0.62))
+	draw_arc(stick_center, 90, 0, TAU, 64, Color(0.75, 0.9, 0.95, 0.75), 2, true)
+	draw_circle(stick_center, 24, Color(0.04, 0.22, 0.28, 0.85))
 	var font := ThemeDB.fallback_font
 	for item in [[Vector2(102, size.y - 22), "MOVE"], [Vector2(size.x - 126, size.y - 86), "RISE"], [Vector2(size.x - 254, size.y - 86), "RUN"], [Vector2(size.x * 0.55, size.y - 30), "Drag right side to look"]]:
 		draw_string(font, item[0], item[1], HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color.WHITE)

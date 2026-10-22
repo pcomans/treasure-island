@@ -27,10 +27,11 @@ func handle_mobile_input(event: InputEvent) -> void:
 			if not on_button:
 				_touches[event.index] = {"begin": event.position, "current": event.position}
 	if event is InputEventScreenDrag and _touches.has(event.index):
+		var relative: Vector2 = event.position - _touches[event.index].current
 		_touches[event.index].current = event.position
 		if _touches.size() == 1:
-			_cam_rot.x -= event.relative.x * sensitivity
-			_cam_rot.y -= event.relative.y * sensitivity
+			_cam_rot.x -= relative.x * sensitivity
+			_cam_rot.y -= relative.y * sensitivity
 			_cam_rot.y = clampf(_cam_rot.y, min_pitch, max_pitch)
 
 func get_movement_vector() -> Vector2:
