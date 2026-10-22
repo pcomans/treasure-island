@@ -110,6 +110,25 @@
       ],
       [
         32
+      ],
+      [
+        22,
+        23
+      ],
+      [
+        25,
+        26
+      ],
+      [
+        28,
+        29,
+        30
+      ],
+      [
+        31
+      ],
+      [
+        33
       ]
     ],
     "upper_window_bottom": 5.96,
@@ -27702,6 +27721,316 @@
             "front_center_xz": [
               -492.62100768157586,
               -86.12748380535383
+            ]
+          }
+        ]
+      },
+      {
+        "runs": [
+          22,
+          23
+        ],
+        "inference": "production_inference: owner-approved openings on an unphotographed side (2026-10-22), in the accepted opaque-slider and closed lower-module family; counts and positions are not as-built",
+        "local_modules": [
+          {
+            "kind": "closed_entry",
+            "station_m": 2.347,
+            "bottom_y": 2.495,
+            "width_m": 1.0,
+            "height_m": 2.1,
+            "face_depth_m": 0.1,
+            "closed_body_depth_m": 0.1,
+            "frame_width_m": 0.075,
+            "floor_at_local_module_m": 2.495,
+            "normal_xz": [
+              0.892,
+              -0.453
+            ],
+            "front_center_xz": [
+              -463.193763,
+              -54.419110499999995
+            ]
+          },
+          {
+            "kind": "closed_window",
+            "station_m": 5.406,
+            "bottom_y": 3.395,
+            "width_m": 1.42,
+            "height_m": 1.18,
+            "face_depth_m": 0.1,
+            "closed_body_depth_m": 0.1,
+            "frame_width_m": 0.075,
+            "floor_at_local_module_m": 2.495,
+            "normal_xz": [
+              0.892,
+              -0.453
+            ],
+            "front_center_xz": [
+              -464.578836,
+              -57.146105999999996
+            ]
+          },
+          {
+            "kind": "closed_entry",
+            "station_m": 10.251,
+            "bottom_y": 2.446,
+            "width_m": 1.0,
+            "height_m": 2.1,
+            "face_depth_m": 0.1,
+            "closed_body_depth_m": 0.1,
+            "frame_width_m": 0.075,
+            "floor_at_local_module_m": 2.446,
+            "normal_xz": [
+              0.892,
+              -0.453
+            ],
+            "front_center_xz": [
+              -466.772763,
+              -61.4656105
+            ]
+          },
+          {
+            "kind": "closed_window",
+            "station_m": 13.309,
+            "bottom_y": 3.346,
+            "width_m": 1.42,
+            "height_m": 1.18,
+            "face_depth_m": 0.1,
+            "closed_body_depth_m": 0.1,
+            "frame_width_m": 0.075,
+            "floor_at_local_module_m": 2.446,
+            "normal_xz": [
+              0.892,
+              -0.453
+            ],
+            "front_center_xz": [
+              -468.157836,
+              -64.192606
+            ]
+          }
+        ]
+      },
+      {
+        "runs": [
+          25,
+          26
+        ],
+        "inference": "production_inference: owner-approved openings on an unphotographed side (2026-10-22), in the accepted opaque-slider and closed lower-module family; counts and positions are not as-built",
+        "local_modules": [
+          {
+            "kind": "closed_entry",
+            "station_m": 2.192,
+            "bottom_y": 2.388,
+            "width_m": 1.0,
+            "height_m": 2.1,
+            "face_depth_m": 0.1,
+            "closed_body_depth_m": 0.1,
+            "frame_width_m": 0.075,
+            "floor_at_local_module_m": 2.388,
+            "normal_xz": [
+              0.891,
+              -0.453
+            ],
+            "front_center_xz": [
+              -471.50451350000003,
+              -67.750263
+            ]
+          },
+          {
+            "kind": "closed_window",
+            "station_m": 5.048,
+            "bottom_y": 3.288,
+            "width_m": 1.42,
+            "height_m": 1.18,
+            "face_depth_m": 0.1,
+            "closed_body_depth_m": 0.1,
+            "frame_width_m": 0.075,
+            "floor_at_local_module_m": 2.388,
+            "normal_xz": [
+              0.891,
+              -0.453
+            ],
+            "front_center_xz": [
+              -472.79922200000004,
+              -70.296336
+            ]
+          },
+          {
+            "kind": "closed_entry",
+            "station_m": 9.573,
+            "bottom_y": 2.354,
+            "width_m": 1.0,
+            "height_m": 2.1,
+            "face_depth_m": 0.1,
+            "closed_body_depth_m": 0.1,
+            "frame_width_m": 0.075,
+            "floor_at_local_module_m": 2.354,
+            "normal_xz": [
+              0.891,
+              -0.453
+            ],
+            "front_center_xz": [
+              -474.85001350000005,
+              -74.329263
+            ]
+          },
+          {
+            "kind": "closed_window",
+            "station_m": 12.429,
+            "bottom_y": 3.254,
+            "width_m": 1.42,
+            "height_m": 1.18,
+            "face_depth_m": 0.1,
+            "closed_body_depth_m": 0.1,
+            "frame_width_m": 0.075,
+            "floor_at_local_module_m": 2.354,
+            "normal_xz": [
+              0.891,
+              -0.453
+            ],
+            "front_center_xz": [
+              -476.144722,
+              -76.875336
+            ]
+          }
+        ]
+      },
+      {
+        "runs": [
+          28,
+          29,
+          30
+        ],
+        "inference": "production_inference: owner-approved openings on an unphotographed side (2026-10-22), in the accepted opaque-slider and closed lower-module family; counts and positions are not as-built",
+        "local_modules": [
+          {
+            "kind": "closed_entry",
+            "station_m": 2.47,
+            "bottom_y": 2.337,
+            "width_m": 1.0,
+            "height_m": 2.1,
+            "face_depth_m": 0.1,
+            "closed_body_depth_m": 0.1,
+            "frame_width_m": 0.075,
+            "floor_at_local_module_m": 2.337,
+            "normal_xz": [
+              0.891,
+              -0.453
+            ],
+            "front_center_xz": [
+              -477.19599600000004,
+              -81.7351095
+            ]
+          },
+          {
+            "kind": "closed_window",
+            "station_m": 5.688,
+            "bottom_y": 3.237,
+            "width_m": 1.42,
+            "height_m": 1.18,
+            "face_depth_m": 0.1,
+            "closed_body_depth_m": 0.1,
+            "frame_width_m": 0.075,
+            "floor_at_local_module_m": 2.337,
+            "normal_xz": [
+              0.891,
+              -0.453
+            ],
+            "front_center_xz": [
+              -478.65421200000003,
+              -84.604134
+            ]
+          },
+          {
+            "kind": "closed_entry",
+            "station_m": 10.786,
+            "bottom_y": 2.302,
+            "width_m": 1.0,
+            "height_m": 2.1,
+            "face_depth_m": 0.1,
+            "closed_body_depth_m": 0.1,
+            "frame_width_m": 0.075,
+            "floor_at_local_module_m": 2.302,
+            "normal_xz": [
+              0.891,
+              -0.453
+            ],
+            "front_center_xz": [
+              -480.963996,
+              -89.14860949999999
+            ]
+          },
+          {
+            "kind": "closed_window",
+            "station_m": 14.004,
+            "bottom_y": 3.202,
+            "width_m": 1.42,
+            "height_m": 1.18,
+            "face_depth_m": 0.1,
+            "closed_body_depth_m": 0.1,
+            "frame_width_m": 0.075,
+            "floor_at_local_module_m": 2.302,
+            "normal_xz": [
+              0.891,
+              -0.453
+            ],
+            "front_center_xz": [
+              -482.422212,
+              -92.01763399999999
+            ]
+          }
+        ]
+      },
+      {
+        "runs": [
+          31
+        ],
+        "inference": "production_inference: owner-approved openings on an unphotographed side (2026-10-22), in the accepted opaque-slider and closed lower-module family; counts and positions are not as-built",
+        "local_modules": [
+          {
+            "kind": "closed_window",
+            "station_m": 5.779,
+            "bottom_y": 3.16,
+            "width_m": 1.42,
+            "height_m": 1.18,
+            "face_depth_m": 0.1,
+            "closed_body_depth_m": 0.1,
+            "frame_width_m": 0.075,
+            "floor_at_local_module_m": 2.26,
+            "normal_xz": [
+              -0.453,
+              -0.892
+            ],
+            "front_center_xz": [
+              -488.8998,
+              -91.7882
+            ]
+          }
+        ]
+      },
+      {
+        "runs": [
+          33
+        ],
+        "inference": "production_inference: owner-approved openings on an unphotographed side (2026-10-22), in the accepted opaque-slider and closed lower-module family; counts and positions are not as-built",
+        "local_modules": [
+          {
+            "kind": "closed_window",
+            "station_m": 3.98,
+            "bottom_y": 3.053,
+            "width_m": 1.42,
+            "height_m": 1.18,
+            "face_depth_m": 0.1,
+            "closed_body_depth_m": 0.1,
+            "frame_width_m": 0.075,
+            "floor_at_local_module_m": 2.153,
+            "normal_xz": [
+              -0.453,
+              -0.891
+            ],
+            "front_center_xz": [
+              -495.4283,
+              -83.0836
             ]
           }
         ]
