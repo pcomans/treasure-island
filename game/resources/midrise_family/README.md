@@ -40,7 +40,7 @@ A scheme fills one face with bays. Single-bay `features` sit at their stations (
 | `ground` | Ground-storey `kind`: `window`, `patio` (railing over a tall plinth), `storefront` (`pier`, `head`) or `blank`. |
 | `stagger` | Deterministic window `offsets` and `mix` variants from `from_storey`. |
 
-Feature types: `loggia` (`storeys`, `depth`, `pier`), `frame` (a multi-storey recess over `storeys` `[k0, k1]`), `band` (a dark vertical window/spandrel stack), `entry` (`door.kind` `unit`, `lobby` or `porch`, plus `canopy`, `landing` and `screens`), `garage`, `vents` and `corner` (a window aligned to the face end). A feature may also set `material`, `material_from`/`material_to`, `window`, `window_storeys`, `ground` and `upper`.
+Feature types: `loggia` (`storeys`, `depth`, `pier`), `frame` (a multi-storey recess over `storeys` `[k0, k1]`), `band` (a dark vertical window/spandrel stack), `entry` (`door.kind` `unit`, `lobby` or `porch`, plus `canopy`, `landing` and `screens`), `garage`, `vents`, `corner` (a window aligned to the face end), and the opt-in `stair_bay` and `top_box` (see the outbuilding fields table). A feature may also set `material`, `material_from`/`material_to`, `window`, `window_storeys`, `ground` and `upper`.
 
 Entry landings are flat walkable pads at the highest terrain under them plus 0.1 m, with skirts of at most 40 degrees into the ground. Doors sit on the landing, so there are no steps to walk-test.
 
@@ -60,6 +60,8 @@ All are opt-in; configs without them build as before. Materials are shared acros
 | feature `ladder` | Caged steel ladder centred on the bay, from 0.3 m above grade to 1 m over the wall top (a fixture, not walkable). |
 | entry `landing.at: "floor"` | Deck at the floor level with skirts to grade; with `ramp` (`dir` ±1 along the face, `w`, `slope`, default 1:12) a walkable ramp runs along the facade to grade. `rails` (default with a ramp) adds pipe rails. |
 | roof item `cylinder` | Prism of `sides` (default 12) inscribed in the item's station/depth square. Items on pitched roofs stand on the slab. |
+| feature `stair_bay` | Open recessed stair bay (at least two storeys): a full-height void `depth` (1.2–4 m, default 2.0) deep inside `pier` (default 0.2) from the feature ends, from the highest grade under its front and back lines up to `head` (default 0.35) below the roof, with a dark `back` wall, `side` reveals (default the wall), a `soffit`, a solid ground-floor guard `guard_h` (default 1.1) high, and per storey two stepped flights around a half landing under a floor landing (all `slab`). A visual recess, not a route; its back wall closes the collision footprint. A clear width under 2 m, a depth outside the range, back corners outside the block or no room between grade and roof fail the build. |
+| feature `top_box` | Projecting box on an otherwise blank wall from `below` (default 0.15) under floor `storey` (default the top storey) up to the wall top, `project` (0.05–2 m, default 0.6) out from the wall, inset by `pier`, in `material` (default the scheme material), with one glazed band from its `window` (`sill`, `h`, `inset`, plus the usual glazing fields). It is `support`, so wall geometry stays inside the footprint. A width under 1 m or an out-of-range storey or projection fails the build. |
 
 Parts are emitted into the same role buckets: posts, rails, ladders, fascia and roof undersides are `support`, knee walls and infill are `wall`, ramps are `ground`.
 
