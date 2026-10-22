@@ -87,7 +87,7 @@ static func _build_pair(records:Dictionary, neutral_wall:StandardMaterial3D, neu
 	_apply_metadata(wall_root,roof_root)
 	var meta:Dictionary={"adapter_id":ADAPTER_ID,"factory_calls":1,"partial_pair_allowed":false,"fallback_allowed":false,"stack_allowed":false,"mapped_public_run_indices":FACTORY.TARGET_RUNS.duplicate(),"protected_run_indices":FACTORY.PROTECTED_RUNS.duplicate()}
 	for root:Node3D in [wall_root,roof_root]:root.set_meta("d5_1317_gateview_live_replacement",meta.duplicate(true))
-	return {"ok":true,"wall_result":{"ok":true,"node":wall_root,"metadata":meta,"mesh_instances":12,"surfaces":12,"triangles":2492,"static_bodies":1,"shapes":3},"roof_result":{"ok":true,"node":roof_root,"metadata":meta,"mesh_instances":2,"surfaces":2,"triangles":130,"static_bodies":1,"shapes":2}}
+	return {"ok":true,"wall_result":{"ok":true,"node":wall_root,"metadata":meta,"mesh_instances":12,"surfaces":12,"triangles":3176,"static_bodies":1,"shapes":3},"roof_result":{"ok":true,"node":roof_root,"metadata":meta,"mesh_instances":2,"surfaces":2,"triangles":130,"static_bodies":1,"shapes":2}}
 
 static func _factory_contract_matches(root:Node3D) -> bool:
 	var seen:Dictionary={}
