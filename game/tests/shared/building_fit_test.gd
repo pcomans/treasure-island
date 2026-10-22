@@ -51,8 +51,8 @@ const QUALITY_SUPPORT_ASSEMBLIES := {
 	"w34313547": {
 		"assembly_name": "YMCAObservedEntrySite",
 		"required": {
-			"wall": ["PavilionFlank", "PavilionPier", "PavilionHeader", "ClosedGlazing", "ServiceDoorFrame", "BlueServiceDoor"],
-			"detail": ["FlatCanopy", "CanopyFascia", "GlazingMullion", "GlazingRail", "DoorLowerRail", "DoorPull", "ObservedCoping", "PanelJoint", "ServiceHandle", "HighLouverFrame", "HighLouverRecess", "LouverBlade"],
+			"wall": ["PavilionFlank", "PavilionPier", "PavilionHeader", "ClosedGlazing", "ServiceDoorFrame", "BlueServiceDoor", "InferredOppositeSolidPanel"],
+			"detail": ["FlatCanopy", "CanopyFascia", "GlazingMullion", "GlazingRail", "DoorLowerRail", "DoorPull", "ObservedCoping", "PanelJoint", "ServiceHandle", "HighLouverFrame", "HighLouverRecess", "LouverBlade", "InferredOppositeCoping", "InferredOppositePanelJoint"],
 			"ground_visual": ["EntryPath", "FrontLawn"],
 		},
 	},
