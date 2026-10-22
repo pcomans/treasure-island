@@ -2,7 +2,7 @@
   "schema_version": "ti.midrise-family/1",
   "target": {
     "source_key": "w1222514686",
-    "address": "600 California Ave annex (SE)",
+    "address": "600 California Ave annex (SE), former Building 111",
     "edge_normals": [
       [
         -0.8785675590184067,
@@ -28,9 +28,9 @@
     "basis": "median frozen terrain around the ring"
   },
   "levels": {
-    "ground_h": 5.897,
+    "ground_h": 2.9,
     "storey_h": 3.0,
-    "parapet_h": 0.0
+    "parapet_h": 0.3
   },
   "palette": {
     "frame": {
@@ -102,15 +102,6 @@
       "roughness": 0.6,
       "metallic": 0.2
     },
-    "garage": {
-      "rgb": [
-        0.72,
-        0.73,
-        0.73
-      ],
-      "roughness": 0.6,
-      "metallic": 0.2
-    },
     "vent_back": {
       "rgb": [
         0.08,
@@ -176,10 +167,77 @@
         0.83
       ],
       "roughness": 0.9
+    },
+    "siding": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.87
+      ],
+      "roughness": 0.85
+    },
+    "siding_line": {
+      "rgb": [
+        0.66,
+        0.66,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "trim_blue": {
+      "rgb": [
+        0.18,
+        0.36,
+        0.6
+      ],
+      "roughness": 0.6
+    },
+    "awning": {
+      "rgb": [
+        0.3,
+        0.3,
+        0.29
+      ],
+      "roughness": 0.7,
+      "metallic": 0.3
+    },
+    "door_dark": {
+      "rgb": [
+        0.2,
+        0.21,
+        0.22
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
+    },
+    "door_light": {
+      "rgb": [
+        0.82,
+        0.82,
+        0.79
+      ],
+      "roughness": 0.6
+    },
+    "roof_tar": {
+      "rgb": [
+        0.3,
+        0.3,
+        0.3
+      ],
+      "roughness": 0.95
+    },
+    "stair": {
+      "rgb": [
+        0.86,
+        0.86,
+        0.84
+      ],
+      "roughness": 0.6,
+      "metallic": 0.2
     }
   },
   "schemes": {
-    "plain": {
+    "shared": {
       "material": "render",
       "parapet_material": "render",
       "module": 4.0,
@@ -209,170 +267,600 @@
         "top": 0.2
       }
     },
-    "door0": {
-      "material": "render",
-      "parapet_material": "render",
-      "module": 4.0,
-      "window": {
-        "w": 1.4,
-        "h": 1.2,
-        "sill": 1.0,
-        "depth": 0.1,
-        "mullions": [
-          0.5
-        ],
-        "frame": "frame_light"
-      },
+    "sse": {
+      "material": "siding",
+      "parapet_material": "siding",
+      "module": 60.0,
       "ground": {
-        "w": 1.4,
-        "h": 1.2,
-        "sill": 1.0,
-        "depth": 0.1,
-        "mullions": [
-          0.5
-        ],
-        "frame": "frame_light",
-        "kind": "window"
+        "kind": "blank"
       },
+      "upper": "blank",
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 0.3,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 0.6,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 0.9,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 1.2,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 1.5,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 1.8,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 2.1,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 2.4,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 2.7,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 1,
+          "offset": 0.3,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 1,
+          "offset": 0.6,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 1,
+          "offset": 0.9,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 1,
+          "offset": 1.2,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 1,
+          "offset": 1.5,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 1,
+          "offset": 1.8,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 1,
+          "offset": 2.1,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 1,
+          "offset": 2.4,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 1,
+          "offset": 2.7,
+          "h": 0.035,
+          "material": "siding_line"
+        }
+      ],
       "plinth": {
         "material": "concrete",
-        "top": 0.2
+        "top": 0.15
       },
       "features": [
         {
           "type": "entry",
-          "from": 3.104,
-          "to": 4.904,
+          "from": 0.35,
+          "to": 1.95,
+          "door": {
+            "kind": "unit",
+            "w": 1.1,
+            "h": 2.1,
+            "leaf_h": 2.1,
+            "material": "door_dark"
+          },
+          "landing": {
+            "w": 1.7000000000000002,
+            "depth": 0.9
+          },
+          "canopy": {
+            "w": 2.0,
+            "depth": 0.9,
+            "t": 0.08,
+            "gap": 0.12,
+            "material": "awning"
+          }
+        },
+        {
+          "type": "bays",
+          "from": 3.2,
+          "to": 5.2,
+          "module": 2.0,
+          "upper": "window",
+          "window": {
+            "w": 1.0,
+            "h": 1.25,
+            "sill": 0.35,
+            "depth": 0.08,
+            "mullions": [],
+            "transoms": [
+              0.5
+            ],
+            "frame": "trim_blue"
+          },
+          "ground": {
+            "w": 1.25,
+            "h": 1.7,
+            "sill": 0.45,
+            "depth": 0.08,
+            "mullions": [],
+            "transoms": [
+              0.5
+            ],
+            "frame": "trim_blue",
+            "kind": "window"
+          }
+        },
+        {
+          "type": "bays",
+          "from": 7.5,
+          "to": 9.3,
+          "module": 1.8,
+          "upper": "window",
+          "window": {
+            "w": 1.1,
+            "h": 1.25,
+            "sill": 0.35,
+            "depth": 0.08,
+            "mullions": [],
+            "transoms": [
+              0.5
+            ],
+            "frame": "trim_blue"
+          },
+          "ground": {
+            "kind": "blank"
+          }
+        },
+        {
+          "type": "bays",
+          "from": 10.0,
+          "to": 11.6,
+          "module": 1.6,
+          "upper": "window",
+          "ground": {
+            "kind": "blank"
+          },
+          "window_storeys": {
+            "1": {
+              "w": 0.95,
+              "h": 2.15,
+              "sill": 0.02,
+              "depth": 0.08,
+              "mullions": [],
+              "transoms": [],
+              "frame": "trim_blue",
+              "glass": "door_dark",
+              "hood": {
+                "depth": 0.9,
+                "h": 0.08,
+                "over": 0.75,
+                "gap": 0.25,
+                "material": "awning"
+              }
+            }
+          }
+        },
+        {
+          "type": "entry",
+          "from": 12.5,
+          "to": 14.0,
           "door": {
             "kind": "unit",
             "w": 1.0,
-            "h": 2.2,
-            "leaf_h": 2.2,
-            "material": "door"
+            "h": 2.1,
+            "leaf_h": 2.1,
+            "material": "door_light"
           },
           "landing": {
+            "w": 1.6,
+            "depth": 0.9
+          },
+          "canopy": {
             "w": 1.8,
-            "depth": 1.2
+            "depth": 0.9,
+            "t": 0.08,
+            "gap": 0.12,
+            "material": "awning"
           }
         }
       ]
     },
-    "door1": {
-      "material": "render",
-      "parapet_material": "render",
-      "module": 4.0,
-      "window": {
-        "w": 1.4,
-        "h": 1.2,
-        "sill": 1.0,
-        "depth": 0.1,
-        "mullions": [
-          0.5
-        ],
-        "frame": "frame_light"
-      },
+    "ene": {
+      "material": "siding",
+      "parapet_material": "siding",
+      "module": 60.0,
       "ground": {
-        "w": 1.4,
-        "h": 1.2,
-        "sill": 1.0,
-        "depth": 0.1,
-        "mullions": [
-          0.5
-        ],
-        "frame": "frame_light",
-        "kind": "window"
+        "kind": "blank"
       },
+      "upper": "blank",
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 0.3,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 0.6,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 0.9,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 1.2,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 1.5,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 1.8,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 2.1,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 2.4,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 2.7,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 1,
+          "offset": 0.3,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 1,
+          "offset": 0.6,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 1,
+          "offset": 0.9,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 1,
+          "offset": 1.2,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 1,
+          "offset": 1.5,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 1,
+          "offset": 1.8,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 1,
+          "offset": 2.1,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 1,
+          "offset": 2.4,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 1,
+          "offset": 2.7,
+          "h": 0.035,
+          "material": "siding_line"
+        }
+      ],
       "plinth": {
         "material": "concrete",
-        "top": 0.2
+        "top": 0.15
       },
       "features": [
         {
-          "type": "entry",
-          "from": 4.081,
-          "to": 5.881,
-          "door": {
-            "kind": "unit",
-            "w": 1.0,
-            "h": 2.2,
-            "leaf_h": 2.2,
-            "material": "door"
+          "type": "bays",
+          "from": 0.9,
+          "to": 3.3,
+          "module": 2.4,
+          "upper": "window",
+          "window": {
+            "w": 1.7,
+            "h": 1.4,
+            "sill": 0.45,
+            "depth": 0.08,
+            "mullions": [
+              0.5
+            ],
+            "transoms": [],
+            "frame": "trim_blue"
           },
-          "landing": {
-            "w": 1.8,
-            "depth": 1.2
+          "ground": {
+            "w": 1.4,
+            "h": 1.6,
+            "sill": 0.5,
+            "depth": 0.08,
+            "mullions": [
+              0.5
+            ],
+            "transoms": [],
+            "frame": "trim_blue",
+            "kind": "window"
+          }
+        },
+        {
+          "type": "bays",
+          "from": 5.1,
+          "to": 7.1,
+          "module": 2.0,
+          "upper": "window",
+          "window": {
+            "w": 1.0,
+            "h": 1.3,
+            "sill": 0.5,
+            "depth": 0.08,
+            "mullions": [],
+            "transoms": [
+              0.5
+            ],
+            "frame": "trim_blue"
+          },
+          "ground": {
+            "w": 1.1,
+            "h": 1.6,
+            "sill": 0.5,
+            "depth": 0.08,
+            "mullions": [],
+            "transoms": [
+              0.5
+            ],
+            "frame": "trim_blue",
+            "kind": "window"
           }
         }
       ]
     },
-    "door2": {
-      "material": "render",
-      "parapet_material": "render",
-      "module": 4.0,
-      "window": {
-        "w": 1.4,
-        "h": 1.2,
-        "sill": 1.0,
-        "depth": 0.1,
-        "mullions": [
-          0.5
-        ],
-        "frame": "frame_light"
-      },
+    "blank": {
+      "material": "siding",
+      "parapet_material": "siding",
+      "module": 60.0,
       "ground": {
-        "w": 1.4,
-        "h": 1.2,
-        "sill": 1.0,
-        "depth": 0.1,
-        "mullions": [
-          0.5
-        ],
-        "frame": "frame_light",
-        "kind": "window"
+        "kind": "blank"
       },
+      "upper": "blank",
+      "bands": [
+        {
+          "storey": 0,
+          "offset": 0.3,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 0.6,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 0.9,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 1.2,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 1.5,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 1.8,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 2.1,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 2.4,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 0,
+          "offset": 2.7,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 1,
+          "offset": 0.3,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 1,
+          "offset": 0.6,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 1,
+          "offset": 0.9,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 1,
+          "offset": 1.2,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 1,
+          "offset": 1.5,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 1,
+          "offset": 1.8,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 1,
+          "offset": 2.1,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 1,
+          "offset": 2.4,
+          "h": 0.035,
+          "material": "siding_line"
+        },
+        {
+          "storey": 1,
+          "offset": 2.7,
+          "h": 0.035,
+          "material": "siding_line"
+        }
+      ],
       "plinth": {
         "material": "concrete",
-        "top": 0.2
-      },
-      "features": [
-        {
-          "type": "entry",
-          "from": 3.097,
-          "to": 4.897,
-          "door": {
-            "kind": "unit",
-            "w": 1.0,
-            "h": 2.2,
-            "leaf_h": 2.2,
-            "material": "door"
-          },
-          "landing": {
-            "w": 1.8,
-            "depth": 1.2
-          }
-        }
-      ]
+        "top": 0.15
+      }
     }
   },
   "blocks": [
     {
-      "id": "annex",
-      "storeys": 1,
-      "ground_h": 5.897,
+      "id": "b111",
+      "storeys": 2,
       "parapet": {
-        "h": 0.0
+        "h": 0.3,
+        "t": 0.15
       },
+      "roof_material": "roof_tar",
       "faces": {
-        "default": "plain",
-        "e0": "door0",
-        "e1": "door1",
-        "e2": "door2"
+        "default": "blank",
+        "e1": "sse",
+        "e2": "ene",
+        "e3": "shared"
       }
     }
   ],
   "study_notes": {
-    "observed": "HABS 2003 and a distant Nov 2025 glimpse (low association): a low white flat-roofed wing at the hangar corner.",
-    "inferred": "Level 1 massing at the frozen roof height (Building 3 party line), windows and one entrance per accessible side; the hangar side is a party wall (no door).",
-    "footprint": "Frozen 4-edge ring kept as one block."
-  }
+    "observed": "HABS CA-2785-B-4 (2003, B/W) SSE near-frontal and ENE oblique; SV Apr 2019 (aiztW, Avenue N) ENE: two-storey white horizontal clapboard, flat roof with a low parapet, blue-trimmed windows; SSE ground door with awning, ground/upper window pair, upper window, upper door with awning at the top of an exterior steel stair, light glazed ground door with awning near the E corner; ENE two windows per storey. Demolished 2019-2021; modelled pre-demolition per the frozen OSM snapshot.",
+    "inferred": "Storey heights, stations and window sizes; clapboard as thin shadow-line bands; WSW (B3 notch) unobserved: plain siding, no openings. The exterior stair is one straight walkable flight (shared ext_stairs) with a landing on two posts; its run is lengthened to a walkable 37-degree pitch (HABS reads steeper).",
+    "footprint": "Frozen 4-edge ring kept as one block; NNW (e3) is the B3 SSE party wall and keeps its L1 scheme."
+  },
+  "ext_stairs": [
+    {
+      "edge": 1,
+      "block": "b111",
+      "storey": 1,
+      "foot": 5.5,
+      "top": 9.4,
+      "landing_end": 11.65,
+      "w": 0.9,
+      "gap": 0.1,
+      "landing_depth": 1.1,
+      "material": "stair"
+    }
+  ]
 }
