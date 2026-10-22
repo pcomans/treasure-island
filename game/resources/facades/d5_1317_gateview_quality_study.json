@@ -3329,11 +3329,11 @@
   "source_reference": "May2019 pano41oK-opOSuzljFvf41TCCQ; actual frontage235/FOV75 and number247/FOV40;1317 only, suffix unknown. Temporary external images are review-only, never runtime inputs.",
   "geometry_path": "res://game/resources/facades/d5_1317_quality_study_geometry.json",
   "batches": {
-    "UpperWarmBoardedFields": 96,
-    "UpperDarkOpaqueFields": 48,
-    "PaleUpperFrames": 576,
-    "PaleGroundFrames": 504,
-    "ClosedGroundBoardedFields": 144,
+    "UpperWarmBoardedFields": 144,
+    "UpperDarkOpaqueFields": 72,
+    "PaleUpperFrames": 864,
+    "PaleGroundFrames": 756,
+    "ClosedGroundBoardedFields": 216,
     "BrownCanopyTopsAndSides": 39,
     "PaleCanopyFrontGables": 9,
     "SlimCanopyTrim": 144,
@@ -3363,13 +3363,13 @@
   },
   "expected": {
     "meshes": 14,
-    "render_triangles": 1938,
+    "render_triangles": 2622,
     "bodies": 1,
     "shapes": 5,
-    "collision_triangles": 1038
+    "collision_triangles": 1362
   },
   "frame_collision_scope": "Ground framing is matching visible solid non-spray geometry. Upper fields/frames and canopy trim remain render decoration against the exact closed source/structure.",
-  "geometry_sha256": "48ba2658a74b4e51ab43fb07b3940a737ffa351350081063c45908e878a5bcf9",
+  "geometry_sha256": "a3c2569f11ce612d027ae586c34f9d25abb79d5bbf2474acf1dd713745c3524e",
   "porch_approaches": {
     "groups": [
       {
@@ -3589,5 +3589,112 @@
     ],
     "collision": "none; unchanged colliding source land provides support",
     "scope": "Three restrained local porch/approach material surfaces ending at exact existing sidewalk. Original areas, roads, wall bottoms and land untouched. Existing sidewalk sits above these area surfaces; edge height is reported, not a new traversal PASS."
+  },
+  "inferred_rear_modules": {
+    "inference": "production_inference: owner-approved openings on the unphotographed WSW rear (2026-10-22), in the accepted boarded upper-window and closed ground-group family; baked into the existing buckets; counts and positions are not as-built",
+    "modules": [
+      {
+        "group": "rear-A",
+        "runs": [
+          0,
+          1
+        ],
+        "kind": "upper",
+        "station_m": 3.951,
+        "finish": "boarded_warm_brown"
+      },
+      {
+        "group": "rear-A",
+        "runs": [
+          0,
+          1
+        ],
+        "kind": "upper",
+        "station_m": 11.853,
+        "finish": "boarded_warm_brown"
+      },
+      {
+        "group": "rear-A",
+        "runs": [
+          0,
+          1
+        ],
+        "kind": "ground",
+        "station_m": 7.902,
+        "door_station_m": 7.382,
+        "window_station_m": 8.452,
+        "visible_datum_y": 2.4358,
+        "door_bottom_y": 2.3958
+      },
+      {
+        "group": "rear-B",
+        "runs": [
+          3,
+          4,
+          5
+        ],
+        "kind": "upper",
+        "station_m": 3.69,
+        "finish": "dark_opaque_closed"
+      },
+      {
+        "group": "rear-B",
+        "runs": [
+          3,
+          4,
+          5
+        ],
+        "kind": "upper",
+        "station_m": 11.071,
+        "finish": "dark_opaque_closed"
+      },
+      {
+        "group": "rear-B",
+        "runs": [
+          3,
+          4,
+          5
+        ],
+        "kind": "ground",
+        "station_m": 7.381,
+        "door_station_m": 6.861,
+        "window_station_m": 7.931,
+        "visible_datum_y": 2.2406,
+        "door_bottom_y": 2.2006
+      },
+      {
+        "group": "rear-C",
+        "runs": [
+          7,
+          8
+        ],
+        "kind": "upper",
+        "station_m": 4.16,
+        "finish": "boarded_warm_brown"
+      },
+      {
+        "group": "rear-C",
+        "runs": [
+          7,
+          8
+        ],
+        "kind": "upper",
+        "station_m": 12.48,
+        "finish": "boarded_warm_brown"
+      },
+      {
+        "group": "rear-C",
+        "runs": [
+          7,
+          8
+        ],
+        "kind": "ground",
+        "station_m": 8.32,
+        "door_station_m": 7.8,
+        "window_station_m": 8.87,
+        "visible_datum_y": 2.3412,
+        "door_bottom_y": 2.3012
+      }
+    ]
   }
 }
