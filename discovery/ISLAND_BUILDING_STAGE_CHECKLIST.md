@@ -417,8 +417,13 @@ CODE PASS; visual L1+L2 PASS on all four. L1/L2 C on all four. The catalog adds
 1444, keeping their earlier records, and retires their d2 `active_runtime_adapters`;
 1445 stays `not_evaluated`. Parked: colour pass (1439 warmer cream; 1441 brown balcony
 rails; 1445 lower storey pink).
-Current totals after Mar22f: L1:209 C/4 U; L2:169 C/44 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall379 C/0 I/686 U across213 units/1,065 cells;49 historical
+**Mar22g** r133351, 2026-10-22: `c984cf7` models r133351 as a courtyard ring on the
+mid-rise family, and `505762d` reworks its south front with cream walls and a glazed
+entrance. CODE PASS; visual L2 PASS on the rework, with the other doors confirmed by
+5 passing route fits. L1/L2 C. Parked: the faint pale-blue fascia, the olive WSW
+faces and 611's roof (colour pass).
+Current totals after Mar22g: L1:210 C/3 U; L2:170 C/43 U; L3/L5:213 U each;
+L4:1 C/212 U. Overall381 C/0 I/684 U across213 units/1,065 cells;49 historical
 recognition credits unchanged.
 **U** no current stage-level conclusion established in this checklist pass.
 
@@ -657,7 +662,7 @@ before selecting another round.
 | physical-building:w1436064757 / w1436064757 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1 PASS (L2 not passed). Parked: validation lows |
 | physical-building:w1473253276 / w1473253276 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21a sheds on the mid-rise family `32384b5` + `792b9f5` — CODE PASS (lows parked), visual PASS for every module, progress L1 PASS (L2 not passed). Parked: validation lows |
 | physical-building:r133347 / r133347 | Treasure Island Personnel Support Detachment | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar22c Personnel Support: L1 C from the review-only sweep `/workspaces/landmark-progress-20261007/review-sweep-20261022/` (visual review; assets unchanged); L2 gap: blank sides; openings pass approved by owner 2026-10-22 |
-| physical-building:r133351 / r133351 | Unnamed | ☐ U | ☐ U | ☐ U | ☐ U | ☐ U | U — inspect before assignment |
+| physical-building:r133351 / r133351 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22g courtyard ring on the mid-rise family (`c984cf7`, rework `505762d`) — CODE PASS; visual L2 PASS on the rework. Parked: faint pale-blue fascia; olive WSW faces; 611 roof (colour pass) |
 | physical-building:r16681702 / r16681702 | Treasure Island Museum | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Opus005 — whole-building game-art visual/CODE and native fit PASS; no further art blocker identified; higher stages not separately scored, as-built unclaimed |
 | physical-building:r19685981 / r19685981 | Maceo May | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22c Maceo May: L1/L2 C from the review-only sweep `/workspaces/landmark-progress-20261007/review-sweep-20261022/` (visual review; assets unchanged) |
 
@@ -686,7 +691,7 @@ March/November2025 refs and unknown-date Apple context support the scoped envelo
 and observed architecture; missing north capture/unknown rear/schematic materials
 keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
 See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
-Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar22f for current totals);
+Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar22g for current totals);
 **L1:21 C /0 I /192 U**. All other stages unchanged;49 historical credits retained.
 
 ## Island environment layers
