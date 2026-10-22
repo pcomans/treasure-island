@@ -40,36 +40,6 @@ const TARGETS := {
 # Surface names remain stable because the canonical lifecycle inventory and the
 # immutable pre-promotion evidence identify these exact renderer surfaces.
 const BATCH_06_ACCEPTED_TARGETS := {
-	"building:w34313564:wall": {
-		"source_key": "w34313564",
-		"run_count": 20,
-		"material_groups": [
-			{
-				"id": "W34313564-MAT-TAN",
-				"surface_name": "trial_w34313564_tan_runs",
-				"run_groups": [[5, 6, 7, 8, 9]],
-				"accepted_length_m": 87.651,
-				"mapping_ids": ["B06-34313564-SSE-EAST-RETURN", "B06-34313564-SSE-CENTRAL"],
-				"prototype_material_path": "res://game/resources/materials/world/w34313564/w34313564_tan_field.tres",
-				"material_path": "res://game/resources/materials/world/w34313564/w34313564_tan_exact_trial.tres",
-				"material": preload("res://game/resources/materials/world/w34313564/w34313564_tan_exact_trial.tres"),
-				"limitation": "Muted tan SSE homogeneous field only; 0.82 m finish scale remains an unmeasured reversible assumption.",
-			},
-			{
-				"id": "W34313564-MAT-PALE",
-				"surface_name": "trial_w34313564_pale_runs",
-				"run_groups": [[10, 11, 12, 13, 14, 15, 16, 17, 18, 19]],
-				"accepted_length_m": 141.340,
-				"mapping_ids": ["B06-34313564-ENE-END", "B06-34313564-NNW-OUTER"],
-				"prototype_material_path": "res://game/resources/materials/world/w34313564/w34313564_pale_field.tres",
-				"material_path": "res://game/resources/materials/world/w34313564/w34313564_pale_exact_trial.tres",
-				"material": preload("res://game/resources/materials/world/w34313564/w34313564_pale_exact_trial.tres"),
-				"limitation": "Off-white/light-gray ENE and NNW homogeneous field only; 0.88 m finish scale remains an unmeasured reversible assumption.",
-			},
-		],
-		"standalone_blocker": "W34313564-MAT-PLINTH remains standalone because exact vertical extent and side bounds are unresolved; a run-only partition cannot attach it without prohibited geometry splitting.",
-		"live_module_instances": 5,
-	},
 	"building:w34313515:wall": {
 		"source_key": "w34313515",
 		"run_count": 48,
@@ -95,32 +65,6 @@ const BATCH_06_ACCEPTED_TARGETS := {
 			"CAL-WSW-BAY-02": 3.0,
 			"CAL-NNW-BAY-01": 3.0,
 			"CAL-NNW-BAY-02": 3.0,
-		},
-	},
-	"building:w291196370:wall": {
-		"source_key": "w291196370",
-		"run_count": 36,
-		"material_groups": [
-			{
-				"id": "W291196370-SIDING",
-				"surface_name": "trial_w291196370_siding_runs",
-				"run_groups": [[8, 9, 10], [17, 18, 19, 20, 21, 22]],
-				"accepted_length_m": 97.893,
-				"mapping_ids": ["B06-291196370-SSE-PUBLIC", "B06-291196370-ENE-OUTER"],
-				"prototype_material_path": "res://game/resources/materials/world/w291196370/w291196370_siding_field.tres",
-				"material_path": "res://game/resources/materials/world/w291196370/w291196370_siding_exact_trial.tres",
-				"material": preload("res://game/resources/materials/world/w291196370/w291196370_siding_exact_trial.tres"),
-				"limitation": "Cool gray-blue horizontal siding on observed SSE and ENE groups only; 0.20 m course height remains an unmeasured reversible assumption.",
-			},
-		],
-		"standalone_blocker": "Exactly three independently detached-placement-reviewed module exemplars are live pending independent actual-world art review. NNW, WSW, short service facets, every additional opening/divider, access geometry, and yard-obscured runs remain placeholder-only or blocked.",
-		"live_module_instances": 3,
-		"live_module_motif_types": 3,
-		"module_placement_role": "stylized/reference-derived production inference",
-		"module_position_uncertainty_by_placement_m": {
-			"CAL-SSE-WINSTACK-01": 2.0,
-			"CAL-SSE-ENTRY-01": 3.0,
-			"CAL-ENE-SERVICE-01": 4.0,
 		},
 	},
 	"building:w34313520:wall": {
@@ -315,9 +259,9 @@ static func metadata_for(object_key: String) -> Dictionary:
 		"field_actual_world_review_status": str(target.get("field_actual_world_review_status", "independently_reviewed_accepted_with_documented_limitation")),
 		"modules": int(target.get("live_module_instances", 0)),
 		"standalone_modules_live": int(target.get("live_module_instances", 0)),
-		"module_motif_types_live": int(target.get("live_module_motif_types", 2 if object_key == "building:w34313564:wall" else 0)),
-		"module_placement_role": str(target.get("module_placement_role", "stylized/reference-derived production inference" if object_key == "building:w34313564:wall" else "")),
-		"module_position_uncertainty_m": 4.0 if object_key == "building:w34313564:wall" else 0.0,
+		"module_motif_types_live": int(target.get("live_module_motif_types", 0)),
+		"module_placement_role": str(target.get("module_placement_role", "")),
+		"module_position_uncertainty_m": 0.0,
 		"module_position_uncertainty_by_placement_m": (target.get("module_position_uncertainty_by_placement_m", {}) as Dictionary).duplicate(true),
 		"module_cadence_inferred": false,
 		"module_total_opening_count_inferred": false,
