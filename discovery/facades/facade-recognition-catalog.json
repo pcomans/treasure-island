@@ -42,7 +42,8 @@
         "game/resources/materials/world/building_1/building_1_public_stucco_base.tres",
         "game/resources/materials/world/building_1/building_1_public_stucco_field.tres",
         "game/resources/materials/world/building_1/building_1_public_stucco_trim.tres",
-        "game/resources/materials/world/building_1/building_1_public_window_metal.tres"
+        "game/resources/materials/world/building_1/building_1_public_window_metal.tres",
+        "game/resources/materials/world/building_1/building_1_emblem_blue.tres"
       ],
       "runtime_config_path": "game/resources/facades/building_1_hero_model.json",
       "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
