@@ -13,7 +13,8 @@ extends SceneTree
 ##    walking through walls is check 2. A side is skipped (WALK_UP_SKIPPED, with
 ##    the reason) only when every candidate start on it lies outside the playable
 ##    boundary, inside another building's frozen footprint, or was rejected by
-##    another building's body (ground ray, drop pose or corridor); every other
+##    another building's body (ground ray, drop pose or corridor), or (rooftop
+##    approach only) beyond the parent building's roof edge; every other
 ##    side must still pass, and at least two sides must pass.
 ## 5. Stairs: each flight listed in the building's catalog entry as
 ##    "stairs": [{"bottom": [x, z], "top": [x, z]}] is walked up and back down.
