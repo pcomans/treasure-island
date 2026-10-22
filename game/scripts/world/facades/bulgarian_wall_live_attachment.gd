@@ -36,6 +36,73 @@ static func install(buildings: Node3D, ground: Node3D, chunks: Array) -> Diction
 		if owners.has(key): return {"ok":false,"message":"Duplicate 1445 owner","source_keys":[SOURCE]}
 		owners[key]=node
 	if owners.size()!=2: return {"ok":false,"message":"1445 source owners missing","source_keys":[SOURCE]}
+	# When the housing family registers 1445 it owns the house (garage-court kit);
+	# this attachment then installs only the unmapped mural court, unchanged.
+	var house: Node3D = null
+	if not _housing_owns_source():
+		var built := _build_house(chunks)
+		if not bool(built.get("ok", false)): return built
+		house = built.house
+	var court := COURT.build()
+	court.name="BulgarianWall_UnmappedLandmark"
+	court.set_meta("source_keys",[])
+	court.set_meta("reference_identity","Bulgaria in the USA / former Navy handball courts")
+	court.set_meta("placement_status","reference_bounded_production_inference")
+	var court_base := -INF
+	for p: Vector3 in [Vector3(-7.725,0,-0.375),Vector3(7.725,0,-0.375),Vector3(-7.725,0,10.175),Vector3(7.725,0,10.175)]:
+		var at: Vector3 = COURT_ORIGIN-N*p.x+T*p.z
+		court_base=maxf(court_base,_ground_height(chunks,Vector2(at.x,at.z)))
+	if not is_finite(court_base):
+		if house != null: house.free()
+		court.free(); return {"ok":false,"message":"Court local land sample missing"}
+	court_base+=0.035
+	var court_faces := PackedVector3Array()
+	for child: Node in court.get_children():
+		if not child is MeshInstance3D: continue
+		var mesh := child as MeshInstance3D
+		if str(mesh.name)=="GroundSetting": court.remove_child(mesh); mesh.free(); continue
+		var basis := Basis(-N,Vector3.UP,T)
+		mesh.transform=Transform3D(basis,COURT_ORIGIN+Vector3.UP*court_base)*mesh.transform
+		if str(mesh.name).begins_with("CourtCrack") or str(mesh.name).begins_with("RightReturnRepair") or str(mesh.name).begins_with("BulgariaInTheUSA"): continue
+		for vertex: Vector3 in mesh.mesh.get_faces(): court_faces.append(mesh.transform*vertex)
+	var body := StaticBody3D.new()
+	body.name="CourtContact_NoSpray"
+	body.collision_layer=1
+	body.collision_mask=0
+	body.position=COURT_ORIGIN+Vector3.UP*court_base
+	body.set_meta("derived_object_key","landmark:bulgarian-wall")
+	body.set_meta("source_keys",[])
+	body.set_meta("receiver_kind","none")
+	var local_faces := PackedVector3Array()
+	for p: Vector3 in court_faces: local_faces.append(p-body.position)
+	var shape := ConcavePolygonShape3D.new()
+	shape.set_faces(local_faces)
+	var holder := CollisionShape3D.new()
+	holder.shape=shape
+	body.add_child(holder)
+	court.add_child(body)
+	# Commit only after both complete models and contacts are prepared.
+	if house != null:
+		for owner: Node in owners.values():
+			for mesh: MeshInstance3D in owner.find_children("*","MeshInstance3D",true,false): mesh.visible=false
+			for old: CollisionObject3D in owner.find_children("*","CollisionObject3D",true,false):
+				old.collision_layer=0; old.collision_mask=0; old.remove_from_group("spray_receiver_wall")
+		owners[WALL].add_child(house)
+	ground.add_child(court)
+	if house == null:
+		return {"ok":true,"source_key":SOURCE,"court_source_status":"unmapped_reference_landmark","court_base":court_base,"recognition_credit":0,"house":"housing_family"}
+	return {"ok":true,"source_key":SOURCE,"court_source_status":"unmapped_reference_landmark","court_base":court_base,"recognition_credit":0,"stairs_contact":"smooth nosing ramps; stock walking verification required"}
+
+
+static func _housing_owns_source() -> bool:
+	var manifest: Variant = JSON.parse_string(FileAccess.get_file_as_string(CONTACTS.CONFIG))
+	if not manifest is Dictionary or not manifest.get("instances") is Array: return false
+	for item: Variant in manifest.instances:
+		if item is Dictionary and str(item.get("source_key","")) == SOURCE: return true
+	return false
+
+# The bespoke 1445 house with its stair ramps, contacts and observed aprons.
+static func _build_house(chunks: Array) -> Dictionary:
 	var house := HOUSE.build()
 	house.name="Chinook1445Live"
 	house.set_meta("source_key",SOURCE)
@@ -96,50 +163,7 @@ static func install(buildings: Node3D, ground: Node3D, chunks: Array) -> Diction
 	# Render-only surface follows actual land/area triangles. Stock support is
 	# still the unchanged land; both front wings receive the observed apron.
 	for x in [-10.1,10.1]: _append_draped_apron(house,chunks,x-4.9,x+4.9,5.13,8.8)
-	var court := COURT.build()
-	court.name="BulgarianWall_UnmappedLandmark"
-	court.set_meta("source_keys",[])
-	court.set_meta("reference_identity","Bulgaria in the USA / former Navy handball courts")
-	court.set_meta("placement_status","reference_bounded_production_inference")
-	var court_base := -INF
-	for p: Vector3 in [Vector3(-7.725,0,-0.375),Vector3(7.725,0,-0.375),Vector3(-7.725,0,10.175),Vector3(7.725,0,10.175)]:
-		var at: Vector3 = COURT_ORIGIN-N*p.x+T*p.z
-		court_base=maxf(court_base,_ground_height(chunks,Vector2(at.x,at.z)))
-	if not is_finite(court_base): house.free(); court.free(); return {"ok":false,"message":"Court local land sample missing"}
-	court_base+=0.035
-	var court_faces := PackedVector3Array()
-	for child: Node in court.get_children():
-		if not child is MeshInstance3D: continue
-		var mesh := child as MeshInstance3D
-		if str(mesh.name)=="GroundSetting": court.remove_child(mesh); mesh.free(); continue
-		var basis := Basis(-N,Vector3.UP,T)
-		mesh.transform=Transform3D(basis,COURT_ORIGIN+Vector3.UP*court_base)*mesh.transform
-		if str(mesh.name).begins_with("CourtCrack") or str(mesh.name).begins_with("RightReturnRepair") or str(mesh.name).begins_with("BulgariaInTheUSA"): continue
-		for vertex: Vector3 in mesh.mesh.get_faces(): court_faces.append(mesh.transform*vertex)
-	var body := StaticBody3D.new()
-	body.name="CourtContact_NoSpray"
-	body.collision_layer=1
-	body.collision_mask=0
-	body.position=COURT_ORIGIN+Vector3.UP*court_base
-	body.set_meta("derived_object_key","landmark:bulgarian-wall")
-	body.set_meta("source_keys",[])
-	body.set_meta("receiver_kind","none")
-	var local_faces := PackedVector3Array()
-	for p: Vector3 in court_faces: local_faces.append(p-body.position)
-	var shape := ConcavePolygonShape3D.new()
-	shape.set_faces(local_faces)
-	var holder := CollisionShape3D.new()
-	holder.shape=shape
-	body.add_child(holder)
-	court.add_child(body)
-	# Commit only after both complete models and contacts are prepared.
-	for owner: Node in owners.values():
-		for mesh: MeshInstance3D in owner.find_children("*","MeshInstance3D",true,false): mesh.visible=false
-		for old: CollisionObject3D in owner.find_children("*","CollisionObject3D",true,false):
-			old.collision_layer=0; old.collision_mask=0; old.remove_from_group("spray_receiver_wall")
-	owners[WALL].add_child(house)
-	ground.add_child(court)
-	return {"ok":true,"source_key":SOURCE,"court_source_status":"unmapped_reference_landmark","court_base":court_base,"recognition_credit":0,"stairs_contact":"smooth nosing ramps; stock walking verification required"}
+	return {"ok":true,"house":house}
 
 static func _warp_mesh(mesh: MeshInstance3D, transform_point: Callable) -> void:
 	var output := ArrayMesh.new()
