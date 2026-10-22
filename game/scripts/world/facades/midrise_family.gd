@@ -2333,7 +2333,8 @@ static func _ext_stair(ctx: Ctx, spec: Variant) -> void:
 	# Landing deck, flush with the top of the walking surface.
 	var l0: float = at.call(run - STAIR_NOSE_M)
 	_box(treads, face, minf(l0, end), maxf(l0, end), y_top - 0.16, y_top, -landing_depth, 0.0, false)
-	# Channel stringers on both sides: top edge 0.06 above the nosing line, 0.26 deep.
+	# Channel stringers on both sides: top edge about 0.04 above the nosing line
+	# (0.06 over the foot line, less the nosing offset), 0.26 deep.
 	for d: Array in [[-outer - 0.04, -outer], [-gap, -gap + 0.04 if gap >= 0.04 else 0.0]]:
 		_sloped_box(steel, face, at.call(-0.15), at.call(run), y0 - 0.15 * rise_k / going + 0.06, y_top + 0.06, float(d[0]), float(d[1]), 0.26)
 	# Outer handrail along the flight, rails round the open landing edges.
