@@ -21685,3 +21685,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - Worked: clean interrupted-work handoff and one fetch established main8d85586; merge preserved browser controls/Compatibility changes and all main content. Only independent appended learning/retro sections conflicted; retained both.
 - Did not: Vercel was absent from PATH; its existing cached CLI and build/web project link remain available. No engine or deployment had survived the interrupted executor.
 - Next: export from this committed merge, audit its pack and verify the hosted browser with one persistent touch-emulation connection; retain physical-iPad limits.
+
+### web_review — latest-main browser integration review, 2026-10-23
+
+- Worked: merge 282d411 retains the previously reviewed browser controls, Compatibility settings, export protections and native-isolation seams unchanged from 10f9e00. Both parents' nonempty LEARNINGS and RETRO lines remain present, with conflict markers removed. Scoped integration source PASS; latest-main art evidence is reused and browser runtime remains the deployer's check.
+- Did not: my first read-only history comparison repeatedly split a large RETRO string inside its line loop, adding avoidable review delay. A set of current lines resolves the same check directly. Earlier status inspection found no merge/build checkpoint under the old executor; the replacement's committed merge and export are observable, but elapsed setup and handoff costs are not measured.
+- Next: use a single set for bounded text-preservation comparisons and report concrete commit/process checkpoints. Do not infer full-workflow speed from this handoff or rerun unchanged engine/art checks for source-review bookkeeping.
