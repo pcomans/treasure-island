@@ -21585,3 +21585,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What the team should change next time: for any non-box building (piers, canopies), run the read-only walk-start probe per side before the first render. Put chest-height opaque receivers (columns, posts) where the plaza approach meets them, and avoid shaping wall triangulation for the probe.
 - r4 addendum: settle-only matched poses put the camera 30–40 m back, and the close photos could not be judged. A short stock walk from a plaza settle onto the deck gave the c07/c03 framings in the same engine run. Next time, plan walked close poses with the first render.
 - Gates addendum: the shared fit (route plaza-to-gate and back, walk-up north and east), the private walk probe and the glass refusal spray all passed first time. The first spray plan aimed at the end block's black sign plate (a solid) and was refused; a quick check of the target against small solid details on the face would have caught it. Retarget fixed it.
+
+## code-review-ferry-pier (w1222514695 walkable pier, df597fd..9e195a9, 2026-10-23)
+
+- What worked well: the boundary change sits behind one named allowlist with fail-closed generator invariants. The private before/after instance digest, once auto node names were normalised, showed in a single diff that no other family instance changed.
+- What did not work well: nobody grepped every reader of `manifest.playable_boundary` before changing what it means. Two offline tools that are not in `tools/test.sh` still treat it as the exact island polygon, and one of them now fails its own invariant.
+- What the team should change next time: when changing a generated contract field, grep every consumer (runtime, tests and offline tools) and list them in the task note. A file the code points to (here a README) should land in the same commit.
