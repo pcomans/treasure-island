@@ -701,3 +701,7 @@ Spray rays use only the spray layer (`1 << 2`). In two passes on 2026-10-22, a p
 - the Hawkins stoop platforms and planters (fixed in the Hawkins review fix).
 
 Any new opaque collision body a producer adds (massing, stoops, rails, canopies) must be on `PHYSICS_WORLD_SOLID | 1 << 2`, with `receiver_kind` none, so that it occludes spray and refuses the tag. As a prevention check in fit, aim one spray at each new solid and expect a refusal (`receiver_rejection`).
+
+## Keep the generic winding when copying generated wall triangles
+
+Generated records store counterclockwise triangles; the generic wall builder takes each triplet as (first, third, second) so faces point outward for Godot. Isle House r3 (2026-10-23) rebuilt its low wall record and copied the untouched runs' triangles in record order, so those receiver faces pointed inward: fit-001 failed with walls 5/20 ("visible wall the player walks through") and walk-up 0/4 ("no qualified native wall crossing"), with no other symptom. When a producer copies generated wall triangles into its own record, keep the (first, third, second) order, and check every run with front-face rays from outside before the fit run.

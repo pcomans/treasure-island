@@ -18,8 +18,12 @@ const STACK_BOTTOM_Y := 28.6
 # 17 floors of 2.95m above level 7 (dba-50) up to the overridden tower top.
 const STACK_FLOORS := 17
 const STACK_TOP_Y := STACK_BOTTOM_Y + 2.95 * STACK_FLOORS
-# About 35% glass on the 3.2m column pitch (dba-50 strip).
-const STACK_W := 1.15
+const FLOOR_M := 2.95
+const LEVEL7_BAND_M := LEVEL7_TOP_Y - PODIUM_TOP_Y
+# Narrow dark slits between white panels at close range (ih14, ih18).
+const STACK_W := 0.85
+# Ground storefront modules now drawn by the massing podium base.
+const PODIUM_BASE_KINDS := ["IH-GG", "IH-ENTRY39", "IH-LVR", "IH-CANOPY"]
 const MASSING := preload("res://game/scripts/world/facades/isle_house_massing_l1.gd")
 const NEW_EXTERIOR_FIELD_RUN_INDICES := [0, 1, 2, 3, 4]
 const SHARED_TOWER_FIELD_RUN_INDICES := [10, 11, 12]
@@ -60,6 +64,8 @@ const MATERIALS := {
 	"glass_proxy": preload("res://game/resources/materials/world/isle_house/isle_house_glass_proxy.tres"),
 	"support_grey": preload("res://game/resources/materials/world/isle_house/isle_house_support_grey.tres"),
 	"identifier": preload("res://game/resources/materials/world/isle_house/isle_house_identifier.tres"),
+	"glass_dark": preload("res://game/resources/materials/world/isle_house/isle_house_glass_dark.tres"),
+	"joint_light": preload("res://game/resources/materials/world/isle_house/isle_house_joint_light.tres"),
 }
 
 var _layout: Dictionary = {}
@@ -268,19 +274,36 @@ func _build_fields(record: Dictionary, target: Dictionary) -> Dictionary:
 			podium_end = Vector3(start_x, start_y, start_z)
 		elif run_index == 11:
 			podium_end = _wing_meet_on_run(record, 11)
-		if podium_end.distance_to(Vector3(start_x, start_y, start_z)) > 0.01:
-			_append_quad(groups.podium_light as Dictionary, [
-				Vector3(start_x, start_y, start_z) + outward,
-				podium_end + outward,
-				Vector3(podium_end.x, PODIUM_TOP_Y, podium_end.z) + outward,
-				Vector3(start_x, PODIUM_TOP_Y, start_z) + outward,
+		# Ground runs (0-9): the massing podium base draws the storefront below
+		# MASSING.SOFFIT_Y. Run 5 splits at the SE step into the west and east podiums.
+		var run_start := Vector3(start_x, start_y, start_z)
+		var run_end := Vector3(end_x, end_y, end_z)
+		var pieces: Array = [[run_start, podium_end, run_end, PODIUM_TOP_Y]]
+		if run_index in [6, 7, 8, 9]:
+			pieces = [[run_start, podium_end, run_end, MASSING.EAST_PODIUM_TOP_Y]]
+		elif run_index == 5:
+			var step := run_start.lerp(run_end, MASSING.SE_STEP_U_M / run_start.distance_to(run_end))
+			pieces = [[run_start, step, step, PODIUM_TOP_Y], [step, run_end, run_end, MASSING.EAST_PODIUM_TOP_Y]]
+		for piece: Array in pieces:
+			var a: Vector3 = piece[0]
+			var b: Vector3 = piece[1]
+			var c: Vector3 = piece[2]
+			var top: float = piece[3]
+			var bottom_a := MASSING.SOFFIT_Y if run_index <= 9 else a.y
+			var bottom_b := MASSING.SOFFIT_Y if run_index <= 9 else b.y
+			if b.distance_to(a) > 0.01:
+				_append_quad(groups.podium_light as Dictionary, [
+					Vector3(a.x, bottom_a, a.z) + outward,
+					Vector3(b.x, bottom_b, b.z) + outward,
+					Vector3(b.x, top, b.z) + outward,
+					Vector3(a.x, top, a.z) + outward,
+				], normal)
+			_append_quad(groups.tower_light as Dictionary, [
+				Vector3(a.x, top, a.z) + outward,
+				Vector3(c.x, top, c.z) + outward,
+				Vector3(c.x, MASSING.TOWER_TOP_Y, c.z) + outward,
+				Vector3(a.x, MASSING.TOWER_TOP_Y, a.z) + outward,
 			], normal)
-		_append_quad(groups.tower_light as Dictionary, [
-			Vector3(start_x, PODIUM_TOP_Y, start_z) + outward,
-			Vector3(end_x, PODIUM_TOP_Y, end_z) + outward,
-			Vector3(end_x, MASSING.TOWER_TOP_Y, end_z) + outward,
-			Vector3(start_x, MASSING.TOWER_TOP_Y, start_z) + outward,
-		], normal)
 	var mesh := ArrayMesh.new()
 	for material_key: String in ["podium_light", "tower_light"]:
 		var group := groups[material_key] as Dictionary
@@ -328,7 +351,10 @@ static func _wing_meet_on_run(record: Dictionary, run_index: int) -> Vector3:
 func _build_tower_modules() -> void:
 	for region_value: Variant in _se.tower_accent_regions:
 		var region := region_value as Dictionary
-		_add_box("tower_accent", float(region.u_m), (float(region.bottom_y_m) + float(region.top_y_m)) * 0.5, float(region.width_m), float(region.top_y_m) - float(region.bottom_y_m), float(_contract.field_offset_m), 0.028)
+		var u := float(region.u_m)
+		var bottom := maxf(float(region.bottom_y_m), _podium_top(u) + LEVEL7_BAND_M + 0.2)
+		var top := maxf(float(region.top_y_m), STACK_TOP_Y)
+		_add_box("tower_accent", u, (bottom + top) * 0.5, float(region.width_m), top - bottom, float(_contract.field_offset_m), 0.028)
 	_build_level7_and_joints(float(_se.length_m))
 	for u_value: Variant in _se.tower_window_columns_u_m:
 		_build_stack(float(u_value))
@@ -338,33 +364,57 @@ func _build_tower_modules() -> void:
 # lines and a centre mullion, pale floor-line bars across it and pale panel
 # returns at its edges for a shadow line. Relief stays within the contract.
 func _build_stack(u: float) -> void:
-	var height := STACK_TOP_Y - STACK_BOTTOM_Y
-	var y := (STACK_TOP_Y + STACK_BOTTOM_Y) * 0.5
+	var bottom := _podium_top(u) + LEVEL7_BAND_M + 0.2
+	var floors := maxi(int(round((STACK_TOP_Y - bottom) / FLOOR_M)), 1)
+	var height := STACK_TOP_Y - bottom
+	var y := (STACK_TOP_Y + bottom) * 0.5
 	var inner := float(_contract.field_offset_m)
 	_new_module("IH-TW", u, y, STACK_W, height)
-	_add_box("glass_proxy", u, y, STACK_W - 0.2, height, inner, 0.032)
+	_add_box("glass_proxy", u, y, STACK_W - 0.1, height, inner, 0.032)
 	for side: float in [-1.0, 1.0]:
-		_add_box("dark_charcoal", u + side * (STACK_W * 0.5 - 0.05), y, 0.10, height, 0.032, 0.058)
+		_add_box("dark_charcoal", u + side * (STACK_W * 0.5 - 0.025), y, 0.05, height, 0.032, 0.058)
 		_add_box("tower_light", u + side * (STACK_W * 0.5 + 0.07), y, 0.14, height, inner, 0.076)
-	var pitch := height / float(STACK_FLOORS)
-	for floor_index in range(1, STACK_FLOORS):
-		_add_box("tower_light", u, STACK_BOTTOM_Y + pitch * float(floor_index), STACK_W - 0.2, 0.12, 0.032, 0.062)
+	var pitch := height / float(floors)
+	for floor_index in range(1, floors):
+		_add_box("tower_light", u, bottom + pitch * float(floor_index), STACK_W - 0.1, 0.16, 0.032, 0.062)
+
+
+# Podium top at u on the active side: the east end (ENE face, SE east of the
+# central glazed strip) steps down to three brick storeys (ih14, dba-50).
+func _podium_top(u: float) -> float:
+	if _active_side == _se:
+		return MASSING.EAST_PODIUM_TOP_Y if u > MASSING.SE_STEP_U_M else PODIUM_TOP_Y
+	if str(_active_side.get("id", "")) == "High_ENE_Runs_8_9":
+		return MASSING.EAST_PODIUM_TOP_Y
+	return PODIUM_TOP_Y
 
 
 # Level-7 dark glazed band between podium and tower, a podium coping under it, a
 # slab edge over it, and thin floor-line joints across the tower panels.
 func _build_level7_and_joints(length: float) -> void:
 	var inner := float(_contract.field_offset_m)
-	var band_y := (PODIUM_TOP_Y + LEVEL7_TOP_Y) * 0.5
-	_add_box("glass_proxy", length * 0.5, band_y, length - 0.02, LEVEL7_TOP_Y - PODIUM_TOP_Y, inner, 0.03)
-	var mullions := int(floor(length / 1.6))
-	for index in range(1, mullions):
-		_add_box("dark_charcoal", length * float(index) / float(mullions), band_y, 0.08, LEVEL7_TOP_Y - PODIUM_TOP_Y, 0.03, 0.05)
-	_add_box("support_grey", length * 0.5, PODIUM_TOP_Y - 0.11, length - 0.02, 0.22, inner, 0.07)
-	_add_box("tower_light", length * 0.5, LEVEL7_TOP_Y + 0.1, length - 0.02, 0.2, inner, 0.075)
-	var pitch := (STACK_TOP_Y - STACK_BOTTOM_Y) / float(STACK_FLOORS)
-	for floor_index in range(1, STACK_FLOORS):
-		_add_box("dark_charcoal", length * 0.5, STACK_BOTTOM_Y + pitch * float(floor_index), length - 0.02, 0.07, inner, 0.03)
+	var segments: Array = [[0.0, length]]
+	if _active_side == _se:
+		segments = [[0.0, MASSING.SE_STEP_U_M], [MASSING.SE_STEP_U_M, length]]
+	for segment: Array in segments:
+		var u0: float = segment[0]
+		var u1: float = segment[1]
+		var mid := (u0 + u1) * 0.5
+		var width := u1 - u0 - 0.02
+		var top := _podium_top(mid)
+		var band_y := top + LEVEL7_BAND_M * 0.5
+		_add_box("glass_proxy", mid, band_y, width, LEVEL7_BAND_M, inner, 0.03)
+		var mullions := int(floor(width / 1.6))
+		for index in range(1, mullions):
+			_add_box("dark_charcoal", u0 + 0.01 + width * float(index) / float(mullions), band_y, 0.08, LEVEL7_BAND_M, 0.03, 0.05)
+		_add_box("support_grey", mid, top - 0.11, width, 0.22, inner, 0.07)
+		_add_box("tower_light", mid, top + LEVEL7_BAND_M + 0.1, width, 0.2, inner, 0.075)
+		# Light floor-line joints across the tower panels.
+		var bottom := top + LEVEL7_BAND_M + 0.2
+		var floors := maxi(int(round((STACK_TOP_Y - bottom) / FLOOR_M)), 1)
+		var pitch := (STACK_TOP_Y - bottom) / float(floors)
+		for floor_index in range(1, floors):
+			_add_box("joint_light", mid, bottom + pitch * float(floor_index), width, 0.04, inner, 0.025)
 
 
 # Owner-approved openings on the unphotographed tower faces (2026-10-22): the
@@ -396,26 +446,32 @@ func _build_podium_modules() -> void:
 				_build_podium_group(str(family.kind), float(u_value), row_index, float(family.height_m))
 
 
-# Tall narrow dark-framed windows (ih08/ih09/ih18, dba-50): wide families are
-# groups of three, medium pairs, narrow singles; alternate storeys shift the
-# group toward the side centre for the staggered rhythm.
-func _build_podium_group(kind: String, u: float, row_index: int, height: float) -> void:
+# Large black-framed multi-pane windows on the grey brick podium (ih08, ih18,
+# ih09): one tall unit per group, sparse and staggered (no narrow singles).
+func _build_podium_group(kind: String, u: float, row_index: int, _height: float) -> void:
+	if kind == "IH-PW-N":
+		return
 	var y := float((_se.podium_window_rows_y_m as Array)[row_index])
-	var lights := 3 if kind == "IH-PW-W" else (2 if kind == "IH-PW-M" else 1)
-	var light_w := 0.85
-	var gap := 0.4
-	var group_w := light_w * float(lights) + gap * float(lights - 1)
+	var panes := 3 if kind == "IH-PW-W" else 2
+	var width := 3.0 if kind == "IH-PW-W" else 2.2
+	var height := 2.6
 	var shift := 0.0
 	if row_index % 2 == 1:
-		shift = 0.5 if u < float(_active_side.length_m) * 0.5 else -0.5
-	_new_module(kind, u + shift, y, group_w, height)
-	for light in lights:
-		var lu := u + shift - group_w * 0.5 + light_w * 0.5 + float(light) * (light_w + gap)
-		_build_framed_glazing(lu, y, light_w, height, 0.09, "dark_charcoal")
+		shift = 0.6 if u < float(_active_side.length_m) * 0.5 else -0.6
+	var cu := u + shift
+	if y + height * 0.5 > _podium_top(cu) - 0.12:
+		return
+	_new_module(kind, cu, y, width, height)
+	_build_framed_glazing(cu, y, width, height, 0.14, "dark_charcoal", "glass_dark")
+	for pane in range(1, panes):
+		_add_box("dark_charcoal", cu - width * 0.5 + width * float(pane) / float(panes), y, 0.07, height - 0.2, 0.032, 0.058)
+	_add_box("dark_charcoal", cu, y - height * 0.5 + 0.7, width - 0.2, 0.07, 0.032, 0.058)
 
 
 func _build_single_module(module: Dictionary) -> void:
 	var kind := str(module.kind)
+	if kind in PODIUM_BASE_KINDS:
+		return
 	var u := float(module.u_m)
 	var y := float(module.center_y_m)
 	var width := float(module.width_m)
@@ -427,7 +483,8 @@ func _build_single_module(module: Dictionary) -> void:
 			for division in [0.25, 0.5, 0.75]:
 				_add_box("support_grey", u, y - height * 0.5 + height * float(division), width - 0.28, 0.07, 0.03, 0.052)
 		"IH-GG":
-			_build_framed_glazing(u, y, width, height, 0.15, "support_grey")
+			# Double-height glazing in dark frames between the concrete columns (ih08).
+			_build_framed_glazing(u, y, width, height, 0.12, "dark_charcoal")
 		"IH-ENTRY39":
 			_build_framed_glazing(u, y, width, height, 0.15, "support_grey")
 			_add_box("support_grey", u, y - 0.25, 0.09, height - 0.3, 0.03, 0.058)
@@ -441,8 +498,8 @@ func _build_single_module(module: Dictionary) -> void:
 			_add_box("dark_charcoal", u, y, width, height, float(_contract.field_offset_m), 0.078)
 
 
-func _build_framed_glazing(u: float, y: float, width: float, height: float, stroke: float, frame_material: String) -> void:
-	_add_box("glass_proxy", u, y, width - stroke * 2.0, height - stroke * 2.0, float(_contract.field_offset_m), 0.032)
+func _build_framed_glazing(u: float, y: float, width: float, height: float, stroke: float, frame_material: String, glass_material: String = "glass_proxy") -> void:
+	_add_box(glass_material, u, y, width - stroke * 2.0, height - stroke * 2.0, float(_contract.field_offset_m), 0.032)
 	_add_box(frame_material, u - width * 0.5 + stroke * 0.5, y, stroke, height, 0.032, 0.058)
 	_add_box(frame_material, u + width * 0.5 - stroke * 0.5, y, stroke, height, 0.032, 0.058)
 	_add_box(frame_material, u, y - height * 0.5 + stroke * 0.5, width, stroke, 0.032, 0.058)

@@ -35,7 +35,7 @@ const FIRE_TRAINING600_LIVE_REPLACEMENT := preload("res://game/scripts/world/fac
 const FIRE_STATION48_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/fire_station48_live_replacement.gd")
 const D5_1317_GATEVIEW_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/d5_1317_gateview_live_replacement.gd")
 const ISLE_HOUSE_HIGH_FACADE_SCENE := preload("res://game/scenes/world/facades/isle_house/isle_house_high_facade.tscn")
-const ISLE_HOUSE_LOW_LIVE_ATTACHMENT := preload("res://game/scripts/world/facades/isle_house_composite_repair_variant_c_live_attachment.gd")
+const ISLE_HOUSE_LOW_FACADE := preload("res://game/scripts/world/facades/isle_house_massing_l1.gd")
 const D1_B201_LIVE_ATTACHMENT := preload("res://game/scripts/world/facades/d1_b201_live_attachment.gd")
 const D1_B225_LIVE_ATTACHMENT := preload("res://game/scripts/world/facades/d1_b225_live_attachment.gd")
 const PANEL_HALL_FACADE := preload("res://game/scripts/world/facades/panel_hall_facade.gd")
@@ -558,6 +558,13 @@ func _build_record(record: Dictionary, is_context: bool, chapel_plan: Dictionary
 	# reference-grounded arched hangar massing inside the frozen footprint.
 	if not is_context and BUILDING_2_HERO_MODEL.matches_record(record):
 		return BUILDING_2_HERO_MODEL.build_record(record)
+	# Isle House's low wall record carries the folded WSW and recessed base inside
+	# its frozen footprint, with its low facade attached.
+	if not is_context and ISLE_HOUSE_LOW_FACADE.matches_low_record(record):
+		return ISLE_HOUSE_LOW_FACADE.build_low_record(
+			record,
+			_material_for(str(record.material_key), str(record.feature_kind), false)
+		)
 	if not is_context and HAWKINS_MASSING.matches_record(record):
 		return HAWKINS_MASSING.build_record(
 			record,
@@ -815,16 +822,6 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 				"source_keys": record.source_keys,
 			}
 		root.add_child(isle_house_facade)
-	if not is_context and ISLE_HOUSE_LOW_LIVE_ATTACHMENT.matches_record(record):
-		var isle_house_low_result := ISLE_HOUSE_LOW_LIVE_ATTACHMENT.build(record)
-		if not bool(isle_house_low_result.get("ok", false)):
-			root.free()
-			return isle_house_low_result
-		root.add_child(isle_house_low_result.node as Node3D)
-		root.set_meta("isle_house_low_live_attachment", (isle_house_low_result.metadata as Dictionary).duplicate(true))
-		mesh_instances += int(isle_house_low_result.mesh_instances)
-		surfaces += int(isle_house_low_result.surfaces)
-		triangle_count += int(isle_house_low_result.triangles)
 	# B225 keeps the exact generated wall MeshInstance and its already-created
 	# sole collision/spray owner. Only after those ordinary host nodes exist do
 	# we attach the reviewed, receiver-relative two-batch render detail.

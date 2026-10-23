@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "isle_house_concrete"
+albedo_color = Color(0.6, 0.59, 0.56, 1)
+metallic = 0.0
+roughness = 0.88
