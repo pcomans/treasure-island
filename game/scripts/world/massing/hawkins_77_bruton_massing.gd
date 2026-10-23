@@ -24,7 +24,8 @@ const TERRACE_Y := 14.774
 const LOW_TOP_Y := 18.274
 const TALL_TOP_Y := 25.274
 const SE_SPLIT_U_M := 33.0
-const NNW_SPLIT_U_M := 25.0
+# The 6-storey block runs about 70% of the NNW face (hk15: 608 of 836 px).
+const NNW_SPLIT_U_M := 39.0
 const WING_DEPTH_M := {"wsw": 13.0, "se": 13.0, "ene": 16.0, "nnw": 13.0}
 const SETBACK_M := 1.6
 # The WSW setback starts past the NNW wing (its corner block stays full height).
@@ -32,7 +33,21 @@ const WSW_SETBACK_FROM_U_M := 13.0
 # Setback stations along each side (u from the side start): WSW from past the
 # NNW wing to the S corner, SE from the S corner to the 6-storey block.
 const SETBACK_U_RANGES := {"wsw": Vector2(WSW_SETBACK_FROM_U_M, 200.0), "se": Vector2(-200.0, SE_SPLIT_U_M)}
-const CANOPY_OVERHANG_M := 1.2
+# The wing roof slab stands just past the bay boxes below it (cav-7, cav-3); only
+# the S corner wedge reaches far out (cav-2).
+const CANOPY_OVERHANG_M := 0.6
+# Projecting fluted bay boxes over storeys 2-3 (hk02, cav-7 SE; cav-3, hk23 WSW):
+# u ranges along each side, from DECK_Y to TERRACE_Y, BAY_BOX_DEPTH_M proud.
+const BAY_BOX_DEPTH_M := 0.4
+# The WSW box starts at the W corner and turns onto the NNW end of the 4-storey
+# wing (cav-3, hk15).
+const BAY_BOX_U_RANGES := {"wsw": Vector2(0.0, 200.0), "se": Vector2(0.0, SE_SPLIT_U_M - 1.8), "nnw": Vector2(41.2, 200.0)}
+# The ground storey under the bay boxes is recessed inside the frozen footprint
+# (cav-3, hk23, hk02, cav-2): a deep shadow line and white soffit, with the WSW
+# stoops tucked under and full-height glazing at the S corner.
+const RECESS_M := 1.3
+# A ground pier keeps the W corner (cav-3); the recess starts past it.
+const RECESS_WSW_START_M := 1.2
 const WEDGE_OVERHANG_M := 2.0
 const WEDGE_RUN_M := 8.0
 const CANOPY_TOP_Y := 18.30
@@ -115,7 +130,11 @@ static func build_record(record: Dictionary, material: Material) -> Dictionary:
 		faces.append_array(_faces(canopy.soffit))
 		# The facade draws the terrace glass rail; it is solid here.
 		faces.append_array(_faces(rail_collision()))
-		mesh_instances += 2
+		# Bay boxes: white returns and undersides here, fluted fronts in the facade.
+		var boxes := bay_box_geometry()
+		root.add_child(_mesh_node("BayBoxes", boxes, CANOPY_MATERIAL, RENDER_WORLD_VISIBLE))
+		faces.append_array(_faces(boxes))
+		mesh_instances += 3
 
 	var body := StaticBody3D.new()
 	body.name = "Collision"
@@ -345,7 +364,84 @@ static func wall_geometry(record: Dictionary) -> Dictionary:
 				elif neighbour < top - 0.001:
 					var role := "setback" if is_equal_approx(neighbour, TERRACE_Y) else ("court" if is_equal_approx(neighbour, DECK_Y) else "step")
 					_append_wall_quad(quads, Vector3(a.x, neighbour, a.y), Vector3(b.x, neighbour, b.y), top, normal, role, str(piece.role))
-	return _geometry_from_wall_quads(quads)
+	return _geometry_from_wall_quads(_recess_ground(quads, source_quads))
+
+
+# Outer walls over the recess start at DECK_Y; the recessed ground walls and their
+# end returns run from the source wall bottom (taken on the footprint line) to it.
+static func _recess_ground(quads: Array[Dictionary], source_quads: Array[Dictionary]) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for quad: Dictionary in quads:
+		var side := _outer_side(quad)
+		var r := ground_cut_range(side) if side != "" else Vector2(INF, -INF)
+		var f := side_frame(side) if side != "" else {}
+		var sb := quad.start_bottom as Vector3
+		var eb := quad.end_bottom as Vector3
+		var ua := (Vector2(sb.x, sb.z) - (f.get("start", Vector2.ZERO) as Vector2)).dot(f.get("tangent", Vector2.ZERO) as Vector2) if side != "" else 0.0
+		var ub := (Vector2(eb.x, eb.z) - (f.get("start", Vector2.ZERO) as Vector2)).dot(f.get("tangent", Vector2.ZERO) as Vector2) if side != "" else 0.0
+		if side == "" or maxf(ua, ub) <= r.x + 0.001 or minf(ua, ub) >= r.y - 0.001:
+			result.append(quad)
+			continue
+		# Split at the range ends; the inside part loses its ground storey.
+		var cuts: Array[float] = [0.0, 1.0]
+		for u_cut: float in [r.x, r.y]:
+			var t := (u_cut - ua) / (ub - ua)
+			if t > 0.001 and t < 0.999:
+				cuts.append(t)
+		cuts.sort()
+		var top := (quad.start_top as Vector3).y
+		for k in cuts.size() - 1:
+			var p := sb.lerp(eb, cuts[k])
+			var q := sb.lerp(eb, cuts[k + 1])
+			var mid_u := lerpf(ua, ub, (cuts[k] + cuts[k + 1]) * 0.5)
+			if mid_u > r.x and mid_u < r.y:
+				p.y = DECK_Y
+				q.y = DECK_Y
+			_append_wall_quad(result, p, q, top, quad.normal, "outer", str(quad.volume))
+	var strip := recess_strip()
+	var walls := [
+		[strip[5], strip[4], "wsw"], [strip[4], strip[3], "se"],
+		[strip[0], strip[5], "wsw_return"], [strip[3], strip[2], "se_return"],
+	]
+	for wall: Array in walls:
+		var p: Vector2 = wall[0]
+		var q: Vector2 = wall[1]
+		var kind := str(wall[2])
+		var normal2: Vector2
+		match kind:
+			"wsw": normal2 = side_frame("wsw").normal
+			"se": normal2 = side_frame("se").normal
+			"wsw_return": normal2 = side_frame("wsw").tangent
+			_: normal2 = -(side_frame("se").tangent as Vector2)
+		# Start -> end must have outward normal (-d.y, d.x).
+		var d := (q - p).normalized()
+		if Vector2(-d.y, d.x).dot(normal2) < 0.0:
+			var swap := p
+			p = q
+			q = swap
+		var foot := kind.trim_suffix("_return")
+		var bottom_p := _source_bottom(source_quads, p + (side_frame(foot).normal as Vector2) * _depth_in(foot, p))
+		var bottom_q := _source_bottom(source_quads, q + (side_frame(foot).normal as Vector2) * _depth_in(foot, q))
+		_append_wall_quad(result, Vector3(p.x, bottom_p, p.y), Vector3(q.x, bottom_q, q.y), DECK_Y, Vector3(normal2.x, 0.0, normal2.y), "recess", foot)
+	return result
+
+
+# How far inside a side's footprint line a point lies.
+static func _depth_in(side: String, p: Vector2) -> float:
+	return -(p - (side_frame(side).start as Vector2)).dot(side_frame(side).normal)
+
+
+# The footprint side an outer wall quad lies on ("" for any other wall).
+static func _outer_side(quad: Dictionary) -> String:
+	if str(quad.role) != "outer":
+		return ""
+	var normal := quad.normal as Vector3
+	var p := quad.start_bottom as Vector3
+	for side: String in SIDES:
+		var f := side_frame(side)
+		if Vector2(normal.x, normal.z).dot(f.normal) > 0.999 and absf((Vector2(p.x, p.z) - (f.start as Vector2)).dot(f.normal)) < 0.05:
+			return side
+	return ""
 
 
 static func roof_geometry() -> Dictionary:
@@ -391,6 +487,61 @@ static func canopy_geometry() -> Dictionary:
 	return {"top": _flat_geometry(top, "canopy"), "soffit": _flat_geometry(soffit, "soffit")}
 
 
+# Solid projecting bay boxes (top, underside and returns; receiver none in the
+# roof body, so they occlude spray instead of hiding a tag behind them).
+static func bay_box_geometry() -> Dictionary:
+	var bucket := _bucket()
+	for side: String in BAY_BOX_U_RANGES:
+		var u_range := bay_box_range(side)
+		var poly := PackedVector2Array([
+			side_point(side, u_range.x, 0.0), side_point(side, u_range.y, 0.0),
+			side_point(side, u_range.y, BAY_BOX_DEPTH_M), side_point(side, u_range.x, BAY_BOX_DEPTH_M),
+		])
+		_append_slab(bucket, bucket, _ordered(poly), DECK_Y, TERRACE_Y)
+	# White soffit over the recessed ground storey.
+	_append_slab(bucket, bucket, _ordered(recess_strip()), DECK_Y, DECK_Y + 0.3)
+	return _flat_geometry(bucket, "bay_box")
+
+
+# Plan of the recessed ground strip: the WSW box range to the S corner and the SE
+# box range from it, RECESS_M deep, joined where the recessed lines meet.
+static func recess_strip() -> PackedVector2Array:
+	var w := recess_range("wsw")
+	var e := recess_range("se")
+	return PackedVector2Array([
+		side_point("wsw", w.x, 0.0), B, side_point("se", e.y, 0.0),
+		side_point("se", e.y, -RECESS_M), recess_corner(), side_point("wsw", w.x, -RECESS_M),
+	])
+
+
+static func recess_corner() -> Vector2:
+	return Geometry2D.line_intersects_line(side_point("wsw", 0.0, -RECESS_M), side_frame("wsw").tangent, side_point("se", 0.0, -RECESS_M), side_frame("se").tangent) as Vector2
+
+
+# u range along a side where the ground storey is recessed (box range, less the
+# corner join).
+static func recess_range(side: String) -> Vector2:
+	if side not in ["wsw", "se"]:
+		return Vector2(INF, -INF)
+	var r := bay_box_range(side)
+	var corner_u := (recess_corner() - (side_frame(side).start as Vector2)).dot(side_frame(side).tangent)
+	return Vector2(maxf(r.x, RECESS_WSW_START_M), corner_u) if side == "wsw" else Vector2(corner_u, r.y)
+
+
+# Footprint-line u range whose outer wall loses its ground storey to the recess.
+static func ground_cut_range(side: String) -> Vector2:
+	if side == "wsw":
+		return Vector2(recess_range("wsw").x, float(side_frame("wsw").length))
+	if side == "se":
+		return Vector2(0.0, recess_range("se").y)
+	return Vector2(INF, -INF)
+
+
+static func bay_box_range(side: String) -> Vector2:
+	var u_range: Vector2 = BAY_BOX_U_RANGES[side]
+	return Vector2(maxf(u_range.x, 0.0), minf(u_range.y, float(side_frame(side).length)))
+
+
 # Collision for the terrace glass rail drawn by the facade (0.15-0.17 m inside
 # the footprint line, terrace to 0.94 m above it) along the WSW and SE setbacks.
 static func rail_collision() -> Dictionary:
@@ -421,7 +572,7 @@ static func stoop_geometry() -> Dictionary:
 		var f := side_frame(side)
 		var t := Vector3((f.tangent as Vector2).x, 0.0, (f.tangent as Vector2).y)
 		var n := Vector3((f.normal as Vector2).x, 0.0, (f.normal as Vector2).y)
-		var base := _at(side_point(side, u, 0.0), 0.0)
+		var base := _at(side_point(side, u, -RECESS_M if side == "wsw" else 0.0), 0.0)
 		var floor_y := land - 0.15
 		var top_y := land + STOOP_RISE_M
 		var riser := STOOP_RISE_M / 3.0

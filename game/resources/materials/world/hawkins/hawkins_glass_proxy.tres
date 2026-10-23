@@ -2,6 +2,6 @@
 
 [resource]
 resource_name = "hawkins_glass_proxy"
-albedo_color = Color(0.23, 0.31, 0.36, 1)
+albedo_color = Color(0.38, 0.47, 0.55, 1)
 metallic = 0.0
-roughness = 0.2
+roughness = 0.06

@@ -5,7 +5,7 @@
 [resource]
 resource_name = "hawkins_pearl_fluted"
 shader = ExtResource("1_shader")
-shader_parameter/base_color = Color(0.86, 0.865, 0.85, 1)
+shader_parameter/base_color = Color(0.8, 0.81, 0.82, 1)
 shader_parameter/roughness_value = 0.55
 shader_parameter/flute_pitch_m = 0.064
 shader_parameter/flute_normal_strength = 0.18
