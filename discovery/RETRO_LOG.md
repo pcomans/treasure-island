@@ -21592,3 +21592,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What did not work well: nobody grepped every reader of `manifest.playable_boundary` before changing what it means. Two offline tools that are not in `tools/test.sh` still treat it as the exact island polygon, and one of them now fails its own invariant.
 - What the team should change next time: when changing a generated contract field, grep every consumer (runtime, tests and offline tools) and list them in the task note. A file the code points to (here a README) should land in the same commit.
 - Code-review addendum: extending `playable_boundary` broke two offline consumers that treated it as the exact island polygon: the coverage-evidence renderer and the NAIP footprint label. These are not in the suite, so only review found them. Next time, when a manifest field's meaning changes, grep every reader of that field (`tools/`, not only `game/`), run each offline reader once, and add the README a header comment points to in the same commit.
+
+## push-coordinator-ferrypier (w1222514695 walkable ferry pier, 2026-10-23)
+
+- What worked well: ferrypier-20261023 was a clean fast-forward from df597fd with no overlaps. Committing the catalog, checklist and this RETRO before the gates meant the gated HEAD is the pushed HEAD. Row counts (193 L2 C rows) were checked against the new totals before committing.
+- What did not work well: the checklist's L3/L5 totals were written as one combined figure ("L3/L5:213 U each"), so the first L3 C had to split that line. The stale pier description sat in two historical notes as well as the row, and nothing pointed to them except the brief.
+- What the team should change next time: when a unit's identity or kind changes (box placeholder to pier), grep its source key across the checklist in the same commit as the model, not at delivery.
