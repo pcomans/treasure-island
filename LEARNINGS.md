@@ -693,3 +693,11 @@ Before re-cutting openings at L2, measure on one reference plane:
 - the pane layout.
 
 Compare those numbers with the model's geometry, and record both, before spending a render. Matching opening counts alone does not establish the opening family.
+
+## Put every new opaque collision body on the spray layer
+
+Spray rays use only the spray layer (`1 << 2`). In two passes on 2026-10-22, a producer added solid bodies on `PHYSICS_WORLD_SOLID` only, so spray passed through them and tagged hidden receiver walls behind:
+- the Isle House massing volumes (fixed in 9f7fdeb);
+- the Hawkins stoop platforms and planters (fixed in the Hawkins review fix).
+
+Any new opaque collision body a producer adds (massing, stoops, rails, canopies) must be on `PHYSICS_WORLD_SOLID | 1 << 2`, with `receiver_kind` none, so that it occludes spray and refuses the tag. As a prevention check in fit, aim one spray at each new solid and expect a refusal (`receiver_rejection`).

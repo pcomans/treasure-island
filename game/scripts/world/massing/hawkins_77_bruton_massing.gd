@@ -38,8 +38,8 @@ const WEDGE_RUN_M := 8.0
 const CANOPY_TOP_Y := 18.30
 const CANOPY_THICKNESS_M := 0.25
 const ROOF_EDGE_OVERHANG_M := 0.9
-# Stoops: [side, u along side, local land y]; land sampled from the frozen
-# chunk at each stoop (land_ground w26767313); platform 0.6m above it.
+# Stoops: [side, u along side, local land y]; land y is sampled terrain from the
+# frozen chunk (land_ground w26767313) at each stoop; platform 0.6m above it.
 const STOOPS := [
 	["wsw", 16.0, 4.60], ["wsw", 28.0, 4.43], ["wsw", 40.0, 4.29], ["wsw", 52.0, 4.30], ["wsw", 64.0, 4.26],
 	["ene", 12.0, 4.28], ["ene", 24.0, 4.34], ["ene", 36.0, 4.44],
@@ -158,9 +158,12 @@ static func build_record(record: Dictionary, material: Material) -> Dictionary:
 		stoop_shape_node.shape = stoop_shape
 		var stoop_body := StaticBody3D.new()
 		stoop_body.name = "StoopCollision_NoSprayOwnership"
-		stoop_body.collision_layer = PHYSICS_WORLD_SOLID
+		# On the spray layer too, so stoops occlude spray (receiver none refuses
+		# the tag) instead of letting it reach the wall behind them.
+		stoop_body.collision_layer = PHYSICS_WORLD_SOLID | PHYSICS_SPRAY_SURFACE
 		stoop_body.collision_mask = 0
 		stoop_body.set_meta("receiver_kind", "none")
+		stoop_body.set_meta("opaque", true)
 		stoop_body.set_meta("source_keys", record.source_keys.duplicate())
 		stoop_body.add_child(stoop_shape_node)
 		root.add_child(stoop_body)
@@ -445,17 +448,6 @@ static func stoop_geometry() -> Dictionary:
 			_append_oriented(support, p0, p1, p2, Vector3.UP)
 			_append_oriented(support, p0, p2, p3, Vector3.UP)
 	return {"solid": _flat_geometry(solid, "stoops"), "decor": _flat_geometry(decor, "stoop_steps"), "support": _flat_geometry(support, "stoop_support")}
-
-
-# Catalog stair endpoints for every stoop: bottom on land beyond the flight,
-# top on the platform.
-static func stoop_stairs() -> Array:
-	var result: Array = []
-	for stoop: Array in STOOPS:
-		var bottom := side_point(str(stoop[0]), float(stoop[1]), STOOP_DEPTH_M + 3.0 * STEP_TREAD_M + 0.6)
-		var top := side_point(str(stoop[0]), float(stoop[1]), STOOP_DEPTH_M * 0.5)
-		result.append({"bottom": [bottom.x, bottom.y], "top": [top.x, top.y]})
-	return result
 
 
 static func _height_at(all_pieces: Array[Dictionary], point: Vector2) -> float:
