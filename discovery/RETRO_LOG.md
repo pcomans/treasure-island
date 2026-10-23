@@ -21611,3 +21611,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the neutral restore is one data table (`NEUTRAL_LIGHTING`) that maps line-for-line onto the main.tscn hunks, so checking it covered every changed value took a single side-by-side read of the diff. The scene change kept to existing properties, and the gameplay contract still holds without edits.
 - What did not work well: the commit message says "MSAA 3D is 4x" while the file says `msaa_3d=2`. That is correct (enum 2 is 4x), but a reviewer has to know the enum to confirm it. The usage string in `_run` does not mention `--neutral-lighting`.
 - What the team should change next time: when a project setting is an enum, quote its raw value and its meaning together in the commit message.
+
+## push-coordinator-lighting (island-wide lighting adopt 531708d + Mar22t L3 correction, 2026-10-23)
+
+- What worked well: the lighting branch was a clean fast-forward from 5fc9835; the five L3 ticks were set by exact source-key match with an assertion that each cell was still U, and the per-column counts (213/193/6/1/0) were recomputed from the table before the new totals were written.
+- What did not work well: four buildings' reviewed L3 rounds landed without their checklist rows being ticked, so the L3 column read 1 C while six units had passed; the gap was found only when ROOT reconciled it by hand at delivery.
+- What the team should change next time: the reviewer or push coordinator that records a level PASS should tick the matching checklist cells and recount the totals in the same commit, rather than leaving it to a later delivery.
