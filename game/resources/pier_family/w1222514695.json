@@ -37,7 +37,7 @@
     "nw_t": 0.55,
     "se_t": 0.5,
     "end_block_len": 0.65,
-    "end_block_h": 0.95
+    "end_block_h": 0.72
   },
   "columns": {
     "count": 10,
@@ -58,18 +58,20 @@
   "gate": {
     "from_sw": 2.6,
     "head": 2.4,
-    "head_top": 2.9,
-    "sign_w": 1.7,
-    "stand_before": 1.1
+    "head_top": 3.0,
+    "sign_w": 2.6,
+    "stand_before": 1.1,
+    "sign_h": 0.42
   },
   "roof": {
     "soffit_nw": 3.45,
     "soffit_se": 3.75,
     "fascia_inset": 0.42,
-    "fascia_depth": 0.5,
+    "fascia_depth": 0.62,
     "prow_rise": 0.8,
     "prow_length": 12.0,
-    "rib_spacing": 0.15
+    "rib_spacing": 0.15,
+    "fascia_band": 0.3
   },
   "palette": {
     "deck": {
@@ -140,20 +142,21 @@
     },
     "glass": {
       "rgb": [
-        0.74,
-        0.85,
-        0.85
+        0.6,
+        0.76,
+        0.76
       ],
-      "alpha": 0.3,
-      "roughness": 0.05
+      "alpha": 0.4,
+      "roughness": 0.04,
+      "metallic": 0.25
     },
     "steel": {
       "rgb": [
-        0.72,
-        0.73,
-        0.74
+        0.62,
+        0.64,
+        0.66
       ],
-      "roughness": 0.35,
+      "roughness": 0.3,
       "metallic": 0.6
     },
     "rail": {
@@ -192,9 +195,9 @@
     },
     "door_frame": {
       "rgb": [
-        0.2,
-        0.21,
-        0.22
+        0.14,
+        0.15,
+        0.16
       ],
       "roughness": 0.5,
       "metallic": 0.3
@@ -210,15 +213,15 @@
     "led": {
       "rgb": [
         1.0,
-        0.32,
+        0.35,
         0.08
       ],
       "emission": [
         1.0,
-        0.3,
-        0.06
+        0.32,
+        0.05
       ],
-      "emission_energy": 2.5,
+      "emission_energy": 6.0,
       "roughness": 0.6
     },
     "sign_red": {
@@ -256,11 +259,11 @@
     },
     "fascia": {
       "rgb": [
-        0.94,
-        0.94,
-        0.93
+        0.97,
+        0.97,
+        0.96
       ],
-      "roughness": 0.5
+      "roughness": 0.4
     },
     "soffit": {
       "rgb": [
@@ -277,6 +280,16 @@
         0.92
       ],
       "roughness": 0.6
+    },
+    "gate_glass": {
+      "rgb": [
+        0.12,
+        0.15,
+        0.17
+      ],
+      "alpha": 0.72,
+      "roughness": 0.05,
+      "metallic": 0.3
     }
   },
   "study_notes": {

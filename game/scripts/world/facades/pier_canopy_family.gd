@@ -487,8 +487,11 @@ static func _windscreen(ctx: Ctx) -> void:
 			var b := s0 + (s1 - s0) * float(p + 1) / float(panels)
 			_box(ctx, glass, a + 0.006, b - 0.006, d - 0.012, d + 0.012, y + h, top, [])
 			if p > 0:
-				_box(ctx, post, a - 0.025, a + 0.025, d - 0.03, d + 0.03, y + h, top + 0.02, [])
-		_box(ctx, post, s0, s0 + 0.04, d - 0.03, d + 0.03, y + h, top + 0.02, [])
+				_box(ctx, post, a - 0.035, a + 0.035, d - 0.04, d + 0.04, y + h, top + 0.05, [])
+		_box(ctx, post, s0, s0 + 0.06, d - 0.04, d + 0.04, y + h, top + 0.05, [])
+		# Top cap rail and base shoe frame each run.
+		_box(ctx, post, s0, s1, d - 0.035, d + 0.035, top, top + 0.05, [])
+		_box(ctx, post, s0, s1, d - 0.04, d + 0.04, y + h, y + h + 0.07, ["bottom"])
 
 
 ## White picket rails: on the SE parapet (broken at the columns) and across the
@@ -564,19 +567,20 @@ static func _gate(ctx: Ctx) -> void:
 	# LED sign on the plaza face of the head: dark panel and lit segments.
 	var mid := (d0 + d1) * 0.5
 	var sign_w := ctx.num("gate", "sign_w", 1.7)
-	_box(ctx, ctx.bucket("solid", "sign_panel"), s - depth - 0.03, s - depth, mid - sign_w * 0.5, mid + sign_w * 0.5, head_y + 0.12, head_y + 0.4, ["s1"])
+	var sign_h := ctx.num("gate", "sign_h", 0.34)
+	_box(ctx, ctx.bucket("solid", "sign_panel"), s - depth - 0.03, s - depth, mid - sign_w * 0.5, mid + sign_w * 0.5, head_y + 0.06, head_y + 0.12 + sign_h, ["s1"])
 	var led := ctx.bucket("solid", "led")
 	var pattern := [0.1, 0.06, 0.12, 0.05, 0.08, 0.1, 0.04, 0.12, 0.07, 0.09, 0.05, 0.11, 0.08, 0.06]
 	var cursor := mid - sign_w * 0.5 + 0.1
-	for i in pattern.size():
-		var seg: float = pattern[i]
-		if cursor + seg > mid + sign_w * 0.5 - 0.1:
-			break
-		_box(ctx, led, s - depth - 0.04, s - depth - 0.03, cursor, cursor + seg, head_y + 0.19, head_y + 0.33, ["s1"])
+	var k := 0
+	while cursor + float(pattern[k % pattern.size()]) <= mid + sign_w * 0.5 - 0.1:
+		var seg: float = pattern[k % pattern.size()]
+		_box(ctx, led, s - depth - 0.04, s - depth - 0.03, cursor, cursor + seg, head_y + 0.12, head_y + 0.06 + sign_h, ["s1"])
 		cursor += seg + 0.035
+		k += 1
 	# Doors and side lights: dark frames with glass between (the barrier).
 	var door := ctx.bucket("solid", "door_frame")
-	var glass := ctx.bucket("solid", "glass")
+	var glass := ctx.bucket("solid", "gate_glass")
 	var mullions: Array[float] = [d0 + 0.16, mid - 1.0, mid, mid + 1.0, d1 - 0.16]
 	for m: float in mullions:
 		_box(ctx, door, s - 0.04, s + 0.04, m - 0.035, m + 0.035, y, head_y, ["bottom"])
@@ -630,6 +634,7 @@ static func _roof(ctx: Ctx) -> void:
 	var L := f.length
 	var fi := ctx.num("roof", "fascia_inset", 0.35)
 	var depth := ctx.num("roof", "fascia_depth", 0.42)
+	var band := ctx.num("roof", "fascia_band", 0.25)
 	var reach := ctx.num("roof", "prow_length", 12.0)
 	var stations: Array[float] = [0.0, fi]
 	var step := reach / 4.0
@@ -661,9 +666,13 @@ static func _roof(ctx: Ctx) -> void:
 		var w0 := f.width(s0)
 		var w1 := f.width(s1)
 		top.quad(top_at.call(s0, 0.0), top_at.call(s1, 0.0), top_at.call(s1, w1), top_at.call(s0, w0), Vector3.UP)
-		# Side fascias: outer top edge down and in to the soffit edge.
-		fascia.quad(top_at.call(s0, 0.0), top_at.call(s1, 0.0), under_at.call(s1, 0.0), under_at.call(s0, 0.0), -f.across(s0) + Vector3.DOWN * 0.8)
-		fascia.quad(top_at.call(s0, w0), top_at.call(s1, w1), under_at.call(s1, w1), under_at.call(s0, w0), f.across(s0) + Vector3.DOWN * 0.8)
+		# Side fascias: a vertical white band at the plate edge, then folded in
+		# down to the soffit edge.
+		var drop := Vector3.DOWN * band
+		fascia.quad(top_at.call(s0, 0.0), top_at.call(s1, 0.0), top_at.call(s1, 0.0) + drop, top_at.call(s0, 0.0) + drop, -f.across(s0))
+		fascia.quad(top_at.call(s0, w0), top_at.call(s1, w1), top_at.call(s1, w1) + drop, top_at.call(s0, w0) + drop, f.across(s0))
+		fascia.quad(top_at.call(s0, 0.0) + drop, top_at.call(s1, 0.0) + drop, under_at.call(s1, 0.0), under_at.call(s0, 0.0), -f.across(s0) + Vector3.DOWN * 0.8)
+		fascia.quad(top_at.call(s0, w0) + drop, top_at.call(s1, w1) + drop, under_at.call(s1, w1), under_at.call(s0, w0), f.across(s0) + Vector3.DOWN * 0.8)
 		if s1 <= fi + 0.001 or s0 >= L - fi - 0.001:
 			continue
 		# Soffit in lengthwise strips between ribs.
@@ -701,7 +710,9 @@ static func _roof(ctx: Ctx) -> void:
 		for k in steps:
 			var ta := float(k) / float(steps)
 			var tb := float(k + 1) / float(steps)
-			fascia.quad(top_at.call(se, we * ta), top_at.call(se, we * tb), under_at.call(si, we * tb), under_at.call(si, we * ta), f.along() * dir + Vector3.DOWN * 0.8)
+			var down := Vector3.DOWN * band
+			fascia.quad(top_at.call(se, we * ta), top_at.call(se, we * tb), top_at.call(se, we * tb) + down, top_at.call(se, we * ta) + down, f.along() * dir)
+			fascia.quad(top_at.call(se, we * ta) + down, top_at.call(se, we * tb) + down, under_at.call(si, we * tb), under_at.call(si, we * ta), f.along() * dir + Vector3.DOWN * 0.8)
 
 
 # ------------------------------------------------------------------ output
