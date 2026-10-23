@@ -478,7 +478,8 @@ catalog accepts them, and 686 gains a catalog `stairs` entry.
 **Mar22n** shared-code robustness pass `f5e9450`…`0e7b42b` (mid-rise `_spans` deck cover, `"posts": false`, stair_bay grade sampling and back-edge check; Isle House guard and metadata renames; 1317 computed module count; D1 door-top check): CODE PASS on all 9 commits; w291193766 still visual L2 PASS with its slits closed. No level or score change.
 **Mar22o** Building 1 L3 in progress (`621c8d6`…`b0602c9`): tower base storey, north ring, SE shoulder, rear podium, crescent flutes and grid; emblem, window reveals, drum banding, crowns and cab trim. CODE PASS (`4d03edb` REWORK, fixed by `e83bae3`); visual L3/L1/L2 progress PASS through r7; ROOT released protected runs 70–92. The shared `building_fit.gd` rooftop-approach walk-up skip affects only w1222720021. No level or score change; L3 not yet marked.
 **Mar22p** Navy Chapel w291189336 L1/L2/L3 round 1 (`fd70a5f`, `547d963`): photo-based eaves, porch, hall windows and roof edges; the SSE front change is justified by the photos. CODE PASS; visual L1/L2/L3 and progress PASS on r1b; author fit (both catalog stair flights walked), spray and suite PASS; the catalog gains a second chapel `stairs` flight. Open for round 2: the rear hip and NNW openings. No level or score change; L3 not yet marked.
-Current totals after Mar22p (unchanged): L1:213 C/0 U; L2:192 C/21 U; L3/L5:213 U each;
+**Mar22q** Isle House w1249412094 and Hawkins w1249412093 L1/L2/L3 (`ca2e8dc`…`cdfdc12`, ported onto main): Isle House gains the photo-based podium wing, glazing stacks and storefront, with the tower raised to about 75 m by ROOT on photo evidence; Hawkins gets corrected perimeter-block massing, setback canopy, window bays and 8 catalog stoop flights. The shared `building_fit.gd` spray check binds composite part receivers to the approved part list. CODE PASS (Isle House fixes and `cdfdc12` re-checked); visual PASS on Isle House r2 and Hawkins r3; author fit (all 8 Hawkins stoops walked), spray and suite PASS. Open: the Hawkins WSW projecting box. No level or score change; L3 not yet marked.
+Current totals after Mar22q (unchanged): L1:213 C/0 U; L2:192 C/21 U; L3/L5:213 U each;
 L4:1 C/212 U. Overall406 C/0 I/659 U across213 units/1,065 cells; catalog
 recognition score 63/213.
 **U** no current stage-level conclusion established in this checklist pass.
@@ -747,7 +748,7 @@ March/November2025 refs and unknown-date Apple context support the scoped envelo
 and observed architecture; missing north capture/unknown rear/schematic materials
 keep L2–L5 U, whole modern quality, recognition and as-built OPEN.
 See [Building461 packet](facades/p2_reference_packets/w34313569_austin_hall_building_461.md).
-Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar22p for current totals);
+Total then **30 C /0 I /1035 U** across213 units/1065 cells (see Mar22q for current totals);
 **L1:21 C /0 I /192 U**. All other stages unchanged;49 historical credits retained.
 
 ## Island environment layers

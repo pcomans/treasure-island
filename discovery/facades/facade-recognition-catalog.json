@@ -11781,6 +11781,16 @@
           "review_id": "p1-existing-live-revalidation-2026-09-04:hawkins",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "code-review-ferryl3-hawkins-20261023",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-ferryl3-hawkins-r3-20261023",
+          "review_kind": "visual",
+          "status": "accepted"
         }
       ],
       "anchor_source_key": "w1249412093",
@@ -11896,6 +11906,16 @@
           "review_id": "isle-house-variant-c-live-replacement-2026-09-04",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "code-review-ferryl3-islehouse-20261023",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-ferryl3-islehouse-r2-20261023",
+          "review_kind": "visual",
+          "status": "accepted"
         }
       ],
       "anchor_source_key": "w1249412094",
