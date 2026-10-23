@@ -9,6 +9,18 @@ const TARGET_RECEIVER_OBJECT_KEY := "building-composite:w1249412094:w1282547786:
 const TARGET_LOW_RECEIVER_OBJECT_KEY := "building-composite:w1249412094:w1282547787:wall"
 const LAYOUT_PATH := "res://game/resources/facades/isle_house_39_bruton_high_se_layout.json"
 const RENDER_BUILDING_WALL := 1 << 1
+# 2026-10-22 photo pass (Sep 2025 Street View, DBA photos): six-storey podium to
+# the level-7 deck, a dark glazed level-7 band, then the tower of continuous dark
+# glazing stacks between pale panel strips with floor-line joints.
+const PODIUM_TOP_Y := 25.1
+const LEVEL7_TOP_Y := 28.4
+const STACK_BOTTOM_Y := 28.6
+# 17 floors of 2.95m above level 7 (dba-50) up to the overridden tower top.
+const STACK_FLOORS := 17
+const STACK_TOP_Y := STACK_BOTTOM_Y + 2.95 * STACK_FLOORS
+# About 35% glass on the 3.2m column pitch (dba-50 strip).
+const STACK_W := 1.15
+const MASSING := preload("res://game/scripts/world/facades/isle_house_massing_l1.gd")
 const EXTERIOR_FIELD_RUN_INDICES := [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 const NEW_EXTERIOR_FIELD_RUN_INDICES := [0, 1, 2, 3, 4]
 const SHARED_TOWER_FIELD_RUN_INDICES := [10, 11, 12]
@@ -144,6 +156,12 @@ func configure(record: Dictionary) -> Dictionary:
 	_build_inferred_sides()
 	_module_library.free()
 	_flush_render_batches()
+	# Photo-based massing (level-7 wing, deck, penthouse) and upper-floor
+	# openings; this child owns its own solid collision.
+	var massing: Dictionary = MASSING.build(record)
+	if not bool(massing.get("ok", false)):
+		return {"ok": false, "message": str(massing.get("message", "Isle House massing failed."))}
+	add_child(massing.node as Node3D)
 	set_meta("module_counts", _module_counts.duplicate(true))
 	set_meta("field_segment_count", int(field_result.segment_count))
 	set_meta("field_quad_count", int(field_result.quad_count))
@@ -242,18 +260,19 @@ func _build_fields(record: Dictionary, target: Dictionary) -> Dictionary:
 		var end_z := float(raw_vertices[offset + 5])
 		var normal := Vector3(float(raw_normals[offset]), 0.0, float(raw_normals[offset + 2])).normalized()
 		var outward := normal * float(_contract.field_offset_m)
-		if run_index in EXTERIOR_FIELD_RUN_INDICES:
-			_append_quad(groups.podium_light as Dictionary, [
-				Vector3(start_x, start_y, start_z) + outward,
-				Vector3(end_x, end_y, end_z) + outward,
-				Vector3(end_x, float(target.low_top_y_m), end_z) + outward,
-				Vector3(start_x, float(target.low_top_y_m), start_z) + outward,
-			], normal)
+		# Podium field from each run's own base (ground, or the low roof for the
+		# shared runs 10-12) up to the level-7 deck; tower field above it.
+		_append_quad(groups.podium_light as Dictionary, [
+			Vector3(start_x, start_y, start_z) + outward,
+			Vector3(end_x, end_y, end_z) + outward,
+			Vector3(end_x, PODIUM_TOP_Y, end_z) + outward,
+			Vector3(start_x, PODIUM_TOP_Y, start_z) + outward,
+		], normal)
 		_append_quad(groups.tower_light as Dictionary, [
-			Vector3(start_x, float(target.low_top_y_m), start_z) + outward,
-			Vector3(end_x, float(target.low_top_y_m), end_z) + outward,
-			Vector3(end_x, float(target.top_y_m), end_z) + outward,
-			Vector3(start_x, float(target.top_y_m), start_z) + outward,
+			Vector3(start_x, PODIUM_TOP_Y, start_z) + outward,
+			Vector3(end_x, PODIUM_TOP_Y, end_z) + outward,
+			Vector3(end_x, MASSING.TOWER_TOP_Y, end_z) + outward,
+			Vector3(start_x, MASSING.TOWER_TOP_Y, start_z) + outward,
 		], normal)
 	var mesh := ArrayMesh.new()
 	for material_key: String in ["podium_light", "tower_light"]:
@@ -286,35 +305,59 @@ func _build_tower_modules() -> void:
 	for region_value: Variant in _se.tower_accent_regions:
 		var region := region_value as Dictionary
 		_add_box("tower_accent", float(region.u_m), (float(region.bottom_y_m) + float(region.top_y_m)) * 0.5, float(region.width_m), float(region.top_y_m) - float(region.bottom_y_m), float(_contract.field_offset_m), 0.028)
-	var descriptor := _se.tower_window as Dictionary
+	_build_level7_and_joints(float(_se.length_m))
 	for u_value: Variant in _se.tower_window_columns_u_m:
-		for y_value: Variant in _se.tower_window_rows_y_m:
-			var u := float(u_value)
-			var y := float(y_value)
-			var width := float(descriptor.width_m)
-			var height := float(descriptor.height_m)
-			_new_module("IH-TW", u, y, width, height)
-			_build_framed_glazing(u, y, width, height, 0.085, "dark_charcoal")
+		_build_stack(float(u_value))
+
+
+# One continuous dark glazing stack (Sep 2025 / DBA): glass between dark frame
+# lines and a centre mullion, pale floor-line bars across it and pale panel
+# returns at its edges for a shadow line. Relief stays within the contract.
+func _build_stack(u: float) -> void:
+	var height := STACK_TOP_Y - STACK_BOTTOM_Y
+	var y := (STACK_TOP_Y + STACK_BOTTOM_Y) * 0.5
+	var inner := float(_contract.field_offset_m)
+	_new_module("IH-TW", u, y, STACK_W, height)
+	_add_box("glass_proxy", u, y, STACK_W - 0.2, height, inner, 0.032)
+	for side: float in [-1.0, 1.0]:
+		_add_box("dark_charcoal", u + side * (STACK_W * 0.5 - 0.05), y, 0.10, height, 0.032, 0.058)
+		_add_box("tower_light", u + side * (STACK_W * 0.5 + 0.07), y, 0.14, height, inner, 0.076)
+	var pitch := height / float(STACK_FLOORS)
+	for floor_index in range(1, STACK_FLOORS):
+		_add_box("tower_light", u, STACK_BOTTOM_Y + pitch * float(floor_index), STACK_W - 0.2, 0.12, 0.032, 0.062)
+
+
+# Level-7 dark glazed band between podium and tower, a podium coping under it, a
+# slab edge over it, and thin floor-line joints across the tower panels.
+func _build_level7_and_joints(length: float) -> void:
+	var inner := float(_contract.field_offset_m)
+	var band_y := (PODIUM_TOP_Y + LEVEL7_TOP_Y) * 0.5
+	_add_box("glass_proxy", length * 0.5, band_y, length - 0.02, LEVEL7_TOP_Y - PODIUM_TOP_Y, inner, 0.03)
+	var mullions := int(floor(length / 1.6))
+	for index in range(1, mullions):
+		_add_box("dark_charcoal", length * float(index) / float(mullions), band_y, 0.08, LEVEL7_TOP_Y - PODIUM_TOP_Y, 0.03, 0.05)
+	_add_box("support_grey", length * 0.5, PODIUM_TOP_Y - 0.11, length - 0.02, 0.22, inner, 0.07)
+	_add_box("tower_light", length * 0.5, LEVEL7_TOP_Y + 0.1, length - 0.02, 0.2, inner, 0.075)
+	var pitch := (STACK_TOP_Y - STACK_BOTTOM_Y) / float(STACK_FLOORS)
+	for floor_index in range(1, STACK_FLOORS):
+		_add_box("dark_charcoal", length * 0.5, STACK_BOTTOM_Y + pitch * float(floor_index), length - 0.02, 0.07, inner, 0.03)
 
 
 # Owner-approved openings on the unphotographed tower faces (2026-10-22): the
 # observed SE tower window grid on each straight run group, with the SE podium
 # row and ground glazing where the face reaches the ground.
 func _build_inferred_sides() -> void:
-	var tower := _se.tower_window as Dictionary
 	for side_value: Variant in (_layout.inferred_high_sides as Dictionary).sides:
 		var side := side_value as Dictionary
 		_active_side = side
 		_active_node_name = str(side.node)
+		_build_level7_and_joints(float(side.length_m))
 		for u_value: Variant in side.tower_window_columns_u_m:
-			for y_value: Variant in _se.tower_window_rows_y_m:
-				_new_module("IH-TW", float(u_value), float(y_value), float(tower.width_m), float(tower.height_m))
-				_build_framed_glazing(float(u_value), float(y_value), float(tower.width_m), float(tower.height_m), 0.085, "dark_charcoal")
+			_build_stack(float(u_value))
 		var podium := side.get("podium_window", {}) as Dictionary
 		for u_value: Variant in podium.get("columns_u_m", []):
-			for y_value: Variant in _se.podium_window_rows_y_m:
-				_new_module(str(podium.kind), float(u_value), float(y_value), float(podium.width_m), float(podium.height_m))
-				_build_framed_glazing(float(u_value), float(y_value), float(podium.width_m), float(podium.height_m), 0.13, "dark_charcoal")
+			for row_index in (_se.podium_window_rows_y_m as Array).size():
+				_build_podium_group(str(podium.kind), float(u_value), row_index, float(podium.height_m))
 		for module_value: Variant in side.get("single_modules", []):
 			_build_single_module(module_value as Dictionary)
 	_active_side = _se
@@ -325,13 +368,26 @@ func _build_podium_modules() -> void:
 	for family_value: Variant in _se.podium_window_families:
 		var family := family_value as Dictionary
 		for u_value: Variant in family.columns_u_m:
-			for y_value: Variant in _se.podium_window_rows_y_m:
-				var u := float(u_value)
-				var y := float(y_value)
-				var width := float(family.width_m)
-				var height := float(family.height_m)
-				_new_module(str(family.kind), u, y, width, height)
-				_build_framed_glazing(u, y, width, height, 0.13, "dark_charcoal")
+			for row_index in (_se.podium_window_rows_y_m as Array).size():
+				_build_podium_group(str(family.kind), float(u_value), row_index, float(family.height_m))
+
+
+# Tall narrow dark-framed windows (ih08/ih09/ih18, dba-50): wide families are
+# groups of three, medium pairs, narrow singles; alternate storeys shift the
+# group toward the side centre for the staggered rhythm.
+func _build_podium_group(kind: String, u: float, row_index: int, height: float) -> void:
+	var y := float((_se.podium_window_rows_y_m as Array)[row_index])
+	var lights := 3 if kind == "IH-PW-W" else (2 if kind == "IH-PW-M" else 1)
+	var light_w := 0.85
+	var gap := 0.4
+	var group_w := light_w * float(lights) + gap * float(lights - 1)
+	var shift := 0.0
+	if row_index % 2 == 1:
+		shift = 0.5 if u < float(_active_side.length_m) * 0.5 else -0.5
+	_new_module(kind, u + shift, y, group_w, height)
+	for light in lights:
+		var lu := u + shift - group_w * 0.5 + light_w * 0.5 + float(light) * (light_w + gap)
+		_build_framed_glazing(lu, y, light_w, height, 0.09, "dark_charcoal")
 
 
 func _build_single_module(module: Dictionary) -> void:

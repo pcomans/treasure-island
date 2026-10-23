@@ -369,16 +369,23 @@ func _build_variant_c_overlay(low_wall: Dictionary) -> Dictionary:
 	for value: Variant in ((_config.get("module_family", {}) as Dictionary).get("variants", []) as Array):
 		var variant := value as Dictionary
 		variants_by_id[str(variant.get("id", ""))] = variant
+	# Sides whose base is the photographed double-height storefront (built by the
+	# Isle House massing producer, 2026-10-22) skip the live-work modules.
+	var storefront_sides: Array = _config.get("storefront_side_ids", [])
+	var built := 0
 	for value: Variant in (_config.get("placements", []) as Array) + (_config.get("inferred_nnw_placements", []) as Array):
 		var placement := value as Dictionary
+		if str(placement.get("side_id", "")) in storefront_sides:
+			continue
 		_build_variant_c_module(overlay, low_wall, placement, variants_by_id[str(placement.get("variant_id", ""))] as Dictionary)
+		built += 1
 	var nnw_openings := (_config.get("inferred_nnw_placements", []) as Array).size()
 	_flush_variant_c_batches(overlay)
 	var topology := _topology_for(overlay)
 	overlay.set_meta("topology", topology.duplicate(true))
 	overlay.set_meta("field_triangle_count", int(fields_result.get("triangles", 0)))
 	overlay.set_meta("field_surface_count", int(fields_result.get("surfaces", 0)))
-	overlay.set_meta("module_count", (_config.get("placements", []) as Array).size())
+	overlay.set_meta("module_count", built)
 	overlay.set_meta("module_variant_count", variants_by_id.size())
 	overlay.set_meta("module_box_count", _module_box_count_c)
 	overlay.set_meta("upper_relief_box_count", _upper_relief_box_count_c)

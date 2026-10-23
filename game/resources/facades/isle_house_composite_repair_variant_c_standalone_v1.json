@@ -68,14 +68,14 @@
       "v_rule": "absolute_world_y_metres"
     },
     "upper_massing_bands": [
-      {"id": "TRANSFER-PLINTH", "bottom_y_m": 10.25, "top_y_m": 11.45, "offset_m": 0.078, "material_key": "transition", "truth_class": "production_inference_massing_not_story"},
-      {"id": "PODIUM-BODY", "bottom_y_m": 11.45, "top_y_m": 17.38, "offset_m": 0.036, "material_key": "podium_mid", "truth_class": "production_inference_massing_not_story"},
-      {"id": "PODIUM-CROWN", "bottom_y_m": 17.38, "top_y_m": 18.70, "offset_m": 0.064, "material_key": "podium_light", "truth_class": "production_inference_massing_not_story"},
-      {"id": "TOP-SHADOW-CAP", "bottom_y_m": 18.70, "top_y_m": 19.103, "offset_m": 0.105, "material_key": "transition", "truth_class": "production_inference_massing_not_story"}
+      {"id": "TRANSFER-PLINTH", "bottom_y_m": 10.25, "top_y_m": 10.75, "offset_m": 0.078, "material_key": "transition", "truth_class": "production_inference_massing_not_story"},
+      {"id": "PODIUM-BODY", "bottom_y_m": 10.75, "top_y_m": 18.95, "offset_m": 0.036, "material_key": "podium_mid", "truth_class": "production_inference_massing_not_story"},
+      {"id": "PODIUM-CROWN", "bottom_y_m": 18.95, "top_y_m": 19.0, "offset_m": 0.064, "material_key": "podium_light", "truth_class": "production_inference_massing_not_story"},
+      {"id": "TOP-SHADOW-CAP", "bottom_y_m": 19.0, "top_y_m": 19.103, "offset_m": 0.105, "material_key": "transition", "truth_class": "production_inference_massing_not_story"}
     ],
     "upper_relief_caps": [
       {"id": "LIVEWORK-TRANSFER-CAP", "center_y_m": 10.38, "height_m": 0.26, "depth_m": 0.16, "outward_center_m": 0.088, "material_key": "transition"},
-      {"id": "PODIUM-CROWN-CAP", "center_y_m": 18.63, "height_m": 0.22, "depth_m": 0.17, "outward_center_m": 0.090, "material_key": "podium_light"}
+      {"id": "PODIUM-CROWN-CAP", "center_y_m": 18.99, "height_m": 0.22, "depth_m": 0.17, "outward_center_m": 0.090, "material_key": "podium_light"}
     ],
     "protected_nnw_fallback": {
       "run_indices": [10, 11, 12],
@@ -169,7 +169,7 @@
     {"id": "IH-C-GW-LAYER-03", "side_id": "LOW-ENE-GARDEN-WALK", "run_index": 8, "run_u_m": 13.45, "variant_id": "LAYERED-PATIO-RECESS", "truth_class": "reversible_production_inference"},
     {"id": "IH-C-GW-WIDE-04", "side_id": "LOW-ENE-GARDEN-WALK", "run_index": 9, "run_u_m": 5.00, "variant_id": "WIDE-GALLERY-ENTRY", "truth_class": "reversible_production_inference"}
   ],
-  "inferred_nnw_upper_windows": {"rows_y_m": [12.85, 15.85], "width_m": 2.0, "height_m": 2.2, "pitch_m": 3.2, "end_margin_m": 1.45, "truth_class": "owner_approved_production_inference_unphotographed_side"},
+  "storefront_side_ids": ["LOW-WSW-AVENUE-OF-THE-PALMS"],
   "inferred_nnw_placements": [
     {"id": "IH-C-NNW-PAUSE-01", "side_id": "LOW-NNW-PROTECTED", "run_index": 10, "run_u_m": 5.4, "variant_id": "OFFSET-ENTRY-PAUSE", "truth_class": "owner_approved_production_inference_unphotographed_side"},
     {"id": "IH-C-NNW-SPLIT-02", "side_id": "LOW-NNW-PROTECTED", "run_index": 11, "run_u_m": 5.0, "variant_id": "SPLIT-GALLERY-CLUSTER", "truth_class": "owner_approved_production_inference_unphotographed_side"},

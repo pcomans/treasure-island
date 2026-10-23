@@ -42,22 +42,22 @@
       {"u_m": 16.8, "width_m": 1.15, "bottom_y_m": 19.103, "top_y_m": 71.103},
       {"u_m": 25.0, "width_m": 1.15, "bottom_y_m": 19.103, "top_y_m": 71.103}
     ],
-    "podium_window_rows_y_m": [12.0, 16.2],
+    "podium_window_rows_y_m": [11.775, 14.745, 17.715, 20.685, 23.655],
     "podium_window_families": [
-      {"kind": "IH-PW-W", "columns_u_m": [3.2, 31.0], "width_m": 2.8, "height_m": 2.7},
-      {"kind": "IH-PW-M", "columns_u_m": [8.0, 13.0, 27.0, 36.0], "width_m": 2.0, "height_m": 2.7},
-      {"kind": "IH-PW-N", "columns_u_m": [17.0, 25.0, 40.2], "width_m": 1.1, "height_m": 2.7}
+      {"kind": "IH-PW-W", "columns_u_m": [3.2, 31.0], "width_m": 2.8, "height_m": 2.35},
+      {"kind": "IH-PW-M", "columns_u_m": [8.0, 13.0, 27.0, 36.0], "width_m": 2.0, "height_m": 2.35},
+      {"kind": "IH-PW-N", "columns_u_m": [17.0, 25.0, 40.2], "width_m": 1.1, "height_m": 2.35}
     ],
     "single_modules": [
-      {"kind": "IH-CW", "u_m": 21.1, "width_m": 3.2, "height_m": 21.8, "center_y_m": 15.4},
-      {"kind": "IH-GG", "u_m": 2.3, "width_m": 3.2, "height_m": 4.0, "center_y_m": 6.3},
-      {"kind": "IH-GG", "u_m": 6.1, "width_m": 3.2, "height_m": 4.0, "center_y_m": 6.3},
-      {"kind": "IH-GG", "u_m": 9.9, "width_m": 3.2, "height_m": 4.0, "center_y_m": 6.3},
-      {"kind": "IH-ENTRY39", "u_m": 14.3, "width_m": 3.3, "height_m": 4.2, "center_y_m": 6.4},
-      {"kind": "IH-GG", "u_m": 27.5, "width_m": 3.2, "height_m": 4.0, "center_y_m": 6.3},
-      {"kind": "IH-GG", "u_m": 31.3, "width_m": 3.2, "height_m": 4.0, "center_y_m": 6.3},
-      {"kind": "IH-LVR", "u_m": 29.4, "width_m": 8.3, "height_m": 0.65, "center_y_m": 8.65},
-      {"kind": "IH-CANOPY", "u_m": 37.3, "width_m": 7.2, "height_m": 0.45, "center_y_m": 8.65}
+      {"kind": "IH-CW", "u_m": 21.1, "width_m": 3.2, "height_m": 20.5, "center_y_m": 14.75},
+      {"kind": "IH-GG", "u_m": 2.3, "width_m": 3.2, "height_m": 5.2, "center_y_m": 6.95},
+      {"kind": "IH-GG", "u_m": 6.1, "width_m": 3.2, "height_m": 5.2, "center_y_m": 6.95},
+      {"kind": "IH-GG", "u_m": 9.9, "width_m": 3.2, "height_m": 5.2, "center_y_m": 6.95},
+      {"kind": "IH-ENTRY39", "u_m": 14.3, "width_m": 3.3, "height_m": 4.6, "center_y_m": 6.65},
+      {"kind": "IH-GG", "u_m": 27.5, "width_m": 3.2, "height_m": 5.2, "center_y_m": 6.95},
+      {"kind": "IH-GG", "u_m": 31.3, "width_m": 3.2, "height_m": 5.2, "center_y_m": 6.95},
+      {"kind": "IH-LVR", "u_m": 29.4, "width_m": 8.3, "height_m": 0.65, "center_y_m": 9.95},
+      {"kind": "IH-CANOPY", "u_m": 37.3, "width_m": 7.2, "height_m": 0.45, "center_y_m": 9.95}
     ]
   },
   "partial_high_ene": {
@@ -88,10 +88,10 @@
           {"index": 2, "start_xz_m": [-128.0, 558.996], "end_xz_m": [-125.636, 563.627]}
         ],
         "tower_window_columns_u_m": [2.1, 5.3, 8.5, 11.7, 14.9],
-        "podium_window": {"kind": "IH-PW-M", "columns_u_m": [2.6, 6.6, 10.6, 14.6], "width_m": 2.0, "height_m": 2.7},
+        "podium_window": {"kind": "IH-PW-M", "columns_u_m": [2.6, 6.6, 10.6, 14.6], "width_m": 2.0, "height_m": 2.35},
         "single_modules": [
-          {"kind": "IH-GG", "u_m": 4.6, "width_m": 3.2, "height_m": 4.0, "center_y_m": 6.3},
-          {"kind": "IH-GG", "u_m": 12.4, "width_m": 3.2, "height_m": 4.0, "center_y_m": 6.3}
+          {"kind": "IH-GG", "u_m": 4.6, "width_m": 3.2, "height_m": 5.2, "center_y_m": 6.95},
+          {"kind": "IH-GG", "u_m": 12.4, "width_m": 3.2, "height_m": 5.2, "center_y_m": 6.95}
         ],
         "node": "High_WSW_SW_Runs_0_4"
       },
@@ -107,9 +107,9 @@
           {"index": 4, "start_xz_m": [-120.336, 568.336], "end_xz_m": [-117.142, 571.175]}
         ],
         "tower_window_columns_u_m": [2.5, 5.7, 8.9],
-        "podium_window": {"kind": "IH-PW-M", "columns_u_m": [3.0, 8.4], "width_m": 2.0, "height_m": 2.7},
+        "podium_window": {"kind": "IH-PW-M", "columns_u_m": [3.0, 8.4], "width_m": 2.0, "height_m": 2.35},
         "single_modules": [
-          {"kind": "IH-GG", "u_m": 5.7, "width_m": 3.2, "height_m": 4.0, "center_y_m": 6.3}
+          {"kind": "IH-GG", "u_m": 5.7, "width_m": 3.2, "height_m": 5.2, "center_y_m": 6.95}
         ],
         "node": "High_WSW_SW_Runs_0_4"
       },
@@ -126,10 +126,10 @@
           {"index": 9, "start_xz_m": [-89.959, 537.959], "end_xz_m": [-95.775, 526.591]}
         ],
         "tower_window_columns_u_m": [2.421, 5.621, 8.821, 12.021],
-        "podium_window": {"kind": "IH-PW-M", "columns_u_m": [2.6, 7.2, 11.8], "width_m": 2.0, "height_m": 2.7},
+        "podium_window": {"kind": "IH-PW-M", "columns_u_m": [2.6, 7.2, 11.8], "width_m": 2.0, "height_m": 2.35},
         "single_modules": [
-          {"kind": "IH-GG", "u_m": 4.6, "width_m": 3.2, "height_m": 4.0, "center_y_m": 6.3},
-          {"kind": "IH-GG", "u_m": 10.0, "width_m": 3.2, "height_m": 4.0, "center_y_m": 6.3}
+          {"kind": "IH-GG", "u_m": 4.6, "width_m": 3.2, "height_m": 5.2, "center_y_m": 6.95},
+          {"kind": "IH-GG", "u_m": 10.0, "width_m": 3.2, "height_m": 5.2, "center_y_m": 6.95}
         ]
       },
       {
