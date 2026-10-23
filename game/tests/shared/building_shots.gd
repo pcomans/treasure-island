@@ -17,9 +17,27 @@ extends SceneTree
 ## --views-batch FILE: only the focused views of several buildings in one world load,
 ## [{"source": "KEY", "plan": "views.json"}, ...], each plan a --views file for its
 ## source, saved to OUT/KEY/detail-NAME.png. Fixed-pose views only (no closeup,
-## context, island or overhead shots); any bad entry fails the run.
+## context or overhead shots; --island may be added); any bad entry fails the run.
+## --neutral-lighting: screenshots only. Switches the environment, sky and sun back
+##   to the neutral pre-2026-10-23 daylight (NEUTRAL_LIGHTING) for colour matching
+##   against reference photos. Gameplay always uses main.tscn's warm daylight.
 
 const WorldHarness := preload("res://game/tests/shared/world_harness.gd")
+
+## The neutral daylight in main.tscn before the 2026-10-23 warm-light change,
+## restored by --neutral-lighting as [target, property, value].
+const NEUTRAL_LIGHTING := [
+	["environment", "ambient_light_color", Color(0.64, 0.60, 0.53)],
+	["environment", "ambient_light_energy", 0.75],
+	["environment", "ambient_light_sky_contribution", 0.45],
+	["environment", "fog_light_color", Color(0.72, 0.80, 0.88)],
+	["environment", "fog_density", 0.00012],
+	["environment", "fog_aerial_perspective", 0.0],
+	["sky", "sky_top_color", Color(0.24, 0.44, 0.78)],
+	["sky", "sky_horizon_color", Color(0.72, 0.80, 0.88)],
+	["sky", "sky_curve", 0.09],
+	["sun", "light_color", Color(1.0, 0.97, 0.92)],
+]
 
 var _h: WorldHarness
 var _errors: Array[String] = []
@@ -38,8 +56,8 @@ func _run() -> void:
 	var batch: Array[Dictionary] = []
 	if args.has("views-batch"):
 		batch = _batch_entries(args["views-batch"])
-		if batch.is_empty() or args.has("source") or args.has("views") or args.has("island") or args.has("overhead"):
-			_fail("--views-batch needs a nonempty list of unique {source, plan} entries and no other shot option")
+		if batch.is_empty() or args.has("source") or args.has("views") or args.has("overhead"):
+			_fail("--views-batch needs a nonempty list of unique {source, plan} entries and no shot option other than --island")
 			return
 	DirAccess.make_dir_recursive_absolute(out)
 	_h = WorldHarness.new(self)
@@ -48,6 +66,8 @@ func _run() -> void:
 		_fail(error)
 		return
 	print("RENDERER: %s / %s" % [RenderingServer.get_video_adapter_name(), DisplayServer.get_name()])
+	if args.has("neutral-lighting"):
+		await _use_neutral_lighting()
 	if args.has("source"):
 		await _building_shots(str(args.source), out)
 	if args.has("views"):
@@ -69,6 +89,19 @@ func _run() -> void:
 			push_error(message)
 	_h.main.queue_free()
 	quit(0 if _errors.is_empty() else 1)
+
+
+## Screenshot-only: the neutral daylight for colour matching. Waits for the sky
+## radiance map to update before any capture.
+func _use_neutral_lighting() -> void:
+	var environment := (_h.main.get_node("WorldEnvironment") as WorldEnvironment).environment
+	var targets := {"environment": environment, "sky": environment.sky.sky_material, "sun": _h.main.get_node("Sun")}
+	for entry: Array in NEUTRAL_LIGHTING:
+		(targets[entry[0]] as Object).set(entry[1] as String, entry[2])
+	for _i in 30:
+		await process_frame
+	await RenderingServer.frame_post_draw
+	print("LIGHTING: neutral (pre-2026-10-23 daylight, screenshots only)")
 
 
 func _focused_views(source: String, path: String, out: String) -> void:
