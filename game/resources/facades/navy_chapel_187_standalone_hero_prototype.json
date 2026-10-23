@@ -292,7 +292,7 @@
         32,
         33
       ],
-      "policy": "Exact source XZ/bottoms preserved; coherent quiet cream finish with eave/rake boards only, no ambiguous rear/wing opening schedule. Returns 5 and 15 and the ENE outer wing gable 19-21 stay protected."
+      "policy": "Exact source XZ/bottoms preserved; coherent quiet cream finish with boxed eaves, bargeboards and the same roof construction only, no ambiguous rear/wing opening schedule. Returns 5 and 15 and the ENE outer wing gable 19-21 stay protected."
     },
     {
       "id": "NC-REAR-GABLE-CLOSURE",
@@ -304,12 +304,12 @@
     "main_gable_width": 16.361515822196925,
     "main_gable_length": 42.75,
     "main_gable_front_inset": 0.0,
-    "main_gable_eave_y": 9.8,
+    "main_gable_eave_y": 9.1,
     "main_gable_ridge_y": 15.5,
     "belfry_center_inward_from_sse_m": 15.0,
     "belfry_plan_width": 6.4,
     "belfry_plan_depth": 6.4,
-    "belfry_base_y": 13.6,
+    "belfry_base_y": 12.4,
     "belfry_wall_top_y": 20.1,
     "belfry_wall_top_lip_policy": "flush with 6.4m tower body; inset curb and pitched cap retained; prevents far lip edge projecting outside the body silhouette in low gameplay views",
     "belfry_cap_width": 6.05,
@@ -344,20 +344,23 @@
     ],
     "side_frame_projection": 0.2,
     "opening_group_recess_depth": 0.28,
-    "opening_group_hall_width": 2.16,
+    "opening_group_hall_width": 2.75,
     "opening_group_ene_hall_width": 2.75,
-    "opening_group_hall_bottom_y": 5.0,
-    "opening_group_hall_top_y": 8.85,
-    "opening_group_wsw_count": 5,
+    "opening_group_hall_bottom_y": 5.45,
+    "opening_group_hall_top_y": 8.15,
     "opening_group_wing_chain_center_m": 3.3,
     "opening_group_wing_width": 3.0,
-    "opening_group_wing_bottom_y": 5.5,
-    "opening_group_wing_top_y": 7.2,
+    "opening_group_wing_bottom_y": 5.4,
+    "opening_group_wing_top_y": 6.95,
     "opening_group_wing_lights": 4,
     "belfry_side_unit_width": 1.8,
     "belfry_side_unit_height": 4.8,
     "belfry_side_unit_center_y": 17.1,
-    "plinth_top_y": 4.55
+    "plinth_top_y": 4.55,
+    "roof_eave_overhang_m": 0.45,
+    "roof_rake_overhang_m": 0.35,
+    "wing_eave_overhang_m": 0.4,
+    "roof_fascia_depth_m": 0.24
   },
   "wing_and_junction_assemblies": [
     {
@@ -366,8 +369,8 @@
       "kind": "window",
       "center_m": 3.967,
       "width_m": 1.4,
-      "bottom_y": 5.5,
-      "top_y": 7.4,
+      "bottom_y": 5.3,
+      "top_y": 6.95,
       "lights": 3,
       "basis": "Jul2016 observed tall narrow triplet; centre under wing ridge and size are production inference"
     },
@@ -377,8 +380,8 @@
       "kind": "window",
       "center_m": 3.7,
       "width_m": 2.6,
-      "bottom_y": 5.9,
-      "top_y": 7.45,
+      "bottom_y": 5.75,
+      "top_y": 6.95,
       "lights": 3,
       "basis": "Jul2016 observed wide three-light window; station and size are production inference"
     },
@@ -390,7 +393,7 @@
       "width_m": 1.5,
       "land_y": 4.03,
       "support_y": 4.52,
-      "top_y": 7.0,
+      "top_y": 6.95,
       "leaves": 2,
       "basis": "Jul2016 observed paired door at the wing/hall junction; run-2 host allocation is production association. land_y is interpolated LAND (4.029-4.035; visible area +0.04), distinct from inferred platform support_y4.52 for leaves and outer jambs. Closed back/reveals reach source bottoms4.009-4.015; current survival and dimensions unclaimed"
     },
@@ -402,7 +405,7 @@
       "width_m": 1.5,
       "land_y": 4.025,
       "support_y": 4.52,
-      "top_y": 7.0,
+      "top_y": 6.95,
       "leaves": 2,
       "basis": "Jul2016 observed second paired door on the WSW-facing junction projection; host allocation is production association. land_y interpolated4.019-4.031 stays distinct from inferred common platform support_y4.52; closed back/reveals reach source bottoms3.999-4.011. Shared approach and one flight inferred from the historical image, not surveyed or verified current"
     },
@@ -505,7 +508,7 @@
       "-t WSW (Jan2023)"
     ],
     "reference": "Jul2016 Google Maps contributor (Larry Olson) WSW wing gable/side/junction doors; Jul2023 Commons thewub complete ENE hall and partly obstructed low junction; Sep2025 SSE + partial ENE + SSE wing front; Jan2023 WSW hall and belfry side; Jun2026 footer (Sep2026 contributor panel) partial rear/ENE-wing and belfry +t side; Dec2016 SSE entry/gable detail; Engeo2020 WSW aerial; undated museum belfry/roof",
-    "inference": "Shared recessed opening groups retain WSW hall, four ENE hall groups, wing-front and WSW wing groups. Closed door backs/reveals reach source bottoms. WSW run2 and runs3-4 leaves/outer jambs stand on a common platform at4.52 with one short flight; qualified ENE16 stays on local land4.05. LAND measurements remain separate from platform support. Jul2016 supports the raised approach relationship, not surveyed step dimensions or current survival; no canopy added. Tower body, outward divided side relief, opaque pyramidal metal cap and restrained ribs are unsurveyed production inference. Successful SSE composition and protected rear/returns remain unchanged; no hidden openings or interiors inferred.",
+    "inference": "Shared recessed opening groups retain WSW hall, four ENE hall groups, wing-front and WSW wing groups. Closed door backs/reveals reach source bottoms. WSW run2 and runs3-4 leaves/outer jambs stand on a common platform at4.52 with one short flight; qualified ENE16 stays on local land4.05. LAND measurements remain separate from platform support. Jul2016 supports the raised approach relationship, not surveyed step dimensions or current survival; no canopy added. Tower body, outward divided side relief, opaque pyramidal metal cap and restrained ribs are unsurveyed production inference. 2026-10-22 L1/L2/L3 pass: visible eave lowered to the 2016/2023 photos (hall roof plane 9.1 at the wall, 0.45m boxed overhang; wings 7.75, 0.4m), WSW hall groups 5 -> 4 mirroring ENE, hall groups raised under the soffit with a transom row, SSE porch platform and three-riser flight with the canopy at the eave line, lean-to roofs over the photographed WSW and ENE junctions; heights scaled from the Dec2016 frontal photo, not surveyed. Protected rear/returns keep their faces; no hidden openings or interiors inferred.",
     "material_hierarchy": "Tower-entry005 adds a distinct restrained matte metal cap above the taller square tower and a common pale raised WSW approach. Retained warm coursed main/wing roofing, warm-cream plaster versus whiter trim, plinth, lower-gable panels and timber entry; original procedural materials with no reference pixels; dimensions and cadence remain production inference"
   }
 }

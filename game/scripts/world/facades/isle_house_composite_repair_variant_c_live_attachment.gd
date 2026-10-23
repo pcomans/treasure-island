@@ -110,7 +110,7 @@ static func _runtime_package_is_clean() -> bool:
 		"res://game/scripts/world/facades/isle_house_composite_repair_variant_c_live_attachment.gd",
 		REPAIR_FACTORY_PATH,
 		REVIEWED_VARIANT_C_FACTORY_PATH,
-		"res://game/resources/facades/isle_house_composite_repair_variant_c_standalone_v1.json",
+		REPAIR_FACTORY.VARIANT_C_CONFIG_PATH,
 	]
 	for path: String in paths:
 		if not _runtime_path_is_allowed(path) or not FileAccess.file_exists(path):
@@ -142,8 +142,10 @@ static func _forbidden_tokens() -> Array[String]:
 
 
 static func _approved_output_matches(node: Node3D) -> bool:
-	if node.get_meta("quiet_nnw_run_indices", []) != [10, 11, 12] \
-		or int(node.get_meta("quiet_nnw_opening_count", -1)) != _configured_nnw_opening_count() \
+	var nnw_openings := _built_nnw_module_count(node)
+	if node.get_meta("nnw_run_indices", []) != [10, 11, 12] \
+		or nnw_openings != _configured_nnw_opening_count() \
+		or int(node.get_meta("nnw_opening_count", -1)) != nnw_openings \
 		or node.get_meta("upper_band_ids", []) != ["TRANSFER-PLINTH", "PODIUM-BODY", "PODIUM-CROWN", "TOP-SHADOW-CAP"]:
 		return false
 	if node.get_node_or_null("IsleHouse39BrutonLowLiveAttachment") != null \
@@ -157,8 +159,17 @@ static func _approved_output_matches(node: Node3D) -> bool:
 	return true
 
 
+## Module nodes the overlay actually built on the NNW return runs (10-12).
+static func _built_nnw_module_count(node: Node3D) -> int:
+	var count := 0
+	for child: Node in node.get_children():
+		if child.has_meta("placement_id") and int(child.get_meta("run_index", -1)) in [10, 11, 12]:
+			count += 1
+	return count
+
+
 static func _configured_nnw_opening_count() -> int:
-	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://game/resources/facades/isle_house_composite_repair_variant_c_standalone_v1.json"))
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(REPAIR_FACTORY.VARIANT_C_CONFIG_PATH))
 	if not (parsed is Dictionary):
 		return -1
 	return ((parsed as Dictionary).get("inferred_nnw_placements", []) as Array).size()

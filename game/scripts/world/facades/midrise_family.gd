@@ -386,12 +386,14 @@ static func _ground_y(ctx: Ctx, p: Vector2) -> float:
 	return ctx.floor_y
 
 
-## Highest frozen terrain along a face between two stations (ends and 0.5 m steps).
-static func _ground_max(ctx: Ctx, face: Face, s0: float, s1: float) -> float:
-	var high := maxf(_ground_y(ctx, face.a + face.d * s0), _ground_y(ctx, face.a + face.d * s1))
+## Highest frozen terrain along a face between two stations (ends and 0.5 m steps),
+## on a line `inward` metres behind the face.
+static func _ground_max(ctx: Ctx, face: Face, s0: float, s1: float, inward := 0.0) -> float:
+	var back := face.n * inward
+	var high := maxf(_ground_y(ctx, face.a + face.d * s0 - back), _ground_y(ctx, face.a + face.d * s1 - back))
 	var s := s0 + 0.5
 	while s < s1:
-		high = maxf(high, _ground_y(ctx, face.a + face.d * s))
+		high = maxf(high, _ground_y(ctx, face.a + face.d * s - back))
 		s += 0.5
 	return high
 
@@ -483,6 +485,13 @@ static func _make_blocks(ctx: Ctx) -> void:
 			block.railing = false
 			block.top_y = block.roof_y
 			block.wall_top = block.roof_y
+		# The deck underside also sets what the block hides of its neighbours (_spans).
+		if item.has("deck"):
+			var deck: Variant = item.deck
+			var deck_t := float((deck as Dictionary).get("t", 0.3)) if deck is Dictionary else NAN
+			if not (_in_range(deck_t, 0.0, 2.0) and deck_t > 0.0):
+				ctx.errors.append("block %s deck needs t in (0, 2] m" % block.id)
+				return
 		ctx.blocks.append(block)
 	if total > footprint_area + 0.05:
 		ctx.errors.append("blocks overlap or exceed the footprint (%.3f > %.3f m2)" % [total, footprint_area])
@@ -745,7 +754,7 @@ static func _spans(ctx: Ctx, block: Block, i: int) -> Array:
 			var lo := maxf(0.0, minf((qa - a).dot(d), (qb - a).dot(d)))
 			var hi := minf(length, maxf((qa - a).dot(d), (qb - a).dot(d)))
 			if hi - lo > 0.001:
-				covers.append([lo, hi, other.roof_y])
+				covers.append([lo, hi, other.roof_y, _cover_floor(other)])
 	var cuts: Array = [0.0, length]
 	for cover: Array in covers:
 		cuts.append(cover[0])
@@ -758,10 +767,19 @@ static func _spans(ctx: Ctx, block: Block, i: int) -> Array:
 		if s1 - s0 < 0.001:
 			continue
 		var mid := (s0 + s1) * 0.5
-		var bottom := -INF
+		# A cover hides the band from its floor (cover[3]) up to its roof (cover[2]).
+		# A span has one bottom, so the face shows above the bands that join up from
+		# the ground. A deck band clear of them leaves the wall below the deck
+		# exposed; that wall then runs on through the slab band, closing the slab end.
+		var bands: Array = []
 		for cover: Array in covers:
 			if float(cover[0]) <= mid and mid <= float(cover[1]):
-				bottom = maxf(bottom, float(cover[2]))
+				bands.append(cover)
+		bands.sort_custom(func(p: Array, q: Array) -> bool: return float(p[3]) < float(q[3]))
+		var bottom := -INF
+		for band: Array in bands:
+			if float(band[3]) <= bottom + 0.000001:
+				bottom = maxf(bottom, float(band[2]))
 		if bottom >= block.roof_y - 0.000001:
 			continue
 		var ground := bottom == -INF
@@ -770,6 +788,15 @@ static func _spans(ctx: Ctx, block: Block, i: int) -> Array:
 		else:
 			spans.append({"s0": s0, "s1": s1, "ground": ground, "y": 0.0 if ground else bottom})
 	return spans
+
+
+## Lowest level a block hides of a neighbour's wall: the deck underside of a flat
+## deck block (open beneath it), else the ground (-INF).
+static func _cover_floor(block: Block) -> float:
+	var deck: Dictionary = block.cfg.get("deck", {})
+	if block.form != "flat" or deck.is_empty():
+		return -INF
+	return block.roof_y - float(deck.get("t", 0.3))
 
 
 static func _block_faces(ctx: Ctx, block: Block) -> void:
@@ -1563,18 +1590,20 @@ static func _stair_bay_opening(ctx: Ctx, face: Face, feature: Dictionary, s0: fl
 	if block.storeys < 2 or b - a < 2.0 or depth < 1.2 or depth > 4.0:
 		ctx.errors.append(label + " needs two storeys, a clear width of at least 2 m and a depth of 1.2-4 m")
 		return {}
-	for p: Vector2 in [face.a + face.d * a - face.n * depth, face.a + face.d * b - face.n * depth]:
-		if not Geometry2D.is_point_in_polygon(p, block.poly):
+	var back0 := face.a + face.d * a - face.n * depth
+	var back1 := face.a + face.d * b - face.n * depth
+	if not Geometry2D.is_point_in_polygon(back0, block.poly) or not Geometry2D.is_point_in_polygon(back1, block.poly):
+		ctx.errors.append(label + " recess leaves its block")
+		return {}
+	# Both back corners inside is not enough for a concave block: the back wall may
+	# not cross the outline either.
+	for i in block.poly.size():
+		if Geometry2D.segment_intersects_segment(back0, back1, block.poly[i], block.poly[(i + 1) % block.poly.size()]) != null:
 			ctx.errors.append(label + " recess leaves its block")
 			return {}
-	# Recess floor: above the frozen grade along both its front and back lines.
-	var y0 := block.floors[0]
-	var s := a
-	while s <= b + 0.001:
-		for d: float in [0.0, depth]:
-			y0 = maxf(y0, _ground_y(ctx, face.a + face.d * minf(s, b) - face.n * d))
-		s += 0.5
-	y0 += 0.02
+	# Recess floor: above the frozen grade along both its front and back lines,
+	# sampled from end to end as for openings.
+	var y0 := maxf(block.floors[0], maxf(_ground_max(ctx, face, a, b), _ground_max(ctx, face, a, b, depth))) + 0.02
 	var y1 := block.roof_y - float(feature.get("head", 0.35))
 	if y0 >= block.floors[1] - 0.5 or y1 <= block.floors[block.storeys - 1] + 1.0:
 		ctx.errors.append(label + " has no room between grade and roof")
@@ -1582,7 +1611,7 @@ static func _stair_bay_opening(ctx: Ctx, face: Face, feature: Dictionary, s0: fl
 	return {"s0": a, "s1": b, "y0": y0, "y1": y1, "kind": "stair_bay", "spec": feature, "k": 0}
 
 
-## Open stair bay: side reveals and soffit, a dark back wall, the recess floor
+## Open stair bay: side reveals and soffit, a back wall (default render), the recess floor
 ## behind a solid ground-floor guard (the bay is not a walkable route), and per
 ## storey two stepped flights around a half landing under a full floor landing.
 static func _stair_bay(ctx: Ctx, face: Face, spec: Dictionary, wall_mat: String, s0: float, s1: float, y0: float, y1: float) -> void:
@@ -2126,7 +2155,8 @@ static func _apron(ctx: Ctx, apron: Dictionary) -> void:
 ## Open side: posts (support) at the face start and every `module` along it,
 ## optionally over a knee wall (wall role, both faces and a cap) with an
 ## entrance `gap` in footprint stations. `post_every` keeps one face start in n
-## (pavilions with many short faces).
+## (pavilions with many short faces); `posts: false` leaves the side without posts
+## (a deck carried by its neighbours).
 static func _open_face(ctx: Ctx, face: Face) -> void:
 	var block := face.block
 	var spec: Dictionary = face.scheme.open
@@ -2142,6 +2172,11 @@ static func _open_face(ctx: Ctx, face: Face) -> void:
 	if not deck.is_empty() and not (_in_range(float(deck.get("t", 0.3)), 0.0, 2.0) and float(deck.get("t", 0.3)) > 0.0):
 		ctx.errors.append("block %s deck needs t in (0, 2] m" % block.id)
 		return
+	var posts_value: Variant = spec.get("posts", true)
+	if not posts_value is bool:
+		ctx.errors.append("block %s open posts must be true or false" % block.id)
+		return
+	var with_posts: bool = posts_value
 	var gap: Array = knee.get("gap", [])
 	var g0 := INF
 	var g1 := -INF
@@ -2154,7 +2189,7 @@ static func _open_face(ctx: Ctx, face: Face) -> void:
 		var b := float(span.s1)
 		var stations: Array = []
 		var x := a
-		while x < b - 0.05:
+		while with_posts and x < b - 0.05:
 			stations.append(x)
 			x += module
 		for i in stations.size():

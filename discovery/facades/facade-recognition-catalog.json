@@ -42,7 +42,8 @@
         "game/resources/materials/world/building_1/building_1_public_stucco_base.tres",
         "game/resources/materials/world/building_1/building_1_public_stucco_field.tres",
         "game/resources/materials/world/building_1/building_1_public_stucco_trim.tres",
-        "game/resources/materials/world/building_1/building_1_public_window_metal.tres"
+        "game/resources/materials/world/building_1/building_1_public_window_metal.tres",
+        "game/resources/materials/world/building_1/building_1_emblem_blue.tres"
       ],
       "runtime_config_path": "game/resources/facades/building_1_hero_model.json",
       "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
@@ -10244,10 +10245,20 @@
           "review_id": "chapel-flight-code-final-lip-integration-20261010",
           "review_kind": "independent_code_review",
           "status": "accept"
+        },
+        {
+          "review_id": "code-review-ferryl3-chapel-20261022",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-ferryl3-chapel-r1b-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
         }
       ],
       "anchor_source_key": "w291189336",
-      "stairs": [{"bottom": [-120.3458, 632.5684], "top": [-118.25, 631.46]}],
+      "stairs": [{"bottom": [-120.3458, 632.5684], "top": [-118.25, 631.46]}, {"bottom": [-96.022, 650.416], "top": [-97.331, 647.941]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -11660,6 +11671,16 @@
           "review_id": "building-1-tower-grounded-correction-2026-09-04",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "code-review-b1l3-20261022",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-b1l3-r7-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
         }
       ],
       "anchor_source_key": "w1222720021",
@@ -11760,9 +11781,20 @@
           "review_id": "p1-existing-live-revalidation-2026-09-04:hawkins",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "code-review-ferryl3-hawkins-20261023",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-ferryl3-hawkins-r3-20261023",
+          "review_kind": "visual",
+          "status": "accepted"
         }
       ],
       "anchor_source_key": "w1249412093",
+      "stairs": [{"bottom": [-114.297, 467.3], "top": [-112.17, 466.187]}, {"bottom": [-108.73, 477.931], "top": [-106.604, 476.818]}, {"bottom": [-103.164, 488.562], "top": [-101.037, 487.449]}, {"bottom": [-97.597, 499.193], "top": [-95.471, 498.079]}, {"bottom": [-92.031, 509.824], "top": [-89.905, 508.71]}, {"bottom": [-44.184, 468.563], "top": [-46.312, 469.674]}, {"bottom": [-49.737, 457.925], "top": [-51.865, 459.036]}, {"bottom": [-55.291, 447.288], "top": [-57.418, 448.398]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -11874,6 +11906,16 @@
           "review_id": "isle-house-variant-c-live-replacement-2026-09-04",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "code-review-ferryl3-islehouse-20261023",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-ferryl3-islehouse-r2-20261023",
+          "review_kind": "visual",
+          "status": "accepted"
         }
       ],
       "anchor_source_key": "w1249412094",
@@ -12390,6 +12432,16 @@
           "review_id": "building1-opus-candidate005-2026-10-16:shared_zoom_review_sol",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "code-review-b1l3-20261022",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-b1l3-r7-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
         }
       ],
       "anchor_source_key": "r16681702",
@@ -12412,32 +12464,9 @@
       "legacy_adapter_ids": [],
       "protected_scopes": [
         {
-          "reason": "Original rear and inner-return wall faces, material, collision and source ownership remain protected. Owner-released lower ribbon on runs 70\u201383 includes disclosed continuity inference on 78\u201379; only the reference-visible drum-end opening pair is added on the exposed central-tier join derived from runs 40/41 and bounded by run 38. The remaining upper drum stays blank; no hidden annex or interior is inferred.",
+          "reason": "Inner-return wall faces (runs 97\u2013109), material, collision and source ownership remain protected. ROOT released runs 70\u201392 on 2026-10-22 (owner OK to rework buildings that fall significantly short): the rear podium (runs 72\u201383) and north lower ring (runs 84\u201395) now carry a railed terrace and a setback upper wall per the Sep 2025 north and 18 Jul 2023 rear views; the accepted rear ribbon keeps its bay design and moved to 8.2\u201311.0 m, its photo-measured place in the podium. The observed small and tall drum-end openings moved from the drum join (runs 40/41) onto the SE shoulder block (runs 69\u201370). The upper drum stays blank; no hidden annex, unmapped utility block or interior is modelled.",
           "receiver_key": "building:r16681702:wall",
           "run_indices": [
-            70,
-            71,
-            72,
-            73,
-            74,
-            75,
-            76,
-            77,
-            78,
-            79,
-            80,
-            81,
-            82,
-            83,
-            84,
-            85,
-            86,
-            87,
-            88,
-            89,
-            90,
-            91,
-            92,
             97,
             98,
             99,

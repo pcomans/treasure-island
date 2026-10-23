@@ -638,7 +638,7 @@
       "open": {
         "post_w": 0.3,
         "module": 60.0,
-        "post_every": 100000,
+        "posts": false,
         "post_material": "metal"
       }
     },
@@ -818,9 +818,9 @@
       "clip": [
         {
           "edge": 70,
-          "s_max": -0.075,
+          "s_max": 0.004,
           "s_min": -11.4,
-          "min": 2.05
+          "min": 2.0
         }
       ],
       "parapet": {
@@ -861,9 +861,9 @@
       "clip": [
         {
           "edge": 70,
-          "s_max": -0.075,
-          "s_min": -9.65,
-          "max": -0.45
+          "s_max": 0.004,
+          "s_min": -9.7,
+          "max": -0.4
         }
       ],
       "parapet": {
@@ -885,10 +885,10 @@
       "clip": [
         {
           "edge": 70,
-          "s_max": -0.075,
-          "s_min": -9.65,
+          "s_max": 0.004,
+          "s_min": -9.7,
           "min": -0.4,
-          "max": 0.8
+          "max": 0.85
         }
       ],
       "parapet": {
@@ -910,8 +910,8 @@
       "clip": [
         {
           "edge": 70,
-          "s_max": -0.075,
-          "s_min": -9.65,
+          "s_max": 0.004,
+          "s_min": -9.7,
           "min": 0.85,
           "max": 2.0
         }

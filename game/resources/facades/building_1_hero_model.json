@@ -28,14 +28,14 @@
     "north_wing_inward_depth": 11.0,
     "central_inward_depth": 25.0,
     "south_wing_inward_depth": 11.0,
-    "tower_platform_top_y": 27.35,
-    "tower_glass_base_y": 27.35,
-    "tower_glass_top_y": 32.65,
-    "tower_roof_peak_y": 35.4,
-    "tower_platform_plan_scale": 1.28
+    "tower_platform_top_y": 29.13,
+    "tower_glass_base_y": 29.13,
+    "tower_glass_top_y": 34.43,
+    "tower_roof_peak_y": 37.18,
+    "tower_platform_plan_scale": 1.0
   },
   "massing_chains": {
-    "north_three_story_runs": [93, 94, 95, 96, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+    "north_three_story_runs": [96, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
     "central_four_story_runs": [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43],
     "south_three_story_runs": [44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69]
   },
@@ -50,8 +50,8 @@
     "upper_lights_per_window": 10,
     "lower_windows_per_wing": 7,
     "lower_lights_per_window": 6,
-    "north_face_window_runs": [93, 94, 95, 96],
-    "north_face_windows_per_floor": 6,
+    "north_face_window_runs": [96],
+    "north_face_windows_per_floor": 2,
     "north_pavilion": {
       "center_runs": [6],
       "flank_runs": [[3, 4], [8]],
@@ -80,8 +80,7 @@
     ],
     "se_face_runs": [63, 64, 65, 66, 67, 68, 69],
     "rear_ribbon_host_chains": [[70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83]],
-    "drum_end_openings": {"join_runs": [40, 41], "occluding_inner_run": 38},
-    "protected_seam_piers": {"north_run_start": 93, "south_run_end": 69}
+    "protected_seam_piers": {"north_run_start": 96, "south_run_end": 69}
   },
   "truth_boundary": {
     "role": "source_anchored_recognizability_hero_production_inference",

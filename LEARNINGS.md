@@ -736,3 +736,21 @@ import. Raw GitHub links can return pointer text. On this port, replacing pointe
 bytes with the authorized PNGs did not clear Godot's generated `valid=false`
 sidecars; remove only the newly failed sidecars and import again, then check
 runtime loading as well as the import log's exit status.
+## Measure the glass fraction before re-cutting openings
+
+On 2026-10-22, Isle House r1b and Hawkins r2 both got an L2 HOLD for the same reason. The row counts matched the photos, but the window shapes did not. Hawkins r2 had about 27% glass by geometry, and the reviewer read 15–20% in the renders. On one plane of the hk07 reference, window units cover about 48% of each bay and clear glass about 36%. Hawkins r3 was fixed in one round after measuring it: a narrow plus a wide unit per bay, with units at about 47% and glass at about 40%.
+
+Before re-cutting openings at L2, measure on one reference plane:
+- the share of each bay that is glass or window unit;
+- the unit's width and height relative to the storey;
+- the pane layout.
+
+Compare those numbers with the model's geometry, and record both, before spending a render. Matching opening counts alone does not establish the opening family.
+
+## Put every new opaque collision body on the spray layer
+
+Spray rays use only the spray layer (`1 << 2`). In two passes on 2026-10-22, a producer added solid bodies on `PHYSICS_WORLD_SOLID` only, so spray passed through them and tagged hidden receiver walls behind:
+- the Isle House massing volumes (fixed in 9f7fdeb);
+- the Hawkins stoop platforms and planters (fixed in the Hawkins review fix).
+
+Any new opaque collision body a producer adds (massing, stoops, rails, canopies) must be on `PHYSICS_WORLD_SOLID | 1 << 2`, with `receiver_kind` none, so that it occludes spray and refuses the tag. As a prevention check in fit, aim one spray at each new solid and expect a refusal (`receiver_rejection`).

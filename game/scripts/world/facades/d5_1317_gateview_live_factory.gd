@@ -91,11 +91,17 @@ func configure_records(wall:Dictionary,roof:Dictionary,neutral_wall:StandardMate
 	for node:Node in get_children():
 		if node is MeshInstance3D:
 			var count:int=node.mesh.surface_get_array_index_len(0)/3;batches[str(node.name)]=count;triangles+=count
-	var metadata:Dictionary={"source_key":"w95934125","mapped_public_run_indices":TARGET_RUNS,"protected_run_indices":PROTECTED_RUNS,"baseline_exact_source":baseline,"original_roof_22_triangles_preserved":true,"public_shallow_roof_added":not baseline,"interior_modeled":false,"source_terrain_untouched":true,"module_dimensions_and_counts":"production_inference","visual_batch_triangles":batches,"visual_triangles":triangles,"mesh_instances":batches.size(),"surfaces":batches.size(),"static_bodies":1,"shapes":collision_counts.size(),"collision_triangles":collision_total,"collision_groups":collision_counts,"ground_module_groups":0 if baseline else 12,"canopies":0 if baseline else 3,"address_mark":"" if baseline else "1317","address_suffix_claim":false}
+	var metadata:Dictionary={"source_key":"w95934125","mapped_public_run_indices":TARGET_RUNS,"protected_run_indices":PROTECTED_RUNS,"baseline_exact_source":baseline,"original_roof_22_triangles_preserved":true,"public_shallow_roof_added":not baseline,"interior_modeled":false,"source_terrain_untouched":true,"module_dimensions_and_counts":"production_inference","visual_batch_triangles":batches,"visual_triangles":triangles,"mesh_instances":batches.size(),"surfaces":batches.size(),"static_bodies":1,"shapes":collision_counts.size(),"collision_triangles":collision_total,"collision_groups":collision_counts,"ground_module_groups":0 if baseline else _ground_module_groups(config),"canopies":0 if baseline else 3,"address_mark":"" if baseline else "1317","address_suffix_claim":false}
 	for key:String in metadata:set_meta(key,metadata[key])
 	_last_result={"ok":true,"node":self,"metadata":metadata}
 	return _last_result
 
+## Ground opening groups built: the front ground_groups plus the inferred rear ground modules.
+static func _ground_module_groups(config:Dictionary) -> int:
+	var count:=(config.get("ground_groups",[]) as Array).size()
+	for module:Variant in (config.get("inferred_rear_modules",{}) as Dictionary).get("modules",[]):
+		if module is Dictionary and str((module as Dictionary).get("kind",""))=="ground":count+=1
+	return count
 static func _decode_bucket(raw:Dictionary) -> Dictionary:
 	var out:=KIT.new_bucket()
 	for i in range(0,raw.vertices.size(),3):out.vertices.append(_v(raw.vertices.slice(i,i+3)));out.normals.append(_v(raw.normals.slice(i,i+3)))

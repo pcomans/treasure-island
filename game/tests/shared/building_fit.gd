@@ -351,6 +351,8 @@ func _walk_start(center: Vector3, side: Vector3, half_depth: float, half_width: 
 				var hit_name := "no support" if ground.is_empty() else str((ground.collider as Node).get_path())
 				if not ground.is_empty():
 					blockers[blockers.size() - 1] = _other_building(ground.collider)
+				if blockers[blockers.size() - 1] == "":
+					blockers[blockers.size() - 1] = _beyond_parent_roof(xz)
 				rejected.append(candidate + ("%.1f m: no walkable ground (%s)" % [margin, hit_name]))
 				continue
 			var descent := _preflight_descent(ground.position)
@@ -390,7 +392,8 @@ func _walk_start(center: Vector3, side: Vector3, half_depth: float, half_width: 
 ## A side is site-blocked only when every candidate start on it lies outside the
 ## playable boundary, inside another building's frozen roof footprint, or was
 ## rejected by another building's body (its ground ray hit that building, or the
-## drop pose or corridor was obstructed by it). Returns the reason, or "" when any
+## drop pose or corridor was obstructed by it), or, for a rooftop-approach
+## source, lies beyond its parent's roof edge. Returns the reason, or "" when any
 ## candidate is ordinary ground, was rejected by the own building or an unknown
 ## body, or the frozen footprints are unavailable (fail closed).
 func _site_blocked(points: Array, blockers: Array) -> String:
@@ -423,6 +426,20 @@ func _site_blocked(points: Array, blockers: Array) -> String:
 			return ""
 		behind[blocker] = int(behind.get(blocker, 0)) + 1
 	return "all %d candidate starts blocked: %d outside the playable boundary, inside other footprints %s, rejected by other buildings %s" % [points.size(), outside, occupants, behind]
+
+
+## For a rooftop-approach source only: "<parent> roof edge" when this start
+## lies outside the parent's frozen roof footprint, so it cannot be on the roof
+## the approach needs. "" otherwise, or when the footprint is unavailable.
+func _beyond_parent_roof(xz: Vector2) -> String:
+	var parent := str(_support_context.get("source", ""))
+	if parent == "" or _source_roofs_error != "" or not _source_roofs.has(parent):
+		return ""
+	var faces: PackedVector3Array = _source_roofs[parent]
+	for i in range(0, faces.size() - 2, 3):
+		if Geometry2D.point_is_inside_triangle(xz, Vector2(faces[i].x, faces[i].z), Vector2(faces[i + 1].x, faces[i + 1].z), Vector2(faces[i + 2].x, faces[i + 2].z)):
+			return ""
+	return parent + " roof edge"
 
 
 ## The other building that owns this collider, from its generated or family
@@ -965,7 +982,11 @@ func _check_spray(source: String, plan: Dictionary, bounds: AABB) -> void:
 	var valid:=results==["placed"] and placed.size()==1
 	if valid:
 		var tag: Decal=placed[0]
-		valid=tag.get_meta("derived_object_key","")=="building:"+source+":wall" and tag.get_meta("source_keys",[])==[source] and tag.texture_albedo!=null and tag.cull_mask==SprayController.RENDER_BUILDING_WALL
+		var key: String=tag.get_meta("derived_object_key","")
+		var keys: Array=tag.get_meta("source_keys",[])
+		# An approved composite parent (Isle House) owns its listed wall parts, each bound to [part].
+		var bound:=(key=="building:"+source+":wall" and keys==[source]) or (key in GeneratedContract.ISLE_HOUSE_COMPOSITE_PART_KEYS and key.begins_with("building-composite:"+source+":") and key.ends_with(":wall") and keys==[key.get_slice(":",2)])
+		valid=bound and tag.texture_albedo!=null and tag.cull_mask==SprayController.RENDER_BUILDING_WALL
 		print("SPRAY source=%s result=%s decal=%s receiver=%s position=%s" % [source,results,tag.get_path(),tag.get_meta("derived_object_key",""),tag.global_position])
 	var rest_error:=await _rest_and_disable(recoveries)
 	if rest_error!="":_failures.append(_prefix+"spray "+rest_error)
