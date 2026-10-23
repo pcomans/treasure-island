@@ -10245,6 +10245,16 @@
           "review_id": "chapel-flight-code-final-lip-integration-20261010",
           "review_kind": "independent_code_review",
           "status": "accept"
+        },
+        {
+          "review_id": "code-review-ferryl3-chapel-20261022",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-ferryl3-chapel-r1b-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
         }
       ],
       "anchor_source_key": "w291189336",
