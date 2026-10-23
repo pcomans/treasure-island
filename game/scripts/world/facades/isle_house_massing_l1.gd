@@ -35,6 +35,7 @@ const NNW_TALL_M := 24.0
 const NNW_WING_S := 12.0
 const FACE_OFFSET := 0.036
 const PHYSICS_WORLD_SOLID := 1 << 0
+const PHYSICS_SPRAY_SURFACE := 1 << 2
 const RENDER_WORLD_VISIBLE := 1 << 0
 const RENDER_BUILDING_WALL := 1 << 1
 
@@ -124,6 +125,7 @@ func _build(low: Dictionary, high: Dictionary) -> Dictionary:
 		flat.append(Vector2(p.x, p.z))
 	var triangles := Geometry2D.triangulate_polygon(flat)
 	if triangles.is_empty():
+		root.free()
 		return {"ok": false, "message": "Isle House deck polygon did not triangulate."}
 	for i in range(0, triangles.size(), 3):
 		var t0 := _at(polygon[triangles[i]], DECK_Y)
@@ -152,8 +154,12 @@ func _build(low: Dictionary, high: Dictionary) -> Dictionary:
 		var tangent := Vector3(q.x - p.x, 0.0, q.z - p.z).normalized()
 		var out := Vector3(tangent.z, 0.0, -tangent.x) if signed > 0.0 else Vector3(-tangent.z, 0.0, tangent.x)
 		_slim_pairs(p, tangent, out, 0.0, Vector3(q.x - p.x, 0.0, q.z - p.z).length(), [4, 5])
-	_tower_extension(high)
-	_penthouse(high)
+	var tower_error := _tower_extension(high)
+	if tower_error == "":
+		tower_error = _penthouse(high)
+	if tower_error != "":
+		root.free()
+		return {"ok": false, "message": tower_error}
 	root.set_meta("roof_box_count", _roof_boxes)
 	_emit(root)
 	return {"ok": true, "node": root, "deck_polygon": polygon}
@@ -277,7 +283,7 @@ func _flush_glazing(center: Vector3, tangent: Vector3, normal: Vector3, width: f
 
 
 # Roof penthouse (ih21, dba-50/52): an offset plant box and a perimeter guardrail.
-func _penthouse(high: Dictionary) -> void:
+func _penthouse(high: Dictionary) -> String:
 	var se_start := _run_point(high, 5, false)
 	var se_end := _run_point(high, 5, true)
 	var along := (se_end - se_start).normalized()
@@ -290,7 +296,9 @@ func _penthouse(high: Dictionary) -> void:
 	# face, left of centre, set back about 3m behind the guardrail.
 	var half := Vector2(10.0, 4.5)
 	var middle := se_start + along * 18.6 - se_normal * (3.0 + half.y)
-	_roof_box(outline, "tower", middle, along, se_normal, half.x * 2.0, 4.0, half.y * 2.0, true)
+	var penthouse_error := _roof_box(outline, "tower", middle, along, se_normal, half.x * 2.0, 4.0, half.y * 2.0, true)
+	if penthouse_error != "":
+		return penthouse_error
 	_roof_box(outline, "roof", middle - along * (half.x + 2.5), along, se_normal, 4.0, 2.2, 4.0, false)
 	_roof_box(outline, "roof", middle + along * (half.x + 3.0) + se_normal * 1.5, along, se_normal, 3.0, 1.8, 2.5, false)
 	for run in 13:
@@ -307,11 +315,12 @@ func _penthouse(high: Dictionary) -> void:
 		for k in range(1, int(length / 2.5)):
 			var post := p + tangent * (length * float(k) / float(int(length / 2.5))) + inward * 0.35
 			_box("frame", _at(post, TOWER_TOP_Y + 0.53), tangent, inward, 0.06, 1.05, 0.06, true)
+	return ""
 
 
 # Tower height override: walls on the frozen tower runs from the generated
 # roof up to TOWER_TOP_Y, and a new roof (the high facade fields cover the walls).
-func _tower_extension(high: Dictionary) -> void:
+func _tower_extension(high: Dictionary) -> String:
 	var outline: PackedVector2Array = []
 	var points: Array[Vector3] = []
 	for run in 13:
@@ -326,24 +335,27 @@ func _tower_extension(high: Dictionary) -> void:
 		_quad("tower", _at(p, HIGH_TOP_Y - 0.05), _at(q, HIGH_TOP_Y - 0.05), _at(q, TOWER_TOP_Y), _at(p, TOWER_TOP_Y), out)
 		_collide_quad(_at(p, HIGH_TOP_Y), _at(q, HIGH_TOP_Y), _at(q, TOWER_TOP_Y), _at(p, TOWER_TOP_Y), out)
 	var triangles := Geometry2D.triangulate_polygon(outline)
-	assert(not triangles.is_empty(), "Isle House tower outline did not triangulate")
+	if triangles.is_empty():
+		return "Isle House tower outline did not triangulate."
 	for i in range(0, triangles.size(), 3):
 		var t0 := _at(points[triangles[i]], TOWER_TOP_Y)
 		var t1 := _at(points[triangles[i + 1]], TOWER_TOP_Y)
 		var t2 := _at(points[triangles[i + 2]], TOWER_TOP_Y)
 		_triangle(_roof_surfaces, "roof", t0, t1, t2, Vector3.UP)
 		_collide_triangle(t0, t1, t2, Vector3.UP)
+	return ""
 
 
 # A solid roof-top box, emitted only when its whole footprint lies on the roof.
-func _roof_box(outline: PackedVector2Array, key: String, middle: Vector3, along: Vector3, normal: Vector3, width: float, height: float, depth: float, required: bool) -> void:
+# Returns an error only for a required box (the penthouse) that does not fit.
+func _roof_box(outline: PackedVector2Array, key: String, middle: Vector3, along: Vector3, normal: Vector3, width: float, height: float, depth: float, required: bool) -> String:
 	for corner: Vector2 in [Vector2(-1, -1), Vector2(1, -1), Vector2(1, 1), Vector2(-1, 1)]:
 		var p := middle + along * corner.x * width * 0.5 + normal * corner.y * depth * 0.5
 		if not Geometry2D.is_point_in_polygon(Vector2(p.x, p.z), outline):
-			assert(not required, "Isle House penthouse footprint left the tower roof")
-			return
+			return "Isle House penthouse footprint left the tower roof." if required else ""
 	_roof_boxes += 1
 	_box(key, _at(middle, TOWER_TOP_Y + height * 0.5), along, normal, width, height, depth, true, true)
+	return ""
 
 
 func _emit(root: Node3D) -> void:
@@ -358,7 +370,9 @@ func _emit(root: Node3D) -> void:
 	shape_node.shape = shape
 	var body := StaticBody3D.new()
 	body.name = "IsleHouseMassingCollision_NoSprayOwnership"
-	body.collision_layer = PHYSICS_WORLD_SOLID
+	# Spray rays stop on these volumes (receiver_kind none refuses the tag)
+	# instead of passing through to the hidden tower walls inside the wing.
+	body.collision_layer = PHYSICS_WORLD_SOLID | PHYSICS_SPRAY_SURFACE
 	body.collision_mask = 0
 	body.set_meta("receiver_kind", "none")
 	body.set_meta("opaque", true)

@@ -213,22 +213,6 @@ static func validate_variant_c_config_dictionary(config: Dictionary) -> bool:
 	or int(fallback.get("opening_count", -1)) != (config.get("inferred_nnw_placements", []) as Array).size() \
 	or (not carried and (str(fallback.get("material_key", "")) != "quiet_return" or "homogeneous" not in str(fallback.get("treatment", "")))):
 		return false
-	# Owner-approved upper window rows on the NNW return (2026-10-22): inside the
-	# PODIUM-BODY band, clear of the run ends.
-	var upper := config.get("inferred_nnw_upper_windows", {}) as Dictionary
-	if not upper.is_empty():
-		var body := {}
-		for value: Variant in bands:
-			if str((value as Dictionary).get("id", "")) == "PODIUM-BODY":
-				body = value as Dictionary
-		if body.is_empty():
-			return false
-		var half_h := float(upper.get("height_m", 0.0)) * 0.5
-		if float(upper.get("width_m", 0.0)) <= 0.0 or half_h <= 0.0 or float(upper.get("pitch_m", 0.0)) <= float(upper.get("width_m", 0.0)):
-			return false
-		for row_value: Variant in upper.get("rows_y_m", []) as Array:
-			if float(row_value) - half_h < float(body.bottom_y_m) or float(row_value) + half_h > float(body.top_y_m):
-				return false
 	var sides := config.get("public_sides", []) as Array
 	if sides.size() != 2 \
 	or _int_array((sides[0] as Dictionary).get("ordered_run_indices", []) as Array) != [0, 1, 2, 3, 4] \
@@ -451,7 +435,6 @@ func _build_variant_c_fields(parent: Node3D, low_wall: Dictionary) -> Dictionary
 			var entry := entry_value as Dictionary
 			if not _emit_public_run_fields(groups, raw_vertices, raw_normals, int(entry.get("run_index", -1)), entry, render, bands):
 				return _failure("variant_c_uv_quad", "Metre-UV helper refused an NNW lower quad.")
-		_add_nnw_upper_windows(raw_vertices, raw_normals, nnw_runs)
 		nnw_runs = []
 	for run_index_value: Variant in nnw_runs:
 		var run_index := int(run_index_value)
@@ -528,33 +511,6 @@ func _emit_public_run_fields(groups: Dictionary, raw_vertices: Array, raw_normal
 		var cap := cap_value as Dictionary
 		_add_c_box(str(cap.get("material_key", "")), "UPPER-RUN-%02d" % run_index, str(cap.get("id", "")), run_transform, Vector3(0.0, float(cap.get("center_y_m", 0.0)), float(cap.get("outward_center_m", 0.0))), Vector3(length + 0.04, float(cap.get("height_m", 0.0)), float(cap.get("depth_m", 0.0))), "upper_relief")
 	return true
-
-
-func _add_nnw_upper_windows(raw_vertices: Array, raw_normals: Array, run_indices: Array) -> void:
-	var upper := _config.get("inferred_nnw_upper_windows", {}) as Dictionary
-	if upper.is_empty():
-		return
-	var width := float(upper.get("width_m", 0.0))
-	var height := float(upper.get("height_m", 0.0))
-	var pitch := float(upper.get("pitch_m", 0.0))
-	var margin := float(upper.get("end_margin_m", 0.0))
-	for run_value: Variant in run_indices:
-		var offset := int(run_value) * 12
-		var start := Vector3(float(raw_vertices[offset]), 0.0, float(raw_vertices[offset + 2]))
-		var end := Vector3(float(raw_vertices[offset + 3]), 0.0, float(raw_vertices[offset + 5]))
-		var tangent := (end - start).normalized()
-		var normal := Vector3(float(raw_normals[offset]), 0.0, float(raw_normals[offset + 2])).normalized()
-		var length := start.distance_to(end)
-		var count := int(floor((length - margin * 2.0 - width) / pitch)) + 1
-		if count <= 0:
-			continue
-		var first := (length - pitch * float(count - 1)) * 0.5
-		for index in count:
-			var u := first + pitch * float(index)
-			var module_transform := Transform3D(Basis(tangent, Vector3.UP, normal), start + tangent * u)
-			for row_value: Variant in upper.get("rows_y_m", []) as Array:
-				var placement := {"id": "IH-C-NNW-UPPER-%02d-%02d" % [int(run_value), index]}
-				_add_framed_panel_c(placement, module_transform, {"id": "UPPER", "x_m": 0.0, "y_m": float(row_value), "width_m": width, "height_m": height})
 
 
 func _build_variant_c_module(parent: Node3D, low_wall: Dictionary, placement: Dictionary, variant: Dictionary) -> void:

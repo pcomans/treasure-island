@@ -21,7 +21,6 @@ const STACK_TOP_Y := STACK_BOTTOM_Y + 2.95 * STACK_FLOORS
 # About 35% glass on the 3.2m column pitch (dba-50 strip).
 const STACK_W := 1.15
 const MASSING := preload("res://game/scripts/world/facades/isle_house_massing_l1.gd")
-const EXTERIOR_FIELD_RUN_INDICES := [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 const NEW_EXTERIOR_FIELD_RUN_INDICES := [0, 1, 2, 3, 4]
 const SHARED_TOWER_FIELD_RUN_INDICES := [10, 11, 12]
 const MODULE_FREE_RUN_INDICES := []
@@ -129,7 +128,6 @@ func configure(record: Dictionary) -> Dictionary:
 	set_meta("spray_ray_owner", "unchanged_underlying_receiver")
 	set_meta("maximum_relief_m", float(_contract.maximum_relief_m))
 	set_meta("module_run_indices", _int_array(_se.run_indices as Array))
-	set_meta("exterior_field_run_indices", EXTERIOR_FIELD_RUN_INDICES.duplicate())
 	set_meta("new_exterior_field_run_indices", NEW_EXTERIOR_FIELD_RUN_INDICES.duplicate())
 	set_meta("module_free_run_indices", MODULE_FREE_RUN_INDICES.duplicate())
 	set_meta("inferred_module_run_indices", INFERRED_MODULE_RUN_INDICES.duplicate())
@@ -261,13 +259,22 @@ func _build_fields(record: Dictionary, target: Dictionary) -> Dictionary:
 		var normal := Vector3(float(raw_normals[offset]), 0.0, float(raw_normals[offset + 2])).normalized()
 		var outward := normal * float(_contract.field_offset_m)
 		# Podium field from each run's own base (ground, or the low roof for the
-		# shared runs 10-12) up to the level-7 deck; tower field above it.
-		_append_quad(groups.podium_light as Dictionary, [
-			Vector3(start_x, start_y, start_z) + outward,
-			Vector3(end_x, end_y, end_z) + outward,
-			Vector3(end_x, PODIUM_TOP_Y, end_z) + outward,
-			Vector3(start_x, PODIUM_TOP_Y, start_z) + outward,
-		], normal)
+		# shared runs 10-12) up to the level-7 deck; tower field above it. Where
+		# the raised WSW wing encloses the tower (run 12 and run 11 beyond the
+		# wing's inner face) the podium field is omitted: it would sit inside
+		# the wing. The underlying receiver record is unchanged.
+		var podium_end := Vector3(end_x, end_y, end_z)
+		if run_index == 12:
+			podium_end = Vector3(start_x, start_y, start_z)
+		elif run_index == 11:
+			podium_end = _wing_meet_on_run(record, 11)
+		if podium_end.distance_to(Vector3(start_x, start_y, start_z)) > 0.01:
+			_append_quad(groups.podium_light as Dictionary, [
+				Vector3(start_x, start_y, start_z) + outward,
+				podium_end + outward,
+				Vector3(podium_end.x, PODIUM_TOP_Y, podium_end.z) + outward,
+				Vector3(start_x, PODIUM_TOP_Y, start_z) + outward,
+			], normal)
 		_append_quad(groups.tower_light as Dictionary, [
 			Vector3(start_x, PODIUM_TOP_Y, start_z) + outward,
 			Vector3(end_x, PODIUM_TOP_Y, end_z) + outward,
@@ -291,7 +298,6 @@ func _build_fields(record: Dictionary, target: Dictionary) -> Dictionary:
 	fields.layers = RENDER_BUILDING_WALL
 	fields.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	fields.set_meta("facade_visual", true)
-	fields.set_meta("exterior_field_run_indices", EXTERIOR_FIELD_RUN_INDICES.duplicate())
 	fields.set_meta("new_exterior_field_run_indices", NEW_EXTERIOR_FIELD_RUN_INDICES.duplicate())
 	fields.set_meta("module_run_indices", _int_array(_se.run_indices as Array))
 	fields.set_meta("module_free_run_indices", MODULE_FREE_RUN_INDICES.duplicate())
@@ -299,6 +305,21 @@ func _build_fields(record: Dictionary, target: Dictionary) -> Dictionary:
 	fields.set_meta("low_receiver_untouched", true)
 	add_child(fields)
 	return {"ok": true, "segment_count": 13, "quad_count": 23}
+
+
+# Point on a shared run where the raised wing's inner face (MASSING.WING_DEPTH
+# from the WSW line through high run 0) meets it.
+static func _wing_meet_on_run(record: Dictionary, run_index: int) -> Vector3:
+	var v: Array = record.vertices
+	var n: Array = record.normals
+	var line := Vector3(float(v[0]), 0.0, float(v[2]))
+	var inward := -Vector3(float(n[0]), 0.0, float(n[2])).normalized()
+	var o := run_index * 12
+	var start := Vector3(float(v[o]), float(v[o + 1]), float(v[o + 2]))
+	var finish := Vector3(float(v[o + 3]), float(v[o + 4]), float(v[o + 5]))
+	var ra := (start - line).dot(inward)
+	var rb := (finish - line).dot(inward)
+	return start.lerp(finish, clampf((MASSING.WING_DEPTH - ra) / (rb - ra), 0.0, 1.0))
 
 
 func _build_tower_modules() -> void:
