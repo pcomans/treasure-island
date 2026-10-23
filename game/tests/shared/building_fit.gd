@@ -984,8 +984,8 @@ func _check_spray(source: String, plan: Dictionary, bounds: AABB) -> void:
 		var tag: Decal=placed[0]
 		var key: String=tag.get_meta("derived_object_key","")
 		var keys: Array=tag.get_meta("source_keys",[])
-		# A composite parent (Isle House) owns wall parts keyed building-composite:<source>:<part>:wall, bound to [part].
-		var bound:=(key=="building:"+source+":wall" and keys==[source]) or (key.begins_with("building-composite:"+source+":") and key.ends_with(":wall") and key.get_slice_count(":")==4 and keys==[key.get_slice(":",2)])
+		# An approved composite parent (Isle House) owns its listed wall parts, each bound to [part].
+		var bound:=(key=="building:"+source+":wall" and keys==[source]) or (key in GeneratedContract.ISLE_HOUSE_COMPOSITE_PART_KEYS and key.begins_with("building-composite:"+source+":") and key.ends_with(":wall") and keys==[key.get_slice(":",2)])
 		valid=bound and tag.texture_albedo!=null and tag.cull_mask==SprayController.RENDER_BUILDING_WALL
 		print("SPRAY source=%s result=%s decal=%s receiver=%s position=%s" % [source,results,tag.get_path(),tag.get_meta("derived_object_key",""),tag.global_position])
 	var rest_error:=await _rest_and_disable(recoveries)
