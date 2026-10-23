@@ -135,24 +135,22 @@ func _focused_views(source: String, path: String, out: String) -> void:
 		if not bounds.has_point(target):
 			_errors.append("focused view target lies outside the source building: " + name)
 			return
+		var camera_error := _free_camera_error(view, target)
+		if camera_error != "":
+			_errors.append("focused view " + name + ": " + camera_error)
+			return
 		var error := await _h.settle_player(Vector2(view.player_xz[0], view.player_xz[1]))
 		if error != "":
 			_errors.append("focused view " + name + ": " + error)
 			return
 		var free: Camera3D = null
 		if view.has("camera_xyz"):
-			var ortho: bool = view.get("projection", "perspective") == "ortho"
-			if not _numbers(view.get("camera_xyz"), 3) or (view.has("fov") and not _numbers([view.get("fov")], 1)) \
-					or not view.get("projection", "perspective") in ["perspective", "ortho"] \
-					or (ortho and (not _numbers([view.get("ortho_size")], 1) or float(view.ortho_size) <= 0.0)):
-				_errors.append("focused view camera_xyz needs three numbers, fov a number, and ortho a positive ortho_size: " + name)
-				return
 			free = Camera3D.new()
-			if ortho:
+			if view.get("projection", "perspective") == "ortho":
 				free.projection = Camera3D.PROJECTION_ORTHOGONAL
 				free.size = float(view.ortho_size)
 			else:
-				free.fov = clampf(float(view.get("fov", 70.0)), 1.0, 170.0)
+				free.fov = float(view.get("fov", 70.0))
 			free.far = 5000.0
 			_h.main.add_child(free)
 			free.global_position = Vector3(view.camera_xyz[0], view.camera_xyz[1], view.camera_xyz[2])
@@ -169,6 +167,28 @@ func _focused_views(source: String, path: String, out: String) -> void:
 			free.queue_free()
 			_h.player.get_camera().make_current()
 		print("FOCUSED_VIEW %s source=%s player=%s target=%s camera=%s" % [name, source, _h.player.global_position, target, view.get("camera_xyz", "gameplay")])
+
+
+## Why a view's free-camera fields are unusable, or "" (also when it has none).
+func _free_camera_error(view: Dictionary, target: Vector3) -> String:
+	if not view.has("camera_xyz"):
+		for key in ["projection", "fov", "ortho_size"]:
+			if view.has(key):
+				return key + " needs camera_xyz"
+		return ""
+	if not _numbers(view.get("camera_xyz"), 3):
+		return "camera_xyz needs three numbers"
+	var projection: Variant = view.get("projection", "perspective")
+	if not projection is String or not projection in ["perspective", "ortho"]:
+		return "projection must be \"perspective\" or \"ortho\""
+	if view.has("fov") and (not _numbers([view.get("fov")], 1) or float(view.fov) <= 0.0 or float(view.fov) >= 180.0):
+		return "fov must be a number of degrees between 0 and 180"
+	if projection == "ortho" and (not _numbers([view.get("ortho_size")], 1) or float(view.ortho_size) <= 0.0):
+		return "ortho needs a positive ortho_size"
+	var direction := target - Vector3(view.camera_xyz[0], view.camera_xyz[1], view.camera_xyz[2])
+	if direction.length() < 0.01 or absf(direction.normalized().dot(Vector3.UP)) > 0.999:
+		return "camera_xyz must not coincide with or lie straight above or below the target"
+	return ""
 
 
 ## The --views-batch list, or empty when it is not a nonempty list of unique,
