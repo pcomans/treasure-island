@@ -682,3 +682,14 @@ The 2026-10-18 housing mesh merge rendered three things differently from the per
 Separately, `get_faces()` snaps vertices to 0.0001 in mesh space, so contacts from merged meshes differ from per-part contacts by about one float32 ULP.
 
 Before batching parts, check each basis's determinant and shear. Keep moved parts with object-space shaders separate. Prove the result with AE parity against a rerun control.
+
+## Measure the glass fraction before re-cutting openings
+
+On 2026-10-22, Isle House r1b and Hawkins r2 both got an L2 HOLD for the same reason. The row counts matched the photos, but the window shapes did not. Hawkins r2 had about 27% glass by geometry, and the reviewer read 15–20% in the renders. On one plane of the hk07 reference, window units cover about 48% of each bay and clear glass about 36%. Hawkins r3 was fixed in one round after measuring it: a narrow plus a wide unit per bay, with units at about 47% and glass at about 40%.
+
+Before re-cutting openings at L2, measure on one reference plane:
+- the share of each bay that is glass or window unit;
+- the unit's width and height relative to the storey;
+- the pane layout.
+
+Compare those numbers with the model's geometry, and record both, before spending a render. Matching opening counts alone does not establish the opening family.

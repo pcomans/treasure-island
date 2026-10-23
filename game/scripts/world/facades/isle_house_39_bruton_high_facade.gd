@@ -304,7 +304,10 @@ func _build_fields(record: Dictionary, target: Dictionary) -> Dictionary:
 	fields.set_meta("shared_tower_field_run_indices", SHARED_TOWER_FIELD_RUN_INDICES.duplicate())
 	fields.set_meta("low_receiver_untouched", true)
 	add_child(fields)
-	return {"ok": true, "segment_count": 13, "quad_count": 23}
+	var quads := 0
+	for key: String in groups:
+		quads += ((groups[key] as Dictionary).indices as PackedInt32Array).size() / 6
+	return {"ok": true, "segment_count": 13, "quad_count": quads}
 
 
 # Point on a shared run where the raised wing's inner face (MASSING.WING_DEPTH
