@@ -21535,3 +21535,33 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: grepping AGENTS, CLAUDE and the role frontmatter for `effort` first showed that CLAUDE's modeling sentence was already current on main, so the change stayed to one new AGENTS paragraph and one CLAUDE clause.
 - What did not work well: the adapter paragraph still said Claude Code's delegation tool has no effort parameter, which the new exception contradicts; it had to be corrected alongside the new paragraph rather than left as a second, conflicting rule.
 - What the team should change next time: when a routing exception relies on a tool capability, check the existing text for claims about that capability and fix them in the same edit.
+
+## modeler-ferry-rework (Isle House w1249412094 + Hawkins w1249412093 photo rework, 2026-10-23)
+
+- What worked well: writing the per-side component list from the photos before touching code turned "it doesn't look like the building" into concrete items: the red-brown Variant C band, a dark-grey upper, navy glass, the missing bay boxes, the 1.2 m canopy and the small lobby. Each item mapped to one edit. Owner-approved base colours (simple albedo) did more for resemblance than any geometry change. With the stock 70-degree camera (about 96 degrees horizontal, close to Street View's default), I could match the photo vantages with ordinary `--views` plans, so building_shots needed no extension. Headless probes (front-face rays, facade boxes with no wall behind them) caught a slot bar hanging over a setback before the render.
+- What did not work well: I spent too long solving exact Street View poses (vanishing points, a solver) before ROOT relayed "within reason". Street View GPS is metres off at 15-30 m, so pano-position views still needed one or two render rounds to frame, and the hk02 view is still too wide after the budget ran out. The first batch failed on relative plan paths inside batch.json. I could not probe view spots headlessly because `load_world` refuses `--headless`.
+- What the team should change next time: when matching a vantage, place the camera from the photo's own layout (which features sit at the left, centre and right edge) rather than from the pano coordinates. Pass absolute plan paths to `--views-batch`. Write the component list and the colour reading in the first hour of any recognition rework, before the first render.
+- Round 2 addendum (after the veto): writing each view's first-read element before
+  modelling made the misses obvious: a solid white podium where the photo's first read
+  is a glazed storefront, and light-blue glass that left punched windows with no
+  contrast on brick. Glass value per context (dark for punched windows, light for
+  curtain-like stacks) mattered as much as size. Re-posing by the photo's own layout
+  (what sits at the frame edges) was still needed for ih08/hk02/cav2/cav3. cav3 kept
+  failing because its foreground is the one bay I left without the box. Next time, check
+  which part of the building fills the foreground of each matched view before choosing
+  the module's range.
+- Round 3 addendum: render-only inward geometry over a spray receiver fails silently
+  (the decal box spans only -0.025..+0.055 m about the hit), so the Isle House WSW folds
+  moved the low receiver itself, as Hawkins does. A headless N.S check against the scene
+  sun predicted facet contrast before rendering, but it also showed the limit: this WSW
+  face is nearly edge-on to the fixed sun, so even 27-degree facets give a faint tone
+  step. Next time, compute N.S for each face against the scene light before choosing
+  relief, and say early when lighting, not geometry, caps the contrast.
+- Gates addendum: the first Isle fit failed silently on inward faces after I copied
+  generated triangles without the generic builder's (first, third, second) order (now
+  a LEARNINGS lesson); a headless front-face ray per run would have caught it before
+  the fit slot. Two refusal-spray attempts missed because aim_camera clamps pitch at
+  25 degrees: a target above that from a close pose is never reached, and the ray lands
+  on whatever lies below. Next time, check the aim pitch (atan(rise / run) from the
+  camera pivot) before writing a spray plan, and stand back far enough to stay under
+  the limit.
