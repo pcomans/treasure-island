@@ -21565,3 +21565,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
   on whatever lies below. Next time, check the aim pitch (atan(rise / run) from the
   camera pivot) before writing a spray plan, and stand back far enough to stay under
   the limit.
+
+## code-review-ferryrework (Isle House 6231196, Hawkins 615f8b5, 2026-10-23)
+
+- What worked well: the receiver override is narrow. `matches_low_record` matches the exact key, source part, kind, top and vertex count, and the replacement copies the generic body's layers, metas, shape metas and spray group line for line. Every new opaque solid (stacks, soffits, ledges, bay boxes, recess soffit, stoops) is on the spray layer with receiver none. The refusal captures exercised that directly, and the Chapel spray control showed the non-composite path unchanged.
+- What did not work well: deleting the Variant C live attachment removed the only root of a chain of older Isle House files (the Variant C standalone, the composite repair standalone, the low live attachment and the low facade prototype, with their scenes, uids and configs). They now ship in the build with no caller. The first two Hawkins refusal plans aimed from under the box, so the 25 degree pitch limit landed both tags on the visible recessed wall. It took two spray runs to find that out.
+- What the team should change next time: when a commit deletes a hook or attachment, grep for what that file loaded and delete anything left without a caller in the same commit. Before a refusal spray, check that the target is reachable within the pitch and range limits from the planned pose.
