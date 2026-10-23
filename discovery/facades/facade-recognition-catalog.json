@@ -11791,6 +11791,16 @@
           "review_id": "visual-review-ferryl3-hawkins-r3-20261023",
           "review_kind": "visual",
           "status": "accepted"
+        },
+        {
+          "review_id": "code-review-ferryrework-hawkins-20261023",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-veto-ferryrework-hawkins-r6-20261023",
+          "review_kind": "visual",
+          "status": "accepted"
         }
       ],
       "anchor_source_key": "w1249412093",
@@ -11914,6 +11924,16 @@
         },
         {
           "review_id": "visual-review-ferryl3-islehouse-r2-20261023",
+          "review_kind": "visual",
+          "status": "accepted"
+        },
+        {
+          "review_id": "code-review-ferryrework-islehouse-20261023",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-veto-ferryrework-islehouse-r8-20261023",
           "review_kind": "visual",
           "status": "accepted"
         }
