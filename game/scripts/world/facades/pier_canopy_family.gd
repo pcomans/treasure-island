@@ -13,7 +13,7 @@ extends RefCounted
 ## (shore-clipped) wall record by its two land-side corners. The frozen land under
 ## the plaza end sets the deck level and how far the abutment runs before the deck
 ## stands on piles. Dimensions, cadence and the gate booth are production inference
-## from dated references; see game/resources/pier_family/README.md.
+## from dated references; config fields are in game/resources/pier_family/README.md.
 
 const SCHEMA := "ti.pier-canopy-family/1"
 const ROLES := ["wall", "roof", "solid", "ground"]
@@ -723,6 +723,9 @@ static func _make_materials(ctx: Ctx) -> void:
 		ctx.errors.append("palette must be an object")
 		return
 	for key: String in palette:
+		if not palette[key] is Dictionary:
+			ctx.errors.append("palette %s must be an object" % key)
+			return
 		var entry: Dictionary = palette[key]
 		var rgb: Array = entry.get("rgb", [])
 		if rgb.size() != 3:

@@ -2,6 +2,8 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 
 import { eastNorthToWorldRounded, inverseProjectEastNorth, projectLonLat } from "./lib/coordinates.mjs";
+import { geometryToMultiPolygon } from "./lib/osm-geometry.mjs";
+import { SOURCE_CONTRACT, roundCoordinate } from "./lib/world-contract.mjs";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const OUTPUT_ROOT = resolve(ROOT, "source_assets/vegetation/naip_2022");
@@ -450,10 +452,23 @@ function rejectionFeatures() {
   });
 }
 
+// The exact frozen island polygon in the generated world's millimetre-rounded
+// +X-east/+Z-south form. The manifest's playable_boundary also includes the
+// owner-approved walkable pier, which is not island land, so it is not used here.
+function exactIslandComponents() {
+  const polygon = JSON.parse(readFileSync(resolve(ROOT, SOURCE_CONTRACT.extraction_polygon.path), "utf8"));
+  assert(polygon.type === "FeatureCollection" && polygon.features?.length === 1, "Treasure Island boundary GeoJSON must have one feature");
+  const toWorld = (ring) => ring.map((point) => [roundCoordinate(point[0]), roundCoordinate(-point[1])]);
+  return geometryToMultiPolygon(polygon.features[0].geometry, "Treasure Island boundary").map((rings) => ({
+    outer: toWorld(rings[0]),
+    holes: rings.slice(1).map(toWorld),
+  }));
+}
+
 function boundaryFeature() {
   const manifest = JSON.parse(readFileSync(GENERATED_MANIFEST_PATH, "utf8"));
-  const components = manifest.playable_boundary?.components;
-  assert(Array.isArray(components) && components.length === 1, "Generated Treasure Island playable boundary is missing");
+  const components = exactIslandComponents();
+  assert(components.length === 1, "Exact Treasure Island boundary must be one polygon");
   const toWgs84Ring = (ring) => ring.map(([worldX, worldZ]) => inverseProjectEastNorth([worldX, -worldZ]).map((value) => round(value, 8)));
   const geometry = {
     type: "MultiPolygon",
@@ -469,9 +484,9 @@ function boundaryFeature() {
     properties: {
       name: "Treasure Island",
       role: "annotation_footprint",
-      source: "generated/world/manifest.json#playable_boundary",
+      source: SOURCE_CONTRACT.extraction_polygon.path,
       source_key: manifest.boundary_source_key,
-      derivation: "Existing generated +X-east/-Z-north boundary converted with tools/lib/coordinates.mjs inverseProjectEastNorth",
+      derivation: "Exact frozen island polygon in the generated world's millimetre-rounded +X-east/-Z-north form, converted with tools/lib/coordinates.mjs inverseProjectEastNorth",
     },
   };
 }
@@ -586,7 +601,7 @@ ${cellRows}
 ## Files
 
 - 'tree_annotations_candidate.geojson': canonical, deterministically sorted candidate points.
-- 'treasure_island_footprint.geojson': existing generated-world Treasure Island boundary converted to WGS84; no YBI polygon.
+- 'treasure_island_footprint.geojson': exact frozen Treasure Island polygon in the generated world's millimetre form, converted to WGS84; no YBI polygon or pier extension.
 - 'tree_annotations_review.svg' and 'tree_annotations_review.png': visual review aids.
 - 'tree_annotations_rejection_audit.geojson': 30 omitted marks with exact surface-intersection reasons; not accepted candidates.
 - 'validation_report.json': persisted result from the independent deterministic validator.

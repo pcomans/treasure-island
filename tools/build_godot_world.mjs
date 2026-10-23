@@ -1738,6 +1738,8 @@ function playableBoundaryWithPiers(boundary, rawOsm) {
     extended = unionMultiPolygons(extended, pier);
   }
   invariant(extended.length === boundary.length, "Pier extension changed the playable component count");
+  const holes = (geometry) => geometry.reduce((count, polygon) => count + polygon.length - 1, 0);
+  invariant(holes(extended) === holes(boundary), "Pier extension changed the playable hole count");
   roundedCanonicalGeometry(extended, "Playable boundary with piers");
   return extended;
 }
