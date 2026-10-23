@@ -13,7 +13,12 @@ extends SceneTree
 ## Options can be combined. Needs a GPU display; tools/godot provides one.
 ## --views FILE adds source-bound focused gameplay views without replacing these
 ## defaults: {"source": "KEY", "views": [{"name": "entrance",
-## "player_xz": [x,z], "target_xyz": [x,y,z]}]}.
+## "player_xz": [x,z], "target_xyz": [x,y,z]}]}. A view may add "camera_xyz": [x,y,z]
+## and "fov": degrees (vertical, default 70) to shoot from a free camera at that
+## position aimed at the target, e.g. to match a reference photo's height, tilt and
+## field of view, or "projection": "ortho" with "ortho_size": metres (vertical
+## extent) for a square-on elevation. The player still settles at player_xz.
+## The player's avatar mesh is hidden in every shot (visual only); --show-player keeps it.
 ## --views-batch FILE: only the focused views of several buildings in one world load,
 ## [{"source": "KEY", "plan": "views.json"}, ...], each plan a --views file for its
 ## source, saved to OUT/KEY/detail-NAME.png. Fixed-pose views only (no closeup,
@@ -68,6 +73,8 @@ func _run() -> void:
 	print("RENDERER: %s / %s" % [RenderingServer.get_video_adapter_name(), DisplayServer.get_name()])
 	if args.has("neutral-lighting"):
 		await _use_neutral_lighting()
+	if not args.has("show-player"):
+		(_h.player.get_node("AvatarPivot") as Node3D).visible = false
 	if args.has("source"):
 		await _building_shots(str(args.source), out)
 	if args.has("views"):
@@ -132,13 +139,36 @@ func _focused_views(source: String, path: String, out: String) -> void:
 		if error != "":
 			_errors.append("focused view " + name + ": " + error)
 			return
-		_h.aim_camera(target)
+		var free: Camera3D = null
+		if view.has("camera_xyz"):
+			var ortho: bool = view.get("projection", "perspective") == "ortho"
+			if not _numbers(view.get("camera_xyz"), 3) or (view.has("fov") and not _numbers([view.get("fov")], 1)) \
+					or not view.get("projection", "perspective") in ["perspective", "ortho"] \
+					or (ortho and (not _numbers([view.get("ortho_size")], 1) or float(view.ortho_size) <= 0.0)):
+				_errors.append("focused view camera_xyz needs three numbers, fov a number, and ortho a positive ortho_size: " + name)
+				return
+			free = Camera3D.new()
+			if ortho:
+				free.projection = Camera3D.PROJECTION_ORTHOGONAL
+				free.size = float(view.ortho_size)
+			else:
+				free.fov = clampf(float(view.get("fov", 70.0)), 1.0, 170.0)
+			free.far = 5000.0
+			_h.main.add_child(free)
+			free.global_position = Vector3(view.camera_xyz[0], view.camera_xyz[1], view.camera_xyz[2])
+			free.look_at(target, Vector3.UP)
+			free.make_current()
+		else:
+			_h.aim_camera(target)
 		await physics_frame
 		await physics_frame
 		error = await _h.save_screenshot("%s/detail-%s.png" % [out, name])
 		if error != "":
 			_errors.append(error)
-		print("FOCUSED_VIEW %s source=%s player=%s target=%s" % [name, source, _h.player.global_position, target])
+		if free != null:
+			free.queue_free()
+			_h.player.get_camera().make_current()
+		print("FOCUSED_VIEW %s source=%s player=%s target=%s camera=%s" % [name, source, _h.player.global_position, target, view.get("camera_xyz", "gameplay")])
 
 
 ## The --views-batch list, or empty when it is not a nonempty list of unique,
