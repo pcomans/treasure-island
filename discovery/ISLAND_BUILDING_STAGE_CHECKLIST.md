@@ -299,8 +299,8 @@ wins deterministically.
 family with outbuilding parts; `792b9f5` models 33 sheds and small buildings with
 registrations. CODE PASS (lows parked), visual PASS for every module. Progress: L1
 and L2 C on 16 rows, L1 C only on 15 rows. No change for `w291196386` and
-`w1222514695`: walk-up blocked by a neighbour or the boundary, fit-test allowance
-pending. Parked: colour pass (tanks to tan concrete; 535 to cream; compound E to
+the ferry pier `w1222514695` (then a placeholder box): walk-up blocked by a neighbour
+or the boundary, fit-test allowance pending; the pier became walkable in Mar22s. Parked: colour pass (tanks to tan concrete; 535 to cream; compound E to
 warm white; 367's roof to grey corrugated; 641's frames to gold); 555's stair (L3);
 the validation lows.
 **Mar21b** Site 12, 2026-10-21: `8c70237` adds an optional `facade.eave_rgb` for
@@ -314,8 +314,8 @@ and 1145 warm white or cream; 1137's siding slightly light); rear fences on 1116
 outbuilding fields (CODE PASS); `b85a505` lets the fit test skip only site-blocked
 walk-up sides in `building_fit.gd` (CODE PASS); `51349c3` models 450
 (`w1043836450`, 680 Avenue I) on the mid-rise family, visual L1+L2 PASS, resolving
-its earlier REWORK. 450 L1/L2 C; shelter `w1222514695` L1 C (site-blocked west side
-skipped under the new rule); `w291196386` stays uncredited (the north gap is real
+its earlier REWORK. 450 L1/L2 C; ferry pier `w1222514695` L1 C as a placeholder box
+(site-blocked west side skipped; superseded by the walkable pier in Mar22s); `w291196386` stays uncredited (the north gap is real
 but too narrow for the stock player). Parked for 450: ramp length (foundation-exposure
 trade-off); colour pass (roof grey-brown, lighter glazing).
 **Mar21d** Northpoint Groups 1+2 recovery, 2026-10-21: reviewed finals from
@@ -480,9 +480,10 @@ catalog accepts them, and 686 gains a catalog `stairs` entry.
 **Mar22p** Navy Chapel w291189336 L1/L2/L3 round 1 (`fd70a5f`, `547d963`): photo-based eaves, porch, hall windows and roof edges; the SSE front change is justified by the photos. CODE PASS; visual L1/L2/L3 and progress PASS on r1b; author fit (both catalog stair flights walked), spray and suite PASS; the catalog gains a second chapel `stairs` flight. Open for round 2: the rear hip and NNW openings. No level or score change; L3 not yet marked.
 **Mar22q** Isle House w1249412094 and Hawkins w1249412093 L1/L2/L3 (`ca2e8dc`…`cdfdc12`, ported onto main): Isle House gains the photo-based podium wing, glazing stacks and storefront, with the tower raised to about 75 m by ROOT on photo evidence; Hawkins gets corrected perimeter-block massing, setback canopy, window bays and 8 catalog stoop flights. The shared `building_fit.gd` spray check binds composite part receivers to the approved part list. CODE PASS (Isle House fixes and `cdfdc12` re-checked); visual PASS on Isle House r2 and Hawkins r3; author fit (all 8 Hawkins stoops walked), spray and suite PASS. Open: the Hawkins WSW projecting box. No level or score change; L3 not yet marked.
 **Mar22r** Isle House w1249412094 and Hawkins w1249412093 photo rework (`6231196`…`b973797`): the owner rejected the Mar22q versions as unlike their photos, so the facades and base colours were rebuilt over 3 rounds against matched photo views; Hawkins' catalog stoop flights move with the recessed ground, and `b973797` removes the uncalled Isle House low-facade overlay chain. CODE PASS (`b973797` re-checked); strict side-by-side visual PASS on Isle House r8 and Hawkins r6; pre-push fit (all 8 Hawkins stoops walked), spray and suite PASS. Open: the Isle House WSW facet tone (lighting) and the ih18 podium brick facets. No level or score change.
-Current totals after Mar22r (unchanged): L1:213 C/0 U; L2:192 C/21 U; L3/L5:213 U each;
-L4:1 C/212 U. Overall406 C/0 I/659 U across213 units/1,065 cells; catalog
-recognition score 63/213.
+**Mar22s** walkable ferry pier w1222514695 (`b3cb85b`…`84cab4b`): the owner approved making this one pier walkable, so the playable boundary is the island polygon united with the frozen pier polygon (a named allowlist entry); the placeholder mid-rise box is replaced by the new pier canopy family (deck, piles, parapet, columns, windscreen, rail, gate with LED sign, tilted canopy), and the housing-family installer gains an opt-in `solid` role. CODE PASS (`84cab4b` re-checked); visual PASS on r4; pre-push deck-route fit, spray and suite PASS. L1/L2/L3 C; catalog accepted. Open: the gangway and float (not modelled) and L4 polish.
+Current totals after Mar22s: L1:213 C/0 U; L2:193 C/20 U; L3:1 C/212 U;
+L4:1 C/212 U; L5:213 U. Overall408 C/0 I/657 U across213 units/1,065 cells; catalog
+recognition score 64/213.
 **U** no current stage-level conclusion established in this checklist pass.
 
 The retained34-building audit entries in [RETRO](RETRO_LOG.md) (2026-09-23,
@@ -709,7 +710,7 @@ before selecting another round.
 | physical-building:w1212173437 / w1212173437 | Star View Court | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar17k mid-rise family `3f44801` + `6e2cead` — CODE PASS (two lows), visual L2 PASS, progress L1+L2 PASS. Parked: code lows (misleading root `scope` string at `midrise_family.gd:146`; `_ground_y` linear scan needs indexing); landscaping, signage, materials |
 | physical-building:w1222514685 / w1222514685 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22d C-set (`fc3db5d` runtime retirement, `68e7453` mid-rise configs) — CODE, visual and evidence-based progress PASS (Building 3 annex); Mar22m Building 3 annexes (`1ab0240` pergola, `730a77e` ext_stairs, `90cc079`, `2957425`) — CODE PASS, visual Winery hall (Building 3 SW corrugated annex), L2 PASS at r1 and r2; fit and suite PASS; catalog accepted |
 | physical-building:w1222514686 / w1222514686 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22d C-set (`fc3db5d` runtime retirement, `68e7453` mid-rise configs) — CODE, visual and evidence-based progress PASS (Building 3 annex); Mar22m Building 3 annexes (`1ab0240` pergola, `730a77e` ext_stairs, `90cc079`, `2957425`) — CODE PASS, visual former Building 111 (modelled pre-demolition), REWORK at r1 then L2 PASS at r2 after the walkable exterior stair; stair walked up and down; fit and suite PASS; catalog accepted |
-| physical-building:w1222514695 / w1222514695 | Unnamed | ☑ C | ☐ U | ☐ U | ☐ U | ☐ U | Mar21c shelter: L1 C under the blocked-side walk-up rule (`b85a505`, CODE PASS); the site-blocked west side is skipped |
+| physical-building:w1222514695 / w1222514695 | Unnamed | ☑ C | ☑ C | ☑ C | ☐ U | ☐ U | Mar22s walkable ferry pier on the pier canopy family (`b3cb85b`…`84cab4b`) — CODE PASS (`84cab4b` re-checked), visual PASS on r4; deck route fit and spray PASS; the playable boundary includes this pier only. Open: gangway/float (not modelled), L4 polish |
 | physical-building:w1222720021 / w1222720021 | Unnamed | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22c Building 1 tower: L1/L2 C from the review-only sweep `/workspaces/landmark-progress-20261007/review-sweep-20261022/` (visual review; assets unchanged) |
 | physical-building:w1249412093 / w1249412093 | Hawkins | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22c Hawkins: L1 C from the review-only sweep `/workspaces/landmark-progress-20261007/review-sweep-20261022/` (visual review; assets unchanged); L2 gap: blank sides; openings pass approved by owner 2026-10-22; Mar22h blank sides filled (`7a87d82`…`58831fe`, D1 inferred openings) — CODE PASS, visual PASS Hawkins (round 1): L2 C |
 | physical-building:w1249412094 / w1249412094, w1282547786, w1282547787 | Isle House | ☑ C | ☑ C | ☐ U | ☐ U | ☐ U | Mar22c Isle House: L1 C from the review-only sweep `/workspaces/landmark-progress-20261007/review-sweep-20261022/` (visual review; assets unchanged); L2 gap: blank sides; openings pass approved by owner 2026-10-22; Mar22h blank sides filled (`7a87d82`…`58831fe`, D1 inferred openings) — CODE PASS, visual PASS Isle House (round 2): L2 C |
