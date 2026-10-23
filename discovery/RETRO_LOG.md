@@ -21577,3 +21577,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the ferryrework branch was a clean fast-forward from 8d85586, so no cherry-pick or overlap handling was needed; the catalog records were appended by exact-snippet replacement and re-parsed, keeping the older records and the file's formatting.
 - What did not work well: the brief's "bridge on port 12049" is the DevPod git-credential helper, which is easy to misread as an engine bridge; earlier prepush folders record only gate invocations, not that check.
 - What the team should change next time: commit the RETRO and catalog/checklist records before the gates so the gates run on the exact HEAD that is pushed, and keep routes and spray as separate fit runs (combined runs hang in save_screenshot).
+
+## modeler-ferry-pier (w1222514695 walkable ferry pier, 2026-10-23)
+
+- What worked well: making the generator change only the manifest's `playable_boundary` (exact island ∪ named pier polygon) left land, clips, spawn and vegetation untouched, and a fresh-build diff showed exactly that. A private headless probe that calls the shared fit's own `_walk_start`/`_site_blocked` read-only found the walk-up problem before any render or fit slot.
+- What did not work well: the walk-up anchors rank wall faces by lowest bottom, then width, then distance from the bounds centre, with a cap of 8. On a long diagonal pier the cardinal plaza lanes first missed the land-end column by 2 cm, then were crowded out by wider land-face triangles. That took three probes to diagnose.
+- What the team should change next time: for any non-box building (piers, canopies), run the read-only walk-start probe per side before the first render. Put chest-height opaque receivers (columns, posts) where the plaza approach meets them, and avoid shaping wall triangulation for the probe.
