@@ -727,8 +727,8 @@
         "form": "mono",
         "low_edge": 3,
         "pitch_deg": 1.5,
-        "overhang": 1.4,
-        "t": 0.45,
+        "overhang": 3.0,
+        "t": 0.9,
         "under": "soffit_light",
         "fascia": "fascia_cream"
       },
@@ -744,7 +744,7 @@
   "study_notes": {
     "observed": "Mar 2025 13th St (560, 24 m) and Jun/Mar 2021 frames: one-storey flat-roofed pavilions with deep overhanging eaves, white/cream walls, blue/teal window ribbons, panels and doors, behind a black mesh fence.",
     "association": "high (photographed SSE and WSW sides)",
-    "inferred": "Deep flat eave (a 1.5 degree mono slab), window ribbon lengths and door positions, unseen sides; the black mesh fence is not modelled.",
+    "inferred": "Deep flat eave (a 1.5 degree mono slab; 3 m overhang and 0.9 m fascia matched to the Mar 2025 NNW photo, applied on all sides), window ribbon lengths and door positions, unseen sides; the black mesh fence is not modelled.",
     "footprint": "Frozen 4-edge ring kept as one block."
   }
 }
