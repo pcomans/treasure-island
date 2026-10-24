@@ -21755,3 +21755,15 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: solving camera pose from four footprint-corner points (with a fixed typical focal where the photo is frontal and the solve degenerates) gave usable matched cameras for undated-position survey photos. One batched render per lighting covered all units and neighbours. Comparing photo against BEFORE at fitted cameras first showed early that four of five units already carried the photographed bays.
 - What did not work well: the plan assumed every unit would benefit from a grid. For units whose bays were already photo-placed (488, 514, Oasis, 450), the grid would only have re-expressed them and dropped the blue hoods, so they stay KEEP-BEFORE. Only 655's curtain flanks gained.
 - What the team should change next time: before planning a grid batch, check each unit's config for photo-placed bay features and fixtures that the grid path does not carry (hoods), and plan grid work only where BEFORE visibly diverges from the photos.
+
+### ti-visual-review — 2026-10-24 — midrise grid batch B2 (655 Harvey Milk; keep-before 488, 514, Oasis, 450)
+
+- What worked well: the camcheck sheet (photo next to BEFORE at the fitted camera, all five units) answered "would a grid help?" in one pass. The rectified 655 flank grid showed the 3 m verticals and close horizontal muntins directly, and the AE list made the no-regression check immediate.
+- What did not work well: the 655 survey photo was hard to locate. TASK_NOTE says only "Job Corps field survey photos" without paths, and the jobcorps-gallery folder is mostly interiors; the actual frames are in `reopen4-20261022/refs/`. The 488 fitted camera reports 4 px error, but the matched render still frames the long face differently from the photo, so counting hood bays against it is uncertain. 655's inherited `flank_nnw` has no view.
+- What the team should change next time: list each reference's file path in the task note. Add one sanity crop for any fit under 5 px that compares the same feature in the photo and the render. Give inherited faces at least one raised or oblique view when a grid lands on them.
+
+### push coordinator — 2026-10-24 — midrise grid batch B2 (655 Harvey Milk)
+
+- What worked well: mirroring the B1 push (c81c515) made the catalog, checklist and gate chain mechanical. Inserting the records with an exact-match script and re-parsing the JSON straight away confirmed the score stayed at 66/213.
+- What did not work well: the assignment called the unit "450" without its way ID, and the checklist has two units with 450 in the label (w34313544 450 4th St and w1043836450 at 680 Avenue I). I had to cross-check the Mar22i note to choose w34313544.
+- What the team should change next time: give every unit in a push assignment its way ID, including the KEEP-BEFORE units, so the row updates need no lookup.
