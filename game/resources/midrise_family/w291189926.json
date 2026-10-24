@@ -936,8 +936,8 @@
     }
   ],
   "study_notes": {
-    "observed": "Sep 2025 Seven Seas Ave (SSE and WSW): five-storey white slab with paired windows and blue stair towers at its corners; official Job Corps aerial: E-shaped plan of equal height; entrance photo: glazed doors under a flat canopy.",
-    "inferred": "Five storeys over the OSM 6 m tag, window cadence, the entrance placed on the photographed WSW wing face, doors on the other accessible sides; the SSE spine wall faces the attached Oasis hall (no door). Stair towers are enclosed blocks (no stairs modelled).",
+    "observed": "Sep 2025 Seven Seas Ave (SSE and WSW): five-storey white slab with paired windows and blue stair towers at its corners; official Job Corps aerial: E-shaped plan of equal height; entrance photo: glazed doors under a flat canopy. The official entrance photo (hero.jpg, '369 / 275 California Ave') shows the glazed doors under the flat canopy of the one-storey entrance wing at the SSE end (the low wing in 369-sideC_151 and the jc-07 aerial), outside this footprint; the Sep 2025 WSW photo (369-sideD_241) shows no entrance on the WSW wing face, so the lobby entry modelled there was removed (2026-10-24 grid batch B1).",
+    "inferred": "Five storeys over the OSM 6 m tag, window cadence, doors on the other accessible sides; the SSE spine wall faces the attached Oasis hall (no door). Stair towers are enclosed blocks (no stairs modelled).",
     "footprint": "Frozen 32-edge E plan split into the spine-and-wings block, three wing ends and two corner towers."
   }
 }
