@@ -21892,3 +21892,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: mirroring the B6 record commit (45adefa) kept the catalog, checklist and push chain to known shapes; editing the catalog by exact text replacement left every other unit untouched, and a re-parse and table recount confirmed the score (76) and the L2 totals (192 C/21 U) from the data.
 - What did not work well: the 641 L2 tick was known wrong at B6 and left for "a re-check" that needed no new evidence, so it cost a second checklist edit in a later round.
 - What the team should change next time: when a reviewer has already confirmed a reference mix-up, correct the stage cell in the same record commit instead of deferring it.
+
+### modeler-wholeunit — 2026-10-24 — whole-unit follow-ups r133351, w96698611, w34313535 (visual-first, before fits)
+
+- What worked well: projecting the OSM outline into the r133351 photo showed the box's fascia ends land on the footprint ends while its walls sit inside them, so the outline is the roof edge; that set both the wall inset and the overhang without guessing. The existing pyramid roof (1° pitch, 1 m slab, 1.25 m overhang) gave the deep fascia and the shared grid gave box-rib cladding, so no producer code was needed.
+- What did not work well: the r1 sheet first used a 1076x840 crop on the 1131x706 renders `building_shots.gd` actually writes; the donor's 904x706 crop was right. Reading the PNG size before writing the crop would have saved a sheet pass. The 611 request (dark brown, from the Feb 2018 photo) conflicts with the Mar 2025 10th St photo of the same building, which shows light natural cedar after refinishing.
+- What the team should change next time: before a colour or material request, check every dated photo of the unit and follow the newest (present day), naming the conflict in the assignment. Check the render size before reusing a crop convention.

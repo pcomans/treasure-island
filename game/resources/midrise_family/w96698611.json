@@ -268,10 +268,10 @@
     "pale": {
       "rgb": [
         0.84,
-        0.8,
-        0.7
+        0.72,
+        0.56
       ],
-      "roughness": 0.9
+      "roughness": 0.85
     },
     "roof_dark": {
       "rgb": [
@@ -953,6 +953,7 @@
   "study_notes": {
     "observed": "Feb 2018 Avenue E: low single-storey building with a dark hipped roof among palms; Mar 2025 10th St: pale one-storey with a low grey roof behind a tall wood fence (medium association).",
     "inferred": "Hipped roofs over the core and arms of the pinwheel plan, window cadence, four doors; the wood fence is not modelled.",
-    "footprint": "Frozen 28-edge pinwheel ring split into a core, six arms and six narrow steps."
+    "footprint": "Frozen 28-edge pinwheel ring split into a core, six arms and six narrow steps.",
+    "wholeunit": "Mar 2025 611-sideC_179 (pano R6AMZ8pY0e5dGnNQpwhJdQ, from 10th St): light natural cedar board siding, grey shingle hips, pale trim; Feb 2018 Avenue E shows the same forms in weathered dark brown before refinishing. Wall colour follows the present-day photo."
   }
 }

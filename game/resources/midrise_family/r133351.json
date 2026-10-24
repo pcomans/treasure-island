@@ -337,6 +337,30 @@
         0.22
       ],
       "roughness": 0.8
+    },
+    "slate": {
+      "rgb": [
+        0.27,
+        0.29,
+        0.33
+      ],
+      "roughness": 0.85
+    },
+    "slate_fascia": {
+      "rgb": [
+        0.3,
+        0.34,
+        0.4
+      ],
+      "roughness": 0.7
+    },
+    "slate_soffit": {
+      "rgb": [
+        0.17,
+        0.18,
+        0.2
+      ],
+      "roughness": 0.9
     }
   },
   "schemes": {
@@ -756,6 +780,55 @@
       },
       "bands": [],
       "features": []
+    },
+    "slate": {
+      "material": "slate",
+      "parapet_material": "slate",
+      "gable_material": "slate",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "plinth": {
+        "material": "slate_soffit",
+        "top": 0.12
+      },
+      "bands": [],
+      "features": []
+    },
+    "slate_door": {
+      "material": "slate",
+      "parapet_material": "slate",
+      "gable_material": "slate",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "plinth": {
+        "material": "slate_soffit",
+        "top": 0.12
+      },
+      "bands": [],
+      "features": [
+        {
+          "type": "entry",
+          "from": 3.4,
+          "to": 5.2,
+          "door": {
+            "kind": "unit",
+            "w": 1.6,
+            "h": 2.3,
+            "leaf_h": 2.3,
+            "material": "door"
+          },
+          "landing": {
+            "w": 2.2,
+            "depth": 1.4
+          }
+        }
+      ]
     }
   },
   "blocks": [
@@ -767,7 +840,12 @@
         "h": 0.25,
         "t": 0.2
       },
-      "clip": [],
+      "clip": [
+        {
+          "edge": 4,
+          "min": 20.0
+        }
+      ],
       "faces": {
         "default": "school",
         "hole": "school",
@@ -780,12 +858,113 @@
         "e3": "plain",
         "e10": "plain",
         "e34": "plain",
-        "e4": "olive_blank",
+        "e4": "plain",
         "e6": "olive",
         "e12": "olive",
         "e18": "olive",
         "e26": "olive",
         "e32": "olive"
+      }
+    },
+    {
+      "id": "hall_nw",
+      "storeys": 1,
+      "ground_h": 2.75,
+      "parapet": {
+        "h": 0.25,
+        "t": 0.2
+      },
+      "clip": [
+        {
+          "edge": 4,
+          "max": 20.0,
+          "s_max": 1.25
+        }
+      ],
+      "faces": {
+        "default": "school",
+        "hole": "school",
+        "e0": "door0",
+        "e37": "door37",
+        "e7": "door7",
+        "e11": "front",
+        "e8": "door_ene",
+        "e2": "plain",
+        "e3": "plain",
+        "e10": "plain",
+        "e34": "plain",
+        "e4": "plain",
+        "e6": "olive",
+        "e12": "olive",
+        "e18": "olive",
+        "e26": "olive",
+        "e32": "olive"
+      }
+    },
+    {
+      "id": "hall_sw",
+      "storeys": 1,
+      "ground_h": 2.75,
+      "parapet": {
+        "h": 0.25,
+        "t": 0.2
+      },
+      "clip": [
+        {
+          "edge": 4,
+          "min": 7.4839,
+          "max": 20.0,
+          "s_min": 17.12
+        }
+      ],
+      "faces": {
+        "default": "school",
+        "hole": "school",
+        "e0": "door0",
+        "e37": "door37",
+        "e7": "door7",
+        "e11": "front",
+        "e8": "door_ene",
+        "e2": "plain",
+        "e3": "plain",
+        "e10": "plain",
+        "e34": "plain",
+        "e4": "plain",
+        "e6": "olive",
+        "e12": "olive",
+        "e18": "olive",
+        "e26": "olive",
+        "e32": "olive"
+      }
+    },
+    {
+      "id": "gym",
+      "storeys": 1,
+      "ground_h": 4.6,
+      "parapet": {
+        "h": 0.0
+      },
+      "clip": [
+        {
+          "edge": 4,
+          "min": 1.2,
+          "max": 20.0,
+          "s_min": 1.25,
+          "s_max": 17.12
+        }
+      ],
+      "roof": {
+        "form": "pyramid",
+        "pitch_deg": 1.0,
+        "overhang": 1.25,
+        "t": 1.0,
+        "under": "slate_soffit",
+        "fascia": "slate_fascia"
+      },
+      "roof_material": "roof",
+      "faces": {
+        "default": "slate",
+        "e5": "slate_door"
       }
     }
   ],
@@ -793,6 +972,7 @@
     "observed": "Mar 2025 13th St (south frontage): low one-storey flat-roofed building, cream/white walls under pale blue fascia panels, a glazed central double-door entrance; a darker olive wing with brown trim to the west.",
     "inferred": "Window cadence, the olive treatment on the WSW-facing faces, doors on every side; north, courtyard and re-entrant sides are unseen.",
     "footprint": "Frozen relation r133351: outer ring (61 edges) kept as one block around its inner courtyard ring.",
-    "grid_b5": "Mar 2025 photos (r133351-sideD_240 and 883-sideB_153): the olive wing's WSW wall at e4 is windowless (round logo only)"
+    "grid_b5": "Mar 2025 photos (r133351-sideD_240 and 883-sideB_153): the olive wing's WSW wall at e4 is windowless (round logo only)",
+    "wholeunit": "Mar 2025 r133351-sideD_240 (pano zHJe3vjFyKW1aAgqgdeypw, h 48): the e4 bump is a tall dark slate box (about 5.6 m to the fascia top) with a deep overhanging fascia about 1 m tall; its fascia ends match the OSM outline, so the walls sit about 1.2 m inside it on the WSW and 1.25 m in from both ends. Box depth (20 m), the SSE door and the roof are inference."
   }
 }
