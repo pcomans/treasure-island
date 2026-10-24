@@ -21844,3 +21844,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: `node_modules` and `.godot` were already in the worktree (the modeler ran `npm ci` first), so the B4 suite-rerun failure did not repeat. The catalog edit was a targeted text change of four units, re-parsed straight away, and the recount gave 68 → 72.
 - What did not work well: the push assignment named the reviewer's finish follow-ups without listing them, so the checklist note had to take them from the modeler's task note exceptions and the RETRO entries; a reviewer-only item could be missed.
 - What the team should change next time: put the reviewer's finish follow-ups in the push assignment verbatim, the same way the verdicts are given.
+
+### modeler-grid-b6 — 2026-10-24 — midrise grid batch B6 (654 gridded; 535 windowless photographed side; 641, 386, 550 keep-before)
+
+- What worked well: projecting every candidate footprint into each photo before authoring showed that both "641" and "654" frames show 654's face, and that 641 is hidden behind it. This avoided gridding a building from a photo of its neighbour. All five engine runs passed on the first attempt: matching cache, `npm ci`, the clearance-checked plan and the stop on any invalid digest.
+- What did not work well: the reference file names were trusted in earlier passes (641 was modelled from 654's photo). One gameplay view of 641 was placed behind 654, so it mostly shows 654.
+- What the team should change next time: before using a reference, confirm which building it shows by projecting nearby footprints at the pano pose. Treat file names as hints. For whole-unit triage, put colour and roof-item gaps (535's pale metal and skylights) in the handback, not only grid findings.
