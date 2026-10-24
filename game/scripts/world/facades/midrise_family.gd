@@ -1195,11 +1195,11 @@ static func _prepare_grid(ctx: Ctx, face: Face) -> bool:
 		columns.append([minf(a, b), maxf(a, b)])
 	columns.sort_custom(func(x: Array, y: Array) -> bool: return float(x[0]) < float(y[0]))
 	local["columns"] = columns
-	var check := FacadeGrid.validate(local, floors, block.floors[block.storeys])
-	if not bool(check.ok):
-		ctx.errors.append("%s/%s grid: %s" % [block.id, face.key, "; ".join(PackedStringArray(check.errors))])
+	var expanded := FacadeGrid.expand(local, floors, block.floors[block.storeys])
+	if not bool(expanded.ok):
+		ctx.errors.append("%s/%s grid: %s" % [block.id, face.key, "; ".join(PackedStringArray(expanded.errors))])
 		return false
-	face.grid_openings = FacadeGrid.expand(local, floors)
+	face.grid_openings = expanded.openings
 	face.has_grid = true
 	return true
 
@@ -1495,8 +1495,13 @@ static func _assembly(ctx: Ctx, face: Face, bay: Dictionary, o: Dictionary) -> v
 			var unit_spec: Dictionary = (spec.get("unit", {}) as Dictionary).duplicate(true)
 			unit_spec["pane_d"] = -depth
 			unit_spec["materials"] = _merge(GRID_MATERIALS, spec.get("materials", {}))
+			var assembly := FacadeAssembly.stack([s0, s1, y0, y1, o.get("extras", {})], unit_spec)
+			if not bool(assembly.ok):
+				ctx.errors.append("%s/%s grid window at %.2f: %s" % [face.block.id, face.key, s0, "; ".join(PackedStringArray(assembly.errors))])
+				return
+			# A flat emitter draws each rect's outward face at d1.
 			var out := face.out3()
-			for r: Dictionary in FacadeAssembly.stack([s0, s1, y0, y1, o.get("extras", {})], unit_spec):
+			for r: Dictionary in assembly.rects:
 				_rect(ctx.bucket("wall", str(r.material)), face, float(r.u0), float(r.u1), float(r.y0), float(r.y1), -float(r.d1), out)
 		"patio":
 			var depth := float(spec.get("depth", 0.18))
