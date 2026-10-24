@@ -21,16 +21,31 @@ extends RefCounted
 const CHUNK_PATH := "res://generated/world/chunks/x_-1__z_2.json"
 const LOW_WALL_KEY := "building-composite:w1249412094:w1282547787:wall"
 const HIGH_WALL_KEY := "building-composite:w1249412094:w1282547786:wall"
-const HIGH_ROOF_KEY := "building-composite:w1249412094:w1282547786:roof"
 const LOW_ROOF_KEY := "building-composite:w1249412094:w1282547787:roof"
 const LOW_SOURCE_KEY := "w1282547787"
 const HIGH_SOURCE_KEY := "w1282547786"
 const LOW_TOP_Y := 19.103
 const HIGH_TOP_Y := 71.103
-# ROOT height override (2026-10-22): the tower rises to 75m on its frozen footprint.
+# ROOT height override (2026-10-22): the tower rises to 75m on its frozen footprint,
+# above the record's 71.103m top; its receiver walls deliberately run to this height.
 const TOWER_TOP_Y := 79.1
 const BASE_BOTTOM_Y := 3.8
 const BASE_TOP_Y := 10.25
+# Shared base bands (ih01, ih08, ih18, dba-64): the storefront mezzanine transom, the
+# podium storefront transom bar and its upper glass, the louvre band under the soffit,
+# the live-work louvred mezzanine band, the leasing canopy, the Garden Walk low wall
+# and the garage door head. Production inference.
+const TRANSOM_Y := 7.25
+const STORE_TRANSOM_BOTTOM_Y := 7.15
+const STORE_TRANSOM_TOP_Y := 7.35
+const LOUVRE_BOTTOM_Y := 9.35
+const MEZZANINE_BOTTOM_Y := 6.75
+const MEZZANINE_TOP_Y := 7.45
+const CANOPY_Y := 7.15
+const GARDEN_WALL_TOP_Y := 5.0
+const GARAGE_HEAD_Y := 7.1
+const SILL_WALL_H := 0.45
+const DOOR_H := 2.65
 # Storey counts from the rectified 2025 photos (ih01/ih04 WSW, ih17/ih06 NNW, ih08 SE,
 # ih14 ENE): four storeys over the double-height base to the level-7 deck (WSW, west
 # podium, tall NNW volume) and two over it for the east volumes (NNW east, ENE, east
@@ -67,7 +82,6 @@ const BAY_D := 0.9
 const BAY_CHEEK := 0.8
 # Low fronts: 6.4m module (the base column bay); WSW tall strip and NNW wing.
 const MODULE_M := 6.4
-const CORNER_BAY_M := 4.35
 const PIER_START := 0.6
 const WING_DEPTH := 14.0
 const NNW_TALL_M := 24.0
@@ -169,10 +183,15 @@ static func matches_low_roof_record(record: Dictionary) -> bool:
 		and (record.get("vertices", []) as Array).size() == 18
 
 
+# A fresh instance of this script (static entry points build through instance state).
+static func _builder() -> RefCounted:
+	return (load("res://game/scripts/world/facades/isle_house_form.gd") as GDScript).new()
+
+
 static func build_low_roof_record(record: Dictionary) -> Dictionary:
 	if not matches_low_roof_record(record):
 		return {"ok": false, "code": "isle_house_low_roof_target", "message": "Isle House low roof refused a non-target record.", "source_keys": (record.get("source_keys", []) as Array).duplicate()}
-	var builder: RefCounted = (load("res://game/scripts/world/facades/isle_house_form.gd") as GDScript).new()
+	var builder := _builder()
 	var raw: Array = record.vertices
 	var outline: Array[Vector3] = []
 	for i in range(0, raw.size(), 3):
@@ -186,7 +205,7 @@ static func build_low_roof_record(record: Dictionary) -> Dictionary:
 static func build_low_record(record: Dictionary) -> Dictionary:
 	if not matches_low_record(record):
 		return {"ok": false, "code": "isle_house_low_receiver_target", "message": "Isle House low receiver refused a non-target record.", "source_keys": (record.get("source_keys", []) as Array).duplicate()}
-	var builder: RefCounted = (load("res://game/scripts/world/facades/isle_house_form.gd") as GDScript).new()
+	var builder := _builder()
 	builder._build_low(record)
 	return builder._emit(record, "IsleHouseLowForm")
 
@@ -200,7 +219,7 @@ static func build_high_record(record: Dictionary) -> Dictionary:
 	var low := _record(chunk.records, LOW_WALL_KEY)
 	if not matches_low_record(low):
 		return {"ok": false, "code": "isle_house_high_chunk", "message": "Isle House low record did not match.", "source_keys": [HIGH_SOURCE_KEY]}
-	var builder: RefCounted = (load("res://game/scripts/world/facades/isle_house_form.gd") as GDScript).new()
+	var builder := _builder()
 	var error: String = builder._build_high(record, low)
 	if error != "":
 		return {"ok": false, "code": "isle_house_high_form", "message": error, "source_keys": [HIGH_SOURCE_KEY]}
@@ -235,9 +254,9 @@ func _build_low(low: Dictionary) -> void:
 	var g0: float = WSW_GARAGE[0]
 	var g1: float = WSW_GARAGE[1]
 	_strip(wsw_base, g0 - 0.25, g1 + 0.25, BASE_BOTTOM_Y, BASE_TOP_Y, "dark", 0.02)
-	_strip(wsw_base, g0, g1, BASE_BOTTOM_Y, 7.1, "metal", 0.04)
+	_strip(wsw_base, g0, g1, BASE_BOTTOM_Y, GARAGE_HEAD_Y, "metal", 0.04)
 	for k in range(1, 16):
-		var y := BASE_BOTTOM_Y + (7.1 - BASE_BOTTOM_Y) * float(k) / 16.0
+		var y := BASE_BOTTOM_Y + (GARAGE_HEAD_Y - BASE_BOTTOM_Y) * float(k) / 16.0
 		_strip(wsw_base, g0, g1, y - 0.015, y + 0.015, "joint", 0.05)
 	# Upper floors. Flat fields (ih01, ih04): grey-white panel field, two large
 	# lights per bay with an asymmetric mullion and a low transom, and a narrow
@@ -247,9 +266,9 @@ func _build_low(low: Dictionary) -> void:
 	var wsw_openings := _stacks(WSW_FLAT_LIGHTS, floors4, [], 0.2, 2.75, flat_style)
 	var corner_openings := _stacks([[1.0, 3.3]], floors4, [], 0.2, 2.75, flat_style)
 	_punched(wsw_line, 0.0, 4.2, BASE_TOP_Y, LOW_ROOF_Y, corner_openings, "brick", Body.RECEIVER)
-	_punched(wsw_line, 0.0, 4.2, LOW_ROOF_Y, DECK_Y, corner_openings, "brick", Body.SOLID)
+	_punched(wsw_line, 0.0, 4.2, LOW_ROOF_Y, DECK_Y, corner_openings, "brick", Body.RECEIVER)
 	_punched(wsw_line, 4.2, length, BASE_TOP_Y, LOW_ROOF_Y, wsw_openings, "panel", Body.RECEIVER)
-	_punched(wsw_line, 4.2, length, LOW_ROOF_Y, DECK_Y, wsw_openings, "panel", Body.SOLID)
+	_punched(wsw_line, 4.2, length, LOW_ROOF_Y, DECK_Y, wsw_openings, "panel", Body.RECEIVER)
 	for floor: float in floors4 + [DECK_Y]:
 		_strip(wsw_line, 4.2, length, floor - 0.12, floor + 0.12, "band", 0.05)
 	var stack_style := {"split": 0.0, "transom": 0.6, "pane": "glass_blue"}
@@ -304,7 +323,7 @@ func _build_low(low: Dictionary) -> void:
 	for o: Array in NNW_BASE_OPENINGS:
 		nnw_base_openings.append([o[0], o[1], BASE_BOTTOM_Y, 9.5, {"split": 0.0, "transom": 0.0, "sills": [BASE_BOTTOM_Y], "surround": true, "pane": "dark"}])
 	_wall(nnw, 0.0, 9.0, BASE_BOTTOM_Y, BASE_TOP_Y, "glass_store", Body.RECEIVER)
-	_mullions(nnw_line, 0.0, 9.0, BASE_BOTTOM_Y, BASE_TOP_Y, 1.5, 7.25)
+	_mullions(nnw_line, 0.0, 9.0, BASE_BOTTOM_Y, BASE_TOP_Y, 1.5, TRANSOM_Y)
 	_punched(nnw_line, 9.0, 24.0, BASE_BOTTOM_Y, BASE_TOP_Y, nnw_base_openings, "brick", Body.RECEIVER)
 	_wall(nnw, 24.0, e0, BASE_BOTTOM_Y, BASE_TOP_Y, "dark", Body.RECEIVER)
 	_wall(nnw, e1, 37.0, BASE_BOTTOM_Y, BASE_TOP_Y, "dark", Body.RECEIVER)
@@ -314,7 +333,7 @@ func _build_low(low: Dictionary) -> void:
 	for pilaster: float in [9.0, 24.0, 37.0]:
 		_strip(nnw_line, pilaster - 0.35, pilaster + 0.35, BASE_BOTTOM_Y, BASE_TOP_Y, "concrete", 0.04)
 	_wall(nnw, e0, e1, BASE_BOTTOM_Y, BASE_TOP_Y, "glass_store", Body.RECEIVER, -ENTRY_D)
-	_mullions(_side_plane(nnw, -ENTRY_D), e0, e1, BASE_BOTTOM_Y, BASE_TOP_Y, 1.0, 7.25)
+	_mullions(_side_plane(nnw, -ENTRY_D), e0, e1, BASE_BOTTOM_Y, BASE_TOP_Y, 1.0, TRANSOM_Y)
 	_return(nnw, e0, 0.0, -ENTRY_D, BASE_BOTTOM_Y, BASE_TOP_Y, 1.0, "dark", Body.RECEIVER)
 	_return(nnw, e1, 0.0, -ENTRY_D, BASE_BOTTOM_Y, BASE_TOP_Y, -1.0, "dark", Body.RECEIVER)
 	_cap(nnw, e0, e1, 0.0, -ENTRY_D, BASE_TOP_Y, false, "trim", Body.SOLID)
@@ -323,7 +342,7 @@ func _build_low(low: Dictionary) -> void:
 	var nnw_openings := _stacks(NNW_EAST_LIGHTS, floors2, [], 0.3, 2.65, nnw_style)
 	nnw_openings.append_array(_stacks(NNW_TALL_LIGHTS, floors4, [[0, 0], [1, 2], [3, 3]], 0.3, 2.65, nnw_style))
 	_punched(nnw_line, 0.0, nnw.length, BASE_TOP_Y, LOW_ROOF_Y, nnw_openings, "brick", Body.RECEIVER)
-	_punched(nnw_line, step - 0.03, nnw.length, LOW_ROOF_Y, DECK_Y, nnw_openings, "brick", Body.SOLID)
+	_punched(nnw_line, step - 0.03, nnw.length, LOW_ROOF_Y, DECK_Y, nnw_openings, "brick", Body.RECEIVER)
 	_coping(nnw, 0.0, step, LOW_ROOF_Y)
 
 
@@ -616,12 +635,12 @@ func _podium_frontage(face: int, side: Dictionary, end_u: float) -> void:
 		_storefront_bay(plane, l0, l1, false)
 		_door(plane, 34.6, 35.8)
 		# Dark leasing canopy and the navy sign band above it (ih08, ih14).
-		_box("frame", _at(_at_side(side, (l0 + l1) * 0.5, -BASE_RECESS * 0.5 + 0.1), 7.15), side.t, side.n, l1 - l0, 0.25, BASE_RECESS + 0.2, Body.SOLID)
+		_box("frame", _at(_at_side(side, (l0 + l1) * 0.5, -BASE_RECESS * 0.5 + 0.1), CANOPY_Y), side.t, side.n, l1 - l0, 0.25, BASE_RECESS + 0.2, Body.SOLID)
 		_strip(plane, l0 + 0.3, l1 - 0.3, 7.6, 9.4, "spandrel", 0.04)
 		_strip(plane, 38.6, 40.6, 7.9, 9.1, "glass_blue", 0.05)
 	if face == 3:
 		# The leasing canopy turns the ENE corner (ih14).
-		_box("frame", _at(_at_side(side, 2.0, -BASE_RECESS * 0.5 + 0.1), 7.15), side.t, side.n, 4.0, 0.25, BASE_RECESS + 0.2, Body.SOLID)
+		_box("frame", _at(_at_side(side, 2.0, -BASE_RECESS * 0.5 + 0.1), CANOPY_Y), side.t, side.n, 4.0, 0.25, BASE_RECESS + 0.2, Body.SOLID)
 
 
 # [u0, u1] pieces of [a, b] outside the given ranges.
@@ -642,14 +661,14 @@ static func _runs_between(a: float, b: float, skips: Array) -> Array:
 # Storefront glazing frame over [u0, u1]: continuous mullions on a shared absolute
 # u grid, a mezzanine transom, and optionally a dark louvre band under the soffit.
 func _storefront_bay(plane: Dictionary, u0: float, u1: float, louvre: bool) -> void:
-	var top := 9.35 if louvre else BASE_TOP_Y
-	_strip(plane, u0, u1, 7.35, top, "glass", 0.015)
+	var top := LOUVRE_BOTTOM_Y if louvre else BASE_TOP_Y
+	_strip(plane, u0, u1, STORE_TRANSOM_TOP_Y, top, "glass", 0.015)
 	_mullions_abs(plane, u0, u1, BASE_BOTTOM_Y, top, 1.25)
-	_strip(plane, u0, u1, 7.15, 7.35, "frame", 0.035)
+	_strip(plane, u0, u1, STORE_TRANSOM_BOTTOM_Y, STORE_TRANSOM_TOP_Y, "frame", 0.035)
 	if louvre:
-		_strip(plane, u0, u1, 9.35, BASE_TOP_Y, "spandrel", 0.03)
+		_strip(plane, u0, u1, LOUVRE_BOTTOM_Y, BASE_TOP_Y, "spandrel", 0.03)
 		for k in range(1, 7):
-			var y := 9.35 + (BASE_TOP_Y - 9.35) * float(k) / 7.0
+			var y := LOUVRE_BOTTOM_Y + (BASE_TOP_Y - LOUVRE_BOTTOM_Y) * float(k) / 7.0
 			_strip(plane, u0, u1, y - 0.015, y + 0.015, "joint", 0.04)
 
 
@@ -672,19 +691,25 @@ func _live_work_bay(plane: Dictionary, u0: float, u1: float, door: bool, skips: 
 		var b: float = run[1]
 		if b - a < 0.3:
 			continue
-		_strip(plane, a, b, 7.45, BASE_TOP_Y, "glass", 0.015)
-		_mullions_abs(plane, a, b, BASE_BOTTOM_Y, BASE_TOP_Y, 1.25)
-		_strip(plane, a, b, 6.75, 7.45, "spandrel", 0.03)
-		for k in range(1, 5):
-			var y := 6.75 + 0.7 * float(k) / 5.0
-			_strip(plane, a, b, y - 0.015, y + 0.015, "joint", 0.04)
+		_mezzanine(plane, a, b, BASE_BOTTOM_Y)
 		var d0 := a + 0.4
 		if door and b - a > 2.2:
 			_door(plane, d0, d0 + 1.1)
-			_strip(plane, d0 + 1.25, b, BASE_BOTTOM_Y, BASE_BOTTOM_Y + 0.45, "concrete", 0.035)
-			_strip(plane, a, d0 - 0.1, BASE_BOTTOM_Y, BASE_BOTTOM_Y + 0.45, "concrete", 0.035)
+			_strip(plane, d0 + 1.25, b, BASE_BOTTOM_Y, BASE_BOTTOM_Y + SILL_WALL_H, "concrete", 0.035)
+			_strip(plane, a, d0 - 0.1, BASE_BOTTOM_Y, BASE_BOTTOM_Y + SILL_WALL_H, "concrete", 0.035)
 		else:
-			_strip(plane, a, b, BASE_BOTTOM_Y, BASE_BOTTOM_Y + 0.45, "concrete", 0.035)
+			_strip(plane, a, b, BASE_BOTTOM_Y, BASE_BOTTOM_Y + SILL_WALL_H, "concrete", 0.035)
+
+
+# Live-work bay upper parts over [a, b]: light upper glass above the louvred mezzanine
+# band and mullions on the shared absolute grid from `mullion_bottom` to the soffit.
+func _mezzanine(plane: Dictionary, a: float, b: float, mullion_bottom: float) -> void:
+	_strip(plane, a, b, MEZZANINE_TOP_Y, BASE_TOP_Y, "glass", 0.015)
+	_mullions_abs(plane, a, b, mullion_bottom, BASE_TOP_Y, 1.25)
+	_strip(plane, a, b, MEZZANINE_BOTTOM_Y, MEZZANINE_TOP_Y, "spandrel", 0.03)
+	for k in range(1, 5):
+		var y := MEZZANINE_BOTTOM_Y + (MEZZANINE_TOP_Y - MEZZANINE_BOTTOM_Y) * float(k) / 5.0
+		_strip(plane, a, b, y - 0.015, y + 0.015, "joint", 0.04)
 
 
 # Garden Walk live-work bay (dba-64): lower windows over an opaque concrete low wall
@@ -693,18 +718,13 @@ func _live_work_bay(plane: Dictionary, u0: float, u1: float, door: bool, skips: 
 func _garden_walk_bay(plane: Dictionary, a: float, b: float, door: bool) -> void:
 	if b - a < 0.3:
 		return
-	var wall_top := 5.0
-	_strip(plane, a, b, 7.45, BASE_TOP_Y, "glass", 0.015)
-	_mullions_abs(plane, a, b, wall_top, BASE_TOP_Y, 1.25)
-	_strip(plane, a, b, 6.75, 7.45, "spandrel", 0.03)
-	for k in range(1, 5):
-		var y := 6.75 + 0.7 * float(k) / 5.0
-		_strip(plane, a, b, y - 0.015, y + 0.015, "joint", 0.04)
+	var wall_top := GARDEN_WALL_TOP_Y
+	_mezzanine(plane, a, b, wall_top)
 	var s0 := a
 	if door and b - a > 3.0:
 		var d0 := a + 0.5
 		# Opaque surround, then the dark recessed door leaf inside it.
-		_strip(plane, a, d0 + 1.5, BASE_BOTTOM_Y, 6.75, "dark", 0.045)
+		_strip(plane, a, d0 + 1.5, BASE_BOTTOM_Y, MEZZANINE_BOTTOM_Y, "dark", 0.045)
 		_strip(plane, d0, d0 + 1.0, BASE_BOTTOM_Y, 6.55, "frame", 0.05)
 		_strip(plane, d0 + 0.08, d0 + 0.92, BASE_BOTTOM_Y, 6.47, "spandrel", 0.055)
 		s0 = d0 + 1.5
@@ -714,9 +734,9 @@ func _garden_walk_bay(plane: Dictionary, a: float, b: float, door: bool) -> void
 
 # A dark-framed glazed door (2.6 m) at the base.
 func _door(plane: Dictionary, u0: float, u1: float) -> void:
-	_strip(plane, u0 - 0.08, u1 + 0.08, BASE_BOTTOM_Y, BASE_BOTTOM_Y + 2.75, "frame", 0.045)
-	_strip(plane, u0, u1, BASE_BOTTOM_Y, BASE_BOTTOM_Y + 2.65, "glass", 0.05)
-	_strip(plane, (u0 + u1) * 0.5 - 0.03, (u0 + u1) * 0.5 + 0.03, BASE_BOTTOM_Y, BASE_BOTTOM_Y + 2.65, "frame", 0.055)
+	_strip(plane, u0 - 0.08, u1 + 0.08, BASE_BOTTOM_Y, BASE_BOTTOM_Y + DOOR_H + 0.1, "frame", 0.045)
+	_strip(plane, u0, u1, BASE_BOTTOM_Y, BASE_BOTTOM_Y + DOOR_H, "glass", 0.05)
+	_strip(plane, (u0 + u1) * 0.5 - 0.03, (u0 + u1) * 0.5 + 0.03, BASE_BOTTOM_Y, BASE_BOTTOM_Y + DOOR_H, "frame", 0.055)
 
 
 # Full-height recessed glazed slot: back wall, and its floor where it stands on a
@@ -747,7 +767,7 @@ func _se_joint() -> void:
 	# One curtain wall from the ground (ih08, ih09, dba-50): the base, joint and slot
 	# share one absolute mullion grid, the mezzanine transom and the floor lines, with
 	# the "39" entry doors and its address plate at the foot.
-	var floors := [7.25]
+	var floors := [TRANSOM_Y]
 	floors.append_array(_floors(BASE_TOP_Y, 5, STOREY_M))
 	var joint := _side_plane(side, -BASE_RECESS)
 	_curtain(joint, u0, u1, BASE_BOTTOM_Y, BASE_TOP_Y, floors, 1.0)
@@ -849,6 +869,8 @@ func _deck(low: Dictionary, meet: Vector3) -> String:
 		var tangent := (q - p).normalized()
 		var out := Vector3(tangent.z, 0.0, -tangent.x) if signed > 0.0 else Vector3(-tangent.z, 0.0, tangent.x)
 		# Faces 0 (WSW) and 6 (NNW) are the low fronts; 1 and 2 lie on the tower.
+		# Courtyard faces of the added storeys stand inside the frozen footprint over
+		# the low roof, not on an exterior run, so they occlude and refuse spray.
 		if i in [3, 4, 5]:
 			_poly("wall", [_at(p, LOW_ROOF_Y), _at(q, LOW_ROOF_Y), _at(q, DECK_Y), _at(p, DECK_Y)], out, Body.SOLID)
 		if i in [1, 2]:
@@ -930,15 +952,6 @@ static func _floors(first: float, count: int, pitch: float) -> Array:
 	for k in count:
 		floors.append(first + pitch * float(k))
 	return floors
-
-
-# Openings [u0, u1, y0, y1] for each column [u0, u1] on each floor line.
-static func _grid(columns: Array, floors: Array, sill: float = SILL, head: float = HEAD) -> Array:
-	var openings := []
-	for floor: float in floors:
-		for column: Array in columns:
-			openings.append([float(column[0]), float(column[1]), floor + sill, floor + head])
-	return openings
 
 
 # Window assemblies (rectified 2025 photos): per column, each floor group [k0, k1]
@@ -1069,15 +1082,15 @@ func _curtain(plane: Dictionary, u0: float, u1: float, y0: float, y1: float, flo
 			us.append(float(k) * pitch)
 		k += 1
 	for u: float in us:
-		_poly("frame", [_pp(plane, u - 0.05, y0, f), _pp(plane, u + 0.05, y0, f), _pp(plane, u + 0.05, y1, f), _pp(plane, u - 0.05, y1, f)], plane.n, Body.VISUAL)
+		_strip(plane, u - 0.05, u + 0.05, y0, y1, "frame", f)
 	# Head and sill members close the field so no vertical ends free.
 	for y: float in [y0, y1]:
-		_poly("frame", [_pp(plane, u0, y - 0.06, f), _pp(plane, u1, y - 0.06, f), _pp(plane, u1, y + 0.06, f), _pp(plane, u0, y + 0.06, f)], plane.n, Body.VISUAL)
+		_strip(plane, u0, u1, y - 0.06, y + 0.06, "frame", f)
 	for floor: float in floors:
 		if floor > y0 + 0.2 and floor < y1 - 0.2:
-			_poly("spandrel", [_pp(plane, u0, floor - 0.35, f - 0.005), _pp(plane, u1, floor - 0.35, f - 0.005), _pp(plane, u1, floor + 0.15, f - 0.005), _pp(plane, u0, floor + 0.15, f - 0.005)], plane.n, Body.VISUAL)
-			_poly("frame", [_pp(plane, u0, floor - 0.4, f), _pp(plane, u1, floor - 0.4, f), _pp(plane, u1, floor - 0.33, f), _pp(plane, u0, floor - 0.33, f)], plane.n, Body.VISUAL)
-			_poly("frame", [_pp(plane, u0, floor + 0.13, f), _pp(plane, u1, floor + 0.13, f), _pp(plane, u1, floor + 0.2, f), _pp(plane, u0, floor + 0.2, f)], plane.n, Body.VISUAL)
+			_strip(plane, u0, u1, floor - 0.35, floor + 0.15, "spandrel", f - 0.005)
+			_strip(plane, u0, u1, floor - 0.4, floor - 0.33, "frame", f)
+			_strip(plane, u0, u1, floor + 0.13, floor + 0.2, "frame", f)
 
 
 # A flat visual strip on a plane (bands, joints, panels) `out` in front of it.
@@ -1089,12 +1102,11 @@ func _strip(plane: Dictionary, u0: float, u1: float, y0: float, y1: float, key: 
 # Thin dark mullions (and an optional transom) just in front of a glazing plane.
 func _mullions(plane: Dictionary, u0: float, u1: float, y0: float, y1: float, pitch: float, transom: float = -1.0) -> void:
 	var count := maxi(roundi((u1 - u0) / pitch), 1)
-	var f := 0.03
 	for k in count + 1:
 		var u := lerpf(u0, u1, float(k) / float(count))
-		_poly("frame", [_pp(plane, u - 0.05, y0, f), _pp(plane, u + 0.05, y0, f), _pp(plane, u + 0.05, y1, f), _pp(plane, u - 0.05, y1, f)], plane.n, Body.VISUAL)
+		_strip(plane, u - 0.05, u + 0.05, y0, y1, "frame", 0.03)
 	if transom > 0.0:
-		_poly("frame", [_pp(plane, u0, transom - 0.06, f), _pp(plane, u1, transom - 0.06, f), _pp(plane, u1, transom + 0.06, f), _pp(plane, u0, transom + 0.06, f)], plane.n, Body.VISUAL)
+		_strip(plane, u0, u1, transom - 0.06, transom + 0.06, "frame", 0.03)
 
 
 # Angled projecting bay (ih18, ih04, dba-64): front `front_w` wide centred on uc,
@@ -1259,6 +1271,8 @@ func _emit(record: Dictionary, form_name: String) -> Dictionary:
 		solid.set_meta("receiver_kind", "none")
 		solid.set_meta("opaque", true)
 		solid.set_meta("spray_ownership", "none")
+		solid.set_meta("derived_object_key", str(record.object_key))
+		solid.set_meta("source_keys", (record.source_keys as Array).duplicate())
 		var solid_node := CollisionShape3D.new()
 		solid_node.name = "SolidShape"
 		solid_node.shape = solid_shape

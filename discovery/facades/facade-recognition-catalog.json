@@ -8,12 +8,11 @@
       "recognition_acceptance_status": "accepted",
       "review_status": "independent_exact_current_live_pass",
       "review_status_scope": "runtime_asset_original_detail_provenance_only_not_reference_recognition",
-      "runtime_adapter_path": "game/scripts/world/facades/isle_house_composite_repair_variant_c_live_attachment.gd",
+      "runtime_adapter_path": "game/scripts/world/facades/isle_house_form.gd",
       "runtime_asset_paths": [
-        "game/scripts/world/facades/isle_house_composite_repair_variant_c_repair_only_factory.gd",
-        "game/scripts/world/facades/isle_house_composite_repair_variant_c_standalone_v1.gd"
+        "game/scripts/world/facades/isle_house_form.gd"
       ],
-      "runtime_config_path": "game/resources/facades/isle_house_composite_repair_variant_c_standalone_v1.json",
+      "runtime_config_path": null,
       "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
       "source_key": "w1282547787",
       "whole_building_recognizability_imported": false

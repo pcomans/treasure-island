@@ -202,11 +202,12 @@
       {
         "source_key": "w1282547786",
         "receiver_key": "building-composite:w1249412094:w1282547786:wall",
-        "facade_layout_path": "game/resources/facades/isle_house_39_bruton_high_se_layout.json",
-        "facade_script_path": "game/scripts/world/facades/isle_house_39_bruton_high_facade.gd",
-        "facade_scene_path": "game/scenes/world/facades/isle_house/isle_house_high_facade.tscn",
-        "material_directory": "game/resources/materials/world/isle_house",
-        "runtime_massing_override_path": null,
+        "facade_layout_path": null,
+        "facade_script_path": "game/scripts/world/facades/isle_house_form.gd",
+        "facade_scene_path": null,
+        "material_directory": null,
+        "runtime_massing_override_path": "game/scripts/world/facades/isle_house_form.gd",
+        "superseded_note": "2026-10-24 isle-form-20261023: the high facade layout/script/scene named by the disposition below were deleted; isle_house_form.gd now rebuilds both wall records and the low roof with procedural materials. The disposition text is historical.",
         "disposition": "all_promised_high_part_sides_accepted_with_documented_limitation; homogeneous podium/tower fields on exterior runs 0-9, tower-only fields on shared runs 10-12, modules preserved only on runs 5-7; low part untouched"
       },
       {
@@ -52809,9 +52810,10 @@
           "All low-part w1282547787 runs and both roofs remain untouched/unknown."
         ],
         "runtime_paths": {
-          "facade_layout": "game/resources/facades/isle_house_39_bruton_high_se_layout.json",
-          "facade_script": "game/scripts/world/facades/isle_house_39_bruton_high_facade.gd",
-          "facade_scene": "game/scenes/world/facades/isle_house/isle_house_high_facade.tscn"
+          "facade_layout": null,
+          "facade_script": "game/scripts/world/facades/isle_house_form.gd",
+          "facade_scene": null,
+          "superseded_note": "2026-10-24 isle-form-20261023: the earlier high facade layout/script/scene were deleted; isle_house_form.gd replaces them. The status fields above are historical."
         },
         "evidence_paths": [
           "evidence/first-playable/isle-house-high-facade-pilot-2026-08-29/independent-art-verdict.yaml",
