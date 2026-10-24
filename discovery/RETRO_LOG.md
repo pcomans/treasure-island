@@ -21814,3 +21814,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: listing each changed scheme's users across blocks confirmed in one step that the ground-kind change reaches only one face per unit. Checking the opt-in palette keys against the palette, and against the old band features that used them, settled the materials question.
 - What did not work well: the face lengths still had to be rebuilt by merging collinear wall runs. I can't be fully sure of the edge numbering that way, which matters for the 560 e3 column that ends 0.2 m from the corner.
 - What the team should change next time: put each gridded face's length in the digest or the skipped report, so the reviewer can check end-of-face columns directly.
+
+### push coordinator — 2026-10-24 — midrise grid batch B4 (13th St pavilions 560, 883)
+
+- What worked well: the assignment named all five way IDs and each verdict, so the catalog edit (mirroring 369's empty-to-accepted change in c81c515), the JSON re-parse and the 66 → 68 recount were mechanical, and all five rows could be found directly.
+- What did not work well: B4 is the first batch under the trial that newly accepts never-evaluated units, so the single push-chain suite is also the first suite to load 560 and 883 in the island test; a failure there would surface only at push time.
+- What the team should change next time: when a batch newly accepts units, have the coordinator confirm in the suite log that the island test lists each new key, not just that the suite exits 0.
