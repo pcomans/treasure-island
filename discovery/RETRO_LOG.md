@@ -21790,3 +21790,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: rebuilding approximate edge lengths from the wall record (e0 about 63.06 m, e5 about 114.31 m) let me check every moved feature and canopy against its face end without an engine.
 - What did not work well: the modeler re-checked the NNW eave against its face end after moving the entry, but not the WSW one. Moving a canopy-carrying entry shifts its centred eave, and the producer does not clip canopies at face ends.
 - What the team should change next time: whenever an entry with a `canopy` moves, check that `centre ± w/2` stays within [0, face length] on every face, not only the one that prompted the move.
+
+### push coordinator — 2026-10-24 — midrise grid batch B3 (warehouse 525)
+
+- What worked well: the assignment gave every unit its way ID, including the three keep-before units, so the four row updates needed no lookup (the B2 suggestion worked). Mirroring fa2be79 again made the catalog insert, JSON re-parse and score recount mechanical.
+- What did not work well: this is the first push under the trial where the modeler runs no full suite, so this entry is written before the push chain's suite (the only B3 suite) has a result; the outcome is in the commit's gate output and the handoff, not here.
+- What the team should change next time: keep the trial's single suite in the push chain, and if it fails, have the coordinator return the full failing log rather than retrying, so the revert trigger is judged on the first run.

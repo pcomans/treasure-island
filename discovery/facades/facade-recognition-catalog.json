@@ -1118,6 +1118,16 @@
           "review_id": "visual-review-inst3-w34313525-round1-20261022",
           "review_kind": "visual",
           "status": "accepted"
+        },
+        {
+          "review_id": "code-review-ti-code-review-gridb3-20261024",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-ti-visual-review-gridb3-20261024",
+          "review_kind": "visual",
+          "status": "accepted"
         }
       ],
       "anchor_source_key": "w34313525",
