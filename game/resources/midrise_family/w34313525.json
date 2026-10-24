@@ -286,16 +286,16 @@
         },
         {
           "type": "garage",
-          "from": 33.6,
-          "to": 38.4,
-          "w": 4.0,
-          "h": 3.4,
+          "from": 30.7,
+          "to": 33.95,
+          "w": 2.85,
+          "h": 3.0,
           "material": "garage"
         },
         {
           "type": "entry",
-          "from": 55.853,
-          "to": 58.453,
+          "from": 58.5,
+          "to": 61.1,
           "door": {
             "kind": "unit",
             "w": 1.8,
@@ -308,7 +308,7 @@
             "depth": 1.2
           },
           "canopy": {
-            "w": 113.306,
+            "w": 109.0,
             "depth": 1.5,
             "t": 0.2,
             "material": "eave_dark",
@@ -331,7 +331,92 @@
             "depth": 1.2
           }
         }
-      ]
+      ],
+      "grid": {
+        "columns": [
+          [
+            0.75,
+            4.5
+          ],
+          [
+            6.8,
+            10.55
+          ],
+          [
+            12.7,
+            16.45
+          ],
+          [
+            24.95,
+            28.7
+          ],
+          [
+            42.1,
+            45.8
+          ],
+          [
+            48.1,
+            51.95
+          ],
+          [
+            55.2,
+            58.1
+          ],
+          [
+            61.25,
+            65.0
+          ],
+          [
+            67.3,
+            71.05
+          ],
+          [
+            73.35,
+            77.1
+          ],
+          [
+            79.4,
+            83.15
+          ],
+          [
+            85.45,
+            89.2
+          ],
+          [
+            97.55,
+            101.3
+          ],
+          [
+            103.6,
+            107.35
+          ],
+          [
+            109.65,
+            113.4
+          ]
+        ],
+        "rows": {
+          "0": {
+            "sill": 2.4,
+            "head": 3.5
+          }
+        },
+        "source": {
+          "kind": "rectified_photo",
+          "ref": "525-sideD_332 pano yi_dSXTpMb7xnGmZXnrCng (fitted h 152.0 t -6.7 f 382)",
+          "date": "2025-03",
+          "side": "e5 (NNW, 8th St)",
+          "note": "u 42.1-45.8, 48.1-51.95 and 55.2-58.1 high 3-light windows and the roll-up door at 30.9-33.75, rectified at the fitted camera; heights from the door scale; not modelled: the lower window at 36.3-39.5 (sill about 1.2, plain wall above it) and the doors under the high windows at 41.0-42.75 and 47.1-49.0 (a feature claims its whole storey); the canopy-carrying entry moves to 58.5-61.1 and its eave to 109 m so it stays on the face; other columns continue the 6.05 m rhythm (production_inference)"
+        }
+      },
+      "grid_unit": {
+        "unit": {
+          "divisions": 3,
+          "frame_w": 0.07,
+          "mullion_w": 0.07,
+          "member_d": 0.02
+        }
+      }
     },
     "wsw": {
       "material": "wh_pale",
@@ -383,16 +468,16 @@
         },
         {
           "type": "garage",
-          "from": 36.699,
-          "to": 41.499,
-          "w": 4.0,
+          "from": 43.85,
+          "to": 47.9,
+          "w": 3.65,
           "h": 3.4,
           "material": "wh_blue"
         },
         {
           "type": "entry",
-          "from": 44.799,
-          "to": 47.399,
+          "from": 51.0,
+          "to": 53.6,
           "door": {
             "kind": "unit",
             "w": 1.8,
@@ -428,7 +513,60 @@
             "depth": 1.2
           }
         }
-      ]
+      ],
+      "grid": {
+        "columns": [
+          [
+            0.75,
+            4.1
+          ],
+          [
+            11.55,
+            14.9
+          ],
+          [
+            16.95,
+            20.3
+          ],
+          [
+            22.35,
+            25.7
+          ],
+          [
+            27.75,
+            31.1
+          ],
+          [
+            33.1,
+            36.45
+          ],
+          [
+            38.6,
+            41.95
+          ]
+        ],
+        "rows": {
+          "0": {
+            "sill": 2.4,
+            "head": 3.5
+          }
+        },
+        "source": {
+          "kind": "rectified_photo",
+          "ref": "525-sideC_242 pano G4ZjhdQ_U05G1IbBd1ouLw (fitted h 61.7 t -5.4 f 440)",
+          "date": "2025-03",
+          "side": "e0 (WSW, Avenue I)",
+          "note": "u 27.75-41.95 three high 3-light windows (3.35 m wide on a 5.4 m pitch) and the blue roll-up door at 44.05-47.7, rectified at the fitted camera; heights from wall proportions (the fit is off vertically); u 0-26 continue the 5.4 m rhythm where no feature claims the bay (production_inference); the canopy-carrying entry moves to 51.0-53.6, off the plain wall the photo shows right of the door"
+        }
+      },
+      "grid_unit": {
+        "unit": {
+          "divisions": 3,
+          "frame_w": 0.07,
+          "mullion_w": 0.07,
+          "member_d": 0.02
+        }
+      }
     },
     "sse": {
       "material": "wh_white",
@@ -482,21 +620,72 @@
         },
         {
           "type": "entry",
-          "from": 68.7,
-          "to": 71.3,
+          "from": 47.9,
+          "to": 49.4,
           "door": {
             "kind": "unit",
-            "w": 1.8,
+            "w": 1.1,
             "h": 2.2,
             "leaf_h": 2.2,
             "material": "door_pale"
           },
           "landing": {
-            "w": 2.6,
+            "w": 1.6,
             "depth": 1.2
           }
         }
-      ]
+      ],
+      "grid": {
+        "columns": [
+          [
+            5.0,
+            8.4
+          ],
+          [
+            12.0,
+            15.4
+          ],
+          [
+            33.5,
+            36.9
+          ],
+          [
+            41.0,
+            44.4
+          ],
+          [
+            49.6,
+            52.3
+          ],
+          [
+            60.5,
+            64.0
+          ],
+          [
+            67.2,
+            70.5
+          ]
+        ],
+        "rows": {
+          "0": {
+            "sill": 0.95,
+            "head": 2.8
+          }
+        },
+        "source": {
+          "kind": "rectified_photo",
+          "ref": "525-sideB_152 pano UNaiCx1oM9tDb3mcWzlhGQ (fitted h 332.0 t 0.1 f 333)",
+          "date": "2025-03",
+          "side": "e1 (SSE, 6th St)",
+          "note": "boarded tall openings at 49.6-52.3, 60.5-64.0 and 67.2-70.5 and the blue door at 48.1-49.5 projected at the fitted camera (wall top and base matched); the modelled door at 68.7 is not in the photo and moves to the photographed door; other columns continue the about 7.5 m rhythm (production_inference); u 72-97 is the canopy-covered yard wall with no openings in the photo, left solid"
+        }
+      },
+      "grid_unit": {
+        "unit": {
+          "frame_w": 0.08,
+          "member_d": 0.02
+        }
+      }
     },
     "ene": {
       "material": "wh_bluegrey",
