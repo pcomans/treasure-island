@@ -21934,3 +21934,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: a review-only batch with photo-binding overlays was fast to judge. The bindings settled identity first (and correctly rejected 528-sideC), so the visual question was only "does it read as the photo". Re-rendering Star View at street height, instead of at the target's lowest wall bottom, made the matched views usable.
 - What did not work well: two units are judged largely through occlusion: Personnel Support behind fence screens and trees, and 850 behind the container wall. Their verdicts rest on a few visible cues (dark framed grid with a rooftop volume; an ochre end with high windows), not on whole-facade comparison. 528 has no north view.
 - What the team should change next time: when a photo is mostly occluded, say in the binding table which features are actually visible, so the reviewer judges exactly those. Treat setting items such as the 850 container wall as a separate opt-in setting study, not part of the building verdict.
+
+### modeler-accept-s2 — 2026-10-24 — acceptance batch S2 (Sturgeon garage courts, review only)
+
+- What worked well: one projector script over every footprint within 70 m bound all eight photos in one pass, including three whose Maps panels name a different address. Fitting cameras to the two coplanar wing fronts gave 11–32 px residuals with no hand-picked footprint vertices.
+- What did not work well: about 19 minutes went to waiting for a fully quiet Slot A before the correction that two engines may run in parallel. The first wing picker took the nearest two long edges, which at oblique views includes the recessed connector, so it needed a coplanarity rule.
+- What the team should change next time: state the parallel-engine rule (start while fewer than two engines are live) in the slot assignment. When fitting kits with recessed fronts, pair coplanar faces rather than nearest faces.
