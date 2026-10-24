@@ -21922,3 +21922,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: waiting on origin/main and the Site 12 chain.txt in one background poll meant no engine overlap, and writing the catalog and checklist only after the rebase kept the totals edit off Site 12's lines. A diff check confirmed the rebase left the three unit JSON changes byte-identical, so the reviewed content is what is pushed.
 - What did not work well: the rebase hit an append-only RETRO conflict (both rounds added sections at the end of the file), and the rebase commit failed until the bot identity was passed per command. Both were mechanical, but they cost two extra steps.
 - What the team should change next time: when two pushes are queued on the same base, the second coordinator should write its record files only after rebasing onto the first push, and should pass `-c user.name/-c user.email` on `git rebase --continue` as well as on `git commit`.
+
+### modeler-accept-s1 — 2026-10-24 — acceptance batch S1 (Star View, Personnel Support, 850/Bldg 202, Hall 528; review-only)
+
+- What worked well: projecting every nearby footprint at each capture pose confirmed the binding of 9 photos in one pass, and caught that 528's sideC frame actually shows w96698650. Checking pgrep right before each run avoided two collisions with another worktree.
+- What did not work well: I set the matched-view eye height from the target's lowest wall-bottom. On Star View that is 2.7 m below the street, so the first pose-matched renders were from under the road and cost 2 extra runs. Another worktree still started an engine run during one of mine.
+- What the team should change next time: take the eye height from the sampled ground (road or land mesh) at the pano position, not from building bounds. Whoever starts an engine run should also check pgrep immediately before, so concurrent slots do not overlap.
