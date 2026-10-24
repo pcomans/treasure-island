@@ -21868,3 +21868,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the assignment gave the reviewer's finish follow-ups verbatim (the B5 retro change), so the checklist note took them directly with nothing reconstructed. `node_modules` and `.godot` were already present, and the catalog edit was an exact-match text replacement of two units, re-parsed and recounted at 72 → 74.
 - What did not work well: the 641 finding ("its filed photo shows 654; stays L1 with no photo") conflicts with its checklist row's earlier Mar21a L2 tick, and the assignment said to keep the totals consistent; the push left the tick unchanged and flagged it rather than silently demoting a level.
 - What the team should change next time: when a reviewer finds a misfiled photo, say in the push assignment whether any level tick that rested on it should change, so the coordinator need not choose between the note and the totals.
+
+### modeler-site12-pilot — 2026-10-24 — housing kit photo gates and Site 12 lower-window pilot
+
+- What worked well: the cheap photo gates on each kit (garage court, Exposition, Site 12, Mariner/Bayside) settled which kit, if any, needed changing before any code. The answer was data-only on one kit, so no housing hook was built. Fitting each camera on the frame's own corners and doors gave 1.5-1.7 px residuals and an overlay that plainly showed the 0.43 m overhang.
+- What did not work well: the whole-world housing digest differs on five untouched units, but only in auto-generated node-name counters, so a raw diff overstates the change until names are normalised. One measured Hutchins frame (1112, oblique) would not fit and was dropped.
+- What the team should change next time: normalise `@Class@NNN` names in family digests before comparing. When a window rule collides with photo-placed entries, report the entry offset as its own follow-up rather than widening into it.
