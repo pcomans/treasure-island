@@ -18,7 +18,15 @@ extends RefCounted
 ## anchor) cover sheds, tanks, trailers and pavilions; configs without them build
 ## as before.
 ## Dimensions, cadence and unseen sides are production inference.
+## Opt-in scheme `grid` (shared facade_grid format, columns in footprint-edge stations
+## on e<k> faces) places the windows of every bay from a photo-derived grid, built as
+## shared facade_assembly units; schemes without it build exactly as before.
 ## See game/resources/midrise_family/README.md for the config fields.
+
+const FacadeGrid := preload("res://game/scripts/world/facades/facade_grid.gd")
+const FacadeAssembly := preload("res://game/scripts/world/facades/facade_assembly.gd")
+const GRID_MATERIALS := {"pane": "glass", "frame": "frame", "mullion": "frame", "transom": "frame",
+	"lower_field": "spandrel", "spandrel": "spandrel", "surround": "frame_light", "divider": "frame_light"}
 
 const SCHEMA := "ti.midrise-family/1"
 const ROLES := ["wall", "roof", "support", "ground"]
@@ -128,6 +136,9 @@ class Face:
 	var index := 0
 	var poly_index := 0
 	var top_xs: Array = []
+	## Opt-in scheme grid: its expanded openings in face-local stations.
+	var has_grid := false
+	var grid_openings: Array = []
 
 	func point(s: float, y: float, depth: float) -> Vector3:
 		var p := a + d * s - n * depth
@@ -963,6 +974,10 @@ static func _fill(face: Face, bays: Array, g0: float, g1: float, ranges: Array) 
 		if b - a < 0.01:
 			continue
 		var feature := _range_at(ranges, (a + b) * 0.5)
+		if face.has_grid:
+			# The grid places the windows; the gap stays one bay.
+			bays.append({"s0": a, "s1": b, "f": {}, "kind": "blank" if str(feature.get("type", "")) == "blank" else "window", "range": feature})
+			continue
 		var module := float(feature.get("module", face.scheme.get("module", 3.3)))
 		var count := int(round((b - a) / module))
 		var kind := "blank" if str(feature.get("type", "")) == "blank" or count < 1 else "window"
@@ -1122,6 +1137,9 @@ static func _openings(ctx: Ctx, face: Face, bay: Dictionary) -> Array:
 	for k in block.storeys:
 		if claimed.has(k) or k in skip_storeys:
 			continue
+		if face.has_grid:
+			out.append_array(_grid_cells(face, s0, s1, k))
+			continue
 		if k == 0:
 			var ground_kind := str(ground.get("kind", "window"))
 			if ground_kind == "blank":
@@ -1158,6 +1176,46 @@ static func _openings(ctx: Ctx, face: Face, bay: Dictionary) -> Array:
 	return kept
 
 
+## Validates and expands a face's scheme grid (columns mapped from footprint-edge
+## stations to face stations); an invalid grid fails the build.
+static func _prepare_grid(ctx: Ctx, face: Face) -> bool:
+	var grid: Variant = face.scheme.get("grid")
+	if not grid is Dictionary:
+		ctx.errors.append("%s/%s grid is not an object" % [face.block.id, face.key])
+		return false
+	var block := face.block
+	var floors: Array = []
+	for k in block.storeys:
+		floors.append(block.floors[k])
+	var local: Dictionary = (grid as Dictionary).duplicate(true)
+	var columns: Array = []
+	for column: Array in FacadeGrid.columns(grid):
+		var a := _local_station(ctx, face, float(column[0]))
+		var b := _local_station(ctx, face, float(column[1]))
+		columns.append([minf(a, b), maxf(a, b)])
+	columns.sort_custom(func(x: Array, y: Array) -> bool: return float(x[0]) < float(y[0]))
+	local["columns"] = columns
+	var check := FacadeGrid.validate(local, floors, block.floors[block.storeys])
+	if not bool(check.ok):
+		ctx.errors.append("%s/%s grid: %s" % [block.id, face.key, "; ".join(PackedStringArray(check.errors))])
+		return false
+	face.grid_openings = FacadeGrid.expand(local, floors)
+	face.has_grid = true
+	return true
+
+
+## Grid openings of storey k whose columns lie inside the bay [s0, s1].
+static func _grid_cells(face: Face, s0: float, s1: float, k: int) -> Array:
+	var out: Array = []
+	for o: Array in face.grid_openings:
+		if _storey_at(face.block, float(o[2])) != k:
+			continue
+		if float(o[0]) < s0 + MIN_PIER_M * 0.5 or float(o[1]) > s1 - MIN_PIER_M * 0.5:
+			continue
+		out.append({"s0": float(o[0]), "s1": float(o[1]), "y0": float(o[2]), "y1": float(o[3]), "kind": "grid", "spec": face.scheme.get("grid_unit", {}), "k": k, "extras": o[4]})
+	return out
+
+
 static func _placed(face: Face, bay: Dictionary, spec: Dictionary, center: float, floor_y: float, next_y: float, k: int, kind: String) -> Dictionary:
 	var w := float(spec.get("w", 1.6))
 	var sill := float(spec.get("sill", 0.8))
@@ -1171,6 +1229,8 @@ static func _placed(face: Face, bay: Dictionary, spec: Dictionary, center: float
 
 
 static func _facade(ctx: Ctx, face: Face) -> void:
+	if face.scheme.has("grid") and not _prepare_grid(ctx, face):
+		return
 	var bays := _bays(ctx, face)
 	if not ctx.errors.is_empty():
 		return
@@ -1195,7 +1255,7 @@ static func _facade(ctx: Ctx, face: Face) -> void:
 					# Where local grade rises above the floor, sills rise with it and heads
 					# stay aligned; doors and garages already sit on their own grade.
 					var grade := _ground_max(ctx, face, float(opening.s0), float(opening.s1))
-					if str(opening.kind) in ["window", "storefront", "patio", "vent", "band"]:
+					if str(opening.kind) in ["window", "storefront", "patio", "vent", "band", "grid"]:
 						if float(opening.y0) < grade + GRADE_CLEARANCE_M:
 							opening.y0 = grade + GRADE_CLEARANCE_M
 							if float(opening.y1) - float(opening.y0) < 0.9:
@@ -1427,6 +1487,17 @@ static func _assembly(ctx: Ctx, face: Face, bay: Dictionary, o: Dictionary) -> v
 				glazing = _merge(spec, {"mullions": mullions})
 			_glazing(ctx, face, glazing, s0, s1, y0, y1, depth)
 			_hood(ctx, face, spec, s0, s1, y1)
+		"grid":
+			# Shared facade_assembly units on the grid opening (frames, mullions,
+			# transoms, lower fields, spandrels across joined storeys).
+			var depth := float(spec.get("depth", 0.2))
+			_reveals(ctx, face, str(spec.get("reveal", wall_mat)), s0, s1, y0, y1, depth, true)
+			var unit_spec: Dictionary = (spec.get("unit", {}) as Dictionary).duplicate(true)
+			unit_spec["pane_d"] = -depth
+			unit_spec["materials"] = _merge(GRID_MATERIALS, spec.get("materials", {}))
+			var out := face.out3()
+			for r: Dictionary in FacadeAssembly.stack([s0, s1, y0, y1, o.get("extras", {})], unit_spec):
+				_rect(ctx.bucket("wall", str(r.material)), face, float(r.u0), float(r.u1), float(r.y0), float(r.y1), -float(r.d1), out)
 		"patio":
 			var depth := float(spec.get("depth", 0.18))
 			_reveals(ctx, face, wall_mat, s0, s1, y0, y1, depth, true)
