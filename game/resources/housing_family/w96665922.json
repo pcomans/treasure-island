@@ -169,8 +169,8 @@
         ],
         "lower_windows": [
           {
-            "station_m": 2.5241987186902817,
-            "local_station_m": 2.5241987186902817,
+            "station_m": 2.8842,
+            "local_station_m": 2.8842,
             "basis": {
               "source_run": 0,
               "start": [
@@ -196,14 +196,14 @@
               "length_m": 10.310045053247848
             },
             "wall_receiver": true,
-            "width_m": 1.75,
+            "width_m": 1.62,
             "height_m": 1.2,
             "center_y": 3.895,
             "glazing": "blue"
           },
           {
-            "station_m": 10.129999995343232,
-            "local_station_m": 10.129999995343232,
+            "station_m": 9.95,
+            "local_station_m": 9.95,
             "basis": {
               "source_run": 0,
               "start": [
@@ -229,14 +229,14 @@
               "length_m": 10.310045053247848
             },
             "wall_receiver": true,
-            "width_m": 1.75,
+            "width_m": 1.9,
             "height_m": 1.2,
             "center_y": 3.988,
             "glazing": "blue"
           },
           {
-            "station_m": 16.472596169365794,
-            "local_station_m": 6.162551116117944,
+            "station_m": 16.8326,
+            "local_station_m": 6.5226,
             "basis": {
               "source_run": 1,
               "start": [
@@ -262,14 +262,14 @@
               "length_m": 10.418854687536435
             },
             "wall_receiver": true,
-            "width_m": 1.75,
+            "width_m": 1.62,
             "height_m": 1.2,
             "center_y": 4.124,
             "glazing": "blue"
           },
           {
-            "station_m": 25.372596179726823,
-            "local_station_m": 4.643696438942541,
+            "station_m": 25.0126,
+            "local_station_m": 4.2837,
             "basis": {
               "source_run": 2,
               "start": [
@@ -295,7 +295,7 @@
               "length_m": 7.167895158273467
             },
             "wall_receiver": true,
-            "width_m": 1.75,
+            "width_m": 1.62,
             "height_m": 1.2,
             "center_y": 4.158,
             "glazing": "blue"
@@ -2404,6 +2404,7 @@
     },
     "eave": "Wall top 7.759 = frozen flat base 2.459 + 5.3 m from dated photo proportions (production_inference); source height 6 m retained as identity only",
     "limits": "Fences, vent pipes, post bands, carport-top finish (shared canopy uses the roof material), finish materials, site and decals parked for later levels. No recognition or stage acceptance claim.",
-    "photo_schedule": "row: unit 2 door, lower and upper window at photo-mapped stations 8.17/10.13/9.45 m from the west corner (ref 1114-ssw-front01), so the west court ends before that door as photographed."
+    "photo_schedule": "row: unit 2 door, lower and upper window at photo-mapped stations 8.17/10.13/9.45 m from the west corner (ref 1114-ssw-front01), so the west court ends before that door as photographed.",
+    "site12_pilot": "2026-10-24 Site 12 pilot: each front lower window is aligned with its upper window's outer edge (the side away from the entry) and widened toward the photographed 1.9 m, stopping 0.06 m short of the entry door, as measured at fitted cameras on Keppler 1109 (Apr 2019 pano 9T6FszoANzyG-g8_D8NI8Q) and Hutchins 1114 (Apr 2019 pano I2Dk_vOGXwebdfpTi5JLzg): lower widths 1.72-2.0 m with outer edges within 0.1 m of the upper's. Before, the lowers were 1.75 m centred 1.0 m off, overhanging the upper's edge by 0.43 m. The entries stay at their stations (about 0.28 m off the photos), which caps the widths; uppers, screens and materials unchanged."
   }
 }
