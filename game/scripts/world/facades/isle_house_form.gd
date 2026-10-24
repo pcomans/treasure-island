@@ -103,6 +103,8 @@ const PODIUM_DOORS := {1: [[5.15, 6.25]]}
 const SE_LEASING := [31.4, 42.0]
 const NNW_BASE_OPENINGS := [[9.7, 10.6], [11.6, 12.5], [15.4, 16.4], [19.2, 20.8], [38.2, 40.2], [41.2, 42.6]]
 const ENTRY_D := 1.5
+# Shared grid helpers (floor lines, stacked openings, cut lines).
+const FACADE_GRID := preload("res://game/scripts/world/facades/facade_grid.gd")
 const PHYSICS_WORLD_SOLID := 1 << 0
 const PHYSICS_SPRAY_SURFACE := 1 << 2
 const RENDER_WORLD_VISIBLE := 1 << 0
@@ -232,8 +234,8 @@ func _build_low(low: Dictionary) -> void:
 	var wsw := _side(low, 0, 4)
 	var ene := _side(low, 5, 9)
 	var nnw := _side(low, 10, 12)
-	var floors2 := _floors(BASE_TOP_Y, 2, STOREY_M)
-	var floors4 := _floors(BASE_TOP_Y, 4, STOREY_M)
+	var floors2 := FACADE_GRID.floor_lines(BASE_TOP_Y, 2, STOREY_M)
+	var floors4 := FACADE_GRID.floor_lines(BASE_TOP_Y, 4, STOREY_M)
 	# WSW, Avenue of the Palms (rectified ih01/ih02/ih04): base recessed under a
 	# soffit behind alternating concrete columns and charcoal piers about 3.85 m apart;
 	# a brick NW corner bay; three projecting white stacks 11.5 m apart, each an angled
@@ -263,8 +265,8 @@ func _build_low(low: Dictionary) -> void:
 	# white floor band at every floor line. Stacks: white projecting surrounds
 	# around one continuous dark glazing/spandrel stack per front and cheek.
 	var flat_style := {"split": 0.42, "transom": 0.55, "pane": "glass_blue"}
-	var wsw_openings := _stacks(WSW_FLAT_LIGHTS, floors4, [], 0.2, 2.75, flat_style)
-	var corner_openings := _stacks([[1.0, 3.3]], floors4, [], 0.2, 2.75, flat_style)
+	var wsw_openings := FACADE_GRID.stacks(WSW_FLAT_LIGHTS, floors4, [], 0.2, 2.75, flat_style)
+	var corner_openings := FACADE_GRID.stacks([[1.0, 3.3]], floors4, [], 0.2, 2.75, flat_style)
 	_punched(wsw_line, 0.0, 4.2, BASE_TOP_Y, LOW_ROOF_Y, corner_openings, "brick", Body.RECEIVER)
 	_punched(wsw_line, 0.0, 4.2, LOW_ROOF_Y, DECK_Y, corner_openings, "brick", Body.RECEIVER)
 	_punched(wsw_line, 4.2, length, BASE_TOP_Y, LOW_ROOF_Y, wsw_openings, "panel", Body.RECEIVER)
@@ -274,7 +276,7 @@ func _build_low(low: Dictionary) -> void:
 	var stack_style := {"split": 0.0, "transom": 0.6, "pane": "glass_blue"}
 	for s: float in WSW_STACKS:
 		_bay(wsw, s + 1.2 + 1.55, 3.1, 1.2, 0.0, 0.8, BASE_TOP_Y, DECK_Y + 0.5, "wall",
-			_stacks([[s + 1.55, s + 3.65]], floors4, [[0, 3]], 0.2, 2.75, stack_style), [[0.3, 0.95]], floors4, [[0, 3]], stack_style)
+			FACADE_GRID.stacks([[s + 1.55, s + 3.65]], floors4, [[0, 3]], 0.2, 2.75, stack_style), [[0.3, 0.95]], floors4, [[0, 3]], stack_style)
 	var pier := false
 	var u := 4.2
 	var bay_index := 0
@@ -305,9 +307,9 @@ func _build_low(low: Dictionary) -> void:
 		ene_slims.append([u0 + 4.75, u0 + 5.65])
 		_strip(ene_line, u0 + 4.1, u0 + 5.1, BASE_BOTTOM_Y, BASE_TOP_Y, "dark", 0.05)
 	var ene_style := {"split": 0.5, "transom": 0.0, "surround": true}
-	_punched(ene_line, 0.0, ene.length, BASE_TOP_Y, LOW_ROOF_Y, _stacks(ene_slims, floors2, [[0, 1]], 0.2, 2.75, ene_style), "wall", Body.RECEIVER)
+	_punched(ene_line, 0.0, ene.length, BASE_TOP_Y, LOW_ROOF_Y, FACADE_GRID.stacks(ene_slims, floors2, [[0, 1]], 0.2, 2.75, ene_style), "wall", Body.RECEIVER)
 	for u0: float in ene_modules:
-		_bay(ene, u0 + 2.0, 3.1, 0.45, 0.45, 0.75, BASE_TOP_Y, LOW_ROOF_Y + 0.3, "wall", _stacks([[u0 + 0.75, u0 + 3.25]], floors2, [[0, 1]], 0.2, 2.75, ene_style))
+		_bay(ene, u0 + 2.0, 3.1, 0.45, 0.45, 0.75, BASE_TOP_Y, LOW_ROOF_Y + 0.3, "wall", FACADE_GRID.stacks([[u0 + 0.75, u0 + 3.25]], floors2, [[0, 1]], 0.2, 2.75, ene_style))
 	_coping(ene, 0.0, ene.length, LOW_ROOF_Y)
 	# NNW (rectified ih17, ih06): light brick with slim dark-framed lights stacked
 	# per storey over a charcoal base; the east volume two storeys, the west NNW_TALL_M
@@ -339,8 +341,8 @@ func _build_low(low: Dictionary) -> void:
 	_cap(nnw, e0, e1, 0.0, -ENTRY_D, BASE_TOP_Y, false, "trim", Body.SOLID)
 	# Tall dark-framed groups joining the middle floors (ih06, ih17), subdivided.
 	var nnw_style := {"split": 0.4, "transom": 0.6, "surround": true}
-	var nnw_openings := _stacks(NNW_EAST_LIGHTS, floors2, [], 0.3, 2.65, nnw_style)
-	nnw_openings.append_array(_stacks(NNW_TALL_LIGHTS, floors4, [[0, 0], [1, 2], [3, 3]], 0.3, 2.65, nnw_style))
+	var nnw_openings := FACADE_GRID.stacks(NNW_EAST_LIGHTS, floors2, [], 0.3, 2.65, nnw_style)
+	nnw_openings.append_array(FACADE_GRID.stacks(NNW_TALL_LIGHTS, floors4, [[0, 0], [1, 2], [3, 3]], 0.3, 2.65, nnw_style))
 	_punched(nnw_line, 0.0, nnw.length, BASE_TOP_Y, LOW_ROOF_Y, nnw_openings, "brick", Body.RECEIVER)
 	_punched(nnw_line, step - 0.03, nnw.length, LOW_ROOF_Y, DECK_Y, nnw_openings, "brick", Body.RECEIVER)
 	_coping(nnw, 0.0, step, LOW_ROOF_Y)
@@ -500,13 +502,13 @@ func _tower_segment(segment: Dictionary) -> void:
 	if bool(segment.ground):
 		# Podium window assemblies (ih08, ih09, ih10, ih18): strong black surrounds,
 		# asymmetric subdivisions, and the middle floors joined into tall groups.
-		var floors := _floors(BASE_TOP_Y, roundi((p - BASE_TOP_Y) / STOREY_M), STOREY_M)
+		var floors := FACADE_GRID.floor_lines(BASE_TOP_Y, roundi((p - BASE_TOP_Y) / STOREY_M), STOREY_M)
 		var groups := [[0, 0], [1, 2], [3, 3]] if floors.size() == 4 else []
 		var style := {"split": 0.36, "transom": 0.6, "surround": true}
-		_punched(_side_plane(side, 0.0), segment.pod_u0, segment.pod_u1, BASE_TOP_Y, p, _stacks(windows.get("flat", []), floors, groups, SILL, HEAD, style), "brick", Body.RECEIVER)
+		_punched(_side_plane(side, 0.0), segment.pod_u0, segment.pod_u1, BASE_TOP_Y, p, FACADE_GRID.stacks(windows.get("flat", []), floors, groups, SILL, HEAD, style), "brick", Body.RECEIVER)
 		for bay: Array in segment.bays:
 			_bay(side, float(bay[0]), float(bay[1]), BAY_CHEEK, BAY_CHEEK, BAY_D, BASE_TOP_Y, p + 0.3, "brick",
-				_stacks(windows.get("fronts", []), floors, groups, SILL, HEAD, style), [[0.3, 0.8]], floors, groups, style)
+				FACADE_GRID.stacks(windows.get("fronts", []), floors, groups, SILL, HEAD, style), [[0.3, 0.8]], floors, groups, style)
 	# Ledge on the podium top, then the recessed glazed band.
 	var outer := [_podium_end(segment, true, 0.0), _podium_end(segment, false, 0.0)]
 	var ledge := [_podium_end(segment, true, -BAND_INSET), _podium_end(segment, false, -BAND_INSET)]
@@ -532,7 +534,7 @@ func _tower_segment(segment: Dictionary) -> void:
 	# Shaft facets: a stacked glazing strip per floor on each wide facet, the narrow
 	# return facets solid grey panel (ih19, ih21); slots on the flat faces (ih14).
 	var plan := _saw(segment)
-	var tower_floors := _floors(tb, ceili((TOWER_TOP_Y - tb) / TOWER_FLOOR_M), TOWER_FLOOR_M)
+	var tower_floors := FACADE_GRID.floor_lines(tb, ceili((TOWER_TOP_Y - tb) / TOWER_FLOOR_M), TOWER_FLOOR_M)
 	for j in shaft.size() - 1:
 		var a := shaft[j]
 		var b := shaft[j + 1]
@@ -546,7 +548,7 @@ func _tower_segment(segment: Dictionary) -> void:
 		# below the parapet (ih14, ih19, ih21), floor joints across the panels.
 		var k_last := floori((TOWER_TOP_Y - 0.5 - tb - 2.8) / TOWER_FLOOR_M)
 		var openings := []
-		for o: Array in _stacks(columns, tower_floors, [[0, k_last]], 0.15, 2.8, {"split": 0.0, "transom": 0.0}):
+		for o: Array in FACADE_GRID.stacks(columns, tower_floors, [[0, k_last]], 0.15, 2.8, {"split": 0.0, "transom": 0.0}):
 			o[2] = maxf(float(o[2]), tb + FLARE_H + 0.15)
 			openings.append(o)
 		var facet := _plane(a, along, facet_n)
@@ -745,8 +747,8 @@ func _slot(face: int, u0: float, bottom: float, floor_cap: bool) -> void:
 	var side: Dictionary = _faces[face]
 	var u1 := u0 + SLOT_W
 	_wall(side, u0, u1, bottom, TOWER_TOP_Y, "glass", Body.RECEIVER, -SLOT_D)
-	var floors := _floors(BASE_TOP_Y, roundi((DECK_Y - BASE_TOP_Y) / STOREY_M) + 1, STOREY_M)
-	floors.append_array(_floors(DECK_Y + BAND_M, ceili((TOWER_TOP_Y - DECK_Y - BAND_M) / TOWER_FLOOR_M), TOWER_FLOOR_M))
+	var floors := FACADE_GRID.floor_lines(BASE_TOP_Y, roundi((DECK_Y - BASE_TOP_Y) / STOREY_M) + 1, STOREY_M)
+	floors.append_array(FACADE_GRID.floor_lines(DECK_Y + BAND_M, ceili((TOWER_TOP_Y - DECK_Y - BAND_M) / TOWER_FLOOR_M), TOWER_FLOOR_M))
 	_curtain(_side_plane(side, -SLOT_D), u0, u1, bottom, TOWER_TOP_Y, floors, 1.0)
 	if floor_cap:
 		_cap(side, u0, u1, 0.0, -SLOT_D, bottom, true, "roof", Body.SOLID)
@@ -768,7 +770,7 @@ func _se_joint() -> void:
 	# share one absolute mullion grid, the mezzanine transom and the floor lines, with
 	# the "39" entry doors and its address plate at the foot.
 	var floors := [TRANSOM_Y]
-	floors.append_array(_floors(BASE_TOP_Y, 5, STOREY_M))
+	floors.append_array(FACADE_GRID.floor_lines(BASE_TOP_Y, 5, STOREY_M))
 	var joint := _side_plane(side, -BASE_RECESS)
 	_curtain(joint, u0, u1, BASE_BOTTOM_Y, BASE_TOP_Y, floors, 1.0)
 	_curtain(joint, u0, s0, BASE_TOP_Y, DECK_Y, floors, 1.0)
@@ -946,60 +948,6 @@ static func _pp(plane: Dictionary, u: float, y: float, d: float) -> Vector3:
 	return (plane.origin as Vector3) + (plane.t as Vector3) * u + (plane.n as Vector3) * d + Vector3.UP * y
 
 
-# Floor lines from `first`, `count` storeys `pitch` apart.
-static func _floors(first: float, count: int, pitch: float) -> Array:
-	var floors := []
-	for k in count:
-		floors.append(first + pitch * float(k))
-	return floors
-
-
-# Window assemblies (rectified 2025 photos): per column, each floor group [k0, k1]
-# becomes one opening from floors[k0]+sill to floors[k1]+head, with dark spandrels
-# across the floor lines inside it, so connected floors read as one framed stack.
-# style: "split" mullion position as a width fraction (0 none, default 0.5 on wide
-# lights), "transom" a bar this far above each floor's sill (0 none), "surround" a
-# proud black frame around the assembly.
-static func _stacks(columns: Array, floors: Array, groups: Array = [], sill: float = SILL, head: float = HEAD, style: Dictionary = {}) -> Array:
-	var openings := []
-	var floor_groups := groups.duplicate()
-	if floor_groups.is_empty():
-		for k in floors.size():
-			floor_groups.append([k, k])
-	for column: Array in columns:
-		for group: Array in floor_groups:
-			var k0 := int(group[0])
-			var k1 := mini(int(group[-1]), floors.size() - 1)
-			if k0 >= floors.size() or k1 < k0:
-				continue
-			var spandrels := []
-			var sills := [float(floors[k0]) + sill]
-			for k in range(k0 + 1, k1 + 1):
-				spandrels.append([float(floors[k - 1]) + head, float(floors[k]) + sill])
-				sills.append(float(floors[k]) + sill)
-			var extras := style.duplicate()
-			extras["spandrels"] = spandrels
-			extras["sills"] = sills
-			openings.append([float(column[0]), float(column[1]), float(floors[k0]) + sill, float(floors[k1]) + head, extras])
-	return openings
-
-
-static func _unique_sorted(values: Array) -> Array:
-	values.sort()
-	var out := []
-	for v: float in values:
-		if out.is_empty() or v - float(out[-1]) > 0.001:
-			out.append(v)
-	return out
-
-
-static func _in_opening(openings: Array, u: float, y: float) -> bool:
-	for o: Array in openings:
-		if u > float(o[0]) and u < float(o[1]) and y > float(o[2]) and y < float(o[3]):
-			return true
-	return false
-
-
 # Wall rectangle [u0,u1]x[y0,y1] on a plane, cut around recessed window openings
 # ([u0, u1, y0, y1] each; rows of merged cells), each opening lined with dark reveals
 # WINDOW_DEPTH deep to a glass pane, a thin frame and a mullion on wide lights.
@@ -1017,14 +965,14 @@ func _punched(plane: Dictionary, u0: float, u1: float, y0: float, y1: float, ope
 	for o: Array in inside:
 		us.append_array([o[0], o[1]])
 		ys.append_array([o[2], o[3]])
-	us = _unique_sorted(us)
-	ys = _unique_sorted(ys)
+	us = FACADE_GRID.unique_sorted(us)
+	ys = FACADE_GRID.unique_sorted(ys)
 	var n: Vector3 = plane.n
 	for j in ys.size() - 1:
 		var y_mid := (float(ys[j]) + float(ys[j + 1])) * 0.5
 		var run_start := -1
 		for i in us.size():
-			var solid_cell := i < us.size() - 1 and not _in_opening(inside, (float(us[i]) + float(us[i + 1])) * 0.5, y_mid)
+			var solid_cell := i < us.size() - 1 and not FACADE_GRID.in_opening(inside, (float(us[i]) + float(us[i + 1])) * 0.5, y_mid)
 			if solid_cell and run_start < 0:
 				run_start = i
 			elif not solid_cell and run_start >= 0:
@@ -1136,7 +1084,7 @@ func _bay(side: Dictionary, uc: float, front_w: float, cheek_l: float, cheek_r: 
 			normal = -normal
 		# Cheek columns measured from the cheek's back (wall) edge.
 		var plane := _plane(a, along, normal) if a == back_l else _plane(b, -along, normal)
-		_punched(plane, 0.0, along.length(), y0, y1, _stacks(cheek_columns, floors, cheek_groups, SILL, HEAD, cheek_style), key, Body.SOLID)
+		_punched(plane, 0.0, along.length(), y0, y1, FACADE_GRID.stacks(cheek_columns, floors, cheek_groups, SILL, HEAD, cheek_style), key, Body.SOLID)
 	_poly("trim", [_at(back_l, y0), _at(front_l, y0), _at(front_r, y0), _at(back_r, y0)], Vector3.DOWN, Body.SOLID)
 	_poly("roof", [_at(back_l, y1), _at(front_l, y1), _at(front_r, y1), _at(back_r, y1)], Vector3.UP, Body.SOLID, true)
 
