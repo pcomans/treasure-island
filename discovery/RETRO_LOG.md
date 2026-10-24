@@ -21695,3 +21695,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the Isle House switch is a pure move, so a side-by-side read of the removed and added functions settled behaviour identity without an engine run. The self-test builds small grids and asserts on behaviour, with tolerances.
 - What did not work well: validate() checks shapes and ranges but coerces values with int()/float(), and it lets a partial group list silently drop storeys. The assembly mixes flat and box rectangles, but its first likely consumer (the Hawkins-style MultiMesh box emitter) refuses zero-depth boxes. Neither gap shows up until a second producer adopts the code.
 - What the team should change next time: when shared infrastructure ships ahead of its consumers, write one adoption sketch per target producer (midrise, housing, panel hall) against the API before review, so convention gaps surface before the family rollout.
+
+## push-coordinator-facade-grid (rebase, gates and push, 2026-10-24)
+
+- What worked well: the rebase onto `b8e9ead` touched only RETRO_LOG, and diffing the rebased head against `d4dd694` showed the result differed only by the docs commit. That made it safe to rerun only the import and suite instead of re-reviewing. Both gates passed on the first run.
+- What did not work well: the first `git rebase` attempt stopped with no committer identity, because the bot identity lives only in the original worktree's commits, not in config. I had to abort and rerun it with `-c user.name/-c user.email`.
+- What the team should change next time: push dispatches should say that a rebase needs the per-command bot identity too, not just the final commit.
