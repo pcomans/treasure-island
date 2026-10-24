@@ -21874,3 +21874,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the cheap photo gates on each kit (garage court, Exposition, Site 12, Mariner/Bayside) settled which kit, if any, needed changing before any code. The answer was data-only on one kit, so no housing hook was built. Fitting each camera on the frame's own corners and doors gave 1.5-1.7 px residuals and an overlay that plainly showed the 0.43 m overhang.
 - What did not work well: the whole-world housing digest differs on five untouched units, but only in auto-generated node-name counters, so a raw diff overstates the change until names are normalised. One measured Hutchins frame (1112, oblique) would not fit and was dropped.
 - What the team should change next time: normalise `@Class@NNN` names in family digests before comparing. When a window rule collides with photo-placed entries, report the entry offset as its own follow-up rather than widening into it.
+
+### ti-visual-review — 2026-10-24 — Site 12 pilot, Keppler 1109 and Hutchins 1114 lower-window alignment
+
+- What worked well: the overlay (cyan uppers, green lowers after, red lowers before, orange entries) showed the outer-edge rule and the residual door offset directly, so the subtle change could be judged without hunting for it in renders.
+- What did not work well: the change is about 0.3–0.4 m per window and is close to invisible at gameplay distance. Most of the review effort went into confirming that it is not a regression rather than an improvement anyone would notice. The whole-unit check also turned up a feature at 1114's front (the grey enclosure box) that the photo neither clearly shows nor rules out.
+- What the team should change next time: before rolling a sub-metre alignment rule out across a family, decide whether it changes anything visible at gameplay distance. If not, bundle it with a change that does (for example the door stations) rather than spending a separate render and review round on it.
