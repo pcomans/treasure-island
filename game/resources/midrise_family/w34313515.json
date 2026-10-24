@@ -297,7 +297,42 @@
           "h": 0.3,
           "material": "inst_band"
         }
-      ]
+      ],
+      "grid": {
+        "columns": {
+          "pitch": 5.2,
+          "first": 0.7,
+          "count": 10,
+          "width": 3.8
+        },
+        "rows": {
+          "*": {
+            "sill": 1.35,
+            "head": 3.05
+          }
+        },
+        "source": {
+          "kind": "inferred_from_side",
+          "ref": "520-sideC_242 pano cAhCruTjAinYoFHxP4wkmw",
+          "date": "2025-09",
+          "side": "e0 of w34313520",
+          "face": "plain comb faces",
+          "truth_class": "production_inference",
+          "note": "520's rows and window size on the existing 5.2 m comb-face module"
+        }
+      },
+      "grid_unit": {
+        "unit": {
+          "split": 0.5,
+          "split_min_w": 2.4,
+          "transoms": [
+            0.55
+          ],
+          "frame_w": 0.08,
+          "mullion_w": 0.08,
+          "member_d": 0.02
+        }
+      }
     },
     "dorm3": {
       "material": "inst_pale",
@@ -800,7 +835,74 @@
           "head": 0.35,
           "guard_h": 1.1
         }
-      ]
+      ],
+      "grid": {
+        "columns": [
+          [
+            2.3,
+            6.1
+          ],
+          [
+            17.3,
+            21.1
+          ],
+          [
+            27.1,
+            30.9
+          ],
+          [
+            32.3,
+            36.1
+          ],
+          [
+            48.3,
+            49.3
+          ],
+          [
+            62.2,
+            66.0
+          ],
+          [
+            66.6,
+            70.4
+          ],
+          [
+            87.9,
+            91.7
+          ],
+          [
+            92.9,
+            96.7
+          ]
+        ],
+        "rows": {
+          "*": {
+            "sill": 1.35,
+            "head": 3.05
+          }
+        },
+        "source": {
+          "kind": "inferred_from_side",
+          "ref": "520-sideC_242 pano cAhCruTjAinYoFHxP4wkmw; 515 reference-wsw001 pano kEX8mV7OsuHLoA4oK69_KA (oblique)",
+          "date": "2025-09",
+          "side": "e0 of w34313520",
+          "face": "e0 of w34313515",
+          "truth_class": "production_inference",
+          "note": "same block type as 520: 520's rows and window width; columns placed between the stair stacks and entry, leaving the broad solid fields 8.4-16.6, 39.4-47.6, 53.4-61.6, 78.9-87.1 seen in reference-wsw001 (2026-10-15 study review)"
+        }
+      },
+      "grid_unit": {
+        "unit": {
+          "split": 0.5,
+          "split_min_w": 2.4,
+          "transoms": [
+            0.55
+          ],
+          "frame_w": 0.08,
+          "mullion_w": 0.08,
+          "member_d": 0.02
+        }
+      }
     },
     "front13": {
       "material": "inst_pale",

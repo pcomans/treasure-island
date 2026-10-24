@@ -281,7 +281,42 @@
           "h": 0.3,
           "material": "inst_band"
         }
-      ]
+      ],
+      "grid": {
+        "columns": {
+          "pitch": 5.2,
+          "first": 0.7,
+          "count": 10,
+          "width": 3.6
+        },
+        "rows": {
+          "*": {
+            "sill": 1.35,
+            "head": 3.05
+          }
+        },
+        "source": {
+          "kind": "inferred_from_side",
+          "ref": "520-sideC_242 pano cAhCruTjAinYoFHxP4wkmw",
+          "date": "2025-09",
+          "side": "e0",
+          "face": "plain comb faces",
+          "truth_class": "production_inference",
+          "note": "the front's window width and rows on the existing 5.2 m comb-face module"
+        }
+      },
+      "grid_unit": {
+        "unit": {
+          "split": 0.5,
+          "split_min_w": 2.4,
+          "transoms": [
+            0.55
+          ],
+          "frame_w": 0.08,
+          "mullion_w": 0.08,
+          "member_d": 0.02
+        }
+      }
     },
     "door5": {
       "material": "inst_pale",
@@ -673,8 +708,8 @@
       "features": [
         {
           "type": "stair_bay",
-          "from": 1.4,
-          "to": 5.8,
+          "from": 1.0,
+          "to": 4.6,
           "depth": 2.2,
           "pier": 0.2,
           "back": "stair_dark",
@@ -685,8 +720,8 @@
         },
         {
           "type": "entry",
-          "from": 24.8,
-          "to": 30.4,
+          "from": 21.4,
+          "to": 25.9,
           "door": {
             "kind": "lobby",
             "w": 2.4,
@@ -720,7 +755,7 @@
         {
           "type": "stair_bay",
           "from": 30.4,
-          "to": 35.6,
+          "to": 34.8,
           "depth": 2.2,
           "pier": 0.2,
           "back": "stair_dark",
@@ -731,8 +766,8 @@
         },
         {
           "type": "entry",
-          "from": 55.2,
-          "to": 57.8,
+          "from": 54.4,
+          "to": 59.0,
           "door": {
             "kind": "unit",
             "w": 1.8,
@@ -759,7 +794,68 @@
             }
           }
         }
-      ]
+      ],
+      "grid": {
+        "columns": [
+          [
+            4.9,
+            8.9
+          ],
+          [
+            15.1,
+            19.5
+          ],
+          [
+            22.0,
+            25.4
+          ],
+          [
+            26.4,
+            29.0
+          ],
+          [
+            35.1,
+            39.9
+          ],
+          [
+            47.0,
+            51.9
+          ],
+          [
+            54.8,
+            58.6
+          ],
+          [
+            60.0,
+            62.4
+          ]
+        ],
+        "rows": {
+          "*": {
+            "sill": 1.35,
+            "head": 3.05
+          }
+        },
+        "source": {
+          "kind": "rectified_photo",
+          "ref": "520-sideC_242 pano cAhCruTjAinYoFHxP4wkmw",
+          "date": "2025-09",
+          "side": "e0",
+          "note": "Seven Seas front rectified at the fitted pano camera (h 64.2, t 1.5, f 394); window heads sit just under the floor bands; solid fields between the stair stacks"
+        }
+      },
+      "grid_unit": {
+        "unit": {
+          "split": 0.5,
+          "split_min_w": 2.4,
+          "transoms": [
+            0.55
+          ],
+          "frame_w": 0.08,
+          "mullion_w": 0.08,
+          "member_d": 0.02
+        }
+      }
     },
     "front1": {
       "material": "inst_pale",
@@ -839,7 +935,68 @@
             }
           }
         }
-      ]
+      ],
+      "grid": {
+        "columns": [
+          [
+            22.0,
+            25.2
+          ],
+          [
+            28.0,
+            31.2
+          ],
+          [
+            33.3,
+            34.7
+          ],
+          [
+            39.4,
+            42.6
+          ],
+          [
+            45.4,
+            48.6
+          ],
+          [
+            51.4,
+            54.6
+          ],
+          [
+            57.4,
+            60.6
+          ],
+          [
+            63.4,
+            66.6
+          ]
+        ],
+        "rows": {
+          "*": {
+            "sill": 1.35,
+            "head": 3.05
+          }
+        },
+        "source": {
+          "kind": "rectified_photo",
+          "ref": "w34313520 reference-sep2025 pano 9DMpaJdFAYWd6KRR3NBbKA",
+          "date": "2025-09",
+          "side": "e1",
+          "note": "SSE face from the oblique corner view (medium confidence): blank first ~16 m, then single windows about 3.2 m wide on a 6 m pitch; separated by floor bands (no joined three-tier stacks visible)"
+        }
+      },
+      "grid_unit": {
+        "unit": {
+          "split": 0.5,
+          "split_min_w": 2.4,
+          "transoms": [
+            0.55
+          ],
+          "frame_w": 0.08,
+          "mullion_w": 0.08,
+          "member_d": 0.02
+        }
+      }
     }
   },
   "blocks": [
