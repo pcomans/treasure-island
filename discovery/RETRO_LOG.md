@@ -21862,3 +21862,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the modeler's triage table (what each photo actually shows, plus the whole-unit gaps) let me check claims directly instead of rediscovering them. The 641 photo's grey cabinet and yellow-framed windows match 654's NNW face, so the "it's really 654" claim is verifiable in seconds. The 654 overlay made the window count (5 singles + 1 pair) a one-glance check.
 - What did not work well: two units (641, 550) have no confirmed reference, and 535 has a known colour and roof-skylight gap. A grid batch can't close any of these, so three of five whole-unit verdicts here were predictable before any render.
 - What the team should change next time: before a grid batch, sort units into "grid can help", "needs materials or roof work" and "no confirmed reference". Send only the first group through grid renders, route the second to a materials or roof study, and flag the third for reference research or L1 status.
+
+### push-coordinator-grid-b6 — 2026-10-24 — midrise grid batch B6 push (2 acceptances; last midrise batch)
+
+- What worked well: the assignment gave the reviewer's finish follow-ups verbatim (the B5 retro change), so the checklist note took them directly with nothing reconstructed. `node_modules` and `.godot` were already present, and the catalog edit was an exact-match text replacement of two units, re-parsed and recounted at 72 → 74.
+- What did not work well: the 641 finding ("its filed photo shows 654; stays L1 with no photo") conflicts with its checklist row's earlier Mar21a L2 tick, and the assignment said to keep the totals consistent; the push left the tick unchanged and flagged it rather than silently demoting a level.
+- What the team should change next time: when a reviewer finds a misfiled photo, say in the push assignment whether any level tick that rested on it should change, so the coordinator need not choose between the note and the totals.
