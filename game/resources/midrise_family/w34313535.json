@@ -252,7 +252,8 @@
           "kind": "rectified_photo",
           "ref": "w34313535.png pano Pjoq4Y58L6BCOfsE5RDbQg (rib pitch 0.32 m from the face-on photo; box-rib cladding as recessed pans)",
           "date": "2025-03",
-          "side": "WSW e0"
+          "side": "WSW e0",
+          "note": "rib cladding, not windows: the grid draws opaque metal pans (metal_pan, 4 cm recess) between 0.11 m ribs at 0.32 m pitch; there is no glass"
         }
       },
       "grid_unit": {
@@ -305,7 +306,8 @@
           "ref": "w34313535.png pano Pjoq4Y58L6BCOfsE5RDbQg (rib pitch 0.32 m from the face-on photo; box-rib cladding as recessed pans)",
           "date": "2025-03",
           "side": "WSW e0",
-          "face": "e1/e3 ends"
+          "face": "e1/e3 ends",
+          "note": "rib cladding, not windows: the grid draws opaque metal pans (metal_pan, 4 cm recess) between 0.11 m ribs at 0.32 m pitch; there is no glass"
         }
       },
       "grid_unit": {
@@ -375,7 +377,8 @@
           "ref": "w34313535.png pano Pjoq4Y58L6BCOfsE5RDbQg (rib pitch 0.32 m from the face-on photo; box-rib cladding as recessed pans)",
           "date": "2025-03",
           "side": "WSW e0",
-          "face": "e2 (ENE)"
+          "face": "e2 (ENE)",
+          "note": "rib cladding, not windows: the grid draws opaque metal pans (metal_pan, 4 cm recess) between 0.11 m ribs at 0.32 m pitch; there is no glass"
         }
       },
       "grid_unit": {

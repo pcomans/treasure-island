@@ -973,6 +973,7 @@
     "inferred": "Window cadence, the olive treatment on the WSW-facing faces, doors on every side; north, courtyard and re-entrant sides are unseen.",
     "footprint": "Frozen relation r133351: outer ring (61 edges) kept as one block around its inner courtyard ring.",
     "grid_b5": "Mar 2025 photos (r133351-sideD_240 and 883-sideB_153): the olive wing's WSW wall at e4 is windowless (round logo only)",
-    "wholeunit": "Mar 2025 r133351-sideD_240 (pano zHJe3vjFyKW1aAgqgdeypw, h 48): the e4 bump is a tall dark slate box (about 5.6 m to the fascia top) with a deep overhanging fascia about 1 m tall; its fascia ends match the OSM outline, so the walls sit about 1.2 m inside it on the WSW and 1.25 m in from both ends. Box depth (20 m), the SSE door and the roof are inference."
+    "wholeunit": "Mar 2025 r133351-sideD_240 (pano zHJe3vjFyKW1aAgqgdeypw, h 48): the e4 bump is a tall dark slate box (about 5.6 m to the fascia top) with a deep overhanging fascia about 1 m tall; its fascia ends match the OSM outline, so the walls sit about 1.2 m inside it on the WSW and 1.25 m in from both ends. Box depth (20 m), the SSE door and the roof are inference.",
+    "wholeunit_ends": "The ends under the gym overhang differ on purpose, following sideD_240: at the NW end the photo shows a lower pale porch/hall under the fascia, so hall_nw fills the 1.25 m strip at hall height; at the SE end the photo shows an open dark pocket under the fascia (equipment, fence), so that strip stays open ground."
   }
 }
