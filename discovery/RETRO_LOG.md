@@ -22000,3 +22000,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: printing every target's `acceptance_records` first (last round's lesson) showed all seven empty, so one exact-text replacement per `anchor_source_key` block appended the record with no reformatting of the rest of the catalog; a re-parse confirmed 7 changed and 105 → 112. The RETRO rebase conflict was again one append-only block, resolved by keeping both sides.
 - What did not work well: the branch's two RETRO commits conflicted with main's S5 entries purely because both append at the end of the log; every acceptance push pays this one manual step.
 - What the team should change next time: keep the record edit as a script over a unit list and a review id, since S5 and S7 used the same steps; only the follow-up text differs per batch.
+
+### modeler-accept-s4 — 2026-10-24 — acceptance batch S4 (Exposition / Gateview Court rows, review only) and the S2 fits
+
+- What worked well: footprint overlays (base, eave and corners drawn on the photo at the pano pose) confirmed all ten photo bindings in two image reads, with no corner fitting, for rows that run past both frame edges. The S2 fits (8 of 8 PASS, every stair flight walked and every spray placed from 4 m) ran in one background chain alongside the S4 prep.
+- What did not work well: one auto side view put the player on 1252's parking apron, which is configured local ground, not a wall or roof record. The whole shots batch failed and took one of the four runs. The 1248 pano position fell under the modelled carport, which took the last run for a street-side re-render. The engine-count check let chains race; the flock lock now prevents that.
+- What the team should change next time: when choosing auto player spots, check configured `local_ground` triangles as well as wall and roof records. Compare each pano position with nearby carport and canopy outlines before rendering a matched view.
