@@ -21826,3 +21826,15 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the fresh worktree reused the matching `.godot` cache and ran `npm ci` first, so no import failures this time. A pre-render footprint clearance test on every view's player position caught nothing new, but it removed the B4 class of failure. Overlaying the final columns on the photos before the first render again aligned on the first try. Looking at photos for "keep-before" units found two facades (902 front, r133351 olive wing) that the photos show as windowless.
 - What did not work well: I set 370's small windows to their photographed 0.9 m light, which the producer rejects (it needs more than 0.9 m). The digest already reported valid=false, but my run script went on to two AFTER shot runs that could only fail to load the world, costing 2 of the 10 runs.
 - What the team should change next time: after the AFTER digest, stop if any unit is valid=false (now in run-r1b.sh). Check grid rows against the producer's 0.9 m minimum light before the first engine run.
+
+### ti-code-review — 2026-10-24 — midrise grid batch B5 (564, 370, 902, r133351)
+
+- What worked well: a reusable per-unit compare script (palette, blocks, schemes, users per scheme, merged edge lengths) made the four-unit data review a single pass. Windowless faces use existing mechanisms (a blank-ground scheme, removed inferred bays on a module-60 scheme), not degenerate grids.
+- What did not work well: the "no columns on this face" log for 370 hall/e1 can't be tied to a specific face segment from the data alone, because merged wall runs show e1 as one 43.3 m edge. I had to rely on the modeler's render note that both windows appear.
+- What the team should change next time: include the face's station range in the producer's no-columns and straddle messages (for example `e1[s0-s1]`), so a reviewer can tell an expected sliver from a missing face.
+
+### ti-visual-review — 2026-10-24 — midrise grid batch B5 (564, 370, 902, r133351; keep-before 611, 450)
+
+- What worked well: the per-unit sheets put the photo, BEFORE, AFTER, four gameplay faces and a raised view in one image, and the column overlays on 564 and 370 made the high-window counts easy to check. The task note listed every reference path, and each change came with its reason. "Remove inferred windows where the photo shows blank wall" was easy to verify against a native crop of the photo.
+- What did not work well: the batch asked for whole-unit verdicts on six units that had never been evaluated, but the only budget was for grid or geometry. Two units (r133351's olive block, and 611's wall colour and material) are held by gaps the grid can't touch. 902, 611 and 450 have no pose-matched views, so their whole-unit calls rest on gameplay-view comparison.
+- What the team should change next time: before a grid batch with units that have never been evaluated, do a quick whole-unit triage against the photo (massing, colour, height) and route those gaps to the same batch or a follow-up. Pose-fit at least one view per unit that is asked for a whole-unit verdict.
