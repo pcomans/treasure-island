@@ -202,15 +202,7 @@
       "parapet_material": "metal_grey",
       "module": 60.0,
       "ground": {
-        "w": 1.6,
-        "h": 0.8,
-        "sill": 2.6,
-        "depth": 0.1,
-        "mullions": [
-          0.5
-        ],
-        "frame": "frame",
-        "kind": "window"
+        "kind": "blank"
       },
       "plinth": {
         "material": "concrete",
@@ -226,44 +218,7 @@
         ],
         "frame": "frame"
       },
-      "features": [
-        {
-          "type": "bays",
-          "from": 4.0,
-          "to": 21.0,
-          "module": 4.25
-        },
-        {
-          "type": "entry",
-          "from": 1.0,
-          "to": 2.8,
-          "door": {
-            "kind": "unit",
-            "w": 1.0,
-            "h": 2.2,
-            "leaf_h": 2.2
-          },
-          "landing": {
-            "w": 1.8,
-            "depth": 1.2
-          }
-        },
-        {
-          "type": "entry",
-          "from": 22.3,
-          "to": 24.1,
-          "door": {
-            "kind": "unit",
-            "w": 1.0,
-            "h": 2.2,
-            "leaf_h": 2.2
-          },
-          "landing": {
-            "w": 1.8,
-            "depth": 1.2
-          }
-        }
-      ]
+      "features": []
     },
     "gable": {
       "material": "metal_grey",
@@ -355,6 +310,7 @@
   "study_notes": {
     "observed": "Mar 2025 320 Avenue M: long low corrugated metal shed with a shallow gable along its length, small high windows and doors.",
     "inferred": "Roll-up doors in both gable ends, rear louvres and door; window rhythm, pitch and heights. Graffiti not modelled.",
-    "footprint": "Frozen rectangle kept as one gable block (ridge along edge 0)."
+    "footprint": "Frozen rectangle kept as one gable block (ridge along edge 0).",
+    "grid_b6": "Mar 2025 photo w34313535.png (pano Pjoq4Y58L6BCOfsE5RDbQg, h 64.8, whole e0 face in frame): the WSW long side is windowless and doorless corrugated metal with a dark sign panel high at about u 6.9-9.1; the inferred bays at 4-21 and the entries at 1.0-2.8 and 22.3-24.1 are removed"
   }
 }
