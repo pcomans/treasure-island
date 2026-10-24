@@ -646,8 +646,17 @@ static func bay_box_geometry() -> Dictionary:
 static func volume_geometry() -> Dictionary:
 	var solid := _bucket()
 	var dark := _bucket()
-	# Ends buried against the notch returns, back against the notch back wall.
+	# Back against the notch back wall. The neighbouring notches are shallower than the
+	# middle one, so each end face is emitted only over the depth those notches leave
+	# exposed (the rest is buried against the returns).
 	_append_box_open_front(solid, "ene", ENE_BOX_U.x, ENE_BOX_U.y, -ENE_MIDDLE_DEPTH_M, 0.0, DECK_Y, ENE_BOX_TOP_Y, false)
+	var ene_t := side_frame("ene").tangent as Vector2
+	var ene_t3 := Vector3(ene_t.x, 0.0, ene_t.y)
+	for end: Array in [[ENE_BOX_U.x, ENE_BAY_DEPTH_M, -ene_t3], [ENE_BOX_U.y, ENE_SLOT_DEPTH_M, ene_t3]]:
+		var u: float = end[0]
+		var inner := _at(side_point("ene", u, -float(end[1])), 0.0)
+		var outer := _at(side_point("ene", u, 0.0), 0.0)
+		_append_oriented_quad(solid, inner + Vector3.UP * DECK_Y, outer + Vector3.UP * DECK_Y, outer + Vector3.UP * ENE_BOX_TOP_Y, inner + Vector3.UP * ENE_BOX_TOP_Y, end[2])
 	_append_slab(solid, solid, _side_rect("ene", ENE_BOX_U.x, ENE_BOX_U.y, -0.35, 0.0), ENE_BOX_TOP_Y, ENE_LEDGE_TOP_Y)
 	var wsw_range := Vector2(maxf((SETBACK_U_RANGES.wsw as Vector2).x, 0.0), float(side_frame("wsw").length) - WEDGE_RUN_M)
 	var u := wsw_range.x
@@ -671,9 +680,10 @@ const WIN_HEAD_M := 2.95
 const REVEAL_M := 0.2
 # Window columns [u0, u1] per face on the cladding at the footprint line (SE tall block
 # hk02/hk13/cav-7; ENE E and N blocks and middle box cav-4/hk13/hk07; NNW 6-storey
-# hk15). Corner columns wrap the E and N corners (hk13, hk09, cav-4).
+# hk15). Corner columns wrap the E and N corners (hk13, hk09, cav-4); each ends short
+# of the corner so its pocket keeps an end reveal (the SE side is 59.44 m long).
 const WINDOW_COLUMNS := {
-	"se": [[38.1, 39.3], [40.0, 42.3], [44.7, 45.7], [47.1, 49.4], [50.6, 51.7], [53.9, 56.2], [57.6, 59.45]],
+	"se": [[38.1, 39.3], [40.0, 42.3], [44.7, 45.7], [47.1, 49.4], [50.6, 51.7], [53.9, 56.2], [57.6, 59.25]],
 	"ene": [[0.15, 4.8], [7.25, 9.6], [11.0, 12.5], [19.6, 20.8], [23.25, 24.5], [25.6, 27.9], [30.0, 32.0], [33.25, 34.5],
 		[36.6, 38.5], [39.9, 40.9], [47.0, 49.0], [51.0, 52.0], [53.1, 55.0], [57.0, 59.95]],
 	"nnw": [[0.15, 1.4], [3.75, 6.0], [7.5, 9.75], [12.1, 14.25], [16.75, 19.0], [25.0, 26.1], [27.25, 29.6], [31.9, 33.0],
@@ -701,7 +711,7 @@ const BOX_GROUPS := {
 }
 # Ground openings at the footprint line [u0, u1, kind] (hk02, hk13, hk07, hk15, cav-4).
 const GROUND_OPENINGS := {
-	"se": [[38.7, 44.1, "garage"], [44.85, 45.55, "door"], [47.1, 49.4, "win"], [53.9, 56.2, "win"], [57.6, 59.45, "store"]],
+	"se": [[38.7, 44.1, "garage"], [44.85, 45.55, "door"], [47.1, 49.4, "win"], [53.9, 56.2, "win"], [57.6, 59.25, "store"]],
 	"ene": [[0.15, 4.8, "store"], [7.25, 9.6, "win"], [14.9, 16.6, "win_bay"], [47.0, 49.0, "win"],
 		[51.0, 52.0, "win"], [53.1, 55.0, "win"], [57.0, 59.95, "store"]],
 	"nnw": [[0.15, 1.4, "store"], [3.75, 6.0, "win"], [7.5, 9.75, "win"], [12.1, 14.25, "door"], [16.75, 19.0, "win"],
