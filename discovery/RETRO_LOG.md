@@ -21701,3 +21701,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the rebase onto `b8e9ead` touched only RETRO_LOG, and diffing the rebased head against `d4dd694` showed the result differed only by the docs commit. That made it safe to rerun only the import and suite instead of re-reviewing. Both gates passed on the first run.
 - What did not work well: the first `git rebase` attempt stopped with no committer identity, because the bot identity lives only in the original worktree's commits, not in config. I had to abort and rerun it with `-c user.name/-c user.email`.
 - What the team should change next time: push dispatches should say that a rebase needs the per-command bot identity too, not just the final commit.
+
+## modeler-grid-trial (490 Avenue of the Palms w1272162518 photo window grid, 2026-10-24)
+
+- What worked well: the Hawkins camera tools carried over directly. Rulers at the resolved panos plus rectification gave the e0 column lines in minutes. A private digest over all 64 midrise configs proved the opt-in hook left the other 63 byte-identical (Star View included) through two rebases. Running the fit on the clean base showed the single grounded sample was pre-existing, not caused by the window cut-outs.
+- What did not work well: I changed the glass colour along with the geometry ("lighter glass"), and the owner judged the BEFORE materials better. One render pair was spent rebuilding with the original palette. I also rendered AFTER once on the pre-fix grid API before the d4dd694 rebase landed, which wasted two renders.
+- What the team should change next time: keep a geometry trial geometry-only and inherit every existing material unless the owner asks for a material change. Wait for a pending shared-API fix before spending owner-facing renders.
