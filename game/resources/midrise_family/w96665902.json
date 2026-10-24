@@ -226,12 +226,6 @@
       },
       "features": [
         {
-          "type": "bays",
-          "from": 3.0,
-          "to": 9.0,
-          "module": 3.0
-        },
-        {
           "type": "entry",
           "from": 11.7,
           "to": 17.5,
@@ -261,12 +255,6 @@
             "material": "fascia",
             "gap": 0.3
           }
-        },
-        {
-          "type": "bays",
-          "from": 20.0,
-          "to": 26.0,
-          "module": 3.0
         }
       ]
     },
@@ -491,6 +479,7 @@
   "study_notes": {
     "observed": "Apr/May 2019 photos: one-storey tan stucco box with a flat roof, green service doors (ENE), a glazed entrance under a canopy (WSW) and a blue/orange mural wall (NNW).",
     "inferred": "Window and door positions, storefront mullions, canopy size, roof units; the mural and the entrance sign are parked (plain stucco).",
-    "footprint": "Frozen 4-edge ring kept as one block."
+    "footprint": "Frozen 4-edge ring kept as one block.",
+    "grid_b5": "2019 photo: corrugated siding with no windows either side of the storefront; the inferred bays at 3-9 and 20-26 are removed"
   }
 }

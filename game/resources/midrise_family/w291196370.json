@@ -360,15 +360,9 @@
       ],
       "features": [
         {
-          "type": "bays",
-          "from": 2.0,
-          "to": 16.0,
-          "module": 4.5
-        },
-        {
           "type": "entry",
-          "from": 20.95,
-          "to": 22.35,
+          "from": 21.4,
+          "to": 22.9,
           "door": {
             "kind": "unit",
             "w": 1.1,
@@ -386,14 +380,39 @@
             "w": 1.4,
             "slope": 0.083
           }
-        },
-        {
-          "type": "bays",
-          "from": 28.0,
-          "to": 41.0,
-          "module": 4.5
         }
-      ]
+      ],
+      "grid": {
+        "columns": [
+          [
+            14.25,
+            15.15
+          ],
+          [
+            29.65,
+            30.5
+          ]
+        ],
+        "rows": {
+          "0": {
+            "sill": 3.0,
+            "head": 3.9
+          }
+        },
+        "source": {
+          "kind": "rectified_photo",
+          "ref": "370-sideC_151 = cset refs/w291196370.png, pano HGXdH5X249D-l-7VKuRrCQ (Sep 2025; pano position, heading 337.1 fitted to the face's east end, f 387)",
+          "date": "2025-09",
+          "side": "e1 (front, 13th St)",
+          "note": "the front has only two small white-trimmed windows, at u 14.25-15.15 and 29.65-30.5, high on the wall, and the transom door at about 21.4-22.9 (moved 0.45 m to the photographed centre with its deck and ramp); u 0-5 is out of frame and left solid"
+        }
+      },
+      "grid_unit": {
+        "unit": {
+          "frame_w": 0.1,
+          "member_d": 0.02
+        }
+      }
     },
     "door0": {
       "material": "siding_blue",

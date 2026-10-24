@@ -732,6 +732,30 @@
         }
       ],
       "upper": "blank"
+    },
+    "olive_blank": {
+      "material": "olive",
+      "parapet_material": "olive_trim",
+      "module": 4.8,
+      "window": {
+        "w": 1.8,
+        "h": 1.3,
+        "sill": 1.0,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "olive_trim"
+      },
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "olive_trim",
+        "top": 0.3
+      },
+      "bands": [],
+      "features": []
     }
   },
   "blocks": [
@@ -756,7 +780,7 @@
         "e3": "plain",
         "e10": "plain",
         "e34": "plain",
-        "e4": "olive",
+        "e4": "olive_blank",
         "e6": "olive",
         "e12": "olive",
         "e18": "olive",
@@ -768,6 +792,7 @@
   "study_notes": {
     "observed": "Mar 2025 13th St (south frontage): low one-storey flat-roofed building, cream/white walls under pale blue fascia panels, a glazed central double-door entrance; a darker olive wing with brown trim to the west.",
     "inferred": "Window cadence, the olive treatment on the WSW-facing faces, doors on every side; north, courtyard and re-entrant sides are unseen.",
-    "footprint": "Frozen relation r133351: outer ring (61 edges) kept as one block around its inner courtyard ring."
+    "footprint": "Frozen relation r133351: outer ring (61 edges) kept as one block around its inner courtyard ring.",
+    "grid_b5": "Mar 2025 photos (r133351-sideD_240 and 883-sideB_153): the olive wing's WSW wall at e4 is windowless (round logo only)"
   }
 }
