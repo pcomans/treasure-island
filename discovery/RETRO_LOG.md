@@ -21880,3 +21880,15 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the overlay (cyan uppers, green lowers after, red lowers before, orange entries) showed the outer-edge rule and the residual door offset directly, so the subtle change could be judged without hunting for it in renders.
 - What did not work well: the change is about 0.3–0.4 m per window and is close to invisible at gameplay distance. Most of the review effort went into confirming that it is not a regression rather than an improvement anyone would notice. The whole-unit check also turned up a feature at 1114's front (the grey enclosure box) that the photo neither clearly shows nor rules out.
 - What the team should change next time: before rolling a sub-metre alignment rule out across a family, decide whether it changes anything visible at gameplay distance. If not, bundle it with a change that does (for example the door stations) rather than spending a separate render and review round on it.
+
+### ti-code-review — 2026-10-24 — Site 12 pilot lower windows (915, 922)
+
+- What worked well: listing each lower window as a global interval next to its upper window and entry confirmed that every outer edge is shared and every 0.06 m door gap holds, from the data alone.
+- What did not work well: the commit message says the lowers "widen toward 1.9 m", but most went from 1.75 to 1.62 m (only 922's second lower widens to 1.9), because the fixed entries cap them. I had to compute this to see it.
+- What the team should change next time: state the before and after widths in data-only commit messages when they move in different directions.
+
+### push coordinator — 2026-10-24 — Site 12 pilot record and push (915, 922)
+
+- What worked well: mirroring the B6 record commit (45adefa) kept the catalog, checklist and push chain to known shapes; editing the catalog by exact text replacement left every other unit untouched, and a re-parse and table recount confirmed the score (76) and the L2 totals (192 C/21 U) from the data.
+- What did not work well: the 641 L2 tick was known wrong at B6 and left for "a re-check" that needed no new evidence, so it cost a second checklist edit in a later round.
+- What the team should change next time: when a reviewer has already confirmed a reference mix-up, correct the stage cell in the same record commit instead of deferring it.
