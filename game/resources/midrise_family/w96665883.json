@@ -270,7 +270,10 @@
       "parapet_material": "cream",
       "module": 60.0,
       "ground": {
-        "kind": "blank"
+        "kind": "window",
+        "frame": "frame_light",
+        "glass": "glass",
+        "depth": 0.1
       },
       "plinth": {
         "material": "white_band",

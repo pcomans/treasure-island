@@ -616,7 +616,10 @@
       "parapet_material": "cream",
       "module": 60.0,
       "ground": {
-        "kind": "blank"
+        "kind": "window",
+        "frame": "teal",
+        "glass": "glass",
+        "depth": 0.1
       },
       "plinth": {
         "material": "teal",
