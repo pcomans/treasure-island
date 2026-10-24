@@ -21940,3 +21940,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: one projector script over every footprint within 70 m bound all eight photos in one pass, including three whose Maps panels name a different address. Fitting cameras to the two coplanar wing fronts gave 11–32 px residuals with no hand-picked footprint vertices.
 - What did not work well: about 19 minutes went to waiting for a fully quiet Slot A before the correction that two engines may run in parallel. The first wing picker took the nearest two long edges, which at oblique views includes the recessed connector, so it needed a coplanarity rule.
 - What the team should change next time: state the parallel-engine rule (start while fewer than two engines are live) in the slot assignment. When fitting kits with recessed fronts, pair coplanar faces rather than nearest faces.
+
+### ti-visual-review — 2026-10-24 — acceptance batch S2 (eight Sturgeon garage-court units)
+
+- What worked well: one sheet per unit with the photo beside a fitted current render made eight whole-unit verdicts quick. The kit's form (twin gabled wings, a garage bank, a recessed stair court) is so distinctive that each unit's colour scheme was the main thing left to check. The shared panos (1403/1404 from iPYX at h196/h16, 1405/1408 from E8fU at h243/h64) give opposite-heading bindings that check each other.
+- What did not work well: the modeler's triage flagged 1408/w130 as slightly dark but called 1403 "none material", although 1403 renders cool grey against the photo's warm sandy beige, the clearest colour mismatch in the batch. The kit-wide lap siding against the photos' stucco also went unremarked.
+- What the team should change next time: in a review-only batch, compare each unit's dominant wall colour on the photo's sunlit face with the neutral render, and list any visible hue shift, not only lightness. Note kit-wide material mismatches once, as a kit item, so they don't get lost per unit.
