@@ -18,7 +18,6 @@ const TARGET_WALL_KEY := "building:w1249412093:wall"
 const TARGET_ROOF_KEY := "building:w1249412093:roof"
 const SOURCE_TOP_Y := 10.274
 const BASE_Y := 4.274
-const STOREY_M := 3.5
 # 2026-10-24 form audit (cav-7 frontal, cav-0 section, hk15/hk18 rectified): ground
 # storey about 4.2 m, upper storeys about 3.15 m; the bay boxes of the 4-storey wing
 # run from about 4.2 to 10.9 m above grade. DECK_Y is the ground-storey top / box
@@ -71,15 +70,22 @@ const ROOF_EDGE_OVERHANG_M := 1.0
 # loggia under the roof slab) and a glazing slot before the N corner block (cav-4 seen
 # from the N corner, hk21 from the E corner, hk10);
 # the NNW glazed strip between the two 6-storey blocks (hk15, hk12).
+const SE_SLOT_DEPTH_M := 1.0
+const ENE_BAY_DEPTH_M := 0.8
+const ENE_MIDDLE_DEPTH_M := 1.8
+const ENE_SLOT_DEPTH_M := 1.2
+const NNW_STRIP_DEPTH_M := 1.0
+const ENE_MIDDLE_U := Vector2(18.8, 42.7)
 const NOTCHES := [
-	["se", 32.0, 34.5, 1.0],
-	["ene", 13.8, 18.8, 0.8], ["ene", 18.8, 42.7, 1.8], ["ene", 42.7, 44.5, 1.2],
-	["nnw", 20.0, 23.3, 1.0],
+	["se", 32.0, 34.5, SE_SLOT_DEPTH_M],
+	["ene", 13.8, ENE_MIDDLE_U.x, ENE_BAY_DEPTH_M], ["ene", ENE_MIDDLE_U.x, ENE_MIDDLE_U.y, ENE_MIDDLE_DEPTH_M], ["ene", ENE_MIDDLE_U.y, 44.5, ENE_SLOT_DEPTH_M],
+	["nnw", 20.0, 23.3, NNW_STRIP_DEPTH_M],
 ]
 # ENE middle: storeys 2-5 at the footprint line over the recessed ground floor, a
 # low ledge in front of the recessed top floor, and the roof slab with a dark
-# soffit over the middle only (u from the E corner).
-const ENE_BOX_U := Vector2(18.82, 42.68)
+# soffit over the middle only (u from the E corner). The box fills the middle notch
+# end to end, closed against its returns.
+const ENE_BOX_U := ENE_MIDDLE_U
 const ENE_BOX_TOP_Y := DECK_Y + 4.0 * UPPER_STOREY_M
 const ENE_LEDGE_TOP_Y := ENE_BOX_TOP_Y + 1.0
 const ENE_ROOF_EDGE_U := Vector2(10.0, 46.0)
@@ -95,7 +101,7 @@ const ENE_ROOF_EDGE_U := Vector2(10.0, 46.0)
 # at the NNW step (hk12, hk15).
 const ROOF_VOLUMES := [
 	["se", 34.5, 38.0, -6.5, 0.0, TALL_TOP_Y, 29.6, "tower"],
-	["se", 32.0, 34.5, -6.5, -1.0, TALL_TOP_Y, 27.7, "tower"],
+	["se", 32.0, 34.5, -6.5, -SE_SLOT_DEPTH_M, TALL_TOP_Y, 27.7, "tower"],
 	["se", SE_CHEEK_U0_M, 32.0, -6.5, 0.0, TERRACE_Y, 29.6, "tower_cheek"],
 	["se", 39.0, 47.0, -12.5, -8.0, TALL_TOP_Y, 28.6, "pavilion"],
 	["se", 38.3, 48.0, -12.8, -7.0, 28.6, 28.9, "pavilion_roof"],
@@ -315,7 +321,7 @@ static func massing_contract() -> Dictionary:
 		"terrace_y_m": TERRACE_Y,
 		"low_top_y_m": LOW_TOP_Y,
 		"tall_top_y_m": TALL_TOP_Y,
-		"storey_height_m": STOREY_M,
+		"upper_storey_height_m": UPPER_STOREY_M,
 		"court_y_m": COURT_Y,
 		"notches": NOTCHES,
 		"roof_volumes": ROOF_VOLUMES,
@@ -640,7 +646,8 @@ static func bay_box_geometry() -> Dictionary:
 static func volume_geometry() -> Dictionary:
 	var solid := _bucket()
 	var dark := _bucket()
-	_append_box_open_front(solid, "ene", ENE_BOX_U.x, ENE_BOX_U.y, -1.8, 0.0, DECK_Y, ENE_BOX_TOP_Y)
+	# Ends buried against the notch returns, back against the notch back wall.
+	_append_box_open_front(solid, "ene", ENE_BOX_U.x, ENE_BOX_U.y, -ENE_MIDDLE_DEPTH_M, 0.0, DECK_Y, ENE_BOX_TOP_Y, false)
 	_append_slab(solid, solid, _side_rect("ene", ENE_BOX_U.x, ENE_BOX_U.y, -0.35, 0.0), ENE_BOX_TOP_Y, ENE_LEDGE_TOP_Y)
 	var wsw_range := Vector2(maxf((SETBACK_U_RANGES.wsw as Vector2).x, 0.0), float(side_frame("wsw").length) - WEDGE_RUN_M)
 	var u := wsw_range.x
@@ -658,7 +665,7 @@ static func volume_geometry() -> Dictionary:
 # and the architect's photos (production inference; grid tables in the task note).
 # Floors L2-L6 at DECK_Y + k * UPPER_STOREY_M; one sill (F + 0.35) and one head
 # (F + 2.95) per floor; columns are shared by every floor of a face.
-const FLOORS := [8.474, 11.624, 14.774, 17.924, 21.074]
+const FLOORS := [DECK_Y, DECK_Y + UPPER_STOREY_M, DECK_Y + 2.0 * UPPER_STOREY_M, DECK_Y + 3.0 * UPPER_STOREY_M, DECK_Y + 4.0 * UPPER_STOREY_M]
 const WIN_SILL_M := 0.35
 const WIN_HEAD_M := 2.95
 const REVEAL_M := 0.2
@@ -677,6 +684,12 @@ const WINDOW_COLUMNS := {
 const FLOOR_GROUPS := {"se": [[0, 0], [1, 1], [2, 2], [3, 3], [4, 4]], "ene": [[0, 0], [1, 1], [2, 2], [3, 3], [4, 4]], "nnw": [[0, 1], [2, 3], [4, 4]]}
 # ENE recessed bay (0.8 m notch, cav-4): one column on its inset plane.
 const ENE_BAY_COLUMN := [14.9, 16.6]
+# Ground opening heights as offsets from the source wall bottom and the ground-storey
+# top: windows, storefronts, door and garage bottoms.
+const GROUND_WINDOW_Y := Vector2(BASE_Y + 0.476, DECK_Y - 1.124)
+const GROUND_STORE_Y := Vector2(BASE_Y + 0.076, DECK_Y - 0.874)
+const GROUND_DOOR_MIN_Y := BASE_Y + 0.026
+const GARAGE_Y := Vector2(BASE_Y + 0.026, DECK_Y - 1.474)
 # Two-storey window groups on the projecting boxes (L2-L3): SE six groups (cav-2
 # count, cav-7/hk01 positions, regular 5.15 m pitch), WSW one per 6.45 m plan module
 # from the terrace fins plus two in the corner block (cav-3, cav-6; inference), NNW
@@ -689,7 +702,7 @@ const BOX_GROUPS := {
 # Ground openings at the footprint line [u0, u1, kind] (hk02, hk13, hk07, hk15, cav-4).
 const GROUND_OPENINGS := {
 	"se": [[38.7, 44.1, "garage"], [44.85, 45.55, "door"], [47.1, 49.4, "win"], [53.9, 56.2, "win"], [57.6, 59.45, "store"]],
-	"ene": [[0.15, 4.8, "store"], [7.25, 9.6, "win"], [11.45, 12.55, "door"], [14.9, 16.6, "win_bay"], [47.0, 49.0, "win"],
+	"ene": [[0.15, 4.8, "store"], [7.25, 9.6, "win"], [14.9, 16.6, "win_bay"], [47.0, 49.0, "win"],
 		[51.0, 52.0, "win"], [53.1, 55.0, "win"], [57.0, 59.95, "store"]],
 	"nnw": [[0.15, 1.4, "store"], [3.75, 6.0, "win"], [7.5, 9.75, "win"], [12.1, 14.25, "door"], [16.75, 19.0, "win"],
 		[25.0, 26.1, "door"], [27.25, 29.6, "win"], [31.9, 33.0, "door"], [35.4, 37.6, "win"], [38.6, 40.2, "win"],
@@ -700,14 +713,14 @@ const GROUND_OPENINGS := {
 const L4_COLUMNS := {"nnw": [[43.4, 44.8], [50.3, 52.7]], "wsw": [[2.0, 4.7], [7.5, 10.2]]}
 # Recessed planes by notch (glazed slot, stair and strip curtain walls; ENE middle
 # ground and loggia): their back walls are glass, the ENE bay is clad.
-const GLASS_NOTCH_OUTS := {"se": [-1.0], "ene": [-1.8, -1.2], "nnw": [-1.0]}
+const GLASS_NOTCH_OUTS := {"se": [-SE_SLOT_DEPTH_M], "ene": [-ENE_MIDDLE_DEPTH_M, -ENE_SLOT_DEPTH_M], "nnw": [-NNW_STRIP_DEPTH_M]}
 # Recessed ground storeys that are opaque pale walls with punched windows and doors
 # (hk07, cav-4 ENE middle; cav-3, cav-6 WSW live-work units), not storefront glazing.
-const BASE_GROUND_OUTS := {"ene": [-1.8], "wsw": [-RECESS_M]}
+const BASE_GROUND_OUTS := {"ene": [-ENE_MIDDLE_DEPTH_M], "wsw": [-RECESS_M]}
 # WSW and ENE-middle ground openings on those recessed planes [u0, u1, kind]; the WSW
 # list is built per plan module in recessed_ground_openings().
-const ENE_MIDDLE_GROUND := [[19.6, 20.8, "win"], [23.45, 24.55, "door"], [25.6, 27.9, "win"], [30.0, 32.0, "win"],
-	[33.25, 34.5, "win"], [35.45, 36.55, "door"], [39.9, 40.9, "win"]]
+const ENE_MIDDLE_GROUND_WINDOWS := [[19.6, 20.8], [25.6, 27.9], [30.0, 32.0], [33.25, 34.5], [39.9, 40.9]]
+const STOOP_DOOR_HALF_M := 0.55
 const WSW_GROUP_W_M := 4.4
 
 
@@ -732,8 +745,8 @@ static func is_base_ground(side: String, out: float) -> bool:
 # window, and the S corner storefront under the wedge.
 static func recessed_ground_openings() -> Array:
 	var result := []
-	for g: Array in ENE_MIDDLE_GROUND:
-		result.append(["ene", -1.8, g[0], g[1], g[2]])
+	for g: Array in ENE_MIDDLE_GROUND_WINDOWS:
+		result.append(["ene", -ENE_MIDDLE_DEPTH_M, g[0], g[1], "win"])
 	var w := -RECESS_M
 	result.append(["wsw", w, 3.0, 5.5, "win"])
 	result.append(["wsw", w, 8.0, 10.5, "win"])
@@ -746,7 +759,7 @@ static func recessed_ground_openings() -> Array:
 			if str(stoop[0]) == "wsw" and float(stoop[1]) > m and float(stoop[1]) < m + WSW_FIN_PITCH_M:
 				door = float(stoop[1])
 		if door > 0.0:
-			result.append(["wsw", w, door - 0.55, door + 1.15, "door_side"])
+			result.append(["wsw", w, door - STOOP_DOOR_HALF_M, door + 1.15, "door_side"])
 			# The window takes the wider side of the module beside the door.
 			if m + WSW_FIN_PITCH_M - door > door - m:
 				result.append(["wsw", w, door + 1.6, m + WSW_FIN_PITCH_M - 0.9, "win"])
@@ -760,7 +773,16 @@ static func recessed_ground_openings() -> Array:
 
 
 # Every punched opening as {side, out, u0, u1, y0, y1, kind, pane, spandrels}.
+static var _openings_cache: Array = []
+
+
 static func openings() -> Array:
+	if _openings_cache.is_empty():
+		_openings_cache = _build_openings()
+	return _openings_cache
+
+
+static func _build_openings() -> Array:
 	var result := []
 	for side: String in WINDOW_COLUMNS:
 		for column: Array in WINDOW_COLUMNS[side]:
@@ -775,7 +797,7 @@ static func openings() -> Array:
 				result.append({"side": side, "out": 0.0, "u0": column[0], "u1": column[1], "y0": f0 + WIN_SILL_M, "y1": f1 + WIN_HEAD_M,
 					"kind": "corner" if float(column[1]) - float(column[0]) > 2.6 else "win", "pane": "glass", "spandrels": spandrels})
 	for f: float in FLOORS:
-		result.append({"side": "ene", "out": -0.8, "u0": ENE_BAY_COLUMN[0], "u1": ENE_BAY_COLUMN[1], "y0": f + WIN_SILL_M, "y1": f + WIN_HEAD_M, "kind": "win", "pane": "glass", "spandrels": []})
+		result.append({"side": "ene", "out": -ENE_BAY_DEPTH_M, "u0": ENE_BAY_COLUMN[0], "u1": ENE_BAY_COLUMN[1], "y0": f + WIN_SILL_M, "y1": f + WIN_HEAD_M, "kind": "win", "pane": "glass", "spandrels": []})
 	var groups := {"se": [], "wsw": [], "nnw": BOX_GROUPS.nnw}
 	for start: float in BOX_GROUPS.se:
 		groups.se.append([start, start + BOX_GROUP_W_M])
@@ -791,27 +813,32 @@ static func openings() -> Array:
 	var ground := []
 	for side: String in GROUND_OPENINGS:
 		for g: Array in GROUND_OPENINGS[side]:
-			ground.append([side, -0.8 if str(g[2]) == "win_bay" else 0.0, g[0], g[1], g[2]])
+			ground.append([side, -ENE_BAY_DEPTH_M if str(g[2]) == "win_bay" else 0.0, g[0], g[1], g[2]])
+	# ENE stoop doors at each stoop, on the wall plane behind it.
+	for stoop: Array in STOOPS:
+		if str(stoop[0]) == "ene":
+			var su := float(stoop[1])
+			ground.append(["ene", -_stoop_recess("ene", su), su - STOOP_DOOR_HALF_M, su + STOOP_DOOR_HALF_M, "door"])
 	ground.append_array(recessed_ground_openings())
 	for entry: Array in ground:
 		var side := str(entry[0])
 		var g := [entry[2], entry[3], entry[4]]
 		var kind := str(g[2])
 		var out := float(entry[1])
-		var y0 := 4.75
-		var y1 := 7.35
+		var y0 := GROUND_WINDOW_Y.x
+		var y1 := GROUND_WINDOW_Y.y
 		var pane := "store"
 		match kind:
 			"store":
 				pane = "lobby"
-				y0 = 4.35
-				y1 = 7.6
+				y0 = GROUND_STORE_Y.x
+				y1 = GROUND_STORE_Y.y
 			"door", "door_side":
-				y0 = maxf(4.3, _stoop_top(side, float(g[0]) + 0.55))
+				y0 = maxf(GROUND_DOOR_MIN_Y, _stoop_top(side, float(g[0]) + STOOP_DOOR_HALF_M))
 				y1 = y0 + 2.6
 			"garage":
-				y0 = 4.3
-				y1 = 7.0
+				y0 = GARAGE_Y.x
+				y1 = GARAGE_Y.y
 				pane = "garage"
 		result.append({"side": side, "out": out, "u0": g[0], "u1": g[1], "y0": y0, "y1": y1, "kind": "win" if kind == "win_bay" else kind, "pane": pane, "spandrels": []})
 	return result
@@ -1013,17 +1040,18 @@ static func _unique(values: Array) -> Array:
 	return out
 
 
-# Box on a side between out0 (back) and out1 (front) without its front face.
-static func _append_box_open_front(bucket: Dictionary, side: String, u0: float, u1: float, out0: float, out1: float, y0: float, y1: float) -> void:
+# Box on a side between out0 (back) and out1 (front) without its front face (the wall
+# receiver carries it) and without its back face, which lies on the wall behind; the
+# end faces are left out where they are buried against notch returns.
+static func _append_box_open_front(bucket: Dictionary, side: String, u0: float, u1: float, out0: float, out1: float, y0: float, y1: float, ends := true) -> void:
 	var f := side_frame(side)
 	var t3 := Vector3((f.tangent as Vector2).x, 0.0, (f.tangent as Vector2).y)
-	var n3 := Vector3((f.normal as Vector2).x, 0.0, (f.normal as Vector2).y)
 	var p := func(u: float, o: float, y: float) -> Vector3: return _at(side_point(side, u, o), y)
 	_append_oriented_quad(bucket, p.call(u0, out0, y1), p.call(u1, out0, y1), p.call(u1, out1, y1), p.call(u0, out1, y1), Vector3.UP)
 	_append_oriented_quad(bucket, p.call(u0, out0, y0), p.call(u1, out0, y0), p.call(u1, out1, y0), p.call(u0, out1, y0), Vector3.DOWN)
-	_append_oriented_quad(bucket, p.call(u0, out0, y0), p.call(u1, out0, y0), p.call(u1, out0, y1), p.call(u0, out0, y1), -n3)
-	_append_oriented_quad(bucket, p.call(u0, out0, y0), p.call(u0, out1, y0), p.call(u0, out1, y1), p.call(u0, out0, y1), -t3)
-	_append_oriented_quad(bucket, p.call(u1, out0, y0), p.call(u1, out1, y0), p.call(u1, out1, y1), p.call(u1, out0, y1), t3)
+	if ends:
+		_append_oriented_quad(bucket, p.call(u0, out0, y0), p.call(u0, out1, y0), p.call(u0, out1, y1), p.call(u0, out0, y1), -t3)
+		_append_oriented_quad(bucket, p.call(u1, out0, y0), p.call(u1, out1, y0), p.call(u1, out1, y1), p.call(u1, out0, y1), t3)
 
 
 # Coarse Stage B materials (no textures): the existing Hawkins cladding resources plus
@@ -1201,7 +1229,7 @@ static func _stoop_recess(side: String, u: float) -> float:
 	if side == "wsw":
 		return RECESS_M
 	if side == "ene" and u > ENE_BOX_U.x and u < ENE_BOX_U.y:
-		return 1.8
+		return ENE_MIDDLE_DEPTH_M
 	return 0.0
 
 

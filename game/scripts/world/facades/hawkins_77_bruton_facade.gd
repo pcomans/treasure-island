@@ -25,7 +25,6 @@ const MATERIALS := {
 	"frame_grey": preload("res://game/resources/materials/world/hawkins/hawkins_frame_grey.tres"),
 	"base_ribbed": preload("res://game/resources/materials/world/hawkins/hawkins_base_ribbed.tres"),
 	"frame_charcoal": preload("res://game/resources/materials/world/hawkins/hawkins_frame_charcoal.tres"),
-	"panel_grey": preload("res://game/resources/materials/world/hawkins/hawkins_base_smooth.tres"),
 	"spandrel_pale": preload("res://game/resources/materials/world/hawkins/hawkins_spandrel_pale.tres"),
 	"garage_dark": preload("res://game/resources/materials/world/hawkins/hawkins_garage_dark.tres"),
 	"sign_letters": preload("res://game/resources/materials/world/hawkins/hawkins_sign_letters.tres"),
@@ -37,17 +36,21 @@ const SE_CORNER_STORE := [0.0, 13.0]
 const SE_LOUVRE := [13.0, 21.5]
 const SE_LOBBY := [21.5, 31.4]
 const SE_LOBBY_DOORS := [27.0, 28.6]
-const SE_FASCIA_Y := [7.55, 8.474]
+const SE_FASCIA_Y := [MASSING.DECK_Y - 0.924, MASSING.DECK_Y]
+# Ground storefronts: bottom just above the source wall bottom, transoms below the
+# box soffit (SE corner storefront, lobby, recessed glazed grounds).
+const STORE_BOTTOM_Y := MASSING.BASE_Y + 0.026
+const SE_CORNER_TRANSOM_Y := MASSING.DECK_Y - 1.474
+const SE_LOBBY_TRANSOM_Y := MASSING.DECK_Y - 1.524
+const RECESS_TRANSOM_Y := MASSING.DECK_Y - 1.174
+const SE_SIGN_Y := MASSING.DECK_Y - 0.474
 const SE_SIGN_U := 27.3
 const SE_SLOT_DOOR := [32.6, 34.0]
 const SE_PIER := [34.5, 38.0]
 const SE_PIER_DOOR := [35.5, 36.8]
 const STORE_PITCH_M := 1.6
-# Stage B rework: window families that use the per-floor light grammar (opaque lower
-# field, lower light, thick transom, upper light; hk02, hk05, cav-2, cav-4, hk07, hk15).
-# Validated on the SE box groups first, then propagated.
-const GRAMMAR_GROUP_SIDES := ["se", "wsw", "nnw"]
-const GRAMMAR_WINDOW_SIDES := ["se", "ene", "nnw", "wsw"]
+# Per-floor light grammar for the upper windows and box groups (opaque lower field,
+# lower light, thick transom, upper light; hk02, hk05, cav-2, cav-4, hk07, hk15).
 const LIGHT_FRAME_W := 0.1
 const LOWER_FIELD_M := 0.45
 const TRANSOM_AT_M := 1.15
@@ -100,7 +103,7 @@ func configure(record: Dictionary, wall_geometry: Dictionary) -> Dictionary:
 				var plane := float(o.out) - MASSING.REVEAL_M
 				var split := float(o.u0) + 1.1
 				_door(str(o.side), plane, float(o.u0), split, float(o.y0), float(o.y1))
-				_frame_ring_w(str(o.side), plane, split, float(o.u1), float(o.y0), float(o.y1), "frame_charcoal", 0.1)
+				_frame_ring(str(o.side), plane, split, float(o.u1), float(o.y0), float(o.y1), "frame_charcoal", 0.1, 0.045)
 			"garage":
 				_garage(o)
 	for key: String in stacks:
@@ -149,22 +152,15 @@ func _window(o: Dictionary) -> void:
 	var u1 := float(o.u1)
 	var y0 := float(o.y0)
 	var y1 := float(o.y1)
-	if side in GRAMMAR_WINDOW_SIDES and y0 > MASSING.DECK_Y:
+	if y0 > MASSING.DECK_Y:
 		_grammar_window(o)
 		return
+	# Ground-storey window: frame ring, a centre mullion on wide lights, low transom.
 	_frame_ring(side, plane, u0, u1, y0, y1, "frame_grey")
 	var width := u1 - u0
-	var panes := maxi(1, int(round(width / 1.15))) if str(o.kind) == "corner" else (2 if width > 1.6 else 1)
-	for k in range(1, panes):
-		_add_box("frame_grey", side, plane, u0 + width * float(k) / float(panes), (y0 + y1) * 0.5, 0.06, y1 - y0, 0.0, 0.04)
-	var sills := [y0]
-	for band: Array in o.spandrels:
-		_add_box("frame_charcoal", side, plane, (u0 + u1) * 0.5, (float(band[0]) + float(band[1])) * 0.5, width, float(band[1]) - float(band[0]), 0.0, 0.03)
-		sills.append(float(band[1]))
-	for s: float in sills:
-		_add_box("frame_grey", side, plane, (u0 + u1) * 0.5, s + 0.7, width, 0.05, 0.0, 0.04)
-	if y0 > MASSING.DECK_Y:
-		_add_box("pearl_plain", side, float(o.out), (u0 + u1) * 0.5, y0 - 0.06, width + 0.2, 0.12, 0.0, 0.1)
+	if width > 1.6:
+		_add_box("frame_grey", side, plane, u0 + width * 0.5, (y0 + y1) * 0.5, 0.06, y1 - y0, 0.0, 0.04)
+	_add_box("frame_grey", side, plane, (u0 + u1) * 0.5, y0 + 0.7, width, 0.05, 0.0, 0.04)
 
 
 # Per-floor light grammar inside one opening: a framed ring, and per floor an opaque
@@ -182,32 +178,24 @@ func _grammar_window(o: Dictionary) -> void:
 		var bottom := float(o.y0)
 		for band: Array in o.spandrels:
 			floors.append([bottom, float(band[0])])
-			_add_box("panel_grey", side, plane, (u0 + u1) * 0.5, (float(band[0]) + float(band[1])) * 0.5, u1 - u0, float(band[1]) - float(band[0]), 0.0, 0.04)
+			_add_box("base_smooth", side, plane, (u0 + u1) * 0.5, (float(band[0]) + float(band[1])) * 0.5, u1 - u0, float(band[1]) - float(band[0]), 0.0, 0.04)
 			bottom = float(band[1])
 		floors.append([bottom, float(o.y1)])
 	var width := u1 - u0
 	var divisions := maxi(1, int(round(width / 1.15))) if str(o.kind) == "corner" else (2 if width > 1.6 else 1)
 	for f: Array in floors:
 		_lights(side, plane, u0, u1, float(f[0]), float(f[1]), divisions)
-	if float(o.y0) > MASSING.DECK_Y:
-		_add_box("pearl_plain", side, float(o.out), (u0 + u1) * 0.5, float(o.y0) - 0.06, width + 0.2, 0.12, 0.0, 0.1)
+	_add_box("pearl_plain", side, float(o.out), (u0 + u1) * 0.5, float(o.y0) - 0.06, width + 0.2, 0.12, 0.0, 0.1)
 
 
 func _lights(side: String, plane: float, u0: float, u1: float, s: float, h: float, divisions: int) -> void:
 	var w := LIGHT_FRAME_W
-	_frame_ring_w(side, plane, u0, u1, s, h, "frame_grey", w)
-	_add_box("panel_grey", side, plane, (u0 + u1) * 0.5, s + LOWER_FIELD_M * 0.5, u1 - u0 - w, LOWER_FIELD_M, 0.0, 0.035)
+	_frame_ring(side, plane, u0, u1, s, h, "frame_grey", w, 0.045)
+	_add_box("base_smooth", side, plane, (u0 + u1) * 0.5, s + LOWER_FIELD_M * 0.5, u1 - u0 - w, LOWER_FIELD_M, 0.0, 0.035)
 	_add_box("frame_grey", side, plane, (u0 + u1) * 0.5, s + LOWER_FIELD_M, u1 - u0, 0.07, 0.0, 0.045)
 	_add_box("frame_grey", side, plane, (u0 + u1) * 0.5, s + TRANSOM_AT_M, u1 - u0, 0.12, 0.0, 0.045)
 	for k in range(1, divisions):
 		_add_box("frame_grey", side, plane, u0 + (u1 - u0) * float(k) / float(divisions), (s + h) * 0.5, 0.08, h - s, 0.0, 0.045)
-
-
-func _frame_ring_w(side: String, plane: float, u0: float, u1: float, y0: float, y1: float, material: String, w: float) -> void:
-	_add_box(material, side, plane, u0 + w * 0.5, (y0 + y1) * 0.5, w, y1 - y0, 0.0, 0.045)
-	_add_box(material, side, plane, u1 - w * 0.5, (y0 + y1) * 0.5, w, y1 - y0, 0.0, 0.045)
-	_add_box(material, side, plane, (u0 + u1) * 0.5, y0 + w * 0.5, u1 - u0, w, 0.0, 0.045)
-	_add_box(material, side, plane, (u0 + u1) * 0.5, y1 - w * 0.5, u1 - u0, w, 0.0, 0.045)
 
 
 # White surround on a tall-block window column: jambs over the whole stack and white
@@ -253,26 +241,19 @@ func _group(o: Dictionary) -> void:
 	var narrow := minf(0.85, (u1 - u0) * 0.35)
 	var divider := u0 + narrow
 	_add_box("pearl_plain", side, plane, divider, (y0 + y1) * 0.5, 0.14, y1 - y0, 0.0, 0.08)
-	if side in GRAMMAR_GROUP_SIDES:
-		# Per floor: the narrow light and the wide light (centre mullion) each with
-		# the opaque lower field, lower light, transom and upper light (cav-2, hk02).
-		for floor: Array in [[y0, float(band[0])], [float(band[1]), y1]]:
-			_lights(side, plane, u0, divider - 0.07, float(floor[0]), float(floor[1]), 1)
-			_lights(side, plane, divider + 0.07, u1, float(floor[0]), float(floor[1]), 2)
-		return
-	_frame_ring(side, plane, u0, u1, y0, y1, "frame_grey")
-	var wide_mid := (divider + u1) * 0.5
+	# Per floor: the narrow light and the wide light (centre mullion) each with the
+	# opaque lower field, lower light, transom and upper light (cav-2, hk02).
 	for floor: Array in [[y0, float(band[0])], [float(band[1]), y1]]:
-		_add_box("frame_grey", side, plane, wide_mid, (float(floor[0]) + float(floor[1])) * 0.5, 0.06, float(floor[1]) - float(floor[0]), 0.0, 0.04)
-		_add_box("frame_grey", side, plane, (divider + u1) * 0.5, float(floor[0]) + 0.55, u1 - divider, 0.06, 0.0, 0.04)
-		_frame_ring(side, plane, u0, divider, float(floor[0]), float(floor[1]), "frame_grey")
+		_lights(side, plane, u0, divider - 0.07, float(floor[0]), float(floor[1]), 1)
+		_lights(side, plane, divider + 0.07, u1, float(floor[0]), float(floor[1]), 2)
 
 
-func _frame_ring(side: String, plane: float, u0: float, u1: float, y0: float, y1: float, material: String) -> void:
-	_add_box(material, side, plane, u0 + FRAME_W * 0.5, (y0 + y1) * 0.5, FRAME_W, y1 - y0, 0.0, 0.04)
-	_add_box(material, side, plane, u1 - FRAME_W * 0.5, (y0 + y1) * 0.5, FRAME_W, y1 - y0, 0.0, 0.04)
-	_add_box(material, side, plane, (u0 + u1) * 0.5, y0 + FRAME_W * 0.5, u1 - u0, FRAME_W, 0.0, 0.04)
-	_add_box(material, side, plane, (u0 + u1) * 0.5, y1 - FRAME_W * 0.5, u1 - u0, FRAME_W, 0.0, 0.04)
+# Frame ring of bar width w, `outer` metres proud of the plane.
+func _frame_ring(side: String, plane: float, u0: float, u1: float, y0: float, y1: float, material: String, w := FRAME_W, outer := 0.04) -> void:
+	_add_box(material, side, plane, u0 + w * 0.5, (y0 + y1) * 0.5, w, y1 - y0, 0.0, outer)
+	_add_box(material, side, plane, u1 - w * 0.5, (y0 + y1) * 0.5, w, y1 - y0, 0.0, outer)
+	_add_box(material, side, plane, (u0 + u1) * 0.5, y0 + w * 0.5, u1 - u0, w, 0.0, outer)
+	_add_box(material, side, plane, (u0 + u1) * 0.5, y1 - w * 0.5, u1 - u0, w, 0.0, outer)
 
 
 # Storefront grid: mullions on a shared absolute u grid, head and sill members and a
@@ -280,7 +261,7 @@ func _frame_ring(side: String, plane: float, u0: float, u1: float, y0: float, y1
 func _storefront(side: String, plane: float, u0: float, u1: float, y0: float, y1: float, doors: Array, transom_y := -1.0) -> void:
 	if u1 - u0 < 0.3 or y1 - y0 < 0.3:
 		return
-	_frame_ring_w(side, plane, u0, u1, y0, y1, "frame_grey", 0.12)
+	_frame_ring(side, plane, u0, u1, y0, y1, "frame_grey", 0.12, 0.045)
 	var k := ceili(u0 / STORE_PITCH_M)
 	while float(k) * STORE_PITCH_M < u1 - 0.15:
 		var u := float(k) * STORE_PITCH_M
@@ -301,13 +282,13 @@ func _storefront(side: String, plane: float, u0: float, u1: float, y0: float, y1
 # Door: heavy charcoal frame proud of the glazing, leaves with broad stiles and a
 # kick rail, pull bars, and a transom bar over the leaves (hk22).
 func _door(side: String, plane: float, u0: float, u1: float, y0: float, y1: float) -> void:
-	_frame_ring_w(side, plane, u0, u1, y0, y1, "frame_charcoal", 0.14)
+	_frame_ring(side, plane, u0, u1, y0, y1, "frame_charcoal", 0.14, 0.045)
 	var width := u1 - u0
 	var leaves := 2 if width > 1.3 else 1
 	for k in leaves:
 		var a := u0 + width * float(k) / float(leaves)
 		var b := u0 + width * float(k + 1) / float(leaves)
-		_frame_ring_w(side, plane + 0.02, a + 0.07, b - 0.07, y0 + 0.07, y1 - 0.07, "frame_charcoal", 0.1)
+		_frame_ring(side, plane + 0.02, a + 0.07, b - 0.07, y0 + 0.07, y1 - 0.07, "frame_charcoal", 0.1, 0.045)
 		_add_box("frame_charcoal", side, plane + 0.02, (a + b) * 0.5, y0 + 0.2, b - a - 0.14, 0.3, 0.0, 0.05)
 		var pull := b - 0.25 if k == 0 and leaves == 2 else a + 0.25
 		_add_box("spandrel_pale", side, plane + 0.05, pull, y0 + 1.05, 0.04, 0.9, 0.0, 0.06)
@@ -359,7 +340,7 @@ func _glazed_plane(quad: Dictionary, info: Dictionary) -> void:
 			var su := float(stoop[1])
 			if str(stoop[0]) == side and su > u0 + 0.6 and su < u1 - 0.6:
 				doors.append([su - 0.6, su + 0.6])
-		_storefront(side, out, u0, u1, bottom, MASSING.DECK_Y - 0.05, doors, 7.3)
+		_storefront(side, out, u0, u1, bottom, MASSING.DECK_Y - 0.05, doors, RECESS_TRANSOM_Y)
 		if side == "se":
 			_door(side, out, SE_SLOT_DOOR[0], SE_SLOT_DOOR[1], bottom, bottom + 2.6)
 	var g0 := maxf(bottom, MASSING.DECK_Y)
@@ -402,16 +383,16 @@ func _terrace_rail(side: String, u0: float, u1: float) -> void:
 # SE base under the wing (recess plane), the ribbed pier and its service door.
 func _se_ground() -> void:
 	var plane := -MASSING.RECESS_M
-	var y0 := 4.3
+	var y0 := STORE_BOTTOM_Y
 	var store_top: float = SE_FASCIA_Y[0]
-	_storefront("se", plane, SE_CORNER_STORE[0] + 0.3, SE_CORNER_STORE[1], y0, store_top, [], 7.0)
-	_storefront("se", plane, SE_LOBBY[0], SE_LOBBY[1], y0, store_top, [SE_LOBBY_DOORS], 6.95)
+	_storefront("se", plane, SE_CORNER_STORE[0] + 0.3, SE_CORNER_STORE[1], y0, store_top, [], SE_CORNER_TRANSOM_Y)
+	_storefront("se", plane, SE_LOBBY[0], SE_LOBBY[1], y0, store_top, [SE_LOBBY_DOORS], SE_LOBBY_TRANSOM_Y)
 	# Fascia over the storefronts with the HAWKINS letters (cav-7, hk02, hk24).
 	var fascia_mid := (float(SE_FASCIA_Y[0]) + float(SE_FASCIA_Y[1])) * 0.5
 	var fascia_h := float(SE_FASCIA_Y[1]) - float(SE_FASCIA_Y[0])
 	# The fascia hangs at the box front line under its soffit, letters on its face.
 	_add_box("base_ribbed", "se", -0.12, (float(SE_CORNER_STORE[0]) + float(SE_LOBBY[1])) * 0.5 + 0.15, fascia_mid, float(SE_LOBBY[1]) - float(SE_CORNER_STORE[0]) - 0.3, fascia_h, 0.0, 0.1)
-	_add_sign_letters(SE_SIGN_U, 8.0, 4.6, 0.6, 0.0)
+	_add_sign_letters(SE_SIGN_U, SE_SIGN_Y, 4.6, 0.6, 0.0)
 	# Louvre screen: an opaque panel behind light vertical slats (cav-7, hk01).
 	_add_box("frame_charcoal", "se", plane, (float(SE_LOUVRE[0]) + float(SE_LOUVRE[1])) * 0.5, (y0 + store_top) * 0.5, float(SE_LOUVRE[1]) - float(SE_LOUVRE[0]), store_top - y0, 0.0, 0.03)
 	var u: float = float(SE_LOUVRE[0]) + 0.1
