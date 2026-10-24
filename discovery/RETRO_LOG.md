@@ -21946,3 +21946,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: one sheet per unit with the photo beside a fitted current render made eight whole-unit verdicts quick. The kit's form (twin gabled wings, a garage bank, a recessed stair court) is so distinctive that each unit's colour scheme was the main thing left to check. The shared panos (1403/1404 from iPYX at h196/h16, 1405/1408 from E8fU at h243/h64) give opposite-heading bindings that check each other.
 - What did not work well: the modeler's triage flagged 1408/w130 as slightly dark but called 1403 "none material", although 1403 renders cool grey against the photo's warm sandy beige, the clearest colour mismatch in the batch. The kit-wide lap siding against the photos' stucco also went unremarked.
 - What the team should change next time: in a review-only batch, compare each unit's dominant wall colour on the photo's sunlit face with the neutral render, and list any visible hue shift, not only lightness. Note kit-wide material mismatches once, as a kit item, so they don't get lost per unit.
+
+### modeler-accept-s3 — 2026-10-24 — acceptance batch S3 (garage-court kit 1418, 1419, Halibut 1430-1434, 1449; review-only) and S1 fits
+
+- What worked well: the S1 lesson (eye height from the sampled road or land at the pano) gave correct matched views first time for all eight units. The binding pass caught that 1449's frame is the same pano as 1444's, aimed the other way. Starting runs with one other engine live, per the ROOT correction, removed most of the waiting.
+- What did not work well: before the correction, about 20 minutes went to waiting for full engine quiet. Halibut 1432-1434 rest only on 2019 imagery.
+- What the team should change next time: check the live engine count against the agreed two-run limit, not engine quiet. For demolished units, keep both the dated standing photo and the current cleared-site photo on the owner sheet.
