@@ -195,6 +195,17 @@ static func build_record(record: Dictionary, material: Material) -> Dictionary:
 			root.add_child(_mesh_node("Wall_" + key, surface, surface_material(key), RENDER_BUILDING_WALL))
 			faces.append_array(_faces(surface))
 			mesh_instances += 1
+		# The photographed exterior fronts of the projecting boxes (SE, WSW, NNW) and
+		# the ENE middle box are spray receivers too (Stage C, ROOT approved); the
+		# rest of each box stays solid in the roof body with receiver none.
+		var fronts := front_surfaces()
+		var front_keys := fronts.keys()
+		front_keys.sort()
+		for key: String in front_keys:
+			var surface := _flat_geometry(fronts[key], "front_" + key)
+			root.add_child(_mesh_node("Front_" + key, surface, surface_material(key), RENDER_BUILDING_WALL))
+			faces.append_array(_faces(surface))
+			mesh_instances += 1
 	else:
 		root.add_child(_mesh_node("Mesh", geometry, material, RENDER_WORLD_VISIBLE))
 		faces = _faces(geometry)
@@ -213,14 +224,6 @@ static func build_record(record: Dictionary, material: Material) -> Dictionary:
 		root.add_child(_mesh_node("BayBoxes", boxes, canopy_material, RENDER_WORLD_VISIBLE))
 		faces.append_array(_faces(boxes))
 		var volumes := volume_geometry()
-		var fronts := front_surfaces()
-		var front_keys := fronts.keys()
-		front_keys.sort()
-		for key: String in front_keys:
-			var surface := _flat_geometry(fronts[key], "front_" + key)
-			root.add_child(_mesh_node("Front_" + key, surface, surface_material(key), RENDER_BUILDING_WALL))
-			faces.append_array(_faces(surface))
-			mesh_instances += 1
 		root.add_child(_mesh_node("FormVolumes", volumes.solid, CANOPY_MATERIAL, RENDER_WORLD_VISIBLE))
 		root.add_child(_mesh_node("FormVolumesDark", volumes.dark, soffit_material, RENDER_WORLD_VISIBLE))
 		faces.append_array(_faces(volumes.solid))
