@@ -490,7 +490,7 @@
             "depth": 1.2
           },
           "canopy": {
-            "w": 24.0,
+            "w": 21.2,
             "depth": 1.5,
             "t": 0.2,
             "material": "eave_dark",

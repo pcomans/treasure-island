@@ -21773,3 +21773,20 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: before writing any column, I projected the fitted cameras' u stations and wall top/base onto the actual photos. This showed that the sideB pose is vertically exact, while sideC/sideD sit about 30-50 px off vertically, so their rows were taken from proportions. It also caught a draft column set about 0.5 m off. Copying the config aside, instead of `git stash`, avoided the stash list that all worktrees share. The whole BEFORE/AFTER/neutral round took 4 min of engine time.
 - What did not work well: I first transcribed the columns from a low-resolution rectified strip, and they were wrong by about 0.5 m and too narrow. I only caught it when I drew the final columns back over the photo. About 10 min went to waiting for another worktree's push-chain island test before Slot B could start.
 - What the team should change next time: before the first render, draw the final grid columns back over the reference photo at the fitted pose. It is cheap and catches transcription errors. A grid gives each storey one row, so photographed doors under high windows, and lower windows, have to be recorded as storey-0 exceptions. Do not force them in.
+- Round 2 (code review): when a feature carries a centred, unclipped canopy, moving the feature moves the canopy too. After any feature move, recompute the canopy span against the measured face length. I missed this, and the WSW eave ran 1.2 m past the corner.
+
+### ti-visual-review — 2026-10-24 — midrise grid batch B3 (warehouse 525; keep-before 686, 685, Compound E)
+
+- What worked well: the task note listed every reference path and each keep-before evidence sheet, so nothing had to be searched for. The projected overlay (`b3-525-overlay.png`, columns in green and features in orange over the three photos) made checking counts and positions a one-image job. Each exception was written with its u-range, storey range and reason, which made the omissions easy to accept.
+- What did not work well: the sideC and sideD fits are off vertically, so sill and head heights there are inference from wall proportions and door scale; only sideB's rows are measured. The canopy entry on NNW moved to a stretch the photo crop doesn't clearly show. Large inferred stretches (WSW u0–26, most of NNW) carry only a continued rhythm and can't be checked.
+- What the team should change next time: when a fit is off vertically, add one sill/head sanity crop to the overlay at a visible opening. Mark inferred stretches on the overlay too (for example in grey), so the reviewer sees at a glance which windows are photographed and which are rhythm.
+
+### ti-code-review — 2026-10-24 — midrise grid batch B2 (655, late entry)
+
+- I did not write this entry at the B2 review, an omission. Worked: reading the evidence logs found the reported solid main/e22 face quickly. Did not: I could not measure that segment without an engine run, so it went back as a confirmation request. Next time: write the RETRO line in the same step as the verdict, for narrow reviews too.
+
+### ti-code-review — 2026-10-24 — midrise grid batch B3 (warehouse 525)
+
+- What worked well: rebuilding approximate edge lengths from the wall record (e0 about 63.06 m, e5 about 114.31 m) let me check every moved feature and canopy against its face end without an engine.
+- What did not work well: the modeler re-checked the NNW eave against its face end after moving the entry, but not the WSW one. Moving a canopy-carrying entry shifts its centred eave, and the producer does not clip canopies at face ends.
+- What the team should change next time: whenever an entry with a `canopy` moves, check that `centre ± w/2` stays within [0, face length] on every face, not only the one that prompted the move.
