@@ -26,5 +26,8 @@ tools/godot --path . --resolution 1600x900 --script game/tests/shared/building_s
 tools/build-mac.sh   # Mac build + content audit + launch check
 ```
 
+A `--views` focused view may add `camera_xyz` with a vertical `fov` (default 70) to shoot from a free camera aimed at its `target_xyz`, for example to match a reference photo, or `"projection": "ortho"` with `ortho_size` (vertical extent in metres) for a square-on elevation.
+The player avatar is hidden in every shot; `--show-player` keeps it.
+
 `shared/` holds these checks and their helpers (`world_harness.gd`, `building_fit.gd`,
 `catalog.gd`). `support/` files are loaded by game scripts at runtime.

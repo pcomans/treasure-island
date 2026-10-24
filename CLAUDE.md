@@ -6,7 +6,7 @@ The imported [project agreement](AGENTS.md) is the shared authority. The primary
 
 ## Persisted entrypoints
 
-Subagent dispatch follows [AGENTS.md](AGENTS.md#bounded-subagent-execution): under the owner's 2026-10-17 routing every role runs in Claude Code on Opus 5.5 (`claude-opus-5-5`), every role, modeling and reviewers included, at effort `high` (modeling moved from `max` on 2026-10-21; see AGENTS for the rationale and rollback signal). Each role file's frontmatter sets that selection, except that ROOT dispatches push/stacking coordination and narrow follow-up re-checks at `medium` (owner, 2026-10-23; see AGENTS); never use `ultra`, and root remains orchestrator-only. Keep reviewers independent of the author. Codex generates textures through `tools/generate-texture`. The 2026-10-10 Astra Low / Sol High Codex routing is superseded.
+Subagent dispatch follows [AGENTS.md](AGENTS.md#bounded-subagent-execution): under the owner's 2026-10-17 routing every role runs in Claude Code on Opus 5.5 (`claude-opus-5-5`), every role, modeling and reviewers included, at effort `high` (modeling moved from `max` on 2026-10-21; see AGENTS for the rationale and rollback signal). Each role file's frontmatter sets that selection, except that ROOT dispatches push/stacking coordination and narrow follow-up re-checks at `medium` (owner, 2026-10-23; see AGENTS); never use `ultra`, and root remains orchestrator-only. Keep reviewers independent of the author. Codex generates textures through `tools/generate-texture`. Landmark visual review runs in Codex on `gpt-6.1-sol` / `high` through the recipe below (owner, 2026-10-23; see AGENTS). The 2026-10-10 Astra Low / Sol High Codex routing is superseded.
 
 | Role prompt | When used |
 |---|---|
@@ -53,17 +53,23 @@ waiting for another owner “Continue.” Existing gates and decision boundaries
 
 ### Codex CLI delegated visual reviews
 
-Optional since the 2026-10-17 routing, which runs visual review on Opus in Claude Code; use this only when an assignment explicitly selects Codex review. For an authorized standalone review, launch a **persistent review orchestrator**: omit `--ephemeral`. Codex child delegation needs the parent's saved thread/rollout context. The CLI root still only coordinates; naming it a reviewer does not make it an executing subagent.
+Used for [landmark visual review](AGENTS.md#bounded-subagent-execution) since the owner's 2026-10-23 routing; other visual review runs on Opus in Claude Code, so use this elsewhere only when an assignment explicitly selects Codex review. For an authorized standalone review, launch a **persistent review orchestrator**: omit `--ephemeral`. Codex child delegation needs the parent's saved thread/rollout context. The CLI root still only coordinates; naming it a reviewer does not make it an executing subagent.
 
 Use the installed CLI's supported arguments, the assignment's explicit Codex model/effort and an environment-authorized sandbox. For example, with a private bounded prompt already written by an executor:
 
 ```bash
 codex exec -m gpt-6.1-sol -c 'model_reasoning_effort="high"' \
-  -C /workspaces/content-main -s workspace-write \
-  -o /tmp/mersea-review-verdict.txt - < /tmp/mersea-review-prompt.txt
+  -C <worktree> -s workspace-write -o <verdict> - < <prompt>
 ```
 
 Adapt workspace/output paths. The prompt must tell the orchestrator to use its actual `spawn_agent` tool for one named independent visual child, explicitly selecting `gpt-6.1-sol`, `high`, and `fork_turns="none"` where supported. Forward the full bounded assignment, role/skill paths, source identities, dated reference paths, and every required gameplay/before-after view. The child inspects saved originals with its actual `view_image` tool; CLI `-i` attachments to the parent alone do not establish that the child saw them. Only the child's own RETRO append is writable for a read-only review; no engine, implementation, acceptance or external actions are implied.
+
+Lessons from the 2026-10-23/24 Isle House and Hawkins series:
+
+- Name the child with lowercase letters, digits and underscores only; a hyphenated name is rejected at spawn.
+- Shell reads can fail in the sandbox (`bwrap: Can't mount devpts`). Inline the form spec, reference bindings and prior verdicts in the prompt, and list every image by exact path.
+- Require a PASS or REWORK.
+- Take proof that the child viewed the images from the child's own rollout under `~/.codex/sessions/` (its agent path, model/effort and returned `input_image` payloads), not from the orchestrator's summary.
 
 Verify the actual spawn result and child identity, not an orchestrator's statement that review started. Retain the CLI handle/PID through its terminal result and the child's explicit verdict. A failed spawn or image load is not a visual verdict; do not duplicate a live review. If container sandbox setup fails before execution, report the exact error and use only an explicitly authorized supported sandbox fallback—do not change account/global configuration. Study026 verified persistent child startup after an ephemeral run failed with a missing rollout; this establishes delegation support, not visual completion or a performance claim.
 
