@@ -21850,3 +21850,15 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: projecting every candidate footprint into each photo before authoring showed that both "641" and "654" frames show 654's face, and that 641 is hidden behind it. This avoided gridding a building from a photo of its neighbour. All five engine runs passed on the first attempt: matching cache, `npm ci`, the clearance-checked plan and the stop on any invalid digest.
 - What did not work well: the reference file names were trusted in earlier passes (641 was modelled from 654's photo). One gameplay view of 641 was placed behind 654, so it mostly shows 654.
 - What the team should change next time: before using a reference, confirm which building it shows by projecting nearby footprints at the pano pose. Treat file names as hints. For whole-unit triage, put colour and roof-item gaps (535's pale metal and skylights) in the handback, not only grid findings.
+
+### ti-code-review — 2026-10-24 — midrise grid batch B6 (654, 535)
+
+- What worked well: the reusable compare script plus a feature list for every scheme confirmed in one pass that the removed doors take their landings with them and that each unit keeps doors on other faces.
+- What did not work well: nothing material. 654's study_notes don't yet mention the grid change; only the grid's source note records it.
+- What the team should change next time: when a batch removes inferred doors or windows, add a one-line study_notes entry as 535 does, so the unit's notes stay the single summary.
+
+### ti-visual-review — 2026-10-24 — midrise grid batch B6 (654, 535; keep-before 641, 386, 550)
+
+- What worked well: the modeler's triage table (what each photo actually shows, plus the whole-unit gaps) let me check claims directly instead of rediscovering them. The 641 photo's grey cabinet and yellow-framed windows match 654's NNW face, so the "it's really 654" claim is verifiable in seconds. The 654 overlay made the window count (5 singles + 1 pair) a one-glance check.
+- What did not work well: two units (641, 550) have no confirmed reference, and 535 has a known colour and roof-skylight gap. A grid batch can't close any of these, so three of five whole-unit verdicts here were predictable before any render.
+- What the team should change next time: before a grid batch, sort units into "grid can help", "needs materials or roof work" and "no confirmed reference". Send only the first group through grid renders, route the second to a materials or roof study, and flag the third for reference research or L1 status.
