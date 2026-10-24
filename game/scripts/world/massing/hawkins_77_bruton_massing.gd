@@ -19,14 +19,24 @@ const TARGET_ROOF_KEY := "building:w1249412093:roof"
 const SOURCE_TOP_Y := 10.274
 const BASE_Y := 4.274
 const STOREY_M := 3.5
-const DECK_Y := 7.774
-const TERRACE_Y := 14.774
+# 2026-10-24 form audit (cav-7 frontal, cav-0 section, hk15/hk18 rectified): ground
+# storey about 4.2 m, upper storeys about 3.15 m; the bay boxes of the 4-storey wing
+# run from about 4.2 to 10.9 m above grade. DECK_Y is the ground-storey top / box
+# underside; the courtyard sits near grade over the garage (cav-0, cav-14).
+const DECK_Y := 8.474
+const COURT_Y := 4.774
+const UPPER_STOREY_M := 3.15
+const TERRACE_Y := 15.174
 const LOW_TOP_Y := 18.274
 const TALL_TOP_Y := 25.274
-const SE_SPLIT_U_M := 33.0
-# The 6-storey block runs about 70% of the NNW face (hk15: 608 of 836 px).
-const NNW_SPLIT_U_M := 39.0
-const WING_DEPTH_M := {"wsw": 13.0, "se": 13.0, "ene": 16.0, "nnw": 13.0}
+# The 6-storey block starts at the junction stair tower (cav-7, hk02 rectified).
+const SE_SPLIT_U_M := 32.0
+# West face of the thin cheek beside the junction slot (cav-7: about 0.6 m).
+const SE_CHEEK_U0_M := 31.4
+# The 6-storey block runs about 40-41 m of the NNW face (hk15 rectified 41.1, hk12 39.5).
+const NNW_SPLIT_U_M := 40.5
+# ENE wing double-loaded, about 20-21 m (cav-0 section, cav-14 plan).
+const WING_DEPTH_M := {"wsw": 13.0, "se": 13.0, "ene": 20.0, "nnw": 13.0}
 const SETBACK_M := 1.6
 # The WSW setback starts past the NNW wing (its corner block stays full height).
 const WSW_SETBACK_FROM_U_M := 13.0
@@ -35,13 +45,14 @@ const WSW_SETBACK_FROM_U_M := 13.0
 const SETBACK_U_RANGES := {"wsw": Vector2(WSW_SETBACK_FROM_U_M, 200.0), "se": Vector2(-200.0, SE_SPLIT_U_M)}
 # The wing roof slab stands just past the bay boxes below it (cav-7, cav-3); only
 # the S corner wedge reaches far out (cav-2).
-const CANOPY_OVERHANG_M := 0.6
+# The canopy reads well beyond the box faces from the walk (cav-3, cav-6, hk16).
+const CANOPY_OVERHANG_M := 1.2
 # Projecting fluted bay boxes over storeys 2-3 (hk02, cav-7 SE; cav-3, hk23 WSW):
 # u ranges along each side, from DECK_Y to TERRACE_Y, BAY_BOX_DEPTH_M proud.
 const BAY_BOX_DEPTH_M := 0.4
 # The WSW box starts at the W corner and turns onto the NNW end of the 4-storey
 # wing (cav-3, hk15).
-const BAY_BOX_U_RANGES := {"wsw": Vector2(0.0, 200.0), "se": Vector2(0.0, SE_SPLIT_U_M - 1.8), "nnw": Vector2(41.2, 200.0)}
+const BAY_BOX_U_RANGES := {"wsw": Vector2(0.0, 200.0), "se": Vector2(0.0, SE_SPLIT_U_M - 0.8), "nnw": Vector2(NNW_SPLIT_U_M + 0.6, 200.0)}
 # The ground storey under the bay boxes is recessed inside the frozen footprint
 # (cav-3, hk23, hk02, cav-2): a deep shadow line and white soffit, with the WSW
 # stoops tucked under and full-height glazing at the S corner.
@@ -52,7 +63,53 @@ const WEDGE_OVERHANG_M := 2.0
 const WEDGE_RUN_M := 8.0
 const CANOPY_TOP_Y := 18.30
 const CANOPY_THICKNESS_M := 0.25
-const ROOF_EDGE_OVERHANG_M := 0.9
+const ROOF_EDGE_OVERHANG_M := 1.0
+# Full-height recesses in plan [side, u0, u1, depth] (production inference from the
+# 2026-10-24 audit): the SE junction glazing slot (cav-7, hk02, hk13); on ENE (u from
+# the E corner) a recessed bay after the E corner block, the middle section (re-filled
+# on storeys 2-5 by ENE_BOX, leaving a recessed glazed ground floor and a top-floor
+# loggia under the roof slab) and a glazing slot before the N corner block (cav-4 seen
+# from the N corner, hk21 from the E corner, hk10);
+# the NNW glazed strip between the two 6-storey blocks (hk15, hk12).
+const NOTCHES := [
+	["se", 32.0, 34.5, 1.0],
+	["ene", 13.8, 18.8, 0.8], ["ene", 18.8, 42.7, 1.8], ["ene", 42.7, 44.5, 1.2],
+	["nnw", 20.0, 23.3, 1.0],
+]
+# ENE middle: storeys 2-5 at the footprint line over the recessed ground floor, a
+# low ledge in front of the recessed top floor, and the roof slab with a dark
+# soffit over the middle only (u from the E corner).
+const ENE_BOX_U := Vector2(18.82, 42.68)
+const ENE_BOX_TOP_Y := DECK_Y + 4.0 * UPPER_STOREY_M
+const ENE_LEDGE_TOP_Y := ENE_BOX_TOP_Y + 1.0
+const ENE_ROOF_EDGE_U := Vector2(10.0, 46.0)
+# Rooftop volumes approved by ROOT 2026-10-24 (production inference): [side, u0, u1,
+# out0, out1, bottom, top, role]. SE junction stair/lift tower (pier and glazed slot
+# part; cav-7, hk13, hk18, hk05), with the thin cheek on the 4-storey side of the slot
+# rising with the pier while the slot cap stays lower between them (cav-7, hk05,
+# hk18; Stage A rework 2026-10-24), roof-terrace pavilion and its overhanging roof east
+# of it, behind the terrace so the street sees none of it (hk25, hk18, hk21, cav-0, cav-7), the mechanical screen along the ENE wing roof from
+# near the E corner (hk21, hk18), the set-back NNW penthouse: a broad thin roof slab
+# over a smaller glazed room at the strip, the slab's west end carried on posts over
+# the roof terrace (hk15, hk21), and the short stair enclosure on the 4-storey roof
+# at the NNW step (hk12, hk15).
+const ROOF_VOLUMES := [
+	["se", 34.5, 38.0, -6.5, 0.0, TALL_TOP_Y, 29.6, "tower"],
+	["se", 32.0, 34.5, -6.5, -1.0, TALL_TOP_Y, 27.7, "tower"],
+	["se", SE_CHEEK_U0_M, 32.0, -6.5, 0.0, TERRACE_Y, 29.6, "tower_cheek"],
+	["se", 39.0, 47.0, -12.5, -8.0, TALL_TOP_Y, 28.6, "pavilion"],
+	["se", 38.3, 48.0, -12.8, -7.0, 28.6, 28.9, "pavilion_roof"],
+	["ene", 8.0, 48.0, -14.0, -6.0, TALL_TOP_Y, 28.0, "screen"],
+	["nnw", 18.5, 27.0, -10.0, -3.0, TALL_TOP_Y, 27.45, "penthouse"],
+	["nnw", 5.0, 27.8, -10.8, -1.5, 27.45, 27.8, "penthouse_roof"],
+	["nnw", 5.2, 5.5, -2.2, -1.9, TALL_TOP_Y, 27.45, "penthouse_post"],
+	["nnw", 5.2, 5.5, -10.5, -10.2, TALL_TOP_Y, 27.45, "penthouse_post"],
+	["nnw", NNW_SPLIT_U_M - 0.2, 46.0, -8.0, -1.5, LOW_TOP_Y, 21.0, "stair"],
+]
+# Fin walls between the set-back top-floor terraces on WSW (cav-3, cav-6), on the
+# unit module of the plan (cav-14, about 6.45 m).
+const WSW_FIN_PITCH_M := 6.45
+const WSW_FIN_WIDTH_M := 0.25
 # Stoops: [side, u along side, local land y]; land y is sampled terrain from the
 # frozen chunk (land_ground w26767313) at each stoop; platform 0.6m above it.
 const STOOPS := [
@@ -105,6 +162,12 @@ static func build_record(record: Dictionary, material: Material) -> Dictionary:
 	if not bool(geometry.get("ok", false)):
 		return geometry
 
+	var grey := form_grey()
+	if grey:
+		material = _grey(0.62 if is_wall else 0.42)
+	var canopy_material: Material = _grey(0.82) if grey else CANOPY_MATERIAL
+	var soffit_material: Material = _grey(0.5) if grey else SOFFIT_MATERIAL
+	var stoop_material: Material = _grey(0.72) if grey else STOOP_MATERIAL
 	var root := Node3D.new()
 	root.name = object_key.validate_node_name()
 	root.set_meta("derived_object_key", object_key)
@@ -118,23 +181,44 @@ static func build_record(record: Dictionary, material: Material) -> Dictionary:
 		root.set_meta("source_exterior_foundation_segments", int(record.exterior_foundation_segments))
 		root.set_meta("runtime_wall_quads", (geometry.quads as Array).size())
 
-	root.add_child(_mesh_node("Mesh", geometry, material, RENDER_BUILDING_WALL if is_wall else RENDER_WORLD_VISIBLE))
-	var faces := _faces(geometry)
 	var mesh_instances := 1
+	if grey and is_wall:
+		# Stage A study only: planes behind the footprint line (notch backs and
+		# returns, recessed ground, set-back storey) in a darker grey, as glazing
+		# will read there. Collision below still uses the whole wall geometry.
+		var light: Array[Dictionary] = []
+		var dark: Array[Dictionary] = []
+		for quad: Dictionary in geometry.quads:
+			var recessed := str(quad.role) in ["recess", "setback"] or (str(quad.role) == "outer" and _outer_side(quad) == "")
+			if recessed:
+				dark.append(quad)
+			else:
+				light.append(quad)
+		root.add_child(_mesh_node("Mesh", _geometry_from_wall_quads(light), material, RENDER_BUILDING_WALL))
+		root.add_child(_mesh_node("MeshRecessed", _geometry_from_wall_quads(dark), _grey(0.38), RENDER_BUILDING_WALL))
+		mesh_instances += 1
+	else:
+		root.add_child(_mesh_node("Mesh", geometry, material, RENDER_BUILDING_WALL if is_wall else RENDER_WORLD_VISIBLE))
+	var faces := _faces(geometry)
 	if not is_wall:
 		# Canopies and the ENE roof edge: pale tops/edges, dark soffits; solid.
 		var canopy := canopy_geometry()
-		root.add_child(_mesh_node("Canopies", canopy.top, CANOPY_MATERIAL, RENDER_WORLD_VISIBLE))
-		root.add_child(_mesh_node("CanopySoffits", canopy.soffit, SOFFIT_MATERIAL, RENDER_WORLD_VISIBLE))
+		root.add_child(_mesh_node("Canopies", canopy.top, canopy_material, RENDER_WORLD_VISIBLE))
+		root.add_child(_mesh_node("CanopySoffits", canopy.soffit, soffit_material, RENDER_WORLD_VISIBLE))
 		faces.append_array(_faces(canopy.top))
 		faces.append_array(_faces(canopy.soffit))
 		# The facade draws the terrace glass rail; it is solid here.
 		faces.append_array(_faces(rail_collision()))
 		# Bay boxes: white returns and undersides here, fluted fronts in the facade.
 		var boxes := bay_box_geometry()
-		root.add_child(_mesh_node("BayBoxes", boxes, CANOPY_MATERIAL, RENDER_WORLD_VISIBLE))
+		root.add_child(_mesh_node("BayBoxes", boxes, canopy_material, RENDER_WORLD_VISIBLE))
 		faces.append_array(_faces(boxes))
-		mesh_instances += 3
+		var volumes := volume_geometry()
+		root.add_child(_mesh_node("FormVolumes", volumes.solid, _grey(0.62) if grey else CANOPY_MATERIAL, RENDER_WORLD_VISIBLE))
+		root.add_child(_mesh_node("FormVolumesDark", volumes.dark, soffit_material, RENDER_WORLD_VISIBLE))
+		faces.append_array(_faces(volumes.solid))
+		faces.append_array(_faces(volumes.dark))
+		mesh_instances += 5
 
 	var body := StaticBody3D.new()
 	body.name = "Collision"
@@ -164,8 +248,8 @@ static func build_record(record: Dictionary, material: Material) -> Dictionary:
 
 	if is_wall:
 		var stoops := stoop_geometry()
-		root.add_child(_mesh_node("Stoops", stoops.solid, STOOP_MATERIAL, RENDER_WORLD_VISIBLE))
-		root.add_child(_mesh_node("StoopSteps", stoops.decor, STOOP_MATERIAL, RENDER_WORLD_VISIBLE))
+		root.add_child(_mesh_node("Stoops", stoops.solid, stoop_material, RENDER_WORLD_VISIBLE))
+		root.add_child(_mesh_node("StoopSteps", stoops.decor, stoop_material, RENDER_WORLD_VISIBLE))
 		mesh_instances += 2
 		# Platforms, planters and the hidden flight ramps: solid, not spray walls.
 		var stoop_faces := _faces(stoops.solid)
@@ -186,6 +270,7 @@ static func build_record(record: Dictionary, material: Material) -> Dictionary:
 		stoop_body.set_meta("source_keys", record.source_keys.duplicate())
 		stoop_body.add_child(stoop_shape_node)
 		root.add_child(stoop_body)
+	if is_wall and not grey:
 		var facade := FACADE_SCENE.instantiate() as Hawkins77BrutonFacade
 		var facade_result := facade.configure(record, geometry)
 		if not bool(facade_result.get("ok", false)):
@@ -208,6 +293,19 @@ static func build_record(record: Dictionary, material: Material) -> Dictionary:
 	}
 
 
+# Stage A form study only (2026-10-24): HAWKINS_FORM_GREY=1 renders the form in
+# neutral greys without the facade. Remove before Stage C.
+static func form_grey() -> bool:
+	return OS.get_environment("HAWKINS_FORM_GREY") == "1"
+
+
+static func _grey(value: float) -> StandardMaterial3D:
+	var grey := StandardMaterial3D.new()
+	grey.albedo_color = Color(value, value, value)
+	grey.roughness = 0.9
+	return grey
+
+
 static func massing_contract() -> Dictionary:
 	return {
 		"schema_version": "ti.hawkins-massing-runtime/2",
@@ -220,6 +318,9 @@ static func massing_contract() -> Dictionary:
 		"low_top_y_m": LOW_TOP_Y,
 		"tall_top_y_m": TALL_TOP_Y,
 		"storey_height_m": STOREY_M,
+		"court_y_m": COURT_Y,
+		"notches": NOTCHES,
+		"roof_volumes": ROOF_VOLUMES,
 		"se_split_u_m": SE_SPLIT_U_M,
 		"nnw_split_u_m": NNW_SPLIT_U_M,
 		"setback_m": SETBACK_M,
@@ -284,7 +385,7 @@ static func pieces() -> Array[Dictionary]:
 			for region: PackedVector2Array in [behind, before, after]:
 				for rest: PackedVector2Array in Geometry2D.intersect_polygons(part, region):
 					result.append({"poly": _ordered(rest), "top": LOW_TOP_Y, "role": "low"})
-	result.append({"poly": _ordered(PackedVector2Array(inner)), "top": DECK_Y, "role": "court"})
+	result.append({"poly": _ordered(PackedVector2Array(inner)), "top": COURT_Y, "role": "court"})
 	# Drop slivers that polygon clipping can leave along collinear edges
 	# (mean width = area / half the perimeter under 5 cm).
 	var cleaned: Array[Dictionary] = []
@@ -295,7 +396,32 @@ static func pieces() -> Array[Dictionary]:
 			perimeter += poly[i].distance_to(poly[(i + 1) % poly.size()])
 		if absf(_signed_area(poly)) / maxf(perimeter * 0.5, 0.001) > 0.05:
 			cleaned.append(piece)
-	return cleaned
+	return _notched(cleaned)
+
+
+# Cut the full-height NOTCHES out of the pieces (each notch rectangle reaches 1 m
+# outside the footprint, so the clip never leaves a hole).
+static func _notched(all_pieces: Array[Dictionary]) -> Array[Dictionary]:
+	var result := all_pieces
+	for notch: Array in NOTCHES:
+		var side := str(notch[0])
+		var rect := PackedVector2Array([
+			side_point(side, notch[1], 1.0), side_point(side, notch[2], 1.0),
+			side_point(side, notch[2], -float(notch[3])), side_point(side, notch[1], -float(notch[3])),
+		])
+		var next: Array[Dictionary] = []
+		for piece: Dictionary in result:
+			if Geometry2D.intersect_polygons(piece.poly, rect).is_empty():
+				next.append(piece)
+				continue
+			for part: PackedVector2Array in Geometry2D.clip_polygons(piece.poly, rect):
+				var perimeter := 0.0
+				for i in part.size():
+					perimeter += part[i].distance_to(part[(i + 1) % part.size()])
+				if absf(_signed_area(part)) / maxf(perimeter * 0.5, 0.001) > 0.05:
+					next.append({"poly": _ordered(part), "top": piece.top, "role": piece.role})
+		result = next
+	return result
 
 
 static func _inner_quad() -> Array[Vector2]:
@@ -356,13 +482,13 @@ static func wall_geometry(record: Dictionary) -> Dictionary:
 					continue
 				var neighbour := _height_at(all_pieces, (a + b) * 0.5 + outward * 0.05)
 				if is_nan(neighbour):
-					var bottom_a := _source_bottom(source_quads, a)
-					var bottom_b := _source_bottom(source_quads, b)
+					var bottom_a := _ground_bottom(source_quads, a)
+					var bottom_b := _ground_bottom(source_quads, b)
 					if is_nan(bottom_a) or is_nan(bottom_b):
 						return {"ok": false, "code": "hawkins_massing_source", "message": "Hawkins outer wall left the frozen footprint."}
 					_append_wall_quad(quads, Vector3(a.x, bottom_a, a.y), Vector3(b.x, bottom_b, b.y), top, normal, "outer", str(piece.role))
 				elif neighbour < top - 0.001:
-					var role := "setback" if is_equal_approx(neighbour, TERRACE_Y) else ("court" if is_equal_approx(neighbour, DECK_Y) else "step")
+					var role := "setback" if is_equal_approx(neighbour, TERRACE_Y) else ("court" if is_equal_approx(neighbour, COURT_Y) else "step")
 					_append_wall_quad(quads, Vector3(a.x, neighbour, a.y), Vector3(b.x, neighbour, b.y), top, normal, role, str(piece.role))
 	return _geometry_from_wall_quads(_recess_ground(quads, source_quads))
 
@@ -471,19 +597,19 @@ static func canopy_geometry() -> Dictionary:
 		side_point("wsw", wsw_length - WEDGE_RUN_M, CANOPY_OVERHANG_M),
 		apex,
 		side_point("se", WEDGE_RUN_M, CANOPY_OVERHANG_M),
-		side_point("se", SE_SPLIT_U_M - 0.05, CANOPY_OVERHANG_M),
-		side_point("se", SE_SPLIT_U_M - 0.05, -SETBACK_M),
+		side_point("se", SE_CHEEK_U0_M, CANOPY_OVERHANG_M),
+		side_point("se", SE_CHEEK_U0_M, -SETBACK_M),
 		inner_corner,
 	])
 	# The wing canopy is white underneath too (cav-2, cav-3); only the ENE roof
 	# edge has a dark soffit (hk07/hk10).
 	_append_slab(top, top, _ordered(canopy), CANOPY_TOP_Y - CANOPY_THICKNESS_M, CANOPY_TOP_Y)
-	var ene_length: float = side_frame("ene").length
+	# Roof slab over the ENE middle and its top-floor loggia (cav-4, hk21, hk10).
 	var edge := PackedVector2Array([
-		side_point("ene", 0.0, -0.3), side_point("ene", 0.0, ROOF_EDGE_OVERHANG_M),
-		side_point("ene", ene_length, ROOF_EDGE_OVERHANG_M), side_point("ene", ene_length, -0.3),
+		side_point("ene", ENE_ROOF_EDGE_U.x, -2.0), side_point("ene", ENE_ROOF_EDGE_U.x, ROOF_EDGE_OVERHANG_M),
+		side_point("ene", ENE_ROOF_EDGE_U.y, ROOF_EDGE_OVERHANG_M), side_point("ene", ENE_ROOF_EDGE_U.y, -2.0),
 	])
-	_append_slab(top, soffit, _ordered(edge), TALL_TOP_Y - 0.3, TALL_TOP_Y + 0.03)
+	_append_slab(top, soffit, _ordered(edge), TALL_TOP_Y - 0.35, TALL_TOP_Y + 0.03)
 	return {"top": _flat_geometry(top, "canopy"), "soffit": _flat_geometry(soffit, "soffit")}
 
 
@@ -501,6 +627,29 @@ static func bay_box_geometry() -> Dictionary:
 	# White soffit over the recessed ground storey.
 	_append_slab(bucket, bucket, _ordered(recess_strip()), DECK_Y, DECK_Y + 0.3)
 	return _flat_geometry(bucket, "bay_box")
+
+
+# Solid form pieces added to the roof body (receiver none, spray layer): the ENE
+# middle storeys 2-5 and ledge, the WSW terrace fins and the rooftop volumes.
+# Returns {"solid": pale volumes, "dark": tower slot and pavilion glazing}.
+static func volume_geometry() -> Dictionary:
+	var solid := _bucket()
+	var dark := _bucket()
+	_append_slab(solid, solid, _side_rect("ene", ENE_BOX_U.x, ENE_BOX_U.y, -1.8, 0.0), DECK_Y, ENE_BOX_TOP_Y)
+	_append_slab(solid, solid, _side_rect("ene", ENE_BOX_U.x, ENE_BOX_U.y, -0.35, 0.0), ENE_BOX_TOP_Y, ENE_LEDGE_TOP_Y)
+	var wsw_range := Vector2(maxf((SETBACK_U_RANGES.wsw as Vector2).x, 0.0), float(side_frame("wsw").length) - WEDGE_RUN_M)
+	var u := wsw_range.x
+	while u <= wsw_range.y:
+		_append_slab(solid, solid, _side_rect("wsw", u - WSW_FIN_WIDTH_M * 0.5, u + WSW_FIN_WIDTH_M * 0.5, -SETBACK_M, BAY_BOX_DEPTH_M), TERRACE_Y, CANOPY_TOP_Y - CANOPY_THICKNESS_M)
+		u += WSW_FIN_PITCH_M
+	for volume: Array in ROOF_VOLUMES:
+		var target := dark if str(volume[7]) in ["pavilion", "penthouse"] else solid
+		_append_slab(target, target, _side_rect(str(volume[0]), volume[1], volume[2], volume[3], volume[4]), volume[5], volume[6])
+	return {"solid": _flat_geometry(solid, "volumes"), "dark": _flat_geometry(dark, "volumes_dark")}
+
+
+static func _side_rect(side: String, u0: float, u1: float, out0: float, out1: float) -> PackedVector2Array:
+	return _ordered(PackedVector2Array([side_point(side, u0, out0), side_point(side, u1, out0), side_point(side, u1, out1), side_point(side, u0, out1)]))
 
 
 # Plan of the recessed ground strip: the WSW box range to the S corner and the SE
@@ -572,7 +721,7 @@ static func stoop_geometry() -> Dictionary:
 		var f := side_frame(side)
 		var t := Vector3((f.tangent as Vector2).x, 0.0, (f.tangent as Vector2).y)
 		var n := Vector3((f.normal as Vector2).x, 0.0, (f.normal as Vector2).y)
-		var base := _at(side_point(side, u, -RECESS_M if side == "wsw" else 0.0), 0.0)
+		var base := _at(side_point(side, u, -_stoop_recess(side, u)), 0.0)
 		var floor_y := land - 0.15
 		var top_y := land + STOOP_RISE_M
 		var riser := STOOP_RISE_M / 3.0
@@ -601,6 +750,15 @@ static func stoop_geometry() -> Dictionary:
 	return {"solid": _flat_geometry(solid, "stoops"), "decor": _flat_geometry(decor, "stoop_steps"), "support": _flat_geometry(support, "stoop_support")}
 
 
+# How far the ground-floor wall behind a stoop sits inside the footprint line.
+static func _stoop_recess(side: String, u: float) -> float:
+	if side == "wsw":
+		return RECESS_M
+	if side == "ene" and u > ENE_BOX_U.x and u < ENE_BOX_U.y:
+		return 1.8
+	return 0.0
+
+
 static func _height_at(all_pieces: Array[Dictionary], point: Vector2) -> float:
 	for piece: Dictionary in all_pieces:
 		if Geometry2D.is_point_in_polygon(point, piece.poly):
@@ -618,6 +776,27 @@ static func _source_bottom(source_quads: Array[Dictionary], point: Vector2) -> f
 			var t := clampf((point - a).dot(b - a) / a.distance_squared_to(b), 0.0, 1.0)
 			return lerpf(s.y, e.y, t)
 	return NAN
+
+
+# Source wall bottom at a point on the footprint line, or, for walls set back in a
+# notch, at its projection on the nearest footprint edge within 2.5 m (as the
+# recessed ground walls do).
+static func _ground_bottom(source_quads: Array[Dictionary], point: Vector2) -> float:
+	var exact := _source_bottom(source_quads, point)
+	if not is_nan(exact):
+		return exact
+	var best := NAN
+	var best_distance := 2.5
+	for quad: Dictionary in source_quads:
+		var s := quad.start_bottom as Vector3
+		var e := quad.end_bottom as Vector3
+		var a := Vector2(s.x, s.z)
+		var b := Vector2(e.x, e.z)
+		var distance := Geometry2D.get_closest_point_to_segment(point, a, b).distance_to(point)
+		if distance < best_distance:
+			best_distance = distance
+			best = lerpf(s.y, e.y, clampf((point - a).dot(b - a) / a.distance_squared_to(b), 0.0, 1.0))
+	return best
 
 
 static func _signed_area(poly: PackedVector2Array) -> float:

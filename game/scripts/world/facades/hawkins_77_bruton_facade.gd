@@ -90,7 +90,10 @@ func configure(record: Dictionary, wall_geometry: Dictionary) -> Dictionary:
 		var side := _side_of(quad)
 		if role == "outer":
 			if side == "":
-				return {"ok": false, "message": "Hawkins outer wall did not lie on a footprint side."}
+				# Back and return walls of the massing notches (2026-10-24 form
+				# study): plain cladding until the Stage B facade grid.
+				_field(quad, -INF, INF, "pearl_fluted")
+				continue
 			outer_count += 1
 			_field(quad, MASSING.BASE_Y - 1.0, MASSING.DECK_Y, "base_ribbed" if side == "se" else "base_smooth")
 			_field(quad, MASSING.DECK_Y, INF, "pearl_fluted")
