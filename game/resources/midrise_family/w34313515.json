@@ -825,8 +825,8 @@
         },
         {
           "type": "stair_bay",
-          "from": 70.8,
-          "to": 75.2,
+          "from": 63.2,
+          "to": 66.4,
           "depth": 2.2,
           "pier": 0.2,
           "back": "stair_dark",
@@ -839,40 +839,80 @@
       "grid": {
         "columns": [
           [
-            2.3,
-            6.1
+            0.6,
+            2.2
           ],
           [
-            17.3,
-            21.1
+            2.5,
+            3.4
           ],
           [
-            27.1,
-            30.9
+            4.6,
+            7.3
           ],
           [
-            32.3,
-            36.1
+            9.6,
+            13.3
           ],
           [
-            48.3,
-            49.3
+            18.2,
+            21.0
           ],
           [
-            62.2,
-            66.0
+            27.0,
+            29.8
           ],
           [
-            66.6,
-            70.4
+            31.0,
+            33.8
           ],
           [
-            87.9,
-            91.7
+            35.2,
+            38.0
           ],
           [
-            92.9,
-            96.7
+            40.6,
+            43.4
+          ],
+          [
+            44.0,
+            47.2
+          ],
+          [
+            47.8,
+            49.8
+          ],
+          [
+            50.4,
+            52.8
+          ],
+          [
+            53.6,
+            56.2
+          ],
+          [
+            59.8,
+            63.0
+          ],
+          [
+            66.8,
+            69.6
+          ],
+          [
+            71.0,
+            73.8
+          ],
+          [
+            74.8,
+            79.0
+          ],
+          [
+            84.6,
+            88.8
+          ],
+          [
+            92.4,
+            96.2
           ]
         ],
         "rows": {
@@ -881,14 +921,22 @@
             "head": 3.05
           }
         },
+        "blank_cells": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ]
+        ],
         "source": {
-          "kind": "inferred_from_side",
-          "ref": "520-sideC_242 pano cAhCruTjAinYoFHxP4wkmw; 515 reference-wsw001 pano kEX8mV7OsuHLoA4oK69_KA (oblique)",
+          "kind": "rectified_photo",
+          "ref": "515 reference-nnw002 (pano XinlFktyE0_U2KP7tU6mfg, h 107.6 t 3.0 f 629) and reference-wsw001 (pano kEX8mV7OsuHLoA4oK69_KA, h 43.1 t 5.2 f 629)",
           "date": "2025-09",
-          "side": "e0 of w34313520",
-          "face": "e0 of w34313515",
-          "truth_class": "production_inference",
-          "note": "same block type as 520: 520's rows and window width; columns placed between the stair stacks and entry, leaving the broad solid fields 8.4-16.6, 39.4-47.6, 53.4-61.6, 78.9-87.1 seen in reference-wsw001 (2026-10-15 study review)"
+          "side": "e0",
+          "note": "u 0-21 from nnw002: L3 wide window 0.6-3.4 over narrow L1-L2 lights 2.5-3.4 (blank cells), then 4.6-7.3 (L1 entry glazing), 9.6-13.3, 18.2-21.0 before the first stair recess; u 40-89 from wsw001: windows 40.6-56.2 around the entry, 59.8-63.0, the stair recess at about 63-66, 66.8-69.6, group 74.8-79.0, solid 79-84.5, group 84.6-88.8; u 27-38, 71-74 (tree) and 92-96 (off frame) continue the rhythm (production_inference); rows from 520"
         }
       },
       "grid_unit": {
