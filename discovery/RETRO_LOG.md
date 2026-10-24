@@ -21964,3 +21964,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: all three branches append to the end of RETRO_LOG, so each conflict was a single block that a keep-both script resolved; a per-line check confirmed every line added by the six original commits survives. An exact-text catalog edit with a per-unit count assertion caught the garage-court entries' extra `stairs` line before anything was written, and the re-parse showed 79 → 99.
 - What did not work well: the first catalog pattern assumed every unit has the same key order, so the batch S2/S3 units (which carry a `stairs` field between `anchor_source_key` and `claim_status`) needed a second pass.
 - What the team should change next time: for multi-unit catalog record commits, match each unit's block by `anchor_source_key` with optional intermediate fields (or edit through a JSON-aware helper that keeps the file's formatting), not by a fixed multi-line text block.
+
+### modeler-accept-s5 — 2026-10-24 — acceptance batch S5 (Bayside 1205, Northpoint 1225, 1229, 1237, 1244, 1245; review-only) and S3 fits
+
+- What worked well: chaining the S3 fits with a "fewer than two live" check before each start kept the engine busy without waiting for quiet; all eight fits passed. The binding pass and ground-sampled eye heights carried over from S1/S3 unchanged.
+- What did not work well: two independent chains (mine and accept-s2) read "one live" in the same second and both started, so three runs were live for a while. Taking f from the notes' "fov75" made the matched views too tight, and two runs went to re-rendering them.
+- What the team should change next time: use an atomic slot claim (e.g. `flock` on a shared lock file per slot) instead of a pgrep count, so two chains cannot start on the same reading. Treat the Maps "75y" field of view as not equal to the rendered frame; use f 387 for 1018x795 captures unless fitted.
