@@ -21928,3 +21928,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: projecting every nearby footprint at each capture pose confirmed the binding of 9 photos in one pass, and caught that 528's sideC frame actually shows w96698650. Checking pgrep right before each run avoided two collisions with another worktree.
 - What did not work well: I set the matched-view eye height from the target's lowest wall-bottom. On Star View that is 2.7 m below the street, so the first pose-matched renders were from under the road and cost 2 extra runs. Another worktree still started an engine run during one of mine.
 - What the team should change next time: take the eye height from the sampled ground (road or land mesh) at the pano position, not from building bounds. Whoever starts an engine run should also check pgrep immediately before, so concurrent slots do not overlap.
+
+### ti-visual-review — 2026-10-24 — acceptance batch S1 (Star View, Personnel Support, 850 / Bldg 202, Hall 528)
+
+- What worked well: a review-only batch with photo-binding overlays was fast to judge. The bindings settled identity first (and correctly rejected 528-sideC), so the visual question was only "does it read as the photo". Re-rendering Star View at street height, instead of at the target's lowest wall bottom, made the matched views usable.
+- What did not work well: two units are judged largely through occlusion: Personnel Support behind fence screens and trees, and 850 behind the container wall. Their verdicts rest on a few visible cues (dark framed grid with a rooftop volume; an ochre end with high windows), not on whole-facade comparison. 528 has no north view.
+- What the team should change next time: when a photo is mostly occluded, say in the binding table which features are actually visible, so the reviewer judges exactly those. Treat setting items such as the 850 container wall as a separate opt-in setting study, not part of the building verdict.
