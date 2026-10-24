@@ -21749,3 +21749,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the 490 Palms push (6536382) gave the record IDs, the dated note shape and the gate chain directly. Checking each unit's current catalog state first showed that 515 and 520 were already accepted from Mar22h, so only 369 raised the score (65 -> 66), and the B1 records were appended after their existing ones.
 - What did not work well: the catalog JSON does not round-trip through a JSON dump (key order and inline `stairs` arrays differ), so the records had to go in as text edits; a first script slip produced invalid JSON and was caught only by parsing the file back.
 - What the team should change next time: always re-parse the catalog and recount the score right after editing it, before touching the checklist, and have dispatches state which units are already accepted.
+
+## modeler-grid-b2 (midrise grid batch B2: Job Corps survey set, 2026-10-24)
+
+- What worked well: solving camera pose from four footprint-corner points (with a fixed typical focal where the photo is frontal and the solve degenerates) gave usable matched cameras for undated-position survey photos. One batched render per lighting covered all units and neighbours. Comparing photo against BEFORE at fitted cameras first showed early that four of five units already carried the photographed bays.
+- What did not work well: the plan assumed every unit would benefit from a grid. For units whose bays were already photo-placed (488, 514, Oasis, 450), the grid would only have re-expressed them and dropped the blue hoods, so they stay KEEP-BEFORE. Only 655's curtain flanks gained.
+- What the team should change next time: before planning a grid batch, check each unit's config for photo-placed bay features and fixtures that the grid path does not carry (hoods), and plan grid work only where BEFORE visibly diverges from the photos.
