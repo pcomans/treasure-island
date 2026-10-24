@@ -21725,3 +21725,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: copying the Hawkins push (ed767dc) gave the catalog record format, the dated checklist note and the gate invocations directly. Matching the 490 row by its unit prefix avoided a second row with the same Mar17k text.
 - What did not work well: the dispatch said the visual reviewer's RETRO entry was uncommitted, but it was already in 329730f with the code-review entry. It took a check of the tree and HEAD to confirm that nothing was missing.
 - What the team should change next time: push dispatches should say "check that X is committed" rather than "commit X as is", so a coordinator doesn't go looking for a change that isn't there.
+
+## modeler-grid-b1 (midrise grid batch B1: 369, 515, 520, Star View paseo, 2026-10-24)
+
+- What worked well: a generic camera tool (pano + footprint edge, fit heading/tilt/focal on corners) made rectification per unit a two-minute step. One batched `--views-batch --island` run per lighting covered all four units plus the neighbour controls. Printing `midrise_skipped_features` in the digest caught a block split cutting a photographed column before any render.
+- What did not work well: two photos (the 520 corner view and 369 sideC) were too oblique for a reliable fit, so those faces stay medium-confidence inference. A shared grid on schemes reused across many faces needed a producer change: drop columns beyond a face's ends instead of reporting them.
+- What the team should change next time: before choosing columns, list each scheme's faces and block splits along the edge, then pick the grid phase so splits fall inside piers. Note up front where one-width-per-column trades off against a wider ground storey (Star View patios).
