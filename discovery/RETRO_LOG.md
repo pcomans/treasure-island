@@ -21952,3 +21952,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the S1 lesson (eye height from the sampled road or land at the pano) gave correct matched views first time for all eight units. The binding pass caught that 1449's frame is the same pano as 1444's, aimed the other way. Starting runs with one other engine live, per the ROOT correction, removed most of the waiting.
 - What did not work well: before the correction, about 20 minutes went to waiting for full engine quiet. Halibut 1432-1434 rest only on 2019 imagery.
 - What the team should change next time: check the live engine count against the agreed two-run limit, not engine quiet. For demolished units, keep both the dated standing photo and the current cleared-site photo on the owner sheet.
+
+### ti-visual-review — 2026-10-24 — acceptance batch S3 (1418, 1419, Halibut 1430–1434, 1449)
+
+- What worked well: the demolition flag was stated up front with the dates and the brief's rule, so 1432–1434 could be judged against their Apr 2019 photos without re-litigating scope. Applying the S2 hue-versus-lightness lesson caught the one real colour gap (1449 renders white-grey against the photo's warm beige) in seconds.
+- What did not work well: the triage table again said "matches" for a unit whose wall hue is visibly off (1449), the same pattern as 1403 in S2. One batch's colour lesson does not carry over unless the triage step itself asks the hue question. Partial occlusion (the tree at 1418, the truck at 1430) limits those verdicts to the visible wing and the kit identity.
+- What the team should change next time: add a "wall hue (photo sunlit face vs neutral render)" column to the triage table for every acceptance batch. Collect the kit units with warm-beige hue gaps (1403, 1449) into one small per-unit colour opt-in round rather than fixing them one at a time.
