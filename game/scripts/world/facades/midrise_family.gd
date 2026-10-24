@@ -1197,22 +1197,42 @@ static func _prepare_grid(ctx: Ctx, face: Face) -> bool:
 		floors.append(block.floors[k])
 	var local: Dictionary = (grid as Dictionary).duplicate(true)
 	var columns: Array = []
+	var index := 0
 	for column: Array in FacadeGrid.columns(grid):
 		var a := _local_station(ctx, face, float(column[0]))
 		var b := _local_station(ctx, face, float(column[1]))
-		columns.append([minf(a, b), maxf(a, b)])
+		columns.append([minf(a, b), maxf(a, b), index])
+		index += 1
 	columns.sort_custom(func(x: Array, y: Array) -> bool: return float(x[0]) < float(y[0]))
+	# The grid's rows, groups, cells and source are validated once against this face's
+	# storeys with all its columns, whether or not any column reaches the face.
+	var whole := local.duplicate(true)
+	whole["columns"] = columns.map(func(c: Array) -> Array: return [c[0], c[1]])
+	var check := FacadeGrid.validate(whole, floors, block.floors[block.storeys])
+	if not bool(check.ok):
+		ctx.errors.append("%s/%s grid: %s" % [block.id, face.key, "; ".join(PackedStringArray(check.errors))])
+		return false
 	# A scheme shared by several faces (one edge split over blocks, or an inherited grid
 	# on faces of different lengths) keeps only the columns that reach this face; columns
 	# wholly beyond its ends belong to other faces. A face left without columns is solid.
 	var on_face: Array = []
+	var remap := {}
 	for column: Array in columns:
 		if float(column[1]) > 0.001 and float(column[0]) < face.length - 0.001:
-			on_face.append(column)
+			remap[int(column[2])] = on_face.size()
+			on_face.append([column[0], column[1]])
 	face.has_grid = true
 	if on_face.is_empty():
 		face.grid_openings = []
+		ctx.skipped.append("%s/%s grid has no columns on this face; solid" % [block.id, face.key])
 		return true
+	# Blank cells name columns by the grid's own order; follow them to this face's list.
+	var cells: Array = []
+	for cell: Variant in local.get("blank_cells", []):
+		if cell is Array and remap.has(int(cell[0])):
+			cells.append([remap[int(cell[0])], int(cell[1])])
+	if local.has("blank_cells"):
+		local["blank_cells"] = cells
 	local["columns"] = on_face
 	# Ground-storey sills rise to GRADE_CLEARANCE_M above the local grade under each
 	# column (storey 0 only, heads kept; a light under 0.9 m is dropped), as the
