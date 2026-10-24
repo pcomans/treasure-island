@@ -21838,3 +21838,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the per-unit sheets put the photo, BEFORE, AFTER, four gameplay faces and a raised view in one image, and the column overlays on 564 and 370 made the high-window counts easy to check. The task note listed every reference path, and each change came with its reason. "Remove inferred windows where the photo shows blank wall" was easy to verify against a native crop of the photo.
 - What did not work well: the batch asked for whole-unit verdicts on six units that had never been evaluated, but the only budget was for grid or geometry. Two units (r133351's olive block, and 611's wall colour and material) are held by gaps the grid can't touch. 902, 611 and 450 have no pose-matched views, so their whole-unit calls rest on gameplay-view comparison.
 - What the team should change next time: before a grid batch with units that have never been evaluated, do a quick whole-unit triage against the photo (massing, colour, height) and route those gaps to the same batch or a follow-up. Pose-fit at least one view per unit that is asked for a whole-unit verdict.
+
+### push-coordinator-grid-b5 — 2026-10-24 — midrise grid batch B5 push (4 acceptances; trial push 3 of 3)
+
+- What worked well: `node_modules` and `.godot` were already in the worktree (the modeler ran `npm ci` first), so the B4 suite-rerun failure did not repeat. The catalog edit was a targeted text change of four units, re-parsed straight away, and the recount gave 68 → 72.
+- What did not work well: the push assignment named the reviewer's finish follow-ups without listing them, so the checklist note had to take them from the modeler's task note exceptions and the RETRO entries; a reviewer-only item could be missed.
+- What the team should change next time: put the reviewer's finish follow-ups in the push assignment verbatim, the same way the verdicts are given.
