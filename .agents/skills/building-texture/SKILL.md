@@ -69,6 +69,17 @@ Keep reference and layout comparison active throughout; compare full reference/g
 
 Follow the mandatory [between-study scope/progress review](../../../AGENTS.md#architectural-study-scope-and-progress-review). At each architectural-study boundary, a named reviewer independent of author and code/visual roles compares actual baseline/current gameplay and truthful references, returning PASS / RESCOPE / REWORK. If later polish displaces an incomplete earlier family, require RESCOPE or REWORK with a concrete REDIRECT to that bounded whole family, appropriate to overall island completion. Failed scope/progress blocks another microstudy or promotion until corrected scope or same-scope rework demonstrates substantial progress. Local detail, complexity or test completion alone is insufficient; already sound or reference-supported blank architecture needs no invented geometry. Supply this handoff before next-study GO without creating another packet or metric system; all existing gates remain.
 
+## Window grid and assemblies
+
+Owner decisions, 2026-10-23/24:
+
+- **Grid.** Windows sit on a structural grid derived from the photos: shared column lines per face, one sill and one head height per floor, and vertical stacking. Alignment, counts and rhythm matter, not centimetre accuracy: approximate measurements from rectified photos are fine when the result looks right.
+- **Exceptions.** The grid is a tool, not a straitjacket. Do not scatter or stagger windows unless the photo clearly shows it; where it shows genuinely irregular windows (Star View Court's staggered windows, asymmetric historic fronts, special entrance bays), follow the photo with blank cells, groups or a named exception rather than forcing uniformity.
+- **Assemblies.** Model photographed connected glazing and spandrel groups, curtain walls and base composition as assemblies, not punched holes. Build and check one complete ground-to-roof frontage before propagating it; see [the assemblies lesson](../../../LEARNINGS.md#model-photographed-window-groups-as-assemblies).
+- **Grid data.** Measure the grid from rectified photos: fit each Street View camera from projected corners ([lesson](../../../LEARNINGS.md#fit-each-street-view-camera-before-a-matched-review)), rectify one plane per side, then measure column lines, sills and heads. A curved or round face (such as Building 1's rounded sides) cannot be rectified flat: place its column lines as stations along the curve, keep the floor lines, and judge both by eye against the photos. Unphotographed sides of a photographed building inherit the photographed side's grid as `production_inference`. Buildings with no photos get no grid and stay L1.
+- **Rollout.** Photo-measured grids only, in family batches: buildings from the same kit share one measured grid. Do not snap existing faces in bulk; buildings without grid data stay unchanged.
+- **Sloped ground.** Each floor's head height stays fixed. A ground-floor sill rises only where the ground would otherwise bury it.
+
 ## Asset boundary and ownership
 
 - For texture work, classify the requested texture output before making pixels:

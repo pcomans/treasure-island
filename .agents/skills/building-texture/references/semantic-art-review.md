@@ -71,6 +71,7 @@ Judge against the researched target and the intended gameplay view:
 - Does the exact game receiver preserve UV phase, placement, and plausible size at close and ordinary third-person distances?
 - Is macro repetition subordinate rather than a visible grid or focal pattern?
 - For an architectural pattern, atlas, or unique elevation, does the selected region preserve the observed motif families and any cadence actually established by the references?
+- Does the window grid's alignment, counts and rhythm (column lines, sills, heads, stacking) match the rectified photo, with photographed irregularities kept as exceptions, and are photographed glazing/spandrel groups, curtain walls and base modelled as the right assemblies? See the skill's [window grid and assemblies](../SKILL.md#window-grid-and-assemblies).
 - If count, cadence, dimensions, or anchors are inferred, are they plausible, reversible, clearly labeled, within the identified region, and not contradicted by the reference observations? Missing survey data alone is not an art failure.
 - For a named building, does the combined view read recognizably and remain honest about its evidence status? Report geometry/massing mismatches to the whole-building art owner for correction within the approved scope; for texture-only work, identify the geometry limitation instead of painting around it.
 

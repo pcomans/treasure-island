@@ -21676,3 +21676,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the Isle House push (`f1b6cab`) was a complete donor: the same two record IDs with the unit name swapped, the same checklist note shape (Mar22v after Mar22u), and the 1223 sentinel invocation from `prepush-f1b6cab/`. The Hawkins row edit was scoped to its source key from the start, avoiding the five-row replace hit noted last time.
 - What did not work well: the reviewer flagged two catalog "cue texts" as describing the old model, but those cues have only `cue_id` identifiers (also referenced by archived checkpoint registries), so there was no wording to update; the finding cost a lookup and is now just a note in Mar22v.
 - What the team should change next time: when a reviewer flags stale catalog wording, quote the field it means. If cue IDs should track the current model, decide once whether renaming identifiers is allowed rather than per push.
+
+## ti-documentation — window-grid rule (building-texture skill, 2026-10-24)
+
+- What worked well: the owner's five decisions fitted one new skill section, and the assemblies and camera-fit details were already LEARNINGS lessons, so the skill links to them instead of repeating them. The review checklist got one question that links back to the section.
+- What did not work well: the grid rule was previously only one Stage B line in AGENTS' landmark routing, so authors outside landmark work had no rule to follow; the rollout and sloped-ground limits were only in conversation.
+- What the team should change next time: write owner art rules into the skill when they are made, not after several studies have relied on them.
