@@ -1202,7 +1202,18 @@ static func _prepare_grid(ctx: Ctx, face: Face) -> bool:
 		var b := _local_station(ctx, face, float(column[1]))
 		columns.append([minf(a, b), maxf(a, b)])
 	columns.sort_custom(func(x: Array, y: Array) -> bool: return float(x[0]) < float(y[0]))
-	local["columns"] = columns
+	# A scheme shared by several faces (one edge split over blocks, or an inherited grid
+	# on faces of different lengths) keeps only the columns that reach this face; columns
+	# wholly beyond its ends belong to other faces. A face left without columns is solid.
+	var on_face: Array = []
+	for column: Array in columns:
+		if float(column[1]) > 0.001 and float(column[0]) < face.length - 0.001:
+			on_face.append(column)
+	face.has_grid = true
+	if on_face.is_empty():
+		face.grid_openings = []
+		return true
+	local["columns"] = on_face
 	# Ground-storey sills rise to GRADE_CLEARANCE_M above the local grade under each
 	# column (storey 0 only, heads kept; a light under 0.9 m is dropped), as the
 	# non-grid windows do.
