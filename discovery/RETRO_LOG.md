@@ -21820,3 +21820,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the assignment named all five way IDs and each verdict, so the catalog edit (mirroring 369's empty-to-accepted change in c81c515), the JSON re-parse and the 66 → 68 recount were mechanical, and all five rows could be found directly.
 - What did not work well: B4 is the first batch under the trial that newly accepts never-evaluated units, so the single push-chain suite is also the first suite to load 560 and 883 in the island test; a failure there would surface only at push time.
 - What the team should change next time: when a batch newly accepts units, have the coordinator confirm in the suite log that the island test lists each new key, not just that the suite exits 0.
+
+### modeler-grid-b5 — 2026-10-24 — midrise grid batch B5 (564 and 370 gridded; 902 and r133351 windowless photographed faces; 611 and 450 keep-before)
+
+- What worked well: the fresh worktree reused the matching `.godot` cache and ran `npm ci` first, so no import failures this time. A pre-render footprint clearance test on every view's player position caught nothing new, but it removed the B4 class of failure. Overlaying the final columns on the photos before the first render again aligned on the first try. Looking at photos for "keep-before" units found two facades (902 front, r133351 olive wing) that the photos show as windowless.
+- What did not work well: I set 370's small windows to their photographed 0.9 m light, which the producer rejects (it needs more than 0.9 m). The digest already reported valid=false, but my run script went on to two AFTER shot runs that could only fail to load the world, costing 2 of the 10 runs.
+- What the team should change next time: after the AFTER digest, stop if any unit is valid=false (now in run-r1b.sh). Check grid rows against the producer's 0.9 m minimum light before the first engine run.
