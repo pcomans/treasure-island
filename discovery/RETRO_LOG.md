@@ -21731,3 +21731,15 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: a generic camera tool (pano + footprint edge, fit heading/tilt/focal on corners) made rectification per unit a two-minute step. One batched `--views-batch --island` run per lighting covered all four units plus the neighbour controls. Printing `midrise_skipped_features` in the digest caught a block split cutting a photographed column before any render.
 - What did not work well: two photos (the 520 corner view and 369 sideC) were too oblique for a reliable fit, so those faces stay medium-confidence inference. A shared grid on schemes reused across many faces needed a producer change: drop columns beyond a face's ends instead of reporting them.
 - What the team should change next time: before choosing columns, list each scheme's faces and block splits along the edge, then pick the grid phase so splits fall inside piers. Note up front where one-width-per-column trades off against a wider ground storey (Star View patios).
+
+### ti-code-review — 2026-10-24 — midrise grid batch B1 6536382..15ee4f8
+
+- What worked well: diffing each config against its base scheme by scheme (palette, blocks, floor, changed keys) showed in one pass that only grid, grid_unit and two feature lists changed. That made the 369 lobby entry removal stand out at once.
+- What did not work well: the producer change makes "no columns on this face" a silent success that also skips grid validation, so a station or edge mistake can blank a face without any record. The commit message for the data batch does not mention removing a photographed entrance.
+- What the team should change next time: when a grid batch removes or moves a non-grid feature, say so in the commit message. Report every face a grid leaves solid, so the digest shows deliberate blanks alongside dropped columns.
+
+### ti-visual-review — 2026-10-24 — midrise photo-grid batch B1 (369, 515, 520, Star View)
+
+- What worked well: the units with a fitted camera and a rectified grid image (369 and 520) were quick to verify. On the matched sheets, AFTER's window groups and solid fields line up with the photo almost column for column, and both are clear wins over BEFORE's even rows. The neighbour sheet and the AE diff list ruled out regressions in seconds.
+- What did not work well: 515 had no camera fit or rectification in this batch; its grid came from an earlier study's notes. Its matched render does not match the photo's pose, so solid-field placement had to be judged by counting columns in the raw photos, and in nnw002 that count contradicts AFTER. Star View's change only shows at L1 in one gameplay close-up, and nothing in the batch checked whether it was an improvement before it was included.
+- What the team should change next time: give every unit in a grid batch the same evidence, a fitted camera plus a rectified grid image; without that, it waits for the next batch. Before adding a unit, compare the changed region in BEFORE and AFTER close-ups against the photo, and leave out units where the visible change is neutral or worse.
