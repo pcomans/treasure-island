@@ -21970,3 +21970,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: chaining the S3 fits with a "fewer than two live" check before each start kept the engine busy without waiting for quiet; all eight fits passed. The binding pass and ground-sampled eye heights carried over from S1/S3 unchanged.
 - What did not work well: two independent chains (mine and accept-s2) read "one live" in the same second and both started, so three runs were live for a while. Taking f from the notes' "fov75" made the matched views too tight, and two runs went to re-rendering them.
 - What the team should change next time: use an atomic slot claim (e.g. `flock` on a shared lock file per slot) instead of a pgrep count, so two chains cannot start on the same reading. Treat the Maps "75y" field of view as not equal to the rendered frame; use f 387 for 1018x795 captures unless fitted.
+
+### ti-visual-review — 2026-10-24 — acceptance batch S5 (1205, 1225, 1229, 1237, 1244, 1245)
+
+- What worked well: re-rendering at f 387 after the f 663 frames came out too tight made the matched views directly comparable. The extra 1244 fronts (south07, north03) turned a tree-blocked unit into a confident verdict. Sibling units in one batch helped too: 1244 already shows a visible red-brown pitched roof, which shows what the 1205/1229 fix should look like.
+- What did not work well: the triage called 1205's roof "minor" and 1229 "matches broadly". In both, the model reads as a warm-white box with an almost invisible roof, while the photos show a cool grey or sage row with a clearly visible shingle roof band. The wall-hue column was still not in the triage table, so the hue gap was again caught only at review.
+- What the team should change next time: in triage, compare the roof silhouette band (visible roof height above the eave from the street) as well as wall hue. When a sibling unit already renders the photographed roof correctly, cite it as the fix template.
