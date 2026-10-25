@@ -704,6 +704,13 @@ no projects and denied creation, while the owner's authenticated CLI saw their
 projects and deployed successfully. An empty connector list need not mean the
 account has no projects; use the prescribed same-team authenticated CLI fallback.
 
+On 2026-10-25, a batched test-only pointer-lock shim installation and Resume click
+ended in the known Chromium/Weston process exit before shim readback. The precise
+execution order is unproved; the private driver accepted overlapping async stdin
+handlers. Serialize commands and confirm the actual canvas method override before
+a dependent click. A synthetic lock-change test proves app state handling only,
+never real browser/OS pointer capture or the owner's macOS behavior.
+
 ## Keep browser emulation attached through verification
 
 On 2026-10-22, a CDP setup connection enabled touch emulation then closed before

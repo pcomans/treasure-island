@@ -11,6 +11,8 @@ var _world_ready := false
 var _touch_controls: TouchControls
 var _web_blur_callback: JavaScriptObject
 var _web_visibility_callback: JavaScriptObject
+var _web_pointer_lock_callback: JavaScriptObject
+var _web_capture_pending := false
 # Shared automation keeps the pointer visible while retaining normal startup.
 # Ordinary gameplay uses the default and captures the mouse as before.
 var capture_mouse_on_ready := true
@@ -22,6 +24,8 @@ func _ready() -> void:
 		# Keep the complete island while avoiding distant shadow passes in WebGL.
 		$Sun.shadow_enabled = false
 		get_viewport().scaling_3d_scale = 0.75
+		get_viewport().msaa_3d = Viewport.MSAA_4X
+		print("WEB_RENDER msaa_3d=%d scale=%.2f" % [get_viewport().msaa_3d, get_viewport().scaling_3d_scale])
 	get_tree().paused = false
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	player.hide()
@@ -35,10 +39,15 @@ func _ready() -> void:
 		_touch_controls.set_gameplay_active(false)
 		_touch_controls.pause_requested.connect(func() -> void: _set_paused(true))
 		hud.set_touch_instructions()
+	if OS.has_feature("web"):
 		_web_blur_callback = JavaScriptBridge.create_callback(_on_web_blur)
 		_web_visibility_callback = JavaScriptBridge.create_callback(_on_web_visibility)
 		JavaScriptBridge.get_interface("window").addEventListener("blur", _web_blur_callback)
 		JavaScriptBridge.get_interface("document").addEventListener("visibilitychange", _web_visibility_callback)
+		if _touch_controls == null:
+			_web_pointer_lock_callback = JavaScriptBridge.create_callback(_on_web_pointer_lock)
+			JavaScriptBridge.get_interface("document").addEventListener("pointerlockchange", _web_pointer_lock_callback)
+			JavaScriptBridge.get_interface("document").addEventListener("pointerlockerror", _web_pointer_lock_callback)
 	hud.show_loading()
 	hud.bind_evidence(world_root.get_runtime_evidence())
 	world_root.load_progress.connect(hud.update_load_progress)
@@ -55,7 +64,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		return
 	if event.is_action_pressed("pause") and _world_ready:
-		_set_paused(not get_tree().paused)
+		# Browser Escape may also arrive after its pointer-lock loss callback.
+		# Never turn that same unlock gesture into a new capture request.
+		_set_paused(true if OS.has_feature("web") and _touch_controls == null else not get_tree().paused)
 		get_viewport().set_input_as_handled()
 		return
 	if get_tree().paused and event.is_action_pressed("quit_game"):
@@ -106,6 +117,7 @@ func _on_world_ready(_report: Dictionary) -> void:
 
 
 func _on_world_failed(code: String, message: String, source_keys: Array) -> void:
+	_web_capture_pending = false
 	_world_ready = false
 	if _touch_controls != null:
 		_touch_controls.set_gameplay_active(false)
@@ -118,14 +130,25 @@ func _on_world_failed(code: String, message: String, source_keys: Array) -> void
 
 func _set_paused(paused: bool) -> void:
 	get_tree().paused = paused
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if paused or _touch_controls != null else Input.MOUSE_MODE_CAPTURED
+	if paused:
+		_web_capture_pending = false
+	var mouse_mode := Input.MOUSE_MODE_VISIBLE if paused or _touch_controls != null else Input.MOUSE_MODE_CAPTURED
+	if Input.mouse_mode != mouse_mode:
+		Input.mouse_mode = mouse_mode
 	if _touch_controls != null:
 		_touch_controls.set_gameplay_active(not paused and _world_ready)
 	hud.set_paused(paused)
 
 
 func _resume_game() -> void:
-	if _world_ready:
+	if not _world_ready:
+		return
+	if OS.has_feature("web") and _touch_controls == null:
+		if not _web_capture_pending:
+			_web_capture_pending = true
+			# Resume is a deliberate user gesture. Stay paused until the async grant.
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	else:
 		_set_paused(false)
 
 
@@ -149,6 +172,32 @@ func _apply_web_detail_distances() -> void:
 			geometry.visibility_range_end_margin = 40.0
 
 
+func _on_web_pointer_lock(_arguments: Array) -> void:
+	_sync_web_pointer_lock.call_deferred()
+
+
+func _sync_web_pointer_lock() -> void:
+	if _touch_controls != null:
+		return
+	var captured := bool(JavaScriptBridge.eval("document.pointerLockElement === document.getElementById('canvas')"))
+	if not _world_ready:
+		_web_capture_pending = false
+		if captured:
+			JavaScriptBridge.get_interface("document").exitPointerLock()
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		return
+	if captured:
+		if _web_capture_pending:
+			_web_capture_pending = false
+			_set_paused(false)
+		elif get_tree().paused:
+			# Escape/cancel can precede an asynchronous grant. Release it, don't resume.
+			JavaScriptBridge.get_interface("document").exitPointerLock()
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	else:
+		_set_paused(true)
+
+
 func _on_web_blur(_arguments: Array) -> void:
 	if _world_ready:
 		_set_paused.call_deferred(true)
@@ -160,6 +209,12 @@ func _on_web_visibility(_arguments: Array) -> void:
 
 
 func _exit_tree() -> void:
+	_web_capture_pending = false
+	if _web_pointer_lock_callback != null:
+		if bool(JavaScriptBridge.eval("document.pointerLockElement === document.getElementById('canvas')")):
+			JavaScriptBridge.get_interface("document").exitPointerLock()
+		JavaScriptBridge.get_interface("document").removeEventListener("pointerlockchange", _web_pointer_lock_callback)
+		JavaScriptBridge.get_interface("document").removeEventListener("pointerlockerror", _web_pointer_lock_callback)
 	if _web_blur_callback != null:
 		JavaScriptBridge.get_interface("window").removeEventListener("blur", _web_blur_callback)
 		JavaScriptBridge.get_interface("document").removeEventListener("visibilitychange", _web_visibility_callback)
