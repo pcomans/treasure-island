@@ -751,6 +751,12 @@ thumb reach, camera sensitivity or combined-input feel. Keep device feel
 acceptance separate and use the owner's specific problematic gesture before
 choosing tuning or a joystick plugin; a plugin alone does not prove Safari UX.
 
+During the 2026-10-25 responsive test, a held joystick survived a context
+transition and moved the player much farther than intended. Release immediately
+after resumption and verify grounded, stopped stock-controller state. Queue each
+bounded press/hold/release together in the retained serial harness, so model or
+transport pauses cannot prolong an input; inspect motion before accepting it.
+
 ## Check per-finger camera deltas with simultaneous touch input
 
 On 2026-10-22, both custom and upstream-derived swipe handlers using the event's
