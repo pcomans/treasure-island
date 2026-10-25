@@ -827,3 +827,11 @@ but reached the reader around32.8s at shutdown; a Vulkan warning split another
 marker across lines. Use embedded monotonic event timestamps for phase durations,
 and label stdout arrival as an observation boundary rather than event time. Keep
 unrecoverable timestamps unknown; do not silently combine clock origins.
+
+The subsequent native baked trace placed a6.637s reflection-probe pipeline wait
+in the draw AFTER the first post-ready frame. A successful first-postdraw marker
+cannot establish that startup freezes have ended. Follow the immediately following
+frames when locating a reported stall, then distinguish trace boundaries from
+function attribution: here main-thread pipeline waits, simultaneous RADV pipeline
+creation stacks and a warm-cache comparison supplied that attribution. Do not
+transfer the native Vulkan diagnosis to browser WebGL without browser evidence.

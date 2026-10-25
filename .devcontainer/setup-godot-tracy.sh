@@ -4,7 +4,7 @@ set -euo pipefail
 root="${GODOT_TRACY_ROOT:-/opt/godot/tracy-4.7.2}"
 jobs="${GODOT_TRACY_JOBS:-8}"
 sudo apt-get update -qq
-sudo apt-get install -y -qq build-essential scons cmake ninja-build pkg-config \
+sudo apt-get install -y -qq build-essential scons cmake ninja-build pkg-config gdb \
   libx11-dev libxcursor-dev libxinerama-dev libgl1-mesa-dev libglu1-mesa-dev \
   libasound2-dev libpulse-dev libudev-dev libxi-dev libxrandr-dev libwayland-dev \
   libxkbcommon-dev libdbus-1-dev libzstd-dev

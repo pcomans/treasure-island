@@ -310,3 +310,12 @@ callstack sampling and allocation tracking retain false defaults. Initial wrappe
 failed after the two tool builds because its script was edited while executing;
 clean-source checks passed before resuming only the engine compilation phase.
 Build outcome and native capture limitations are recorded in the round RETRO.
+
+2026-10-25: Native root-cause follow-up installed distro `gdb` using
+`sudo apt-get install -y -qq gdb`; observed GNU gdb17.1 (Ubuntu17.1-2ubuntu1).
+Added the dependency to optional `.devcontainer/setup-godot-tracy.sh` for
+reproducibility; did not rerun its engine build. Child-debugger permission probe
+passed. Existing Godot debug-symbol binary supplied native stack names; Mesa/RADV
+internals remained stripped. `perf` was absent and an own-process userspace
+perf_event_open probe returned EPERM; no perf package, sysctl or security change
+was attempted. Installation log: /tmp/ti-native-rootcause-20261025-gdb-install.log.
