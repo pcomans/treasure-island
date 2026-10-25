@@ -9,10 +9,10 @@ func _get_name() -> String:
 
 
 func _export_begin(features: PackedStringArray, _is_debug: bool, _path: String, _flags: int) -> void:
-	if "web" in features:
-		var baked := "res://generated/web/static_world.scn"
+	if "web" in features or "prebuilt_native_world" in features:
+		var baked := "res://generated/web/static_world.scn" if "web" in features else "res://generated/native/static_world.scn"
 		if not FileAccess.file_exists(baked):
-			push_error("Missing static web world: export through tools/build-web.sh")
+			push_error("Missing static world: export through the platform build script")
 		else:
 			add_file(baked, FileAccess.get_file_as_bytes(baked), false)
 	var paths: Array[String] = []

@@ -37,7 +37,7 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 	_validated = false
 	_clear_generated_children()
 	runtime_evidence.begin_load(0)
-	if OS.has_feature("web") or OS.get_cmdline_user_args().has("--use-prebuilt-world"):
+	if OS.has_feature("web") or OS.has_feature("prebuilt_native_world") or OS.get_cmdline_user_args().has("--use-prebuilt-world"):
 		_load_prebuilt()
 		return
 	var validation := GeneratedWorldContract.load_and_validate(manifest_path)
@@ -120,17 +120,17 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 
 func _load_prebuilt() -> void:
 	STARTUP_MARKS.mark("resource_load_begin")
-	var packed := load(PREBUILT_WORLD.PATH) as PackedScene
+	var packed := load(PREBUILT_WORLD.resource_path()) as PackedScene
 	STARTUP_MARKS.mark("resource_load_end")
 	if packed == null:
-		_fail("prebuilt_missing", "Web world was not prebuilt; rebuild with tools/build-web.sh.", [])
+		_fail("prebuilt_missing", "Static world is missing; rebuild through the platform build script.", [])
 		return
 	STARTUP_MARKS.mark("instantiate_begin")
 	var baked := packed.instantiate()
 	STARTUP_MARKS.mark("instantiate_end")
-	if baked.get_meta("schema", "") != PREBUILT_WORLD.SCHEMA or not baked.has_node("PlayableWorld") or not baked.has_node("ContextWorld"):
+	if baked.get_meta("schema", "") != PREBUILT_WORLD.SCHEMA or baked.get_meta("profile", "") != PREBUILT_WORLD.profile() or not baked.has_node("PlayableWorld") or not baked.has_node("ContextWorld"):
 		baked.free()
-		_fail("prebuilt_invalid", "Invalid prebuilt web world.", [])
+		_fail("prebuilt_invalid", "Invalid prebuilt world or material profile.", [])
 		return
 	var spawn: Variant = baked.get_meta("spawn", null)
 	var boundary: Variant = baked.get_meta("boundary", null)

@@ -6,3 +6,4 @@ third_party_staging/
 source_assets/context/sf_skyline_photo/
 .DS_Store
 generated/web/
+generated/native/

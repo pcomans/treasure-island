@@ -16,7 +16,16 @@ if [ -n "$(git status --porcelain)" ]; then
   echo "FAIL: commit or stash your changes first; the build is named after the commit" >&2
   exit 1
 fi
+revision="$(git rev-parse HEAD)"
 commit="$(git rev-parse --short HEAD)"
+baked=generated/native/static_world.scn
+work="$(mktemp -d)"
+trap 'rm -rf "${work}"; rm -f "${baked}"' EXIT
+tools/prebuild-static-world.sh native
+if [ "$(git rev-parse HEAD)" != "${revision}" ] || [ -n "$(git status --porcelain)" ]; then
+  echo "FAIL: source changed during static-world baking" >&2
+  exit 1
+fi
 mkdir -p build/mac build/linux
 touch build/.gdignore
 zip="build/mac/treasure-island-mac-${commit}.zip"
@@ -25,8 +34,6 @@ rm -f "${zip}"
 tools/godot --headless --path . --export-release "macOS Private" "${zip}"
 tools/godot --headless --path . --export-release "Linux Private" build/linux/treasure-island.x86_64
 
-work="$(mktemp -d)"
-trap 'rm -rf "${work}"' EXIT
 unzip -q "${zip}" -d "${work}"
 mac_pck="$(find "${work}" -name '*.pck' -path '*Contents/Resources*' | head -1)"
 [ -n "${mac_pck}" ] || { echo "FAIL: no .pck inside the Mac build"; exit 1; }

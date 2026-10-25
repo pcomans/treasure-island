@@ -1,5 +1,5 @@
 extends RefCounted
-## Opt-in diagnostic marks/material probe; default and native paths are no-ops.
+## Opt-in diagnostic marks/material probe; default paths are no-ops.
 static var _checked := false
 static var _enabled := false
 
@@ -7,17 +7,26 @@ static var _enabled := false
 static func enabled() -> bool:
 	if not _checked:
 		_checked = true
-		_enabled = OS.has_feature("web") and bool(JavaScriptBridge.eval("new URLSearchParams(location.search).get('profile_startup') === '1'"))
+		if OS.has_feature("web"):
+			_enabled = bool(JavaScriptBridge.eval("new URLSearchParams(location.search).get('profile_startup') === '1'"))
+		else:
+			_enabled = OS.get_cmdline_user_args().has("--profile-startup-native")
 	return _enabled
 
 
 static func mark(label: String) -> void:
-	if enabled():
+	if not enabled():
+		return
+	if OS.has_feature("web"):
 		JavaScriptBridge.get_interface("performance").mark("TI:" + label)
+	else:
+		print("TI_NATIVE_MARK %s ticks_usec=%d" % [label, Time.get_ticks_usec()])
+		if label == "first_frame_submitted":
+			print("TI_NATIVE_RENDERER %s / %s" % [DisplayServer.get_name(), RenderingServer.get_video_adapter_name()])
 
 
 static func probe_building_materials(buildings: Node3D) -> void:
-	if not enabled():
+	if not OS.has_feature("web") or not enabled():
 		return
 	var isolate := bool(JavaScriptBridge.eval("new URLSearchParams(location.search).get('profile_materials') === 'shared_buildings'"))
 	mark("material_probe_begin")

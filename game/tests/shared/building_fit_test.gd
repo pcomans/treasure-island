@@ -21,6 +21,7 @@ extends SceneTree
 ## A check with nothing to sample fails: it would otherwise pass untested.
 ##
 ## Prints PASS or FAIL lines and exits non-zero on failure.
+## --use-prebuilt-world checks the native baked scene with the same stock checks.
 ## Optional --routes FILE: {"source":"KEY", "routes":[{"name":"passage",
 ## "start_xz":[x,z], "end_xz":[x,z]}]}. Each route is walked in both directions.
 ## A route may require_adjacent_support:true with --adjacent-source; this observes
@@ -127,6 +128,10 @@ func _run() -> void:
 	var index := 0
 	while index < raw_args.size():
 		var flag := raw_args[index]
+		if flag == "--use-prebuilt-world" and not seen.has(flag):
+			seen[flag] = true
+			index += 1
+			continue
 		if flag not in ["--source", "--routes", "--spray", "--diagnose-side", "--adjacent-source", "--native-producer"] or seen.has(flag):
 			push_error("unsupported or duplicate option: " + flag)
 			quit(1)

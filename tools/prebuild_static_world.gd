@@ -1,7 +1,7 @@
 extends SceneTree
 
 const PREBUILT_WORLD := preload("res://game/scripts/world/prebuilt_world.gd")
-## Build the web static scene from the same validated source generator as native play.
+## Build the platform static scene from the same validated source generator as native play.
 ## The generated scene is a disposable build product, never a source-of-truth cache.
 var failed := false
 var compared_resources := {}
@@ -15,8 +15,8 @@ func _run() -> void:
 		quit(1)
 		return
 	print("BAKE_RENDERER ", DisplayServer.get_name(), " / ", RenderingServer.get_video_adapter_name())
-	if not OS.get_cmdline_user_args().has("--web-world-bake"):
-		push_error("Pass --web-world-bake to select the existing web material profile.")
+	if OS.get_cmdline_user_args().has("--web-world-bake") == OS.get_cmdline_user_args().has("--native-world-bake"):
+		push_error("Pass exactly one of --web-world-bake or --native-world-bake.")
 		quit(1)
 		return
 	var world := load("res://game/scenes/world/world_root.tscn").instantiate() as WorldLoader
@@ -33,14 +33,14 @@ func _run() -> void:
 	if packed == null:
 		quit(1)
 		return
-	DirAccess.make_dir_recursive_absolute("res://generated/web")
-	var error := ResourceSaver.save(packed, PREBUILT_WORLD.PATH, ResourceSaver.FLAG_COMPRESS)
+	DirAccess.make_dir_recursive_absolute(PREBUILT_WORLD.resource_path().get_base_dir())
+	var error := ResourceSaver.save(packed, PREBUILT_WORLD.resource_path(), ResourceSaver.FLAG_COMPRESS)
 	if error != OK:
 		push_error("Static world save failed: " + error_string(error))
 		quit(1)
 		return
 	# Load from disk, not the in-memory PackedScene, and compare actual properties.
-	var reloaded := ResourceLoader.load(PREBUILT_WORLD.PATH, "PackedScene", ResourceLoader.CACHE_MODE_IGNORE) as PackedScene
+	var reloaded := ResourceLoader.load(PREBUILT_WORLD.resource_path(), "PackedScene", ResourceLoader.CACHE_MODE_IGNORE) as PackedScene
 	if reloaded == null:
 		quit(1)
 		return
@@ -57,7 +57,7 @@ func _run() -> void:
 		quit(1)
 		return
 	print("PASS: disk-reloaded static geometry, materials, transforms, metadata, groups and collision properties match the generated source")
-	print("BAKED_BYTES ", FileAccess.get_file_as_bytes(PREBUILT_WORLD.PATH).size())
+	print("BAKED_BYTES ", FileAccess.get_file_as_bytes(PREBUILT_WORLD.resource_path()).size())
 	print("MEMORY_STATIC_BYTES ", Performance.get_monitor(Performance.MEMORY_STATIC))
 	quit(0)
 

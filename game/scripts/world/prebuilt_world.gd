@@ -1,8 +1,15 @@
 extends RefCounted
-## Transient web build product. Native play continues to use WorldLoader's generator.
-const PATH := "res://generated/web/static_world.scn"
-const SCHEMA := "ti.web-static-world/1"
+## Transient export build product; source authoring retains the generator.
+const WEB_PATH := "res://generated/web/static_world.scn"
+const NATIVE_PATH := "res://generated/native/static_world.scn"
+const SCHEMA := "ti.static-world/2"
 const EVIDENCE_FIELDS := ["chunks_expected", "chunks_loaded", "playable_rows", "context_rows", "mesh_instances", "surfaces", "triangles", "static_bodies", "shapes", "vegetation_seed", "vegetation_instances", "vegetation_assets", "vegetation_multimesh_batches", "vegetation_rendered_triangles", "vegetation_species_counts", "vegetation_zone_counts"]
+
+static func profile() -> String:
+	return "web" if OS.has_feature("web") or OS.get_cmdline_user_args().has("--web-world-bake") else "native"
+
+static func resource_path() -> String:
+	return WEB_PATH if profile() == "web" else NATIVE_PATH
 
 static func pack_world(world: Node) -> PackedScene:
 	var static_root := Node3D.new()
@@ -12,6 +19,7 @@ static func pack_world(world: Node) -> PackedScene:
 	for field: String in EVIDENCE_FIELDS:
 		values[field] = evidence.get(field)
 	static_root.set_meta("schema", SCHEMA)
+	static_root.set_meta("profile", profile())
 	static_root.set_meta("spawn", world.get_spawn_transform())
 	static_root.set_meta("boundary", world.get_boundary().get_boundary_data())
 	static_root.set_meta("evidence", values)

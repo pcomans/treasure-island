@@ -31,7 +31,7 @@ mkdir -p generated/web
 rm -f "${baked}"
 work="$(mktemp -d)"
 trap 'rm -rf "${work}"; rm -f "${baked}"' EXIT
-tools/godot --rendering-method gl_compatibility --rendering-driver opengl3 --path . --script tools/prebuild_web_world.gd -- --web-world-bake
+tools/prebuild-static-world.sh web
 test -s "${baked}"
 if [ "$(git rev-parse HEAD)" != "${revision}" ] || [ -n "$(git status --porcelain)" ]; then
   echo "FAIL: source changed during static-world baking; commit and rebuild" >&2
