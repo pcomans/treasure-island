@@ -839,3 +839,7 @@ transfer the native Vulkan diagnosis to browser WebGL without browser evidence.
 ## Keep optional UI review separate from building-art acceptance
 
 On 2026-10-25, an optional two-screen loading-UI review repeatedly failed to return despite bounded requests, delaying an already code- and runtime-reviewed reversible change. Cancel and explicitly release a stalled optional handoff early; root can review the actual UI outputs without inventing a building-art gate. Record the missing verdict honestly. This does not waive the independent visual/reference acceptance required for building art.
+
+## Paint browser startup status before entering synchronous game startup
+
+On 2026-10-25, the completed download bar remained visible for roughly15s before the first captured game-owned Preparing graphics frame; a game HUD cannot announce work before its canvas paints. The stock startGame promise combines init/preload and synchronous game startup, and its resolution is not PLAY_READY. A project-owned shell using public init+preloadFile→DOM status/rendering opportunity→start produced an actual status frame before heavy game startup. Verify captured frames and terminal ready/error ordering, not rAF timestamps alone; Engine.load resolves at response headers, so it is not completed-download proof. This changes feedback timing, not the amount of graphics work.
