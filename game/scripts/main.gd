@@ -24,7 +24,7 @@ func _ready() -> void:
 		# Keep the complete island while avoiding distant shadow passes in WebGL.
 		$Sun.shadow_enabled = false
 		get_viewport().scaling_3d_scale = 0.75
-		get_viewport().msaa_3d = Viewport.MSAA_4X
+		get_viewport().msaa_3d = Viewport.MSAA_2X
 		print("WEB_RENDER msaa_3d=%d scale=%.2f" % [get_viewport().msaa_3d, get_viewport().scaling_3d_scale])
 	get_tree().paused = false
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
