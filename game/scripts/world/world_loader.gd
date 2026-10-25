@@ -1,6 +1,8 @@
 class_name WorldLoader
 extends Node3D
 
+const PREBUILT_WORLD := preload("res://game/scripts/world/prebuilt_world.gd")
+
 const MERSEA := preload("res://game/scripts/world/facades/mersea_live_attachment.gd")
 const HOUSING_FAMILY := preload("res://game/scripts/world/facades/housing_family_live_attachment.gd")
 
@@ -34,6 +36,9 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 	_validated = false
 	_clear_generated_children()
 	runtime_evidence.begin_load(0)
+	if OS.has_feature("web") or OS.get_cmdline_user_args().has("--use-prebuilt-world"):
+		_load_prebuilt()
+		return
 	var validation := GeneratedWorldContract.load_and_validate(manifest_path)
 	if not validation.ok:
 		_fail(str(validation.get("code", "world_validation")), str(validation.get("message", "World validation failed.")), validation.get("source_keys", []))
@@ -110,6 +115,59 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 	ready_report["vegetation_rendered_triangles"] = int(vegetation_result.rendered_triangles)
 	runtime_evidence.finish_load(ready_report)
 	world_ready.emit(ready_report)
+
+
+func _load_prebuilt() -> void:
+	var packed := load(PREBUILT_WORLD.PATH) as PackedScene
+	if packed == null:
+		_fail("prebuilt_missing", "Web world was not prebuilt; rebuild with tools/build-web.sh.", [])
+		return
+	var baked := packed.instantiate()
+	if baked.get_meta("schema", "") != PREBUILT_WORLD.SCHEMA or not baked.has_node("PlayableWorld") or not baked.has_node("ContextWorld"):
+		baked.free()
+		_fail("prebuilt_invalid", "Invalid prebuilt web world.", [])
+		return
+	var spawn: Variant = baked.get_meta("spawn", null)
+	var boundary: Variant = baked.get_meta("boundary", null)
+	var report: Variant = baked.get_meta("report", null)
+	var evidence: Variant = baked.get_meta("evidence", null)
+	if not spawn is Transform3D or not boundary is Dictionary or not report is Dictionary or not evidence is Dictionary:
+		baked.free()
+		_fail("prebuilt_state", "Prebuilt world is missing validated startup state.", [])
+		return
+	var valid_categories := true
+	for path: String in ["PlayableWorld/GroundAndAreas", "PlayableWorld/RoadsAndPaths", "PlayableWorld/Buildings", "PlayableWorld/Vegetation", "ContextWorld/YerbaBuenaIsland", "ContextWorld/BayBridge", "ContextWorld/BoundaryAttachedVisuals"]:
+		valid_categories = valid_categories and baked.get_node_or_null(path) is Node3D
+	for field: String in PREBUILT_WORLD.EVIDENCE_FIELDS:
+		valid_categories = valid_categories and evidence.has(field) and typeof(evidence.get(field)) == typeof(runtime_evidence.get(field))
+	if not valid_categories or not spawn.is_finite() or not GeneratedWorldContract.validate_boundary(boundary).ok or not GeneratedWorldContract.contains_xz(boundary, Vector2(spawn.origin.x, spawn.origin.z)):
+		baked.free()
+		_fail("prebuilt_content", "Prebuilt world has incomplete categories, evidence or spawn/boundary state.", [])
+		return
+	for name: String in ["PlayableWorld", "ContextWorld"]:
+		var old := get_node(name)
+		remove_child(old)
+		old.free()
+		var child := baked.get_node(name)
+		PREBUILT_WORLD._clear_owners(child)
+		child.reparent(self, false)
+	ground_and_areas = $PlayableWorld/GroundAndAreas
+	roads_and_paths = $PlayableWorld/RoadsAndPaths
+	buildings = $PlayableWorld/Buildings
+	vegetation = $PlayableWorld/Vegetation
+	ybi_context = $ContextWorld/YerbaBuenaIsland
+	bridge_context = $ContextWorld/BayBridge
+	boundary_attached_context = $ContextWorld/BoundaryAttachedVisuals
+	world_boundary.configure(boundary)
+	_spawn_transform = spawn
+	for field: String in PREBUILT_WORLD.EVIDENCE_FIELDS:
+		runtime_evidence.set(field, evidence[field])
+	baked.free()
+	_validated = true
+	_loading = false
+	runtime_evidence.finish_load(report)
+	preload("res://game/scripts/world/facades/mersea_model.gd").resume_prebuilt_reflections(buildings)
+	world_ready.emit(report)
 
 
 func get_spawn_transform() -> Transform3D:

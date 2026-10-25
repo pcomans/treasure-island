@@ -357,6 +357,13 @@ Run these visible-geometry checks with rendering and fail closed on headless
 use. A missing source-wall ray hit is not zero distance or arrival evidence;
 report required approaches and their actual contacts, retaining failures.
 
+The 2026-10-25 web prebuild's headless source/reload comparison passed, but both
+sides shared the Dummy renderer, so that did not establish faithful vegetation
+MultiMesh serialization. Bake with actual rendering and compare its saved/reloaded
+resources before visual review. This is a proof-scope limitation, not a measured
+corruption claim for that bake. Explicitly pair Compatibility with opengl3:
+tools/godot otherwise supplies its default Vulkan driver.
+
 ## Unsafe test state must survive across units
 
 Independent review found that BuildingFit reset its unsafe flag on every unit

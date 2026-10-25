@@ -193,7 +193,7 @@ void fragment() {
 	var custom_glass := ShaderMaterial.new()
 	custom_glass.shader=optical
 	var glass: Material = custom_glass
-	if optical_pilot or OS.has_feature("web"):
+	if optical_pilot or OS.has_feature("web") or OS.get_cmdline_user_args().has("--web-world-bake"):
 		# Native PBR glass variant: restrained tint over actual shaded exterior depth.
 		# Reuses family geometry; parameters are game-art inference, not measured glass.
 		var native_glass := StandardMaterial3D.new()
@@ -915,14 +915,27 @@ static func bar_golf_deck(p: Node3D,frame: Transform3D,land: Dictionary,top: flo
 	box(deck,Vector3((near_x+far_x)/2,counter_top,left),Vector3(near_x-far_x+0.04,0.055,0.32),mat("424b45",0.25,0.36))
 
 
-static func _settle_bar_reflection(probe: ReflectionProbe) -> void:
+static func resume_prebuilt_reflections(buildings: Node3D) -> void:
+	for probe: Node in buildings.find_children("MerseaBarReflection", "ReflectionProbe", true, false):
+		probe.update_mode = ReflectionProbe.UPDATE_ALWAYS
+		_settle_bar_reflection(probe, buildings)
+
+
+static func _settle_bar_reflection(probe: ReflectionProbe, material_root: Node = null) -> void:
 	# Keep startup rendering available while procedural images are generated.
 	# Completed draw opportunities are not a cubemap-ready query.
 	if DisplayServer.get_name()=="headless":
 		probe.update_mode=ReflectionProbe.UPDATE_ONCE
 		return
 	var textures: Dictionary={}
-	for material: Material in _materials.values():
+	var materials: Array = _materials.values()
+	if material_root != null:
+		materials = []
+		for mesh: MeshInstance3D in material_root.find_children("*", "MeshInstance3D", true, false):
+			if mesh.mesh != null:
+				for surface in mesh.mesh.get_surface_count():
+					materials.append(mesh.get_active_material(surface))
+	for material: Material in materials:
 		if material is StandardMaterial3D:
 			for texture in [material.albedo_texture,material.normal_texture,material.roughness_texture]:
 				if texture is NoiseTexture2D:textures[texture.get_instance_id()]=texture

@@ -8,7 +8,13 @@ func _get_name() -> String:
 	return "GeneratedWorldExport"
 
 
-func _export_begin(_features: PackedStringArray, _is_debug: bool, _path: String, _flags: int) -> void:
+func _export_begin(features: PackedStringArray, _is_debug: bool, _path: String, _flags: int) -> void:
+	if "web" in features:
+		var baked := "res://generated/web/static_world.scn"
+		if not FileAccess.file_exists(baked):
+			push_error("Missing static web world: export through tools/build-web.sh")
+		else:
+			add_file(baked, FileAccess.get_file_as_bytes(baked), false)
 	var paths: Array[String] = []
 	_collect_files(GENERATED_WORLD_ROOT, paths)
 	paths.sort()
