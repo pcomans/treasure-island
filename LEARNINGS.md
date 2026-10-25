@@ -820,3 +820,10 @@ result, use summary/filtered fields and streaming aggregation with bounded memor
 The final quiet comparison reused the same invocation and fresh-cache policy,
 without another export or instrumentation change. Retain contaminated measurements
 as failures, not as valid overhead estimates.
+
+Native release stdout can be buffered and interleaved with driver stderr. In the
+2026-10-25 stock native bake check, a postdraw marker carried engine tick11.658s
+but reached the reader around32.8s at shutdown; a Vulkan warning split another
+marker across lines. Use embedded monotonic event timestamps for phase durations,
+and label stdout arrival as an observation boundary rather than event time. Keep
+unrecoverable timestamps unknown; do not silently combine clock origins.
