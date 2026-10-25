@@ -711,6 +711,13 @@ handlers. Serialize commands and confirm the actual canvas method override befor
 a dependent click. A synthetic lock-change test proves app state handling only,
 never real browser/OS pointer capture or the owner's macOS behavior.
 
+A later private HTML test delivered a preloaded `--script` driver to the release
+web build, but the driver never emitted its application marker; the exact reason
+was not established. Successful bootstrap delivery is not proof that a release
+runtime supports or executes a diagnostic entrypoint. Before comparing an
+isolation, require actual changed-property counts and a before-draw marker; the
+subsequent query-gated game hook supplied both without modifying engine code.
+
 ## Keep browser emulation attached through verification
 
 On 2026-10-22, a CDP setup connection enabled touch emulation then closed before
