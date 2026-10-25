@@ -720,6 +720,15 @@ attached through navigation and gestures, and verify the actual capability
 value before interpreting a touch test. A screenshot timeout during synchronous
 world loading is not a browser exit; inspect the existing process and console.
 
+The 2026-10-25 DPR comparison repeated this ownership mistake: a second CDP
+connection changed DPR from 2 to 1, then disconnected; the backing canvas reverted
+from the requested test size to the native window size. That invalidated a
+same-view resolution comparison. Apply emulation changes on the same retained
+controlling connection through resize and sampling. After the resize has taken
+effect, read actual DPR, CSS viewport, canvas and WebGL drawing-buffer dimensions
+before interpreting performance; requested values or immediate readback alone
+are insufficient.
+
 A new worktree may lack Git author identity even when prior bot commits exist.
 Before a build that requires a committed tree, check `git var GIT_AUTHOR_IDENT`;
 if absent, use the established bot identity on that commit command with `git -c`
