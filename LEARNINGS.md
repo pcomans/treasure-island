@@ -798,3 +798,25 @@ the installed binary's selected backend. Distinguish script/visual profiling,
 compiled native tracing and external Chrome/CDP traces; existing trace zones
 do not promise coverage of every startup operation or browser-driver wait.
 Source checked 2026-10-25: https://docs.godotengine.org/en/4.7/engine_details/development/profiling/index.html
+
+## Do not edit a shell script while it is executing
+
+On 2026-10-25, inserting a source-cleanliness guard into the running native Tracy
+setup script shifted Bash's subsequent read offset. Both Tracy tools completed,
+but the wrapper then exited with a syntax error before Godot compilation; the
+saved script itself passed `bash -n`. Finish or stop the tracked invocation
+before changing its file, or execute an immutable temporary copy. Consume the
+terminal result and resume only the uncompleted phase after checking actual
+outputs; do not rerun successful downloads/builds for bookkeeping.
+
+## Keep measured runs quiet and stream large trace analysis
+
+The 2026-10-25 native Tracy capture contained 60.5 million zones. An unanchored CSV
+filter matched duration columns as well as timestamps; materializing its output
+with `list(csv.DictReader(...))` grew to about 13 GB RSS while a comparison run was
+active. That run's timing was rejected and the analysis process stopped. Freeze
+edits and bulk analysis during active measured/build commands; after their terminal
+result, use summary/filtered fields and streaming aggregation with bounded memory.
+The final quiet comparison reused the same invocation and fresh-cache policy,
+without another export or instrumentation change. Retain contaminated measurements
+as failures, not as valid overhead estimates.

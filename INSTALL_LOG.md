@@ -293,3 +293,20 @@ revision c809ec20fd8170f4a81f3d8964e8a9838f8b29da: three adapted input scripts,
 LICENSE and five UI PNGs from official raw/media.githubusercontent.com endpoints.
 Provenance/adaptations: game/scripts/vendor/selgesel/README.md. No installation,
 account or full-controller dependency; Virtual Joystick DX was not integrated.
+
+2026-10-25: Owner-authorized native Tracy investigation. Added optional
+`.devcontainer/setup-godot-tracy.sh`; default container setup and stock editor
+remain unchanged. Source caches/builds live outside Git at
+`/opt/godot/tracy-4.7.2`. Official repositories and pinned revisions:
+- https://github.com/godotengine/godot/tree/4.7.2-stable — ed1daf0bf001b61586d9930840f2f1394092c079
+- https://github.com/wolfpld/tracy/tree/v0.13.0 — e6b9ea460993a6f093283055ef3c98025b19f909
+Installed distro development prerequisites listed by the setup script. Observed
+GCC 15.2.0 (Ubuntu 15.2.0-16ubuntu1), SCons 4.8.1, CMake 4.2.3; this is not a
+fully pinned compiler/dependency environment. Tracy upstream CMake fetched its
+version-selected dependencies and built matching `tracy-capture`/`tracy-csvexport`.
+Godot invocation: `scons -j8 platform=linuxbsd target=template_release production=yes debug_symbols=yes profiler=tracy profiler_path=/opt/godot/tracy-4.7.2/tracy`.
+Existing source instrumentation only, no engine patches. On-demand remains true;
+callstack sampling and allocation tracking retain false defaults. Initial wrapper
+failed after the two tool builds because its script was edited while executing;
+clean-source checks passed before resuming only the engine compilation phase.
+Build outcome and native capture limitations are recorded in the round RETRO.
