@@ -784,3 +784,17 @@ Spray rays use only the spray layer (`1 << 2`). In two passes on 2026-10-22, a p
 - the Hawkins stoop platforms and planters (fixed in the Hawkins review fix).
 
 Any new opaque collision body a producer adds (massing, stoops, rails, canopies) must be on `PHYSICS_WORLD_SOLID | 1 << 2`, with `receiver_kind` none, so that it occludes spray and refuses the tag. As a prevention check in fit, aim one spray at each new solid and expect a refusal (`receiver_rejection`).
+
+## Distinguish engine tracing integration from the installed binary
+
+On 2026-10-25, a blanket claim that Godot had no built-in tracer was wrong.
+The official 4.7 profiling documentation and 4.7.2 source include event
+instrumentation for Tracy, Perfetto and Instruments; the source build defaults
+to `profiler=none`. Android has official Perfetto-enabled templates. Neither
+stripped browser WASM nor absence of a generic trace CLI switch establishes
+absence of engine tracing support. Before recommending a profiler, check the
+versioned profiling docs, `SConstruct` and `core/profiling/SCsub`, then verify
+the installed binary's selected backend. Distinguish script/visual profiling,
+compiled native tracing and external Chrome/CDP traces; existing trace zones
+do not promise coverage of every startup operation or browser-driver wait.
+Source checked 2026-10-25: https://docs.godotengine.org/en/4.7/engine_details/development/profiling/index.html
