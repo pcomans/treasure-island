@@ -5,6 +5,7 @@ extends Node3D
 @onready var player: PlayerController = $Player
 @onready var hud: GameHUD = $Interface/HUD
 
+const STARTUP_MARKS := preload("res://game/scripts/debug/startup_marks.gd")
 const TOUCH_CONTROLS := preload("res://game/scripts/ui/touch_controls.gd")
 
 var _world_ready := false
@@ -18,7 +19,16 @@ var _web_capture_pending := false
 var capture_mouse_on_ready := true
 
 
+func _init() -> void:
+	STARTUP_MARKS.mark("main_init")
+
+
+func _enter_tree() -> void:
+	STARTUP_MARKS.mark("main_enter_tree")
+
+
 func _ready() -> void:
+	STARTUP_MARKS.mark("main_ready_begin")
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	if OS.has_feature("web"):
 		# Keep the complete island while avoiding distant shadow passes in WebGL.
@@ -56,6 +66,7 @@ func _ready() -> void:
 	hud.resume_requested.connect(_resume_game)
 	hud.exit_requested.connect(_exit_game)
 	world_root.call_deferred("load_world")
+	STARTUP_MARKS.mark("main_ready_end")
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -82,14 +93,18 @@ func _notification(what: int) -> void:
 
 
 func _on_world_ready(_report: Dictionary) -> void:
+	STARTUP_MARKS.mark("grounding_begin")
 	player.configure_world(world_root.get_spawn_transform(), world_root.get_boundary())
 	await player.startup_grounded
 	if not world_root.is_world_validated() or not player.reveal_grounded():
 		_on_world_failed("player_grounding", "Player could not settle on generated land before its first visible frame.", [])
 		return
+	STARTUP_MARKS.mark("grounding_end")
 	_world_ready = true
 	if OS.has_feature("web"):
+		STARTUP_MARKS.mark("detail_distances_begin")
 		_apply_web_detail_distances()
+		STARTUP_MARKS.mark("detail_distances_end")
 	if not player.feedback_requested.is_connected(hud.show_feedback):
 		player.feedback_requested.connect(hud.show_feedback)
 	if not player.spray_result.is_connected(world_root.get_runtime_evidence().record_spray):
@@ -111,9 +126,18 @@ func _on_world_ready(_report: Dictionary) -> void:
 		# Browser pointer lock must originate in a user click (Resume).
 		_set_paused(true)
 	print("WORLD_READY")
+	STARTUP_MARKS.mark("world_ready")
+	if STARTUP_MARKS.enabled():
+		_mark_first_submitted_frame()
 	# Launch check for exported builds: load the island, then exit cleanly.
 	if OS.get_cmdline_user_args().has("--quit-on-ready"):
 		get_tree().quit(0)
+
+
+func _mark_first_submitted_frame() -> void:
+	await RenderingServer.frame_post_draw
+	# Submission opportunity only: not physical display or shader completion.
+	STARTUP_MARKS.mark("first_frame_submitted")
 
 
 func _on_world_failed(code: String, message: String, source_keys: Array) -> void:

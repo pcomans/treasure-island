@@ -1,6 +1,7 @@
 class_name WorldLoader
 extends Node3D
 
+const STARTUP_MARKS := preload("res://game/scripts/debug/startup_marks.gd")
 const PREBUILT_WORLD := preload("res://game/scripts/world/prebuilt_world.gd")
 
 const MERSEA := preload("res://game/scripts/world/facades/mersea_live_attachment.gd")
@@ -118,11 +119,15 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 
 
 func _load_prebuilt() -> void:
+	STARTUP_MARKS.mark("resource_load_begin")
 	var packed := load(PREBUILT_WORLD.PATH) as PackedScene
+	STARTUP_MARKS.mark("resource_load_end")
 	if packed == null:
 		_fail("prebuilt_missing", "Web world was not prebuilt; rebuild with tools/build-web.sh.", [])
 		return
+	STARTUP_MARKS.mark("instantiate_begin")
 	var baked := packed.instantiate()
+	STARTUP_MARKS.mark("instantiate_end")
 	if baked.get_meta("schema", "") != PREBUILT_WORLD.SCHEMA or not baked.has_node("PlayableWorld") or not baked.has_node("ContextWorld"):
 		baked.free()
 		_fail("prebuilt_invalid", "Invalid prebuilt web world.", [])
@@ -144,6 +149,7 @@ func _load_prebuilt() -> void:
 		baked.free()
 		_fail("prebuilt_content", "Prebuilt world has incomplete categories, evidence or spawn/boundary state.", [])
 		return
+	STARTUP_MARKS.mark("attach_configure_begin")
 	for name: String in ["PlayableWorld", "ContextWorld"]:
 		var old := get_node(name)
 		remove_child(old)
@@ -166,7 +172,10 @@ func _load_prebuilt() -> void:
 	_validated = true
 	_loading = false
 	runtime_evidence.finish_load(report)
+	STARTUP_MARKS.mark("attach_configure_end")
+	STARTUP_MARKS.mark("reflection_setup_begin")
 	preload("res://game/scripts/world/facades/mersea_model.gd").resume_prebuilt_reflections(buildings)
+	STARTUP_MARKS.mark("reflection_setup_end")
 	world_ready.emit(report)
 
 
