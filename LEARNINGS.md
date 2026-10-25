@@ -835,3 +835,7 @@ frames when locating a reported stall, then distinguish trace boundaries from
 function attribution: here main-thread pipeline waits, simultaneous RADV pipeline
 creation stacks and a warm-cache comparison supplied that attribution. Do not
 transfer the native Vulkan diagnosis to browser WebGL without browser evidence.
+
+## Keep optional UI review separate from building-art acceptance
+
+On 2026-10-25, an optional two-screen loading-UI review repeatedly failed to return despite bounded requests, delaying an already code- and runtime-reviewed reversible change. Cancel and explicitly release a stalled optional handoff early; root can review the actual UI outputs without inventing a building-art gate. Record the missing verdict honestly. This does not waive the independent visual/reference acceptance required for building art.
