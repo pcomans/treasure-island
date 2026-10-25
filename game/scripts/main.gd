@@ -15,6 +15,9 @@ var _web_blur_callback: JavaScriptObject
 var _web_visibility_callback: JavaScriptObject
 var _web_pointer_lock_callback: JavaScriptObject
 var _web_capture_pending := false
+var _web_pointer_locked := false
+var _web_view_revision := 0
+var _web_debug_callback: JavaScriptObject
 # Shared automation keeps the pointer visible while retaining normal startup.
 # Ordinary gameplay uses the default and captures the mouse as before.
 var capture_mouse_on_ready := true
@@ -32,6 +35,11 @@ func _ready() -> void:
 	STARTUP_MARKS.mark("main_ready_begin")
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	if OS.has_feature("web"):
+		# Fit the actual browser aspect; native keeps its existing window policy.
+		get_window().content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
+		get_viewport().size_changed.connect(func() -> void: _web_view_revision += 1)
+		if bool(JavaScriptBridge.eval("navigator.maxTouchPoints > 0")):
+			get_window().content_scale_size = Vector2i(720, 720)
 		# Keep the complete island while avoiding distant shadow passes in WebGL.
 		$Sun.shadow_enabled = false
 		get_viewport().scaling_3d_scale = 0.75
@@ -59,6 +67,9 @@ func _ready() -> void:
 			_web_pointer_lock_callback = JavaScriptBridge.create_callback(_on_web_pointer_lock)
 			JavaScriptBridge.get_interface("document").addEventListener("pointerlockchange", _web_pointer_lock_callback)
 			JavaScriptBridge.get_interface("document").addEventListener("pointerlockerror", _web_pointer_lock_callback)
+	if OS.has_feature("web") and STARTUP_MARKS.enabled():
+		_web_debug_callback = JavaScriptBridge.create_callback(_publish_web_state)
+		JavaScriptBridge.get_interface("window").__tiReadback = _web_debug_callback
 	hud.show_loading()
 	hud.bind_evidence(world_root.get_runtime_evidence())
 	world_root.load_progress.connect(hud.update_load_progress)
@@ -138,8 +149,12 @@ func _on_world_ready(_report: Dictionary) -> void:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	hud.show_world_ready()
 	if OS.has_feature("web"):
-		# Browser pointer lock must originate in a user click (Resume).
-		_set_paused(true)
+		# Touch plays immediately; desktop walks with a visible pointer until a
+		# deliberate click requests look capture. Never auto-request browser lock.
+		if _touch_controls != null:
+			_touch_controls.set_gameplay_active(true)
+		else:
+			hud.set_pointer_capture_hint(true)
 	# Launch check for exported builds: load the island, then exit cleanly.
 	if OS.get_cmdline_user_args().has("--quit-on-ready"):
 		get_tree().quit(0)
@@ -169,27 +184,32 @@ func _prepare_initial_graphics() -> String:
 		if not is_instance_valid(probe) or not probe.is_inside_tree():
 			return "Initial reflection producer was removed."
 	STARTUP_MARKS.mark("graphics_final_probe_mode")
-	# Pinned Godot 4.7.2 scheduling contract, NOT a public probe-ready query.
-	# Preserve Mersea's existing ALWAYS atlas setup and image-settling callback.
-	# Its final ONCE mode dirties the probe: viewport culling discovers it AFTER
-	# render_probes, so start with a discovery draw at the grounded player camera.
-	await RenderingServer.frame_post_draw
-	STARTUP_MARKS.mark("graphics_probe_discovery_submitted")
-	# render_probes services one ONCE probe per draw. RD's existing ALWAYS atlas
-	# has 7 roughness mips: capture + 6 filtering steps. GLES3 caps its atlas at
-	# 8 mips: capture + at most 8 filtering steps. Cover each actual producer;
-	# the exterior ALWAYS probe finishes its capture/filter within each draw.
-	# This bound is scoped to the current Mersea setup, not a generic scheduler.
-	var capture_filter_draws := 9 if RenderingServer.get_current_rendering_method() == "gl_compatibility" else 7
-	for probe: ReflectionProbe in probes:
-		for task in range(capture_filter_draws):
-			await RenderingServer.frame_post_draw
-			if _startup_failed or not is_instance_valid(probe) or not probe.is_inside_tree():
-				return "Initial reflection preparation was cancelled."
-	STARTUP_MARKS.mark("graphics_capture_filter_submitted")
-	# Draw the player-visible initial scene with those reflections, input still off.
-	await RenderingServer.frame_post_draw
-	STARTUP_MARKS.mark("graphics_initial_view_submitted")
+	# If rotation changes the initial view mid-preparation, submit the same
+	# bounded work for the new view before handing over controls.
+	var prepared_revision := -1
+	while prepared_revision != _web_view_revision:
+		prepared_revision = _web_view_revision
+		# Pinned Godot 4.7.2 scheduling contract, NOT a public probe-ready query.
+		# Preserve Mersea's existing ALWAYS atlas setup and image-settling callback.
+		# Its final ONCE mode dirties the probe: viewport culling discovers it AFTER
+		# render_probes, so start with a discovery draw at the grounded player camera.
+		await RenderingServer.frame_post_draw
+		STARTUP_MARKS.mark("graphics_probe_discovery_submitted")
+		# render_probes services one ONCE probe per draw. RD's existing ALWAYS atlas
+		# has 7 roughness mips: capture + 6 filtering steps. GLES3 caps its atlas at
+		# 8 mips: capture + at most 8 filtering steps. Cover each actual producer;
+		# the exterior ALWAYS probe finishes its capture/filter within each draw.
+		# This bound is scoped to the current Mersea setup, not a generic scheduler.
+		var capture_filter_draws := 9 if RenderingServer.get_current_rendering_method() == "gl_compatibility" else 7
+		for probe: ReflectionProbe in probes:
+			for task in range(capture_filter_draws):
+				await RenderingServer.frame_post_draw
+				if _startup_failed or not is_instance_valid(probe) or not probe.is_inside_tree():
+					return "Initial reflection preparation was cancelled."
+		STARTUP_MARKS.mark("graphics_capture_filter_submitted")
+		# Draw the player-visible initial scene with those reflections, input still off.
+		await RenderingServer.frame_post_draw
+		STARTUP_MARKS.mark("graphics_initial_view_submitted")
 	# Submission coverage of this tested initial view only: no physical-display,
 	# all-future-variant, driver-idle or general cubemap-completion guarantee.
 	return ""
@@ -218,12 +238,15 @@ func _set_paused(paused: bool) -> void:
 	get_tree().paused = paused
 	if paused:
 		_web_capture_pending = false
+		_web_pointer_locked = false
 	var mouse_mode := Input.MOUSE_MODE_VISIBLE if paused or _touch_controls != null else Input.MOUSE_MODE_CAPTURED
 	if Input.mouse_mode != mouse_mode:
 		Input.mouse_mode = mouse_mode
 	if _touch_controls != null:
 		_touch_controls.set_gameplay_active(not paused and _world_ready)
 	hud.set_paused(paused)
+	if OS.has_feature("web") and _touch_controls == null:
+		hud.set_pointer_capture_hint(not paused and _world_ready and not _web_pointer_locked)
 
 
 func _resume_game() -> void:
@@ -275,12 +298,14 @@ func _sync_web_pointer_lock() -> void:
 	if captured:
 		if _web_capture_pending:
 			_web_capture_pending = false
+			_web_pointer_locked = true
 			_set_paused(false)
-		elif get_tree().paused:
+		elif get_tree().paused or not _web_pointer_locked:
 			# Escape/cancel can precede an asynchronous grant. Release it, don't resume.
 			JavaScriptBridge.get_interface("document").exitPointerLock()
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	else:
+		_web_pointer_locked = false
 		_set_paused(true)
 
 
@@ -294,7 +319,28 @@ func _on_web_visibility(_arguments: Array) -> void:
 		_on_web_blur([])
 
 
+func _publish_web_state(_args: Array) -> void:
+	var state := {
+		"ready": _world_ready, "paused": get_tree().paused,
+		"visible": player.visible, "grounded": player.is_on_floor(),
+		"input": player.is_processing_unhandled_input(),
+		"position": [player.position.x, player.position.y, player.position.z],
+		"velocity": [player.velocity.x, player.velocity.y, player.velocity.z],
+		"jetpack": Input.is_action_pressed("jetpack"), "run": Input.is_action_pressed("run"),
+		"touch_vector": [player.touch_input_vector.x, player.touch_input_vector.y],
+		"viewport": [get_viewport().get_visible_rect().size.x, get_viewport().get_visible_rect().size.y],
+		"window": [get_window().size.x, get_window().size.y],
+		"camera_aspect": player.get_camera().get_camera_projection().get_aspect(),
+		"touch_visible": _touch_controls != null and _touch_controls.visible,
+		"capture_pending": _web_capture_pending, "pointer_locked": _web_pointer_locked,
+		"view_revision": _web_view_revision,
+	}
+	JavaScriptBridge.get_interface("window").__tiState = JSON.stringify(state)
+
+
 func _exit_tree() -> void:
+	if _web_debug_callback != null:
+		JavaScriptBridge.eval("delete window.__tiReadback; delete window.__tiState")
 	_web_capture_pending = false
 	if _web_pointer_lock_callback != null:
 		if bool(JavaScriptBridge.eval("document.pointerLockElement === document.getElementById('canvas')")):

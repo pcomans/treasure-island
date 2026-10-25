@@ -17,6 +17,7 @@ signal exit_requested
 
 var _feedback_seconds := 0.0
 var _evidence: RuntimeEvidence
+var _capture_hint: Button
 
 
 func _ready() -> void:
@@ -95,3 +96,18 @@ func set_touch_instructions() -> void:
 	pause_panel.offset_right = 240.0
 	pause_panel.offset_top = -165.0
 	pause_panel.offset_bottom = 165.0
+
+
+func set_pointer_capture_hint(show_hint: bool) -> void:
+	if _capture_hint == null and show_hint:
+		_capture_hint = Button.new()
+		_capture_hint.text = "Click to look"
+		add_child(_capture_hint)
+		_capture_hint.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP)
+		_capture_hint.offset_left = -110.0
+		_capture_hint.offset_right = 110.0
+		_capture_hint.offset_top = 20.0
+		_capture_hint.offset_bottom = 68.0
+		_capture_hint.pressed.connect(func() -> void: resume_requested.emit())
+	if _capture_hint != null:
+		_capture_hint.visible = show_hint

@@ -10,6 +10,8 @@ var camera_rig: PlayerCamera
 var player: PlayerController
 var _active := false
 var _last_camera_rotation := Vector2.ZERO
+var _safe_rect := Rect2()
+var _pause_center := Vector2.ZERO
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -49,10 +51,18 @@ func _make_button(action: String, icon: String) -> void:
 
 func _layout() -> void:
 	_release_all()
-	_move_stick.position = Vector2(20, size.y - 250)
+	_safe_rect = Rect2(Vector2.ZERO, size)
+	if OS.has_feature("web"):
+		var insets: Array = JSON.parse_string(str(JavaScriptBridge.eval("JSON.stringify(['left','top','right','bottom'].map(side=>parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--safe-'+side))||0).concat([innerWidth,innerHeight]))")))
+		var css_scale := size / Vector2(float(insets[4]), float(insets[5]))
+		var start := Vector2(float(insets[0]), float(insets[1])) * css_scale
+		var end := Vector2(float(insets[2]), float(insets[3])) * css_scale
+		_safe_rect = Rect2(start, size - start - end)
+	_pause_center = Vector2(_safe_rect.end.x - 55, _safe_rect.position.y + 55)
+	_move_stick.position = Vector2(_safe_rect.position.x + 20, _safe_rect.end.y - 250)
 	_move_stick.size = Vector2(220, 220)
-	_buttons[0].position = Vector2(size.x - 144, size.y - 208)
-	_buttons[1].position = Vector2(size.x - 272, size.y - 208)
+	_buttons[0].position = _safe_rect.end - Vector2(144, 208)
+	_buttons[1].position = _safe_rect.end - Vector2(272, 208)
 	for button in _buttons:
 		button.size = Vector2(96, 96)
 	queue_redraw()
@@ -70,7 +80,7 @@ func set_gameplay_active(active: bool) -> void:
 func _input(event: InputEvent) -> void:
 	if not _active:
 		return
-	if event is InputEventScreenTouch and event.pressed and not event.canceled and event.position.distance_to(Vector2(size.x - 55, 55)) <= 34.0:
+	if event is InputEventScreenTouch and event.pressed and not event.canceled and event.position.distance_to(_pause_center) <= 34.0:
 		pause_requested.emit()
 		get_viewport().set_input_as_handled()
 		return
@@ -98,12 +108,12 @@ func _exit_tree() -> void:
 
 func _draw() -> void:
 	# Keep the upstream stick texture readable over pale paths and grass.
-	var stick_center := Vector2(130, size.y - 140)
+	var stick_center := _move_stick.position + Vector2(110, 110)
 	draw_circle(stick_center, 94, Color(0.02, 0.06, 0.09, 0.62))
 	draw_arc(stick_center, 90, 0, TAU, 64, Color(0.75, 0.9, 0.95, 0.75), 2, true)
 	draw_circle(stick_center, 24, Color(0.04, 0.22, 0.28, 0.85))
 	var font := ThemeDB.fallback_font
-	for item in [[Vector2(102, size.y - 22), "MOVE"], [Vector2(size.x - 126, size.y - 86), "RISE"], [Vector2(size.x - 254, size.y - 86), "RUN"], [Vector2(size.x * 0.55, size.y - 30), "Drag right side to look"]]:
+	for item in [[_move_stick.position + Vector2(82, 228), "MOVE"], [_buttons[0].position + Vector2(18, 122), "RISE"], [_buttons[1].position + Vector2(18, 122), "RUN"], [Vector2(_safe_rect.position.x + _safe_rect.size.x * 0.55, _safe_rect.end.y - 30), "Drag right side to look"]]:
 		draw_string(font, item[0], item[1], HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color.WHITE)
-	draw_circle(Vector2(size.x - 55, 55), 34, Color(0.03, 0.1, 0.14, 0.65))
-	draw_string(font, Vector2(size.x - 63, 62), "II", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color.WHITE)
+	draw_circle(_pause_center, 34, Color(0.03, 0.1, 0.14, 0.65))
+	draw_string(font, _pause_center + Vector2(-8, 7), "II", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color.WHITE)
