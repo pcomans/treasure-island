@@ -9,6 +9,7 @@ const STARTUP_MARKS := preload("res://game/scripts/debug/startup_marks.gd")
 const TOUCH_CONTROLS := preload("res://game/scripts/ui/touch_controls.gd")
 
 var _world_ready := false
+var _startup_failed := false
 var _touch_controls: TouchControls
 var _web_blur_callback: JavaScriptObject
 var _web_visibility_callback: JavaScriptObject
@@ -101,7 +102,6 @@ func _on_world_ready(_report: Dictionary) -> void:
 		_on_world_failed("player_grounding", "Player could not settle on generated land before its first visible frame.", [])
 		return
 	STARTUP_MARKS.mark("grounding_end")
-	_world_ready = true
 	if OS.has_feature("web"):
 		STARTUP_MARKS.mark("detail_distances_begin")
 		_apply_web_detail_distances()
@@ -119,6 +119,20 @@ func _on_world_ready(_report: Dictionary) -> void:
 	if not player.get_spray_controller().tag_instances.oldest_tag_removed.is_connected(world_root.get_runtime_evidence().record_tag_eviction):
 		player.get_spray_controller().tag_instances.oldest_tag_removed.connect(world_root.get_runtime_evidence().record_tag_eviction)
 	world_root.get_runtime_evidence().bind_runtime(player, world_root.get_boundary())
+	hud.show_loading("Preparing graphics…")
+	STARTUP_MARKS.mark("world_ready")
+	print("WORLD_READY")
+	if STARTUP_MARKS.enabled():
+		_mark_first_submitted_frame()
+	var graphics_error := await _prepare_initial_graphics()
+	if not graphics_error.is_empty():
+		_on_world_failed("graphics_preparation", graphics_error, [])
+		return
+	if not is_inside_tree() or _startup_failed or not world_root.is_world_validated():
+		return
+	_world_ready = true
+	STARTUP_MARKS.mark("play_handoff")
+	print("PLAY_READY")
 	player.set_gameplay_enabled(true)
 	if capture_mouse_on_ready and not OS.has_feature("web"):
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -126,13 +140,59 @@ func _on_world_ready(_report: Dictionary) -> void:
 	if OS.has_feature("web"):
 		# Browser pointer lock must originate in a user click (Resume).
 		_set_paused(true)
-	print("WORLD_READY")
-	STARTUP_MARKS.mark("world_ready")
-	if STARTUP_MARKS.enabled():
-		_mark_first_submitted_frame()
 	# Launch check for exported builds: load the island, then exit cleanly.
 	if OS.get_cmdline_user_args().has("--quit-on-ready"):
 		get_tree().quit(0)
+
+
+func _prepare_initial_graphics() -> String:
+	# Headless contracts have no rendered readiness claim or draw signals.
+	if DisplayServer.get_name() == "headless":
+		STARTUP_MARKS.mark("graphics_skipped_headless")
+		return ""
+	STARTUP_MARKS.mark("graphics_prepare_begin")
+	if STARTUP_MARKS.enabled():
+		print("GRAPHICS_PREPARE visible=%s grounded=%s input=%s camera=%s renderer=%s" % [player.visible, player.is_on_floor(), player.is_processing_unhandled_input(), player.get_camera().global_position, RenderingServer.get_current_rendering_method()])
+	var probes := world_root.buildings.find_children("MerseaBarReflection", "ReflectionProbe", true, false)
+	if probes.is_empty():
+		return "Initial reflection producer is missing."
+	for probe: ReflectionProbe in probes:
+		while is_instance_valid(probe) and probe.is_inside_tree():
+			if _startup_failed:
+				return "Startup was cancelled."
+			var state := str(probe.get_meta("startup_reflection", ""))
+			if state == "final_mode_set":
+				break
+			if state != "waiting_images":
+				return "Initial reflection images could not be prepared."
+			await get_tree().process_frame
+		if not is_instance_valid(probe) or not probe.is_inside_tree():
+			return "Initial reflection producer was removed."
+	STARTUP_MARKS.mark("graphics_final_probe_mode")
+	# Pinned Godot 4.7.2 scheduling contract, NOT a public probe-ready query.
+	# Preserve Mersea's existing ALWAYS atlas setup and image-settling callback.
+	# Its final ONCE mode dirties the probe: viewport culling discovers it AFTER
+	# render_probes, so start with a discovery draw at the grounded player camera.
+	await RenderingServer.frame_post_draw
+	STARTUP_MARKS.mark("graphics_probe_discovery_submitted")
+	# render_probes services one ONCE probe per draw. RD's existing ALWAYS atlas
+	# has 7 roughness mips: capture + 6 filtering steps. GLES3 caps its atlas at
+	# 8 mips: capture + at most 8 filtering steps. Cover each actual producer;
+	# the exterior ALWAYS probe finishes its capture/filter within each draw.
+	# This bound is scoped to the current Mersea setup, not a generic scheduler.
+	var capture_filter_draws := 9 if RenderingServer.get_current_rendering_method() == "gl_compatibility" else 7
+	for probe: ReflectionProbe in probes:
+		for task in range(capture_filter_draws):
+			await RenderingServer.frame_post_draw
+			if _startup_failed or not is_instance_valid(probe) or not probe.is_inside_tree():
+				return "Initial reflection preparation was cancelled."
+	STARTUP_MARKS.mark("graphics_capture_filter_submitted")
+	# Draw the player-visible initial scene with those reflections, input still off.
+	await RenderingServer.frame_post_draw
+	STARTUP_MARKS.mark("graphics_initial_view_submitted")
+	# Submission coverage of this tested initial view only: no physical-display,
+	# all-future-variant, driver-idle or general cubemap-completion guarantee.
+	return ""
 
 
 func _mark_first_submitted_frame() -> void:
@@ -142,6 +202,7 @@ func _mark_first_submitted_frame() -> void:
 
 
 func _on_world_failed(code: String, message: String, source_keys: Array) -> void:
+	_startup_failed = true
 	_web_capture_pending = false
 	_world_ready = false
 	if _touch_controls != null:

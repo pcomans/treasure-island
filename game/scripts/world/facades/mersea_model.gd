@@ -922,10 +922,12 @@ static func resume_prebuilt_reflections(buildings: Node3D) -> void:
 
 
 static func _settle_bar_reflection(probe: ReflectionProbe, material_root: Node = null) -> void:
+	probe.set_meta("startup_reflection", "waiting_images")
 	# Keep startup rendering available while procedural images are generated.
 	# Completed draw opportunities are not a cubemap-ready query.
 	if DisplayServer.get_name()=="headless":
 		probe.update_mode=ReflectionProbe.UPDATE_ONCE
+		probe.set_meta("startup_reflection", "headless")
 		return
 	var textures: Dictionary={}
 	var materials: Array = _materials.values()
@@ -947,6 +949,7 @@ static func _settle_bar_reflection(probe: ReflectionProbe, material_root: Node =
 			if image==null or image.is_empty():ready=false;break
 		if ready:break
 		if Time.get_ticks_msec()>deadline:
+			probe.set_meta("startup_reflection", "images_failed")
 			push_warning("Mersea bar reflection retained continuous updates: procedural images unavailable")
 			return
 		await probe.get_tree().process_frame
@@ -956,6 +959,7 @@ static func _settle_bar_reflection(probe: ReflectionProbe, material_root: Node =
 		await RenderingServer.frame_post_draw
 		if not is_instance_valid(probe) or not probe.is_inside_tree():return
 	probe.update_mode=ReflectionProbe.UPDATE_ONCE
+	probe.set_meta("startup_reflection", "final_mode_set")
 	print("MERSEA_BAR_UPDATE_ONCE rendered=%d" % Engine.get_frames_drawn())
 
 
