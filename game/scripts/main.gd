@@ -93,6 +93,7 @@ func _notification(what: int) -> void:
 
 
 func _on_world_ready(_report: Dictionary) -> void:
+	STARTUP_MARKS.probe_building_materials(world_root.buildings)
 	STARTUP_MARKS.mark("grounding_begin")
 	player.configure_world(world_root.get_spawn_transform(), world_root.get_boundary())
 	await player.startup_grounded
