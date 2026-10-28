@@ -22216,3 +22216,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: separating 1223's sentinel constraint (no geometry change) from the visual verdict let the review judge recognition honestly and route the carport difference to its own future round instead of blocking. 1107's taupe shift is a clean, visible improvement against its only photo.
 - What did not work well: 1223's BEFORE column was rendered at a different focal length, so BEFORE and AFTER can't be compared pixel for pixel. 1107's only reference is from Feb 2018, with trees and a parked car covering much of the facade, which limits how much a colour verdict can claim.
 - What the team should change next time: render every sheet column with the same camera definition, and treat a focal mismatch as a sheet bug to fix before review. For units whose only photo is older than about five years, add a quick check for a newer frame before the colour round.
+
+### modeler-f1-finish — 2026-10-28 — F1 finish follow-ups (1411, 1305, 366, 371; 1204, 901, 1301/1306 skipped)
+
+- What worked well: checking each target's key in code before editing showed that 1204's carport underside is hard-coded (already dark) and that 366's hut was already white, so neither needed a change. Element crops made the subtle 1305 roof shift visible.
+- What did not work well: I reused an M2b sample for 1411 without re-checking its box. It sat partly on a window in shade, and the first value was too pale, costing one re-render. Two "reads as" notes (1301/1306 tan gables, 901 flat roof) were not supported by the photos.
+- What the team should change next time: re-draw every reused sample box on the photo before trusting the value. Treat review targets as hypotheses to confirm against a fresh sample.
