@@ -22114,3 +22114,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: cherry-picking the five S9/M1 commits onto the just-pushed B1 HEAD with a reusable keep-both script resolved both end-of-file RETRO conflicts identically, and a check confirmed the result removes no RETRO lines. All 20 units had the same `acceptance_records: []` then `anchor_source_key` layout, so one anchored patch with per-unit assertions and a JSON comparison (only records and `reference_recognizable` change) handled the batch in one step. Reusing the B1 worktree kept `node_modules` and the `.godot` import cache, so no reinstall.
 - What did not work well: the brief asked for code and visual records on every unit, but S9 was review-only with no config change and no code review, so S9 got visual records only, as in batches S1–S8. The S9 fit evidence is spread across per-unit run logs rather than one log like M1's `fits.out`.
 - What the team should change next time: in combined briefs, say per batch whether a code review happened, and name each record's review_id. Keep one fits log per batch, like M1's.
+
+### modeler-m2b-flounder — 2026-10-28 — M2b Flounder 1409-1413 and 1445 (colour fix and whole-unit review)
+
+- What worked well: these fronts are sunlit, so raw samples could be used directly. They showed that the parked "cream too dark and cool" note was partly wrong: 1409 and 1410 already match, while 1411 and 1413 are actually white. For 1445, comparing the lower storey's value relative to the upper storey explained the pink read without changing the hue.
+- What did not work well: the digest still cannot see shader colour changes, so the evidence leans on pixel diffs again. 1412's only photo is far (diff below the 2% fuzz).
+- What the team should change next time: compare relative value (lower/upper storey, door/wall) as well as hue when a note says something reads too pink or too dark.
