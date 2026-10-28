@@ -30,8 +30,8 @@
     "south_wing_inward_depth": 11.0,
     "tower_platform_top_y": 29.13,
     "tower_glass_base_y": 29.13,
-    "tower_glass_top_y": 34.43,
-    "tower_roof_peak_y": 37.18,
+    "tower_glass_top_y": 31.55,
+    "tower_roof_peak_y": 34.08,
     "tower_platform_plan_scale": 1.0
   },
   "massing_chains": {

@@ -88,6 +88,7 @@
         "game/resources/materials/world/building_1/building_1_projecting_base_stone.tres",
         "game/resources/materials/world/building_1/building_1_reveal_shadow.tres",
         "game/resources/materials/world/building_1/building_1_roof_metal.tres",
+        "game/resources/materials/world/building_1/building_1_tower_roof_pale.tres",
         "game/resources/materials/world/building_1/building_1_warm_ivory_exact_trial.tres"
       ],
       "runtime_config_path": "game/resources/facades/building_1_hero_model.json",
