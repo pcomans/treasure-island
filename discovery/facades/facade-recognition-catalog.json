@@ -12314,6 +12314,16 @@
           "review_id": "visual-review-b1l3-r7-20261022",
           "review_kind": "visual",
           "status": "accepted"
+        },
+        {
+          "review_id": "code-review-ti-code-review-b1-roof-20261028",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-codex-sol-b1-roof-20261028",
+          "review_kind": "visual",
+          "status": "accepted"
         }
       ],
       "anchor_source_key": "w1222720021",
@@ -13141,6 +13151,16 @@
         },
         {
           "review_id": "visual-review-b1l3-r7-20261022",
+          "review_kind": "visual",
+          "status": "accepted"
+        },
+        {
+          "review_id": "code-review-ti-code-review-b1-roof-20261028",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-codex-sol-b1-roof-20261028",
           "review_kind": "visual",
           "status": "accepted"
         }
