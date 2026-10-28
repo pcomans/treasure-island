@@ -21982,3 +21982,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: matching each catalog block by `anchor_source_key` with optional fields in between (last push's lesson) needed no second pass, and the re-parse showed 99 → 105 with sentinel 1223 still not_evaluated. The RETRO rebase conflict was again a single end-of-file block, resolved by dropping only the markers.
 - What did not work well: the brief and the first pattern both assumed every `acceptance_records` list was empty, but 1225 and 1229 already carry older scoped `pass` records, so the first run's per-unit count assertion stopped at 1225 and the pattern had to accept and append to a non-empty list.
 - What the team should change next time: before a catalog record edit, print each target unit's existing `acceptance_records` and append to them; never assume a `not_evaluated` unit has an empty list.
+
+### modeler-accept-s7 — 2026-10-24/28 — acceptance batch S7 (Ozbourn 1139/1141/1147/1149, Reeves 1122/1124/1128; review-only) and the 1205/1229 fix fits
+
+- What worked well: engine-B.lock removed all polling and the three-runs race. Both S7 renders and the 1205/1229 fits queued and ran cleanly. After the usage-limit pause, checking `git status` and the run logs first showed that the notes fix, both fits and both S7 renders were already complete, so nothing was re-run.
+- What did not work well: two of the seven units (1139 at 42 m, 1149 at 54 m) only have distant lot photos. Their whole-unit verdicts rest on form and colour, not detail.
+- What the team should change next time: put the triage's wall-hue and roof columns into the first S-batch template, so they are not added halfway through the series. For distant-only units, say up front that the verdict covers form and colour only.
