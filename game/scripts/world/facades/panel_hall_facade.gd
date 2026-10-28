@@ -139,12 +139,13 @@ static func build(record: Dictionary) -> Dictionary:
 				_box(root,"TerminalPier",a,t,n,[.16,length-.16][end_index],(floor_y+top-.16)/2.0,.24,Vector3(.32,top-.16-floor_y,.46),materials.structure,"wall")
 		if spec.has("eave"):
 			# Opt-in projecting eave {"depth": m, "thickness": m}: a soffit slab and fascia
-			# beyond the wall in place of the thin coping, run past both chain ends by the
-			# depth so neighbouring chains close the corners. Dimensions are production inference.
+			# beyond the wall in place of the thin coping. Dimensions are production inference.
 			var eave: Dictionary=spec.eave
 			var depth := float(eave.depth); var thick := float(eave.thickness)
-			_box(root,"EaveSoffit",a,t,n,length/2.0,top-thick/2.0,depth/2.0,Vector3(length+2.0*depth,thick,depth+.30),materials.get("soffit",materials.upper),"detail")
-			_box(root,"EaveFascia",a,t,n,length/2.0,top-thick/2.0,depth+.15+.04,Vector3(length+2.0*depth+.08,thick+.06,.08),materials.coping,"detail")
+			# Each part runs past both chain ends by its own outer offset (soffit
+			# depth+0.15, fascia depth+0.23), so neighbouring chains meet without a notch.
+			_box(root,"EaveSoffit",a,t,n,length/2.0,top-thick/2.0,depth/2.0,Vector3(length+2.0*(depth+.15),thick,depth+.30),materials.get("soffit",materials.upper),"detail")
+			_box(root,"EaveFascia",a,t,n,length/2.0,top-thick/2.0,depth+.15+.04,Vector3(length+2.0*(depth+.23),thick+.06,.08),materials.coping,"detail")
 		else:
 			_box(root,"ThinCoping",a,t,n,length/2.0,top-.065,.18,Vector3(length,.13,.52),materials.coping,"detail")
 		if bool(spec.get("terminal_projection",false)):
