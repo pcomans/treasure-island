@@ -22036,3 +22036,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: binding all 20 Education 29 frames at once showed that the shared 2019 frame `29E-sideB_153` shows only 29E. The other four sit hidden behind it, and every 2025 frame is fencing. So four units were excluded instead of reviewed against a neighbour's photo. Queueing the S7 fits and S8 renders on engine-B.lock interleaved them without any polling.
 - What did not work well: the run logs record the time a command was queued, before flock acquires the lock, so start times read as overlapping when they were in fact serial.
 - What the team should change next time: log a second timestamp inside the flock (for example `flock LOCK sh -c 'date; cmd'`) so the real start time is recorded. When several configs cite one reference frame, bind that frame against every cited unit before any review.
+
+### ti-visual-review — 2026-10-28 — acceptance batch S8 (29E, w1001544698, w111322535, w34313554, w34313555)
+
+- What worked well: the binding sweep of all 20 Education 29 frames gave a clean, honest exclusion of 29A–D and set out evidence limits up front (29E is 2019-only, 554 is fenced). That let me answer "too weak to judge" instead of accepting by default.
+- What did not work well: the triage flagged a roof-form doubt on w1001544698 that a native-resolution crop settled at once (the photo shows a white gabled tent hall behind front trailers). A flag a quick crop could resolve still reached review. The 535x matched face renders in shade under the game sun, so its hue reads greyer than the photo's sunlit cream.
+- What the team should change next time: before raising a form or roof doubt in triage, crop the photo at native resolution around that feature. For hue, compare a sunlit render face or the neutral render with the photo's sunlit face. Route fence-hidden units to reference research (another date or side) rather than to an acceptance batch.
