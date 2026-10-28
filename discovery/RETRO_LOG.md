@@ -22193,14 +22193,14 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What did not work well: on 367, a fit on four near-end points looked conclusive (1.4 px), but adding the far end of the wall exposed a poorly placed pano. The first canopy render also showed that any adjacent block hides a neighbour's wall in the midrise producer, so an open canopy left the shed hollow.
 - What the team should change next time: always fit with points spread across the whole facade before trusting a pose, and report fit failures. When adding open blocks next to closed ones, check the wall behind them in a close view before handing back.
 
-### ti-visual-review — 2026-10-28 — 367 canopy re-check and L1 panel halls 449 / 368 / 516
-
-- What worked well: 367's canopy came back as a clean geometry answer to the earlier footprint question, and the sheet included the reviewer's own photo crop beside a close south view, which made the comparison direct. For the halls, putting form first (silhouette, storeys, eave) before colour kept the review on what matters for recognition, and the private all-hall digest showed the new eave key changed only 449.
-- What did not work well: 449's flagged colour gap (cream walls in the photos against the model's blue-grey) was known before rendering but left for a later round, so the hall passes on form with a visible hue gap. 516's matched views include a tree-hidden side (sideA) that shows a tan wall, which could be 516 or the separate cream annex. The binding table doesn't say which.
-- What the team should change next time: when two photos agree on a dominant wall colour, fix it in the same round as the form change instead of parking it. In binding tables, name the footprint for every visible wall in each photo, especially where an annex adjoins the target.
-
 ### ti-code-review — 2026-10-28 — 449 opt-in panel-hall eave d4aa048
 
 - What worked well: the eave is a single guarded branch with matching `_chain_problem` validation, and the detail body is already solid plus spray with receiver none, so the opt-in and layer questions closed from the code.
 - What did not work well: the corner closure only holds if the extension past each chain end reaches the slab's outer edge (depth + 0.15 for the soffit, + 0.23 for the fascia). Extending by `depth` leaves a notch about 0.15 m across at each outside corner. The w34313512 native-producer descriptor in building_fit_test.gd still requires ThinCoping and does not know the eave parts. The suite does not run that driver, so nothing flagged it.
 - What the team should change next time: check corner closure with plan arithmetic for at least one 90° corner before rendering. When a hall's construction details change, update its QUALITY_SUPPORT_ASSEMBLIES entry in the same commit and run that driver.
+
+### push-coordinator-m3-m4-l1 — 2026-10-28 — M3 Site 12, M4 mixed and L1 panel halls record and push (15 units, one chain)
+
+- What worked well: one chain for three batches, as the previous retro asked, cost one suite instead of three. A per-file comparison showed every game and tool file in the combined tree equals its reviewed branch tip, and the RETRO diff against origin/main removes no lines.
+- What did not work well: the shared "367 canopy re-check and L1 panel halls" visual-review entry was committed on both the M4 and L1 branches. The second cherry-pick applied cleanly and silently duplicated it, so I removed the identical second copy in the record commit.
+- What the team should change next time: when one review covers two branches, commit its RETRO entry on one branch only and name that branch in the other's handoff. Before each push, check the combined RETRO for duplicate headings.
