@@ -38,7 +38,7 @@ def main():
     out = root / args.variant / args.phase
     out.mkdir(exist_ok=False)
     shutil.copy2(source, out / "model.gd")
-    cmd = [str(godot), "--path", str(project), "--rendering-method", "forward_plus",
+    cmd = [str(godot), "--path", str(project), "--audio-driver", "Dummy", "--rendering-method", "forward_plus",
            "--resolution", "1440x900", "--script",
            str(project / "capture.gd"), "--", str(out / "model.gd"), str(out)]
     if args.study != "housing":

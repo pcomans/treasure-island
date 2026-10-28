@@ -4,6 +4,7 @@ func _initialize() -> void:
 	_run.call_deferred()
 
 func _run() -> void:
+	print("TASTE_RUNTIME display=" + DisplayServer.get_name() + " adapter=" + RenderingServer.get_video_adapter_name())
 	var args: PackedStringArray = OS.get_cmdline_user_args()
 	if args.size() != 2 and args.size() != 3:
 		push_error("Expected absolute model.gd, output directory and optional study")
