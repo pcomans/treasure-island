@@ -22162,3 +22162,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the per-channel photo/render ratio at the same patch in the matched view, with no shade factor, gave small, believable corrections and no over-correction like M2a's. Keeping 1113 white from the newer 2025 rear photo, and moderating 1117's tree-shaded ratio to beige, were sensible judgement calls that were disclosed.
 - What did not work well: 1111's screen change edited a palette key that the 12 per-screen material_rgb values override, so the AFTER render did not show the intended change, and only code review caught it. The pixel diff (4.2%) did not reveal that the targeted element was unchanged.
 - What the team should change next time: after a colour change, crop the targeted element itself in BEFORE and AFTER (not just the whole-view AE) to confirm the intended pixels moved. When a config has per-instance colour overrides, edit those or note the override in the task note.
+
+### modeler-m4-mixed — 2026-10-28 — M4 (1224, 1204, 1243, 367; 549 excluded, r133351 already accepted) and M2b fits
+
+- What worked well: rendering BEFORE first and sampling the same boxes in the photo and the render at the matched pose, per the M2a lesson, showed that three of four units already match within ~10%. Only 367 changed, and nothing was brightened.
+- What did not work well: one BEFORE run failed on a side view whose player spot sat on a building. The clearance check in the plan generator only tests 2.5 m around wall segments, and missed a footprint the point was inside. That cost one of six runs.
+- What the team should change next time: in the plan generator, test player spots against every footprint polygon (point-in-polygon), not only wall-segment distance. Keep the render-first ratio method as the default for colour rounds.
