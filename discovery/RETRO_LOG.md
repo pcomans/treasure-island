@@ -22090,3 +22090,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: queuing the seven 1248/S6 fits on `engine-A.lock` while building the S9 sheets kept the slot full without polling. Every fit passed first time from 4 m, because the spray targets were the earlier end-wall plans moved out along their own approach line, with no new target guessing.
 - What did not work well: the plant photos are mostly through chain-link fences, so binding for the low basins (369, 382) rests on the footprint overlay rather than visible geometry; 382 is effectively not photographed. Lock waits behind other owners spread the seven fits over 22 minutes.
 - What the team should change next time: for compound-interior units, flag the low-association ones (382) to the reviewer up front instead of rendering them like the photographed ones. Consider one wide compound view for each plant.
+
+### ti-visual-review — 2026-10-28 — acceptance batch S9 (Avenue M plant sheds and tanks)
+
+- What worked well: the honest association column (high, medium, low) and the advance note that 382 is effectively unphotographed let me decline 382 instead of accepting it by default. Sampling sunlit photo pixels directly (as the colour-round retro suggested) gave concrete RGB targets for 366 and 371 instead of descriptive words.
+- What did not work well: the cameras are pano-position, not corner-fitted, and every photo is behind chain-link. Low structures (basins) are hard to bind, and the verdicts lean on the taller neighbours in frame (371 and 372 tanks, 386 block).
+- What the team should change next time: for units under about 2 m tall (basins), require a raised or aerial-angle reference before an acceptance batch, or mark them as L1 with no photo up front. Put the sampled photo RGB in the triage table whenever the hue column says "model darker" or "warmer".
