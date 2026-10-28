@@ -22018,3 +22018,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the before/after pair at both the street camera and the pano camera, plus the stated frame-width figure (57% against the photo's 61%), made the trim verifiable in one look.
 - What did not work well: there was no neutral re-render, and the remaining asphalt apron in front of the left units (lawn in the photo) belongs to ground or area data rather than the building config. It stays, and a reviewer has to decide whether it counts.
 - What the team should change next time: when a building fix leaves a ground-surface mismatch, log it as a setting item with the area ID so a later ground pass can pick it up, rather than leaving it in a review note.
+
+### modeler-accept-s6 — 2026-10-24/28 — acceptance batch S6 (Site 12 Hutchins, Mason, 1108; review only) and the S4 1248 fix and fits
+
+- What worked well: queuing every engine command on `engine-A.lock` let the S4 fix chain (digest, render, 7 fits) and the S6 renders run unattended and in order, and both finished before the usage-limit pause. The resume therefore needed only a log check, with no re-runs. Comparing the housing digest against the pilot's rebased digest (same housing state) proved "only 1248 differs; 1223 identical" without spending a run on a base digest.
+- What did not work well: the 9-run S4 budget did not cover a neutral re-render of 1248 after the digest, one render and 7 fits. Two S6 cameras rest on estimated pano positions (1131, 1135), because the reference note recorded only pano IDs for them.
+- What the team should change next time: count the digest when setting a fix-and-fits budget. Record pano latitude/longitude alongside the pano ID in reference notes, so later camera work does not depend on estimates.
