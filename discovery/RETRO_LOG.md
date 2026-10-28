@@ -21988,3 +21988,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: engine-B.lock removed all polling and the three-runs race. Both S7 renders and the 1205/1229 fits queued and ran cleanly. After the usage-limit pause, checking `git status` and the run logs first showed that the notes fix, both fits and both S7 renders were already complete, so nothing was re-run.
 - What did not work well: two of the seven units (1139 at 42 m, 1149 at 54 m) only have distant lot photos. Their whole-unit verdicts rest on form and colour, not detail.
 - What the team should change next time: put the triage's wall-hue and roof columns into the first S-batch template, so they are not added halfway through the series. For distant-only units, say up front that the verdict covers form and colour only.
+
+### ti-visual-review — 2026-10-28 — acceptance batch S7 (Site 12 Ozbourn 1139/1141/1147/1149, Reeves 1122/1124/1128)
+
+- What worked well: the triage table now carries the wall-hue, visible-roof and street-blocking columns, so the three checks I keep repeating were already pre-answered and only needed confirming against pixels. Two panos shared across units (uMQ8, n93I, 4cDG) let each unit be sanity-checked from the neighbouring frame.
+- What did not work well: on the sheet thumbnail, 1128's blank west end looked like a contradiction. Only a native crop showed that the photo's end face is also blank and that the windows sit on the front, so a thumbnail can mislead about which face a feature belongs to. The 42 m and 54 m units (1139, 1149) can only be judged on colour and form.
+- What the team should change next time: when a matched view shows a corner, crop the photo at native resolution around the corner before calling an end wall blank or windowed. For distant units, an extra closer frame from the same date is cheap and would strengthen the verdict.
