@@ -22229,3 +22229,75 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: both branches were cut from 9553a61, so the cherry-picks had one end-of-file RETRO conflict and F1's "Round 2" line still landed in its own entry. A duplicate-heading check on the new RETRO entries, a per-file comparison with the branch tips, and a JSON check (records only appended; the four F1 units' claim status unchanged) covered the batch.
 - What did not work well: the F1 branch carries only the modeler's RETRO entry; the F1 code and visual reviewers' entries are not in it. 1107's checklist row is L2 U while it is now catalog-accepted, and I left the level alone because no one asked for a level change.
 - What the team should change next time: include each reviewer's RETRO entry on the branch it reviewed, and say in the brief whether an acceptance also changes a checklist level.
+
+## 2026-10-05 — worktree — latest main checkout
+
+- Worked: fetched `origin/main` and created `/workspaces/content-main` on `worktree/main-20261005` at `836c00a`, preserving the existing checkout branch and leaving LFS assets unhydrated.
+- Did not work: no execution failure; a stale prunable `/tmp/mainwt` registration exists and was left untouched because cleanup was outside the request.
+- Change next time: keep checkout-only tasks to fetch, isolated worktree creation and Git-state verification. This required retrospective stays uncommitted in the original checkout so the requested latest-main worktree remains clean; no implementation commit or test run was needed.
+
+### worktree — Mersea bounded task discovery
+
+- Worked: isolated latest-main inspection identified four unaccepted frozen building units and the archived mural/site prototype, while retained 2019 overhead and 2025/2026 exterior pixels make the multi-structure courtyard scope concrete. Existing reference and implementation entrypoints cover the work without a new harness.
+- Did not work: the older prototype is not production-integrated and its portable source was not executed; historical reference sufficiency cannot certify a newly enlarged site assignment. New private projection overlays suggest the old mural-to-source association needs checking, but overlays alone do not prove that mapping wrong. Initial broad search excerpts included low-value long URLs; narrow source and image inspection was more useful.
+- Change next time: bind the full site's component identities and source faces from retained originals before author dispatch, reuse suitable container/material parts rather than assuming the old layout is correct, and ask only whether the neighboring event venue is part of the requested site. No modeling, engine, browser, downloads or commits occurred; this retrospective remains in the original checkout and the latest-main worktree stays clean.
+
+### worktree — Mersea official and review-photo research
+
+- Worked: reused retained official originals and Google photo URLs, checked official private-events and Google Latest galleries live, and inspected selected full-size mural, overhead, courtyard and glazing pixels. Google distinguishes Photo October 2023 from Image capture September/August 2023; private notes preserve both. No duplicate bulk acquisition was needed.
+- Did not work: Yelp web access was robots-blocked and the retained browser attempt showed CAPTCHA; no bypass attempted. The old mural source mapping remains unresolved despite physical-component distinctions in raw photographs; inferred projection overlays cannot certify the corrected receiver. A filename suggesting a main container view actually showed an interior.
+- Change next time: select complementary actual pixels and exact date labels first, then bind raw sightlines to OSM identities before reuse. Private shortlist and access findings are in /tmp/mersea-refs-20261005/REFERENCE_NOTES.md. Named browser/Weston session closed; no modeling, Godot, commits or main-worktree edits occurred.
+
+## 2026-10-05 — efficiency — bounded Mersea setup checkpoint
+
+- Worked: latest-main checkout stayed isolated; the Mersea reference round reused retained official/Google originals and made one live-verification capture, with browser closure recorded. These notes show no repeated bulk acquisition or engine run. Actual-pixel sufficiency, date distinctions and mural/restroom receiver identification are necessary checks for the expanded site, not redundant research. Prior Building 600 reviewer entries confirm the explicit own-RETRO permission experiment eliminated the earlier clarification handoff; retain that wording.
+- Did not: discovery's broad search returned low-value long URLs, and my initial broad historical match likewise truncated output before targeted excerpts resolved it. The reference notes still leave exact receiver association open; a repeated gallery sweep without an architectural question would not resolve that by itself. Available retained activity does not establish current modeler-launch delays or total waiting time, so no troubleshooting/time-cost finding is claimed.
+- Next: one reversible experiment is to carry the existing private reference shortlist and one explicit unresolved component-to-footprint question into the author handoff; acquire another view only when it can decide that question or a newly identified structural gap. At the next ordinary checkpoint, compare whether the receiver question was resolved without another broad gallery sweep. Preserve ROOT direct-pixel sufficiency, independent visual/source review and every required fit/screenshot/suite gate. This reviewer performed no engine, browsing, modeling or process/worktree changes; only this own retrospective append.
+
+### worktree — Mersea Claude modeling dispatch blocked
+
+- Worked: confirmed installed Claude Code 2.1.289 and supported --agent ti-implementation dispatch; actual init model was claude-opus-5-5. ROOT reviewed the selected raw image set and authorized a bounded four-building courtyard study with identity preflight, protected scope and independent review preserved. No existing Claude/reference browser was touched.
+- Did not work: Claude returned its account session limit immediately, stating reset at 4:10am UTC without a date. Exec77679 reached exit1 before tools, source edits or engine activity; the clean worktree was preserved. This is an access limit, not a modeling failure.
+- Change next time: resume the retained private assignment after access is available, with a fresh named serialized-slot grant and process inspection. No Codex modeling fallback or repeated launch was attempted; slot released with terminal/no-child evidence. Launch prompt and stream remain under /tmp/mersea-model-20261005; retrospective kept only in original checkout.
+
+### worktree — Gold Bar/Mersea location clarification
+
+- Worked: official Mersea Golden Hour Bar text and clear hero sign establish a real collaboration; official Gold Bar visit page and separate frozen POI establish the distillery elsewhere. Reused raw March2025 street view, overhead and official photographs, without new image acquisition or engine work.
+- Did not work: branded-photo provenance alone cannot validate w1308007112. Its frozen footprint bears 141.94–148.78 degrees from the retained 9th Street camera; the signed bar appears on the right/waterfront side of the 165-degree view, inconsistent with that leftward location. Exact corrected receiver remains a source-binding question, not a business-name question. No model review or acceptance supplied.
+- Change next time: verify primary collaboration/location before settled naming and verify footprint/sightline separately. Added the concise assigned lesson to LEARNINGS in the original checkout; no model changes. Mersea contact page says 699 Avenue of the Palms while frozen POI says 669; preserved discrepancy without changing authoritative layout.
+
+### worktree — bounded Mersea satellite corroboration
+
+- Worked: one Google satellite navigation plus one zoom produced useful raw whole-site and close views. Visible mini-golf/restaurant adjacency and opposite bocce side corroborate the signed street-view waterfront region; no Apple fallback or broad survey was needed.
+- Did not work: satellite text cannot establish bar signage or exact service face; copyright2026 does not give imagery capture date. Browser URL scale transition was retained without claiming survey calibration.
+- Change next time: combine one spatially useful aerial with dated raw street pixels and frozen footprints, then allow bounded production inference after independent target binding. Browser exec36442 reached terminal0 with cleanup, owned Weston154889 released. Notes/screenshots remain private; no engine or model edits.
+
+## 2026-10-05 — mersea-refs-1: fresh Mersea exterior reference set
+
+- Worked: Official-site originals (49, many 2019 and 2025 upload dates), Google Maps owner and visitor photos (Vibe, Latest, By-owner, All and 360 tabs; a dated photo and caption for each), and four dated Street View panoramas (Jan 2023, Mar 2025, Sep 2025) covered every public side of the four Mersea units, plus the props and ground surfaces. To associate images with units, I projected the frozen OSM footprints into each saved Street View frame using its resolved camera position and heading, and drew them over close satellite captures. This tied the mural to the actual container face and tied w1001544698 to the white tent's roof outline using direct pixels rather than perspective. Two October 2019 owner drone photos supplied the missing roof and overall-layout view. Browser closed and Weston terminated.
+- Did not work: Yelp business photos showed a bot-check slider at first load. I stopped there per the rules; it needs the owner. Google's Latest tab exposes only 8 photos without login. I twice navigated the gallery tab away to a local contact sheet and lost my place; a separate tab fixed this. A rate-limit interruption hid some image reads; the saved originals made resuming cheap.
+- Next time: open contact sheets in a separate tab from the start. Project the frozen footprints into the first saved Street View frame before collecting more imagery: one projection overturned the inherited "mural wall" label for w1098437841. Associate units from each image's pixels, not from task labels.
+
+## 2026-10-15 — benchmark_routes — model comparison feasibility
+
+- Worked: read the maintained blind protocol and renderer, current Astra routing worktree, installed Claude help, official Gateway documentation and public live model catalog without inference or engine execution. Gemini 4 Argon is listed with image/tool support; OpenCode documents local editing, shell and image prompts with Gateway.
+- Did not: broad historical searches produced truncated output and the private original benchmark packet is referenced at an old Mac path, not established as present here. Claude Code Gateway discovery alone does not prove this installed client completes Gemini tool/image loops.
+- Next: reuse the fixed capture workflow, locate the private source packet, and perform one bounded image-plus-edit tool smoke test only after Gateway credentials/spend authorization; retain full edit-to-verdict timing and label model-plus-harness comparisons honestly. No installs, auth/config changes, benchmark/model calls or engine launches.
+
+### independent_checkpoint_sol — 2026-10-17 — requested next-agent handoff file
+
+- Worked: saved ROOT-supplied handoff text verbatim to HANDOFF_NEXT_AGENT.md, including completed normal push/current main and exhausted two-family authorization; no art, engine, staging or commit.
+- Did not work: the earlier pending-delivery handoff would have incorrectly retained the credential-bridge blocker after the successful push; supplied replacement text records the actual completed delivery.
+- Next: read the saved current-state prompt rather than repeat completed tests/pushes, preserve unrelated dirty work, and require a concrete new bounded assignment before another audit family.
+
+### ti-code-review — 2026-10-23 — 84b3b16 free-camera views and hidden avatar
+
+- What worked well: the diff is small and every touched path could be traced statically: free cameras are freed and the gameplay camera made current again, the avatar has no collision and `ray()` excludes the player body, so hiding `AvatarPivot` cannot move any fit, sightline or spray assertion.
+- What did not work well: the branch was cut before main's `531708d` (`--neutral-lighting`), so the requested neutral-lighting regression check had nothing to check here; the two edits touch the same lines in `_run` and will conflict on merge.
+- What the team should change next time: base shared-test edits on current main, or say in the review brief which commit the branch is behind, so the reviewer checks the merged result rather than a parent without the feature.
+
+### push-coordinator-harness-cleanup — 2026-10-28 — committing the main checkout's leftover edits
+
+- What worked well: backing up the full dirty diff and both untracked files before touching anything made the later discard safe. Copying the RETRO additions verbatim from the dirty diff, then comparing added lines with the original, kept the ten Oct 5–17 entries and the 2026-10-23 code-review entry byte-for-byte; none of their headings exists on main.
+- What did not work well: these entries sat uncommitted in the shared checkout for up to three weeks, next to edits that main had since superseded (the agent effort, the old Mersea routing and a duplicate lesson), so they needed a separate triage before anything could be cleaned.
+- What the team should change next time: commit or explicitly discard a checkout's RETRO entries in the round that writes them; don't leave uncommitted edits in the shared main checkout.
