@@ -22030,3 +22030,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the triage's hue column named the one real gap (1131's medium blue) in advance, and the photos from three dates for 1108 (2018, 2019, 2025) made the boarded present-day state clear.
 - What did not work well: four of seven units carry the same kind of small warm-greige or board-colour mismatch. Each is non-blocking alone, but they keep accumulating as follow-ups across S2–S6 (1403, 1449, 1247, 1118, 1129, 1135, 1108) with no owner or round. Two cameras (1131, 1135) are estimated, so pose comparison is loose.
 - What the team should change next time: open one small colour-opt-in round that takes every logged hue follow-up across the acceptance batches, with a target RGB per unit. Close them in one render pass instead of re-flagging them in each batch.
+
+### modeler-accept-s8 — 2026-10-28 — acceptance batch S8 (Education 29A-E, w1001544698, w111322535, w34313554, w34313555; review-only) and S7 fits
+
+- What worked well: binding all 20 Education 29 frames at once showed that the shared 2019 frame `29E-sideB_153` shows only 29E. The other four sit hidden behind it, and every 2025 frame is fencing. So four units were excluded instead of reviewed against a neighbour's photo. Queueing the S7 fits and S8 renders on engine-B.lock interleaved them without any polling.
+- What did not work well: the run logs record the time a command was queued, before flock acquires the lock, so start times read as overlapping when they were in fact serial.
+- What the team should change next time: log a second timestamp inside the flock (for example `flock LOCK sh -c 'date; cmd'`) so the real start time is recorded. When several configs cite one reference frame, bind that frame against every cited unit before any review.
