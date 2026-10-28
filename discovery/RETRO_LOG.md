@@ -22042,3 +22042,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the binding sweep of all 20 Education 29 frames gave a clean, honest exclusion of 29A–D and set out evidence limits up front (29E is 2019-only, 554 is fenced). That let me answer "too weak to judge" instead of accepting by default.
 - What did not work well: the triage flagged a roof-form doubt on w1001544698 that a native-resolution crop settled at once (the photo shows a white gabled tent hall behind front trailers). A flag a quick crop could resolve still reached review. The 535x matched face renders in shade under the game sun, so its hue reads greyer than the photo's sunlit cream.
 - What the team should change next time: before raising a form or roof doubt in triage, crop the photo at native resolution around that feature. For hue, compare a sunlit render face or the neutral render with the photo's sunlit face. Route fence-hidden units to reference research (another date or side) rather than to an acceptance batch.
+
+### modeler-colour-round — 2026-10-28 — colour opt-in round (13 housing units) and S8 fits
+
+- What worked well: reusing the matched-pose plans from S3, S6 and S8 meant no new camera work for 9 of 13 units. Recording the real start time inside the flock (`flock LOCK sh -c 'date; cmd'`) made the logs show serial engine use correctly.
+- What did not work well: the family digest does not see ShaderMaterial colour parameters, so it reported only 1108 as changed. Colour-only rounds need the pixel diff as evidence of change, with the digest showing only that geometry is unchanged. For 1449 the photo measurement (neutral wing walls) conflicts with the reviewer's warm-beige target.
+- What the team should change next time: add the siding shader's wall_color to the private digest when colour rounds are routine. When a measurement contradicts a review target, report both and let the reviewer decide, not split the difference.
