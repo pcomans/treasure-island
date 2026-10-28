@@ -22168,3 +22168,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: rendering BEFORE first and sampling the same boxes in the photo and the render at the matched pose, per the M2a lesson, showed that three of four units already match within ~10%. Only 367 changed, and nothing was brightened.
 - What did not work well: one BEFORE run failed on a side view whose player spot sat on a building. The clearance check in the plan generator only tests 2.5 m around wall segments, and missed a footprint the point was inside. That cost one of six runs.
 - What the team should change next time: in the plan generator, test player spots against every footprint polygon (point-in-polygon), not only wall-segment distance. Keep the render-first ratio method as the default for colour rounds.
+
+### ti-visual-review — 2026-10-28 — M4 mixed (1224, 1204, 1243 unchanged; 367 recoloured)
+
+- What worked well: the M2a lesson was applied properly. Shaded photo against shaded render, the same boxes in both, and leaving units unchanged when the ratios already match avoided another round of over-correction. 367's rust roof and warmer walls are visibly closer, and 549's honest exclusion avoided a weak verdict.
+- What did not work well: 367's main identity feature, the open timber lean-to or canopy on the street-end gable, was filed as a "non-colour flag" without checking whether it falls inside the OSM footprint. That decides whether it's the building's job or the setting's. The matched pose for 367 is also more frontal and distant than the 37 m oblique photo.
+- What the team should change next time: for any attached structure flagged in triage, record whether it is inside the frozen footprint (building) or outside (setting) before review. When the pano pose is oblique and the render differs strongly, fit the camera to the visible eave and corner points rather than reusing the pano heading alone.
