@@ -22012,3 +22012,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the triage named both real gaps (1248's carport extent and 1247's hue), and the binding overlays settled identity for the long rows, which have no corners to fit. The extra street-position render for 1248 isolated the carport contradiction from camera placement. Siblings rendering correctly in the same batch (1250's blue-grey, 1214/1218's carport bays) gave ready fix templates.
 - What did not work well: 1248's pano camera falls under the modelled carport, so the main matched view is dominated by a structure the photo shows only at one end. A setting element can decide a whole-unit verdict, yet it was filed as "parked setting". 1247's SE photo is 42 m away and shows mostly white, so its blue-grey only shows in the Sep 2025 end photo, and the two photos need reading together.
 - What the team should change next time: treat any feature attached to the building config that blocks the matched street view (carports, canopies) as part of the whole-unit check, not as parked setting. When a unit has photos from two dates or sides, state in triage which photo carries the colour evidence.
+
+### ti-visual-review — 2026-10-28 — 1248/1395 carport re-check
+
+- What worked well: the before/after pair at both the street camera and the pano camera, plus the stated frame-width figure (57% against the photo's 61%), made the trim verifiable in one look.
+- What did not work well: there was no neutral re-render, and the remaining asphalt apron in front of the left units (lawn in the photo) belongs to ground or area data rather than the building config. It stays, and a reviewer has to decide whether it counts.
+- What the team should change next time: when a building fix leaves a ground-surface mismatch, log it as a setting item with the area ID so a later ground pass can pick it up, rather than leaving it in a review note.
