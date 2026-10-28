@@ -39,6 +39,9 @@ const SE_FACE_RUNS := [63, 64, 65, 66, 67, 68, 69]
 const REAR_RIBBON_HOST_CHAINS := [[70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83]]
 # SE shoulder block carrying the observed small and tall drum-end openings.
 const SE_SHOULDER_RUNS := [69, 70]
+## Inward face of a two-sided setback wall sits this far behind the outward
+## face, so the two never tie in depth (or in a ray probe).
+const SETBACK_INWARD_FACE_INSET_M := 0.02
 const PHYSICS_WORLD_SOLID := 1 << 0
 const PHYSICS_SPRAY_SURFACE := 1 << 2
 const RENDER_WORLD_VISIBLE := 1 << 0
@@ -288,6 +291,8 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	# tier's exact rear (inner) face. Visual relief only, high above any
 	# walkable surface; the face, its material and collision are unchanged.
 	var drum_banding_on_rear_outline := _append_drum_banding(buckets.trim, record, central_runs, central_depth, front.drum_banding as Dictionary)
+	if not drum_banding_on_rear_outline:
+		push_warning("Building 1 hero: the drum's rear outline did not resolve; the rear drum banding was omitted.")
 	var seams := schedule.protected_seam_piers as Dictionary
 	_append_seam_pier(buckets.trim, collision, record, int(seams.north_run_start), true, front)
 	_append_seam_pier(buckets.trim, collision, record, int(seams.south_run_end), false, front)
@@ -399,16 +404,20 @@ static func _build_building_roof(record: Dictionary, wall_record: Dictionary, co
 	var south_depth := float(vertical.south_wing_inward_depth)
 	_append_strip_roof(roof, collision, wall_record, south_runs, three_y, south_depth, tier_clip, se_cuts)
 	var continuous := _append_canopy(canopy, soffit, collision, wall_record, _int_array(schedule.central_runs), field_runs, crescent, front)
-	# Thin mast on the drum roof (Sep 2025 WSW and SW Street Views, triangulated
-	# to about (22.6, 739.6); 18 Jul 2023 rear view). Solid, non-receiver.
+	# Thin dark mast on the drum roof near its south end, placed and sized by
+	# fitted-camera triangulation of the Sep 2025 SW and WSW Street Views and
+	# the 18 Jul 2023 rear photograph (see the b1-roof study notes). Solid,
+	# non-receiver.
 	var mast := _bucket()
 	var mast_placed := _append_drum_mast(mast, collision, wall_record, _int_array(chains.central_four_story_runs), float(vertical.central_inward_depth), four_y, front.drum_mast as Dictionary)
+	if not mast_placed:
+		push_warning("Building 1 hero: the configured drum mast point is not on the drum roof; the mast was omitted.")
 	var root := _hero_root("Building1HeroRoof", record, "building_roof")
 	var specs: Array[Dictionary] = [
 		{"name": "HeroSteppedRoof", "bucket": roof, "material": ROOF_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
 		{"name": "HeroEntranceCanopy", "bucket": canopy, "material": PUBLIC_TRIM_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
 		{"name": "HeroEntranceCanopySoffit", "bucket": soffit, "material": PUBLIC_WALL_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
-		{"name": "HeroDrumMast", "bucket": mast, "material": PUBLIC_TRIM_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
+		{"name": "HeroDrumMast", "bucket": mast, "material": PUBLIC_FRAME_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
 	]
 	var metadata := _common_metadata(config, record, "building_roof")
 	metadata["reachable_roof_tier_y"] = [two_y, three_y, four_y]
@@ -943,7 +952,10 @@ static func _append_cut_polygon(visual: Dictionary, collision: Dictionary, polyg
 					kept.append(remainder)
 		pieces = kept
 	for piece in pieces:
-		for triangle in _polygon_triangles(piece):
+		var triangles := _polygon_triangles(piece)
+		if triangles.is_empty():
+			push_warning("Building 1 hero: a %.3f m2 roof piece at y %.2f could not be triangulated and was dropped." % [absf(_ring_area(piece)), y])
+		for triangle in triangles:
 			var a := Vector3(triangle[0].x, y, triangle[0].y)
 			var b := Vector3(triangle[1].x, y, triangle[1].y)
 			var c := Vector3(triangle[2].x, y, triangle[2].y)
@@ -1424,7 +1436,7 @@ static func _append_setback_storey(wall_visual: Dictionary, floor_visual: Dictio
 		for target: Dictionary in [wall_visual, collision]:
 			_append_vertical_face(target, a, b, low_y, high_y, normal)
 			if both_sides:
-				_append_vertical_face(target, b - normal * 0.02, a - normal * 0.02, low_y, high_y, -normal)
+				_append_vertical_face(target, b - normal * SETBACK_INWARD_FACE_INSET_M, a - normal * SETBACK_INWARD_FACE_INSET_M, low_y, high_y, -normal)
 		if with_floor:
 			var oa := _lifted(outer_points[segment] as Vector3, low_y)
 			var ob := _lifted(outer_points[segment + 1] as Vector3, low_y)
