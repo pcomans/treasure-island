@@ -22144,3 +22144,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: per-element sampling with box coordinates in the task note made every change traceable. Direct sampling for the sunlit photos (1436, 1438, 1440) improved doors, shutters and brick bases.
 - What did not work well: the ×1.38 brightening for shaded photos to a cream luminance of 0.86 keeps the measured ratios, but the matched render's front is also in shade. The result renders washed-out grey-cream where the photo is clearly tan-beige, so 1437, 1443 and 1420 got worse than BEFORE. A rule that assumes the wall is "cream" builds in the answer.
 - What the team should change next time: for shaded photos, compare the photo and the render under the same lighting (shade against shade) instead of brightening the photo to an assumed luminance. When the render face is also shaded, keep the BEFORE value unless the side-by-side shows a hue mismatch. Check every change against a photo | BEFORE | AFTER strip before calling it fixed.
+
+### push-coordinator-m2a — 2026-10-28 — M2a Chinook record and push (7 units)
+
+- What worked well: queuing M2a behind the running M2b chain, instead of restarting it, meant no suite run was thrown away. The cherry-pick, keep-both RETRO script, config-identity diff against the reviewed `d18fa07..f72f29c` and the anchored catalog patch all ran unchanged from the earlier pushes.
+- What did not work well: M2a arrived minutes after M2b's chain started, so it needed its own ~15-minute chain; four pushes in a row each paid for import, the 1223 sentinel and the full suite.
+- What the team should change next time: when batches finish close together, wait a few minutes for the next one before starting a push chain, so one chain covers both.

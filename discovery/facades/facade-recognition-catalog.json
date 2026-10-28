@@ -2379,14 +2379,25 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "code-review-ti-code-review-m2a-chinook-20261028",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-ti-visual-review-m2a-chinook-20261028",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w95934098",
       "stairs": [{"bottom": [-287.4659, -116.3387], "top": [-284.7969, -111.2796]}, {"bottom": [-295.2135, -112.2513], "top": [-292.5444, -107.1922]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -2876,14 +2887,25 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "code-review-ti-code-review-m2a-chinook-20261028",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-ti-visual-review-m2a-chinook-20261028",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w95934107",
       "stairs": [{"bottom": [-444.819, -221.4675], "top": [-449.4521, -219.151]}, {"bottom": [-448.493, -229.4194], "top": [-453.3677, -226.9821]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -3057,14 +3079,25 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "code-review-ti-code-review-m2a-chinook-20261028",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-ti-visual-review-m2a-chinook-20261028",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w95934113",
       "stairs": [{"bottom": [-324.9292, 12.6858], "top": [-322.333, 17.7827]}, {"bottom": [-332.7291, 16.6587], "top": [-330.133, 21.7556]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -4050,14 +4083,25 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "code-review-ti-code-review-m2a-chinook-20261028",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-ti-visual-review-m2a-chinook-20261028",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w95934129",
       "stairs": [{"bottom": [-257.4148, -50.648], "top": [-260.0792, -55.7096]}, {"bottom": [-249.6669, -54.7266], "top": [-252.3313, -59.7881]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -4140,14 +4184,25 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "code-review-ti-code-review-m2a-chinook-20261028",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-ti-visual-review-m2a-chinook-20261028",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w95934131",
       "stairs": [{"bottom": [-292.4291, -31.9134], "top": [-294.9614, -36.7394]}, {"bottom": [-284.6741, -35.9827], "top": [-287.2064, -40.8087]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -4314,14 +4369,25 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "code-review-ti-code-review-m2a-chinook-20261028",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-ti-visual-review-m2a-chinook-20261028",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w95934137",
       "stairs": [{"bottom": [-340.5447, -6.328], "top": [-342.9577, -11.2147]}, {"bottom": [-332.5714, -9.9639], "top": [-335.1038, -15.0928]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -4494,14 +4560,25 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "code-review-ti-code-review-m2a-chinook-20261028",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-ti-visual-review-m2a-chinook-20261028",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w95934143",
       "stairs": [{"bottom": [-222.0475, -44.005], "top": [-218.5476, -39.4807]}, {"bottom": [-228.9736, -38.6472], "top": [-225.4737, -34.1229]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
