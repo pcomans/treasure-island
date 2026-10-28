@@ -179,9 +179,9 @@
     },
     "siding_grey": {
       "rgb": [
-        0.62,
-        0.62,
-        0.6
+        0.65,
+        0.6,
+        0.54
       ],
       "roughness": 0.85
     },
@@ -203,9 +203,9 @@
     },
     "boarded": {
       "rgb": [
-        0.84,
-        0.83,
-        0.79
+        0.57,
+        0.53,
+        0.49
       ],
       "roughness": 0.9
     },
@@ -652,6 +652,7 @@
   "study_notes": {
     "observed": "Feb 2018 13th St (NNE, partial): grey/taupe lap siding, a white belt and downpipes, upper windows, boarded lower openings; Apple overhead: grey roof.",
     "inferred": "Level 1 massing: two storeys under the overhead roof colour, gable ridges along the long axis, flat lower connectors, windows and one entrance per accessible side. The boarded lower openings on the NNE side are as observed.",
-    "footprint": "Frozen ring split into convex gabled rows and flat connector pieces."
+    "footprint": "Frozen ring split into convex gabled rows and flat connector pieces.",
+    "colour_m5": "2026-10-28 colour opt-in: current albedo x (Feb 2018 NNE photo / neutral render) at matched wall and boarded-opening patches: siding_grey 0.62,0.62,0.60 -> 0.65,0.60,0.54 (warm taupe-grey); boarded 0.84,0.83,0.79 -> 0.57,0.53,0.49 (boards read close to the wall, not cream)"
   }
 }

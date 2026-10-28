@@ -22204,3 +22204,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: one chain for three batches, as the previous retro asked, cost one suite instead of three. A per-file comparison showed every game and tool file in the combined tree equals its reviewed branch tip, and the RETRO diff against origin/main removes no lines.
 - What did not work well: the shared "367 canopy re-check and L1 panel halls" visual-review entry was committed on both the M4 and L1 branches. The second cherry-pick applied cleanly and silently duplicated it, so I removed the identical second copy in the record commit.
 - What the team should change next time: when one review covers two branches, commit its RETRO entry on one branch only and name that branch in the other's handoff. Before each push, check the combined RETRO for duplicate headings.
+
+### modeler-m5 — 2026-10-28 — census and M5 (1107 Bigelow colour; 1223 Mariner review-only)
+
+- What worked well: re-checking each census candidate by drawing its footprint over the photo turned "has a photo" into "the photo shows this facade". That cut the candidate list from six to two before any engine run. The ratio method again separated real albedo gaps (1107's warm taupe, boards near wall colour) from lighting differences (1223's under-carport shade).
+- What did not work well: I copied the 1223 photo's recorded Maps "FOV 75" into the render. It over-zoomed the BEFORE view about 2.3x, while the f 387 default matched the footprint drawn over the photo. With a 4-run budget that left the 1223 sheet without a pose-matched BEFORE.
+- What the team should change next time: before rendering a matched view, check the planned field of view against the footprint drawn over the photo, not against the capture note. Spend the digest run only where shared-material or geometry change is possible.
