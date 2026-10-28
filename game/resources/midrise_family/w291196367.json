@@ -423,7 +423,8 @@
       "clip": [
         {
           "edge": 0,
-          "max": 12.69
+          "max": 12.69,
+          "s_max": 32.59
         }
       ],
       "parapet": {
@@ -445,6 +446,35 @@
         "e11": "gable_n",
         "default": "inner"
       }
+    },
+    {
+      "id": "canopy_s",
+      "storeys": 1,
+      "ground_h": 4.2,
+      "clip": [
+        {
+          "edge": 0,
+          "max": 12.69,
+          "s_min": 32.59
+        }
+      ],
+      "parapet": {
+        "h": 0.0
+      },
+      "roof": {
+        "form": "gable",
+        "ridge_edge": 0,
+        "pitch_deg": 15.0,
+        "overhang": 0.3,
+        "t": 0.12,
+        "under": "soffit",
+        "fascia": "fascia"
+      },
+      "roof_material": "roof_rust",
+      "faces": {
+        "default": "carport"
+      },
+      "open_sided": true
     },
     {
       "id": "leanto_s",
@@ -541,6 +571,7 @@
   "study_notes": {
     "observed": "Sep 2025 899 13th St: long beige corrugated shed with a rusty gable roof and an open gabled carport on timber posts beside parking.",
     "inferred": "Lean-to annexes in the other two steps of the ENE side, doors, roll-ups and louvres; pitches and heights.",
-    "footprint": "Frozen 12-edge ring kept; the 12.69 m WSW strip is the gable shed, the stepped ENE side splits into two lean-tos and the open carport."
+    "footprint": "Frozen 12-edge ring kept; the 12.69 m WSW strip is the gable shed, the stepped ENE side splits into two lean-tos and the open carport.",
+    "m4_canopy": "2026-10-28 M4 re-check: the Sep 2025 photo shows the street (south) end as an open timber canopy under the continued rust gable roof, with the enclosed gable wall set back about 4.5 m; a camera fitted to the eave corner, canopy apex and canopy eaves (rms 1.4 px) puts the canopy front on the frozen south footprint edge, so the last 4.5 m of the shed block becomes an open canopy_s block on timber posts (carport scheme)"
   }
 }

@@ -757,8 +757,10 @@ static func _spans(ctx: Ctx, block: Block, i: int) -> Array:
 	var side := Vector2(-d.y, d.x)
 	var covers: Array = []
 	for other: Block in ctx.blocks:
-		# An open pergola has no roof slab, so it never hides a neighbour's wall.
-		if other == block or other.cfg.has("pergola"):
+		# An open pergola has no roof slab, so it never hides a neighbour's wall. An
+		# opt-in "open_sided": true block (an open canopy on posts) keeps its roof but
+		# also leaves the neighbour's wall standing behind it.
+		if other == block or other.cfg.has("pergola") or bool(other.cfg.get("open_sided", false)):
 			continue
 		for j in other.poly.size():
 			var qa := other.poly[j]
