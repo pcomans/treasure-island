@@ -22048,3 +22048,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: reusing the matched-pose plans from S3, S6 and S8 meant no new camera work for 9 of 13 units. Recording the real start time inside the flock (`flock LOCK sh -c 'date; cmd'`) made the logs show serial engine use correctly.
 - What did not work well: the family digest does not see ShaderMaterial colour parameters, so it reported only 1108 as changed. Colour-only rounds need the pixel diff as evidence of change, with the digest showing only that geometry is unchanged. For 1449 the photo measurement (neutral wing walls) conflicts with the reviewer's warm-beige target.
 - What the team should change next time: add the siding shader's wall_color to the private digest when colour rounds are routine. When a measurement contradicts a review target, report both and let the reviewer decide, not split the difference.
+
+### ti-visual-review — 2026-10-28 — colour opt-in round (13 units)
+
+- What worked well: batching every logged hue follow-up into one config-only round with photo | BEFORE neutral | AFTER neutral | AFTER game lighting per unit made the judgement quick. The modeler's photo-sampled RGBs (1449, 1419, 1403) were more reliable than my reviewer targets taken from thumbnails, and flagging the 1449 conflict was right.
+- What did not work well: several of my earlier targets were set from sheet thumbnails, not sampled pixels. 1449's warm target overshoots the photo's pale wings. 1247's copied blue-grey is darker than its own front photo, and 1403's minimal nudge left a visible gap. Shaded matched faces (29E under its veranda) make neutral-render hue hard to compare.
+- What the team should change next time: give colour targets as sampled photo RGB from a sunlit wall patch, with the sample location, instead of descriptive words. Let the modeler's sampled value win when it disagrees with a reviewer's descriptive target, and flag only real conflicts.
