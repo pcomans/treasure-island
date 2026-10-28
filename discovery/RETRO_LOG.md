@@ -22210,3 +22210,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: re-checking each census candidate by drawing its footprint over the photo turned "has a photo" into "the photo shows this facade". That cut the candidate list from six to two before any engine run. The ratio method again separated real albedo gaps (1107's warm taupe, boards near wall colour) from lighting differences (1223's under-carport shade).
 - What did not work well: I copied the 1223 photo's recorded Maps "FOV 75" into the render. It over-zoomed the BEFORE view about 2.3x, while the f 387 default matched the footprint drawn over the photo. With a 4-run budget that left the 1223 sheet without a pose-matched BEFORE.
 - What the team should change next time: before rendering a matched view, check the planned field of view against the footprint drawn over the photo, not against the capture note. Spend the digest run only where shared-material or geometry change is possible.
+
+### ti-visual-review — 2026-10-28 — M5 1107 Bigelow and 1223 Mariner
+
+- What worked well: separating 1223's sentinel constraint (no geometry change) from the visual verdict let the review judge recognition honestly and route the carport difference to its own future round instead of blocking. 1107's taupe shift is a clean, visible improvement against its only photo.
+- What did not work well: 1223's BEFORE column was rendered at a different focal length, so BEFORE and AFTER can't be compared pixel for pixel. 1107's only reference is from Feb 2018, with trees and a parked car covering much of the facade, which limits how much a colour verdict can claim.
+- What the team should change next time: render every sheet column with the same camera definition, and treat a focal mismatch as a sheet bug to fix before review. For units whose only photo is older than about five years, add a quick check for a newer frame before the colour round.
