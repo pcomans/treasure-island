@@ -22084,3 +22084,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the rebase onto a45f5cb had one RETRO_LOG end-of-file conflict, resolved by keeping both sides; a check showed the rebased diff against origin/main removes no RETRO lines. Anchoring the catalog patch on the two units' shared last review_id, with an assertion that it occurs exactly twice and a JSON comparison showing only appended `acceptance_records`, made the two-unit edit one step; the score stayed at 131.
 - What did not work well: the brief's commits carry the modeler and code-review RETRO entries but no entry from the Codex Sol visual reviewer, so its retrospective has to come from that reviewer's own round.
 - What the team should change next time: when a fix branch is cut before a record batch lands on main, rebase it before the reviews finish so the coordinator inherits fewer conflicts; keep including each reviewer's RETRO entry in the branch it reviewed.
+
+### modeler-accept-s9 — 2026-10-28 — acceptance batch S9 (Avenue M plant sheds and tanks, review only) and the 1248/S6 fits
+
+- What worked well: queuing the seven 1248/S6 fits on `engine-A.lock` while building the S9 sheets kept the slot full without polling. Every fit passed first time from 4 m, because the spray targets were the earlier end-wall plans moved out along their own approach line, with no new target guessing.
+- What did not work well: the plant photos are mostly through chain-link fences, so binding for the low basins (369, 382) rests on the footprint overlay rather than visible geometry; 382 is effectively not photographed. Lock waits behind other owners spread the seven fits over 22 minutes.
+- What the team should change next time: for compound-interior units, flag the low-association ones (382) to the reviewer up front instead of rendering them like the photographed ones. Consider one wide compound view for each plant.
