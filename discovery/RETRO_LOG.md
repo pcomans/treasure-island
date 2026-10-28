@@ -22186,3 +22186,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the producer change is one guarded condition in `_spans`, so opt-in and no-change for other units were clear from the diff. Following the clip planes showed that shed and canopy_s share the s = 32.59 plane exactly.
 - What did not work well: shortening the shed moved its south gable wall off footprint edge e1, so it fell back to the `inner` scheme. The `gable_s` scheme, with its garage door, is now unused. That only showed up by tracing face keys through FACE_BAND_M.
 - What the team should change next time: when a block split moves a wall off its footprint edge, re-key the moved face explicitly (for example `"return": "gable_s"`), and list unused schemes in the digest.
+
+### modeler-l1-halls — 2026-10-28 — L1 panel halls 449, 368, 516 (form first) and M4 367 canopy
+
+- What worked well: photo-against-render comparison at the matched pose, done before any colour work, isolated the one form gap two photos supported (449's projecting eave). A small private all-hall digest proved the opt-in leaves the other six halls identical.
+- What did not work well: on 367, a fit on four near-end points looked conclusive (1.4 px), but adding the far end of the wall exposed a poorly placed pano. The first canopy render also showed that any adjacent block hides a neighbour's wall in the midrise producer, so an open canopy left the shed hollow.
+- What the team should change next time: always fit with points spread across the whole facade before trusting a pose, and report fit failures. When adding open blocks next to closed ones, check the wall behind them in a close view before handing back.

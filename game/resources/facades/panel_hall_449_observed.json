@@ -134,7 +134,11 @@
       78.51
      ]
     }
-   ]
+   ],
+   "eave": {
+    "depth": 0.9,
+    "thickness": 0.32
+   }
   },
   {
    "upper_slots": true,
@@ -190,7 +194,11 @@
       33.74
      ]
     }
-   ]
+   ],
+   "eave": {
+    "depth": 0.9,
+    "thickness": 0.32
+   }
   },
   {
    "upper_slots": true,
@@ -272,7 +280,11 @@
       78.51
      ]
     }
-   ]
+   ],
+   "eave": {
+    "depth": 0.9,
+    "thickness": 0.32
+   }
   },
   {
    "upper_slots": true,
@@ -327,7 +339,11 @@
       33.74
      ]
     }
-   ]
+   ],
+   "eave": {
+    "depth": 0.9,
+    "thickness": 0.32
+   }
   }
  ],
  "palette": {
@@ -370,6 +386,11 @@
    0.52,
    0.45,
    0.36
+  ],
+  "soffit": [
+   0.8,
+   0.77,
+   0.68
   ]
  },
  "site": {}

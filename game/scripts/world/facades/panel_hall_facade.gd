@@ -137,7 +137,16 @@ static func build(record: Dictionary) -> Dictionary:
 		for end_index in 2:
 			if bool(piers[end_index]):
 				_box(root,"TerminalPier",a,t,n,[.16,length-.16][end_index],(floor_y+top-.16)/2.0,.24,Vector3(.32,top-.16-floor_y,.46),materials.structure,"wall")
-		_box(root,"ThinCoping",a,t,n,length/2.0,top-.065,.18,Vector3(length,.13,.52),materials.coping,"detail")
+		if spec.has("eave"):
+			# Opt-in projecting eave {"depth": m, "thickness": m}: a soffit slab and fascia
+			# beyond the wall in place of the thin coping, run past both chain ends by the
+			# depth so neighbouring chains close the corners. Dimensions are production inference.
+			var eave: Dictionary=spec.eave
+			var depth := float(eave.depth); var thick := float(eave.thickness)
+			_box(root,"EaveSoffit",a,t,n,length/2.0,top-thick/2.0,depth/2.0,Vector3(length+2.0*depth,thick,depth+.30),materials.get("soffit",materials.upper),"detail")
+			_box(root,"EaveFascia",a,t,n,length/2.0,top-thick/2.0,depth+.15+.04,Vector3(length+2.0*depth+.08,thick+.06,.08),materials.coping,"detail")
+		else:
+			_box(root,"ThinCoping",a,t,n,length/2.0,top-.065,.18,Vector3(length,.13,.52),materials.coping,"detail")
 		if bool(spec.get("terminal_projection",false)):
 			_box(root,"PaleEndProjection",a,t,n,length-2.10,(floor_y+top-.18)/2.0,.73,Vector3(4.20,top-.18-floor_y,1.48),materials.upper,"wall")
 			_box(root,"ProjectionLowerField",a,t,n,length-2.10,(floor_y+split)/2.0,1.49,Vector3(4.20,split-floor_y,.045),materials.lower,"wall")
@@ -175,6 +184,8 @@ static func _chain_problem(spec: Dictionary,v: Array,top: float)->String:
 		return "slot_top_offset must be a number of at least 0"
 	if spec.has("split_below_top") and (not _numbers([spec.split_below_top],1) or float(spec.split_below_top)<=0.0):
 		return "split_below_top must be a positive number"
+	if spec.has("eave") and (not spec.eave is Dictionary or not _numbers([spec.eave.get("depth"),spec.eave.get("thickness")],2) or float(spec.eave.depth)<=0.0 or float(spec.eave.depth)>2.0 or float(spec.eave.thickness)<=0.0 or float(spec.eave.thickness)>1.0):
+		return "eave needs depth in (0, 2] m and thickness in (0, 1] m"
 	if spec.has("terminal_piers") and (not spec.terminal_piers is Array or spec.terminal_piers.size()!=2 or not spec.terminal_piers[0] is bool or not spec.terminal_piers[1] is bool):
 		return "terminal_piers needs two booleans [start, end]"
 	var split := top-float(spec.get("split_below_top",4.0))
