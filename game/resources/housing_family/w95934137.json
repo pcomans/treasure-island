@@ -1339,9 +1339,9 @@
       0.25
     ],
     "siding_rgb": [
-      0.94,
-      0.93,
-      0.9
+      0.97,
+      0.97,
+      0.95
     ],
     "trim_rgb": [
       0.95,
@@ -1349,14 +1349,14 @@
       0.92
     ],
     "door_rgb": [
-      0.6,
-      0.15,
-      0.15
+      0.78,
+      0.34,
+      0.31
     ],
     "garage_door_rgb": [
-      0.75,
-      0.7,
-      0.66
+      0.8,
+      0.74,
+      0.71
     ],
     "garage_reveal_rgb": [
       0.5,
@@ -3181,9 +3181,9 @@
     }
   ],
   "lower_siding_rgb": [
-    0.88,
-    0.84,
-    0.74
+    0.92,
+    0.9,
+    0.83
   ],
   "exterior_stairs": [
     {
@@ -6405,6 +6405,7 @@
       "rear": "Mar2025 from Avenue B (44 m, behind 1444): distant end/rear; fish-street rear module as production_inference."
     },
     "eave": "Wall top 8.427 = design base 3.177 (frozen flat base 3.022, raised to the garage-front grade) + 5.25 m from dated frontal proportions (production_inference); source height 6 m retained as identity only",
-    "limits": "Fences, walkways, lawn, landscaping, accessible ramps (1406, 1433, 1440), downspouts, pier and garage-zone board textures, the 1404 connector brick wainscot and trees are parked for later levels. No recognition or stage acceptance claim."
+    "limits": "Fences, walkways, lawn, landscaping, accessible ramps (1406, 1433, 1440), downspouts, pier and garage-zone board textures, the 1404 connector brick wainscot and trees are parked for later levels. No recognition or stage acceptance claim.",
+    "colour_m2a": "2026-10-28 colour opt-in from sampled photo pixels (sunlit values direct; shaded or overcast photos normalised to a cream/white wall reference); keys changed: door_rgb, garage_door_rgb, lower_siding_rgb, siding_rgb"
   }
 }

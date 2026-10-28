@@ -1715,9 +1715,9 @@
       0.25
     ],
     "siding_rgb": [
-      0.92,
-      0.88,
-      0.78
+      0.95,
+      0.93,
+      0.86
     ],
     "trim_rgb": [
       0.94,
@@ -1725,13 +1725,13 @@
       0.89
     ],
     "door_rgb": [
+      0.14,
       0.18,
-      0.32,
-      0.24
+      0.15
     ],
     "garage_door_rgb": [
-      0.72,
-      0.66,
+      0.76,
+      0.71,
       0.68
     ],
     "garage_reveal_rgb": [
@@ -1745,9 +1745,9 @@
       0.24
     ],
     "shutter_rgb": [
-      0.55,
-      0.48,
-      0.42
+      0.63,
+      0.62,
+      0.6
     ]
   },
   "facade": {
@@ -6747,7 +6747,8 @@
       "rear": "Mar2025 oblique from Croaker Court (~49 m): end and rear; fish-street rear module as production_inference."
     },
     "eave": "Wall top 8.461 = design base 3.211 (frozen flat base 3.138, raised to the garage-front grade) + 5.25 m from dated frontal proportions (production_inference); source height 6 m retained as identity only",
-    "limits": "Fences, walkways, lawn, landscaping, accessible ramps (1406, 1433, 1440), downspouts, pier and garage-zone board textures, the 1404 connector brick wainscot and trees are parked for later levels. No recognition or stage acceptance claim."
+    "limits": "Fences, walkways, lawn, landscaping, accessible ramps (1406, 1433, 1440), downspouts, pier and garage-zone board textures, the 1404 connector brick wainscot and trees are parked for later levels. No recognition or stage acceptance claim.",
+    "colour_m2a": "2026-10-28 colour opt-in from sampled photo pixels (sunlit values direct; shaded or overcast photos normalised to a cream/white wall reference); keys changed: door_rgb, garage_door_rgb, shutter_rgb, siding_rgb"
   },
   "run_siding_rgb": {
     "5": [

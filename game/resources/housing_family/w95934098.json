@@ -1726,14 +1726,14 @@
       0.9
     ],
     "door_rgb": [
-      0.6,
-      0.15,
-      0.15
+      0.46,
+      0.3,
+      0.24
     ],
     "garage_door_rgb": [
-      0.8,
-      0.4,
-      0.28
+      0.72,
+      0.45,
+      0.35
     ],
     "garage_reveal_rgb": [
       0.54,
@@ -1746,8 +1746,8 @@
       0.24
     ],
     "shutter_rgb": [
-      0.82,
-      0.5,
+      0.75,
+      0.49,
       0.38
     ]
   },
@@ -3512,9 +3512,9 @@
     }
   ],
   "lower_siding_rgb": [
-    0.8,
-    0.44,
-    0.32
+    0.82,
+    0.64,
+    0.5
   ],
   "exterior_stairs": [
     {
@@ -11712,6 +11712,7 @@
       "rear": "Unobserved; fish-street rear module as production_inference."
     },
     "eave": "Wall top 8.343 = design base 3.093 (frozen flat base 3.093) + 5.25 m from dated frontal proportions (production_inference); source height 6 m retained as identity only",
-    "limits": "Fences, walkways, lawn, landscaping, accessible ramps (1406, 1433, 1440), downspouts, pier and garage-zone board textures, the 1404 connector brick wainscot and trees are parked for later levels. Demolished since 2019: modeled from the April 2019 imagery because the frozen OSM is authoritative. No recognition or stage acceptance claim."
+    "limits": "Fences, walkways, lawn, landscaping, accessible ramps (1406, 1433, 1440), downspouts, pier and garage-zone board textures, the 1404 connector brick wainscot and trees are parked for later levels. Demolished since 2019: modeled from the April 2019 imagery because the frozen OSM is authoritative. No recognition or stage acceptance claim.",
+    "colour_m2a": "2026-10-28 colour opt-in from sampled photo pixels (sunlit values direct; shaded or overcast photos normalised to a cream/white wall reference); keys changed: door_rgb, garage_door_rgb, lower_siding_rgb, shutter_rgb"
   }
 }

@@ -22132,3 +22132,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: taking M2b as the next push after the S9+M1 chain, rather than restarting that chain, kept the engine-A slot busy with no wasted suite run. The keep-both RETRO script and the anchored catalog patch from the S9/M1 push were reused unchanged (scan window widened for units with a catalog `stairs` block), and a diff showed the cherry-picked configs are byte-for-byte the reviewed `058c7a8` change.
 - What did not work well: three back-to-back pushes each repeated the same end-of-file RETRO conflict and the same full suite; the work was routine, but every batch paid for a ~11-minute suite.
 - What the team should change next time: when several reviewed batches are ready within the same hour, hand them to the push coordinator together so one chain covers them, as the S9+M1 push did.
+
+### modeler-m2a — 2026-10-28 — M2a garage-court colour fixes (1436, 1437, 1438, 1440, 1443, 1420, 1435)
+
+- What worked well: sampling fixed boxes on each photo and writing the box, sample, before and after values into one table made every colour change traceable, as the reviewer's lesson asks. The housing digest confirmed colour-only edits (identical face hashes on all 7) without a render.
+- What did not work well: three of the seven photos are in shade and one is overcast, so absolute albedo needs a normalisation rule (x1.38 to a cream wall, or per channel to a reference wall). That rule is a judgement call the reviewer should check. Sunlit white walls clip at 0.99, so they bound the white only from below.
+- What the team should change next time: prefer sunlit dated photos for colour rounds where they exist, and record the normalisation rule next to the sampled values. Also, the S9 366 spray plan from the sheds round had never been run; it aimed above the deck knee walls and failed with range_rejection. Validate inherited spray plans against the actual receiver roles before a fit run.
