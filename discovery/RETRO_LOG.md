@@ -22180,3 +22180,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: 367's canopy came back as a clean geometry answer to the earlier footprint question, and the sheet included the reviewer's own photo crop beside a close south view, which made the comparison direct. For the halls, putting form first (silhouette, storeys, eave) before colour kept the review on what matters for recognition, and the private all-hall digest showed the new eave key changed only 449.
 - What did not work well: 449's flagged colour gap (cream walls in the photos against the model's blue-grey) was known before rendering but left for a later round, so the hall passes on form with a visible hue gap. 516's matched views include a tree-hidden side (sideA) that shows a tan wall, which could be 516 or the separate cream annex. The binding table doesn't say which.
 - What the team should change next time: when two photos agree on a dominant wall colour, fix it in the same round as the form change instead of parking it. In binding tables, name the footprint for every visible wall in each photo, especially where an annex adjoins the target.
+
+### ti-code-review — 2026-10-28 — 367 open_sided canopy c77b190
+
+- What worked well: the producer change is one guarded condition in `_spans`, so opt-in and no-change for other units were clear from the diff. Following the clip planes showed that shed and canopy_s share the s = 32.59 plane exactly.
+- What did not work well: shortening the shed moved its south gable wall off footprint edge e1, so it fell back to the `inner` scheme. The `gable_s` scheme, with its garage door, is now unused. That only showed up by tracing face keys through FACE_BAND_M.
+- What the team should change next time: when a block split moves a wall off its footprint edge, re-key the moved face explicitly (for example `"return": "gable_s"`), and list unused schemes in the digest.

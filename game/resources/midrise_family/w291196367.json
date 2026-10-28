@@ -444,7 +444,8 @@
         "e0": "long_front",
         "e1": "gable_s",
         "e11": "gable_n",
-        "default": "inner"
+        "default": "inner",
+        "return": "gable_s"
       }
     },
     {
