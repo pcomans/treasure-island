@@ -1778,9 +1778,9 @@
   ],
   "materials": {
     "siding_rgb": [
-      0.72,
-      0.7,
-      0.65
+      0.68,
+      0.66,
+      0.62
     ],
     "trim_rgb": [
       0.93,
@@ -2403,6 +2403,7 @@
       "north": "Unobserved; left blank as production_inference."
     },
     "eave": "Wall top 7.814 = frozen flat base 2.514 + 5.3 m from dated photo proportions (production_inference); source height 6 m retained as identity only",
-    "limits": "Fences, vent pipes, post bands, carport-top finish (shared canopy uses the roof material), finish materials, site and decals parked for later levels. No recognition or stage acceptance claim."
+    "limits": "Fences, vent pipes, post bands, carport-top finish (shared canopy uses the roof material), finish materials, site and decals parked for later levels. No recognition or stage acceptance claim.",
+    "colour_m3": "2026-10-28 colour opt-in: current albedo x (Apr 2019/Mar 2025 photo sample / neutral render sample at the matched view); keys changed: siding_rgb"
   }
 }

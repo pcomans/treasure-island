@@ -1776,9 +1776,9 @@
   ],
   "materials": {
     "siding_rgb": [
-      0.92,
+      0.91,
       0.89,
-      0.8
+      0.81
     ],
     "trim_rgb": [
       0.93,
@@ -2401,6 +2401,7 @@
       "ne": "Apr2019 (4cDG; ref 1120-lot right edge): blank lap-sided gable end."
     },
     "eave": "Wall top 7.444 = frozen flat base 2.144 + 5.3 m from dated photo proportions (production_inference); source height 6 m retained as identity only",
-    "limits": "Fences, vent pipes, post bands, carport-top finish (shared canopy uses the roof material), finish materials, site and decals parked for later levels. No recognition or stage acceptance claim."
+    "limits": "Fences, vent pipes, post bands, carport-top finish (shared canopy uses the roof material), finish materials, site and decals parked for later levels. No recognition or stage acceptance claim.",
+    "colour_m3": "2026-10-28 colour opt-in: current albedo x (Apr 2019/Mar 2025 photo sample / neutral render sample at the matched view); keys changed: siding_rgb"
   }
 }

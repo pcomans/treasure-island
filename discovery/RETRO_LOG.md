@@ -22150,3 +22150,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: queuing M2a behind the running M2b chain, instead of restarting it, meant no suite run was thrown away. The cherry-pick, keep-both RETRO script, config-identity diff against the reviewed `d18fa07..f72f29c` and the anchored catalog patch all ran unchanged from the earlier pushes.
 - What did not work well: M2a arrived minutes after M2b's chain started, so it needed its own ~15-minute chain; four pushes in a row each paid for import, the 1223 sentinel and the full suite.
 - What the team should change next time: when batches finish close together, wait a few minutes for the next one before starting a push chain, so one chain covers both.
+
+### modeler-m3 — 2026-10-28 — M3 Site 12 colour fixes (1111, 1115, 1117, 1120, 1137, 1143, 1145; 1113 kept) and the M2a fits
+
+- What worked well: the M2a reviewer's lesson turned into a simple, checkable rule: albedo × (photo / neutral render) at the same wall box in the matched view. It needs no shade factor, and it showed that 1111's "reads blue" was the overcast photo itself; the real gap was the tan privacy boxes.
+- What did not work well: the private family digest records StandardMaterial albedo only, so siding colour (a ShaderMaterial parameter) is invisible to it. Only 1111 showed as changed, and the colour evidence had to come from pixel diffs. Rough poses (1117 front, 1143, 1145) limit the ratio method to the few frames where the same wall patch is visible in both images.
+- What the team should change next time: add the ShaderMaterial `wall_color` parameter to the digest's material line so colour rounds are visible there. Prefer frames where the target wall is unobstructed when choosing which photo to sample.
