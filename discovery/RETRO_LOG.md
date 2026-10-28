@@ -21994,3 +21994,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the triage table now carries the wall-hue, visible-roof and street-blocking columns, so the three checks I keep repeating were already pre-answered and only needed confirming against pixels. Two panos shared across units (uMQ8, n93I, 4cDG) let each unit be sanity-checked from the neighbouring frame.
 - What did not work well: on the sheet thumbnail, 1128's blank west end looked like a contradiction. Only a native crop showed that the photo's end face is also blank and that the windows sit on the front, so a thumbnail can mislead about which face a feature belongs to. The 42 m and 54 m units (1139, 1149) can only be judged on colour and form.
 - What the team should change next time: when a matched view shows a corner, crop the photo at native resolution around the corner before calling an end wall blank or windowed. For distant units, an extra closer frame from the same date is cheap and would strengthen the verdict.
+
+### push-coordinator-accept-s7 — 2026-10-28 — acceptance batch S7 record and push (Ozbourn 1139/1141/1147/1149, Reeves 1122/1124/1128; review-only)
+
+- What worked well: printing every target's `acceptance_records` first (last round's lesson) showed all seven empty, so one exact-text replacement per `anchor_source_key` block appended the record with no reformatting of the rest of the catalog; a re-parse confirmed 7 changed and 105 → 112. The RETRO rebase conflict was again one append-only block, resolved by keeping both sides.
+- What did not work well: the branch's two RETRO commits conflicted with main's S5 entries purely because both append at the end of the log; every acceptance push pays this one manual step.
+- What the team should change next time: keep the record edit as a script over a unit list and a review id, since S5 and S7 used the same steps; only the follow-up text differs per batch.
