@@ -22102,3 +22102,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: sampling every unit with recorded boxes, then comparing hue as ratios against a white wall shaded in the same photo set, separated real hue differences (1314 too yellow, 1318 and the shore unit too grey) from shade cast. Only 5 of 14 units needed a change.
 - What did not work well: most fronts are backlit in the Mar 2025 frames, so the raw sunlit RGB the reviewer asked for is not available. A first automatic white-balance using the brightest pixels picked up sky and was discarded.
 - What the team should change next time: when collecting references, record the sun side of each frame. For backlit fronts, use shade-normalised ratios rather than raw values, and say so in the table.
+
+### ti-visual-review — 2026-10-28 — M1 Gateview Ave A/B kit (14 units)
+
+- What worked well: the shade-normalised hue ratios (against shaded whites in the same photo set) were a sound fix for backlit fronts, and they kept me from over-reading 1301's warm impression. Its walls sample near-neutral greige. The impression comes from the sunlit tan carport gables. The sample boxes on each sheet made checks reproducible.
+- What did not work well: the kit's secondary-colour items (carport gables and roofs on 1301, 1305 and 1306) and 901's flat parapet roof are spread across units as "flagged, not fixed", with weak single samples. Several matched views (1314, 905F, 1303) are far more distant than their photos, which limits detail checks.
+- What the team should change next time: give carport gable and roof colour its own sampled kit-level pass (one key per unit) rather than per-unit flags. Re-pose matched cameras whose subject distance differs from the photo by more than about 1.5x before review.
