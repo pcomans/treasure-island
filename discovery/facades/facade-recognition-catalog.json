@@ -5589,6 +5589,11 @@
           "numerator_effect": 0,
           "scope": "Whole shallow-gabled stepped envelope, observed E runs1\u20133,5\u20138,10\u201313, partial deep carport and road-connected lawn/footway/parking; N9,14,15,21 corroborated envelope only, no invented end/rear openings. Remaining runs and neighboring/annex ownership protected. Independent northpoint_third_family_visual scoped PASS with complete target sets and five before/final island pairs; distinct PROGRESS and corrected CODE PASS. Native role coverage, four stock approaches, changed-site out-and-back, exact-source spray and active supported released REST before SAFE passed with clean terminal0 per unit. Full suite28452 terminal0/ae7f99 ALL TESTS PASS, all49 scored fits/validation/determinism; actual runtime release. Initial study001 site REWORK/Float32 HOLD retained and resolved. L1 complete; L2\u20135 unknown. Production-inference dimensions; no whole modern-quality/as-built claim, new recognition or historical-status change.",
           "source_locator": "discovery/ISLAND_BUILDING_STAGE_CHECKLIST.md"
+        },
+        {
+          "review_id": "visual-review-ti-visual-review-accept-s5-20261024",
+          "review_kind": "visual",
+          "status": "accepted"
         }
       ],
       "anchor_source_key": "w96215660",
@@ -5596,7 +5601,7 @@
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -6319,13 +6324,19 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "visual-review-ti-visual-review-accept-s5-20261024",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w96215671",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -6896,13 +6907,24 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "code-review-ti-code-review-accept-s5-20261024",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-ti-visual-review-accept-s5-20261024",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w96215678",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -8372,13 +8394,19 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "visual-review-ti-visual-review-accept-s5-20261024",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w96665904",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -8652,6 +8680,16 @@
           "numerator_effect": 0,
           "scope": "Observed ESE lawn/entry-path/forecourt composition; March2025 cropped frontage, not end/rear or annex evidence. Independent scoped VISUAL, distinct PROGRESS, CODE, native/four approaches/exact-source spray/active REST then SAFE PASS; full suite77858 terminal0 PASS. L1 complete; L2–5 unknown. No whole modern-quality or as-built claim; historical recognition status unchanged.",
           "source_locator": "discovery/ISLAND_BUILDING_STAGE_CHECKLIST.md"
+        },
+        {
+          "review_id": "code-review-ti-code-review-accept-s5-20261024",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-ti-visual-review-accept-s5-20261024",
+          "review_kind": "visual",
+          "status": "accepted"
         }
       ],
       "anchor_source_key": "w96665911",
@@ -8659,7 +8697,7 @@
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -10178,13 +10216,19 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "visual-review-ti-visual-review-accept-s5-20261024",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w96698672",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
