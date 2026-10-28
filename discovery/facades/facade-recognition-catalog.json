@@ -2867,6 +2867,16 @@
           "review_id": "visual-review-ti-visual-review-m1-gateview-20261028",
           "review_kind": "visual",
           "status": "accepted"
+        },
+        {
+          "review_id": "code-review-ti-code-review-f1-finish-20261028",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-ti-visual-review-f1-finish-20261028",
+          "review_kind": "visual",
+          "status": "accepted"
         }
       ],
       "anchor_source_key": "w95934106",
@@ -3003,6 +3013,16 @@
         },
         {
           "review_id": "visual-review-ti-visual-review-m2b-flounder-20261028",
+          "review_kind": "visual",
+          "status": "accepted"
+        },
+        {
+          "review_id": "code-review-ti-code-review-f1-finish-20261028",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-ti-visual-review-f1-finish-20261028",
           "review_kind": "visual",
           "status": "accepted"
         }
@@ -8491,6 +8511,16 @@
           "review_id": "visual-review-ti-visual-review-m3-site12-20261028",
           "review_kind": "visual",
           "status": "accepted"
+        },
+        {
+          "review_id": "code-review-ti-code-review-f1-finish-20261028",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-ti-visual-review-f1-finish-20261028",
+          "review_kind": "visual",
+          "status": "accepted"
         }
       ],
       "anchor_source_key": "w96665890",
@@ -9758,13 +9788,24 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "code-review-ti-code-review-m5-20261028",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-ti-visual-review-m5-20261028",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w96665925",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -10551,13 +10592,19 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "visual-review-ti-visual-review-m5-20261028",
+          "review_kind": "visual",
+          "status": "accepted"
+        }
+      ],
       "anchor_source_key": "w96698652",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -11880,6 +11927,16 @@
       "acceptance_records": [
         {
           "review_id": "visual-review-ti-visual-review-accept-s9-20261028",
+          "review_kind": "visual",
+          "status": "accepted"
+        },
+        {
+          "review_id": "code-review-ti-code-review-f1-finish-20261028",
+          "review_kind": "code",
+          "status": "accepted"
+        },
+        {
+          "review_id": "visual-review-ti-visual-review-f1-finish-20261028",
           "review_kind": "visual",
           "status": "accepted"
         }

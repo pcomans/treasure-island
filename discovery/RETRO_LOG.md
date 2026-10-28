@@ -22223,3 +22223,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What did not work well: I reused an M2b sample for 1411 without re-checking its box. It sat partly on a window in shade, and the first value was too pale, costing one re-render. Two "reads as" notes (1301/1306 tan gables, 901 flat roof) were not supported by the photos.
 - What the team should change next time: re-draw every reused sample box on the photo before trusting the value. Treat review targets as hypotheses to confirm against a fresh sample.
 - Round 2: 1111's screens ignored main's new screen_rgb because every screen entry carried its own material_rgb. When a palette key seems not to apply, check for per-element overrides first. For 1411, a photo/render ratio at the matched box got closer than raw samples, because the render's sky light shifts the hue.
+
+### push-coordinator-m5-f1 — 2026-10-28 — M5 and F1 finish record and push (2 newly accepted, 4 refinished)
+
+- What worked well: both branches were cut from 9553a61, so the cherry-picks had one end-of-file RETRO conflict and F1's "Round 2" line still landed in its own entry. A duplicate-heading check on the new RETRO entries, a per-file comparison with the branch tips, and a JSON check (records only appended; the four F1 units' claim status unchanged) covered the batch.
+- What did not work well: the F1 branch carries only the modeler's RETRO entry; the F1 code and visual reviewers' entries are not in it. 1107's checklist row is L2 U while it is now catalog-accepted, and I left the level alone because no one asked for a level change.
+- What the team should change next time: include each reviewer's RETRO entry on the branch it reviewed, and say in the brief whether an acceptance also changes a checklist level.
