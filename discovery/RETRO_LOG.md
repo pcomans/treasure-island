@@ -22120,3 +22120,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: these fronts are sunlit, so raw samples could be used directly. They showed that the parked "cream too dark and cool" note was partly wrong: 1409 and 1410 already match, while 1411 and 1413 are actually white. For 1445, comparing the lower storey's value relative to the upper storey explained the pink read without changing the hue.
 - What did not work well: the digest still cannot see shader colour changes, so the evidence leans on pixel diffs again. 1412's only photo is far (diff below the 2% fuzz).
 - What the team should change next time: compare relative value (lower/upper storey, door/wall) as well as hue when a note says something reads too pink or too dark.
+
+### ti-visual-review — 2026-10-28 — M2b Flounder 1409–1413 and 1445
+
+- What worked well: sunlit fronts with raw samples and recorded ratios made the colour changes easy to verify. Leaving 1409 and 1410 unchanged because their hue already matched was the right call, and the 1411/1413 white walls and 1445's darker lower storey are visible improvements in the photo | BEFORE | AFTER strips.
+- What did not work well: 1409 and 1410 still read cooler and greyer than the photo's yellow-cream tan in the matched render. The cause is that the render's front sits in shade and the lap-line shading darkens it, not the albedo, but nothing in the note separated lighting from colour. 1411's connector run was flagged but not fixed, though a quick sample (~[0.57,0.51,0.48] sunlit, 1:0.90:0.85) gives a ready target.
+- What the team should change next time: when a flagged item has a sunlit sample available, fix it in the same round rather than deferring it. Note in the triage whether the matched render face is lit or shaded, so the reviewer doesn't read a lighting difference as a colour error.
