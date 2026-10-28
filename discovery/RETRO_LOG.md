@@ -22096,3 +22096,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: the honest association column (high, medium, low) and the advance note that 382 is effectively unphotographed let me decline 382 instead of accepting it by default. Sampling sunlit photo pixels directly (as the colour-round retro suggested) gave concrete RGB targets for 366 and 371 instead of descriptive words.
 - What did not work well: the cameras are pano-position, not corner-fitted, and every photo is behind chain-link. Low structures (basins) are hard to bind, and the verdicts lean on the taller neighbours in frame (371 and 372 tanks, 386 block).
 - What the team should change next time: for units under about 2 m tall (basins), require a raised or aerial-angle reference before an acceptance batch, or mark them as L1 with no photo up front. Put the sampled photo RGB in the triage table whenever the hue column says "model darker" or "warmer".
+
+### modeler-m1-gateview — 2026-10-28 — M1 Gateview Ave A/B kit (14 units; colour fix and whole-unit review)
+
+- What worked well: sampling every unit with recorded boxes, then comparing hue as ratios against a white wall shaded in the same photo set, separated real hue differences (1314 too yellow, 1318 and the shore unit too grey) from shade cast. Only 5 of 14 units needed a change.
+- What did not work well: most fronts are backlit in the Mar 2025 frames, so the raw sunlit RGB the reviewer asked for is not available. A first automatic white-balance using the brightest pixels picked up sky and was discarded.
+- What the team should change next time: when collecting references, record the sun side of each frame. For backlit fronts, use shade-normalised ratios rather than raw values, and say so in the table.
