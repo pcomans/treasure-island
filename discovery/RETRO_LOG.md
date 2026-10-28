@@ -22024,3 +22024,9 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - What worked well: queuing every engine command on `engine-A.lock` let the S4 fix chain (digest, render, 7 fits) and the S6 renders run unattended and in order, and both finished before the usage-limit pause. The resume therefore needed only a log check, with no re-runs. Comparing the housing digest against the pilot's rebased digest (same housing state) proved "only 1248 differs; 1223 identical" without spending a run on a base digest.
 - What did not work well: the 9-run S4 budget did not cover a neutral re-render of 1248 after the digest, one render and 7 fits. Two S6 cameras rest on estimated pano positions (1131, 1135), because the reference note recorded only pano IDs for them.
 - What the team should change next time: count the digest when setting a fix-and-fits budget. Record pano latitude/longitude alongside the pano ID in reference notes, so later camera work does not depend on estimates.
+
+### ti-visual-review — 2026-10-28 — acceptance batch S6 (Site 12 Hutchins 1112/1116/1118, Mason 1129/1131/1135, Halyburton 1108)
+
+- What worked well: the triage's hue column named the one real gap (1131's medium blue) in advance, and the photos from three dates for 1108 (2018, 2019, 2025) made the boarded present-day state clear.
+- What did not work well: four of seven units carry the same kind of small warm-greige or board-colour mismatch. Each is non-blocking alone, but they keep accumulating as follow-ups across S2–S6 (1403, 1449, 1247, 1118, 1129, 1135, 1108) with no owner or round. Two cameras (1131, 1135) are estimated, so pose comparison is loose.
+- What the team should change next time: open one small colour-opt-in round that takes every logged hue follow-up across the acceptance batches, with a target RGB per unit. Close them in one render pass instead of re-flagging them in each batch.
