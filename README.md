@@ -93,11 +93,23 @@ then click **Resume**. WASD moves, Shift runs, Space rises with the jetpack,
 releasing Space descends slowly, mouse movement looks around, and Esc pauses.
 Spray is omitted in the browser build by owner approval. F3 shows actual FPS.
 
-To deploy a new exported build to the existing Vercel project, run the CLI from
-`build/web`, verify the linked `treasure-island` project, then deploy production.
-Do not upload the source checkout, reference imagery or evidence directory.
-The web exporter writes immutable caching for commit-named assets and the WASM
-content type.
+To deploy, push to `main`, check out a clean `main` and run:
+
+```sh
+tools/deploy-web.sh             # build origin/main and deploy it to production
+tools/deploy-web.sh --dry-run   # the same checks and build; prints the Vercel commands instead
+```
+
+It refuses unless the checkout is clean and HEAD is `origin/main`. If `build/web`
+isn't linked yet, it links it to the existing `treasure-island` Vercel project (never
+a new one). Then it runs `tools/build-web.sh`, deploys `build/web` to production with
+the pinned Vercel CLI (`npx vercel@64.5.0`) and prints the deployment URL. It uses
+your saved Vercel CLI login (`npx vercel@64.5.0 login`, once). If that login has
+more than one team, link once by hand:
+`cd build/web && npx vercel@64.5.0 link --team <slug> --project treasure-island`.
+Only `build/web` is uploaded, never the source checkout, reference imagery or
+evidence. The web exporter writes immutable caching for commit-named assets and
+the WASM content type.
 
 Browser performance and pointer lock need checking on the playing machine.
 The development container's Chrome 154 on headless Weston has a reproducible
