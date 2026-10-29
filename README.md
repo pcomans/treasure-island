@@ -60,6 +60,10 @@ evidence folders, no images outside `game/resources/`), and launches a Linux bui
 loads. Copy the zip to the Mac, unzip it, and right-click the app → Open the
 first time (it is not notarized).
 
+Desktop builds (this and `tools/build-linux.sh`) first bake the island with
+`tools/prebuild-static-world.sh native` and load that baked world at startup
+instead of generating it; `tools/test.sh` runs the whole-island check on it too.
+
 ## Controls
 
 - `WASD` moves; hold `Shift` to run.
@@ -93,8 +97,7 @@ To deploy a new exported build to the existing Vercel project, run the CLI from
 `build/web`, verify the linked `treasure-island` project, then deploy production.
 Do not upload the source checkout, reference imagery or evidence directory.
 The web exporter writes immutable caching for commit-named assets and the WASM
-content type. The source branch is `web/vercel-20261019`; the delivery branch is
-untouched.
+content type.
 
 Browser performance and pointer lock need checking on the playing machine.
 The development container's Chrome 154 on headless Weston has a reproducible
