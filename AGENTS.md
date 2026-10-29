@@ -114,7 +114,7 @@ All development and checks run in the Linux devcontainer (`.devcontainer/`) on t
 - Record what actually ran (`DisplayServer.get_name()`, `RenderingServer.get_video_adapter_name()`) rather than hardcoding a platform, renderer or GPU name, and never require a specific one.
 - Git: `post-create.sh` sets the bot's commit identity. `git push` goes over HTTPS through DevPod's credential helper. `gh` has no login of its own; for PRs and the API, pass a token per command without saving it: `GH_TOKEN=$(printf 'protocol=https\nhost=github.com\n\n' | git credential fill | sed -n 's/^password=//p') gh pr create ...`.
 - Textures: generate one with `tools/generate-texture "<description>" game/resources/<path>.png`. It runs Codex's image generation on the owner's ChatGPT plan (Codex logged in with `codex login --device-auth`), following the building-texture skill. Generated textures must be original, never a copy of a reference photo.
-- The owner plays on a Mac. Build for it only when asked, with `tools/build-mac.sh` (see [Mac builds](#mac-builds)).
+- The owner currently plays the web build. Deploy it only when asked (see [Web deploys](#web-deploys)); build for the Mac only when asked, with `tools/build-mac.sh` (see [Mac builds](#mac-builds)).
 
 ## Approved product brief
 
@@ -122,8 +122,8 @@ All development and checks run in the Linux devcontainer (`.devcontainer/`) on t
 - World boundary: Treasure Island, San Francisco only. Yerba Buena Island and bridge approaches are out of scope unless later approved.
 - World coverage: model Treasure Island at island scale using a frozen latest-available OpenStreetMap snapshot as the authoritative horizontal layout inventory. Represent all Treasure Island terrain/shoreline features, roads/paths, major public spaces/land use, and exterior building footprints in that snapshot. Use the approved bounded USGS 3DEP bare-earth source for vertical terrain on Treasure Island and YBI. Individual apartments, floor plans, rooms, and interiors are out of scope.
 - Time setting: broadly present day as represented by that latest OSM snapshot. Do not reconcile it against a separate 2026 ground-truth inventory or reject it because reality may differ.
-- Current first-playable actions: third-person walking, running, an unlimited hold-to-rise jetpack on `Space` with slow descent when released, and placing one predefined spray-tag decal on eligible building surfaces in the spirit of Half-Life 1's spray interaction.
-- Current play target: the owner's MacBook Pro with Apple M1 Pro (10-core CPU, 32 GB memory), using mouse and keyboard only. Development happens on Linux; see [Development environment](#development-environment).
+- Current first-playable actions: third-person walking, running, an unlimited hold-to-rise jetpack on `Space` with slow descent when released, and placing one predefined spray-tag decal on eligible building surfaces in the spirit of Half-Life 1's spray interaction. Spray is disabled in the web build for now (owner, 2026-10-29).
+- Current play targets: the owner's MacBook Pro with Apple M1 Pro (10-core CPU, 32 GB memory), using mouse and keyboard, and, since 2026-10-29, the web build in a browser with mouse and keyboard or touch controls. The web build is deployed at the public URL https://treasure-island-five.vercel.app, which the owner accepted; it is a free hobby-tier Vercel project. Development happens on Linux; see [Development environment](#development-environment).
 - Current traversal rule: do not research or reproduce real fenced/private access. Outdoor space in the frozen OSM snapshot is generally traversable unless a clear gameplay or world boundary is approved later.
 - Current visual baseline: simple exterior building massing is acceptable across the complete snapshot inventory. The ground is no longer a flat baseline: use a modest USGS-derived terrain mesh, keep OSM horizontal geometry complete, drape roads/areas, level building bases to sampled terrain, and preserve traversability.
 - Deferred feature: drivable cars with arcade-acceptable handling remain part of the eventual idea but are not a current first-playable requirement.
@@ -207,7 +207,7 @@ Before committing, run the whitespace check (`git diff --check`, plus the same c
 
 ### Tests
 
-`tools/test.sh` runs every test: a junk check on new files (no screenshots, videos, builds, logs, reference photos or files over 5 MB outside `game/resources/` and `generated/`), the behaviour tests, the whole-island check of every scored building, and the world-generator determinism check. It must pass before anything is pushed to `main`; fix the cause of a failure, never weaken or skip a test to make it pass.
+`tools/test.sh` runs every test: a junk check on new files (no screenshots, videos, builds, logs, reference photos or files over 5 MB outside `game/resources/` and `generated/`), the behaviour tests, the whole-island check of every scored building (on both the world generated at startup and the baked world desktop exports ship), and the world-generator determinism check. It must pass before anything is pushed to `main`; fix the cause of a failure, never weaken or skip a test to make it pass.
 
 Tests check behaviour: the game loads and plays, a building is solid and fits, generated data is valid. Never write a test or runtime check that compares file checksums, pins byte-identical source or evidence files, or asserts snapshot counts (triangles, meshes, records) that change whenever the world legitimately changes. Git already records what changed. One deliberate exception: `game/scripts/world/generated_world_contract.gd` checks the generated world against the manifest the generator writes with it, so regenerate them together with `tools/build_godot_world.mjs`; the determinism check in `tools/test.sh` confirms they match the sources.
 
@@ -224,6 +224,12 @@ Then mark the building accepted in `discovery/facades/facade-recognition-catalog
 ### Mac builds
 
 Build for the Mac only when the owner asks, with `tools/build-mac.sh` from a committed state. It exports the macOS build (ad-hoc signed, not notarized) and a Linux build of the same commit, runs `game/tests/shared/build_content_audit.gd` on the exported data pack, and launches the Linux build to confirm the island loads. Both checks must pass. The content audit lets only `game/`, `generated/` and Godot's own files into the build, and images only from `game/resources/`; it also rejects names that look like reference photos. It can't recognize a renamed photo, so Street View and other reference photos must never be saved anywhere under `game/` (they stay outside Git). Never weaken the audit or work around a failure; remove the offending file from the export instead. No signing identity, notarization, checksum binding, independent package review or release record is involved.
+
+Desktop exports (Mac and Linux) ship the prebuilt (baked) world instead of generating it at startup; see [README](README.md#build-for-the-mac).
+
+### Web deploys
+
+Deploy only when the owner asks ("push to main and deploy"); ordinary building pushes never deploy. Run `tools/deploy-web.sh` from a clean checkout at `origin/main`, after `tools/test.sh` has passed for that commit. It builds with `tools/build-web.sh` and uploads `build/web` with the pinned Vercel CLI, using the owner's existing login. Pair each deploy with a quick browser screenshot of the deployed web build. Setup, linking and controls are in [README](README.md#browser-build). No release record or extra review is involved.
 
 ## Bounded subagent execution
 
@@ -263,14 +269,14 @@ For a requested full workflow comparison, time from before the actual source edi
 
 ## Approved implementation approach
 
-- Godot 4.7.2 standard edition, GDScript, and Forward+.
+- Godot 4.7.2 standard edition, GDScript, and Forward+. Only the web export uses the Compatibility renderer (WebGL 2, `renderer/rendering_method.web="gl_compatibility"`); the desktop renderer is unchanged.
 - One Godot unit equals one meter in a local Treasure Island coordinate system.
 - Offline `osmium` plus a project-owned Node converter using pinned `polygon-clipping@0.15.7` and `earcut@3.2.3`.
 - Deterministic, OSM-ID-traceable generated island geometry and coverage evidence.
 - A frozen, bounded official USGS 3DEP elevation crop plus deterministic modest terrain derivation; OSM remains authoritative for horizontal geometry and source coverage.
 - A project-owned `CharacterBody3D` walk/run/jetpack controller and `Node3D` pivot -> `SpringArm3D` -> `Camera3D` mouse camera; no controller/camera add-on.
 - Projected `Decal` spray placement on eligible building walls.
-- Development and checks on Linux with Vulkan/Forward+ in the devcontainer; a private macOS build on request.
+- Development, checks and building review on Linux with Vulkan/Forward+ in the devcontainer; a private macOS build on request; a web build deployed on request.
 
 ## Remaining explicit non-decisions
 
