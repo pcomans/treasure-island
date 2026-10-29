@@ -39,6 +39,9 @@ const SE_FACE_RUNS := [63, 64, 65, 66, 67, 68, 69]
 const REAR_RIBBON_HOST_CHAINS := [[70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83]]
 # SE shoulder block carrying the observed small and tall drum-end openings.
 const SE_SHOULDER_RUNS := [69, 70]
+## Inward face of a two-sided setback wall sits this far behind the outward
+## face, so the two never tie in depth (or in a ray probe).
+const SETBACK_INWARD_FACE_INSET_M := 0.02
 const PHYSICS_WORLD_SOLID := 1 << 0
 const PHYSICS_SPRAY_SURFACE := 1 << 2
 const RENDER_WORLD_VISIBLE := 1 << 0
@@ -52,6 +55,7 @@ const TRIM_MATERIAL := preload("res://game/resources/materials/world/building_1/
 const GLASS_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_bluegrey_glass.tres")
 const BRONZE_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_bronze.tres")
 const ROOF_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_roof_metal.tres")
+const TOWER_ROOF_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_tower_roof_pale.tres")
 const REVEAL_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_reveal_shadow.tres")
 # Public-only variants for the crescent, wings and pavilions.
 const PUBLIC_WALL_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_stucco_field.tres")
@@ -248,7 +252,7 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	# openings, previously on the drum join behind it, sit on the shoulder face.
 	var se_outer := _chain_points(record, _int_array(se_setback.runs as Array), 0.0, _chain_length(record, _int_array(se_setback.runs as Array)))
 	var se_inner := _offset_path(se_outer, float(se_setback.setback))
-	_append_setback_storey(buckets.wall, buckets.wall, collision, se_outer, se_inner, two_y, three_y, false)
+	_append_setback_storey(buckets.wall, buckets.wall, collision, se_outer, se_inner, two_y, three_y, false, true)
 	_append_podium_edge(buckets.trim, collision, se_outer, podium_edge, two_y, false)
 	_append_se_shoulder(buckets, collision, record, front.se_shoulder as Dictionary, drum_openings, wing_style, float(se_setback.setback), two_y, three_y)
 
@@ -286,7 +290,9 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	# parapet and three Art Deco speed lines below it, following the central
 	# tier's exact rear (inner) face. Visual relief only, high above any
 	# walkable surface; the face, its material and collision are unchanged.
-	_append_drum_banding(buckets.trim, record, central_runs, central_depth, front.drum_banding as Dictionary)
+	var drum_banding_on_rear_outline := _append_drum_banding(buckets.trim, record, central_runs, central_depth, front.drum_banding as Dictionary)
+	if not drum_banding_on_rear_outline:
+		push_warning("Building 1 hero: the drum's rear outline did not resolve; the rear drum banding was omitted.")
 	var seams := schedule.protected_seam_piers as Dictionary
 	_append_seam_pier(buckets.trim, collision, record, int(seams.north_run_start), true, front)
 	_append_seam_pier(buckets.trim, collision, record, int(seams.south_run_end), false, front)
@@ -347,6 +353,7 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 		"drum_end_opening_host_width_m": _chain_length(record, shoulder_runs),
 		"drum_end_opening_count": 2,
 		"upper_drum_blank": true,
+		"drum_banding_on_exposed_rear_outline": drum_banding_on_rear_outline,
 		"wing_tier_partitions_clipped_to_frozen_footprint": not tier_clip.is_empty(),
 		"central_tier_walls_unchanged": true,
 		"public_depth_bands_m": [
@@ -392,13 +399,25 @@ static func _build_building_roof(record: Dictionary, wall_record: Dictionary, co
 	_append_strip_roof(roof, collision, wall_record, _int_array(chains.north_three_story_runs), three_y, float(vertical.north_wing_inward_depth), tier_clip)
 	_append_strip_roof(roof, collision, wall_record, _int_array(chains.central_four_story_runs), four_y, float(vertical.central_inward_depth))
 	var se_setback := front.se_setback as Dictionary
-	_append_strip_roof(roof, collision, wall_record, _int_array(chains.south_three_story_runs), three_y, float(vertical.south_wing_inward_depth), tier_clip, _setback_cuts(wall_record, [se_setback.runs], float(se_setback.setback)))
+	var se_cuts := _setback_cuts(wall_record, [se_setback.runs], float(se_setback.setback))
+	var south_runs := _int_array(chains.south_three_story_runs)
+	var south_depth := float(vertical.south_wing_inward_depth)
+	_append_strip_roof(roof, collision, wall_record, south_runs, three_y, south_depth, tier_clip, se_cuts)
 	var continuous := _append_canopy(canopy, soffit, collision, wall_record, _int_array(schedule.central_runs), field_runs, crescent, front)
+	# Thin dark mast on the drum roof near its south end, placed and sized by
+	# fitted-camera triangulation of the Sep 2025 SW and WSW Street Views and
+	# the 18 Jul 2023 rear photograph (see the b1-roof study notes). Solid,
+	# non-receiver.
+	var mast := _bucket()
+	var mast_placed := _append_drum_mast(mast, collision, wall_record, _int_array(chains.central_four_story_runs), float(vertical.central_inward_depth), four_y, front.drum_mast as Dictionary)
+	if not mast_placed:
+		push_warning("Building 1 hero: the configured drum mast point is not on the drum roof; the mast was omitted.")
 	var root := _hero_root("Building1HeroRoof", record, "building_roof")
 	var specs: Array[Dictionary] = [
 		{"name": "HeroSteppedRoof", "bucket": roof, "material": ROOF_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
 		{"name": "HeroEntranceCanopy", "bucket": canopy, "material": PUBLIC_TRIM_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
 		{"name": "HeroEntranceCanopySoffit", "bucket": soffit, "material": PUBLIC_WALL_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
+		{"name": "HeroDrumMast", "bucket": mast, "material": PUBLIC_FRAME_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
 	]
 	var metadata := _common_metadata(config, record, "building_roof")
 	metadata["reachable_roof_tier_y"] = [two_y, three_y, four_y]
@@ -407,6 +426,7 @@ static func _build_building_roof(record: Dictionary, wall_record: Dictionary, co
 	metadata["canopy_horizontal_domain"] = "exact_union_of_accepted_per_run_slabs" if continuous else "accepted_per_run_slabs_fallback"
 	metadata["wing_tier_roofs_clipped_to_frozen_footprint"] = not tier_clip.is_empty()
 	metadata["central_tier_roof_unchanged"] = true
+	metadata["drum_mast_placed"] = mast_placed
 	metadata["public_family_pass_id"] = str(bar_config.pass_id)
 	metadata["public_front_believability_config_path"] = BAR_CONFIG_PATH
 	metadata["recognition_status"] = "accepted_before_quality_hardening_and_preserved"
@@ -440,18 +460,17 @@ static func _build_tower_wall(record: Dictionary, config: Dictionary, front: Dic
 		for mullion_fraction in [0.333333, 0.666667]:
 			var mullion_anchor := exact_start.lerp(exact_end, float(mullion_fraction))
 			_append_wall_bar(trim, mullion_anchor, frame.tangent as Vector3, frame.normal as Vector3, (glass_base + glass_top) * 0.5, 0.12, glass_top - glass_base, 0.13)
-		# Cab cornice above the glazing and a sill course below it (dated 2023
-		# rear view), on the exact tower plan; visual only above the platform.
-		var cornice := front.tower_cab_cornice as Dictionary
-		var sill := front.tower_cab_sill as Dictionary
-		var cornice_bottom := glass_top - float(cornice.below_glass_top)
-		var sill_bottom := glass_base - float(sill.below_glass_base)
-		for band: Array in [[cornice_bottom, cornice_bottom + float(cornice.height), float(cornice.front)], [sill_bottom, sill_bottom + float(sill.height), float(sill.front)]]:
-			var band_mid := exact_start.lerp(exact_end, 0.5)
-			var band_depth := float(band[2])
-			var band_center := band_mid + (frame.normal as Vector3) * (band_depth * 0.5 - 0.02)
-			band_center.y = (float(band[0]) + float(band[1])) * 0.5
-			_append_box(trim, band_center, frame.tangent as Vector3, frame.normal as Vector3, float(frame.length_m) + band_depth * 0.85, float(band[1]) - float(band[0]), band_depth + 0.04)
+	# Fascia above the low glazing, under the overhanging roof eave, and a sill
+	# course below it (dated 2023 rear and east views): closed rings mitred at
+	# the octagon's corners. The fascia is solid, closing the wall between the
+	# glass top and the roof soffit.
+	var ring := _tower_plan_ring(record)
+	var fascia := front.tower_cab_fascia as Dictionary
+	var sill := front.tower_cab_sill as Dictionary
+	for target: Dictionary in [trim, collision]:
+		_append_ring_band(target, ring, glass_top, glass_top + float(fascia.height), float(fascia.front), float(fascia.back))
+	var sill_bottom := glass_base - float(sill.below_glass_base)
+	_append_ring_band(trim, ring, sill_bottom, sill_bottom + float(sill.height), float(sill.front), float(sill.back))
 	# Base storey under the cab (2023 rear view). ROOT 2026-10-22: the tower
 	# record owns the cab and this storey; the frozen OSM way traces only the
 	# cab, and the storey stands on r16681702's central roof at the tower base.
@@ -491,25 +510,56 @@ static func _build_tower_roof(record: Dictionary, config: Dictionary, front: Dic
 		return _failure("building_1_tower_plan", "Tower roof no longer resolves to the exact eight-corner source plan.", record)
 	var center := _plan_centroid(source_points)
 	var roof := _bucket()
+	var cab_roof := _bucket()
+	var spike_bucket := _bucket()
 	var collision := _bucket()
 	_append_scaled_record_roof(roof, collision, record, center, scale, platform_top + 0.02)
+	# Low pale standing-seam pyramid (dated 2023 rear and east views): the eave
+	# overhangs the fascia on a scaled copy of the exact plan, with a soffit
+	# back to the fascia face, raised hips and seams, and a small octagonal vent
+	# cap with a short spike. Roof faces, eave edge, soffit and cap are solid.
+	var cab := front.tower_cab_roof as Dictionary
+	var fascia := front.tower_cab_fascia as Dictionary
+	var soffit_y := glass_top + float(fascia.height)
+	var eave_y := soffit_y + float(cab.eave_thickness)
+	var eave_scale := float(cab.eave_plan_scale)
 	var apex := Vector3(center.x, peak_y, center.z)
-	for index in source_points.size():
-		var first_source := source_points[index]
-		var second_source := source_points[(index + 1) % source_points.size()]
-		var first := Vector3(first_source.x, glass_top, first_source.z)
-		var second := Vector3(second_source.x, glass_top, second_source.z)
+	var ring := {"points": source_points, "center": center}
+	var count := source_points.size()
+	var eaves: Array[Vector3] = []
+	var fascia_fronts: Array[Vector3] = []
+	for index in count:
+		eaves.append(_scaled_plan_point(source_points[index], center, eave_scale, eave_y))
+		fascia_fronts.append(_lifted(source_points[index] + _ring_miter(ring, index) * float(fascia.front), soffit_y))
+	var facet_normals: Array[Vector3] = []
+	for index in count:
+		var first := eaves[index]
+		var second := eaves[(index + 1) % count]
 		var normal := (second - first).cross(apex - first).normalized()
 		if normal.y < 0.0:
 			normal = -normal
-		_append_triangle(roof, first, second, apex, normal)
-		_append_triangle(collision, first, second, apex, normal)
-	# Small finial at the apex (dated 2023 rear view); visual only.
-	var finial := front.tower_finial as Dictionary
-	_append_box(roof, Vector3(apex.x, peak_y + float(finial.height) * 0.5 - 0.05, apex.z), Vector3.RIGHT, Vector3.BACK, float(finial.radius) * 2.0, float(finial.height), float(finial.radius) * 2.0)
+		facet_normals.append(normal)
+		for target: Dictionary in [cab_roof, collision]:
+			_append_triangle(target, first, second, apex, normal)
+			_append_quad(target, _lifted(first, soffit_y), _lifted(second, soffit_y), second, first, _ring_edge_normal(ring, index))
+			_append_quad(target, fascia_fronts[index], fascia_fronts[(index + 1) % count], _lifted(second, soffit_y), _lifted(first, soffit_y), Vector3.DOWN)
+		_append_roof_seams(cab_roof, first, second, apex, normal, int(cab.seams_per_facet), float(cab.seam_width), float(cab.seam_height))
+	var cap := cab.cap as Dictionary
+	var cap_radius := float(cap.radius)
+	for index in count:
+		var hip_run := Vector2(eaves[index].x - apex.x, eaves[index].z - apex.z).length()
+		_append_roof_hip(cab_roof, eaves[index], apex, eaves[(index + count - 1) % count], facet_normals[(index + count - 1) % count], eaves[(index + 1) % count], facet_normals[index], float(cab.hip_width), float(cab.hip_height), 1.0 - cap_radius / maxf(hip_run, cap_radius + 0.01))
+	var cap_wall_top := peak_y + float(cap.wall_above_peak)
+	var cap_top := cap_wall_top + float(cap.roof_rise)
+	for target: Dictionary in [cab_roof, collision]:
+		_append_octagon_cap(target, apex, cap_radius, peak_y - cap_radius * 0.75, cap_wall_top, cap_top)
+	var spike := cab.spike as Dictionary
+	_append_box(spike_bucket, Vector3(apex.x, cap_top + float(spike.height) * 0.5 - 0.05, apex.z), Vector3.RIGHT, Vector3.BACK, float(spike.width), float(spike.height), float(spike.width))
 	var root := _hero_root("Building1ObservationTowerHeroRoof", record, "tower_roof")
 	var specs: Array[Dictionary] = [
-		{"name": "HeroTowerPlatformAndPyramidalRoof", "bucket": roof, "material": ROOF_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
+		{"name": "HeroTowerPlatform", "bucket": roof, "material": ROOF_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
+		{"name": "HeroTowerPaleStandingSeamRoof", "bucket": cab_roof, "material": TOWER_ROOF_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
+		{"name": "HeroTowerVentSpike", "bucket": spike_bucket, "material": BRONZE_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
 	]
 	var metadata := _common_metadata(config, record, "tower_roof")
 	metadata.merge({
@@ -520,6 +570,155 @@ static func _build_tower_roof(record: Dictionary, config: Dictionary, front: Dic
 		"reachable_platform_y": platform_top,
 	}, true)
 	return _finish_record(root, specs, collision, false, metadata)
+
+
+## The cab's exact plan as a ring: the wall record's run starts, merging
+## collinear source splits (runs 0/1 and 5/6), with the plan centroid.
+static func _tower_plan_ring(record: Dictionary) -> Dictionary:
+	var points: Array[Vector3] = []
+	var last_tangent := Vector3.ZERO
+	for run_index in range(10):
+		var frame := _run_frame(record, run_index)
+		var tangent := frame.tangent as Vector3
+		if not points.is_empty() and tangent.dot(last_tangent) > 0.9999:
+			continue
+		points.append(frame.start as Vector3)
+		last_tangent = tangent
+	var first_tangent := _run_frame(record, 0).tangent as Vector3
+	if points.size() > 1 and last_tangent.dot(first_tangent) > 0.9999:
+		points.remove_at(0)
+	return {"points": points, "center": _plan_centroid(points)}
+
+
+## Outward horizontal normal of ring edge `index` (points[index] to the next).
+static func _ring_edge_normal(ring: Dictionary, index: int) -> Vector3:
+	var points := ring.points as Array
+	var a := points[index] as Vector3
+	var b := points[(index + 1) % points.size()] as Vector3
+	var normal := Vector3(b.z - a.z, 0.0, a.x - b.x).normalized()
+	var middle := (a + b) * 0.5 - (ring.center as Vector3)
+	if normal.dot(Vector3(middle.x, 0.0, middle.z)) < 0.0:
+		normal = -normal
+	return normal
+
+
+static func _ring_miter(ring: Dictionary, index: int) -> Vector3:
+	var count := (ring.points as Array).size()
+	return _miter_between(_ring_edge_normal(ring, (index + count - 1) % count), _ring_edge_normal(ring, index))
+
+
+## Closed band around a ring, mitred at every corner: outer face, top and
+## bottom between `back` and `front` metres off the exact plan.
+static func _append_ring_band(bucket: Dictionary, ring: Dictionary, bottom: float, top: float, front: float, back: float) -> void:
+	var points := ring.points as Array
+	var count := points.size()
+	for index in count:
+		var next := (index + 1) % count
+		var a := points[index] as Vector3
+		var b := points[next] as Vector3
+		var fa := a + _ring_miter(ring, index) * front
+		var fb := b + _ring_miter(ring, next) * front
+		var ba := a + _ring_miter(ring, index) * back
+		var bb := b + _ring_miter(ring, next) * back
+		_append_quad(bucket, _lifted(fa, bottom), _lifted(fb, bottom), _lifted(fb, top), _lifted(fa, top), _ring_edge_normal(ring, index))
+		_append_quad(bucket, _lifted(ba, top), _lifted(bb, top), _lifted(fb, top), _lifted(fa, top), Vector3.UP)
+		_append_quad(bucket, _lifted(fa, bottom), _lifted(fb, bottom), _lifted(bb, bottom), _lifted(ba, bottom), Vector3.DOWN)
+
+
+## Standing seams on one pyramid facet: raised strips at even stations along
+## the eave, running straight up the fall line until they meet a hip.
+static func _append_roof_seams(bucket: Dictionary, first: Vector3, second: Vector3, apex: Vector3, normal: Vector3, count: int, width: float, height: float) -> void:
+	var along := second - first
+	var length := along.length()
+	if count <= 0 or length < 0.5:
+		return
+	var e1 := along / length
+	var e2 := normal.cross(e1).normalized()
+	if e2.dot(apex - first) < 0.0:
+		e2 = -e2
+	var apex_x := (apex - first).dot(e1)
+	var apex_y := (apex - first).dot(e2)
+	if apex_x <= 0.01 or apex_x >= length - 0.01:
+		return
+	for station in count:
+		var x := length * float(station + 1) / float(count + 1)
+		var reach := apex_y * (x / apex_x if x <= apex_x else (length - x) / (length - apex_x))
+		reach -= width
+		if reach < 0.3:
+			continue
+		var lift := normal * height
+		var bl := first + e1 * (x - width * 0.5)
+		var br := first + e1 * (x + width * 0.5)
+		var tl := bl + e2 * reach
+		var tr := br + e2 * reach
+		_append_quad(bucket, bl + lift, br + lift, tr + lift, tl + lift, normal)
+		_append_quad(bucket, bl, tl, tl + lift, bl + lift, -e1)
+		_append_quad(bucket, br, tr, tr + lift, br + lift, e1)
+		_append_quad(bucket, bl, br, br + lift, bl + lift, -e2)
+
+
+## Raised hip roll along a hip line from the eave towards the apex, lying on
+## both adjoining facets (each given by its normal and its other eave corner);
+## stops `fraction` of the way up, under the vent cap.
+static func _append_roof_hip(bucket: Dictionary, eave: Vector3, apex: Vector3, left_corner: Vector3, left_normal: Vector3, right_corner: Vector3, right_normal: Vector3, width: float, height: float, fraction: float) -> void:
+	var direction := (apex - eave).normalized()
+	var top := eave + (apex - eave) * clampf(fraction, 0.0, 1.0)
+	var ridge := (left_normal + right_normal).normalized() * height
+	for pair: Array in [[left_corner, left_normal], [right_corner, right_normal]]:
+		var normal: Vector3 = pair[1]
+		var side := normal.cross(direction).normalized()
+		if side.dot((pair[0] as Vector3) - eave) < 0.0:
+			side = -side
+		var offset := side * width * 0.5
+		_append_quad(bucket, eave + offset, top + offset, top + ridge, eave + ridge, (normal + ridge.normalized()).normalized())
+		_append_triangle(bucket, eave + offset, eave + ridge, eave, -direction)
+
+
+## Small octagonal vent cap seated into the pyramid apex: walls, then a low
+## octagonal pyramid roof. Closed above the main roof.
+static func _append_octagon_cap(bucket: Dictionary, apex: Vector3, radius: float, bottom: float, wall_top: float, top: float) -> void:
+	var tip := Vector3(apex.x, top, apex.z)
+	for index in 8:
+		var a_angle := TAU * (float(index) + 0.5) / 8.0
+		var b_angle := TAU * (float(index) + 1.5) / 8.0
+		var a := Vector3(apex.x + cos(a_angle) * radius, 0.0, apex.z + sin(a_angle) * radius)
+		var b := Vector3(apex.x + cos(b_angle) * radius, 0.0, apex.z + sin(b_angle) * radius)
+		var outward := Vector3(cos((a_angle + b_angle) * 0.5), 0.0, sin((a_angle + b_angle) * 0.5))
+		_append_quad(bucket, _lifted(a, bottom), _lifted(b, bottom), _lifted(b, wall_top), _lifted(a, wall_top), outward)
+		var up := (_lifted(b, wall_top) - _lifted(a, wall_top)).cross(tip - _lifted(a, wall_top)).normalized()
+		if up.y < 0.0:
+			up = -up
+		_append_triangle(bucket, _lifted(a, wall_top), _lifted(b, wall_top), tip, up)
+
+
+## Thin tapered mast on a plinth, standing on the drum roof at the configured
+## point when that point lies inside the central tier's roof pieces.
+static func _append_drum_mast(visual: Dictionary, collision: Dictionary, record: Dictionary, runs: Array[int], depth: float, roof_y: float, mast: Dictionary) -> bool:
+	var xz := mast.xz as Array
+	var at := Vector2(float(xz[0]), float(xz[1]))
+	var plinth := float(mast.plinth_width)
+	var inside := 0
+	for corner in [Vector2(-1, -1), Vector2(1, -1), Vector2(1, 1), Vector2(-1, 1)]:
+		for piece in _strip_pieces(record, runs, depth):
+			if Geometry2D.is_point_in_polygon(at + corner * (plinth * 0.5 + 0.5), piece):
+				inside += 1
+				break
+	if inside < 4:
+		return false
+	var plinth_top := roof_y + float(mast.plinth_height)
+	var top := float(mast.top_y)
+	for target: Dictionary in [visual, collision]:
+		_append_box(target, Vector3(at.x, (roof_y - 0.02 + plinth_top) * 0.5, at.y), Vector3.RIGHT, Vector3.BACK, plinth, plinth_top - roof_y + 0.02, plinth)
+		var base_half := float(mast.base_width) * 0.5
+		var top_half := float(mast.top_width) * 0.5
+		var corners := [Vector2(-1, -1), Vector2(1, -1), Vector2(1, 1), Vector2(-1, 1)]
+		for index in 4:
+			var c0: Vector2 = corners[index]
+			var c1: Vector2 = corners[(index + 1) % 4]
+			var outward := Vector3(c0.x + c1.x, 0.0, c0.y + c1.y).normalized()
+			_append_quad(target, Vector3(at.x + c0.x * base_half, plinth_top - 0.02, at.y + c0.y * base_half), Vector3(at.x + c1.x * base_half, plinth_top - 0.02, at.y + c1.y * base_half), Vector3(at.x + c1.x * top_half, top, at.y + c1.y * top_half), Vector3(at.x + c0.x * top_half, top, at.y + c0.y * top_half), outward)
+		_append_quad(target, Vector3(at.x - top_half, top, at.y - top_half), Vector3(at.x + top_half, top, at.y - top_half), Vector3(at.x + top_half, top, at.y + top_half), Vector3(at.x - top_half, top, at.y + top_half), Vector3.UP)
+	return true
 
 
 static func _append_exact_base_walls(public_visual: Dictionary, original_visual: Dictionary, collision: Dictionary, record: Dictionary, top_y: float, lowered: Dictionary = {}) -> void:
@@ -753,13 +952,34 @@ static func _append_cut_polygon(visual: Dictionary, collision: Dictionary, polyg
 					kept.append(remainder)
 		pieces = kept
 	for piece in pieces:
-		var indices := Geometry2D.triangulate_polygon(piece)
-		for offset in range(0, indices.size(), 3):
-			var a := Vector3(piece[indices[offset]].x, y, piece[indices[offset]].y)
-			var b := Vector3(piece[indices[offset + 1]].x, y, piece[indices[offset + 1]].y)
-			var c := Vector3(piece[indices[offset + 2]].x, y, piece[indices[offset + 2]].y)
+		var triangles := _polygon_triangles(piece)
+		if triangles.is_empty():
+			push_warning("Building 1 hero: a %.3f m2 roof piece at y %.2f could not be triangulated and was dropped." % [absf(_ring_area(piece)), y])
+		for triangle in triangles:
+			var a := Vector3(triangle[0].x, y, triangle[0].y)
+			var b := Vector3(triangle[1].x, y, triangle[1].y)
+			var c := Vector3(triangle[2].x, y, triangle[2].y)
 			_append_triangle(visual, a, b, c, Vector3.UP)
 			_append_triangle(collision, a, b, c, Vector3.UP)
+
+
+## Triangles covering a simple polygon. Ear clipping returns nothing for some
+## clipped rings (duplicate or collinear vertices left by the setback cut), which
+## silently dropped whole roof pieces; those retry on the simplified ring, then
+## as a fan over each convex part.
+static func _polygon_triangles(polygon: PackedVector2Array) -> Array[PackedVector2Array]:
+	var triangles: Array[PackedVector2Array] = []
+	for ring: PackedVector2Array in [polygon, _simplified_ring(polygon)]:
+		var indices := Geometry2D.triangulate_polygon(ring)
+		if indices.is_empty():
+			continue
+		for offset in range(0, indices.size(), 3):
+			triangles.append(PackedVector2Array([ring[indices[offset]], ring[indices[offset + 1]], ring[indices[offset + 2]]]))
+		return triangles
+	for part: PackedVector2Array in Geometry2D.decompose_polygon_in_convex(_simplified_ring(polygon)):
+		for index in range(1, part.size() - 1):
+			triangles.append(PackedVector2Array([part[0], part[index], part[index + 1]]))
+	return triangles
 
 
 ## World-XZ cut polygons for setback storeys: each chain's band between the
@@ -1157,7 +1377,7 @@ static func _append_podium_edge(trim: Dictionary, collision: Dictionary, path: D
 	var coping := edge.coping as Array
 	if with_coping:
 		for target: Dictionary in [trim, collision]:
-			_append_path_band(target, path, roof_y + float(coping[0]), roof_y + float(coping[1]), float(coping[2]), float(coping[3]))
+			_append_path_band(target, path, roof_y + float(coping[0]), roof_y + float(coping[1]), float(coping[2]), float(coping[3]), false, false, true)
 	var inset := float(edge.rail_inset)
 	var thickness := float(edge.rail_thickness)
 	var base := roof_y + (float(coping[1]) if with_coping else 0.0)
@@ -1203,7 +1423,9 @@ static func _offset_path(path: Dictionary, distance: float) -> Dictionary:
 ## Setback upper storey on a chain: walls on the offset path from low_y to
 ## high_y, end caps closing the notch, and optionally the terrace floor
 ## between the exact walls and the setback at low_y. Visual and collision.
-static func _append_setback_storey(wall_visual: Dictionary, floor_visual: Dictionary, collision: Dictionary, outer: Dictionary, inner: Dictionary, low_y: float, high_y: float, with_floor: bool) -> void:
+## `both_sides` also faces the wall inward, for a setback whose back is seen
+## from a lower roof behind it (the south wing's slot behind the SE tier).
+static func _append_setback_storey(wall_visual: Dictionary, floor_visual: Dictionary, collision: Dictionary, outer: Dictionary, inner: Dictionary, low_y: float, high_y: float, with_floor: bool, both_sides: bool = false) -> void:
 	var outer_points := outer.points as Array
 	var inner_points := inner.points as Array
 	var normals := outer.normals as Array
@@ -1213,6 +1435,8 @@ static func _append_setback_storey(wall_visual: Dictionary, floor_visual: Dictio
 		var normal := normals[segment] as Vector3
 		for target: Dictionary in [wall_visual, collision]:
 			_append_vertical_face(target, a, b, low_y, high_y, normal)
+			if both_sides:
+				_append_vertical_face(target, b - normal * SETBACK_INWARD_FACE_INSET_M, a - normal * SETBACK_INWARD_FACE_INSET_M, low_y, high_y, -normal)
 		if with_floor:
 			var oa := _lifted(outer_points[segment] as Vector3, low_y)
 			var ob := _lifted(outer_points[segment + 1] as Vector3, low_y)
@@ -1279,7 +1503,7 @@ static func _append_north_ring(buckets: Dictionary, original: Dictionary, collis
 			_append_path_band(buckets.trim, inner, float(profile[0]), float(profile[1]), float(profile[2]), -0.03)
 		var top_coping := ring.top_coping as Array
 		for target: Dictionary in [buckets.trim, collision]:
-			_append_path_band(target, inner, float(top_coping[0]), float(top_coping[1]), float(top_coping[2]), -0.35)
+			_append_path_band(target, inner, float(top_coping[0]), float(top_coping[1]), float(top_coping[2]), -0.35, false, false, true)
 	# Junction pylon over node 0: solid, rising one storey above the ring.
 	var pylon_runs := _int_array(pylon.runs as Array)
 	var pylon_length := _chain_length(record, pylon_runs)
@@ -1314,8 +1538,10 @@ static func _append_se_shoulder(buckets: Dictionary, collision: Dictionary, reco
 	var half := length * 0.5
 	var depth := float(shoulder.depth)
 	var top := float(shoulder.top_y)
+	# The block starts on the podium roof: its face lies in the exact wall plane,
+	# so a seat below the roof would overlap the protected run-70 wall.
 	for target: Dictionary in [buckets.wall, collision]:
-		_append_frame_box(target, frame, -half, half, low_y - 0.05, top, wall - depth, wall)
+		_append_frame_box(target, frame, -half, half, low_y, top, wall - depth, wall)
 	var coping := shoulder.coping as Array
 	for target: Dictionary in [buckets.trim, collision]:
 		_append_frame_box(target, frame, -half - 0.1, half + 0.1, float(coping[0]), float(coping[1]), wall - depth - 0.1, wall + float(coping[2]))
@@ -1424,38 +1650,165 @@ static func _append_tower_base_block(buckets: Dictionary, collision: Dictionary,
 				_append_box(target, post, along, face_normal, 0.07, float(block.rail_height) - parapet_height, 0.07)
 
 
-## Rear drum banding along the central tier's exact inner (rear) face, which
-## the strip walls emit `depth` behind each central run: one path over those
-## inner segments and the joins between them, ordered so its normals face out
-## of the rear. Bands sit `back` into the face so no seam opens at a join.
-static func _append_drum_banding(trim: Dictionary, record: Dictionary, runs: Array[int], depth: float, banding: Dictionary) -> void:
-	var points: Array = []
-	var normals: Array = []
-	for index in range(runs.size() - 1, -1, -1):
-		var frame := _run_frame(record, runs[index])
-		var normal := frame.normal as Vector3
-		var inner_end := (frame.end as Vector3) - normal * depth
-		var inner_start := (frame.start as Vector3) - normal * depth
-		if not points.is_empty():
-			var previous := points[points.size() - 1] as Vector3
-			var join := Vector3(inner_end.x - previous.x, 0.0, inner_end.z - previous.z)
-			if join.length() > 0.001:
-				var join_normal := Vector3(join.z, 0.0, -join.x).normalized()
-				if join_normal.dot((normals[normals.size() - 1] as Vector3) - normal) < 0.0:
-					join_normal = -join_normal
-				points.append(inner_end)
-				normals.append(join_normal)
-		else:
-			points.append(inner_end)
-		points.append(inner_start)
-		normals.append(-normal)
-	var path := {"points": points, "normals": normals}
+## Rear drum banding along the central tier's exposed rear outline (dated
+## 2023 rear view): the boundary of the tier's exact roof pieces between its
+## two end caps. Short junction runs whose 25 m inward offsets fall inside the
+## drum (39, 40, 42) contribute no band, so nothing crosses the roof. Bands sit
+## `back` into the face so no seam opens at a join; the coping, which stands
+## above the roof, also closes its inner face. Visual relief only.
+static func _append_drum_banding(trim: Dictionary, record: Dictionary, runs: Array[int], depth: float, banding: Dictionary) -> bool:
+	var path := _strip_rear_outline(record, runs, depth)
+	if path.is_empty():
+		return false
 	var back := float(banding.back)
 	var coping := banding.coping as Array
-	_append_path_band(trim, path, float(coping[0]), float(coping[1]), float(coping[2]), back)
+	_append_path_band(trim, path, float(coping[0]), float(coping[1]), float(coping[2]), back, false, false, true)
 	for line_value in banding.speed_lines as Array:
 		var line := line_value as Array
 		_append_path_band(trim, path, float(line[0]), float(line[1]), float(banding.speed_line_front), back)
+	return true
+
+
+## Horizontal XZ pieces of a stepped tier strip exactly as _append_strip_roof
+## emits them (before clipping): one quad per run and the join triangles.
+static func _strip_pieces(record: Dictionary, runs: Array[int], depth: float) -> Array[PackedVector2Array]:
+	var pieces: Array[PackedVector2Array] = []
+	var previous := {}
+	for run_index in runs:
+		var frame := _run_frame(record, run_index)
+		var normal := frame.normal as Vector3
+		var start := frame.start as Vector3
+		var end := frame.end as Vector3
+		var inner_start := start - normal * depth
+		var inner_end := end - normal * depth
+		pieces.append(PackedVector2Array([Vector2(start.x, start.z), Vector2(end.x, end.z), Vector2(inner_end.x, inner_end.z), Vector2(inner_start.x, inner_start.z)]))
+		if not previous.is_empty():
+			var join := previous.end as Vector3
+			var previous_inner := join - (previous.normal as Vector3) * depth
+			var current_inner := join - normal * depth
+			var triangle := PackedVector2Array([Vector2(join.x, join.z), Vector2(previous_inner.x, previous_inner.z), Vector2(current_inner.x, current_inner.z)])
+			if absf(_ring_area(triangle)) > 0.0001:
+				pieces.append(triangle)
+		previous = frame
+	return pieces
+
+
+## Outer boundaries of the union of polygons, merging pieces that overlap or
+## share an edge (holes are dropped). Each result is counterclockwise in
+## Geometry2D's sense (not is_polygon_clockwise).
+static func _union_outers(polygons: Array[PackedVector2Array]) -> Array[PackedVector2Array]:
+	var result: Array[PackedVector2Array] = []
+	for polygon in polygons:
+		if absf(_ring_area(polygon)) < 0.0001:
+			continue
+		var current := polygon.duplicate()
+		if Geometry2D.is_polygon_clockwise(current):
+			current.reverse()
+		var merged := true
+		while merged:
+			merged = false
+			for index in result.size():
+				var outer := _single_outer(Geometry2D.merge_polygons(current, result[index]))
+				if outer.is_empty():
+					continue
+				current = outer
+				result.remove_at(index)
+				merged = true
+				break
+		result.append(current)
+	return result
+
+
+## The one outer boundary of a merge result, or empty when the inputs stayed
+## separate (two or more outers). Holes have the opposite orientation.
+static func _single_outer(pieces: Array[PackedVector2Array]) -> PackedVector2Array:
+	var largest := -1
+	for index in pieces.size():
+		if largest < 0 or absf(_ring_area(pieces[index])) > absf(_ring_area(pieces[largest])):
+			largest = index
+	if largest < 0:
+		return PackedVector2Array()
+	var orientation := Geometry2D.is_polygon_clockwise(pieces[largest])
+	for index in pieces.size():
+		if index != largest and Geometry2D.is_polygon_clockwise(pieces[index]) == orientation:
+			return PackedVector2Array()
+	var outer := pieces[largest].duplicate()
+	if orientation:
+		outer.reverse()
+	return outer
+
+
+## The tier strip's exposed rear outline as a band path: the union boundary of
+## its pieces from the first run's inner start to the last run's inner end,
+## the way that does not pass the exact front, with outward normals. Empty
+## when the union is not one polygon or the corners are not on it.
+static func _strip_rear_outline(record: Dictionary, runs: Array[int], depth: float) -> Dictionary:
+	var origin_point := _run_frame(record, runs[0]).start as Vector3
+	var origin := Vector2(origin_point.x, origin_point.z)
+	var local: Array[PackedVector2Array] = []
+	for piece in _strip_pieces(record, runs, depth):
+		var shifted := PackedVector2Array()
+		for point in piece:
+			shifted.append(point - origin)
+		if Geometry2D.is_polygon_clockwise(shifted):
+			shifted.reverse()
+		local.append(shifted)
+	var outers := _union_outers(local)
+	if outers.size() != 1:
+		return {}
+	var outline := _simplified_ring(outers[0])
+	var first := _run_frame(record, runs[0])
+	var last := _run_frame(record, runs[runs.size() - 1])
+	var corner_a3 := (first.start as Vector3) - (first.normal as Vector3) * depth
+	var corner_b3 := (last.end as Vector3) - (last.normal as Vector3) * depth
+	var corner_a := Vector2(corner_a3.x, corner_a3.z) - origin
+	var corner_b := Vector2(corner_b3.x, corner_b3.z) - origin
+	var last_end := last.end as Vector3
+	var fronts: Array[Vector2] = [Vector2.ZERO, Vector2(last_end.x, last_end.z) - origin]
+	var ia := -1
+	var ib := -1
+	for index in outline.size():
+		if outline[index].distance_to(corner_a) < 0.02:
+			ia = index
+		if outline[index].distance_to(corner_b) < 0.02:
+			ib = index
+	if ia < 0 or ib < 0 or ia == ib:
+		return {}
+	var count := outline.size()
+	var arcs: Array = []
+	for step in [1, count - 1]:
+		var arc: Array[Vector2] = []
+		var index := ia
+		var touches_front := false
+		while true:
+			arc.append(outline[index])
+			for front in fronts:
+				if outline[index].distance_to(front) < 0.05:
+					touches_front = true
+			if index == ib:
+				break
+			index = (index + step) % count
+		arcs.append([arc, touches_front])
+	var chosen: Array[Vector2] = []
+	for entry: Array in arcs:
+		if not bool(entry[1]):
+			chosen = entry[0]
+	if chosen.size() < 2:
+		return {}
+	var points: Array = []
+	var normals: Array = []
+	for index in chosen.size():
+		var point := chosen[index] + origin
+		points.append(Vector3(point.x, 0.0, point.y))
+		if index == 0:
+			continue
+		var a := chosen[index - 1]
+		var b := chosen[index]
+		var normal := Vector2(b.y - a.y, a.x - b.x).normalized()
+		if Geometry2D.is_point_in_polygon((a + b) * 0.5 + normal * 0.05, outline):
+			normal = -normal
+		normals.append(Vector3(normal.x, 0.0, normal.y))
+	return {"points": points, "normals": normals}
 
 
 static func _append_fluted_pier(trim: Dictionary, frame: Dictionary, center: float, width: float, bottom: float, top: float, depth: float, reeds: int, reed_width: float, reed_gap: float, reed_front: float) -> void:
@@ -1647,10 +2000,13 @@ static func _append_plinth(base: Dictionary, record: Dictionary, runs: Array[int
 		_append_path_band(base, path, -0.06, height, float(front.plinth_front), -0.04, true, true)
 
 
+## Cornice courses on an exact wall path. The top course stands above the
+## tier roof, so every course also closes its inner face: without it the lip
+## reads as a see-through slot from the roof. Visual only.
 static func _append_cornice(trim: Dictionary, path: Dictionary, profile: Array, back: float) -> void:
 	for level_value in profile:
 		var level := level_value as Array
-		_append_path_band(trim, path, float(level[0]), float(level[1]), float(level[2]), back)
+		_append_path_band(trim, path, float(level[0]), float(level[1]), float(level[2]), back, false, false, true)
 
 
 ## End point of a stepped tier's end cap `depth` inward from the exact outer

@@ -520,8 +520,8 @@
     },
     {
       "source_key": "w1222514695",
-      "family": "midrise",
-      "config": "res://game/resources/midrise_family/w1222514695.json",
+      "family": "pier",
+      "config": "res://game/resources/pier_family/w1222514695.json",
       "chunk": "res://generated/world/chunks/x_-1__z_3.json"
     },
     {

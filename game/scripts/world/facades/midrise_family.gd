@@ -18,7 +18,16 @@ extends RefCounted
 ## anchor) cover sheds, tanks, trailers and pavilions; configs without them build
 ## as before.
 ## Dimensions, cadence and unseen sides are production inference.
+## Opt-in scheme `grid` (shared facade_grid format, columns in footprint-edge stations
+## on e<k> faces) places the windows of every bay from a photo-derived grid, built as
+## shared facade_assembly units; schemes without it build exactly as before.
 ## See game/resources/midrise_family/README.md for the config fields.
+
+const FacadeGrid := preload("res://game/scripts/world/facades/facade_grid.gd")
+const FacadeAssembly := preload("res://game/scripts/world/facades/facade_assembly.gd")
+# Assembly roles that take the window spec's member (frame) material by default; panes
+# take its glass. Grid windows thus keep the scheme's existing window materials.
+const GRID_MEMBER_ROLES := ["frame", "mullion", "transom", "lower_field", "spandrel", "surround", "divider"]
 
 const SCHEMA := "ti.midrise-family/1"
 const ROLES := ["wall", "roof", "support", "ground"]
@@ -128,6 +137,11 @@ class Face:
 	var index := 0
 	var poly_index := 0
 	var top_xs: Array = []
+	## Opt-in scheme grid: its expanded openings in face-local stations.
+	var has_grid := false
+	var grid_openings: Array = []
+	## Per grid opening index: "placed", "claimed" or why it was not placed.
+	var grid_status: Dictionary = {}
 
 	func point(s: float, y: float, depth: float) -> Vector3:
 		var p := a + d * s - n * depth
@@ -743,8 +757,10 @@ static func _spans(ctx: Ctx, block: Block, i: int) -> Array:
 	var side := Vector2(-d.y, d.x)
 	var covers: Array = []
 	for other: Block in ctx.blocks:
-		# An open pergola has no roof slab, so it never hides a neighbour's wall.
-		if other == block or other.cfg.has("pergola"):
+		# An open pergola has no roof slab, so it never hides a neighbour's wall. An
+		# opt-in "open_sided": true block (an open canopy on posts) keeps its roof but
+		# also leaves the neighbour's wall standing behind it.
+		if other == block or other.cfg.has("pergola") or bool(other.cfg.get("open_sided", false)):
 			continue
 		for j in other.poly.size():
 			var qa := other.poly[j]
@@ -963,6 +979,10 @@ static func _fill(face: Face, bays: Array, g0: float, g1: float, ranges: Array) 
 		if b - a < 0.01:
 			continue
 		var feature := _range_at(ranges, (a + b) * 0.5)
+		if face.has_grid:
+			# The grid places the windows; the gap stays one bay.
+			bays.append({"s0": a, "s1": b, "f": {}, "kind": "blank" if str(feature.get("type", "")) == "blank" else "window", "range": feature})
+			continue
 		var module := float(feature.get("module", face.scheme.get("module", 3.3)))
 		var count := int(round((b - a) / module))
 		var kind := "blank" if str(feature.get("type", "")) == "blank" or count < 1 else "window"
@@ -1119,7 +1139,20 @@ static func _openings(ctx: Ctx, face: Face, bay: Dictionary) -> Array:
 			# Opt-in: ground-storey windows still fill the bay (louvres under windows).
 			if not bool(feature.get("windows", false)):
 				claimed[0] = true
+	var blocked := claimed.duplicate()
+	for value: Variant in skip_storeys:
+		blocked[int(value)] = true
+	if face.has_grid:
+		# Under a grid, ground kind "blank" and upper "blank" still leave storeys solid.
+		if str(ground.get("kind", "window")) == "blank":
+			blocked[0] = true
+		if upper == "blank":
+			for k in range(1, block.storeys):
+				blocked[k] = true
 	for k in block.storeys:
+		if face.has_grid:
+			out.append_array(_grid_cells(face, s0, s1, k, ground if k == 0 else _storey_window(window, [scheme, rng, feature], k), blocked))
+			continue
 		if claimed.has(k) or k in skip_storeys:
 			continue
 		if k == 0:
@@ -1134,12 +1167,7 @@ static func _openings(ctx: Ctx, face: Face, bay: Dictionary) -> Array:
 			continue
 		if upper == "blank":
 			continue
-		var storey_window := window
-		for source: Dictionary in [scheme, rng, feature]:
-			var overrides: Dictionary = source.get("window_storeys", {})
-			if overrides.has(str(k)):
-				storey_window = _merge(storey_window, overrides[str(k)])
-		var choice := _stagger(face, bay, k, storey_window)
+		var choice := _stagger(face, bay, k, _storey_window(window, [scheme, rng, feature], k))
 		var spec: Dictionary = choice.spec
 		var c := center + float(choice.offset)
 		if kind == "corner":
@@ -1158,6 +1186,144 @@ static func _openings(ctx: Ctx, face: Face, bay: Dictionary) -> Array:
 	return kept
 
 
+## Validates and expands a face's scheme grid (columns mapped from footprint-edge
+## stations to face stations); an invalid grid fails the build.
+static func _prepare_grid(ctx: Ctx, face: Face) -> bool:
+	var grid: Variant = face.scheme.get("grid")
+	if not grid is Dictionary:
+		ctx.errors.append("%s/%s grid is not an object" % [face.block.id, face.key])
+		return false
+	var block := face.block
+	var floors: Array = []
+	for k in block.storeys:
+		floors.append(block.floors[k])
+	var local: Dictionary = (grid as Dictionary).duplicate(true)
+	var columns: Array = []
+	var index := 0
+	for column: Array in FacadeGrid.columns(grid):
+		var a := _local_station(ctx, face, float(column[0]))
+		var b := _local_station(ctx, face, float(column[1]))
+		columns.append([minf(a, b), maxf(a, b), index])
+		index += 1
+	columns.sort_custom(func(x: Array, y: Array) -> bool: return float(x[0]) < float(y[0]))
+	# The grid's rows, groups, cells and source are validated once against this face's
+	# storeys with all its columns, whether or not any column reaches the face.
+	var whole := local.duplicate(true)
+	whole["columns"] = columns.map(func(c: Array) -> Array: return [c[0], c[1]])
+	var check := FacadeGrid.validate(whole, floors, block.floors[block.storeys])
+	if not bool(check.ok):
+		ctx.errors.append("%s/%s grid: %s" % [block.id, face.key, "; ".join(PackedStringArray(check.errors))])
+		return false
+	# A scheme shared by several faces (one edge split over blocks, or an inherited grid
+	# on faces of different lengths) keeps only the columns that reach this face; columns
+	# wholly beyond its ends belong to other faces. A face left without columns is solid.
+	var on_face: Array = []
+	var remap := {}
+	for column: Array in columns:
+		if float(column[1]) > 0.001 and float(column[0]) < face.length - 0.001:
+			remap[int(column[2])] = on_face.size()
+			on_face.append([column[0], column[1]])
+	face.has_grid = true
+	if on_face.is_empty():
+		face.grid_openings = []
+		ctx.skipped.append("%s/%s grid has no columns on this face; solid" % [block.id, face.key])
+		return true
+	# Blank cells name columns by the grid's own order; follow them to this face's list.
+	var cells: Array = []
+	for cell: Variant in local.get("blank_cells", []):
+		if cell is Array and remap.has(int(cell[0])):
+			cells.append([remap[int(cell[0])], int(cell[1])])
+	if local.has("blank_cells"):
+		local["blank_cells"] = cells
+	local["columns"] = on_face
+	# Ground-storey sills rise to GRADE_CLEARANCE_M above the local grade under each
+	# column (storey 0 only, heads kept; a light under 0.9 m is dropped), as the
+	# non-grid windows do.
+	var ground := func(u0: float, u1: float) -> float: return _ground_max(ctx, face, u0, u1)
+	var expanded := FacadeGrid.expand(local, floors, block.floors[block.storeys], {"ground": ground, "ground_clearance": GRADE_CLEARANCE_M, "min_light": 0.9})
+	var missing := _grid_missing_materials(ctx, face)
+	if not missing.is_empty():
+		ctx.errors.append("%s/%s grid: palette has no %s" % [block.id, face.key, ", ".join(PackedStringArray(missing))])
+		return false
+	if not bool(expanded.ok):
+		ctx.errors.append("%s/%s grid: %s" % [block.id, face.key, "; ".join(PackedStringArray(expanded.errors))])
+		return false
+	face.grid_openings = expanded.openings
+	face.has_grid = true
+	return true
+
+
+## Palette keys the face's grid windows would use that the palette lacks: each window
+## spec's glass and frame (scheme, ranges, features and their storey overrides) and the
+## grid_unit opt-in materials.
+static func _grid_missing_materials(ctx: Ctx, face: Face) -> Array:
+	var keys: Array = []
+	var specs: Array = []
+	for source: Dictionary in [face.scheme] + (face.scheme.get("features", []) as Array):
+		for name: String in ["window", "ground"]:
+			if source.get(name) is Dictionary:
+				specs.append(source.get(name))
+		var overrides: Variant = source.get("window_storeys", {})
+		if overrides is Dictionary:
+			for value: Variant in (overrides as Dictionary).values():
+				if value is Dictionary:
+					specs.append(value)
+	for spec: Dictionary in specs:
+		keys.append(str(spec.get("glass", "glass")))
+		keys.append(str(spec.get("frame", "frame")))
+	var unit: Variant = face.scheme.get("grid_unit", {})
+	if unit is Dictionary and (unit as Dictionary).get("materials") is Dictionary:
+		for value: Variant in ((unit as Dictionary).materials as Dictionary).values():
+			keys.append(str(value))
+	var missing: Array = []
+	for key: String in keys:
+		if not ctx.materials.has(key) and key not in missing:
+			missing.append(key)
+	return missing
+
+
+## Window spec of storey k: the merged window plus the sources' storey overrides.
+static func _storey_window(window: Dictionary, sources: Array, k: int) -> Dictionary:
+	var spec := window
+	for source: Dictionary in sources:
+		var overrides: Dictionary = source.get("window_storeys", {})
+		if overrides.has(str(k)):
+			spec = _merge(spec, overrides[str(k)])
+	return spec
+
+
+## Grid openings starting in storey k whose columns lie inside the bay [s0, s1]. An
+## opening joined over storeys is kept only when none of them is blocked (claimed by a
+## feature, skipped or blank); window_spec supplies the default materials.
+static func _grid_cells(face: Face, s0: float, s1: float, k: int, window_spec: Dictionary, blocked: Dictionary) -> Array:
+	var out: Array = []
+	var unit: Dictionary = face.scheme.get("grid_unit", {})
+	for i in face.grid_openings.size():
+		var o: Array = face.grid_openings[i]
+		if _storey_at(face.block, float(o[2])) != k or float(o[1]) <= s0 or float(o[0]) >= s1:
+			continue
+		var placed := str(face.grid_status.get(i, "")) == "placed"
+		if blocked.has(k):
+			# The bay's own feature (or a blank/skip rule) owns this storey.
+			if not placed:
+				face.grid_status[i] = "claimed"
+			continue
+		if float(o[0]) < s0 + MIN_PIER_M * 0.5 or float(o[1]) > s1 - MIN_PIER_M * 0.5:
+			if not placed:
+				face.grid_status[i] = "straddles bay %.2f-%.2f" % [s0, s1]
+			continue
+		var conflict := -1
+		for kk in range(k, _storey_at(face.block, float(o[3]) - 0.01) + 1):
+			if blocked.has(kk):
+				conflict = kk
+		if conflict >= 0:
+			if not placed:
+				face.grid_status[i] = "joined storey %d is claimed" % conflict
+			continue
+		out.append({"s0": float(o[0]), "s1": float(o[1]), "y0": float(o[2]), "y1": float(o[3]), "kind": "grid", "spec": {"unit": unit, "window": window_spec}, "k": k, "extras": o[4], "gi": i})
+	return out
+
+
 static func _placed(face: Face, bay: Dictionary, spec: Dictionary, center: float, floor_y: float, next_y: float, k: int, kind: String) -> Dictionary:
 	var w := float(spec.get("w", 1.6))
 	var sill := float(spec.get("sill", 0.8))
@@ -1171,6 +1337,8 @@ static func _placed(face: Face, bay: Dictionary, spec: Dictionary, center: float
 
 
 static func _facade(ctx: Ctx, face: Face) -> void:
+	if face.scheme.has("grid") and not _prepare_grid(ctx, face):
+		return
 	var bays := _bays(ctx, face)
 	if not ctx.errors.is_empty():
 		return
@@ -1203,9 +1371,16 @@ static func _facade(ctx: Ctx, face: Face) -> void:
 					elif float(opening.y0) < grade:
 						continue
 				holes.append(opening)
+				if opening.has("gi"):
+					face.grid_status[int(opening.gi)] = "placed"
 			_wall_strip(ctx, face, bay, x0, x1, span, holes)
 			for opening: Dictionary in holes:
 				_assembly(ctx, face, bay, opening)
+	for i in face.grid_openings.size():
+		var status := str(face.grid_status.get(i, "not placed (off the face or below a raised span)"))
+		if status not in ["placed", "claimed"]:
+			var o: Array = face.grid_openings[i]
+			ctx.skipped.append("%s/%s grid column %.2f-%.2f at %.2f: %s" % [block.id, face.key, float(o[0]), float(o[1]), float(o[2]), status])
 	for bay: Dictionary in bays:
 		if str(bay.kind) == "ladder":
 			_ladder(ctx, face, bay)
@@ -1427,6 +1602,28 @@ static func _assembly(ctx: Ctx, face: Face, bay: Dictionary, o: Dictionary) -> v
 				glazing = _merge(spec, {"mullions": mullions})
 			_glazing(ctx, face, glazing, s0, s1, y0, y1, depth)
 			_hood(ctx, face, spec, s0, s1, y1)
+		"grid":
+			# Shared facade_assembly units on the grid opening (frames, mullions,
+			# transoms, lower fields, spandrels across joined storeys).
+			var unit: Dictionary = spec.get("unit", {})
+			var window_spec: Dictionary = spec.get("window", {})
+			var depth := float(unit.get("depth", window_spec.get("depth", 0.2)))
+			_reveals(ctx, face, str(unit.get("reveal", window_spec.get("reveal", wall_mat))), s0, s1, y0, y1, depth, true)
+			var unit_spec: Dictionary = (unit.get("unit", {}) as Dictionary).duplicate(true)
+			unit_spec["pane_d"] = -depth
+			# Default: the scheme's existing window materials; grid_unit.materials opts in.
+			var materials := {"pane": str(window_spec.get("glass", "glass"))}
+			for role: String in GRID_MEMBER_ROLES:
+				materials[role] = str(window_spec.get("frame", "frame"))
+			unit_spec["materials"] = _merge(materials, unit.get("materials", {}))
+			var assembly := FacadeAssembly.stack([s0, s1, y0, y1, o.get("extras", {})], unit_spec)
+			if not bool(assembly.ok):
+				ctx.errors.append("%s/%s grid window at %.2f: %s" % [face.block.id, face.key, s0, "; ".join(PackedStringArray(assembly.errors))])
+				return
+			# A flat emitter draws each rect's outward face at d1.
+			var out := face.out3()
+			for r: Dictionary in assembly.rects:
+				_rect(ctx.bucket("wall", str(r.material)), face, float(r.u0), float(r.u1), float(r.y0), float(r.y1), -float(r.d1), out)
 		"patio":
 			var depth := float(spec.get("depth", 0.18))
 			_reveals(ctx, face, wall_mat, s0, s1, y0, y1, depth, true)

@@ -994,7 +994,11 @@ func _check_spray(source: String, plan: Dictionary, bounds: AABB) -> void:
 		_failures.append(_prefix+"spray did not place one actual source-bound wall decal: "+str(results))
 		_unsafe=true
 	if valid and rest_error == "" and not screenshot_path.is_empty():
+		# The avatar stays out of the evidence frame (visual only).
+		var avatar := _h.player.get_node("AvatarPivot") as Node3D
+		avatar.visible = false
 		var screenshot_error := await _h.save_screenshot(screenshot_path)
+		avatar.visible = true
 		if screenshot_error != "":
 			_failures.append(_prefix + "spray " + screenshot_error)
 		else:

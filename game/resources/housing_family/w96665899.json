@@ -613,9 +613,9 @@
             "bottom_y": 2.134,
             "panel_style": "boarded",
             "material_rgb": [
+              0.82,
               0.8,
-              0.7,
-              0.56
+              0.74
             ],
             "inference": "production_inference: walled privacy court (front panel and returns from kit screen assemblies) enclosing this pair's door as in the dated lot view; height, depth and gate position are not measured"
           },
@@ -652,9 +652,9 @@
             "bottom_y": 2.1452,
             "panel_style": "boarded",
             "material_rgb": [
+              0.82,
               0.8,
-              0.7,
-              0.56
+              0.74
             ],
             "inference": "production_inference: walled privacy court (front panel and returns from kit screen assemblies) enclosing this pair's door as in the dated lot view; height, depth and gate position are not measured"
           },
@@ -691,9 +691,9 @@
             "bottom_y": 2.1356,
             "panel_style": "boarded",
             "material_rgb": [
+              0.82,
               0.8,
-              0.7,
-              0.56
+              0.74
             ],
             "inference": "production_inference: walled privacy court (front panel and returns from kit screen assemblies) enclosing this pair's door as in the dated lot view; height, depth and gate position are not measured"
           },
@@ -847,9 +847,9 @@
             "bottom_y": 2.0155,
             "panel_style": "boarded",
             "material_rgb": [
+              0.82,
               0.8,
-              0.7,
-              0.56
+              0.74
             ],
             "inference": "production_inference: walled privacy court (front panel and returns from kit screen assemblies) enclosing this pair's door as in the dated lot view; height, depth and gate position are not measured"
           },
@@ -886,9 +886,9 @@
             "bottom_y": 2.0773,
             "panel_style": "boarded",
             "material_rgb": [
+              0.82,
               0.8,
-              0.7,
-              0.56
+              0.74
             ],
             "inference": "production_inference: walled privacy court (front panel and returns from kit screen assemblies) enclosing this pair's door as in the dated lot view; height, depth and gate position are not measured"
           },
@@ -925,9 +925,9 @@
             "bottom_y": 2.0171,
             "panel_style": "boarded",
             "material_rgb": [
+              0.82,
               0.8,
-              0.7,
-              0.56
+              0.74
             ],
             "inference": "production_inference: walled privacy court (front panel and returns from kit screen assemblies) enclosing this pair's door as in the dated lot view; height, depth and gate position are not measured"
           },
@@ -1795,9 +1795,9 @@
       0.83
     ],
     "screen_rgb": [
+      0.82,
       0.8,
-      0.7,
-      0.56
+      0.74
     ],
     "dark_glass_rgb": [
       0.11,
@@ -1815,9 +1815,9 @@
       0.52
     ],
     "closure_rgb": [
-      0.72,
-      0.68,
-      0.6
+      0.82,
+      0.8,
+      0.74
     ],
     "pale_door_rgb": [
       0.7,

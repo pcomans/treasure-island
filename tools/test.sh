@@ -72,6 +72,7 @@ for test in \
   game/tests/headless_world_material_contract.gd \
   game/tests/headless_facade_meter_uv_adapter_contract.gd \
   game/tests/headless_building_study_geometry_contract.gd \
+  game/tests/headless_facade_grid_contract.gd \
   game/tests/automated_route_qa.gd \
   game/tests/shared/island_test.gd
 do

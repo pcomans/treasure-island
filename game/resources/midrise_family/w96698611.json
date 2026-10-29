@@ -268,10 +268,10 @@
     "pale": {
       "rgb": [
         0.84,
-        0.8,
-        0.7
+        0.72,
+        0.56
       ],
-      "roughness": 0.9
+      "roughness": 0.85
     },
     "roof_dark": {
       "rgb": [
@@ -512,6 +512,29 @@
           }
         }
       ]
+    },
+    "side_blank": {
+      "material": "pale",
+      "parapet_material": "pale",
+      "module": 3.4,
+      "window": {
+        "w": 1.4,
+        "h": 1.3,
+        "sill": 0.9,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      },
+      "upper": "blank"
     }
   },
   "blocks": [
@@ -538,6 +561,10 @@
         {
           "edge": 12,
           "min": 0.0
+        },
+        {
+          "edge": 3,
+          "min": 0.0
         }
       ],
       "roof": {
@@ -555,6 +582,98 @@
         "e10": "door10",
         "e14": "door14",
         "e23": "door23"
+      }
+    },
+    {
+      "id": "core_se",
+      "storeys": 1,
+      "ground_h": 3.0,
+      "parapet": {
+        "h": 0.0
+      },
+      "clip": [
+        {
+          "edge": 21,
+          "min": 0.0
+        },
+        {
+          "edge": 7,
+          "min": 0.0
+        },
+        {
+          "edge": 26,
+          "min": 0.0
+        },
+        {
+          "edge": 12,
+          "min": 0.0
+        },
+        {
+          "edge": 3,
+          "max": 0.0
+        },
+        {
+          "edge": 6,
+          "max": 0.0
+        }
+      ],
+      "roof": {
+        "form": "pyramid",
+        "pitch_deg": 14.0,
+        "overhang": 0.35,
+        "t": 0.15,
+        "under": "soffit",
+        "fascia": "fascia"
+      },
+      "roof_material": "roof_dark",
+      "faces": {
+        "default": "side",
+        "e0": "door0",
+        "e10": "door10",
+        "e14": "door14",
+        "e23": "door23"
+      }
+    },
+    {
+      "id": "clerestory",
+      "storeys": 1,
+      "ground_h": 3.3,
+      "parapet": {
+        "h": 0.0
+      },
+      "clip": [
+        {
+          "edge": 26,
+          "min": 0.0
+        },
+        {
+          "edge": 6,
+          "min": 0.0
+        },
+        {
+          "edge": 3,
+          "max": 0.0
+        }
+      ],
+      "roof": {
+        "form": "mono",
+        "low_edge": 4,
+        "pitch_deg": 14.5,
+        "overhang": 0.3,
+        "t": 0.15,
+        "under": "soffit",
+        "fascia": "fascia"
+      },
+      "roof_material": "roof_dark",
+      "faces": {
+        "default": "side",
+        "e0": "door0",
+        "e10": "door10",
+        "e14": "door14",
+        "e23": "door23",
+        "court": "side_blank",
+        "e6": "side_blank",
+        "e4": "side_blank"
       }
     },
     {
@@ -790,38 +909,8 @@
           "max": 0.0
         },
         {
-          "edge": 7,
-          "min": 0.0
-        },
-        {
           "edge": 26,
           "max": 0.0
-        }
-      ],
-      "roof_material": "roof_dark",
-      "faces": {
-        "default": "side",
-        "e0": "door0",
-        "e10": "door10",
-        "e14": "door14",
-        "e23": "door23"
-      }
-    },
-    {
-      "id": "f_e",
-      "storeys": 1,
-      "ground_h": 3.0,
-      "parapet": {
-        "h": 0.0
-      },
-      "clip": [
-        {
-          "edge": 7,
-          "max": 0.0
-        },
-        {
-          "edge": 6,
-          "min": 0.0
         }
       ],
       "roof_material": "roof_dark",
@@ -953,6 +1042,7 @@
   "study_notes": {
     "observed": "Feb 2018 Avenue E: low single-storey building with a dark hipped roof among palms; Mar 2025 10th St: pale one-storey with a low grey roof behind a tall wood fence (medium association).",
     "inferred": "Hipped roofs over the core and arms of the pinwheel plan, window cadence, four doors; the wood fence is not modelled.",
-    "footprint": "Frozen 28-edge pinwheel ring split into a core, six arms and six narrow steps."
+    "footprint": "Frozen 28-edge pinwheel ring split into a core, six arms and six narrow steps.",
+    "wholeunit": "Mar 2025 611-sideC_179 (pano R6AMZ8pY0e5dGnNQpwhJdQ, from 10th St): light natural cedar board siding, grey shingle hips, pale trim; Feb 2018 Avenue E shows the same forms in weathered dark brown before refinishing. Wall colour follows the present-day photo. The same photo shows a tall mono-pitch block over the e5 front (x between the e4 and e6 lines, back to the e3 line), its roof rising from about 3 m at the west to about 5.7 m at the east (fitted camera h 5.0, t -2.1): modelled as block clerestory (eave 3.3 m, 14.5 deg mono roof falling toward e4); the core hip is split around it. The green-roofed annex in that photo lies east of the footprint and is not part of this unit."
   }
 }

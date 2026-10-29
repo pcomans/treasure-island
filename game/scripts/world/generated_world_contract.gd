@@ -895,7 +895,7 @@ static func _validate_chunk(chunk: Dictionary, expected_chunk_id: String, source
 		for vertex_index in range(0, record_value.vertices.size(), 3):
 			var point := Vector2(float(record_value.vertices[vertex_index]), float(record_value.vertices[vertex_index + 2]))
 			if not contains_xz(boundary, point):
-				return _failure("playable_vertex_outside_boundary", "Chunk record %s has geometry outside the exact playable boundary." % str(record_value.object_key), record_value.source_keys)
+				return _failure("playable_vertex_outside_boundary", "Chunk record %s has geometry outside the playable boundary (island plus approved walkable piers)." % str(record_value.object_key), record_value.source_keys)
 	return {"ok": true}
 
 

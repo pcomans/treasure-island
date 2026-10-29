@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "building_1_tower_pale_standing_seam_roof"
+albedo_color = Color(0.8, 0.8, 0.78, 1)
+metallic = 0.35
+roughness = 0.45

@@ -546,9 +546,9 @@
       "properties": {
         "name": "Treasure Island",
         "role": "annotation_footprint",
-        "source": "generated/world/manifest.json#playable_boundary",
+        "source": "data/osm/treasure-island-polygon.geojson",
         "source_key": "w26767313",
-        "derivation": "Existing generated +X-east/-Z-north boundary converted with tools/lib/coordinates.mjs inverseProjectEastNorth"
+        "derivation": "Exact frozen island polygon in the generated world's millimetre-rounded +X-east/-Z-north form, converted with tools/lib/coordinates.mjs inverseProjectEastNorth"
       }
     }
   ]

@@ -2,7 +2,7 @@
 
 Keep this a short, living guide to mistakes worth preventing. Update an applicable lesson when new evidence changes it; preserve uncertainty and useful gains. Routine execution history belongs in `discovery/RETRO_LOG.md`.
 
-Retain the current owner-authorized [routing](AGENTS.md#bounded-subagent-execution): since 2026-10-21, every role runs in Claude Code on Opus 5.5 at effort `high`, modeling included, set by each role file's frontmatter. This supersedes the 2026-10-10 Codex Astra Low modeling / Sol High review routing. Keep root orchestration, explicit non-ultra dispatch, separate reviewers and existing gates. Earlier model choices and comparisons below are historical evidence, not a universal quality/cost/speed claim.
+Retain the current owner-authorized [routing](AGENTS.md#bounded-subagent-execution): since 2026-10-21, every role runs in Claude Code on Opus 5.5 at effort `high`, modeling included, set by each role file's frontmatter. Since 2026-10-23, landmark visual review runs in Codex on `gpt-6.1-sol` / `high`. This supersedes the 2026-10-10 Codex Astra Low modeling / Sol High review routing. Keep root orchestration, explicit non-ultra dispatch, separate reviewers and existing gates. Earlier model choices and comparisons below are historical evidence, not a universal quality/cost/speed claim.
 
 ## Do not promote one facade's finish to whole-building quality
 
@@ -849,3 +849,27 @@ On 2026-10-25, an optional two-screen loading-UI review repeatedly failed to ret
 ## Paint browser startup status before entering synchronous game startup
 
 On 2026-10-25, the completed download bar remained visible for roughly15s before the first captured game-owned Preparing graphics frame; a game HUD cannot announce work before its canvas paints. The stock startGame promise combines init/preload and synchronous game startup, and its resolution is not PLAY_READY. A project-owned shell using public init+preloadFile→DOM status/rendering opportunity→start produced an actual status frame before heavy game startup. Verify captured frames and terminal ready/error ordering, not rAF timestamps alone; Engine.load resolves at response headers, so it is not completed-download proof. This changes feedback timing, not the amount of graphics work.
+
+## Keep the generic winding when copying generated wall triangles
+
+Generated records store counterclockwise triangles; the generic wall builder takes each triplet as (first, third, second) so faces point outward for Godot. Isle House r3 (2026-10-23) rebuilt its low wall record and copied the untouched runs' triangles in record order, so those receiver faces pointed inward: fit-001 failed with walls 5/20 ("visible wall the player walks through") and walk-up 0/4 ("no qualified native wall crossing"), with no other symptom. When a producer copies generated wall triangles into its own record, keep the (first, third, second) order, and check every run with front-face rays from outside before the fit run.
+
+## Metallic glass tints its reflection by its base colour
+
+Isle House c10 (2026-10-24) got a REWORK because its glazing merged with the charcoal piers at street angles. The glass was metallic (0.5–0.7) with a dark albedo. In Godot a metallic surface tints its reflection by its base colour, so the dark glass mirrored a darkened sky; the ortho views hid this. c12 fixed it with material parameters only, and the c14 review raised only the Garden Walk base: light, mirror-like upper glass (light albedo, metallic 0.8, roughness 0.05) and dark non-metallic storefront glass (metallic 0, Fresnel sheen only). Judge glass in street-angle views, and check that it separates from neighbouring dark solids before a review.
+
+## Fit each Street View camera before a matched review
+
+Isle House b1 (2026-10-23) assumed a 96° field of view and its walls filled the frame. Offline corner projection then found the default-zoom focal length at about 387 px on 1018x795 screenshots (fov50 about 800 px). Hawkins r1–r5 (2026-10-24) assumed the +8° default tilt for every screenshot; fits against projected corners gave 14–21°, so the renders showed mostly lower wall and ground. The architect's shift-lens photos (cav-4, cav-7) could not be matched by any tilted pinhole (cav-4 rms 55 px) and needed a level camera with a crop. Before any review batch, fit tilt and heading per screenshot from projected corners at the right focal length, use a level camera with a crop for shift-lens photos, and check the overlay of render on photo.
+
+## Model photographed window groups as assemblies
+
+Isle House c2 (2026-10-23) aligned its openings to the rectified grid, and the Codex review still sent it back: the photos show connected glazing and spandrel stacks, curtain walls and a base composition, not punched holes. c4 built one complete WSW frontage from ground to roof as an assembly, had it checked, and only then propagated it (c5, c6). Before propagating windows, build one complete ground-to-roof frontage with its glazing/spandrel groups, curtain walls and base, and compare it with the photos.
+
+## Check rooftop outlines separately from rooftop rooms
+
+At Hawkins r6 (2026-10-24) the NNW penthouse existed and had plausible room dimensions, but its outline was wrong: the photos show a broad thin roof slab over a smaller glazed room. A corroborated stair box had also been deferred as detail. For each rooftop volume, compare the silhouette outline against the photos as its own check, not only the room's size.
+
+## Use fixed matched cameras for regression comparison
+
+At Hawkins r8 (2026-10-24) the automatic close-up and context shots differed by 4–9% from r6, while the fixed matched views differed by 0–1.5% and only where the changes were visible. The automatic framing follows the building's bounds, which grew with the new rooftop volumes. After adding volumes, compare fixed matched cameras as the main regression check; treat automatic-framing pixel diffs as framing changes until shown otherwise.

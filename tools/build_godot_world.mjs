@@ -35,6 +35,7 @@ import {
   MATERIAL_KEYS,
   PLAYER_CAPSULE_RADIUS_M,
   PLAYABLE_BOUNDARY_SOURCE_KEY,
+  PLAYABLE_PIER_EXTENSION_SOURCE_KEYS,
   ROAD_WIDTHS_M,
   ROAD_SURFACE_BIASES_M,
   ROAD_VISUAL_CLASSES,
@@ -1723,6 +1724,26 @@ function findInitialSpawn(boundary, objects, rawOsm, rawSources, chunks) {
   };
 }
 
+// The runtime playable boundary: the exact island polygon plus the named,
+// owner-approved walkable pier polygons. Each pier must be a frozen closed
+// man_made=pier area that already overlaps the island, and the union must stay
+// one component, so the extension can only add that pier's deck.
+function playableBoundaryWithPiers(boundary, rawOsm) {
+  let extended = boundary;
+  for (const sourceKey of PLAYABLE_PIER_EXTENSION_SOURCE_KEYS) {
+    const way = rawOsm.ways.get(sourceKey.slice(1));
+    invariant(way?.tags.man_made === "pier" && way.tags.area === "yes", `${sourceKey} is not a frozen pier area`);
+    const pier = rawWayFootprint(rawOsm, sourceKey.slice(1));
+    invariant(multiPolygonArea(intersectMultiPolygons(pier, boundary)) > 1, `${sourceKey} pier is not attached to the island`);
+    extended = unionMultiPolygons(extended, pier);
+  }
+  invariant(extended.length === boundary.length, "Pier extension changed the playable component count");
+  const holes = (geometry) => geometry.reduce((count, polygon) => count + polygon.length - 1, 0);
+  invariant(holes(extended) === holes(boundary), "Pier extension changed the playable hole count");
+  roundedCanonicalGeometry(extended, "Playable boundary with piers");
+  return extended;
+}
+
 function playableBoundaryManifest(boundary) {
   return {
     components: boundary.map((polygon) => ({
@@ -2141,7 +2162,7 @@ function main() {
         category_memberships: ledgerState.memberships,
       },
       initial_spawn: spawn,
-      playable_boundary: playableBoundaryManifest(boundary),
+      playable_boundary: playableBoundaryManifest(playableBoundaryWithPiers(boundary, loaded.rawOsm)),
       material_keys: [
         ...MATERIAL_KEYS,
         "context_bay_bridge",

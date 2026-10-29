@@ -297,7 +297,42 @@
           "h": 0.3,
           "material": "inst_band"
         }
-      ]
+      ],
+      "grid": {
+        "columns": {
+          "pitch": 5.2,
+          "first": 0.7,
+          "count": 10,
+          "width": 3.8
+        },
+        "rows": {
+          "*": {
+            "sill": 1.35,
+            "head": 3.05
+          }
+        },
+        "source": {
+          "kind": "inferred_from_side",
+          "ref": "520-sideC_242 pano cAhCruTjAinYoFHxP4wkmw",
+          "date": "2025-09",
+          "side": "e0 of w34313520",
+          "face": "plain comb faces",
+          "truth_class": "production_inference",
+          "note": "520's rows and window size on the existing 5.2 m comb-face module"
+        }
+      },
+      "grid_unit": {
+        "unit": {
+          "split": 0.5,
+          "split_min_w": 2.4,
+          "transoms": [
+            0.55
+          ],
+          "frame_w": 0.08,
+          "mullion_w": 0.08,
+          "member_d": 0.02
+        }
+      }
     },
     "dorm3": {
       "material": "inst_pale",
@@ -790,8 +825,8 @@
         },
         {
           "type": "stair_bay",
-          "from": 70.8,
-          "to": 75.2,
+          "from": 63.2,
+          "to": 66.4,
           "depth": 2.2,
           "pier": 0.2,
           "back": "stair_dark",
@@ -800,7 +835,122 @@
           "head": 0.35,
           "guard_h": 1.1
         }
-      ]
+      ],
+      "grid": {
+        "columns": [
+          [
+            0.6,
+            2.2
+          ],
+          [
+            2.5,
+            3.4
+          ],
+          [
+            4.6,
+            7.3
+          ],
+          [
+            9.6,
+            13.3
+          ],
+          [
+            18.2,
+            21.0
+          ],
+          [
+            27.0,
+            29.8
+          ],
+          [
+            31.0,
+            33.8
+          ],
+          [
+            35.2,
+            38.0
+          ],
+          [
+            40.6,
+            43.4
+          ],
+          [
+            44.0,
+            47.2
+          ],
+          [
+            47.8,
+            49.8
+          ],
+          [
+            50.4,
+            52.8
+          ],
+          [
+            53.6,
+            56.2
+          ],
+          [
+            59.8,
+            63.0
+          ],
+          [
+            66.8,
+            69.6
+          ],
+          [
+            71.0,
+            73.8
+          ],
+          [
+            74.8,
+            79.0
+          ],
+          [
+            84.6,
+            88.8
+          ],
+          [
+            92.4,
+            96.2
+          ]
+        ],
+        "rows": {
+          "*": {
+            "sill": 1.35,
+            "head": 3.05
+          }
+        },
+        "blank_cells": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ]
+        ],
+        "source": {
+          "kind": "rectified_photo",
+          "ref": "515 reference-nnw002 (pano XinlFktyE0_U2KP7tU6mfg, h 107.6 t 3.0 f 629) and reference-wsw001 (pano kEX8mV7OsuHLoA4oK69_KA, h 43.1 t 5.2 f 629)",
+          "date": "2025-09",
+          "side": "e0",
+          "note": "u 0-21 from nnw002: L3 wide window 0.6-3.4 over narrow L1-L2 lights 2.5-3.4 (blank cells), then 4.6-7.3 (L1 entry glazing), 9.6-13.3, 18.2-21.0 before the first stair recess; u 40-89 from wsw001: windows 40.6-56.2 around the entry, 59.8-63.0, the stair recess at about 63-66, 66.8-69.6, group 74.8-79.0, solid 79-84.5, group 84.6-88.8; u 27-38, 71-74 (tree) and 92-96 (off frame) continue the rhythm (production_inference); rows from 520"
+        }
+      },
+      "grid_unit": {
+        "unit": {
+          "split": 0.5,
+          "split_min_w": 2.4,
+          "transoms": [
+            0.55
+          ],
+          "frame_w": 0.08,
+          "mullion_w": 0.08,
+          "member_d": 0.02
+        }
+      }
     },
     "front13": {
       "material": "inst_pale",

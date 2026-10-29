@@ -1,10 +1,13 @@
 extends RefCounted
 ## Approved family appearance, with source-owned contacts matching installed meshes.
-## An instance's optional "family" ("housing" default, or "midrise") picks the
-## producer; both return the same role-tagged mesh contract. The mid-rise
-## producer also reads the chunks' frozen land to seat walls and landings.
+## An instance's optional "family" ("housing" default, "midrise" or "pier") picks
+## the producer; all return the same role-tagged mesh contract. The mid-rise and
+## pier producers also read the chunks' frozen land to seat walls and decks.
+## Roles: "wall" (spray receivers), "roof", "support", "ground", and the opt-in
+## "solid": an opaque non-receiver on the spray layer, so it blocks and refuses a tag.
 const FAMILY = preload("res://game/scripts/world/facades/housing_site_family.gd")
 const MIDRISE = preload("res://game/scripts/world/facades/midrise_family.gd")
+const PIER = preload("res://game/scripts/world/facades/pier_canopy_family.gd")
 const CONFIG := "res://game/resources/housing_family/live_instances.json"
 
 static func install(buildings: Node3D, chunks: Array, candidate_manifest: Dictionary = {}) -> Dictionary:
@@ -37,11 +40,14 @@ static func install(buildings: Node3D, chunks: Array, candidate_manifest: Dictio
 		var roof_key := "building:"+source+":roof"
 		var cfg: Variant = JSON.parse_string(FileAccess.get_file_as_string(item.config))
 		var family := str(item.get("family", "housing"))
-		if seen.has(source) or family not in ["housing", "midrise"] or not records.has(wall_key) or not records.has(roof_key) or not nodes.has(wall_key) or not nodes.has(roof_key) or not cfg is Dictionary or str(cfg.get("target",{}).get("source_key",""))!=source:
+		if seen.has(source) or family not in ["housing", "midrise", "pier"] or not records.has(wall_key) or not records.has(roof_key) or not nodes.has(wall_key) or not nodes.has(roof_key) or not cfg is Dictionary or str(cfg.get("target",{}).get("source_key",""))!=source:
 			for plan: Dictionary in plans: plan.model.free()
 			return {"ok":false,"message":"Family source/pair identity failed: "+source,"source_keys":[source]}
 		seen[source]=true
-		var model: Node3D = MIDRISE.build(records[wall_key],records[roof_key],cfg,chunks) if family == "midrise" else FAMILY.build(records[wall_key],records[roof_key],cfg)
+		var model: Node3D
+		if family == "midrise": model = MIDRISE.build(records[wall_key],records[roof_key],cfg,chunks)
+		elif family == "pier": model = PIER.build(records[wall_key],records[roof_key],cfg,chunks)
+		else: model = FAMILY.build(records[wall_key],records[roof_key],cfg)
 		if not bool(model.get_meta("build_valid",false)):
 			model.free()
 			for plan: Dictionary in plans: plan.model.free()
@@ -83,7 +89,7 @@ static func install(buildings: Node3D, chunks: Array, candidate_manifest: Dictio
 	return {"ok":true,"instances":plans.size(),"disabled_legacy_bodies":disabled,"contact_triangles":triangles,"scope":"approved appearance; no new recognition credit"}
 
 static func _contacts(model: Node3D, retained: Array[MeshInstance3D], source: String) -> Dictionary:
-	var faces_by_role: Dictionary = {"wall":PackedVector3Array(),"roof":PackedVector3Array(),"support":PackedVector3Array(),"ground":PackedVector3Array()}
+	var faces_by_role: Dictionary = {"wall":PackedVector3Array(),"roof":PackedVector3Array(),"support":PackedVector3Array(),"ground":PackedVector3Array(),"solid":PackedVector3Array()}
 	var meshes: Array[MeshInstance3D] = []
 	for child: Node in model.get_children():
 		if child is MeshInstance3D: meshes.append(child)
@@ -109,14 +115,15 @@ static func _contacts(model: Node3D, retained: Array[MeshInstance3D], source: St
 		if faces.is_empty(): continue
 		var body := StaticBody3D.new()
 		body.name="FamilyContact_"+role
-		body.collision_layer=5 if role=="wall" else 1
+		var spray_layer := role=="wall" or role=="solid"
+		body.collision_layer=5 if spray_layer else 1
 		body.collision_mask=0
 		var key := "building:"+source+(":roof" if role=="roof" else ":wall")
 		for node: Node in [body]:
 			node.set_meta("derived_object_key",key)
 			node.set_meta("source_keys",[source])
 			node.set_meta("receiver_kind","building_wall" if role=="wall" else "none")
-			node.set_meta("opaque",role=="wall")
+			node.set_meta("opaque",spray_layer)
 			node.set_meta("family_role",role)
 		if role=="wall": body.add_to_group("spray_receiver_wall")
 		# Keep physics calculations local while preserving every world-space vertex.

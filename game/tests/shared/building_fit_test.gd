@@ -102,7 +102,7 @@ const QUALITY_SUPPORT_ASSEMBLIES := {
 		"assembly_name": "ObservedPanelHall",
 		"required": {
 			"wall": ["PanelField", "ClosedSlot", "SlotReveal", "TerminalPier", "InfillPanel", "StorefrontGlazing", "StorefrontPilaster"],
-			"detail": ["SlotSill", "ThinCoping", "StorefrontFascia", "SplitFascia"],
+			"detail": ["SlotSill", "EaveSoffit", "EaveFascia", "StorefrontFascia", "SplitFascia"],
 			"ground_visual": [],
 		},
 	},

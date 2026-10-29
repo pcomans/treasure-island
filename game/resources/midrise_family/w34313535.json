@@ -28,7 +28,7 @@
     "basis": "median frozen terrain along the photographed WSW long side"
   },
   "levels": {
-    "ground_h": 4.6,
+    "ground_h": 5.2,
     "storey_h": 3.0,
     "parapet_h": 0.0
   },
@@ -171,21 +171,20 @@
     },
     "metal_grey": {
       "rgb": [
-        0.92,
-        0.86,
-        0.7
+        0.84,
+        0.84,
+        0.81
       ],
-      "roughness": 0.85,
-      "metallic": 0.0
+      "roughness": 0.75
     },
     "roof_metal": {
       "rgb": [
+        0.76,
         0.72,
-        0.73,
-        0.73
+        0.64
       ],
-      "roughness": 0.5,
-      "metallic": 0.3
+      "roughness": 0.55,
+      "metallic": 0.25
     },
     "fascia": {
       "rgb": [
@@ -194,6 +193,23 @@
         0.78
       ],
       "roughness": 0.7
+    },
+    "metal_pan": {
+      "rgb": [
+        0.9,
+        0.9,
+        0.87
+      ],
+      "roughness": 0.75
+    },
+    "skylight": {
+      "rgb": [
+        0.22,
+        0.24,
+        0.27
+      ],
+      "roughness": 0.3,
+      "metallic": 0.1
     }
   },
   "schemes": {
@@ -202,19 +218,11 @@
       "parapet_material": "metal_grey",
       "module": 60.0,
       "ground": {
-        "w": 1.6,
-        "h": 0.8,
-        "sill": 2.6,
-        "depth": 0.1,
-        "mullions": [
-          0.5
-        ],
-        "frame": "frame",
         "kind": "window"
       },
       "plinth": {
         "material": "concrete",
-        "top": 0.25
+        "top": 0.6
       },
       "window": {
         "w": 1.6,
@@ -226,55 +234,50 @@
         ],
         "frame": "frame"
       },
-      "features": [
-        {
-          "type": "bays",
-          "from": 4.0,
-          "to": 21.0,
-          "module": 4.25
+      "features": [],
+      "grid": {
+        "columns": {
+          "pitch": 0.32,
+          "first": 0.1,
+          "count": 78,
+          "width": 0.21
         },
-        {
-          "type": "entry",
-          "from": 1.0,
-          "to": 2.8,
-          "door": {
-            "kind": "unit",
-            "w": 1.0,
-            "h": 2.2,
-            "leaf_h": 2.2
-          },
-          "landing": {
-            "w": 1.8,
-            "depth": 1.2
+        "rows": {
+          "0": {
+            "sill": 0.62,
+            "head": 5.05
           }
         },
-        {
-          "type": "entry",
-          "from": 22.3,
-          "to": 24.1,
-          "door": {
-            "kind": "unit",
-            "w": 1.0,
-            "h": 2.2,
-            "leaf_h": 2.2
-          },
-          "landing": {
-            "w": 1.8,
-            "depth": 1.2
-          }
+        "source": {
+          "kind": "rectified_photo",
+          "ref": "w34313535.png pano Pjoq4Y58L6BCOfsE5RDbQg (rib pitch 0.32 m from the face-on photo; box-rib cladding as recessed pans)",
+          "date": "2025-03",
+          "side": "WSW e0",
+          "note": "rib cladding, not windows: the grid draws opaque metal pans (metal_pan, 4 cm recess) between 0.11 m ribs at 0.32 m pitch; there is no glass"
         }
-      ]
+      },
+      "grid_unit": {
+        "depth": 0.04,
+        "materials": {
+          "pane": "metal_pan",
+          "frame": "metal_pan"
+        },
+        "unit": {
+          "frame_w": 0.01,
+          "member_d": 0.005
+        }
+      }
     },
     "gable": {
       "material": "metal_grey",
       "parapet_material": "metal_grey",
       "module": 60.0,
       "ground": {
-        "kind": "blank"
+        "kind": "window"
       },
       "plinth": {
         "material": "concrete",
-        "top": 0.25
+        "top": 0.6
       },
       "features": [
         {
@@ -284,18 +287,51 @@
           "w": 4.0,
           "h": 3.8
         }
-      ]
+      ],
+      "grid": {
+        "columns": {
+          "pitch": 0.32,
+          "first": 0.1,
+          "count": 40,
+          "width": 0.21
+        },
+        "rows": {
+          "0": {
+            "sill": 0.62,
+            "head": 5.05
+          }
+        },
+        "source": {
+          "kind": "inferred_from_side",
+          "ref": "w34313535.png pano Pjoq4Y58L6BCOfsE5RDbQg (rib pitch 0.32 m from the face-on photo; box-rib cladding as recessed pans)",
+          "date": "2025-03",
+          "side": "WSW e0",
+          "face": "e1/e3 ends",
+          "note": "rib cladding, not windows: the grid draws opaque metal pans (metal_pan, 4 cm recess) between 0.11 m ribs at 0.32 m pitch; there is no glass"
+        }
+      },
+      "grid_unit": {
+        "depth": 0.04,
+        "materials": {
+          "pane": "metal_pan",
+          "frame": "metal_pan"
+        },
+        "unit": {
+          "frame_w": 0.01,
+          "member_d": 0.005
+        }
+      }
     },
     "long_back": {
       "material": "metal_grey",
       "parapet_material": "metal_grey",
       "module": 60.0,
       "ground": {
-        "kind": "blank"
+        "kind": "window"
       },
       "plinth": {
         "material": "concrete",
-        "top": 0.25
+        "top": 0.6
       },
       "features": [
         {
@@ -322,14 +358,47 @@
             "depth": 1.2
           }
         }
-      ]
+      ],
+      "grid": {
+        "columns": {
+          "pitch": 0.32,
+          "first": 0.1,
+          "count": 78,
+          "width": 0.21
+        },
+        "rows": {
+          "0": {
+            "sill": 0.62,
+            "head": 5.05
+          }
+        },
+        "source": {
+          "kind": "inferred_from_side",
+          "ref": "w34313535.png pano Pjoq4Y58L6BCOfsE5RDbQg (rib pitch 0.32 m from the face-on photo; box-rib cladding as recessed pans)",
+          "date": "2025-03",
+          "side": "WSW e0",
+          "face": "e2 (ENE)",
+          "note": "rib cladding, not windows: the grid draws opaque metal pans (metal_pan, 4 cm recess) between 0.11 m ribs at 0.32 m pitch; there is no glass"
+        }
+      },
+      "grid_unit": {
+        "depth": 0.04,
+        "materials": {
+          "pane": "metal_pan",
+          "frame": "metal_pan"
+        },
+        "unit": {
+          "frame_w": 0.01,
+          "member_d": 0.005
+        }
+      }
     }
   },
   "blocks": [
     {
       "id": "shed",
       "storeys": 1,
-      "ground_h": 4.6,
+      "ground_h": 5.2,
       "parapet": {
         "h": 0.0
       },
@@ -349,12 +418,60 @@
         "e2": "long_back",
         "e3": "gable"
       },
-      "roof_items": []
+      "roof_items": [
+        {
+          "kind": "box",
+          "edge": 0,
+          "s": [
+            2.3,
+            4.6
+          ],
+          "d": [
+            3.7,
+            4.3
+          ],
+          "h": 0.3,
+          "material": "coping",
+          "top": "skylight"
+        },
+        {
+          "kind": "box",
+          "edge": 0,
+          "s": [
+            7.3,
+            9.6
+          ],
+          "d": [
+            3.7,
+            4.3
+          ],
+          "h": 0.3,
+          "material": "coping",
+          "top": "skylight"
+        },
+        {
+          "kind": "box",
+          "edge": 0,
+          "s": [
+            13.9,
+            16.2
+          ],
+          "d": [
+            3.7,
+            4.3
+          ],
+          "h": 0.3,
+          "material": "coping",
+          "top": "skylight"
+        }
+      ]
     }
   ],
   "study_notes": {
     "observed": "Mar 2025 320 Avenue M: long low corrugated metal shed with a shallow gable along its length, small high windows and doors.",
     "inferred": "Roll-up doors in both gable ends, rear louvres and door; window rhythm, pitch and heights. Graffiti not modelled.",
-    "footprint": "Frozen rectangle kept as one gable block (ridge along edge 0)."
+    "footprint": "Frozen rectangle kept as one gable block (ridge along edge 0).",
+    "grid_b6": "Mar 2025 photo w34313535.png (pano Pjoq4Y58L6BCOfsE5RDbQg, h 64.8, whole e0 face in frame): the WSW long side is windowless and doorless corrugated metal with a dark sign panel high at about u 6.9-9.1; the inferred bays at 4-21 and the entries at 1.0-2.8 and 22.3-24.1 are removed",
+    "wholeunit": "Mar 2025 photo (pano Pjoq4Y58L6BCOfsE5RDbQg): pale grey-white weathered box-rib metal on a 0.6 m concrete base, ribs about 0.32 m apart, eave about 5.3 m, beige standing-seam roof with three dark skylights near the ridge on the WSW slope. Ribs are recessed pans on the shared grid; the dark sign panel is not modelled."
   }
 }

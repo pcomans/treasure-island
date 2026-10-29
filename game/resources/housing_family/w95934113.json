@@ -1727,14 +1727,14 @@
       0.85
     ],
     "door_rgb": [
+      0.23,
       0.27,
-      0.22,
-      0.2
+      0.31
     ],
     "garage_door_rgb": [
-      0.66,
+      0.65,
       0.63,
-      0.6
+      0.63
     ],
     "garage_reveal_rgb": [
       0.45,
@@ -1747,9 +1747,9 @@
       0.24
     ],
     "shutter_rgb": [
-      0.52,
-      0.45,
-      0.4
+      0.6,
+      0.55,
+      0.51
     ]
   },
   "facade": {
@@ -7174,6 +7174,7 @@
       "rear": "Sep2025 (9ECqQ2Kz c338 ~25 m, 9th St): the best rear reference: dark grey roof, two recessed upper balconies with grey-teal railings over lower recesses, paired windows between, tall fence."
     },
     "eave": "Wall top 8.547 = design base 3.297 (frozen flat base 3.297) + 5.25 m from dated frontal proportions (production_inference); source height 6 m retained as identity only",
-    "limits": "Fences, walkways, lawn, landscaping, accessible ramps (1406, 1433, 1440), downspouts, pier and garage-zone board textures, the 1404 connector brick wainscot and trees are parked for later levels. No recognition or stage acceptance claim."
+    "limits": "Fences, walkways, lawn, landscaping, accessible ramps (1406, 1433, 1440), downspouts, pier and garage-zone board textures, the 1404 connector brick wainscot and trees are parked for later levels. No recognition or stage acceptance claim.",
+    "colour_m2a": "2026-10-28 colour opt-in from sampled photo pixels (sunlit values direct; shaded or overcast photos normalised to a cream/white wall reference); keys changed: door_rgb, garage_door_rgb, shutter_rgb, siding_rgb; review 2026-10-28: siding_rgb restored to the pre-M2a value (the x1.38 shade normalisation washed the tan-beige out)"
   }
 }

@@ -613,9 +613,9 @@
             "bottom_y": 2.3296,
             "panel_style": "boarded",
             "material_rgb": [
-              0.84,
-              0.73,
-              0.58
+              0.75,
+              0.69,
+              0.67
             ],
             "inference": "production_inference: walled privacy court (front panel and returns from kit screen assemblies) enclosing this pair's door as in the dated lot view; height, depth and gate position are not measured"
           },
@@ -652,9 +652,9 @@
             "bottom_y": 2.3418,
             "panel_style": "boarded",
             "material_rgb": [
-              0.84,
-              0.73,
-              0.58
+              0.75,
+              0.69,
+              0.67
             ],
             "inference": "production_inference: walled privacy court (front panel and returns from kit screen assemblies) enclosing this pair's door as in the dated lot view; height, depth and gate position are not measured"
           },
@@ -691,9 +691,9 @@
             "bottom_y": 2.3579,
             "panel_style": "boarded",
             "material_rgb": [
-              0.84,
-              0.73,
-              0.58
+              0.75,
+              0.69,
+              0.67
             ],
             "inference": "production_inference: walled privacy court (front panel and returns from kit screen assemblies) enclosing this pair's door as in the dated lot view; height, depth and gate position are not measured"
           },
@@ -730,9 +730,9 @@
             "bottom_y": 4.2096,
             "panel_style": "boarded",
             "material_rgb": [
-              0.8,
-              0.6,
-              0.22
+              0.9,
+              0.76,
+              0.54
             ],
             "inference": "production_inference: contrasting cap band on the court wall as in the dated lot view"
           },
@@ -769,9 +769,9 @@
             "bottom_y": 4.2218,
             "panel_style": "boarded",
             "material_rgb": [
-              0.8,
-              0.6,
-              0.22
+              0.9,
+              0.76,
+              0.54
             ],
             "inference": "production_inference: contrasting cap band on the court wall as in the dated lot view"
           },
@@ -808,9 +808,9 @@
             "bottom_y": 4.2379,
             "panel_style": "boarded",
             "material_rgb": [
-              0.8,
-              0.6,
-              0.22
+              0.9,
+              0.76,
+              0.54
             ],
             "inference": "production_inference: contrasting cap band on the court wall as in the dated lot view"
           },
@@ -847,9 +847,9 @@
             "bottom_y": 2.3921,
             "panel_style": "boarded",
             "material_rgb": [
-              0.84,
-              0.73,
-              0.58
+              0.75,
+              0.69,
+              0.67
             ],
             "inference": "production_inference: walled privacy court (front panel and returns from kit screen assemblies) enclosing this pair's door as in the dated lot view; height, depth and gate position are not measured"
           },
@@ -886,9 +886,9 @@
             "bottom_y": 2.3939,
             "panel_style": "boarded",
             "material_rgb": [
-              0.84,
-              0.73,
-              0.58
+              0.75,
+              0.69,
+              0.67
             ],
             "inference": "production_inference: walled privacy court (front panel and returns from kit screen assemblies) enclosing this pair's door as in the dated lot view; height, depth and gate position are not measured"
           },
@@ -925,9 +925,9 @@
             "bottom_y": 2.3896,
             "panel_style": "boarded",
             "material_rgb": [
-              0.84,
-              0.73,
-              0.58
+              0.75,
+              0.69,
+              0.67
             ],
             "inference": "production_inference: walled privacy court (front panel and returns from kit screen assemblies) enclosing this pair's door as in the dated lot view; height, depth and gate position are not measured"
           },
@@ -964,9 +964,9 @@
             "bottom_y": 4.2721,
             "panel_style": "boarded",
             "material_rgb": [
-              0.8,
-              0.6,
-              0.22
+              0.9,
+              0.76,
+              0.54
             ],
             "inference": "production_inference: contrasting cap band on the court wall as in the dated lot view"
           },
@@ -1003,9 +1003,9 @@
             "bottom_y": 4.2739,
             "panel_style": "boarded",
             "material_rgb": [
-              0.8,
-              0.6,
-              0.22
+              0.9,
+              0.76,
+              0.54
             ],
             "inference": "production_inference: contrasting cap band on the court wall as in the dated lot view"
           },
@@ -1042,9 +1042,9 @@
             "bottom_y": 4.2696,
             "panel_style": "boarded",
             "material_rgb": [
-              0.8,
-              0.6,
-              0.22
+              0.9,
+              0.76,
+              0.54
             ],
             "inference": "production_inference: contrasting cap band on the court wall as in the dated lot view"
           }
@@ -1778,9 +1778,9 @@
   ],
   "materials": {
     "siding_rgb": [
-      0.86,
       0.85,
-      0.8
+      0.82,
+      0.77
     ],
     "trim_rgb": [
       0.93,
@@ -1788,14 +1788,14 @@
       0.92
     ],
     "door_rgb": [
-      0.86,
-      0.62,
-      0.18
+      0.88,
+      0.67,
+      0.32
     ],
     "screen_rgb": [
-      0.84,
-      0.73,
-      0.58
+      0.74,
+      0.68,
+      0.63
     ],
     "dark_glass_rgb": [
       0.11,
@@ -2403,6 +2403,7 @@
       "north": "Unobserved; left blank as production_inference."
     },
     "eave": "Wall top 7.69 = frozen flat base 2.39 + 5.3 m from dated photo proportions (production_inference); source height 6 m retained as identity only",
-    "limits": "Fences, vent pipes, post bands, carport-top finish (shared canopy uses the roof material), finish materials, site and decals parked for later levels. No recognition or stage acceptance claim."
+    "limits": "Fences, vent pipes, post bands, carport-top finish (shared canopy uses the roof material), finish materials, site and decals parked for later levels. No recognition or stage acceptance claim.",
+    "colour_m3": "2026-10-28 colour opt-in: current albedo x (Apr 2019/Mar 2025 photo sample / neutral render sample at the matched view); keys changed: door_rgb, screen_rgb, siding_rgb"
   }
 }

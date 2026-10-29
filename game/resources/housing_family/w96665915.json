@@ -236,8 +236,8 @@
         ],
         "lower_windows": [
           {
-            "station_m": 2.2679639335548694,
-            "local_station_m": 2.2679639335548694,
+            "station_m": 2.628,
+            "local_station_m": 2.628,
             "basis": {
               "source_run": 0,
               "start": [
@@ -263,47 +263,47 @@
               "length_m": 11.064222566452646
             },
             "wall_receiver": true,
-            "width_m": 1.75,
+            "width_m": 1.62,
             "height_m": 1.2,
             "center_y": 3.695,
             "glazing": "blue"
           },
           {
-            "station_m": 11.167963933810094,
-            "local_station_m": 0.10374136735744854,
+            "station_m": 10.808,
+            "local_station_m": 10.808,
             "basis": {
-              "source_run": 1,
+              "source_run": 0,
               "start": [
+                -504.638,
+                2.114,
+                -437.213
+              ],
+              "end": [
                 -494.073,
                 2.047,
                 -433.927
               ],
-              "end": [
-                -480,
-                2.131,
-                -429.551
-              ],
               "tangent": [
-                0.9549003926003362,
+                0.9548795621694813,
                 0,
-                0.2969263211837639
+                0.2969933025356287
               ],
               "normal": [
-                -0.2969263211837639,
+                -0.2969933025356287,
                 0,
-                0.9549003926003362
+                0.9548795621694813
               ],
-              "length_m": 14.737662806564671
+              "length_m": 11.064222566452646
             },
             "wall_receiver": true,
-            "width_m": 1.75,
+            "width_m": 1.62,
             "height_m": 1.2,
             "center_y": 3.661,
             "glazing": "blue"
           },
           {
-            "station_m": 15.703891812079142,
-            "local_station_m": 4.639669245626496,
+            "station_m": 16.0639,
+            "local_station_m": 4.9997,
             "basis": {
               "source_run": 1,
               "start": [
@@ -329,14 +329,14 @@
               "length_m": 14.737662806564671
             },
             "wall_receiver": true,
-            "width_m": 1.75,
+            "width_m": 1.62,
             "height_m": 1.2,
             "center_y": 3.723,
             "glazing": "blue"
           },
           {
-            "station_m": 24.603891833974956,
-            "local_station_m": 13.539669267522312,
+            "station_m": 24.2439,
+            "local_station_m": 13.1797,
             "basis": {
               "source_run": 1,
               "start": [
@@ -362,14 +362,14 @@
               "length_m": 14.737662806564671
             },
             "wall_receiver": true,
-            "width_m": 1.75,
+            "width_m": 1.62,
             "height_m": 1.2,
             "center_y": 3.783,
             "glazing": "blue"
           },
           {
-            "station_m": 30.428191793595868,
-            "local_station_m": 4.62630642057855,
+            "station_m": 30.7882,
+            "local_station_m": 4.9863,
             "basis": {
               "source_run": 2,
               "start": [
@@ -395,14 +395,14 @@
               "length_m": 10.824468624371365
             },
             "wall_receiver": true,
-            "width_m": 1.75,
+            "width_m": 1.62,
             "height_m": 1.2,
             "center_y": 3.82,
             "glazing": "blue"
           },
           {
-            "station_m": 39.32819181010687,
-            "local_station_m": 2.7018378127181926,
+            "station_m": 38.9682,
+            "local_station_m": 2.3418,
             "basis": {
               "source_run": 3,
               "start": [
@@ -428,7 +428,7 @@
               "length_m": 6.258173855047494
             },
             "wall_receiver": true,
-            "width_m": 1.75,
+            "width_m": 1.62,
             "height_m": 1.2,
             "center_y": 3.832,
             "glazing": "blue"
@@ -3134,6 +3134,7 @@
       "east": "Unobserved (occluded by 1111 from the lot); left blank as production_inference."
     },
     "eave": "Wall top 7.431 = frozen flat base 2.131 + 5.3 m from dated photo proportions (production_inference); source height 6 m retained as identity only",
-    "limits": "Fences, vent pipes, post bands, carport-top finish (shared canopy uses the roof material), finish materials, site and decals parked for later levels. No recognition or stage acceptance claim."
+    "limits": "Fences, vent pipes, post bands, carport-top finish (shared canopy uses the roof material), finish materials, site and decals parked for later levels. No recognition or stage acceptance claim.",
+    "site12_pilot": "2026-10-24 Site 12 pilot: each front lower window is aligned with its upper window's outer edge (the side away from the entry) and widened toward the photographed 1.9 m, stopping 0.06 m short of the entry door, as measured at fitted cameras on Keppler 1109 (Apr 2019 pano 9T6FszoANzyG-g8_D8NI8Q) and Hutchins 1114 (Apr 2019 pano I2Dk_vOGXwebdfpTi5JLzg): lower widths 1.72-2.0 m with outer edges within 0.1 m of the upper's. Before, the lowers were 1.75 m centred 1.0 m off, overhanging the upper's edge by 0.43 m. The entries stay at their stations (about 0.28 m off the photos), which caps the widths; uppers, screens and materials unchanged."
   }
 }

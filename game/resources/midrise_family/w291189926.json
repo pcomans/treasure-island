@@ -335,6 +335,106 @@
       "plinth": {
         "material": "concrete",
         "top": 0.3
+      },
+      "grid": {
+        "columns": [
+          [
+            2.5,
+            3.5
+          ],
+          [
+            5.5,
+            9.9
+          ],
+          [
+            11.7,
+            12.7
+          ],
+          [
+            14.7,
+            19.1
+          ],
+          [
+            20.9,
+            21.9
+          ],
+          [
+            23.9,
+            28.3
+          ],
+          [
+            30.1,
+            31.1
+          ],
+          [
+            33.1,
+            37.5
+          ],
+          [
+            39.3,
+            40.3
+          ],
+          [
+            42.3,
+            46.7
+          ],
+          [
+            48.5,
+            49.5
+          ],
+          [
+            51.5,
+            55.9
+          ],
+          [
+            57.7,
+            58.7
+          ],
+          [
+            60.7,
+            65.1
+          ],
+          [
+            66.9,
+            67.9
+          ],
+          [
+            69.9,
+            74.3
+          ],
+          [
+            76.1,
+            77.1
+          ]
+        ],
+        "rows": {
+          "0": {
+            "sill": 1.75,
+            "head": 2.95
+          },
+          "*": {
+            "sill": 0.95,
+            "head": 2.25
+          }
+        },
+        "source": {
+          "kind": "inferred_from_side",
+          "ref": "369-sideD_241 pano 9uhRtlOwZp1gmsmfe_g-Vw; 369-spec-D369SV01; 369-sideC_151 (oblique SSE)",
+          "date": "2025-09",
+          "side": "e0",
+          "face": "slab faces (SSE e5 and campus faces)",
+          "truth_class": "production_inference",
+          "note": "the WSW rhythm (4.4 m paired group, 1.0 m slim light, 9.2 m period) on every slab face; phase chosen so no column crosses the SSE block splits at stations 20 and 60; sideC shows the same alternating wide/slim rhythm on the SSE face"
+        }
+      },
+      "grid_unit": {
+        "unit": {
+          "split": 0.5,
+          "split_min_w": 1.4,
+          "frame_w": 0.07,
+          "mullion_w": 0.08,
+          "member_d": 0.02
+        }
       }
     },
     "tower": {
@@ -382,37 +482,74 @@
         "material": "concrete",
         "top": 0.3
       },
-      "features": [
-        {
-          "type": "entry",
-          "from": 19.0,
-          "to": 24.4,
-          "door": {
-            "kind": "lobby",
-            "w": 4.6,
-            "h": 2.8,
-            "mullions": [
-              0.25,
-              0.5,
-              0.75
-            ],
-            "transoms": [
-              0.8
-            ]
+      "features": [],
+      "grid": {
+        "columns": [
+          [
+            3.3,
+            6.4
+          ],
+          [
+            9.9,
+            13.4
+          ],
+          [
+            15.0,
+            16.0
+          ],
+          [
+            18.4,
+            22.8
+          ],
+          [
+            24.7,
+            25.7
+          ],
+          [
+            27.5,
+            31.8
+          ],
+          [
+            34.2,
+            35.3
+          ],
+          [
+            37.0,
+            41.1
+          ],
+          [
+            44.2,
+            47.2
+          ]
+        ],
+        "rows": {
+          "0": {
+            "sill": 1.75,
+            "head": 2.95
           },
-          "landing": {
-            "w": 5.4,
-            "depth": 2.0
-          },
-          "canopy": {
-            "w": 6.4,
-            "depth": 2.4,
-            "t": 0.3,
-            "material": "fascia",
-            "gap": 0.25
+          "*": {
+            "sill": 0.95,
+            "head": 2.25
           }
+        },
+        "source": {
+          "kind": "rectified_photo",
+          "ref": "369-sideD_241 pano 9uhRtlOwZp1gmsmfe_g-Vw; 369-spec-D369SV01",
+          "date": "2025-09",
+          "side": "e0",
+          "note": "WSW long elevation rectified at the fitted pano camera (h 63.6, t 2.1, f 405): wide paired-window groups and slim single lights; each group is one two-light unit (centre mullion)"
+        },
+        "note_exceptions": "u 8.8 trimmed to 9.9: the west_end/spine block split at e0 station 9.74 would otherwise cut the group"
+      },
+      "grid_unit": {
+        "unit": {
+          "split": 0.5,
+          "split_min_w": 1.4,
+          "frame_w": 0.07,
+          "mullion_w": 0.08,
+          "member_d": 0.02
         }
-      ]
+      }
     },
     "door_e": {
       "material": "dorm_white",
@@ -799,8 +936,8 @@
     }
   ],
   "study_notes": {
-    "observed": "Sep 2025 Seven Seas Ave (SSE and WSW): five-storey white slab with paired windows and blue stair towers at its corners; official Job Corps aerial: E-shaped plan of equal height; entrance photo: glazed doors under a flat canopy.",
-    "inferred": "Five storeys over the OSM 6 m tag, window cadence, the entrance placed on the photographed WSW wing face, doors on the other accessible sides; the SSE spine wall faces the attached Oasis hall (no door). Stair towers are enclosed blocks (no stairs modelled).",
+    "observed": "Sep 2025 Seven Seas Ave (SSE and WSW): five-storey white slab with paired windows and blue stair towers at its corners; official Job Corps aerial: E-shaped plan of equal height; entrance photo: glazed doors under a flat canopy. The official entrance photo (hero.jpg, '369 / 275 California Ave') shows the glazed doors under the flat canopy of the one-storey entrance wing at the SSE end (the low wing in 369-sideC_151 and the jc-07 aerial), outside this footprint; the Sep 2025 WSW photo (369-sideD_241) shows no entrance on the WSW wing face, so the lobby entry modelled there was removed (2026-10-24 grid batch B1).",
+    "inferred": "Five storeys over the OSM 6 m tag, window cadence, doors on the other accessible sides; the SSE spine wall faces the attached Oasis hall (no door). Stair towers are enclosed blocks (no stairs modelled).",
     "footprint": "Frozen 32-edge E plan split into the spine-and-wings block, three wing ends and two corner towers."
   }
 }

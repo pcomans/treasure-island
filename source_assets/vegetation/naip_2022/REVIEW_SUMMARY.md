@@ -61,7 +61,7 @@ This is a review-only, hobby-scale candidate inventory of 80 visually distinct m
 ## Files
 
 - 'tree_annotations_candidate.geojson': canonical, deterministically sorted candidate points.
-- 'treasure_island_footprint.geojson': existing generated-world Treasure Island boundary converted to WGS84; no YBI polygon.
+- 'treasure_island_footprint.geojson': exact frozen Treasure Island polygon in the generated world's millimetre form, converted to WGS84; no YBI polygon or pier extension.
 - 'tree_annotations_review.svg' and 'tree_annotations_review.png': visual review aids.
 - 'tree_annotations_rejection_audit.geojson': 30 omitted marks with exact surface-intersection reasons; not accepted candidates.
 - 'validation_report.json': persisted result from the independent deterministic validator.

@@ -50,6 +50,13 @@ export const BRIDGE_SOURCE_KEYS = Object.freeze([
   "r13543938",
   "w1011568818",
 ]);
+// Owner decision 2026-10-23 ("Walkable pier"): the deck of the ferry landing
+// pier joins the playable boundary so the player can walk from the plaza to
+// the gangway head. Only these frozen pier polygons extend the runtime
+// boundary; land, terrain and every source clip keep the exact island polygon.
+export const PLAYABLE_PIER_EXTENSION_SOURCE_KEYS = Object.freeze([
+  "w1011830367",
+]);
 export const ISLE_HOUSE_PARENT_KEY = "w1249412094";
 export const ISLE_HOUSE_PART_KEYS = Object.freeze([
   "w1282547786",

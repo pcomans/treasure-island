@@ -7749,7 +7749,8 @@
       "nne": "Unobserved (Mar2025 view blocked by the boarded 1236 row); mirrors the SSW end as production_inference."
     },
     "eave": "Wall top 9.012 = frozen flat base 3.212 + 5.8 m from dated photo proportions (production_inference); source height 6 m retained as identity only",
-    "limits": "Fences, vent pipes, post bands, carport-top finish (shared canopy uses the roof material), finish materials, site and decals parked for later levels. No recognition or stage acceptance claim."
+    "limits": "Fences, vent pipes, post bands, carport-top finish (shared canopy uses the roof material), finish materials, site and decals parked for later levels. No recognition or stage acceptance claim.",
+    "carport_trim": "Mar2025 street view: the north carport covers only the photographed right-end stalls (station 6.0-12.9 of its segment); the south segment (carports[0]) lies outside that frame and stays as the Apple layout shows it. The court parking apron is unchanged."
   },
   "carports": [
     {
@@ -7859,7 +7860,7 @@
         "length_m": 12.899999999999999
       },
       "station_m": [
-        0,
+        6.0,
         12.9
       ],
       "depth_m": [
@@ -7874,34 +7875,24 @@
       ],
       "posts": [
         {
-          "station_m": 0.35,
+          "station_m": 6.35,
           "depth_m": 7.8141,
-          "bottom_y": 3.0551
+          "bottom_y": 3.0047
         },
         {
-          "station_m": 0.35,
+          "station_m": 6.35,
           "depth_m": 12.8141,
-          "bottom_y": 2.9528
+          "bottom_y": 2.9301
         },
         {
-          "station_m": 4.4866,
+          "station_m": 9.45,
           "depth_m": 7.8141,
-          "bottom_y": 3.0682
+          "bottom_y": 2.9605
         },
         {
-          "station_m": 4.4866,
+          "station_m": 9.45,
           "depth_m": 12.8141,
-          "bottom_y": 2.9743
-        },
-        {
-          "station_m": 8.4833,
-          "depth_m": 7.8141,
-          "bottom_y": 3.0247
-        },
-        {
-          "station_m": 8.4833,
-          "depth_m": 12.8141,
-          "bottom_y": 2.9501
+          "bottom_y": 2.8859
         },
         {
           "station_m": 12.55,
@@ -7914,7 +7905,7 @@
           "bottom_y": 2.9059
         }
       ],
-      "inference": "production_inference: Mar2025/Apr2019 Street View and undated Apple layout show two separate dark flat carport segments on white posts over parking along the court in front of this row (1248 side); extent, depth, height and post cadence are not measured."
+      "inference": "production_inference, trimmed 2026-10-24 to the photographed extent: the Mar2025 ESE street view (pano FnrJYDep) shows this north carport starting about 6 m into the segment (two stalls at the right end) with lawn and paths in front of the units to its south; the undated Apple layout showed it longer. Post cadence and depth are not measured."
     }
   ]
 }

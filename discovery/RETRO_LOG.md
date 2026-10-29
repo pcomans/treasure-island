@@ -22033,3 +22033,769 @@ Decision round (PASS, Level 2 with 1223 Level 1):
 - Worked: production dpl_GruZGuuZjCJaXq57ejqKL8qPFqo3 READY at https://treasure-island-five.vercel.app, shell/runtime fb4ff70. One fresh public portrait Chromium check fetched versioned WASM/PCK with HTTP200, handed off at15.184s unpaused with active visible touch controls and grounded player, and matched CSS390x844/DPR2 to canvas780x1688/logical720x1558/camera0.46213. Same-session landscape rotation matched1688x780/logical1558x720/camera2.16389 without pausing. Actual live PNG inspected; no console errors or failed assets observed.
 - Did not: emulated viewport and diagnostic readback do not prove physical-phone ergonomics or real Mac pointer capture. Earlier unbounded movement HOLD remains; this deployment does not claim whole-path mechanical acceptance or faster total startup.
 - Next: retain direct play, early DOM status and orientation-safe preparation together. All deployment/browser/CDP/Weston handles terminal and owned processes released; push web branch and update existing draft PR only. Evidence /tmp/ti-responsive-20261025-touch-live-states.jsonl/events.json and live-portrait.png; no main/native/Mac changes.
+
+## modeler-ferry-rework (Isle House w1249412094 + Hawkins w1249412093 photo rework, 2026-10-23)
+
+- What worked well: writing the per-side component list from the photos before touching code turned "it doesn't look like the building" into concrete items: the red-brown Variant C band, a dark-grey upper, navy glass, the missing bay boxes, the 1.2 m canopy and the small lobby. Each item mapped to one edit. Owner-approved base colours (simple albedo) did more for resemblance than any geometry change. With the stock 70-degree camera (about 96 degrees horizontal, close to Street View's default), I could match the photo vantages with ordinary `--views` plans, so building_shots needed no extension. Headless probes (front-face rays, facade boxes with no wall behind them) caught a slot bar hanging over a setback before the render.
+- What did not work well: I spent too long solving exact Street View poses (vanishing points, a solver) before ROOT relayed "within reason". Street View GPS is metres off at 15-30 m, so pano-position views still needed one or two render rounds to frame, and the hk02 view is still too wide after the budget ran out. The first batch failed on relative plan paths inside batch.json. I could not probe view spots headlessly because `load_world` refuses `--headless`.
+- What the team should change next time: when matching a vantage, place the camera from the photo's own layout (which features sit at the left, centre and right edge) rather than from the pano coordinates. Pass absolute plan paths to `--views-batch`. Write the component list and the colour reading in the first hour of any recognition rework, before the first render.
+- Round 2 addendum (after the veto): writing each view's first-read element before
+  modelling made the misses obvious: a solid white podium where the photo's first read
+  is a glazed storefront, and light-blue glass that left punched windows with no
+  contrast on brick. Glass value per context (dark for punched windows, light for
+  curtain-like stacks) mattered as much as size. Re-posing by the photo's own layout
+  (what sits at the frame edges) was still needed for ih08/hk02/cav2/cav3. cav3 kept
+  failing because its foreground is the one bay I left without the box. Next time, check
+  which part of the building fills the foreground of each matched view before choosing
+  the module's range.
+- Round 3 addendum: render-only inward geometry over a spray receiver fails silently
+  (the decal box spans only -0.025..+0.055 m about the hit), so the Isle House WSW folds
+  moved the low receiver itself, as Hawkins does. A headless N.S check against the scene
+  sun predicted facet contrast before rendering, but it also showed the limit: this WSW
+  face is nearly edge-on to the fixed sun, so even 27-degree facets give a faint tone
+  step. Next time, compute N.S for each face against the scene light before choosing
+  relief, and say early when lighting, not geometry, caps the contrast.
+- Gates addendum: the first Isle fit failed silently on inward faces after I copied
+  generated triangles without the generic builder's (first, third, second) order (now
+  a LEARNINGS lesson); a headless front-face ray per run would have caught it before
+  the fit slot. Two refusal-spray attempts missed because aim_camera clamps pitch at
+  25 degrees: a target above that from a close pose is never reached, and the ray lands
+  on whatever lies below. Next time, check the aim pitch (atan(rise / run) from the
+  camera pivot) before writing a spray plan, and stand back far enough to stay under
+  the limit.
+
+## code-review-ferryrework (Isle House 6231196, Hawkins 615f8b5, 2026-10-23)
+
+- What worked well: the receiver override is narrow. `matches_low_record` matches the exact key, source part, kind, top and vertex count, and the replacement copies the generic body's layers, metas, shape metas and spray group line for line. Every new opaque solid (stacks, soffits, ledges, bay boxes, recess soffit, stoops) is on the spray layer with receiver none. The refusal captures exercised that directly, and the Chapel spray control showed the non-composite path unchanged.
+- What did not work well: deleting the Variant C live attachment removed the only root of a chain of older Isle House files (the Variant C standalone, the composite repair standalone, the low live attachment and the low facade prototype, with their scenes, uids and configs). They now ship in the build with no caller. The first two Hawkins refusal plans aimed from under the box, so the 25 degree pitch limit landed both tags on the visible recessed wall. It took two spray runs to find that out.
+- What the team should change next time: when a commit deletes a hook or attachment, grep for what that file loaded and delete anything left without a caller in the same commit. Before a refusal spray, check that the target is reachable within the pitch and range limits from the planned pose.
+
+## push-coordinator-ferryrework (Isle House and Hawkins photo rework, 2026-10-23)
+
+- What worked well: the ferryrework branch was a clean fast-forward from 8d85586, so no cherry-pick or overlap handling was needed; the catalog records were appended by exact-snippet replacement and re-parsed, keeping the older records and the file's formatting.
+- What did not work well: the brief's "bridge on port 12049" is the DevPod git-credential helper, which is easy to misread as an engine bridge; earlier prepush folders record only gate invocations, not that check.
+- What the team should change next time: commit the RETRO and catalog/checklist records before the gates so the gates run on the exact HEAD that is pushed, and keep routes and spray as separate fit runs (combined runs hang in save_screenshot).
+
+## modeler-ferry-pier (w1222514695 walkable ferry pier, 2026-10-23)
+
+- What worked well: making the generator change only the manifest's `playable_boundary` (exact island ∪ named pier polygon) left land, clips, spawn and vegetation untouched, and a fresh-build diff showed exactly that. A private headless probe that calls the shared fit's own `_walk_start`/`_site_blocked` read-only found the walk-up problem before any render or fit slot.
+- What did not work well: the walk-up anchors rank wall faces by lowest bottom, then width, then distance from the bounds centre, with a cap of 8. On a long diagonal pier the cardinal plaza lanes first missed the land-end column by 2 cm, then were crowded out by wider land-face triangles. That took three probes to diagnose.
+- What the team should change next time: for any non-box building (piers, canopies), run the read-only walk-start probe per side before the first render. Put chest-height opaque receivers (columns, posts) where the plaza approach meets them, and avoid shaping wall triangulation for the probe.
+- r4 addendum: settle-only matched poses put the camera 30–40 m back, and the close photos could not be judged. A short stock walk from a plaza settle onto the deck gave the c07/c03 framings in the same engine run. Next time, plan walked close poses with the first render.
+- Gates addendum: the shared fit (route plaza-to-gate and back, walk-up north and east), the private walk probe and the glass refusal spray all passed first time. The first spray plan aimed at the end block's black sign plate (a solid) and was refused; a quick check of the target against small solid details on the face would have caught it. Retarget fixed it.
+
+## code-review-ferry-pier (w1222514695 walkable pier, df597fd..9e195a9, 2026-10-23)
+
+- What worked well: the boundary change sits behind one named allowlist with fail-closed generator invariants. The private before/after instance digest, once auto node names were normalised, showed in a single diff that no other family instance changed.
+- What did not work well: nobody grepped every reader of `manifest.playable_boundary` before changing what it means. Two offline tools that are not in `tools/test.sh` still treat it as the exact island polygon, and one of them now fails its own invariant.
+- What the team should change next time: when changing a generated contract field, grep every consumer (runtime, tests and offline tools) and list them in the task note. A file the code points to (here a README) should land in the same commit.
+- Code-review addendum: extending `playable_boundary` broke two offline consumers that treated it as the exact island polygon: the coverage-evidence renderer and the NAIP footprint label. These are not in the suite, so only review found them. Next time, when a manifest field's meaning changes, grep every reader of that field (`tools/`, not only `game/`), run each offline reader once, and add the README a header comment points to in the same commit.
+
+## push-coordinator-ferrypier (w1222514695 walkable ferry pier, 2026-10-23)
+
+- What worked well: ferrypier-20261023 was a clean fast-forward from df597fd with no overlaps. Committing the catalog, checklist and this RETRO before the gates meant the gated HEAD is the pushed HEAD. Row counts (193 L2 C rows) were checked against the new totals before committing.
+- What did not work well: the checklist's L3/L5 totals were written as one combined figure ("L3/L5:213 U each"), so the first L3 C had to split that line. The stale pier description sat in two historical notes as well as the row, and nothing pointed to them except the brief.
+- What the team should change next time: when a unit's identity or kind changes (box placeholder to pier), grep its source key across the checklist in the same commit as the model, not at delivery.
+
+## lighting-adopt (island-wide L1 lighting + neutral colour-check mode, 2026-10-23)
+
+- What worked well: allowing `--island` alongside `--views-batch` in the shared `building_shots.gd` put the five source-bound arrival views and the five overviews in one world load, so both looks fit in two 75-second renders. Running the same poses with `--neutral-lighting` gave an exact before/after on one commit, with only the lighting changed. Grepping the binary's shader strings and the GLES3 `config.cpp` answered the web question (aerial perspective and MSAA 3D both work in Compatibility) without an engine run.
+- What did not work well: the brief said the water-plane seam came from the warm ground hemisphere. The pilot's run-1 sheet already showed the seam getting stronger with aerial perspective added (L2), but the adopted set combined L1 with L2's aerial perspective, and no capture had tested that combination. The seam came back and used up the render budget.
+- What the team should change next time: when a recommendation combines settings from different variants, capture that exact combination in the pilot before it is adopted. Check the far-water horizon on the oblique overviews in the first render of any fog or sky change.
+- Seam addendum: the same three far-water pixels in the from-southwest overview bracketed the fix. Aerial 0.7 left the water about 10 levels darker than the background, and aerial 0 left it about 16 levels lighter, because the denser fog lightens it. Interpolating between the two gave about 0.35, which the spare render confirmed is as faint as the neutral edge. ROOT had suggested 0.2 for the spare; the measured bracket showed 0.2 would still leave a visible light edge, so 0.35 was used instead. Next time, sample both sides of an edge at fixed pixels in the first render, so the second render can go straight to the interpolated value.
+
+## ti-code-review: lighting-adopt 531708d (2026-10-23)
+
+- What worked well: the neutral restore is one data table (`NEUTRAL_LIGHTING`) that maps line-for-line onto the main.tscn hunks, so checking it covered every changed value took a single side-by-side read of the diff. The scene change kept to existing properties, and the gameplay contract still holds without edits.
+- What did not work well: the commit message says "MSAA 3D is 4x" while the file says `msaa_3d=2`. That is correct (enum 2 is 4x), but a reviewer has to know the enum to confirm it. The usage string in `_run` does not mention `--neutral-lighting`.
+- What the team should change next time: when a project setting is an enum, quote its raw value and its meaning together in the commit message.
+
+## push-coordinator-lighting (island-wide lighting adopt 531708d + Mar22t L3 correction, 2026-10-23)
+
+- What worked well: the lighting branch was a clean fast-forward from 5fc9835; the five L3 ticks were set by exact source-key match with an assertion that each cell was still U, and the per-column counts (213/193/6/1/0) were recomputed from the table before the new totals were written.
+- What did not work well: four buildings' reviewed L3 rounds landed without their checklist rows being ticked, so the L3 column read 1 C while six units had passed; the gap was found only when ROOT reconciled it by hand at delivery.
+- What the team should change next time: the reviewer or push coordinator that records a level PASS should tick the matching checklist cells and recount the totals in the same commit, rather than leaving it to a later delivery.
+
+## modeler-isle-form (Isle House w1249412094 form-first rebuild, 2026-10-23/24)
+
+- What worked well: the staged form, then windows, then fit order kept each review narrow. Projecting footprint corners into the Street View photos offline (`camcheck.py`) found the real focal lengths (about 387 px default) and the SE slot's true position before a render was spent. Rectifying photos to metric elevations exposed two form errors that four grey renders had missed: one extra storey on every low volume, and 7 WSW stacks where there are 3. Settling one frontage before propagating (WSW assembly, then the SE frontage) closed each review round in a single pass.
+- What did not work well: the first matched poses reused the earlier round's player-relative cameras, and the gameplay camera's 25° pitch clamp could not frame Street View tilts. One whole review round went on fixing cameras. Glass read dark at street angles for two rounds because a metallic material tints its reflections by its albedo; the ortho views hid this. The first routes run hit the 5-minute timeout with all legs done but no PASS line, and legs that end under a soffit need `return_from_arrival`.
+- What the team should change next time: before the first matched render, project the model's corners onto each photo and use free cameras at the photo's focal length. Rectify the photos and count storeys and bays before building form. Judge glass at street angles: light albedo with high metallic for mirror-like upper glass, dark dielectric for storefronts. Split fit routes into runs of about six legs, and give any leg ending under an overhang `return_from_arrival`.
+
+### ti-code-review — 2026-10-24 — Isle House c58615c..567926c
+
+- What worked well: the hooks match the exact object_key plus source, kind, top and vertex count, so the shared builder change could be cleared from the diff alone; every new body's layer, receiver_kind and group could be read straight from `_emit`, and a repo-wide grep over the deleted basenames closed the deletion check in one pass.
+- What did not work well: one 1,300-line producer mixes form, window assemblies and base-band details with many inline heights (7.15, 7.35, 9.35, 6.75, 7.45) repeated across helpers, so checking that the bands agree meant reading four functions side by side. Why the low block's upper storeys are solid while the tower's receivers rise to the crown is not stated anywhere.
+- What the team should change next time: name the shared heights once and add a one-line comment wherever a visible facade is deliberately left non-receiving, so the reviewer can tell intent from accident without re-deriving it.
+
+## codex-visual-review-coordinator-isle (Isle House w1249412094 Codex Sol review series a2-final, 2026-10-23/24)
+
+- What worked well: each review was a `codex exec -m gpt-6.1-sol` root that spawned one lowercase-underscore child (gpt-6.1-sol, high, `fork_turns="none"`). The child's own rollout settled each review's identity and image count: `agent_path`, model/effort and the number of returned `input_image` payloads. The orchestrator's word was never the evidence. From attempt 3 on, every prompt inlined the form spec, the reference bindings, the prior verdict and the modeler's log entries, with exact image paths and a required PASS or REWORK. Each review then ran once and returned a usable verdict (a2 REWORK, b3 REWORK, b4 PASS, c2/c6/c10/c14 REWORK, c16 PASS, final PASS). Narrow re-checks (b4, c16) that read only the changed views, plus the modeler's pixel-diff regression report, took minutes instead of 30+.
+- What did not work well: the first a2 review needed three runs. Attempt 1's spawn was rejected because the child name had hyphens. In attempt 2, shell reads failed in the sandbox (`bwrap: Can't mount devpts`), and with only reference IDs the child never opened a reference photo, so it returned INCOMPLETE. The full reviews of about 60 images ran 30-35 minutes with long silent drafting, so 30-minute monitors expired before the run ended.
+- What the team should change next time: for Codex children, name them with `[a-z0-9_]` only. Inline all text instead of relying on shell reads, list every image by exact path, and require PASS or REWORK. Watch the child's rollout size rather than only the CLI exit. Keep full reviews for changed scope and use narrow before/after re-checks with a regression diff for single fixes.
+
+## push-coordinator-isle-formfirst (Isle House w1249412094 acceptance record and push, 2026-10-24)
+
+- What worked well: the previous push's `prepush-c58615c/jobs-gates.txt` held the exact 1223 sentinel invocation (`--source w96698652 --native-producer housing-get-faces --routes .../routes1223.json`), so no command was reconstructed. The catalog already had dated `review_id` strings for the earlier Isle House rounds, so the two new records follow that format without new fields.
+- What did not work well: the checklist's Isle House row ends with the same Mar22t suffix as four other rows, so a plain text replace hit five places; the edit had to be scoped to the row's source key. The checklist states L4 only as "PBR/textures/materials", so deciding the L4 tick depended on the reviewer's own L4/L5 finish list.
+- What the team should change next time: keep the sentinel invocation in one stable place (the stage checklist) rather than in per-push delivery folders. Visual verdicts that pass L3 should say in one line whether L4 is met.
+
+## docs-landmark-lessons (landmark Codex routing, shots options and five lessons, 2026-10-24)
+
+- What worked well: the evidence was already in two task notes and the Codex verdicts, so each lesson could cite its round (Isle House b1, c2/c4, c10/c12; Hawkins r1–r8) without new captures. CLAUDE.md already had the Codex CLI recipe, so the landmark routing went into AGENTS as one short paragraph pointing at it, and the recipe lessons were added under the existing example instead of a second recipe.
+- What did not work well: the routing text lives in four places (AGENTS, CLAUDE.md's entrypoint summary, the recipe's "optional" lead-in and LEARNINGS' header), and each said visual review runs only on Opus. A change to one route needs all four checked, which a grep for "Opus"/"Codex" found only after the main edit.
+- What the team should change next time: keep the routing summary in CLAUDE.md and LEARNINGS to a pointer at AGENTS' routing section, so the next routing change edits one paragraph.
+
+## modeler-hawkins-form (Hawkins w1249412093 form-first audit, Stage A, 2026-10-24)
+
+- What worked well: two things from Isle House paid off immediately. Rulers projected into the photos, and rectification with focal lengths from corner checks, showed that the model's overall heights (21 m / 14 m) were already within about 1 m of four references. That avoided a false "too tall" change: an early single-photo reading had said 1.3 m. The architect's frontal photo (cav-7) and the section/plan, scaled from their own bars, gave the floor lines, the junction tower and the wing depths directly. The headless closure probe (rays to interior targets) caught a clip-winding bug before any render.
+- What did not work well: I trusted the reference note's corner bindings for hk21 and cav-4, and both were mirrored (E vs N corner). One render (r2) went to ENE features placed in reverse order. Also, a single grey hid the recesses (r3), so it took a render to learn that the study needs Isle's darker grey for recessed planes. Moving a volume left one probe target on its face, which produced a probe-only failure.
+- What the team should change next time: before using a non-Street-View reference, check the face order against plan handedness. From outside, the left face at a corner is the side that runs into that corner in ring order. Write the bound corner into the note with that check. Render Stage A from the start with a darker grey on planes behind the footprint line, and keep probe targets well inside volumes rather than on their planned faces.
+- Follow-up (camera gate and r6 rework): assuming Isle's +8° default pitch for every Street View frame was wrong here. Fitting heading and tilt against model features, then blending each render over its photo, found tilts of 14–21°. Shift-lens architect photos need a level camera plus a crop, not a tilted pinhole. In the Codex rework I missed two corroborated rooftop silhouettes: the penthouse slab outline and the stair box at the step. Check rooftop outlines separately from rooftop room dimensions before calling a form complete.
+- Stage B: driving the wall punch and the overlay from one opening list kept every frame, sill and stack on the same grid and made rectified-vs-ortho checks direct. Applying the Isle House lessons up front got to a coherent set in 5 of 8 renders. Not good: the first ortho crops assumed the plan's 1018x795 frame while the saved frames are 1018x636 (read the real image size), and an untested window-placement rule produced a negative width that only the headless probe's assertions caught. Next time: run the probe on the colour (facade) path after every data-table change.
+- Stage B rework: validating one upper-window assembly and one base entry (SE box group plus lobby) under both lightings before propagating worked; the propagation pass needed no grammar change. Missed: the WSW entries were still too sparse to read after c3/c4, because I kept the old 12 m stoop spacing instead of checking hk23's one-entry-per-unit rhythm. That cost a render pair. Next time: check base element counts against the plan module before the first render, not just their presence.
+- Stage B rework 2: a pedestrian-angle entry view plus a split lobby pane (dark glass, a lit ceiling band, a few lit bays) fixed both items in one validated render pair (2 of 4 renders). A single uniform emissive pane reads as frosted infill; value structure behind dark glass reads as glazing.
+- Stage C: the fit test walked all 12 flights in every run, and both route files and the spray passed first time. Not good: (1) my first canopy refusal aimed under the canopy at the receiver glass, and its rejection came from range, not from the canopy. Only `first_hit=none` gave it away, so check that the logged first hit is on the intended solid before counting a refusal. (2) The suite failed its two Node checks because the fresh worktree had no `node_modules`. Next time: copy `node_modules` (same lockfile) when creating a worktree that will run tools/test.sh, as Isle did.
+
+### ti-code-review — 2026-10-24 — Hawkins form-first rebuild 4adaf7f..3306e8c
+
+- What worked well: the change stays inside the two Hawkins scripts, one Hawkins material and one catalog `stairs` line, so shared-code risk was closed from the diff stat and a grep. Reproducing the catalog stair points from STOOPS with the side frames confirmed all 12 flights without an engine run.
+- What did not work well: the "validate on SE first, then propagate" switches (GRAMMAR_GROUP_SIDES, GRAMMAR_WINDOW_SIDES) were widened to every side but kept, so their old branches became dead code that still reads as live. The ENE notch depth (1.8) and the floor lines are repeated as literals in several places instead of being derived.
+- What the team should change next time: once a staged propagation reaches every side, delete the gate and the branch it replaced in the same commit. Derive repeated geometry (notch depths, FLOORS from DECK_Y and UPPER_STOREY_M) from one constant before the first review.
+
+## codex-visual-review-coordinator-hawkins (Hawkins w1249412093 Codex Sol review series r6-final, 2026-10-24)
+
+- What worked well: the Isle House recipe carried over unchanged and ran once per round: one `[a-z0-9_]` child on gpt-6.1-sol/high, all text inlined, exact image paths, PASS/REWORK required, and identity and image counts taken from the child's own rollout. The series was r6 REWORK (3 fixes), r8 PASS, b4 REWORK, c5 REWORK, d1 PASS, final PASS. Every round has a verdict file under the scratchpad `codex-hawkins-*` directories. Inlining the modeler's orientation correction (hk21 = E corner, cav-4 = N corner) and the Isle House lessons kept the reviews from re-litigating cameras or asking for depth because grey shading was subtle. Narrow re-checks (r8, d1) took about 5 minutes against about 25 for the full rounds.
+- What did not work well: the first Hawkins run used the Isle House worktree as the Codex `-C` root, copied from the previous command. That was harmless because the review was read-only with absolute paths, but it was the wrong root. Children twice tried, unprompted, to read LEARNINGS.md and skill files that the sandbox blocks, which only produced caveats. Stage C captured no before close-ups or context, so the final improvement judgment relied on the grey Stage A old-vs-new sheet.
+- What the team should change next time: set `-C` to the target's own worktree from the first run. Tell the child that the inlined text is complete, so it doesn't attempt file reads. Capture before close-ups and context for whole-unit reviews alongside the island overviews.
+
+## push-coordinator-hawkins-formfirst (Hawkins w1249412093 acceptance record and push, 2026-10-24)
+
+- What worked well: the Isle House push (`f1b6cab`) was a complete donor: the same two record IDs with the unit name swapped, the same checklist note shape (Mar22v after Mar22u), and the 1223 sentinel invocation from `prepush-f1b6cab/`. The Hawkins row edit was scoped to its source key from the start, avoiding the five-row replace hit noted last time.
+- What did not work well: the reviewer flagged two catalog "cue texts" as describing the old model, but those cues have only `cue_id` identifiers (also referenced by archived checkpoint registries), so there was no wording to update; the finding cost a lookup and is now just a note in Mar22v.
+- What the team should change next time: when a reviewer flags stale catalog wording, quote the field it means. If cue IDs should track the current model, decide once whether renaming identifiers is allowed rather than per push.
+
+## ti-documentation — window-grid rule (building-texture skill, 2026-10-24)
+
+- What worked well: the owner's five decisions fitted one new skill section, and the assemblies and camera-fit details were already LEARNINGS lessons, so the skill links to them instead of repeating them. The review checklist got one question that links back to the section.
+- What did not work well: the grid rule was previously only one Stage B line in AGENTS' landmark routing, so authors outside landmark work had no rule to follow; the rollout and sloped-ground limits were only in conversation.
+- What the team should change next time: write owner art rules into the skill when they are made, not after several studies have relied on them.
+
+## modeler-facade-grid (shared window-grid rollout step 1, infrastructure only, 2026-10-24)
+
+- What worked well: capturing the ed767dc evidence in the new worktree before the first edit (import, two digests, the c16 fixed views) avoided a second checkout and import. The private digest covered vertices, normals, materials, collision faces, layers and receiver metadata, and it was stable across two runs. Branch digests matched base, and 27 of 27 fixed matched views were AE 0. The new test also exposes `run_checks()`, so the branch digest run exercised it in the same process. That kept the engine budget to 6 runs plus the import and one suite, and the test passed on its first run.
+- What did not work well: the six-run budget did not obviously cover the one-time import a fresh worktree needs. I counted it as setup, which is a judgement call that should have been settled at dispatch. My first expected values for the self-test compared computed floats such as 10 + 2.6 with literals by exact `==`, and curtain rail centres were wrong. I caught both by reading before the first run, not by running.
+- What the team should change next time: state at dispatch whether a fresh worktree's import counts against the engine budget. In geometry tests, compare computed coordinates with a tolerance, never with exact equality against literals. Pilots adopting `facade_grid` should validate the grid at build time and fail the record closed, rather than expanding an unvalidated grid.
+- Review follow-up (nine findings): `validate()` now refuses non-integral or non-numeric values instead of coercing them, and requires groups to tile every storey. `expand()` validates itself, and the ground raises only the ground-floor sill. Every assembly member is a box, and every helper returns `{ok, rects, errors}`. Lesson: shared helpers should return an ok/errors result from the start, because adding failure handling later changes the API under a trial that is already consuming it.
+
+### ti-code-review — 2026-10-24 — shared facade grid and assembly ed767dc..3910cbc
+
+- What worked well: the Isle House switch is a pure move, so a side-by-side read of the removed and added functions settled behaviour identity without an engine run. The self-test builds small grids and asserts on behaviour, with tolerances.
+- What did not work well: validate() checks shapes and ranges but coerces values with int()/float(), and it lets a partial group list silently drop storeys. The assembly mixes flat and box rectangles, but its first likely consumer (the Hawkins-style MultiMesh box emitter) refuses zero-depth boxes. Neither gap shows up until a second producer adopts the code.
+- What the team should change next time: when shared infrastructure ships ahead of its consumers, write one adoption sketch per target producer (midrise, housing, panel hall) against the API before review, so convention gaps surface before the family rollout.
+
+## push-coordinator-facade-grid (rebase, gates and push, 2026-10-24)
+
+- What worked well: the rebase onto `b8e9ead` touched only RETRO_LOG, and diffing the rebased head against `d4dd694` showed the result differed only by the docs commit. That made it safe to rerun only the import and suite instead of re-reviewing. Both gates passed on the first run.
+- What did not work well: the first `git rebase` attempt stopped with no committer identity, because the bot identity lives only in the original worktree's commits, not in config. I had to abort and rerun it with `-c user.name/-c user.email`.
+- What the team should change next time: push dispatches should say that a rebase needs the per-command bot identity too, not just the final commit.
+
+## modeler-grid-trial (490 Avenue of the Palms w1272162518 photo window grid, 2026-10-24)
+
+- What worked well: the Hawkins camera tools carried over directly. Rulers at the resolved panos plus rectification gave the e0 column lines in minutes. A private digest over all 64 midrise configs proved the opt-in hook left the other 63 byte-identical (Star View included) through two rebases. Running the fit on the clean base showed the single grounded sample was pre-existing, not caused by the window cut-outs.
+- What did not work well: I changed the glass colour along with the geometry ("lighter glass"), and the owner judged the BEFORE materials better. One render pair was spent rebuilding with the original palette. I also rendered AFTER once on the pre-fix grid API before the d4dd694 rebase landed, which wasted two renders.
+- What the team should change next time: keep a geometry trial geometry-only and inherit every existing material unless the owner asks for a material change. Wait for a pending shared-API fix before spending owner-facing renders.
+
+### ti-code-review — 2026-10-24 — midrise photo-grid hook and 490 Palms fc8c226..0cfd405
+
+- What worked well: the hook is gated on `scheme.has("grid")` and `face.has_grid` at each branch point, so old-path identity could be confirmed by reading the code. Errors land in ctx.errors, so an invalid grid fails the record before emit.
+- What did not work well: 490 is a friendly trial (single-storey groups, default `frame`/`glass` keys, a full palette). It does not exercise the cases the 29-unit rollout will hit: palettes without `spandrel`/`frame_light`, schemes whose windows use other frame keys, joined storeys beside claimed storeys, and grade-raised joined stacks. A one-off scan of the 64 configs found the material gap in seconds.
+- What the team should change next time: before calling a hook family-ready, scan every family config for the keys and features the hook assumes, and build one deliberately awkward synthetic scheme (joined storeys, features, sloped ground, non-default palette) alongside the friendly trial.
+
+### ti-visual-review — 2026-10-24 — 490 Avenue of the Palms (w1272162518) photo-grid AFTER-v2
+
+- What worked well: the matched Street View sheet, the rectified metric elevations with u/y rulers and the ortho elevations at the same stations made column alignment checkable in minutes. The grid columns, floor lines and stacking check out, and the two relocated brick frames now read as the photos' signature feature, a clear gain over BEFORE.
+- What did not work well: the brick-frame exceptions moved in u but kept their old vertical extents. In the photos the north frame starts above two white storeys, and the south void opens down to L2. Neither the grid table nor the sheets recorded per-storey extents for exceptions, so the gap only showed up when the slim pier lights were counted on native photo crops. There was no gameplay view of the inherited ENE face (the driver reported "no clear gameplay view from the east"), so only a raised oblique fragment could be judged. The TASK_NOTE render table also ends before AFTER-v2, so the provenance of v2 and the island captures had to be inferred from the glass colour.
+- What the team should change next time: record each exception's storey range (base storey, void storeys) next to its u-range, measured against a face-plane cue such as pier windows, and check it in the matched view before rendering. Add the final owner-facing variant (v2) and its commit to the task note's render table.
+
+## push-coordinator-490palms-grid (490 Avenue of the Palms w1272162518 acceptance record and push, 2026-10-24)
+
+- What worked well: copying the Hawkins push (ed767dc) gave the catalog record format, the dated checklist note and the gate invocations directly. Matching the 490 row by its unit prefix avoided a second row with the same Mar17k text.
+- What did not work well: the dispatch said the visual reviewer's RETRO entry was uncommitted, but it was already in 329730f with the code-review entry. It took a check of the tree and HEAD to confirm that nothing was missing.
+- What the team should change next time: push dispatches should say "check that X is committed" rather than "commit X as is", so a coordinator doesn't go looking for a change that isn't there.
+
+## modeler-grid-b1 (midrise grid batch B1: 369, 515, 520, Star View paseo, 2026-10-24)
+
+- What worked well: a generic camera tool (pano + footprint edge, fit heading/tilt/focal on corners) made rectification per unit a two-minute step. One batched `--views-batch --island` run per lighting covered all four units plus the neighbour controls. Printing `midrise_skipped_features` in the digest caught a block split cutting a photographed column before any render.
+- What did not work well: two photos (the 520 corner view and 369 sideC) were too oblique for a reliable fit, so those faces stay medium-confidence inference. A shared grid on schemes reused across many faces needed a producer change: drop columns beyond a face's ends instead of reporting them.
+- What the team should change next time: before choosing columns, list each scheme's faces and block splits along the edge, then pick the grid phase so splits fall inside piers. Note up front where one-width-per-column trades off against a wider ground storey (Star View patios).
+
+### ti-code-review — 2026-10-24 — midrise grid batch B1 6536382..15ee4f8
+
+- What worked well: diffing each config against its base scheme by scheme (palette, blocks, floor, changed keys) showed in one pass that only grid, grid_unit and two feature lists changed. That made the 369 lobby entry removal stand out at once.
+- What did not work well: the producer change makes "no columns on this face" a silent success that also skips grid validation, so a station or edge mistake can blank a face without any record. The commit message for the data batch does not mention removing a photographed entrance.
+- What the team should change next time: when a grid batch removes or moves a non-grid feature, say so in the commit message. Report every face a grid leaves solid, so the digest shows deliberate blanks alongside dropped columns.
+
+### ti-visual-review — 2026-10-24 — midrise photo-grid batch B1 (369, 515, 520, Star View)
+
+- What worked well: the units with a fitted camera and a rectified grid image (369 and 520) were quick to verify. On the matched sheets, AFTER's window groups and solid fields line up with the photo almost column for column, and both are clear wins over BEFORE's even rows. The neighbour sheet and the AE diff list ruled out regressions in seconds.
+- What did not work well: 515 had no camera fit or rectification in this batch; its grid came from an earlier study's notes. Its matched render does not match the photo's pose, so solid-field placement had to be judged by counting columns in the raw photos, and in nnw002 that count contradicts AFTER. Star View's change only shows at L1 in one gameplay close-up, and nothing in the batch checked whether it was an improvement before it was included.
+- What the team should change next time: give every unit in a grid batch the same evidence, a fitted camera plus a rectified grid image; without that, it waits for the next batch. Before adding a unit, compare the changed region in BEFORE and AFTER close-ups against the photo, and leave out units where the visible change is neutral or worse.
+
+## push-coordinator-grid-b1 (midrise photo-grid batch B1 acceptance record and push, 2026-10-24)
+
+- What worked well: the 490 Palms push (6536382) gave the record IDs, the dated note shape and the gate chain directly. Checking each unit's current catalog state first showed that 515 and 520 were already accepted from Mar22h, so only 369 raised the score (65 -> 66), and the B1 records were appended after their existing ones.
+- What did not work well: the catalog JSON does not round-trip through a JSON dump (key order and inline `stairs` arrays differ), so the records had to go in as text edits; a first script slip produced invalid JSON and was caught only by parsing the file back.
+- What the team should change next time: always re-parse the catalog and recount the score right after editing it, before touching the checklist, and have dispatches state which units are already accepted.
+
+## modeler-grid-b2 (midrise grid batch B2: Job Corps survey set, 2026-10-24)
+
+- What worked well: solving camera pose from four footprint-corner points (with a fixed typical focal where the photo is frontal and the solve degenerates) gave usable matched cameras for undated-position survey photos. One batched render per lighting covered all units and neighbours. Comparing photo against BEFORE at fitted cameras first showed early that four of five units already carried the photographed bays.
+- What did not work well: the plan assumed every unit would benefit from a grid. For units whose bays were already photo-placed (488, 514, Oasis, 450), the grid would only have re-expressed them and dropped the blue hoods, so they stay KEEP-BEFORE. Only 655's curtain flanks gained.
+- What the team should change next time: before planning a grid batch, check each unit's config for photo-placed bay features and fixtures that the grid path does not carry (hoods), and plan grid work only where BEFORE visibly diverges from the photos.
+
+### ti-visual-review — 2026-10-24 — midrise grid batch B2 (655 Harvey Milk; keep-before 488, 514, Oasis, 450)
+
+- What worked well: the camcheck sheet (photo next to BEFORE at the fitted camera, all five units) answered "would a grid help?" in one pass. The rectified 655 flank grid showed the 3 m verticals and close horizontal muntins directly, and the AE list made the no-regression check immediate.
+- What did not work well: the 655 survey photo was hard to locate. TASK_NOTE says only "Job Corps field survey photos" without paths, and the jobcorps-gallery folder is mostly interiors; the actual frames are in `reopen4-20261022/refs/`. The 488 fitted camera reports 4 px error, but the matched render still frames the long face differently from the photo, so counting hood bays against it is uncertain. 655's inherited `flank_nnw` has no view.
+- What the team should change next time: list each reference's file path in the task note. Add one sanity crop for any fit under 5 px that compares the same feature in the photo and the render. Give inherited faces at least one raised or oblique view when a grid lands on them.
+
+### push coordinator — 2026-10-24 — midrise grid batch B2 (655 Harvey Milk)
+
+- What worked well: mirroring the B1 push (c81c515) made the catalog, checklist and gate chain mechanical. Inserting the records with an exact-match script and re-parsing the JSON straight away confirmed the score stayed at 66/213.
+- What did not work well: the assignment called the unit "450" without its way ID, and the checklist has two units with 450 in the label (w34313544 450 4th St and w1043836450 at 680 Avenue I). I had to cross-check the Mar22i note to choose w34313544.
+- What the team should change next time: give every unit in a push assignment its way ID, including the KEEP-BEFORE units, so the row updates need no lookup.
+
+### modeler-grid-b3 — 2026-10-24 — midrise grid batch B3 (warehouse 525 changed; keep-before 686, 685, Compound E)
+
+- What worked well: before writing any column, I projected the fitted cameras' u stations and wall top/base onto the actual photos. This showed that the sideB pose is vertically exact, while sideC/sideD sit about 30-50 px off vertically, so their rows were taken from proportions. It also caught a draft column set about 0.5 m off. Copying the config aside, instead of `git stash`, avoided the stash list that all worktrees share. The whole BEFORE/AFTER/neutral round took 4 min of engine time.
+- What did not work well: I first transcribed the columns from a low-resolution rectified strip, and they were wrong by about 0.5 m and too narrow. I only caught it when I drew the final columns back over the photo. About 10 min went to waiting for another worktree's push-chain island test before Slot B could start.
+- What the team should change next time: before the first render, draw the final grid columns back over the reference photo at the fitted pose. It is cheap and catches transcription errors. A grid gives each storey one row, so photographed doors under high windows, and lower windows, have to be recorded as storey-0 exceptions. Do not force them in.
+- Round 2 (code review): when a feature carries a centred, unclipped canopy, moving the feature moves the canopy too. After any feature move, recompute the canopy span against the measured face length. I missed this, and the WSW eave ran 1.2 m past the corner.
+
+### ti-visual-review — 2026-10-24 — midrise grid batch B3 (warehouse 525; keep-before 686, 685, Compound E)
+
+- What worked well: the task note listed every reference path and each keep-before evidence sheet, so nothing had to be searched for. The projected overlay (`b3-525-overlay.png`, columns in green and features in orange over the three photos) made checking counts and positions a one-image job. Each exception was written with its u-range, storey range and reason, which made the omissions easy to accept.
+- What did not work well: the sideC and sideD fits are off vertically, so sill and head heights there are inference from wall proportions and door scale; only sideB's rows are measured. The canopy entry on NNW moved to a stretch the photo crop doesn't clearly show. Large inferred stretches (WSW u0–26, most of NNW) carry only a continued rhythm and can't be checked.
+- What the team should change next time: when a fit is off vertically, add one sill/head sanity crop to the overlay at a visible opening. Mark inferred stretches on the overlay too (for example in grey), so the reviewer sees at a glance which windows are photographed and which are rhythm.
+
+### ti-code-review — 2026-10-24 — midrise grid batch B2 (655, late entry)
+
+- I did not write this entry at the B2 review, an omission. Worked: reading the evidence logs found the reported solid main/e22 face quickly. Did not: I could not measure that segment without an engine run, so it went back as a confirmation request. Next time: write the RETRO line in the same step as the verdict, for narrow reviews too.
+
+### ti-code-review — 2026-10-24 — midrise grid batch B3 (warehouse 525)
+
+- What worked well: rebuilding approximate edge lengths from the wall record (e0 about 63.06 m, e5 about 114.31 m) let me check every moved feature and canopy against its face end without an engine.
+- What did not work well: the modeler re-checked the NNW eave against its face end after moving the entry, but not the WSW one. Moving a canopy-carrying entry shifts its centred eave, and the producer does not clip canopies at face ends.
+- What the team should change next time: whenever an entry with a `canopy` moves, check that `centre ± w/2` stays within [0, face length] on every face, not only the one that prompted the move.
+
+### push coordinator — 2026-10-24 — midrise grid batch B3 (warehouse 525)
+
+- What worked well: the assignment gave every unit its way ID, including the three keep-before units, so the four row updates needed no lookup (the B2 suggestion worked). Mirroring fa2be79 again made the catalog insert, JSON re-parse and score recount mechanical.
+- What did not work well: this is the first push under the trial where the modeler runs no full suite, so this entry is written before the push chain's suite (the only B3 suite) has a result; the outcome is in the commit's gate output and the handoff, not here.
+- What the team should change next time: keep the trial's single suite in the push chain, and if it fails, have the coordinator return the full failing log rather than retrying, so the revert trigger is judged on the first run.
+
+### modeler-grid-b4 — 2026-10-24 — midrise grid batch B4 (13th St pavilions: 560 and 883 changed; 558, 557, 556 keep-before)
+
+- What worked well: drawing the final columns back over the photo at the fitted pose before any render (the B3 lesson). Both overlays aligned on the first try. Re-reading the pass2 bearing suffix showed that 560's photographed layout had sat on the wrong faces since the institutional pass.
+- What did not work well: 4 of the first 8 engine runs failed. Three were parse errors because the fresh worktree had no `.godot` import cache. One stopped on a gameplay view whose player position stood on a neighbouring building. Then a valid AFTER render showed no windows, because the gridded faces kept ground kind "blank", which leaves storey 0 solid under a grid. My B3 and B4 sheets also cropped 1131x706 renders to 1076x840, which shrank the renders against the photos.
+- What the team should change next time: in a fresh worktree, import (or copy a matching `.godot` cache) before any shots. Before any engine run, test every view's player_xz against the footprints. When gridding a face, set its ground kind to "window". Crop sheet renders to the photo aspect of the actual render height (904x706 for 1131x706).
+
+### ti-visual-review — 2026-10-24 — midrise grid batch B4 (13th St pavilions 560, 883; keep-before 556, 557, 558)
+
+- What worked well: each owner sheet carries everything in one image: the fitted-camera row, a zoom row, the column overlay, all four gameplay faces and a raised view. That made both the per-face and the whole-unit verdicts possible without extra crops. The task note's "observed gaps outside grid scope" list pointed straight at the remaining whole-unit issues.
+- What did not work well: the visual-first trial asks for a whole-unit ACCEPT on units that were never evaluated, but the batch only had grid budget. 560's long roof slab over the open area is the most visible difference from its photo, and nothing in the batch could change it. The unphotographed faces of 560 still carry the old copy of the photographed layout (including the roll-up door), and the photos can't confirm or reject it.
+- What the team should change next time: when a grid batch includes not-yet-accepted units, either budget for the flagged whole-unit gaps (roof or eave extent, attached structures) or limit the review to the grid verdict and leave acceptance to a later whole-unit pass. Note in the task note which faces carry copied rather than photographed layouts.
+
+### ti-code-review — 2026-10-24 — midrise grid batch B4 (pavilions 560, 883)
+
+- What worked well: listing each changed scheme's users across blocks confirmed in one step that the ground-kind change reaches only one face per unit. Checking the opt-in palette keys against the palette, and against the old band features that used them, settled the materials question.
+- What did not work well: the face lengths still had to be rebuilt by merging collinear wall runs. I can't be fully sure of the edge numbering that way, which matters for the 560 e3 column that ends 0.2 m from the corner.
+- What the team should change next time: put each gridded face's length in the digest or the skipped report, so the reviewer can check end-of-face columns directly.
+
+### push coordinator — 2026-10-24 — midrise grid batch B4 (13th St pavilions 560, 883)
+
+- What worked well: the assignment named all five way IDs and each verdict, so the catalog edit (mirroring 369's empty-to-accepted change in c81c515), the JSON re-parse and the 66 → 68 recount were mechanical, and all five rows could be found directly.
+- What did not work well: B4 is the first batch under the trial that newly accepts never-evaluated units, so the single push-chain suite is also the first suite to load 560 and 883 in the island test; a failure there would surface only at push time.
+- What the team should change next time: when a batch newly accepts units, have the coordinator confirm in the suite log that the island test lists each new key, not just that the suite exits 0.
+
+### modeler-grid-b5 — 2026-10-24 — midrise grid batch B5 (564 and 370 gridded; 902 and r133351 windowless photographed faces; 611 and 450 keep-before)
+
+- What worked well: the fresh worktree reused the matching `.godot` cache and ran `npm ci` first, so no import failures this time. A pre-render footprint clearance test on every view's player position caught nothing new, but it removed the B4 class of failure. Overlaying the final columns on the photos before the first render again aligned on the first try. Looking at photos for "keep-before" units found two facades (902 front, r133351 olive wing) that the photos show as windowless.
+- What did not work well: I set 370's small windows to their photographed 0.9 m light, which the producer rejects (it needs more than 0.9 m). The digest already reported valid=false, but my run script went on to two AFTER shot runs that could only fail to load the world, costing 2 of the 10 runs.
+- What the team should change next time: after the AFTER digest, stop if any unit is valid=false (now in run-r1b.sh). Check grid rows against the producer's 0.9 m minimum light before the first engine run.
+
+### ti-code-review — 2026-10-24 — midrise grid batch B5 (564, 370, 902, r133351)
+
+- What worked well: a reusable per-unit compare script (palette, blocks, schemes, users per scheme, merged edge lengths) made the four-unit data review a single pass. Windowless faces use existing mechanisms (a blank-ground scheme, removed inferred bays on a module-60 scheme), not degenerate grids.
+- What did not work well: the "no columns on this face" log for 370 hall/e1 can't be tied to a specific face segment from the data alone, because merged wall runs show e1 as one 43.3 m edge. I had to rely on the modeler's render note that both windows appear.
+- What the team should change next time: include the face's station range in the producer's no-columns and straddle messages (for example `e1[s0-s1]`), so a reviewer can tell an expected sliver from a missing face.
+
+### ti-visual-review — 2026-10-24 — midrise grid batch B5 (564, 370, 902, r133351; keep-before 611, 450)
+
+- What worked well: the per-unit sheets put the photo, BEFORE, AFTER, four gameplay faces and a raised view in one image, and the column overlays on 564 and 370 made the high-window counts easy to check. The task note listed every reference path, and each change came with its reason. "Remove inferred windows where the photo shows blank wall" was easy to verify against a native crop of the photo.
+- What did not work well: the batch asked for whole-unit verdicts on six units that had never been evaluated, but the only budget was for grid or geometry. Two units (r133351's olive block, and 611's wall colour and material) are held by gaps the grid can't touch. 902, 611 and 450 have no pose-matched views, so their whole-unit calls rest on gameplay-view comparison.
+- What the team should change next time: before a grid batch with units that have never been evaluated, do a quick whole-unit triage against the photo (massing, colour, height) and route those gaps to the same batch or a follow-up. Pose-fit at least one view per unit that is asked for a whole-unit verdict.
+
+### push-coordinator-grid-b5 — 2026-10-24 — midrise grid batch B5 push (4 acceptances; trial push 3 of 3)
+
+- What worked well: `node_modules` and `.godot` were already in the worktree (the modeler ran `npm ci` first), so the B4 suite-rerun failure did not repeat. The catalog edit was a targeted text change of four units, re-parsed straight away, and the recount gave 68 → 72.
+- What did not work well: the push assignment named the reviewer's finish follow-ups without listing them, so the checklist note had to take them from the modeler's task note exceptions and the RETRO entries; a reviewer-only item could be missed.
+- What the team should change next time: put the reviewer's finish follow-ups in the push assignment verbatim, the same way the verdicts are given.
+
+### modeler-grid-b6 — 2026-10-24 — midrise grid batch B6 (654 gridded; 535 windowless photographed side; 641, 386, 550 keep-before)
+
+- What worked well: projecting every candidate footprint into each photo before authoring showed that both "641" and "654" frames show 654's face, and that 641 is hidden behind it. This avoided gridding a building from a photo of its neighbour. All five engine runs passed on the first attempt: matching cache, `npm ci`, the clearance-checked plan and the stop on any invalid digest.
+- What did not work well: the reference file names were trusted in earlier passes (641 was modelled from 654's photo). One gameplay view of 641 was placed behind 654, so it mostly shows 654.
+- What the team should change next time: before using a reference, confirm which building it shows by projecting nearby footprints at the pano pose. Treat file names as hints. For whole-unit triage, put colour and roof-item gaps (535's pale metal and skylights) in the handback, not only grid findings.
+
+### ti-code-review — 2026-10-24 — midrise grid batch B6 (654, 535)
+
+- What worked well: the reusable compare script plus a feature list for every scheme confirmed in one pass that the removed doors take their landings with them and that each unit keeps doors on other faces.
+- What did not work well: nothing material. 654's study_notes don't yet mention the grid change; only the grid's source note records it.
+- What the team should change next time: when a batch removes inferred doors or windows, add a one-line study_notes entry as 535 does, so the unit's notes stay the single summary.
+
+### ti-visual-review — 2026-10-24 — midrise grid batch B6 (654, 535; keep-before 641, 386, 550)
+
+- What worked well: the modeler's triage table (what each photo actually shows, plus the whole-unit gaps) let me check claims directly instead of rediscovering them. The 641 photo's grey cabinet and yellow-framed windows match 654's NNW face, so the "it's really 654" claim is verifiable in seconds. The 654 overlay made the window count (5 singles + 1 pair) a one-glance check.
+- What did not work well: two units (641, 550) have no confirmed reference, and 535 has a known colour and roof-skylight gap. A grid batch can't close any of these, so three of five whole-unit verdicts here were predictable before any render.
+- What the team should change next time: before a grid batch, sort units into "grid can help", "needs materials or roof work" and "no confirmed reference". Send only the first group through grid renders, route the second to a materials or roof study, and flag the third for reference research or L1 status.
+
+### push-coordinator-grid-b6 — 2026-10-24 — midrise grid batch B6 push (2 acceptances; last midrise batch)
+
+- What worked well: the assignment gave the reviewer's finish follow-ups verbatim (the B5 retro change), so the checklist note took them directly with nothing reconstructed. `node_modules` and `.godot` were already present, and the catalog edit was an exact-match text replacement of two units, re-parsed and recounted at 72 → 74.
+- What did not work well: the 641 finding ("its filed photo shows 654; stays L1 with no photo") conflicts with its checklist row's earlier Mar21a L2 tick, and the assignment said to keep the totals consistent; the push left the tick unchanged and flagged it rather than silently demoting a level.
+- What the team should change next time: when a reviewer finds a misfiled photo, say in the push assignment whether any level tick that rested on it should change, so the coordinator need not choose between the note and the totals.
+
+### modeler-site12-pilot — 2026-10-24 — housing kit photo gates and Site 12 lower-window pilot
+
+- What worked well: the cheap photo gates on each kit (garage court, Exposition, Site 12, Mariner/Bayside) settled which kit, if any, needed changing before any code. The answer was data-only on one kit, so no housing hook was built. Fitting each camera on the frame's own corners and doors gave 1.5-1.7 px residuals and an overlay that plainly showed the 0.43 m overhang.
+- What did not work well: the whole-world housing digest differs on five untouched units, but only in auto-generated node-name counters, so a raw diff overstates the change until names are normalised. One measured Hutchins frame (1112, oblique) would not fit and was dropped.
+- What the team should change next time: normalise `@Class@NNN` names in family digests before comparing. When a window rule collides with photo-placed entries, report the entry offset as its own follow-up rather than widening into it.
+
+### ti-visual-review — 2026-10-24 — Site 12 pilot, Keppler 1109 and Hutchins 1114 lower-window alignment
+
+- What worked well: the overlay (cyan uppers, green lowers after, red lowers before, orange entries) showed the outer-edge rule and the residual door offset directly, so the subtle change could be judged without hunting for it in renders.
+- What did not work well: the change is about 0.3–0.4 m per window and is close to invisible at gameplay distance. Most of the review effort went into confirming that it is not a regression rather than an improvement anyone would notice. The whole-unit check also turned up a feature at 1114's front (the grey enclosure box) that the photo neither clearly shows nor rules out.
+- What the team should change next time: before rolling a sub-metre alignment rule out across a family, decide whether it changes anything visible at gameplay distance. If not, bundle it with a change that does (for example the door stations) rather than spending a separate render and review round on it.
+
+### ti-code-review — 2026-10-24 — Site 12 pilot lower windows (915, 922)
+
+- What worked well: listing each lower window as a global interval next to its upper window and entry confirmed that every outer edge is shared and every 0.06 m door gap holds, from the data alone.
+- What did not work well: the commit message says the lowers "widen toward 1.9 m", but most went from 1.75 to 1.62 m (only 922's second lower widens to 1.9), because the fixed entries cap them. I had to compute this to see it.
+- What the team should change next time: state the before and after widths in data-only commit messages when they move in different directions.
+
+### push coordinator — 2026-10-24 — Site 12 pilot record and push (915, 922)
+
+- What worked well: mirroring the B6 record commit (45adefa) kept the catalog, checklist and push chain to known shapes; editing the catalog by exact text replacement left every other unit untouched, and a re-parse and table recount confirmed the score (76) and the L2 totals (192 C/21 U) from the data.
+- What did not work well: the 641 L2 tick was known wrong at B6 and left for "a re-check" that needed no new evidence, so it cost a second checklist edit in a later round.
+- What the team should change next time: when a reviewer has already confirmed a reference mix-up, correct the stage cell in the same record commit instead of deferring it.
+
+### modeler-wholeunit — 2026-10-24 — whole-unit follow-ups r133351, w96698611, w34313535 (visual-first, before fits)
+
+- What worked well: projecting the OSM outline into the r133351 photo showed the box's fascia ends land on the footprint ends while its walls sit inside them, so the outline is the roof edge; that set both the wall inset and the overhang without guessing. The existing pyramid roof (1° pitch, 1 m slab, 1.25 m overhang) gave the deep fascia and the shared grid gave box-rib cladding, so no producer code was needed.
+- What did not work well: the r1 sheet first used a 1076x840 crop on the 1131x706 renders `building_shots.gd` actually writes; the donor's 904x706 crop was right. Reading the PNG size before writing the crop would have saved a sheet pass. The 611 request (dark brown, from the Feb 2018 photo) conflicts with the Mar 2025 10th St photo of the same building, which shows light natural cedar after refinishing.
+- What the team should change next time: before a colour or material request, check every dated photo of the unit and follow the newest (present day), naming the conflict in the assignment. Check the render size before reusing a crop convention.
+
+### ti-visual-review — 2026-10-24 — whole-unit follow-ups r133351, w34313535, w96698611
+
+- What worked well: the photo-versus-AFTER zoom crops (`z351-box`/`z351-after2`, `z535-ribs`/`z535-after2`) settled massing, fascia and rib questions in one look. Re-checking 611 against the newer Mar 2025 photo instead of applying my earlier Feb 2018 note was the right call: the building has since been refinished in light cedar.
+- What did not work well: my B5 611 note relied on the only photo in the batch (2018) and asked for a colour the building no longer has. The 2025 photo also shows a tall mono-pitch clerestory volume that nobody had flagged, and it is now the main blocker. The 535 WSW face sits in shade under the game sun and reads cooler than the sunlit photo, which makes colour comparison against one matched view unreliable.
+- What the team should change next time: before calling a colour, list every dated photo of the unit and judge against the newest. Run a massing check (silhouette and secondary volumes) as part of whole-unit triage, not only facades and colour. Judge colour on a sunlit face or under neutral lighting.
+
+### ti-code-review — 2026-10-24 — whole-unit follow-ups (r133351 gym, 535 pans and skylights, 611 palette)
+
+- What worked well: projecting r133351's footprint vertices into the edge-4 frame showed the block splits exactly. The gym, hall_nw, hall_sw and hall clip planes meet with no overlap, and the only uncovered areas are the 1.2 m WSW strip and the 1.25 m SE end pocket under the gym fascia, which match the study note.
+- What did not work well: the producer checks block overlap and excess area but not gaps, so an uncovered pocket inside the frozen footprint passes silently. I had to rebuild the plan to tell intent from accident. 535 uses the window grid as rib cladding (236 metal "windows"), which works but is a stretch of the grid's meaning.
+- What the team should change next time: add an uncovered-area line to the digest (footprint area minus block area), so deliberate pockets are visible. Name non-window uses of the grid in the scheme's source note so later reviewers do not mistake them for windows.
+
+### modeler-wholeunit — 2026-10-24 — round 2: 611 clerestory block and fits
+
+- What worked well: fitting the 611 camera to two eaves and the block ends gave the clerestory's heights directly (about 3 m low eave to 5.7 m high side), and the existing mono roof plus splitting the core hip covered it with no producer code. A Python mirror of the clip planes confirmed that the replaced blocks tile exactly the same area.
+- What did not work well: all three fit sprays were refused with `range_rejection`, because I put the player 7-8 m out and the stock spray range is 6 m. That spent three of the six runs on an avoidable failure. The roof, wall, grounded, walk-up and native-partition checks all passed. The fit test takes one spray, and it must place, so an expected refusal cannot be recorded without another run.
+- What the team should change next time: read `spray_controller.maximum_range_m` before writing spray plans, and keep the player within about 4 m of the target. If refusal checks are wanted, give the fit test an opt-in expected-refusal spray (for example `expect: "receiver_rejection"`) rather than spending a failing run.
+
+### push-coordinator-wholeunit — 2026-10-24 — whole-unit follow-ups push (r133351, w34313535, w96698611; 3 acceptances)
+
+- What worked well: waiting on origin/main and the Site 12 chain.txt in one background poll meant no engine overlap, and writing the catalog and checklist only after the rebase kept the totals edit off Site 12's lines. A diff check confirmed the rebase left the three unit JSON changes byte-identical, so the reviewed content is what is pushed.
+- What did not work well: the rebase hit an append-only RETRO conflict (both rounds added sections at the end of the file), and the rebase commit failed until the bot identity was passed per command. Both were mechanical, but they cost two extra steps.
+- What the team should change next time: when two pushes are queued on the same base, the second coordinator should write its record files only after rebasing onto the first push, and should pass `-c user.name/-c user.email` on `git rebase --continue` as well as on `git commit`.
+
+### modeler-accept-s1 — 2026-10-24 — acceptance batch S1 (Star View, Personnel Support, 850/Bldg 202, Hall 528; review-only)
+
+- What worked well: projecting every nearby footprint at each capture pose confirmed the binding of 9 photos in one pass, and caught that 528's sideC frame actually shows w96698650. Checking pgrep right before each run avoided two collisions with another worktree.
+- What did not work well: I set the matched-view eye height from the target's lowest wall-bottom. On Star View that is 2.7 m below the street, so the first pose-matched renders were from under the road and cost 2 extra runs. Another worktree still started an engine run during one of mine.
+- What the team should change next time: take the eye height from the sampled ground (road or land mesh) at the pano position, not from building bounds. Whoever starts an engine run should also check pgrep immediately before, so concurrent slots do not overlap.
+
+### ti-visual-review — 2026-10-24 — acceptance batch S1 (Star View, Personnel Support, 850 / Bldg 202, Hall 528)
+
+- What worked well: a review-only batch with photo-binding overlays was fast to judge. The bindings settled identity first (and correctly rejected 528-sideC), so the visual question was only "does it read as the photo". Re-rendering Star View at street height, instead of at the target's lowest wall bottom, made the matched views usable.
+- What did not work well: two units are judged largely through occlusion: Personnel Support behind fence screens and trees, and 850 behind the container wall. Their verdicts rest on a few visible cues (dark framed grid with a rooftop volume; an ochre end with high windows), not on whole-facade comparison. 528 has no north view.
+- What the team should change next time: when a photo is mostly occluded, say in the binding table which features are actually visible, so the reviewer judges exactly those. Treat setting items such as the 850 container wall as a separate opt-in setting study, not part of the building verdict.
+
+### modeler-accept-s2 — 2026-10-24 — acceptance batch S2 (Sturgeon garage courts, review only)
+
+- What worked well: one projector script over every footprint within 70 m bound all eight photos in one pass, including three whose Maps panels name a different address. Fitting cameras to the two coplanar wing fronts gave 11–32 px residuals with no hand-picked footprint vertices.
+- What did not work well: about 19 minutes went to waiting for a fully quiet Slot A before the correction that two engines may run in parallel. The first wing picker took the nearest two long edges, which at oblique views includes the recessed connector, so it needed a coplanarity rule.
+- What the team should change next time: state the parallel-engine rule (start while fewer than two engines are live) in the slot assignment. When fitting kits with recessed fronts, pair coplanar faces rather than nearest faces.
+
+### ti-visual-review — 2026-10-24 — acceptance batch S2 (eight Sturgeon garage-court units)
+
+- What worked well: one sheet per unit with the photo beside a fitted current render made eight whole-unit verdicts quick. The kit's form (twin gabled wings, a garage bank, a recessed stair court) is so distinctive that each unit's colour scheme was the main thing left to check. The shared panos (1403/1404 from iPYX at h196/h16, 1405/1408 from E8fU at h243/h64) give opposite-heading bindings that check each other.
+- What did not work well: the modeler's triage flagged 1408/w130 as slightly dark but called 1403 "none material", although 1403 renders cool grey against the photo's warm sandy beige, the clearest colour mismatch in the batch. The kit-wide lap siding against the photos' stucco also went unremarked.
+- What the team should change next time: in a review-only batch, compare each unit's dominant wall colour on the photo's sunlit face with the neutral render, and list any visible hue shift, not only lightness. Note kit-wide material mismatches once, as a kit item, so they don't get lost per unit.
+
+### modeler-accept-s3 — 2026-10-24 — acceptance batch S3 (garage-court kit 1418, 1419, Halibut 1430-1434, 1449; review-only) and S1 fits
+
+- What worked well: the S1 lesson (eye height from the sampled road or land at the pano) gave correct matched views first time for all eight units. The binding pass caught that 1449's frame is the same pano as 1444's, aimed the other way. Starting runs with one other engine live, per the ROOT correction, removed most of the waiting.
+- What did not work well: before the correction, about 20 minutes went to waiting for full engine quiet. Halibut 1432-1434 rest only on 2019 imagery.
+- What the team should change next time: check the live engine count against the agreed two-run limit, not engine quiet. For demolished units, keep both the dated standing photo and the current cleared-site photo on the owner sheet.
+
+### ti-visual-review — 2026-10-24 — acceptance batch S3 (1418, 1419, Halibut 1430–1434, 1449)
+
+- What worked well: the demolition flag was stated up front with the dates and the brief's rule, so 1432–1434 could be judged against their Apr 2019 photos without re-litigating scope. Applying the S2 hue-versus-lightness lesson caught the one real colour gap (1449 renders white-grey against the photo's warm beige) in seconds.
+- What did not work well: the triage table again said "matches" for a unit whose wall hue is visibly off (1449), the same pattern as 1403 in S2. One batch's colour lesson does not carry over unless the triage step itself asks the hue question. Partial occlusion (the tree at 1418, the truck at 1430) limits those verdicts to the visible wing and the kit identity.
+- What the team should change next time: add a "wall hue (photo sunlit face vs neutral render)" column to the triage table for every acceptance batch. Collect the kit units with warm-beige hue gaps (1403, 1449) into one small per-unit colour opt-in round rather than fixing them one at a time.
+
+### push-coordinator-accept-123 — 2026-10-24 — acceptance batches S1, S2 and S3 record and push (20 review-only acceptances)
+
+- What worked well: all three branches append to the end of RETRO_LOG, so each conflict was a single block that a keep-both script resolved; a per-line check confirmed every line added by the six original commits survives. An exact-text catalog edit with a per-unit count assertion caught the garage-court entries' extra `stairs` line before anything was written, and the re-parse showed 79 → 99.
+- What did not work well: the first catalog pattern assumed every unit has the same key order, so the batch S2/S3 units (which carry a `stairs` field between `anchor_source_key` and `claim_status`) needed a second pass.
+- What the team should change next time: for multi-unit catalog record commits, match each unit's block by `anchor_source_key` with optional intermediate fields (or edit through a JSON-aware helper that keeps the file's formatting), not by a fixed multi-line text block.
+
+### modeler-accept-s5 — 2026-10-24 — acceptance batch S5 (Bayside 1205, Northpoint 1225, 1229, 1237, 1244, 1245; review-only) and S3 fits
+
+- What worked well: chaining the S3 fits with a "fewer than two live" check before each start kept the engine busy without waiting for quiet; all eight fits passed. The binding pass and ground-sampled eye heights carried over from S1/S3 unchanged.
+- What did not work well: two independent chains (mine and accept-s2) read "one live" in the same second and both started, so three runs were live for a while. Taking f from the notes' "fov75" made the matched views too tight, and two runs went to re-rendering them.
+- What the team should change next time: use an atomic slot claim (e.g. `flock` on a shared lock file per slot) instead of a pgrep count, so two chains cannot start on the same reading. Treat the Maps "75y" field of view as not equal to the rendered frame; use f 387 for 1018x795 captures unless fitted.
+
+### ti-visual-review — 2026-10-24 — acceptance batch S5 (1205, 1225, 1229, 1237, 1244, 1245)
+
+- What worked well: re-rendering at f 387 after the f 663 frames came out too tight made the matched views directly comparable. The extra 1244 fronts (south07, north03) turned a tree-blocked unit into a confident verdict. Sibling units in one batch helped too: 1244 already shows a visible red-brown pitched roof, which shows what the 1205/1229 fix should look like.
+- What did not work well: the triage called 1205's roof "minor" and 1229 "matches broadly". In both, the model reads as a warm-white box with an almost invisible roof, while the photos show a cool grey or sage row with a clearly visible shingle roof band. The wall-hue column was still not in the triage table, so the hue gap was again caught only at review.
+- What the team should change next time: in triage, compare the roof silhouette band (visible roof height above the eave from the street) as well as wall hue. When a sibling unit already renders the photographed roof correctly, cite it as the fix template.
+
+### push-coordinator-accept-s5 — 2026-10-24 — acceptance batch S5 record and push (1205, 1225, 1229, 1237, 1244, 1245)
+
+- What worked well: matching each catalog block by `anchor_source_key` with optional fields in between (last push's lesson) needed no second pass, and the re-parse showed 99 → 105 with sentinel 1223 still not_evaluated. The RETRO rebase conflict was again a single end-of-file block, resolved by dropping only the markers.
+- What did not work well: the brief and the first pattern both assumed every `acceptance_records` list was empty, but 1225 and 1229 already carry older scoped `pass` records, so the first run's per-unit count assertion stopped at 1225 and the pattern had to accept and append to a non-empty list.
+- What the team should change next time: before a catalog record edit, print each target unit's existing `acceptance_records` and append to them; never assume a `not_evaluated` unit has an empty list.
+
+### modeler-accept-s7 — 2026-10-24/28 — acceptance batch S7 (Ozbourn 1139/1141/1147/1149, Reeves 1122/1124/1128; review-only) and the 1205/1229 fix fits
+
+- What worked well: engine-B.lock removed all polling and the three-runs race. Both S7 renders and the 1205/1229 fits queued and ran cleanly. After the usage-limit pause, checking `git status` and the run logs first showed that the notes fix, both fits and both S7 renders were already complete, so nothing was re-run.
+- What did not work well: two of the seven units (1139 at 42 m, 1149 at 54 m) only have distant lot photos. Their whole-unit verdicts rest on form and colour, not detail.
+- What the team should change next time: put the triage's wall-hue and roof columns into the first S-batch template, so they are not added halfway through the series. For distant-only units, say up front that the verdict covers form and colour only.
+
+### ti-visual-review — 2026-10-28 — acceptance batch S7 (Site 12 Ozbourn 1139/1141/1147/1149, Reeves 1122/1124/1128)
+
+- What worked well: the triage table now carries the wall-hue, visible-roof and street-blocking columns, so the three checks I keep repeating were already pre-answered and only needed confirming against pixels. Two panos shared across units (uMQ8, n93I, 4cDG) let each unit be sanity-checked from the neighbouring frame.
+- What did not work well: on the sheet thumbnail, 1128's blank west end looked like a contradiction. Only a native crop showed that the photo's end face is also blank and that the windows sit on the front, so a thumbnail can mislead about which face a feature belongs to. The 42 m and 54 m units (1139, 1149) can only be judged on colour and form.
+- What the team should change next time: when a matched view shows a corner, crop the photo at native resolution around the corner before calling an end wall blank or windowed. For distant units, an extra closer frame from the same date is cheap and would strengthen the verdict.
+
+### push-coordinator-accept-s7 — 2026-10-28 — acceptance batch S7 record and push (Ozbourn 1139/1141/1147/1149, Reeves 1122/1124/1128; review-only)
+
+- What worked well: printing every target's `acceptance_records` first (last round's lesson) showed all seven empty, so one exact-text replacement per `anchor_source_key` block appended the record with no reformatting of the rest of the catalog; a re-parse confirmed 7 changed and 105 → 112. The RETRO rebase conflict was again one append-only block, resolved by keeping both sides.
+- What did not work well: the branch's two RETRO commits conflicted with main's S5 entries purely because both append at the end of the log; every acceptance push pays this one manual step.
+- What the team should change next time: keep the record edit as a script over a unit list and a review id, since S5 and S7 used the same steps; only the follow-up text differs per batch.
+
+### modeler-accept-s4 — 2026-10-24 — acceptance batch S4 (Exposition / Gateview Court rows, review only) and the S2 fits
+
+- What worked well: footprint overlays (base, eave and corners drawn on the photo at the pano pose) confirmed all ten photo bindings in two image reads, with no corner fitting, for rows that run past both frame edges. The S2 fits (8 of 8 PASS, every stair flight walked and every spray placed from 4 m) ran in one background chain alongside the S4 prep.
+- What did not work well: one auto side view put the player on 1252's parking apron, which is configured local ground, not a wall or roof record. The whole shots batch failed and took one of the four runs. The 1248 pano position fell under the modelled carport, which took the last run for a street-side re-render. The engine-count check let chains race; the flock lock now prevents that.
+- What the team should change next time: when choosing auto player spots, check configured `local_ground` triangles as well as wall and roof records. Compare each pano position with nearby carport and canopy outlines before rendering a matched view.
+
+### ti-visual-review — 2026-10-24 — acceptance batch S4 (Exposition / Gateview Court, 8 rows)
+
+- What worked well: the triage named both real gaps (1248's carport extent and 1247's hue), and the binding overlays settled identity for the long rows, which have no corners to fit. The extra street-position render for 1248 isolated the carport contradiction from camera placement. Siblings rendering correctly in the same batch (1250's blue-grey, 1214/1218's carport bays) gave ready fix templates.
+- What did not work well: 1248's pano camera falls under the modelled carport, so the main matched view is dominated by a structure the photo shows only at one end. A setting element can decide a whole-unit verdict, yet it was filed as "parked setting". 1247's SE photo is 42 m away and shows mostly white, so its blue-grey only shows in the Sep 2025 end photo, and the two photos need reading together.
+- What the team should change next time: treat any feature attached to the building config that blocks the matched street view (carports, canopies) as part of the whole-unit check, not as parked setting. When a unit has photos from two dates or sides, state in triage which photo carries the colour evidence.
+
+### ti-visual-review — 2026-10-28 — 1248/1395 carport re-check
+
+- What worked well: the before/after pair at both the street camera and the pano camera, plus the stated frame-width figure (57% against the photo's 61%), made the trim verifiable in one look.
+- What did not work well: there was no neutral re-render, and the remaining asphalt apron in front of the left units (lawn in the photo) belongs to ground or area data rather than the building config. It stays, and a reviewer has to decide whether it counts.
+- What the team should change next time: when a building fix leaves a ground-surface mismatch, log it as a setting item with the area ID so a later ground pass can pick it up, rather than leaving it in a review note.
+
+### modeler-accept-s6 — 2026-10-24/28 — acceptance batch S6 (Site 12 Hutchins, Mason, 1108; review only) and the S4 1248 fix and fits
+
+- What worked well: queuing every engine command on `engine-A.lock` let the S4 fix chain (digest, render, 7 fits) and the S6 renders run unattended and in order, and both finished before the usage-limit pause. The resume therefore needed only a log check, with no re-runs. Comparing the housing digest against the pilot's rebased digest (same housing state) proved "only 1248 differs; 1223 identical" without spending a run on a base digest.
+- What did not work well: the 9-run S4 budget did not cover a neutral re-render of 1248 after the digest, one render and 7 fits. Two S6 cameras rest on estimated pano positions (1131, 1135), because the reference note recorded only pano IDs for them.
+- What the team should change next time: count the digest when setting a fix-and-fits budget. Record pano latitude/longitude alongside the pano ID in reference notes, so later camera work does not depend on estimates.
+
+### ti-visual-review — 2026-10-28 — acceptance batch S6 (Site 12 Hutchins 1112/1116/1118, Mason 1129/1131/1135, Halyburton 1108)
+
+- What worked well: the triage's hue column named the one real gap (1131's medium blue) in advance, and the photos from three dates for 1108 (2018, 2019, 2025) made the boarded present-day state clear.
+- What did not work well: four of seven units carry the same kind of small warm-greige or board-colour mismatch. Each is non-blocking alone, but they keep accumulating as follow-ups across S2–S6 (1403, 1449, 1247, 1118, 1129, 1135, 1108) with no owner or round. Two cameras (1131, 1135) are estimated, so pose comparison is loose.
+- What the team should change next time: open one small colour-opt-in round that takes every logged hue follow-up across the acceptance batches, with a target RGB per unit. Close them in one render pass instead of re-flagging them in each batch.
+
+### modeler-accept-s8 — 2026-10-28 — acceptance batch S8 (Education 29A-E, w1001544698, w111322535, w34313554, w34313555; review-only) and S7 fits
+
+- What worked well: binding all 20 Education 29 frames at once showed that the shared 2019 frame `29E-sideB_153` shows only 29E. The other four sit hidden behind it, and every 2025 frame is fencing. So four units were excluded instead of reviewed against a neighbour's photo. Queueing the S7 fits and S8 renders on engine-B.lock interleaved them without any polling.
+- What did not work well: the run logs record the time a command was queued, before flock acquires the lock, so start times read as overlapping when they were in fact serial.
+- What the team should change next time: log a second timestamp inside the flock (for example `flock LOCK sh -c 'date; cmd'`) so the real start time is recorded. When several configs cite one reference frame, bind that frame against every cited unit before any review.
+
+### ti-visual-review — 2026-10-28 — acceptance batch S8 (29E, w1001544698, w111322535, w34313554, w34313555)
+
+- What worked well: the binding sweep of all 20 Education 29 frames gave a clean, honest exclusion of 29A–D and set out evidence limits up front (29E is 2019-only, 554 is fenced). That let me answer "too weak to judge" instead of accepting by default.
+- What did not work well: the triage flagged a roof-form doubt on w1001544698 that a native-resolution crop settled at once (the photo shows a white gabled tent hall behind front trailers). A flag a quick crop could resolve still reached review. The 535x matched face renders in shade under the game sun, so its hue reads greyer than the photo's sunlit cream.
+- What the team should change next time: before raising a form or roof doubt in triage, crop the photo at native resolution around that feature. For hue, compare a sunlit render face or the neutral render with the photo's sunlit face. Route fence-hidden units to reference research (another date or side) rather than to an acceptance batch.
+
+### modeler-colour-round — 2026-10-28 — colour opt-in round (13 housing units) and S8 fits
+
+- What worked well: reusing the matched-pose plans from S3, S6 and S8 meant no new camera work for 9 of 13 units. Recording the real start time inside the flock (`flock LOCK sh -c 'date; cmd'`) made the logs show serial engine use correctly.
+- What did not work well: the family digest does not see ShaderMaterial colour parameters, so it reported only 1108 as changed. Colour-only rounds need the pixel diff as evidence of change, with the digest showing only that geometry is unchanged. For 1449 the photo measurement (neutral wing walls) conflicts with the reviewer's warm-beige target.
+- What the team should change next time: add the siding shader's wall_color to the private digest when colour rounds are routine. When a measurement contradicts a review target, report both and let the reviewer decide, not split the difference.
+
+### ti-visual-review — 2026-10-28 — colour opt-in round (13 units)
+
+- What worked well: batching every logged hue follow-up into one config-only round with photo | BEFORE neutral | AFTER neutral | AFTER game lighting per unit made the judgement quick. The modeler's photo-sampled RGBs (1449, 1419, 1403) were more reliable than my reviewer targets taken from thumbnails, and flagging the 1449 conflict was right.
+- What did not work well: several of my earlier targets were set from sheet thumbnails, not sampled pixels. 1449's warm target overshoots the photo's pale wings. 1247's copied blue-grey is darker than its own front photo, and 1403's minimal nudge left a visible gap. Shaded matched faces (29E under its veranda) make neutral-render hue hard to compare.
+- What the team should change next time: give colour targets as sampled photo RGB from a sunlit wall patch, with the sample location, instead of descriptive words. Let the modeler's sampled value win when it disagrees with a reviewer's descriptive target, and flag only real conflicts.
+
+### push-coordinator-accept-468c — 2026-10-28 — combined acceptance push (S4, S6, S8, colour round; 19 units)
+
+- What worked well: checking `git show --stat` on all 11 source commits before the first cherry-pick confirmed the scope (RETRO_LOG, housing_family configs, w96215667.json) up front. The four RETRO_LOG conflicts were all end-of-file appends, and a keep-both resolver handled them identically; the +54 lines equal the nine 6-line entries. A JSON comparison of old and new catalogs (only `acceptance_records` and `reference_recognizable` differ, and records are only appended) checked the 25-unit edit in one step.
+- What did not work well: the catalog is not byte-stable under a `json.dumps` round-trip, so the edit had to be a line-anchored text patch. The brief listed five units both as "already accepted" retunes and as newly accepted, so I had to check the catalog to establish that they start this push as not_evaluated.
+- What the team should change next time: when several branches each append RETRO entries, merge them as one batch from a common base so the push coordinator doesn't resolve the same append conflict once per branch. In combined briefs, list each unit once with every record it gets.
+
+### modeler-b1-roof — 2026-10-28 — Building 1 roof geometry audit and fix (r16681702 + tower w1222720021, Engine C)
+
+- What worked well: Before rendering, I read the producer, then ran a headless physics-ray probe over the actual hero records (each visual mesh wrapped in a trimesh body, triangles looked up by face_index, the clockwise front-normal test). Each probe took about 14 s. It produced a height map, a visual-versus-collision map, back-face and z-fight checks, and low-resolution camera images. It found the drum-banding stripes, the open cornice lips and the SE shoulder z-fight. In the fix round, re-running the probe after every edit separated real fixes from artefacts: the south-wing "crack" was the acute tip of a wide slot, and the thin wedge next to it was roof pieces that `_append_cut_polygon` silently dropped when ear clipping failed. A Job Corps aerial already in the reference folders (jc-06) confirmed the squat pale cab and the pale roofs.
+- What did not work well: Audit render 1 stopped (exit 1) because a free-camera target lay outside the source bounds. Two probe runs went on back-face calibration before face_index worked: physics normals always face the ray, and hit_back_faces culled nothing. In the fix round, two infill designs were built for a "crack" that turned out to be a slot corner; a north–south section had read it as 0.25–0.5 m wide. Coplanar opposite-facing faces make the probe report false back faces.
+- What the team should change next time: Check free-camera targets against the source bounds before a run. Measure slot widths perpendicular to the slot, not along a fixed axis. Treat an empty ear-clipping result as a dropped roof piece rather than an empty piece. Offset any inward-facing duplicate wall by 2 cm so probes never tie. Look for operator and agency aerials in the existing reference folders before calling roof shape unverifiable.
+
+### ti-code-review — 2026-10-28 — Building 1 roof fix 0dd4ca5
+
+- What worked well: the change stays inside building_1_hero_model.gd, its two configs, one new material and one catalog path, so shared-code risk closed quickly. Following `_finish_record`/`_collision_body` settled every body's layers: wall records are sprayable receivers, roof records are world-solid only.
+- What did not work well: the mast is a new opaque solid, but the only body it could join is the roof record's world-solid-only collision. That repeats the known roof spray-layer gap for a new part rather than closing it. The triangulation fallback can still return nothing without any signal.
+- What the team should change next time: give hero producers a second body helper (opaque, spray layer, receiver none) so new roof-top solids can follow the LEARNINGS rule without waiting for the installer follow-up. Make any geometry fallback that can drop a piece say so in metadata or a warning.
+
+### modeler-b1-roof — 2026-10-28 — Building 1 mast rework (Codex Sol REWORK, mast only)
+
+- What worked well: I solved the cameras before moving the mast. Each reference camera's position, yaw and focal length was fitted to frozen-footprint landmarks: the 11 crescent window centres, the cab centroid, both pavilion centres, the SE shoulder edge and window, the north end of the tower base storey, and the drum's silhouette tangent. Rays from the SW, WSW and rear cameras then put the mast at about (11, 756), 34 m from the cab, not at (22.6, 739.6). Pitch-only vertical fits from the SW and rear cameras gave a 40.5 m top. Renders from the fitted cameras reproduced the photos' mast-to-cab and mast-to-crown relations in the same pixel windows.
+- What did not work well: My first placement converted Street View URL headings and an assumed 75° field of view straight into bearings, and the SV fits came out at 85–95°. The rear photo's EXIF (18 mm, GPS) misled me: the GPS sits on the building wall, and the fitted field of view (about 24°) implies a crop or stitch. The WSW vertical fit is weak because palms hide the cab and landmarks, and it disagrees with the other two cameras (it implies 36.4 m).
+- What the team should change next time: Fit every reference camera to footprint landmarks before placing anything from it, and don't trust stated headings, fields of view or EXIF GPS on their own. Prefer ray pairs that cross near 90°; the SW and WSW rays cross at about 21°, so their intersection alone moved by 5–8 m. Keep the solver (`tools/mast_solve.py` in the study folder) next to the evidence.
+
+### push-coordinator-b1-roof — 2026-10-28 — Building 1 roof fix record and push (r16681702 + tower w1222720021)
+
+- What worked well: the rebase onto a45f5cb had one RETRO_LOG end-of-file conflict, resolved by keeping both sides; a check showed the rebased diff against origin/main removes no RETRO lines. Anchoring the catalog patch on the two units' shared last review_id, with an assertion that it occurs exactly twice and a JSON comparison showing only appended `acceptance_records`, made the two-unit edit one step; the score stayed at 131.
+- What did not work well: the brief's commits carry the modeler and code-review RETRO entries but no entry from the Codex Sol visual reviewer, so its retrospective has to come from that reviewer's own round.
+- What the team should change next time: when a fix branch is cut before a record batch lands on main, rebase it before the reviews finish so the coordinator inherits fewer conflicts; keep including each reviewer's RETRO entry in the branch it reviewed.
+
+### modeler-accept-s9 — 2026-10-28 — acceptance batch S9 (Avenue M plant sheds and tanks, review only) and the 1248/S6 fits
+
+- What worked well: queuing the seven 1248/S6 fits on `engine-A.lock` while building the S9 sheets kept the slot full without polling. Every fit passed first time from 4 m, because the spray targets were the earlier end-wall plans moved out along their own approach line, with no new target guessing.
+- What did not work well: the plant photos are mostly through chain-link fences, so binding for the low basins (369, 382) rests on the footprint overlay rather than visible geometry; 382 is effectively not photographed. Lock waits behind other owners spread the seven fits over 22 minutes.
+- What the team should change next time: for compound-interior units, flag the low-association ones (382) to the reviewer up front instead of rendering them like the photographed ones. Consider one wide compound view for each plant.
+
+### ti-visual-review — 2026-10-28 — acceptance batch S9 (Avenue M plant sheds and tanks)
+
+- What worked well: the honest association column (high, medium, low) and the advance note that 382 is effectively unphotographed let me decline 382 instead of accepting it by default. Sampling sunlit photo pixels directly (as the colour-round retro suggested) gave concrete RGB targets for 366 and 371 instead of descriptive words.
+- What did not work well: the cameras are pano-position, not corner-fitted, and every photo is behind chain-link. Low structures (basins) are hard to bind, and the verdicts lean on the taller neighbours in frame (371 and 372 tanks, 386 block).
+- What the team should change next time: for units under about 2 m tall (basins), require a raised or aerial-angle reference before an acceptance batch, or mark them as L1 with no photo up front. Put the sampled photo RGB in the triage table whenever the hue column says "model darker" or "warmer".
+
+### modeler-m1-gateview — 2026-10-28 — M1 Gateview Ave A/B kit (14 units; colour fix and whole-unit review)
+
+- What worked well: sampling every unit with recorded boxes, then comparing hue as ratios against a white wall shaded in the same photo set, separated real hue differences (1314 too yellow, 1318 and the shore unit too grey) from shade cast. Only 5 of 14 units needed a change.
+- What did not work well: most fronts are backlit in the Mar 2025 frames, so the raw sunlit RGB the reviewer asked for is not available. A first automatic white-balance using the brightest pixels picked up sky and was discarded.
+- What the team should change next time: when collecting references, record the sun side of each frame. For backlit fronts, use shade-normalised ratios rather than raw values, and say so in the table.
+
+### ti-visual-review — 2026-10-28 — M1 Gateview Ave A/B kit (14 units)
+
+- What worked well: the shade-normalised hue ratios (against shaded whites in the same photo set) were a sound fix for backlit fronts, and they kept me from over-reading 1301's warm impression. Its walls sample near-neutral greige. The impression comes from the sunlit tan carport gables. The sample boxes on each sheet made checks reproducible.
+- What did not work well: the kit's secondary-colour items (carport gables and roofs on 1301, 1305 and 1306) and 901's flat parapet roof are spread across units as "flagged, not fixed", with weak single samples. Several matched views (1314, 905F, 1303) are far more distant than their photos, which limits detail checks.
+- What the team should change next time: give carport gable and roof colour its own sampled kit-level pass (one key per unit) rather than per-unit flags. Re-pose matched cameras whose subject distance differs from the photo by more than about 1.5x before review.
+
+### push-coordinator-s9-m1 — 2026-10-28 — acceptance batch S9 and M1 Gateview Ave kit record and push (20 units)
+
+- What worked well: cherry-picking the five S9/M1 commits onto the just-pushed B1 HEAD with a reusable keep-both script resolved both end-of-file RETRO conflicts identically, and a check confirmed the result removes no RETRO lines. All 20 units had the same `acceptance_records: []` then `anchor_source_key` layout, so one anchored patch with per-unit assertions and a JSON comparison (only records and `reference_recognizable` change) handled the batch in one step. Reusing the B1 worktree kept `node_modules` and the `.godot` import cache, so no reinstall.
+- What did not work well: the brief asked for code and visual records on every unit, but S9 was review-only with no config change and no code review, so S9 got visual records only, as in batches S1–S8. The S9 fit evidence is spread across per-unit run logs rather than one log like M1's `fits.out`.
+- What the team should change next time: in combined briefs, say per batch whether a code review happened, and name each record's review_id. Keep one fits log per batch, like M1's.
+
+### modeler-m2b-flounder — 2026-10-28 — M2b Flounder 1409-1413 and 1445 (colour fix and whole-unit review)
+
+- What worked well: these fronts are sunlit, so raw samples could be used directly. They showed that the parked "cream too dark and cool" note was partly wrong: 1409 and 1410 already match, while 1411 and 1413 are actually white. For 1445, comparing the lower storey's value relative to the upper storey explained the pink read without changing the hue.
+- What did not work well: the digest still cannot see shader colour changes, so the evidence leans on pixel diffs again. 1412's only photo is far (diff below the 2% fuzz).
+- What the team should change next time: compare relative value (lower/upper storey, door/wall) as well as hue when a note says something reads too pink or too dark.
+
+### ti-visual-review — 2026-10-28 — M2b Flounder 1409–1413 and 1445
+
+- What worked well: sunlit fronts with raw samples and recorded ratios made the colour changes easy to verify. Leaving 1409 and 1410 unchanged because their hue already matched was the right call, and the 1411/1413 white walls and 1445's darker lower storey are visible improvements in the photo | BEFORE | AFTER strips.
+- What did not work well: 1409 and 1410 still read cooler and greyer than the photo's yellow-cream tan in the matched render. The cause is that the render's front sits in shade and the lap-line shading darkens it, not the albedo, but nothing in the note separated lighting from colour. 1411's connector run was flagged but not fixed, though a quick sample (~[0.57,0.51,0.48] sunlit, 1:0.90:0.85) gives a ready target.
+- What the team should change next time: when a flagged item has a sunlit sample available, fix it in the same round rather than deferring it. Note in the triage whether the matched render face is lit or shaded, so the reviewer doesn't read a lighting difference as a colour error.
+
+### push-coordinator-m2b — 2026-10-28 — M2b Flounder and Chinook record and push (6 units)
+
+- What worked well: taking M2b as the next push after the S9+M1 chain, rather than restarting that chain, kept the engine-A slot busy with no wasted suite run. The keep-both RETRO script and the anchored catalog patch from the S9/M1 push were reused unchanged (scan window widened for units with a catalog `stairs` block), and a diff showed the cherry-picked configs are byte-for-byte the reviewed `058c7a8` change.
+- What did not work well: three back-to-back pushes each repeated the same end-of-file RETRO conflict and the same full suite; the work was routine, but every batch paid for a ~11-minute suite.
+- What the team should change next time: when several reviewed batches are ready within the same hour, hand them to the push coordinator together so one chain covers them, as the S9+M1 push did.
+
+### modeler-m2a — 2026-10-28 — M2a garage-court colour fixes (1436, 1437, 1438, 1440, 1443, 1420, 1435)
+
+- What worked well: sampling fixed boxes on each photo and writing the box, sample, before and after values into one table made every colour change traceable, as the reviewer's lesson asks. The housing digest confirmed colour-only edits (identical face hashes on all 7) without a render.
+- What did not work well: three of the seven photos are in shade and one is overcast, so absolute albedo needs a normalisation rule (x1.38 to a cream wall, or per channel to a reference wall). That rule is a judgement call the reviewer should check. Sunlit white walls clip at 0.99, so they bound the white only from below.
+- What the team should change next time: prefer sunlit dated photos for colour rounds where they exist, and record the normalisation rule next to the sampled values. Also, the S9 366 spray plan from the sheds round had never been run; it aimed above the deck knee walls and failed with range_rejection. Validate inherited spray plans against the actual receiver roles before a fit run.
+
+### ti-visual-review — 2026-10-28 — M2a garage-court colour fixes (1436, 1437, 1438, 1440, 1443, 1420, 1435)
+
+- What worked well: per-element sampling with box coordinates in the task note made every change traceable. Direct sampling for the sunlit photos (1436, 1438, 1440) improved doors, shutters and brick bases.
+- What did not work well: the ×1.38 brightening for shaded photos to a cream luminance of 0.86 keeps the measured ratios, but the matched render's front is also in shade. The result renders washed-out grey-cream where the photo is clearly tan-beige, so 1437, 1443 and 1420 got worse than BEFORE. A rule that assumes the wall is "cream" builds in the answer.
+- What the team should change next time: for shaded photos, compare the photo and the render under the same lighting (shade against shade) instead of brightening the photo to an assumed luminance. When the render face is also shaded, keep the BEFORE value unless the side-by-side shows a hue mismatch. Check every change against a photo | BEFORE | AFTER strip before calling it fixed.
+
+### push-coordinator-m2a — 2026-10-28 — M2a Chinook record and push (7 units)
+
+- What worked well: queuing M2a behind the running M2b chain, instead of restarting it, meant no suite run was thrown away. The cherry-pick, keep-both RETRO script, config-identity diff against the reviewed `d18fa07..f72f29c` and the anchored catalog patch all ran unchanged from the earlier pushes.
+- What did not work well: M2a arrived minutes after M2b's chain started, so it needed its own ~15-minute chain; four pushes in a row each paid for import, the 1223 sentinel and the full suite.
+- What the team should change next time: when batches finish close together, wait a few minutes for the next one before starting a push chain, so one chain covers both.
+
+### modeler-m3 — 2026-10-28 — M3 Site 12 colour fixes (1111, 1115, 1117, 1120, 1137, 1143, 1145; 1113 kept) and the M2a fits
+
+- What worked well: the M2a reviewer's lesson turned into a simple, checkable rule: albedo × (photo / neutral render) at the same wall box in the matched view. It needs no shade factor, and it showed that 1111's "reads blue" was the overcast photo itself; the real gap was the tan privacy boxes.
+- What did not work well: the private family digest records StandardMaterial albedo only, so siding colour (a ShaderMaterial parameter) is invisible to it. Only 1111 showed as changed, and the colour evidence had to come from pixel diffs. Rough poses (1117 front, 1143, 1145) limit the ratio method to the few frames where the same wall patch is visible in both images.
+- What the team should change next time: add the ShaderMaterial `wall_color` parameter to the digest's material line so colour rounds are visible there. Prefer frames where the target wall is unobstructed when choosing which photo to sample.
+
+### ti-visual-review — 2026-10-28 — M3 Site 12 colour fixes (1111, 1113, 1115, 1117, 1120, 1137, 1143, 1145)
+
+- What worked well: the per-channel photo/render ratio at the same patch in the matched view, with no shade factor, gave small, believable corrections and no over-correction like M2a's. Keeping 1113 white from the newer 2025 rear photo, and moderating 1117's tree-shaded ratio to beige, were sensible judgement calls that were disclosed.
+- What did not work well: 1111's screen change edited a palette key that the 12 per-screen material_rgb values override, so the AFTER render did not show the intended change, and only code review caught it. The pixel diff (4.2%) did not reveal that the targeted element was unchanged.
+- What the team should change next time: after a colour change, crop the targeted element itself in BEFORE and AFTER (not just the whole-view AE) to confirm the intended pixels moved. When a config has per-instance colour overrides, edit those or note the override in the task note.
+
+### modeler-m4-mixed — 2026-10-28 — M4 (1224, 1204, 1243, 367; 549 excluded, r133351 already accepted) and M2b fits
+
+- What worked well: rendering BEFORE first and sampling the same boxes in the photo and the render at the matched pose, per the M2a lesson, showed that three of four units already match within ~10%. Only 367 changed, and nothing was brightened.
+- What did not work well: one BEFORE run failed on a side view whose player spot sat on a building. The clearance check in the plan generator only tests 2.5 m around wall segments, and missed a footprint the point was inside. That cost one of six runs.
+- What the team should change next time: in the plan generator, test player spots against every footprint polygon (point-in-polygon), not only wall-segment distance. Keep the render-first ratio method as the default for colour rounds.
+
+### ti-visual-review — 2026-10-28 — M4 mixed (1224, 1204, 1243 unchanged; 367 recoloured)
+
+- What worked well: the M2a lesson was applied properly. Shaded photo against shaded render, the same boxes in both, and leaving units unchanged when the ratios already match avoided another round of over-correction. 367's rust roof and warmer walls are visibly closer, and 549's honest exclusion avoided a weak verdict.
+- What did not work well: 367's main identity feature, the open timber lean-to or canopy on the street-end gable, was filed as a "non-colour flag" without checking whether it falls inside the OSM footprint. That decides whether it's the building's job or the setting's. The matched pose for 367 is also more frontal and distant than the 37 m oblique photo.
+- What the team should change next time: for any attached structure flagged in triage, record whether it is inside the frozen footprint (building) or outside (setting) before review. When the pano pose is oblique and the render differs strongly, fit the camera to the visible eave and corner points rather than reusing the pano heading alone.
+
+### ti-visual-review — 2026-10-28 — 367 canopy re-check and L1 panel halls 449 / 368 / 516
+
+- What worked well: 367's canopy came back as a clean geometry answer to the earlier footprint question, and the sheet included the reviewer's own photo crop beside a close south view, which made the comparison direct. For the halls, putting form first (silhouette, storeys, eave) before colour kept the review on what matters for recognition, and the private all-hall digest showed the new eave key changed only 449.
+- What did not work well: 449's flagged colour gap (cream walls in the photos against the model's blue-grey) was known before rendering but left for a later round, so the hall passes on form with a visible hue gap. 516's matched views include a tree-hidden side (sideA) that shows a tan wall, which could be 516 or the separate cream annex. The binding table doesn't say which.
+- What the team should change next time: when two photos agree on a dominant wall colour, fix it in the same round as the form change instead of parking it. In binding tables, name the footprint for every visible wall in each photo, especially where an annex adjoins the target.
+
+### ti-code-review — 2026-10-28 — 367 open_sided canopy c77b190
+
+- What worked well: the producer change is one guarded condition in `_spans`, so opt-in and no-change for other units were clear from the diff. Following the clip planes showed that shed and canopy_s share the s = 32.59 plane exactly.
+- What did not work well: shortening the shed moved its south gable wall off footprint edge e1, so it fell back to the `inner` scheme. The `gable_s` scheme, with its garage door, is now unused. That only showed up by tracing face keys through FACE_BAND_M.
+- What the team should change next time: when a block split moves a wall off its footprint edge, re-key the moved face explicitly (for example `"return": "gable_s"`), and list unused schemes in the digest.
+
+### modeler-l1-halls — 2026-10-28 — L1 panel halls 449, 368, 516 (form first) and M4 367 canopy
+
+- What worked well: photo-against-render comparison at the matched pose, done before any colour work, isolated the one form gap two photos supported (449's projecting eave). A small private all-hall digest proved the opt-in leaves the other six halls identical.
+- What did not work well: on 367, a fit on four near-end points looked conclusive (1.4 px), but adding the far end of the wall exposed a poorly placed pano. The first canopy render also showed that any adjacent block hides a neighbour's wall in the midrise producer, so an open canopy left the shed hollow.
+- What the team should change next time: always fit with points spread across the whole facade before trusting a pose, and report fit failures. When adding open blocks next to closed ones, check the wall behind them in a close view before handing back.
+
+### ti-code-review — 2026-10-28 — 449 opt-in panel-hall eave d4aa048
+
+- What worked well: the eave is a single guarded branch with matching `_chain_problem` validation, and the detail body is already solid plus spray with receiver none, so the opt-in and layer questions closed from the code.
+- What did not work well: the corner closure only holds if the extension past each chain end reaches the slab's outer edge (depth + 0.15 for the soffit, + 0.23 for the fascia). Extending by `depth` leaves a notch about 0.15 m across at each outside corner. The w34313512 native-producer descriptor in building_fit_test.gd still requires ThinCoping and does not know the eave parts. The suite does not run that driver, so nothing flagged it.
+- What the team should change next time: check corner closure with plan arithmetic for at least one 90° corner before rendering. When a hall's construction details change, update its QUALITY_SUPPORT_ASSEMBLIES entry in the same commit and run that driver.
+
+### push-coordinator-m3-m4-l1 — 2026-10-28 — M3 Site 12, M4 mixed and L1 panel halls record and push (15 units, one chain)
+
+- What worked well: one chain for three batches, as the previous retro asked, cost one suite instead of three. A per-file comparison showed every game and tool file in the combined tree equals its reviewed branch tip, and the RETRO diff against origin/main removes no lines.
+- What did not work well: the shared "367 canopy re-check and L1 panel halls" visual-review entry was committed on both the M4 and L1 branches. The second cherry-pick applied cleanly and silently duplicated it, so I removed the identical second copy in the record commit.
+- What the team should change next time: when one review covers two branches, commit its RETRO entry on one branch only and name that branch in the other's handoff. Before each push, check the combined RETRO for duplicate headings.
+
+### modeler-m5 — 2026-10-28 — census and M5 (1107 Bigelow colour; 1223 Mariner review-only)
+
+- What worked well: re-checking each census candidate by drawing its footprint over the photo turned "has a photo" into "the photo shows this facade". That cut the candidate list from six to two before any engine run. The ratio method again separated real albedo gaps (1107's warm taupe, boards near wall colour) from lighting differences (1223's under-carport shade).
+- What did not work well: I copied the 1223 photo's recorded Maps "FOV 75" into the render. It over-zoomed the BEFORE view about 2.3x, while the f 387 default matched the footprint drawn over the photo. With a 4-run budget that left the 1223 sheet without a pose-matched BEFORE.
+- What the team should change next time: before rendering a matched view, check the planned field of view against the footprint drawn over the photo, not against the capture note. Spend the digest run only where shared-material or geometry change is possible.
+
+### ti-visual-review — 2026-10-28 — M5 1107 Bigelow and 1223 Mariner
+
+- What worked well: separating 1223's sentinel constraint (no geometry change) from the visual verdict let the review judge recognition honestly and route the carport difference to its own future round instead of blocking. 1107's taupe shift is a clean, visible improvement against its only photo.
+- What did not work well: 1223's BEFORE column was rendered at a different focal length, so BEFORE and AFTER can't be compared pixel for pixel. 1107's only reference is from Feb 2018, with trees and a parked car covering much of the facade, which limits how much a colour verdict can claim.
+- What the team should change next time: render every sheet column with the same camera definition, and treat a focal mismatch as a sheet bug to fix before review. For units whose only photo is older than about five years, add a quick check for a newer frame before the colour round.
+
+### modeler-f1-finish — 2026-10-28 — F1 finish follow-ups (1411, 1305, 366, 371; 1204, 901, 1301/1306 skipped)
+
+- What worked well: checking each target's key in code before editing showed that 1204's carport underside is hard-coded (already dark) and that 366's hut was already white, so neither needed a change. Element crops made the subtle 1305 roof shift visible.
+- What did not work well: I reused an M2b sample for 1411 without re-checking its box. It sat partly on a window in shade, and the first value was too pale, costing one re-render. Two "reads as" notes (1301/1306 tan gables, 901 flat roof) were not supported by the photos.
+- What the team should change next time: re-draw every reused sample box on the photo before trusting the value. Treat review targets as hypotheses to confirm against a fresh sample.
+- Round 2: 1111's screens ignored main's new screen_rgb because every screen entry carried its own material_rgb. When a palette key seems not to apply, check for per-element overrides first. For 1411, a photo/render ratio at the matched box got closer than raw samples, because the render's sky light shifts the hue.
+
+### push-coordinator-m5-f1 — 2026-10-28 — M5 and F1 finish record and push (2 newly accepted, 4 refinished)
+
+- What worked well: both branches were cut from 9553a61, so the cherry-picks had one end-of-file RETRO conflict and F1's "Round 2" line still landed in its own entry. A duplicate-heading check on the new RETRO entries, a per-file comparison with the branch tips, and a JSON check (records only appended; the four F1 units' claim status unchanged) covered the batch.
+- What did not work well: the F1 branch carries only the modeler's RETRO entry; the F1 code and visual reviewers' entries are not in it. 1107's checklist row is L2 U while it is now catalog-accepted, and I left the level alone because no one asked for a level change.
+- What the team should change next time: include each reviewer's RETRO entry on the branch it reviewed, and say in the brief whether an acceptance also changes a checklist level.
+
+## 2026-10-05 — worktree — latest main checkout
+
+- Worked: fetched `origin/main` and created `/workspaces/content-main` on `worktree/main-20261005` at `836c00a`, preserving the existing checkout branch and leaving LFS assets unhydrated.
+- Did not work: no execution failure; a stale prunable `/tmp/mainwt` registration exists and was left untouched because cleanup was outside the request.
+- Change next time: keep checkout-only tasks to fetch, isolated worktree creation and Git-state verification. This required retrospective stays uncommitted in the original checkout so the requested latest-main worktree remains clean; no implementation commit or test run was needed.
+
+### worktree — Mersea bounded task discovery
+
+- Worked: isolated latest-main inspection identified four unaccepted frozen building units and the archived mural/site prototype, while retained 2019 overhead and 2025/2026 exterior pixels make the multi-structure courtyard scope concrete. Existing reference and implementation entrypoints cover the work without a new harness.
+- Did not work: the older prototype is not production-integrated and its portable source was not executed; historical reference sufficiency cannot certify a newly enlarged site assignment. New private projection overlays suggest the old mural-to-source association needs checking, but overlays alone do not prove that mapping wrong. Initial broad search excerpts included low-value long URLs; narrow source and image inspection was more useful.
+- Change next time: bind the full site's component identities and source faces from retained originals before author dispatch, reuse suitable container/material parts rather than assuming the old layout is correct, and ask only whether the neighboring event venue is part of the requested site. No modeling, engine, browser, downloads or commits occurred; this retrospective remains in the original checkout and the latest-main worktree stays clean.
+
+### worktree — Mersea official and review-photo research
+
+- Worked: reused retained official originals and Google photo URLs, checked official private-events and Google Latest galleries live, and inspected selected full-size mural, overhead, courtyard and glazing pixels. Google distinguishes Photo October 2023 from Image capture September/August 2023; private notes preserve both. No duplicate bulk acquisition was needed.
+- Did not work: Yelp web access was robots-blocked and the retained browser attempt showed CAPTCHA; no bypass attempted. The old mural source mapping remains unresolved despite physical-component distinctions in raw photographs; inferred projection overlays cannot certify the corrected receiver. A filename suggesting a main container view actually showed an interior.
+- Change next time: select complementary actual pixels and exact date labels first, then bind raw sightlines to OSM identities before reuse. Private shortlist and access findings are in /tmp/mersea-refs-20261005/REFERENCE_NOTES.md. Named browser/Weston session closed; no modeling, Godot, commits or main-worktree edits occurred.
+
+## 2026-10-05 — efficiency — bounded Mersea setup checkpoint
+
+- Worked: latest-main checkout stayed isolated; the Mersea reference round reused retained official/Google originals and made one live-verification capture, with browser closure recorded. These notes show no repeated bulk acquisition or engine run. Actual-pixel sufficiency, date distinctions and mural/restroom receiver identification are necessary checks for the expanded site, not redundant research. Prior Building 600 reviewer entries confirm the explicit own-RETRO permission experiment eliminated the earlier clarification handoff; retain that wording.
+- Did not: discovery's broad search returned low-value long URLs, and my initial broad historical match likewise truncated output before targeted excerpts resolved it. The reference notes still leave exact receiver association open; a repeated gallery sweep without an architectural question would not resolve that by itself. Available retained activity does not establish current modeler-launch delays or total waiting time, so no troubleshooting/time-cost finding is claimed.
+- Next: one reversible experiment is to carry the existing private reference shortlist and one explicit unresolved component-to-footprint question into the author handoff; acquire another view only when it can decide that question or a newly identified structural gap. At the next ordinary checkpoint, compare whether the receiver question was resolved without another broad gallery sweep. Preserve ROOT direct-pixel sufficiency, independent visual/source review and every required fit/screenshot/suite gate. This reviewer performed no engine, browsing, modeling or process/worktree changes; only this own retrospective append.
+
+### worktree — Mersea Claude modeling dispatch blocked
+
+- Worked: confirmed installed Claude Code 2.1.289 and supported --agent ti-implementation dispatch; actual init model was claude-opus-5-5. ROOT reviewed the selected raw image set and authorized a bounded four-building courtyard study with identity preflight, protected scope and independent review preserved. No existing Claude/reference browser was touched.
+- Did not work: Claude returned its account session limit immediately, stating reset at 4:10am UTC without a date. Exec77679 reached exit1 before tools, source edits or engine activity; the clean worktree was preserved. This is an access limit, not a modeling failure.
+- Change next time: resume the retained private assignment after access is available, with a fresh named serialized-slot grant and process inspection. No Codex modeling fallback or repeated launch was attempted; slot released with terminal/no-child evidence. Launch prompt and stream remain under /tmp/mersea-model-20261005; retrospective kept only in original checkout.
+
+### worktree — Gold Bar/Mersea location clarification
+
+- Worked: official Mersea Golden Hour Bar text and clear hero sign establish a real collaboration; official Gold Bar visit page and separate frozen POI establish the distillery elsewhere. Reused raw March2025 street view, overhead and official photographs, without new image acquisition or engine work.
+- Did not work: branded-photo provenance alone cannot validate w1308007112. Its frozen footprint bears 141.94–148.78 degrees from the retained 9th Street camera; the signed bar appears on the right/waterfront side of the 165-degree view, inconsistent with that leftward location. Exact corrected receiver remains a source-binding question, not a business-name question. No model review or acceptance supplied.
+- Change next time: verify primary collaboration/location before settled naming and verify footprint/sightline separately. Added the concise assigned lesson to LEARNINGS in the original checkout; no model changes. Mersea contact page says 699 Avenue of the Palms while frozen POI says 669; preserved discrepancy without changing authoritative layout.
+
+### worktree — bounded Mersea satellite corroboration
+
+- Worked: one Google satellite navigation plus one zoom produced useful raw whole-site and close views. Visible mini-golf/restaurant adjacency and opposite bocce side corroborate the signed street-view waterfront region; no Apple fallback or broad survey was needed.
+- Did not work: satellite text cannot establish bar signage or exact service face; copyright2026 does not give imagery capture date. Browser URL scale transition was retained without claiming survey calibration.
+- Change next time: combine one spatially useful aerial with dated raw street pixels and frozen footprints, then allow bounded production inference after independent target binding. Browser exec36442 reached terminal0 with cleanup, owned Weston154889 released. Notes/screenshots remain private; no engine or model edits.
+
+## 2026-10-05 — mersea-refs-1: fresh Mersea exterior reference set
+
+- Worked: Official-site originals (49, many 2019 and 2025 upload dates), Google Maps owner and visitor photos (Vibe, Latest, By-owner, All and 360 tabs; a dated photo and caption for each), and four dated Street View panoramas (Jan 2023, Mar 2025, Sep 2025) covered every public side of the four Mersea units, plus the props and ground surfaces. To associate images with units, I projected the frozen OSM footprints into each saved Street View frame using its resolved camera position and heading, and drew them over close satellite captures. This tied the mural to the actual container face and tied w1001544698 to the white tent's roof outline using direct pixels rather than perspective. Two October 2019 owner drone photos supplied the missing roof and overall-layout view. Browser closed and Weston terminated.
+- Did not work: Yelp business photos showed a bot-check slider at first load. I stopped there per the rules; it needs the owner. Google's Latest tab exposes only 8 photos without login. I twice navigated the gallery tab away to a local contact sheet and lost my place; a separate tab fixed this. A rate-limit interruption hid some image reads; the saved originals made resuming cheap.
+- Next time: open contact sheets in a separate tab from the start. Project the frozen footprints into the first saved Street View frame before collecting more imagery: one projection overturned the inherited "mural wall" label for w1098437841. Associate units from each image's pixels, not from task labels.
+
+## 2026-10-15 — benchmark_routes — model comparison feasibility
+
+- Worked: read the maintained blind protocol and renderer, current Astra routing worktree, installed Claude help, official Gateway documentation and public live model catalog without inference or engine execution. Gemini 4 Argon is listed with image/tool support; OpenCode documents local editing, shell and image prompts with Gateway.
+- Did not: broad historical searches produced truncated output and the private original benchmark packet is referenced at an old Mac path, not established as present here. Claude Code Gateway discovery alone does not prove this installed client completes Gemini tool/image loops.
+- Next: reuse the fixed capture workflow, locate the private source packet, and perform one bounded image-plus-edit tool smoke test only after Gateway credentials/spend authorization; retain full edit-to-verdict timing and label model-plus-harness comparisons honestly. No installs, auth/config changes, benchmark/model calls or engine launches.
+
+### independent_checkpoint_sol — 2026-10-17 — requested next-agent handoff file
+
+- Worked: saved ROOT-supplied handoff text verbatim to HANDOFF_NEXT_AGENT.md, including completed normal push/current main and exhausted two-family authorization; no art, engine, staging or commit.
+- Did not work: the earlier pending-delivery handoff would have incorrectly retained the credential-bridge blocker after the successful push; supplied replacement text records the actual completed delivery.
+- Next: read the saved current-state prompt rather than repeat completed tests/pushes, preserve unrelated dirty work, and require a concrete new bounded assignment before another audit family.
+
+### ti-code-review — 2026-10-23 — 84b3b16 free-camera views and hidden avatar
+
+- What worked well: the diff is small and every touched path could be traced statically: free cameras are freed and the gameplay camera made current again, the avatar has no collision and `ray()` excludes the player body, so hiding `AvatarPivot` cannot move any fit, sightline or spray assertion.
+- What did not work well: the branch was cut before main's `531708d` (`--neutral-lighting`), so the requested neutral-lighting regression check had nothing to check here; the two edits touch the same lines in `_run` and will conflict on merge.
+- What the team should change next time: base shared-test edits on current main, or say in the review brief which commit the branch is behind, so the reviewer checks the merged result rather than a parent without the feature.
+
+### push-coordinator-harness-cleanup — 2026-10-28 — committing the main checkout's leftover edits
+
+- What worked well: backing up the full dirty diff and both untracked files before touching anything made the later discard safe. Copying the RETRO additions verbatim from the dirty diff, then comparing added lines with the original, kept the ten Oct 5–17 entries and the 2026-10-23 code-review entry byte-for-byte; none of their headings exists on main.
+- What did not work well: these entries sat uncommitted in the shared checkout for up to three weeks, next to edits that main had since superseded (the agent effort, the old Mersea routing and a duplicate lesson), so they needed a separate triage before anything could be cleaned.
+- What the team should change next time: commit or explicitly discard a checkout's RETRO entries in the round that writes them; don't leave uncommitted edits in the shared main checkout.

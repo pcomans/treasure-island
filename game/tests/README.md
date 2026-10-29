@@ -13,6 +13,7 @@ It must pass before anything is pushed to `main`.
 | `headless_world_material_contract.gd` | The ground and building materials load with their textures. |
 | `headless_facade_meter_uv_adapter_contract.gd` | Facade texture coordinates run continuously around corners. |
 | `headless_building_study_geometry_contract.gd` | The shared geometry helper (`support/building_study_geometry.gd`). |
+| `headless_facade_grid_contract.gd` | The shared facade window grid and assembly helpers (`scripts/world/facades/facade_grid.gd`, `facade_assembly.gd`) on hand-built grids. |
 | `automated_route_qa.gd` | The player can walk the ferry-to-Trade-Winds road route without getting stuck or falling. |
 | `shared/island_test.gd` | The island loads and every scored building is present, solid and grounded. |
 | `tools/validate_godot_world.mjs` | The committed generated world is valid. |
@@ -25,6 +26,9 @@ tools/godot --headless --path . --script game/tests/shared/building_fit_test.gd 
 tools/godot --path . --resolution 1600x900 --script game/tests/shared/building_shots.gd -- --source <key> --island --out <dir>
 tools/build-mac.sh   # Mac build + content audit + launch check
 ```
+
+A `--views` focused view may add `camera_xyz` with a vertical `fov` (default 70) to shoot from a free camera aimed at its `target_xyz`, for example to match a reference photo, or `"projection": "ortho"` with `ortho_size` (vertical extent in metres) for a square-on elevation.
+The player avatar is hidden in every shot; `--show-player` keeps it.
 
 `shared/` holds these checks and their helpers (`world_harness.gd`, `building_fit.gd`,
 `catalog.gd`). `support/` files are loaded by game scripts at runtime.

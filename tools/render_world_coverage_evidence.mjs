@@ -198,6 +198,16 @@ function extentForRecords(records) {
   return Object.fromEntries(Object.entries(extent).map(([key, value]) => [key, round3(value)]));
 }
 
+function ringArea(ring) {
+  let twice = 0;
+  for (let index = 0; index < ring.length; index += 1) {
+    const [x0, z0] = ring[index];
+    const [x1, z1] = ring[(index + 1) % ring.length];
+    twice += x0 * z1 - x1 * z0;
+  }
+  return twice / 2;
+}
+
 function extentForRing(ring) {
   const extent = emptyExtent();
   for (const [x, z] of ring) includePoint(extent, x, -z);
@@ -352,7 +362,22 @@ function validateWorld(worldRoot) {
   const sourceBoundary = projectedSourceBoundary(sourcePolygon, manifest.coordinate_system);
   const derivedBoundary = manifest.playable_boundary.components[0].outer;
   invariant(manifest.playable_boundary.components.length === 1 && manifest.playable_boundary.components[0].holes.length === 0, "Playable boundary topology drift");
-  invariant(stableJson(sourceBoundary) === stableJson(derivedBoundary), "Projected exact source polygon differs from manifest boundary");
+  // The runtime boundary is the exact island polygon plus the owner-approved
+  // walkable pier polygons (PLAYABLE_PIER_EXTENSION_SOURCE_KEYS), so it keeps
+  // every exact source vertex in order and only adds the piers' vertices. The
+  // land itself still covers exactly the source polygon.
+  const start = derivedBoundary.findIndex((point) => samePoint(point, sourceBoundary[0]));
+  invariant(start >= 0, "Manifest boundary lost the exact source polygon start vertex");
+  let matched = 0;
+  for (let step = 0; step < derivedBoundary.length; step += 1) {
+    const point = derivedBoundary[(start + step) % derivedBoundary.length];
+    if (matched < sourceBoundary.length && samePoint(point, sourceBoundary[matched])) matched += 1;
+  }
+  invariant(matched === sourceBoundary.length, "Manifest boundary does not keep every exact source polygon vertex in order");
+  invariant(Math.abs(ringArea(derivedBoundary)) >= Math.abs(ringArea(sourceBoundary)), "Manifest boundary is smaller than the exact source polygon");
+  const landExtent = extentForRecords(chunkRecords.filter((record) => record.feature_kind === "land_ground"));
+  const sourceExtent = extentForRing(sourceBoundary);
+  invariant(Object.keys(sourceExtent).every((key) => Math.abs(sourceExtent[key] - landExtent[key]) <= 0.002), "Land records do not span the exact source polygon");
 
   const kindStats = {};
   for (const kind of [...new Set(chunkRecords.map((record) => record.feature_kind))].sort()) {

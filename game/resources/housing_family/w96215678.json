@@ -1980,16 +1980,16 @@
       0.25
     ],
     "roof_high_rgb": [
-      0.59,
-      0.54,
-      0.43
+      0.42,
+      0.37,
+      0.31
     ]
   },
   "materials": {
     "siding_rgb": [
-      0.88,
-      0.86,
-      0.8
+      0.74,
+      0.78,
+      0.72
     ],
     "trim_rgb": [
       0.85,
@@ -2900,9 +2900,9 @@
   },
   "roof_kind": "shallow_hip",
   "segmented_roof": true,
-  "roof_rise_m": 1.25,
+  "roof_rise_m": 2.2,
   "wall_top_y": 8.09,
-  "study_notes": "Observed run5 lower group completed from retained March2025 frontage. Pale solid-front screens with taller slatted returns; shallow muted tan roof/apron proportions are bounded art inference. Shrub-obscured details and backs remain unknown. Final source-relative vertical composition lowers upper groups/eave 0.35m without resizing motifs; 1.25m roof rise and 0.32m eave depth are explicit shallow-roof art inference, not measured geometry. Rear study001: existing housing_site_family complete paired windows and green-gray closed entries reused across full west collinear hosts12\u201315. Seven upper pairs, seven lower pairs and seven entries form a restrained residential bay rhythm; counts, cadence and anchors are reversible production_inference from target-bound March2025 front family and undated layout, not an observed rear schedule. North/south terminals deliberately retain coherent blank siding as source-uncertain end-wall inference; no reference-backed absence claim. Roof, front, site and short returns remain unchanged.",
+  "study_notes": "Observed run5 lower group completed from retained March2025 frontage. Pale solid-front screens with taller slatted returns; apron proportions are bounded art inference. Shrub-obscured details and backs remain unknown. Final source-relative vertical composition lowers upper groups/eave 0.35m without resizing motifs; the 0.32m eave depth is explicit shallow-roof art inference (roof rise: see the S5 review note below), not measured geometry. Rear study001: existing housing_site_family complete paired windows and green-gray closed entries reused across full west collinear hosts12\u201315. Seven upper pairs, seven lower pairs and seven entries form a restrained residential bay rhythm; counts, cadence and anchors are reversible production_inference from target-bound March2025 front family and undated layout, not an observed rear schedule. North/south terminals deliberately retain coherent blank siding as source-uncertain end-wall inference; no reference-backed absence claim. Front, site and short returns remain unchanged in that rear study. 2026-10-24 S5 review: Mar 2025 front shows a warm grey-brown shingle roof band and pale sage/grey-green siding; roof_rise_m 1.25 -> 2.2 (visible from the street, as on sibling 1244), roof_high_rgb warm grey-brown, siding_rgb pale sage (production_inference of colour)",
   "clamp_pipe_to_eave": true,
   "roof_eave_depth_m": 0.32,
   "rear_frames": [
