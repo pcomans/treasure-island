@@ -97,6 +97,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 
+## True once startup has handed play to the player: the world is loaded, the
+## player grounded and the initial graphics prepared.
+func is_play_ready() -> bool:
+	return _world_ready
+
+
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT \
 	and _world_ready \

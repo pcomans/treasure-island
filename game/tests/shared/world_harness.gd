@@ -17,8 +17,9 @@ func _init(scene_tree: SceneTree) -> void:
 	tree = scene_tree
 
 
-## Instantiates main.tscn and waits until the world is loaded and the player
-## has settled. Returns an error message, or "" on success.
+## Instantiates main.tscn and waits until the world is loaded, the player has
+## settled and startup has handed over play (after preparing the initial
+## graphics). Returns an error message, or "" on success.
 func load_world() -> String:
 	# Dummy-renderer MultiMesh readback can return identity transforms, silently
 	# moving visible geometry into the origin and invalidating fit/approach checks.
@@ -46,6 +47,12 @@ func load_world() -> String:
 		await tree.physics_frame
 	if not player.was_first_reveal_grounded():
 		return "player did not settle at spawn"
+	# Startup enables gameplay and shows the HUD only once it hands over play;
+	# wait for that, so it can't undo the setup below a few frames later.
+	while not main.is_play_ready() and Time.get_ticks_msec() - started < 120000:
+		await tree.process_frame
+	if not main.is_play_ready():
+		return "startup did not reach play within 120 s"
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	player.set_gameplay_enabled(false)
 	clean_hud()

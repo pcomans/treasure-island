@@ -88,10 +88,12 @@ instead of generating it; `tools/test.sh` runs the whole-island check on it too.
 pack for game-only content. Native builds retain Forward+; the browser uses
 Godot's Compatibility/WebGL 2 renderer and single-threaded WebAssembly.
 
-Open https://treasure-island-five.vercel.app/ and wait for the island to load,
-then click **Resume**. WASD moves, Shift runs, Space rises with the jetpack,
-releasing Space descends slowly, mouse movement looks around, and Esc pauses.
-Spray is omitted in the browser build by owner approval. F3 shows actual FPS.
+Open https://treasure-island-five.vercel.app/ and wait for the island to load;
+play starts by itself. WASD moves, Shift runs, Space rises with the jetpack and
+releasing Space descends slowly. Click **Click to look** at the top to capture the
+mouse and look around. Esc releases the mouse and pauses; **Resume** captures it
+again and continues. Spray is omitted in the browser build by owner approval.
+F3 shows actual FPS.
 
 To deploy, push to `main`, check out a clean `main` and run:
 
@@ -126,12 +128,13 @@ the container crash. That override is not in the deployed game.
 
 ### Touch controls
 
-On a touch-capable browser, tap **Play / Resume** after loading. Drag the left
-movement stick to walk, drag the right side to look, hold **RISE** to jetpack
+On a touch-capable browser, play starts as soon as the island has loaded. Drag the
+left movement stick to walk, drag the right side to look, hold **RISE** to jetpack
 upward and release it to descend, and hold **RUN** while moving to run. The
-**II** button pauses. Movement, look and buttons accept different fingers at
-the same time. Pausing, losing focus, resizing or cancelling a finger releases
-held touch input. Desktop mouse and keyboard controls are retained.
+**II** button pauses; **Play / Resume** continues. Movement, look and buttons
+accept different fingers at the same time. Pausing, losing focus, resizing or
+cancelling a finger releases held touch input. Desktop mouse and keyboard
+controls are retained.
 
 This ports the MIT mobile input layer from Selgesel’s Godot4 third-person
 controller (see game/scripts/vendor/selgesel/README.md): its analog thumbstick,

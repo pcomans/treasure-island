@@ -155,7 +155,7 @@ func _load_prebuilt() -> void:
 		remove_child(old)
 		old.free()
 		var child := baked.get_node(name)
-		PREBUILT_WORLD._clear_owners(child)
+		PREBUILT_WORLD.clear_owners(child)
 		child.reparent(self, false)
 	ground_and_areas = $PlayableWorld/GroundAndAreas
 	roads_and_paths = $PlayableWorld/RoadsAndPaths

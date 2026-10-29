@@ -32,7 +32,7 @@ static func pack_world(world: Node) -> PackedScene:
 	var error := packed.pack(static_root)
 	# Return the original tree to its loader for same-run source/reload comparisons.
 	for child: Node in static_root.get_children():
-		_clear_owners(child)
+		clear_owners(child)
 		child.reparent(world, false)
 	static_root.free()
 	if error != OK:
@@ -51,7 +51,7 @@ static func _own_descendants(node: Node, owner_root: Node) -> void:
 	for child: Node in node.get_children():
 		_own_descendants(child, owner_root)
 
-static func _clear_owners(node: Node) -> void:
+static func clear_owners(node: Node) -> void:
 	node.owner = null
 	for child: Node in node.get_children():
-		_clear_owners(child)
+		clear_owners(child)
