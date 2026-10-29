@@ -10,12 +10,14 @@ It must pass before anything is pushed to `main`.
 | `headless_startup_configuration_contract.gd` | Dummy audio is selected; the building catalog lists 213 buildings and every accepted one has a reviewer verdict. Prints the score. |
 | `validate_generated_world.gd` | The generated world data is valid and matches its manifest. |
 | `headless_gameplay_contract.gd` | Controls, movement and jetpack defaults, water, skyline billboard. |
+| `headless_touch_controls.gd` | The browser touch controls: proportional stick, independent fingers, release, pause and teardown. |
 | `headless_world_material_contract.gd` | The ground and building materials load with their textures. |
 | `headless_facade_meter_uv_adapter_contract.gd` | Facade texture coordinates run continuously around corners. |
 | `headless_building_study_geometry_contract.gd` | The shared geometry helper (`support/building_study_geometry.gd`). |
 | `headless_facade_grid_contract.gd` | The shared facade window grid and assembly helpers (`scripts/world/facades/facade_grid.gd`, `facade_assembly.gd`) on hand-built grids. |
 | `automated_route_qa.gd` | The player can walk the ferry-to-Trade-Winds road route without getting stuck or falling. |
 | `shared/island_test.gd` | The island loads and every scored building is present, solid and grounded. |
+| `shared/island_test.gd -- --use-prebuilt-world` | The same, on the baked world desktop exports load (baked first by `tools/prebuild-static-world.sh native`, removed afterwards). |
 | `tools/validate_godot_world.mjs` | The committed generated world is valid. |
 | `tools/check_godot_world_determinism.mjs` | Fresh world builds from the OSM sources are identical to each other and to the committed world. |
 

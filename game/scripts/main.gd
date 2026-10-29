@@ -168,15 +168,18 @@ func _prepare_initial_graphics() -> String:
 	STARTUP_MARKS.mark("graphics_prepare_begin")
 	if STARTUP_MARKS.enabled():
 		print("GRAPHICS_PREPARE visible=%s grounded=%s input=%s camera=%s renderer=%s" % [player.visible, player.is_on_floor(), player.is_processing_unhandled_input(), player.get_camera().global_position, RenderingServer.get_current_rendering_method()])
+	# Mersea's bar probe is the only startup reflection producer, and shared startup
+	# must not depend on one building: without it there is nothing to settle, and a
+	# probe whose images failed keeps updating every frame (Mersea's own fallback).
 	var probes := world_root.buildings.find_children("MerseaBarReflection", "ReflectionProbe", true, false)
 	if probes.is_empty():
-		return "Initial reflection producer is missing."
+		STARTUP_MARKS.mark("graphics_no_reflection_probe")
 	for probe: ReflectionProbe in probes:
 		while is_instance_valid(probe) and probe.is_inside_tree():
 			if _startup_failed:
 				return "Startup was cancelled."
 			var state := str(probe.get_meta("startup_reflection", ""))
-			if state == "final_mode_set":
+			if state == "final_mode_set" or state == "images_failed":
 				break
 			if state != "waiting_images":
 				return "Initial reflection images could not be prepared."

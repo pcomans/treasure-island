@@ -7,7 +7,8 @@
 #    screenshots, videos, builds, logs, reference photos or huge files outside
 #    the game's own asset folders (game/resources/, generated/).
 # 2. The behaviour tests: the game parses, loads and plays, and every building
-#    in the score is present and fits (game/tests/shared/island_test.gd).
+#    in the score is present and fits (game/tests/shared/island_test.gd), both
+#    in the world generated at startup and in the baked world desktop exports load.
 set -uo pipefail
 cd "$(dirname "$0")/.."
 # npm/node live here in the devcontainer (node feature); non-login shells lack it.
@@ -64,11 +65,29 @@ else
   echo "PASS"
 fi
 
+# Runs a Godot command, shows its PASS/FAIL/NOTE and error lines, and records
+# NAME as failed on a nonzero exit or engine error output.
+#   check_godot NAME TIMEOUT_SECONDS COMMAND...
+check_godot() {
+  local name="$1" limit="$2" output status
+  shift 2
+  output="$(timeout "${limit}" "$@" 2>&1)"
+  status=$?
+  grep -E "^(PASS|FAIL|NOTE)|${godot_errors}" <<< "${output}"
+  if [ "${status}" -ne 0 ] || grep -qE "${godot_errors}" <<< "${output}"; then
+    echo "FAIL: ${name} process status=${status} (nonzero exit or engine error output)"
+    echo "Last 30 raw output lines:"
+    tail -n 30 <<< "${output}"
+    failed+=("${name}")
+  fi
+}
+
 for test in \
   game/tests/headless_scene_parse.gd \
   game/tests/headless_startup_configuration_contract.gd \
   game/tests/validate_generated_world.gd \
   game/tests/headless_gameplay_contract.gd \
+  game/tests/headless_touch_controls.gd \
   game/tests/headless_world_material_contract.gd \
   game/tests/headless_facade_meter_uv_adapter_contract.gd \
   game/tests/headless_building_study_geometry_contract.gd \
@@ -84,16 +103,21 @@ do
   if [ "${test}" = game/tests/shared/island_test.gd ]; then
     display_args=()
   fi
-  output="$(timeout 600 tools/godot "${display_args[@]}" --fixed-fps 60 --path . --audio-driver Dummy --script "${test}" 2>&1)"
-  status=$?
-  grep -E "^(PASS|FAIL|NOTE)|${godot_errors}" <<< "${output}"
-  if [ "${status}" -ne 0 ] || grep -qE "${godot_errors}" <<< "${output}"; then
-    echo "FAIL: ${test} process status=${status} (nonzero exit or engine error output)"
-    echo "Last 30 raw output lines:"
-    tail -n 30 <<< "${output}"
-    failed+=("${test}")
-  fi
+  check_godot "${test}" 600 tools/godot "${display_args[@]}" --fixed-fps 60 --path . --audio-driver Dummy --script "${test}"
 done
+
+# Desktop exports load a baked world instead of generating it at startup
+# (tools/build-linux.sh, tools/build-mac.sh). Bake it the same way and run the
+# whole-island check on it too. The bake is a build product, removed afterwards.
+baked=generated/native/static_world.scn
+trap 'rm -f "${baked}"' EXIT
+echo "== tools/prebuild-static-world.sh native"
+check_godot "tools/prebuild-static-world.sh native" 900 tools/prebuild-static-world.sh native
+if [ -s "${baked}" ]; then
+  echo "== game/tests/shared/island_test.gd -- --use-prebuilt-world"
+  check_godot "game/tests/shared/island_test.gd (prebuilt world)" 600 tools/godot --fixed-fps 60 --path . --audio-driver Dummy --script game/tests/shared/island_test.gd -- --use-prebuilt-world
+fi
+rm -f "${baked}"
 
 echo "== tools/validate_godot_world.mjs"
 node tools/validate_godot_world.mjs >/dev/null || failed+=("tools/validate_godot_world.mjs")
