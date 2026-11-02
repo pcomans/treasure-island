@@ -168,6 +168,7 @@ func _variant_b(species: String, sites: Array[Vector3], target_height: float) ->
 		_errors.append("could not load " + path)
 		return {}
 	var source := scene.instantiate() as Node3D
+	var converted := _scissor_materials(source)
 	var raw := _mesh_stats(source)
 	var reduced := source.duplicate() as Node3D
 	var reduction := _reduce(reduced, int(B_TRIANGLE_BUDGET[species]))
@@ -190,11 +191,14 @@ func _variant_b(species: String, sites: Array[Vector3], target_height: float) ->
 			raw_hero.scale = copy.scale
 			raw_hero.position = copy.position
 			raw_hero.visible = false
+			# The raw model as downloaded: keep Godot's automatic mesh LOD off.
+			for instance in raw_hero.find_children("*", "MeshInstance3D", true, false):
+				(instance as GeometryInstance3D).lod_bias = 1000.0
 			holder.add_child(raw_hero)
 	_h.main.add_child(root)
 	source.free()
 	reduced.free()
-	_metrics.variants["B_" + species] = {"scene": path, "scale": scale, "raw": raw, "reduced": reduction}
+	_metrics.variants["B_" + species] = {"scene": path, "scale": scale, "raw": raw, "reduced": reduction, "blend_to_scissor_surfaces": converted}
 	return {"root": root, "raw_hero": raw_hero}
 
 
@@ -442,6 +446,9 @@ func _mesh_stats(node: Node) -> Dictionary:
 	return {"triangles": triangles, "draw_surfaces": surfaces, "textures": _texture_stats(textures)}
 
 
+## Exact bounds of the vertices under node, in node's own space. A transformed
+## mesh AABB is only conservative: the Umbrella Pine's rotated leaf node gave a box
+## reaching 1.7 m below the trunk base, which lifted the whole tree off the ground.
 func _node_bounds(node: Node3D) -> AABB:
 	var box := AABB()
 	var first := true
@@ -454,14 +461,42 @@ func _node_bounds(node: Node3D) -> AABB:
 		while walker != node and walker is Node3D:
 			transform = (walker as Node3D).transform * transform
 			walker = walker.get_parent()
-		var mesh_box := transform * mesh_instance.mesh.get_aabb()
-		box = mesh_box if first else box.merge(mesh_box)
-		first = false
+		for surface in mesh_instance.mesh.get_surface_count():
+			var vertices: PackedVector3Array = mesh_instance.mesh.surface_get_arrays(surface)[Mesh.ARRAY_VERTEX]
+			for vertex in vertices:
+				var point := transform * vertex
+				if first:
+					box = AABB(point, Vector3.ZERO)
+					first = false
+				else:
+					box = box.expand(point)
 	return box
 
 
+## Game-ready materials for variant B: blended foliage (glTF BLEND) becomes
+## alpha scissor, as in variant A, so it sorts and casts shadows like game foliage.
+func _scissor_materials(node: Node) -> int:
+	var converted := 0
+	for instance in node.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := instance as MeshInstance3D
+		if mesh_instance.mesh == null:
+			continue
+		for surface in mesh_instance.mesh.get_surface_count():
+			var material := mesh_instance.get_active_material(surface) as BaseMaterial3D
+			# Godot imports glTF BLEND as alpha with a depth pre-pass.
+			if material == null or material.transparency not in [BaseMaterial3D.TRANSPARENCY_ALPHA, BaseMaterial3D.TRANSPARENCY_ALPHA_DEPTH_PRE_PASS]:
+				continue
+			var scissor := material.duplicate() as BaseMaterial3D
+			scissor.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR
+			scissor.alpha_scissor_threshold = 0.5
+			mesh_instance.set_surface_override_material(surface, scissor)
+			converted += 1
+	return converted
+
+
 ## Swaps every mesh under node for one of its Godot-generated LODs, choosing per
-## surface the level nearest the share of the triangle budget.
+## surface the level nearest the share of the triangle budget. Coarser levels
+## stay attached as the mesh's runtime LODs, as on any imported mesh.
 func _reduce(node: Node, budget: int) -> Dictionary:
 	var raw: int = _mesh_stats(node).triangles
 	var share := minf(1.0, float(budget) / maxf(raw, 1.0))
@@ -473,6 +508,11 @@ func _reduce(node: Node, budget: int) -> Dictionary:
 		var reduced := ArrayMesh.new()
 		for surface in mesh.get_surface_count():
 			var arrays := mesh.surface_get_arrays(surface)
+			# Extra glTF texture coordinates arrive as custom channels, which
+			# need their format flags to be re-added. StandardMaterial3D doesn't
+			# read them, so drop them.
+			for channel in [Mesh.ARRAY_CUSTOM0, Mesh.ARRAY_CUSTOM1, Mesh.ARRAY_CUSTOM2, Mesh.ARRAY_CUSTOM3]:
+				arrays[channel] = null
 			var importer := ImporterMesh.new()
 			importer.add_surface(Mesh.PRIMITIVE_TRIANGLES, arrays, [], {}, mesh_instance.get_active_material(surface))
 			importer.generate_lods(25.0, 60.0, [])
@@ -483,8 +523,13 @@ func _reduce(node: Node, budget: int) -> Dictionary:
 				var candidate := importer.get_surface_lod_indices(0, lod)
 				if absf(candidate.size() - wanted) < absf(best.size() - wanted):
 					best = candidate
+			var lods := {}
+			for lod in importer.get_surface_lod_count(0):
+				var candidate := importer.get_surface_lod_indices(0, lod)
+				if candidate.size() < best.size():
+					lods[importer.get_surface_lod_size(0, lod)] = candidate
 			arrays[Mesh.ARRAY_INDEX] = best
-			reduced.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+			reduced.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays, [], lods)
 			reduced.surface_set_material(surface, mesh_instance.get_active_material(surface))
 		mesh_instance.mesh = reduced
 	var stats := _mesh_stats(node)
@@ -554,6 +599,7 @@ func _perf() -> void:
 		if path != "":
 			var scene := load(path) as PackedScene
 			var reduced := scene.instantiate() as Node3D
+			_scissor_materials(reduced)
 			_reduce(reduced, int(B_TRIANGLE_BUDGET[species]))
 			var box := _node_bounds(reduced)
 			var height := (pool[0].lod0 as ArrayMesh).get_aabb().end.y

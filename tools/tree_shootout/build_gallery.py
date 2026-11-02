@@ -104,6 +104,10 @@ def rel(path, root):
     return html.escape(str(Path(path).relative_to(root)))
 
 
+def caveat_html(text):
+    return f'<p class="caveat"><strong>Known defect:</strong> {html.escape(text)}</p>' if text else ""
+
+
 def figure(path, root, caption, kind=""):
     if path is None:
         return f'<figure class="cell missing {kind}"><div class="placeholder">not captured</div><figcaption>{html.escape(caption)}</figcaption></figure>'
@@ -193,6 +197,7 @@ def build(args):
     refs = reference_images(args.refs, root / "refs")
     renderers = [("forward", "Forward+ (desktop)", Path(args.forward)), ("compat", "Compatibility (web stand-in)", Path(args.compat))]
     has_b = any(f"B_{s}" in forward.get("variants", {}) for s in SPECIES)
+    caveats = dict(item.split("=", 1) for item in args.caveat)
     sections = []
     for species, title in SPECIES.items():
         ref_cards = []
@@ -215,7 +220,8 @@ def build(args):
                             cells.append(pending(f"B · {SPECIES[species].split(' (')[0]}"))
                         continue
                     copied = copy_capture(capture, root / "img" / key, f"{species}-{view}-{variant}")
-                    cells.append(figure(copied, root, f"{variant} · {renderer_label}"))
+                    flag = " (see known defect)" if caveats.get(f"{species}-{variant}") else ""
+                    cells.append(figure(copied, root, f"{variant} · {renderer_label}{flag}"))
             blocks.append(
                 f'<article class="view"><h3>{html.escape(label)}</h3><p class="desc">{html.escape(description)}</p>'
                 f'<p class="meta">{view_meta(forward, f"{species}-{view}")}</p><div class="cells">{"".join(cells)}</div></article>')
@@ -228,12 +234,14 @@ def build(args):
                 capture = folder / f"{species}-lod-{lod}-B.png"
                 if capture.exists():
                     copied = copy_capture(capture, root / "img" / key, f"{species}-lod-{lod}-B")
-                    lod_cells.append(figure(copied, root, f"B {lod_label} · {renderer_label}"))
+                    flag = " (see known defect)" if caveats.get(f"{species}-B") else ""
+                    lod_cells.append(figure(copied, root, f"B {lod_label} · {renderer_label}{flag}"))
         blocks.append(
             '<article class="view"><h3>Levels of detail, forced</h3><p class="desc">The same raised camera on the hero tree with one level forced on. In play, LOD0 shows up close, LOD1 in the middle distance and the impostor (a camera-facing image baked from LOD0) far away.</p>'
             f'<div class="cells">{"".join(lod_cells)}</div></article>')
+        notes = caveat_html(caveats.get(f"{species}-B", ""))
         sections.append(
-            f'<section id="{species}"><h2>{html.escape(title)}</h2><div class="refs">{"".join(ref_cards)}</div>{"".join(blocks)}</section>')
+            f'<section id="{species}"><h2>{html.escape(title)}</h2>{notes}<div class="refs">{"".join(ref_cards)}</div>{"".join(blocks)}</section>')
     perf_cells = []
     for key, renderer_label, folder in renderers:
         for species in SPECIES:
@@ -253,7 +261,8 @@ def build(args):
         f'licensed under <a href="{CC_BY}">CC BY 4.0</a>. Model page: {m["faces"]:,} triangles. {html.escape(m["note"])}'
         f'<br><span class="muted">Attribution text: “{html.escape(m["title"])}” by {html.escape(m["author"])} ({html.escape(m["url"])}), CC BY 4.0 ({CC_BY}).</span></li>'
         for m in SKETCHFAB)
-    b_status = ("Variant B models are included below." if has_b else
+    b_status = (("Downloaded on 2026-11-02 through the Sketchfab API with the owner's access: “Realistic HD Mexican fan palm (10/10)” by PlantCatalog for the palm and “Umbrella Pine” by rhcreations as a <strong>stand-in</strong> for the cypress (no free whole Monterey cypress exists on Sketchfab). "
+                 "Each is scaled to variant A's tree height. For a game-ready setup its blended foliage materials are switched to alpha scissor, like A's, and the mesh is cut to a game budget with Godot's own LOD generation (coarser levels stay attached as runtime LODs). Neither has an impostor.") if has_b else
                 "Variant B is <strong>not downloaded yet</strong>: this machine has no Sketchfab session or token, and Sketchfab's download API requires one (it answered 401). Once the owner signs in and downloads the two models, the same driver adds B to every view with no other changes.")
     page = f"""<!doctype html>
 <html lang="en">
@@ -284,6 +293,7 @@ figure img {{ width: 100%; height: auto; display: block; border-radius: 4px; bor
 figcaption {{ font-size: 0.85rem; color: var(--muted); margin-top: 4px; }}
 .ref figcaption {{ font-size: 0.8rem; }}
 .refcell figcaption {{ color: var(--accent); font-weight: 600; }}
+.caveat {{ background: var(--pending); border-left: 4px solid #b5582a; padding: 8px 12px; border-radius: 4px; }}
 .placeholder {{ aspect-ratio: 16 / 9; display: grid; place-items: center; text-align: center; padding: 12px; background: var(--pending); border: 1px dashed var(--line); border-radius: 4px; color: var(--muted); }}
 table {{ border-collapse: collapse; width: 100%; font-size: 0.9rem; background: var(--panel); }}
 th, td {{ border: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; }}
@@ -338,6 +348,7 @@ def main():
     parser.add_argument("--compat", required=True)
     parser.add_argument("--refs", required=True)
     parser.add_argument("--out", required=True)
+    parser.add_argument("--caveat", action="append", default=[], help="SPECIES-VARIANT=text shown on that variant's captures")
     build(parser.parse_args())
 
 
