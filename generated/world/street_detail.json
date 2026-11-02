@@ -7,10 +7,11 @@
         "palms_parked_cars:curb_kept_clear": 10,
         "palms_parked_cars:fill": 13,
         "palms_parked_cars:item": 2,
-        "palms_parked_cars:off_asphalt": 2
+        "palms_parked_cars:off_asphalt": 2,
+        "palms_parked_cars:uneven_ground": 1
       },
       "rules": {
-        "avenue_of_the_palms/palms_parked_cars": 52,
+        "avenue_of_the_palms/palms_parked_cars": 51,
         "building_1_forecourt/forecourt_lot_cars": 56
       }
     },
@@ -137,6 +138,7 @@
     "fenced_approaches": "scored-building sides a built fence closes, which the building fit may skip (game/tests/shared/building_fit.gd)",
     "footprint_m": "the plan size {x_m, z_m} of a parked car or a long prop along its local X and Z; with its position and yaw it is the item's rectangle (the gameplay mask checks a stadium that holds it)",
     "layers": "switchable runtime subtrees under PlayableWorld/StreetDetail; ground rows feed the always-on chunk surfaces",
+    "parked_car": "a parked car's prop_params: body, paint, finish, roof and rims, and its rest on the visible ground under its four tyres (settleParkedCar in tools/lib/street-clutter-generation.mjs): pitch raises the nose and roll the left side (radians), lift takes the car's origin from y + bias_m to that rest, twist is what the suspension takes up (metres: the front-left and rear-right wheels rise by it in the car frame, the other two drop by it)",
     "position_m": "[x, y, z]; y is the generated land elevation under x, z (terrain_support names the triangle)",
     "prop": "the kit prop the runtime builds for a placed row, with prop_params: the street-furniture kit (game/scripts/world/street_furniture_kit.gd) for the furniture layer, the street-clutter kit (game/scripts/world/street_clutter_kit.gd) for the clutter layer; rows without one are data only",
     "source_position_m": "a stop sign's OSM node position, kept when the sign moves to the curb of its approach",
@@ -166,7 +168,7 @@
       "kerb": 8,
       "log_barrier": 2,
       "palm_slot": 12,
-      "parked_car": 108,
+      "parked_car": 107,
       "planting_slot": 19,
       "post_box": 1,
       "power_line": 44,
@@ -182,7 +184,7 @@
       "waste_basket": 14
     },
     "by_layer": {
-      "clutter": 422,
+      "clutter": 421,
       "fences": 60,
       "furniture": 216,
       "ground": 169,
@@ -190,22 +192,22 @@
     },
     "by_source": {
       "osm": 660,
-      "scatter": 218,
+      "scatter": 217,
       "set_piece": 20
     },
     "by_status": {
       "excluded": 4,
-      "placed": 894
+      "placed": 893
     },
-    "pilot_rows": 258,
+    "pilot_rows": 257,
     "placed_by_layer": {
-      "clutter": 420,
+      "clutter": 419,
       "fences": 59,
       "furniture": 215,
       "ground": 169,
       "vegetation": 31
     },
-    "total": 898
+    "total": 897
   },
   "exclusion_inputs": {
     "ferry_path_xz": [
@@ -1616,7 +1618,7 @@
     },
     "zones": {
       "path": "tools/config/street-detail-zones.json",
-      "sha256": "ef80b4ba49387d958d1b8e135f7247ffdc08a84381e08f663193df0788e2d7c0"
+      "sha256": "0adf074d82f274f5c80f63a58e715b91258df7f4c3b03dfb264f57c3bec83fcc"
     }
   },
   "kinds": {
@@ -35226,13 +35228,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "sedan",
-        "finish": "metallic",
-        "lift": 0,
-        "paint": "navy",
-        "pitch": -0.029,
+        "finish": "pearl",
+        "lift": 0.004,
+        "paint": "pearl_white",
+        "pitch": -0.0287,
         "rims": "alloy",
-        "roll": 0.013,
-        "roof": "body"
+        "roll": 0.0116,
+        "roof": "body",
+        "twist": -0.001
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -35273,13 +35276,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "wagon",
-        "finish": "pearl",
-        "lift": -0.002,
-        "paint": "navy",
-        "pitch": 0.057,
+        "finish": "metallic",
+        "lift": -0.001,
+        "paint": "red",
+        "pitch": 0.0563,
         "rims": "dark",
-        "roll": 0.097,
-        "roof": "body"
+        "roll": 0.0985,
+        "roof": "body",
+        "twist": 0.002
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -35321,12 +35325,13 @@
       "prop_params": {
         "body": "van",
         "finish": "solid",
-        "lift": 0,
+        "lift": 0.004,
         "paint": "black",
-        "pitch": 0.06,
+        "pitch": 0.0604,
         "rims": "dark",
-        "roll": 0.096,
-        "roof": "body"
+        "roll": 0.0954,
+        "roof": "body",
+        "twist": -0.001
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -35367,13 +35372,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "fastback",
-        "finish": "pearl",
-        "lift": 0.008,
-        "paint": "red",
-        "pitch": 0.048,
+        "finish": "metallic",
+        "lift": 0.027,
+        "paint": "silver",
+        "pitch": 0.0487,
         "rims": "alloy",
-        "roll": 0.096,
-        "roof": "body"
+        "roll": 0.0741,
+        "roof": "body",
+        "twist": 0.016
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -35414,13 +35420,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "hatchback",
-        "finish": "metallic",
-        "lift": 0,
-        "paint": "silver",
-        "pitch": -0.106,
+        "finish": "solid",
+        "lift": 0.003,
+        "paint": "white",
+        "pitch": -0.1062,
         "rims": "dark",
-        "roll": 0.044,
-        "roof": "body"
+        "roll": 0.0443,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -35461,13 +35468,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "crossover",
-        "finish": "solid",
-        "lift": -0.053,
-        "paint": "black",
-        "pitch": -0.044,
+        "finish": "metallic",
+        "lift": -0.081,
+        "paint": "dark_grey",
+        "pitch": -0.0454,
         "rims": "alloy",
-        "roll": 0.019,
-        "roof": "body"
+        "roll": 0.0071,
+        "roof": "body",
+        "twist": 0.028
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -35508,13 +35516,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "crossover",
-        "finish": "metallic",
-        "lift": 0,
-        "paint": "silver",
-        "pitch": -0.017,
+        "finish": "solid",
+        "lift": 0.003,
+        "paint": "white",
+        "pitch": -0.0165,
         "rims": "alloy",
         "roll": -0.044,
-        "roof": "body"
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -35540,53 +35549,6 @@
       "basis": "production_inference",
       "exclusion": null,
       "footprint_m": {
-        "x_m": 1.83,
-        "z_m": 4.82
-      },
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_011",
-      "kind": "parked_car",
-      "layer": "clutter",
-      "position_m": [
-        -255.653,
-        4.012,
-        331.751
-      ],
-      "prop": "parked_car",
-      "prop_params": {
-        "body": "sedan",
-        "finish": "metallic",
-        "lift": -0.025,
-        "paint": "black",
-        "pitch": 0.04,
-        "rims": "alloy",
-        "roll": 0.066,
-        "roof": "body"
-      },
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0.078,
-        "kind": "street_paint",
-        "material_key": "street_parking",
-        "source_key": "w1001544697"
-      },
-      "terrain_support": {
-        "elevation_m": 4.012,
-        "object_key": "land:w26767313:x_-1__z_1",
-        "triangle_index": 10
-      },
-      "yaw_radians": 0.475,
-      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "basis": "production_inference",
-      "exclusion": null,
-      "footprint_m": {
         "x_m": 1.79,
         "z_m": 4.38
       },
@@ -35603,12 +35565,13 @@
       "prop_params": {
         "body": "hatchback",
         "finish": "solid",
-        "lift": 0,
+        "lift": 0.003,
         "paint": "white",
-        "pitch": 0.059,
+        "pitch": 0.0583,
         "rims": "alloy",
-        "roll": 0.099,
-        "roof": "body"
+        "roll": 0.0989,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -35650,12 +35613,13 @@
       "prop_params": {
         "body": "crossover",
         "finish": "solid",
-        "lift": 0,
+        "lift": 0.018,
         "paint": "white",
-        "pitch": 0.057,
+        "pitch": 0.0521,
         "rims": "alloy",
-        "roll": 0.1,
-        "roof": "black"
+        "roll": 0.0909,
+        "roof": "black",
+        "twist": 0.007
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -35696,13 +35660,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "crossover",
-        "finish": "pearl",
-        "lift": -0.001,
-        "paint": "navy",
-        "pitch": -0.105,
+        "finish": "solid",
+        "lift": 0.003,
+        "paint": "red",
+        "pitch": -0.1047,
         "rims": "alloy",
-        "roll": 0.049,
-        "roof": "body"
+        "roll": 0.0488,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -35744,12 +35709,13 @@
       "prop_params": {
         "body": "hatchback",
         "finish": "solid",
-        "lift": 0,
-        "paint": "green",
-        "pitch": 0,
+        "lift": 0.003,
+        "paint": "grey",
+        "pitch": 0.0001,
         "rims": "alloy",
-        "roll": -0.007,
-        "roof": "body"
+        "roll": -0.0067,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -35791,12 +35757,13 @@
       "prop_params": {
         "body": "fastback",
         "finish": "metallic",
-        "lift": 0,
+        "lift": 0.004,
         "paint": "black",
-        "pitch": 0,
+        "pitch": 0.0006,
         "rims": "dark",
-        "roll": -0.007,
-        "roof": "body"
+        "roll": -0.0079,
+        "roof": "body",
+        "twist": -0.001
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -35838,12 +35805,13 @@
       "prop_params": {
         "body": "hatchback",
         "finish": "metallic",
-        "lift": 0,
+        "lift": 0.003,
         "paint": "grey",
-        "pitch": 0.003,
+        "pitch": 0.0034,
         "rims": "dark",
         "roll": -0.006,
-        "roof": "body"
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -35885,12 +35853,13 @@
       "prop_params": {
         "body": "hatchback",
         "finish": "metallic",
-        "lift": 0,
-        "paint": "blue",
-        "pitch": 0.003,
+        "lift": 0.003,
+        "paint": "grey",
+        "pitch": 0.0033,
         "rims": "dark",
         "roll": -0.006,
-        "roof": "body"
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -35931,13 +35900,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "suv",
-        "finish": "metallic",
-        "lift": 0,
-        "paint": "light_grey",
-        "pitch": 0.003,
+        "finish": "pearl",
+        "lift": 0.003,
+        "paint": "navy",
+        "pitch": 0.0033,
         "rims": "dark",
-        "roll": -0.006,
-        "roof": "body"
+        "roll": -0.0059,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -35979,12 +35949,13 @@
       "prop_params": {
         "body": "crossover",
         "finish": "metallic",
-        "lift": 0.001,
-        "paint": "light_grey",
-        "pitch": -0.017,
+        "lift": 0.007,
+        "paint": "navy",
+        "pitch": -0.0154,
         "rims": "alloy",
-        "roll": 0.005,
-        "roof": "body"
+        "roll": 0.0009,
+        "roof": "body",
+        "twist": -0.003
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -36026,12 +35997,13 @@
       "prop_params": {
         "body": "sedan",
         "finish": "solid",
-        "lift": 0,
+        "lift": 0.006,
         "paint": "white",
-        "pitch": 0.009,
+        "pitch": 0.008,
         "rims": "alloy",
-        "roll": 0.014,
-        "roof": "body"
+        "roll": 0.0111,
+        "roof": "body",
+        "twist": 0.002
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -36073,12 +36045,13 @@
       "prop_params": {
         "body": "crossover",
         "finish": "metallic",
-        "lift": 0.001,
-        "paint": "dark_grey",
-        "pitch": -0.002,
+        "lift": 0.003,
+        "paint": "grey",
+        "pitch": -0.0018,
         "rims": "dark",
-        "roll": -0.007,
-        "roof": "body"
+        "roll": -0.0076,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -36120,12 +36093,13 @@
       "prop_params": {
         "body": "hatchback",
         "finish": "solid",
-        "lift": 0,
+        "lift": 0.003,
         "paint": "white",
-        "pitch": -0.002,
+        "pitch": -0.0019,
         "rims": "alloy",
-        "roll": -0.008,
-        "roof": "body"
+        "roll": -0.0074,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -36167,12 +36141,13 @@
       "prop_params": {
         "body": "sedan",
         "finish": "metallic",
-        "lift": -0.002,
+        "lift": 0.001,
         "paint": "black",
-        "pitch": 0,
+        "pitch": 0.0004,
         "rims": "alloy",
-        "roll": -0.006,
-        "roof": "body"
+        "roll": -0.0066,
+        "roof": "body",
+        "twist": -0.001
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -36214,12 +36189,13 @@
       "prop_params": {
         "body": "sedan",
         "finish": "metallic",
-        "lift": 0,
-        "paint": "grey",
-        "pitch": 0.003,
+        "lift": 0.002,
+        "paint": "light_grey",
+        "pitch": 0.0035,
         "rims": "alloy",
-        "roll": -0.008,
-        "roof": "body"
+        "roll": -0.0075,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -36260,13 +36236,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "crossover",
-        "finish": "metallic",
-        "lift": 0,
-        "paint": "navy",
-        "pitch": 0.003,
+        "finish": "pearl",
+        "lift": 0.003,
+        "paint": "pearl_white",
+        "pitch": 0.0035,
         "rims": "alloy",
-        "roll": -0.007,
-        "roof": "body"
+        "roll": -0.0076,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -36307,13 +36284,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "van",
-        "finish": "metallic",
-        "lift": 0,
-        "paint": "silver",
-        "pitch": -0.001,
+        "finish": "solid",
+        "lift": 0.003,
+        "paint": "white",
+        "pitch": -0.0006,
         "rims": "alloy",
-        "roll": -0.009,
-        "roof": "body"
+        "roll": -0.0089,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -36355,12 +36333,13 @@
       "prop_params": {
         "body": "crossover",
         "finish": "metallic",
-        "lift": 0.036,
+        "lift": 0.073,
         "paint": "silver",
-        "pitch": -0.078,
+        "pitch": -0.0768,
         "rims": "dark",
-        "roll": 0.051,
-        "roof": "body"
+        "roll": 0.0239,
+        "roof": "body",
+        "twist": -0.026
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -36402,12 +36381,13 @@
       "prop_params": {
         "body": "van",
         "finish": "metallic",
-        "lift": -0.068,
-        "paint": "dark_grey",
-        "pitch": -0.05,
+        "lift": -0.13,
+        "paint": "grey",
+        "pitch": -0.0582,
         "rims": "dark",
-        "roll": 0.058,
-        "roof": "body"
+        "roll": 0.0869,
+        "roof": "body",
+        "twist": -0.025
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -36448,13 +36428,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "crossover",
-        "finish": "metallic",
-        "lift": 0,
-        "paint": "dark_grey",
-        "pitch": 0.067,
+        "finish": "solid",
+        "lift": 0.003,
+        "paint": "grey",
+        "pitch": 0.0674,
         "rims": "alloy",
-        "roll": 0.118,
-        "roof": "body"
+        "roll": 0.1184,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -36496,12 +36477,13 @@
       "prop_params": {
         "body": "sedan",
         "finish": "solid",
-        "lift": 0,
+        "lift": 0.003,
         "paint": "white",
-        "pitch": 0.068,
+        "pitch": 0.0679,
         "rims": "alloy",
-        "roll": 0.118,
-        "roof": "body"
+        "roll": 0.1181,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -36543,12 +36525,13 @@
       "prop_params": {
         "body": "fastback",
         "finish": "metallic",
-        "lift": 0,
-        "paint": "black",
-        "pitch": 0.067,
+        "lift": 0.004,
+        "paint": "dark_grey",
+        "pitch": 0.0675,
         "rims": "dark",
-        "roll": 0.118,
-        "roof": "body"
+        "roll": 0.1183,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -36589,13 +36572,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "suv",
-        "finish": "metallic",
-        "lift": 0.01,
-        "paint": "light_grey",
-        "pitch": -0.001,
+        "finish": "pearl",
+        "lift": 0.014,
+        "paint": "pearl_white",
+        "pitch": -0.0011,
         "rims": "dark",
-        "roll": 0.01,
-        "roof": "body"
+        "roll": 0.0102,
+        "roof": "body",
+        "twist": 0.01
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -36636,13 +36620,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "crossover",
-        "finish": "solid",
-        "lift": 0,
-        "paint": "grey",
-        "pitch": -0.008,
+        "finish": "metallic",
+        "lift": 0.003,
+        "paint": "light_grey",
+        "pitch": -0.0078,
         "rims": "alloy",
-        "roll": -0.003,
-        "roof": "black"
+        "roll": -0.0029,
+        "roof": "black",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -36684,12 +36669,13 @@
       "prop_params": {
         "body": "crossover",
         "finish": "metallic",
-        "lift": -0.001,
-        "paint": "black",
-        "pitch": -0.007,
+        "lift": 0.002,
+        "paint": "blue",
+        "pitch": -0.0066,
         "rims": "alloy",
-        "roll": -0.003,
-        "roof": "body"
+        "roll": -0.0007,
+        "roof": "body",
+        "twist": -0.002
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -36731,12 +36717,13 @@
       "prop_params": {
         "body": "fastback",
         "finish": "metallic",
-        "lift": 0,
-        "paint": "grey",
-        "pitch": 0.007,
+        "lift": 0.003,
+        "paint": "light_grey",
+        "pitch": 0.0072,
         "rims": "alloy",
         "roll": 0.002,
-        "roof": "body"
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -36777,13 +36764,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "fastback",
-        "finish": "metallic",
-        "lift": 0,
-        "paint": "silver",
-        "pitch": -0.014,
+        "finish": "solid",
+        "lift": 0.004,
+        "paint": "white",
+        "pitch": -0.0139,
         "rims": "alloy",
-        "roll": 0.014,
-        "roof": "body"
+        "roll": 0.012,
+        "roof": "body",
+        "twist": -0.001
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -36825,12 +36813,13 @@
       "prop_params": {
         "body": "sedan",
         "finish": "metallic",
-        "lift": 0,
-        "paint": "black",
-        "pitch": 0.013,
+        "lift": 0.003,
+        "paint": "blue",
+        "pitch": 0.0129,
         "rims": "dark",
-        "roll": 0.022,
-        "roof": "body"
+        "roll": 0.0216,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -36871,13 +36860,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "fastback",
-        "finish": "pearl",
-        "lift": 0,
-        "paint": "pearl_white",
+        "finish": "metallic",
+        "lift": 0.004,
+        "paint": "silver",
         "pitch": 0.013,
         "rims": "alloy",
-        "roll": 0.022,
-        "roof": "body"
+        "roll": 0.0216,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -36918,13 +36908,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "crossover",
-        "finish": "pearl",
-        "lift": 0,
-        "paint": "navy",
-        "pitch": 0.013,
+        "finish": "solid",
+        "lift": 0.004,
+        "paint": "red",
+        "pitch": 0.0132,
         "rims": "alloy",
         "roll": 0.021,
-        "roof": "body"
+        "roof": "body",
+        "twist": -0.001
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -36966,12 +36957,13 @@
       "prop_params": {
         "body": "fastback",
         "finish": "metallic",
-        "lift": 0,
+        "lift": 0.004,
         "paint": "black",
-        "pitch": -0.007,
+        "pitch": -0.0079,
         "rims": "alloy",
-        "roll": 0.007,
-        "roof": "body"
+        "roll": 0.0061,
+        "roof": "body",
+        "twist": 0.001
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -37013,12 +37005,13 @@
       "prop_params": {
         "body": "suv",
         "finish": "metallic",
-        "lift": 0,
+        "lift": 0.003,
         "paint": "silver",
-        "pitch": -0.061,
+        "pitch": -0.0613,
         "rims": "alloy",
-        "roll": -0.095,
-        "roof": "body"
+        "roll": -0.0955,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -37060,12 +37053,13 @@
       "prop_params": {
         "body": "hatchback",
         "finish": "solid",
-        "lift": 0,
+        "lift": 0.003,
         "paint": "white",
-        "pitch": -0.061,
+        "pitch": -0.0608,
         "rims": "alloy",
-        "roll": -0.095,
-        "roof": "body"
+        "roll": -0.0958,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -37108,11 +37102,12 @@
         "body": "crossover",
         "finish": "metallic",
         "lift": 0,
-        "paint": "dark_grey",
-        "pitch": -0.031,
+        "paint": "grey",
+        "pitch": -0.0268,
         "rims": "alloy",
-        "roll": 0.029,
-        "roof": "body"
+        "roll": 0.0211,
+        "roof": "body",
+        "twist": 0.006
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -37153,13 +37148,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "fastback",
-        "finish": "metallic",
-        "lift": 0,
-        "paint": "silver",
-        "pitch": -0.032,
+        "finish": "solid",
+        "lift": 0.004,
+        "paint": "white",
+        "pitch": -0.0318,
         "rims": "dark",
-        "roll": 0.029,
-        "roof": "body"
+        "roll": 0.0287,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -37201,12 +37197,13 @@
       "prop_params": {
         "body": "crossover",
         "finish": "metallic",
-        "lift": 0,
-        "paint": "black",
-        "pitch": 0.017,
+        "lift": 0.003,
+        "paint": "dark_grey",
+        "pitch": 0.0166,
         "rims": "alloy",
         "roll": 0.044,
-        "roof": "body"
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -37248,12 +37245,13 @@
       "prop_params": {
         "body": "crossover",
         "finish": "solid",
-        "lift": 0,
+        "lift": 0.003,
         "paint": "white",
-        "pitch": 0.016,
+        "pitch": 0.0165,
         "rims": "alloy",
-        "roll": 0.044,
-        "roof": "body"
+        "roll": 0.0441,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -37295,12 +37293,13 @@
       "prop_params": {
         "body": "wagon",
         "finish": "solid",
-        "lift": 0,
+        "lift": 0.008,
         "paint": "white",
-        "pitch": -0.016,
+        "pitch": -0.0023,
         "rims": "alloy",
-        "roll": -0.074,
-        "roof": "body"
+        "roll": -0.0293,
+        "roof": "body",
+        "twist": -0.015
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -37341,13 +37340,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "crossover",
-        "finish": "metallic",
-        "lift": -0.001,
-        "paint": "silver",
-        "pitch": 0,
+        "finish": "solid",
+        "lift": 0.002,
+        "paint": "white",
+        "pitch": -0.0001,
         "rims": "dark",
-        "roll": 0.007,
-        "roof": "body"
+        "roll": 0.0067,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -37388,13 +37388,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "fastback",
-        "finish": "metallic",
-        "lift": 0,
-        "paint": "light_grey",
-        "pitch": 0,
+        "finish": "pearl",
+        "lift": 0.003,
+        "paint": "pearl_white",
+        "pitch": -0.0001,
         "rims": "alloy",
         "roll": 0.007,
-        "roof": "body"
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -37436,12 +37437,13 @@
       "prop_params": {
         "body": "sedan",
         "finish": "solid",
-        "lift": 0.008,
+        "lift": 0.017,
         "paint": "black",
-        "pitch": 0.006,
+        "pitch": 0.0063,
         "rims": "dark",
-        "roll": 0.003,
-        "roof": "body"
+        "roll": 0.0004,
+        "roof": "body",
+        "twist": -0.004
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -37483,12 +37485,13 @@
       "prop_params": {
         "body": "fastback",
         "finish": "metallic",
-        "lift": 0,
-        "paint": "black",
+        "lift": 0.003,
+        "paint": "dark_grey",
         "pitch": 0.018,
         "rims": "alloy",
         "roll": -0.005,
-        "roof": "body"
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -37530,12 +37533,13 @@
       "prop_params": {
         "body": "sedan",
         "finish": "metallic",
-        "lift": 0,
-        "paint": "blue",
-        "pitch": -0.009,
+        "lift": 0.003,
+        "paint": "grey",
+        "pitch": -0.0092,
         "rims": "dark",
-        "roll": -0.014,
-        "roof": "body"
+        "roll": -0.0136,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -37577,12 +37581,13 @@
       "prop_params": {
         "body": "crossover",
         "finish": "pearl",
-        "lift": 0.001,
-        "paint": "navy",
-        "pitch": 0,
+        "lift": 0.006,
+        "paint": "pearl_white",
+        "pitch": 0.0001,
         "rims": "alloy",
-        "roll": 0.006,
-        "roof": "body"
+        "roll": 0.0037,
+        "roof": "black",
+        "twist": -0.003
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -37623,13 +37628,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "sedan",
-        "finish": "pearl",
-        "lift": 0,
-        "paint": "pearl_white",
-        "pitch": 0.01,
+        "finish": "metallic",
+        "lift": 0.003,
+        "paint": "silver",
+        "pitch": 0.0101,
         "rims": "alloy",
-        "roll": 0,
-        "roof": "body"
+        "roll": -0.0004,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
@@ -38217,10 +38223,11 @@
         "finish": "solid",
         "lift": 0,
         "paint": "black",
-        "pitch": -0.041,
+        "pitch": -0.0406,
         "rims": "alloy",
-        "roll": 0.017,
-        "roof": "body"
+        "roll": 0.0161,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -38262,13 +38269,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "sedan",
-        "finish": "metallic",
+        "finish": "pearl",
         "lift": 0.002,
-        "paint": "light_grey",
-        "pitch": 0.01,
+        "paint": "navy",
+        "pitch": 0.0105,
         "rims": "dark",
-        "roll": 0.001,
-        "roof": "body"
+        "roll": 0.0017,
+        "roof": "body",
+        "twist": -0.002
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -38311,12 +38319,13 @@
       "prop_params": {
         "body": "sedan",
         "finish": "metallic",
-        "lift": 0,
-        "paint": "dark_grey",
-        "pitch": -0.014,
+        "lift": 0.001,
+        "paint": "grey",
+        "pitch": -0.0143,
         "rims": "dark",
-        "roll": -0.017,
-        "roof": "body"
+        "roll": -0.0166,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -38361,10 +38370,11 @@
         "finish": "metallic",
         "lift": 0,
         "paint": "silver",
-        "pitch": 0.04,
+        "pitch": 0.0401,
         "rims": "alloy",
-        "roll": -0.017,
-        "roof": "body"
+        "roll": -0.0175,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -38408,10 +38418,11 @@
         "finish": "metallic",
         "lift": 0,
         "paint": "black",
-        "pitch": 0.041,
+        "pitch": 0.0405,
         "rims": "alloy",
-        "roll": -0.016,
-        "roof": "body"
+        "roll": -0.0163,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -38453,12 +38464,13 @@
       "prop_params": {
         "body": "pickup",
         "finish": "solid",
-        "lift": 0.008,
+        "lift": 0.02,
         "paint": "black",
-        "pitch": 0.024,
+        "pitch": 0.0257,
         "rims": "alloy",
-        "roll": 0.016,
-        "roof": "body"
+        "roll": 0.0086,
+        "roof": "body",
+        "twist": -0.006
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -38501,11 +38513,12 @@
         "body": "pickup",
         "finish": "metallic",
         "lift": 0,
-        "paint": "black",
-        "pitch": 0.015,
+        "paint": "blue",
+        "pitch": 0.0147,
         "rims": "alloy",
-        "roll": 0.016,
-        "roof": "body"
+        "roll": 0.0163,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -38546,13 +38559,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "hatchback",
-        "finish": "pearl",
+        "finish": "metallic",
         "lift": 0,
-        "paint": "blue",
-        "pitch": 0.014,
+        "paint": "dark_grey",
+        "pitch": 0.0144,
         "rims": "alloy",
-        "roll": 0.017,
-        "roof": "body"
+        "roll": 0.0165,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -38595,11 +38609,12 @@
         "body": "suv",
         "finish": "metallic",
         "lift": 0,
-        "paint": "black",
-        "pitch": 0.045,
+        "paint": "blue",
+        "pitch": 0.0452,
         "rims": "dark",
-        "roll": 0,
-        "roof": "body"
+        "roll": 0.0001,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -38641,12 +38656,13 @@
       "prop_params": {
         "body": "hatchback",
         "finish": "metallic",
-        "lift": 0,
+        "lift": 0.001,
         "paint": "silver",
-        "pitch": 0.045,
+        "pitch": 0.0458,
         "rims": "alloy",
-        "roll": 0,
-        "roof": "body"
+        "roll": -0.0007,
+        "roof": "body",
+        "twist": -0.001
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -38687,13 +38703,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "fastback",
-        "finish": "metallic",
-        "lift": -0.001,
-        "paint": "dark_grey",
-        "pitch": -0.046,
+        "finish": "solid",
+        "lift": 0,
+        "paint": "grey",
+        "pitch": -0.0465,
         "rims": "alloy",
-        "roll": 0.006,
-        "roof": "body"
+        "roll": 0.0066,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -38735,12 +38752,13 @@
       "prop_params": {
         "body": "fastback",
         "finish": "solid",
-        "lift": 0,
+        "lift": 0.003,
         "paint": "white",
-        "pitch": -0.047,
+        "pitch": -0.0447,
         "rims": "alloy",
-        "roll": 0.006,
-        "roof": "body"
+        "roll": 0.0096,
+        "roof": "body",
+        "twist": 0.003
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -38783,11 +38801,12 @@
         "body": "hatchback",
         "finish": "metallic",
         "lift": 0,
-        "paint": "black",
-        "pitch": -0.045,
+        "paint": "dark_grey",
+        "pitch": -0.0452,
         "rims": "alloy",
-        "roll": 0.001,
-        "roof": "body"
+        "roll": 0.0005,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -38830,11 +38849,12 @@
         "body": "crossover",
         "finish": "metallic",
         "lift": 0,
-        "paint": "black",
-        "pitch": -0.045,
+        "paint": "blue",
+        "pitch": -0.0452,
         "rims": "dark",
-        "roll": 0.001,
-        "roof": "body"
+        "roll": 0.0011,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -38876,12 +38896,13 @@
       "prop_params": {
         "body": "sedan",
         "finish": "metallic",
-        "lift": 0.001,
+        "lift": 0.002,
         "paint": "light_grey",
-        "pitch": 0.045,
+        "pitch": 0.0459,
         "rims": "alloy",
-        "roll": -0.002,
-        "roof": "body"
+        "roll": -0.0021,
+        "roof": "body",
+        "twist": -0.001
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -38922,13 +38943,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "hatchback",
-        "finish": "pearl",
-        "lift": 0.001,
-        "paint": "red",
-        "pitch": -0.047,
+        "finish": "metallic",
+        "lift": 0,
+        "paint": "silver",
+        "pitch": -0.0466,
         "rims": "alloy",
-        "roll": 0.006,
-        "roof": "body"
+        "roll": 0.0057,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -38969,13 +38991,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "hatchback",
-        "finish": "pearl",
+        "finish": "metallic",
         "lift": 0,
-        "paint": "red",
-        "pitch": -0.04,
+        "paint": "silver",
+        "pitch": -0.0398,
         "rims": "alloy",
-        "roll": 0.018,
-        "roof": "body"
+        "roll": 0.0181,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -39016,13 +39039,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "pickup",
-        "finish": "metallic",
+        "finish": "solid",
         "lift": -0.017,
-        "paint": "dark_grey",
-        "pitch": -0.047,
+        "paint": "grey",
+        "pitch": -0.046,
         "rims": "alloy",
-        "roll": -0.036,
-        "roof": "body"
+        "roll": -0.0343,
+        "roof": "body",
+        "twist": -0.031
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -39064,12 +39088,13 @@
       "prop_params": {
         "body": "crossover",
         "finish": "metallic",
-        "lift": -0.007,
-        "paint": "red",
-        "pitch": -0.038,
+        "lift": -0.012,
+        "paint": "silver",
+        "pitch": -0.0379,
         "rims": "alloy",
-        "roll": 0.006,
-        "roof": "body"
+        "roll": -0.0016,
+        "roof": "body",
+        "twist": 0.006
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -39110,13 +39135,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "hatchback",
-        "finish": "pearl",
+        "finish": "metallic",
         "lift": 0,
-        "paint": "red",
-        "pitch": 0.046,
+        "paint": "silver",
+        "pitch": 0.0466,
         "rims": "alloy",
-        "roll": -0.006,
-        "roof": "body"
+        "roll": -0.0058,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -39160,10 +39186,11 @@
         "finish": "solid",
         "lift": 0,
         "paint": "white",
-        "pitch": -0.047,
+        "pitch": -0.0466,
         "rims": "alloy",
-        "roll": 0.005,
-        "roof": "body"
+        "roll": 0.0059,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -39204,13 +39231,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "sedan",
-        "finish": "metallic",
+        "finish": "solid",
         "lift": 0,
-        "paint": "silver",
-        "pitch": -0.047,
+        "paint": "white",
+        "pitch": -0.0466,
         "rims": "alloy",
-        "roll": 0.005,
-        "roof": "body"
+        "roll": 0.006,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -39253,11 +39281,12 @@
         "body": "wagon",
         "finish": "pearl",
         "lift": 0,
-        "paint": "pearl_white",
-        "pitch": -0.047,
+        "paint": "red",
+        "pitch": -0.0468,
         "rims": "alloy",
-        "roll": 0.004,
-        "roof": "body"
+        "roll": 0.0041,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -39300,11 +39329,12 @@
         "body": "sedan",
         "finish": "metallic",
         "lift": 0,
-        "paint": "dark_grey",
-        "pitch": 0.046,
+        "paint": "grey",
+        "pitch": 0.0465,
         "rims": "alloy",
-        "roll": -0.007,
-        "roof": "body"
+        "roll": -0.0063,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -39345,13 +39375,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "crossover",
-        "finish": "metallic",
+        "finish": "solid",
         "lift": 0,
-        "paint": "silver",
-        "pitch": -0.047,
+        "paint": "white",
+        "pitch": -0.0468,
         "rims": "alloy",
-        "roll": 0.004,
-        "roof": "body"
+        "roll": 0.0039,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -39393,12 +39424,13 @@
       "prop_params": {
         "body": "sedan",
         "finish": "metallic",
-        "lift": 0,
-        "paint": "black",
-        "pitch": 0.047,
+        "lift": 0.001,
+        "paint": "blue",
+        "pitch": 0.046,
         "rims": "dark",
-        "roll": -0.005,
-        "roof": "body"
+        "roll": -0.0041,
+        "roof": "body",
+        "twist": -0.001
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -39442,10 +39474,11 @@
         "finish": "solid",
         "lift": 0,
         "paint": "white",
-        "pitch": -0.045,
+        "pitch": -0.0452,
         "rims": "dark",
         "roll": -0.001,
-        "roof": "body"
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -39486,13 +39519,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "wagon",
-        "finish": "solid",
+        "finish": "metallic",
         "lift": 0,
-        "paint": "grey",
-        "pitch": -0.045,
+        "paint": "light_grey",
+        "pitch": -0.0452,
         "rims": "alloy",
-        "roll": 0.001,
-        "roof": "body"
+        "roll": 0.0012,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -39534,12 +39568,13 @@
       "prop_params": {
         "body": "wagon",
         "finish": "metallic",
-        "lift": -0.001,
+        "lift": -0.002,
         "paint": "silver",
-        "pitch": 0.032,
+        "pitch": 0.0342,
         "rims": "alloy",
-        "roll": -0.025,
-        "roof": "body"
+        "roll": -0.0207,
+        "roof": "body",
+        "twist": -0.003
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -39583,10 +39618,11 @@
         "finish": "metallic",
         "lift": 0,
         "paint": "black",
-        "pitch": 0.025,
+        "pitch": 0.0252,
         "rims": "alloy",
-        "roll": -0.015,
-        "roof": "body"
+        "roll": -0.0154,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -39628,12 +39664,13 @@
       "prop_params": {
         "body": "fastback",
         "finish": "solid",
-        "lift": 0,
+        "lift": 0.002,
         "paint": "white",
-        "pitch": -0.025,
+        "pitch": -0.0252,
         "rims": "dark",
-        "roll": 0.015,
-        "roof": "body"
+        "roll": 0.0144,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -39677,10 +39714,11 @@
         "finish": "solid",
         "lift": 0,
         "paint": "grey",
-        "pitch": 0.018,
+        "pitch": 0.0177,
         "rims": "alloy",
-        "roll": 0.011,
-        "roof": "body"
+        "roll": 0.0107,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -39724,10 +39762,11 @@
         "finish": "metallic",
         "lift": 0,
         "paint": "beige",
-        "pitch": 0.018,
+        "pitch": 0.0182,
         "rims": "alloy",
-        "roll": 0.009,
-        "roof": "body"
+        "roll": 0.0099,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -39773,8 +39812,9 @@
         "paint": "white",
         "pitch": 0.018,
         "rims": "alloy",
-        "roll": 0.01,
-        "roof": "body"
+        "roll": 0.0102,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -39818,10 +39858,11 @@
         "finish": "metallic",
         "lift": 0,
         "paint": "silver",
-        "pitch": 0.018,
+        "pitch": 0.0178,
         "rims": "alloy",
-        "roll": 0.011,
-        "roof": "body"
+        "roll": 0.0105,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -39863,12 +39904,13 @@
       "prop_params": {
         "body": "wagon",
         "finish": "metallic",
-        "lift": -0.002,
+        "lift": -0.004,
         "paint": "silver",
-        "pitch": -0.02,
+        "pitch": -0.0212,
         "rims": "alloy",
-        "roll": -0.011,
-        "roof": "body"
+        "roll": -0.0045,
+        "roof": "body",
+        "twist": 0.005
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -39912,10 +39954,11 @@
         "finish": "metallic",
         "lift": 0,
         "paint": "grey",
-        "pitch": 0.047,
+        "pitch": 0.0467,
         "rims": "alloy",
-        "roll": -0.005,
-        "roof": "body"
+        "roll": -0.0048,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -39957,12 +40000,13 @@
       "prop_params": {
         "body": "sedan",
         "finish": "solid",
-        "lift": 0,
+        "lift": 0.001,
         "paint": "white",
-        "pitch": 0.047,
+        "pitch": 0.0461,
         "rims": "alloy",
-        "roll": -0.003,
-        "roof": "body"
+        "roll": -0.0032,
+        "roof": "body",
+        "twist": -0.001
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -40005,11 +40049,12 @@
         "body": "fastback",
         "finish": "metallic",
         "lift": 0,
-        "paint": "black",
-        "pitch": 0.045,
+        "paint": "dark_grey",
+        "pitch": 0.0452,
         "rims": "dark",
-        "roll": 0,
-        "roof": "body"
+        "roll": -0.0003,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -40055,8 +40100,9 @@
         "paint": "white",
         "pitch": -0.032,
         "rims": "dark",
-        "roll": 0.025,
-        "roof": "black"
+        "roll": 0.0247,
+        "roof": "black",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -40100,10 +40146,11 @@
         "finish": "solid",
         "lift": 0,
         "paint": "white",
-        "pitch": -0.025,
+        "pitch": -0.0251,
         "rims": "dark",
-        "roll": 0.015,
-        "roof": "body"
+        "roll": 0.0156,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -40145,12 +40192,13 @@
       "prop_params": {
         "body": "suv",
         "finish": "solid",
-        "lift": 0,
+        "lift": 0.004,
         "paint": "white",
-        "pitch": -0.026,
+        "pitch": -0.0238,
         "rims": "dark",
-        "roll": 0.014,
-        "roof": "body"
+        "roll": 0.0109,
+        "roof": "body",
+        "twist": -0.003
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -40196,8 +40244,9 @@
         "paint": "black",
         "pitch": -0.018,
         "rims": "alloy",
-        "roll": -0.01,
-        "roof": "body"
+        "roll": -0.0101,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -40241,10 +40290,11 @@
         "finish": "solid",
         "lift": 0,
         "paint": "white",
-        "pitch": -0.018,
+        "pitch": -0.0179,
         "rims": "dark",
-        "roll": -0.01,
-        "roof": "body"
+        "roll": -0.0103,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -40288,10 +40338,11 @@
         "finish": "solid",
         "lift": 0,
         "paint": "white",
-        "pitch": 0.018,
+        "pitch": 0.0182,
         "rims": "alloy",
-        "roll": 0.01,
-        "roof": "body"
+        "roll": 0.0097,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -40334,11 +40385,12 @@
         "body": "crossover",
         "finish": "metallic",
         "lift": 0,
-        "paint": "blue",
+        "paint": "dark_grey",
         "pitch": -0.018,
         "rims": "alloy",
-        "roll": -0.01,
-        "roof": "black"
+        "roll": -0.0102,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -40379,13 +40431,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "pickup",
-        "finish": "pearl",
-        "lift": -0.015,
-        "paint": "pearl_white",
-        "pitch": -0.016,
+        "finish": "solid",
+        "lift": -0.03,
+        "paint": "red",
+        "pitch": -0.0171,
         "rims": "alloy",
-        "roll": 0.024,
-        "roof": "body"
+        "roll": 0.0083,
+        "roof": "body",
+        "twist": 0.013
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -40428,11 +40481,12 @@
         "body": "crossover",
         "finish": "metallic",
         "lift": 0,
-        "paint": "blue",
-        "pitch": -0.033,
+        "paint": "dark_grey",
+        "pitch": -0.0331,
         "rims": "alloy",
-        "roll": 0.023,
-        "roof": "black"
+        "roll": 0.0232,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -40476,10 +40530,11 @@
         "finish": "metallic",
         "lift": -0.001,
         "paint": "silver",
-        "pitch": -0.026,
+        "pitch": -0.0258,
         "rims": "dark",
-        "roll": 0.014,
-        "roof": "body"
+        "roll": 0.0143,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -40525,8 +40580,9 @@
         "paint": "grey",
         "pitch": 0.025,
         "rims": "dark",
-        "roll": -0.016,
-        "roof": "body"
+        "roll": -0.0157,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -40568,12 +40624,13 @@
       "prop_params": {
         "body": "sedan",
         "finish": "metallic",
-        "lift": 0,
-        "paint": "dark_grey",
-        "pitch": -0.026,
+        "lift": 0.003,
+        "paint": "grey",
+        "pitch": -0.0242,
         "rims": "alloy",
-        "roll": 0.014,
-        "roof": "body"
+        "roll": 0.0111,
+        "roof": "body",
+        "twist": -0.002
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -40614,13 +40671,14 @@
       "prop": "parked_car",
       "prop_params": {
         "body": "pickup",
-        "finish": "metallic",
-        "lift": 0.001,
-        "paint": "dark_grey",
-        "pitch": 0.018,
+        "finish": "solid",
+        "lift": 0,
+        "paint": "grey",
+        "pitch": 0.0179,
         "rims": "dark",
-        "roll": 0.011,
-        "roof": "body"
+        "roll": 0.0103,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -40663,11 +40721,12 @@
         "body": "crossover",
         "finish": "metallic",
         "lift": 0,
-        "paint": "grey",
-        "pitch": 0.018,
+        "paint": "light_grey",
+        "pitch": 0.0182,
         "rims": "dark",
-        "roll": 0.009,
-        "roof": "body"
+        "roll": 0.0099,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -40709,12 +40768,13 @@
       "prop_params": {
         "body": "fastback",
         "finish": "metallic",
-        "lift": -0.001,
-        "paint": "black",
-        "pitch": 0.018,
+        "lift": 0,
+        "paint": "dark_grey",
+        "pitch": 0.0179,
         "rims": "alloy",
-        "roll": 0.01,
-        "roof": "body"
+        "roll": 0.0103,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -40756,12 +40816,13 @@
       "prop_params": {
         "body": "fastback",
         "finish": "metallic",
-        "lift": -0.004,
+        "lift": -0.009,
         "paint": "grey",
-        "pitch": 0.016,
+        "pitch": 0.0092,
         "rims": "alloy",
-        "roll": 0.006,
-        "roof": "body"
+        "roll": -0.0053,
+        "roof": "body",
+        "twist": -0.012
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -40804,11 +40865,12 @@
         "body": "crossover",
         "finish": "metallic",
         "lift": -0.001,
-        "paint": "dark_grey",
-        "pitch": -0.01,
+        "paint": "grey",
+        "pitch": -0.0104,
         "rims": "alloy",
-        "roll": -0.042,
-        "roof": "body"
+        "roll": -0.0424,
+        "roof": "body",
+        "twist": 0
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -45263,7 +45325,7 @@
           "id": "palms_parked_cars",
           "kind": "parked_car",
           "pattern": "curb_parking",
-          "placed": 52,
+          "placed": 51,
           "prop": "parked_car"
         }
       ],

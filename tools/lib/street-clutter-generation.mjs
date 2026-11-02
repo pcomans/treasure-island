@@ -19,7 +19,7 @@ import { createHash } from "node:crypto";
 
 import { projectLonLat } from "./coordinates.mjs";
 import { pointInMultiPolygon } from "./osm-geometry.mjs";
-import { carBodyDimensions, CAR_BODIES } from "./street-clutter-kit.mjs";
+import { carBodyGeometry, CAR_BODIES } from "./street-clutter-kit.mjs";
 import { compareSourceKeys, invariant, roundCoordinate } from "./world-contract.mjs";
 
 // Kit props of the clutter layer, with the row kind each one stands for.
@@ -64,6 +64,16 @@ const VAN_PAINTS = Object.freeze(["black", "dark_grey", "grey", "silver", "white
 const pickFrom = (weights, names) => Object.fromEntries(Object.entries(weights).filter(([name]) => names.includes(name)));
 // Bus stops keep this much curb clear on each side.
 const BUS_STOP_CLEAR_M = 12;
+// Chunk record kinds the visible ground is made of, and the surfaces (by
+// material) a parked car's tyre may stand on.
+const VISIBLE_GROUND_KINDS = new Set(["land_ground", "major_area", "road_path", "street_kerb", "street_paint", "terrain_overlay"]);
+const WHEEL_SURFACES = new Set(["major_area_paved", "road_path", "street_gutter", "street_marking", "street_parking", "street_wear"]);
+const GROUND_CELL_M = 4;
+// A tyre's contact patch, sampled across its width (fractions) and along it (m).
+const PATCH_ACROSS = Object.freeze([-0.35, 0, 0.35]);
+const PATCH_ALONG_M = Object.freeze([-0.08, 0, 0.08]);
+// Suspension travel a parked car may use to keep all four tyres down (m).
+export const MAX_TWIST_M = 0.04;
 
 const sub = (a, b) => [a[0] - b[0], a[1] - b[1]];
 const add = (a, b) => [a[0] + b[0], a[1] + b[1]];
@@ -215,6 +225,114 @@ export function footprintPiece(position, yaw, footprint) {
   };
 }
 
+// The top of the visible ground, from the generated chunk records: a function
+// of world [x, z] returning {y, material_key} of the highest surface there (the
+// draped roads, paint and areas sit their small bias above the land), or null.
+// Each chunk is indexed on first use.
+export function visibleGroundIndex(chunks) {
+  const indexed = new Map();
+  const cellKey = (x, z) => `${Math.floor(x / GROUND_CELL_M)},${Math.floor(z / GROUND_CELL_M)}`;
+  const indexChunk = (chunk) => {
+    const cells = new Map();
+    for (const record of chunk.records) {
+      if (!VISIBLE_GROUND_KINDS.has(record.feature_kind)) continue;
+      const vertices = record.vertices;
+      for (let offset = 0; offset < record.indices.length; offset += 3) {
+        const corners = [0, 1, 2].map((corner) => {
+          const index = record.indices[offset + corner] * 3;
+          return [vertices[index], vertices[index + 1], vertices[index + 2]];
+        });
+        const [a, b, c] = corners;
+        const denominator = (b[2] - c[2]) * (a[0] - c[0]) + (c[0] - b[0]) * (a[2] - c[2]);
+        // Vertical faces (kerb sides) hold no plan area.
+        if (Math.abs(denominator) <= 1e-10) continue;
+        const triangle = { a, b, c, denominator, material_key: record.material_key };
+        const xs = corners.map((point) => point[0]);
+        const zs = corners.map((point) => point[2]);
+        for (let x = Math.floor(Math.min(...xs) / GROUND_CELL_M); x <= Math.floor(Math.max(...xs) / GROUND_CELL_M); x += 1) {
+          for (let z = Math.floor(Math.min(...zs) / GROUND_CELL_M); z <= Math.floor(Math.max(...zs) / GROUND_CELL_M); z += 1) {
+            const key = `${x},${z}`;
+            if (!cells.has(key)) cells.set(key, []);
+            cells.get(key).push(triangle);
+          }
+        }
+      }
+    }
+    return cells;
+  };
+  return (xz) => {
+    let best = null;
+    for (const chunk of chunks.values()) {
+      const bounds = chunk.bounds_m;
+      if (xz[0] < bounds.min_x || xz[0] > bounds.max_x || xz[1] < bounds.min_z || xz[1] > bounds.max_z) continue;
+      if (!indexed.has(chunk.chunk_id)) indexed.set(chunk.chunk_id, indexChunk(chunk));
+      for (const { a, b, c, denominator, material_key } of indexed.get(chunk.chunk_id).get(cellKey(xz[0], xz[1])) ?? []) {
+        const weightA = ((b[2] - c[2]) * (xz[0] - c[0]) + (c[0] - b[0]) * (xz[1] - c[2])) / denominator;
+        const weightB = ((c[2] - a[2]) * (xz[0] - c[0]) + (a[0] - c[0]) * (xz[1] - c[2])) / denominator;
+        const weightC = 1 - weightA - weightB;
+        if (weightA < -1e-7 || weightB < -1e-7 || weightC < -1e-7) continue;
+        const y = weightA * a[1] + weightB * b[1] + weightC * c[1];
+        if (!best || y > best.y || (y === best.y && material_key < best.material_key)) best = { y, material_key };
+      }
+    }
+    return best;
+  };
+}
+
+// A parked car's rest on the visible ground (east/north centre and front). The
+// body takes the plane through the ground under its four tyre centres (its
+// height at the car's origin, pitch raising the nose, roll the left side) and
+// the suspension takes up the twist a plane cannot: the front-left and
+// rear-right wheels rise by it in the car frame, the other two drop by it.
+// Then the car rises by the most that any point of a tyre's contact patch (a
+// gutter lip, a paint line, a fold in the ground) reaches into that tyre's
+// round tread, so no tyre sinks. Returns {height, pitch, roll, twist}, or {problem}
+// when a tyre is off the pavement or the ground is too uneven.
+export function settleParkedCar(body, center, front, groundAt) {
+  const geometry = carBodyGeometry(body);
+  const right = [front[1], -front[0]];
+  // The visible ground under a car-frame point (x right, z back).
+  const groundUnder = (x, z) => {
+    const ground = groundAt(toWorld(add(add(center, scale(right, x)), scale(front, -z))));
+    if (!ground) return { problem: "no_ground" };
+    if (!WHEEL_SURFACES.has(ground.material_key)) return { problem: "wheel_off_pavement" };
+    return ground;
+  };
+  const wheels = Object.entries(geometry.wheels).map(([name, [x, , z]]) => ({ name, x, z, side: Math.sign(x) * Math.sign(z) }));
+  const centres = {};
+  for (const wheel of wheels) {
+    const ground = groundUnder(wheel.x, wheel.z);
+    if (ground.problem) return ground;
+    centres[wheel.name] = ground.y;
+  }
+  const { front_left: fl, front_right: fr, rear_left: rl, rear_right: rr } = centres;
+  const frontZ = geometry.wheels.front_left[2];
+  const rearZ = geometry.wheels.rear_left[2];
+  // The plane y = height + slopeForward * forward + slopeLeft * left, with
+  // forward = -z and left = -x in the car frame.
+  const slopeForward = (fl + fr - rl - rr) / (2 * (rearZ - frontZ));
+  const slopeLeft = (fl + rl - fr - rr) / (2 * geometry.track_m);
+  const height = (fl + fr + rl + rr) / 4 + slopeForward * (frontZ + rearZ) / 2;
+  const twist = (fl - fr - rl + rr) / 4;
+  if (Math.abs(twist) > MAX_TWIST_M) return { problem: "uneven_ground" };
+  const radius = geometry.wheel_radius_m;
+  let raise = 0;
+  for (const wheel of wheels) {
+    for (const along of PATCH_ALONG_M) {
+      // The tread curves up away from its lowest line.
+      const curve = radius - Math.sqrt(radius * radius - along * along);
+      for (const across of PATCH_ACROSS) {
+        const x = wheel.x + across * geometry.tire_width_m;
+        const z = wheel.z - along;
+        const ground = groundUnder(x, z);
+        if (ground.problem) return ground;
+        raise = Math.max(raise, ground.y - (height - slopeForward * z - slopeLeft * x + twist * wheel.side + curve));
+      }
+    }
+  }
+  return { height: height + raise, pitch: Math.atan(slopeForward), roll: Math.atan(slopeLeft), twist };
+}
+
 // Places the parked cars of the pilot zones' clutter rules. Returns the rows and an audit.
 export function placeStreetClutter({
   kinds,
@@ -231,14 +349,15 @@ export function placeStreetClutter({
   onLand,
   grounded,
   surfaceAt,
+  chunks,
 }) {
   const pilotShapes = zoneShapes.filter(({ zone }) => zone.pilot);
+  const groundAt = visibleGroundIndex(chunks);
   const audit = { rules: {}, rejected_by_reason: {} };
   const count = (table, key) => {
     table[key] = (table[key] ?? 0) + 1;
   };
   const ruleRows = [];
-  const placedSegments = [];
 
   // The car's rectangle corners in east/north for a centre, a front direction and size.
   const corners = (center, front, footprint) => {
@@ -250,7 +369,7 @@ export function placeStreetClutter({
   // Site checks for one car: the mask, the land, its surface (the asphalt of the
   // carriageway, a parking lane or the lot, never the raised street ground) and
   // clear of placed items.
-  const reject = (center, front, footprint, surface, ignoreIds = new Set()) => {
+  const reject = (center, front, footprint, surface) => {
     const xz = toWorld(center);
     const piece = footprintPiece(xz, yawToward(front), footprint);
     if (!onLand(xz, exclusions.land_edge_buffer_m + footprint.z_m / 2)) return "land_edge";
@@ -267,7 +386,6 @@ export function placeStreetClutter({
       if (surface === "lot" && !site.inLot(corner) && site.carriagewayDistance(corner, 1) > 0) return "off_lot";
     }
     for (const item of occupied) {
-      if (ignoreIds.has(item.id)) continue;
       for (const point of piece.points.length > 1 ? sampleSegment(piece.points) : piece.points) {
         const near = item.points.length > 1 ? distanceToPolyline(point, item.points) : Math.hypot(point[0] - item.points[0][0], point[1] - item.points[0][1]);
         if (near < item.radius_m + piece.radius + ITEM_CLEAR_M) return "item";
@@ -295,26 +413,13 @@ export function placeStreetClutter({
     const rims = hashUnit(seed, identity, "rims") < 0.28 ? "dark" : "alloy";
     return { body, paint, finish, roof, rims };
   };
-  // Slight tilt with the ground under the wheels (the road drapes the terrain).
-  const tilt = (center, front, footprint) => {
-    const right = [front[1], -front[0]];
-    const reach = footprint.z_m * 0.3;
-    const across = footprint.x_m * 0.4;
-    const y = (point) => grounded(toWorld(point)).y;
-    const yFront = y(add(center, scale(front, reach)));
-    const yRear = y(add(center, scale(front, -reach)));
-    const yRight = y(add(center, scale(right, across)));
-    const yLeft = y(add(center, scale(right, -across)));
-    const yCenter = y(center);
-    return {
-      pitch: roundCoordinate(Math.atan2(yFront - yRear, 2 * reach)),
-      roll: roundCoordinate(Math.atan2(yLeft - yRight, 2 * across)),
-      lift: roundCoordinate((yFront + yRear + yRight + yLeft) / 4 - yCenter),
-    };
-  };
-  const addCar = (zone, rule, cell, center, front, params, footprint) => {
+  // A car at rest (settleParkedCar): the row keeps the land under its middle
+  // and that point's top surface; lift takes the body from there to its rest.
+  const addCar = (zone, rule, cell, center, front, params, footprint, rest) => {
     const xz = [roundCoordinate(toWorld(center)[0]), roundCoordinate(toWorld(center)[1])];
     const yaw = yawToward(front);
+    const ground = surfaceRow(xz);
+    const angle = (value) => Math.round(value * 1e4) / 1e4 || 0;
     const row = {
       id: `scatter:${zone.id}:${rule.id}:${cell}`,
       source: "scatter",
@@ -322,21 +427,31 @@ export function placeStreetClutter({
       kind: rule.kind,
       layer: kinds[rule.kind].layer,
       geometry: "point",
-      ...surfaceRow(xz),
+      ...ground,
       yaw_radians: yaw,
       yaw_source: `rule:${zone.id}/${rule.id}`,
       status: "placed",
       exclusion: null,
       prop: rule.prop,
-      prop_params: { ...params, ...tilt(center, front, footprint) },
+      prop_params: {
+        ...params,
+        pitch: angle(rest.pitch),
+        roll: angle(rest.roll),
+        lift: roundCoordinate(rest.height - ground.position_m[1] - ground.surface.bias_m),
+        twist: roundCoordinate(rest.twist),
+      },
       footprint_m: footprint,
       basis: rule.basis,
     };
     ruleRows.push(row);
-    const piece = footprintPiece(xz, yaw, footprint);
-    placedSegments.push({ id: row.id, ...piece });
     count(audit.rules, `${zone.id}/${rule.id}`);
     return row;
+  };
+  // The site checks, then the rest on the ground; the reason when either fails.
+  const fit = (center, front, footprint, surface, body) => {
+    const problem = reject(center, front, footprint, surface);
+    if (problem) return { problem };
+    return settleParkedCar(body, center, front, groundAt);
   };
 
   // Junction nodes on a road: other vehicle roads sharing one of its nodes.
@@ -394,7 +509,7 @@ export function placeStreetClutter({
                 const cell = `${key}_${sideName}_${String(index).padStart(3, "0")}`;
                 const identity = `${zone.id}:${rule.id}:${cell}`;
                 const params = carParams(rule, identity);
-                const dims = carBodyDimensions(params.body);
+                const dims = carBodyGeometry(params.body);
                 const footprint = { x_m: dims.width_m, z_m: dims.length_m };
                 const gap = rule.gap_m[0] + (rule.gap_m[1] - rule.gap_m[0]) * hashUnit(seed, identity, "gap");
                 index += 1;
@@ -426,13 +541,13 @@ export function placeStreetClutter({
                 }
                 const jitter = (hashUnit(seed, identity, "yaw") - 0.5) * 0.02;
                 const facing = [front[0] * Math.cos(jitter) - front[1] * Math.sin(jitter), front[0] * Math.sin(jitter) + front[1] * Math.cos(jitter)];
-                const problem = reject(center, facing, footprint, "road");
-                if (problem) {
-                  count(audit.rejected_by_reason, `${rule.id}:${problem}`);
+                const rest = fit(center, facing, footprint, "road", params.body);
+                if (rest.problem) {
+                  count(audit.rejected_by_reason, `${rule.id}:${rest.problem}`);
                   s = endS + gap;
                   continue;
                 }
-                addCar(zone, rule, cell, center, facing, params, footprint);
+                addCar(zone, rule, cell, center, facing, params, footprint, rest);
                 s = endS + gap;
               }
             }
@@ -459,7 +574,7 @@ export function placeStreetClutter({
             continue;
           }
           const params = carParams(rule, identity);
-          const dims = carBodyDimensions(params.body);
+          const dims = carBodyGeometry(params.body);
           const footprint = { x_m: dims.width_m, z_m: dims.length_m };
           // The car's far end 0.3 m short of the stall's back; a long body (a
           // pickup or a van) may reach up to 1.1 m into the aisle, as they do.
@@ -474,12 +589,12 @@ export function placeStreetClutter({
           const jitter = (hashUnit(seed, identity, "yaw") - 0.5) * 0.06;
           const base = headIn ? stall.outward : scale(stall.outward, -1);
           const facing = [base[0] * Math.cos(jitter) - base[1] * Math.sin(jitter), base[0] * Math.sin(jitter) + base[1] * Math.cos(jitter)];
-          const problem = reject(center, facing, footprint, "lot");
-          if (problem) {
-            count(audit.rejected_by_reason, `${rule.id}:${problem}`);
+          const rest = fit(center, facing, footprint, "lot", params.body);
+          if (rest.problem) {
+            count(audit.rejected_by_reason, `${rule.id}:${rest.problem}`);
             continue;
           }
-          addCar(zone, rule, cell, center, facing, params, footprint);
+          addCar(zone, rule, cell, center, facing, params, footprint, rest);
         }
         invariant(stallsInLots > 0, `Street clutter lot rule ${rule.id} found no painted stalls in ${rule.source_keys.join(", ")}`);
       }

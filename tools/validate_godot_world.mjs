@@ -70,7 +70,7 @@ import {
   STREET_DETAIL_SCHEMA,
   STREET_DETAIL_SOURCES,
 } from "./lib/street-detail-generation.mjs";
-import { CAR_BODY_NAMES, CAR_FINISHES, CAR_PAINTS, STREET_CLUTTER_PROPS } from "./lib/street-clutter-generation.mjs";
+import { CAR_BODY_NAMES, CAR_FINISHES, CAR_PAINTS, MAX_TWIST_M, STREET_CLUTTER_PROPS } from "./lib/street-clutter-generation.mjs";
 import { STREET_FENCE_INSIDE, STREET_FENCE_SCREENS, STREET_FENCE_TYPES } from "./lib/street-fence-generation.mjs";
 import { STREET_FURNITURE_PROPS } from "./lib/street-furniture-generation.mjs";
 import {
@@ -988,6 +988,7 @@ function validateStreetDetail(worldRoot, manifest, records) {
         invariant(row.prop === "parked_car" && CAR_BODY_NAMES.includes(params.body) && CAR_PAINTS.includes(params.paint) && CAR_FINISHES.includes(params.finish)
           && ["body", "black"].includes(params.roof) && ["alloy", "dark"].includes(params.rims), `${row.id} car params are invalid`);
         invariant(["pitch", "roll", "lift"].every((key) => Number.isFinite(params[key]) && Math.abs(params[key]) < 0.25), `${row.id} car tilt is invalid`);
+        invariant(Number.isFinite(params.twist) && Math.abs(params.twist) <= MAX_TWIST_M, `${row.id} car twist is invalid`);
         invariant(row.footprint_m !== undefined, `${row.id} parked car has no footprint`);
       }
       if (row.footprint_m !== undefined) {

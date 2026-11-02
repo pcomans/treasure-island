@@ -6,7 +6,9 @@ shader_type spatial;
 // brings the sRGB colours into its own lighting space); finish (roughness and
 // metallic) per part is below. A parked car is a MultiMesh instance whose custom
 // data picks its paint (r: palette column) and style (g: bit 0-1 finish, bit 2
-// black roof, bit 3 dark rims).
+// black roof, bit 3 dark rims) and carries its suspension twist (b, metres): the
+// front-left and rear-right wheels rise by it, the other two drop by it, so all
+// four tyres stand on uneven ground.
 render_mode depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx;
 
 uniform sampler2D palette : source_color, filter_nearest, repeat_disable;
@@ -26,6 +28,10 @@ void vertex() {
 	part = clamp(int(UV.x * 16.0), 0, 15);
 	paint_u = INSTANCE_CUSTOM.r;
 	style = int(INSTANCE_CUSTOM.g * 16.0);
+	// Tyre, rim and hub: the wheel follows the ground (front is -Z, right +X).
+	if (part >= 3 && part <= 5) {
+		VERTEX.y += INSTANCE_CUSTOM.b * sign(VERTEX.x) * sign(VERTEX.z);
+	}
 }
 
 void fragment() {

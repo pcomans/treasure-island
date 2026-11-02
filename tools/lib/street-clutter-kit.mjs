@@ -411,6 +411,11 @@ export const CAR_BODIES = Object.freeze({
   },
 });
 
+// Each tyre's outer face sits this far inside the body side; the mirror
+// housings reach this far beyond it.
+const WHEEL_INSET_M = 0.035;
+const MIRROR_REACH_M = 0.14;
+
 // Detail levels: stations per arch, ring resolution and wheel sides.
 const LODS = Object.freeze([
   { arch: 7, mid: 0.6, corner: 4, face: [0, 0.18, 0.42, 0.62, 0.8, 1], glass: [4, 3], sides: 14, spokes: true, mirrors: true },
@@ -688,10 +693,10 @@ function buildCar(name, lodIndex) {
   };
   out.loft(gGrid, glassPart, { crease: 40 });
 
-  // --- Wheels.
+  // --- Wheels (centres from carBodyGeometry).
   const R = body.wheel_radius;
   const tw = body.tire_width;
-  const xOut = W - 0.035;
+  const xOut = W - WHEEL_INSET_M;
   for (const axle of axles) {
     for (const side of [1, -1]) {
       const center = v3(side * (xOut - tw / 2), R, zOf(axle));
@@ -754,7 +759,7 @@ function buildCar(name, lodIndex) {
       // Housing on a short stalk at the front corner of the side glass; its
       // back (toward the rear) is the mirror glass.
       const inner = hw * 0.9;
-      const outer = hw + 0.14;
+      const outer = hw + MIRROR_REACH_M;
       out.box(v3(side * ((inner + outer) / 2), belt + 0.07, zOf(zf)), [(outer - inner) / 2, 0.052, 0.04], (face) => (face === "+z" ? PART.glass : PART.paint));
       out.box(v3(side * (hw * 0.93), belt + 0.015, zOf(zf + 0.02)), [hw * 0.03 + 0.02, 0.02, 0.05], PART.trim);
     }
@@ -796,11 +801,7 @@ function buildCar(name, lodIndex) {
     for (const side of [1, -1]) out.box(v3(side * (W - 0.06), 1.24, zOf(4.85)), [0.04, 0.02, 0.98], PART.trim);
   }
 
-  const mesh = out.result();
-  return {
-    ...mesh,
-    box: { length: L, width: body.width + 0.2, height: Math.max(cab.roof + cab.crown, ...body.deck.map((key) => key[1])) },
-  };
+  return out.result();
 }
 
 // ---------------------------------------------------------------- small props
@@ -824,7 +825,7 @@ function buildCone(lodIndex) {
   const partOf = (i) => (i === 2 || i === 4 ? PART.white : PART.orange);
   // The lathe axis is +Y; the profile is [radius, height].
   out.lathe(v3(0, 0, 0), v3(0, 1, 0), profile, sides, partOf);
-  return { ...out.result(), box: { length: 0.36, width: 0.36, height: 0.71 } };
+  return out.result();
 }
 
 // A type I A-frame barricade: two hinged galvanised frames with one orange and
@@ -855,7 +856,7 @@ function buildBarricade(lodIndex) {
     // A white sign panel lower down, facing outward.
     out.box(vadd(v3(0, 0, side * spread / 2), vadd(vscale(lean, 0.55), vscale(axes[2], 0.014))), [0.26, 0.19, 0.006], PART.white, axes);
   }
-  return { ...out.result(), box: { length: 0.66, width: 0.42, height: 1.02 } };
+  return out.result();
 }
 
 export const CLUTTER_PROPS_KIT = Object.freeze({
@@ -877,7 +878,48 @@ export function clutterKitMeshes() {
   return meshes;
 }
 
-export function carBodyDimensions(name) {
+// Key dimensions of a car body, in one place for whatever places (or later
+// drives) a car. Car frame in metres: origin on the ground under the middle of
+// the body's plan rectangle, +Y up, front -Z, +X the right side. length_m and
+// width_m are the body's plan rectangle (mirrors excluded); the track is
+// between the tyre centre planes; each wheel centre is [x, y, z] in the car
+// frame; bounds_m is the near mesh's box (mirrors and roof rails included).
+const geometryCache = new Map();
+export function carBodyGeometry(name) {
+  if (geometryCache.has(name)) return geometryCache.get(name);
   const body = CAR_BODIES[name];
-  return { length_m: body.length, width_m: body.width, height_m: Math.max(body.cabin.roof + body.cabin.crown, ...body.deck.map((key) => key[1])) };
+  if (!body) throw new Error(`Unknown car body ${name}`);
+  const round = (value) => Math.round(value * 1e4) / 1e4;
+  const wheelX = round(body.width / 2 - WHEEL_INSET_M - body.tire_width / 2);
+  const frontZ = round(body.front_overhang - body.length / 2);
+  const rearZ = round(frontZ + body.wheelbase);
+  const centre = (x, z) => Object.freeze([x, body.wheel_radius, z]);
+  const { positions } = buildCar(name, 0);
+  const min = [Infinity, Infinity, Infinity];
+  const max = [-Infinity, -Infinity, -Infinity];
+  for (let index = 0; index < positions.length; index += 3) {
+    for (let axis = 0; axis < 3; axis += 1) {
+      min[axis] = Math.min(min[axis], positions[index + axis]);
+      max[axis] = Math.max(max[axis], positions[index + axis]);
+    }
+  }
+  const geometry = Object.freeze({
+    length_m: body.length,
+    width_m: body.width,
+    height_m: round(max[1]),
+    wheelbase_m: body.wheelbase,
+    track_m: round(2 * wheelX),
+    wheel_radius_m: body.wheel_radius,
+    tire_width_m: body.tire_width,
+    ground_clearance_m: body.clearance,
+    wheels: Object.freeze({
+      front_left: centre(-wheelX, frontZ),
+      front_right: centre(wheelX, frontZ),
+      rear_left: centre(-wheelX, rearZ),
+      rear_right: centre(wheelX, rearZ),
+    }),
+    bounds_m: Object.freeze({ min: Object.freeze(min.map(round)), max: Object.freeze(max.map(round)) }),
+  });
+  geometryCache.set(name, geometry);
+  return geometry;
 }

@@ -4,7 +4,9 @@ extends RefCounted
 ## barricades). The meshes are built offline by tools/lib/street-clutter-kit.mjs
 ## into street_clutter_kit.glb, two detail levels each; one shader
 ## (street_clutter.gdshader) colours their parts from a palette texture, and each
-## parked car is a MultiMesh instance whose custom data picks its paint and style.
+## parked car is a MultiMesh instance whose custom data picks its paint and style
+## and carries its suspension twist (the generator settles each car on its four
+## tyres; the twist is what a rigid body cannot take up on uneven ground).
 ##
 ## Prop frame: origin on the visible ground under the middle of the item, +Y up,
 ## front -Z (a car's nose), +X its right side.
@@ -34,7 +36,7 @@ const PART_COLORS := [
 	Color(0.66, 0.67, 0.68), # metal: galvanised frames
 ]
 ## Car paints by name (sRGB), sampled from the dated pilot photos (Sep and Nov
-## 2025): mostly white, black, greys and silvers, some dark and bright blue, red.
+## 2025): mostly white, silver and grey, some black and dark, the odd blue or red.
 const PAINTS := {
 	"white": Color(0.9, 0.9, 0.89),
 	"pearl_white": Color(0.88, 0.88, 0.85),
@@ -57,6 +59,9 @@ const CAR_BODIES := ["crossover", "suv", "sedan", "fastback", "hatchback", "wago
 ## Detail levels: the near mesh within LOD_NEAR_M of its cell's centre, the
 ## far mesh beyond, to the prop's range.
 const LOD_NEAR_M := 60.0
+## The largest suspension twist a parked car's row may carry (metres; the
+## generator keeps it within MAX_TWIST_M of tools/lib/street-clutter-generation.mjs).
+const MAX_TWIST_M := 0.05
 const PROPS := {
 	"parked_car": {"range_m": 260.0, "shadow": true},
 	"traffic_cone": {"range_m": 90.0, "shadow": true},
@@ -114,8 +119,11 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 			style |= 4
 		if str(params.get("rims", "alloy")) == "dark":
 			style |= 8
+		var twist: Variant = params.get("twist", 0.0)
+		if not (twist is float or twist is int) or absf(float(twist)) > MAX_TWIST_M:
+			return {"ok": false, "message": "parked_car twist must be a number within %.2f m: %s" % [MAX_TWIST_M, params]}
 		var paint_index := paint_names().find(paint)
-		result.custom = Color((float(paint_index) + 0.5) / 32.0, (float(style) + 0.5) / 16.0, 0.0, 0.0)
+		result.custom = Color((float(paint_index) + 0.5) / 32.0, (float(style) + 0.5) / 16.0, float(twist), 0.0)
 	else:
 		base = prop
 	var near: Variant = _meshes.get("%s_lod0" % base, null)
