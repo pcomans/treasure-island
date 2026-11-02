@@ -893,3 +893,11 @@ The session scratchpad `/tmp/claude-1000/<project>/<session>/scratchpad` is shar
 ## Write edits atomically when the disk is near full
 
 On 2026-11-02 the shared overlay disk swung between about 1.4 GB and 0 bytes free while parallel agents generated worlds and web exports. A Python `open(path, "w")` edit of `generated_world_contract.gd` hit ENOSPC after truncating the file, leaving a 0-byte GDScript source, and the agent harness lost tool output when its own temp directory filled. Check `df` before edits, world generation and engine runs; write edited files through a temporary file, fsync and rename; and re-check the size and syntax of every file touched in a low-space window before committing. Free only your own regenerable files (scratch worlds, your worktree's `.godot` cache); other agents' files are not yours to delete.
+
+## Refresh Godot's class cache before tests after a merge
+
+On 2026-11-02 the shoreline branch merged main, which added `class_name StreetFurnitureBuilder`. The next tests slot ran the headless tests straight away and every test that loads `world_loader.gd` failed with `Identifier "StreetFurnitureBuilder" not declared` (and route QA timed out), because the global class cache in `.godot` predates the new script. The same tests passed once `tools/godot --headless --path . --import` ran first. Start every engine slot after a merge, checkout or rebase that adds or renames a `class_name` script with that import step, and read a `not declared in the current scope` parse error as a stale cache before suspecting the code.
+
+## Scale MultiMesh instances uniformly
+
+In the shoreline rework (2026-11-02) the first boulders were one unit prototype stretched per instance (size, height and depth scaled separately). They shaded like smooth eggs, and the flattest ones (the cobbles, about 4:1) smeared into streaks. Baking the proportions into more prototypes and scaling each instance uniformly gave shading that matched the silhouettes in the next render, though the shapes changed in the same round, so the cause is not isolated (the likely one: instance normals transformed without the inverse transpose). Prefer uniform per-instance scale for instanced rocks and props; use per-axis scale only where it cannot tilt a normal (a cylinder scaled along its axis, an axis-aligned box).
