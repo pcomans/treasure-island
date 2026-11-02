@@ -1541,6 +1541,8 @@ export function generateStreetGround({
     })),
     crosswalks: crosswalks.map((walk) => ({ ...walk })),
     stop_bars: stopBars,
+    // OSM parking lots near the pilot: multipolygons in the east/north frame.
+    lots: lots.map((object) => ({ source_key: object.row.source_key, geometry: object.geometry })),
     // Plan distance (m) to the carriageway (0 inside it), searched within reach.
     carriagewayDistance: (point, reach = 12) => distanceTo(vehicleIndex, point, reach),
     // Plan distance (m) to a curb ramp (0 inside it), searched within reach.

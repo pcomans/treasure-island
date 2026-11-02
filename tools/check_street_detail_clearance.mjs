@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 // Street-detail clearance: with every street-detail layer switched on, nothing
 // they would build (OSM-placed items, scatter, set pieces and the placeholder
-// vegetation) intrudes on a door, stair or approach buffer, the ferry spawn,
-// the ferry path, the normal QA route or a whole-island QA landing anchor.
+// vegetation) intrudes on a door, stair or approach buffer, the ferry spawn and
+// the walk straight ahead from it, the ferry path, the normal QA route or a
+// whole-island QA landing anchor.
 //
 //   node tools/check_street_detail_clearance.mjs [WORLD_DIR]   (default generated/world)
 //
 // Buffers come from tools/config/street-detail-zones.json and are rebuilt here
-// from their own sources: the manifest spawn, the QA routes and the stairs in
+// from their own sources: the manifest spawn and its yaw, the QA routes and the stairs in
 // the building catalog as it is now, so a stair added after the last world
 // generation is checked as well. The buffer shapes and the plan distance are the
 // generator's own (streetDetailHardShapes, planDistance); what this check adds is
@@ -42,8 +43,8 @@ function main() {
   const detail = readJson(resolve(worldRoot, manifest.street_detail.path));
   const vegetation = readJson(resolve(worldRoot, manifest.vegetation.path));
   const exclusions = loadStreetDetailZones(projectRoot).exclusions;
-  const spawn = manifest.initial_spawn.origin;
-  const zones = streetDetailHardShapes(exclusions, [spawn[0], spawn[2]], loadStreetDetailStairFlights(projectRoot))
+  const spawn = { xz: [manifest.initial_spawn.origin[0], manifest.initial_spawn.origin[2]], yaw: manifest.initial_spawn.yaw };
+  const zones = streetDetailHardShapes(exclusions, spawn, loadStreetDetailStairFlights(projectRoot))
     .map((shape) => ({ name: shape.component, id: shape.source_id, points: shape.points, radius: shape.radius_m }));
 
   // Everything the switchable layers build when they are all on. Overhead lines
@@ -71,7 +72,7 @@ function main() {
     }
   }
   // Always-on street ground under the walked places: information, never a failure.
-  const walked = zones.filter((zone) => ["spawn", "ferry_path", "qa_route", "whole_island_anchor"].includes(zone.name));
+  const walked = zones.filter((zone) => ["spawn", "spawn_forward", "ferry_path", "qa_route", "whole_island_anchor"].includes(zone.name));
   const groundHits = {};
   for (const entry of manifest.chunks) {
     for (const record of readJson(resolve(worldRoot, entry.path)).records) {
@@ -100,7 +101,7 @@ function main() {
   if (failures.length > 0) process.exit(1);
   const byLayer = STREET_DETAIL_LAYERS.map((layer) => `${items.filter((item) => item.layer === layer).length} ${layer}`).join(", ");
   const closest = Object.entries(minimum).map(([name, value]) => `${name} ${value.toFixed(2)} m`).join(", ");
-  console.log(`PASS: street detail with all layers on (${byLayer}) clears ${stairs} stair flights with their doors and approaches, the spawn and the QA corridors; closest: ${closest}`);
+  console.log(`PASS: street detail with all layers on (${byLayer}) clears ${stairs} stair flights with their doors and approaches, the spawn, its walk-forward line and the QA corridors; closest: ${closest}`);
 }
 
 main();

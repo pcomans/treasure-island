@@ -945,6 +945,13 @@ func _check_spray(source: String, plan: Dictionary, bounds: AABB) -> void:
 		_failures.append(_prefix+"spray needs finite player_xz/target_xyz")
 		_unsafe=true
 		return
+	# "placed" (default): one source-bound wall decal. "receiver_rejection": a
+	# non-receiver solid in front of the wall (a prop, say) stops the spray.
+	var expect: Variant = plan.get("expect", "placed")
+	if not expect is String or expect not in ["placed", "receiver_rejection"]:
+		_failures.append(_prefix+"spray expect must be \"placed\" or \"receiver_rejection\"")
+		_unsafe=true
+		return
 	for value: Variant in plan.target_xyz:
 		if not (value is float or value is int) or not is_finite(float(value)):
 			_failures.append(_prefix+"spray target must be finite")
@@ -975,6 +982,16 @@ func _check_spray(source: String, plan: Dictionary, bounds: AABB) -> void:
 	var spray:=_h.player.get_spray_controller()
 	var pool:=spray.tag_instances
 	var before:=pool.get_children()
+	# What the spray ray meets first: the controller's own screen-centre query.
+	var camera:=_h.player.get_camera()
+	var center:=camera.get_viewport().get_visible_rect().size*0.5
+	var origin:=camera.project_ray_origin(center)
+	var query:=PhysicsRayQueryParameters3D.create(origin, origin+camera.project_ray_normal(center).normalized()*1000.0, SprayController.PHYSICS_SPRAY_SURFACE, [_h.player.get_rid()])
+	query.collide_with_areas=false
+	var first:=_h.player.get_world_3d().direct_space_state.intersect_ray(query)
+	var first_node:=first.get("collider") as Node
+	var first_receiver:=first_node!=null and first_node.is_in_group("spray_receiver_wall")
+	print("SPRAY_HIT source=%s expect=%s collider=%s feature=%s receiver=%s at=%s" % [source, expect, first_node.get_path() if first_node!=null else "none", first_node.get_meta("feature_kind", "") if first_node!=null else "", first_receiver, first.get("position", "none")])
 	var results: Array[String]=[]
 	var record:=func(code: String) -> void:results.append(code)
 	spray.spray_result.connect(record)
@@ -983,6 +1000,16 @@ func _check_spray(source: String, plan: Dictionary, bounds: AABB) -> void:
 	var placed: Array[Decal]=[]
 	for child: Node in pool.get_children():
 		if child is Decal and child not in before:placed.append(child)
+	if expect=="receiver_rejection":
+		var refused:=results==["receiver_rejection"] and placed.is_empty() and first_node!=null and not first_receiver
+		print("SPRAY source=%s result=%s expected=receiver_rejection refused=%s" % [source, results, refused])
+		var refusal_rest:=await _rest_and_disable(recoveries)
+		if refusal_rest!="":_failures.append(_prefix+"spray "+refusal_rest)
+		if not refused:
+			_failures.append(_prefix+"spray at a non-receiver solid was not refused: "+str(results))
+			_unsafe=true
+		if before.is_empty():pool.clear_tags()
+		return
 	var valid:=results==["placed"] and placed.size()==1
 	if valid:
 		var tag: Decal=placed[0]

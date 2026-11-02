@@ -37,7 +37,11 @@ const SIGN_BACK := Color(0.78, 0.79, 0.80)
 const HYDRANT_YELLOW := Color(0.86, 0.65, 0.19)
 const HYDRANT_BONNET := Color(0.90, 0.89, 0.85)
 const HYDRANT_RUST := Color(0.40, 0.22, 0.14)
-const CABINET_GREEN := Color(0.17, 0.29, 0.21)
+## The controller cabinets photograph as a very dark green-grey (about 30-37 /
+## 36-45 / 35-45 of 255 in sunlit Sep and Mar 2025 photos). The door texture
+## (the atlas cabinet cell, about 0.17 / 0.29 / 0.20) is tinted down to match.
+const CABINET_GREEN := Color(0.12, 0.14, 0.13)
+const CABINET_DOOR_TINT := Color(0.70, 0.48, 0.65)
 const PAD_CONCRETE := Color(0.70, 0.69, 0.66)
 const BLADE_GREEN := Color(0.0, 0.42, 0.21)
 const LENS_RED_OFF := Color(0.22, 0.03, 0.03)
@@ -50,6 +54,7 @@ const PROPS := {
 	"bus_stop_sign": {"range_m": 110.0, "shadow": false},
 	"hydrant": {"range_m": 70.0, "shadow": false},
 	"lamp_cobra": {"range_m": 320.0, "shadow": true},
+	"lamp_lot": {"range_m": 220.0, "shadow": true},
 	"lamp_plaza": {"range_m": 220.0, "shadow": true},
 	"name_sign": {"range_m": 120.0, "shadow": false},
 	"signal_cabinet": {"range_m": 120.0, "shadow": false},
@@ -65,6 +70,7 @@ const BLADE_MARGIN_M := 0.09
 var _opaque: StandardMaterial3D
 var _lit: StandardMaterial3D
 var _meshes: Dictionary = {}
+var _shapes: Dictionary = {}
 
 
 func _init() -> void:
@@ -100,6 +106,10 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 			var arm := _number(params, "arm_m", 2.6)
 			_piece(result, "lamp_cobra_h%.1f_a%.1f" % [height, arm], func(b: Builder) -> void: _lamp_cobra(b, height, arm))
 			_capsule(result, 0.13, height - 0.9)
+		"lamp_lot":
+			var lot_height := _number(params, "height_m", 6.0)
+			_piece(result, "lamp_lot_h%.1f" % lot_height, func(b: Builder) -> void: _lamp_lot(b, lot_height))
+			_capsule(result, 0.08, lot_height)
 		"lamp_plaza":
 			var plaza_height := _number(params, "height_m", 8.0)
 			var heads := int(_number(params, "heads", 4))
@@ -123,9 +133,11 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 			_capsule(result, 0.17, 0.78)
 		"signal_cabinet":
 			_piece(result, "signal_cabinet", func(b: Builder) -> void: _signal_cabinet(b))
-			var box := BoxShape3D.new()
-			box.size = Vector3(0.8, 1.45, 0.55)
-			result.shapes.append({"shape": box, "transform": Transform3D(Basis.IDENTITY, Vector3(0.0, 0.725, 0.0))})
+			if not _shapes.has("cabinet_box"):
+				var box := BoxShape3D.new()
+				box.size = Vector3(0.8, 1.45, 0.55)
+				_shapes["cabinet_box"] = box
+			result.shapes.append({"shape": _shapes["cabinet_box"], "transform": Transform3D(Basis.IDENTITY, Vector3(0.0, 0.725, 0.0))})
 		"bus_stop_sign":
 			_piece(result, "bus_stop_sign", func(b: Builder) -> void: _bus_stop_sign(b))
 			_capsule(result, 0.06, 3.0)
@@ -147,11 +159,16 @@ func _piece(result: Dictionary, key: String, draw: Callable, transform := Transf
 	result.pieces.append({"key": key, "mesh": _meshes[key], "transform": transform})
 
 
+## An upright capsule from the foot, shared between rows of the same size.
 func _capsule(result: Dictionary, radius: float, height: float) -> void:
-	var capsule := CapsuleShape3D.new()
-	capsule.radius = radius
-	capsule.height = maxf(height, radius * 2.0)
-	result.shapes.append({"shape": capsule, "transform": Transform3D(Basis.IDENTITY, Vector3(0.0, capsule.height * 0.5, 0.0))})
+	var key := "capsule_r%.3f_h%.3f" % [radius, height]
+	if not _shapes.has(key):
+		var capsule := CapsuleShape3D.new()
+		capsule.radius = radius
+		capsule.height = maxf(height, radius * 2.0)
+		_shapes[key] = capsule
+	var shape: CapsuleShape3D = _shapes[key]
+	result.shapes.append({"shape": shape, "transform": Transform3D(Basis.IDENTITY, Vector3(0.0, shape.height * 0.5, 0.0))})
 
 
 # ---------------------------------------------------------------- props
@@ -189,6 +206,19 @@ func _cobra_head(b: Builder, arm_end: Vector3) -> void:
 	b.box(center, Basis.IDENTITY, Vector3(0.30, 0.10, 0.74), LUMINAIRE_GREY, CELL_WHITE)
 	b.box(center + Vector3(0.0, 0.06, 0.06), Basis.IDENTITY, Vector3(0.24, 0.04, 0.5), LUMINAIRE_GREY, CELL_WHITE)
 	b.box(center + Vector3(0.0, -0.056, -0.04), Basis.IDENTITY, Vector3(0.24, 0.014, 0.52), LENS_GREY, CELL_WHITE)
+
+
+## Slim grey lot-light pole with a small post-top lantern (the Building 1
+## forecourt lot, Sep 2025 photos).
+func _lamp_lot(b: Builder, height: float) -> void:
+	b.tube(PackedVector3Array([Vector3(0, -0.3, 0), Vector3(0, height - 0.55, 0)]), PackedFloat32Array([0.07, 0.055]), 8, GALVANIZED, CELL_METAL, false, true)
+	b.tube(PackedVector3Array([Vector3(0, -0.05, 0), Vector3(0, 0.45, 0)]), PackedFloat32Array([0.11, 0.09]), 8, GALVANIZED, CELL_METAL, false, true)
+	# Lantern: a tapered housing over a lit lens, under a wider cap and finial.
+	var top := height - 0.55
+	b.tube(PackedVector3Array([Vector3(0, top, 0), Vector3(0, top + 0.06, 0)]), PackedFloat32Array([0.09, 0.09]), 8, LUMINAIRE_GREY, CELL_WHITE, false, false)
+	b.tube(PackedVector3Array([Vector3(0, top + 0.06, 0), Vector3(0, top + 0.36, 0)]), PackedFloat32Array([0.12, 0.17]), 4, LENS_GREY, CELL_WHITE, true, false)
+	b.tube(PackedVector3Array([Vector3(0, top + 0.36, 0), Vector3(0, top + 0.42, 0), Vector3(0, top + 0.5, 0)]), PackedFloat32Array([0.22, 0.2, 0.05]), 4, LUMINAIRE_GREY, CELL_WHITE, true, true)
+	b.tube(PackedVector3Array([Vector3(0, top + 0.5, 0), Vector3(0, top + 0.6, 0)]), PackedFloat32Array([0.02, 0.01]), 4, LUMINAIRE_GREY, CELL_WHITE, false, true)
 
 
 ## Charcoal plaza pole with small spot heads on curved brackets, in pairs on
@@ -357,13 +387,15 @@ func _hydrant(b: Builder) -> void:
 ## A dark green signal controller cabinet on a concrete pad, its door toward -Z.
 func _signal_cabinet(b: Builder) -> void:
 	b.box(Vector3(0, 0.05, 0), Basis.IDENTITY, Vector3(1.0, 0.16, 0.7), PAD_CONCRETE, CELL_WHITE)
-	b.box(Vector3(0, 0.13 + 0.62, 0), Basis.IDENTITY, Vector3(0.76, 1.24, 0.48), CABINET_GREEN, CELL_WHITE, CELL_CABINET, Color.WHITE)
+	b.box(Vector3(0, 0.13 + 0.62, 0), Basis.IDENTITY, Vector3(0.76, 1.24, 0.48), CABINET_GREEN, CELL_WHITE, CELL_CABINET, CABINET_DOOR_TINT)
 	b.box(Vector3(0, 0.13 + 1.24 + 0.025, 0), Basis.IDENTITY, Vector3(0.82, 0.05, 0.54), CABINET_GREEN, CELL_WHITE)
 
 
 ## A bus stop flag on a galvanised post, printed on both faces and set across
 ## the curb (its faces along the road) so approaching buses see it.
 func _bus_stop_sign(b: Builder) -> void:
+	# A small concrete pad under the post where it stands in a verge.
+	b.box(Vector3(0, 0.0, 0), Basis.IDENTITY, Vector3(0.9, 0.08, 0.9), PAD_CONCRETE, CELL_WHITE)
 	b.tube(PackedVector3Array([Vector3(0, -0.3, 0), Vector3(0, 3.0, 0)]), PackedFloat32Array([0.035, 0.032]), 8, GALVANIZED, CELL_METAL, false, true)
 	# Faces along X; the flag stands out from the post toward the road (-Z).
 	var basis := Basis.looking_at(Vector3.LEFT, Vector3.UP)

@@ -51,6 +51,8 @@ export const STREET_DETAIL_EXCLUSION_KEYS = Object.freeze([
   "land_edge_buffer_m",
   "qa_route_half_width_m",
   "road_buffer_m",
+  "spawn_forward_half_width_m",
+  "spawn_forward_length_m",
   "spawn_radius_m",
   "stair_half_width_m",
   "vegetation_placeholder_radius_m",
@@ -60,6 +62,7 @@ export const STREET_DETAIL_EXCLUSION_KEYS = Object.freeze([
 // Gameplay clearances every switchable item must keep, in reporting order.
 export const STREET_DETAIL_HARD_COMPONENTS = Object.freeze([
   "spawn",
+  "spawn_forward",
   "ferry_path",
   "qa_route",
   "whole_island_anchor",
@@ -446,9 +449,19 @@ export function loadStreetDetailStairFlights(projectRoot) {
 }
 
 // The gameplay part of the shared mask: shapes no switchable item may enter.
-export function streetDetailHardShapes(exclusions, spawnXZ, stairFlights) {
+// spawn is the manifest's initial spawn as {xz: [x, z], yaw}.
+export function streetDetailHardShapes(exclusions, spawn, stairFlights) {
+  invariant(Array.isArray(spawn?.xz) && spawn.xz.length === 2 && spawn.xz.every(isFiniteNumber) && isFiniteNumber(spawn.yaw), "Street detail needs the spawn position and yaw");
+  const spawnXZ = [spawn.xz[0], spawn.xz[1]];
+  // The player faces local -Z turned by yaw: world direction (-sin yaw, -cos yaw).
+  const ahead = [
+    round3(spawnXZ[0] - Math.sin(spawn.yaw) * exclusions.spawn_forward_length_m),
+    round3(spawnXZ[1] - Math.cos(spawn.yaw) * exclusions.spawn_forward_length_m),
+  ];
   const shapes = [
     { component: "spawn", source_id: "manifest:initial_spawn", points: [spawnXZ], radius_m: exclusions.spawn_radius_m },
+    // The first walk: straight ahead from the spawn, as a player who just holds W.
+    { component: "spawn_forward", source_id: "manifest:initial_spawn_forward", points: [spawnXZ, ahead], radius_m: exclusions.spawn_forward_half_width_m },
     { component: "ferry_path", source_id: "qa:ferry_arrival_path", points: VEGETATION_QA_CORRIDORS.ferry_arrival_path, radius_m: exclusions.ferry_path_half_width_m },
     { component: "qa_route", source_id: "qa:normal_qa_route", points: VEGETATION_QA_CORRIDORS.normal_qa_route, radius_m: exclusions.qa_route_half_width_m },
   ];
@@ -544,8 +557,8 @@ export function generateStreetDetail({
   const stairFlights = loadStreetDetailStairFlights(projectRoot);
   const exclusions = config.exclusions;
   const seed = config.seed;
-  const spawnXZ = [spawn[0], spawn[1]];
-  const hardShapes = streetDetailHardShapes(exclusions, spawnXZ, stairFlights);
+  const spawnXZ = [spawn.xz[0], spawn.xz[1]];
+  const hardShapes = streetDetailHardShapes(exclusions, spawn, stairFlights);
 
   const objects = [...playableObjects.values()];
   const buildings = polygonSet(objects
@@ -1086,6 +1099,8 @@ export function generateStreetDetail({
     exclusions,
     exclusion_inputs: {
       spawn_xz: spawnXZ,
+      spawn_yaw: spawn.yaw,
+      spawn_forward_xz: hardShapes.find((shape) => shape.component === "spawn_forward").points,
       ferry_path_xz: VEGETATION_QA_CORRIDORS.ferry_arrival_path,
       qa_route_xz: VEGETATION_QA_CORRIDORS.normal_qa_route,
       whole_island_anchors_xz: VEGETATION_QA_CORRIDORS.whole_island_qa_route.slice(1),

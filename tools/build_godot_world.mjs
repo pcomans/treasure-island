@@ -1991,7 +1991,7 @@ function main() {
       facetsForChunk: (id) => landFacetsForChunk(chunks, id),
       facetElevation,
       spawnXZ,
-      hardShapes: streetDetailHardShapes(streetConfig.exclusions, spawnXZ, loadStreetDetailStairFlights(projectRoot)),
+      hardShapes: streetDetailHardShapes(streetConfig.exclusions, { xz: spawnXZ, yaw: spawn.yaw }, loadStreetDetailStairFlights(projectRoot)),
     });
     for (const [id, records] of streetGround.records) {
       const chunk = chunks.get(id);
@@ -2027,7 +2027,7 @@ function main() {
       areaStyleFor: (object) => areaStyle(object.tags, object.roles),
       properSources: loaded.properSources,
       rawOsm: loaded.rawOsm,
-      spawn: spawnXZ,
+      spawn: { xz: spawnXZ, yaw: spawn.yaw },
       ground: streetGround,
     });
     terrainDocument.surface_anchors = TERRAIN_SURFACE_ANCHORS.map((anchor) => ({

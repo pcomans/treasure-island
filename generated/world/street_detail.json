@@ -16,11 +16,15 @@
       "rejected_by_reason": {
         "crossing_signals:carriageway": 3,
         "crossing_signals:qa_route": 4,
+        "lot_lights:carriageway": 6,
+        "lot_lights:curb_ramp": 8,
+        "lot_lights:outside_zone": 39,
         "palms_lamps:curb_ramp": 18,
-        "palms_lamps:overlap": 2,
+        "palms_lamps:overlap": 4,
         "plaza_lamps:outside_zone": 17,
+        "plaza_lamps:spawn_forward": 7,
         "stop_sign:curb_ramp": 2,
-        "stop_sign:overlap": 4,
+        "stop_sign:overlap": 5,
         "ti_road_lamps:outside_zone": 68,
         "trade_winds_lamps:same_kind_near": 2
       },
@@ -28,6 +32,8 @@
         "avenue_of_the_palms/all_way_stops": 3,
         "avenue_of_the_palms/palms_lamps": 24,
         "avenue_of_the_palms/street_names": 3,
+        "building_1_forecourt/exit_stop": 1,
+        "building_1_forecourt/lot_lights": 9,
         "ferry_arrival_plaza/plaza_lamps": 3,
         "trade_winds_palms_link/trade_winds_lamps": 2,
         "treasure_island_road_south/crossing_signals": 3,
@@ -43,6 +49,7 @@
       "ferry_path": 3.001,
       "qa_route": 3.001,
       "spawn": 10.941,
+      "spawn_forward": 1.517,
       "stair": 4.909,
       "whole_island_anchor": 12.871
     },
@@ -80,7 +87,7 @@
     },
     "scatter": {
       "candidates": 531,
-      "placed": 57,
+      "placed": 56,
       "rejected_by_reason": {
         "building_buffer": 1,
         "ferry_path": 4,
@@ -88,9 +95,10 @@
         "outside_zone": 89,
         "overlap": 3,
         "qa_route": 2,
-        "road": 57,
+        "road": 56,
         "seed_acceptance": 257,
         "spawn": 3,
+        "spawn_forward": 2,
         "unplantable_surface": 36
       }
     },
@@ -117,7 +125,7 @@
       "bicycle_parking": 14,
       "bollard": 4,
       "bus_stop": 15,
-      "clutter_slot": 21,
+      "clutter_slot": 20,
       "crossing": 161,
       "fence": 24,
       "fire_hydrant": 17,
@@ -132,39 +140,39 @@
       "power_line": 44,
       "power_pole": 245,
       "retaining_wall": 0,
-      "stop_sign": 24,
+      "stop_sign": 25,
       "street_cabinet": 34,
-      "street_lamp": 46,
+      "street_lamp": 55,
       "street_sign": 4,
       "traffic_signals": 6,
       "wall": 1,
       "waste_basket": 11
     },
     "by_layer": {
-      "clutter": 310,
+      "clutter": 309,
       "fences": 58,
-      "furniture": 191,
+      "furniture": 201,
       "ground": 169,
       "vegetation": 36
     },
     "by_source": {
       "osm": 660,
-      "scatter": 104,
+      "scatter": 113,
       "set_piece": 0
     },
     "by_status": {
       "excluded": 5,
-      "placed": 759
+      "placed": 768
     },
-    "pilot_rows": 124,
+    "pilot_rows": 133,
     "placed_by_layer": {
-      "clutter": 308,
+      "clutter": 307,
       "fences": 56,
-      "furniture": 190,
+      "furniture": 200,
       "ground": 169,
       "vegetation": 36
     },
-    "total": 764
+    "total": 773
   },
   "exclusion_inputs": {
     "ferry_path_xz": [
@@ -255,10 +263,21 @@
         629.439
       ]
     ],
+    "spawn_forward_xz": [
+      [
+        -104.364,
+        786.024
+      ],
+      [
+        -99.615,
+        746.307
+      ]
+    ],
     "spawn_xz": [
       -104.364,
       786.024
     ],
+    "spawn_yaw": -0.119,
     "stair_flights": [
       {
         "bottom": [
@@ -1273,6 +1292,8 @@
     "land_edge_buffer_m": 1,
     "qa_route_half_width_m": 2,
     "road_buffer_m": 0.5,
+    "spawn_forward_half_width_m": 1.5,
+    "spawn_forward_length_m": 40,
     "spawn_radius_m": 6.5,
     "stair_half_width_m": 1.5,
     "vegetation_placeholder_radius_m": 1,
@@ -1561,7 +1582,7 @@
     },
     "zones": {
       "path": "tools/config/street-detail-zones.json",
-      "sha256": "0e6b6c8c058ac2dbb1e00708562f53d898c01d851e38267338bbd6fd1c680fa8"
+      "sha256": "6127c2621ef6308239fc61421fc3f7557118e29f3f5fb4b9390fd681ad995c77"
     }
   },
   "kinds": {
@@ -29807,9 +29828,9 @@
       "kind": "stop_sign",
       "layer": "furniture",
       "position_m": [
-        -216.963,
-        4.035,
-        427.903
+        -217.237,
+        4.029,
+        427.37
       ],
       "prop": "stop_sign",
       "prop_params": {
@@ -29825,7 +29846,7 @@
         "source_key": "w1001544697"
       },
       "terrain_support": {
-        "elevation_m": 4.035,
+        "elevation_m": 4.029,
         "object_key": "land:w26767313:x_-1__z_1",
         "triangle_index": 20
       },
@@ -30248,9 +30269,9 @@
       "kind": "street_lamp",
       "layer": "furniture",
       "position_m": [
-        -160.799,
-        4.074,
-        510.363
+        -161.028,
+        4.108,
+        509.919
       ],
       "prop": "lamp_cobra",
       "prop_params": {
@@ -30267,7 +30288,7 @@
         "source_key": "w1001544697"
       },
       "terrain_support": {
-        "elevation_m": 4.074,
+        "elevation_m": 4.108,
         "object_key": "land:w26767313:x_-1__z_1",
         "triangle_index": 33
       },
@@ -31458,6 +31479,43 @@
       ]
     },
     {
+      "basis": "production_inference",
+      "exclusion": null,
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:exit_stop:n7930197745_w850003198_b",
+      "kind": "stop_sign",
+      "layer": "furniture",
+      "position_m": [
+        -63.443,
+        4.143,
+        787.596
+      ],
+      "prop": "stop_sign",
+      "prop_params": {
+        "all_way": false
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/exit_stop",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 4.143,
+        "object_key": "land:w26767313:x_-1__z_3",
+        "triangle_index": 28
+      },
+      "yaw_radians": -1.107,
+      "yaw_source": "approach:w850003198",
+      "zones": [
+        "building_1_forecourt",
+        "treasure_island_road_south"
+      ]
+    },
+    {
       "exclusion": null,
       "geometry": "point",
       "id": "scatter:building_1_forecourt:forecourt_planting:r001c003",
@@ -31579,6 +31637,332 @@
       "yaw_source": "seeded",
       "zones": [
         "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:lot_lights:w96665914_p0_s000",
+      "kind": "street_lamp",
+      "layer": "furniture",
+      "position_m": [
+        -85.531,
+        4.287,
+        754.558
+      ],
+      "prop": "lamp_lot",
+      "prop_params": {
+        "height_m": 6
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/lot_lights",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.228,
+        "kind": "street_kerb",
+        "material_key": "street_kerb_concrete",
+        "source_key": "w1115934723"
+      },
+      "terrain_support": {
+        "elevation_m": 4.287,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 65
+      },
+      "yaw_radians": -1.062,
+      "yaw_source": "rule:building_1_forecourt/lot_lights",
+      "zones": [
+        "treasure_island_road_south"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:lot_lights:w96665914_p0_s001",
+      "kind": "street_lamp",
+      "layer": "furniture",
+      "position_m": [
+        -75.063,
+        4.067,
+        773.338
+      ],
+      "prop": "lamp_lot",
+      "prop_params": {
+        "height_m": 6
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/lot_lights",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.228,
+        "kind": "street_kerb",
+        "material_key": "street_kerb_concrete",
+        "source_key": "w1249797944"
+      },
+      "terrain_support": {
+        "elevation_m": 4.067,
+        "object_key": "land:w26767313:x_-1__z_3",
+        "triangle_index": 14
+      },
+      "yaw_radians": -1.062,
+      "yaw_source": "rule:building_1_forecourt/lot_lights",
+      "zones": [
+        "building_1_forecourt",
+        "treasure_island_road_south"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:lot_lights:w96665914_p0_s002",
+      "kind": "street_lamp",
+      "layer": "furniture",
+      "position_m": [
+        -62.649,
+        4.153,
+        795.612
+      ],
+      "prop": "lamp_lot",
+      "prop_params": {
+        "height_m": 6
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/lot_lights",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.228,
+        "kind": "street_kerb",
+        "material_key": "street_kerb_concrete",
+        "source_key": "w850003198"
+      },
+      "terrain_support": {
+        "elevation_m": 4.153,
+        "object_key": "land:w26767313:x_-1__z_3",
+        "triangle_index": 28
+      },
+      "yaw_radians": -1.062,
+      "yaw_source": "rule:building_1_forecourt/lot_lights",
+      "zones": [
+        "building_1_forecourt",
+        "treasure_island_road_south"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:lot_lights:w96665914_p0_s003",
+      "kind": "street_lamp",
+      "layer": "furniture",
+      "position_m": [
+        -41.522,
+        4.425,
+        786.194
+      ],
+      "prop": "lamp_lot",
+      "prop_params": {
+        "height_m": 6
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/lot_lights",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.04,
+        "kind": "major_area",
+        "material_key": "major_area_leisure",
+        "source_key": "r19585233"
+      },
+      "terrain_support": {
+        "elevation_m": 4.425,
+        "object_key": "land:w26767313:x_-1__z_3",
+        "triangle_index": 29
+      },
+      "yaw_radians": 0.48,
+      "yaw_source": "rule:building_1_forecourt/lot_lights",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:lot_lights:w96665914_p0_s004",
+      "kind": "street_lamp",
+      "layer": "furniture",
+      "position_m": [
+        -20.231,
+        5.343,
+        775.118
+      ],
+      "prop": "lamp_lot",
+      "prop_params": {
+        "height_m": 6
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/lot_lights",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.04,
+        "kind": "major_area",
+        "material_key": "major_area_leisure",
+        "source_key": "r19585233"
+      },
+      "terrain_support": {
+        "elevation_m": 5.343,
+        "object_key": "land:w26767313:x_-1__z_3",
+        "triangle_index": 46
+      },
+      "yaw_radians": 0.48,
+      "yaw_source": "rule:building_1_forecourt/lot_lights",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:lot_lights:w96665914_p0_s005",
+      "kind": "street_lamp",
+      "layer": "furniture",
+      "position_m": [
+        -1.652,
+        6.462,
+        759.532
+      ],
+      "prop": "lamp_lot",
+      "prop_params": {
+        "height_m": 6
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/lot_lights",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.228,
+        "kind": "street_kerb",
+        "material_key": "street_kerb_concrete",
+        "source_key": "w775796580"
+      },
+      "terrain_support": {
+        "elevation_m": 6.462,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 98
+      },
+      "yaw_radians": 1.143,
+      "yaw_source": "rule:building_1_forecourt/lot_lights",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:lot_lights:w96665914_p0_s008",
+      "kind": "street_lamp",
+      "layer": "furniture",
+      "position_m": [
+        -39.626,
+        5.724,
+        717.413
+      ],
+      "prop": "lamp_lot",
+      "prop_params": {
+        "height_m": 6
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/lot_lights",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.04,
+        "kind": "major_area",
+        "material_key": "major_area_leisure",
+        "source_key": "r19585233"
+      },
+      "terrain_support": {
+        "elevation_m": 5.724,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 84
+      },
+      "yaw_radians": -2.768,
+      "yaw_source": "rule:building_1_forecourt/lot_lights",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:lot_lights:w96665914_p0_s009",
+      "kind": "street_lamp",
+      "layer": "furniture",
+      "position_m": [
+        -61.03,
+        4.8,
+        728.499
+      ],
+      "prop": "lamp_lot",
+      "prop_params": {
+        "height_m": 6
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/lot_lights",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.04,
+        "kind": "major_area",
+        "material_key": "major_area_leisure",
+        "source_key": "r19585233"
+      },
+      "terrain_support": {
+        "elevation_m": 4.8,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 83
+      },
+      "yaw_radians": -2.653,
+      "yaw_source": "rule:building_1_forecourt/lot_lights",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:lot_lights:w96665914_p0_s010",
+      "kind": "street_lamp",
+      "layer": "furniture",
+      "position_m": [
+        -83.549,
+        4.408,
+        740.463
+      ],
+      "prop": "lamp_lot",
+      "prop_params": {
+        "height_m": 6
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/lot_lights",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.04,
+        "kind": "major_area",
+        "material_key": "major_area_leisure",
+        "source_key": "r19585233"
+      },
+      "terrain_support": {
+        "elevation_m": 4.408,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 65
+      },
+      "yaw_radians": -2.653,
+      "yaw_source": "rule:building_1_forecourt/lot_lights",
+      "zones": [
+        "treasure_island_road_south"
       ]
     },
     {
@@ -32149,9 +32533,9 @@
       "kind": "street_lamp",
       "layer": "furniture",
       "position_m": [
-        -92.346,
-        3.848,
-        786.605
+        -90.848,
+        3.835,
+        789.204
       ],
       "prop": "lamp_plaza",
       "prop_params": {
@@ -32167,7 +32551,7 @@
         "source_key": "w1249797944"
       },
       "terrain_support": {
-        "elevation_m": 3.848,
+        "elevation_m": 3.835,
         "object_key": "land:w26767313:x_-1__z_3",
         "triangle_index": 14
       },
@@ -32186,9 +32570,9 @@
       "kind": "street_lamp",
       "layer": "furniture",
       "position_m": [
-        -104.329,
-        3.925,
-        765.811
+        -103.83,
+        3.924,
+        766.677
       ],
       "prop": "lamp_plaza",
       "prop_params": {
@@ -32204,7 +32588,7 @@
         "source_key": "w1249797944"
       },
       "terrain_support": {
-        "elevation_m": 3.925,
+        "elevation_m": 3.924,
         "object_key": "land:w26767313:x_-1__z_2",
         "triangle_index": 50
       },
@@ -32223,9 +32607,9 @@
       "kind": "street_lamp",
       "layer": "furniture",
       "position_m": [
-        -115.932,
-        3.817,
-        744.227
+        -114.539,
+        3.858,
+        746.884
       ],
       "prop": "lamp_plaza",
       "prop_params": {
@@ -32241,7 +32625,7 @@
         "source_key": "w1249797944"
       },
       "terrain_support": {
-        "elevation_m": 3.817,
+        "elevation_m": 3.858,
         "object_key": "land:w26767313:x_-1__z_2",
         "triangle_index": 49
       },
@@ -32917,38 +33301,6 @@
     {
       "exclusion": null,
       "geometry": "point",
-      "id": "scatter:treasure_island_road_south:sidewalk_edge_clutter:w1212173466_o1_s009",
-      "kind": "clutter_slot",
-      "layer": "clutter",
-      "position_m": [
-        -102.709,
-        3.93,
-        767.492
-      ],
-      "source": "scatter",
-      "source_id": "zone:treasure_island_road_south/sidewalk_edge_clutter",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0.228,
-        "kind": "street_kerb",
-        "material_key": "street_plaza_pavers",
-        "source_key": "w1249797944"
-      },
-      "terrain_support": {
-        "elevation_m": 3.93,
-        "object_key": "land:w26767313:x_-1__z_2",
-        "triangle_index": 50
-      },
-      "yaw_radians": -1.063,
-      "yaw_source": "seeded",
-      "zones": [
-        "ferry_arrival_plaza",
-        "treasure_island_road_south"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
       "id": "scatter:treasure_island_road_south:sidewalk_edge_clutter:w1212173466_o1_s012",
       "kind": "clutter_slot",
       "layer": "clutter",
@@ -33425,7 +33777,7 @@
           "id": "sidewalk_edge_clutter",
           "kind": "clutter_slot",
           "pattern": "along",
-          "placed": 9
+          "placed": 8
         }
       ]
     },
@@ -33490,7 +33842,22 @@
       ]
     },
     {
-      "furniture": [],
+      "furniture": [
+        {
+          "id": "exit_stop",
+          "kind": "stop_sign",
+          "pattern": "drive_exits",
+          "placed": 1,
+          "prop": "stop_sign"
+        },
+        {
+          "id": "lot_lights",
+          "kind": "street_lamp",
+          "pattern": "lot_edge",
+          "placed": 9,
+          "prop": "lamp_lot"
+        }
+      ],
       "id": "building_1_forecourt",
       "name": "Building 1 forecourt",
       "pilot": true,

@@ -5,11 +5,14 @@
     "Zone scatter for procedural street detail. Coordinates are world metres: +X east, +Z south (the game's frame).",
     "Zone shapes and scatter densities are production inference for the ferry-arrival pilot, not survey data.",
     "Step 0 scatter emits placement slots only; later steps assign assets per slot kind. The runtime builds nothing from slots yet.",
-    "Furniture rules place the vertical street objects of the pilot zones (tools/lib/street-furniture-generation.mjs) where OSM leaves gaps: kerb (along the curbs of named kerbed roads), signalized_crossings and near_signals (at OSM crossings with signals), junctions (named-street corners) and along (beside OSM paths). Each is production inference with its dated photo evidence; prop is the kit prop the runtime builds and params its settings.",
-    "Exclusions are the shared mask for every street-detail source. The older vegetation clearances (roads 4 m, buildings 5 m, spawn 24 m, ferry path 16 m, QA route 7 m) size tree canopies; these values size walk, camera and doorway clearance instead."
+    "Furniture rules place the vertical street objects of the pilot zones (tools/lib/street-furniture-generation.mjs) where OSM leaves gaps: kerb (along the curbs of named kerbed roads), signalized_crossings and near_signals (at OSM crossings with signals), junctions (named-street corners), all_way_stops (the other approaches of an OSM stop=all junction), drive_exits (where a kerbed service drive meets a named road) and lot_edge (around a parking lot). Each is production inference with its dated photo evidence; prop is the kit prop the runtime builds and params its settings.",
+    "Exclusions are the shared mask for every street-detail source. The older vegetation clearances (roads 4 m, buildings 5 m, spawn 24 m, ferry path 16 m, QA route 7 m) size tree canopies; these values size walk, camera and doorway clearance instead. spawn_forward keeps the first walk clear: a corridor from the ferry spawn straight along its facing direction.",
+    "Furniture placement keeps its own site margins on top of this mask (tools/lib/street-furniture-generation.mjs): clear of the carriageway and curb ramps, and at least a player's width between two items."
   ],
   "exclusions": {
     "spawn_radius_m": 6.5,
+    "spawn_forward_length_m": 40.0,
+    "spawn_forward_half_width_m": 1.5,
     "ferry_path_half_width_m": 2.0,
     "qa_route_half_width_m": 2.0,
     "whole_island_anchor_radius_m": 3.0,
@@ -56,7 +59,7 @@
         {"id": "path_edge_clutter", "kind": "clutter_slot", "pattern": "along", "source_keys": ["w1222514694", "w1370667339", "w1370667340", "w1370667341"], "offsets_m": [-2.2, 2.2], "spacing_m": 12, "jitter_m": 1.5, "acceptance": 0.5}
       ],
       "furniture": [
-        {"id": "plaza_lamps", "kind": "street_lamp", "prop": "lamp_plaza", "pattern": "kerb", "source_keys": ["w28353118", "w1249797944"], "sides": ["left"], "spacing_m": 24, "phase_m": 61, "setback_m": 8.8, "slide_m": 4, "params": {"heads": 4}, "basis": "production_inference", "rule": "Charcoal plaza poles with small spot heads on curved brackets stand along the back edge of the Waterfront Plaza paving, about 24 m apart.", "evidence": "ferry-shelter 11-sv-road-sw and 13-sv-road-ne (83 Treasure Island Rd, Sep 2025), 15-sv-mar2025 and 17-sv-mar2025-canopy (Mar 2025), 21-sv-north-sw and 25-sv-north-mid (185 Treasure Island Rd, Sep 2025)"}
+        {"id": "plaza_lamps", "kind": "street_lamp", "prop": "lamp_plaza", "pattern": "kerb", "source_keys": ["w28353118", "w1249797944"], "sides": ["left"], "spacing_m": 24, "phase_m": 58, "setback_m": 8.8, "slide_m": 4, "params": {"heads": 4}, "basis": "production_inference", "rule": "Charcoal plaza poles with small spot heads on curved brackets stand along the back edge of the Waterfront Plaza paving, about 24 m apart.", "evidence": "ferry-shelter 11-sv-road-sw and 13-sv-road-ne (83 Treasure Island Rd, Sep 2025), 15-sv-mar2025 and 17-sv-mar2025-canopy (Mar 2025), 21-sv-north-sw and 25-sv-north-mid (185 Treasure Island Rd, Sep 2025)"}
       ]
     },
     {
@@ -73,7 +76,7 @@
       "furniture": [
         {"id": "ti_road_lamps", "kind": "street_lamp", "prop": "lamp_cobra", "pattern": "kerb", "source_keys": ["w28353118", "w1249797944", "w1249797945"], "sides": ["left", "right"], "spacing_m": 34, "phase_m": 6, "setback_m": 0.6, "slide_m": 4, "params": {"height_m": 9.2, "arm_m": 2.6}, "basis": "production_inference", "rule": "Galvanised bent-mast LED lamps stand on both curbs of Treasure Island Road, roughly opposite each other, about 34 m apart.", "evidence": "ferry-shelter 10-sv-road (83 Treasure Island Rd, Sep 2025), 20-sv-north and 23-sv-north-ssw (185 Treasure Island Rd, Sep 2025), 15-sv-mar2025 (Mar 2025)"},
         {"id": "crossing_signals", "kind": "traffic_signals", "prop": "signal_mast", "pattern": "signalized_crossings", "setback_m": 0.6, "beyond_m": 1.0, "params": {"lamp": true, "sign": "no_stopping"}, "basis": "production_inference", "rule": "At each OSM signalized crossing, a galvanised mast-arm pole on the far side of the crosswalk for each direction, on the curb to the traffic's right: a signal head over the lanes, a head on the pole, a pedestrian head facing the crosswalk, a NO STOPPING ANY TIME sign and a street lamp on top.", "evidence": "OSM n9551738100 and n10206762980 crossing=traffic_signals; ferry-shelter 10-sv-road and 13-sv-road-ne (Sep 2025), 15-sv-mar2025 (Mar 2025), 18-sv-jan2023 (Jan 2023)"},
-        {"id": "signal_cabinets", "kind": "street_cabinet", "prop": "signal_cabinet", "pattern": "near_signals", "back_m": 3.4, "along_m": 1.2, "side_point_xz": [-112, 790], "params": {}, "basis": "production_inference", "rule": "Each signalized crossing has its dark green controller cabinet behind the far-side pole, on the plaza side where there is one.", "evidence": "ferry-shelter 11-sv-road-sw and 13-sv-road-ne (Sep 2025), 15-sv-mar2025 and 17-sv-mar2025-canopy (Mar 2025)"},
+        {"id": "signal_cabinets", "kind": "street_cabinet", "prop": "signal_cabinet", "pattern": "near_signals", "back_m": 3.4, "along_m": 1.2, "params": {}, "basis": "production_inference", "rule": "Each signalized crossing has one very dark green-grey controller cabinet behind a far-side pole, on the landing with the most paved ground around it (the plaza side at the ferry crossing).", "evidence": "ferry-shelter 11-sv-road-sw and 13-sv-road-ne (Sep 2025), 15-sv-mar2025 and 17-sv-mar2025-canopy (Mar 2025)"},
         {"id": "street_names", "kind": "street_sign", "prop": "name_sign", "pattern": "junctions", "setback_m": 0.5, "params": {}, "basis": "production_inference", "rule": "A post with green street-name blades (white text, OSM names) at one corner of every junction of named streets.", "evidence": "ferry-shelter 10-sv-road (Sep 2025): green name blade at the Trade Winds signal; isle-house ih15-cravath-nnw-context (55 Cravath St, Sep 2025): blades on a corner post"}
       ]
     },
@@ -122,6 +125,10 @@
       },
       "scatter": [
         {"id": "forecourt_planting", "kind": "planting_slot", "pattern": "grid", "spacing_m": 7, "jitter_m": 1.5, "acceptance": 0.5}
+      ],
+      "furniture": [
+        {"id": "exit_stop", "kind": "stop_sign", "prop": "stop_sign", "pattern": "drive_exits", "clear_m": 1.0, "params": {"all_way": false}, "basis": "production_inference", "rule": "Traffic leaving the forecourt drive onto Treasure Island Road stops: a stop sign on the drive's right-hand curb, upstream of its crosswalk.", "evidence": "building1-references southwest-sep2025 (17 Treasure Island Rd, Sep 2025): a red stop sign at the forecourt exit, left of the crosswalk"},
+        {"id": "lot_lights", "kind": "street_lamp", "prop": "lamp_lot", "pattern": "lot_edge", "source_keys": ["w96665914"], "spacing_m": 24, "phase_m": 8, "setback_m": 1.0, "slide_m": 4, "params": {"height_m": 6.0}, "basis": "production_inference", "rule": "Slim grey poles with small post-top lanterns stand just outside the edge of the Building 1 forecourt lot, about 24 m apart.", "evidence": "building1-references public-wsw-sep2025 (1 Avenue of the Palms, Sep 2025): a slim grey pole with a post-top lantern in the bed at the lot's Treasure Island Road edge; southwest-sep2025 (Sep 2025): slim grey poles across the lot"}
       ]
     }
   ]

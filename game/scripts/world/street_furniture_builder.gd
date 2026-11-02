@@ -3,15 +3,28 @@ extends RefCounted
 ## Builds PlayableWorld/StreetDetail/Furniture from the placed street-detail rows
 ## that carry a kit prop (tools/lib/street-furniture-generation.mjs chooses them;
 ## street_furniture_kit.gd draws them). Each prop variant is one MultiMesh per
-## CELL_M square, so its visibility range culls by area (Godot measures the range
-## to the instance's bounds centre). Each cell has one static body with simple
-## shapes for the poles, posts, cabinets and hydrants the player can walk into;
-## it is world-solid only, never a spray surface. Street names are Label3D.
+## square cell sized from the prop's visibility range, so it culls by area; Godot
+## measures the range to the MultiMesh bounds centre, so each range is extended by
+## the farthest instance's offset from that centre and no prop shows up late.
+## Each physics cell has one static body with simple shapes for the poles, posts,
+## cabinets and hydrants the player walks into. The bodies are on their own
+## street-prop layer: the player collides with it and the spray ray stops on it
+## (a prop is never a spray receiver), while the camera arm ignores it, so a pole
+## between the camera and the player does not pull the camera in. Street names
+## are Label3D.
 
 const KIT := preload("res://game/scripts/world/street_furniture_kit.gd")
-const CELL_M := 96.0
+## Largest render cell (m) and its share of a prop's visibility range.
+const CELL_MAX_M := 96.0
+const CELL_RANGE_SHARE := 0.4
+const PHYSICS_CELL_M := 96.0
 const RENDER_WORLD_VISIBLE := 1
-const PHYSICS_WORLD_SOLID := 1 << 0
+const PHYSICS_SPRAY_SURFACE := 1 << 2
+const PHYSICS_STREET_PROP := 1 << 3
+
+
+static func _cell(position: Array, size_m: float) -> String:
+	return "%d_%d" % [floori(float(position[0]) / size_m), floori(float(position[2]) / size_m)]
 
 
 func build(document: Dictionary) -> Dictionary:
@@ -40,23 +53,26 @@ func build(document: Dictionary) -> Dictionary:
 		var yaw_value: Variant = row.get("yaw_radians", null)
 		var yaw := float(yaw_value) if yaw_value is float or yaw_value is int else 0.0
 		var placement := Transform3D(Basis(Vector3.UP, yaw), Vector3(float(position[0]), float(position[1]) + float(surface.get("bias_m", 0.0)), float(position[2])))
-		var cell := "%d_%d" % [floori(float(position[0]) / CELL_M), floori(float(position[2]) / CELL_M)]
+		var range_m := float(parts.range_m)
+		var cell := _cell(position, minf(CELL_MAX_M, range_m * CELL_RANGE_SHARE))
+		var physics_cell := _cell(position, PHYSICS_CELL_M)
+		var label_cell := _cell(position, minf(CELL_MAX_M, KIT.LABEL_RANGE_M * CELL_RANGE_SHARE))
 		for piece: Dictionary in parts.pieces:
 			var key := str(piece.key)
 			if not batches.has(key):
-				batches[key] = {"mesh": piece.mesh, "range_m": parts.range_m, "shadow": parts.shadow, "cells": {}}
+				batches[key] = {"mesh": piece.mesh, "range_m": range_m, "shadow": parts.shadow, "cells": {}}
 			var cells: Dictionary = batches[key].cells
 			if not cells.has(cell):
 				cells[cell] = []
 			(cells[cell] as Array).append(placement * (piece.transform as Transform3D))
 		for shape: Dictionary in parts.shapes:
-			if not shapes.has(cell):
-				shapes[cell] = []
-			(shapes[cell] as Array).append({"id": str(row.id), "shape": shape.shape, "transform": placement * (shape.transform as Transform3D)})
+			if not shapes.has(physics_cell):
+				shapes[physics_cell] = []
+			(shapes[physics_cell] as Array).append({"id": str(row.id), "shape": shape.shape, "transform": placement * (shape.transform as Transform3D)})
 		for label: Dictionary in parts.labels:
-			if not labels.has(cell):
-				labels[cell] = []
-			(labels[cell] as Array).append({"id": str(row.id), "text": str(label.text), "transform": placement * (label.transform as Transform3D)})
+			if not labels.has(label_cell):
+				labels[label_cell] = []
+			(labels[label_cell] as Array).append({"id": str(row.id), "text": str(label.text), "transform": placement * (label.transform as Transform3D)})
 		prop_counts[prop] = int(prop_counts.get(prop, 0)) + 1
 		props += 1
 	var multimeshes := 0
@@ -72,14 +88,24 @@ func build(document: Dictionary) -> Dictionary:
 			multimesh.transform_format = MultiMesh.TRANSFORM_3D
 			multimesh.mesh = batch.mesh
 			multimesh.instance_count = transforms.size()
+			var mesh_box: AABB = (batch.mesh as Mesh).get_aabb()
+			var bounds := AABB()
+			var centers := PackedVector3Array()
 			for index in transforms.size():
 				multimesh.set_instance_transform(index, transforms[index])
+				var box: AABB = (transforms[index] as Transform3D) * mesh_box
+				bounds = box if index == 0 else bounds.merge(box)
+				centers.append(box.get_center())
+			# Godot measures the range to the bounds centre: reach each instance in full.
+			var slack := 0.0
+			for center: Vector3 in centers:
+				slack = maxf(slack, center.distance_to(bounds.get_center()))
 			var instance := MultiMeshInstance3D.new()
 			instance.name = "%s__c%s" % [key.replace(".", "p"), cell]
 			instance.multimesh = multimesh
 			instance.layers = RENDER_WORLD_VISIBLE
 			instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON if bool(batch.shadow) else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-			instance.visibility_range_end = float(batch.range_m)
+			instance.visibility_range_end = float(batch.range_m) + ceilf(slack)
 			# Hysteresis only: a fading item would draw transparent while it fades.
 			instance.visibility_range_end_margin = 10.0
 			instance.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_DISABLED
@@ -93,10 +119,11 @@ func build(document: Dictionary) -> Dictionary:
 	for cell: String in shape_cells:
 		var body := StaticBody3D.new()
 		body.name = "Collision__c%s" % cell
-		body.collision_layer = PHYSICS_WORLD_SOLID
+		body.collision_layer = PHYSICS_STREET_PROP | PHYSICS_SPRAY_SURFACE
 		body.collision_mask = 0
 		body.set_meta("feature_kind", "street_furniture")
 		body.set_meta("receiver_kind", "none")
+		body.set_meta("opaque", true)
 		var ids := PackedStringArray()
 		for entry: Dictionary in shapes[cell]:
 			var collision := CollisionShape3D.new()
