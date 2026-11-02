@@ -863,6 +863,7 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 		"triangles": triangle_count,
 	}
 
+
 ## The shared blended decal material for street paint or wear.
 func _street_decal_material(material_key: String) -> ShaderMaterial:
 	if _street_decal_materials.has(material_key):

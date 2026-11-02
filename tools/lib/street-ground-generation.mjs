@@ -42,14 +42,6 @@ import {
 } from "./world-contract.mjs";
 
 export const STREET_GROUND_FEATURE_KINDS = Object.freeze(["street_kerb", "street_kerb_support", "street_paint"]);
-export const STREET_GROUND_MATERIAL_KEYS = Object.freeze([
-  "street_gutter",
-  "street_kerb_concrete",
-  "street_kerb_support",
-  "street_kerb_verge",
-  "street_marking",
-  "street_wear",
-]);
 // Record kinds in emission order: [object key prefix, feature kind, material, collision, opaque].
 const RECORD_KINDS = Object.freeze({
   kerb: ["street-kerb", "street_kerb", "street_kerb_concrete", "world_solid", true],
@@ -1086,7 +1078,7 @@ export function generateStreetGround({
   // Curb faces: vertical quads from the road surface to the raised edge, split
   // where the land under them changes triangle.
   for (const edge of faces) {
-    const top = (point) => edge.ha + (edge.hb - edge.ha) * (length(sub(point, edge.a)) / Math.max(1e-9, length(sub(edge.b, edge.a))));
+    const edgeTop = (point) => edge.ha + (edge.hb - edge.ha) * (length(sub(point, edge.a)) / Math.max(1e-9, length(sub(edge.b, edge.a))));
     if (Math.max(edge.ha, edge.hb) - ROAD_TOP_M < 0.01) continue;
     for (const chunk of chunkRange(boxOfPoints([edge.a, edge.b]))) {
       const facets = facetsOf(chunk.id);
@@ -1113,8 +1105,8 @@ export function generateStreetGround({
         const corners = [
           [p0, ROAD_TOP_M, along0],
           [p1, ROAD_TOP_M, along1],
-          [p1, top(p1), along1],
-          [p0, top(p0), along0],
+          [p1, edgeTop(p1), along1],
+          [p0, edgeTop(p0), along0],
         ];
         for (const [point, h, along] of corners) {
           const land = facetElevation(facet, point[0], point[1]).elevation;

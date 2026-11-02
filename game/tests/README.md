@@ -31,6 +31,7 @@ tools/build-mac.sh   # Mac build + content audit + launch check
 ```
 
 A `--views` focused view may add `camera_xyz` with a vertical `fov` (default 70) to shoot from a free camera aimed at its `target_xyz`, for example to match a reference photo, or `"projection": "ortho"` with `ortho_size` (vertical extent in metres) for a square-on elevation.
+`--street-views FILE` shoots a street-detail area instead of a building: `{"area": "NAME", "views": [...]}` with the same view fields but no building bound, saved as `street-NAME.png`, with street detail on and off by default.
 The player avatar is hidden in every shot; `--show-player` keeps it.
 
 Street detail (the vegetation, furniture, fences and clutter layers under `PlayableWorld/StreetDetail`) is on in play, the web build and `island_test.gd`, and off in `building_fit_test.gd`.
