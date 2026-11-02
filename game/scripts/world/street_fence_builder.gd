@@ -5,11 +5,12 @@ extends RefCounted
 ## street_fence_kit.gd draws them). A fence row's solid runs become meshes per
 ## square cell they cross, so they cull by area: the solid parts with shadows, the
 ## blended wire and windscreens without, and a shadow-only copy of the wire and
-## screens. Each row has one static body with a box per bay. The bodies are on
-## the street-prop layer, like the street furniture: the player collides with a
-## fence and the jetpack clears it, the spray ray stops on it (a fence is never a
-## spray receiver), and the camera arm ignores it. Openings (crossing roads and
-## paths, gates, the gameplay mask) hold neither mesh nor box.
+## screens. Each row has one static body with a box per bay; bays of one size
+## share a box shape. The bodies are on the street-prop layer, like the street
+## furniture: the player collides with a fence and the jetpack clears it, the
+## spray ray stops on it (a fence is never a spray receiver), and the camera arm
+## ignores it. Openings (crossing roads and paths, gates, the gameplay mask) hold
+## neither mesh nor box.
 
 const KIT := preload("res://game/scripts/world/street_fence_kit.gd")
 ## Render cell size (m).
@@ -28,6 +29,8 @@ func build(document: Dictionary) -> Dictionary:
 	var boxes := 0
 	var meshes := 0
 	var type_counts: Dictionary = {}
+	# size key -> BoxShape3D, shared by every bay of that size in every row
+	var box_shapes: Dictionary = {}
 	for row_value: Variant in document.get("rows", []):
 		var row: Dictionary = row_value
 		if str(row.get("status", "")) != "placed" or str(row.get("layer", "")) != "fences" or not row.get("prop", null) is String:
@@ -89,11 +92,9 @@ func build(document: Dictionary) -> Dictionary:
 		body.set_meta("street_detail_kind", "fence")
 		body.set_meta("street_detail_ids", PackedStringArray([id]))
 		for entry: Dictionary in bay_boxes:
-			var shape := BoxShape3D.new()
-			shape.size = entry.size
 			var collision := CollisionShape3D.new()
 			collision.name = "Bay%d" % body.get_child_count()
-			collision.shape = shape
+			collision.shape = _box_shape(box_shapes, entry.size)
 			collision.transform = entry.transform
 			collision.set_meta("street_detail_id", id)
 			body.add_child(collision)
@@ -128,6 +129,18 @@ static func _posts(run: Variant) -> PackedVector3Array:
 		var point: Array = points[index]
 		posts.append(Vector3(float(point[0]), float(point[1]) + float(biases[index]), float(point[2])))
 	return posts
+
+
+## A bay's box shape at its size to the millimetre, shared between bays of the
+## same size like the street-furniture kit's prop shapes.
+static func _box_shape(cache: Dictionary, size: Vector3) -> BoxShape3D:
+	var rounded := size.snapped(Vector3(0.001, 0.001, 0.001))
+	var key := "box_%.3f_%.3f_%.3f" % [rounded.x, rounded.y, rounded.z]
+	if not cache.has(key):
+		var shape := BoxShape3D.new()
+		shape.size = rounded
+		cache[key] = shape
+	return cache[key] as BoxShape3D
 
 
 static func _error(message: String) -> Dictionary:

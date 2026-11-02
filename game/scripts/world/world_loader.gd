@@ -120,6 +120,7 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 	if not fence_result.ok:
 		vegetation_result.node.free()
 		furniture_result.node.free()
+		shoreline_result.node.free()
 		_free_staged(staged_reports)
 		_fail(str(fence_result.get("code", "street_fence_build")), str(fence_result.get("message", "Could not build the street fences.")), [])
 		return
