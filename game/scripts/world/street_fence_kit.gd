@@ -10,7 +10,8 @@ extends RefCounted
 ## its galvanised atlas cell; fabric, screens and boards are textured quads tiled
 ## in metres along the fence. Chain-link and barbed wire are blended from their
 ## textures' mipmaps (street_fence_mesh.gdshader): crisp wire up close, a faint
-## even haze further away. A windscreen is a slightly see-through blended fabric.
+## even haze further away. A windscreen is a slightly see-through, translucent
+## blended fabric.
 ## Blended surfaces cast no shadow, so a shadow-only copy of the wire (cut out by
 ## street_fence_mesh_shadow.gdshader) and of the screens shades the ground.
 ## Dimensions are US fence-trade sizes (6 ft fabric, 1 7/8 in line posts,
@@ -43,11 +44,15 @@ const TYPES := {
 const INSIDE := ["left", "right", "center"]
 ## Windscreen colours (sRGB, multiplied with the soft grey screen texture) and
 ## opacity: the photographed "black" screen reads as a smooth, neutral to
-## slightly cool mid-dark grey in sun (about 29/30/30 to 28/30/34 % in the
-## Sep 2025 photos), with the site faintly visible through it. The black tint
-## leans blue because the island's sun and ambient light are warm.
-const SCREENS := {"black": Color(0.35, 0.35, 0.44), "green": Color(0.34, 0.5, 0.4)}
+## slightly cool mid-dark grey on its sunlit and its shaded face alike (about
+## 29/30/30 and 28/30/34 % in the Sep 2025 photos), with the site faintly
+## visible through it. The knitted fabric is translucent, so sunlight through
+## it lights the shaded face (SCREEN_BACKLIGHT, about half the sun in linear
+## terms). The black tint leans blue because the island's sun and ambient light
+## are warm.
+const SCREENS := {"black": Color(0.32, 0.32, 0.43), "green": Color(0.34, 0.5, 0.4)}
 const SCREEN_OPACITY := 0.92
+const SCREEN_BACKLIGHT := Color(0.73, 0.73, 0.73)
 ## Visible ranges (m): a fence is long and low, so it reaches as far as a lamp pole.
 const RANGE_M := 260.0
 ## Fabric tile sizes (m): the chain-link texture holds two diamonds each way,
@@ -109,6 +114,11 @@ func _init() -> void:
 		screen.roughness = 0.95
 		screen.cull_mode = BaseMaterial3D.CULL_DISABLED
 		screen.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+		screen.backlight_enabled = true
+		screen.backlight = SCREEN_BACKLIGHT
+		# The screen's own shadow copy would shadow its far face and put out the
+		# light through it, so the screens take no shadows.
+		screen.disable_receive_shadows = true
 		_screens[colour] = screen
 	# Blended surfaces cast no shadow: an opaque, shadow-only copy of each screen does.
 	_screen_shadow = StandardMaterial3D.new()

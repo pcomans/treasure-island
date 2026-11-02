@@ -453,12 +453,18 @@ func _fenced_side(side_name: String) -> Array:
 ## "fence:<street-detail id>" for a built street fence, else "".
 func _site_blocker(collider: Variant) -> String:
 	var building := _other_building(collider)
-	if building != "" or not collider is Node:
+	if building != "":
 		return building
-	var node := collider as Node
-	if str(node.get_meta("feature_kind", "")) == "street_fence" and str(node.get_meta("street_detail_kind", "")) == "fence":
-		return "fence:" + str(node.get_meta("street_detail_id", ""))
-	return ""
+	var fence := _street_fence(collider)
+	return "" if fence == null else "fence:" + str(fence.get_meta("street_detail_id", ""))
+
+
+## The collider when it is a built street fence's body
+## (game/scripts/world/street_fence_builder.gd), else null.
+static func _street_fence(collider: Variant) -> Node:
+	if collider is Node and str((collider as Node).get_meta("feature_kind", "")) == "street_fence" and str((collider as Node).get_meta("street_detail_kind", "")) == "fence":
+		return collider as Node
+	return null
 
 
 ## For a rooftop-approach source only: "<parent> roof edge" when this start
@@ -605,10 +611,12 @@ func _preflight_descent(ground: Vector3) -> Dictionary:
 			var body := result.get_collider(contact)
 			var normal := result.get_collision_normal(contact)
 			var identity := str((body as Node).get_path()) if body is Node else "unknown"
+			# A street fence the stock drop lands on or against blocks the start
+			# for site blocking; other bodies stay unattributed here, as before.
 			if not normal.is_finite() or normal.dot(up) < floor_dot:
-				return {"ok": false, "reason": phase + ": blocked descent by " + identity}
+				return {"ok": false, "reason": phase + ": blocked descent by " + identity, "blocker": _street_fence(body)}
 			if not _h.is_approach_support({"collider": body, "normal": normal, "shape": result.get_collider_shape(contact), "position": result.get_collision_point(contact)}, _support_context):
-				return {"ok": false, "reason": phase + ": unqualified support " + identity}
+				return {"ok": false, "reason": phase + ": unqualified support " + identity, "blocker": _street_fence(body)}
 			print("%sWALK_PREFLIGHT_SUPPORT phase=%s ground=%s body=%s shape=%d normal=%s" % [_prefix, phase, ground, identity, result.get_collider_shape(contact), normal])
 		if not result.get_travel().is_finite():
 			return {"ok": false, "reason": phase + ": nonfinite native travel"}
