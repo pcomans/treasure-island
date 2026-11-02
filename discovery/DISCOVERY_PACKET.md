@@ -11,7 +11,7 @@ Status: discovery complete; the exact Godot implementation approach was approved
 - Broadly present-day layout baseline: latest raw OSM snapshot when acquired; no separate real-world currentness reconciliation
 - Third-person walking, running, and unlimited hold-to-rise Space jetpack flight with slow descent on release
 - Owner's MacBook Pro with Apple M1 Pro (10-core CPU, 32 GB memory), using mouse and keyboard only
-- Generally traversable outdoor OSM space; do not reproduce real fenced/private access
+- Generally traversable outdoor OSM space, except that OSM and photo-based fences are solid and block walking (the jetpack clears them; gates and road/path crossings stay open; owner, 2026-11-02)
 - Simple exterior building massing to start
 - One predefined spray tag on eligible building surfaces in the spirit of Half-Life 1's spray interaction
 - San Francisco as non-playable billboard background scenery

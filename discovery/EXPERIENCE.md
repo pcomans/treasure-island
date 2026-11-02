@@ -17,7 +17,7 @@ The first playable was initially scoped to walking and running. The owner later 
 - Complete coverage means every in-scope Treasure Island exterior feature in that snapshot, including the recorded shoreline, road network, public spaces, exterior building footprints, and a continuous island ground surface.
 - Every recorded building footprint receives simple exterior massing. Missing height data uses a conservative reversible default rather than omission.
 - Apartments, individual units, rooms, floor plans, interiors, and bespoke facade detail are out of scope.
-- Real fenced/private-access restrictions are not researched or reproduced. Outdoor snapshot space is generally traversable except for clear world-boundary, safety, or playability boundaries.
+- Fences from OpenStreetMap and photo-based rules are solid and block walking; the jetpack clears them; gates and places where a road or path crosses a fence stay open (owner, 2026-11-02). Other outdoor snapshot space is generally traversable except for clear world-boundary, safety, or playability boundaries.
 - The current spray content is one predefined tag image placed on eligible building surfaces.
 
 This document does not select an engine, framework, map-production pipeline, technical architecture, detailed visual treatment, or vehicle implementation.
