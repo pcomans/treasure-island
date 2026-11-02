@@ -373,7 +373,11 @@ func _walk_start(center: Vector3, side: Vector3, half_depth: float, half_width: 
 			var endpoint: Dictionary = {}
 			var corridor_error := _preflight_corridor(descent.pose, crossing.position, -side, own, wall_shapes, endpoint)
 			if corridor_error != "":
-				blockers[blockers.size() - 1] = _site_blocker(endpoint.get("blocker"))
+				var corridor_blocker := _site_blocker(endpoint.get("blocker"))
+				# A corridor that fails without naming a body (deflected along a
+				# fence or a kerb short of it) is still closed by a street fence
+				# standing between the start and the wall.
+				blockers[blockers.size() - 1] = corridor_blocker if corridor_blocker != "" else _fence_between(chest, crossing.position)
 				rejected.append(candidate + ("%.1f m: %s" % [margin, corridor_error]))
 				continue
 			var preference := _wall_span_preference(endpoint.pose, crossing.position, -side, own, wall_shapes)
@@ -397,7 +401,9 @@ func _walk_start(center: Vector3, side: Vector3, half_depth: float, half_width: 
 ## playable boundary, inside another building's frozen roof footprint, or was
 ## rejected by another building's body (its ground ray hit that building, or the
 ## drop pose or corridor was obstructed by it), or by a street fence the street
-## detail lists as closing this side (fenced_approaches), or, for a rooftop-
+## detail lists as closing this side (fenced_approaches; the fence rejected the
+## start's ground, drop or corridor, or stands between the start and the wall
+## when the corridor failed otherwise), or, for a rooftop-
 ## approach source, lies beyond its parent's roof edge. Returns the reason, or ""
 ## when any candidate is ordinary ground, was rejected by the own building, an
 ## unlisted fence or an unknown body, or the frozen footprints are unavailable
@@ -465,6 +471,21 @@ static func _street_fence(collider: Variant) -> Node:
 	if collider is Node and str((collider as Node).get_meta("feature_kind", "")) == "street_fence" and str((collider as Node).get_meta("street_detail_kind", "")) == "fence":
 		return collider as Node
 	return null
+
+
+## The first built street fence on the straight line between two points, as
+## "fence:<street-detail id>", looking past anything else in the way; "" if none.
+func _fence_between(from: Vector3, to: Vector3) -> String:
+	var others: Array[RID] = []
+	for _attempt in 8:
+		var hit := _h.ray(from, to, _h.player.collision_mask, others)
+		if hit.is_empty():
+			return ""
+		var fence := _street_fence(hit.collider)
+		if fence != null:
+			return "fence:" + str(fence.get_meta("street_detail_id", ""))
+		others.append(hit.rid as RID)
+	return ""
 
 
 ## For a rooftop-approach source only: "<parent> roof edge" when this start
