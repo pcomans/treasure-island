@@ -20,5 +20,6 @@
     "--dns=8.8.8.8",
     "--device=/dev/dri"
   ],
-  "postCreateCommand": "bash .devcontainer/post-create.sh"
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "postStartCommand": "bash tools/clean-tmp.sh"
 }
