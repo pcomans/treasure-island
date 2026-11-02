@@ -77,6 +77,9 @@ const NAIP_TREE_ANNOTATIONS_PATH = resolve(
 );
 // Street-ground record kinds: object key prefix -> feature kind, material,
 // collision and spray opacity. Every record holds one chunk's share of a layer.
+// A deliberate copy of RECORD_KINDS in tools/lib/street-ground-generation.mjs:
+// the validator states what it accepts on its own, so a generator change that
+// adds or reroutes a record kind fails here until it is reviewed into both.
 const STREET_GROUND_RECORDS = Object.freeze({
   "street-kerb": ["street_kerb", "street_kerb_concrete", "world_solid", true],
   "street-planting": ["street_kerb", "street_kerb_planting", "world_solid", true],

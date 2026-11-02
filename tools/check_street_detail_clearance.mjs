@@ -12,7 +12,10 @@
 // generation is checked as well. The buffer shapes and the plan distance are the
 // generator's own (streetDetailHardShapes, planDistance); what this check adds is
 // the placeholder vegetation and a catalog read independent of the last build.
-// Prints PASS or one FAIL line per intrusion.
+// Prints PASS or one FAIL line per intrusion. The always-on street ground
+// (raised sidewalks, plaza, curb ramps) is walkable, not an intrusion: where it
+// covers the spawn, the ferry path, the QA route or a landing anchor that is
+// reported on a NOTE line, so tests that probe those places know to expect it.
 
 import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -67,6 +70,29 @@ function main() {
       }
     }
   }
+  // Always-on street ground under the walked places: information, never a failure.
+  const walked = zones.filter((zone) => ["spawn", "ferry_path", "qa_route", "whole_island_anchor"].includes(zone.name));
+  const groundHits = {};
+  for (const entry of manifest.chunks) {
+    for (const record of readJson(resolve(worldRoot, entry.path)).records) {
+      if (!["street_kerb", "street_kerb_support"].includes(record.feature_kind)) continue;
+      for (let index = 0; index < record.indices.length; index += 3) {
+        const corners = [0, 1, 2].map((corner) => record.indices[index + corner] * 3);
+        const centroid = [
+          corners.reduce((sum, at) => sum + record.vertices[at], 0) / 3,
+          corners.reduce((sum, at) => sum + record.vertices[at + 2], 0) / 3,
+        ];
+        for (const zone of walked) {
+          if (planDistance([centroid], zone.points) < zone.radius) {
+            const key = `${zone.name} ${zone.id}`;
+            groundHits[key] = (groundHits[key] ?? 0) + 1;
+          }
+        }
+      }
+    }
+  }
+  const covered = Object.entries(groundHits).map(([key, count]) => `${key} (${count} triangles)`);
+  if (covered.length > 0) console.log(`NOTE: always-on street ground (walkable, not an intrusion) lies on ${covered.join(", ")}`);
   const stairs = zones.filter((zone) => zone.name === "stair").length;
   // A check with nothing to compare would pass untested.
   if (items.length === 0 || stairs === 0) failures.push(`nothing to check: ${items.length} items, ${stairs} stair flights`);

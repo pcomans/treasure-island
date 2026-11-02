@@ -7,7 +7,8 @@ const COVERAGE_LEDGER_PATH := "res://generated/world/coverage-ledger.csv"
 const EXPECTED_MATERIALS := {
 	"road_path": {"feature_kind": "road_path", "context": false, "asset": "clean_asphalt", "source_dimension_m": 2.1, "repeat_dimension_m": 2.1, "normal_strength": 0.2},
 	"road_path_pedestrian": {"feature_kind": "road_path", "context": false, "asset": "concrete_pavement", "source_dimension_m": 1.8, "repeat_dimension_m": 1.8, "normal_strength": 0.2},
-	"major_area_paved": {"feature_kind": "major_area", "context": false, "asset": "concrete_floor_03", "source_dimension_m": 2.5, "repeat_dimension_m": 2.5, "normal_strength": 0.2},
+	"major_area_paved": {"feature_kind": "major_area", "context": false, "asset": "clean_asphalt", "source_dimension_m": 2.1, "repeat_dimension_m": 2.1, "normal_strength": 0.2},
+	"major_area_court": {"feature_kind": "major_area", "context": false, "asset": "concrete_floor_03", "source_dimension_m": 2.5, "repeat_dimension_m": 2.5, "normal_strength": 0.2},
 	"context_ybi": {"feature_kind": "ybi", "context": true, "asset": "sparse_grass", "source_dimension_m": 2.0, "repeat_dimension_m": 5.0, "normal_strength": 0.2},
 	"building_wall": {"feature_kind": "building_wall", "context": false, "asset": "plaster_grey_04", "source_dimension_m": 1.5, "repeat_dimension_m": 0.75, "normal_strength": 0.1},
 	"building_part_wall": {"feature_kind": "building_part_wall", "context": false, "asset": "plaster_grey_04", "source_dimension_m": 1.5, "repeat_dimension_m": 0.75, "normal_strength": 0.1},
@@ -167,7 +168,7 @@ func _ground_routes_match(builder: WorldChunkBuilder) -> bool:
 		var material := mesh.surface_get_material(0)
 		var expected: Material
 		if family == GROUND_COVER.PAVED:
-			expected = builder._material_for("major_area_paved", "major_area", false)
+			expected = builder._material_for("major_area_court", "major_area", false)
 		elif family != "":
 			expected = GROUND_COVER.material(family)
 		else:

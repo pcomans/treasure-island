@@ -63,10 +63,10 @@
       "sha256": "ce3771571ef7b838b835df6e5da486e1b7fc7f99d110cc2fe91904da7a52dd1d"
     },
     {
-      "bytes": 541272,
+      "bytes": 542517,
       "chunk_id": "x_-2__z_1",
       "path": "chunks/x_-2__z_1.json",
-      "sha256": "3be8f392eb8b8894f8bfa346155e683e1134e35fdee550eaf0484d238ff49e25"
+      "sha256": "4c497598814daf01087ce6e40f839072895c94daa5dc88aa1fa2851c6a70a29b"
     },
     {
       "bytes": 2746,
@@ -105,10 +105,10 @@
       "sha256": "b935890b89202fa181248552176364668e506a7630f0024ec86f12a084743d86"
     },
     {
-      "bytes": 1078898,
+      "bytes": 1072760,
       "chunk_id": "x_-1__z_1",
       "path": "chunks/x_-1__z_1.json",
-      "sha256": "945c3aafbb6788bca63b41d9ec43e3faf72661b23ba52100e3a196affdd9a33f"
+      "sha256": "9a430447869b8f17aa931029ee1ac54ae23df3c1d7fa11b534bc1ca9d9571752"
     },
     {
       "bytes": 2177821,
@@ -231,7 +231,7 @@
       "sha256": "f6fd17666df382f89b51dff1b5a3b906e1c17fdc36d4af3e1aa4ecf4aad817a5"
     }
   ],
-  "content_sha256": "1155bcfe47fe924f1e93e213c89e338f00c25d8f87f59d7649f3db939978d008",
+  "content_sha256": "76026f11a5c3911a246bb060dba55e48ec649169eb24157100e6de613f307328",
   "context": {
     "bytes": 675130,
     "path": "context.json",
@@ -309,9 +309,9 @@
       "sha256": "b935890b89202fa181248552176364668e506a7630f0024ec86f12a084743d86"
     },
     {
-      "bytes": 1078898,
+      "bytes": 1072760,
       "path": "chunks/x_-1__z_1.json",
-      "sha256": "945c3aafbb6788bca63b41d9ec43e3faf72661b23ba52100e3a196affdd9a33f"
+      "sha256": "9a430447869b8f17aa931029ee1ac54ae23df3c1d7fa11b534bc1ca9d9571752"
     },
     {
       "bytes": 2177821,
@@ -349,9 +349,9 @@
       "sha256": "ce3771571ef7b838b835df6e5da486e1b7fc7f99d110cc2fe91904da7a52dd1d"
     },
     {
-      "bytes": 541272,
+      "bytes": 542517,
       "path": "chunks/x_-2__z_1.json",
-      "sha256": "3be8f392eb8b8894f8bfa346155e683e1134e35fdee550eaf0484d238ff49e25"
+      "sha256": "4c497598814daf01087ce6e40f839072895c94daa5dc88aa1fa2851c6a70a29b"
     },
     {
       "bytes": 2746,
@@ -504,9 +504,9 @@
       "sha256": "afe1d34d0c743c9a16f058b8613f4276bd44ee7bddc3cd062657dfe65304e7a9"
     },
     {
-      "bytes": 731918,
+      "bytes": 723782,
       "path": "street_detail.json",
-      "sha256": "62081c6e6b320eb4fb150da292f824c727cd3e2334e2fd68748dc71c0d65a8b2"
+      "sha256": "09460f67bd9d2b86c4ecb93acf5586b343db52f6436c06b42f9fe04b65ad68f4"
     },
     {
       "bytes": 4599,
@@ -1155,9 +1155,9 @@
     }
   },
   "street_detail": {
-    "bytes": 731918,
+    "bytes": 723782,
     "path": "street_detail.json",
-    "sha256": "62081c6e6b320eb4fb150da292f824c727cd3e2334e2fd68748dc71c0d65a8b2"
+    "sha256": "09460f67bd9d2b86c4ecb93acf5586b343db52f6436c06b42f9fe04b65ad68f4"
   },
   "terrain": {
     "bytes": 4599,

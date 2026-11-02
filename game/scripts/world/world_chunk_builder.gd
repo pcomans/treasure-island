@@ -43,17 +43,23 @@ const ACCEPTED_MATERIAL_RUN_TRIALS := preload("res://game/scripts/world/facades/
 const BUILDING_1_HERO_MODEL := preload("res://game/scripts/world/facades/building_1_hero_model.gd")
 const BUILDING_2_HERO_MODEL := preload("res://game/scripts/world/facades/building_2_hero_model.gd")
 const GROUND_COVER := preload("res://game/scripts/world/ground_cover.gd")
-## Street ground (tools/lib/street-ground-generation.mjs): road paint and asphalt
-## wear share one blended decal shader; parking lanes reuse the road asphalt.
-const STREET_DECAL_SHADER := preload("res://game/resources/materials/world/street/street_decal.gdshader")
-const STREET_DECAL_TEXTURES := {
-	"paint_wear": preload("res://game/resources/textures/world/street/street_paint_wear.png"),
-	"tactile": preload("res://game/resources/textures/world/street/street_tactile.png"),
-	"stop_legend": preload("res://game/resources/textures/world/street/street_stop_legend.png"),
-	"wear_atlas": preload("res://game/resources/textures/world/street/street_wear_atlas.png"),
+## Street ground (tools/lib/street-ground-generation.mjs): road paint is opaque
+## with a cut-out for worn paint, asphalt wear is a blended decal; parking lanes
+## reuse the road asphalt. Decal material key -> its shader and textures.
+const STREET_DECAL_MATERIALS := {
+	"street_marking": {
+		"shader": preload("res://game/resources/materials/world/street/street_paint.gdshader"),
+		"textures": {
+			"paint_wear": preload("res://game/resources/textures/world/street/street_paint_wear.png"),
+			"tactile": preload("res://game/resources/textures/world/street/street_tactile.png"),
+			"stop_legend": preload("res://game/resources/textures/world/street/street_stop_legend.png"),
+		},
+	},
+	"street_wear": {
+		"shader": preload("res://game/resources/materials/world/street/street_decal.gdshader"),
+		"textures": {"wear_atlas": preload("res://game/resources/textures/world/street/street_wear_atlas.png")},
+	},
 }
-## Decal material key -> [shader mode, render priority]: paint draws over wear.
-const STREET_DECAL_MATERIALS := {"street_wear": [1, 0], "street_marking": [0, 1]}
 ## Raised street-ground tops in their own generated textures, which carry the
 ## colour (no tint, so neither renderer pushes them past white): sidewalk concrete
 ## in 1.5 m poured panels with saw-cut joints (UV unit = one panel; the texture
@@ -112,7 +118,8 @@ const POLYHAVEN_TEXTURE_SETS := {
 const POLYHAVEN_MATERIAL_TEXTURE_SET := {
 	"road_path": "clean_asphalt",
 	"road_path_pedestrian": "concrete_pavement",
-	"major_area_paved": "concrete_floor_03",
+	"major_area_paved": "clean_asphalt",
+	"major_area_court": "concrete_floor_03",
 	"street_parking": "clean_asphalt",
 	"street_gutter": "concrete_floor_03",
 	"context_ybi": "sparse_grass",
@@ -726,7 +733,7 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 	elif STREET_GROUND_SURFACES.has(str(record.material_key)) and not uvs.is_empty():
 		placeholder_material = _street_ground_material(str(record.material_key))
 	elif ground_family == GROUND_COVER.PAVED:
-		placeholder_material = _material_for("major_area_paved", "major_area", false)
+		placeholder_material = _material_for("major_area_court", "major_area", false)
 	elif ground_family != "":
 		placeholder_material = GROUND_COVER.material(ground_family)
 	else:
@@ -877,17 +884,17 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 	}
 
 
-## The shared blended decal material for street paint or wear.
+## The shared material for street paint (opaque, cut out where worn) or asphalt wear (blended).
 func _street_decal_material(material_key: String) -> ShaderMaterial:
 	if _street_decal_materials.has(material_key):
 		return _street_decal_materials[material_key]
+	var decal: Dictionary = STREET_DECAL_MATERIALS[material_key]
 	var material := ShaderMaterial.new()
 	material.resource_name = material_key
-	material.shader = STREET_DECAL_SHADER
-	for parameter: String in STREET_DECAL_TEXTURES:
-		material.set_shader_parameter(parameter, STREET_DECAL_TEXTURES[parameter])
-	material.set_shader_parameter("mode", int(STREET_DECAL_MATERIALS[material_key][0]))
-	material.render_priority = int(STREET_DECAL_MATERIALS[material_key][1])
+	material.shader = decal.shader as Shader
+	var textures: Dictionary = decal.textures
+	for parameter: String in textures:
+		material.set_shader_parameter(parameter, textures[parameter])
 	_street_decal_materials[material_key] = material
 	return material
 
@@ -920,7 +927,7 @@ func _material_for(material_key: String, feature_kind: String, is_context: bool)
 	# Context remains double-sided because it is distant, non-colliding scenery.
 	if is_context:
 		material.cull_mode = BaseMaterial3D.CULL_DISABLED
-	if feature_kind == "road_path" or material_key == "street_parking":
+	if feature_kind == "road_path" or material_key in ["street_parking", "major_area_paved"]:
 		material.roughness = 1.0
 	_apply_polyhaven_textures(material, material_key)
 	_materials[cache_key] = material
@@ -949,16 +956,17 @@ func _apply_polyhaven_textures(material: StandardMaterial3D, material_key: Strin
 	material.heightmap_enabled = false
 
 
-## Paving tints multiply the Poly Haven maps. Roads and parking lanes read as the
-## photographed asphalt: neutral to slightly cool, about 38-41 % grey in the dated
-## Sep 2025 Treasure Island Road views; walks stay lighter than the asphalt.
+## Paving tints multiply the Poly Haven maps. Roads, parking lanes and parking
+## lots read as the photographed asphalt: neutral to slightly cool, about
+## 38-41 % grey in the dated Sep 2025 Treasure Island Road and Building 1 views,
+## one tone across a lot and its aisles. Walks and hard courts stay lighter.
 func _polyhaven_tint_for(material_key: String, fallback: Color) -> Color:
 	match material_key:
-		"road_path", "street_parking":
+		"road_path", "street_parking", "major_area_paved":
 			return Color(0.94, 0.95, 0.95)
 		"road_path_pedestrian":
 			return Color(1.12, 1.20, 1.28)
-		"major_area_paved":
+		"major_area_court":
 			return Color(0.70, 0.76, 0.74)
 		"street_gutter":
 			# Gutter pans: smoother, slightly darker concrete; cooled so the

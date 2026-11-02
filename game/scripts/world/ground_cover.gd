@@ -10,7 +10,8 @@ const DETAIL_ALBEDO := preload("res://game/resources/textures/world/polyhaven/sp
 const DETAIL_NORMAL := preload("res://game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_nor_gl_1k.jpg")
 const DETAIL_ROUGHNESS := preload("res://game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_rough_1k.jpg")
 
-## Hard courts reuse the builder's existing parking material.
+## Hard courts and the skate park use the builder's light concrete court
+## material (parking lots are asphalt).
 const PAVED := "paved"
 
 ## Shader mix per family. Thresholds are levels of the shader's patch noise

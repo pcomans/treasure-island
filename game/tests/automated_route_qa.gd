@@ -6,6 +6,12 @@ const WHOLE_ISLAND_ARG := "--whole-island-route"
 const EXPECTED_FERRY_SPAWN := Vector3(-104.364, 3.457, 786.024)
 const EXPECTED_FERRY_YAW := -0.119
 const WORLD_SOLID_MASK := 1
+# A checkpoint's first collision is the land, or the always-on street ground
+# built over it (tools/lib/street-ground-generation.mjs): raised sidewalk, plaza
+# and planting tops, curb ramps and the invisible ramps in front of curb faces.
+# All of it is walkable and stays within reveal height of the land, so the
+# terrain-anchor height check below still holds for it.
+const CHECKPOINT_GROUND_FEATURE_KINDS := ["land_ground", "street_kerb", "street_kerb_support"]
 const MAX_ROUTE_PHYSICS_FRAMES := 6000
 const MAX_AIRBORNE_FRAMES := 6
 const STALL_WINDOW_FRAMES := 120
@@ -371,8 +377,8 @@ func _validate_route_checkpoint(checkpoint: Dictionary, world: WorldLoader, play
 		return {"ok": false, "message": "%s has no generated ground hit." % checkpoint.id}
 	var collider := ground_hit.get("collider") as Node
 	var record := collider.get_parent() if collider != null else null
-	if record == null or str(record.get_meta("feature_kind", "")) != "land_ground":
-		return {"ok": false, "message": "%s hits non-land collision first." % checkpoint.id}
+	if record == null or str(record.get_meta("feature_kind", "")) not in CHECKPOINT_GROUND_FEATURE_KINDS:
+		return {"ok": false, "message": "%s hits non-ground collision first." % checkpoint.id}
 	if absf(float(ground_hit.position.y) - float(checkpoint.terrain_y_m)) > 0.35:
 		return {"ok": false, "message": "%s terrain elevation %.3f differs from its USGS anchor %.3f." % [checkpoint.id, ground_hit.position.y, checkpoint.terrain_y_m]}
 	var road_sources := _road_sources_at(point, road_records)

@@ -93,8 +93,9 @@ const GROUND_SCHEMA = Object.freeze({
   lines: ["bike_lane_width_m", "bus_lane_width_m", "conflict_length_m", "dash_gap_m", "dash_m", "double_gap_m", "edge_inset_m", "stall_length_m", "stall_spacing_m", "stop_bar_width_m", "stop_legend_gap_m", "stop_legend_length_m", "width_m"],
   lifts: ["gutter_m", "paint_m"],
 });
-const ZONE_GROUND_FIELDS = ["centerlines", "kerbs", "lane_markings", "parking_lanes", "parking_stalls", "planting", "plazas", "wear"];
+const ZONE_GROUND_FIELDS = ["centerlines", "kerbs", "lane_markings", "parking_lanes", "parking_stalls", "planting", "planting_behind_walk", "plazas", "wear"];
 const PARKING_LANE_FIELDS = ["reason", "source_keys", "width_m"];
+const BEHIND_WALK_FIELDS = ["reason", "source_keys"];
 const CENTERLINE_STYLES = Object.freeze(["double_yellow", "dashed_faded"]);
 const PLANTING_MODES = Object.freeze(["none", "curb_strip"]);
 const PLAZA_FIELDS = ["depth_m", "paver_tile_m", "reason", "side_point_xz", "source_keys", "walk_m"];
@@ -150,6 +151,13 @@ export function streetGroundSettings(config) {
     invariant(PLANTING_MODES.includes(settings.planting), `Street ground zone ${zone.id} planting must be ${PLANTING_MODES.join(" or ")}`);
     invariant(Array.isArray(settings.plazas), `Street ground zone ${zone.id} plazas must be a list`);
     invariant(Array.isArray(settings.parking_lanes), `Street ground zone ${zone.id} parking_lanes must be a list`);
+    invariant(Array.isArray(settings.planting_behind_walk), `Street ground zone ${zone.id} planting_behind_walk must be a list`);
+    for (const entry of settings.planting_behind_walk) {
+      exactKeys(entry, BEHIND_WALK_FIELDS, `Street ground zone ${zone.id} planting_behind_walk entry`);
+      invariant(settings.planting === "curb_strip", `Street ground zone ${zone.id} planting_behind_walk needs planting curb_strip`);
+      invariant(Array.isArray(entry.source_keys) && entry.source_keys.length > 0 && entry.source_keys.every((key) => /^w\d+$/u.test(key)), `Street ground zone ${zone.id} planting_behind_walk needs OSM sidewalk source_keys`);
+      invariant(typeof entry.reason === "string" && entry.reason.trim() !== "", `Street ground zone ${zone.id} planting_behind_walk needs a reason`);
+    }
     for (const lane of settings.parking_lanes) {
       exactKeys(lane, PARKING_LANE_FIELDS, `Street ground zone ${zone.id} parking lane`);
       invariant(Array.isArray(lane.source_keys) && lane.source_keys.length > 0 && lane.source_keys.every((key) => /^w\d+$/u.test(key)), `Street ground zone ${zone.id} parking lane needs OSM way source_keys`);
@@ -709,6 +717,8 @@ export function generateStreetGround({
   const sidewalkParts = [];
   const wideGapParts = [];
   const wideGapWalks = [];
+  // OSM sidewalks whose walk is photographed at the curb with the bed behind it.
+  const behindWalk = new Set(zoneRegions.flatMap((zone) => zone.settings.planting_behind_walk.flatMap((entry) => entry.source_keys)));
   for (const sidewalk of sidewalks) {
     const line = wayLine(sidewalk);
     const total = polylineLength(line);
@@ -735,9 +745,11 @@ export function generateStreetGround({
       const hull = convexHull([outA, outB, a, b, best.nearA.point, best.nearB.point]);
       sidewalkParts.push(walk);
       if (hull.length >= 3) sidewalkParts.push([[hull]]);
-      // Gap between the curb and the sidewalk's inner edge.
+      // Gap between the curb and the sidewalk's inner edge. Normally the bed
+      // fills it and the OSM walk stays concrete; a behind-walk sidewalk keeps
+      // the default walk at the curb and the bed takes the gap and its line.
       const gap = (best.nearA.distance + best.nearB.distance) / 2 - halfWidth(best.road) - 1;
-      if (gap >= kerb.planting_gap_m && hull.length >= 3) {
+      if (gap >= kerb.planting_gap_m && hull.length >= 3 && !behindWalk.has(sidewalk.row.source_key)) {
         wideGapParts.push([[hull]]);
         wideGapWalks.push(walk);
       }
