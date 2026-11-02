@@ -132,9 +132,19 @@ func _fill_transparent(image: Image) -> void:
 
 
 func _write_import(path: String) -> void:
-	var file := FileAccess.open(ProjectSettings.globalize_path(path) + ".import", FileAccess.WRITE)
-	file.store_string("\n".join([
-		"[remap]", "", "importer=\"texture\"", "type=\"CompressedTexture2D\"", "",
+	# Keep an existing uid so a rebake doesn't churn the import file.
+	var import_path := ProjectSettings.globalize_path(path) + ".import"
+	var uid_line := ""
+	if FileAccess.file_exists(import_path):
+		for line in FileAccess.get_file_as_string(import_path).split("\n"):
+			if line.begins_with("uid="):
+				uid_line = line
+	var header: Array[String] = ["[remap]", "", "importer=\"texture\"", "type=\"CompressedTexture2D\""]
+	if uid_line != "":
+		header.append(uid_line)
+	var file := FileAccess.open(import_path, FileAccess.WRITE)
+	file.store_string("\n".join(header + [
+		"",
 		"[deps]", "", "source_file=\"%s\"" % path, "",
 		"[params]", "",
 		"compress/mode=2", "compress/high_quality=false", "compress/lossy_quality=0.7",

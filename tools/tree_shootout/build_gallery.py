@@ -45,11 +45,12 @@ REFERENCES = {
     ],
 }
 SKETCHFAB = [
-    {"species": "palm", "role": "Variant B fan palm (first choice)", "title": "Realistic HD Mexican fan palm (10/10)", "author": "PlantCatalog", "url": "https://sketchfab.com/3d-models/realistic-hd-mexican-fan-palm-1010-1205a111ed9a4ba8a94077b58a39d10b", "faces": 185966, "note": "Washingtonia robusta, 19.9 m, 22 materials, LODs included per the model page."},
-    {"species": "palm", "role": "Alternate fan palm", "title": "Washingtonia Robusta Palm_01", "author": "André Murrugarra (andre.arq.89)", "url": "https://sketchfab.com/3d-models/washingtonia-robusta-palm-01-e59d8c7f054248fbbf32cfe4851b8911", "faces": 365774, "note": "Albedo, normal, gloss, opacity and translucency maps."},
-    {"species": "cypress", "role": "Variant B cypress stand-in (first choice)", "title": "Umbrella Pine", "author": "rhcreations", "url": "https://sketchfab.com/3d-models/umbrella-pine-0de584cdb07a408c8e411d892cb2c9a7", "faces": 13208, "note": "Not a cypress: the closest free flat-topped conifer silhouette found."},
-    {"species": "cypress", "role": "Alternate cypress stand-in", "title": "Cedar Of Lebanon", "author": "Valery.Li", "url": "https://sketchfab.com/3d-models/cedar-of-lebanon-6bf28d5c230a4dbcbc350ab7e4964a89", "faces": 206076, "note": "Not a cypress: layered, spreading conifer."},
-    {"species": "cypress", "role": "Researched, rejected", "title": "Macrocarpa tree 1, 2, 3", "author": "b_nealie", "url": "https://sketchfab.com/3d-models/macrocarpa-tree-1-49aba64f05104f40b6baf2c721463f88", "faces": 396598, "note": "Photogrammetry of the lower trunk only, no crown, so not usable as a whole tree. The real Monterey cypress models on Sketchfab (meshshape, DATEC Studio) are paid Standard-licence."},
+    {"species": "palm", "role": "Variant B fan palm (used)", "title": "Realistic HD Mexican fan palm (10/10)", "author": "PlantCatalog", "url": "https://sketchfab.com/3d-models/realistic-hd-mexican-fan-palm-1010-1205a111ed9a4ba8a94077b58a39d10b", "faces": 185966, "noai": False, "note": "Washingtonia robusta, 19.9 m, 22 materials. The GLB download holds only LOD0."},
+    {"species": "palm", "role": "Alternate fan palm (not used)", "title": "Washingtonia Robusta Palm_01", "author": "André Murrugarra (andre.arq.89)", "url": "https://sketchfab.com/3d-models/washingtonia-robusta-palm-01-e59d8c7f054248fbbf32cfe4851b8911", "faces": 365774, "noai": False, "note": "Albedo, normal, gloss, opacity and translucency maps."},
+    {"species": "palm", "role": "Researched, excluded", "title": "Realistic HD Mexican fan palm (8/10)", "author": "PlantCatalog", "url": "https://sketchfab.com/3d-models/realistic-hd-mexican-fan-palm-810-00bd2ea54eb1405bb056eac3f1e14673", "faces": 162290, "noai": True, "note": "Tagged NoAI, so not used."},
+    {"species": "cypress", "role": "Variant B cypress stand-in (used)", "title": "Umbrella Pine", "author": "rhcreations", "url": "https://sketchfab.com/3d-models/umbrella-pine-0de584cdb07a408c8e411d892cb2c9a7", "faces": 13208, "noai": False, "note": "Not a cypress: the closest free flat-topped conifer silhouette found."},
+    {"species": "cypress", "role": "Alternate cypress stand-in (not used)", "title": "Cedar Of Lebanon", "author": "Valery.Li", "url": "https://sketchfab.com/3d-models/cedar-of-lebanon-6bf28d5c230a4dbcbc350ab7e4964a89", "faces": 206076, "noai": False, "note": "Not a cypress: layered, spreading conifer."},
+    {"species": "cypress", "role": "Researched, rejected", "title": "Macrocarpa tree 1, 2, 3", "author": "b_nealie", "url": "https://sketchfab.com/3d-models/macrocarpa-tree-1-49aba64f05104f40b6baf2c721463f88", "faces": 396598, "noai": False, "note": "Photogrammetry of the lower trunk only, no crown, so not usable as a whole tree (NoAI result is for tree 1). The real Monterey cypress models on Sketchfab (meshshape, DATEC Studio) are paid Standard-licence."},
 ]
 CC_BY = "http://creativecommons.org/licenses/by/4.0/"
 
@@ -258,11 +259,11 @@ def build(args):
     trees = compat.get("perf", {}).get("trees", forward.get("perf", {}).get("trees", "?"))
     attributions = "\n".join(
         f'<li><strong>{html.escape(m["role"])}:</strong> “<a href="{html.escape(m["url"])}">{html.escape(m["title"])}</a>” by {html.escape(m["author"])}, '
-        f'licensed under <a href="{CC_BY}">CC BY 4.0</a>. Model page: {m["faces"]:,} triangles. {html.escape(m["note"])}'
+        f'licensed under <a href="{CC_BY}">CC BY 4.0</a>. Model page: {m["faces"]:,} triangles. NoAI tag: {"<strong>yes</strong>" if m["noai"] else "no"}. {html.escape(m["note"])}'
         f'<br><span class="muted">Attribution text: “{html.escape(m["title"])}” by {html.escape(m["author"])} ({html.escape(m["url"])}), CC BY 4.0 ({CC_BY}).</span></li>'
         for m in SKETCHFAB)
     b_status = (("Downloaded on 2026-11-02 through the Sketchfab API with the owner's access: “Realistic HD Mexican fan palm (10/10)” by PlantCatalog for the palm and “Umbrella Pine” by rhcreations as a <strong>stand-in</strong> for the cypress (no free whole Monterey cypress exists on Sketchfab). "
-                 "Each is scaled to variant A's tree height. For a game-ready setup its blended foliage materials are switched to alpha scissor, like A's, and the mesh is cut to a game budget with Godot's own LOD generation (coarser levels stay attached as runtime LODs). Neither has an impostor.") if has_b else
+                 "Each is scaled to variant A's tree height. For a game-ready setup its blended foliage materials are switched to alpha scissor, like A's, and the mesh is cut to a game budget with Godot's own LOD generation (coarser levels stay attached as runtime LODs). Neither has an impostor. Neither model carries a NoAI tag (checked 2026-11-02; see Attributions).") if has_b else
                 "Variant B is <strong>not downloaded yet</strong>: this machine has no Sketchfab session or token, and Sketchfab's download API requires one (it answered 401). Once the owner signs in and downloads the two models, the same driver adds B to every view with no other changes.")
     page = f"""<!doctype html>
 <html lang="en">
@@ -331,6 +332,7 @@ ul {{ padding-left: 20px; }}
 </section>
 <section id="attributions">
 <h2>Sketchfab models and attributions</h2>
+<p>NoAI check, 2026-11-02: Sketchfab lets authors tag a model “NoAI”, and its terms bar using those models as input to AI systems. I checked every model below through the public API's tag list (<code>/v3/models/{{uid}}</code>). The check came after the two used models had already been downloaded, imported and rendered (the instruction to check arrived then). Neither carries a NoAI tag, so no NoAI-tagged model was used. Fan palm 8/10 is NoAI-tagged and was never downloaded.</p>
 <ul>{attributions}</ul>
 <p class="muted">Variant A uses no third-party assets. Its textures were generated for this project and are not copies of any photograph. The reference photos on this page are private research captures and are not shipped anywhere.</p>
 </section>
