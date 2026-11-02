@@ -50,7 +50,8 @@ writes them with `Label3D` from the OSM names.
 | (1, 1) | bus stop flag (both faces) | generic bus stop flag, red band, bus pictogram, BUS STOP |
 | (2, 1) top | ALL WAY plaque under all-way stop signs | ALL WAY plaque, red letters on white |
 | (2, 1) bottom | blank name blade (border kept at the ends, the middle stretches) | blank green street name blade with a thin white border |
-| (3, 1) | plain white, for vertex-coloured parts | (filled by the packing script) |
+| (3, 1) top half | the ferry plaza information board's island map | not generated: drawn 2026-11-02 with ImageMagick from the frozen OSM data (the island outline turned to fill the panel, its streets, the ferry landing marked, a legend band of colour blocks); the drawing script is kept outside Git with the street-clutter work notes |
+| (3, 1) bottom half | plain white, for vertex-coloured parts | (filled by the packing script) |
 
 ## Street fences
 

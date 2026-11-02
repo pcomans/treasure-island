@@ -327,8 +327,8 @@ export const CAR_BODIES = Object.freeze({
   // Mid-size sedan (Camry, Accord, WRX, E-class).
   sedan: {
     length: 4.82, width: 1.83, wheelbase: 2.82, front_overhang: 0.95, wheel_radius: 0.335, tire_width: 0.225, clearance: 0.15,
-    nose: { bumper_bottom: 0.25, lean: 0.2, corner: 0.42, face_top: 0.7 },
-    tail: { bumper_bottom: 0.3, lean: 0.1, corner: 0.38, face_top: 0.98 },
+    nose: { bumper_bottom: 0.25, lean: 0.18, corner: 0.34, face_top: 0.7 },
+    tail: { bumper_bottom: 0.3, lean: 0.1, corner: 0.32, face_top: 0.98 },
     hood: [[0.0, 0.7], [0.35, 0.79], [1.0, 0.87], [1.42, 0.93]],
     belt: [[1.42, 0.93], [3.35, 1.01]],
     deck: [[3.98, 1.03], [4.55, 1.04], [4.82, 1.0]],
@@ -339,8 +339,8 @@ export const CAR_BODIES = Object.freeze({
   // EV fastback sedan (Tesla Model 3 class): short nose, no grille, long glass roof.
   fastback: {
     length: 4.72, width: 1.85, wheelbase: 2.88, front_overhang: 0.85, wheel_radius: 0.34, tire_width: 0.235, clearance: 0.14,
-    nose: { bumper_bottom: 0.24, lean: 0.24, corner: 0.45, face_top: 0.66 },
-    tail: { bumper_bottom: 0.3, lean: 0.08, corner: 0.4, face_top: 0.98 },
+    nose: { bumper_bottom: 0.24, lean: 0.22, corner: 0.38, face_top: 0.66 },
+    tail: { bumper_bottom: 0.3, lean: 0.08, corner: 0.34, face_top: 0.98 },
     hood: [[0.0, 0.66], [0.3, 0.75], [0.8, 0.83], [1.22, 0.89]],
     belt: [[1.22, 0.89], [3.4, 0.99]],
     deck: [[4.3, 1.02], [4.55, 1.03], [4.72, 0.99]],
@@ -351,8 +351,8 @@ export const CAR_BODIES = Object.freeze({
   // Hatchback (Civic hatch, Golf, Elantra GT).
   hatchback: {
     length: 4.38, width: 1.79, wheelbase: 2.68, front_overhang: 0.9, wheel_radius: 0.32, tire_width: 0.215, clearance: 0.15,
-    nose: { bumper_bottom: 0.26, lean: 0.2, corner: 0.42, face_top: 0.72 },
-    tail: { bumper_bottom: 0.32, lean: 0.06, corner: 0.36, face_top: 1.0 },
+    nose: { bumper_bottom: 0.26, lean: 0.18, corner: 0.35, face_top: 0.72 },
+    tail: { bumper_bottom: 0.32, lean: 0.06, corner: 0.32, face_top: 1.0 },
     hood: [[0.0, 0.72], [0.35, 0.8], [0.95, 0.88], [1.36, 0.94]],
     belt: [[1.36, 0.94], [3.6, 1.02], [4.3, 1.01]],
     deck: [[4.3, 1.01], [4.38, 0.99]],
@@ -416,6 +416,21 @@ const LODS = Object.freeze([
   { arch: 7, mid: 0.6, corner: 4, face: [0, 0.18, 0.42, 0.62, 0.8, 1], glass: [4, 3], sides: 14, spokes: true, mirrors: true },
   { arch: 3, mid: 1.3, corner: 2, face: [0, 0.55, 1], glass: [2, 2], sides: 8, spokes: false, mirrors: false },
 ]);
+
+// Door seams along the side, from the cabin layout: the front door's front edge
+// behind the windshield base, the B pillar, and the rear door's rear edge (or a
+// pickup's cab back, a van's sliding door).
+const SEAM_HALF_M = 0.006;
+function doorSeams(body) {
+  const cab = body.cabin;
+  const seams = [cab.windshield_base + 0.07];
+  if (body.pillars.b) seams.push(body.pillars.b);
+  if (body.pillars.cargo_from) seams.push(body.pillars.cargo_from + 1.25);
+  else if (body.bed) seams.push(cab.rear_base - 0.08);
+  else if (body.pillars.c) seams.push(body.pillars.c - 0.04);
+  else seams.push(cab.roof_end + 0.08);
+  return seams;
+}
 
 // The tub: the body below the glasshouse, a loft from nose to tail.
 // Ring (one side, bottom centre to top centre):
@@ -506,6 +521,10 @@ function buildCar(name, lodIndex) {
     for (let i = 0; i < lod.arch; i += 1) middle.push(axle - archRadius + (2 * archRadius * (i + 0.5)) / lod.arch);
   }
   const cab = body.cabin;
+  // Door seams (near detail only): thin dark strips down the side from the
+  // shoulder to the rocker, at the door edges.
+  const seams = lodIndex === 0 ? doorSeams(body) : [];
+  for (const seam of seams) middle.push(seam - SEAM_HALF_M, seam + SEAM_HALF_M);
   const span0 = body.nose.corner + 0.05;
   const span1 = L - body.tail.corner - 0.05;
   for (let z = span0; z < span1; z += lod.mid) middle.push(z);
@@ -582,6 +601,7 @@ function buildCar(name, lodIndex) {
     // Corners: lamps wrap a little around the sides.
     if (j === 4 && end > 0.35) return front ? PART.head_lamp : PART.tail_lamp;
     if (body.cladding > 0 && (j === 2 || (inArch && j === 3))) return PART.trim;
+    if (j >= 2 && j <= 5 && seams.some((seam) => Math.abs(zf - seam) < SEAM_HALF_M * 1.5)) return PART.trim;
     return PART.paint;
   };
   const tubAo = (k, j) => (j <= 1 ? 0.35 : j === 2 ? 0.7 : j === 3 ? 0.88 : 1);
@@ -627,8 +647,10 @@ function buildCar(name, lodIndex) {
     const roofHalf = Math.min(bottomHalf, hw - cab.tumblehome);
     const g = (x, y) => v3(x, y, zOf(zf));
     // Collapse cleanly where the glasshouse has no height.
+    const seal = Math.min(0.025, H * 0.2);
     return [
       g(bottomHalf, belt),
+      g(lerp(bottomHalf, roofHalf, seal / Math.max(H, 1e-6)), belt + seal),
       g(lerp(bottomHalf, roofHalf, 0.45) + 0.012 * Math.min(1, H / 0.3), belt + H * 0.45),
       g(roofHalf + 0.004, belt + Math.max(0, H - 0.05)),
       g(Math.max(0, roofHalf - 0.07), belt + Math.max(0, H - 0.006)),
@@ -650,6 +672,9 @@ function buildCar(name, lodIndex) {
     const zf = (glassZ[k] + glassZ[k + 1]) / 2;
     const windshield = zf < cab.windshield_top;
     const rear = zf > cab.roof_end;
+    // The black seal along the bottom of the side glass.
+    if (j === 0) return windshield && zf < cab.windshield_base + 0.12 ? PART.paint : PART.trim;
+    j -= 1;
     if (j <= 1) {
       // Side glass, the pillars in body colour or black.
       if (windshield) return zf > cab.windshield_base + 0.12 ? PART.glass : PART.paint;
@@ -722,15 +747,26 @@ function buildCar(name, lodIndex) {
 
   // --- Mirrors, roof rails, bed.
   if (lod.mirrors) {
-    const zf = cab.windshield_base + 0.2;
+    const zf = cab.windshield_base + 0.3;
     const belt = fns.top(zf);
     for (const side of [1, -1]) {
       const hw = fns.halfWidth(zf);
       // Housing on a short stalk at the front corner of the side glass; its
       // back (toward the rear) is the mirror glass.
-      const inner = hw * 0.91;
-      const outer = hw + 0.17;
-      out.box(v3(side * ((inner + outer) / 2), belt + 0.075, zOf(zf)), [(outer - inner) / 2, 0.06, 0.045], (face) => (face === "+z" ? PART.glass : PART.paint));
+      const inner = hw * 0.9;
+      const outer = hw + 0.14;
+      out.box(v3(side * ((inner + outer) / 2), belt + 0.07, zOf(zf)), [(outer - inner) / 2, 0.052, 0.04], (face) => (face === "+z" ? PART.glass : PART.paint));
+      out.box(v3(side * (hw * 0.93), belt + 0.015, zOf(zf + 0.02)), [hw * 0.03 + 0.02, 0.02, 0.05], PART.trim);
+    }
+  }
+  if (lodIndex === 0) {
+    // Door handles: short dark bars near the rear edge of each door.
+    const seams2 = doorSeams(body);
+    for (let i = 1; i < seams2.length; i += 1) {
+      const zf = seams2[i] - 0.24;
+      const y = fns.top(zf) - 0.1;
+      const hw = fns.halfWidth(zf);
+      for (const side of [1, -1]) out.box(v3(side * (hw + 0.004), y, zOf(zf)), [0.012, 0.016, 0.07], PART.trim);
     }
   }
   if (body.roof_rails) {

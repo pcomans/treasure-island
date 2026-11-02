@@ -3,10 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
+uid="uid://dwnqrqof382s4"
+path="res://.godot/imported/street_clutter_kit.glb-fcc7d5a33342cff3b29ebbda1be63e11.scn"
 
 [deps]
 
 source_file="res://game/resources/models/street/street_clutter_kit.glb"
+dest_files=["res://.godot/imported/street_clutter_kit.glb-fcc7d5a33342cff3b29ebbda1be63e11.scn"]
 
 [params]
 

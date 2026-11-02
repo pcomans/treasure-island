@@ -47,7 +47,14 @@ func build(document: Dictionary) -> Dictionary:
 		var surface: Dictionary = row.get("surface", {})
 		var yaw_value: Variant = row.get("yaw_radians", null)
 		var yaw := float(yaw_value) if yaw_value is float or yaw_value is int else 0.0
-		var placement := Transform3D(Basis(Vector3.UP, yaw), Vector3(float(position[0]), float(position[1]) + float(surface.get("bias_m", 0.0)), float(position[2])))
+		var basis := Basis(Vector3.UP, yaw)
+		var lift := 0.0
+		var tilt: Dictionary = params if params is Dictionary else {}
+		if prop == "parked_car":
+			# A car settles on its four wheels: pitch raises its nose, roll its left side.
+			basis = basis * Basis(Vector3.RIGHT, float(tilt.get("pitch", 0.0))) * Basis(Vector3.BACK, -float(tilt.get("roll", 0.0)))
+			lift = float(tilt.get("lift", 0.0))
+		var placement := Transform3D(basis, Vector3(float(position[0]), float(position[1]) + float(surface.get("bias_m", 0.0)) + lift, float(position[2])))
 		var key := str(parts.mesh_key)
 		if not batches.has(key):
 			batches[key] = {"meshes": parts.meshes, "range_m": float(parts.range_m), "shadow": bool(parts.shadow), "cells": {}}
