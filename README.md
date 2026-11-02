@@ -27,6 +27,8 @@ Creating the container installs Godot 4.7.2 and its export templates (in the
 dependencies (`.devcontainer/post-create.sh`). Log in to Codex with
 `codex login --device-auth`.
 
+Container starts delete `/tmp` content unused for 7 days (`tools/clean-tmp.sh`).
+
 Always start Godot through `tools/godot`. It picks the project's Godot and, for
 anything that renders, a headless display on the GPU:
 
