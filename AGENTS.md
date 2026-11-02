@@ -124,7 +124,7 @@ All development and checks run in the Linux devcontainer (`.devcontainer/`) on t
 - Time setting: broadly present day as represented by that latest OSM snapshot. Do not reconcile it against a separate 2026 ground-truth inventory or reject it because reality may differ.
 - Current first-playable actions: third-person walking, running, an unlimited hold-to-rise jetpack on `Space` with slow descent when released, and placing one predefined spray-tag decal on eligible building surfaces in the spirit of Half-Life 1's spray interaction. Spray is disabled in the web build for now (owner, 2026-10-29).
 - Current play targets: the owner's MacBook Pro with Apple M1 Pro (10-core CPU, 32 GB memory), using mouse and keyboard, and, since 2026-10-29, the web build in a browser with mouse and keyboard or touch controls. The web build is deployed at the public URL https://treasure-island-five.vercel.app, which the owner accepted; it is a free hobby-tier Vercel project. Development happens on Linux; see [Development environment](#development-environment).
-- Current traversal rule: do not research or reproduce real fenced/private access. Outdoor space in the frozen OSM snapshot is generally traversable unless a clear gameplay or world boundary is approved later.
+- Current traversal rule (owner, 2026-11-02): Fences from OpenStreetMap and photo-based rules are solid and block walking; the jetpack clears them; gates and places where a road or path crosses a fence stay open. Other outdoor space in the frozen OSM snapshot stays generally traversable unless a clear gameplay or world boundary is approved later.
 - Current visual baseline: simple exterior building massing is acceptable across the complete snapshot inventory. The ground is no longer a flat baseline: use a modest USGS-derived terrain mesh, keep OSM horizontal geometry complete, drape roads/areas, level building bases to sampled terrain, and preserve traversability.
 - Deferred feature: drivable cars with arcade-acceptable handling remain part of the eventual idea but are not a current first-playable requirement.
 - Horizon context: San Francisco appears as non-playable billboard background scenery. Yerba Buena Island uses the approved USGS-derived terrain clipped to its OSM shoreline and remains non-colliding/non-playable. The modern eastern Bay Bridge span retains simple non-playable polygonal scenery with a readable light-concrete treatment, and the western span uses the non-colliding CC BY `Baybridge-western-span` model by cdr420.
@@ -189,6 +189,18 @@ blank service-wall exception. If the side cannot be observed after bounded
 attempts, disclose that limit/inference; neither the flag nor an attractive east
 facade alone decides whole-building acceptance.
 
+## Street detail and vegetation
+
+Owner, 2026-11-01/02: buildings are good enough for now. The next quality work is street detail: roads and ground (curbs, markings, wear), street furniture, fences, clutter and debris, and vegetation. Place it mostly procedurally, in three layers; don't hand-place most items:
+
+1. OSM data-placed items.
+2. Zone scatter driven by `tools/config/street-detail-zones.json`.
+3. A small intentional set-piece list, `data/street_detail/set_pieces.json`, where each entry has a reason and a dated reference.
+
+Plants and items must be evidenced as present on Treasure Island; only "observed" species are placed. The existing low-poly vegetation is a placeholder to be replaced, not a quality reference.
+
+The placed layers (vegetation, furniture, fences, clutter) can be switched off for building work with `--street-detail`; ground surfaces stay on. See the [README](README.md#check-a-building) and [game/tests/README.md](game/tests/README.md) for the switches and their defaults.
+
 ## Authoring
 
 For bounded mechanics drivers, preserve each case’s HOLD and the aggregate HOLD. Continue unrelated cases only after recording supported, stopped, input-released rest while the stock controller is still active, then verifying a safe disabled final state; stock disable zeroes velocity, so post-disable zero alone is not rest proof. Source, identity, controller, setup, recovery or unsafe-final failures stop execution; skip cases dependent on a failed prerequisite. Reuse completed unchanged cases instead of replaying them solely for bookkeeping.
@@ -197,7 +209,7 @@ Before any new building implementation, apply the [existing-asset comparison and
 
 Keep added detail within the owner's M1 Pro budget through shared kits, level of detail and texture/material reuse. When a level transition adds island-wide detail, note frame time from an ordinary gameplay capture in the task note. Ask the owner for a [Mac build](#mac-builds) only when the result is material; add no performance framework.
 
-Assign one named art owner for a bounded whole-building or verified-family study: target/source paths, dated real-world references, protected regions and systems, allowed edits, proven render driver, finite engine/iteration budget and stop conditions. Within those bounds the author owns research, composition, implementation and self-inspection; these are functions, not mandatory separate handoffs. Reference-supported roof/silhouette, geometry, materials and immediate setting may change together while preserving frozen OSM identities/footprints, protected regions, stock controls and gameplay integrity. Texture-only restrictions apply only to texture assignments. Bespoke tree modeling is deferred to a future vegetation-asset pass: do not require custom trees in building studies or reject a study solely because trees are absent. Existing world vegetation may remain, and simple ground treatment is allowed; judge the architecture and materials on their own merits. Judge whether the result is believable and recognizable against the real world; sensible game-art inference need not reproduce it one-to-one.
+Assign one named art owner for a bounded whole-building or verified-family study: target/source paths, dated real-world references, protected regions and systems, allowed edits, proven render driver, finite engine/iteration budget and stop conditions. Within those bounds the author owns research, composition, implementation and self-inspection; these are functions, not mandatory separate handoffs. Reference-supported roof/silhouette, geometry, materials and immediate setting may change together while preserving frozen OSM identities/footprints, protected regions, stock controls and gameplay integrity. Texture-only restrictions apply only to texture assignments. Building studies don't require trees: do not reject a study solely because trees are absent, and judge it with the placed street-detail layers off. Vegetation is no longer deferred; it belongs to the [street-detail work](#street-detail-and-vegetation). Simple ground treatment is allowed; judge the architecture and materials on their own merits. Judge whether the result is believable and recognizable against the real world; sensible game-art inference need not reproduce it one-to-one.
 
 The ordinary iteration loop is **edit assets/code -> run or reload the source project -> capture and inspect the actual render early**. The first coherent actual-world render precedes completed independent review: perform focused identity, containment, local contact and execution-safety preflight, then inspect pixels. Independent technical review concentrates on changed risk seams and reuses applicable unchanged evidence; the checks in [What done means for a building](#what-done-means-for-a-building) remain required before promotion. Use the approved gameplay camera and matched reference/baseline views where applicable. Bring the first coherent study to the independent visual reviewer before extended refinement. Run focused source and mechanical checks for the change; visible stairs require actual stock-player walking attempts up and down each flight, with contact, grounding and destination evidence. Jetpack access or static floor contact alone does not establish stair walkability. Preserve the approved walk/run/jetpack/camera/spray controls.
 
@@ -207,7 +219,7 @@ Before committing, run the whitespace check (`git diff --check`, plus the same c
 
 ### Tests
 
-`tools/test.sh` runs every test: a junk check on new files (no screenshots, videos, builds, logs, reference photos or files over 5 MB outside `game/resources/` and `generated/`), the behaviour tests, the whole-island check of every scored building (on both the world generated at startup and the baked world desktop exports ship), and the world-generator determinism check. It must pass before anything is pushed to `main`; fix the cause of a failure, never weaken or skip a test to make it pass.
+`tools/test.sh` runs every test: a junk check on new files (no screenshots, videos, builds, logs, reference photos or files over 5 MB outside `game/resources/` and `generated/`), the behaviour tests, the whole-island check of every scored building (on both the world generated at startup and the baked world desktop exports ship), the world-generator determinism check and the street-detail clearance check. It must pass before anything is pushed to `main`; fix the cause of a failure, never weaken or skip a test to make it pass.
 
 Tests check behaviour: the game loads and plays, a building is solid and fits, generated data is valid. Never write a test or runtime check that compares file checksums, pins byte-identical source or evidence files, or asserts snapshot counts (triangles, meshes, records) that change whenever the world legitimately changes. Git already records what changed. One deliberate exception: `game/scripts/world/generated_world_contract.gd` checks the generated world against the manifest the generator writes with it, so regenerate them together with `tools/build_godot_world.mjs`; the determinism check in `tools/test.sh` confirms they match the sources.
 
@@ -220,6 +232,16 @@ What matters: the building looks good, it fits into the island, and the island a
 3. **Independent review:** the mandatory [study scope/progress decision](#architectural-study-scope-and-progress-review) must be PASS. The independent code reviewer ([ti-code-review](.claude/agents/ti-code-review.md), reading the diff for sloppy or risky code and shared-code damage) and the independent visual bar-raiser (neither of them the author) must also pass the change. The visual reviewer compares the close-ups with dated real-world references, judges the in-context views for fit with neighbours, ground and scale, and compares the before/after island overviews.
 
 Then mark the building accepted in `discovery/facades/facade-recognition-catalog.json`: set its `claim_status.reference_recognizable` to `accepted` and add an `acceptance_records` entry naming the review (`review_id`, `review_kind`, `status`). The score is the number of accepted buildings; `island_test.gd` checks each one loads and fits. Run `tools/test.sh` and merge. Record each building's verdicts in the ordinary task note or commit message. Do not create acceptance packets, image-tree digests, package receipts, candidate or exact-current exports, release-closure or publication records, or new per-building evidence-check scripts. Preserve the 213-unit inventory, previously accepted credit, protected scope and reference privacy. Several ready buildings may be merged together, each with its own verdicts.
+
+### What done means for a street-detail area
+
+A street-detail area is done and merged to `main` when all of these pass:
+
+1. **Tests:** `tools/test.sh` passes, including the world-generator determinism check, the manifest and street-detail clearance checks, and the island test with the layers on; `building_fit_test.gd`, which runs with them off, passes for the buildings in the area.
+2. **Screenshots and frame rate:** before/after island overviews and in-context views of the area, each with the layers on and off (`building_shots.gd --street-detail both`), plus a frame-rate reading at spawn in the web build (or the Compatibility renderer) before and after.
+3. **Independent review:** the independent code reviewer and an independent visual reviewer (neither of them the author) pass the change. The visual reviewer compares each new item type and species with dated Treasure Island photos.
+
+Do not create new per-area evidence scripts or packets.
 
 ### Mac builds
 
@@ -337,4 +359,4 @@ Be concrete and candid. Record process lessons, not praise. Never include creden
 
 ## Owner resumption
 
-The owner explicitly resumed improving the buildings identified by the 34-building audit. Keep building work going until the owner says otherwise; when a decision genuinely needs the owner, stop that work and ask (see [HUMAN.md](HUMAN.md)). Surface meaningful milestones, stalls, failures or needed decisions; keep routine progress quiet.
+The owner explicitly resumed improving the buildings identified by the 34-building audit; on 2026-11-02 the owner judged the buildings good enough for now and made [street detail](#street-detail-and-vegetation) the next quality work. Keep that work going until the owner says otherwise; when a decision genuinely needs the owner, stop that work and ask (see [HUMAN.md](HUMAN.md)). Surface meaningful milestones, stalls, failures or needed decisions; keep routine progress quiet.
