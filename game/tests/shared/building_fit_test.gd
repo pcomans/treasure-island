@@ -30,6 +30,8 @@ extends SceneTree
 ## active floor contact during traversal without changing settle/support rules.
 ## Optional route return_from_arrival:true returns from the reached pose (like
 ## stairs), requiring ordinary ground at initial settle and final return.
+## Optional route reach_m (15-40, default 15): how far beyond the building's box
+## the route's ends may lie, for street ground near it (curbs, crossings).
 ## Optional --spray FILE: {"source":"KEY", "player_xz":[x,z], "target_xyz":[x,y,z]}.
 ## Optional --adjacent-source KEY: complete recorded nonreceiver roof/support
 ## mesh-to-native coverage for a neighboring POI, before ordinary building checks.

@@ -29,7 +29,7 @@ const FAMILIES := {
 ## buildings and the Yerba Buena context keep their existing materials.
 const FAMILY_BY_MATERIAL_KEY := {
 	"land_ground": "field",
-	# Planted strips and back slopes of the raised street ground match the land.
+	# Back slopes of the raised street ground match the land (planting strips are mulch).
 	"street_kerb_verge": "field",
 	"major_area_landuse": "residential",
 	"major_area_leisure": "lawn",

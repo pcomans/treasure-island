@@ -79,9 +79,12 @@ const NAIP_TREE_ANNOTATIONS_PATH = resolve(
 // collision and spray opacity. Every record holds one chunk's share of a layer.
 const STREET_GROUND_RECORDS = Object.freeze({
   "street-kerb": ["street_kerb", "street_kerb_concrete", "world_solid", true],
+  "street-planting": ["street_kerb", "street_kerb_planting", "world_solid", true],
+  "street-plaza": ["street_kerb", "street_plaza_pavers", "world_solid", true],
   "street-verge": ["street_kerb", "street_kerb_verge", "world_solid", true],
   "street-ramp": ["street_kerb_support", "street_kerb_support", "world_solid", false],
   "street-gutter": ["street_paint", "street_gutter", "none", false],
+  "street-parking": ["street_paint", "street_parking", "none", false],
   "street-marking": ["street_paint", "street_marking", "none", false],
   "street-wear": ["street_paint", "street_wear", "none", false],
 });

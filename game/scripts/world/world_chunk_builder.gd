@@ -44,7 +44,7 @@ const BUILDING_1_HERO_MODEL := preload("res://game/scripts/world/facades/buildin
 const BUILDING_2_HERO_MODEL := preload("res://game/scripts/world/facades/building_2_hero_model.gd")
 const GROUND_COVER := preload("res://game/scripts/world/ground_cover.gd")
 ## Street ground (tools/lib/street-ground-generation.mjs): road paint and asphalt
-## wear share one blended decal shader; kerbs reuse the Poly Haven concrete.
+## wear share one blended decal shader; parking lanes reuse the road asphalt.
 const STREET_DECAL_SHADER := preload("res://game/resources/materials/world/street/street_decal.gdshader")
 const STREET_DECAL_TEXTURES := {
 	"paint_wear": preload("res://game/resources/textures/world/street/street_paint_wear.png"),
@@ -54,6 +54,16 @@ const STREET_DECAL_TEXTURES := {
 }
 ## Decal material key -> [shader mode, render priority]: paint draws over wear.
 const STREET_DECAL_MATERIALS := {"street_wear": [1, 0], "street_marking": [0, 1]}
+## Raised street-ground tops in their own generated textures, which carry the
+## colour (no tint, so neither renderer pushes them past white): sidewalk concrete
+## in 1.5 m poured panels with saw-cut joints (UV unit = one panel; the texture
+## holds two by two), mulch in planting strips (2 m tiles) and banded plaza
+## pavers (UV unit = one texture).
+const STREET_GROUND_SURFACES := {
+	"street_kerb_concrete": {"albedo": preload("res://game/resources/textures/world/street/street_concrete_panels.png"), "uv_scale": 0.5, "roughness": 0.9},
+	"street_kerb_planting": {"albedo": preload("res://game/resources/textures/world/street/street_mulch.png"), "uv_scale": 1.0, "roughness": 1.0},
+	"street_plaza_pavers": {"albedo": preload("res://game/resources/textures/world/street/street_plaza_pavers.png"), "uv_scale": 1.0, "roughness": 0.85},
+}
 const POLYHAVEN_TEXTURE_SETS := {
 	"clean_asphalt": {
 		"albedo": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"),
@@ -103,7 +113,7 @@ const POLYHAVEN_MATERIAL_TEXTURE_SET := {
 	"road_path": "clean_asphalt",
 	"road_path_pedestrian": "concrete_pavement",
 	"major_area_paved": "concrete_floor_03",
-	"street_kerb_concrete": "concrete_pavement",
+	"street_parking": "clean_asphalt",
 	"street_gutter": "concrete_floor_03",
 	"context_ybi": "sparse_grass",
 	"building_wall": "plaster_grey_04",
@@ -114,6 +124,7 @@ const POLYHAVEN_MATERIAL_TEXTURE_SET := {
 
 var _materials: Dictionary = {}
 var _street_decal_materials: Dictionary = {}
+var _street_ground_materials: Dictionary = {}
 var _generic_roof_material: StandardMaterial3D
 
 
@@ -712,6 +723,8 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 	var placeholder_material: Material
 	if STREET_DECAL_MATERIALS.has(str(record.material_key)):
 		placeholder_material = _street_decal_material(str(record.material_key))
+	elif STREET_GROUND_SURFACES.has(str(record.material_key)) and not uvs.is_empty():
+		placeholder_material = _street_ground_material(str(record.material_key))
 	elif ground_family == GROUND_COVER.PAVED:
 		placeholder_material = _material_for("major_area_paved", "major_area", false)
 	elif ground_family != "":
@@ -879,6 +892,23 @@ func _street_decal_material(material_key: String) -> ShaderMaterial:
 	return material
 
 
+## The shared material for a raised street-ground top: its generated texture, untinted.
+func _street_ground_material(material_key: String) -> StandardMaterial3D:
+	if _street_ground_materials.has(material_key):
+		return _street_ground_materials[material_key]
+	var surface: Dictionary = STREET_GROUND_SURFACES[material_key]
+	var material := StandardMaterial3D.new()
+	material.resource_name = material_key
+	material.albedo_texture = surface.albedo as Texture2D
+	material.roughness = float(surface.roughness)
+	var uv_scale := float(surface.uv_scale)
+	material.uv1_scale = Vector3(uv_scale, uv_scale, 1.0)
+	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+	material.set_flag(BaseMaterial3D.FLAG_USE_TEXTURE_REPEAT, true)
+	_street_ground_materials[material_key] = material
+	return material
+
+
 func _material_for(material_key: String, feature_kind: String, is_context: bool) -> StandardMaterial3D:
 	var cache_key := "%s|%s|%s" % [material_key, feature_kind, is_context]
 	if _materials.has(cache_key):
@@ -890,7 +920,7 @@ func _material_for(material_key: String, feature_kind: String, is_context: bool)
 	# Context remains double-sided because it is distant, non-colliding scenery.
 	if is_context:
 		material.cull_mode = BaseMaterial3D.CULL_DISABLED
-	if feature_kind == "road_path":
+	if feature_kind == "road_path" or material_key == "street_parking":
 		material.roughness = 1.0
 	_apply_polyhaven_textures(material, material_key)
 	_materials[cache_key] = material
@@ -924,16 +954,12 @@ func _apply_polyhaven_textures(material: StandardMaterial3D, material_key: Strin
 ## walks stay lighter than the asphalt, as in the dated photos.
 func _polyhaven_tint_for(material_key: String, fallback: Color) -> Color:
 	match material_key:
-		"road_path":
+		"road_path", "street_parking":
 			return Color(1.18, 1.12, 0.97)
 		"road_path_pedestrian":
 			return Color(1.12, 1.20, 1.28)
 		"major_area_paved":
 			return Color(0.70, 0.76, 0.74)
-		"street_kerb_concrete":
-			# Sidewalks and curbs: light neutral concrete, a step lighter than the
-			# pedestrian skin (dated Sep 2025 photos).
-			return Color(1.18, 1.24, 1.30)
 		"street_gutter":
 			# Gutter pans: smoother, slightly darker concrete; cooled so the
 			# warm source map does not read pink beside the asphalt.

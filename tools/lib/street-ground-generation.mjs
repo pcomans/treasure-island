@@ -12,12 +12,17 @@
 // so a piece clipped to one land triangle stays planar.
 //
 // Records, one of each per chunk the pilot touches:
-//   street-kerb   street_kerb          raised sidewalk tops, curb faces, curb
-//                                      ramps and paved back slopes; solid
-//   street-verge  street_kerb          planted back slopes behind sidewalks; solid
+//   street-kerb   street_kerb          concrete sidewalk tops (road-aligned
+//                                      panels), curb faces, curb ramps and paved
+//                                      back slopes; solid
+//   street-planting street_kerb        raised mulch planting strips; solid
+//   street-plaza  street_kerb          banded plaza paving; solid
+//   street-verge  street_kerb          grassed back slopes behind sidewalks; solid
 //   street-ramp   street_kerb_support  invisible ramps in front of every curb
 //                                      face, so the stock player (no step-up)
 //                                      walks on and off a kerb; solid
+//   street-parking street_paint        asphalt parking lanes beyond the frozen
+//                                      road ribbon, up to the moved curb; visual only
 //   street-gutter street_paint         concrete gutter pans; visual only
 //   street-wear   street_paint         cracks, patches, stains, manholes, drains
 //   street-marking street_paint        road paint, crosswalks, stop bars, stalls,
@@ -45,15 +50,18 @@ export const STREET_GROUND_FEATURE_KINDS = Object.freeze(["street_kerb", "street
 // Record kinds in emission order: [object key prefix, feature kind, material, collision, opaque].
 const RECORD_KINDS = Object.freeze({
   kerb: ["street-kerb", "street_kerb", "street_kerb_concrete", "world_solid", true],
+  planting: ["street-planting", "street_kerb", "street_kerb_planting", "world_solid", true],
+  plaza: ["street-plaza", "street_kerb", "street_plaza_pavers", "world_solid", true],
   verge: ["street-verge", "street_kerb", "street_kerb_verge", "world_solid", true],
   ramp: ["street-ramp", "street_kerb_support", "street_kerb_support", "world_solid", false],
+  parking: ["street-parking", "street_paint", "street_parking", "none", false],
   gutter: ["street-gutter", "street_paint", "street_gutter", "none", false],
   wear: ["street-wear", "street_paint", "street_wear", "none", false],
   marking: ["street-marking", "street_paint", "street_marking", "none", false],
 });
 // Paint kinds (street-marking UV.x integer part) and wear atlas cells
 // (street-wear UV.x integer part); the shader reads the same numbers.
-export const STREET_PAINT_KINDS = Object.freeze({ white: 0, yellow: 1, red: 2, green: 3, tactile: 4, stop_legend: 5 });
+export const STREET_PAINT_KINDS = Object.freeze({ white: 0, yellow: 1, red: 2, green: 3, tactile: 4, stop_legend: 5, yellow_faded: 6 });
 export const STREET_WEAR_CELLS = Object.freeze({ crack_a: 0, crack_b: 1, oil_a: 2, oil_b: 3, patch: 4, manhole: 5, drain: 6 });
 // The deepest any street-ground vertex may sit above the land under it (m);
 // validators reuse it.
@@ -64,15 +72,32 @@ const ROAD_TOP_M = ROAD_SURFACE_BIASES_M.base;
 const SKIRT_FOOT_M = -0.01;
 const MINIMUM_TRIANGLE_AREA_M2 = 1e-6;
 const EDGE_MERGE_M = 0.01;
+// Parking strips start this far inside the frozen carriageway (and are then cut
+// back to it), so where a ribbon bends their inner edge leaves no gap.
+const CARRIAGEWAY_OVERLAP_M = 0.5;
+// Plaza paving (tapered strip ends) and parking-lot tips narrower than twice
+// these are dropped.
+const PLAZA_OPENING_M = 1.5;
+const LOT_OPENING_M = 1.5;
+// boundaryBand merges ring vertices closer than this.
+const BAND_VERTEX_MERGE_M = 0.05;
+// Concrete kept beyond the top of a curb ramp before any mulch bed.
+const RAMP_LANDING_M = 1.5;
+// Road classes in order of which owns the sidewalk panel frame where reaches overlap.
+const FRAME_ROAD_RANK = Object.freeze(["trunk", "primary", "secondary", "tertiary", "unclassified", "residential", "service"]);
 const SAFE_ID = /^[a-z0-9_]+$/u;
 
 const GROUND_SCHEMA = Object.freeze({
-  kerb: ["back_slope_run_m", "building_clearance_m", "flare_run_m", "gutter_width_m", "minimum_width_m", "reveal_m", "sidewalk_reach_m", "sidewalk_width_m", "support_run_m"],
+  kerb: ["back_slope_run_m", "building_clearance_m", "closing_m", "flare_run_m", "gutter_width_m", "minimum_width_m", "panel_m", "planting_gap_m", "reveal_m", "sidewalk_reach_m", "sidewalk_width_m", "support_run_m"],
   crossings: ["bar_gap_m", "bar_width_m", "ramp_depth_m", "ramp_width_m", "tactile_depth_m", "walk_width_m"],
-  lines: ["bike_lane_width_m", "bus_lane_width_m", "conflict_length_m", "double_gap_m", "edge_inset_m", "stall_length_m", "stall_spacing_m", "stop_bar_width_m", "stop_legend_gap_m", "stop_legend_length_m", "width_m"],
+  lines: ["bike_lane_width_m", "bus_lane_width_m", "conflict_length_m", "dash_gap_m", "dash_m", "double_gap_m", "edge_inset_m", "stall_length_m", "stall_spacing_m", "stop_bar_width_m", "stop_legend_gap_m", "stop_legend_length_m", "width_m"],
   lifts: ["gutter_m", "paint_m"],
 });
-const ZONE_GROUND_FIELDS = ["centerline_highways", "kerbs", "lane_markings", "parking_stalls", "wear"];
+const ZONE_GROUND_FIELDS = ["centerlines", "kerbs", "lane_markings", "parking_lanes", "parking_stalls", "planting", "plazas", "wear"];
+const PARKING_LANE_FIELDS = ["reason", "source_keys", "width_m"];
+const CENTERLINE_STYLES = Object.freeze(["double_yellow", "dashed_faded"]);
+const PLANTING_MODES = Object.freeze(["none", "curb_strip"]);
+const PLAZA_FIELDS = ["depth_m", "paver_tile_m", "reason", "side_point_xz", "source_keys", "walk_m"];
 const WEAR_FIELDS = ["crack_per_100m2", "drain_spacing_m", "manhole_spacing_m", "oil_per_100m2", "patch_per_100m2"];
 
 function isFiniteNumber(value) {
@@ -108,6 +133,7 @@ export function streetGroundSettings(config) {
   invariant(crossings.ramp_width_m > 2 * kerb.flare_run_m, "Curb ramps must be wider than their two flares");
   invariant(lifts.paint_m > lifts.gutter_m && lifts.gutter_m > 0, "Paint must sit above the gutter, which sits above the road");
   invariant(lines.width_m > 0 && lines.stall_spacing_m > lines.width_m && crossings.bar_width_m > 0, "Line widths must be positive");
+  invariant(lines.dash_m > 0 && lines.dash_gap_m > 0 && kerb.panel_m > 0 && kerb.closing_m >= 0, "Dashes, panels and gap closing need positive sizes");
   const zones = [];
   for (const zone of config.zones) {
     if (!zone.pilot || zone.ground == null) continue;
@@ -116,7 +142,27 @@ export function streetGroundSettings(config) {
     for (const key of ["kerbs", "lane_markings", "parking_stalls"]) {
       invariant(typeof settings[key] === "boolean", `Street ground zone ${zone.id} ${key} must be boolean`);
     }
-    invariant(Array.isArray(settings.centerline_highways) && settings.centerline_highways.every((value) => ROAD_WIDTHS_M[value] != null), `Street ground zone ${zone.id} centerline_highways must name highway classes`);
+    invariant(
+      settings.centerlines != null && typeof settings.centerlines === "object" && !Array.isArray(settings.centerlines) &&
+        Object.entries(settings.centerlines).every(([highway, style]) => ROAD_WIDTHS_M[highway] != null && CENTERLINE_STYLES.includes(style)),
+      `Street ground zone ${zone.id} centerlines must map highway classes to ${CENTERLINE_STYLES.join(" or ")}`,
+    );
+    invariant(PLANTING_MODES.includes(settings.planting), `Street ground zone ${zone.id} planting must be ${PLANTING_MODES.join(" or ")}`);
+    invariant(Array.isArray(settings.plazas), `Street ground zone ${zone.id} plazas must be a list`);
+    invariant(Array.isArray(settings.parking_lanes), `Street ground zone ${zone.id} parking_lanes must be a list`);
+    for (const lane of settings.parking_lanes) {
+      exactKeys(lane, PARKING_LANE_FIELDS, `Street ground zone ${zone.id} parking lane`);
+      invariant(Array.isArray(lane.source_keys) && lane.source_keys.length > 0 && lane.source_keys.every((key) => /^w\d+$/u.test(key)), `Street ground zone ${zone.id} parking lane needs OSM way source_keys`);
+      invariant(isFiniteNumber(lane.width_m) && lane.width_m > 0 && lane.width_m <= 3.5, `Street ground zone ${zone.id} parking lane width must be in (0, 3.5] m`);
+      invariant(typeof lane.reason === "string" && lane.reason.trim() !== "", `Street ground zone ${zone.id} parking lane needs a reason`);
+    }
+    for (const plaza of settings.plazas) {
+      exactKeys(plaza, PLAZA_FIELDS, `Street ground zone ${zone.id} plaza`);
+      invariant(Array.isArray(plaza.source_keys) && plaza.source_keys.length > 0 && plaza.source_keys.every((key) => /^w\d+$/u.test(key)), `Street ground zone ${zone.id} plaza needs OSM way source_keys`);
+      invariant(Array.isArray(plaza.side_point_xz) && plaza.side_point_xz.length === 2 && plaza.side_point_xz.every(isFiniteNumber), `Street ground zone ${zone.id} plaza needs side_point_xz`);
+      invariant(isFiniteNumber(plaza.walk_m) && isFiniteNumber(plaza.depth_m) && plaza.walk_m > 0 && plaza.depth_m > plaza.walk_m && isFiniteNumber(plaza.paver_tile_m) && plaza.paver_tile_m > 0, `Street ground zone ${zone.id} plaza needs walk_m < depth_m and a paver_tile_m`);
+      invariant(typeof plaza.reason === "string" && plaza.reason.trim() !== "", `Street ground zone ${zone.id} plaza needs a reason`);
+    }
     exactKeys(settings.wear, WEAR_FIELDS, `Street ground zone ${zone.id} wear`);
     for (const key of WEAR_FIELDS) {
       invariant(isFiniteNumber(settings.wear[key]) && settings.wear[key] >= 0, `Street ground zone ${zone.id} wear.${key} must be non-negative`);
@@ -321,12 +367,17 @@ function polygonIndex(multi) {
 }
 
 // Drops slivers: parts smaller than minimumArea or thinner than minimumWidth
-// (mean width 2 * area / perimeter), and holes smaller than minimumArea.
-function cleanPolygons(multi, minimumArea, minimumWidth) {
+// (mean width 2 * area / perimeter). Fills holes smaller than holeArea or
+// thinner than holeWidth, so no ragged land sliver is left inside a sidewalk.
+function cleanPolygons(multi, minimumArea, minimumWidth, holeArea = minimumArea, holeWidth = 0) {
   const kept = [];
   for (const polygon of multi) {
     const outer = polygon[0];
-    const holes = polygon.slice(1).filter((hole) => Math.abs(ringArea(openRing(hole))) >= minimumArea);
+    const holes = polygon.slice(1).filter((hole) => {
+      const ring = openRing(hole);
+      const area = Math.abs(ringArea(ring));
+      return area >= holeArea && (2 * area) / multiPerimeter([[hole]]) >= holeWidth;
+    });
     const candidate = [outer, ...holes];
     const area = multiArea([candidate]);
     if (area < minimumArea) continue;
@@ -350,6 +401,63 @@ function offsetPolyline(points, distance) {
     result.push(add(points[index], scale(miter, distance / cosine)));
   }
   return result;
+}
+
+// Raw band of a given half-width around every ring edge: segment rectangles and
+// vertex discs, unioned without the strict canonical-ring checks (touching
+// output is fine here). Vertices closer than a few centimetres are merged first:
+// the band is a coarse morphological tool, and millimetre edges only give the
+// boolean sweep near-degenerate input.
+function boundaryBand(label, shape, radius) {
+  const parts = [];
+  for (const polygon of shape) {
+    for (const raw of polygon) {
+      const ring = [];
+      for (const point of openRing(raw)) {
+        if (ring.length === 0 || length(sub(point, ring.at(-1))) >= BAND_VERTEX_MERGE_M) ring.push(point);
+      }
+      while (ring.length > 1 && length(sub(ring.at(-1), ring[0])) < BAND_VERTEX_MERGE_M) ring.pop();
+      ring.forEach((point, index) => {
+        const next = ring[(index + 1) % ring.length];
+        const edge = sub(next, point);
+        if (length(edge) > 1e-6) {
+          const normal = scale(leftOf(unit(edge)), radius);
+          parts.push([[[add(point, normal), sub(point, normal), sub(next, normal), add(next, normal)]]]);
+        }
+        parts.push(circle(point, radius, 8));
+      });
+    }
+  }
+  // On a 1/1024 m lattice, nearly coincident corners of neighbouring parts coincide exactly.
+  const snap = (value) => Math.round(value * 1024) / 1024;
+  return union(label, parts.map((part) => part.map((polygon) => polygon.map((ring) => ring.map(([x, y]) => [snap(x), snap(y)])))));
+}
+
+// Morphological closing: fills gaps and notches narrower than 2 * radius
+// between raised pieces (dilate, then erode by the same radius).
+function closeGaps(label, multi, radius) {
+  if (radius <= 0 || multi.length === 0) return multi;
+  const dilated = union(`${label} dilate`, [multi, boundaryBand(`${label} outline`, multi, radius)]);
+  return difference(`${label} erode`, dilated, [boundaryBand(`${label} dilated outline`, dilated, radius)]);
+}
+
+// Morphological opening: drops spikes and slivers narrower than twice the radius.
+function openShapes(label, multi, radius) {
+  if (radius <= 0 || multi.length === 0) return multi;
+  const eroded = difference(`${label} erode`, multi, [boundaryBand(`${label} outline`, multi, radius)]);
+  if (eroded.length === 0) return eroded;
+  return union(`${label} dilate`, [eroded, boundaryBand(`${label} eroded outline`, eroded, radius)]);
+}
+
+// Squares of a fixed plan grid covering a box, for splitting large surfaces.
+function gridCells(box, size) {
+  const cells = [];
+  for (let x = Math.floor(box.min_x / size) * size; x < box.max_x; x += size) {
+    for (let y = Math.floor(box.min_y / size) * size; y < box.max_y; y += size) {
+      cells.push([[[[x, y], [x + size, y], [x + size, y + size], [x, y + size]]]]);
+    }
+  }
+  return cells;
 }
 
 // The strip between two sideways offsets of a polyline, as unioned quads.
@@ -455,6 +563,21 @@ function worldUv(point) {
   return [point[0] / 10, -point[1] / 10];
 }
 
+// World-planar UV in tiles of the given size (for direction-free textures).
+function tiledUv(size) {
+  return (point) => [point[0] / size, -point[1] / size];
+}
+
+// UV in tiles of the given size, in a frame running along a road: u along its
+// centre line, v across it. Joints and paver bands follow the street.
+function roadFrameUv(line, reference, size) {
+  const near = closestOnPolyline(line, reference);
+  return (point) => {
+    const offset = sub(point, near.point);
+    return [(near.along + dot(offset, near.tangent)) / size, cross(near.tangent, offset) / size];
+  };
+}
+
 // UV for a paint kind with no texture placement (the shader tiles in world space).
 function kindUv(kind) {
   return () => [kind + 0.5, 0.5];
@@ -515,7 +638,26 @@ export function generateStreetGround({
   };
   const roads = objects.filter((object) => object.roles.includes("roads_paths") && object.row.osm_type === "way" && nearPilot(object, 60));
   const vehicles = roads.filter((object) => object.road_visual_class === "vehicle");
-  const vehicleUnion = union("vehicle roads", vehicles.map((object) => object.geometry));
+  const osmCarriageway = union("vehicle roads", vehicles.map((object) => object.geometry));
+  // Parking lanes widen the carriageway beyond the frozen ribbon where the
+  // photographs show cars parked along the curb and the OSM sidewalks sit that
+  // far out; the curb then follows the widened edge.
+  const parkingParts = [];
+  const parkingWidth = new Map();
+  for (const zone of zoneRegions) {
+    for (const lane of zone.settings.parking_lanes) {
+      for (const key of lane.source_keys) {
+        parkingWidth.set(key, Math.max(parkingWidth.get(key) ?? 0, lane.width_m));
+        const road = vehicles.find((object) => object.row.source_key === key);
+        invariant(road, `Street ground parking lane road ${key} is not a vehicle road near the pilot`);
+        const hw = ROAD_WIDTHS_M[road.tags.highway] / 2;
+        parkingParts.push(intersect(`parking lane ${key}`, union(`parking lane ${key}`, [strip(`parking left ${key}`, wayLine(road), hw - CARRIAGEWAY_OVERLAP_M, hw + lane.width_m), strip(`parking right ${key}`, wayLine(road), -hw - lane.width_m, -hw + CARRIAGEWAY_OVERLAP_M)]), zone.region));
+      }
+    }
+  }
+  const parkingSurface = difference("parking lanes", union("parking lanes", parkingParts), [osmCarriageway]);
+  const parkingIndex = polygonIndex(parkingSurface);
+  const vehicleUnion = union("carriageway", [osmCarriageway, parkingSurface]);
   const vehicleIndex = polygonIndex(vehicleUnion);
   const inKerbRegion = (object) => intersect(`kerb test ${object.row.source_key}`, object.geometry, kerbRegion).length > 0;
   const kerbRoads = vehicles.filter((object) => object.tags.service !== "parking_aisle" && inKerbRegion(object));
@@ -543,51 +685,108 @@ export function generateStreetGround({
   const sameStreet = (left, right) => left === right ||
     (left.tags.name != null && left.tags.name === right.tags.name && left.tags.highway === right.tags.highway);
 
-  // --- Raised band: a default sidewalk width each side of every kerbed road,
-  // widened to meet OSM sidewalks that run alongside within reach.
+  // --- Raised band. Flat-ended strips of the default sidewalk width along both
+  // sides of every kerbed road, rounded only where ways meet; OSM sidewalks that
+  // run alongside within reach join it, with the gap between them filled.
   const kerbSources = new Set(kerbRoads.map((object) => object.row.source_key));
-  const bandParts = kerbRoads.map((object) => lineRibbon(wayLine(object), ROAD_WIDTHS_M[object.tags.highway] + kerb.sidewalk_width_m * 2, `band ${object.row.source_key}`));
-  const fillParts = [];
+  // Half the carriageway: the frozen ribbon plus any parking lane.
+  const halfWidth = (object) => ROAD_WIDTHS_M[object.tags.highway] / 2 + (parkingWidth.get(object.row.source_key) ?? 0);
+  const nodeUse = new Map();
+  for (const object of vehicles) {
+    for (const ref of new Set(rawOsm.ways.get(object.row.osm_id).node_refs)) nodeUse.set(ref, (nodeUse.get(ref) ?? 0) + 1);
+  }
+  const sideStrips = (label, line, inner, outer) => union(label, [strip(`${label} left`, line, inner, outer), strip(`${label} right`, line, -outer, -inner)]);
+  const defaultBand = union("default band", kerbRoads.map((object) => {
+    const line = wayLine(object);
+    const refs = rawOsm.ways.get(object.row.osm_id).node_refs;
+    const outer = halfWidth(object) + kerb.sidewalk_width_m;
+    const parts = [sideStrips(`band ${object.row.source_key}`, line, halfWidth(object) - 0.05, outer)];
+    if ((nodeUse.get(refs[0]) ?? 0) > 1) parts.push(circle(line[0], outer, 24));
+    if ((nodeUse.get(refs.at(-1)) ?? 0) > 1) parts.push(circle(line.at(-1), outer, 24));
+    return union(`band ${object.row.source_key}`, parts);
+  }));
   const joinedSidewalks = [];
+  const sidewalkParts = [];
+  const wideGapParts = [];
+  const wideGapWalks = [];
   for (const sidewalk of sidewalks) {
     const line = wayLine(sidewalk);
-    const connectors = [];
     const total = polylineLength(line);
     const pieces = Math.max(1, Math.ceil(total / 6));
+    let joined = false;
     for (let piece = 0; piece < pieces; piece += 1) {
       const a = pointAlong(line, (total * piece) / pieces).point;
       const b = pointAlong(line, (total * (piece + 1)) / pieces).point;
+      if (length(sub(b, a)) < 0.2) continue;
       let best = null;
       for (const road of kerbRoads) {
         const nearA = closestOnPolyline(wayLine(road), a);
         const nearB = closestOnPolyline(wayLine(road), b);
-        const reach = ROAD_WIDTHS_M[road.tags.highway] / 2 + kerb.sidewalk_reach_m + 1;
+        const reach = halfWidth(road) + kerb.sidewalk_reach_m + 1;
         if (nearA.distance > reach || nearB.distance > reach) continue;
-        if (!best || nearA.distance + nearB.distance < best.score) best = { score: nearA.distance + nearB.distance, nearA, nearB };
+        if (!best || nearA.distance + nearB.distance < best.score) best = { score: nearA.distance + nearB.distance, nearA, nearB, road };
       }
       if (!best || best.nearA.distance < 0.5 || best.nearB.distance < 0.5) continue;
+      joined = true;
+      const along = unit(sub(b, a));
+      const walk = rectangle(a, along, leftOf(along), 0, length(sub(b, a)), -1, 1);
       const outA = add(a, scale(unit(sub(a, best.nearA.point)), 1));
       const outB = add(b, scale(unit(sub(b, best.nearB.point)), 1));
       const hull = convexHull([outA, outB, a, b, best.nearA.point, best.nearB.point]);
-      if (hull.length >= 3) connectors.push([[hull]]);
+      sidewalkParts.push(walk);
+      if (hull.length >= 3) sidewalkParts.push([[hull]]);
+      // Gap between the curb and the sidewalk's inner edge.
+      const gap = (best.nearA.distance + best.nearB.distance) / 2 - halfWidth(best.road) - 1;
+      if (gap >= kerb.planting_gap_m && hull.length >= 3) {
+        wideGapParts.push([[hull]]);
+        wideGapWalks.push(walk);
+      }
     }
-    if (connectors.length === 0) continue;
-    joinedSidewalks.push(sidewalk.row.source_key);
-    bandParts.push(sidewalk.geometry);
-    fillParts.push(...connectors);
+    if (joined) joinedSidewalks.push(sidewalk.row.source_key);
   }
-  // Paved: the default sidewalk next to each curb and the joined OSM sidewalks.
-  // The gap between them is a raised planting strip where it is wide enough.
-  const pavedRaw = union("paved band", bandParts);
+  // Plazas: a concrete walk at the curb, then banded paving, along named roads.
+  const plazaParts = [];
+  const paverParts = [];
+  for (const zone of zoneRegions) {
+    for (const plaza of zone.settings.plazas) {
+      const sidePoint = [plaza.side_point_xz[0], -plaza.side_point_xz[1]];
+      const walks = [];
+      const pavers = [];
+      for (const key of plaza.source_keys) {
+        const road = vehicles.find((object) => object.row.source_key === key);
+        invariant(road, `Street ground plaza road ${key} is not a vehicle road near the pilot`);
+        const line = wayLine(road);
+        const near = closestOnPolyline(line, sidePoint);
+        const sign = cross(near.tangent, sub(sidePoint, near.point)) >= 0 ? 1 : -1;
+        const hw = halfWidth(road);
+        const signed = (from, to) => (sign > 0 ? [from, to] : [-to, -from]);
+        walks.push(strip(`plaza walk ${key}`, line, ...signed(hw - 0.05, hw + plaza.walk_m)));
+        pavers.push(strip(`plaza paving ${key}`, line, ...signed(hw + plaza.walk_m, hw + plaza.depth_m)));
+      }
+      // Where the road bends, the end of the paving strip tapers to a spike: open it away.
+      const paving = openShapes(`plaza paving ${zone.id}`, intersect(`plaza paving ${zone.id}`, union(`plaza pavers ${zone.id}`, pavers), zone.region), PLAZA_OPENING_M);
+      plazaParts.push(union(`plaza ${zone.id}`, [intersect(`plaza walk ${zone.id}`, union(`plaza walks ${zone.id}`, walks), zone.region), paving]));
+      paverParts.push({ zone, plaza, region: paving });
+    }
+  }
+  const raisedRaw = union("raised band", [defaultBand, ...sidewalkParts, ...plazaParts]);
+  // A parking lot's narrow tips (under 3 m) do not notch the sidewalk.
+  const blockers = [vehicleUnion, openShapes("parking lot body", lotUnion, LOT_OPENING_M), buildingClearance, hardKeepout];
   const bandOriginal = cleanPolygons(
-    difference("band subtraction", intersect("band zone", union("band", [pavedRaw, ...fillParts]), kerbRegion), [vehicleUnion, lotUnion, buildingClearance, hardKeepout]),
+    difference("band subtraction", closeGaps("band closing", intersect("band zone", raisedRaw, kerbRegion), kerb.closing_m), blockers),
     1.0,
     kerb.minimum_width_m,
+    6.0,
+    1.5,
   );
-  const plantedTop = cleanPolygons(difference("planting strips", bandOriginal, [pavedRaw]), 2.0, 1.2);
-  const plantedIndex = polygonIndex(plantedTop);
   const bandIndex = polygonIndex(bandOriginal);
   invariant(!bandIndex.contains([spawnXZ[0], -spawnXZ[1]]), "Street ground raises the ferry spawn");
+  // Surface materials over the raised band: banded plaza paving, mulch planting
+  // (curb_strip zones: between the curb and a sidewalk set back from it, and
+  // beyond the default sidewalk where the OSM sidewalk crowds the curb) and
+  // concrete everywhere else.
+  const paverTop = intersect("plaza paving top", bandOriginal, union("plaza paving", paverParts.map((part) => part.region)));
+  const paverIndex = polygonIndex(paverTop);
 
   // --- Crosswalks: from crossing ways, and crossing nodes that no crossing way carries.
   const marked = (tags) => tags["crossing:markings"] !== "no" && tags.crossing !== "unmarked" &&
@@ -653,22 +852,94 @@ export function generateStreetGround({
   }
   const notchUnion = union("curb ramp notches", notches.map((notch) => notch.rect));
   const notchIndex = polygonIndex(union("curb ramps", notches.map((notch) => notch.piece)));
+  // Mulch beds stay clear of a crosswalk's landing: a ramp tops out on concrete.
+  const landings = notches.map((notch) => rectangle(notch.landing, notch.outward, notch.across,
+    crossings.ramp_depth_m - 0.05, crossings.ramp_depth_m + RAMP_LANDING_M, -crossings.ramp_width_m / 2, crossings.ramp_width_m / 2));
+  const curbStripRegion = union("curb-strip zones", zoneRegions.filter((zone) => zone.settings.planting === "curb_strip").map((zone) => zone.region));
+  const concreteKeep = union("concrete keep", [difference("default band beside set-back walks", defaultBand, wideGapParts), ...wideGapWalks, ...plazaParts, ...landings]);
+  const plantedTop = cleanPolygons(
+    intersect("planting", difference("planting candidates", bandOriginal, [concreteKeep, paverTop]), curbStripRegion),
+    1.0,
+    0.6,
+  );
+  const plantedIndex = polygonIndex(plantedTop);
   const bandRaised = cleanPolygons(difference("band minus ramps", bandOriginal, [notchUnion]), 0.3, 0.2);
   const raisedIndex = polygonIndex(bandRaised);
 
   const pieces = [];
   const faces = [];
-  const sources = { kerb: new Set(kerbSources), verge: new Set(kerbSources), ramp: new Set(kerbSources), gutter: new Set(kerbSources), wear: new Set(), marking: new Set() };
-  for (const key of joinedSidewalks) sources.kerb.add(key);
+  const sources = {
+    kerb: new Set(kerbSources),
+    planting: new Set(kerbSources),
+    plaza: new Set(paverParts.flatMap((part) => part.plaza.source_keys)),
+    parking: new Set(zoneRegions.flatMap((zone) => zone.settings.parking_lanes.flatMap((lane) => lane.source_keys))),
+    verge: new Set(kerbSources),
+    ramp: new Set(kerbSources),
+    gutter: new Set(kerbSources),
+    wear: new Set(),
+    marking: new Set(),
+  };
+  for (const key of joinedSidewalks) {
+    sources.kerb.add(key);
+    sources.planting.add(key);
+  }
   const addPiece = (record, polygon, height, uv) => {
     if (polygon.length > 0) pieces.push({ record, polygon, height, uv });
   };
 
-  // Raised tops (paved and planted) and ramp floors.
-  addPiece("kerb", difference("paved tops", bandRaised, [plantedTop]), constantHeight(top), worldUv);
-  addPiece("verge", intersect("planted tops", bandRaised, plantedTop), constantHeight(top), worldUv);
+  // Raised tops take their panel or paver frame from a kerbed road. Each road
+  // owns the band within reach of it, the more important (then longer) road
+  // first, so a side street's panels meet the main sidewalk along its back edge,
+  // as poured, rather than on an arbitrary seam. Owned parts are cut on an 8 m
+  // grid so the frame follows curves; parts no road reaches take the nearest
+  // road's frame. Ramp floors use their crossing's frame.
+  const nearestKerbLine = (point) => {
+    let best = null;
+    for (const road of kerbRoads) {
+      const near = closestOnPolyline(wayLine(road), point);
+      if (!best || near.distance < best.distance) best = { line: wayLine(road), distance: near.distance };
+    }
+    return best.line;
+  };
+  const rankOf = (road) => {
+    const rank = FRAME_ROAD_RANK.indexOf(road.tags.highway);
+    return rank < 0 ? FRAME_ROAD_RANK.length : rank;
+  };
+  const frameOwners = [...kerbRoads].sort((left, right) => rankOf(left) - rankOf(right) ||
+    polylineLength(wayLine(right)) - polylineLength(wayLine(left)) ||
+    compareSourceKeys(left.row.source_key, right.row.source_key));
+  let framed = [];
+  const frameRegions = frameOwners.map((road) => {
+    const reach = halfWidth(road) + kerb.sidewalk_reach_m + 1;
+    const region = strip(`frame ${road.row.source_key}`, wayLine(road), -reach, reach);
+    const owned = difference(`frame owned ${road.row.source_key}`, region, [framed]);
+    framed = union("framed", [framed, region]);
+    return { line: wayLine(road), region: owned };
+  });
+  const addFramed = (record, polygon, size) => {
+    if (polygon.length === 0) return;
+    const addCells = (part, line) => {
+      if (part.length === 0) return;
+      for (const cell of gridCells(boxOfMulti(part), 8)) {
+        const piece = intersect(`${record} cell`, part, cell);
+        if (multiArea(piece) < 1e-6) continue;
+        const box = boxOfMulti(piece);
+        const centre = [(box.min_x + box.max_x) / 2, (box.min_y + box.max_y) / 2];
+        addPiece(record, piece, constantHeight(top), roadFrameUv(line ?? nearestKerbLine(centre), centre, size));
+      }
+    };
+    for (const owner of frameRegions) addCells(intersect(`${record} owned`, polygon, owner.region), owner.line);
+    addCells(difference(`${record} unowned`, polygon, [framed]), null);
+  };
+  addFramed("kerb", difference("concrete tops", bandRaised, [plantedTop, paverTop]), kerb.panel_m);
+  addPiece("parking", parkingSurface, constantHeight(ROAD_TOP_M), worldUv);
+  addPiece("planting", intersect("planted tops", bandRaised, plantedTop), constantHeight(top), tiledUv(2));
+  for (const part of paverParts) addFramed("plaza", intersect("plaza tops", bandRaised, part.region), part.plaza.paver_tile_m);
   for (const notch of notches) {
-    addPiece("kerb", notch.piece, notch.height, worldUv);
+    addPiece("kerb", notch.piece, notch.height, (point) => [
+      dot(sub(point, notch.landing), notch.across) / kerb.panel_m,
+      dot(sub(point, notch.landing), notch.outward) / kerb.panel_m,
+    ]);
     sources.kerb.add(notch.source_key);
   }
 
@@ -766,9 +1037,16 @@ export function generateStreetGround({
     addPiece("ramp", support, height, worldUv);
     const visible = difference("skirt beside buildings", open, buildingIndex.near(box, 0.01));
     if (visible.length === 0) continue;
-    const probe = add(add(skirt.edge.a, scale(sub(skirt.edge.b, skirt.edge.a), 0.5)), scale(skirt.edge.outward, runOf[skirt.kind] * 0.7));
+    // The slope takes the raised top it falls from: a mulch bed's own edge, else
+    // concrete where it runs down onto paving and grass where it meets ground.
+    const middle = add(skirt.edge.a, scale(sub(skirt.edge.b, skirt.edge.a), 0.5));
+    const probe = add(middle, scale(skirt.edge.outward, runOf[skirt.kind] * 0.7));
+    const inner = add(middle, scale(skirt.edge.outward, -0.05));
+    const planted = skirt.kind === "back" && plantedIndex.contains(inner);
     const paved = skirt.kind === "flare" || skirt.kind === "curb" || notchIndex.contains(probe) || pedestrianIndex.contains(probe) || lotIndex.contains(probe) || vehicleIndex.contains(probe);
-    addPiece(paved ? "kerb" : "verge", visible, height, worldUv);
+    if (planted) addPiece("planting", visible, height, tiledUv(2));
+    else if (paved) addPiece("kerb", visible, height, roadFrameUv(nearestKerbLine(middle), middle, kerb.panel_m));
+    else addPiece("verge", visible, height, worldUv);
   }
 
   // Gutter pans along curb faces, on the road.
@@ -822,7 +1100,8 @@ export function generateStreetGround({
     const junctions = union(`junctions ${road.row.source_key}`, others);
     const clip = (label, polygon) => difference(label, intersect(`${label} own road`, roadPaint(label, polygon), road.geometry), [junctions, crosswalkKeepout]);
     const zoneWants = (key) => roadZones.some((zone) => zone.settings[key]);
-    const centerline = roadZones.some((zone) => zone.settings.centerline_highways.includes(road.tags.highway)) && road.tags.oneway !== "yes";
+    const centerlineStyle = road.tags.oneway === "yes" ? null : (roadZones.map((zone) => zone.settings.centerlines[road.tags.highway]).find(Boolean) ?? null);
+    const centerline = centerlineStyle === "double_yellow";
     const sideLanes = { left: null, right: null };
     if (zoneWants("lane_markings")) {
       const busSide = (value) => typeof value === "string" && value.split("|").includes("designated");
@@ -838,6 +1117,17 @@ export function generateStreetGround({
       const clipped = clip("centre line", yellow);
       paint(STREET_PAINT_KINDS.yellow, clipped, road.row.source_key);
       counts.centerline_m += multiArea(clipped) / (2 * lines.width_m);
+    } else if (centerlineStyle === "dashed_faded") {
+      // A worn single dashed line, as photographed on the Avenue of the Palms.
+      const dashes = [];
+      const total = polylineLength(line);
+      for (let s = lines.dash_gap_m / 2; s + lines.dash_m <= total; s += lines.dash_m + lines.dash_gap_m) {
+        const at = pointAlong(line, s + lines.dash_m / 2);
+        dashes.push(rectangle(at.point, at.tangent, leftOf(at.tangent), -lines.dash_m / 2, lines.dash_m / 2, -lines.width_m / 2, lines.width_m / 2));
+      }
+      const clipped = clip("dashed centre line", union("dashed centre line", dashes));
+      paint(STREET_PAINT_KINDS.yellow_faded, clipped, road.row.source_key);
+      counts.centerline_m += multiArea(clipped) / lines.width_m;
     }
     for (const [side, sign] of [["left", 1], ["right", -1]]) {
       const lane = sideLanes[side];
@@ -883,11 +1173,19 @@ export function generateStreetGround({
     const travel = scale(near.tangent, forward ? 1 : -1);
     const right = [travel[1], -travel[0]];
     const half = ROAD_WIDTHS_M[host.tags.highway] / 2;
-    // Stop short of a crosswalk the stop line would otherwise cover.
-    let barCenter = near.point;
-    for (let step = 0; step < 12 && keepoutIndex.contains(add(barCenter, scale(travel, lines.stop_bar_width_m))); step += 1) {
-      barCenter = add(barCenter, scale(travel, -0.5));
+    // A stop node often sits on the junction itself. Back the stop line up the
+    // approach until it is clear of every crossing road and crosswalk.
+    const crossingRoads = polygonIndex(union(`roads crossing ${host.row.source_key}`, vehicles.filter((other) => !sameStreet(other, host)).map((other) => other.geometry)));
+    const barCorners = (center) => [-1, 1].flatMap((side) => [-1, 1].map((end) =>
+      add(add(center, scale(travel, end * lines.stop_bar_width_m)), scale(right, side > 0 ? half - 0.1 : 0.15))));
+    // The driver meets STOP, the stop line, then any crosswalk, then the
+    // junction: put the line just upstream of the last blocked sample within 16 m.
+    let lastBlocked = -1;
+    for (let step = 0; step <= 32; step += 1) {
+      const sample = add(near.point, scale(travel, -0.5 * step));
+      if (barCorners(sample).some((corner) => crossingRoads.contains(corner) || keepoutIndex.contains(corner))) lastBlocked = step;
     }
+    const barCenter = lastBlocked < 0 ? near.point : add(near.point, scale(travel, -(0.5 * lastBlocked + 1.1)));
     const bar = rectangle(barCenter, travel, right, -lines.stop_bar_width_m / 2, lines.stop_bar_width_m / 2, 0.15, half - 0.1);
     paint(STREET_PAINT_KINDS.white, roadPaint("stop bar", bar), host.row.source_key);
     const legendWidth = Math.min(half - 0.6, 2.4);
@@ -1112,7 +1410,8 @@ export function generateStreetGround({
           const land = facetElevation(facet, point[0], point[1]).elevation;
           mesh.vertices.push(roundCoordinate(point[0]), roundCoordinate(land + h), roundCoordinate(-point[1]));
           mesh.normals.push(...normal.map(roundCoordinate));
-          mesh.uvs.push(roundCoordinate(along / 10), roundCoordinate((land + h) / 10));
+          // v from the face's own foot, inside one panel: no sidewalk joint runs along a curb face.
+          mesh.uvs.push(roundCoordinate(along / kerb.panel_m), roundCoordinate((h - ROAD_TOP_M) / kerb.panel_m + 0.1));
         }
         pushTriangles(mesh, [offset, offset + 1, offset + 2, offset, offset + 2, offset + 3], normal);
       }
@@ -1147,11 +1446,15 @@ export function generateStreetGround({
         return { kind: "street_kerb", material_key: "street_kerb_concrete", source_key: notch.source_key, bias_m: roundCoordinate(heightAt(notch.height, point)) };
       }
     }
-    if (!raisedIndex.contains(point)) return null;
+    if (!raisedIndex.contains(point)) {
+      // Parking lanes widen the asphalt beyond the frozen road ribbons.
+      if (!parkingIndex.contains(point)) return null;
+      return { kind: "street_paint", material_key: "street_parking", source_key: nearestRoad(point).road.row.source_key, bias_m: ROAD_TOP_M };
+    }
     const near = nearestRoad(point);
     return {
       kind: "street_kerb",
-      material_key: plantedIndex.contains(point) ? "street_kerb_verge" : "street_kerb_concrete",
+      material_key: plantedIndex.contains(point) ? "street_kerb_planting" : paverIndex.contains(point) ? "street_plaza_pavers" : "street_kerb_concrete",
       source_key: near ? near.road.row.source_key : [...kerbSources][0],
       bias_m: roundCoordinate(top),
     };
@@ -1178,6 +1481,9 @@ export function generateStreetGround({
       stall_lines: counts.stall_lines,
       centerline_m: roundCoordinate(counts.centerline_m),
       raised_area_m2: roundCoordinate(multiArea(bandRaised)),
+      planted_area_m2: roundCoordinate(multiArea(plantedTop)),
+      plaza_paving_area_m2: roundCoordinate(multiArea(paverTop)),
+      parking_lane_area_m2: roundCoordinate(multiArea(parkingSurface)),
       curb_face_m: roundCoordinate(faces.reduce((sum, edge) => sum + length(sub(edge.b, edge.a)), 0)),
       wear_by_cell: Object.fromEntries(Object.entries(STREET_WEAR_CELLS).map(([name, cell]) => [name, counts.wear[cell] ?? 0])),
     },

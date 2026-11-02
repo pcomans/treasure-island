@@ -856,9 +856,13 @@ func _check_routes(routes: Array, box: AABB) -> void:
 			_failures.append(_prefix + "return_from_arrival must be boolean")
 			_unsafe = true
 			return
+		if route.has("reach_m") and (not (route.reach_m is float or route.reach_m is int) or float(route.reach_m) < 15.0 or float(route.reach_m) > 40.0):
+			_failures.append(_prefix + "route reach_m must be a number from 15 to 40")
+			_unsafe = true
+			return
 		names[route.name] = true
 		for value: Array in [route.start_xz, route.end_xz]:
-			if not box.grow(15.0).has_point(Vector3(value[0], box.get_center().y, value[1])):
+			if not box.grow(float(route.get("reach_m", 15.0))).has_point(Vector3(value[0], box.get_center().y, value[1])):
 				_failures.append(_prefix + "route is outside the source building's surroundings: " + route.name)
 				_unsafe = true
 				return
