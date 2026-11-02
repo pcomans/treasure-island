@@ -95,7 +95,7 @@ refuse_hidden_files() {
 }
 refuse_hidden_files || exit 1
 
-deploy=("${vercel[@]}" deploy --prod)
+deploy=("${vercel[@]}" deploy --prod --json)
 if [ "${dry_run}" = true ]; then
   echo "DRY RUN: in build/web, would run: ${deploy[*]}"
   echo "PASS: dry run for ${head:0:8}; nothing was linked or uploaded"
@@ -103,10 +103,10 @@ if [ "${dry_run}" = true ]; then
 fi
 
 # Runs the deploy command given as arguments in build/web, then prints PASS with
-# the URL or FAIL. With stdout captured, CLI 64.5.0 prints only the deployment URL
-# there, unless it detects an AI agent (CLAUDECODE, AI_AGENT, CODEX_* and others)
-# while stdin is not a terminal: then it prints a JSON status object instead. Its
-# progress and the production alias go to stderr either way.
+# the URL or FAIL. With --json, CLI 64.5.0 prints one JSON object on stdout: the
+# deployment, or a status object holding it when the CLI detects an AI agent
+# (CLAUDECODE, AI_AGENT, CODEX_* and others) while stdin is not a terminal. Its
+# progress and the production alias go to stderr.
 deploy_to_production() {
   local output status=0 url
   output="$(cd build/web && "$@")" || status=$?
@@ -116,22 +116,19 @@ deploy_to_production() {
   fi
   url="$(python3 -I -c '
 import json, sys
-out = sys.argv[1].strip()
-if out.startswith("https://") and len(out.split()) == 1:
-    print(out)
-    sys.exit()
+out = sys.stdin.read().strip()
 try:
     result = json.loads(out)
-    deployment = result["deployment"]
-    state = [result["status"], deployment["readyState"], deployment["target"]]
+    deployment = result.get("deployment", result)
+    state = [result.get("status", "ok"), deployment["readyState"], deployment["target"]]
     urls = [deployment["productionUrl"], deployment["url"]]
-except (ValueError, KeyError, TypeError):
+except (ValueError, KeyError, TypeError, AttributeError):
     sys.exit("FAIL: unexpected deploy output: " + out)
 # productionUrl is null unless the production domain now points at this deployment.
-if state != ["ok", "READY", "production"] or not urls[0]:
+if state != ["ok", "READY", "production"] or not urls[0] or deployment.get("error"):
     sys.exit("FAIL: the deploy is not ready on the production domain: " + out)
 print("%s (deployment %s)" % tuple(urls))
-' "${output}")" || return 1
+' <<< "${output}")" || return 1
   echo "PASS: deployed ${head:0:8} to production: ${url}"
 }
 deploy_to_production "${deploy[@]}"

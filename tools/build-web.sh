@@ -33,7 +33,15 @@ rm -f "${baked}"
 work="$(mktemp -d)"
 trap 'rm -rf "${work}"; rm -f "${baked}"' EXIT
 # A fresh checkout has nothing imported yet, and the bake and export need it.
-timeout 300 tools/godot --headless --path . --import
+# Godot can exit 0 after an import error, so check its output too, as tools/test.sh does.
+godot_errors='SCRIPT ERROR|Parse Error|Failed to load script|^ERROR'
+status=0
+imported="$(timeout 300 tools/godot --headless --path . --import 2>&1)" || status=$?
+if [ "${status}" -ne 0 ] || grep -qE "${godot_errors}" <<< "${imported}"; then
+  grep -E "${godot_errors}|ERROR" <<< "${imported}" | head -20 || true
+  echo "FAIL: the Godot import exited ${status} or reported engine errors" >&2
+  exit 1
+fi
 tools/prebuild-static-world.sh web
 test -s "${baked}"
 if [ "$(git rev-parse HEAD)" != "${revision}" ] || [ -n "$(git status --porcelain)" ]; then
