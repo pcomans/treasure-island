@@ -231,7 +231,7 @@
       "sha256": "f6fd17666df382f89b51dff1b5a3b906e1c17fdc36d4af3e1aa4ecf4aad817a5"
     }
   ],
-  "content_sha256": "04eb5da25bb50522cced847479acd6556bfca8ccfa800c0bf43548b5ff15268e",
+  "content_sha256": "1c35e43117b657f17aa5ba646f0eb12bbee52d3a56a100967668e9c16afb8509",
   "context": {
     "bytes": 675130,
     "path": "context.json",
@@ -504,14 +504,14 @@
       "sha256": "afe1d34d0c743c9a16f058b8613f4276bd44ee7bddc3cd062657dfe65304e7a9"
     },
     {
-      "bytes": 2251194,
+      "bytes": 2338925,
       "path": "shoreline.json",
-      "sha256": "7e63fc7141581450d99390e2989e32d3eeff68a638da0a88e2e1392ade0256f3"
+      "sha256": "ad1dcd0640e2232ccc5a4d5e963409724678b59206827bdd2b9cf0bca46c5cb3"
     },
     {
       "bytes": 723782,
       "path": "street_detail.json",
-      "sha256": "cade7200536244f243d5ef8521e9b8cb24b33fffa8007f7673239c47da1d6dd6"
+      "sha256": "617eff9d5e5f890df5a297cc2e3bf82b56b95dd785b21e53770b18f9c1f7c740"
     },
     {
       "bytes": 4599,
@@ -1129,9 +1129,9 @@
   },
   "schema_version": "ti.godot-world/2",
   "shoreline": {
-    "bytes": 2251194,
+    "bytes": 2338925,
     "path": "shoreline.json",
-    "sha256": "7e63fc7141581450d99390e2989e32d3eeff68a638da0a88e2e1392ade0256f3"
+    "sha256": "ad1dcd0640e2232ccc5a4d5e963409724678b59206827bdd2b9cf0bca46c5cb3"
   },
   "sources": {
     "extraction_polygon": {
@@ -1168,7 +1168,7 @@
   "street_detail": {
     "bytes": 723782,
     "path": "street_detail.json",
-    "sha256": "cade7200536244f243d5ef8521e9b8cb24b33fffa8007f7673239c47da1d6dd6"
+    "sha256": "617eff9d5e5f890df5a297cc2e3bf82b56b95dd785b21e53770b18f9c1f7c740"
   },
   "terrain": {
     "bytes": 4599,

@@ -342,7 +342,8 @@ function convexHull3(points) {
 // One low-poly quarry stone: the hull of a few points on a squashed ellipsoid,
 // a couple of them pulled toward cut planes so the stone has broad broken
 // faces. Normalized to 1 m across, its bottom at y = 0, facet normals rounded
-// a third of the way toward the centre so shaded faces are not black.
+// halfway toward the centre: weathered, not crisply cut, and shaded faces are
+// not black.
 function rockPrototype(seed, index) {
   const rng = random(seed, `rock:${index}`);
   const count = 12 + (index % 3) * 2;
@@ -381,7 +382,7 @@ function rockPrototype(seed, index) {
   for (const face of faces) {
     const corners = face.map((i) => placed[i]);
     const faceNormal = unit3(cross3(sub3(corners[1], corners[0]), sub3(corners[2], corners[0])));
-    const indices = corners.map((corner) => pushVertex(mesh, corner, unit3(add3(scale3(faceNormal, 0.62), scale3(unit3(sub3(corner, centroid)), 0.38)))));
+    const indices = corners.map((corner) => pushVertex(mesh, corner, unit3(add3(scale3(faceNormal, 0.5), scale3(unit3(sub3(corner, centroid)), 0.5)))));
     pushTriangle(mesh, indices, faceNormal);
   }
   const height = (max[1] - min[1]) / across;

@@ -1521,7 +1521,7 @@
     },
     "zones": {
       "path": "tools/config/street-detail-zones.json",
-      "sha256": "fb3a1c91285cafb102c371ad7e78c69db5498c5b2a2f841f6673d483ff0c18b4"
+      "sha256": "6e0470d36135b3a6eaf49f245930d391bb4216c9b95b9c5df4219431155f33a6"
     }
   },
   "kinds": {
