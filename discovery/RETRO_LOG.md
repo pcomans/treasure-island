@@ -22905,3 +22905,9 @@ Carried by deploy-fix from the deploy agent's scratch log; text unchanged apart 
 - What worked well: the delta sheets were built for exactly the four open items, which kept this check short. They showed the web red lane with sampled values next to the photo, the lot before and after, the 999 strip order against the photo, and a plan plus a view of the Cravath stop bar. Sampling the real web capture (about 60/35/39 % against 54/34/38 % in the photo) closed the red-lane question directly.
 - What did not work well: the Forward+ sheets say 40139cb3, but E25 was rendered from a dirty tree at 32d1c91e. Only the web capture (E27) comes from a clean commit. Opaque paint also left the crosswalk bars flat and bright (about 83 % against about 53 % faded in the photo), with almost no visible wear.
 - What the team should change next time: label each sheet with the commit its run actually started from, and render the final evidence from a clean tree. In the next paint pass, put wear and fading back on the opaque paint.
+
+### street-ground-code-review — 2026-11-02 — fix round 2 delta 32d1c91e..25d2eeb5 (PASS)
+
+- What worked well: reviewing only the delta and rerunning just the affected checks kept it short. One locked slot ran the material contract, the generated-world check and the route QA (all 14 checkpoints, 0 recoveries, plaza crossed). Determinism was rerun on the regenerated world.
+- What did not work well: the parking-lot material change (`major_area_paved` to asphalt) affects every parking lot on the island, not only the pilot. It shows up only in the builder diff, so the island before/after overviews have to carry that judgement.
+- What the team should change next time: when a fix round changes a shared material key, say in the handoff that it is island-wide, so the visual reviewer knows to compare the island overviews.
