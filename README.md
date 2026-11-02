@@ -73,6 +73,7 @@ instead of generating it; `tools/test.sh` runs the whole-island check on it too.
 - `WASD` moves; hold `Shift` to run.
 - Mouse looks around.
 - Hold `Space` to jetpack upward; release it to descend slowly.
+- Fences stop you on foot (gates and path crossings stay open); the jetpack clears them.
 - Primary click sprays the center-reticle target.
 - `R` recovers to a safe position.
 - `Esc` pauses; `Q` quits while paused; `F3` toggles runtime evidence.

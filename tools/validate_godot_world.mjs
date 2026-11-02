@@ -54,6 +54,7 @@ import {
   STREET_DETAIL_SCHEMA,
   STREET_DETAIL_SOURCES,
 } from "./lib/street-detail-generation.mjs";
+import { STREET_FENCE_INSIDE, STREET_FENCE_SCREENS, STREET_FENCE_TYPES } from "./lib/street-fence-generation.mjs";
 import { STREET_FURNITURE_PROPS } from "./lib/street-furniture-generation.mjs";
 import {
   STREET_GROUND_FEATURE_KINDS,
@@ -969,8 +970,13 @@ function validateStreetDetail(worldRoot, manifest, records) {
         invariant(point.length === 3 && point.every(Number.isFinite) && inBoundary(point[0], point[2]), `${row.id} vertex ${index} is invalid or off the island`);
         grounded(`${row.id} vertex ${index}`, point[0], point[1], point[2], row.terrain_supports[index][0], row.terrain_supports[index][1]);
       });
+      invariant((row.kind === "fence") === (row.fence !== undefined), `${row.id}: every fence row, and only a fence row, carries a fence block`);
+      if (row.fence !== undefined) validateFenceRow(row, grounded, inBoundary);
     }
   }
+  const builtFences = new Set(rows.filter((row) => row.fence && row.prop !== undefined).map((row) => row.id));
+  invariant(Array.isArray(document.fenced_approaches) && document.fenced_approaches.every((entry) =>
+    typeof entry.source_key === "string" && ["north", "south", "west", "east"].includes(entry.side) && entry.fence_ids.every((id) => builtFences.has(id))), "Street-detail fenced approaches must name built fence rows");
   const tally = (field, values) => Object.fromEntries(values.map((value) => [value, rows.filter((row) => row[field] === value).length]));
   const layerNames = [...STREET_DETAIL_LAYERS, STREET_DETAIL_GROUND_LAYER];
   invariant(document.counts.total === rows.length, "Street-detail total count differs from its rows");
@@ -980,6 +986,36 @@ function validateStreetDetail(worldRoot, manifest, records) {
   invariant(stableJson(document.counts.by_source) === stableJson(tally("source", STREET_DETAIL_SOURCES)), "Street-detail source counts differ from its rows");
   invariant(stableJson(document.counts.by_status) === stableJson(tally("status", ["excluded", "placed"])), "Street-detail status counts differ from its rows");
   return document;
+}
+
+// A fence row: its kit type, openings along the line and solid runs of grounded
+// posts. A built row (with a prop) is placed and its prop is its type.
+function validateFenceRow(row, grounded, inBoundary) {
+  const fence = row.fence;
+  const spec = STREET_FENCE_TYPES[fence.type];
+  invariant(spec && fence.height_m === spec.height_m && fence.half_thickness_m === spec.half_thickness_m && typeof fence.type_basis === "string", `${row.id} fence type is invalid`);
+  invariant(STREET_FENCE_INSIDE.includes(fence.params?.inside) && (fence.type !== "chain_link_screened" || row.source === "osm" || STREET_FENCE_SCREENS.includes(fence.params.screen)), `${row.id} fence params are invalid`);
+  invariant(Number.isFinite(fence.length_m) && fence.length_m > 0, `${row.id} fence length is invalid`);
+  let previous = 0;
+  for (const opening of fence.openings) {
+    invariant(Number.isFinite(opening.from_m) && Number.isFinite(opening.to_m) && opening.from_m >= previous && opening.to_m > opening.from_m && opening.to_m <= fence.length_m + 1e-6, `${row.id} fence openings are not ordered stretches of the line`);
+    invariant(typeof opening.reason === "string" && opening.reason !== "" && Array.isArray(opening.source_ids), `${row.id} fence opening is unnamed`);
+    previous = opening.to_m;
+  }
+  invariant(row.status === (fence.runs.length > 0 ? "placed" : "excluded"), `${row.id} status does not match its fence runs`);
+  fence.runs.forEach((run, runIndex) => {
+    invariant(Array.isArray(run.points_m) && run.points_m.length >= 2 && run.terrain_supports?.length === run.points_m.length && run.surface_bias_m?.length === run.points_m.length, `${row.id} run ${runIndex} arrays are inconsistent`);
+    run.points_m.forEach((point, index) => {
+      const label = `${row.id} run ${runIndex} post ${index}`;
+      invariant(point.length === 3 && point.every(Number.isFinite) && inBoundary(point[0], point[2]), `${label} is invalid or off the island`);
+      grounded(label, point[0], point[1], point[2], run.terrain_supports[index][0], run.terrain_supports[index][1]);
+      invariant(Number.isFinite(run.surface_bias_m[index]) && run.surface_bias_m[index] >= 0, `${label} surface bias is invalid`);
+      invariant(index === 0 || point[0] !== run.points_m[index - 1][0] || point[2] !== run.points_m[index - 1][2], `${label} repeats the post before it`);
+    });
+  });
+  if (row.prop !== undefined) {
+    invariant(row.prop === fence.type && row.status === "placed" && stableJson(row.prop_params) === stableJson(fence.params), `${row.id} fence prop does not match its placed fence`);
+  }
 }
 
 function validateManifest(worldRoot) {

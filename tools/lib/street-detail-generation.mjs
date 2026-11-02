@@ -14,6 +14,7 @@ import { resolve } from "node:path";
 
 import { projectLonLat } from "./coordinates.mjs";
 import { geometryToLine, pointInMultiPolygon, pointInRing, selectGeometry } from "./osm-geometry.mjs";
+import { fencePieces, placeStreetFences, validateFenceRules } from "./street-fence-generation.mjs";
 import { placeStreetFurniture, validateFurnitureRules } from "./street-furniture-generation.mjs";
 import { VEGETATION_QA_CORRIDORS } from "./vegetation-generation.mjs";
 import {
@@ -397,9 +398,35 @@ export function loadStreetDetailZones(projectRoot) {
     const ruleIds = new Set();
     for (const rule of zone.scatter) validateScatterRule(rule, zone.id, ruleIds);
     validateFurnitureRules(zone, STREET_DETAIL_KINDS);
-    for (const rule of zone.furniture ?? []) invariant(!ruleIds.has(rule.id), `Street detail zone ${zone.id} rule ${rule.id} is both scatter and furniture`);
+    validateFenceRules(zone, STREET_DETAIL_KINDS);
+    for (const rule of [...(zone.furniture ?? []), ...(zone.fences ?? [])]) {
+      invariant(!ruleIds.has(rule.id), `Street detail zone ${zone.id} rule id ${rule.id} is used twice`);
+      ruleIds.add(rule.id);
+    }
   }
+  validateFencedApproaches(config.fenced_approaches);
   return config;
+}
+
+// Scored-building sides a real fence closes, which the building fit may then skip
+// (game/tests/shared/building_fit.gd). Each entry names the side, the fence rows
+// that close it, and why, with dated evidence. The generator checks that every
+// named fence is a built fence row.
+export const STREET_DETAIL_FENCED_SIDES = Object.freeze(["north", "south", "west", "east"]);
+function validateFencedApproaches(value) {
+  invariant(value != null && typeof value === "object" && !Array.isArray(value), "Street detail fenced_approaches must be an object");
+  invariant(Array.isArray(value.notes) && value.notes.every((note) => typeof note === "string"), "Street detail fenced_approaches needs notes");
+  invariant(Array.isArray(value.entries), "Street detail fenced_approaches needs an entries list");
+  const seen = new Set();
+  for (const entry of value.entries) {
+    const label = `Street detail fenced approach ${entry?.source_key}/${entry?.side}`;
+    invariant(JSON.stringify(Object.keys(entry ?? {}).sort()) === JSON.stringify(["evidence", "fence_ids", "reason", "side", "source_key"]), `${label} must have exactly {source_key, side, fence_ids, reason, evidence}`);
+    invariant(/^[nwr]\d+$/u.test(entry.source_key) && STREET_DETAIL_FENCED_SIDES.includes(entry.side), `${label} needs an OSM source key and a side ${STREET_DETAIL_FENCED_SIDES.join("/")}`);
+    invariant(!seen.has(`${entry.source_key}/${entry.side}`), `${label} is listed twice`);
+    seen.add(`${entry.source_key}/${entry.side}`);
+    invariant(Array.isArray(entry.fence_ids) && entry.fence_ids.length > 0 && entry.fence_ids.every((id) => typeof id === "string" && id !== ""), `${label} needs fence_ids`);
+    for (const field of ["reason", "evidence"]) invariant(typeof entry[field] === "string" && entry[field].trim() !== "", `${label} needs ${field}`);
+  }
 }
 
 export function loadStreetDetailSetPieces(projectRoot) {
@@ -768,7 +795,8 @@ export function generateStreetDetail({
       invariant(points[index][0] !== points[index - 1][0] || points[index][1] !== points[index - 1][1], `${sourceKey} has a zero-length segment`);
     }
     const supports = points.map(grounded);
-    const exclusion = kind.overhead || kind.layer === STREET_DETAIL_GROUND_LAYER ? null : hardViolation(hardShapes, points, kind.footprint_radius_m);
+    // A fence opens where it meets the mask (street-fence-generation.mjs) instead of being dropped whole.
+    const exclusion = kind.overhead || kind.layer === STREET_DETAIL_GROUND_LAYER || kindName === "fence" ? null : hardViolation(hardShapes, points, kind.footprint_radius_m);
     if (exclusion) count(audit.osm.excluded_by_reason, exclusion.reason);
     const row = {
       id: `osm:${sourceKey}`,
@@ -837,15 +865,57 @@ export function generateStreetDetail({
   for (const line of lineRows.values()) line.attached_ids.sort(compareText);
   audit.osm.rows = rows.length;
 
-  // Footprints already claimed by placed switchable rows, for overlap checks.
+  // Zone shapes, queried with world points.
+  const zoneShapes = config.zones.map((zone) => {
+    if (zone.shape.type === "polygon") {
+      const ring = zone.shape.points_xz.map((point) => [point[0], point[1]]);
+      const bounds = boundsOf(ring);
+      return { zone, contains: (xz) => pointInRing(xz, ring, true), bounds };
+    }
+    const lines = zone.shape.source_keys.map(wayLine);
+    const halfWidth = zone.shape.half_width_m;
+    const all = boundsOf(lines.flat());
+    return {
+      zone,
+      contains: (xz) => lines.some((line) => polylineDistance(xz, line) <= halfWidth),
+      bounds: { min_x: all.min_x - halfWidth, min_y: all.min_y - halfWidth, max_x: all.max_x + halfWidth, max_y: all.max_y + halfWidth },
+    };
+  });
+  // Fences, before anything placed around them: OSM fence ways open where roads,
+  // paths, gates and the gameplay mask cross them, and the zones' fence rules add
+  // the photographed fencing OSM lacks (tools/lib/street-fence-generation.mjs).
+  const fences = placeStreetFences({
+    config,
+    rows,
+    zoneShapes,
+    kinds: STREET_DETAIL_KINDS,
+    site: ground.site,
+    roads,
+    buildings,
+    hardShapes,
+    hardViolation,
+    onLand,
+    grounded,
+    surfaceAt,
+    wayLine,
+    rawOsm,
+    // Raw nodes carry no tags; the proper extract has the tagged ones (gates).
+    nodeTags: (ref) => properSources.get(`n${ref}`)?.metadata.tags ?? {},
+  });
+  rows.push(...fences.rows);
+  const builtFences = new Set(rows.filter((row) => row.kind === "fence" && row.prop != null).map((row) => row.id));
+  for (const entry of config.fenced_approaches.entries) {
+    for (const id of entry.fence_ids) invariant(builtFences.has(id), `Fenced approach ${entry.source_key}/${entry.side} names ${id}, which is not a built fence row`);
+  }
+
+  // Footprints already claimed by placed switchable rows, for overlap checks: a
+  // fence claims each of its solid runs, its half thickness wide.
   const occupied = [];
   const occupy = (row) => {
     const kind = STREET_DETAIL_KINDS[row.kind];
     if (row.status !== "placed" || kind.overhead || kind.layer === STREET_DETAIL_GROUND_LAYER) return;
-    occupied.push({
-      id: row.id,
-      points: row.geometry === "point" ? [[row.position_m[0], row.position_m[2]]] : row.points_m.map((point) => [point[0], point[2]]),
-      radius_m: kind.footprint_radius_m,
+    fencePieces(row).forEach((points, index) => {
+      occupied.push({ id: row.fence ? `${row.id}#run${index}` : row.id, points, radius_m: row.fence ? row.fence.half_thickness_m : kind.footprint_radius_m });
     });
   };
   rows.forEach(occupy);
@@ -906,21 +976,6 @@ export function generateStreetDetail({
 
   // (b) Seeded zone scatter. Candidates are visited in config order, so a later
   // rule never displaces an earlier one; every draw is keyed by the candidate id.
-  const zoneShapes = config.zones.map((zone) => {
-    if (zone.shape.type === "polygon") {
-      const ring = zone.shape.points_xz.map((point) => [point[0], point[1]]);
-      const bounds = boundsOf(ring);
-      return { zone, contains: (xz) => pointInRing(xz, ring, true), bounds };
-    }
-    const lines = zone.shape.source_keys.map(wayLine);
-    const halfWidth = zone.shape.half_width_m;
-    const all = boundsOf(lines.flat());
-    return {
-      zone,
-      contains: (xz) => lines.some((line) => polylineDistance(xz, line) <= halfWidth),
-      bounds: { min_x: all.min_x - halfWidth, min_y: all.min_y - halfWidth, max_x: all.max_x + halfWidth, max_y: all.max_y + halfWidth },
-    };
-  });
   const zoneSummaries = [];
   for (const { zone, contains, bounds } of zoneShapes) {
     const ruleSummaries = [];
@@ -1048,6 +1103,10 @@ export function generateStreetDetail({
       pattern: rule.pattern,
       placed: furniture.audit.rules[`${zone.id}/${rule.id}`] ?? 0,
     }));
+    summary.fences = (zone.fences ?? []).map((rule) => {
+      const row = rows.find((candidate) => candidate.id === `scatter:${zone.id}:${rule.id}:line`);
+      return { id: rule.id, fence_type: rule.fence_type, row: row?.id ?? null, built_runs: row?.fence.runs.length ?? 0 };
+    });
   }
 
   rows.sort((left, right) => compareText(left.id, right.id));
@@ -1058,9 +1117,11 @@ export function generateStreetDetail({
     row.zones = zoneShapes.filter(({ contains }) => points.some((point) => contains(point))).map(({ zone }) => zone.id).sort(compareText);
     const kind = STREET_DETAIL_KINDS[row.kind];
     if (row.status !== "placed" || kind.overhead || kind.layer === STREET_DETAIL_GROUND_LAYER) continue;
-    const clearances = hardClearances(hardShapes, points, kind.footprint_radius_m);
-    for (const component of STREET_DETAIL_HARD_COMPONENTS) {
-      minimumClearances[component] = Math.min(minimumClearances[component], clearances[component]);
+    for (const piece of fencePieces(row)) {
+      const clearances = hardClearances(hardShapes, piece, row.fence ? row.fence.half_thickness_m : kind.footprint_radius_m);
+      for (const component of STREET_DETAIL_HARD_COMPONENTS) {
+        minimumClearances[component] = Math.min(minimumClearances[component], clearances[component]);
+      }
     }
   }
   for (const component of STREET_DETAIL_HARD_COMPONENTS) {
@@ -1085,6 +1146,8 @@ export function generateStreetDetail({
       status: "placed rows are built when their layer is on; excluded rows keep their source id and the reason",
       prop: "the street-furniture kit prop the runtime builds for a placed row (game/scripts/world/street_furniture_kit.gd), with prop_params; rows without one are data only",
       source_position_m: "a stop sign's OSM node position, kept when the sign moves to the curb of its approach",
+      fence: "fence rows: the kit type and why (type_basis), height and collision half thickness, the stretches cut open along points_m (openings, metres along the line, with what opens them) and the solid runs left (posts on the ground: points_m, terrain_supports, surface_bias_m); a fence row with a prop is built (game/scripts/world/street_fence_kit.gd)",
+      fenced_approaches: "scored-building sides a built fence closes, which the building fit may skip (game/tests/shared/building_fit.gd)",
     },
     layers: STREET_DETAIL_LAYERS,
     ground_layer: STREET_DETAIL_GROUND_LAYER,
@@ -1107,6 +1170,7 @@ export function generateStreetDetail({
       stair_flights: stairFlights,
     },
     zones: zoneSummaries,
+    fenced_approaches: config.fenced_approaches.entries,
     ground: ground.summary,
     counts: {
       total: rows.length,
@@ -1120,6 +1184,7 @@ export function generateStreetDetail({
     audit: {
       ...audit,
       furniture: furniture.audit,
+      fences: fences.audit,
       minimum_placed_clearances_m: Object.fromEntries(
         STREET_DETAIL_HARD_COMPONENTS.map((component) => [component, Number.isFinite(minimumClearances[component]) ? round3(minimumClearances[component]) : null]),
       ),

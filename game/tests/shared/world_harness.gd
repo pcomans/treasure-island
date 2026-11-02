@@ -72,13 +72,17 @@ func street_detail_summary() -> String:
 	if "furniture" in on:
 		for child: Node in world.street_detail_layer("furniture").get_children():
 			furniture += int(child.get_meta("props", 0))
-	return "STREET_DETAIL on=%s source=%s rows=%d furniture_props=%d" % [",".join(PackedStringArray(on)) if not on.is_empty() else "none", evidence.street_detail_source, evidence.street_detail_rows, furniture]
+	var fences := 0
+	if "fences" in on:
+		for child: Node in world.street_detail_layer("fences").get_children():
+			fences += int(child.get_meta("fences", 0))
+	return "STREET_DETAIL on=%s source=%s rows=%d furniture_props=%d fences=%d" % [",".join(PackedStringArray(on)) if not on.is_empty() else "none", evidence.street_detail_source, evidence.street_detail_rows, furniture, fences]
 
 
 ## What is wrong with the loaded street-detail state: a layer that is off must
 ## hold nothing (its nodes and collision were freed), and the placeholder
-## vegetation and the street furniture must be there while their layers are on.
-## [] when all is well.
+## vegetation, the street furniture and the fences must be there while their
+## layers are on. [] when all is well.
 func street_detail_problems() -> Array[String]:
 	var problems: Array[String] = []
 	var on := world.get_street_detail_layers()
@@ -92,6 +96,8 @@ func street_detail_problems() -> Array[String]:
 		problems.append("street-detail vegetation is on but empty")
 	if "furniture" in on and world.street_detail_layer("furniture").get_child_count() == 0:
 		problems.append("street-detail furniture is on but empty")
+	if "fences" in on and world.street_detail_layer("fences").get_child_count() == 0:
+		problems.append("street-detail fences are on but empty")
 	return problems
 
 

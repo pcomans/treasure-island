@@ -107,6 +107,13 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 		_free_staged(staged_reports)
 		_fail(str(furniture_result.get("code", "street_furniture_build")), str(furniture_result.get("message", "Could not build the street furniture.")), [])
 		return
+	var fence_result := StreetFenceBuilder.new().build(validation.street_detail)
+	if not fence_result.ok:
+		vegetation_result.node.free()
+		furniture_result.node.free()
+		_free_staged(staged_reports)
+		_fail(str(fence_result.get("code", "street_fence_build")), str(fence_result.get("message", "Could not build the street fences.")), [])
+		return
 
 	# Attach only after every chunk and context mesh was validated and built.
 	for report: Dictionary in staged_reports:
@@ -116,22 +123,26 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 	if not family_result.ok:
 		vegetation_result.node.free()
 		furniture_result.node.free()
+		fence_result.node.free()
 		_fail("housing_family",str(family_result.message),family_result.get("source_keys",[]))
 		return
 	var bulgarian_result := BULGARIAN_WALL.install(buildings,ground_and_areas,validation.chunks)
 	if not bulgarian_result.ok:
 		vegetation_result.node.free()
 		furniture_result.node.free()
+		fence_result.node.free()
 		_fail("bulgarian_wall",str(bulgarian_result.message),bulgarian_result.get("source_keys",[]))
 		return
 	var mersea_result := MERSEA.install(buildings, validation.chunks)
 	if not mersea_result.ok:
 		vegetation_result.node.free()
 		furniture_result.node.free()
+		fence_result.node.free()
 		_fail("mersea", str(mersea_result.message), [])
 		return
 	street_detail_layer("vegetation").add_child(vegetation_result.node)
 	street_detail_layer("furniture").add_child(furniture_result.node)
+	street_detail_layer("fences").add_child(fence_result.node)
 	runtime_evidence.set_vegetation_report(vegetation_result)
 	runtime_evidence.set_street_detail_report(validation.street_detail)
 	_apply_street_detail_choice(street_choice)

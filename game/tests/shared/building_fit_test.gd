@@ -13,9 +13,12 @@ extends SceneTree
 ##    walking through walls is check 2. A side is skipped (WALK_UP_SKIPPED, with
 ##    the reason) only when every candidate start on it lies outside the playable
 ##    boundary, inside another building's frozen footprint, or was rejected by
-##    another building's body (ground ray, drop pose or corridor), or (rooftop
-##    approach only) beyond the parent building's roof edge; every other
-##    side must still pass, and at least two sides must pass.
+##    another building's body (ground ray, drop pose or corridor) or by a street
+##    fence the street detail lists as closing that side (fenced_approaches in
+##    tools/config/street-detail-zones.json), or (rooftop approach only) beyond
+##    the parent building's roof edge; every other side must still pass, and at
+##    least two sides must pass. An unlisted fence that closes a side fails it,
+##    naming the fence.
 ## 5. Stairs: each flight listed in the building's catalog entry as
 ##    "stairs": [{"bottom": [x, z], "top": [x, z]}] is walked up and back down.
 ## A check with nothing to sample fails: it would otherwise pass untested.

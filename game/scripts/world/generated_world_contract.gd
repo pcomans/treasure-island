@@ -32,6 +32,7 @@ const VEGETATION_ASSET_SPECIES := {
 	"res://game/resources/models/vegetation/kenney_nature_kit/tree_thin.glb": "broadleaf",
 }
 const STREET_DETAIL_SCHEMA := "ti.street-detail/1"
+const STREET_FENCE_KIT := preload("res://game/scripts/world/street_fence_kit.gd")
 ## The switchable street-detail layers, in PlayableWorld/StreetDetail node order.
 const STREET_DETAIL_LAYERS := ["vegetation", "furniture", "fences", "clutter"]
 ## Rows of the ground layer feed the always-on chunk surfaces.
@@ -729,6 +730,12 @@ static func _validate_street_detail(document: Dictionary, chunks: Array[Dictiona
 				if not _is_finite_number(point[0]) or not _is_finite_number(point[1]) or not _is_finite_number(point[2]) \
 				or not _street_detail_grounded(land_records, boundary, point, str(support_value[0]), support_value[1]):
 					return _failure("street_detail_grounding", "Street-detail polyline vertex is off the island or not grounded: %s" % row_id)
+			if (kind_name == "fence") != row.has("fence"):
+				return _failure("street_detail_fence", "Every street-detail fence row, and only a fence row, carries a fence block: %s" % row_id)
+			if row.has("fence"):
+				var fence_check := _validate_street_fence(row, land_records, boundary)
+				if not fence_check.ok:
+					return fence_check
 		tallies.layer[layer] = int(tallies.layer.get(layer, 0)) + 1
 		if status == "placed":
 			tallies.placed_layer[layer] = int(tallies.placed_layer.get(layer, 0)) + 1
@@ -741,6 +748,46 @@ static func _validate_street_detail(document: Dictionary, chunks: Array[Dictiona
 	or not _integer_counts_match(counts.get("by_source", null), tallies.source) \
 	or not _integer_counts_match(counts.get("by_status", null), tallies.status):
 		return _failure("street_detail_counts", "Street-detail counts do not match its rows.")
+	return {"ok": true}
+
+
+## A fence row (tools/lib/street-fence-generation.mjs): a known kit type, solid
+## runs of posts grounded on their land triangles, a status that follows the runs
+## and, when it is built, a prop of its own type with usable params.
+static func _validate_street_fence(row: Dictionary, land_records: Dictionary, boundary: Dictionary) -> Dictionary:
+	var row_id := str(row.get("id", ""))
+	var fence_value: Variant = row.get("fence", null)
+	if not fence_value is Dictionary or not STREET_FENCE_KIT.TYPES.has(str((fence_value as Dictionary).get("type", ""))) \
+	or not (fence_value as Dictionary).get("runs", null) is Array or not (fence_value as Dictionary).get("openings", null) is Array:
+		return _failure("street_detail_fence", "Street-detail fence block is invalid: %s" % row_id)
+	var fence: Dictionary = fence_value
+	# The generator's type table (tools/lib/street-fence-generation.mjs) and the kit's must agree.
+	var spec: Dictionary = STREET_FENCE_KIT.TYPES[str(fence.type)]
+	if not is_equal_approx(float(fence.get("height_m", -1.0)), float(spec.height_m)) or not is_equal_approx(float(fence.get("half_thickness_m", -1.0)), float(spec.half_thickness_m)):
+		return _failure("street_detail_fence", "Street-detail fence height or half thickness differs from the fence kit: %s" % row_id)
+	var runs: Array = fence.runs
+	if (str(row.get("status", "")) == "placed") != (runs.size() > 0):
+		return _failure("street_detail_fence", "Street-detail fence status does not follow its runs: %s" % row_id)
+	for run_value: Variant in runs:
+		if not run_value is Dictionary:
+			return _failure("street_detail_fence", "Street-detail fence run is not an object: %s" % row_id)
+		var points_value: Variant = (run_value as Dictionary).get("points_m", null)
+		var supports_value: Variant = (run_value as Dictionary).get("terrain_supports", null)
+		var biases_value: Variant = (run_value as Dictionary).get("surface_bias_m", null)
+		if not points_value is Array or not supports_value is Array or not biases_value is Array \
+		or (points_value as Array).size() < 2 or (supports_value as Array).size() != (points_value as Array).size() or (biases_value as Array).size() != (points_value as Array).size():
+			return _failure("street_detail_fence", "Street-detail fence run arrays are inconsistent: %s" % row_id)
+		for index in (points_value as Array).size():
+			var point_value: Variant = points_value[index]
+			var support_value: Variant = supports_value[index]
+			if not point_value is Array or (point_value as Array).size() != 3 or not support_value is Array or (support_value as Array).size() != 2 \
+			or not _is_finite_number(point_value[0]) or not _is_finite_number(point_value[1]) or not _is_finite_number(point_value[2]) \
+			or not _is_finite_number(biases_value[index]) or float(biases_value[index]) < 0.0 \
+			or not _street_detail_grounded(land_records, boundary, point_value, str(support_value[0]), support_value[1]):
+				return _failure("street_detail_grounding", "Street-detail fence post is invalid, off the island or not grounded: %s" % row_id)
+	if row.has("prop") and (str(row.prop) != str(fence.type) or str(row.get("status", "")) != "placed" \
+	or STREET_FENCE_KIT.params_error(str(row.prop), row.get("prop_params", null)) != ""):
+		return _failure("street_detail_fence", "Street-detail fence prop does not match its placed fence: %s" % row_id)
 	return {"ok": true}
 
 

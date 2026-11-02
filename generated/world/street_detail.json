@@ -1,5 +1,22 @@
 {
   "audit": {
+    "fences": {
+      "built_length_m": 446.531,
+      "fully_open": [
+        "osm:w1098437855"
+      ],
+      "openings_by_reason": {
+        "building": 3,
+        "building+mask:approach+mask:door+mask:stair": 1,
+        "crossing": 16,
+        "crossing+gate": 9,
+        "gate": 1,
+        "mask:whole_island_anchor": 1
+      },
+      "osm_built": 0,
+      "osm_fences": 24,
+      "rule_fences": 2
+    },
     "furniture": {
       "osm_props": 6,
       "osm_unbuilt": [
@@ -44,21 +61,19 @@
       "stops_moved": 3
     },
     "minimum_placed_clearances_m": {
-      "approach": 5.441,
-      "door": 4.956,
+      "approach": 1.512,
+      "door": 3.811,
       "ferry_path": 3.001,
       "qa_route": 3.001,
       "spawn": 10.941,
       "spawn_forward": 1.517,
-      "stair": 4.909,
-      "whole_island_anchor": 12.871
+      "stair": 3.811,
+      "whole_island_anchor": 3.05
     },
     "osm": {
       "excluded_by_reason": {
         "inside_building": 2,
-        "stair": 1,
-        "wall_buffer": 1,
-        "whole_island_anchor": 1
+        "wall_buffer": 1
       },
       "matched": 665,
       "outside_land": [
@@ -87,13 +102,13 @@
     },
     "scatter": {
       "candidates": 531,
-      "placed": 56,
+      "placed": 51,
       "rejected_by_reason": {
         "building_buffer": 1,
         "ferry_path": 4,
         "land_edge": 22,
         "outside_zone": 89,
-        "overlap": 3,
+        "overlap": 8,
         "qa_route": 2,
         "road": 56,
         "seed_acceptance": 257,
@@ -108,6 +123,8 @@
     }
   },
   "conventions": {
+    "fence": "fence rows: the kit type and why (type_basis), height and collision half thickness, the stretches cut open along points_m (openings, metres along the line, with what opens them) and the solid runs left (posts on the ground: points_m, terrain_supports, surface_bias_m); a fence row with a prop is built (game/scripts/world/street_fence_kit.gd)",
+    "fenced_approaches": "scored-building sides a built fence closes, which the building fit may skip (game/tests/shared/building_fit.gd)",
     "layers": "switchable runtime subtrees under PlayableWorld/StreetDetail; ground rows feed the always-on chunk surfaces",
     "position_m": "[x, y, z]; y is the generated land elevation under x, z (terrain_support names the triangle)",
     "prop": "the street-furniture kit prop the runtime builds for a placed row (game/scripts/world/street_furniture_kit.gd), with prop_params; rows without one are data only",
@@ -127,14 +144,14 @@
       "bus_stop": 15,
       "clutter_slot": 20,
       "crossing": 161,
-      "fence": 24,
+      "fence": 26,
       "fire_hydrant": 17,
       "gate": 27,
       "hedge": 0,
       "jersey_barrier": 1,
       "kerb": 8,
       "log_barrier": 2,
-      "palm_slot": 17,
+      "palm_slot": 12,
       "planting_slot": 19,
       "post_box": 1,
       "power_line": 44,
@@ -150,29 +167,29 @@
     },
     "by_layer": {
       "clutter": 309,
-      "fences": 58,
+      "fences": 60,
       "furniture": 201,
       "ground": 169,
-      "vegetation": 36
+      "vegetation": 31
     },
     "by_source": {
       "osm": 660,
-      "scatter": 113,
+      "scatter": 110,
       "set_piece": 0
     },
     "by_status": {
-      "excluded": 5,
-      "placed": 768
+      "excluded": 4,
+      "placed": 766
     },
-    "pilot_rows": 133,
+    "pilot_rows": 130,
     "placed_by_layer": {
       "clutter": 307,
-      "fences": 56,
+      "fences": 59,
       "furniture": 200,
       "ground": 169,
-      "vegetation": 36
+      "vegetation": 31
     },
-    "total": 773
+    "total": 770
   },
   "exclusion_inputs": {
     "ferry_path_xz": [
@@ -1300,6 +1317,7 @@
     "wall_buffer_m": 1,
     "whole_island_anchor_radius_m": 3
   },
+  "fenced_approaches": [],
   "generator": "tools/lib/street-detail-generation.mjs",
   "ground": {
     "counts": {
@@ -1582,7 +1600,7 @@
     },
     "zones": {
       "path": "tools/config/street-detail-zones.json",
-      "sha256": "f2beccc606a05fb3a332240f0c3de404156597216bf6b0977e5b2d4aba4fcfbb"
+      "sha256": "745abcbb93b734a3d6d5b7a919b8769981579afe7bcb04502cadde2d73544b9a"
     }
   },
   "kinds": {
@@ -22032,6 +22050,233 @@
       ],
       "closed": false,
       "exclusion": null,
+      "fence": {
+        "half_thickness_m": 0.06,
+        "height_m": 1.83,
+        "length_m": 417.251,
+        "openings": [
+          {
+            "from_m": 207.775,
+            "reason": "crossing+gate",
+            "source_ids": [
+              "n1249019391",
+              "w108982423",
+              "w1473022594"
+            ],
+            "to_m": 214.775
+          },
+          {
+            "from_m": 253.97,
+            "reason": "crossing+gate",
+            "source_ids": [
+              "n13515004503",
+              "w8919778"
+            ],
+            "to_m": 260.769
+          }
+        ],
+        "params": {
+          "inside": "center"
+        },
+        "runs": [
+          {
+            "points_m": [
+              [
+                -628.771,
+                2.453,
+                -199.735
+              ],
+              [
+                -619.784,
+                2.393,
+                -204.477
+              ],
+              [
+                -577.093,
+                2.223,
+                -227.031
+              ],
+              [
+                -596.808,
+                2.356,
+                -264.323
+              ],
+              [
+                -566.533,
+                2.308,
+                -279.718
+              ],
+              [
+                -599.516,
+                2.471,
+                -343.816
+              ],
+              [
+                -599.299,
+                2.463,
+                -344.893
+              ]
+            ],
+            "surface_bias_m": [
+              0,
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0.02
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-3__z_-1",
+                19
+              ],
+              [
+                "land:w26767313:x_-3__z_-1",
+                19
+              ],
+              [
+                "land:w26767313:x_-3__z_-1",
+                39
+              ],
+              [
+                "land:w26767313:x_-3__z_-2",
+                57
+              ],
+              [
+                "land:w26767313:x_-3__z_-2",
+                72
+              ],
+              [
+                "land:w26767313:x_-3__z_-2",
+                60
+              ],
+              [
+                "land:w26767313:x_-3__z_-2",
+                60
+              ]
+            ]
+          },
+          {
+            "points_m": [
+              [
+                -597.424,
+                2.416,
+                -351.617
+              ],
+              [
+                -593.088,
+                2.14,
+                -363.764
+              ],
+              [
+                -585.39,
+                2.098,
+                -388.91
+              ]
+            ],
+            "surface_bias_m": [
+              0.02,
+              0.02,
+              0.02
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-3__z_-2",
+                60
+              ],
+              [
+                "land:w26767313:x_-3__z_-2",
+                63
+              ],
+              [
+                "land:w26767313:x_-3__z_-2",
+                65
+              ]
+            ]
+          },
+          {
+            "points_m": [
+              [
+                -583.4,
+                2.215,
+                -395.411
+              ],
+              [
+                -566.533,
+                2.459,
+                -450.527
+              ],
+              [
+                -582.097,
+                2.49,
+                -455.603
+              ],
+              [
+                -589.202,
+                2.477,
+                -463.718
+              ],
+              [
+                -632.27,
+                2.206,
+                -476.52
+              ],
+              [
+                -654.086,
+                2.534,
+                -481.117
+              ],
+              [
+                -658.474,
+                2.683,
+                -480.316
+              ]
+            ],
+            "surface_bias_m": [
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-3__z_-2",
+                65
+              ],
+              [
+                "land:w26767313:x_-3__z_-2",
+                85
+              ],
+              [
+                "land:w26767313:x_-3__z_-2",
+                69
+              ],
+              [
+                "land:w26767313:x_-3__z_-2",
+                69
+              ],
+              [
+                "land:w26767313:x_-3__z_-2",
+                52
+              ],
+              [
+                "land:w26767313:x_-3__z_-2",
+                39
+              ],
+              [
+                "land:w26767313:x_-3__z_-2",
+                39
+              ]
+            ]
+          }
+        ],
+        "type": "chain_link",
+        "type_basis": "default"
+      },
       "geometry": "polyline",
       "id": "osm:w109023439",
       "kind": "fence",
@@ -22208,6 +22453,316 @@
       ],
       "closed": true,
       "exclusion": null,
+      "fence": {
+        "half_thickness_m": 0.25,
+        "height_m": 2.13,
+        "length_m": 554.891,
+        "openings": [
+          {
+            "from_m": 73.199,
+            "reason": "crossing+gate",
+            "source_ids": [
+              "n12112843877",
+              "w8919233",
+              "w1473022609"
+            ],
+            "to_m": 80.799
+          }
+        ],
+        "params": {
+          "inside": "center"
+        },
+        "runs": [
+          {
+            "points_m": [
+              [
+                -429.307,
+                2.293,
+                -516.495
+              ],
+              [
+                -440.8,
+                2.361,
+                -479.815
+              ],
+              [
+                -440.642,
+                2.105,
+                -464.007
+              ],
+              [
+                -446.225,
+                1.951,
+                -445.896
+              ]
+            ],
+            "surface_bias_m": [
+              0.02,
+              0.02,
+              0.02,
+              0.02
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-2__z_-3",
+                33
+              ],
+              [
+                "land:w26767313:x_-2__z_-2",
+                44
+              ],
+              [
+                "land:w26767313:x_-2__z_-2",
+                44
+              ],
+              [
+                "land:w26767313:x_-2__z_-2",
+                42
+              ]
+            ]
+          },
+          {
+            "points_m": [
+              [
+                -451.295,
+                2.022,
+                -440.322
+              ],
+              [
+                -451.985,
+                2.033,
+                -439.617
+              ],
+              [
+                -458.668,
+                2.448,
+                -416.374
+              ],
+              [
+                -455.493,
+                2.461,
+                -413.502
+              ],
+              [
+                -471.875,
+                2.458,
+                -359.156
+              ],
+              [
+                -447.324,
+                2.506,
+                -346.922
+              ],
+              [
+                -406.014,
+                2.81,
+                -334.532
+              ],
+              [
+                -389.202,
+                2.88,
+                -338.884
+              ],
+              [
+                -376.847,
+                2.715,
+                -376.355
+              ],
+              [
+                -367.834,
+                2.561,
+                -399.442
+              ],
+              [
+                -352.86,
+                2.812,
+                -405.943
+              ],
+              [
+                -349.263,
+                2.686,
+                -417.654
+              ],
+              [
+                -337.173,
+                2.701,
+                -458.096
+              ],
+              [
+                -367.201,
+                2.348,
+                -545.026
+              ],
+              [
+                -373.664,
+                2.298,
+                -542.454
+              ],
+              [
+                -382.853,
+                2.244,
+                -536.577
+              ],
+              [
+                -400.703,
+                2.238,
+                -523.096
+              ],
+              [
+                -409.276,
+                2.246,
+                -519.133
+              ],
+              [
+                -417.938,
+                2.301,
+                -517.252
+              ],
+              [
+                -418.017,
+                2.279,
+                -515.404
+              ],
+              [
+                -420.066,
+                2.28,
+                -515.426
+              ],
+              [
+                -420.409,
+                2.298,
+                -516.996
+              ],
+              [
+                -429.307,
+                2.293,
+                -516.495
+              ]
+            ],
+            "surface_bias_m": [
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0,
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0.02
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-2__z_-2",
+                27
+              ],
+              [
+                "land:w26767313:x_-2__z_-2",
+                27
+              ],
+              [
+                "land:w26767313:x_-2__z_-2",
+                27
+              ],
+              [
+                "land:w26767313:x_-2__z_-2",
+                24
+              ],
+              [
+                "land:w26767313:x_-2__z_-2",
+                23
+              ],
+              [
+                "land:w26767313:x_-2__z_-2",
+                36
+              ],
+              [
+                "land:w26767313:x_-2__z_-2",
+                52
+              ],
+              [
+                "land:w26767313:x_-2__z_-2",
+                53
+              ],
+              [
+                "land:w26767313:x_-2__z_-2",
+                70
+              ],
+              [
+                "land:w26767313:x_-2__z_-2",
+                73
+              ],
+              [
+                "land:w26767313:x_-2__z_-2",
+                73
+              ],
+              [
+                "land:w26767313:x_-2__z_-2",
+                91
+              ],
+              [
+                "land:w26767313:x_-2__z_-2",
+                93
+              ],
+              [
+                "land:w26767313:x_-2__z_-3",
+                67
+              ],
+              [
+                "land:w26767313:x_-2__z_-3",
+                64
+              ],
+              [
+                "land:w26767313:x_-2__z_-3",
+                64
+              ],
+              [
+                "land:w26767313:x_-2__z_-3",
+                49
+              ],
+              [
+                "land:w26767313:x_-2__z_-3",
+                48
+              ],
+              [
+                "land:w26767313:x_-2__z_-3",
+                33
+              ],
+              [
+                "land:w26767313:x_-2__z_-3",
+                33
+              ],
+              [
+                "land:w26767313:x_-2__z_-3",
+                33
+              ],
+              [
+                "land:w26767313:x_-2__z_-3",
+                33
+              ],
+              [
+                "land:w26767313:x_-2__z_-3",
+                33
+              ]
+            ]
+          }
+        ],
+        "type": "chain_link_barbed",
+        "type_basis": "osm_context:hazard=radiation"
+      },
       "geometry": "polyline",
       "id": "osm:w109042225",
       "kind": "fence",
@@ -22505,6 +23060,94 @@
       "attached_ids": [],
       "closed": false,
       "exclusion": null,
+      "fence": {
+        "half_thickness_m": 0.06,
+        "height_m": 1.83,
+        "length_m": 168.912,
+        "openings": [
+          {
+            "from_m": 42.678,
+            "reason": "crossing",
+            "source_ids": [
+              "w1098437831"
+            ],
+            "to_m": 80.858
+          }
+        ],
+        "params": {
+          "inside": "center"
+        },
+        "runs": [
+          {
+            "points_m": [
+              [
+                -76.439,
+                3.409,
+                -91.41
+              ],
+              [
+                -38.709,
+                3.566,
+                -111.355
+              ]
+            ],
+            "surface_bias_m": [
+              0,
+              0
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-1__z_-1",
+                84
+              ],
+              [
+                "land:w26767313:x_-1__z_-1",
+                103
+              ]
+            ]
+          },
+          {
+            "points_m": [
+              [
+                -5.729,
+                3.179,
+                -129.426
+              ],
+              [
+                -7.747,
+                3.249,
+                -132.999
+              ],
+              [
+                66.362,
+                3.23,
+                -172.439
+              ]
+            ],
+            "surface_bias_m": [
+              0,
+              0,
+              0
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-1__z_-1",
+                121
+              ],
+              [
+                "land:w26767313:x_-1__z_-1",
+                121
+              ],
+              [
+                "land:w26767313:x_0__z_-1",
+                42
+              ]
+            ]
+          }
+        ],
+        "type": "chain_link",
+        "type_basis": "default"
+      },
       "geometry": "polyline",
       "id": "osm:w1098437830",
       "kind": "fence",
@@ -22569,6 +23212,47 @@
       "attached_ids": [],
       "closed": false,
       "exclusion": null,
+      "fence": {
+        "half_thickness_m": 0.06,
+        "height_m": 1.83,
+        "length_m": 166.192,
+        "openings": [],
+        "params": {
+          "inside": "center"
+        },
+        "runs": [
+          {
+            "points_m": [
+              [
+                -95.722,
+                3.4,
+                -108.653
+              ],
+              [
+                -173.128,
+                3.168,
+                -255.718
+              ]
+            ],
+            "surface_bias_m": [
+              0,
+              0
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-1__z_-1",
+                86
+              ],
+              [
+                "land:w26767313:x_-1__z_-1",
+                46
+              ]
+            ]
+          }
+        ],
+        "type": "chain_link",
+        "type_basis": "default"
+      },
       "geometry": "polyline",
       "id": "osm:w1098437833",
       "kind": "fence",
@@ -22613,6 +23297,57 @@
       "attached_ids": [],
       "closed": false,
       "exclusion": null,
+      "fence": {
+        "half_thickness_m": 0.06,
+        "height_m": 1.83,
+        "length_m": 121.84,
+        "openings": [],
+        "params": {
+          "inside": "center"
+        },
+        "runs": [
+          {
+            "points_m": [
+              [
+                -195.049,
+                3.129,
+                -262.753
+              ],
+              [
+                -241.882,
+                3.142,
+                -238.096
+              ],
+              [
+                -274.003,
+                3.026,
+                -299.065
+              ]
+            ],
+            "surface_bias_m": [
+              0,
+              0,
+              0
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-1__z_-2",
+                17
+              ],
+              [
+                "land:w26767313:x_-1__z_-1",
+                15
+              ],
+              [
+                "land:w26767313:x_-2__z_-2",
+                115
+              ]
+            ]
+          }
+        ],
+        "type": "chain_link",
+        "type_basis": "default"
+      },
       "geometry": "polyline",
       "id": "osm:w1098437834",
       "kind": "fence",
@@ -22666,11 +23401,105 @@
     {
       "attached_ids": [],
       "closed": false,
-      "exclusion": {
-        "observed_m": 1.282,
-        "reason": "stair",
-        "required_m": 1.5,
-        "source_id": "w1308007114:stair_1"
+      "exclusion": null,
+      "fence": {
+        "half_thickness_m": 0.06,
+        "height_m": 1.83,
+        "length_m": 43.235,
+        "openings": [
+          {
+            "from_m": 20.17,
+            "reason": "building+mask:approach+mask:door+mask:stair",
+            "source_ids": [
+              "w1308007114",
+              "w1308007114:stair_1"
+            ],
+            "to_m": 41.239
+          }
+        ],
+        "params": {
+          "inside": "center"
+        },
+        "runs": [
+          {
+            "points_m": [
+              [
+                -404.3,
+                2.811,
+                157.434
+              ],
+              [
+                -406.762,
+                2.794,
+                158.669
+              ],
+              [
+                -410.033,
+                2.87,
+                152.157
+              ],
+              [
+                -414.582,
+                3.092,
+                143.108
+              ]
+            ],
+            "surface_bias_m": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-2__z_0",
+                49
+              ],
+              [
+                "land:w26767313:x_-2__z_0",
+                49
+              ],
+              [
+                "land:w26767313:x_-2__z_0",
+                48
+              ],
+              [
+                "land:w26767313:x_-2__z_0",
+                48
+              ]
+            ]
+          },
+          {
+            "points_m": [
+              [
+                -424.049,
+                3.17,
+                124.286
+              ],
+              [
+                -424.946,
+                3.12,
+                122.502
+              ]
+            ],
+            "surface_bias_m": [
+              0,
+              0
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-2__z_0",
+                34
+              ],
+              [
+                "land:w26767313:x_-2__z_0",
+                34
+              ]
+            ]
+          }
+        ],
+        "type": "chain_link",
+        "type_basis": "default"
       },
       "geometry": "polyline",
       "id": "osm:w1098437840",
@@ -22707,7 +23536,7 @@
       "source": "osm",
       "source_id": "w1098437840",
       "source_tag": "barrier=fence",
-      "status": "excluded",
+      "status": "placed",
       "tags": {
         "barrier": "fence"
       },
@@ -22745,7 +23574,33 @@
     {
       "attached_ids": [],
       "closed": false,
-      "exclusion": null,
+      "exclusion": {
+        "observed_m": 0,
+        "reason": "fully_open",
+        "required_m": 0,
+        "source_id": "w1098437856"
+      },
+      "fence": {
+        "half_thickness_m": 0.06,
+        "height_m": 1.83,
+        "length_m": 25.894,
+        "openings": [
+          {
+            "from_m": 0,
+            "reason": "crossing",
+            "source_ids": [
+              "w1098437856"
+            ],
+            "to_m": 25.894
+          }
+        ],
+        "params": {
+          "inside": "center"
+        },
+        "runs": [],
+        "type": "chain_link",
+        "type_basis": "default"
+      },
       "geometry": "polyline",
       "id": "osm:w1098437855",
       "kind": "fence",
@@ -22771,7 +23626,7 @@
       "source": "osm",
       "source_id": "w1098437855",
       "source_tag": "barrier=fence",
-      "status": "placed",
+      "status": "excluded",
       "tags": {
         "barrier": "fence"
       },
@@ -22800,6 +23655,144 @@
       "attached_ids": [],
       "closed": false,
       "exclusion": null,
+      "fence": {
+        "half_thickness_m": 0.06,
+        "height_m": 1.83,
+        "length_m": 132.641,
+        "openings": [
+          {
+            "from_m": 58.674,
+            "reason": "crossing",
+            "source_ids": [
+              "w1098437860"
+            ],
+            "to_m": 128.044
+          }
+        ],
+        "params": {
+          "inside": "center"
+        },
+        "runs": [
+          {
+            "points_m": [
+              [
+                -33.915,
+                3.056,
+                66.474
+              ],
+              [
+                -49.655,
+                3.131,
+                75.135
+              ],
+              [
+                -47.931,
+                3.154,
+                78.263
+              ],
+              [
+                -60.119,
+                3.209,
+                84.976
+              ],
+              [
+                -62.273,
+                3.253,
+                90.742
+              ],
+              [
+                -55.661,
+                3.225,
+                103.11
+              ],
+              [
+                -58.342,
+                3.239,
+                104.548
+              ]
+            ],
+            "surface_bias_m": [
+              0.05,
+              0.05,
+              0.05,
+              0.05,
+              0.05,
+              0.05,
+              0.05
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-1__z_0",
+                107
+              ],
+              [
+                "land:w26767313:x_-1__z_0",
+                106
+              ],
+              [
+                "land:w26767313:x_-1__z_0",
+                106
+              ],
+              [
+                "land:w26767313:x_-1__z_0",
+                106
+              ],
+              [
+                "land:w26767313:x_-1__z_0",
+                106
+              ],
+              [
+                "land:w26767313:x_-1__z_0",
+                104
+              ],
+              [
+                "land:w26767313:x_-1__z_0",
+                104
+              ]
+            ]
+          },
+          {
+            "points_m": [
+              [
+                -26.584,
+                3.231,
+                165.463
+              ],
+              [
+                -26.063,
+                3.228,
+                166.439
+              ],
+              [
+                -22.985,
+                3.238,
+                164.792
+              ]
+            ],
+            "surface_bias_m": [
+              0.05,
+              0.05,
+              0.05
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-1__z_0",
+                116
+              ],
+              [
+                "land:w26767313:x_-1__z_0",
+                116
+              ],
+              [
+                "land:w26767313:x_-1__z_0",
+                116
+              ]
+            ]
+          }
+        ],
+        "type": "chain_link",
+        "type_basis": "default"
+      },
       "geometry": "polyline",
       "id": "osm:w1164820773",
       "kind": "fence",
@@ -22914,6 +23907,120 @@
       "attached_ids": [],
       "closed": false,
       "exclusion": null,
+      "fence": {
+        "half_thickness_m": 0.06,
+        "height_m": 1.83,
+        "length_m": 26.21,
+        "openings": [
+          {
+            "from_m": 9.366,
+            "reason": "crossing",
+            "source_ids": [
+              "w1212173471"
+            ],
+            "to_m": 13.256
+          },
+          {
+            "from_m": 16.043,
+            "reason": "crossing",
+            "source_ids": [
+              "w1530613466"
+            ],
+            "to_m": 18.937
+          }
+        ],
+        "params": {
+          "inside": "center"
+        },
+        "runs": [
+          {
+            "points_m": [
+              [
+                -380.233,
+                2.88,
+                242.56
+              ],
+              [
+                -388.285,
+                3.033,
+                247.344
+              ]
+            ],
+            "surface_bias_m": [
+              0,
+              0
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-2__z_0",
+                58
+              ],
+              [
+                "land:w26767313:x_-2__z_0",
+                43
+              ]
+            ]
+          },
+          {
+            "points_m": [
+              [
+                -391.606,
+                3.144,
+                249.37
+              ],
+              [
+                -393.968,
+                3.224,
+                250.85
+              ]
+            ],
+            "surface_bias_m": [
+              0,
+              0
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-2__z_0",
+                43
+              ],
+              [
+                "land:w26767313:x_-2__z_0",
+                43
+              ]
+            ]
+          },
+          {
+            "points_m": [
+              [
+                -396.45,
+                3.307,
+                252.336
+              ],
+              [
+                -402.761,
+                3.519,
+                255.951
+              ]
+            ],
+            "surface_bias_m": [
+              0,
+              0.03
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-2__z_0",
+                43
+              ],
+              [
+                "land:w26767313:x_-2__z_0",
+                43
+              ]
+            ]
+          }
+        ],
+        "type": "chain_link",
+        "type_basis": "osm_fence_type:chain_link"
+      },
       "geometry": "polyline",
       "id": "osm:w1212173468",
       "kind": "fence",
@@ -22979,6 +24086,290 @@
       "attached_ids": [],
       "closed": false,
       "exclusion": null,
+      "fence": {
+        "half_thickness_m": 0.06,
+        "height_m": 1.83,
+        "length_m": 357.904,
+        "openings": [
+          {
+            "from_m": 80.078,
+            "reason": "crossing",
+            "source_ids": [
+              "w1222505189"
+            ],
+            "to_m": 86.577
+          },
+          {
+            "from_m": 311.116,
+            "reason": "crossing",
+            "source_ids": [
+              "w131937148"
+            ],
+            "to_m": 328.912
+          }
+        ],
+        "params": {
+          "inside": "center"
+        },
+        "runs": [
+          {
+            "points_m": [
+              [
+                574.306,
+                3.09,
+                551.015
+              ],
+              [
+                577.7,
+                2.988,
+                549.211
+              ],
+              [
+                580.725,
+                2.952,
+                544.247
+              ],
+              [
+                586.616,
+                2.9,
+                529.397
+              ],
+              [
+                596.5,
+                2.606,
+                490.078
+              ],
+              [
+                584.312,
+                3.02,
+                496.769
+              ]
+            ],
+            "surface_bias_m": [
+              0.03,
+              0.03,
+              0.03,
+              0.03,
+              0,
+              0
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_2__z_2",
+                9
+              ],
+              [
+                "land:w26767313:x_2__z_2",
+                12
+              ],
+              [
+                "land:w26767313:x_2__z_2",
+                12
+              ],
+              [
+                "land:w26767313:x_2__z_2",
+                16
+              ],
+              [
+                "land:w26767313:x_2__z_1",
+                36
+              ],
+              [
+                "land:w26767313:x_2__z_1",
+                32
+              ]
+            ]
+          },
+          {
+            "points_m": [
+              [
+                578.616,
+                3.166,
+                499.896
+              ],
+              [
+                575.634,
+                3.234,
+                501.533
+              ],
+              [
+                559.613,
+                3.266,
+                510.439
+              ],
+              [
+                552.798,
+                3.279,
+                514.446
+              ],
+              [
+                537.885,
+                3.279,
+                522.695
+              ],
+              [
+                490.182,
+                3.297,
+                548.243
+              ],
+              [
+                495.247,
+                3.298,
+                559.152
+              ],
+              [
+                488.001,
+                3.322,
+                562.67
+              ],
+              [
+                483.271,
+                3.319,
+                552.006
+              ],
+              [
+                439.085,
+                3.529,
+                576.084
+              ],
+              [
+                444.379,
+                3.553,
+                585.758
+              ],
+              [
+                417.054,
+                3.507,
+                599.64
+              ]
+            ],
+            "surface_bias_m": [
+              0,
+              0,
+              0.03,
+              0,
+              0,
+              0,
+              0.03,
+              0.03,
+              0,
+              0,
+              0.03,
+              0.03
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_2__z_1",
+                32
+              ],
+              [
+                "land:w26767313:x_2__z_1",
+                17
+              ],
+              [
+                "land:w26767313:x_2__z_1",
+                17
+              ],
+              [
+                "land:w26767313:x_2__z_2",
+                10
+              ],
+              [
+                "land:w26767313:x_2__z_2",
+                7
+              ],
+              [
+                "land:w26767313:x_1__z_2",
+                94
+              ],
+              [
+                "land:w26767313:x_1__z_2",
+                94
+              ],
+              [
+                "land:w26767313:x_1__z_2",
+                94
+              ],
+              [
+                "land:w26767313:x_1__z_2",
+                94
+              ],
+              [
+                "land:w26767313:x_1__z_2",
+                78
+              ],
+              [
+                "land:w26767313:x_1__z_2",
+                79
+              ],
+              [
+                "land:w26767313:x_1__z_2",
+                78
+              ]
+            ]
+          },
+          {
+            "points_m": [
+              [
+                423.479,
+                2.972,
+                615.172
+              ],
+              [
+                425.966,
+                2.671,
+                619.576
+              ],
+              [
+                439.419,
+                3.003,
+                612.441
+              ],
+              [
+                442.365,
+                2.638,
+                615.959
+              ],
+              [
+                445.056,
+                2.315,
+                619.076
+              ]
+            ],
+            "surface_bias_m": [
+              0.03,
+              0.03,
+              0.03,
+              0,
+              0.03
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_1__z_2",
+                76
+              ],
+              [
+                "land:w26767313:x_1__z_2",
+                76
+              ],
+              [
+                "land:w26767313:x_1__z_2",
+                77
+              ],
+              [
+                "land:w26767313:x_1__z_2",
+                77
+              ],
+              [
+                "land:w26767313:x_1__z_2",
+                77
+              ]
+            ]
+          }
+        ],
+        "type": "chain_link",
+        "type_basis": "default"
+      },
       "geometry": "polyline",
       "id": "osm:w1222505200",
       "kind": "fence",
@@ -23213,6 +24604,47 @@
       "attached_ids": [],
       "closed": false,
       "exclusion": null,
+      "fence": {
+        "half_thickness_m": 0.06,
+        "height_m": 1.83,
+        "length_m": 141.772,
+        "openings": [],
+        "params": {
+          "inside": "center"
+        },
+        "runs": [
+          {
+            "points_m": [
+              [
+                -88.652,
+                3.046,
+                -793.168
+              ],
+              [
+                -23.346,
+                3.282,
+                -667.333
+              ]
+            ],
+            "surface_bias_m": [
+              0,
+              0
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-1__z_-4",
+                65
+              ],
+              [
+                "land:w26767313:x_-1__z_-3",
+                120
+              ]
+            ]
+          }
+        ],
+        "type": "chain_link",
+        "type_basis": "default"
+      },
       "geometry": "polyline",
       "id": "osm:w1222514688",
       "kind": "fence",
@@ -25182,6 +26614,214 @@
       ],
       "closed": true,
       "exclusion": null,
+      "fence": {
+        "half_thickness_m": 0.25,
+        "height_m": 2.13,
+        "length_m": 232.544,
+        "openings": [
+          {
+            "from_m": 58.674,
+            "reason": "gate",
+            "source_ids": [
+              "n11548963520"
+            ],
+            "to_m": 61.174
+          }
+        ],
+        "params": {
+          "inside": "center"
+        },
+        "runs": [
+          {
+            "points_m": [
+              [
+                298.36,
+                4.168,
+                -453.588
+              ],
+              [
+                313.387,
+                3.854,
+                -425.246
+              ],
+              [
+                299.142,
+                3.95,
+                -417.543
+              ],
+              [
+                294.113,
+                4.1,
+                -422.619
+              ],
+              [
+                291.311,
+                4.103,
+                -420.962
+              ]
+            ],
+            "surface_bias_m": [
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0.02
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_1__z_-2",
+                29
+              ],
+              [
+                "land:w26767313:x_1__z_-2",
+                27
+              ],
+              [
+                "land:w26767313:x_1__z_-2",
+                27
+              ],
+              [
+                "land:w26767313:x_1__z_-2",
+                26
+              ],
+              [
+                "land:w26767313:x_1__z_-2",
+                26
+              ]
+            ]
+          },
+          {
+            "points_m": [
+              [
+                289.159,
+                4.105,
+                -419.69
+              ],
+              [
+                286.559,
+                4.115,
+                -418.155
+              ],
+              [
+                286.929,
+                4.065,
+                -411.632
+              ],
+              [
+                240.756,
+                3.587,
+                -387.531
+              ],
+              [
+                229.606,
+                3.93,
+                -407.201
+              ],
+              [
+                229.096,
+                3.957,
+                -409.361
+              ],
+              [
+                229.149,
+                3.985,
+                -411.164
+              ],
+              [
+                229.237,
+                4.031,
+                -414.114
+              ],
+              [
+                230.486,
+                4.072,
+                -416.363
+              ],
+              [
+                232.508,
+                4.085,
+                -418.533
+              ],
+              [
+                234.671,
+                4.104,
+                -419.914
+              ],
+              [
+                298.36,
+                4.168,
+                -453.588
+              ]
+            ],
+            "surface_bias_m": [
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0.02
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_1__z_-2",
+                26
+              ],
+              [
+                "land:w26767313:x_1__z_-2",
+                11
+              ],
+              [
+                "land:w26767313:x_1__z_-2",
+                9
+              ],
+              [
+                "land:w26767313:x_0__z_-2",
+                121
+              ],
+              [
+                "land:w26767313:x_0__z_-2",
+                120
+              ],
+              [
+                "land:w26767313:x_0__z_-2",
+                120
+              ],
+              [
+                "land:w26767313:x_0__z_-2",
+                120
+              ],
+              [
+                "land:w26767313:x_0__z_-2",
+                120
+              ],
+              [
+                "land:w26767313:x_0__z_-2",
+                123
+              ],
+              [
+                "land:w26767313:x_0__z_-2",
+                123
+              ],
+              [
+                "land:w26767313:x_0__z_-2",
+                123
+              ],
+              [
+                "land:w26767313:x_1__z_-2",
+                29
+              ]
+            ]
+          }
+        ],
+        "type": "chain_link_barbed",
+        "type_basis": "osm_context:power=substation"
+      },
       "geometry": "polyline",
       "id": "osm:w1242725090",
       "kind": "fence",
@@ -27515,11 +29155,192 @@
     {
       "attached_ids": [],
       "closed": false,
-      "exclusion": {
-        "observed_m": 0.646,
-        "reason": "whole_island_anchor",
-        "required_m": 3,
-        "source_id": "qa:whole_island_anchor_4"
+      "exclusion": null,
+      "fence": {
+        "half_thickness_m": 0.06,
+        "height_m": 1.83,
+        "length_m": 485.084,
+        "openings": [
+          {
+            "from_m": 0,
+            "reason": "building",
+            "source_ids": [
+              "w1222514686"
+            ],
+            "to_m": 0.1
+          },
+          {
+            "from_m": 140.795,
+            "reason": "mask:whole_island_anchor",
+            "source_ids": [
+              "qa:whole_island_anchor_4"
+            ],
+            "to_m": 146.895
+          }
+        ],
+        "params": {
+          "inside": "center"
+        },
+        "runs": [
+          {
+            "points_m": [
+              [
+                532.689,
+                3.185,
+                495.888
+              ],
+              [
+                581.094,
+                3.071,
+                470.831
+              ],
+              [
+                606.038,
+                2.582,
+                388.33
+              ]
+            ],
+            "surface_bias_m": [
+              0,
+              0.02,
+              0.02
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_2__z_1",
+                1
+              ],
+              [
+                "land:w26767313:x_2__z_1",
+                37
+              ],
+              [
+                "land:w26767313:x_2__z_1",
+                43
+              ]
+            ]
+          },
+          {
+            "points_m": [
+              [
+                607.803,
+                2.566,
+                382.491
+              ],
+              [
+                618.298,
+                2.577,
+                347.779
+              ],
+              [
+                608.274,
+                2.567,
+                336.914
+              ],
+              [
+                611.061,
+                2.632,
+                332.361
+              ],
+              [
+                573.55,
+                2.996,
+                260.805
+              ],
+              [
+                551.154,
+                2.896,
+                277.013
+              ],
+              [
+                548.243,
+                2.834,
+                287.21
+              ],
+              [
+                511.198,
+                4.049,
+                269.343
+              ],
+              [
+                553.853,
+                3.264,
+                245.532
+              ],
+              [
+                550.67,
+                3.365,
+                232.619
+              ],
+              [
+                522.725,
+                4.588,
+                180.109
+              ]
+            ],
+            "surface_bias_m": [
+              0.02,
+              0.02,
+              0,
+              0.02,
+              0,
+              0.02,
+              0.02,
+              0,
+              0,
+              0,
+              0
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_2__z_1",
+                45
+              ],
+              [
+                "land:w26767313:x_2__z_1",
+                67
+              ],
+              [
+                "land:w26767313:x_2__z_1",
+                66
+              ],
+              [
+                "land:w26767313:x_2__z_1",
+                66
+              ],
+              [
+                "land:w26767313:x_2__z_1",
+                31
+              ],
+              [
+                "land:w26767313:x_2__z_1",
+                30
+              ],
+              [
+                "land:w26767313:x_2__z_1",
+                31
+              ],
+              [
+                "land:w26767313:x_1__z_1",
+                127
+              ],
+              [
+                "land:w26767313:x_2__z_0",
+                16
+              ],
+              [
+                "land:w26767313:x_2__z_0",
+                16
+              ],
+              [
+                "land:w26767313:x_2__z_0",
+                4
+              ]
+            ]
+          }
+        ],
+        "type": "chain_link",
+        "type_basis": "osm_fence_type:chain_link"
       },
       "geometry": "polyline",
       "id": "osm:w1252737733",
@@ -27591,7 +29412,7 @@
       "source": "osm",
       "source_id": "w1252737733",
       "source_tag": "barrier=fence",
-      "status": "excluded",
+      "status": "placed",
       "tags": {
         "barrier": "fence",
         "fence_type": "chain_link"
@@ -27666,6 +29487,294 @@
       "attached_ids": [],
       "closed": true,
       "exclusion": null,
+      "fence": {
+        "half_thickness_m": 0.3,
+        "height_m": 1.83,
+        "length_m": 944.639,
+        "openings": [
+          {
+            "from_m": 749.051,
+            "reason": "crossing",
+            "source_ids": [
+              "w1252737735"
+            ],
+            "to_m": 755.251
+          }
+        ],
+        "params": {
+          "inside": "center"
+        },
+        "runs": [
+          {
+            "points_m": [
+              [
+                393.484,
+                3.651,
+                -116.09
+              ],
+              [
+                365.531,
+                4.322,
+                -169.345
+              ],
+              [
+                371.369,
+                4.62,
+                -173.23
+              ],
+              [
+                367.474,
+                3.729,
+                -180.844
+              ],
+              [
+                377.014,
+                3.764,
+                -185.508
+              ],
+              [
+                375.775,
+                3.757,
+                -187.868
+              ],
+              [
+                424.585,
+                3.859,
+                -215.019
+              ],
+              [
+                437.283,
+                4.063,
+                -192.633
+              ],
+              [
+                493.04,
+                3.699,
+                -221.787
+              ],
+              [
+                499.432,
+                3.611,
+                -226.674
+              ],
+              [
+                573.998,
+                3.728,
+                -84.052
+              ],
+              [
+                581.27,
+                3.443,
+                -74.512
+              ],
+              [
+                623.108,
+                3.689,
+                4.136
+              ],
+              [
+                621.771,
+                3.691,
+                8.833
+              ],
+              [
+                613.304,
+                3.673,
+                11.449
+              ],
+              [
+                574.807,
+                3.717,
+                -61.754
+              ],
+              [
+                512.921,
+                3.728,
+                -27.045
+              ],
+              [
+                522.031,
+                3.666,
+                -8.722
+              ],
+              [
+                500.875,
+                3.76,
+                1.586
+              ],
+              [
+                485.768,
+                3.673,
+                -28.961
+              ]
+            ],
+            "surface_bias_m": [
+              0.02,
+              0.02,
+              0,
+              0.02,
+              0.02,
+              0.02,
+              0,
+              0.02,
+              0.02,
+              0,
+              0.02,
+              0,
+              0,
+              0.02,
+              0.02,
+              0.04,
+              0.02,
+              0.04,
+              0.02,
+              0.02
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_1__z_-1",
+                70
+              ],
+              [
+                "land:w26767313:x_1__z_-1",
+                59
+              ],
+              [
+                "land:w26767313:x_1__z_-1",
+                59
+              ],
+              [
+                "land:w26767313:x_1__z_-1",
+                58
+              ],
+              [
+                "land:w26767313:x_1__z_-1",
+                58
+              ],
+              [
+                "land:w26767313:x_1__z_-1",
+                58
+              ],
+              [
+                "land:w26767313:x_1__z_-1",
+                92
+              ],
+              [
+                "land:w26767313:x_1__z_-1",
+                93
+              ],
+              [
+                "land:w26767313:x_1__z_-1",
+                124
+              ],
+              [
+                "land:w26767313:x_1__z_-1",
+                127
+              ],
+              [
+                "land:w26767313:x_2__z_-1",
+                22
+              ],
+              [
+                "land:w26767313:x_2__z_-1",
+                35
+              ],
+              [
+                "land:w26767313:x_2__z_0",
+                62
+              ],
+              [
+                "land:w26767313:x_2__z_0",
+                62
+              ],
+              [
+                "land:w26767313:x_2__z_0",
+                62
+              ],
+              [
+                "land:w26767313:x_2__z_-1",
+                20
+              ],
+              [
+                "land:w26767313:x_2__z_-1",
+                0
+              ],
+              [
+                "land:w26767313:x_2__z_-1",
+                1
+              ],
+              [
+                "land:w26767313:x_1__z_0",
+                126
+              ],
+              [
+                "land:w26767313:x_1__z_-1",
+                112
+              ]
+            ]
+          },
+          {
+            "points_m": [
+              [
+                482.98,
+                3.653,
+                -34.498
+              ],
+              [
+                449.619,
+                3.847,
+                -99.213
+              ],
+              [
+                464.62,
+                3.897,
+                -107.529
+              ],
+              [
+                444.924,
+                3.827,
+                -143.597
+              ],
+              [
+                393.484,
+                3.651,
+                -116.09
+              ]
+            ],
+            "surface_bias_m": [
+              0,
+              0,
+              0,
+              0.02,
+              0.02
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_1__z_-1",
+                115
+              ],
+              [
+                "land:w26767313:x_1__z_-1",
+                102
+              ],
+              [
+                "land:w26767313:x_1__z_-1",
+                103
+              ],
+              [
+                "land:w26767313:x_1__z_-1",
+                89
+              ],
+              [
+                "land:w26767313:x_1__z_-1",
+                70
+              ]
+            ]
+          }
+        ],
+        "type": "construction_panel",
+        "type_basis": "osm_context:landuse=construction"
+      },
       "geometry": "polyline",
       "id": "osm:w1252737734",
       "kind": "fence",
@@ -27975,6 +30084,117 @@
       "attached_ids": [],
       "closed": false,
       "exclusion": null,
+      "fence": {
+        "half_thickness_m": 0.06,
+        "height_m": 1.83,
+        "length_m": 302.134,
+        "openings": [],
+        "params": {
+          "inside": "center"
+        },
+        "runs": [
+          {
+            "points_m": [
+              [
+                -658.474,
+                2.683,
+                -480.316
+              ],
+              [
+                -679.006,
+                2.995,
+                -415.773
+              ],
+              [
+                -693.075,
+                3.32,
+                -370.544
+              ],
+              [
+                -695.625,
+                3.243,
+                -357.92
+              ],
+              [
+                -696.706,
+                3.287,
+                -347.289
+              ],
+              [
+                -696.012,
+                3.469,
+                -336.335
+              ],
+              [
+                -692.987,
+                3.486,
+                -325.437
+              ],
+              [
+                -686.339,
+                3.183,
+                -310.298
+              ],
+              [
+                -628.771,
+                2.453,
+                -199.735
+              ]
+            ],
+            "surface_bias_m": [
+              0,
+              0,
+              0,
+              0,
+              0.02,
+              0,
+              0,
+              0.02,
+              0
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-3__z_-2",
+                39
+              ],
+              [
+                "land:w26767313:x_-3__z_-2",
+                19
+              ],
+              [
+                "land:w26767313:x_-3__z_-2",
+                15
+              ],
+              [
+                "land:w26767313:x_-3__z_-2",
+                15
+              ],
+              [
+                "land:w26767313:x_-3__z_-2",
+                12
+              ],
+              [
+                "land:w26767313:x_-3__z_-2",
+                12
+              ],
+              [
+                "land:w26767313:x_-3__z_-2",
+                13
+              ],
+              [
+                "land:w26767313:x_-3__z_-2",
+                10
+              ],
+              [
+                "land:w26767313:x_-3__z_-1",
+                19
+              ]
+            ]
+          }
+        ],
+        "type": "chain_link",
+        "type_basis": "default"
+      },
       "geometry": "polyline",
       "id": "osm:w1252737743",
       "kind": "fence",
@@ -28089,6 +30309,77 @@
       "attached_ids": [],
       "closed": true,
       "exclusion": null,
+      "fence": {
+        "half_thickness_m": 0.25,
+        "height_m": 2.13,
+        "length_m": 24.21,
+        "openings": [],
+        "params": {
+          "inside": "center"
+        },
+        "runs": [
+          {
+            "points_m": [
+              [
+                -370.112,
+                2.187,
+                -842.416
+              ],
+              [
+                -364.924,
+                2.295,
+                -845.11
+              ],
+              [
+                -362.04,
+                2.112,
+                -839.555
+              ],
+              [
+                -367.228,
+                1.957,
+                -836.861
+              ],
+              [
+                -370.112,
+                2.187,
+                -842.416
+              ]
+            ],
+            "surface_bias_m": [
+              0.02,
+              0.02,
+              0.02,
+              0.02,
+              0.02
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-2__z_-4",
+                27
+              ],
+              [
+                "land:w26767313:x_-2__z_-4",
+                35
+              ],
+              [
+                "land:w26767313:x_-2__z_-4",
+                27
+              ],
+              [
+                "land:w26767313:x_-2__z_-4",
+                27
+              ],
+              [
+                "land:w26767313:x_-2__z_-4",
+                27
+              ]
+            ]
+          }
+        ],
+        "type": "chain_link_barbed",
+        "type_basis": "osm_context:man_made=pumping_station"
+      },
       "geometry": "polyline",
       "id": "osm:w1252737745",
       "kind": "fence",
@@ -28169,6 +30460,657 @@
       ],
       "closed": true,
       "exclusion": null,
+      "fence": {
+        "half_thickness_m": 0.06,
+        "height_m": 1.83,
+        "length_m": 2113.423,
+        "openings": [
+          {
+            "from_m": 0,
+            "reason": "crossing+gate",
+            "source_ids": [
+              "n11586185528",
+              "n11644726181",
+              "w1252738864",
+              "w1252738865"
+            ],
+            "to_m": 13.3
+          },
+          {
+            "from_m": 184.093,
+            "reason": "crossing",
+            "source_ids": [
+              "w1098437880"
+            ],
+            "to_m": 186.993
+          },
+          {
+            "from_m": 204.892,
+            "reason": "crossing",
+            "source_ids": [
+              "w1252737730"
+            ],
+            "to_m": 207.592
+          },
+          {
+            "from_m": 1218.255,
+            "reason": "crossing",
+            "source_ids": [
+              "w1098437859"
+            ],
+            "to_m": 1220.355
+          },
+          {
+            "from_m": 1226.855,
+            "reason": "crossing",
+            "source_ids": [
+              "w1473253277"
+            ],
+            "to_m": 1233.755
+          },
+          {
+            "from_m": 1239.855,
+            "reason": "crossing",
+            "source_ids": [
+              "w1098437860"
+            ],
+            "to_m": 1241.655
+          },
+          {
+            "from_m": 1822.133,
+            "reason": "crossing+gate",
+            "source_ids": [
+              "n2253031332",
+              "w8917792",
+              "w1252738866"
+            ],
+            "to_m": 1829.033
+          }
+        ],
+        "params": {
+          "inside": "center"
+        },
+        "runs": [
+          {
+            "points_m": [
+              [
+                145.643,
+                3.91,
+                290.89
+              ],
+              [
+                180.066,
+                3.726,
+                358.276
+              ],
+              [
+                177.657,
+                3.582,
+                366.525
+              ],
+              [
+                162.242,
+                3.145,
+                376.789
+              ],
+              [
+                106.819,
+                3.1,
+                404.452
+              ],
+              [
+                101.518,
+                3.085,
+                407.406
+              ]
+            ],
+            "surface_bias_m": [
+              0,
+              0,
+              0.02,
+              0.02,
+              0.02,
+              0.05
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_0__z_1",
+                76
+              ],
+              [
+                "land:w26767313:x_0__z_1",
+                88
+              ],
+              [
+                "land:w26767313:x_0__z_1",
+                89
+              ],
+              [
+                "land:w26767313:x_0__z_1",
+                88
+              ],
+              [
+                "land:w26767313:x_0__z_1",
+                54
+              ],
+              [
+                "land:w26767313:x_0__z_1",
+                54
+              ]
+            ]
+          },
+          {
+            "points_m": [
+              [
+                98.985,
+                3.077,
+                408.818
+              ],
+              [
+                83.351,
+                3.178,
+                417.532
+              ]
+            ],
+            "surface_bias_m": [
+              0.05,
+              0.05
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_0__z_1",
+                54
+              ],
+              [
+                "land:w26767313:x_0__z_1",
+                36
+              ]
+            ]
+          },
+          {
+            "points_m": [
+              [
+                80.992,
+                3.204,
+                418.847
+              ],
+              [
+                80.536,
+                3.209,
+                419.101
+              ],
+              [
+                145.324,
+                6.527,
+                540.629
+              ],
+              [
+                141.728,
+                6.844,
+                553.853
+              ],
+              [
+                54.966,
+                3.713,
+                600.107
+              ],
+              [
+                52.17,
+                3.744,
+                601.598
+              ],
+              [
+                8.828,
+                3.974,
+                514.413
+              ],
+              [
+                -29.395,
+                4.138,
+                438.716
+              ],
+              [
+                -33.889,
+                4.205,
+                440.842
+              ],
+              [
+                -235.849,
+                3.245,
+                59.116
+              ],
+              [
+                -225.403,
+                3.408,
+                54.586
+              ],
+              [
+                -229.149,
+                3.672,
+                46.303
+              ],
+              [
+                -199.49,
+                3.655,
+                31.62
+              ],
+              [
+                -196.931,
+                3.612,
+                28.96
+              ],
+              [
+                -194.662,
+                3.58,
+                24.819
+              ],
+              [
+                -193.774,
+                3.574,
+                21.279
+              ],
+              [
+                -193.581,
+                3.589,
+                15.267
+              ],
+              [
+                -194.856,
+                3.632,
+                9.646
+              ],
+              [
+                -199.191,
+                3.733,
+                2.455
+              ],
+              [
+                -153.233,
+                3.421,
+                -22.765
+              ]
+            ],
+            "surface_bias_m": [
+              0.05,
+              0.05,
+              0.05,
+              0.02,
+              0,
+              0.05,
+              0,
+              0.05,
+              0,
+              0,
+              0.05,
+              0,
+              0,
+              0.05,
+              0.05,
+              0.05,
+              0,
+              0,
+              0,
+              0.05
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_0__z_1",
+                36
+              ],
+              [
+                "land:w26767313:x_0__z_1",
+                36
+              ],
+              [
+                "land:w26767313:x_0__z_2",
+                79
+              ],
+              [
+                "land:w26767313:x_0__z_2",
+                76
+              ],
+              [
+                "land:w26767313:x_0__z_2",
+                27
+              ],
+              [
+                "land:w26767313:x_0__z_2",
+                27
+              ],
+              [
+                "land:w26767313:x_0__z_2",
+                14
+              ],
+              [
+                "land:w26767313:x_-1__z_1",
+                116
+              ],
+              [
+                "land:w26767313:x_-1__z_1",
+                101
+              ],
+              [
+                "land:w26767313:x_-1__z_0",
+                13
+              ],
+              [
+                "land:w26767313:x_-1__z_0",
+                13
+              ],
+              [
+                "land:w26767313:x_-1__z_0",
+                13
+              ],
+              [
+                "land:w26767313:x_-1__z_0",
+                31
+              ],
+              [
+                "land:w26767313:x_-1__z_0",
+                31
+              ],
+              [
+                "land:w26767313:x_-1__z_0",
+                31
+              ],
+              [
+                "land:w26767313:x_-1__z_0",
+                31
+              ],
+              [
+                "land:w26767313:x_-1__z_0",
+                31
+              ],
+              [
+                "land:w26767313:x_-1__z_0",
+                31
+              ],
+              [
+                "land:w26767313:x_-1__z_0",
+                30
+              ],
+              [
+                "land:w26767313:x_-1__z_-1",
+                48
+              ]
+            ]
+          },
+          {
+            "points_m": [
+              [
+                -151.392,
+                3.41,
+                -23.776
+              ],
+              [
+                -148.762,
+                3.393,
+                -25.219
+              ],
+              [
+                -145.695,
+                3.374,
+                -26.904
+              ]
+            ],
+            "surface_bias_m": [
+              0.05,
+              0.05,
+              0.05
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-1__z_-1",
+                48
+              ],
+              [
+                "land:w26767313:x_-1__z_-1",
+                48
+              ],
+              [
+                "land:w26767313:x_-1__z_-1",
+                48
+              ]
+            ]
+          },
+          {
+            "points_m": [
+              [
+                -139.647,
+                3.336,
+                -30.226
+              ],
+              [
+                -136.724,
+                3.318,
+                -31.832
+              ],
+              [
+                -134.301,
+                3.295,
+                -33.162
+              ]
+            ],
+            "surface_bias_m": [
+              0.05,
+              0.05,
+              0
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-1__z_-1",
+                48
+              ],
+              [
+                "land:w26767313:x_-1__z_-1",
+                48
+              ],
+              [
+                "land:w26767313:x_-1__z_-1",
+                51
+              ]
+            ]
+          },
+          {
+            "points_m": [
+              [
+                -132.723,
+                3.28,
+                -34.028
+              ],
+              [
+                -37.951,
+                3.561,
+                -86.033
+              ],
+              [
+                -33.484,
+                3.576,
+                -86.401
+              ],
+              [
+                34.1,
+                6.656,
+                43.565
+              ],
+              [
+                1.477,
+                3.409,
+                60.519
+              ],
+              [
+                74.346,
+                3.334,
+                197.776
+              ],
+              [
+                185.043,
+                3.317,
+                139.756
+              ],
+              [
+                186.783,
+                3.382,
+                143.643
+              ]
+            ],
+            "surface_bias_m": [
+              0,
+              0.05,
+              0,
+              0,
+              0.05,
+              0.05,
+              0,
+              0.05
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-1__z_-1",
+                51
+              ],
+              [
+                "land:w26767313:x_-1__z_-1",
+                101
+              ],
+              [
+                "land:w26767313:x_-1__z_-1",
+                101
+              ],
+              [
+                "land:w26767313:x_0__z_0",
+                28
+              ],
+              [
+                "land:w26767313:x_0__z_0",
+                12
+              ],
+              [
+                "land:w26767313:x_0__z_0",
+                34
+              ],
+              [
+                "land:w26767313:x_0__z_0",
+                87
+              ],
+              [
+                "land:w26767313:x_0__z_0",
+                87
+              ]
+            ]
+          },
+          {
+            "points_m": [
+              [
+                189.607,
+                3.488,
+                149.939
+              ],
+              [
+                190.028,
+                3.503,
+                150.877
+              ],
+              [
+                227.215,
+                3.407,
+                130.606
+              ],
+              [
+                229.325,
+                3.419,
+                134.223
+              ],
+              [
+                232.605,
+                3.415,
+                132.287
+              ],
+              [
+                268.613,
+                3.497,
+                199.178
+              ],
+              [
+                266.089,
+                3.584,
+                207.839
+              ],
+              [
+                228.534,
+                3.694,
+                228.233
+              ],
+              [
+                229.844,
+                3.756,
+                230.771
+              ],
+              [
+                139.521,
+                3.757,
+                279.084
+              ]
+            ],
+            "surface_bias_m": [
+              0.05,
+              0.05,
+              0,
+              0,
+              0.05,
+              0,
+              0.05,
+              0,
+              0,
+              0
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_0__z_0",
+                87
+              ],
+              [
+                "land:w26767313:x_0__z_0",
+                87
+              ],
+              [
+                "land:w26767313:x_0__z_0",
+                118
+              ],
+              [
+                "land:w26767313:x_0__z_0",
+                118
+              ],
+              [
+                "land:w26767313:x_0__z_0",
+                118
+              ],
+              [
+                "land:w26767313:x_1__z_0",
+                2
+              ],
+              [
+                "land:w26767313:x_1__z_0",
+                2
+              ],
+              [
+                "land:w26767313:x_0__z_0",
+                112
+              ],
+              [
+                "land:w26767313:x_0__z_0",
+                112
+              ],
+              [
+                "land:w26767313:x_0__z_1",
+                79
+              ]
+            ]
+          }
+        ],
+        "type": "chain_link",
+        "type_basis": "default"
+      },
       "geometry": "polyline",
       "id": "osm:w1252737750",
       "kind": "fence",
@@ -28631,6 +31573,357 @@
       ],
       "closed": true,
       "exclusion": null,
+      "fence": {
+        "half_thickness_m": 0.06,
+        "height_m": 1.83,
+        "length_m": 970.979,
+        "openings": [
+          {
+            "from_m": 107.798,
+            "reason": "building",
+            "source_ids": [
+              "w34313528"
+            ],
+            "to_m": 128.697
+          },
+          {
+            "from_m": 337.993,
+            "reason": "crossing+gate",
+            "source_ids": [
+              "n11644724983",
+              "w1252737753"
+            ],
+            "to_m": 342.793
+          },
+          {
+            "from_m": 742.784,
+            "reason": "building",
+            "source_ids": [
+              "w111322535"
+            ],
+            "to_m": 746.284
+          }
+        ],
+        "params": {
+          "inside": "center"
+        },
+        "runs": [
+          {
+            "points_m": [
+              [
+                196.104,
+                3.458,
+                12.34
+              ],
+              [
+                272.869,
+                3.564,
+                -28.637
+              ],
+              [
+                275.964,
+                3.632,
+                -22.269
+              ],
+              [
+                288.039,
+                3.64,
+                -28.741
+              ]
+            ],
+            "surface_bias_m": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_0__z_0",
+                110
+              ],
+              [
+                "land:w26767313:x_1__z_-1",
+                0
+              ],
+              [
+                "land:w26767313:x_1__z_-1",
+                0
+              ],
+              [
+                "land:w26767313:x_1__z_-1",
+                16
+              ]
+            ]
+          },
+          {
+            "points_m": [
+              [
+                297.894,
+                3.568,
+                -10.41
+              ],
+              [
+                302.924,
+                3.642,
+                -1.82
+              ],
+              [
+                399.076,
+                3.653,
+                -53.45
+              ],
+              [
+                438.32,
+                3.633,
+                21.034
+              ],
+              [
+                434.68,
+                3.655,
+                22.77
+              ],
+              [
+                435.624,
+                3.647,
+                24.513
+              ]
+            ],
+            "surface_bias_m": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_1__z_-1",
+                16
+              ],
+              [
+                "land:w26767313:x_1__z_-1",
+                17
+              ],
+              [
+                "land:w26767313:x_1__z_-1",
+                66
+              ],
+              [
+                "land:w26767313:x_1__z_0",
+                95
+              ],
+              [
+                "land:w26767313:x_1__z_0",
+                95
+              ],
+              [
+                "land:w26767313:x_1__z_0",
+                95
+              ]
+            ]
+          },
+          {
+            "points_m": [
+              [
+                437.908,
+                3.628,
+                28.734
+              ],
+              [
+                438.865,
+                3.62,
+                30.507
+              ],
+              [
+                442.69,
+                3.598,
+                28.414
+              ],
+              [
+                477.291,
+                3.703,
+                94.883
+              ],
+              [
+                402.717,
+                3.513,
+                134.58
+              ],
+              [
+                401.442,
+                3.505,
+                132.12
+              ],
+              [
+                291.448,
+                3.392,
+                189.304
+              ],
+              [
+                250.086,
+                3.599,
+                109.043
+              ],
+              [
+                265.507,
+                3.633,
+                101.502
+              ]
+            ],
+            "surface_bias_m": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_1__z_0",
+                95
+              ],
+              [
+                "land:w26767313:x_1__z_0",
+                95
+              ],
+              [
+                "land:w26767313:x_1__z_0",
+                95
+              ],
+              [
+                "land:w26767313:x_1__z_0",
+                107
+              ],
+              [
+                "land:w26767313:x_1__z_0",
+                70
+              ],
+              [
+                "land:w26767313:x_1__z_0",
+                70
+              ],
+              [
+                "land:w26767313:x_1__z_0",
+                21
+              ],
+              [
+                "land:w26767313:x_0__z_0",
+                121
+              ],
+              [
+                "land:w26767313:x_1__z_0",
+                8
+              ]
+            ]
+          },
+          {
+            "points_m": [
+              [
+                268.651,
+                3.634,
+                99.964
+              ],
+              [
+                309.861,
+                3.657,
+                79.811
+              ],
+              [
+                290.798,
+                3.752,
+                42.296
+              ],
+              [
+                241.838,
+                3.446,
+                67.476
+              ],
+              [
+                241.073,
+                3.443,
+                65.706
+              ],
+              [
+                236.263,
+                3.422,
+                67.977
+              ],
+              [
+                230.389,
+                3.397,
+                64.838
+              ],
+              [
+                225.342,
+                3.375,
+                67.231
+              ],
+              [
+                196.104,
+                3.458,
+                12.34
+              ]
+            ],
+            "surface_bias_m": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_1__z_0",
+                8
+              ],
+              [
+                "land:w26767313:x_1__z_0",
+                27
+              ],
+              [
+                "land:w26767313:x_1__z_0",
+                28
+              ],
+              [
+                "land:w26767313:x_0__z_0",
+                122
+              ],
+              [
+                "land:w26767313:x_0__z_0",
+                122
+              ],
+              [
+                "land:w26767313:x_0__z_0",
+                122
+              ],
+              [
+                "land:w26767313:x_0__z_0",
+                122
+              ],
+              [
+                "land:w26767313:x_0__z_0",
+                122
+              ],
+              [
+                "land:w26767313:x_0__z_0",
+                110
+              ]
+            ]
+          }
+        ],
+        "type": "chain_link",
+        "type_basis": "default"
+      },
       "geometry": "polyline",
       "id": "osm:w1252737751",
       "kind": "fence",
@@ -28909,6 +32202,77 @@
       "attached_ids": [],
       "closed": true,
       "exclusion": null,
+      "fence": {
+        "half_thickness_m": 0.25,
+        "height_m": 2.13,
+        "length_m": 40.95,
+        "openings": [],
+        "params": {
+          "inside": "center"
+        },
+        "runs": [
+          {
+            "points_m": [
+              [
+                237.195,
+                3.424,
+                77.05
+              ],
+              [
+                242.998,
+                3.529,
+                88.56
+              ],
+              [
+                249.769,
+                3.583,
+                85.143
+              ],
+              [
+                243.966,
+                3.454,
+                73.632
+              ],
+              [
+                237.195,
+                3.424,
+                77.05
+              ]
+            ],
+            "surface_bias_m": [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_0__z_0",
+                122
+              ],
+              [
+                "land:w26767313:x_0__z_0",
+                123
+              ],
+              [
+                "land:w26767313:x_0__z_0",
+                123
+              ],
+              [
+                "land:w26767313:x_0__z_0",
+                122
+              ],
+              [
+                "land:w26767313:x_0__z_0",
+                122
+              ]
+            ]
+          }
+        ],
+        "type": "chain_link_barbed",
+        "type_basis": "osm_context:pipeline=substation"
+      },
       "geometry": "polyline",
       "id": "osm:w1252737752",
       "kind": "fence",
@@ -29377,6 +32741,85 @@
       ],
       "closed": false,
       "exclusion": null,
+      "fence": {
+        "half_thickness_m": 0.06,
+        "height_m": 1.83,
+        "length_m": 24.573,
+        "openings": [
+          {
+            "from_m": 1.698,
+            "reason": "crossing+gate",
+            "source_ids": [
+              "n2253031345",
+              "w775820809"
+            ],
+            "to_m": 8.192
+          }
+        ],
+        "params": {
+          "inside": "center"
+        },
+        "runs": [
+          {
+            "points_m": [
+              [
+                1.126,
+                2.919,
+                -811.692
+              ],
+              [
+                2.312,
+                2.91,
+                -812.907
+              ]
+            ],
+            "surface_bias_m": [
+              0,
+              0
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_0__z_-4",
+                2
+              ],
+              [
+                "land:w26767313:x_0__z_-4",
+                2
+              ]
+            ]
+          },
+          {
+            "points_m": [
+              [
+                7.477,
+                2.885,
+                -816.725
+              ],
+              [
+                21.851,
+                2.85,
+                -824.582
+              ]
+            ],
+            "surface_bias_m": [
+              0,
+              0
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_0__z_-4",
+                2
+              ],
+              [
+                "land:w26767313:x_0__z_-4",
+                2
+              ]
+            ]
+          }
+        ],
+        "type": "chain_link",
+        "type_basis": "default"
+      },
       "geometry": "polyline",
       "id": "osm:w215879084",
       "kind": "fence",
@@ -29431,6 +32874,97 @@
       "attached_ids": [],
       "closed": false,
       "exclusion": null,
+      "fence": {
+        "half_thickness_m": 0.06,
+        "height_m": 1.83,
+        "length_m": 76.447,
+        "openings": [],
+        "params": {
+          "inside": "center"
+        },
+        "runs": [
+          {
+            "points_m": [
+              [
+                19.09,
+                3.531,
+                -787.023
+              ],
+              [
+                13.348,
+                3.373,
+                -798.211
+              ],
+              [
+                6.173,
+                2.997,
+                -806.849
+              ],
+              [
+                1.126,
+                2.919,
+                -811.692
+              ],
+              [
+                -8.371,
+                2.894,
+                -816.879
+              ],
+              [
+                -37.872,
+                2.952,
+                -825.25
+              ],
+              [
+                -41.653,
+                2.948,
+                -823.514
+              ]
+            ],
+            "surface_bias_m": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_0__z_-4",
+                1
+              ],
+              [
+                "land:w26767313:x_0__z_-4",
+                0
+              ],
+              [
+                "land:w26767313:x_0__z_-4",
+                2
+              ],
+              [
+                "land:w26767313:x_0__z_-4",
+                2
+              ],
+              [
+                "land:w26767313:x_-1__z_-4",
+                89
+              ],
+              [
+                "land:w26767313:x_-1__z_-4",
+                78
+              ],
+              [
+                "land:w26767313:x_-1__z_-4",
+                77
+              ]
+            ]
+          }
+        ],
+        "type": "chain_link",
+        "type_basis": "default"
+      },
       "geometry": "polyline",
       "id": "osm:w215879086",
       "kind": "fence",
@@ -29527,6 +33061,131 @@
       ],
       "closed": false,
       "exclusion": null,
+      "fence": {
+        "half_thickness_m": 0.06,
+        "height_m": 1.83,
+        "length_m": 167.52,
+        "openings": [
+          {
+            "from_m": 39.281,
+            "reason": "crossing",
+            "source_ids": [
+              "w1098437847"
+            ],
+            "to_m": 44.379
+          },
+          {
+            "from_m": 65.768,
+            "reason": "crossing+gate",
+            "source_ids": [
+              "n10057579734",
+              "w1098437847"
+            ],
+            "to_m": 146.63
+          }
+        ],
+        "params": {
+          "inside": "center"
+        },
+        "runs": [
+          {
+            "points_m": [
+              [
+                -367.861,
+                3.22,
+                9.646
+              ],
+              [
+                -357.874,
+                3.166,
+                47.636
+              ]
+            ],
+            "surface_bias_m": [
+              0.04,
+              0
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-2__z_0",
+                72
+              ],
+              [
+                "land:w26767313:x_-2__z_0",
+                71
+              ]
+            ]
+          },
+          {
+            "points_m": [
+              [
+                -357.478,
+                3.173,
+                52.562
+              ],
+              [
+                -358.593,
+                3.169,
+                56.623
+              ],
+              [
+                -373.725,
+                3.075,
+                64.753
+              ]
+            ],
+            "surface_bias_m": [
+              0.04,
+              0,
+              0
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-2__z_0",
+                71
+              ],
+              [
+                "land:w26767313:x_-2__z_0",
+                71
+              ],
+              [
+                "land:w26767313:x_-2__z_0",
+                68
+              ]
+            ]
+          },
+          {
+            "points_m": [
+              [
+                -445.133,
+                2.896,
+                102.539
+              ],
+              [
+                -465.623,
+                2.861,
+                106.605
+              ]
+            ],
+            "surface_bias_m": [
+              0.04,
+              0.04
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-2__z_0",
+                33
+              ],
+              [
+                "land:w26767313:x_-2__z_0",
+                15
+              ]
+            ]
+          }
+        ],
+        "type": "chain_link",
+        "type_basis": "osm_fence_type:chain_link"
+      },
       "geometry": "polyline",
       "id": "osm:w775796579",
       "kind": "fence",
@@ -29614,6 +33273,165 @@
       ],
       "closed": true,
       "exclusion": null,
+      "fence": {
+        "half_thickness_m": 0.06,
+        "height_m": 1.83,
+        "length_m": 655.177,
+        "openings": [
+          {
+            "from_m": 592.28,
+            "reason": "crossing+gate",
+            "source_ids": [
+              "n13515946927",
+              "w1473253283"
+            ],
+            "to_m": 597.179
+          }
+        ],
+        "params": {
+          "inside": "center"
+        },
+        "runs": [
+          {
+            "points_m": [
+              [
+                -172.064,
+                3.078,
+                -281.154
+              ],
+              [
+                -163.517,
+                3.056,
+                -279.507
+              ],
+              [
+                -145.562,
+                3.007,
+                -289.047
+              ],
+              [
+                -20.207,
+                2.942,
+                -355.682
+              ],
+              [
+                -96.135,
+                2.738,
+                -498.505
+              ],
+              [
+                -221.481,
+                2.78,
+                -431.87
+              ],
+              [
+                -224.515,
+                2.77,
+                -430.311
+              ],
+              [
+                -242.576,
+                2.734,
+                -421.272
+              ],
+              [
+                -226.819,
+                2.89,
+                -389.98
+              ],
+              [
+                -200.337,
+                3.181,
+                -337.339
+              ]
+            ],
+            "surface_bias_m": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0.04,
+              0,
+              0
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-1__z_-2",
+                32
+              ],
+              [
+                "land:w26767313:x_-1__z_-2",
+                33
+              ],
+              [
+                "land:w26767313:x_-1__z_-2",
+                51
+              ],
+              [
+                "land:w26767313:x_-1__z_-2",
+                119
+              ],
+              [
+                "land:w26767313:x_-1__z_-2",
+                79
+              ],
+              [
+                "land:w26767313:x_-1__z_-2",
+                26
+              ],
+              [
+                "land:w26767313:x_-1__z_-2",
+                11
+              ],
+              [
+                "land:w26767313:x_-1__z_-2",
+                11
+              ],
+              [
+                "land:w26767313:x_-1__z_-2",
+                9
+              ],
+              [
+                "land:w26767313:x_-1__z_-2",
+                21
+              ]
+            ]
+          },
+          {
+            "points_m": [
+              [
+                -198.135,
+                3.19,
+                -332.962
+              ],
+              [
+                -172.064,
+                3.078,
+                -281.154
+              ]
+            ],
+            "surface_bias_m": [
+              0,
+              0
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-1__z_-2",
+                21
+              ],
+              [
+                "land:w26767313:x_-1__z_-2",
+                32
+              ]
+            ]
+          }
+        ],
+        "type": "chain_link",
+        "type_basis": "default"
+      },
       "geometry": "polyline",
       "id": "osm:w99060798",
       "kind": "fence",
@@ -29748,6 +33566,77 @@
       "attached_ids": [],
       "closed": true,
       "exclusion": null,
+      "fence": {
+        "half_thickness_m": 0.06,
+        "height_m": 1.83,
+        "length_m": 482.964,
+        "openings": [],
+        "params": {
+          "inside": "center"
+        },
+        "runs": [
+          {
+            "points_m": [
+              [
+                -75.155,
+                2.924,
+                -503.515
+              ],
+              [
+                -1.143,
+                2.98,
+                -365.367
+              ],
+              [
+                73.572,
+                2.9,
+                -405.387
+              ],
+              [
+                -0.44,
+                3.223,
+                -543.534
+              ],
+              [
+                -75.155,
+                2.924,
+                -503.515
+              ]
+            ],
+            "surface_bias_m": [
+              0.05,
+              0,
+              0,
+              0.05,
+              0.05
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-1__z_-2",
+                94
+              ],
+              [
+                "land:w26767313:x_-1__z_-2",
+                119
+              ],
+              [
+                "land:w26767313:x_0__z_-2",
+                40
+              ],
+              [
+                "land:w26767313:x_-1__z_-3",
+                113
+              ],
+              [
+                "land:w26767313:x_-1__z_-2",
+                94
+              ]
+            ]
+          }
+        ],
+        "type": "chain_link",
+        "type_basis": "default"
+      },
       "geometry": "polyline",
       "id": "osm:w99060801",
       "kind": "fence",
@@ -29924,6 +33813,453 @@
       },
       "yaw_radians": -0.753,
       "yaw_source": "approach:w1076140200",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "attached_ids": [],
+      "basis": "production_inference",
+      "closed": false,
+      "exclusion": null,
+      "fence": {
+        "half_thickness_m": 0.3,
+        "height_m": 1.83,
+        "length_m": 127.399,
+        "openings": [
+          {
+            "from_m": 0,
+            "reason": "crossing",
+            "source_ids": [
+              "w1212173471"
+            ],
+            "to_m": 3
+          }
+        ],
+        "params": {
+          "inside": "right"
+        },
+        "runs": [
+          {
+            "points_m": [
+              [
+                -212.23,
+                4.319,
+                544.338
+              ],
+              [
+                -209.472,
+                4.621,
+                541.954
+              ],
+              [
+                -206.713,
+                4.952,
+                539.57
+              ],
+              [
+                -203.954,
+                5.284,
+                537.186
+              ],
+              [
+                -201.196,
+                5.615,
+                534.802
+              ],
+              [
+                -198.437,
+                5.946,
+                532.418
+              ],
+              [
+                -195.678,
+                6.278,
+                530.034
+              ],
+              [
+                -192.92,
+                6.609,
+                527.65
+              ],
+              [
+                -190.161,
+                6.64,
+                525.266
+              ],
+              [
+                -187.403,
+                6.521,
+                522.881
+              ],
+              [
+                -184.644,
+                6.402,
+                520.497
+              ],
+              [
+                -181.885,
+                6.283,
+                518.113
+              ],
+              [
+                -179.127,
+                6.164,
+                515.729
+              ],
+              [
+                -176.368,
+                6.045,
+                513.345
+              ],
+              [
+                -174.761,
+                5.489,
+                516.454
+              ],
+              [
+                -173.154,
+                4.934,
+                519.563
+              ],
+              [
+                -171.547,
+                4.379,
+                522.673
+              ],
+              [
+                -169.94,
+                4.26,
+                525.782
+              ],
+              [
+                -168.333,
+                4.241,
+                528.891
+              ],
+              [
+                -166.725,
+                4.222,
+                532
+              ],
+              [
+                -165.118,
+                4.203,
+                535.11
+              ],
+              [
+                -163.511,
+                4.184,
+                538.219
+              ],
+              [
+                -161.904,
+                4.164,
+                541.328
+              ],
+              [
+                -160.297,
+                4.141,
+                544.437
+              ],
+              [
+                -158.69,
+                4.196,
+                547.547
+              ],
+              [
+                -157.083,
+                4.245,
+                550.656
+              ],
+              [
+                -155.476,
+                4.295,
+                553.765
+              ],
+              [
+                -153.869,
+                4.345,
+                556.874
+              ],
+              [
+                -152.262,
+                4.395,
+                559.983
+              ],
+              [
+                -150.655,
+                4.445,
+                563.093
+              ],
+              [
+                -149.047,
+                4.472,
+                566.202
+              ],
+              [
+                -147.44,
+                4.427,
+                569.311
+              ],
+              [
+                -145.833,
+                4.382,
+                572.42
+              ],
+              [
+                -144.226,
+                4.337,
+                575.53
+              ],
+              [
+                -142.619,
+                4.291,
+                578.639
+              ],
+              [
+                -141.012,
+                4.245,
+                581.748
+              ]
+            ],
+            "surface_bias_m": [
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-1__z_2",
+                14
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                17
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                17
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                17
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                17
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                17
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                17
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                17
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                30
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                30
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                30
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                30
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                30
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                30
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                30
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                30
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                30
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                31
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                31
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                31
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                31
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                31
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                31
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                29
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                45
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                45
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                45
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                45
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                45
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                45
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                46
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                46
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                46
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                46
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                43
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                43
+              ]
+            ]
+          }
+        ],
+        "type": "construction_panel",
+        "type_basis": "rule"
+      },
+      "geometry": "polyline",
+      "id": "scatter:avenue_of_the_palms:cityside_park_lot:line",
+      "kind": "fence",
+      "layer": "fences",
+      "length_m": 127.399,
+      "points_m": [
+        [
+          -214.5,
+          4.218,
+          546.3
+        ],
+        [
+          -176.368,
+          6.045,
+          513.345
+        ],
+        [
+          -141.012,
+          4.245,
+          581.748
+        ]
+      ],
+      "prop": "construction_panel",
+      "prop_params": {
+        "inside": "right"
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/cityside_park_lot",
+      "status": "placed",
+      "terrain_supports": [
+        [
+          "land:w26767313:x_-1__z_2",
+          14
+        ],
+        [
+          "land:w26767313:x_-1__z_2",
+          30
+        ],
+        [
+          "land:w26767313:x_-1__z_2",
+          43
+        ]
+      ],
+      "vertex_source_ids": [
+        "rule_point",
+        "w1001544697",
+        "w1001544697"
+      ],
       "zones": [
         "avenue_of_the_palms"
       ]
@@ -31008,161 +35344,6 @@
         "triangle_index": 33
       },
       "yaw_radians": -0.105,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o0_s022",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -167.219,
-        4.228,
-        531.046
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 4.228,
-        "object_key": "land:w26767313:x_-1__z_2",
-        "triangle_index": 31
-      },
-      "yaw_radians": -2.972,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o0_s023",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -160.791,
-        4.151,
-        543.482
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 4.151,
-        "object_key": "land:w26767313:x_-1__z_2",
-        "triangle_index": 31
-      },
-      "yaw_radians": -0.777,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o0_s024",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -154.292,
-        4.332,
-        556.055
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 4.332,
-        "object_key": "land:w26767313:x_-1__z_2",
-        "triangle_index": 45
-      },
-      "yaw_radians": -0.758,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o0_s025",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -147.922,
-        4.44,
-        568.379
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 4.44,
-        "object_key": "land:w26767313:x_-1__z_2",
-        "triangle_index": 46
-      },
-      "yaw_radians": -0.98,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o0_s026",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -141.431,
-        4.257,
-        580.938
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 4.257,
-        "object_key": "land:w26767313:x_-1__z_2",
-        "triangle_index": 43
-      },
-      "yaw_radians": -0.713,
       "yaw_source": "seeded",
       "zones": [
         "avenue_of_the_palms"
@@ -32637,6 +36818,1334 @@
       ]
     },
     {
+      "attached_ids": [],
+      "basis": "production_inference",
+      "closed": false,
+      "exclusion": null,
+      "fence": {
+        "half_thickness_m": 0.06,
+        "height_m": 1.83,
+        "length_m": 325.532,
+        "openings": [
+          {
+            "from_m": 141.17,
+            "reason": "crossing",
+            "source_ids": [
+              "w1212173471"
+            ],
+            "to_m": 144.57
+          }
+        ],
+        "params": {
+          "inside": "left",
+          "screen": "black"
+        },
+        "runs": [
+          {
+            "points_m": [
+              [
+                -66.143,
+                4.526,
+                541.867
+              ],
+              [
+                -67.878,
+                4.518,
+                543.912
+              ],
+              [
+                -69.613,
+                4.493,
+                545.957
+              ],
+              [
+                -71.347,
+                4.468,
+                548.003
+              ],
+              [
+                -73.082,
+                4.443,
+                550.048
+              ],
+              [
+                -74.817,
+                4.418,
+                552.093
+              ],
+              [
+                -76.552,
+                4.393,
+                554.138
+              ],
+              [
+                -78.41,
+                4.366,
+                556.329
+              ],
+              [
+                -80.268,
+                4.339,
+                558.52
+              ],
+              [
+                -82.125,
+                4.312,
+                560.711
+              ],
+              [
+                -83.983,
+                4.285,
+                562.902
+              ],
+              [
+                -85.841,
+                4.258,
+                565.092
+              ],
+              [
+                -87.699,
+                4.231,
+                567.283
+              ],
+              [
+                -89.556,
+                4.204,
+                569.474
+              ],
+              [
+                -91.414,
+                4.176,
+                571.665
+              ],
+              [
+                -93.272,
+                4.147,
+                573.856
+              ],
+              [
+                -95.13,
+                4.118,
+                576.047
+              ],
+              [
+                -96.987,
+                4.106,
+                578.238
+              ],
+              [
+                -98.845,
+                4.103,
+                580.429
+              ],
+              [
+                -100.703,
+                4.101,
+                582.619
+              ],
+              [
+                -102.561,
+                4.099,
+                584.81
+              ],
+              [
+                -104.418,
+                4.096,
+                587.001
+              ],
+              [
+                -106.276,
+                4.094,
+                589.192
+              ],
+              [
+                -108.134,
+                4.092,
+                591.383
+              ],
+              [
+                -110.783,
+                4.085,
+                592.632
+              ],
+              [
+                -113.432,
+                4.078,
+                593.88
+              ],
+              [
+                -114.589,
+                4.072,
+                593.901
+              ],
+              [
+                -116.498,
+                4.071,
+                596.229
+              ],
+              [
+                -118.406,
+                4.069,
+                598.556
+              ],
+              [
+                -120.315,
+                4.067,
+                600.884
+              ],
+              [
+                -122.223,
+                4.064,
+                603.212
+              ],
+              [
+                -124.132,
+                4.062,
+                605.54
+              ],
+              [
+                -126.04,
+                4.06,
+                607.867
+              ],
+              [
+                -127.949,
+                4.048,
+                610.195
+              ],
+              [
+                -129.857,
+                4.045,
+                612.523
+              ],
+              [
+                -131.766,
+                4.042,
+                614.851
+              ],
+              [
+                -133.674,
+                4.039,
+                617.178
+              ],
+              [
+                -135.583,
+                4.036,
+                619.506
+              ],
+              [
+                -137.491,
+                4.034,
+                621.834
+              ],
+              [
+                -139.4,
+                4.031,
+                624.162
+              ],
+              [
+                -141.308,
+                4.028,
+                626.489
+              ],
+              [
+                -143.217,
+                4.025,
+                628.817
+              ],
+              [
+                -145.125,
+                4.022,
+                631.145
+              ],
+              [
+                -147.034,
+                4.02,
+                633.473
+              ],
+              [
+                -148.942,
+                4.017,
+                635.8
+              ],
+              [
+                -150.851,
+                4.014,
+                638.128
+              ],
+              [
+                -152.759,
+                4.012,
+                640.456
+              ],
+              [
+                -154.668,
+                4.01,
+                642.784
+              ],
+              [
+                -156.576,
+                4.009,
+                645.111
+              ],
+              [
+                -158.485,
+                4.007,
+                647.439
+              ]
+            ],
+            "surface_bias_m": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-1__z_2",
+                80
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                80
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                77
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                77
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                77
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                77
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                77
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                77
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                77
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                77
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                77
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                77
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                77
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                77
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                78
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                78
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                75
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                60
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                60
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                60
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                60
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                60
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                60
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                60
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                60
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                60
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                59
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                59
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                60
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                60
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                60
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                60
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                60
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                57
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                42
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                42
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                42
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                42
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                42
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                42
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                42
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                42
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                42
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                42
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                42
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                42
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                39
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                39
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                39
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                39
+              ]
+            ]
+          },
+          {
+            "points_m": [
+              [
+                -157.556,
+                4.002,
+                649.663
+              ],
+              [
+                -156.445,
+                3.998,
+                650.461
+              ],
+              [
+                -155.029,
+                3.991,
+                653.139
+              ],
+              [
+                -153.614,
+                3.984,
+                655.817
+              ],
+              [
+                -152.198,
+                3.976,
+                658.495
+              ],
+              [
+                -150.783,
+                3.969,
+                661.173
+              ],
+              [
+                -149.367,
+                4.003,
+                663.851
+              ],
+              [
+                -147.952,
+                4.064,
+                666.529
+              ],
+              [
+                -146.536,
+                4.126,
+                669.207
+              ],
+              [
+                -145.288,
+                4.183,
+                671.767
+              ],
+              [
+                -144.04,
+                4.181,
+                674.326
+              ],
+              [
+                -142.792,
+                4.173,
+                676.886
+              ],
+              [
+                -141.544,
+                4.165,
+                679.445
+              ],
+              [
+                -140.296,
+                4.157,
+                682.005
+              ],
+              [
+                -139.047,
+                4.15,
+                684.564
+              ],
+              [
+                -137.799,
+                4.143,
+                687.124
+              ],
+              [
+                -136.551,
+                4.137,
+                689.683
+              ],
+              [
+                -135.303,
+                4.13,
+                692.243
+              ],
+              [
+                -134.055,
+                4.124,
+                694.802
+              ],
+              [
+                -132.807,
+                4.117,
+                697.362
+              ],
+              [
+                -131.559,
+                4.111,
+                699.921
+              ],
+              [
+                -129.073,
+                4.163,
+                698.631
+              ],
+              [
+                -126.587,
+                4.183,
+                697.341
+              ],
+              [
+                -124.101,
+                4.18,
+                696.051
+              ],
+              [
+                -121.616,
+                4.177,
+                694.762
+              ],
+              [
+                -119.13,
+                4.174,
+                693.472
+              ],
+              [
+                -116.644,
+                4.171,
+                692.182
+              ],
+              [
+                -114.158,
+                4.167,
+                690.892
+              ],
+              [
+                -111.484,
+                4.163,
+                689.487
+              ],
+              [
+                -108.81,
+                4.158,
+                688.082
+              ],
+              [
+                -106.137,
+                4.153,
+                686.677
+              ],
+              [
+                -103.463,
+                4.149,
+                685.272
+              ],
+              [
+                -100.789,
+                4.144,
+                683.867
+              ],
+              [
+                -98.115,
+                4.139,
+                682.462
+              ],
+              [
+                -95.442,
+                4.139,
+                681.057
+              ],
+              [
+                -92.768,
+                4.153,
+                679.653
+              ],
+              [
+                -90.094,
+                4.168,
+                678.248
+              ],
+              [
+                -87.42,
+                4.182,
+                676.843
+              ],
+              [
+                -84.746,
+                4.197,
+                675.438
+              ],
+              [
+                -82.073,
+                4.211,
+                674.033
+              ],
+              [
+                -79.399,
+                4.226,
+                672.628
+              ],
+              [
+                -76.725,
+                4.232,
+                671.223
+              ],
+              [
+                -74.051,
+                4.23,
+                669.818
+              ],
+              [
+                -71.377,
+                4.228,
+                668.413
+              ],
+              [
+                -68.704,
+                4.227,
+                667.008
+              ],
+              [
+                -66.03,
+                4.225,
+                665.603
+              ],
+              [
+                -63.356,
+                4.23,
+                664.198
+              ],
+              [
+                -60.682,
+                4.258,
+                662.793
+              ],
+              [
+                -58.009,
+                4.286,
+                661.388
+              ],
+              [
+                -55.335,
+                4.313,
+                659.983
+              ],
+              [
+                -52.661,
+                4.341,
+                658.578
+              ],
+              [
+                -49.987,
+                4.369,
+                657.174
+              ],
+              [
+                -47.313,
+                4.387,
+                655.769
+              ],
+              [
+                -44.64,
+                4.39,
+                654.364
+              ],
+              [
+                -41.966,
+                4.392,
+                652.959
+              ],
+              [
+                -39.292,
+                4.394,
+                651.554
+              ],
+              [
+                -36.618,
+                4.396,
+                650.149
+              ],
+              [
+                -33.945,
+                4.399,
+                648.744
+              ],
+              [
+                -31.271,
+                4.398,
+                647.339
+              ],
+              [
+                -28.597,
+                4.392,
+                645.934
+              ],
+              [
+                -25.68,
+                4.371,
+                645.062
+              ],
+              [
+                -23.221,
+                4.339,
+                645.058
+              ],
+              [
+                -20.763,
+                4.307,
+                645.054
+              ]
+            ],
+            "surface_bias_m": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04,
+              0.04
+            ],
+            "terrain_supports": [
+              [
+                "land:w26767313:x_-1__z_2",
+                39
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                39
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                39
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                39
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                39
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                39
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                40
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                40
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                40
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                40
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                37
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                37
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                37
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                37
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                38
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                38
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                38
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                38
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                38
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                38
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                38
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                38
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                53
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                53
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                53
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                53
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                53
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                54
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                54
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                54
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                54
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                54
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                54
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                54
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                69
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                69
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                69
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                69
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                69
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                69
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                69
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                72
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                72
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                72
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                72
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                72
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                87
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                87
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                87
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                87
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                87
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                87
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                88
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                88
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                88
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                88
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                88
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                88
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                103
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                103
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                103
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                103
+              ],
+              [
+                "land:w26767313:x_-1__z_2",
+                103
+              ]
+            ]
+          }
+        ],
+        "type": "chain_link_screened",
+        "type_basis": "rule"
+      },
+      "geometry": "polyline",
+      "id": "scatter:trade_winds_palms_link:cultural_park_site:line",
+      "kind": "fence",
+      "layer": "fences",
+      "length_m": 325.532,
+      "points_m": [
+        [
+          -66.143,
+          4.526,
+          541.867
+        ],
+        [
+          -76.552,
+          4.393,
+          554.138
+        ],
+        [
+          -108.134,
+          4.092,
+          591.383
+        ],
+        [
+          -113.432,
+          4.078,
+          593.88
+        ],
+        [
+          -114.589,
+          4.072,
+          593.901
+        ],
+        [
+          -159.288,
+          4.007,
+          648.419
+        ],
+        [
+          -156.445,
+          3.998,
+          650.461
+        ],
+        [
+          -146.536,
+          4.126,
+          669.207
+        ],
+        [
+          -131.559,
+          4.111,
+          699.921
+        ],
+        [
+          -114.158,
+          4.167,
+          690.892
+        ],
+        [
+          -28.597,
+          4.392,
+          645.934
+        ],
+        [
+          -25.68,
+          4.371,
+          645.062
+        ],
+        [
+          -20.763,
+          4.307,
+          645.054
+        ]
+      ],
+      "prop": "chain_link_screened",
+      "prop_params": {
+        "inside": "left",
+        "screen": "black"
+      },
+      "source": "scatter",
+      "source_id": "zone:trade_winds_palms_link/cultural_park_site",
+      "status": "placed",
+      "terrain_supports": [
+        [
+          "land:w26767313:x_-1__z_2",
+          80
+        ],
+        [
+          "land:w26767313:x_-1__z_2",
+          77
+        ],
+        [
+          "land:w26767313:x_-1__z_2",
+          60
+        ],
+        [
+          "land:w26767313:x_-1__z_2",
+          60
+        ],
+        [
+          "land:w26767313:x_-1__z_2",
+          59
+        ],
+        [
+          "land:w26767313:x_-1__z_2",
+          39
+        ],
+        [
+          "land:w26767313:x_-1__z_2",
+          39
+        ],
+        [
+          "land:w26767313:x_-1__z_2",
+          40
+        ],
+        [
+          "land:w26767313:x_-1__z_2",
+          38
+        ],
+        [
+          "land:w26767313:x_-1__z_2",
+          54
+        ],
+        [
+          "land:w26767313:x_-1__z_2",
+          103
+        ],
+        [
+          "land:w26767313:x_-1__z_2",
+          103
+        ],
+        [
+          "land:w26767313:x_-1__z_2",
+          103
+        ]
+      ],
+      "vertex_source_ids": [
+        "w1370667326",
+        "w1370667326",
+        "w1370667326",
+        "w1370667326",
+        "w1370667328",
+        "w1370667328",
+        "w1370667335",
+        "w1370667335",
+        "w1370667335",
+        "w1212173467",
+        "w1212173467",
+        "w1212173467",
+        "w1212173467"
+      ],
+      "zones": [
+        "avenue_of_the_palms",
+        "trade_winds_palms_link"
+      ]
+    },
+    {
       "basis": "production_inference",
       "exclusion": null,
       "geometry": "point",
@@ -33708,6 +39217,7 @@
   "seed": 1414091588,
   "zones": [
     {
+      "fences": [],
       "furniture": [
         {
           "id": "plaza_lamps",
@@ -33738,6 +39248,7 @@
       ]
     },
     {
+      "fences": [],
       "furniture": [
         {
           "id": "ti_road_lamps",
@@ -33782,6 +39293,14 @@
       ]
     },
     {
+      "fences": [
+        {
+          "built_runs": 2,
+          "fence_type": "chain_link_screened",
+          "id": "cultural_park_site",
+          "row": "scatter:trade_winds_palms_link:cultural_park_site:line"
+        }
+      ],
       "furniture": [
         {
           "id": "trade_winds_lamps",
@@ -33805,6 +39324,14 @@
       ]
     },
     {
+      "fences": [
+        {
+          "built_runs": 1,
+          "fence_type": "construction_panel",
+          "id": "cityside_park_lot",
+          "row": "scatter:avenue_of_the_palms:cityside_park_lot:line"
+        }
+      ],
       "furniture": [
         {
           "id": "palms_lamps",
@@ -33837,11 +39364,12 @@
           "id": "verge_palms",
           "kind": "palm_slot",
           "pattern": "along",
-          "placed": 17
+          "placed": 12
         }
       ]
     },
     {
+      "fences": [],
       "furniture": [
         {
           "id": "entry_stop",

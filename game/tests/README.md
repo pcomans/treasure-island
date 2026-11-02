@@ -20,7 +20,7 @@ It must pass before anything is pushed to `main`.
 | `shared/island_test.gd -- --use-prebuilt-world` | The same, on the baked world desktop exports load (baked first by `tools/prebuild-static-world.sh native`, removed afterwards). |
 | `tools/validate_godot_world.mjs` | The committed generated world is valid. |
 | `tools/check_godot_world_determinism.mjs` | Fresh world builds from the OSM sources are identical to each other and to the committed world. |
-| `tools/check_street_detail_clearance.mjs` | With every street-detail layer on, nothing intrudes on a catalog stair, its door or approach, the ferry spawn, the ferry path or the QA route. |
+| `tools/check_street_detail_clearance.mjs` | With every street-detail layer on, nothing intrudes on a catalog stair, its door or approach, the ferry spawn, the ferry path or the QA route (a fence counts by its solid runs), and no built fence shuts walkable ground in. |
 
 Checks for one building, used while working on it (see [AGENTS.md](../../AGENTS.md#what-done-means-for-a-building)):
 
@@ -36,6 +36,10 @@ The player avatar is hidden in every shot; `--show-player` keeps it.
 
 Street detail (the vegetation, furniture, fences and clutter layers under `PlayableWorld/StreetDetail`) is on in play, the web build and `island_test.gd`, and off in `building_fit_test.gd`.
 The furniture layer's poles, posts, cabinets and hydrants are solid on their own street-prop physics layer (layer 4): the player collides with it, the spray ray stops on it (a refusal, never a tag) and the camera arm ignores it. `automated_route_qa.gd`, `island_test.gd` and fits with `--street-detail on` walk among them; the clearance check keeps them off the walked corridors and the walk straight ahead from the spawn. A `--spray` plan may add `"expect": "receiver_rejection"` to aim through such a solid and require the refusal. Gameplay-camera street views print `arm_m`, the camera's distance along its arm.
+The fences layer's fences (OSM `barrier=fence` ways and the zones' photo-based fence rules, `tools/lib/street-fence-generation.mjs`) are solid on the same street-prop layer: they stop the stock player, the jetpack clears them, a spray at one is refused and the camera arm ignores them. A fence opens where a road or path crosses it, at an OSM gate and where it meets the gameplay mask; the clearance check also floods the ground around every built fence and fails if a fence, with buildings, other fences, street props or the island's edge, shuts walkable ground in.
+
+Fences and the building fit: `island_test.gd` checks every scored building with all layers on, fences included, because fences are part of the world a player walks. A real fence may close one side of a building, as a neighbouring building can. The fit then skips that side (`WALK_UP_SKIPPED`, naming the fence) only when `fenced_approaches` in `tools/config/street-detail-zones.json` lists it, with the fence rows, the reason and dated evidence, and every start the fit tries there is blocked by the listed fence, another building or the island's edge. A fence that closes a side without that listing fails the fit and names the fence; at least two sides must still pass. `building_fit_test.gd` keeps the layers off, so each building's own fit never depends on street detail.
+
 `building_shots.gd` takes close-ups and focused views with it off and context, island and overhead views both ways (`NAME-street-on.png`, `NAME-street-off.png`); `--street-detail off|on|both` sets every view.
 Override a test with `-- --street-detail on|off`, or choose layers with `--street-detail-layers vegetation,fences` (`island_test.gd`); the play default is the project setting `treasure_island/street_detail/enabled` and `.../layers`.
 

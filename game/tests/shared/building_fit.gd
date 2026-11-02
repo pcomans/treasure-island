@@ -31,6 +31,10 @@ var _source_roofs: Dictionary = {}
 var _source_roofs_error := ""
 var _composite_records: Dictionary = {}
 var _composite_records_error := ""
+## Scored-building sides a built street fence closes, from the generated street
+## detail (fenced_approaches): "source/side" -> fence row ids. Loaded once.
+var _fenced_sides_loaded := false
+var _fenced_sides: Dictionary = {}
 
 
 func _init(harness: WorldHarness) -> void:
@@ -350,14 +354,14 @@ func _walk_start(center: Vector3, side: Vector3, half_depth: float, half_width: 
 			if not _h.is_approach_support(ground, _support_context):
 				var hit_name := "no support" if ground.is_empty() else str((ground.collider as Node).get_path())
 				if not ground.is_empty():
-					blockers[blockers.size() - 1] = _other_building(ground.collider)
+					blockers[blockers.size() - 1] = _site_blocker(ground.collider)
 				if blockers[blockers.size() - 1] == "":
 					blockers[blockers.size() - 1] = _beyond_parent_roof(xz)
 				rejected.append(candidate + ("%.1f m: no walkable ground (%s)" % [margin, hit_name]))
 				continue
 			var descent := _preflight_descent(ground.position)
 			if not descent.ok:
-				blockers[blockers.size() - 1] = _other_building(descent.get("blocker"))
+				blockers[blockers.size() - 1] = _site_blocker(descent.get("blocker"))
 				rejected.append(candidate + ("%.1f m: %s" % [margin, descent.reason]))
 				continue
 			var chest := Vector3(xz.x, (ground.position as Vector3).y + 1.0, xz.y)
@@ -369,7 +373,7 @@ func _walk_start(center: Vector3, side: Vector3, half_depth: float, half_width: 
 			var endpoint: Dictionary = {}
 			var corridor_error := _preflight_corridor(descent.pose, crossing.position, -side, own, wall_shapes, endpoint)
 			if corridor_error != "":
-				blockers[blockers.size() - 1] = _other_building(endpoint.get("blocker"))
+				blockers[blockers.size() - 1] = _site_blocker(endpoint.get("blocker"))
 				rejected.append(candidate + ("%.1f m: %s" % [margin, corridor_error]))
 				continue
 			var preference := _wall_span_preference(endpoint.pose, crossing.position, -side, own, wall_shapes)
@@ -392,11 +396,13 @@ func _walk_start(center: Vector3, side: Vector3, half_depth: float, half_width: 
 ## A side is site-blocked only when every candidate start on it lies outside the
 ## playable boundary, inside another building's frozen roof footprint, or was
 ## rejected by another building's body (its ground ray hit that building, or the
-## drop pose or corridor was obstructed by it), or, for a rooftop-approach
-## source, lies beyond its parent's roof edge. Returns the reason, or "" when any
-## candidate is ordinary ground, was rejected by the own building or an unknown
-## body, or the frozen footprints are unavailable (fail closed).
-func _site_blocked(points: Array, blockers: Array) -> String:
+## drop pose or corridor was obstructed by it), or by a street fence the street
+## detail lists as closing this side (fenced_approaches), or, for a rooftop-
+## approach source, lies beyond its parent's roof edge. Returns the reason, or ""
+## when any candidate is ordinary ground, was rejected by the own building, an
+## unlisted fence or an unknown body, or the frozen footprints are unavailable
+## (fail closed).
+func _site_blocked(points: Array, blockers: Array, side_name: String) -> String:
 	if points.is_empty() or blockers.size() != points.size() or _source_roofs_error != "" or _source_roofs.is_empty():
 		return ""
 	var outside := 0
@@ -422,10 +428,37 @@ func _site_blocked(points: Array, blockers: Array) -> String:
 			occupants[owner] = int(occupants.get(owner, 0)) + 1
 			continue
 		var blocker := str(blockers[index])
-		if blocker == "":
+		if blocker == "" or (blocker.begins_with("fence:") and blocker.trim_prefix("fence:") not in _fenced_side(side_name)):
 			return ""
 		behind[blocker] = int(behind.get(blocker, 0)) + 1
-	return "all %d candidate starts blocked: %d outside the playable boundary, inside other footprints %s, rejected by other buildings %s" % [points.size(), outside, occupants, behind]
+	return "all %d candidate starts blocked: %d outside the playable boundary, inside other footprints %s, rejected by other buildings or listed fences %s" % [points.size(), outside, occupants, behind]
+
+
+## The fence row ids the street detail lists as closing this source's side.
+func _fenced_side(side_name: String) -> Array:
+	if not _fenced_sides_loaded:
+		_fenced_sides_loaded = true
+		var manifest_path := _h.world.default_manifest_path
+		var manifest: Variant = JSON.parse_string(FileAccess.get_file_as_string(manifest_path))
+		if manifest is Dictionary and manifest.get("street_detail") is Dictionary:
+			var detail: Variant = JSON.parse_string(FileAccess.get_file_as_string(manifest_path.get_base_dir().path_join(str(manifest.street_detail.get("path", "")))))
+			if detail is Dictionary and detail.get("fenced_approaches") is Array:
+				for entry: Variant in detail.fenced_approaches:
+					if entry is Dictionary and entry.get("fence_ids") is Array:
+						_fenced_sides["%s/%s" % [entry.get("source_key", ""), entry.get("side", "")]] = entry.fence_ids
+	return _fenced_sides.get("%s/%s" % [_source, side_name], [])
+
+
+## What blocked a candidate start, for site blocking: another building's key,
+## "fence:<street-detail id>" for a built street fence, else "".
+func _site_blocker(collider: Variant) -> String:
+	var building := _other_building(collider)
+	if building != "" or not collider is Node:
+		return building
+	var node := collider as Node
+	if str(node.get_meta("feature_kind", "")) == "street_fence" and str(node.get_meta("street_detail_kind", "")) == "fence":
+		return "fence:" + str(node.get_meta("street_detail_id", ""))
+	return ""
 
 
 ## For a rooftop-approach source only: "<parent> roof edge" when this start
@@ -747,12 +780,17 @@ func _check_walk_up(box: AABB, own: Array[RID], wall_shapes: Dictionary, wall_fa
 		var half_width := absf(side.z) * box.size.x * 0.5 + absf(side.x) * box.size.z * 0.5
 		var setup := _walk_start(center, side, half_depth, half_width, own, wall_shapes, wall_faces)
 		if not setup.ok:
-			var blocked := _site_blocked(setup.get("points", []), setup.get("blockers", []))
+			var blocked := _site_blocked(setup.get("points", []), setup.get("blockers", []), _side_name(side))
 			if blocked != "":
 				skipped.append(_side_name(side))
 				print("%sWALK_UP_SKIPPED side=%s reason=%s" % [_prefix, _side_name(side), blocked])
 				continue
-			_failures.append(_prefix + "%s: no safe same-side start: %s" % [name, setup.reason])
+			var fences: Array[String] = []
+			for blocker: Variant in setup.get("blockers", []):
+				if str(blocker).begins_with("fence:") and str(blocker).trim_prefix("fence:") not in fences:
+					fences.append(str(blocker).trim_prefix("fence:"))
+			var fenced := "" if fences.is_empty() else "; street fences in the way: %s (list this side under fenced_approaches only if the fence is real and closes it)" % ", ".join(PackedStringArray(fences))
+			_failures.append(_prefix + "%s: no safe same-side start: %s%s" % [name, setup.reason, fenced])
 			_unsafe = true
 			break
 		var start := setup.xz as Vector2

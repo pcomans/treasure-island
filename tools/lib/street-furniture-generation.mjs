@@ -218,8 +218,8 @@ export function placeStreetFurniture({
     if (options.raised && !site.raised(en)) return "off_sidewalk";
     for (const item of occupied) {
       if (options.ignore?.has(item.id)) continue;
-      let distance = Infinity;
-      for (const point of item.points) distance = Math.min(distance, Math.hypot(point[0] - xz[0], point[1] - xz[1]));
+      // A line item (a fence run) counts by its segments, not only its vertices.
+      const distance = item.points.length > 1 ? closestOnPolyline(item.points, xz).distance : Math.hypot(item.points[0][0] - xz[0], item.points[0][1] - xz[1]);
       if (distance < item.radius_m + radius + PLAYER_WIDTH_M) return "overlap";
     }
     return null;
