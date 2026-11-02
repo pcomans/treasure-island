@@ -6,7 +6,7 @@
     "Every value here is an estimate for game art (production inference), read from the dated photos (Sep 2025 Street View at 83 Treasure Island Rd, a Sep 2026 view from the ferry float, Commons Aug 2021 c01/c08 and May 2025 c10/c11) and the USGS 3DEP 2023 DEM; none is survey data.",
     "A segment takes the OSM breakwater polygon (man_made=breakwater, material=rock) between the distances s_m along the island outline w26767313 (start > end runs across the outline's start). Its part inside the outline, from the crest to the outline, is draped on the land as a terrain overlay with no collision, overlay_bias_m above the land: the dry dirt verge at the top of the riprap (the land's 'bare' ground cover), with low cobbles set in it. land_ground stays the only support there, so route QA, the regional anchors and boundary recovery are unchanged.",
     "Outside the outline a flat shoulder shoulder_m wide continues the verge's ground cover at the land edge's height (the dirt and small stones in front of the rocks in the photos), and behind it an underlay slope runs down past the water plane (y -0.12) to toe_y_m. The DEM's gradient between dem_fit_m along each cross-section, clamped to gradient_m_per_m (the photographed 2:1 to 3:1) and smoothed over gradient_smoothing_m, sets it; relief_m of boulder-scale bumps fades in over top_blend_m behind the shoulder. It shows between the stones and stands in for them beyond their visibility range; vertical rock faces close the segment ends.",
-    "Stones are one shared set of angular quarry-stone shapes, convex blocks with flat broken faces and sharp edges (prototypes), each instance scaled uniformly by its size and tilted up to tilt_deg: a top row of stones just outside the outline (inner faces at least setback_m beyond it, about the player's radius), spaced spacing sizes apart and pushed out_jitter_m further, each buried by a bury share of its own height so big stones stand tall, up to max_rise_m above the land edge; a back row of big stones piled within depth_m behind it, aiming rise_m above the land edge less drop_per_m per metre out but always bedded in the slope, so the big ones rise above the top row; small shoulder stones in the shoulder, rising rise_m above it; a heap packed over the slope to toe_extra_m past the toe, largest size class first (neighbours overlap by up to 1 - overlap of their radii; bury and lift are shares of each stone's size); past the waterline only stones that stand clear of the water are kept; and low cobbles (small stones mostly buried in the dirt) wholly inside the band, more of them toward the outline (outline_bias), rising at most top_m above the land, so the player walks over them. No stone spills past a segment end. Bleached driftwood logs and washed-up planks rest on the stone tops. Everything is visual only; structures (piers keep the slope under them, slipways cut it) clear the stones by clearance_m, except stones that top out under_drop_m below the land edge under a pier, paths clear the cobbles, and the street-detail hard shapes (spawn, ferry path, QA route, stairs, doors, approaches) clear everything. Stones are batched per section_m of shore, band and shape; each band fades out over its visibility_m [end, margin]."
+    "Stones are one shared set of fractured quarry blocks (prototypes, cycling through block, slab, long, wedge and chunky shapes): convex polyhedra with flat broken faces and hard edges, each instance scaled uniformly by its size (its longest side) and dumped: resting on any of its faces, turned any way and tilted up to tilt_deg. a top row of stones just outside the outline (inner faces at least setback_m beyond it, about the player's radius), spaced spacing sizes apart and pushed out_jitter_m further, each buried by a bury share of its own height so big stones stand tall, up to max_rise_m above the land edge; a back row of big stones piled within depth_m behind it, aiming rise_m above the land edge less drop_per_m per metre out but always bedded in the slope, so the big ones rise above the top row; small shoulder stones in the shoulder, rising rise_m above it; a heap packed over the slope to toe_extra_m past the toe, largest size class first (neighbours overlap by up to 1 - overlap of their radii; bury is a share of each stone's height); past the waterline only stones that stand clear of the water are kept; and low cobbles (small stones mostly buried in the dirt) wholly inside the band, more of them toward the outline (outline_bias), rising at most top_m above the land, so the player walks over them. No stone spills past a segment end. Bleached driftwood logs and washed-up planks rest on the stone tops. Everything is visual only; structures (piers keep the slope under them, slipways cut it) clear the stones by clearance_m, except stones that top out under_drop_m below the land edge under a pier, paths clear the cobbles, and the street-detail hard shapes (spawn, ferry path, QA route, stairs, doors, approaches) clear everything. Stones are batched per section_m of shore, band and shape; each band fades out over its visibility_m [end, margin]."
   ],
   "overlay_bias_m": 0.06,
   "slope": {
@@ -78,37 +78,33 @@
             1.2,
             1.8
           ],
-          "fill": 0.3
+          "fill": 0.36
         },
         {
           "size_m": [
             0.8,
             1.25
           ],
-          "fill": 0.32
+          "fill": 0.38
         },
         {
           "size_m": [
             0.45,
             0.8
           ],
-          "fill": 0.22
+          "fill": 0.28
         },
         {
           "size_m": [
             0.22,
             0.45
           ],
-          "fill": 0.07
+          "fill": 0.12
         }
       ],
       "bury": [
-        0.16,
-        0.3
-      ],
-      "lift": [
-        0.0,
-        0.12
+        0.18,
+        0.35
       ],
       "overlap": 0.8,
       "tilt_deg": 25,

@@ -824,14 +824,6 @@ static func _validate_shoreline(document: Dictionary, source_scopes: Dictionary)
 		var mesh_result := _validate_shoreline_mesh(prototype, prototype.get("indices", null), prototype_id)
 		if not mesh_result.ok:
 			return mesh_result
-		# A boulder's vertex heights on the stone (0 at the cut base, 1 at the top) shade its base.
-		if kind == "boulder":
-			var heights: Array = prototype.get("relative_height", []) if prototype.get("relative_height", null) is Array else []
-			if heights.size() * 3 != (prototype.vertices as Array).size():
-				return _failure("shoreline_prototypes", "Shoreline boulder %s needs one relative height per vertex." % prototype_id)
-			for value: Variant in heights:
-				if not _is_finite_number(value) or float(value) < 0.0 or float(value) > 1.0:
-					return _failure("shoreline_prototypes", "Shoreline boulder %s has a relative height outside [0, 1]." % prototype_id)
 		if not prototype.get("lods", null) is Array:
 			return _failure("shoreline_prototypes", "Shoreline prototype %s has no LOD list." % prototype_id)
 		var previous_error := 0.0

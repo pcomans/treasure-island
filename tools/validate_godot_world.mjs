@@ -1084,10 +1084,6 @@ function validateShoreline(worldRoot, manifest, records) {
       prototype.material_key === (prototype.kind === "boulder" ? SHORELINE_BOULDER_MATERIAL : SHORELINE_DRIFTWOOD_MATERIAL), `Shoreline prototype ${prototype.id} identity drift`);
     const uvs = new Array((prototype.vertices.length / 3) * 2).fill(0);
     validateMesh({ ...prototype, uvs }, `shoreline prototype ${prototype.id}`);
-    if (prototype.kind === "boulder") {
-      invariant(Array.isArray(prototype.relative_height) && prototype.relative_height.length * 3 === prototype.vertices.length &&
-        prototype.relative_height.every((value) => Number.isFinite(value) && value >= 0 && value <= 1), `Shoreline boulder ${prototype.id} needs one relative height in [0, 1] per vertex`);
-    }
     let error = 0;
     for (const lod of prototype.lods) {
       invariant(Number.isFinite(lod.error_m) && lod.error_m > error, `Shoreline prototype ${prototype.id} LOD errors must grow`);

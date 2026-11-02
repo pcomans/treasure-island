@@ -145,7 +145,7 @@ func build(document: Dictionary) -> Dictionary:
 
 
 ## An ArrayMesh from a generated mesh dictionary (vertices, normals, indices,
-## and optional uvs, relative_height and lods: [{error_m, indices}]). The
+## and optional uvs and lods: [{error_m, indices}]). The
 ## generated contract winds triangles counterclockwise around their outward
 ## normals; Godot treats clockwise as front-facing, so each triplet is turned
 ## once here, as world_chunk_builder.gd does for chunk records. A mesh with
@@ -163,13 +163,6 @@ static func _array_mesh(record: Dictionary, material: Material) -> ArrayMesh:
 	arrays[Mesh.ARRAY_VERTEX] = vertices
 	arrays[Mesh.ARRAY_NORMAL] = normals
 	arrays[Mesh.ARRAY_INDEX] = _clockwise(record.indices)
-	# A stone's vertex alpha is its height on the stone (0 at the cut base, 1 at
-	# the top); the instance colour multiplies in its tint.
-	if record.has("relative_height"):
-		var colors := PackedColorArray()
-		for value: Variant in record.relative_height:
-			colors.append(Color(1.0, 1.0, 1.0, float(value)))
-		arrays[Mesh.ARRAY_COLOR] = colors
 	# Coarser index sets over the same vertices, keyed by their error for a 1 m stone.
 	var lods := {}
 	for lod_value: Variant in record.get("lods", []):

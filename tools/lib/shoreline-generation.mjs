@@ -92,7 +92,7 @@ const STONE_FIELDS = ["cobble", "crest", "driftwood", "heap", "planks", "prototy
 const SHOULDER_FIELDS = ["fill", "rise_m", "size_m"];
 const TOP_FIELDS = ["bury", "max_rise_m", "out_jitter_m", "size_m", "spacing", "tilt_deg"];
 const CREST_FIELDS = ["depth_m", "drop_per_m", "fill", "rise_m", "size_m"];
-const HEAP_FIELDS = ["bury", "classes", "lift", "overlap", "tilt_deg", "toe_extra_m"];
+const HEAP_FIELDS = ["bury", "classes", "overlap", "tilt_deg", "toe_extra_m"];
 const COBBLE_FIELDS = ["edge_m", "fill", "outline_bias", "path_clearance_m", "size_m", "top_m"];
 const DRIFTWOOD_FIELDS = ["acceptance", "d_m", "length_m", "radius_m", "spacing_m", "yaw_jitter_deg"];
 const PLANK_FIELDS = ["above_water_m", "length_m", "near_xz", "segment", "width_m", "yaw_deg"];
@@ -163,10 +163,11 @@ export function shorelineSettings(config) {
   requireRange(stones.shoulder.rise_m, -1, "Shoreline stones.shoulder.rise_m");
   invariant(isFiniteNumber(stones.shoulder.fill) && stones.shoulder.fill > 0 && stones.shoulder.fill <= 1.5, "Shoreline stones.shoulder.fill must be in (0, 1.5]");
   exactKeys(stones.heap, HEAP_FIELDS, "Shoreline stones.heap");
-  for (const key of ["bury", "lift"]) requireRange(stones.heap[key], 0, `Shoreline stones.heap.${key}`);
-  invariant(stones.heap.lift[1] < stones.heap.bury[0], "Shoreline stones.heap.lift must stay under bury, so no cut base lifts out of the slope");
+  requireRange(stones.heap.bury, 0, "Shoreline stones.heap.bury");
+  invariant(stones.heap.bury[1] < 1, "Shoreline stones.heap.bury must leave part of each stone above the slope");
   invariant(isFiniteNumber(stones.heap.overlap) && stones.heap.overlap > 0.4 && stones.heap.overlap <= 1, "Shoreline stones.heap.overlap must be in (0.4, 1]");
   invariant(isFiniteNumber(stones.heap.tilt_deg) && stones.heap.tilt_deg >= 0 && stones.heap.tilt_deg < 45, "Shoreline stones.heap.tilt_deg must be in [0, 45)");
+  invariant(stones.prototypes >= QUARRY_FAMILIES.length, `Shoreline stones.prototypes must cover the ${QUARRY_FAMILIES.length} quarry-stone families`);
   invariant(isFiniteNumber(stones.heap.toe_extra_m) && stones.heap.toe_extra_m >= 0, "Shoreline stones.heap.toe_extra_m must be non-negative");
   invariant(Array.isArray(stones.heap.classes) && stones.heap.classes.length > 0, "Shoreline stones.heap.classes must list size classes");
   for (const [index, size] of stones.heap.classes.entries()) {
@@ -422,6 +423,19 @@ function quaternionFor(up, yaw) {
   return q.map((value) => value / l);
 }
 
+// The shortest rotation (unit quaternion) taking unit vector a onto unit vector b.
+function arcQuaternion(a, b) {
+  const c = dot3(a, b);
+  if (c < -0.999999) {
+    const axis = unit3(Math.abs(a[0]) < 0.9 ? cross3(a, [1, 0, 0]) : cross3(a, [0, 1, 0]));
+    return [axis[0], axis[1], axis[2], 0];
+  }
+  const axis = cross3(a, b);
+  const q = [axis[0], axis[1], axis[2], 1 + c];
+  const l = Math.hypot(...q);
+  return q.map((value) => value / l);
+}
+
 // The basis columns of quaternion q, scaled per local axis.
 function basisOf(q, scales) {
   const [x, y, z, w] = q;
@@ -446,34 +460,48 @@ function placedVertices(prototype, q, scales, origin) {
 
 // ---------------------------------------------------------------- prototypes
 
-// One quarry stone, as split rock armour is: a block cut by random planes
-// into a convex polytope with flat broken faces and sharp edges. The block's
-// six faces are tilted and set in a little (split, not sawn); further cuts
-// take off corners and edges, deep or shallow, so each stone has faces of
-// many sizes. Flat-shaded: every face has its own normal, so the edges stay
-// sharp. Normalized so the widest horizontal extent is 1 and the lowest
-// vertex lies at y = 0; size_m gives [1, height, depth]. relative_height (0 at
-// the bottom, 1 at the top) lets the shader darken the buried base.
-function quarryPrototype(seed, index) {
-  const rng = random(seed, `boulder:${index}`);
-  const half = [1, 0.5 + 0.38 * rng(), 0.55 + 0.42 * rng()];
+// Quarry-stone families: half extents of the starting block (x is 1), how
+// far its six faces are tilted, how many corners are broken off, and whether a
+// deep fracture takes off a whole top edge (a wedge).
+const QUARRY_FAMILIES = Object.freeze([
+  { name: "block", half: [[0.62, 0.85], [0.7, 0.95]], jitter: 0.32, corners: 3, wedge: false },
+  { name: "slab", half: [[0.34, 0.48], [0.62, 0.9]], jitter: 0.26, corners: 2, wedge: false },
+  { name: "long", half: [[0.5, 0.66], [0.4, 0.55]], jitter: 0.3, corners: 3, wedge: false },
+  { name: "wedge", half: [[0.6, 0.8], [0.65, 0.9]], jitter: 0.3, corners: 1, wedge: true },
+  { name: "chunky", half: [[0.75, 0.95], [0.8, 1.0]], jitter: 0.34, corners: 4, wedge: false },
+]);
+// A fracture face smaller than this share of the surface is a sliver, and two
+// neighbouring faces closer than this angle read as a rounded edge.
+const QUARRY_MIN_FACE_SHARE = 0.03;
+const QUARRY_MIN_EDGE_DEG = 24;
+
+// One candidate fractured block from `rng`, or null when it has a sliver face,
+// a soft edge, or too many faces to read as a broken block.
+function quarryCandidate(rng, family) {
+  const half = [1, pick(family.half[0], rng), pick(family.half[1], rng)];
   const support = (n) => Math.abs(n[0]) * half[0] + Math.abs(n[1]) * half[1] + Math.abs(n[2]) * half[2];
-  const jitter = (amount) => [(rng() - 0.5) * amount, (rng() - 0.5) * amount, (rng() - 0.5) * amount];
+  const jitter = () => (rng() - 0.5) * 2 * family.jitter;
+  const sign = () => (rng() < 0.5 ? -1 : 1);
   const planes = [];
+  // The split faces of the block: tilted, set in a little.
   for (const axis of [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]]) {
-    const n = unit3(add3(axis, jitter(0.55)));
-    planes.push({ n, o: support(n) * (0.8 + 0.18 * rng()) });
+    const n = unit3(add3(axis, [jitter(), jitter(), jitter()]));
+    planes.push({ n, o: support(n) * (0.84 + 0.14 * rng()) });
   }
-  const cuts = 7 + (index % 4);
-  for (let k = 0; k < cuts; k += 1) {
-    const z = rng() * 2 - 1;
-    const theta = rng() * Math.PI * 2;
-    const r = Math.sqrt(1 - z * z);
-    const n = [r * Math.cos(theta), z, r * Math.sin(theta)];
-    planes.push({ n, o: support(n) * (0.66 + 0.24 * rng()) });
+  // A wedge loses one whole top edge to a deep fracture.
+  if (family.wedge) {
+    const n = unit3([(rng() - 0.5) * 0.4, 1, sign() * (0.8 + 0.6 * rng())]);
+    planes.push({ n, o: support(n) * (0.4 + 0.15 * rng()) });
+  }
+  // Broken-off corners: one fracture plane each, deep enough to leave a large
+  // face rather than a chamfer.
+  for (let k = 0; k < family.corners; k += 1) {
+    const n = unit3([sign() * (0.6 + 0.6 * rng()), sign() * (0.5 + 0.6 * rng()), sign() * (0.6 + 0.6 * rng())]);
+    planes.push({ n, o: support(n) * (0.55 + 0.25 * rng()) });
   }
   // Vertices: every point where three planes meet inside all the others.
   const points = [];
+  const onPlanes = [];
   for (let i = 0; i < planes.length; i += 1) {
     for (let j = i + 1; j < planes.length; j += 1) {
       for (let k = j + 1; k < planes.length; k += 1) {
@@ -483,26 +511,19 @@ function quarryPrototype(seed, index) {
         if (Math.abs(determinant) < 1e-9) continue;
         const p = scale3(add3(add3(scale3(bc, a.o), scale3(cross3(c.n, a.n), b.o)), scale3(cross3(a.n, b.n), c.o)), 1 / determinant);
         if (planes.some((plane) => dot3(plane.n, p) > plane.o + 1e-7)) continue;
-        if (!points.some((q) => length3(sub3(p, q)) < 1e-6)) points.push(p);
+        if (points.some((q) => length3(sub3(p, q)) < 1e-6)) continue;
+        points.push(p);
+        onPlanes.push(planes.map((plane, index) => (Math.abs(dot3(plane.n, p) - plane.o) < 1e-6 ? index : -1)).filter((index) => index >= 0));
       }
     }
   }
-  invariant(points.length >= 8, `Quarry stone ${index} is degenerate`);
-  const extent = (axis) => [Math.min(...points.map((p) => p[axis])), Math.max(...points.map((p) => p[axis]))];
-  const [minX, maxX] = extent(0);
-  const [minY, maxY] = extent(1);
-  const [minZ, maxZ] = extent(2);
-  const widest = Math.max(maxX - minX, maxZ - minZ);
-  const height = (maxY - minY) / widest;
-  const placed = points.map((p) => [(p[0] - (minX + maxX) / 2) / widest, (p[1] - minY) / widest, (p[2] - (minZ + maxZ) / 2) / widest]);
+  if (points.length < 8) return null;
   // Faces: the vertices on each plane, in order around their centroid.
-  const mesh = { vertices: [], normals: [], indices: [] };
-  const relative = [];
-  let faces = 0;
-  for (const plane of planes) {
-    const on = points.map((p, index2) => [p, index2]).filter(([p]) => Math.abs(dot3(plane.n, p) - plane.o) < 1e-6).map(([, index2]) => index2);
-    if (on.length < 3) continue;
-    const centroid = scale3(on.reduce((sum, index2) => add3(sum, points[index2]), [0, 0, 0]), 1 / on.length);
+  const faces = [];
+  planes.forEach((plane, planeIndex) => {
+    const on = points.map((p, index) => index).filter((index) => onPlanes[index].includes(planeIndex));
+    if (on.length < 3) return;
+    const centroid = scale3(on.reduce((sum, index) => add3(sum, points[index]), [0, 0, 0]), 1 / on.length);
     const u = unit3(Math.abs(plane.n[1]) < 0.9 ? cross3(plane.n, [0, 1, 0]) : cross3(plane.n, [1, 0, 0]));
     const w = cross3(plane.n, u);
     on.sort((left, right) => {
@@ -510,24 +531,58 @@ function quarryPrototype(seed, index) {
       const b = sub3(points[right], centroid);
       return Math.atan2(dot3(a, w), dot3(a, u)) - Math.atan2(dot3(b, w), dot3(b, u));
     });
-    // Normalization only translates and scales uniformly: the plane normal stays the face normal.
-    const ids = on.map((index2) => {
-      relative.push(round2(Math.max(0, Math.min(1, placed[index2][1] / height))));
-      return pushVertex(mesh, placed[index2], plane.n);
-    });
-    for (let k = 1; k + 1 < ids.length; k += 1) pushTriangle(mesh, [ids[0], ids[k], ids[k + 1]], plane.n);
-    faces += 1;
+    let area = 0;
+    for (let k = 1; k + 1 < on.length; k += 1) area += length3(cross3(sub3(points[on[k]], points[on[0]]), sub3(points[on[k + 1]], points[on[0]]))) / 2;
+    faces.push({ n: plane.n, on, area });
+  });
+  if (faces.length < 6 || faces.length > 11) return null;
+  const surface = faces.reduce((sum, face) => sum + face.area, 0);
+  if (faces.some((face) => face.area < surface * QUARRY_MIN_FACE_SHARE)) return null;
+  // Every edge must be a crease: neighbouring faces (two shared vertices) at
+  // least QUARRY_MIN_EDGE_DEG apart.
+  for (let i = 0; i < faces.length; i += 1) {
+    for (let j = i + 1; j < faces.length; j += 1) {
+      if (faces[i].on.filter((index) => faces[j].on.includes(index)).length < 2) continue;
+      const angle = (Math.acos(Math.max(-1, Math.min(1, dot3(faces[i].n, faces[j].n)))) * 180) / Math.PI;
+      if (angle < QUARRY_MIN_EDGE_DEG) return null;
+    }
   }
-  invariant(faces >= 6 && mesh.indices.length >= 24, `Quarry stone ${index} has too few faces`);
+  // Centre on the vertex centroid; scale so the longest box side is 1.
+  const centroid = scale3(points.reduce((sum, p) => add3(sum, p), [0, 0, 0]), 1 / points.length);
+  const extents = [0, 1, 2].map((axis) => Math.max(...points.map((p) => p[axis])) - Math.min(...points.map((p) => p[axis])));
+  const unitScale = 1 / Math.max(...extents);
+  const placed = points.map((p) => scale3(sub3(p, centroid), unitScale));
+  // Flat-shaded: every face gets its own vertices with the face's normal.
+  const mesh = { vertices: [], normals: [], indices: [] };
+  for (const face of faces) {
+    const ids = face.on.map((index) => pushVertex(mesh, placed[index], face.n));
+    for (let k = 1; k + 1 < ids.length; k += 1) pushTriangle(mesh, [ids[0], ids[k], ids[k + 1]], face.n);
+  }
   return {
-    id: `boulder_${index}`,
-    kind: "boulder",
-    material_key: SHORELINE_BOULDER_MATERIAL,
-    size_m: [1, round3(height), round3((maxZ - minZ) / widest)],
-    ...mesh,
-    relative_height: relative,
-    lods: [],
+    size_m: extents.map((extent) => round3(extent * unitScale)),
+    mesh,
+    faces: faces.map((face) => ({ n: face.n, area: face.area * unitScale * unitScale })),
   };
+}
+
+// One fractured quarry block, as dumped riprap is: a block split by a few
+// fracture planes into a convex polyhedron with flat broken faces and sharp
+// edges and corners. Prototypes cycle through QUARRY_FAMILIES (block, slab,
+// long, wedge, chunky); a candidate with a sliver face or a soft edge is drawn
+// again. Flat-shaded, so edges stay hard. Centred on its centroid and scaled
+// so its longest side is 1; size_m gives its three box sides. Also returns its
+// faces (outward normal and area), on any of which a dumped stone may rest.
+function quarryPrototype(seed, index) {
+  const family = QUARRY_FAMILIES[index % QUARRY_FAMILIES.length];
+  for (let attempt = 0; attempt < 200; attempt += 1) {
+    const stone = quarryCandidate(random(seed, `quarry:${index}:${attempt}`), family);
+    if (!stone) continue;
+    return {
+      prototype: { id: `boulder_${index}`, kind: "boulder", material_key: SHORELINE_BOULDER_MATERIAL, size_m: stone.size_m, ...stone.mesh, lods: [] },
+      faces: stone.faces,
+    };
+  }
+  throw new Error(`Quarry stone ${index} (${family.name}) found no clean shape in 200 attempts`);
 }
 
 // One bleached driftwood log, 1 long along x and 1 thick, bent, tapered and
@@ -809,7 +864,13 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
   const hard = hardShapes.map((shape) => ({ ...shape, points: shape.points.map(([x, z]) => [x, -z]) }));
 
   const prototypes = [];
-  for (let index = 0; index < rules.prototypes; index += 1) prototypes.push(quarryPrototype(seed, index));
+  // The faces each stone shape may come to rest on (kept out of the document).
+  const restFaces = new Map();
+  for (let index = 0; index < rules.prototypes; index += 1) {
+    const { prototype, faces } = quarryPrototype(seed, index);
+    prototypes.push(prototype);
+    restFaces.set(prototype.id, faces);
+  }
   const log = logPrototype(seed);
   const plank = plankPrototype();
   prototypes.push(log, plank);
@@ -1081,40 +1142,64 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
       return least;
     };
     const boulders = prototypes.filter((prototype) => prototype.id.startsWith("boulder_"));
-    // One stone of `prototype`, scaled uniformly to `size`, its cut base at
-    // bottomY; returns its record with its actual world top and reach.
-    const makeStone = ({ band, s, d, plan2, rng, size, prototype, up, yaw, bottomY }) => {
-      const q = quaternionFor(up, yaw);
-      const scales = [size, size, size];
-      const origin = [plan2[0], bottomY, -plan2[1]];
-      const points = placedVertices(prototype, q, scales, origin);
+    // `base` tilted by up to maxDeg about a random horizontal axis.
+    const leanUp = (base, maxDeg, rng) => {
+      const tilt = ((rng() - 0.5) * 2 * maxDeg * Math.PI) / 180;
+      const axis = rng() * Math.PI * 2;
+      return unit3(add3(unit3(base), [Math.sin(tilt) * Math.cos(axis), 0, Math.sin(tilt) * Math.sin(axis)]));
+    };
+    // A dumped stone comes to rest on one of its faces (larger faces more
+    // often), that face against its bed (`up` is the bed's normal, tilted up to
+    // tiltDeg), turned any way about it. Returns the rotation and, for a stone
+    // of size 1, its lowest and highest point relative to its centroid, its
+    // mean horizontal half-extent (radius).
+    const orient = (prototype, up, tiltDeg, rng) => {
+      const faces = restFaces.get(prototype.id);
+      let pickAt = rng() * faces.reduce((sum, face) => sum + face.area, 0);
+      let face = faces[faces.length - 1];
+      for (const candidate of faces) {
+        pickAt -= candidate.area;
+        if (pickAt <= 0) {
+          face = candidate;
+          break;
+        }
+      }
+      const turned = quaternionMultiply(quaternionFor(leanUp(up, tiltDeg, rng), rng() * Math.PI * 2), arcQuaternion(face.n, [0, -1, 0]));
+      const length4 = Math.hypot(...turned);
+      const q = turned.map((value) => value / length4);
+      const points = placedVertices(prototype, q, [1, 1, 1], [0, 0, 0]);
+      const span = (axis) => Math.max(...points.map((p) => p[axis])) - Math.min(...points.map((p) => p[axis]));
       return {
-        band, s, d, plan: plan2, radius: (size * (1 + prototype.size_m[2])) / 4, prototype, prototypeId: prototype.id, section: batchSection(s),
-        q, scales, origin, tint: tintFor(rng),
+        q,
+        low: Math.min(...points.map((p) => p[1])),
+        high: Math.max(...points.map((p) => p[1])),
+        radius: (span(0) + span(2)) / 4,
+      };
+    };
+    // One stone of `prototype` in orientation o, scaled uniformly to `size`,
+    // its lowest point at bedY; returns its record with its world top and reach.
+    const makeStone = ({ band, s, d, plan2, rng, size, prototype, o, bedY }) => {
+      const scales = [size, size, size];
+      const origin = [plan2[0], bedY - o.low * size, -plan2[1]];
+      const points = placedVertices(prototype, o.q, scales, origin);
+      return {
+        band, s, d, plan: plan2, radius: o.radius * size, prototype, prototypeId: prototype.id, section: batchSection(s),
+        q: o.q, scales, origin, tint: tintFor(rng),
         top: Math.max(...points.map((point) => point[1])),
         reach: Math.max(...points.map((point) => Math.hypot(point[0] - origin[0], point[2] - origin[2]))),
       };
     };
     const outsideOk = (stone) => stone.d - stone.reach >= rules.setback_m + 0.3
       || clearOfOutline(stone.prototype, stone.q, stone.scales, stone.origin, stone.s) >= SHORELINE_OUTSIDE_CLEARANCE_M;
-    // A stone's height above its base along world y, per unit size.
-    const rise = (prototype, up) => prototype.size_m[1] * up[1];
     // Stones never spill past the segment's end caps.
     const insideEnds = (s, size) => s - size * 0.6 >= s0 && s + size * 0.6 <= s1;
-    // `base` tilted by up to maxDeg about a random horizontal axis: quarry
-    // stones come to rest on whichever face they fall on.
-    const leanUp = (base, maxDeg, rng) => {
-      const tilt = ((rng() - 0.5) * 2 * maxDeg * Math.PI) / 180;
-      const axis = rng() * Math.PI * 2;
-      return unit3(add3(unit3(base), [Math.sin(tilt) * Math.cos(axis), 0, Math.sin(tilt) * Math.sin(axis)]));
-    };
 
-    // Top row: big quarry stones just beyond the outline, their inner faces at
-    // least setback_m out (about the player's radius, so the player is
+    // Top row: quarry blocks dumped just beyond the outline, their inner faces
+    // at least setback_m out (about the player's radius, so the player is
     // recovered before it can reach into one). Each is buried by a share of
     // its own height, so big stones stand tall and small ones low, up to
-    // max_rise_m above the land edge; sizes, spacing and tilt vary stone by
-    // stone, so the crest skyline breaks up as in the plaza photos.
+    // max_rise_m above the land edge; sizes, spacing and the face each rests
+    // on vary stone by stone, so the crest skyline breaks up as in the photos.
     const topRule = rules.top;
     for (let s = s0, k = 0; s < s1; k += 1) {
       const rng = random(seed, `${segment.id}:top:${k}`);
@@ -1124,26 +1209,25 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
       if (!insideEnds(sAt, size)) continue;
       const section = sectionAtS(sAt);
       const prototype = boulders[Math.floor(rng() * boulders.length)];
-      const yaw = rng() * Math.PI * 2;
-      const up = leanUp(add3(scale3(slopeNormal(section), 0.3), [0, 0.7, 0]), topRule.tilt_deg, rng);
-      const stoneHeight = size * rise(prototype, up);
+      const o = orient(prototype, add3(scale3(slopeNormal(section), 0.3), [0, 0.7, 0]), topRule.tilt_deg, rng);
+      const height = (o.high - o.low) * size;
       const bury = pick(topRule.bury, rng);
-      const bedAt = (d) => Math.min(planeAt(section, d) - stoneHeight * bury, section.land + topRule.max_rise_m - stoneHeight);
-      let d = rules.setback_m + size * 0.42 + pick(topRule.out_jitter_m, rng);
+      const bedAt = (d) => Math.min(planeAt(section, d) - height * bury, section.land + topRule.max_rise_m - height);
+      let d = rules.setback_m + o.radius * size + pick(topRule.out_jitter_m, rng);
       let plan2 = planAt(section, d);
       if (blocked(plan2, size * 0.5, false)) continue;
-      let stone = makeStone({ band: "top", s: sAt, d, plan2, rng, size, prototype, up, yaw, bottomY: bedAt(d) });
+      let stone = makeStone({ band: "top", s: sAt, d, plan2, rng, size, prototype, o, bedY: bedAt(d) });
       const clear = clearOfOutline(prototype, stone.q, stone.scales, stone.origin, sAt);
       if (clear < rules.setback_m) {
         // Push it out just far enough, once.
         d += rules.setback_m - clear + 0.02;
         plan2 = planAt(section, d);
-        stone = makeStone({ band: "top", s: sAt, d, plan2, rng, size, prototype, up, yaw, bottomY: bedAt(d) });
+        stone = makeStone({ band: "top", s: sAt, d, plan2, rng, size, prototype, o, bedY: bedAt(d) });
         if (!outsideOk(stone) || blocked(plan2, size * 0.5, false)) continue;
       }
       remember(stone);
     }
-    // Back row: big stones piled behind the top row, within depth_m of the
+    // Back row: big blocks dumped behind the top row, within depth_m of the
     // setback, aiming their tops rise_m above the land edge (less drop_per_m
     // further out) but always bedded at least 0.1 m into the slope, so the big
     // ones rise above the top row and the small ones sit lower in the pile.
@@ -1159,23 +1243,23 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
         if (!insideEnds(sAt, size)) continue;
         const section = sectionAtS(sAt);
         const prototype = boulders[Math.floor(rng() * boulders.length)];
-        const radius = (size * (1 + prototype.size_m[2])) / 4;
+        const o = orient(prototype, add3(scale3(slopeNormal(section), 0.55), [0, 0.45, 0]), topRule.tilt_deg, rng);
+        const radius = o.radius * size;
         const d = rules.setback_m + radius + rng() * crest.depth_m;
         const plan2 = planAt(section, d);
         if (!fits(plan2, radius, rules.heap.overlap) || blocked(plan2, radius, false)) continue;
-        const up = leanUp(add3(scale3(slopeNormal(section), 0.55), [0, 0.45, 0]), topRule.tilt_deg, rng);
         const topY = section.land + pick(crest.rise_m, rng) - crest.drop_per_m * (d - rules.setback_m);
-        const bottomY = Math.min(planeAt(section, d) - 0.1, topY - size * rise(prototype, up));
-        const stone = makeStone({ band: "top", s: sAt, d, plan2, rng, size, prototype, up, yaw: rng() * Math.PI * 2, bottomY });
+        const bedY = Math.min(planeAt(section, d) - 0.1, topY - (o.high - o.low) * size);
+        const stone = makeStone({ band: "top", s: sAt, d, plan2, rng, size, prototype, o, bedY });
         if (!outsideOk(stone)) continue;
         remember(stone);
         placed += 1;
       }
     }
-    // Shoulder stones: small stones bedded in the shoulder between the outline
-    // and the top row, rising rise_m above it, so the strip reads as the dirt
-    // and stone at the top of the riprap in the photos, not as a trench. Like
-    // every stone outside, they keep clear of the outline.
+    // Shoulder stones: small blocks in the shoulder between the outline and
+    // the top row, rising rise_m above it, so the strip reads as the dirt and
+    // stone at the top of the riprap in the photos, not as a trench. Like every
+    // stone outside, they keep clear of the outline.
     const shoulderRule = rules.shoulder;
     {
       const meanSize = (shoulderRule.size_m[0] + shoulderRule.size_m[1]) / 2;
@@ -1188,13 +1272,13 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
         if (!insideEnds(sAt, size)) continue;
         const section = sectionAtS(sAt);
         const prototype = boulders[Math.floor(rng() * boulders.length)];
-        const radius = (size * (1 + prototype.size_m[2])) / 4;
+        const o = orient(prototype, [0, 1, 0], topRule.tilt_deg, rng);
+        const radius = o.radius * size;
         const d = SHORELINE_OUTSIDE_CLEARANCE_M + radius + rng() * (slope.shoulder_m + 0.4);
         const plan2 = planAt(section, d);
         if (!fits(plan2, radius, 0.9) || blocked(plan2, radius, false)) continue;
-        const up = leanUp([0, 1, 0], topRule.tilt_deg, rng);
-        const bottomY = Math.min(planeAt(section, d) - 0.04, section.top + pick(shoulderRule.rise_m, rng) - size * rise(prototype, up));
-        const stone = makeStone({ band: "heap", s: sAt, d, plan2, rng, size, prototype, up, yaw: rng() * Math.PI * 2, bottomY });
+        const bedY = Math.min(planeAt(section, d) - 0.04, section.top + pick(shoulderRule.rise_m, rng) - (o.high - o.low) * size);
+        const stone = makeStone({ band: "heap", s: sAt, d, plan2, rng, size, prototype, o, bedY });
         if (clearOfOutline(prototype, stone.q, stone.scales, stone.origin, sAt) < SHORELINE_OUTSIDE_CLEARANCE_M) continue;
         remember(stone);
         placed += 1;
@@ -1202,10 +1286,10 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
     }
     // Heap: random sequential packing of the slope from behind the crest to
     // just past the toe, largest stones first; neighbours may overlap by up to
-    // 1 - overlap of their radii, so the stones close up into one pile. Past
-    // the waterline only stones that stand clear of the water are kept: one
-    // that would just break the surface would read as a pebble dotted
-    // offshore, and a sunk one shows through the water only as a smudge.
+    // 1 - overlap of their radii, so the blocks close up into one dumped pile,
+    // each buried by a bury share of its height (at least 5 cm). Past the
+    // waterline only stones that stand clear of the water are kept: one that
+    // would just break the surface would read as a pebble dotted offshore.
     const heap = rules.heap;
     const meanToe = sections.reduce((sum, section) => sum + section.toe_m, 0) / sections.length;
     const heapArea = (s1 - s0) * (meanToe + heap.toe_extra_m);
@@ -1220,25 +1304,22 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
         if (!insideEnds(sAt, size)) continue;
         const section = sectionAtS(sAt);
         const prototype = boulders[Math.floor(rng() * boulders.length)];
-        const radius = (size * (1 + prototype.size_m[2])) / 4;
+        const o = orient(prototype, add3(scale3(slopeNormal(section), 0.7), [0, 0.3, 0]), heap.tilt_deg, rng);
+        const radius = o.radius * size;
         const d = lerp(rules.setback_m + radius, section.toe_m + heap.toe_extra_m, rng());
         const plan2 = planAt(section, d);
-        const tilt = ((rng() - 0.5) * 2 * heap.tilt_deg * Math.PI) / 180;
-        const tiltAxis = rng() * Math.PI * 2;
-        const lean = [Math.sin(tilt) * Math.cos(tiltAxis), 0, Math.sin(tilt) * Math.sin(tiltAxis)];
-        const up = unit3(add3(add3(scale3(slopeNormal(section), 0.7), [0, 0.3, 0]), lean));
-        const plane = planeAt(section, d);
-        const bottomY = plane - size * (pick(heap.bury, rng) - pick(heap.lift, rng));
-        const top = bottomY + size * rise(prototype, up);
+        const height = (o.high - o.low) * size;
+        const bedY = planeAt(section, d) - Math.max(0.05, height * pick(heap.bury, rng));
+        const top = bedY + height;
         if (d > section.water_m - 0.2 && top < WATER_Y_M + 0.14) continue;
         if (!fits(plan2, radius, heap.overlap) || blocked(plan2, radius, false, section.land - top - 0.1)) continue;
-        const stone = makeStone({ band: "heap", s: sAt, d, plan2, rng, size, prototype, up, yaw: rng() * Math.PI * 2, bottomY });
+        const stone = makeStone({ band: "heap", s: sAt, d, plan2, rng, size, prototype, o, bedY });
         if (!outsideOk(stone)) continue;
         remember(stone);
         placed += 1;
       }
     }
-    // Cobbles: low stones bedded in the band inside the outline, more of them
+    // Cobbles: small blocks set in the band inside the outline, more of them
     // toward the outline, each wholly inside the band (so the overlay's edge
     // never cuts across one) and no higher than the player can walk over
     // without seeming to sink into rock.
@@ -1257,20 +1338,14 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
         const size = pick(cobble.size_m, rng);
         // Mostly buried, a cobble shows only its top: three shapes are enough (fewer batches).
         const prototype = boulders[Math.floor(rng() * Math.min(3, boulders.length))];
-        const radius = (size * (1 + prototype.size_m[2])) / 4;
+        const o = orient(prototype, [0, 1, 0], 10, rng);
+        const radius = o.radius * size;
         if (edgeDistance(band, plan2) < size * 0.5 + cobble.edge_m || !fits(plan2, radius, 0.95) || blocked(plan2, size * 0.5, true)) continue;
         const ground = landAt(plan2);
         if (ground == null) continue;
-        const up = unit3([0.1 * (rng() - 0.5), 1, 0.1 * (rng() - 0.5)]);
-        const yaw = rng() * Math.PI * 2;
-        // Bury it so only its cap shows, top_m above the land.
-        let bottomY = ground + pick(cobble.top_m, rng) - size * rise(prototype, up);
-        let stone = makeStone({ band: "cobble", s: sAt, d: -1, plan2, rng, size, prototype, up, yaw, bottomY });
-        if (stone.top > ground + cobble.top_m[1]) {
-          // Tilt can lift a vertex past the top: lower it to fit.
-          bottomY -= stone.top - (ground + cobble.top_m[1]) + 0.002;
-          stone = makeStone({ band: "cobble", s: sAt, d: -1, plan2, rng, size, prototype, up, yaw, bottomY });
-        }
+        // Bury it so only its top shows, top_m above the land.
+        const bedY = ground + pick(cobble.top_m, rng) - (o.high - o.low) * size;
+        const stone = makeStone({ band: "cobble", s: sAt, d: -1, plan2, rng, size, prototype, o, bedY });
         if (stone.top > ground + cobble.top_m[1] + 1e-6 || edgeDistance(band, plan2) < stone.reach + cobble.edge_m) continue;
         remember(stone);
         placed += 1;

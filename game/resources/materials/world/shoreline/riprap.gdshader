@@ -8,11 +8,12 @@ render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_burley, specular_sc
 //      stones' visibility range, it stands in for the heap at far_brightness,
 //      about the heap's average tone, so the band does not lighten where the
 //      stones fade out;
-//   1  the instanced stones (MultiMesh): the generated boulder skin, tinted per
-//      stone by its instance colour (COLOR.rgb), darker toward its buried base
-//      where neighbours meet it and lighter on sun-facing tops; the prototype's
-//      vertex alpha carries each vertex's height on the stone (0 at the cut
-//      base, 1 at the top).
+//   1  the instanced stones (MultiMesh): the generated boulder skin on flat,
+//      hard-edged quarry faces, tinted per stone by its instance colour
+//      (COLOR.rgb), darker toward its lower part where neighbours meet it and
+//      lighter on sun-facing tops. A stone may rest on any face, so its height
+//      share comes from the world: the fragment's height above the stone's
+//      centroid (its instance origin) against its size (the instance scale).
 // (The band inside the outline is the land's own dry grass ground cover.)
 // The generated textures are sampled triplanar in world space (no UVs); each
 // stone offsets its sample by its own position so no two stones match. The
@@ -44,11 +45,13 @@ uniform float void_brightness = 0.45;
 uniform float far_brightness = 0.75;
 uniform float void_fade_start_m = 215.0;
 uniform float void_fade_end_m = 290.0;
-// Stones: darker toward the cut base (relative height 0) where they meet the
-// heap, lighter on sun-facing tops.
+// Stones: darker toward their lower part (height share 0) where they meet the
+// heap, lighter on sun-facing tops. stone_extent is a stone's typical vertical
+// extent for size 1 (the longest side).
 uniform float contact_dark = 0.4;
 uniform float contact_height = 0.65;
 uniform float top_bleach = 0.2;
+uniform float stone_extent = 0.7;
 // Bump.
 uniform float bump_height_m = 0.035;
 uniform float stone_bump_height_m = 0.012;
@@ -75,12 +78,14 @@ uniform float wet_roughness = 0.56;
 varying vec3 world_position;
 varying vec3 world_normal;
 varying vec3 instance_origin;
+varying float instance_scale;
 
 void vertex() {
 	world_position = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
 	// Stones scale uniformly, so the model matrix keeps normals true.
 	world_normal = normalize(mat3(MODEL_MATRIX) * NORMAL);
 	instance_origin = MODEL_MATRIX[3].xyz;
+	instance_scale = length(MODEL_MATRIX[0].xyz);
 }
 
 float hash12(vec2 p) {
@@ -152,9 +157,10 @@ void fragment() {
 		NORMAL = normalize(abs(det) * view_normal - gradient);
 	}
 	if (stone) {
+		float share = clamp(0.5 + (world_position.y - instance_origin.y) / max(instance_scale * stone_extent, 0.01), 0.0, 1.0);
 		albedo *= COLOR.rgb;
-		albedo *= mix(contact_dark, 1.0, smoothstep(0.0, contact_height, COLOR.a));
-		albedo *= 1.0 + top_bleach * smoothstep(0.55, 1.0, COLOR.a) * max(n.y, 0.0);
+		albedo *= mix(contact_dark, 1.0, smoothstep(0.0, contact_height, share));
+		albedo *= 1.0 + top_bleach * smoothstep(0.55, 1.0, share) * max(n.y, 0.0);
 	} else {
 		albedo *= mix(void_brightness, far_brightness, smoothstep(void_fade_start_m, void_fade_end_m, distance_m));
 	}
