@@ -7,9 +7,9 @@
 //   - rule rows from the "furniture" lists of tools/config/street-detail-zones.json
 //     fill what OSM leaves out (lamps along curbs, signal poles at signalized
 //     crossings, the controller cabinet, street-name signs at junctions, the
-//     other approaches of an all-way stop, a stop sign where a drive meets a
-//     named road, lights around a parking lot). Every rule says it is
-//     production inference and names its dated photo evidence.
+//     other approaches of an all-way stop, a stop sign for traffic turning into
+//     a drive, lights around a parking lot). Every rule says it is production
+//     inference and names its dated photo evidence.
 // Only pilot zones get props; other rows stay data until the rollout.
 //
 // Plan geometry here is east/north (the ground generator's frame); rows use
@@ -33,7 +33,7 @@ export const STREET_FURNITURE_PROPS = Object.freeze({
   signal_mast: "traffic_signals",
   stop_sign: "stop_sign",
 });
-export const STREET_FURNITURE_PATTERNS = Object.freeze(["kerb", "signalized_crossings", "near_signals", "junctions", "all_way_stops", "drive_exits", "lot_edge"]);
+export const STREET_FURNITURE_PATTERNS = Object.freeze(["kerb", "signalized_crossings", "near_signals", "junctions", "all_way_stops", "drive_entries", "lot_edge"]);
 // Default props for OSM rows in pilot zones; kinds without one stay unbuilt.
 const OSM_PROPS = Object.freeze({
   bus_stop: (tags) => (tags.shelter === "yes" ? null : { prop: "bus_stop_sign", params: {} }),
@@ -64,7 +64,7 @@ const RULE_FIELDS = Object.freeze({
   near_signals: ["back_m", "along_m"],
   junctions: ["setback_m"],
   all_way_stops: ["clear_m"],
-  drive_exits: ["clear_m"],
+  drive_entries: ["clear_m"],
   lot_edge: ["source_keys", "spacing_m", "phase_m", "setback_m", "slide_m"],
 });
 const COMMON_FIELDS = Object.freeze(["basis", "evidence", "id", "kind", "params", "pattern", "prop", "rule"]);
@@ -280,11 +280,12 @@ export function placeStreetFurniture({
     }
     return distance;
   };
-  // The first clear spot on the right-hand curb of an approach, upstream of base.
-  const stopPosition = (id, base, travel, reach) => {
+  // The first clear spot on the right-hand curb of traffic moving along travel,
+  // stepping from base upstream (step -1) or downstream (step 1).
+  const stopPosition = (id, base, travel, reach, step = -1) => {
     const right = [travel[1], -travel[0]];
-    for (const upstream of STOP_SIGN.upstream_m) {
-      const xz = toWorld(add(add(base, scale(right, reach + STOP_SIGN.setback_m)), scale(travel, -upstream)));
+    for (const distance of STOP_SIGN.upstream_m) {
+      const xz = toWorld(add(add(base, scale(right, reach + STOP_SIGN.setback_m)), scale(travel, step * distance)));
       const problem = reject("stop_sign", xz, { ignore: new Set([id]) });
       if (!problem) return round2(xz);
       count(audit.rejected_by_reason, `stop_sign:${problem}`);
@@ -495,28 +496,29 @@ export function placeStreetFurniture({
     return found;
   };
 
-  // Stop signs on both approaches of `road` at junction `ref` that no sign covers
-  // yet: on the right-hand curb, past the crossing roads' curbs and upstream of
-  // any crosswalk across the arm.
-  const signArms = (zone, rule, ref, center, road, crossing) => {
+  // Stop signs on the arms of `road` at junction `ref`, on the right-hand curb,
+  // past the crossing roads' curbs and any crosswalk across the arm. They face
+  // traffic approaching the junction, or with inbound traffic leaving it into
+  // the arm (and stand downstream of that crosswalk).
+  const signArms = (zone, rule, ref, center, road, crossing, inbound = false) => {
     const total = polylineLength(road.line);
     const at = closestOnPolyline(road.line, center).along;
     for (const sign of [-1, 1]) {
       const room = sign > 0 ? total - at : at;
       if (room < 6) continue;
       const outward = unit(sub(pointAlong(road.line, at + sign * Math.min(8, room)).point, center));
-      const travel = scale(outward, -1);
-      if (coveredBy(ref, road.source_key, travel)) continue;
+      const travel = inbound ? outward : scale(outward, -1);
+      if (!inbound && coveredBy(ref, road.source_key, travel)) continue;
       const cross = Math.max(0, ...crossing.map((other) => other.kerb_offset_m));
       const cell = `n${ref}_${road.source_key}_${sign > 0 ? "b" : "a"}`;
       const base = add(center, scale(outward, armClearance(center, road, outward, cross, rule.clear_m)));
-      const xz = stopPosition(`scatter:${zone.id}:${rule.id}:${cell}`, base, travel, road.kerb_offset_m);
+      const xz = stopPosition(`scatter:${zone.id}:${rule.id}:${cell}`, base, travel, road.kerb_offset_m, inbound ? 1 : -1);
       if (!xz) {
         count(audit.rejected_by_reason, `${rule.id}:no_clear_curb`);
         continue;
       }
-      const row = addRow(zone, rule, cell, toEastNorth(xz), scale(travel, -1), {}, `approach:${road.source_key}`);
-      stopSigns.push({ id: row.id, junction: ref, road_key: road.source_key, travel });
+      const row = addRow(zone, rule, cell, toEastNorth(xz), scale(travel, -1), {}, `${inbound ? "inbound" : "approach"}:${road.source_key}`);
+      if (!inbound) stopSigns.push({ id: row.id, junction: ref, road_key: road.source_key, travel });
     }
   };
 
@@ -614,16 +616,16 @@ export function placeStreetFurniture({
           if (!contains(toWorld(center)) || !once(`all_way:${ref}`)) continue;
           for (const road of roads) signArms(zone, rule, ref, center, road, roads.filter((other) => other !== road));
         }
-      } else if (rule.pattern === "drive_exits") {
-        // Traffic leaving a kerbed service drive onto a named road stops: a sign on
-        // the drive's right-hand curb, upstream of any crosswalk across it.
+      } else if (rule.pattern === "drive_entries") {
+        // Traffic turning off a named road into a kerbed service drive stops: a
+        // sign on its right-hand curb, just past any crosswalk across the drive.
         for (const [ref, roads] of [...meetings.entries()].sort(([left], [right]) => compareSourceKeys(`n${left}`, `n${right}`))) {
           const named = roads.filter((road) => road.name != null);
           const drives = roads.filter((road) => road.name == null && road.highway === "service");
           if (named.length === 0 || drives.length === 0) continue;
           const center = nodePoint(ref);
-          if (!contains(toWorld(center)) || !once(`drive_exit:${ref}`)) continue;
-          for (const road of drives) signArms(zone, rule, ref, center, road, named);
+          if (!contains(toWorld(center)) || !once(`drive_entry:${ref}`)) continue;
+          for (const road of drives) signArms(zone, rule, ref, center, road, named, true);
         }
       } else if (rule.pattern === "lot_edge") {
         // Lights around a parking lot: just outside its outer edge, facing in.

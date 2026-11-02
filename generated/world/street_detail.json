@@ -32,7 +32,7 @@
         "avenue_of_the_palms/all_way_stops": 3,
         "avenue_of_the_palms/palms_lamps": 24,
         "avenue_of_the_palms/street_names": 3,
-        "building_1_forecourt/exit_stop": 1,
+        "building_1_forecourt/entry_stop": 1,
         "building_1_forecourt/lot_lights": 9,
         "ferry_arrival_plaza/plaza_lamps": 3,
         "trade_winds_palms_link/trade_winds_lamps": 2,
@@ -1582,7 +1582,7 @@
     },
     "zones": {
       "path": "tools/config/street-detail-zones.json",
-      "sha256": "6127c2621ef6308239fc61421fc3f7557118e29f3f5fb4b9390fd681ad995c77"
+      "sha256": "f2beccc606a05fb3a332240f0c3de404156597216bf6b0977e5b2d4aba4fcfbb"
     }
   },
   "kinds": {
@@ -31482,20 +31482,20 @@
       "basis": "production_inference",
       "exclusion": null,
       "geometry": "point",
-      "id": "scatter:building_1_forecourt:exit_stop:n7930197745_w850003198_b",
+      "id": "scatter:building_1_forecourt:entry_stop:n7930197745_w850003198_b",
       "kind": "stop_sign",
       "layer": "furniture",
       "position_m": [
-        -63.443,
-        4.143,
-        787.596
+        -61.162,
+        4.229,
+        792.157
       ],
       "prop": "stop_sign",
       "prop_params": {
         "all_way": false
       },
       "source": "scatter",
-      "source_id": "zone:building_1_forecourt/exit_stop",
+      "source_id": "zone:building_1_forecourt/entry_stop",
       "status": "placed",
       "surface": {
         "bias_m": 0.05,
@@ -31504,12 +31504,12 @@
         "source_key": "w96665914"
       },
       "terrain_support": {
-        "elevation_m": 4.143,
+        "elevation_m": 4.229,
         "object_key": "land:w26767313:x_-1__z_3",
         "triangle_index": 28
       },
-      "yaw_radians": -1.107,
-      "yaw_source": "approach:w850003198",
+      "yaw_radians": 2.034,
+      "yaw_source": "inbound:w850003198",
       "zones": [
         "building_1_forecourt",
         "treasure_island_road_south"
@@ -33844,9 +33844,9 @@
     {
       "furniture": [
         {
-          "id": "exit_stop",
+          "id": "entry_stop",
           "kind": "stop_sign",
-          "pattern": "drive_exits",
+          "pattern": "drive_entries",
           "placed": 1,
           "prop": "stop_sign"
         },

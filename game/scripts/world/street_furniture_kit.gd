@@ -40,8 +40,8 @@ const HYDRANT_RUST := Color(0.40, 0.22, 0.14)
 ## The controller cabinets photograph as a very dark green-grey (about 30-37 /
 ## 36-45 / 35-45 of 255 in sunlit Sep and Mar 2025 photos). The door texture
 ## (the atlas cabinet cell, about 0.17 / 0.29 / 0.20) is tinted down to match.
-const CABINET_GREEN := Color(0.12, 0.14, 0.13)
-const CABINET_DOOR_TINT := Color(0.70, 0.48, 0.65)
+const CABINET_GREEN := Color(0.12, 0.155, 0.115)
+const CABINET_DOOR_TINT := Color(0.70, 0.53, 0.575)
 const PAD_CONCRETE := Color(0.70, 0.69, 0.66)
 const BLADE_GREEN := Color(0.0, 0.42, 0.21)
 const LENS_RED_OFF := Color(0.22, 0.03, 0.03)
