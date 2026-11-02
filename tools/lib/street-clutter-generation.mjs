@@ -64,6 +64,12 @@ const VAN_PAINTS = Object.freeze(["black", "dark_grey", "grey", "silver", "white
 const pickFrom = (weights, names) => Object.fromEntries(Object.entries(weights).filter(([name]) => names.includes(name)));
 // Bus stops keep this much curb clear on each side.
 const BUS_STOP_CLEAR_M = 12;
+// A car in a lot stall stops 0.3 m short of the stall's back; a body longer
+// than that pulls in to 0.1 m (over the curb stop) and may reach out into the
+// aisle up to LOT_OVERHANG_M, as the photographed utility trucks do.
+const LOT_BACK_GAP_M = 0.3;
+const LOT_LONG_BACK_GAP_M = 0.1;
+const LOT_OVERHANG_M = 1.3;
 // Chunk record kinds the visible ground is made of, and the surfaces (by
 // material) a parked car's tyre may stand on.
 const VISIBLE_GROUND_KINDS = new Set(["land_ground", "major_area", "road_path", "street_kerb", "street_paint", "terrain_overlay"]);
@@ -576,15 +582,13 @@ export function placeStreetClutter({
           const params = carParams(rule, identity);
           const dims = carBodyGeometry(params.body);
           const footprint = { x_m: dims.width_m, z_m: dims.length_m };
-          // The car's far end 0.3 m short of the stall's back; a long body (a
-          // pickup or a van) may reach up to 1.1 m into the aisle, as they do.
-          const reachIn = Math.min(stall.depth_m - 0.3, footprint.z_m);
-          if (footprint.z_m - reachIn > 1.1) {
+          const backGap = footprint.z_m > stall.depth_m - LOT_BACK_GAP_M ? LOT_LONG_BACK_GAP_M : LOT_BACK_GAP_M;
+          if (footprint.z_m - (stall.depth_m - backGap) > LOT_OVERHANG_M) {
             count(audit.rejected_by_reason, `${rule.id}:too_long`);
             continue;
           }
           const along = (hashUnit(seed, identity, "lateral") - 0.5) * 0.24;
-          const center = add(add(entry, scale(stall.outward, stall.depth_m - 0.3 - footprint.z_m / 2)), scale(stall.along, along));
+          const center = add(add(entry, scale(stall.outward, stall.depth_m - backGap - footprint.z_m / 2)), scale(stall.along, along));
           const headIn = hashUnit(seed, identity, "head_in") < rule.head_in;
           const jitter = (hashUnit(seed, identity, "yaw") - 0.5) * 0.06;
           const base = headIn ? stall.outward : scale(stall.outward, -1);

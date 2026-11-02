@@ -3,7 +3,6 @@
     "clutter": {
       "rejected_by_reason": {
         "forecourt_lot_cars:fill": 52,
-        "forecourt_lot_cars:too_long": 8,
         "palms_parked_cars:curb_kept_clear": 10,
         "palms_parked_cars:fill": 13,
         "palms_parked_cars:item": 2,
@@ -12,7 +11,7 @@
       },
       "rules": {
         "avenue_of_the_palms/palms_parked_cars": 51,
-        "building_1_forecourt/forecourt_lot_cars": 56
+        "building_1_forecourt/forecourt_lot_cars": 64
       }
     },
     "fences": {
@@ -168,7 +167,7 @@
       "kerb": 8,
       "log_barrier": 2,
       "palm_slot": 12,
-      "parked_car": 107,
+      "parked_car": 115,
       "planting_slot": 19,
       "post_box": 1,
       "power_line": 44,
@@ -184,7 +183,7 @@
       "waste_basket": 14
     },
     "by_layer": {
-      "clutter": 421,
+      "clutter": 429,
       "fences": 60,
       "furniture": 216,
       "ground": 169,
@@ -192,22 +191,22 @@
     },
     "by_source": {
       "osm": 660,
-      "scatter": 217,
+      "scatter": 225,
       "set_piece": 20
     },
     "by_status": {
       "excluded": 4,
-      "placed": 893
+      "placed": 901
     },
-    "pilot_rows": 257,
+    "pilot_rows": 265,
     "placed_by_layer": {
-      "clutter": 419,
+      "clutter": 427,
       "fences": 59,
       "furniture": 215,
       "ground": 169,
       "vegetation": 31
     },
-    "total": 897
+    "total": 905
   },
   "exclusion_inputs": {
     "ferry_path_xz": [
@@ -38213,9 +38212,9 @@
       "kind": "parked_car",
       "layer": "clutter",
       "position_m": [
-        -61.248,
-        4.253,
-        783.037
+        -61.427,
+        4.245,
+        783.126
       ],
       "prop": "parked_car",
       "prop_params": {
@@ -38239,7 +38238,7 @@
         "source_key": "w96665914"
       },
       "terrain_support": {
-        "elevation_m": 4.253,
+        "elevation_m": 4.245,
         "object_key": "land:w26767313:x_-1__z_3",
         "triangle_index": 28
       },
@@ -38262,9 +38261,9 @@
       "kind": "parked_car",
       "layer": "clutter",
       "position_m": [
-        -67.261,
-        4.133,
-        771.122
+        -67.44,
+        4.131,
+        771.211
       ],
       "prop": "parked_car",
       "prop_params": {
@@ -38274,7 +38273,7 @@
         "paint": "pearl_white",
         "pitch": 0.0105,
         "rims": "dark",
-        "roll": 0.0017,
+        "roll": 0.002,
         "roof": "body",
         "twist": -0.002
       },
@@ -38288,7 +38287,7 @@
         "source_key": "w96665914"
       },
       "terrain_support": {
-        "elevation_m": 4.133,
+        "elevation_m": 4.131,
         "object_key": "land:w26767313:x_-1__z_3",
         "triangle_index": 14
       },
@@ -38311,15 +38310,15 @@
       "kind": "parked_car",
       "layer": "clutter",
       "position_m": [
-        -70.859,
-        4.224,
-        763.886
+        -71.038,
+        4.222,
+        763.975
       ],
       "prop": "parked_car",
       "prop_params": {
         "body": "sedan",
         "finish": "metallic",
-        "lift": 0.001,
+        "lift": 0,
         "paint": "grey",
         "pitch": -0.0143,
         "rims": "dark",
@@ -38337,7 +38336,7 @@
         "source_key": "w96665914"
       },
       "terrain_support": {
-        "elevation_m": 4.224,
+        "elevation_m": 4.222,
         "object_key": "land:w26767313:x_-1__z_2",
         "triangle_index": 66
       },
@@ -38346,6 +38345,54 @@
       "zones": [
         "building_1_forecourt",
         "treasure_island_road_south"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 2.03,
+        "z_m": 6.2
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w1473253282_right_s0056",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -53.724,
+        4.592,
+        779.504
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "utility",
+        "finish": "solid",
+        "lift": 0,
+        "paint": "white",
+        "pitch": 0.0406,
+        "rims": "alloy",
+        "roll": -0.0163,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 4.592,
+        "object_key": "land:w26767313:x_-1__z_3",
+        "triangle_index": 28
+      },
+      "yaw_radians": -1.119,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
       ]
     },
     {
@@ -38408,9 +38455,9 @@
       "kind": "parked_car",
       "layer": "clutter",
       "position_m": [
-        -56.908,
-        4.476,
-        771.998
+        -56.729,
+        4.484,
+        771.909
       ],
       "prop": "parked_car",
       "prop_params": {
@@ -38434,7 +38481,7 @@
         "source_key": "w96665914"
       },
       "terrain_support": {
-        "elevation_m": 4.476,
+        "elevation_m": 4.484,
         "object_key": "land:w26767313:x_-1__z_3",
         "triangle_index": 28
       },
@@ -38456,17 +38503,17 @@
       "kind": "parked_car",
       "layer": "clutter",
       "position_m": [
-        -64.564,
-        4.391,
-        757.767
+        -64.385,
+        4.394,
+        757.678
       ],
       "prop": "parked_car",
       "prop_params": {
         "body": "pickup",
         "finish": "solid",
-        "lift": 0.02,
+        "lift": 0.023,
         "paint": "black",
-        "pitch": 0.0257,
+        "pitch": 0.0273,
         "rims": "alloy",
         "roll": 0.0086,
         "roof": "body",
@@ -38482,7 +38529,7 @@
         "source_key": "w96665914"
       },
       "terrain_support": {
-        "elevation_m": 4.391,
+        "elevation_m": 4.394,
         "object_key": "land:w26767313:x_-1__z_2",
         "triangle_index": 66
       },
@@ -38504,9 +38551,9 @@
       "kind": "parked_car",
       "layer": "clutter",
       "position_m": [
-        -67.047,
-        4.481,
-        752.774
+        -66.868,
+        4.484,
+        752.685
       ],
       "prop": "parked_car",
       "prop_params": {
@@ -38530,7 +38577,7 @@
         "source_key": "w96665914"
       },
       "terrain_support": {
-        "elevation_m": 4.481,
+        "elevation_m": 4.484,
         "object_key": "land:w26767313:x_-1__z_2",
         "triangle_index": 66
       },
@@ -38600,9 +38647,9 @@
       "kind": "parked_car",
       "layer": "clutter",
       "position_m": [
-        -48.811,
-        5.199,
-        748.454
+        -48.635,
+        5.208,
+        748.358
       ],
       "prop": "parked_car",
       "prop_params": {
@@ -38626,7 +38673,7 @@
         "source_key": "w96665914"
       },
       "terrain_support": {
-        "elevation_m": 5.199,
+        "elevation_m": 5.208,
         "object_key": "land:w26767313:x_-1__z_2",
         "triangle_index": 81
       },
@@ -38888,19 +38935,19 @@
       "kind": "parked_car",
       "layer": "clutter",
       "position_m": [
-        -53.979,
-        4.803,
-        757.401
+        -54.155,
+        4.794,
+        757.497
       ],
       "prop": "parked_car",
       "prop_params": {
         "body": "sedan",
         "finish": "metallic",
-        "lift": 0.002,
+        "lift": 0.001,
         "paint": "light_grey",
-        "pitch": 0.0459,
+        "pitch": 0.0458,
         "rims": "alloy",
-        "roll": -0.0021,
+        "roll": -0.002,
         "roof": "body",
         "twist": -0.001
       },
@@ -38914,7 +38961,7 @@
         "source_key": "w96665914"
       },
       "terrain_support": {
-        "elevation_m": 4.803,
+        "elevation_m": 4.794,
         "object_key": "land:w26767313:x_-1__z_2",
         "triangle_index": 81
       },
@@ -38967,6 +39014,54 @@
         "triangle_index": 82
       },
       "yaw_radians": 2.074,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 2.03,
+        "z_m": 6.2
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102143_right_s0353",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -47.085,
+        4.913,
+        769.13
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "utility",
+        "finish": "solid",
+        "lift": 0.003,
+        "paint": "white",
+        "pitch": -0.0402,
+        "rims": "alloy",
+        "roll": 0.0172,
+        "roof": "body",
+        "twist": 0.001
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 4.913,
+        "object_key": "land:w26767313:x_-1__z_3",
+        "triangle_index": 28
+      },
+      "yaw_radians": 2.086,
       "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
       "zones": [
         "building_1_forecourt"
@@ -39032,21 +39127,21 @@
       "kind": "parked_car",
       "layer": "clutter",
       "position_m": [
-        -30.597,
-        5.595,
-        768.258
+        -30.774,
+        5.583,
+        768.352
       ],
       "prop": "parked_car",
       "prop_params": {
         "body": "pickup",
         "finish": "solid",
-        "lift": -0.017,
+        "lift": -0.013,
         "paint": "grey",
-        "pitch": -0.046,
+        "pitch": -0.0452,
         "rims": "alloy",
-        "roll": -0.0343,
+        "roll": -0.0354,
         "roof": "body",
-        "twist": -0.031
+        "twist": -0.028
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -39058,7 +39153,7 @@
         "source_key": "w96665914"
       },
       "terrain_support": {
-        "elevation_m": 5.595,
+        "elevation_m": 5.583,
         "object_key": "land:w26767313:x_-1__z_3",
         "triangle_index": 46
       },
@@ -39224,9 +39319,9 @@
       "kind": "parked_car",
       "layer": "clutter",
       "position_m": [
-        -36.15,
-        5.552,
-        758.96
+        -36.326,
+        5.543,
+        759.054
       ],
       "prop": "parked_car",
       "prop_params": {
@@ -39250,7 +39345,7 @@
         "source_key": "w96665914"
       },
       "terrain_support": {
-        "elevation_m": 5.552,
+        "elevation_m": 5.543,
         "object_key": "land:w26767313:x_-1__z_2",
         "triangle_index": 82
       },
@@ -39272,9 +39367,9 @@
       "kind": "parked_car",
       "layer": "clutter",
       "position_m": [
-        -38.613,
-        5.526,
-        754.303
+        -38.789,
+        5.516,
+        754.397
       ],
       "prop": "parked_car",
       "prop_params": {
@@ -39298,7 +39393,7 @@
         "source_key": "w96665914"
       },
       "terrain_support": {
-        "elevation_m": 5.526,
+        "elevation_m": 5.516,
         "object_key": "land:w26767313:x_-1__z_2",
         "triangle_index": 82
       },
@@ -39320,9 +39415,9 @@
       "kind": "parked_car",
       "layer": "clutter",
       "position_m": [
-        -39.903,
-        5.511,
-        751.929
+        -40.079,
+        5.502,
+        752.024
       ],
       "prop": "parked_car",
       "prop_params": {
@@ -39346,7 +39441,7 @@
         "source_key": "w96665914"
       },
       "terrain_support": {
-        "elevation_m": 5.511,
+        "elevation_m": 5.502,
         "object_key": "land:w26767313:x_-1__z_2",
         "triangle_index": 82
       },
@@ -39416,19 +39511,19 @@
       "kind": "parked_car",
       "layer": "clutter",
       "position_m": [
-        -42.488,
-        5.483,
-        747.086
+        -42.664,
+        5.473,
+        747.18
       ],
       "prop": "parked_car",
       "prop_params": {
         "body": "sedan",
         "finish": "metallic",
-        "lift": 0.001,
+        "lift": 0.002,
         "paint": "dark_grey",
         "pitch": 0.046,
         "rims": "dark",
-        "roll": -0.0041,
+        "roll": -0.004,
         "roof": "body",
         "twist": -0.001
       },
@@ -39442,7 +39537,7 @@
         "source_key": "w96665914"
       },
       "terrain_support": {
-        "elevation_m": 5.483,
+        "elevation_m": 5.473,
         "object_key": "land:w26767313:x_-1__z_2",
         "triangle_index": 82
       },
@@ -39512,9 +39607,9 @@
       "kind": "parked_car",
       "layer": "clutter",
       "position_m": [
-        -47.539,
-        5.479,
-        737.581
+        -47.715,
+        5.47,
+        737.675
       ],
       "prop": "parked_car",
       "prop_params": {
@@ -39538,7 +39633,7 @@
         "source_key": "w96665914"
       },
       "terrain_support": {
-        "elevation_m": 5.479,
+        "elevation_m": 5.47,
         "object_key": "land:w26767313:x_-1__z_2",
         "triangle_index": 81
       },
@@ -39560,21 +39655,21 @@
       "kind": "parked_car",
       "layer": "clutter",
       "position_m": [
-        -48.831,
-        5.456,
-        735.161
+        -49.007,
+        5.449,
+        735.256
       ],
       "prop": "parked_car",
       "prop_params": {
         "body": "wagon",
         "finish": "metallic",
-        "lift": -0.002,
+        "lift": -0.003,
         "paint": "silver",
-        "pitch": 0.0342,
+        "pitch": 0.0347,
         "rims": "alloy",
-        "roll": -0.0207,
+        "roll": -0.0199,
         "roof": "body",
-        "twist": -0.003
+        "twist": -0.004
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -39586,7 +39681,7 @@
         "source_key": "w96665914"
       },
       "terrain_support": {
-        "elevation_m": 5.456,
+        "elevation_m": 5.449,
         "object_key": "land:w26767313:x_-1__z_2",
         "triangle_index": 84
       },
@@ -39608,9 +39703,9 @@
       "kind": "parked_car",
       "layer": "clutter",
       "position_m": [
-        -23.334,
-        5.827,
-        764.281
+        -23.158,
+        5.832,
+        764.187
       ],
       "prop": "parked_car",
       "prop_params": {
@@ -39634,7 +39729,7 @@
         "source_key": "w96665914"
       },
       "terrain_support": {
-        "elevation_m": 5.827,
+        "elevation_m": 5.832,
         "object_key": "land:w26767313:x_-1__z_2",
         "triangle_index": 98
       },
@@ -39704,9 +39799,9 @@
       "kind": "parked_car",
       "layer": "clutter",
       "position_m": [
-        -25.747,
-        5.791,
-        759.592
+        -25.57,
+        5.795,
+        759.498
       ],
       "prop": "parked_car",
       "prop_params": {
@@ -39730,7 +39825,7 @@
         "source_key": "w96665914"
       },
       "terrain_support": {
-        "elevation_m": 5.791,
+        "elevation_m": 5.795,
         "object_key": "land:w26767313:x_-1__z_2",
         "triangle_index": 97
       },
@@ -39800,9 +39895,9 @@
       "kind": "parked_car",
       "layer": "clutter",
       "position_m": [
-        -28.317,
-        5.847,
-        754.777
+        -28.14,
+        5.85,
+        754.683
       ],
       "prop": "parked_car",
       "prop_params": {
@@ -39826,7 +39921,7 @@
         "source_key": "w96665914"
       },
       "terrain_support": {
-        "elevation_m": 5.847,
+        "elevation_m": 5.85,
         "object_key": "land:w26767313:x_-1__z_2",
         "triangle_index": 97
       },
@@ -39896,21 +39991,21 @@
       "kind": "parked_car",
       "layer": "clutter",
       "position_m": [
-        -30.893,
-        5.902,
-        749.994
+        -30.716,
+        5.905,
+        749.9
       ],
       "prop": "parked_car",
       "prop_params": {
         "body": "wagon",
         "finish": "metallic",
-        "lift": -0.004,
+        "lift": -0.002,
         "paint": "silver",
-        "pitch": -0.0212,
+        "pitch": -0.0201,
         "rims": "alloy",
-        "roll": -0.0045,
+        "roll": -0.0064,
         "roof": "body",
-        "twist": 0.005
+        "twist": 0.003
       },
       "source": "scatter",
       "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
@@ -39922,7 +40017,7 @@
         "source_key": "w96665914"
       },
       "terrain_support": {
-        "elevation_m": 5.902,
+        "elevation_m": 5.905,
         "object_key": "land:w26767313:x_-1__z_2",
         "triangle_index": 97
       },
@@ -39944,9 +40039,9 @@
       "kind": "parked_car",
       "layer": "clutter",
       "position_m": [
-        -35.06,
-        5.874,
-        743.248
+        -34.884,
+        5.883,
+        743.154
       ],
       "prop": "parked_car",
       "prop_params": {
@@ -39970,7 +40065,7 @@
         "source_key": "w96665914"
       },
       "terrain_support": {
-        "elevation_m": 5.874,
+        "elevation_m": 5.883,
         "object_key": "land:w26767313:x_-1__z_2",
         "triangle_index": 82
       },
@@ -39992,9 +40087,9 @@
       "kind": "parked_car",
       "layer": "clutter",
       "position_m": [
-        -35.938,
-        5.884,
-        740.499
+        -35.762,
+        5.893,
+        740.405
       ],
       "prop": "parked_car",
       "prop_params": {
@@ -40004,7 +40099,7 @@
         "paint": "white",
         "pitch": 0.0461,
         "rims": "alloy",
-        "roll": -0.0032,
+        "roll": -0.0033,
         "roof": "body",
         "twist": -0.001
       },
@@ -40018,7 +40113,7 @@
         "source_key": "w96665914"
       },
       "terrain_support": {
-        "elevation_m": 5.884,
+        "elevation_m": 5.893,
         "object_key": "land:w26767313:x_-1__z_2",
         "triangle_index": 82
       },
@@ -40128,6 +40223,54 @@
       "basis": "production_inference",
       "exclusion": null,
       "footprint_m": {
+        "x_m": 2.03,
+        "z_m": 6.2
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102145_left_s0056",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -17.222,
+        6.005,
+        761.84
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "utility",
+        "finish": "solid",
+        "lift": 0,
+        "paint": "white",
+        "pitch": -0.0251,
+        "rims": "alloy",
+        "roll": 0.0155,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 6.005,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 98
+      },
+      "yaw_radians": 2.089,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
         "x_m": 1.79,
         "z_m": 4.38
       },
@@ -40184,19 +40327,19 @@
       "kind": "parked_car",
       "layer": "clutter",
       "position_m": [
-        -20.158,
-        5.914,
-        757.28
+        -20.333,
+        5.909,
+        757.375
       ],
       "prop": "parked_car",
       "prop_params": {
         "body": "suv",
         "finish": "solid",
-        "lift": 0.004,
+        "lift": 0.005,
         "paint": "white",
-        "pitch": -0.0238,
+        "pitch": -0.0235,
         "rims": "dark",
-        "roll": 0.0109,
+        "roll": 0.0104,
         "roof": "body",
         "twist": -0.003
       },
@@ -40210,7 +40353,7 @@
         "source_key": "w96665914"
       },
       "terrain_support": {
-        "elevation_m": 5.914,
+        "elevation_m": 5.909,
         "object_key": "land:w26767313:x_-1__z_2",
         "triangle_index": 98
       },
@@ -40232,9 +40375,9 @@
       "kind": "parked_car",
       "layer": "clutter",
       "position_m": [
-        -25.355,
-        6.003,
-        747.684
+        -25.531,
+        6,
+        747.779
       ],
       "prop": "parked_car",
       "prop_params": {
@@ -40258,7 +40401,7 @@
         "source_key": "w96665914"
       },
       "terrain_support": {
-        "elevation_m": 6.003,
+        "elevation_m": 6,
         "object_key": "land:w26767313:x_-1__z_2",
         "triangle_index": 97
       },
@@ -40280,9 +40423,9 @@
       "kind": "parked_car",
       "layer": "clutter",
       "position_m": [
-        -26.601,
-        6.027,
-        745.553
+        -26.777,
+        6.023,
+        745.648
       ],
       "prop": "parked_car",
       "prop_params": {
@@ -40306,7 +40449,7 @@
         "source_key": "w96665914"
       },
       "terrain_support": {
-        "elevation_m": 6.027,
+        "elevation_m": 6.023,
         "object_key": "land:w26767313:x_-1__z_2",
         "triangle_index": 97
       },
@@ -40424,17 +40567,17 @@
       "kind": "parked_car",
       "layer": "clutter",
       "position_m": [
-        -32.648,
-        6.093,
-        733.297
+        -32.824,
+        6.086,
+        733.392
       ],
       "prop": "parked_car",
       "prop_params": {
         "body": "pickup",
         "finish": "metallic",
-        "lift": -0.03,
+        "lift": -0.023,
         "paint": "silver",
-        "pitch": -0.0171,
+        "pitch": -0.0202,
         "rims": "alloy",
         "roll": 0.0083,
         "roof": "body",
@@ -40450,7 +40593,7 @@
         "source_key": "w96665914"
       },
       "terrain_support": {
-        "elevation_m": 6.093,
+        "elevation_m": 6.086,
         "object_key": "land:w26767313:x_-1__z_2",
         "triangle_index": 84
       },
@@ -40616,9 +40759,9 @@
       "kind": "parked_car",
       "layer": "clutter",
       "position_m": [
-        -13.653,
-        6.1,
-        750.812
+        -13.477,
+        6.105,
+        750.717
       ],
       "prop": "parked_car",
       "prop_params": {
@@ -40626,9 +40769,9 @@
         "finish": "metallic",
         "lift": 0.003,
         "paint": "grey",
-        "pitch": -0.0242,
+        "pitch": -0.0245,
         "rims": "alloy",
-        "roll": 0.0111,
+        "roll": 0.0116,
         "roof": "body",
         "twist": -0.002
       },
@@ -40642,7 +40785,7 @@
         "source_key": "w96665914"
       },
       "terrain_support": {
-        "elevation_m": 6.1,
+        "elevation_m": 6.105,
         "object_key": "land:w26767313:x_-1__z_2",
         "triangle_index": 98
       },
@@ -40664,9 +40807,9 @@
       "kind": "parked_car",
       "layer": "clutter",
       "position_m": [
-        -15.411,
-        6.096,
-        748.659
+        -15.235,
+        6.1,
+        748.564
       ],
       "prop": "parked_car",
       "prop_params": {
@@ -40690,7 +40833,7 @@
         "source_key": "w96665914"
       },
       "terrain_support": {
-        "elevation_m": 6.096,
+        "elevation_m": 6.1,
         "object_key": "land:w26767313:x_-1__z_2",
         "triangle_index": 97
       },
@@ -40752,6 +40895,54 @@
       "basis": "production_inference",
       "exclusion": null,
       "footprint_m": {
+        "x_m": 2.03,
+        "z_m": 6.2
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102145_right_s0218",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -17.983,
+        6.152,
+        743.847
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "utility",
+        "finish": "solid",
+        "lift": 0.012,
+        "paint": "white",
+        "pitch": -0.0105,
+        "rims": "dark",
+        "roll": -0.01,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 6.152,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 97
+      },
+      "yaw_radians": 2.076,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
         "x_m": 1.85,
         "z_m": 4.72
       },
@@ -40791,6 +40982,54 @@
         "triangle_index": 97
       },
       "yaw_radians": -1.085,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 2.02,
+        "z_m": 5.93
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102145_right_s0272",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -20.415,
+        6.208,
+        739.074
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "van",
+        "finish": "solid",
+        "lift": 0,
+        "paint": "white",
+        "pitch": 0.0182,
+        "rims": "alloy",
+        "roll": 0.0099,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 6.208,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 97
+      },
+      "yaw_radians": -1.063,
       "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
       "zones": [
         "building_1_forecourt"
@@ -40887,6 +41126,150 @@
         "triangle_index": 100
       },
       "yaw_radians": -1.075,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 2.03,
+        "z_m": 6.2
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102145_right_s0353",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -24.381,
+        6.051,
+        732.036
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "utility",
+        "finish": "solid",
+        "lift": 0,
+        "paint": "white",
+        "pitch": -0.0104,
+        "rims": "alloy",
+        "roll": -0.0424,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 6.051,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 100
+      },
+      "yaw_radians": -1.076,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 2.03,
+        "z_m": 6.2
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102145_right_s0380",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -25.725,
+        5.937,
+        729.554
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "utility",
+        "finish": "solid",
+        "lift": 0.02,
+        "paint": "white",
+        "pitch": -0.018,
+        "rims": "alloy",
+        "roll": -0.0161,
+        "roof": "body",
+        "twist": -0.013
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.937,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 99
+      },
+      "yaw_radians": -1.066,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.85,
+        "z_m": 4.72
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102145_right_s0407",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -27.574,
+        5.973,
+        727.526
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "fastback",
+        "finish": "metallic",
+        "lift": 0.015,
+        "paint": "light_grey",
+        "pitch": -0.0347,
+        "rims": "dark",
+        "roll": 0.0079,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.973,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 99
+      },
+      "yaw_radians": -1.048,
       "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
       "zones": [
         "building_1_forecourt"
@@ -45379,7 +45762,7 @@
           "id": "forecourt_lot_cars",
           "kind": "parked_car",
           "pattern": "lot_stalls",
-          "placed": 56,
+          "placed": 64,
           "prop": "parked_car"
         }
       ],
