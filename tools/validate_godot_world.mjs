@@ -70,6 +70,7 @@ import {
   STREET_DETAIL_SCHEMA,
   STREET_DETAIL_SOURCES,
 } from "./lib/street-detail-generation.mjs";
+import { STREET_FURNITURE_PROPS } from "./lib/street-furniture-generation.mjs";
 import {
   STREET_GROUND_FEATURE_KINDS,
   STREET_GROUND_MAXIMUM_HEIGHT_M,
@@ -972,6 +973,11 @@ function validateStreetDetail(worldRoot, manifest, records) {
       invariant(row.terrain_support.elevation_m === y, `${row.id} terrain_support elevation differs from its position`);
       invariant(row.yaw_radians === null ? row.yaw_source === null : Number.isFinite(row.yaw_radians) && Math.abs(row.yaw_radians) <= Math.PI && typeof row.yaw_source === "string", `${row.id} yaw is invalid`);
       invariant(Number.isFinite(row.surface?.bias_m) && row.surface.bias_m >= 0 && typeof row.surface.material_key === "string", `${row.id} surface is invalid`);
+      // A kit prop is built at runtime: a placed furniture row of the kind its prop draws.
+      if (row.prop !== undefined) {
+        invariant(STREET_FURNITURE_PROPS[row.prop] === row.kind && row.layer === "furniture" && row.status === "placed", `${row.id} prop ${row.prop} does not match a placed ${row.kind} furniture row`);
+        invariant(row.prop_params !== null && typeof row.prop_params === "object" && !Array.isArray(row.prop_params), `${row.id} prop_params must be an object`);
+      }
     } else {
       const points = row.points_m;
       invariant(Array.isArray(points) && points.length >= 2 && row.terrain_supports?.length === points.length && row.vertex_source_ids?.length === points.length, `${row.id} polyline arrays are inconsistent`);

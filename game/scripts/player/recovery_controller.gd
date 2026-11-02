@@ -3,8 +3,6 @@ extends Node
 
 signal recovered(cause: String, from_position: Vector3)
 
-const PHYSICS_WORLD_SOLID := 1 << 0
-
 @export var fall_recovery_y := -20.0
 @export_range(0.1, 2.0, 0.05) var stable_duration_seconds := 0.75
 @export_range(0.05, 1.0, 0.05) var safe_velocity_mps := 0.5
@@ -100,7 +98,8 @@ func _has_capsule_clearance() -> bool:
 	var query := PhysicsShapeQueryParameters3D.new()
 	query.shape = query_shape
 	query.transform = _collision_shape.global_transform
-	query.collision_mask = PHYSICS_WORLD_SOLID
+	# Everything the player collides with: the world and the street props.
+	query.collision_mask = _player.collision_mask
 	query.exclude = [_player.get_rid()]
 	query.collide_with_areas = false
 	query.collide_with_bodies = true

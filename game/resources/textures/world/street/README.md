@@ -28,3 +28,26 @@ packed with ImageMagick:
 | `street_concrete_panels.png` | sidewalk concrete: 2 x 2 poured panels (one UV unit = one 1.5 m panel) with saw-cut joints drawn on the panel edges; broom lines turned to run across the walk, each panel toned slightly differently | seamless light grey broom-finished concrete, no joints |
 | `street_mulch.png` | planting strips, darkened and desaturated | seamless dark reddish-brown shredded bark mulch |
 | `street_plaza_pavers.png` | Waterfront Plaza banded paving; band contrast pulled down to the photographed plaza | seamless charcoal and mid-grey stack-bond pavers in alternating bands |
+
+## Street furniture
+
+`street_furniture_atlas.png` (1024 x 512, eight 256 px cells) is the one texture of
+the street-furniture kit (`game/scripts/world/street_furniture_kit.gd`): poles, sign
+faces, signal heads and cabinets multiply its cells by a vertex colour. Generated
+2026-11-02 with `tools/generate-texture` (eight images, one per call, text prompts
+only; no photograph was given to the generator or copied), each resized into its
+cell with ImageMagick. The packing script and the untouched sources are kept outside
+Git with the street-objects work notes. Street names are not in the atlas: the kit
+writes them with `Label3D` from the OSM names.
+
+| Cell (column, row) | Use | Source prompt (short) |
+|---|---|---|
+| (0, 0) | galvanised steel for poles and posts; darkened by vertex colour for the charcoal plaza poles | seamless galvanised steel lamp-pole surface, zinc spangle |
+| (1, 0) | signal controller cabinet door | front of a dark green steel controller cabinet door with louvre vents and a lock |
+| (2, 0) | stop sign face | United States STOP sign face, red octagon, white border and legend |
+| (3, 0) | pedestrian signal face (drawn unshaded, as lit) | pedestrian countdown head face, lit orange hand, dark countdown |
+| (0, 1) | NO STOPPING ANY TIME sign | white parking regulation sign, NO STOPPING / ANY / TIME in red |
+| (1, 1) | bus stop flag (both faces) | generic bus stop flag, red band, bus pictogram, BUS STOP |
+| (2, 1) top | ALL WAY plaque under all-way stop signs | ALL WAY plaque, red letters on white |
+| (2, 1) bottom | blank name blade (border kept at the ends, the middle stretches) | blank green street name blade with a thin white border |
+| (3, 1) | plain white, for vertex-coloured parts | (filled by the packing script) |

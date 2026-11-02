@@ -44,7 +44,9 @@ func _initialize() -> void:
 
 	var player_scene := load("res://game/scenes/player/player.tscn") as PackedScene
 	var player := player_scene.instantiate() as PlayerController
-	if player == null or player.collision_layer != 2 or player.collision_mask != 1:
+	# The player collides with the world (1) and the street props (1 << 3); the
+	# camera arm below sees only the world, so a thin pole never pulls it in.
+	if player == null or player.collision_layer != 2 or player.collision_mask != (1 | 1 << 3):
 		_fail("Player physics-layer isolation is invalid.")
 		return
 	if not is_equal_approx(player.walk_speed_mps, 4.0) \

@@ -2010,7 +2010,7 @@ function main() {
     // The spawn reads only land and roads, so it is fixed before street ground lands.
     const spawn = findInitialSpawn(boundary, playableObjects, loaded.rawOsm, loaded.rawSources, chunks);
     const spawnXZ = [spawn.origin[0], spawn.origin[2]];
-    const hardShapes = streetDetailHardShapes(streetConfig.exclusions, spawnXZ, loadStreetDetailStairFlights(projectRoot));
+    const hardShapes = streetDetailHardShapes(streetConfig.exclusions, { xz: spawnXZ, yaw: spawn.yaw }, loadStreetDetailStairFlights(projectRoot));
     const streetGround = generateStreetGround({
       config: streetConfig,
       playableObjects,
@@ -2067,7 +2067,7 @@ function main() {
       areaStyleFor: (object) => areaStyle(object.tags, object.roles),
       properSources: loaded.properSources,
       rawOsm: loaded.rawOsm,
-      spawn: spawnXZ,
+      spawn: { xz: spawnXZ, yaw: spawn.yaw },
       ground: streetGround,
     });
     terrainDocument.surface_anchors = TERRAIN_SURFACE_ANCHORS.map((anchor) => ({

@@ -236,7 +236,12 @@ func _street_views(path: String, out: String, suffix: String) -> void:
 		if error != "":
 			_errors.append("street view " + name + ": " + error)
 			return
-		print("STREET_VIEW %s area=%s player=%s on_floor=%s target=%s camera=%s" % [name, plan.area, _h.player.global_position, _h.player.is_on_floor(), target, view.get("camera_xyz", "gameplay")])
+		var camera_note: Variant = view.get("camera_xyz", "gameplay")
+		if not view.has("camera_xyz"):
+			# How far the gameplay camera stands from its arm's origin, against the full arm.
+			var arm := _h.player.get_node("CameraPivot/SpringArm3D") as SpringArm3D
+			camera_note = "gameplay arm_m=%.2f of %.2f" % [arm.global_position.distance_to(_h.player.get_camera().global_position), arm.spring_length]
+		print("STREET_VIEW %s area=%s player=%s on_floor=%s target=%s camera=%s" % [name, plan.area, _h.player.global_position, _h.player.is_on_floor(), target, camera_note])
 
 
 ## Settles the player at the view's player_xz and saves one screenshot from the

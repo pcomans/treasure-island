@@ -14,6 +14,7 @@ import { resolve } from "node:path";
 
 import { projectLonLat } from "./coordinates.mjs";
 import { geometryToLine, pointInMultiPolygon, pointInRing, selectGeometry } from "./osm-geometry.mjs";
+import { placeStreetFurniture, validateFurnitureRules } from "./street-furniture-generation.mjs";
 import { VEGETATION_QA_CORRIDORS } from "./vegetation-generation.mjs";
 import {
   BOUNDARY_ATTACHED_SOURCE_KEYS,
@@ -50,6 +51,8 @@ export const STREET_DETAIL_EXCLUSION_KEYS = Object.freeze([
   "land_edge_buffer_m",
   "qa_route_half_width_m",
   "road_buffer_m",
+  "spawn_forward_half_width_m",
+  "spawn_forward_length_m",
   "spawn_radius_m",
   "stair_half_width_m",
   "vegetation_placeholder_radius_m",
@@ -59,6 +62,7 @@ export const STREET_DETAIL_EXCLUSION_KEYS = Object.freeze([
 // Gameplay clearances every switchable item must keep, in reporting order.
 export const STREET_DETAIL_HARD_COMPONENTS = Object.freeze([
   "spawn",
+  "spawn_forward",
   "ferry_path",
   "qa_route",
   "whole_island_anchor",
@@ -83,7 +87,7 @@ export const STREET_DETAIL_KINDS = Object.freeze({
   barrier_point: pointKind("fences", 0.5, "host_barrier"),
   bench: pointKind("furniture", 0.9, "faces_road"),
   bicycle_parking: pointKind("furniture", 1.0, "faces_road"),
-  bollard: pointKind("fences", 0.15, "host_barrier"),
+  bollard: pointKind("furniture", 0.15, "host_barrier"),
   bus_stop: pointKind("furniture", 1.5, "faces_road"),
   clutter_slot: pointKind("clutter", 0.4, "seeded"),
   crossing: pointKind(STREET_DETAIL_GROUND_LAYER, 0, "crossing"),
@@ -101,8 +105,9 @@ export const STREET_DETAIL_KINDS = Object.freeze({
   power_pole: pointKind("clutter", 0.2, "host_power_line"),
   retaining_wall: lineKind("fences", 0.2),
   stop_sign: pointKind("furniture", 0.15, "host_road"),
-  street_cabinet: pointKind("clutter", 0.6, "faces_road"),
+  street_cabinet: pointKind("furniture", 0.6, "faces_road"),
   street_lamp: pointKind("furniture", 0.25, "faces_road"),
+  street_sign: pointKind("furniture", 0.15, "faces_road"),
   traffic_signals: pointKind("furniture", 0.25, "host_road"),
   wall: lineKind("fences", 0.15),
   waste_basket: pointKind("furniture", 0.35, "faces_road"),
@@ -391,6 +396,8 @@ export function loadStreetDetailZones(projectRoot) {
     invariant(Array.isArray(zone.scatter), `Street detail zone ${zone.id} scatter must be a list`);
     const ruleIds = new Set();
     for (const rule of zone.scatter) validateScatterRule(rule, zone.id, ruleIds);
+    validateFurnitureRules(zone, STREET_DETAIL_KINDS);
+    for (const rule of zone.furniture ?? []) invariant(!ruleIds.has(rule.id), `Street detail zone ${zone.id} rule ${rule.id} is both scatter and furniture`);
   }
   return config;
 }
@@ -442,9 +449,19 @@ export function loadStreetDetailStairFlights(projectRoot) {
 }
 
 // The gameplay part of the shared mask: shapes no switchable item may enter.
-export function streetDetailHardShapes(exclusions, spawnXZ, stairFlights) {
+// spawn is the manifest's initial spawn as {xz: [x, z], yaw}.
+export function streetDetailHardShapes(exclusions, spawn, stairFlights) {
+  invariant(Array.isArray(spawn?.xz) && spawn.xz.length === 2 && spawn.xz.every(isFiniteNumber) && isFiniteNumber(spawn.yaw), "Street detail needs the spawn position and yaw");
+  const spawnXZ = [spawn.xz[0], spawn.xz[1]];
+  // The player faces local -Z turned by yaw: world direction (-sin yaw, -cos yaw).
+  const ahead = [
+    round3(spawnXZ[0] - Math.sin(spawn.yaw) * exclusions.spawn_forward_length_m),
+    round3(spawnXZ[1] - Math.cos(spawn.yaw) * exclusions.spawn_forward_length_m),
+  ];
   const shapes = [
     { component: "spawn", source_id: "manifest:initial_spawn", points: [spawnXZ], radius_m: exclusions.spawn_radius_m },
+    // The first walk: straight ahead from the spawn, as a player who just holds W.
+    { component: "spawn_forward", source_id: "manifest:initial_spawn_forward", points: [spawnXZ, ahead], radius_m: exclusions.spawn_forward_half_width_m },
     { component: "ferry_path", source_id: "qa:ferry_arrival_path", points: VEGETATION_QA_CORRIDORS.ferry_arrival_path, radius_m: exclusions.ferry_path_half_width_m },
     { component: "qa_route", source_id: "qa:normal_qa_route", points: VEGETATION_QA_CORRIDORS.normal_qa_route, radius_m: exclusions.qa_route_half_width_m },
   ];
@@ -540,8 +557,8 @@ export function generateStreetDetail({
   const stairFlights = loadStreetDetailStairFlights(projectRoot);
   const exclusions = config.exclusions;
   const seed = config.seed;
-  const spawnXZ = [spawn[0], spawn[1]];
-  const hardShapes = streetDetailHardShapes(exclusions, spawnXZ, stairFlights);
+  const spawnXZ = [spawn.xz[0], spawn.xz[1]];
+  const hardShapes = streetDetailHardShapes(exclusions, spawn, stairFlights);
 
   const objects = [...playableObjects.values()];
   const buildings = polygonSet(objects
@@ -1003,6 +1020,36 @@ export function generateStreetDetail({
     zoneSummaries.push({ id: zone.id, name: zone.name, pilot: zone.pilot, scatter: ruleSummaries });
   }
 
+  // (d) Street furniture, after everything above so it works around it: kit
+  // props for the pilot zones' OSM rows (stop signs move to their curbs) and the
+  // zones' furniture rules (tools/lib/street-furniture-generation.mjs).
+  const furniture = placeStreetFurniture({
+    kinds: STREET_DETAIL_KINDS,
+    rows,
+    occupied,
+    zoneShapes,
+    site: ground.site,
+    rawOsm,
+    hardViolation,
+    hardShapes,
+    buildings,
+    exclusions,
+    onLand,
+    grounded,
+    surfaceAt,
+  });
+  rows.push(...furniture.rows);
+  for (const summary of zoneSummaries) {
+    const zone = config.zones.find((candidate) => candidate.id === summary.id);
+    summary.furniture = (zone.furniture ?? []).map((rule) => ({
+      id: rule.id,
+      kind: rule.kind,
+      prop: rule.prop,
+      pattern: rule.pattern,
+      placed: furniture.audit.rules[`${zone.id}/${rule.id}`] ?? 0,
+    }));
+  }
+
   rows.sort((left, right) => compareText(left.id, right.id));
   invariant(new Set(rows.map((row) => row.id)).size === rows.length, "Street detail row ids are not unique");
   const minimumClearances = Object.fromEntries(STREET_DETAIL_HARD_COMPONENTS.map((component) => [component, Infinity]));
@@ -1036,6 +1083,8 @@ export function generateStreetDetail({
       yaw_radians: "rotation about +Y turning the asset's local -Z front; null when the source gives no direction",
       layers: "switchable runtime subtrees under PlayableWorld/StreetDetail; ground rows feed the always-on chunk surfaces",
       status: "placed rows are built when their layer is on; excluded rows keep their source id and the reason",
+      prop: "the street-furniture kit prop the runtime builds for a placed row (game/scripts/world/street_furniture_kit.gd), with prop_params; rows without one are data only",
+      source_position_m: "a stop sign's OSM node position, kept when the sign moves to the curb of its approach",
     },
     layers: STREET_DETAIL_LAYERS,
     ground_layer: STREET_DETAIL_GROUND_LAYER,
@@ -1050,6 +1099,8 @@ export function generateStreetDetail({
     exclusions,
     exclusion_inputs: {
       spawn_xz: spawnXZ,
+      spawn_yaw: spawn.yaw,
+      spawn_forward_xz: hardShapes.find((shape) => shape.component === "spawn_forward").points,
       ferry_path_xz: VEGETATION_QA_CORRIDORS.ferry_arrival_path,
       qa_route_xz: VEGETATION_QA_CORRIDORS.normal_qa_route,
       whole_island_anchors_xz: VEGETATION_QA_CORRIDORS.whole_island_qa_route.slice(1),
@@ -1068,6 +1119,7 @@ export function generateStreetDetail({
     },
     audit: {
       ...audit,
+      furniture: furniture.audit,
       minimum_placed_clearances_m: Object.fromEntries(
         STREET_DETAIL_HARD_COMPONENTS.map((component) => [component, Number.isFinite(minimumClearances[component]) ? round3(minimumClearances[component]) : null]),
       ),
