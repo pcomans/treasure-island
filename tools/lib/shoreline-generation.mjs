@@ -1041,8 +1041,8 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
       // a few paler weathered stones; multiplied onto the boulder texture, at
       // most 1.
       const family = rng();
-      const base = family < 0.52 ? [1, 1, 1] : family < 0.76 ? [1, 0.93, 0.83] : family < 0.9 ? [0.72, 0.72, 0.72] : [1, 0.98, 0.95];
-      const shade = family >= 0.9 ? 0.95 + 0.05 * rng() : 0.72 + 0.26 * rng();
+      const base = family < 0.45 ? [1, 1, 1] : family < 0.75 ? [1, 0.92, 0.8] : family < 0.88 ? [0.72, 0.72, 0.72] : [1, 0.98, 0.95];
+      const shade = family >= 0.88 ? 0.95 + 0.05 * rng() : 0.72 + 0.26 * rng();
       return base.map((value) => value * shade);
     };
     // Spatial hash over every stone of the segment, for overlap tests and for
@@ -1148,7 +1148,7 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
         const plan2 = planAt(section, d);
         if (!fits(plan2, radius, rules.heap.overlap) || blocked(plan2, radius, false)) continue;
         const up = unit3(add3(scale3(slopeNormal(section), 0.55), [0, 0.45, 0]));
-        const topY = section.land + pick(crest.rise_m, rng) - 0.18 * (d - rules.setback_m);
+        const topY = section.land + pick(crest.rise_m, rng) - 0.12 * (d - rules.setback_m);
         const bottomY = Math.min(planeAt(section, d) - 0.15, topY - size * rise(prototype, up));
         const stone = makeStone({ band: "top", s: sAt, d, plan2, rng, size, prototype, up, yaw: rng() * Math.PI * 2, bottomY });
         if (!outsideOk(stone)) continue;
