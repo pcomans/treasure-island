@@ -5,7 +5,10 @@ const GROUND_COVER := preload("res://game/scripts/world/ground_cover.gd")
 const GROUND_COVER_SHADER_PATH := "res://game/resources/materials/world/ground_cover/ground_cover.gdshader"
 const COVERAGE_LEDGER_PATH := "res://generated/world/coverage-ledger.csv"
 const SHORELINE_SHADER_PATH := "res://game/resources/materials/world/shoreline/riprap.gdshader"
-const SHORELINE_ALBEDO_PATH := "res://game/resources/textures/world/shoreline/riprap_albedo.png"
+const SHORELINE_ALBEDO_PATHS := {
+	"riprap_albedo": "res://game/resources/textures/world/shoreline/riprap_albedo.png",
+	"boulder_albedo": "res://game/resources/textures/world/shoreline/boulder_albedo.png",
+}
 const EXPECTED_MATERIALS := {
 	"road_path": {"feature_kind": "road_path", "context": false, "asset": "clean_asphalt", "source_dimension_m": 2.1, "repeat_dimension_m": 2.1, "normal_strength": 0.2},
 	"road_path_pedestrian": {"feature_kind": "road_path", "context": false, "asset": "concrete_pavement", "source_dimension_m": 1.8, "repeat_dimension_m": 1.8, "normal_strength": 0.2},
@@ -50,7 +53,7 @@ func _initialize() -> void:
 	if not _shoreline_material_matches(builder):
 		quit(1)
 		return
-	print("PASS: %d Poly Haven semantic materials retain official source dimensions and exact maps while using approved effective repeats, mipmapped filtering, and pinned subtle normals; land and area records use the shared ground-cover families; the shoreline riprap is one shared, mipmapped material" % EXPECTED_MATERIALS.size())
+	print("PASS: %d Poly Haven semantic materials retain official source dimensions and exact maps while using approved effective repeats, mipmapped filtering, and pinned subtle normals; land and area records use the shared ground-cover families; the shoreline slope and stones share one riprap shader with mipmapped textures and its band takes the field ground cover" % EXPECTED_MATERIALS.size())
 	quit(0)
 
 
@@ -208,18 +211,25 @@ func _ground_overrides_name_generated_areas() -> bool:
 	return true
 
 
-## The shoreline riprap overlay, slope and boulders share one shader material
-## whose generated albedo loads with mipmaps; a riprap overlay record gets it.
+## The shoreline slope and the stones are two shared materials of one riprap
+## shader whose generated textures load with mipmaps; a riprap overlay record
+## (the band inside the outline) gets the field ground cover with tangents and
+## no collision.
 func _shoreline_material_matches(builder: WorldChunkBuilder) -> bool:
-	var material := ShorelineBuilder.riprap_material()
-	if not _require(material is ShaderMaterial and material.shader != null and material.shader.resource_path == SHORELINE_SHADER_PATH, "Shoreline riprap is not the riprap shader.") \
-	or not _require(ShorelineBuilder.riprap_material() == material, "Shoreline riprap is not one shared material."):
-		return false
-	var albedo := material.get_shader_parameter("riprap_albedo") as Texture2D
-	if not _require(albedo != null and albedo.resource_path == SHORELINE_ALBEDO_PATH, "Shoreline riprap albedo is not the generated riprap texture."):
-		return false
-	var image := albedo.get_image()
-	if not _require(image != null and image.has_mipmaps(), "Shoreline riprap albedo lacks imported mipmaps."):
+	var materials := [ShorelineBuilder.slope_material(), ShorelineBuilder.stone_material()]
+	for index in materials.size():
+		var material: ShaderMaterial = materials[index]
+		if not _require(material != null and material.shader != null and material.shader.resource_path == SHORELINE_SHADER_PATH, "Shoreline material %d is not the riprap shader." % index) \
+		or not _require(int(material.get_shader_parameter("surface")) == index, "Shoreline material %d draws the wrong surface." % index):
+			return false
+		for parameter: String in SHORELINE_ALBEDO_PATHS:
+			var albedo := material.get_shader_parameter(parameter) as Texture2D
+			if not _require(albedo != null and albedo.resource_path == SHORELINE_ALBEDO_PATHS[parameter], "Shoreline %s is not the generated texture." % parameter):
+				return false
+			var image := albedo.get_image()
+			if not _require(image != null and image.has_mipmaps(), "Shoreline %s lacks imported mipmaps." % parameter):
+				return false
+	if not _require(ShorelineBuilder.slope_material() == materials[0] and ShorelineBuilder.stone_material() == materials[1], "Shoreline materials are not shared."):
 		return false
 	var record := {
 		"object_key": "material-contract-shoreline",
@@ -240,9 +250,12 @@ func _shoreline_material_matches(builder: WorldChunkBuilder) -> bool:
 	var record_node := result.node as Node3D
 	var mesh := (record_node.get_node("Mesh") as MeshInstance3D).mesh as ArrayMesh
 	var built := mesh.surface_get_material(0)
+	var arrays := mesh.surface_get_arrays(0)
+	var has_tangents := arrays[Mesh.ARRAY_TANGENT] is PackedFloat32Array and (arrays[Mesh.ARRAY_TANGENT] as PackedFloat32Array).size() == 12
 	var has_collision := record_node.get_node_or_null("Collision") != null
 	record_node.free()
-	return _require(built == material, "A riprap overlay record did not get the riprap material.") \
+	return _require(built == GROUND_COVER.material("field"), "A riprap overlay record did not get the field ground cover.") \
+		and _require(has_tangents, "A riprap overlay record lacks tangents for the ground cover's normal map.") \
 		and _require(not has_collision, "A riprap overlay record has collision.")
 
 

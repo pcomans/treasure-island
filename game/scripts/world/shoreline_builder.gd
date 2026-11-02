@@ -1,44 +1,60 @@
 class_name ShorelineBuilder
 extends RefCounted
 ## Shoreline riprap from generated/world/shoreline.json
-## (tools/lib/shoreline-generation.mjs): the rock slope outside the island
-## outline and the boulders instanced along the crest, over the slope and at the
-## waterline. Visual only, like the Yerba Buena context: no collision and no
-## spray receiver. The riprap band inside the outline is an ordinary chunk
-## overlay; world_chunk_builder.gd gives it riprap_material().
+## (tools/lib/shoreline-generation.mjs): the underlay slope outside the island
+## outline, the instanced rock heap over it (the top row and the heap), the low
+## cobbles in the band inside the outline and the driftwood. Visual only, like
+## the Yerba Buena context: no collision and no spray receiver. The band inside
+## the outline is an ordinary chunk overlay; world_chunk_builder.gd gives it the
+## land's own field ground cover (the dry verge at the top of the riprap).
 
 const RIPRAP_SHADER := preload("res://game/resources/materials/world/shoreline/riprap.gdshader")
 const RIPRAP_ALBEDO := preload("res://game/resources/textures/world/shoreline/riprap_albedo.png")
+const BOULDER_ALBEDO := preload("res://game/resources/textures/world/shoreline/boulder_albedo.png")
 const RENDER_WORLD_VISIBLE := 1
-## Instance-colour alpha that marks a boulder for the riprap shader.
-const BOULDER_ALPHA := 0.5
-## Bleached driftwood, multiplied by each log's instance colour.
-const DRIFTWOOD_ALBEDO := Color(0.74, 0.7, 0.63)
+## The shader's `surface` per material.
+const SURFACE_SLOPE := 0
+const SURFACE_STONE := 1
+## Weathered, bleached driftwood, multiplied by each log's instance colour.
+const DRIFTWOOD_ALBEDO := Color(0.7, 0.68, 0.63)
 const SLOPE_MATERIAL := "shoreline_riprap"
+const STONE_MATERIAL := "shoreline_boulder"
 const DRIFTWOOD_MATERIAL := "shoreline_driftwood"
 
-static var _riprap: ShaderMaterial
+static var _riprap := {}
 static var _driftwood: StandardMaterial3D
 
 
-## The one shared riprap material of the overlay, the slope and the boulders.
-static func riprap_material() -> ShaderMaterial:
-	if _riprap == null:
-		_riprap = ShaderMaterial.new()
-		_riprap.resource_name = "shoreline_riprap"
-		_riprap.shader = RIPRAP_SHADER
-		_riprap.set_shader_parameter("riprap_albedo", RIPRAP_ALBEDO)
-	return _riprap
+## The underlay slope's material.
+static func slope_material() -> ShaderMaterial:
+	return _riprap_material(SLOPE_MATERIAL, SURFACE_SLOPE)
+
+
+## Every instanced stone: top row, heap and cobbles.
+static func stone_material() -> ShaderMaterial:
+	return _riprap_material(STONE_MATERIAL, SURFACE_STONE)
 
 
 static func driftwood_material() -> StandardMaterial3D:
 	if _driftwood == null:
 		_driftwood = StandardMaterial3D.new()
-		_driftwood.resource_name = "shoreline_driftwood"
+		_driftwood.resource_name = DRIFTWOOD_MATERIAL
 		_driftwood.albedo_color = DRIFTWOOD_ALBEDO
 		_driftwood.vertex_color_use_as_albedo = true
-		_driftwood.roughness = 0.95
+		_driftwood.roughness = 1.0
 	return _driftwood
+
+
+static func _riprap_material(key: String, surface: int) -> ShaderMaterial:
+	if not _riprap.has(key):
+		var material := ShaderMaterial.new()
+		material.resource_name = key
+		material.shader = RIPRAP_SHADER
+		material.set_shader_parameter("surface", surface)
+		material.set_shader_parameter("riprap_albedo", RIPRAP_ALBEDO)
+		material.set_shader_parameter("boulder_albedo", BOULDER_ALBEDO)
+		_riprap[key] = material
+	return _riprap[key]
 
 
 ## Builds the validated document into one Node3D; returns the builder report.
@@ -48,13 +64,11 @@ func build(document: Dictionary) -> Dictionary:
 	root.set_meta("visual_only", true)
 	var triangles := 0
 	var mesh_instances := 0
-	var surfaces := 0
 	for record_value: Variant in document.records:
 		var record: Dictionary = record_value
-		var mesh := _array_mesh(record, riprap_material())
 		var instance := MeshInstance3D.new()
 		instance.name = str(record.object_key).validate_node_name()
-		instance.mesh = mesh
+		instance.mesh = _array_mesh(record, slope_material())
 		instance.layers = RENDER_WORLD_VISIBLE
 		# Like the terrain overlays, the slope receives shadows but casts none.
 		instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
@@ -63,36 +77,22 @@ func build(document: Dictionary) -> Dictionary:
 		root.add_child(instance)
 		triangles += int(record.indices.size() / 3)
 		mesh_instances += 1
-		surfaces += 1
 	var prototypes := {}
 	for prototype_value: Variant in document.prototypes:
 		var prototype: Dictionary = prototype_value
-		var material: Material = riprap_material()
-		if str(prototype.material_key) == DRIFTWOOD_MATERIAL:
-			material = driftwood_material()
-		prototypes[str(prototype.id)] = {"mesh": _array_mesh(prototype, material), "triangles": int(prototype.indices.size() / 3), "boulder": str(prototype.material_key) == SLOPE_MATERIAL}
-	# One MultiMesh per prototype and shore section, so each batch culls and
-	# fades with distance on its own. Stones bedded in the slope cast no
-	# shadow (the shader's relief shades them); the top course, crest, toe
-	# and driftwood do.
-	var groups := {}
-	for placement_value: Variant in document.placements:
-		var placement: Dictionary = placement_value
-		var key := "%s_%02d_%s" % [str(placement.prototype), int(placement.section), "bedded" if str(placement.band) == "slope" else "standing"]
-		if not groups.has(key):
-			groups[key] = []
-		(groups[key] as Array).append(placement)
-	var keys: Array = groups.keys()
-	keys.sort()
+		var material: Material = driftwood_material() if str(prototype.material_key) == DRIFTWOOD_MATERIAL else stone_material()
+		prototypes[str(prototype.id)] = {"mesh": _array_mesh(prototype, material), "triangles": int(prototype.indices.size() / 3)}
+	# One MultiMesh per generated batch (segment, shore section, band and
+	# prototype), so each culls, picks its LOD and fades on its own.
+	var stones := Node3D.new()
+	stones.name = "Stones"
+	root.add_child(stones)
 	var batches := 0
 	var instances := 0
-	var boulder_root := Node3D.new()
-	boulder_root.name = "Boulders"
-	root.add_child(boulder_root)
-	for key_value: Variant in keys:
-		var key := str(key_value)
-		var placements: Array = groups[key]
-		var prototype: Dictionary = prototypes[str((placements[0] as Dictionary).prototype)]
+	for batch_value: Variant in document.batches:
+		var batch: Dictionary = batch_value
+		var prototype: Dictionary = prototypes[str(batch.prototype)]
+		var placements: Array = batch.placements
 		var multi_mesh := MultiMesh.new()
 		multi_mesh.transform_format = MultiMesh.TRANSFORM_3D
 		multi_mesh.use_colors = true
@@ -100,27 +100,24 @@ func build(document: Dictionary) -> Dictionary:
 		multi_mesh.mesh = prototype.mesh
 		multi_mesh.instance_count = placements.size()
 		for index in placements.size():
-			var placement: Dictionary = placements[index]
-			var b: Array = placement.basis
-			var o: Array = placement.origin
-			var basis := Basis(
-				Vector3(float(b[0]), float(b[1]), float(b[2])),
-				Vector3(float(b[3]), float(b[4]), float(b[5])),
-				Vector3(float(b[6]), float(b[7]), float(b[8])))
-			multi_mesh.set_instance_transform(index, Transform3D(basis, Vector3(float(o[0]), float(o[1]), float(o[2]))))
-			var tint: Array = placement.tint
-			multi_mesh.set_instance_color(index, Color(float(tint[0]), float(tint[1]), float(tint[2]), BOULDER_ALPHA if bool(prototype.boulder) else 1.0))
-		var batch := MultiMeshInstance3D.new()
-		batch.name = key
-		batch.multimesh = multi_mesh
-		batch.layers = RENDER_WORLD_VISIBLE
-		batch.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF if key.ends_with("bedded") else GeometryInstance3D.SHADOW_CASTING_SETTING_ON
-		batch.visibility_range_end = float(document.visibility_range_m)
-		batch.visibility_range_end_margin = float(document.visibility_range_m) * 0.12
-		batch.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_SELF
-		batch.set_meta("placement_count", placements.size())
-		batch.set_meta("visual_only", true)
-		boulder_root.add_child(batch)
+			var p: Array = placements[index]
+			# Position, rotation quaternion (x, y, z, w), per-axis scale, tint.
+			var rotation := Quaternion(float(p[3]), float(p[4]), float(p[5]), float(p[6])).normalized()
+			var basis := Basis(rotation) * Basis.from_scale(Vector3(float(p[7]), float(p[8]), float(p[9])))
+			multi_mesh.set_instance_transform(index, Transform3D(basis, Vector3(float(p[0]), float(p[1]), float(p[2]))))
+			multi_mesh.set_instance_color(index, Color(float(p[10]), float(p[11]), float(p[12]), 1.0))
+		var node := MultiMeshInstance3D.new()
+		node.name = str(batch.id).validate_node_name()
+		node.multimesh = multi_mesh
+		node.layers = RENDER_WORLD_VISIBLE
+		node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON if bool(batch.cast_shadow) else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		node.visibility_range_end = float(batch.visibility_end_m)
+		node.visibility_range_end_margin = float(batch.visibility_margin_m)
+		node.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_SELF
+		node.set_meta("band", str(batch.band))
+		node.set_meta("placement_count", placements.size())
+		node.set_meta("visual_only", true)
+		stones.add_child(node)
 		batches += 1
 		instances += placements.size()
 		triangles += int(prototype.triangles) * placements.size()
@@ -128,38 +125,54 @@ func build(document: Dictionary) -> Dictionary:
 		"ok": true,
 		"node": root,
 		"mesh_instances": mesh_instances + batches,
-		"surfaces": surfaces + batches,
+		"surfaces": mesh_instances + batches,
 		"triangles": triangles,
 		"multimesh_batches": batches,
 		"boulders": instances,
 	}
 
 
-## An ArrayMesh from a generated mesh dictionary (vertices, normals, indices).
-## The generated contract winds triangles counterclockwise around their
-## outward normals; Godot treats clockwise as front-facing, so each triplet is
-## turned once here, as world_chunk_builder.gd does for chunk records.
+## An ArrayMesh from a generated mesh dictionary (vertices, normals, indices and
+## optional lods: [{error_m, indices}]). The generated contract winds triangles
+## counterclockwise around their outward normals; Godot treats clockwise as
+## front-facing, so each triplet is turned once here, as world_chunk_builder.gd
+## does for chunk records.
 static func _array_mesh(record: Dictionary, material: Material) -> ArrayMesh:
 	var vertices := PackedVector3Array()
 	var normals := PackedVector3Array()
-	var indices := PackedInt32Array()
 	var v: Array = record.vertices
 	var n: Array = record.normals
 	for index in range(0, v.size(), 3):
 		vertices.append(Vector3(float(v[index]), float(v[index + 1]), float(v[index + 2])))
 		normals.append(Vector3(float(n[index]), float(n[index + 1]), float(n[index + 2])))
-	var source: Array = record.indices
-	for index in range(0, source.size(), 3):
-		indices.append(int(source[index]))
-		indices.append(int(source[index + 2]))
-		indices.append(int(source[index + 1]))
 	var arrays: Array = []
 	arrays.resize(Mesh.ARRAY_MAX)
 	arrays[Mesh.ARRAY_VERTEX] = vertices
 	arrays[Mesh.ARRAY_NORMAL] = normals
-	arrays[Mesh.ARRAY_INDEX] = indices
+	arrays[Mesh.ARRAY_INDEX] = _clockwise(record.indices)
+	# A stone's vertex alpha is its height on the stone (0 at the cut base, 1 at
+	# the top); the instance colour multiplies in its tint.
+	if record.has("relative_height"):
+		var colors := PackedColorArray()
+		for value: Variant in record.relative_height:
+			colors.append(Color(1.0, 1.0, 1.0, float(value)))
+		arrays[Mesh.ARRAY_COLOR] = colors
+	# Coarser index sets over the same vertices, keyed by their error for a 1 m stone.
+	var lods := {}
+	for lod_value: Variant in record.get("lods", []):
+		var lod: Dictionary = lod_value
+		lods[float(lod.error_m)] = _clockwise(lod.indices)
 	var mesh := ArrayMesh.new()
-	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays, [], lods)
 	mesh.surface_set_material(0, material)
 	mesh.resource_name = str(record.get("object_key", record.get("id", "shoreline")))
 	return mesh
+
+
+static func _clockwise(source: Array) -> PackedInt32Array:
+	var indices := PackedInt32Array()
+	for index in range(0, source.size(), 3):
+		indices.append(int(source[index]))
+		indices.append(int(source[index + 2]))
+		indices.append(int(source[index + 1]))
+	return indices

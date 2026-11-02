@@ -56,6 +56,7 @@ import {
   roundMeasure,
   serializeCsv,
   sha256File,
+  sortJson,
   stableJson,
   verifySourceContract,
 } from "./lib/world-contract.mjs";
@@ -124,6 +125,7 @@ import {
   SHORELINE_OVERLAY_MATERIAL,
   SHORELINE_OVERLAY_PREFIX,
   generateShoreline,
+  loadShorelineConfig,
   planShoreline,
 } from "./lib/shoreline-generation.mjs";
 
@@ -2002,7 +2004,8 @@ function main() {
     );
     const playableObjects = buildPlayableObjects(joinedLedger, boundary);
     const streetConfig = loadStreetDetailZones(projectRoot);
-    const shorelinePlan = planShoreline({ config: streetConfig, boundary, playableObjects, rawOsm: loaded.rawOsm });
+    const shorelineConfig = loadShorelineConfig(projectRoot);
+    const shorelinePlan = planShoreline({ config: shorelineConfig.config, boundary, playableObjects, rawOsm: loaded.rawOsm });
     const chunks = buildChunks(playableObjects, boundary, terrain, shorelinePlan);
     // The spawn reads only land and roads, so it is fixed before street ground lands.
     const spawn = findInitialSpawn(boundary, playableObjects, loaded.rawOsm, loaded.rawSources, chunks);
@@ -2027,7 +2030,7 @@ function main() {
     // The rock slope and boulders outside the outline: visual-only, like the YBI context.
     const shoreline = generateShoreline({
       plan: shorelinePlan,
-      seed: streetConfig.seed,
+      configDescriptor: shorelineConfig.descriptor,
       facetsForChunk: (id) => landFacetsForChunk(chunks, id),
       facetElevation,
       terrain,
@@ -2080,7 +2083,8 @@ function main() {
     writeArtifact(stagingRoot, "terrain.json", terrainDocument);
     writeArtifact(stagingRoot, "vegetation.json", vegetation);
     writeArtifact(stagingRoot, "street_detail.json", streetDetail);
-    writeArtifact(stagingRoot, "shoreline.json", shoreline.document);
+    // Compact: the shoreline is mostly number arrays, and it grows segment by segment.
+    writeArtifact(stagingRoot, "shoreline.json", `${JSON.stringify(sortJson(shoreline.document))}\n`);
     writeArtifact(stagingRoot, "qa/pavement-skin.json", chunks.pavement_skin);
     for (const chunk of [...chunks.values()].sort((left, right) => compareChunkIds(left.chunk_id, right.chunk_id))) {
       writeArtifact(stagingRoot, `chunks/${chunk.chunk_id}.json`, chunk);

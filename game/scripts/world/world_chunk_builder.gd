@@ -43,8 +43,11 @@ const ACCEPTED_MATERIAL_RUN_TRIALS := preload("res://game/scripts/world/facades/
 const BUILDING_1_HERO_MODEL := preload("res://game/scripts/world/facades/building_1_hero_model.gd")
 const BUILDING_2_HERO_MODEL := preload("res://game/scripts/world/facades/building_2_hero_model.gd")
 const GROUND_COVER := preload("res://game/scripts/world/ground_cover.gd")
-## The shoreline riprap overlay (tools/lib/shoreline-generation.mjs).
+## The shoreline riprap overlay (tools/lib/shoreline-generation.mjs): the band
+## inside the outline is the dry verge at the top of the riprap, so it takes the
+## land's own ground cover family (the shoreline's cobbles are set in it).
 const SHORELINE_RIPRAP_OVERLAY := "terrain_riprap"
+const SHORELINE_BAND_GROUND_FAMILY := "field"
 ## Street ground (tools/lib/street-ground-generation.mjs): road paint is opaque
 ## with a cut-out for worn paint, asphalt wear is a blended decal; parking lanes
 ## reuse the road asphalt. Decal material key -> its shader and textures.
@@ -727,14 +730,13 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 	# The ground-cover shader needs UVs and tangents, so a record without UVs
 	# falls back to the builder's own material.
 	var ground_family := "" if uvs.is_empty() else GROUND_COVER.family_for(record, is_context)
+	if ground_family == "" and not uvs.is_empty() and not is_context and str(record.material_key) == SHORELINE_RIPRAP_OVERLAY:
+		ground_family = SHORELINE_BAND_GROUND_FAMILY
 	if (POLYHAVEN_MATERIAL_TEXTURE_SET.has(str(record.material_key)) or ground_family != "") and not uvs.is_empty():
 		arrays[Mesh.ARRAY_TANGENT] = _tangents_for(vertices, normals, uvs, indices)
 	var placeholder_material: Material
 	if STREET_DECAL_MATERIALS.has(str(record.material_key)):
 		placeholder_material = _street_decal_material(str(record.material_key))
-	elif str(record.material_key) == SHORELINE_RIPRAP_OVERLAY:
-		# The riprap band inside the outline shares the slope and boulder material.
-		placeholder_material = ShorelineBuilder.riprap_material()
 	elif STREET_GROUND_SURFACES.has(str(record.material_key)) and not uvs.is_empty():
 		placeholder_material = _street_ground_material(str(record.material_key))
 	elif ground_family == GROUND_COVER.PAVED:
