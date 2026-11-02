@@ -655,6 +655,10 @@ completed design. This corrects invocation guidance, not global runtime policy.
 
 The w34313564 integration reused Building1 candidate005 island images after checking only Building1 source parity. Independent visual review found widespread unrelated roof differences: the full study-to-main diff included52 runtime files from previously shipped families. A target-only unchanged diff cannot establish an unchanged world baseline. Before reusing island images, compare the complete runtime/world/settings/capture revision; if it differs materially, use a bounded clean-main island-only control with the maintained driver. Keep historical images and their original revision labels.
 
+## Verify the production revision before creating a comparison baseline
+
+The 2026-10-26 Star View video pilot branched from local `main` at `b801c2e` (2026-10-08), while the already available `origin/main` was 381 commits ahead. Its "before" baseline lacked the committed mid-rise-family model and other island work, so matched cameras and passing tests compared the pilot against a world that no longer existed, and the pilot was invalidated. A local branch named `main` had simply never been updated; nothing checks that. Before branching or capturing a baseline, fetch and compare the local base with `origin/main` (`git rev-list --count <base>..origin/main` should be 0) and check for dirty worktrees, then capture the unchanged production art first and judge the proposed edits against it.
+
 ## Keep a printed PASS separate from a clean engine exit
 
 Housing61 recovery printed complete native/fit/recess/spray PASS but stalled after its final line; the owned process required TERM and returned143. A later69 capture stalled the same way with `--audio-driver Dummy`, so audio was not the cause. The main cause was later found in Godot 4.7.2 on Wayland: `WaylandThread::destroy()` joins the "Wayland Events" thread, which checks `thread_done` only after its endless `poll`. If the main thread reads the roundtrip reply itself, our headless Weston never wakes that poll. A 30-frame draw-and-quit script hung 2 of 80 times with the unchanged wrapper; `/proc/<tid>/syscall` showed the main thread futex-waiting on an address inside the events thread's stack mapping while the events thread sat in `poll`.
@@ -873,3 +877,11 @@ At Hawkins r6 (2026-10-24) the NNW penthouse existed and had plausible room dime
 ## Use fixed matched cameras for regression comparison
 
 At Hawkins r8 (2026-10-24) the automatic close-up and context shots differed by 4–9% from r6, while the fixed matched views differed by 0–1.5% and only where the changes were visible. The automatic framing follows the building's bounds, which grew with the new rooftop volumes. After adding volumes, compare fixed matched cameras as the main regression check; treat automatic-framing pixel diffs as framing changes until shown otherwise.
+
+## Check sampling before rebuilding apparently broken window grids
+
+Building 1 study013 (2026-10-09) still showed missing central sash segments after repeated aperture rework. With geometry, materials, lighting and poses unchanged, the grids became continuous at 4320x2700, and at the stock 1440x900 with temporary 4x MSAA: the 65 mm members project to less than a pixel in the ordinary view. That shows sampling contributes; it does not explain every earlier artifact or approve a permanent AA setting. Before diagnosing occlusion and rewriting architecture, compute the feature's projected size in the gameplay view and make one discriminating comparison at higher resolution or AA.
+
+## Keep to your own subdirectory of the shared session scratchpad
+
+The session scratchpad `/tmp/claude-1000/<project>/<session>/scratchpad` is shared by every subagent of the session, not owned by one agent. On 2026-11-02 the tmp-cleanup agent treated it as its own and began a fixture test with `sudo rm -rf` on `scratchpad/fixture` and `scratchpad/decoy`; only a search of the session's 125 transcripts showed that no other agent had used those names. Work in a subdirectory named after your agent or task, and never delete generic names (`fixture`, `out`, `tmp`, `decoy`) at the scratchpad's top level or in another agent's subdirectory.
