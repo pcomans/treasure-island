@@ -949,13 +949,13 @@ func _apply_polyhaven_textures(material: StandardMaterial3D, material_key: Strin
 	material.heightmap_enabled = false
 
 
-## Paving tints multiply the Poly Haven maps. Roads and paved areas read as neutral
-## grey under the SSE sun (the dark clean_asphalt map needs channels above 1);
-## walks stay lighter than the asphalt, as in the dated photos.
+## Paving tints multiply the Poly Haven maps. Roads and parking lanes read as the
+## photographed asphalt: neutral to slightly cool, about 38-41 % grey in the dated
+## Sep 2025 Treasure Island Road views; walks stay lighter than the asphalt.
 func _polyhaven_tint_for(material_key: String, fallback: Color) -> Color:
 	match material_key:
 		"road_path", "street_parking":
-			return Color(1.18, 1.12, 0.97)
+			return Color(0.94, 0.95, 0.95)
 		"road_path_pedestrian":
 			return Color(1.12, 1.20, 1.28)
 		"major_area_paved":
