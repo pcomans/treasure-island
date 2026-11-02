@@ -81,6 +81,8 @@ function main() {
     }
     const vegetationPath = "vegetation.json";
     invariant(firstInventory.some((file) => file.path === vegetationPath), "Clean generation omitted vegetation.json");
+    const streetDetailPath = "street_detail.json";
+    invariant(firstInventory.some((file) => file.path === streetDetailPath), "Clean generation omitted street_detail.json");
     invariant(
       readFileSync(resolve(first, vegetationPath)).equals(readFileSync(resolve(second, vegetationPath))),
       "Clean generations differ byte-for-byte at vegetation.json",
@@ -92,6 +94,7 @@ function main() {
       files_compared: firstInventory.length,
       content_sha256: manifest.content_sha256,
       vegetation_sha256: firstInventory.find((file) => file.path === vegetationPath).sha256,
+      street_detail_sha256: firstInventory.find((file) => file.path === streetDetailPath).sha256,
     }));
   } finally {
     rmSync(temporaryDirectory, { recursive: true, force: true });

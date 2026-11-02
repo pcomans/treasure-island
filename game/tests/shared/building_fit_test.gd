@@ -22,6 +22,8 @@ extends SceneTree
 ##
 ## Prints PASS or FAIL lines and exits non-zero on failure.
 ## --use-prebuilt-world checks the native baked scene with the same stock checks.
+## Optional --street-detail on|off: street detail (vegetation, furniture, fences,
+## clutter) is off by default here, so the building is checked on its own.
 ## Optional --routes FILE: {"source":"KEY", "routes":[{"name":"passage",
 ## "start_xz":[x,z], "end_xz":[x,z]}]}. Each route is walked in both directions.
 ## A route may require_adjacent_support:true with --adjacent-source; this observes
@@ -132,7 +134,7 @@ func _run() -> void:
 			seen[flag] = true
 			index += 1
 			continue
-		if flag not in ["--source", "--routes", "--spray", "--diagnose-side", "--adjacent-source", "--native-producer"] or seen.has(flag):
+		if flag not in ["--source", "--routes", "--spray", "--diagnose-side", "--adjacent-source", "--native-producer", "--street-detail"] or seen.has(flag):
 			push_error("unsupported or duplicate option: " + flag)
 			quit(1)
 			return
@@ -148,6 +150,11 @@ func _run() -> void:
 		quit(1)
 		return
 	var source_key := str(args.source)
+	var street_detail := str(args.get("street-detail", "off"))
+	if street_detail not in ["on", "off"]:
+		push_error("--street-detail takes on or off")
+		quit(1)
+		return
 	var native_sources := {"chapel-indexed": "w291189336", "building2-indexed": "w24274434", "station48-indexed": "w764313741", "northpoint1232-mixed": "w96215673", "ymca-mixed": "w34313547", "panel-hall-mixed": "w34313569", "personnel-support-mixed": "r133347", "job-corps-368-mixed": "w34313521", "building-202-mixed": "w34313546", "panel-hall-528-mixed": "w34313528", "avenue-h-449-mixed": "w34313512", "panel-hall-516-mixed": "w110188516"}
 	var housing_native := str(args.get("native-producer", "")) in ["housing-get-faces", "housing-retained-get-faces"]
 	if args.has("native-producer") and ((not housing_native and str(native_sources.get(str(args["native-producer"]), "")) != source_key) or args.has("diagnose-side") or args.has("adjacent-source")):
@@ -183,9 +190,17 @@ func _run() -> void:
 			return
 		spray_case = plan
 	var h := WorldHarness.new(self)
-	var error := await h.load_world()
+	var error := await h.load_world(WorldLoader.STREET_DETAIL_LAYERS.duplicate() if street_detail == "on" else [])
 	if error != "":
 		push_error(error)
+		quit(1)
+		return
+	print(h.street_detail_summary())
+	var street_problems := h.street_detail_problems()
+	if not street_problems.is_empty():
+		for problem in street_problems:
+			print("FAIL: " + problem)
+		h.main.queue_free()
 		quit(1)
 		return
 	if diagnostic_side != "":

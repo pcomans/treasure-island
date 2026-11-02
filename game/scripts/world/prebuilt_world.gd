@@ -2,8 +2,10 @@ extends RefCounted
 ## Transient export build product; source authoring retains the generator.
 const WEB_PATH := "res://generated/web/static_world.scn"
 const NATIVE_PATH := "res://generated/native/static_world.scn"
-const SCHEMA := "ti.static-world/2"
-const EVIDENCE_FIELDS := ["chunks_expected", "chunks_loaded", "playable_rows", "context_rows", "mesh_instances", "surfaces", "triangles", "static_bodies", "shapes", "vegetation_seed", "vegetation_instances", "vegetation_assets", "vegetation_multimesh_batches", "vegetation_rendered_triangles", "vegetation_species_counts", "vegetation_zone_counts"]
+const SCHEMA := "ti.static-world/3"
+## Build-time evidence carried by the bake. The street-detail on/off state is not
+## among them: it is chosen again when the baked world loads.
+const EVIDENCE_FIELDS := ["chunks_expected", "chunks_loaded", "playable_rows", "context_rows", "mesh_instances", "surfaces", "triangles", "static_bodies", "shapes", "vegetation_seed", "vegetation_instances", "vegetation_assets", "vegetation_multimesh_batches", "vegetation_rendered_triangles", "vegetation_species_counts", "vegetation_zone_counts", "street_detail_rows", "street_detail_rows_by_layer"]
 
 static func profile() -> String:
 	return "web" if OS.has_feature("web") or OS.get_cmdline_user_args().has("--web-world-bake") else "native"

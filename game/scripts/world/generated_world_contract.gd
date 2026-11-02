@@ -31,6 +31,12 @@ const VEGETATION_ASSET_SPECIES := {
 	"res://game/resources/models/vegetation/kenney_nature_kit/tree_plateau.glb": "broadleaf",
 	"res://game/resources/models/vegetation/kenney_nature_kit/tree_thin.glb": "broadleaf",
 }
+const STREET_DETAIL_SCHEMA := "ti.street-detail/1"
+## The switchable street-detail layers, in PlayableWorld/StreetDetail node order.
+const STREET_DETAIL_LAYERS := ["vegetation", "furniture", "fences", "clutter"]
+## Rows of the ground layer feed the always-on chunk surfaces.
+const STREET_DETAIL_GROUND_LAYER := "ground"
+const STREET_DETAIL_SOURCES := ["osm", "scatter", "set_piece"]
 const BOUNDARY_TOLERANCE_M := 0.001
 const MIN_TRIANGLE_AREA_M2 := 0.00000001
 const BOUNDARY_SOURCE_KEY := "w26767313"
@@ -192,6 +198,13 @@ static func load_and_validate(manifest_path: String) -> Dictionary:
 	result = _validate_vegetation(vegetation_result.data, chunk_results, manifest.playable_boundary)
 	if not result.ok:
 		return result
+	var street_detail_path := _resolve_artifact_path(manifest_path, str(manifest.street_detail.path))
+	var street_detail_result := _read_json_object(street_detail_path)
+	if not street_detail_result.ok:
+		return street_detail_result
+	result = _validate_street_detail(street_detail_result.data, chunk_results, manifest.playable_boundary)
+	if not result.ok:
+		return result
 
 	result = _validate_coverage_references(coverage_rows, record_keys, represented_playable, represented_context, approved_composite_sources)
 	if not result.ok:
@@ -216,6 +229,7 @@ static func load_and_validate(manifest_path: String) -> Dictionary:
 		"context": context_result.data,
 		"terrain": terrain_result.data,
 		"vegetation": vegetation_result.data,
+		"street_detail": street_detail_result.data,
 		"coverage_rows": coverage_rows,
 		"spawn_transform": spawn_result.transform,
 		"boundary": boundary,
@@ -229,6 +243,7 @@ static func load_and_validate(manifest_path: String) -> Dictionary:
 			"vegetation_instances": int(vegetation_result.data.counts.total),
 			"vegetation_species_counts": vegetation_result.data.counts.by_species.duplicate(true),
 			"vegetation_zone_counts": vegetation_result.data.counts.by_zone.duplicate(true),
+			"street_detail_rows": int(street_detail_result.data.counts.total),
 		},
 	}
 
@@ -286,8 +301,9 @@ static func _validate_manifest_shape(manifest: Dictionary) -> Dictionary:
 	if not manifest.get("files", null) is Array or manifest.files.is_empty():
 		return _failure("manifest_files", "Manifest artifact index is missing.")
 	if not manifest.get("coverage_ledger", null) is Dictionary or not manifest.get("context", null) is Dictionary \
-	or not manifest.get("terrain", null) is Dictionary or not manifest.get("vegetation", null) is Dictionary:
-		return _failure("manifest_required_files", "Manifest coverage, context, terrain, or vegetation entry is missing.")
+	or not manifest.get("terrain", null) is Dictionary or not manifest.get("vegetation", null) is Dictionary \
+	or not manifest.get("street_detail", null) is Dictionary:
+		return _failure("manifest_required_files", "Manifest coverage, context, terrain, vegetation, or street-detail entry is missing.")
 	if not manifest.get("initial_spawn", null) is Dictionary:
 		return _failure("manifest_spawn", "Manifest initial spawn is missing.")
 	if not manifest.get("playable_boundary", null) is Dictionary:
@@ -381,7 +397,7 @@ static func _validate_artifact_index(manifest: Dictionary, manifest_path: String
 	if actual_content_hash != str(manifest.content_sha256):
 		return _failure("manifest_content_hash", "Manifest artifact-index content hash does not match.")
 
-	var required_entries: Array[Dictionary] = [manifest.coverage_ledger, manifest.context, manifest.terrain, manifest.vegetation]
+	var required_entries: Array[Dictionary] = [manifest.coverage_ledger, manifest.context, manifest.terrain, manifest.vegetation, manifest.street_detail]
 	for chunk_value: Variant in manifest.chunks:
 		required_entries.append(chunk_value)
 	for required: Dictionary in required_entries:
@@ -607,6 +623,163 @@ static func _validate_vegetation(vegetation: Dictionary, chunks: Array[Dictionar
 	if float(observed_clearances.get("terrain_shoreline_overlays", -1.0)) < 3.0:
 		return _failure("vegetation_shoreline_overlay", "Vegetation terrain/shoreline overlay clearance audit failed.")
 	return {"ok": true}
+
+
+## Street detail changes as later steps add content, so this checks structure,
+## identity, grounding and self-consistent counts rather than pinned totals.
+static func _validate_street_detail(document: Dictionary, chunks: Array[Dictionary], boundary: Dictionary) -> Dictionary:
+	if str(document.get("schema_version", "")) != STREET_DETAIL_SCHEMA:
+		return _failure("street_detail_schema", "Generated street-detail schema is invalid.")
+	if document.get("layers", []) != STREET_DETAIL_LAYERS or str(document.get("ground_layer", "")) != STREET_DETAIL_GROUND_LAYER:
+		return _failure("street_detail_layers", "Street-detail layers differ from the runtime layer list.")
+	var kinds_value: Variant = document.get("kinds", null)
+	if not kinds_value is Dictionary or (kinds_value as Dictionary).is_empty():
+		return _failure("street_detail_kinds", "Street-detail kind table is missing.")
+	var kinds: Dictionary = kinds_value
+	var row_layers: Array = STREET_DETAIL_LAYERS + [STREET_DETAIL_GROUND_LAYER]
+	for kind_name: Variant in kinds.keys():
+		var kind_value: Variant = kinds[kind_name]
+		if not kind_value is Dictionary:
+			return _failure("street_detail_kinds", "Street-detail kind %s is not an object." % kind_name)
+		var kind: Dictionary = kind_value
+		if str(kind.get("layer", "")) not in row_layers or str(kind.get("geometry", "")) not in ["point", "polyline"] \
+		or not _is_finite_number(kind.get("footprint_radius_m", null)) or float(kind.get("footprint_radius_m", -1.0)) < 0.0 \
+		or not kind.get("overhead", null) is bool:
+			return _failure("street_detail_kinds", "Street-detail kind %s is invalid." % kind_name)
+	var zone_ids: Dictionary = {}
+	for zone_value: Variant in document.get("zones", []):
+		if not zone_value is Dictionary or str((zone_value as Dictionary).get("id", "")).is_empty():
+			return _failure("street_detail_zones", "Street-detail zone entry is invalid.")
+		zone_ids[str(zone_value.id)] = true
+	var land_records: Dictionary = {}
+	for chunk: Dictionary in chunks:
+		for record_value: Variant in chunk.records:
+			var record: Dictionary = record_value
+			if str(record.feature_kind) == "land_ground":
+				land_records[str(record.object_key)] = record
+	if not document.get("rows", null) is Array:
+		return _failure("street_detail_rows", "Street-detail rows are missing.")
+	var rows: Array = document.rows
+	var tallies := {"layer": {}, "placed_layer": {}, "source": {}, "status": {}}
+	for layer: String in row_layers:
+		tallies.layer[layer] = 0
+		tallies.placed_layer[layer] = 0
+	for source: String in STREET_DETAIL_SOURCES:
+		tallies.source[source] = 0
+	for status: String in ["excluded", "placed"]:
+		tallies.status[status] = 0
+	var prior_id := ""
+	for row_value: Variant in rows:
+		if not row_value is Dictionary:
+			return _failure("street_detail_rows", "Street-detail row is not an object.")
+		var row: Dictionary = row_value
+		var row_id := str(row.get("id", ""))
+		if row_id.is_empty() or (not prior_id.is_empty() and row_id <= prior_id):
+			return _failure("street_detail_order", "Street-detail ids must be unique and sorted: %s" % row_id)
+		prior_id = row_id
+		var kind_name := str(row.get("kind", ""))
+		if not kinds.has(kind_name):
+			return _failure("street_detail_kind", "Street-detail row has an unknown kind: %s" % row_id)
+		var kind: Dictionary = kinds[kind_name]
+		var layer := str(row.get("layer", ""))
+		var geometry := str(row.get("geometry", ""))
+		var source := str(row.get("source", ""))
+		var status := str(row.get("status", ""))
+		if layer != str(kind.layer) or geometry != str(kind.geometry) or source not in STREET_DETAIL_SOURCES \
+		or not row_id.begins_with(source + ":") or str(row.get("source_id", "")).is_empty():
+			return _failure("street_detail_identity", "Street-detail row kind, layer, geometry or source is inconsistent: %s" % row_id)
+		var exclusion: Variant = row.get("exclusion", false)
+		if not ((status == "placed" and typeof(exclusion) == TYPE_NIL) or (status == "excluded" and exclusion is Dictionary and not str((exclusion as Dictionary).get("reason", "")).is_empty())):
+			return _failure("street_detail_status", "Street-detail row status or exclusion is invalid: %s" % row_id)
+		if not row.get("zones", null) is Array:
+			return _failure("street_detail_zones", "Street-detail row zones are missing: %s" % row_id)
+		for zone_value: Variant in row.zones:
+			if not zone_ids.has(str(zone_value)):
+				return _failure("street_detail_zones", "Street-detail row names an unknown zone: %s" % row_id)
+		if geometry == "point":
+			if not row.get("position_m", null) is Array:
+				return _failure("street_detail_transform", "Street-detail position is missing: %s" % row_id)
+			var position: Array = row.position_m
+			var support: Variant = row.get("terrain_support", null)
+			if position.size() != 3 or not _is_finite_number(position[0]) or not _is_finite_number(position[1]) or not _is_finite_number(position[2]) \
+			or not support is Dictionary:
+				return _failure("street_detail_transform", "Street-detail position is invalid: %s" % row_id)
+			if not _street_detail_grounded(land_records, boundary, position, str(support.get("object_key", "")), support.get("triangle_index", null)) \
+			or not is_equal_approx(float(support.get("elevation_m", INF)), float(position[1])):
+				return _failure("street_detail_grounding", "Street-detail row is off the island or not grounded on its land triangle: %s" % row_id)
+			var yaw: Variant = row.get("yaw_radians", false)
+			if not (typeof(yaw) == TYPE_NIL or (_is_finite_number(yaw) and absf(float(yaw)) <= PI)):
+				return _failure("street_detail_transform", "Street-detail yaw is invalid: %s" % row_id)
+		else:
+			if not row.get("points_m", null) is Array or not row.get("terrain_supports", null) is Array or not row.get("vertex_source_ids", null) is Array:
+				return _failure("street_detail_transform", "Street-detail polyline arrays are missing: %s" % row_id)
+			var points: Array = row.points_m
+			var supports: Array = row.terrain_supports
+			if points.size() < 2 or supports.size() != points.size() or (row.vertex_source_ids as Array).size() != points.size():
+				return _failure("street_detail_transform", "Street-detail polyline arrays are inconsistent: %s" % row_id)
+			for index in points.size():
+				var point_value: Variant = points[index]
+				var support_value: Variant = supports[index]
+				if not point_value is Array or (point_value as Array).size() != 3 or not support_value is Array or (support_value as Array).size() != 2:
+					return _failure("street_detail_transform", "Street-detail polyline vertex is invalid: %s" % row_id)
+				var point: Array = point_value
+				if not _is_finite_number(point[0]) or not _is_finite_number(point[1]) or not _is_finite_number(point[2]) \
+				or not _street_detail_grounded(land_records, boundary, point, str(support_value[0]), support_value[1]):
+					return _failure("street_detail_grounding", "Street-detail polyline vertex is off the island or not grounded: %s" % row_id)
+		tallies.layer[layer] = int(tallies.layer.get(layer, 0)) + 1
+		if status == "placed":
+			tallies.placed_layer[layer] = int(tallies.placed_layer.get(layer, 0)) + 1
+		tallies.source[source] += 1
+		tallies.status[status] = int(tallies.status.get(status, 0)) + 1
+	var counts: Variant = document.get("counts", null)
+	if not counts is Dictionary or not _is_nonnegative_json_integer((counts as Dictionary).get("total", null)) or int(counts.total) != rows.size() \
+	or not _integer_counts_match(counts.get("by_layer", null), tallies.layer) \
+	or not _integer_counts_match(counts.get("placed_by_layer", null), tallies.placed_layer) \
+	or not _integer_counts_match(counts.get("by_source", null), tallies.source) \
+	or not _integer_counts_match(counts.get("by_status", null), tallies.status):
+		return _failure("street_detail_counts", "Street-detail counts do not match its rows.")
+	return {"ok": true}
+
+
+## True when position lies on the island and on its named land triangle. The
+## weights use 64-bit floats straight from the JSON, with the generator's formula
+## and threshold: an OSM node on a shared triangle edge falls just outside its
+## triangle once squeezed into 32-bit Vector2/Vector3 coordinates.
+static func _street_detail_grounded(land_records: Dictionary, boundary: Dictionary, position: Array, object_key: String, triangle_index: Variant) -> bool:
+	var x := float(position[0])
+	var z := float(position[2])
+	if not contains_xz(boundary, Vector2(x, z)) or not land_records.has(object_key) or not _is_nonnegative_json_integer(triangle_index):
+		return false
+	var record: Dictionary = land_records[object_key]
+	var indices: Array = record.indices
+	var vertices: Array = record.vertices
+	var offset := int(triangle_index) * 3
+	if offset + 2 >= indices.size():
+		return false
+	var corner_indices: Array[int] = []
+	for corner in 3:
+		var vertex := int(indices[offset + corner])
+		if vertex < 0 or vertex * 3 + 2 >= vertices.size():
+			return false
+		corner_indices.append(vertex * 3)
+	var ax := float(vertices[corner_indices[0]])
+	var ay := float(vertices[corner_indices[0] + 1])
+	var az := float(vertices[corner_indices[0] + 2])
+	var bx := float(vertices[corner_indices[1]])
+	var by := float(vertices[corner_indices[1] + 1])
+	var bz := float(vertices[corner_indices[1] + 2])
+	var cx := float(vertices[corner_indices[2]])
+	var cy := float(vertices[corner_indices[2] + 1])
+	var cz := float(vertices[corner_indices[2] + 2])
+	var denominator := (bz - cz) * (ax - cx) + (cx - bx) * (az - cz)
+	if absf(denominator) <= 0.0000000001:
+		return false
+	var weight_a := ((bz - cz) * (x - cx) + (cx - bx) * (z - cz)) / denominator
+	var weight_b := ((cz - az) * (x - cx) + (ax - cx) * (z - cz)) / denominator
+	var weight_c := 1.0 - weight_a - weight_b
+	if weight_a < -0.0000001 or weight_b < -0.0000001 or weight_c < -0.0000001:
+		return false
+	return absf(weight_a * ay + weight_b * by + weight_c * cy - float(position[1])) <= 0.001001
 
 
 static func _integer_counts_match(actual_value: Variant, expected: Dictionary) -> bool:

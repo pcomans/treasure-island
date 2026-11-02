@@ -231,7 +231,7 @@
       "sha256": "f6fd17666df382f89b51dff1b5a3b906e1c17fdc36d4af3e1aa4ecf4aad817a5"
     }
   ],
-  "content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
+  "content_sha256": "8ae405fcc2c36d29bf91bae7d853e1c0d882d8ed6ade981c16062241e4c3c1d3",
   "context": {
     "bytes": 675130,
     "path": "context.json",
@@ -499,6 +499,11 @@
       "bytes": 3142,
       "path": "qa/validation-report.json",
       "sha256": "afe1d34d0c743c9a16f058b8613f4276bd44ee7bddc3cd062657dfe65304e7a9"
+    },
+    {
+      "bytes": 734694,
+      "path": "street_detail.json",
+      "sha256": "d5623fe1ba0c39cec77c90b877f62efa7381d7ded81644075b9b2c79a618bfe9"
     },
     {
       "bytes": 4599,
@@ -1136,6 +1141,11 @@
       "path": "data/terrain/treasure-island-ybi-usgs-3dep-2023.tif",
       "sha256": "3af54acdd116f3e253af8ece5ec501a08dff94cfca47b7f05f2c326c9ba33f3f"
     }
+  },
+  "street_detail": {
+    "bytes": 734694,
+    "path": "street_detail.json",
+    "sha256": "d5623fe1ba0c39cec77c90b877f62efa7381d7ded81644075b9b2c79a618bfe9"
   },
   "terrain": {
     "bytes": 4599,

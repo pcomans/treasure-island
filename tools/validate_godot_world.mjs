@@ -47,6 +47,13 @@ import {
   VEGETATION_SEED,
   naipUnknownShrubVariation,
 } from "./lib/vegetation-generation.mjs";
+import {
+  STREET_DETAIL_GROUND_LAYER,
+  STREET_DETAIL_KINDS,
+  STREET_DETAIL_LAYERS,
+  STREET_DETAIL_SCHEMA,
+  STREET_DETAIL_SOURCES,
+} from "./lib/street-detail-generation.mjs";
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(scriptDirectory, "..");
@@ -486,6 +493,21 @@ function pointToLineDistance(point, line) {
   return minimum;
 }
 
+function pointInRingXZ(point, ring) {
+  let inside = false;
+  for (let index = 0, previous = ring.length - 1; index < ring.length; previous = index, index += 1) {
+    const [ax, az] = ring[previous];
+    const [bx, bz] = ring[index];
+    if ((az > point[1]) !== (bz > point[1]) && point[0] < ((bx - ax) * (point[1] - az)) / (bz - az) + ax) inside = !inside;
+  }
+  return inside;
+}
+
+function pointInPlayableBoundary(point, boundary) {
+  return boundary.components.some((component) =>
+    pointInRingXZ(point, component.outer) && !component.holes.some((hole) => pointInRingXZ(point, hole)));
+}
+
 function pointToBoundaryDistance(point, boundary) {
   let minimum = Infinity;
   for (const component of boundary.components) {
@@ -843,6 +865,65 @@ function validateVegetation(worldRoot, manifest, records) {
   return vegetation;
 }
 
+// Structure and grounding only: the street-detail content changes as steps add it.
+function validateStreetDetail(worldRoot, manifest, records) {
+  invariant(manifest.street_detail?.path === "street_detail.json", "Manifest street-detail descriptor is missing");
+  invariant(stableJson(descriptor(worldRoot, manifest.street_detail.path)) === stableJson(manifest.street_detail), "Street-detail descriptor drift");
+  const document = JSON.parse(readFileSync(resolve(worldRoot, manifest.street_detail.path), "utf8"));
+  invariant(document.schema_version === STREET_DETAIL_SCHEMA, "Street-detail schema drift");
+  invariant(Number.isInteger(document.seed), "Street-detail seed is missing");
+  invariant(stableJson(document.layers) === stableJson(STREET_DETAIL_LAYERS) && document.ground_layer === STREET_DETAIL_GROUND_LAYER, "Street-detail layer list drift");
+  invariant(stableJson(document.kinds) === stableJson(STREET_DETAIL_KINDS), "Street-detail kind table differs from the generator");
+  const landByKey = new Map([...records.physical.values()]
+    .filter(({ record }) => record.feature_kind === "land_ground")
+    .map(({ record }) => [record.object_key, record]));
+  const grounded = (id, x, y, z, objectKey, triangleIndex) => {
+    const landRecord = landByKey.get(objectKey);
+    invariant(landRecord && Number.isInteger(triangleIndex) && triangleIndex >= 0 && triangleIndex * 3 + 2 < landRecord.indices.length, `${id} has no serialized land support`);
+    const sample = facetSample(landFacet(landRecord, triangleIndex * 3, objectKey), x, -z);
+    invariant(sample.inside && Math.abs(sample.elevation - y) <= COORDINATE_ROUNDING_M + 1e-9, `${id} is not grounded on its land triangle`);
+  };
+  const inBoundary = (x, z) => pointInPlayableBoundary([x, z], manifest.playable_boundary);
+  const zoneIds = new Set(document.zones.map((zone) => zone.id));
+  const rows = document.rows;
+  invariant(Array.isArray(rows), "Street-detail rows are missing");
+  const ids = rows.map((row) => row.id);
+  invariant(new Set(ids).size === ids.length, "Street-detail row ids are not unique");
+  invariant(ids.every((id, index) => index === 0 || ids[index - 1] < id), "Street-detail rows are not in code-point id order");
+  for (const row of rows) {
+    const kind = STREET_DETAIL_KINDS[row.kind];
+    invariant(kind && row.layer === kind.layer && row.geometry === kind.geometry, `${row.id} kind/layer/geometry mismatch`);
+    invariant(STREET_DETAIL_SOURCES.includes(row.source) && row.id.startsWith(`${row.source}:`) && typeof row.source_id === "string" && row.source_id !== "", `${row.id} source identity is invalid`);
+    if (row.source === "osm") invariant(row.id === `osm:${row.source_id}` && /^[nw]\d+$/u.test(row.source_id), `${row.id} OSM identity is invalid`);
+    invariant(row.status === "placed" ? row.exclusion === null : row.status === "excluded" && typeof row.exclusion?.reason === "string", `${row.id} status/exclusion mismatch`);
+    invariant(Array.isArray(row.zones) && row.zones.every((zone) => zoneIds.has(zone)), `${row.id} names an unknown zone`);
+    if (row.geometry === "point") {
+      const [x, y, z] = row.position_m;
+      invariant(row.position_m.length === 3 && [x, y, z].every(Number.isFinite) && inBoundary(x, z), `${row.id} position is invalid or off the island`);
+      grounded(row.id, x, y, z, row.terrain_support?.object_key, row.terrain_support?.triangle_index);
+      invariant(row.terrain_support.elevation_m === y, `${row.id} terrain_support elevation differs from its position`);
+      invariant(row.yaw_radians === null ? row.yaw_source === null : Number.isFinite(row.yaw_radians) && Math.abs(row.yaw_radians) <= Math.PI && typeof row.yaw_source === "string", `${row.id} yaw is invalid`);
+      invariant(Number.isFinite(row.surface?.bias_m) && row.surface.bias_m >= 0 && typeof row.surface.material_key === "string", `${row.id} surface is invalid`);
+    } else {
+      const points = row.points_m;
+      invariant(Array.isArray(points) && points.length >= 2 && row.terrain_supports?.length === points.length && row.vertex_source_ids?.length === points.length, `${row.id} polyline arrays are inconsistent`);
+      points.forEach((point, index) => {
+        invariant(point.length === 3 && point.every(Number.isFinite) && inBoundary(point[0], point[2]), `${row.id} vertex ${index} is invalid or off the island`);
+        grounded(`${row.id} vertex ${index}`, point[0], point[1], point[2], row.terrain_supports[index][0], row.terrain_supports[index][1]);
+      });
+    }
+  }
+  const tally = (field, values) => Object.fromEntries(values.map((value) => [value, rows.filter((row) => row[field] === value).length]));
+  const layerNames = [...STREET_DETAIL_LAYERS, STREET_DETAIL_GROUND_LAYER];
+  invariant(document.counts.total === rows.length, "Street-detail total count differs from its rows");
+  invariant(stableJson(document.counts.by_layer) === stableJson(tally("layer", layerNames)), "Street-detail layer counts differ from its rows");
+  const placedByLayer = Object.fromEntries(layerNames.map((layer) => [layer, rows.filter((row) => row.status === "placed" && row.layer === layer).length]));
+  invariant(stableJson(document.counts.placed_by_layer) === stableJson(placedByLayer), "Street-detail placed-layer counts differ from its rows");
+  invariant(stableJson(document.counts.by_source) === stableJson(tally("source", STREET_DETAIL_SOURCES)), "Street-detail source counts differ from its rows");
+  invariant(stableJson(document.counts.by_status) === stableJson(tally("status", ["excluded", "placed"])), "Street-detail status counts differ from its rows");
+  return document;
+}
+
 function validateManifest(worldRoot) {
   verifySourceContract(projectRoot);
   const manifestPath = resolve(worldRoot, "manifest.json");
@@ -891,6 +972,7 @@ function main() {
   const coherentGeometry = validateCoherentGeometry(records, terrain);
   const pavement = validatePavementSkin(worldRoot, manifest, coverage, records, terrain);
   const vegetation = validateVegetation(worldRoot, manifest, records);
+  const streetDetail = validateStreetDetail(worldRoot, manifest, records);
   process.stdout.write(stableJson({
     status: "valid",
     world: relative(projectRoot, worldRoot).replaceAll("\\", "/"),
@@ -906,6 +988,7 @@ function main() {
     pavement,
     vegetation_seed: vegetation.seed,
     vegetation_instances: vegetation.counts.total,
+    street_detail_rows: streetDetail.counts.total,
   }));
 }
 

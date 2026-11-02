@@ -26,8 +26,22 @@ extends SceneTree
 ## --neutral-lighting: screenshots only. Switches the environment, sky and sun back
 ##   to the neutral pre-2026-10-23 daylight (NEUTRAL_LIGHTING) for colour matching
 ##   against reference photos. Gameplay always uses main.tscn's warm daylight.
+## --street-detail off|on|both: street detail (vegetation, furniture, fences, clutter)
+##   in every shot. Without it, close-ups and focused views are taken with street
+##   detail off, and context, island and overhead views both ways. A view taken
+##   both ways is saved as NAME-street-on.png and NAME-street-off.png, otherwise
+##   as NAME.png. One world load: the on views first, then street detail is freed.
 
 const WorldHarness := preload("res://game/tests/shared/world_harness.gd")
+
+## Street-detail states per kind of shot when --street-detail is not given.
+const DEFAULT_STREET_DETAIL := {
+	"closeup": ["off"],
+	"focused": ["off"],
+	"context": ["on", "off"],
+	"island": ["on", "off"],
+	"overhead": ["on", "off"],
+}
 
 ## The neutral daylight in main.tscn before the 2026-10-23 warm-light change,
 ## restored by --neutral-lighting as [target, property, value].
@@ -64,9 +78,37 @@ func _run() -> void:
 		if batch.is_empty() or args.has("source") or args.has("views") or args.has("overhead"):
 			_fail("--views-batch needs a nonempty list of unique {source, plan} entries and no shot option other than --island")
 			return
+	var street := DEFAULT_STREET_DETAIL.duplicate(true)
+	if args.has("street-detail"):
+		var choice := str(args["street-detail"])
+		if choice not in ["off", "on", "both"]:
+			_fail("--street-detail takes off, on or both")
+			return
+		for kind: String in street.keys():
+			street[kind] = ["on", "off"] if choice == "both" else [choice]
+	var kinds: Array[String] = []
+	if args.has("source"):
+		kinds.append("closeup")
+		kinds.append("context")
+	if args.has("views") or not batch.is_empty():
+		kinds.append("focused")
+	if args.has("island"):
+		kinds.append("island")
+	if args.has("overhead"):
+		kinds.append("overhead")
+	var passes: Array[String] = []
+	var plan: Array[String] = []
+	for kind in kinds:
+		plan.append("%s=%s" % [kind, "+".join(PackedStringArray(street[kind]))])
+	for state: String in ["on", "off"]:
+		for kind in kinds:
+			if state in street[kind] and state not in passes:
+				passes.append(state)
+	print("STREET_DETAIL_SHOTS " + " ".join(PackedStringArray(plan)))
 	DirAccess.make_dir_recursive_absolute(out)
 	_h = WorldHarness.new(self)
-	var error := await _h.load_world()
+	# Load with every layer on when any view wants it; the off views come after.
+	var error := await _h.load_world(WorldLoader.STREET_DETAIL_LAYERS.duplicate() if "on" in passes else [])
 	if error != "":
 		_fail(error)
 		return
@@ -75,18 +117,34 @@ func _run() -> void:
 		await _use_neutral_lighting()
 	if not args.has("show-player"):
 		(_h.player.get_node("AvatarPivot") as Node3D).visible = false
-	if args.has("source"):
-		await _building_shots(str(args.source), out)
-	if args.has("views"):
-		await _focused_views(str(args.get("source", "")), str(args.views), out)
-	if args.has("island"):
-		await _island_shots(out)
-	if args.has("overhead"):
-		await _overhead_shot(str(args.overhead), out)
-	for entry: Dictionary in batch:
-		var folder := out.path_join(entry.source)
-		DirAccess.make_dir_recursive_absolute(folder)
-		await _focused_views(entry.source, entry.plan, folder)
+	for state in passes:
+		if state == "off" and not _h.world.get_street_detail_layers().is_empty():
+			var switched := _h.world.apply_street_detail([])
+			if not switched.ok:
+				_errors.append(str(switched.message))
+				break
+		var problems := _h.street_detail_problems()
+		if not problems.is_empty():
+			_errors.append_array(problems)
+			break
+		print("STREET_DETAIL_PASS state=%s %s" % [state, _h.street_detail_summary()])
+		if args.has("source") and state in street.closeup:
+			await _closeup_shots(str(args.source), out, _suffix(street.closeup, state))
+		if args.has("source") and state in street.context:
+			await _context_shots(str(args.source), out, _suffix(street.context, state))
+		if args.has("views") and state in street.focused:
+			await _focused_views(str(args.get("source", "")), str(args.views), out, _suffix(street.focused, state))
+		if args.has("island") and state in street.island:
+			await _island_shots(out, _suffix(street.island, state))
+		if args.has("overhead") and state in street.overhead:
+			await _overhead_shot(str(args.overhead), out, _suffix(street.overhead, state))
+		if state in street.focused:
+			for entry: Dictionary in batch:
+				var folder := out.path_join(entry.source)
+				DirAccess.make_dir_recursive_absolute(folder)
+				await _focused_views(entry.source, entry.plan, folder, _suffix(street.focused, state))
+				if not _errors.is_empty():
+					break
 		if not _errors.is_empty():
 			break
 	if _errors.is_empty():
@@ -96,6 +154,11 @@ func _run() -> void:
 			push_error(message)
 	_h.main.queue_free()
 	quit(0 if _errors.is_empty() else 1)
+
+
+## "" when a kind of view is taken in one street-detail state, else -street-on/-off.
+func _suffix(states: Array, state: String) -> String:
+	return "" if states.size() == 1 else "-street-" + state
 
 
 ## Screenshot-only: the neutral daylight for colour matching. Waits for the sky
@@ -111,7 +174,7 @@ func _use_neutral_lighting() -> void:
 	print("LIGHTING: neutral (pre-2026-10-23 daylight, screenshots only)")
 
 
-func _focused_views(source: String, path: String, out: String) -> void:
+func _focused_views(source: String, path: String, out: String, suffix: String) -> void:
 	var plan: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
 	if not plan is Dictionary or source == "" or plan.get("source", "") != source or not plan.get("views") is Array or plan.views.is_empty():
 		_errors.append("focused views need a nonempty view list bound to --source")
@@ -160,7 +223,7 @@ func _focused_views(source: String, path: String, out: String) -> void:
 			_h.aim_camera(target)
 		await physics_frame
 		await physics_frame
-		error = await _h.save_screenshot("%s/detail-%s.png" % [out, name])
+		error = await _h.save_screenshot("%s/detail-%s%s.png" % [out, name, suffix])
 		if error != "":
 			_errors.append(error)
 		if free != null:
@@ -221,17 +284,32 @@ func _numbers(value: Variant, size: int) -> bool:
 	return true
 
 
-func _building_shots(source_key: String, out: String) -> void:
+## The building's visible bounds and the shot framing derived from them, or {}.
+func _building_frame(source_key: String) -> Dictionary:
 	var nodes := _h.building_nodes(source_key)
 	var meshes := _h.visual_meshes(nodes)
 	if meshes.is_empty():
 		_errors.append("no visible geometry found for building %s" % source_key)
-		return
+		return {}
 	var box := _h.bounds(meshes)
 	var center := box.get_center()
-	var own := _h.collision_rids(nodes)
-	var radius := maxf(Vector2(box.size.x, box.size.z).length() * 0.5 + 10.0, 15.0)
-	var target := Vector3(center.x, box.position.y + box.size.y * 0.4, center.z)
+	return {
+		"box": box,
+		"center": center,
+		"own": _h.collision_rids(nodes),
+		"radius": maxf(Vector2(box.size.x, box.size.z).length() * 0.5 + 10.0, 15.0),
+		"target": Vector3(center.x, box.position.y + box.size.y * 0.4, center.z),
+	}
+
+
+func _closeup_shots(source_key: String, out: String, suffix: String) -> void:
+	var frame := _building_frame(source_key)
+	if frame.is_empty():
+		return
+	var center: Vector3 = frame.center
+	var own: Array[RID] = frame.own
+	var radius: float = frame.radius
+	var target: Vector3 = frame.target
 	# Gameplay-camera views from the four sides, trying nearby spots when a
 	# side is blocked (water, another building, outside the boundary).
 	for side in ["north", "east", "south", "west"]:
@@ -247,14 +325,23 @@ func _building_shots(source_key: String, out: String) -> void:
 			await physics_frame
 			if not _sees_building(target, own):
 				continue
-			var error := await _h.save_screenshot("%s/closeup-%s.png" % [out, side])
+			var error := await _h.save_screenshot("%s/closeup-%s%s.png" % [out, side, suffix])
 			if error != "":
 				_errors.append(error)
 			taken = true
 			break
 		if not taken:
 			print("NOTE: no clear gameplay view of %s from the %s" % [source_key, side])
-	# Raised views of the building in its surroundings.
+
+
+## Raised views of the building in its surroundings.
+func _context_shots(source_key: String, out: String, suffix: String) -> void:
+	var frame := _building_frame(source_key)
+	if frame.is_empty():
+		return
+	var box: AABB = frame.box
+	var center: Vector3 = frame.center
+	var radius: float = frame.radius
 	var camera := Camera3D.new()
 	camera.fov = 60.0
 	camera.far = 5000.0
@@ -264,7 +351,7 @@ func _building_shots(source_key: String, out: String) -> void:
 		camera.global_position = center + direction * radius * 3.0 + Vector3.UP * (box.size.y + radius * 1.2)
 		camera.look_at(center, Vector3.UP)
 		camera.make_current()
-		var error := await _h.save_screenshot("%s/context-%s.png" % [out, view[0]])
+		var error := await _h.save_screenshot("%s/context-%s%s.png" % [out, view[0], suffix])
 		if error != "":
 			_errors.append(error)
 	camera.queue_free()
@@ -277,7 +364,7 @@ func _sees_building(target: Vector3, own: Array[RID]) -> bool:
 	return hit.is_empty() or (hit.rid as RID) in own
 
 
-func _island_shots(out: String) -> void:
+func _island_shots(out: String, suffix: String) -> void:
 	var low := Vector2(INF, INF)
 	var high := Vector2(-INF, -INF)
 	for component: Dictionary in _h.world.get_boundary().get_boundary_data().components:
@@ -301,7 +388,7 @@ func _island_shots(out: String) -> void:
 		camera.global_position = center + (view[1] as Vector3)
 		camera.look_at(center, Vector3.UP)
 		camera.make_current()
-		var error := await _h.save_screenshot("%s/island-%s.png" % [out, view[0]])
+		var error := await _h.save_screenshot("%s/island-%s%s.png" % [out, view[0], suffix])
 		if error != "":
 			_errors.append(error)
 	camera.queue_free()
@@ -313,7 +400,7 @@ func _fail(message: String) -> void:
 	quit(1)
 
 
-func _overhead_shot(spec: String, out: String) -> void:
+func _overhead_shot(spec: String, out: String, suffix: String) -> void:
 	var fields := spec.split(",")
 	if fields.size() != 4:
 		_errors.append("overhead requires center_x,center_z,width,depth")
@@ -340,7 +427,7 @@ func _overhead_shot(spec: String, out: String) -> void:
 	camera.make_current()
 	await process_frame
 	await process_frame
-	var error := await _h.save_screenshot(out.path_join("site-overhead.png"))
+	var error := await _h.save_screenshot(out.path_join("site-overhead%s.png" % suffix))
 	if error != "": _errors.append(error)
 	print("OVERHEAD center=%s extent=%s north_up=-Z size=%s" % [center, Vector2(width,depth), root.size])
 	camera.queue_free()

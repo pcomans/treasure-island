@@ -20,7 +20,10 @@ func _init(scene_tree: SceneTree) -> void:
 ## Instantiates main.tscn and waits until the world is loaded, the player has
 ## settled and startup has handed over play (after preparing the initial
 ## graphics). Returns an error message, or "" on success.
-func load_world() -> String:
+## street_detail: null keeps the world's own choice (--street-detail on the
+## command line, else the project setting, normally on); an array of layer
+## names (WorldLoader.STREET_DETAIL_LAYERS, or [] for none) overrides it.
+func load_world(street_detail: Variant = null) -> String:
 	# Dummy-renderer MultiMesh readback can return identity transforms, silently
 	# moving visible geometry into the origin and invalidating fit/approach checks.
 	if DisplayServer.get_name() == "headless":
@@ -29,6 +32,8 @@ func load_world() -> String:
 	main = packed.instantiate() as GameMain
 	main.capture_mouse_on_ready = false
 	world = main.get_node("WorldRoot") as WorldLoader
+	if typeof(street_detail) != TYPE_NIL:
+		world.street_detail_request = street_detail
 	player = main.get_node("Player") as PlayerController
 	hud = main.get_node("Interface/HUD") as GameHUD
 	var ready: Array = []
@@ -57,6 +62,30 @@ func load_world() -> String:
 	player.set_gameplay_enabled(false)
 	clean_hud()
 	return ""
+
+
+## One line naming the street-detail layers that are on, for test output.
+func street_detail_summary() -> String:
+	var on := world.get_street_detail_layers()
+	var evidence := world.get_runtime_evidence()
+	return "STREET_DETAIL on=%s source=%s rows=%d" % [",".join(PackedStringArray(on)) if not on.is_empty() else "none", evidence.street_detail_source, evidence.street_detail_rows]
+
+
+## What is wrong with the loaded street-detail state: a layer that is off must
+## hold nothing (its nodes and collision were freed), and the placeholder
+## vegetation must be there while its layer is on. [] when all is well.
+func street_detail_problems() -> Array[String]:
+	var problems: Array[String] = []
+	var on := world.get_street_detail_layers()
+	for layer: String in WorldLoader.STREET_DETAIL_LAYERS:
+		var node := world.street_detail_layer(layer)
+		if node == null:
+			problems.append("street-detail layer %s is missing" % layer)
+		elif layer not in on and node.get_child_count() > 0:
+			problems.append("street-detail layer %s is off but still holds %d nodes" % [layer, node.get_child_count()])
+	if "vegetation" in on and world.street_detail_layer("vegetation").get_child_count() == 0:
+		problems.append("street-detail vegetation is on but empty")
+	return problems
 
 
 ## Every node that belongs to the building with this OSM source key

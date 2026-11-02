@@ -22,6 +22,13 @@ var vegetation_multimesh_batches := 0
 var vegetation_rendered_triangles := 0
 var vegetation_species_counts: Dictionary = {}
 var vegetation_zone_counts: Dictionary = {}
+## Street-detail data rows (generated/world/street_detail.json) and placed rows per layer.
+var street_detail_rows := 0
+var street_detail_rows_by_layer: Dictionary = {}
+## Street-detail layers on after loading (or a later switch-off) and who chose them:
+## caller, command_line or project_setting.
+var street_detail_layers: Array = []
+var street_detail_source := "not-loaded"
 var active_decals := 0
 var tags_evicted := 0
 var recovery_count := 0
@@ -62,6 +69,10 @@ func begin_load(expected_chunks: int) -> void:
 	vegetation_rendered_triangles = 0
 	vegetation_species_counts = {}
 	vegetation_zone_counts = {}
+	street_detail_rows = 0
+	street_detail_rows_by_layer = {}
+	street_detail_layers = []
+	street_detail_source = "not-loaded"
 
 
 func set_expected_chunks(expected_chunks: int) -> void:
@@ -98,6 +109,17 @@ func set_vegetation_report(report: Dictionary) -> void:
 	vegetation_rendered_triangles = int(report.get("rendered_triangles", 0))
 	vegetation_species_counts = report.get("species_counts", {}).duplicate(true)
 	vegetation_zone_counts = report.get("zone_counts", {}).duplicate(true)
+
+
+func set_street_detail_report(document: Dictionary) -> void:
+	var counts: Dictionary = document.get("counts", {})
+	street_detail_rows = int(counts.get("total", 0))
+	street_detail_rows_by_layer = (counts.get("placed_by_layer", {}) as Dictionary).duplicate(true)
+
+
+func set_street_detail_layers(layers: Array, source: String) -> void:
+	street_detail_layers = layers.duplicate()
+	street_detail_source = source
 
 
 func bind_runtime(player_body: CharacterBody3D, world_boundary: WorldBoundary) -> void:
@@ -143,6 +165,7 @@ func debug_text() -> String:
 		"Load: %d ms | chunks %d/%d | coverage %d+%d | failure %s" % [load_duration_msec, chunks_loaded, chunks_expected, playable_rows, context_rows, load_failure_code],
 		"Meshes: %d | surfaces %d | triangles %d" % [mesh_instances, surfaces, triangles],
 		"Vegetation: seed %d | %d instances | %d assets | %d batches | %d rendered triangles" % [vegetation_seed, vegetation_instances, vegetation_assets, vegetation_multimesh_batches, vegetation_rendered_triangles],
+		"Street detail: on %s (%s) | %d rows" % [", ".join(PackedStringArray(street_detail_layers)) if not street_detail_layers.is_empty() else "none", street_detail_source, street_detail_rows],
 		"Physics: %d bodies | %d shapes | nodes %d" % [static_bodies, shapes, node_count],
 		"Frame: %.1f FPS | %.2f ms" % [fps, frame_ms],
 		"Memory: %.1f MiB static" % static_memory_mib,

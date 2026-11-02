@@ -9,6 +9,14 @@ const HOUSING_FAMILY := preload("res://game/scripts/world/facades/housing_family
 
 const BULGARIAN_WALL = preload("res://game/scripts/world/facades/bulgarian_wall_live_attachment.gd")
 
+## The switchable street-detail layers: subtrees PlayableWorld/StreetDetail/<Layer>,
+## kept out of the chunk meshes. Roads, sidewalks and other ground surfaces stay
+## in the chunks and are always on. A layer that is off is freed after loading,
+## collision included.
+const STREET_DETAIL_LAYERS := GeneratedWorldContract.STREET_DETAIL_LAYERS
+const STREET_DETAIL_ENABLED_SETTING := "treasure_island/street_detail/enabled"
+const STREET_DETAIL_LAYERS_SETTING := "treasure_island/street_detail/layers"
+
 signal load_progress(loaded: int, total: int)
 signal world_ready(report: Dictionary)
 signal world_failed(code: String, message: String, source_keys: Array)
@@ -18,16 +26,22 @@ signal world_failed(code: String, message: String, source_keys: Array)
 @onready var ground_and_areas: Node3D = $PlayableWorld/GroundAndAreas
 @onready var roads_and_paths: Node3D = $PlayableWorld/RoadsAndPaths
 @onready var buildings: Node3D = $PlayableWorld/Buildings
-@onready var vegetation: Node3D = $PlayableWorld/Vegetation
+@onready var street_detail: Node3D = $PlayableWorld/StreetDetail
 @onready var ybi_context: Node3D = $ContextWorld/YerbaBuenaIsland
 @onready var bridge_context: Node3D = $ContextWorld/BayBridge
 @onready var boundary_attached_context: Node3D = $ContextWorld/BoundaryAttachedVisuals
 @onready var world_boundary: WorldBoundary = $WorldBoundary
 @onready var runtime_evidence: RuntimeEvidence = $RuntimeEvidence
 
+## Street-detail layers a caller (a test or the static-world bake) wants for the
+## next load, as an array of layer names; set it before load_world runs. null
+## leaves the choice to the command line and the project setting.
+var street_detail_request: Variant = null
+
 var _spawn_transform := Transform3D.IDENTITY
 var _validated := false
 var _loading := false
+var _street_detail_layers: Array[String] = []
 
 
 func load_world(manifest_path: String = default_manifest_path) -> void:
@@ -37,8 +51,12 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 	_validated = false
 	_clear_generated_children()
 	runtime_evidence.begin_load(0)
+	var street_choice := resolve_street_detail()
+	if not street_choice.ok:
+		_fail("street_detail_toggle", str(street_choice.message), [])
+		return
 	if OS.has_feature("web") or OS.has_feature("prebuilt_native_world") or OS.get_cmdline_user_args().has("--use-prebuilt-world"):
-		_load_prebuilt()
+		_load_prebuilt(street_choice)
 		return
 	var validation := GeneratedWorldContract.load_and_validate(manifest_path)
 	if not validation.ok:
@@ -103,8 +121,10 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 		vegetation_result.node.free()
 		_fail("mersea", str(mersea_result.message), [])
 		return
-	vegetation.add_child(vegetation_result.node)
+	street_detail_layer("vegetation").add_child(vegetation_result.node)
 	runtime_evidence.set_vegetation_report(vegetation_result)
+	runtime_evidence.set_street_detail_report(validation.street_detail)
+	_apply_street_detail_choice(street_choice)
 	world_boundary.configure(validation.boundary)
 	_spawn_transform = validation.spawn_transform
 	_validated = true
@@ -114,11 +134,12 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 	ready_report["bulgarian_wall"] = bulgarian_result
 	ready_report["vegetation_multimesh_batches"] = int(vegetation_result.multimesh_batches)
 	ready_report["vegetation_rendered_triangles"] = int(vegetation_result.rendered_triangles)
+	ready_report["street_detail"] = street_detail_report()
 	runtime_evidence.finish_load(ready_report)
 	world_ready.emit(ready_report)
 
 
-func _load_prebuilt() -> void:
+func _load_prebuilt(street_choice: Dictionary) -> void:
 	STARTUP_MARKS.mark("resource_load_begin")
 	var packed := load(PREBUILT_WORLD.resource_path()) as PackedScene
 	STARTUP_MARKS.mark("resource_load_end")
@@ -141,7 +162,10 @@ func _load_prebuilt() -> void:
 		_fail("prebuilt_state", "Prebuilt world is missing validated startup state.", [])
 		return
 	var valid_categories := true
-	for path: String in ["PlayableWorld/GroundAndAreas", "PlayableWorld/RoadsAndPaths", "PlayableWorld/Buildings", "PlayableWorld/Vegetation", "ContextWorld/YerbaBuenaIsland", "ContextWorld/BayBridge", "ContextWorld/BoundaryAttachedVisuals"]:
+	var required_paths: Array[String] = ["PlayableWorld/GroundAndAreas", "PlayableWorld/RoadsAndPaths", "PlayableWorld/Buildings", "PlayableWorld/StreetDetail", "ContextWorld/YerbaBuenaIsland", "ContextWorld/BayBridge", "ContextWorld/BoundaryAttachedVisuals"]
+	for layer: String in STREET_DETAIL_LAYERS:
+		required_paths.append("PlayableWorld/StreetDetail/" + layer.capitalize())
+	for path: String in required_paths:
 		valid_categories = valid_categories and baked.get_node_or_null(path) is Node3D
 	for field: String in PREBUILT_WORLD.EVIDENCE_FIELDS:
 		valid_categories = valid_categories and evidence.has(field) and typeof(evidence.get(field)) == typeof(runtime_evidence.get(field))
@@ -160,7 +184,7 @@ func _load_prebuilt() -> void:
 	ground_and_areas = $PlayableWorld/GroundAndAreas
 	roads_and_paths = $PlayableWorld/RoadsAndPaths
 	buildings = $PlayableWorld/Buildings
-	vegetation = $PlayableWorld/Vegetation
+	street_detail = $PlayableWorld/StreetDetail
 	ybi_context = $ContextWorld/YerbaBuenaIsland
 	bridge_context = $ContextWorld/BayBridge
 	boundary_attached_context = $ContextWorld/BoundaryAttachedVisuals
@@ -169,14 +193,143 @@ func _load_prebuilt() -> void:
 	for field: String in PREBUILT_WORLD.EVIDENCE_FIELDS:
 		runtime_evidence.set(field, evidence[field])
 	baked.free()
+	_apply_street_detail_choice(street_choice)
 	_validated = true
 	_loading = false
-	runtime_evidence.finish_load(report)
+	var ready_report: Dictionary = (report as Dictionary).duplicate(true)
+	ready_report["street_detail"] = street_detail_report()
+	runtime_evidence.finish_load(ready_report)
 	STARTUP_MARKS.mark("attach_configure_end")
 	STARTUP_MARKS.mark("reflection_setup_begin")
 	preload("res://game/scripts/world/facades/mersea_model.gd").resume_prebuilt_reflections(buildings)
 	STARTUP_MARKS.mark("reflection_setup_end")
-	world_ready.emit(report)
+	world_ready.emit(ready_report)
+
+
+## The street-detail layers to keep for this load and where the choice came from:
+## the caller's street_detail_request, else the command line
+## (--street-detail on|off, --street-detail-layers vegetation,fences), else the
+## project setting. {"ok": true, "layers": [...], "source": "..."} or
+## {"ok": false, "message": "..."}.
+func resolve_street_detail() -> Dictionary:
+	if street_detail_request != null:
+		if not street_detail_request is Array:
+			return _street_detail_error("street_detail_request must be an array of layer names")
+		return _street_detail_choice(street_detail_request, "caller")
+	return parse_street_detail(
+		OS.get_cmdline_user_args(),
+		ProjectSettings.get_setting(STREET_DETAIL_ENABLED_SETTING, true),
+		ProjectSettings.get_setting(STREET_DETAIL_LAYERS_SETTING, ",".join(PackedStringArray(STREET_DETAIL_LAYERS))),
+	)
+
+
+## The command-line and project-setting part of resolve_street_detail. Flags and
+## their values are separate arguments; --street-detail off cannot be combined
+## with a layer list, and any bad value is an error rather than a silent default.
+static func parse_street_detail(args: PackedStringArray, setting_enabled: Variant, setting_layers: Variant) -> Dictionary:
+	var values := {}
+	var index := 0
+	while index < args.size():
+		var arg := args[index]
+		if arg.begins_with("--street-detail=") or arg.begins_with("--street-detail-layers="):
+			return _street_detail_error("pass %s and its value as separate arguments" % arg.get_slice("=", 0))
+		if arg in ["--street-detail", "--street-detail-layers"]:
+			if values.has(arg):
+				return _street_detail_error("%s is given twice" % arg)
+			if index + 1 >= args.size() or args[index + 1].is_empty() or args[index + 1].begins_with("--"):
+				return _street_detail_error("%s needs a value" % arg)
+			values[arg] = args[index + 1]
+			index += 2
+			continue
+		index += 1
+	if not values.is_empty():
+		var mode := str(values.get("--street-detail", "on"))
+		if mode not in ["on", "off"]:
+			return _street_detail_error("--street-detail takes on or off, not %s" % mode)
+		if mode == "off":
+			if values.has("--street-detail-layers"):
+				return _street_detail_error("--street-detail off conflicts with --street-detail-layers")
+			return _street_detail_choice([], "command_line")
+		if values.has("--street-detail-layers"):
+			return _street_detail_choice(str(values["--street-detail-layers"]).split(","), "command_line")
+		return _street_detail_choice(STREET_DETAIL_LAYERS, "command_line")
+	if not setting_enabled is bool:
+		return _street_detail_error("%s must be true or false" % STREET_DETAIL_ENABLED_SETTING)
+	if not setting_enabled:
+		return _street_detail_choice([], "project_setting")
+	if setting_layers is String:
+		return _street_detail_choice((setting_layers as String).split(","), "project_setting")
+	if setting_layers is PackedStringArray or setting_layers is Array:
+		return _street_detail_choice(setting_layers, "project_setting")
+	return _street_detail_error("%s must list layer names" % STREET_DETAIL_LAYERS_SETTING)
+
+
+## The node that holds one street-detail layer ("vegetation" -> StreetDetail/Vegetation).
+func street_detail_layer(layer: String) -> Node3D:
+	return street_detail.get_node(layer.capitalize()) as Node3D
+
+
+## The street-detail layers that are on, in canonical order.
+func get_street_detail_layers() -> Array[String]:
+	return _street_detail_layers.duplicate()
+
+
+## Switches street-detail layers off after loading: frees every layer that is not
+## in layers, collision included. A freed layer stays empty until the next load,
+## so this cannot switch a layer back on. Returns {"ok", "layers"} or {"ok", "message"}.
+func apply_street_detail(layers: Array) -> Dictionary:
+	var choice := _street_detail_choice(layers, "caller")
+	if not choice.ok:
+		return choice
+	for layer: String in choice.layers:
+		if layer not in _street_detail_layers:
+			return _street_detail_error("street-detail layer %s is already off; reload the world to restore it" % layer)
+	_apply_street_detail_choice(choice)
+	return {"ok": true, "layers": get_street_detail_layers()}
+
+
+func street_detail_report() -> Dictionary:
+	var children := {}
+	for layer: String in STREET_DETAIL_LAYERS:
+		children[layer] = street_detail_layer(layer).get_child_count()
+	return {
+		"layers_on": get_street_detail_layers(),
+		"source": runtime_evidence.street_detail_source,
+		"layer_nodes": children,
+		"rows": runtime_evidence.street_detail_rows,
+	}
+
+
+func _apply_street_detail_choice(choice: Dictionary) -> void:
+	var keep: Array[String] = []
+	keep.assign(choice.layers)
+	for layer: String in STREET_DETAIL_LAYERS:
+		if layer in keep:
+			continue
+		for child: Node in street_detail_layer(layer).get_children():
+			child.free()
+	_street_detail_layers = keep
+	runtime_evidence.set_street_detail_layers(keep, str(choice.source))
+
+
+static func _street_detail_choice(names: Variant, source: String) -> Dictionary:
+	var chosen: Array[String] = []
+	for name_value: Variant in names:
+		var layer_name := str(name_value).strip_edges()
+		if layer_name not in STREET_DETAIL_LAYERS:
+			return _street_detail_error("unknown street-detail layer '%s' (layers: %s)" % [layer_name, ",".join(PackedStringArray(STREET_DETAIL_LAYERS))])
+		if layer_name in chosen:
+			return _street_detail_error("street-detail layer %s is listed twice" % layer_name)
+		chosen.append(layer_name)
+	var layers: Array[String] = []
+	for layer: String in STREET_DETAIL_LAYERS:
+		if layer in chosen:
+			layers.append(layer)
+	return {"ok": true, "layers": layers, "source": source}
+
+
+static func _street_detail_error(message: String) -> Dictionary:
+	return {"ok": false, "message": message}
 
 
 func get_spawn_transform() -> Transform3D:
@@ -211,7 +364,11 @@ func _free_staged(reports: Array[Dictionary]) -> void:
 
 
 func _clear_generated_children() -> void:
-	for parent: Node3D in [ground_and_areas, roads_and_paths, buildings, vegetation, ybi_context, bridge_context, boundary_attached_context]:
+	var parents: Array[Node3D] = [ground_and_areas, roads_and_paths, buildings, ybi_context, bridge_context, boundary_attached_context]
+	if street_detail != null:
+		for layer: String in STREET_DETAIL_LAYERS:
+			parents.append(street_detail_layer(layer))
+	for parent: Node3D in parents:
 		if parent == null:
 			continue
 		for child: Node in parent.get_children():

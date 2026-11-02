@@ -37,7 +37,15 @@ script = ExtResource("1_loader")
 
 [node name="Buildings" type="Node3D" parent="PlayableWorld"]
 
-[node name="Vegetation" type="Node3D" parent="PlayableWorld"]
+[node name="StreetDetail" type="Node3D" parent="PlayableWorld"]
+
+[node name="Vegetation" type="Node3D" parent="PlayableWorld/StreetDetail"]
+
+[node name="Furniture" type="Node3D" parent="PlayableWorld/StreetDetail"]
+
+[node name="Fences" type="Node3D" parent="PlayableWorld/StreetDetail"]
+
+[node name="Clutter" type="Node3D" parent="PlayableWorld/StreetDetail"]
 
 [node name="ContextWorld" type="Node3D" parent="."]
 

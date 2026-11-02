@@ -113,6 +113,7 @@ import {
   NAIP_TREE_ANNOTATION_SHA256,
   generateVegetation,
 } from "./lib/vegetation-generation.mjs";
+import { generateStreetDetail } from "./lib/street-detail-generation.mjs";
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(scriptDirectory, "..");
@@ -331,7 +332,7 @@ function loadSources(temporaryDirectory, ledgerRows) {
     joined.set(row.source_key, { row, tags, exported });
   }
   invariant(joined.size === ledgerRows.length, "Source join did not resolve one-to-one");
-  return { joined, rawOsm, rawSources };
+  return { joined, rawOsm, rawSources, properSources };
 }
 
 function exactBoundary() {
@@ -1992,6 +1993,17 @@ function main() {
       spawn: [spawn.origin[0], spawn.origin[2]],
       naipTreeAnnotations: JSON.parse(readFileSync(NAIP_TREE_ANNOTATIONS_PATH, "utf8")),
     });
+    const streetDetail = generateStreetDetail({
+      projectRoot,
+      boundary,
+      playableObjects,
+      chunks,
+      terrainSupportAt: terrainSupportFromChunks,
+      areaStyleFor: (object) => areaStyle(object.tags, object.roles),
+      properSources: loaded.properSources,
+      rawOsm: loaded.rawOsm,
+      spawn: [spawn.origin[0], spawn.origin[2]],
+    });
     terrainDocument.surface_anchors = TERRAIN_SURFACE_ANCHORS.map((anchor) => ({
       ...anchor,
       elevation_m: terrainElevationFromChunks(chunks, anchor.x, -anchor.z),
@@ -2004,6 +2016,7 @@ function main() {
     writeArtifact(stagingRoot, "logical-objects.json", logicalObjects);
     writeArtifact(stagingRoot, "terrain.json", terrainDocument);
     writeArtifact(stagingRoot, "vegetation.json", vegetation);
+    writeArtifact(stagingRoot, "street_detail.json", streetDetail);
     writeArtifact(stagingRoot, "qa/pavement-skin.json", chunks.pavement_skin);
     for (const chunk of [...chunks.values()].sort((left, right) => compareChunkIds(left.chunk_id, right.chunk_id))) {
       writeArtifact(stagingRoot, `chunks/${chunk.chunk_id}.json`, chunk);
@@ -2141,8 +2154,9 @@ function main() {
     const contextDescriptor = preManifestFiles.find((file) => file.path === "context.json");
     const terrainDescriptor = preManifestFiles.find((file) => file.path === "terrain.json");
     const vegetationDescriptor = preManifestFiles.find((file) => file.path === "vegetation.json");
+    const streetDetailDescriptor = preManifestFiles.find((file) => file.path === "street_detail.json");
     const chunkDescriptors = preManifestFiles.filter((file) => file.path.startsWith("chunks/"));
-    invariant(coverageDescriptor && contextDescriptor && terrainDescriptor && vegetationDescriptor && chunkDescriptors.length === chunks.size, "Manifest artifact discovery failed");
+    invariant(coverageDescriptor && contextDescriptor && terrainDescriptor && vegetationDescriptor && streetDetailDescriptor && chunkDescriptors.length === chunks.size, "Manifest artifact discovery failed");
     const manifest = {
       schema_version: WORLD_SCHEMA,
       generator_version: GENERATOR_VERSION,
@@ -2175,6 +2189,7 @@ function main() {
       context: contextDescriptor,
       terrain: terrainDescriptor,
       vegetation: vegetationDescriptor,
+      street_detail: streetDetailDescriptor,
       chunks: chunkDescriptors.map((descriptor) => ({
         chunk_id: descriptor.path.slice("chunks/".length, -".json".length),
         ...descriptor,

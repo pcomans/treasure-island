@@ -9,6 +9,9 @@
 # 2. The behaviour tests: the game parses, loads and plays, and every building
 #    in the score is present and fits (game/tests/shared/island_test.gd), both
 #    in the world generated at startup and in the baked world desktop exports load.
+# 3. The generated-world checks, including the street-detail clearance check:
+#    with all street-detail layers on, nothing intrudes on doors, stairs, their
+#    approaches, the spawn or the QA corridors.
 set -uo pipefail
 cd "$(dirname "$0")/.."
 # npm/node live here in the devcontainer (node feature); non-login shells lack it.
@@ -124,6 +127,9 @@ node tools/validate_godot_world.mjs >/dev/null || failed+=("tools/validate_godot
 
 echo "== tools/check_godot_world_determinism.mjs"
 node tools/check_godot_world_determinism.mjs >/dev/null || failed+=("tools/check_godot_world_determinism.mjs")
+
+echo "== tools/check_street_detail_clearance.mjs"
+node tools/check_street_detail_clearance.mjs || failed+=("tools/check_street_detail_clearance.mjs")
 
 echo
 if [ ${#failed[@]} -eq 0 ]; then

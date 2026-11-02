@@ -20,6 +20,7 @@ It must pass before anything is pushed to `main`.
 | `shared/island_test.gd -- --use-prebuilt-world` | The same, on the baked world desktop exports load (baked first by `tools/prebuild-static-world.sh native`, removed afterwards). |
 | `tools/validate_godot_world.mjs` | The committed generated world is valid. |
 | `tools/check_godot_world_determinism.mjs` | Fresh world builds from the OSM sources are identical to each other and to the committed world. |
+| `tools/check_street_detail_clearance.mjs` | With every street-detail layer on, nothing intrudes on a catalog stair, its door or approach, the ferry spawn, the ferry path or the QA route. |
 
 Checks for one building, used while working on it (see [AGENTS.md](../../AGENTS.md#what-done-means-for-a-building)):
 
@@ -31,6 +32,10 @@ tools/build-mac.sh   # Mac build + content audit + launch check
 
 A `--views` focused view may add `camera_xyz` with a vertical `fov` (default 70) to shoot from a free camera aimed at its `target_xyz`, for example to match a reference photo, or `"projection": "ortho"` with `ortho_size` (vertical extent in metres) for a square-on elevation.
 The player avatar is hidden in every shot; `--show-player` keeps it.
+
+Street detail (the vegetation, furniture, fences and clutter layers under `PlayableWorld/StreetDetail`) is on in play, the web build and `island_test.gd`, and off in `building_fit_test.gd`.
+`building_shots.gd` takes close-ups and focused views with it off and context, island and overhead views both ways (`NAME-street-on.png`, `NAME-street-off.png`); `--street-detail off|on|both` sets every view.
+Override a test with `-- --street-detail on|off`, or choose layers with `--street-detail-layers vegetation,fences` (`island_test.gd`); the play default is the project setting `treasure_island/street_detail/enabled` and `.../layers`.
 
 `shared/` holds these checks and their helpers (`world_harness.gd`, `building_fit.gd`,
 `catalog.gd`). `support/` files are loaded by game scripts at runtime.

@@ -1,0 +1,9 @@
+{
+  "schema_version": "ti.street-detail-set-pieces/1",
+  "notes": [
+    "Hand-picked street-detail set pieces, each {id, kind, asset, xz, yaw, reason, reference}.",
+    "xz is world metres (+X east, +Z south); yaw is radians about +Y, turning the asset's -Z front.",
+    "tools/build_godot_world.mjs rejects an entry that leaves the land or enters the shared exclusion mask."
+  ],
+  "set_pieces": []
+}

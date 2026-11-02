@@ -20,6 +20,8 @@ func _run() -> void:
 		quit(1)
 		return
 	var world := load("res://game/scenes/world/world_root.tscn").instantiate() as WorldLoader
+	# The bake keeps every street-detail layer; the baked world switches them when it loads.
+	world.street_detail_request = WorldLoader.STREET_DETAIL_LAYERS.duplicate()
 	root.add_child(world)
 	world.world_failed.connect(func(code: String, message: String, _keys: Array) -> void:
 		push_error(code + ": " + message)
@@ -29,6 +31,7 @@ func _run() -> void:
 		quit(1)
 		return
 	print("SOURCE_WORLD_MS ", world.runtime_evidence.load_duration_msec)
+	print("BAKE_STREET_DETAIL layers_on=", ",".join(PackedStringArray(world.get_street_detail_layers())), " rows=", world.runtime_evidence.street_detail_rows)
 	var packed := PREBUILT_WORLD.pack_world(world)
 	if packed == null:
 		quit(1)

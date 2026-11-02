@@ -38,7 +38,9 @@ tools/godot --headless --path . --script game/tests/<test>.gd  # a headless test
 ## Check a building
 
 ```sh
-# Screenshots for review: gameplay close-ups, the building in its surroundings, island overviews
+# Screenshots for review: gameplay close-ups, the building in its surroundings, island overviews.
+# Close-ups leave out street detail (trees, furniture, fences, clutter); surroundings and
+# overviews come both ways (NAME-street-on.png, NAME-street-off.png). --street-detail off|on|both overrides.
 tools/godot --path . --resolution 1600x900 --script game/tests/shared/building_shots.gd -- --source w291189336 --island --out /tmp/shots
 
 # Fit and playability: roof and walls are solid, walls reach the ground, the player can walk up to it

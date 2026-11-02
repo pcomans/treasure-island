@@ -103,3 +103,8 @@ anti_aliasing/quality/msaa_3d=2
 textures/vram_compression/import_etc2_astc=true
 textures/default_filters/use_nearest_mipmap_filter=false
 environment/defaults/default_clear_color=Color(0.46, 0.69, 0.86, 1)
+
+[treasure_island]
+
+street_detail/enabled=true
+street_detail/layers="vegetation,furniture,fences,clutter"

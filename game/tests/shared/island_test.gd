@@ -7,6 +7,8 @@ extends SceneTree
 ## --fixed-fps 60 lets the walking simulation run as fast as the CPU allows.
 ## Optional -- --use-prebuilt-world: run the same checks on the baked native
 ## world that desktop exports load (bake it first: tools/prebuild-static-world.sh native).
+## Optional -- --street-detail on|off or --street-detail-layers vegetation,fences:
+## the street-detail layers to load (default: the project setting, on).
 ## Optional -- --diagnose-after SOURCE: query four sides of subsequent scored
 ## units only, without placement/input; always diagnostic HOLD and exit1.
 
@@ -29,6 +31,13 @@ func _run() -> void:
 			print("FAIL: duplicate --use-prebuilt-world")
 			quit(1)
 			return
+	# WorldLoader reads and validates the street-detail options itself.
+	for flag: String in ["--street-detail", "--street-detail-layers"]:
+		while raw.has(flag):
+			var at := raw.find(flag)
+			if at + 1 < raw.size() and not raw[at + 1].begins_with("--"):
+				raw.remove_at(at + 1)
+			raw.remove_at(at)
 	var diagnostic := not raw.is_empty()
 	var diagnostic_units: Array[Dictionary] = []
 	if diagnostic:
@@ -55,6 +64,14 @@ func _run() -> void:
 	var error := await h.load_world()
 	if error != "":
 		print("FAIL: " + error)
+		quit(1)
+		return
+	print(h.street_detail_summary())
+	var street_problems := h.street_detail_problems()
+	if not street_problems.is_empty():
+		for problem in street_problems:
+			print("FAIL: " + problem)
+		h.main.queue_free()
 		quit(1)
 		return
 	if diagnostic:
@@ -90,7 +107,8 @@ func _run() -> void:
 			failures.append("island checks stopped after unsafe failure at %s; %d remaining buildings untested" % [key, accepted.size() - checked])
 			break
 	if failures.is_empty():
-		print("PASS: island loads and all %d scored buildings fit%s" % [accepted.size(), " (prebuilt native world)" if prebuilt else ""])
+		var on := h.world.get_street_detail_layers()
+		print("PASS: island loads and all %d scored buildings fit%s, street detail %s" % [accepted.size(), " (prebuilt native world)" if prebuilt else "", "on: " + ",".join(PackedStringArray(on)) if not on.is_empty() else "off"])
 	else:
 		for message in failures:
 			print("FAIL: " + message)
