@@ -59,6 +59,9 @@ const SAFE_ID = /^[a-z0-9_]+$/u;
 const FOOTPRINT_EXTRA_M = 0.1;
 // Clear space kept between a car and street furniture or fence runs.
 const ITEM_CLEAR_M = 0.15;
+// Paints a van comes in (the rule's weights, these only).
+const VAN_PAINTS = Object.freeze(["black", "dark_grey", "grey", "silver", "white"]);
+const pickFrom = (weights, names) => Object.fromEntries(Object.entries(weights).filter(([name]) => names.includes(name)));
 // Bus stops keep this much curb clear on each side.
 const BUS_STOP_CLEAR_M = 12;
 
@@ -283,7 +286,9 @@ export function placeStreetClutter({
   // The car's body, paint, finish and details, seeded by its row id.
   const carParams = (rule, identity) => {
     const body = pickWeighted(rule.mix, hashUnit(seed, identity, "body"));
-    const paint = body === "utility" ? "white" : pickWeighted(rule.paints, hashUnit(seed, identity, "paint"));
+    // Work vehicles keep work colours: utility trucks white, vans white, black or grey.
+    const paints = body === "utility" ? { white: 1 } : body === "van" ? pickFrom(rule.paints, VAN_PAINTS) : rule.paints;
+    const paint = pickWeighted(paints, hashUnit(seed, identity, "paint"));
     const finishes = PAINT_FINISHES[paint];
     const finish = finishes[Math.min(finishes.length - 1, Math.floor(hashUnit(seed, identity, "finish") * (finishes.length + 1)) % finishes.length)];
     const roof = body === "crossover" && !["black", "dark_grey", "navy"].includes(paint) && hashUnit(seed, identity, "roof") < 0.22 ? "black" : "body";
