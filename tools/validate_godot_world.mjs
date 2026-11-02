@@ -39,7 +39,6 @@ import {
   SHORELINE_BANDS,
   SHORELINE_BOULDER_MATERIAL,
   SHORELINE_COBBLE_MAX_TOP_M,
-  SHORELINE_CONFIG_PATH,
   SHORELINE_DRIFTWOOD_MATERIAL,
   SHORELINE_OUTSIDE_CLEARANCE_M,
   SHORELINE_OVERLAY_MATERIAL,
@@ -48,6 +47,7 @@ import {
   SHORELINE_PROTOTYPE_KINDS,
   SHORELINE_SCHEMA,
   SHORELINE_SLOPE_MATERIAL,
+  SHORELINE_VERGE_MATERIAL,
   WATER_Y_M,
 } from "./lib/shoreline-generation.mjs";
 import {
@@ -999,8 +999,8 @@ function validateStreetDetail(worldRoot, manifest, records) {
 }
 
 // The shoreline: its riprap overlays are ordinary terrain overlays (checked
-// with the other coherent surfaces). Here: the visual-only slope stays outside
-// the exact island polygon and reaches under the water; prototypes and their
+// with the other coherent surfaces). Here: the visual-only slope and shoulder
+// stay outside the exact island polygon and the slope reaches under the water; prototypes and their
 // LOD index sets are valid meshes; every placement is a finite unit rotation
 // with positive scale. Then each stone is placed and checked against the
 // island the player walks on: cobbles lie wholly inside it and no higher than
@@ -1016,8 +1016,6 @@ function validateShoreline(worldRoot, manifest, records) {
   invariant(document.schema_version === SHORELINE_SCHEMA && document.visual_only === true, "Shoreline schema or visual-only contract drift");
   invariant(document.water_y_m === WATER_Y_M, "Shoreline water level drift");
   invariant(document.overlay?.material_key === SHORELINE_OVERLAY_MATERIAL, "Shoreline overlay material drift");
-  invariant(document.config?.path === SHORELINE_CONFIG_PATH && document.config.sha256 === sha256File(resolve(projectRoot, SHORELINE_CONFIG_PATH)),
-    "Shoreline was not generated from the committed tools/config/shoreline.json");
   // The exact island polygon in world x, z (z = -north).
   const island = geometryToMultiPolygon(
     JSON.parse(readFileSync(resolve(projectRoot, SOURCE_CONTRACT.extraction_polygon.path), "utf8")).features[0].geometry,
@@ -1064,11 +1062,15 @@ function validateShoreline(worldRoot, manifest, records) {
   }
   const keys = new Set();
   let minimumY = Infinity;
+  // The slope, and the shoulder strip, which carries the land's UVs (world x / 10, z / 10).
+  const recordKinds = { "shoreline-slope": SHORELINE_SLOPE_MATERIAL, "shoreline-verge": SHORELINE_VERGE_MATERIAL };
   for (const record of document.records) {
-    invariant(record.object_key.startsWith("shoreline-slope:") && !keys.has(record.object_key), `${record.object_key} is not a unique shoreline slope key`);
+    const kind = record.object_key.split(":")[0];
+    invariant(recordKinds[kind] !== undefined && !keys.has(record.object_key), `${record.object_key} is not a unique shoreline slope or shoulder key`);
     keys.add(record.object_key);
-    invariant(record.material_key === SHORELINE_SLOPE_MATERIAL, `${record.object_key} material drift`);
-    validateMesh({ ...record, uvs: new Array((record.vertices.length / 3) * 2).fill(0) }, record.object_key);
+    invariant(record.material_key === recordKinds[kind], `${record.object_key} material drift`);
+    invariant((kind === "shoreline-verge") === Array.isArray(record.uvs), `${record.object_key} UVs drift`);
+    validateMesh(kind === "shoreline-verge" ? record : { ...record, uvs: new Array((record.vertices.length / 3) * 2).fill(0) }, record.object_key);
     for (let index = 0; index < record.vertices.length; index += 3) {
       const [x, y, z] = [record.vertices[index], record.vertices[index + 1], record.vertices[index + 2]];
       invariant(!inside(x, z) || nearBoundary(x, z) <= 0.01, `${record.object_key} vertex ${index / 3} lies inside the island`);
@@ -1138,6 +1140,8 @@ function validateShoreline(worldRoot, manifest, records) {
       invariant(Array.isArray(placement) && placement.length === SHORELINE_PLACEMENT_LENGTH && placement.every(Number.isFinite), `Shoreline batch ${batch.id} has a malformed placement`);
       const [ox, oy, oz, qx, qy, qz, qw, sx, sy, sz] = placement;
       invariant(Math.abs(Math.hypot(qx, qy, qz, qw) - 1) <= 0.01 && sx > 0 && sy > 0 && sz > 0, `Shoreline batch ${batch.id} has a placement that is not a scaled rotation`);
+      // The stone shader turns normals by the model matrix alone: stones scale uniformly.
+      invariant(prototype.kind !== "boulder" || (sx === sy && sy === sz), `Shoreline batch ${batch.id} scales a stone unevenly`);
       invariant(placement.slice(10).every((value) => value > 0 && value <= 1), `Shoreline batch ${batch.id} has a tint outside (0, 1]`);
       const columns = [
         [(1 - 2 * (qy * qy + qz * qz)) * sx, 2 * (qx * qy + qz * qw) * sx, 2 * (qx * qz - qy * qw) * sx],

@@ -53,7 +53,7 @@ func _initialize() -> void:
 	if not _shoreline_material_matches(builder):
 		quit(1)
 		return
-	print("PASS: %d Poly Haven semantic materials retain official source dimensions and exact maps while using approved effective repeats, mipmapped filtering, and pinned subtle normals; land and area records use the shared ground-cover families; the shoreline slope and stones share one riprap shader with mipmapped textures and its band takes the field ground cover" % EXPECTED_MATERIALS.size())
+	print("PASS: %d Poly Haven semantic materials retain official source dimensions and exact maps while using approved effective repeats, mipmapped filtering, and pinned subtle normals; land and area records use the shared ground-cover families; the shoreline slope and stones share one riprap shader with mipmapped textures, and its band and shoulder share the verge's ground cover" % EXPECTED_MATERIALS.size())
 	quit(0)
 
 
@@ -213,8 +213,8 @@ func _ground_overrides_name_generated_areas() -> bool:
 
 ## The shoreline slope and the stones are two shared materials of one riprap
 ## shader whose generated textures load with mipmaps; a riprap overlay record
-## (the band inside the outline) gets the field ground cover with tangents and
-## no collision.
+## (the band inside the outline) gets the verge's ground cover with tangents and
+## no collision, and the shoulder outside the outline gets the same cover.
 func _shoreline_material_matches(builder: WorldChunkBuilder) -> bool:
 	var materials := [ShorelineBuilder.slope_material(), ShorelineBuilder.stone_material()]
 	for index in materials.size():
@@ -254,7 +254,14 @@ func _shoreline_material_matches(builder: WorldChunkBuilder) -> bool:
 	var has_tangents := arrays[Mesh.ARRAY_TANGENT] is PackedFloat32Array and (arrays[Mesh.ARRAY_TANGENT] as PackedFloat32Array).size() == 12
 	var has_collision := record_node.get_node_or_null("Collision") != null
 	record_node.free()
-	return _require(built == GROUND_COVER.material("field"), "A riprap overlay record did not get the field ground cover.") \
+	var verge := GROUND_COVER.material(ShorelineBuilder.BAND_GROUND_FAMILY)
+	# A shoulder record (it carries the land's UVs) gets tangents for the same normal map.
+	var shoulder := ShorelineBuilder._array_mesh({"vertices": record.vertices, "normals": record.normals, "uvs": record.uvs, "indices": record.indices}, ShorelineBuilder.verge_material())
+	var shoulder_arrays := shoulder.surface_get_arrays(0)
+	var shoulder_has_tangents := shoulder_arrays[Mesh.ARRAY_TANGENT] is PackedFloat32Array and (shoulder_arrays[Mesh.ARRAY_TANGENT] as PackedFloat32Array).size() == 12
+	return _require(built == verge, "A riprap overlay record did not get the verge's ground cover.") \
+		and _require(ShorelineBuilder.verge_material() == verge and shoulder.surface_get_material(0) == verge, "The shoreline shoulder does not share the verge's ground cover.") \
+		and _require(shoulder_has_tangents, "A shoreline shoulder mesh lacks tangents for the ground cover's normal map.") \
 		and _require(has_tangents, "A riprap overlay record lacks tangents for the ground cover's normal map.") \
 		and _require(not has_collision, "A riprap overlay record has collision.")
 

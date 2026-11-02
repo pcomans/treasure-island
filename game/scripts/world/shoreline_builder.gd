@@ -1,14 +1,17 @@
 class_name ShorelineBuilder
 extends RefCounted
 ## Shoreline riprap from generated/world/shoreline.json
-## (tools/lib/shoreline-generation.mjs): the underlay slope outside the island
-## outline, the instanced rock heap over it (the top row and the heap), the low
-## cobbles in the band inside the outline and the driftwood. Visual only, like
-## the Yerba Buena context: no collision and no spray receiver. The band inside
-## the outline is an ordinary chunk overlay; world_chunk_builder.gd gives it the
-## land's own field ground cover (the dry verge at the top of the riprap).
+## (tools/lib/shoreline-generation.mjs): the flat shoulder just outside the
+## island outline, the underlay slope behind it, the instanced quarry stones
+## (top row, back row, shoulder stones and heap), the low cobbles in the band
+## inside the outline and the driftwood. Visual only, like the Yerba Buena
+## context: no collision and no spray receiver. The band inside the outline is
+## an ordinary chunk overlay; it and the shoulder share BAND_GROUND_FAMILY, the
+## dry dirt verge at the top of the riprap, so the verge runs on past the
+## outline to the stones.
 
 const RIPRAP_SHADER := preload("res://game/resources/materials/world/shoreline/riprap.gdshader")
+const GROUND_COVER := preload("res://game/scripts/world/ground_cover.gd")
 const RIPRAP_ALBEDO := preload("res://game/resources/textures/world/shoreline/riprap_albedo.png")
 const BOULDER_ALBEDO := preload("res://game/resources/textures/world/shoreline/boulder_albedo.png")
 const RENDER_WORLD_VISIBLE := 1
@@ -18,7 +21,11 @@ const SURFACE_STONE := 1
 ## Weathered, bleached driftwood, multiplied by each log's instance colour.
 const DRIFTWOOD_ALBEDO := Color(0.7, 0.68, 0.63)
 const SLOPE_MATERIAL := "shoreline_riprap"
+const VERGE_MATERIAL := "shoreline_verge"
 const STONE_MATERIAL := "shoreline_boulder"
+## The ground cover family of the verge: the band inside the outline (a chunk
+## overlay, see world_chunk_builder.gd) and the shoulder outside it.
+const BAND_GROUND_FAMILY := "bare"
 const DRIFTWOOD_MATERIAL := "shoreline_driftwood"
 
 static var _riprap := {}
@@ -30,9 +37,14 @@ static func slope_material() -> ShaderMaterial:
 	return _riprap_material(SLOPE_MATERIAL, SURFACE_SLOPE)
 
 
-## Every instanced stone: top row, heap and cobbles.
+## Every instanced stone: top row, back row, shoulder stones, heap and cobbles.
 static func stone_material() -> ShaderMaterial:
 	return _riprap_material(STONE_MATERIAL, SURFACE_STONE)
+
+
+## The shoulder strip outside the outline: the verge's own ground cover.
+static func verge_material() -> ShaderMaterial:
+	return GROUND_COVER.material(BAND_GROUND_FAMILY)
 
 
 static func driftwood_material() -> StandardMaterial3D:
@@ -68,9 +80,9 @@ func build(document: Dictionary) -> Dictionary:
 		var record: Dictionary = record_value
 		var instance := MeshInstance3D.new()
 		instance.name = str(record.object_key).validate_node_name()
-		instance.mesh = _array_mesh(record, slope_material())
+		instance.mesh = _array_mesh(record, verge_material() if str(record.material_key) == VERGE_MATERIAL else slope_material())
 		instance.layers = RENDER_WORLD_VISIBLE
-		# Like the terrain overlays, the slope receives shadows but casts none.
+		# Like the terrain overlays, the slope and shoulder receive shadows but cast none.
 		instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		instance.set_meta("source_keys", (record.source_keys as Array).duplicate())
 		instance.set_meta("visual_only", true)
@@ -132,11 +144,12 @@ func build(document: Dictionary) -> Dictionary:
 	}
 
 
-## An ArrayMesh from a generated mesh dictionary (vertices, normals, indices and
-## optional lods: [{error_m, indices}]). The generated contract winds triangles
-## counterclockwise around their outward normals; Godot treats clockwise as
-## front-facing, so each triplet is turned once here, as world_chunk_builder.gd
-## does for chunk records.
+## An ArrayMesh from a generated mesh dictionary (vertices, normals, indices,
+## and optional uvs, relative_height and lods: [{error_m, indices}]). The
+## generated contract winds triangles counterclockwise around their outward
+## normals; Godot treats clockwise as front-facing, so each triplet is turned
+## once here, as world_chunk_builder.gd does for chunk records. A mesh with
+## UVs (the shoulder) also gets tangents for the ground cover's normal map.
 static func _array_mesh(record: Dictionary, material: Material) -> ArrayMesh:
 	var vertices := PackedVector3Array()
 	var normals := PackedVector3Array()
@@ -163,7 +176,18 @@ static func _array_mesh(record: Dictionary, material: Material) -> ArrayMesh:
 		var lod: Dictionary = lod_value
 		lods[float(lod.error_m)] = _clockwise(lod.indices)
 	var mesh := ArrayMesh.new()
-	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays, [], lods)
+	if record.has("uvs"):
+		var uvs := PackedVector2Array()
+		var u: Array = record.uvs
+		for index in range(0, u.size(), 2):
+			uvs.append(Vector2(float(u[index]), float(u[index + 1])))
+		arrays[Mesh.ARRAY_TEX_UV] = uvs
+		var tool := SurfaceTool.new()
+		tool.create_from_arrays(arrays)
+		tool.generate_tangents()
+		mesh = tool.commit()
+	else:
+		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays, [], lods)
 	mesh.surface_set_material(0, material)
 	mesh.resource_name = str(record.get("object_key", record.get("id", "shoreline")))
 	return mesh

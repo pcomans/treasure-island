@@ -44,10 +44,10 @@ const BUILDING_1_HERO_MODEL := preload("res://game/scripts/world/facades/buildin
 const BUILDING_2_HERO_MODEL := preload("res://game/scripts/world/facades/building_2_hero_model.gd")
 const GROUND_COVER := preload("res://game/scripts/world/ground_cover.gd")
 ## The shoreline riprap overlay (tools/lib/shoreline-generation.mjs): the band
-## inside the outline is the dry verge at the top of the riprap, so it takes the
-## land's own ground cover family (the shoreline's cobbles are set in it).
+## inside the outline is the dry dirt verge at the top of the riprap, in the
+## ground cover family the shoreline's shoulder continues past the outline
+## (ShorelineBuilder.BAND_GROUND_FAMILY); the shoreline's cobbles are set in it.
 const SHORELINE_RIPRAP_OVERLAY := "terrain_riprap"
-const SHORELINE_BAND_GROUND_FAMILY := "field"
 ## Street ground (tools/lib/street-ground-generation.mjs): road paint is opaque
 ## with a cut-out for worn paint, asphalt wear is a blended decal; parking lanes
 ## reuse the road asphalt. Decal material key -> its shader and textures.
@@ -731,7 +731,7 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 	# falls back to the builder's own material.
 	var ground_family := "" if uvs.is_empty() else GROUND_COVER.family_for(record, is_context)
 	if ground_family == "" and not uvs.is_empty() and not is_context and str(record.material_key) == SHORELINE_RIPRAP_OVERLAY:
-		ground_family = SHORELINE_BAND_GROUND_FAMILY
+		ground_family = ShorelineBuilder.BAND_GROUND_FAMILY
 	if (POLYHAVEN_MATERIAL_TEXTURE_SET.has(str(record.material_key)) or ground_family != "") and not uvs.is_empty():
 		arrays[Mesh.ARRAY_TANGENT] = _tangents_for(vertices, normals, uvs, indices)
 	var placeholder_material: Material

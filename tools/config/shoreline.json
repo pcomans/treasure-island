@@ -4,9 +4,9 @@
   "notes": [
     "Rock armour (riprap) along the island edge, built by tools/lib/shoreline-generation.mjs into the chunk records and generated/world/shoreline.json. Always-on scenery, not a switchable street-detail layer.",
     "Every value here is an estimate for game art (production inference), read from the dated photos (Sep 2025 Street View at 83 Treasure Island Rd, a Sep 2026 view from the ferry float, Commons Aug 2021 c01/c08 and May 2025 c10/c11) and the USGS 3DEP 2023 DEM; none is survey data.",
-    "A segment takes the OSM breakwater polygon (man_made=breakwater, material=rock) between the distances s_m along the island outline w26767313 (start > end runs across the outline's start). Its part inside the outline, from the crest to the outline, is draped on the land as a terrain overlay with no collision: the dry grass verge at the top of the riprap (the land's own field ground cover), with low cobbles set in it, overlay_bias_m above the land: over the lawn and park overlays (0.02-0.05 m), under the paths (0.078-0.08 m). land_ground stays the only support there, so route QA, the regional anchors and boundary recovery are unchanged.",
-    "Outside the outline an underlay slope runs from the land edge down past the water plane (y -0.12) to toe_y_m. The DEM's gradient between dem_fit_m along each cross-section, clamped to gradient_m_per_m (the photographed 2:1 to 3:1) and smoothed over gradient_smoothing_m, sets it; relief_m of boulder-scale bumps fades in over top_blend_m below the land edge. It shows between the stones and stands in for them beyond their visibility range; vertical rock faces close the segment ends.",
-    "Stones are one shared set of weathered, subangular boulder shapes with their proportions baked in (prototypes; cobble_prototypes are flatter), each instance scaled uniformly by its size: a top row of big stones just outside the outline, each turned its own way, spaced spacing sizes apart and pushed out_jitter_m beyond the setback (their inner faces at least setback_m beyond the outline, about the player's radius), rising rise_m above the land edge, as the plaza photos show; a crest mound of big stones piled within depth_m behind them, topping out rise_m about the land edge; small gap_fill stones in the strip between the outline and the top row, their tops below_land_m under the land edge; a heap packed over the slope to toe_extra_m past the toe, largest size class first (neighbours overlap by up to 1 - overlap of their radii; bury and lift are shares of each stone's size; past the waterline only stones that stand clear of the water are kept); and low cobbles wholly inside the band, more of them toward the outline (outline_bias), rising at most top_m above the land, so the player walks over them. No stone spills past a segment end. Bleached driftwood logs and washed-up planks rest on the stone tops. Everything is visual only; structures (piers keep the slope under them, slipways cut it) clear the stones by clearance_m, except stones that top out under_drop_m below the land edge under a pier, paths clear the cobbles, and the street-detail hard shapes (spawn, ferry path, QA route, stairs, doors, approaches) clear everything. Each band fades out over its visibility_m [end, margin]."
+    "A segment takes the OSM breakwater polygon (man_made=breakwater, material=rock) between the distances s_m along the island outline w26767313 (start > end runs across the outline's start). Its part inside the outline, from the crest to the outline, is draped on the land as a terrain overlay with no collision, overlay_bias_m above the land: the dry dirt verge at the top of the riprap (the land's 'bare' ground cover), with low cobbles set in it. land_ground stays the only support there, so route QA, the regional anchors and boundary recovery are unchanged.",
+    "Outside the outline a flat shoulder shoulder_m wide continues the verge's ground cover at the land edge's height (the dirt and small stones in front of the rocks in the photos), and behind it an underlay slope runs down past the water plane (y -0.12) to toe_y_m. The DEM's gradient between dem_fit_m along each cross-section, clamped to gradient_m_per_m (the photographed 2:1 to 3:1) and smoothed over gradient_smoothing_m, sets it; relief_m of boulder-scale bumps fades in over top_blend_m behind the shoulder. It shows between the stones and stands in for them beyond their visibility range; vertical rock faces close the segment ends.",
+    "Stones are one shared set of angular quarry-stone shapes, convex blocks with flat broken faces and sharp edges (prototypes), each instance scaled uniformly by its size and tilted up to tilt_deg: a top row of stones just outside the outline (inner faces at least setback_m beyond it, about the player's radius), spaced spacing sizes apart and pushed out_jitter_m further, each buried by a bury share of its own height so big stones stand tall, up to max_rise_m above the land edge; a back row of big stones piled within depth_m behind it, aiming rise_m above the land edge less drop_per_m per metre out but always bedded in the slope, so the big ones rise above the top row; small shoulder stones in the shoulder, rising rise_m above it; a heap packed over the slope to toe_extra_m past the toe, largest size class first (neighbours overlap by up to 1 - overlap of their radii; bury and lift are shares of each stone's size); past the waterline only stones that stand clear of the water are kept; and low cobbles (small stones mostly buried in the dirt) wholly inside the band, more of them toward the outline (outline_bias), rising at most top_m above the land, so the player walks over them. No stone spills past a segment end. Bleached driftwood logs and washed-up planks rest on the stone tops. Everything is visual only; structures (piers keep the slope under them, slipways cut it) clear the stones by clearance_m, except stones that top out under_drop_m below the land edge under a pier, paths clear the cobbles, and the street-detail hard shapes (spawn, ferry path, QA route, stairs, doors, approaches) clear everything. Stones are batched per section_m of shore, band and shape; each band fades out over its visibility_m [end, margin]."
   ],
   "overlay_bias_m": 0.06,
   "slope": {
@@ -26,11 +26,12 @@
     "relief_wavelength_m": 1.4,
     "top_blend_m": 1.0,
     "end_cap_bottom_y_m": -0.9,
-    "section_m": 90
+    "section_m": 90,
+    "shoulder_m": 0.8
   },
   "stones": {
-    "prototypes": 10,
-    "section_m": 24,
+    "prototypes": 7,
+    "section_m": 90,
     "setback_m": 0.3,
     "visibility_m": {
       "cobble": [
@@ -52,44 +53,53 @@
     },
     "top": {
       "size_m": [
-        1.1,
-        1.85
+        0.55,
+        1.55
       ],
       "spacing": [
-        0.4,
-        0.62
+        0.35,
+        1.05
       ],
       "out_jitter_m": [
         0.0,
-        0.35
+        0.4
       ],
-      "rise_m": [
-        0.25,
-        0.9
-      ]
+      "bury": [
+        0.15,
+        0.42
+      ],
+      "max_rise_m": 1.3,
+      "tilt_deg": 22
     },
     "heap": {
       "classes": [
         {
           "size_m": [
-            1.0,
-            1.45
+            1.1,
+            1.6
           ],
-          "fill": 0.42
+          "fill": 0.3
         },
         {
           "size_m": [
-            0.65,
-            1.0
+            0.8,
+            1.25
           ],
           "fill": 0.32
         },
         {
           "size_m": [
-            0.38,
-            0.65
+            0.45,
+            0.8
           ],
-          "fill": 0.16
+          "fill": 0.22
+        },
+        {
+          "size_m": [
+            0.22,
+            0.45
+          ],
+          "fill": 0.07
         }
       ],
       "bury": [
@@ -101,19 +111,19 @@
         0.12
       ],
       "overlap": 0.8,
-      "tilt_deg": 14,
+      "tilt_deg": 25,
       "toe_extra_m": 0.15
     },
     "cobble": {
       "size_m": [
-        0.25,
-        0.55
+        0.18,
+        0.42
       ],
       "top_m": [
         0.03,
         0.11
       ],
-      "fill": 0.035,
+      "fill": 0.025,
       "edge_m": 0.05,
       "outline_bias": 2.5,
       "path_clearance_m": 0.25
@@ -122,16 +132,16 @@
       "spacing_m": 16,
       "acceptance": 0.75,
       "length_m": [
-        2.2,
-        4.2
+        2.6,
+        4.8
       ],
       "radius_m": [
-        0.09,
-        0.16
+        0.12,
+        0.2
       ],
       "d_m": [
-        0.9,
-        3.2
+        1.6,
+        4.2
       ],
       "yaw_jitter_deg": 30
     },
@@ -148,26 +158,29 @@
         "yaw_deg": 32
       }
     ],
-    "cobble_prototypes": 4,
     "crest": {
       "size_m": [
         0.8,
-        1.45
+        1.65
       ],
-      "fill": 0.85,
-      "depth_m": 1.9,
+      "fill": 0.75,
+      "depth_m": 2.4,
       "rise_m": [
-        -0.05,
-        0.45
-      ]
+        0.1,
+        1.3
+      ],
+      "drop_per_m": 0.05
     },
-    "gap_fill": {
+    "shoulder": {
       "size_m": [
-        0.3,
+        0.22,
         0.6
       ],
-      "fill": 0.7,
-      "below_land_m": 0.04
+      "fill": 0.18,
+      "rise_m": [
+        0.0,
+        0.2
+      ]
     }
   },
   "structures": {

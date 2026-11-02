@@ -2,8 +2,9 @@
 
 The shoreline riprap (`tools/lib/shoreline-generation.mjs`) samples two
 generated textures in `game/resources/materials/world/shoreline/riprap.gdshader`,
-triplanar in world space (no UVs). The band inside the island outline is the
-land's own field ground cover, not one of these.
+triplanar in world space (no UVs). The verge (the band inside the island
+outline and the shoulder just outside it) is the land's `bare` ground cover,
+not one of these.
 
 - `riprap_albedo.png`: a top-down view of a riprap revetment, stones with dark
   voids between them. The underlay slope outside the outline samples it at about
@@ -11,8 +12,9 @@ land's own field ground cover, not one of these.
   the stones' visibility range it shows only in the gaps of the stone heap and
   is darkened there, and beyond it it stands in for the heap.
 - `boulder_albedo.png`: the weathered skin of one grey boulder. Every instanced
-  stone (top row, crest, heap and cobbles) samples it at about 1.7 m per repeat,
-  each stone from its own offset, tinted per stone.
+  quarry stone (top row, back row, shoulder stones, heap and cobbles) samples it
+  on its flat faces at about 1.7 m per repeat, each stone from its own offset,
+  tinted per stone.
 
 Both were generated on 2026-11-02 with `tools/generate-texture` (Codex image
 generation, one image per call, text prompts only; no photograph was given to

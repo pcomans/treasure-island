@@ -5,8 +5,9 @@ render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_burley, specular_sc
 // materials (game/scripts/world/shoreline_builder.gd), chosen by `surface`:
 //   0  the underlay slope outside the outline. It shows only in the gaps of the
 //      stone heap nearby, so it is dark there (voids); far away, beyond the
-//      stones' visibility range, it stands in for the heap and fades up to the
-//      heap's average grey;
+//      stones' visibility range, it stands in for the heap at far_brightness,
+//      about the heap's average tone, so the band does not lighten where the
+//      stones fade out;
 //   1  the instanced stones (MultiMesh): the generated boulder skin, tinted per
 //      stone by its instance colour (COLOR.rgb), darker toward its buried base
 //      where neighbours meet it and lighter on sun-facing tops; the prototype's
@@ -22,6 +23,8 @@ render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_burley, specular_sc
 // Near the water plane every surface turns charcoal and glossy (the wet band of
 // the dated photos), with green-brown algae at the waterline and darker under
 // the water; the band's edge wanders so it does not read as a ruled line.
+// Rock deeper than submerged_cut_m under the water is not drawn: through the
+// translucent water plane it would only show as a dark smudge.
 // Colours are source_color uniforms so both renderers convert them the same way.
 
 uniform int surface = 0;
@@ -38,6 +41,7 @@ uniform float stone_saturation = 0.85;
 uniform float stone_brightness = 0.8;
 // Underlay: dark voids within the stones' range, their average beyond it.
 uniform float void_brightness = 0.45;
+uniform float far_brightness = 0.75;
 uniform float void_fade_start_m = 215.0;
 uniform float void_fade_end_m = 290.0;
 // Stones: darker toward the cut base (relative height 0) where they meet the
@@ -64,6 +68,7 @@ uniform vec3 wet_tint : source_color = vec3(0.58, 0.58, 0.56);
 uniform float algae_top_m = 0.32;
 uniform vec3 algae_tint : source_color = vec3(0.7, 0.76, 0.52);
 uniform vec3 submerged_tint : source_color = vec3(0.55, 0.62, 0.6);
+uniform float submerged_cut_m = 0.35;
 uniform float dry_roughness = 0.88;
 uniform float wet_roughness = 0.56;
 
@@ -110,6 +115,9 @@ vec3 grade(vec3 color, float saturation, float brightness) {
 }
 
 void fragment() {
+	if (world_position.y < water_y - submerged_cut_m) {
+		discard;
+	}
 	vec3 n = normalize(world_normal);
 	float distance_m = length(VERTEX);
 	bool stone = surface == 1;
@@ -148,7 +156,7 @@ void fragment() {
 		albedo *= mix(contact_dark, 1.0, smoothstep(0.0, contact_height, COLOR.a));
 		albedo *= 1.0 + top_bleach * smoothstep(0.55, 1.0, COLOR.a) * max(n.y, 0.0);
 	} else {
-		albedo *= mix(void_brightness, 1.0, smoothstep(void_fade_start_m, void_fade_end_m, distance_m));
+		albedo *= mix(void_brightness, far_brightness, smoothstep(void_fade_start_m, void_fade_end_m, distance_m));
 	}
 	vec2 rotated = mat2(vec2(0.8, 0.6), vec2(-0.6, 0.8)) * world_position.xz;
 	float macro = dot(texture(riprap_albedo, rotated / macro_tile_m + vec2(0.31, 0.57)).rgb, vec3(0.3333));

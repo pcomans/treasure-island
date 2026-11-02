@@ -39,7 +39,9 @@ const STREET_DETAIL_GROUND_LAYER := "ground"
 const STREET_DETAIL_SOURCES := ["osm", "scatter", "set_piece"]
 ## Shoreline riprap (tools/lib/shoreline-generation.mjs): visual-only slope
 ## records and boulder placements outside the playable land.
-const SHORELINE_SCHEMA := "ti.shoreline/2"
+const SHORELINE_SCHEMA := "ti.shoreline/3"
+## Underlay records: the riprap slope, and the shoulder strip, which carries the land's UVs.
+const SHORELINE_RECORD_KINDS := {"shoreline-slope:": "shoreline_riprap", "shoreline-verge:": "shoreline_verge"}
 const SHORELINE_BANDS := ["cobble", "driftwood", "heap", "top"]
 const SHORELINE_PROTOTYPE_MATERIALS := {"boulder": "shoreline_boulder", "log": "shoreline_driftwood", "plank": "shoreline_driftwood"}
 const SHORELINE_FIELDS := ["batches", "config", "generator", "overlay", "prototypes", "records", "schema_version", "seed", "segments", "visual_only", "water_y_m"]
@@ -786,9 +788,18 @@ static func _validate_shoreline(document: Dictionary, source_scopes: Dictionary)
 			return _failure("shoreline_records", "Shoreline record is not an object.")
 		var record: Dictionary = record_value
 		var object_key := str(record.get("object_key", ""))
-		if not object_key.begins_with("shoreline-slope:") or object_keys.has(object_key) or str(record.get("material_key", "")) != "shoreline_riprap":
+		var kind := object_key.substr(0, object_key.find(":") + 1)
+		if not SHORELINE_RECORD_KINDS.has(kind) or object_keys.has(object_key) or str(record.get("material_key", "")) != str(SHORELINE_RECORD_KINDS[kind]):
 			return _failure("shoreline_records", "Shoreline record key or material is invalid: %s" % object_key)
 		object_keys[object_key] = true
+		if kind == "shoreline-verge:":
+			var uvs: Array = record.get("uvs", []) if record.get("uvs", null) is Array else []
+			var vertex_values: Array = record.get("vertices", []) if record.get("vertices", null) is Array else []
+			if uvs.is_empty() or uvs.size() * 3 != vertex_values.size() * 2:
+				return _failure("shoreline_records", "Shoreline shoulder record %s needs one UV per vertex." % object_key)
+			for value: Variant in uvs:
+				if not _is_finite_number(value):
+					return _failure("shoreline_records", "Shoreline shoulder record %s has a non-finite UV." % object_key)
 		if not record.get("source_keys", null) is Array or (record.source_keys as Array).is_empty():
 			return _failure("shoreline_records", "Shoreline record %s has no source." % object_key)
 		for key_value: Variant in record.source_keys:
