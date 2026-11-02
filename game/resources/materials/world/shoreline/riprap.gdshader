@@ -24,8 +24,9 @@ render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_burley, specular_sc
 // Near the water plane every surface turns charcoal and glossy (the wet band of
 // the dated photos), with green-brown algae at the waterline and darker under
 // the water; the band's edge wanders so it does not read as a ruled line.
-// Rock deeper than submerged_cut_m under the water is not drawn: through the
-// translucent water plane it would only show as a dark smudge.
+// Far away (beyond submerged_near_m) rock deeper than submerged_cut_m under the
+// water is not drawn: through the translucent water plane it would only show
+// as a smudge. Near by it stays, dark, as the wet foot of the pile.
 // Colours are source_color uniforms so both renderers convert them the same way.
 
 uniform int surface = 0;
@@ -54,7 +55,7 @@ uniform float top_bleach = 0.2;
 uniform float stone_extent = 0.7;
 // Bump.
 uniform float bump_height_m = 0.035;
-uniform float stone_bump_height_m = 0.012;
+uniform float stone_bump_height_m = 0.02;
 uniform float height_mip_bias = 2.5;
 uniform float bump_fade_start_m = 18.0;
 uniform float bump_fade_end_m = 70.0;
@@ -63,15 +64,17 @@ uniform float macro_tile_m = 17.0;
 uniform float macro_strength = 0.28;
 // Wet band.
 uniform float water_y = -0.12;
-uniform float wet_top_m = 1.0;
-uniform float wet_soft_m = 0.3;
-// sRGB multipliers: 0.58 darkens to about 30 % in linear light (charcoal,
+uniform float wet_top_m = 1.05;
+uniform float wet_soft_m = 0.22;
+// sRGB multipliers: 0.4 darkens to about 13 % in linear light (charcoal,
 // not black).
-uniform vec3 wet_tint : source_color = vec3(0.58, 0.58, 0.56);
-uniform float algae_top_m = 0.32;
-uniform vec3 algae_tint : source_color = vec3(0.7, 0.76, 0.52);
-uniform vec3 submerged_tint : source_color = vec3(0.55, 0.62, 0.6);
+uniform vec3 wet_tint : source_color = vec3(0.4, 0.4, 0.38);
+uniform float algae_top_m = 0.55;
+uniform float algae_strength = 0.85;
+uniform vec3 algae_tint : source_color = vec3(0.55, 0.68, 0.38);
+uniform vec3 submerged_tint : source_color = vec3(0.42, 0.5, 0.45);
 uniform float submerged_cut_m = 0.35;
+uniform float submerged_near_m = 60.0;
 uniform float dry_roughness = 0.88;
 uniform float wet_roughness = 0.56;
 
@@ -120,7 +123,7 @@ vec3 grade(vec3 color, float saturation, float brightness) {
 }
 
 void fragment() {
-	if (world_position.y < water_y - submerged_cut_m) {
+	if (world_position.y < water_y - submerged_cut_m && length(VERTEX) > submerged_near_m) {
 		discard;
 	}
 	vec3 n = normalize(world_normal);
@@ -173,10 +176,12 @@ void fragment() {
 	float algae = (1.0 - smoothstep(algae_top_m - 0.15, algae_top_m + 0.15, height)) * smoothstep(-0.9, -0.2, height);
 	float submerged = 1.0 - smoothstep(-0.25, 0.0, height);
 	albedo = mix(albedo, albedo * wet_tint, wet);
-	albedo = mix(albedo, albedo * algae_tint * 1.3, algae * 0.6);
+	albedo = mix(albedo, albedo * algae_tint * 1.3, algae * algae_strength);
 	albedo = mix(albedo, albedo * submerged_tint, submerged);
 	ALBEDO = clamp(albedo, vec3(0.0), vec3(1.0));
 	ROUGHNESS = mix(dry_roughness, wet_roughness, wet * (1.0 - submerged * 0.5));
-	SPECULAR = mix(0.3, 0.42, wet);
+	// Wet rock stays dark: little more sheen than dry rock, so it does not
+	// lighten toward the sky's reflection at grazing angles.
+	SPECULAR = mix(0.3, 0.34, wet);
 	METALLIC = 0.0;
 }

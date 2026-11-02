@@ -7,8 +7,8 @@ extends RefCounted
 ## inside the outline and the driftwood. Visual only, like the Yerba Buena
 ## context: no collision and no spray receiver. The band inside the outline is
 ## an ordinary chunk overlay; it and the shoulder share BAND_GROUND_FAMILY, the
-## dry dirt verge at the top of the riprap, so the verge runs on past the
-## outline to the stones.
+## dry grass-and-dirt verge at the top of the riprap, so the verge runs on
+## past the outline to the stones.
 
 const RIPRAP_SHADER := preload("res://game/resources/materials/world/shoreline/riprap.gdshader")
 const GROUND_COVER := preload("res://game/scripts/world/ground_cover.gd")
@@ -18,14 +18,14 @@ const RENDER_WORLD_VISIBLE := 1
 ## The shader's `surface` per material.
 const SURFACE_SLOPE := 0
 const SURFACE_STONE := 1
-## Weathered, bleached driftwood, multiplied by each log's instance colour.
-const DRIFTWOOD_ALBEDO := Color(0.7, 0.68, 0.63)
+## Weathered grey driftwood, multiplied by each log's instance colour.
+const DRIFTWOOD_ALBEDO := Color(0.56, 0.54, 0.51)
 const SLOPE_MATERIAL := "shoreline_riprap"
 const VERGE_MATERIAL := "shoreline_verge"
 const STONE_MATERIAL := "shoreline_boulder"
 ## The ground cover family of the verge: the band inside the outline (a chunk
 ## overlay, see world_chunk_builder.gd) and the shoulder outside it.
-const BAND_GROUND_FAMILY := "bare"
+const BAND_GROUND_FAMILY := "verge"
 const DRIFTWOOD_MATERIAL := "shoreline_driftwood"
 
 static var _riprap := {}
