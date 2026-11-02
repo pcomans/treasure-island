@@ -14,8 +14,9 @@ import { resolve } from "node:path";
 
 import { projectLonLat } from "./coordinates.mjs";
 import { geometryToLine, pointInMultiPolygon, pointInRing, selectGeometry } from "./osm-geometry.mjs";
-import { fencePieces, placeStreetFences, validateFenceRules } from "./street-fence-generation.mjs";
-import { placeStreetFurniture, validateFurnitureRules } from "./street-furniture-generation.mjs";
+import { footprintPiece, placeStreetClutter, STREET_CLUTTER_FOOTPRINTS, STREET_CLUTTER_PROPS, validateClutterRules } from "./street-clutter-generation.mjs";
+import { placeStreetFences, validateFenceRules } from "./street-fence-generation.mjs";
+import { placeStreetFurniture, STREET_FURNITURE_FOOTPRINTS, STREET_FURNITURE_PROPS, validateFurnitureRules } from "./street-furniture-generation.mjs";
 import { VEGETATION_QA_CORRIDORS } from "./vegetation-generation.mjs";
 import {
   BOUNDARY_ATTACHED_SOURCE_KEYS,
@@ -84,22 +85,28 @@ function lineKind(layer, halfWidthM, overhead = false) {
 // clearance; production inference, not measured. Slot kinds are step-0 scatter
 // placeholders that later steps fill with assets.
 export const STREET_DETAIL_KINDS = Object.freeze({
+  barricade: pointKind("clutter", 0.4, "seeded"),
   barrier_line: lineKind("fences", 0.15),
   barrier_point: pointKind("fences", 0.5, "host_barrier"),
   bench: pointKind("furniture", 0.9, "faces_road"),
   bicycle_parking: pointKind("furniture", 1.0, "faces_road"),
   bollard: pointKind("furniture", 0.15, "host_barrier"),
   bus_stop: pointKind("furniture", 1.5, "faces_road"),
+  chair: pointKind("furniture", 0.45, "seeded"),
   clutter_slot: pointKind("clutter", 0.4, "seeded"),
   crossing: pointKind(STREET_DETAIL_GROUND_LAYER, 0, "crossing"),
   fence: lineKind("fences", 0.05),
   fire_hydrant: pointKind("furniture", 0.25, "faces_road"),
   gate: pointKind("fences", 0.1, "host_barrier"),
   hedge: lineKind("vegetation", 0.5),
+  information_board: pointKind("furniture", 0.6, "faces_road"),
   jersey_barrier: lineKind("fences", 0.35),
   kerb: pointKind(STREET_DETAIL_GROUND_LAYER, 0, "crossing"),
   log_barrier: lineKind("fences", 0.25),
+  // A parked car's footprint is its own rectangle (footprint_m on the row);
+  // the radius is its half width for whoever reads only the kind.
   palm_slot: pointKind("vegetation", 0.6, "seeded"),
+  parked_car: pointKind("clutter", 1.0, "seeded"),
   planting_slot: pointKind("vegetation", 0.8, "seeded"),
   post_box: pointKind("furniture", 0.35, "faces_road"),
   power_line: lineKind("clutter", 0, true),
@@ -109,6 +116,7 @@ export const STREET_DETAIL_KINDS = Object.freeze({
   street_cabinet: pointKind("furniture", 0.6, "faces_road"),
   street_lamp: pointKind("furniture", 0.25, "faces_road"),
   street_sign: pointKind("furniture", 0.15, "faces_road"),
+  traffic_cone: pointKind("clutter", 0.2, "seeded"),
   traffic_signals: pointKind("furniture", 0.25, "host_road"),
   wall: lineKind("fences", 0.15),
   waste_basket: pointKind("furniture", 0.35, "faces_road"),
@@ -139,6 +147,12 @@ const UNPLANTABLE_MATERIALS = Object.freeze([
   "terrain_pier",
 ]);
 const LAND_EDGE_EPSILON_M = 0.01;
+// Street-prop set pieces keep the street furniture's site margins
+// (tools/lib/street-furniture-generation.mjs): from the carriageway, from a curb
+// ramp, and a player's width between two items.
+const PROP_KERB_CLEAR_M = 0.3;
+const PROP_RAMP_CLEAR_M = 0.9;
+const PLAYER_WIDTH_M = 0.7;
 const SAFE_ID = /^[a-z0-9_]+$/u;
 
 function osmPointKind(tags) {
@@ -399,7 +413,8 @@ export function loadStreetDetailZones(projectRoot) {
     for (const rule of zone.scatter) validateScatterRule(rule, zone.id, ruleIds);
     validateFurnitureRules(zone, STREET_DETAIL_KINDS);
     validateFenceRules(zone, STREET_DETAIL_KINDS);
-    for (const rule of [...(zone.furniture ?? []), ...(zone.fences ?? [])]) {
+    validateClutterRules(zone, STREET_DETAIL_KINDS);
+    for (const rule of [...(zone.furniture ?? []), ...(zone.fences ?? []), ...(zone.clutter ?? [])]) {
       invariant(!ruleIds.has(rule.id), `Street detail zone ${zone.id} rule id ${rule.id} is used twice`);
       ruleIds.add(rule.id);
     }
@@ -436,18 +451,25 @@ export function loadStreetDetailSetPieces(projectRoot) {
   const ids = new Set();
   for (const entry of document.set_pieces) {
     const label = `Street detail set piece ${entry?.id}`;
-    invariant(
-      JSON.stringify(Object.keys(entry ?? {}).sort()) === JSON.stringify(["asset", "id", "kind", "reason", "reference", "xz", "yaw"]),
-      `${label} must have exactly {id, kind, asset, xz, yaw, reason, reference}`,
-    );
+    const keys = JSON.stringify(Object.keys(entry ?? {}).sort());
+    // An entry either names an asset file or a kit prop of its kind's layer with its params.
+    const assetShape = JSON.stringify(["asset", "id", "kind", "reason", "reference", "xz", "yaw"]);
+    const propShape = JSON.stringify(["id", "kind", "params", "prop", "reason", "reference", "xz", "yaw"]);
+    invariant(keys === assetShape || keys === propShape, `${label} must have exactly {id, kind, asset, xz, yaw, reason, reference} or {id, kind, prop, params, xz, yaw, reason, reference}`);
     invariant(typeof entry.id === "string" && SAFE_ID.test(entry.id) && !ids.has(entry.id), `${label} needs a unique lower_snake id`);
     ids.add(entry.id);
     const kind = STREET_DETAIL_KINDS[entry.kind];
     invariant(kind && kind.geometry === "point" && STREET_DETAIL_LAYERS.includes(kind.layer), `${label} has a non-point or ground kind ${entry.kind}`);
-    invariant(
-      typeof entry.asset === "string" && entry.asset.startsWith("res://game/resources/") && existsSync(resolve(projectRoot, entry.asset.slice("res://".length))),
-      `${label} asset must be an existing res://game/resources/ file`,
-    );
+    if (keys === assetShape) {
+      invariant(
+        typeof entry.asset === "string" && entry.asset.startsWith("res://game/resources/") && existsSync(resolve(projectRoot, entry.asset.slice("res://".length))),
+        `${label} asset must be an existing res://game/resources/ file`,
+      );
+    } else {
+      const props = kind.layer === "furniture" ? STREET_FURNITURE_PROPS : kind.layer === "clutter" ? STREET_CLUTTER_PROPS : {};
+      invariant(props[entry.prop] === entry.kind, `${label}: prop ${entry.prop} does not build a ${entry.kind} in the ${kind.layer} layer`);
+      invariant(entry.params != null && typeof entry.params === "object" && !Array.isArray(entry.params), `${label} params must be an object`);
+    }
     invariant(isXZ(entry.xz), `${label} xz must be [x, z]`);
     invariant(isFiniteNumber(entry.yaw) && entry.yaw >= -Math.PI && entry.yaw <= Math.PI, `${label} yaw must be radians in [-pi, pi]`);
     for (const field of ["reason", "reference"]) {
@@ -566,6 +588,20 @@ function compassDirectionDegrees(value) {
 }
 
 export const planDistance = polylinePolylineDistance;
+
+// The plan footprint of a placed row for clearance checks, as pieces of
+// {points (world x, z), radius}: a fence's solid runs with its half thickness;
+// a row with a footprint (a parked car, a long bench) the stadium that holds
+// its rectangle; any other row its point or polyline with its kind's radius.
+export function streetDetailPieces(row) {
+  if (row.fence) return row.fence.runs.map((run) => ({ points: run.points_m.map((point) => [point[0], point[2]]), radius: row.fence.half_thickness_m }));
+  if (row.footprint_m) return [footprintPiece([row.position_m[0], row.position_m[2]], row.yaw_radians, row.footprint_m)];
+  const kind = STREET_DETAIL_KINDS[row.kind];
+  return [{
+    points: row.geometry === "point" ? [[row.position_m[0], row.position_m[2]]] : row.points_m.map((point) => [point[0], point[2]]),
+    radius: kind.footprint_radius_m,
+  }];
+}
 
 export function generateStreetDetail({
   projectRoot,
@@ -909,16 +945,50 @@ export function generateStreetDetail({
   }
 
   // Footprints already claimed by placed switchable rows, for overlap checks: a
-  // fence claims each of its solid runs, its half thickness wide.
+  // fence claims each of its solid runs, its half thickness wide; a parked car
+  // or a long prop its footprint (streetDetailPieces).
   const occupied = [];
   const occupy = (row) => {
     const kind = STREET_DETAIL_KINDS[row.kind];
     if (row.status !== "placed" || kind.overhead || kind.layer === STREET_DETAIL_GROUND_LAYER) return;
-    fencePieces(row).forEach((points, index) => {
-      occupied.push({ id: row.fence ? `${row.id}#run${index}` : row.id, points, radius_m: row.fence ? row.fence.half_thickness_m : kind.footprint_radius_m });
+    streetDetailPieces(row).forEach((piece, index) => {
+      occupied.push({ id: row.fence ? `${row.id}#run${index}` : row.id, points: piece.points, radius_m: piece.radius });
     });
   };
   rows.forEach(occupy);
+  // Site checks for a set piece that is a street prop (it stands on the street
+  // ground like the street furniture): the mask, land, walls, the carriageway,
+  // curb ramps and crosswalks, and a player's width from every other item.
+  const crosswalkAt = (en) => ground.site.crosswalks.some((walk) => {
+    const along = (en[0] - walk.center[0]) * walk.direction[0] + (en[1] - walk.center[1]) * walk.direction[1];
+    const across = (en[0] - walk.center[0]) * walk.across[0] + (en[1] - walk.center[1]) * walk.across[1];
+    return along >= walk.span[0] - 1 && along <= walk.span[1] + 1 && Math.abs(across) <= ground.site.walk_width_m / 2 + 0.5;
+  });
+  const propSiteViolation = (piece) => {
+    const { radius } = piece;
+    // The footprint's segment, sampled every half metre for the site tests.
+    const samples = [];
+    const [a, b] = [piece.points[0], piece.points.at(-1)];
+    const steps = Math.max(1, Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1]) / 0.5));
+    for (let step = 0; step <= steps; step += 1) samples.push([a[0] + ((b[0] - a[0]) * step) / steps, a[1] + ((b[1] - a[1]) * step) / steps]);
+    const violation = (reason, sourceId = null) => ({ reason, source_id: sourceId, observed_m: null, required_m: null });
+    if (!samples.every((xz) => onLand(xz, exclusions.land_edge_buffer_m + radius))) return violation("land_edge", PLAYABLE_BOUNDARY_SOURCE_KEY);
+    const hard = hardViolation(hardShapes, piece.points, radius);
+    if (hard) return hard;
+    for (const xz of samples) {
+      const building = buildings.nearest(xz, exclusions.wall_buffer_m + radius);
+      if (building.distance < exclusions.wall_buffer_m + radius) return violation(building.distance === 0 ? "inside_building" : "wall_buffer", building.key);
+      const en = toEastNorth(xz);
+      if (ground.site.carriagewayDistance(en) < PROP_KERB_CLEAR_M + radius) return violation("carriageway");
+      if (ground.site.rampDistance(en) < PROP_RAMP_CLEAR_M + radius) return violation("curb_ramp");
+      if (crosswalkAt(en)) return violation("crosswalk");
+    }
+    for (const item of occupied) {
+      const distance = polylinePolylineDistance(piece.points, item.points);
+      if (distance < item.radius_m + radius + PLAYER_WIDTH_M) return { reason: "overlap", source_id: item.id, observed_m: round3(distance), required_m: round3(item.radius_m + radius + PLAYER_WIDTH_M) };
+    }
+    return null;
+  };
 
   // Site checks shared by scatter and set pieces, after the gameplay mask.
   const siteViolation = (kindName, xz, buildingBuffer) => {
@@ -948,7 +1018,11 @@ export function generateStreetDetail({
   // entry stops the build. They come before scatter, which then works around them.
   for (const entry of setPieceDocument.set_pieces) {
     const xz = [round3(entry.xz[0]), round3(entry.xz[1])];
-    const violation = siteViolation(entry.kind, xz, exclusions.wall_buffer_m);
+    const footprint = entry.prop === undefined ? null : (STREET_FURNITURE_FOOTPRINTS[entry.prop] ?? STREET_CLUTTER_FOOTPRINTS[entry.prop] ?? null);
+    const piece = footprint
+      ? footprintPiece(xz, normalizedYaw(entry.yaw), footprint)
+      : { points: [xz], radius: STREET_DETAIL_KINDS[entry.kind].footprint_radius_m };
+    const violation = entry.prop === undefined ? siteViolation(entry.kind, xz, exclusions.wall_buffer_m) : propSiteViolation(piece);
     invariant(!violation, `Street detail set piece ${entry.id} fails the exclusion mask: ${JSON.stringify(violation)}`);
     const { y, support } = grounded(xz);
     const row = {
@@ -963,7 +1037,8 @@ export function generateStreetDetail({
       surface: surfaceAt(xz),
       yaw_radians: normalizedYaw(entry.yaw),
       yaw_source: "set_piece",
-      asset: entry.asset,
+      ...(entry.prop === undefined ? { asset: entry.asset } : { prop: entry.prop, prop_params: entry.params }),
+      ...(footprint ? { footprint_m: { ...footprint } } : {}),
       reason: entry.reason,
       reference: entry.reference,
       status: "placed",
@@ -1109,6 +1184,38 @@ export function generateStreetDetail({
     });
   }
 
+  // (e) Street clutter, last: the parked cars of the zones' clutter rules
+  // (tools/lib/street-clutter-generation.mjs) along the parking lanes and in
+  // the painted lot stalls, clear of everything placed above (the furniture
+  // rules have already claimed their footprints).
+  const clutter = placeStreetClutter({
+    kinds: STREET_DETAIL_KINDS,
+    rows,
+    occupied,
+    zoneShapes,
+    site: ground.site,
+    rawOsm,
+    seed,
+    hardViolation,
+    hardShapes,
+    buildings,
+    exclusions,
+    onLand,
+    grounded,
+    surfaceAt,
+  });
+  rows.push(...clutter.rows);
+  for (const summary of zoneSummaries) {
+    const zone = config.zones.find((candidate) => candidate.id === summary.id);
+    summary.clutter = (zone.clutter ?? []).map((rule) => ({
+      id: rule.id,
+      kind: rule.kind,
+      prop: rule.prop,
+      pattern: rule.pattern,
+      placed: clutter.audit.rules[`${zone.id}/${rule.id}`] ?? 0,
+    }));
+  }
+
   rows.sort((left, right) => compareText(left.id, right.id));
   invariant(new Set(rows.map((row) => row.id)).size === rows.length, "Street detail row ids are not unique");
   const minimumClearances = Object.fromEntries(STREET_DETAIL_HARD_COMPONENTS.map((component) => [component, Infinity]));
@@ -1117,8 +1224,8 @@ export function generateStreetDetail({
     row.zones = zoneShapes.filter(({ contains }) => points.some((point) => contains(point))).map(({ zone }) => zone.id).sort(compareText);
     const kind = STREET_DETAIL_KINDS[row.kind];
     if (row.status !== "placed" || kind.overhead || kind.layer === STREET_DETAIL_GROUND_LAYER) continue;
-    for (const piece of fencePieces(row)) {
-      const clearances = hardClearances(hardShapes, piece, row.fence ? row.fence.half_thickness_m : kind.footprint_radius_m);
+    for (const piece of streetDetailPieces(row)) {
+      const clearances = hardClearances(hardShapes, piece.points, piece.radius);
       for (const component of STREET_DETAIL_HARD_COMPONENTS) {
         minimumClearances[component] = Math.min(minimumClearances[component], clearances[component]);
       }
@@ -1144,7 +1251,8 @@ export function generateStreetDetail({
       yaw_radians: "rotation about +Y turning the asset's local -Z front; null when the source gives no direction",
       layers: "switchable runtime subtrees under PlayableWorld/StreetDetail; ground rows feed the always-on chunk surfaces",
       status: "placed rows are built when their layer is on; excluded rows keep their source id and the reason",
-      prop: "the street-furniture kit prop the runtime builds for a placed row (game/scripts/world/street_furniture_kit.gd), with prop_params; rows without one are data only",
+      prop: "the kit prop the runtime builds for a placed row, with prop_params: the street-furniture kit (game/scripts/world/street_furniture_kit.gd) for the furniture layer, the street-clutter kit (game/scripts/world/street_clutter_kit.gd) for the clutter layer; rows without one are data only",
+      footprint_m: "the plan size {x_m, z_m} of a parked car or a long prop along its local X and Z; with its position and yaw it is the item's rectangle (the gameplay mask checks a stadium that holds it)",
       source_position_m: "a stop sign's OSM node position, kept when the sign moves to the curb of its approach",
       fence: "fence rows: the kit type and why (type_basis), height and collision half thickness, the stretches cut open along points_m (openings, metres along the line, with what opens them) and the solid runs left (posts on the ground: points_m, terrain_supports, surface_bias_m); a fence row with a prop is built (game/scripts/world/street_fence_kit.gd)",
       fenced_approaches: "scored-building sides a built fence closes, which the building fit may skip (game/tests/shared/building_fit.gd)",
@@ -1185,6 +1293,7 @@ export function generateStreetDetail({
       ...audit,
       furniture: furniture.audit,
       fences: fences.audit,
+      clutter: clutter.audit,
       minimum_placed_clearances_m: Object.fromEntries(
         STREET_DETAIL_HARD_COMPONENTS.map((component) => [component, Number.isFinite(minimumClearances[component]) ? round3(minimumClearances[component]) : null]),
       ),

@@ -1,9 +1,284 @@
 {
   "schema_version": "ti.street-detail-set-pieces/1",
   "notes": [
-    "Hand-picked street-detail set pieces, each {id, kind, asset, xz, yaw, reason, reference}.",
+    "Hand-picked street-detail set pieces, each {id, kind, asset, xz, yaw, reason, reference} or, for a kit prop, {id, kind, prop, params, xz, yaw, reason, reference}.",
     "xz is world metres (+X east, +Z south); yaw is radians about +Y, turning the asset's -Z front.",
-    "tools/build_godot_world.mjs rejects an entry that leaves the land or enters the shared exclusion mask."
+    "tools/build_godot_world.mjs rejects an entry that leaves the land or enters the shared exclusion mask; a kit prop also keeps the street furniture's margins (clear of the carriageway, curb ramps and crosswalks, a player's width from other items)."
   ],
-  "set_pieces": []
+  "set_pieces": [
+    {
+      "id": "plaza_map_board",
+      "kind": "information_board",
+      "prop": "map_board",
+      "params": {},
+      "xz": [
+        -91.2,
+        783.4
+      ],
+      "yaw": -1.99,
+      "reason": "The Waterfront Plaza's information board, an island map in a dark frame on two posts, stands just west of the signal cabinet at the plaza's crosswalk landing and faces Treasure Island Road. Its map is an original drawing of the island from the frozen OSM data.",
+      "reference": "ferry-shelter 13-sv-road-ne and 11-sv-road-sw (83 Treasure Island Rd, Sep 2025); 15-sv-mar2025 (Mar 2025)"
+    },
+    {
+      "id": "plaza_wedges_north_lawn",
+      "kind": "bench",
+      "prop": "bench_wedge",
+      "params": {
+        "timber": false
+      },
+      "xz": [
+        -112.5,
+        765.9
+      ],
+      "yaw": 0.479,
+      "reason": "Pale cast-concrete wedge benches, in pairs end to end, edge the plaza lawns; this pair lines the path along the north edge of the lawn west of the plaza paving, its seats toward the path.",
+      "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025): the pair on the lawn edge between the paving and the Adirondack chairs; 21-sv-north-sw (Sep 2025)"
+    },
+    {
+      "id": "plaza_wedges_north",
+      "kind": "bench",
+      "prop": "bench_wedge",
+      "params": {
+        "timber": false
+      },
+      "xz": [
+        -117.0,
+        757.5
+      ],
+      "yaw": -1.125,
+      "reason": "A pair of wedge benches where the north lawn meets the plaza paving, its seats toward the paving (production_inference: the photographed pairs repeat along the lawn edges).",
+      "reference": "ferry-shelter 21-sv-north-sw and 25-sv-north-mid (185 Treasure Island Rd, Sep 2025)"
+    },
+    {
+      "id": "plaza_wedges_landing",
+      "kind": "bench",
+      "prop": "bench_wedge",
+      "params": {
+        "timber": false
+      },
+      "xz": [
+        -95.9,
+        784.3
+      ],
+      "yaw": 0.513,
+      "reason": "A pair of wedge benches at the edge of the paving south of the landing path, seats toward the path, kept clear of the ferry spawn and its walk to the crossing.",
+      "reference": "ferry-shelter 11-sv-road-sw (83 Treasure Island Rd, Sep 2025): pairs at the far edge of the paving; 17-sv-mar2025-canopy (Mar 2025)"
+    },
+    {
+      "id": "plaza_wedges_shore",
+      "kind": "bench",
+      "prop": "bench_wedge",
+      "params": {
+        "timber": true
+      },
+      "xz": [
+        -103.2,
+        802.2
+      ],
+      "yaw": 2.045,
+      "reason": "A pair of wedge benches with a slatted timber bench on one block, beside the shore path south of the landing, seats toward the path.",
+      "reference": "ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the timber bench on a wedge pair near the pier; 17-sv-mar2025-canopy (Mar 2025)"
+    },
+    {
+      "id": "plaza_adirondack_chair_1",
+      "kind": "chair",
+      "prop": "adirondack_chair",
+      "params": {},
+      "xz": [
+        -113.1,
+        773.5
+      ],
+      "yaw": 1.571,
+      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; arranged here in a circle facing each other (production_inference: the photos show about six to eight chairs in a group).",
+      "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn"
+    },
+    {
+      "id": "plaza_adirondack_chair_2",
+      "kind": "chair",
+      "prop": "adirondack_chair",
+      "params": {},
+      "xz": [
+        -114.3,
+        775.58
+      ],
+      "yaw": 0.524,
+      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; arranged here in a circle facing each other (production_inference: the photos show about six to eight chairs in a group).",
+      "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn"
+    },
+    {
+      "id": "plaza_adirondack_chair_3",
+      "kind": "chair",
+      "prop": "adirondack_chair",
+      "params": {},
+      "xz": [
+        -116.7,
+        775.58
+      ],
+      "yaw": -0.524,
+      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; arranged here in a circle facing each other (production_inference: the photos show about six to eight chairs in a group).",
+      "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn"
+    },
+    {
+      "id": "plaza_adirondack_chair_4",
+      "kind": "chair",
+      "prop": "adirondack_chair",
+      "params": {},
+      "xz": [
+        -117.9,
+        773.5
+      ],
+      "yaw": -1.571,
+      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; arranged here in a circle facing each other (production_inference: the photos show about six to eight chairs in a group).",
+      "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn"
+    },
+    {
+      "id": "plaza_adirondack_chair_5",
+      "kind": "chair",
+      "prop": "adirondack_chair",
+      "params": {},
+      "xz": [
+        -116.7,
+        771.42
+      ],
+      "yaw": -2.618,
+      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; arranged here in a circle facing each other (production_inference: the photos show about six to eight chairs in a group).",
+      "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn"
+    },
+    {
+      "id": "plaza_adirondack_chair_6",
+      "kind": "chair",
+      "prop": "adirondack_chair",
+      "params": {},
+      "xz": [
+        -114.3,
+        771.42
+      ],
+      "yaw": 2.618,
+      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; arranged here in a circle facing each other (production_inference: the photos show about six to eight chairs in a group).",
+      "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn"
+    },
+    {
+      "id": "plaza_basket_pier",
+      "kind": "waste_basket",
+      "prop": "waste_basket",
+      "params": {
+        "style": "steel"
+      },
+      "xz": [
+        -112.3,
+        783.6
+      ],
+      "yaw": 0.0,
+      "reason": "A grey steel litter can by the pier entrance.",
+      "reference": "ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025); 17-sv-mar2025-canopy (Mar 2025): a grey can by the landing"
+    },
+    {
+      "id": "plaza_basket_north",
+      "kind": "waste_basket",
+      "prop": "waste_basket",
+      "params": {
+        "style": "timber"
+      },
+      "xz": [
+        -110.5,
+        745.2
+      ],
+      "yaw": 0.0,
+      "reason": "A timber-slatted litter can with a grey band on the plaza walk beside Treasure Island Road at the north end of the plaza.",
+      "reference": "ferry-shelter 21-sv-north-sw (185 Treasure Island Rd, Sep 2025)"
+    },
+    {
+      "id": "palms_barricade_1",
+      "kind": "barricade",
+      "prop": "barricade",
+      "params": {},
+      "xz": [
+        -182.46,
+        495.67
+      ],
+      "yaw": -2.665,
+      "reason": "Orange and white striped A-frame barricades with white sign panels stand on the west sidewalk of Avenue of the Palms beside the fenced Cityside Park lot, south of 338 Ave of the Palms.",
+      "reference": "isle-house ih05 (338 Ave of the Palms, Sep 2025): two barricades on the west sidewalk and one farther on; street-fences refs p4b-aotp-338-sw-h228 (same panorama, Sep 2025)"
+    },
+    {
+      "id": "palms_barricade_2",
+      "kind": "barricade",
+      "prop": "barricade",
+      "params": {},
+      "xz": [
+        -178.33,
+        503.67
+      ],
+      "yaw": -2.665,
+      "reason": "Orange and white striped A-frame barricades with white sign panels stand on the west sidewalk of Avenue of the Palms beside the fenced Cityside Park lot, south of 338 Ave of the Palms.",
+      "reference": "isle-house ih05 (338 Ave of the Palms, Sep 2025): two barricades on the west sidewalk and one farther on; street-fences refs p4b-aotp-338-sw-h228 (same panorama, Sep 2025)"
+    },
+    {
+      "id": "palms_barricade_3",
+      "kind": "barricade",
+      "prop": "barricade",
+      "params": {},
+      "xz": [
+        -168.0,
+        523.65
+      ],
+      "yaw": -2.665,
+      "reason": "Orange and white striped A-frame barricades with white sign panels stand on the west sidewalk of Avenue of the Palms beside the fenced Cityside Park lot, south of 338 Ave of the Palms.",
+      "reference": "isle-house ih05 (338 Ave of the Palms, Sep 2025): two barricades on the west sidewalk and one farther on; street-fences refs p4b-aotp-338-sw-h228 (same panorama, Sep 2025)"
+    },
+    {
+      "id": "palms_cone_1",
+      "kind": "traffic_cone",
+      "prop": "traffic_cone",
+      "params": {},
+      "xz": [
+        -275.2,
+        289.29
+      ],
+      "yaw": 0.4,
+      "reason": "Two orange traffic cones on the east sidewalk of Avenue of the Palms in front of 490 Avenue of the Palms.",
+      "reference": "large-batch1 palms-wsw01 (999 Ave of the Palms, Nov 2025)"
+    },
+    {
+      "id": "palms_cone_2",
+      "kind": "traffic_cone",
+      "prop": "traffic_cone",
+      "params": {},
+      "xz": [
+        -274.59,
+        290.44
+      ],
+      "yaw": 1.3,
+      "reason": "Two orange traffic cones on the east sidewalk of Avenue of the Palms in front of 490 Avenue of the Palms.",
+      "reference": "large-batch1 palms-wsw01 (999 Ave of the Palms, Nov 2025)"
+    },
+    {
+      "id": "palms_basket_490",
+      "kind": "waste_basket",
+      "prop": "waste_basket",
+      "params": {
+        "style": "steel"
+      },
+      "xz": [
+        -275.81,
+        287.69
+      ],
+      "yaw": 0.0,
+      "reason": "A slatted steel litter can on the east sidewalk beside the cones, in front of 490 Avenue of the Palms.",
+      "reference": "large-batch1 palms-wsw01 (999 Ave of the Palms, Nov 2025)"
+    },
+    {
+      "id": "palms_bike_rack_johnson",
+      "kind": "bicycle_parking",
+      "prop": "bike_rack",
+      "params": {},
+      "xz": [
+        -291.23,
+        258.07
+      ],
+      "yaw": 0.495,
+      "reason": "A dark inverted-U bike rack on the east sidewalk of Avenue of the Palms at its north end, by Johnson Street, its loop across the walk.",
+      "reference": "large-batch1 palms-n-corner02 (801 Ave of the Palms, Nov 2025)"
+    }
+  ]
 }
