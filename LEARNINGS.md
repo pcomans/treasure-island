@@ -873,3 +873,7 @@ At Hawkins r6 (2026-10-24) the NNW penthouse existed and had plausible room dime
 ## Use fixed matched cameras for regression comparison
 
 At Hawkins r8 (2026-10-24) the automatic close-up and context shots differed by 4–9% from r6, while the fixed matched views differed by 0–1.5% and only where the changes were visible. The automatic framing follows the building's bounds, which grew with the new rooftop volumes. After adding volumes, compare fixed matched cameras as the main regression check; treat automatic-framing pixel diffs as framing changes until shown otherwise.
+
+## Walk the spawn's facing line after adding solid street props
+
+On 2026-11-02 the street-objects pilot placed a plaza lamp 17 m in front of the ferry spawn. Every render, the route QA, the island test and the fits passed, because the shared clearance mask covers the spawn radius and the QA corridors only; the real web build's scripted walk (W held from the spawn) stopped against the pole. Moving the lamps 3 m along the paving cleared it. When a change adds collision near the spawn, check the spawn's facing line (or walk it in the web check) before review, not only the masked corridors.

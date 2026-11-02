@@ -86,10 +86,6 @@ func _init() -> void:
 	_lit.texture_repeat = false
 
 
-static func has_prop(prop: String) -> bool:
-	return PROPS.has(prop)
-
-
 ## What to build for one placed row: {ok, pieces: [{key, mesh, transform}],
 ## shapes: [{shape, transform}], labels: [{text, transform}], range_m, shadow},
 ## transforms in the prop's local frame. Meshes are shared between rows whose

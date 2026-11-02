@@ -144,13 +144,6 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 	ready_report["bulgarian_wall"] = bulgarian_result
 	ready_report["vegetation_multimesh_batches"] = int(vegetation_result.multimesh_batches)
 	ready_report["vegetation_rendered_triangles"] = int(vegetation_result.rendered_triangles)
-	ready_report["street_furniture"] = {
-		"props": int(furniture_result.props),
-		"prop_counts": (furniture_result.prop_counts as Dictionary).duplicate(),
-		"multimesh_batches": int(furniture_result.multimesh_batches),
-		"collision_shapes": int(furniture_result.collision_shapes),
-		"labels": int(furniture_result.labels),
-	}
 	ready_report["street_detail"] = street_detail_report()
 	runtime_evidence.finish_load(ready_report)
 	world_ready.emit(ready_report)
