@@ -178,6 +178,7 @@ export const MATERIAL_KEYS = Object.freeze([
   "terrain_breakwater",
   "terrain_marina",
   "terrain_pier",
+  "terrain_riprap",
   "terrain_sand",
   "terrain_wetland",
 ]);

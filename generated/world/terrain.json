@@ -68,7 +68,7 @@
     "maximum_clearance_m": 0.081,
     "maximum_serialization_tolerance_m": 0.01,
     "minimum_clearance_m": 0.019,
-    "sample_points": 206339
+    "sample_points": 206381
   },
   "raster_bbox_wgs84": [
     -122.380001708984,

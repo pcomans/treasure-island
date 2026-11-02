@@ -873,3 +873,7 @@ At Hawkins r6 (2026-10-24) the NNW penthouse existed and had plausible room dime
 ## Use fixed matched cameras for regression comparison
 
 At Hawkins r8 (2026-10-24) the automatic close-up and context shots differed by 4–9% from r6, while the fixed matched views differed by 0–1.5% and only where the changes were visible. The automatic framing follows the building's bounds, which grew with the new rooftop volumes. After adding volumes, compare fixed matched cameras as the main regression check; treat automatic-framing pixel diffs as framing changes until shown otherwise.
+
+## Write edits atomically when the disk is near full
+
+On 2026-11-02 the shared overlay disk swung between about 1.4 GB and 0 bytes free while parallel agents generated worlds and web exports. A Python `open(path, "w")` edit of `generated_world_contract.gd` hit ENOSPC after truncating the file, leaving a 0-byte GDScript source, and the agent harness lost tool output when its own temp directory filled. Check `df` before edits, world generation and engine runs; write edited files through a temporary file, fsync and rename; and re-check the size and syntax of every file touched in a low-space window before committing. Free only your own regenerable files (scratch worlds, your worktree's `.godot` cache); other agents' files are not yours to delete.

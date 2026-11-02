@@ -39039,6 +39039,8 @@
       "heights": [],
       "logical_object_key": "terrain:w1222685424",
       "physical_object_keys": [
+        "shoreline:w1222685424:x_-1__z_2",
+        "shoreline:w1222685424:x_-1__z_3",
         "terrain:w1222685424:x_-1__z_2",
         "terrain:w1222685424:x_-1__z_3",
         "terrain:w1222685424:x_-2__z_-4",

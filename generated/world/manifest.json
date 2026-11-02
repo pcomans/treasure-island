@@ -111,16 +111,16 @@
       "sha256": "9a430447869b8f17aa931029ee1ac54ae23df3c1d7fa11b534bc1ca9d9571752"
     },
     {
-      "bytes": 2177821,
+      "bytes": 2178652,
       "chunk_id": "x_-1__z_2",
       "path": "chunks/x_-1__z_2.json",
-      "sha256": "0d3c84484b200fac8970d03e5d4652f1148942febe37cc8122d5faf9db1be33e"
+      "sha256": "05e5ab5e0aefe6f3cf0a33aa92c6b8b5da740aca681fe3d0005e0f74a343cd8f"
     },
     {
-      "bytes": 891147,
+      "bytes": 892703,
       "chunk_id": "x_-1__z_3",
       "path": "chunks/x_-1__z_3.json",
-      "sha256": "1e581730549cf4633d3050f014c339de2996a81cbeee8800da94dd256c161c19"
+      "sha256": "c429e4c877a8f01de521e9a4c4350e94a1aa44a9c590971d6213ef466872ae6a"
     },
     {
       "bytes": 132875,
@@ -231,7 +231,7 @@
       "sha256": "f6fd17666df382f89b51dff1b5a3b906e1c17fdc36d4af3e1aa4ecf4aad817a5"
     }
   ],
-  "content_sha256": "76026f11a5c3911a246bb060dba55e48ec649169eb24157100e6de613f307328",
+  "content_sha256": "04eb5da25bb50522cced847479acd6556bfca8ccfa800c0bf43548b5ff15268e",
   "context": {
     "bytes": 675130,
     "path": "context.json",
@@ -265,9 +265,9 @@
     "unresolved_rows": 0
   },
   "coverage_ledger": {
-    "bytes": 156280,
+    "bytes": 156344,
     "path": "coverage-ledger.csv",
-    "sha256": "3b4652e0f333d89c5994dd644873b75dd05c1068334f87235cd958177658bb2a"
+    "sha256": "7614c0e3b80cb2c6b506d646029fffb41c2ccb80d5e97d29fb47e488168b8e87"
   },
   "feature_kinds": [
     "building_part_roof",
@@ -314,14 +314,14 @@
       "sha256": "9a430447869b8f17aa931029ee1ac54ae23df3c1d7fa11b534bc1ca9d9571752"
     },
     {
-      "bytes": 2177821,
+      "bytes": 2178652,
       "path": "chunks/x_-1__z_2.json",
-      "sha256": "0d3c84484b200fac8970d03e5d4652f1148942febe37cc8122d5faf9db1be33e"
+      "sha256": "05e5ab5e0aefe6f3cf0a33aa92c6b8b5da740aca681fe3d0005e0f74a343cd8f"
     },
     {
-      "bytes": 891147,
+      "bytes": 892703,
       "path": "chunks/x_-1__z_3.json",
-      "sha256": "1e581730549cf4633d3050f014c339de2996a81cbeee8800da94dd256c161c19"
+      "sha256": "c429e4c877a8f01de521e9a4c4350e94a1aa44a9c590971d6213ef466872ae6a"
     },
     {
       "bytes": 911426,
@@ -479,19 +479,19 @@
       "sha256": "4008473d014530211eba8e77e5b6f3ebe977c283a4750bacb57d6739b239a037"
     },
     {
-      "bytes": 156280,
+      "bytes": 156344,
       "path": "coverage-ledger.csv",
-      "sha256": "3b4652e0f333d89c5994dd644873b75dd05c1068334f87235cd958177658bb2a"
+      "sha256": "7614c0e3b80cb2c6b506d646029fffb41c2ccb80d5e97d29fb47e488168b8e87"
     },
     {
       "bytes": 81538,
       "path": "coverage-summary.json",
-      "sha256": "09a796d233527fa5cf1023f24552e05fb75875152220f3d4d07a9570f1ed791a"
+      "sha256": "b76b3a35aa9cd76757e158d76d78c480f7cfc0b47bdd4f091df8c854dc936bae"
     },
     {
-      "bytes": 1285299,
+      "bytes": 1285385,
       "path": "logical-objects.json",
-      "sha256": "5a74a80a7930ef8edfbea4f7c3a15a509d38e59b64e55d17a26ea1061137ba11"
+      "sha256": "90f296c123039561df2ddf4950f690115933c619682976686716d1af31587f3f"
     },
     {
       "bytes": 23820,
@@ -504,14 +504,19 @@
       "sha256": "afe1d34d0c743c9a16f058b8613f4276bd44ee7bddc3cd062657dfe65304e7a9"
     },
     {
+      "bytes": 2251194,
+      "path": "shoreline.json",
+      "sha256": "7e63fc7141581450d99390e2989e32d3eeff68a638da0a88e2e1392ade0256f3"
+    },
+    {
       "bytes": 723782,
       "path": "street_detail.json",
-      "sha256": "09460f67bd9d2b86c4ecb93acf5586b343db52f6436c06b42f9fe04b65ad68f4"
+      "sha256": "cade7200536244f243d5ef8521e9b8cb24b33fffa8007f7673239c47da1d6dd6"
     },
     {
       "bytes": 4599,
       "path": "terrain.json",
-      "sha256": "f2399e68640e92003d40f26362515902bada52838545b9b40271ffe21774d167"
+      "sha256": "ea6eee42078371ca489521ea4b21cd6524a6b1448db60c12a0f29ea32cc3f7c9"
     },
     {
       "bytes": 89950,
@@ -561,6 +566,7 @@
     "terrain_breakwater",
     "terrain_marina",
     "terrain_pier",
+    "terrain_riprap",
     "terrain_sand",
     "terrain_wetland"
   ],
@@ -1122,6 +1128,11 @@
     ]
   },
   "schema_version": "ti.godot-world/2",
+  "shoreline": {
+    "bytes": 2251194,
+    "path": "shoreline.json",
+    "sha256": "7e63fc7141581450d99390e2989e32d3eeff68a638da0a88e2e1392ade0256f3"
+  },
   "sources": {
     "extraction_polygon": {
       "bytes": 12422,
@@ -1157,12 +1168,12 @@
   "street_detail": {
     "bytes": 723782,
     "path": "street_detail.json",
-    "sha256": "09460f67bd9d2b86c4ecb93acf5586b343db52f6436c06b42f9fe04b65ad68f4"
+    "sha256": "cade7200536244f243d5ef8521e9b8cb24b33fffa8007f7673239c47da1d6dd6"
   },
   "terrain": {
     "bytes": 4599,
     "path": "terrain.json",
-    "sha256": "f2399e68640e92003d40f26362515902bada52838545b9b40271ffe21774d167"
+    "sha256": "ea6eee42078371ca489521ea4b21cd6524a6b1448db60c12a0f29ea32cc3f7c9"
   },
   "vegetation": {
     "bytes": 89950,

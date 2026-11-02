@@ -106,5 +106,36 @@
         {"id": "forecourt_planting", "kind": "planting_slot", "pattern": "grid", "spacing_m": 7, "jitter_m": 1.5, "acceptance": 0.5}
       ]
     }
-  ]
+  ],
+  "shoreline": {
+    "notes": [
+      "Rock armour (riprap) along the island edge, built by tools/lib/shoreline-generation.mjs into the chunk records and generated/world/shoreline.json. Always-on ground, not a switchable street-detail layer.",
+      "Every value here is an estimate for game art (production inference), read from the dated photos (Sep 2025 Street View at 83 Treasure Island Rd, a Sep 2026 view from the ferry float, Commons Aug 2021 c01/c08 and May 2025 c10/c11) and the USGS 3DEP 2023 DEM; none is survey data.",
+      "A segment takes the OSM breakwater polygon (man_made=breakwater, material=rock) between the distances s_m along the island outline w26767313. Its part inside the outline, from the crest to the outline, is draped on the land as a riprap terrain overlay with no collision, overlay_bias_m above the land: over the lawn and park overlays (0.02-0.05 m), under the paths (0.078-0.08 m). land_ground stays the only support there, so route QA, the regional anchors and boundary recovery are unchanged.",
+      "Its part outside the outline becomes a non-colliding rock slope from the land edge down past the water plane (y -0.12) to toe_y_m. The DEM's gradient between dem_fit_m along each cross-section, clamped to gradient_m_per_m (the photographed 2:1 to 3:1) and smoothed over gradient_smoothing_m, sets the slope; relief_m of boulder-scale bumps (relief_wavelength_m) fades in over top_blend_m below the land edge. Slopes are split into records of about section_m along the shore for culling; vertical rock faces close the segment ends.",
+      "Boulders are one shared set of low-poly quarry-stone prototypes plus one driftwood log, instanced as low crest stones on the inside band (protruding protrude_m), as the top course of big stones just outside the outline (out_m beyond it, rising rise_m above the land edge, as the plaza photos show), over the slope, and at the waterline (submerge is the share of a toe stone under the water). They are visual only, cleared from the landing-pier footprint by pier_clearance_m, from paths inside the outline, and from the street-detail hard shapes (spawn, ferry path, QA route, stairs, doors, approaches), and fade out beyond visibility_range_m."
+    ],
+    "overlay_bias_m": 0.06,
+    "slope": {"station_m": 0.7, "columns": 14, "gradient_m_per_m": [0.34, 0.55], "dem_fit_m": [1.0, 5.0], "gradient_smoothing_m": 6.0, "toe_y_m": -0.6, "relief_m": 0.2, "relief_wavelength_m": 1.4, "top_blend_m": 1.0, "end_cap_bottom_y_m": -0.9, "section_m": 90},
+    "boulders": {
+      "prototypes": 5,
+      "crest": {"spacing_m": 1.6, "size_m": [0.5, 0.95], "protrude_m": [0.1, 0.28], "inset_m": [0.15, 0.6], "acceptance": 0.8},
+      "top": {"spacing_m": 0.8, "size_m": [0.75, 1.35], "out_m": [0.15, 0.9], "rise_m": [0.12, 0.5], "acceptance": 0.95},
+      "slope": {"cell_m": 1.3, "size_m": [0.45, 1.15], "embed": [0.35, 0.55], "acceptance": 0.62},
+      "toe": {"spacing_m": 1.0, "size_m": [0.6, 1.35], "submerge": [0.35, 0.6], "acceptance": 0.85},
+      "driftwood": {"spacing_m": 26, "length_m": [1.6, 3.2], "band_y_m": [0.9, 2.1], "acceptance": 0.6},
+      "pier_clearance_m": 0.8,
+      "visibility_range_m": 260
+    },
+    "segments": [
+      {
+        "id": "west_ferry_pilot",
+        "outline_source_key": "w26767313",
+        "source_key": "w1222685424",
+        "s_m": [1380, 1740],
+        "reason": "Pilot: the west shore from north of Waterfront Plaza past the ferry landing pier (w1011830367) to the causeway corner, the first shore a ferry arrival sees.",
+        "reference": "ferry-shelter refs: Sep 2025 Street View 12-sv-road-sw-zoom (83 Treasure Island Rd), Sep 2026 29-sv-water-ne from the float; Commons c08 (Aug 2021) and c10 (May 2025); USGS 3DEP 2023 profiles: crest 3.2-3.9 m NAVD88, 2:1 to 3:1 to the water"
+      }
+    ]
+  }
 }

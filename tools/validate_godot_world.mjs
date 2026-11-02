@@ -34,6 +34,16 @@ import {
   verifySourceContract,
 } from "./lib/world-contract.mjs";
 import { validateMesh } from "./lib/mesh-output.mjs";
+import { geometryToMultiPolygon, pointInMultiPolygon } from "./lib/osm-geometry.mjs";
+import {
+  SHORELINE_BANDS,
+  SHORELINE_DRIFTWOOD_MATERIAL,
+  SHORELINE_OVERLAY_MATERIAL,
+  SHORELINE_OVERLAY_PREFIX,
+  SHORELINE_SCHEMA,
+  SHORELINE_SLOPE_MATERIAL,
+  WATER_Y_M,
+} from "./lib/shoreline-generation.mjs";
 import {
   NAIP_TREE_ANNOTATION_SCHEMA,
   NAIP_TREE_ANNOTATION_SHA256,
@@ -976,6 +986,76 @@ function validateStreetDetail(worldRoot, manifest, records) {
   return document;
 }
 
+// The shoreline: its riprap overlays are ordinary terrain overlays (checked
+// with the other coherent surfaces); here the visual-only slope must stay
+// outside the exact island polygon and reach under the water, and every
+// boulder row must be a finite, unmirrored placement of a known prototype.
+function validateShoreline(worldRoot, manifest, records) {
+  invariant(manifest.shoreline?.path === "shoreline.json", "Manifest shoreline descriptor is missing");
+  invariant(stableJson(descriptor(worldRoot, manifest.shoreline.path)) === stableJson(manifest.shoreline), "Shoreline descriptor drift");
+  const document = JSON.parse(readFileSync(resolve(worldRoot, manifest.shoreline.path), "utf8"));
+  invariant(document.schema_version === SHORELINE_SCHEMA && document.visual_only === true, "Shoreline schema or visual-only contract drift");
+  invariant(document.water_y_m === WATER_Y_M, "Shoreline water level drift");
+  invariant(document.overlay?.material_key === SHORELINE_OVERLAY_MATERIAL, "Shoreline overlay material drift");
+  const island = geometryToMultiPolygon(
+    JSON.parse(readFileSync(resolve(projectRoot, SOURCE_CONTRACT.extraction_polygon.path), "utf8")).features[0].geometry,
+    "Treasure Island boundary",
+  );
+  const islandEdges = island.flatMap((polygon) => polygon.flatMap((ring) => ring.map((point, index) => [point, ring[(index + 1) % ring.length]])));
+  const edgeDistance = (east, north) => Math.min(...islandEdges.map(([a, b]) => pointToSegmentDistance2d([east, north], a, b)));
+  const insideIsland = (east, north) => pointInMultiPolygon([east, north], island, false) && edgeDistance(east, north) > 0.01;
+  // Every segment's source keeps its riprap overlay in the chunks.
+  for (const segment of document.segments) {
+    const overlays = [...records.physical.values()].filter(({ record }) => record.object_key.startsWith(`${SHORELINE_OVERLAY_PREFIX}:${segment.source_key}:`));
+    invariant(overlays.length > 0, `Shoreline segment ${segment.id} has no riprap overlay`);
+    for (const { record } of overlays) {
+      invariant(
+        record.feature_kind === "terrain_overlay" && record.material_key === SHORELINE_OVERLAY_MATERIAL && record.collision_kind === "none" &&
+          record.surface_bias_m === document.overlay.bias_m && stableJson(record.source_keys) === stableJson([segment.source_key]),
+        `${record.object_key} riprap overlay semantics drift`,
+      );
+    }
+  }
+  const keys = new Set();
+  let minimumY = Infinity;
+  for (const record of document.records) {
+    invariant(record.object_key.startsWith("shoreline-slope:") && !keys.has(record.object_key), `${record.object_key} is not a unique shoreline slope key`);
+    keys.add(record.object_key);
+    invariant(record.material_key === SHORELINE_SLOPE_MATERIAL, `${record.object_key} material drift`);
+    validateMesh({ ...record, uvs: new Array((record.vertices.length / 3) * 2).fill(0) }, record.object_key);
+    for (let index = 0; index < record.vertices.length; index += 3) {
+      const [east, y, north] = [record.vertices[index], record.vertices[index + 1], -record.vertices[index + 2]];
+      invariant(!insideIsland(east, north), `${record.object_key} vertex ${index / 3} lies inside the playable island`);
+      minimumY = Math.min(minimumY, y);
+    }
+  }
+  invariant(minimumY < WATER_Y_M, "Shoreline slope never reaches under the water plane");
+  const prototypes = new Map();
+  for (const prototype of document.prototypes) {
+    invariant(!prototypes.has(prototype.id) && [SHORELINE_SLOPE_MATERIAL, SHORELINE_DRIFTWOOD_MATERIAL].includes(prototype.material_key), `Shoreline prototype ${prototype.id} identity drift`);
+    validateMesh({ ...prototype, uvs: new Array((prototype.vertices.length / 3) * 2).fill(0) }, `shoreline prototype ${prototype.id}`);
+    prototypes.set(prototype.id, prototype);
+  }
+  const byBand = Object.fromEntries(SHORELINE_BANDS.map((band) => [band, 0]));
+  let previous = "";
+  for (const placement of document.placements) {
+    invariant(placement.id > previous, `Shoreline placement ${placement.id} is out of order`);
+    previous = placement.id;
+    invariant(SHORELINE_BANDS.includes(placement.band) && prototypes.has(placement.prototype), `Shoreline placement ${placement.id} band or prototype drift`);
+    invariant(placement.basis.length === 9 && placement.origin.length === 3 && placement.tint.length === 3 && [...placement.basis, ...placement.origin, ...placement.tint].every(Number.isFinite), `Shoreline placement ${placement.id} is malformed`);
+    const [a, b, c, d, e, f, g, h, i] = placement.basis;
+    invariant(a * (e * i - f * h) - d * (b * i - c * h) + g * (b * f - c * e) > 1e-6, `Shoreline placement ${placement.id} basis is degenerate or mirrored`);
+    invariant(placement.tint.every((value) => value > 0 && value <= 1), `Shoreline placement ${placement.id} tint leaves (0, 1]`);
+    // Crest stones sit on the riprap band inside the outline; the rest stand
+    // on the slope or at the waterline, outside it.
+    const inside = pointInMultiPolygon([placement.origin[0], -placement.origin[2]], island, true);
+    invariant(placement.band === "crest" ? inside : !insideIsland(placement.origin[0], -placement.origin[2]), `Shoreline placement ${placement.id} is on the wrong side of the outline`);
+    byBand[placement.band] += 1;
+  }
+  invariant(document.counts.placements === document.placements.length && stableJson(document.counts.by_band) === stableJson(byBand), "Shoreline placement counts drift");
+  return document;
+}
+
 function validateManifest(worldRoot) {
   verifySourceContract(projectRoot);
   const manifestPath = resolve(worldRoot, "manifest.json");
@@ -1025,6 +1105,7 @@ function main() {
   const pavement = validatePavementSkin(worldRoot, manifest, coverage, records, terrain);
   const vegetation = validateVegetation(worldRoot, manifest, records);
   const streetDetail = validateStreetDetail(worldRoot, manifest, records);
+  const shoreline = validateShoreline(worldRoot, manifest, records);
   process.stdout.write(stableJson({
     status: "valid",
     world: relative(projectRoot, worldRoot).replaceAll("\\", "/"),
@@ -1042,6 +1123,7 @@ function main() {
     vegetation_seed: vegetation.seed,
     vegetation_instances: vegetation.counts.total,
     street_detail_rows: streetDetail.counts.total,
+    shoreline_placements: shoreline.counts.placements,
   }));
 }
 

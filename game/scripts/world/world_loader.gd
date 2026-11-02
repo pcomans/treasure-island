@@ -30,6 +30,8 @@ signal world_failed(code: String, message: String, source_keys: Array)
 @onready var ybi_context: Node3D = $ContextWorld/YerbaBuenaIsland
 @onready var bridge_context: Node3D = $ContextWorld/BayBridge
 @onready var boundary_attached_context: Node3D = $ContextWorld/BoundaryAttachedVisuals
+## The rock slope and boulders outside the outline (generated/world/shoreline.json).
+@onready var shoreline_context: Node3D = $ContextWorld/Shoreline
 @onready var world_boundary: WorldBoundary = $WorldBoundary
 @onready var runtime_evidence: RuntimeEvidence = $RuntimeEvidence
 
@@ -95,10 +97,16 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 		return
 	staged_reports.append(context_result)
 	load_progress.emit(chunks.size() + 1, chunks.size() + 1)
+	var shoreline_result := ShorelineBuilder.new().build(validation.shoreline)
+	if not shoreline_result.ok:
+		_free_staged(staged_reports)
+		_fail(str(shoreline_result.get("code", "shoreline_build")), str(shoreline_result.get("message", "Could not build the validated shoreline.")), [])
+		return
 	var vegetation_builder := VegetationBuilder.new()
 	var vegetation_result := vegetation_builder.build(validation.vegetation)
 	if not vegetation_result.ok:
 		_free_staged(staged_reports)
+		shoreline_result.node.free()
 		_fail(str(vegetation_result.get("code", "vegetation_build")), str(vegetation_result.get("message", "Could not build validated vegetation.")), [])
 		return
 
@@ -106,6 +114,8 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 	for report: Dictionary in staged_reports:
 		builder.attach_built_chunk(report, category_parents)
 		runtime_evidence.add_builder_report(report)
+	shoreline_context.add_child(shoreline_result.node)
+	runtime_evidence.add_builder_report(shoreline_result)
 	var family_result := HOUSING_FAMILY.install(buildings, validation.chunks)
 	if not family_result.ok:
 		vegetation_result.node.free()
@@ -134,6 +144,8 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 	ready_report["bulgarian_wall"] = bulgarian_result
 	ready_report["vegetation_multimesh_batches"] = int(vegetation_result.multimesh_batches)
 	ready_report["vegetation_rendered_triangles"] = int(vegetation_result.rendered_triangles)
+	ready_report["shoreline_boulders"] = int(shoreline_result.boulders)
+	ready_report["shoreline_multimesh_batches"] = int(shoreline_result.multimesh_batches)
 	ready_report["street_detail"] = street_detail_report()
 	runtime_evidence.finish_load(ready_report)
 	world_ready.emit(ready_report)
@@ -162,7 +174,7 @@ func _load_prebuilt(street_choice: Dictionary) -> void:
 		_fail("prebuilt_state", "Prebuilt world is missing validated startup state.", [])
 		return
 	var valid_categories := true
-	var required_paths: Array[String] = ["PlayableWorld/GroundAndAreas", "PlayableWorld/RoadsAndPaths", "PlayableWorld/Buildings", "PlayableWorld/StreetDetail", "ContextWorld/YerbaBuenaIsland", "ContextWorld/BayBridge", "ContextWorld/BoundaryAttachedVisuals"]
+	var required_paths: Array[String] = ["PlayableWorld/GroundAndAreas", "PlayableWorld/RoadsAndPaths", "PlayableWorld/Buildings", "PlayableWorld/StreetDetail", "ContextWorld/YerbaBuenaIsland", "ContextWorld/BayBridge", "ContextWorld/BoundaryAttachedVisuals", "ContextWorld/Shoreline"]
 	for layer: String in STREET_DETAIL_LAYERS:
 		required_paths.append("PlayableWorld/StreetDetail/" + layer.capitalize())
 	for path: String in required_paths:
@@ -188,6 +200,7 @@ func _load_prebuilt(street_choice: Dictionary) -> void:
 	ybi_context = $ContextWorld/YerbaBuenaIsland
 	bridge_context = $ContextWorld/BayBridge
 	boundary_attached_context = $ContextWorld/BoundaryAttachedVisuals
+	shoreline_context = $ContextWorld/Shoreline
 	world_boundary.configure(boundary)
 	_spawn_transform = spawn
 	for field: String in PREBUILT_WORLD.EVIDENCE_FIELDS:
@@ -364,7 +377,7 @@ func _free_staged(reports: Array[Dictionary]) -> void:
 
 
 func _clear_generated_children() -> void:
-	var parents: Array[Node3D] = [ground_and_areas, roads_and_paths, buildings, ybi_context, bridge_context, boundary_attached_context]
+	var parents: Array[Node3D] = [ground_and_areas, roads_and_paths, buildings, ybi_context, bridge_context, boundary_attached_context, shoreline_context]
 	if street_detail != null:
 		for layer: String in STREET_DETAIL_LAYERS:
 			parents.append(street_detail_layer(layer))
