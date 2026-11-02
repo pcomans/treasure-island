@@ -807,7 +807,11 @@ export function generateStreetGround({
   const carriedNodes = new Set(roads.filter((object) => object.tags.footway === "crossing" || object.tags.cycleway === "crossing")
     .flatMap((object) => rawOsm.ways.get(object.row.osm_id).node_refs));
   const crosswalks = [];
-  const addCrosswalk = (sourceKey, center, direction) => {
+  // A crossing is signalized when its way or one of its nodes says so; street
+  // furniture puts signal poles at these.
+  const signalTags = (tags) => tags.crossing === "traffic_signals" || tags.highway === "traffic_signals" || tags["crossing:signals"] === "yes";
+  const nodeTags = (ref) => properSources.get(`n${ref}`)?.metadata.tags ?? {};
+  const addCrosswalk = (sourceKey, center, direction, signals = false) => {
     if (zonesAt(center).length === 0) return;
     const start = add(center, scale(direction, -25));
     const end = add(center, scale(direction, 25));
@@ -822,13 +826,14 @@ export function generateStreetGround({
       if (s0 <= 0.5 && s1 >= -0.5 && (!span || Math.abs(s0 + s1) < Math.abs(span[0] + span[1]))) span = [s0, s1];
     }
     if (!span || span[1] - span[0] < 2) return;
-    crosswalks.push({ source_key: sourceKey, center, direction, across: leftOf(direction), span });
+    crosswalks.push({ source_key: sourceKey, center, direction, across: leftOf(direction), span, signals });
   };
   for (const way of crossingWays) {
     const line = wayLine(way);
     const middle = pointAlong(line, polylineLength(line) / 2);
     const chord = sub(line.at(-1), line[0]);
-    addCrosswalk(way.row.source_key, middle.point, length(chord) > 1 ? unit(chord) : middle.tangent);
+    const signals = signalTags(way.tags) || rawOsm.ways.get(way.row.osm_id).node_refs.some((ref) => signalTags(nodeTags(ref)));
+    addCrosswalk(way.row.source_key, middle.point, length(chord) > 1 ? unit(chord) : middle.tangent, signals);
   }
   for (const [sourceKey, source] of [...properSources.entries()].sort(([left], [right]) => compareSourceKeys(left, right))) {
     if (sourceKey[0] !== "n" || source.metadata.tags.highway !== "crossing" || !marked(source.metadata.tags) || carriedNodes.has(sourceKey.slice(1))) continue;
@@ -836,7 +841,7 @@ export function generateStreetGround({
     const host = node ? vehicles.find((object) => rawOsm.ways.get(object.row.osm_id).node_refs.includes(sourceKey.slice(1))) : null;
     if (!host) continue;
     const position = closestOnPolyline(wayLine(host), projectLonLat(node.coordinate));
-    addCrosswalk(host.row.source_key, position.point, leftOf(position.tangent));
+    addCrosswalk(host.row.source_key, position.point, leftOf(position.tangent), signalTags(source.metadata.tags));
   }
   crosswalks.sort((left, right) => left.center[0] - right.center[0] || left.center[1] - right.center[1]);
   const crosswalkKeepout = union("crosswalk keepout", crosswalks.map((walk) =>
@@ -1080,6 +1085,8 @@ export function generateStreetGround({
     sources.marking.add(sourceKey);
   };
   const counts = { crosswalks: crosswalks.length, curb_ramps: notches.length, centerline_m: 0, stop_bars: 0, stall_lines: 0, wear: {} };
+  // Painted stop bars, for the stop signs beside them.
+  const stopBars = [];
 
   // Crosswalk bars (continental style, bars parallel to traffic).
   for (const walk of crosswalks) {
@@ -1206,6 +1213,7 @@ export function generateStreetGround({
     if (legend.length > 0) {
       addPiece("marking", legend, constantHeight(ROAD_TOP_M + lifts.paint_m), frameUv(STREET_PAINT_KINDS.stop_legend, legendCenter, travel, right, lines.stop_legend_length_m, legendWidth));
     }
+    stopBars.push({ node_key: sourceKey, host_key: host.row.source_key, bar_center: barCenter, travel, right, kerb_offset_m: halfWidth(host) });
     counts.stop_bars += 1;
   }
 
@@ -1502,7 +1510,45 @@ export function generateStreetGround({
     records: [...records.entries()].sort(([left], [right]) => compareChunkIds(left, right))
       .flatMap(([, list]) => list.map((record) => ({ object_key: record.object_key, triangles: record.indices.length / 3 }))),
   };
-  return { records, summary, surfaceAt };
+  // Plan geometry for the street furniture that stands on and beside this
+  // ground (tools/lib/street-furniture-generation.mjs), in the east/north frame.
+  const distanceTo = (index, point, reach) => {
+    if (index.contains(point)) return 0;
+    let best = Infinity;
+    for (const polygon of index.near({ min_x: point[0], min_y: point[1], max_x: point[0], max_y: point[1] }, reach)) {
+      for (const raw of polygon) {
+        const ring = openRing(raw);
+        for (let at = 0; at < ring.length; at += 1) {
+          const a = ring[at];
+          const edge = sub(ring[(at + 1) % ring.length], a);
+          const fraction = Math.max(0, Math.min(1, dot(sub(point, a), edge) / Math.max(1e-12, dot(edge, edge))));
+          best = Math.min(best, length(sub(point, add(a, scale(edge, fraction)))));
+        }
+      }
+    }
+    return best;
+  };
+  const rampIndex = polygonIndex(notchUnion);
+  const site = {
+    top_m: roundCoordinate(top),
+    walk_width_m: crossings.walk_width_m,
+    kerb_roads: kerbRoads.map((road) => ({
+      source_key: road.row.source_key,
+      name: road.tags.name ?? null,
+      highway: road.tags.highway,
+      line: wayLine(road),
+      kerb_offset_m: halfWidth(road),
+    })),
+    crosswalks: crosswalks.map((walk) => ({ ...walk })),
+    stop_bars: stopBars,
+    // Plan distance (m) to the carriageway (0 inside it), searched within reach.
+    carriagewayDistance: (point, reach = 12) => distanceTo(vehicleIndex, point, reach),
+    // Plan distance (m) to a curb ramp (0 inside it), searched within reach.
+    rampDistance: (point, reach = 6) => distanceTo(rampIndex, point, reach),
+    // On the raised street ground: sidewalk, planting strip or plaza top.
+    raised: (point) => raisedIndex.contains(point),
+  };
+  return { records, summary, surfaceAt, site };
 }
 
 function pointInMultiCheap(multi, point) {

@@ -35,6 +35,7 @@ A `--views` focused view may add `camera_xyz` with a vertical `fov` (default 70)
 The player avatar is hidden in every shot; `--show-player` keeps it.
 
 Street detail (the vegetation, furniture, fences and clutter layers under `PlayableWorld/StreetDetail`) is on in play, the web build and `island_test.gd`, and off in `building_fit_test.gd`.
+The furniture layer's poles, posts, cabinets and hydrants are solid (world-solid only, not spray surfaces), so `automated_route_qa.gd`, `island_test.gd` and fits run with `--street-detail on` walk among them; the clearance check keeps them off the walked corridors.
 `building_shots.gd` takes close-ups and focused views with it off and context, island and overhead views both ways (`NAME-street-on.png`, `NAME-street-off.png`); `--street-detail off|on|both` sets every view.
 Override a test with `-- --street-detail on|off`, or choose layers with `--street-detail-layers vegetation,fences` (`island_test.gd`); the play default is the project setting `treasure_island/street_detail/enabled` and `.../layers`.
 

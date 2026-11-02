@@ -14,6 +14,7 @@ import { resolve } from "node:path";
 
 import { projectLonLat } from "./coordinates.mjs";
 import { geometryToLine, pointInMultiPolygon, pointInRing, selectGeometry } from "./osm-geometry.mjs";
+import { placeStreetFurniture, validateFurnitureRules } from "./street-furniture-generation.mjs";
 import { VEGETATION_QA_CORRIDORS } from "./vegetation-generation.mjs";
 import {
   BOUNDARY_ATTACHED_SOURCE_KEYS,
@@ -83,7 +84,7 @@ export const STREET_DETAIL_KINDS = Object.freeze({
   barrier_point: pointKind("fences", 0.5, "host_barrier"),
   bench: pointKind("furniture", 0.9, "faces_road"),
   bicycle_parking: pointKind("furniture", 1.0, "faces_road"),
-  bollard: pointKind("fences", 0.15, "host_barrier"),
+  bollard: pointKind("furniture", 0.15, "host_barrier"),
   bus_stop: pointKind("furniture", 1.5, "faces_road"),
   clutter_slot: pointKind("clutter", 0.4, "seeded"),
   crossing: pointKind(STREET_DETAIL_GROUND_LAYER, 0, "crossing"),
@@ -101,8 +102,9 @@ export const STREET_DETAIL_KINDS = Object.freeze({
   power_pole: pointKind("clutter", 0.2, "host_power_line"),
   retaining_wall: lineKind("fences", 0.2),
   stop_sign: pointKind("furniture", 0.15, "host_road"),
-  street_cabinet: pointKind("clutter", 0.6, "faces_road"),
+  street_cabinet: pointKind("furniture", 0.6, "faces_road"),
   street_lamp: pointKind("furniture", 0.25, "faces_road"),
+  street_sign: pointKind("furniture", 0.15, "faces_road"),
   traffic_signals: pointKind("furniture", 0.25, "host_road"),
   wall: lineKind("fences", 0.15),
   waste_basket: pointKind("furniture", 0.35, "faces_road"),
@@ -391,6 +393,8 @@ export function loadStreetDetailZones(projectRoot) {
     invariant(Array.isArray(zone.scatter), `Street detail zone ${zone.id} scatter must be a list`);
     const ruleIds = new Set();
     for (const rule of zone.scatter) validateScatterRule(rule, zone.id, ruleIds);
+    validateFurnitureRules(zone, STREET_DETAIL_KINDS);
+    for (const rule of zone.furniture ?? []) invariant(!ruleIds.has(rule.id), `Street detail zone ${zone.id} rule ${rule.id} is both scatter and furniture`);
   }
   return config;
 }
@@ -1003,6 +1007,36 @@ export function generateStreetDetail({
     zoneSummaries.push({ id: zone.id, name: zone.name, pilot: zone.pilot, scatter: ruleSummaries });
   }
 
+  // (d) Street furniture, after everything above so it works around it: kit
+  // props for the pilot zones' OSM rows (stop signs move to their curbs) and the
+  // zones' furniture rules (tools/lib/street-furniture-generation.mjs).
+  const furniture = placeStreetFurniture({
+    kinds: STREET_DETAIL_KINDS,
+    rows,
+    occupied,
+    zoneShapes,
+    site: ground.site,
+    rawOsm,
+    hardViolation,
+    hardShapes,
+    buildings,
+    exclusions,
+    onLand,
+    grounded,
+    surfaceAt,
+  });
+  rows.push(...furniture.rows);
+  for (const summary of zoneSummaries) {
+    const zone = config.zones.find((candidate) => candidate.id === summary.id);
+    summary.furniture = (zone.furniture ?? []).map((rule) => ({
+      id: rule.id,
+      kind: rule.kind,
+      prop: rule.prop,
+      pattern: rule.pattern,
+      placed: furniture.audit.rules[`${zone.id}/${rule.id}`] ?? 0,
+    }));
+  }
+
   rows.sort((left, right) => compareText(left.id, right.id));
   invariant(new Set(rows.map((row) => row.id)).size === rows.length, "Street detail row ids are not unique");
   const minimumClearances = Object.fromEntries(STREET_DETAIL_HARD_COMPONENTS.map((component) => [component, Infinity]));
@@ -1036,6 +1070,8 @@ export function generateStreetDetail({
       yaw_radians: "rotation about +Y turning the asset's local -Z front; null when the source gives no direction",
       layers: "switchable runtime subtrees under PlayableWorld/StreetDetail; ground rows feed the always-on chunk surfaces",
       status: "placed rows are built when their layer is on; excluded rows keep their source id and the reason",
+      prop: "the street-furniture kit prop the runtime builds for a placed row (game/scripts/world/street_furniture_kit.gd), with prop_params; rows without one are data only",
+      source_position_m: "a stop sign's OSM node position, kept when the sign moves to the curb of its approach",
     },
     layers: STREET_DETAIL_LAYERS,
     ground_layer: STREET_DETAIL_GROUND_LAYER,
@@ -1068,6 +1104,7 @@ export function generateStreetDetail({
     },
     audit: {
       ...audit,
+      furniture: furniture.audit,
       minimum_placed_clearances_m: Object.fromEntries(
         STREET_DETAIL_HARD_COMPONENTS.map((component) => [component, Number.isFinite(minimumClearances[component]) ? round3(minimumClearances[component]) : null]),
       ),
