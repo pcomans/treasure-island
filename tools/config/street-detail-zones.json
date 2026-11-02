@@ -56,7 +56,7 @@
         {"id": "path_edge_clutter", "kind": "clutter_slot", "pattern": "along", "source_keys": ["w1222514694", "w1370667339", "w1370667340", "w1370667341"], "offsets_m": [-2.2, 2.2], "spacing_m": 12, "jitter_m": 1.5, "acceptance": 0.5}
       ],
       "furniture": [
-        {"id": "plaza_lamps", "kind": "street_lamp", "prop": "lamp_plaza", "pattern": "kerb", "source_keys": ["w28353118", "w1249797944"], "sides": ["left"], "spacing_m": 24, "phase_m": 58, "setback_m": 8.8, "slide_m": 4, "params": {"heads": 4}, "basis": "production_inference", "rule": "Charcoal plaza poles with small spot heads on curved brackets stand along the back edge of the Waterfront Plaza paving, about 24 m apart.", "evidence": "ferry-shelter 11-sv-road-sw and 13-sv-road-ne (83 Treasure Island Rd, Sep 2025), 15-sv-mar2025 and 17-sv-mar2025-canopy (Mar 2025), 21-sv-north-sw and 25-sv-north-mid (185 Treasure Island Rd, Sep 2025)"}
+        {"id": "plaza_lamps", "kind": "street_lamp", "prop": "lamp_plaza", "pattern": "kerb", "source_keys": ["w28353118", "w1249797944"], "sides": ["left"], "spacing_m": 24, "phase_m": 61, "setback_m": 8.8, "slide_m": 4, "params": {"heads": 4}, "basis": "production_inference", "rule": "Charcoal plaza poles with small spot heads on curved brackets stand along the back edge of the Waterfront Plaza paving, about 24 m apart.", "evidence": "ferry-shelter 11-sv-road-sw and 13-sv-road-ne (83 Treasure Island Rd, Sep 2025), 15-sv-mar2025 and 17-sv-mar2025-canopy (Mar 2025), 21-sv-north-sw and 25-sv-north-mid (185 Treasure Island Rd, Sep 2025)"}
       ]
     },
     {

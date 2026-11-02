@@ -19,7 +19,6 @@
         "palms_lamps:curb_ramp": 18,
         "palms_lamps:overlap": 2,
         "plaza_lamps:outside_zone": 17,
-        "plaza_lamps:overlap": 2,
         "stop_sign:curb_ramp": 2,
         "stop_sign:overlap": 4,
         "ti_road_lamps:outside_zone": 68,
@@ -1562,7 +1561,7 @@
     },
     "zones": {
       "path": "tools/config/street-detail-zones.json",
-      "sha256": "55ceb5b69a9a326c9aafc6df0363154b36f6b831cc9cbb20bce515bd2318a5ba"
+      "sha256": "0e6b6c8c058ac2dbb1e00708562f53d898c01d851e38267338bbd6fd1c680fa8"
     }
   },
   "kinds": {
@@ -32150,9 +32149,9 @@
       "kind": "street_lamp",
       "layer": "furniture",
       "position_m": [
-        -90.848,
-        3.835,
-        789.204
+        -92.346,
+        3.848,
+        786.605
       ],
       "prop": "lamp_plaza",
       "prop_params": {
@@ -32168,7 +32167,7 @@
         "source_key": "w1249797944"
       },
       "terrain_support": {
-        "elevation_m": 3.835,
+        "elevation_m": 3.848,
         "object_key": "land:w26767313:x_-1__z_3",
         "triangle_index": 14
       },
@@ -32187,9 +32186,9 @@
       "kind": "street_lamp",
       "layer": "furniture",
       "position_m": [
-        -102.582,
-        3.794,
-        768.843
+        -104.329,
+        3.925,
+        765.811
       ],
       "prop": "lamp_plaza",
       "prop_params": {
@@ -32205,9 +32204,9 @@
         "source_key": "w1249797944"
       },
       "terrain_support": {
-        "elevation_m": 3.794,
-        "object_key": "land:w26767313:x_-1__z_3",
-        "triangle_index": 4
+        "elevation_m": 3.925,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 50
       },
       "yaw_radians": -1.048,
       "yaw_source": "rule:ferry_arrival_plaza/plaza_lamps",
@@ -32224,9 +32223,9 @@
       "kind": "street_lamp",
       "layer": "furniture",
       "position_m": [
-        -114.539,
-        3.858,
-        746.884
+        -115.932,
+        3.817,
+        744.227
       ],
       "prop": "lamp_plaza",
       "prop_params": {
@@ -32242,7 +32241,7 @@
         "source_key": "w1249797944"
       },
       "terrain_support": {
-        "elevation_m": 3.858,
+        "elevation_m": 3.817,
         "object_key": "land:w26767313:x_-1__z_2",
         "triangle_index": 49
       },
