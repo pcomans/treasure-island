@@ -56,6 +56,7 @@ import {
   roundMeasure,
   serializeCsv,
   sha256File,
+  sortJson,
   stableJson,
   verifySourceContract,
 } from "./lib/world-contract.mjs";
@@ -120,6 +121,13 @@ import {
   streetDetailHardShapes,
 } from "./lib/street-detail-generation.mjs";
 import { generateStreetGround } from "./lib/street-ground-generation.mjs";
+import {
+  SHORELINE_OVERLAY_MATERIAL,
+  SHORELINE_OVERLAY_PREFIX,
+  generateShoreline,
+  loadShorelineConfig,
+  planShoreline,
+} from "./lib/shoreline-generation.mjs";
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(scriptDirectory, "..");
@@ -1371,7 +1379,7 @@ function buildBuildings(store, objects) {
   invariant(buildings.every((object) => object.physical_object_keys.size > 0), "At least one building has no physical geometry");
 }
 
-function buildChunks(objects, boundary, terrain) {
+function buildChunks(objects, boundary, terrain, shorelinePlan) {
   const store = chunkStore();
   store.road_batch_audits = [];
   store.pavement_skin_audits = [];
@@ -1391,6 +1399,23 @@ function buildChunks(objects, boundary, terrain) {
     if (object === land || object === coastline) continue;
     if (object.boundary_attached_visual) continue;
     if (object.roles.includes("roads_paths") || object.roles.includes("building") || object.roles.includes("building_part")) continue;
+    // Shoreline segments drape the breakwater's inside band as riprap instead
+    // of the flat breakwater overlay (tools/lib/shoreline-generation.mjs). Both
+    // stay non-colliding overlays of the same source; land_ground is unchanged.
+    const riprap = shorelinePlan.innerBySource.get(object.row.source_key);
+    if (riprap) {
+      const rest = differenceMultiPolygons(object.geometry, riprap);
+      if (rest.length > 0 && multiPolygonArea(rest) > 1e-8) {
+        addChunkedTopSurface(store, { ...object, geometry: rest }, areaStyle(object.tags, object.roles), terrain);
+      }
+      addChunkedTopSurface(
+        store,
+        { ...object, geometry: riprap, logical_key: `${SHORELINE_OVERLAY_PREFIX}:${object.row.source_key}` },
+        { feature_kind: "terrain_overlay", material_key: SHORELINE_OVERLAY_MATERIAL, elevation_m: shorelinePlan.overlay_bias_m },
+        terrain,
+      );
+      continue;
+    }
     addChunkedTopSurface(store, object, areaStyle(object.tags, object.roles), terrain);
   }
   buildRoadChunks(store, objects);
@@ -1978,11 +2003,14 @@ function main() {
       1e-9,
     );
     const playableObjects = buildPlayableObjects(joinedLedger, boundary);
-    const chunks = buildChunks(playableObjects, boundary, terrain);
+    const streetConfig = loadStreetDetailZones(projectRoot);
+    const shorelineConfig = loadShorelineConfig(projectRoot);
+    const shorelinePlan = planShoreline({ config: shorelineConfig.config, boundary, playableObjects, rawOsm: loaded.rawOsm });
+    const chunks = buildChunks(playableObjects, boundary, terrain, shorelinePlan);
     // The spawn reads only land and roads, so it is fixed before street ground lands.
     const spawn = findInitialSpawn(boundary, playableObjects, loaded.rawOsm, loaded.rawSources, chunks);
     const spawnXZ = [spawn.origin[0], spawn.origin[2]];
-    const streetConfig = loadStreetDetailZones(projectRoot);
+    const hardShapes = streetDetailHardShapes(streetConfig.exclusions, { xz: spawnXZ, yaw: spawn.yaw }, loadStreetDetailStairFlights(projectRoot));
     const streetGround = generateStreetGround({
       config: streetConfig,
       playableObjects,
@@ -1991,7 +2019,7 @@ function main() {
       facetsForChunk: (id) => landFacetsForChunk(chunks, id),
       facetElevation,
       spawnXZ,
-      hardShapes: streetDetailHardShapes(streetConfig.exclusions, { xz: spawnXZ, yaw: spawn.yaw }, loadStreetDetailStairFlights(projectRoot)),
+      hardShapes,
     });
     for (const [id, records] of streetGround.records) {
       const chunk = chunks.get(id);
@@ -1999,6 +2027,18 @@ function main() {
       chunk.records.push(...records);
       chunk.records.sort((left, right) => left.object_key.localeCompare(right.object_key));
     }
+    // The rock slope and boulders outside the outline: visual-only, like the YBI context.
+    const shoreline = generateShoreline({
+      plan: shorelinePlan,
+      configDescriptor: shorelineConfig.descriptor,
+      facetsForChunk: (id) => landFacetsForChunk(chunks, id),
+      facetElevation,
+      terrain,
+      spawnXZ,
+      hardShapes,
+      playableObjects,
+      rawOsm: loaded.rawOsm,
+    });
     const context = buildContext(joinedLedger, boundary, loaded.rawOsm, loaded.rawSources, playableObjects, terrain);
     const allObjects = new Map([...playableObjects, ...context.objects]);
     const coverage = coverageRows(allObjects, chunks, context.document);
@@ -2043,6 +2083,8 @@ function main() {
     writeArtifact(stagingRoot, "terrain.json", terrainDocument);
     writeArtifact(stagingRoot, "vegetation.json", vegetation);
     writeArtifact(stagingRoot, "street_detail.json", streetDetail);
+    // Compact: the shoreline is mostly number arrays, and it grows segment by segment.
+    writeArtifact(stagingRoot, "shoreline.json", `${JSON.stringify(sortJson(shoreline.document))}\n`);
     writeArtifact(stagingRoot, "qa/pavement-skin.json", chunks.pavement_skin);
     for (const chunk of [...chunks.values()].sort((left, right) => compareChunkIds(left.chunk_id, right.chunk_id))) {
       writeArtifact(stagingRoot, `chunks/${chunk.chunk_id}.json`, chunk);
@@ -2181,8 +2223,9 @@ function main() {
     const terrainDescriptor = preManifestFiles.find((file) => file.path === "terrain.json");
     const vegetationDescriptor = preManifestFiles.find((file) => file.path === "vegetation.json");
     const streetDetailDescriptor = preManifestFiles.find((file) => file.path === "street_detail.json");
+    const shorelineDescriptor = preManifestFiles.find((file) => file.path === "shoreline.json");
     const chunkDescriptors = preManifestFiles.filter((file) => file.path.startsWith("chunks/"));
-    invariant(coverageDescriptor && contextDescriptor && terrainDescriptor && vegetationDescriptor && streetDetailDescriptor && chunkDescriptors.length === chunks.size, "Manifest artifact discovery failed");
+    invariant(coverageDescriptor && contextDescriptor && terrainDescriptor && vegetationDescriptor && streetDetailDescriptor && shorelineDescriptor && chunkDescriptors.length === chunks.size, "Manifest artifact discovery failed");
     const manifest = {
       schema_version: WORLD_SCHEMA,
       generator_version: GENERATOR_VERSION,
@@ -2216,6 +2259,7 @@ function main() {
       terrain: terrainDescriptor,
       vegetation: vegetationDescriptor,
       street_detail: streetDetailDescriptor,
+      shoreline: shorelineDescriptor,
       chunks: chunkDescriptors.map((descriptor) => ({
         chunk_id: descriptor.path.slice("chunks/".length, -".json".length),
         ...descriptor,

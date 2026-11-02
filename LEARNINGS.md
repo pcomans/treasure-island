@@ -889,3 +889,19 @@ Building 1 study013 (2026-10-09) still showed missing central sash segments afte
 ## Keep to your own subdirectory of the shared session scratchpad
 
 The session scratchpad `/tmp/claude-1000/<project>/<session>/scratchpad` is shared by every subagent of the session, not owned by one agent. On 2026-11-02 the tmp-cleanup agent treated it as its own and began a fixture test with `sudo rm -rf` on `scratchpad/fixture` and `scratchpad/decoy`; only a search of the session's 125 transcripts showed that no other agent had used those names. Work in a subdirectory named after your agent or task, and never delete generic names (`fixture`, `out`, `tmp`, `decoy`) at the scratchpad's top level or in another agent's subdirectory.
+
+## Write edits atomically when the disk is near full
+
+On 2026-11-02 the shared overlay disk swung between about 1.4 GB and 0 bytes free while parallel agents generated worlds and web exports. A Python `open(path, "w")` edit of `generated_world_contract.gd` hit ENOSPC after truncating the file, leaving a 0-byte GDScript source, and the agent harness lost tool output when its own temp directory filled. Check `df` before edits, world generation and engine runs; write edited files through a temporary file, fsync and rename; and re-check the size and syntax of every file touched in a low-space window before committing. Free only your own regenerable files (scratch worlds, your worktree's `.godot` cache); other agents' files are not yours to delete.
+
+## Refresh Godot's class cache before tests after a merge
+
+On 2026-11-02 the shoreline branch merged main, which added `class_name StreetFurnitureBuilder`. The next tests slot ran the headless tests straight away and every test that loads `world_loader.gd` failed with `Identifier "StreetFurnitureBuilder" not declared` (and route QA timed out), because the global class cache in `.godot` predates the new script. The same tests passed once `tools/godot --headless --path . --import` ran first. Start every engine slot after a merge, checkout or rebase that adds or renames a `class_name` script with that import step, and read a `not declared in the current scope` parse error as a stale cache before suspecting the code.
+
+## Scale MultiMesh instances uniformly
+
+In the shoreline rework (2026-11-02) the first boulders were one unit prototype stretched per instance (size, height and depth scaled separately). They shaded like smooth eggs, and the flattest ones (the cobbles, about 4:1) smeared into streaks. Baking the proportions into more prototypes and scaling each instance uniformly gave shading that matched the silhouettes in the next render, though the shapes changed in the same round, so the cause is not isolated (the likely one: instance normals transformed without the inverse transpose). Prefer uniform per-instance scale for instanced rocks and props; use per-axis scale only where it cannot tilt a normal (a cylinder scaled along its axis, an axis-aligned box).
+
+## Settle an instanced asset's form at close range before tuning its layout
+
+In the shoreline pilot (2026-11-02) three rounds tuned the rock pile's layout (rows, overlap, crest height, the waterline) on smooth, sphere-based stones. The re-review and then the owner rejected the stones themselves: rounded loaves read as river rock, and the shore's riprap is quarried blocks with sharp corners. Every layout view inherited that wrong form. Replacing it (fractured polyhedra resting on random faces) changed every placement rule, and one of the fitted camera poses ended up below the new, taller crest. Before tuning the layout of a repeated asset, put one close still of a few instances beside the closest reference crop, and settle the form there. When geometry near a fitted free-camera pose grows, check the pose still clears it before spending an evidence run.

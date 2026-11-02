@@ -4,6 +4,11 @@ const TEXTURE_ROOT := "res://game/resources/textures/world/polyhaven"
 const GROUND_COVER := preload("res://game/scripts/world/ground_cover.gd")
 const GROUND_COVER_SHADER_PATH := "res://game/resources/materials/world/ground_cover/ground_cover.gdshader"
 const COVERAGE_LEDGER_PATH := "res://generated/world/coverage-ledger.csv"
+const SHORELINE_SHADER_PATH := "res://game/resources/materials/world/shoreline/riprap.gdshader"
+const SHORELINE_ALBEDO_PATHS := {
+	"riprap_albedo": "res://game/resources/textures/world/shoreline/riprap_albedo.png",
+	"boulder_albedo": "res://game/resources/textures/world/shoreline/boulder_albedo.png",
+}
 const EXPECTED_MATERIALS := {
 	"road_path": {"feature_kind": "road_path", "context": false, "asset": "clean_asphalt", "source_dimension_m": 2.1, "repeat_dimension_m": 2.1, "normal_strength": 0.2},
 	"road_path_pedestrian": {"feature_kind": "road_path", "context": false, "asset": "concrete_pavement", "source_dimension_m": 1.8, "repeat_dimension_m": 1.8, "normal_strength": 0.2},
@@ -45,7 +50,10 @@ func _initialize() -> void:
 	if not _ground_families_match() or not _ground_routes_match(builder) or not _ground_overrides_name_generated_areas():
 		quit(1)
 		return
-	print("PASS: %d Poly Haven semantic materials retain official source dimensions and exact maps while using approved effective repeats, mipmapped filtering, and pinned subtle normals; land and area records use the shared ground-cover families" % EXPECTED_MATERIALS.size())
+	if not _shoreline_material_matches(builder):
+		quit(1)
+		return
+	print("PASS: %d Poly Haven semantic materials retain official source dimensions and exact maps while using approved effective repeats, mipmapped filtering, and pinned subtle normals; land and area records use the shared ground-cover families; the shoreline slope and stones share one riprap shader with mipmapped textures, and its band and shoulder share the verge's ground cover" % EXPECTED_MATERIALS.size())
 	quit(0)
 
 
@@ -201,6 +209,61 @@ func _ground_overrides_name_generated_areas() -> bool:
 		or not _require(GROUND_COVER.FAMILIES.has(family) or family == GROUND_COVER.PAVED, "Ground-cover override %s names unknown family %s." % [source, family]):
 			return false
 	return true
+
+
+## The shoreline slope and the stones are two shared materials of one riprap
+## shader whose generated textures load with mipmaps; a riprap overlay record
+## (the band inside the outline) gets the verge's ground cover with tangents and
+## no collision, and the shoulder outside the outline gets the same cover.
+func _shoreline_material_matches(builder: WorldChunkBuilder) -> bool:
+	var materials := [ShorelineBuilder.slope_material(), ShorelineBuilder.stone_material()]
+	for index in materials.size():
+		var material: ShaderMaterial = materials[index]
+		if not _require(material != null and material.shader != null and material.shader.resource_path == SHORELINE_SHADER_PATH, "Shoreline material %d is not the riprap shader." % index) \
+		or not _require(int(material.get_shader_parameter("surface")) == index, "Shoreline material %d draws the wrong surface." % index):
+			return false
+		for parameter: String in SHORELINE_ALBEDO_PATHS:
+			var albedo := material.get_shader_parameter(parameter) as Texture2D
+			if not _require(albedo != null and albedo.resource_path == SHORELINE_ALBEDO_PATHS[parameter], "Shoreline %s is not the generated texture." % parameter):
+				return false
+			var image := albedo.get_image()
+			if not _require(image != null and image.has_mipmaps(), "Shoreline %s lacks imported mipmaps." % parameter):
+				return false
+	if not _require(ShorelineBuilder.slope_material() == materials[0] and ShorelineBuilder.stone_material() == materials[1], "Shoreline materials are not shared."):
+		return false
+	var record := {
+		"object_key": "material-contract-shoreline",
+		"source_keys": ["w1222685424"],
+		"feature_kind": "terrain_overlay",
+		"material_key": "terrain_riprap",
+		"receiver_kind": "none",
+		"collision_kind": "none",
+		"opaque": false,
+		"vertices": [0.0, 0.0, 0.0, 10.0, 0.0, 0.0, 0.0, 0.0, 10.0],
+		"normals": [0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0],
+		"uvs": [0.0, 0.0, 1.0, 0.0, 0.0, 1.0],
+		"indices": [0, 2, 1],
+	}
+	var result := builder._build_record(record, false)
+	if not _require(bool(result.get("ok", false)), "A riprap overlay record could not be built."):
+		return false
+	var record_node := result.node as Node3D
+	var mesh := (record_node.get_node("Mesh") as MeshInstance3D).mesh as ArrayMesh
+	var built := mesh.surface_get_material(0)
+	var arrays := mesh.surface_get_arrays(0)
+	var has_tangents := arrays[Mesh.ARRAY_TANGENT] is PackedFloat32Array and (arrays[Mesh.ARRAY_TANGENT] as PackedFloat32Array).size() == 12
+	var has_collision := record_node.get_node_or_null("Collision") != null
+	record_node.free()
+	var verge := GROUND_COVER.material(ShorelineBuilder.BAND_GROUND_FAMILY)
+	# A shoulder record (it carries the land's UVs) gets tangents for the same normal map.
+	var shoulder := ShorelineBuilder._array_mesh({"vertices": record.vertices, "normals": record.normals, "uvs": record.uvs, "indices": record.indices}, ShorelineBuilder.verge_material())
+	var shoulder_arrays := shoulder.surface_get_arrays(0)
+	var shoulder_has_tangents := shoulder_arrays[Mesh.ARRAY_TANGENT] is PackedFloat32Array and (shoulder_arrays[Mesh.ARRAY_TANGENT] as PackedFloat32Array).size() == 12
+	return _require(built == verge, "A riprap overlay record did not get the verge's ground cover.") \
+		and _require(ShorelineBuilder.verge_material() == verge and shoulder.surface_get_material(0) == verge, "The shoreline shoulder does not share the verge's ground cover.") \
+		and _require(shoulder_has_tangents, "A shoreline shoulder mesh lacks tangents for the ground cover's normal map.") \
+		and _require(has_tangents, "A riprap overlay record lacks tangents for the ground cover's normal map.") \
+		and _require(not has_collision, "A riprap overlay record has collision.")
 
 
 func _require(condition: bool, message: String) -> bool:

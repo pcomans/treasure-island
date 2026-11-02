@@ -70,6 +70,8 @@ metadata/license = "CC BY 4.0"
 
 [node name="BoundaryAttachedVisuals" type="Node3D" parent="ContextWorld"]
 
+[node name="Shoreline" type="Node3D" parent="ContextWorld"]
+
 [node name="SanFranciscoBillboard" type="MeshInstance3D" parent="ContextWorld"]
 position = Vector3(-1875, 264.85, 4306.4)
 layers = 1

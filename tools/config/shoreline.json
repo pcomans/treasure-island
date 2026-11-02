@@ -1,0 +1,243 @@
+{
+  "schema_version": "ti.shoreline-config/1",
+  "seed": 1102,
+  "notes": [
+    "Rock armour (riprap) along the island edge, built by tools/lib/shoreline-generation.mjs into the chunk records and generated/world/shoreline.json. Always-on scenery, not a switchable street-detail layer.",
+    "Every value here is an estimate for game art (production inference), read from the dated photos (Sep 2025 Street View at 83 Treasure Island Rd, a Sep 2026 view from the ferry float, Commons Aug 2021 c01/c08 and May 2025 c10/c11) and the USGS 3DEP 2023 DEM; none is survey data.",
+    "A segment takes the OSM breakwater polygon (man_made=breakwater, material=rock) between the distances s_m along the island outline w26767313 (start > end runs across the outline's start). Its part inside the outline, from the crest to the outline, is draped on the land as a terrain overlay with no collision, overlay_bias_m above the land: the verge at the top of the riprap (the 'verge' ground cover: dry grass and dirt), with low cobbles set in it. land_ground stays the only support there, so route QA, the regional anchors and boundary recovery are unchanged.",
+    "Outside the outline a flat shoulder shoulder_m wide continues the verge's ground cover at the land edge's height and in its shading (the dirt and small stones in front of the rocks in the photos), and behind it an underlay slope runs down past the water plane (y -0.12) to toe_y_m. The DEM's gradient between dem_fit_m along each cross-section, clamped to gradient_m_per_m (the photographed 2:1 to 3:1) and smoothed over gradient_smoothing_m, sets it; relief_m of boulder-scale bumps fades in over top_blend_m behind the shoulder. It shows between the stones and stands in for them beyond their visibility range; vertical rock faces close the segment ends.",
+    "Stones are one shared set of fractured quarry blocks (prototypes, cycling through block, slab, long, wedge and chunky shapes): convex polyhedra with flat broken faces, sharp corners and edges, shallow creases across the big faces and chipped corners (12-20 faces; the clean block is the coarse LOD); stones under pebbles.below_m use pebbles, clean blocks without the creases and chips, each instance scaled uniformly by its size (its longest side) and dumped: resting on a broad face (posture: a face of at least broad_face of the largest face's area, each equally often when even, never taller than max_aspect times its narrower width), turned any way and tilted up to tilt_deg. A top row of stones just outside the outline (inner faces at least setback_m beyond it, about the player's radius), sized over size_m mostly toward its low end (size_skew), spaced spacing sizes apart and pushed out_jitter_m further, each buried by a bury share of its own height, up to max_rise_m above the land edge; a back row piled within depth_m behind it, aiming rise_m above the land edge less drop_per_m per metre out but always bedded in the slope; mid-sized crest_fill stones packed between them, so the crest reads as one continuous low heap about a metre high; small shoulder stones in the shoulder, rising rise_m above it; a heap packed over the slope to toe_extra_m past the toe, largest size class first (neighbours overlap by up to 1 - overlap of their radii; bury is a share of each stone's height); past the waterline only stones that stand clear of the water are kept; and low cobbles (small stones mostly buried in the dirt) wholly inside the band, more of them toward the outline (outline_bias), rising at most top_m above the land, so the player walks over them. No stone spills past a segment end. Weathered grey driftwood logs rest on the stone tops along the crest (d_m from the outline), and washed-up planks at the waterline. Everything is visual only; structures (piers keep the slope under them, slipways cut it) clear the stones by clearance_m, except stones that top out under_drop_m below the land edge under a pier, paths clear the cobbles, and the street-detail hard shapes (spawn, ferry path, QA route, stairs, doors, approaches) clear everything. Stones are batched per section_m of shore, band and shape; each band fades out over its visibility_m [end, margin]."
+  ],
+  "overlay_bias_m": 0.06,
+  "slope": {
+    "station_m": 1.0,
+    "columns": 10,
+    "gradient_m_per_m": [
+      0.34,
+      0.55
+    ],
+    "dem_fit_m": [
+      1.0,
+      5.0
+    ],
+    "gradient_smoothing_m": 6.0,
+    "toe_y_m": -0.6,
+    "relief_m": 0.1,
+    "relief_wavelength_m": 1.4,
+    "top_blend_m": 1.0,
+    "end_cap_bottom_y_m": -0.9,
+    "section_m": 90,
+    "shoulder_m": 0.8
+  },
+  "stones": {
+    "prototypes": 5,
+    "section_m": 90,
+    "setback_m": 0.3,
+    "visibility_m": {
+      "cobble": [
+        80,
+        20
+      ],
+      "driftwood": [
+        240,
+        40
+      ],
+      "heap": [
+        240,
+        40
+      ],
+      "top": [
+        240,
+        40
+      ]
+    },
+    "top": {
+      "size_m": [
+        0.45,
+        1.5
+      ],
+      "size_skew": 1.25,
+      "spacing": [
+        0.35,
+        0.7
+      ],
+      "out_jitter_m": [
+        0.0,
+        0.35
+      ],
+      "bury": [
+        0.06,
+        0.22
+      ],
+      "max_rise_m": 1.1,
+      "tilt_deg": 8
+    },
+    "heap": {
+      "classes": [
+        {
+          "size_m": [
+            1.0,
+            1.5
+          ],
+          "fill": 0.22
+        },
+        {
+          "size_m": [
+            0.7,
+            1.0
+          ],
+          "fill": 0.34
+        },
+        {
+          "size_m": [
+            0.45,
+            0.7
+          ],
+          "fill": 0.32
+        },
+        {
+          "size_m": [
+            0.22,
+            0.45
+          ],
+          "fill": 0.16
+        }
+      ],
+      "bury": [
+        0.18,
+        0.35
+      ],
+      "overlap": 0.8,
+      "tilt_deg": 18,
+      "toe_extra_m": 0.15
+    },
+    "cobble": {
+      "size_m": [
+        0.15,
+        0.35
+      ],
+      "top_m": [
+        0.05,
+        0.13
+      ],
+      "fill": 0.025,
+      "edge_m": 0.05,
+      "outline_bias": 2.5,
+      "path_clearance_m": 0.25
+    },
+    "driftwood": {
+      "spacing_m": 16,
+      "acceptance": 0.75,
+      "length_m": [
+        1.8,
+        4.0
+      ],
+      "radius_m": [
+        0.1,
+        0.17
+      ],
+      "d_m": [
+        0.9,
+        2.8
+      ],
+      "yaw_jitter_deg": 30
+    },
+    "planks": [
+      {
+        "segment": "west_ferry_pilot",
+        "near_xz": [
+          -133.0,
+          779.5
+        ],
+        "above_water_m": 0.12,
+        "length_m": 2.9,
+        "width_m": 0.24,
+        "yaw_deg": 32
+      }
+    ],
+    "crest": {
+      "size_m": [
+        0.55,
+        1.5
+      ],
+      "size_skew": 1.2,
+      "fill": 0.75,
+      "depth_m": 2.2,
+      "rise_m": [
+        0.55,
+        1.05
+      ],
+      "drop_per_m": 0.06
+    },
+    "shoulder": {
+      "size_m": [
+        0.18,
+        0.45
+      ],
+      "fill": 0.2,
+      "rise_m": [
+        0.0,
+        0.15
+      ]
+    },
+    "crest_fill": {
+      "size_m": [
+        0.35,
+        0.8
+      ],
+      "fill": 0.6,
+      "rise_m": [
+        0.2,
+        0.8
+      ]
+    },
+    "posture": {
+      "crest": {
+        "broad_face": 0.55,
+        "max_aspect": 0.85,
+        "even": true
+      },
+      "heap": {
+        "broad_face": 0.35,
+        "max_aspect": 1.15,
+        "even": false
+      }
+    },
+    "pebbles": {
+      "prototypes": 3,
+      "below_m": 0.45
+    }
+  },
+  "structures": {
+    "pier": {
+      "tags": [
+        "man_made=jetty",
+        "man_made=pier"
+      ],
+      "slope": "keep",
+      "clearance_m": 0.35,
+      "under_drop_m": 1.7
+    },
+    "slipway": {
+      "tags": [
+        "leisure=slipway"
+      ],
+      "slope": "cut",
+      "clearance_m": 0.6,
+      "under_drop_m": null
+    }
+  },
+  "segments": [
+    {
+      "id": "west_ferry_pilot",
+      "outline_source_key": "w26767313",
+      "source_key": "w1222685424",
+      "s_m": [
+        1380,
+        1740
+      ],
+      "reason": "Pilot: the west shore from north of Waterfront Plaza past the ferry landing pier (w1011830367) to the causeway corner, the first shore a ferry arrival sees.",
+      "reference": "ferry-shelter refs: Sep 2025 Street View 12-sv-road-sw-zoom (83 Treasure Island Rd), Sep 2026 29-sv-water-ne from the float; Commons c01 and c08 (Aug 2021) and c10 (May 2025); USGS 3DEP 2023 profiles: crest 3.2-3.9 m NAVD88, 2:1 to 3:1 to the water"
+    }
+  ]
+}

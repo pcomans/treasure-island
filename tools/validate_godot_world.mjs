@@ -34,6 +34,22 @@ import {
   verifySourceContract,
 } from "./lib/world-contract.mjs";
 import { validateMesh } from "./lib/mesh-output.mjs";
+import { geometryToMultiPolygon, pointInMultiPolygon } from "./lib/osm-geometry.mjs";
+import {
+  SHORELINE_BANDS,
+  SHORELINE_BOULDER_MATERIAL,
+  SHORELINE_COBBLE_MAX_TOP_M,
+  SHORELINE_DRIFTWOOD_MATERIAL,
+  SHORELINE_OUTSIDE_CLEARANCE_M,
+  SHORELINE_OVERLAY_MATERIAL,
+  SHORELINE_OVERLAY_PREFIX,
+  SHORELINE_PLACEMENT_LENGTH,
+  SHORELINE_PROTOTYPE_KINDS,
+  SHORELINE_SCHEMA,
+  SHORELINE_SLOPE_MATERIAL,
+  SHORELINE_VERGE_MATERIAL,
+  WATER_Y_M,
+} from "./lib/shoreline-generation.mjs";
 import {
   NAIP_TREE_ANNOTATION_SCHEMA,
   NAIP_TREE_ANNOTATION_SHA256,
@@ -1018,6 +1034,181 @@ function validateFenceRow(row, grounded, inBoundary) {
   }
 }
 
+// The shoreline: its riprap overlays are ordinary terrain overlays (checked
+// with the other coherent surfaces). Here: the visual-only slope and shoulder
+// stay outside the exact island polygon and the slope reaches under the water; prototypes and their
+// LOD index sets are valid meshes; every placement is a finite unit rotation
+// with positive scale. Then each stone is placed and checked against the
+// island the player walks on: cobbles lie wholly inside it and no higher than
+// SHORELINE_COBBLE_MAX_TOP_M above the land (the player walks over them, with
+// no collision); every other stone and log keeps SHORELINE_OUTSIDE_CLEARANCE_M
+// clear of it on the water side, and one that lies under a walkable pier (the
+// playable boundary's pier extensions) tops out at least 1 m below the land
+// edge, under the deck.
+function validateShoreline(worldRoot, manifest, records) {
+  invariant(manifest.shoreline?.path === "shoreline.json", "Manifest shoreline descriptor is missing");
+  invariant(stableJson(descriptor(worldRoot, manifest.shoreline.path)) === stableJson(manifest.shoreline), "Shoreline descriptor drift");
+  const document = JSON.parse(readFileSync(resolve(worldRoot, manifest.shoreline.path), "utf8"));
+  invariant(document.schema_version === SHORELINE_SCHEMA && document.visual_only === true, "Shoreline schema or visual-only contract drift");
+  invariant(document.water_y_m === WATER_Y_M, "Shoreline water level drift");
+  invariant(document.overlay?.material_key === SHORELINE_OVERLAY_MATERIAL, "Shoreline overlay material drift");
+  // The exact island polygon in world x, z (z = -north).
+  const island = geometryToMultiPolygon(
+    JSON.parse(readFileSync(resolve(projectRoot, SOURCE_CONTRACT.extraction_polygon.path), "utf8")).features[0].geometry,
+    "Treasure Island boundary",
+  );
+  // Island edges in an 8 m grid: distance queries near the shore stay cheap.
+  const cell = 8;
+  const edges = island.flatMap((polygon) => polygon.flatMap((ring) => ring.map((point, index) => [[point[0], -point[1]], [ring[(index + 1) % ring.length][0], -ring[(index + 1) % ring.length][1]]])));
+  const grid = new Map();
+  edges.forEach(([a, b], index) => {
+    for (let x = Math.floor(Math.min(a[0], b[0]) / cell); x <= Math.floor(Math.max(a[0], b[0]) / cell); x += 1) {
+      for (let z = Math.floor(Math.min(a[1], b[1]) / cell); z <= Math.floor(Math.max(a[1], b[1]) / cell); z += 1) {
+        const key = `${x},${z}`;
+        if (!grid.has(key)) grid.set(key, []);
+        grid.get(key).push(index);
+      }
+    }
+  });
+  // Distance to the island edge, exact within one grid cell (Infinity beyond).
+  const nearBoundary = (x, z) => {
+    let best = Infinity;
+    const cx = Math.floor(x / cell);
+    const cz = Math.floor(z / cell);
+    for (let dx = -1; dx <= 1; dx += 1) {
+      for (let dz = -1; dz <= 1; dz += 1) {
+        for (const index of grid.get(`${cx + dx},${cz + dz}`) ?? []) best = Math.min(best, pointToSegmentDistance2d([x, z], edges[index][0], edges[index][1]));
+      }
+    }
+    return best;
+  };
+  const inside = (x, z) => pointInMultiPolygon([x, -z], island, false);
+  const walkable = (x, z) => pointInPlayableBoundary([x, z], manifest.playable_boundary);
+  // Every segment's source keeps its riprap overlay in the chunks.
+  for (const segment of document.segments) {
+    const overlays = [...records.physical.values()].filter(({ record }) => record.object_key.startsWith(`${SHORELINE_OVERLAY_PREFIX}:${segment.source_key}:`));
+    invariant(overlays.length > 0, `Shoreline segment ${segment.id} has no riprap overlay`);
+    for (const { record } of overlays) {
+      invariant(
+        record.feature_kind === "terrain_overlay" && record.material_key === SHORELINE_OVERLAY_MATERIAL && record.collision_kind === "none" &&
+          record.surface_bias_m === document.overlay.bias_m && stableJson(record.source_keys) === stableJson([segment.source_key]),
+        `${record.object_key} riprap overlay semantics drift`,
+      );
+    }
+  }
+  const keys = new Set();
+  let minimumY = Infinity;
+  // The slope, and the shoulder strip, which carries the land's UVs (world x / 10, z / 10).
+  const recordKinds = { "shoreline-slope": SHORELINE_SLOPE_MATERIAL, "shoreline-verge": SHORELINE_VERGE_MATERIAL };
+  for (const record of document.records) {
+    const kind = record.object_key.split(":")[0];
+    invariant(recordKinds[kind] !== undefined && !keys.has(record.object_key), `${record.object_key} is not a unique shoreline slope or shoulder key`);
+    keys.add(record.object_key);
+    invariant(record.material_key === recordKinds[kind], `${record.object_key} material drift`);
+    invariant((kind === "shoreline-verge") === Array.isArray(record.uvs), `${record.object_key} UVs drift`);
+    validateMesh(kind === "shoreline-verge" ? record : { ...record, uvs: new Array((record.vertices.length / 3) * 2).fill(0) }, record.object_key);
+    for (let index = 0; index < record.vertices.length; index += 3) {
+      const [x, y, z] = [record.vertices[index], record.vertices[index + 1], record.vertices[index + 2]];
+      invariant(!inside(x, z) || nearBoundary(x, z) <= 0.01, `${record.object_key} vertex ${index / 3} lies inside the island`);
+      minimumY = Math.min(minimumY, y);
+    }
+  }
+  invariant(minimumY < WATER_Y_M, "Shoreline slope never reaches under the water plane");
+  const prototypes = new Map();
+  for (const prototype of document.prototypes) {
+    invariant(!prototypes.has(prototype.id) && SHORELINE_PROTOTYPE_KINDS.includes(prototype.kind) &&
+      prototype.material_key === (prototype.kind === "boulder" ? SHORELINE_BOULDER_MATERIAL : SHORELINE_DRIFTWOOD_MATERIAL), `Shoreline prototype ${prototype.id} identity drift`);
+    const uvs = new Array((prototype.vertices.length / 3) * 2).fill(0);
+    validateMesh({ ...prototype, uvs }, `shoreline prototype ${prototype.id}`);
+    let error = 0;
+    for (const lod of prototype.lods) {
+      invariant(Number.isFinite(lod.error_m) && lod.error_m > error, `Shoreline prototype ${prototype.id} LOD errors must grow`);
+      error = lod.error_m;
+      validateMesh({ ...prototype, uvs, indices: lod.indices }, `shoreline prototype ${prototype.id} LOD ${lod.error_m}`);
+    }
+    prototypes.set(prototype.id, prototype);
+  }
+  const segments = new Set(document.segments.map((segment) => segment.id));
+  const landByChunk = new Map();
+  for (const { record, chunk_id: chunkId } of records.physical.values()) {
+    if (record.feature_kind !== "land_ground") continue;
+    if (!landByChunk.has(chunkId)) landByChunk.set(chunkId, []);
+    for (let offset = 0; offset < record.indices.length; offset += 3) landByChunk.get(chunkId).push(landFacet(record, offset, chunkId));
+  }
+  const landAt = (x, z) => {
+    const chunkId = `x_${Math.floor(x / 256)}__z_${Math.floor(z / 256)}`;
+    for (const facet of landByChunk.get(chunkId) ?? []) {
+      const sample = facetSample(facet, x, -z);
+      if (sample.inside) return sample.elevation;
+    }
+    return null;
+  };
+  // The land at the island edge nearest a point outside (sampled 5 cm inland).
+  const edgeLandAt = (x, z) => {
+    let best = null;
+    for (const [a, b] of edges) {
+      const dx = b[0] - a[0];
+      const dz = b[1] - a[1];
+      const t = Math.max(0, Math.min(1, ((x - a[0]) * dx + (z - a[1]) * dz) / (dx * dx + dz * dz)));
+      const point = [a[0] + t * dx, a[1] + t * dz];
+      const distance = Math.hypot(x - point[0], z - point[1]);
+      if (!best || distance < best.distance) best = { distance, point };
+    }
+    const scale = 0.05 / Math.max(best.distance, 1e-9);
+    return landAt(best.point[0] + (best.point[0] - x) * scale, best.point[1] + (best.point[1] - z) * scale);
+  };
+  const batchIds = new Set();
+  let placements = 0;
+  for (const batch of document.batches) {
+    invariant(!batchIds.has(batch.id) && SHORELINE_BANDS.includes(batch.band) && prototypes.has(batch.prototype) && segments.has(batch.segment) &&
+      Number.isInteger(batch.section) && batch.section >= 0 && typeof batch.cast_shadow === "boolean" &&
+      Number.isFinite(batch.visibility_end_m) && Number.isFinite(batch.visibility_margin_m) && batch.visibility_margin_m > 0 && batch.visibility_end_m > batch.visibility_margin_m,
+    `Shoreline batch ${batch.id} identity or visibility drift`);
+    batchIds.add(batch.id);
+    invariant(Array.isArray(batch.placements) && batch.placements.length > 0, `Shoreline batch ${batch.id} is empty`);
+    const prototype = prototypes.get(batch.prototype);
+    invariant((batch.band === "driftwood") === (prototype.kind !== "boulder"), `Shoreline batch ${batch.id} puts ${prototype.kind} in ${batch.band}`);
+    for (const placement of batch.placements) {
+      invariant(Array.isArray(placement) && placement.length === SHORELINE_PLACEMENT_LENGTH && placement.every(Number.isFinite), `Shoreline batch ${batch.id} has a malformed placement`);
+      const [ox, oy, oz, qx, qy, qz, qw, sx, sy, sz] = placement;
+      invariant(Math.abs(Math.hypot(qx, qy, qz, qw) - 1) <= 0.01 && sx > 0 && sy > 0 && sz > 0, `Shoreline batch ${batch.id} has a placement that is not a scaled rotation`);
+      // The stone shader turns normals by the model matrix alone: stones scale uniformly.
+      invariant(prototype.kind !== "boulder" || (sx === sy && sy === sz), `Shoreline batch ${batch.id} scales a stone unevenly`);
+      invariant(placement.slice(10).every((value) => value > 0 && value <= 1), `Shoreline batch ${batch.id} has a tint outside (0, 1]`);
+      const columns = [
+        [(1 - 2 * (qy * qy + qz * qz)) * sx, 2 * (qx * qy + qz * qw) * sx, 2 * (qx * qz - qy * qw) * sx],
+        [2 * (qx * qy - qz * qw) * sy, (1 - 2 * (qx * qx + qz * qz)) * sy, 2 * (qy * qz + qx * qw) * sy],
+        [2 * (qx * qz + qy * qw) * sz, 2 * (qy * qz - qx * qw) * sz, (1 - 2 * (qx * qx + qy * qy)) * sz],
+      ];
+      let top = -Infinity;
+      let underPier = false;
+      for (let index = 0; index < prototype.vertices.length; index += 3) {
+        const [vx, vy, vz] = [prototype.vertices[index], prototype.vertices[index + 1], prototype.vertices[index + 2]];
+        const x = ox + columns[0][0] * vx + columns[1][0] * vy + columns[2][0] * vz;
+        const y = oy + columns[0][1] * vx + columns[1][1] * vy + columns[2][1] * vz;
+        const z = oz + columns[0][2] * vx + columns[1][2] * vy + columns[2][2] * vz;
+        top = Math.max(top, y);
+        const distance = nearBoundary(x, z);
+        if (batch.band === "cobble") {
+          invariant(inside(x, z) && distance > 0.005, `Shoreline cobble in ${batch.id} at (${ox}, ${oz}) reaches the playable boundary`);
+        } else {
+          invariant(!inside(x, z) && distance >= SHORELINE_OUTSIDE_CLEARANCE_M - 0.005, `Shoreline ${batch.band} stone in ${batch.id} at (${ox}, ${oz}) comes within ${distance.toFixed(3)} m of the island edge`);
+          underPier ||= walkable(x, z);
+        }
+      }
+      if (batch.band === "cobble") {
+        const land = landAt(ox, oz);
+        invariant(land != null && top <= land + SHORELINE_COBBLE_MAX_TOP_M + 1e-6, `Shoreline cobble in ${batch.id} at (${ox}, ${oz}) rises ${(top - land).toFixed(3)} m above the land`);
+      } else if (underPier) {
+        const land = edgeLandAt(ox, oz);
+        invariant(land != null && top <= land - 1.0, `Shoreline ${batch.band} stone in ${batch.id} at (${ox}, ${oz}) under a walkable pier reaches ${top.toFixed(3)} m, within 1 m of the land edge`);
+      }
+      placements += 1;
+    }
+  }
+  return { document, placements };
+}
+
 function validateManifest(worldRoot) {
   verifySourceContract(projectRoot);
   const manifestPath = resolve(worldRoot, "manifest.json");
@@ -1067,6 +1258,7 @@ function main() {
   const pavement = validatePavementSkin(worldRoot, manifest, coverage, records, terrain);
   const vegetation = validateVegetation(worldRoot, manifest, records);
   const streetDetail = validateStreetDetail(worldRoot, manifest, records);
+  const shoreline = validateShoreline(worldRoot, manifest, records);
   process.stdout.write(stableJson({
     status: "valid",
     world: relative(projectRoot, worldRoot).replaceAll("\\", "/"),
@@ -1084,6 +1276,7 @@ function main() {
     vegetation_seed: vegetation.seed,
     vegetation_instances: vegetation.counts.total,
     street_detail_rows: streetDetail.counts.total,
+    shoreline_placements: shoreline.placements,
   }));
 }
 
