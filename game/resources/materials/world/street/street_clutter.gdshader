@@ -18,7 +18,7 @@ uniform sampler2D palette : source_color, filter_nearest, repeat_disable;
 // grille, orange, white, metal.
 const float PART_ROUGHNESS[16] = float[16](0.3, 0.3, 0.05, 0.86, 0.32, 0.55, 0.6, 0.14, 0.07, 0.12, 0.5, 0.95, 0.42, 0.55, 0.45, 0.4);
 const float PART_METALLIC[16] = float[16](0.0, 0.0, 0.0, 0.0, 0.85, 0.3, 0.0, 1.0, 0.55, 0.0, 0.0, 0.0, 0.2, 0.0, 0.0, 0.8);
-const float PART_SPECULAR[16] = float[16](0.5, 0.5, 0.6, 0.3, 0.5, 0.4, 0.4, 0.5, 0.6, 0.5, 0.4, 0.2, 0.4, 0.5, 0.5, 0.5);
+const float PART_SPECULAR[16] = float[16](0.5, 0.5, 0.8, 0.3, 0.5, 0.4, 0.4, 0.5, 0.6, 0.5, 0.4, 0.2, 0.4, 0.5, 0.5, 0.5);
 
 varying flat int part;
 varying flat float paint_u;

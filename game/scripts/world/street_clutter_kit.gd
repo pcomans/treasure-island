@@ -20,7 +20,7 @@ const SHADER := preload("res://game/resources/materials/world/street/street_clut
 const PART_COLORS := [
 	Color(0.5, 0.5, 0.5), # paint
 	Color(0.5, 0.5, 0.5), # roof
-	Color(0.07, 0.085, 0.1), # glass: dark, the sky shows in its reflection
+	Color(0.1, 0.115, 0.135), # glass: dark slate, a shade above black paint; the sky shows in its reflection
 	Color(0.12, 0.12, 0.125), # tire
 	Color(0.74, 0.75, 0.77), # rim (alloy)
 	Color(0.11, 0.11, 0.12), # hub, spoke gaps, dark rims
