@@ -21,13 +21,15 @@ commit="$(git rev-parse --short HEAD)"
 baked=generated/native/static_world.scn
 work="$(mktemp -d)"
 trap 'rm -rf "${work}"; rm -f "${baked}"' EXIT
-tools/prebuild-static-world.sh native
-if [ "$(git rev-parse HEAD)" != "${revision}" ] || [ -n "$(git status --porcelain)" ]; then
-  echo "FAIL: source changed during static-world baking" >&2
-  exit 1
-fi
 mkdir -p build/mac build/linux
 touch build/.gdignore
+# A fresh checkout has nothing imported yet, and the bake and exports need it.
+timeout 300 tools/godot --headless --path . --import
+tools/prebuild-static-world.sh native
+if [ "$(git rev-parse HEAD)" != "${revision}" ] || [ -n "$(git status --porcelain)" ]; then
+  echo "FAIL: source changed during the import or static-world bake" >&2
+  exit 1
+fi
 zip="build/mac/treasure-island-mac-${commit}.zip"
 rm -f "${zip}"
 

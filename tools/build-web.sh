@@ -8,7 +8,8 @@
 #   1. exports the single-threaded web build, which needs no special headers,
 #   2. checks the data pack contains only game files (no reference photos,
 #      research or evidence),
-#   3. writes vercel.json so browsers cache the large files for good.
+#   3. writes vercel.json so browsers cache the large files for good, and a
+#      .vercelignore so the Vercel CLI never uploads an .env file.
 set -euo pipefail
 root="$(cd "$(dirname "$0")/.." && pwd)"
 cd "${root}"
@@ -31,10 +32,12 @@ mkdir -p generated/web
 rm -f "${baked}"
 work="$(mktemp -d)"
 trap 'rm -rf "${work}"; rm -f "${baked}"' EXIT
+# A fresh checkout has nothing imported yet, and the bake and export need it.
+timeout 300 tools/godot --headless --path . --import
 tools/prebuild-static-world.sh web
 test -s "${baked}"
 if [ "$(git rev-parse HEAD)" != "${revision}" ] || [ -n "$(git status --porcelain)" ]; then
-  echo "FAIL: source changed during static-world baking; commit and rebuild" >&2
+  echo "FAIL: source changed during the import or static-world bake; commit and rebuild" >&2
   exit 1
 fi
 
@@ -58,4 +61,6 @@ cat >"${out}/vercel.json" <<'EOF'
   ]
 }
 EOF
+# The CLI skips its own list (.vercel, .env.local, ...) and these patterns.
+printf '.env*\n' >"${out}/.vercelignore"
 echo "PASS: ${out}/index.html ($(du -sh "${out}" | cut -f1))"
