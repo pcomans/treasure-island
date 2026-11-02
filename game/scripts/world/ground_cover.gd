@@ -29,6 +29,8 @@ const FAMILIES := {
 ## buildings and the Yerba Buena context keep their existing materials.
 const FAMILY_BY_MATERIAL_KEY := {
 	"land_ground": "field",
+	# Planted strips and back slopes of the raised street ground match the land.
+	"street_kerb_verge": "field",
 	"major_area_landuse": "residential",
 	"major_area_leisure": "lawn",
 	"major_area_amenity": "lawn",
@@ -65,8 +67,8 @@ const FAMILY_BY_SOURCE := {
 static var _materials: Dictionary = {}
 
 
-## The family for a generated land or area record: a FAMILIES key, PAVED, or ""
-## when the builder keeps its own material.
+## The family for a generated land, area or planted street-kerb record: a
+## FAMILIES key, PAVED, or "" when the builder keeps its own material.
 static func family_for(record: Dictionary, is_context: bool) -> String:
 	if is_context:
 		return ""
@@ -75,7 +77,7 @@ static func family_for(record: Dictionary, is_context: bool) -> String:
 		var sources: Array = record.get("source_keys", [])
 		if sources.size() == 1 and FAMILY_BY_SOURCE.has(str(sources[0])):
 			return str(FAMILY_BY_SOURCE[str(sources[0])])
-	elif feature != "land_ground":
+	elif feature != "land_ground" and feature != "street_kerb":
 		return ""
 	return str(FAMILY_BY_MATERIAL_KEY.get(str(record.get("material_key", "")), ""))
 

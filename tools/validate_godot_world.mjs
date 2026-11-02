@@ -54,6 +54,11 @@ import {
   STREET_DETAIL_SCHEMA,
   STREET_DETAIL_SOURCES,
 } from "./lib/street-detail-generation.mjs";
+import {
+  STREET_GROUND_FEATURE_KINDS,
+  STREET_GROUND_MAXIMUM_HEIGHT_M,
+  STREET_GROUND_MINIMUM_HEIGHT_M,
+} from "./lib/street-ground-generation.mjs";
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(scriptDirectory, "..");
@@ -70,6 +75,16 @@ const NAIP_TREE_ANNOTATIONS_PATH = resolve(
   projectRoot,
   "source_assets/vegetation/naip_2022/tree_annotations_candidate.geojson",
 );
+// Street-ground record kinds: object key prefix -> feature kind, material,
+// collision and spray opacity. Every record holds one chunk's share of a layer.
+const STREET_GROUND_RECORDS = Object.freeze({
+  "street-kerb": ["street_kerb", "street_kerb_concrete", "world_solid", true],
+  "street-verge": ["street_kerb", "street_kerb_verge", "world_solid", true],
+  "street-ramp": ["street_kerb_support", "street_kerb_support", "world_solid", false],
+  "street-gutter": ["street_paint", "street_gutter", "none", false],
+  "street-marking": ["street_paint", "street_marking", "none", false],
+  "street-wear": ["street_paint", "street_wear", "none", false],
+});
 const EXPECTED_PHYSICAL_COLLISION_SHA256 = "3c5571828de1498622fbcf074a0f3ec03790b14ad36160c9302652421c345296";
 
 function listFiles(root, current = root) {
@@ -165,6 +180,17 @@ function validateRecords(worldRoot, manifest, coverage) {
       }
       if (record.feature_kind === "road_path" || record.feature_kind === "major_area" || record.feature_kind === "terrain_overlay") {
         invariant(record.collision_kind === "none" && record.receiver_kind === "none", `${record.object_key} overlay collision leak`);
+      }
+      if (STREET_GROUND_FEATURE_KINDS.includes(record.feature_kind)) {
+        const [prefix, chunkId] = record.object_key.split(":");
+        const expected = STREET_GROUND_RECORDS[prefix];
+        invariant(expected && chunkId === chunk.chunk_id, `${record.object_key} is not a street-ground record key for its chunk`);
+        const [featureKind, materialKey, collisionKind, opaque] = expected;
+        invariant(
+          record.feature_kind === featureKind && record.material_key === materialKey && record.collision_kind === collisionKind &&
+            record.opaque === opaque && record.receiver_kind === "none",
+          `${record.object_key} street-ground semantics drift`,
+        );
       }
       validateMesh(record, record.object_key);
       invariant(!physical.has(record.object_key), `Duplicate physical key ${record.object_key}`);
@@ -319,7 +345,24 @@ function validateCoherentGeometry(records, terrain) {
   let maximumHeightDeviation = 0;
   let maximumFoundationGap = -Infinity;
 
+  let streetGroundSamples = 0;
   for (const { record, chunk_id: chunkId } of records.physical.values()) {
+    if (STREET_GROUND_FEATURE_KINDS.includes(record.feature_kind)) {
+      // Every street-ground vertex sits on its chunk's land, within the kerb band.
+      const facets = facetsByChunk.get(chunkId) ?? [];
+      for (let index = 0; index < record.vertices.length / 3; index += 1) {
+        const [east, elevation, north] = recordVertex(record, index);
+        const land = containingFacet(facets, east, north);
+        invariant(land, `${record.object_key} vertex ${index} is off its chunk's land`);
+        const height = elevation - land.elevation;
+        invariant(
+          height >= STREET_GROUND_MINIMUM_HEIGHT_M - COORDINATE_ROUNDING_M * 2 && height <= STREET_GROUND_MAXIMUM_HEIGHT_M,
+          `${record.object_key} vertex ${index} sits ${height} m above land, outside the street-ground band`,
+        );
+        streetGroundSamples += 1;
+      }
+      continue;
+    }
     const isOverlay = ["road_path", "major_area", "terrain_overlay"].includes(record.feature_kind);
     if (isOverlay) {
       invariant(Number.isFinite(record.surface_bias_m), `${record.object_key} has no surface bias`);
@@ -421,7 +464,7 @@ function validateCoherentGeometry(records, terrain) {
   invariant(foundationSamples === foundations.sample_points && waterSupportedSegments === foundations.water_supported_exterior_segments, "Foundation support sample totals drift");
   invariant(roofCells === foundations.flat_roof_cells && maximumRoofRange <= foundations.tolerance_m && maximumHeightDeviation <= foundations.tolerance_m, "Building roof/base/height contract drift");
   invariant(maximumFoundationGap <= foundations.tolerance_m, "Foundation gap exceeds descriptor tolerance");
-  return { surfaceSamples, maximumBiasDeviation, exteriorSegments, foundationSamples, waterSupportedSegments, roofCells };
+  return { surfaceSamples, maximumBiasDeviation, exteriorSegments, foundationSamples, waterSupportedSegments, roofCells, streetGroundSamples };
 }
 
 function validateTerrain(worldRoot, manifest) {
@@ -671,9 +714,12 @@ function validatePavementSkin(worldRoot, manifest, coverage, records, terrain) {
   );
   invariant(terrain.building_foundations.maximum_positive_gap_m === 0, "Pavement pass changed the zero-gap foundation contract");
 
+  // The visual pavement pass must not change land, building or other collision.
+  // Street-ground kerbs and their ramps are a separate, deliberate collision
+  // layer with their own checks (record semantics and the height band above).
   const collisionPayload = [...records.physical.values()]
     .map(({ record }) => record)
-    .filter((record) => record.collision_kind === "world_solid")
+    .filter((record) => record.collision_kind === "world_solid" && !STREET_GROUND_FEATURE_KINDS.includes(record.feature_kind))
     .sort((left, right) => left.object_key.localeCompare(right.object_key))
     .map((record) => ({
       object_key: record.object_key,
@@ -985,6 +1031,7 @@ function main() {
     coherent_surface_samples: coherentGeometry.surfaceSamples,
     foundation_samples: coherentGeometry.foundationSamples,
     flat_roof_cells: coherentGeometry.roofCells,
+    street_ground_samples: coherentGeometry.streetGroundSamples,
     pavement,
     vegetation_seed: vegetation.seed,
     vegetation_instances: vegetation.counts.total,

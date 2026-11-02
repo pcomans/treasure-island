@@ -22,11 +22,24 @@
     "land_edge_buffer_m": 1.0,
     "vegetation_placeholder_radius_m": 1.0
   },
+  "ground": {
+    "notes": [
+      "Always-on street ground for the pilot zones: kerbs and raised sidewalks, curb ramps, road paint and asphalt wear, built by tools/lib/street-ground-generation.mjs into the chunk records. A zone without a ground block gets none.",
+      "Dimensions are production inference read from the dated pilot photos (Sep 2025 Treasure Island Road, ferry plaza and Building 1 forecourt; Sep and Nov 2025 Avenue of the Palms), not survey data. Road widths stay the frozen generator ribbons.",
+      "Collision: sidewalk tops are solid at the road surface plus reveal_m. The stock player has no step-up (floor_snap_length 0.35 m, floor_max_angle 48 degrees), so every curb face has an invisible collision ramp support_run_m wide in front of it, back edges a visible slope back_slope_run_m wide and curb-ramp sides a flare flare_run_m wide; the generator rejects any of them steeper than 40 degrees.",
+      "Wear densities are decals per 100 m2 of asphalt in the zone: low in the new district, more on older roads and the forecourt lot."
+    ],
+    "kerb": {"reveal_m": 0.15, "sidewalk_width_m": 2.2, "sidewalk_reach_m": 5.0, "support_run_m": 0.45, "back_slope_run_m": 0.8, "flare_run_m": 0.6, "gutter_width_m": 0.35, "building_clearance_m": 0.3, "minimum_width_m": 0.6},
+    "crossings": {"bar_width_m": 0.6, "bar_gap_m": 0.6, "walk_width_m": 3.0, "ramp_width_m": 2.8, "ramp_depth_m": 1.5, "tactile_depth_m": 0.9},
+    "lines": {"width_m": 0.1, "double_gap_m": 0.1, "edge_inset_m": 0.3, "bike_lane_width_m": 1.5, "bus_lane_width_m": 2.0, "conflict_length_m": 9.0, "stop_bar_width_m": 0.45, "stop_legend_length_m": 2.4, "stop_legend_gap_m": 1.5, "stall_length_m": 5.2, "stall_spacing_m": 2.7},
+    "lifts": {"paint_m": 0.006, "gutter_m": 0.003}
+  },
   "zones": [
     {
       "id": "ferry_arrival_plaza",
       "name": "Ferry arrival and Waterfront Plaza",
       "pilot": true,
+      "ground": {"kerbs": true, "centerline_highways": ["tertiary"], "lane_markings": true, "parking_stalls": false, "wear": {"crack_per_100m2": 0.15, "patch_per_100m2": 0.03, "oil_per_100m2": 0.05, "manhole_spacing_m": 90, "drain_spacing_m": 50}},
       "reason": "First view after the ferry spawn: the plaza lawn and paths between the landing pier and Treasure Island Road.",
       "reference": "OSM w1428380754 (Waterfront Plaza, leisure=park), w1222514694 and w1036802527 (landing footways), ferry spawn from the manifest",
       "shape": {
@@ -42,6 +55,7 @@
       "id": "treasure_island_road_south",
       "name": "Treasure Island Road, ferry crossing to Trade Winds Avenue",
       "pilot": true,
+      "ground": {"kerbs": true, "centerline_highways": ["tertiary"], "lane_markings": true, "parking_stalls": false, "wear": {"crack_per_100m2": 0.2, "patch_per_100m2": 0.04, "oil_per_100m2": 0.05, "manhole_spacing_m": 90, "drain_spacing_m": 50}},
       "reason": "The arrival walk south along Treasure Island Road and its west sidewalk.",
       "reference": "OSM w1249797944 and w1249797945 (Treasure Island Road), w1212173466 and w1212173452 (sidewalks)",
       "shape": {"type": "corridor", "source_keys": ["w1249797944", "w1249797945"], "half_width_m": 18},
@@ -53,6 +67,7 @@
       "id": "trade_winds_palms_link",
       "name": "Trade Winds Avenue to Avenue of the Palms link",
       "pilot": true,
+      "ground": {"kerbs": true, "centerline_highways": ["tertiary"], "lane_markings": true, "parking_stalls": false, "wear": {"crack_per_100m2": 0.45, "patch_per_100m2": 0.08, "oil_per_100m2": 0.08, "manhole_spacing_m": 80, "drain_spacing_m": 55}},
       "reason": "The path from the Trade Winds turn to the north end of Avenue of the Palms.",
       "reference": "OSM w255330044 (Trade Winds Avenue), w1248964744, w1530613464 and w1370667335 (cycleways)",
       "shape": {"type": "corridor", "source_keys": ["w255330044", "w1248964744", "w1370667335", "w1530613464"], "half_width_m": 12},
@@ -64,6 +79,7 @@
       "id": "avenue_of_the_palms",
       "name": "Avenue of the Palms",
       "pilot": true,
+      "ground": {"kerbs": true, "centerline_highways": [], "lane_markings": false, "parking_stalls": false, "wear": {"crack_per_100m2": 0.05, "patch_per_100m2": 0.0, "oil_per_100m2": 0.1, "manhole_spacing_m": 90, "drain_spacing_m": 60}},
       "reason": "The palm-lined avenue named in the pilot route; palm slots stand in both verges.",
       "reference": "OSM w1001544697 (Avenue of the Palms), w1212173444 and w1375156123 (sidewalks)",
       "shape": {"type": "corridor", "source_keys": ["w1001544697"], "half_width_m": 14},
@@ -75,6 +91,7 @@
       "id": "building_1_forecourt",
       "name": "Building 1 forecourt",
       "pilot": true,
+      "ground": {"kerbs": true, "centerline_highways": ["tertiary"], "lane_markings": true, "parking_stalls": true, "wear": {"crack_per_100m2": 0.6, "patch_per_100m2": 0.12, "oil_per_100m2": 0.45, "manhole_spacing_m": 0, "drain_spacing_m": 0}},
       "reason": "The forecourt and half-moon drive between Treasure Island Road and the Building 1 front.",
       "reference": "OSM r16681702 (Building 1, Treasure Island Museum), w775796580 (forecourt drive)",
       "shape": {

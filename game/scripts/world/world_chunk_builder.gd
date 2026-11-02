@@ -43,6 +43,17 @@ const ACCEPTED_MATERIAL_RUN_TRIALS := preload("res://game/scripts/world/facades/
 const BUILDING_1_HERO_MODEL := preload("res://game/scripts/world/facades/building_1_hero_model.gd")
 const BUILDING_2_HERO_MODEL := preload("res://game/scripts/world/facades/building_2_hero_model.gd")
 const GROUND_COVER := preload("res://game/scripts/world/ground_cover.gd")
+## Street ground (tools/lib/street-ground-generation.mjs): road paint and asphalt
+## wear share one blended decal shader; kerbs reuse the Poly Haven concrete.
+const STREET_DECAL_SHADER := preload("res://game/resources/materials/world/street/street_decal.gdshader")
+const STREET_DECAL_TEXTURES := {
+	"paint_wear": preload("res://game/resources/textures/world/street/street_paint_wear.png"),
+	"tactile": preload("res://game/resources/textures/world/street/street_tactile.png"),
+	"stop_legend": preload("res://game/resources/textures/world/street/street_stop_legend.png"),
+	"wear_atlas": preload("res://game/resources/textures/world/street/street_wear_atlas.png"),
+}
+## Decal material key -> [shader mode, render priority]: paint draws over wear.
+const STREET_DECAL_MATERIALS := {"street_wear": [1, 0], "street_marking": [0, 1]}
 const POLYHAVEN_TEXTURE_SETS := {
 	"clean_asphalt": {
 		"albedo": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"),
@@ -92,6 +103,8 @@ const POLYHAVEN_MATERIAL_TEXTURE_SET := {
 	"road_path": "clean_asphalt",
 	"road_path_pedestrian": "concrete_pavement",
 	"major_area_paved": "concrete_floor_03",
+	"street_kerb_concrete": "concrete_pavement",
+	"street_gutter": "concrete_floor_03",
 	"context_ybi": "sparse_grass",
 	"building_wall": "plaster_grey_04",
 	"building_part_wall": "plaster_grey_04",
@@ -100,6 +113,7 @@ const POLYHAVEN_MATERIAL_TEXTURE_SET := {
 }
 
 var _materials: Dictionary = {}
+var _street_decal_materials: Dictionary = {}
 var _generic_roof_material: StandardMaterial3D
 
 
@@ -696,7 +710,9 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 	if (POLYHAVEN_MATERIAL_TEXTURE_SET.has(str(record.material_key)) or ground_family != "") and not uvs.is_empty():
 		arrays[Mesh.ARRAY_TANGENT] = _tangents_for(vertices, normals, uvs, indices)
 	var placeholder_material: Material
-	if ground_family == GROUND_COVER.PAVED:
+	if STREET_DECAL_MATERIALS.has(str(record.material_key)):
+		placeholder_material = _street_decal_material(str(record.material_key))
+	elif ground_family == GROUND_COVER.PAVED:
 		placeholder_material = _material_for("major_area_paved", "major_area", false)
 	elif ground_family != "":
 		placeholder_material = GROUND_COVER.material(ground_family)
@@ -749,16 +765,20 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 		root.set_meta("d1_b225_host_partition", (surface_plan.metadata as Dictionary).duplicate(true))
 	elif surface_plan.has("metadata"):
 		root.set_meta("accepted_material_run_trial", (surface_plan.metadata as Dictionary).duplicate(true))
-	var mesh_instance := MeshInstance3D.new()
-	mesh_instance.name = "Mesh"
-	mesh_instance.mesh = mesh
-	mesh_instance.layers = RENDER_BUILDING_WALL if str(record.receiver_kind) == "building_wall" else RENDER_WORLD_VISIBLE
-	mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF \
-		if str(record.feature_kind) in ["road_path", "major_area", "terrain_overlay"] \
-		else GeometryInstance3D.SHADOW_CASTING_SETTING_ON
-	root.add_child(mesh_instance)
-	var mesh_instances := 1
-	var surfaces := mesh.get_surface_count()
+	var mesh_instances := 0
+	var surfaces := 0
+	# Street-kerb support ramps are collision only: no visible mesh.
+	if str(record.feature_kind) != "street_kerb_support":
+		var mesh_instance := MeshInstance3D.new()
+		mesh_instance.name = "Mesh"
+		mesh_instance.mesh = mesh
+		mesh_instance.layers = RENDER_BUILDING_WALL if str(record.receiver_kind) == "building_wall" else RENDER_WORLD_VISIBLE
+		mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF \
+			if str(record.feature_kind) in ["road_path", "major_area", "terrain_overlay", "street_paint"] \
+			else GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+		root.add_child(mesh_instance)
+		mesh_instances = 1
+		surfaces = mesh.get_surface_count()
 	var triangle_count := int(indices.size() / 3)
 
 	if not is_context and str(record.collision_kind) == "world_solid":
@@ -843,6 +863,21 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 		"triangles": triangle_count,
 	}
 
+## The shared blended decal material for street paint or wear.
+func _street_decal_material(material_key: String) -> ShaderMaterial:
+	if _street_decal_materials.has(material_key):
+		return _street_decal_materials[material_key]
+	var material := ShaderMaterial.new()
+	material.resource_name = material_key
+	material.shader = STREET_DECAL_SHADER
+	for parameter: String in STREET_DECAL_TEXTURES:
+		material.set_shader_parameter(parameter, STREET_DECAL_TEXTURES[parameter])
+	material.set_shader_parameter("mode", int(STREET_DECAL_MATERIALS[material_key][0]))
+	material.render_priority = int(STREET_DECAL_MATERIALS[material_key][1])
+	_street_decal_materials[material_key] = material
+	return material
+
+
 func _material_for(material_key: String, feature_kind: String, is_context: bool) -> StandardMaterial3D:
 	var cache_key := "%s|%s|%s" % [material_key, feature_kind, is_context]
 	if _materials.has(cache_key):
@@ -894,6 +929,14 @@ func _polyhaven_tint_for(material_key: String, fallback: Color) -> Color:
 			return Color(1.12, 1.20, 1.28)
 		"major_area_paved":
 			return Color(0.70, 0.76, 0.74)
+		"street_kerb_concrete":
+			# Sidewalks and curbs: light neutral concrete, a step lighter than the
+			# pedestrian skin (dated Sep 2025 photos).
+			return Color(1.18, 1.24, 1.30)
+		"street_gutter":
+			# Gutter pans: smoother, slightly darker concrete; cooled so the
+			# warm source map does not read pink beside the asphalt.
+			return Color(0.84, 0.92, 0.98)
 		"context_ybi":
 			return Color("d2d8cb")
 		"building_wall", "building_part_wall":
@@ -986,7 +1029,7 @@ func _color_for(material_key: String, feature_kind: String, is_context: bool) ->
 
 
 func _parent_key_for_feature(feature_kind: String) -> String:
-	if feature_kind == "road_path":
+	if feature_kind == "road_path" or feature_kind.begins_with("street_"):
 		return "roads"
 	if feature_kind.begins_with("building_") or feature_kind.begins_with("building_part_"):
 		return "buildings"

@@ -50,6 +50,9 @@ const FEATURE_KINDS := [
 	"land_ground",
 	"major_area",
 	"road_path",
+	"street_kerb",
+	"street_kerb_support",
+	"street_paint",
 	"terrain_overlay",
 ]
 const CONTEXT_KINDS := ["bay_bridge", "ybi"]
@@ -1252,14 +1255,18 @@ static func _validate_mesh_record(record: Dictionary, allowed_kinds: Array, sour
 			if not _is_nonnegative_json_integer(record.get("exterior_foundation_segments", null)) \
 			or not _is_nonnegative_json_integer(record.get("shared_wall_segments", null)):
 				return _failure("building_foundations", "Record %s has invalid foundation/shared-wall counts." % object_key)
-		var must_collide := feature_kind in ["land_ground", "building_wall", "building_roof", "building_part_wall", "building_part_roof", "boundary_blocker"]
+		var must_collide := feature_kind in ["land_ground", "building_wall", "building_roof", "building_part_wall", "building_part_roof", "boundary_blocker", "street_kerb", "street_kerb_support"]
 		if must_collide != (collision_kind == "world_solid"):
 			return _failure("record_collision", "Record %s collision semantics do not match its feature kind." % object_key)
 		var must_receive := feature_kind == "building_wall" or feature_kind == "building_part_wall"
 		if must_receive != (receiver_kind == "building_wall"):
 			return _failure("record_receiver", "Record %s receiver semantics do not match its feature kind." % object_key)
-		if collision_kind == "world_solid" and feature_kind != "boundary_blocker" and not bool(record.get("opaque", false)):
+		# Invisible collision (boundary blockers, street-kerb support ramps) stays off the spray layer.
+		var invisible_collision := feature_kind in ["boundary_blocker", "street_kerb_support"]
+		if collision_kind == "world_solid" and not invisible_collision and not bool(record.get("opaque", false)):
 			return _failure("record_opacity", "Record %s must occlude the first-hit spray ray." % object_key)
+		if feature_kind == "street_kerb_support" and bool(record.get("opaque", true)):
+			return _failure("record_opacity", "Record %s is invisible collision and must stay off the spray layer." % object_key)
 	record_keys[object_key] = {
 		"owner_id": owner_id,
 		"vertex_count": vertex_count,

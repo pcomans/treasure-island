@@ -19,6 +19,10 @@ extends SceneTree
 ## field of view, or "projection": "ortho" with "ortho_size": metres (vertical
 ## extent) for a square-on elevation. The player still settles at player_xz.
 ## The player's avatar mesh is hidden in every shot (visual only); --show-player keeps it.
+## --street-views FILE: views of a street-detail area, not bound to a building:
+##   {"area": "NAME", "views": [{"name": "...", "player_xz": [x,z], "target_xyz": [x,y,z]}]}
+##   with the same optional camera_xyz, fov, projection and ortho_size as --views.
+##   Saved as street-NAME.png; taken with street detail on and off by default.
 ## --views-batch FILE: only the focused views of several buildings in one world load,
 ## [{"source": "KEY", "plan": "views.json"}, ...], each plan a --views file for its
 ## source, saved to OUT/KEY/detail-NAME.png. Fixed-pose views only (no closeup,
@@ -38,6 +42,7 @@ const WorldHarness := preload("res://game/tests/shared/world_harness.gd")
 const DEFAULT_STREET_DETAIL := {
 	"closeup": ["off"],
 	"focused": ["off"],
+	"street": ["on", "off"],
 	"context": ["on", "off"],
 	"island": ["on", "off"],
 	"overhead": ["on", "off"],
@@ -69,13 +74,13 @@ func _initialize() -> void:
 func _run() -> void:
 	var args := WorldHarness.user_args()
 	var out := str(args.get("out", ""))
-	if out == "" or (not args.has("source") and not args.has("island") and not args.has("overhead") and not args.has("views-batch")):
-		_fail("usage: -- [--source KEY] [--island] [--overhead center_x,center_z,width,depth] --out DIR")
+	if out == "" or (not args.has("source") and not args.has("island") and not args.has("overhead") and not args.has("views-batch") and not args.has("street-views")):
+		_fail("usage: -- [--source KEY] [--street-views FILE] [--island] [--overhead center_x,center_z,width,depth] --out DIR")
 		return
 	var batch: Array[Dictionary] = []
 	if args.has("views-batch"):
 		batch = _batch_entries(args["views-batch"])
-		if batch.is_empty() or args.has("source") or args.has("views") or args.has("overhead"):
+		if batch.is_empty() or args.has("source") or args.has("views") or args.has("overhead") or args.has("street-views"):
 			_fail("--views-batch needs a nonempty list of unique {source, plan} entries and no shot option other than --island")
 			return
 	var street := DEFAULT_STREET_DETAIL.duplicate(true)
@@ -92,6 +97,8 @@ func _run() -> void:
 		kinds.append("context")
 	if args.has("views") or not batch.is_empty():
 		kinds.append("focused")
+	if args.has("street-views"):
+		kinds.append("street")
 	if args.has("island"):
 		kinds.append("island")
 	if args.has("overhead"):
@@ -134,6 +141,8 @@ func _run() -> void:
 			await _context_shots(str(args.source), out, _suffix(street.context, state))
 		if args.has("views") and state in street.focused:
 			await _focused_views(str(args.get("source", "")), str(args.views), out, _suffix(street.focused, state))
+		if args.has("street-views") and state in street.street:
+			await _street_views(str(args["street-views"]), out, _suffix(street.street, state))
 		if args.has("island") and state in street.island:
 			await _island_shots(out, _suffix(street.island, state))
 		if args.has("overhead") and state in street.overhead:
@@ -198,38 +207,70 @@ func _focused_views(source: String, path: String, out: String, suffix: String) -
 		if not bounds.has_point(target):
 			_errors.append("focused view target lies outside the source building: " + name)
 			return
-		var camera_error := _free_camera_error(view, target)
-		if camera_error != "":
-			_errors.append("focused view " + name + ": " + camera_error)
-			return
-		var error := await _h.settle_player(Vector2(view.player_xz[0], view.player_xz[1]))
+		var error := await _shoot_view(view, target, "%s/detail-%s%s.png" % [out, name, suffix])
 		if error != "":
 			_errors.append("focused view " + name + ": " + error)
 			return
-		var free: Camera3D = null
-		if view.has("camera_xyz"):
-			free = Camera3D.new()
-			if view.get("projection", "perspective") == "ortho":
-				free.projection = Camera3D.PROJECTION_ORTHOGONAL
-				free.size = float(view.ortho_size)
-			else:
-				free.fov = float(view.get("fov", 70.0))
-			free.far = 5000.0
-			_h.main.add_child(free)
-			free.global_position = Vector3(view.camera_xyz[0], view.camera_xyz[1], view.camera_xyz[2])
-			free.look_at(target, Vector3.UP)
-			free.make_current()
-		else:
-			_h.aim_camera(target)
-		await physics_frame
-		await physics_frame
-		error = await _h.save_screenshot("%s/detail-%s%s.png" % [out, name, suffix])
-		if error != "":
-			_errors.append(error)
-		if free != null:
-			free.queue_free()
-			_h.player.get_camera().make_current()
 		print("FOCUSED_VIEW %s source=%s player=%s target=%s camera=%s" % [name, source, _h.player.global_position, target, view.get("camera_xyz", "gameplay")])
+
+
+## Views of a street-detail area, not bound to a building (--street-views).
+func _street_views(path: String, out: String, suffix: String) -> void:
+	var plan: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	if not plan is Dictionary or not plan.get("area") is String or str(plan.area) == "" or str(plan.area).validate_filename() != str(plan.area) \
+	or not plan.get("views") is Array or plan.views.is_empty():
+		_errors.append("street views need a safe area name and a nonempty view list")
+		return
+	var names := {}
+	for view: Variant in plan.views:
+		if not view is Dictionary or not view.get("name") is String or not _numbers(view.get("player_xz"), 2) or not _numbers(view.get("target_xyz"), 3):
+			_errors.append("street view needs name, player_xz and target_xyz")
+			return
+		var name: String = view.name
+		if name == "" or name.validate_filename() != name or names.has(name):
+			_errors.append("street view names must be unique safe filenames")
+			return
+		names[name] = true
+		var target := Vector3(view.target_xyz[0], view.target_xyz[1], view.target_xyz[2])
+		var error := await _shoot_view(view, target, "%s/street-%s%s.png" % [out, name, suffix])
+		if error != "":
+			_errors.append("street view " + name + ": " + error)
+			return
+		print("STREET_VIEW %s area=%s player=%s on_floor=%s target=%s camera=%s" % [name, plan.area, _h.player.global_position, _h.player.is_on_floor(), target, view.get("camera_xyz", "gameplay")])
+
+
+## Settles the player at the view's player_xz and saves one screenshot from the
+## gameplay camera aimed at target, or from a free camera at camera_xyz. Returns
+## an error message, or "".
+func _shoot_view(view: Dictionary, target: Vector3, path: String) -> String:
+	var camera_error := _free_camera_error(view, target)
+	if camera_error != "":
+		return camera_error
+	var error := await _h.settle_player(Vector2(view.player_xz[0], view.player_xz[1]))
+	if error != "":
+		return error
+	var free: Camera3D = null
+	if view.has("camera_xyz"):
+		free = Camera3D.new()
+		if view.get("projection", "perspective") == "ortho":
+			free.projection = Camera3D.PROJECTION_ORTHOGONAL
+			free.size = float(view.ortho_size)
+		else:
+			free.fov = float(view.get("fov", 70.0))
+		free.far = 5000.0
+		_h.main.add_child(free)
+		free.global_position = Vector3(view.camera_xyz[0], view.camera_xyz[1], view.camera_xyz[2])
+		free.look_at(target, Vector3.UP)
+		free.make_current()
+	else:
+		_h.aim_camera(target)
+	await physics_frame
+	await physics_frame
+	error = await _h.save_screenshot(path)
+	if free != null:
+		free.queue_free()
+		_h.player.get_camera().make_current()
+	return error
 
 
 ## Why a view's free-camera fields are unusable, or "" (also when it has none).

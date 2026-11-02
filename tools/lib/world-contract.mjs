@@ -4,7 +4,7 @@ import { readFileSync, statSync } from "node:fs";
 export const WORLD_SCHEMA = "ti.godot-world/2";
 export const CHUNK_SCHEMA = "ti.godot-world-chunk/2";
 export const CONTEXT_SCHEMA = "ti.godot-world-context/2";
-export const GENERATOR_VERSION = "2.1.0";
+export const GENERATOR_VERSION = "2.2.0";
 
 export const SOURCE_CONTRACT = Object.freeze({
   raw_osm: Object.freeze({
@@ -148,6 +148,9 @@ export const FEATURE_KINDS = Object.freeze([
   "land_ground",
   "major_area",
   "road_path",
+  "street_kerb",
+  "street_kerb_support",
+  "street_paint",
   "terrain_overlay",
 ]);
 
@@ -163,6 +166,12 @@ export const MATERIAL_KEYS = Object.freeze([
   "major_area_paved",
   "road_path",
   "road_path_pedestrian",
+  "street_gutter",
+  "street_kerb_concrete",
+  "street_kerb_support",
+  "street_kerb_verge",
+  "street_marking",
+  "street_wear",
   "terrain_breakwater",
   "terrain_marina",
   "terrain_pier",

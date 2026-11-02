@@ -125,6 +125,7 @@ const UNPLANTABLE_MATERIALS = Object.freeze([
   "major_area_paved",
   "road_path",
   "road_path_pedestrian",
+  "street_kerb_concrete",
   "terrain_breakwater",
   "terrain_marina",
   "terrain_pier",
@@ -246,6 +247,8 @@ function polylineDistance(point, points) {
   return minimum;
 }
 
+// Plan distance between two polylines; a single point is a one-vertex polyline.
+// Exported as planDistance for tools/check_street_detail_clearance.mjs.
 function polylinePolylineDistance(left, right) {
   if (left.length === 1) return polylineDistance(left[0], right);
   if (right.length === 1) return polylineDistance(right[0], left);
@@ -516,6 +519,8 @@ function compassDirectionDegrees(value) {
   return COMPASS_DEGREES[text] ?? null;
 }
 
+export const planDistance = polylinePolylineDistance;
+
 export function generateStreetDetail({
   projectRoot,
   boundary,
@@ -526,6 +531,7 @@ export function generateStreetDetail({
   properSources,
   rawOsm,
   spawn,
+  ground,
 }) {
   const config = loadStreetDetailZones(projectRoot);
   const setPieceDocument = loadStreetDetailSetPieces(projectRoot);
@@ -597,6 +603,9 @@ export function generateStreetDetail({
     return { y: support.elevation_m, support };
   };
   const surfaceAt = (xz) => {
+    // The always-on street ground (raised sidewalks and curb ramps) is the top surface where it exists.
+    const raised = ground.surfaceAt(xz);
+    if (raised) return raised;
     const containingRoads = roads.containing(xz).sort((left, right) => compareSourceKeys(left.key, right.key));
     const vehicle = containingRoads.find((item) => item.visual_class === "vehicle");
     if (vehicle) return { kind: "road_path", material_key: "road_path", source_key: vehicle.key, bias_m: ROAD_SURFACE_BIASES_M.base };
@@ -1021,7 +1030,7 @@ export function generateStreetDetail({
     coordinate_system: "+X east,+Y up,-Z north; meters; NAVD 88",
     conventions: {
       position_m: "[x, y, z]; y is the generated land elevation under x, z (terrain_support names the triangle)",
-      surface: "the visible ground surface at x, z (generated feature kind and material); set an item on it at y + bias_m",
+      surface: "the visible ground surface at x, z (generated feature kind and material, including the raised street ground); set an item on it at y + bias_m",
       yaw_radians: "rotation about +Y turning the asset's local -Z front; null when the source gives no direction",
       layers: "switchable runtime subtrees under PlayableWorld/StreetDetail; ground rows feed the always-on chunk surfaces",
       status: "placed rows are built when their layer is on; excluded rows keep their source id and the reason",
@@ -1045,6 +1054,7 @@ export function generateStreetDetail({
       stair_flights: stairFlights,
     },
     zones: zoneSummaries,
+    ground: ground.summary,
     counts: {
       total: rows.length,
       by_layer: countBy("layer", layerNames),

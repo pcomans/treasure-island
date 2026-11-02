@@ -113,7 +113,13 @@ import {
   NAIP_TREE_ANNOTATION_SHA256,
   generateVegetation,
 } from "./lib/vegetation-generation.mjs";
-import { generateStreetDetail } from "./lib/street-detail-generation.mjs";
+import {
+  generateStreetDetail,
+  loadStreetDetailStairFlights,
+  loadStreetDetailZones,
+  streetDetailHardShapes,
+} from "./lib/street-detail-generation.mjs";
+import { generateStreetGround } from "./lib/street-ground-generation.mjs";
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(scriptDirectory, "..");
@@ -1973,6 +1979,26 @@ function main() {
     );
     const playableObjects = buildPlayableObjects(joinedLedger, boundary);
     const chunks = buildChunks(playableObjects, boundary, terrain);
+    // The spawn reads only land and roads, so it is fixed before street ground lands.
+    const spawn = findInitialSpawn(boundary, playableObjects, loaded.rawOsm, loaded.rawSources, chunks);
+    const spawnXZ = [spawn.origin[0], spawn.origin[2]];
+    const streetConfig = loadStreetDetailZones(projectRoot);
+    const streetGround = generateStreetGround({
+      config: streetConfig,
+      playableObjects,
+      rawOsm: loaded.rawOsm,
+      properSources: loaded.properSources,
+      facetsForChunk: (id) => landFacetsForChunk(chunks, id),
+      facetElevation,
+      spawnXZ,
+      hardShapes: streetDetailHardShapes(streetConfig.exclusions, spawnXZ, loadStreetDetailStairFlights(projectRoot)),
+    });
+    for (const [id, records] of streetGround.records) {
+      const chunk = chunks.get(id);
+      invariant(chunk, `Street ground lands in chunk ${id}, which has no land`);
+      chunk.records.push(...records);
+      chunk.records.sort((left, right) => left.object_key.localeCompare(right.object_key));
+    }
     const context = buildContext(joinedLedger, boundary, loaded.rawOsm, loaded.rawSources, playableObjects, terrain);
     const allObjects = new Map([...playableObjects, ...context.objects]);
     const coverage = coverageRows(allObjects, chunks, context.document);
@@ -1980,7 +2006,6 @@ function main() {
       sourceRows.findIndex((row) => row.source_key === right.source_key));
     const validation = validateFinalState(coverage, allObjects, chunks, context.document, ledgerState.memberships);
     const logicalObjects = logicalObjectsDocument(allObjects);
-    const spawn = findInitialSpawn(boundary, playableObjects, loaded.rawOsm, loaded.rawSources, chunks);
     invariant(
       sha256File(NAIP_TREE_ANNOTATIONS_PATH) === NAIP_TREE_ANNOTATION_SHA256,
       "Pinned NAIP tree annotation source hash drift",
@@ -2002,7 +2027,8 @@ function main() {
       areaStyleFor: (object) => areaStyle(object.tags, object.roles),
       properSources: loaded.properSources,
       rawOsm: loaded.rawOsm,
-      spawn: [spawn.origin[0], spawn.origin[2]],
+      spawn: spawnXZ,
+      ground: streetGround,
     });
     terrainDocument.surface_anchors = TERRAIN_SURFACE_ANCHORS.map((anchor) => ({
       ...anchor,

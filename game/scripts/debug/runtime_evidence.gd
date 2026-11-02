@@ -164,7 +164,9 @@ func debug_text() -> String:
 		"Manifest: %s" % manifest_hash,
 		"Load: %d ms | chunks %d/%d | coverage %d+%d | failure %s" % [load_duration_msec, chunks_loaded, chunks_expected, playable_rows, context_rows, load_failure_code],
 		"Meshes: %d | surfaces %d | triangles %d" % [mesh_instances, surfaces, triangles],
-		"Vegetation: seed %d | %d instances | %d assets | %d batches | %d rendered triangles" % [vegetation_seed, vegetation_instances, vegetation_assets, vegetation_multimesh_batches, vegetation_rendered_triangles],
+		# The counts are build-time; once the layer is freed they no longer describe the scene.
+		"Vegetation: seed %d | %d instances | %d assets | %d batches | %d rendered triangles" % [vegetation_seed, vegetation_instances, vegetation_assets, vegetation_multimesh_batches, vegetation_rendered_triangles] \
+			if street_detail_layers.has("vegetation") else "Vegetation: (off)",
 		"Street detail: on %s (%s) | %d rows" % [", ".join(PackedStringArray(street_detail_layers)) if not street_detail_layers.is_empty() else "none", street_detail_source, street_detail_rows],
 		"Physics: %d bodies | %d shapes | nodes %d" % [static_bodies, shapes, node_count],
 		"Frame: %.1f FPS | %.2f ms" % [fps, frame_ms],

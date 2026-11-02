@@ -4,7 +4,7 @@
       "approach": 5.441,
       "door": 4.956,
       "ferry_path": 6.746,
-      "qa_route": 5.21,
+      "qa_route": 5.518,
       "spawn": 10.941,
       "stair": 4.909,
       "whole_island_anchor": 12.871
@@ -43,7 +43,7 @@
     },
     "scatter": {
       "candidates": 531,
-      "placed": 78,
+      "placed": 41,
       "rejected_by_reason": {
         "building_buffer": 1,
         "ferry_path": 4,
@@ -54,7 +54,7 @@
         "road": 50,
         "seed_acceptance": 257,
         "spawn": 3,
-        "unplantable_surface": 22
+        "unplantable_surface": 59
       }
     },
     "set_pieces": {
@@ -66,7 +66,7 @@
     "layers": "switchable runtime subtrees under PlayableWorld/StreetDetail; ground rows feed the always-on chunk surfaces",
     "position_m": "[x, y, z]; y is the generated land elevation under x, z (terrain_support names the triangle)",
     "status": "placed rows are built when their layer is on; excluded rows keep their source id and the reason",
-    "surface": "the visible ground surface at x, z (generated feature kind and material); set an item on it at y + bias_m",
+    "surface": "the visible ground surface at x, z (generated feature kind and material, including the raised street ground); set an item on it at y + bias_m",
     "yaw_radians": "rotation about +Y turning the asset's local -Z front; null when the source gives no direction"
   },
   "coordinate_system": "+X east,+Y up,-Z north; meters; NAVD 88",
@@ -87,8 +87,8 @@
       "jersey_barrier": 1,
       "kerb": 8,
       "log_barrier": 2,
-      "palm_slot": 36,
-      "planting_slot": 21,
+      "palm_slot": 0,
+      "planting_slot": 20,
       "post_box": 1,
       "power_line": 44,
       "power_pole": 245,
@@ -105,26 +105,26 @@
       "fences": 62,
       "furniture": 108,
       "ground": 169,
-      "vegetation": 57
+      "vegetation": 20
     },
     "by_source": {
       "osm": 660,
-      "scatter": 78,
+      "scatter": 41,
       "set_piece": 0
     },
     "by_status": {
       "excluded": 5,
-      "placed": 733
+      "placed": 696
     },
-    "pilot_rows": 98,
+    "pilot_rows": 61,
     "placed_by_layer": {
       "clutter": 340,
       "fences": 60,
       "furniture": 107,
       "ground": 169,
-      "vegetation": 57
+      "vegetation": 20
     },
-    "total": 738
+    "total": 701
   },
   "exclusion_inputs": {
     "ferry_path_xz": [
@@ -1240,6 +1240,218 @@
     "whole_island_anchor_radius_m": 3
   },
   "generator": "tools/lib/street-detail-generation.mjs",
+  "ground": {
+    "counts": {
+      "centerline_m": 149.686,
+      "crosswalks": 11,
+      "curb_face_m": 1345.719,
+      "curb_ramps": 22,
+      "raised_area_m2": 5553.738,
+      "stall_lines": 124,
+      "stop_bars": 2,
+      "wear_by_cell": {
+        "crack_a": 9,
+        "crack_b": 6,
+        "drain": 23,
+        "manhole": 8,
+        "oil_a": 5,
+        "oil_b": 6,
+        "patch": 2
+      }
+    },
+    "feature_kinds": [
+      "street_kerb",
+      "street_kerb_support",
+      "street_paint"
+    ],
+    "generator": "tools/lib/street-ground-generation.mjs",
+    "heights_m": {
+      "gutter": 0.081,
+      "paint": 0.084,
+      "road_surface": 0.078,
+      "sidewalk_top": 0.228
+    },
+    "joined_sidewalks": [
+      "w1212173434",
+      "w1212173435",
+      "w1212173441",
+      "w1212173444",
+      "w1212173446",
+      "w1212173452",
+      "w1212173459",
+      "w1212173460",
+      "w1212173466",
+      "w1212176708",
+      "w1249412116",
+      "w1249412123",
+      "w1370667326",
+      "w1370667328",
+      "w1375156123",
+      "w1375156130",
+      "w1375156134",
+      "w1375156139",
+      "w1375156144",
+      "w1428130463"
+    ],
+    "kerbed_roads": [
+      "w28353118",
+      "w255330044",
+      "w775796580",
+      "w775796581",
+      "w850003198",
+      "w1001544695",
+      "w1001544697",
+      "w1076140200",
+      "w1115934723",
+      "w1115934724",
+      "w1212176122",
+      "w1249797944",
+      "w1249797945",
+      "w1249797946"
+    ],
+    "paint_kinds": {
+      "green": 3,
+      "red": 2,
+      "stop_legend": 5,
+      "tactile": 4,
+      "white": 0,
+      "yellow": 1
+    },
+    "records": [
+      {
+        "object_key": "street-gutter:x_-2__z_0",
+        "triangles": 25
+      },
+      {
+        "object_key": "street-kerb:x_-2__z_0",
+        "triangles": 47
+      },
+      {
+        "object_key": "street-ramp:x_-2__z_0",
+        "triangles": 33
+      },
+      {
+        "object_key": "street-verge:x_-2__z_0",
+        "triangles": 64
+      },
+      {
+        "object_key": "street-gutter:x_-2__z_1",
+        "triangles": 73
+      },
+      {
+        "object_key": "street-kerb:x_-2__z_1",
+        "triangles": 298
+      },
+      {
+        "object_key": "street-marking:x_-2__z_1",
+        "triangles": 42
+      },
+      {
+        "object_key": "street-ramp:x_-2__z_1",
+        "triangles": 187
+      },
+      {
+        "object_key": "street-verge:x_-2__z_1",
+        "triangles": 292
+      },
+      {
+        "object_key": "street-wear:x_-2__z_1",
+        "triangles": 6
+      },
+      {
+        "object_key": "street-gutter:x_-1__z_1",
+        "triangles": 140
+      },
+      {
+        "object_key": "street-kerb:x_-1__z_1",
+        "triangles": 496
+      },
+      {
+        "object_key": "street-marking:x_-1__z_1",
+        "triangles": 58
+      },
+      {
+        "object_key": "street-ramp:x_-1__z_1",
+        "triangles": 316
+      },
+      {
+        "object_key": "street-verge:x_-1__z_1",
+        "triangles": 342
+      },
+      {
+        "object_key": "street-wear:x_-1__z_1",
+        "triangles": 22
+      },
+      {
+        "object_key": "street-gutter:x_-1__z_2",
+        "triangles": 359
+      },
+      {
+        "object_key": "street-kerb:x_-1__z_2",
+        "triangles": 1302
+      },
+      {
+        "object_key": "street-marking:x_-1__z_2",
+        "triangles": 494
+      },
+      {
+        "object_key": "street-ramp:x_-1__z_2",
+        "triangles": 804
+      },
+      {
+        "object_key": "street-verge:x_-1__z_2",
+        "triangles": 852
+      },
+      {
+        "object_key": "street-wear:x_-1__z_2",
+        "triangles": 88
+      },
+      {
+        "object_key": "street-gutter:x_-1__z_3",
+        "triangles": 111
+      },
+      {
+        "object_key": "street-kerb:x_-1__z_3",
+        "triangles": 418
+      },
+      {
+        "object_key": "street-marking:x_-1__z_3",
+        "triangles": 177
+      },
+      {
+        "object_key": "street-ramp:x_-1__z_3",
+        "triangles": 284
+      },
+      {
+        "object_key": "street-verge:x_-1__z_3",
+        "triangles": 312
+      },
+      {
+        "object_key": "street-wear:x_-1__z_3",
+        "triangles": 26
+      },
+      {
+        "object_key": "street-verge:x_0__z_2",
+        "triangles": 12
+      }
+    ],
+    "wear_cells": {
+      "crack_a": 0,
+      "crack_b": 1,
+      "drain": 6,
+      "manhole": 5,
+      "oil_a": 2,
+      "oil_b": 3,
+      "patch": 4
+    },
+    "zones": [
+      "ferry_arrival_plaza",
+      "treasure_island_road_south",
+      "trade_winds_palms_link",
+      "avenue_of_the_palms",
+      "building_1_forecourt"
+    ]
+  },
   "ground_layer": "ground",
   "inputs": {
     "osm_extract": {
@@ -1257,7 +1469,7 @@
     },
     "zones": {
       "path": "tools/config/street-detail-zones.json",
-      "sha256": "03306894f7249d1632e7c02798f0bfca352d41f79a6229ffcb3483c6889567f4"
+      "sha256": "e4f459f76602cbde406dcfaba923a5ae9cc581d6db54b4a824807f859b55a424"
     }
   },
   "kinds": {
@@ -13910,10 +14122,10 @@
       "source_tag": "emergency=fire_hydrant",
       "status": "placed",
       "surface": {
-        "bias_m": 0.04,
-        "kind": "major_area",
-        "material_key": "major_area_leisure",
-        "source_key": "w1428380754"
+        "bias_m": 0.228,
+        "kind": "street_kerb",
+        "material_key": "street_kerb_verge",
+        "source_key": "w1249797944"
       },
       "tags": {
         "emergency": "fire_hydrant",
@@ -19358,10 +19570,10 @@
       "source_tag": "highway=stop",
       "status": "placed",
       "surface": {
-        "bias_m": 0.08,
-        "kind": "road_path",
-        "material_key": "road_path_pedestrian",
-        "source_key": "w1212173444"
+        "bias_m": 0.228,
+        "kind": "street_kerb",
+        "material_key": "street_kerb_concrete",
+        "source_key": "w1001544697"
       },
       "tags": {
         "highway": "stop",
@@ -19612,9 +19824,9 @@
       "source_tag": "highway=stop",
       "status": "placed",
       "surface": {
-        "bias_m": 0.08,
-        "kind": "road_path",
-        "material_key": "road_path_pedestrian",
+        "bias_m": 0.125,
+        "kind": "street_kerb",
+        "material_key": "street_kerb_concrete",
         "source_key": "w1375156142"
       },
       "tags": {
@@ -29455,1122 +29667,6 @@
     {
       "exclusion": null,
       "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o0_s000",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -306.021,
-        4.101,
-        255.924
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 4.101,
-        "object_key": "land:w26767313:x_-2__z_0",
-        "triangle_index": 91
-      },
-      "yaw_radians": -0.219,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o0_s003",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -286.059,
-        3.793,
-        293.558
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0.04,
-        "kind": "major_area",
-        "material_key": "major_area_leisure",
-        "source_key": "w1428380753"
-      },
-      "terrain_support": {
-        "elevation_m": 3.793,
-        "object_key": "land:w26767313:x_-2__z_1",
-        "triangle_index": 48
-      },
-      "yaw_radians": 2.202,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o0_s004",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -279.943,
-        2.991,
-        305.274
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0.04,
-        "kind": "major_area",
-        "material_key": "major_area_leisure",
-        "source_key": "w1428380753"
-      },
-      "terrain_support": {
-        "elevation_m": 2.991,
-        "object_key": "land:w26767313:x_-2__z_1",
-        "triangle_index": 48
-      },
-      "yaw_radians": -0.393,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o0_s005",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -273,
-        3.767,
-        318.572
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0.04,
-        "kind": "major_area",
-        "material_key": "major_area_leisure",
-        "source_key": "w1428380753"
-      },
-      "terrain_support": {
-        "elevation_m": 3.767,
-        "object_key": "land:w26767313:x_-2__z_1",
-        "triangle_index": 49
-      },
-      "yaw_radians": 3.12,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o0_s006",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -267.031,
-        3.583,
-        330.007
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0.04,
-        "kind": "major_area",
-        "material_key": "major_area_leisure",
-        "source_key": "w1428380753"
-      },
-      "terrain_support": {
-        "elevation_m": 3.583,
-        "object_key": "land:w26767313:x_-2__z_1",
-        "triangle_index": 46
-      },
-      "yaw_radians": 1.139,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o0_s007",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -260.444,
-        3.784,
-        342.624
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0.04,
-        "kind": "major_area",
-        "material_key": "major_area_leisure",
-        "source_key": "w1428380753"
-      },
-      "terrain_support": {
-        "elevation_m": 3.784,
-        "object_key": "land:w26767313:x_-2__z_1",
-        "triangle_index": 47
-      },
-      "yaw_radians": 2.93,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o0_s008",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -254.016,
-        3.942,
-        354.936
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0.04,
-        "kind": "major_area",
-        "material_key": "major_area_leisure",
-        "source_key": "w1428380753"
-      },
-      "terrain_support": {
-        "elevation_m": 3.942,
-        "object_key": "land:w26767313:x_-1__z_1",
-        "triangle_index": 8
-      },
-      "yaw_radians": -0.094,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o0_s009",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -247.115,
-        3.941,
-        368.157
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0.04,
-        "kind": "major_area",
-        "material_key": "major_area_leisure",
-        "source_key": "w1428380753"
-      },
-      "terrain_support": {
-        "elevation_m": 3.941,
-        "object_key": "land:w26767313:x_-1__z_1",
-        "triangle_index": 8
-      },
-      "yaw_radians": 2.889,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o0_s010",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -240.761,
-        3.911,
-        380.327
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0.04,
-        "kind": "major_area",
-        "material_key": "major_area_leisure",
-        "source_key": "w1428380753"
-      },
-      "terrain_support": {
-        "elevation_m": 3.911,
-        "object_key": "land:w26767313:x_-1__z_1",
-        "triangle_index": 9
-      },
-      "yaw_radians": 0.652,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o0_s011",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -234.266,
-        4.075,
-        392.769
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0.04,
-        "kind": "major_area",
-        "material_key": "major_area_leisure",
-        "source_key": "w1428380753"
-      },
-      "terrain_support": {
-        "elevation_m": 4.075,
-        "object_key": "land:w26767313:x_-1__z_1",
-        "triangle_index": 6
-      },
-      "yaw_radians": 2.294,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o0_s012",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -227.985,
-        3.981,
-        404.801
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0.04,
-        "kind": "major_area",
-        "material_key": "major_area_leisure",
-        "source_key": "w1428380753"
-      },
-      "terrain_support": {
-        "elevation_m": 3.981,
-        "object_key": "land:w26767313:x_-1__z_1",
-        "triangle_index": 7
-      },
-      "yaw_radians": -2.561,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o0_s013",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -221.325,
-        3.922,
-        417.557
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0.04,
-        "kind": "major_area",
-        "material_key": "major_area_leisure",
-        "source_key": "w1428380753"
-      },
-      "terrain_support": {
-        "elevation_m": 3.922,
-        "object_key": "land:w26767313:x_-1__z_1",
-        "triangle_index": 20
-      },
-      "yaw_radians": -0.881,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o0_s014",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -215.184,
-        4.056,
-        429.322
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0.04,
-        "kind": "major_area",
-        "material_key": "major_area_leisure",
-        "source_key": "w1428380753"
-      },
-      "terrain_support": {
-        "elevation_m": 4.056,
-        "object_key": "land:w26767313:x_-1__z_1",
-        "triangle_index": 20
-      },
-      "yaw_radians": 0.689,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o1_s000",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -297.287,
-        3.968,
-        251.053
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 3.968,
-        "object_key": "land:w26767313:x_-2__z_0",
-        "triangle_index": 91
-      },
-      "yaw_radians": -0.47,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o1_s001",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -290.163,
-        4.105,
-        264.27
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 4.105,
-        "object_key": "land:w26767313:x_-2__z_1",
-        "triangle_index": 34
-      },
-      "yaw_radians": -3.025,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o1_s003",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -277.55,
-        2.879,
-        288.248
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 2.879,
-        "object_key": "land:w26767313:x_-2__z_1",
-        "triangle_index": 48
-      },
-      "yaw_radians": 0.851,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o1_s004",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -271.132,
-        2.037,
-        300.542
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 2.037,
-        "object_key": "land:w26767313:x_-2__z_1",
-        "triangle_index": 48
-      },
-      "yaw_radians": 1.27,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o1_s005",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -264.578,
-        3.23,
-        313.096
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 3.23,
-        "object_key": "land:w26767313:x_-2__z_1",
-        "triangle_index": 49
-      },
-      "yaw_radians": 1.014,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o1_s006",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -258.158,
-        3.986,
-        325.396
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 3.986,
-        "object_key": "land:w26767313:x_-2__z_1",
-        "triangle_index": 47
-      },
-      "yaw_radians": 1.402,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o1_s007",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -251.621,
-        3.514,
-        337.918
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 3.514,
-        "object_key": "land:w26767313:x_-1__z_1",
-        "triangle_index": 10
-      },
-      "yaw_radians": 2.856,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o1_s008",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -245.044,
-        3.835,
-        350.516
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 3.835,
-        "object_key": "land:w26767313:x_-1__z_1",
-        "triangle_index": 11
-      },
-      "yaw_radians": -0.685,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o1_s009",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -238.44,
-        4.01,
-        363.165
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 4.01,
-        "object_key": "land:w26767313:x_-1__z_1",
-        "triangle_index": 8
-      },
-      "yaw_radians": -2.515,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o1_s010",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -232.27,
-        3.973,
-        374.984
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 3.973,
-        "object_key": "land:w26767313:x_-1__z_1",
-        "triangle_index": 9
-      },
-      "yaw_radians": -0.528,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o1_s011",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -225.543,
-        3.97,
-        387.869
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 3.97,
-        "object_key": "land:w26767313:x_-1__z_1",
-        "triangle_index": 7
-      },
-      "yaw_radians": -2.021,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o1_s012",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -219.168,
-        3.959,
-        400.082
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 3.959,
-        "object_key": "land:w26767313:x_-1__z_1",
-        "triangle_index": 22
-      },
-      "yaw_radians": -1.782,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o1_s016",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -193.27,
-        4.09,
-        449.717
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 4.09,
-        "object_key": "land:w26767313:x_-1__z_1",
-        "triangle_index": 19
-      },
-      "yaw_radians": 0.521,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o1_s017",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -186.805,
-        4.026,
-        462.226
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 4.026,
-        "object_key": "land:w26767313:x_-1__z_1",
-        "triangle_index": 34
-      },
-      "yaw_radians": -0.133,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o1_s018",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -180.175,
-        3.997,
-        475.053
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 3.997,
-        "object_key": "land:w26767313:x_-1__z_1",
-        "triangle_index": 35
-      },
-      "yaw_radians": 1.966,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o1_s019",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -174.117,
-        4.969,
-        486.774
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 4.969,
-        "object_key": "land:w26767313:x_-1__z_1",
-        "triangle_index": 32
-      },
-      "yaw_radians": 1.421,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o1_s020",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -167.633,
-        5.072,
-        499.319
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 5.072,
-        "object_key": "land:w26767313:x_-1__z_1",
-        "triangle_index": 33
-      },
-      "yaw_radians": -0.993,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o1_s021",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -161.169,
-        4.116,
-        511.824
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 4.116,
-        "object_key": "land:w26767313:x_-1__z_1",
-        "triangle_index": 33
-      },
-      "yaw_radians": 0.584,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o1_s023",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -148.315,
-        4.116,
-        536.694
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 4.116,
-        "object_key": "land:w26767313:x_-1__z_2",
-        "triangle_index": 48
-      },
-      "yaw_radians": -3.076,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o1_s024",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -141.455,
-        4.153,
-        549.967
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 4.153,
-        "object_key": "land:w26767313:x_-1__z_2",
-        "triangle_index": 45
-      },
-      "yaw_radians": 1.051,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o1_s025",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -135.141,
-        4.128,
-        562.182
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 4.128,
-        "object_key": "land:w26767313:x_-1__z_2",
-        "triangle_index": 46
-      },
-      "yaw_radians": -0.96,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o1_s026",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -128.671,
-        3.947,
-        574.7
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 3.947,
-        "object_key": "land:w26767313:x_-1__z_2",
-        "triangle_index": 46
-      },
-      "yaw_radians": 0.328,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:verge_palms:w1001544697_o1_s027",
-      "kind": "palm_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -121.854,
-        3.983,
-        581.427
-      ],
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/verge_palms",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 3.983,
-        "object_key": "land:w26767313:x_-1__z_2",
-        "triangle_index": 59
-      },
-      "yaw_radians": 1.571,
-      "yaw_source": "seeded",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
       "id": "scatter:building_1_forecourt:forecourt_planting:r001c003",
       "kind": "planting_slot",
       "layer": "vegetation",
@@ -31535,37 +30631,6 @@
     {
       "exclusion": null,
       "geometry": "point",
-      "id": "scatter:trade_winds_palms_link:verge_planting:r006c010",
-      "kind": "planting_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -74.369,
-        3.908,
-        696.3
-      ],
-      "source": "scatter",
-      "source_id": "zone:trade_winds_palms_link/verge_planting",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0,
-        "kind": "land_ground",
-        "material_key": "land_ground",
-        "source_key": "w26767313"
-      },
-      "terrain_support": {
-        "elevation_m": 3.908,
-        "object_key": "land:w26767313:x_-1__z_2",
-        "triangle_index": 70
-      },
-      "yaw_radians": -2.874,
-      "yaw_source": "seeded",
-      "zones": [
-        "trade_winds_palms_link"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
       "id": "scatter:trade_winds_palms_link:verge_planting:r008c004",
       "kind": "planting_slot",
       "layer": "vegetation",
@@ -31704,10 +30769,10 @@
       "source_id": "zone:treasure_island_road_south/sidewalk_edge_clutter",
       "status": "placed",
       "surface": {
-        "bias_m": 0.04,
-        "kind": "major_area",
-        "material_key": "major_area_leisure",
-        "source_key": "w1428380754"
+        "bias_m": 0.228,
+        "kind": "street_kerb",
+        "material_key": "street_kerb_verge",
+        "source_key": "w1249797944"
       },
       "terrain_support": {
         "elevation_m": 3.912,
@@ -31735,10 +30800,10 @@
       "source_id": "zone:treasure_island_road_south/sidewalk_edge_clutter",
       "status": "placed",
       "surface": {
-        "bias_m": 0.04,
-        "kind": "major_area",
-        "material_key": "major_area_leisure",
-        "source_key": "w1428380754"
+        "bias_m": 0.228,
+        "kind": "street_kerb",
+        "material_key": "street_kerb_verge",
+        "source_key": "w1249797945"
       },
       "terrain_support": {
         "elevation_m": 3.69,
@@ -31927,7 +30992,7 @@
           "id": "verge_planting",
           "kind": "planting_slot",
           "pattern": "grid",
-          "placed": 10
+          "placed": 9
         }
       ]
     },
@@ -31941,7 +31006,7 @@
           "id": "verge_palms",
           "kind": "palm_slot",
           "pattern": "along",
-          "placed": 36
+          "placed": 0
         }
       ]
     },
