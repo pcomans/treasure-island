@@ -51,7 +51,8 @@ fi
 
 # build/web/.vercel is the Vercel CLI's link to the project. tools/build-web.sh
 # keeps it and clears everything else, so link first: the link's other files
-# (a .gitignore) are then gone before the upload.
+# (a .gitignore, and a .env.local holding a VERCEL_OIDC_TOKEN) are then gone
+# before the upload.
 link_file=build/web/.vercel/project.json
 linked_project() {
   python3 -I -c 'import json, sys; print(json.load(open(sys.argv[1])).get("projectName", ""))' \
@@ -80,16 +81,54 @@ fi
 
 tools/build-web.sh
 
-deploy=("${vercel[@]}" deploy --prod)
+# Only the build may be uploaded. Refuses any .env file, even one the CLI would
+# skip, and any other hidden file except the link (.vercel, which the CLI never
+# uploads) and build-web.sh's .vercelignore. Checks names only, never contents.
+refuse_hidden_files() {
+  local hidden
+  hidden="$(find build/web -mindepth 1 \( -name '.env*' -o -name '.*' ! -path build/web/.vercel \
+    ! -path 'build/web/.vercel/*' ! -path build/web/.vercelignore \) -print)" || return 1
+  if [ -n "${hidden}" ]; then
+    printf 'FAIL: delete these from build/web; they must not be uploaded:\n%s\n' "${hidden}" >&2
+    return 1
+  fi
+}
+refuse_hidden_files || exit 1
+
+deploy=("${vercel[@]}" deploy --prod --json)
 if [ "${dry_run}" = true ]; then
   echo "DRY RUN: in build/web, would run: ${deploy[*]}"
   echo "PASS: dry run for ${head:0:8}; nothing was linked or uploaded"
   exit 0
 fi
-# With stdout captured the CLI prints only the deployment URL there; its
+
+# Runs the deploy command given as arguments in build/web, then prints PASS with
+# the URL or FAIL. With --json, CLI 64.5.0 prints one JSON object on stdout: the
+# deployment, or a status object holding it when the CLI detects an AI agent
+# (CLAUDECODE, AI_AGENT, CODEX_* and others) while stdin is not a terminal. Its
 # progress and the production alias go to stderr.
-url="$(cd build/web && "${deploy[@]}")"
-case "${url}" in
-  https://*) echo "PASS: deployed ${head:0:8} to production: ${url}" ;;
-  *) echo "FAIL: unexpected deploy output: ${url}" >&2; exit 1 ;;
-esac
+deploy_to_production() {
+  local output status=0 url
+  output="$(cd build/web && "$@")" || status=$?
+  if [ "${status}" -ne 0 ]; then
+    echo "FAIL: the deploy exited ${status}: ${output}" >&2
+    return 1
+  fi
+  url="$(python3 -I -c '
+import json, sys
+out = sys.stdin.read().strip()
+try:
+    result = json.loads(out)
+    deployment = result.get("deployment", result)
+    state = [result.get("status", "ok"), deployment["readyState"], deployment["target"]]
+    urls = [deployment["productionUrl"], deployment["url"]]
+except (ValueError, KeyError, TypeError, AttributeError):
+    sys.exit("FAIL: unexpected deploy output: " + out)
+# productionUrl is null unless the production domain now points at this deployment.
+if state != ["ok", "READY", "production"] or not urls[0] or deployment.get("error"):
+    sys.exit("FAIL: the deploy is not ready on the production domain: " + out)
+print("%s (deployment %s)" % tuple(urls))
+' <<< "${output}")" || return 1
+  echo "PASS: deployed ${head:0:8} to production: ${url}"
+}
+deploy_to_production "${deploy[@]}"
