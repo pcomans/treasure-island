@@ -5,12 +5,12 @@
         "forecourt_lot_cars:fill": 52,
         "palms_parked_cars:curb_kept_clear": 10,
         "palms_parked_cars:fill": 13,
-        "palms_parked_cars:item": 11,
+        "palms_parked_cars:item": 2,
         "palms_parked_cars:off_asphalt": 2,
         "palms_parked_cars:uneven_ground": 1
       },
       "rules": {
-        "avenue_of_the_palms/palms_parked_cars": 42,
+        "avenue_of_the_palms/palms_parked_cars": 51,
         "building_1_forecourt/forecourt_lot_cars": 64
       }
     },
@@ -168,7 +168,7 @@
       "kerb": 8,
       "log_barrier": 2,
       "palm_slot": 12,
-      "parked_car": 106,
+      "parked_car": 115,
       "planting_slot": 19,
       "post_box": 1,
       "power_line": 44,
@@ -184,7 +184,7 @@
       "waste_basket": 14
     },
     "by_layer": {
-      "clutter": 420,
+      "clutter": 429,
       "fences": 60,
       "furniture": 215,
       "ground": 169,
@@ -192,22 +192,22 @@
     },
     "by_source": {
       "osm": 660,
-      "scatter": 216,
+      "scatter": 225,
       "set_piece": 19
     },
     "by_status": {
       "excluded": 4,
-      "placed": 891
+      "placed": 900
     },
-    "pilot_rows": 255,
+    "pilot_rows": 264,
     "placed_by_layer": {
-      "clutter": 418,
+      "clutter": 427,
       "fences": 59,
       "furniture": 214,
       "ground": 169,
       "vegetation": 31
     },
-    "total": 895
+    "total": 904
   },
   "exclusion_inputs": {
     "ferry_path_xz": [
@@ -35405,6 +35405,54 @@
       "basis": "production_inference",
       "exclusion": null,
       "footprint_m": {
+        "x_m": 1.79,
+        "z_m": 4.38
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_008",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -265.136,
+        3.281,
+        313.593
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "hatchback",
+        "finish": "solid",
+        "lift": 0.003,
+        "paint": "white",
+        "pitch": -0.1062,
+        "rims": "dark",
+        "roll": 0.0443,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.281,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 49
+      },
+      "yaw_radians": 0.49,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
         "x_m": 1.87,
         "z_m": 4.62
       },
@@ -35540,6 +35588,54 @@
         "triangle_index": 10
       },
       "yaw_radians": 0.484,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_013",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -249.524,
+        3.241,
+        343.597
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "solid",
+        "lift": 0.018,
+        "paint": "white",
+        "pitch": 0.0521,
+        "rims": "alloy",
+        "roll": 0.0909,
+        "roof": "black",
+        "twist": 0.007
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.241,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 10
+      },
+      "yaw_radians": 0.471,
       "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
       "zones": [
         "avenue_of_the_palms"
@@ -35933,6 +36029,54 @@
       "basis": "production_inference",
       "exclusion": null,
       "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_022",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -222.017,
+        3.945,
+        396.232
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "metallic",
+        "lift": 0.003,
+        "paint": "grey",
+        "pitch": -0.0018,
+        "rims": "dark",
+        "roll": -0.0076,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.945,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 22
+      },
+      "yaw_radians": 0.479,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
         "x_m": 1.79,
         "z_m": 4.38
       },
@@ -36020,6 +36164,54 @@
         "triangle_index": 23
       },
       "yaw_radians": 0.476,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.83,
+        "z_m": 4.82
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_029",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -190.644,
+        4.045,
+        456.437
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "sedan",
+        "finish": "metallic",
+        "lift": 0.002,
+        "paint": "light_grey",
+        "pitch": 0.0035,
+        "rims": "alloy",
+        "roll": -0.0075,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 4.045,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 34
+      },
+      "yaw_radians": 0.479,
       "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
       "zones": [
         "avenue_of_the_palms"
@@ -36317,6 +36509,54 @@
       "basis": "production_inference",
       "exclusion": null,
       "footprint_m": {
+        "x_m": 1.85,
+        "z_m": 4.72
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_038",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -163.002,
+        4.377,
+        509.874
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "fastback",
+        "finish": "metallic",
+        "lift": 0.004,
+        "paint": "dark_grey",
+        "pitch": 0.0675,
+        "rims": "dark",
+        "roll": 0.1183,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 4.377,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 33
+      },
+      "yaw_radians": 0.474,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
         "x_m": 1.95,
         "z_m": 4.98
       },
@@ -36465,6 +36705,54 @@
         "z_m": 4.72
       },
       "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_043",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -147.724,
+        4.098,
+        539.448
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "fastback",
+        "finish": "metallic",
+        "lift": 0.003,
+        "paint": "light_grey",
+        "pitch": 0.0072,
+        "rims": "alloy",
+        "roll": 0.002,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 4.098,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 48
+      },
+      "yaw_radians": 0.478,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.85,
+        "z_m": 4.72
+      },
+      "geometry": "point",
       "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_045",
       "kind": "parked_car",
       "layer": "clutter",
@@ -36596,6 +36884,102 @@
         "triangle_index": 46
       },
       "yaw_radians": 0.485,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_048",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -131.561,
+        4.025,
+        570.72
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "solid",
+        "lift": 0.004,
+        "paint": "red",
+        "pitch": 0.0132,
+        "rims": "alloy",
+        "roll": 0.021,
+        "roof": "body",
+        "twist": -0.001
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 4.025,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 46
+      },
+      "yaw_radians": 0.47,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.85,
+        "z_m": 4.72
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_right_001",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -303.997,
+        4.087,
+        258.145
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "fastback",
+        "finish": "metallic",
+        "lift": 0.004,
+        "paint": "black",
+        "pitch": -0.0079,
+        "rims": "alloy",
+        "roll": 0.0061,
+        "roof": "body",
+        "twist": 0.001
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 4.087,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 33
+      },
+      "yaw_radians": -2.638,
       "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
       "zones": [
         "avenue_of_the_palms"
@@ -37124,6 +37508,54 @@
         "triangle_index": 6
       },
       "yaw_radians": -2.67,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.83,
+        "z_m": 4.82
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_right_023",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -228.09,
+        3.986,
+        403.009
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "sedan",
+        "finish": "metallic",
+        "lift": 0.003,
+        "paint": "grey",
+        "pitch": -0.0092,
+        "rims": "dark",
+        "roll": -0.0136,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.986,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 7
+      },
+      "yaw_radians": -2.652,
       "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
       "zones": [
         "avenue_of_the_palms"
@@ -45238,7 +45670,7 @@
           "id": "palms_parked_cars",
           "kind": "parked_car",
           "pattern": "curb_parking",
-          "placed": 42,
+          "placed": 51,
           "prop": "parked_car"
         }
       ],

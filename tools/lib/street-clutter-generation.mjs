@@ -57,12 +57,22 @@ const SAFE_ID = /^[a-z0-9_]+$/u;
 // A car's footprint for the shared mask: a stadium that holds its rectangle
 // (radius this far beyond its half width, the straight part shortened to fit).
 const FOOTPRINT_EXTRA_M = 0.1;
-// Clear space kept between a car and a built street prop or fence run (one
-// with a kit prop, so it collides): the player's width, so no gap beside a car
-// pinches shut. Data-only rows (placeholder slots, unbuilt OSM features) have no
-// collision and keep only a small margin. Cars are not checked against each
-// other: stall neighbours and curb gaps have their own rules.
+// Clear space kept between a car and what stands near it:
+//   - ITEM_CLEAR_M, the player's width, from a built prop (one with a kit prop,
+//     so it collides) on the car's own walking level (the road, a parking lane or
+//     the lot) and from every fence run, so no gap beside a car pinches shut;
+//   - OTHER_LEVEL_CLEAR_M between a curbside car (on the road, below the curb)
+//     and a built prop standing on the raised street ground behind the curb (a
+//     lamp post or a sign on the sidewalk or verge): the two are on different
+//     walking levels, so there is no pinch (the player walks the sidewalk on the
+//     prop's far side or stays in the road) and the margin only keeps the meshes
+//     apart, as along a real curb;
+//   - DATA_ROW_CLEAR_M from data-only rows (placeholder slots, unbuilt OSM
+//     features), which have no collision.
+// Cars are not checked against each other: stall neighbours and curb gaps have
+// their own rules.
 const ITEM_CLEAR_M = 0.7;
+const OTHER_LEVEL_CLEAR_M = 0.15;
 const DATA_ROW_CLEAR_M = 0.15;
 // Paints a van comes in (the rule's weights, these only).
 const VAN_PAINTS = Object.freeze(["black", "dark_grey", "grey", "silver", "white"]);
@@ -364,8 +374,21 @@ export function placeStreetClutter({
 }) {
   const pilotShapes = zoneShapes.filter(({ zone }) => zone.pilot);
   const groundAt = visibleGroundIndex(chunks);
-  // Rows the runtime builds (a fence's runs are claimed as "<id>#run<n>").
+  // Rows the runtime builds (a fence's runs are claimed as "<id>#run<n>"), and the
+  // built point props standing on the raised street ground (sidewalk, verge,
+  // planting or plaza paving above the curb).
   const builtIds = new Set(rows.filter((row) => row.status === "placed" && row.prop != null).map((row) => row.id));
+  const raisedIds = new Set(rows
+    .filter((row) => builtIds.has(row.id) && row.geometry === "point" && row.surface?.kind === "street_kerb")
+    .map((row) => row.id));
+  // The clear space between a car (on the road at the curb, or in the lot) and an occupied item.
+  const itemClearance = (item, surface) => {
+    const isFenceRun = item.id.includes("#");
+    const id = item.id.split("#")[0];
+    if (!builtIds.has(id)) return DATA_ROW_CLEAR_M;
+    if (surface === "road" && !isFenceRun && raisedIds.has(id)) return OTHER_LEVEL_CLEAR_M;
+    return ITEM_CLEAR_M;
+  };
   const audit = { rules: {}, rejected_by_reason: {} };
   const count = (table, key) => {
     table[key] = (table[key] ?? 0) + 1;
@@ -399,7 +422,7 @@ export function placeStreetClutter({
       if (surface === "lot" && !site.inLot(corner) && site.carriagewayDistance(corner, 1) > 0) return "off_lot";
     }
     for (const item of occupied) {
-      const clear = builtIds.has(item.id.split("#")[0]) ? ITEM_CLEAR_M : DATA_ROW_CLEAR_M;
+      const clear = itemClearance(item, surface);
       for (const point of piece.points.length > 1 ? sampleSegment(piece.points) : piece.points) {
         const near = item.points.length > 1 ? distanceToPolyline(point, item.points) : Math.hypot(point[0] - item.points[0][0], point[1] - item.points[0][1]);
         if (near < item.radius_m + piece.radius + clear) return "item";
