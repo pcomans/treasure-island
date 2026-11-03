@@ -7,27 +7,29 @@ name: Mac build
 
 on:
   push:
-    branches: [main]
+    branches: [main, ci/mac-build-20261103]
   workflow_dispatch:
 
 # Read-only everywhere; only the publish job may write (the release).
 permissions:
   contents: read
 
-# A newer push cancels the build still running for an older one.
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 defaults:
   run:
     shell: bash
 
+# Concurrency is per job, not per workflow: a newer push cancels an older run's
+# build or launch check, but never a publish that is swapping the download.
 jobs:
   build:
     name: Build
     runs-on: ubuntu-26.04
     timeout-minutes: 60
+    # A group of its own: an older run's launch check, queued later, must not
+    # cancel a newer run's build.
+    concurrency:
+      group: mac-build-${{ github.ref }}
+      cancel-in-progress: true
     steps:
       - name: Check out without LFS (only evidence videos live there)
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -65,7 +67,7 @@ jobs:
           # setup-godot.sh pins the version and both SHA-256 hashes, so its hash keys the cache.
           key: godot-${{ steps.godot.outputs.version }}-${{ hashFiles('.devcontainer/setup-godot.sh') }}
 
-      - name: Install Godot and its export templates (SHA-256 checked)
+      - name: Install Godot and its export templates (downloads are SHA-256 checked)
         run: .devcontainer/setup-godot.sh
 
       - name: Save Godot to the cache
@@ -102,6 +104,9 @@ jobs:
     needs: build
     runs-on: macos-26
     timeout-minutes: 20
+    concurrency:
+      group: mac-verify-${{ github.ref }}
+      cancel-in-progress: true
     steps:
       - name: Download the Mac app
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
@@ -145,6 +150,11 @@ jobs:
     timeout-minutes: 15
     permissions:
       contents: write
+    # Never cancelled mid-swap. A newer publish waits for it, and replaces an
+    # older one that is still waiting.
+    concurrency:
+      group: mac-latest-publish
+      cancel-in-progress: false
     steps:
       - name: Download the Mac app
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
@@ -182,6 +192,7 @@ jobs:
           [ -z "${stale}" ] || gh api -X DELETE "${api}/releases/assets/${stale}" --silent
           gh release upload "${tag}" "${next}"
           new="$(asset_id "${next}")"
+          [ -n "${new}" ] || { echo "FAIL: ${next} is not listed on the release after its upload" >&2; exit 1; }
           old="$(asset_id "${name}")"
           [ -z "${old}" ] || gh api -X DELETE "${api}/releases/assets/${old}" --silent
           gh api -X PATCH "${api}/releases/assets/${new}" -f name="${name}" --silent

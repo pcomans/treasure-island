@@ -57,9 +57,10 @@ when a building counts as done.
 ## Build for the Mac
 
 Every push to `main` builds the Mac app on GitHub Actions
-([mac-build.yml](.github/workflows/mac-build.yml)). Once a GitHub Apple Silicon
-Mac has launched it and loaded the island, it replaces the previous build at one
-fixed link:
+([mac-build.yml](.github/workflows/mac-build.yml)). Both launch checks there are
+headless, so CI never exercises the game's rendering on a Mac. Once a GitHub
+Apple Silicon Mac has launched the app and loaded the island, the build replaces
+the previous one at one fixed link:
 
 https://github.com/pcomans/treasure-island/releases/download/mac-latest/treasure-island-mac.zip
 
