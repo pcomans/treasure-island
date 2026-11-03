@@ -12,11 +12,11 @@
       "prop": "map_board",
       "params": {},
       "xz": [
-        -91.2,
-        783.4
+        -89.93,
+        781.14
       ],
       "yaw": -1.99,
-      "reason": "The Waterfront Plaza's information board, an island map in a dark frame on two posts, stands just west of the signal cabinet at the plaza's crosswalk landing and faces Treasure Island Road. Its map is an original drawing of the island from the frozen OSM data.",
+      "reason": "The Waterfront Plaza's information board, an island map in a dark frame on two posts, stands at the plaza's crosswalk landing just behind the signal cabinet and to its right seen from Treasure Island Road, facing the road. Its map is an original drawing of the island from the frozen OSM data.",
       "reference": "ferry-shelter 13-sv-road-ne and 11-sv-road-sw (83 Treasure Island Rd, Sep 2025); 15-sv-mar2025 (Mar 2025)"
     },
     {
@@ -89,7 +89,7 @@
         773.5
       ],
       "yaw": 1.571,
-      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; arranged here in a circle facing each other (production_inference: the photos show about six to eight chairs in a group).",
+      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; five here, facing each other in a ring open on one side (production_inference: photo 25 shows five chairs in the group).",
       "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn"
     },
     {
@@ -102,7 +102,7 @@
         775.58
       ],
       "yaw": 0.524,
-      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; arranged here in a circle facing each other (production_inference: the photos show about six to eight chairs in a group).",
+      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; five here, facing each other in a ring open on one side (production_inference: photo 25 shows five chairs in the group).",
       "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn"
     },
     {
@@ -115,7 +115,7 @@
         775.58
       ],
       "yaw": -0.524,
-      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; arranged here in a circle facing each other (production_inference: the photos show about six to eight chairs in a group).",
+      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; five here, facing each other in a ring open on one side (production_inference: photo 25 shows five chairs in the group).",
       "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn"
     },
     {
@@ -128,7 +128,7 @@
         773.5
       ],
       "yaw": -1.571,
-      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; arranged here in a circle facing each other (production_inference: the photos show about six to eight chairs in a group).",
+      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; five here, facing each other in a ring open on one side (production_inference: photo 25 shows five chairs in the group).",
       "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn"
     },
     {
@@ -141,20 +141,7 @@
         771.42
       ],
       "yaw": -2.618,
-      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; arranged here in a circle facing each other (production_inference: the photos show about six to eight chairs in a group).",
-      "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn"
-    },
-    {
-      "id": "plaza_adirondack_chair_6",
-      "kind": "chair",
-      "prop": "adirondack_chair",
-      "params": {},
-      "xz": [
-        -114.3,
-        771.42
-      ],
-      "yaw": 2.618,
-      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; arranged here in a circle facing each other (production_inference: the photos show about six to eight chairs in a group).",
+      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; five here, facing each other in a ring open on one side (production_inference: photo 25 shows five chairs in the group).",
       "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn"
     },
     {
@@ -193,12 +180,12 @@
       "prop": "barricade",
       "params": {},
       "xz": [
-        -182.46,
-        495.67
+        -183.12,
+        496.01
       ],
       "yaw": -2.665,
-      "reason": "Orange and white striped A-frame barricades with white sign panels stand on the west sidewalk of Avenue of the Palms beside the fenced Cityside Park lot, south of 338 Ave of the Palms.",
-      "reference": "isle-house ih05 (338 Ave of the Palms, Sep 2025): two barricades on the west sidewalk and one farther on; street-fences refs p4b-aotp-338-sw-h228 (same panorama, Sep 2025)"
+      "reason": "Orange and white striped A-frame barricades with white sign panels stand at the back edge of the west sidewalk of Avenue of the Palms, against the planting verge beside the fenced Cityside Park lot, south of 338 Ave of the Palms.",
+      "reference": "isle-house ih05 (338 Ave of the Palms, Sep 2025): two barricades and one farther on, all at the walk's planting edge; street-fences refs p4b-aotp-338-sw-h228 (same panorama, Sep 2025)"
     },
     {
       "id": "palms_barricade_2",
@@ -206,12 +193,12 @@
       "prop": "barricade",
       "params": {},
       "xz": [
-        -178.33,
-        503.67
+        -178.99,
+        504.01
       ],
       "yaw": -2.665,
-      "reason": "Orange and white striped A-frame barricades with white sign panels stand on the west sidewalk of Avenue of the Palms beside the fenced Cityside Park lot, south of 338 Ave of the Palms.",
-      "reference": "isle-house ih05 (338 Ave of the Palms, Sep 2025): two barricades on the west sidewalk and one farther on; street-fences refs p4b-aotp-338-sw-h228 (same panorama, Sep 2025)"
+      "reason": "Orange and white striped A-frame barricades with white sign panels stand at the back edge of the west sidewalk of Avenue of the Palms, against the planting verge beside the fenced Cityside Park lot, south of 338 Ave of the Palms.",
+      "reference": "isle-house ih05 (338 Ave of the Palms, Sep 2025): two barricades and one farther on, all at the walk's planting edge; street-fences refs p4b-aotp-338-sw-h228 (same panorama, Sep 2025)"
     },
     {
       "id": "palms_barricade_3",
@@ -219,12 +206,12 @@
       "prop": "barricade",
       "params": {},
       "xz": [
-        -168.0,
-        523.65
+        -168.66,
+        523.99
       ],
       "yaw": -2.665,
-      "reason": "Orange and white striped A-frame barricades with white sign panels stand on the west sidewalk of Avenue of the Palms beside the fenced Cityside Park lot, south of 338 Ave of the Palms.",
-      "reference": "isle-house ih05 (338 Ave of the Palms, Sep 2025): two barricades on the west sidewalk and one farther on; street-fences refs p4b-aotp-338-sw-h228 (same panorama, Sep 2025)"
+      "reason": "Orange and white striped A-frame barricades with white sign panels stand at the back edge of the west sidewalk of Avenue of the Palms, against the planting verge beside the fenced Cityside Park lot, south of 338 Ave of the Palms.",
+      "reference": "isle-house ih05 (338 Ave of the Palms, Sep 2025): two barricades and one farther on, all at the walk's planting edge; street-fences refs p4b-aotp-338-sw-h228 (same panorama, Sep 2025)"
     },
     {
       "id": "palms_cone_1",

@@ -13,7 +13,11 @@ extends RefCounted
 ## ignores it, as for the street furniture.
 
 const KIT := preload("res://game/scripts/world/street_clutter_kit.gd")
-const CELL_M := 48.0
+## Render cell (m): this share of the near-mesh distance, as the street
+## furniture sizes its cells from its ranges, so an item's own hand-over stays
+## close to LOD_NEAR_M wherever it stands in its cell.
+const CELL_RANGE_SHARE := 0.4
+const CELL_M := KIT.LOD_NEAR_M * CELL_RANGE_SHARE
 const PHYSICS_CELL_M := 96.0
 const RENDER_WORLD_VISIBLE := 1
 const PHYSICS_SPRAY_SURFACE := 1 << 2

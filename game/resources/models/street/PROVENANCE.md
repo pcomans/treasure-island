@@ -5,6 +5,9 @@
 - Made in this project, no third-party asset: `tools/build_street_clutter_kit.mjs`
   writes it from the procedural kit in `tools/lib/street-clutter-kit.mjs`
   (deterministic; rebuild and commit it with any kit change).
+  `tools/check_godot_world_determinism.mjs` (part of `tools/test.sh`) rebuilds it
+  in memory and fails when the committed file differs from that build, as it
+  does for `generated/world`.
 - Contents: one node and mesh per detail level (`_lod0` near, `_lod1` far) of nine
   generic parked-car bodies (crossover, suv, sedan, fastback, hatchback, wagon,
   pickup, utility, van), a traffic cone and an A-frame barricade. Each vertex

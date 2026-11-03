@@ -6,6 +6,7 @@ import { tmpdir } from "node:os";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { buildStreetClutterKitGlb, STREET_CLUTTER_KIT_PATH } from "./build_street_clutter_kit.mjs";
 import { invariant, sha256File, stableJson } from "./lib/world-contract.mjs";
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
@@ -79,6 +80,13 @@ function main() {
         `Committed generated/world/${file.path} differs from a fresh build; regenerate with tools/build_godot_world.mjs`,
       );
     }
+    // The committed street-clutter kit must be exactly what its generator writes:
+    // the world rows take wheel positions and car sizes from the same kit module.
+    const kit = buildStreetClutterKitGlb().glb;
+    invariant(
+      kit.equals(readFileSync(resolve(projectRoot, STREET_CLUTTER_KIT_PATH))),
+      `Committed ${STREET_CLUTTER_KIT_PATH} differs from a fresh build; rebuild it with tools/build_street_clutter_kit.mjs`,
+    );
     const vegetationPath = "vegetation.json";
     invariant(firstInventory.some((file) => file.path === vegetationPath), "Clean generation omitted vegetation.json");
     const streetDetailPath = "street_detail.json";
@@ -92,6 +100,7 @@ function main() {
       status: "deterministic",
       clean_generations: 2,
       files_compared: firstInventory.length,
+      street_clutter_kit_bytes: kit.length,
       content_sha256: manifest.content_sha256,
       vegetation_sha256: firstInventory.find((file) => file.path === vegetationPath).sha256,
       street_detail_sha256: firstInventory.find((file) => file.path === streetDetailPath).sha256,

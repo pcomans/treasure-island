@@ -57,8 +57,13 @@ const SAFE_ID = /^[a-z0-9_]+$/u;
 // A car's footprint for the shared mask: a stadium that holds its rectangle
 // (radius this far beyond its half width, the straight part shortened to fit).
 const FOOTPRINT_EXTRA_M = 0.1;
-// Clear space kept between a car and street furniture or fence runs.
-const ITEM_CLEAR_M = 0.15;
+// Clear space kept between a car and a built street prop or fence run (one
+// with a kit prop, so it collides): the player's width, so no gap beside a car
+// pinches shut. Data-only rows (placeholder slots, unbuilt OSM features) have no
+// collision and keep only a small margin. Cars are not checked against each
+// other: stall neighbours and curb gaps have their own rules.
+const ITEM_CLEAR_M = 0.7;
+const DATA_ROW_CLEAR_M = 0.15;
 // Paints a van comes in (the rule's weights, these only).
 const VAN_PAINTS = Object.freeze(["black", "dark_grey", "grey", "silver", "white"]);
 const pickFrom = (weights, names) => Object.fromEntries(Object.entries(weights).filter(([name]) => names.includes(name)));
@@ -359,6 +364,8 @@ export function placeStreetClutter({
 }) {
   const pilotShapes = zoneShapes.filter(({ zone }) => zone.pilot);
   const groundAt = visibleGroundIndex(chunks);
+  // Rows the runtime builds (a fence's runs are claimed as "<id>#run<n>").
+  const builtIds = new Set(rows.filter((row) => row.status === "placed" && row.prop != null).map((row) => row.id));
   const audit = { rules: {}, rejected_by_reason: {} };
   const count = (table, key) => {
     table[key] = (table[key] ?? 0) + 1;
@@ -392,9 +399,10 @@ export function placeStreetClutter({
       if (surface === "lot" && !site.inLot(corner) && site.carriagewayDistance(corner, 1) > 0) return "off_lot";
     }
     for (const item of occupied) {
+      const clear = builtIds.has(item.id.split("#")[0]) ? ITEM_CLEAR_M : DATA_ROW_CLEAR_M;
       for (const point of piece.points.length > 1 ? sampleSegment(piece.points) : piece.points) {
         const near = item.points.length > 1 ? distanceToPolyline(point, item.points) : Math.hypot(point[0] - item.points[0][0], point[1] - item.points[0][1]);
-        if (near < item.radius_m + piece.radius + ITEM_CLEAR_M) return "item";
+        if (near < item.radius_m + piece.radius + clear) return "item";
       }
     }
     return null;

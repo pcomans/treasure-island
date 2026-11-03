@@ -5,12 +5,12 @@
         "forecourt_lot_cars:fill": 52,
         "palms_parked_cars:curb_kept_clear": 10,
         "palms_parked_cars:fill": 13,
-        "palms_parked_cars:item": 2,
+        "palms_parked_cars:item": 11,
         "palms_parked_cars:off_asphalt": 2,
         "palms_parked_cars:uneven_ground": 1
       },
       "rules": {
-        "avenue_of_the_palms/palms_parked_cars": 51,
+        "avenue_of_the_palms/palms_parked_cars": 42,
         "building_1_forecourt/forecourt_lot_cars": 64
       }
     },
@@ -50,6 +50,7 @@
         "palms_lamps:overlap": 4,
         "plaza_lamps:outside_zone": 17,
         "plaza_lamps:spawn_forward": 7,
+        "signal_cabinets:overlap": 3,
         "stop_sign:curb_ramp": 2,
         "stop_sign:overlap": 5,
         "ti_road_lamps:outside_zone": 68,
@@ -128,8 +129,8 @@
       }
     },
     "set_pieces": {
-      "entries": 20,
-      "placed": 20
+      "entries": 19,
+      "placed": 19
     }
   },
   "conventions": {
@@ -155,7 +156,7 @@
       "bicycle_parking": 15,
       "bollard": 4,
       "bus_stop": 15,
-      "chair": 6,
+      "chair": 5,
       "clutter_slot": 20,
       "crossing": 161,
       "fence": 26,
@@ -167,7 +168,7 @@
       "kerb": 8,
       "log_barrier": 2,
       "palm_slot": 12,
-      "parked_car": 115,
+      "parked_car": 106,
       "planting_slot": 19,
       "post_box": 1,
       "power_line": 44,
@@ -183,30 +184,30 @@
       "waste_basket": 14
     },
     "by_layer": {
-      "clutter": 429,
+      "clutter": 420,
       "fences": 60,
-      "furniture": 216,
+      "furniture": 215,
       "ground": 169,
       "vegetation": 31
     },
     "by_source": {
       "osm": 660,
-      "scatter": 225,
-      "set_piece": 20
+      "scatter": 216,
+      "set_piece": 19
     },
     "by_status": {
       "excluded": 4,
-      "placed": 901
+      "placed": 891
     },
-    "pilot_rows": 265,
+    "pilot_rows": 255,
     "placed_by_layer": {
-      "clutter": 427,
+      "clutter": 418,
       "fences": 59,
-      "furniture": 215,
+      "furniture": 214,
       "ground": 169,
       "vegetation": 31
     },
-    "total": 905
+    "total": 895
   },
   "exclusion_inputs": {
     "ferry_path_xz": [
@@ -1608,7 +1609,7 @@
     },
     "set_pieces": {
       "path": "data/street_detail/set_pieces.json",
-      "sha256": "3c0d2e119d35aa0c86f645a82c049ca3badc6e952ab7e75b4d96269064266871"
+      "sha256": "a1e537eb32f8231643a0944401536d8e98e48743fdc7ee6c15e48d6be8250625"
     },
     "stair_catalog": {
       "field": "units[].stairs",
@@ -35404,54 +35405,6 @@
       "basis": "production_inference",
       "exclusion": null,
       "footprint_m": {
-        "x_m": 1.79,
-        "z_m": 4.38
-      },
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_008",
-      "kind": "parked_car",
-      "layer": "clutter",
-      "position_m": [
-        -265.136,
-        3.281,
-        313.593
-      ],
-      "prop": "parked_car",
-      "prop_params": {
-        "body": "hatchback",
-        "finish": "solid",
-        "lift": 0.003,
-        "paint": "white",
-        "pitch": -0.1062,
-        "rims": "dark",
-        "roll": 0.0443,
-        "roof": "body",
-        "twist": 0
-      },
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0.078,
-        "kind": "street_paint",
-        "material_key": "street_parking",
-        "source_key": "w1001544697"
-      },
-      "terrain_support": {
-        "elevation_m": 3.281,
-        "object_key": "land:w26767313:x_-2__z_1",
-        "triangle_index": 49
-      },
-      "yaw_radians": 0.49,
-      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "basis": "production_inference",
-      "exclusion": null,
-      "footprint_m": {
         "x_m": 1.87,
         "z_m": 4.62
       },
@@ -35587,54 +35540,6 @@
         "triangle_index": 10
       },
       "yaw_radians": 0.484,
-      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "basis": "production_inference",
-      "exclusion": null,
-      "footprint_m": {
-        "x_m": 1.87,
-        "z_m": 4.62
-      },
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_013",
-      "kind": "parked_car",
-      "layer": "clutter",
-      "position_m": [
-        -249.524,
-        3.241,
-        343.597
-      ],
-      "prop": "parked_car",
-      "prop_params": {
-        "body": "crossover",
-        "finish": "solid",
-        "lift": 0.018,
-        "paint": "white",
-        "pitch": 0.0521,
-        "rims": "alloy",
-        "roll": 0.0909,
-        "roof": "black",
-        "twist": 0.007
-      },
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0.078,
-        "kind": "street_paint",
-        "material_key": "street_parking",
-        "source_key": "w1001544697"
-      },
-      "terrain_support": {
-        "elevation_m": 3.241,
-        "object_key": "land:w26767313:x_-1__z_1",
-        "triangle_index": 10
-      },
-      "yaw_radians": 0.471,
       "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
       "zones": [
         "avenue_of_the_palms"
@@ -36028,54 +35933,6 @@
       "basis": "production_inference",
       "exclusion": null,
       "footprint_m": {
-        "x_m": 1.87,
-        "z_m": 4.62
-      },
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_022",
-      "kind": "parked_car",
-      "layer": "clutter",
-      "position_m": [
-        -222.017,
-        3.945,
-        396.232
-      ],
-      "prop": "parked_car",
-      "prop_params": {
-        "body": "crossover",
-        "finish": "metallic",
-        "lift": 0.003,
-        "paint": "grey",
-        "pitch": -0.0018,
-        "rims": "dark",
-        "roll": -0.0076,
-        "roof": "body",
-        "twist": 0
-      },
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0.078,
-        "kind": "street_paint",
-        "material_key": "street_parking",
-        "source_key": "w1001544697"
-      },
-      "terrain_support": {
-        "elevation_m": 3.945,
-        "object_key": "land:w26767313:x_-1__z_1",
-        "triangle_index": 22
-      },
-      "yaw_radians": 0.479,
-      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "basis": "production_inference",
-      "exclusion": null,
-      "footprint_m": {
         "x_m": 1.79,
         "z_m": 4.38
       },
@@ -36163,54 +36020,6 @@
         "triangle_index": 23
       },
       "yaw_radians": 0.476,
-      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "basis": "production_inference",
-      "exclusion": null,
-      "footprint_m": {
-        "x_m": 1.83,
-        "z_m": 4.82
-      },
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_029",
-      "kind": "parked_car",
-      "layer": "clutter",
-      "position_m": [
-        -190.644,
-        4.045,
-        456.437
-      ],
-      "prop": "parked_car",
-      "prop_params": {
-        "body": "sedan",
-        "finish": "metallic",
-        "lift": 0.002,
-        "paint": "light_grey",
-        "pitch": 0.0035,
-        "rims": "alloy",
-        "roll": -0.0075,
-        "roof": "body",
-        "twist": 0
-      },
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0.078,
-        "kind": "street_paint",
-        "material_key": "street_parking",
-        "source_key": "w1001544697"
-      },
-      "terrain_support": {
-        "elevation_m": 4.045,
-        "object_key": "land:w26767313:x_-1__z_1",
-        "triangle_index": 34
-      },
-      "yaw_radians": 0.479,
       "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
       "zones": [
         "avenue_of_the_palms"
@@ -36508,54 +36317,6 @@
       "basis": "production_inference",
       "exclusion": null,
       "footprint_m": {
-        "x_m": 1.85,
-        "z_m": 4.72
-      },
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_038",
-      "kind": "parked_car",
-      "layer": "clutter",
-      "position_m": [
-        -163.002,
-        4.377,
-        509.874
-      ],
-      "prop": "parked_car",
-      "prop_params": {
-        "body": "fastback",
-        "finish": "metallic",
-        "lift": 0.004,
-        "paint": "dark_grey",
-        "pitch": 0.0675,
-        "rims": "dark",
-        "roll": 0.1183,
-        "roof": "body",
-        "twist": 0
-      },
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0.078,
-        "kind": "street_paint",
-        "material_key": "street_parking",
-        "source_key": "w1001544697"
-      },
-      "terrain_support": {
-        "elevation_m": 4.377,
-        "object_key": "land:w26767313:x_-1__z_1",
-        "triangle_index": 33
-      },
-      "yaw_radians": 0.474,
-      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "basis": "production_inference",
-      "exclusion": null,
-      "footprint_m": {
         "x_m": 1.95,
         "z_m": 4.98
       },
@@ -36704,54 +36465,6 @@
         "z_m": 4.72
       },
       "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_043",
-      "kind": "parked_car",
-      "layer": "clutter",
-      "position_m": [
-        -147.724,
-        4.098,
-        539.448
-      ],
-      "prop": "parked_car",
-      "prop_params": {
-        "body": "fastback",
-        "finish": "metallic",
-        "lift": 0.003,
-        "paint": "light_grey",
-        "pitch": 0.0072,
-        "rims": "alloy",
-        "roll": 0.002,
-        "roof": "body",
-        "twist": 0
-      },
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0.078,
-        "kind": "street_paint",
-        "material_key": "street_parking",
-        "source_key": "w1001544697"
-      },
-      "terrain_support": {
-        "elevation_m": 4.098,
-        "object_key": "land:w26767313:x_-1__z_2",
-        "triangle_index": 48
-      },
-      "yaw_radians": 0.478,
-      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "basis": "production_inference",
-      "exclusion": null,
-      "footprint_m": {
-        "x_m": 1.85,
-        "z_m": 4.72
-      },
-      "geometry": "point",
       "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_045",
       "kind": "parked_car",
       "layer": "clutter",
@@ -36883,102 +36596,6 @@
         "triangle_index": 46
       },
       "yaw_radians": 0.485,
-      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "basis": "production_inference",
-      "exclusion": null,
-      "footprint_m": {
-        "x_m": 1.87,
-        "z_m": 4.62
-      },
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_048",
-      "kind": "parked_car",
-      "layer": "clutter",
-      "position_m": [
-        -131.561,
-        4.025,
-        570.72
-      ],
-      "prop": "parked_car",
-      "prop_params": {
-        "body": "crossover",
-        "finish": "solid",
-        "lift": 0.004,
-        "paint": "red",
-        "pitch": 0.0132,
-        "rims": "alloy",
-        "roll": 0.021,
-        "roof": "body",
-        "twist": -0.001
-      },
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0.078,
-        "kind": "street_paint",
-        "material_key": "street_parking",
-        "source_key": "w1001544697"
-      },
-      "terrain_support": {
-        "elevation_m": 4.025,
-        "object_key": "land:w26767313:x_-1__z_2",
-        "triangle_index": 46
-      },
-      "yaw_radians": 0.47,
-      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "basis": "production_inference",
-      "exclusion": null,
-      "footprint_m": {
-        "x_m": 1.85,
-        "z_m": 4.72
-      },
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_right_001",
-      "kind": "parked_car",
-      "layer": "clutter",
-      "position_m": [
-        -303.997,
-        4.087,
-        258.145
-      ],
-      "prop": "parked_car",
-      "prop_params": {
-        "body": "fastback",
-        "finish": "metallic",
-        "lift": 0.004,
-        "paint": "black",
-        "pitch": -0.0079,
-        "rims": "alloy",
-        "roll": 0.0061,
-        "roof": "body",
-        "twist": 0.001
-      },
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0.078,
-        "kind": "street_paint",
-        "material_key": "street_parking",
-        "source_key": "w1001544697"
-      },
-      "terrain_support": {
-        "elevation_m": 4.087,
-        "object_key": "land:w26767313:x_-2__z_1",
-        "triangle_index": 33
-      },
-      "yaw_radians": -2.638,
       "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
       "zones": [
         "avenue_of_the_palms"
@@ -37507,54 +37124,6 @@
         "triangle_index": 6
       },
       "yaw_radians": -2.67,
-      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
-      "zones": [
-        "avenue_of_the_palms"
-      ]
-    },
-    {
-      "basis": "production_inference",
-      "exclusion": null,
-      "footprint_m": {
-        "x_m": 1.83,
-        "z_m": 4.82
-      },
-      "geometry": "point",
-      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_right_023",
-      "kind": "parked_car",
-      "layer": "clutter",
-      "position_m": [
-        -228.09,
-        3.986,
-        403.009
-      ],
-      "prop": "parked_car",
-      "prop_params": {
-        "body": "sedan",
-        "finish": "metallic",
-        "lift": 0.003,
-        "paint": "grey",
-        "pitch": -0.0092,
-        "rims": "dark",
-        "roll": -0.0136,
-        "roof": "body",
-        "twist": 0
-      },
-      "source": "scatter",
-      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0.078,
-        "kind": "street_paint",
-        "material_key": "street_parking",
-        "source_key": "w1001544697"
-      },
-      "terrain_support": {
-        "elevation_m": 3.986,
-        "object_key": "land:w26767313:x_-1__z_1",
-        "triangle_index": 7
-      },
-      "yaw_radians": -2.652,
       "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
       "zones": [
         "avenue_of_the_palms"
@@ -44457,9 +44026,9 @@
       "kind": "street_cabinet",
       "layer": "furniture",
       "position_m": [
-        -89.127,
-        3.902,
-        782.581
+        -90.427,
+        3.888,
+        783.33
       ],
       "prop": "signal_cabinet",
       "prop_params": {},
@@ -44473,7 +44042,7 @@
         "source_key": "w1249797944"
       },
       "terrain_support": {
-        "elevation_m": 3.902,
+        "elevation_m": 3.888,
         "object_key": "land:w26767313:x_-1__z_3",
         "triangle_index": 14
       },
@@ -44802,14 +44371,14 @@
       "kind": "barricade",
       "layer": "clutter",
       "position_m": [
-        -182.46,
-        6.136,
-        495.67
+        -183.12,
+        6.178,
+        496.01
       ],
       "prop": "barricade",
       "prop_params": {},
-      "reason": "Orange and white striped A-frame barricades with white sign panels stand on the west sidewalk of Avenue of the Palms beside the fenced Cityside Park lot, south of 338 Ave of the Palms.",
-      "reference": "isle-house ih05 (338 Ave of the Palms, Sep 2025): two barricades on the west sidewalk and one farther on; street-fences refs p4b-aotp-338-sw-h228 (same panorama, Sep 2025)",
+      "reason": "Orange and white striped A-frame barricades with white sign panels stand at the back edge of the west sidewalk of Avenue of the Palms, against the planting verge beside the fenced Cityside Park lot, south of 338 Ave of the Palms.",
+      "reference": "isle-house ih05 (338 Ave of the Palms, Sep 2025): two barricades and one farther on, all at the walk's planting edge; street-fences refs p4b-aotp-338-sw-h228 (same panorama, Sep 2025)",
       "source": "set_piece",
       "source_id": "palms_barricade_1",
       "status": "placed",
@@ -44820,7 +44389,7 @@
         "source_key": "w1001544697"
       },
       "terrain_support": {
-        "elevation_m": 6.136,
+        "elevation_m": 6.178,
         "object_key": "land:w26767313:x_-1__z_1",
         "triangle_index": 32
       },
@@ -44841,14 +44410,14 @@
       "kind": "barricade",
       "layer": "clutter",
       "position_m": [
-        -178.33,
-        6.507,
-        503.67
+        -178.99,
+        6.595,
+        504.01
       ],
       "prop": "barricade",
       "prop_params": {},
-      "reason": "Orange and white striped A-frame barricades with white sign panels stand on the west sidewalk of Avenue of the Palms beside the fenced Cityside Park lot, south of 338 Ave of the Palms.",
-      "reference": "isle-house ih05 (338 Ave of the Palms, Sep 2025): two barricades on the west sidewalk and one farther on; street-fences refs p4b-aotp-338-sw-h228 (same panorama, Sep 2025)",
+      "reason": "Orange and white striped A-frame barricades with white sign panels stand at the back edge of the west sidewalk of Avenue of the Palms, against the planting verge beside the fenced Cityside Park lot, south of 338 Ave of the Palms.",
+      "reference": "isle-house ih05 (338 Ave of the Palms, Sep 2025): two barricades and one farther on, all at the walk's planting edge; street-fences refs p4b-aotp-338-sw-h228 (same panorama, Sep 2025)",
       "source": "set_piece",
       "source_id": "palms_barricade_2",
       "status": "placed",
@@ -44859,7 +44428,7 @@
         "source_key": "w1001544697"
       },
       "terrain_support": {
-        "elevation_m": 6.507,
+        "elevation_m": 6.595,
         "object_key": "land:w26767313:x_-1__z_1",
         "triangle_index": 33
       },
@@ -44880,14 +44449,14 @@
       "kind": "barricade",
       "layer": "clutter",
       "position_m": [
-        -168,
-        4.204,
-        523.65
+        -168.66,
+        4.221,
+        523.99
       ],
       "prop": "barricade",
       "prop_params": {},
-      "reason": "Orange and white striped A-frame barricades with white sign panels stand on the west sidewalk of Avenue of the Palms beside the fenced Cityside Park lot, south of 338 Ave of the Palms.",
-      "reference": "isle-house ih05 (338 Ave of the Palms, Sep 2025): two barricades on the west sidewalk and one farther on; street-fences refs p4b-aotp-338-sw-h228 (same panorama, Sep 2025)",
+      "reason": "Orange and white striped A-frame barricades with white sign panels stand at the back edge of the west sidewalk of Avenue of the Palms, against the planting verge beside the fenced Cityside Park lot, south of 338 Ave of the Palms.",
+      "reference": "isle-house ih05 (338 Ave of the Palms, Sep 2025): two barricades and one farther on, all at the walk's planting edge; street-fences refs p4b-aotp-338-sw-h228 (same panorama, Sep 2025)",
       "source": "set_piece",
       "source_id": "palms_barricade_3",
       "status": "placed",
@@ -44898,7 +44467,7 @@
         "source_key": "w1001544697"
       },
       "terrain_support": {
-        "elevation_m": 4.204,
+        "elevation_m": 4.221,
         "object_key": "land:w26767313:x_-1__z_2",
         "triangle_index": 31
       },
@@ -45083,7 +44652,7 @@
       ],
       "prop": "adirondack_chair",
       "prop_params": {},
-      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; arranged here in a circle facing each other (production_inference: the photos show about six to eight chairs in a group).",
+      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; five here, facing each other in a ring open on one side (production_inference: photo 25 shows five chairs in the group).",
       "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn",
       "source": "set_piece",
       "source_id": "plaza_adirondack_chair_1",
@@ -45122,7 +44691,7 @@
       ],
       "prop": "adirondack_chair",
       "prop_params": {},
-      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; arranged here in a circle facing each other (production_inference: the photos show about six to eight chairs in a group).",
+      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; five here, facing each other in a ring open on one side (production_inference: photo 25 shows five chairs in the group).",
       "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn",
       "source": "set_piece",
       "source_id": "plaza_adirondack_chair_2",
@@ -45161,7 +44730,7 @@
       ],
       "prop": "adirondack_chair",
       "prop_params": {},
-      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; arranged here in a circle facing each other (production_inference: the photos show about six to eight chairs in a group).",
+      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; five here, facing each other in a ring open on one side (production_inference: photo 25 shows five chairs in the group).",
       "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn",
       "source": "set_piece",
       "source_id": "plaza_adirondack_chair_3",
@@ -45200,7 +44769,7 @@
       ],
       "prop": "adirondack_chair",
       "prop_params": {},
-      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; arranged here in a circle facing each other (production_inference: the photos show about six to eight chairs in a group).",
+      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; five here, facing each other in a ring open on one side (production_inference: photo 25 shows five chairs in the group).",
       "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn",
       "source": "set_piece",
       "source_id": "plaza_adirondack_chair_4",
@@ -45239,7 +44808,7 @@
       ],
       "prop": "adirondack_chair",
       "prop_params": {},
-      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; arranged here in a circle facing each other (production_inference: the photos show about six to eight chairs in a group).",
+      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; five here, facing each other in a ring open on one side (production_inference: photo 25 shows five chairs in the group).",
       "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn",
       "source": "set_piece",
       "source_id": "plaza_adirondack_chair_5",
@@ -45256,45 +44825,6 @@
         "triangle_index": 4
       },
       "yaw_radians": -2.618,
-      "yaw_source": "set_piece",
-      "zones": [
-        "ferry_arrival_plaza"
-      ]
-    },
-    {
-      "exclusion": null,
-      "footprint_m": {
-        "x_m": 0.8,
-        "z_m": 0.92
-      },
-      "geometry": "point",
-      "id": "set_piece:plaza_adirondack_chair_6",
-      "kind": "chair",
-      "layer": "furniture",
-      "position_m": [
-        -114.3,
-        3.326,
-        771.42
-      ],
-      "prop": "adirondack_chair",
-      "prop_params": {},
-      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; arranged here in a circle facing each other (production_inference: the photos show about six to eight chairs in a group).",
-      "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn",
-      "source": "set_piece",
-      "source_id": "plaza_adirondack_chair_6",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0.04,
-        "kind": "major_area",
-        "material_key": "major_area_leisure",
-        "source_key": "w1428380754"
-      },
-      "terrain_support": {
-        "elevation_m": 3.326,
-        "object_key": "land:w26767313:x_-1__z_3",
-        "triangle_index": 5
-      },
-      "yaw_radians": 2.618,
       "yaw_source": "set_piece",
       "zones": [
         "ferry_arrival_plaza"
@@ -45394,13 +44924,13 @@
       "kind": "information_board",
       "layer": "furniture",
       "position_m": [
-        -91.2,
-        3.883,
-        783.4
+        -89.93,
+        3.91,
+        781.14
       ],
       "prop": "map_board",
       "prop_params": {},
-      "reason": "The Waterfront Plaza's information board, an island map in a dark frame on two posts, stands just west of the signal cabinet at the plaza's crosswalk landing and faces Treasure Island Road. Its map is an original drawing of the island from the frozen OSM data.",
+      "reason": "The Waterfront Plaza's information board, an island map in a dark frame on two posts, stands at the plaza's crosswalk landing just behind the signal cabinet and to its right seen from Treasure Island Road, facing the road. Its map is an original drawing of the island from the frozen OSM data.",
       "reference": "ferry-shelter 13-sv-road-ne and 11-sv-road-sw (83 Treasure Island Rd, Sep 2025); 15-sv-mar2025 (Mar 2025)",
       "source": "set_piece",
       "source_id": "plaza_map_board",
@@ -45412,7 +44942,7 @@
         "source_key": "w1249797944"
       },
       "terrain_support": {
-        "elevation_m": 3.883,
+        "elevation_m": 3.91,
         "object_key": "land:w26767313:x_-1__z_3",
         "triangle_index": 14
       },
@@ -45708,7 +45238,7 @@
           "id": "palms_parked_cars",
           "kind": "parked_car",
           "pattern": "curb_parking",
-          "placed": 51,
+          "placed": 42,
           "prop": "parked_car"
         }
       ],
