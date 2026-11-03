@@ -31,6 +31,10 @@ extends SceneTree
 ##   are evenly spaced in game time. A free camera (camera_xyz) follows the player,
 ##   keeping its offset and looking at the player. Each tick prints a MOVE_TICK
 ##   line, with the avatar's describe() when it has one.
+##   A still view (focused or street) may add "frame_time_frames": N (10-3000) to
+##   hold its camera for N more frames with vsync and the frame cap off and print
+##   their frame time as a FRAME_TIME line (pass --rendering-method
+##   gl_compatibility --rendering-driver opengl3 for the web renderer).
 ## --views-batch FILE: only the focused views of several buildings in one world load,
 ## [{"source": "KEY", "plan": "views.json"}, ...], each plan a --views file for its
 ## source, saved to OUT/KEY/detail-NAME.png. Fixed-pose views only (no closeup,
@@ -275,10 +279,46 @@ func _shoot_view(view: Dictionary, target: Vector3, path: String) -> String:
 	await physics_frame
 	await physics_frame
 	error = await _h.save_screenshot(path)
+	if error == "" and view.has("frame_time_frames"):
+		error = await _frame_time(view.frame_time_frames, path.get_file().get_basename())
 	if free != null:
 		free.queue_free()
 		_h.player.get_camera().make_current()
 	return error
+
+
+## Holds the view's camera for `frames` more drawn frames, with vsync and the
+## frame cap off, and prints the wall time between them as a FRAME_TIME line
+## (mean, median, 95th percentile and the mean's fps). Returns an error, or "".
+func _frame_time(frames: Variant, label: String) -> String:
+	if not _numbers([frames], 1) or float(frames) != floorf(float(frames)) or float(frames) < 10.0 or float(frames) > 3000.0:
+		return "frame_time_frames must be a whole number from 10 to 3000"
+	var vsync := DisplayServer.window_get_vsync_mode()
+	var max_fps := Engine.max_fps
+	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+	Engine.max_fps = 0
+	# Let the change and any first-use work settle before timing.
+	for _i in 30:
+		await RenderingServer.frame_post_draw
+	var times := PackedFloat64Array()
+	var last := Time.get_ticks_usec()
+	for _i in int(frames):
+		await RenderingServer.frame_post_draw
+		var now := Time.get_ticks_usec()
+		times.append(float(now - last) / 1000.0)
+		last = now
+	DisplayServer.window_set_vsync_mode(vsync)
+	Engine.max_fps = max_fps
+	times.sort()
+	var total := 0.0
+	for time in times:
+		total += time
+	var mean := total / float(times.size())
+	print("FRAME_TIME %s frames=%d mean_ms=%.2f median_ms=%.2f p95_ms=%.2f mean_fps=%.1f method=%s adapter=%s" % [
+		label, times.size(), mean, times[times.size() / 2], times[mini(times.size() - 1, int(times.size() * 0.95))],
+		1000.0 / mean, RenderingServer.get_current_rendering_method(), RenderingServer.get_video_adapter_name(),
+	])
+	return ""
 
 
 ## The view's free camera at camera_xyz aimed at target, made current, or null

@@ -39,6 +39,8 @@ const FAMILY_BY_MATERIAL_KEY := {
 	"major_area_landuse": "residential",
 	"major_area_leisure": "lawn",
 	"major_area_amenity": "lawn",
+	# A park zone's lawn (tools/lib/street-ground-generation.mjs park surfaces).
+	"park_lawn": "lawn",
 }
 
 ## Frozen 2026-08-27 OSM areas whose tags the generated material keys merge.
@@ -82,7 +84,7 @@ static func family_for(record: Dictionary, is_context: bool) -> String:
 		var sources: Array = record.get("source_keys", [])
 		if sources.size() == 1 and FAMILY_BY_SOURCE.has(str(sources[0])):
 			return str(FAMILY_BY_SOURCE[str(sources[0])])
-	elif feature != "land_ground" and feature != "street_kerb":
+	elif feature != "land_ground" and feature != "street_kerb" and feature != "street_paint":
 		return ""
 	return str(FAMILY_BY_MATERIAL_KEY.get(str(record.get("material_key", "")), ""))
 

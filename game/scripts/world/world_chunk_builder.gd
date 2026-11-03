@@ -74,6 +74,19 @@ const STREET_GROUND_SURFACES := {
 	"street_kerb_concrete": {"albedo": preload("res://game/resources/textures/world/street/street_concrete_panels.png"), "uv_scale": 0.5, "roughness": 0.9},
 	"street_kerb_planting": {"albedo": preload("res://game/resources/textures/world/street/street_mulch.png"), "uv_scale": 1.0, "roughness": 1.0},
 	"street_plaza_pavers": {"albedo": preload("res://game/resources/textures/world/street/street_plaza_pavers.png"), "uv_scale": 1.0, "roughness": 0.85},
+	# Park ground (park_* records): mulch beds in 2 m tiles of the world UV, the
+	# promenade and garden paths in 3 m poured panels (one UV unit a panel, warm
+	# buff concrete), decomposed-granite paths in 2 m tiles.
+	"park_mulch": {"albedo": preload("res://game/resources/textures/world/street/street_mulch.png"), "uv_scale": 5.0, "roughness": 1.0},
+	"park_concrete": {"albedo": preload("res://game/resources/textures/world/street/street_concrete_panels.png"), "uv_scale": 0.5, "roughness": 0.9, "tint": Color(1.0, 0.96, 0.9)},
+	"park_dg": {"albedo": preload("res://game/resources/textures/world/street/park_dg.png"), "uv_scale": 5.0, "roughness": 1.0},
+}
+## Painted park plazas (park_plaza_* records): game/resources/materials/world/street/park_paving.gdshader
+## draws the pattern in the plaza's own frame (UV in metres); colours read from the dated photos.
+const PARK_PAVING_SHADER := preload("res://game/resources/materials/world/street/park_paving.gdshader")
+const PARK_PAVING_MATERIALS := {
+	"park_plaza_zigzag": {"pattern": 0, "color_light": Color(0.88, 0.88, 0.86), "color_mid": Color(0.66, 0.67, 0.66), "color_dark": Color(0.36, 0.37, 0.37)},
+	"park_plaza_lens": {"pattern": 1, "color_light": Color(0.8, 0.8, 0.78), "color_mid": Color(0.5, 0.5, 0.5), "color_dark": Color(0.2, 0.2, 0.21)},
 }
 const POLYHAVEN_TEXTURE_SETS := {
 	"clean_asphalt": {
@@ -127,6 +140,8 @@ const POLYHAVEN_MATERIAL_TEXTURE_SET := {
 	"major_area_court": "concrete_floor_03",
 	"street_parking": "clean_asphalt",
 	"street_gutter": "concrete_floor_03",
+	"park_asphalt": "clean_asphalt",
+	"park_gravel": "concrete_floor_03",
 	"context_ybi": "sparse_grass",
 	"building_wall": "plaster_grey_04",
 	"building_part_wall": "plaster_grey_04",
@@ -137,6 +152,7 @@ const POLYHAVEN_MATERIAL_TEXTURE_SET := {
 var _materials: Dictionary = {}
 var _street_decal_materials: Dictionary = {}
 var _street_ground_materials: Dictionary = {}
+var _park_paving_materials: Dictionary = {}
 var _generic_roof_material: StandardMaterial3D
 
 
@@ -739,6 +755,8 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 		placeholder_material = _street_decal_material(str(record.material_key))
 	elif STREET_GROUND_SURFACES.has(str(record.material_key)) and not uvs.is_empty():
 		placeholder_material = _street_ground_material(str(record.material_key))
+	elif PARK_PAVING_MATERIALS.has(str(record.material_key)) and not uvs.is_empty():
+		placeholder_material = _park_paving_material(str(record.material_key))
 	elif ground_family == GROUND_COVER.PAVED:
 		placeholder_material = _material_for("major_area_court", "major_area", false)
 	elif ground_family != "":
@@ -923,12 +941,28 @@ func _street_ground_material(material_key: String) -> StandardMaterial3D:
 	var material := StandardMaterial3D.new()
 	material.resource_name = material_key
 	material.albedo_texture = surface.albedo as Texture2D
+	material.albedo_color = surface.get("tint", Color.WHITE) as Color
 	material.roughness = float(surface.roughness)
 	var uv_scale := float(surface.uv_scale)
 	material.uv1_scale = Vector3(uv_scale, uv_scale, 1.0)
 	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
 	material.set_flag(BaseMaterial3D.FLAG_USE_TEXTURE_REPEAT, true)
 	_street_ground_materials[material_key] = material
+	return material
+
+
+## The shared material for a painted park plaza.
+func _park_paving_material(material_key: String) -> ShaderMaterial:
+	if _park_paving_materials.has(material_key):
+		return _park_paving_materials[material_key]
+	var paving: Dictionary = PARK_PAVING_MATERIALS[material_key]
+	var material := ShaderMaterial.new()
+	material.resource_name = material_key
+	material.shader = PARK_PAVING_SHADER
+	for parameter: String in paving:
+		material.set_shader_parameter(parameter, paving[parameter])
+	material.set_shader_parameter("detail", POLYHAVEN_TEXTURE_SETS.concrete_floor_03.roughness)
+	_park_paving_materials[material_key] = material
 	return material
 
 
@@ -988,6 +1022,11 @@ func _polyhaven_tint_for(material_key: String, fallback: Color) -> Color:
 			# Gutter pans: smoother, slightly darker concrete; cooled so the
 			# warm source map does not read pink beside the asphalt.
 			return Color(0.84, 0.92, 0.98)
+		"park_asphalt":
+			# The park's newer, darker asphalt paths (Sep 2025 to 2026 photos).
+			return Color(0.66, 0.67, 0.68)
+		"park_gravel":
+			return Color(0.86, 0.87, 0.86)
 		"context_ybi":
 			return Color("d2d8cb")
 		"building_wall", "building_part_wall":

@@ -126,6 +126,10 @@ const MESH_RECORD_FIELDS := [
 	"opaque", "receiver_kind", "source_keys", "uvs", "vertices",
 ]
 const SURFACE_RECORD_FIELDS := ["surface_bias_m"]
+## A park zone's ground layers (tools/lib/street-ground-generation.mjs) are
+## street paint draped over the land, carrying their lift like other draped
+## surfaces so VisibleGround can stand visuals on them.
+const PARK_SURFACE_MATERIAL_PREFIX := "park_"
 const BUILDING_LEVEL_FIELDS := ["flat_base_elevation_m", "source_height_m", "top_elevation_m"]
 const BUILDING_WALL_FIELDS := ["exterior_foundation_segments", "shared_wall_segments"]
 const CONTEXT_RECORD_FIELDS := [
@@ -995,7 +999,7 @@ static func _validate_chunk(chunk: Dictionary, expected_chunk_id: String, source
 			return _failure("chunk_record", "Chunk %s contains a non-object record." % expected_chunk_id)
 		var expected_record_fields := MESH_RECORD_FIELDS.duplicate()
 		var feature_kind := str(record_value.get("feature_kind", ""))
-		if feature_kind in ["road_path", "major_area", "terrain_overlay"]:
+		if feature_kind in ["road_path", "major_area", "terrain_overlay"] or _is_park_surface(record_value):
 			expected_record_fields.append_array(SURFACE_RECORD_FIELDS)
 		if feature_kind in ["building_roof", "building_part_roof", "building_wall", "building_part_wall"]:
 			expected_record_fields.append_array(BUILDING_LEVEL_FIELDS)
@@ -1176,7 +1180,7 @@ static func _validate_mesh_record(record: Dictionary, allowed_kinds: Array, sour
 		if collision_kind != "world_solid" or not bool(record.get("opaque", false)) or (feature_kind != "building_wall" and feature_kind != "building_part_wall"):
 			return _failure("record_receiver", "Record %s violates the opaque building-wall receiver contract." % object_key)
 	if expected_scope == "playable":
-		if feature_kind in ["road_path", "major_area", "terrain_overlay"] \
+		if (feature_kind in ["road_path", "major_area", "terrain_overlay"] or _is_park_surface(record)) \
 		and not _is_finite_number(record.get("surface_bias_m", null)):
 			return _failure("surface_conformance", "Record %s has no finite coherent-surface bias." % object_key)
 		if feature_kind == "road_path":
@@ -1569,6 +1573,11 @@ static func _sorted_unique_chunk_ids(values: Array[String]) -> Array[String]:
 			return []
 		seen[value] = true
 	return _sorted_chunk_ids(values)
+
+
+static func _is_park_surface(record: Dictionary) -> bool:
+	return str(record.get("feature_kind", "")) == "street_paint" \
+		and str(record.get("material_key", "")).begins_with(PARK_SURFACE_MATERIAL_PREFIX)
 
 
 static func _has_exact_fields(value: Dictionary, expected_fields: Array) -> bool:
