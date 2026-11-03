@@ -817,77 +817,8 @@
       "entries": [],
       "elevation_role": "rear",
       "_k": 11,
-      "loggias": [
-        {
-          "station_m": 7.2435,
-          "local_station_m": 7.2435,
-          "basis": {
-            "source_run": 21,
-            "start": [
-              -475.99,
-              2.285,
-              -337.871
-            ],
-            "end": [
-              -479.551,
-              2.166,
-              -325.192
-            ],
-            "tangent": [
-              -0.2703959255958643,
-              0,
-              0.9627492110727258
-            ],
-            "normal": [
-              -0.9627492110727258,
-              0,
-              -0.2703959255958643
-            ],
-            "length_m": 13.16957713823793
-          },
-          "wall_receiver": true,
-          "width_m": 3.2,
-          "height_m": 2.3,
-          "center_y": 6.458,
-          "depth_m": 1.3,
-          "railing": true
-        },
-        {
-          "station_m": 1.95,
-          "local_station_m": 1.95,
-          "basis": {
-            "source_run": 21,
-            "start": [
-              -475.99,
-              2.285,
-              -337.871
-            ],
-            "end": [
-              -479.551,
-              2.166,
-              -325.192
-            ],
-            "tangent": [
-              -0.2703959255958643,
-              0,
-              0.9627492110727258
-            ],
-            "normal": [
-              -0.9627492110727258,
-              0,
-              -0.2703959255958643
-            ],
-            "length_m": 13.16957713823793
-          },
-          "wall_receiver": true,
-          "width_m": 3,
-          "height_m": 2.66,
-          "center_y": 3.678,
-          "depth_m": 1.6,
-          "railing": false
-        }
-      ],
-      "inference": "production_inference: family end schedule from the observed Flounder 1409 SSE and 1411 NNW ends and the neighbouring ends glimpsed in the 1418-1420 rears (inset upper balcony with railing toward the front, open recessed lower bay at the rear corner)"
+      "loggias": [],
+      "inference": "L2 all-sides audit 2026-11-03: photographed 1402 W (1402-GmuT-h79-zoom, Nov 2025) shows a plain stucco end with no openings; the kit balcony and slider are removed."
     },
     {
       "id": "right-end",
@@ -953,47 +884,18 @@
           },
           "wall_receiver": true,
           "width_m": 3.2,
-          "height_m": 2.3,
-          "center_y": 6.458,
+          "height_m": 2.52,
+          "center_y": 6.568,
           "depth_m": 1.3,
-          "railing": true
-        },
-        {
-          "station_m": 11.85,
-          "local_station_m": 6.6047,
-          "basis": {
-            "source_run": 11,
-            "start": [
-              -446.452,
-              2.393,
-              -321.548
-            ],
-            "end": [
-              -444.141,
-              2.393,
-              -329.778
-            ],
-            "tangent": [
-              0.2703458027266862,
-              0,
-              -0.9627632870794689
-            ],
-            "normal": [
-              0.9627632870794689,
-              0,
-              0.2703458027266862
-            ],
-            "length_m": 8.548311002765411
-          },
-          "wall_receiver": true,
-          "width_m": 3,
-          "height_m": 2.3218,
-          "center_y": 3.8471,
-          "depth_m": 1.6,
-          "railing": false
+          "railing": true,
+          "lining_rgb": [
+            0.52,
+            0.38,
+            0.28
+          ]
         }
       ],
-      "inference": "production_inference: family end schedule from the observed Flounder 1409 SSE and 1411 NNW ends and the neighbouring ends glimpsed in the 1418-1420 rears (inset upper balcony with railing toward the front, open recessed lower bay at the rear corner)"
+      "inference": "L2 all-sides audit 2026-11-03 (photographed 1402 E (1402-8xBj-h324-zoom, Mar 2025)): recessed upper balcony wood-lined and opened up to the eave; the lower slider is removed (blank lower storey). Positions and dimensions production_inference."
     },
     {
       "id": "rear-main",

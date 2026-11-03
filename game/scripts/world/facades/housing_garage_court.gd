@@ -240,7 +240,24 @@ static func run_siding(root: Node3D, begin: int, run: int, cfg: Dictionary, sidi
 ## A width x height opening centred at point recessed depth_m into the wall:
 ## back wall with a glazed sliding door, side walls, soffit and floor, all
 ## inside the host wall, plus an optional railing across the opening.
+## Opt-in lining_rgb lines the recess walls and soffit in that colour (the
+## wood-lined end balconies). Opt-in "kind": "undercut" leaves the recess open,
+## with no glazed door, and an optional "post" ("start" or "end", the opening
+## edge toward -t or +t) stands a post just inside that edge.
 static func loggia(root: Node3D, point: Vector3, t: Vector3, n: Vector3, width: float, height: float, motif: Dictionary, palette: Dictionary, siding: Material, trim: Material, dark: Material, concrete: Material) -> void:
+	if motif.has("lining_rgb") and not _rgb(motif.lining_rgb):
+		_invalid(root, "Invalid loggia lining_rgb %s" % [motif.lining_rgb])
+		return
+	var undercut := motif.has("kind")
+	if undercut and str(motif.kind) != "undercut":
+		_invalid(root, "Invalid loggia kind %s" % [motif.kind])
+		return
+	var post_side := 0.0
+	if motif.has("post"):
+		if not undercut or str(motif.post) not in ["start", "end"]:
+			_invalid(root, "Invalid loggia post %s" % [motif.post])
+			return
+		post_side = -1.0 if str(motif.post) == "start" else 1.0
 	var depth := float(motif.get("depth_m", 1.3))
 	var half := width * 0.5
 	var bottom := point.y - height * 0.5
@@ -263,14 +280,18 @@ static func loggia(root: Node3D, point: Vector3, t: Vector3, n: Vector3, width: 
 	_quad(inner, r1 + up_b, r0 + up_b, r0 + up_t, r1 + up_t, -t)
 	_quad(soffit, l0 + up_t, r0 + up_t, r1 + up_t, l1 + up_t, Vector3.DOWN)
 	_box(floor_slab, base - n * depth * 0.5 + Vector3.UP * (bottom - 0.06), t, n, Vector3(width, 0.12, depth))
-	var door_width := minf(1.8, width - 0.6)
-	var door_height := minf(2.05, height - 0.12)
-	var door_center := base - n * (depth - 0.03) + Vector3.UP * (bottom + door_height * 0.5)
-	_box(glazing, door_center, t, n, Vector3(door_width, door_height, 0.02))
-	for side: float in [-1.0, 1.0]:
-		_box(frame, door_center + t * side * (door_width * 0.5 + 0.03), t, n, Vector3(0.06, door_height + 0.06, 0.05))
-	_box(frame, door_center + Vector3.UP * (door_height * 0.5 + 0.03), t, n, Vector3(door_width + 0.12, 0.06, 0.05))
-	_box(frame, door_center, t, n, Vector3(0.05, door_height, 0.05))
+	if not undercut:
+		var door_width := minf(1.8, width - 0.6)
+		var door_height := minf(2.05, height - 0.12)
+		var door_center := base - n * (depth - 0.03) + Vector3.UP * (bottom + door_height * 0.5)
+		_box(glazing, door_center, t, n, Vector3(door_width, door_height, 0.02))
+		for side: float in [-1.0, 1.0]:
+			_box(frame, door_center + t * side * (door_width * 0.5 + 0.03), t, n, Vector3(0.06, door_height + 0.06, 0.05))
+		_box(frame, door_center + Vector3.UP * (door_height * 0.5 + 0.03), t, n, Vector3(door_width + 0.12, 0.06, 0.05))
+		_box(frame, door_center, t, n, Vector3(0.05, door_height, 0.05))
+	var post := _bucket()
+	if post_side != 0.0:
+		_box(post, base + t * post_side * (half - 0.12) - n * 0.08 + Vector3.UP * (bottom + top) * 0.5, t, n, Vector3(0.14, top - bottom, 0.14))
 	if bool(motif.get("railing", false)):
 		var rail_face := base - n * 0.06
 		var rail_top := bottom + 1.0
@@ -280,12 +301,18 @@ static func loggia(root: Node3D, point: Vector3, t: Vector3, n: Vector3, width: 
 		for i in count + 1:
 			var along := lerpf(-half + 0.05, half - 0.05, float(i) / float(count))
 			_box(rail, rail_face + t * along + Vector3.UP * (bottom + 0.55), t, n, Vector3(0.022, 0.9, 0.022))
-	_commit(root, inner, siding, "LoggiaWalls")
-	_commit(root, soffit, PARTS._material(_color(palette, "soffit_rgb", Color(0.86, 0.85, 0.82)), 0.92), "LoggiaSoffit")
+	var walls := siding
+	var soffit_material: Material = PARTS._material(_color(palette, "soffit_rgb", Color(0.86, 0.85, 0.82)), 0.92)
+	if motif.has("lining_rgb"):
+		walls = PARTS._material(_color(motif, "lining_rgb", Color.GRAY), 0.85)
+		soffit_material = walls
+	_commit(root, inner, walls, "LoggiaWalls")
+	_commit(root, soffit, soffit_material, "LoggiaSoffit")
 	_commit(root, floor_slab, concrete, "LoggiaFloor")
 	_commit(root, glazing, dark, "LoggiaGlazing")
 	_commit(root, frame, trim, "LoggiaDoorFrame")
 	_commit(root, rail, PARTS._material(_color(motif, "rail_rgb", _color(palette, "rail_rgb", Color(0.3, 0.3, 0.3))), 0.6), "LoggiaRailing")
+	_commit(root, post, trim, "LoggiaPost")
 
 
 # ---------- exterior open stairs and gable vents ----------

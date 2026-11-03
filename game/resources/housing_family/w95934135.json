@@ -848,10 +848,15 @@
           },
           "wall_receiver": true,
           "width_m": 3.2,
-          "height_m": 2.3,
-          "center_y": 6.665,
+          "height_m": 2.52,
+          "center_y": 6.775,
           "depth_m": 1.3,
-          "railing": true
+          "railing": true,
+          "lining_rgb": [
+            0.52,
+            0.38,
+            0.28
+          ]
         },
         {
           "station_m": 1.95,
@@ -882,13 +887,20 @@
           },
           "wall_receiver": true,
           "width_m": 3,
-          "height_m": 2.4722,
-          "center_y": 3.9789,
+          "height_m": 2.4686,
+          "center_y": 3.9807,
           "depth_m": 1.6,
-          "railing": false
+          "railing": false,
+          "post": "start",
+          "kind": "undercut",
+          "lining_rgb": [
+            0.506,
+            0.49,
+            0.451
+          ]
         }
       ],
-      "inference": "production_inference: family end schedule from the observed Flounder 1409 SSE and 1411 NNW ends and the neighbouring ends glimpsed in the 1418-1420 rears (inset upper balcony with railing toward the front, open recessed lower bay at the rear corner)"
+      "inference": "L2 all-sides audit 2026-11-03 (unphotographed; inherits the most common photographed end (1400 W, 1410 N, w95934130 N, 1409 S: balcony over a rear-corner undercut on a post)): recessed upper balcony wood-lined and opened up to the eave; the lower recessed slider is now an open undercut on a post (its walls and soffit in a shaded tone of the wall colour, as in the photos) at the rear corner. Positions and dimensions production_inference."
     },
     {
       "id": "right-end",
@@ -925,8 +937,8 @@
       "_k": 5,
       "loggias": [
         {
-          "station_m": 6.21,
-          "local_station_m": 6.21,
+          "station_m": 6.8962,
+          "local_station_m": 6.8962,
           "basis": {
             "source_run": 0,
             "start": [
@@ -953,47 +965,18 @@
           },
           "wall_receiver": true,
           "width_m": 3.2,
-          "height_m": 2.3,
-          "center_y": 6.665,
+          "height_m": 2.52,
+          "center_y": 6.775,
           "depth_m": 1.3,
-          "railing": true
-        },
-        {
-          "station_m": 11.85,
-          "local_station_m": 4.9137,
-          "basis": {
-            "source_run": 1,
-            "start": [
-              -384,
-              2.73,
-              -76.079
-            ],
-            "end": [
-              -380.866,
-              2.815,
-              -69.981
-            ],
-            "tangent": [
-              0.4571041219904684,
-              0,
-              0.8894131895015517
-            ],
-            "normal": [
-              -0.8894131895015517,
-              0,
-              0.4571041219904684
-            ],
-            "length_m": 6.856205947898595
-          },
-          "wall_receiver": true,
-          "width_m": 3,
-          "height_m": 2.3288,
-          "center_y": 4.0506,
-          "depth_m": 1.6,
-          "railing": false
+          "railing": true,
+          "lining_rgb": [
+            0.52,
+            0.38,
+            0.28
+          ]
         }
       ],
-      "inference": "production_inference: family end schedule from the observed Flounder 1409 SSE and 1411 NNW ends and the neighbouring ends glimpsed in the 1418-1420 rears (inset upper balcony with railing toward the front, open recessed lower bay at the rear corner)"
+      "inference": "L2 all-sides audit 2026-11-03 (photographed 1431 W (1431-WSW-hqsb-h52, Mar 2025)): recessed upper balcony wood-lined and opened up to the eave; the lower slider is removed (blank lower storey). Positions and dimensions production_inference."
     },
     {
       "id": "rear-main",
