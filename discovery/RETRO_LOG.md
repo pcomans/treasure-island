@@ -23104,3 +23104,9 @@ Carried by deploy-fix from the deploy agent's scratch log; text unchanged apart 
   - Jet flames: the chest's downward flames would hit the pelican's rump and tail unless the rider sits far back and the flames trail backwards.
   - Bill: a 0.5 m bill reaches past the capsule's 0.35 m radius into walls, unless it hangs steeply down or pulls back near walls.
 - What the team should change next time: when a part rides on a sprung or moving parent, put the parent's extremes in the standard capture set from the start (for example, a landing captured every tick through the lid's peak). When choosing between kinematic rules for such a part, model what stays visible offline first; that costs far less than engine runs.
+
+### chest-avatar-visual — 2026-11-03 — addendum: eye poke-through delta check (230df569 renders, PASS)
+
+- What worked well: the matched before/after sheets at the same poses and lid angles (face_land_09-11, curb_up_02-03) and the per-tick sheets across the whole lid-open range answered the question directly. So did the Forward+ against Compatibility pairs and the 60 fps land clip. No eye shows through the lid interior in any frame. The eyes slide continuously and peek over the raised front edge. The Compatibility log has the same 18 `premul_alpha` GLES3 errors as before the change, so the change adds none.
+- What did not work well: at the 55-61° peak the eyes show only their top third for about 4 frames. The curb run still stays at road level, which is irrelevant to this delta.
+- What the team should change next time: keep the matched-pose before/after sheet as the standard for a delta check. It made a one-defect re-check take minutes.
