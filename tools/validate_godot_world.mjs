@@ -72,7 +72,7 @@ import {
 } from "./lib/street-detail-generation.mjs";
 import { CAR_BODY_NAMES, CAR_FINISHES, CAR_PAINTS, MAX_TWIST_M, STREET_CLUTTER_PROPS, visibleGroundIndex } from "./lib/street-clutter-generation.mjs";
 import { STREET_FENCE_INSIDE, STREET_FENCE_SCREENS, STREET_FENCE_TYPES } from "./lib/street-fence-generation.mjs";
-import { STREET_FURNITURE_PROPS } from "./lib/street-furniture-generation.mjs";
+import { MAX_LEG_DROP_M, MAX_REST_TILT_RAD, restTilt, STREET_FURNITURE_FEET, STREET_FURNITURE_PROPS } from "./lib/street-furniture-generation.mjs";
 import {
   STREET_VEGETATION_BURY_M,
   STREET_VEGETATION_MAX_FOOT_SPREAD_M,
@@ -1011,6 +1011,7 @@ function validateStreetDetail(worldRoot, manifest, records) {
   invariant(Number.isInteger(document.seed), "Street-detail seed is missing");
   invariant(stableJson(document.layers) === stableJson(STREET_DETAIL_LAYERS) && document.ground_layer === STREET_DETAIL_GROUND_LAYER, "Street-detail layer list drift");
   invariant(stableJson(document.kinds) === stableJson(STREET_DETAIL_KINDS), "Street-detail kind table differs from the generator");
+  invariant(stableJson(document.prop_feet) === stableJson(STREET_FURNITURE_FEET), "Street-detail prop feet differ from the generator");
   const landByKey = new Map([...records.physical.values()]
     .filter(({ record }) => record.feature_kind === "land_ground")
     .map(({ record }) => [record.object_key, record]));
@@ -1060,6 +1061,14 @@ function validateStreetDetail(worldRoot, manifest, records) {
         invariant(["pitch", "roll", "lift"].every((key) => Number.isFinite(params[key]) && Math.abs(params[key]) < 0.25), `${row.id} car tilt is invalid`);
         invariant(Number.isFinite(params.twist) && Math.abs(params.twist) <= MAX_TWIST_M, `${row.id} car twist is invalid`);
         invariant(row.footprint_m !== undefined, `${row.id} parked car has no footprint`);
+      }
+      // A furniture prop on legs: its rest on the ground under its feet, a small tilt and lift.
+      if (row.layer === "furniture" && row.prop !== undefined && STREET_FURNITURE_FEET[row.prop] !== undefined) {
+        const params = row.prop_params ?? {};
+        invariant(["pitch", "roll", "lift"].every((key) => Number.isFinite(params[key])) && restTilt(params.pitch, params.roll) <= MAX_REST_TILT_RAD
+          && Math.abs(params.lift) < 0.25, `${row.id} rest on its feet is invalid`);
+        invariant(params.leg_drops_m === undefined || (Array.isArray(params.leg_drops_m) && params.leg_drops_m.length === STREET_FURNITURE_FEET[row.prop].length
+          && params.leg_drops_m.every((drop) => Number.isFinite(drop) && Math.abs(drop) <= MAX_LEG_DROP_M)), `${row.id} leg drops are invalid`);
       }
       if (row.footprint_m !== undefined) {
         invariant(Number.isFinite(row.footprint_m.x_m) && row.footprint_m.x_m > 0 && Number.isFinite(row.footprint_m.z_m) && row.footprint_m.z_m > 0 && Number.isFinite(row.yaw_radians), `${row.id} footprint is invalid`);

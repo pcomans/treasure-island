@@ -50,6 +50,31 @@ export const STREET_FURNITURE_FOOTPRINTS = Object.freeze({
   map_board: Object.freeze({ x_m: 1.34, z_m: 0.2 }),
   waste_basket: Object.freeze({ x_m: 0.6, z_m: 0.6 }),
 });
+// Kit props that stand on legs: the flat bottom of each foot, {x, z, half_x,
+// half_z} in the prop's frame (front -Z, right +X), in the kit's leg order
+// (front-left, front-right, back-left, back-right). This is the one table of
+// the feet: the generated street detail carries it as prop_feet, and
+// game/tests/validate_generated_world.gd checks that the legs
+// game/scripts/world/street_furniture_kit.gd draws stand on it. A set piece of
+// such a prop settles on the visible ground under its feet (settleOnFeet).
+export const STREET_FURNITURE_FEET = Object.freeze({
+  adirondack_chair: Object.freeze([
+    Object.freeze({ x: -0.3, z: -0.305, half_x: 0.0115, half_z: 0.037 }),
+    Object.freeze({ x: 0.3, z: -0.305, half_x: 0.0115, half_z: 0.037 }),
+    Object.freeze({ x: -0.3, z: 0.373, half_x: 0.0115, half_z: 0.034 }),
+    Object.freeze({ x: 0.3, z: 0.373, half_x: 0.0115, half_z: 0.034 }),
+  ]),
+});
+// The most a settled prop's leg may be lengthened or shortened (m); uneven
+// ground that needs more stops the build.
+export const MAX_LEG_DROP_M = 0.03;
+// Leg changes are made in these steps (m), so props on similar ground share a
+// mesh; when every change rounds to nothing the prop rests on its plane alone.
+const LEG_DROP_STEP_M = 0.005;
+// The steepest rest a prop on feet may take (radians from upright): steeper
+// ground stops the build, and the tilted collision box stays inside the
+// footprint's clearance stadium.
+export const MAX_REST_TILT_RAD = 0.15;
 export const STREET_FURNITURE_PATTERNS = Object.freeze(["kerb", "signalized_crossings", "near_signals", "junctions", "all_way_stops", "drive_entries", "lot_edge"]);
 // Default props for OSM rows in pilot zones; kinds without one stay unbuilt.
 const OSM_PROPS = Object.freeze({
@@ -677,4 +702,77 @@ export function placeStreetFurniture({
   }
   audit.osm_unbuilt.sort((left, right) => (left.id < right.id ? -1 : left.id > right.id ? 1 : 0));
   return { rows: ruleRows, audit };
+}
+
+// A local point of a prop at rest, turned as the runtime turns it: Godot's
+// Basis(UP, yaw) * Basis(RIGHT, pitch) * Basis(BACK, -roll), in world x, y, z.
+function restOffset([x, y, z], yaw, pitch, roll) {
+  const x1 = x * Math.cos(roll) + y * Math.sin(roll);
+  const y1 = -x * Math.sin(roll) + y * Math.cos(roll);
+  const y2 = y1 * Math.cos(pitch) - z * Math.sin(pitch);
+  const z2 = y1 * Math.sin(pitch) + z * Math.cos(pitch);
+  return [x1 * Math.cos(yaw) + z2 * Math.sin(yaw), y2, -x1 * Math.sin(yaw) + z2 * Math.cos(yaw)];
+}
+
+// The least-squares plane y = h + a x + b z through points {x, z, y}: [h, a, b].
+function leastSquaresPlane(points) {
+  const m = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+  const r = [0, 0, 0];
+  for (const { x, z, y } of points) {
+    const terms = [1, x, z];
+    for (let i = 0; i < 3; i += 1) {
+      r[i] += terms[i] * y;
+      for (let j = 0; j < 3; j += 1) m[i][j] += terms[i] * terms[j];
+    }
+  }
+  const det = (q) => q[0][0] * (q[1][1] * q[2][2] - q[1][2] * q[2][1]) - q[0][1] * (q[1][0] * q[2][2] - q[1][2] * q[2][0]) + q[0][2] * (q[1][0] * q[2][1] - q[1][1] * q[2][0]);
+  const d = det(m);
+  invariant(Math.abs(d) > 1e-12, "Street furniture feet do not span a plane");
+  return [0, 1, 2].map((k) => det(m.map((row, i) => row.map((value, j) => (j === k ? r[i] : value)))) / d);
+}
+
+// A prop on feet (STREET_FURNITURE_FEET) at rest on the visible ground, for its
+// row at world xz with yaw and base height y + bias_m. It takes the plane
+// through the ground under its feet: pitch raises its front and roll its left
+// side (radians), lift takes its origin from the base to that plane (metres).
+// Where the ground is not one plane under the feet (a fold in the terrain), each
+// leg is lengthened by what its foot would still float there or shortened by
+// what it would sink: leg_drops_m, in the feet's order and LEG_DROP_STEP_M
+// steps, left out when every change rounds to nothing. Returns {pitch, roll,
+// lift[, leg_drops_m]}, or {problem} when a foot has no ground, the rest would
+// tilt more than MAX_REST_TILT_RAD or a leg needs more than MAX_LEG_DROP_M.
+export function settleOnFeet(feet, xz, yaw, base, groundAt) {
+  const groundUnder = (foot, pitch, roll) => {
+    const offset = restOffset([foot.x, 0, foot.z], yaw, pitch, roll);
+    const ground = groundAt([xz[0] + offset[0], xz[1] + offset[2]]);
+    return ground ? { offset, y: ground.y } : null;
+  };
+  const samples = [];
+  for (const foot of feet) {
+    const ground = groundUnder(foot, 0, 0);
+    if (!ground) return { problem: "no_ground" };
+    samples.push({ x: foot.x, z: foot.z, y: ground.y });
+  }
+  const [height, slopeX, slopeZ] = leastSquaresPlane(samples);
+  const pitch = Math.round(Math.atan(-slopeZ) * 1e4) / 1e4 || 0;
+  const roll = Math.round(Math.atan(-slopeX * Math.cos(pitch)) * 1e4) / 1e4 || 0;
+  if (restTilt(pitch, roll) > MAX_REST_TILT_RAD) return { problem: "too_steep" };
+  const lift = roundCoordinate(height - base);
+  const drops = [];
+  for (const foot of feet) {
+    const ground = groundUnder(foot, pitch, roll);
+    if (!ground) return { problem: "no_ground" };
+    drops.push(base + lift + ground.offset[1] - ground.y);
+  }
+  if (drops.some((drop) => Math.abs(drop) > MAX_LEG_DROP_M)) return { problem: "uneven_ground" };
+  const rest = { pitch, roll, lift };
+  const steps = drops.map((drop) => roundCoordinate(Math.round(drop / LEG_DROP_STEP_M) * LEG_DROP_STEP_M));
+  if (steps.some((drop) => drop !== 0)) rest.leg_drops_m = steps;
+  return rest;
+}
+
+// How far a rest of pitch and roll (radians) tilts a prop from upright: the
+// angle between its up axis, Basis(RIGHT, pitch) * Basis(BACK, -roll) * Y, and +Y.
+export function restTilt(pitch, roll) {
+  return Math.acos(Math.min(1, Math.cos(pitch) * Math.cos(roll)));
 }

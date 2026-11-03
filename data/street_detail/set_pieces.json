@@ -4,7 +4,8 @@
     "Hand-picked street-detail set pieces, each {id, kind, asset, xz, yaw, reason, reference} or, for a kit prop, {id, kind, prop, params, xz, yaw, reason, reference}.",
     "xz is world metres (+X east, +Z south); yaw is radians about +Y, turning the asset's -Z front.",
     "tools/build_godot_world.mjs rejects an entry that leaves the land or enters the shared exclusion mask; a kit prop also keeps the street furniture's margins (clear of the carriageway, curb ramps and crosswalks, a player's width from other items).",
-    "Trees are props of the street-vegetation kit (game/scripts/world/street_vegetation_kit.gd) with params {variant, scale}, where dated photos show particular trees; they keep the scatter's site checks rather than the street props' margins, and their foot must rest on the visible ground. Positions are production inference read from those photos and an undated Google satellite view (ferry-shelter-refs-20261023 shots/32-sat-canopy), not survey data. A tree whose foot reaches paving (the Building 1 lot edge, where the photographed bed is lot asphalt in the game) stands in a round mulch pit."
+    "Trees are props of the street-vegetation kit (game/scripts/world/street_vegetation_kit.gd) with params {variant, scale}, where dated photos show particular trees; they keep the scatter's site checks rather than the street props' margins, and their foot must rest on the visible ground. Positions are production inference read from those photos and an undated Google satellite view (ferry-shelter-refs-20261023 shots/32-sat-canopy), not survey data. A tree whose foot reaches paving (the Building 1 lot edge, where the photographed bed is lot asphalt in the game) stands in a round mulch pit.",
+    "A kit prop on legs (adirondack_chair) settles on the visible ground under its feet: the generator adds its rest (pitch, roll, lift and, where the ground folds, leg_drops_m) to the row's params."
   ],
   "set_pieces": [
     {
@@ -86,12 +87,12 @@
       "prop": "adirondack_chair",
       "params": {},
       "xz": [
-        -113.1,
-        773.5
+        -117.31,
+        773.41
       ],
-      "yaw": 1.571,
-      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; five here, facing each other in a ring open on one side (production_inference: photo 25 shows five chairs in the group).",
-      "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn"
+      "yaw": 3.064,
+      "reason": "Bright blue plastic Adirondack chairs stand side by side on the lawn north of the landing in a loose, shallow arc, all facing the bay and the pier; five here (production_inference: photos 24 and 25 show five chairs seen from behind, facing away from the road toward the water).",
+      "reference": "ferry-shelter 24-sv-north-zoom and 25-sv-north-mid (185 Treasure Island Rd, Sep 2025): the blue chairs on the lawn, seen from behind"
     },
     {
       "id": "plaza_adirondack_chair_2",
@@ -99,12 +100,12 @@
       "prop": "adirondack_chair",
       "params": {},
       "xz": [
-        -114.3,
-        775.58
+        -115.49,
+        773.94
       ],
-      "yaw": 0.524,
-      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; five here, facing each other in a ring open on one side (production_inference: photo 25 shows five chairs in the group).",
-      "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn"
+      "yaw": 2.815,
+      "reason": "Bright blue plastic Adirondack chairs stand side by side on the lawn north of the landing in a loose, shallow arc, all facing the bay and the pier; five here (production_inference: photos 24 and 25 show five chairs seen from behind, facing away from the road toward the water).",
+      "reference": "ferry-shelter 24-sv-north-zoom and 25-sv-north-mid (185 Treasure Island Rd, Sep 2025): the blue chairs on the lawn, seen from behind"
     },
     {
       "id": "plaza_adirondack_chair_3",
@@ -112,12 +113,12 @@
       "prop": "adirondack_chair",
       "params": {},
       "xz": [
-        -116.7,
-        775.58
+        -113.74,
+        774.5
       ],
-      "yaw": -0.524,
-      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; five here, facing each other in a ring open on one side (production_inference: photo 25 shows five chairs in the group).",
-      "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn"
+      "yaw": 2.775,
+      "reason": "Bright blue plastic Adirondack chairs stand side by side on the lawn north of the landing in a loose, shallow arc, all facing the bay and the pier; five here (production_inference: photos 24 and 25 show five chairs seen from behind, facing away from the road toward the water).",
+      "reference": "ferry-shelter 24-sv-north-zoom and 25-sv-north-mid (185 Treasure Island Rd, Sep 2025): the blue chairs on the lawn, seen from behind"
     },
     {
       "id": "plaza_adirondack_chair_4",
@@ -125,12 +126,12 @@
       "prop": "adirondack_chair",
       "params": {},
       "xz": [
-        -117.9,
-        773.5
+        -111.95,
+        775.29
       ],
-      "yaw": -1.571,
-      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; five here, facing each other in a ring open on one side (production_inference: photo 25 shows five chairs in the group).",
-      "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn"
+      "yaw": 2.543,
+      "reason": "Bright blue plastic Adirondack chairs stand side by side on the lawn north of the landing in a loose, shallow arc, all facing the bay and the pier; five here (production_inference: photos 24 and 25 show five chairs seen from behind, facing away from the road toward the water).",
+      "reference": "ferry-shelter 24-sv-north-zoom and 25-sv-north-mid (185 Treasure Island Rd, Sep 2025): the blue chairs on the lawn, seen from behind"
     },
     {
       "id": "plaza_adirondack_chair_5",
@@ -138,12 +139,12 @@
       "prop": "adirondack_chair",
       "params": {},
       "xz": [
-        -116.7,
-        771.42
+        -110.42,
+        776.46
       ],
-      "yaw": -2.618,
-      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; five here, facing each other in a ring open on one side (production_inference: photo 25 shows five chairs in the group).",
-      "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn"
+      "yaw": 2.539,
+      "reason": "Bright blue plastic Adirondack chairs stand side by side on the lawn north of the landing in a loose, shallow arc, all facing the bay and the pier; five here (production_inference: photos 24 and 25 show five chairs seen from behind, facing away from the road toward the water).",
+      "reference": "ferry-shelter 24-sv-north-zoom and 25-sv-north-mid (185 Treasure Island Rd, Sep 2025): the blue chairs on the lawn, seen from behind"
     },
     {
       "id": "plaza_basket_pier",

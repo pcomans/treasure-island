@@ -16,7 +16,7 @@ import { projectLonLat } from "./coordinates.mjs";
 import { geometryToLine, pointInMultiPolygon, pointInRing, selectGeometry } from "./osm-geometry.mjs";
 import { footprintPiece, placeStreetClutter, STREET_CLUTTER_FOOTPRINTS, STREET_CLUTTER_PROPS, validateClutterRules, visibleGroundIndex } from "./street-clutter-generation.mjs";
 import { placeStreetFences, validateFenceRules } from "./street-fence-generation.mjs";
-import { placeStreetFurniture, STREET_FURNITURE_FOOTPRINTS, STREET_FURNITURE_PROPS, validateFurnitureRules } from "./street-furniture-generation.mjs";
+import { placeStreetFurniture, settleOnFeet, STREET_FURNITURE_FEET, STREET_FURNITURE_FOOTPRINTS, STREET_FURNITURE_PROPS, validateFurnitureRules } from "./street-furniture-generation.mjs";
 import {
   STREET_VEGETATION_PROPS,
   bedOffsets,
@@ -1109,6 +1109,8 @@ export function generateStreetDetail({
 
   // (c) Hand-picked set pieces must clear the whole mask and the OSM items; a bad
   // entry stops the build. They come before scatter, which then works around them.
+  // A kit tree rests on the visible ground round its foot, a prop on legs on the
+  // ground under its feet (groundAt, the one visible-ground index above).
   for (const entry of setPieceDocument.set_pieces) {
     const xz = [round3(entry.xz[0]), round3(entry.xz[1])];
     // A planted tree keeps the scatter's site checks; a street prop the furniture's margins.
@@ -1122,10 +1124,17 @@ export function generateStreetDetail({
     const { y, support } = grounded(xz);
     const surface = surfaceAt(xz);
     let planted = null;
+    let params = entry.params;
     if (entry.prop !== undefined && tree) {
       // A kit tree: it must rest on the visible ground round its foot.
       planted = plantRow({ prop: entry.prop, kind: entry.kind, variant: entry.params.variant, scale: entry.params.scale, xz, landY: y, surface, groundAt });
       invariant(!planted.problem, `Street detail set piece ${entry.id} cannot rest on the visible ground: ${planted.problem}`);
+    }
+    const feet = entry.prop === undefined ? undefined : STREET_FURNITURE_FEET[entry.prop];
+    if (feet) {
+      const rest = settleOnFeet(feet, xz, normalizedYaw(entry.yaw), y + surface.bias_m, groundAt);
+      invariant(!rest.problem, `Street detail set piece ${entry.id} cannot stand on its feet: ${rest.problem}`);
+      params = { ...entry.params, ...rest };
     }
     const row = {
       id: `set_piece:${entry.id}`,
@@ -1139,7 +1148,7 @@ export function generateStreetDetail({
       surface,
       yaw_radians: normalizedYaw(entry.yaw),
       yaw_source: "set_piece",
-      ...(entry.prop === undefined ? { asset: entry.asset } : planted ?? { prop: entry.prop, prop_params: entry.params }),
+      ...(entry.prop === undefined ? { asset: entry.asset } : planted ?? { prop: entry.prop, prop_params: params }),
       ...(footprint ? { footprint_m: { ...footprint } } : {}),
       reason: entry.reason,
       reference: entry.reference,
@@ -1400,6 +1409,8 @@ export function generateStreetDetail({
       footprint_m: "the plan size {x_m, z_m} of a parked car or a long prop along its local X and Z; with its position and yaw it is the item's rectangle (the gameplay mask checks a stadium that holds it)",
       parked_car: "a parked car's prop_params: body, paint, finish, roof and rims, and its rest on the visible ground under its four tyres (settleParkedCar in tools/lib/street-clutter-generation.mjs): pitch raises the nose and roll the left side (radians), lift takes the car's origin from y + bias_m to that rest, twist is what the suspension takes up (metres: the front-left and rear-right wheels rise by it in the car frame, the other two drop by it)",
       planted: "a vegetation row's prop_params: the kit variant and uniform scale, and its rest on the visible ground (settlePlant in tools/lib/street-vegetation-generation.mjs): lift_m takes the foot from y + bias_m to the lowest visible surface round it, foot_spread_m is how much higher the rest of that ground lies (the trunk runs on below the foot); a tree whose foot reaches paving stands in a round mulch pit well_m across on the plane of that paving (well_lift_m its height over the foot at the trunk, well_slope its rise per metre along +X and +Z), which other items keep clear of",
+      standing_prop: "a furniture set piece on legs (an Adirondack chair) carries its rest on the visible ground under its feet in prop_params (settleOnFeet in tools/lib/street-furniture-generation.mjs): pitch raises its front and roll its left side (radians, together at most 0.15 rad from upright), lift takes its origin from y + bias_m to that rest, and leg_drops_m, where the ground folds under it, lengthens (+) or shortens (-) each leg in the kit's order (front-left, front-right, back-left, back-right; metres, in 5 mm steps)",
+      prop_feet: "per kit prop on legs, the flat bottom of each foot {x, z, half_x, half_z} in the prop's frame (front -Z, right +X) in the kit's leg order: the feet a standing prop settles on, which the kit's legs must stand on",
       source_position_m: "a stop sign's OSM node position, kept when the sign moves to the curb of its approach",
       fence: "fence rows: the kit type and why (type_basis), height and collision half thickness, the stretches cut open along points_m (openings, metres along the line, with what opens them) and the solid runs left (posts on the ground: points_m, terrain_supports, surface_bias_m); a fence row with a prop is built (game/scripts/world/street_fence_kit.gd)",
       fenced_approaches: "scored-building sides a built fence closes, which the building fit may skip (game/tests/shared/building_fit.gd)",
@@ -1407,6 +1418,7 @@ export function generateStreetDetail({
     layers: STREET_DETAIL_LAYERS,
     ground_layer: STREET_DETAIL_GROUND_LAYER,
     kinds: STREET_DETAIL_KINDS,
+    prop_feet: STREET_FURNITURE_FEET,
     inputs: {
       osm_extract: { path: SOURCE_CONTRACT.proper_extract.path, sha256: SOURCE_CONTRACT.proper_extract.sha256 },
       zones: { path: STREET_DETAIL_INPUTS.zones, sha256: sha256File(resolve(projectRoot, STREET_DETAIL_INPUTS.zones)) },
