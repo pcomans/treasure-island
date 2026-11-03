@@ -535,6 +535,44 @@
             "w": 1.8,
             "depth": 1.2
           }
+        },
+        {
+          "type": "bays",
+          "from": 26.475,
+          "to": 39.275,
+          "module": 3.2,
+          "upper": "blank",
+          "ground": {
+            "kind": "storefront",
+            "pier": 0.3,
+            "sill": 0.1,
+            "head": 0.5,
+            "depth": 0.35,
+            "glass": "boarded",
+            "frame": "trim_white",
+            "mullions": [
+              0.5
+            ]
+          }
+        },
+        {
+          "type": "bays",
+          "from": 39.275,
+          "to": 42.45,
+          "module": 3.175,
+          "upper": "window",
+          "ground": {
+            "kind": "storefront",
+            "pier": 0.3,
+            "sill": 0.1,
+            "head": 0.5,
+            "depth": 0.35,
+            "glass": "boarded",
+            "frame": "trim_white",
+            "mullions": [
+              0.5
+            ]
+          }
         }
       ]
     },
@@ -576,6 +614,23 @@
           "material": "trim_white"
         }
       ]
+    },
+    "canopy_open": {
+      "material": "siding_grey",
+      "open": {
+        "module": 3.2,
+        "post_w": 0.15,
+        "post_material": "trim_white"
+      }
+    },
+    "canopy_end": {
+      "material": "siding_grey",
+      "open": {
+        "module": 3.2,
+        "post_w": 0.15,
+        "post_material": "trim_white",
+        "posts": false
+      }
     }
   },
   "blocks": [
@@ -623,10 +678,9 @@
     {
       "id": "strip",
       "storeys": 1,
-      "ground_h": 4.9,
+      "ground_h": 2.65,
       "parapet": {
-        "h": 0.25,
-        "t": 0.15
+        "h": 0.0
       },
       "clip": [
         {
@@ -640,12 +694,13 @@
       ],
       "roof_material": "roof_grey",
       "faces": {
-        "default": "plain",
-        "e0": "door0",
-        "e1": "door1",
-        "e2": "boarded2",
-        "e5": "door5",
-        "e4": "boarded4"
+        "default": "canopy_end",
+        "e4": "canopy_open"
+      },
+      "open_sided": true,
+      "deck": {
+        "t": 0.45,
+        "material": "trim_white"
       }
     }
   ],
@@ -653,6 +708,18 @@
     "observed": "Feb 2018 13th St (NNE, partial): grey/taupe lap siding, a white belt and downpipes, upper windows, boarded lower openings; Apple overhead: grey roof.",
     "inferred": "Level 1 massing: two storeys under the overhead roof colour, gable ridges along the long axis, flat lower connectors, windows and one entrance per accessible side. The boarded lower openings on the NNE side are as observed.",
     "footprint": "Frozen ring split into convex gabled rows and flat connector pieces.",
-    "colour_m5": "2026-10-28 colour opt-in: current albedo x (Feb 2018 NNE photo / neutral render) at matched wall and boarded-opening patches: siding_grey 0.62,0.62,0.60 -> 0.65,0.60,0.54 (warm taupe-grey); boarded 0.84,0.83,0.79 -> 0.57,0.53,0.49 (boards read close to the wall, not cream)"
-  }
+    "colour_m5": "2026-10-28 colour opt-in: current albedo x (Feb 2018 NNE photo / neutral render) at matched wall and boarded-opening patches: siding_grey 0.62,0.62,0.60 -> 0.65,0.60,0.54 (warm taupe-grey); boarded 0.84,0.83,0.79 -> 0.57,0.53,0.49 (boards read close to the wall, not cream)",
+    "l2_audit_20261103": "NNE (Feb 2018): the 1.5 m strip in front of the WNW section is a white-fascia canopy on posts over the lower storey (open-sided block, paved floor), with one wide recessed boarded panel per bay between its posts; the upper storey above it is blank except one window near the WNW end, as in the photo. Canopy height, post spacing and window cadence are production_inference; the other sides stay at massing level (no photo)."
+  },
+  "aprons": [
+    {
+      "edge": 4,
+      "s0": 0.05,
+      "s1": 16.08,
+      "d0": 1.5,
+      "d1": 1.5,
+      "lift": 0.05,
+      "material": "paving"
+    }
+  ]
 }

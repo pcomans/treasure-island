@@ -222,9 +222,33 @@
       },
       "features": [
         {
+          "type": "vents",
+          "from": 1.8,
+          "to": 4.7,
+          "count": 1,
+          "w": 2.7,
+          "h": 1.0,
+          "y": 4.6
+        },
+        {
+          "type": "bays",
+          "from": 6.7,
+          "to": 8.7,
+          "module": 1.0,
+          "ground": {
+            "w": 0.45,
+            "h": 1.55,
+            "sill": 0.55,
+            "depth": 0.1,
+            "mullions": [],
+            "frame": "frame_light",
+            "kind": "window"
+          }
+        },
+        {
           "type": "entry",
-          "from": 2.2,
-          "to": 3.8,
+          "from": 9.7,
+          "to": 10.9,
           "door": {
             "kind": "unit",
             "w": 1.0,
@@ -232,24 +256,9 @@
             "leaf_h": 2.2
           },
           "landing": {
-            "w": 1.8,
+            "w": 1.6,
             "depth": 1.2
           }
-        },
-        {
-          "type": "bays",
-          "from": 5.0,
-          "to": 7.4,
-          "module": 2.4
-        },
-        {
-          "type": "vents",
-          "from": 8.6,
-          "to": 11.6,
-          "count": 1,
-          "w": 1.4,
-          "h": 0.8,
-          "y": 3.6
         }
       ]
     },
@@ -362,6 +371,7 @@
   "study_notes": {
     "observed": "Sep 2025 400 Avenue H: beige corrugated flat-roof utility box with a door, small window and signs in a fenced yard.",
     "inferred": "Louvres, side doors and a rear roll-up; roof unit; heights. Signs not modelled.",
-    "footprint": "Frozen ring with its two jogs kept as one block."
+    "footprint": "Frozen ring with its two jogs kept as one block.",
+    "l2_audit_20261103": "WSW front un-mirrored against the Sep 2025 photo (e0 stations run from the NNW end, the viewer's left): large louvre high at the left (about 1.9-4.6 m, 4.6-5.6 m up), two narrow vertical windows centre-right (about 7.0-7.4 and 8.0-8.4 m) and the door at the right (about 9.8-10.8 m); sizes are production_inference from the unrectified photo. The old layout had placed them from the SSE end."
   }
 }

@@ -840,13 +840,14 @@
         "default": "blank",
         "e1": "sse",
         "e2": "ene",
-        "e3": "shared"
+        "e3": "shared",
+        "e0": "ene"
       }
     }
   ],
   "study_notes": {
     "observed": "HABS CA-2785-B-4 (2003, B/W) SSE near-frontal and ENE oblique; SV Apr 2019 (aiztW, Avenue N) ENE: two-storey white horizontal clapboard, flat roof with a low parapet, blue-trimmed windows; SSE ground door with awning, ground/upper window pair, upper window, upper door with awning at the top of an exterior steel stair, light glazed ground door with awning near the E corner; ENE two windows per storey. Demolished 2019-2021; modelled pre-demolition per the frozen OSM snapshot.",
-    "inferred": "Storey heights, stations and window sizes; clapboard as thin shadow-line bands; WSW (B3 notch) unobserved: plain siding, no openings. The exterior stair is one straight walkable flight (shared ext_stairs) with a landing on two posts; its run is lengthened to a walkable 37-degree pitch (HABS reads steeper).",
+    "inferred": "Storey heights, stations and window sizes; clapboard as thin shadow-line bands; WSW (B3 notch) unobserved: it inherits the photographed ENE window pairs per storey (production_inference, L2 all-sides audit 2026-11-03). The exterior stair is one straight walkable flight (shared ext_stairs) with a landing on two posts; its run is lengthened to a walkable 37-degree pitch (HABS reads steeper).",
     "footprint": "Frozen 4-edge ring kept as one block; NNW (e3) is the B3 SSE party wall and keeps its L1 scheme."
   },
   "ext_stairs": [

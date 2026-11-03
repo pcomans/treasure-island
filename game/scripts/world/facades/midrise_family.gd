@@ -215,6 +215,9 @@ static func _build_all(ctx: Ctx, wall: Dictionary, roof: Dictionary, chunks: Arr
 	if str(ctx.cfg.get("schema_version", "")) != SCHEMA:
 		ctx.errors.append("unsupported config schema")
 		return
+	if str(ctx.cfg.get("face_key", "line")) not in ["line", "overlap"]:
+		ctx.errors.append("face_key must be \"line\" or \"overlap\"")
+		return
 	if ctx.source.is_empty() or wall.get("source_keys", []) != [ctx.source] or roof.get("source_keys", []) != [ctx.source]:
 		ctx.errors.append("wall/roof records do not belong to the configured source")
 		return
@@ -268,6 +271,8 @@ static func _build_all(ctx: Ctx, wall: Dictionary, roof: Dictionary, chunks: Arr
 		_apron(ctx, apron)
 	for stair: Variant in ctx.cfg.get("ext_stairs", []):
 		_ext_stair(ctx, stair)
+	for gate: Variant in ctx.cfg.get("gates", []):
+		_gate(ctx, gate)
 
 
 # ------------------------------------------------------------------ footprint
@@ -818,6 +823,10 @@ static func _cover_floor(block: Block) -> float:
 static func _block_faces(ctx: Ctx, block: Block) -> void:
 	var faces_cfg: Dictionary = block.cfg.get("faces", {})
 	var schemes: Dictionary = ctx.cfg.get("schemes", {})
+	# Opt-in "face_key": "overlap": an edge keys a face only where the face also lies
+	# alongside that edge, not merely within FACE_BAND_M of its infinite line, so the
+	# parallel jogs of a stepped frontage keep their own keys and stations.
+	var overlap := str(ctx.cfg.get("face_key", "line")) == "overlap"
 	for i in block.poly.size():
 		var spans := _spans(ctx, block, i)
 		if spans.is_empty():
@@ -848,6 +857,11 @@ static func _block_faces(ctx: Ctx, block: Block) -> void:
 			var db := edge.depth(b)
 			if da < -0.01 or db < -0.01 or da > FACE_BAND_M or db > FACE_BAND_M:
 				continue
+			if overlap:
+				var sa := edge.station(face.a)
+				var sb := edge.station(b)
+				if maxf(sa, sb) < 0.01 or minf(sa, sb) > edge.length - 0.01:
+					continue
 			face.key = "e%d" % k
 			face.edge = k
 			break
@@ -1711,7 +1725,13 @@ static func _loggia(ctx: Ctx, face: Face, spec: Dictionary, wall_mat: String, s0
 		if gy1 - gy0 < 0.5:
 			continue
 		_glazing(ctx, face, {"mullions": [0.5], "frame": str(spec.get("frame", "frame"))}, c - glass_w * 0.5, c + glass_w * 0.5, gy0, gy1, depth - 0.01)
-	_railing(ctx, face, s0, s1, y0, y0 + float(spec.get("rail_h", 1.05)), 0.12)
+	var rail_h := float(spec.get("rail_h", 1.05))
+	# Opt-in "rail": "baluster" (in `rail_material`, default rail) instead of the glass railing.
+	if str(spec.get("rail", "glass")) == "baluster":
+		var mat := str(spec.get("rail_material", "rail"))
+		_baluster_run(ctx.bucket("support", mat), face.a + face.d * s0 - face.n * 0.12, face.a + face.d * s1 - face.n * 0.12, face.n, y0, y0 + rail_h)
+	else:
+		_railing(ctx, face, s0, s1, y0, y0 + rail_h, 0.12)
 
 
 static func _railing(ctx: Ctx, face: Face, s0: float, s1: float, y0: float, y1: float, depth: float) -> void:
@@ -1825,6 +1845,11 @@ static func _stair_bay(ctx: Ctx, face: Face, spec: Dictionary, wall_mat: String,
 	var t := 0.2
 	var land := minf(1.3, (s1 - s0) * 0.3)
 	var mid_d := depth * 0.5
+	# Opt-in "rails": baluster rails across the bay front at each half landing and each
+	# floor landing (in `rail_material`, default rail), so the open stair reads from the street.
+	var rails: Bucket = ctx.bucket("support", str(spec.get("rail_material", "rail"))) if bool(spec.get("rails", false)) else null
+	var r0 := face.a + face.d * (s0 + 0.05) - face.n * 0.1
+	var r1 := face.a + face.d * (s1 - 0.05) - face.n * 0.1
 	for k in range(block.storeys - 1):
 		var ya := y0 if k == 0 else block.floors[k]
 		var yb := block.floors[k + 1]
@@ -1835,6 +1860,9 @@ static func _stair_bay(ctx: Ctx, face: Face, spec: Dictionary, wall_mat: String,
 		_box(slab, face, s1 - land, s1, ym - t, ym, guard_t + 0.05, depth, false)
 		_flight(slab, face, s1 - land, s0 + land, ym, yb, mid_d + 0.05, depth, t)
 		_box(slab, face, s0, s1, yb - t, yb, 0.05, depth, false)
+		if rails != null:
+			_baluster_run(rails, r0, r1, face.n, ym, ym + RAIL_H_M)
+			_baluster_run(rails, r0, r1, face.n, yb, yb + RAIL_H_M)
 
 
 ## A straight stepped flight in face coordinates from (sa, ya) up to (sb, yb),
@@ -2502,7 +2530,8 @@ static func _pergola(ctx: Ctx, block: Block) -> void:
 ## Opt-in exterior stair ("ext_stairs" entry): one straight open steel flight
 ## along footprint edge `edge`, outside the wall (`gap` out, `w` clear width),
 ## from grade at station `foot` up to a landing at floor `storey` of block
-## `block` that starts at station `top` and runs to `landing_end`, `landing_depth`
+## `block` (an upper floor, or the roof of a flat block when `storey` equals its
+## storey count) that starts at station `top` and runs to `landing_end`, `landing_depth`
 ## out from the wall, on two posts. Open treads, channel stringers, an outer
 ## handrail and landing rails are support role. The stock controller has no
 ## step-up, so the walking surface is a collision-only ramp through the tread
@@ -2519,8 +2548,10 @@ static func _ext_stair(ctx: Ctx, spec: Variant) -> void:
 		if candidate.id == str(spec.get("block", "")):
 			block = candidate
 	var storey := int(spec.get("storey", 1))
-	if k < 0 or k >= ctx.edges.size() or block == null or storey < 1 or storey >= block.storeys:
-		ctx.errors.append(label + " needs a footprint edge, a block id and an upper storey below its roof")
+	# storey == block.storeys lands at roof level, only on a flat roof.
+	if k < 0 or k >= ctx.edges.size() or block == null or storey < 1 or storey > block.storeys \
+			or (storey == block.storeys and block.form != "flat"):
+		ctx.errors.append(label + " needs a footprint edge, a block id and an upper storey (or the flat roof) of that block")
 		return
 	var edge: Edge = ctx.edges[k]
 	var face := Face.new()
@@ -2691,6 +2722,94 @@ static func _pipe_run(bucket: Bucket, p0: Vector2, p1: Vector2, n: Vector2, y0: 
 		_plan_box(bucket, p - d * half, p + d * half, n, y0, y1, half)
 	_plan_box(bucket, p0, p1, n, y1 - RAIL_BAR_M, y1, half)
 	_plan_box(bucket, p0, p1, n, (y0 + y1) * 0.5 - half, (y0 + y1) * 0.5 + half, half)
+
+
+## Level baluster rail along p0 -> p1 (plan points): a top and a bottom rail with square
+## balusters every 0.15 m between them, denser than _pipe_run so a balcony or gallery
+## front reads as a light band. `n` is the side the rail faces.
+static func _baluster_run(bucket: Bucket, p0: Vector2, p1: Vector2, n: Vector2, y0: float, y1: float) -> void:
+	var length := p0.distance_to(p1)
+	if length < 0.3:
+		return
+	var d := (p1 - p0) / length
+	var half := RAIL_BAR_M * 0.5
+	var low := y0 + 0.08
+	_plan_box(bucket, p0, p1, n, y1 - RAIL_BAR_M, y1, half)
+	_plan_box(bucket, p0, p1, n, low, low + RAIL_BAR_M, half)
+	var count := maxi(2, ceili(length / 0.15))
+	for i in count + 1:
+		var p := p0.lerp(p1, float(i) / float(count))
+		_plan_box(bucket, p - d * 0.015, p + d * 0.015, n, low + RAIL_BAR_M, y1 - RAIL_BAR_M, 0.015)
+
+
+## Opt-in "gates" entry: an open gate in a gateway between two footprint vertices
+## (from/to: [edge, 0] for that edge's start, [edge, 1] for its end; 0.5-12 m apart).
+## Gates stay open (the owner's traversal rule), so nothing crosses the gateway: a post
+## `h` tall (0.8-3 m) stands just clear of each end, on the highest grade under the
+## gateway, and the leaf is slid aside, parked along footprint edge `park.edge` between
+## its stations `park.s0` and `park.s1` (0.5-12 m), `park.out` (0.1-1 m) outside the
+## wall. The leaf has top and bottom rails and end stiles (`material`, default metal)
+## round a mesh panel (`mesh`, normally a translucent palette colour). Support role.
+## Invalid input fails the build.
+static func _gate(ctx: Ctx, spec: Variant) -> void:
+	var label := "gate"
+	var ends: Array = []
+	for key: String in ["from", "to"]:
+		var value: Variant = spec.get(key) if spec is Dictionary else null
+		var ok: bool = value is Array and (value as Array).size() == 2
+		if ok:
+			ok = int(value[0]) >= 0 and int(value[0]) < ctx.edges.size() and int(value[1]) in [0, 1]
+		if not ok:
+			ctx.errors.append(label + " needs from and to as [edge, 0 or 1]")
+			return
+		var edge: Edge = ctx.edges[int(value[0])]
+		ends.append(edge.start if int(value[1]) == 0 else edge.end)
+	var length := (ends[0] as Vector2).distance_to(ends[1])
+	var h := float((spec as Dictionary).get("h", 2.0))
+	var park: Variant = (spec as Dictionary).get("park")
+	var ok_park: bool = park is Dictionary and int((park as Dictionary).get("edge", -1)) >= 0 and int((park as Dictionary).get("edge", -1)) < ctx.edges.size()
+	var edge: Edge = ctx.edges[int((park as Dictionary).get("edge", 0))] if ok_park else null
+	var s0 := float((park as Dictionary).get("s0", -1.0)) if ok_park else -1.0
+	var s1 := float((park as Dictionary).get("s1", -1.0)) if ok_park else -1.0
+	var out := float((park as Dictionary).get("out", 0.0)) if ok_park else 0.0
+	if not (_in_range(length, 0.5, 12.0) and _in_range(h, 0.8, 3.0) and ok_park and _in_range(s0, 0.0, edge.length) and _in_range(s1, 0.0, edge.length) and _in_range(s1 - s0, 0.5, 12.0) and _in_range(out, 0.1, 1.0)):
+		ctx.errors.append(label + " needs a gateway of 0.5-12 m, h of 0.8-3 m and a park edge with s0 < s1 on it (0.5-12 m apart) and out of 0.1-1 m")
+		return
+	var d := ((ends[1] as Vector2) - (ends[0] as Vector2)) / length
+	var n := Vector2(d.y, -d.x)
+	var base := -INF
+	var samples := maxi(2, ceili(length / 0.5))
+	for i in samples + 1:
+		base = maxf(base, _ground_y(ctx, (ends[0] as Vector2).lerp(ends[1], float(i) / float(samples))))
+	var steel := ctx.bucket("support", str(spec.get("material", "metal")))
+	# Gateway posts just clear of the two wall corners; nothing spans the opening.
+	for i in 2:
+		var c: Vector2 = (ends[i] as Vector2) + d * (0.06 if i == 0 else -0.06)
+		_plan_box(steel, c - d * 0.04, c + d * 0.04, n, _ground_y(ctx, c) - BURY_M, base + h, 0.04)
+	# The leaf, slid aside and parked outside the wall along the park edge.
+	var q0 := edge.at(s0, -out)
+	var q1 := edge.at(s1, -out)
+	var low := -INF
+	var leaf_samples := maxi(2, ceili((s1 - s0) / 0.5))
+	for i in leaf_samples + 1:
+		low = maxf(low, _ground_y(ctx, q0.lerp(q1, float(i) / float(leaf_samples))))
+	if ctx.terrain_misses > 0:
+		ctx.errors.append(label + " is not on frozen land")
+		return
+	low += 0.05
+	var top := low + h - 0.05
+	_plan_box(steel, q0, q1, edge.n, top - 0.05, top, 0.02)
+	_plan_box(steel, q0, q1, edge.n, low, low + 0.05, 0.02)
+	for q: Vector2 in [q0, q1]:
+		var inward := edge.d if q == q0 else -edge.d
+		_plan_box(steel, q, q + inward * 0.05, edge.n, low, top, 0.02)
+	# One mesh layer: two coplanar quads facing opposite ways, so back-face culling shows
+	# exactly one from either side (no stacked translucent layers).
+	var m0 := q0 + edge.d * 0.05
+	var m1 := q1 - edge.d * 0.05
+	var mesh := ctx.bucket("support", str(spec.get("mesh", "metal")))
+	for side: float in [1.0, -1.0]:
+		mesh.quad(Vector3(m0.x, low + 0.05, m0.y), Vector3(m1.x, low + 0.05, m1.y), Vector3(m1.x, top - 0.05, m1.y), Vector3(m0.x, top - 0.05, m0.y), Vector3(edge.n.x * side, 0.0, edge.n.y * side))
 
 
 ## Sloping pipe rail between two walking-surface points (world), facing `out`.

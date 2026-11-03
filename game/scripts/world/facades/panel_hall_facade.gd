@@ -32,7 +32,7 @@ static func build(record: Dictionary) -> Dictionary:
 		var n := Vector3(-t.z,0,t.x)
 		var length := Vector2(b.x-a.x,b.z-a.z).length()
 		var floor_y := minf(a.y,b.y)-.12
-		# Opt-in keys (split_below_top, slot_size, slot_top_offset, split_fascia, storefronts, terminal_piers);
+		# Opt-in keys (split_below_top, slot_size, slot_top_offset, split_fascia, storefronts, terminal_piers, infill_rollup, slot_lights);
 		# absent keys keep the original Bldg 461 / 550 4th St geometry exactly.
 		var split := top-float(spec.get("split_below_top",4.0))
 		if str(spec.get("family", "")) == "grid_transom":
@@ -120,6 +120,21 @@ static func build(record: Dictionary) -> Dictionary:
 			_box(root,"SlotSill",a,t,n,hole.get_center().x,hole.position.y,.22,Vector3(hole.size.x+.10,.09,.34),materials.structure,"detail")
 			for s: float in [hole.position.x-.065,hole.end.x+.065]:
 				_box(root,"SlotReveal",a,t,n,s,hole.get_center().y,.23,Vector3(.13,hole.size.y,.34),materials.lower,"wall")
+		# Small repeated detail boxes of the opt-in keys below, merged into one mesh per
+		# label per chain: label -> [[s, y, d, size], ...].
+		var bars := {}
+		# Opt-in slot_lights [columns, rows]: a frame and glazing bars over every closed
+		# upper and split slot (and a two-leaf frame on each storefront), so they read as
+		# multi-light windows and double doors. Light counts are production inference.
+		if spec.has("slot_lights"):
+			var lights: Array = spec.slot_lights
+			for hole: Rect2 in openings:
+				if not bool(spec.lower_row):
+					_slot_light_bars(bars,hole,int(lights[0]),int(lights[1]))
+			for hole: Rect2 in split_openings:
+				_slot_light_bars(bars,hole,int(lights[0]),int(lights[1]))
+			for front: Rect2 in fronts:
+				_slot_light_bars(bars,front,2,1)
 		# Observed storefronts: recessed dark glazing, pilasters about every 3 m and a fascia
 		# over the range. Positions and dimensions are production inference.
 		for front: Rect2 in fronts:
@@ -130,6 +145,22 @@ static func build(record: Dictionary) -> Dictionary:
 			_box(root,"StorefrontFascia",a,t,n,front.get_center().x,split-.22,.30,Vector3(front.size.x+.60,.44,.56),materials.get("fascia",materials.coping),"detail")
 		for panel: Rect2 in panels:
 			_box(root,"InfillPanel",a,t,n,panel.get_center().x,panel.get_center().y,.035,Vector3(panel.size.x,panel.size.y,.045),materials.get("infill",materials.lower),"wall")
+			# Opt-in infill_rollup (metres): the panel reads as a roll-up door, with a dark
+			# head box and jambs in the recess colour and horizontal grooves at that pitch.
+			# Sizes are production inference.
+			if spec.has("infill_rollup"):
+				var pitch := float(spec.infill_rollup)
+				var head := .32
+				_bar(bars,"InfillFrame",panel.get_center().x,panel.end.y-head/2.0,.07,Vector3(panel.size.x,head,.025))
+				for s: float in [panel.position.x+.05,panel.end.x-.05]:
+					_bar(bars,"InfillFrame",s,(panel.position.y+panel.end.y-head)/2.0,.07,Vector3(.10,panel.size.y-head,.025))
+				var y := panel.position.y+pitch
+				while y < panel.end.y-head-pitch*.5:
+					_bar(bars,"InfillSlat",panel.get_center().x,y,.065,Vector3(panel.size.x-.24,.035,.015))
+					y += pitch
+		for label: String in bars:
+			var mat: Material = materials.get("frame",materials.structure) if label=="SlotMullion" else materials.recess
+			_merged_boxes(root,label,a,t,n,bars[label],mat,"detail")
 		if bool(spec.get("split_fascia",false)):
 			_box(root,"SplitFascia",a,t,n,length/2.0,split-.12,.30,Vector3(length,.30,.48),materials.get("fascia",materials.coping),"detail")
 		# Opt-in terminal_piers [start, end] lets a chain leave a shared corner to its neighbour.
@@ -189,6 +220,10 @@ static func _chain_problem(spec: Dictionary,v: Array,top: float)->String:
 		return "eave needs depth in (0, 2] m and thickness in (0, 1] m"
 	if spec.has("terminal_piers") and (not spec.terminal_piers is Array or spec.terminal_piers.size()!=2 or not spec.terminal_piers[0] is bool or not spec.terminal_piers[1] is bool):
 		return "terminal_piers needs two booleans [start, end]"
+	if spec.has("infill_rollup") and (not _numbers([spec.infill_rollup],1) or float(spec.infill_rollup)<.1 or float(spec.infill_rollup)>1.0):
+		return "infill_rollup must be a number from 0.1 to 1.0 m"
+	if spec.has("slot_lights") and (not _numbers(spec.slot_lights,2) or float(spec.slot_lights[0])!=floorf(float(spec.slot_lights[0])) or float(spec.slot_lights[1])!=floorf(float(spec.slot_lights[1])) or float(spec.slot_lights[0])<1.0 or float(spec.slot_lights[0])>8.0 or float(spec.slot_lights[1])<1.0 or float(spec.slot_lights[1])>8.0):
+		return "slot_lights needs two whole numbers from 1 to 8 [columns, rows]"
 	var split := top-float(spec.get("split_below_top",4.0))
 	for key: String in ["storefronts","infill_panels"]:
 		var entries: Variant=spec.get(key,[])
@@ -239,6 +274,46 @@ static func _box(root: Node3D,label:String,a:Vector3,t:Vector3,n:Vector3,s:float
 	var mesh:=BoxMesh.new(); mesh.size=size; mesh.material=mat
 	var node:=MeshInstance3D.new(); node.name=label; node.mesh=mesh
 	node.transform=Transform3D(Basis(t,Vector3.UP,n),Vector3(a.x,y,a.z)+t*s+n*d)
+	node.set_meta("physical_role",role); node.set_meta("construction_detail",label); root.add_child(node)
+
+
+## Frame and glazing bars over one closed opening: a perimeter frame, cols-1 mullions and
+## rows-1 transoms. Transoms stand slightly proud of the mullions, so no two bar faces
+## share a plane where they cross.
+static func _slot_light_bars(bars:Dictionary,hole:Rect2,cols:int,rows:int)->void:
+	var c := hole.get_center()
+	for y: float in [hole.position.y+.03,hole.end.y-.03]:
+		_bar(bars,"SlotMullion",c.x,y,.065,Vector3(hole.size.x,.06,.015))
+	for s: float in [hole.position.x+.03,hole.end.x-.03]:
+		_bar(bars,"SlotMullion",s,c.y,.065,Vector3(.06,hole.size.y-.12,.015))
+	for i in range(1,cols):
+		_bar(bars,"SlotMullion",hole.position.x+hole.size.x*i/cols,c.y,.065,Vector3(.05,hole.size.y-.12,.015))
+	for j in range(1,rows):
+		_bar(bars,"SlotMullion",c.x,hole.position.y+hole.size.y*j/rows,.07,Vector3(hole.size.x-.12,.05,.015))
+
+
+static func _bar(bars:Dictionary,label:String,s:float,y:float,d:float,size:Vector3)->void:
+	if not bars.has(label): bars[label]=[]
+	(bars[label] as Array).append([s,y,d,size])
+
+
+## Many boxes of one label as a single mesh, placed by the same rule as _box (s along the
+## chain, y height, d out from the shell), so repeated small parts cost one node per chain.
+static func _merged_boxes(root:Node3D,label:String,a:Vector3,t:Vector3,n:Vector3,boxes:Array,mat:Material,role:String)->void:
+	var basis := Basis(t,Vector3.UP,n)
+	var verts := PackedVector3Array(); var normals := PackedVector3Array(); var indices := PackedInt32Array()
+	for box: Array in boxes:
+		var cube := BoxMesh.new(); cube.size=box[3]
+		var arrays := cube.get_mesh_arrays()
+		var xform := Transform3D(basis,Vector3(a.x,float(box[1]),a.z)+t*float(box[0])+n*float(box[2]))
+		var base := verts.size()
+		for v: Vector3 in arrays[Mesh.ARRAY_VERTEX]: verts.append(xform*v)
+		for normal: Vector3 in arrays[Mesh.ARRAY_NORMAL]: normals.append(basis*normal)
+		for index: int in arrays[Mesh.ARRAY_INDEX]: indices.append(base+index)
+	var surface: Array=[]; surface.resize(Mesh.ARRAY_MAX)
+	surface[Mesh.ARRAY_VERTEX]=verts; surface[Mesh.ARRAY_NORMAL]=normals; surface[Mesh.ARRAY_INDEX]=indices
+	var mesh := ArrayMesh.new(); mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,surface); mesh.surface_set_material(0,mat)
+	var node := MeshInstance3D.new(); node.name=label; node.mesh=mesh
 	node.set_meta("physical_role",role); node.set_meta("construction_detail",label); root.add_child(node)
 
 

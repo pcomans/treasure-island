@@ -440,6 +440,113 @@
           "material": "lattice"
         }
       }
+    },
+    "corr_wsw": {
+      "material": "corrugated",
+      "parapet_material": "corrugated",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "plinth": {
+        "material": "concrete",
+        "top": 0.12
+      },
+      "features": [
+        {
+          "type": "bays",
+          "from": 1.5,
+          "to": 9.5,
+          "module": 4.0,
+          "upper": "window",
+          "window": {
+            "w": 2.0,
+            "h": 1.15,
+            "sill": 0.15,
+            "depth": 0.1,
+            "mullions": [
+              0.25,
+              0.5,
+              0.75
+            ],
+            "transoms": [
+              0.5
+            ],
+            "frame": "frame"
+          }
+        },
+        {
+          "type": "entry",
+          "from": 10.5,
+          "to": 14.0,
+          "door": {
+            "kind": "unit",
+            "w": 3.0,
+            "h": 3.0,
+            "leaf_h": 3.0,
+            "material": "steel_door"
+          },
+          "landing": {
+            "w": 3.6,
+            "depth": 1.2
+          },
+          "upper": "window",
+          "window": {
+            "w": 2.0,
+            "h": 1.15,
+            "sill": 0.15,
+            "depth": 0.1,
+            "mullions": [
+              0.25,
+              0.5,
+              0.75
+            ],
+            "transoms": [
+              0.5
+            ],
+            "frame": "frame"
+          }
+        },
+        {
+          "type": "bays",
+          "from": 14.5,
+          "to": 22.5,
+          "module": 4.0,
+          "upper": "window",
+          "window": {
+            "w": 2.0,
+            "h": 1.15,
+            "sill": 0.15,
+            "depth": 0.1,
+            "mullions": [
+              0.25,
+              0.5,
+              0.75
+            ],
+            "transoms": [
+              0.5
+            ],
+            "frame": "frame"
+          }
+        },
+        {
+          "type": "entry",
+          "from": 23.4,
+          "to": 25.0,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.3,
+            "leaf_h": 2.3,
+            "material": "steel_door"
+          },
+          "landing": {
+            "w": 1.4,
+            "depth": 1.0
+          }
+        }
+      ]
     }
   },
   "blocks": [
@@ -501,7 +608,8 @@
       },
       "faces": {
         "default": "corr",
-        "e3": "nnw_w"
+        "e3": "nnw_w",
+        "e0": "corr_wsw"
       }
     },
     {
@@ -575,7 +683,7 @@
   ],
   "study_notes": {
     "observed": "Contributor 360s Jun 2019 (photo 001/003, SSE): grey-green corrugated gable end with a raised ridge monitor (tenant sign not copied), 12-pane window, AC unit, single door, full-width timber deck under an open lattice pergola with lattice screens, B3 abutting at the E; photo 032 (NNW): dark-green corrugated wall, steel double door, multi-pane upper windows, louvre near the W end.",
-    "inferred": "Monitor section (mono aisles, gabled nave), ridge NNW-SSE from the two gable ends, heights, pitch and stations; the deck/pergola lies inside the frozen footprint (gable wall set back 4 m). WSW unobserved: plain corrugated wall. The plank shed outside the NNW face and the tenant signage are not modelled.",
+    "inferred": "Monitor section (mono aisles, gabled nave), ridge NNW-SSE from the two gable ends, heights, pitch and stations; the deck/pergola lies inside the frozen footprint (gable wall set back 4 m). WSW unobserved: it inherits the NNW vocabulary (steel double door with a multi-pane window over it, upper multi-pane windows, one personnel door); positions are production inference (L2 all-sides audit 2026-11-03). The plank shed outside the NNW face and the tenant signage are not modelled.",
     "footprint": "Frozen 4-edge ring tiled by a pergola deck strip and three hall strips; ENE (e2) is the B3 WSW party wall and keeps its L1 scheme."
   },
   "aprons": [

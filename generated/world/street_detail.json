@@ -323,6 +323,18 @@
     "stair_flights": [
       {
         "bottom": [
+          119.2131,
+          -435.4222
+        ],
+        "index": 0,
+        "source_key": "w34313555",
+        "top": [
+          112.6514,
+          -432.0336
+        ]
+      },
+      {
+        "bottom": [
           -356.5662,
           -126.2527
         ],
@@ -1620,7 +1632,7 @@
     },
     "stair_catalog": {
       "field": "units[].stairs",
-      "flights": 82,
+      "flights": 83,
       "path": "discovery/facades/facade-recognition-catalog.json"
     },
     "zones": {

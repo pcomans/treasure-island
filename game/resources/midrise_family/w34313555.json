@@ -182,7 +182,7 @@
     "front": {
       "material": "render",
       "parapet_material": "render",
-      "module": 3.3,
+      "module": 60.0,
       "window": {
         "w": 1.5,
         "h": 1.0,
@@ -211,8 +211,8 @@
       "features": [
         {
           "type": "entry",
-          "from": 2.8,
-          "to": 4.6,
+          "from": 0.8,
+          "to": 2.6,
           "door": {
             "kind": "unit",
             "w": 1.0,
@@ -222,6 +222,21 @@
           "landing": {
             "w": 1.8,
             "depth": 1.2
+          }
+        },
+        {
+          "type": "bays",
+          "from": 4.4,
+          "to": 5.4,
+          "module": 1.0,
+          "ground": {
+            "w": 0.6,
+            "h": 0.45,
+            "sill": 2.3,
+            "depth": 0.1,
+            "mullions": [],
+            "frame": "frame_light",
+            "kind": "window"
           }
         }
       ]
@@ -398,7 +413,22 @@
   ],
   "study_notes": {
     "observed": "Mar 2025 11th St: white flat-roof building with a rooftop pipe rail and a white plant penthouse.",
-    "inferred": "Doors, windows, louvres and a roof unit; heights. The external roof stair is parked (Level 3, would need stair walk-tests).",
-    "footprint": "Frozen rectangle kept as one block."
-  }
+    "inferred": "Doors, windows, louvres and a roof unit; heights.",
+    "footprint": "Frozen rectangle kept as one block.",
+    "l2_audit_20261103": "SSE (Mar 2025): the external diagonal stair to the roof deck is a walkable ext_stairs flight (foot near the ENE corner, roof-level landing near the middle; listed in the catalog stairs and walk-tested); the three large windows are replaced by the one small high window seen under the landing. Stations, sizes and the door (the lower wall is behind the fence) are production_inference. The roof rail stays closed at the landing, so the roof deck itself is reached by jetpack."
+  },
+  "ext_stairs": [
+    {
+      "edge": 1,
+      "block": "block",
+      "storey": 1,
+      "foot": 11.6,
+      "top": 5.6,
+      "landing_end": 4.2,
+      "w": 0.9,
+      "gap": 0.1,
+      "landing_depth": 1.2,
+      "material": "rail"
+    }
+  ]
 }

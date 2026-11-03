@@ -63,10 +63,10 @@
         14,
         15
       ],
-      "upper_slots": false,
+      "upper_slots": true,
       "lower_row": false,
       "bay_width": 8.8,
-      "status": "unphotographed side: plain closed wall with the front's two-tone concrete (stained lower band under light upper concrete) and coping; no openings; production_inference",
+      "status": "unphotographed bay side: the front's two-tone concrete and coping, with the photographed SSW upper slot rhythm inherited (bay 8.8 m; production_inference, L2 all-sides audit 2026-11-03)",
       "terminal_piers": [
         false,
         true

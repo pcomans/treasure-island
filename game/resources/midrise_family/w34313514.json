@@ -307,6 +307,23 @@
         0.85
       ],
       "roughness": 0.9
+    },
+    "gate_mesh": {
+      "rgb": [
+        0.1,
+        0.11,
+        0.12
+      ],
+      "alpha": 0.72,
+      "roughness": 0.9
+    },
+    "gate_frame": {
+      "rgb": [
+        0.12,
+        0.13,
+        0.14
+      ],
+      "roughness": 0.8
     }
   },
   "schemes": {
@@ -596,36 +613,30 @@
       },
       "features": [
         {
-          "type": "stair_bay",
-          "from": 0.35,
-          "to": 2.75,
-          "depth": 1.5,
-          "pier": 0.15,
-          "head": 0.35,
-          "guard_h": 1.0,
-          "side": "stucco",
-          "back": "stucco",
-          "soffit": "stucco",
-          "slab": "coping"
-        },
-        {
           "type": "loggia",
-          "from": 2.75,
-          "to": 4.45,
           "storeys": [
-            0,
             1
           ],
-          "depth": 1.5,
+          "depth": 1.6,
           "pier": 0.15,
           "head": 0.35,
           "frame": "win_frame",
-          "glass_fraction": 0.45,
+          "glass_fraction": 0.4,
           "rail_h": 1.0,
           "side": "stucco",
           "back": "stucco",
-          "soffit": "stucco",
-          "slab": "coping"
+          "soffit": "soffit",
+          "slab": "coping",
+          "from": 0.55,
+          "to": 4.3,
+          "ground": {
+            "kind": "storefront",
+            "pier": 0.55,
+            "sill": 0.05,
+            "head": 0.55
+          },
+          "rail": "baluster",
+          "rail_material": "coping"
         }
       ]
     },
@@ -657,6 +668,26 @@
             "w": 1.8,
             "depth": 1.2
           }
+        },
+        {
+          "type": "loggia",
+          "storeys": [
+            1
+          ],
+          "depth": 1.5,
+          "pier": 0.15,
+          "head": 0.35,
+          "frame": "win_frame",
+          "glass_fraction": 0.35,
+          "rail_h": 1.0,
+          "side": "stucco",
+          "back": "stucco",
+          "soffit": "soffit",
+          "slab": "coping",
+          "from": 3.0,
+          "to": 10.3,
+          "rail": "baluster",
+          "rail_material": "coping"
         }
       ]
     },
@@ -714,6 +745,36 @@
           }
         }
       ]
+    },
+    "stair_front": {
+      "material": "stucco",
+      "parapet_material": "stucco",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "plinth": {
+        "material": "concrete",
+        "top": 0.15
+      },
+      "features": [
+        {
+          "type": "stair_bay",
+          "from": 0.0,
+          "to": 2.986,
+          "depth": 3.0,
+          "pier": 0.25,
+          "head": 0.5,
+          "guard_h": 1.5,
+          "side": "stucco",
+          "back": "soffit",
+          "soffit": "soffit",
+          "slab": "coping",
+          "rails": true,
+          "rail_material": "coping"
+        }
+      ]
     }
   },
   "blocks": [
@@ -730,6 +791,10 @@
         {
           "edge": 23,
           "s_min": 1.65
+        },
+        {
+          "edge": 0,
+          "min": 0.0
         }
       ],
       "parapet": {
@@ -775,6 +840,30 @@
           "top": "mech"
         }
       ]
+    },
+    {
+      "id": "stair_489",
+      "storeys": 2,
+      "ground_h": 3.0,
+      "storey_h": 3.0,
+      "clip": [
+        {
+          "edge": 0,
+          "max": 0.0
+        },
+        {
+          "edge": 3,
+          "min": 0.0
+        }
+      ],
+      "parapet": {
+        "h": 0.35,
+        "t": 0.25
+      },
+      "faces": {
+        "default": "plain",
+        "e2": "stair_front"
+      }
     },
     {
       "id": "corner_487",
@@ -878,7 +967,29 @@
   ],
   "study_notes": {
     "observed": "Job Corps field survey photos (<=2018-09, pp.237/265). WSW side bound at medium from outer-489 (camera on the Avenue D sidewalk at the NW corner, looking SSE) and courtyard-489 (same pine and gate): the north wing's west end is a one-storey blank white stucco block; the 4.5 m slot between it and the west wing (footprint edges e1-e5) is a gated breezeway with an open stair; the west wing's WSW face is two-storey white stucco with pairs of windows, each under its own blue box hood, on both storeys. Courtyard-487 (camera SE of the courtyard looking NW) shows the north wing's courtyard face as a blank one-storey block with a tall louvre and steel flue stacks on the roof.",
-    "inferred": "North wing one storey throughout (seen at its west end and courtyard face); the east wing keeps the Level 1 two storeys. Window-pair stations past the second pair, window and hood sizes, flue and louvre positions, the stair bay and door in the breezeway. Unbound sides are plain white stucco (owner rule) with one door per building: 487 on the 5th Street face, 489 in the breezeway.",
-    "footprint": "Frozen ring split into five blocks: one-storey north wing (487) with its NE corner, two-storey east wing in two parts, two-storey west wing (489) with the link behind the breezeway."
-  }
+    "inferred": "North wing one storey throughout (seen at its west end and courtyard face); the east wing keeps the Level 1 two storeys. Window-pair stations past the second pair, window and hood sizes, flue and louvre positions, the door in the breezeway. Unbound sides are plain white stucco (owner rule) with one door per building: 487 on the 5th Street face, 489 in the breezeway.",
+    "footprint": "Frozen ring split into five blocks: one-storey north wing (487) with its NE corner, two-storey east wing in two parts, two-storey west wing (489) with the link behind the breezeway.",
+    "l2_audit_20261103": "WSW breezeway (courtyard-489, 2018): the 5 x 3 m tab of the outline (e1-e3) is a two-storey open stair tower facing the street (stair_bay), split off the one-storey north wing; the slot behind it carries a railed upper gallery on its back wall (e4, glazed ground bay below) and on the west wing's north end (e5, ground door kept). The blank one-storey north-wing end and the hooded window pairs are unchanged. The stair tower's open frame carries white baluster rails at its half landing (over a solid lower guard) and upper landing, the galleries have baluster rails, and the slot mouth has dark gate posts with the dark chain-link leaf slid open in front of the stair tower (opt-in `gates`; gates stay open under the owner's traversal rule, so the breezeway stays walkable). Gallery length, depths and the gate height are production_inference. Other sides stay at massing level."
+  },
+  "gates": [
+    {
+      "from": [
+        2,
+        1
+      ],
+      "to": [
+        5,
+        1
+      ],
+      "h": 2.1,
+      "material": "gate_frame",
+      "mesh": "gate_mesh",
+      "park": {
+        "edge": 2,
+        "s0": 0.15,
+        "s1": 2.85,
+        "out": 0.3
+      }
+    }
+  ]
 }

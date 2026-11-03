@@ -231,7 +231,7 @@
       "sha256": "f6fd17666df382f89b51dff1b5a3b906e1c17fdc36d4af3e1aa4ecf4aad817a5"
     }
   ],
-  "content_sha256": "a8170ec3df0a6b4dae39c1a947c518376f2a7af874b33d63d9ec627b76154c96",
+  "content_sha256": "9fca7712d5b479e741676cc150dd6bf89215e93684195cdab10e3076fa556001",
   "context": {
     "bytes": 675130,
     "path": "context.json",
@@ -509,9 +509,9 @@
       "sha256": "5a07473c1c1d3dbc960e4b944740ecb2616ba04301b875b6fa657803a4cdf7d9"
     },
     {
-      "bytes": 1303300,
+      "bytes": 1303510,
       "path": "street_detail.json",
-      "sha256": "19ab685944ec9166c7f99203425c4e51543973efdd45b54882d43a8156cb01f7"
+      "sha256": "1c899604ac2d55f07c3a13f31e95bdd4875a83cc2467212a357fb0d246c472c5"
     },
     {
       "bytes": 4599,
@@ -1166,9 +1166,9 @@
     }
   },
   "street_detail": {
-    "bytes": 1303300,
+    "bytes": 1303510,
     "path": "street_detail.json",
-    "sha256": "19ab685944ec9166c7f99203425c4e51543973efdd45b54882d43a8156cb01f7"
+    "sha256": "1c899604ac2d55f07c3a13f31e95bdd4875a83cc2467212a357fb0d246c472c5"
   },
   "terrain": {
     "bytes": 4599,

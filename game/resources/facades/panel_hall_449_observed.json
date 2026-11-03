@@ -1,7 +1,7 @@
 {
  "source": "w34313512",
  "chunk": "x_0__z_0",
- "status": "production_inference; March2025 state before demolition (ENE close, Jan2023 and Jun2021 for confirmation; NNW end at ~65 m): two storeys of weathered off-white horizontal siding, a near-continuous upper window band (largely boarded, blue-grey frames) under the eave, a deep ledge at the storey line (split fascia), a continuous boarded transom band under it, doors and boarded roll-up bays (ENE stations 30-50 m from the calibrated camera; the rhythm continues along the side). WSW and SSE are unobserved and get the same band, transoms, two or one doors and boarded bays. The flat 10 m source shell is kept (the low hipped roof with wide eaves is a disclosed Level 1 inference); the NNW lower projecting bay is parked.",
+ "status": "production_inference; March2025 state before demolition (ENE close, Jan2023 and Jun2021 for confirmation; NNW end at ~65 m): two storeys of weathered off-white horizontal siding, a near-continuous upper window band (largely boarded, blue-grey frames) under the eave, a deep ledge at the storey line (split fascia), a continuous boarded transom band under it, doors and roll-up bays (ENE stations 30-50 m from the calibrated camera; the rhythm continues along the side), shown as the white roll-up doors of Jan 2023 and Jun 2021 (about 3.4 m wide, up to the transom strip, with a dark head, jambs and slat grooves; dark personnel doors and dark multi-light windows in blue frames in the upper band and the lower strip; L2 all-sides audit 2026-11-03). WSW and SSE are unobserved and get the same band, transoms, two or one doors and roll-up bays. The flat 10 m source shell is kept (the low hipped roof with wide eaves is a disclosed Level 1 inference); the NNW lower projecting bay is parked.",
  "chains": [
   {
    "upper_slots": true,
@@ -43,34 +43,34 @@
    ],
    "infill_panels": [
     [
-     8.0,
-     11.0,
-     3.0
+     7.8,
+     11.2,
+     3.25
     ],
     [
-     20.0,
-     23.0,
-     3.0
+     19.8,
+     23.2,
+     3.25
     ],
     [
-     35.3,
-     38.3,
-     3.0
+     35.1,
+     38.5,
+     3.25
     ],
     [
-     41.9,
-     44.9,
-     3.0
+     41.7,
+     45.1,
+     3.25
     ],
     [
-     58.0,
-     61.0,
-     3.0
+     57.8,
+     61.2,
+     3.25
     ],
     [
-     70.0,
-     73.0,
-     3.0
+     69.8,
+     73.2,
+     3.25
     ]
    ],
    "split_slots": [
@@ -138,7 +138,12 @@
    "eave": {
     "depth": 0.9,
     "thickness": 0.32
-   }
+   },
+   "infill_rollup": 0.25,
+   "slot_lights": [
+    3,
+    2
+   ]
   },
   {
    "upper_slots": true,
@@ -164,9 +169,9 @@
    ],
    "infill_panels": [
     [
-     20.0,
-     23.0,
-     3.0
+     19.8,
+     23.2,
+     3.25
     ]
    ],
    "split_slots": [
@@ -198,7 +203,12 @@
    "eave": {
     "depth": 0.9,
     "thickness": 0.32
-   }
+   },
+   "infill_rollup": 0.25,
+   "slot_lights": [
+    3,
+    2
+   ]
   },
   {
    "upper_slots": true,
@@ -233,14 +243,14 @@
    ],
    "infill_panels": [
     [
-     30.0,
-     33.0,
-     3.0
+     29.8,
+     33.2,
+     3.25
     ],
     [
-     64.0,
-     67.0,
-     3.0
+     63.8,
+     67.2,
+     3.25
     ]
    ],
    "split_slots": [
@@ -284,7 +294,12 @@
    "eave": {
     "depth": 0.9,
     "thickness": 0.32
-   }
+   },
+   "infill_rollup": 0.25,
+   "slot_lights": [
+    3,
+    2
+   ]
   },
   {
    "upper_slots": true,
@@ -309,9 +324,9 @@
    ],
    "infill_panels": [
     [
-     9.0,
-     12.0,
-     3.0
+     8.8,
+     12.2,
+     3.25
     ]
    ],
    "split_slots": [
@@ -343,7 +358,12 @@
    "eave": {
     "depth": 0.9,
     "thickness": 0.32
-   }
+   },
+   "infill_rollup": 0.25,
+   "slot_lights": [
+    3,
+    2
+   ]
   }
  ],
  "palette": {
@@ -363,9 +383,9 @@
    0.74
   ],
   "recess": [
-   0.5,
-   0.48,
-   0.42
+   0.24,
+   0.25,
+   0.27
   ],
   "coping": [
    0.62,
@@ -383,14 +403,19 @@
    0.74
   ],
   "infill": [
-   0.52,
-   0.45,
-   0.36
+   0.86,
+   0.86,
+   0.84
   ],
   "soffit": [
    0.8,
    0.77,
    0.68
+  ],
+  "frame": [
+   0.42,
+   0.53,
+   0.66
   ]
  },
  "site": {}
