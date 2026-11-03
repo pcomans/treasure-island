@@ -38,10 +38,10 @@ jobs:
           GIT_LFS_SKIP_SMUDGE: "1"
 
       - name: Install Weston and Mesa
-        # The graphics packages of .devcontainer/post-create.sh. The runner has no
-        # GPU, so in the private Weston that tools/godot starts, Godot renders on
-        # Mesa's software Vulkan (lavapipe; never xvfb). The static-world bake
-        # needs a real renderer: the headless dummy one drops MultiMesh data.
+        # The graphics packages of .devcontainer/post-create.sh. The static-world
+        # bake needs a real renderer (the headless dummy one drops MultiMesh data),
+        # and the runner has no GPU, so in the private Weston that tools/godot
+        # starts, Godot renders on Mesa's software Vulkan (lavapipe; never xvfb).
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq weston libgl1 libvulkan1 mesa-vulkan-drivers
@@ -80,7 +80,9 @@ jobs:
         env:
           # tools/godot puts its private Weston socket here.
           XDG_RUNTIME_DIR: ${{ runner.temp }}/xdg
-        run: tools/build-mac.sh
+        # Its Linux launch check runs headless here: rendering the island on the
+        # CPU takes minutes. The Apple Silicon job then launches the Mac app itself.
+        run: tools/build-mac.sh --headless-launch
 
       - name: Upload the Mac app
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -111,6 +113,7 @@ jobs:
         # loads the island, quits with 0 and prints no engine errors.
         run: |
           echo "$(sw_vers -productName) $(sw_vers -productVersion), $(uname -m)"
+          df -h .
           zip="$(ls treasure-island-mac-*.zip)"
           ditto -x -k "${zip}" app
           app="$(ls -d app/*.app)"
@@ -120,11 +123,12 @@ jobs:
           log=launch.log
           arch -arm64 "${exe}" --headless -- --quit-on-ready >"${log}" 2>&1 &
           pid=$!
-          ( sleep 300; kill "${pid}" ) >/dev/null 2>&1 &
+          # Stop it after 300 s, as tools/build-mac.sh's timeout does.
+          ( for _ in $(seq 300); do sleep 1; kill -0 "${pid}" || exit 0; done; kill "${pid}" ) 2>/dev/null &
           watchdog=$!
           status=0
           wait "${pid}" || status=$?
-          kill "${watchdog}" 2>/dev/null || true
+          wait "${watchdog}" || true
           cat "${log}"
           errors="$(grep -E '^ERROR|SCRIPT ERROR' "${log}" | grep -v 'Parameter "ss" is null' || true)"
           if [ "${status}" -ne 0 ] || ! grep -q '^WORLD_READY' "${log}" || ! grep -q '^PLAY_READY' "${log}" || [ -n "${errors}" ]; then
