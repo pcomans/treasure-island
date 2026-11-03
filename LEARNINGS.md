@@ -913,3 +913,7 @@ In the street-clutter pilot (2026-11-02) the owner saw parked cars sink into the
 ## A queued engine slot runs the tree as it is when it takes the lock
 
 In the same pilot I edited and regenerated the tree while a slot ran a car sheet before a web build. The build refused the now-dirty tree (`commit or stash your changes first`), and that half of the slot was lost. The car sheet had loaded the world while its files were being rewritten. A slot queued behind another agent's lock had to be cancelled before it started, so that it would not run a commit other than the one its receipt named. Hold every edit to a tree from the moment its slot is queued until the slot's terminal line and lock release. Work on scratch copies in the meantime, and let the run's own printed head and dirty count, not the queue receipt, name what ran.
+
+## Confirm a background-task event against its source before acting
+
+While the CI Mac build pipeline was being set up (2026-11-03), a monitor polling run 41584183972 delivered events saying the build step had failed, followed by `RUN COMPLETED: failure`. The monitor's own output file held only the first seven step results. The GitHub REST API still showed the build step running, and the run later passed. The cause of the extra events is unknown. Before you report, retry or "fix" anything on the strength of a background-task event, especially a failure, read the task's own output file or ask the source directly (API, job log, process) and act on that.

@@ -185,5 +185,6 @@ jobs:
           old="$(asset_id "${name}")"
           [ -z "${old}" ] || gh api -X DELETE "${api}/releases/assets/${old}" --silent
           gh api -X PATCH "${api}/releases/assets/${new}" -f name="${name}" --silent
+          [ "$(asset_id "${name}")" = "${new}" ] || { echo "FAIL: ${name} is not the new upload" >&2; exit 1; }
           gh release edit "${tag}" --title "${title}" --notes "${notes}"
           echo "Published ${link}"
