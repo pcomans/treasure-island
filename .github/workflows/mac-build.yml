@@ -175,6 +175,9 @@ jobs:
           next=treasure-island-mac-next.zip
           api="repos/${GITHUB_REPOSITORY}"
           link="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/releases/download/${tag}/${name}"
+          # A re-run of an older run must not publish over a newer build.
+          head="$(gh api "${api}/commits/main" --jq .sha)"
+          [ "${head}" = "${GITHUB_SHA}" ] || { echo "SKIP: ${GITHUB_SHA} is no longer the head of main (${head}); a newer run publishes"; exit 0; }
           mv treasure-island-mac-*.zip "${next}"
           committed="$(gh api "${api}/commits/${GITHUB_SHA}" --jq .commit.committer.date)"
           title="Mac build ${GITHUB_SHA:0:7} (${committed%%T*})"

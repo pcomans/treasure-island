@@ -23234,3 +23234,7 @@ Carried by deploy-fix from the deploy agent's scratch log; text unchanged apart 
 - What worked well: the delta was small. I checked each earlier finding against its exact line, then traced publish ordering through the three per-job groups. Normal pushes can't publish out of order: an older run's publish joins its group before the newer run's verify even starts, and a newer verify cancels an older verify that is still running.
 - What did not work well: concurrency groups order publishes only by when each job joins the group, not by commit. A manual re-run of an older run's verify or publish joins later, so nothing in the groups stops it from overwriting a newer download.
 - What the team should change next time: when a job publishes to one fixed link, have the job itself check that its commit is still the newest, for example that it is the head of main or newer than the commit already published. Concurrency settings don't cover re-runs.
+
+### ci-mac-build — 2026-11-03 — addendum: head-of-main publish guard
+
+- A manual re-run of an older run could publish stale content: I had not counted re-runs among the ways a job starts. The guard now reads the head of main before any `mv` or write, and the mock's new stale-head case skips with exit 0 after one read and no writes. Next time, list every way a job can start, re-runs included, before calling a mutating job safe.
