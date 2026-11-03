@@ -72,6 +72,27 @@
               ]
             ],
             "reason": "The fenced lawn lot south-east of the park (Jun 2026 pano p10, aerial 2026-05-26): the OSM park polygon takes in its north-west corner up to the construction-panel fence, which is not part of the opened park."
+          },
+          {
+            "points_xz": [
+              [
+                -192.5,
+                479.5
+              ],
+              [
+                -159.5,
+                479.5
+              ],
+              [
+                -159.5,
+                544.5
+              ],
+              [
+                -192.5,
+                544.5
+              ]
+            ],
+            "reason": "The two land cells beside Isle House (w1249412094) stay as generated: re-meshing them would split the cells under the building and re-cut the foundation its landmark form matches. Only the park's edge strip by the avenue lies here, where the grade follows the USGS land anyway."
           }
         ],
         "edge_blend_m": 3

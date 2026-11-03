@@ -68,6 +68,35 @@ const RACK_DARK := Color(0.2, 0.17, 0.14)
 const LENS_RED_OFF := Color(0.22, 0.03, 0.03)
 const LENS_AMBER_OFF := Color(0.26, 0.16, 0.03)
 const LENS_GREEN_LIT := Color(0.40, 1.0, 0.62)
+## Cityside Park (Phase 1, opened Sep 2025): colours read from the dated photos
+## ph02, ph05, ph08, ph09 and ph10 (Google Maps contributors, Sep 2025), CMG's
+## photos and the aerial of 2026-05-26.
+const ALUMINIUM := Color(0.74, 0.76, 0.78)
+const STAINLESS := Color(0.88, 0.89, 0.9)
+const PARK_POLE_GREY := Color(0.36, 0.38, 0.4)
+const TABLE_TIMBER := Color(0.66, 0.46, 0.29)
+const BENCH_TIMBER := Color(0.76, 0.63, 0.47)
+const STEEL_BLACK := Color(0.09, 0.09, 0.095)
+const DRIFTWOOD := Color(0.7, 0.64, 0.55)
+const END_GRAIN := Color(0.79, 0.7, 0.56)
+const PUMP_CONCRETE := Color(0.44, 0.44, 0.43)
+const PUMP_ROOF := Color(0.74, 0.74, 0.72)
+const PUMP_DOOR := Color(0.27, 0.31, 0.29)
+const TRANSFORMER_GREEN := Color(0.24, 0.33, 0.27)
+## Canopy of Sky (Ned Kahn; TIDA art-selection report 2024-09-11, ph05 Sep 2025):
+## a 20 ft stainless ring hung on cables from four curved aluminium poles that
+## stand outside the walkway, holding a shallow dish of hanging polycarbonate
+## discs above 13 ft. Heights and the dish's sag are inference from ph05.
+const CANOPY_RING_RADIUS_M := 3.05
+const CANOPY_RING_Y := 5.1
+const CANOPY_SAG_M := 0.55
+const CANOPY_POLE_RADIUS_M := 4.3
+const CANOPY_POLE_TOP_M := 7.3
+## The pump station's house (size, and its centre along local X) and the far end
+## of its fenced yard: inference from the aerial.
+const PUMP_HOUSE_M := Vector3(10.4, 3.9, 7.6)
+const PUMP_HOUSE_X_M := -3.2
+const PUMP_YARD_END_M := 8.4
 
 ## Per prop: visibility range (m) and whether it casts a sun shadow. Tall poles
 ## keep their shadows and reach; small items fade out early for the web build.
@@ -87,6 +116,14 @@ const PROPS := {
 	"map_board": {"range_m": 110.0, "shadow": true},
 	"adirondack_chair": {"range_m": 100.0, "shadow": true},
 	"bike_rack": {"range_m": 70.0, "shadow": false},
+	"canopy_of_sky": {"range_m": 450.0, "shadow": true},
+	"lamp_disc": {"range_m": 220.0, "shadow": true},
+	"event_pole": {"range_m": 400.0, "shadow": true},
+	"bench_long": {"range_m": 130.0, "shadow": true},
+	"picnic_table_long": {"range_m": 150.0, "shadow": true},
+	"bbq_grill": {"range_m": 100.0, "shadow": true},
+	"log_seat": {"range_m": 110.0, "shadow": true},
+	"pump_station": {"range_m": 700.0, "shadow": true},
 }
 const LABEL_RANGE_M := 60.0
 const LABEL_FONT_SIZE := 64
@@ -97,6 +134,7 @@ const BLADE_MARGIN_M := 0.09
 var _opaque: StandardMaterial3D
 var _lit: StandardMaterial3D
 var _plastic: StandardMaterial3D
+var _discs: StandardMaterial3D
 var _meshes: Dictionary = {}
 var _shapes: Dictionary = {}
 
@@ -124,6 +162,17 @@ func _init() -> void:
 	_plastic.vertex_color_use_as_albedo = true
 	_plastic.vertex_color_is_srgb = true
 	_plastic.roughness = 0.45
+	# The Canopy of Sky's polycarbonate discs: pale and glossy, both sides drawn,
+	# and lit through from behind, so the dish glows against the sky from below.
+	_discs = StandardMaterial3D.new()
+	_discs.resource_name = "street_furniture_canopy_discs"
+	_discs.vertex_color_use_as_albedo = true
+	_discs.vertex_color_is_srgb = true
+	_discs.metallic = 0.35
+	_discs.roughness = 0.22
+	_discs.cull_mode = BaseMaterial3D.CULL_DISABLED
+	_discs.backlight_enabled = true
+	_discs.backlight = Color(0.62, 0.64, 0.66)
 
 
 ## What to build for one placed row: {ok, pieces: [{key, mesh, transform}],
@@ -203,6 +252,56 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 		"bike_rack":
 			_piece(result, "bike_rack", func(b: Builder) -> void: _bike_rack(b))
 			_box_shape(result, Vector3(0.78, 0.86, 0.06), Vector3(0.0, 0.43, 0.0))
+		"canopy_of_sky":
+			_piece(result, "canopy_of_sky_frame", func(b: Builder) -> void: _canopy_frame(b))
+			_piece(result, "canopy_of_sky_discs", func(b: Builder) -> void: _canopy_discs(b), Transform3D.IDENTITY, _discs)
+			for index in 4:
+				var angle := PI * 0.25 + PI * 0.5 * float(index)
+				_capsule(result, 0.11, 4.0, Vector3(cos(angle), 0.0, sin(angle)) * CANOPY_POLE_RADIUS_M)
+		"lamp_disc":
+			_piece(result, "lamp_disc", func(b: Builder) -> void: _lamp_disc(b))
+			_capsule(result, 0.07, 4.2)
+		"event_pole":
+			_piece(result, "event_pole", func(b: Builder) -> void: _event_pole(b))
+			_capsule(result, 0.13, 9.0)
+		"bench_long":
+			var bench_length := snappedf(clampf(_number(params, "length_m", 2.4), 1.2, 6.0), 0.1)
+			var back := bool(params.get("back", true))
+			_piece(result, "bench_long_l%.1f_b%d" % [bench_length, int(back)], func(b: Builder) -> void: _bench_long(b, bench_length, back))
+			if back:
+				_box_shape(result, Vector3(bench_length, 0.84, 0.62), Vector3(0.0, 0.42, 0.04))
+			else:
+				_box_shape(result, Vector3(bench_length, 0.45, 0.6), Vector3(0.0, 0.225, 0.0))
+		"picnic_table_long":
+			var table_length := snappedf(clampf(_number(params, "length_m", 6.1), 2.0, 7.0), 0.1)
+			_piece(result, "picnic_table_long_l%.1f" % table_length, func(b: Builder) -> void: _picnic_table_long(b, table_length))
+			_box_shape(result, Vector3(table_length, 0.79, 0.95), Vector3(0.0, 0.395, 0.0))
+			for side: float in [-1.0, 1.0]:
+				_box_shape(result, Vector3(table_length - 0.4, 0.45, 0.32), Vector3(0.0, 0.225, side * 0.86))
+		"bbq_grill":
+			_piece(result, "bbq_grill", func(b: Builder) -> void: _bbq_grill(b))
+			_box_shape(result, Vector3(0.78, 1.24, 0.54), Vector3(0.0, 0.62, 0.0))
+		"log_seat":
+			var form := str(params.get("form", "log"))
+			if not form in ["log", "stump", "slab"]:
+				form = "log"
+			var size := snappedf(clampf(_number(params, "size_m", 3.2), 0.5, 5.0), 0.1)
+			_piece(result, "log_seat_%s_%.1f" % [form, size], func(b: Builder) -> void: _log_seat(b, form, size))
+			match form:
+				"stump":
+					_box_shape(result, Vector3(size * 0.86, 0.45, size * 0.86), Vector3(0.0, 0.225, 0.0))
+				"slab":
+					_box_shape(result, Vector3(size, 0.45, size * 0.55), Vector3(0.0, 0.225, 0.0))
+				_:
+					_box_shape(result, Vector3(size, 0.5, 0.56), Vector3(0.0, 0.25, 0.0))
+		"pump_station":
+			_piece(result, "pump_station", func(b: Builder) -> void: _pump_station(b))
+			_box_shape(result, Vector3(PUMP_HOUSE_M.x, PUMP_HOUSE_M.y + 0.35, PUMP_HOUSE_M.z), Vector3(PUMP_HOUSE_X_M, (PUMP_HOUSE_M.y + 0.35) * 0.5, 0.0))
+			var yard_start := PUMP_HOUSE_X_M + PUMP_HOUSE_M.x * 0.5
+			var yard_length := PUMP_YARD_END_M - yard_start
+			for side: float in [-1.0, 1.0]:
+				_box_shape(result, Vector3(yard_length, 2.1, 0.1), Vector3(yard_start + yard_length * 0.5, 1.05, side * PUMP_HOUSE_M.z * 0.5))
+			_box_shape(result, Vector3(0.1, 2.1, PUMP_HOUSE_M.z), Vector3(PUMP_YARD_END_M, 1.05, 0.0))
 	return result
 
 
@@ -270,8 +369,9 @@ func _leg_drops(params: Dictionary) -> PackedFloat32Array:
 	return drops
 
 
-## An upright capsule from the foot, shared between rows of the same size.
-func _capsule(result: Dictionary, radius: float, height: float) -> void:
+## An upright capsule from the foot (moved by `offset` in the prop's frame),
+## shared between rows of the same size.
+func _capsule(result: Dictionary, radius: float, height: float, offset := Vector3.ZERO) -> void:
 	var key := "capsule_r%.3f_h%.3f" % [radius, height]
 	if not _shapes.has(key):
 		var capsule := CapsuleShape3D.new()
@@ -279,7 +379,7 @@ func _capsule(result: Dictionary, radius: float, height: float) -> void:
 		capsule.height = maxf(height, radius * 2.0)
 		_shapes[key] = capsule
 	var shape: CapsuleShape3D = _shapes[key]
-	result.shapes.append({"shape": shape, "transform": Transform3D(Basis.IDENTITY, Vector3(0.0, shape.height * 0.5, 0.0))})
+	result.shapes.append({"shape": shape, "transform": Transform3D(Basis.IDENTITY, offset + Vector3(0.0, shape.height * 0.5, 0.0))})
 
 
 # ---------------------------------------------------------------- props
@@ -663,6 +763,212 @@ func _bike_rack(b: Builder) -> void:
 	path.append(Vector3(0.36, -0.1, 0))
 	radii.append(0.026)
 	b.tube(path, radii, 8, RACK_DARK, CELL_WHITE, false, false)
+
+
+# ---------------------------------------------------------------- Cityside Park
+
+## Canopy of Sky (Ned Kahn, 2025): the 20 ft stainless ring hung on cables from
+## four curved aluminium poles, drawn here (the hanging discs are
+## _canopy_discs). The poles stand on the diagonals, outside the walkway along
+## local X; each pole's head leans in over the ring.
+func _canopy_frame(b: Builder) -> void:
+	for index in 4:
+		var angle := PI * 0.25 + PI * 0.5 * float(index)
+		var out := Vector3(cos(angle), 0.0, sin(angle))
+		var path := PackedVector3Array()
+		var radii := PackedFloat32Array()
+		for step in 10:
+			var t := float(step) / 9.0
+			path.append(out * (CANOPY_POLE_RADIUS_M - 1.0 * t * t) + Vector3(0.0, -0.3 + (CANOPY_POLE_TOP_M + 0.3) * t, 0.0))
+			radii.append(lerpf(0.095, 0.055, t))
+		b.tube(path, radii, 10, ALUMINIUM, CELL_METAL, false, true)
+		b.tube(PackedVector3Array([out * CANOPY_POLE_RADIUS_M + Vector3(0.0, -0.05, 0.0), out * CANOPY_POLE_RADIUS_M + Vector3(0.0, 0.09, 0.0)]), PackedFloat32Array([0.19, 0.16]), 12, PAD_CONCRETE, CELL_WHITE, false, true)
+		# Three cables from the head to the ring, splayed either side.
+		var head := path[path.size() - 1]
+		for spread: float in [-0.35, 0.0, 0.35]:
+			var to := Vector3(cos(angle + spread), 0.0, sin(angle + spread)) * CANOPY_RING_RADIUS_M + Vector3(0.0, CANOPY_RING_Y, 0.0)
+			b.tube(PackedVector3Array([head, to]), PackedFloat32Array([0.012, 0.012]), 4, FRAME_CHARCOAL, CELL_WHITE, false, false)
+	var ring := PackedVector3Array()
+	var ring_radii := PackedFloat32Array()
+	for step in 73:
+		var angle := TAU * float(step) / 72.0
+		ring.append(Vector3(cos(angle), 0.0, sin(angle)) * CANOPY_RING_RADIUS_M + Vector3(0.0, CANOPY_RING_Y, 0.0))
+		ring_radii.append(0.045)
+	b.tube(ring, ring_radii, 8, STAINLESS, CELL_METAL, false, false)
+
+
+## The canopy's hanging polycarbonate discs (about 7000 on the real piece; fewer
+## and larger here): rings of small discs filling the ring in a shallow dish that
+## sags CANOPY_SAG_M at the middle, each turned and swung a little by the wind,
+## pale silver with a faint sky tint. The disc material lets the sun through, so
+## the dish glows when seen from below.
+func _canopy_discs(b: Builder) -> void:
+	var random := RandomNumberGenerator.new()
+	random.seed = 7000
+	var step := 0.2
+	for ring in int(CANOPY_RING_RADIUS_M / step):
+		var radius := step * (float(ring) + 0.55)
+		var count := maxi(6, roundi(TAU * radius / step))
+		for index in count:
+			var angle := TAU * (float(index) + random.randf_range(-0.2, 0.2)) / float(count) + float(ring) * 0.41
+			var r := minf(radius + random.randf_range(-0.035, 0.035), CANOPY_RING_RADIUS_M - 0.06)
+			var y := CANOPY_RING_Y - CANOPY_SAG_M * (1.0 - pow(r / CANOPY_RING_RADIUS_M, 2.0)) - random.randf_range(0.0, 0.07)
+			var normal := Vector3(random.randf_range(-0.6, 0.6), -1.0, random.randf_range(-0.6, 0.6)).normalized()
+			var shade := random.randf_range(0.8, 0.98)
+			b.disc(Vector3(cos(angle) * r, y, sin(angle) * r), normal, 0.088, 8, Color(shade * 0.97, shade * 0.99, minf(1.0, shade * 1.04)))
+
+
+## Cityside Park's 14 ft path lights (2024 art-location plan label "Light Pole
+## 14 ft"; ph08 and ph10, Sep 2025): a slender dark grey pole under a broad flat
+## disc head.
+func _lamp_disc(b: Builder) -> void:
+	var top := 4.27
+	b.tube(PackedVector3Array([Vector3(0, -0.3, 0), Vector3(0, top - 0.12, 0)]), PackedFloat32Array([0.055, 0.045]), 10, PARK_POLE_GREY, CELL_METAL, false, true)
+	b.tube(PackedVector3Array([Vector3(0, -0.05, 0), Vector3(0, 0.3, 0)]), PackedFloat32Array([0.085, 0.075]), 10, PARK_POLE_GREY, CELL_METAL, false, true)
+	b.tube(PackedVector3Array([Vector3(0, top - 0.12, 0), Vector3(0, top - 0.05, 0)]), PackedFloat32Array([0.42, 0.45]), 24, PARK_POLE_GREY, CELL_METAL, false, false)
+	b.tube(PackedVector3Array([Vector3(0, top - 0.05, 0), Vector3(0, top - 0.01, 0), Vector3(0, top + 0.03, 0)]), PackedFloat32Array([0.45, 0.38, 0.06]), 24, PARK_POLE_GREY, CELL_METAL, false, true)
+	b.disc(Vector3(0, top - 0.12, 0), Vector3.DOWN, 0.42, 24, LENS_GREY)
+
+
+## The 30 ft event light poles round the lawn (2024 art-location plan label
+## "Light Pole 30 ft (event use only)"; ph08): a tall tapered grey pole with a
+## short cross arm near its top holding two small floodlights aimed down over the
+## lawn (-Z).
+func _event_pole(b: Builder) -> void:
+	var top := 9.1
+	b.tube(PackedVector3Array([Vector3(0, -0.3, 0), Vector3(0, top, 0)]), PackedFloat32Array([0.12, 0.07]), 10, PARK_POLE_GREY, CELL_METAL, false, true)
+	b.tube(PackedVector3Array([Vector3(0, -0.05, 0), Vector3(0, 0.45, 0)]), PackedFloat32Array([0.17, 0.15]), 10, PARK_POLE_GREY, CELL_METAL, false, true)
+	b.box(Vector3(0, top - 0.45, -0.05), Basis.IDENTITY, Vector3(0.95, 0.07, 0.07), PARK_POLE_GREY, CELL_METAL)
+	for x: float in [-0.4, 0.4]:
+		var mount := Vector3(x, top - 0.42, -0.08)
+		var axis := Vector3(0.0, -0.6, -1.0).normalized()
+		b.tube(PackedVector3Array([mount, mount + axis * 0.3]), PackedFloat32Array([0.1, 0.13]), 10, PARK_POLE_GREY, CELL_METAL, true, false)
+		b.disc(mount + axis * 0.3, axis, 0.12, 10, LENS_GREY)
+	b.box(Vector3(0, top - 1.4, 0.1), Basis.IDENTITY, Vector3(0.22, 0.32, 0.16), PARK_POLE_GREY, CELL_METAL)
+
+
+## The park's long timber benches (2024 art-location plan label "Park Bench -
+## Rough&Ready 6 by Streetlife"; ph10, Sep 2025): thick pale timber slats on dark
+## steel frames with a slatted backrest, or, without a back, on a pale concrete
+## plinth as by the lawn. Length along X; the seat faces -Z.
+func _bench_long(b: Builder, length: float, back: bool) -> void:
+	if back:
+		var frames := maxi(2, ceili(length / 1.9) + 1)
+		for index in frames:
+			var x := lerpf(-length * 0.5 + 0.18, length * 0.5 - 0.18, float(index) / float(frames - 1))
+			b.box(Vector3(x, 0.2, 0.0), Basis.IDENTITY, Vector3(0.07, 0.4, 0.5), STEEL_BLACK, CELL_WHITE)
+			b.box(Vector3(x, 0.68, 0.24), Basis(Vector3.RIGHT, -0.18), Vector3(0.07, 0.52, 0.07), STEEL_BLACK, CELL_WHITE)
+		for index in 5:
+			b.box(Vector3(0.0, 0.435, -0.22 + 0.105 * float(index)), Basis.IDENTITY, Vector3(length, 0.07, 0.092), BENCH_TIMBER, CELL_WHITE)
+		var tilt := Basis(Vector3.RIGHT, -0.18)
+		for index in 3:
+			b.box(Vector3(0.0, 0.62 + 0.13 * float(index), 0.26 + 0.024 * float(index)), tilt, Vector3(length, 0.1, 0.06), BENCH_TIMBER, CELL_WHITE)
+	else:
+		b.box(Vector3(0.0, 0.19, 0.0), Basis.IDENTITY, Vector3(length - 0.1, 0.38, 0.5), CONCRETE, CELL_WHITE)
+		for index in 5:
+			b.box(Vector3(0.0, 0.415, -0.24 + 0.12 * float(index)), Basis.IDENTITY, Vector3(length, 0.07, 0.1), BENCH_TIMBER, CELL_WHITE)
+
+
+## The north BBQ plaza's 20 ft picnic tables (CMG news, Sep 2025; ph09, Sep 2025):
+## a top of three thick fresh timber beams and a long timber bench beam either
+## side, on black steel flat-bar frames. Length along X.
+func _picnic_table_long(b: Builder, length: float) -> void:
+	for index in 3:
+		b.box(Vector3(0.0, 0.74, -0.31 + 0.31 * float(index)), Basis.IDENTITY, Vector3(length, 0.1, 0.29), TABLE_TIMBER, CELL_WHITE)
+	for side: float in [-1.0, 1.0]:
+		b.box(Vector3(0.0, 0.33, side * 0.86), Basis.IDENTITY, Vector3(length - 0.4, 0.24, 0.3), TABLE_TIMBER, CELL_WHITE)
+	var frames := maxi(2, roundi(length / 2.0) + 1)
+	for index in frames:
+		var x := lerpf(-length * 0.5 + 0.45, length * 0.5 - 0.45, float(index) / float(frames - 1))
+		for dz: float in [-0.13, 0.13]:
+			b.box(Vector3(x, 0.345, dz), Basis.IDENTITY, Vector3(0.05, 0.69, 0.025), STEEL_BLACK, CELL_WHITE)
+		b.box(Vector3(x, 0.12, 0.0), Basis.IDENTITY, Vector3(0.05, 0.05, 1.95), STEEL_BLACK, CELL_WHITE)
+		for side: float in [-1.0, 1.0]:
+			b.box(Vector3(x, 0.115, side * 0.86), Basis.IDENTITY, Vector3(0.05, 0.23, 0.05), STEEL_BLACK, CELL_WHITE)
+
+
+## A park BBQ grill (ph09, Sep 2025): a black steel firebox under a heavy grate on
+## a single post, a heat shield rising at its back (+Z), on a small pad.
+func _bbq_grill(b: Builder) -> void:
+	b.box(Vector3(0, 0.03, 0), Basis.IDENTITY, Vector3(0.6, 0.06, 0.6), PAD_CONCRETE, CELL_WHITE)
+	b.tube(PackedVector3Array([Vector3(0, 0.0, 0), Vector3(0, 0.72, 0)]), PackedFloat32Array([0.06, 0.06]), 10, STEEL_BLACK, CELL_METAL, false, false)
+	b.box(Vector3(0, 0.84, 0), Basis.IDENTITY, Vector3(0.76, 0.24, 0.5), STEEL_BLACK, CELL_METAL)
+	b.box(Vector3(0, 1.1, 0.235), Basis.IDENTITY, Vector3(0.76, 0.28, 0.03), STEEL_BLACK, CELL_METAL)
+	for side: float in [-1.0, 1.0]:
+		b.box(Vector3(side * 0.365, 1.04, 0.1), Basis.IDENTITY, Vector3(0.03, 0.16, 0.3), STEEL_BLACK, CELL_METAL)
+	for index in 7:
+		b.box(Vector3(0, 0.97, -0.21 + 0.07 * float(index)), Basis.IDENTITY, Vector3(0.7, 0.02, 0.018), BIN_STEEL * 0.6, CELL_METAL)
+
+
+## Salvaged eucalyptus from Yerba Buena Island as seats in the strand garden (CMG;
+## ph02 and ph03, Sep 2025), the wood weathered pale and barkless: a long log
+## lying along X, a stump stool, or a broad bean-shaped stump slab. size is the
+## log's length or the stump's or slab's width (m).
+func _log_seat(b: Builder, form: String, size: float) -> void:
+	match form:
+		"stump":
+			var radius := size * 0.5
+			b.tube(PackedVector3Array([Vector3(0, -0.05, 0), Vector3(0, 0.45, 0)]), PackedFloat32Array([radius + 0.03, radius]), 16, DRIFTWOOD, CELL_WHITE, false, false)
+			b.disc(Vector3(0, 0.45, 0), Vector3.UP, radius, 16, END_GRAIN)
+		"slab":
+			# Two overlapping rounds of one broad stump.
+			for lobe: Array in [[Vector3(-size * 0.2, 0.0, 0.03), size * 0.32], [Vector3(size * 0.2, 0.0, -0.03), size * 0.28]]:
+				var center: Vector3 = lobe[0]
+				var radius := float(lobe[1])
+				b.tube(PackedVector3Array([center + Vector3(0, -0.05, 0), center + Vector3(0, 0.45, 0)]), PackedFloat32Array([radius + 0.02, radius]), 16, DRIFTWOOD, CELL_WHITE, false, false)
+				b.disc(center + Vector3(0, 0.45, 0), Vector3.UP, radius, 16, END_GRAIN)
+		_:
+			b.tube(PackedVector3Array([Vector3(-size * 0.5, 0.27, 0), Vector3(0.0, 0.26, 0.02), Vector3(size * 0.5, 0.245, 0)]), PackedFloat32Array([0.31, 0.29, 0.27]), 14, DRIFTWOOD, CELL_WHITE, false, false)
+			b.disc(Vector3(-size * 0.5, 0.27, 0), Vector3.LEFT, 0.31, 14, END_GRAIN)
+			b.disc(Vector3(size * 0.5, 0.245, 0), Vector3.RIGHT, 0.27, 14, END_GRAIN)
+
+
+## Cityside Park's stormwater pump station (not in the frozen OSM building
+## inventory, so a site structure; CMG photo 4 and the aerial of 2026-05-26 show
+## a pale-roofed single-storey box by the avenue with a fenced equipment yard at
+## its south-east end): dark grey board-formed concrete under a low parapet, two
+## pairs of steel doors and louvres on its front (-Z), and a yard of dark steel
+## pickets round a transformer and switchgear. Sizes and details are inference.
+func _pump_station(b: Builder) -> void:
+	var size := PUMP_HOUSE_M
+	var center := Vector3(PUMP_HOUSE_X_M, 0.0, 0.0)
+	b.box(center + Vector3(0.0, size.y * 0.5 - 0.15, 0.0), Basis.IDENTITY, Vector3(size.x, size.y + 0.3, size.z), PUMP_CONCRETE, CELL_WHITE)
+	# Board-form joints round the walls.
+	for level in range(1, 6):
+		b.box(center + Vector3(0.0, 0.62 * float(level), 0.0), Basis.IDENTITY, Vector3(size.x + 0.02, 0.03, size.z + 0.02), PUMP_CONCRETE * 0.78, CELL_WHITE)
+	# Parapet, roof membrane, a rooftop unit and a hatch.
+	for side: float in [-1.0, 1.0]:
+		b.box(center + Vector3(0.0, size.y + 0.17, side * (size.z * 0.5 - 0.12)), Basis.IDENTITY, Vector3(size.x, 0.34, 0.24), PUMP_CONCRETE, CELL_WHITE)
+		b.box(center + Vector3(side * (size.x * 0.5 - 0.12), size.y + 0.17, 0.0), Basis.IDENTITY, Vector3(0.24, 0.34, size.z - 0.48), PUMP_CONCRETE, CELL_WHITE)
+	b.box(center + Vector3(0.0, size.y + 0.03, 0.0), Basis.IDENTITY, Vector3(size.x - 0.48, 0.06, size.z - 0.48), PUMP_ROOF, CELL_WHITE)
+	b.box(center + Vector3(-1.6, size.y + 0.55, 1.2), Basis.IDENTITY, Vector3(1.7, 1.0, 1.1), BIN_STEEL, CELL_METAL)
+	b.box(center + Vector3(2.4, size.y + 0.12, -1.0), Basis.IDENTITY, Vector3(1.0, 0.18, 1.0), BIN_STEEL * 0.8, CELL_METAL)
+	# Front: two pairs of steel doors and louvres above them.
+	for x: float in [-2.9, 2.2]:
+		b.box(center + Vector3(x, 1.25, -size.z * 0.5 - 0.02), Basis.IDENTITY, Vector3(1.9, 2.5, 0.06), PUMP_DOOR, CELL_WHITE)
+		b.box(center + Vector3(x, 1.25, -size.z * 0.5 - 0.055), Basis.IDENTITY, Vector3(0.03, 2.4, 0.02), PUMP_DOOR * 0.6, CELL_WHITE)
+		b.box(center + Vector3(x, 3.05, -size.z * 0.5 - 0.02), Basis.IDENTITY, Vector3(1.5, 0.7, 0.06), BIN_STEEL * 0.7, CELL_METAL)
+	# The yard: a dark steel picket fence on three sides, the house the fourth.
+	var x0 := PUMP_HOUSE_X_M + size.x * 0.5
+	var x1 := PUMP_YARD_END_M
+	var half := size.z * 0.5
+	var runs := [[Vector3(x0, 0.0, -half), Vector3(x1, 0.0, -half)], [Vector3(x1, 0.0, -half), Vector3(x1, 0.0, half)], [Vector3(x1, 0.0, half), Vector3(x0, 0.0, half)]]
+	for run: Array in runs:
+		var from: Vector3 = run[0]
+		var to: Vector3 = run[1]
+		var along := to - from
+		var length := along.length()
+		var direction := along / length
+		var basis := Basis(direction, Vector3.UP, direction.cross(Vector3.UP))
+		for rail_y: float in [0.12, 2.0]:
+			b.box(from + along * 0.5 + Vector3(0.0, rail_y, 0.0), basis, Vector3(length, 0.05, 0.04), STEEL_BLACK, CELL_WHITE)
+		for index in roundi(length / 2.2) + 1:
+			b.box(from + direction * minf(2.2 * float(index), length) + Vector3(0.0, 1.05, 0.0), Basis.IDENTITY, Vector3(0.07, 2.1, 0.07), STEEL_BLACK, CELL_WHITE)
+		for index in floori(length / 0.13):
+			b.box(from + direction * (0.065 + 0.13 * float(index)) + Vector3(0.0, 1.03, 0.0), Basis.IDENTITY, Vector3(0.022, 2.0, 0.022), STEEL_BLACK, CELL_WHITE)
+	b.box(Vector3(x0 + 2.0, 0.65, -1.4), Basis.IDENTITY, Vector3(1.5, 1.3, 1.2), TRANSFORMER_GREEN, CELL_WHITE)
+	b.box(Vector3(x1 - 1.4, 0.95, 2.6), Basis.IDENTITY, Vector3(2.2, 1.9, 0.7), BIN_STEEL, CELL_METAL)
+	b.box(Vector3((x0 + x1) * 0.5, 0.04, 0.0), Basis.IDENTITY, Vector3(x1 - x0 - 0.2, 0.08, size.z - 0.2), PAD_CONCRETE * 0.9, CELL_WHITE)
 
 
 func _rectangle(width: float, height: float) -> PackedVector2Array:

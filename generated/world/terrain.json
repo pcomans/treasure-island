@@ -1,13 +1,13 @@
 {
   "building_foundations": {
     "burial_margin_m": 0.02,
-    "exterior_segments": 4976,
+    "exterior_segments": 4975,
     "flat_roof_cells": 214,
     "maximum_height_deviation_m": 0,
     "maximum_positive_gap_m": 0,
     "maximum_roof_elevation_range_m": 0,
     "minimum_embed_m": -4.062,
-    "sample_points": 14928,
+    "sample_points": 14925,
     "shared_segments": 3,
     "tolerance_m": 0.001,
     "water_datum_m": 0,
@@ -68,7 +68,7 @@
     "maximum_clearance_m": 0.081,
     "maximum_serialization_tolerance_m": 0.01,
     "minimum_clearance_m": 0.019,
-    "sample_points": 244265
+    "sample_points": 243600
   },
   "raster_bbox_wgs84": [
     -122.380001708984,
@@ -209,11 +209,11 @@
     "basis": "production_inference",
     "config": {
       "path": "tools/config/terrain-overrides.json",
-      "sha256": "7621e396e9502c2e41e18307ab059fe57fa0740159fe735f97f16776e22a3574"
+      "sha256": "9873878a01293a9f875bc54784e2e5360d19b665bb28d79105cc7f11a97fa2c4"
     },
-    "corrected_cells": 41,
-    "leaves": 1016,
-    "maximum_cut_m": 2.155,
+    "corrected_cells": 39,
+    "leaves": 987,
+    "maximum_cut_m": 1.344,
     "maximum_raise_m": 1.412,
     "mesh": {
       "cell_m": 32,
@@ -221,7 +221,7 @@
       "sample_m": 0.5,
       "tolerance_m": 0.08
     },
-    "neighbour_edge_vertices": 38,
+    "neighbour_edge_vertices": 46,
     "refined_cell_bounds_m": [
       [
         -320,
@@ -386,12 +386,6 @@
         512
       ],
       [
-        -192,
-        480,
-        -160,
-        512
-      ],
-      [
         -288,
         512,
         -256,
@@ -407,12 +401,6 @@
         -224,
         512,
         -192,
-        544
-      ],
-      [
-        -192,
-        512,
-        -160,
         544
       ],
       [
@@ -470,15 +458,15 @@
         672
       ]
     ],
-    "refined_cells": 41,
-    "refined_triangles": 2419,
+    "refined_cells": 39,
+    "refined_triangles": 2341,
     "schema_version": "ti.terrain-overrides/1",
     "sites": [
       {
         "edge_blend_m": 3,
         "grade": {
           "final_sweep_change_m": 0,
-          "free_nodes": 16358,
+          "free_nodes": 16132,
           "kind": "harmonic"
         },
         "id": "cityside_park",
@@ -517,7 +505,7 @@
             "rule": "sink"
           }
         ],
-        "scope_area_m2": 23367.7
+        "scope_area_m2": 23141
       }
     ]
   },

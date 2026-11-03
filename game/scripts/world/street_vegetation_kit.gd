@@ -55,7 +55,10 @@ const BURY_M := 0.35
 const WELL_LIFT_M := 0.015
 ## The uniform scale and foot settling the generator may give an instance
 ## (tools/lib/street-vegetation-generation.mjs).
-const SCALE_RANGE := Vector2(0.8, 1.25)
+## Plain floats, not a Vector2: its 32-bit 0.8 is a hair above 0.8 and would
+## turn away a generated scale of exactly 0.8.
+const SCALE_MIN := 0.8
+const SCALE_MAX := 1.25
 const MAX_FOOT_SPREAD_M := 0.25
 const MAX_LIFT_M := 0.6
 
@@ -455,7 +458,7 @@ static func params_error(prop: String, kind: String, params: Variant) -> String:
 		var value: Variant = p.get(field, null)
 		if not (value is float or value is int) or not is_finite(float(value)):
 			return "%s params need a finite %s" % [prop, field]
-	if float(p.scale) < SCALE_RANGE.x or float(p.scale) > SCALE_RANGE.y:
+	if float(p.scale) < SCALE_MIN or float(p.scale) > SCALE_MAX:
 		return "%s scale %s is out of range" % [prop, p.scale]
 	if absf(float(p.lift_m)) > MAX_LIFT_M or float(p.foot_spread_m) < 0.0 or float(p.foot_spread_m) > MAX_FOOT_SPREAD_M or float(p.well_m) < 0.0:
 		return "%s foot settling is out of range" % prop

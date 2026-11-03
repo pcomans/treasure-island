@@ -24,16 +24,24 @@ import { compareSourceKeys, invariant, roundCoordinate } from "./world-contract.
 // kind each one stands for.
 export const STREET_FURNITURE_PROPS = Object.freeze({
   adirondack_chair: "chair",
+  bbq_grill: "bbq",
+  bench_long: "bench",
   bench_park: "bench",
   bench_wedge: "bench",
   bike_rack: "bicycle_parking",
   bus_stop_sign: "bus_stop",
+  canopy_of_sky: "artwork",
+  event_pole: "street_lamp",
   hydrant: "fire_hydrant",
   lamp_cobra: "street_lamp",
+  lamp_disc: "street_lamp",
   lamp_lot: "street_lamp",
   lamp_plaza: "street_lamp",
+  log_seat: "bench",
   map_board: "information_board",
   name_sign: "street_sign",
+  picnic_table_long: "picnic_table",
+  pump_station: "site_structure",
   signal_cabinet: "street_cabinet",
   signal_mast: "traffic_signals",
   stop_sign: "stop_sign",
@@ -44,12 +52,29 @@ export const STREET_FURNITURE_PROPS = Object.freeze({
 // footprint for the shared mask.
 export const STREET_FURNITURE_FOOTPRINTS = Object.freeze({
   adirondack_chair: Object.freeze({ x_m: 0.8, z_m: 0.92 }),
+  bbq_grill: Object.freeze({ x_m: 0.8, z_m: 0.6 }),
   bench_park: Object.freeze({ x_m: 1.9, z_m: 0.66 }),
   bench_wedge: Object.freeze({ x_m: 4.1, z_m: 0.6 }),
   bike_rack: Object.freeze({ x_m: 0.8, z_m: 0.12 }),
   map_board: Object.freeze({ x_m: 1.34, z_m: 0.2 }),
+  pump_station: Object.freeze({ x_m: 16.9, z_m: 7.7 }),
   waste_basket: Object.freeze({ x_m: 0.6, z_m: 0.6 }),
 });
+// The plan size of a kit prop whose size comes from its params (the long park
+// bench, the salvaged log seats and the long picnic table, drawn by
+// street_furniture_kit.gd within the same clamps), else its fixed footprint.
+export function streetFurnitureFootprint(prop, params) {
+  const number = (key, fallback, low, high) => Math.min(high, Math.max(low, isFiniteNumber(params?.[key]) ? params[key] : fallback));
+  if (prop === "bench_long") return { x_m: roundCoordinate(number("length_m", 2.4, 1.2, 6.0) + 0.1), z_m: 0.7 };
+  if (prop === "picnic_table_long") return { x_m: roundCoordinate(number("length_m", 6.1, 2.0, 7.0) + 0.1), z_m: 2.1 };
+  if (prop === "log_seat") {
+    const size = number("size_m", 3.2, 0.5, 5.0);
+    if (params?.form === "stump") return { x_m: roundCoordinate(size + 0.06), z_m: roundCoordinate(size + 0.06) };
+    if (params?.form === "slab") return { x_m: roundCoordinate(size + 0.1), z_m: roundCoordinate(size * 0.65) };
+    return { x_m: roundCoordinate(size + 0.1), z_m: 0.7 };
+  }
+  return STREET_FURNITURE_FOOTPRINTS[prop] ?? null;
+}
 // Kit props that stand on legs: the flat bottom of each foot, {x, z, half_x,
 // half_z} in the prop's frame (front -Z, right +X), in the kit's leg order
 // (front-left, front-right, back-left, back-right). This is the one table of

@@ -16,8 +16,8 @@ import { projectLonLat } from "./coordinates.mjs";
 import { geometryToLine, pointInMultiPolygon, pointInRing, selectGeometry } from "./osm-geometry.mjs";
 import { footprintPiece, placeStreetClutter, STREET_CLUTTER_FOOTPRINTS, STREET_CLUTTER_PROPS, validateClutterRules, visibleGroundIndex } from "./street-clutter-generation.mjs";
 import { placeStreetFences, validateFenceRules } from "./street-fence-generation.mjs";
-import { placeStreetFurniture, settleOnFeet, STREET_FURNITURE_FEET, STREET_FURNITURE_FOOTPRINTS, STREET_FURNITURE_PROPS, validateFurnitureRules } from "./street-furniture-generation.mjs";
-import { planDrifts, validateDriftRule } from "./street-planting-generation.mjs";
+import { placeStreetFurniture, settleOnFeet, STREET_FURNITURE_FEET, STREET_FURNITURE_PROPS, streetFurnitureFootprint, validateFurnitureRules } from "./street-furniture-generation.mjs";
+import { packPlantingRows, planDrifts, planFill, plantingState, validatePlantingRule } from "./street-planting-generation.mjs";
 import {
   STREET_VEGETATION_PROPS,
   bedOffsets,
@@ -110,9 +110,13 @@ function lineKind(layer, halfWidthM, overhead = false) {
 // clearance; production inference, not measured. Slot kinds are step-0 scatter
 // placeholders that later steps fill with assets.
 export const STREET_DETAIL_KINDS = Object.freeze({
+  // A park's sculpture (Cityside Park's Canopy of Sky): the pole bases stand
+  // outside its walkway, the radius is the walkway under it.
+  artwork: pointKind("furniture", 0.6, "seeded"),
   barricade: pointKind("clutter", 0.4, "seeded"),
   barrier_line: lineKind("fences", 0.15),
   barrier_point: pointKind("fences", 0.5, "host_barrier"),
+  bbq: pointKind("furniture", 0.45, "seeded"),
   bench: pointKind("furniture", 0.9, "faces_road"),
   bicycle_parking: pointKind("furniture", 1.0, "faces_road"),
   bollard: pointKind("furniture", 0.15, "host_barrier"),
@@ -134,11 +138,15 @@ export const STREET_DETAIL_KINDS = Object.freeze({
   // A parked car's footprint is its own rectangle (footprint_m on the row);
   // the radius is its half width for whoever reads only the kind.
   parked_car: pointKind("clutter", 1.0, "seeded"),
+  picnic_table: pointKind("furniture", 1.0, "seeded"),
   planting_slot: pointKind("vegetation", 0.8, "seeded"),
   post_box: pointKind("furniture", 0.35, "faces_road"),
   power_line: lineKind("clutter", 0, true),
   power_pole: pointKind("clutter", 0.2, "host_power_line"),
   retaining_wall: lineKind("fences", 0.2),
+  // A small park building outside the OSM inventory (Cityside Park's pump
+  // station): its footprint is its own rectangle (footprint_m on the row).
+  site_structure: pointKind("furniture", 3.8, "seeded"),
   stop_sign: pointKind("furniture", 0.15, "host_road"),
   street_cabinet: pointKind("furniture", 0.6, "faces_road"),
   street_lamp: pointKind("furniture", 0.25, "faces_road"),
@@ -151,6 +159,8 @@ export const STREET_DETAIL_KINDS = Object.freeze({
 });
 
 const AMENITY_KINDS = Object.freeze(["bench", "bicycle_parking", "post_box", "waste_basket"]);
+// Scatter patterns that plant naturalistic beds (tools/lib/street-planting-generation.mjs).
+const PLANTING_PATTERNS = Object.freeze(["drifts", "fill"]);
 const GATE_VALUES = Object.freeze(["gate", "hampshire_gate", "kissing_gate", "lift_gate", "sliding_gate", "swing_gate", "wicket_gate"]);
 const LINE_BARRIER_KINDS = Object.freeze({
   fence: "fence",
@@ -412,16 +422,16 @@ function validateScatterRule(rule, zoneId, ruleIds) {
   ruleIds.add(rule.id);
   const kind = STREET_DETAIL_KINDS[rule.kind];
   invariant(kind && kind.geometry === "point" && STREET_DETAIL_LAYERS.includes(kind.layer), `${label} has a non-scatter kind ${rule.kind}`);
-  if (rule.pattern === "drifts") {
+  if (PLANTING_PATTERNS.includes(rule.pattern)) {
     // Naturalistic beds (tools/lib/street-planting-generation.mjs): a mix of kit plants.
-    invariant(kind.layer === "vegetation", `${label}: drifts plant vegetation`);
-    validateDriftRule(rule, label, (prop, kindName, params, entryLabel) => {
+    invariant(kind.layer === "vegetation", `${label}: ${rule.pattern} rules plant vegetation`);
+    validatePlantingRule(rule, label, (prop, kindName, params, entryLabel) => {
       invariant(STREET_VEGETATION_PROPS[prop]?.kinds.includes(kindName), `${entryLabel}: prop ${prop} does not plant a ${kindName}`);
       validateVegetationRuleParams(prop, params, entryLabel);
-    });
+    }, (prop) => STREET_VEGETATION_PROPS[prop]?.variants ?? 0);
     return;
   }
-  invariant(["grid", "along", "along_beds"].includes(rule.pattern), `${label} pattern must be grid, along, along_beds or drifts`);
+  invariant(["grid", "along", "along_beds"].includes(rule.pattern), `${label} pattern must be grid, along, along_beds, drifts or fill`);
   invariant(isFiniteNumber(rule.spacing_m) && rule.spacing_m > 0, `${label} spacing must be positive`);
   invariant(isFiniteNumber(rule.jitter_m) && rule.jitter_m >= 0 && rule.jitter_m < rule.spacing_m, `${label} jitter must be below spacing`);
   invariant(isFiniteNumber(rule.acceptance) && rule.acceptance > 0 && rule.acceptance <= 1, `${label} acceptance must be in (0, 1]`);
@@ -862,8 +872,8 @@ export function generateStreetDetail({
     scatter: { candidates: 0, placed: 0, rejected_by_reason: {} },
     set_pieces: { entries: setPieceDocument.set_pieces.length, placed: 0 },
   };
-  const count = (table, key) => {
-    table[key] = (table[key] ?? 0) + 1;
+  const count = (table, key, number = 1) => {
+    table[key] = (table[key] ?? 0) + number;
   };
 
   // A node's yaw from its kind's rule; an explicit OSM direction tag wins.
@@ -1079,14 +1089,16 @@ export function generateStreetDetail({
   // or a long prop its footprint (streetDetailPieces); a tree in paving its
   // mulch pit, so nothing later stands or parks in it.
   const occupied = [];
-  const occupy = (row) => {
+  // planted: the row came from a drifts or fill rule, whose zone's planting
+  // state keeps its plants apart by their crown widths.
+  const occupy = (row, planted = false) => {
     const kind = STREET_DETAIL_KINDS[row.kind];
     if (row.status !== "placed" || kind.overhead || kind.layer === STREET_DETAIL_GROUND_LAYER) return;
     const pit = (row.prop_params?.well_m ?? 0) / 2;
     // Low plants (grass clumps, planting slots) have no collision; drift planting may overlap them.
     const lowPlant = row.layer === "vegetation" && (row.kind === "grass_clump" || row.kind === "planting_slot");
     streetDetailPieces(row).forEach((piece, index) => {
-      occupied.push({ id: row.fence ? `${row.id}#run${index}` : row.id, points: piece.points, radius_m: Math.max(piece.radius, pit), lowPlant });
+      occupied.push({ id: row.fence ? `${row.id}#run${index}` : row.id, points: piece.points, radius_m: Math.max(piece.radius, pit), lowPlant, planted });
     });
   };
   rows.forEach(occupy);
@@ -1156,7 +1168,7 @@ export function generateStreetDetail({
     const xz = [round3(entry.xz[0]), round3(entry.xz[1])];
     // A planted tree keeps the scatter's site checks; a street prop the furniture's margins.
     const tree = STREET_DETAIL_KINDS[entry.kind].layer === "vegetation";
-    const footprint = entry.prop === undefined || tree ? null : (STREET_FURNITURE_FOOTPRINTS[entry.prop] ?? STREET_CLUTTER_FOOTPRINTS[entry.prop] ?? null);
+    const footprint = entry.prop === undefined || tree ? null : (streetFurnitureFootprint(entry.prop, entry.params) ?? STREET_CLUTTER_FOOTPRINTS[entry.prop] ?? null);
     const piece = footprint
       ? footprintPiece(xz, normalizedYaw(entry.yaw), footprint)
       : { points: [xz], radius: STREET_DETAIL_KINDS[entry.kind].footprint_radius_m };
@@ -1206,10 +1218,10 @@ export function generateStreetDetail({
   // The slot rules run here; the planting rules (those with a prop) run after
   // the street furniture (b2), so plants work around the lamps and signs.
   const ruleSummaries = new Map();
-  // A drifts rule (tools/lib/street-planting-generation.mjs): its candidates keep
-  // the gameplay mask, the land, walls and every placed item except other low
-  // plants, which they may overlap (no collision), though not stem on stem.
-  const LOW_PLANTS = new Set(["grass_clump", "planting_slot"]);
+  // A drifts or fill rule (tools/lib/street-planting-generation.mjs): its plants
+  // keep the gameplay mask, the land, walls and every placed item except low
+  // plants and the zone's other planted rows (no collision), which the zone's
+  // planting state keeps apart by their crown widths instead.
   const slopeAt = (xz) => {
     const step = 0.6;
     const at = (dx, dz) => groundAt([xz[0] + dx, xz[1] + dz])?.y;
@@ -1217,27 +1229,30 @@ export function generateStreetDetail({
     if ([east, west, south, north].some((value) => value === undefined)) return Infinity;
     return Math.hypot((east - west) / (2 * step), (south - north) / (2 * step));
   };
-  const placeDrifts = (zone, rule, contains) => {
-    const plan = planDrifts({
-      rule,
-      zoneId: zone.id,
-      seed,
-      bed: (xz) => ground.site.parkBed([xz[0], -xz[1]], rule.surfaces),
-      slopeAt,
-      footOf: (prop) => STREET_VEGETATION_PROPS[prop].foot_m,
-    });
+  const plantingStates = new Map();
+  const placePlanting = (zone, rule, contains) => {
+    if (!plantingStates.has(zone.id)) plantingStates.set(zone.id, plantingState());
     const radius = STREET_DETAIL_KINDS[rule.kind].footprint_radius_m;
-    const nearPlants = new Map();
-    const cellOf = (xz) => `${Math.floor(xz[0] / 2)},${Math.floor(xz[1] / 2)}`;
+    // The items a plant must clear, on a coarse grid of their reach.
+    const BLOCK_CELL_M = 8;
+    const blockers = new Map();
     for (const item of occupied) {
-      if (!item.lowPlant) continue;
-      const key = cellOf(item.points[0]);
-      if (!nearPlants.has(key)) nearPlants.set(key, []);
-      nearPlants.get(key).push(item);
+      if (item.lowPlant || item.planted) continue;
+      const reach = item.radius_m + radius;
+      const xs = item.points.map((point) => point[0]);
+      const zs = item.points.map((point) => point[1]);
+      for (let i = Math.floor((Math.min(...xs) - reach) / BLOCK_CELL_M); i <= Math.floor((Math.max(...xs) + reach) / BLOCK_CELL_M); i += 1) {
+        for (let j = Math.floor((Math.min(...zs) - reach) / BLOCK_CELL_M); j <= Math.floor((Math.max(...zs) + reach) / BLOCK_CELL_M); j += 1) {
+          const key = `${i},${j}`;
+          if (!blockers.has(key)) blockers.set(key, []);
+          blockers.get(key).push(item);
+        }
+      }
     }
+    let candidates = 0;
     let placed = 0;
-    for (const candidate of plan.candidates) {
-      const identity = `${zone.id}:${rule.id}:${candidate.identity}`;
+    const accept = (candidate) => {
+      candidates += 1;
       audit.scatter.candidates += 1;
       const xz = candidate.xz;
       let problem = null;
@@ -1246,42 +1261,23 @@ export function generateStreetDetail({
       else if (hardViolation(hardShapes, [xz], radius)) problem = hardViolation(hardShapes, [xz], radius).reason;
       else if (buildings.nearest(xz, exclusions.building_buffer_m + radius).distance < exclusions.building_buffer_m + radius) problem = "building_buffer";
       else if (shorelineOverlays.nearest(xz, radius).distance < radius) problem = "shoreline_overlay";
-      if (!problem) {
-        for (const item of occupied) {
-          if (item.lowPlant) continue;
-          if (polylineDistance(xz, item.points) < item.radius_m + radius) {
-            problem = "overlap";
-            break;
-          }
-        }
-      }
-      if (!problem && LOW_PLANTS.has(rule.kind)) {
-        // Crowns may overlap; stems keep apart.
-        const [ci, cj] = cellOf(xz).split(",").map(Number);
-        for (let di = -1; di <= 1 && !problem; di += 1) {
-          for (let dj = -1; dj <= 1 && !problem; dj += 1) {
-            for (const item of nearPlants.get(`${ci + di},${cj + dj}`) ?? []) {
-              if (Math.hypot(item.points[0][0] - xz[0], item.points[0][1] - xz[1]) < 0.45 * (item.radius_m + radius)) {
-                problem = "stem_overlap";
-                break;
-              }
-            }
-          }
-        }
+      else {
+        const near = blockers.get(`${Math.floor(xz[0] / BLOCK_CELL_M)},${Math.floor(xz[1] / BLOCK_CELL_M)}`) ?? [];
+        if (near.some((item) => polylineDistance(xz, item.points) < item.radius_m + radius)) problem = "overlap";
       }
       if (problem) {
         count(audit.scatter.rejected_by_reason, problem);
-        continue;
+        return false;
       }
       const surface = surfaceAt(xz);
       const { y, support } = grounded(xz);
       const planted = plantRow({ prop: candidate.prop, kind: rule.kind, variant: candidate.variant, scale: candidate.scale, xz, landY: y, surface, groundAt });
       if (planted.problem) {
         count(audit.scatter.rejected_by_reason, planted.problem);
-        continue;
+        return false;
       }
       const row = {
-        id: `scatter:${identity}`,
+        id: `scatter:${zone.id}:${rule.id}:p${String(placed).padStart(5, "0")}`,
         source: "scatter",
         source_id: `zone:${zone.id}/${rule.id}`,
         kind: rule.kind,
@@ -1290,32 +1286,36 @@ export function generateStreetDetail({
         position_m: [xz[0], y, xz[1]],
         terrain_support: { object_key: support.object_key, triangle_index: support.triangle_index, elevation_m: support.elevation_m },
         surface,
-        yaw_radians: normalizedYaw(unit(hashBytes(seed, identity), 12) * Math.PI * 2 - Math.PI),
+        yaw_radians: normalizedYaw(unit(hashBytes(seed, `${zone.id}:${rule.id}:${candidate.identity}`), 12) * Math.PI * 2 - Math.PI),
         yaw_source: "seeded",
         ...planted,
         status: "placed",
         exclusion: null,
       };
       rows.push(row);
-      occupy(row);
-      if (LOW_PLANTS.has(rule.kind)) {
-        const item = occupied.at(-1);
-        const key = cellOf(item.points[0]);
-        if (!nearPlants.has(key)) nearPlants.set(key, []);
-        nearPlants.get(key).push(item);
-      }
+      occupy(row, true);
       placed += 1;
       audit.scatter.placed += 1;
-    }
-    for (const [reason, number] of Object.entries(plan.rejected)) audit.scatter.rejected_by_reason[`drift_${reason}`] = (audit.scatter.rejected_by_reason[`drift_${reason}`] ?? 0) + number;
-    ruleSummaries.set(`${zone.id}/${rule.id}`, { id: rule.id, kind: rule.kind, pattern: rule.pattern, candidates: plan.candidates.length, placed });
+      return true;
+    };
+    const plan = (rule.pattern === "drifts" ? planDrifts : planFill)({
+      rule,
+      zoneId: zone.id,
+      seed,
+      bed: (xz) => ground.site.parkBed([xz[0], -xz[1]], rule.surfaces),
+      slopeAt,
+      state: plantingStates.get(zone.id),
+      accept,
+    });
+    for (const [reason, number] of Object.entries(plan.rejected)) count(audit.scatter.rejected_by_reason, `planting_${reason}`, number);
+    ruleSummaries.set(`${zone.id}/${rule.id}`, { id: rule.id, kind: rule.kind, pattern: rule.pattern, candidates, placed, ...(plan.cover === undefined ? {} : { cover: plan.cover }) });
   };
   const runScatter = (planting) => {
     for (const { zone, contains, bounds } of zoneShapes) {
       for (const rule of zone.scatter) {
-        if ((rule.prop != null || rule.pattern === "drifts") !== planting) continue;
-        if (rule.pattern === "drifts") {
-          placeDrifts(zone, rule, contains);
+        if ((rule.prop != null || PLANTING_PATTERNS.includes(rule.pattern)) !== planting) continue;
+        if (PLANTING_PATTERNS.includes(rule.pattern)) {
+          placePlanting(zone, rule, contains);
           continue;
         }
         const candidates = [];
@@ -1545,6 +1545,10 @@ export function generateStreetDetail({
   const placedBy = (field, values) => Object.fromEntries(values.map((value) => [value, rows.filter((row) => row.status === "placed" && row[field] === value).length]));
   const layerNames = [...STREET_DETAIL_LAYERS, STREET_DETAIL_GROUND_LAYER];
   const pilotZones = new Set(config.zones.filter((zone) => zone.pilot).map((zone) => zone.id));
+  // The planting rules' many small rows go in compact blocks (packPlantingRows).
+  const plantingSources = new Set(config.zones.flatMap((zone) => (zone.scatter ?? [])
+    .filter((rule) => PLANTING_PATTERNS.includes(rule.pattern)).map((rule) => `zone:${zone.id}/${rule.id}`)));
+  const packed = packPlantingRows(rows, plantingSources);
   return {
     schema_version: STREET_DETAIL_SCHEMA,
     generator: "tools/lib/street-detail-generation.mjs",
@@ -1565,6 +1569,7 @@ export function generateStreetDetail({
       source_position_m: "a stop sign's OSM node position, kept when the sign moves to the curb of its approach",
       fence: "fence rows: the kit type and why (type_basis), height and collision half thickness, the stretches cut open along points_m (openings, metres along the line, with what opens them) and the solid runs left (posts on the ground: points_m, terrain_supports, surface_bias_m); a fence row with a prop is built (game/scripts/world/street_fence_kit.gd)",
       fenced_approaches: "scored-building sides a built fence closes, which the building fit may skip (game/tests/shared/building_fit.gd)",
+      planting_rows: "the rows of drifts and fill rules (park beds) in compact blocks, one per rule: the shared id prefix, kind and source id, the props, surfaces, land records and zone sets the rows index, and one array per row in fields order, its number in the block giving its id; readers expand them into the usual rows (unpackPlantingRows in tools/lib/street-planting-generation.mjs, its twin in game/scripts/world/generated_world_contract.gd), and counts count them",
     },
     layers: STREET_DETAIL_LAYERS,
     ground_layer: STREET_DETAIL_GROUND_LAYER,
@@ -1608,6 +1613,7 @@ export function generateStreetDetail({
         STREET_DETAIL_HARD_COMPONENTS.map((component) => [component, Number.isFinite(minimumClearances[component]) ? round3(minimumClearances[component]) : null]),
       ),
     },
-    rows,
+    rows: packed.rows,
+    planting_rows: packed.planting_rows,
   };
 }

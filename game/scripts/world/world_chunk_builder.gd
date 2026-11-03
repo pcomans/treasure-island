@@ -74,13 +74,26 @@ const STREET_GROUND_SURFACES := {
 	"street_kerb_concrete": {"albedo": preload("res://game/resources/textures/world/street/street_concrete_panels.png"), "uv_scale": 0.5, "roughness": 0.9},
 	"street_kerb_planting": {"albedo": preload("res://game/resources/textures/world/street/street_mulch.png"), "uv_scale": 1.0, "roughness": 1.0},
 	"street_plaza_pavers": {"albedo": preload("res://game/resources/textures/world/street/street_plaza_pavers.png"), "uv_scale": 1.0, "roughness": 0.85},
-	# Park ground (park_* records): mulch beds in 2 m tiles of the world UV, the
-	# promenade and garden paths in 3 m poured panels (one UV unit a panel, warm
-	# buff concrete), decomposed-granite paths in 2 m tiles.
-	"park_mulch": {"albedo": preload("res://game/resources/textures/world/street/street_mulch.png"), "uv_scale": 5.0, "roughness": 1.0},
+	# Park ground (park_* records): grey pea gravel along the riprap (the
+	# vegetation kit's park texture), the new dark asphalt paths and the
+	# decomposed-granite paths in 2 m tiles of the world UV, the promenade and
+	# garden paths in 3 m poured panels (one UV unit a panel, warm buff
+	# concrete), and the pink-painted concrete stripes under the Canopy of Sky
+	# (ph05, Sep 2025). The beds' mulch is PARK_BED below.
+	"park_asphalt": {"albedo": preload("res://game/resources/textures/world/street/park_asphalt.png"), "uv_scale": 5.0, "roughness": 0.92},
+	"park_paint_pink": {"albedo": preload("res://game/resources/textures/world/street/street_paint_wear.png"), "uv_scale": 5.0, "roughness": 0.85, "tint": Color(0.86, 0.55, 0.58)},
+	"park_gravel": {"albedo": preload("res://game/resources/textures/world/vegetation/park_gravel.png"), "uv_scale": 5.0, "roughness": 0.95},
 	"park_concrete": {"albedo": preload("res://game/resources/textures/world/street/street_concrete_panels.png"), "uv_scale": 0.5, "roughness": 0.9, "tint": Color(1.0, 0.96, 0.9)},
 	"park_dg": {"albedo": preload("res://game/resources/textures/world/street/park_dg.png"), "uv_scale": 5.0, "roughness": 1.0},
 }
+## A park's planted beds (park_mulch records): the vegetation kit's dark
+## grey-brown shredded mulch in 2 m tiles of the world UV, blending to the
+## beds' planted colour beyond the low plants' range
+## (game/resources/materials/world/street/park_bed.gdshader).
+const PARK_BED_MATERIAL_KEY := "park_mulch"
+const PARK_BED_SHADER := preload("res://game/resources/materials/world/street/park_bed.gdshader")
+const PARK_BED_MULCH := preload("res://game/resources/textures/world/vegetation/park_mulch.png")
+const PARK_BED_UV_SCALE := 5.0
 ## Painted park plazas (park_plaza_* records): game/resources/materials/world/street/park_paving.gdshader
 ## draws the pattern in the plaza's own frame (UV in metres); colours read from the dated photos.
 const PARK_PAVING_SHADER := preload("res://game/resources/materials/world/street/park_paving.gdshader")
@@ -140,8 +153,6 @@ const POLYHAVEN_MATERIAL_TEXTURE_SET := {
 	"major_area_court": "concrete_floor_03",
 	"street_parking": "clean_asphalt",
 	"street_gutter": "concrete_floor_03",
-	"park_asphalt": "clean_asphalt",
-	"park_gravel": "concrete_floor_03",
 	"context_ybi": "sparse_grass",
 	"building_wall": "plaster_grey_04",
 	"building_part_wall": "plaster_grey_04",
@@ -153,6 +164,7 @@ var _materials: Dictionary = {}
 var _street_decal_materials: Dictionary = {}
 var _street_ground_materials: Dictionary = {}
 var _park_paving_materials: Dictionary = {}
+var _park_bed: ShaderMaterial
 var _generic_roof_material: StandardMaterial3D
 
 
@@ -753,6 +765,8 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 	var placeholder_material: Material
 	if STREET_DECAL_MATERIALS.has(str(record.material_key)):
 		placeholder_material = _street_decal_material(str(record.material_key))
+	elif str(record.material_key) == PARK_BED_MATERIAL_KEY and not uvs.is_empty():
+		placeholder_material = _park_bed_material()
 	elif STREET_GROUND_SURFACES.has(str(record.material_key)) and not uvs.is_empty():
 		placeholder_material = _street_ground_material(str(record.material_key))
 	elif PARK_PAVING_MATERIALS.has(str(record.material_key)) and not uvs.is_empty():
@@ -951,6 +965,17 @@ func _street_ground_material(material_key: String) -> StandardMaterial3D:
 	return material
 
 
+## The shared material for a park's planted beds.
+func _park_bed_material() -> ShaderMaterial:
+	if _park_bed == null:
+		_park_bed = ShaderMaterial.new()
+		_park_bed.resource_name = PARK_BED_MATERIAL_KEY
+		_park_bed.shader = PARK_BED_SHADER
+		_park_bed.set_shader_parameter("mulch", PARK_BED_MULCH)
+		_park_bed.set_shader_parameter("uv_scale", PARK_BED_UV_SCALE)
+	return _park_bed
+
+
 ## The shared material for a painted park plaza.
 func _park_paving_material(material_key: String) -> ShaderMaterial:
 	if _park_paving_materials.has(material_key):
@@ -1022,11 +1047,6 @@ func _polyhaven_tint_for(material_key: String, fallback: Color) -> Color:
 			# Gutter pans: smoother, slightly darker concrete; cooled so the
 			# warm source map does not read pink beside the asphalt.
 			return Color(0.84, 0.92, 0.98)
-		"park_asphalt":
-			# The park's newer, darker asphalt paths (Sep 2025 to 2026 photos).
-			return Color(0.66, 0.67, 0.68)
-		"park_gravel":
-			return Color(0.86, 0.87, 0.86)
 		"context_ybi":
 			return Color("d2d8cb")
 		"building_wall", "building_part_wall":

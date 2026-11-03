@@ -472,12 +472,14 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
   });
 
   // The site correction at a point, given the coarse surface there.
-  const siteDelta = (site, point, base) => {
+  // A site's corrected surface at a point and how fully it applies there (its
+  // fade from the scope's inland edges), or null outside the scope.
+  const siteTarget = (site, point) => {
     const box = site.scope.bounds;
-    if (point[0] < box.min_x || point[0] > box.max_x || point[1] < box.min_y || point[1] > box.max_y) return 0;
-    if (!pointInMultiPolygon(point, site.scope.fadeGeometry, true)) return 0;
+    if (point[0] < box.min_x || point[0] > box.max_x || point[1] < box.min_y || point[1] > box.max_y) return null;
+    if (!pointInMultiPolygon(point, site.scope.fadeGeometry, true)) return null;
     const fade = smoothstep(0, site.edgeBlend, distanceToEdges(point, site.scope.edges));
-    if (fade === 0) return 0;
+    if (fade === 0) return null;
     let surface = site.grade.at(point);
     for (const region of site.regions) {
       if (region.rule.kind !== "sink") continue;
@@ -486,7 +488,11 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
       const signed = region.field.signed(point);
       if (signed < 0) surface -= region.rule.depth_m * smoothstep(0, region.rule.side_run_m, -signed);
     }
-    return fade * (surface - base);
+    return { fade, surface };
+  };
+  const siteDelta = (site, point, base) => {
+    const target = siteTarget(site, point);
+    return target ? target.fade * (target.surface - base) : 0;
   };
   const siteBoxes = sites.map((site) => site.scope.bounds);
 
@@ -679,16 +685,24 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
     (sampler(point[0] + RASTER_NORMAL_STEP_M, point[1]) - sampler(point[0] - RASTER_NORMAL_STEP_M, point[1])) / (2 * RASTER_NORMAL_STEP_M),
     (sampler(point[0], point[1] + RASTER_NORMAL_STEP_M) - sampler(point[0], point[1] - RASTER_NORMAL_STEP_M)) / (2 * RASTER_NORMAL_STEP_M),
   ];
-  // Shading normal: the raster's gradient (as the coarse land's) blended into
-  // the corrected surface's own where the correction applies.
+  // Shading normal: what the light sees is the raster's surface, as on all the
+  // generated land (raster gradients), pulled to each site's corrected surface by
+  // its fade, so corrected ground shades as its grade (a level lawn flat, with
+  // none of the raster's bumps) and the blend as the slope it makes:
+  // d/dx [(1 - f) r + f t] = (1 - f) r' + f t' + (t - r) f'.
   const normalAt = (point) => {
-    const cell = cellAt(point);
     let [slopeEast, slopeNorth] = rasterGradient(point);
-    if (cell) {
-      const deltaOf = (p) => deltaAt(p, coarseAt(cell, p));
+    for (const site of sites) {
+      const at = siteTarget(site, point);
+      if (!at) continue;
       const step = DELTA_NORMAL_STEP_M;
-      slopeEast += (deltaOf([point[0] + step, point[1]]) - deltaOf([point[0] - step, point[1]])) / (2 * step);
-      slopeNorth += (deltaOf([point[0], point[1] + step]) - deltaOf([point[0], point[1] - step])) / (2 * step);
+      const sample = (p) => siteTarget(site, p) ?? { fade: 0, surface: sampler(p[0], p[1]) };
+      const [east, west, north, south] = [[step, 0], [-step, 0], [0, step], [0, -step]].map(([dx, dy]) => sample([point[0] + dx, point[1] + dy]));
+      const raster = sampler(point[0], point[1]);
+      const blend = (gradient, ahead, behind) => (1 - at.fade) * gradient + at.fade * (ahead.surface - behind.surface) / (2 * step)
+        + (at.surface - raster) * (ahead.fade - behind.fade) / (2 * step);
+      slopeEast = blend(slopeEast, east, west);
+      slopeNorth = blend(slopeNorth, north, south);
     }
     const length = Math.hypot(slopeEast, 1, slopeNorth);
     return [-slopeEast / length, 1 / length, slopeNorth / length];
@@ -876,6 +890,62 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
     return { mesh: { vertices: out.vertices, normals: out.normals, uvs: out.uvs, indices: out.indices }, inserted };
   };
 
+  // A split coarse neighbour keeps its surface but gains edges, fanned from its
+  // new edge vertices across the cell. Under a building that no re-meshed cell
+  // reaches they would re-cut a foundation that otherwise stays as generated
+  // (it follows the land facets, and landmark forms match those wall records),
+  // so a site must leave such a neighbour unsplit: exclude the re-meshed cell
+  // beside it from the scope (scope.exclude_xz). A building that a re-meshed
+  // cell reaches has its foundation re-cut by that cell's facets anyway.
+  const remeshed = (geometry) => [...refined.values()].some((cell) => cell.mode === "leaves"
+    && multiPolygonArea(intersectMultiPolygons(rectangleMultiPolygon(cell.west, cell.south, cell.west + cellSizeM, cell.south + cellSizeM), geometry)) > 1e-6);
+  const buildingRings = [];
+  for (const object of playableObjects.values()) {
+    if (!(object.roles.includes("building") || object.roles.includes("building_part")) || !object.geometry) continue;
+    const box = multiPolygonBounds(object.geometry);
+    const near = siteBoxes.some((site) => box.max_x > site.min_x - cellSizeM && box.min_x < site.max_x + cellSizeM && box.max_y > site.min_y - cellSizeM && box.min_y < site.max_y + cellSizeM);
+    if (!near || remeshed(object.geometry)) continue;
+    for (const polygon of object.geometry) {
+      for (const ring of polygon) {
+        const xs = ring.map((point) => point[0]);
+        const ys = ring.map((point) => point[1]);
+        buildingRings.push({ key: object.row.source_key, ring, box: { min_x: Math.min(...xs), max_x: Math.max(...xs), min_y: Math.min(...ys), max_y: Math.max(...ys) } });
+      }
+    }
+  }
+  const orientation = (a, b, c) => (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]);
+  const crosses = (p, q, a, b) => {
+    const d1 = orientation(a, b, p);
+    const d2 = orientation(a, b, q);
+    const d3 = orientation(p, q, a);
+    const d4 = orientation(p, q, b);
+    return ((d1 > 1e-9 && d2 < -1e-9) || (d1 < -1e-9 && d2 > 1e-9)) && ((d3 > 1e-9 && d4 < -1e-9) || (d3 < -1e-9 && d4 > 1e-9));
+  };
+  const planEdges = (mesh) => {
+    const point = (index) => [mesh.vertices[index * 3], -mesh.vertices[index * 3 + 2]];
+    const edges = [];
+    for (let offset = 0; offset < mesh.indices.length; offset += 3) {
+      for (let k = 0; k < 3; k += 1) edges.push([point(mesh.indices[offset + k]), point(mesh.indices[offset + ((k + 1) % 3)])]);
+    }
+    return edges;
+  };
+  const onSegment = (point, [a, b]) => Math.abs(orientation(a, b, point)) <= 1e-6 * Math.hypot(b[0] - a[0], b[1] - a[1])
+    && Math.min(a[0], b[0]) - 1e-6 <= point[0] && point[0] <= Math.max(a[0], b[0]) + 1e-6
+    && Math.min(a[1], b[1]) - 1e-6 <= point[1] && point[1] <= Math.max(a[1], b[1]) + 1e-6;
+  const assertBuildingsUncut = (west, south, before, after, label) => {
+    const rings = buildingRings.filter(({ box }) => box.max_x > west && box.min_x < west + cellSizeM && box.max_y > south && box.min_y < south + cellSizeM);
+    if (rings.length === 0) return;
+    const original = planEdges(before);
+    for (const [p, q] of planEdges(after)) {
+      if (original.some((edge) => onSegment(p, edge) && onSegment(q, edge))) continue;
+      for (const { key, ring } of rings) {
+        for (let index = 0; index < ring.length; index += 1) {
+          invariant(!crosses(p, q, ring[index], ring[(index + 1) % ring.length]), `${label}: splitting this land cell for a terrain override would re-cut building ${key}'s foundation; exclude the re-meshed cell beside it from the site's scope`);
+        }
+      }
+    }
+  };
+
   // Meshes for the generator's per-cell callback (griddedTerrainSurfaceMesh).
   let neighbourInserts = 0;
   let refinedTriangles = 0;
@@ -892,11 +962,12 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
     if (!near) return coarse;
     const result = splitCoarseMesh(coarse, label);
     neighbourInserts += result.inserted;
+    assertBuildingsUncut(west, south, coarse, result.mesh, label);
     return result.mesh;
   };
 
   // The corrected surface's shading normal, for surfaces draped over it.
-  const smoothNormalAt = (east, north) => (cellAt([east, north]) ? normalAt([east, north]) : null);
+  const smoothNormalAt = (east, north) => normalAt([east, north]);
 
   const document = () => ({
     schema_version: TERRAIN_OVERRIDES_SCHEMA,

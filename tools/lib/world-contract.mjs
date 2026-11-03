@@ -170,6 +170,7 @@ export const MATERIAL_KEYS = Object.freeze([
   "park_gravel",
   "park_lawn",
   "park_mulch",
+  "park_paint_pink",
   "park_plaza_lens",
   "park_plaza_zigzag",
   "road_path",

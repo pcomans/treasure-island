@@ -60,6 +60,7 @@ export const PARK_SURFACE_MATERIALS = Object.freeze({
   park_gravel: "park-gravel",
   park_lawn: "park-lawn",
   park_mulch: "park-mulch",
+  park_paint_pink: "park-paint-pink",
   park_plaza_lens: "park-plaza-lens",
   park_plaza_zigzag: "park-plaza-zigzag",
 });
@@ -119,6 +120,12 @@ const WEAR_FIELDS = ["crack_per_100m2", "drain_spacing_m", "manhole_spacing_m", 
 const SURFACE_LAYER_FIELDS = ["evidence", "id", "material", "reason", "shape"];
 // Cut a path's surface into cells this size so its panel frame follows its bends.
 const PATH_FRAME_CELL_M = 8;
+// Park path markings (a layer's markings): line width, the edge lines' inset
+// from the path edge, the centre line's dash and gap, and their lift over the path.
+const PARK_LINE_WIDTH_M = 0.1;
+const PARK_EDGE_LINE_INSET_M = 0.25;
+const PARK_DASH_M = 3;
+const PARK_PAINT_LIFT_M = 0.006;
 
 function isFiniteNumber(value) {
   return typeof value === "number" && Number.isFinite(value);
@@ -140,7 +147,9 @@ function exactKeys(value, keys, label) {
 //   shape {osm_paths: true}               the zone's OSM footway and cycleway ribbons
 // Any shape may add minus_sources: OSM areas cut out of it (a breakwater). A
 // layer may add frame {origin_xz, axis_xz}: plaza paint is laid out in metres
-// along axis_xz from origin_xz.
+// along axis_xz from origin_xz. A way or line layer may add markings {edges,
+// centre}: painted edge lines and a dashed centre line along it (STREET_PAINT_KINDS
+// names, or null for none), as on a two-way cycle track.
 function validateParkSurfaces(surfaces, label) {
   exactKeys(surfaces, ["layers", "lift_m", "source_keys"], label);
   invariant(isFiniteNumber(surfaces.lift_m) && surfaces.lift_m > ROAD_SURFACE_BIASES_M.pedestrian && surfaces.lift_m < STREET_GROUND_MAXIMUM_HEIGHT_M, `${label} lift_m must lie above the pedestrian path skin and inside the street-ground band`);
@@ -149,7 +158,7 @@ function validateParkSurfaces(surfaces, label) {
   const ids = new Set();
   for (const layer of surfaces.layers) {
     const layerLabel = `${label} layer ${layer?.id}`;
-    exactKeys(layer, "frame" in (layer ?? {}) ? [...SURFACE_LAYER_FIELDS, "frame"] : SURFACE_LAYER_FIELDS, layerLabel);
+    exactKeys(layer, [...SURFACE_LAYER_FIELDS, ...["frame", "markings"].filter((field) => field in (layer ?? {}))], layerLabel);
     invariant(typeof layer.id === "string" && SAFE_ID.test(layer.id) && !ids.has(layer.id), `${layerLabel} needs a unique lower_snake id`);
     ids.add(layer.id);
     invariant(PARK_SURFACE_MATERIALS[layer.material] !== undefined, `${layerLabel} material must be one of ${Object.keys(PARK_SURFACE_MATERIALS).join(", ")}`);
@@ -178,6 +187,10 @@ function validateParkSurfaces(surfaces, label) {
       invariant(isXZ(layer.frame.origin_xz) && isXZ(layer.frame.axis_xz) && Math.hypot(...layer.frame.axis_xz) > 1e-6, `${layerLabel} frame needs origin_xz and a non-zero axis_xz`);
     }
     invariant(!layer.material.startsWith("park_plaza_") || layer.frame !== undefined, `${layerLabel}: painted plazas need a frame`);
+    if (layer.markings !== undefined) {
+      exactKeys(layer.markings, ["centre", "edges"], `${layerLabel} markings`);
+      invariant((shape.way || shape.line_xz) && ["centre", "edges"].every((field) => layer.markings[field] === null || STREET_PAINT_KINDS[layer.markings[field]] !== undefined), `${layerLabel} markings go on a way or line layer and name paint kinds (or null)`);
+    }
   }
 }
 
@@ -547,6 +560,24 @@ function strip(label, points, from, to) {
   const quads = [];
   for (let index = 1; index < points.length; index += 1) {
     const ring = [near[index - 1], near[index], far[index], far[index - 1]];
+    if (Math.abs(ringArea(ring)) < 1e-6) continue;
+    quads.push([[ringArea(ring) > 0 ? ring : ring.reverse()]]);
+  }
+  return union(label, quads);
+}
+
+// Dashes along a polyline at an offset to its left: dash metres painted, then as
+// many left bare, each dash a straight quad between its ends.
+function dashedStrip(label, points, offset, width, dash) {
+  const quads = [];
+  const total = polylineLength(points);
+  for (let start = dash / 2; start + dash <= total; start += dash * 2) {
+    const ends = [pointAlong(points, start), pointAlong(points, start + dash)];
+    const corners = ends.flatMap(({ point, tangent }) => {
+      const left = [-tangent[1], tangent[0]];
+      return [add(point, scale(left, offset - width / 2)), add(point, scale(left, offset + width / 2))];
+    });
+    const ring = [corners[0], corners[2], corners[3], corners[1]];
     if (Math.abs(ringArea(ring)) < 1e-6) continue;
     quads.push([[ringArea(ring) > 0 ? ring : ring.reverse()]]);
   }
@@ -1494,6 +1525,26 @@ export function generateStreetGround({
     } else {
       // Concrete elsewhere in panels on the world grid; other ground in world UV.
       addPiece(layer.material, polygon, height, layer.material === "park_concrete" ? tiledUv(kerb.panel_m * 2) : worldUv, true);
+    }
+    if (layer.markings) {
+      // Painted lines on the path itself, just above it: edge lines in from
+      // both edges and a dashed centre line.
+      const { line, offset } = layerLine(layer);
+      const half = layer.shape.width_m / 2;
+      const lines = [];
+      if (layer.markings.edges) {
+        for (const side of [-1, 1]) {
+          const at = offset + side * (half - PARK_EDGE_LINE_INSET_M);
+          lines.push([layer.markings.edges, strip(`park ${layer.id} edge line`, line, at - PARK_LINE_WIDTH_M / 2, at + PARK_LINE_WIDTH_M / 2)]);
+        }
+      }
+      if (layer.markings.centre) lines.push([layer.markings.centre, dashedStrip(`park ${layer.id} centre line`, line, offset, PARK_LINE_WIDTH_M, PARK_DASH_M)]);
+      for (const [kind, band] of lines) {
+        const painted = intersect(`park ${layer.id} paint`, band, polygon);
+        if (painted.length === 0) continue;
+        addPiece("marking", painted, constantHeight(lift + PARK_PAINT_LIFT_M), kindUv(STREET_PAINT_KINDS[kind]));
+        for (const key of entry.sources) sources.marking.add(key);
+      }
     }
   }
   const parkAt = (point) => parkLayers.find((entry) => inBox(entry.box, point) && entry.index.contains(point)) ?? null;

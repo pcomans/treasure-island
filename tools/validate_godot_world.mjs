@@ -67,6 +67,7 @@ import {
   STREET_VEGETATION_SCALE_RANGE,
   footSamples,
 } from "./lib/street-vegetation-generation.mjs";
+import { unpackPlantingRows } from "./lib/street-planting-generation.mjs";
 import {
   STREET_GROUND_FEATURE_KINDS,
   STREET_GROUND_MAXIMUM_HEIGHT_M,
@@ -106,6 +107,7 @@ const STREET_GROUND_RECORDS = Object.freeze({
   "park-gravel": ["street_paint", "park_gravel", "none", false],
   "park-lawn": ["street_paint", "park_lawn", "none", false],
   "park-mulch": ["street_paint", "park_mulch", "none", false],
+  "park-paint-pink": ["street_paint", "park_paint_pink", "none", false],
   "park-plaza-lens": ["street_paint", "park_plaza_lens", "none", false],
   "park-plaza-zigzag": ["street_paint", "park_plaza_zigzag", "none", false],
 });
@@ -813,7 +815,7 @@ function validatePlantedRow(row, groundAt) {
 function validateStreetDetail(worldRoot, manifest, records) {
   invariant(manifest.street_detail?.path === "street_detail.json", "Manifest street-detail descriptor is missing");
   invariant(stableJson(descriptor(worldRoot, manifest.street_detail.path)) === stableJson(manifest.street_detail), "Street-detail descriptor drift");
-  const document = JSON.parse(readFileSync(resolve(worldRoot, manifest.street_detail.path), "utf8"));
+  const document = unpackPlantingRows(JSON.parse(readFileSync(resolve(worldRoot, manifest.street_detail.path), "utf8")));
   invariant(document.schema_version === STREET_DETAIL_SCHEMA, "Street-detail schema drift");
   invariant(Number.isInteger(document.seed), "Street-detail seed is missing");
   invariant(stableJson(document.layers) === stableJson(STREET_DETAIL_LAYERS) && document.ground_layer === STREET_DETAIL_GROUND_LAYER, "Street-detail layer list drift");

@@ -42,6 +42,7 @@ import {
   streetDetailHardShapes,
   streetDetailPieces,
 } from "./lib/street-detail-generation.mjs";
+import { unpackPlantingRows } from "./lib/street-planting-generation.mjs";
 import { STREET_VEGETATION_PROPS } from "./lib/street-vegetation-generation.mjs";
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -53,7 +54,7 @@ function readJson(path) {
 
 function main() {
   const manifest = readJson(resolve(worldRoot, "manifest.json"));
-  const detail = readJson(resolve(worldRoot, manifest.street_detail.path));
+  const detail = unpackPlantingRows(readJson(resolve(worldRoot, manifest.street_detail.path)));
   const exclusions = loadStreetDetailZones(projectRoot).exclusions;
   const spawn = { xz: [manifest.initial_spawn.origin[0], manifest.initial_spawn.origin[2]], yaw: manifest.initial_spawn.yaw };
   const zones = streetDetailHardShapes(exclusions, spawn, loadStreetDetailStairFlights(projectRoot))
