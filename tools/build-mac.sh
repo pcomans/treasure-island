@@ -1,15 +1,23 @@
 #!/usr/bin/env bash
 # Builds the game for the owner's Mac, from the current commit.
 #
-#   tools/build-mac.sh            -> build/mac/treasure-island-mac-<commit>.zip
+#   tools/build-mac.sh                    -> build/mac/treasure-island-mac-<commit>.zip
+#   tools/build-mac.sh --headless-launch  the same, with step 3 headless (CI has no GPU)
 #
-# Unzip on the Mac, then right-click the app -> Open the first time (it is
-# ad-hoc signed, not notarized). Before handing it over this
+# Unzip on the Mac. The app is ad-hoc signed, not notarized: after a browser
+# download, allow its first launch in System Settings -> Privacy & Security.
+# Before handing it over this
 #   1. exports the macOS build and a Linux build of the same commit,
 #   2. checks both data packs contain only game files (no reference photos,
 #      research or evidence),
-#   3. launches the Linux build on the GPU and checks the island loads.
+#   3. launches the Linux build on the GPU (or, with --headless-launch, without
+#      rendering) and checks the island loads.
 set -euo pipefail
+case "$*" in
+  "") launch=() ;;
+  --headless-launch) launch=(--headless) ;;
+  *) echo "Usage: tools/build-mac.sh [--headless-launch]" >&2; exit 1 ;;
+esac
 root="$(cd "$(dirname "$0")/.." && pwd)"
 cd "${root}"
 if [ -n "$(git status --porcelain)" ]; then
@@ -55,7 +63,7 @@ done
 log="${work}/launch.log"
 # The only expected error: the game asks to capture a mouse the headless display doesn't have.
 errors() { grep -E '^ERROR|SCRIPT ERROR' "${log}" | grep -v 'Parameter "ss" is null'; }
-if ! GODOT_BIN="${root}/build/linux/treasure-island.x86_64" timeout 300 tools/godot --audio-driver Dummy -- --quit-on-ready >"${log}" 2>&1 \
+if ! GODOT_BIN="${root}/build/linux/treasure-island.x86_64" timeout 300 tools/godot "${launch[@]}" --audio-driver Dummy -- --quit-on-ready >"${log}" 2>&1 \
   || ! grep -q WORLD_READY "${log}" || errors >/dev/null; then
   errors | head -20
   echo "FAIL: the exported build did not load the island cleanly and exit"
