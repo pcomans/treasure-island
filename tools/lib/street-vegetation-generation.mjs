@@ -31,26 +31,29 @@ import { invariant, roundCoordinate } from "./world-contract.mjs";
 // and stands in a round mulch pit where its foot reaches paving; grasses,
 // perennials and shrubs have neither. A species' variants run from its
 // smallest (0) to its largest, so a rule picks a size class with [first, last];
-// a groundcover's last variant (dense_sedge, blue_eyed_grass, seaside_daisy,
-// sea_thrift: 3) is a drift of several plants, about 1-2 m across, in one row.
+// a drift variant packs several plants into one row: variant 3 of dense_sedge,
+// blue_eyed_grass, seaside_daisy, sea_thrift, pacific_reedgrass, rush and
+// bronze_clump_grass (about 1-2.5 m across) and variant 4 of dense_sedge (twelve
+// tussocks, about 2.5 m); its plants' bases run 0.15 m into the ground, so a
+// drift row may lie on a bed sloping up to about 10 %.
 const vegetationProp = (kinds, variants, footM, trunk) => Object.freeze({ kinds: Object.freeze(kinds), variants, foot_m: footM, trunk });
 // Low plants stand in grass_clump rows (a 0.35 m footprint) or, spaced wider,
 // in planting_slot rows (0.8 m).
 const LOW_PLANT_KINDS = Object.freeze(["grass_clump", "planting_slot"]);
 export const STREET_VEGETATION_PROPS = Object.freeze({
   blue_eyed_grass: vegetationProp(LOW_PLANT_KINDS, 4, 0.1, false),
-  bronze_clump_grass: vegetationProp(LOW_PLANT_KINDS, 3, 0.18, false),
+  bronze_clump_grass: vegetationProp(LOW_PLANT_KINDS, 4, 0.18, false),
   california_buckwheat: vegetationProp(LOW_PLANT_KINDS, 3, 0.25, false),
   california_sagebrush: vegetationProp(LOW_PLANT_KINDS, 3, 0.3, false),
   canary_date_palm: vegetationProp(["palm_slot", "tree"], 4, 0.7, true),
   clump_grass: vegetationProp(["grass_clump"], 4, 0.3, false),
-  dense_sedge: vegetationProp(LOW_PLANT_KINDS, 4, 0.18, false),
+  dense_sedge: vegetationProp(LOW_PLANT_KINDS, 5, 0.18, false),
   dune_tansy: vegetationProp(LOW_PLANT_KINDS, 3, 0.2, false),
   island_oak_young: vegetationProp(["tree"], 3, 0.3, true),
   mexican_fan_palm: vegetationProp(["palm_slot", "tree"], 6, 0.45, true),
   monterey_cypress: vegetationProp(["tree"], 5, 0.8, true),
-  pacific_reedgrass: vegetationProp(LOW_PLANT_KINDS, 3, 0.25, false),
-  rush: vegetationProp(LOW_PLANT_KINDS, 3, 0.2, false),
+  pacific_reedgrass: vegetationProp(LOW_PLANT_KINDS, 4, 0.25, false),
+  rush: vegetationProp(LOW_PLANT_KINDS, 4, 0.2, false),
   sea_thrift: vegetationProp(LOW_PLANT_KINDS, 4, 0.12, false),
   seaside_daisy: vegetationProp(LOW_PLANT_KINDS, 4, 0.2, false),
   seaside_woolly_sunflower: vegetationProp(LOW_PLANT_KINDS, 3, 0.3, false),

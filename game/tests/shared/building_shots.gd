@@ -46,8 +46,9 @@ extends SceneTree
 ## Plant galleries: a --street-views plan may also plant street-vegetation kit
 ##   props for its shots (a species gallery, a test bed), visual only and gone
 ##   after them: "beds": [{"name": "...", "center_xz": [x,z], "size_m": [w,d],
-##   "ground": "mulch"}] lays a bed of mulch (or "gravel", or the streets'
-##   "street_mulch") 2 cm over the drawn ground, later beds over earlier ones,
+##   "ground": "mulch", "edge_m": 0.0}] lays a bed of mulch (or "gravel", or the
+##   streets' "street_mulch") 2 cm over the drawn ground, later beds over earlier
+##   ones, its edge fading out unevenly over edge_m when that is set,
 ##   and "plants": [{"group": "...", "prop": "...", "variant": 0, "scale": 1.0,
 ##   "xz": [x,z], "yaw": 0.0}] stands kit props on the beds (or on the drawn
 ##   ground), built as the world builds its vegetation; the aiming reticle is
@@ -314,16 +315,16 @@ func _plant_gallery(plan: Dictionary) -> Dictionary:
 	for bed: Variant in beds:
 		if not bed is Dictionary or not bed.get("name") is String or not _numbers(bed.get("center_xz"), 2) or not _numbers(bed.get("size_m"), 2) \
 		or float(bed.size_m[0]) <= 0.0 or float(bed.size_m[1]) <= 0.0 or float(bed.size_m[0]) > 60.0 or float(bed.size_m[1]) > 60.0 \
-		or not BED_GROUNDS.has(bed.get("ground", "mulch")):
+		or not BED_GROUNDS.has(bed.get("ground", "mulch")) or not _numbers([bed.get("edge_m", 0.0)], 1) or float(bed.get("edge_m", 0.0)) < 0.0 or float(bed.get("edge_m", 0.0)) > 5.0:
 			root.free()
-			return {"error": "a bed needs a name, center_xz, a size_m of up to 60 m and a ground of %s" % ", ".join(PackedStringArray(BED_GROUNDS.keys()))}
+			return {"error": "a bed needs a name, center_xz, a size_m of up to 60 m, a ground of %s and an edge_m of 0-5 m" % ", ".join(PackedStringArray(BED_GROUNDS.keys()))}
 		var grid := _bed_grid(Vector2(bed.center_xz[0], bed.center_xz[1]), Vector2(bed.size_m[0], bed.size_m[1]), ground, BED_LIFT_M + BED_LAYER_M * grids.size())
 		if grid.has("error"):
 			root.free()
 			return {"error": "bed %s: %s" % [bed.name, grid.error]}
 		# Plants stand on the topmost bed under them.
 		grids.push_front(grid)
-		root.add_child(_bed_mesh(str(bed.name), grid, str(bed.get("ground", "mulch"))))
+		root.add_child(_bed_mesh(str(bed.name), grid, str(bed.get("ground", "mulch")), float(bed.get("edge_m", 0.0))))
 	var rows := {}
 	for index in (plants as Array).size():
 		var plant: Variant = plants[index]
@@ -407,8 +408,10 @@ func _bed_height(grids: Array[Dictionary], xz: Vector2) -> float:
 	return NAN
 
 
-## The bed's surface of its ground texture in 2 m tiles, as the planting strips draw theirs.
-func _bed_mesh(name: String, grid: Dictionary, ground: String) -> MeshInstance3D:
+## The bed's surface of its ground texture in 2 m tiles, as the planting strips
+## draw theirs; with edge_m, its edge fades out unevenly over that width (a
+## gravel patch worked into the mulch round it, not a cut square).
+func _bed_mesh(name: String, grid: Dictionary, ground: String, edge_m: float) -> MeshInstance3D:
 	var counts: Vector2i = grid.counts
 	var origin: Vector2 = grid.origin
 	var step: Vector2 = grid.step
@@ -419,6 +422,13 @@ func _bed_mesh(name: String, grid: Dictionary, ground: String) -> MeshInstance3D
 		for i in counts.x:
 			var x := origin.x + i * step.x
 			var z := origin.y + j * step.y
+			var alpha := 1.0
+			if edge_m > 0.0:
+				var inside := minf(minf(i * step.x, (counts.x - 1 - i) * step.x), minf(j * step.y, (counts.y - 1 - j) * step.y))
+				# A fixed per-vertex wobble, so the fade's outline is ragged.
+				var wobble := (fposmod(sin(float(i) * 12.9898 + float(j) * 78.233) * 43758.5453, 1.0) - 0.5) * edge_m
+				alpha = clampf((inside + wobble) / edge_m, 0.0, 1.0)
+			surface.set_color(Color(1.0, 1.0, 1.0, alpha))
 			surface.set_uv(Vector2(x, z) / 2.0)
 			surface.add_vertex(Vector3(x, heights[j * counts.x + i], z))
 	for j in counts.y - 1:
@@ -435,6 +445,9 @@ func _bed_mesh(name: String, grid: Dictionary, ground: String) -> MeshInstance3D
 	var material := StandardMaterial3D.new()
 	material.albedo_texture = load(BED_GROUNDS[ground])
 	material.roughness = 1.0
+	if edge_m > 0.0:
+		material.vertex_color_use_as_albedo = true
+		material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
 	var instance := MeshInstance3D.new()
 	instance.name = "Bed_" + name.validate_node_name()

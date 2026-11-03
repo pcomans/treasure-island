@@ -32,22 +32,27 @@ const SETS := {
 ## the kit): side views drawn on crossed cards, and the litter.
 const MEADOW_CELLS := [
 	"reedgrass_clump.png", "sedge_tussock.png", "rush_clump.png", "bronze_grass.png",
-	"blue_eyed_grass.png", "thrift_stalks.png", "umbel_stalks.png", "daisy_stalks.png",
+	"blue_eyed_grass.png", "thrift_stalks.png", "umbel_stalks.png", "thrift_side.png",
 	"woolly_stalks.png", "monkey_stalks.png", "tansy_stalks.png", "buckwheat_stalks.png",
 	"sagebrush_side.png", "sage_side.png", "litter.png", "buckwheat_side.png",
 ]
-## The perennial atlas's 512 x 512 cells in 2048 x 1024: face-on foliage clusters.
+## The perennial atlas's 512 x 512 cells in 2048 x 1536: face-on foliage
+## clusters, and the top views the kit lays over clumps as caps.
 const PERENNIAL_CELLS := [
 	"daisy_foliage.png", "thrift_cushion.png", "woolly_foliage.png", "sagebrush_foliage.png",
 	"yarrow_foliage.png", "buckwheat_foliage.png", "monkeyflower_foliage.png", "tansy_foliage.png",
+	"tussock_top.png", "bronze_top.png", "daisy_bloom.png",
 ]
 const MAGENTA := Color(1.0, 0.0, 1.0)
 const CYAN := Color(0.0, 1.0, 1.0)
 ## Sources generated on cyan, so their pink, lilac and blue flowers survive the key.
-const ON_CYAN := ["blue_eyed_grass.png", "thrift_stalks.png", "daisy_stalks.png", "sage_side.png"]
+const ON_CYAN := ["blue_eyed_grass.png", "thrift_stalks.png", "daisy_bloom.png", "sage_side.png"]
 ## Pixels a low-plant image keeps clear round its atlas cell's edge, so mipmaps
 ## don't pull a neighbouring cell's leaves into a card's outline.
 const CELL_MARGIN := 8
+## Top views the kit lays over clumps as caps fade out from their middle, so a
+## cap fills a clump's dense core from above without a flat rim of its own.
+const CAP_CELLS := ["tussock_top.png", "bronze_top.png", "thrift_cushion.png"]
 ## Low-plant images graded toward the dated Cityside photos and November:
 ## [tint, desaturation]. The generated sedge, tansy and monkeyflower came out
 ## lime, the rush yellow-green, the bronze sedge orange rather than copper-tan,
@@ -56,17 +61,22 @@ const CELL_MARGIN := 8
 const LOW_GRADES := {
 	"sedge_tussock.png": [Color(0.72, 0.78, 0.68), 0.5],
 	"rush_clump.png": [Color(0.86, 0.92, 0.88), 0.2],
-	"bronze_grass.png": [Color(0.86, 0.78, 0.7), 0.5],
+	"bronze_grass.png": [Color(0.82, 0.74, 0.66), 0.6],
 	"sagebrush_foliage.png": [Color(0.8, 0.86, 0.78), 0.0],
 	"sagebrush_side.png": [Color(0.74, 0.84, 0.72), 0.0],
 	"litter.png": [Color(0.78, 0.74, 0.7), 0.35],
-	"woolly_stalks.png": [Color(0.86, 0.82, 0.78), 0.3],
-	"buckwheat_stalks.png": [Color(0.84, 0.76, 0.7), 0.35],
-	"buckwheat_side.png": [Color(0.9, 0.92, 0.86), 0.1],
+	"woolly_stalks.png": [Color(0.78, 0.72, 0.66), 0.55],
+	"buckwheat_stalks.png": [Color(0.74, 0.68, 0.62), 0.85],
+	"buckwheat_side.png": [Color(0.84, 0.85, 0.8), 0.45],
 	"monkeyflower_foliage.png": [Color(0.86, 0.9, 0.82), 0.2],
 	"tansy_foliage.png": [Color(0.84, 0.88, 0.8), 0.25],
-	"daisy_foliage.png": [Color(0.92, 0.94, 0.9), 0.1],
-	"woolly_foliage.png": [Color(0.94, 0.95, 0.92), 0.05],
+	"daisy_foliage.png": [Color(0.86, 0.9, 0.86), 0.3],
+	"daisy_bloom.png": [Color(0.9, 0.92, 0.9), 0.15],
+	"woolly_foliage.png": [Color(0.74, 0.8, 0.72), 0.15],
+	"tussock_top.png": [Color(0.9, 0.95, 0.85), 0.2],
+	"bronze_top.png": [Color(0.9, 0.85, 0.8), 0.3],
+	"thrift_side.png": [Color(0.82, 0.88, 0.82), 0.15],
+	"thrift_cushion.png": [Color(0.86, 0.9, 0.86), 0.1],
 }
 
 
@@ -207,16 +217,18 @@ func _pack_meadow(images: Dictionary, errors: Array[String]) -> void:
 	_save(atlas, OUT + "meadow_atlas.png", errors)
 
 
-## The perennials' and shrubs' face-on foliage clusters, 2048 x 1024 in 512 x
-## 512 cells like the meadow atlas (PERENNIAL_CELLS).
+## The perennials' and shrubs' face-on foliage clusters and the caps' top views,
+## 2048 x 1536 in 512 x 512 cells like the meadow atlas (PERENNIAL_CELLS).
 func _pack_perennial(images: Dictionary, errors: Array[String]) -> void:
 	var cells := PERENNIAL_CELLS
-	var atlas := Image.create_empty(2048, 1024, false, Image.FORMAT_RGBA8)
+	var atlas := Image.create_empty(2048, 1536, false, Image.FORMAT_RGBA8)
 	for index in cells.size():
 		var name: String = cells[index]
 		var cell := _keyed_fit(images[name], 512 - 2 * CELL_MARGIN, 512 - 2 * CELL_MARGIN, CYAN if name in ON_CYAN else MAGENTA)
 		if LOW_GRADES.has(name):
 			_grade(cell, LOW_GRADES[name][0], LOW_GRADES[name][1])
+		if name in CAP_CELLS:
+			_radial_fade(cell, 0.22, 0.48)
 		atlas.blit_rect(cell, Rect2i(Vector2i.ZERO, cell.get_size()), Vector2i(512 * (index % 4) + CELL_MARGIN, 512 * (index / 4) + CELL_MARGIN))
 	_fill_transparent(atlas)
 	_save(atlas, OUT + "perennial_atlas.png", errors)
@@ -250,7 +262,7 @@ func _pack_park_ground(images: Dictionary, errors: Array[String]) -> void:
 		# Darker than generated: in the game's sun the generated mulch read pale pink-grey
 		# and the gravel near white, against the dark beds of the dated photos.
 		"park_mulch.png": ["park_mulch.png", Color(0.72, 0.7, 0.68), 0.2],
-		"park_gravel.png": ["park_gravel.png", Color(0.72, 0.72, 0.72), 0.1],
+		"park_gravel.png": ["park_gravel.png", Color(0.62, 0.62, 0.62), 0.1],
 	}, errors)
 
 
@@ -413,6 +425,19 @@ func _straw(image: Image) -> void:
 		data[i + 2] = mini(data[i + 2], int(g * 0.88))
 		data[i] = mini(data[i], int(g * 1.18) + 10)
 	image.set_data(image.get_width(), image.get_height(), false, Image.FORMAT_RGBA8, data)
+
+
+## Fades alpha out from inner to outer (fractions of the image's width) from its middle.
+func _radial_fade(image: Image, inner: float, outer: float) -> void:
+	var w := image.get_width()
+	var h := image.get_height()
+	var data := image.get_data()
+	for y in h:
+		for x in w:
+			var r := Vector2((x + 0.5) / w - 0.5, (y + 0.5) / h - 0.5).length()
+			var i := (y * w + x) * 4 + 3
+			data[i] = int(round(data[i] * (1.0 - smoothstep(inner, outer, r))))
+	image.set_data(w, h, false, Image.FORMAT_RGBA8, data)
 
 
 ## Multiplies visible colour by tint and pulls it toward grey by desaturate (0..1).
