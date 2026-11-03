@@ -66,9 +66,7 @@ func configure_records(wall:Dictionary,roof:Dictionary,source_builder:Callable,t
 		_append_source_run(source_walls,wall,run,true)
 	_append_source_roof(source_roof,roof)
 	var pale:=_public_wall_material(config)
-	# The protected NNW notch runs keep their exact geometry and no openings, but
-	# carry the unit's one pale finish instead of the generic placeholder (2026-11-03).
-	_add_original_wall_subset("ProtectedExactNeutralWallRuns",wall_mesh,wall,PROTECTED_RUNS,wall_mesh.get_active_material(0) if baseline else pale)
+	_add_original_wall_subset("ProtectedExactNeutralWallRuns",wall_mesh,wall,PROTECTED_RUNS,wall_mesh.get_active_material(0))
 	_add_original_wall_subset("ObservedWSWNNWPaleWallFields",wall_mesh,wall,OBSERVED_RUNS,wall_mesh.get_active_material(0) if baseline else pale)
 	_add_original_wall_subset("InferredENESSEPaleWallFields",wall_mesh,wall,INFERRED_RUNS,wall_mesh.get_active_material(0) if baseline else pale)
 	var roof_copy:=MeshInstance3D.new();roof_copy.name="ExactSourceNeutralRoof"
