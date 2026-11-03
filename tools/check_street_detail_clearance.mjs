@@ -23,9 +23,9 @@
 // stadium that holds its rectangle; any other by its point or line and its
 // kind's radius (streetDetailPieces). Built fences must also never shut walkable
 // ground in: around each one, the ground no building, built fence, street prop,
-// parked car or the island's edge covers, at the stock capsule's reach, must all
-// connect to the open ground beyond, so a player anywhere near a fence can walk
-// out without the jetpack.
+// parked car, tree trunk or the island's edge covers, at the stock capsule's
+// reach, must all connect to the open ground beyond, so a player anywhere near a
+// fence can walk out without the jetpack. Grass clumps have no collision.
 
 import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -141,9 +141,9 @@ function fencedPockets(manifest, detail) {
   const solids = [];
   for (const row of detail.rows) {
     if (row.status !== "placed") continue;
-    // Built fences, street props and parked cars (every row the runtime builds
-    // with collision), each grown by the capsule radius.
-    if (row.prop != null && (row.fence || ["furniture", "clutter"].includes(row.layer))) {
+    // Built fences, street props, parked cars and tree trunks (every row the
+    // runtime builds with collision), each grown by the capsule radius.
+    if (row.prop != null && (row.fence || ["furniture", "clutter"].includes(row.layer) || (row.layer === "vegetation" && row.kind !== "grass_clump"))) {
       for (const piece of streetDetailPieces(row)) solids.push({ points: piece.points, radius: piece.radius + PLAYER_CAPSULE_RADIUS_M });
     }
   }

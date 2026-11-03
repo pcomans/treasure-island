@@ -80,7 +80,13 @@ func street_detail_summary() -> String:
 	if "clutter" in on:
 		for child: Node in world.street_detail_layer("clutter").get_children():
 			clutter += int(child.get_meta("items", 0))
-	return "STREET_DETAIL on=%s source=%s rows=%d furniture_props=%d fences=%d clutter_items=%d" % [",".join(PackedStringArray(on)) if not on.is_empty() else "none", evidence.street_detail_source, evidence.street_detail_rows, furniture, fences, clutter]
+	var trees := 0
+	var grass := 0
+	if "vegetation" in on:
+		for child: Node in world.street_detail_layer("vegetation").get_children():
+			trees += int(child.get_meta("trees", 0))
+			grass += int(child.get_meta("grass_clumps", 0))
+	return "STREET_DETAIL on=%s source=%s rows=%d furniture_props=%d fences=%d clutter_items=%d trees=%d grass_clumps=%d" % [",".join(PackedStringArray(on)) if not on.is_empty() else "none", evidence.street_detail_source, evidence.street_detail_rows, furniture, fences, clutter, trees, grass]
 
 
 ## What is wrong with the loaded street-detail state: a layer that is off must

@@ -1,7 +1,8 @@
 # Treasure Island
 
 A private Godot game of Treasure Island, San Francisco, built autonomously by
-agents: walk, run, jetpack, and spray a tag on building walls. The whole island
+agents: as a treasure chest full of gold on rubber-hose legs, walk, run, jetpack,
+and spray a tag on building walls. The whole island
 comes from a frozen OpenStreetMap snapshot; agents improve its buildings one at a
 time so they look like the real ones.
 

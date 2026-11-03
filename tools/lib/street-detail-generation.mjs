@@ -14,9 +14,18 @@ import { resolve } from "node:path";
 
 import { projectLonLat } from "./coordinates.mjs";
 import { geometryToLine, pointInMultiPolygon, pointInRing, selectGeometry } from "./osm-geometry.mjs";
-import { footprintPiece, placeStreetClutter, STREET_CLUTTER_FOOTPRINTS, STREET_CLUTTER_PROPS, validateClutterRules } from "./street-clutter-generation.mjs";
+import { footprintPiece, placeStreetClutter, STREET_CLUTTER_FOOTPRINTS, STREET_CLUTTER_PROPS, validateClutterRules, visibleGroundIndex } from "./street-clutter-generation.mjs";
 import { placeStreetFences, validateFenceRules } from "./street-fence-generation.mjs";
-import { placeStreetFurniture, STREET_FURNITURE_FOOTPRINTS, STREET_FURNITURE_PROPS, validateFurnitureRules } from "./street-furniture-generation.mjs";
+import { placeStreetFurniture, settleOnFeet, STREET_FURNITURE_FEET, STREET_FURNITURE_FOOTPRINTS, STREET_FURNITURE_PROPS, validateFurnitureRules } from "./street-furniture-generation.mjs";
+import {
+  STREET_VEGETATION_PROPS,
+  bedOffsets,
+  drawVegetationVariant,
+  footSamples,
+  plantRow,
+  validateVegetationRuleParams,
+  validateVegetationSetPieceParams,
+} from "./street-vegetation-generation.mjs";
 import { VEGETATION_QA_CORRIDORS } from "./vegetation-generation.mjs";
 import {
   BOUNDARY_ATTACHED_SOURCE_KEYS,
@@ -98,14 +107,16 @@ export const STREET_DETAIL_KINDS = Object.freeze({
   fence: lineKind("fences", 0.05),
   fire_hydrant: pointKind("furniture", 0.25, "faces_road"),
   gate: pointKind("fences", 0.1, "host_barrier"),
+  grass_clump: pointKind("vegetation", 0.35, "seeded"),
   hedge: lineKind("vegetation", 0.5),
   information_board: pointKind("furniture", 0.6, "faces_road"),
   jersey_barrier: lineKind("fences", 0.35),
   kerb: pointKind(STREET_DETAIL_GROUND_LAYER, 0, "crossing"),
   log_barrier: lineKind("fences", 0.25),
+  // A fan palm's foot (its flared trunk and roots); date palms and cypresses are trees.
+  palm_slot: pointKind("vegetation", 0.4, "seeded"),
   // A parked car's footprint is its own rectangle (footprint_m on the row);
   // the radius is its half width for whoever reads only the kind.
-  palm_slot: pointKind("vegetation", 0.6, "seeded"),
   parked_car: pointKind("clutter", 1.0, "seeded"),
   planting_slot: pointKind("vegetation", 0.8, "seeded"),
   post_box: pointKind("furniture", 0.35, "faces_road"),
@@ -118,6 +129,7 @@ export const STREET_DETAIL_KINDS = Object.freeze({
   street_sign: pointKind("furniture", 0.15, "faces_road"),
   traffic_cone: pointKind("clutter", 0.2, "seeded"),
   traffic_signals: pointKind("furniture", 0.25, "host_road"),
+  tree: pointKind("vegetation", 0.8, "seeded"),
   wall: lineKind("fences", 0.15),
   waste_basket: pointKind("furniture", 0.35, "faces_road"),
 });
@@ -367,21 +379,53 @@ function validateExclusions(exclusions) {
   invariant(exclusions.approach_length_m > 0, "Street detail approach length must be positive");
 }
 
+// A scatter rule places point rows of its kind: on a grid over the zone, along
+// OSM ways at fixed offsets, or (along_beds) at the middle of the planting bed
+// found across a way on each named side. A vegetation rule may also plant: a
+// kit prop (tools/lib/street-vegetation-generation.mjs) with the variants and
+// scale it draws, the surfaces it may stand on, a polygon it keeps within and,
+// like the furniture rules, its basis, rule and dated evidence.
 function validateScatterRule(rule, zoneId, ruleIds) {
   const label = `Street detail zone ${zoneId} scatter rule ${rule?.id}`;
   invariant(typeof rule?.id === "string" && SAFE_ID.test(rule.id) && !ruleIds.has(rule.id), `${label} needs a unique lower_snake id`);
   ruleIds.add(rule.id);
   const kind = STREET_DETAIL_KINDS[rule.kind];
   invariant(kind && kind.geometry === "point" && STREET_DETAIL_LAYERS.includes(kind.layer), `${label} has a non-scatter kind ${rule.kind}`);
-  invariant(["grid", "along"].includes(rule.pattern), `${label} pattern must be grid or along`);
+  invariant(["grid", "along", "along_beds"].includes(rule.pattern), `${label} pattern must be grid, along or along_beds`);
   invariant(isFiniteNumber(rule.spacing_m) && rule.spacing_m > 0, `${label} spacing must be positive`);
   invariant(isFiniteNumber(rule.jitter_m) && rule.jitter_m >= 0 && rule.jitter_m < rule.spacing_m, `${label} jitter must be below spacing`);
   invariant(isFiniteNumber(rule.acceptance) && rule.acceptance > 0 && rule.acceptance <= 1, `${label} acceptance must be in (0, 1]`);
-  if (rule.pattern === "along") {
-    invariant(Array.isArray(rule.source_keys) && rule.source_keys.length > 0 && rule.source_keys.every((key) => /^w\d+$/u.test(key)), `${label} needs OSM way source_keys`);
-    invariant(Array.isArray(rule.offsets_m) && rule.offsets_m.length > 0 && rule.offsets_m.every(isFiniteNumber), `${label} needs numeric offsets_m`);
+  if (rule.pattern === "grid") {
+    invariant(rule.source_keys == null && rule.offsets_m == null && rule.sides == null && rule.reach_m == null, `${label}: grid rules take no source_keys, offsets_m, sides or reach_m`);
   } else {
-    invariant(rule.source_keys == null && rule.offsets_m == null, `${label}: grid rules take no source_keys or offsets_m`);
+    invariant(Array.isArray(rule.source_keys) && rule.source_keys.length > 0 && rule.source_keys.every((key) => /^w\d+$/u.test(key)), `${label} needs OSM way source_keys`);
+  }
+  if (rule.pattern === "along") {
+    invariant(Array.isArray(rule.offsets_m) && rule.offsets_m.length > 0 && rule.offsets_m.every(isFiniteNumber), `${label} needs numeric offsets_m`);
+    invariant(rule.sides == null && rule.reach_m == null, `${label}: along rules take offsets_m, not sides or reach_m`);
+  }
+  if (rule.pattern === "along_beds") {
+    invariant(rule.offsets_m == null, `${label}: along_beds rules take sides and reach_m, not offsets_m`);
+    invariant(Array.isArray(rule.sides) && rule.sides.length > 0 && rule.sides.every((side) => ["left", "right"].includes(side)) && new Set(rule.sides).size === rule.sides.length, `${label} sides must list left and/or right`);
+    invariant(Array.isArray(rule.reach_m) && rule.reach_m.length === 2 && rule.reach_m.every(isFiniteNumber) && rule.reach_m[0] >= 0 && rule.reach_m[1] > rule.reach_m[0], `${label} reach_m must be [near, far] metres from the way`);
+    invariant(isFiniteNumber(rule.min_bed_m) && rule.min_bed_m > 0, `${label} needs a positive min_bed_m`);
+    invariant(Array.isArray(rule.surfaces), `${label}: along_beds needs the bed surfaces`);
+  } else {
+    invariant(rule.min_bed_m == null, `${label}: only along_beds takes min_bed_m`);
+  }
+  if (rule.surfaces != null) {
+    invariant(Array.isArray(rule.surfaces) && rule.surfaces.length > 0 && rule.surfaces.every((key) => typeof key === "string" && key !== "") && new Set(rule.surfaces).size === rule.surfaces.length, `${label} surfaces must list material keys`);
+  }
+  if (rule.within_xz != null) {
+    invariant(Array.isArray(rule.within_xz) && rule.within_xz.length >= 3 && rule.within_xz.every(isXZ), `${label} within_xz must be a polygon of 3+ [x, z] points`);
+  }
+  if (rule.prop != null) {
+    invariant(kind.layer === "vegetation" && STREET_VEGETATION_PROPS[rule.prop]?.kinds.includes(rule.kind), `${label}: prop ${rule.prop} does not plant a ${rule.kind}`);
+    validateVegetationRuleParams(rule.prop, rule.params, label);
+    invariant(rule.basis === "production_inference", `${label} basis must be production_inference`);
+    for (const field of ["rule", "evidence"]) invariant(typeof rule[field] === "string" && rule[field].trim() !== "", `${label} needs ${field}`);
+  } else {
+    invariant(rule.params == null && rule.basis == null, `${label}: params and basis go with a prop`);
   }
 }
 
@@ -466,9 +510,15 @@ export function loadStreetDetailSetPieces(projectRoot) {
         `${label} asset must be an existing res://game/resources/ file`,
       );
     } else {
-      const props = kind.layer === "furniture" ? STREET_FURNITURE_PROPS : kind.layer === "clutter" ? STREET_CLUTTER_PROPS : {};
-      invariant(props[entry.prop] === entry.kind, `${label}: prop ${entry.prop} does not build a ${entry.kind} in the ${kind.layer} layer`);
-      invariant(entry.params != null && typeof entry.params === "object" && !Array.isArray(entry.params), `${label} params must be an object`);
+      // Trees of the street-vegetation kit (street_vegetation_kit.gd), or a
+      // furniture or clutter kit prop of its kind's layer.
+      if (kind.layer === "vegetation") {
+        validateVegetationSetPieceParams(entry.prop, entry.kind, entry.params, label);
+      } else {
+        const props = kind.layer === "furniture" ? STREET_FURNITURE_PROPS : kind.layer === "clutter" ? STREET_CLUTTER_PROPS : {};
+        invariant(props[entry.prop] === entry.kind, `${label}: prop ${entry.prop} does not build a ${entry.kind} in the ${kind.layer} layer`);
+        invariant(entry.params != null && typeof entry.params === "object" && !Array.isArray(entry.params), `${label} params must be an object`);
+      }
     }
     invariant(isXZ(entry.xz), `${label} xz must be [x, z]`);
     invariant(isFiniteNumber(entry.yaw) && entry.yaw >= -Math.PI && entry.yaw <= Math.PI, `${label} yaw must be radians in [-pi, pi]`);
@@ -589,6 +639,59 @@ function compassDirectionDegrees(value) {
 
 export const planDistance = polylinePolylineDistance;
 
+// The point target metres along a polyline, stepped offset metres to the left
+// of its direction (to the right when negative), in plan with north up.
+function alongPoint(line, target, offset) {
+  let walked = 0;
+  for (let index = 1; index < line.length; index += 1) {
+    const segment = Math.hypot(line[index][0] - line[index - 1][0], line[index][1] - line[index - 1][1]);
+    if (walked + segment >= target || index === line.length - 1) {
+      const fraction = segment > 0 ? Math.min(1, (target - walked) / segment) : 0;
+      const dx = (line[index][0] - line[index - 1][0]) / (segment || 1);
+      const dz = (line[index][1] - line[index - 1][1]) / (segment || 1);
+      // Left of travel with north up: rotate the heading a quarter turn counterclockwise in plan.
+      return [
+        line[index - 1][0] + dx * segment * fraction + dz * offset,
+        line[index - 1][1] + dz * segment * fraction - dx * offset,
+      ];
+    }
+    walked += segment;
+  }
+  invariant(false, "alongPoint needs a polyline of two or more points");
+  return null;
+}
+
+// An OSM way of the frozen proper extract as a world [x, z] polyline.
+function wayLineIn(properSources) {
+  return (sourceKey) => {
+    const source = properSources.get(sourceKey);
+    invariant(source, `Street detail way ${sourceKey} is not in the frozen OSM extract`);
+    return geometryToLine(selectGeometry(source, "line"), sourceKey).map(toWorld);
+  };
+}
+
+// The zones' shapes, queried with world points: {zone, contains(xz), bounds}.
+// The placeholder vegetation (tools/lib/vegetation-generation.mjs) keeps out of
+// the pilot zones, which the street-detail vegetation now plants.
+export function streetDetailZoneShapes(config, properSources) {
+  const wayLine = wayLineIn(properSources);
+  return config.zones.map((zone) => {
+    if (zone.shape.type === "polygon") {
+      const ring = zone.shape.points_xz.map((point) => [point[0], point[1]]);
+      const bounds = boundsOf(ring);
+      return { zone, contains: (xz) => pointInRing(xz, ring, true), bounds };
+    }
+    const lines = zone.shape.source_keys.map(wayLine);
+    const halfWidth = zone.shape.half_width_m;
+    const all = boundsOf(lines.flat());
+    return {
+      zone,
+      contains: (xz) => lines.some((line) => polylineDistance(xz, line) <= halfWidth),
+      bounds: { min_x: all.min_x - halfWidth, min_y: all.min_y - halfWidth, max_x: all.max_x + halfWidth, max_y: all.max_y + halfWidth },
+    };
+  });
+}
+
 // The plan footprint of a placed row for clearance checks, as pieces of
 // {points (world x, z), radius}: a fence's solid runs with its half thickness;
 // a row with a footprint (a parked car, a long bench) the stadium that holds
@@ -622,6 +725,8 @@ export function generateStreetDetail({
   const seed = config.seed;
   const spawnXZ = [spawn.xz[0], spawn.xz[1]];
   const hardShapes = streetDetailHardShapes(exclusions, spawn, stairFlights);
+  // The visible ground (draped areas, raised street ground, land) a planted row rests on.
+  const groundAt = visibleGroundIndex(chunks);
 
   const objects = [...playableObjects.values()];
   const buildings = polygonSet(objects
@@ -630,6 +735,11 @@ export function generateStreetDetail({
   const roads = polygonSet(objects
     .filter((object) => object.roles.includes("roads_paths"))
     .map((object) => ({ key: object.row.source_key, geometry: object.geometry, visual_class: object.road_visual_class })));
+  // Plants keep off roads and paths too, except the OSM sidewalks a zone's
+  // street ground photographed at the curb: their mulch bed takes that ground
+  // (planting_behind_walk), so a plant may stand where the OSM line runs.
+  const bedSidewalks = new Set(config.zones.flatMap((zone) => (zone.ground?.planting_behind_walk ?? []).flatMap((entry) => entry.source_keys)));
+  const plantRoads = polygonSet(roads.items.filter((item) => !bedSidewalks.has(item.key)));
   const shorelineOverlays = polygonSet(objects
     .filter((object) => object.roles.includes("terrain_shoreline") && !object.logical_key.startsWith("land:") && !object.boundary_attached_visual)
     .map((object) => ({ key: object.row.source_key, geometry: object.geometry })));
@@ -641,11 +751,7 @@ export function generateStreetDetail({
       return { key: object.row.source_key, geometry: object.geometry, feature_kind: style.feature_kind, material_key: style.material_key, bias_m: style.elevation_m };
     }));
 
-  const wayLine = (sourceKey) => {
-    const source = properSources.get(sourceKey);
-    invariant(source, `Street detail way ${sourceKey} is not in the frozen OSM extract`);
-    return geometryToLine(selectGeometry(source, "line"), sourceKey).map(toWorld);
-  };
+  const wayLine = wayLineIn(properSources);
   // Raw topology (node order and ids) for proper-extract ways; the extract's
   // geometry for these ways matches the raw nodes exactly.
   const rawWay = (sourceKey) => {
@@ -901,22 +1007,7 @@ export function generateStreetDetail({
   for (const line of lineRows.values()) line.attached_ids.sort(compareText);
   audit.osm.rows = rows.length;
 
-  // Zone shapes, queried with world points.
-  const zoneShapes = config.zones.map((zone) => {
-    if (zone.shape.type === "polygon") {
-      const ring = zone.shape.points_xz.map((point) => [point[0], point[1]]);
-      const bounds = boundsOf(ring);
-      return { zone, contains: (xz) => pointInRing(xz, ring, true), bounds };
-    }
-    const lines = zone.shape.source_keys.map(wayLine);
-    const halfWidth = zone.shape.half_width_m;
-    const all = boundsOf(lines.flat());
-    return {
-      zone,
-      contains: (xz) => lines.some((line) => polylineDistance(xz, line) <= halfWidth),
-      bounds: { min_x: all.min_x - halfWidth, min_y: all.min_y - halfWidth, max_x: all.max_x + halfWidth, max_y: all.max_y + halfWidth },
-    };
-  });
+  const zoneShapes = streetDetailZoneShapes(config, properSources);
   // Fences, before anything placed around them: OSM fence ways open where roads,
   // paths, gates and the gameplay mask cross them, and the zones' fence rules add
   // the photographed fencing OSM lacks (tools/lib/street-fence-generation.mjs).
@@ -946,13 +1037,15 @@ export function generateStreetDetail({
 
   // Footprints already claimed by placed switchable rows, for overlap checks: a
   // fence claims each of its solid runs, its half thickness wide; a parked car
-  // or a long prop its footprint (streetDetailPieces).
+  // or a long prop its footprint (streetDetailPieces); a tree in paving its
+  // mulch pit, so nothing later stands or parks in it.
   const occupied = [];
   const occupy = (row) => {
     const kind = STREET_DETAIL_KINDS[row.kind];
     if (row.status !== "placed" || kind.overhead || kind.layer === STREET_DETAIL_GROUND_LAYER) return;
+    const pit = (row.prop_params?.well_m ?? 0) / 2;
     streetDetailPieces(row).forEach((piece, index) => {
-      occupied.push({ id: row.fence ? `${row.id}#run${index}` : row.id, points: piece.points, radius_m: piece.radius });
+      occupied.push({ id: row.fence ? `${row.id}#run${index}` : row.id, points: piece.points, radius_m: Math.max(piece.radius, pit) });
     });
   };
   rows.forEach(occupy);
@@ -1001,7 +1094,7 @@ export function generateStreetDetail({
     if (building.distance < buildingBuffer + radius) {
       return { reason: building.distance === 0 ? "inside_building" : "building_buffer", source_id: building.key, observed_m: round3(Math.max(0, building.distance - radius)), required_m: buildingBuffer };
     }
-    const road = roads.nearest(xz, exclusions.road_buffer_m + radius);
+    const road = (kind.layer === "vegetation" ? plantRoads : roads).nearest(xz, exclusions.road_buffer_m + radius);
     if (road.distance < exclusions.road_buffer_m + radius) {
       return { reason: "road", source_id: road.key, observed_m: round3(Math.max(0, road.distance - radius)), required_m: exclusions.road_buffer_m };
     }
@@ -1016,15 +1109,33 @@ export function generateStreetDetail({
 
   // (c) Hand-picked set pieces must clear the whole mask and the OSM items; a bad
   // entry stops the build. They come before scatter, which then works around them.
+  // A kit tree rests on the visible ground round its foot, a prop on legs on the
+  // ground under its feet (groundAt, the one visible-ground index above).
   for (const entry of setPieceDocument.set_pieces) {
     const xz = [round3(entry.xz[0]), round3(entry.xz[1])];
-    const footprint = entry.prop === undefined ? null : (STREET_FURNITURE_FOOTPRINTS[entry.prop] ?? STREET_CLUTTER_FOOTPRINTS[entry.prop] ?? null);
+    // A planted tree keeps the scatter's site checks; a street prop the furniture's margins.
+    const tree = STREET_DETAIL_KINDS[entry.kind].layer === "vegetation";
+    const footprint = entry.prop === undefined || tree ? null : (STREET_FURNITURE_FOOTPRINTS[entry.prop] ?? STREET_CLUTTER_FOOTPRINTS[entry.prop] ?? null);
     const piece = footprint
       ? footprintPiece(xz, normalizedYaw(entry.yaw), footprint)
       : { points: [xz], radius: STREET_DETAIL_KINDS[entry.kind].footprint_radius_m };
-    const violation = entry.prop === undefined ? siteViolation(entry.kind, xz, exclusions.wall_buffer_m) : propSiteViolation(piece);
+    const violation = entry.prop === undefined || tree ? siteViolation(entry.kind, xz, exclusions.wall_buffer_m) : propSiteViolation(piece);
     invariant(!violation, `Street detail set piece ${entry.id} fails the exclusion mask: ${JSON.stringify(violation)}`);
     const { y, support } = grounded(xz);
+    const surface = surfaceAt(xz);
+    let planted = null;
+    let params = entry.params;
+    if (entry.prop !== undefined && tree) {
+      // A kit tree: it must rest on the visible ground round its foot.
+      planted = plantRow({ prop: entry.prop, kind: entry.kind, variant: entry.params.variant, scale: entry.params.scale, xz, landY: y, surface, groundAt });
+      invariant(!planted.problem, `Street detail set piece ${entry.id} cannot rest on the visible ground: ${planted.problem}`);
+    }
+    const feet = entry.prop === undefined ? undefined : STREET_FURNITURE_FEET[entry.prop];
+    if (feet) {
+      const rest = settleOnFeet(feet, xz, normalizedYaw(entry.yaw), y + surface.bias_m, groundAt);
+      invariant(!rest.problem, `Street detail set piece ${entry.id} cannot stand on its feet: ${rest.problem}`);
+      params = { ...entry.params, ...rest };
+    }
     const row = {
       id: `set_piece:${entry.id}`,
       source: "set_piece",
@@ -1034,10 +1145,10 @@ export function generateStreetDetail({
       geometry: "point",
       position_m: [xz[0], y, xz[1]],
       terrain_support: { object_key: support.object_key, triangle_index: support.triangle_index, elevation_m: support.elevation_m },
-      surface: surfaceAt(xz),
+      surface,
       yaw_radians: normalizedYaw(entry.yaw),
       yaw_source: "set_piece",
-      ...(entry.prop === undefined ? { asset: entry.asset } : { prop: entry.prop, prop_params: entry.params }),
+      ...(entry.prop === undefined ? { asset: entry.asset } : planted ?? { prop: entry.prop, prop_params: params }),
       ...(footprint ? { footprint_m: { ...footprint } } : {}),
       reason: entry.reason,
       reference: entry.reference,
@@ -1051,104 +1162,138 @@ export function generateStreetDetail({
 
   // (b) Seeded zone scatter. Candidates are visited in config order, so a later
   // rule never displaces an earlier one; every draw is keyed by the candidate id.
-  const zoneSummaries = [];
-  for (const { zone, contains, bounds } of zoneShapes) {
-    const ruleSummaries = [];
-    for (const rule of zone.scatter) {
-      const candidates = [];
-      if (rule.pattern === "grid") {
-        for (let row = 0, z = bounds.min_y + rule.spacing_m / 2; z <= bounds.max_y; row += 1, z += rule.spacing_m) {
-          for (let column = 0, x = bounds.min_x + rule.spacing_m / 2; x <= bounds.max_x; column += 1, x += rule.spacing_m) {
-            candidates.push({ cell: `r${String(row).padStart(3, "0")}c${String(column).padStart(3, "0")}`, base: [x, z], along: null });
+  // The slot rules run here; the planting rules (those with a prop) run after
+  // the street furniture (b2), so plants work around the lamps and signs.
+  const ruleSummaries = new Map();
+  const runScatter = (planting) => {
+    for (const { zone, contains, bounds } of zoneShapes) {
+      for (const rule of zone.scatter) {
+        if ((rule.prop != null) !== planting) continue;
+        const candidates = [];
+        if (rule.pattern === "grid") {
+          for (let row = 0, z = bounds.min_y + rule.spacing_m / 2; z <= bounds.max_y; row += 1, z += rule.spacing_m) {
+            for (let column = 0, x = bounds.min_x + rule.spacing_m / 2; x <= bounds.max_x; column += 1, x += rule.spacing_m) {
+              candidates.push({ cell: `r${String(row).padStart(3, "0")}c${String(column).padStart(3, "0")}`, base: [x, z], along: null });
+            }
           }
-        }
-      } else {
-        for (const wayKey of rule.source_keys) {
-          const line = wayLine(wayKey);
-          const length = polylineLength(line);
-          rule.offsets_m.forEach((offset, offsetIndex) => {
-            for (let step = 0, distance = rule.spacing_m / 2; distance <= length; step += 1, distance += rule.spacing_m) {
-              candidates.push({ cell: `${wayKey}_o${offsetIndex}_s${String(step).padStart(3, "0")}`, base: null, along: { line, length, distance, offset } });
-            }
-          });
-        }
-      }
-      let placed = 0;
-      for (const candidate of candidates) {
-        const identity = `${zone.id}:${rule.id}:${candidate.cell}`;
-        const bytes = hashBytes(seed, identity);
-        audit.scatter.candidates += 1;
-        if (unit(bytes, 0) >= rule.acceptance) {
-          count(audit.scatter.rejected_by_reason, "seed_acceptance");
-          continue;
-        }
-        let point;
-        if (candidate.along) {
-          // Jitter along the line, then step off it by the rule's offset (+ is left of the way direction).
-          const target = Math.max(0, Math.min(candidate.along.length, candidate.along.distance + (unit(bytes, 4) * 2 - 1) * rule.jitter_m));
-          const line = candidate.along.line;
-          let walked = 0;
-          for (let index = 1; index < line.length; index += 1) {
-            const segment = Math.hypot(line[index][0] - line[index - 1][0], line[index][1] - line[index - 1][1]);
-            if (walked + segment >= target || index === line.length - 1) {
-              const fraction = segment > 0 ? Math.min(1, (target - walked) / segment) : 0;
-              const dx = (line[index][0] - line[index - 1][0]) / (segment || 1);
-              const dz = (line[index][1] - line[index - 1][1]) / (segment || 1);
-              // Left of travel with north up: rotate the heading a quarter turn counterclockwise in plan.
-              point = [
-                line[index - 1][0] + dx * segment * fraction + dz * candidate.along.offset,
-                line[index - 1][1] + dz * segment * fraction - dx * candidate.along.offset,
-              ];
-              break;
-            }
-            walked += segment;
+        } else if (rule.pattern === "along") {
+          for (const wayKey of rule.source_keys) {
+            const line = wayLine(wayKey);
+            const length = polylineLength(line);
+            rule.offsets_m.forEach((offset, offsetIndex) => {
+              for (let step = 0, distance = rule.spacing_m / 2; distance <= length; step += 1, distance += rule.spacing_m) {
+                candidates.push({ cell: `${wayKey}_o${offsetIndex}_s${String(step).padStart(3, "0")}`, base: null, along: { line, length, distance, offset } });
+              }
+            });
           }
         } else {
-          point = [
-            candidate.base[0] + (unit(bytes, 4) * 2 - 1) * rule.jitter_m,
-            candidate.base[1] + (unit(bytes, 8) * 2 - 1) * rule.jitter_m,
-          ];
+          // along_beds: one station per spacing on each side, planted in the bed found across the way there.
+          for (const wayKey of rule.source_keys) {
+            const line = wayLine(wayKey);
+            const length = polylineLength(line);
+            for (const side of rule.sides) {
+              for (let step = 0, distance = rule.spacing_m / 2; distance <= length; step += 1, distance += rule.spacing_m) {
+                candidates.push({ cell: `${wayKey}_${side}_s${String(step).padStart(3, "0")}`, base: null, along: { line, length, distance, side } });
+              }
+            }
+          }
         }
-        const xz = [round3(point[0]), round3(point[1])];
-        if (!contains(xz)) {
-          count(audit.scatter.rejected_by_reason, "outside_zone");
-          continue;
+        let placed = 0;
+        for (const candidate of candidates) {
+          const identity = `${zone.id}:${rule.id}:${candidate.cell}`;
+          const bytes = hashBytes(seed, identity);
+          audit.scatter.candidates += 1;
+          if (unit(bytes, 0) >= rule.acceptance) {
+            count(audit.scatter.rejected_by_reason, "seed_acceptance");
+            continue;
+          }
+          // Why a candidate point cannot take a row, or null.
+          const placementProblem = (xz) => {
+            if (!contains(xz)) return "outside_zone";
+            if (rule.within_xz && !pointInRing(xz, rule.within_xz, true)) return "outside_rule_area";
+            const violation = siteViolation(rule.kind, xz, exclusions.building_buffer_m);
+            if (violation) return violation.reason;
+            const material = surfaceAt(xz).material_key;
+            if (STREET_DETAIL_KINDS[rule.kind].layer === "vegetation" && UNPLANTABLE_MATERIALS.includes(material)) return "unplantable_surface";
+            // The whole footprint stands on the rule's surfaces, so a plant keeps
+            // inside its bed, clear of the curb and the cars parked along it.
+            if (rule.surfaces && !footSamples(xz, STREET_DETAIL_KINDS[rule.kind].footprint_radius_m).every((point) => rule.surfaces.includes(surfaceAt(point).material_key))) return "rule_surface";
+            return null;
+          };
+          let xz = null;
+          let problem = null;
+          if (candidate.along) {
+            // Jitter along the line, then step off it by the rule's offset (+ is left of the way direction).
+            const target = Math.max(0, Math.min(candidate.along.length, candidate.along.distance + (unit(bytes, 4) * 2 - 1) * rule.jitter_m));
+            if (candidate.along.side === undefined) {
+              const point = alongPoint(candidate.along.line, target, candidate.along.offset);
+              xz = [round3(point[0]), round3(point[1])];
+              problem = placementProblem(xz);
+            } else {
+              // The first spot in the bed, from its middle outward, that clears the site checks.
+              const sign = candidate.along.side === "left" ? 1 : -1;
+              const offsets = bedOffsets((offset) => alongPoint(candidate.along.line, target, sign * offset), rule.reach_m, rule.min_bed_m, rule.surfaces, surfaceAt, STREET_DETAIL_KINDS[rule.kind].footprint_radius_m);
+              problem = "no_bed";
+              for (const offset of offsets) {
+                const point = alongPoint(candidate.along.line, target, sign * offset);
+                const spot = [round3(point[0]), round3(point[1])];
+                const spotProblem = placementProblem(spot);
+                if (spotProblem === null) {
+                  xz = spot;
+                  problem = null;
+                  break;
+                }
+                if (problem === "no_bed") problem = spotProblem;
+              }
+            }
+          } else {
+            xz = [
+              round3(candidate.base[0] + (unit(bytes, 4) * 2 - 1) * rule.jitter_m),
+              round3(candidate.base[1] + (unit(bytes, 8) * 2 - 1) * rule.jitter_m),
+            ];
+            problem = placementProblem(xz);
+          }
+          if (problem) {
+            count(audit.scatter.rejected_by_reason, problem);
+            continue;
+          }
+          const surface = surfaceAt(xz);
+          const { y, support } = grounded(xz);
+          let planted = null;
+          if (rule.prop) {
+            const { variant, scale } = drawVegetationVariant(seed, identity, rule.params);
+            planted = plantRow({ prop: rule.prop, kind: rule.kind, variant, scale, xz, landY: y, surface, groundAt });
+            if (planted.problem) {
+              count(audit.scatter.rejected_by_reason, planted.problem);
+              continue;
+            }
+          }
+          const row = {
+            id: `scatter:${identity}`,
+            source: "scatter",
+            source_id: `zone:${zone.id}/${rule.id}`,
+            kind: rule.kind,
+            layer: STREET_DETAIL_KINDS[rule.kind].layer,
+            geometry: "point",
+            position_m: [xz[0], y, xz[1]],
+            terrain_support: { object_key: support.object_key, triangle_index: support.triangle_index, elevation_m: support.elevation_m },
+            surface,
+            yaw_radians: normalizedYaw(unit(bytes, 12) * Math.PI * 2 - Math.PI),
+            yaw_source: "seeded",
+            ...(planted ?? {}),
+            status: "placed",
+            exclusion: null,
+          };
+          rows.push(row);
+          occupy(row);
+          placed += 1;
+          audit.scatter.placed += 1;
         }
-        const violation = siteViolation(rule.kind, xz, exclusions.building_buffer_m);
-        if (violation) {
-          count(audit.scatter.rejected_by_reason, violation.reason);
-          continue;
-        }
-        const surface = surfaceAt(xz);
-        if (STREET_DETAIL_KINDS[rule.kind].layer === "vegetation" && UNPLANTABLE_MATERIALS.includes(surface.material_key)) {
-          count(audit.scatter.rejected_by_reason, "unplantable_surface");
-          continue;
-        }
-        const { y, support } = grounded(xz);
-        const row = {
-          id: `scatter:${identity}`,
-          source: "scatter",
-          source_id: `zone:${zone.id}/${rule.id}`,
-          kind: rule.kind,
-          layer: STREET_DETAIL_KINDS[rule.kind].layer,
-          geometry: "point",
-          position_m: [xz[0], y, xz[1]],
-          terrain_support: { object_key: support.object_key, triangle_index: support.triangle_index, elevation_m: support.elevation_m },
-          surface,
-          yaw_radians: normalizedYaw(unit(bytes, 12) * Math.PI * 2 - Math.PI),
-          yaw_source: "seeded",
-          status: "placed",
-          exclusion: null,
-        };
-        rows.push(row);
-        occupy(row);
-        placed += 1;
-        audit.scatter.placed += 1;
+        ruleSummaries.set(`${zone.id}/${rule.id}`, { id: rule.id, kind: rule.kind, pattern: rule.pattern, candidates: candidates.length, placed });
       }
-      ruleSummaries.push({ id: rule.id, kind: rule.kind, pattern: rule.pattern, candidates: candidates.length, placed });
     }
-    zoneSummaries.push({ id: zone.id, name: zone.name, pilot: zone.pilot, scatter: ruleSummaries });
-  }
+  };
+  runScatter(false);
 
   // (d) Street furniture, after everything above so it works around it: kit
   // props for the pilot zones' OSM rows (stop signs move to their curbs) and the
@@ -1169,6 +1314,14 @@ export function generateStreetDetail({
     surfaceAt,
   });
   rows.push(...furniture.rows);
+  // (b2) The planting scatter: trees and grass round the furniture placed above.
+  runScatter(true);
+  const zoneSummaries = config.zones.map((zone) => ({
+    id: zone.id,
+    name: zone.name,
+    pilot: zone.pilot,
+    scatter: zone.scatter.map((rule) => ruleSummaries.get(`${zone.id}/${rule.id}`)),
+  }));
   for (const summary of zoneSummaries) {
     const zone = config.zones.find((candidate) => candidate.id === summary.id);
     summary.furniture = (zone.furniture ?? []).map((rule) => ({
@@ -1252,9 +1405,12 @@ export function generateStreetDetail({
       yaw_radians: "rotation about +Y turning the asset's local -Z front; null when the source gives no direction",
       layers: "switchable runtime subtrees under PlayableWorld/StreetDetail; ground rows feed the always-on chunk surfaces",
       status: "placed rows are built when their layer is on; excluded rows keep their source id and the reason",
-      prop: "the kit prop the runtime builds for a placed row, with prop_params: the street-furniture kit (game/scripts/world/street_furniture_kit.gd) for the furniture layer, the street-clutter kit (game/scripts/world/street_clutter_kit.gd) for the clutter layer; rows without one are data only",
+      prop: "the kit prop the runtime builds for a placed row, with prop_params: the street-furniture kit (game/scripts/world/street_furniture_kit.gd) for the furniture layer, the street-clutter kit (game/scripts/world/street_clutter_kit.gd) for the clutter layer, the street-vegetation kit (game/scripts/world/street_vegetation_kit.gd) for the vegetation layer; rows without one are data only",
       footprint_m: "the plan size {x_m, z_m} of a parked car or a long prop along its local X and Z; with its position and yaw it is the item's rectangle (the gameplay mask checks a stadium that holds it)",
       parked_car: "a parked car's prop_params: body, paint, finish, roof and rims, and its rest on the visible ground under its four tyres (settleParkedCar in tools/lib/street-clutter-generation.mjs): pitch raises the nose and roll the left side (radians), lift takes the car's origin from y + bias_m to that rest, twist is what the suspension takes up (metres: the front-left and rear-right wheels rise by it in the car frame, the other two drop by it)",
+      planted: "a vegetation row's prop_params: the kit variant and uniform scale, and its rest on the visible ground (settlePlant in tools/lib/street-vegetation-generation.mjs): lift_m takes the foot from y + bias_m to the lowest visible surface round it, foot_spread_m is how much higher the rest of that ground lies (the trunk runs on below the foot); a tree whose foot reaches paving stands in a round mulch pit well_m across on the plane of that paving (well_lift_m its height over the foot at the trunk, well_slope its rise per metre along +X and +Z), which other items keep clear of",
+      standing_prop: "a furniture set piece on legs (an Adirondack chair) carries its rest on the visible ground under its feet in prop_params (settleOnFeet in tools/lib/street-furniture-generation.mjs): pitch raises its front and roll its left side (radians, together at most 0.15 rad from upright), lift takes its origin from y + bias_m to that rest, and leg_drops_m, where the ground folds under it, lengthens (+) or shortens (-) each leg in the kit's order (front-left, front-right, back-left, back-right; metres, in 5 mm steps)",
+      prop_feet: "per kit prop on legs, the flat bottom of each foot {x, z, half_x, half_z} in the prop's frame (front -Z, right +X) in the kit's leg order: the feet a standing prop settles on, which the kit's legs must stand on",
       source_position_m: "a stop sign's OSM node position, kept when the sign moves to the curb of its approach",
       fence: "fence rows: the kit type and why (type_basis), height and collision half thickness, the stretches cut open along points_m (openings, metres along the line, with what opens them) and the solid runs left (posts on the ground: points_m, terrain_supports, surface_bias_m); a fence row with a prop is built (game/scripts/world/street_fence_kit.gd)",
       fenced_approaches: "scored-building sides a built fence closes, which the building fit may skip (game/tests/shared/building_fit.gd)",
@@ -1262,6 +1418,7 @@ export function generateStreetDetail({
     layers: STREET_DETAIL_LAYERS,
     ground_layer: STREET_DETAIL_GROUND_LAYER,
     kinds: STREET_DETAIL_KINDS,
+    prop_feet: STREET_FURNITURE_FEET,
     inputs: {
       osm_extract: { path: SOURCE_CONTRACT.proper_extract.path, sha256: SOURCE_CONTRACT.proper_extract.sha256 },
       zones: { path: STREET_DETAIL_INPUTS.zones, sha256: sha256File(resolve(projectRoot, STREET_DETAIL_INPUTS.zones)) },
