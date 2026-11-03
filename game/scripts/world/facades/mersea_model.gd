@@ -175,6 +175,8 @@ static func glazing(p: Node3D,x: float,w: float,open_bay: bool=false, sliding: b
 	if optical_pilot: frame = mat("bac1bd",0.85,0.24)
 	# One consistent clear dielectric envelope; actual opposing exterior is visible.
 	# Perimeter depth replaces opaque fake infill. No furnished interior is authored.
+	# PREMUL_ALPHA_FACTOR keeps its default 1.0 and is not written: Godot 4.7.2's
+	# Compatibility (web) compiler never declares it, so writing it fails to compile.
 	var optical:=Shader.new()
 	optical.code="""shader_type spatial;
 render_mode blend_premul_alpha, depth_draw_never, cull_back, fog_disabled;
@@ -187,7 +189,7 @@ void fragment() {
 	ALBEDO=mix(vec3(0.008,0.017,0.016),vec3(0.075,0.087,0.079),deposits);
 	METALLIC=0.0;ROUGHNESS=mix(0.055,0.42,deposits);SPECULAR=0.8;
 	float fresnel=0.12+0.88*pow(1.0-facing,5.0);
-	ALPHA=mix(fresnel,0.48,deposits);PREMUL_ALPHA_FACTOR=1.0;
+	ALPHA=mix(fresnel,0.48,deposits);
 }
 """
 	var custom_glass := ShaderMaterial.new()
