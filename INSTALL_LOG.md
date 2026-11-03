@@ -322,7 +322,7 @@ was attempted. Installation log: /tmp/ti-native-rootcause-20261025-gdb-install.l
 
 ### 2026-11-03 — GitHub Actions Mac build (runner-side installs)
 
-- Date and time (UTC): 2026-11-03, runs 41584183972 and 41585341573.
+- Date and time (UTC): 2026-11-03, runs 41584183972, 41585341573 and 41586459134.
 - Status: `completed`
 - Exact package and version: on each GitHub-hosted `ubuntu-26.04` runner (image 20261025.179.1) the workflow installs Ubuntu `weston` 14.0.2-5, `mesa-vulkan-drivers` 26.0.8-1ubuntu0.3 (lavapipe), `libvulkan1` 1.4.341.0-1 and `libgl1` (apt-resolved versions, as logged by those runs), and Godot `4.7.2-stable` with its export templates through `.devcontainer/setup-godot.sh`. Actions pinned to commits: `actions/checkout` v7.0.1 `3d3c42e5aac5ba805825da76410c181273ba90b1`, `actions/cache` v6.1.0 `55cc8345863c7cc4c66a329aec7e433d2d1c52a9`, `actions/upload-artifact` v7.0.2 `cf430e030ddbb5b0abf93d22962f4752f3646cd9`, `actions/download-artifact` v8.0.2 `9000827ccba6bdab643e8b6fd33ac0654aef8333`.
 - Publisher and source URL: Ubuntu archive; Godot official builds, https://github.com/godotengine/godot-builds/releases/tag/4.7.2-stable; GitHub's `actions/*` repositories.

@@ -7,7 +7,7 @@ name: Mac build
 
 on:
   push:
-    branches: [main, ci/mac-build-20261103]
+    branches: [main]
   workflow_dispatch:
 
 # Read-only everywhere; only the publish job may write (the release).
