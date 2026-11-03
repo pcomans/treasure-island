@@ -6,7 +6,10 @@ and the heap of gold inside it. Generated 2026-11-02 with `tools/generate-textur
 (Codex image generation, one image per call, text prompts only; no photograph or
 existing artwork was given to the generator or copied), then resized from
 1254 px to 512 px with ImageMagick (Lanczos). The untouched sources are kept
-outside Git with the chest-avatar work notes.
+outside Git with the chest-avatar work notes. On 2026-11-03 the owner asked for a
+deeper, less saturated warm brown so the gold is the brightest, most saturated
+part of the chest: `chest_wood.png` is the same source darkened and desaturated
+(`-modulate 66,54,98`).
 
 | File | Use | Source prompt (short) |
 |---|---|---|

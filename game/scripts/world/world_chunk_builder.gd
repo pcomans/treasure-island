@@ -786,6 +786,15 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 	root.set_meta("derived_object_key", str(record.object_key))
 	root.set_meta("source_keys", record.source_keys.duplicate())
 	root.set_meta("feature_kind", str(record.feature_kind))
+	# A visible-only surface draped over the land (road, path, area, overlay):
+	# its footprint and lift, so visuals can stand on what is drawn rather than
+	# on the land collision under it (VisibleGround; the player character's feet).
+	if not is_context and record.has("surface_bias_m") and str(record.collision_kind) == "none":
+		var footprint := PackedVector2Array()
+		for index_value: int in indices:
+			footprint.append(Vector2(vertices[index_value].x, vertices[index_value].z))
+		root.set_meta(VisibleGround.FOOTPRINT_META, footprint)
+		root.set_meta(VisibleGround.LIFT_META, float(record.surface_bias_m))
 	if not b201_prepared.is_empty() and surface_plan.has("metadata"):
 		root.set_meta("d1_b201_host_partition", (surface_plan.metadata as Dictionary).duplicate(true))
 	elif not b225_prepared.is_empty() and surface_plan.has("metadata"):

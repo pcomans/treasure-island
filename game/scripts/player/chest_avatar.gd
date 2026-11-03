@@ -11,13 +11,15 @@ extends Node3D
 ## the controller has moved the player:
 ## - Gait: a phase advances with ground speed. Each foot stays planted in the
 ##   world while it carries the chest, so it never slides, then swings to a spot
-##   predicted from the velocity, on the ground a short ray finds there (stairs
-##   included), lifted onto any road, path or area drawn a few centimetres
-##   above the land the player stands on. Arms swing against the legs; the
-##   chest bobs, leans and sways.
+##   predicted from the velocity, on the ground a short ray finds there with the
+##   player's own collision mask (stairs and street props included), lifted onto
+##   any road, path or area drawn a few centimetres above the land the player
+##   stands on (VisibleGround). Arms swing against the legs; the chest bobs, leans
+##   and sways. Running at speed shakes gold out of the lid: a few coins tumble
+##   out behind, bounce and shrink away (a small reused pool; nothing stays).
 ## - Air: the legs dangle and pedal and reach for the ground before landing; the
 ##   arms flail on the way up and float out on the slow descent. Landing
-##   squashes the chest and plants both feet.
+##   squashes the chest, plants both feet and pops a few coins out.
 ## - Lid: a sprung hinge, simulated. It is driven by the chest's own
 ##   acceleration (the lid's inertia in the chest's accelerating frame: thrust
 ##   pushes it shut, releasing the jet or the rebound of a landing throws it
@@ -26,17 +28,14 @@ extends Node3D
 ##   closed stop is elastic, so it chatters, and soft-limited when wide open.
 ## - Coins: loose coins hop in the same accelerating frame and tumble while
 ##   they fly, kept under the lid. Hands follow their poses on damped springs.
-## - Eyes blink now and then and look towards the camera.
+## - Eyes blink now and then, look towards the camera and stay nearly upright
+##   when the lid opens wide.
 
 const Parts := preload("res://game/scripts/player/chest_avatar_parts.gd")
 
-## The world's solid layer, which the feet stand on.
+## Feet stand on what the player stands on: its own collision mask (world solid
+## and street props); this is the fallback without a player.
 const GROUND_MASK := 1
-## Visible-only surfaces the world generator drapes over the land (roads and
-## paths 0.078-0.08 m up, areas 0.02-0.05 m, overlays 0.03-0.06 m, street paint)
-## and the most such a surface may stand above the solid ground under it.
-const DRAPED_KINDS: Array[String] = ["road_path", "major_area", "terrain_overlay", "street_paint"]
-const DRAPE_MAX := 0.12
 ## Ground speed (m/s) below which the chest stands.
 const STAND_SPEED := 0.25
 ## A planted foot further than this from its standing spot takes a settling step.
@@ -47,6 +46,9 @@ const FOOT_TOE_OUT := 0.12
 ## Floor contact must be lost this long (s) before the chest counts as airborne,
 ## unless it is thrusting or rising.
 const AIR_GRACE := 0.12
+## Stride cycles per second at most: at the 20 m/s run more would strobe at web
+## frame rates; the knee-less hoses stretch (and stay curved) instead.
+const CADENCE_MAX := 5.0
 
 ## Lid hinge: natural frequency (Hz), damping ratio, rest angle (rad), gains
 ## from the hinge's acceleration (rad/s^2 per m/s^2), airflow lift (rad per
@@ -72,6 +74,11 @@ const LID_SUBSTEPS := 4
 
 const SQUASH_FREQUENCY := 3.2
 const SQUASH_DAMPING := 0.3
+## Squash speed per 1.5 m/s of landing impact: a clear rubber-hose squash
+## (about -0.22) and stretch.
+const LANDING_SQUASH := 8.0
+## How much of the lid's opening the eyes turn back, staying nearly upright.
+const EYE_LEVELING := 0.75
 const ARM_FREQUENCY := 2.6
 const ARM_DAMPING := 0.35
 const ARM_INERTIA := 0.012
@@ -83,6 +90,14 @@ const COIN_BOB_COUPLING := 0.5
 const LOOSE_COINS := 7
 const PUFFS := 16
 const PUFF_LIFE := 0.65
+## Coins shaken out of the chest: a fixed pool, each coin living this long (s),
+## spilled by footsteps above SPILL_SPEED (m/s) with this chance.
+const SPILL_COINS := 16
+const SPILL_LIFE := 1.6
+const SPILL_SPEED := 9.0
+const SPILL_CHANCE := 0.35
+## Spilled coins are drawn larger than the heap's, to read at camera distance.
+const SPILL_SCALE := 1.6
 
 var _player: CharacterBody3D
 var _materials: Parts.Materials
@@ -95,15 +110,21 @@ var _legs: Array[Leg] = []
 var _arms: Array[Arm] = []
 var _coins: Array[Coin] = []
 var _puffs: Array[Puff] = []
+var _spills: Array[Spill] = []
+var _spill_multimesh: MultiMesh
+var _spill_instance: MultiMeshInstance3D
+var _eye_mount: Node3D
+var _blobs: Array[MeshInstance3D] = []
 var _ray := PhysicsRayQueryParameters3D.new()
 var _space: PhysicsDirectSpaceState3D
 var _hit_normal := Vector3.UP
 var _hit := false
-var _scenario := RID()
-## Drape heights by 5 cm cell, and the draped meshes' triangle trees.
-var _drapes := {}
-var _triangle_meshes := {}
+var _world: WorldLoader
+var _visible_ground := VisibleGround.new()
+var _ground_stale := true
 var _lift := 0.0
+## The visible ground under the chest this tick (y -INF when none was found).
+var _under := Vector3.ZERO
 
 var _reset_pending := true
 var _last_position := Vector3.ZERO
@@ -197,6 +218,20 @@ class Puff:
 	var size := 0.1
 
 
+class Spill:
+	extends RefCounted
+	var position := Vector3.ZERO
+	var velocity := Vector3.ZERO
+	var axis := Vector3.RIGHT
+	var spin := 0.0
+	var spin_speed := 0.0
+	var age := 99.0
+	var bounces := 0
+	## The ground under the coin, re-found when it has moved on.
+	var ground := -INF
+	var ground_xz := Vector2(INF, INF)
+
+
 func _ready() -> void:
 	_rng.seed = 1930
 	var node := get_parent()
@@ -207,9 +242,19 @@ func _ready() -> void:
 	_ray.collision_mask = GROUND_MASK
 	_ray.collide_with_areas = false
 	if _player != null:
+		_ray.collision_mask = _player.collision_mask
 		_ray.exclude = [_player.get_rid()]
 		# Run after the controller has moved the player (as the camera does).
 		process_physics_priority = _player.process_physics_priority + 1
+		# The world beside the player (main.tscn): its draped roads and areas,
+		# indexed again whenever it (re)loads.
+		var main := _player.get_parent()
+		if main != null:
+			for child in main.get_children():
+				if child is WorldLoader:
+					_world = child
+					_world.world_ready.connect(func(_report: Dictionary) -> void: _ground_stale = true)
+					break
 
 
 ## Read-only state for evidence captures.
@@ -219,6 +264,7 @@ func describe() -> Dictionary:
 		"speed": Vector2(_velocity.x, _velocity.z).length(), "squash": _squash,
 		"flame": _flame, "swinging": [_legs[0].swinging, _legs[1].swinging] if _legs.size() == 2 else [],
 		"feet": [_legs[0].current, _legs[1].current] if _legs.size() == 2 else [],
+		"spilled": _spills.filter(func(coin: Spill) -> bool: return coin.age < SPILL_LIFE).size(),
 	}
 
 
@@ -239,7 +285,11 @@ func _build() -> void:
 	_body.add_child(_lid)
 	_mesh(_lid, "LidBoards", Parts.lid(m), true)
 	_mesh(_lid, "LidOutline", Parts.lid_outline(m), false)
-	_mesh(_lid, "Eyes", Parts.eyes(m), false)
+	_eye_mount = Node3D.new()
+	_eye_mount.name = "EyeMount"
+	_eye_mount.position = Parts.EYE_MOUNT
+	_lid.add_child(_eye_mount)
+	_mesh(_eye_mount, "Eyes", Parts.eyes(m), false)
 	var flames := _mesh(_body, "JetFlames", Parts.flames(m), false)
 	flames.custom_aabb = AABB(Vector3(-0.3, -0.7, -0.6), Vector3(0.6, 0.8, 0.5))
 	# Loose coins on the heap, one MultiMesh.
@@ -301,6 +351,27 @@ func _build() -> void:
 	for i in PUFFS:
 		_puffs.append(Puff.new())
 		_puff_multimesh.set_instance_transform(i, Transform3D(Basis.from_scale(Vector3.ONE * 0.0001), Vector3.ZERO))
+	# Coins shaken out of the chest, in world space too; purely visual.
+	_spill_multimesh = MultiMesh.new()
+	_spill_multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	_spill_multimesh.mesh = _coin_multimesh.mesh
+	_spill_multimesh.instance_count = SPILL_COINS
+	_spill_instance = MultiMeshInstance3D.new()
+	_spill_instance.name = "SpilledCoins"
+	_spill_instance.top_level = true
+	_spill_instance.multimesh = _spill_multimesh
+	_spill_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	add_child(_spill_instance)
+	for i in SPILL_COINS:
+		_spills.append(Spill.new())
+		_spill_multimesh.set_instance_transform(i, Transform3D(Basis.from_scale(Vector3.ONE * 0.0001), Vector3.ZERO))
+	# The web build draws no sun shadows: soft blobs under the shoes and chest.
+	if OS.has_feature("web"):
+		var disc := Parts.blob(m)
+		for i in 3:
+			var blob := _mesh(self, "BlobShadow", disc, false)
+			blob.top_level = true
+			_blobs.append(blob)
 
 
 func _mesh(parent: Node3D, node_name: String, mesh: Mesh, shadow: bool) -> MeshInstance3D:
@@ -321,7 +392,9 @@ func _physics_process(delta: float) -> void:
 		_reset_pending = true
 		return
 	_space = get_world_3d().direct_space_state
-	_scenario = get_world_3d().scenario
+	if _ground_stale and _world != null:
+		_ground_stale = false
+		_visible_ground.build([_world.ground_and_areas, _world.roads_and_paths])
 	var xf := global_transform
 	var origin := _player.global_position
 	var active := _player.is_physics_processing()
@@ -355,7 +428,7 @@ func _physics_process(delta: float) -> void:
 		_land(xf, _fall_speed, yaw)
 	elif not _airborne and not on_floor and (thrust or velocity.y > 1.0 or _air_time > AIR_GRACE):
 		_airborne = true
-		_take_off(xf)
+		_take_off(xf, thrust)
 	var rising := thrust or velocity.y > 1.0
 	_w_move = _approach(_w_move, 0.0 if _airborne else clampf((speed - STAND_SPEED) / 0.8, 0.0, 1.0), delta, 0.1)
 	_w_run = _approach(_w_run, smoothstep(5.0, 14.0, speed), delta, 0.15)
@@ -365,12 +438,13 @@ func _physics_process(delta: float) -> void:
 	# The visible ground under the chest, so it stands on a road or path drawn
 	# above the land rather than in it.
 	var under := _ground(origin, origin.y)
-	_lift = _approach(_lift, clampf(under.y - origin.y, 0.0, DRAPE_MAX) if _hit and absf(under.y - origin.y) < 0.3 else 0.0, delta, 0.06)
+	_under = under if _hit else Vector3(origin.x, -INF, origin.z)
+	_lift = _approach(_lift, clampf(under.y - origin.y, 0.0, 0.12) if _hit and absf(under.y - origin.y) < 0.3 else 0.0, delta, 0.06)
 	var bob_accel := _update_gait(xf, planar, speed, yaw, delta)
 	_update_body(speed, local_acc, yaw_rate, delta)
-	var lid_drive_y := local_acc.y + LID_BOB_COUPLING * bob_accel + _squash_accel * (0.35 + Parts.BODY_H)
+	var lid_drive_y := local_acc.y + LID_BOB_COUPLING * bob_accel + _squash_accel * (0.45 + Parts.BODY_H)
 	_update_lid(lid_drive_y, local_acc.z, local_vel, thrust, delta)
-	_update_coins(local_acc.y + COIN_BOB_COUPLING * bob_accel + _squash_accel * (0.35 + Parts.GOLD_BASE), delta)
+	_update_coins(local_acc.y + COIN_BOB_COUPLING * bob_accel + _squash_accel * (0.45 + Parts.GOLD_BASE), delta)
 	var body_xf := _body.transform
 	for arm in _arms:
 		_update_arm(arm, body_xf, local_acc, delta)
@@ -379,6 +453,8 @@ func _physics_process(delta: float) -> void:
 		_update_leg(leg, body_xf, inv, yaw, local_acc, delta)
 	_update_eyes(delta)
 	_update_jet(thrust, delta)
+	_update_spills(delta)
+	_update_blobs(xf)
 
 
 static func _approach(value: float, target: float, delta: float, tau: float) -> float:
@@ -392,55 +468,26 @@ func _rest_foot(xf: Transform3D, leg: Leg) -> Vector3:
 
 
 func _ground(point: Vector3, reference_y: float) -> Vector3:
-	_ray.from = Vector3(point.x, reference_y + 0.65, point.z)
-	_ray.to = Vector3(point.x, reference_y - 0.9, point.z)
+	return _ground_between(point.x, point.z, reference_y + 0.65, reference_y - 0.9, reference_y)
+
+
+## The visible ground under (x, z) between two heights, or (x, fallback_y, z)
+## with _hit false. A land hit takes the lift of any road, path or area drawn
+## over it; other solids (kerbs, stairs, props) are their own visible surface.
+func _ground_between(x: float, z: float, top: float, bottom: float, fallback_y: float) -> Vector3:
+	_ray.from = Vector3(x, top, z)
+	_ray.to = Vector3(x, bottom, z)
 	var hit := _space.intersect_ray(_ray)
 	_hit = not hit.is_empty()
 	if not _hit:
 		_hit_normal = Vector3.UP
-		return Vector3(point.x, reference_y, point.z)
+		return Vector3(x, fallback_y, z)
 	_hit_normal = hit.normal
 	var position: Vector3 = hit.position
-	return position + Vector3.UP * _drape(position)
-
-
-## How far the visible ground stands above a solid ground hit: the top draped
-## surface within DRAPE_MAX (cached per 5 cm cell), else 0. The renderer's own
-## instance tree finds the candidate meshes; their cached triangle trees give
-## the height.
-func _drape(hit: Vector3) -> float:
-	var cell := Vector3i(roundi(hit.x * 20.0), roundi(hit.y * 20.0), roundi(hit.z * 20.0))
-	if _drapes.has(cell):
-		return _drapes[cell]
-	if _drapes.size() > 512:
-		_drapes.clear()
-	var top := hit + Vector3.UP * (DRAPE_MAX + 0.02)
-	var bottom := hit + Vector3.DOWN * 0.02
-	var best := 0.0
-	if _scenario.is_valid():
-		for id in RenderingServer.instances_cull_ray(top, bottom, _scenario):
-			var instance := instance_from_id(id) as MeshInstance3D
-			if instance == null or instance.mesh == null or not instance.is_visible_in_tree():
-				continue
-			var record := instance.get_parent()
-			if record == null or not DRAPED_KINDS.has(str(record.get_meta("feature_kind", ""))):
-				continue
-			var key := instance.mesh.get_instance_id()
-			if not _triangle_meshes.has(key):
-				# Mesh.generate_triangle_mesh() (cached by the mesh too); looked up
-				# dynamically, so a build without it simply gets no lift.
-				_triangle_meshes[key] = instance.mesh.call("generate_triangle_mesh") if instance.mesh.has_method("generate_triangle_mesh") else null
-			var triangles: Variant = _triangle_meshes[key]
-			if triangles == null or not (triangles as Object).has_method("intersect_segment"):
-				continue
-			var inverse := instance.global_transform.affine_inverse()
-			var found: Dictionary = triangles.call("intersect_segment", inverse * top, inverse * bottom)
-			if found.is_empty():
-				continue
-			var height := (instance.global_transform * (found.position as Vector3)).y - hit.y
-			best = maxf(best, clampf(height, 0.0, DRAPE_MAX))
-	_drapes[cell] = best
-	return best
+	var collider := hit.get("collider") as Node
+	if collider != null and collider.get_parent() != null and str(collider.get_parent().get_meta("feature_kind", "")) == "land_ground":
+		position.y += _visible_ground.lift_at(position.x, position.z)
+	return position
 
 
 func _needs_settle(xf: Transform3D) -> bool:
@@ -460,7 +507,7 @@ func _update_gait(xf: Transform3D, planar: Vector3, speed: float, yaw: float, de
 	var moving := speed > STAND_SPEED
 	if not moving and not _needs_settle(xf):
 		return 0.0
-	_cadence = 1.6 + 1.25 * sqrt(speed) if moving else 2.8
+	_cadence = minf(1.6 + 1.25 * sqrt(speed), CADENCE_MAX) if moving else 2.8
 	_duty = lerpf(0.58, 0.28, _w_run)
 	_phase = fposmod(_phase + _cadence * delta, 1.0)
 	var swing_height := clampf(0.07 + 0.012 * speed, 0.08, 0.24)
@@ -503,6 +550,8 @@ func _update_gait(xf: Transform3D, planar: Vector3, speed: float, yaw: float, de
 func _footstep(speed: float) -> void:
 	var strength := clampf((speed - 1.0) / 10.0, 0.12, 1.3)
 	_lid_speed += LID_STEP_KICK * strength
+	if speed > SPILL_SPEED and _rng.randf() < SPILL_CHANCE:
+		_spill(1, false)
 	if speed > 6.0:
 		for coin in _coins:
 			if coin.height <= 0.0 and _rng.randf() < 0.5:
@@ -512,7 +561,9 @@ func _footstep(speed: float) -> void:
 
 func _land(xf: Transform3D, fall_speed: float, yaw: float) -> void:
 	var impact := clampf(fall_speed / 1.5, 0.2, 1.4)
-	_squash_speed -= 3.0 * impact
+	_squash_speed -= LANDING_SQUASH * impact
+	if impact > 0.7:
+		_spill(3, true)
 	_squint = maxf(_squint, 0.8 * impact)
 	for leg in _legs:
 		var world := xf * leg.air
@@ -529,7 +580,9 @@ func _land(xf: Transform3D, fall_speed: float, yaw: float) -> void:
 		coin.spin_speed = _rng.randf_range(-10.0, 10.0)
 
 
-func _take_off(xf: Transform3D) -> void:
+func _take_off(xf: Transform3D, thrust: bool) -> void:
+	if thrust:
+		_spill(2, false)
 	var inv := xf.affine_inverse()
 	for leg in _legs:
 		leg.air = inv * leg.current
@@ -575,6 +628,8 @@ func _reset(xf: Transform3D) -> void:
 		coin.speed = 0.0
 		coin.spin = 0.0
 		coin.moved = true
+	for coin in _spills:
+		coin.age = SPILL_LIFE
 
 
 # --- Body: bob, breathing, lean, sway and squash.
@@ -585,12 +640,12 @@ func _update_body(speed: float, local_acc: Vector3, yaw_rate: float, delta: floa
 	var stretch := 0.05 * _w_rise * _w_air
 	_squash_accel = -k * (_squash - stretch) - c * _squash_speed
 	_squash_speed += _squash_accel * delta
-	_squash = clampf(_squash + _squash_speed * delta, -0.3, 0.25)
+	_squash = clampf(_squash + _squash_speed * delta, -0.32, 0.25)
 	var amplitude := (0.03 * (1.0 - _w_run) + 0.022 * _w_run) * _w_move
 	var bob := amplitude * 0.5 * (1.0 - cos(4.0 * PI * (_phase - _duty * 0.5 * _w_run)))
 	var breathe := sin(_time * TAU * 0.9) * 0.012 * (1.0 - _w_move) * (1.0 - _w_air)
 	var hover := sin(_time * TAU * 1.3) * 0.02 * _w_air
-	var height := Parts.HIP_HEIGHT + _lift + bob + breathe + hover + _squash * 0.35 - 0.05 * _w_run * _w_move
+	var height := Parts.HIP_HEIGHT + _lift + bob + breathe + hover + _squash * 0.45 - 0.09 * _w_run * _w_move
 	# Lean forward with speed and acceleration, back while rising; roll into
 	# turns and sway over the stance foot.
 	var lean_target := (0.009 * speed + 0.006 * local_acc.z) * (1.0 - _w_air) - 0.12 * _w_rise * _w_air + 0.08 * (1.0 - _w_rise) * _w_air
@@ -638,6 +693,7 @@ func _update_lid(accel_up: float, accel_forward: float, local_vel: Vector3, thru
 			else:
 				_lid_speed = 0.0
 	_lid.rotation = Vector3(-_lid_angle, 0.0, 0.0)
+	_eye_mount.rotation = Vector3(_lid_angle * EYE_LEVELING, 0.0, 0.0)
 
 
 # --- Coins: hop in the chest's frame, tumble in the air, stay under the lid.
@@ -656,7 +712,7 @@ func _update_coins(accel_up: float, delta: float) -> void:
 		var coin := _coins[i]
 		var z := coin.rest.origin.z
 		var room := Parts.BODY_H + Parts.LID_LIP + (Parts.LID_ARCH - Parts.WALL) * sqrt(maxf(0.0, 1.0 - pow(z / (Parts.LID_D * 0.5 - Parts.WALL), 2.0)))
-		room += _lid_angle * (z - Parts.HINGE.z) - coin.rest.origin.y - 0.012
+		room += _lid_angle * (z - Parts.HINGE.z) - coin.rest.origin.y - 0.02 - Parts.COIN_RADIUS * absf(sin(coin.spin))
 		if coin.height <= 0.0 and coin.speed <= 0.0 and relative <= 0.0:
 			if absf(coin.spin) > 0.001:
 				coin.spin = lerpf(coin.spin, roundf(coin.spin / PI) * PI, 1.0 - exp(-delta / 0.05))
@@ -757,14 +813,17 @@ func _update_leg(leg: Leg, body_xf: Transform3D, inv: Transform3D, yaw: float, l
 		foot_xf = Transform3D(tilt * Basis(Vector3.UP, wrapf(leg.current_yaw - yaw, -PI, PI)) * Basis(Vector3.RIGHT, -leg.pitch), local)
 	leg.shoe.transform = foot_xf
 	var ankle := foot_xf * Parts.ANKLE
-	var slack := maxf(0.0, Parts.LEG_LENGTH - hip.distance_to(ankle))
+	var reach := hip.distance_to(ankle)
+	var slack := maxf(0.0, Parts.LEG_LENGTH - reach)
+	# Stretched past its length (a long running stride) the hose still bows.
+	var stretch := maxf(0.0, reach - Parts.LEG_LENGTH)
 	# Rubber-hose legs bow outwards and forwards, more as they compress.
 	var forward := foot_xf.basis.z
 	forward.y = 0.0
 	forward = forward.normalized() if forward.length_squared() > 0.001 else body_xf.basis.z.normalized()
 	var knee := (forward * 0.6 + body_xf.basis.x.normalized() * leg.side * 0.8).normalized()
-	var lam := 0.09 + slack * 0.45
-	var bow := 0.035 + slack * 0.9
+	var lam := 0.09 + slack * 0.45 + stretch * 0.25
+	var bow := 0.035 + slack * 0.9 + stretch * 0.35
 	var p1 := hip - body_xf.basis.y.normalized() * lam + knee * bow
 	var p2 := ankle + foot_xf.basis.y.normalized() * lam + knee * bow
 	_bend(leg.material, hip, p1, p2, ankle, body_xf.basis.x.normalized())
@@ -806,14 +865,106 @@ func _update_eyes(delta: float) -> void:
 	var look := Vector2(0.0, -0.08)
 	var camera := get_viewport().get_camera_3d()
 	if camera != null:
-		var eye := Vector3(0.0, Parts.EYE_CENTER.y, Parts.EYE_CENTER.z)
-		var to_camera := (_lid.global_transform.affine_inverse() * camera.global_position - eye).normalized()
+		var to_camera := (_eye_mount.global_transform.affine_inverse() * camera.global_position).normalized()
 		var facing := smoothstep(-0.1, 0.4, to_camera.z)
 		look = look.lerp(Vector2(to_camera.x, to_camera.y + 0.25) * 0.55, facing)
 	look.y += (0.3 * _w_rise - 0.25 * (1.0 - _w_rise)) * _w_air
 	_look = _look.lerp(look.limit_length(0.5), 1.0 - exp(-delta / 0.06))
 	_materials.eye.set_shader_parameter("look", _look)
 	_materials.eye.set_shader_parameter("blink", blink)
+
+
+# --- Spilled coins: shaken out of the lid gap, they bounce and shrink away.
+
+## Throws `count` coins out of the lid gap: from a run or a jet lift-off they
+## fly up and drop behind; from a landing they pop up and out of the front.
+func _spill(count: int, landing: bool) -> void:
+	var body := _body.global_transform
+	var forward := global_transform.basis.z.normalized()
+	var across := global_transform.basis.x.normalized()
+	for _i in count:
+		var coin: Spill = null
+		for candidate in _spills:
+			if candidate.age >= SPILL_LIFE:
+				coin = candidate
+				break
+		if coin == null:
+			return
+		coin.position = body * Vector3(_rng.randf_range(-0.24, 0.24), Parts.BODY_H + 0.05, _rng.randf_range(0.02, 0.2))
+		var sideways := across * _rng.randf_range(-0.9, 0.9)
+		if landing:
+			coin.velocity = _velocity * 0.3 + forward * _rng.randf_range(0.6, 1.4) + sideways + Vector3.UP * _rng.randf_range(2.6, 3.6)
+		else:
+			coin.velocity = _velocity * _rng.randf_range(0.35, 0.6) - forward * _rng.randf_range(0.5, 1.5) + sideways + Vector3.UP * _rng.randf_range(2.0, 3.0)
+		coin.axis = Vector3(_rng.randf_range(-1.0, 1.0), 0.0, _rng.randf_range(-1.0, 1.0)).normalized()
+		coin.spin = _rng.randf_range(0.0, TAU)
+		coin.spin_speed = _rng.randf_range(12.0, 24.0) * (1.0 if _rng.randf() < 0.5 else -1.0)
+		coin.age = 0.0
+		coin.bounces = 0
+		coin.ground_xz = Vector2(INF, INF)
+
+
+func _update_spills(delta: float) -> void:
+	var box := AABB(global_position, Vector3.ZERO)
+	var active := false
+	for i in _spills.size():
+		var coin := _spills[i]
+		if coin.age >= SPILL_LIFE:
+			continue
+		coin.age += delta
+		coin.velocity.y -= 9.8 * delta
+		coin.position += coin.velocity * delta
+		# Find the ground under the coin again once it has moved on.
+		if Vector2(coin.position.x, coin.position.z).distance_to(coin.ground_xz) > 0.6:
+			coin.ground_xz = Vector2(coin.position.x, coin.position.z)
+			var below := _ground_between(coin.position.x, coin.position.z, coin.position.y + 0.4, coin.position.y - 6.0, -INF)
+			coin.ground = below.y if _hit else -INF
+		var rest_y := coin.ground + Parts.COIN_RADIUS * 0.4
+		if coin.position.y < rest_y and coin.velocity.y < 0.0:
+			coin.position.y = rest_y
+			if coin.bounces < 2 and coin.velocity.y < -1.0:
+				coin.bounces += 1
+				coin.velocity = Vector3(coin.velocity.x * 0.55, -coin.velocity.y * 0.45, coin.velocity.z * 0.55)
+				coin.spin_speed *= 0.6
+			else:
+				# Down for good: slide to a stop and settle flat.
+				coin.velocity = Vector3(coin.velocity.x * 0.8, 0.0, coin.velocity.z * 0.8)
+				coin.spin_speed = 0.0
+				coin.spin = lerpf(coin.spin, roundf(coin.spin / PI) * PI, 0.3)
+		coin.spin += coin.spin_speed * delta
+		var size := SPILL_SCALE * (1.0 - smoothstep(SPILL_LIFE - 0.45, SPILL_LIFE, coin.age))
+		if coin.age >= SPILL_LIFE:
+			size = 0.0001
+		else:
+			active = true
+			box = box.expand(coin.position)
+		_spill_multimesh.set_instance_transform(i, Transform3D(Basis(coin.axis, coin.spin).scaled(Vector3.ONE * size), coin.position))
+	_spill_instance.custom_aabb = box.grow(0.5) if active else AABB(global_position - Vector3.ONE, Vector3.ONE * 2.0)
+
+
+# --- Web build only: blob shadows on the visible ground.
+
+## Soft discs under each shoe and under the chest, shrinking as they rise.
+func _update_blobs(xf: Transform3D) -> void:
+	if _blobs.is_empty():
+		return
+	var yaw := atan2(xf.basis.z.x, xf.basis.z.z)
+	for i in 2:
+		var leg := _legs[i]
+		var ground_y := leg.current.y
+		if _airborne or leg.swinging:
+			ground_y = _ground(leg.current, global_position.y).y
+			if not _hit:
+				ground_y = -INF
+		var size := clampf(1.0 - (leg.current.y - ground_y) * 2.5, 0.0, 1.0)
+		var at := Vector3(leg.current.x, ground_y + 0.012, leg.current.z)
+		_blobs[i].visible = size > 0.02
+		if _blobs[i].visible:
+			_blobs[i].global_transform = Transform3D(Basis(Vector3.UP, leg.current_yaw) * Basis.from_scale(Vector3(0.12, 1.0, 0.2) * size), at)
+	var body_size := clampf(1.0 - (global_position.y - _under.y) * 0.6, 0.0, 1.0)
+	_blobs[2].visible = body_size > 0.02
+	if _blobs[2].visible:
+		_blobs[2].global_transform = Transform3D(Basis(Vector3.UP, yaw) * Basis.from_scale(Vector3(0.48, 1.0, 0.36) * body_size), Vector3(_under.x, _under.y + 0.01, _under.z))
 
 
 # --- Jet: flames while thrusting, cartoon smoke puffs left behind.

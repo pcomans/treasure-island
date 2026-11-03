@@ -43,21 +43,26 @@ const LEG_RADIUS := 0.046
 const EYE_CENTER := Vector3(0.076, 0.2, 0.43)
 const EYE_RADII := Vector3(0.071, 0.095, 0.052)
 const EYE_TILT := 0.30
+## The eyes' pivot in the lid frame (between them); the avatar turns them back
+## upright as the lid opens, so the face stays readable.
+const EYE_MOUNT := Vector3(0.0, EYE_CENTER.y, EYE_CENTER.z)
 const COIN_RADIUS := 0.03
 const COIN_THICK := 0.007
 const PLANK_TILE := 0.64
 const COIN_TILE := 0.25
 const OUTLINE := 0.012
 
-const WOOD_OUTER := Color(0.92, 0.78, 0.66)
-const WOOD_INNER := Color(0.46, 0.36, 0.30)
-const IRON := Color(0.17, 0.17, 0.19)
-const BRASS := Color(0.90, 0.68, 0.30)
+## The wood texture carries the deep warm brown; the gold stays the brightest,
+## most saturated part of the chest (owner, 2026-11-03).
+const WOOD_OUTER := Color(1.0, 0.96, 0.92)
+const WOOD_INNER := Color(0.55, 0.47, 0.42)
+const IRON := Color(0.24, 0.24, 0.26)
+const BRASS := Color(0.80, 0.58, 0.30)
 const GOLD := Color(1.0, 0.80, 0.26)
-const LEATHER := Color(0.40, 0.22, 0.12)
+const LEATHER := Color(0.30, 0.17, 0.10)
 const INK := Color(0.03, 0.025, 0.025)
 const GLOVE := Color(0.97, 0.96, 0.93)
-const SHOE := Color(0.70, 0.13, 0.11)
+const SHOE := Color(0.62, 0.12, 0.10)
 const SOLE := Color(0.16, 0.11, 0.09)
 const RUBY := Color(0.86, 0.06, 0.16)
 const EMERALD := Color(0.08, 0.70, 0.34)
@@ -69,6 +74,7 @@ const GOLD_TEXTURE := preload("res://game/resources/textures/player/gold_coins.p
 const HOSE_SHADER := preload("res://game/resources/player/hose_limb.gdshader")
 const EYE_SHADER := preload("res://game/resources/player/chest_eye.gdshader")
 const FLAME_SHADER := preload("res://game/resources/player/jet_flame.gdshader")
+const BLOB_SHADER := preload("res://game/resources/player/blob_shadow.gdshader")
 
 ## Surface slots of the body mesh.
 enum { S_WOOD, S_METAL, S_PAINT, S_GOLD, S_GEM }
@@ -85,6 +91,7 @@ class Materials:
 	var outline: StandardMaterial3D
 	var eye: ShaderMaterial
 	var flame: ShaderMaterial
+	var blob: ShaderMaterial
 
 
 ## One surface's arrays, filled in place.
@@ -298,6 +305,9 @@ static func make_materials() -> Materials:
 	m.flame = ShaderMaterial.new()
 	m.flame.resource_name = "chest_jet_flame"
 	m.flame.shader = FLAME_SHADER
+	m.blob = ShaderMaterial.new()
+	m.blob.resource_name = "chest_blob_shadow"
+	m.blob.shader = BLOB_SHADER
 	return m
 
 
@@ -501,7 +511,7 @@ static func _gold(b: Builder) -> void:
 		var dz := (gold_height(x, z + e) - gold_height(x, z - e)) / (2.0 * e)
 		return [Vector3(x, gold_height(x, z), z), Vector3(-dx, 1.0, -dz).normalized(), Vector2(x, z) / COIN_TILE]
 	b.sheet(S_GOLD, 12, 16, heap, Color.WHITE)
-	# Coins strewn on the heap and two pinched under the front of the lid.
+	# Coins strewn on the heap.
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 7
 	for i in 11:
@@ -509,8 +519,6 @@ static func _gold(b: Builder) -> void:
 		var z := rng.randf_range(-0.18, 0.18)
 		var tilt := Basis.from_euler(Vector3(rng.randf_range(-0.5, 0.5), rng.randf_range(0, TAU), rng.randf_range(-0.5, 0.5)))
 		_coin(b, S_METAL, Transform3D(tilt, Vector3(x, gold_height(x, z) + 0.003, z)), GOLD)
-	for x: float in [-0.11, 0.15]:
-		_coin(b, S_METAL, Transform3D(Basis.from_euler(Vector3(0.35, 0.3 * x, 0.12)), Vector3(x, BODY_H + 0.004, BODY_D * 0.5 + 0.012)), GOLD)
 	_gem(b, Vector3(0.10, gold_height(0.10, 0.06) - 0.004, 0.06), 0.036, RUBY, 0.4)
 	_gem(b, Vector3(-0.15, gold_height(-0.15, -0.05) - 0.004, -0.05), 0.032, EMERALD, 1.1)
 	# A string of pearls from the heap over the front edge, hanging in a loop.
@@ -651,14 +659,14 @@ static func lid_outline(m: Materials) -> ArrayMesh:
 	return b.commit([m.outline])
 
 
-## The two eyes in the lid frame. UV is the eye-front coordinate in -1..1
-## (x across, y up); UV2 = (side, front): side +1 for the eye on the chest's
-## left, front > 0 on the visible front half.
+## The two eyes in their mount's frame (EYE_MOUNT in the lid frame). UV is the
+## eye-front coordinate in -1..1 (x across, y up); UV2 = (side, front): side +1
+## for the eye on the chest's left, front > 0 on the visible front half.
 static func eyes(m: Materials) -> ArrayMesh:
 	var b := Builder.new(1)
 	for side: float in [-1.0, 1.0]:
 		var basis := Basis(Vector3.RIGHT, -EYE_TILT) * Basis(Vector3.UP, side * 0.12)
-		var xform := Transform3D(basis, Vector3(side * EYE_CENTER.x, EYE_CENTER.y, EYE_CENTER.z))
+		var xform := Transform3D(basis, Vector3(side * EYE_CENTER.x, EYE_CENTER.y, EYE_CENTER.z) - EYE_MOUNT)
 		var fn := func(u: float, v: float) -> Array:
 			var lat := lerpf(-PI * 0.5, PI * 0.5, v)
 			var lon := u * TAU
@@ -764,6 +772,18 @@ static func flames(m: Materials) -> ArrayMesh:
 			return [centre + radial * radius + Vector3.DOWN * v, (radial + Vector3.DOWN * 0.3).normalized(), Vector2(u, v), Vector2(float(k), 0.0)]
 		b.sheet(0, 10, 12, fn, Color.WHITE)
 	return b.commit([m.flame])
+
+
+## A flat unit disc (in XZ, facing up) for the web build's blob shadows; UV
+## runs -1..1 across it.
+static func blob(m: Materials) -> ArrayMesh:
+	var b := Builder.new(1)
+	var fn := func(u: float, v: float) -> Array:
+		var angle := u * TAU
+		var radial := Vector3(cos(angle), 0.0, sin(angle)) * v
+		return [radial, Vector3.UP, Vector2(radial.x, radial.z)]
+	b.sheet(0, 2, 16, fn, Color.WHITE)
+	return b.commit([m.blob])
 
 
 ## A unit sphere for the jet's smoke puffs.
