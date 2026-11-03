@@ -1183,31 +1183,31 @@
       "_k": 11,
       "loggias": [
         {
-          "station_m": 7.2435,
-          "local_station_m": 5.184,
+          "station_m": 1.95,
+          "local_station_m": 1.95,
           "basis": {
-            "source_run": 23,
+            "source_run": 22,
             "start": [
+              -422.519,
+              2.476,
+              -256.909
+            ],
+            "end": [
               -424.367,
               2.441,
               -256
             ],
-            "end": [
-              -434.337,
-              2.312,
-              -251.098
-            ],
             "tangent": [
-              -0.8973955407382392,
+              -0.8973215933117888,
               0,
-              0.44122697499486957
+              0.4413773421647202
             ],
             "normal": [
-              -0.44122697499486957,
+              -0.4413773421647202,
               0,
-              -0.8973955407382392
+              -0.8973215933117888
             ],
-            "length_m": 11.109928172585063
+            "length_m": 2.059462308467925
           },
           "wall_receiver": true,
           "width_m": 3.2,
@@ -1250,8 +1250,8 @@
           },
           "wall_receiver": true,
           "width_m": 3,
-          "height_m": 2.6108,
-          "center_y": 3.8246,
+          "height_m": 2.5355,
+          "center_y": 3.8622,
           "depth_m": 1.6,
           "railing": false,
           "post": "start",
@@ -1260,10 +1260,15 @@
             0.479,
             0.435,
             0.358
+          ],
+          "back_rgb": [
+            0.331,
+            0.3,
+            0.247
           ]
         }
       ],
-      "inference": "L2 all-sides audit 2026-11-03 (photographed w95934130 N (130-NNW-7ppB-h112, Mar 2025)): recessed upper balcony wood-lined and opened up to the eave; the lower recessed slider is now an open undercut on a post (its walls and soffit in a shaded tone of the wall colour, as in the photos) at the rear corner. Positions and dimensions production_inference."
+      "inference": "L2 all-sides audit 2026-11-03 (photographed w95934130 N (130-NNW-7ppB-h112, Mar 2025)): recessed upper balcony wood-lined, opened up to the eave and set over the undercut on the rear half as in the photo; the lower recessed slider is now an open undercut on a post (its walls and soffit in a shaded tone of the wall colour, as in the photos) at the rear corner. Positions and dimensions production_inference."
     },
     {
       "id": "right-end",
@@ -1369,8 +1374,8 @@
           },
           "wall_receiver": true,
           "width_m": 3,
-          "height_m": 2.3163,
-          "center_y": 3.9718,
+          "height_m": 2.2749,
+          "center_y": 3.9925,
           "depth_m": 1.6,
           "railing": false,
           "post": "end",
@@ -1379,6 +1384,11 @@
             0.479,
             0.435,
             0.358
+          ],
+          "back_rgb": [
+            0.331,
+            0.3,
+            0.247
           ]
         }
       ],

@@ -1297,8 +1297,8 @@
           },
           "wall_receiver": true,
           "width_m": 3,
-          "height_m": 2.3083,
-          "center_y": 4.0969,
+          "height_m": 2.2873,
+          "center_y": 4.1074,
           "depth_m": 1.6,
           "railing": false,
           "post": "end",
@@ -1307,6 +1307,11 @@
             0.517,
             0.512,
             0.495
+          ],
+          "back_rgb": [
+            0.357,
+            0.353,
+            0.342
           ]
         }
       ],

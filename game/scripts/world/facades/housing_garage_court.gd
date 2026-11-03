@@ -241,13 +241,15 @@ static func run_siding(root: Node3D, begin: int, run: int, cfg: Dictionary, sidi
 ## back wall with a glazed sliding door, side walls, soffit and floor, all
 ## inside the host wall, plus an optional railing across the opening.
 ## Opt-in lining_rgb lines the recess walls and soffit in that colour (the
-## wood-lined end balconies). Opt-in "kind": "undercut" leaves the recess open,
-## with no glazed door, and an optional "post" ("start" or "end", the opening
-## edge toward -t or +t) stands a post just inside that edge.
+## wood-lined end balconies); opt-in back_rgb gives the back wall its own
+## colour (a darker back reads as depth). Opt-in "kind": "undercut" leaves the
+## recess open, with no glazed door, and an optional "post" ("start" or "end",
+## the opening edge toward -t or +t) stands a post just inside that edge.
 static func loggia(root: Node3D, point: Vector3, t: Vector3, n: Vector3, width: float, height: float, motif: Dictionary, palette: Dictionary, siding: Material, trim: Material, dark: Material, concrete: Material) -> void:
-	if motif.has("lining_rgb") and not _rgb(motif.lining_rgb):
-		_invalid(root, "Invalid loggia lining_rgb %s" % [motif.lining_rgb])
-		return
+	for key: String in ["lining_rgb", "back_rgb"]:
+		if motif.has(key) and not _rgb(motif[key]):
+			_invalid(root, "Invalid loggia %s %s" % [key, motif[key]])
+			return
 	var undercut := motif.has("kind")
 	if undercut and str(motif.kind) != "undercut":
 		_invalid(root, "Invalid loggia kind %s" % [motif.kind])
@@ -264,6 +266,7 @@ static func loggia(root: Node3D, point: Vector3, t: Vector3, n: Vector3, width: 
 	var top := point.y + height * 0.5
 	var base := Vector3(point.x, 0.0, point.z)
 	var inner := _bucket()
+	var back := inner if not motif.has("back_rgb") else _bucket()
 	var soffit := _bucket()
 	var floor_slab := _bucket()
 	var glazing := _bucket()
@@ -275,7 +278,7 @@ static func loggia(root: Node3D, point: Vector3, t: Vector3, n: Vector3, width: 
 	var r1 := r0 - n * depth
 	var up_b := Vector3.UP * bottom
 	var up_t := Vector3.UP * top
-	_quad(inner, l1 + up_b, r1 + up_b, r1 + up_t, l1 + up_t, n)
+	_quad(back, l1 + up_b, r1 + up_b, r1 + up_t, l1 + up_t, n)
 	_quad(inner, l0 + up_b, l1 + up_b, l1 + up_t, l0 + up_t, t)
 	_quad(inner, r1 + up_b, r0 + up_b, r0 + up_t, r1 + up_t, -t)
 	_quad(soffit, l0 + up_t, r0 + up_t, r1 + up_t, l1 + up_t, Vector3.DOWN)
@@ -307,6 +310,8 @@ static func loggia(root: Node3D, point: Vector3, t: Vector3, n: Vector3, width: 
 		walls = PARTS._material(_color(motif, "lining_rgb", Color.GRAY), 0.85)
 		soffit_material = walls
 	_commit(root, inner, walls, "LoggiaWalls")
+	if motif.has("back_rgb"):
+		_commit(root, back, PARTS._material(_color(motif, "back_rgb", Color.GRAY), 0.9), "LoggiaBack")
 	_commit(root, soffit, soffit_material, "LoggiaSoffit")
 	_commit(root, floor_slab, concrete, "LoggiaFloor")
 	_commit(root, glazing, dark, "LoggiaGlazing")

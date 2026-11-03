@@ -886,8 +886,8 @@
           },
           "wall_receiver": true,
           "width_m": 3,
-          "height_m": 2.3328,
-          "center_y": 4.4106,
+          "height_m": 2.3115,
+          "center_y": 4.4212,
           "depth_m": 1.6,
           "railing": false,
           "post": "start",
@@ -896,6 +896,11 @@
             0.533,
             0.533,
             0.522
+          ],
+          "back_rgb": [
+            0.369,
+            0.369,
+            0.361
           ]
         }
       ],
@@ -1003,8 +1008,8 @@
           },
           "wall_receiver": true,
           "width_m": 3,
-          "height_m": 2.7607,
-          "center_y": 4.1967,
+          "height_m": 2.712,
+          "center_y": 4.2211,
           "depth_m": 1.6,
           "railing": false,
           "post": "end",
@@ -1013,6 +1018,11 @@
             0.533,
             0.533,
             0.522
+          ],
+          "back_rgb": [
+            0.369,
+            0.369,
+            0.361
           ]
         }
       ],

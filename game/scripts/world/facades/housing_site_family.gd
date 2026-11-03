@@ -255,6 +255,9 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bo
 		# Opt-in triangular closures (gablets, soffits), wound as authored.
 		for triangle: Array in shallow.get("closure_triangles", []):
 			PARTS._mesh(root, [vec(triangle[0]), vec(triangle[1]), vec(triangle[2])], PackedInt32Array([0, 1, 2]), siding)
+		# Opt-in closures in the trim material (a painted parapet band), wound like closures.
+		for closure: Array in shallow.get("trim_closures", []):
+			PARTS._quad(root, [vec(closure[0]), vec(closure[1]), vec(closure[2]), vec(closure[3])], trim)
 		# Optional facade.eave_rgb colours only these eave fascia beams; without it they keep the trim material.
 		var eave: Material = trim
 		var facade_cfg: Dictionary = cfg.get("facade", {})
