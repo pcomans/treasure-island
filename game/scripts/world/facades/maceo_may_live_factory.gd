@@ -7,11 +7,12 @@ const CONFIG_PATH := "res://game/resources/facades/maceo_may_quality_study.json"
 const WALL_KEY := "building:r19685981:wall"
 const ROOF_KEY := "building:r19685981:roof"
 const TARGET_RUNS := [8, 9, 10, 11, 12, 13, 14, 15, 16]
-# Unphotographed outer WSW (0-6) and NNW (17-20) faces inherit the observed ENE
-# bay grid (L2 all-sides audit 2026-11-03; production_inference).
-const INFERRED_RUNS := [0, 1, 2, 3, 4, 5, 6, 17, 18, 19, 20]
-# Run 7 and the inner courtyard ring stay as they were.
-const PROTECTED_RUNS := [7, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39]
+# Unphotographed outer WSW (0-6), SW corner return (7) and NNW (17-20) faces
+# inherit the observed ENE bay grid (L2 all-sides audit 2026-11-03;
+# production_inference).
+const INFERRED_RUNS := [0, 1, 2, 3, 4, 5, 6, 7, 17, 18, 19, 20]
+# The inner courtyard ring stays as it was.
+const PROTECTED_RUNS := [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39]
 # The observed ENE bay, decoded from the reviewed ENE geometry: per upper storey
 # a 3.44 x 2.68 m pale frame around a graphite recess with two glazed lights, a
 # rail and a louvre band; on the graphite base two tall narrow framed lights.

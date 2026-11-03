@@ -19,13 +19,13 @@
     4,
     5,
     6,
+    7,
     17,
     18,
     19,
     20
   ],
   "protected_runs": [
-    7,
     21,
     22,
     23,
@@ -167,7 +167,7 @@
       16.63,
       19.53
     ],
-    "unknowns": "Cropped upper extents and far ends; all upper cadence/dimensions inferred inside source18m mass. No neighbor schedule, courtyard transfer, interior, roof or story change. Run7 retained unchanged. 2026-11-03: the WSW and NNW outer faces inherit the ENE grid (inferred_grid); run 7 and the courtyard ring are unchanged."
+    "unknowns": "Cropped upper extents and far ends; all upper cadence/dimensions inferred inside source18m mass. No neighbor schedule, courtyard transfer, interior, roof or story change. Run7 retained unchanged. 2026-11-03: the WSW, SW corner return (run 7) and NNW outer faces inherit the ENE grid (inferred_grid); the courtyard ring is unchanged."
   },
   "expected": {
     "render_triangles": 16436,
@@ -185,6 +185,14 @@
           6
         ],
         "bays": 17
+      },
+      {
+        "side": "SW corner return",
+        "runs": [
+          7,
+          7
+        ],
+        "bays": 1
       },
       {
         "side": "NNW",
