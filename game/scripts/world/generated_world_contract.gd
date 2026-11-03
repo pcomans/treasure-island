@@ -10,27 +10,6 @@ const EXPECTED_CONTEXT_ROWS := 4
 const EXPECTED_CHUNK_SIZE_M := 256.0
 const ROAD_BASE_SURFACE_BIAS_M := 0.078
 const ROAD_PEDESTRIAN_SURFACE_BIAS_M := 0.08
-const VEGETATION_SCHEMA := "ti.vegetation/1"
-const VEGETATION_SEED := 1414092337
-const EXPECTED_VEGETATION_COUNT := 123
-const VEGETATION_ASSET_ROOT := "res://game/resources/models/vegetation/kenney_nature_kit/"
-const VEGETATION_ASSET_SPECIES := {
-	"res://game/resources/models/vegetation/kenney_nature_kit/grass.glb": "ornamental_grass",
-	"res://game/resources/models/vegetation/kenney_nature_kit/grass_large.glb": "ornamental_grass",
-	"res://game/resources/models/vegetation/kenney_nature_kit/grass_leafsLarge.glb": "ornamental_grass",
-	"res://game/resources/models/vegetation/kenney_nature_kit/plant_bushDetailed.glb": "shrub",
-	"res://game/resources/models/vegetation/kenney_nature_kit/plant_bushLarge.glb": "shrub",
-	"res://game/resources/models/vegetation/kenney_nature_kit/plant_bushSmall.glb": "shrub",
-	"res://game/resources/models/vegetation/kenney_nature_kit/tree_detailed.glb": "broadleaf",
-	"res://game/resources/models/vegetation/kenney_nature_kit/tree_oak.glb": "broadleaf",
-	"res://game/resources/models/vegetation/kenney_nature_kit/tree_palmBend.glb": "palm",
-	"res://game/resources/models/vegetation/kenney_nature_kit/tree_palmDetailedShort.glb": "palm",
-	"res://game/resources/models/vegetation/kenney_nature_kit/tree_palmDetailedTall.glb": "palm",
-	"res://game/resources/models/vegetation/kenney_nature_kit/tree_pineTallA_detailed.glb": "conifer",
-	"res://game/resources/models/vegetation/kenney_nature_kit/tree_pineTallB_detailed.glb": "conifer",
-	"res://game/resources/models/vegetation/kenney_nature_kit/tree_plateau.glb": "broadleaf",
-	"res://game/resources/models/vegetation/kenney_nature_kit/tree_thin.glb": "broadleaf",
-}
 const STREET_DETAIL_SCHEMA := "ti.street-detail/1"
 const STREET_FENCE_KIT := preload("res://game/scripts/world/street_fence_kit.gd")
 const STREET_VEGETATION_KIT := preload("res://game/scripts/world/street_vegetation_kit.gd")
@@ -207,13 +186,6 @@ static func load_and_validate(manifest_path: String) -> Dictionary:
 	result = _validate_context(context_result.data, source_scopes, record_keys, represented_context, represented_playable, manifest.material_keys)
 	if not result.ok:
 		return result
-	var vegetation_path := _resolve_artifact_path(manifest_path, str(manifest.vegetation.path))
-	var vegetation_result := _read_json_object(vegetation_path)
-	if not vegetation_result.ok:
-		return vegetation_result
-	result = _validate_vegetation(vegetation_result.data, chunk_results, manifest.playable_boundary)
-	if not result.ok:
-		return result
 	var street_detail_path := _resolve_artifact_path(manifest_path, str(manifest.street_detail.path))
 	var street_detail_result := _read_json_object(street_detail_path)
 	if not street_detail_result.ok:
@@ -251,7 +223,6 @@ static func load_and_validate(manifest_path: String) -> Dictionary:
 		"chunks": chunk_results,
 		"context": context_result.data,
 		"terrain": terrain_result.data,
-		"vegetation": vegetation_result.data,
 		"street_detail": street_detail_result.data,
 		"shoreline": shoreline_result.data,
 		"coverage_rows": coverage_rows,
@@ -263,10 +234,6 @@ static func load_and_validate(manifest_path: String) -> Dictionary:
 			"playable_rows": EXPECTED_PLAYABLE_ROWS,
 			"context_rows": EXPECTED_CONTEXT_ROWS,
 			"source_rows": EXPECTED_SOURCE_ROWS,
-			"vegetation_seed": int(vegetation_result.data.seed),
-			"vegetation_instances": int(vegetation_result.data.counts.total),
-			"vegetation_species_counts": vegetation_result.data.counts.by_species.duplicate(true),
-			"vegetation_zone_counts": vegetation_result.data.counts.by_zone.duplicate(true),
 			"street_detail_rows": int(street_detail_result.data.counts.total),
 		},
 	}
@@ -325,9 +292,9 @@ static func _validate_manifest_shape(manifest: Dictionary) -> Dictionary:
 	if not manifest.get("files", null) is Array or manifest.files.is_empty():
 		return _failure("manifest_files", "Manifest artifact index is missing.")
 	if not manifest.get("coverage_ledger", null) is Dictionary or not manifest.get("context", null) is Dictionary \
-	or not manifest.get("terrain", null) is Dictionary or not manifest.get("vegetation", null) is Dictionary \
+	or not manifest.get("terrain", null) is Dictionary \
 	or not manifest.get("street_detail", null) is Dictionary or not manifest.get("shoreline", null) is Dictionary:
-		return _failure("manifest_required_files", "Manifest coverage, context, terrain, vegetation, street-detail or shoreline entry is missing.")
+		return _failure("manifest_required_files", "Manifest coverage, context, terrain, street-detail or shoreline entry is missing.")
 	if not manifest.get("initial_spawn", null) is Dictionary:
 		return _failure("manifest_spawn", "Manifest initial spawn is missing.")
 	if not manifest.get("playable_boundary", null) is Dictionary:
@@ -421,7 +388,7 @@ static func _validate_artifact_index(manifest: Dictionary, manifest_path: String
 	if actual_content_hash != str(manifest.content_sha256):
 		return _failure("manifest_content_hash", "Manifest artifact-index content hash does not match.")
 
-	var required_entries: Array[Dictionary] = [manifest.coverage_ledger, manifest.context, manifest.terrain, manifest.vegetation, manifest.street_detail, manifest.shoreline]
+	var required_entries: Array[Dictionary] = [manifest.coverage_ledger, manifest.context, manifest.terrain, manifest.street_detail, manifest.shoreline]
 	for chunk_value: Variant in manifest.chunks:
 		required_entries.append(chunk_value)
 	for required: Dictionary in required_entries:
@@ -491,161 +458,6 @@ static func _validate_terrain(terrain: Dictionary) -> Dictionary:
 	or float(foundations.get("maximum_roof_elevation_range_m", INF)) > float(foundations.get("tolerance_m", -INF)) \
 	or float(foundations.get("maximum_height_deviation_m", INF)) > float(foundations.get("tolerance_m", -INF)):
 		return _failure("building_foundations", "Building foundation, roof-flatness, or source-height audit drifted.")
-	return {"ok": true}
-
-
-static func _validate_vegetation(vegetation: Dictionary, chunks: Array[Dictionary], boundary: Dictionary) -> Dictionary:
-	if str(vegetation.get("schema_version", "")) != VEGETATION_SCHEMA:
-		return _failure("vegetation_schema", "Generated vegetation schema is invalid.")
-	if int(vegetation.get("seed", -1)) != VEGETATION_SEED or vegetation.get("visual_only", false) != true:
-		return _failure("vegetation_contract", "Vegetation must use the pinned seed and remain visual-only.")
-	if str(vegetation.get("asset_root", "")) != VEGETATION_ASSET_ROOT:
-		return _failure("vegetation_assets", "Vegetation asset root is not the curated Kenney directory.")
-	var assets: Array = vegetation.get("assets", [])
-	if assets.size() != VEGETATION_ASSET_SPECIES.size():
-		return _failure("vegetation_assets", "Vegetation allowed-asset palette is incomplete.")
-	var prior_asset_path := ""
-	for asset_value: Variant in assets:
-		if not asset_value is Dictionary:
-			return _failure("vegetation_assets", "Vegetation asset entry is not an object.")
-		var asset: Dictionary = asset_value
-		var asset_path := str(asset.get("path", ""))
-		if not asset_path.begins_with(VEGETATION_ASSET_ROOT) or not asset_path.ends_with(".glb") \
-		or not VEGETATION_ASSET_SPECIES.has(asset_path) \
-		or str(asset.get("species", "")) != str(VEGETATION_ASSET_SPECIES[asset_path]) \
-		or (not prior_asset_path.is_empty() and asset_path <= prior_asset_path) \
-		or not ResourceLoader.exists(asset_path, "PackedScene"):
-			return _failure("vegetation_assets", "Missing, unsafe, unsorted, or mismatched vegetation asset: %s" % asset_path)
-		prior_asset_path = asset_path
-	var clearances: Dictionary = vegetation.get("clearances_m", {})
-	var expected_clearances := {
-		"boundary_shoreline": 14.0,
-		"roads_paths": 4.0,
-		"buildings_foundations": 5.0,
-		"terrain_shoreline_overlays": 3.0,
-		"ferry_spawn": 24.0,
-		"ferry_arrival_path": 16.0,
-		"normal_qa_route": 7.0,
-		"whole_island_qa_route": 5.0,
-	}
-	for key_value: Variant in expected_clearances.keys():
-		var key := str(key_value)
-		if not is_equal_approx(float(clearances.get(key, -1.0)), float(expected_clearances[key])):
-			return _failure("vegetation_clearance", "Vegetation clearance contract drifted for %s." % key)
-	var counts: Dictionary = vegetation.get("counts", {})
-	var placements: Array = vegetation.get("placements", [])
-	if placements.size() != EXPECTED_VEGETATION_COUNT or int(counts.get("total", -1)) != EXPECTED_VEGETATION_COUNT:
-		return _failure("vegetation_count", "Expected the pinned 123-placement vegetation pass.")
-	var expected_species_counts := {
-		"broadleaf": 28,
-		"conifer": 21,
-		"ornamental_grass": 20,
-		"palm": 13,
-		"shrub": 41,
-	}
-	var expected_zone_counts := {
-		"central_conifer_groves": 21,
-		"legacy_grid_broadleaf": 20,
-		"naip_unknown_shrubs": 22,
-		"north_west_lawn_broadleaf": 8,
-		"south_ornamental_beds": 33,
-		"south_palm_rows": 13,
-		"south_shrub_groups": 6,
-	}
-	if not _integer_counts_match(counts.get("by_species", {}), expected_species_counts) \
-	or not _integer_counts_match(counts.get("by_zone", {}), expected_zone_counts):
-		return _failure("vegetation_density", "Vegetation species or zone density drifted.")
-	var by_asset: Dictionary = counts.get("by_asset", {})
-	if by_asset.size() != VEGETATION_ASSET_SPECIES.size():
-		return _failure("vegetation_assets", "Vegetation per-asset counts are incomplete.")
-	for asset_path_value: Variant in VEGETATION_ASSET_SPECIES.keys():
-		if int(by_asset.get(str(asset_path_value), 0)) <= 0:
-			return _failure("vegetation_assets", "Every curated vegetation asset must have a placement.")
-	var land_records: Dictionary = {}
-	var road_records: Array[Dictionary] = []
-	var building_records: Array[Dictionary] = []
-	var shoreline_overlay_records: Array[Dictionary] = []
-	for chunk: Dictionary in chunks:
-		for record_value: Variant in chunk.records:
-			var record: Dictionary = record_value
-			if str(record.feature_kind) == "land_ground":
-				land_records[str(record.object_key)] = record
-			elif str(record.feature_kind) == "road_path":
-				road_records.append(record)
-			elif str(record.feature_kind) in ["building_roof", "building_part_roof"]:
-				building_records.append(record)
-			elif str(record.feature_kind) == "terrain_overlay":
-				shoreline_overlay_records.append(record)
-	var seen_ids: Dictionary = {}
-	var prior_id := ""
-	var computed_species_counts := {"broadleaf": 0, "conifer": 0, "ornamental_grass": 0, "palm": 0, "shrub": 0}
-	var computed_zone_counts := expected_zone_counts.duplicate()
-	for zone_value: Variant in computed_zone_counts.keys():
-		computed_zone_counts[zone_value] = 0
-	for placement_value: Variant in placements:
-		if not placement_value is Dictionary:
-			return _failure("vegetation_placement", "Vegetation placement is not an object.")
-		var placement: Dictionary = placement_value
-		var placement_id := str(placement.get("id", ""))
-		var asset_path := str(placement.get("asset_path", ""))
-		var species := str(placement.get("species", ""))
-		var zone := str(placement.get("zone", ""))
-		if not placement_id.begins_with("vegetation:") or seen_ids.has(placement_id) \
-		or (not prior_id.is_empty() and placement_id <= prior_id):
-			return _failure("vegetation_order", "Vegetation IDs must be canonical, unique, and sorted.")
-		if not VEGETATION_ASSET_SPECIES.has(asset_path) or str(VEGETATION_ASSET_SPECIES[asset_path]) != species \
-		or not computed_species_counts.has(species) or not computed_zone_counts.has(zone):
-			return _failure("vegetation_palette", "Vegetation placement has an unknown zone/species/asset.")
-		var position: Array = placement.get("position_m", [])
-		var yaw := float(placement.get("yaw_radians", INF))
-		var uniform_scale := float(placement.get("uniform_scale", -1.0))
-		if position.size() != 3 or not is_finite(float(position[0])) or not is_finite(float(position[1])) \
-		or not is_finite(float(position[2])) or not is_finite(yaw) or yaw < -PI or yaw > PI \
-		or not is_finite(uniform_scale) or uniform_scale < 2.8 or uniform_scale > 7.4:
-			return _failure("vegetation_transform", "Vegetation placement transform is invalid: %s" % placement_id)
-		var xz := Vector2(float(position[0]), float(position[2]))
-		if not contains_xz(boundary, xz):
-			return _failure("vegetation_boundary", "Vegetation placement is outside Treasure Island: %s" % placement_id)
-		var support: Dictionary = placement.get("terrain_support", {})
-		var support_key := str(support.get("object_key", ""))
-		var triangle_index_value: Variant = support.get("triangle_index", null)
-		if not land_records.has(support_key) or not _is_nonnegative_json_integer(triangle_index_value):
-			return _failure("vegetation_grounding", "Vegetation placement lacks playable terrain support: %s" % placement_id)
-		var terrain_sample := _terrain_triangle_sample(land_records[support_key], int(triangle_index_value), xz)
-		if not terrain_sample.ok or absf(float(terrain_sample.elevation_m) - float(position[1])) > 0.001001 \
-		or not is_equal_approx(float(support.get("elevation_m", INF)), float(position[1])):
-			return _failure("vegetation_grounding", "Vegetation placement is not exactly grounded: %s" % placement_id)
-		if _minimum_plan_distance_to_records(xz, shoreline_overlay_records) < 2.998:
-			return _failure("vegetation_shoreline_overlay", "Vegetation placement enters a terrain/shoreline overlay: %s" % placement_id)
-		if zone == "naip_unknown_shrubs":
-			if species != "shrub" or str(placement.get("annotation_tree_type", "")) != "unknown" \
-			or str(placement.get("annotation_id", "")).is_empty() \
-			or _minimum_plan_distance_to_records(xz, road_records) < 0.001 \
-			or _minimum_plan_distance_to_records(xz, building_records) < 0.001:
-				return _failure("vegetation_naip_unknown", "NAIP unknown shrub identity or surface-exterior contract failed: %s" % placement_id)
-		seen_ids[placement_id] = true
-		prior_id = placement_id
-		computed_species_counts[species] += 1
-		computed_zone_counts[zone] += 1
-	if not _integer_counts_match(computed_species_counts, expected_species_counts) \
-	or not _integer_counts_match(computed_zone_counts, expected_zone_counts):
-		return _failure("vegetation_counts", "Vegetation placement rows do not match declared counts.")
-	var audit: Dictionary = vegetation.get("audit", {})
-	if int(audit.get("terrain_grounded_count", -1)) != EXPECTED_VEGETATION_COUNT or int(audit.get("ybi_placements", -1)) != 0:
-		return _failure("vegetation_audit", "Vegetation grounding or no-YBI audit drifted.")
-	var annotation_audit: Dictionary = audit.get("naip_unknown_annotations", {})
-	var annotation_clearances: Dictionary = annotation_audit.get("clearance_policy_m", {})
-	if int(annotation_audit.get("input_count", -1)) != 22 \
-	or int(annotation_audit.get("placed_count", -1)) != 22 \
-	or int(annotation_audit.get("rejected_count", -1)) != 0 \
-	or (annotation_audit.get("procedural_buffer_exceptions", []) as Array).size() != 7 \
-	or annotation_audit.get("fixed_projected_locations", false) != true \
-	or not is_equal_approx(float(annotation_clearances.get("roads_paths", -1.0)), 0.001) \
-	or not is_equal_approx(float(annotation_clearances.get("buildings_foundations", -1.0)), 0.001):
-		return _failure("vegetation_naip_unknown", "NAIP unknown-to-shrub audit drifted.")
-	var observed_clearances: Dictionary = audit.get("minimum_observed_clearances_m", {})
-	if float(observed_clearances.get("terrain_shoreline_overlays", -1.0)) < 3.0:
-		return _failure("vegetation_shoreline_overlay", "Vegetation terrain/shoreline overlay clearance audit failed.")
 	return {"ok": true}
 
 
@@ -1001,76 +813,6 @@ static func _integer_counts_match(actual_value: Variant, expected: Dictionary) -
 		if not actual.has(key) or int(actual[key]) != int(expected[key]):
 			return false
 	return true
-
-
-static func _terrain_triangle_sample(record: Dictionary, triangle_index: int, point: Vector2) -> Dictionary:
-	var indices: Array = record.get("indices", [])
-	var vertices: Array = record.get("vertices", [])
-	var offset := triangle_index * 3
-	if offset < 0 or offset + 2 >= indices.size():
-		return {"ok": false}
-	var points: Array[Vector3] = []
-	for index_offset in 3:
-		var vertex_index := int(indices[offset + index_offset])
-		if vertex_index < 0 or vertex_index * 3 + 2 >= vertices.size():
-			return {"ok": false}
-		points.append(Vector3(
-			float(vertices[vertex_index * 3]),
-			float(vertices[vertex_index * 3 + 1]),
-			float(vertices[vertex_index * 3 + 2])
-		))
-	var a := points[0]
-	var b := points[1]
-	var c := points[2]
-	var denominator := (b.z - c.z) * (a.x - c.x) + (c.x - b.x) * (a.z - c.z)
-	if absf(denominator) <= 0.0000000001:
-		return {"ok": false}
-	var weight_a := ((b.z - c.z) * (point.x - c.x) + (c.x - b.x) * (point.y - c.z)) / denominator
-	var weight_b := ((c.z - a.z) * (point.x - c.x) + (a.x - c.x) * (point.y - c.z)) / denominator
-	var weight_c := 1.0 - weight_a - weight_b
-	if weight_a < -0.0000001 or weight_b < -0.0000001 or weight_c < -0.0000001:
-		return {"ok": false}
-	return {"ok": true, "elevation_m": weight_a * a.y + weight_b * b.y + weight_c * c.y}
-
-
-static func _minimum_plan_distance_to_records(point: Vector2, records: Array[Dictionary]) -> float:
-	var minimum := INF
-	for record: Dictionary in records:
-		var indices: Array = record.indices
-		var vertices: Array = record.vertices
-		for offset in range(0, indices.size(), 3):
-			var triangle: Array[Vector2] = []
-			for index_offset in 3:
-				var vertex_index := int(indices[offset + index_offset])
-				triangle.append(Vector2(float(vertices[vertex_index * 3]), float(vertices[vertex_index * 3 + 2])))
-			if _point_in_triangle_2d(point, triangle):
-				return 0.0
-			for edge_index in 3:
-				minimum = minf(minimum, _point_to_segment_distance_2d(point, triangle[edge_index], triangle[(edge_index + 1) % 3]))
-	return minimum
-
-
-static func _point_in_triangle_2d(point: Vector2, triangle: Array[Vector2]) -> bool:
-	var signs: Array[float] = []
-	for index in 3:
-		var left := triangle[index]
-		var right := triangle[(index + 1) % 3]
-		signs.append((point.x - right.x) * (left.y - right.y) - (left.x - right.x) * (point.y - right.y))
-	var has_negative := false
-	var has_positive := false
-	for sign_value: float in signs:
-		has_negative = has_negative or sign_value < -0.0000001
-		has_positive = has_positive or sign_value > 0.0000001
-	return not (has_negative and has_positive)
-
-
-static func _point_to_segment_distance_2d(point: Vector2, start: Vector2, end: Vector2) -> float:
-	var delta := end - start
-	var length_squared := delta.length_squared()
-	if length_squared <= 0.0:
-		return point.distance_to(start)
-	var fraction := clampf((point - start).dot(delta) / length_squared, 0.0, 1.0)
-	return point.distance_to(start + delta * fraction)
 
 
 static func _read_and_validate_coverage(path: String) -> Dictionary:

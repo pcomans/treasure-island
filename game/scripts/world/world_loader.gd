@@ -102,23 +102,14 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 		_free_staged(staged_reports)
 		_fail(str(shoreline_result.get("code", "shoreline_build")), str(shoreline_result.get("message", "Could not build the validated shoreline.")), [])
 		return
-	var vegetation_builder := VegetationBuilder.new()
-	var vegetation_result := vegetation_builder.build(validation.vegetation)
-	if not vegetation_result.ok:
-		_free_staged(staged_reports)
-		shoreline_result.node.free()
-		_fail(str(vegetation_result.get("code", "vegetation_build")), str(vegetation_result.get("message", "Could not build validated vegetation.")), [])
-		return
 	var furniture_result := StreetFurnitureBuilder.new().build(validation.street_detail)
 	if not furniture_result.ok:
-		vegetation_result.node.free()
 		shoreline_result.node.free()
 		_free_staged(staged_reports)
 		_fail(str(furniture_result.get("code", "street_furniture_build")), str(furniture_result.get("message", "Could not build the street furniture.")), [])
 		return
 	var fence_result := StreetFenceBuilder.new().build(validation.street_detail)
 	if not fence_result.ok:
-		vegetation_result.node.free()
 		furniture_result.node.free()
 		shoreline_result.node.free()
 		_free_staged(staged_reports)
@@ -126,17 +117,15 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 		return
 	var clutter_result := StreetClutterBuilder.new().build(validation.street_detail)
 	if not clutter_result.ok:
-		vegetation_result.node.free()
 		furniture_result.node.free()
 		fence_result.node.free()
 		shoreline_result.node.free()
 		_free_staged(staged_reports)
 		_fail(str(clutter_result.get("code", "street_clutter_build")), str(clutter_result.get("message", "Could not build the street clutter.")), [])
 		return
-	# The planted trees and grass of the street-detail vegetation rows, beside the placeholder vegetation.
+	# The planted trees and grass of the street-detail vegetation rows.
 	var planting_result := StreetVegetationBuilder.new().build(validation.street_detail)
 	if not planting_result.ok:
-		vegetation_result.node.free()
 		furniture_result.node.free()
 		fence_result.node.free()
 		clutter_result.node.free()
@@ -153,7 +142,6 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 	runtime_evidence.add_builder_report(shoreline_result)
 	var family_result := HOUSING_FAMILY.install(buildings, validation.chunks)
 	if not family_result.ok:
-		vegetation_result.node.free()
 		furniture_result.node.free()
 		fence_result.node.free()
 		clutter_result.node.free()
@@ -162,7 +150,6 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 		return
 	var bulgarian_result := BULGARIAN_WALL.install(buildings,ground_and_areas,validation.chunks)
 	if not bulgarian_result.ok:
-		vegetation_result.node.free()
 		furniture_result.node.free()
 		fence_result.node.free()
 		clutter_result.node.free()
@@ -171,19 +158,16 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 		return
 	var mersea_result := MERSEA.install(buildings, validation.chunks)
 	if not mersea_result.ok:
-		vegetation_result.node.free()
 		furniture_result.node.free()
 		fence_result.node.free()
 		clutter_result.node.free()
 		planting_result.node.free()
 		_fail("mersea", str(mersea_result.message), [])
 		return
-	street_detail_layer("vegetation").add_child(vegetation_result.node)
 	street_detail_layer("vegetation").add_child(planting_result.node)
 	street_detail_layer("furniture").add_child(furniture_result.node)
 	street_detail_layer("fences").add_child(fence_result.node)
 	street_detail_layer("clutter").add_child(clutter_result.node)
-	runtime_evidence.set_vegetation_report(vegetation_result)
 	runtime_evidence.set_street_detail_report(validation.street_detail)
 	_apply_street_detail_choice(street_choice)
 	world_boundary.configure(validation.boundary)
@@ -193,8 +177,6 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 	var ready_report: Dictionary = validation.report.duplicate(true)
 	ready_report["housing_family"] = family_result
 	ready_report["bulgarian_wall"] = bulgarian_result
-	ready_report["vegetation_multimesh_batches"] = int(vegetation_result.multimesh_batches)
-	ready_report["vegetation_rendered_triangles"] = int(vegetation_result.rendered_triangles)
 	ready_report["street_vegetation"] = {"trees": int(planting_result.trees), "grass_clumps": int(planting_result.grass_clumps), "multimesh_batches": int(planting_result.multimesh_batches), "collision_shapes": int(planting_result.collision_shapes)}
 	ready_report["shoreline_boulders"] = int(shoreline_result.boulders)
 	ready_report["shoreline_multimesh_batches"] = int(shoreline_result.multimesh_batches)

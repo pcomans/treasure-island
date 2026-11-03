@@ -26,7 +26,6 @@ import {
   validateVegetationRuleParams,
   validateVegetationSetPieceParams,
 } from "./street-vegetation-generation.mjs";
-import { VEGETATION_QA_CORRIDORS } from "./vegetation-generation.mjs";
 import {
   BOUNDARY_ATTACHED_SOURCE_KEYS,
   PLAYABLE_BOUNDARY_SOURCE_KEY,
@@ -66,10 +65,26 @@ export const STREET_DETAIL_EXCLUSION_KEYS = Object.freeze([
   "spawn_forward_length_m",
   "spawn_radius_m",
   "stair_half_width_m",
-  "vegetation_placeholder_radius_m",
   "wall_buffer_m",
   "whole_island_anchor_radius_m",
 ]);
+// The automated route QA's walks (game/tests/automated_route_qa.gd and the
+// whole-island anchors in game/tests/regional_qa_anchors.gd), as world [x, z]:
+// street detail keeps clear of them (streetDetailHardShapes).
+const NORMAL_QA_ROUTE = Object.freeze([
+  [-104.364, 786.024], [-93.682, 780.044], [-91.651, 778.897], [-84.414, 774.734],
+  [-96.25, 754.195], [-108.833, 730.206], [-112.174, 722.948], [-112.666, 718.005],
+  [-111.532, 712.884], [-110.152, 711.081], [-103.53, 705.972], [-68.085, 685.812],
+  [-4.951, 652.705], [38.743, 629.439],
+]);
+const QA_CORRIDORS = Object.freeze({
+  ferry_arrival_path: Object.freeze(NORMAL_QA_ROUTE.slice(0, 7)),
+  normal_qa_route: NORMAL_QA_ROUTE,
+  // Its first point is the normal route's end.
+  whole_island_qa_route: Object.freeze([
+    NORMAL_QA_ROUTE.at(-1), [-293.543, 335.72], [-159.292, -104.818], [-159.535, -879.905], [606.249, 385.227],
+  ]),
+});
 // Gameplay clearances every switchable item must keep, in reporting order.
 export const STREET_DETAIL_HARD_COMPONENTS = Object.freeze([
   "spawn",
@@ -561,12 +576,12 @@ export function streetDetailHardShapes(exclusions, spawn, stairFlights) {
     { component: "spawn", source_id: "manifest:initial_spawn", points: [spawnXZ], radius_m: exclusions.spawn_radius_m },
     // The first walk: straight ahead from the spawn, as a player who just holds W.
     { component: "spawn_forward", source_id: "manifest:initial_spawn_forward", points: [spawnXZ, ahead], radius_m: exclusions.spawn_forward_half_width_m },
-    { component: "ferry_path", source_id: "qa:ferry_arrival_path", points: VEGETATION_QA_CORRIDORS.ferry_arrival_path, radius_m: exclusions.ferry_path_half_width_m },
-    { component: "qa_route", source_id: "qa:normal_qa_route", points: VEGETATION_QA_CORRIDORS.normal_qa_route, radius_m: exclusions.qa_route_half_width_m },
+    { component: "ferry_path", source_id: "qa:ferry_arrival_path", points: QA_CORRIDORS.ferry_arrival_path, radius_m: exclusions.ferry_path_half_width_m },
+    { component: "qa_route", source_id: "qa:normal_qa_route", points: QA_CORRIDORS.normal_qa_route, radius_m: exclusions.qa_route_half_width_m },
   ];
   // The whole-island route flies between anchors; only its vertical take-off and
   // landing columns reach the ground. Its first point is the normal route's end.
-  VEGETATION_QA_CORRIDORS.whole_island_qa_route.slice(1).forEach((anchor, index) => {
+  QA_CORRIDORS.whole_island_qa_route.slice(1).forEach((anchor, index) => {
     shapes.push({ component: "whole_island_anchor", source_id: `qa:whole_island_anchor_${index + 1}`, points: [anchor], radius_m: exclusions.whole_island_anchor_radius_m });
   });
   for (const flight of stairFlights) {
@@ -671,8 +686,6 @@ function wayLineIn(properSources) {
 }
 
 // The zones' shapes, queried with world points: {zone, contains(xz), bounds}.
-// The placeholder vegetation (tools/lib/vegetation-generation.mjs) keeps out of
-// the pilot zones, which the street-detail vegetation now plants.
 export function streetDetailZoneShapes(config, properSources) {
   const wayLine = wayLineIn(properSources);
   return config.zones.map((zone) => {
@@ -1431,9 +1444,9 @@ export function generateStreetDetail({
       spawn_xz: spawnXZ,
       spawn_yaw: spawn.yaw,
       spawn_forward_xz: hardShapes.find((shape) => shape.component === "spawn_forward").points,
-      ferry_path_xz: VEGETATION_QA_CORRIDORS.ferry_arrival_path,
-      qa_route_xz: VEGETATION_QA_CORRIDORS.normal_qa_route,
-      whole_island_anchors_xz: VEGETATION_QA_CORRIDORS.whole_island_qa_route.slice(1),
+      ferry_path_xz: QA_CORRIDORS.ferry_arrival_path,
+      qa_route_xz: QA_CORRIDORS.normal_qa_route,
+      whole_island_anchors_xz: QA_CORRIDORS.whole_island_qa_route.slice(1),
       stair_flights: stairFlights,
     },
     zones: zoneSummaries,

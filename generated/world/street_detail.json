@@ -1338,7 +1338,6 @@
     "spawn_forward_length_m": 40,
     "spawn_radius_m": 6.5,
     "stair_half_width_m": 1.5,
-    "vegetation_placeholder_radius_m": 1,
     "wall_buffer_m": 1,
     "whole_island_anchor_radius_m": 3
   },
@@ -1625,7 +1624,7 @@
     },
     "zones": {
       "path": "tools/config/street-detail-zones.json",
-      "sha256": "e80d3fbf8a72fe22d911687d962150dab12f40e164a2bad2097bda01d05df30f"
+      "sha256": "dd3d3e8470a3aba34ca6d122e9865120c92c1c841fffb4c73470f34f707929bc"
     }
   },
   "kinds": {

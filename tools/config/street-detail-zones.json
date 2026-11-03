@@ -6,7 +6,7 @@
     "Zone shapes and scatter densities are production inference for the ferry-arrival pilot, not survey data.",
     "Step 0 scatter emits placement slots only; later steps assign assets per slot kind. The runtime builds nothing from slots yet.",
     "Furniture rules place the vertical street objects of the pilot zones (tools/lib/street-furniture-generation.mjs) where OSM leaves gaps: kerb (along the curbs of named kerbed roads), signalized_crossings and near_signals (at OSM crossings with signals), junctions (named-street corners), all_way_stops (the other approaches of an OSM stop=all junction), drive_entries (traffic turning into a kerbed service drive from a named road) and lot_edge (around a parking lot). Each is production inference with its dated photo evidence; prop is the kit prop the runtime builds and params its settings.",
-    "Exclusions are the shared mask for every street-detail source. The older vegetation clearances (roads 4 m, buildings 5 m, spawn 24 m, ferry path 16 m, QA route 7 m) size tree canopies; these values size walk, camera and doorway clearance instead. spawn_forward keeps the first walk clear: a corridor from the ferry spawn straight along its facing direction.",
+    "Exclusions are the shared mask for every street-detail source. These values size walk, camera and doorway clearance. spawn_forward keeps the first walk clear: a corridor from the ferry spawn straight along its facing direction.",
     "Furniture placement keeps its own site margins on top of this mask (tools/lib/street-furniture-generation.mjs): clear of the carriageway and curb ramps, and at least a player's width between two items.",
     "Fence rules (tools/lib/street-fence-generation.mjs) draw photographed fencing OSM lacks as a line of legs: a way leg follows an OSM way at offset_m on one side (left or right of the way's own direction) between two along-distances (from_m above to_m walks it backwards); a point leg is a fixed [x, z]; consecutive legs join with straight runs. fence_type names a kit type (game/scripts/world/street_fence_kit.gd); params.inside is the side of the line the fenced site lies on, which fabric and screens face; a screened fence names its screen colour. A rule fence, like an OSM fence, opens wherever a road or path crosses it and where it meets the gameplay mask, and must stay off the raised street ground and the carriageway. Fences are placed before scatter and furniture, which keep clear of them.",
     "Clutter rules place parked cars (tools/lib/street-clutter-generation.mjs): curb_parking packs cars along the curbs of a road's parking lanes, each side as stretches [from_m, to_m, fill] along the way (left and right of the way's own direction), with gap_m between cars (at least 1 m, so the player passes between them), clear of junctions and crosswalks by daylight_m, of fire hydrants by hydrant_m and of bus stops; lot_stalls fills a lot's painted stalls, fill_near beside the near_key building falling to fill_far beyond far_m, head_in of them nose first. mix and paints weight the body types and colours of the kit (tools/lib/street-clutter-kit.mjs); utility trucks are white. Each is production inference with its dated photo evidence. Photographed one-off clutter (cones, barricades) and the ferry plaza's furniture are set pieces (data/street_detail/set_pieces.json).",
@@ -26,8 +26,7 @@
     "wall_buffer_m": 1.0,
     "building_buffer_m": 2.0,
     "road_buffer_m": 0.5,
-    "land_edge_buffer_m": 1.0,
-    "vegetation_placeholder_radius_m": 1.0
+    "land_edge_buffer_m": 1.0
   },
   "ground": {
     "notes": [
