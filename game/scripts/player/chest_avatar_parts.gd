@@ -43,9 +43,12 @@ const LEG_RADIUS := 0.046
 const EYE_CENTER := Vector3(0.076, 0.2, 0.43)
 const EYE_RADII := Vector3(0.071, 0.095, 0.052)
 const EYE_TILT := 0.30
-## The eyes' pivot in the lid frame (between them); the avatar turns them back
-## upright as the lid opens, so the face stays readable.
+## The eyes' mount in the lid frame (between them), seated on the lid's outer
+## arch. As the lid opens wide the avatar slides it along the arch to this arch
+## angle (see lid_arch_frame()), near the raised front edge, so the eyes peek
+## over the open lid and stay readable from the front.
 const EYE_MOUNT := Vector3(0.0, EYE_CENTER.y, EYE_CENTER.z)
+const EYE_ARCH_OPEN := 0.40
 const COIN_RADIUS := 0.03
 const COIN_THICK := 0.007
 const PLANK_TILE := 0.64
@@ -302,6 +305,10 @@ static func make_materials() -> Materials:
 	m.eye = ShaderMaterial.new()
 	m.eye.resource_name = "chest_eye"
 	m.eye.shader = EYE_SHADER
+	# The lid's outer arch, inside which the eye shader draws nothing.
+	m.eye.set_shader_parameter("arch", Vector3(LID_D * 0.5, LID_ARCH, LID_LIP))
+	m.eye.set_shader_parameter("lid_half_width", LID_W * 0.5)
+	m.eye.set_shader_parameter("mount_origin", EYE_MOUNT)
 	m.flame = ShaderMaterial.new()
 	m.flame.resource_name = "chest_jet_flame"
 	m.flame.shader = FLAME_SHADER
@@ -585,6 +592,21 @@ static func lid_profile(inset: float, steps: int) -> Array:
 			arc += Vector2(points[i][0] - points[i - 1][0], points[i][1] - points[i - 1][1]).length()
 		rows.append([points[i][0], points[i][1], points[i][2], points[i][3], arc])
 	return rows
+
+
+## A frame seated on the lid's outer arch (lid frame) at arch angle `t`, the
+## parameter of lid_profile(): PI at the back lip, PI/2 on top, 0 at the front
+## lip. Origin on the surface, Y along its outward normal, Z along the arch
+## towards the front.
+static func lid_arch_frame(t: float) -> Transform3D:
+	var a := LID_D * 0.5
+	var normal := Vector2(cos(t) / a, sin(t) / LID_ARCH)
+	return Transform3D(Basis(Vector3.RIGHT, atan2(normal.x, normal.y)), Vector3(0.0, LID_LIP + LID_ARCH * sin(t), a + a * cos(t)))
+
+
+## The arch angle under the eyes' rest mount (EYE_MOUNT) on the closed lid.
+static func eye_arch_rest() -> float:
+	return acos((EYE_MOUNT.z - LID_D * 0.5) / (LID_D * 0.5))
 
 
 ## A profile extruded along X from x0 to x1 (normals flipped when `flip`).

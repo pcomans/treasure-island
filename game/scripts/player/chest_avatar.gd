@@ -28,8 +28,9 @@ extends Node3D
 ##   closed stop is elastic, so it chatters, and soft-limited when wide open.
 ## - Coins: loose coins hop in the same accelerating frame and tumble while
 ##   they fly, kept under the lid. Hands follow their poses on damped springs.
-## - Eyes blink now and then, look towards the camera and stay nearly upright
-##   when the lid opens wide.
+## - Eyes blink now and then and look towards the camera. They sit on the lid's
+##   outer face; as it opens wide they ride its arch up to the raised front edge
+##   and peek over it (the eye shader draws nothing inside the lid).
 
 const Parts := preload("res://game/scripts/player/chest_avatar_parts.gd")
 
@@ -77,8 +78,10 @@ const SQUASH_DAMPING := 0.3
 ## Squash speed per 1.5 m/s of landing impact: a clear rubber-hose squash
 ## (about -0.22) and stretch.
 const LANDING_SQUASH := 8.0
-## How much of the lid's opening the eyes turn back, staying nearly upright.
-const EYE_LEVELING := 0.75
+## Lid angles (rad) over which the eyes slide from their rest seat to
+## Parts.EYE_ARCH_OPEN on the lid's arch.
+const EYE_SLIDE_FROM := 0.17
+const EYE_SLIDE_TO := 0.79
 const ARM_FREQUENCY := 2.6
 const ARM_DAMPING := 0.35
 const ARM_INERTIA := 0.012
@@ -114,6 +117,9 @@ var _spills: Array[Spill] = []
 var _spill_multimesh: MultiMesh
 var _spill_instance: MultiMeshInstance3D
 var _eye_mount: Node3D
+## The eye mount relative to the arch frame under it, and that frame's arch angle.
+var _eye_seat := Transform3D.IDENTITY
+var _eye_arch_rest := 0.0
 var _blobs: Array[MeshInstance3D] = []
 var _ray := PhysicsRayQueryParameters3D.new()
 var _space: PhysicsDirectSpaceState3D
@@ -288,6 +294,8 @@ func _build() -> void:
 	_eye_mount = Node3D.new()
 	_eye_mount.name = "EyeMount"
 	_eye_mount.position = Parts.EYE_MOUNT
+	_eye_arch_rest = Parts.eye_arch_rest()
+	_eye_seat = Parts.lid_arch_frame(_eye_arch_rest).affine_inverse() * _eye_mount.transform
 	_lid.add_child(_eye_mount)
 	_mesh(_eye_mount, "Eyes", Parts.eyes(m), false)
 	var flames := _mesh(_body, "JetFlames", Parts.flames(m), false)
@@ -693,7 +701,13 @@ func _update_lid(accel_up: float, accel_forward: float, local_vel: Vector3, thru
 			else:
 				_lid_speed = 0.0
 	_lid.rotation = Vector3(-_lid_angle, 0.0, 0.0)
-	_eye_mount.rotation = Vector3(_lid_angle * EYE_LEVELING, 0.0, 0.0)
+	# The eyes stay seated on the lid's outer face, sliding up its arch to the
+	# raised front edge as it opens; the shader is told where they sit.
+	var arch := lerpf(_eye_arch_rest, Parts.EYE_ARCH_OPEN, smoothstep(EYE_SLIDE_FROM, EYE_SLIDE_TO, _lid_angle))
+	var mount := Parts.lid_arch_frame(arch) * _eye_seat
+	_eye_mount.transform = mount
+	_materials.eye.set_shader_parameter("mount_origin", mount.origin)
+	_materials.eye.set_shader_parameter("mount_angle", atan2(mount.basis.y.z, mount.basis.y.y))
 
 
 # --- Coins: hop in the chest's frame, tumble in the air, stay under the lid.

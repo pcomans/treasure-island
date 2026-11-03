@@ -3,8 +3,19 @@
 // and wooden eyelids that close to blink. Drawn procedurally so they stay crisp
 // at any distance. UV is the eye-front coordinate (-1..1, x across, y up);
 // UV2.x is the side (+1 the chest's left eye), UV2.y > 0 on the front half.
+// The bulbs are half sunk into the lid; whatever lies inside the lid's outer
+// arch (its wood or its hollow) is not drawn, so no part of an eye ever shows
+// through the inside of the open lid.
 shader_type spatial;
 render_mode cull_back, diffuse_toon, specular_toon;
+
+// The eye mount in the lid frame (a rotation about X, then this origin), set
+// by the avatar each tick, and the lid's outer arch: half its depth (the arch
+// is centred there), the arch height above the lip, the lip height, half width.
+uniform vec3 mount_origin = vec3(0.0, 0.2, 0.43);
+uniform float mount_angle = 0.0;
+uniform vec3 arch = vec3(0.27, 0.18, 0.05);
+uniform float lid_half_width = 0.38;
 
 // Where the pupils look, in eye units (x across, y up).
 uniform vec2 look = vec2(0.0, -0.08);
@@ -16,7 +27,19 @@ uniform vec4 white : source_color = vec4(0.98, 0.97, 0.93, 1.0);
 uniform vec4 ink : source_color = vec4(0.03, 0.025, 0.025, 1.0);
 uniform vec4 lid_color : source_color = vec4(0.62, 0.36, 0.17, 1.0);
 
+varying vec3 lid_position;
+
+void vertex() {
+	float c = cos(mount_angle);
+	float s = sin(mount_angle);
+	lid_position = mount_origin + vec3(VERTEX.x, c * VERTEX.y - s * VERTEX.z, s * VERTEX.y + c * VERTEX.z);
+}
+
 void fragment() {
+	vec2 q_lid = vec2(lid_position.z / arch.x - 1.0, (lid_position.y - arch.z) / arch.y);
+	if (lid_position.y >= 0.0 && abs(lid_position.x) <= lid_half_width && abs(q_lid.x) <= 1.0 && (q_lid.y <= 0.0 || dot(q_lid, q_lid) <= 1.0)) {
+		discard;
+	}
 	vec2 p = UV;
 	float side = UV2.x;
 	float front = UV2.y;
