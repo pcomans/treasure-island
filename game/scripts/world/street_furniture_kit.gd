@@ -48,12 +48,19 @@ const CABINET_DOOR_TINT := Color(0.70, 0.53, 0.575)
 const PAD_CONCRETE := Color(0.70, 0.69, 0.66)
 const BLADE_GREEN := Color(0.0, 0.42, 0.21)
 ## Ferry plaza furniture (Sep and Mar 2025 photos): pale cast concrete, dark
-## stained timber, charcoal frames, cobalt blue chairs, grey steel bins.
+## stained timber, charcoal frames, bright blue plastic chairs, grey steel bins.
 const CONCRETE := Color(0.8, 0.79, 0.76)
 const TIMBER := Color(0.42, 0.3, 0.2)
 const TIMBER_WEATHERED := Color(0.5, 0.41, 0.31)
 const FRAME_CHARCOAL := Color(0.16, 0.17, 0.18)
-const CHAIR_BLUE := Color(0.1, 0.34, 0.78)
+## The Adirondack chairs are moulded plastic in a bright azure blue: about 30 /
+## 95 / 160 of 255 on their shaded faces in the overcast Sep 2025 photos 24 and
+## 25 (hue about 210 degrees), paler where their tops catch the sky.
+const CHAIR_BLUE := Color(0.11, 0.43, 0.72)
+## The chair's legs stand at x = +-CHAIR_LEG_X. Each placed chair settles on the
+## visible ground under its feet (settleOnFeet and STREET_FURNITURE_FEET in
+## tools/lib/street-furniture-generation.mjs, which must match these legs).
+const CHAIR_LEG_X := 0.3
 const BIN_STEEL := Color(0.42, 0.43, 0.44)
 const RACK_DARK := Color(0.2, 0.17, 0.14)
 const LENS_RED_OFF := Color(0.22, 0.03, 0.03)
@@ -87,6 +94,7 @@ const BLADE_MARGIN_M := 0.09
 
 var _opaque: StandardMaterial3D
 var _lit: StandardMaterial3D
+var _plastic: StandardMaterial3D
 var _meshes: Dictionary = {}
 var _shapes: Dictionary = {}
 
@@ -108,6 +116,12 @@ func _init() -> void:
 	_lit.vertex_color_is_srgb = true
 	_lit.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
 	_lit.texture_repeat = false
+	# Moulded plastic: vertex colour alone, a little glossier than paint.
+	_plastic = StandardMaterial3D.new()
+	_plastic.resource_name = "street_furniture_plastic"
+	_plastic.vertex_color_use_as_albedo = true
+	_plastic.vertex_color_is_srgb = true
+	_plastic.roughness = 0.45
 
 
 ## What to build for one placed row: {ok, pieces: [{key, mesh, transform}],
@@ -175,8 +189,15 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 			_piece(result, "map_board", func(b: Builder) -> void: _map_board(b))
 			_box_shape(result, Vector3(1.32, 1.86, 0.16), Vector3(0.0, 0.93, 0.0))
 		"adirondack_chair":
-			_piece(result, "adirondack_chair", func(b: Builder) -> void: _adirondack_chair(b))
-			_box_shape(result, Vector3(0.74, 0.62, 0.84), Vector3(0.0, 0.31, 0.04))
+			# Its rest on the ground under its feet (settleOnFeet): the tilt and lift,
+			# and single legs lengthened or shortened where the ground folds.
+			var rest := _rest(params)
+			var drops := _leg_drops(params)
+			var chair_key := "adirondack_chair"
+			for drop in drops:
+				chair_key += "_%d" % roundi(drop * 1000.0)
+			_piece(result, chair_key, func(b: Builder) -> void: _adirondack_chair(b, drops), rest, _plastic)
+			_box_shape(result, Vector3(0.74, 0.6, 0.84), Vector3(0.0, 0.3, 0.0), rest)
 		"bike_rack":
 			_piece(result, "bike_rack", func(b: Builder) -> void: _bike_rack(b))
 			_box_shape(result, Vector3(0.78, 0.86, 0.06), Vector3(0.0, 0.43, 0.0))
@@ -188,24 +209,49 @@ func _number(params: Dictionary, key: String, fallback: float) -> float:
 	return float(value) if (value is float or value is int) and is_finite(float(value)) else fallback
 
 
-func _piece(result: Dictionary, key: String, draw: Callable, transform := Transform3D.IDENTITY) -> void:
+## The prop's mesh for `key`, drawn once; `material` replaces the shared atlas
+## material for the shaded surface.
+func _piece(result: Dictionary, key: String, draw: Callable, transform := Transform3D.IDENTITY, material: Material = null) -> void:
 	if not _meshes.has(key):
 		var builder := Builder.new(CELL_WHITE)
 		draw.call(builder)
-		var mesh := builder.commit(_opaque, _lit)
+		var mesh := builder.commit(material if material != null else _opaque, _lit)
 		mesh.resource_name = key
 		_meshes[key] = mesh
 	result.pieces.append({"key": key, "mesh": _meshes[key], "transform": transform})
 
 
-## A box shape at an offset in the prop's frame, shared between rows of the same size.
-func _box_shape(result: Dictionary, size: Vector3, offset: Vector3) -> void:
+## A box shape at an offset in the prop's frame (moved with the prop's `rest`),
+## shared between rows of the same size.
+func _box_shape(result: Dictionary, size: Vector3, offset: Vector3, rest := Transform3D.IDENTITY) -> void:
 	var key := "box_%.3f_%.3f_%.3f" % [size.x, size.y, size.z]
 	if not _shapes.has(key):
 		var box := BoxShape3D.new()
 		box.size = size
 		_shapes[key] = box
-	result.shapes.append({"shape": _shapes[key], "transform": Transform3D(Basis.IDENTITY, offset)})
+	result.shapes.append({"shape": _shapes[key], "transform": rest * Transform3D(Basis.IDENTITY, offset)})
+
+
+## A prop's rest on the ground from its row's prop_params: pitch raises its
+## front and roll its left side (radians), lift raises it (metres).
+func _rest(params: Dictionary) -> Transform3D:
+	var basis := Basis(Vector3.RIGHT, _number(params, "pitch", 0.0)) * Basis(Vector3.BACK, -_number(params, "roll", 0.0))
+	return Transform3D(basis, Vector3(0.0, _number(params, "lift", 0.0), 0.0))
+
+
+## The row's leg_drops_m: how much each leg (front-left, front-right,
+## back-left, back-right) is lengthened (+) or shortened (-), in metres; empty
+## when the row has none or they are malformed.
+func _leg_drops(params: Dictionary) -> PackedFloat32Array:
+	var drops := PackedFloat32Array()
+	var value: Variant = params.get("leg_drops_m", null)
+	if not value is Array or (value as Array).size() != 4:
+		return drops
+	for drop: Variant in value:
+		if not (drop is float or drop is int) or not is_finite(float(drop)):
+			return PackedFloat32Array()
+		drops.append(float(drop))
+	return drops
 
 
 ## An upright capsule from the foot, shared between rows of the same size.
@@ -522,21 +568,77 @@ func _map_board(b: Builder) -> void:
 	b.plate(Vector3(0.0, 1.41, 0.0), Basis.IDENTITY, _rectangle(1.2, 0.72), 0.03, CELL_MAP, Color.WHITE, FRAME_CHARCOAL, CELL_WHITE)
 
 
-## A cobalt blue Adirondack chair (slatted back fanning up and back, wide
-## arms, low sloping seat); it faces -Z (Waterfront Plaza lawn, Sep 2025).
-func _adirondack_chair(b: Builder) -> void:
-	var seat := Basis(Vector3.RIGHT, 0.14)
+## A bright blue moulded-plastic Adirondack chair facing -Z (Waterfront Plaza
+## lawn, Sep 2025 photos 24 and 25): a tall back of five slats fanned slightly
+## outward under an arched top, held by two rails behind; wide flat arms on
+## upright front legs, their backs on a rail across the chair; a low seat of
+## slats falling toward the back on two seat rails; and back legs angled from
+## under the arms down to the ground behind. About 0.75 m wide, 0.85 m deep and
+## 1.0 m tall, the seat front 0.375 m up: production inference from the photos
+## and common Adirondack proportions, not measured. `drops` (none, or the
+## front-left, front-right, back-left and back-right legs) lengthens single legs.
+func _adirondack_chair(b: Builder, drops: PackedFloat32Array) -> void:
+	var bevel := 0.006
+	# Side frames, outlines in (z, y) and thick across X: the front leg with the
+	# bracket under the arm's front, the back leg, the seat rail inside the legs
+	# (its top the seat's underside) and the arm, widening to its rounded front.
+	var side := _frame(Vector3.BACK, Vector3.UP)
+	var plan := _frame(Vector3.RIGHT, Vector3.BACK)
+	for index in 2:
+		var mirror := -1.0 if index == 0 else 1.0
+		var front_drop := drops[index] if drops.size() == 4 else 0.0
+		var back_drop := drops[index + 2] if drops.size() == 4 else 0.0
+		var leg := Vector3(mirror * CHAIR_LEG_X, 0.0, 0.0)
+		b.slab(leg, side, Builder.rounded(PackedVector2Array([Vector2(-0.35, -front_drop), Vector2(-0.26, -front_drop), Vector2(-0.26, 0.553), Vector2(-0.35, 0.553)]), [0.008], 2), 0.035, bevel, CHAIR_BLUE)
+		b.slab(leg, side, Builder.rounded(PackedVector2Array([Vector2(-0.35, 0.47), Vector2(-0.35, 0.553), Vector2(-0.397, 0.553)]), [0.006], 1), 0.03, 0.004, CHAIR_BLUE)
+		b.slab(leg, side, Builder.rounded(PackedVector2Array([Vector2(0.333, -back_drop), Vector2(0.417, -back_drop), Vector2(0.262, 0.553), Vector2(0.178, 0.553)]), [0.008], 2), 0.035, bevel, CHAIR_BLUE)
+		b.slab(Vector3(mirror * 0.265, 0.0, 0.0), side, Builder.rounded(PackedVector2Array([Vector2(-0.35, 0.2525), Vector2(-0.35, 0.3525), Vector2(0.32, 0.21), Vector2(0.32, 0.11)]), [0.008], 2), 0.035, bevel, CHAIR_BLUE)
+		var arm := PackedVector2Array([Vector2(mirror * 0.26, 0.28), Vector2(mirror * 0.375, 0.28), Vector2(mirror * 0.375, -0.415), Vector2(mirror * 0.225, -0.415)])
+		b.slab(Vector3(0.0, 0.564, 0.0), plan, Builder.rounded(arm, [0.012, 0.012, 0.05, 0.05], 3), 0.022, bevel, CHAIR_BLUE)
+	# The arms' backs rest on a rail across the back of the chair.
+	b.slab(Vector3(0.0, 0.513, 0.2625), _frame(Vector3.RIGHT, Vector3.UP), Builder.rounded(_rectangle(0.75, 0.08), [0.01], 2), 0.025, bevel, CHAIR_BLUE)
+	# Seat: five slats on a plane falling 12 degrees toward the back from its
+	# front edge, 0.375 m up.
+	var fall := deg_to_rad(12.0)
+	var down_seat := Vector3(0.0, -sin(fall), cos(fall))
+	var seat_normal := Vector3(0.0, cos(fall), sin(fall))
+	var seat := _frame(Vector3.RIGHT, down_seat)
 	for index in 5:
-		b.box(Vector3(0.0, 0.33 - 0.012 * float(index), -0.2 + 0.1 * float(index)), seat, Vector3(0.56, 0.025, 0.085), CHAIR_BLUE, CELL_WHITE)
-	var back := Basis(Vector3.RIGHT, -0.42)
-	for index in 5:
-		var x := -0.22 + 0.11 * float(index)
-		var height := 0.78 - absf(float(index) - 2.0) * 0.06
-		b.box(Vector3(x * 1.08, 0.34 + height * 0.45, 0.2 + height * 0.18), back * Basis(Vector3.FORWARD, -x * 0.3), Vector3(0.09, height, 0.025), CHAIR_BLUE, CELL_WHITE)
-	for x: float in [-0.33, 0.33]:
-		b.box(Vector3(x, 0.58, -0.08), Basis.IDENTITY, Vector3(0.13, 0.025, 0.66), CHAIR_BLUE, CELL_WHITE)
-		b.box(Vector3(x, 0.29, -0.32), Basis.IDENTITY, Vector3(0.05, 0.58, 0.07), CHAIR_BLUE, CELL_WHITE)
-		b.box(Vector3(x * 0.85, 0.17, 0.28), Basis(Vector3.RIGHT, -0.3), Vector3(0.05, 0.36, 0.07), CHAIR_BLUE, CELL_WHITE)
+		var center := Vector3(0.0, 0.375, -0.36) + down_seat * (0.092 * float(index) + 0.04) - seat_normal * 0.01
+		b.slab(center, seat, Builder.rounded(_rectangle(0.56, 0.08), [0.012], 2), 0.02, bevel, CHAIR_BLUE)
+	# Back: five slats leaning back 23 degrees from behind the seat, fanned out
+	# 1.5 degrees apart and cut together to an arch 1.0 m up at the middle. The
+	# outlines are in the back's plane (across, up it); its Z points behind.
+	var lean := deg_to_rad(23.0)
+	var back := _frame(Vector3.RIGHT, Vector3(0.0, cos(lean), sin(lean)))
+	var back_origin := Vector3(0.0, 0.26, 0.1)
+	var arch_top := 0.804
+	var arch_fall := 0.86
+	for index in range(-2, 3):
+		var angle := deg_to_rad(1.5 * float(index))
+		var along_slat := Vector2(sin(angle), cos(angle))
+		var across := Vector2(cos(angle), -sin(angle))
+		var foot := Vector2(0.093 * float(index), 0.0)
+		var outline := PackedVector2Array([foot - across * 0.0425, foot + across * 0.0425])
+		for offset: float in [0.0425, 0.0, -0.0425]:
+			var start := foot + across * offset
+			var reach := arch_top
+			for _step in 4:
+				var u := start.x + along_slat.x * reach
+				reach = (arch_top - arch_fall * u * u - start.y) / along_slat.y
+			outline.append(start + along_slat * reach)
+		b.slab(back_origin + back.z * 0.01, back, Builder.rounded(outline, [0.006, 0.006, 0.02, 0.0, 0.02], 2), 0.02, 0.005, CHAIR_BLUE)
+	# Rails behind the slats: a low one between the seat rails, one near the top.
+	b.slab(back_origin + back.y * 0.035 + back.z * 0.035, back, Builder.rounded(_rectangle(0.495, 0.07), [0.01], 2), 0.03, bevel, CHAIR_BLUE)
+	b.slab(back_origin + back.y * 0.68 + back.z * 0.0325, back, Builder.rounded(_rectangle(0.54, 0.06), [0.01], 2), 0.025, bevel, CHAIR_BLUE)
+
+
+## An orthonormal basis whose X and Y span an outline's plane and whose Z
+## (X cross Y) is a slab's thickness.
+static func _frame(x_axis: Vector3, y_axis: Vector3) -> Basis:
+	var x := x_axis.normalized()
+	var y := (y_axis - x * y_axis.dot(x)).normalized()
+	return Basis(x, y, x.cross(y))
 
 
 ## An inverted-U bike rack ("staple") of dark painted tube, its loop along X
@@ -715,6 +817,95 @@ class Builder:
 				quad.append(vertex(0, center + basis * Vector3(point.x, point.y, float(corner[1]) * thickness * 0.5), normal, middle, back_color))
 			triangle(0, quad[0], quad[1], quad[2], normal)
 			triangle(0, quad[0], quad[2], quad[3], normal)
+
+	## A slab: the convex `outline` (local XY around `center`, either winding)
+	## extruded by `thickness` along local Z, the edges of both faces bevelled by
+	## `bevel` with normals smoothed across the bevels and round the outline, so
+	## it reads as moulded with softened edges. Round the outline's corners
+	## (Builder.rounded) so its sides shade smoothly too. One flat colour.
+	func slab(center: Vector3, basis: Basis, outline: PackedVector2Array, thickness: float, bevel: float, color: Color, surface := 0) -> void:
+		var points := PackedVector2Array()
+		for point in outline:
+			if points.is_empty() or point.distance_to(points[points.size() - 1]) > 1e-5:
+				points.append(point)
+		if points.size() > 3 and points[0].distance_to(points[points.size() - 1]) <= 1e-5:
+			points.remove_at(points.size() - 1)
+		var count := points.size()
+		var area := 0.0
+		for index in count:
+			area += points[index].cross(points[(index + 1) % count])
+		if area < 0.0:
+			points.reverse()
+		var half := thickness * 0.5
+		var depth := minf(bevel, half * 0.9)
+		# Outward normal of the outline at each point, and the point moved in by
+		# the bevel (the edge of a face).
+		var normals := PackedVector2Array()
+		var insets := PackedVector2Array()
+		for index in count:
+			var before := _edge_normal(points[(index + count - 1) % count], points[index])
+			var after := _edge_normal(points[index], points[(index + 1) % count])
+			var normal := (before + after).normalized()
+			normals.append(normal)
+			insets.append(points[index] - normal * depth / maxf(normal.dot(after), 0.3))
+		var middle := _white.get_center()
+		# Rings round the slab: the front face's edge, the side's two edges, the back face's edge.
+		var rings: Array[PackedInt32Array] = []
+		for spec: Array in [[insets, half, 1.0], [points, half - depth, 0.0], [points, depth - half, 0.0], [insets, -half, -1.0]]:
+			var ring_points: PackedVector2Array = spec[0]
+			var z := float(spec[1])
+			var face := float(spec[2])
+			var ring := PackedInt32Array()
+			for index in count:
+				var local_normal := Vector3(0.0, 0.0, face) if face != 0.0 else Vector3(normals[index].x, normals[index].y, 0.0)
+				var point := ring_points[index]
+				ring.append(vertex(surface, center + basis * Vector3(point.x, point.y, z), (basis * local_normal).normalized(), middle, color))
+			rings.append(ring)
+		var arrays: Dictionary = _surfaces[surface]
+		for ring_index in 3:
+			var near_ring := rings[ring_index]
+			var far_ring := rings[ring_index + 1]
+			for index in count:
+				var next := (index + 1) % count
+				var outward: Vector3 = arrays.normals[near_ring[index]] + arrays.normals[near_ring[next]] + arrays.normals[far_ring[index]] + arrays.normals[far_ring[next]]
+				triangle(surface, near_ring[index], near_ring[next], far_ring[next], outward)
+				triangle(surface, near_ring[index], far_ring[next], far_ring[index], outward)
+		for cap: Array in [[rings[0], basis.z], [rings[3], -basis.z]]:
+			var ring: PackedInt32Array = cap[0]
+			for index in range(1, count - 1):
+				triangle(surface, ring[0], ring[index], ring[index + 1], cap[1])
+
+	## The convex polygon `points` with each corner rounded by an arc of
+	## radii[i] (or radii[0] at every corner) in `segments` steps, smaller where
+	## an edge is too short for it; nearly straight corners stay as they are.
+	static func rounded(points: PackedVector2Array, radii: Array, segments: int) -> PackedVector2Array:
+		var count := points.size()
+		var result := PackedVector2Array()
+		for index in count:
+			var here := points[index]
+			var to_before := points[(index + count - 1) % count] - here
+			var to_after := points[(index + 1) % count] - here
+			var radius := float(radii[index] if radii.size() == count else radii[0])
+			var angle := acos(clampf(to_before.normalized().dot(to_after.normalized()), -1.0, 1.0))
+			if radius <= 0.0 or angle > deg_to_rad(170.0):
+				result.append(here)
+				continue
+			var tangent := radius / tan(angle * 0.5)
+			var limit := 0.45 * minf(to_before.length(), to_after.length())
+			if tangent > limit:
+				radius *= limit / tangent
+				tangent = limit
+			var centre := here + (to_before.normalized() + to_after.normalized()).normalized() * radius / sin(angle * 0.5)
+			var start := (here + to_before.normalized() * tangent - centre).angle()
+			var sweep := wrapf((here + to_after.normalized() * tangent - centre).angle() - start, -PI, PI)
+			for step in segments + 1:
+				result.append(centre + Vector2.from_angle(start + sweep * float(step) / float(segments)) * radius)
+		return result
+
+	## The outward normal of an edge of a counter-clockwise outline.
+	static func _edge_normal(from: Vector2, to: Vector2) -> Vector2:
+		var direction := (to - from).normalized()
+		return Vector2(direction.y, -direction.x)
 
 	## A double-faced blade along X centred on the origin: each face shows `cell`
 	## with its outer `edge_u` of the texture kept on the outer `cap` metres.

@@ -14,9 +14,9 @@ import { resolve } from "node:path";
 
 import { projectLonLat } from "./coordinates.mjs";
 import { geometryToLine, pointInMultiPolygon, pointInRing, selectGeometry } from "./osm-geometry.mjs";
-import { footprintPiece, placeStreetClutter, STREET_CLUTTER_FOOTPRINTS, STREET_CLUTTER_PROPS, validateClutterRules } from "./street-clutter-generation.mjs";
+import { footprintPiece, placeStreetClutter, STREET_CLUTTER_FOOTPRINTS, STREET_CLUTTER_PROPS, validateClutterRules, visibleGroundIndex } from "./street-clutter-generation.mjs";
 import { placeStreetFences, validateFenceRules } from "./street-fence-generation.mjs";
-import { placeStreetFurniture, STREET_FURNITURE_FOOTPRINTS, STREET_FURNITURE_PROPS, validateFurnitureRules } from "./street-furniture-generation.mjs";
+import { placeStreetFurniture, settleOnFeet, STREET_FURNITURE_FEET, STREET_FURNITURE_FOOTPRINTS, STREET_FURNITURE_PROPS, validateFurnitureRules } from "./street-furniture-generation.mjs";
 import { VEGETATION_QA_CORRIDORS } from "./vegetation-generation.mjs";
 import {
   BOUNDARY_ATTACHED_SOURCE_KEYS,
@@ -1016,6 +1016,8 @@ export function generateStreetDetail({
 
   // (c) Hand-picked set pieces must clear the whole mask and the OSM items; a bad
   // entry stops the build. They come before scatter, which then works around them.
+  // A prop on legs settles on the visible ground under its feet.
+  const visibleGround = visibleGroundIndex(chunks);
   for (const entry of setPieceDocument.set_pieces) {
     const xz = [round3(entry.xz[0]), round3(entry.xz[1])];
     const footprint = entry.prop === undefined ? null : (STREET_FURNITURE_FOOTPRINTS[entry.prop] ?? STREET_CLUTTER_FOOTPRINTS[entry.prop] ?? null);
@@ -1025,6 +1027,14 @@ export function generateStreetDetail({
     const violation = entry.prop === undefined ? siteViolation(entry.kind, xz, exclusions.wall_buffer_m) : propSiteViolation(piece);
     invariant(!violation, `Street detail set piece ${entry.id} fails the exclusion mask: ${JSON.stringify(violation)}`);
     const { y, support } = grounded(xz);
+    const surface = surfaceAt(xz);
+    let params = entry.params;
+    const feet = entry.prop === undefined ? undefined : STREET_FURNITURE_FEET[entry.prop];
+    if (feet) {
+      const rest = settleOnFeet(feet, xz, normalizedYaw(entry.yaw), y + surface.bias_m, visibleGround);
+      invariant(!rest.problem, `Street detail set piece ${entry.id} cannot stand on its feet: ${rest.problem}`);
+      params = { ...entry.params, ...rest };
+    }
     const row = {
       id: `set_piece:${entry.id}`,
       source: "set_piece",
@@ -1034,10 +1044,10 @@ export function generateStreetDetail({
       geometry: "point",
       position_m: [xz[0], y, xz[1]],
       terrain_support: { object_key: support.object_key, triangle_index: support.triangle_index, elevation_m: support.elevation_m },
-      surface: surfaceAt(xz),
+      surface,
       yaw_radians: normalizedYaw(entry.yaw),
       yaw_source: "set_piece",
-      ...(entry.prop === undefined ? { asset: entry.asset } : { prop: entry.prop, prop_params: entry.params }),
+      ...(entry.prop === undefined ? { asset: entry.asset } : { prop: entry.prop, prop_params: params }),
       ...(footprint ? { footprint_m: { ...footprint } } : {}),
       reason: entry.reason,
       reference: entry.reference,
@@ -1255,6 +1265,7 @@ export function generateStreetDetail({
       prop: "the kit prop the runtime builds for a placed row, with prop_params: the street-furniture kit (game/scripts/world/street_furniture_kit.gd) for the furniture layer, the street-clutter kit (game/scripts/world/street_clutter_kit.gd) for the clutter layer; rows without one are data only",
       footprint_m: "the plan size {x_m, z_m} of a parked car or a long prop along its local X and Z; with its position and yaw it is the item's rectangle (the gameplay mask checks a stadium that holds it)",
       parked_car: "a parked car's prop_params: body, paint, finish, roof and rims, and its rest on the visible ground under its four tyres (settleParkedCar in tools/lib/street-clutter-generation.mjs): pitch raises the nose and roll the left side (radians), lift takes the car's origin from y + bias_m to that rest, twist is what the suspension takes up (metres: the front-left and rear-right wheels rise by it in the car frame, the other two drop by it)",
+      standing_prop: "a furniture set piece on legs (an Adirondack chair) carries its rest on the visible ground under its feet in prop_params (settleOnFeet in tools/lib/street-furniture-generation.mjs): pitch raises its front and roll its left side (radians), lift takes its origin from y + bias_m to that rest, and leg_drops_m, where the ground folds under it, lengthens (+) or shortens (-) each leg in the kit's order (front-left, front-right, back-left, back-right; metres)",
       source_position_m: "a stop sign's OSM node position, kept when the sign moves to the curb of its approach",
       fence: "fence rows: the kit type and why (type_basis), height and collision half thickness, the stretches cut open along points_m (openings, metres along the line, with what opens them) and the solid runs left (posts on the ground: points_m, terrain_supports, surface_bias_m); a fence row with a prop is built (game/scripts/world/street_fence_kit.gd)",
       fenced_approaches: "scored-building sides a built fence closes, which the building fit may skip (game/tests/shared/building_fit.gd)",
