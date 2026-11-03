@@ -66,6 +66,8 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bo
 	var rear_recess_runs: Dictionary = {}
 	if not rear_recess.is_empty():
 		for frame: Dictionary in cfg.get("rear_frames", []):
+			# An "end" frame keeps its full-height wall: only rear frames take the lower setback.
+			if str(frame.get("elevation_role", "")) == "end": continue
 			for run in frame.runs: rear_recess_runs[int(run)] = frame
 	var recess_runs: Dictionary = {}
 	if not recess.is_empty():
@@ -76,7 +78,10 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bo
 	var opening_frames: Array = cfg.target.frames.duplicate()
 	opening_frames.append_array(cfg.get("rear_frames", []))
 	for frame: Dictionary in opening_frames:
-		var is_rear: bool = str(frame.get("elevation_role", "front")) == "rear"
+		# Opt-in "end" frames (rear_frames on end walls) behave as rear frames, but
+		# their openings never take the lower rear recess.
+		var elevation_role := str(frame.get("elevation_role", "front"))
+		var is_rear: bool = elevation_role == "rear" or elevation_role == "end"
 		for group in ["upper_windows", "lower_windows", "entries", "garage_doors", "loggias"]:
 			for motif: Dictionary in frame.get(group, []):
 				var basis: Dictionary = motif.get("basis", frame)
@@ -129,7 +134,7 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bo
 					push_error("Incomplete opening containment: %s %s %s" % [cfg.target.source_key,frame.id,station])
 				point.y = cy
 				var motif_begin := root.get_child_count()
-				var active_recess: Dictionary = rear_recess if is_rear else recess
+				var active_recess: Dictionary = {} if elevation_role == "end" else (rear_recess if is_rear else recess)
 				var recessed: bool = not active_recess.is_empty() and group != "upper_windows"
 				if recessed: point -= n * float(active_recess.depth_m)
 				if group == "entries":

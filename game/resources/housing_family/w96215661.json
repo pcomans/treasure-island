@@ -2260,10 +2260,14 @@
     ]
   },
   "mapped_runs": [
+    0,
+    1,
     2,
     4,
     5,
     7,
+    8,
+    9,
     10,
     11,
     12,
@@ -2274,12 +2278,8 @@
     19
   ],
   "protected_runs": [
-    0,
-    1,
     3,
     6,
-    8,
-    9,
     17,
     18
   ],
@@ -4798,6 +4798,280 @@
       ],
       "entries": [],
       "evidence": "March2025 rear07 partial paired upper/broad lower glazing; partition, count and continuation production_inference"
+    },
+    {
+      "id": "ene-end-inferred",
+      "elevation_role": "end",
+      "runs": [
+        8,
+        9
+      ],
+      "start": [
+        -462.484,
+        2.034,
+        -726.955
+      ],
+      "end": [
+        -467.496,
+        1.883,
+        -736.629
+      ],
+      "length_m": 10.895247596618844,
+      "tangent": [
+        -0.4600170817229389,
+        0,
+        -0.8879100655601957
+      ],
+      "normal": [
+        0.8879100655601957,
+        0,
+        -0.4600170817229389
+      ],
+      "top_y": 8.034,
+      "evidence": "L2 all-sides audit 2026-11-03: GAP-BLIND bare end. No dated photo shows this end; it inherits the photographed Bayside end module (stacked pair near the front corner plus a small square upper window, as on 1220 NW, 1224 ENE and 1215 S). Dimensions, anchors and head heights (aligned to this unit's own window heads) are production_inference.",
+      "upper_windows": [
+        {
+          "station_m": 8.4952,
+          "local_station_m": 8.4952,
+          "basis": {
+            "source_run": 8,
+            "start": [
+              -462.484,
+              2.034,
+              -726.955
+            ],
+            "end": [
+              -467.17,
+              1.894,
+              -736
+            ],
+            "tangent": [
+              -0.4600076735957228,
+              0,
+              -0.8879149397510163
+            ],
+            "normal": [
+              0.8879149397510163,
+              0,
+              -0.4600076735957228
+            ],
+            "length_m": 10.18678658851748
+          },
+          "width_m": 1.1,
+          "height_m": 1.25,
+          "center_y": 6.765,
+          "glazing": "blue",
+          "wall_receiver": true,
+          "semantic_note": "production_inference: photographed Bayside end module (1220 NW and 1224 ENE Mar 2025, 1215 S Jul 2023): stacked pair about 2.4 m from the front corner and a small upper window near mid-end; this end is unphotographed, dimensions and anchors not surveyed"
+        },
+        {
+          "station_m": 5.4476,
+          "local_station_m": 5.4476,
+          "basis": {
+            "source_run": 8,
+            "start": [
+              -462.484,
+              2.034,
+              -726.955
+            ],
+            "end": [
+              -467.17,
+              1.894,
+              -736
+            ],
+            "tangent": [
+              -0.4600076735957228,
+              0,
+              -0.8879149397510163
+            ],
+            "normal": [
+              0.8879149397510163,
+              0,
+              -0.4600076735957228
+            ],
+            "length_m": 10.18678658851748
+          },
+          "width_m": 0.62,
+          "height_m": 0.62,
+          "center_y": 7.08,
+          "glazing": "blue",
+          "wall_receiver": true,
+          "semantic_note": "production_inference: photographed Bayside end module (1220 NW and 1224 ENE Mar 2025, 1215 S Jul 2023): stacked pair about 2.4 m from the front corner and a small upper window near mid-end; this end is unphotographed, dimensions and anchors not surveyed"
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 8.4952,
+          "local_station_m": 8.4952,
+          "basis": {
+            "source_run": 8,
+            "start": [
+              -462.484,
+              2.034,
+              -726.955
+            ],
+            "end": [
+              -467.17,
+              1.894,
+              -736
+            ],
+            "tangent": [
+              -0.4600076735957228,
+              0,
+              -0.8879149397510163
+            ],
+            "normal": [
+              0.8879149397510163,
+              0,
+              -0.4600076735957228
+            ],
+            "length_m": 10.18678658851748
+          },
+          "width_m": 1.0,
+          "height_m": 1.2,
+          "center_y": 3.55,
+          "glazing": "blue",
+          "wall_receiver": true,
+          "semantic_note": "production_inference: photographed Bayside end module (1220 NW and 1224 ENE Mar 2025, 1215 S Jul 2023): stacked pair about 2.4 m from the front corner and a small upper window near mid-end; this end is unphotographed, dimensions and anchors not surveyed"
+        }
+      ]
+    },
+    {
+      "id": "wsw-end-inferred",
+      "elevation_role": "end",
+      "runs": [
+        0,
+        1
+      ],
+      "start": [
+        -506.361,
+        2.034,
+        -716.191
+      ],
+      "end": [
+        -501.349,
+        2.034,
+        -706.461
+      ],
+      "length_m": 10.94500097157179,
+      "tangent": [
+        0.45792595728927876,
+        0,
+        0.88899033607835
+      ],
+      "normal": [
+        -0.88899033607835,
+        0,
+        0.45792595728927876
+      ],
+      "top_y": 8.034,
+      "evidence": "L2 all-sides audit 2026-11-03: GAP-BLIND bare end. No dated photo shows this end; it inherits the photographed Bayside end module (stacked pair near the front corner plus a small square upper window, as on 1220 NW, 1224 ENE and 1215 S). Dimensions, anchors and head heights (aligned to this unit's own window heads) are production_inference.",
+      "upper_windows": [
+        {
+          "station_m": 2.4,
+          "local_station_m": 2.4,
+          "basis": {
+            "source_run": 0,
+            "start": [
+              -506.361,
+              2.034,
+              -716.191
+            ],
+            "end": [
+              -504.134,
+              2.034,
+              -711.866
+            ],
+            "tangent": [
+              0.4577892071809669,
+              0,
+              0.8890607638337334
+            ],
+            "normal": [
+              -0.8890607638337334,
+              0,
+              0.4577892071809669
+            ],
+            "length_m": 4.864684367972941
+          },
+          "width_m": 1.1,
+          "height_m": 1.25,
+          "center_y": 6.765,
+          "glazing": "blue",
+          "wall_receiver": true,
+          "semantic_note": "production_inference: photographed Bayside end module (1220 NW and 1224 ENE Mar 2025, 1215 S Jul 2023): stacked pair about 2.4 m from the front corner and a small upper window near mid-end; this end is unphotographed, dimensions and anchors not surveyed"
+        },
+        {
+          "station_m": 5.4725,
+          "local_station_m": 0.6078,
+          "basis": {
+            "source_run": 1,
+            "start": [
+              -504.134,
+              2.034,
+              -711.866
+            ],
+            "end": [
+              -501.349,
+              2.034,
+              -706.461
+            ],
+            "tangent": [
+              0.45803535926922373,
+              0,
+              0.8889339737343338
+            ],
+            "normal": [
+              -0.8889339737343338,
+              0,
+              0.45803535926922373
+            ],
+            "length_m": 6.080316603598849
+          },
+          "width_m": 0.62,
+          "height_m": 0.62,
+          "center_y": 7.08,
+          "glazing": "blue",
+          "wall_receiver": true,
+          "semantic_note": "production_inference: photographed Bayside end module (1220 NW and 1224 ENE Mar 2025, 1215 S Jul 2023): stacked pair about 2.4 m from the front corner and a small upper window near mid-end; this end is unphotographed, dimensions and anchors not surveyed"
+        }
+      ],
+      "lower_windows": [
+        {
+          "station_m": 2.4,
+          "local_station_m": 2.4,
+          "basis": {
+            "source_run": 0,
+            "start": [
+              -506.361,
+              2.034,
+              -716.191
+            ],
+            "end": [
+              -504.134,
+              2.034,
+              -711.866
+            ],
+            "tangent": [
+              0.4577892071809669,
+              0,
+              0.8890607638337334
+            ],
+            "normal": [
+              -0.8890607638337334,
+              0,
+              0.4577892071809669
+            ],
+            "length_m": 4.864684367972941
+          },
+          "width_m": 1.0,
+          "height_m": 1.2,
+          "center_y": 3.55,
+          "glazing": "blue",
+          "wall_receiver": true,
+          "semantic_note": "production_inference: photographed Bayside end module (1220 NW and 1224 ENE Mar 2025, 1215 S Jul 2023): stacked pair about 2.4 m from the front corner and a small upper window near mid-end; this end is unphotographed, dimensions and anchors not surveyed"
+        }
+      ]
     }
   ],
   "shallow_sectional_roof": {
