@@ -113,13 +113,13 @@
     },
     "scatter": {
       "candidates": 531,
-      "placed": 51,
+      "placed": 50,
       "rejected_by_reason": {
         "building_buffer": 1,
         "ferry_path": 4,
         "land_edge": 22,
         "outside_zone": 89,
-        "overlap": 9,
+        "overlap": 10,
         "qa_route": 2,
         "road": 56,
         "seed_acceptance": 257,
@@ -141,8 +141,9 @@
     "parked_car": "a parked car's prop_params: body, paint, finish, roof and rims, and its rest on the visible ground under its four tyres (settleParkedCar in tools/lib/street-clutter-generation.mjs): pitch raises the nose and roll the left side (radians), lift takes the car's origin from y + bias_m to that rest, twist is what the suspension takes up (metres: the front-left and rear-right wheels rise by it in the car frame, the other two drop by it)",
     "position_m": "[x, y, z]; y is the generated land elevation under x, z (terrain_support names the triangle)",
     "prop": "the kit prop the runtime builds for a placed row, with prop_params: the street-furniture kit (game/scripts/world/street_furniture_kit.gd) for the furniture layer, the street-clutter kit (game/scripts/world/street_clutter_kit.gd) for the clutter layer; rows without one are data only",
+    "prop_feet": "per kit prop on legs, the flat bottom of each foot {x, z, half_x, half_z} in the prop's frame (front -Z, right +X) in the kit's leg order: the feet a standing prop settles on, which the kit's legs must stand on",
     "source_position_m": "a stop sign's OSM node position, kept when the sign moves to the curb of its approach",
-    "standing_prop": "a furniture set piece on legs (an Adirondack chair) carries its rest on the visible ground under its feet in prop_params (settleOnFeet in tools/lib/street-furniture-generation.mjs): pitch raises its front and roll its left side (radians), lift takes its origin from y + bias_m to that rest, and leg_drops_m, where the ground folds under it, lengthens (+) or shortens (-) each leg in the kit's order (front-left, front-right, back-left, back-right; metres)",
+    "standing_prop": "a furniture set piece on legs (an Adirondack chair) carries its rest on the visible ground under its feet in prop_params (settleOnFeet in tools/lib/street-furniture-generation.mjs): pitch raises its front and roll its left side (radians, together at most 0.15 rad from upright), lift takes its origin from y + bias_m to that rest, and leg_drops_m, where the ground folds under it, lengthens (+) or shortens (-) each leg in the kit's order (front-left, front-right, back-left, back-right; metres, in 5 mm steps)",
     "status": "placed rows are built when their layer is on; excluded rows keep their source id and the reason",
     "surface": "the visible ground surface at x, z (generated feature kind and material, including the raised street ground); set an item on it at y + bias_m",
     "yaw_radians": "rotation about +Y turning the asset's local -Z front; null when the source gives no direction"
@@ -170,7 +171,7 @@
       "log_barrier": 2,
       "palm_slot": 12,
       "parked_car": 115,
-      "planting_slot": 19,
+      "planting_slot": 18,
       "post_box": 1,
       "power_line": 44,
       "power_pole": 245,
@@ -189,26 +190,26 @@
       "fences": 60,
       "furniture": 215,
       "ground": 169,
-      "vegetation": 31
+      "vegetation": 30
     },
     "by_source": {
       "osm": 660,
-      "scatter": 225,
+      "scatter": 224,
       "set_piece": 19
     },
     "by_status": {
       "excluded": 4,
-      "placed": 900
+      "placed": 899
     },
-    "pilot_rows": 264,
+    "pilot_rows": 263,
     "placed_by_layer": {
       "clutter": 427,
       "fences": 59,
       "furniture": 214,
       "ground": 169,
-      "vegetation": 31
+      "vegetation": 30
     },
-    "total": 904
+    "total": 903
   },
   "exclusion_inputs": {
     "ferry_path_xz": [
@@ -1610,7 +1611,7 @@
     },
     "set_pieces": {
       "path": "data/street_detail/set_pieces.json",
-      "sha256": "9e8c3a14aaada6888dc52c82f6cf31675cfe6e36f3d92defc8c0ee5913545ce8"
+      "sha256": "5002c50ed28f4d2c69281fee7a1de02608e63d8552b794b57000e20eb868fa84"
     },
     "stair_catalog": {
       "field": "units[].stairs",
@@ -1861,6 +1862,34 @@
     "fences",
     "clutter"
   ],
+  "prop_feet": {
+    "adirondack_chair": [
+      {
+        "half_x": 0.0115,
+        "half_z": 0.037,
+        "x": -0.3,
+        "z": -0.305
+      },
+      {
+        "half_x": 0.0115,
+        "half_z": 0.037,
+        "x": 0.3,
+        "z": -0.305
+      },
+      {
+        "half_x": 0.0115,
+        "half_z": 0.034,
+        "x": -0.3,
+        "z": 0.373
+      },
+      {
+        "half_x": 0.0115,
+        "half_z": 0.034,
+        "x": 0.3,
+        "z": 0.373
+      }
+    ]
+  },
   "rows": [
     {
       "exclusion": null,
@@ -41823,37 +41852,6 @@
     {
       "exclusion": null,
       "geometry": "point",
-      "id": "scatter:ferry_arrival_plaza:lawn_planting:r004c006",
-      "kind": "planting_slot",
-      "layer": "vegetation",
-      "position_m": [
-        -111.53,
-        3.397,
-        775.146
-      ],
-      "source": "scatter",
-      "source_id": "zone:ferry_arrival_plaza/lawn_planting",
-      "status": "placed",
-      "surface": {
-        "bias_m": 0.04,
-        "kind": "major_area",
-        "material_key": "major_area_leisure",
-        "source_key": "w1428380754"
-      },
-      "terrain_support": {
-        "elevation_m": 3.397,
-        "object_key": "land:w26767313:x_-1__z_3",
-        "triangle_index": 6
-      },
-      "yaw_radians": 1.063,
-      "yaw_source": "seeded",
-      "zones": [
-        "ferry_arrival_plaza"
-      ]
-    },
-    {
-      "exclusion": null,
-      "geometry": "point",
       "id": "scatter:ferry_arrival_plaza:lawn_planting:r005c005",
       "kind": "planting_slot",
       "layer": "vegetation",
@@ -45079,18 +45077,18 @@
       "kind": "chair",
       "layer": "furniture",
       "position_m": [
-        -113.1,
-        3.376,
-        773.5
+        -117.31,
+        3.223,
+        773.41
       ],
       "prop": "adirondack_chair",
       "prop_params": {
-        "lift": -0.002,
-        "pitch": -0.0336,
-        "roll": -0.0096
+        "lift": 0,
+        "pitch": 0.0012,
+        "roll": 0.0371
       },
-      "reason": "Bright blue plastic Adirondack chairs stand in a loose group on the lawn north of the landing; five here, facing each other in a ring open on one side (production_inference: photo 25 shows five chairs in the group).",
-      "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn",
+      "reason": "Bright blue plastic Adirondack chairs stand side by side on the lawn north of the landing in a loose, shallow arc, all facing the bay and the pier; five here (production_inference: photos 24 and 25 show five chairs seen from behind, facing away from the road toward the water).",
+      "reference": "ferry-shelter 24-sv-north-zoom and 25-sv-north-mid (185 Treasure Island Rd, Sep 2025): the blue chairs on the lawn, seen from behind",
       "source": "set_piece",
       "source_id": "plaza_adirondack_chair_1",
       "status": "placed",
@@ -45101,11 +45099,11 @@
         "source_key": "w1428380754"
       },
       "terrain_support": {
-        "elevation_m": 3.376,
+        "elevation_m": 3.223,
         "object_key": "land:w26767313:x_-1__z_3",
-        "triangle_index": 6
+        "triangle_index": 5
       },
-      "yaw_radians": 1.571,
+      "yaw_radians": 3.064,
       "yaw_source": "set_piece",
       "zones": [
         "ferry_arrival_plaza"
@@ -45122,18 +45120,18 @@
       "kind": "chair",
       "layer": "furniture",
       "position_m": [
-        -114.3,
-        3.305,
-        775.58
+        -115.49,
+        3.292,
+        773.94
       ],
       "prop": "adirondack_chair",
       "prop_params": {
-        "lift": 0.001,
-        "pitch": -0.0007,
-        "roll": -0.0346
+        "lift": -0.001,
+        "pitch": -0.0113,
+        "roll": 0.0325
       },
-      "reason": "Bright blue plastic Adirondack chairs stand in a loose group on the lawn north of the landing; five here, facing each other in a ring open on one side (production_inference: photo 25 shows five chairs in the group).",
-      "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn",
+      "reason": "Bright blue plastic Adirondack chairs stand side by side on the lawn north of the landing in a loose, shallow arc, all facing the bay and the pier; five here (production_inference: photos 24 and 25 show five chairs seen from behind, facing away from the road toward the water).",
+      "reference": "ferry-shelter 24-sv-north-zoom and 25-sv-north-mid (185 Treasure Island Rd, Sep 2025): the blue chairs on the lawn, seen from behind",
       "source": "set_piece",
       "source_id": "plaza_adirondack_chair_2",
       "status": "placed",
@@ -45144,11 +45142,11 @@
         "source_key": "w1428380754"
       },
       "terrain_support": {
-        "elevation_m": 3.305,
+        "elevation_m": 3.292,
         "object_key": "land:w26767313:x_-1__z_3",
-        "triangle_index": 6
+        "triangle_index": 5
       },
-      "yaw_radians": 0.524,
+      "yaw_radians": 2.815,
       "yaw_source": "set_piece",
       "zones": [
         "ferry_arrival_plaza"
@@ -45165,18 +45163,18 @@
       "kind": "chair",
       "layer": "furniture",
       "position_m": [
-        -116.7,
-        3.232,
-        775.58
+        -113.74,
+        3.34,
+        774.5
       ],
       "prop": "adirondack_chair",
       "prop_params": {
         "lift": 0.001,
-        "pitch": 0.0296,
-        "roll": -0.0179
+        "pitch": -0.0265,
+        "roll": 0.0223
       },
-      "reason": "Bright blue plastic Adirondack chairs stand in a loose group on the lawn north of the landing; five here, facing each other in a ring open on one side (production_inference: photo 25 shows five chairs in the group).",
-      "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn",
+      "reason": "Bright blue plastic Adirondack chairs stand side by side on the lawn north of the landing in a loose, shallow arc, all facing the bay and the pier; five here (production_inference: photos 24 and 25 show five chairs seen from behind, facing away from the road toward the water).",
+      "reference": "ferry-shelter 24-sv-north-zoom and 25-sv-north-mid (185 Treasure Island Rd, Sep 2025): the blue chairs on the lawn, seen from behind",
       "source": "set_piece",
       "source_id": "plaza_adirondack_chair_3",
       "status": "placed",
@@ -45187,11 +45185,11 @@
         "source_key": "w1428380754"
       },
       "terrain_support": {
-        "elevation_m": 3.232,
+        "elevation_m": 3.34,
         "object_key": "land:w26767313:x_-1__z_3",
         "triangle_index": 6
       },
-      "yaw_radians": -0.524,
+      "yaw_radians": 2.775,
       "yaw_source": "set_piece",
       "zones": [
         "ferry_arrival_plaza"
@@ -45208,18 +45206,18 @@
       "kind": "chair",
       "layer": "furniture",
       "position_m": [
-        -117.9,
-        3.201,
-        773.5
+        -111.95,
+        3.381,
+        775.29
       ],
       "prop": "adirondack_chair",
       "prop_params": {
-        "lift": 0,
-        "pitch": 0.0369,
-        "roll": -0.004
+        "lift": 0.001,
+        "pitch": -0.0309,
+        "roll": 0.0156
       },
-      "reason": "Bright blue plastic Adirondack chairs stand in a loose group on the lawn north of the landing; five here, facing each other in a ring open on one side (production_inference: photo 25 shows five chairs in the group).",
-      "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn",
+      "reason": "Bright blue plastic Adirondack chairs stand side by side on the lawn north of the landing in a loose, shallow arc, all facing the bay and the pier; five here (production_inference: photos 24 and 25 show five chairs seen from behind, facing away from the road toward the water).",
+      "reference": "ferry-shelter 24-sv-north-zoom and 25-sv-north-mid (185 Treasure Island Rd, Sep 2025): the blue chairs on the lawn, seen from behind",
       "source": "set_piece",
       "source_id": "plaza_adirondack_chair_4",
       "status": "placed",
@@ -45230,11 +45228,11 @@
         "source_key": "w1428380754"
       },
       "terrain_support": {
-        "elevation_m": 3.201,
+        "elevation_m": 3.381,
         "object_key": "land:w26767313:x_-1__z_3",
-        "triangle_index": 5
+        "triangle_index": 6
       },
-      "yaw_radians": -1.571,
+      "yaw_radians": 2.543,
       "yaw_source": "set_piece",
       "zones": [
         "ferry_arrival_plaza"
@@ -45251,24 +45249,18 @@
       "kind": "chair",
       "layer": "furniture",
       "position_m": [
-        -116.7,
-        3.259,
-        771.42
+        -110.42,
+        3.408,
+        776.46
       ],
       "prop": "adirondack_chair",
       "prop_params": {
-        "leg_drops_m": [
-          0.008,
-          -0.008,
-          -0.009,
-          0.008
-        ],
-        "lift": 0.014,
-        "pitch": -0.0949,
-        "roll": 0.0582
+        "lift": 0.001,
+        "pitch": -0.031,
+        "roll": 0.0155
       },
-      "reason": "Bright blue plastic Adirondack chairs stand in a loose group on the lawn north of the landing; five here, facing each other in a ring open on one side (production_inference: photo 25 shows five chairs in the group).",
-      "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn",
+      "reason": "Bright blue plastic Adirondack chairs stand side by side on the lawn north of the landing in a loose, shallow arc, all facing the bay and the pier; five here (production_inference: photos 24 and 25 show five chairs seen from behind, facing away from the road toward the water).",
+      "reference": "ferry-shelter 24-sv-north-zoom and 25-sv-north-mid (185 Treasure Island Rd, Sep 2025): the blue chairs on the lawn, seen from behind",
       "source": "set_piece",
       "source_id": "plaza_adirondack_chair_5",
       "status": "placed",
@@ -45279,11 +45271,11 @@
         "source_key": "w1428380754"
       },
       "terrain_support": {
-        "elevation_m": 3.259,
+        "elevation_m": 3.408,
         "object_key": "land:w26767313:x_-1__z_3",
-        "triangle_index": 4
+        "triangle_index": 6
       },
-      "yaw_radians": -2.618,
+      "yaw_radians": 2.539,
       "yaw_source": "set_piece",
       "zones": [
         "ferry_arrival_plaza"
@@ -45602,7 +45594,7 @@
           "id": "lawn_planting",
           "kind": "planting_slot",
           "pattern": "grid",
-          "placed": 6
+          "placed": 5
         },
         {
           "candidates": 24,

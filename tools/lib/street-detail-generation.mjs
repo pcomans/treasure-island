@@ -1265,7 +1265,8 @@ export function generateStreetDetail({
       prop: "the kit prop the runtime builds for a placed row, with prop_params: the street-furniture kit (game/scripts/world/street_furniture_kit.gd) for the furniture layer, the street-clutter kit (game/scripts/world/street_clutter_kit.gd) for the clutter layer; rows without one are data only",
       footprint_m: "the plan size {x_m, z_m} of a parked car or a long prop along its local X and Z; with its position and yaw it is the item's rectangle (the gameplay mask checks a stadium that holds it)",
       parked_car: "a parked car's prop_params: body, paint, finish, roof and rims, and its rest on the visible ground under its four tyres (settleParkedCar in tools/lib/street-clutter-generation.mjs): pitch raises the nose and roll the left side (radians), lift takes the car's origin from y + bias_m to that rest, twist is what the suspension takes up (metres: the front-left and rear-right wheels rise by it in the car frame, the other two drop by it)",
-      standing_prop: "a furniture set piece on legs (an Adirondack chair) carries its rest on the visible ground under its feet in prop_params (settleOnFeet in tools/lib/street-furniture-generation.mjs): pitch raises its front and roll its left side (radians), lift takes its origin from y + bias_m to that rest, and leg_drops_m, where the ground folds under it, lengthens (+) or shortens (-) each leg in the kit's order (front-left, front-right, back-left, back-right; metres)",
+      standing_prop: "a furniture set piece on legs (an Adirondack chair) carries its rest on the visible ground under its feet in prop_params (settleOnFeet in tools/lib/street-furniture-generation.mjs): pitch raises its front and roll its left side (radians, together at most 0.15 rad from upright), lift takes its origin from y + bias_m to that rest, and leg_drops_m, where the ground folds under it, lengthens (+) or shortens (-) each leg in the kit's order (front-left, front-right, back-left, back-right; metres, in 5 mm steps)",
+      prop_feet: "per kit prop on legs, the flat bottom of each foot {x, z, half_x, half_z} in the prop's frame (front -Z, right +X) in the kit's leg order: the feet a standing prop settles on, which the kit's legs must stand on",
       source_position_m: "a stop sign's OSM node position, kept when the sign moves to the curb of its approach",
       fence: "fence rows: the kit type and why (type_basis), height and collision half thickness, the stretches cut open along points_m (openings, metres along the line, with what opens them) and the solid runs left (posts on the ground: points_m, terrain_supports, surface_bias_m); a fence row with a prop is built (game/scripts/world/street_fence_kit.gd)",
       fenced_approaches: "scored-building sides a built fence closes, which the building fit may skip (game/tests/shared/building_fit.gd)",
@@ -1273,6 +1274,7 @@ export function generateStreetDetail({
     layers: STREET_DETAIL_LAYERS,
     ground_layer: STREET_DETAIL_GROUND_LAYER,
     kinds: STREET_DETAIL_KINDS,
+    prop_feet: STREET_FURNITURE_FEET,
     inputs: {
       osm_extract: { path: SOURCE_CONTRACT.proper_extract.path, sha256: SOURCE_CONTRACT.proper_extract.sha256 },
       zones: { path: STREET_DETAIL_INPUTS.zones, sha256: sha256File(resolve(projectRoot, STREET_DETAIL_INPUTS.zones)) },

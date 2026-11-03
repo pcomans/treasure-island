@@ -58,8 +58,10 @@ const FRAME_CHARCOAL := Color(0.16, 0.17, 0.18)
 ## 25 (hue about 210 degrees), paler where their tops catch the sky.
 const CHAIR_BLUE := Color(0.11, 0.43, 0.72)
 ## The chair's legs stand at x = +-CHAIR_LEG_X. Each placed chair settles on the
-## visible ground under its feet (settleOnFeet and STREET_FURNITURE_FEET in
-## tools/lib/street-furniture-generation.mjs, which must match these legs).
+## visible ground under its feet: STREET_FURNITURE_FEET in
+## tools/lib/street-furniture-generation.mjs is the one table of them (prop_feet
+## in the generated street detail), and game/tests/validate_generated_world.gd
+## checks that these legs stand on it (standing_vertices).
 const CHAIR_LEG_X := 0.3
 const BIN_STEEL := Color(0.42, 0.43, 0.44)
 const RACK_DARK := Color(0.2, 0.17, 0.14)
@@ -230,6 +232,20 @@ func _box_shape(result: Dictionary, size: Vector3, offset: Vector3, rest := Tran
 		box.size = size
 		_shapes[key] = box
 	result.shapes.append({"shape": _shapes[key], "transform": rest * Transform3D(Basis.IDENTITY, offset)})
+
+
+## The mesh vertices of a prop on legs as parts() draws it with no leg drops, in
+## its own frame and without its rest, built without committing a mesh; empty
+## for a prop without legs. For the contract that checks the legs against the
+## generated street detail's prop_feet.
+func standing_vertices(prop: String) -> PackedVector3Array:
+	var builder := Builder.new(CELL_WHITE)
+	match prop:
+		"adirondack_chair":
+			_adirondack_chair(builder, PackedFloat32Array())
+		_:
+			return PackedVector3Array()
+	return builder.vertices(0)
 
 
 ## A prop's rest on the ground from its row's prop_params: pitch raises its
@@ -568,15 +584,16 @@ func _map_board(b: Builder) -> void:
 	b.plate(Vector3(0.0, 1.41, 0.0), Basis.IDENTITY, _rectangle(1.2, 0.72), 0.03, CELL_MAP, Color.WHITE, FRAME_CHARCOAL, CELL_WHITE)
 
 
-## A bright blue moulded-plastic Adirondack chair facing -Z (Waterfront Plaza
-## lawn, Sep 2025 photos 24 and 25): a tall back of five slats fanned slightly
-## outward under an arched top, held by two rails behind; wide flat arms on
-## upright front legs, their backs on a rail across the chair; a low seat of
-## slats falling toward the back on two seat rails; and back legs angled from
-## under the arms down to the ground behind. About 0.75 m wide, 0.85 m deep and
-## 1.0 m tall, the seat front 0.375 m up: production inference from the photos
-## and common Adirondack proportions, not measured. `drops` (none, or the
-## front-left, front-right, back-left and back-right legs) lengthens single legs.
+## A bright blue moulded-plastic Adirondack chair of the modern kind facing -Z
+## (Waterfront Plaza lawn, Sep 2025 photos 24 and 25): a tall, flat-topped,
+## rectangular back of broad side boards and closely spaced parallel slats under
+## a band across its top; wide flat arms on upright front legs, their backs on a
+## rail across the chair; a low seat of slats falling toward the back on two
+## seat rails; and back legs angled from under the arms down to the ground
+## behind. About 0.75 m wide, 0.87 m deep and 0.99 m tall, the seat front
+## 0.375 m up: production inference from the photos and common Adirondack
+## proportions, not measured. `drops` (none, or the front-left, front-right,
+## back-left and back-right legs) lengthens single legs.
 func _adirondack_chair(b: Builder, drops: PackedFloat32Array) -> void:
 	var bevel := 0.006
 	# Side frames, outlines in (z, y) and thick across X: the front leg with the
@@ -606,31 +623,24 @@ func _adirondack_chair(b: Builder, drops: PackedFloat32Array) -> void:
 	for index in 5:
 		var center := Vector3(0.0, 0.375, -0.36) + down_seat * (0.092 * float(index) + 0.04) - seat_normal * 0.01
 		b.slab(center, seat, Builder.rounded(_rectangle(0.56, 0.08), [0.012], 2), 0.02, bevel, CHAIR_BLUE)
-	# Back: five slats leaning back 23 degrees from behind the seat, fanned out
-	# 1.5 degrees apart and cut together to an arch 1.0 m up at the middle. The
-	# outlines are in the back's plane (across, up it); its Z points behind.
+	# Back, the modern poly kind of photos 24 and 25: a flat-topped rectangle
+	# 0.49 m wide leaning back 23 degrees from behind the seat, broad side boards
+	# with four closely spaced parallel slats between them, a band across its
+	# top behind and a low rail between the seat rails. The outlines are in the
+	# back's plane (across, up it); its Z points behind.
 	var lean := deg_to_rad(23.0)
 	var back := _frame(Vector3.RIGHT, Vector3(0.0, cos(lean), sin(lean)))
 	var back_origin := Vector3(0.0, 0.26, 0.1)
-	var arch_top := 0.804
-	var arch_fall := 0.86
-	for index in range(-2, 3):
-		var angle := deg_to_rad(1.5 * float(index))
-		var along_slat := Vector2(sin(angle), cos(angle))
-		var across := Vector2(cos(angle), -sin(angle))
-		var foot := Vector2(0.093 * float(index), 0.0)
-		var outline := PackedVector2Array([foot - across * 0.0425, foot + across * 0.0425])
-		for offset: float in [0.0425, 0.0, -0.0425]:
-			var start := foot + across * offset
-			var reach := arch_top
-			for _step in 4:
-				var u := start.x + along_slat.x * reach
-				reach = (arch_top - arch_fall * u * u - start.y) / along_slat.y
-			outline.append(start + along_slat * reach)
-		b.slab(back_origin + back.z * 0.01, back, Builder.rounded(outline, [0.006, 0.006, 0.02, 0.0, 0.02], 2), 0.02, 0.005, CHAIR_BLUE)
-	# Rails behind the slats: a low one between the seat rails, one near the top.
-	b.slab(back_origin + back.y * 0.035 + back.z * 0.035, back, Builder.rounded(_rectangle(0.495, 0.07), [0.01], 2), 0.03, bevel, CHAIR_BLUE)
-	b.slab(back_origin + back.y * 0.68 + back.z * 0.0325, back, Builder.rounded(_rectangle(0.54, 0.06), [0.01], 2), 0.025, bevel, CHAIR_BLUE)
+	var top := 0.79
+	for mirror: float in [-1.0, 1.0]:
+		var side_board := PackedVector2Array([Vector2(mirror * 0.155, 0.0), Vector2(mirror * 0.245, 0.0), Vector2(mirror * 0.245, top), Vector2(mirror * 0.155, top)])
+		b.slab(back_origin + back.z * 0.0125, back, Builder.rounded(side_board, [0.006, 0.006, 0.025, 0.008], 2), 0.025, bevel, CHAIR_BLUE)
+	for index in 4:
+		var middle := -0.113625 + 0.07575 * float(index)
+		var slat := PackedVector2Array([Vector2(middle - 0.034375, 0.0), Vector2(middle + 0.034375, 0.0), Vector2(middle + 0.034375, top), Vector2(middle - 0.034375, top)])
+		b.slab(back_origin + back.z * 0.01, back, Builder.rounded(slat, [0.006], 2), 0.02, 0.005, CHAIR_BLUE)
+	b.slab(back_origin + back.y * (top - 0.0375) + back.z * 0.0375, back, Builder.rounded(_rectangle(0.49, 0.075), [0.012], 2), 0.025, bevel, CHAIR_BLUE)
+	b.slab(back_origin + back.y * 0.035 + back.z * 0.04, back, Builder.rounded(_rectangle(0.495, 0.07), [0.01], 2), 0.03, bevel, CHAIR_BLUE)
 
 
 ## An orthonormal basis whose X and Y span an outline's plane and whose Z
@@ -941,6 +951,10 @@ class Builder:
 				quad.append(vertex(0, center + t * corner.x * along + Vector3(0, 0, corner.y * half.z), n, middle, edge_color))
 			triangle(0, quad[0], quad[1], quad[2], n)
 			triangle(0, quad[0], quad[2], quad[3], n)
+
+	## A copy of one surface's vertex positions so far.
+	func vertices(surface: int) -> PackedVector3Array:
+		return (_surfaces[surface].vertices as PackedVector3Array).duplicate()
 
 	func commit(opaque: Material, lit: Material) -> ArrayMesh:
 		var mesh := ArrayMesh.new()
