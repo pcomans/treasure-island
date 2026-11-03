@@ -25,7 +25,8 @@
 // ground in: around each one, the ground no building, built fence, street prop,
 // parked car, tree trunk or the island's edge covers, at the stock capsule's
 // reach, must all connect to the open ground beyond, so a player anywhere near a
-// fence can walk out without the jetpack. Grass clumps have no collision.
+// fence can walk out without the jetpack. Grass clumps, perennials and shrubs (the
+// vegetation props without a trunk) have no collision.
 
 import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -41,6 +42,7 @@ import {
   streetDetailHardShapes,
   streetDetailPieces,
 } from "./lib/street-detail-generation.mjs";
+import { STREET_VEGETATION_PROPS } from "./lib/street-vegetation-generation.mjs";
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const worldRoot = resolve(projectRoot, process.argv[2] ?? "generated/world");
@@ -139,7 +141,7 @@ function fencedPockets(manifest, detail) {
     if (row.status !== "placed") continue;
     // Built fences, street props, parked cars and tree trunks (every row the
     // runtime builds with collision), each grown by the capsule radius.
-    if (row.prop != null && (row.fence || ["furniture", "clutter"].includes(row.layer) || (row.layer === "vegetation" && row.kind !== "grass_clump"))) {
+    if (row.prop != null && (row.fence || ["furniture", "clutter"].includes(row.layer) || (row.layer === "vegetation" && STREET_VEGETATION_PROPS[row.prop]?.trunk))) {
       for (const piece of streetDetailPieces(row)) solids.push({ points: piece.points, radius: piece.radius + PLAYER_CAPSULE_RADIUS_M });
     }
   }
