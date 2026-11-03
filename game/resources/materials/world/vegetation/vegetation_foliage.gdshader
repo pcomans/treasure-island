@@ -14,6 +14,11 @@ uniform float roughness : hint_range(0.0, 1.0) = 0.82;
 uniform float specular : hint_range(0.0, 1.0) = 0.3;
 uniform vec4 translucency : source_color = vec4(0.16, 0.2, 0.07, 1.0);
 uniform vec2 texture_size = vec2(1024.0);
+// Alpha gained per sampled mip level. The packed atlases keep about the same
+// alpha-test coverage down their mip chain (measured 2026-11-03: unboosted, within
+// 6 % of the full-size coverage to mip 5), so only a small boost is needed to hold
+// thin tips; 0.25 filled the distant crowns into solid lobes.
+uniform float mip_alpha_boost : hint_range(0.0, 0.5) = 0.05;
 
 void vertex() {
 	VERTEX += vegetation_wind(VERTEX, NORMAL, UV2, MODEL_MATRIX, TIME);
@@ -22,7 +27,7 @@ void vertex() {
 void fragment() {
 	vec4 tex = texture(albedo_texture, UV);
 	// Mipmapping averages thin leaf segments toward transparency. Raise alpha
-	// with the sampled mip level so distant crowns keep their density.
+	// a little with the sampled mip level so their tips hold at a distance.
 	vec2 texel = UV * texture_size;
 	float lod = max(0.0, 0.5 * log2(max(dot(dFdx(texel), dFdx(texel)), dot(dFdy(texel), dFdy(texel)))));
 	ALBEDO = tex.rgb * tint.rgb * COLOR.rgb;
@@ -34,6 +39,6 @@ void fragment() {
 		NORMAL = -NORMAL;
 	}
 	BACKLIGHT = translucency.rgb;
-	ALPHA = tex.a * (1.0 + lod * 0.25);
+	ALPHA = tex.a * (1.0 + lod * mip_alpha_boost);
 	ALPHA_SCISSOR_THRESHOLD = alpha_cutoff;
 }

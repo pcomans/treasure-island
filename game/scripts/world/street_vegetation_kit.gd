@@ -107,7 +107,8 @@ const GRASSES := [
 ## LOD1 until the second, the far level until the third; grass has only LOD0)
 ## and the radius of its foot on the ground, which the generator settles on the
 ## visible surface (tools/lib/street-vegetation-generation.mjs keeps the same
-## variant counts and foot radii).
+## variant counts and foot radii). The far impostors are baked from these forms:
+## re-run tools/vegetation/bake_impostors.gd after any kit geometry change.
 const PROPS := {
 	"mexican_fan_palm": {"kinds": ["palm_slot", "tree"], "variants": FAN_PALMS, "ranges": [35.0, 95.0, 900.0], "foot_m": 0.45},
 	"canary_date_palm": {"kinds": ["palm_slot", "tree"], "variants": CANARY_PALMS, "ranges": [45.0, 110.0, 900.0], "foot_m": 0.7},

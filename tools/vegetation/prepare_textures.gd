@@ -6,10 +6,14 @@ extends SceneTree
 ## magenta spill, fills transparent pixels with nearby leaf colour (so mipmaps
 ## don't halo), grades and packs the atlases whose cells
 ## game/scripts/world/street_vegetation_kit.gd reads, and resizes the tiled barks.
+## Writes each PNG's `.import` beside it (tools/vegetation/texture_import.gd:
+## lossless, with mipmaps), so a re-pack always imports with the mip chain the
+## foliage and bark shaders sample.
 ##
 ##   tools/godot --headless --path . --script tools/vegetation/prepare_textures.gd -- --source DIR
 ##   tools/godot --headless --path . --import   # then import the new PNGs
 
+const TextureImport := preload("res://tools/vegetation/texture_import.gd")
 const OUT := "res://game/resources/textures/world/vegetation/"
 ## The sources this tool reads, by file name in the source folder.
 const SOURCES := [
@@ -259,8 +263,12 @@ func _save(image: Image, path: String, errors: Array[String]) -> void:
 	var error := image.save_png(ProjectSettings.globalize_path(path))
 	if error != OK:
 		errors.append("could not save %s (error %d)" % [path, error])
-	else:
-		print("WROTE %s %dx%d" % [path, image.get_width(), image.get_height()])
+		return
+	error = TextureImport.write(path)
+	if error != OK:
+		errors.append("could not write %s.import (error %d)" % [path, error])
+		return
+	print("WROTE %s %dx%d" % [path, image.get_width(), image.get_height()])
 
 
 func _finish(errors: Array[String]) -> void:

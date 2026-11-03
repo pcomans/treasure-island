@@ -10,6 +10,7 @@ extends SceneTree
 ##   tools/godot --headless --path . --import   # then import the new PNGs
 
 const Kit := preload("res://game/scripts/world/street_vegetation_kit.gd")
+const TextureImport := preload("res://tools/vegetation/texture_import.gd")
 ## Longest side of the saved image per prop; the bake renders at twice this and halves it.
 const PIXELS := {"mexican_fan_palm": 256, "canary_date_palm": 256, "monterey_cypress": 512}
 
@@ -96,7 +97,10 @@ func _bake(kit: Kit, prop: String, variant: int) -> void:
 	if error != OK:
 		_errors.append("could not save %s (error %d)" % [path, error])
 		return
-	_write_import(path)
+	error = TextureImport.write(path)
+	if error != OK:
+		_errors.append("could not write %s.import (error %d)" % [path, error])
+		return
 	print("BAKED %s %dx%d frame centre=%s size=%s" % [path, pixels.x, pixels.y, frame.center, size])
 
 
@@ -133,30 +137,3 @@ func _fill_transparent(image: Image) -> void:
 					data[i + c] = int(round(lerpf(level[i + c] * 255.0 / a, data[i + c], keep)))
 				break
 	image.set_data(w, h, false, Image.FORMAT_RGBA8, data)
-
-
-func _write_import(path: String) -> void:
-	# Keep an existing uid so a rebake doesn't churn the import file.
-	var import_path := ProjectSettings.globalize_path(path) + ".import"
-	var uid_line := ""
-	if FileAccess.file_exists(import_path):
-		for line in FileAccess.get_file_as_string(import_path).split("\n"):
-			if line.begins_with("uid="):
-				uid_line = line
-	var header: Array[String] = ["[remap]", "", "importer=\"texture\"", "type=\"CompressedTexture2D\""]
-	if uid_line != "":
-		header.append(uid_line)
-	var file := FileAccess.open(import_path, FileAccess.WRITE)
-	file.store_string("\n".join(header + [
-		"",
-		"[deps]", "", "source_file=\"%s\"" % path, "",
-		"[params]", "",
-		"compress/mode=0", "compress/high_quality=false", "compress/lossy_quality=0.7",
-		"compress/uastc_level=0", "compress/rdo_quality_loss=0.0", "compress/hdr_compression=1",
-		"compress/normal_map=0", "compress/channel_pack=0", "mipmaps/generate=true", "mipmaps/limit=-1",
-		"roughness/mode=0", "roughness/src_normal=\"\"",
-		"process/channel_remap/red=0", "process/channel_remap/green=1", "process/channel_remap/blue=2", "process/channel_remap/alpha=3",
-		"process/fix_alpha_border=true", "process/premult_alpha=false", "process/normal_map_invert_y=false",
-		"process/hdr_as_srgb=false", "process/hdr_clamp_exposure=false", "process/size_limit=0", "detect_3d/compress_to=1", "",
-	]))
-	file.close()

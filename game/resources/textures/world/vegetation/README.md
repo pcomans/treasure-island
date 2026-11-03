@@ -15,6 +15,12 @@ alpha, removes the magenta spill, refills transparent pixels with nearby leaf co
 so mipmaps don't halo, grades and packs the atlases, and resizes the tiled barks.
 The untouched sources are kept outside Git with the street-vegetation work notes.
 
+Every PNG here and its `.import` are checked-in build products: the atlases and
+barks of `prepare_textures.gd`, the impostors of `tools/vegetation/bake_impostors.gd`.
+Both tools write each `.import` (`tools/vegetation/texture_import.gd`: lossless, with
+mipmaps, which the shaders' alpha-scissor cards rely on). Re-run `bake_impostors.gd`
+after any kit geometry change.
+
 | File | Use | Source prompt (short) |
 |---|---|---|
 | `fan_palm_foliage_atlas.png` | 1024 x 1024: live fan (0,0)-(512,512), two dead fronds (512,0)-(1024,512), the leaf-base boot (0,512)-(512,1024), an older fan (512,512)-(1024,1024); the leaf graded greyer and cooler than generated | one bright-to-mid green costapalmate Washingtonia robusta fan leaf, face-on, on magenta; one dried dead fan leaf hanging from its petiole, on magenta; seamless crisscross lattice of split woody leaf-base stubs |
