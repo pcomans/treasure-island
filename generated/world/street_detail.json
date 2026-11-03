@@ -1610,7 +1610,7 @@
     },
     "set_pieces": {
       "path": "data/street_detail/set_pieces.json",
-      "sha256": "8bed66f22c22a45c7c3703ce573a419387eb2d45341f692529bd94156f022a05"
+      "sha256": "9e8c3a14aaada6888dc52c82f6cf31675cfe6e36f3d92defc8c0ee5913545ce8"
     },
     "stair_catalog": {
       "field": "units[].stairs",

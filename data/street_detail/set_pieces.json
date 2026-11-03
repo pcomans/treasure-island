@@ -3,7 +3,8 @@
   "notes": [
     "Hand-picked street-detail set pieces, each {id, kind, asset, xz, yaw, reason, reference} or, for a kit prop, {id, kind, prop, params, xz, yaw, reason, reference}.",
     "xz is world metres (+X east, +Z south); yaw is radians about +Y, turning the asset's -Z front.",
-    "tools/build_godot_world.mjs rejects an entry that leaves the land or enters the shared exclusion mask; a kit prop also keeps the street furniture's margins (clear of the carriageway, curb ramps and crosswalks, a player's width from other items)."
+    "tools/build_godot_world.mjs rejects an entry that leaves the land or enters the shared exclusion mask; a kit prop also keeps the street furniture's margins (clear of the carriageway, curb ramps and crosswalks, a player's width from other items).",
+    "A kit prop on legs (adirondack_chair) settles on the visible ground under its feet: the generator adds its rest (pitch, roll, lift and, where the ground folds, leg_drops_m) to the row's params."
   ],
   "set_pieces": [
     {
