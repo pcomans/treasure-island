@@ -19,18 +19,18 @@
 // reported on a NOTE line, so tests that probe those places know to expect it.
 //
 // A fence counts by its solid runs (its openings are walkable) and its collision
-// half thickness. Built fences must also never shut walkable ground in: around
-// each one, the ground no building, built fence, street prop or the island's
-// edge covers, at the stock capsule's reach, must all connect to the open ground
-// beyond, so a player anywhere near a fence can walk out without the jetpack.
-// Planted trees count by their row's footprint like the street props (their
-// trunks are solid); grass clumps have no collision.
+// half thickness; an item with a footprint (a parked car, a long bench) by the
+// stadium that holds its rectangle; any other by its point or line and its
+// kind's radius (streetDetailPieces). Built fences must also never shut walkable
+// ground in: around each one, the ground no building, built fence, street prop,
+// parked car, tree trunk or the island's edge covers, at the stock capsule's
+// reach, must all connect to the open ground beyond, so a player anywhere near a
+// fence can walk out without the jetpack. Grass clumps have no collision.
 
 import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { fencePieces } from "./lib/street-fence-generation.mjs";
 import { PLAYER_CAPSULE_RADIUS_M } from "./lib/world-contract.mjs";
 import {
   STREET_DETAIL_KINDS,
@@ -39,6 +39,7 @@ import {
   loadStreetDetailZones,
   planDistance,
   streetDetailHardShapes,
+  streetDetailPieces,
 } from "./lib/street-detail-generation.mjs";
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -63,8 +64,8 @@ function main() {
   for (const row of detail.rows) {
     const kind = STREET_DETAIL_KINDS[row.kind];
     if (row.status !== "placed" || !STREET_DETAIL_LAYERS.includes(row.layer) || kind.overhead) continue;
-    fencePieces(row).forEach((points, index) => {
-      items.push({ id: row.fence ? `${row.id} run ${index}` : row.id, layer: row.layer, points, radius: row.fence ? row.fence.half_thickness_m : kind.footprint_radius_m });
+    streetDetailPieces(row).forEach((piece, index) => {
+      items.push({ id: row.fence ? `${row.id} run ${index}` : row.id, layer: row.layer, points: piece.points, radius: piece.radius });
     });
   }
   for (const placement of vegetation.placements) {
@@ -140,11 +141,10 @@ function fencedPockets(manifest, detail) {
   const solids = [];
   for (const row of detail.rows) {
     if (row.status !== "placed") continue;
-    if (row.fence && row.prop != null) {
-      for (const points of fencePieces(row)) solids.push({ points, radius: row.fence.half_thickness_m + PLAYER_CAPSULE_RADIUS_M });
-    } else if (row.prop != null && (row.layer === "furniture" || (row.layer === "vegetation" && row.kind !== "grass_clump"))) {
-      // Street props and tree trunks are solid; grass clumps are not.
-      solids.push({ points: [[row.position_m[0], row.position_m[2]]], radius: STREET_DETAIL_KINDS[row.kind].footprint_radius_m + PLAYER_CAPSULE_RADIUS_M });
+    // Built fences, street props, parked cars and tree trunks (every row the
+    // runtime builds with collision), each grown by the capsule radius.
+    if (row.prop != null && (row.fence || ["furniture", "clutter"].includes(row.layer) || (row.layer === "vegetation" && row.kind !== "grass_clump"))) {
+      for (const piece of streetDetailPieces(row)) solids.push({ points: piece.points, radius: piece.radius + PLAYER_CAPSULE_RADIUS_M });
     }
   }
   const inRing = (point, ring) => {
@@ -157,7 +157,7 @@ function fencedPockets(manifest, detail) {
   const onIsland = (point) => manifest.playable_boundary.components.some((component) => inRing(point, component.outer) && !component.holes.some((hole) => inRing(point, hole)));
   let cells = 0;
   for (const fence of fences) {
-    const all = fencePieces(fence).flat();
+    const all = streetDetailPieces(fence).flatMap((piece) => piece.points);
     const x0 = Math.min(...all.map((point) => point[0])) - POCKET_MARGIN_M;
     const z0 = Math.min(...all.map((point) => point[1])) - POCKET_MARGIN_M;
     const width = Math.ceil((Math.max(...all.map((point) => point[0])) + POCKET_MARGIN_M - x0) / POCKET_CELL_M);

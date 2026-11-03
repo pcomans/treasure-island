@@ -76,19 +76,23 @@ func street_detail_summary() -> String:
 	if "fences" in on:
 		for child: Node in world.street_detail_layer("fences").get_children():
 			fences += int(child.get_meta("fences", 0))
+	var clutter := 0
+	if "clutter" in on:
+		for child: Node in world.street_detail_layer("clutter").get_children():
+			clutter += int(child.get_meta("items", 0))
 	var trees := 0
 	var grass := 0
 	if "vegetation" in on:
 		for child: Node in world.street_detail_layer("vegetation").get_children():
 			trees += int(child.get_meta("trees", 0))
 			grass += int(child.get_meta("grass_clumps", 0))
-	return "STREET_DETAIL on=%s source=%s rows=%d furniture_props=%d fences=%d trees=%d grass_clumps=%d" % [",".join(PackedStringArray(on)) if not on.is_empty() else "none", evidence.street_detail_source, evidence.street_detail_rows, furniture, fences, trees, grass]
+	return "STREET_DETAIL on=%s source=%s rows=%d furniture_props=%d fences=%d clutter_items=%d trees=%d grass_clumps=%d" % [",".join(PackedStringArray(on)) if not on.is_empty() else "none", evidence.street_detail_source, evidence.street_detail_rows, furniture, fences, clutter, trees, grass]
 
 
 ## What is wrong with the loaded street-detail state: a layer that is off must
 ## hold nothing (its nodes and collision were freed), and the placeholder
-## vegetation, the street furniture and the fences must be there while their
-## layers are on. [] when all is well.
+## vegetation, the street furniture, the fences and the clutter must be there
+## while their layers are on. [] when all is well.
 func street_detail_problems() -> Array[String]:
 	var problems: Array[String] = []
 	var on := world.get_street_detail_layers()
@@ -104,6 +108,8 @@ func street_detail_problems() -> Array[String]:
 		problems.append("street-detail furniture is on but empty")
 	if "fences" in on and world.street_detail_layer("fences").get_child_count() == 0:
 		problems.append("street-detail fences are on but empty")
+	if "clutter" in on and world.street_detail_layer("clutter").get_child_count() == 0:
+		problems.append("street-detail clutter is on but empty")
 	return problems
 
 

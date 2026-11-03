@@ -70,6 +70,7 @@ import {
   STREET_DETAIL_SCHEMA,
   STREET_DETAIL_SOURCES,
 } from "./lib/street-detail-generation.mjs";
+import { CAR_BODY_NAMES, CAR_FINISHES, CAR_PAINTS, MAX_TWIST_M, STREET_CLUTTER_PROPS, visibleGroundIndex } from "./lib/street-clutter-generation.mjs";
 import { STREET_FENCE_INSIDE, STREET_FENCE_SCREENS, STREET_FENCE_TYPES } from "./lib/street-fence-generation.mjs";
 import { STREET_FURNITURE_PROPS } from "./lib/street-furniture-generation.mjs";
 import {
@@ -78,7 +79,6 @@ import {
   STREET_VEGETATION_PROPS,
   STREET_VEGETATION_SCALE_RANGE,
   footSamples,
-  visibleGroundIndex,
 } from "./lib/street-vegetation-generation.mjs";
 import {
   STREET_GROUND_FEATURE_KINDS,
@@ -1042,13 +1042,27 @@ function validateStreetDetail(worldRoot, manifest, records) {
       invariant(row.terrain_support.elevation_m === y, `${row.id} terrain_support elevation differs from its position`);
       invariant(row.yaw_radians === null ? row.yaw_source === null : Number.isFinite(row.yaw_radians) && Math.abs(row.yaw_radians) <= Math.PI && typeof row.yaw_source === "string", `${row.id} yaw is invalid`);
       invariant(Number.isFinite(row.surface?.bias_m) && row.surface.bias_m >= 0 && typeof row.surface.material_key === "string", `${row.id} surface is invalid`);
-      // A kit prop is built at runtime: a placed furniture row of the kind its prop
-      // draws, or a planted vegetation row (validatePlantedRow).
+      // A kit prop is built at runtime: a placed row of the kind its prop draws,
+      // in the layer whose kit has it (furniture or clutter), or a planted
+      // vegetation row (validatePlantedRow).
       if (row.prop !== undefined && row.layer === "vegetation") {
         validatePlantedRow(row, groundAt);
       } else if (row.prop !== undefined) {
-        invariant(STREET_FURNITURE_PROPS[row.prop] === row.kind && row.layer === "furniture" && row.status === "placed", `${row.id} prop ${row.prop} does not match a placed ${row.kind} furniture row`);
+        const props = row.layer === "furniture" ? STREET_FURNITURE_PROPS : row.layer === "clutter" ? STREET_CLUTTER_PROPS : {};
+        invariant(props[row.prop] === row.kind && row.status === "placed", `${row.id} prop ${row.prop} does not match a placed ${row.kind} ${row.layer} row`);
         invariant(row.prop_params !== null && typeof row.prop_params === "object" && !Array.isArray(row.prop_params), `${row.id} prop_params must be an object`);
+      }
+      // A parked car: a known body, paint and finish, a small tilt, and its footprint.
+      if (row.kind === "parked_car") {
+        const params = row.prop_params ?? {};
+        invariant(row.prop === "parked_car" && CAR_BODY_NAMES.includes(params.body) && CAR_PAINTS.includes(params.paint) && CAR_FINISHES.includes(params.finish)
+          && ["body", "black"].includes(params.roof) && ["alloy", "dark"].includes(params.rims), `${row.id} car params are invalid`);
+        invariant(["pitch", "roll", "lift"].every((key) => Number.isFinite(params[key]) && Math.abs(params[key]) < 0.25), `${row.id} car tilt is invalid`);
+        invariant(Number.isFinite(params.twist) && Math.abs(params.twist) <= MAX_TWIST_M, `${row.id} car twist is invalid`);
+        invariant(row.footprint_m !== undefined, `${row.id} parked car has no footprint`);
+      }
+      if (row.footprint_m !== undefined) {
+        invariant(Number.isFinite(row.footprint_m.x_m) && row.footprint_m.x_m > 0 && Number.isFinite(row.footprint_m.z_m) && row.footprint_m.z_m > 0 && Number.isFinite(row.yaw_radians), `${row.id} footprint is invalid`);
       }
     } else {
       const points = row.points_m;

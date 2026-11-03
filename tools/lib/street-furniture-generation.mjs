@@ -23,23 +23,43 @@ import { compareSourceKeys, invariant, roundCoordinate } from "./world-contract.
 // Kit props built by game/scripts/world/street_furniture_kit.gd, with the row
 // kind each one stands for.
 export const STREET_FURNITURE_PROPS = Object.freeze({
+  adirondack_chair: "chair",
+  bench_park: "bench",
+  bench_wedge: "bench",
+  bike_rack: "bicycle_parking",
   bus_stop_sign: "bus_stop",
   hydrant: "fire_hydrant",
   lamp_cobra: "street_lamp",
   lamp_lot: "street_lamp",
   lamp_plaza: "street_lamp",
+  map_board: "information_board",
   name_sign: "street_sign",
   signal_cabinet: "street_cabinet",
   signal_mast: "traffic_signals",
   stop_sign: "stop_sign",
+  waste_basket: "waste_basket",
+});
+// Plan sizes {x_m, z_m} (along the prop's local X and Z) of the kit props that
+// are longer than their kind's radius covers; set pieces carry them as their
+// footprint for the shared mask.
+export const STREET_FURNITURE_FOOTPRINTS = Object.freeze({
+  adirondack_chair: Object.freeze({ x_m: 0.8, z_m: 0.92 }),
+  bench_park: Object.freeze({ x_m: 1.9, z_m: 0.66 }),
+  bench_wedge: Object.freeze({ x_m: 4.1, z_m: 0.6 }),
+  bike_rack: Object.freeze({ x_m: 0.8, z_m: 0.12 }),
+  map_board: Object.freeze({ x_m: 1.34, z_m: 0.2 }),
+  waste_basket: Object.freeze({ x_m: 0.6, z_m: 0.6 }),
 });
 export const STREET_FURNITURE_PATTERNS = Object.freeze(["kerb", "signalized_crossings", "near_signals", "junctions", "all_way_stops", "drive_entries", "lot_edge"]);
 // Default props for OSM rows in pilot zones; kinds without one stay unbuilt.
 const OSM_PROPS = Object.freeze({
+  bench: () => ({ prop: "bench_park", params: {} }),
+  bicycle_parking: () => ({ prop: "bike_rack", params: {} }),
   bus_stop: (tags) => (tags.shelter === "yes" ? null : { prop: "bus_stop_sign", params: {} }),
   fire_hydrant: () => ({ prop: "hydrant", params: {} }),
   stop_sign: (tags) => ({ prop: "stop_sign", params: { all_way: tags.stop === "all" } }),
   street_lamp: () => ({ prop: "lamp_cobra", params: {} }),
+  waste_basket: (tags) => ({ prop: "waste_basket", params: { style: tags.material === "wood" ? "timber" : "steel" } }),
 });
 const STOP_SIGN = Object.freeze({ setback_m: 0.55, upstream_m: Array.from({ length: 20 }, (_, index) => roundCoordinate(0.6 * (index + 1))) });
 // Site margins (m) beyond an item's footprint: from the carriageway edge, and

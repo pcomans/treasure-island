@@ -16,7 +16,9 @@ extends RefCounted
 const ATLAS := preload("res://game/resources/textures/world/street/street_furniture_atlas.png")
 
 ## Atlas cells as UV rectangles (1024 x 512 atlas of 256 px cells; see the
-## texture README). WHITE is an inset of the plain white cell for vertex-coloured parts.
+## texture README). WHITE is an inset of the plain white lower half of the last
+## cell, for vertex-coloured parts; MAP, its upper half, is the ferry plaza
+## board's island map.
 const CELL_METAL := Rect2(0.0, 0.0, 0.25, 0.5)
 const CELL_CABINET := Rect2(0.25, 0.0, 0.25, 0.5)
 const CELL_STOP := Rect2(0.5, 0.0, 0.25, 0.5)
@@ -25,7 +27,8 @@ const CELL_NO_STOPPING := Rect2(0.0, 0.5, 0.25, 0.5)
 const CELL_BUS_STOP := Rect2(0.25, 0.5, 0.25, 0.5)
 const CELL_ALL_WAY := Rect2(0.5, 0.5, 0.25, 0.25)
 const CELL_NAME_BLADE := Rect2(0.5, 0.75, 0.25, 0.25)
-const CELL_WHITE := Rect2(0.82, 0.62, 0.11, 0.26)
+const CELL_MAP := Rect2(0.75, 0.5, 0.25, 0.25)
+const CELL_WHITE := Rect2(0.8, 0.84, 0.15, 0.12)
 
 ## Vertex colours (sRGB), multiplied with the atlas cell they sample.
 const GALVANIZED := Color(1.0, 1.0, 1.0)
@@ -44,6 +47,15 @@ const CABINET_GREEN := Color(0.12, 0.155, 0.115)
 const CABINET_DOOR_TINT := Color(0.70, 0.53, 0.575)
 const PAD_CONCRETE := Color(0.70, 0.69, 0.66)
 const BLADE_GREEN := Color(0.0, 0.42, 0.21)
+## Ferry plaza furniture (Sep and Mar 2025 photos): pale cast concrete, dark
+## stained timber, charcoal frames, cobalt blue chairs, grey steel bins.
+const CONCRETE := Color(0.8, 0.79, 0.76)
+const TIMBER := Color(0.42, 0.3, 0.2)
+const TIMBER_WEATHERED := Color(0.5, 0.41, 0.31)
+const FRAME_CHARCOAL := Color(0.16, 0.17, 0.18)
+const CHAIR_BLUE := Color(0.1, 0.34, 0.78)
+const BIN_STEEL := Color(0.42, 0.43, 0.44)
+const RACK_DARK := Color(0.2, 0.17, 0.14)
 const LENS_RED_OFF := Color(0.22, 0.03, 0.03)
 const LENS_AMBER_OFF := Color(0.26, 0.16, 0.03)
 const LENS_GREEN_LIT := Color(0.40, 1.0, 0.62)
@@ -60,6 +72,12 @@ const PROPS := {
 	"signal_cabinet": {"range_m": 120.0, "shadow": false},
 	"signal_mast": {"range_m": 320.0, "shadow": true},
 	"stop_sign": {"range_m": 120.0, "shadow": false},
+	"bench_wedge": {"range_m": 140.0, "shadow": true},
+	"bench_park": {"range_m": 100.0, "shadow": true},
+	"waste_basket": {"range_m": 90.0, "shadow": true},
+	"map_board": {"range_m": 110.0, "shadow": true},
+	"adirondack_chair": {"range_m": 100.0, "shadow": true},
+	"bike_rack": {"range_m": 70.0, "shadow": false},
 }
 const LABEL_RANGE_M := 60.0
 const LABEL_FONT_SIZE := 64
@@ -141,6 +159,27 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 		"bus_stop_sign":
 			_piece(result, "bus_stop_sign", func(b: Builder) -> void: _bus_stop_sign(b))
 			_capsule(result, 0.06, 3.0)
+		"bench_wedge":
+			var timber_seat := bool(params.get("timber", false))
+			_piece(result, "bench_wedge_t%d" % int(timber_seat), func(b: Builder) -> void: _bench_wedge(b, timber_seat))
+			for x: float in [-1.0, 1.0]:
+				_box_shape(result, Vector3(1.96, 0.46, 0.58), Vector3(x * 1.03, 0.23, 0.0))
+		"bench_park":
+			_piece(result, "bench_park", func(b: Builder) -> void: _bench_park(b))
+			_box_shape(result, Vector3(1.86, 0.84, 0.62), Vector3(0.0, 0.42, 0.04))
+		"waste_basket":
+			var timber := str(params.get("style", "steel")) == "timber"
+			_piece(result, "waste_basket_%s" % ("timber" if timber else "steel"), func(b: Builder) -> void: _waste_basket(b, timber))
+			_capsule(result, 0.3, 0.98)
+		"map_board":
+			_piece(result, "map_board", func(b: Builder) -> void: _map_board(b))
+			_box_shape(result, Vector3(1.32, 1.86, 0.16), Vector3(0.0, 0.93, 0.0))
+		"adirondack_chair":
+			_piece(result, "adirondack_chair", func(b: Builder) -> void: _adirondack_chair(b))
+			_box_shape(result, Vector3(0.74, 0.62, 0.84), Vector3(0.0, 0.31, 0.04))
+		"bike_rack":
+			_piece(result, "bike_rack", func(b: Builder) -> void: _bike_rack(b))
+			_box_shape(result, Vector3(0.78, 0.86, 0.06), Vector3(0.0, 0.43, 0.0))
 	return result
 
 
@@ -157,6 +196,16 @@ func _piece(result: Dictionary, key: String, draw: Callable, transform := Transf
 		mesh.resource_name = key
 		_meshes[key] = mesh
 	result.pieces.append({"key": key, "mesh": _meshes[key], "transform": transform})
+
+
+## A box shape at an offset in the prop's frame, shared between rows of the same size.
+func _box_shape(result: Dictionary, size: Vector3, offset: Vector3) -> void:
+	var key := "box_%.3f_%.3f_%.3f" % [size.x, size.y, size.z]
+	if not _shapes.has(key):
+		var box := BoxShape3D.new()
+		box.size = size
+		_shapes[key] = box
+	result.shapes.append({"shape": _shapes[key], "transform": Transform3D(Basis.IDENTITY, offset)})
 
 
 ## An upright capsule from the foot, shared between rows of the same size.
@@ -402,6 +451,106 @@ func _bus_stop_sign(b: Builder) -> void:
 	for dy: float in [-0.22, 0.22]:
 		b.box(Vector3(0, 2.55 + dy, -0.05), Basis.IDENTITY, Vector3(0.04, 0.04, 0.1), GALVANIZED, CELL_METAL)
 	b.plate(Vector3(0, 2.55, -0.32), basis, _rectangle(0.44, 0.66), 0.012, CELL_BUS_STOP, Color.WHITE, Color.WHITE, CELL_BUS_STOP, true)
+
+
+## A pair of pale cast-concrete wedge benches end to end (Waterfront Plaza):
+## each block's top falls from its outer end to where the two meet, in a
+## shallow V; their long axis is X, the seat front -Z. With `timber`, a slatted
+## timber bench with a backrest stands on the -X block, as at the pier.
+func _bench_wedge(b: Builder, timber: bool) -> void:
+	var length := 1.96
+	var depth := 0.58
+	for side: float in [-1.0, 1.0]:
+		# Side profile in the block's XY plane: a trapezoid from the outer end
+		# (0.46 m) down to the meeting end (0.3 m); the front face leans in a little.
+		var outline := PackedVector2Array([Vector2(-length * 0.5, 0.0), Vector2(length * 0.5, 0.0), Vector2(length * 0.5, 0.3), Vector2(-length * 0.5, 0.46)])
+		if side > 0.0:
+			outline = PackedVector2Array([Vector2(-length * 0.5, 0.0), Vector2(length * 0.5, 0.0), Vector2(length * 0.5, 0.46), Vector2(-length * 0.5, 0.3)])
+		var center := Vector3(side * (length * 0.5 + 0.05), 0.0, 0.0)
+		b.plate(center, Basis.IDENTITY, outline, depth, CELL_WHITE, CONCRETE, CONCRETE, CELL_WHITE)
+	if timber:
+		var x0 := -(length * 0.5 + 0.05)
+		# Legs down to the sloping top (0.46 m at the outer end, 0.3 m inside).
+		for x: float in [x0 - 0.7, x0 + 0.7]:
+			var top := lerpf(0.46, 0.3, (x - (x0 - length * 0.5)) / length)
+			b.box(Vector3(x, (top + 0.52) * 0.5, 0.02), Basis.IDENTITY, Vector3(0.05, 0.52 - top, 0.42), FRAME_CHARCOAL, CELL_WHITE)
+		for index in 4:
+			b.box(Vector3(x0, 0.54, -0.17 + 0.11 * float(index)), Basis.IDENTITY, Vector3(1.6, 0.035, 0.09), TIMBER, CELL_WHITE)
+		var back := Basis(Vector3.RIGHT, -0.22)
+		for index in 3:
+			b.box(Vector3(x0, 0.7 + 0.11 * float(index), 0.24 + 0.024 * float(index)), back, Vector3(1.6, 0.08, 0.03), TIMBER, CELL_WHITE)
+		for x: float in [x0 - 0.76, x0 + 0.76]:
+			b.box(Vector3(x, 0.78, 0.2), Basis(Vector3.RIGHT, -0.22), Vector3(0.05, 0.5, 0.05), FRAME_CHARCOAL, CELL_WHITE)
+
+
+## A slatted timber bench with a backrest and armrests on two charcoal cast
+## frames (Waterfront Plaza, Sep and Mar 2025); the seat faces -Z.
+func _bench_park(b: Builder) -> void:
+	for x: float in [-0.82, 0.82]:
+		b.box(Vector3(x, 0.21, -0.02), Basis.IDENTITY, Vector3(0.06, 0.42, 0.5), FRAME_CHARCOAL, CELL_WHITE)
+		b.box(Vector3(x, 0.62, 0.22), Basis(Vector3.RIGHT, -0.2), Vector3(0.06, 0.48, 0.05), FRAME_CHARCOAL, CELL_WHITE)
+		b.box(Vector3(x, 0.64, -0.06), Basis.IDENTITY, Vector3(0.07, 0.04, 0.46), FRAME_CHARCOAL, CELL_WHITE)
+	for index in 4:
+		b.box(Vector3(0.0, 0.43, -0.2 + 0.125 * float(index)), Basis.IDENTITY, Vector3(1.8, 0.035, 0.1), TIMBER, CELL_WHITE)
+	var back := Basis(Vector3.RIGHT, -0.2)
+	for index in 3:
+		b.box(Vector3(0.0, 0.58 + 0.12 * float(index), 0.25 + 0.025 * float(index)), back, Vector3(1.8, 0.09, 0.03), TIMBER, CELL_WHITE)
+
+
+## A litter receptacle: a grey steel can with a domed lid, or the plaza's
+## timber-slatted can under a grey band.
+func _waste_basket(b: Builder, timber: bool) -> void:
+	var body := TIMBER_WEATHERED if timber else BIN_STEEL
+	b.tube(PackedVector3Array([Vector3(0, 0.0, 0), Vector3(0, 0.78, 0)]), PackedFloat32Array([0.27, 0.28]), 14, body, CELL_WHITE if timber else CELL_METAL, false, false)
+	if timber:
+		# Vertical slats read as dark grooves.
+		for index in 10:
+			var angle := TAU * float(index) / 10.0
+			b.box(Vector3(cos(angle) * 0.282, 0.4, sin(angle) * 0.282), Basis(Vector3.UP, -angle), Vector3(0.012, 0.7, 0.012), TIMBER * 0.55, CELL_WHITE)
+	b.tube(PackedVector3Array([Vector3(0, 0.78, 0), Vector3(0, 0.9, 0)]), PackedFloat32Array([0.29, 0.29]), 14, FRAME_CHARCOAL if timber else BIN_STEEL * 0.8, CELL_METAL, false, false)
+	b.tube(PackedVector3Array([Vector3(0, 0.9, 0), Vector3(0, 0.94, 0), Vector3(0, 0.98, 0)]), PackedFloat32Array([0.29, 0.24, 0.1]), 14, FRAME_CHARCOAL if timber else BIN_STEEL * 0.8, CELL_METAL, false, true)
+	b.disc(Vector3(0, 0.005, 0), Vector3.DOWN, 0.27, 14, body)
+
+
+## The ferry plaza's information board: an island map in a charcoal frame on
+## two posts, facing -Z (Sep 2025, beside the signal cabinet).
+func _map_board(b: Builder) -> void:
+	for x: float in [-0.63, 0.63]:
+		b.box(Vector3(x, 0.92, 0.0), Basis.IDENTITY, Vector3(0.06, 1.84, 0.08), FRAME_CHARCOAL, CELL_WHITE)
+	b.box(Vector3(0.0, 1.8, 0.0), Basis.IDENTITY, Vector3(1.32, 0.08, 0.1), FRAME_CHARCOAL, CELL_WHITE)
+	b.box(Vector3(0.0, 1.02, 0.0), Basis.IDENTITY, Vector3(1.2, 0.06, 0.08), FRAME_CHARCOAL, CELL_WHITE)
+	b.plate(Vector3(0.0, 1.41, 0.0), Basis.IDENTITY, _rectangle(1.2, 0.72), 0.03, CELL_MAP, Color.WHITE, FRAME_CHARCOAL, CELL_WHITE)
+
+
+## A cobalt blue Adirondack chair (slatted back fanning up and back, wide
+## arms, low sloping seat); it faces -Z (Waterfront Plaza lawn, Sep 2025).
+func _adirondack_chair(b: Builder) -> void:
+	var seat := Basis(Vector3.RIGHT, 0.14)
+	for index in 5:
+		b.box(Vector3(0.0, 0.33 - 0.012 * float(index), -0.2 + 0.1 * float(index)), seat, Vector3(0.56, 0.025, 0.085), CHAIR_BLUE, CELL_WHITE)
+	var back := Basis(Vector3.RIGHT, -0.42)
+	for index in 5:
+		var x := -0.22 + 0.11 * float(index)
+		var height := 0.78 - absf(float(index) - 2.0) * 0.06
+		b.box(Vector3(x * 1.08, 0.34 + height * 0.45, 0.2 + height * 0.18), back * Basis(Vector3.FORWARD, -x * 0.3), Vector3(0.09, height, 0.025), CHAIR_BLUE, CELL_WHITE)
+	for x: float in [-0.33, 0.33]:
+		b.box(Vector3(x, 0.58, -0.08), Basis.IDENTITY, Vector3(0.13, 0.025, 0.66), CHAIR_BLUE, CELL_WHITE)
+		b.box(Vector3(x, 0.29, -0.32), Basis.IDENTITY, Vector3(0.05, 0.58, 0.07), CHAIR_BLUE, CELL_WHITE)
+		b.box(Vector3(x * 0.85, 0.17, 0.28), Basis(Vector3.RIGHT, -0.3), Vector3(0.05, 0.36, 0.07), CHAIR_BLUE, CELL_WHITE)
+
+
+## An inverted-U bike rack ("staple") of dark painted tube, its loop along X
+## (Ave of the Palms at Johnson St, Nov 2025).
+func _bike_rack(b: Builder) -> void:
+	var path := PackedVector3Array([Vector3(-0.36, -0.1, 0), Vector3(-0.36, 0.62, 0)])
+	var radii := PackedFloat32Array([0.026, 0.026])
+	for step in range(1, 7):
+		var angle := PI - PI * float(step) / 6.0
+		path.append(Vector3(cos(angle) * 0.36, 0.62 + sin(angle) * 0.2, 0.0))
+		radii.append(0.026)
+	path.append(Vector3(0.36, -0.1, 0))
+	radii.append(0.026)
+	b.tube(path, radii, 8, RACK_DARK, CELL_WHITE, false, false)
 
 
 func _rectangle(width: float, height: float) -> PackedVector2Array:

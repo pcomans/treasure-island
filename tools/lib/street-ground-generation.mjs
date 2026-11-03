@@ -1217,7 +1217,9 @@ export function generateStreetGround({
     counts.stop_bars += 1;
   }
 
-  // Parking stall lines along aisles inside lots.
+  // Parking stall lines along aisles inside lots. The stalls between two
+  // neighbouring lines are kept for the parked cars (street clutter).
+  const stallSlots = [];
   for (const zone of zoneRegions.filter((candidate) => candidate.settings.parking_stalls)) {
     const aisles = vehicles.filter((object) => object.tags.service === "parking_aisle" && intersect("aisle zone", object.geometry, zone.region).length > 0);
     for (const aisle of aisles) {
@@ -1227,6 +1229,7 @@ export function generateStreetGround({
       const total = polylineLength(line);
       const stalls = [];
       for (const sign of [1, -1]) {
+        let previous = null;
         for (let s = 1.5; s <= total - 1.5; s += lines.stall_spacing_m) {
           const at = pointAlong(line, s);
           const outward = scale(leftOf(at.tangent), sign);
@@ -1238,8 +1241,26 @@ export function generateStreetGround({
             reach = step * 0.2;
           }
           const stall = Math.min(lines.stall_length_m, reach > lines.stall_length_m * 1.6 ? lines.stall_length_m : reach / 2) - 0.1;
-          if (stall < 2.5) continue;
+          if (stall < 2.5) {
+            previous = null;
+            continue;
+          }
           stalls.push(rectangle(base, outward, at.tangent, 0, stall, -lines.width_m / 2, lines.width_m / 2));
+          if (previous) {
+            const middle = pointAlong(line, s - lines.stall_spacing_m / 2);
+            const middleOut = scale(leftOf(middle.tangent), sign);
+            stallSlots.push({
+              aisle_key: aisle.row.source_key,
+              side: sign > 0 ? "left" : "right",
+              s: roundCoordinate(s - lines.stall_spacing_m / 2),
+              entry: add(middle.point, scale(middleOut, half + 0.05)),
+              outward: middleOut,
+              along: middle.tangent,
+              depth_m: roundCoordinate(Math.min(stall, previous)),
+              width_m: lines.stall_spacing_m,
+            });
+          }
+          previous = stall;
         }
       }
       const painted = intersect("stall lines", union("stall lines", stalls), lotUnion);
@@ -1549,6 +1570,17 @@ export function generateStreetGround({
     rampDistance: (point, reach = 6) => distanceTo(rampIndex, point, reach),
     // On the raised street ground: sidewalk, planting strip or plaza top.
     raised: (point) => raisedIndex.contains(point),
+    // Parking lanes: the roads that have them, with the curb's offset from the
+    // centre line on both sides (the frozen ribbon's half width plus the lane).
+    parking_lanes: [...parkingWidth.entries()].sort(([left], [right]) => compareSourceKeys(left, right)).map(([key, width]) => {
+      const road = vehicles.find((object) => object.row.source_key === key);
+      return { source_key: key, line: wayLine(road), ribbon_half_m: ROAD_WIDTHS_M[road.tags.highway] / 2, lane_width_m: width, kerb_offset_m: halfWidth(road) };
+    }),
+    // Painted parking stalls: the entry point on the aisle edge, the direction
+    // into the stall, along the aisle, the stall depth and width.
+    stalls: stallSlots,
+    // Inside an OSM parking lot near the pilot.
+    inLot: (point) => lotIndex.contains(point),
   };
   return { records, summary, surfaceAt, site };
 }

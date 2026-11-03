@@ -13,10 +13,11 @@
 // inference, not survey data.
 //
 // Every planted row rests on the visible ground (the draped lawn, the raised
-// mulch beds and sidewalks, the land), not only on the land under it: the foot
-// is settled at the lowest visible surface round its trunk (settlePlant), so it
-// never floats, and the kit runs the trunk on below the foot so the higher side
-// never shows a gap. World x, z with z = -north, as everywhere in street detail.
+// mulch beds and sidewalks, the land; groundAt is visibleGroundIndex of
+// tools/lib/street-clutter-generation.mjs), not only on the land under it: the
+// foot is settled at the lowest visible surface round its trunk (settlePlant),
+// so it never floats, and the kit runs the trunk on below the foot so the higher
+// side never shows a gap. World x, z with z = -north, as everywhere in street detail.
 
 import { createHash } from "node:crypto";
 
@@ -38,9 +39,6 @@ export const STREET_VEGETATION_BURY_M = 0.35;
 export const STREET_VEGETATION_MAX_FOOT_SPREAD_M = 0.25;
 // The uniform scale an instance may take.
 export const STREET_VEGETATION_SCALE_RANGE = Object.freeze([0.8, 1.25]);
-// Chunk record kinds the visible ground is made of.
-const VISIBLE_GROUND_KINDS = new Set(["land_ground", "major_area", "road_path", "street_kerb", "street_paint", "terrain_overlay"]);
-const GROUND_CELL_M = 4;
 // The foot is sampled at its centre and on two rings (fractions of its radius).
 const FOOT_RINGS = Object.freeze([0.5, 1.0]);
 const FOOT_RING_SAMPLES = 12;
@@ -89,60 +87,6 @@ export function drawVegetationVariant(seed, identity, params) {
   const variant = Math.min(last, first + Math.floor(hashUnit(seed, identity, 0) * (last - first + 1)));
   const scale = roundCoordinate(params.scale[0] + (params.scale[1] - params.scale[0]) * hashUnit(seed, identity, 1));
   return { variant, scale };
-}
-
-// The top of the visible ground, from the generated chunk records: a function
-// of world [x, z] returning {y, material_key} of the highest surface there (the
-// draped roads, paint and areas sit their small bias above the land), or null.
-// Each chunk is indexed on first use.
-export function visibleGroundIndex(chunks) {
-  const indexed = new Map();
-  const cellKey = (x, z) => `${Math.floor(x / GROUND_CELL_M)},${Math.floor(z / GROUND_CELL_M)}`;
-  const indexChunk = (chunk) => {
-    const cells = new Map();
-    for (const record of chunk.records) {
-      if (!VISIBLE_GROUND_KINDS.has(record.feature_kind)) continue;
-      const vertices = record.vertices;
-      for (let offset = 0; offset < record.indices.length; offset += 3) {
-        const corners = [0, 1, 2].map((corner) => {
-          const index = record.indices[offset + corner] * 3;
-          return [vertices[index], vertices[index + 1], vertices[index + 2]];
-        });
-        const [a, b, c] = corners;
-        const denominator = (b[2] - c[2]) * (a[0] - c[0]) + (c[0] - b[0]) * (a[2] - c[2]);
-        // Vertical faces (kerb sides) hold no plan area.
-        if (Math.abs(denominator) <= 1e-10) continue;
-        const triangle = { a, b, c, denominator, material_key: record.material_key };
-        const xs = corners.map((point) => point[0]);
-        const zs = corners.map((point) => point[2]);
-        for (let x = Math.floor(Math.min(...xs) / GROUND_CELL_M); x <= Math.floor(Math.max(...xs) / GROUND_CELL_M); x += 1) {
-          for (let z = Math.floor(Math.min(...zs) / GROUND_CELL_M); z <= Math.floor(Math.max(...zs) / GROUND_CELL_M); z += 1) {
-            const key = `${x},${z}`;
-            if (!cells.has(key)) cells.set(key, []);
-            cells.get(key).push(triangle);
-          }
-        }
-      }
-    }
-    return cells;
-  };
-  return (xz) => {
-    let best = null;
-    for (const chunk of chunks.values()) {
-      const bounds = chunk.bounds_m;
-      if (xz[0] < bounds.min_x || xz[0] > bounds.max_x || xz[1] < bounds.min_z || xz[1] > bounds.max_z) continue;
-      if (!indexed.has(chunk.chunk_id)) indexed.set(chunk.chunk_id, indexChunk(chunk));
-      for (const { a, b, c, denominator, material_key } of indexed.get(chunk.chunk_id).get(cellKey(xz[0], xz[1])) ?? []) {
-        const weightA = ((b[2] - c[2]) * (xz[0] - c[0]) + (c[0] - b[0]) * (xz[1] - c[2])) / denominator;
-        const weightB = ((c[2] - a[2]) * (xz[0] - c[0]) + (a[0] - c[0]) * (xz[1] - c[2])) / denominator;
-        const weightC = 1 - weightA - weightB;
-        if (weightA < -1e-7 || weightB < -1e-7 || weightC < -1e-7) continue;
-        const y = weightA * a[1] + weightB * b[1] + weightC * c[1];
-        if (!best || y > best.y || (y === best.y && material_key < best.material_key)) best = { y, material_key };
-      }
-    }
-    return best;
-  };
 }
 
 // Plan sample points of a foot of radius footM at [x, z]: its centre and two rings.

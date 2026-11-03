@@ -1,5 +1,19 @@
 {
   "audit": {
+    "clutter": {
+      "rejected_by_reason": {
+        "forecourt_lot_cars:fill": 52,
+        "palms_parked_cars:curb_kept_clear": 10,
+        "palms_parked_cars:fill": 13,
+        "palms_parked_cars:item": 1,
+        "palms_parked_cars:off_asphalt": 2,
+        "palms_parked_cars:uneven_ground": 1
+      },
+      "rules": {
+        "avenue_of_the_palms/palms_parked_cars": 52,
+        "building_1_forecourt/forecourt_lot_cars": 64
+      }
+    },
     "fences": {
       "built_length_m": 446.531,
       "fully_open": [
@@ -18,12 +32,8 @@
       "rule_fences": 2
     },
     "furniture": {
-      "osm_props": 6,
+      "osm_props": 7,
       "osm_unbuilt": [
-        {
-          "id": "osm:n11230312317",
-          "kind": "waste_basket"
-        },
         {
           "id": "osm:n12732411710",
           "kind": "stop_sign",
@@ -39,6 +49,7 @@
         "palms_lamps:curb_ramp": 18,
         "plaza_lamps:outside_zone": 17,
         "plaza_lamps:spawn_forward": 7,
+        "signal_cabinets:overlap": 3,
         "stop_sign:curb_ramp": 2,
         "stop_sign:overlap": 2,
         "ti_road_lamps:outside_zone": 68,
@@ -62,9 +73,9 @@
     "minimum_placed_clearances_m": {
       "approach": 1.512,
       "door": 3.811,
-      "ferry_path": 3.001,
-      "qa_route": 3.001,
-      "spawn": 11.37,
+      "ferry_path": 2.225,
+      "qa_route": 2.225,
+      "spawn": 6.56,
       "spawn_forward": 1.517,
       "stair": 3.811,
       "whole_island_anchor": 3.05
@@ -109,28 +120,30 @@
         "no_bed": 9,
         "outside_rule_area": 7,
         "outside_zone": 42904,
-        "overlap": 124,
+        "overlap": 127,
         "road": 3916,
         "rule_surface": 1806,
         "seed_acceptance": 8653,
         "shoreline_overlay": 14,
         "spawn": 2,
         "spawn_forward": 1,
-        "unplantable_surface": 949
+        "unplantable_surface": 946
       }
     },
     "set_pieces": {
-      "entries": 16,
-      "placed": 16
+      "entries": 35,
+      "placed": 35
     }
   },
   "conventions": {
     "fence": "fence rows: the kit type and why (type_basis), height and collision half thickness, the stretches cut open along points_m (openings, metres along the line, with what opens them) and the solid runs left (posts on the ground: points_m, terrain_supports, surface_bias_m); a fence row with a prop is built (game/scripts/world/street_fence_kit.gd)",
     "fenced_approaches": "scored-building sides a built fence closes, which the building fit may skip (game/tests/shared/building_fit.gd)",
+    "footprint_m": "the plan size {x_m, z_m} of a parked car or a long prop along its local X and Z; with its position and yaw it is the item's rectangle (the gameplay mask checks a stadium that holds it)",
     "layers": "switchable runtime subtrees under PlayableWorld/StreetDetail; ground rows feed the always-on chunk surfaces",
-    "planted": "a vegetation row's prop_params: the kit variant and uniform scale, and its rest on the visible ground (settlePlant in tools/lib/street-vegetation-generation.mjs): lift_m takes the foot from y + bias_m to the lowest visible surface round it, foot_spread_m is how much higher the rest of that ground lies (the trunk runs on below the foot)",
+    "parked_car": "a parked car's prop_params: body, paint, finish, roof and rims, and its rest on the visible ground under its four tyres (settleParkedCar in tools/lib/street-clutter-generation.mjs): pitch raises the nose and roll the left side (radians), lift takes the car's origin from y + bias_m to that rest, twist is what the suspension takes up (metres: the front-left and rear-right wheels rise by it in the car frame, the other two drop by it)",
+    "planted": "a vegetation row's prop_params: the kit variant and uniform scale, and its rest on the visible ground (settlePlant in tools/lib/street-vegetation-generation.mjs): lift_m takes the foot from y + bias_m to the lowest visible surface round it, foot_spread_m is how much higher the rest of that ground lies (the trunk runs on below the foot); a tree whose foot reaches paving stands in a round mulch pit well_m across on the plane of that paving (well_lift_m its height over the foot at the trunk, well_slope its rise per metre along +X and +Z), which other items keep clear of",
     "position_m": "[x, y, z]; y is the generated land elevation under x, z (terrain_support names the triangle)",
-    "prop": "the kit prop the runtime builds for a placed row, with prop_params: the street-furniture kit (game/scripts/world/street_furniture_kit.gd) for the furniture layer, the street-vegetation kit (game/scripts/world/street_vegetation_kit.gd) for the vegetation layer; rows without one are data only",
+    "prop": "the kit prop the runtime builds for a placed row, with prop_params: the street-furniture kit (game/scripts/world/street_furniture_kit.gd) for the furniture layer, the street-clutter kit (game/scripts/world/street_clutter_kit.gd) for the clutter layer, the street-vegetation kit (game/scripts/world/street_vegetation_kit.gd) for the vegetation layer; rows without one are data only",
     "source_position_m": "a stop sign's OSM node position, kept when the sign moves to the curb of its approach",
     "status": "placed rows are built when their layer is on; excluded rows keep their source id and the reason",
     "surface": "the visible ground surface at x, z (generated feature kind and material, including the raised street ground); set an item on it at y + bias_m",
@@ -139,12 +152,14 @@
   "coordinate_system": "+X east,+Y up,-Z north; meters; NAVD 88",
   "counts": {
     "by_kind": {
+      "barricade": 3,
       "barrier_line": 0,
       "barrier_point": 3,
-      "bench": 15,
-      "bicycle_parking": 14,
+      "bench": 19,
+      "bicycle_parking": 15,
       "bollard": 4,
       "bus_stop": 15,
+      "chair": 5,
       "clutter_slot": 21,
       "crossing": 161,
       "fence": 26,
@@ -152,10 +167,12 @@
       "gate": 27,
       "grass_clump": 184,
       "hedge": 0,
+      "information_board": 1,
       "jersey_barrier": 1,
       "kerb": 8,
       "log_barrier": 2,
       "palm_slot": 47,
+      "parked_car": 116,
       "planting_slot": 0,
       "post_box": 1,
       "power_line": 44,
@@ -165,36 +182,37 @@
       "street_cabinet": 34,
       "street_lamp": 55,
       "street_sign": 4,
+      "traffic_cone": 2,
       "traffic_signals": 6,
       "tree": 13,
       "wall": 1,
-      "waste_basket": 11
+      "waste_basket": 14
     },
     "by_layer": {
-      "clutter": 310,
+      "clutter": 431,
       "fences": 60,
-      "furniture": 201,
+      "furniture": 215,
       "ground": 169,
       "vegetation": 244
     },
     "by_source": {
       "osm": 660,
-      "scatter": 308,
-      "set_piece": 16
+      "scatter": 424,
+      "set_piece": 35
     },
     "by_status": {
       "excluded": 4,
-      "placed": 980
+      "placed": 1115
     },
-    "pilot_rows": 337,
+    "pilot_rows": 472,
     "placed_by_layer": {
-      "clutter": 308,
+      "clutter": 429,
       "fences": 59,
-      "furniture": 200,
+      "furniture": 214,
       "ground": 169,
       "vegetation": 244
     },
-    "total": 984
+    "total": 1119
   },
   "exclusion_inputs": {
     "ferry_path_xz": [
@@ -1596,7 +1614,7 @@
     },
     "set_pieces": {
       "path": "data/street_detail/set_pieces.json",
-      "sha256": "59e103ac81fba4bd1d26fdf376853133d9bab54d4fd37aee0c7688c9b4019065"
+      "sha256": "681fc830ea4cff9b09545b54624bc24199aa8d47aaca7984ea7d73614bb1297b"
     },
     "stair_catalog": {
       "field": "units[].stairs",
@@ -1605,10 +1623,17 @@
     },
     "zones": {
       "path": "tools/config/street-detail-zones.json",
-      "sha256": "8e8a681cacb525f4ab10a612cfb4be671cfd25a8ffbdbccf6cba54d8e823b204"
+      "sha256": "e80d3fbf8a72fe22d911687d962150dab12f40e164a2bad2097bda01d05df30f"
     }
   },
   "kinds": {
+    "barricade": {
+      "footprint_radius_m": 0.4,
+      "geometry": "point",
+      "layer": "clutter",
+      "overhead": false,
+      "yaw_rule": "seeded"
+    },
     "barrier_line": {
       "footprint_radius_m": 0.15,
       "geometry": "polyline",
@@ -1650,6 +1675,13 @@
       "layer": "furniture",
       "overhead": false,
       "yaw_rule": "faces_road"
+    },
+    "chair": {
+      "footprint_radius_m": 0.45,
+      "geometry": "point",
+      "layer": "furniture",
+      "overhead": false,
+      "yaw_rule": "seeded"
     },
     "clutter_slot": {
       "footprint_radius_m": 0.4,
@@ -1700,6 +1732,13 @@
       "overhead": false,
       "yaw_rule": "none"
     },
+    "information_board": {
+      "footprint_radius_m": 0.6,
+      "geometry": "point",
+      "layer": "furniture",
+      "overhead": false,
+      "yaw_rule": "faces_road"
+    },
     "jersey_barrier": {
       "footprint_radius_m": 0.35,
       "geometry": "polyline",
@@ -1725,6 +1764,13 @@
       "footprint_radius_m": 0.4,
       "geometry": "point",
       "layer": "vegetation",
+      "overhead": false,
+      "yaw_rule": "seeded"
+    },
+    "parked_car": {
+      "footprint_radius_m": 1,
+      "geometry": "point",
+      "layer": "clutter",
       "overhead": false,
       "yaw_rule": "seeded"
     },
@@ -1790,6 +1836,13 @@
       "layer": "furniture",
       "overhead": false,
       "yaw_rule": "faces_road"
+    },
+    "traffic_cone": {
+      "footprint_radius_m": 0.2,
+      "geometry": "point",
+      "layer": "clutter",
+      "overhead": false,
+      "yaw_rule": "seeded"
     },
     "traffic_signals": {
       "footprint_radius_m": 0.25,
@@ -3799,6 +3852,10 @@
         4.139,
         680.179
       ],
+      "prop": "waste_basket",
+      "prop_params": {
+        "style": "steel"
+      },
       "source": "osm",
       "source_id": "n11230312317",
       "source_tag": "amenity=waste_basket",
@@ -43323,6 +43380,2502 @@
       ]
     },
     {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.83,
+        "z_m": 4.82
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_001",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -297.012,
+        4.033,
+        253.093
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "sedan",
+        "finish": "pearl",
+        "lift": 0.004,
+        "paint": "pearl_white",
+        "pitch": -0.0287,
+        "rims": "alloy",
+        "roll": 0.0116,
+        "roof": "body",
+        "twist": -0.001
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 4.033,
+        "object_key": "land:w26767313:x_-2__z_0",
+        "triangle_index": 91
+      },
+      "yaw_radians": 0.486,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.84,
+        "z_m": 4.86
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_004",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -278.396,
+        2.974,
+        288.258
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "wagon",
+        "finish": "metallic",
+        "lift": -0.001,
+        "paint": "red",
+        "pitch": 0.0563,
+        "rims": "dark",
+        "roll": 0.0985,
+        "roof": "body",
+        "twist": 0.002
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 2.974,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 48
+      },
+      "yaw_radians": 0.473,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 2.02,
+        "z_m": 5.93
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_005",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -274.788,
+        2.5,
+        295.311
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "van",
+        "finish": "solid",
+        "lift": 0.004,
+        "paint": "black",
+        "pitch": 0.0604,
+        "rims": "dark",
+        "roll": 0.0954,
+        "roof": "body",
+        "twist": -0.001
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 2.5,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 48
+      },
+      "yaw_radians": 0.475,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.85,
+        "z_m": 4.72
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_006",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -271.354,
+        2.051,
+        301.707
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "fastback",
+        "finish": "metallic",
+        "lift": 0.027,
+        "paint": "silver",
+        "pitch": 0.0487,
+        "rims": "alloy",
+        "roll": 0.0741,
+        "roof": "body",
+        "twist": 0.016
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 2.051,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 48
+      },
+      "yaw_radians": 0.472,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.79,
+        "z_m": 4.38
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_008",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -265.136,
+        3.281,
+        313.593
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "hatchback",
+        "finish": "solid",
+        "lift": 0.003,
+        "paint": "white",
+        "pitch": -0.1062,
+        "rims": "dark",
+        "roll": 0.0443,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.281,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 49
+      },
+      "yaw_radians": 0.49,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_009",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -261.875,
+        4.04,
+        319.889
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "metallic",
+        "lift": -0.081,
+        "paint": "dark_grey",
+        "pitch": -0.0454,
+        "rims": "alloy",
+        "roll": 0.0071,
+        "roof": "body",
+        "twist": 0.028
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 4.04,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 49
+      },
+      "yaw_radians": 0.478,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_010",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -258.62,
+        3.961,
+        326.117
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "solid",
+        "lift": 0.003,
+        "paint": "white",
+        "pitch": -0.0165,
+        "rims": "alloy",
+        "roll": -0.044,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.961,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 47
+      },
+      "yaw_radians": 0.478,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.79,
+        "z_m": 4.38
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_012",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -252.724,
+        3.644,
+        337.345
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "hatchback",
+        "finish": "solid",
+        "lift": 0.003,
+        "paint": "white",
+        "pitch": 0.0583,
+        "rims": "alloy",
+        "roll": 0.0989,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.644,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 10
+      },
+      "yaw_radians": 0.484,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_013",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -249.524,
+        3.241,
+        343.597
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "solid",
+        "lift": 0.018,
+        "paint": "white",
+        "pitch": 0.0521,
+        "rims": "alloy",
+        "roll": 0.0909,
+        "roof": "black",
+        "twist": 0.007
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.241,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 10
+      },
+      "yaw_radians": 0.471,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_014",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -246.411,
+        3.719,
+        349.579
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "solid",
+        "lift": 0.003,
+        "paint": "red",
+        "pitch": -0.1047,
+        "rims": "alloy",
+        "roll": 0.0488,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.719,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 11
+      },
+      "yaw_radians": 0.486,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.79,
+        "z_m": 4.38
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_015",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -243.688,
+        4.006,
+        354.706
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "hatchback",
+        "finish": "solid",
+        "lift": 0.003,
+        "paint": "grey",
+        "pitch": 0.0001,
+        "rims": "alloy",
+        "roll": -0.0067,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 4.006,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 8
+      },
+      "yaw_radians": 0.473,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.85,
+        "z_m": 4.72
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_016",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -240.453,
+        4.005,
+        360.973
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "fastback",
+        "finish": "metallic",
+        "lift": 0.004,
+        "paint": "black",
+        "pitch": 0.0006,
+        "rims": "dark",
+        "roll": -0.0079,
+        "roof": "body",
+        "twist": -0.001
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 4.005,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 8
+      },
+      "yaw_radians": 0.485,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.79,
+        "z_m": 4.38
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_017",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -237.126,
+        3.999,
+        367.283
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "hatchback",
+        "finish": "metallic",
+        "lift": 0.003,
+        "paint": "grey",
+        "pitch": 0.0034,
+        "rims": "dark",
+        "roll": -0.006,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.999,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 9
+      },
+      "yaw_radians": 0.473,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.79,
+        "z_m": 4.38
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_018",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -233.989,
+        3.977,
+        373.227
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "hatchback",
+        "finish": "metallic",
+        "lift": 0.003,
+        "paint": "grey",
+        "pitch": 0.0033,
+        "rims": "dark",
+        "roll": -0.006,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.977,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 9
+      },
+      "yaw_radians": 0.483,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.95,
+        "z_m": 4.98
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_019",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -230.743,
+        3.952,
+        379.605
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "suv",
+        "finish": "pearl",
+        "lift": 0.003,
+        "paint": "navy",
+        "pitch": 0.0033,
+        "rims": "dark",
+        "roll": -0.0059,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.952,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 9
+      },
+      "yaw_radians": 0.484,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_020",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -227.869,
+        3.957,
+        385.044
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "metallic",
+        "lift": 0.007,
+        "paint": "navy",
+        "pitch": -0.0154,
+        "rims": "alloy",
+        "roll": 0.0009,
+        "roof": "body",
+        "twist": -0.003
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.957,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 6
+      },
+      "yaw_radians": 0.483,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.83,
+        "z_m": 4.82
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_021",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -225.014,
+        3.957,
+        390.46
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "sedan",
+        "finish": "solid",
+        "lift": 0.006,
+        "paint": "white",
+        "pitch": 0.008,
+        "rims": "alloy",
+        "roll": 0.0111,
+        "roof": "body",
+        "twist": 0.002
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.957,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 7
+      },
+      "yaw_radians": 0.49,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_022",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -222.017,
+        3.945,
+        396.232
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "metallic",
+        "lift": 0.003,
+        "paint": "grey",
+        "pitch": -0.0018,
+        "rims": "dark",
+        "roll": -0.0076,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.945,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 22
+      },
+      "yaw_radians": 0.479,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.79,
+        "z_m": 4.38
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_023",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -219.133,
+        3.957,
+        401.749
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "hatchback",
+        "finish": "solid",
+        "lift": 0.003,
+        "paint": "white",
+        "pitch": -0.0019,
+        "rims": "alloy",
+        "roll": -0.0074,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.957,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 22
+      },
+      "yaw_radians": 0.491,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.83,
+        "z_m": 4.82
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_024",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -215.819,
+        3.969,
+        408.079
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "sedan",
+        "finish": "metallic",
+        "lift": 0.001,
+        "paint": "black",
+        "pitch": 0.0004,
+        "rims": "alloy",
+        "roll": -0.0066,
+        "roof": "body",
+        "twist": -0.001
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.969,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 23
+      },
+      "yaw_radians": 0.476,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.83,
+        "z_m": 4.82
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_029",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -190.644,
+        4.045,
+        456.437
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "sedan",
+        "finish": "metallic",
+        "lift": 0.002,
+        "paint": "light_grey",
+        "pitch": 0.0035,
+        "rims": "alloy",
+        "roll": -0.0075,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 4.045,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 34
+      },
+      "yaw_radians": 0.479,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.83,
+        "z_m": 4.82
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_030",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -187.686,
+        4.022,
+        462.149
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "sedan",
+        "finish": "metallic",
+        "lift": 0.003,
+        "paint": "silver",
+        "pitch": 0.0035,
+        "rims": "alloy",
+        "roll": -0.0075,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 4.022,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 34
+      },
+      "yaw_radians": 0.469,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_031",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -184.687,
+        3.999,
+        467.926
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "pearl",
+        "lift": 0.003,
+        "paint": "pearl_white",
+        "pitch": 0.0035,
+        "rims": "alloy",
+        "roll": -0.0076,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.999,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 34
+      },
+      "yaw_radians": 0.476,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 2.02,
+        "z_m": 5.93
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_032",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -181.596,
+        3.988,
+        474.172
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "van",
+        "finish": "solid",
+        "lift": 0.003,
+        "paint": "white",
+        "pitch": -0.0006,
+        "rims": "alloy",
+        "roll": -0.0089,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.988,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 35
+      },
+      "yaw_radians": 0.47,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_033",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -178.303,
+        4.034,
+        480.283
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "metallic",
+        "lift": 0.073,
+        "paint": "silver",
+        "pitch": -0.0768,
+        "rims": "dark",
+        "roll": 0.0239,
+        "roof": "body",
+        "twist": -0.026
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 4.034,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 32
+      },
+      "yaw_radians": 0.478,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_034",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -175.547,
+        4.807,
+        485.69
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "metallic",
+        "lift": 0.003,
+        "paint": "black",
+        "pitch": -0.1265,
+        "rims": "dark",
+        "roll": 0.0561,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 4.807,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 32
+      },
+      "yaw_radians": 0.474,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 2.02,
+        "z_m": 5.93
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_035",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -172.405,
+        5.691,
+        491.877
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "van",
+        "finish": "metallic",
+        "lift": -0.13,
+        "paint": "grey",
+        "pitch": -0.0582,
+        "rims": "dark",
+        "roll": 0.0869,
+        "roof": "body",
+        "twist": -0.025
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 5.691,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 32
+      },
+      "yaw_radians": 0.487,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_036",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -169.269,
+        5.304,
+        497.824
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "solid",
+        "lift": 0.003,
+        "paint": "grey",
+        "pitch": 0.0674,
+        "rims": "alloy",
+        "roll": 0.1184,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 5.304,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 33
+      },
+      "yaw_radians": 0.474,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.83,
+        "z_m": 4.82
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_037",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -166.189,
+        4.849,
+        503.701
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "sedan",
+        "finish": "solid",
+        "lift": 0.003,
+        "paint": "white",
+        "pitch": 0.0679,
+        "rims": "alloy",
+        "roll": 0.1181,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 4.849,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 33
+      },
+      "yaw_radians": 0.478,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.85,
+        "z_m": 4.72
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_038",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -163.002,
+        4.377,
+        509.874
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "fastback",
+        "finish": "metallic",
+        "lift": 0.004,
+        "paint": "dark_grey",
+        "pitch": 0.0675,
+        "rims": "dark",
+        "roll": 0.1183,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 4.377,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 33
+      },
+      "yaw_radians": 0.474,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.95,
+        "z_m": 4.98
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_039",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -159.986,
+        3.977,
+        515.838
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "suv",
+        "finish": "pearl",
+        "lift": 0.014,
+        "paint": "pearl_white",
+        "pitch": -0.0011,
+        "rims": "dark",
+        "roll": 0.0102,
+        "roof": "body",
+        "twist": 0.01
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.977,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 47
+      },
+      "yaw_radians": 0.479,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_041",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -154.075,
+        4.077,
+        527.202
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "metallic",
+        "lift": 0.003,
+        "paint": "light_grey",
+        "pitch": -0.0078,
+        "rims": "alloy",
+        "roll": -0.0029,
+        "roof": "black",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 4.077,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 47
+      },
+      "yaw_radians": 0.481,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_042",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -150.901,
+        4.13,
+        533.336
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "metallic",
+        "lift": 0.002,
+        "paint": "blue",
+        "pitch": -0.0066,
+        "rims": "alloy",
+        "roll": -0.0007,
+        "roof": "body",
+        "twist": -0.002
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 4.13,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 47
+      },
+      "yaw_radians": 0.486,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.85,
+        "z_m": 4.72
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_043",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -147.724,
+        4.098,
+        539.448
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "fastback",
+        "finish": "metallic",
+        "lift": 0.003,
+        "paint": "light_grey",
+        "pitch": 0.0072,
+        "rims": "alloy",
+        "roll": 0.002,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 4.098,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 48
+      },
+      "yaw_radians": 0.478,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.83,
+        "z_m": 4.82
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_046",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -137.828,
+        4.2,
+        558.645
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "sedan",
+        "finish": "metallic",
+        "lift": 0.003,
+        "paint": "blue",
+        "pitch": 0.0129,
+        "rims": "dark",
+        "roll": 0.0216,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 4.2,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 46
+      },
+      "yaw_radians": 0.479,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.85,
+        "z_m": 4.72
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_047",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -134.83,
+        4.116,
+        564.435
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "fastback",
+        "finish": "metallic",
+        "lift": 0.004,
+        "paint": "silver",
+        "pitch": 0.013,
+        "rims": "alloy",
+        "roll": 0.0216,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 4.116,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 46
+      },
+      "yaw_radians": 0.485,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_048",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -131.561,
+        4.025,
+        570.72
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "solid",
+        "lift": 0.004,
+        "paint": "red",
+        "pitch": 0.0132,
+        "rims": "alloy",
+        "roll": 0.021,
+        "roof": "body",
+        "twist": -0.001
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 4.025,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 46
+      },
+      "yaw_radians": 0.47,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.85,
+        "z_m": 4.72
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_right_001",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -303.997,
+        4.087,
+        258.145
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "fastback",
+        "finish": "metallic",
+        "lift": 0.004,
+        "paint": "black",
+        "pitch": -0.0079,
+        "rims": "alloy",
+        "roll": 0.0061,
+        "roof": "body",
+        "twist": 0.001
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 4.087,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 33
+      },
+      "yaw_radians": -2.638,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.95,
+        "z_m": 4.98
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_right_004",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -285.855,
+        3.783,
+        292.22
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "suv",
+        "finish": "metallic",
+        "lift": 0.003,
+        "paint": "silver",
+        "pitch": -0.0613,
+        "rims": "alloy",
+        "roll": -0.0955,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.783,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 48
+      },
+      "yaw_radians": -2.653,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.79,
+        "z_m": 4.38
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_right_005",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -282.616,
+        3.357,
+        298.559
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "hatchback",
+        "finish": "solid",
+        "lift": 0.003,
+        "paint": "white",
+        "pitch": -0.0608,
+        "rims": "alloy",
+        "roll": -0.0958,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.357,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 48
+      },
+      "yaw_radians": -2.659,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_right_009",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -270.669,
+        3.899,
+        321.395
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "metallic",
+        "lift": 0,
+        "paint": "grey",
+        "pitch": -0.0268,
+        "rims": "alloy",
+        "roll": 0.0211,
+        "roof": "body",
+        "twist": 0.006
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.899,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 46
+      },
+      "yaw_radians": -2.652,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.85,
+        "z_m": 4.72
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_right_010",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -267.957,
+        3.712,
+        326.624
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "fastback",
+        "finish": "solid",
+        "lift": 0.004,
+        "paint": "white",
+        "pitch": -0.0318,
+        "rims": "dark",
+        "roll": 0.0287,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.712,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 46
+      },
+      "yaw_radians": -2.667,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_right_011",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -265.185,
+        3.622,
+        331.877
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "metallic",
+        "lift": 0.003,
+        "paint": "dark_grey",
+        "pitch": 0.0166,
+        "rims": "alloy",
+        "roll": 0.044,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.622,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 47
+      },
+      "yaw_radians": -2.665,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_right_012",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -262.157,
+        3.732,
+        337.649
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "solid",
+        "lift": 0.003,
+        "paint": "white",
+        "pitch": 0.0165,
+        "rims": "alloy",
+        "roll": 0.0441,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.732,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 47
+      },
+      "yaw_radians": -2.665,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.84,
+        "z_m": 4.86
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_right_014",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -255.581,
+        3.901,
+        350.278
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "wagon",
+        "finish": "solid",
+        "lift": 0.008,
+        "paint": "white",
+        "pitch": -0.0023,
+        "rims": "alloy",
+        "roll": -0.0293,
+        "roof": "body",
+        "twist": -0.015
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.901,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 10
+      },
+      "yaw_radians": -2.656,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_right_015",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -252.516,
+        3.948,
+        356.119
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "solid",
+        "lift": 0.002,
+        "paint": "white",
+        "pitch": -0.0001,
+        "rims": "dark",
+        "roll": 0.0067,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.948,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 8
+      },
+      "yaw_radians": -2.665,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.85,
+        "z_m": 4.72
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_right_017",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -247.091,
+        3.946,
+        366.548
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "fastback",
+        "finish": "pearl",
+        "lift": 0.003,
+        "paint": "pearl_white",
+        "pitch": -0.0001,
+        "rims": "alloy",
+        "roll": 0.007,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.946,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 8
+      },
+      "yaw_radians": -2.657,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.83,
+        "z_m": 4.82
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_right_020",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -238.084,
+        3.901,
+        383.836
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "sedan",
+        "finish": "solid",
+        "lift": 0.017,
+        "paint": "black",
+        "pitch": 0.0063,
+        "rims": "dark",
+        "roll": 0.0004,
+        "roof": "body",
+        "twist": -0.004
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.901,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 9
+      },
+      "yaw_radians": -2.668,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.85,
+        "z_m": 4.72
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_right_021",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -234.854,
+        4.022,
+        390.004
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "fastback",
+        "finish": "metallic",
+        "lift": 0.003,
+        "paint": "dark_grey",
+        "pitch": 0.018,
+        "rims": "alloy",
+        "roll": -0.005,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 4.022,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 6
+      },
+      "yaw_radians": -2.67,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.83,
+        "z_m": 4.82
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_right_023",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -228.09,
+        3.986,
+        403.009
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "sedan",
+        "finish": "metallic",
+        "lift": 0.003,
+        "paint": "grey",
+        "pitch": -0.0092,
+        "rims": "dark",
+        "roll": -0.0136,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.986,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 7
+      },
+      "yaw_radians": -2.652,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_right_025",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -221.723,
+        3.91,
+        415.117
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "pearl",
+        "lift": 0.006,
+        "paint": "pearl_white",
+        "pitch": 0.0001,
+        "rims": "alloy",
+        "roll": 0.0037,
+        "roof": "black",
+        "twist": -0.003
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.91,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 23
+      },
+      "yaw_radians": -2.667,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.83,
+        "z_m": 4.82
+      },
+      "geometry": "point",
+      "id": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_right_026",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -218.888,
+        3.96,
+        420.575
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "sedan",
+        "finish": "metallic",
+        "lift": 0.003,
+        "paint": "silver",
+        "pitch": 0.0101,
+        "rims": "alloy",
+        "roll": -0.0004,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:avenue_of_the_palms/palms_parked_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.078,
+        "kind": "street_paint",
+        "material_key": "street_parking",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 3.96,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 20
+      },
+      "yaw_radians": -2.654,
+      "yaw_source": "rule:avenue_of_the_palms/palms_parked_cars",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
       "exclusion": null,
       "geometry": "point",
       "id": "scatter:avenue_of_the_palms:palms_west:w1001544697_right_s000",
@@ -44233,6 +46786,3081 @@
       "zones": [
         "building_1_forecourt",
         "treasure_island_road_south"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.95,
+        "z_m": 4.98
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w1473253282_left_s0056",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -61.427,
+        4.245,
+        783.126
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "suv",
+        "finish": "solid",
+        "lift": 0,
+        "paint": "black",
+        "pitch": -0.0406,
+        "rims": "alloy",
+        "roll": 0.0161,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 4.245,
+        "object_key": "land:w26767313:x_-1__z_3",
+        "triangle_index": 28
+      },
+      "yaw_radians": 2.018,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt",
+        "treasure_island_road_south"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.83,
+        "z_m": 4.82
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w1473253282_left_s0191",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -67.44,
+        4.131,
+        771.211
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "sedan",
+        "finish": "pearl",
+        "lift": 0.002,
+        "paint": "pearl_white",
+        "pitch": 0.0105,
+        "rims": "dark",
+        "roll": 0.002,
+        "roof": "body",
+        "twist": -0.002
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 4.131,
+        "object_key": "land:w26767313:x_-1__z_3",
+        "triangle_index": 14
+      },
+      "yaw_radians": -1.098,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt",
+        "treasure_island_road_south"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.83,
+        "z_m": 4.82
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w1473253282_left_s0272",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -71.038,
+        4.222,
+        763.975
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "sedan",
+        "finish": "metallic",
+        "lift": 0,
+        "paint": "grey",
+        "pitch": -0.0143,
+        "rims": "dark",
+        "roll": -0.0166,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 4.222,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 66
+      },
+      "yaw_radians": 2.005,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt",
+        "treasure_island_road_south"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 2.03,
+        "z_m": 6.2
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w1473253282_right_s0056",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -53.724,
+        4.592,
+        779.504
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "utility",
+        "finish": "solid",
+        "lift": 0,
+        "paint": "white",
+        "pitch": 0.0406,
+        "rims": "alloy",
+        "roll": -0.0163,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 4.592,
+        "object_key": "land:w26767313:x_-1__z_3",
+        "triangle_index": 28
+      },
+      "yaw_radians": -1.119,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.79,
+        "z_m": 4.38
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w1473253282_right_s0110",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -55.515,
+        4.53,
+        774.307
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "hatchback",
+        "finish": "metallic",
+        "lift": 0,
+        "paint": "silver",
+        "pitch": 0.0401,
+        "rims": "alloy",
+        "roll": -0.0175,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 4.53,
+        "object_key": "land:w26767313:x_-1__z_3",
+        "triangle_index": 28
+      },
+      "yaw_radians": -1.09,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.83,
+        "z_m": 4.82
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w1473253282_right_s0137",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -56.729,
+        4.484,
+        771.909
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "sedan",
+        "finish": "metallic",
+        "lift": 0,
+        "paint": "black",
+        "pitch": 0.0405,
+        "rims": "alloy",
+        "roll": -0.0163,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 4.484,
+        "object_key": "land:w26767313:x_-1__z_3",
+        "triangle_index": 28
+      },
+      "yaw_radians": -1.117,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 2,
+        "z_m": 5.86
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w1473253282_right_s0299",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -64.385,
+        4.394,
+        757.678
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "pickup",
+        "finish": "solid",
+        "lift": 0.023,
+        "paint": "black",
+        "pitch": 0.0273,
+        "rims": "alloy",
+        "roll": 0.0086,
+        "roof": "body",
+        "twist": -0.006
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 4.394,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 66
+      },
+      "yaw_radians": -1.11,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 2,
+        "z_m": 5.86
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w1473253282_right_s0353",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -66.868,
+        4.484,
+        752.685
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "pickup",
+        "finish": "metallic",
+        "lift": 0,
+        "paint": "blue",
+        "pitch": 0.0147,
+        "rims": "alloy",
+        "roll": 0.0163,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 4.484,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 66
+      },
+      "yaw_radians": -1.114,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.79,
+        "z_m": 4.38
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w1473253282_right_s0407",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -68.742,
+        4.578,
+        747.703
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "hatchback",
+        "finish": "solid",
+        "lift": 0,
+        "paint": "grey",
+        "pitch": 0.0144,
+        "rims": "alloy",
+        "roll": 0.0165,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 4.578,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 66
+      },
+      "yaw_radians": -1.13,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.95,
+        "z_m": 4.98
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102143_left_s0164",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -48.635,
+        5.208,
+        748.358
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "suv",
+        "finish": "metallic",
+        "lift": 0,
+        "paint": "dark_grey",
+        "pitch": 0.0452,
+        "rims": "dark",
+        "roll": 0.0001,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.208,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 81
+      },
+      "yaw_radians": -1.088,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.79,
+        "z_m": 4.38
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102143_left_s0191",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -47.306,
+        5.214,
+        750.608
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "hatchback",
+        "finish": "metallic",
+        "lift": 0.001,
+        "paint": "silver",
+        "pitch": 0.0458,
+        "rims": "alloy",
+        "roll": -0.0007,
+        "roof": "body",
+        "twist": -0.001
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.214,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 81
+      },
+      "yaw_radians": -1.094,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.85,
+        "z_m": 4.72
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102143_left_s0353",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -39.719,
+        5.291,
+        765.008
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "fastback",
+        "finish": "solid",
+        "lift": 0,
+        "paint": "grey",
+        "pitch": -0.0465,
+        "rims": "alloy",
+        "roll": 0.0066,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.291,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 82
+      },
+      "yaw_radians": 2.092,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.85,
+        "z_m": 4.72
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102143_left_s0380",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -38.472,
+        5.305,
+        767.316
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "fastback",
+        "finish": "solid",
+        "lift": 0.003,
+        "paint": "white",
+        "pitch": -0.0447,
+        "rims": "alloy",
+        "roll": 0.0096,
+        "roof": "body",
+        "twist": 0.003
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.305,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 82
+      },
+      "yaw_radians": 2.084,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.79,
+        "z_m": 4.38
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102143_right_s0083",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -60.585,
+        4.787,
+        745.638
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "hatchback",
+        "finish": "metallic",
+        "lift": 0,
+        "paint": "dark_grey",
+        "pitch": -0.0452,
+        "rims": "alloy",
+        "roll": 0.0005,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 4.787,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 81
+      },
+      "yaw_radians": 2.066,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102143_right_s0137",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -57.958,
+        4.795,
+        750.248
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "metallic",
+        "lift": 0,
+        "paint": "dark_grey",
+        "pitch": -0.0452,
+        "rims": "dark",
+        "roll": 0.0011,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 4.795,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 81
+      },
+      "yaw_radians": 2.078,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.83,
+        "z_m": 4.82
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102143_right_s0218",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -54.155,
+        4.794,
+        757.497
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "sedan",
+        "finish": "metallic",
+        "lift": 0.001,
+        "paint": "light_grey",
+        "pitch": 0.0458,
+        "rims": "alloy",
+        "roll": -0.002,
+        "roof": "body",
+        "twist": -0.001
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 4.794,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 81
+      },
+      "yaw_radians": -1.066,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.79,
+        "z_m": 4.38
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102143_right_s0299",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -50.326,
+        4.834,
+        764.625
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "hatchback",
+        "finish": "metallic",
+        "lift": 0,
+        "paint": "silver",
+        "pitch": -0.0466,
+        "rims": "alloy",
+        "roll": 0.0057,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 4.834,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 82
+      },
+      "yaw_radians": 2.074,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 2.03,
+        "z_m": 6.2
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102143_right_s0353",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -47.085,
+        4.913,
+        769.13
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "utility",
+        "finish": "solid",
+        "lift": 0.003,
+        "paint": "white",
+        "pitch": -0.0402,
+        "rims": "alloy",
+        "roll": 0.0172,
+        "roof": "body",
+        "twist": 0.001
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 4.913,
+        "object_key": "land:w26767313:x_-1__z_3",
+        "triangle_index": 28
+      },
+      "yaw_radians": 2.086,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.79,
+        "z_m": 4.38
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102143_right_s0407",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -45.234,
+        4.979,
+        774.048
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "hatchback",
+        "finish": "metallic",
+        "lift": 0,
+        "paint": "silver",
+        "pitch": -0.0398,
+        "rims": "alloy",
+        "roll": 0.0181,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 4.979,
+        "object_key": "land:w26767313:x_-1__z_3",
+        "triangle_index": 28
+      },
+      "yaw_radians": 2.067,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 2,
+        "z_m": 5.86
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102144_left_s0056",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -30.774,
+        5.583,
+        768.352
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "pickup",
+        "finish": "solid",
+        "lift": -0.013,
+        "paint": "grey",
+        "pitch": -0.0452,
+        "rims": "alloy",
+        "roll": -0.0354,
+        "roof": "body",
+        "twist": -0.028
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.583,
+        "object_key": "land:w26767313:x_-1__z_3",
+        "triangle_index": 46
+      },
+      "yaw_radians": 2.039,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102144_left_s0083",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -32.441,
+        5.589,
+        766.12
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "metallic",
+        "lift": -0.012,
+        "paint": "silver",
+        "pitch": -0.0379,
+        "rims": "alloy",
+        "roll": -0.0016,
+        "roof": "body",
+        "twist": 0.006
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.589,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 82
+      },
+      "yaw_radians": 2.091,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.79,
+        "z_m": 4.38
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102144_left_s0110",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -33.74,
+        5.57,
+        763.942
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "hatchback",
+        "finish": "metallic",
+        "lift": 0,
+        "paint": "silver",
+        "pitch": 0.0466,
+        "rims": "alloy",
+        "roll": -0.0058,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.57,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 82
+      },
+      "yaw_radians": -1.067,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.85,
+        "z_m": 4.72
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102144_left_s0137",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -34.872,
+        5.564,
+        761.46
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "fastback",
+        "finish": "solid",
+        "lift": 0,
+        "paint": "white",
+        "pitch": -0.0466,
+        "rims": "alloy",
+        "roll": 0.0059,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.564,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 82
+      },
+      "yaw_radians": 2.077,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.83,
+        "z_m": 4.82
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102144_left_s0164",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -36.326,
+        5.543,
+        759.054
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "sedan",
+        "finish": "solid",
+        "lift": 0,
+        "paint": "white",
+        "pitch": -0.0466,
+        "rims": "alloy",
+        "roll": 0.006,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.543,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 82
+      },
+      "yaw_radians": 2.079,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.84,
+        "z_m": 4.86
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102144_left_s0218",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -38.789,
+        5.516,
+        754.397
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "wagon",
+        "finish": "metallic",
+        "lift": 0,
+        "paint": "silver",
+        "pitch": -0.0468,
+        "rims": "alloy",
+        "roll": 0.0041,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.516,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 82
+      },
+      "yaw_radians": 2.039,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.83,
+        "z_m": 4.82
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102144_left_s0245",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -40.079,
+        5.502,
+        752.024
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "sedan",
+        "finish": "metallic",
+        "lift": 0,
+        "paint": "grey",
+        "pitch": 0.0465,
+        "rims": "alloy",
+        "roll": -0.0063,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.502,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 82
+      },
+      "yaw_radians": -1.055,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102144_left_s0272",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -41.264,
+        5.492,
+        749.591
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "solid",
+        "lift": 0,
+        "paint": "white",
+        "pitch": -0.0468,
+        "rims": "alloy",
+        "roll": 0.0039,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.492,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 82
+      },
+      "yaw_radians": 2.036,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.83,
+        "z_m": 4.82
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102144_left_s0299",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -42.664,
+        5.473,
+        747.18
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "sedan",
+        "finish": "metallic",
+        "lift": 0.002,
+        "paint": "dark_grey",
+        "pitch": 0.046,
+        "rims": "dark",
+        "roll": -0.004,
+        "roof": "body",
+        "twist": -0.001
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.473,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 82
+      },
+      "yaw_radians": -1.078,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102144_left_s0353",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -45.17,
+        5.475,
+        742.274
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "solid",
+        "lift": 0,
+        "paint": "white",
+        "pitch": -0.0452,
+        "rims": "dark",
+        "roll": -0.001,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.475,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 81
+      },
+      "yaw_radians": 2.034,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.84,
+        "z_m": 4.86
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102144_left_s0407",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -47.715,
+        5.47,
+        737.675
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "wagon",
+        "finish": "metallic",
+        "lift": 0,
+        "paint": "light_grey",
+        "pitch": -0.0452,
+        "rims": "alloy",
+        "roll": 0.0012,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.47,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 81
+      },
+      "yaw_radians": 2.081,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.84,
+        "z_m": 4.86
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102144_left_s0434",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -49.007,
+        5.449,
+        735.256
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "wagon",
+        "finish": "metallic",
+        "lift": -0.003,
+        "paint": "silver",
+        "pitch": 0.0347,
+        "rims": "alloy",
+        "roll": -0.0199,
+        "roof": "body",
+        "twist": -0.004
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.449,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 84
+      },
+      "yaw_radians": -1.055,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.95,
+        "z_m": 4.98
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102144_right_s0056",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -23.158,
+        5.832,
+        764.187
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "suv",
+        "finish": "metallic",
+        "lift": 0,
+        "paint": "black",
+        "pitch": 0.0252,
+        "rims": "alloy",
+        "roll": -0.0154,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.832,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 98
+      },
+      "yaw_radians": -1.054,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.85,
+        "z_m": 4.72
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102144_right_s0083",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -24.414,
+        5.793,
+        761.982
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "fastback",
+        "finish": "solid",
+        "lift": 0.002,
+        "paint": "white",
+        "pitch": -0.0252,
+        "rims": "dark",
+        "roll": 0.0144,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.793,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 98
+      },
+      "yaw_radians": 2.066,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.83,
+        "z_m": 4.82
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102144_right_s0110",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -25.57,
+        5.795,
+        759.498
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "sedan",
+        "finish": "solid",
+        "lift": 0,
+        "paint": "grey",
+        "pitch": 0.0177,
+        "rims": "alloy",
+        "roll": 0.0107,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.795,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 97
+      },
+      "yaw_radians": -1.106,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.85,
+        "z_m": 4.72
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102144_right_s0137",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -27.035,
+        5.821,
+        757.073
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "fastback",
+        "finish": "metallic",
+        "lift": 0,
+        "paint": "beige",
+        "pitch": 0.0182,
+        "rims": "alloy",
+        "roll": 0.0099,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.821,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 97
+      },
+      "yaw_radians": -1.061,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.83,
+        "z_m": 4.82
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102144_right_s0164",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -28.14,
+        5.85,
+        754.683
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "sedan",
+        "finish": "solid",
+        "lift": 0,
+        "paint": "white",
+        "pitch": 0.018,
+        "rims": "alloy",
+        "roll": 0.0102,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.85,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 97
+      },
+      "yaw_radians": -1.079,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102144_right_s0191",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -29.505,
+        5.876,
+        752.338
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "metallic",
+        "lift": 0,
+        "paint": "silver",
+        "pitch": 0.0178,
+        "rims": "alloy",
+        "roll": 0.0105,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.876,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 97
+      },
+      "yaw_radians": -1.094,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.84,
+        "z_m": 4.86
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102144_right_s0218",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -30.716,
+        5.905,
+        749.9
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "wagon",
+        "finish": "metallic",
+        "lift": -0.002,
+        "paint": "silver",
+        "pitch": -0.0201,
+        "rims": "alloy",
+        "roll": -0.0064,
+        "roof": "body",
+        "twist": 0.003
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.905,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 97
+      },
+      "yaw_radians": 2.042,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 2,
+        "z_m": 5.86
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102144_right_s0299",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -34.884,
+        5.883,
+        743.154
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "pickup",
+        "finish": "metallic",
+        "lift": 0,
+        "paint": "grey",
+        "pitch": 0.0467,
+        "rims": "alloy",
+        "roll": -0.0048,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.883,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 82
+      },
+      "yaw_radians": -1.087,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.83,
+        "z_m": 4.82
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102144_right_s0326",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -35.762,
+        5.893,
+        740.405
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "sedan",
+        "finish": "solid",
+        "lift": 0.001,
+        "paint": "white",
+        "pitch": 0.0461,
+        "rims": "alloy",
+        "roll": -0.0033,
+        "roof": "body",
+        "twist": -0.001
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.893,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 82
+      },
+      "yaw_radians": -1.094,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.85,
+        "z_m": 4.72
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102144_right_s0353",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -37.16,
+        5.883,
+        738.104
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "fastback",
+        "finish": "metallic",
+        "lift": 0,
+        "paint": "dark_grey",
+        "pitch": 0.0452,
+        "rims": "dark",
+        "roll": -0.0003,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.883,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 81
+      },
+      "yaw_radians": -1.081,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102144_right_s0407",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -39.611,
+        5.815,
+        733.406
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "solid",
+        "lift": 0,
+        "paint": "white",
+        "pitch": -0.032,
+        "rims": "dark",
+        "roll": 0.0247,
+        "roof": "black",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.815,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 84
+      },
+      "yaw_radians": 2.089,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 2.03,
+        "z_m": 6.2
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102145_left_s0056",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -17.222,
+        6.005,
+        761.84
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "utility",
+        "finish": "solid",
+        "lift": 0,
+        "paint": "white",
+        "pitch": -0.0251,
+        "rims": "alloy",
+        "roll": 0.0155,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 6.005,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 98
+      },
+      "yaw_radians": 2.089,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.79,
+        "z_m": 4.38
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102145_left_s0083",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -19.178,
+        5.945,
+        759.719
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "hatchback",
+        "finish": "solid",
+        "lift": 0,
+        "paint": "white",
+        "pitch": -0.0251,
+        "rims": "dark",
+        "roll": 0.0156,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.945,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 98
+      },
+      "yaw_radians": 2.094,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.95,
+        "z_m": 4.98
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102145_left_s0110",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -20.333,
+        5.909,
+        757.375
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "suv",
+        "finish": "solid",
+        "lift": 0.005,
+        "paint": "white",
+        "pitch": -0.0235,
+        "rims": "dark",
+        "roll": 0.0104,
+        "roof": "body",
+        "twist": -0.003
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.909,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 98
+      },
+      "yaw_radians": 2.048,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.95,
+        "z_m": 4.98
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102145_left_s0218",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -25.531,
+        6,
+        747.779
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "suv",
+        "finish": "solid",
+        "lift": 0,
+        "paint": "black",
+        "pitch": -0.018,
+        "rims": "alloy",
+        "roll": -0.0101,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 6,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 97
+      },
+      "yaw_radians": 2.065,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.83,
+        "z_m": 4.82
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102145_left_s0245",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -26.777,
+        6.023,
+        745.648
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "sedan",
+        "finish": "solid",
+        "lift": 0,
+        "paint": "white",
+        "pitch": -0.0179,
+        "rims": "dark",
+        "roll": -0.0103,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 6.023,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 97
+      },
+      "yaw_radians": 2.059,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.79,
+        "z_m": 4.38
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102145_left_s0272",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -28.162,
+        6.052,
+        743.132
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "hatchback",
+        "finish": "solid",
+        "lift": 0,
+        "paint": "white",
+        "pitch": 0.0182,
+        "rims": "alloy",
+        "roll": 0.0097,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 6.052,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 97
+      },
+      "yaw_radians": -1.054,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102145_left_s0299",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -29.267,
+        6.08,
+        740.84
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "metallic",
+        "lift": 0,
+        "paint": "grey",
+        "pitch": -0.018,
+        "rims": "alloy",
+        "roll": -0.0102,
+        "roof": "black",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 6.08,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 97
+      },
+      "yaw_radians": 2.063,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 2,
+        "z_m": 5.86
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102145_left_s0380",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -32.824,
+        6.086,
+        733.392
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "pickup",
+        "finish": "metallic",
+        "lift": -0.023,
+        "paint": "silver",
+        "pitch": -0.0202,
+        "rims": "alloy",
+        "roll": 0.0083,
+        "roof": "body",
+        "twist": 0.013
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 6.086,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 84
+      },
+      "yaw_radians": 2.051,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102145_left_s0407",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -34.422,
+        6.011,
+        731.322
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "metallic",
+        "lift": 0,
+        "paint": "grey",
+        "pitch": -0.0331,
+        "rims": "alloy",
+        "roll": 0.0232,
+        "roof": "black",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 6.011,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 84
+      },
+      "yaw_radians": 2.043,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102145_right_s0083",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -11.059,
+        6.181,
+        755.391
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "metallic",
+        "lift": -0.001,
+        "paint": "silver",
+        "pitch": -0.0258,
+        "rims": "dark",
+        "roll": 0.0143,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 6.181,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 98
+      },
+      "yaw_radians": 2.044,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102145_right_s0110",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -12.354,
+        6.14,
+        753.001
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "metallic",
+        "lift": 0,
+        "paint": "grey",
+        "pitch": 0.025,
+        "rims": "dark",
+        "roll": -0.0157,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 6.14,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 98
+      },
+      "yaw_radians": -1.044,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.83,
+        "z_m": 4.82
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102145_right_s0137",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -13.477,
+        6.105,
+        750.717
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "sedan",
+        "finish": "metallic",
+        "lift": 0.003,
+        "paint": "grey",
+        "pitch": -0.0245,
+        "rims": "alloy",
+        "roll": 0.0116,
+        "roof": "body",
+        "twist": -0.002
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 6.105,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 98
+      },
+      "yaw_radians": 2.039,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 2,
+        "z_m": 5.86
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102145_right_s0164",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -15.235,
+        6.1,
+        748.564
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "pickup",
+        "finish": "solid",
+        "lift": 0,
+        "paint": "grey",
+        "pitch": 0.0179,
+        "rims": "dark",
+        "roll": 0.0103,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 6.1,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 97
+      },
+      "yaw_radians": -1.087,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102145_right_s0191",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -16.207,
+        6.136,
+        745.888
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "metallic",
+        "lift": 0,
+        "paint": "light_grey",
+        "pitch": 0.0182,
+        "rims": "dark",
+        "roll": 0.0099,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 6.136,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 97
+      },
+      "yaw_radians": -1.061,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 2.03,
+        "z_m": 6.2
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102145_right_s0218",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -17.983,
+        6.152,
+        743.847
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "utility",
+        "finish": "solid",
+        "lift": 0.012,
+        "paint": "white",
+        "pitch": -0.0105,
+        "rims": "dark",
+        "roll": -0.01,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 6.152,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 97
+      },
+      "yaw_radians": 2.076,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.85,
+        "z_m": 4.72
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102145_right_s0245",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -18.782,
+        6.189,
+        741.238
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "fastback",
+        "finish": "metallic",
+        "lift": 0,
+        "paint": "dark_grey",
+        "pitch": 0.0179,
+        "rims": "alloy",
+        "roll": 0.0103,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 6.189,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 97
+      },
+      "yaw_radians": -1.085,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 2.02,
+        "z_m": 5.93
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102145_right_s0272",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -20.415,
+        6.208,
+        739.074
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "van",
+        "finish": "solid",
+        "lift": 0,
+        "paint": "white",
+        "pitch": 0.0182,
+        "rims": "alloy",
+        "roll": 0.0099,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 6.208,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 97
+      },
+      "yaw_radians": -1.063,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.85,
+        "z_m": 4.72
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102145_right_s0299",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -21.321,
+        6.243,
+        736.55
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "fastback",
+        "finish": "metallic",
+        "lift": -0.009,
+        "paint": "light_grey",
+        "pitch": 0.0092,
+        "rims": "alloy",
+        "roll": -0.0053,
+        "roof": "body",
+        "twist": -0.012
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 6.243,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 97
+      },
+      "yaw_radians": -1.102,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.87,
+        "z_m": 4.62
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102145_right_s0326",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -22.571,
+        6.16,
+        734.138
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "crossover",
+        "finish": "metallic",
+        "lift": -0.001,
+        "paint": "grey",
+        "pitch": -0.0104,
+        "rims": "alloy",
+        "roll": -0.0424,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 6.16,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 100
+      },
+      "yaw_radians": -1.075,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 2.03,
+        "z_m": 6.2
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102145_right_s0353",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -24.381,
+        6.051,
+        732.036
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "utility",
+        "finish": "solid",
+        "lift": 0,
+        "paint": "white",
+        "pitch": -0.0104,
+        "rims": "alloy",
+        "roll": -0.0424,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 6.051,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 100
+      },
+      "yaw_radians": -1.076,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 2.03,
+        "z_m": 6.2
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102145_right_s0380",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -25.725,
+        5.937,
+        729.554
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "utility",
+        "finish": "solid",
+        "lift": 0.02,
+        "paint": "white",
+        "pitch": -0.018,
+        "rims": "alloy",
+        "roll": -0.0161,
+        "roof": "body",
+        "twist": -0.013
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.937,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 99
+      },
+      "yaw_radians": -1.066,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
+      ]
+    },
+    {
+      "basis": "production_inference",
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.85,
+        "z_m": 4.72
+      },
+      "geometry": "point",
+      "id": "scatter:building_1_forecourt:forecourt_lot_cars:w43102145_right_s0407",
+      "kind": "parked_car",
+      "layer": "clutter",
+      "position_m": [
+        -27.574,
+        5.973,
+        727.526
+      ],
+      "prop": "parked_car",
+      "prop_params": {
+        "body": "fastback",
+        "finish": "metallic",
+        "lift": 0.015,
+        "paint": "light_grey",
+        "pitch": -0.0347,
+        "rims": "dark",
+        "roll": 0.0079,
+        "roof": "body",
+        "twist": 0
+      },
+      "source": "scatter",
+      "source_id": "zone:building_1_forecourt/forecourt_lot_cars",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.05,
+        "kind": "major_area",
+        "material_key": "major_area_paved",
+        "source_key": "w96665914"
+      },
+      "terrain_support": {
+        "elevation_m": 5.973,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 99
+      },
+      "yaw_radians": -1.048,
+      "yaw_source": "rule:building_1_forecourt/forecourt_lot_cars",
+      "zones": [
+        "building_1_forecourt"
       ]
     },
     {
@@ -46859,9 +52487,9 @@
       "kind": "street_cabinet",
       "layer": "furniture",
       "position_m": [
-        -89.127,
-        3.902,
-        782.581
+        -90.427,
+        3.888,
+        783.33
       ],
       "prop": "signal_cabinet",
       "prop_params": {},
@@ -46875,7 +52503,7 @@
         "source_key": "w1249797944"
       },
       "terrain_support": {
-        "elevation_m": 3.902,
+        "elevation_m": 3.888,
         "object_key": "land:w26767313:x_-1__z_3",
         "triangle_index": 14
       },
@@ -47777,6 +53405,764 @@
     },
     {
       "exclusion": null,
+      "footprint_m": {
+        "x_m": 0.66,
+        "z_m": 0.42
+      },
+      "geometry": "point",
+      "id": "set_piece:palms_barricade_1",
+      "kind": "barricade",
+      "layer": "clutter",
+      "position_m": [
+        -183.12,
+        6.178,
+        496.01
+      ],
+      "prop": "barricade",
+      "prop_params": {},
+      "reason": "Orange and white striped A-frame barricades with white sign panels stand at the back edge of the west sidewalk of Avenue of the Palms, against the planting verge beside the fenced Cityside Park lot, south of 338 Ave of the Palms.",
+      "reference": "isle-house ih05 (338 Ave of the Palms, Sep 2025): two barricades and one farther on, all at the walk's planting edge; street-fences refs p4b-aotp-338-sw-h228 (same panorama, Sep 2025)",
+      "source": "set_piece",
+      "source_id": "palms_barricade_1",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.228,
+        "kind": "street_kerb",
+        "material_key": "street_kerb_concrete",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 6.178,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 32
+      },
+      "yaw_radians": -2.665,
+      "yaw_source": "set_piece",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 0.66,
+        "z_m": 0.42
+      },
+      "geometry": "point",
+      "id": "set_piece:palms_barricade_2",
+      "kind": "barricade",
+      "layer": "clutter",
+      "position_m": [
+        -178.99,
+        6.595,
+        504.01
+      ],
+      "prop": "barricade",
+      "prop_params": {},
+      "reason": "Orange and white striped A-frame barricades with white sign panels stand at the back edge of the west sidewalk of Avenue of the Palms, against the planting verge beside the fenced Cityside Park lot, south of 338 Ave of the Palms.",
+      "reference": "isle-house ih05 (338 Ave of the Palms, Sep 2025): two barricades and one farther on, all at the walk's planting edge; street-fences refs p4b-aotp-338-sw-h228 (same panorama, Sep 2025)",
+      "source": "set_piece",
+      "source_id": "palms_barricade_2",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.228,
+        "kind": "street_kerb",
+        "material_key": "street_kerb_concrete",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 6.595,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 33
+      },
+      "yaw_radians": -2.665,
+      "yaw_source": "set_piece",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 0.66,
+        "z_m": 0.42
+      },
+      "geometry": "point",
+      "id": "set_piece:palms_barricade_3",
+      "kind": "barricade",
+      "layer": "clutter",
+      "position_m": [
+        -168.66,
+        4.221,
+        523.99
+      ],
+      "prop": "barricade",
+      "prop_params": {},
+      "reason": "Orange and white striped A-frame barricades with white sign panels stand at the back edge of the west sidewalk of Avenue of the Palms, against the planting verge beside the fenced Cityside Park lot, south of 338 Ave of the Palms.",
+      "reference": "isle-house ih05 (338 Ave of the Palms, Sep 2025): two barricades and one farther on, all at the walk's planting edge; street-fences refs p4b-aotp-338-sw-h228 (same panorama, Sep 2025)",
+      "source": "set_piece",
+      "source_id": "palms_barricade_3",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.228,
+        "kind": "street_kerb",
+        "material_key": "street_kerb_concrete",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 4.221,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 31
+      },
+      "yaw_radians": -2.665,
+      "yaw_source": "set_piece",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 0.6,
+        "z_m": 0.6
+      },
+      "geometry": "point",
+      "id": "set_piece:palms_basket_490",
+      "kind": "waste_basket",
+      "layer": "furniture",
+      "position_m": [
+        -275.81,
+        2.684,
+        287.69
+      ],
+      "prop": "waste_basket",
+      "prop_params": {
+        "style": "steel"
+      },
+      "reason": "A slatted steel litter can on the east sidewalk beside the cones, in front of 490 Avenue of the Palms.",
+      "reference": "large-batch1 palms-wsw01 (999 Ave of the Palms, Nov 2025)",
+      "source": "set_piece",
+      "source_id": "palms_basket_490",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.228,
+        "kind": "street_kerb",
+        "material_key": "street_kerb_concrete",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 2.684,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 51
+      },
+      "yaw_radians": 0,
+      "yaw_source": "set_piece",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 0.8,
+        "z_m": 0.12
+      },
+      "geometry": "point",
+      "id": "set_piece:palms_bike_rack_johnson",
+      "kind": "bicycle_parking",
+      "layer": "furniture",
+      "position_m": [
+        -291.23,
+        4.12,
+        258.07
+      ],
+      "prop": "bike_rack",
+      "prop_params": {},
+      "reason": "A dark inverted-U bike rack on the east sidewalk of Avenue of the Palms at its north end, by Johnson Street, its loop across the walk.",
+      "reference": "large-batch1 palms-n-corner02 (801 Ave of the Palms, Nov 2025)",
+      "source": "set_piece",
+      "source_id": "palms_bike_rack_johnson",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.228,
+        "kind": "street_kerb",
+        "material_key": "street_kerb_concrete",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 4.12,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 33
+      },
+      "yaw_radians": 0.495,
+      "yaw_source": "set_piece",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 0.36,
+        "z_m": 0.36
+      },
+      "geometry": "point",
+      "id": "set_piece:palms_cone_1",
+      "kind": "traffic_cone",
+      "layer": "clutter",
+      "position_m": [
+        -275.2,
+        2.603,
+        289.29
+      ],
+      "prop": "traffic_cone",
+      "prop_params": {},
+      "reason": "Two orange traffic cones on the east sidewalk of Avenue of the Palms in front of 490 Avenue of the Palms.",
+      "reference": "large-batch1 palms-wsw01 (999 Ave of the Palms, Nov 2025)",
+      "source": "set_piece",
+      "source_id": "palms_cone_1",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.228,
+        "kind": "street_kerb",
+        "material_key": "street_kerb_concrete",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 2.603,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 48
+      },
+      "yaw_radians": 0.4,
+      "yaw_source": "set_piece",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 0.36,
+        "z_m": 0.36
+      },
+      "geometry": "point",
+      "id": "set_piece:palms_cone_2",
+      "kind": "traffic_cone",
+      "layer": "clutter",
+      "position_m": [
+        -274.59,
+        2.523,
+        290.44
+      ],
+      "prop": "traffic_cone",
+      "prop_params": {},
+      "reason": "Two orange traffic cones on the east sidewalk of Avenue of the Palms in front of 490 Avenue of the Palms.",
+      "reference": "large-batch1 palms-wsw01 (999 Ave of the Palms, Nov 2025)",
+      "source": "set_piece",
+      "source_id": "palms_cone_2",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.228,
+        "kind": "street_kerb",
+        "material_key": "street_kerb_concrete",
+        "source_key": "w1001544697"
+      },
+      "terrain_support": {
+        "elevation_m": 2.523,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 48
+      },
+      "yaw_radians": 1.3,
+      "yaw_source": "set_piece",
+      "zones": [
+        "avenue_of_the_palms"
+      ]
+    },
+    {
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 0.8,
+        "z_m": 0.92
+      },
+      "geometry": "point",
+      "id": "set_piece:plaza_adirondack_chair_1",
+      "kind": "chair",
+      "layer": "furniture",
+      "position_m": [
+        -113.1,
+        3.376,
+        773.5
+      ],
+      "prop": "adirondack_chair",
+      "prop_params": {},
+      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; five here, facing each other in a ring open on one side (production_inference: photo 25 shows five chairs in the group).",
+      "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn",
+      "source": "set_piece",
+      "source_id": "plaza_adirondack_chair_1",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.04,
+        "kind": "major_area",
+        "material_key": "major_area_leisure",
+        "source_key": "w1428380754"
+      },
+      "terrain_support": {
+        "elevation_m": 3.376,
+        "object_key": "land:w26767313:x_-1__z_3",
+        "triangle_index": 6
+      },
+      "yaw_radians": 1.571,
+      "yaw_source": "set_piece",
+      "zones": [
+        "ferry_arrival_plaza"
+      ]
+    },
+    {
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 0.8,
+        "z_m": 0.92
+      },
+      "geometry": "point",
+      "id": "set_piece:plaza_adirondack_chair_2",
+      "kind": "chair",
+      "layer": "furniture",
+      "position_m": [
+        -114.3,
+        3.305,
+        775.58
+      ],
+      "prop": "adirondack_chair",
+      "prop_params": {},
+      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; five here, facing each other in a ring open on one side (production_inference: photo 25 shows five chairs in the group).",
+      "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn",
+      "source": "set_piece",
+      "source_id": "plaza_adirondack_chair_2",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.04,
+        "kind": "major_area",
+        "material_key": "major_area_leisure",
+        "source_key": "w1428380754"
+      },
+      "terrain_support": {
+        "elevation_m": 3.305,
+        "object_key": "land:w26767313:x_-1__z_3",
+        "triangle_index": 6
+      },
+      "yaw_radians": 0.524,
+      "yaw_source": "set_piece",
+      "zones": [
+        "ferry_arrival_plaza"
+      ]
+    },
+    {
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 0.8,
+        "z_m": 0.92
+      },
+      "geometry": "point",
+      "id": "set_piece:plaza_adirondack_chair_3",
+      "kind": "chair",
+      "layer": "furniture",
+      "position_m": [
+        -116.7,
+        3.232,
+        775.58
+      ],
+      "prop": "adirondack_chair",
+      "prop_params": {},
+      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; five here, facing each other in a ring open on one side (production_inference: photo 25 shows five chairs in the group).",
+      "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn",
+      "source": "set_piece",
+      "source_id": "plaza_adirondack_chair_3",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.04,
+        "kind": "major_area",
+        "material_key": "major_area_leisure",
+        "source_key": "w1428380754"
+      },
+      "terrain_support": {
+        "elevation_m": 3.232,
+        "object_key": "land:w26767313:x_-1__z_3",
+        "triangle_index": 6
+      },
+      "yaw_radians": -0.524,
+      "yaw_source": "set_piece",
+      "zones": [
+        "ferry_arrival_plaza"
+      ]
+    },
+    {
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 0.8,
+        "z_m": 0.92
+      },
+      "geometry": "point",
+      "id": "set_piece:plaza_adirondack_chair_4",
+      "kind": "chair",
+      "layer": "furniture",
+      "position_m": [
+        -117.9,
+        3.201,
+        773.5
+      ],
+      "prop": "adirondack_chair",
+      "prop_params": {},
+      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; five here, facing each other in a ring open on one side (production_inference: photo 25 shows five chairs in the group).",
+      "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn",
+      "source": "set_piece",
+      "source_id": "plaza_adirondack_chair_4",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.04,
+        "kind": "major_area",
+        "material_key": "major_area_leisure",
+        "source_key": "w1428380754"
+      },
+      "terrain_support": {
+        "elevation_m": 3.201,
+        "object_key": "land:w26767313:x_-1__z_3",
+        "triangle_index": 5
+      },
+      "yaw_radians": -1.571,
+      "yaw_source": "set_piece",
+      "zones": [
+        "ferry_arrival_plaza"
+      ]
+    },
+    {
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 0.8,
+        "z_m": 0.92
+      },
+      "geometry": "point",
+      "id": "set_piece:plaza_adirondack_chair_5",
+      "kind": "chair",
+      "layer": "furniture",
+      "position_m": [
+        -116.7,
+        3.259,
+        771.42
+      ],
+      "prop": "adirondack_chair",
+      "prop_params": {},
+      "reason": "Cobalt blue Adirondack chairs stand in a loose group on the lawn north of the landing; five here, facing each other in a ring open on one side (production_inference: photo 25 shows five chairs in the group).",
+      "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025) and ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the blue chairs on the lawn",
+      "source": "set_piece",
+      "source_id": "plaza_adirondack_chair_5",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.04,
+        "kind": "major_area",
+        "material_key": "major_area_leisure",
+        "source_key": "w1428380754"
+      },
+      "terrain_support": {
+        "elevation_m": 3.259,
+        "object_key": "land:w26767313:x_-1__z_3",
+        "triangle_index": 4
+      },
+      "yaw_radians": -2.618,
+      "yaw_source": "set_piece",
+      "zones": [
+        "ferry_arrival_plaza"
+      ]
+    },
+    {
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 0.6,
+        "z_m": 0.6
+      },
+      "geometry": "point",
+      "id": "set_piece:plaza_basket_north",
+      "kind": "waste_basket",
+      "layer": "furniture",
+      "position_m": [
+        -110.5,
+        3.928,
+        745.2
+      ],
+      "prop": "waste_basket",
+      "prop_params": {
+        "style": "timber"
+      },
+      "reason": "A timber-slatted litter can with a grey band on the plaza walk beside Treasure Island Road at the north end of the plaza.",
+      "reference": "ferry-shelter 21-sv-north-sw (185 Treasure Island Rd, Sep 2025)",
+      "source": "set_piece",
+      "source_id": "plaza_basket_north",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.228,
+        "kind": "street_kerb",
+        "material_key": "street_plaza_pavers",
+        "source_key": "w1249797944"
+      },
+      "terrain_support": {
+        "elevation_m": 3.928,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 49
+      },
+      "yaw_radians": 0,
+      "yaw_source": "set_piece",
+      "zones": [
+        "ferry_arrival_plaza",
+        "treasure_island_road_south"
+      ]
+    },
+    {
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 0.6,
+        "z_m": 0.6
+      },
+      "geometry": "point",
+      "id": "set_piece:plaza_basket_pier",
+      "kind": "waste_basket",
+      "layer": "furniture",
+      "position_m": [
+        -112.3,
+        3.232,
+        783.6
+      ],
+      "prop": "waste_basket",
+      "prop_params": {
+        "style": "steel"
+      },
+      "reason": "A grey steel litter can by the pier entrance.",
+      "reference": "ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025); 17-sv-mar2025-canopy (Mar 2025): a grey can by the landing",
+      "source": "set_piece",
+      "source_id": "plaza_basket_pier",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.04,
+        "kind": "major_area",
+        "material_key": "major_area_leisure",
+        "source_key": "w1428380754"
+      },
+      "terrain_support": {
+        "elevation_m": 3.232,
+        "object_key": "land:w26767313:x_-1__z_3",
+        "triangle_index": 6
+      },
+      "yaw_radians": 0,
+      "yaw_source": "set_piece",
+      "zones": [
+        "ferry_arrival_plaza"
+      ]
+    },
+    {
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 1.34,
+        "z_m": 0.2
+      },
+      "geometry": "point",
+      "id": "set_piece:plaza_map_board",
+      "kind": "information_board",
+      "layer": "furniture",
+      "position_m": [
+        -89.93,
+        3.91,
+        781.14
+      ],
+      "prop": "map_board",
+      "prop_params": {},
+      "reason": "The Waterfront Plaza's information board, an island map in a dark frame on two posts, stands at the plaza's crosswalk landing just behind the signal cabinet and to its right seen from Treasure Island Road, facing the road. Its map is an original drawing of the island from the frozen OSM data.",
+      "reference": "ferry-shelter 13-sv-road-ne and 11-sv-road-sw (83 Treasure Island Rd, Sep 2025); 15-sv-mar2025 (Mar 2025)",
+      "source": "set_piece",
+      "source_id": "plaza_map_board",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.228,
+        "kind": "street_kerb",
+        "material_key": "street_plaza_pavers",
+        "source_key": "w1249797944"
+      },
+      "terrain_support": {
+        "elevation_m": 3.91,
+        "object_key": "land:w26767313:x_-1__z_3",
+        "triangle_index": 14
+      },
+      "yaw_radians": -1.99,
+      "yaw_source": "set_piece",
+      "zones": [
+        "ferry_arrival_plaza",
+        "treasure_island_road_south"
+      ]
+    },
+    {
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 4.1,
+        "z_m": 0.6
+      },
+      "geometry": "point",
+      "id": "set_piece:plaza_wedges_landing",
+      "kind": "bench",
+      "layer": "furniture",
+      "position_m": [
+        -95.9,
+        3.847,
+        784.3
+      ],
+      "prop": "bench_wedge",
+      "prop_params": {
+        "timber": false
+      },
+      "reason": "A pair of wedge benches at the edge of the paving south of the landing path, seats toward the path, kept clear of the ferry spawn and its walk to the crossing.",
+      "reference": "ferry-shelter 11-sv-road-sw (83 Treasure Island Rd, Sep 2025): pairs at the far edge of the paving; 17-sv-mar2025-canopy (Mar 2025)",
+      "source": "set_piece",
+      "source_id": "plaza_wedges_landing",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.04,
+        "kind": "major_area",
+        "material_key": "major_area_leisure",
+        "source_key": "w1428380754"
+      },
+      "terrain_support": {
+        "elevation_m": 3.847,
+        "object_key": "land:w26767313:x_-1__z_3",
+        "triangle_index": 14
+      },
+      "yaw_radians": 0.513,
+      "yaw_source": "set_piece",
+      "zones": [
+        "ferry_arrival_plaza",
+        "treasure_island_road_south"
+      ]
+    },
+    {
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 4.1,
+        "z_m": 0.6
+      },
+      "geometry": "point",
+      "id": "set_piece:plaza_wedges_north",
+      "kind": "bench",
+      "layer": "furniture",
+      "position_m": [
+        -117,
+        3.858,
+        757.5
+      ],
+      "prop": "bench_wedge",
+      "prop_params": {
+        "timber": false
+      },
+      "reason": "A pair of wedge benches where the north lawn meets the plaza paving, its seats toward the paving (production_inference: the photographed pairs repeat along the lawn edges).",
+      "reference": "ferry-shelter 21-sv-north-sw and 25-sv-north-mid (185 Treasure Island Rd, Sep 2025)",
+      "source": "set_piece",
+      "source_id": "plaza_wedges_north",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.04,
+        "kind": "major_area",
+        "material_key": "major_area_leisure",
+        "source_key": "w1428380754"
+      },
+      "terrain_support": {
+        "elevation_m": 3.858,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 50
+      },
+      "yaw_radians": -1.125,
+      "yaw_source": "set_piece",
+      "zones": [
+        "ferry_arrival_plaza"
+      ]
+    },
+    {
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 4.1,
+        "z_m": 0.6
+      },
+      "geometry": "point",
+      "id": "set_piece:plaza_wedges_north_lawn",
+      "kind": "bench",
+      "layer": "furniture",
+      "position_m": [
+        -112.5,
+        3.851,
+        765.9
+      ],
+      "prop": "bench_wedge",
+      "prop_params": {
+        "timber": false
+      },
+      "reason": "Pale cast-concrete wedge benches, in pairs end to end, edge the plaza lawns; this pair lines the path along the north edge of the lawn west of the plaza paving, its seats toward the path.",
+      "reference": "ferry-shelter 25-sv-north-mid (185 Treasure Island Rd, Sep 2025): the pair on the lawn edge between the paving and the Adirondack chairs; 21-sv-north-sw (Sep 2025)",
+      "source": "set_piece",
+      "source_id": "plaza_wedges_north_lawn",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.04,
+        "kind": "major_area",
+        "material_key": "major_area_leisure",
+        "source_key": "w1428380754"
+      },
+      "terrain_support": {
+        "elevation_m": 3.851,
+        "object_key": "land:w26767313:x_-1__z_2",
+        "triangle_index": 50
+      },
+      "yaw_radians": 0.479,
+      "yaw_source": "set_piece",
+      "zones": [
+        "ferry_arrival_plaza"
+      ]
+    },
+    {
+      "exclusion": null,
+      "footprint_m": {
+        "x_m": 4.1,
+        "z_m": 0.6
+      },
+      "geometry": "point",
+      "id": "set_piece:plaza_wedges_shore",
+      "kind": "bench",
+      "layer": "furniture",
+      "position_m": [
+        -103.2,
+        3.347,
+        802.2
+      ],
+      "prop": "bench_wedge",
+      "prop_params": {
+        "timber": true
+      },
+      "reason": "A pair of wedge benches with a slatted timber bench on one block, beside the shore path south of the landing, seats toward the path.",
+      "reference": "ferry-shelter 13-sv-road-ne (83 Treasure Island Rd, Sep 2025): the timber bench on a wedge pair near the pier; 17-sv-mar2025-canopy (Mar 2025)",
+      "source": "set_piece",
+      "source_id": "plaza_wedges_shore",
+      "status": "placed",
+      "surface": {
+        "bias_m": 0.04,
+        "kind": "major_area",
+        "material_key": "major_area_leisure",
+        "source_key": "w1428380754"
+      },
+      "terrain_support": {
+        "elevation_m": 3.347,
+        "object_key": "land:w26767313:x_-1__z_3",
+        "triangle_index": 2
+      },
+      "yaw_radians": 2.045,
+      "yaw_source": "set_piece",
+      "zones": [
+        "ferry_arrival_plaza"
+      ]
+    },
+    {
+      "exclusion": null,
       "geometry": "point",
       "id": "set_piece:plaza_young_cypress_north",
       "kind": "tree",
@@ -47862,6 +54248,7 @@
   "seed": 1414091588,
   "zones": [
     {
+      "clutter": [],
       "fences": [],
       "furniture": [
         {
@@ -47886,6 +54273,7 @@
       ]
     },
     {
+      "clutter": [],
       "fences": [],
       "furniture": [
         {
@@ -47931,6 +54319,7 @@
       ]
     },
     {
+      "clutter": [],
       "fences": [
         {
           "built_runs": 2,
@@ -47954,6 +54343,15 @@
       "scatter": []
     },
     {
+      "clutter": [
+        {
+          "id": "palms_parked_cars",
+          "kind": "parked_car",
+          "pattern": "curb_parking",
+          "placed": 52,
+          "prop": "parked_car"
+        }
+      ],
       "fences": [
         {
           "built_runs": 1,
@@ -48013,6 +54411,15 @@
       ]
     },
     {
+      "clutter": [
+        {
+          "id": "forecourt_lot_cars",
+          "kind": "parked_car",
+          "pattern": "lot_stalls",
+          "placed": 64,
+          "prop": "parked_car"
+        }
+      ],
       "fences": [],
       "furniture": [
         {
