@@ -73,6 +73,14 @@ import {
 import { STREET_FENCE_INSIDE, STREET_FENCE_SCREENS, STREET_FENCE_TYPES } from "./lib/street-fence-generation.mjs";
 import { STREET_FURNITURE_PROPS } from "./lib/street-furniture-generation.mjs";
 import {
+  STREET_VEGETATION_BURY_M,
+  STREET_VEGETATION_MAX_FOOT_SPREAD_M,
+  STREET_VEGETATION_PROPS,
+  STREET_VEGETATION_SCALE_RANGE,
+  footSamples,
+  visibleGroundIndex,
+} from "./lib/street-vegetation-generation.mjs";
+import {
   STREET_GROUND_FEATURE_KINDS,
   STREET_GROUND_MAXIMUM_HEIGHT_M,
   STREET_GROUND_MINIMUM_HEIGHT_M,
@@ -797,16 +805,16 @@ function validateVegetation(worldRoot, manifest, records) {
   const unknownAnnotationsById = new Map(unknownAnnotations.map((feature) => [feature.id, feature]));
   for (const asset of vegetation.assets) validateGlbAsset(asset.path);
   const placements = vegetation.placements;
-  invariant(Array.isArray(placements) && placements.length === 124 && vegetation.counts.total === placements.length, "Expected the pinned 124-placement vegetation pass");
+  invariant(Array.isArray(placements) && placements.length === 123 && vegetation.counts.total === placements.length, "Expected the pinned 123-placement vegetation pass");
   invariant(stableJson(placements.map((placement) => placement.id)) === stableJson(placements.map((placement) => placement.id).sort()), "Vegetation placements are not canonically ordered");
   invariant(new Set(placements.map((placement) => placement.id)).size === placements.length, "Vegetation placement IDs are not unique");
-  invariant(stableJson(vegetation.counts.by_species) === stableJson({ broadleaf: 28, conifer: 21, ornamental_grass: 21, palm: 13, shrub: 41 }), "Vegetation species palette/density drift");
+  invariant(stableJson(vegetation.counts.by_species) === stableJson({ broadleaf: 28, conifer: 21, ornamental_grass: 20, palm: 13, shrub: 41 }), "Vegetation species palette/density drift");
   invariant(stableJson(vegetation.counts.by_zone) === stableJson({
     central_conifer_groves: 21,
     legacy_grid_broadleaf: 20,
     naip_unknown_shrubs: 22,
     north_west_lawn_broadleaf: 8,
-    south_ornamental_beds: 34,
+    south_ornamental_beds: 33,
     south_palm_rows: 13,
     south_shrub_groups: 6,
   }), "Vegetation zone density drift");
@@ -897,6 +905,11 @@ function validateVegetation(worldRoot, manifest, records) {
     }
   }
   invariant(vegetation.audit.terrain_grounded_count === placements.length && vegetation.audit.ybi_placements === 0, "Vegetation terrain/YBI audit drift");
+  // The placeholder keeps out of the street-detail pilot zones, which plant their own vegetation.
+  const pilot = vegetation.audit.street_detail_pilot_zones;
+  invariant(Array.isArray(pilot?.zone_ids) && pilot.zone_ids.length > 0 && Array.isArray(pilot.removed)
+    && pilot.removed.length === vegetation.audit.rejected.street_detail_pilot_zone
+    && pilot.removed.every((entry) => pilot.zone_ids.includes(entry.zone) && !placements.some((placement) => placement.id === entry.id)), "Vegetation pilot-zone removal audit drift");
   const annotationAudit = vegetation.audit.naip_unknown_annotations;
   const annotationOrder = new Map(unknownAnnotations.map((feature, index) => [feature.id, index]));
   expectedProceduralBufferExceptions.sort((left, right) =>
@@ -935,6 +948,60 @@ function validateVegetation(worldRoot, manifest, records) {
   return vegetation;
 }
 
+// The serialized records grouped back into chunks with plan bounds, for the
+// street-vegetation visible-ground query.
+function chunksOf(records) {
+  const chunks = new Map();
+  for (const { record, chunk_id: chunkId } of records.physical.values()) {
+    if (!chunks.has(chunkId)) chunks.set(chunkId, { chunk_id: chunkId, records: [], bounds_m: { min_x: Infinity, max_x: -Infinity, min_z: Infinity, max_z: -Infinity } });
+    const chunk = chunks.get(chunkId);
+    chunk.records.push(record);
+    for (let index = 0; index < record.vertices.length; index += 3) {
+      chunk.bounds_m.min_x = Math.min(chunk.bounds_m.min_x, record.vertices[index]);
+      chunk.bounds_m.max_x = Math.max(chunk.bounds_m.max_x, record.vertices[index]);
+      chunk.bounds_m.min_z = Math.min(chunk.bounds_m.min_z, record.vertices[index + 2]);
+      chunk.bounds_m.max_z = Math.max(chunk.bounds_m.max_z, record.vertices[index + 2]);
+    }
+  }
+  return chunks;
+}
+
+// A planted vegetation row: a kit prop of its kind with a variant and scale in
+// range, and a foot that meets the visible ground: nowhere under the foot is the
+// ground lower than the foot (it would float) and nowhere is it higher than the
+// trunk runs on below it (it would show a gap round a buried foot).
+function validatePlantedRow(row, groundAt) {
+  const spec = STREET_VEGETATION_PROPS[row.prop];
+  invariant(spec && spec.kinds.includes(row.kind) && row.status === "placed", `${row.id} prop ${row.prop} does not plant a placed ${row.kind} row`);
+  const params = row.prop_params ?? {};
+  invariant(Number.isInteger(params.variant) && params.variant >= 0 && params.variant < spec.variants, `${row.id} variant is invalid`);
+  invariant(Number.isFinite(params.scale) && params.scale >= STREET_VEGETATION_SCALE_RANGE[0] && params.scale <= STREET_VEGETATION_SCALE_RANGE[1], `${row.id} scale is invalid`);
+  invariant(Number.isFinite(params.lift_m) && Number.isFinite(params.foot_spread_m) && Number.isFinite(params.well_m) && params.well_m >= 0, `${row.id} foot settling is invalid`);
+  invariant(Number.isFinite(row.yaw_radians), `${row.id} needs a yaw`);
+  const foot = row.position_m[1] + row.surface.bias_m + params.lift_m;
+  let low = Infinity;
+  let high = -Infinity;
+  for (const point of footSamples([row.position_m[0], row.position_m[2]], spec.foot_m * params.scale)) {
+    const ground = groundAt(point);
+    invariant(ground, `${row.id} has no visible ground under its foot`);
+    low = Math.min(low, ground.y);
+    high = Math.max(high, ground.y);
+  }
+  // Coordinates are rounded to the millimetre on both sides of this comparison.
+  invariant(foot <= low + 0.002, `${row.id} floats ${(foot - low).toFixed(3)} m above the visible ground`);
+  invariant(high - foot <= Math.min(STREET_VEGETATION_MAX_FOOT_SPREAD_M, STREET_VEGETATION_BURY_M) + 0.002, `${row.id} foot is buried ${(high - foot).toFixed(3)} m deep on one side`);
+  if (params.well_m > 0) {
+    invariant(Number.isFinite(params.well_lift_m) && Array.isArray(params.well_slope) && params.well_slope.length === 2 && params.well_slope.every(Number.isFinite), `${row.id} mulch pit is invalid`);
+    // The pit's rim lies on the plane of the paving, within a centimetre and a half.
+    for (const point of footSamples([row.position_m[0], row.position_m[2]], params.well_m / 2)) {
+      const ground = groundAt(point);
+      invariant(ground, `${row.id} mulch pit has no paving under it`);
+      const plane = foot + params.well_lift_m + params.well_slope[0] * (point[0] - row.position_m[0]) + params.well_slope[1] * (point[1] - row.position_m[2]);
+      invariant(Math.abs(plane - ground.y) <= 0.015, `${row.id} mulch pit leaves its paving by ${(plane - ground.y).toFixed(3)} m`);
+    }
+  }
+}
+
 // Structure and grounding only: the street-detail content changes as steps add it.
 function validateStreetDetail(worldRoot, manifest, records) {
   invariant(manifest.street_detail?.path === "street_detail.json", "Manifest street-detail descriptor is missing");
@@ -954,6 +1021,7 @@ function validateStreetDetail(worldRoot, manifest, records) {
     invariant(sample.inside && Math.abs(sample.elevation - y) <= COORDINATE_ROUNDING_M + 1e-9, `${id} is not grounded on its land triangle`);
   };
   const inBoundary = (x, z) => pointInPlayableBoundary([x, z], manifest.playable_boundary);
+  const groundAt = visibleGroundIndex(chunksOf(records));
   const zoneIds = new Set(document.zones.map((zone) => zone.id));
   const rows = document.rows;
   invariant(Array.isArray(rows), "Street-detail rows are missing");
@@ -974,8 +1042,11 @@ function validateStreetDetail(worldRoot, manifest, records) {
       invariant(row.terrain_support.elevation_m === y, `${row.id} terrain_support elevation differs from its position`);
       invariant(row.yaw_radians === null ? row.yaw_source === null : Number.isFinite(row.yaw_radians) && Math.abs(row.yaw_radians) <= Math.PI && typeof row.yaw_source === "string", `${row.id} yaw is invalid`);
       invariant(Number.isFinite(row.surface?.bias_m) && row.surface.bias_m >= 0 && typeof row.surface.material_key === "string", `${row.id} surface is invalid`);
-      // A kit prop is built at runtime: a placed furniture row of the kind its prop draws.
-      if (row.prop !== undefined) {
+      // A kit prop is built at runtime: a placed furniture row of the kind its prop
+      // draws, or a planted vegetation row (validatePlantedRow).
+      if (row.prop !== undefined && row.layer === "vegetation") {
+        validatePlantedRow(row, groundAt);
+      } else if (row.prop !== undefined) {
         invariant(STREET_FURNITURE_PROPS[row.prop] === row.kind && row.layer === "furniture" && row.status === "placed", `${row.id} prop ${row.prop} does not match a placed ${row.kind} furniture row`);
         invariant(row.prop_params !== null && typeof row.prop_params === "object" && !Array.isArray(row.prop_params), `${row.id} prop_params must be an object`);
       }

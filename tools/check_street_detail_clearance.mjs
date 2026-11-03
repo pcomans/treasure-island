@@ -23,6 +23,8 @@
 // each one, the ground no building, built fence, street prop or the island's
 // edge covers, at the stock capsule's reach, must all connect to the open ground
 // beyond, so a player anywhere near a fence can walk out without the jetpack.
+// Planted trees count by their row's footprint like the street props (their
+// trunks are solid); grass clumps have no collision.
 
 import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -140,7 +142,8 @@ function fencedPockets(manifest, detail) {
     if (row.status !== "placed") continue;
     if (row.fence && row.prop != null) {
       for (const points of fencePieces(row)) solids.push({ points, radius: row.fence.half_thickness_m + PLAYER_CAPSULE_RADIUS_M });
-    } else if (row.prop != null && row.layer === "furniture") {
+    } else if (row.prop != null && (row.layer === "furniture" || (row.layer === "vegetation" && row.kind !== "grass_clump"))) {
+      // Street props and tree trunks are solid; grass clumps are not.
       solids.push({ points: [[row.position_m[0], row.position_m[2]]], radius: STREET_DETAIL_KINDS[row.kind].footprint_radius_m + PLAYER_CAPSULE_RADIUS_M });
     }
   }

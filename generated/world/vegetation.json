@@ -226,10 +226,30 @@
       "outside_playable_boundary": 7,
       "roads_paths": 71,
       "seed_acceptance": 429,
+      "street_detail_pilot_zone": 1,
       "terrain_shoreline_overlays": 15,
       "whole_island_qa_route": 8
     },
-    "terrain_grounded_count": 124,
+    "street_detail_pilot_zones": {
+      "removed": [
+        {
+          "id": "vegetation:south_ornamental_beds:row_021:column_012",
+          "position_m": [
+            -218.121,
+            442.335
+          ],
+          "zone": "avenue_of_the_palms"
+        }
+      ],
+      "zone_ids": [
+        "avenue_of_the_palms",
+        "building_1_forecourt",
+        "ferry_arrival_plaza",
+        "trade_winds_palms_link",
+        "treasure_island_road_south"
+      ]
+    },
+    "terrain_grounded_count": 123,
     "ybi_placements": 0
   },
   "clearances_m": {
@@ -246,7 +266,7 @@
   "counts": {
     "by_asset": {
       "res://game/resources/models/vegetation/kenney_nature_kit/grass_large.glb": 5,
-      "res://game/resources/models/vegetation/kenney_nature_kit/grass_leafsLarge.glb": 9,
+      "res://game/resources/models/vegetation/kenney_nature_kit/grass_leafsLarge.glb": 8,
       "res://game/resources/models/vegetation/kenney_nature_kit/grass.glb": 7,
       "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushDetailed.glb": 13,
       "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushLarge.glb": 17,
@@ -264,7 +284,7 @@
     "by_species": {
       "broadleaf": 28,
       "conifer": 21,
-      "ornamental_grass": 21,
+      "ornamental_grass": 20,
       "palm": 13,
       "shrub": 41
     },
@@ -273,11 +293,11 @@
       "legacy_grid_broadleaf": 20,
       "naip_unknown_shrubs": 22,
       "north_west_lawn_broadleaf": 8,
-      "south_ornamental_beds": 34,
+      "south_ornamental_beds": 33,
       "south_palm_rows": 13,
       "south_shrub_groups": 6
     },
-    "total": 124
+    "total": 123
   },
   "generator": "tools/lib/vegetation-generation.mjs",
   "placements": [
@@ -2403,26 +2423,6 @@
       },
       "uniform_scale": 4.679,
       "yaw_radians": -0.893,
-      "zone": "south_ornamental_beds"
-    },
-    {
-      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/grass_leafsLarge.glb",
-      "cell_id": "row_021:column_012",
-      "id": "vegetation:south_ornamental_beds:row_021:column_012",
-      "position_m": [
-        -218.121,
-        4.162,
-        442.335
-      ],
-      "source_id": "streetview:37.82080,-122.37400",
-      "species": "ornamental_grass",
-      "terrain_support": {
-        "elevation_m": 4.162,
-        "object_key": "land:w26767313:x_-1__z_1",
-        "triangle_index": 21
-      },
-      "uniform_scale": 3.062,
-      "yaw_radians": 0.331,
       "zone": "south_ornamental_beds"
     },
     {

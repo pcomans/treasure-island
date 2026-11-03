@@ -1,15 +1,17 @@
 extends SceneTree
-## Tree shootout (variant A): bakes each species' far-impostor image from its
-## representative tree's LOD0 and writes it next to the other tree textures.
-## The bake is lit by flat white ambient light only, so the image holds the
-## leaves' colour and shading; the game lights the impostor at runtime.
+## Bakes the far-impostor image of every tree variant of the street-vegetation
+## kit (game/scripts/world/street_vegetation_kit.gd) from its LOD0, framed as
+## the kit frames it (a palm's crown, a whole cypress), and writes them to
+## game/resources/textures/world/vegetation/impostors/. The bake is lit by flat
+## white ambient light only, with the breeze off, so the image holds the leaves'
+## colour and shading; the game lights the impostor at runtime.
 ##
-##   tools/godot --path . --script tools/tree_shootout/bake_impostors.gd
+##   tools/godot --path . --script tools/vegetation/bake_impostors.gd
 ##   tools/godot --headless --path . --import   # then import the new PNGs
 
-const Builder := preload("res://game/scripts/vegetation/shootout_tree_builder.gd")
-## Longest side of the saved image; the bake renders at twice this and halves it.
-const PIXELS := {"palm": 512, "cypress": 1024}
+const Kit := preload("res://game/scripts/world/street_vegetation_kit.gd")
+## Longest side of the saved image per prop; the bake renders at twice this and halves it.
+const PIXELS := {"mexican_fan_palm": 256, "canary_date_palm": 256, "monterey_cypress": 512}
 
 var _errors: Array[String] = []
 
@@ -24,18 +26,21 @@ func _run() -> void:
 		quit(1)
 		return
 	print("BAKE_RENDERER %s / %s / %s" % [RenderingServer.get_current_rendering_method(), RenderingServer.get_video_adapter_name(), DisplayServer.get_name()])
-	var builder := Builder.new()
-	for species: String in ["palm", "cypress"]:
-		await _bake(builder, species)
+	var kit := Kit.new()
+	kit.wind_strength = 0.0
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(Kit.TEXTURES + "impostors"))
+	for prop: String in PIXELS.keys():
+		for variant in Kit.variant_count(prop):
+			await _bake(kit, prop, variant)
 	for message in _errors:
 		push_error(message)
 	quit(0 if _errors.is_empty() else 1)
 
 
-func _bake(builder: Builder, species: String) -> void:
-	var frame := builder.impostor_frame(species)
+func _bake(kit: Kit, prop: String, variant: int) -> void:
+	var frame := kit.impostor_frame(prop, variant)
 	var size: Vector2 = frame.size
-	var longest: int = PIXELS[species]
+	var longest: int = PIXELS[prop]
 	var pixels := Vector2i(longest, longest)
 	if size.x > size.y:
 		pixels.y = maxi(64, int(round(longest * size.y / size.x)))
@@ -67,9 +72,8 @@ func _bake(builder: Builder, species: String) -> void:
 	camera.position = (frame.center as Vector3) + Vector3(0.0, 0.0, 80.0)
 	viewport.add_child(camera)
 	camera.current = true
-	var tree: Dictionary = frame.reference
 	var instance := MeshInstance3D.new()
-	instance.mesh = tree.lod0
+	instance.mesh = (frame.tree as Dictionary).lod0
 	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	viewport.add_child(instance)
 	for _i in 8:
@@ -78,7 +82,7 @@ func _bake(builder: Builder, species: String) -> void:
 	var image := viewport.get_texture().get_image()
 	viewport.queue_free()
 	if image == null or image.is_empty():
-		_errors.append("no image rendered for " + species)
+		_errors.append("no image rendered for %s %d" % [prop, variant])
 		return
 	image.convert(Image.FORMAT_RGBA8)
 	# Halve with premultiplied alpha so edges don't darken, then refill the
@@ -87,7 +91,7 @@ func _bake(builder: Builder, species: String) -> void:
 	image.resize(pixels.x, pixels.y, Image.INTERPOLATE_BILINEAR)
 	_unpremultiply(image)
 	_fill_transparent(image)
-	var path := builder.impostor_texture_path(species)
+	var path := Kit.impostor_texture_path(prop, variant)
 	var error := image.save_png(ProjectSettings.globalize_path(path))
 	if error != OK:
 		_errors.append("could not save %s (error %d)" % [path, error])
@@ -147,12 +151,12 @@ func _write_import(path: String) -> void:
 		"",
 		"[deps]", "", "source_file=\"%s\"" % path, "",
 		"[params]", "",
-		"compress/mode=2", "compress/high_quality=false", "compress/lossy_quality=0.7",
+		"compress/mode=0", "compress/high_quality=false", "compress/lossy_quality=0.7",
 		"compress/uastc_level=0", "compress/rdo_quality_loss=0.0", "compress/hdr_compression=1",
 		"compress/normal_map=0", "compress/channel_pack=0", "mipmaps/generate=true", "mipmaps/limit=-1",
 		"roughness/mode=0", "roughness/src_normal=\"\"",
 		"process/channel_remap/red=0", "process/channel_remap/green=1", "process/channel_remap/blue=2", "process/channel_remap/alpha=3",
 		"process/fix_alpha_border=true", "process/premult_alpha=false", "process/normal_map_invert_y=false",
-		"process/hdr_as_srgb=false", "process/hdr_clamp_exposure=false", "process/size_limit=0", "detect_3d/compress_to=0", "",
+		"process/hdr_as_srgb=false", "process/hdr_clamp_exposure=false", "process/size_limit=0", "detect_3d/compress_to=1", "",
 	]))
 	file.close()

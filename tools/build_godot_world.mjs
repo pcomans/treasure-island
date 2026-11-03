@@ -119,6 +119,7 @@ import {
   loadStreetDetailStairFlights,
   loadStreetDetailZones,
   streetDetailHardShapes,
+  streetDetailZoneShapes,
 } from "./lib/street-detail-generation.mjs";
 import { generateStreetGround } from "./lib/street-ground-generation.mjs";
 import {
@@ -2057,6 +2058,8 @@ function main() {
       terrainSupportAt: terrainSupportFromChunks,
       spawn: [spawn.origin[0], spawn.origin[2]],
       naipTreeAnnotations: JSON.parse(readFileSync(NAIP_TREE_ANNOTATIONS_PATH, "utf8")),
+      // The street-detail vegetation replaces the placeholder in the pilot zones.
+      pilotZones: streetDetailZoneShapes(streetConfig, loaded.properSources).filter(({ zone }) => zone.pilot),
     });
     const streetDetail = generateStreetDetail({
       projectRoot,

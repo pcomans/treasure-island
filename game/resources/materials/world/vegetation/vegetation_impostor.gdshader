@@ -1,7 +1,8 @@
 shader_type spatial;
-// Tree shootout (variant A) far impostor: a quad that turns about the vertical
-// axis to face the camera, textured with an image baked from LOD0.
-// VERTEX holds the quad's pivot, UV2 the corner offset from it in metres.
+// Street-vegetation far impostor (street_vegetation_kit.gd): a quad that turns
+// about the vertical axis to face the camera, textured with an image baked from
+// the tree's LOD0 (tools/vegetation/bake_impostors.gd). VERTEX holds the quad's
+// pivot, UV2 the corner offset from it in metres.
 render_mode cull_disabled, depth_draw_opaque;
 
 uniform sampler2D albedo_texture : source_color, filter_linear_mipmap, repeat_disable;

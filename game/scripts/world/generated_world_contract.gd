@@ -12,7 +12,7 @@ const ROAD_BASE_SURFACE_BIAS_M := 0.078
 const ROAD_PEDESTRIAN_SURFACE_BIAS_M := 0.08
 const VEGETATION_SCHEMA := "ti.vegetation/1"
 const VEGETATION_SEED := 1414092337
-const EXPECTED_VEGETATION_COUNT := 124
+const EXPECTED_VEGETATION_COUNT := 123
 const VEGETATION_ASSET_ROOT := "res://game/resources/models/vegetation/kenney_nature_kit/"
 const VEGETATION_ASSET_SPECIES := {
 	"res://game/resources/models/vegetation/kenney_nature_kit/grass.glb": "ornamental_grass",
@@ -33,6 +33,7 @@ const VEGETATION_ASSET_SPECIES := {
 }
 const STREET_DETAIL_SCHEMA := "ti.street-detail/1"
 const STREET_FENCE_KIT := preload("res://game/scripts/world/street_fence_kit.gd")
+const STREET_VEGETATION_KIT := preload("res://game/scripts/world/street_vegetation_kit.gd")
 ## The switchable street-detail layers, in PlayableWorld/StreetDetail node order.
 const STREET_DETAIL_LAYERS := ["vegetation", "furniture", "fences", "clutter"]
 ## Rows of the ground layer feed the always-on chunk surfaces.
@@ -534,11 +535,11 @@ static func _validate_vegetation(vegetation: Dictionary, chunks: Array[Dictionar
 	var counts: Dictionary = vegetation.get("counts", {})
 	var placements: Array = vegetation.get("placements", [])
 	if placements.size() != EXPECTED_VEGETATION_COUNT or int(counts.get("total", -1)) != EXPECTED_VEGETATION_COUNT:
-		return _failure("vegetation_count", "Expected the pinned 124-placement vegetation pass.")
+		return _failure("vegetation_count", "Expected the pinned 123-placement vegetation pass.")
 	var expected_species_counts := {
 		"broadleaf": 28,
 		"conifer": 21,
-		"ornamental_grass": 21,
+		"ornamental_grass": 20,
 		"palm": 13,
 		"shrub": 41,
 	}
@@ -547,7 +548,7 @@ static func _validate_vegetation(vegetation: Dictionary, chunks: Array[Dictionar
 		"legacy_grid_broadleaf": 20,
 		"naip_unknown_shrubs": 22,
 		"north_west_lawn_broadleaf": 8,
-		"south_ornamental_beds": 34,
+		"south_ornamental_beds": 33,
 		"south_palm_rows": 13,
 		"south_shrub_groups": 6,
 	}
@@ -733,6 +734,11 @@ static func _validate_street_detail(document: Dictionary, chunks: Array[Dictiona
 			var yaw: Variant = row.get("yaw_radians", false)
 			if not (typeof(yaw) == TYPE_NIL or (_is_finite_number(yaw) and absf(float(yaw)) <= PI)):
 				return _failure("street_detail_transform", "Street-detail yaw is invalid: %s" % row_id)
+			# A planted row: a street-vegetation kit prop the builder can draw, placed and with a yaw.
+			if layer == "vegetation" and row.has("prop"):
+				var plant_error := STREET_VEGETATION_KIT.params_error(str(row.prop), kind_name, row.get("prop_params", null))
+				if plant_error != "" or status != "placed" or typeof(yaw) == TYPE_NIL:
+					return _failure("street_detail_vegetation", "Street-detail planted row is invalid (%s): %s" % [plant_error, row_id])
 		else:
 			if not row.get("points_m", null) is Array or not row.get("terrain_supports", null) is Array or not row.get("vertex_source_ids", null) is Array:
 				return _failure("street_detail_transform", "Street-detail polyline arrays are missing: %s" % row_id)

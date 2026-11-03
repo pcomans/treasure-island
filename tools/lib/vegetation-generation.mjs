@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 
 import { pointInMultiPolygon } from "./osm-geometry.mjs";
+import { invariant } from "./world-contract.mjs";
 
 export const VEGETATION_SCHEMA = "ti.vegetation/1";
 export const VEGETATION_SEED = 0x54495631;
@@ -293,7 +294,13 @@ function clearanceAudit(clearances, requirements) {
   return failed ? { reason: failed[0], observed_m: round(clearances[failed[0]]), required_m: failed[1] } : null;
 }
 
-export function generateVegetation({ boundary, playableObjects, chunks, terrainSupportAt, spawn, naipTreeAnnotations }) {
+// pilotZones: the street-detail pilot zones ({zone, contains(xz)}, world x, z),
+// where the street-detail vegetation (tools/lib/street-vegetation-generation.mjs)
+// replaces this placeholder: no placeholder placement is kept inside one.
+export function generateVegetation({ boundary, playableObjects, chunks, terrainSupportAt, spawn, naipTreeAnnotations, pilotZones }) {
+  invariant(Array.isArray(pilotZones) && pilotZones.every((shape) => shape.zone?.pilot === true && typeof shape.contains === "function"), "Vegetation needs the street-detail pilot zone shapes");
+  const pilotZoneAt = (xz) => pilotZones.find((shape) => shape.contains(xz))?.zone.id ?? null;
+  const pilotRemovals = [];
   const roadGeometries = [...playableObjects.values()]
     .filter((object) => object.roles.includes("roads_paths"))
     .map((object) => object.geometry);
@@ -307,6 +314,7 @@ export function generateVegetation({ boundary, playableObjects, chunks, terrainS
   const rejected = Object.fromEntries(Object.keys(VEGETATION_CLEARANCES_M).map((key) => [key, 0]));
   rejected.outside_playable_boundary = 0;
   rejected.seed_acceptance = 0;
+  rejected.street_detail_pilot_zone = 0;
   for (const spec of ZONE_SPECS) {
     for (const candidate of candidatesFor(spec)) {
       const bytes = hashBytes(candidate.id);
@@ -326,6 +334,13 @@ export function generateVegetation({ boundary, playableObjects, chunks, terrainS
       const failed = clearanceAudit(clearances, VEGETATION_CLEARANCES_M);
       if (failed) {
         rejected[failed.reason] += 1;
+        continue;
+      }
+      // A placement the street-detail vegetation now replaces.
+      const pilotZone = pilotZoneAt(point);
+      if (pilotZone) {
+        rejected.street_detail_pilot_zone += 1;
+        pilotRemovals.push({ id: `vegetation:${candidate.id}`, zone: pilotZone, position_m: point });
         continue;
       }
       const species = speciesFor(spec, bytes);
@@ -380,6 +395,13 @@ export function generateVegetation({ boundary, playableObjects, chunks, terrainS
         position_m: [worldX, worldZ],
         ...failed,
       });
+      continue;
+    }
+    const pilotZone = pilotZoneAt(point);
+    if (pilotZone) {
+      rejected.street_detail_pilot_zone += 1;
+      pilotRemovals.push({ id: `vegetation:${NAIP_UNKNOWN_SHRUB_ZONE_ID}:${annotation.id}`, zone: pilotZone, position_m: point });
+      unknownAnnotationAudit.rejected.push({ annotation_id: annotation.id, position_m: [worldX, worldZ], reason: "street_detail_pilot_zone" });
       continue;
     }
     for (const key of ["roads_paths", "buildings_foundations"]) {
@@ -466,6 +488,10 @@ export function generateVegetation({ boundary, playableObjects, chunks, terrainS
         ),
       },
       rejected,
+      street_detail_pilot_zones: {
+        zone_ids: pilotZones.map((shape) => shape.zone.id).sort(),
+        removed: pilotRemovals.sort((left, right) => left.id.localeCompare(right.id)),
+      },
       minimum_observed_clearances_m: Object.fromEntries(
         Object.entries(minimumObserved).map(([key, value]) => [key, round(value)]),
       ),

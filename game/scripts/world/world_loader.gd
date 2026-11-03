@@ -124,6 +124,16 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 		_free_staged(staged_reports)
 		_fail(str(fence_result.get("code", "street_fence_build")), str(fence_result.get("message", "Could not build the street fences.")), [])
 		return
+	# The planted trees and grass of the street-detail vegetation rows, beside the placeholder vegetation.
+	var planting_result := StreetVegetationBuilder.new().build(validation.street_detail)
+	if not planting_result.ok:
+		vegetation_result.node.free()
+		furniture_result.node.free()
+		fence_result.node.free()
+		shoreline_result.node.free()
+		_free_staged(staged_reports)
+		_fail(str(planting_result.get("code", "street_vegetation_build")), str(planting_result.get("message", "Could not build the street vegetation.")), [])
+		return
 
 	# Attach only after every chunk and context mesh was validated and built.
 	for report: Dictionary in staged_reports:
@@ -136,6 +146,7 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 		vegetation_result.node.free()
 		furniture_result.node.free()
 		fence_result.node.free()
+		planting_result.node.free()
 		_fail("housing_family",str(family_result.message),family_result.get("source_keys",[]))
 		return
 	var bulgarian_result := BULGARIAN_WALL.install(buildings,ground_and_areas,validation.chunks)
@@ -143,6 +154,7 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 		vegetation_result.node.free()
 		furniture_result.node.free()
 		fence_result.node.free()
+		planting_result.node.free()
 		_fail("bulgarian_wall",str(bulgarian_result.message),bulgarian_result.get("source_keys",[]))
 		return
 	var mersea_result := MERSEA.install(buildings, validation.chunks)
@@ -150,9 +162,11 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 		vegetation_result.node.free()
 		furniture_result.node.free()
 		fence_result.node.free()
+		planting_result.node.free()
 		_fail("mersea", str(mersea_result.message), [])
 		return
 	street_detail_layer("vegetation").add_child(vegetation_result.node)
+	street_detail_layer("vegetation").add_child(planting_result.node)
 	street_detail_layer("furniture").add_child(furniture_result.node)
 	street_detail_layer("fences").add_child(fence_result.node)
 	runtime_evidence.set_vegetation_report(vegetation_result)
@@ -167,6 +181,7 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 	ready_report["bulgarian_wall"] = bulgarian_result
 	ready_report["vegetation_multimesh_batches"] = int(vegetation_result.multimesh_batches)
 	ready_report["vegetation_rendered_triangles"] = int(vegetation_result.rendered_triangles)
+	ready_report["street_vegetation"] = {"trees": int(planting_result.trees), "grass_clumps": int(planting_result.grass_clumps), "multimesh_batches": int(planting_result.multimesh_batches), "collision_shapes": int(planting_result.collision_shapes)}
 	ready_report["shoreline_boulders"] = int(shoreline_result.boulders)
 	ready_report["shoreline_multimesh_batches"] = int(shoreline_result.multimesh_batches)
 	ready_report["street_detail"] = street_detail_report()
