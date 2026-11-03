@@ -82,17 +82,17 @@ const FAN_PALMS := [
 ## Building 1's date palms range from a low one by the forecourt corner to the
 ## tall row along Treasure Island Road (Sep 2025 photos).
 const CANARY_PALMS := [
-	{"seed": 21, "height": 3.6, "lean": 0.08, "radius_low": 0.4, "radius_top": 0.38, "flare": 0.16, "knob": 1.35, "knob_radius": 0.58, "fronds": 54, "frond": 4.4},
-	{"seed": 22, "height": 5.6, "lean": 0.12, "radius_low": 0.41, "radius_top": 0.38, "flare": 0.17, "knob": 1.45, "knob_radius": 0.6, "fronds": 56, "frond": 4.7},
-	{"seed": 23, "height": 7.6, "lean": 0.16, "radius_low": 0.42, "radius_top": 0.39, "flare": 0.18, "knob": 1.55, "knob_radius": 0.62, "fronds": 58, "frond": 4.9},
-	{"seed": 24, "height": 9.8, "lean": 0.2, "radius_low": 0.44, "radius_top": 0.4, "flare": 0.19, "knob": 1.65, "knob_radius": 0.65, "fronds": 60, "frond": 5.1},
+	{"seed": 21, "height": 3.6, "lean": 0.08, "radius_low": 0.4, "radius_top": 0.38, "flare": 0.16, "knob": 1.35, "knob_radius": 0.58, "fronds": 66, "frond": 4.4},
+	{"seed": 22, "height": 5.6, "lean": 0.12, "radius_low": 0.41, "radius_top": 0.38, "flare": 0.17, "knob": 1.45, "knob_radius": 0.6, "fronds": 68, "frond": 4.7},
+	{"seed": 23, "height": 7.6, "lean": 0.16, "radius_low": 0.42, "radius_top": 0.39, "flare": 0.18, "knob": 1.55, "knob_radius": 0.62, "fronds": 70, "frond": 4.9},
+	{"seed": 24, "height": 9.8, "lean": 0.2, "radius_low": 0.44, "radius_top": 0.4, "flare": 0.19, "knob": 1.65, "knob_radius": 0.65, "fronds": 72, "frond": 5.1},
 ]
 ## Two old wind-shaped cypresses (Building 1 grounds, Sep 2025 and Jul 2023)
 ## and a young conical one (the Waterfront Plaza, Sep 2025).
 const CYPRESSES := [
 	{"form": "old", "seed": 1, "height": 13.0, "spread": 17.0, "trunk_radius": 0.5, "fork": 2.4, "leaders": 4, "shear": 0.3},
 	{"form": "old", "seed": 7, "height": 11.0, "spread": 12.5, "trunk_radius": 0.42, "fork": 2.0, "leaders": 3, "shear": 0.4},
-	{"form": "young", "seed": 5, "height": 4.4, "spread": 3.2, "trunk_radius": 0.14},
+	{"form": "young", "seed": 5, "height": 4.6, "spread": 3.0, "trunk_radius": 0.14},
 ]
 ## The Treasure Island prevailing wind is westerly, so old crowns reach east (+X).
 const CYPRESS_LEE := Vector2(1.0, 0.0)
@@ -568,11 +568,13 @@ func _build_canary_palm(p: Dictionary) -> Dictionary:
 		fronds.append({
 			"age": age,
 			"azimuth": azimuth,
-			"elevation": deg_to_rad(lerpf(66.0, -46.0, pow(age, 0.75)) + rng.randf_range(-7.0, 7.0)),
+			# A full, rounded crown: young fronds rise, the middle ones spread level and
+			# arch over, the oldest (the trimmed palms' lowest) hang to about 40 degrees.
+			"elevation": deg_to_rad(lerpf(60.0, -24.0, pow(age, 0.75)) + rng.randf_range(-7.0, 7.0)),
 			"attach": top + axis_top * knob * attach_f + Vector3(cos(azimuth), 0.0, sin(azimuth)) * float(knob_radius_at.call(attach_f)) * 0.8,
 			"length": length,
-			"droop": lerpf(0.12, 0.55, age) * rng.randf_range(0.85, 1.15),
-			"width": length * 0.25 * rng.randf_range(0.9, 1.04),
+			"droop": lerpf(0.1, 0.4, age) * rng.randf_range(0.85, 1.15),
+			"width": length * 0.21 * rng.randf_range(0.9, 1.04),
 			"fold": deg_to_rad(rng.randf_range(22.0, 34.0)),
 			"cell": rng.randi_range(0, 1),
 			"shade": rng.randf_range(0.9, 1.06),
@@ -790,22 +792,23 @@ func _cypress_young_skeleton(p: Dictionary, rng: RandomNumberGenerator) -> Dicti
 		radii.append(lerpf(trunk_radius * 1.3, 0.025, pow(s, 0.8)))
 	var branches := [{"depth": 0, "points": stem, "radii": radii}]
 	var clusters := []
-	var tiers := 7
+	var tiers := 8
 	var phase := rng.randf() * TAU
 	for tier in tiers:
 		var f := (float(tier) + rng.randf_range(0.2, 0.8)) / tiers
-		var y := lerpf(0.7, height * 0.86, f)
-		# Widest low down, tapering unevenly to the leader.
-		var reach := radius * pow(1.0 - f * 0.85, 0.85) * rng.randf_range(0.75, 1.1)
+		# Feathered almost to the ground, as the young plaza cypresses are (Sep 2025).
+		var y := lerpf(0.3, height * 0.86, f)
+		# Widest low down, tapering unevenly to a pointed leader.
+		var reach := radius * (1.0 - f * 0.88) * rng.randf_range(0.75, 1.1)
 		var count := 3 if f < 0.7 else 2
 		for k in count:
 			var angle := phase + TAU * (k + 0.5 * tier) / count + rng.randf_range(-0.5, 0.5)
 			var out := Vector3(cos(angle), 0.0, sin(angle))
-			var origin := lean * f * f + Vector3.UP * (y - 0.3)
-			var tip := origin + out * reach + Vector3.UP * rng.randf_range(0.25, 0.6)
+			var origin := lean * f * f + Vector3.UP * maxf(0.15, y - 0.3)
+			var tip := origin + out * reach + Vector3.UP * rng.randf_range(0.2, 0.5)
 			branches.append({"depth": 2, "points": PackedVector3Array([origin, origin.lerp(tip, 0.55) + Vector3.UP * 0.1, tip]), "radii": PackedFloat32Array([0.035, 0.025, 0.012])})
-			clusters.append({"center": tip, "reach": maxf(0.45, reach * rng.randf_range(0.5, 0.7)), "half_height": rng.randf_range(0.35, 0.55)})
-	clusters.append({"center": lean + Vector3.UP * (height * 0.93), "reach": 0.45, "half_height": 0.45})
+			clusters.append({"center": tip, "reach": maxf(0.38, reach * rng.randf_range(0.45, 0.62)), "half_height": rng.randf_range(0.3, 0.48)})
+	clusters.append({"center": lean + Vector3.UP * (height * 0.93), "reach": 0.32, "half_height": 0.42})
 	return {"branches": branches, "clusters": clusters, "crown": _cloud_centroid(clusters), "radius": radius, "height": height, "young": true}
 
 
@@ -832,14 +835,15 @@ func _polyline_at(points: PackedVector3Array, s: float) -> Vector3:
 
 
 ## Foliage cards for the clouds: wind-flattened plates, and upright clumps
-## round their rims (a young tree is mostly clumps).
+## round their rims (a young tree has only the clumps).
 func _cypress_cards(rng: RandomNumberGenerator, clusters: Array, young: bool) -> Array:
 	var cards := []
 	for cloud: Dictionary in clusters:
 		var center: Vector3 = cloud.center
 		var reach: float = cloud.reach
 		var half_height: float = cloud.half_height
-		var plates := 1 if young else clampi(int(round(reach * reach * 2.8)), 6, 26)
+		# A young tree is all upright clumps: a flat plate would show edge-on as a stray card.
+		var plates := 0 if young else clampi(int(round(reach * reach * 2.8)), 6, 26)
 		for i in plates:
 			var angle := rng.randf() * TAU
 			var distance := sqrt(rng.randf()) * reach * 0.7
@@ -847,9 +851,9 @@ func _cypress_cards(rng: RandomNumberGenerator, clusters: Array, young: bool) ->
 			cards.append({
 				"kind": "plate",
 				"center": center + Vector3(cos(angle) * distance, rng.randf_range(-0.1, 0.55) * half_height, sin(angle) * distance),
-				"normal": Vector3.UP.rotated(tilt_axis, deg_to_rad(rng.randf_range(0.0, 30.0 if young else 14.0))),
+				"normal": Vector3.UP.rotated(tilt_axis, deg_to_rad(rng.randf_range(0.0, 14.0))),
 				"spin": rng.randf() * TAU,
-				"size": rng.randf_range(1.0, 1.5) if young else rng.randf_range(1.4, 2.3),
+				"size": rng.randf_range(1.4, 2.3),
 				"cloud": cloud,
 				"lod1": i % 3 == 0,
 				"shade": rng.randf_range(0.9, 1.08),
@@ -924,7 +928,7 @@ func _cypress_card(s: Surf, card: Dictionary, skeleton: Dictionary, lod: int) ->
 			var shade := clampf(lerpf(0.4, 1.0, pow(inside, 0.8)) * lerpf(0.68, 1.0, outward) * float(card.shade), 0.3, 1.0)
 			if skeleton.get("young", false):
 				# Young cypresses photograph darker than the old crowns' sunlit tops.
-				shade *= 0.62
+				shade *= 0.74
 			var sway := CYPRESS_SWAY * height * pow(clampf(position.y / height, 0.0, 1.0), 2.0)
 			s.add(position, n, cell.position + Vector2(x + 0.5, 0.5 - y) * cell.size, Color(shade, shade, shade), Vector2(sway, 0.012))
 	for j in grid:
@@ -1079,15 +1083,15 @@ func material(key: String) -> Material:
 		"fan_palm_bark":
 			made = _bark("fan_palm_bark.png", Color(0.84, 0.82, 0.78))
 		"canary_bark":
-			made = _bark("canary_trunk_bark.png", Color(0.86, 0.82, 0.78))
+			made = _bark("canary_trunk_bark.png", Color(0.88, 0.85, 0.82))
 		"canary_knob":
-			made = _bark("canary_knob.png", Color(0.62, 0.52, 0.42))
+			made = _bark("canary_knob.png", Color(0.6, 0.53, 0.47))
 		"cypress_bark":
 			made = _bark("cypress_bark.png", Color(0.92, 0.9, 0.88))
 		"fan_palm_foliage":
 			made = _foliage("fan_palm_foliage_atlas.png", Color(0.66, 0.7, 0.62), Color(0.09, 0.11, 0.05), Vector2(1024.0, 1024.0), 0.15, 0.82)
 		"canary_foliage":
-			made = _foliage("canary_frond_atlas.png", Color(0.74, 0.82, 0.64), Color(0.1, 0.13, 0.04), Vector2(512.0, 2048.0), 0.15, 0.82)
+			made = _foliage("canary_frond_atlas.png", Color(0.8, 0.85, 0.74), Color(0.1, 0.13, 0.05), Vector2(512.0, 2048.0), 0.15, 0.82)
 		"cypress_foliage":
 			made = _foliage("cypress_foliage_atlas.png", Color(0.74, 0.8, 0.6), Color(0.08, 0.12, 0.04), Vector2(1024.0, 512.0), 0.06, 0.95)
 		"grass":

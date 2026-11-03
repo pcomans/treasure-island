@@ -70,12 +70,14 @@ func _initialize() -> void:
 	_save(palm, OUT + "fan_palm_foliage_atlas.png", errors)
 
 	# Canary Island date palm fronds, 512 x 2048: two 256 x 2048 cells, each a
-	# whole frond from its bare petiole at the bottom edge to its tip at the top,
-	# the rachis on the cell's centre line.
+	# whole frond stretched to fill its cell, from its bare petiole at the bottom
+	# edge to its tip at the top, the rachis on the cell's centre line. The
+	# generated fronds are drawn stubby (about 1:3); the kit's ribbons are about
+	# 1:5, so the leaflets come out long and swept forward as on the palm.
 	var fronds := Image.create_empty(512, 2048, false, Image.FORMAT_RGBA8)
 	var frond_names := ["canary_frond_b.png", "canary_frond_a.png"]
 	for index in frond_names.size():
-		var frond := _keyed_fit(images[frond_names[index]], 256, 2048)
+		var frond := _keyed_stretch(images[frond_names[index]], 256, 2048)
 		fronds.blit_rect(frond, Rect2i(0, 0, 256, 2048), Vector2i(256 * index, 0))
 	_save(fronds, OUT + "canary_frond_atlas.png", errors)
 
@@ -100,8 +102,11 @@ func _initialize() -> void:
 	# Tiled barks, 512 x 512 opaque: [output, tint, desaturation].
 	var barks := {
 		"fan_bark_grey.png": ["fan_palm_bark.png", Color(1.0, 1.0, 1.0), 0.0],
-		"canary_trunk_a.png": ["canary_trunk_bark.png", Color(1.0, 0.98, 0.96), 0.1],
-		"canary_knob.png": ["canary_knob.png", Color(1.0, 0.97, 0.94), 0.0],
+		# Greyer than the generated warm brown: the palms' leaf-scar trunks read
+		# grey-brown in the dated Building 1 photos.
+		"canary_trunk_a.png": ["canary_trunk_bark.png", Color(1.0, 0.98, 0.97), 0.4],
+		# The trimmed leaf bases read brown, not orange, in the Building 1 photos.
+		"canary_knob.png": ["canary_knob.png", Color(1.0, 0.97, 0.94), 0.3],
 		# The generated bark is redder than Monterey cypress's grey-brown.
 		"cypress_bark.png": ["cypress_bark.png", Color(0.95, 0.93, 0.92), 0.45],
 	}
@@ -131,23 +136,20 @@ func _keyed(source: Image, width: int, height: int) -> Image:
 	return image
 
 
-## Keyed, cropped to the leaf and fitted into width x height: scaled to the full
-## height (or width, if wider), centred across on the leaf's middle and
-## bottom-aligned, so its axis runs up the cell's centre line from the bottom edge.
-func _keyed_fit(source: Image, width: int, height: int) -> Image:
+## Keyed, cropped to the leaf (symmetric about its middle, so its axis stays on
+## the cell's centre line) and stretched to fill width x height.
+func _keyed_stretch(source: Image, width: int, height: int) -> Image:
 	var image := _key(source)
 	var used := image.get_used_rect()
 	var middle := used.get_center().x
 	var half := maxi(middle - used.position.x, used.end.x - middle)
 	var crop := Rect2i(middle - half, used.position.y, half * 2, used.size.y).intersection(Rect2i(Vector2i.ZERO, image.get_size()))
 	var leaf := image.get_region(crop)
-	var scale := minf(float(width) / leaf.get_width(), float(height) / leaf.get_height())
-	var size := Vector2i(maxi(1, int(round(leaf.get_width() * scale))), maxi(1, int(round(leaf.get_height() * scale))))
-	leaf.resize(size.x, size.y, Image.INTERPOLATE_LANCZOS)
-	var cell := Image.create_empty(width, height, false, Image.FORMAT_RGBA8)
-	cell.blit_rect(leaf, Rect2i(Vector2i.ZERO, size), Vector2i((width - size.x) / 2, height - size.y))
-	_fill_transparent(cell)
-	return cell
+	# Refill before resizing too, so the stretch blends leaf colour, not key colour, into the edges.
+	_fill_transparent(leaf)
+	leaf.resize(width, height, Image.INTERPOLATE_LANCZOS)
+	_fill_transparent(leaf)
+	return leaf
 
 
 func _key(source: Image) -> Image:
