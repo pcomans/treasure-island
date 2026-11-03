@@ -194,8 +194,9 @@ void fragment() {
 """
 	var custom_glass := ShaderMaterial.new()
 	custom_glass.shader=optical
+	# The web build uses this same glass: it compiles in Compatibility (above).
 	var glass: Material = custom_glass
-	if optical_pilot or OS.has_feature("web") or OS.get_cmdline_user_args().has("--web-world-bake"):
+	if optical_pilot:
 		# Native PBR glass variant: restrained tint over actual shaded exterior depth.
 		# Reuses family geometry; parameters are game-art inference, not measured glass.
 		var native_glass := StandardMaterial3D.new()
