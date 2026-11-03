@@ -12,7 +12,7 @@ The Chapel follow-up owner feedback again exposed missing opening coverage after
 
 The owner clarified the work order: basic shape/footprint/ground fit and coarse roof silhouette; complete doors/entrances/windows/roof forms across sides; secondary details; textures/PBR/material finish; then decals/final finishing. Keep source/layout comparison active throughout and redirect later polish to a bounded whole earlier family whenever substantive coverage is missing. Minimal provisional materials may help read architecture, and good existing materials remain; neither excuses an incomplete opening or roof family. This refines scope selection within the existing finite loop, without new phase approvals or surveyed-count gates.
 
-**Cause and prevention:** A scoped facade/finish improvement was promoted to whole quality without resolving the other visible sides. Before choosing scope, compare full target-reference and gameplay originals, using original-pixel crops for unclear architecture/opening/material families. Seek available Street View, Maps place photographs, relevant primary web and owner photos; Apple imagery may clarify layout. A failed black viewer or unread gallery is not a completed source attempt. After meaningful bounded attempts, record useful URL/date/side/context or actual search/access gaps, plus one concise observed/modeled/missing/inferred statement per observed side/unit in the ordinary note. Unresolved opening coverage cannot become acceptable finish inference. Review all actual gameplay sides and judge coherent inferred surfaces too; do not invent hidden detail or require surveyed counts. A scoped PASS or protected art boundary cannot exempt visibly unfinished sides; reopen whole-quality work through bounded scope while preserving source/gameplay invariants and historical credit.
+**Cause and prevention:** A scoped facade/finish improvement was promoted to whole quality without resolving the other visible sides. Before choosing scope, compare full target-reference and gameplay originals, using original-pixel crops for unclear architecture/opening/material families. Seek available Street View, Maps place photographs, relevant primary web and owner photos; Apple imagery may clarify layout. A failed black viewer or unread gallery is not a completed source attempt. After meaningful bounded attempts, record useful URL/date/side/context or actual search/access gaps, plus one concise observed/modeled/missing/inferred statement per observed side/unit in the ordinary note. Unresolved opening coverage cannot become acceptable finish inference. Review all actual gameplay sides; a side without a dated photo stays as it is (no invented detail, owner 2026-11-03), and surveyed counts are not required. A scoped PASS or protected art boundary cannot exempt visibly unfinished sides; reopen whole-quality work through bounded scope while preserving source/gameplay invariants and historical credit.
 
 Mariner2026-10-10 exposed the same error in stage bookkeeping: scoped front/end/roof
 PASS plus full mechanical/suite success was translated into both units' L2 C.
@@ -20,6 +20,7 @@ Actual1219 north and1212 south showed blank rears without reference-backed openi
 coverage. Retain supported L1 envelope/site C but keep complete all-side L2 U;
 compare each checkbox's full definition with actual side coverage before updating
 it. Unknown opening coverage is neither verified absence nor a proven motif defect.
+(2026-11-03: stage 2 covers photographed sides only)
 
 On 2026-10-16, the Building 1 follow-up discussion exposed a shared-context gap:
 the author, reviewer and coordinator needed to know and focus on the same active
@@ -677,6 +678,8 @@ A 2026-10-17 Gateview B rework recheck showed 9–28% AE on closeups and up to 2
 
 ## Inferred non-residential sides still need entrances
 
+**Superseded 2026-11-03** by the [no-invented-detail rule](AGENTS.md#facade-recognizability-policy): a side without a dated photo gets no entrance or openings; it stays as it is. Kept for history:
+
 The 2026-10-17 halls review sent 850 Avenue H back for about 150 m of blank ochre wall with no entrance on any side; its real sides are hidden behind an unmodeled container wall. The 575 Avenue D inferred sides also had no doors. "Plain because unobserved" becomes a blank wall in game. Give every inferred side of a non-residential building a believable personnel entrance and service openings, labelled `production_inference`.
 
 ## Track unmodeled inventory by checklist status, including off-tip finals
@@ -953,3 +956,11 @@ On 2026-11-03 a keyboard-driven capture of the web build flew nowhere twice. Fir
 ## Give Decal art a surface mesh where Decals aren't drawn
 
 Godot's Compatibility renderer, the web build's only renderer, does not draw `Decal` nodes. The Mersea mural, a Decal, was missing from every web build until 2026-11-03 while desktop showed it, and no web check had looked at it. Where a Decal paints art, give `gl_compatibility` (the renderer the web world is baked under) a decor mesh that copies the receiving surface under the Decal's footprint, with the image mapped as the Decal projects it. Pull it toward the camera along the view ray in its vertex shader (`POSITION = PROJECTION_MATRIX * vec4((MODELVIEW_MATRIX * vec4(VERTEX, 1.0)).xyz * 0.999, 1.0)`), rather than offsetting it: the pixels stay put, it stays in front of the surface at any range (checked from 5 m to 108 m), and there is no gap to see at grazing angles. Keep Forward+ on the Decal so desktop stays pixel-identical. Before calling art done, look at it in a native Compatibility capture or the web build if it relies on a feature Compatibility lacks.
+
+## Read what a "massing only" or "plain" unit actually builds
+
+On 2026-11-03 several units recorded as massing only (1447 and 1442 Chinook, 1105 Bigelow, w96698650) still built generic windows and doors from the producer's default scheme. A checklist label does not show what a config builds: read the config's schemes, or the render, before recording a side as plain.
+
+## Count "no bound photo", not "no photo"
+
+An evidence inventory built from incomplete photo bindings overstates gaps. On 2026-11-03 a draft inventory counted sides labelled "unbound" or "none (inherits)" as unphotographed; many of those rows were only "unbound", 4 of 5 spot-checked unbound photos clearly showed the side, and "none (inherits)" meant no retained photo was linked in our notes, not that none exists (the recapture found new end-wall views easily). The owner withdrew it as misleading. Label such counts "no bound photo" and verify unbound sides before publishing.
