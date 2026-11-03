@@ -112,7 +112,7 @@ const PROPS := {
 	"mexican_fan_palm": {"kinds": ["palm_slot", "tree"], "variants": FAN_PALMS, "ranges": [35.0, 95.0, 900.0], "foot_m": 0.45},
 	"canary_date_palm": {"kinds": ["palm_slot", "tree"], "variants": CANARY_PALMS, "ranges": [45.0, 110.0, 900.0], "foot_m": 0.7},
 	"monterey_cypress": {"kinds": ["tree"], "variants": CYPRESSES, "ranges": [45.0, 110.0, 900.0], "foot_m": 0.8},
-	"clump_grass": {"kinds": ["grass_clump"], "variants": GRASSES, "ranges": [45.0], "foot_m": 0.3},
+	"clump_grass": {"kinds": ["grass_clump"], "variants": GRASSES, "ranges": [70.0], "foot_m": 0.3},
 }
 
 ## The impostor bake turns the breeze off on every material it draws.

@@ -20,6 +20,7 @@ import {
   STREET_VEGETATION_PROPS,
   bedOffsets,
   drawVegetationVariant,
+  footSamples,
   plantRow,
   validateVegetationRuleParams,
   validateVegetationSetPieceParams,
@@ -1128,7 +1129,9 @@ export function generateStreetDetail({
             if (violation) return violation.reason;
             const material = surfaceAt(xz).material_key;
             if (STREET_DETAIL_KINDS[rule.kind].layer === "vegetation" && UNPLANTABLE_MATERIALS.includes(material)) return "unplantable_surface";
-            if (rule.surfaces && !rule.surfaces.includes(material)) return "rule_surface";
+            // The whole footprint stands on the rule's surfaces, so a plant keeps
+            // inside its bed, clear of the curb and the cars parked along it.
+            if (rule.surfaces && !footSamples(xz, STREET_DETAIL_KINDS[rule.kind].footprint_radius_m).every((point) => rule.surfaces.includes(surfaceAt(point).material_key))) return "rule_surface";
             return null;
           };
           let xz = null;
