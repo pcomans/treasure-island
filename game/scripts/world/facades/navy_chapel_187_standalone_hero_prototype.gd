@@ -24,6 +24,15 @@ const OBSERVED_WSW_JUNCTION_RUNS := [3, 4]
 # Jul2023 ENE low-junction projection, partly obstructed: one disclosed
 # production-inference door assembly; no observed door count is claimed.
 const QUALIFIED_ENE_JUNCTION_RUNS := [16]
+# Jun2026 contributor rear views (nc03/nc04, heading ~152-160): the NNW nave
+# rear wall under the hip carries seven tall transomed windows in 2+3+2 groups,
+# and both wing NNW faces carry a window group (the SF skyline at the frames'
+# right edge puts the WSW wing on the right, the ENE wing's four lights left).
+const OBSERVED_NNW_REAR_RUNS := [27, 28]
+const OBSERVED_ENE_WING_NNW_RUNS := [22]
+const OBSERVED_WSW_WING_NNW_RUNS := [32, 33]
+# Jul2023 Commons: a deep recessed porch under the ENE cross-wing gable end.
+const OBSERVED_ENE_WING_GABLE_RUNS := [19, 20, 21]
 # Every recessed opening-group chain, indexed by group "chain". Each chain is
 # one colinear run sequence sharing a single outward normal.
 const RECESSED_CHAINS := [
@@ -34,10 +43,16 @@ const RECESSED_CHAINS := [
 	OBSERVED_WSW_WING_SIDE_RUNS,
 	OBSERVED_WSW_JUNCTION_RUNS,
 	QUALIFIED_ENE_JUNCTION_RUNS,
+	OBSERVED_NNW_REAR_RUNS,
+	OBSERVED_ENE_WING_NNW_RUNS,
+	OBSERVED_WSW_WING_NNW_RUNS,
+	OBSERVED_ENE_WING_GABLE_RUNS,
 ]
-# Chains >= this index take their groups from config "wing_and_junction_assemblies".
+# Chains >= this index take their groups from config "wing_and_junction_assemblies",
+# except the NNW rear hall wall, whose groups come from "nnw_rear_window_groups".
 const ASSEMBLY_CHAIN_FIRST := 3
-const PROTECTED_RUNS := [5, 15, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33]
+# The hoarded ENE rear returns (23-26) and the small WSW returns stay protected.
+const PROTECTED_RUNS := [5, 15, 23, 24, 25, 26, 29, 30, 31]
 # Clearance between a group's dressed edge and a chain end or a neighbouring
 # group (surround, sill and head overhang are within it).
 const GROUP_END_MARGIN_M := 0.3
@@ -143,7 +158,7 @@ func _compose_study(wall: Dictionary, roof_record: Dictionary, config: Dictionar
 	# footprint sits a few centimetres outside the nominal hall half-width.
 	var roof_at := func(point: Vector3) -> float:
 		return eave - maxf(0.0, absf((point - c).dot(t)) - width * 0.5) * hall_slope
-	var groups := _opening_groups(wall, inf, config.get("wing_and_junction_assemblies", []) as Array)
+	var groups := _opening_groups(wall, inf, config.get("wing_and_junction_assemblies", []) as Array, config.get("nnw_rear_window_groups", []) as Array)
 	var fit_error := _groups_fit_chains(wall, groups, c, t, width, eave)
 	if not fit_error.is_empty():
 		return _failure("navy_chapel_opening_group_bounds", fit_error)
@@ -171,7 +186,13 @@ func _compose_study(wall: Dictionary, roof_record: Dictionary, config: Dictionar
 			var bucket := protected if run in PROTECTED_RUNS else shell
 			var chain := _chain_index(run)
 			if chain >= 0:
-				_append_group_recesses(shell, glass, wall, chain, run, left, right, top, groups, float(inf.opening_group_recess_depth))
+				# The NNW rear wall top follows the hip eave plane, which dips at the
+				# corners where the run ends a few centimetres past the hall half-width.
+				var flat_top := top
+				var top_at: Callable = func(_point: Vector3) -> float: return flat_top
+				if run in OBSERVED_NNW_REAR_RUNS:
+					top_at = roof_at
+				_append_group_recesses(shell, glass, wall, chain, run, left, right, top_at, groups, float(inf.opening_group_recess_depth))
 			elif top == eave:
 				_append_quad(bucket, left, right, Vector3(right.x, roof_at.call(right), right.z), Vector3(left.x, roof_at.call(left), left.z), f.normal)
 			else:
@@ -212,11 +233,7 @@ func _compose_study(wall: Dictionary, roof_record: Dictionary, config: Dictionar
 	var eave_out := float(inf.roof_eave_overhang_m)
 	var rake_out := float(inf.roof_rake_overhang_m)
 	var fascia := float(inf.roof_fascia_depth_m)
-	var hall_roof := inf.duplicate(true)
-	hall_roof["eave_overhang"] = eave_out
-	hall_roof["rake_overhang_front"] = rake_out
-	hall_roof["rake_overhang_rear"] = rake_out
-	_append_gabled_roof(shell, protected, roofing, unused, c + Vector3.UP * eave, t, n, hall_roof)
+	_append_hall_roof(shell, roofing, trim, glass, c, t, n, inf)
 	_append_hall_edges(trim, c, t, n, width * 0.5, eave, ridge, length, eave_out, rake_out, fascia)
 	var wing_out := float(inf.wing_eave_overhang_m)
 	var wing_slope := 0.0
@@ -348,6 +365,10 @@ func _compose_study(wall: Dictionary, roof_record: Dictionary, config: Dictionar
 	set_meta("observed_wing_sse_run_indices", OBSERVED_WING_SSE_RUNS)
 	set_meta("observed_wsw_wing_run_indices", OBSERVED_WSW_WING_GABLE_RUNS + OBSERVED_WSW_WING_SIDE_RUNS + OBSERVED_WSW_JUNCTION_RUNS)
 	set_meta("qualified_ene_junction_run_indices", QUALIFIED_ENE_JUNCTION_RUNS)
+	set_meta("observed_nnw_rear_run_indices", OBSERVED_NNW_REAR_RUNS)
+	set_meta("observed_wing_nnw_run_indices", OBSERVED_ENE_WING_NNW_RUNS + OBSERVED_WSW_WING_NNW_RUNS)
+	set_meta("observed_ene_wing_gable_porch_run_indices", OBSERVED_ENE_WING_GABLE_RUNS)
+	set_meta("hall_rear_roof_form", "hip_with_louvred_gablet")
 	set_meta("observed_belfry_side_faces", ["+t_ENE", "-t_WSW"])
 	set_meta("belfry_side_units_are_relief_not_cavity", true)
 	_configured = true
@@ -359,7 +380,7 @@ func _compose_study(wall: Dictionary, roof_record: Dictionary, config: Dictionar
 # Sep2025 SSE-facing wing front and Jul2016 WSW wing/junction support finite
 # framed multi-light groups and closed doors; counts, cadence, widths, heights
 # and door host allocation are reversible production inference.
-func _opening_groups(wall: Dictionary, inf: Dictionary, assemblies: Array) -> Array[Dictionary]:
+func _opening_groups(wall: Dictionary, inf: Dictionary, assemblies: Array, rear_groups: Array) -> Array[Dictionary]:
 	var groups: Array[Dictionary] = []
 	var hall_half := float(inf.opening_group_hall_width) * 0.5
 	var hall_bottom := float(inf.opening_group_hall_bottom_y)
@@ -380,6 +401,15 @@ func _opening_groups(wall: Dictionary, inf: Dictionary, assemblies: Array) -> Ar
 	var wing_half := float(inf.opening_group_wing_width) * 0.5
 	groups.append({"chain": 2, "kind": "window", "a": wing_center - wing_half, "b": wing_center + wing_half,
 		"bottom": float(inf.opening_group_wing_bottom_y), "top": float(inf.opening_group_wing_top_y), "lights": int(inf.opening_group_wing_lights)})
+	# NNW rear hall wall (Jun2026 nc03/nc04): 2+3+2 transomed groups on the hall
+	# sill/head line; stations and widths are production inference.
+	var rear_chain := _chain_for_runs(_int_array(OBSERVED_NNW_REAR_RUNS))
+	for value: Variant in rear_groups:
+		var rear := value as Dictionary
+		var half := float(rear.width_m) * 0.5
+		var center := float(rear.center_m)
+		groups.append({"chain": rear_chain, "kind": "window", "a": center - half, "b": center + half,
+			"bottom": hall_bottom, "top": hall_top, "lights": int(rear.lights)})
 	for value: Variant in assemblies:
 		var assembly := value as Dictionary
 		var half := float(assembly.width_m) * 0.5
@@ -393,6 +423,12 @@ func _opening_groups(wall: Dictionary, inf: Dictionary, assemblies: Array) -> Ar
 			group["bottom"] = float(assembly.land_y)
 			group["support_y"] = float(assembly.get("support_y", assembly.land_y))
 			group["leaves"] = int(assembly.leaves)
+		elif group.kind == "porch":
+			# Deep open recess cut to the source wall bottom like a door; its
+			# dark back holds one closed paired door.
+			group["bottom"] = float(assembly.land_y)
+			group["depth"] = float(assembly.depth_m)
+			group["door_top"] = float(assembly.door_top_y)
 		else:
 			group["bottom"] = float(assembly.bottom_y)
 			group["lights"] = int(assembly.lights)
@@ -435,7 +471,7 @@ func _groups_fit_chains(wall: Dictionary, groups: Array[Dictionary], c: Vector3,
 				return "chain %d group [%.3f, %.3f] outside [%.2f, %.3f]" % [chain, a, b, GROUP_END_MARGIN_M, length - GROUP_END_MARGIN_M]
 			if float(group.top) + 0.3 > wall_top:
 				return "chain %d group top %.3f too close to wall top %.3f" % [chain, float(group.top), wall_top]
-			if str(group.kind) == "door":
+			if str(group.kind) in ["door", "porch"]:
 				var land := float(group.bottom)
 				var lowest := INF
 				var samples: Array[float] = [a, b]
@@ -553,7 +589,7 @@ func _cap_half_plane(polygon: PackedVector3Array, origin: Vector3, axis: Vector3
 	return result
 
 
-func _append_group_recesses(shell: Dictionary, glass: Dictionary, wall: Dictionary, chain: int, run: int, left: Vector3, right: Vector3, top: float, groups: Array[Dictionary], depth: float) -> void:
+func _append_group_recesses(shell: Dictionary, glass: Dictionary, wall: Dictionary, chain: int, run: int, left: Vector3, right: Vector3, top_at: Callable, groups: Array[Dictionary], depth: float) -> void:
 	var runs: Array = RECESSED_CHAINS[chain]
 	var frame := _run_frame(wall, run)
 	var tangent: Vector3 = frame.tangent
@@ -575,38 +611,43 @@ func _append_group_recesses(shell: Dictionary, glass: Dictionary, wall: Dictiona
 			if edge > sa and edge < sb:
 				cuts.append(edge)
 	cuts.sort()
-	var inward := -normal * depth
 	for i in range(cuts.size() - 1):
 		var a := left.lerp(right, (cuts[i] - sa) / (sb - sa))
 		var b := left.lerp(right, (cuts[i + 1] - sa) / (sb - sa))
+		var top_a := Vector3(a.x, float(top_at.call(a)), a.z)
+		var top_b := Vector3(b.x, float(top_at.call(b)), b.z)
 		var middle := (cuts[i] + cuts[i + 1]) * 0.5
 		var aperture: Dictionary = {}
 		for group: Dictionary in chain_groups:
 			if middle > float(group.a) and middle < float(group.b):
 				aperture = group
 		if aperture.is_empty():
-			_append_quad(shell, a, b, Vector3(b.x, top, b.z), Vector3(a.x, top, a.z), normal)
+			_append_quad(shell, a, b, top_b, top_a, normal)
 			continue
-		# Closed doors cut to the actual source wall bottom (no raised sill);
-		# their pocket floor below local land closes the source bottom.
-		var door := str(aperture.kind) == "door"
+		# Closed doors and the open porch cut to the actual source wall bottom
+		# (no raised sill); their pocket floor below local land closes it.
+		var door := str(aperture.kind) in ["door", "porch"]
+		var inward := -normal * float(aperture.get("depth", depth))
 		var low_a := a if door else Vector3(a.x, float(aperture.bottom), a.z)
 		var low_b := b if door else Vector3(b.x, float(aperture.bottom), b.z)
 		var high_a := Vector3(a.x, float(aperture.top), a.z)
 		var high_b := Vector3(b.x, float(aperture.top), b.z)
 		if not door:
 			_append_quad(shell, a, b, low_b, low_a, normal)
-		_append_quad(shell, high_a, high_b, Vector3(b.x, top, b.z), Vector3(a.x, top, a.z), normal)
+		_append_quad(shell, high_a, high_b, top_b, top_a, normal)
+		# Window, door and porch backs are the dark proxy; the deep porch reads
+		# as the shaded recess of the 2023 photo with its pale door in front.
 		_append_quad(glass, low_a + inward, low_b + inward, high_b + inward, high_a + inward, normal)
 		_append_quad(shell, low_a, low_b, low_b + inward, low_a + inward, Vector3.UP)
 		_append_quad(shell, high_a, high_a + inward, high_b + inward, high_b, Vector3.DOWN)
 	for group: Dictionary in chain_groups:
+		var inward := -normal * float(group.get("depth", depth))
 		for end in 2:
 			var edge := float(group.a) if end == 0 else float(group.b)
 			if edge < sa or edge > sb:
 				continue
 			var p := left.lerp(right, (edge - sa) / (sb - sa))
-			var low := p if str(group.kind) == "door" else Vector3(p.x, float(group.bottom), p.z)
+			var low := p if str(group.kind) in ["door", "porch"] else Vector3(p.x, float(group.bottom), p.z)
 			var high := Vector3(p.x, float(group.top), p.z)
 			_append_quad(shell, low, low + inward, high + inward, high, tangent if end == 0 else -tangent)
 
@@ -628,6 +669,9 @@ func _append_group_dressing(trim: Dictionary, glass: Dictionary, wall: Dictionar
 	var face: Vector3 = f.wall_anchor
 	if str(group.kind) == "door":
 		_append_door_dressing(trim, glass, face, t, n, width, float(group.get("support_y", bottom)), top, int(group.leaves), depth)
+		return
+	if str(group.kind) == "porch":
+		_append_porch_dressing(trim, glass, face, t, n, width, bottom, top, float(group.depth), float(group.door_top))
 		return
 	var lights := int(group.lights)
 	face.y = (bottom + top) * 0.5
@@ -691,26 +735,45 @@ func _append_door_dressing(trim: Dictionary, glass: Dictionary, face: Vector3, t
 	_append_box(trim, drip, t, n, width + 0.36, 0.07, 0.14)
 
 
+# Jul2023 ENE gable porch: a pale surround on the gable face (two jambs and a
+# head) around the deep open recess, and one closed paired door in the shared
+# family on its dark back. Recess and door sizes are production inference.
+func _append_porch_dressing(trim: Dictionary, glass: Dictionary, face: Vector3, t: Vector3, n: Vector3, width: float, land: float, top: float, depth: float, door_top: float) -> void:
+	var member := 0.16
+	var jamb_h := top + member - land
+	for side: float in [-1.0, 1.0]:
+		var jamb := face + n * 0.05 + t * side * (width + member) * 0.5
+		jamb.y = land + jamb_h * 0.5
+		_append_box(trim, jamb, t, n, member, jamb_h, 0.10)
+	var head := face + n * 0.05
+	head.y = top + member * 0.5
+	_append_box(trim, head, t, n, width + member * 2.0, member, 0.10)
+	_append_door_dressing(trim, glass, face - n * depth, t, n, 1.5, land, door_top, 2, 0.0)
+
+
 # Outward layered relief (not a cavity) on the two belfry side faces seen in
-# Jan2023 (-t/WSW) and Jun2026 (+t/ENE); front/back faces stay plain.
+# Jan2023 (-t/WSW), Jun2026 and Sep2025 nc02 (+t/ENE): three narrow louvred
+# vent slots with pale crossbars in pale frames; front/back faces stay plain.
 func _append_belfry_side_units(glass: Dictionary, trim: Dictionary, c: Vector3, t: Vector3, n: Vector3, inf: Dictionary) -> void:
 	var center := c - n * float(inf.belfry_center_inward_from_sse_m)
 	center.y = float(inf.belfry_side_unit_center_y)
 	var unit_w := float(inf.belfry_side_unit_width)
 	var unit_h := float(inf.belfry_side_unit_height)
+	var slot_w := unit_w * 0.19
 	for side: float in [-1.0, 1.0]:
 		var out := t * side
 		var face := center + out * float(inf.belfry_plan_width) * 0.5
-		_append_box(glass, face + out * 0.03, n, out, unit_w, unit_h, 0.06)
-		_append_frame(trim, face + out * 0.06, n, out, unit_w, unit_h, 0.14, 0.12)
-		for offset: float in [-unit_w / 6.0, unit_w / 6.0]:
-			_append_box(trim, face + out * 0.05 + n * offset, n, out, 0.09, unit_h, 0.10)
-		for fraction: float in [-0.30, 0.05, 0.33]:
-			for shift: float in [-0.06, 0.06]:
-				_append_box(trim, face + out * 0.075 + Vector3.UP * (unit_h * fraction + shift), n, out, unit_w, 0.045, 0.10)
+		for k: float in [-1.0, 0.0, 1.0]:
+			var slot := face + n * (k * unit_w * 0.32)
+			_append_box(glass, slot + out * 0.03, n, out, slot_w, unit_h, 0.06)
+			_append_frame(trim, slot + out * 0.06, n, out, slot_w, unit_h, 0.08, 0.11)
+			var blade := -unit_h * 0.5 + 0.35
+			while blade < unit_h * 0.5 - 0.2:
+				_append_box(trim, slot + out * 0.075 + Vector3.UP * blade, n, out, slot_w, 0.05, 0.09)
+				blade += 0.55
 		var sill := face + out * 0.06
-		sill.y -= unit_h * 0.5 + 0.18
-		_append_box(trim, sill, n, out, unit_w + 0.4, 0.08, 0.12)
+		sill.y -= unit_h * 0.5 + 0.14
+		_append_box(trim, sill, n, out, unit_w + 0.3, 0.08, 0.12)
 
 
 # SSE gable glazing: stepped columns between deep pale fins over a broad pale
@@ -753,6 +816,11 @@ func _append_corner_boards(trim: Dictionary, wall: Dictionary, c: Vector3, t: Ve
 		var prior := _run_frame(wall, (run + WALL_RUN_COUNT - 1) % WALL_RUN_COUNT)
 		var next := _run_frame(wall, run)
 		if (next.tangent as Vector3).dot(prior.normal as Vector3) > -0.5:
+			continue
+		# The small rear bumps between both protected faces show no corner of
+		# their own against the same-colour wall; a board there reads as a stray
+		# pilaster, so they stay plain.
+		if (run + WALL_RUN_COUNT - 1) % WALL_RUN_COUNT in PROTECTED_RUNS and run in PROTECTED_RUNS:
 			continue
 		var corner: Vector3 = next.start
 		var top := low_top if absf((corner - c).dot(t)) > width * 0.5 + 0.10 else hall_top
@@ -824,15 +892,84 @@ func _append_gabled_roof(
 	_append_triangle(collision, rear_right, rear_left, rear_ridge, inward)
 
 
-# Hall boxed eaves (both long sides, full roof length) and bargeboards on the
-# SSE front and NNW rear gables.
+# Jun2026 rear (nc03/nc04) and Sep2025 NNE (nc01/nc02): the nave is gabled at
+# the SSE front and hipped at the NNW rear at the long sides' pitch, the hip
+# stopping under a small louvred gablet at the ridge just behind the belfry.
+# Overhangs match the long sides; the gablet height is production inference.
+func _append_hall_roof(cream: Dictionary, roofing: Dictionary, trim: Dictionary, glass: Dictionary, c: Vector3, t: Vector3, n: Vector3, inf: Dictionary) -> void:
+	var half := float(inf.main_gable_width) * 0.5
+	var eave := float(inf.main_gable_eave_y)
+	var ridge := float(inf.main_gable_ridge_y)
+	var length := float(inf.main_gable_length)
+	var eave_out := float(inf.roof_eave_overhang_m)
+	var slope := (ridge - eave) / half
+	var gablet_y := float(inf.rear_hip_gablet_base_y)
+	var edge_y := eave - eave_out * slope
+	var u_edge := half + eave_out
+	var v_front := float(inf.roof_rake_overhang_m)
+	var v_edge := -length - eave_out
+	var v_gablet := -length + (gablet_y - eave) / slope
+	var u_gablet := (ridge - gablet_y) / slope
+	var at := func(u: float, v: float, y: float) -> Vector3:
+		return c + t * u + n * v + Vector3.UP * y
+	# SSE front gable wall; the rake overhang carries the roof planes past it.
+	_append_triangle(cream, at.call(-half, 0.0, eave), at.call(half, 0.0, eave), at.call(0.0, 0.0, ridge), n)
+	# Each long-side plane is a concave pentagon (front edge, ridge to the gablet,
+	# gablet corner, hip line to the rear eave corner): fan it from the front corner.
+	var gablet_apex: Vector3 = at.call(0.0, v_gablet, ridge)
+	for side: float in [-1.0, 1.0]:
+		var front_edge: Vector3 = at.call(side * u_edge, v_front, edge_y)
+		var front_ridge: Vector3 = at.call(0.0, v_front, ridge)
+		var gablet_corner: Vector3 = at.call(side * u_gablet, v_gablet, gablet_y)
+		var rear_edge: Vector3 = at.call(side * u_edge, v_edge, edge_y)
+		var normal := _upward_normal(front_edge, front_ridge, gablet_apex)
+		_append_triangle(roofing, front_edge, front_ridge, gablet_apex, normal)
+		_append_triangle(roofing, front_edge, gablet_apex, gablet_corner, normal)
+		_append_triangle(roofing, front_edge, gablet_corner, rear_edge, normal)
+	var hip_left: Vector3 = at.call(-u_edge, v_edge, edge_y)
+	var hip_right: Vector3 = at.call(u_edge, v_edge, edge_y)
+	var gablet_left: Vector3 = at.call(-u_gablet, v_gablet, gablet_y)
+	var gablet_right: Vector3 = at.call(u_gablet, v_gablet, gablet_y)
+	_append_quad(roofing, hip_left, hip_right, gablet_right, gablet_left, _upward_normal(hip_left, hip_right, gablet_right))
+	# Gablet: cream triangle, an inset dark vent with pale louvre slats and a
+	# sill, and small bargeboards on its two rakes (nc02/nc04).
+	_append_triangle(cream, gablet_left, gablet_right, gablet_apex, -n)
+	var vent_bottom := gablet_y + 0.14
+	var vent_top := ridge - 0.22
+	var vent_half := (ridge - 0.30 - vent_bottom) / slope
+	_append_triangle(glass, at.call(-vent_half, v_gablet - 0.02, vent_bottom), at.call(vent_half, v_gablet - 0.02, vent_bottom), at.call(0.0, v_gablet - 0.02, vent_top), -n)
+	for fraction: float in [0.18, 0.42, 0.66]:
+		var y := lerpf(vent_bottom, vent_top, fraction)
+		var slat_half := maxf(0.08, (vent_top - y) / (vent_top - vent_bottom) * vent_half - 0.06)
+		_append_box(trim, at.call(0.0, v_gablet - 0.05, y), t, -n, slat_half * 2.0, 0.06, 0.05)
+	_append_box(trim, at.call(0.0, v_gablet - 0.05, vent_bottom - 0.04), t, -n, vent_half * 2.0 + 0.2, 0.08, 0.07)
+	for side: float in [-1.0, 1.0]:
+		_append_sloped_board(trim, at.call(side * u_gablet, v_gablet, gablet_y), gablet_apex, -n, 0.12, 0.14)
+
+
+# Hall boxed eaves on both long sides, SSE front bargeboards, and the hipped
+# NNW rear: a boxed rear eave between the side wall lines plus a closed corner
+# piece (side fascia, rear fascia, soffit) under each hip corner.
 func _append_hall_edges(trim: Dictionary, c: Vector3, t: Vector3, n: Vector3, half: float, eave: float, ridge: float, length: float, eave_out: float, rake_out: float, fascia: float) -> void:
 	var slope := (ridge - eave) / half
 	for side: float in [-1.0, 1.0]:
 		var line := c + t * half * side
-		_append_eave_prism(trim, line + n * rake_out, line - n * (length + rake_out), t * side, eave, slope, eave_out, fascia)
+		_append_eave_prism(trim, line + n * rake_out, line - n * length, t * side, eave, slope, eave_out, fascia)
 	_append_rake_boards(trim, c, t, n, half, eave, ridge, eave_out, rake_out, fascia + 0.04)
-	_append_rake_boards(trim, c - n * length, t, -n, half, eave, ridge, eave_out, rake_out, fascia + 0.04)
+	var rear := c - n * length
+	_append_eave_prism(trim, rear - t * half, rear + t * half, -n, eave, slope, eave_out, fascia)
+	var top := eave - eave_out * slope
+	var soffit := top - fascia
+	var at := func(u: float, v: float, y: float) -> Vector3:
+		return c + t * u + n * v + Vector3.UP * y
+	for side: float in [-1.0, 1.0]:
+		var u0 := half * side
+		var u1 := (half + eave_out) * side
+		var v0 := -length
+		var v1 := -length - eave_out
+		_append_quad(trim, at.call(u1, v0, soffit), at.call(u1, v1, soffit), at.call(u1, v1, top), at.call(u1, v0, top), t * side)
+		_append_quad(trim, at.call(u0, v1, soffit), at.call(u1, v1, soffit), at.call(u1, v1, top), at.call(u0, v1, top), -n)
+		_append_quad(trim, at.call(u0, v0, soffit), at.call(u1, v0, soffit), at.call(u1, v1, soffit), at.call(u0, v1, soffit), Vector3.DOWN)
 
 
 # Closed boxed-eave section under an overhanging roof plane: fascia, level
@@ -1005,13 +1142,14 @@ func _append_belfry(
 	var depth := float(inference.belfry_plan_depth)
 	_append_box(cream, center, tangent, outward, width, wall_top_y - base_y, depth)
 	_append_box(collision, center, tangent, outward, width, wall_top_y - base_y, depth)
-	# Reference hierarchy: flush pale wall-top lip, inset raised square curb,
-	# then one projecting metal eave and a complete pitched pyramid.
-	_append_box(cream, Vector3(center.x, wall_top_y + 0.08, center.z), tangent, outward, width, 0.16, depth)
+	# nc02/nc04 hierarchy: a flat pale cornice slab projecting all round the
+	# tower top, an inset cream curb, then the low metal pyramid on its own eave.
+	var cornice := float(inference.belfry_cornice_projection_m)
+	_append_box(trim, Vector3(center.x, wall_top_y + 0.11, center.z), tangent, outward, width + cornice * 2.0, 0.22, depth + cornice * 2.0)
 	var eave_y := float(inference.belfry_cap_eave_y)
 	var cap_width := float(inference.belfry_cap_width)
 	var cap_center := Vector3(center.x, eave_y, center.z)
-	var curb_bottom := wall_top_y + 0.16
+	var curb_bottom := wall_top_y + 0.22
 	_append_box(cream, Vector3(center.x, (curb_bottom + eave_y) * 0.5, center.z), tangent, outward, cap_width - 0.40, eave_y - curb_bottom, cap_width - 0.40)
 	_append_box(roof, Vector3(center.x, eave_y - 0.045, center.z), tangent, outward, cap_width, 0.09, cap_width)
 	var half_w := cap_width * 0.5
@@ -1306,6 +1444,10 @@ static func _config_contract_matches(config: Dictionary) -> bool:
 		OBSERVED_WSW_WING_SIDE_RUNS,
 		OBSERVED_WSW_JUNCTION_RUNS,
 		QUALIFIED_ENE_JUNCTION_RUNS,
+		OBSERVED_NNW_REAR_RUNS,
+		OBSERVED_ENE_WING_NNW_RUNS,
+		OBSERVED_WSW_WING_NNW_RUNS,
+		OBSERVED_ENE_WING_GABLE_RUNS,
 	]
 	if mapped.size() != expected_mapped.size() \
 		or protected.is_empty() \
@@ -1325,6 +1467,15 @@ static func _config_contract_matches(config: Dictionary) -> bool:
 		or float(inference.get("belfry_cap_apex_y", 0.0)) <= float(inference.get("belfry_wall_top_y", 0.0)) \
 		or float(inference.get("cross_vertical_center_y", 0.0)) <= float(inference.get("belfry_cap_apex_y", 0.0)) \
 		or (inference.get("side_window_chain_centers_m", []) as Array).size() != 4:
+		return false
+	# Belfry: the pale cornice projects modestly past the tower walls.
+	var cornice := float(inference.get("belfry_cornice_projection_m", 0.0))
+	if cornice < 0.1 or cornice > 0.5:
+		return false
+	# Hipped NNW rear: the louvred gablet sits between the eave and the ridge.
+	var gablet_y := float(inference.get("rear_hip_gablet_base_y", 0.0))
+	if gablet_y <= float(inference.get("main_gable_eave_y", 0.0)) + 3.0 \
+		or gablet_y >= float(inference.get("main_gable_ridge_y", 0.0)) - 0.6:
 		return false
 	# Opening groups stay above source bottoms and below their own eaves; the
 	# lower cap pocket assumes the existing closed 0.28m recess.
@@ -1357,6 +1508,15 @@ static func _config_contract_matches(config: Dictionary) -> bool:
 	var plinth_top := float(inference.get("plinth_top_y", 0.0))
 	if plinth_top <= 4.04 or plinth_top >= minf(hall_bottom, wing_bottom) - 0.3:
 		return false
+	# NNW rear hall groups: the photographed 2+3+2 lights on the hall sill/head
+	# line (stations and widths are checked against the source chain later).
+	var rear_groups := config.get("nnw_rear_window_groups", []) as Array
+	if rear_groups.size() != 3:
+		return false
+	for value: Variant in rear_groups:
+		if not (value is Dictionary) or not (value as Dictionary).has_all(["center_m", "width_m", "lights"]) \
+			or float(value.width_m) <= 0.0 or int(value.lights) < 2:
+			return false
 	# Wing/junction assemblies: each names exactly one assembly chain; windows
 	# keep the plinth/sill rule and wing-eave clearance; closed doors are two-
 	# leaf at most, 2.0-2.8m tall above land and land stays near source bottoms
@@ -1387,6 +1547,15 @@ static func _config_contract_matches(config: Dictionary) -> bool:
 					return false
 				if land <= 3.9 or land >= 4.04 + 0.15 or top - support < 2.0 or top - support > 2.8 \
 					or leaves < 1 or leaves > 2:
+					return false
+			"porch":
+				# Open recess from local land to under the wing eave, with a
+				# closed door on its back wall.
+				var land := float(assembly.get("land_y", 0.0))
+				var depth_m := float(assembly.get("depth_m", 0.0))
+				var door_top := float(assembly.get("door_top_y", 0.0))
+				if land <= 3.9 or land >= 4.04 + 0.15 or top - land < 2.4 or top - land > 3.4 \
+					or depth_m < 1.0 or depth_m > 3.0 or door_top - land < 2.0 or door_top + 0.3 > top:
 					return false
 			_:
 				return false

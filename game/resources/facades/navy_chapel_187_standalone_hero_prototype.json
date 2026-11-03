@@ -268,6 +268,50 @@
       ],
       "field_material_policy": "quiet cream coating",
       "module_policy": "one closed paired door assembly as disclosed production inference; the photograph is partly obstructed and does not establish an exact door count or leaf arrangement; not mirrored from WSW"
+    },
+    {
+      "id": "NC-NNW-REAR",
+      "role": "observed NNW nave rear wall under the hipped roof end (Jun2026 contributor nc03/nc04, L2 all-sides audit 2026-11-03)",
+      "ordered_run_indices": [
+        27,
+        28
+      ],
+      "length_m": 16.456,
+      "field_material_policy": "quiet cream coating",
+      "module_policy": "seven tall transomed lights in 2+3+2 recessed groups on the hall sill/head line; stations and widths are reversible production inference"
+    },
+    {
+      "id": "NC-ENE-WING-NNW",
+      "role": "observed NNW face of the ENE cross wing (Jun2026 nc04 left; the frames' right edge holds the SF skyline at about 214 deg, so the left wing is the ENE wing)",
+      "ordered_run_indices": [
+        22
+      ],
+      "length_m": 7.207,
+      "field_material_policy": "quiet cream coating",
+      "module_policy": "one recessed four-light group under the wing eave; size and station are production inference"
+    },
+    {
+      "id": "NC-WSW-WING-NNW",
+      "role": "observed NNW face of the WSW cross wing (Jun2026 nc03/nc04 right edge)",
+      "ordered_run_indices": [
+        32,
+        33
+      ],
+      "length_m": 7.886,
+      "field_material_policy": "quiet cream coating",
+      "module_policy": "one recessed three-light group under the wing eave; light count, size and station are production inference"
+    },
+    {
+      "id": "NC-ENE-WING-GABLE-PORCH",
+      "role": "ENE cross-wing outer gable end with a deep recessed porch (18 Jul 2023 Commons; the porch floor is hidden by a container)",
+      "ordered_run_indices": [
+        19,
+        20,
+        21
+      ],
+      "length_m": 7.935,
+      "field_material_policy": "quiet cream coating",
+      "module_policy": "one open recess centred under the wing ridge, at local land, with a pale surround and one closed paired door on its back wall; width, height, depth and the door are production inference"
     }
   ],
   "protected_regions": [
@@ -276,28 +320,20 @@
       "run_indices": [
         5,
         15,
-        19,
-        20,
-        21,
-        22,
         23,
         24,
         25,
         26,
-        27,
-        28,
         29,
         30,
-        31,
-        32,
-        33
+        31
       ],
-      "policy": "Exact source XZ/bottoms preserved; coherent quiet cream finish with boxed eaves, bargeboards and the same roof construction only, no ambiguous rear/wing opening schedule. Returns 5 and 15 and the ENE outer wing gable 19-21 stay protected."
+      "policy": "Exact source XZ/bottoms preserved; coherent quiet cream finish with boxed eaves and the same roof construction only. Returns 5 and 15, the ENE rear returns 23-26 (behind hoarding in every image since 2023) and the small WSW rear returns 29-31 stay without openings."
     },
     {
-      "id": "NC-REAR-GABLE-CLOSURE",
+      "id": "NC-REAR-ENTRY-STEPS",
       "run_indices": [],
-      "policy": "Source-owned closed rear/wing structure with quiet cream coating; no invented rear openings."
+      "policy": "The Jun2026 rear views also show steps up to recessed entries at both wing/nave rear junctions; they are not modelled in this pass (no new stair flight)."
     }
   ],
   "production_inference_m": {
@@ -306,18 +342,20 @@
     "main_gable_front_inset": 0.0,
     "main_gable_eave_y": 9.1,
     "main_gable_ridge_y": 15.5,
-    "belfry_center_inward_from_sse_m": 15.0,
-    "belfry_plan_width": 6.4,
-    "belfry_plan_depth": 6.4,
-    "belfry_base_y": 12.4,
-    "belfry_wall_top_y": 20.1,
-    "belfry_wall_top_lip_policy": "flush with 6.4m tower body; inset curb and pitched cap retained; prevents far lip edge projecting outside the body silhouette in low gameplay views",
-    "belfry_cap_width": 6.05,
-    "belfry_cap_eave_y": 20.65,
-    "belfry_cap_apex_y": 23.35,
-    "cross_vertical_center_y": 24.35,
+    "rear_hip_gablet_base_y": 14.35,
+    "belfry_center_inward_from_sse_m": 30.3,
+    "belfry_plan_width": 7.8,
+    "belfry_plan_depth": 7.8,
+    "belfry_base_y": 12.0,
+    "belfry_wall_top_y": 18.2,
+    "belfry_wall_top_lip_policy": "2026-11-03: the 7.8m tower body (widened and lowered to the squat belfry of nc02/nc03/nc04 and the 2023 Commons photo) carries a flat pale cornice slab projecting 0.28m all round, an inset cream curb and a low ribbed metal pyramid on its own eave (nc02/nc04)",
+    "belfry_cap_width": 7.45,
+    "belfry_cap_eave_y": 18.75,
+    "belfry_cap_apex_y": 20.85,
+    "belfry_cornice_projection_m": 0.28,
+    "cross_vertical_center_y": 21.85,
     "cross_vertical_height": 2.0,
-    "cross_horizontal_center_y": 24.70,
+    "cross_horizontal_center_y": 22.20,
     "cross_horizontal_width": 1.15,
     "cross_member_thickness": 0.14,
     "entry_width": 5.4,
@@ -353,9 +391,9 @@
     "opening_group_wing_bottom_y": 5.4,
     "opening_group_wing_top_y": 6.95,
     "opening_group_wing_lights": 4,
-    "belfry_side_unit_width": 1.8,
-    "belfry_side_unit_height": 4.8,
-    "belfry_side_unit_center_y": 17.1,
+    "belfry_side_unit_width": 2.2,
+    "belfry_side_unit_height": 4.6,
+    "belfry_side_unit_center_y": 15.3,
     "plinth_top_y": 4.55,
     "roof_eave_overhang_m": 0.45,
     "roof_rake_overhang_m": 0.35,
@@ -419,6 +457,60 @@
       "top_y": 6.45,
       "leaves": 2,
       "basis": "Jul2023 partly obstructed door at the low junction; single assembly, leaf count, size and station are production inference; no observed count claim. land_y interpolated 4.054-4.066; source bottoms 4.028-4.033"
+    },
+    {
+      "id": "NC-ENE-WING-NNW-QUAD",
+      "runs": [22],
+      "kind": "window",
+      "center_m": 3.6,
+      "width_m": 3.6,
+      "bottom_y": 5.4,
+      "top_y": 6.95,
+      "lights": 4,
+      "basis": "Jun2026 nc04 four lights under the ENE wing eave; size and station are production inference"
+    },
+    {
+      "id": "NC-WSW-WING-NNW-TRIPLET",
+      "runs": [32, 33],
+      "kind": "window",
+      "center_m": 3.6,
+      "width_m": 2.6,
+      "bottom_y": 5.4,
+      "top_y": 6.95,
+      "lights": 3,
+      "basis": "Jun2026 nc03/nc04 lights under the WSW wing eave at the frame edge; light count, size and station are production inference"
+    },
+    {
+      "id": "NC-ENE-WING-GABLE-PORCH",
+      "runs": [19, 20, 21],
+      "kind": "porch",
+      "center_m": 3.968,
+      "width_m": 4.2,
+      "land_y": 4.12,
+      "top_y": 7.2,
+      "depth_m": 2.4,
+      "door_top_y": 6.5,
+      "basis": "18 Jul 2023 Commons: deep recess under the ENE wing gable. land_y is interpolated LAND (4.11-4.15) over source bottoms 4.04; width, height, depth and the closed back door are production inference"
+    }
+  ],
+  "nnw_rear_window_groups": [
+    {
+      "id": "NC-NNW-REAR-ENE-PAIR",
+      "center_m": 2.2,
+      "width_m": 2.3,
+      "lights": 2
+    },
+    {
+      "id": "NC-NNW-REAR-CENTRE-TRIPLE",
+      "center_m": 8.2,
+      "width_m": 3.5,
+      "lights": 3
+    },
+    {
+      "id": "NC-NNW-REAR-WSW-PAIR",
+      "center_m": 14.2,
+      "width_m": 2.3,
+      "lights": 2
     }
   ],
   "material_scope": {
@@ -472,7 +564,7 @@
   "blocked_claims": [
     "as-built or surveyed dimensional fidelity",
     "exact pane count, sash profile, door count, side-window count, spacing, substrate, color sample, or product",
-    "rear, private-side, or complete long-side facade appearance",
+    "private-side appearance of the hoarded ENE rear returns",
     "transparent glazing, visible interior, operable entry, interior access, or occupancy",
     "recognition or believability acceptance before independent review",
     "plaque, sign, lettering, stained glass, or arbitrary accent color"
@@ -508,7 +600,7 @@
       "-t WSW (Jan2023)"
     ],
     "reference": "Jul2016 Google Maps contributor (Larry Olson) WSW wing gable/side/junction doors; Jul2023 Commons thewub complete ENE hall and partly obstructed low junction; Sep2025 SSE + partial ENE + SSE wing front; Jan2023 WSW hall and belfry side; Jun2026 footer (Sep2026 contributor panel) partial rear/ENE-wing and belfry +t side; Dec2016 SSE entry/gable detail; Engeo2020 WSW aerial; undated museum belfry/roof",
-    "inference": "Shared recessed opening groups retain WSW hall, four ENE hall groups, wing-front and WSW wing groups. Closed door backs/reveals reach source bottoms. WSW run2 and runs3-4 leaves/outer jambs stand on a common platform at4.52 with one short flight; qualified ENE16 stays on local land4.05. LAND measurements remain separate from platform support. Jul2016 supports the raised approach relationship, not surveyed step dimensions or current survival; no canopy added. Tower body, outward divided side relief, opaque pyramidal metal cap and restrained ribs are unsurveyed production inference. 2026-10-22 L1/L2/L3 pass: visible eave lowered to the 2016/2023 photos (hall roof plane 9.1 at the wall, 0.45m boxed overhang; wings 7.75, 0.4m), WSW hall groups 5 -> 4 mirroring ENE, hall groups raised under the soffit with a transom row, SSE porch platform and three-riser flight with the canopy at the eave line, lean-to roofs over the photographed WSW and ENE junctions; heights scaled from the Dec2016 frontal photo, not surveyed. Protected rear/returns keep their faces; no hidden openings or interiors inferred.",
+    "inference": "Shared recessed opening groups retain WSW hall, four ENE hall groups, wing-front and WSW wing groups. Closed door backs/reveals reach source bottoms. WSW run2 and runs3-4 leaves/outer jambs stand on a common platform at4.52 with one short flight; qualified ENE16 stays on local land4.05. LAND measurements remain separate from platform support. Jul2016 supports the raised approach relationship, not surveyed step dimensions or current survival; no canopy added. Tower body, outward divided side relief, opaque pyramidal metal cap and restrained ribs are unsurveyed production inference. 2026-10-22 L1/L2/L3 pass: visible eave lowered to the 2016/2023 photos (hall roof plane 9.1 at the wall, 0.45m boxed overhang; wings 7.75, 0.4m), WSW hall groups 5 -> 4 mirroring ENE, hall groups raised under the soffit with a transom row, SSE porch platform and three-riser flight with the canopy at the eave line, lean-to roofs over the photographed WSW and ENE junctions; heights scaled from the Dec2016 frontal photo, not surveyed. 2026-11-03 L2 all-sides fix: the NNW nave end is a hip at the long sides' pitch with a louvred gablet under the ridge (nc02/nc03/nc04), the belfry stands over the rear half just ahead of the hip (Jul2016/Jul2023/Sep2025), the rear wall carries 2+3+2 transomed groups, both wing NNW faces carry a group, and the ENE wing gable holds a deep open porch with a closed door on its back wall; all stations and sizes are production inference. The hoarded ENE rear returns keep plain faces; no hidden interiors inferred.",
     "material_hierarchy": "Tower-entry005 adds a distinct restrained matte metal cap above the taller square tower and a common pale raised WSW approach. Retained warm coursed main/wing roofing, warm-cream plaster versus whiter trim, plinth, lower-gable panels and timber entry; original procedural materials with no reference pixels; dimensions and cadence remain production inference"
   }
 }

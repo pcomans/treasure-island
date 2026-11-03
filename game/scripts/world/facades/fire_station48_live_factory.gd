@@ -7,7 +7,8 @@ const CONFIG_PATH := "res://game/resources/facades/fire_station48_quality_study.
 const WALL_KEY := "building:w764313741:wall"
 const ROOF_KEY := "building:w764313741:roof"
 const OBSERVED_RUNS := [0,1,2,3,5,6,8,9,24,25]
-# Unphotographed ENE/SSE runs: plain closed walls in the observed pale finish, no openings.
+# Unphotographed ENE/SSE runs: closed walls in the observed pale finish carrying
+# the observed WSW high-window module and rhythm (L2 all-sides audit 2026-11-03).
 const INFERRED_RUNS := [4,10,11,12,13,14,15,18,19,20,21,22,23]
 const TARGET_RUNS := OBSERVED_RUNS + INFERRED_RUNS
 const PROTECTED_RUNS := [7,16,17]
@@ -65,7 +66,9 @@ func configure_records(wall:Dictionary,roof:Dictionary,source_builder:Callable,t
 		_append_source_run(source_walls,wall,run,true)
 	_append_source_roof(source_roof,roof)
 	var pale:=_public_wall_material(config)
-	_add_original_wall_subset("ProtectedExactNeutralWallRuns",wall_mesh,wall,PROTECTED_RUNS,wall_mesh.get_active_material(0))
+	# The protected NNW notch runs keep their exact geometry and no openings, but
+	# carry the unit's one pale finish instead of the generic placeholder (2026-11-03).
+	_add_original_wall_subset("ProtectedExactNeutralWallRuns",wall_mesh,wall,PROTECTED_RUNS,wall_mesh.get_active_material(0) if baseline else pale)
 	_add_original_wall_subset("ObservedWSWNNWPaleWallFields",wall_mesh,wall,OBSERVED_RUNS,wall_mesh.get_active_material(0) if baseline else pale)
 	_add_original_wall_subset("InferredENESSEPaleWallFields",wall_mesh,wall,INFERRED_RUNS,wall_mesh.get_active_material(0) if baseline else pale)
 	var roof_copy:=MeshInstance3D.new();roof_copy.name="ExactSourceNeutralRoof"
@@ -76,14 +79,16 @@ func configure_records(wall:Dictionary,roof:Dictionary,source_builder:Callable,t
 	var trim:=_material("FS48_complete_pale_surrounds",_color(config.materials.trim_rgb),.88)
 	var glass:=_material("FS48_opaque_dark_glazing_no_interior",_color(config.materials.glass_rgb),.4)
 	var edge:=_material("FS48_thin_roof_edge",_color(config.materials.edge_rgb),.89)
+	var inferred_windows:=0
 	if not baseline:
 		var raw:Dictionary=_json(str(config.geometry_path)).buckets
+		for label:String in raw:buckets[label]=_decode_bucket(raw[label])
+		inferred_windows=_append_inferred_windows(buckets,wall,config.inference.inferred_windows)
 		for label:String in raw:
-			var bucket:=_decode_bucket(raw[label]);buckets[label]=bucket
 			var material:Material=trim
 			if label=="OpaqueHighWindowGlass":material=glass
 			elif label=="ThinStraightPublicRoofEdge":material=edge
-			_add_mesh(label,bucket,material)
+			_add_mesh(label,buckets[label],material)
 	_build_entry(wall,buckets,trim,glass)
 	var body:=StaticBody3D.new();body.name="ExactFootprintStructuralCollision_NoSprayOwnership";body.collision_layer=1;body.collision_mask=0
 	body.set_meta("receiver_kind","none");body.set_meta("derived_object_key","prototype:"+WALL_KEY);body.set_meta("source_keys",["w764313741"])
@@ -101,9 +106,31 @@ func configure_records(wall:Dictionary,roof:Dictionary,source_builder:Callable,t
 	for child:Node in get_children():
 		if child is MeshInstance3D:
 			var count:int=child.mesh.surface_get_array_index_len(0)/3;batches[str(child.name)]=count;total+=count
-	var metadata:Dictionary={"model_id":"fire-station48-whole-building-20261010","source_key":"w764313741","mapped_public_run_indices":OBSERVED_RUNS,"inferred_run_indices":INFERRED_RUNS,"protected_run_indices":PROTECTED_RUNS,"baseline_exact_source":baseline,"source_xz_and_wall_bottoms_preserved":true,"source_roof_geometry_preserved":false,"interior_modeled":false,"source_terrain_untouched":true,"module_dimensions_and_counts":"production_inference","visual_batch_triangles":batches,"visual_triangles":total,"mesh_instances":batches.size(),"surfaces":batches.size(),"static_bodies":1,"shapes":counts.size(),"collision_triangles":collision_total,"collision_groups":counts,"complete_high_windows":0 if baseline else int(config.inference.window_count),"all_additions_render_only":false,"source_collision_only":false,"ground_detail_added":true}
+	var metadata:Dictionary={"model_id":"fire-station48-whole-building-20261010","source_key":"w764313741","mapped_public_run_indices":OBSERVED_RUNS,"inferred_run_indices":INFERRED_RUNS,"protected_run_indices":PROTECTED_RUNS,"baseline_exact_source":baseline,"source_xz_and_wall_bottoms_preserved":true,"source_roof_geometry_preserved":false,"interior_modeled":false,"source_terrain_untouched":true,"module_dimensions_and_counts":"production_inference","visual_batch_triangles":batches,"visual_triangles":total,"mesh_instances":batches.size(),"surfaces":batches.size(),"static_bodies":1,"shapes":counts.size(),"collision_triangles":collision_total,"collision_groups":counts,"complete_high_windows":0 if baseline else int(config.inference.window_count)+inferred_windows,"all_additions_render_only":false,"source_collision_only":false,"ground_detail_added":true}
 	for key:String in metadata:set_meta(key,metadata[key])
 	_last_result={"ok":true,"node":self,"metadata":metadata};return _last_result
+
+# The observed WSW high window (2.0 x 1.06 m opaque glazing, pale surround,
+# centre mullion, decoded from the reviewed WSW geometry) on the inferred ENE
+# and SSE chains at the WSW sill/head line. Stations are production inference.
+static func _append_inferred_windows(buckets:Dictionary,wall:Dictionary,groups:Array) -> int:
+	var surround:Dictionary=buckets.CompletePaleWindowSurrounds;var glass:Dictionary=buckets.OpaqueHighWindowGlass;var mullion:Dictionary=buckets.ThinWindowMullions
+	var count:=0
+	for group:Dictionary in groups:
+		var first:=int(group.runs[0]);var last:=int(group.runs[1])
+		var frame:=_joined_frame(wall,first,last)
+		for station_value:Variant in group.stations_m:
+			var s:=float(station_value)
+			if first not in INFERRED_RUNS or last not in INFERRED_RUNS or s<1.2 or s>float(frame.length_m)-1.2:
+				push_error("Station48 inferred window outside its inferred chain");continue
+			_box(surround,frame,s,5.2715,0.067,2.19,0.095,0.096)
+			_box(surround,frame,s,6.4265,0.067,2.19,0.095,0.096)
+			for side:float in [-1.0,1.0]:
+				_box(surround,frame,s+side*1.0475,5.849,0.067,0.095,1.06,0.096)
+			_box(glass,frame,s,5.849,0.0345,2.0,1.06,0.021)
+			_box(mullion,frame,s,5.849,0.0705,0.046,1.06,0.047)
+			count+=1
+	return count
 
 static func _public_wall_material(config:Dictionary) -> ShaderMaterial:
 	var material:=ShaderMaterial.new()

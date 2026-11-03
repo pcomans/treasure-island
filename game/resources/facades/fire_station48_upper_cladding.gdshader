@@ -18,9 +18,9 @@ void vertex() {
 }
 
 void fragment() {
-	// This material is attached only to the exact public draw subset. The two
-	// fixed source directions keep phase continuous across collinear run splits.
-	vec2 tangent = dot(source_world_normal.xz, vec2(-0.8854596, 0.4647164)) > 0.5
+	// The two fixed source directions keep phase continuous across collinear run
+	// splits; WSW and ENE faces share one, NNW and SSE faces the other.
+	vec2 tangent = abs(dot(source_world_normal.xz, vec2(-0.8854596, 0.4647164))) > 0.5
 		? vec2(0.4647164, 0.8854596) : vec2(-0.8854596, 0.4647164);
 	float station = dot(source_world_position.xz - vec2(125.223, -364.588), tangent);
 	float cycles = station / rib_period_m;

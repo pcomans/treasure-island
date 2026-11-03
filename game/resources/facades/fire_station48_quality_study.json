@@ -368,6 +368,79 @@
       }
     ],
     "window_count": 13,
+    "inferred_windows": [
+      {
+        "side": "ENE main block",
+        "runs": [
+          20,
+          23
+        ],
+        "stations_m": [
+          2.6,
+          8.0,
+          13.4,
+          18.8,
+          24.2,
+          29.6
+        ]
+      },
+      {
+        "side": "ENE connector",
+        "runs": [
+          18,
+          18
+        ],
+        "stations_m": [
+          3.84
+        ]
+      },
+      {
+        "side": "ENE south block",
+        "runs": [
+          14,
+          15
+        ],
+        "stations_m": [
+          3.6,
+          9.06,
+          14.5
+        ]
+      },
+      {
+        "side": "SSE main block end",
+        "runs": [
+          4,
+          4
+        ],
+        "stations_m": [
+          3.88
+        ]
+      },
+      {
+        "side": "SSE main block end",
+        "runs": [
+          19,
+          19
+        ],
+        "stations_m": [
+          2.49
+        ]
+      },
+      {
+        "side": "SSE south block",
+        "runs": [
+          10,
+          13
+        ],
+        "stations_m": [
+          3.0,
+          8.75,
+          14.5,
+          20.25
+        ]
+      }
+    ],
+    "inferred_windows_basis": "production_inference (L2 all-sides audit 2026-11-03): the unphotographed ENE and SSE sides carry the observed WSW high-window module at the same sill/head line and about the WSW spacing; counts and stations are not as-built",
     "all_dimensions_and_cadence": "reversible production inference; only observed public side motifs",
     "ground_detail_added": true,
     "source6m_not_measured_height": true,
@@ -416,7 +489,7 @@
       6.81
     ],
     "head_line_relief_m": 0,
-    "scope": "Observed WSW/NNW faces carry the fine vertical cladding and head joint (production inference). Unphotographed ENE/SSE runs carry the same pale finish as plain closed walls with no openings. Protected NNW runs 7/16/17 retain the original neutral material."
+    "scope": "Observed WSW/NNW faces carry the fine vertical cladding and head joint (production inference). Unphotographed ENE/SSE runs carry the same pale finish with the inferred high windows (2026-11-03); the rib direction follows each face. Protected NNW notch runs 7/16/17 keep their exact geometry and no openings, in the same pale finish (2026-11-03)."
   },
   "observed_runs": [
     0,

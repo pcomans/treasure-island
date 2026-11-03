@@ -4,9 +4,11 @@ extends RefCounted
 ## (B201, B225), owner-approved on 2026-10-22. Each config group names
 ## consecutive host wall runs that form one straight side. The helper places
 ## that attachment's own clerestory window and service-door style along the
-## side from the exact receiver record. The host wall mesh, its material,
-## collision and spray ownership are not touched, and nothing here collides.
-## Counts and positions are production inference, not as-built.
+## side from the exact receiver record, and optionally louvred vents,
+## downspouts and a parapet coping (B225's photographed WSW end, 2026-11-03).
+## The host wall mesh, its material, collision and spray ownership are not
+## touched, and nothing here collides. Counts and positions are production
+## inference, not as-built.
 
 const RENDER_BUILDING_WALL := 1 << 1
 const MAX_SIDE_CHORD_DEVIATION_M := 0.01
@@ -157,6 +159,39 @@ static func _add_group(boxes: Dictionary, group: Dictionary, side: Dictionary, m
 			return "inferred door at %.2f on %s rises above its wall top" % [u, str(group.get("runs", []))]
 		_add_box(boxes, leaf, side, u, (bottom_y + top_y) * 0.5, 0.06, Vector3(width, top_y - bottom_y, 0.09))
 		_add_frame(boxes, frame, side, u, (bottom_y + top_y) * 0.5, Vector2(width, top_y - bottom_y), 0)
+	# Louvred vent: a dark field behind evenly spaced horizontal slats, framed.
+	for louvre_value: Variant in group.get("louvres", []) as Array:
+		var louvre := louvre_value as Dictionary
+		var u := float(louvre.get("u_m", -1.0))
+		var width := float(louvre.get("width_m", 0.0))
+		var bottom_y := float(louvre.get("bottom_y_m", 0.0))
+		var top_y := float(louvre.get("top_y_m", 0.0))
+		var slats := int(louvre.get("slats", 0))
+		if width <= 0.0 or u - width * 0.5 < 0.5 or u + width * 0.5 > length - 0.5 or top_y - bottom_y < 0.3 or slats < 2 \
+			or bottom_y - FRAME_THICKNESS_M < _bottom_y(side, u) or top_y + FRAME_THICKNESS_M > float(side.top_y) - 0.05:
+			return "inferred louvre at %.2f on %s does not fit its side" % [u, str(group.get("runs", []))]
+		var center_y := (bottom_y + top_y) * 0.5
+		_add_box(boxes, glass, side, u, center_y, 0.05, Vector3(width, top_y - bottom_y, 0.08))
+		for index in slats:
+			_add_box(boxes, frame, side, u, lerpf(bottom_y, top_y, (float(index) + 0.5) / float(slats)), 0.1, Vector3(width, 0.05, 0.06))
+		_add_frame(boxes, frame, side, u, center_y, Vector2(width, top_y - bottom_y), 0)
+	# Downspout: one straight pipe from the wall bottom up to top_y_m.
+	for pipe_value: Variant in group.get("pipes", []) as Array:
+		var pipe := pipe_value as Dictionary
+		var u := float(pipe.get("u_m", -1.0))
+		var top_y := float(pipe.get("top_y_m", 0.0))
+		var bottom_y := _bottom_y(side, u) - 0.04
+		if u < 0.2 or u > length - 0.2 or top_y - bottom_y < 1.0 or top_y > float(side.top_y):
+			return "inferred downspout at %.2f on %s does not fit its side" % [u, str(group.get("runs", []))]
+		_add_box(boxes, frame, side, u, (bottom_y + top_y) * 0.5, 0.1, Vector3(0.09, top_y - bottom_y, 0.09))
+	# Parapet coping along the whole side, just proud of the wall top.
+	var cap := group.get("cap", {}) as Dictionary
+	if not cap.is_empty():
+		var height := float(cap.get("height_m", 0.0))
+		var depth := float(cap.get("depth_m", 0.0))
+		if height <= 0.05 or height > 0.5 or depth <= 0.05 or depth > 0.4:
+			return "inferred coping on %s needs a modest height and depth" % str(group.get("runs", []))
+		_add_box(boxes, frame, side, length * 0.5, float(side.top_y) + 0.04 - height * 0.5, depth * 0.5, Vector3(length + 0.1, height, depth))
 	return ""
 
 

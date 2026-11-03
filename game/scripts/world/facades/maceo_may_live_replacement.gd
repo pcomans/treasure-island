@@ -9,9 +9,9 @@ const SOURCE_KEY := "r19685981"
 const WALL_KEY := "building:r19685981:wall"
 const ROOF_KEY := "building:r19685981:roof"
 const TARGET_CHUNK_ID := "x_-1__z_1"
-const WALL_MESHES := ["ProtectedExactNeutralWallRuns", "ObservedENESSEWallFields"]
+const WALL_MESHES := ["ProtectedExactNeutralWallRuns", "ObservedENESSEWallFields", "InferredWSWNNWWallFields"]
 const ROOF_MESHES := ["ExactSourceNeutralRoof"]
-const ACCEPTED_BATCHES := ["ProtectedExactNeutralWallRuns", "ObservedENESSEWallFields", "ExactSourceNeutralRoof", "PaleCompleteENEFrames", "GraphiteRecessAndMullions", "OpaqueBlueGrayGlazing", "GraphiteLouvers", "RustCompleteSSEFrames", "PaleSmallVentFrames", "RustEntryPanels", "PaleRoundEntranceColumns"]
+const ACCEPTED_BATCHES := ["ProtectedExactNeutralWallRuns", "ObservedENESSEWallFields", "InferredWSWNNWWallFields", "ExactSourceNeutralRoof", "PaleCompleteENEFrames", "GraphiteRecessAndMullions", "OpaqueBlueGrayGlazing", "GraphiteLouvers", "RustCompleteSSEFrames", "PaleSmallVentFrames", "RustEntryPanels", "PaleRoundEntranceColumns"]
 const SOURCE_DEPENDENCIES := ["res://game/resources/facades/maceo_may_quality_study.json", "res://game/resources/facades/maceo_may_study_geometry.json", "res://game/resources/facades/maceo_may_public_fields.gdshader", "res://game/scripts/world/facades/site_12_housing_kit.gd", "res://game/scripts/world/facades/maceo_may_live_factory.gd"]
 static func claims_record(record: Dictionary) -> bool:
 	return str(record.get("object_key", "")) in [WALL_KEY, ROOF_KEY]
@@ -73,9 +73,12 @@ static func _build_pair(records:Dictionary, source_builder:Callable,tangent_buil
 	_configure_body(original,WALL_KEY,true);_configure_body(roof_body,ROOF_KEY,false)
 	for index in original.get_child_count():_configure_shape(original.get_child(index) as CollisionShape3D,WALL_KEY,"building_wall" if index==0 else "none")
 	_apply_metadata(wall_root,roof_root)
-	var meta:Dictionary={"adapter_id":ADAPTER_ID,"factory_calls":1,"partial_pair_allowed":false,"fallback_allowed":false,"stack_allowed":false,"mapped_public_run_indices":FACTORY.TARGET_RUNS.duplicate(),"protected_run_indices":FACTORY.PROTECTED_RUNS.duplicate(),"all_additions_render_only":false,"source_collision_only":false,"added_collision_scope":"Five unchanged visible round columns, separate nonreceiver shape"}
+	var meta:Dictionary={"adapter_id":ADAPTER_ID,"factory_calls":1,"partial_pair_allowed":false,"fallback_allowed":false,"stack_allowed":false,"mapped_public_run_indices":FACTORY.TARGET_RUNS.duplicate(),"inferred_grid_run_indices":FACTORY.INFERRED_RUNS.duplicate(),"protected_run_indices":FACTORY.PROTECTED_RUNS.duplicate(),"all_additions_render_only":false,"source_collision_only":false,"added_collision_scope":"Five unchanged visible round columns, separate nonreceiver shape"}
 	for root:Node3D in [wall_root,roof_root]:root.set_meta("maceo_may_live_replacement",meta.duplicate(true))
-	return {"ok":true,"wall_result":{"ok":true,"node":wall_root,"metadata":meta,"mesh_instances":10,"surfaces":10,"triangles":16420,"static_bodies":1,"shapes":2},"roof_result":{"ok":true,"node":roof_root,"metadata":meta,"mesh_instances":1,"surfaces":1,"triangles":16,"static_bodies":1,"shapes":1}}
+	var wall_meshes:=0;var wall_triangles:=0
+	for child:Node in wall_root.get_children():
+		if child is MeshInstance3D:wall_meshes+=1;wall_triangles+=(child as MeshInstance3D).mesh.surface_get_array_index_len(0)/3
+	return {"ok":true,"wall_result":{"ok":true,"node":wall_root,"metadata":meta,"mesh_instances":wall_meshes,"surfaces":wall_meshes,"triangles":wall_triangles,"static_bodies":1,"shapes":2},"roof_result":{"ok":true,"node":roof_root,"metadata":meta,"mesh_instances":1,"surfaces":1,"triangles":16,"static_bodies":1,"shapes":1}}
 
 static func _factory_contract_matches(root:Node3D,records:Dictionary) -> bool:
 	var seen:Dictionary={}

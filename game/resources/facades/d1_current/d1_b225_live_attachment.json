@@ -166,7 +166,7 @@
     "catalog_or_registry_promotion": false
   },
   "inferred_openings": {
-    "inference": "production_inference: owner-approved openings on an unphotographed side (2026-10-22), in this building's own clerestory and service-door style; render only, host wall/collision/spray unchanged; counts and positions are not as-built",
+    "inference": "production_inference: owner-approved openings on the unphotographed SSE and ENE sides (2026-10-22), in this building's own clerestory and service-door style, plus the photographed WSW end details (2026-11-03); render only, host wall/collision/spray unchanged; counts and positions are not as-built",
     "groups": [
       {
         "side": "SSE long side",
@@ -248,6 +248,47 @@
             "leaf_material": "shared_dark_glass"
           }
         ]
+      },
+      {
+        "side": "WSW end, photographed (Street View pano JUZRIY5z, Mar 2025; L2 all-sides audit 2026-11-03): a boarded door-sized opening and a louvred panel low right of centre, two downspouts near the SSE corner and a parapet coping; sizes and stations are production inference from the square-on frame",
+        "runs": [
+          0,
+          1,
+          2
+        ],
+        "glass_material": "shared_dark_glass",
+        "frame_material": "shared_pale_frame",
+        "doors": [
+          {
+            "u_m": 18.2,
+            "width_m": 1.6,
+            "top_y_m": 4.95,
+            "leaf_material": "shared_pale_frame"
+          }
+        ],
+        "louvres": [
+          {
+            "u_m": 19.75,
+            "width_m": 1.3,
+            "bottom_y_m": 3.8,
+            "top_y_m": 4.95,
+            "slats": 5
+          }
+        ],
+        "pipes": [
+          {
+            "u_m": 22.2,
+            "top_y_m": 7.4
+          },
+          {
+            "u_m": 22.55,
+            "top_y_m": 7.4
+          }
+        ],
+        "cap": {
+          "height_m": 0.18,
+          "depth_m": 0.22
+        }
       }
     ]
   }

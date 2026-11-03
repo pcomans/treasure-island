@@ -7,7 +7,15 @@ const CONFIG_PATH := "res://game/resources/facades/maceo_may_quality_study.json"
 const WALL_KEY := "building:r19685981:wall"
 const ROOF_KEY := "building:r19685981:roof"
 const TARGET_RUNS := [8, 9, 10, 11, 12, 13, 14, 15, 16]
-const PROTECTED_RUNS := [0, 1, 2, 3, 4, 5, 6, 7, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39]
+# Unphotographed outer WSW (0-6) and NNW (17-20) faces inherit the observed ENE
+# bay grid (L2 all-sides audit 2026-11-03; production_inference).
+const INFERRED_RUNS := [0, 1, 2, 3, 4, 5, 6, 17, 18, 19, 20]
+# Run 7 and the inner courtyard ring stay as they were.
+const PROTECTED_RUNS := [7, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39]
+# The observed ENE bay, decoded from the reviewed ENE geometry: per upper storey
+# a 3.44 x 2.68 m pale frame around a graphite recess with two glazed lights, a
+# rail and a louvre band; on the graphite base two tall narrow framed lights.
+const GRID_FLOOR_Y := [7.93, 10.83, 13.73, 16.63, 19.53]
 var _tangent_builder:Callable
 var _last_result:Dictionary={}
 
@@ -33,6 +41,7 @@ func configure_records(wall:Dictionary,roof:Dictionary,source_builder:Callable,t
 	var config:=_json(CONFIG_PATH)
 	if not matches_record_pair(wall,roof):return {"ok":false,"message":"Exact source wall and roof pair required."}
 	if not _same_numeric_runs(config.get("mapped_runs",[]),TARGET_RUNS) or not _same_numeric_runs(config.get("protected_runs",[]),PROTECTED_RUNS):return {"ok":false,"message":"Observed/protected scope changed."}
+	if not _same_numeric_runs(config.get("inferred_runs",[]),INFERRED_RUNS) or not _inferred_grid_valid(config.get("inferred_grid",{})):return {"ok":false,"message":"Inferred grid scope changed."}
 	if str(config.get("schema_version",""))!="ti.maceo-may-quality-study/1":return {"ok":false,"message":"Configured emission changed."}
 	# Use the ordinary builder's consumed original streams/material partitions.
 	var original_wall:Dictionary=source_builder.call(wall,false)
@@ -54,6 +63,7 @@ func configure_records(wall:Dictionary,roof:Dictionary,source_builder:Callable,t
 	var pale:=_public_wall_material(config)
 	_add_original_wall_subset("ProtectedExactNeutralWallRuns",wall_mesh,wall,PROTECTED_RUNS,wall_mesh.get_active_material(0))
 	_add_original_wall_subset("ObservedENESSEWallFields",wall_mesh,wall,TARGET_RUNS,wall_mesh.get_active_material(0) if baseline else pale)
+	_add_original_wall_subset("InferredWSWNNWWallFields",wall_mesh,wall,INFERRED_RUNS,wall_mesh.get_active_material(0) if baseline else pale)
 	var roof_copy:=MeshInstance3D.new();roof_copy.name="ExactSourceNeutralRoof"
 	roof_copy.mesh=roof_mesh.mesh;roof_copy.layers=roof_mesh.layers;roof_copy.cast_shadow=roof_mesh.cast_shadow;roof_copy.transform=roof_mesh.transform
 	add_child(roof_copy)
@@ -61,11 +71,12 @@ func configure_records(wall:Dictionary,roof:Dictionary,source_builder:Callable,t
 	var buckets:Dictionary={"source_walls":source_walls,"source_roof":source_roof}
 	if not baseline:
 		var raw:Dictionary=_json(str(config.geometry_path)).buckets
+		for label:String in raw:buckets[label]=_decode_bucket(raw[label])
+		_append_inferred_grid(buckets,wall,config.inferred_grid.faces)
 		for label:String in raw:
-			var bucket:=_decode_bucket(raw[label]);buckets[label]=bucket
 			var family:String=str(config.bucket_materials[label])
 			var material:=_material("MM_"+family,_color(config.materials[family+"_rgb"]),.42 if family=="glass" else .88)
-			_add_mesh(label,bucket,material)
+			_add_mesh(label,buckets[label],material)
 	var body:=StaticBody3D.new();body.name="ExactFootprintStructuralCollision_NoSprayOwnership";body.collision_layer=1;body.collision_mask=0
 	body.set_meta("receiver_kind","none");body.set_meta("derived_object_key","prototype:"+WALL_KEY);body.set_meta("source_keys",["r19685981"])
 	var counts:Dictionary={};var collision_total:=0
@@ -82,9 +93,57 @@ func configure_records(wall:Dictionary,roof:Dictionary,source_builder:Callable,t
 	for child:Node in get_children():
 		if child is MeshInstance3D:
 			var count:int=child.mesh.surface_get_array_index_len(0)/3;batches[str(child.name)]=count;total+=count
-	var metadata:Dictionary={"model_id":"maceo-may-first-coherent-study-001","source_key":"r19685981","mapped_public_run_indices":TARGET_RUNS,"protected_run_indices":PROTECTED_RUNS,"baseline_exact_source":baseline,"original80wall16roof_triangles_preserved":true,"source_roof_geometry_preserved":true,"interior_modeled":false,"source_terrain_untouched":true,"module_dimensions_and_counts":"production_inference","visual_batch_triangles":batches,"visual_triangles":total,"mesh_instances":batches.size(),"surfaces":batches.size(),"static_bodies":1,"shapes":counts.size(),"collision_triangles":collision_total,"collision_groups":counts,"complete_high_windows":0 if baseline else int(config.inference.window_count),"all_additions_render_only":false,"source_collision_only":false,"ground_detail_added":true,"added_collision_scope":"Five round entrance columns only; visible faces and collision identical."}
+	var metadata:Dictionary={"model_id":"maceo-may-first-coherent-study-001","source_key":"r19685981","mapped_public_run_indices":TARGET_RUNS,"inferred_grid_run_indices":INFERRED_RUNS,"inferred_grid_bays":0 if baseline else _inferred_bay_count(config.inferred_grid.faces),"protected_run_indices":PROTECTED_RUNS,"baseline_exact_source":baseline,"original80wall16roof_triangles_preserved":true,"source_roof_geometry_preserved":true,"interior_modeled":false,"source_terrain_untouched":true,"module_dimensions_and_counts":"production_inference","visual_batch_triangles":batches,"visual_triangles":total,"mesh_instances":batches.size(),"surfaces":batches.size(),"static_bodies":1,"shapes":counts.size(),"collision_triangles":collision_total,"collision_groups":counts,"complete_high_windows":0 if baseline else int(config.inference.window_count),"all_additions_render_only":false,"source_collision_only":false,"ground_detail_added":true,"added_collision_scope":"Five round entrance columns only; visible faces and collision identical."}
 	for key:String in metadata:set_meta(key,metadata[key])
 	_last_result={"ok":true,"node":self,"metadata":metadata};return _last_result
+
+static func _inferred_bay_count(faces:Array) -> int:
+	var bays:=0
+	for face:Dictionary in faces:bays+=int(face.bays)
+	return bays
+
+static func _inferred_grid_valid(grid:Variant) -> bool:
+	if not grid is Dictionary or not (grid as Dictionary).get("faces") is Array:return false
+	var seen:Array=[]
+	for face:Variant in grid.faces:
+		if not face is Dictionary or not face.get("runs") is Array or face.runs.size()!=2:return false
+		var first:=int(face.runs[0]);var last:=int(face.runs[1]);var bays:=int(face.get("bays",0))
+		if first>last or bays<1:return false
+		for run in range(first,last+1):
+			if run not in INFERRED_RUNS or run in seen:return false
+			seen.append(run)
+	return seen.size()==INFERRED_RUNS.size()
+
+# Each inferred face is one straight run chain; its bays are centred in equal
+# cells along it, at the ENE storey lines (cadence and count are production
+# inference). Render-only detail in the existing ENE batches and materials.
+static func _append_inferred_grid(buckets:Dictionary,wall:Dictionary,faces:Array) -> void:
+	var pale:Dictionary=buckets.PaleCompleteENEFrames;var graphite:Dictionary=buckets.GraphiteRecessAndMullions
+	var glass:Dictionary=buckets.OpaqueBlueGrayGlazing;var louver:Dictionary=buckets.GraphiteLouvers
+	for face:Dictionary in faces:
+		var frame:=_joined_frame(wall,int(face.runs[0]),int(face.runs[1]))
+		var bays:=int(face.bays);var pitch:float=float(frame.length_m)/bays
+		for bay in bays:
+			var c0:=pitch*(float(bay)+0.5)
+			for y0:float in GRID_FLOOR_Y:
+				_box(pale,frame,c0,y0+0.17,0.1525,3.44,0.34,0.215)
+				_box(pale,frame,c0,y0+2.51,0.1525,3.44,0.34,0.215)
+				_box(graphite,frame,c0,y0+1.34,0.0335,2.76,2.0,0.043)
+				_box(louver,frame,c0,y0+2.165,0.0925,2.66,0.25,0.035)
+				for side:float in [-1.0,1.0]:
+					_box(pale,frame,c0+side*1.55,y0+1.34,0.1525,0.34,2.0,0.215)
+					_box(glass,frame,c0+side*0.83,y0+1.22,0.0645,0.98,1.62,0.013)
+					_box(graphite,frame,c0+side*0.83,y0+0.8025,0.087,0.98,0.045,0.03)
+			for side:float in [-1.0,1.0]:
+				var s:=c0+side*0.78
+				_box(glass,frame,s,6.115,0.031,0.58,2.8,0.026)
+				_box(graphite,frame,s,4.6875,0.056,0.69,0.055,0.088)
+				_box(graphite,frame,s,7.5425,0.056,0.69,0.055,0.088)
+				for edge:float in [-1.0,1.0]:
+					_box(graphite,frame,s+edge*0.3175,6.115,0.056,0.055,2.8,0.088)
+
+static func _box(bucket:Dictionary,frame:Dictionary,station:float,y:float,depth:float,width:float,height:float,thickness:float) -> void:
+	KIT.append_box(bucket,_point(frame,station,y,depth),frame.tangent,frame.normal,width,height,thickness)
 
 static func _public_wall_material(config:Dictionary) -> ShaderMaterial:
 	var material:=ShaderMaterial.new()
