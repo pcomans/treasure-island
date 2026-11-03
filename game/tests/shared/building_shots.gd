@@ -23,6 +23,14 @@ extends SceneTree
 ##   {"area": "NAME", "views": [{"name": "...", "player_xz": [x,z], "target_xyz": [x,y,z]}]}
 ##   with the same optional camera_xyz, fov, projection and ortho_size as --views.
 ##   Saved as street-NAME.png; taken with street detail on and off by default.
+##   A street view may add "moves": [{"hold": ["move_forward", "run"], "ticks": 60,
+##   "turn_deg": 0}, ...] to drive the stock player with its real input actions
+##   from where it settled, facing the target (turn_deg turns the camera, and so
+##   the walk, over that step), saving a frame every "every" physics ticks
+##   (default 2) as street-NAME-000.png, ... Run with --fixed-fps 60 so the frames
+##   are evenly spaced in game time. A free camera (camera_xyz) follows the player,
+##   keeping its offset and looking at the player. Each tick prints a MOVE_TICK
+##   line, with the avatar's describe() when it has one.
 ## --views-batch FILE: only the focused views of several buildings in one world load,
 ## [{"source": "KEY", "plan": "views.json"}, ...], each plan a --views file for its
 ## source, saved to OUT/KEY/detail-NAME.png. Fixed-pose views only (no closeup,
@@ -47,6 +55,9 @@ const DEFAULT_STREET_DETAIL := {
 	"island": ["on", "off"],
 	"overhead": ["on", "off"],
 }
+
+## Input actions a street view's moves may hold.
+const MOVE_ACTIONS := ["move_forward", "move_back", "move_left", "move_right", "run", "jetpack"]
 
 ## The neutral daylight in main.tscn before the 2026-10-23 warm-light change,
 ## restored by --neutral-lighting as [target, property, value].
@@ -232,7 +243,11 @@ func _street_views(path: String, out: String, suffix: String) -> void:
 			return
 		names[name] = true
 		var target := Vector3(view.target_xyz[0], view.target_xyz[1], view.target_xyz[2])
-		var error := await _shoot_view(view, target, "%s/street-%s%s.png" % [out, name, suffix])
+		var error := ""
+		if view.has("moves"):
+			error = await _moving_view(view, target, "%s/street-%s%s" % [out, name, suffix])
+		else:
+			error = await _shoot_view(view, target, "%s/street-%s%s.png" % [out, name, suffix])
 		if error != "":
 			_errors.append("street view " + name + ": " + error)
 			return
@@ -254,20 +269,8 @@ func _shoot_view(view: Dictionary, target: Vector3, path: String) -> String:
 	var error := await _h.settle_player(Vector2(view.player_xz[0], view.player_xz[1]))
 	if error != "":
 		return error
-	var free: Camera3D = null
-	if view.has("camera_xyz"):
-		free = Camera3D.new()
-		if view.get("projection", "perspective") == "ortho":
-			free.projection = Camera3D.PROJECTION_ORTHOGONAL
-			free.size = float(view.ortho_size)
-		else:
-			free.fov = float(view.get("fov", 70.0))
-		free.far = 5000.0
-		_h.main.add_child(free)
-		free.global_position = Vector3(view.camera_xyz[0], view.camera_xyz[1], view.camera_xyz[2])
-		free.look_at(target, Vector3.UP)
-		free.make_current()
-	else:
+	var free := _free_camera(view, target)
+	if free == null:
 		_h.aim_camera(target)
 	await physics_frame
 	await physics_frame
@@ -276,6 +279,111 @@ func _shoot_view(view: Dictionary, target: Vector3, path: String) -> String:
 		free.queue_free()
 		_h.player.get_camera().make_current()
 	return error
+
+
+## The view's free camera at camera_xyz aimed at target, made current, or null
+## when the view has none.
+func _free_camera(view: Dictionary, target: Vector3) -> Camera3D:
+	if not view.has("camera_xyz"):
+		return null
+	var free := Camera3D.new()
+	if view.get("projection", "perspective") == "ortho":
+		free.projection = Camera3D.PROJECTION_ORTHOGONAL
+		free.size = float(view.ortho_size)
+	else:
+		free.fov = float(view.get("fov", 70.0))
+	free.far = 5000.0
+	_h.main.add_child(free)
+	free.global_position = Vector3(view.camera_xyz[0], view.camera_xyz[1], view.camera_xyz[2])
+	free.look_at(target, Vector3.UP)
+	free.make_current()
+	return free
+
+
+## Settles the player at the view's player_xz, faces the gameplay camera to the
+## target, then drives the stock player through the view's moves with its real
+## input actions, saving a frame every `every` physics ticks as PREFIX-000.png,
+## PREFIX-001.png, ... A free camera keeps its offset from the player and looks
+## at the player's capsule. Prints one MOVE_TICK line per tick, after its
+## physics. Returns an error message, or "".
+func _moving_view(view: Dictionary, target: Vector3, prefix: String) -> String:
+	var every: Variant = view.get("every", 2)
+	if not view.moves is Array or view.moves.is_empty() or not _numbers([every], 1) or float(every) != floorf(float(every)) or float(every) < 1.0:
+		return "moves need a nonempty list of steps and a whole positive every"
+	for step: Variant in view.moves:
+		if not step is Dictionary or not step.get("hold") is Array or not _numbers([step.get("ticks")], 1) \
+		or float(step.ticks) != floorf(float(step.ticks)) or float(step.ticks) < 1.0 \
+		or (step.has("turn_deg") and not _numbers([step.get("turn_deg")], 1)):
+			return "each move needs hold (a list of actions), whole positive ticks and an optional numeric turn_deg"
+		for action: Variant in step.hold:
+			if not action in MOVE_ACTIONS:
+				return "moves may hold only " + ", ".join(PackedStringArray(MOVE_ACTIONS))
+	var camera_error := _free_camera_error(view, target)
+	if camera_error != "":
+		return camera_error
+	var error := await _h.settle_player(Vector2(view.player_xz[0], view.player_xz[1]))
+	if error != "":
+		return error
+	var player := _h.player
+	var capsule := player.get_node("CollisionShape3D") as Node3D
+	var free := _free_camera(view, target)
+	var camera_offset := free.global_position - player.global_position if free != null else Vector3.ZERO
+	_h.aim_camera(target)
+	var rig := player.get_node("CameraPivot") as Node3D
+	var pivot := player.get_node("AvatarPivot") as Node3D
+	var avatar: Node = pivot.get_child(0) if pivot.get_child_count() > 0 else null
+	_h.clean_hud()
+	player.set_gameplay_enabled(true)
+	var tick := 0
+	var frame := 0
+	for step: Dictionary in view.moves:
+		for action: String in step.hold:
+			Input.action_press(action)
+		var turn := deg_to_rad(float(step.get("turn_deg", 0.0))) / float(step.ticks)
+		for _i in int(step.ticks):
+			rig.rotation.y += turn
+			await physics_frame
+			# Resume after this tick's physics has moved the player.
+			await process_frame
+			var saved := "-"
+			if tick % int(every) == 0:
+				if free != null:
+					free.global_position = player.global_position + camera_offset
+					free.look_at(capsule.global_position, Vector3.UP)
+				_h.clean_hud()
+				await RenderingServer.frame_post_draw
+				var path := "%s-%03d.png" % [prefix, frame]
+				if root.get_texture().get_image().save_png(path) != OK:
+					error = "could not save " + path
+					break
+				saved = path.get_file()
+				frame += 1
+			var velocity := player.get_real_velocity()
+			var state: Variant = _plain(avatar.describe()) if avatar != null and avatar.has_method("describe") else null
+			print("MOVE_TICK %s tick=%d frame=%s pos=%s speed=%.3f floor=%s held=%s avatar=%s" % [prefix.get_file(), tick, saved, player.global_position, Vector2(velocity.x, velocity.z).length(), player.is_on_floor(), ",".join(PackedStringArray(step.hold)), JSON.stringify(state)])
+			tick += 1
+		_h.release_input()
+		if error != "":
+			break
+	player.set_gameplay_enabled(false)
+	if free != null:
+		free.queue_free()
+		player.get_camera().make_current()
+	return error
+
+
+## Vectors as plain number lists, so a describe() dictionary prints as JSON.
+static func _plain(value: Variant) -> Variant:
+	if value is Vector3:
+		return [value.x, value.y, value.z]
+	if value is Array:
+		return value.map(func(item: Variant) -> Variant: return _plain(item))
+	if value is Dictionary:
+		var plain := {}
+		for key: Variant in value:
+			plain[key] = _plain(value[key])
+		return plain
+	return value
 
 
 ## Why a view's free-camera fields are unusable, or "" (also when it has none).

@@ -87,14 +87,8 @@ function main() {
       kit.equals(readFileSync(resolve(projectRoot, STREET_CLUTTER_KIT_PATH))),
       `Committed ${STREET_CLUTTER_KIT_PATH} differs from a fresh build; rebuild it with tools/build_street_clutter_kit.mjs`,
     );
-    const vegetationPath = "vegetation.json";
-    invariant(firstInventory.some((file) => file.path === vegetationPath), "Clean generation omitted vegetation.json");
     const streetDetailPath = "street_detail.json";
     invariant(firstInventory.some((file) => file.path === streetDetailPath), "Clean generation omitted street_detail.json");
-    invariant(
-      readFileSync(resolve(first, vegetationPath)).equals(readFileSync(resolve(second, vegetationPath))),
-      "Clean generations differ byte-for-byte at vegetation.json",
-    );
     const manifest = JSON.parse(readFileSync(resolve(first, "manifest.json"), "utf8"));
     process.stdout.write(stableJson({
       status: "deterministic",
@@ -102,7 +96,6 @@ function main() {
       files_compared: firstInventory.length,
       street_clutter_kit_bytes: kit.length,
       content_sha256: manifest.content_sha256,
-      vegetation_sha256: firstInventory.find((file) => file.path === vegetationPath).sha256,
       street_detail_sha256: firstInventory.find((file) => file.path === streetDetailPath).sha256,
     }));
   } finally {

@@ -9,7 +9,8 @@ extends Node3D
 ##
 ## Everything is procedural and driven by that motion, each physics tick after
 ## the controller has moved the player:
-## - Gait: a phase advances with ground speed. Each foot stays planted in the
+## - Gait: a phase advances with ground speed, about two strides a second at
+##   the stock walk and quicker above it. Each foot stays planted in the
 ##   world while it carries the chest, so it never slides, then swings to a spot
 ##   predicted from the velocity, on the ground a short ray finds there with the
 ##   player's own collision mask (stairs and street props included), lifted onto
@@ -50,6 +51,16 @@ const AIR_GRACE := 0.12
 ## Stride cycles per second at most: at the 20 m/s run more would strobe at web
 ## frame rates; the knee-less hoses stretch (and stay curved) instead.
 const CADENCE_MAX := 5.0
+## Walking: WALK_CADENCE stride cycles a second (a step of each foot) at the
+## stock walk speed, with fewer, shorter strides below it, and a foot down for
+## WALK_DUTY of each stride so the long strides stay within a rubber-hose
+## stretch. Above the walk both blend into the run's own, which they equal from
+## RUN_CADENCE_SPEED on (where the run's cadence reaches CADENCE_MAX): the run
+## and its blend from there are unchanged.
+const WALK_SPEED := 4.0
+const WALK_CADENCE := 2.0
+const WALK_DUTY := 0.5
+const RUN_CADENCE_SPEED := 7.4
 
 ## Lid hinge: natural frequency (Hz), damping ratio, rest angle (rad), gains
 ## from the hinge's acceleration (rad/s^2 per m/s^2), airflow lift (rad per
@@ -515,8 +526,10 @@ func _update_gait(xf: Transform3D, planar: Vector3, speed: float, yaw: float, de
 	var moving := speed > STAND_SPEED
 	if not moving and not _needs_settle(xf):
 		return 0.0
-	_cadence = minf(1.6 + 1.25 * sqrt(speed), CADENCE_MAX) if moving else 2.8
-	_duty = lerpf(0.58, 0.28, _w_run)
+	var walk := 1.0 - smoothstep(WALK_SPEED, RUN_CADENCE_SPEED, speed)
+	var run_cadence := minf(1.6 + 1.25 * sqrt(speed), CADENCE_MAX)
+	_cadence = lerpf(run_cadence, WALK_CADENCE * pow(speed / WALK_SPEED, 0.45), walk) if moving else 2.8
+	_duty = lerpf(lerpf(0.58, 0.28, _w_run), WALK_DUTY, walk)
 	_phase = fposmod(_phase + _cadence * delta, 1.0)
 	var swing_height := clampf(0.07 + 0.012 * speed, 0.08, 0.24)
 	var stance_time := _duty / _cadence

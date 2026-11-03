@@ -90,8 +90,8 @@ func street_detail_summary() -> String:
 
 
 ## What is wrong with the loaded street-detail state: a layer that is off must
-## hold nothing (its nodes and collision were freed), and the placeholder
-## vegetation, the street furniture, the fences and the clutter must be there
+## hold nothing (its nodes and collision were freed), and the vegetation, the
+## street furniture, the fences and the clutter must be there
 ## while their layers are on. [] when all is well.
 func street_detail_problems() -> Array[String]:
 	var problems: Array[String] = []

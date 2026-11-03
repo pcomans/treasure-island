@@ -56,14 +56,35 @@ when a building counts as done.
 
 ## Build for the Mac
 
+Every push to `main` builds the Mac app on GitHub Actions
+([mac-build.yml](.github/workflows/mac-build.yml)). Both launch checks there are
+headless, so CI never exercises the game's rendering on a Mac. Once a GitHub
+Apple Silicon Mac has launched the app and loaded the island, the build replaces
+the previous one at one fixed link:
+
+https://github.com/pcomans/treasure-island/releases/download/mac-latest/treasure-island-mac.zip
+
+The [release page](https://github.com/pcomans/treasure-island/releases/tag/mac-latest)
+names the commit and date of the build. Downloaded with curl or `gh`, the zip has
+no quarantine flag, so the unzipped app opens directly:
+
+```sh
+curl -fLO https://github.com/pcomans/treasure-island/releases/download/mac-latest/treasure-island-mac.zip
+gh release download mac-latest --repo pcomans/treasure-island   # or this
+```
+
+The app is not notarized, so after a browser download macOS blocks the first
+launch: open System Settings → Privacy & Security and click "Open Anyway".
+
+To build it in the devcontainer instead:
+
 ```sh
 tools/build-mac.sh   # -> build/mac/treasure-island-mac-<commit>.zip
 ```
 
 This exports the macOS build, checks it contains only game files (no research or
 evidence folders, no images outside `game/resources/`), and launches a Linux build of the same commit to confirm the island
-loads. Copy the zip to the Mac, unzip it, and right-click the app → Open the
-first time (it is not notarized).
+loads.
 
 Desktop builds (this and `tools/build-linux.sh`) first bake the island with
 `tools/prebuild-static-world.sh native` and load that baked world at startup

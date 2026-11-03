@@ -111,15 +111,10 @@ import {
 } from "./lib/mesh-output.mjs";
 import { loadTerrainRaster } from "./lib/terrain-raster.mjs";
 import {
-  NAIP_TREE_ANNOTATION_SHA256,
-  generateVegetation,
-} from "./lib/vegetation-generation.mjs";
-import {
   generateStreetDetail,
   loadStreetDetailStairFlights,
   loadStreetDetailZones,
   streetDetailHardShapes,
-  streetDetailZoneShapes,
 } from "./lib/street-detail-generation.mjs";
 import { generateStreetGround } from "./lib/street-ground-generation.mjs";
 import {
@@ -132,10 +127,6 @@ import {
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(scriptDirectory, "..");
-const NAIP_TREE_ANNOTATIONS_PATH = resolve(
-  projectRoot,
-  "source_assets/vegetation/naip_2022/tree_annotations_candidate.geojson",
-);
 const TERRAIN_RASTER_EXPECTATIONS = Object.freeze({
   width: 1_669,
   height: 2_048,
@@ -2047,20 +2038,6 @@ function main() {
       sourceRows.findIndex((row) => row.source_key === right.source_key));
     const validation = validateFinalState(coverage, allObjects, chunks, context.document, ledgerState.memberships);
     const logicalObjects = logicalObjectsDocument(allObjects);
-    invariant(
-      sha256File(NAIP_TREE_ANNOTATIONS_PATH) === NAIP_TREE_ANNOTATION_SHA256,
-      "Pinned NAIP tree annotation source hash drift",
-    );
-    const vegetation = generateVegetation({
-      boundary,
-      playableObjects,
-      chunks,
-      terrainSupportAt: terrainSupportFromChunks,
-      spawn: [spawn.origin[0], spawn.origin[2]],
-      naipTreeAnnotations: JSON.parse(readFileSync(NAIP_TREE_ANNOTATIONS_PATH, "utf8")),
-      // The street-detail vegetation replaces the placeholder in the pilot zones.
-      pilotZones: streetDetailZoneShapes(streetConfig, loaded.properSources).filter(({ zone }) => zone.pilot),
-    });
     const streetDetail = generateStreetDetail({
       projectRoot,
       boundary,
@@ -2084,7 +2061,6 @@ function main() {
     writeArtifact(stagingRoot, "context.json", context.document);
     writeArtifact(stagingRoot, "logical-objects.json", logicalObjects);
     writeArtifact(stagingRoot, "terrain.json", terrainDocument);
-    writeArtifact(stagingRoot, "vegetation.json", vegetation);
     writeArtifact(stagingRoot, "street_detail.json", streetDetail);
     // Compact: the shoreline is mostly number arrays, and it grows segment by segment.
     writeArtifact(stagingRoot, "shoreline.json", `${JSON.stringify(sortJson(shoreline.document))}\n`);
@@ -2224,11 +2200,10 @@ function main() {
     const coverageDescriptor = preManifestFiles.find((file) => file.path === "coverage-ledger.csv");
     const contextDescriptor = preManifestFiles.find((file) => file.path === "context.json");
     const terrainDescriptor = preManifestFiles.find((file) => file.path === "terrain.json");
-    const vegetationDescriptor = preManifestFiles.find((file) => file.path === "vegetation.json");
     const streetDetailDescriptor = preManifestFiles.find((file) => file.path === "street_detail.json");
     const shorelineDescriptor = preManifestFiles.find((file) => file.path === "shoreline.json");
     const chunkDescriptors = preManifestFiles.filter((file) => file.path.startsWith("chunks/"));
-    invariant(coverageDescriptor && contextDescriptor && terrainDescriptor && vegetationDescriptor && streetDetailDescriptor && shorelineDescriptor && chunkDescriptors.length === chunks.size, "Manifest artifact discovery failed");
+    invariant(coverageDescriptor && contextDescriptor && terrainDescriptor && streetDetailDescriptor && shorelineDescriptor && chunkDescriptors.length === chunks.size, "Manifest artifact discovery failed");
     const manifest = {
       schema_version: WORLD_SCHEMA,
       generator_version: GENERATOR_VERSION,
@@ -2260,7 +2235,6 @@ function main() {
       coverage_ledger: coverageDescriptor,
       context: contextDescriptor,
       terrain: terrainDescriptor,
-      vegetation: vegetationDescriptor,
       street_detail: streetDetailDescriptor,
       shoreline: shorelineDescriptor,
       chunks: chunkDescriptors.map((descriptor) => ({
