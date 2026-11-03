@@ -153,7 +153,7 @@ changed.
 ### 2026-08-28 — Kenney Nature Kit vegetation models
 
 - Date and time (UTC): `2026-08-28T22:17:11Z`
-- Status: `completed`
+- Status: `removed` (2026-11-03). The owner called these low-poly plants placeholders; the generator's placeholder vegetation pass, its runtime builder and `game/resources/models/vegetation/` (the 15 GLBs, their imports and `PROVENANCE.md`) were removed together. `third_party_staging/` is not present in this checkout. The street-detail vegetation layer's own kit replaces them.
 - Exact package and version: Kenney `Nature Kit`; embedded license identifies version `2.1`.
 - Publisher and source URL: Kenney; [official asset page](https://kenney.nl/assets/nature-kit); [exact official ZIP](https://kenney.nl/media/pages/assets/nature-kit/37ac38a37b-1677698939/kenney_nature-kit.zip).
 - Checksum or integrity evidence: downloaded archive is `10,537,521` bytes with SHA-256 `fa7974a0d342bfe63c38664ba9f8ec1a4aab8ea25f099bdc56870e33588c4d9d`; `unzip -tq` passed. Kenney publishes no separate checksum on the asset page, so this is a locally recorded acquisition hash rather than a publisher checksum.

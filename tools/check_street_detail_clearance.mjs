@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 // Street-detail clearance: with every street-detail layer switched on, nothing
-// they would build (OSM-placed items, scatter, set pieces and the placeholder
-// vegetation) intrudes on a door, stair or approach buffer, the ferry spawn and
-// the walk straight ahead from it, the ferry path, the normal QA route or a
-// whole-island QA landing anchor.
+// they would build (OSM-placed items, scatter and set pieces) intrudes on a
+// door, stair or approach buffer, the ferry spawn and the walk straight ahead
+// from it, the ferry path, the normal QA route or a whole-island QA landing
+// anchor.
 //
 //   node tools/check_street_detail_clearance.mjs [WORLD_DIR]   (default generated/world)
 //
@@ -12,7 +12,7 @@
 // the building catalog as it is now, so a stair added after the last world
 // generation is checked as well. The buffer shapes and the plan distance are the
 // generator's own (streetDetailHardShapes, planDistance); what this check adds is
-// the placeholder vegetation and a catalog read independent of the last build.
+// a catalog read independent of the last build.
 // Prints PASS or one FAIL line per intrusion. The always-on street ground
 // (raised sidewalks, plaza, curb ramps) is walkable, not an intrusion: where it
 // covers the spawn, the ferry path, the QA route or a landing anchor that is
@@ -52,7 +52,6 @@ function readJson(path) {
 function main() {
   const manifest = readJson(resolve(worldRoot, "manifest.json"));
   const detail = readJson(resolve(worldRoot, manifest.street_detail.path));
-  const vegetation = readJson(resolve(worldRoot, manifest.vegetation.path));
   const exclusions = loadStreetDetailZones(projectRoot).exclusions;
   const spawn = { xz: [manifest.initial_spawn.origin[0], manifest.initial_spawn.origin[2]], yaw: manifest.initial_spawn.yaw };
   const zones = streetDetailHardShapes(exclusions, spawn, loadStreetDetailStairFlights(projectRoot))
@@ -67,9 +66,6 @@ function main() {
     streetDetailPieces(row).forEach((piece, index) => {
       items.push({ id: row.fence ? `${row.id} run ${index}` : row.id, layer: row.layer, points: piece.points, radius: piece.radius });
     });
-  }
-  for (const placement of vegetation.placements) {
-    items.push({ id: placement.id, layer: "vegetation", points: [[placement.position_m[0], placement.position_m[2]]], radius: exclusions.vegetation_placeholder_radius_m });
   }
 
   const failures = [];

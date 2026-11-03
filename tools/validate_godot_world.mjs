@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { createHash } from "node:crypto";
-import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -51,19 +51,6 @@ import {
   WATER_Y_M,
 } from "./lib/shoreline-generation.mjs";
 import {
-  NAIP_TREE_ANNOTATION_SCHEMA,
-  NAIP_TREE_ANNOTATION_SHA256,
-  NAIP_UNKNOWN_CLEARANCES_M,
-  NAIP_UNKNOWN_SHRUB_ZONE_ID,
-  VEGETATION_ASSETS,
-  VEGETATION_ASSET_ROOT,
-  VEGETATION_CLEARANCES_M,
-  VEGETATION_QA_CORRIDORS,
-  VEGETATION_SCHEMA,
-  VEGETATION_SEED,
-  naipUnknownShrubVariation,
-} from "./lib/vegetation-generation.mjs";
-import {
   STREET_DETAIL_GROUND_LAYER,
   STREET_DETAIL_KINDS,
   STREET_DETAIL_LAYERS,
@@ -97,10 +84,6 @@ const EXPECTED_TERRAIN_STATISTICS = Object.freeze({
   minimum_elevation_m: -1.08,
   maximum_elevation_m: 104.756,
 });
-const NAIP_TREE_ANNOTATIONS_PATH = resolve(
-  projectRoot,
-  "source_assets/vegetation/naip_2022/tree_annotations_candidate.geojson",
-);
 // Street-ground record kinds: object key prefix -> feature kind, material,
 // collision and spray opacity. Every record holds one chunk's share of a layer.
 // A deliberate copy of RECORD_KINDS in tools/lib/street-ground-generation.mjs:
@@ -556,18 +539,6 @@ function pointToRecordDistance(point, record) {
   return minimum;
 }
 
-function pointToRecordsDistance(point, records) {
-  return Math.min(...records.map((record) => pointToRecordDistance(point, record)));
-}
-
-function pointToLineDistance(point, line) {
-  let minimum = Infinity;
-  for (let index = 1; index < line.length; index += 1) {
-    minimum = Math.min(minimum, pointToSegmentDistance2d(point, line[index - 1], line[index]));
-  }
-  return minimum;
-}
-
 function pointInRingXZ(point, ring) {
   let inside = false;
   for (let index = 0, previous = ring.length - 1; index < ring.length; previous = index, index += 1) {
@@ -581,18 +552,6 @@ function pointInRingXZ(point, ring) {
 function pointInPlayableBoundary(point, boundary) {
   return boundary.components.some((component) =>
     pointInRingXZ(point, component.outer) && !component.holes.some((hole) => pointInRingXZ(point, hole)));
-}
-
-function pointToBoundaryDistance(point, boundary) {
-  let minimum = Infinity;
-  for (const component of boundary.components) {
-    for (const ring of [component.outer, ...component.holes]) {
-      for (let index = 0; index < ring.length; index += 1) {
-        minimum = Math.min(minimum, pointToSegmentDistance2d(point, ring[index], ring[(index + 1) % ring.length]));
-      }
-    }
-  }
-  return minimum;
 }
 
 function validatePavementSkin(worldRoot, manifest, coverage, records, terrain) {
@@ -768,184 +727,6 @@ function validatePavementSkin(worldRoot, manifest, coverage, records, terrain) {
     collision_sha256: collisionSha256,
     relative_luminance_difference: audit.materials.pedestrian_vs_vehicle_relative_luminance_difference,
   };
-}
-
-function validateGlbAsset(resourcePath) {
-  invariant(resourcePath.startsWith(VEGETATION_ASSET_ROOT) && resourcePath.endsWith(".glb"), `Unsafe vegetation asset path ${resourcePath}`);
-  const relativePath = resourcePath.slice("res://".length);
-  const absolutePath = resolve(projectRoot, relativePath);
-  invariant(absolutePath.startsWith(resolve(projectRoot, "game/resources/models/vegetation/kenney_nature_kit") + "/"), `Vegetation asset escapes curated root: ${resourcePath}`);
-  invariant(existsSync(absolutePath), `Vegetation asset is missing: ${resourcePath}`);
-  const bytes = readFileSync(absolutePath);
-  invariant(bytes.length >= 20 && bytes.toString("ascii", 0, 4) === "glTF", `${resourcePath} is not a binary glTF`);
-  invariant(bytes.readUInt32LE(4) === 2 && bytes.readUInt32LE(8) === bytes.length, `${resourcePath} GLB version/length drift`);
-  const jsonLength = bytes.readUInt32LE(12);
-  invariant(bytes.toString("ascii", 16, 20) === "JSON", `${resourcePath} first GLB chunk is not JSON`);
-  const gltf = JSON.parse(bytes.subarray(20, 20 + jsonLength).toString("utf8").replace(/[\u0000 ]+$/u, ""));
-  invariant(gltf.asset?.version === "2.0" && gltf.scenes?.length === 1 && gltf.meshes?.length > 0, `${resourcePath} glTF scene/mesh contract drift`);
-  invariant((gltf.buffers ?? []).every((buffer) => buffer.uri == null), `${resourcePath} references an external buffer`);
-  invariant((gltf.images ?? []).every((image) => image.uri == null), `${resourcePath} references an external image`);
-}
-
-function validateVegetation(worldRoot, manifest, records) {
-  invariant(manifest.vegetation?.path === "vegetation.json", "Manifest vegetation descriptor is missing");
-  invariant(stableJson(descriptor(worldRoot, manifest.vegetation.path)) === stableJson(manifest.vegetation), "Vegetation descriptor drift");
-  const vegetation = JSON.parse(readFileSync(resolve(worldRoot, manifest.vegetation.path), "utf8"));
-  invariant(vegetation.schema_version === VEGETATION_SCHEMA, "Vegetation schema drift");
-  invariant(vegetation.seed === VEGETATION_SEED && vegetation.visual_only === true, "Vegetation seed or visual-only contract drift");
-  invariant(vegetation.asset_root === VEGETATION_ASSET_ROOT, "Vegetation asset root drift");
-  invariant(stableJson(vegetation.assets) === stableJson(VEGETATION_ASSETS), "Vegetation allowed asset palette drift");
-  invariant(stableJson(vegetation.clearances_m) === stableJson(VEGETATION_CLEARANCES_M), "Vegetation clearance contract drift");
-  invariant(sha256File(NAIP_TREE_ANNOTATIONS_PATH) === NAIP_TREE_ANNOTATION_SHA256, "Pinned NAIP tree annotation source hash drift");
-  const annotationDocument = JSON.parse(readFileSync(NAIP_TREE_ANNOTATIONS_PATH, "utf8"));
-  invariant(annotationDocument.type === "FeatureCollection" && annotationDocument.schema === NAIP_TREE_ANNOTATION_SCHEMA,
-    "NAIP tree annotation source schema drift");
-  const unknownAnnotations = annotationDocument.features.filter((feature) => feature.properties?.tree_type === "unknown");
-  invariant(unknownAnnotations.length === 22, "Expected exactly 22 accepted NAIP unknown annotations");
-  const unknownAnnotationsById = new Map(unknownAnnotations.map((feature) => [feature.id, feature]));
-  for (const asset of vegetation.assets) validateGlbAsset(asset.path);
-  const placements = vegetation.placements;
-  invariant(Array.isArray(placements) && placements.length === 123 && vegetation.counts.total === placements.length, "Expected the pinned 123-placement vegetation pass");
-  invariant(stableJson(placements.map((placement) => placement.id)) === stableJson(placements.map((placement) => placement.id).sort()), "Vegetation placements are not canonically ordered");
-  invariant(new Set(placements.map((placement) => placement.id)).size === placements.length, "Vegetation placement IDs are not unique");
-  invariant(stableJson(vegetation.counts.by_species) === stableJson({ broadleaf: 28, conifer: 21, ornamental_grass: 20, palm: 13, shrub: 41 }), "Vegetation species palette/density drift");
-  invariant(stableJson(vegetation.counts.by_zone) === stableJson({
-    central_conifer_groves: 21,
-    legacy_grid_broadleaf: 20,
-    naip_unknown_shrubs: 22,
-    north_west_lawn_broadleaf: 8,
-    south_ornamental_beds: 33,
-    south_palm_rows: 13,
-    south_shrub_groups: 6,
-  }), "Vegetation zone density drift");
-  invariant(Object.values(vegetation.counts.by_asset).every((count) => count > 0), "Every curated vegetation GLB must be exercised");
-  const assetSpecies = new Map(VEGETATION_ASSETS.map((asset) => [asset.path, asset.species]));
-  const landByKey = new Map([...records.physical.values()]
-    .filter(({ record }) => record.feature_kind === "land_ground")
-    .map(({ record }) => [record.object_key, record]));
-  const roadRecords = [...records.physical.values()].map(({ record }) => record)
-    .filter((record) => record.feature_kind === "road_path");
-  const buildingRecords = [...records.physical.values()].map(({ record }) => record)
-    .filter((record) => ["building_roof", "building_part_roof"].includes(record.feature_kind));
-  const shorelineOverlayRecords = [...records.physical.values()].map(({ record }) => record)
-    .filter((record) => record.feature_kind === "terrain_overlay");
-  const observed = Object.fromEntries(Object.keys(VEGETATION_CLEARANCES_M).map((key) => [key, Infinity]));
-  const unknownObserved = Object.fromEntries(Object.keys(NAIP_UNKNOWN_CLEARANCES_M).map((key) => [key, Infinity]));
-  const seenUnknownAnnotationIds = new Set();
-  const expectedProceduralBufferExceptions = [];
-  for (const placement of placements) {
-    invariant(/^vegetation:[a-z0-9_]+:/u.test(placement.id), `${placement.id} is not a canonical vegetation ID`);
-    invariant(assetSpecies.get(placement.asset_path) === placement.species, `${placement.id} asset/species mismatch`);
-    invariant(Array.isArray(placement.position_m) && placement.position_m.length === 3 && placement.position_m.every(Number.isFinite), `${placement.id} position is invalid`);
-    invariant(Number.isFinite(placement.yaw_radians) && placement.yaw_radians >= -Math.PI && placement.yaw_radians <= Math.PI, `${placement.id} yaw is invalid`);
-    invariant(Number.isFinite(placement.uniform_scale) && placement.uniform_scale >= 2.8 && placement.uniform_scale <= 7.4, `${placement.id} scale is invalid`);
-    const isUnknownAnnotation = placement.zone === NAIP_UNKNOWN_SHRUB_ZONE_ID;
-    if (isUnknownAnnotation) {
-      const annotation = unknownAnnotationsById.get(placement.annotation_id);
-      invariant(annotation && !seenUnknownAnnotationIds.has(annotation.id), `${placement.id} has a missing or duplicate NAIP unknown annotation`);
-      const [sourceX, , sourceZ] = annotation.properties.world_position_m;
-      const expectedVariation = naipUnknownShrubVariation(annotation.id);
-      invariant(placement.id === `vegetation:${NAIP_UNKNOWN_SHRUB_ZONE_ID}:${annotation.id}` &&
-        placement.species === "shrub" && placement.annotation_tree_type === "unknown" &&
-        placement.cell_id === annotation.id &&
-        placement.source_id === `naip:2022-05-18:${annotation.properties.source_cell}`,
-      `${placement.id} NAIP identity/provenance contract drift`);
-      invariant(placement.position_m[0] === sourceX && placement.position_m[2] === sourceZ,
-        `${placement.id} moved from its fixed projected NAIP location`);
-      invariant(placement.asset_path === expectedVariation.asset_path &&
-        placement.yaw_radians === expectedVariation.yaw_radians &&
-        placement.uniform_scale === expectedVariation.uniform_scale,
-      `${placement.id} deterministic shrub variation drift`);
-      seenUnknownAnnotationIds.add(annotation.id);
-    }
-    const support = placement.terrain_support;
-    const landRecord = landByKey.get(support?.object_key);
-    invariant(landRecord, `${placement.id} is not supported by serialized playable land`);
-    const triangleOffset = support.triangle_index * 3;
-    invariant(Number.isInteger(support.triangle_index) && triangleOffset >= 0 && triangleOffset + 2 < landRecord.indices.length, `${placement.id} terrain triangle is invalid`);
-    const facet = landFacet(landRecord, triangleOffset, support.object_key);
-    const sample = facetSample(facet, placement.position_m[0], -placement.position_m[2]);
-    invariant(sample.inside, `${placement.id} terrain support triangle does not contain placement`);
-    invariant(Math.abs(sample.elevation - placement.position_m[1]) <= COORDINATE_ROUNDING_M + 1e-9 && placement.position_m[1] === support.elevation_m, `${placement.id} is not exactly grounded to serialized terrain`);
-    const point = [placement.position_m[0], placement.position_m[2]];
-    const measured = {
-      boundary_shoreline: pointToBoundaryDistance(point, manifest.playable_boundary),
-      roads_paths: pointToRecordsDistance(point, roadRecords),
-      buildings_foundations: pointToRecordsDistance(point, buildingRecords),
-      terrain_shoreline_overlays: pointToRecordsDistance(point, shorelineOverlayRecords),
-      ferry_spawn: Math.hypot(point[0] - manifest.initial_spawn.origin[0], point[1] - manifest.initial_spawn.origin[2]),
-      ferry_arrival_path: pointToLineDistance(point, VEGETATION_QA_CORRIDORS.ferry_arrival_path),
-      normal_qa_route: pointToLineDistance(point, VEGETATION_QA_CORRIDORS.normal_qa_route),
-      whole_island_qa_route: pointToLineDistance(point, VEGETATION_QA_CORRIDORS.whole_island_qa_route),
-    };
-    const requirements = isUnknownAnnotation ? NAIP_UNKNOWN_CLEARANCES_M : VEGETATION_CLEARANCES_M;
-    const observationTarget = isUnknownAnnotation ? unknownObserved : observed;
-    for (const [key, required] of Object.entries(requirements)) {
-      if (isUnknownAnnotation && ["roads_paths", "buildings_foundations"].includes(key)) {
-        invariant(measured[key] >= required - 1e-9, `${placement.id} violates the source-annotation ${key} exterior threshold`);
-      } else {
-        invariant(measured[key] >= required - 0.002, `${placement.id} ${key} clearance ${measured[key]} < ${required}`);
-      }
-      observationTarget[key] = Math.min(observationTarget[key], measured[key]);
-    }
-    if (isUnknownAnnotation) {
-      for (const key of ["roads_paths", "buildings_foundations"]) {
-        if (measured[key] < VEGETATION_CLEARANCES_M[key]) {
-          expectedProceduralBufferExceptions.push({
-            annotation_id: placement.annotation_id,
-            position_m: [placement.position_m[0], placement.position_m[2]],
-            clearance: key,
-            observed_m: Math.round((measured[key] + Number.EPSILON) * 1000) / 1000,
-            procedural_required_m: VEGETATION_CLEARANCES_M[key],
-            source_annotation_required_m: NAIP_UNKNOWN_CLEARANCES_M[key],
-            outcome: "placed_at_fixed_source_location",
-          });
-        }
-      }
-    }
-  }
-  invariant(vegetation.audit.terrain_grounded_count === placements.length && vegetation.audit.ybi_placements === 0, "Vegetation terrain/YBI audit drift");
-  // The placeholder keeps out of the street-detail pilot zones, which plant their own vegetation.
-  const pilot = vegetation.audit.street_detail_pilot_zones;
-  invariant(Array.isArray(pilot?.zone_ids) && pilot.zone_ids.length > 0 && Array.isArray(pilot.removed)
-    && pilot.removed.length === vegetation.audit.rejected.street_detail_pilot_zone
-    && pilot.removed.every((entry) => pilot.zone_ids.includes(entry.zone) && !placements.some((placement) => placement.id === entry.id)), "Vegetation pilot-zone removal audit drift");
-  const annotationAudit = vegetation.audit.naip_unknown_annotations;
-  const annotationOrder = new Map(unknownAnnotations.map((feature, index) => [feature.id, index]));
-  expectedProceduralBufferExceptions.sort((left, right) =>
-    annotationOrder.get(left.annotation_id) - annotationOrder.get(right.annotation_id) ||
-    left.clearance.localeCompare(right.clearance));
-  invariant(annotationAudit?.source_schema === NAIP_TREE_ANNOTATION_SCHEMA, "NAIP unknown audit source schema drift");
-  invariant(annotationAudit.source_sha256 === NAIP_TREE_ANNOTATION_SHA256, "NAIP unknown audit source hash drift");
-  invariant(annotationAudit.source_imagery_date === "2022-05-18", "NAIP unknown audit imagery date drift");
-  invariant(annotationAudit.input_count === 22 && annotationAudit.placed_count === 22 &&
-    annotationAudit.rejected_count === 0 && seenUnknownAnnotationIds.size === 22,
-  "NAIP unknown audit count drift");
-  invariant(annotationAudit.fixed_projected_locations === true, "NAIP unknown fixed-location audit drift");
-  invariant(stableJson(annotationAudit.clearance_policy_m) === stableJson(NAIP_UNKNOWN_CLEARANCES_M),
-    "NAIP unknown clearance-policy audit drift");
-  invariant(stableJson(annotationAudit.accepted_ids) === stableJson(unknownAnnotations.map((feature) => feature.id)),
-    "NAIP unknown accepted-ID audit drift");
-  invariant(Array.isArray(annotationAudit.procedural_buffer_exceptions) &&
-    annotationAudit.procedural_buffer_exceptions.length === expectedProceduralBufferExceptions.length,
-  "NAIP unknown procedural-buffer exception count drift");
-  annotationAudit.procedural_buffer_exceptions.forEach((actual, index) => {
-    const expected = expectedProceduralBufferExceptions[index];
-    invariant(actual.annotation_id === expected.annotation_id && actual.clearance === expected.clearance &&
-      stableJson(actual.position_m) === stableJson(expected.position_m) &&
-      actual.procedural_required_m === expected.procedural_required_m &&
-      actual.source_annotation_required_m === expected.source_annotation_required_m &&
-      actual.outcome === expected.outcome && Math.abs(actual.observed_m - expected.observed_m) <= 0.002,
-    `NAIP unknown procedural-buffer exception drift at ${actual.annotation_id}`);
-  });
-  invariant(stableJson(annotationAudit.rejected) === stableJson([]), "NAIP unknown rejection audit is not empty");
-  for (const [key, value] of Object.entries(observed)) {
-    invariant(Math.abs(value - vegetation.audit.minimum_observed_clearances_m[key]) <= 0.002, `Vegetation ${key} minimum-clearance audit drift`);
-  }
-  for (const [key, value] of Object.entries(unknownObserved)) {
-    invariant(Math.abs(value - annotationAudit.minimum_observed_clearances_m[key]) <= 0.002, `NAIP unknown shrub ${key} minimum-clearance audit drift`);
-  }
-  return vegetation;
 }
 
 // The serialized records grouped back into chunks with plan bounds, for the
@@ -1350,7 +1131,6 @@ function main() {
   const records = validateRecords(worldRoot, manifest, coverage);
   const coherentGeometry = validateCoherentGeometry(records, terrain);
   const pavement = validatePavementSkin(worldRoot, manifest, coverage, records, terrain);
-  const vegetation = validateVegetation(worldRoot, manifest, records);
   const streetDetail = validateStreetDetail(worldRoot, manifest, records);
   const shoreline = validateShoreline(worldRoot, manifest, records);
   process.stdout.write(stableJson({
@@ -1367,8 +1147,6 @@ function main() {
     flat_roof_cells: coherentGeometry.roofCells,
     street_ground_samples: coherentGeometry.streetGroundSamples,
     pavement,
-    vegetation_seed: vegetation.seed,
-    vegetation_instances: vegetation.counts.total,
     street_detail_rows: streetDetail.counts.total,
     shoreline_placements: shoreline.placements,
   }));
