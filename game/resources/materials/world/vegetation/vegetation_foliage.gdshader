@@ -19,9 +19,20 @@ uniform vec2 texture_size = vec2(1024.0);
 // 6 % of the full-size coverage to mip 5), so only a small boost is needed to hold
 // thin tips; 0.25 filled the distant crowns into solid lobes.
 uniform float mip_alpha_boost : hint_range(0.0, 0.5) = 0.05;
+// Low plants (grasses, perennials, shrubs) dissolve away over fade_length_m
+// before their visibility range ends, which the kit stores in the vertex
+// colour's alpha in hundreds of metres, so a cell of them never pops out.
+uniform bool distance_fade = false;
+uniform float fade_length_m = 12.0;
+
+varying float fade;
 
 void vertex() {
 	VERTEX += vegetation_wind(VERTEX, NORMAL, UV2, MODEL_MATRIX, TIME);
+	fade = 1.0;
+	if (distance_fade) {
+		fade = clamp((COLOR.a * 100.0 - distance(CAMERA_POSITION_WORLD, MODEL_MATRIX[3].xyz)) / fade_length_m, 0.0, 1.0);
+	}
 }
 
 void fragment() {
@@ -40,5 +51,10 @@ void fragment() {
 	}
 	BACKLIGHT = translucency.rgb;
 	ALPHA = tex.a * (1.0 + lod * mip_alpha_boost);
+	if (fade < 1.0) {
+		// Blocks of the card drop out one by one as the plant recedes.
+		float noise = fract(sin(dot(floor(UV * texture_size / 6.0), vec2(12.9898, 78.233))) * 43758.5453);
+		ALPHA *= step(noise, fade);
+	}
 	ALPHA_SCISSOR_THRESHOLD = alpha_cutoff;
 }

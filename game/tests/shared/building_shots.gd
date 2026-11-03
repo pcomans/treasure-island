@@ -47,8 +47,32 @@ extends SceneTree
 ##   detail off, and context, island and overhead views both ways. A view taken
 ##   both ways is saved as NAME-street-on.png and NAME-street-off.png, otherwise
 ##   as NAME.png. One world load: the on views first, then street detail is freed.
+## Plant galleries: a --street-views plan may also plant street-vegetation kit
+##   props for its shots (a species gallery, a test bed), visual only and gone
+##   after them: "beds": [{"name": "...", "center_xz": [x,z], "size_m": [w,d],
+##   "ground": "mulch"}] lays a bed of mulch (or "gravel", or the streets'
+##   "street_mulch") 2 cm over the drawn ground, later beds over earlier ones,
+##   and "plants": [{"group": "...", "prop": "...", "variant": 0, "scale": 1.0,
+##   "xz": [x,z], "yaw": 0.0}] stands kit props on the beds (or on the drawn
+##   ground), built as the world builds its vegetation; the aiming reticle is
+##   hidden while they stand. A view may then add "show": ["GROUP", ...] to
+##   draw only those groups, and "measure_frames": N to time N drawn frames with
+##   them shown and N with every group hidden, in three alternating blocks each,
+##   with vsync and the frame cap off (FRAME_TIME lines, with the frame's draw
+##   calls and primitives).
 
 const WorldHarness := preload("res://game/tests/shared/world_harness.gd")
+const VegetationKit := preload("res://game/scripts/world/street_vegetation_kit.gd")
+## A gallery bed's ground textures (2 m tiles), its grid step and its lift over
+## the drawn ground, in metres; each later bed lies BED_LAYER_M over the earlier.
+const BED_GROUNDS := {
+	"mulch": "res://game/resources/textures/world/vegetation/park_mulch.png",
+	"gravel": "res://game/resources/textures/world/vegetation/park_gravel.png",
+	"street_mulch": "res://game/resources/textures/world/street/street_mulch.png",
+}
+const BED_STEP_M := 0.5
+const BED_LIFT_M := 0.02
+const BED_LAYER_M := 0.006
 
 ## Street-detail states per kind of shot when --street-detail is not given.
 const DEFAULT_STREET_DETAIL := {
@@ -236,31 +260,266 @@ func _street_views(path: String, out: String, suffix: String) -> void:
 	or not plan.get("views") is Array or plan.views.is_empty():
 		_errors.append("street views need a safe area name and a nonempty view list")
 		return
+	var gallery := _plant_gallery(plan)
+	if gallery.has("error"):
+		_errors.append("street view plants: " + str(gallery.error))
+		return
 	var names := {}
 	for view: Variant in plan.views:
 		if not view is Dictionary or not view.get("name") is String or not _numbers(view.get("player_xz"), 2) or not _numbers(view.get("target_xyz"), 3):
 			_errors.append("street view needs name, player_xz and target_xyz")
-			return
+			break
 		var name: String = view.name
 		if name == "" or name.validate_filename() != name or names.has(name):
 			_errors.append("street view names must be unique safe filenames")
-			return
+			break
 		names[name] = true
+		var show_error := _show_groups(gallery, view)
+		if show_error != "":
+			_errors.append("street view " + name + ": " + show_error)
+			break
 		var target := Vector3(view.target_xyz[0], view.target_xyz[1], view.target_xyz[2])
 		var error := ""
 		if view.has("moves"):
 			error = await _moving_view(view, target, "%s/street-%s%s" % [out, name, suffix])
 		else:
 			error = await _shoot_view(view, target, "%s/street-%s%s.png" % [out, name, suffix])
+		if error == "" and view.has("measure_frames"):
+			error = await _measure_view(view, target, gallery)
 		if error != "":
 			_errors.append("street view " + name + ": " + error)
-			return
+			break
 		var camera_note: Variant = view.get("camera_xyz", "gameplay")
 		if not view.has("camera_xyz"):
 			# How far the gameplay camera stands from its arm's origin, against the full arm.
 			var arm := _h.player.get_node("CameraPivot/SpringArm3D") as SpringArm3D
 			camera_note = "gameplay arm_m=%.2f of %.2f" % [arm.global_position.distance_to(_h.player.get_camera().global_position), arm.spring_length]
 		print("STREET_VIEW %s area=%s player=%s on_floor=%s target=%s camera=%s" % [name, plan.area, _h.player.global_position, _h.player.is_on_floor(), target, camera_note])
+	if gallery.has("node"):
+		(gallery.node as Node).free()
+		_h.hud.reticle.modulate.a = 1.0
+
+
+## The plan's gallery beds and plants, built under one node:
+## {node, groups: {name -> Node3D}}, {} when the plan has none, or {error}.
+func _plant_gallery(plan: Dictionary) -> Dictionary:
+	if not plan.has("plants") and not plan.has("beds"):
+		return {}
+	var beds: Variant = plan.get("beds", [])
+	var plants: Variant = plan.get("plants", [])
+	if not beds is Array or not plants is Array or (plants as Array).is_empty():
+		return {"error": "plants must be a nonempty list and beds a list"}
+	var ground := VisibleGround.new()
+	ground.build([_h.world.ground_and_areas, _h.world.roads_and_paths])
+	var root := Node3D.new()
+	root.name = "PlantGallery"
+	_h.main.add_child(root)
+	var grids: Array[Dictionary] = []
+	for bed: Variant in beds:
+		if not bed is Dictionary or not bed.get("name") is String or not _numbers(bed.get("center_xz"), 2) or not _numbers(bed.get("size_m"), 2) \
+		or float(bed.size_m[0]) <= 0.0 or float(bed.size_m[1]) <= 0.0 or float(bed.size_m[0]) > 60.0 or float(bed.size_m[1]) > 60.0 \
+		or not BED_GROUNDS.has(bed.get("ground", "mulch")):
+			root.free()
+			return {"error": "a bed needs a name, center_xz, a size_m of up to 60 m and a ground of %s" % ", ".join(PackedStringArray(BED_GROUNDS.keys()))}
+		var grid := _bed_grid(Vector2(bed.center_xz[0], bed.center_xz[1]), Vector2(bed.size_m[0], bed.size_m[1]), ground, BED_LIFT_M + BED_LAYER_M * grids.size())
+		if grid.has("error"):
+			root.free()
+			return {"error": "bed %s: %s" % [bed.name, grid.error]}
+		# Plants stand on the topmost bed under them.
+		grids.push_front(grid)
+		root.add_child(_bed_mesh(str(bed.name), grid, str(bed.get("ground", "mulch"))))
+	var rows := {}
+	for index in (plants as Array).size():
+		var plant: Variant = plants[index]
+		if not plant is Dictionary or not plant.get("group") is String or str(plant.group) == "" or not plant.get("prop") is String or not _numbers(plant.get("xz"), 2) \
+		or not _numbers([plant.get("scale", 1.0), plant.get("yaw", 0.0), plant.get("variant")], 3):
+			root.free()
+			return {"error": "plant %d needs a group, prop, variant and xz, and numeric scale and yaw" % index}
+		var prop := str(plant.prop)
+		var params := {"variant": plant.variant, "scale": float(plant.get("scale", 1.0)), "lift_m": 0.0, "foot_spread_m": 0.0, "well_m": 0.0}
+		var problem := VegetationKit.params_error(prop, str((VegetationKit.PROPS[prop].kinds as Array)[0]) if VegetationKit.PROPS.has(prop) else "", params)
+		if problem != "":
+			root.free()
+			return {"error": "plant %d: %s" % [index, problem]}
+		var xz := Vector2(plant.xz[0], plant.xz[1])
+		var y := _bed_height(grids, xz)
+		if is_nan(y):
+			var drawn := _drawn_ground(xz, ground)
+			if is_nan(drawn):
+				root.free()
+				return {"error": "plant %d has no ground under it" % index}
+			y = drawn
+		if not rows.has(plant.group):
+			rows[plant.group] = []
+		(rows[plant.group] as Array).append({"id": "gallery:%d" % index, "status": "placed", "layer": "vegetation", "kind": (VegetationKit.PROPS[prop].kinds as Array)[0],
+			"prop": prop, "prop_params": params, "position_m": [xz.x, y, xz.y], "surface": {"bias_m": 0.0}, "yaw_radians": float(plant.get("yaw", 0.0))})
+	var groups := {}
+	for group: String in rows:
+		var built := StreetVegetationBuilder.new().build({"rows": rows[group]})
+		if not built.ok:
+			root.free()
+			return {"error": "group %s: %s" % [group, built.message]}
+		var node: Node3D = built.node
+		node.name = "Group_" + group.validate_node_name()
+		root.add_child(node)
+		groups[group] = node
+	# The aiming reticle would sit on the plants in the middle of every shot.
+	_h.hud.reticle.modulate.a = 0.0
+	print("PLANT_GALLERY beds=%d plants=%d groups=%s" % [grids.size(), (plants as Array).size(), ",".join(PackedStringArray(groups.keys()))])
+	return {"node": root, "groups": groups}
+
+
+## The drawn ground's height at xz (the land under it plus the lift of the
+## surface drawn over it), or NAN off the land.
+func _drawn_ground(xz: Vector2, ground: VisibleGround) -> float:
+	var hit := _h.ray(Vector3(xz.x, 300.0, xz.y), Vector3(xz.x, -50.0, xz.y))
+	if hit.is_empty():
+		return NAN
+	return float((hit.position as Vector3).y) + ground.lift_at(xz.x, xz.y)
+
+
+## A bed's grid of heights, lift over the drawn ground: {origin, step, counts, heights}.
+func _bed_grid(center: Vector2, size: Vector2, ground: VisibleGround, lift: float) -> Dictionary:
+	var counts := Vector2i(ceili(size.x / BED_STEP_M) + 1, ceili(size.y / BED_STEP_M) + 1)
+	var origin := center - size * 0.5
+	var step := Vector2(size.x / (counts.x - 1), size.y / (counts.y - 1))
+	var heights := PackedFloat32Array()
+	for j in counts.y:
+		for i in counts.x:
+			var y := _drawn_ground(origin + Vector2(i * step.x, j * step.y), ground)
+			if is_nan(y):
+				return {"error": "it leaves the land"}
+			heights.append(y + lift)
+	return {"origin": origin, "step": step, "counts": counts, "heights": heights}
+
+
+## The height of the bed surface at xz, or NAN outside every bed.
+func _bed_height(grids: Array[Dictionary], xz: Vector2) -> float:
+	for grid in grids:
+		var counts: Vector2i = grid.counts
+		var local: Vector2 = (xz - (grid.origin as Vector2)) / (grid.step as Vector2)
+		if local.x < 0.0 or local.y < 0.0 or local.x > counts.x - 1 or local.y > counts.y - 1:
+			continue
+		var i := mini(int(local.x), counts.x - 2)
+		var j := mini(int(local.y), counts.y - 2)
+		var fx := local.x - i
+		var fz := local.y - j
+		var heights: PackedFloat32Array = grid.heights
+		var low := lerpf(heights[j * counts.x + i], heights[j * counts.x + i + 1], fx)
+		var high := lerpf(heights[(j + 1) * counts.x + i], heights[(j + 1) * counts.x + i + 1], fx)
+		return lerpf(low, high, fz)
+	return NAN
+
+
+## The bed's surface of its ground texture in 2 m tiles, as the planting strips draw theirs.
+func _bed_mesh(name: String, grid: Dictionary, ground: String) -> MeshInstance3D:
+	var counts: Vector2i = grid.counts
+	var origin: Vector2 = grid.origin
+	var step: Vector2 = grid.step
+	var heights: PackedFloat32Array = grid.heights
+	var surface := SurfaceTool.new()
+	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	for j in counts.y:
+		for i in counts.x:
+			var x := origin.x + i * step.x
+			var z := origin.y + j * step.y
+			surface.set_uv(Vector2(x, z) / 2.0)
+			surface.add_vertex(Vector3(x, heights[j * counts.x + i], z))
+	for j in counts.y - 1:
+		for i in counts.x - 1:
+			var a := j * counts.x + i
+			# Clockwise seen from above (Godot's front face).
+			surface.add_index(a)
+			surface.add_index(a + 1)
+			surface.add_index(a + counts.x)
+			surface.add_index(a + 1)
+			surface.add_index(a + counts.x + 1)
+			surface.add_index(a + counts.x)
+	surface.generate_normals()
+	var material := StandardMaterial3D.new()
+	material.albedo_texture = load(BED_GROUNDS[ground])
+	material.roughness = 1.0
+	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+	var instance := MeshInstance3D.new()
+	instance.name = "Bed_" + name.validate_node_name()
+	instance.mesh = surface.commit()
+	instance.material_override = material
+	return instance
+
+
+## Shows only the gallery groups a view names in "show" (all when it names none).
+func _show_groups(gallery: Dictionary, view: Dictionary) -> String:
+	if not gallery.has("groups"):
+		return "show needs plants in the plan" if view.has("show") else ""
+	var show: Variant = view.get("show", [])
+	if not show is Array:
+		return "show must list plant groups"
+	for group: Variant in show:
+		if not (gallery.groups as Dictionary).has(group):
+			return "show names no plant group %s" % group
+	for group: String in gallery.groups:
+		(gallery.groups[group] as Node3D).visible = (show as Array).is_empty() or group in show
+	return ""
+
+
+## Times a view's drawn frames from its camera, with vsync and the frame cap
+## off: measure_frames with its plant groups as shown and as many with every
+## group hidden (the beds stay), in three alternating blocks each so a slow
+## drift in the machine's load falls on both. Prints one FRAME_TIME line per
+## state, with the last frame's draw calls and primitives. Returns an error, or "".
+func _measure_view(view: Dictionary, target: Vector3, gallery: Dictionary) -> String:
+	if not _numbers([view.get("measure_frames")], 1) or float(view.measure_frames) < 30.0 or float(view.measure_frames) > 3000.0 or not gallery.has("groups"):
+		return "measure_frames needs 30-3000 frames and plants in the plan"
+	var error := await _h.settle_player(Vector2(view.player_xz[0], view.player_xz[1]))
+	if error != "":
+		return error
+	var free := _free_camera(view, target)
+	if free == null:
+		_h.aim_camera(target)
+	var shown := {}
+	for group: String in gallery.groups:
+		shown[group] = (gallery.groups[group] as Node3D).visible
+	var vsync := DisplayServer.window_get_vsync_mode()
+	var max_fps := Engine.max_fps
+	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+	Engine.max_fps = 0
+	var blocks := 3
+	var per_block := maxi(10, int(view.measure_frames) / blocks)
+	# Packed arrays are values in GDScript: keep one local per state, not two in a dictionary.
+	var plants_times := PackedFloat64Array()
+	var empty_times := PackedFloat64Array()
+	var info := {}
+	for block in blocks * 2:
+		var state := "plants" if block % 2 == 0 else "empty"
+		for group: String in gallery.groups:
+			(gallery.groups[group] as Node3D).visible = bool(shown[group]) and state == "plants"
+		# Let the change settle before timing.
+		for _i in 20:
+			await RenderingServer.frame_post_draw
+		var last := Time.get_ticks_usec()
+		for _i in per_block:
+			await RenderingServer.frame_post_draw
+			var now := Time.get_ticks_usec()
+			if state == "plants":
+				plants_times.append((now - last) / 1000.0)
+			else:
+				empty_times.append((now - last) / 1000.0)
+			last = now
+		info[state] = [RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME), RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_PRIMITIVES_IN_FRAME)]
+	DisplayServer.window_set_vsync_mode(vsync)
+	Engine.max_fps = max_fps
+	for state: String in ["plants", "empty"]:
+		var list := plants_times if state == "plants" else empty_times
+		var total := 0.0
+		for time in list:
+			total += time
+		list.sort()
+		print("FRAME_TIME view=%s state=%s frames=%d mean_ms=%.2f median_ms=%.2f p95_ms=%.2f draw_calls=%d primitives=%d renderer=%s/%s" % [view.name, state, list.size(), total / list.size(),
+			list[list.size() / 2], list[int(list.size() * 0.95)], info[state][0], info[state][1], RenderingServer.get_current_rendering_method(), RenderingServer.get_video_adapter_name()])
+	if free != null:
+		free.queue_free()
+		_h.player.get_camera().make_current()
+	return ""
 
 
 ## Settles the player at the view's player_xz and saves one screenshot from the
