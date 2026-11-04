@@ -72,7 +72,7 @@ import {
   STREET_FENCE_TYPES,
 } from "./lib/street-fence-generation.mjs";
 import { MAX_LEG_DROP_M, MAX_REST_TILT_RAD, restTilt, STREET_FURNITURE_FEET, STREET_FURNITURE_PROPS } from "./lib/street-furniture-generation.mjs";
-import { YARD_KIT_KEYS, YARD_KIT_PARTS, YARD_KIT_PROPS, YARD_MAX_FLOAT_M, YARD_MAX_SINK_M, yardCornerGaps, yardPropFootprint, yardPropParamsError, yardPropRests } from "./lib/street-yard-kit.mjs";
+import { YARD_KIT_KEYS, YARD_KIT_PARTS, YARD_KIT_PROPS, YARD_MAX_FLOAT_M, yardMaxSink, yardPropFootprint, yardPropParamsError, yardPropRests, yardRestGaps } from "./lib/street-yard-kit.mjs";
 import { BERM_MODULE, BERM_SPECS, RIDGE_MODULE, yardKitMeshes } from "./lib/street-yard-meshes.mjs";
 import {
   STREET_VEGETATION_BURY_M,
@@ -927,12 +927,14 @@ function validateStreetDetail(worldRoot, manifest, records) {
         const plan = yardPropFootprint(row.prop, row.prop_params);
         invariant(row.footprint_m !== undefined && Math.abs(row.footprint_m.x_m - plan.x_m) <= 0.002 && Math.abs(row.footprint_m.z_m - plan.z_m) <= 0.002,
           `${row.id} footprint_m differs from its ${row.prop} plan ${plan.x_m} x ${plan.z_m}`);
-        // It rests on the visible ground: no corner floats or sinks past the
-        // limits at its pitch, roll and lift (a barge floats instead).
+        // It rests on the visible ground: no point of its plan (corners and a
+        // grid no coarser than 3 m) floats or sinks past the limits at its
+        // pitch, roll and lift (a barge floats instead).
         if (yardPropRests(row.prop)) {
-          const gaps = yardCornerGaps(row.footprint_m, [row.position_m[0], row.position_m[2]], row.yaw_radians, row.position_m[1] + (row.surface?.bias_m ?? 0), row.prop_params, groundAt);
-          invariant(gaps.every((gap) => gap !== null && gap <= YARD_MAX_FLOAT_M + 0.005 && gap >= -YARD_MAX_SINK_M - 0.005),
-            `${row.id} ${row.prop} does not rest on the ground: its corners float (+) or sink (-) ${gaps.map((gap) => (gap === null ? "off the ground" : gap.toFixed(3))).join(", ")} m`);
+          const gaps = yardRestGaps(row.footprint_m, [row.position_m[0], row.position_m[2]], row.yaw_radians, row.position_m[1] + (row.surface?.bias_m ?? 0), row.prop_params, groundAt);
+          const sink = yardMaxSink(row.prop, row.prop_params);
+          invariant(gaps.every((gap) => gap !== null && gap <= YARD_MAX_FLOAT_M + 0.005 && gap >= -sink - 0.005),
+            `${row.id} ${row.prop} does not rest on the ground: its plan floats (+) or sinks (-) ${gaps.map((gap) => (gap === null ? "off the ground" : gap.toFixed(3))).join(", ")} m (sink limit ${sink} m)`);
         }
       }
       // A furniture prop on legs: its rest on the ground under its feet, a small tilt and lift.

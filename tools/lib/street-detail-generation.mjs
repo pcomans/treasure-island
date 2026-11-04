@@ -16,7 +16,7 @@ import { projectLonLat } from "./coordinates.mjs";
 import { geometryToLine, pointInMultiPolygon, pointInRing, selectGeometry } from "./osm-geometry.mjs";
 import { footprintPiece, placeStreetClutter, STREET_CLUTTER_FOOTPRINTS, STREET_CLUTTER_PROPS, validateClutterRules, visibleGroundIndex } from "./street-clutter-generation.mjs";
 import { GATE_LEAF_HALF_M, placeStreetFences, validateFenceRules } from "./street-fence-generation.mjs";
-import { settleYardProp, YARD_KIT_KEYS, yardKindRadius, yardPropFootprint, yardPropRests } from "./street-yard-kit.mjs";
+import { settleYardProp, YARD_KIT_KEYS, yardKindRadius, yardMaxSink, yardPropFootprint, yardPropRests } from "./street-yard-kit.mjs";
 import { placeStreetFurniture, settleOnFeet, STREET_FURNITURE_FEET, STREET_FURNITURE_PROPS, streetFurnitureFootprint, validateFurnitureRules } from "./street-furniture-generation.mjs";
 import { packPlantingRows, planDrifts, planFill, plantingState, validatePlantingRule } from "./street-planting-generation.mjs";
 import {
@@ -1205,7 +1205,7 @@ export function generateStreetDetail({
     // A yard prop settles on the ground under its plan unless the set piece
     // gives its rest (a barge floats).
     if (yardFootprint && yardPropRests(entry.prop) && ["pitch", "roll", "lift"].every((key) => entry.params?.[key] === undefined)) {
-      const rest = settleYardProp(yardFootprint, xz, normalizedYaw(entry.yaw), y + surface.bias_m, groundAt);
+      const rest = settleYardProp(yardFootprint, xz, normalizedYaw(entry.yaw), y + surface.bias_m, groundAt, yardMaxSink(entry.prop, entry.params));
       invariant(!rest.problem, `Street detail set piece ${entry.id} cannot rest on the ground: ${rest.problem}`);
       params = { ...entry.params, ...rest };
     }
