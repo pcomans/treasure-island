@@ -2252,6 +2252,67 @@ function buildConveyorLeg(lod) {
   return out.result();
 }
 
+// A cross-section (x, y points round it) extruded along Z from z0 to z1, its
+// faces out from the section's middle, both ends capped.
+function extrudeZ(out, section, z0, z1, part, endPart = part) {
+  const cx = section.reduce((sum, point) => sum + point[0], 0) / section.length;
+  const cy = section.reduce((sum, point) => sum + point[1], 0) / section.length;
+  for (let i = 0; i < section.length; i += 1) {
+    const [x0, y0] = section[i];
+    const [x1, y1] = section[(i + 1) % section.length];
+    let n = vnorm(v3(y1 - y0, -(x1 - x0), 0));
+    if (vdot(n, v3((x0 + x1) / 2 - cx, (y0 + y1) / 2 - cy, 0)) < 0) n = vscale(n, -1);
+    out.face([v3(x0, y0, z0), v3(x1, y1, z0), v3(x1, y1, z1), v3(x0, y0, z1)], n, part);
+  }
+  for (const [z, dir] of [[z0, -1], [z1, 1]]) polygonFace(out, v3(0, 0, z), X, Y, section, [], v3(0, 0, dir), endPart);
+}
+
+// A water-filled plastic barrier, one unit 1.9 m long: a jersey section (a
+// wide foot, steep lower face, sloped upper face, narrow rounded top), the
+// fork pockets through its foot, the interlocking lugs at its ends and the
+// fill cap on top. Its plastic is the row's paint.
+function buildWaterBarrier(lod) {
+  const out = new YardBuilder(lod);
+  const hl = 0.9;
+  const section = [[0.3, 0.0], [0.3, 0.1], [0.24, 0.3], [0.13, 0.78], [0.1, 0.95], [0.06, 1.0], [-0.06, 1.0], [-0.1, 0.95], [-0.13, 0.78], [-0.24, 0.3], [-0.3, 0.1], [-0.3, 0.0]];
+  extrudeZ(out, section, -hl, hl, P.crane_red);
+  if (lod === 0) {
+    // Fork pockets: dark slots across the foot.
+    for (const z of [-0.45, 0.45]) for (const s of [1, -1]) {
+      const xs = [s * 0.3, s * 0.303].sort((a, b) => a - b);
+      out.aabb([xs[0], 0.02, z - 0.16], [xs[1], 0.16, z + 0.16], P.inside);
+    }
+    // Lugs at both ends, the fill cap.
+    for (const [z0, z1] of [[-hl - 0.06, -hl], [hl, hl + 0.06]]) {
+      out.aabb([-0.07, 0.15, z0], [0.07, 0.35, z1], P.crane_red);
+      out.aabb([-0.05, 0.62, z0], [0.05, 0.78, z1], P.crane_red);
+    }
+    out.cylinder(v3(0, 1.0, 0.45), Y, 0.06, 0.03, 8, P.white_body);
+  }
+  return out.result();
+}
+
+// Red machinery on a work barge's deck (Pier 1, May 2026 aerial: red blocks
+// beside the cranes), generic: a power pack, a winch skid and a tool
+// container, about 7 m by 6 m together. Origin on the deck.
+function buildDeckEquipment(lod) {
+  const out = new YardBuilder(lod);
+  const box = (x0, x1, y1, z0, z1, part = P.crane_red) => out.aabb([x0, 0, z0], [x1, y1, z1], (face) => (face === "-y" ? null : part));
+  // Power pack: an enclosure with louvres and an exhaust.
+  box(-3.5, -1.3, 1.9, -3.0, 1.2);
+  if (lod === 0) {
+    for (let k = 0; k < 4; k += 1) out.aabb([-1.3, 0.5, -2.6 + k * 0.9], [-1.28, 1.5, -2.2 + k * 0.9], P.grille);
+    out.cylinder(v3(-2.4, 1.9, -0.5), Y, 0.09, 0.7, 8, P.trim);
+  }
+  // Winch skid: a base frame with a drum.
+  box(0.2, 3.2, 0.3, -3.0, -0.6, P.trim);
+  out.cylinder(v3(0.4, 0.95, -1.8), X, 0.55, 2.6, lod === 0 ? 16 : 8, P.crane_red);
+  // A tool container (a 10 ft box) and a stack of beams beside it.
+  box(0.0, 2.4, 2.4, 0.6, 3.6);
+  for (let i = 0; i < (lod === 0 ? 4 : 1); i += 1) out.aabb([-3.4 + i * 0.5, 0, 1.8], [-3.0 + i * 0.5, 0.4, 3.6], P.metal);
+  return out.result();
+}
+
 // ---------------------------------------------------------------- barges and cranes
 // A deck barge hull module: the box between the rakes (mid, 1 m long and
 // 1 m wide, scaled per instance along X and Z), or a raked end (1 m wide,
@@ -2448,6 +2509,7 @@ function kitEntries() {
   add("hopper", buildHopper);
   add("conveyor_module", buildConveyorModule);
   add("conveyor_leg", buildConveyorLeg);
+  add("water_barrier", buildWaterBarrier);
   add("crane_mats", buildCraneMats);
   add("excavator", buildExcavator);
   add("wheel_loader", buildWheelLoader);
@@ -2465,9 +2527,12 @@ function kitEntries() {
   add("barge_end_neg", () => buildBargeEnd(-1));
   add("barge_end_pos", () => buildBargeEnd(1));
   add("crawler_crane_barge", (lod) => buildCrawlerCrane(45, 62, lod));
+  // The boom lowered nearly level, out over the barge's -Z end.
+  add("crawler_crane_barge_lowered", (lod) => buildCrawlerCrane(45, 10, lod));
   add("crawler_crane_pier", (lod) => buildCrawlerCrane(58, 74, lod));
   add("deckhouse", buildDeckhouse);
   add("deck_materials", buildDeckMaterials);
+  add("deck_equipment", buildDeckEquipment);
   return entries;
 }
 
