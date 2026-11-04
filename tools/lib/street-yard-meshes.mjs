@@ -884,9 +884,9 @@ export const PILE_SPECS = Object.freeze({
 // A heap's surface stands no steeper than its angle of repose, about 39
 // degrees (a slope of PILE_REPOSE), so the floor it is walked on (heap floors,
 // below) lies on it; a chunk of concrete or a tyre stands at most
-// PILE_CHUNK_PROUD_M above it (within the floor's FLOOR_LOOSE_M).
+// PILE_CHUNK_PROUD_M above it (the floor takes it FLOOR_LOOSE_M lower).
 const PILE_REPOSE = 0.82;
-const PILE_CHUNK_PROUD_M = 0.09;
+const PILE_CHUNK_PROUD_M = 0.14;
 
 // A broken concrete chunk: a box with its corners pushed about, faceted, its
 // buried bottom left out. With `bed` ({proud, ground(x, z)}) it sinks straight
@@ -1072,8 +1072,9 @@ function buildPile(material, shape, lod) {
   const segments = lod === 0 ? (spec.folds ? 60 : spec.chunks ? 40 : 28) : 12;
   const rings = lod === 0 ? (spec.chunks ? 14 : 9) : 4;
   const seed = 31 * (shape + 1) + material.length;
-  // Folds: ridges of a sheet draped over the mound, running down to the hem.
-  const fold = (a) => (spec.folds ? 0.6 * (1 - Math.abs(Math.sin(3.5 * a + seed))) ** 3 + 0.4 * (1 - Math.abs(Math.sin(5.5 * a + 2.1 * seed))) ** 4 : 0);
+  // Folds: rounded ridges of a sheet draped over the mound, running down to
+  // the hem.
+  const fold = (a) => (spec.folds ? 0.6 * Math.cos(3.5 * a + seed) ** 6 + 0.4 * Math.cos(5.5 * a + 2.1 * seed) ** 8 : 0);
   const outline = (a) => {
     return 1 + 0.14 * (ringNoise(a, 0, 6, seed) - 0.5) * 2 + 0.06 * (ringNoise(a, 0.5, 14, seed + 9) - 0.5) * 2 + 0.05 * fold(a);
   };
@@ -1107,6 +1108,7 @@ function buildPile(material, shape, lod) {
     for (const mound of mounds) top = Math.max(top, mound.h * stockpile(Math.min(1, Math.hypot(x - mound.x, z - mound.z) / mound.r)));
     return top;
   };
+  const folds = (rho, a) => (spec.folds ? spec.folds * fold(a) * Math.sin(Math.PI * Math.min(1, rho)) ** 0.8 : 0);
   const heightAt = (rho, a) => {
     // A tarp drapes over its mounds; a stockpile is a cone with a rounded
     // crown (no point for a foot to catch on). Settled (below), its sides
@@ -1118,8 +1120,7 @@ function buildPile(material, shape, lod) {
     const pz = r * Math.sin(a) * elongation;
     let bump = lod === 0 ? spec.rough * ((noise2(px / 2.6, pz / 2.6, seed + 3) - 0.5) * 2 + 0.5 * (noise2(px / 1.2, pz / 1.2, seed + 5) - 0.5)) : 0;
     if (spec.lumps && lod === 0) bump += spec.lumps * (noise2(px / 0.75, pz / 0.75, seed + 7) - 0.5);
-    const folds = spec.folds ? spec.folds * fold(a) * Math.sin(Math.PI * Math.min(1, rho)) ** 0.8 : 0;
-    return Math.max(0, spec.h * base * (1 + bump * Math.min(1, rho * 6)) + folds);
+    return Math.max(0, spec.h * base * (1 + bump * Math.min(1, rho * 6)) + folds(rho, a));
   };
   // The tallest point of the mound, to fit its height to the plan's (a rubble
   // pile's surface stays a little lower: its chunks stand proud of it).
@@ -1211,21 +1212,18 @@ function buildPile(material, shape, lod) {
     }
   }
   if (lod === 0 && spec.folds) {
-    // Tyres holding the sheeting down on the mounds, square to the sheet
-    // where it is no steeper than about 20 degrees, bedded so none stands
+    // Tyres holding the sheeting down, square to the sheet where it is no
+    // steeper than about 37 degrees and a metre apart, bedded so none stands
     // more than PILE_CHUNK_PROUD_M above the sheet under it.
     const profile = [[0.2, 0], [0.33, 0.02], [0.36, 0.11], [0.3, 0.2], [0.2, 0.2], [0.2, 0.02]];
-    let tyres = 0;
-    for (let i = 0; i < 40 && tyres < 7; i += 1) {
-      const mound = mounds[i % mounds.length];
-      const angle = hash(i, seed, 9) * Math.PI * 2;
-      const reach = mound.r * (0.15 + 0.45 * hash(i, seed, 8));
-      const x = mound.x + reach * Math.cos(angle);
-      const z = mound.z + reach * Math.sin(angle);
-      const rho = Math.min(0.85, Math.hypot(x, z));
-      const a = Math.atan2(z, x);
+    const placed = [];
+    for (let i = 0; i < 80 && placed.length < 7; i += 1) {
+      const rho = 0.1 + 0.75 * Math.sqrt(hash(i, seed, 8));
+      const a = hash(i, seed, 9) * Math.PI * 2;
       const n = normalAt(rho, a);
-      if (n[1] < 0.94) continue;
+      const spot = surface(rho, a);
+      if (n[1] < 0.8 || placed.some((other) => Math.hypot(other[0] - spot[0], other[2] - spot[2]) < 1)) continue;
+      placed.push(spot);
       const u = vnorm(vcross(n, X));
       const w = vcross(n, u);
       let origin = vadd(surface(rho, a), vscale(n, -0.06));
@@ -1239,7 +1237,6 @@ function buildPile(material, shape, lod) {
       }
       if (proud > PILE_CHUNK_PROUD_M) origin = vadd(origin, v3(0, PILE_CHUNK_PROUD_M - proud, 0));
       out.lathe(origin, n, profile, 10, () => P.tire);
-      tyres += 1;
     }
   }
   return out.result();
@@ -2787,15 +2784,15 @@ function buildRidge(part, lod) {
 // FLOOR_SLOPE (43.5 degrees) for the distance, and any visible point still
 // above the floor's triangles lifts the triangle under it; so the floor follows
 // the heap wherever it is no steeper than that and bridges only what is
-// steeper. Loose pieces (concrete chunks and tyres, bedded no more than
-// FLOOR_LOOSE_M proud) may stand that much above it, as a foot beds into them.
+// steeper. Loose pieces (concrete chunks and tyres) count FLOOR_LOOSE_M lower
+// than they stand, as a foot beds into them.
 // Each cell takes the diagonal that keeps its triangles flatter, and any
 // triangle still steeper than 45 degrees (the player's floor limit is 48) is
 // eased by raising its lowest corner. The runtime collides with it as a
 // trimesh (<name>_floor).
 const FLOOR_CELL_M = 0.25;
 const FLOOR_SLOPE = 0.95;
-const FLOOR_LOOSE_M = 0.1;
+const FLOOR_LOOSE_M = 0.09;
 const FLOOR_SAMPLES = 4;
 
 // Grid positions from a to b, evenly spaced no more than FLOOR_CELL_M apart.
