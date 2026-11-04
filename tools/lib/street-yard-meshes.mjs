@@ -914,6 +914,16 @@ function ringNoise(a, v, cells, seed) {
   return lerp(lerp(at(i, j), at(i + 1, j), tx), lerp(at(i, j + 1), at(i + 1, j + 1), tx), ty);
 }
 
+// A stockpile's profile, 1 at its middle and 0 at its foot: nearly a cone
+// (its sides about the angle of repose) with a crown rounded over STOCKPILE_CROWN
+// of its radius, so it has no point for a foot to catch on.
+const STOCKPILE_CROWN = 0.15;
+const STOCKPILE_POWER = 1.15;
+function stockpile(rho) {
+  const f = (r) => -((r * r + STOCKPILE_CROWN * STOCKPILE_CROWN) ** (STOCKPILE_POWER / 2));
+  return (f(rho) - f(1)) / (f(0) - f(1));
+}
+
 // Smooth 2D value noise (plan coordinates; no period).
 function noise2(x, z, seed) {
   const i = Math.floor(x);
@@ -962,9 +972,10 @@ function buildPile(material, shape, lod) {
     let base;
     if (spec.cone) base = Math.min(1, (1 - rho) * 1.08) - 0.06 * Math.max(0, 0.08 - (1 - rho));
     else if (spec.flat) base = draped(rho, a);
-    // A stockpile: a cone with a rounded crown, its sides about the angle of
-    // repose (under 45 degrees, so its hull is walkable).
-    else base = Math.max(0, 1 - rho ** 1.15);
+    // A stockpile: a cone with a rounded crown (no point for a foot to catch
+    // on), its sides about the angle of repose (under 45 degrees, so its hull
+    // is walkable).
+    else base = Math.max(0, stockpile(rho));
     // Bumps (and a rubble pile's lumps of a metre or so) in plan coordinates.
     const r = nominal * outline(a) * rho;
     const px = r * Math.cos(a);
