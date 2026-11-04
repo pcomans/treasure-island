@@ -10,7 +10,11 @@
 //              shed row by its bays, a fabric shed, a berm, a container wall);
 //   wall       container walls along a traced perimeter polyline: one
 //              container_wall prop per straight leg, trimmed at the corners and
-//              cut open at the gates (openings).
+//              cut open at the gates (openings);
+//   moored     singular evidenced vessels on the water (the Pier 1 barges):
+//              each item a prop with its origin on the waterline at its own
+//              xz and yaw, wholly off the land, at WATER_Y_M with no land
+//              support (the row's surface is water) and no rest tilt.
 //
 // pack and span lines are [u0, v0, u1, v1]: in the rule's frame (metres along
 // U = (cos a, sin a) and V = (-sin a, cos a) in world x, z from origin_xz, a =
@@ -38,15 +42,20 @@
 import { createHash } from "node:crypto";
 
 import { YARD_KIT_KEYS, YARD_KIT_PROPS, containerWallLayout, yardPropFootprint, yardPropParamsError } from "./street-yard-kit.mjs";
+import { WATER_Y_M } from "./shoreline-generation.mjs";
 import { invariant, roundCoordinate } from "./world-contract.mjs";
 
-export const STREET_YARD_PATTERNS = Object.freeze(["pack", "span", "wall"]);
+export const STREET_YARD_PATTERNS = Object.freeze(["pack", "span", "wall", "moored"]);
 const COMMON_FIELDS = Object.freeze(["basis", "evidence", "id", "pattern", "rule"]);
 const PATTERN_FIELDS = Object.freeze({
   pack: { required: ["lines", "orient", "facing", "items", "gap_m", "fill"], optional: ["frame", "anchor", "align", "jitter_m", "jitter_deg", "allow_roads"] },
   span: { required: ["lines", "prop", "params", "facing"], optional: ["frame", "align", "allow_roads", "segment_m"] },
   wall: { required: ["line_xz", "inside", "params"], optional: ["closed", "openings", "align", "segment_m"] },
+  moored: { required: ["items"], optional: [] },
 });
+// The yard kit props (and variants) whose origin is on the waterline, which a
+// moored rule may float: the barges of crane_barge (its pier crane stands on land).
+export const MOORED_PROP_VARIANTS = Object.freeze({ crane_barge: Object.freeze([0, 1]) });
 const SAFE_ID = /^[a-z0-9_]+$/u;
 // The prop a wall rule places, and the params a span sizes to its line.
 const WALL_PROP = "container_wall";
@@ -233,8 +242,24 @@ export function validateYardRules(zone, kinds) {
         invariant(error === null, `${label}: ${error}`);
       }
       if (rule.openings !== undefined) validateRanges(rule.openings, `${label} openings`);
+    } else if (rule.pattern === "moored") {
+      invariant(Array.isArray(rule.items) && rule.items.length > 0, `${label} needs items`);
+      rule.items.forEach((item, index) => {
+        const itemLabel = `${label} item ${index}`;
+        invariant(isPlainObject(item) && JSON.stringify(Object.keys(item).sort()) === JSON.stringify(["params", "prop", "xz", "yaw"]), `${itemLabel} is {prop, params, xz, yaw}`);
+        checkProp(item.prop, item.params, itemLabel);
+        invariant(MOORED_PROP_VARIANTS[item.prop]?.includes(item.params.variant), `${itemLabel}: only ${Object.entries(MOORED_PROP_VARIANTS).map(([prop, variants]) => `${prop} ${variants.join("/")}`).join(", ")} float`);
+        invariant(Object.values(item.params).every((value) => !isPlainObject(value)), `${itemLabel}: a moored item's params are fixed (it is one evidenced vessel)`);
+        invariant(yardPropParamsError(item.prop, item.params) === null, `${itemLabel}: ${yardPropParamsError(item.prop, item.params)}`);
+        invariant(isXZ(item.xz) && isFiniteNumber(item.yaw) && Math.abs(item.yaw) <= Math.PI, `${itemLabel} needs xz [x, z] and yaw in [-pi, pi]`);
+      });
     }
   }
+}
+
+// A moored row: a vessel on the water (pattern moored), not on the land.
+export function isMooredRow(row) {
+  return row.surface?.kind === "water";
 }
 
 // The plan of a placed yard row: its centre, local X and Z axes in world x, z
@@ -579,6 +604,55 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
           }));
           walked += total;
         }
+      } else if (rule.pattern === "moored") {
+        rule.items.forEach((item, index) => {
+          const cell = `m${String(index).padStart(2, "0")}`;
+          const footprint = yardPropFootprint(item.prop, item.params);
+          const yaw = roundCoordinate(item.yaw);
+          const rect = rowRectangle({ position_m: [item.xz[0], 0, item.xz[1]], yaw_radians: yaw, footprint_m: footprint, prop: item.prop, prop_params: item.params });
+          const zoneShape = yardShapes.find((shape) => shape.zone === zone);
+          let problem = zoneShape.contains(rect.centre) ? null : "outside_zone";
+          // Wholly on the water: no part of the hull over the land.
+          if (!problem && rectangleSamples(rect, SAMPLE_STEP_M).some((sample) => onLand(sample, 0))) problem = "on_land";
+          if (!problem) {
+            for (const piece of rectanglePieces(rect)) {
+              const hard = hardViolation(hardShapes, piece.points, piece.radius);
+              if (hard) {
+                problem = hard.reason;
+                break;
+              }
+            }
+          }
+          if (!problem && placed.some((other) => rectanglesOverlap(rect, other.rect, ITEM_CLEAR_M))) problem = "overlap";
+          if (problem) {
+            count(audit.rejected_by_reason, reasonKey(problem));
+            return;
+          }
+          const xz = [round3(item.xz[0]), round3(item.xz[1])];
+          const row = {
+            id: `scatter:${zone.id}:${rule.id}:${cell}`,
+            source: "scatter",
+            source_id: `zone:${zone.id}/${rule.id}`,
+            kind: item.prop,
+            layer: kinds[item.prop].layer,
+            geometry: "point",
+            position_m: [xz[0], WATER_Y_M, xz[1]],
+            terrain_support: null,
+            surface: { kind: "water", material_key: "water", source_key: "water", bias_m: 0 },
+            yaw_radians: yaw,
+            yaw_source: `rule:${zone.id}/${rule.id}`,
+            status: "placed",
+            exclusion: null,
+            prop: item.prop,
+            prop_params: { ...item.params, pitch: 0, roll: 0, lift: 0 },
+            footprint_m: { x_m: footprint.x_m, z_m: footprint.z_m },
+            basis: rule.basis,
+          };
+          rows.push(row);
+          placed.push({ id: row.id, rect: rowRectangle(row) });
+          for (const piece of yardRowPieces(row)) occupied.push({ id: row.id, points: piece.points, radius_m: piece.radius, yard: true });
+          count(audit.rules, `${zone.id}/${rule.id}`);
+        });
       }
     }
   }

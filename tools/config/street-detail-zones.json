@@ -79,6 +79,18 @@
       ]
     },
     {
+      "id": "pier1_barges",
+      "name": "Pier 1 barges",
+      "pilot": true,
+      "reason": "Large-clutter place #10: the work barges moored at Pier 1, two of them with red lattice-boom crawler cranes, seen over much of the east side and from the bridge.",
+      "reference": "Esri World Imagery, Vantor capture 2026-05-26 (large-clutter research tile z-pier1, 0.4 m, and the pier's east half fetched 2026-11-04 from the same service and capture, identify SRC_DATE2 2026-05-26); Google Street View, Avenue N at Pier 1, Mar 2025 (camera x 636, z 324, heading 130): tall red lattice-boom crawler cranes; OSM w319406837 (Pier 1, man_made=pier); Google Maps place card Bigge Crane and Rigging Co. (checked 2026-11-04)",
+      "shape": {"type": "polygon", "points_xz": [[652, 302], [935, 302], [935, 446], [652, 446]]},
+      "scatter": [],
+      "yard": [
+        {"id": "barges", "pattern": "moored", "items": [{"prop": "crane_barge", "params": {"variant": 1, "width_m": 22, "length_m": 35, "hull": "dark_grey", "deck": "dark_grey", "cargo": "none"}, "xz": [665.77, 376.78], "yaw": 1.2752}, {"prop": "crane_barge", "params": {"variant": 1, "width_m": 28, "length_m": 32, "hull": "dark_grey", "deck": "dark_grey", "cargo": "containers"}, "xz": [697.32, 391.61], "yaw": 2.846}, {"prop": "crane_barge", "params": {"variant": 0, "width_m": 30, "length_m": 32}, "xz": [727.93, 400.94], "yaw": 2.846}, {"prop": "crane_barge", "params": {"variant": 0, "width_m": 30, "length_m": 32}, "xz": [759.5, 410.55], "yaw": 2.846}, {"prop": "crane_barge", "params": {"variant": 1, "width_m": 18, "length_m": 36, "hull": "dark_grey", "deck": "light_grey", "cargo": "materials"}, "xz": [696.15, 419.48], "yaw": 1.2752}, {"prop": "crane_barge", "params": {"variant": 1, "width_m": 17, "length_m": 34, "hull": "dark_grey", "deck": "light_grey", "cargo": "materials"}, "xz": [798.7, 415.69], "yaw": 1.2752}, {"prop": "crane_barge", "params": {"variant": 1, "width_m": 13, "length_m": 75, "hull": "rust", "deck": "rust", "cargo": "none"}, "xz": [760.02, 347.14], "yaw": 1.2752}, {"prop": "crane_barge", "params": {"variant": 1, "width_m": 13, "length_m": 70, "hull": "rust", "deck": "rust", "cargo": "none"}, "xz": [770.32, 335.64], "yaw": 1.2752}, {"prop": "crane_barge", "params": {"variant": 1, "width_m": 26, "length_m": 93, "hull": "dark_grey", "deck": "dark_grey", "cargo": "none", "deckhouse": "small"}, "xz": [881.49, 377.34], "yaw": 1.2752}], "basis": "production_inference", "rule": "The barges as moored in the May 2026 aerial, each laid out along or across the pier from its traced outline: south of the deck a plain grey barge, a container barge, two crane barges and two light materials barges; north of it two open rust barges and a long dark barge with a small deckhouse. Barges move day to day, so this is one dated arrangement.", "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (large-clutter research tile z-pier1, 0.4 m, and the pier's east half fetched 2026-11-04 from the same service and capture, identify SRC_DATE2 2026-05-26): the outlines, decks and loads (red crawler cranes and booms, a red 40 ft and white 20 ft boxes, stacked materials); Google Street View, Avenue N at Pier 1, Mar 2025 (camera x 636, z 324, heading 130): tall red lattice-boom crawler cranes"}
+      ]
+    },
+    {
       "id": "ferry_arrival_plaza",
       "name": "Ferry arrival and Waterfront Plaza",
       "pilot": true,

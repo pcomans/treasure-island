@@ -21,6 +21,8 @@ const STREET_DETAIL_SOURCES := ["osm", "scatter", "set_piece"]
 ## Compact blocks of planting rows in street_detail.json (packPlantingRows in
 ## tools/lib/street-planting-generation.mjs), expanded before validation.
 const PLANTING_ROWS_SCHEMA := "ti.street-detail-planting-rows/1"
+## The water plane a moored street-detail row floats on (WATER_Y_M of tools/lib/shoreline-generation.mjs).
+const STREET_DETAIL_WATER_Y_M := -0.12
 const PLANTING_ROW_FIELDS := ["prop", "variant", "x", "y", "z", "yaw_radians", "scale", "lift_m", "foot_spread_m", "surface", "land", "triangle_index", "zones"]
 ## Shoreline riprap (tools/lib/shoreline-generation.mjs): visual-only slope
 ## records and boulder placements outside the playable land.
@@ -556,10 +558,17 @@ static func _validate_street_detail(document: Dictionary, chunks: Array[Dictiona
 				return _failure("street_detail_transform", "Street-detail position is missing: %s" % row_id)
 			var position: Array = row.position_m
 			var support: Variant = row.get("terrain_support", null)
+			# A moored vessel (yard pattern moored) floats on the water off the island, with no land support.
+			var surface_value: Variant = row.get("surface", null)
+			var moored: bool = surface_value is Dictionary and str((surface_value as Dictionary).get("kind", "")) == "water"
 			if position.size() != 3 or not _is_finite_number(position[0]) or not _is_finite_number(position[1]) or not _is_finite_number(position[2]) \
-			or not support is Dictionary:
+			or (not moored and not support is Dictionary):
 				return _failure("street_detail_transform", "Street-detail position is invalid: %s" % row_id)
-			if not _street_detail_grounded(land_records, boundary, position, str(support.get("object_key", "")), support.get("triangle_index", null)) \
+			if moored:
+				if typeof(support) != TYPE_NIL or contains_xz(boundary, Vector2(float(position[0]), float(position[2]))) \
+				or not is_equal_approx(float(position[1]), STREET_DETAIL_WATER_Y_M):
+					return _failure("street_detail_grounding", "Street-detail moored row is not on the water off the island: %s" % row_id)
+			elif not _street_detail_grounded(land_records, boundary, position, str(support.get("object_key", "")), support.get("triangle_index", null)) \
 			or not is_equal_approx(float(support.get("elevation_m", INF)), float(position[1])):
 				return _failure("street_detail_grounding", "Street-detail row is off the island or not grounded on its land triangle: %s" % row_id)
 			var yaw: Variant = row.get("yaw_radians", false)

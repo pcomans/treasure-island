@@ -61,6 +61,7 @@ import { CAR_BODY_NAMES, CAR_FINISHES, CAR_PAINTS, MAX_TWIST_M, STREET_CLUTTER_P
 import { STREET_FENCE_INSIDE, STREET_FENCE_SCREENS, STREET_FENCE_TYPES } from "./lib/street-fence-generation.mjs";
 import { MAX_LEG_DROP_M, MAX_REST_TILT_RAD, restTilt, STREET_FURNITURE_FEET, STREET_FURNITURE_PROPS } from "./lib/street-furniture-generation.mjs";
 import { YARD_KIT_KEYS, yardPropFootprint, yardPropParamsError } from "./lib/street-yard-kit.mjs";
+import { isMooredRow, MOORED_PROP_VARIANTS } from "./lib/street-yard-generation.mjs";
 import {
   STREET_VEGETATION_BURY_M,
   STREET_VEGETATION_MAX_FOOT_SPREAD_M,
@@ -867,9 +868,15 @@ function validateStreetDetail(worldRoot, manifest, records) {
     invariant(Array.isArray(row.zones) && row.zones.every((zone) => zoneIds.has(zone)), `${row.id} names an unknown zone`);
     if (row.geometry === "point") {
       const [x, y, z] = row.position_m;
-      invariant(row.position_m.length === 3 && [x, y, z].every(Number.isFinite) && inBoundary(x, z), `${row.id} position is invalid or off the island`);
-      grounded(row.id, x, y, z, row.terrain_support?.object_key, row.terrain_support?.triangle_index);
-      invariant(row.terrain_support.elevation_m === y, `${row.id} terrain_support elevation differs from its position`);
+      if (isMooredRow(row)) {
+        // A moored vessel (yard pattern moored): on the water off the playable land, at the water plane, no land support.
+        invariant(row.position_m.length === 3 && [x, y, z].every(Number.isFinite) && !inBoundary(x, z) && y === WATER_Y_M, `${row.id} moored position is invalid or on the island`);
+        invariant(row.terrain_support === null && row.surface.bias_m === 0 && MOORED_PROP_VARIANTS[row.prop]?.includes(row.prop_params?.variant), `${row.id} moored row is not a floating yard prop`);
+      } else {
+        invariant(row.position_m.length === 3 && [x, y, z].every(Number.isFinite) && inBoundary(x, z), `${row.id} position is invalid or off the island`);
+        grounded(row.id, x, y, z, row.terrain_support?.object_key, row.terrain_support?.triangle_index);
+        invariant(row.terrain_support.elevation_m === y, `${row.id} terrain_support elevation differs from its position`);
+      }
       invariant(row.yaw_radians === null ? row.yaw_source === null : Number.isFinite(row.yaw_radians) && Math.abs(row.yaw_radians) <= Math.PI && typeof row.yaw_source === "string", `${row.id} yaw is invalid`);
       invariant(Number.isFinite(row.surface?.bias_m) && row.surface.bias_m >= 0 && typeof row.surface.material_key === "string", `${row.id} surface is invalid`);
       // A kit prop is built at runtime: a placed row of the kind its prop draws,
