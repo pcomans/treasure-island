@@ -60,6 +60,7 @@ import {
 import { CAR_BODY_NAMES, CAR_FINISHES, CAR_PAINTS, MAX_TWIST_M, STREET_CLUTTER_PROPS, visibleGroundIndex } from "./lib/street-clutter-generation.mjs";
 import { STREET_FENCE_INSIDE, STREET_FENCE_SCREENS, STREET_FENCE_TYPES } from "./lib/street-fence-generation.mjs";
 import { MAX_LEG_DROP_M, MAX_REST_TILT_RAD, restTilt, STREET_FURNITURE_FEET, STREET_FURNITURE_PROPS } from "./lib/street-furniture-generation.mjs";
+import { YARD_KIT_KEYS, yardPropFootprint, yardPropParamsError } from "./lib/street-yard-kit.mjs";
 import {
   STREET_VEGETATION_BURY_M,
   STREET_VEGETATION_MAX_FOOT_SPREAD_M,
@@ -870,6 +871,14 @@ function validateStreetDetail(worldRoot, manifest, records) {
         invariant(["pitch", "roll", "lift"].every((key) => Number.isFinite(params[key]) && Math.abs(params[key]) < 0.25), `${row.id} car tilt is invalid`);
         invariant(Number.isFinite(params.twist) && Math.abs(params.twist) <= MAX_TWIST_M, `${row.id} car twist is invalid`);
         invariant(row.footprint_m !== undefined, `${row.id} parked car has no footprint`);
+      }
+      // A yard kit prop: usable params and its own rectangle as its footprint.
+      if (row.layer === "clutter" && YARD_KIT_KEYS.includes(row.prop)) {
+        const error = yardPropParamsError(row.prop, row.prop_params);
+        invariant(error === null, `${row.id} ${row.prop} params are invalid: ${error}`);
+        const plan = yardPropFootprint(row.prop, row.prop_params);
+        invariant(row.footprint_m !== undefined && Math.abs(row.footprint_m.x_m - plan.x_m) <= 0.002 && Math.abs(row.footprint_m.z_m - plan.z_m) <= 0.002,
+          `${row.id} footprint_m differs from its ${row.prop} plan ${plan.x_m} x ${plan.z_m}`);
       }
       // A furniture prop on legs: its rest on the ground under its feet, a small tilt and lift.
       if (row.layer === "furniture" && row.prop !== undefined && STREET_FURNITURE_FEET[row.prop] !== undefined) {

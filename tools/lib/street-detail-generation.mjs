@@ -16,6 +16,7 @@ import { projectLonLat } from "./coordinates.mjs";
 import { geometryToLine, pointInMultiPolygon, pointInRing, selectGeometry } from "./osm-geometry.mjs";
 import { footprintPiece, placeStreetClutter, STREET_CLUTTER_FOOTPRINTS, STREET_CLUTTER_PROPS, validateClutterRules, visibleGroundIndex } from "./street-clutter-generation.mjs";
 import { placeStreetFences, validateFenceRules } from "./street-fence-generation.mjs";
+import { YARD_KIT_KEYS, yardKindRadius, yardPropFootprint } from "./street-yard-kit.mjs";
 import { placeStreetFurniture, settleOnFeet, STREET_FURNITURE_FEET, STREET_FURNITURE_PROPS, streetFurnitureFootprint, validateFurnitureRules } from "./street-furniture-generation.mjs";
 import { packPlantingRows, planDrifts, planFill, plantingState, validatePlantingRule } from "./street-planting-generation.mjs";
 import {
@@ -156,6 +157,10 @@ export const STREET_DETAIL_KINDS = Object.freeze({
   tree: pointKind("vegetation", 0.8, "seeded"),
   wall: lineKind("fences", 0.15),
   waste_basket: pointKind("furniture", 0.35, "faces_road"),
+  // The yard kit's props (tools/lib/street-yard-kit.mjs), each a kind of its
+  // own name; a row carries its rectangle (footprint_m), the radius is half the
+  // short side of the prop's smallest plan.
+  ...Object.fromEntries(YARD_KIT_KEYS.map((key) => [key, pointKind("clutter", yardKindRadius(key), "seeded")])),
 });
 
 const AMENITY_KINDS = Object.freeze(["bench", "bicycle_parking", "post_box", "waste_basket"]);
@@ -1168,7 +1173,9 @@ export function generateStreetDetail({
     const xz = [round3(entry.xz[0]), round3(entry.xz[1])];
     // A planted tree keeps the scatter's site checks; a street prop the furniture's margins.
     const tree = STREET_DETAIL_KINDS[entry.kind].layer === "vegetation";
-    const footprint = entry.prop === undefined || tree ? null : (streetFurnitureFootprint(entry.prop, entry.params) ?? STREET_CLUTTER_FOOTPRINTS[entry.prop] ?? null);
+    const yardFootprint = entry.prop !== undefined && YARD_KIT_KEYS.includes(entry.prop) ? yardPropFootprint(entry.prop, entry.params) : null;
+    const footprint = entry.prop === undefined || tree ? null
+      : (streetFurnitureFootprint(entry.prop, entry.params) ?? STREET_CLUTTER_FOOTPRINTS[entry.prop] ?? (yardFootprint ? { x_m: yardFootprint.x_m, z_m: yardFootprint.z_m } : null));
     const piece = footprint
       ? footprintPiece(xz, normalizedYaw(entry.yaw), footprint)
       : { points: [xz], radius: STREET_DETAIL_KINDS[entry.kind].footprint_radius_m };
