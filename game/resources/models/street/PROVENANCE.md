@@ -40,8 +40,9 @@
   food trucks, trailers (cargo, utility, semi, mobile office), boats on
   trailers, the Pier 1 barge hull modules, crawler cranes (boom raised or
   lowered), a deckhouse and deck loads, a water barrier and a pole flag; and for
-  every heap (pile, berm and windrow module) its collision hull (`_hull`), built
-  over its near mesh with no face steeper than 45 degrees. Each vertex carries
+  every heap (pile, berm and windrow module) its collision floor (`_floor`), a
+  height field laid over its near mesh with no triangle steeper than 45
+  degrees. Each vertex carries
   its part in UV.x and baked occlusion in UV.y (a flag's face carries texture
   coordinates instead, for `street_pole_flag.png`); no materials or textures in
   the file. `street_yard.gdshader` colours the parts and

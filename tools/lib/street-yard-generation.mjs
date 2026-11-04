@@ -41,8 +41,7 @@
 
 import { createHash } from "node:crypto";
 
-import { restOffset } from "./street-furniture-generation.mjs";
-import { YARD_KIT_KEYS, YARD_KIT_PROPS, YARD_MAX_FLOAT_M, YARD_MAX_SINK_M, containerWallLayout, yardPropFootprint, yardPropParamsError } from "./street-yard-kit.mjs";
+import { YARD_KIT_KEYS, YARD_KIT_PROPS, YARD_MAX_FLOAT_M, containerWallLayout, yardMaxSink, yardPropFootprint, yardPropParamsError, yardRestGaps } from "./street-yard-kit.mjs";
 import { invariant, roundCoordinate } from "./world-contract.mjs";
 
 export const STREET_YARD_PATTERNS = Object.freeze(["pack", "span", "wall"]);
@@ -85,23 +84,6 @@ const SEGMENT_GAP_M = 0.12;
 const MAX_REST_RAD = 0.35;
 // Ground samples along a long side are at most this far apart (m).
 const REST_SAMPLE_M = 3;
-// The rest limits hold on a row's plan corners and, along a long prop, on
-// both long edges and its centre line at most REST_CHECK_M apart.
-const REST_CHECK_M = 1.5;
-// Vehicles and boats stand on tyres and keels, so they sink less.
-const VEHICLE_PROPS = Object.freeze(["boat_on_trailer", "box_truck", "bus", "food_truck", "rv", "trailer", "van"]);
-const VEHICLE_MAX_SINK_M = 0.1;
-const restSinkLimit = (prop) => (VEHICLE_PROPS.includes(prop) ? VEHICLE_MAX_SINK_M : YARD_MAX_SINK_M);
-// The plan points the rest limits apply to, in the row's local x, z.
-function restPoints(prop, footprint) {
-  const [hx, hz] = [footprint.x_m / 2, footprint.z_m / 2];
-  const points = [[-hx, -hz], [hx, -hz], [-hx, hz], [hx, hz]];
-  if (LONG_PROPS.includes(prop)) {
-    const steps = Math.max(1, Math.ceil((2 * hz) / REST_CHECK_M));
-    for (let i = 0; i <= steps; i += 1) for (const x of [-hx, 0, hx]) points.push([x, -hz + (2 * hz * i) / steps]);
-  }
-  return points;
-}
 
 const isFiniteNumber = (value) => typeof value === "number" && Number.isFinite(value);
 const isXZ = (value) => Array.isArray(value) && value.length === 2 && value.every(isFiniteNumber);
@@ -347,14 +329,6 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
 
   // The visible ground under a plan point, or null off the generated surfaces.
   const groundY = (xz) => groundAt(xz)?.y ?? null;
-  // How far each rest point of a row floats over the visible ground (+) or
-  // sinks into it (-) at its pitch, roll and lift, as the runtime turns it;
-  // null where a point has no ground.
-  const restGaps = (prop, footprint, xz, yaw, base, rest) => restPoints(prop, footprint).map(([x, z]) => {
-    const offset = restOffset([x, 0, z], yaw, rest.pitch, rest.roll);
-    const y = groundY([xz[0] + offset[0], xz[1] + offset[2]]);
-    return y === null ? null : base + rest.lift + offset[1] - y;
-  });
   // An item's rest on the visible ground: the plane through the ground under
   // its rectangle (least squares), raised until no sample is more than the
   // allowed sink above it; addItem then holds it to the kit's corner limits.
@@ -448,15 +422,15 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
     const { y, support } = grounded(xz);
     const surface = surfaceAt(xz);
     const angle = (value) => Math.round(value * 1e4) / 1e4 || 0;
-    // The kit's rest limits on the rest points: lowered until none floats
-    // more than YARD_MAX_FLOAT_M, and left out where one then sinks more
-    // than its limit.
+    // The kit's rest limits on its rest points (yardRestGaps, a grid over the
+    // plan): lowered until none floats more than YARD_MAX_FLOAT_M, and left
+    // out where one then sinks more than the prop's limit (yardMaxSink).
     const base = y + surface.bias_m;
     const restParams = { pitch: angle(settled.pitch), roll: angle(settled.roll), lift: round3(settled.height - base) };
-    const gaps = restGaps(prop, footprint, xz, yaw, base, restParams);
+    const gaps = yardRestGaps(footprint, xz, yaw, base, restParams, groundAt);
     if (gaps.some((gap) => gap === null)) return { problem: "no_ground" };
     const drop = Math.max(0, Math.max(...gaps) - YARD_MAX_FLOAT_M);
-    if (gaps.some((gap) => gap - drop < -restSinkLimit(prop))) return { problem: "uneven_ground" };
+    if (gaps.some((gap) => gap - drop < -yardMaxSink(prop, params))) return { problem: "uneven_ground" };
     restParams.lift = round3(restParams.lift - drop);
     const settledGaps = gaps.map((gap) => gap - drop);
     const row = {

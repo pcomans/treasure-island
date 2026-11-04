@@ -68,12 +68,12 @@ import {
 } from "./lib/street-detail-generation.mjs";
 import { CAR_BODY_NAMES, CAR_FINISHES, CAR_PAINTS, MAX_TWIST_M, STREET_CLUTTER_PROPS, visibleGroundIndex } from "./lib/street-clutter-generation.mjs";
 import {
-  fenceHeight, fenceParamsError, gateLeaves, STREET_FENCE_BANNER_TYPES, STREET_FENCE_GATE_HINGES, STREET_FENCE_GATE_STYLES, STREET_FENCE_GATED_TYPES, STREET_FENCE_INSIDE,
+  fenceHeight, fenceParamsError, GATE_LEAF_LIFT_M, gateLeaves, STREET_FENCE_BANNER_TYPES, STREET_FENCE_GATE_HINGES, STREET_FENCE_GATE_STYLES, STREET_FENCE_GATED_TYPES, STREET_FENCE_INSIDE,
   STREET_FENCE_TYPES,
 } from "./lib/street-fence-generation.mjs";
 import { MAX_LEG_DROP_M, MAX_REST_TILT_RAD, restTilt, STREET_FURNITURE_FEET, STREET_FURNITURE_PROPS } from "./lib/street-furniture-generation.mjs";
-import { YARD_KIT_KEYS, YARD_KIT_PARTS, YARD_MAX_FLOAT_M, YARD_MAX_SINK_M, yardCornerGaps, yardPropFootprint, yardPropParamsError, yardPropRests } from "./lib/street-yard-kit.mjs";
-import { yardKitMeshes } from "./lib/street-yard-meshes.mjs";
+import { YARD_KIT_KEYS, YARD_KIT_PARTS, YARD_KIT_PROPS, YARD_MAX_FLOAT_M, yardMaxSink, yardPropFootprint, yardPropParamsError, yardPropRests, yardRestGaps } from "./lib/street-yard-kit.mjs";
+import { BERM_MODULE, BERM_SPECS, RIDGE_MODULE, yardKitMeshes } from "./lib/street-yard-meshes.mjs";
 import {
   STREET_VEGETATION_BURY_M,
   STREET_VEGETATION_MAX_FOOT_SPREAD_M,
@@ -947,12 +947,16 @@ function validateStreetDetail(worldRoot, manifest, records) {
         const plan = yardPropFootprint(row.prop, row.prop_params);
         invariant(row.footprint_m !== undefined && Math.abs(row.footprint_m.x_m - plan.x_m) <= 0.002 && Math.abs(row.footprint_m.z_m - plan.z_m) <= 0.002,
           `${row.id} footprint_m differs from its ${row.prop} plan ${plan.x_m} x ${plan.z_m}`);
-        // It rests on the visible ground: no corner floats or sinks past the
-        // limits at its pitch, roll and lift (a barge floats instead).
+        // It rests on the visible ground: no point of its plan (corners and a
+        // grid no coarser than 3 m) floats or sinks past the limits at its
+        // pitch, roll and lift (a barge floats instead).
         if (yardPropRests(row.prop)) {
-          const gaps = yardCornerGaps(row.footprint_m, [row.position_m[0], row.position_m[2]], row.yaw_radians, row.position_m[1] + (row.surface?.bias_m ?? 0), row.prop_params, groundAt);
-          invariant(gaps.every((gap) => gap !== null && gap <= YARD_MAX_FLOAT_M + 0.005 && gap >= -YARD_MAX_SINK_M - 0.005),
-            `${row.id} ${row.prop} does not rest on the ground: its corners float (+) or sink (-) ${gaps.map((gap) => (gap === null ? "off the ground" : gap.toFixed(3))).join(", ")} m`);
+          const gaps = yardRestGaps(row.footprint_m, [row.position_m[0], row.position_m[2]], row.yaw_radians, row.position_m[1] + (row.surface?.bias_m ?? 0), row.prop_params, groundAt);
+          const sink = yardMaxSink(row.prop, row.prop_params);
+          const bad = gaps.filter((gap) => gap === null || gap > YARD_MAX_FLOAT_M + 0.005 || gap < -sink - 0.005);
+          const known = gaps.filter((gap) => gap !== null);
+          invariant(bad.length === 0, `${row.id} ${row.prop} does not rest on the ground: ${bad.length} of its ${gaps.length} rest points float more than ${YARD_MAX_FLOAT_M} m or sink more than ${sink} m `
+            + `(${gaps.length - known.length} off the ground, highest ${Math.max(...known).toFixed(3)} m, lowest ${Math.min(...known).toFixed(3)} m)`);
         }
       }
       // A furniture prop on legs: its rest on the ground under its feet, a small tilt and lift.
@@ -974,7 +978,7 @@ function validateStreetDetail(worldRoot, manifest, records) {
         grounded(`${row.id} vertex ${index}`, point[0], point[1], point[2], row.terrain_supports[index][0], row.terrain_supports[index][1]);
       });
       invariant((row.kind === "fence") === (row.fence !== undefined), `${row.id}: every fence row, and only a fence row, carries a fence block`);
-      if (row.fence !== undefined) validateFenceRow(row, grounded, inBoundary);
+      if (row.fence !== undefined) validateFenceRow(row, grounded, inBoundary, groundAt);
     }
   }
   const builtFences = new Set(rows.filter((row) => row.fence && row.prop !== undefined).map((row) => row.id));
@@ -993,7 +997,7 @@ function validateStreetDetail(worldRoot, manifest, records) {
 
 // A fence row: its kit type, openings along the line and solid runs of grounded
 // posts. A built row (with a prop) is placed and its prop is its type.
-function validateFenceRow(row, grounded, inBoundary) {
+function validateFenceRow(row, grounded, inBoundary, groundAt) {
   const fence = row.fence;
   const spec = STREET_FENCE_TYPES[fence.type];
   invariant(spec && fence.height_m === fenceHeight(fence.type, fence.params) && fence.half_thickness_m === spec.half_thickness_m && typeof fence.type_basis === "string", `${row.id} fence type is invalid`);
@@ -1010,6 +1014,17 @@ function validateFenceRow(row, grounded, inBoundary) {
       gate.points_m.forEach((point, end) => grounded(`${row.id} gate ${index} end ${end}`, point[0], point[1], point[2], gate.terrain_supports[end][0], gate.terrain_supports[end][1]));
       const expected = gateLeaves(gate.points_m.map((point) => [point[0], point[2]]), gate.style, gate.hinge, fence.params.inside);
       invariant(stableJson(gate.leaves) === stableJson(expected), `${row.id} gate ${index} leaves differ from its ends, style and hinge`);
+      // A leaf hangs level from its post: the ground under it, to its tip,
+      // stays below its bottom rail (where it rises from the post, the gate
+      // needs its other hinge or style).
+      expected.forEach((leaf, side) => {
+        const rail = gate.points_m[leaf.post][1] + gate.surface_bias_m[leaf.post] + GATE_LEAF_LIFT_M;
+        for (let step = 0; step <= 8; step += 1) {
+          const t = step / 8;
+          const ground = groundAt([leaf.xz[0][0] + (leaf.xz[1][0] - leaf.xz[0][0]) * t, leaf.xz[0][1] + (leaf.xz[1][1] - leaf.xz[0][1]) * t]);
+          invariant(!ground || ground.y <= rail + 0.005, `${row.id} gate ${index} leaf ${side} meets ground rising ${(ground?.y - rail).toFixed(3)} m into its bottom rail ${(t * 100).toFixed(0)}% of the way to its tip`);
+        }
+      });
     });
   }
   // Banners: a white sheet between two grounded ends on a solid run, lower than the fence.
@@ -1219,11 +1234,76 @@ function validateShoreline(worldRoot, manifest, records) {
   return { document, placements };
 }
 
+// The top of a mesh's triangles over a plan point (0 where it has none).
+function meshTop(mesh, cell = 0.5) {
+  const bins = new Map();
+  const triangles = [];
+  for (let index = 0; index < mesh.indices.length; index += 3) {
+    const corners = [0, 1, 2].map((k) => mesh.positions.slice(mesh.indices[index + k] * 3, mesh.indices[index + k] * 3 + 3));
+    const [a, b, c] = corners;
+    const det = (b[2] - c[2]) * (a[0] - c[0]) + (c[0] - b[0]) * (a[2] - c[2]);
+    if (Math.abs(det) < 1e-12) continue;
+    triangles.push({ a, b, c, det });
+    const xs = corners.map((corner) => corner[0]);
+    const zs = corners.map((corner) => corner[2]);
+    for (let i = Math.floor(Math.min(...xs) / cell); i <= Math.floor(Math.max(...xs) / cell); i += 1) {
+      for (let j = Math.floor(Math.min(...zs) / cell); j <= Math.floor(Math.max(...zs) / cell); j += 1) {
+        if (!bins.has(`${i},${j}`)) bins.set(`${i},${j}`, []);
+        bins.get(`${i},${j}`).push(triangles.at(-1));
+      }
+    }
+  }
+  return (x, z) => {
+    let top = 0;
+    for (const { a, b, c, det } of bins.get(`${Math.floor(x / cell)},${Math.floor(z / cell)}`) ?? []) {
+      const l1 = ((b[2] - c[2]) * (x - c[0]) + (c[0] - b[0]) * (z - c[2])) / det;
+      const l2 = ((c[2] - a[2]) * (x - c[0]) + (a[0] - c[0]) * (z - c[2])) / det;
+      if (l1 < -1e-9 || l2 < -1e-9 || 1 - l1 - l2 < -1e-9) continue;
+      top = Math.max(top, l1 * a[1] + l2 * b[1] + (1 - l1 - l2) * c[1]);
+    }
+    return top;
+  };
+}
+
+// How far a heap's floor may stand above its visible mesh, at the largest
+// scale the heap takes.
+const YARD_FLOOR_FLOAT_M = 0.3;
+
+// The heaps the player walks on, each with the plan its floor keeps to (x0,
+// x1, z0, z1, at scale 1), the largest scale it takes and the edges where a
+// module meets the next (z values).
+function yardHeaps() {
+  const heaps = [];
+  const pile = YARD_KIT_PROPS.material_pile;
+  for (const variant of pile.variants) {
+    if (variant.name === "ridge") continue;
+    for (let shape = pile.params.shape.min; shape <= pile.params.shape.max; shape += 1) {
+      heaps.push({ name: `pile_${variant.name}_${shape}`, x0: -variant.x_m / 2, x1: variant.x_m / 2, z0: -variant.z_m / 2, z1: variant.z_m / 2, scale: pile.params.scale.max, joints: [] });
+    }
+  }
+  const modular = [
+    ...YARD_KIT_PROPS.plastic_berm.variants.map((variant) => [`berm_${variant.name}`, variant.x_m, BERM_MODULE, BERM_SPECS[variant.name].cap_m]),
+    ["ridge", pile.variants.find((variant) => variant.name === "ridge").x_m, RIDGE_MODULE, RIDGE_MODULE / 2],
+  ];
+  for (const [base, width, length, cap] of modular) {
+    const [x0, x1] = [-width / 2, width / 2];
+    heaps.push({ name: `${base}_mid`, base, x0, x1, z0: -length / 2, z1: length / 2, scale: 1, joints: [-length / 2, length / 2] });
+    heaps.push({ name: `${base}_end_neg`, base, x0, x1, z0: -cap, z1: 0, scale: 1, joints: [0] });
+    heaps.push({ name: `${base}_end_pos`, base, x0, x1, z0: 0, z1: cap, scale: 1, joints: [0] });
+  }
+  return heaps;
+}
+
 // The yard kit (tools/lib/street-yard-kit.mjs, -meshes.mjs): its shader and
 // runtime keep one entry per kit part and name the parts they treat specially
-// by their place in YARD_KIT_PARTS; every heap's collision hull (<mesh>_hull)
-// has no face steeper than 45 degrees, so the player walks up it (the floor
-// limit is 48), and holds the heap's visible mesh to within 0.1 m.
+// by their place in YARD_KIT_PARTS. Every heap collides as the floor the kit
+// lays over its visible (near) mesh (<mesh>_floor), and the player walks on
+// it: no triangle steeper than 45 degrees (the floor limit is 48); the near
+// mesh at most 0.1 m above it (a foot beds into a loose chunk or tyre) and,
+// on a 0.2 m grid, it at most YARD_FLOOR_FLOAT_M above the near mesh at the
+// heap's largest scale; within the heap's plan and down to the ground at its
+// edges, but where a module meets the next, along which the two floors are
+// the same.
 function validateYardKit() {
   const parts = YARD_KIT_PARTS;
   const shader = readFileSync(resolve(projectRoot, "game/resources/materials/world/street/street_yard.gdshader"), "utf8");
@@ -1240,25 +1320,51 @@ function validateYardKit() {
   const colours = kit.slice(kit.indexOf("const PART_COLORS := ["), kit.indexOf("]", kit.indexOf("const PART_COLORS := [")));
   invariant((colours.match(/Color\(/gu) ?? []).length === parts.length, "The yard kit's PART_COLORS is not one colour per kit part");
   const meshes = new Map(yardKitMeshes().map((mesh) => [mesh.name, mesh]));
-  for (const [name, hull] of meshes) {
-    if (!name.endsWith("_hull")) continue;
-    const planes = [];
-    for (let index = 0; index < hull.indices.length; index += 3) {
-      const [a, b, c] = [0, 1, 2].map((corner) => hull.positions.slice(hull.indices[index + corner] * 3, hull.indices[index + corner] * 3 + 3));
+  const floors = new Map();
+  for (const heap of yardHeaps()) {
+    const [floor, near] = [meshes.get(`${heap.name}_floor`), meshes.get(`${heap.name}_lod0`)];
+    invariant(floor && near, `The yard kit has no floor for ${heap.name}`);
+    const label = `The yard kit's ${heap.name} floor`;
+    for (let index = 0; index < floor.indices.length; index += 3) {
+      const [a, b, c] = [0, 1, 2].map((corner) => floor.positions.slice(floor.indices[index + corner] * 3, floor.indices[index + corner] * 3 + 3));
       const u = [b[0] - a[0], b[1] - a[1], b[2] - a[2]];
       const v = [c[0] - a[0], c[1] - a[1], c[2] - a[2]];
       const normal = [u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0]];
-      const length = Math.hypot(...normal);
-      if (length < 1e-9) continue;
-      const n = normal.map((value) => value / length);
-      invariant(n[1] <= 0.01 || Math.acos(Math.min(1, n[1])) <= (45.05 * Math.PI) / 180, `The yard kit's ${name} has a face steeper than 45 degrees`);
-      planes.push([n, n[0] * a[0] + n[1] * a[1] + n[2] * a[2]]);
+      const tilt = Math.atan2(Math.hypot(normal[0], normal[2]), normal[1]);
+      invariant(tilt <= (45.05 * Math.PI) / 180, `${label} has a triangle at ${((tilt * 180) / Math.PI).toFixed(2)} degrees near ${a.map((value) => value.toFixed(2)).join(", ")}`);
     }
-    const near = meshes.get(`${name.slice(0, -"_hull".length)}_lod0`);
+    for (let index = 0; index < floor.positions.length; index += 3) {
+      const [x, y, z] = floor.positions.slice(index, index + 3);
+      invariant(x >= heap.x0 - 1e-6 && x <= heap.x1 + 1e-6 && z >= heap.z0 - 1e-6 && z <= heap.z1 + 1e-6, `${label} leaves its plan at ${x.toFixed(2)}, ${z.toFixed(2)}`);
+      const edge = Math.abs(x - heap.x0) < 1e-6 || Math.abs(x - heap.x1) < 1e-6
+        || ([heap.z0, heap.z1].some((end) => Math.abs(z - end) < 1e-6) && !heap.joints.some((joint) => Math.abs(z - joint) < 1e-6));
+      invariant(!edge || y <= 0.02, `${label} ends ${y.toFixed(3)} m above the ground at ${x.toFixed(2)}, ${z.toFixed(2)}`);
+    }
+    const [floorTop, nearTop] = [meshTop(floor), meshTop(near)];
     for (let index = 0; index < near.positions.length; index += 3) {
-      const point = [near.positions[index], Math.max(0, near.positions[index + 1]), near.positions[index + 2]];
-      const outside = Math.max(...planes.map(([n, d]) => n[0] * point[0] + n[1] * point[1] + n[2] * point[2] - d));
-      invariant(outside <= 0.1, `The yard kit's ${name} leaves its visible mesh ${outside.toFixed(2)} m outside`);
+      const [x, y, z] = near.positions.slice(index, index + 3);
+      const above = y - floorTop(x, z);
+      invariant(above <= 0.1 + 1e-6, `${label} leaves its visible mesh ${above.toFixed(3)} m above it at ${x.toFixed(2)}, ${z.toFixed(2)}`);
+    }
+    for (let x = heap.x0 + 0.1; x < heap.x1; x += 0.2) {
+      for (let z = heap.z0 + 0.1; z < heap.z1; z += 0.2) {
+        const height = floorTop(x, z);
+        if (height <= 0.005) continue;
+        const float = (height - nearTop(x, z)) * heap.scale;
+        invariant(float <= YARD_FLOOR_FLOAT_M + 1e-6, `${label} stands ${float.toFixed(3)} m above its visible mesh at ${x.toFixed(2)}, ${z.toFixed(2)} (scale ${heap.scale})`);
+      }
+    }
+    floors.set(heap.name, { heap, top: floorTop });
+  }
+  // Where modules meet (a middle's end and an end's start, or two ends), their floors are the same.
+  for (const { heap } of floors.values()) {
+    if (!heap.name.endsWith("_mid")) continue;
+    const pairs = [[`${heap.base}_mid`, heap.z1, `${heap.base}_end_pos`, 0], [`${heap.base}_end_neg`, 0, `${heap.base}_mid`, heap.z0], [`${heap.base}_end_neg`, 0, `${heap.base}_end_pos`, 0], [`${heap.base}_mid`, heap.z1, `${heap.base}_mid`, heap.z0]];
+    for (const [first, firstZ, second, secondZ] of pairs) {
+      for (let x = heap.x0; x <= heap.x1 + 1e-9; x += 0.05) {
+        const step = floors.get(first).top(x, firstZ) - floors.get(second).top(x, secondZ);
+        invariant(Math.abs(step) <= 0.005, `The yard kit's ${first} and ${second} floors meet ${step.toFixed(3)} m apart at x ${x.toFixed(2)}`);
+      }
     }
   }
 }

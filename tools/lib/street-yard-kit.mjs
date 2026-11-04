@@ -103,9 +103,10 @@ const oneOf = (...values) => Object.freeze({ type: "enum", values: Object.freeze
 // default. Every row may also carry seed (int), and pitch, roll (radians) and
 // lift (metres) for its rest on uneven ground (settleYardProp).
 //   collision: box (one box per body), boxes (one per container or part),
-//   hull (the convex hull the kit builds over the visible mesh, no face
-//   steeper than 45 degrees, so the player walks up it), cylinder, or none
-//   (a barge floats; it rests on no ground).
+//   hull (convex prisms over a shed's bays and ends), floor (the floor the kit
+//   lays over a heap's visible mesh, no triangle steeper than 45 degrees, so
+//   the player walks up it), cylinder, or none (a barge floats; it rests on
+//   no ground).
 export const YARD_KIT_PROPS = Object.freeze({
   shipping_container: {
     collision: "box",
@@ -244,7 +245,7 @@ export const YARD_KIT_PROPS = Object.freeze({
     params: { paint: oneOf("yellow", "red", "orange", "blue", "white"), house: oneOf("same", "white", "light_grey"), tone: oneOf("light", "dark"), length_m: numRange(12, 60) },
   },
   material_pile: {
-    collision: "hull",
+    collision: "floor",
     variants: [
       { name: "gravel", x_m: 8, z_m: 8, h_m: 3 },
       { name: "rubble", x_m: 12, z_m: 12, h_m: 4.5 },
@@ -258,7 +259,7 @@ export const YARD_KIT_PROPS = Object.freeze({
     params: { scale: numRange(0.5, 3), shape: intRange(0, 2), length_m: numRange(RIDGE_MODULE_M, 240) },
   },
   plastic_berm: {
-    collision: "hull",
+    collision: "floor",
     variants: [
       { name: "low", x_m: 9, z_m: null, h_m: 1.8 },
       // Its rounded ends take a whole module each, so it needs two.
@@ -463,31 +464,50 @@ export function yardKindRadius(key) {
 }
 
 // ---------------------------------------------------------------- rest on the ground
-// A yard prop rests on the visible ground on its plan's underside: the plane
-// through the ground under its corners and edge midpoints gives its pitch
-// (raising its front, -Z), roll (its left side) and lift (metres from the row's
-// base, y + bias_m, to that plane at its middle), as the runtime turns it
-// (Basis(UP, yaw) * Basis(RIGHT, pitch) * Basis(BACK, -roll)). Resting so, no
-// corner may float more than YARD_MAX_FLOAT_M over the ground or sink more than
-// YARD_MAX_SINK_M into it. A barge floats, so it has no rest.
+// A yard prop rests on the visible ground on its plan's underside, sampled at
+// its corners and on a grid over it no coarser than YARD_REST_STEP_M (so a
+// long wall or shed row is sampled along every container, bay or module):
+// the plane through the ground there gives its pitch (raising its front, -Z),
+// roll (its left side) and lift (metres from the row's base, y + bias_m, to
+// that plane at its middle), as the runtime turns it (Basis(UP, yaw) *
+// Basis(RIGHT, pitch) * Basis(BACK, -roll)). Resting so, no sample may float
+// more than YARD_MAX_FLOAT_M over the ground or sink more than its limit into
+// it: YARD_MAX_SINK_M, or YARD_VEHICLE_MAX_SINK_M for a vehicle, boat or
+// machine, whose wheels or tracks would show it. A barge floats, so it has no
+// rest. Ground that dips or humps along a long prop more than that needs the
+// prop split into shorter rows.
+export const YARD_REST_STEP_M = 3;
 export const YARD_MAX_FLOAT_M = 0.08;
 export const YARD_MAX_SINK_M = 0.3;
+export const YARD_VEHICLE_MAX_SINK_M = 0.1;
 export const YARD_MAX_TILT_RAD = 0.35;
 export function yardPropRests(key) {
   return YARD_KIT_PROPS[key]?.collision !== "none";
 }
 
-function planPoints(footprint, withMidpoints) {
-  const [hx, hz] = [footprint.x_m / 2, footprint.z_m / 2];
-  const corners = [[-hx, -hz], [hx, -hz], [-hx, hz], [hx, hz]];
-  return withMidpoints ? [...corners, [0, -hz], [0, hz], [-hx, 0], [hx, 0], [0, 0]] : corners;
+const ON_WHEELS = new Set(["rv", "bus", "box_truck", "van", "food_truck", "trailer", "boat_on_trailer"]);
+const MACHINES = new Set(["excavator", "wheel_loader"]);
+export function yardMaxSink(key, params = {}) {
+  const variant = YARD_KIT_PROPS[key]?.variants[params?.variant ?? 0]?.name;
+  return ON_WHEELS.has(key) || (key === "equipment" && MACHINES.has(variant)) ? YARD_VEHICLE_MAX_SINK_M : YARD_MAX_SINK_M;
 }
 
-// How far each plan corner floats over the visible ground (+) or sinks into it
-// (-) for a row at world xz, yaw, base height and rest; null where a corner
+// The plan points ([x, z] in the prop frame) a prop rests on.
+export function yardRestPoints(footprint) {
+  const stations = (size) => {
+    const n = Math.max(1, Math.ceil(size / YARD_REST_STEP_M - 1e-9));
+    return Array.from({ length: n + 1 }, (_, i) => -size / 2 + (size * i) / n);
+  };
+  const points = [];
+  for (const z of stations(footprint.z_m)) for (const x of stations(footprint.x_m)) points.push([x, z]);
+  return points;
+}
+
+// How far each rest point floats over the visible ground (+) or sinks into it
+// (-) for a row at world xz, yaw, base height and rest; null where a point
 // has no ground.
-export function yardCornerGaps(footprint, xz, yaw, base, rest, groundAt) {
-  return planPoints(footprint, false).map(([x, z]) => {
+export function yardRestGaps(footprint, xz, yaw, base, rest, groundAt) {
+  return yardRestPoints(footprint).map(([x, z]) => {
     const offset = restOffset([x, 0, z], yaw, rest.pitch ?? 0, rest.roll ?? 0);
     const ground = groundAt([xz[0] + offset[0], xz[1] + offset[2]]);
     return ground ? base + (rest.lift ?? 0) + offset[1] - ground.y : null;
@@ -495,12 +515,12 @@ export function yardCornerGaps(footprint, xz, yaw, base, rest, groundAt) {
 }
 
 // The rest a yard prop takes on the visible ground: {pitch, roll, lift}, or
-// {problem} where a point of its plan has no ground, the ground tilts more
-// than YARD_MAX_TILT_RAD or it is too uneven for its corners to sit within
-// YARD_MAX_FLOAT_M and YARD_MAX_SINK_M.
-export function settleYardProp(footprint, xz, yaw, base, groundAt) {
+// {problem} where a rest point has no ground, the ground tilts more than
+// YARD_MAX_TILT_RAD or it is too uneven for the points to sit within
+// YARD_MAX_FLOAT_M and maxSink (yardMaxSink).
+export function settleYardProp(footprint, xz, yaw, base, groundAt, maxSink = YARD_MAX_SINK_M) {
   const samples = [];
-  for (const [x, z] of planPoints(footprint, true)) {
+  for (const [x, z] of yardRestPoints(footprint)) {
     const offset = restOffset([x, 0, z], yaw, 0, 0);
     const ground = groundAt([xz[0] + offset[0], xz[1] + offset[2]]);
     if (!ground) return { problem: "no_ground" };
@@ -511,11 +531,11 @@ export function settleYardProp(footprint, xz, yaw, base, groundAt) {
   const roll = Math.round(Math.atan(-slopeX * Math.cos(pitch)) * 1e4) / 1e4 || 0;
   if (Math.abs(pitch) > YARD_MAX_TILT_RAD || Math.abs(roll) > YARD_MAX_TILT_RAD) return { problem: "too_steep" };
   const rest = { pitch, roll, lift: roundCoordinate(height - base) };
-  const gaps = yardCornerGaps(footprint, xz, yaw, base, rest, groundAt);
+  const gaps = yardRestGaps(footprint, xz, yaw, base, rest, groundAt);
   if (gaps.some((gap) => gap === null)) return { problem: "no_ground" };
   // Sit on the highest ground under it rather than float off the lowest.
   const drop = Math.max(...gaps) - YARD_MAX_FLOAT_M;
   if (drop > 0) rest.lift = roundCoordinate(rest.lift - drop);
-  if (gaps.some((gap) => gap - Math.max(0, drop) < -YARD_MAX_SINK_M)) return { problem: "uneven_ground" };
+  if (gaps.some((gap) => gap - Math.max(0, drop) < -maxSink)) return { problem: "uneven_ground" };
   return rest;
 }
