@@ -159,13 +159,21 @@
       "barrier_point": 3,
       "bench": 19,
       "bicycle_parking": 15,
+      "boat_on_trailer": 0,
       "bollard": 4,
+      "box_truck": 0,
+      "bus": 0,
       "bus_stop": 15,
       "chair": 5,
       "clutter_slot": 21,
+      "container_wall": 0,
+      "crane_barge": 0,
       "crossing": 161,
+      "equipment": 0,
+      "fabric_shed": 0,
       "fence": 26,
       "fire_hydrant": 17,
+      "food_truck": 0,
       "gate": 27,
       "grass_clump": 184,
       "hedge": 0,
@@ -173,20 +181,27 @@
       "jersey_barrier": 1,
       "kerb": 8,
       "log_barrier": 2,
+      "material_pile": 0,
       "palm_slot": 47,
       "parked_car": 116,
       "planting_slot": 0,
+      "plastic_berm": 0,
       "post_box": 1,
       "power_line": 44,
       "power_pole": 245,
       "retaining_wall": 0,
+      "rv": 0,
+      "shipping_container": 0,
       "stop_sign": 25,
+      "storage_shed_row": 0,
       "street_cabinet": 34,
       "street_lamp": 55,
       "street_sign": 4,
       "traffic_cone": 2,
       "traffic_signals": 6,
+      "trailer": 0,
       "tree": 13,
+      "van": 0,
       "wall": 1,
       "waste_basket": 14
     },
@@ -1663,12 +1678,33 @@
       "overhead": false,
       "yaw_rule": "faces_road"
     },
+    "boat_on_trailer": {
+      "footprint_radius_m": 1.25,
+      "geometry": "point",
+      "layer": "clutter",
+      "overhead": false,
+      "yaw_rule": "seeded"
+    },
     "bollard": {
       "footprint_radius_m": 0.15,
       "geometry": "point",
       "layer": "furniture",
       "overhead": false,
       "yaw_rule": "host_barrier"
+    },
+    "box_truck": {
+      "footprint_radius_m": 1.2,
+      "geometry": "point",
+      "layer": "clutter",
+      "overhead": false,
+      "yaw_rule": "seeded"
+    },
+    "bus": {
+      "footprint_radius_m": 1.2,
+      "geometry": "point",
+      "layer": "clutter",
+      "overhead": false,
+      "yaw_rule": "seeded"
     },
     "bus_stop": {
       "footprint_radius_m": 1.5,
@@ -1691,12 +1727,40 @@
       "overhead": false,
       "yaw_rule": "seeded"
     },
+    "container_wall": {
+      "footprint_radius_m": 1.219,
+      "geometry": "point",
+      "layer": "clutter",
+      "overhead": false,
+      "yaw_rule": "seeded"
+    },
+    "crane_barge": {
+      "footprint_radius_m": 3,
+      "geometry": "point",
+      "layer": "clutter",
+      "overhead": false,
+      "yaw_rule": "seeded"
+    },
     "crossing": {
       "footprint_radius_m": 0,
       "geometry": "point",
       "layer": "ground",
       "overhead": false,
       "yaw_rule": "crossing"
+    },
+    "equipment": {
+      "footprint_radius_m": 0.6,
+      "geometry": "point",
+      "layer": "clutter",
+      "overhead": false,
+      "yaw_rule": "seeded"
+    },
+    "fabric_shed": {
+      "footprint_radius_m": 5,
+      "geometry": "point",
+      "layer": "clutter",
+      "overhead": false,
+      "yaw_rule": "seeded"
     },
     "fence": {
       "footprint_radius_m": 0.05,
@@ -1711,6 +1775,13 @@
       "layer": "furniture",
       "overhead": false,
       "yaw_rule": "faces_road"
+    },
+    "food_truck": {
+      "footprint_radius_m": 1.2,
+      "geometry": "point",
+      "layer": "clutter",
+      "overhead": false,
+      "yaw_rule": "seeded"
     },
     "gate": {
       "footprint_radius_m": 0.1,
@@ -1761,6 +1832,13 @@
       "overhead": false,
       "yaw_rule": "none"
     },
+    "material_pile": {
+      "footprint_radius_m": 1.5,
+      "geometry": "point",
+      "layer": "clutter",
+      "overhead": false,
+      "yaw_rule": "seeded"
+    },
     "palm_slot": {
       "footprint_radius_m": 0.4,
       "geometry": "point",
@@ -1779,6 +1857,13 @@
       "footprint_radius_m": 0.8,
       "geometry": "point",
       "layer": "vegetation",
+      "overhead": false,
+      "yaw_rule": "seeded"
+    },
+    "plastic_berm": {
+      "footprint_radius_m": 3,
+      "geometry": "point",
+      "layer": "clutter",
       "overhead": false,
       "yaw_rule": "seeded"
     },
@@ -1810,12 +1895,33 @@
       "overhead": false,
       "yaw_rule": "none"
     },
+    "rv": {
+      "footprint_radius_m": 1.2,
+      "geometry": "point",
+      "layer": "clutter",
+      "overhead": false,
+      "yaw_rule": "seeded"
+    },
+    "shipping_container": {
+      "footprint_radius_m": 1.219,
+      "geometry": "point",
+      "layer": "clutter",
+      "overhead": false,
+      "yaw_rule": "seeded"
+    },
     "stop_sign": {
       "footprint_radius_m": 0.15,
       "geometry": "point",
       "layer": "furniture",
       "overhead": false,
       "yaw_rule": "host_road"
+    },
+    "storage_shed_row": {
+      "footprint_radius_m": 2.285,
+      "geometry": "point",
+      "layer": "clutter",
+      "overhead": false,
+      "yaw_rule": "seeded"
     },
     "street_cabinet": {
       "footprint_radius_m": 0.6,
@@ -1852,10 +1958,24 @@
       "overhead": false,
       "yaw_rule": "host_road"
     },
+    "trailer": {
+      "footprint_radius_m": 1.05,
+      "geometry": "point",
+      "layer": "clutter",
+      "overhead": false,
+      "yaw_rule": "seeded"
+    },
     "tree": {
       "footprint_radius_m": 0.8,
       "geometry": "point",
       "layer": "vegetation",
+      "overhead": false,
+      "yaw_rule": "seeded"
+    },
+    "van": {
+      "footprint_radius_m": 1.01,
+      "geometry": "point",
+      "layer": "clutter",
       "overhead": false,
       "yaw_rule": "seeded"
     },
