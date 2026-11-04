@@ -36,7 +36,7 @@ const WOOD := preload("res://game/resources/textures/world/street/street_fence_w
 ## half thickness of each bay's collision box: panels are jittered at their
 ## joints by up to PANEL_JITTER_M, which stays within the clearance.
 const TYPES := {
-	"chainlink_slatted": {"height_m": 1.83, "half_thickness_m": 0.06, "collision_half_m": 0.06},
+	"chain_link_slatted": {"height_m": 1.83, "half_thickness_m": 0.06, "collision_half_m": 0.06},
 	"chain_link": {"height_m": 1.83, "half_thickness_m": 0.06, "collision_half_m": 0.06},
 	"chain_link_barbed": {"height_m": 2.13, "half_thickness_m": 0.25, "collision_half_m": 0.06},
 	"chain_link_screened": {"height_m": 1.83, "half_thickness_m": 0.06, "collision_half_m": 0.06},
@@ -65,7 +65,7 @@ const SLAT_TILE_M := 0.4
 const GATE_STYLES := ["swing_single", "swing_double", "sliding"]
 ## Fence types that take open gate leaves, and banners (white sheets tied to
 ## the fabric: Gate 5, Nov 2025).
-const GATED_TYPES := ["chainlink_slatted", "chain_link", "chain_link_screened"]
+const GATED_TYPES := ["chain_link_slatted", "chain_link", "chain_link_screened"]
 const BANNER_COLOR := Color(0.9, 0.9, 0.88)
 const SCREEN_BACKLIGHT := Color(0.73, 0.73, 0.73)
 ## Visible ranges (m): a fence is long and low, so it reaches as far as a lamp pole.
@@ -200,7 +200,7 @@ static func params_error(type: String, params: Variant) -> String:
 		return "fence params need inside left, right or center"
 	if type == "chain_link_screened" and str((params as Dictionary).get("screen", "black")) not in SCREENS:
 		return "unknown screen colour %s" % (params as Dictionary).get("screen")
-	if type == "chainlink_slatted":
+	if type == "chain_link_slatted":
 		if str((params as Dictionary).get("slats", "")) not in SLATS:
 			return "slatted fence needs slats green, brown or black"
 		var height: Variant = (params as Dictionary).get("height_m", 1.83)
@@ -211,7 +211,7 @@ static func params_error(type: String, params: Variant) -> String:
 
 ## The height of a fence of this type with these params.
 static func height_of(type: String, params: Variant) -> float:
-	if type == "chainlink_slatted" and params is Dictionary and (params as Dictionary).has("height_m"):
+	if type == "chain_link_slatted" and params is Dictionary and (params as Dictionary).has("height_m"):
 		return float((params as Dictionary).height_m)
 	return float(TYPES[type].height_m)
 
@@ -226,7 +226,7 @@ func add_run(cells: Dictionary, cell_size_m: float, type: String, params: Dictio
 			return _panels(cells, cell_size_m, posts, side, seed)
 		"wood_privacy":
 			return _wood_fence(cells, cell_size_m, posts, side)
-		"chainlink_slatted":
+		"chain_link_slatted":
 			return _slatted(cells, cell_size_m, posts, side, str(params.get("slats", "green")), height_of(type, params))
 		_:
 			return _chain_link(cells, cell_size_m, type, posts, side, str(params.get("screen", "black")))
@@ -409,7 +409,7 @@ func _slatted(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, 
 		# The wire on the outside of the slats (outward: away from the inside).
 		var wire := normal * (side * 0.035 - (side if side != 0.0 else 1.0) * 0.012)
 		(cell.chain as Quads).wall(a + wire, b + wire, 0.05, height - 0.04, along_m, CHAIN_TILE)
-		boxes.append(_bay_box(a, b, height, float(TYPES.chainlink_slatted.collision_half_m)))
+		boxes.append(_bay_box(a, b, height, float(TYPES.chain_link_slatted.collision_half_m)))
 		along_m += length
 	return boxes
 
@@ -461,7 +461,7 @@ func add_gate(cells: Dictionary, cell_size_m: float, type: String, params: Dicti
 		metal.tube(frame, PackedFloat32Array([0.022, 0.022, 0.022, 0.022, 0.022]), 6, GALVANIZED, FURNITURE.CELL_METAL, false, false)
 		metal.tube(PackedVector3Array([hinge + lift + Vector3(0, (height - 0.08) * 0.5, 0), far + lift + Vector3(0, (height - 0.08) * 0.5, 0)]), PackedFloat32Array([0.018, 0.018]), 6, GALVANIZED, FURNITURE.CELL_METAL, false, false)
 		match type:
-			"chainlink_slatted":
+			"chain_link_slatted":
 				(cell["slats_" + slats] as Quads).wall(hinge + lift, far + lift, 0.03, height - 0.1, 0.0, Vector2(SLAT_TILE_M, height))
 				(cell.chain as Quads).wall(hinge + lift + _left(direction) * 0.012, far + lift + _left(direction) * 0.012, 0.03, height - 0.1, 0.0, CHAIN_TILE)
 			"chain_link_screened":

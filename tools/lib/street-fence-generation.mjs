@@ -32,7 +32,7 @@ import { compareSourceKeys, invariant, roundCoordinate } from "./world-contract.
 export const STREET_FENCE_TYPES = Object.freeze({
   // Chain-link with privacy slats woven through it (storage yards: green on 9th
   // St, Sep 2025, and Avenue M, Mar 2025; brown on 12th St, Jul 2023), 6 or 8 ft.
-  chainlink_slatted: Object.freeze({ height_m: 1.83, post_spacing_m: 3.05, half_thickness_m: 0.06, heights_m: Object.freeze([1.83, 2.44]) }),
+  chain_link_slatted: Object.freeze({ height_m: 1.83, post_spacing_m: 3.05, half_thickness_m: 0.06, heights_m: Object.freeze([1.83, 2.44]) }),
   chain_link: Object.freeze({ height_m: 1.83, post_spacing_m: 3.05, half_thickness_m: 0.06 }),
   chain_link_barbed: Object.freeze({ height_m: 2.13, post_spacing_m: 3.05, half_thickness_m: 0.25 }),
   chain_link_screened: Object.freeze({ height_m: 1.83, post_spacing_m: 3.05, half_thickness_m: 0.06 }),
@@ -48,12 +48,12 @@ export const STREET_FENCE_SLATS = Object.freeze(["green", "brown", "black"]);
 // single leaf hangs on the gate's start post (first along the line) unless
 // the rule hinges it at the end.
 export const STREET_FENCE_GATE_STYLES = Object.freeze(["swing_single", "swing_double", "sliding"]);
-export const STREET_FENCE_GATED_TYPES = Object.freeze(["chainlink_slatted", "chain_link", "chain_link_screened"]);
+export const STREET_FENCE_GATED_TYPES = Object.freeze(["chain_link_slatted", "chain_link", "chain_link_screened"]);
 export const STREET_FENCE_GATE_HINGES = Object.freeze(["start", "end"]);
 // A banner tied to a chain-link fence: a plain white sheet, no text, centred
 // on the fence's height (Gate 5, Nov 2025: a contractor's banner on the green
 // screen).
-export const STREET_FENCE_BANNER_TYPES = Object.freeze(["chainlink_slatted", "chain_link", "chain_link_screened"]);
+export const STREET_FENCE_BANNER_TYPES = Object.freeze(["chain_link_slatted", "chain_link", "chain_link_screened"]);
 export const STREET_FENCE_INSIDE = Object.freeze(["left", "right", "center"]);
 // Along-fence sampling step (m) for openings, and the clear margin (m) an opening
 // keeps on both sides of a crossing road or path.
@@ -236,11 +236,11 @@ export function fenceParamsError(type, params) {
   const spec = STREET_FENCE_TYPES[type];
   if (!spec) return `unknown fence type ${type}`;
   if (params === null || typeof params !== "object" || Array.isArray(params)) return "params must be an object";
-  const allowed = type === "chain_link_screened" ? ["inside", "screen"] : type === "chainlink_slatted" ? ["height_m", "inside", "slats"] : ["inside"];
+  const allowed = type === "chain_link_screened" ? ["inside", "screen"] : type === "chain_link_slatted" ? ["height_m", "inside", "slats"] : ["inside"];
   if (!Object.keys(params).every((key) => allowed.includes(key))) return `params take only ${allowed.join(", ")}`;
   if (!STREET_FENCE_INSIDE.includes(params.inside)) return `params.inside must be ${STREET_FENCE_INSIDE.join(", ")}`;
   if (type === "chain_link_screened" && !STREET_FENCE_SCREENS.includes(params.screen)) return `params.screen must be ${STREET_FENCE_SCREENS.join(" or ")}`;
-  if (type === "chainlink_slatted") {
+  if (type === "chain_link_slatted") {
     if (!STREET_FENCE_SLATS.includes(params.slats)) return `params.slats must be ${STREET_FENCE_SLATS.join(", ")}`;
     if (params.height_m !== undefined && !spec.heights_m.includes(params.height_m)) return `params.height_m must be ${spec.heights_m.join(" or ")}`;
   }
@@ -250,7 +250,7 @@ export function fenceParamsError(type, params) {
 // A fence's height: a slatted fence may be the taller 8 ft kind.
 export function fenceHeight(type, params) {
   const spec = STREET_FENCE_TYPES[type];
-  return type === "chainlink_slatted" && params?.height_m !== undefined ? params.height_m : spec.height_m;
+  return type === "chain_link_slatted" && params?.height_m !== undefined ? params.height_m : spec.height_m;
 }
 
 // The style a gate opening of this width gets when no rule names one.
@@ -451,7 +451,7 @@ export function placeStreetFences({
       const gateLeaves = [];
       for (const opening of openings) {
         if (!opening.reason.split("+").includes("gate")) continue;
-        if (type !== "chainlink_slatted" && !opening.style) continue;
+        if (type !== "chain_link_slatted" && !opening.style) continue;
         const width = opening.to_m - opening.from_m;
         if (width < 0.9) continue;
         const leaf = { style: opening.style ?? defaultGateStyle(width), from_m: opening.from_m, to_m: opening.to_m, ...runRecord(ends(opening.from_m, opening.to_m)) };
