@@ -769,6 +769,7 @@ export function generateStreetDetail({
   rawOsm,
   spawn,
   ground,
+  decks = [],
 }) {
   const config = loadStreetDetailZones(projectRoot);
   const setPieceDocument = loadStreetDetailSetPieces(projectRoot);
@@ -848,6 +849,30 @@ export function generateStreetDetail({
   const grounded = (xz) => {
     const support = terrainSupportAt(chunks, xz[0], -xz[1]);
     return { y: support.elevation_m, support };
+  };
+  // The boundary-attached context decks (a pier, a marina: visual-only,
+  // non-colliding context draped outside the playable boundary), by OSM key: a
+  // rule that names one stands its items or fence posts on it instead of on the
+  // land. The deck under a plan point ({y, support} on one of its triangles,
+  // as grounded gives on the land), or null off it.
+  const deckRecords = new Map(decks.map((record) => [record.source_keys[0], record]));
+  const deckSupport = (sourceKey, xz) => {
+    const record = deckRecords.get(sourceKey);
+    invariant(record, `Street detail names the deck ${sourceKey}, which is no boundary-attached context`);
+    const [east, worldZ] = xz;
+    for (let offset = 0; offset < record.indices.length; offset += 3) {
+      const [a, b, c] = record.indices.slice(offset, offset + 3).map((index) => record.vertices.slice(index * 3, index * 3 + 3));
+      const denominator = (b[2] - c[2]) * (a[0] - c[0]) + (c[0] - b[0]) * (a[2] - c[2]);
+      if (Math.abs(denominator) <= 1e-10) continue;
+      const weightA = ((b[2] - c[2]) * (east - c[0]) + (c[0] - b[0]) * (worldZ - c[2])) / denominator;
+      const weightB = ((c[2] - a[2]) * (east - c[0]) + (a[0] - c[0]) * (worldZ - c[2])) / denominator;
+      const weightC = 1 - weightA - weightB;
+      if (weightA >= -1e-7 && weightB >= -1e-7 && weightC >= -1e-7) {
+        const elevation = roundCoordinate(weightA * a[1] + weightB * b[1] + weightC * c[1]);
+        return { y: elevation, support: { object_key: record.object_key, triangle_index: offset / 3, elevation_m: elevation }, material_key: record.material_key };
+      }
+    }
+    return null;
   };
   const surfaceAt = (xz) => {
     // The always-on street ground (raised sidewalks and curb ramps) is the top surface where it exists.
@@ -1082,6 +1107,7 @@ export function generateStreetDetail({
     hardViolation,
     onLand,
     grounded,
+    deckSupport,
     surfaceAt,
     wayLine,
     rawOsm,
@@ -1128,6 +1154,7 @@ export function generateStreetDetail({
     roads,
     onLand,
     grounded,
+    deckSupport,
     surfaceAt,
     groundAt,
     exclusions,

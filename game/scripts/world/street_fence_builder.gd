@@ -10,7 +10,9 @@ extends RefCounted
 ## furniture: the player collides with a fence and the jetpack clears it, the
 ## spray ray stops on it (a fence is never a spray receiver), and the camera arm
 ## ignores it. Openings (crossing roads and paths, gates, the gameplay mask) hold
-## neither mesh nor box.
+## neither mesh nor box. A fence on a context deck (its fence block's deck: a pier
+## drawn as visual-only context beyond the playable boundary) has no body, as the
+## deck has none.
 
 const KIT := preload("res://game/scripts/world/street_fence_kit.gd")
 ## Render cell size (m).
@@ -85,6 +87,11 @@ func build(document: Dictionary) -> Dictionary:
 				instance.set_meta("street_detail_layer", "fences")
 				group.add_child(instance)
 				meshes += 1
+		if (fence as Dictionary).has("deck"):
+			root.add_child(group)
+			fences += 1
+			type_counts[type] = int(type_counts.get(type, 0)) + 1
+			continue
 		var body := StaticBody3D.new()
 		body.name = "Collision"
 		body.collision_layer = PHYSICS_STREET_PROP | PHYSICS_SPRAY_SURFACE

@@ -2116,6 +2116,7 @@ function main() {
       rawOsm: loaded.rawOsm,
       spawn: { xz: spawnXZ, yaw: spawn.yaw },
       ground: streetGround,
+      decks: context.document.boundary_attached_visuals,
     });
     terrainDocument.surface_anchors = TERRAIN_SURFACE_ANCHORS.map((anchor) => ({
       ...anchor,

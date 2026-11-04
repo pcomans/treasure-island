@@ -63,7 +63,7 @@ import {
 } from "./lib/street-fence-generation.mjs";
 import { MAX_LEG_DROP_M, MAX_REST_TILT_RAD, restTilt, STREET_FURNITURE_FEET, STREET_FURNITURE_PROPS } from "./lib/street-furniture-generation.mjs";
 import { YARD_KIT_KEYS, yardPropFootprint, yardPropParamsError } from "./lib/street-yard-kit.mjs";
-import { isMooredRow, MOORED_PROP_VARIANTS } from "./lib/street-yard-generation.mjs";
+import { isDeckRow, isMooredRow, isYardRow, MOORED_PROP_VARIANTS } from "./lib/street-yard-generation.mjs";
 import {
   STREET_VEGETATION_BURY_M,
   STREET_VEGETATION_MAX_FOOT_SPREAD_M,
@@ -848,11 +848,18 @@ function validateStreetDetail(worldRoot, manifest, records) {
   const landByKey = new Map([...records.physical.values()]
     .filter(({ record }) => record.feature_kind === "land_ground")
     .map(({ record }) => [record.object_key, record]));
-  const grounded = (id, x, y, z, objectKey, triangleIndex) => {
-    const landRecord = landByKey.get(objectKey);
-    invariant(landRecord && Number.isInteger(triangleIndex) && triangleIndex >= 0 && triangleIndex * 3 + 2 < landRecord.indices.length, `${id} has no serialized land support`);
-    const sample = facetSample(landFacet(landRecord, triangleIndex * 3, objectKey), x, -z);
-    invariant(sample.inside && Math.abs(sample.elevation - y) <= COORDINATE_ROUNDING_M + 1e-9, `${id} is not grounded on its land triangle`);
+  // The boundary-attached context decks (a pier drawn beyond the playable
+  // boundary): a deck rule's items and fence posts stand on their triangles.
+  const deckByKey = new Map([...records.physical.values()]
+    .filter(({ record }) => record.context_kind === "boundary_attached_visual")
+    .map(({ record }) => [record.object_key, record]));
+  // On its land triangle, or with deck (an OSM key) on that deck's triangle.
+  const grounded = (id, x, y, z, objectKey, triangleIndex, deck = null) => {
+    const support = deck === null ? landByKey.get(objectKey) : objectKey === `boundary_context:${deck}` ? deckByKey.get(objectKey) : undefined;
+    const what = deck === null ? "land" : `deck ${deck}`;
+    invariant(support && Number.isInteger(triangleIndex) && triangleIndex >= 0 && triangleIndex * 3 + 2 < support.indices.length, `${id} has no serialized ${what} support`);
+    const sample = facetSample(landFacet(support, triangleIndex * 3, objectKey), x, -z);
+    invariant(sample.inside && Math.abs(sample.elevation - y) <= COORDINATE_ROUNDING_M + 1e-9, `${id} is not grounded on its ${what} triangle`);
   };
   const inBoundary = (x, z) => pointInPlayableBoundary([x, z], manifest.playable_boundary);
   const groundAt = visibleGroundIndex(chunksOf(records));
@@ -875,6 +882,13 @@ function validateStreetDetail(worldRoot, manifest, records) {
         // A moored vessel (yard pattern moored): on the water off the playable land, at the water plane, no land support.
         invariant(row.position_m.length === 3 && [x, y, z].every(Number.isFinite) && !inBoundary(x, z) && y === WATER_Y_M, `${row.id} moored position is invalid or on the island`);
         invariant(row.terrain_support === null && row.surface.bias_m === 0 && MOORED_PROP_VARIANTS[row.prop]?.includes(row.prop_params?.variant), `${row.id} moored row is not a floating yard prop`);
+      } else if (isDeckRow(row)) {
+        // A deck item (a yard pack rule with a deck): a yard prop on its context deck, off the playable land.
+        const deck = deckByKey.get(`boundary_context:${row.surface.source_key}`);
+        invariant(row.position_m.length === 3 && [x, y, z].every(Number.isFinite) && !inBoundary(x, z), `${row.id} deck position is invalid or on the island`);
+        invariant(isYardRow(row) && deck && row.surface.bias_m === 0 && row.surface.material_key === deck.material_key, `${row.id} deck row is not a yard prop on a context deck`);
+        grounded(row.id, x, y, z, row.terrain_support?.object_key, row.terrain_support?.triangle_index, row.surface.source_key);
+        invariant(row.terrain_support.elevation_m === y, `${row.id} terrain_support elevation differs from its position`);
       } else {
         invariant(row.position_m.length === 3 && [x, y, z].every(Number.isFinite) && inBoundary(x, z), `${row.id} position is invalid or off the island`);
         grounded(row.id, x, y, z, row.terrain_support?.object_key, row.terrain_support?.triangle_index);
@@ -923,9 +937,12 @@ function validateStreetDetail(worldRoot, manifest, records) {
     } else {
       const points = row.points_m;
       invariant(Array.isArray(points) && points.length >= 2 && row.terrain_supports?.length === points.length && row.vertex_source_ids?.length === points.length, `${row.id} polyline arrays are inconsistent`);
+      // A rule fence on a context deck stands on the deck, off the playable land.
+      const deck = row.fence?.deck ?? null;
+      invariant(deck === null || (row.source === "scatter" && deckByKey.has(`boundary_context:${deck}`)), `${row.id} names no context deck ${deck}`);
       points.forEach((point, index) => {
-        invariant(point.length === 3 && point.every(Number.isFinite) && inBoundary(point[0], point[2]), `${row.id} vertex ${index} is invalid or off the island`);
-        grounded(`${row.id} vertex ${index}`, point[0], point[1], point[2], row.terrain_supports[index][0], row.terrain_supports[index][1]);
+        invariant(point.length === 3 && point.every(Number.isFinite) && (deck !== null || inBoundary(point[0], point[2])), `${row.id} vertex ${index} is invalid or off the island`);
+        grounded(`${row.id} vertex ${index}`, point[0], point[1], point[2], row.terrain_supports[index][0], row.terrain_supports[index][1], deck);
       });
       invariant((row.kind === "fence") === (row.fence !== undefined), `${row.id}: every fence row, and only a fence row, carries a fence block`);
       if (row.fence !== undefined) validateFenceRow(row, grounded, inBoundary);
@@ -949,6 +966,8 @@ function validateStreetDetail(worldRoot, manifest, records) {
 // posts. A built row (with a prop) is placed and its prop is its type.
 function validateFenceRow(row, grounded, inBoundary) {
   const fence = row.fence;
+  // A fence on a context deck: every post on the deck's triangles, wherever the playable land ends.
+  const deck = fence.deck ?? null;
   const spec = STREET_FENCE_TYPES[fence.type];
   invariant(spec && fence.height_m === fenceHeight(fence.type, fence.params) && fence.half_thickness_m === spec.half_thickness_m && typeof fence.type_basis === "string", `${row.id} fence type is invalid`);
   invariant(STREET_FENCE_INSIDE.includes(fence.params?.inside) && (fence.type !== "chain_link_screened" || row.source === "osm" || STREET_FENCE_SCREENS.includes(fence.params.screen))
@@ -960,7 +979,7 @@ function validateFenceRow(row, grounded, inBoundary) {
     fence.gates.forEach((gate, index) => {
       invariant(STREET_FENCE_GATE_STYLES.includes(gate.style) && (gate.hinge === undefined || STREET_FENCE_GATE_HINGES.includes(gate.hinge))
         && gate.points_m?.length === 2 && gate.terrain_supports?.length === 2 && gate.surface_bias_m?.length === 2, `${row.id} gate ${index} is invalid`);
-      gate.points_m.forEach((point, end) => grounded(`${row.id} gate ${index} end ${end}`, point[0], point[1], point[2], gate.terrain_supports[end][0], gate.terrain_supports[end][1]));
+      gate.points_m.forEach((point, end) => grounded(`${row.id} gate ${index} end ${end}`, point[0], point[1], point[2], gate.terrain_supports[end][0], gate.terrain_supports[end][1], deck));
     });
   }
   // Banners: a white sheet between two grounded ends on a solid run, lower than the fence.
@@ -969,7 +988,7 @@ function validateFenceRow(row, grounded, inBoundary) {
     fence.banners.forEach((banner, index) => {
       invariant(Number.isFinite(banner.height_m) && banner.height_m >= 0.3 && banner.height_m <= fence.height_m - 0.2 && banner.to_m > banner.from_m
         && banner.points_m?.length === 2 && banner.terrain_supports?.length === 2 && banner.surface_bias_m?.length === 2, `${row.id} banner ${index} is invalid`);
-      banner.points_m.forEach((point, end) => grounded(`${row.id} banner ${index} end ${end}`, point[0], point[1], point[2], banner.terrain_supports[end][0], banner.terrain_supports[end][1]));
+      banner.points_m.forEach((point, end) => grounded(`${row.id} banner ${index} end ${end}`, point[0], point[1], point[2], banner.terrain_supports[end][0], banner.terrain_supports[end][1], deck));
     });
   }
   invariant(Number.isFinite(fence.length_m) && fence.length_m > 0, `${row.id} fence length is invalid`);
@@ -984,8 +1003,8 @@ function validateFenceRow(row, grounded, inBoundary) {
     invariant(Array.isArray(run.points_m) && run.points_m.length >= 2 && run.terrain_supports?.length === run.points_m.length && run.surface_bias_m?.length === run.points_m.length, `${row.id} run ${runIndex} arrays are inconsistent`);
     run.points_m.forEach((point, index) => {
       const label = `${row.id} run ${runIndex} post ${index}`;
-      invariant(point.length === 3 && point.every(Number.isFinite) && inBoundary(point[0], point[2]), `${label} is invalid or off the island`);
-      grounded(label, point[0], point[1], point[2], run.terrain_supports[index][0], run.terrain_supports[index][1]);
+      invariant(point.length === 3 && point.every(Number.isFinite) && (deck !== null || inBoundary(point[0], point[2])), `${label} is invalid or off the island`);
+      grounded(label, point[0], point[1], point[2], run.terrain_supports[index][0], run.terrain_supports[index][1], deck);
       invariant(Number.isFinite(run.surface_bias_m[index]) && run.surface_bias_m[index] >= 0, `${label} surface bias is invalid`);
       invariant(index === 0 || point[0] !== run.points_m[index - 1][0] || point[2] !== run.points_m[index - 1][2], `${label} repeats the post before it`);
     });

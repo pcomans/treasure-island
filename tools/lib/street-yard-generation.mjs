@@ -35,6 +35,13 @@
 // into equal parts no longer than it, each resting on its own, so a long row
 // steps down a steeper slope.
 //
+// deck (pack only) names a boundary-attached context deck by its OSM key (a
+// pier drawn as visual-only context beyond the playable boundary): the rule's
+// items stand on that deck instead of the land, wholly on it and off the land,
+// at rest on the deck as on the ground (the row's surface is the deck, its
+// support one of the deck's triangles), and draw without collision, as the
+// deck itself does.
+//
 // Items are the yard kit's props (tools/lib/street-yard-kit.mjs, drawn by the
 // street-clutter builder): clutter-layer rows of the prop's own kind with their
 // plan rectangle (footprint_m), at rest on the visible ground (pitch, roll and
@@ -52,7 +59,7 @@ import { invariant, roundCoordinate } from "./world-contract.mjs";
 export const STREET_YARD_PATTERNS = Object.freeze(["pack", "span", "wall", "moored"]);
 const COMMON_FIELDS = Object.freeze(["basis", "evidence", "id", "pattern", "rule"]);
 const PATTERN_FIELDS = Object.freeze({
-  pack: { required: ["lines", "orient", "facing", "items", "gap_m", "fill"], optional: ["frame", "anchor", "align", "jitter_m", "jitter_deg", "skew_deg", "allow_roads"] },
+  pack: { required: ["lines", "orient", "facing", "items", "gap_m", "fill"], optional: ["frame", "anchor", "align", "jitter_m", "jitter_deg", "skew_deg", "allow_roads", "deck"] },
   span: { required: ["lines", "prop", "params", "facing"], optional: ["frame", "align", "allow_roads", "segment_m"] },
   wall: { required: ["line_xz", "inside", "params"], optional: ["closed", "openings", "align", "segment_m", "allow_roads"] },
   moored: { required: ["items"], optional: [] },
@@ -200,6 +207,7 @@ export function validateYardRules(zone, kinds) {
     }
     if (rule.align !== undefined) invariant(["start", "center", "end"].includes(rule.align), `${label} align is start, center or end`);
     if (rule.allow_roads !== undefined) invariant(Array.isArray(rule.allow_roads) && rule.allow_roads.length > 0 && rule.allow_roads.every((key) => /^w\d+$/u.test(key)), `${label} allow_roads lists OSM way keys`);
+    if (rule.deck !== undefined) invariant(/^w\d+$/u.test(rule.deck) && rule.allow_roads === undefined, `${label} deck is the OSM way key of a context deck (and takes no allow_roads)`);
     if (rule.segment_m !== undefined) invariant(isFiniteNumber(rule.segment_m) && rule.segment_m >= YARD_KIT_PROPS[WALL_PROP].params.length_m.min, `${label} segment_m must be at least ${YARD_KIT_PROPS[WALL_PROP].params.length_m.min} m`);
     const checkProp = (prop, params, itemLabel) => {
       invariant(YARD_KIT_KEYS.includes(prop), `${itemLabel} prop ${prop} is not a yard kit prop`);
@@ -269,6 +277,12 @@ export function validateYardRules(zone, kinds) {
 // A moored row: a vessel on the water (pattern moored), not on the land.
 export function isMooredRow(row) {
   return row.surface?.kind === "water";
+}
+
+// A deck row: an item of a pack rule with a deck, on a context deck off the
+// playable land, supported by one of the deck's triangles; drawn without collision.
+export function isDeckRow(row) {
+  return row.surface?.kind === "deck";
 }
 
 // The plan of a placed yard row: its centre, local X and Z axes in world x, z
@@ -343,7 +357,7 @@ function rectangleSamples({ centre, axisX, axisZ, halfX, halfZ }, step) {
 }
 
 // Places the yards: rows of the zones' yard rules. Returns {rows, audit}.
-export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, hardShapes, hardViolation, buildings, roads, onLand, grounded, surfaceAt, groundAt, exclusions }) {
+export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, hardShapes, hardViolation, buildings, roads, onLand, grounded, deckSupport, surfaceAt, groundAt, exclusions }) {
   const audit = { rules: {}, rejected_by_reason: {}, rest: { max_tilt_rad: 0, max_float_m: 0, max_float_row: null, max_sink_m: 0, max_sink_row: null } };
   const count = (table, key) => {
     table[key] = (table[key] ?? 0) + 1;
@@ -354,9 +368,10 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
 
   // The visible ground under a plan point, or null off the generated surfaces.
   const groundY = (xz) => groundAt(xz)?.y ?? null;
-  // An item's rest on the visible ground: the plane through the ground under
-  // its rectangle (least squares), raised until no sample is above it.
-  const rest = (rect, prop) => {
+  // An item's rest on the visible ground (or on a deck, by groundOf): the plane
+  // through the ground under its rectangle (least squares), raised until no
+  // sample is above it.
+  const rest = (rect, prop, groundOf = groundY) => {
     const samples = [];
     const nx = Math.max(1, Math.ceil((rect.halfX * 2) / REST_SAMPLE_M));
     const nz = Math.max(1, Math.ceil((rect.halfZ * 2) / REST_SAMPLE_M));
@@ -364,7 +379,7 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
       for (let j = 0; j <= nz; j += 1) {
         const x = -rect.halfX + (rect.halfX * 2 * i) / nx;
         const z = -rect.halfZ + (rect.halfZ * 2 * j) / nz;
-        const y = groundY(add(rect.centre, add(scale(rect.axisX, x), scale(rect.axisZ, z))));
+        const y = groundOf(add(rect.centre, add(scale(rect.axisX, x), scale(rect.axisZ, z))));
         if (y === null) return { problem: "no_ground" };
         samples.push([x, z, y]);
       }
@@ -484,6 +499,55 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
     return { row };
   };
 
+  // One item of a deck rule: its row when it stands on the deck, else the reason it doesn't.
+  const addDeckItem = (zone, rule, cell, prop, params, centre, front) => {
+    const footprint = yardPropFootprint(prop, params);
+    const yaw = roundCoordinate(Math.atan2(-front[0], -front[1]));
+    const rect = rowRectangle({ position_m: [centre[0], 0, centre[1]], yaw_radians: yaw, footprint_m: footprint, prop, prop_params: params });
+    const zoneShape = yardShapes.find((shape) => shape.zone === zone);
+    if (!zoneShape.contains(rect.centre)) return { problem: "outside_zone" };
+    const xz = [round3(centre[0]), round3(centre[1])];
+    const samples = [xz, ...rectangleSamples(rect, SAMPLE_STEP_M)];
+    if (samples.some((sample) => onLand(sample, 0))) return { problem: "on_land" };
+    const decked = samples.map((sample) => deckSupport(rule.deck, sample));
+    if (decked.some((support) => support === null)) return { problem: "off_deck" };
+    // At rest on the deck as on the ground: the deck's plane under it, raised clear.
+    const settled = rest(rect, prop, (sample) => deckSupport(rule.deck, sample)?.y ?? null);
+    if (settled.problem) return settled;
+    for (const piece of rectanglePieces(rect)) {
+      const hard = hardViolation(hardShapes, piece.points, piece.radius);
+      if (hard) return { problem: hard.reason };
+    }
+    if (placed.some((other) => rectanglesOverlap(rect, other.rect, ITEM_CLEAR_M))) return { problem: "overlap" };
+    const [{ y, support, material_key: materialKey }] = decked;
+    const row = {
+      id: `scatter:${zone.id}:${rule.id}:${cell}`,
+      source: "scatter",
+      source_id: `zone:${zone.id}/${rule.id}`,
+      kind: prop,
+      layer: kinds[prop].layer,
+      geometry: "point",
+      position_m: [xz[0], y, xz[1]],
+      terrain_support: { object_key: support.object_key, triangle_index: support.triangle_index, elevation_m: support.elevation_m },
+      surface: { kind: "deck", material_key: materialKey, source_key: rule.deck, bias_m: 0 },
+      yaw_radians: yaw,
+      yaw_source: `rule:${zone.id}/${rule.id}`,
+      status: "placed",
+      exclusion: null,
+      prop,
+      prop_params: { ...params, pitch: Math.round(settled.pitch * 1e4) / 1e4 || 0, roll: Math.round(settled.roll * 1e4) / 1e4 || 0, lift: round3(settled.height - y) },
+      footprint_m: { x_m: footprint.x_m, z_m: footprint.z_m },
+      basis: rule.basis,
+    };
+    const paramError = yardPropParamsError(prop, row.prop_params);
+    invariant(paramError === null, `${row.id}: ${paramError}`);
+    rows.push(row);
+    placed.push({ id: row.id, rect: rowRectangle(row) });
+    for (const piece of yardRowPieces(row)) occupied.push({ id: row.id, points: piece.points, radius_m: piece.radius, yard: true });
+    count(audit.rules, `${zone.id}/${rule.id}`);
+    return { row };
+  };
+
   // A rule's lines in world x, z.
   const worldLines = (rule) => rule.lines.map(([u0, v0, u1, v1]) => {
     if (!rule.frame) return [[u0, v0], [u1, v1]];
@@ -543,7 +607,7 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
             centre = add(centre, scale(front, lateral));
             if (anchor === "center") centre = add(centre, scale(left, jitter * (hashUnit(seed, slot.identity, "across") * 2 - 1)));
             front = [front[0] * Math.cos(turn) - front[1] * Math.sin(turn), front[0] * Math.sin(turn) + front[1] * Math.cos(turn)];
-            const result = addItem(zone, rule, slot.cell, slot.item.prop, slot.params, centre, front);
+            const result = (rule.deck ? addDeckItem : addItem)(zone, rule, slot.cell, slot.item.prop, slot.params, centre, front);
             if (result.problem) count(audit.rejected_by_reason, reasonKey(result.problem));
           }
         });

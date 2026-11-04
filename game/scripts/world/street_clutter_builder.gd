@@ -16,7 +16,9 @@ extends RefCounted
 ## built the same way from their rows: each row becomes the kit's pieces (one
 ## MultiMesh instance each, in the yard material, in the yard kit's own cells
 ## and hand-over distance) and collision shapes, turned by its yaw and resting
-## on the ground by its optional pitch, roll and lift.
+## on the ground by its optional pitch, roll and lift. A row on a context deck
+## (its surface kind deck: a pier drawn as visual-only context beyond the
+## playable boundary) gets no shapes, as the deck has none.
 
 const KIT := preload("res://game/scripts/world/street_clutter_kit.gd")
 const YARD_KIT := preload("res://game/scripts/world/street_yard_kit.gd")
@@ -196,6 +198,8 @@ func _add_yard_row(yard: Variant, row: Dictionary, prop: String, params: Diction
 		if not cells.has(cell):
 			cells[cell] = []
 		(cells[cell] as Array).append([world, piece.custom])
+	if str(surface.get("kind", "")) == "deck":
+		return ""
 	for entry: Dictionary in built.shapes:
 		var shape_world: Transform3D = placement * (entry.transform as Transform3D)
 		var physics_cell := _cell([shape_world.origin.x, shape_world.origin.y, shape_world.origin.z], PHYSICS_CELL_M)

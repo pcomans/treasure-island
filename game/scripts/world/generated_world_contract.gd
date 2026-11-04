@@ -211,7 +211,7 @@ static func load_and_validate(manifest_path: String) -> Dictionary:
 	street_detail_result = _expand_planting_rows(street_detail_result.data)
 	if not street_detail_result.ok:
 		return street_detail_result
-	result = _validate_street_detail(street_detail_result.data, chunk_results, manifest.playable_boundary)
+	result = _validate_street_detail(street_detail_result.data, chunk_results, manifest.playable_boundary, context_result.data.boundary_attached_visuals)
 	if not result.ok:
 		return result
 	var shoreline_path := _resolve_artifact_path(manifest_path, str(manifest.shoreline.path))
@@ -484,7 +484,7 @@ static func _validate_terrain(terrain: Dictionary) -> Dictionary:
 
 ## Street detail changes as later steps add content, so this checks structure,
 ## identity, grounding and self-consistent counts rather than pinned totals.
-static func _validate_street_detail(document: Dictionary, chunks: Array[Dictionary], boundary: Dictionary) -> Dictionary:
+static func _validate_street_detail(document: Dictionary, chunks: Array[Dictionary], boundary: Dictionary, decks: Array) -> Dictionary:
 	if str(document.get("schema_version", "")) != STREET_DETAIL_SCHEMA:
 		return _failure("street_detail_schema", "Generated street-detail schema is invalid.")
 	if document.get("layers", []) != STREET_DETAIL_LAYERS or str(document.get("ground_layer", "")) != STREET_DETAIL_GROUND_LAYER:
@@ -514,6 +514,12 @@ static func _validate_street_detail(document: Dictionary, chunks: Array[Dictiona
 			var record: Dictionary = record_value
 			if str(record.feature_kind) == "land_ground":
 				land_records[str(record.object_key)] = record
+	# The boundary-attached context decks (a pier drawn beyond the playable
+	# boundary): a deck rule's items and fence posts stand on their triangles.
+	var deck_records: Dictionary = {}
+	for deck_value: Variant in decks:
+		if deck_value is Dictionary:
+			deck_records[str((deck_value as Dictionary).get("object_key", ""))] = deck_value
 	if not document.get("rows", null) is Array:
 		return _failure("street_detail_rows", "Street-detail rows are missing.")
 	var rows: Array = document.rows
@@ -558,9 +564,12 @@ static func _validate_street_detail(document: Dictionary, chunks: Array[Dictiona
 				return _failure("street_detail_transform", "Street-detail position is missing: %s" % row_id)
 			var position: Array = row.position_m
 			var support: Variant = row.get("terrain_support", null)
-			# A moored vessel (yard pattern moored) floats on the water off the island, with no land support.
+			# A moored vessel (yard pattern moored) floats on the water off the island,
+			# with no land support; a deck item stands on its context deck off the island.
 			var surface_value: Variant = row.get("surface", null)
-			var moored: bool = surface_value is Dictionary and str((surface_value as Dictionary).get("kind", "")) == "water"
+			var surface_kind := str((surface_value as Dictionary).get("kind", "")) if surface_value is Dictionary else ""
+			var moored := surface_kind == "water"
+			var deck_key := "boundary_context:%s" % str((surface_value as Dictionary).get("source_key", "")) if surface_kind == "deck" else ""
 			if position.size() != 3 or not _is_finite_number(position[0]) or not _is_finite_number(position[1]) or not _is_finite_number(position[2]) \
 			or (not moored and not support is Dictionary):
 				return _failure("street_detail_transform", "Street-detail position is invalid: %s" % row_id)
@@ -568,6 +577,11 @@ static func _validate_street_detail(document: Dictionary, chunks: Array[Dictiona
 				if typeof(support) != TYPE_NIL or contains_xz(boundary, Vector2(float(position[0]), float(position[2]))) \
 				or not is_equal_approx(float(position[1]), STREET_DETAIL_WATER_Y_M):
 					return _failure("street_detail_grounding", "Street-detail moored row is not on the water off the island: %s" % row_id)
+			elif not deck_key.is_empty():
+				if not deck_records.has(deck_key) or str(support.get("object_key", "")) != deck_key or contains_xz(boundary, Vector2(float(position[0]), float(position[2]))) \
+				or not _street_detail_grounded(land_records, boundary, position, deck_key, support.get("triangle_index", null), {deck_key: deck_records.get(deck_key, {})}) \
+				or not is_equal_approx(float(support.get("elevation_m", INF)), float(position[1])):
+					return _failure("street_detail_grounding", "Street-detail deck row is not on its context deck off the island: %s" % row_id)
 			elif not _street_detail_grounded(land_records, boundary, position, str(support.get("object_key", "")), support.get("triangle_index", null)) \
 			or not is_equal_approx(float(support.get("elevation_m", INF)), float(position[1])):
 				return _failure("street_detail_grounding", "Street-detail row is off the island or not grounded on its land triangle: %s" % row_id)
@@ -586,6 +600,14 @@ static func _validate_street_detail(document: Dictionary, chunks: Array[Dictiona
 			var supports: Array = row.terrain_supports
 			if points.size() < 2 or supports.size() != points.size() or (row.vertex_source_ids as Array).size() != points.size():
 				return _failure("street_detail_transform", "Street-detail polyline arrays are inconsistent: %s" % row_id)
+			# A rule fence on a context deck: its vertices and posts on that deck's triangles.
+			var fence_deck: Variant = (row.fence as Dictionary).get("deck", null) if row.get("fence", null) is Dictionary else null
+			var deck_only: Dictionary = {}
+			if typeof(fence_deck) != TYPE_NIL:
+				var fence_deck_key := "boundary_context:%s" % str(fence_deck)
+				if not deck_records.has(fence_deck_key) or source != "scatter":
+					return _failure("street_detail_fence", "Street-detail fence names no context deck: %s" % row_id)
+				deck_only[fence_deck_key] = deck_records[fence_deck_key]
 			for index in points.size():
 				var point_value: Variant = points[index]
 				var support_value: Variant = supports[index]
@@ -593,12 +615,12 @@ static func _validate_street_detail(document: Dictionary, chunks: Array[Dictiona
 					return _failure("street_detail_transform", "Street-detail polyline vertex is invalid: %s" % row_id)
 				var point: Array = point_value
 				if not _is_finite_number(point[0]) or not _is_finite_number(point[1]) or not _is_finite_number(point[2]) \
-				or not _street_detail_grounded(land_records, boundary, point, str(support_value[0]), support_value[1]):
+				or not _street_detail_grounded(land_records, boundary, point, str(support_value[0]), support_value[1], deck_only):
 					return _failure("street_detail_grounding", "Street-detail polyline vertex is off the island or not grounded: %s" % row_id)
 			if (kind_name == "fence") != row.has("fence"):
 				return _failure("street_detail_fence", "Every street-detail fence row, and only a fence row, carries a fence block: %s" % row_id)
 			if row.has("fence"):
-				var fence_check := _validate_street_fence(row, land_records, boundary)
+				var fence_check := _validate_street_fence(row, land_records, boundary, deck_only)
 				if not fence_check.ok:
 					return fence_check
 		tallies.layer[layer] = int(tallies.layer.get(layer, 0)) + 1
@@ -681,7 +703,7 @@ static func _expand_planting_rows(document: Dictionary) -> Dictionary:
 ## A fence row (tools/lib/street-fence-generation.mjs): a known kit type, solid
 ## runs of posts grounded on their land triangles, a status that follows the runs
 ## and, when it is built, a prop of its own type with usable params.
-static func _validate_street_fence(row: Dictionary, land_records: Dictionary, boundary: Dictionary) -> Dictionary:
+static func _validate_street_fence(row: Dictionary, land_records: Dictionary, boundary: Dictionary, deck_only: Dictionary = {}) -> Dictionary:
 	var row_id := str(row.get("id", ""))
 	var fence_value: Variant = row.get("fence", null)
 	if not fence_value is Dictionary or not STREET_FENCE_KIT.TYPES.has(str((fence_value as Dictionary).get("type", ""))) \
@@ -712,7 +734,7 @@ static func _validate_street_fence(row: Dictionary, land_records: Dictionary, bo
 			if not point_value is Array or (point_value as Array).size() != 3 or not support_value is Array or (support_value as Array).size() != 2 \
 			or not _is_finite_number(point_value[0]) or not _is_finite_number(point_value[1]) or not _is_finite_number(point_value[2]) \
 			or not _is_finite_number(biases_value[index]) or float(biases_value[index]) < 0.0 \
-			or not _street_detail_grounded(land_records, boundary, point_value, str(support_value[0]), support_value[1]):
+			or not _street_detail_grounded(land_records, boundary, point_value, str(support_value[0]), support_value[1], deck_only):
 				return _failure("street_detail_grounding", "Street-detail fence post is invalid, off the island or not grounded: %s" % row_id)
 	if row.has("prop") and (str(row.prop) != str(fence.type) or str(row.get("status", "")) != "placed" \
 	or STREET_FENCE_KIT.params_error(str(row.prop), row.get("prop_params", null)) != ""):
@@ -853,16 +875,19 @@ static func _validate_shoreline_mesh(mesh: Dictionary, indices_value: Variant, l
 	return {"ok": true}
 
 
-## True when position lies on the island and on its named land triangle. The
+## True when position lies on the island and on its named land triangle, or on
+## a triangle of one of the given context decks (deck_records, a deck row's or
+## deck fence's own deck), wherever the island ends. The
 ## weights use 64-bit floats straight from the JSON, with the generator's formula
 ## and threshold: an OSM node on a shared triangle edge falls just outside its
 ## triangle once squeezed into 32-bit Vector2/Vector3 coordinates.
-static func _street_detail_grounded(land_records: Dictionary, boundary: Dictionary, position: Array, object_key: String, triangle_index: Variant) -> bool:
+static func _street_detail_grounded(land_records: Dictionary, boundary: Dictionary, position: Array, object_key: String, triangle_index: Variant, deck_records: Dictionary = {}) -> bool:
 	var x := float(position[0])
 	var z := float(position[2])
-	if not contains_xz(boundary, Vector2(x, z)) or not land_records.has(object_key) or not _is_nonnegative_json_integer(triangle_index):
+	var on_deck := deck_records.has(object_key)
+	if (not on_deck and (not contains_xz(boundary, Vector2(x, z)) or not land_records.has(object_key))) or not _is_nonnegative_json_integer(triangle_index):
 		return false
-	var record: Dictionary = land_records[object_key]
+	var record: Dictionary = deck_records[object_key] if on_deck else land_records[object_key]
 	var indices: Array = record.indices
 	var vertices: Array = record.vertices
 	var offset := int(triangle_index) * 3
