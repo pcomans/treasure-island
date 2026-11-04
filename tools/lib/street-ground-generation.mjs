@@ -1768,17 +1768,19 @@ export function generateStreetGround({
     records.get(mesh.chunk).push(record);
   }
 
-  // The raised surface under a world point, for placing street-detail items on it.
+  // The raised surface under a world point, for placing street-detail items on
+  // it: a curb ramp or the raised street ground drawn over everything else, then
+  // park ground, then a parking lane.
   const surfaceAt = (xz) => {
     const point = [xz[0], -xz[1]];
-    const park = parkAt(point);
-    if (park) return { kind: "street_paint", material_key: park.layer.material, source_key: park.sources[0], bias_m: roundCoordinate(park.lift) };
     for (const notch of notches) {
       if (notchIndex.contains(point) && pointInMultiCheap(notch.piece, point)) {
         return { kind: "street_kerb", material_key: "street_kerb_concrete", source_key: notch.source_key, bias_m: roundCoordinate(heightAt(notch.height, point)) };
       }
     }
     if (!raisedIndex.contains(point)) {
+      const park = parkAt(point);
+      if (park) return { kind: "street_paint", material_key: park.layer.material, source_key: park.sources[0], bias_m: roundCoordinate(park.lift) };
       // Parking lanes widen the asphalt beyond the frozen road ribbons.
       if (!parkingIndex.contains(point)) return null;
       return { kind: "street_paint", material_key: "street_parking", source_key: nearestRoad(point).road.row.source_key, bias_m: ROAD_TOP_M };

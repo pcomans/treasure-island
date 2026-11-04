@@ -67,6 +67,7 @@ import {
   STREET_DETAIL_SOURCES,
 } from "./lib/street-detail-generation.mjs";
 import { CAR_BODY_NAMES, CAR_FINISHES, CAR_PAINTS, MAX_TWIST_M, STREET_CLUTTER_PROPS, visibleGroundIndex } from "./lib/street-clutter-generation.mjs";
+import { carBodyGeometry } from "./lib/street-clutter-kit.mjs";
 import { STREET_FENCE_INSIDE, STREET_FENCE_SCREENS, STREET_FENCE_TYPES } from "./lib/street-fence-generation.mjs";
 import { MAX_LEG_DROP_M, MAX_REST_TILT_RAD, restTilt, STREET_FURNITURE_FEET, STREET_FURNITURE_PROPS } from "./lib/street-furniture-generation.mjs";
 import {
@@ -864,6 +865,44 @@ function validatePlantedRow(row, groundAt) {
   }
 }
 
+// A street prop stands on the visible ground, never sunk into a sidewalk or
+// floating over it. Furniture and the anchored clutter (barricades, cones)
+// keep their base, the row's y with its surface bias and any lift, within these
+// of the ground at their anchor (m): the yard rows' float limit both ways, as a
+// prop on paving has no reason to sink (they rest within a millimetre). A
+// parked car's tyres, set from its pitch, roll, twist and lift, rest on the
+// ground at their centres: they float at most the yard vehicles' 0.1 m (the
+// settle lifts a car about a centimetre off a lip or paint line) and sink 2 cm
+// at most. A yard kit prop rests on its corners and is checked there.
+const PROP_REST_FLOAT_M = 0.08;
+const PROP_REST_SINK_M = 0.08;
+const ANCHORED_CLUTTER = Object.freeze(["barricade", "traffic_cone"]);
+const TYRE_REST_FLOAT_M = 0.1;
+const TYRE_REST_SINK_M = 0.02;
+
+function validatePropRest(row, groundAt) {
+  const params = row.prop_params ?? {};
+  const base = row.position_m[1] + row.surface.bias_m + (Number.isFinite(params.lift) ? params.lift : 0);
+  const rests = (gap, what, where) => invariant(gap !== null && gap <= (row.prop === "parked_car" ? TYRE_REST_FLOAT_M : PROP_REST_FLOAT_M) && gap >= -(row.prop === "parked_car" ? TYRE_REST_SINK_M : PROP_REST_SINK_M),
+    `${row.id} ${what} ${gap === null ? "has no visible ground under it" : gap > 0 ? `floats ${gap.toFixed(3)} m above the visible ground` : `sinks ${(-gap).toFixed(3)} m into the visible ground`} at ${where.map((value) => value.toFixed(2)).join(", ")}`);
+  if (row.prop === "parked_car") {
+    const geometry = carBodyGeometry(params.body);
+    const front = [-Math.sin(row.yaw_radians), Math.cos(row.yaw_radians)];
+    const right = [front[1], -front[0]];
+    for (const [name, [x, , z]] of Object.entries(geometry.wheels)) {
+      // The tyre's centre in world x, z (z = -north); the car frame's z runs back.
+      const point = [row.position_m[0] + right[0] * x - front[0] * z, row.position_m[2] - right[1] * x + front[1] * z];
+      const ground = groundAt(point);
+      const tyre = base - Math.tan(params.pitch) * z - Math.tan(params.roll) * x + params.twist * Math.sign(x) * Math.sign(z);
+      rests(ground ? tyre - ground.y : null, `${name} tyre`, point);
+    }
+  } else if (row.layer === "furniture" || ANCHORED_CLUTTER.includes(row.prop)) {
+    const point = [row.position_m[0], row.position_m[2]];
+    const ground = groundAt(point);
+    rests(ground ? base - ground.y : null, row.prop, point);
+  }
+}
+
 // Structure and grounding only: the street-detail content changes as steps add it.
 function validateStreetDetail(worldRoot, manifest, records) {
   invariant(manifest.street_detail?.path === "street_detail.json", "Manifest street-detail descriptor is missing");
@@ -935,6 +974,7 @@ function validateStreetDetail(worldRoot, manifest, records) {
       if (row.footprint_m !== undefined) {
         invariant(Number.isFinite(row.footprint_m.x_m) && row.footprint_m.x_m > 0 && Number.isFinite(row.footprint_m.z_m) && row.footprint_m.z_m > 0 && Number.isFinite(row.yaw_radians), `${row.id} footprint is invalid`);
       }
+      if (row.status === "placed" && row.prop !== undefined && (row.layer === "furniture" || row.layer === "clutter")) validatePropRest(row, groundAt);
     } else {
       const points = row.points_m;
       invariant(Array.isArray(points) && points.length >= 2 && row.terrain_supports?.length === points.length && row.vertex_source_ids?.length === points.length, `${row.id} polyline arrays are inconsistent`);
