@@ -389,6 +389,12 @@ function pointInPolygon(point, polygon) {
   return !polygon.slice(1).some((hole) => pointInRing(point, openRing(hole), false));
 }
 
+// pointInPolygon on rings already opened.
+function pointInOpenRings(point, rings) {
+  if (!pointInRing(point, rings[0], true)) return false;
+  return !rings.slice(1).some((hole) => pointInRing(point, hole, false));
+}
+
 function rectangle(origin, along, across, alongMin, alongMax, acrossMin, acrossMax) {
   const corner = (s, t) => add(origin, add(scale(along, s), scale(across, t)));
   const ring = [corner(alongMin, acrossMin), corner(alongMax, acrossMin), corner(alongMax, acrossMax), corner(alongMin, acrossMax)];
@@ -455,14 +461,14 @@ function difference(label, subject, clips) {
 
 // Individual polygons with bounds, so local operations only touch nearby parts.
 function polygonIndex(multi) {
-  const items = multi.map((polygon) => ({ polygon, box: boxOfPoints(polygon[0]) }));
+  const items = multi.map((polygon) => ({ polygon, box: boxOfPoints(polygon[0]), rings: null }));
   return {
     multi,
     near(box, margin = 0) {
       return items.filter((item) => boxesOverlap(item.box, box, margin)).map((item) => item.polygon);
     },
     contains(point) {
-      return items.some((item) => inBox(item.box, point) && pointInPolygon(point, item.polygon));
+      return items.some((item) => inBox(item.box, point) && pointInOpenRings(point, item.rings ??= item.polygon.map(openRing)));
     },
   };
 }
@@ -1565,8 +1571,15 @@ export function generateStreetGround({
   // within BED_REACH_M; for planting drifts (tools/lib/street-planting-generation.mjs).
   const BED_REACH_M = 8;
   const BED_CELL_M = 2;
+  // Each cell lists the bed edges that come within BED_EDGE_MARGIN_M of it: a
+  // cell that lists none lies wholly on a bed or wholly off it.
+  const BED_EDGE_MARGIN_M = 0.001;
   const bedIndexes = new Map();
+  // A rule passes the same materials list on every call: look it up by the list.
+  const bedIndexesByList = new WeakMap();
   const bedIndex = (materials) => {
+    const known = bedIndexesByList.get(materials);
+    if (known) return known;
     const key = [...materials].sort().join("|");
     if (!bedIndexes.has(key)) {
       const parts = parkLayers.filter((entry) => materials.includes(entry.layer.material)).map((entry) => entry.polygon);
@@ -1577,22 +1590,41 @@ export function generateStreetGround({
           const ring = openRing(raw);
           ring.forEach((a, index) => {
             const b = ring[(index + 1) % ring.length];
-            for (let i = Math.floor(Math.min(a[0], b[0]) / BED_CELL_M); i <= Math.floor(Math.max(a[0], b[0]) / BED_CELL_M); i += 1) {
-              for (let j = Math.floor(Math.min(a[1], b[1]) / BED_CELL_M); j <= Math.floor(Math.max(a[1], b[1]) / BED_CELL_M); j += 1) {
-                const cell = `${i},${j}`;
-                if (!cells.has(cell)) cells.set(cell, []);
-                cells.get(cell).push([a, b]);
+            // In pieces of at most half a cell, so a long diagonal edge lists
+            // only in the cells along it, not across its whole bounding box.
+            const edge = sub(b, a);
+            const pieces = Math.max(1, Math.ceil(length(edge) / (BED_CELL_M / 2)));
+            const touched = new Set();
+            for (let piece = 0; piece < pieces; piece += 1) {
+              const p = add(a, scale(edge, piece / pieces));
+              const q = piece + 1 === pieces ? b : add(a, scale(edge, (piece + 1) / pieces));
+              for (let i = Math.floor((Math.min(p[0], q[0]) - BED_EDGE_MARGIN_M) / BED_CELL_M); i <= Math.floor((Math.max(p[0], q[0]) + BED_EDGE_MARGIN_M) / BED_CELL_M); i += 1) {
+                for (let j = Math.floor((Math.min(p[1], q[1]) - BED_EDGE_MARGIN_M) / BED_CELL_M); j <= Math.floor((Math.max(p[1], q[1]) + BED_EDGE_MARGIN_M) / BED_CELL_M); j += 1) touched.add(`${i},${j}`);
               }
+            }
+            for (const cell of touched) {
+              if (!cells.has(cell)) cells.set(cell, []);
+              cells.get(cell).push([a, b]);
             }
           });
         }
       }
-      bedIndexes.set(key, { index: polygonIndex(region), cells });
+      // Whether each cell that lists no edge lies on the bed, from its first query.
+      bedIndexes.set(key, { index: polygonIndex(region), cells, wholeCells: new Map() });
     }
+    bedIndexesByList.set(materials, bedIndexes.get(key));
     return bedIndexes.get(key);
   };
+  // Whether a point lies on a bed of the given materials (parkBed's "on" alone).
+  const parkBedOn = (point, materials) => {
+    const { index, cells, wholeCells } = bedIndex(materials);
+    const cell = `${Math.floor(point[0] / BED_CELL_M)},${Math.floor(point[1] / BED_CELL_M)}`;
+    if (cells.has(cell)) return index.contains(point);
+    if (!wholeCells.has(cell)) wholeCells.set(cell, index.contains(point));
+    return wholeCells.get(cell);
+  };
   const parkBed = (point, materials) => {
-    const { index, cells } = bedIndex(materials);
+    const { cells } = bedIndex(materials);
     const ci = Math.floor(point[0] / BED_CELL_M);
     const cj = Math.floor(point[1] / BED_CELL_M);
     let best = BED_REACH_M;
@@ -1609,7 +1641,7 @@ export function generateStreetGround({
         }
       }
     }
-    return { on: index.contains(point), distance: best };
+    return { on: parkBedOn(point, materials), distance: best };
   };
 
   // ---------------------------------------------------------------- drape
@@ -1843,6 +1875,7 @@ export function generateStreetGround({
     raised: (point) => raisedIndex.contains(point),
     // A park bed of the given materials under an east/north point: {on, distance to its edge}.
     parkBed,
+    parkBedOn,
     // Parking lanes: the roads that have them, with the curb's offset from the
     // centre line on both sides (the frozen ribbon's half width plus the lane).
     parking_lanes: [...parkingWidth.entries()].sort(([left], [right]) => compareSourceKeys(left, right)).map(([key, width]) => {

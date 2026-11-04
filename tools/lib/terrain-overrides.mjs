@@ -50,6 +50,9 @@ const SAFE_ID = /^[a-z0-9_]+$/u;
 // Central-difference steps for shading normals (m): the raster's, as the coarse
 // land (mesh-output.mjs terrainNormal), and the correction's.
 const RASTER_NORMAL_STEP_M = 2;
+// The steepest corrected ground between neighbouring samples (rise per metre):
+// the stock player's floor limit, 48 degrees.
+const MAX_CORRECTED_RISE = Math.tan((48 * Math.PI) / 180);
 const DELTA_NORMAL_STEP_M = 0.5;
 const MM = 1000;
 
@@ -246,14 +249,11 @@ function shapeField(shape) {
 // The arc-length position of the closest point on a line and its interpolated control value.
 function profileAt(line, values, point) {
   let best = null;
-  let walked = 0;
   for (let index = 1; index < line.length; index += 1) {
-    const length = Math.hypot(line[index][0] - line[index - 1][0], line[index][1] - line[index - 1][1]);
     const near = segmentDistance(point, line[index - 1], line[index]);
     if (!best || near.distance < best.distance) {
       best = { distance: near.distance, value: values[index - 1] + (values[index] - values[index - 1]) * near.t };
     }
-    walked += length;
   }
   return best.value;
 }
@@ -333,6 +333,7 @@ function harmonicGrade(grade, scope, land, regions, baseAt) {
           count += 1;
         }
       }
+      invariant(count > 0, "Terrain override grade has a free node with no valued neighbour");
       const change = omega * (sum / count - values[index]);
       values[index] += change;
       lastChange = Math.max(lastChange, Math.abs(change));
@@ -540,11 +541,6 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
     heights.set(key, value);
     return value;
   };
-  // Unrounded surface for refinement tests.
-  const surfaceAt = (cell, point) => {
-    const base = coarseAt(cell, point);
-    return base + deltaAt(point, base);
-  };
 
   // ---- quadtree leaves per refined cell
   const steps = Math.round(cellSizeM / sampleM);
@@ -552,6 +548,7 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
   for (const cell of refined.values()) {
     // Surface samples on the cell's grid (rows south to north).
     const samples = new Float64Array((steps + 1) * (steps + 1));
+    const deltas = new Float64Array((steps + 1) * (steps + 1));
     const inside = new Uint8Array((steps + 1) * (steps + 1));
     let largest = 0;
     for (let j = 0; j <= steps; j += 1) {
@@ -560,6 +557,7 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
         const base = coarseAt(cell, point);
         const delta = deltaAt(point, base);
         samples[j * (steps + 1) + i] = base + delta;
+        deltas[j * (steps + 1) + i] = delta;
         inside[j * (steps + 1) + i] = cell.full || pointInMultiPolygon(point, cell.polygon, true) ? 1 : 0;
         largest = Math.max(largest, Math.abs(delta));
         if (inside[j * (steps + 1) + i]) {
@@ -569,6 +567,18 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
       }
     }
     audit.sampled_points += samples.length;
+    // Corrected ground stays walkable: between neighbouring samples the
+    // correction touches, no slope steeper than the stock player's floor.
+    for (let j = 0; j <= steps; j += 1) {
+      for (let i = 0; i <= steps; i += 1) {
+        const index = j * (steps + 1) + i;
+        if (!inside[index]) continue;
+        for (const other of [i < steps ? index + 1 : -1, j < steps ? index + steps + 1 : -1]) {
+          if (other < 0 || !inside[other] || (deltas[index] === 0 && deltas[other] === 0)) continue;
+          invariant(Math.abs(samples[other] - samples[index]) <= MAX_CORRECTED_RISE * sampleM, `Terrain override ground at east ${cell.west + i * sampleM}, north ${cell.south + j * sampleM} is steeper than the player can walk (48 degrees)`);
+        }
+      }
+    }
     // A cell the correction never reaches keeps its coarse triangles.
     cell.mode = largest > 0 ? "leaves" : "coarse";
     if (cell.mode === "coarse") {
@@ -806,10 +816,7 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
           return vertexKey(point) !== vertexKey(next);
         });
         const triangles = clipEars(cleaned);
-        if (!triangles) {
-          process.stderr.write(`DEBUG ring ${label} ${x0},${y0}: ${JSON.stringify(cleaned)}\n`);
-        }
-        invariant(triangles, `${label} could not triangulate a coastal leaf at ${x0},${y0}`);
+        invariant(triangles, `${label} could not triangulate a coastal leaf at ${x0},${y0}: ${JSON.stringify(cleaned)}`);
         for (const [a, b, c] of triangles) emit(a, b, c);
       }
     }
@@ -954,6 +961,7 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
     if (cell) {
       invariant(JSON.stringify(clipped) === JSON.stringify(cell.polygon), `${label} land polygon differs from the terrain override plan`);
       const mesh = cell.mode === "leaves" ? refinedCellMesh(cell, label) : splitCoarseMesh(coarse, label).mesh;
+      if (cell.mode === "coarse") assertBuildingsUncut(west, south, coarse, mesh, label);
       refinedTriangles += mesh.indices.length / 3;
       return mesh;
     }
@@ -1000,10 +1008,5 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
     cellMesh,
     document,
     smoothNormalAt,
-    // The corrected land height at a point inside a refined cell (unrounded), or null.
-    surfaceAt: (east, north) => {
-      const cell = cellAt([east, north]);
-      return cell ? surfaceAt(cell, [east, north]) : null;
-    },
   };
 }
