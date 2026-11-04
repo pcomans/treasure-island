@@ -63,6 +63,10 @@ const SLATTED_HEIGHTS := [1.83, 2.44]
 ## A slat tile: eight slats across SLAT_TILE_M, one fabric height tall.
 const SLAT_TILE_M := 0.4
 const GATE_STYLES := ["swing_single", "swing_double", "sliding"]
+## Fence types that take open gate leaves, and banners (white sheets tied to
+## the fabric: Gate 5, Nov 2025).
+const GATED_TYPES := ["chainlink_slatted", "chain_link", "chain_link_screened"]
+const BANNER_COLOR := Color(0.9, 0.9, 0.88)
 const SCREEN_BACKLIGHT := Color(0.73, 0.73, 0.73)
 ## Visible ranges (m): a fence is long and low, so it reaches as far as a lamp pole.
 const RANGE_M := 260.0
@@ -96,6 +100,7 @@ var _wood: StandardMaterial3D
 var _screens: Dictionary = {}
 var _screen_shadow: StandardMaterial3D
 var _slats: Dictionary = {}
+var _banner: StandardMaterial3D
 
 
 func _init() -> void:
@@ -153,6 +158,11 @@ func _init() -> void:
 		slat_material.cull_mode = BaseMaterial3D.CULL_DISABLED
 		slat_material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
 		_slats[colour] = slat_material
+	_banner = StandardMaterial3D.new()
+	_banner.resource_name = "street_fence_banner"
+	_banner.albedo_color = BANNER_COLOR
+	_banner.roughness = 0.8
+	_banner.cull_mode = BaseMaterial3D.CULL_DISABLED
 	# Blended surfaces cast no shadow: an opaque, shadow-only copy of each screen does.
 	_screen_shadow = StandardMaterial3D.new()
 	_screen_shadow.resource_name = "street_fence_screen_shadow"
@@ -240,6 +250,7 @@ func commit(cell: Dictionary) -> Dictionary:
 		_add_surface(shadow, cell["screen_" + colour], _screen_shadow)
 	for colour: String in SLATS:
 		_add_surface(solid, cell["slats_" + colour], _slats[colour])
+	_add_surface(solid, cell.banner, _banner)
 	return {
 		"solid": solid if solid.get_surface_count() > 0 else null,
 		"fabric": fabric if fabric.get_surface_count() > 0 else null,
@@ -271,6 +282,7 @@ func _cell(cells: Dictionary, cell_size_m: float, position: Vector3) -> Dictiona
 			"slats_green": Quads.new(),
 			"slats_brown": Quads.new(),
 			"slats_black": Quads.new(),
+			"banner": Quads.new(),
 		}
 	return cells[key]
 
@@ -402,16 +414,20 @@ func _slatted(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, 
 	return boxes
 
 
-## A slatted fence's open gate between the solid runs either side of it: two
-## stout gate posts, and the leaves swung back square to the fence on its
-## inside (swing gates) or slid along the fence beyond the post (a sliding
-## gate). Returns the leaves' collision boxes; the opening itself stays clear.
-func add_gate(cells: Dictionary, cell_size_m: float, params: Dictionary, ends: PackedVector3Array, style: String) -> Array[Dictionary]:
+## An open gate between the solid runs either side of it (a slatted, plain or
+## screened chain-link fence): two stout gate posts, and the leaves swung back
+## square to the fence on its inside (swing gates; a single leaf on its start
+## post unless hinge_side is "end") or slid along the fence beyond the post (a
+## sliding gate). A leaf is filled like its fence: slats and wire, wire, or
+## wire and windscreen. Returns the leaves' collision boxes; the opening
+## itself stays clear.
+func add_gate(cells: Dictionary, cell_size_m: float, type: String, params: Dictionary, ends: PackedVector3Array, style: String, hinge_side: String = "start") -> Array[Dictionary]:
 	var boxes: Array[Dictionary] = []
-	if ends.size() != 2 or style not in GATE_STYLES:
+	if ends.size() != 2 or style not in GATE_STYLES or type not in GATED_TYPES:
 		return boxes
-	var height := height_of("chainlink_slatted", params)
+	var height := height_of(type, params)
 	var slats := str(params.get("slats", "green"))
+	var screen := str(params.get("screen", "black"))
 	var side := {"left": 1.0, "right": -1.0}.get(str(params.get("inside", "center")), 1.0) as float
 	if side == 0.0:
 		side = 1.0
@@ -426,7 +442,7 @@ func add_gate(cells: Dictionary, cell_size_m: float, params: Dictionary, ends: P
 	var leaves: Array = []
 	match style:
 		"swing_single":
-			leaves.append([a + inside * 0.06, inside, width - 0.12])
+			leaves.append([(b if hinge_side == "end" else a) + inside * 0.06, inside, width - 0.12])
 		"swing_double":
 			leaves.append([a + inside * 0.06, inside, width * 0.5 - 0.08])
 			leaves.append([b + inside * 0.06, inside, width * 0.5 - 0.08])
@@ -444,10 +460,31 @@ func add_gate(cells: Dictionary, cell_size_m: float, params: Dictionary, ends: P
 		var frame := PackedVector3Array([hinge + lift, hinge + lift + Vector3(0, height - 0.08, 0), far + lift + Vector3(0, height - 0.08, 0), far + lift, hinge + lift])
 		metal.tube(frame, PackedFloat32Array([0.022, 0.022, 0.022, 0.022, 0.022]), 6, GALVANIZED, FURNITURE.CELL_METAL, false, false)
 		metal.tube(PackedVector3Array([hinge + lift + Vector3(0, (height - 0.08) * 0.5, 0), far + lift + Vector3(0, (height - 0.08) * 0.5, 0)]), PackedFloat32Array([0.018, 0.018]), 6, GALVANIZED, FURNITURE.CELL_METAL, false, false)
-		(cell["slats_" + slats] as Quads).wall(hinge + lift, far + lift, 0.03, height - 0.1, 0.0, Vector2(SLAT_TILE_M, height))
-		(cell.chain as Quads).wall(hinge + lift + _left(direction) * 0.012, far + lift + _left(direction) * 0.012, 0.03, height - 0.1, 0.0, CHAIN_TILE)
+		match type:
+			"chainlink_slatted":
+				(cell["slats_" + slats] as Quads).wall(hinge + lift, far + lift, 0.03, height - 0.1, 0.0, Vector2(SLAT_TILE_M, height))
+				(cell.chain as Quads).wall(hinge + lift + _left(direction) * 0.012, far + lift + _left(direction) * 0.012, 0.03, height - 0.1, 0.0, CHAIN_TILE)
+			"chain_link_screened":
+				(cell["screen_" + screen] as Quads).wall(hinge + lift, far + lift, 0.03, height - 0.1, 0.0, Vector2(SCREEN_TILE_M, SCREEN_TILE_M))
+			_:
+				(cell.chain as Quads).wall(hinge + lift, far + lift, 0.03, height - 0.1, 0.0, CHAIN_TILE)
 		boxes.append(_bay_box(hinge, far, height, 0.04))
 	return boxes
+
+
+## A banner tied to a chain-link fence between two grounded ends: a plain white
+## sheet height_m tall, centred on the fence's height, on its outer face (the
+## side away from the inside; a centred fence's left).
+func add_banner(cells: Dictionary, cell_size_m: float, type: String, params: Dictionary, ends: PackedVector3Array, height_m: float) -> void:
+	if ends.size() != 2 or type not in GATED_TYPES:
+		return
+	var fence_h := height_of(type, params)
+	var side := {"left": 1.0, "right": -1.0}.get(str(params.get("inside", "center")), 0.0) as float
+	var outward := _left(_flat(ends[1] - ends[0])) * (-side if side != 0.0 else 1.0)
+	var shift := outward * 0.045
+	var bottom := maxf(0.1, (fence_h - height_m) * 0.5)
+	var cell := _cell(cells, cell_size_m, (ends[0] + ends[1]) * 0.5)
+	(cell.banner as Quads).wall(ends[0] + shift, ends[1] + shift, bottom, bottom + height_m, 0.0, Vector2(1.0, 1.0))
 
 
 # ---------------------------------------------------------------- panels
