@@ -87,5 +87,5 @@ ImageMagick as three horizontal bands, red, white and blue, after the two flags
 above the 9th St storage yard (Google Street View, Sep 2025). The upper half
 carries SELF STORAGE in blue DejaVu Sans Bold capitals on the white band, as
 legible in that photo; the lower half is plain. Each flag is drawn at its 5:3
-shape (480 x 288) and the pair is packed into the square. The drawing script is
-kept outside Git with the clutter-kit work notes.
+shape (480 x 288) and the pair is packed into the square, by
+`tools/draw_pole_flag_texture.sh`, which redraws it byte for byte.

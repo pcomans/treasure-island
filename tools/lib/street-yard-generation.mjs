@@ -41,7 +41,7 @@
 
 import { createHash } from "node:crypto";
 
-import { YARD_KIT_KEYS, YARD_KIT_PROPS, containerWallLayout, yardPropFootprint, yardPropParamsError } from "./street-yard-kit.mjs";
+import { YARD_KIT_KEYS, YARD_KIT_PROPS, YARD_MAX_FLOAT_M, YARD_MAX_SINK_M, containerWallLayout, yardCornerGaps, yardPropFootprint, yardPropParamsError } from "./street-yard-kit.mjs";
 import { invariant, roundCoordinate } from "./world-contract.mjs";
 
 export const STREET_YARD_PATTERNS = Object.freeze(["pack", "span", "wall"]);
@@ -330,7 +330,8 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
   // The visible ground under a plan point, or null off the generated surfaces.
   const groundY = (xz) => groundAt(xz)?.y ?? null;
   // An item's rest on the visible ground: the plane through the ground under
-  // its rectangle (least squares), raised until no sample is above it.
+  // its rectangle (least squares), raised until no sample is more than the
+  // allowed sink above it; addItem then holds it to the kit's corner limits.
   const rest = (rect, prop) => {
     const samples = [];
     const nx = Math.max(1, Math.ceil((rect.halfX * 2) / REST_SAMPLE_M));
@@ -357,18 +358,11 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
     const residuals = samples.map(([x, z, y]) => y - (mean + a * x + b * z));
     const top = Math.max(...residuals);
     const raise = long ? Math.max((top + Math.min(...residuals)) / 2, top - LONG_REST_SINK_M) : top - REST_SINK_M;
-    let float = 0;
-    let sink = 0;
-    for (const [x, z, y] of samples) {
-      const gap = mean + raise + a * x + b * z - y;
-      float = Math.max(float, gap);
-      sink = Math.max(sink, -gap);
-    }
     // pitch raises the -Z end, roll the left (-X) side, as for the parked cars.
     const pitch = Math.atan(-b);
     const roll = Math.atan(-a);
     if (Math.abs(pitch) > MAX_REST_RAD || Math.abs(roll) > MAX_REST_RAD) return { problem: "steep_ground" };
-    return { height: mean + raise, pitch, roll, float, sink };
+    return { height: mean + raise, pitch, roll };
   };
 
   // Why an item cannot stand at its rectangle, or null.
@@ -428,6 +422,17 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
     const { y, support } = grounded(xz);
     const surface = surfaceAt(xz);
     const angle = (value) => Math.round(value * 1e4) / 1e4 || 0;
+    // The kit's rest limits, as the validator checks them on the plan's
+    // corners: lowered until no corner floats more than YARD_MAX_FLOAT_M, and
+    // left out where a corner then sinks more than YARD_MAX_SINK_M.
+    const base = y + surface.bias_m;
+    const restParams = { pitch: angle(settled.pitch), roll: angle(settled.roll), lift: round3(settled.height - base) };
+    const gaps = yardCornerGaps(footprint, xz, yaw, base, restParams, groundAt);
+    if (gaps.some((gap) => gap === null)) return { problem: "no_ground" };
+    const drop = Math.max(0, Math.max(...gaps) - YARD_MAX_FLOAT_M);
+    if (gaps.some((gap) => gap - drop < -YARD_MAX_SINK_M)) return { problem: "uneven_ground" };
+    restParams.lift = round3(restParams.lift - drop);
+    const settledGaps = gaps.map((gap) => gap - drop);
     const row = {
       id: `scatter:${zone.id}:${rule.id}:${cell}`,
       source: "scatter",
@@ -443,7 +448,7 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
       status: "placed",
       exclusion: null,
       prop,
-      prop_params: { ...params, pitch: angle(settled.pitch), roll: angle(settled.roll), lift: round3(settled.height - y - surface.bias_m) },
+      prop_params: { ...params, ...restParams },
       footprint_m: { x_m: footprint.x_m, z_m: footprint.z_m },
       basis: rule.basis,
     };
@@ -452,9 +457,12 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
     rows.push(row);
     placed.push({ id: row.id, rect: rowRectangle(row) });
     for (const piece of yardRowPieces(row)) occupied.push({ id: row.id, points: piece.points, radius_m: piece.radius, yard: true });
-    audit.rest.max_tilt_rad = Math.max(audit.rest.max_tilt_rad, Math.abs(settled.pitch), Math.abs(settled.roll));
-    if (settled.float > audit.rest.max_float_m) Object.assign(audit.rest, { max_float_m: round3(settled.float), max_float_row: row.id });
-    if (settled.sink > audit.rest.max_sink_m) Object.assign(audit.rest, { max_sink_m: round3(settled.sink), max_sink_row: row.id });
+    // The audit reports the corner gaps the validator checks.
+    const float = Math.max(0, ...settledGaps);
+    const sink = Math.max(0, ...settledGaps.map((gap) => -gap));
+    audit.rest.max_tilt_rad = Math.max(audit.rest.max_tilt_rad, Math.abs(restParams.pitch), Math.abs(restParams.roll));
+    if (float > audit.rest.max_float_m) Object.assign(audit.rest, { max_float_m: round3(float), max_float_row: row.id });
+    if (sink > audit.rest.max_sink_m) Object.assign(audit.rest, { max_sink_m: round3(sink), max_sink_row: row.id });
     count(audit.rules, `${zone.id}/${rule.id}`);
     return { row };
   };

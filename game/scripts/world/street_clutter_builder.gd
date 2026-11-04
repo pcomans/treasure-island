@@ -177,7 +177,8 @@ func build(document: Dictionary) -> Dictionary:
 ## Adds one yard-kit row's pieces to the render batches and its shapes to the
 ## physics cells; "" or why it can't be built.
 func _add_yard_row(yard: Variant, row: Dictionary, prop: String, params: Dictionary, batches: Dictionary, shapes: Dictionary) -> String:
-	var built: Dictionary = yard.pieces(prop, params, hash(str(row.id)) & 0x7fffffff)
+	var footprint: Variant = row.get("footprint_m", {})
+	var built: Dictionary = yard.pieces(prop, params, hash(str(row.id)) & 0x7fffffff, footprint if footprint is Dictionary else {})
 	if not built.ok:
 		return str(built.message)
 	var position: Array = row.position_m

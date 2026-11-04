@@ -130,18 +130,11 @@ const PROPS := {
 	"crane_barge": {"range_m": 2500.0, "variants": ["crane", "deck", "pier_crane"]},
 	"pole_flag": {"range_m": 600.0, "variants": ["flag"]},
 }
-## Plan sizes (x, z) and heights of the fixed-size props, as yardPropFootprint
-## gives them: a vehicle's collision box is its plan rectangle to its height.
-const PLANS := {
-	"rv": [[2.55, 11.6, 3.75], [2.4, 8.5, 3.45], [2.44, 9.0, 3.25], [2.5, 10.5, 3.9]],
-	"bus": [[2.6, 13.7, 3.7], [2.4, 8.2, 3.2]],
-	"box_truck": [[2.4, 7.4, 3.5], [2.6, 10.4, 4.0]],
-	"van": [[2.02, 5.93, 2.65], [2.4, 7.0, 3.0]],
-	"food_truck": [[2.4, 7.3, 3.3], [2.44, 6.2, 3.0]],
-	"boat_on_trailer": [[2.5, 7.3, 2.2], [2.6, 8.8, 2.9]],
-	"trailer": [[2.6, 7.3, 3.0], [2.4, 4.5, 1.55], [2.6, 16.2, 4.1], [3.66, 14.6, 3.5]],
-	"equipment": [[3.2, 10.0, 4.5], [3.0, 8.0, 3.5], [1.2, 9.1, 1.2], [1.8, 1.8, 1.3], [2.44, 6.9, 1.85], [4.0, 4.0, 8.0], [1.4, 0.0, 0.0], [0.6, 1.9, 1.0]],
-}
+## The excavator's collision (tools/lib/street-yard-meshes.mjs buildExcavator:
+## its swing centre 1.5 m behind the plan's middle): the machine (tracks, house
+## and cab), then the boom, arm and bucket out in front.
+const EXCAVATOR_MACHINE_BOX := AABB(Vector3(-1.6, 0.0, -0.795), Vector3(3.2, 3.05, 5.05))
+const EXCAVATOR_BOOM_BOX := AABB(Vector3(-0.58, 0.0, -4.97), Vector3(1.2, 4.5, 4.2))
 ## Containers (tools/lib/street-yard-kit.mjs): width, heights, lengths.
 const CONTAINER_W := 2.438
 const CONTAINER_H := 2.591
@@ -151,7 +144,6 @@ const WALL_GAP_M := 0.12
 const MAX_WALL_GAP_M := 0.3
 ## Shed rows, fabric sheds, berms and ridges (tools/lib/street-yard-meshes.mjs).
 const SHED_BAY_M := 3.05
-const SHED_END_M := 0.15
 const SHEDS := {
 	"double": {"hw": 3.66, "eave": 2.62, "ridge": 3.1, "mono": false},
 	"single": {"hw": 2.285, "eave": 2.44, "front": 2.86, "mono": true},
@@ -166,6 +158,9 @@ const FABRICS := {
 	"span30": {"hw": 15.0, "eave": 5.0, "ridge": 9.6},
 }
 const BERM_MODULE_M := 6.0
+## A berm's rounded end (tools/lib/street-yard-meshes.mjs BERM_SPECS cap_m):
+## half a module on the low berm, a whole one on the high berm.
+const BERM_CAP_M := {"low": 3.0, "high": 6.0}
 const RIDGE_MODULE_M := 4.0
 ## A conveyor: 6 m truss modules rising at 16 degrees from a foot 1.2 m up.
 const CONVEYOR_MODULE_M := 6.0
@@ -246,8 +241,9 @@ static func _unit(seed: int, index: int) -> float:
 ## What to build for one placed row: {ok, pieces: [{mesh_key, meshes: [near,
 ## far], transform, custom, material?}], shapes: [{shape, transform}], range_m,
 ## lod_near_m, cell_m, shadow}, or {ok: false, message}. default_seed varies the
-## weathering when the row has no seed.
-func pieces(prop: String, params: Dictionary, default_seed: int = 0) -> Dictionary:
+## weathering when the row has no seed; plan is the row's validated
+## footprint_m ({x_m, z_m}), the collision box of a vehicle or a machine.
+func pieces(prop: String, params: Dictionary, default_seed: int = 0, plan: Dictionary = {}) -> Dictionary:
 	if not PROPS.has(prop):
 		return {"ok": false, "message": "unknown yard prop %s" % prop}
 	var variant_value: Variant = params.get("variant", null)
@@ -269,17 +265,17 @@ func pieces(prop: String, params: Dictionary, default_seed: int = 0) -> Dictiona
 		"fabric_shed":
 			error = _fabric_shed(result, variants[variant], params, level, seed)
 		"plastic_berm":
-			error = _modules(result, "berm_%s" % variants[variant], int(params.get("modules", 0)), BERM_MODULE_M, _custom("black", "black", "black", level, seed))
+			error = _modules(result, "berm_%s" % variants[variant], int(params.get("modules", 0)), BERM_MODULE_M, float(BERM_CAP_M[variants[variant]]), _custom("black", "black", "black", level, seed))
 		"material_pile":
 			error = _pile(result, variants[variant], params, level, seed)
 		"crane_barge":
 			error = _barge(result, variants[variant], params, level, seed)
 		"equipment":
-			error = _equipment(result, variant, variants[variant], params, level, seed)
+			error = _equipment(result, variants[variant], params, level, seed, plan)
 		"pole_flag":
 			error = _pole_flag(result, params, seed)
 		_:
-			error = _vehicle(result, prop, variant, variants[variant], params, level, seed)
+			error = _vehicle(result, prop, variants[variant], params, level, seed, plan)
 	if error != "":
 		return {"ok": false, "message": "%s: %s" % [prop, error]}
 	return result
@@ -306,6 +302,17 @@ func _add(result: Dictionary, name: String, transform: Transform3D, custom: Colo
 	return ""
 
 
+## A body's collision box: its plan rectangle (the row's footprint_m) from the
+## ground to the top of its near mesh; "" or why it can't.
+func _plan_box(result: Dictionary, plan: Dictionary, mesh: String) -> String:
+	var meshes := _meshes_for(mesh)
+	if not (plan.get("x_m") is float or plan.get("x_m") is int) or not (plan.get("z_m") is float or plan.get("z_m") is int) or meshes.is_empty():
+		return "%s needs its footprint_m" % mesh
+	var height := (meshes[0] as Mesh).get_aabb().end.y
+	_box(result, Vector3(float(plan.x_m), height, float(plan.z_m)), Vector3(0, height * 0.5, 0))
+	return ""
+
+
 func _box(result: Dictionary, size: Vector3, center: Vector3, basis: Basis = Basis.IDENTITY) -> void:
 	var shape := BoxShape3D.new()
 	shape.size = size
@@ -323,19 +330,24 @@ func _prism(result: Dictionary, section: Array, z0: float, z1: float) -> void:
 	(result.shapes as Array).append({"shape": shape, "transform": Transform3D.IDENTITY})
 
 
-## A convex hull over a piece's far mesh at a uniform scale, cached per mesh
-## and scale (the scale is baked into the points: shapes keep unscaled transforms).
-func _hull(result: Dictionary, name: String, offset: Vector3, scale: float = 1.0) -> void:
+## A heap's collision: the convex hull the kit builds for it (<name>_hull: no
+## face steeper than 45 degrees, holding the visible mesh), at a uniform scale,
+## cached per mesh and scale (the scale is baked into the points: shapes keep
+## unscaled transforms). "" or why it can't.
+func _hull(result: Dictionary, name: String, offset: Vector3, scale: float = 1.0) -> String:
 	var key := "%s@%.3f" % [name, scale]
 	if not _hulls.has(key):
-		var mesh: Mesh = _meshes_for(name)[1]
+		var mesh: Variant = _meshes.get("%s_hull" % name, null)
+		if not mesh is Mesh:
+			return "the yard kit has no collision hull for %s" % name
 		var points := PackedVector3Array()
-		for point in mesh.get_faces():
+		for point in (mesh as Mesh).get_faces():
 			points.append(point * scale)
 		var shape := ConvexPolygonShape3D.new()
 		shape.points = points
 		_hulls[key] = shape
 	(result.shapes as Array).append({"shape": _hulls[key], "transform": Transform3D(Basis.IDENTITY, offset)})
+	return ""
 
 
 func _colour(params: Dictionary, key: String, fallback: String) -> String:
@@ -375,7 +387,8 @@ static func wall_layout(length_m: float) -> Array:
 	var at := -length_m / 2.0
 	for size: String in sizes:
 		var box := float(CONTAINER_LENGTHS[size])
-		containers.append({"z_m": at + box / 2.0, "length_m": box, "size": size})
+		# Rounded to the millimetre exactly as containerWallLayout rounds (Math.round).
+		containers.append({"z_m": floorf((at + box / 2.0) * 1000.0 + 0.5) / 1000.0, "length_m": box, "size": size})
 		at += box + gap
 	return containers
 
@@ -443,23 +456,24 @@ func _fabric_shed(result: Dictionary, span: String, params: Dictionary, level: f
 	return error
 
 
-## A modular ridge (berm or windrow): two rounded ends (half a module each)
-## and modules - 1 middles, each with its own convex hull.
-func _modules(result: Dictionary, base: String, modules: int, module_m: float, custom: Color) -> String:
-	if modules < 1:
-		return "%s needs at least one module" % base
+## A modular ridge (berm or windrow): two rounded ends cap_m long and the
+## middles between them, each with its own convex hull. A cap's origin is
+## where it meets the middles.
+func _modules(result: Dictionary, base: String, modules: int, module_m: float, cap_m: float, custom: Color) -> String:
 	var length := modules * module_m
-	var half := module_m / 2.0
+	var middles := roundi((length - 2.0 * cap_m) / module_m)
+	if modules < 1 or middles < 0:
+		return "%s needs at least %d modules" % [base, ceili(2.0 * cap_m / module_m)]
 	var error := ""
-	var placements: Array = [["%s_end_neg" % base, -length / 2.0 + half]]
-	for index in modules - 1:
-		placements.append(["%s_mid" % base, -length / 2.0 + half + module_m * (index + 0.5)])
-	placements.append(["%s_end_pos" % base, length / 2.0 - half])
+	var placements: Array = [["%s_end_neg" % base, -length / 2.0 + cap_m]]
+	for index in middles:
+		placements.append(["%s_mid" % base, -length / 2.0 + cap_m + module_m * (index + 0.5)])
+	placements.append(["%s_end_pos" % base, length / 2.0 - cap_m])
 	for placement: Array in placements:
 		var transform := Transform3D(Basis.IDENTITY, Vector3(0, 0, float(placement[1])))
 		error += _add(result, str(placement[0]), transform, custom)
 		if error == "":
-			_hull(result, str(placement[0]), transform.origin)
+			error += _hull(result, str(placement[0]), transform.origin)
 	return error
 
 
@@ -468,20 +482,20 @@ func _pile(result: Dictionary, material: String, params: Dictionary, level: floa
 	var custom := _custom("rubble_concrete" if material == "rubble" else "grey", "grey", "grey", level, seed)
 	if material == "ridge":
 		var length := float(params.get("length_m", 0.0))
-		return _modules(result, "ridge", maxi(1, roundi(length / RIDGE_MODULE_M)), RIDGE_MODULE_M, custom)
+		return _modules(result, "ridge", maxi(1, roundi(length / RIDGE_MODULE_M)), RIDGE_MODULE_M, RIDGE_MODULE_M / 2.0, custom)
 	var shape := clampi(int(params.get("shape", 0)), 0, 2)
 	var scale := clampf(float(params.get("scale", 1.0)), 0.5, 3.0)
 	var name := "pile_%s_%d" % [material, shape]
 	var transform := Transform3D(Basis.IDENTITY.scaled(Vector3.ONE * scale), Vector3.ZERO)
 	var error := _add(result, name, transform, custom)
 	if error == "":
-		_hull(result, name, Vector3.ZERO, scale)
+		error += _hull(result, name, Vector3.ZERO, scale)
 	return error
 
 
 # ---------------------------------------------------------------- vehicles and equipment
 
-func _vehicle(result: Dictionary, prop: String, variant: int, mesh: String, params: Dictionary, level: float, seed: int) -> String:
+func _vehicle(result: Dictionary, prop: String, mesh: String, params: Dictionary, level: float, seed: int, plan: Dictionary) -> String:
 	var primary := "white"
 	var secondary := "white"
 	var tertiary := "dark_grey"
@@ -510,12 +524,12 @@ func _vehicle(result: Dictionary, prop: String, variant: int, mesh: String, para
 			secondary = "grey" if cover == "none" else _colour(params, "cover", "blue")
 			mesh = "boat_%s_%s" % [mesh, "open" if cover == "none" else "covered"]
 	var error := _add(result, mesh, Transform3D.IDENTITY, _custom(primary, secondary, tertiary, level, seed))
-	var plan: Array = PLANS[prop][variant]
-	_box(result, Vector3(plan[0], plan[2], plan[1]), Vector3(0, float(plan[2]) * 0.5, 0))
+	if error == "":
+		error = _plan_box(result, plan, mesh)
 	return error
 
 
-func _equipment(result: Dictionary, variant: int, mesh: String, params: Dictionary, level: float, seed: int) -> String:
+func _equipment(result: Dictionary, mesh: String, params: Dictionary, level: float, seed: int, plan: Dictionary) -> String:
 	if mesh == "conveyor":
 		return _conveyor(result, float(params.get("length_m", 0.0)), level, seed)
 	if mesh == "cylinder_section":
@@ -543,14 +557,14 @@ func _equipment(result: Dictionary, variant: int, mesh: String, params: Dictiona
 			house = "white"
 		"light_grey":
 			house = "light_grey"
+	var error := _add(result, mesh, Transform3D.IDENTITY, _custom(paint, house, "dark_grey", level, seed))
+	if error != "":
+		return error
 	if mesh == "excavator":
-		# The machine (tracks, house and cab), then the boom, arm and bucket out in front.
-		_box(result, Vector3(3.2, 3.05, 5.05), Vector3(0, 1.525, 1.73))
-		_box(result, Vector3(1.2, 4.5, 4.2), Vector3(0.02, 2.25, -2.87))
-	else:
-		var plan: Array = PLANS.equipment[variant]
-		_box(result, Vector3(plan[0], plan[2], plan[1]), Vector3(0, float(plan[2]) * 0.5, 0))
-	return _add(result, mesh, Transform3D.IDENTITY, _custom(paint, house, "dark_grey", level, seed))
+		for box: AABB in [EXCAVATOR_MACHINE_BOX, EXCAVATOR_BOOM_BOX]:
+			_box(result, box.size, box.get_center())
+		return ""
+	return _plan_box(result, plan, mesh)
 
 
 ## A conveyor: its truss modules end to end up the incline (rising toward +Z),
