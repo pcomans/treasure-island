@@ -68,7 +68,7 @@ import {
 } from "./lib/street-detail-generation.mjs";
 import { CAR_BODY_NAMES, CAR_FINISHES, CAR_PAINTS, MAX_TWIST_M, STREET_CLUTTER_PROPS, visibleGroundIndex } from "./lib/street-clutter-generation.mjs";
 import {
-  fenceHeight, fenceParamsError, gateLeaves, STREET_FENCE_BANNER_TYPES, STREET_FENCE_GATE_HINGES, STREET_FENCE_GATE_STYLES, STREET_FENCE_GATED_TYPES, STREET_FENCE_INSIDE,
+  fenceHeight, fenceParamsError, GATE_LEAF_LIFT_M, gateLeaves, STREET_FENCE_BANNER_TYPES, STREET_FENCE_GATE_HINGES, STREET_FENCE_GATE_STYLES, STREET_FENCE_GATED_TYPES, STREET_FENCE_INSIDE,
   STREET_FENCE_TYPES,
 } from "./lib/street-fence-generation.mjs";
 import { MAX_LEG_DROP_M, MAX_REST_TILT_RAD, restTilt, STREET_FURNITURE_FEET, STREET_FURNITURE_PROPS } from "./lib/street-furniture-generation.mjs";
@@ -956,7 +956,7 @@ function validateStreetDetail(worldRoot, manifest, records) {
         grounded(`${row.id} vertex ${index}`, point[0], point[1], point[2], row.terrain_supports[index][0], row.terrain_supports[index][1]);
       });
       invariant((row.kind === "fence") === (row.fence !== undefined), `${row.id}: every fence row, and only a fence row, carries a fence block`);
-      if (row.fence !== undefined) validateFenceRow(row, grounded, inBoundary);
+      if (row.fence !== undefined) validateFenceRow(row, grounded, inBoundary, groundAt);
     }
   }
   const builtFences = new Set(rows.filter((row) => row.fence && row.prop !== undefined).map((row) => row.id));
@@ -975,7 +975,7 @@ function validateStreetDetail(worldRoot, manifest, records) {
 
 // A fence row: its kit type, openings along the line and solid runs of grounded
 // posts. A built row (with a prop) is placed and its prop is its type.
-function validateFenceRow(row, grounded, inBoundary) {
+function validateFenceRow(row, grounded, inBoundary, groundAt) {
   const fence = row.fence;
   const spec = STREET_FENCE_TYPES[fence.type];
   invariant(spec && fence.height_m === fenceHeight(fence.type, fence.params) && fence.half_thickness_m === spec.half_thickness_m && typeof fence.type_basis === "string", `${row.id} fence type is invalid`);
@@ -992,6 +992,17 @@ function validateFenceRow(row, grounded, inBoundary) {
       gate.points_m.forEach((point, end) => grounded(`${row.id} gate ${index} end ${end}`, point[0], point[1], point[2], gate.terrain_supports[end][0], gate.terrain_supports[end][1]));
       const expected = gateLeaves(gate.points_m.map((point) => [point[0], point[2]]), gate.style, gate.hinge, fence.params.inside);
       invariant(stableJson(gate.leaves) === stableJson(expected), `${row.id} gate ${index} leaves differ from its ends, style and hinge`);
+      // A leaf hangs level from its post: the ground under it, to its tip,
+      // stays below its bottom rail (where it rises from the post, the gate
+      // needs its other hinge or style).
+      expected.forEach((leaf, side) => {
+        const rail = gate.points_m[leaf.post][1] + gate.surface_bias_m[leaf.post] + GATE_LEAF_LIFT_M;
+        for (let step = 0; step <= 8; step += 1) {
+          const t = step / 8;
+          const ground = groundAt([leaf.xz[0][0] + (leaf.xz[1][0] - leaf.xz[0][0]) * t, leaf.xz[0][1] + (leaf.xz[1][1] - leaf.xz[0][1]) * t]);
+          invariant(!ground || ground.y <= rail + 0.005, `${row.id} gate ${index} leaf ${side} meets ground rising ${(ground?.y - rail).toFixed(3)} m into its bottom rail ${(t * 100).toFixed(0)}% of the way to its tip`);
+        }
+      });
     });
   }
   // Banners: a white sheet between two grounded ends on a solid run, lower than the fence.

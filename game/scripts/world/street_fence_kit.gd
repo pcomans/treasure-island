@@ -66,8 +66,11 @@ const SLATTED_HEIGHTS := [1.83, 2.44]
 ## A slat tile: eight slats across SLAT_TILE_M, one fabric height tall.
 const SLAT_TILE_M := 0.4
 ## A gate leaf's collision half thickness (GATE_LEAF_HALF_M in
-## tools/lib/street-fence-generation.mjs, which the clearance checks read).
+## tools/lib/street-fence-generation.mjs, which the clearance checks read), and
+## how far its bottom rail stands over its post's foot (GATE_LEAF_LIFT_M, which
+## the validator holds the ground under the leaf to).
 const GATE_LEAF_HALF_M := 0.04
+const GATE_LEAF_LIFT_M := 0.05
 ## Fence types that take open gate leaves, and banners (white sheets tied to
 ## the fabric: Gate 5, Nov 2025).
 const GATED_TYPES := ["chain_link_slatted", "chain_link", "chain_link_screened"]
@@ -466,7 +469,7 @@ func add_gate(cells: Dictionary, cell_size_m: float, type: String, params: Dicti
 		var direction := _flat(far - hinge)
 		var cell := _cell(cells, cell_size_m, (hinge + far) * 0.5)
 		var metal: FURNITURE.Builder = cell.metal
-		var lift := Vector3(0, 0.05, 0)
+		var lift := Vector3(0, GATE_LEAF_LIFT_M, 0)
 		var frame := PackedVector3Array([hinge + lift, hinge + lift + Vector3(0, height - 0.08, 0), far + lift + Vector3(0, height - 0.08, 0), far + lift, hinge + lift])
 		metal.tube(frame, PackedFloat32Array([0.022, 0.022, 0.022, 0.022, 0.022]), 6, GALVANIZED, FURNITURE.CELL_METAL, false, false)
 		metal.tube(PackedVector3Array([hinge + lift + Vector3(0, (height - 0.08) * 0.5, 0), far + lift + Vector3(0, (height - 0.08) * 0.5, 0)]), PackedFloat32Array([0.018, 0.018]), 6, GALVANIZED, FURNITURE.CELL_METAL, false, false)
