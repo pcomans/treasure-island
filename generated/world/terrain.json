@@ -1,13 +1,13 @@
 {
   "building_foundations": {
     "burial_margin_m": 0.02,
-    "exterior_segments": 4784,
+    "exterior_segments": 4777,
     "flat_roof_cells": 200,
     "maximum_height_deviation_m": 0,
     "maximum_positive_gap_m": 0,
     "maximum_roof_elevation_range_m": 0,
     "minimum_embed_m": -4.062,
-    "sample_points": 14352,
+    "sample_points": 14331,
     "shared_segments": 3,
     "tolerance_m": 0.001,
     "water_datum_m": 0,
@@ -68,7 +68,7 @@
     "maximum_clearance_m": 0.081,
     "maximum_serialization_tolerance_m": 0.01,
     "minimum_clearance_m": 0.019,
-    "sample_points": 297948
+    "sample_points": 301105
   },
   "raster_bbox_wgs84": [
     -122.380001708984,
@@ -209,10 +209,10 @@
     "basis": "production_inference",
     "config": {
       "path": "tools/config/terrain-overrides.json",
-      "sha256": "9cc1f93d4f6d63ba3e466cd3bd2aeb35adea4d30ab95debc8c1b41aa209fc921"
+      "sha256": "e35a9a084d9afc28840c283a28e44255d237958e663c7686391f73ebb1a2e782"
     },
-    "corrected_cells": 191,
-    "leaves": 4169,
+    "corrected_cells": 182,
+    "leaves": 4334,
     "maximum_cut_m": 20.205,
     "maximum_raise_m": 1.412,
     "mesh": {
@@ -221,7 +221,7 @@
       "sample_m": 0.5,
       "tolerance_m": 0.08
     },
-    "neighbour_edge_vertices": 259,
+    "neighbour_edge_vertices": 296,
     "refined_cell_bounds_m": [
       [
         0,
@@ -242,18 +242,6 @@
         -128
       ],
       [
-        96,
-        -160,
-        128,
-        -128
-      ],
-      [
-        128,
-        -160,
-        160,
-        -128
-      ],
-      [
         -32,
         -128,
         0,
@@ -275,18 +263,6 @@
         64,
         -128,
         96,
-        -96
-      ],
-      [
-        96,
-        -128,
-        128,
-        -96
-      ],
-      [
-        128,
-        -128,
-        160,
         -96
       ],
       [
@@ -323,12 +299,6 @@
         96,
         -96,
         128,
-        -64
-      ],
-      [
-        128,
-        -96,
-        160,
         -64
       ],
       [
@@ -575,12 +545,6 @@
         160,
         96,
         192,
-        128
-      ],
-      [
-        192,
-        96,
-        224,
         128
       ],
       [
@@ -641,12 +605,6 @@
         160,
         128,
         192,
-        160
-      ],
-      [
-        192,
-        128,
-        224,
         160
       ],
       [
@@ -726,18 +684,6 @@
         160,
         640,
         192
-      ],
-      [
-        32,
-        192,
-        64,
-        224
-      ],
-      [
-        64,
-        192,
-        96,
-        224
       ],
       [
         448,
@@ -1370,8 +1316,8 @@
         672
       ]
     ],
-    "refined_cells": 191,
-    "refined_triangles": 9995,
+    "refined_cells": 182,
+    "refined_triangles": 10306,
     "schema_version": "ti.terrain-overrides/1",
     "sites": [
       {
@@ -1420,10 +1366,10 @@
         "scope_area_m2": 23141
       },
       {
-        "edge_blend_m": 4,
+        "edge_blend_m": 8,
         "grade": {
           "final_sweep_change_m": 0,
-          "free_nodes": 3424,
+          "free_nodes": 4394,
           "kind": "harmonic"
         },
         "id": "construction_9th_avenue_h",
@@ -1454,7 +1400,7 @@
             "rule": "sink"
           }
         ],
-        "scope_area_m2": 51769.4
+        "scope_area_m2": 49296.3
       },
       {
         "edge_blend_m": 8,

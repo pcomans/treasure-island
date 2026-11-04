@@ -93,16 +93,16 @@
       "sha256": "98f9eac10e17f205e001d82c20ee04a347324b44ce3c29ad2187f27b9e55c13e"
     },
     {
-      "bytes": 555889,
+      "bytes": 563383,
       "chunk_id": "x_-1__z_-1",
       "path": "chunks/x_-1__z_-1.json",
-      "sha256": "4960c9c5b04666993e841c52ad1bba45902515f5c31fe437dd46e87146c610bd"
+      "sha256": "c0141210dfc04f09993a17c6add5d59f64f776eb4cdc77598872e3c58d88042c"
     },
     {
-      "bytes": 481610,
+      "bytes": 482944,
       "chunk_id": "x_-1__z_0",
       "path": "chunks/x_-1__z_0.json",
-      "sha256": "6f65963c831ac26be41e1035a913aa3d561c04870ead711cdf5a33e6f2f8fd1f"
+      "sha256": "cef9db0d382c343417828572587dc78b61c831d8e9cc56aec79aa33d7fde20a7"
     },
     {
       "bytes": 3375888,
@@ -141,16 +141,16 @@
       "sha256": "74383bd5a4c7cd675bca50512f4120cc506c00c2edc6f94be56b9ada14e50d3d"
     },
     {
-      "bytes": 693525,
+      "bytes": 881058,
       "chunk_id": "x_0__z_-1",
       "path": "chunks/x_0__z_-1.json",
-      "sha256": "483cea55caeaf349bdccff14e301051ce4201deb13876aaff5535a625d67f0ab"
+      "sha256": "cf6915a12cdbb960ca7a08e8cd3f074f3b02ca985d3c6a639d1140e29445f6b6"
     },
     {
-      "bytes": 968785,
+      "bytes": 1021867,
       "chunk_id": "x_0__z_0",
       "path": "chunks/x_0__z_0.json",
-      "sha256": "589fe07b46602837d8db4b4490c759bf19fd228dffcb1427ed7e20379058efbe"
+      "sha256": "46a86296e76efa71c807d41d5eeaaea2897347e010fc2b19ec9c7d804a99976f"
     },
     {
       "bytes": 1034025,
@@ -231,7 +231,7 @@
       "sha256": "f6fd17666df382f89b51dff1b5a3b906e1c17fdc36d4af3e1aa4ecf4aad817a5"
     }
   ],
-  "content_sha256": "138cfda7a351560eb8b5f967dac8abc3b80492a6e7cd771acf1065cb3c1aa3ae",
+  "content_sha256": "3c2e722f388d16a628645ce3536ec29d3eb4defd50b14dbd65d39f684a03708a",
   "context": {
     "bytes": 675130,
     "path": "context.json",
@@ -265,9 +265,9 @@
     "unresolved_rows": 0
   },
   "coverage_ledger": {
-    "bytes": 156619,
+    "bytes": 156616,
     "path": "coverage-ledger.csv",
-    "sha256": "f4097fac03ad25f33ab687b11e6c836eb42506b6bdf88caa63c123c333db5845"
+    "sha256": "3b0c60d4933b4ab4d008f736cc1a53468e3bd316dbe852f3f820b2ab1123d7d6"
   },
   "demolished_buildings": {
     "path": "tools/config/demolished-buildings.json",
@@ -304,9 +304,9 @@
   ],
   "files": [
     {
-      "bytes": 555889,
+      "bytes": 563383,
       "path": "chunks/x_-1__z_-1.json",
-      "sha256": "4960c9c5b04666993e841c52ad1bba45902515f5c31fe437dd46e87146c610bd"
+      "sha256": "c0141210dfc04f09993a17c6add5d59f64f776eb4cdc77598872e3c58d88042c"
     },
     {
       "bytes": 195499,
@@ -324,9 +324,9 @@
       "sha256": "bb21618ff0bc88549e3a600d981880415817747475c2c3a0d368a7da8db4d3ac"
     },
     {
-      "bytes": 481610,
+      "bytes": 482944,
       "path": "chunks/x_-1__z_0.json",
-      "sha256": "6f65963c831ac26be41e1035a913aa3d561c04870ead711cdf5a33e6f2f8fd1f"
+      "sha256": "cef9db0d382c343417828572587dc78b61c831d8e9cc56aec79aa33d7fde20a7"
     },
     {
       "bytes": 3375888,
@@ -404,9 +404,9 @@
       "sha256": "1cd2caaf02334a9aa39228e681a85b659b6da8e5fda3e7a875126071260ee74c"
     },
     {
-      "bytes": 693525,
+      "bytes": 881058,
       "path": "chunks/x_0__z_-1.json",
-      "sha256": "483cea55caeaf349bdccff14e301051ce4201deb13876aaff5535a625d67f0ab"
+      "sha256": "cf6915a12cdbb960ca7a08e8cd3f074f3b02ca985d3c6a639d1140e29445f6b6"
     },
     {
       "bytes": 269679,
@@ -424,9 +424,9 @@
       "sha256": "b9ed8d18acdcfe4f89e3d7fb1d69c11ba7152e174398c0943bfe295be2b12954"
     },
     {
-      "bytes": 968785,
+      "bytes": 1021867,
       "path": "chunks/x_0__z_0.json",
-      "sha256": "589fe07b46602837d8db4b4490c759bf19fd228dffcb1427ed7e20379058efbe"
+      "sha256": "46a86296e76efa71c807d41d5eeaaea2897347e010fc2b19ec9c7d804a99976f"
     },
     {
       "bytes": 1034025,
@@ -499,14 +499,14 @@
       "sha256": "4008473d014530211eba8e77e5b6f3ebe977c283a4750bacb57d6739b239a037"
     },
     {
-      "bytes": 156619,
+      "bytes": 156616,
       "path": "coverage-ledger.csv",
-      "sha256": "f4097fac03ad25f33ab687b11e6c836eb42506b6bdf88caa63c123c333db5845"
+      "sha256": "3b0c60d4933b4ab4d008f736cc1a53468e3bd316dbe852f3f820b2ab1123d7d6"
     },
     {
       "bytes": 81562,
       "path": "coverage-summary.json",
-      "sha256": "7e01fd65cba99154581c1c5701a8e5f22614179b67fb398af53c3915fda0a004"
+      "sha256": "8ee07afdda6556616949326f12d9373b3d86dfbc2095d252a87058e9b68d0eae"
     },
     {
       "bytes": 1283928,
@@ -529,14 +529,14 @@
       "sha256": "e4816438dac07ff0983d9e481e626c698e6749f09b771f566f900ce56428031d"
     },
     {
-      "bytes": 3312344,
+      "bytes": 3312512,
       "path": "street_detail.json",
-      "sha256": "1da30a9e749a89d58902033e4048f9be45aed0737cbae45a9acfee64a6971bba"
+      "sha256": "8aa4dbfb95d9fdb78a5f58c7777ab15842010120b211850d5757075fe0dfe2d2"
     },
     {
-      "bytes": 20904,
+      "bytes": 20294,
       "path": "terrain.json",
-      "sha256": "a951d7b02cdd7e6ce357ba12adebc8aa0ed711ae55f447b44ab2bf0df47e609e"
+      "sha256": "2ff4a51f737d12d3229a3dc3f678a9fa5c8c1368f3ec447fe0214d2cee452613"
     }
   ],
   "generator": {
@@ -1199,13 +1199,13 @@
     }
   },
   "street_detail": {
-    "bytes": 3312344,
+    "bytes": 3312512,
     "path": "street_detail.json",
-    "sha256": "1da30a9e749a89d58902033e4048f9be45aed0737cbae45a9acfee64a6971bba"
+    "sha256": "8aa4dbfb95d9fdb78a5f58c7777ab15842010120b211850d5757075fe0dfe2d2"
   },
   "terrain": {
-    "bytes": 20904,
+    "bytes": 20294,
     "path": "terrain.json",
-    "sha256": "a951d7b02cdd7e6ce357ba12adebc8aa0ed711ae55f447b44ab2bf0df47e609e"
+    "sha256": "2ff4a51f737d12d3229a3dc3f678a9fa5c8c1368f3ec447fe0214d2cee452613"
   }
 }
