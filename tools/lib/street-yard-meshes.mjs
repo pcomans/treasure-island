@@ -848,7 +848,15 @@ function buildBermEnd(variant, dir, lod) {
     const t = Math.min(1, Math.abs(z) / half);
     const s = Math.sqrt(Math.max(0, 1 - t * t));
     return { x: Math.max(s, 0.001), y: s };
-  }, (i, z) => (lod === 0 && Math.abs(z) < half * 0.95 ? 0.025 * Math.sin(5 * z + hash(i, 3) * 6) * (Math.abs(z) / half) : 0));
+  }, (i, z) => {
+    if (lod > 0) return 0;
+    // The ring the cap shares with a middle module (or the other cap) takes the
+    // middle's wrinkle at its end, fading toward the tip, so they meet without
+    // a gap; the cap's own wrinkle grows toward the tip.
+    const t = Math.abs(z) / half;
+    const shared = bermWrinkle(lod)(i, half) * Math.max(0, 1 - t / 0.52);
+    return shared + (t < 0.95 ? 0.025 * Math.sin(5 * z + hash(i, 3) * 6) * t : 0);
+  });
   gridSurface(out, grid, P.plastic);
   return out.result();
 }
@@ -924,10 +932,28 @@ function buildPile(material, shape, lod) {
   };
   const elongation = material === "tarp" ? 1.3 : 1 + 0.15 * hash(seed, 2);
   const nominal = Math.max(spec.x, spec.z / elongation) / 2;
+  // A tarp drapes over two or three mounds of what it covers, sagging
+  // between them (plan positions in units of the nominal radius).
+  const mounds = [0, 1, 2].map((k) => ({
+    x: (hash(seed, k, 11) - 0.5) * 0.9,
+    z: (hash(seed, k, 12) - 0.5) * 0.9,
+    r: 0.55 + 0.3 * hash(seed, k, 13),
+    h: k === 0 ? 1 : 0.55 + 0.35 * hash(seed, k, 14),
+  }));
+  const draped = (rho, a) => {
+    const x = rho * Math.cos(a);
+    const z = rho * Math.sin(a);
+    let top = 0;
+    for (const mound of mounds) {
+      const d = Math.hypot(x - mound.x, z - mound.z) / mound.r;
+      top = Math.max(top, mound.h * Math.pow(Math.max(0, 1 - d * d), 0.7));
+    }
+    return top * Math.pow(Math.max(0, 1 - rho ** 6), 0.5);
+  };
   const heightAt = (rho, a) => {
     let base;
     if (spec.cone) base = Math.min(1, (1 - rho) * 1.08) - 0.06 * Math.max(0, 0.08 - (1 - rho));
-    else if (spec.flat) base = Math.pow(Math.max(0, 1 - rho ** 3), 0.8);
+    else if (spec.flat) base = draped(rho, a);
     else base = Math.pow(Math.max(0, 1 - rho * rho), 1.2);
     // Bumps (and a rubble pile's lumps of a metre or so) in plan coordinates.
     const r = nominal * outline(a) * rho;
@@ -1008,12 +1034,18 @@ function buildPile(material, shape, lod) {
     }
   }
   if (lod === 0 && spec.folds) {
-    // Tyres holding the sheeting down.
+    // Tyres holding the sheeting down on the mounds, square to the sheet and
+    // bedded a little into it.
     for (let i = 0; i < 7; i += 1) {
-      const rho = 0.35 + 0.4 * hash(i, seed, 8);
-      const a = (2 * Math.PI * Math.floor(hash(i, seed, 9) * segments)) / segments;
-      const p = surface(rho, a);
-      out.lathe(vadd(p, v3(0, -0.04, 0)), Y, [[0.2, 0], [0.33, 0.02], [0.36, 0.11], [0.3, 0.2], [0.2, 0.2], [0.2, 0.02]], 10, () => P.tire);
+      const mound = mounds[i % mounds.length];
+      const angle = hash(i, seed, 9) * Math.PI * 2;
+      const reach = mound.r * (0.15 + 0.45 * hash(i, seed, 8));
+      const x = mound.x + reach * Math.cos(angle);
+      const z = mound.z + reach * Math.sin(angle);
+      const rho = Math.min(0.85, Math.hypot(x, z));
+      const a = Math.atan2(z, x);
+      const n = normalAt(rho, a);
+      out.lathe(vadd(surface(rho, a), vscale(n, -0.06)), n, [[0.2, 0], [0.33, 0.02], [0.36, 0.11], [0.3, 0.2], [0.2, 0.2], [0.2, 0.02]], 10, () => P.tire);
     }
   }
   return out.result();
@@ -2058,34 +2090,54 @@ function buildExcavator(lod) {
     out.beam(v3(1.3, deck + 1.2, zc + 1.9), v3(1.3, deck + 1.55, zc + 1.9), 0.04, 0.04, P.metal);
     out.beam(v3(1.3, deck + 1.55, zc + 0.28), v3(1.3, deck + 1.55, zc + 1.92), 0.04, 0.04, P.metal);
   }
-  // Boom: a banana from its foot on the deck up over the knee to the tip.
+  // Boom: an arch (a quadratic curve) from its foot on the deck, rising
+  // steeply, over its crown and down to the tip; deepest at the crown.
   const bx = 0.02;
-  const boom = profileOf([["boom", roundedProfile([
-    [0.1, 1.48, 0.12], [0.45, 2.12, 0.12], [-2.3, 4.05, 0.7], [-4.22, 3.82, 0.12], [-4.12, 3.28, 0.12], [-2.25, 3.55, 0.55],
-  ], lod === 0 ? 3 : 1)]]);
+  const foot = [0.25, 1.75];
+  const crown = [-1.6, 5.2];
+  const tip = [-4.45, 3.05];
+  const curve = (t) => [0, 1].map((k) => (1 - t) * (1 - t) * foot[k] + 2 * t * (1 - t) * crown[k] + t * t * tip[k]);
+  const upward = (t) => {
+    const d = vnorm2([0, 1].map((k) => 2 * (1 - t) * (crown[k] - foot[k]) + 2 * t * (tip[k] - crown[k])));
+    const n = [-d[1], d[0]];
+    return n[1] < 0 ? [-n[0], -n[1]] : n;
+  };
+  const depth = (t) => 0.6 - 0.12 * t + 0.16 * Math.sin(Math.PI * t);
+  const edge = (t, side) => {
+    const c = curve(t);
+    const n = upward(t);
+    return [c[0] + side * n[0] * depth(t) / 2, c[1] + side * n[1] * depth(t) / 2];
+  };
+  const steps = lod === 0 ? 10 : 4;
+  const ts = Array.from({ length: steps + 1 }, (_, k) => k / steps);
+  const boom = profileOf([["boom", [...ts.map((t) => edge(t, 1)), ...ts.slice().reverse().map((t) => edge(t, -1))]]]);
   sweepAt(out, boom, 0.27, { boom: P.crane_red }, v3(bx, 0, 0), { r: 0.05, steps: 1, side: { part: P.crane_red } });
-  // Arm: hangs from the boom tip with its heel above it; the bucket below.
-  const tip = [-4.12, 3.56];
-  const pin = [-4.42, 0.98];
+  // Arm: hangs from the boom tip, leaning back toward the machine, its heel
+  // above the tip; the bucket curled under it.
+  const pin = [-3.95, 0.95];
   const along = vnorm2([pin[0] - tip[0], pin[1] - tip[1]]);
   const heel = [tip[0] - along[0] * 0.7, tip[1] - along[1] * 0.7];
   sweepAt(out, stripProfile("arm", heel, pin, 0.55, 0.32), 0.2, { arm: P.crane_red }, v3(bx, 0, 0), { r: 0.04, steps: 1, side: { part: P.crane_red } });
   // Bucket, curled: the shell round the front and under, its teeth pointing
   // back toward the machine on the ground; the open mouth faces up and back.
+  const at = (dz, dy) => [pin[0] + dz, pin[1] + dy];
   const bucket = profileOf([
-    ["mouth", [[-4.1, 1.22]]],
-    ["shell", [[-4.72, 1.24], ...arcPts(-4.45, 0.55, 0.5, 125, 275, lod === 0 ? 6 : 3), [-3.85, 0.03]]],
+    ["mouth", [at(0.32, 0.24)]],
+    ["shell", [at(-0.3, 0.26), ...arcPts(pin[0] - 0.03, pin[1] - 0.43, 0.5, 125, 275, lod === 0 ? 6 : 3), at(0.57, -0.93)]],
   ]);
   sweepAt(out, bucket, 0.55, { mouth: P.gravel, shell: P.crane_red }, v3(bx, 0, 0), { r: 0.03, steps: 1, side: { part: P.crane_red } });
   if (lod === 0) {
-    for (const x of [-0.39, -0.13, 0.13, 0.39]) out.aabb([bx + x - 0.045, 0.01, -3.9], [bx + x + 0.045, 0.1, -3.74], P.metal);
-    // Boom rams from the house front up under the boom; the arm ram over the
-    // knee to the heel; the bucket ram down the arm's back to the links.
-    for (const s of [1, -1]) ram(out, v3(bx + s * 0.36, 1.32, 0.15), v3(bx + s * 0.36, 3.02, -1.55), 0.085, P.crane_red);
-    out.aabb([bx - 0.1, 3.3, -1.58], [bx + 0.1, 3.82, -1.26], P.crane_red);
-    ram(out, v3(bx, 3.74, -1.42), v3(bx, heel[1] + 0.2, heel[0] + 0.12), 0.08, P.crane_red);
-    ram(out, v3(bx, heel[1] - 0.05, heel[0] + 0.32), v3(bx, 1.52, -4.12), 0.07, P.crane_red);
-    for (const s of [1, -1]) out.beam(v3(bx + s * 0.24, 1.55, -4.15), v3(bx + s * 0.24, 1.16, -4.12), 0.06, 0.12, P.crane_red);
+    for (const x of [-0.39, -0.13, 0.13, 0.39]) out.aabb([bx + x - 0.045, 0.01, pin[0] + 0.52], [bx + x + 0.045, 0.1, pin[0] + 0.68], P.metal);
+    // Boom rams from the house front up under the boom; the arm ram from a
+    // bracket on the boom's back over the crown to the heel; the bucket ram
+    // down the arm's back to the links.
+    const under = edge(0.35, -1);
+    for (const s of [1, -1]) ram(out, v3(bx + s * 0.36, 1.32, 0.15), v3(bx + s * 0.36, under[1] - 0.05, under[0]), 0.085, P.crane_red);
+    const back = edge(0.45, 1);
+    out.aabb([bx - 0.1, back[1] - 0.2, back[0] - 0.16], [bx + 0.1, back[1] + 0.22, back[0] + 0.16], P.crane_red);
+    ram(out, v3(bx, back[1] + 0.2, back[0]), v3(bx, heel[1] + 0.22, heel[0] + 0.06), 0.08, P.crane_red);
+    ram(out, v3(bx, heel[1] - 0.05, heel[0] + 0.32), v3(bx, pin[1] + 0.55, pin[0] + 0.3), 0.07, P.crane_red);
+    for (const s of [1, -1]) out.beam(v3(bx + s * 0.24, pin[1] + 0.57, pin[0] + 0.27), v3(bx + s * 0.24, pin[1] + 0.18, pin[0] + 0.3), 0.06, 0.12, P.crane_red);
   }
   return out.result();
 }
@@ -2313,6 +2365,66 @@ function buildDeckEquipment(lod) {
   return out.result();
 }
 
+// ---------------------------------------------------------------- pole flag
+// A flag on a slim pole: the pole a galvanised tube one metre tall that the
+// runtime stretches to the row's height, a cap for its top, and the flag
+// (1.5 x 0.9 m) flying along +X from the pole, waved and drooping a little.
+// The flag's UV is a texture coordinate into the pole-flag texture (the upper
+// half has SELF STORAGE on its white band, the lower half is plain), not a
+// part: the runtime draws it with its own material.
+export const POLE_FLAG = Object.freeze({ radius: 0.045, flag_w: 1.5, flag_h: 0.9 });
+function buildFlagPole(lod) {
+  const out = new YardBuilder(lod);
+  out.cylinder(v3(0, 0, 0), Y, POLE_FLAG.radius, 1, lod === 0 ? 10 : 6, P.metal, { caps: false });
+  return out.result();
+}
+
+function buildFlagCap(lod) {
+  const out = new YardBuilder(lod);
+  out.lathe(v3(0, 0, 0), Y, [[0, -0.02], [0.055, -0.02], [0.055, 0.02], [0.04, 0.06], [0, 0.08]], lod === 0 ? 10 : 6, () => P.metal);
+  return out.result();
+}
+
+function buildFlag(text, lod) {
+  const columns = lod === 0 ? 12 : 3;
+  const rows = lod === 0 ? 4 : 1;
+  const { flag_w: w, flag_h: h, radius } = POLE_FLAG;
+  const at = (s, t) => v3(
+    radius + 0.01 + s * w * (1 - 0.04 * s),
+    -t * h - 0.12 * s * s,
+    0.1 * Math.sin(Math.PI * s * 1.6) * Math.pow(s, 0.6) + 0.02 * Math.sin(Math.PI * t) * s,
+  );
+  // Half a texel in from the half's edges, so mipmaps keep the two flags apart.
+  const v0 = text ? 1 / 512 : 0.5 + 1 / 512;
+  const v1 = text ? 0.5 - 1 / 512 : 1 - 1 / 512;
+  const positions = [];
+  const normals = [];
+  const uvs = [];
+  const indices = [];
+  for (let j = 0; j <= rows; j += 1) {
+    for (let i = 0; i <= columns; i += 1) {
+      const s = i / columns;
+      const t = j / rows;
+      const e = 1e-3;
+      const ds = vsub(at(Math.min(1, s + e), t), at(Math.max(0, s - e), t));
+      const dt = vsub(at(s, Math.min(1, t + e)), at(s, Math.max(0, t - e)));
+      let n = vnorm(vcross(ds, dt));
+      if (n[2] < 0) n = vscale(n, -1);
+      positions.push(...at(s, t));
+      normals.push(...n);
+      uvs.push(s, v0 + t * (v1 - v0));
+    }
+  }
+  const index = (i, j) => j * (columns + 1) + i;
+  for (let j = 0; j < rows; j += 1) {
+    for (let i = 0; i < columns; i += 1) {
+      // Counterclockwise seen from +Z (the face the normals take).
+      indices.push(index(i, j), index(i, j + 1), index(i + 1, j + 1), index(i, j), index(i + 1, j + 1), index(i + 1, j));
+    }
+  }
+  return { positions, normals, uvs, indices };
+}
+
 // ---------------------------------------------------------------- barges and cranes
 // A deck barge hull module: the box between the rakes (mid, 1 m long and
 // 1 m wide, scaled per instance along X and Z), or a raked end (1 m wide,
@@ -2510,6 +2622,10 @@ function kitEntries() {
   add("conveyor_module", buildConveyorModule);
   add("conveyor_leg", buildConveyorLeg);
   add("water_barrier", buildWaterBarrier);
+  add("pole_flag_pole", buildFlagPole);
+  add("pole_flag_cap", buildFlagCap);
+  add("pole_flag_text", (lod) => buildFlag(true, lod));
+  add("pole_flag_plain", (lod) => buildFlag(false, lod));
   add("crane_mats", buildCraneMats);
   add("excavator", buildExcavator);
   add("wheel_loader", buildWheelLoader);

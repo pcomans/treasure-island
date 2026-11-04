@@ -186,6 +186,7 @@
       "parked_car": 116,
       "planting_slot": 0,
       "plastic_berm": 0,
+      "pole_flag": 0,
       "post_box": 1,
       "power_line": 44,
       "power_pole": 245,
@@ -1862,6 +1863,13 @@
     },
     "plastic_berm": {
       "footprint_radius_m": 3,
+      "geometry": "point",
+      "layer": "clutter",
+      "overhead": false,
+      "yaw_rule": "seeded"
+    },
+    "pole_flag": {
+      "footprint_radius_m": 0.075,
       "geometry": "point",
       "layer": "clutter",
       "overhead": false,

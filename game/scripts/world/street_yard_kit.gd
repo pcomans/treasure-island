@@ -16,6 +16,9 @@ extends RefCounted
 
 const KIT_SCENE := preload("res://game/resources/models/street/street_yard_kit.glb")
 const SHADER := preload("res://game/resources/materials/world/street/street_yard.gdshader")
+## The pole flag's faces (upper half SELF STORAGE, lower half plain), drawn
+## with their own material.
+const FLAG_TEXTURE := preload("res://game/resources/textures/world/street/street_pole_flag.png")
 const SLOTS := 64
 ## Detail levels: the near mesh within LOD_NEAR_M of its render cell's centre,
 ## the far mesh beyond. Yard props are big and stand in dense blocks, so they
@@ -99,6 +102,7 @@ const COLOURS := {
 	"yellow": Color(0.86, 0.64, 0.1),
 	"bin_blue": Color(0.36, 0.5, 0.66),
 	"concrete_light": Color(0.7, 0.69, 0.66),
+	"deck_red": Color(0.45, 0.27, 0.22),
 	"concrete_dark": Color(0.48, 0.48, 0.47),
 	"door_grey": Color(0.6, 0.61, 0.62),
 	"machine_red": Color(0.7, 0.13, 0.09),
@@ -124,6 +128,7 @@ const PROPS := {
 	"material_pile": {"range_m": 1500.0, "variants": ["gravel", "rubble", "soil", "tarp", "ridge"]},
 	"plastic_berm": {"range_m": 1500.0, "variants": ["low", "high"]},
 	"crane_barge": {"range_m": 2500.0, "variants": ["crane", "deck", "pier_crane"]},
+	"pole_flag": {"range_m": 600.0, "variants": ["flag"]},
 }
 ## Plan sizes (x, z) and heights of the fixed-size props, as yardPropFootprint
 ## gives them: a vehicle's collision box is its plan rectangle to its height.
@@ -176,6 +181,7 @@ const WEATHERING := {
 }
 
 var _material: ShaderMaterial
+var _flag_material: StandardMaterial3D
 var _meshes: Dictionary = {}
 var _hulls: Dictionary = {}
 var _colour_index: Dictionary = {}
@@ -193,6 +199,12 @@ func _init() -> void:
 	_material.resource_name = "street_yard"
 	_material.shader = SHADER
 	_material.set_shader_parameter("palette", ImageTexture.create_from_image(image))
+	_flag_material = StandardMaterial3D.new()
+	_flag_material.resource_name = "street_yard_flag"
+	_flag_material.albedo_texture = FLAG_TEXTURE
+	_flag_material.roughness = 0.85
+	_flag_material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	_flag_material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
 	var scene := KIT_SCENE.instantiate()
 	for node: Node in scene.find_children("*", "MeshInstance3D", true, false):
 		_meshes[str(node.name)] = (node as MeshInstance3D).mesh
@@ -232,7 +244,7 @@ static func _unit(seed: int, index: int) -> float:
 
 
 ## What to build for one placed row: {ok, pieces: [{mesh_key, meshes: [near,
-## far], transform, custom}], shapes: [{shape, transform}], range_m,
+## far], transform, custom, material?}], shapes: [{shape, transform}], range_m,
 ## lod_near_m, cell_m, shadow}, or {ok: false, message}. default_seed varies the
 ## weathering when the row has no seed.
 func pieces(prop: String, params: Dictionary, default_seed: int = 0) -> Dictionary:
@@ -264,6 +276,8 @@ func pieces(prop: String, params: Dictionary, default_seed: int = 0) -> Dictiona
 			error = _barge(result, variants[variant], params, level, seed)
 		"equipment":
 			error = _equipment(result, variant, variants[variant], params, level, seed)
+		"pole_flag":
+			error = _pole_flag(result, params, seed)
 		_:
 			error = _vehicle(result, prop, variant, variants[variant], params, level, seed)
 	if error != "":
@@ -279,12 +293,16 @@ func _meshes_for(name: String) -> Array:
 	return [near, far]
 
 
-## Adds one piece; "" or why it can't.
-func _add(result: Dictionary, name: String, transform: Transform3D, custom: Color) -> String:
+## Adds one piece; "" or why it can't. A piece drawn with another material
+## than the kit's (a flag) names it.
+func _add(result: Dictionary, name: String, transform: Transform3D, custom: Color, piece_material: Material = null) -> String:
 	var meshes := _meshes_for(name)
 	if meshes.is_empty():
 		return "the yard kit has no meshes for %s" % name
-	(result.pieces as Array).append({"mesh_key": name, "meshes": meshes, "transform": transform, "custom": custom})
+	var piece := {"mesh_key": name, "meshes": meshes, "transform": transform, "custom": custom}
+	if piece_material != null:
+		piece["material"] = piece_material
+	(result.pieces as Array).append(piece)
 	return ""
 
 
@@ -558,6 +576,24 @@ func _conveyor(result: Dictionary, length_m: float, level: float, seed: int) -> 
 	return error
 
 
+# ---------------------------------------------------------------- pole flag
+
+## A flag on a slim pole: the pole stretched to height_m, its cap, and the flag
+## hung from just under the top, flying along +X; the pole is the collision.
+func _pole_flag(result: Dictionary, params: Dictionary, seed: int) -> String:
+	var height := clampf(float(params.get("height_m", 6.5)), 5.0, 8.0)
+	var galvanised := _custom("grey", "grey", "grey", 0.2, seed)
+	var error := _add(result, "pole_flag_pole", Transform3D(Basis.IDENTITY.scaled(Vector3(1, height, 1)), Vector3.ZERO), galvanised)
+	error += _add(result, "pole_flag_cap", Transform3D(Basis.IDENTITY, Vector3(0, height, 0)), galvanised)
+	var face := "pole_flag_plain" if str(params.get("text", "self_storage")) == "none" else "pole_flag_text"
+	error += _add(result, face, Transform3D(Basis.IDENTITY, Vector3(0, height - 0.15, 0)), galvanised, _flag_material)
+	var pole := CylinderShape3D.new()
+	pole.radius = 0.06
+	pole.height = height
+	(result.shapes as Array).append({"shape": pole, "transform": Transform3D(Basis.IDENTITY, Vector3(0, height * 0.5, 0))})
+	return error
+
+
 # ---------------------------------------------------------------- barges
 
 ## A barge (hull modules, deck cargo, crane, deckhouse) or the pier crane. No
@@ -568,7 +604,11 @@ func _barge(result: Dictionary, variant: String, params: Dictionary, level: floa
 		return _add(result, "crawler_crane_pier", Transform3D.IDENTITY, red)
 	var length := clampf(float(params.get("length_m", 40.0 if variant == "crane" else 36.0)), 15.0, 100.0)
 	var width := clampf(float(params.get("width_m", 30.0 if variant == "crane" else 18.0)), 8.0, 40.0)
-	var hull := _custom(_colour(params, "hull", "dark_grey"), _colour(params, "deck", "dark_grey"), "dark_grey", level, seed)
+	# A red deck is the dull rust-brown red of the north barges (May 2026 aerial).
+	var deck_colour := _colour(params, "deck", "dark_grey")
+	if deck_colour == "red":
+		deck_colour = "deck_red"
+	var hull := _custom(_colour(params, "hull", "dark_grey"), deck_colour, "dark_grey", level, seed)
 	var middle := length - 2.0 * BARGE_RAKE_M
 	var error := _add(result, "barge_end_neg", Transform3D(Basis.IDENTITY.scaled(Vector3(width, 1, 1)), Vector3(0, 0, -middle / 2.0)), hull)
 	error += _add(result, "barge_mid", Transform3D(Basis.IDENTITY.scaled(Vector3(width, 1, middle)), Vector3.ZERO), hull)

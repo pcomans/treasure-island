@@ -67,3 +67,15 @@ the street-fences work notes.
 | `street_fence_barbed.png` | the three strands of barbed wire on the arms of industrial chain-link, drawn like the chain-link; a crop of three barb repeats, alpha from brightness | three strands of galvanised barbed wire, flat-on, on solid black |
 | `street_fence_screen.png` | construction windscreen fabric, tinted black or dark green by the kit | seamless grey woven polypropylene windscreen |
 | `street_fence_wood.png` | the wood board fence: six boards (0.84 m) per tile | seamless weathered cedar privacy fence boards |
+
+## Yard kit
+
+`street_pole_flag.png` (512 x 512) is the face of the yard kit's pole flag
+(`game/scripts/world/street_yard_kit.gd`, drawn with its own double-sided material,
+so the back shows the text mirrored). Not generated: drawn 2026-11-04 with
+ImageMagick as three horizontal bands, red, white and blue, after the two flags
+above the 9th St storage yard (Google Street View, Sep 2025). The upper half
+carries SELF STORAGE in blue DejaVu Sans Bold capitals on the white band, as
+legible in that photo; the lower half is plain. Each flag is drawn at its 5:3
+shape (480 x 288) and the pair is packed into the square. The drawing script is
+kept outside Git with the clutter-kit work notes.
