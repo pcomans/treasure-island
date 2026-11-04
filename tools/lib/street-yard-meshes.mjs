@@ -860,10 +860,11 @@ function buildBermEnd(variant, dir, lod) {
     if (lod > 0) return 0;
     // The ring the cap shares with a middle module (or the other cap) takes the
     // middle's wrinkle at its end, fading toward the tip, so they meet without
-    // a gap; the cap's own wrinkle grows toward the tip.
+    // a gap; the cap's own wrinkle swells and fades again before the tip,
+    // which stays under 45 degrees.
     const t = Math.abs(z) / cap;
     const shared = bermWrinkle(lod)(i, BERM_MODULE / 2) * Math.max(0, 1 - t / 0.52);
-    return shared + (t < 0.95 ? 0.025 * Math.sin(5 * z + hash(i, 3) * 6) * t : 0);
+    return shared + 0.025 * Math.sin(5 * z + hash(i, 3) * 6) * Math.sin(Math.PI * t);
   });
   gridSurface(out, grid, P.plastic);
   return out.result();
@@ -876,19 +877,30 @@ function buildBermEnd(variant, dir, lod) {
 // tyres (Avenue N, Nov 2025).
 export const PILE_SPECS = Object.freeze({
   gravel: { x: 8, z: 8, h: 3, part: "gravel", rough: 0.05 },
-  rubble: { x: 12, z: 12, h: 4.5, part: "rubble", rough: 0.16, lumps: 0.18, chunks: [260, 60], fit: 0.92 },
+  rubble: { x: 12, z: 12, h: 4.5, part: "rubble", rough: 0.16, lumps: 0.18, chunks: [260, 60] },
   soil: { x: 12, z: 12, h: 4, part: "earth", rough: 0.1 },
-  tarp: { x: 6, z: 8, h: 2.2, part: "tarp", rough: 0.04, flat: true, folds: 0.24, fit: 0.86 },
+  tarp: { x: 6, z: 8, h: 2.2, part: "tarp", rough: 0.04, flat: true, folds: 0.24 },
 });
+// A heap's surface stands no steeper than its angle of repose, about 39
+// degrees (a slope of PILE_REPOSE), so the floor it is walked on (heap floors,
+// below) lies on it; a chunk of concrete or a tyre stands at most
+// PILE_CHUNK_PROUD_M above it (within the floor's FLOOR_LOOSE_M).
+const PILE_REPOSE = 0.82;
+const PILE_CHUNK_PROUD_M = 0.09;
 
 // A broken concrete chunk: a box with its corners pushed about, faceted, its
-// buried bottom left out.
-function chunk(out, center, axes, half, seed, part, ao) {
+// buried bottom left out. With `bed` ({proud, ground(x, z)}) it sinks straight
+// down until no corner stands more than `proud` above the ground under it.
+function chunk(out, center, axes, half, seed, part, ao, bed = null) {
   const [ax, ay, az] = axes;
-  const corners = [];
+  let corners = [];
   for (let i = 0; i < 8; i += 1) {
     const jitter = (k) => 1 + 0.9 * (hash(seed, i, k) - 0.5);
     corners.push(vadd(center, vadd(vscale(ax, (i & 1 ? 1 : -1) * half[0] * jitter(0)), vadd(vscale(ay, (i & 2 ? 1 : -1) * half[1] * jitter(1)), vscale(az, (i & 4 ? 1 : -1) * half[2] * jitter(2))))));
+  }
+  if (bed) {
+    const proud = Math.max(...corners.map((corner) => corner[1] - bed.ground(corner[0], corner[2])));
+    if (proud > bed.proud) corners = corners.map((corner) => vadd(corner, v3(0, bed.proud - proud, 0)));
   }
   for (const [a, b, c, d] of [[0, 2, 6, 4], [1, 5, 7, 3], [2, 3, 7, 6], [0, 1, 3, 2], [4, 6, 7, 5]]) {
     for (const [i, j, k] of [[a, b, c], [a, c, d]]) {
@@ -933,6 +945,123 @@ function noise2(x, z, seed) {
   const tx = fx * fx * (3 - 2 * fx);
   const tz = fz * fz * (3 - 2 * fz);
   return lerp(lerp(hash(i, j, seed), hash(i + 1, j, seed), tx), lerp(hash(i, j + 1, seed), hash(i + 1, j + 1, seed), tx), tz);
+}
+
+// A heap settled to its angle of repose: height(rho, a) over a polar grid
+// (rho 0..1 from the middle to the foot, angle a), plan(rho, a) its plan
+// position in metres. The heap is lowered wherever it would rise more steeply
+// than `slope` from a neighbouring grid point (the largest surface under it
+// that does not), and read back between grid points.
+const REPOSE_RINGS = 48;
+const REPOSE_SEGMENTS = 192;
+function repose(height, plan, slope) {
+  const [R, S] = [REPOSE_RINGS, REPOSE_SEGMENTS];
+  const y = [];
+  const xz = [];
+  for (let i = 0; i <= R; i += 1) {
+    for (let k = 0; k < S; k += 1) {
+      const a = (2 * Math.PI * k) / S;
+      y.push(height(i / R, a));
+      xz.push(plan(i / R, a));
+    }
+  }
+  const at = (i, k) => i * S + (((k % S) + S) % S);
+  const links = [];
+  for (let i = 0; i <= R; i += 1) {
+    for (let k = 0; k < S; k += 1) {
+      for (const [di, dk] of [[0, 1], [1, -1], [1, 0], [1, 1]]) {
+        if (i + di > R) continue;
+        const [p, q] = [at(i, k), at(i + di, k + dk)];
+        links.push([p, q, slope * Math.hypot(xz[p][0] - xz[q][0], xz[p][1] - xz[q][1])]);
+      }
+    }
+  }
+  for (let pass = 0; pass < 4 * (R + S); pass += 1) {
+    let lowered = false;
+    for (const list of [links, [...links].reverse()]) {
+      for (const [p, q, rise] of list) {
+        if (y[p] > y[q] + rise + 1e-9) [y[p], lowered] = [y[q] + rise, true];
+        else if (y[q] > y[p] + rise + 1e-9) [y[q], lowered] = [y[p] + rise, true];
+      }
+    }
+    if (!lowered) break;
+  }
+  return (rho, a) => {
+    const u = Math.min(R, Math.max(0, rho * R));
+    const v = ((((a / (2 * Math.PI)) % 1) + 1) % 1) * S;
+    const [i, k] = [Math.min(R - 1, Math.floor(u)), Math.floor(v)];
+    const [fu, fv] = [u - i, v - k];
+    return lerp(lerp(y[at(i, k)], y[at(i, k + 1)], fv), lerp(y[at(i + 1, k)], y[at(i + 1, k + 1)], fv), fu);
+  };
+}
+
+// The top of a mesh over a plan point (x, z): the highest of its triangles
+// over it (each lowered by its entry in `drops`, if given), or `none` where
+// there is none.
+function planTop(positions, indices, none = 0, cell = 0.5, drops = null) {
+  const bins = new Map();
+  const triangles = [];
+  for (let t = 0; t < indices.length; t += 3) {
+    const corners = [0, 1, 2].map((k) => positions.slice(indices[t + k] * 3, indices[t + k] * 3 + 3));
+    const det = (corners[1][2] - corners[2][2]) * (corners[0][0] - corners[2][0]) + (corners[2][0] - corners[1][0]) * (corners[0][2] - corners[2][2]);
+    if (Math.abs(det) < 1e-12) continue;
+    triangles.push([corners, det, drops ? drops[t / 3] : 0]);
+    const xs = corners.map((corner) => corner[0]);
+    const zs = corners.map((corner) => corner[2]);
+    for (let i = Math.floor(Math.min(...xs) / cell); i <= Math.floor(Math.max(...xs) / cell); i += 1) {
+      for (let j = Math.floor(Math.min(...zs) / cell); j <= Math.floor(Math.max(...zs) / cell); j += 1) {
+        const key = `${i},${j}`;
+        if (!bins.has(key)) bins.set(key, []);
+        bins.get(key).push(triangles.length - 1);
+      }
+    }
+  }
+  return (x, z) => {
+    let top = -Infinity;
+    for (const index of bins.get(`${Math.floor(x / cell)},${Math.floor(z / cell)}`) ?? []) {
+      const [[a, b, c], det, drop] = triangles[index];
+      const l1 = ((b[2] - c[2]) * (x - c[0]) + (c[0] - b[0]) * (z - c[2])) / det;
+      const l2 = ((c[2] - a[2]) * (x - c[0]) + (a[0] - c[0]) * (z - c[2])) / det;
+      const l3 = 1 - l1 - l2;
+      if (l1 < -1e-9 || l2 < -1e-9 || l3 < -1e-9) continue;
+      top = Math.max(top, l1 * a[1] + l2 * b[1] + l3 * c[1] - drop);
+    }
+    return top === -Infinity ? none : top;
+  };
+}
+
+// A height over the plan (|x| <= hx, |z| <= hz) with its creases softened: a
+// binomial blur over a SOFTEN_CELL_M grid, which keeps it no steeper than it
+// was, read back between grid points.
+const SOFTEN_CELL_M = 0.1;
+function softened(height, hx, hz) {
+  const [nx, nz] = [Math.ceil(hx / SOFTEN_CELL_M) + 2, Math.ceil(hz / SOFTEN_CELL_M) + 2];
+  const columns = 2 * nx + 1;
+  let grid = [];
+  for (let j = -nz; j <= nz; j += 1) for (let i = -nx; i <= nx; i += 1) grid.push(height(i * SOFTEN_CELL_M, j * SOFTEN_CELL_M));
+  const taps = [1 / 16, 4 / 16, 6 / 16, 4 / 16, 1 / 16];
+  for (const [di, dj] of [[1, 0], [0, 1]]) {
+    const out = grid.slice();
+    for (let j = 0; j <= 2 * nz; j += 1) {
+      for (let i = 0; i <= 2 * nx; i += 1) {
+        let sum = 0;
+        for (let t = -2; t <= 2; t += 1) {
+          const [ii, jj] = [Math.min(2 * nx, Math.max(0, i + t * di)), Math.min(2 * nz, Math.max(0, j + t * dj))];
+          sum += taps[t + 2] * grid[jj * columns + ii];
+        }
+        out[j * columns + i] = sum;
+      }
+    }
+    grid = out;
+  }
+  return (x, z) => {
+    const u = Math.min(2 * nx - 1e-9, Math.max(0, x / SOFTEN_CELL_M + nx));
+    const v = Math.min(2 * nz - 1e-9, Math.max(0, z / SOFTEN_CELL_M + nz));
+    const [i, j] = [Math.floor(u), Math.floor(v)];
+    const [fu, fv] = [u - i, v - j];
+    const at = (a, b) => grid[b * columns + a];
+    return lerp(lerp(at(i, j), at(i + 1, j), fu), lerp(at(i, j + 1), at(i + 1, j + 1), fu), fv);
+  };
 }
 
 // A pile: a radial mound with an irregular outline (shape seeds 0..2), fitted
@@ -989,9 +1118,10 @@ function buildPile(material, shape, lod) {
   const sy = (spec.chunks ? spec.h - 0.25 : spec.h) / peak;
   // A tarp's hem lies loose on the ground beyond the mound, wider in places.
   const hemWidth = (a) => 0.07 + 0.08 * ringNoise(a, 0.3, 14, seed + 13) + 0.04 * fold(a);
+  const edge = spec.folds ? 0.035 : 0;
   const raw = (rho, a, hem = 0) => {
     const r = nominal * outline(a) * (rho + hem * hemWidth(a));
-    const y = hem > 0 ? (hem < 1 ? 0.035 : 0.008) : rho >= 1 ? (spec.folds ? 0.035 : 0) : heightAt(rho, a) * sy;
+    const y = hem > 0 ? (hem < 1 ? 0.035 : 0.008) : rho >= 1 ? edge : heightAt(rho, a) * sy;
     return v3(r * Math.cos(a), y, r * Math.sin(a) * elongation);
   };
   // Fit the outermost ring to the plan (sampled finer than any level's mesh).
@@ -1003,14 +1133,26 @@ function buildPile(material, shape, lod) {
     maxX = Math.max(maxX, Math.abs(p[0]));
     maxZ = Math.max(maxZ, Math.abs(p[2]));
   }
-  // (A heap whose foot is steep fits a little inside its plan, so the foot of
-  // its collision hull, which reaches past it, still keeps to the plan.)
-  const fit = spec.fit ?? 0.98;
-  const sx = (spec.x / 2) * fit / maxX;
-  const sz = (spec.z / 2) * fit / maxZ;
+  const sx = (spec.x / 2) * 0.98 / maxX;
+  const sz = (spec.z / 2) * 0.98 / maxZ;
+  // The heap's height over a plan point: settled to its angle of repose over
+  // the fitted plan, and its creases softened (so the floor it is walked on
+  // follows it closely).
+  const settled = repose((rho, a) => raw(rho, a)[1], (rho, a) => {
+    const p = raw(rho, a);
+    return [p[0] * sx, p[2] * sz];
+  }, PILE_REPOSE);
+  const heapAt = softened((x, z) => {
+    const u = x / sx;
+    const w = z / (sz * elongation);
+    const a = Math.atan2(w, u);
+    const rho = Math.hypot(u, w) / (nominal * outline(a));
+    return rho >= 1 ? edge : settled(rho, a);
+  }, spec.x / 2, spec.z / 2);
   const surface = (rho, a, hem = 0) => {
     const p = raw(rho, a, hem);
-    return v3(p[0] * sx, p[1], p[2] * sz);
+    const [x, z] = [p[0] * sx, p[2] * sz];
+    return v3(x, hem > 0 || rho >= 1 ? p[1] : heapAt(x, z), z);
   };
   const rows = [];
   for (let ring = 0; ring <= rings; ring += 1) {
@@ -1020,14 +1162,17 @@ function buildPile(material, shape, lod) {
   if (spec.folds) for (const hem of lod === 0 ? [0.55, 1] : [1]) rows.push((a) => surface(1, a, hem));
   const grid = rows.map((row) => Array.from({ length: segments + 1 }, (_, k) => row((2 * Math.PI * (k % segments)) / segments)));
   gridSurface(out, grid, P[spec.part]);
+  // The visible surface built so far, which loose pieces are bedded into.
+  const bodyTop = planTop(out.positions, out.indices, edge);
   const normalAt = (rho, a) => {
     const n = vnorm(vcross(vsub(surface(Math.min(1, rho + 0.02), a), surface(Math.max(0, rho - 0.02), a)), vsub(surface(rho, a + 0.02), surface(rho, a - 0.02))));
     return n[1] < 0 ? vscale(n, -1) : n;
   };
   if (spec.chunks) {
-    // Broken concrete all over, bedded about a third deep: area-weighted
-    // positions, mostly small pieces with a few slabs; the far level keeps
-    // the biggest.
+    // Broken concrete all over, bedded at least a third deep (the biggest
+    // deeper, so none stands more than PILE_CHUNK_PROUD_M proud):
+    // area-weighted positions, mostly small pieces with a few slabs; the far
+    // level keeps the biggest.
     const count = spec.chunks[0];
     const keep = spec.chunks[lod];
     const pieces = [];
@@ -1052,13 +1197,16 @@ function buildPile(material, shape, lod) {
       const az = vcross(ax, ay);
       const half = [size * (0.75 + 0.4 * hash(i, 6)), size * (0.42 + 0.25 * hash(i, 8)), size * (0.55 + 0.35 * hash(i, 7))];
       const center = vadd(surface(rho, a), vscale(n, half[1] * 0.25));
-      chunk(out, center, [ax, ay, az], half, seed * 1000 + i, P.concrete, 0.72 + 0.28 * hash(i, seed, 9));
+      chunk(out, center, [ax, ay, az], half, seed * 1000 + i, P.concrete, 0.72 + 0.28 * hash(i, seed, 9), { proud: PILE_CHUNK_PROUD_M, ground: bodyTop });
     }
   }
   if (lod === 0 && spec.folds) {
-    // Tyres holding the sheeting down on the mounds, square to the sheet and
-    // bedded a little into it.
-    for (let i = 0; i < 7; i += 1) {
+    // Tyres holding the sheeting down on the mounds, square to the sheet
+    // where it is no steeper than about 20 degrees, bedded so none stands
+    // more than PILE_CHUNK_PROUD_M above the sheet under it.
+    const profile = [[0.2, 0], [0.33, 0.02], [0.36, 0.11], [0.3, 0.2], [0.2, 0.2], [0.2, 0.02]];
+    let tyres = 0;
+    for (let i = 0; i < 40 && tyres < 7; i += 1) {
       const mound = mounds[i % mounds.length];
       const angle = hash(i, seed, 9) * Math.PI * 2;
       const reach = mound.r * (0.15 + 0.45 * hash(i, seed, 8));
@@ -1067,7 +1215,21 @@ function buildPile(material, shape, lod) {
       const rho = Math.min(0.85, Math.hypot(x, z));
       const a = Math.atan2(z, x);
       const n = normalAt(rho, a);
-      out.lathe(vadd(surface(rho, a), vscale(n, -0.06)), n, [[0.2, 0], [0.33, 0.02], [0.36, 0.11], [0.3, 0.2], [0.2, 0.2], [0.2, 0.02]], 10, () => P.tire);
+      if (n[1] < 0.94) continue;
+      const u = vnorm(vcross(n, X));
+      const w = vcross(n, u);
+      let origin = vadd(surface(rho, a), vscale(n, -0.06));
+      let proud = -Infinity;
+      for (let k = 0; k < 36; k += 1) {
+        const t = (2 * Math.PI * k) / 36;
+        for (const [r, along] of profile) {
+          const point = vadd(origin, vadd(vscale(n, along), vadd(vscale(u, r * Math.cos(t)), vscale(w, r * Math.sin(t)))));
+          proud = Math.max(proud, point[1] - bodyTop(point[0], point[2]));
+        }
+      }
+      if (proud > PILE_CHUNK_PROUD_M) origin = vadd(origin, v3(0, PILE_CHUNK_PROUD_M - proud, 0));
+      out.lathe(origin, n, profile, 10, () => P.tire);
+      tyres += 1;
     }
   }
   return out.result();
@@ -2577,6 +2739,12 @@ function appendMesh(out, mesh, offset) {
 // A soil windrow module (4 m, the ends rounded like the berm's).
 const RIDGE_MODULE = 4;
 const RIDGE_PROFILE = Object.freeze([[-1.5, 0], [-1.05, 0.42], [-0.6, 0.82], [0, 1.0], [0.6, 0.82], [1.05, 0.42], [1.5, 0]]);
+// The middle's wrinkle along it (periodic over a module, so modules meet),
+// smaller toward the foot, so the foot stays under 45 degrees.
+function ridgeWrinkle(i, z, lod) {
+  if (lod > 0 || i === 0 || i === RIDGE_PROFILE.length - 1) return 0;
+  return 0.05 * RIDGE_PROFILE[i][1] ** 2 * Math.sin((2 * Math.PI * z) / RIDGE_MODULE * 2 + hash(i, 5) * 6);
+}
 function buildRidge(part, lod) {
   const out = new YardBuilder();
   const steps = lod === 0 ? 6 : 1;
@@ -2584,10 +2752,7 @@ function buildRidge(part, lod) {
   const grid = [];
   for (let k = 0; k <= steps; k += 1) {
     const z = -half + (RIDGE_MODULE * k) / steps;
-    grid.push(RIDGE_PROFILE.map(([x, y], i) => {
-      const w = lod === 0 && i > 0 && i < RIDGE_PROFILE.length - 1 ? 0.05 * Math.sin((2 * Math.PI * z) / RIDGE_MODULE * 2 + hash(i, 5) * 6) : 0;
-      return v3(x, y + w, z);
-    }));
+    grid.push(RIDGE_PROFILE.map(([x, y], i) => v3(x, y + ridgeWrinkle(i, z, lod), z)));
   }
   if (part === "mid") gridSurface(out, grid, P.earth);
   else {
@@ -2595,7 +2760,8 @@ function buildRidge(part, lod) {
     const fractions = lod === 0 ? [0, 0.35, 0.6, 0.8, 0.93, 1] : [0, 0.6, 1];
     const endGrid = fractions.map((f) => {
       const s = Math.sqrt(Math.max(0, 1 - f * f));
-      return RIDGE_PROFILE.map(([x, y]) => v3(x * Math.max(s, 0.001), y * Math.cos((Math.PI / 2) * f), dir * f * half));
+      // The ring it shares with a middle takes the middle's wrinkle, fading.
+      return RIDGE_PROFILE.map(([x, y], i) => v3(x * Math.max(s, 0.001), y * Math.cos((Math.PI / 2) * f) + ridgeWrinkle(i, half, lod) * Math.max(0, 1 - f / 0.6), dir * f * half));
     });
     gridSurface(out, endGrid, P.earth);
   }
@@ -2604,132 +2770,273 @@ function buildRidge(part, lod) {
 
 
 
-// ---------------------------------------------------------------- collision hulls
-// A heap's collision is a convex hull, and its top is walked on, so no face of
-// the hull may be steeper than 45 degrees (the player's floor limit is 48).
-// The hull is built over the visible (near) mesh's highest point in each
-// 0.25 m plan cell, plus a 45-degree slope from each down to the ground: a
-// cone round it ("cone") or, for a module that continues along Z (a berm or
-// windrow middle), the two slopes across it ("prism"). Every supporting plane
-// of that set is at most 45 degrees, and the hull holds the visible mesh, so
-// feet never sink into it; where the mesh is steeper than 45 degrees the hull
-// reaches a little past it at its foot.
-const HULL_CELL_M = 0.25;
-const HULL_SLOPE_RING = 12;
-// A heap that peaks in one point gets a small flat top instead: walking
-// straight over a single topmost vertex, the stock player stops dead on it.
-const HULL_PLATEAU_M = 0.35;
-const HULL_PLATEAU_DROP_M = 0.03;
+// ---------------------------------------------------------------- heap floors
+// A heap (a pile, or a berm or windrow module) is walked on, so it collides as
+// a floor laid over its visible (near) mesh: a height field over a grid on its
+// plan. Each grid point stands no lower than the visible surface near it less
+// FLOOR_SLOPE (43.5 degrees) for the distance, and any visible point still
+// above the floor's triangles lifts the triangle under it; so the floor follows
+// the heap wherever it is no steeper than that and bridges only what is
+// steeper. Loose pieces (concrete chunks and tyres, bedded no more than
+// FLOOR_LOOSE_M proud) may stand that much above it, as a foot beds into them.
+// Each cell takes the diagonal that keeps its triangles flatter, and any
+// triangle still steeper than 45 degrees (the player's floor limit is 48) is
+// eased by raising its lowest corner. The runtime collides with it as a
+// trimesh (<name>_floor).
+const FLOOR_CELL_M = 0.25;
+const FLOOR_SLOPE = 0.95;
+const FLOOR_LOOSE_M = 0.1;
+const FLOOR_SAMPLES = 4;
 
-// A convex hull of points: [{v: [i, j, k], n, d}] faces, outward normals.
-function convexHull(points) {
-  const sub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
-  const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
-  const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
-  const n = points.length;
-  let i1 = 0;
-  let best = 0;
-  for (let i = 1; i < n; i += 1) {
-    const d = dot(sub(points[i], points[0]), sub(points[i], points[0]));
-    if (d > best) [best, i1] = [d, i];
-  }
-  let i2 = 0;
-  best = 0;
-  for (let i = 0; i < n; i += 1) {
-    const c = cross(sub(points[i1], points[0]), sub(points[i], points[0]));
-    if (dot(c, c) > best) [best, i2] = [dot(c, c), i];
-  }
-  const normal = cross(sub(points[i1], points[0]), sub(points[i2], points[0]));
-  let i3 = 0;
-  best = 0;
-  for (let i = 0; i < n; i += 1) {
-    const d = Math.abs(dot(normal, sub(points[i], points[0])));
-    if (d > best) [best, i3] = [d, i];
-  }
-  const centre = [0, 1, 2].map((k) => (points[0][k] + points[i1][k] + points[i2][k] + points[i3][k]) / 4);
-  const face = (a, b, c) => {
-    let nn = cross(sub(points[b], points[a]), sub(points[c], points[a]));
-    if (dot(nn, sub(centre, points[a])) > 0) {
-      [b, c] = [c, b];
-      nn = nn.map((value) => -value);
-    }
-    const length = Math.hypot(...nn);
-    return { v: [a, b, c], n: nn.map((value) => value / length), d: dot(nn, points[a]) / length };
-  };
-  let faces = [face(0, i1, i2), face(0, i1, i3), face(0, i2, i3), face(i1, i2, i3)];
-  for (let p = 0; p < n; p += 1) {
-    const visible = faces.filter((f) => dot(f.n, points[p]) - f.d > 1e-7);
-    if (visible.length === 0) continue;
-    const edges = new Map();
-    for (const f of visible) {
-      for (let k = 0; k < 3; k += 1) {
-        const a = f.v[k];
-        const b = f.v[(k + 1) % 3];
-        if (edges.has(`${b},${a}`)) edges.delete(`${b},${a}`);
-        else edges.set(`${a},${b}`, [a, b]);
-      }
-    }
-    faces = faces.filter((f) => !visible.includes(f));
-    for (const [a, b] of edges.values()) faces.push(face(a, b, p));
-  }
-  return faces;
+// Grid positions from a to b, evenly spaced no more than FLOOR_CELL_M apart.
+function floorStations(a, b) {
+  const n = Math.max(1, Math.ceil((b - a) / FLOOR_CELL_M - 1e-9));
+  return Array.from({ length: n + 1 }, (_, i) => (i === n ? b : a + ((b - a) * i) / n));
 }
 
-// The collision hull of a heap from its near mesh, as a mesh of the hull's
-// faces (the runtime takes its points).
-function heapHull(mesh, mode) {
-  const p = mesh.positions;
-  const cells = new Map();
-  for (let i = 0; i < p.length; i += 3) {
-    const point = [p[i], Math.max(0, p[i + 1]), p[i + 2]];
-    const key = `${Math.floor(point[0] / HULL_CELL_M)},${Math.floor(point[2] / HULL_CELL_M)}`;
-    const held = cells.get(key);
-    if (!held || point[1] > held[1]) cells.set(key, point);
+// A floor over a rectilinear grid (ascending xs by zs) laid over `mesh`;
+// `fixed` ({row, heights}) holds one row of it to given heights, so it meets
+// the module beyond it exactly.
+function heapFloor(mesh, xs, zs, fixed = null) {
+  const drops = [];
+  for (let t = 0; t < mesh.indices.length; t += 3) {
+    const part = Math.floor(mesh.uvs[mesh.indices[t] * 2] * YARD_KIT_PART_SLOTS);
+    drops.push(part === P.concrete || part === P.tire ? FLOOR_LOOSE_M : 0);
   }
-  const tops = [...cells.keys()].sort().map((key) => cells.get(key));
-  if (mode === "cone") {
-    const peak = Math.max(...tops.map((point) => point[1]));
-    const apex = tops.filter((point) => point[1] > peak - 0.02);
-    if (apex.length < 3) {
-      const level = peak - HULL_PLATEAU_DROP_M;
-      const [x, z] = [apex[0][0], apex[0][2]];
-      for (const point of tops) point[1] = Math.min(point[1], level);
-      for (let k = 0; k < 8; k += 1) {
-        const a = (2 * Math.PI * k) / 8;
-        tops.push([x + HULL_PLATEAU_M * Math.cos(a), level, z + HULL_PLATEAU_M * Math.sin(a)]);
+  const top = planTop(mesh.positions, mesh.indices, 0, 0.5, drops);
+  const [nx, nz] = [xs.length - 1, zs.length - 1];
+  const columns = xs.length;
+  const id = (i, j) => j * columns + i;
+  const [px, pz] = [(v) => xs[v % columns], (v) => zs[Math.floor(v / columns)]];
+  const h = new Float64Array(columns * zs.length);
+  const locked = new Uint8Array(h.length);
+  const cellOf = (values, v) => {
+    let [lo, hi] = [0, values.length - 2];
+    while (lo < hi) {
+      const mid = (lo + hi + 1) >> 1;
+      if (values[mid] <= v) lo = mid;
+      else hi = mid - 1;
+    }
+    return lo;
+  };
+  // Samples: the visible vertices, and the visible top at every grid point and
+  // at FLOOR_SAMPLES by FLOOR_SAMPLES points in every cell.
+  const samples = [];
+  const seen = new Set();
+  for (let t = 0; t < mesh.indices.length; t += 1) {
+    const v = mesh.indices[t];
+    const y = mesh.positions[v * 3 + 1] - drops[Math.floor(t / 3)];
+    const key = `${v},${y}`;
+    if (y <= 0.002 || seen.has(key)) continue;
+    seen.add(key);
+    samples.push([mesh.positions[v * 3], y, mesh.positions[v * 3 + 2]]);
+  }
+  for (let j = 0; j <= nz; j += 1) {
+    for (let i = 0; i <= nx; i += 1) {
+      const y = top(xs[i], zs[j]);
+      if (y > 0.002) samples.push([xs[i], y, zs[j]]);
+      if (i === nx || j === nz) continue;
+      for (let a = 0; a < FLOOR_SAMPLES; a += 1) {
+        for (let b = 0; b < FLOOR_SAMPLES; b += 1) {
+          const x = lerp(xs[i], xs[i + 1], (a + 0.5) / FLOOR_SAMPLES);
+          const z = lerp(zs[j], zs[j + 1], (b + 0.5) / FLOOR_SAMPLES);
+          const sy = top(x, z);
+          if (sy > 0.002) samples.push([x, sy, z]);
+        }
       }
     }
   }
-  const points = [];
-  for (const point of tops) {
-    points.push(point);
-    if (point[1] < 0.02) continue;
-    if (mode === "prism") {
-      for (const s of [1, -1]) points.push([point[0] + s * point[1], 0, point[2]]);
-    } else {
-      const r = point[1] / Math.cos(Math.PI / HULL_SLOPE_RING);
-      for (let k = 0; k < HULL_SLOPE_RING; k += 1) {
-        const a = (2 * Math.PI * k) / HULL_SLOPE_RING;
-        points.push([point[0] + r * Math.cos(a), 0, point[2] + r * Math.sin(a)]);
+  // Each grid point stands no lower than the samples in the cells round it,
+  // less FLOOR_SLOPE for the distance.
+  for (const [x, y, z] of samples) {
+    const [ci, cj] = [cellOf(xs, x), cellOf(zs, z)];
+    for (let j = Math.max(0, cj - 1); j <= Math.min(nz, cj + 2); j += 1) {
+      for (let i = Math.max(0, ci - 1); i <= Math.min(nx, ci + 2); i += 1) {
+        h[id(i, j)] = Math.max(h[id(i, j)], y - FLOOR_SLOPE * Math.hypot(xs[i] - x, zs[j] - z));
       }
     }
   }
-  // (One normal for every corner, so each hull point is stored once: only
-  // the points matter to the runtime.)
-  const out = new YardBuilder(1);
-  for (const f of convexHull(points)) {
-    const [a, b, c] = f.v.map((index) => points[index]);
-    out.triangle(a, b, c, [Y, Y, Y], P.earth);
+  if (fixed) {
+    for (let i = 0; i <= nx; i += 1) {
+      h[id(i, fixed.row)] = fixed.heights[i];
+      locked[id(i, fixed.row)] = 1;
+    }
+  }
+  // Along every grid edge and diagonal the floor falls no faster than FLOOR_SLOPE.
+  const links = [];
+  for (let j = 0; j <= nz; j += 1) {
+    for (let i = 0; i <= nx; i += 1) {
+      for (const [di, dj] of [[1, 0], [0, 1], [1, 1], [1, -1]]) {
+        if (i + di > nx || j + dj < 0 || j + dj > nz) continue;
+        links.push([id(i, j), id(i + di, j + dj), FLOOR_SLOPE * Math.hypot(xs[i + di] - xs[i], zs[j + dj] - zs[j])]);
+      }
+    }
+  }
+  const backward = [...links].reverse();
+  const relax = () => {
+    for (let pass = 0; pass < 4 * (nx + nz + 2); pass += 1) {
+      let raised = false;
+      for (const list of [links, backward]) {
+        for (const [a, b, rise] of list) {
+          if (h[a] < h[b] - rise - 1e-9 && !locked[a]) [h[a], raised] = [h[b] - rise, true];
+          else if (h[b] < h[a] - rise - 1e-9 && !locked[b]) [h[b], raised] = [h[a] - rise, true];
+        }
+      }
+      if (!raised) break;
+    }
+  };
+  // A cell's two triangles: diagonal 0 joins (i, j) and (i + 1, j + 1), 1 the other two.
+  const diagonal = new Uint8Array(nx * nz);
+  const triangle = (i, j, k) => {
+    const [a, b, c, d] = [id(i, j), id(i + 1, j), id(i + 1, j + 1), id(i, j + 1)];
+    if (diagonal[j * nx + i] === 0) return k ? [a, c, d] : [a, b, c];
+    return k ? [b, c, d] : [a, b, d];
+  };
+  // A triangle's slope (dy/dx, dy/dz), and its steepness.
+  const slope = ([a, b, c]) => {
+    const [ux, uy, uz] = [px(b) - px(a), h[b] - h[a], pz(b) - pz(a)];
+    const [vx, vy, vz] = [px(c) - px(a), h[c] - h[a], pz(c) - pz(a)];
+    const ny = uz * vx - ux * vz;
+    return [-(uy * vz - uz * vy) / ny, -(ux * vy - uy * vx) / ny];
+  };
+  const gradient = (corners) => Math.hypot(...slope(corners));
+  const choose = () => {
+    for (let j = 0; j < nz; j += 1) {
+      for (let i = 0; i < nx; i += 1) {
+        const steepest = (d) => {
+          diagonal[j * nx + i] = d;
+          return Math.max(gradient(triangle(i, j, 0)), gradient(triangle(i, j, 1)));
+        };
+        const first = steepest(0);
+        diagonal[j * nx + i] = first <= steepest(1) ? 0 : 1;
+      }
+    }
+  };
+  // Where a plan point lies in the floor: a triangle and its weights.
+  const locate = (x, z) => {
+    const [i, j] = [cellOf(xs, x), cellOf(zs, z)];
+    let best = null;
+    for (const k of [0, 1]) {
+      const corners = triangle(i, j, k);
+      const [a, b, c] = corners;
+      const det = (pz(b) - pz(c)) * (px(a) - px(c)) + (px(c) - px(b)) * (pz(a) - pz(c));
+      const l1 = ((pz(b) - pz(c)) * (x - px(c)) + (px(c) - px(b)) * (z - pz(c))) / det;
+      const l2 = ((pz(c) - pz(a)) * (x - px(c)) + (px(a) - px(c)) * (z - pz(c))) / det;
+      const weights = [l1, l2, 1 - l1 - l2];
+      const worst = Math.min(...weights);
+      if (!best || worst > best.worst) best = { corners, weights, worst };
+    }
+    return best;
+  };
+  relax();
+  // Lift the floor under every sample still above it, until none is.
+  for (let round = 0; round < 8; round += 1) {
+    choose();
+    let lifted = false;
+    for (const [x, y, z] of samples) {
+      const { corners, weights } = locate(x, z);
+      const gap = y - corners.reduce((sum, v, k) => sum + weights[k] * h[v], 0);
+      if (gap <= 1e-6) continue;
+      const free = weights.map((w, k) => (locked[corners[k]] ? 0 : Math.max(0, w)));
+      const norm = free.reduce((sum, w) => sum + w * w, 0);
+      if (norm < 1e-12) continue;
+      corners.forEach((v, k) => {
+        h[v] += ((gap + 1e-6) * free[k]) / norm;
+      });
+      lifted = true;
+    }
+    if (!lifted) break;
+    relax();
+  }
+  // Ease every triangle still steeper than 45 degrees by raising its lowest
+  // free corner as little as will do.
+  for (let pass = 0; pass < 50; pass += 1) {
+    choose();
+    let eased = false;
+    for (let j = 0; j < nz; j += 1) {
+      for (let i = 0; i < nx; i += 1) {
+        for (const k of [0, 1]) {
+          const corners = triangle(i, j, k);
+          if (gradient(corners) <= 1) continue;
+          const free = corners.filter((v) => !locked[v]);
+          if (free.length === 0) continue;
+          // The slope g moves linearly as the corner rises, by r a metre: the
+          // least rise t with |g + t r| = 1. (Held rows can leave a triangle
+          // no rise of its free corner eases; the kit's check reports it.)
+          const low = free.reduce((best, v) => (h[v] < h[best] ? v : best));
+          const g = slope(corners);
+          h[low] += 1;
+          const moved = slope(corners);
+          h[low] -= 1;
+          const r = [moved[0] - g[0], moved[1] - g[1]];
+          const [rr, gr, gg] = [r[0] * r[0] + r[1] * r[1], g[0] * r[0] + g[1] * r[1], g[0] * g[0] + g[1] * g[1]];
+          const reach = gr * gr - rr * (gg - 1);
+          if (rr < 1e-12 || reach < 0 || gr >= 0) continue;
+          h[low] += (-gr - Math.sqrt(reach)) / rr + 1e-9;
+          eased = true;
+        }
+      }
+    }
+    if (!eased) break;
+    relax();
+  }
+  const out = new YardBuilder();
+  for (let j = 0; j < nz; j += 1) {
+    for (let i = 0; i < nx; i += 1) {
+      for (const k of [0, 1]) {
+        const corners = triangle(i, j, k);
+        if (corners.every((v) => h[v] < 0.005)) continue;
+        const [a, b, c] = corners.map((v) => v3(px(v), h[v], pz(v)));
+        out.tri(a, b, c, Y, P.earth);
+      }
+    }
   }
   return out.result();
 }
 
-// The heaps whose collision is a hull, and how their hull slopes.
-function hullMode(name) {
-  if (/^pile_/.test(name)) return "cone";
-  if (/^(berm_[a-z]+|ridge)_mid$/.test(name)) return "prism";
-  if (/^(berm_[a-z]+|ridge)_end_(neg|pos)$/.test(name)) return "cone";
-  return null;
+// A middle module's floor, the same all along it so modules meet exactly:
+// over each of its profile's points, the highest the visible mesh reaches
+// there, falling no faster than FLOOR_SLOPE across it. (Between profile points
+// the visible mesh is no higher than the line between those highest points.)
+function extrudedFloor(mesh, z0, z1) {
+  const highest = new Map();
+  for (let i = 0; i < mesh.positions.length; i += 3) {
+    const x = Math.round(mesh.positions[i] * 1e6) / 1e6;
+    highest.set(x, Math.max(highest.get(x) ?? 0, mesh.positions[i + 1]));
+  }
+  const xs = [...highest.keys()].sort((a, b) => a - b);
+  const heights = xs.map((x) => Math.max(...xs.map((other) => highest.get(other) - FLOOR_SLOPE * Math.abs(other - x))));
+  const out = new YardBuilder();
+  for (let i = 0; i + 1 < xs.length; i += 1) {
+    if (heights[i] < 0.005 && heights[i + 1] < 0.005) continue;
+    const [a, b, c, d] = [v3(xs[i], heights[i], z0), v3(xs[i + 1], heights[i + 1], z0), v3(xs[i + 1], heights[i + 1], z1), v3(xs[i], heights[i], z1)];
+    out.tri(a, b, c, Y, P.earth);
+    out.tri(a, c, d, Y, P.earth);
+  }
+  return { floor: out.result(), xs, heights };
+}
+
+// An end module's floor, from z0 to z1, its row at the middle (z = 0) held
+// to the middle's floor there: across it, the middle's profile points and
+// others evenly between them, so the two floors meet along the same
+// segments; along it, the end's own rings and others between them.
+function capFloor(mesh, middle, z0, z1) {
+  const xs = [];
+  for (let k = 0; k + 1 < middle.xs.length; k += 1) {
+    const [a, b] = [middle.xs[k], middle.xs[k + 1]];
+    const n = Math.max(1, Math.ceil((b - a) / FLOOR_CELL_M - 1e-9));
+    for (let s = 0; s < n; s += 1) xs.push(a + ((b - a) * s) / n);
+  }
+  xs.push(middle.xs[middle.xs.length - 1]);
+  const heights = xs.map((x) => {
+    let k = 0;
+    while (k < middle.xs.length - 2 && middle.xs[k + 1] <= x) k += 1;
+    const t = (x - middle.xs[k]) / (middle.xs[k + 1] - middle.xs[k]);
+    return lerp(middle.heights[k], middle.heights[k + 1], Math.min(1, Math.max(0, t)));
+  });
+  const rings = [...new Set(Array.from({ length: mesh.positions.length / 3 }, (_, i) => Math.round(mesh.positions[i * 3 + 2] * 1e6) / 1e6))];
+  const zs = [...rings, ...floorStations(z0, z1).filter((z) => rings.every((ring) => Math.abs(ring - z) > 0.06))].sort((a, b) => a - b);
+  return heapFloor(mesh, xs, zs, { row: z0 < 0 ? zs.length - 1 : 0, heights });
 }
 
 // ---------------------------------------------------------------- the kit
@@ -2806,9 +3113,22 @@ export function yardKitMeshes() {
   const meshes = [];
   for (const [name, build] of kitEntries()) {
     for (let lod = 0; lod < YARD_KIT_LOD_COUNT; lod += 1) meshes.push({ name: `${name}_lod${lod}`, ...build(lod) });
-    // A heap's collision hull (<name>_hull), from its near mesh.
-    const mode = hullMode(name);
-    if (mode) meshes.push({ name: `${name}_hull`, ...heapHull(meshes.find((mesh) => mesh.name === `${name}_lod0`), mode) });
+  }
+  // The heaps' floors (<name>_floor), from their near meshes: a pile's over
+  // its plan, a berm's or windrow's module by module.
+  const near = (name) => meshes.find((mesh) => mesh.name === `${name}_lod0`);
+  for (const [material, spec] of Object.entries(PILE_SPECS)) {
+    for (let shape = 0; shape < 3; shape += 1) {
+      const name = `pile_${material}_${shape}`;
+      meshes.push({ name: `${name}_floor`, ...heapFloor(near(name), floorStations(-spec.x / 2, spec.x / 2), floorStations(-spec.z / 2, spec.z / 2)) });
+    }
+  }
+  const modules = [...Object.entries(BERM_SPECS).map(([variant, spec]) => [`berm_${variant}`, BERM_MODULE, spec.cap_m]), ["ridge", RIDGE_MODULE, RIDGE_MODULE / 2]];
+  for (const [base, length, cap] of modules) {
+    const middle = extrudedFloor(near(`${base}_mid`), -length / 2, length / 2);
+    meshes.push({ name: `${base}_mid_floor`, ...middle.floor });
+    meshes.push({ name: `${base}_end_neg_floor`, ...capFloor(near(`${base}_end_neg`), middle, -cap, 0) });
+    meshes.push({ name: `${base}_end_pos_floor`, ...capFloor(near(`${base}_end_pos`), middle, 0, cap) });
   }
   return meshes;
 }

@@ -103,9 +103,10 @@ const oneOf = (...values) => Object.freeze({ type: "enum", values: Object.freeze
 // default. Every row may also carry seed (int), and pitch, roll (radians) and
 // lift (metres) for its rest on uneven ground (settleYardProp).
 //   collision: box (one box per body), boxes (one per container or part),
-//   hull (the convex hull the kit builds over the visible mesh, no face
-//   steeper than 45 degrees, so the player walks up it), cylinder, or none
-//   (a barge floats; it rests on no ground).
+//   hull (convex prisms over a shed's bays and ends), floor (the floor the kit
+//   lays over a heap's visible mesh, no triangle steeper than 45 degrees, so
+//   the player walks up it), cylinder, or none (a barge floats; it rests on
+//   no ground).
 export const YARD_KIT_PROPS = Object.freeze({
   shipping_container: {
     collision: "box",
@@ -244,7 +245,7 @@ export const YARD_KIT_PROPS = Object.freeze({
     params: { paint: oneOf("yellow", "red", "orange", "blue", "white"), house: oneOf("same", "white", "light_grey"), tone: oneOf("light", "dark"), length_m: numRange(12, 60) },
   },
   material_pile: {
-    collision: "hull",
+    collision: "floor",
     variants: [
       { name: "gravel", x_m: 8, z_m: 8, h_m: 3 },
       { name: "rubble", x_m: 12, z_m: 12, h_m: 4.5 },
@@ -258,7 +259,7 @@ export const YARD_KIT_PROPS = Object.freeze({
     params: { scale: numRange(0.5, 3), shape: intRange(0, 2), length_m: numRange(RIDGE_MODULE_M, 240) },
   },
   plastic_berm: {
-    collision: "hull",
+    collision: "floor",
     variants: [
       { name: "low", x_m: 9, z_m: null, h_m: 1.8 },
       // Its rounded ends take a whole module each, so it needs two.

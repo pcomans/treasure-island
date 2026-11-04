@@ -78,10 +78,10 @@ const PART_COLORS := [
 	Color(0.5, 0.5, 0.5), # tank
 	Color(0.06, 0.06, 0.065), # belt
 ]
-## Named paints (sRGB): the params' colour names (YARD_COLOURS) and a few the
-## kit picks itself. Container and wall colours are sampled from the dated
-## photos (Sep 2025 9th St and Avenue I, Mar and Nov 2025 Avenue M, Mar 2025
-## 3rd St, Jul 2023 Avenue E and 12th St).
+## Named paints (sRGB): the params' colour names and a few the kit picks
+## itself. Container and wall colours are sampled from the dated photos (Sep
+## 2025 9th St and Avenue I, Mar and Nov 2025 Avenue M, Mar 2025 3rd St, Jul
+## 2023 Avenue E and 12th St).
 const COLOURS := {
 	"beige": Color(0.79, 0.71, 0.54),
 	"black": Color(0.05, 0.05, 0.055),
@@ -178,7 +178,7 @@ const WEATHERING := {
 var _material: ShaderMaterial
 var _flag_material: StandardMaterial3D
 var _meshes: Dictionary = {}
-var _hulls: Dictionary = {}
+var _floors: Dictionary = {}
 var _colour_index: Dictionary = {}
 
 
@@ -330,23 +330,24 @@ func _prism(result: Dictionary, section: Array, z0: float, z1: float) -> void:
 	(result.shapes as Array).append({"shape": shape, "transform": Transform3D.IDENTITY})
 
 
-## A heap's collision: the convex hull the kit builds for it (<name>_hull: no
-## face steeper than 45 degrees, holding the visible mesh), at a uniform scale,
-## cached per mesh and scale (the scale is baked into the points: shapes keep
-## unscaled transforms). "" or why it can't.
-func _hull(result: Dictionary, name: String, offset: Vector3, scale: float = 1.0) -> String:
+## A heap's collision: the floor the kit lays over it (<name>_floor: a height
+## field over its plan following its visible mesh, no triangle steeper than 45
+## degrees), as a trimesh at a uniform scale, cached per mesh and scale (the
+## scale is baked into the faces: shapes keep unscaled transforms). "" or why
+## it can't.
+func _floor(result: Dictionary, name: String, offset: Vector3, scale: float = 1.0) -> String:
 	var key := "%s@%.3f" % [name, scale]
-	if not _hulls.has(key):
-		var mesh: Variant = _meshes.get("%s_hull" % name, null)
+	if not _floors.has(key):
+		var mesh: Variant = _meshes.get("%s_floor" % name, null)
 		if not mesh is Mesh:
-			return "the yard kit has no collision hull for %s" % name
-		var points := PackedVector3Array()
+			return "the yard kit has no floor for %s" % name
+		var faces := PackedVector3Array()
 		for point in (mesh as Mesh).get_faces():
-			points.append(point * scale)
-		var shape := ConvexPolygonShape3D.new()
-		shape.points = points
-		_hulls[key] = shape
-	(result.shapes as Array).append({"shape": _hulls[key], "transform": Transform3D(Basis.IDENTITY, offset)})
+			faces.append(point * scale)
+		var shape := ConcavePolygonShape3D.new()
+		shape.set_faces(faces)
+		_floors[key] = shape
+	(result.shapes as Array).append({"shape": _floors[key], "transform": Transform3D(Basis.IDENTITY, offset)})
 	return ""
 
 
@@ -457,8 +458,8 @@ func _fabric_shed(result: Dictionary, span: String, params: Dictionary, level: f
 
 
 ## A modular ridge (berm or windrow): two rounded ends cap_m long and the
-## middles between them, each with its own convex hull. A cap's origin is
-## where it meets the middles.
+## middles between them, each with its own floor (meeting the next one's
+## exactly). A cap's origin is where it meets the middles.
 func _modules(result: Dictionary, base: String, modules: int, module_m: float, cap_m: float, custom: Color) -> String:
 	var length := modules * module_m
 	var middles := roundi((length - 2.0 * cap_m) / module_m)
@@ -473,7 +474,7 @@ func _modules(result: Dictionary, base: String, modules: int, module_m: float, c
 		var transform := Transform3D(Basis.IDENTITY, Vector3(0, 0, float(placement[1])))
 		error += _add(result, str(placement[0]), transform, custom)
 		if error == "":
-			error += _hull(result, str(placement[0]), transform.origin)
+			error += _floor(result, str(placement[0]), transform.origin)
 	return error
 
 
@@ -489,7 +490,7 @@ func _pile(result: Dictionary, material: String, params: Dictionary, level: floa
 	var transform := Transform3D(Basis.IDENTITY.scaled(Vector3.ONE * scale), Vector3.ZERO)
 	var error := _add(result, name, transform, custom)
 	if error == "":
-		error += _hull(result, name, Vector3.ZERO, scale)
+		error += _floor(result, name, Vector3.ZERO, scale)
 	return error
 
 
