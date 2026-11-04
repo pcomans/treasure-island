@@ -13936,7 +13936,7 @@
         56,
         54
       ],
-      "material_key": "yard_asphalt",
+      "material_key": "yard_asphalt_pale",
       "normals": [
         0.005,
         1,
@@ -14110,12 +14110,11 @@
         0.999,
         -0.023
       ],
-      "object_key": "yard-asphalt:x_1__z_-1",
+      "object_key": "yard-asphalt-pale:x_1__z_-1",
       "opaque": false,
       "receiver_kind": "none",
       "source_keys": [
-        "w26767313",
-        "w96698665"
+        "w26767313"
       ],
       "surface_bias_m": 0.09,
       "uvs": [

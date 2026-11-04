@@ -87,10 +87,12 @@ const STREET_GROUND_SURFACES := {
 	"park_dg": {"albedo": preload("res://game/resources/textures/world/street/park_dg.png"), "uv_scale": 5.0, "roughness": 1.0},
 	# The yards' shared ground (yard surfaces of street-detail-zones.json, May 2026
 	# aerial): worn asphalt as the parking lots draw it (2.1 m Poly Haven tiles,
-	# the lots' tint), compacted beige-grey gravel (the park gravel warmed), grey
-	# concrete rubble (the shoreline riprap, lighter, 1.25 m tiles) and black
-	# plastic sheeting over earth (the bitumen map darkened, with a sheen).
+	# the lots' tint), the older lots' pale, sun-bleached asphalt (the same tiles,
+	# lightened), compacted pale gravel (the park gravel lightened), grey concrete
+	# rubble (the shoreline riprap, lighter, 1.25 m tiles) and black plastic
+	# sheeting over earth (the bitumen map darkened, with a sheen).
 	"yard_asphalt": {"albedo": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"), "uv_scale": 4.76, "roughness": 1.0, "tint": Color(1.04, 1.05, 1.05)},
+	"yard_asphalt_pale": {"albedo": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"), "uv_scale": 4.76, "roughness": 1.0, "tint": Color(1.5, 1.49, 1.44)},
 	"yard_gravel": {"albedo": preload("res://game/resources/textures/world/vegetation/park_gravel.png"), "uv_scale": 5.0, "roughness": 0.97, "tint": Color(1.22, 1.2, 1.15)},
 	"rubble_grey": {"albedo": preload("res://game/resources/textures/world/shoreline/riprap_albedo.png"), "uv_scale": 8.0, "roughness": 0.95, "tint": Color(1.12, 1.12, 1.1)},
 	"black_plastic": {"albedo": preload("res://game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg"), "uv_scale": 2.0, "roughness": 0.45, "tint": Color(0.3, 0.3, 0.32)},

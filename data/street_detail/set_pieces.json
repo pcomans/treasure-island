@@ -1382,6 +1382,103 @@
       "yaw": 2.406,
       "reason": "A movable blue Adirondack chair in a loose group on the lawn, turned to the skyline view.",
       "reference": "ph05 (Sep 2025); cmg12 (2025-2026); ph04 (Sep 2025)"
+    },
+    {
+      "id": "storage_9th_floodlight_west",
+      "kind": "street_lamp",
+      "prop": "lamp_plaza",
+      "params": {
+        "height_m": 7.5,
+        "heads": 2
+      },
+      "xz": [
+        -57.11,
+        -104.69
+      ],
+      "yaw": 2.06,
+      "reason": "Pole floodlights rise above the central self-storage yard's 9th Street fence; this one stands in the gap between the two sheds behind the fence, its two lamps aimed across the fence line. The plaza pole with two heads stands in for the yard's floodlight pole.",
+      "reference": "large-clutter-20261104 01c-central-9th-st (pano gzVv8NBB1YJxjGX0y0Qdog, Sep 2025) and verify-810-avenue-d-20261104 05-9thst-2025-09 (pano zymx-sHLgpe6167colQIQQ); position production inference"
+    },
+    {
+      "id": "storage_9th_floodlight_east",
+      "kind": "street_lamp",
+      "prop": "lamp_plaza",
+      "params": {
+        "height_m": 7.5,
+        "heads": 2
+      },
+      "xz": [
+        -9.93,
+        -130.34
+      ],
+      "yaw": 2.06,
+      "reason": "A second floodlight pole above the 9th Street fence, beside the stacked red containers at the fence's jog.",
+      "reference": "large-clutter-20261104 01c-central-9th-st (pano gzVv8NBB1YJxjGX0y0Qdog, Sep 2025): a floodlight pole left of the stacked red containers; position production inference"
+    },
+    {
+      "id": "truck_lot_gate_cone_1",
+      "kind": "traffic_cone",
+      "prop": "traffic_cone",
+      "params": {},
+      "xz": [
+        174.38,
+        -24.28
+      ],
+      "yaw": 0.3,
+      "reason": "Cones and A-frame barricades stand on the sidewalk in front of the Avenue H truck lot's gate.",
+      "reference": "large-clutter-20261104 06-trucklot-avenue-h (pano 1NT4Oh9iXeuKRp6LjDoB5w, Sep 2025)"
+    },
+    {
+      "id": "truck_lot_gate_cone_2",
+      "kind": "traffic_cone",
+      "prop": "traffic_cone",
+      "params": {},
+      "xz": [
+        175.38,
+        -21.99
+      ],
+      "yaw": 1.1,
+      "reason": "Cones and A-frame barricades stand on the sidewalk in front of the Avenue H truck lot's gate.",
+      "reference": "large-clutter-20261104 06-trucklot-avenue-h (pano 1NT4Oh9iXeuKRp6LjDoB5w, Sep 2025)"
+    },
+    {
+      "id": "truck_lot_gate_cone_3",
+      "kind": "traffic_cone",
+      "prop": "traffic_cone",
+      "params": {},
+      "xz": [
+        178.84,
+        -15.9
+      ],
+      "yaw": 2.4,
+      "reason": "Cones and A-frame barricades stand on the sidewalk in front of the Avenue H truck lot's gate.",
+      "reference": "large-clutter-20261104 06-trucklot-avenue-h (pano 1NT4Oh9iXeuKRp6LjDoB5w, Sep 2025)"
+    },
+    {
+      "id": "truck_lot_gate_barricade_1",
+      "kind": "barricade",
+      "prop": "barricade",
+      "params": {},
+      "xz": [
+        175.82,
+        -20.3
+      ],
+      "yaw": 2.06,
+      "reason": "A-frame barricades on the sidewalk in front of the Avenue H truck lot's gate, facing the street.",
+      "reference": "large-clutter-20261104 06-trucklot-avenue-h (pano 1NT4Oh9iXeuKRp6LjDoB5w, Sep 2025)"
+    },
+    {
+      "id": "truck_lot_gate_barricade_2",
+      "kind": "barricade",
+      "prop": "barricade",
+      "params": {},
+      "xz": [
+        177.09,
+        -17.91
+      ],
+      "yaw": 2.2,
+      "reason": "A-frame barricades on the sidewalk in front of the Avenue H truck lot's gate, facing the street.",
+      "reference": "large-clutter-20261104 06-trucklot-avenue-h (pano 1NT4Oh9iXeuKRp6LjDoB5w, Sep 2025)"
     }
   ]
 }
