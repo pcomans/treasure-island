@@ -1570,8 +1570,8 @@ function stepVan(out, lod, { length, height, food }) {
     rectHole(front + 1.85, front + 2.6, sill + 0.16, 1.22, P.seal),
   ];
   if (food) {
-    // The serving window on the right, closed by a steel flap.
-    holes.push(rectHole(-0.8, 1.8, 1.25, 2.2, P.metal, { side: 1 }));
+    // The serving window on the right, closed by a stainless flap.
+    holes.push(rectHole(-0.8, 1.8, 1.25, 2.2, P.chrome, { side: 1 }));
   }
   sweepTagged(out, p, hw, {
     bumper: P.trim, grille: { face: P.grille, round: P.paint }, hood: P.paint, windshield: { face: P.glass, round: P.trim },
@@ -1587,8 +1587,9 @@ function stepVan(out, lod, { length, height, food }) {
     lamp(out, v3(0, 0.62, hl + 0.015), v3(0.15, 0.07, 0.008), P.plate);
   }
   if (food) {
-    // Counter ledge under the window, roof hood vent and AC.
+    // Counter ledge under the window, the flap's hinge rail over it, roof hood vent and AC.
     out.aabb([hw, 1.18, -0.75], [hw + 0.28, 1.24, 1.75], P.metal);
+    out.aabb([hw, 2.2, -0.85], [hw + 0.06, 2.27, 1.85], P.trim);
     out.aabb([0.1, height - 0.02, -0.4], [0.95, height + 0.32, 0.5], (face) => (face === "-y" ? null : P.vent));
     out.aabb([-0.75, height - 0.02, 1.2], [-0.05, height + 0.25, 2.0], (face) => (face === "-y" ? null : P.vent));
   }
