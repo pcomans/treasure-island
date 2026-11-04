@@ -9272,6 +9272,7 @@
       "opaque": false,
       "receiver_kind": "none",
       "source_keys": [
+        "w1043836449",
         "w26767313",
         "w96698665"
       ],
@@ -10284,6 +10285,55 @@
         457.062,
         3.921,
         54.938
+      ]
+    },
+    {
+      "collision_kind": "none",
+      "feature_kind": "street_paint",
+      "indices": [
+        1,
+        2,
+        0
+      ],
+      "material_key": "yard_gravel_pale",
+      "normals": [
+        -0.104,
+        0.994,
+        -0.046,
+        -0.086,
+        0.996,
+        0,
+        -0.082,
+        0.996,
+        -0.035
+      ],
+      "object_key": "yard-gravel-pale:x_1__z_0",
+      "opaque": false,
+      "receiver_kind": "none",
+      "source_keys": [
+        "w1252737732",
+        "w899364786",
+        "w899364787"
+      ],
+      "surface_bias_m": 0.09,
+      "uvs": [
+        51.1,
+        9.95,
+        51.2,
+        10.136,
+        51.2,
+        9.896
+      ],
+      "vertices": [
+        511,
+        4.057,
+        99.5,
+        512,
+        4.032,
+        101.359,
+        512,
+        4.062,
+        98.961
       ]
     },
     {

@@ -116,6 +116,8 @@ const unit = (a) => {
 };
 const leftOf = (d) => [d[1], -d[0]];
 const round3 = (value) => roundCoordinate(value);
+// A yaw rounded like a coordinate, kept within [-pi, pi]: pi itself rounds to 3.142.
+const roundYaw = (value) => Math.max(-3.141, Math.min(3.141, roundCoordinate(value)));
 
 export function isYardZone(zone) {
   return Array.isArray(zone?.yard) && zone.yard.length > 0;
@@ -457,7 +459,7 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
   // One item: its row when it stands, else the reason it doesn't.
   const addItem = (zone, rule, cell, prop, params, centre, front) => {
     const footprint = yardPropFootprint(prop, params);
-    const yaw = roundCoordinate(Math.atan2(-front[0], -front[1]));
+    const yaw = roundYaw(Math.atan2(-front[0], -front[1]));
     const rect = rowRectangle({ position_m: [centre[0], 0, centre[1]], yaw_radians: yaw, footprint_m: footprint, prop, prop_params: params });
     const zoneShape = yardShapes.find((shape) => shape.zone === zone);
     const problem = reject(zoneShape, rect, rule.allow_roads ?? []);
@@ -502,7 +504,7 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
   // One item of a deck rule: its row when it stands on the deck, else the reason it doesn't.
   const addDeckItem = (zone, rule, cell, prop, params, centre, front) => {
     const footprint = yardPropFootprint(prop, params);
-    const yaw = roundCoordinate(Math.atan2(-front[0], -front[1]));
+    const yaw = roundYaw(Math.atan2(-front[0], -front[1]));
     const rect = rowRectangle({ position_m: [centre[0], 0, centre[1]], yaw_radians: yaw, footprint_m: footprint, prop, prop_params: params });
     const zoneShape = yardShapes.find((shape) => shape.zone === zone);
     if (!zoneShape.contains(rect.centre)) return { problem: "outside_zone" };
@@ -691,7 +693,7 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
         rule.items.forEach((item, index) => {
           const cell = `m${String(index).padStart(2, "0")}`;
           const footprint = yardPropFootprint(item.prop, item.params);
-          const yaw = roundCoordinate(item.yaw);
+          const yaw = roundYaw(item.yaw);
           const rect = rowRectangle({ position_m: [item.xz[0], 0, item.xz[1]], yaw_radians: yaw, footprint_m: footprint, prop: item.prop, prop_params: item.params });
           const zoneShape = yardShapes.find((shape) => shape.zone === zone);
           let problem = zoneShape.contains(rect.centre) ? null : "outside_zone";
