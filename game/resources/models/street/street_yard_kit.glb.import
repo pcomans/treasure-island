@@ -3,10 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
+uid="uid://djrrlsqhb573h"
+path="res://.godot/imported/street_yard_kit.glb-ccb510216f40346287428df3639c51ab.scn"
 
 [deps]
 
 source_file="res://game/resources/models/street/street_yard_kit.glb"
+dest_files=["res://.godot/imported/street_yard_kit.glb-ccb510216f40346287428df3639c51ab.scn"]
 
 [params]
 
