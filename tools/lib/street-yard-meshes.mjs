@@ -352,7 +352,7 @@ function vnorm2(a) {
 // A road wheel on an axle at (x centre of the tyre, radius, z), its outer face
 // toward `side` (+1 right, -1 left). dual: twin rear tyres (one wide tyre with
 // a deep-dish rim face).
-function wheel(out, x, z, radius, width, side, lod, { dual = false, rimColour = P.rim, hubs = 8 } = {}) {
+function wheel(out, x, z, radius, width, side, lod, { dual = false, rimColour = P.rim } = {}) {
   const center = v3(x, radius, z);
   const axis = v3(side, 0, 0);
   const tw = dual ? width * 2 + 0.03 : width;
@@ -382,8 +382,6 @@ function wheel(out, x, z, radius, width, side, lod, { dual = false, rimColour = 
       out.face([at(rimR * r0, a0, d0), at(rimR * r0, a1, d0), at(rimR * r1, a1, d1), at(rimR * r1, a0, d1)], axis, holeRing ? P.hub : part);
     }
   }
-  // A dark well behind the wheel so the arch reads closed.
-  void hubs;
 }
 
 // Both wheels of an axle: track between tyre centres, and a dark axle bar.
@@ -790,7 +788,7 @@ function bermGrid(variant, stations, scaleAt, wrinkle) {
   });
 }
 
-function gridSurface(out, grid, part, { closeStart = false } = {}) {
+function gridSurface(out, grid, part) {
   // Quads between stations k, k+1 and profile points i, i+1, smooth normals.
   const K = grid.length;
   const N = grid[0].length;
@@ -825,7 +823,6 @@ function gridSurface(out, grid, part, { closeStart = false } = {}) {
       else out.quad(a, d, c, b, [ns[0], ns[3], ns[2], ns[1]], part);
     }
   }
-  void closeStart;
 }
 
 function bermWrinkle(lod) {
@@ -917,11 +914,9 @@ function buildPile(material, shape, lod) {
       const t1 = vnorm(vcross(ref, n));
       const t2 = vcross(n, t1);
       const ax = vnorm(vadd(vscale(t1, Math.cos(yaw)), vscale(t2, Math.sin(yaw))));
-      const az = vcross(ax, n);
       const tilt = (hash(i, seed, 5) - 0.5) * 0.5;
       const ay = vnorm(vadd(n, vscale(ax, tilt)));
       out.box(vadd(base, vscale(n, size * 0.06)), [size * (0.7 + 0.5 * hash(i, 6)), size * 0.2, size * (0.5 + 0.4 * hash(i, 7))], P.rubble, [ax, ay, vnorm(vcross(ax, ay))]);
-      void az;
     }
   }
   if (lod === 0 && material === "tarp") {
@@ -1387,7 +1382,7 @@ function classA(out, lod) {
     bumper: P.trim, grille: { face: P.grille, round: P.paint }, windshield: { face: P.glass, round: P.trim }, cap: P.paint,
     roof: P.paint, rear: P.paint, under: P.under, arch: P.under,
   }, { r: 0.16, side: { part: P.paint, holes } });
-  roofKit(out, lod, hw, roof, [-2.0, 2.4]);
+  roofKit(out, lod, roof, [-2.0, 2.4]);
   if (lod === 0) {
     lamp(out, v3(0, 2.75, hl + 0.012), v3(0.75, 0.3, 0.012), P.glass);
     for (const s of [1, -1]) {
@@ -1405,7 +1400,7 @@ function classA(out, lod) {
 }
 
 // Roof AC units and vents of an RV.
-function roofKit(out, lod, hw, roof, acZ) {
+function roofKit(out, lod, roof, acZ) {
   for (const z of acZ) {
     out.aabb([-0.38, roof - 0.02, z - 0.5], [0.38, roof + 0.28, z + 0.5], (face) => (face === "-y" ? null : P.vent));
   }
@@ -1414,7 +1409,6 @@ function roofKit(out, lod, hw, roof, acZ) {
       out.aabb([0.3, roof - 0.02, z - 0.2], [0.7, roof + 0.1, z + 0.2], (face) => (face === "-y" ? null : P.vent));
     }
   }
-  void hw;
 }
 
 function classC(out, lod) {
@@ -1445,7 +1439,7 @@ function classC(out, lod) {
     ...swooshes(-1.85, hl - 0.2, 1.05, 0.25, [[-0.7, 0.15]], lod === 0 ? 0.5 : 1.6),
   ];
   sweepTagged(out, p, hw, { front: P.paint, bunk: P.paint, roof: P.paint, rear: P.paint, under: P.under, arch: P.under }, { r: 0.15, side: { part: P.paint, holes } });
-  roofKit(out, lod, hw, roof, [0.6]);
+  roofKit(out, lod, roof, [0.6]);
   if (lod === 0) for (const s of [1, -1]) lamp(out, v3(s * (hw - 0.14), 1.2, hl + 0.012), v3(0.07, 0.28, 0.012), P.tail_lamp);
   out.aabb([-0.4, 0.5, frontAxle + 0.5], [0.4, 0.75, hl - 0.4], P.under, { ao: 0.4 });
   axle(out, frontAxle, 1.75, R, 0.22, lod, { well: R + 0.06 });
@@ -1482,7 +1476,7 @@ function travelTrailer(out, lod) {
     lamp(out, v3(0, 1.9, bodyFront - 0.19), v3(0.75, 0.22, 0.012), P.glass);
     for (const s of [1, -1]) lamp(out, v3(s * (hw - 0.12), 1.0, hl + 0.012), v3(0.07, 0.15, 0.012), P.tail_lamp);
   }
-  roofKit(out, lod, hw, roof, [0.6]);
+  roofKit(out, lod, roof, [0.6]);
   tongue(out, bodyFront + 0.05, -hl, 0.5, 0.8, lod, { tanks: true });
   out.aabb([-0.9, 0.42, bodyFront], [0.9, sill, hl - 0.2], P.under, { ao: 0.4 });
   for (const z of axles) axle(out, z, 2 * hw - 0.3, R, 0.2, lod, { well: 0.48 });
@@ -1526,7 +1520,7 @@ function fifthWheel(out, lod) {
     }
     out.aabb([-0.5, 1.35, front + 0.5], [0.5, 1.5, front + 1.6], P.under);
   }
-  roofKit(out, lod, hw, roof, [-1.5, 2.6]);
+  roofKit(out, lod, roof, [-1.5, 2.6]);
   out.aabb([-0.9, 0.48, neck], [0.9, sill, hl - 0.2], P.under, { ao: 0.4 });
   for (const z of axles) axle(out, z, 2 * hw - 0.32, R, 0.22, lod, { well: 0.52 });
   return out.result();
@@ -2051,25 +2045,25 @@ function buildConveyorLeg(lod) {
 const BARGE_FREEBOARD = 1.0;
 const BARGE_DRAFT = 2.0;
 const BARGE_RAKE = 3.0;
-function buildBargeMid(lod) {
+// (One detail level serves both: these are a handful of quads.)
+function buildBargeMid() {
   const out = new YardBuilder();
   out.aabb([-0.5, -BARGE_DRAFT, -0.5], [0.5, BARGE_FREEBOARD, 0.5], (face) => (face === "+y" ? P.deck : face === "-y" || face === "+z" || face === "-z" ? null : P.hull));
-  void lod;
   return out.result();
 }
 
-function buildBargeEnd(dir, lod) {
+function buildBargeEnd(dir) {
   const out = new YardBuilder();
   const z1 = dir * BARGE_RAKE;
   // Deck triangle strip out to the rake's top edge, the rake face, the sides.
   out.face([v3(-0.5, BARGE_FREEBOARD, 0), v3(0.5, BARGE_FREEBOARD, 0), v3(0.5, BARGE_FREEBOARD, z1), v3(-0.5, BARGE_FREEBOARD, z1)], Y, P.deck);
-  const rakeNormal = vnorm(v3(0, -(BARGE_RAKE - 0.6), dir * (BARGE_DRAFT + 0.4)));
-  out.face([v3(-0.5, -BARGE_DRAFT, 0), v3(0.5, -BARGE_DRAFT, 0), v3(0.5, 0.6 - 0.6, z1), v3(-0.5, 0.0, z1)], rakeNormal, P.hull);
+  // The rake rises from the bottom (y = -draft) at the hull's end to the waterline at z1.
+  const rakeNormal = vnorm(v3(0, -BARGE_RAKE, dir * BARGE_DRAFT));
+  out.face([v3(-0.5, -BARGE_DRAFT, 0), v3(0.5, -BARGE_DRAFT, 0), v3(0.5, 0.0, z1), v3(-0.5, 0.0, z1)], rakeNormal, P.hull);
   out.face([v3(-0.5, 0.0, z1), v3(0.5, 0.0, z1), v3(0.5, BARGE_FREEBOARD, z1), v3(-0.5, BARGE_FREEBOARD, z1)], v3(0, 0, dir), P.hull);
   for (const s of [-0.5, 0.5]) {
     out.face([v3(s, -BARGE_DRAFT, 0), v3(s, BARGE_FREEBOARD, 0), v3(s, BARGE_FREEBOARD, z1), v3(s, 0.0, z1)], v3(Math.sign(s), 0, 0), P.hull);
   }
-  void lod;
   return out.result();
 }
 
@@ -2253,9 +2247,9 @@ function kitEntries() {
     add(`boat_${variant}_open`, (lod) => buildBoat(variant, false, lod));
     add(`boat_${variant}_covered`, (lod) => buildBoat(variant, true, lod));
   }
-  add("barge_mid", buildBargeMid);
-  add("barge_end_neg", (lod) => buildBargeEnd(-1, lod));
-  add("barge_end_pos", (lod) => buildBargeEnd(1, lod));
+  add("barge_mid", () => buildBargeMid());
+  add("barge_end_neg", () => buildBargeEnd(-1));
+  add("barge_end_pos", () => buildBargeEnd(1));
   add("crawler_crane_barge", (lod) => buildCrawlerCrane(45, 62, lod));
   add("crawler_crane_pier", (lod) => buildCrawlerCrane(58, 74, lod));
   add("deckhouse", buildDeckhouse);
