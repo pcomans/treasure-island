@@ -29,7 +29,7 @@ const int SOURCE[46] = int[46](1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 const int PATTERN[46] = int[46](0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	1, 2, 3, 0, 0, 0, 4, 5, 6, 9, 7, 8, 8, 8, 10, 8, 0, 0, 10, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 const float ROUGH[46] = float[46](0.38, 0.38, 0.05, 0.86, 0.35, 0.55, 0.6, 0.14, 0.07, 0.12, 0.5, 0.95, 0.42, 0.55, 0.45, 0.42,
-	0.55, 0.62, 0.55, 0.6, 0.45, 0.4, 0.5, 0.5, 0.48, 0.85, 0.9, 0.95, 0.95, 0.92, 0.5, 0.9, 0.5, 0.75, 0.55, 0.85, 0.6, 0.95, 0.25, 0.85, 0.5, 0.8, 0.45, 0.55, 0.6, 0.8);
+	0.55, 0.62, 0.55, 0.6, 0.45, 0.4, 0.5, 0.5, 0.48, 0.85, 0.9, 0.95, 0.95, 0.92, 0.6, 0.9, 0.5, 0.75, 0.55, 0.85, 0.6, 0.95, 0.25, 0.85, 0.5, 0.8, 0.45, 0.55, 0.6, 0.8);
 const float METAL[46] = float[46](0.0, 0.0, 0.0, 0.0, 0.85, 0.3, 0.0, 1.0, 0.55, 0.0, 0.0, 0.0, 0.2, 0.0, 0.0, 0.75,
 	0.25, 0.2, 0.25, 0.25, 0.7, 0.0, 0.3, 0.3, 0.35, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.1, 0.3, 0.0, 0.2, 0.15, 0.0, 0.0, 0.0, 0.2, 0.0, 0.0, 0.3, 0.2, 0.0);
 const float SPEC[46] = float[46](0.5, 0.5, 0.8, 0.3, 0.5, 0.4, 0.4, 0.5, 0.6, 0.5, 0.4, 0.2, 0.4, 0.5, 0.5, 0.5,
@@ -37,9 +37,9 @@ const float SPEC[46] = float[46](0.5, 0.5, 0.8, 0.3, 0.5, 0.4, 0.4, 0.5, 0.6, 0.
 // How strongly each part rusts and gathers grime (scaled by the instance's level).
 const float RUST[46] = float[46](0.03, 0.03, 0.0, 0.0, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.25,
 	1.0, 1.0, 0.8, 1.3, 0.6, 0.03, 0.15, 0.2, 0.35, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.25, 1.0, 0.0, 0.9, 0.2, 0.0, 0.0, 0.0, 0.2, 0.0, 0.0, 0.15, 0.9, 0.0);
-const float GRIME[46] = float[46](0.35, 0.35, 0.0, 0.0, 0.3, 0.0, 0.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.4,
+const float GRIME[46] = float[46](0.55, 0.55, 0.0, 0.0, 0.3, 0.0, 0.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.4,
 	1.0, 0.6, 1.0, 1.0, 0.6, 0.35, 0.6, 0.8, 0.5, 0.9, 0.5, 0.0, 0.0, 0.0, 0.3, 0.8, 0.6, 0.8, 0.0, 0.6, 0.8, 0.0, 0.4, 0.6, 0.4, 0.0, 0.6, 0.5, 0.8, 0.2);
-const vec3 RUST_COLOUR = vec3(0.13, 0.043, 0.016); // linear; about sRGB (0.40, 0.23, 0.13)
+const vec3 RUST_COLOUR = vec3(0.235, 0.075, 0.025); // linear; about sRGB (0.52, 0.30, 0.17)
 const vec3 DIRT_COLOUR = vec3(0.16, 0.12, 0.08); // linear; about sRGB (0.44, 0.38, 0.31)
 
 varying flat int part;
@@ -50,6 +50,8 @@ varying float v_w;
 varying vec3 v_across;
 varying vec3 v_along;
 varying flat vec4 v_custom;
+varying vec3 v_world;
+varying float v_u_world;
 
 float hash12(vec2 p) {
 	vec3 p3 = fract(vec3(p.xyx) * 0.1031);
@@ -77,6 +79,7 @@ void vertex() {
 	v_pos = VERTEX;
 	v_normal_model = NORMAL;
 	v_custom = INSTANCE_CUSTOM;
+	v_world = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
 	// The direction the profile varies along: up a roll-up door, along Z on a
 	// roof, horizontally across any wall.
 	vec3 across;
@@ -88,6 +91,7 @@ void vertex() {
 		across = normalize(vec3(-NORMAL.z, 0.0, NORMAL.x) + vec3(1e-5, 0.0, 0.0));
 	}
 	v_u = dot(VERTEX, across);
+	v_u_world = dot(v_world, normalize((MODEL_MATRIX * vec4(across, 0.0)).xyz));
 	v_across = normalize((MODELVIEW_MATRIX * vec4(across, 0.0)).xyz);
 	// The second direction in the surface, for sheeting wrinkles.
 	vec3 along = normalize(cross(NORMAL, across) + vec3(0.0, 1e-5, 0.0));
@@ -140,8 +144,14 @@ void fragment() {
 		albedo *= 0.95 + 0.1 * fract(seed * 7.13 + 0.37);
 	}
 	bool roof = abs(v_normal_model.y) > 0.7;
-	// Weathering coordinates: along the face and up, or the plan on a roof.
+	// Weathering coordinates: along the face and up, or the plan on a roof. A
+	// barge's hull and deck are modules stretched per instance, so they take
+	// world coordinates instead, or their weathering would stretch with them.
 	vec2 w = roof ? v_pos.xz : vec2(v_u, v_pos.y);
+	bool barge = p == 33 || p == 35;
+	if (barge) {
+		w = roof ? v_world.xz : vec2(v_u_world, v_pos.y);
+	}
 	vec2 ws = w + vec2(seed * 137.0, seed * 59.0);
 	// Profiles.
 	int pattern = PATTERN[p];
@@ -174,13 +184,24 @@ void fragment() {
 		tilt = 0.55;
 	}
 	if (pattern >= 1 && pattern <= 6) {
-		// Fade the profile out where it shrinks below a few pixels.
+		// Sharp up close; a sine of the same pitch once a period spans a few
+		// pixels (a sharp flank there aliases into arcs at grazing angles);
+		// gone below about 2.5 pixels a period, leaving its average shade.
 		float footprint = fwidth(v_u) / pitch;
-		float keep = 1.0 - smoothstep(0.18, 0.45, footprint);
-		NORMAL = normalize(NORMAL + v_across * profile.x * tilt * keep);
+		vec2 wave = sine_profile(v_u, pitch);
+		vec2 shape = mix(profile, vec2(wave.x * 0.6, wave.y), smoothstep(0.05, 0.16, footprint));
+		float keep = 1.0 - smoothstep(0.26, 0.4, footprint);
+		NORMAL = normalize(NORMAL + v_across * shape.x * tilt * keep);
 		// Valleys and flanks hold a little shade; far away, their average.
-		float shade = mix(0.86, 1.0, profile.y);
-		albedo *= mix(0.93, shade, keep);
+		float shade = mix(0.88, 1.0, shape.y);
+		albedo *= mix(0.94, shade, keep);
+	}
+	// Vehicle paint: a little tone from panel to panel and faint dirt runs
+	// down from the roof line (RV sidewalls especially).
+	if (p == 0) {
+		albedo *= 0.97 + 0.045 * hash12(floor(vec2(v_u / 1.4, v_pos.y / 0.9)) + seed * 3.0);
+		float run = roof ? 0.0 : smoothstep(0.62, 0.92, vnoise(vec2(ws.x * 2.5, 0.0))) * smoothstep(0.4, 2.2, v_pos.y);
+		albedo *= 1.0 - (0.04 + 0.12 * level) * run * (1.0 - smoothstep(0.3, 0.8, fwidth(ws.x) * 2.5));
 	}
 	if (pattern == 9) {
 		// The membrane's seams over the portal frames, every 5 m.
@@ -188,13 +209,14 @@ void fragment() {
 		float seam = 1.0 - smoothstep(0.04, 0.09 + fwidth(v_u), frame);
 		albedo *= 1.0 - 0.22 * seam;
 	} else if (pattern == 10) {
-		// Plastic sheeting and tarps: folds and wrinkles tilt the normal.
+		// Plastic sheeting and tarps: folds and wrinkles tilt the normal (the
+		// berms' sheeting is stretched tighter than a loose tarp).
 		vec2 q = vec2(v_u, v_w) * 0.9 + seed * 17.0;
 		float e = 0.07;
 		float n0 = fbm(q);
 		vec2 g = vec2(fbm(q + vec2(e, 0.0)) - n0, fbm(q + vec2(0.0, e)) - n0) / e;
 		float keep = 1.0 - smoothstep(0.6, 2.4, fwidth(v_u) * 0.9);
-		NORMAL = normalize(NORMAL + (v_across * g.x + v_along * g.y) * 0.22 * keep);
+		NORMAL = normalize(NORMAL + (v_across * g.x + v_along * g.y) * (p == 30 ? 0.14 : 0.22) * keep);
 		albedo *= 0.85 + 0.3 * n0;
 	}
 	if (pattern == 7) {
@@ -223,22 +245,28 @@ void fragment() {
 	if (p == 17) {
 		albedo = mix(albedo, vec3(0.45), 0.35);
 	}
-	// Rust: patches, streaks running down from the top rail, and the bottom edge.
+	// Rust: a few patches, thin streaks running down from the top rail, and
+	// the bottom edge. The fine noise gives way to its average with distance,
+	// so it never aliases into arcs.
 	float rust_amount = RUST[p] * level;
 	if (rust_amount > 0.0) {
-		float patches = smoothstep(0.6, 0.78, fbm(ws * 0.8));
-		float spots = smoothstep(0.72, 0.86, fbm(ws * 3.3 + 5.0)) * 0.7;
-		float streak = roof ? 0.0 : smoothstep(0.55, 0.9, vnoise(vec2(ws.x * 7.0, 0.5))) * smoothstep(0.9, 2.45, v_pos.y) * (0.6 + 0.4 * vnoise(vec2(ws.x * 7.0, ws.y * 1.5)));
-		float edge = roof ? 0.0 : smoothstep(0.32, 0.0, v_pos.y) * 0.7;
-		float rust = clamp((patches * 0.75 + spots + streak * 0.8 + edge) * rust_amount, 0.0, 0.92);
-		albedo = mix(albedo, RUST_COLOUR * (0.75 + 0.5 * vnoise(ws * 5.0)), rust);
+		float detail = 1.0 - smoothstep(0.25, 0.6, fwidth(ws.x) * 7.0);
+		float patches = smoothstep(0.66, 0.82, fbm(ws * 0.7));
+		float spots = smoothstep(0.78, 0.9, fbm(ws * 3.3 + 5.0)) * 0.5 * detail;
+		float streak_noise = mix(0.35, vnoise(vec2(ws.x * 7.0, 0.5)), detail);
+		float streak = roof ? 0.0 : smoothstep(0.55, 0.9, streak_noise) * smoothstep(0.9, 2.45, v_pos.y) * 0.8;
+		float edge = roof ? 0.0 : smoothstep(0.3, 0.0, v_pos.y) * 0.6;
+		float rust = clamp((patches * 0.55 + spots + streak * 0.7 + edge) * rust_amount, 0.0, 0.85);
+		// A barge's rust is old and dark; a container's fresh and orange.
+		vec3 rust_colour = barge ? RUST_COLOUR * 0.5 : RUST_COLOUR;
+		albedo = mix(albedo, rust_colour * (0.85 + 0.3 * mix(0.5, vnoise(ws * 5.0), detail)), rust);
 	}
-	// Grime: dirt splashed up from the ground and a broad, uneven film.
+	// Grime: dirt splashed up from the ground and a light, uneven film.
 	float grime = GRIME[p] * (0.35 + 0.65 * level);
 	if (grime > 0.0) {
-		float splash = roof ? 0.0 : smoothstep(0.75, 0.0, v_pos.y) * (0.6 + 0.4 * vnoise(ws * 2.0));
-		albedo = mix(albedo, DIRT_COLOUR, clamp(splash * 0.55 * grime, 0.0, 0.6));
-		albedo *= 1.0 - 0.12 * grime * fbm(ws * 0.35);
+		float splash = roof ? 0.0 : smoothstep(0.6, 0.0, v_pos.y) * (0.6 + 0.4 * vnoise(ws * 2.0));
+		albedo = mix(albedo, DIRT_COLOUR, clamp(splash * 0.4 * grime, 0.0, 0.45));
+		albedo *= 1.0 - 0.06 * grime * fbm(ws * 0.35);
 	}
 	ALBEDO = albedo;
 	ROUGHNESS = ROUGH[p];

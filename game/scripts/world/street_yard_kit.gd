@@ -57,7 +57,7 @@ const PART_COLORS := [
 	Color(0.44, 0.38, 0.3), # timber: weathered fir
 	Color(0.6, 0.5, 0.37), # earth: the tan soil of the 2025 yard photos
 	Color(0.4, 0.4, 0.39), # gravel: dark crushed aggregate
-	Color(0.66, 0.63, 0.58), # rubble: broken concrete
+	Color(0.55, 0.49, 0.41), # rubble: the fines between broken concrete
 	Color(0.045, 0.045, 0.05), # plastic: black sheeting
 	Color(0.5, 0.5, 0.5), # concrete
 	Color(0.5, 0.5, 0.5), # crane_red
@@ -80,27 +80,30 @@ const PART_COLORS := [
 ## photos (Sep 2025 9th St and Avenue I, Mar and Nov 2025 Avenue M, Mar 2025
 ## 3rd St, Jul 2023 Avenue E and 12th St).
 const COLOURS := {
-	"beige": Color(0.7, 0.62, 0.47),
+	"beige": Color(0.79, 0.71, 0.54),
 	"black": Color(0.05, 0.05, 0.055),
-	"blue": Color(0.14, 0.3, 0.58),
+	"blue": Color(0.17, 0.31, 0.52),
 	"blue_grey": Color(0.5, 0.58, 0.65),
 	"brown": Color(0.33, 0.23, 0.16),
 	"cream": Color(0.86, 0.83, 0.74),
 	"dark_grey": Color(0.22, 0.23, 0.24),
-	"green": Color(0.18, 0.3, 0.27),
+	"green": Color(0.22, 0.35, 0.25),
 	"grey": Color(0.56, 0.58, 0.59),
 	"light_grey": Color(0.72, 0.73, 0.72),
 	"orange": Color(0.78, 0.38, 0.13),
 	"red": Color(0.43, 0.13, 0.11),
-	"rust": Color(0.48, 0.24, 0.14),
+	"rust": Color(0.42, 0.23, 0.15),
 	"silver": Color(0.66, 0.68, 0.7),
 	"tan": Color(0.66, 0.58, 0.44),
 	"white": Color(0.86, 0.87, 0.86),
 	"yellow": Color(0.86, 0.64, 0.1),
+	"bin_blue": Color(0.36, 0.5, 0.66),
 	"concrete_light": Color(0.7, 0.69, 0.66),
 	"concrete_dark": Color(0.48, 0.48, 0.47),
 	"door_grey": Color(0.6, 0.61, 0.62),
+	"machine_red": Color(0.7, 0.13, 0.09),
 	"plank": Color(0.5, 0.43, 0.33),
+	"rubble_concrete": Color(0.72, 0.68, 0.6),
 }
 
 ## Props: far range (m), whether they cast shadows, their variants (mesh
@@ -132,7 +135,7 @@ const PLANS := {
 	"food_truck": [[2.4, 7.3, 3.3], [2.44, 6.2, 3.0]],
 	"boat_on_trailer": [[2.5, 7.3, 2.2], [2.6, 8.8, 2.9]],
 	"trailer": [[2.6, 7.3, 3.0], [2.4, 4.5, 1.55], [2.6, 16.2, 4.1], [3.66, 14.6, 3.5]],
-	"equipment": [[3.2, 10.0, 3.2], [3.0, 8.0, 3.5], [1.2, 9.1, 1.2], [1.8, 1.8, 1.3], [2.44, 6.9, 1.85], [4.0, 4.0, 8.0], [1.4, 0.0, 0.0]],
+	"equipment": [[3.2, 10.0, 4.5], [3.0, 8.0, 3.5], [1.2, 9.1, 1.2], [1.8, 1.8, 1.3], [2.44, 6.9, 1.85], [4.0, 4.0, 8.0], [1.4, 0.0, 0.0]],
 }
 ## Containers (tools/lib/street-yard-kit.mjs): width, heights, lengths.
 const CONTAINER_W := 2.438
@@ -166,9 +169,10 @@ const CONVEYOR_FOOT_M := 1.2
 const BARGE_RAKE_M := 3.0
 const BARGE_FREEBOARD_M := 1.0
 ## Default weathering (0..1) by prop; a row's weathering param overrides it.
+## The photographed container walls are clean paint with light streaks.
 const WEATHERING := {
-	"shipping_container": 0.6, "container_wall": 0.5, "storage_shed_row": 0.35, "fabric_shed": 0.3,
-	"crane_barge": 0.85, "equipment": 0.45, "trailer": 0.3,
+	"shipping_container": 0.5, "container_wall": 0.3, "storage_shed_row": 0.35, "fabric_shed": 0.3,
+	"crane_barge": 0.6, "equipment": 0.45, "trailer": 0.3,
 }
 
 var _material: ShaderMaterial
@@ -442,7 +446,8 @@ func _modules(result: Dictionary, base: String, modules: int, module_m: float, c
 
 
 func _pile(result: Dictionary, material: String, params: Dictionary, level: float, seed: int) -> String:
-	var custom := _custom("grey", "grey", "grey", level, seed)
+	# A rubble pile's broken concrete is its primary paint.
+	var custom := _custom("rubble_concrete" if material == "rubble" else "grey", "grey", "grey", level, seed)
 	if material == "ridge":
 		var length := float(params.get("length_m", 0.0))
 		return _modules(result, "ridge", maxi(1, roundi(length / RIDGE_MODULE_M)), RIDGE_MODULE_M, custom)
@@ -502,16 +507,30 @@ func _equipment(result: Dictionary, variant: int, mesh: String, params: Dictiona
 		cylinder.height = 1.3
 		(result.shapes as Array).append({"shape": cylinder, "transform": Transform3D(Basis.IDENTITY, Vector3(0, 0.65, 0))})
 		return _add(result, mesh, Transform3D.IDENTITY, _custom(tone, tone, tone, level, seed))
-	# A hopper is white unless the row paints it; machines take the paint (yellow by default).
+	# A hopper is white unless the row paints it; machines take the paint
+	# (yellow by default) in a machine's red; an open bin's blue is sun-faded
+	# and its steel rusts through (Avenue M, Nov 2025).
 	var paint := _colour(params, "paint", "white" if mesh == "hopper" else "yellow")
+	if paint == "red" and (mesh == "excavator" or mesh == "wheel_loader"):
+		paint = "machine_red"
+	if mesh == "open_bin":
+		if paint == "blue":
+			paint = "bin_blue"
+		level = maxf(level, 0.85)
+	var house := paint
+	match str(params.get("house", "same")):
+		"white":
+			house = "white"
+		"light_grey":
+			house = "light_grey"
 	if mesh == "excavator":
-		# The machine, and its boom and bucket out in front.
-		_box(result, Vector3(3.2, 3.2, 4.9), Vector3(0, 1.6, 0.4))
-		_box(result, Vector3(1.3, 3.1, 4.6), Vector3(0.2, 1.55, -3.7))
+		# The machine (tracks, house and cab), then the boom, arm and bucket out in front.
+		_box(result, Vector3(3.2, 3.05, 5.05), Vector3(0, 1.525, 1.73))
+		_box(result, Vector3(1.2, 4.5, 4.2), Vector3(0.02, 2.25, -2.87))
 	else:
 		var plan: Array = PLANS.equipment[variant]
 		_box(result, Vector3(plan[0], plan[2], plan[1]), Vector3(0, float(plan[2]) * 0.5, 0))
-	return _add(result, mesh, Transform3D.IDENTITY, _custom(paint, paint, "dark_grey", level, seed))
+	return _add(result, mesh, Transform3D.IDENTITY, _custom(paint, house, "dark_grey", level, seed))
 
 
 ## A conveyor: its truss modules end to end up the incline (rising toward +Z),
@@ -547,7 +566,7 @@ func _barge(result: Dictionary, variant: String, params: Dictionary, level: floa
 		return _add(result, "crawler_crane_pier", Transform3D.IDENTITY, red)
 	var length := clampf(float(params.get("length_m", 40.0 if variant == "crane" else 36.0)), 15.0, 100.0)
 	var width := clampf(float(params.get("width_m", 30.0 if variant == "crane" else 18.0)), 8.0, 40.0)
-	var hull := _custom(_colour(params, "hull", "dark_grey"), _colour(params, "deck", "rust"), "dark_grey", level, seed)
+	var hull := _custom(_colour(params, "hull", "dark_grey"), _colour(params, "deck", "dark_grey"), "dark_grey", level, seed)
 	var middle := length - 2.0 * BARGE_RAKE_M
 	var error := _add(result, "barge_end_neg", Transform3D(Basis.IDENTITY.scaled(Vector3(width, 1, 1)), Vector3(0, 0, -middle / 2.0)), hull)
 	error += _add(result, "barge_mid", Transform3D(Basis.IDENTITY.scaled(Vector3(width, 1, middle)), Vector3.ZERO), hull)

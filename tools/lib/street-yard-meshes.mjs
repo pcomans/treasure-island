@@ -351,8 +351,9 @@ function vnorm2(a) {
 // ---------------------------------------------------------------- wheels
 // A road wheel on an axle at (x centre of the tyre, radius, z), its outer face
 // toward `side` (+1 right, -1 left). dual: twin rear tyres (one wide tyre with
-// a deep-dish rim face).
-function wheel(out, x, z, radius, width, side, lod, { dual = false, rimColour = P.rim } = {}) {
+// a deep-dish rim face). inner: close the tyre's inner side (a wheel no body
+// hides from below, such as a loader's).
+function wheel(out, x, z, radius, width, side, lod, { dual = false, rimColour = P.rim, inner = false } = {}) {
   const center = v3(x, radius, z);
   const axis = v3(side, 0, 0);
   const tw = dual ? width * 2 + 0.03 : width;
@@ -364,6 +365,7 @@ function wheel(out, x, z, radius, width, side, lod, { dual = false, rimColour = 
   const rimSegment = profile.length - (lod === 0 ? 2 : 1);
   const sides = lod === 0 ? 16 : 6;
   out.lathe(center, axis, profile, sides, (i) => (i >= rimSegment ? rimColour : P.tire), Math.PI / sides, (i) => (i <= 1 ? 0.8 : 1));
+  if (inner) out.lathe(center, axis, [[0, -tw / 2], [profile[0][0], -tw / 2]], sides, () => P.tire, Math.PI / sides, () => 0.6);
   // The rim face: a disc (dished on a dual) with a darker hub and nut ring.
   const depth = lod > 0 ? 0.005 : dual ? 0.09 : 0.03;
   const face = vadd(center, vscale(axis, tw / 2 - depth));
@@ -767,13 +769,14 @@ function buildFabricEnd(span, dir, lod) {
 
 // ---------------------------------------------------------------- berms
 // Earth berms under black plastic sheeting (hangar earthworks pad, May 2026
-// aerial and Jun 2021 Avenue H view): a mound profile extruded in 6 m modules
-// with rounded ends; the sheets overlap down the slope at every module joint.
+// aerial and Jun 2021 Avenue H view): a long, low trapezoid with rounded
+// shoulders, extruded in 6 m modules with rounded ends; the sheets overlap
+// down the slope at every module joint.
 export const BERM_SPECS = Object.freeze({
   low: { sx: 1, sy: 1 },
-  high: { sx: 15 / 9, sy: 4.5 / 2.5 },
+  high: { sx: 15 / 9, sy: 3.2 / 1.8 },
 });
-const BERM_PROFILE = Object.freeze([[-4.5, 0], [-3.6, 0.72], [-2.6, 1.62], [-1.8, 2.18], [-0.9, 2.44], [0, 2.5], [0.9, 2.44], [1.8, 2.18], [2.6, 1.62], [3.6, 0.72], [4.5, 0]]);
+const BERM_PROFILE = Object.freeze([[-4.5, 0], [-3.9, 0.2], [-3.1, 0.7], [-2.4, 1.22], [-1.9, 1.55], [-1.3, 1.72], [-0.65, 1.79], [0, 1.8], [0.65, 1.79], [1.3, 1.72], [1.9, 1.55], [2.4, 1.22], [3.1, 0.7], [3.9, 0.2], [4.5, 0]]);
 const BERM_MODULE = 6;
 
 // The berm surface as a grid: rows of profile points along z stations.
@@ -859,73 +862,166 @@ function buildBermEnd(variant, dir, lod) {
 }
 
 // ---------------------------------------------------------------- piles
+// Plan sizes as the registry's (x by z at scale 1) and heights. Rubble is
+// broken concrete over its own fines (3rd St, Mar 2025); a tarp pile is black
+// sheeting folded over a mound, its hem loose on the ground and held by
+// tyres (Avenue N, Nov 2025).
 export const PILE_SPECS = Object.freeze({
-  gravel: { r: 4, h: 3, part: "gravel", rough: 0.05, cone: true },
-  rubble: { r: 6, h: 4.5, part: "rubble", rough: 0.16, cone: false },
-  soil: { r: 6, h: 4, part: "earth", rough: 0.1, cone: false },
-  tarp: { r: 3.4, h: 2.2, part: "tarp", rough: 0.06, cone: false, flat: true },
+  gravel: { x: 8, z: 8, h: 3, part: "gravel", rough: 0.05, cone: true },
+  rubble: { x: 12, z: 12, h: 4.5, part: "rubble", rough: 0.16, lumps: 0.18, chunks: [260, 60] },
+  soil: { x: 12, z: 12, h: 4, part: "earth", rough: 0.1 },
+  tarp: { x: 6, z: 8, h: 2.2, part: "tarp", rough: 0.04, flat: true, folds: 0.24 },
 });
 
-// A pile: a radial mound with an irregular outline (shape seeds 0..2).
+// A broken concrete chunk: a box with its corners pushed about, faceted, its
+// buried bottom left out.
+function chunk(out, center, axes, half, seed, part, ao) {
+  const [ax, ay, az] = axes;
+  const corners = [];
+  for (let i = 0; i < 8; i += 1) {
+    const jitter = (k) => 1 + 0.6 * (hash(seed, i, k) - 0.5);
+    corners.push(vadd(center, vadd(vscale(ax, (i & 1 ? 1 : -1) * half[0] * jitter(0)), vadd(vscale(ay, (i & 2 ? 1 : -1) * half[1] * jitter(1)), vscale(az, (i & 4 ? 1 : -1) * half[2] * jitter(2))))));
+  }
+  for (const [a, b, c, d] of [[0, 2, 6, 4], [1, 5, 7, 3], [2, 3, 7, 6], [0, 1, 3, 2], [4, 6, 7, 5]]) {
+    for (const [i, j, k] of [[a, b, c], [a, c, d]]) {
+      const [p, q, r] = [corners[i], corners[j], corners[k]];
+      const mid = vscale(vadd(vadd(p, q), r), 1 / 3);
+      if (vdot(vcross(vsub(q, p), vsub(r, p)), vsub(mid, center)) >= 0) out.triangle(p, q, r, null, part, [ao, ao, ao]);
+      else out.triangle(p, r, q, null, part, [ao, ao, ao]);
+    }
+  }
+}
+
+// Smooth value noise round a circle: angle a over `cells` cells (periodic, so
+// a ring closes without a step) by a second, open coordinate v.
+function ringNoise(a, v, cells, seed) {
+  const x = (((a / (2 * Math.PI)) % 1) + 1) % 1 * cells;
+  const i = Math.floor(x);
+  const j = Math.floor(v);
+  const fx = x - i;
+  const fy = v - j;
+  const at = (ii, jj) => hash(((ii % cells) + cells) % cells, jj, seed);
+  const tx = fx * fx * (3 - 2 * fx);
+  const ty = fy * fy * (3 - 2 * fy);
+  return lerp(lerp(at(i, j), at(i + 1, j), tx), lerp(at(i, j + 1), at(i + 1, j + 1), tx), ty);
+}
+
+// Smooth 2D value noise (plan coordinates; no period).
+function noise2(x, z, seed) {
+  const i = Math.floor(x);
+  const j = Math.floor(z);
+  const fx = x - i;
+  const fz = z - j;
+  const tx = fx * fx * (3 - 2 * fx);
+  const tz = fz * fz * (3 - 2 * fz);
+  return lerp(lerp(hash(i, j, seed), hash(i + 1, j, seed), tx), lerp(hash(i, j + 1, seed), hash(i + 1, j + 1, seed), tx), tz);
+}
+
+// A pile: a radial mound with an irregular outline (shape seeds 0..2), fitted
+// to its plan rectangle and height.
 function buildPile(material, shape, lod) {
   const spec = PILE_SPECS[material];
-  const out = new YardBuilder();
-  const segments = lod === 0 ? 28 : 12;
-  const rings = lod === 0 ? 9 : 4;
+  const out = new YardBuilder(lod);
+  const segments = lod === 0 ? (spec.folds ? 60 : spec.chunks ? 40 : 28) : 12;
+  const rings = lod === 0 ? (spec.chunks ? 12 : 9) : 4;
   const seed = 31 * (shape + 1) + material.length;
+  // Folds: ridges of a sheet draped over the mound, running down to the hem.
+  const fold = (a) => (spec.folds ? 0.6 * (1 - Math.abs(Math.sin(3.5 * a + seed))) ** 3 + 0.4 * (1 - Math.abs(Math.sin(5.5 * a + 2.1 * seed))) ** 4 : 0);
   const outline = (a) => {
-    const t = (a / (Math.PI * 2)) * 6;
-    return 1 + 0.14 * (noise1(t, seed) - 0.5) * 2 + 0.06 * (noise1(t * 2.3, seed + 9) - 0.5) * 2;
+    return 1 + 0.14 * (ringNoise(a, 0, 6, seed) - 0.5) * 2 + 0.06 * (ringNoise(a, 0.5, 14, seed + 9) - 0.5) * 2 + 0.05 * fold(a);
   };
   const elongation = material === "tarp" ? 1.3 : 1 + 0.15 * hash(seed, 2);
+  const nominal = Math.max(spec.x, spec.z / elongation) / 2;
   const heightAt = (rho, a) => {
     let base;
     if (spec.cone) base = Math.min(1, (1 - rho) * 1.08) - 0.06 * Math.max(0, 0.08 - (1 - rho));
     else if (spec.flat) base = Math.pow(Math.max(0, 1 - rho ** 3), 0.8);
     else base = Math.pow(Math.max(0, 1 - rho * rho), 1.2);
-    const bump = lod === 0 ? spec.rough * ((noise1(a * 3 + rho * 4, seed + 3) - 0.5) * 2 + 0.5 * (noise1(a * 7 + rho * 9, seed + 5) - 0.5)) : 0;
-    return Math.max(0, spec.h * base * (1 + bump * (rho > 0.05 ? 1 : 0)));
+    // Bumps (and a rubble pile's lumps of a metre or so) in plan coordinates.
+    const r = nominal * outline(a) * rho;
+    const px = r * Math.cos(a);
+    const pz = r * Math.sin(a) * elongation;
+    let bump = lod === 0 ? spec.rough * ((noise2(px / 2.6, pz / 2.6, seed + 3) - 0.5) * 2 + 0.5 * (noise2(px / 1.2, pz / 1.2, seed + 5) - 0.5)) : 0;
+    if (spec.lumps && lod === 0) bump += spec.lumps * (noise2(px / 0.75, pz / 0.75, seed + 7) - 0.5);
+    const folds = spec.folds ? spec.folds * fold(a) * Math.sin(Math.PI * Math.min(1, rho)) ** 0.8 : 0;
+    return Math.max(0, spec.h * base * (1 + bump * Math.min(1, rho * 6)) + folds);
   };
-  const point = (rho, k) => {
-    const a = (2 * Math.PI * k) / segments;
-    const r = spec.r * rho * outline(a);
-    return v3(r * Math.cos(a), rho >= 1 ? 0 : heightAt(rho, a), r * Math.sin(a) * elongation);
+  // The tallest point of the mound, to fit its height to the plan's (a rubble
+  // pile's surface stays a little lower: its chunks stand proud of it).
+  let peak = 0;
+  for (let i = 0; i <= 40; i += 1) for (let k = 0; k < 120; k += 1) peak = Math.max(peak, heightAt(i / 40, (2 * Math.PI * k) / 120));
+  const sy = (spec.chunks ? spec.h - 0.25 : spec.h) / peak;
+  // A tarp's hem lies loose on the ground beyond the mound, wider in places.
+  const hemWidth = (a) => 0.07 + 0.08 * ringNoise(a, 0.3, 14, seed + 13) + 0.04 * fold(a);
+  const raw = (rho, a, hem = 0) => {
+    const r = nominal * outline(a) * (rho + hem * hemWidth(a));
+    const y = hem > 0 ? (hem < 1 ? 0.035 : 0.008) : rho >= 1 ? (spec.folds ? 0.035 : 0) : heightAt(rho, a) * sy;
+    return v3(r * Math.cos(a), y, r * Math.sin(a) * elongation);
   };
-  const grid = [];
+  // Fit the outermost ring to the plan (sampled finer than any level's mesh).
+  const outermost = spec.folds ? (a) => raw(1, a, 1) : (a) => raw(1, a);
+  let maxX = 0;
+  let maxZ = 0;
+  for (let i = 0; i < 720; i += 1) {
+    const p = outermost((2 * Math.PI * i) / 720);
+    maxX = Math.max(maxX, Math.abs(p[0]));
+    maxZ = Math.max(maxZ, Math.abs(p[2]));
+  }
+  const sx = (spec.x / 2) * 0.98 / maxX;
+  const sz = (spec.z / 2) * 0.98 / maxZ;
+  const surface = (rho, a, hem = 0) => {
+    const p = raw(rho, a, hem);
+    return v3(p[0] * sx, p[1], p[2] * sz);
+  };
+  const rows = [];
   for (let ring = 0; ring <= rings; ring += 1) {
     const rho = ring === 0 ? 0 : Math.pow(ring / rings, 0.85);
-    const row = [];
-    for (let k = 0; k <= segments; k += 1) row.push(point(rho, k % segments));
-    grid.push(row);
+    rows.push((a) => surface(rho, a));
   }
+  if (spec.folds) for (const hem of lod === 0 ? [0.55, 1] : [1]) rows.push((a) => surface(1, a, hem));
+  const grid = rows.map((row) => Array.from({ length: segments + 1 }, (_, k) => row((2 * Math.PI * (k % segments)) / segments)));
   gridSurface(out, grid, P[spec.part]);
-  if (lod === 0 && material === "rubble") {
-    // Broken slabs and blocks lying in the slope.
-    for (let i = 0; i < 120; i += 1) {
-      const rho = 0.08 + 0.9 * hash(i, seed, 1);
-      const k = Math.floor(hash(i, seed, 2) * segments);
-      const base = point(rho, k);
-      // Lying in the slope: the chunk's up is the surface normal there.
-      const up = vnorm(vcross(vsub(point(Math.min(1, rho + 0.05), k), point(Math.max(0, rho - 0.05), k)), vsub(point(rho, (k + 1) % segments), point(rho, (k + segments - 1) % segments))));
-      const n = up[1] < 0 ? vscale(up, -1) : up;
-      const size = 0.12 + 0.34 * hash(i, seed, 3) ** 1.6;
-      const yaw = hash(i, seed, 4) * Math.PI * 2;
+  const normalAt = (rho, a) => {
+    const n = vnorm(vcross(vsub(surface(Math.min(1, rho + 0.02), a), surface(Math.max(0, rho - 0.02), a)), vsub(surface(rho, a + 0.02), surface(rho, a - 0.02))));
+    return n[1] < 0 ? vscale(n, -1) : n;
+  };
+  if (spec.chunks) {
+    // Broken concrete all over, bedded about a third deep: area-weighted
+    // positions, mostly small pieces with a few slabs; the far level keeps
+    // the biggest.
+    const count = spec.chunks[0];
+    const keep = spec.chunks[lod];
+    const pieces = [];
+    for (let i = 0; i < count; i += 1) {
+      const rho = Math.sqrt(0.003 + 0.9 * hash(i, seed, 1));
+      const a = hash(i, seed, 2) * Math.PI * 2;
+      const size = 0.13 + 0.34 * hash(i, seed, 3) ** 2.2;
+      pieces.push({ i, rho, a, size });
+    }
+    pieces.sort((p, q) => q.size - p.size);
+    for (const { i, rho, a, size } of pieces.slice(0, keep)) {
+      const n = normalAt(rho, a);
       const ref = Math.abs(n[1]) < 0.95 ? Y : X;
       const t1 = vnorm(vcross(ref, n));
       const t2 = vcross(n, t1);
-      const ax = vnorm(vadd(vscale(t1, Math.cos(yaw)), vscale(t2, Math.sin(yaw))));
+      const yaw = hash(i, seed, 4) * Math.PI * 2;
+      const ax0 = vnorm(vadd(vscale(t1, Math.cos(yaw)), vscale(t2, Math.sin(yaw))));
       const tilt = (hash(i, seed, 5) - 0.5) * 0.5;
-      const ay = vnorm(vadd(n, vscale(ax, tilt)));
-      out.box(vadd(base, vscale(n, size * 0.06)), [size * (0.7 + 0.5 * hash(i, 6)), size * 0.2, size * (0.5 + 0.4 * hash(i, 7))], P.rubble, [ax, ay, vnorm(vcross(ax, ay))]);
+      const ay = vnorm(vadd(n, vscale(ax0, tilt)));
+      const ax = vnorm(vsub(ax0, vscale(ay, vdot(ax0, ay))));
+      const az = vcross(ax, ay);
+      const half = [size * (0.75 + 0.4 * hash(i, 6)), size * (0.42 + 0.25 * hash(i, 8)), size * (0.55 + 0.35 * hash(i, 7))];
+      const center = vadd(surface(rho, a), vscale(n, half[1] * 0.25));
+      chunk(out, center, [ax, ay, az], half, seed * 1000 + i, P.concrete, 0.72 + 0.28 * hash(i, seed, 9));
     }
   }
-  if (lod === 0 && material === "tarp") {
-    // Tyres holding the tarp down.
+  if (lod === 0 && spec.folds) {
+    // Tyres holding the sheeting down.
     for (let i = 0; i < 7; i += 1) {
       const rho = 0.35 + 0.4 * hash(i, seed, 8);
-      const k = Math.floor(hash(i, seed, 9) * segments);
-      const p = point(rho, k);
-      out.lathe(vadd(p, v3(0, -0.04, 0)), Y, [[0.2, 0], [0.33, 0.02], [0.36, 0.11], [0.3, 0.2], [0.2, 0.2]], 10, () => P.tire);
+      const a = (2 * Math.PI * Math.floor(hash(i, seed, 9) * segments)) / segments;
+      const p = surface(rho, a);
+      out.lathe(vadd(p, v3(0, -0.04, 0)), Y, [[0.2, 0], [0.33, 0.02], [0.36, 0.11], [0.3, 0.2], [0.2, 0.2], [0.2, 0.02]], 10, () => P.tire);
     }
   }
   return out.result();
@@ -1541,6 +1637,38 @@ function buildVan(variant, lod) {
   return stepVan(new YardBuilder(lod), lod, { length: 7.0, height: 2.95, food: false });
 }
 
+// A food truck's serving window in its +X side at x = hw: glazing in a
+// stainless frame with a sliding sash, a counter ledge under it and a fixed
+// stainless awning hood over it (City View Commissary, Mar 2025: the window
+// side of a parked truck, closed). The hood and ledge stand out 0.3 m at
+// most, so trucks parked a third of a metre apart stay clear of each other.
+function servingWindow(out, lod, hw, z0, z1, y0, y1) {
+  if (lod === 0) {
+    const t = 0.025;
+    out.aabb([hw, y0 - 0.05, z0 - 0.05], [hw + t, y0, z1 + 0.05], P.chrome);
+    out.aabb([hw, y1, z0 - 0.05], [hw + t, y1 + 0.05, z1 + 0.05], P.chrome);
+    out.aabb([hw, y0, z0 - 0.05], [hw + t, y1, z0], P.chrome);
+    out.aabb([hw, y0, z1], [hw + t, y1, z1 + 0.05], P.chrome);
+    out.aabb([hw, y0, (z0 + z1) / 2 - 0.025], [hw + t, y1, (z0 + z1) / 2 + 0.025], P.chrome);
+  }
+  out.aabb([hw, y0 - 0.11, z0 - 0.05], [hw + 0.22, y0 - 0.05, z1 + 0.05], P.metal);
+  // The hood: a stainless sheet sloping down and out from over the window,
+  // closed at its ends.
+  const top = y1 + 0.16;
+  const reach = 0.28;
+  const drop = 0.14;
+  const angle = Math.atan2(drop, reach);
+  const along = v3(Math.cos(angle), -Math.sin(angle), 0);
+  const up = v3(Math.sin(angle), Math.cos(angle), 0);
+  const length = Math.hypot(reach, drop);
+  out.box(vadd(v3(hw, top, (z0 + z1) / 2), vscale(along, length / 2)), [length / 2, 0.012, (z1 - z0) / 2 + 0.12], (face) => (face === "+y" ? P.chrome : P.metal), [along, up, Z]);
+  for (const z of [z0 - 0.12, z1 + 0.12]) {
+    const zz = [z - 0.006, z + 0.006];
+    out.face([v3(hw, top, zz[0]), v3(hw + reach, top - drop, zz[0]), v3(hw, top - drop, zz[0])].concat([v3(hw, top - drop, zz[0])]), NZ, P.chrome);
+    out.face([v3(hw, top, zz[1]), v3(hw + reach, top - drop, zz[1]), v3(hw, top - drop, zz[1])].concat([v3(hw, top - drop, zz[1])]), Z, P.chrome);
+  }
+}
+
 // A walk-in step van (and the food truck built on one): a tall box body with a
 // short nose, a big flat windshield and folding doors at the front.
 function stepVan(out, lod, { length, height, food }) {
@@ -1569,10 +1697,7 @@ function stepVan(out, lod, { length, height, food }) {
     rectHole(front + 1.85, front + 2.6, 1.3, 2.45, P.glass, { radius: 0.04 }),
     rectHole(front + 1.85, front + 2.6, sill + 0.16, 1.22, P.seal),
   ];
-  if (food) {
-    // The serving window on the right, closed by a stainless flap.
-    holes.push(rectHole(-0.8, 1.8, 1.25, 2.2, P.chrome, { side: 1 }));
-  }
+  if (food) holes.push(rectHole(-0.75, 1.75, 1.3, 2.15, P.glass, { side: 1 }));
   sweepTagged(out, p, hw, {
     bumper: P.trim, grille: { face: P.grille, round: P.paint }, hood: P.paint, windshield: { face: P.glass, round: P.trim },
     roof: P.paint, rear: { face: food ? P.paint : P.rollup, round: P.paint }, under: P.under, arch: P.under,
@@ -1587,9 +1712,8 @@ function stepVan(out, lod, { length, height, food }) {
     lamp(out, v3(0, 0.62, hl + 0.015), v3(0.15, 0.07, 0.008), P.plate);
   }
   if (food) {
-    // Counter ledge under the window, the flap's hinge rail over it, roof hood vent and AC.
-    out.aabb([hw, 1.18, -0.75], [hw + 0.28, 1.24, 1.75], P.metal);
-    out.aabb([hw, 2.2, -0.85], [hw + 0.06, 2.27, 1.85], P.trim);
+    // The serving window on the right, the roof's hood vent and AC.
+    servingWindow(out, lod, hw, -0.75, 1.75, 1.3, 2.15);
     out.aabb([0.1, height - 0.02, -0.4], [0.95, height + 0.32, 0.5], (face) => (face === "-y" ? null : P.vent));
     out.aabb([-0.75, height - 0.02, 1.2], [-0.05, height + 0.25, 2.0], (face) => (face === "-y" ? null : P.vent));
   }
@@ -1620,9 +1744,9 @@ function buildFoodTruck(variant, lod) {
   ]);
   sweepTagged(out, p, hw, { front: P.paint, roof: P.paint, rear: P.paint, under: P.under, arch: P.under }, {
     r: 0.1,
-    side: { part: P.paint, holes: [rectHole(-1.3, 1.1, 1.2, 2.1, P.metal, { side: 1 }), rectHole(1.6, 2.4, 0.8, 2.4, P.white_body, { side: -1, radius: 0.03 })] },
+    side: { part: P.paint, holes: [rectHole(-1.25, 1.05, 1.25, 2.1, P.glass, { side: 1 }), rectHole(1.6, 2.4, 0.8, 2.4, P.white_body, { side: -1, radius: 0.03 })] },
   });
-  out.aabb([hw, 1.14, -1.25], [hw + 0.28, 1.2, 1.05], P.metal);
+  servingWindow(out, lod, hw, -1.25, 1.05, 1.25, 2.1);
   out.aabb([-0.4, roof - 0.02, -0.6], [0.4, roof + 0.28, 0.3], (face) => (face === "-y" ? null : P.vent));
   tongue(out, bodyFront + 0.05, -hl, 0.48, 0.75, lod, { tanks: true });
   out.aabb([-0.9, 0.4, bodyFront], [0.9, sill, hl - 0.2], P.under, { ao: 0.4 });
@@ -1865,102 +1989,199 @@ function buildBoat(variant, covered, lod) {
 }
 
 // ---------------------------------------------------------------- equipment
-// A crawler excavator in its parking pose (boom low, arm tucked, bucket on
-// the ground in front) and a wheel loader with its bucket down; the machine
-// colour is the row's paint.
+// Sweeps a tagged profile into a builder of its own and adds it moved by
+// offset (a swept body is always centred on x = 0).
+function sweepAt(out, profile, hw, parts, offset, options = {}) {
+  const local = new YardBuilder(out.lod);
+  sweepTagged(local, profile, hw, parts, options);
+  appendMesh(out, local.result(), offset);
+}
+
+// A hydraulic cylinder from a to b: a painted barrel, then a chrome rod.
+function ram(out, a, b, radius, part) {
+  const split = vadd(a, vscale(vsub(b, a), 0.58));
+  out.beam(a, split, radius * 2, radius * 2, part);
+  out.beam(split, b, radius, radius, P.chrome);
+}
+
+// A strip of side profile around the line a -> b (z, y), depth da at a and db
+// at b: a beam's outline for sweepAt.
+function stripProfile(tag, a, b, da, db) {
+  const d = vnorm2([b[0] - a[0], b[1] - a[1]]);
+  const n = [-d[1], d[0]];
+  return profileOf([[tag, [
+    [a[0] + n[0] * da / 2, a[1] + n[1] * da / 2], [b[0] + n[0] * db / 2, b[1] + n[1] * db / 2],
+    [b[0] - n[0] * db / 2, b[1] - n[1] * db / 2], [a[0] - n[0] * da / 2, a[1] - n[1] * da / 2],
+  ]]]);
+}
+
+// A crawler excavator parked with its arm hanging and the bucket curled on the
+// ground under the boom tip (Avenue M, Nov 2025: a red boom and arm high over
+// a white house with a dark cab; Seven Seas Ave, Nov 2025: yellow machines).
+// Boom, arm and bucket take the row's paint (primary), the house and its
+// counterweight the house colour (secondary). The swing centre stands behind
+// the plan's middle so the reach fits the plan.
+const EXCAVATOR_SWING_Z = 1.5;
 function buildExcavator(lod) {
   const out = new YardBuilder(lod);
+  const zc = EXCAVATOR_SWING_Z;
   const R = 0.42;
-  // Tracks: rounded track frames with idlers and sprockets.
-  for (const s of [1, -1]) {
-    const x = s * 1.28;
-    const p = profileOf([["track", [...arcPts(-1.95, R, R, 270, 90, 6), ...arcPts(1.95, R + 0.05, R + 0.05, 90, -90, 6)]]]);
-    const local = new YardBuilder();
-    sweepTagged(local, p, 0.3, { track: P.hub }, { r: 0.04, steps: 1, side: { part: P.trim } });
-    const mesh = local.result();
-    for (let i = 0; i < mesh.indices.length; i += 3) {
-      const corner = (k) => {
-        const index = mesh.indices[i + k];
-        return {
-          p: v3(mesh.positions[index * 3] + x, mesh.positions[index * 3 + 1], mesh.positions[index * 3 + 2]),
-          n: v3(mesh.normals[index * 3], mesh.normals[index * 3 + 1], mesh.normals[index * 3 + 2]),
-          part: Math.floor(mesh.uvs[index * 2] * YARD_KIT_PART_SLOTS),
-        };
-      };
-      const [a, b, c] = [corner(0), corner(1), corner(2)];
-      out.triangle(a.p, b.p, c.p, [a.n, b.n, c.n], a.part);
-    }
+  // Tracks: rounded track frames, idler at the front, sprocket at the rear.
+  const track = profileOf([["track", [...arcPts(zc - 1.85, R, R, 270, 90, 6), ...arcPts(zc + 1.85, R + 0.04, R + 0.04, 90, -90, 6)]]]);
+  for (const s of [1, -1]) sweepAt(out, track, 0.3, { track: P.hub }, v3(s * 1.3, 0, 0), { r: 0.04, steps: 1, side: { part: P.trim } });
+  out.aabb([-1.0, 0.45, zc - 1.4], [1.0, 1.0, zc + 1.4], P.under, { ao: 0.5 });
+  if (lod === 0) {
+    // Track rollers along the frames' inner faces.
+    for (const s of [1, -1]) for (let k = -2; k <= 2; k += 1) out.aabb([s * 1.0 - 0.02, 0.12, zc + k * 0.62 - 0.15], [s * 1.0 + 0.02, 0.36, zc + k * 0.62 + 0.15], P.under);
   }
-  out.aabb([-1.0, 0.45, -1.4], [1.0, 1.0, 1.4], P.under, { ao: 0.5 });
-  // Upper structure: house with counterweight, cab on the left front.
+  // The house: engine and counterweight across the full width behind the cab
+  // and the boom foot; a tool box on the right front, the cab on the left.
+  const deck = 1.05;
   const house = profileOf([
-    ["deck", [[-1.25, 1.05], [2.25, 1.05]]],
-    ["rear", [...arcPts(2.25, 1.6, 0.55, -90, 90, 5)]],
-    ["top", [[1.6, 2.2], [-1.25, 2.2]]],
-    ["front", [[-1.3, 2.15], [-1.3, 1.1]]],
+    ["front", [[zc + 0.05, deck]]],
+    ["bottom", [[zc + 2.15, deck]]],
+    ["counterweight", arcPts(zc + 2.15, deck + 0.6, 0.6, -90, 90, lod === 0 ? 6 : 3)],
+    ["top", [[zc + 0.05, deck + 1.2]]],
   ]);
-  sweepTagged(out, house, 1.42, { deck: P.under, rear: P.crane_red, top: P.crane_red, front: P.crane_red }, { r: 0.08, steps: 2, side: { part: P.crane_red } });
-  const cab = { x0: -1.42, x1: -0.45, z0: -1.25, z1: 0.45, y0: 2.18, y1: 3.12 };
-  out.aabb([cab.x0, cab.y0, cab.z0], [cab.x1, cab.y1, cab.z1], (face) => (face === "+y" ? P.crane_red : face === "-y" ? null : P.trim), {
+  sweepTagged(out, house, 1.45, { front: P.accent, bottom: P.under, counterweight: P.accent, top: P.accent }, { r: 0.1, steps: 2, side: { part: P.accent } });
+  out.aabb([0.55, deck, zc - 1.6], [1.45, deck + 0.95, zc + 0.15], (face) => (face === "-y" ? null : P.accent));
+  out.aabb([-0.55, deck, zc - 1.5], [0.55, deck + 0.3, zc + 0.15], (face) => (face === "-y" ? null : P.accent));
+  const cab = { x0: -1.45, x1: -0.5, z0: zc - 1.6, z1: zc + 0.15, y0: deck, y1: deck + 2.0 };
+  out.aabb([cab.x0, cab.y0, cab.z0], [cab.x1, cab.y1, cab.z1], (face) => (face === "-y" ? null : P.trim), {
     holes: {
-      "-z": [{ u0: cab.x0 + 0.08, u1: cab.x1 - 0.08, v0: cab.y0 + 0.1, v1: cab.y1 - 0.1, part: P.glass }],
-      "-x": [{ u0: cab.z0 + 0.1, u1: cab.z1 - 0.1, v0: cab.y0 + 0.2, v1: cab.y1 - 0.12, part: P.glass }],
-      "+x": [{ u0: cab.z0 + 0.1, u1: cab.z1 - 0.1, v0: cab.y0 + 0.2, v1: cab.y1 - 0.12, part: P.glass }],
+      "-z": [{ u0: cab.x0 + 0.07, u1: cab.x1 - 0.07, v0: cab.y0 + 0.4, v1: cab.y1 - 0.08, part: P.glass }],
+      "-x": [{ u0: cab.z0 + 0.08, u1: cab.z1 - 0.45, v0: cab.y0 + 0.8, v1: cab.y1 - 0.1, part: P.glass }],
+      "+x": [{ u0: cab.z0 + 0.08, u1: cab.z1 - 0.25, v0: cab.y0 + 1.0, v1: cab.y1 - 0.1, part: P.glass }],
+      "+z": [{ u0: cab.x0 + 0.1, u1: cab.x1 - 0.1, v0: deck + 1.32, v1: cab.y1 - 0.12, part: P.glass }],
     },
   });
-  if (lod === 0) out.cylinder(v3(0.9, 2.18, 0.9), Y, 0.07, 0.55, 8, P.trim);
-  // Boom, arm and bucket (a beam chain), with the boom cylinders.
-  const foot = v3(0.2, 1.75, -1.15);
-  const elbow = v3(0.2, 3.05, -5.6);
-  const wrist = v3(0.2, 0.85, -5.1);
-  out.beam(foot, elbow, 0.45, 0.6, P.crane_red);
-  out.beam(elbow, wrist, 0.32, 0.45, P.crane_red);
-  out.beam(v3(0.2, 1.35, -1.6), vadd(foot, vscale(vsub(elbow, foot), 0.55)), 0.18, 0.18, P.lock_bar);
-  // Bucket.
-  const bucket = profileOf([["bucket", [[-5.7, 0.05], [-4.85, 0.05], ...arcPts(-5.0, 0.6, 0.55, -60, 60, 4), [-5.55, 1.0]]]]);
-  const local = new YardBuilder();
-  sweepTagged(local, bucket, 0.62, { bucket: P.crane_red }, { r: 0.04, steps: 1, side: { part: P.crane_red } });
-  const mesh = local.result();
-  for (let i = 0; i < mesh.indices.length; i += 3) {
-    const corner = (k) => {
-      const index = mesh.indices[i + k];
-      return { p: v3(mesh.positions[index * 3] + 0.2, mesh.positions[index * 3 + 1], mesh.positions[index * 3 + 2]), n: v3(mesh.normals[index * 3], mesh.normals[index * 3 + 1], mesh.normals[index * 3 + 2]), part: Math.floor(mesh.uvs[index * 2] * YARD_KIT_PART_SLOTS) };
-    };
-    const [a, b, c] = [corner(0), corner(1), corner(2)];
-    out.triangle(a.p, b.p, c.p, [a.n, b.n, c.n], a.part);
+  if (lod === 0) {
+    // Exhaust, engine grilles on both sides of the house, a rail on top.
+    out.cylinder(v3(0.95, deck + 1.2, zc + 1.05), Y, 0.07, 0.5, 8, P.trim);
+    for (const s of [1, -1]) {
+      const xs = [s * 1.45, s * 1.47].sort((a, b) => a - b);
+      out.aabb([xs[0], deck + 0.35, zc + 0.55], [xs[1], deck + 1.0, zc + 1.85], P.grille);
+    }
+    out.beam(v3(1.3, deck + 1.2, zc + 0.3), v3(1.3, deck + 1.55, zc + 0.3), 0.04, 0.04, P.metal);
+    out.beam(v3(1.3, deck + 1.2, zc + 1.9), v3(1.3, deck + 1.55, zc + 1.9), 0.04, 0.04, P.metal);
+    out.beam(v3(1.3, deck + 1.55, zc + 0.28), v3(1.3, deck + 1.55, zc + 1.92), 0.04, 0.04, P.metal);
+  }
+  // Boom: a banana from its foot on the deck up over the knee to the tip.
+  const bx = 0.02;
+  const boom = profileOf([["boom", roundedProfile([
+    [0.1, 1.48, 0.12], [0.45, 2.12, 0.12], [-2.3, 4.05, 0.7], [-4.22, 3.82, 0.12], [-4.12, 3.28, 0.12], [-2.25, 3.55, 0.55],
+  ], lod === 0 ? 3 : 1)]]);
+  sweepAt(out, boom, 0.27, { boom: P.crane_red }, v3(bx, 0, 0), { r: 0.05, steps: 1, side: { part: P.crane_red } });
+  // Arm: hangs from the boom tip with its heel above it; the bucket below.
+  const tip = [-4.12, 3.56];
+  const pin = [-4.42, 0.98];
+  const along = vnorm2([pin[0] - tip[0], pin[1] - tip[1]]);
+  const heel = [tip[0] - along[0] * 0.7, tip[1] - along[1] * 0.7];
+  sweepAt(out, stripProfile("arm", heel, pin, 0.55, 0.32), 0.2, { arm: P.crane_red }, v3(bx, 0, 0), { r: 0.04, steps: 1, side: { part: P.crane_red } });
+  // Bucket, curled: the shell round the front and under, its teeth pointing
+  // back toward the machine on the ground; the open mouth faces up and back.
+  const bucket = profileOf([
+    ["mouth", [[-4.1, 1.22]]],
+    ["shell", [[-4.72, 1.24], ...arcPts(-4.45, 0.55, 0.5, 125, 275, lod === 0 ? 6 : 3), [-3.85, 0.03]]],
+  ]);
+  sweepAt(out, bucket, 0.55, { mouth: P.metal, shell: P.crane_red }, v3(bx, 0, 0), { r: 0.03, steps: 1, side: { part: P.crane_red } });
+  if (lod === 0) {
+    for (const x of [-0.39, -0.13, 0.13, 0.39]) out.aabb([bx + x - 0.045, 0.01, -3.9], [bx + x + 0.045, 0.1, -3.74], P.metal);
+    // Boom rams from the house front up under the boom; the arm ram over the
+    // knee to the heel; the bucket ram down the arm's back to the links.
+    for (const s of [1, -1]) ram(out, v3(bx + s * 0.36, 1.32, 0.15), v3(bx + s * 0.36, 3.02, -1.55), 0.085, P.crane_red);
+    out.aabb([bx - 0.1, 3.3, -1.58], [bx + 0.1, 3.82, -1.26], P.crane_red);
+    ram(out, v3(bx, 3.74, -1.42), v3(bx, heel[1] + 0.2, heel[0] + 0.12), 0.08, P.crane_red);
+    ram(out, v3(bx, heel[1] - 0.05, heel[0] + 0.32), v3(bx, 1.52, -4.12), 0.07, P.crane_red);
+    for (const s of [1, -1]) out.beam(v3(bx + s * 0.24, 1.55, -4.15), v3(bx + s * 0.24, 1.16, -4.12), 0.06, 0.12, P.crane_red);
   }
   return out.result();
 }
 
+// A wheel loader parked with its bucket flat on the ground: an articulated
+// machine, the bucket on two lift arms with a Z-bar tilt linkage, the cab
+// over the hinge and the engine under a long hood at the rear (Avenue M and
+// Seven Seas Ave yards, Nov 2025: yellow machines). Paint is the row's.
 function buildWheelLoader(lod) {
   const out = new YardBuilder(lod);
-  const R = 0.8;
-  const frontAxle = -1.45;
-  const rearAxle = 1.85;
-  // Rear engine body, cab, front frame.
+  const R = 0.78;
+  const frontAxle = -1.2;
+  const rearAxle = 1.95;
+  const track = 2.25;
+  // Rear frame: the cab deck, the engine hood and the counterweight.
   const body = profileOf([
-    ["bottom", [[0.6, 0.85], [3.55, 0.85]]],
-    ["rear", [[3.65, 1.0], [3.65, 2.0], [3.5, 2.3]]],
-    ["hood", [[1.4, 2.3], [1.3, 1.7]]],
-    ["front", [[0.6, 1.6]]],
+    ["front", [[0.25, 0.95]]],
+    ["bottom", [[3.4, 0.95]]],
+    ["rear", [[3.85, 1.1], [3.92, 1.65]]],
+    ["grille", [[3.78, 2.15]]],
+    ["hood", [[3.52, 2.33], [1.6, 2.37], [1.47, 2.27]]],
+    ["deck", [[1.47, 1.6], [0.25, 1.6]]],
   ]);
-  sweepTagged(out, body, 1.05, { bottom: P.under, rear: { face: P.grille, round: P.crane_red }, hood: P.crane_red, front: P.crane_red }, { r: 0.12, side: { part: P.crane_red } });
-  out.aabb([-0.75, 1.6, -0.2], [0.75, 3.35, 1.3], (face) => (face === "+y" ? P.crane_red : face === "-y" ? null : P.trim), {
-    holes: Object.fromEntries(["+x", "-x"].map((face) => [face, [{ u0: -0.1, u1: 1.2, v0: 2.0, v1: 3.2, part: P.glass }]]).concat([["-z", [{ u0: -0.65, u1: 0.65, v0: 2.0, v1: 3.22, part: P.glass }]], ["+z", [{ u0: -0.6, u1: 0.6, v0: 2.3, v1: 3.2, part: P.glass }]]])),
+  sweepTagged(out, body, 0.82, {
+    front: P.crane_red, bottom: P.under, rear: P.crane_red, grille: { face: P.grille, round: P.crane_red }, hood: P.crane_red, deck: P.crane_red,
+  }, { r: 0.1, steps: 2, side: { part: P.crane_red } });
+  // Fenders over the tyres.
+  for (const s of [1, -1]) {
+    const xs = [s * 0.8, s * 1.46].sort((a, b) => a - b);
+    out.aabb([xs[0], 1.62, rearAxle - 0.72], [xs[1], 1.69, rearAxle + 0.8], P.crane_red);
+    out.aabb([xs[0], 1.15, rearAxle + 0.74], [xs[1], 1.69, rearAxle + 0.8], P.crane_red);
+    out.aabb([xs[0], 1.62, frontAxle - 0.62], [xs[1], 1.69, frontAxle + 0.45], P.crane_red);
+  }
+  // Cab with glass all round and a roof slab.
+  out.aabb([-0.78, 1.6, -0.1], [0.78, 3.38, 1.5], (face) => (face === "-y" ? null : P.trim), {
+    holes: {
+      "-z": [{ u0: -0.7, u1: 0.7, v0: 1.85, v1: 3.3, part: P.glass }],
+      "+z": [{ u0: -0.66, u1: 0.66, v0: 2.3, v1: 3.3, part: P.glass }],
+      "-x": [{ u0: -0.02, u1: 1.32, v0: 1.95, v1: 3.3, part: P.glass }],
+      "+x": [{ u0: -0.02, u1: 1.32, v0: 1.95, v1: 3.3, part: P.glass }],
+    },
   });
-  out.aabb([-0.55, 0.75, -2.1], [0.55, 1.55, 0.6], P.crane_red);
-  if (lod === 0) out.cylinder(v3(0.6, 2.28, 2.9), Y, 0.08, 0.7, 8, P.trim);
-  // Lift arms and the bucket on the ground.
-  for (const s of [1, -1]) out.beam(v3(s * 0.62, 1.55, -0.6), v3(s * 0.75, 0.75, -3.15), 0.16, 0.3, P.crane_red);
-  const bucket = profileOf([["bucket", [[-4.0, 0.03], [-3.0, 0.03], ...arcPts(-3.2, 0.65, 0.62, -70, 70, 4), [-3.85, 1.2]]]]);
-  sweepTagged(out, bucket, 1.5, { bucket: P.metal }, { r: 0.03, steps: 1, side: { part: P.crane_red } });
-  axle(out, frontAxle, 2.1, R, 0.6, lod);
-  axle(out, rearAxle, 2.1, R, 0.6, lod);
+  out.aabb([-0.86, 3.38, -0.18], [0.86, 3.48, 1.58], P.crane_red);
+  // Front frame with the arms' tower, and the axle housings.
+  out.aabb([-0.5, 0.62, -2.05], [0.5, 1.5, 0.25], P.crane_red);
+  out.aabb([-0.55, 1.5, -0.68], [0.55, 2.28, -0.2], P.crane_red);
+  out.aabb([-0.85, R - 0.13, frontAxle - 0.16], [0.85, R + 0.13, frontAxle + 0.16], P.under, { ao: 0.5 });
+  out.aabb([-0.85, R - 0.13, rearAxle - 0.16], [0.85, R + 0.13, rearAxle + 0.16], P.under, { ao: 0.5 });
+  // Lift arms, bent, from the tower to the bucket's back; their cross tube
+  // carries the bell crank, tilted by the ram from the tower and linked down
+  // to the bucket's top.
+  const towerPin = v3(0, 2.08, -0.45);
+  const bend = v3(0, 1.62, -1.85);
+  const bucketPin = v3(0, 0.62, -3.0);
+  for (const s of [1, -1]) {
+    const x = v3(s * 0.62, 0, 0);
+    out.beam(vadd(towerPin, x), vadd(bend, x), 0.2, 0.42, P.crane_red);
+    out.beam(vadd(bend, x), vadd(bucketPin, x), 0.2, 0.4, P.crane_red);
+  }
+  out.beam(v3(-0.72, 1.62, -1.85), v3(0.72, 1.62, -1.85), 0.3, 0.3, P.crane_red);
+  out.beam(v3(0, 2.42, -1.58), v3(0, 1.32, -2.12), 0.26, 0.24, P.crane_red);
+  out.beam(v3(0, 1.32, -2.12), v3(0, 1.1, -3.02), 0.16, 0.18, P.crane_red);
+  if (lod === 0) {
+    ram(out, v3(0, 2.05, -0.62), v3(0, 2.4, -1.6), 0.09, P.crane_red);
+    for (const s of [1, -1]) ram(out, v3(s * 0.42, 0.95, -0.55), v3(s * 0.42, 1.48, -1.55), 0.09, P.crane_red);
+    out.cylinder(v3(0.45, 2.33, 2.25), Y, 0.08, 0.72, 8, P.trim);
+    out.cylinder(v3(-0.45, 2.33, 1.95), Y, 0.13, 0.36, 8, P.trim);
+  }
+  // The bucket, flat on the ground and open to the front: a steel plate
+  // bent into floor, curved back and spill guard between two side plates;
+  // the worn inside shows.
+  const arcSteps = lod === 0 ? 7 : 3;
+  const outer = [[-4.0, 0.0], [-3.42, 0.0], ...arcPts(-3.42, 0.6, 0.6, 270, 450, arcSteps).slice(1), [-3.76, 1.24]];
+  const inner = [[-3.76, 1.17], ...arcPts(-3.42, 0.6, 0.54, 90, -90, arcSteps), [-3.97, 0.06]];
+  const plate = profileOf([["edge", [outer[0]]], ["shell", outer.slice(1)], ["inside", inner]]);
+  sweepTagged(out, plate, 1.42, { edge: P.metal, shell: P.crane_red, inside: P.metal }, { r: 0.01, steps: 1, side: { part: P.crane_red } });
+  for (const s of [1, -1]) {
+    polygonFace(out, v3(s * 1.45, 0, 0), Z, Y, outer, [], v3(s, 0, 0), P.crane_red);
+    polygonFace(out, v3(s * 1.42, 0, 0), Z, Y, outer, [], v3(-s, 0, 0), P.metal, 0.7);
+  }
+  axle(out, frontAxle, track, R, 0.6, lod, { rimColour: P.crane_red, inner: true });
+  axle(out, rearAxle, track, R, 0.6, lod, { rimColour: P.crane_red, inner: true });
   return out.result();
 }
 
 // An open-top roll-off bin: a ribbed steel box on two rails, its front raked,
-// a hinged rear door; the open top shows the dark inside.
+// a hinged rear door; the open top shows the dark inside. Its walls and
+// frame rust through the paint (Avenue M, Nov 2025: faded blue, rusted).
 function buildOpenBin(lod) {
   const out = new YardBuilder(lod);
   const hw = 1.22;
@@ -1970,19 +2191,19 @@ function buildOpenBin(lod) {
     ["top", [[3.3, 1.85]]],
     ["rear", [[3.3, 0.22]]],
   ]);
-  sweepTagged(out, p, hw, { bottom: P.under, front: P.crane_red, top: { face: P.inside, round: P.crane_red }, rear: P.crane_red }, { r: 0.04, steps: 1, side: { part: P.crane_red } });
+  sweepTagged(out, p, hw, { bottom: P.under, front: P.tank, top: { face: P.inside, round: P.container_frame }, rear: P.tank }, { r: 0.04, steps: 1, side: { part: P.tank } });
   for (const s of [1, -1]) out.aabb([s * 0.55 - 0.07, 0, -3.0], [s * 0.55 + 0.07, 0.22, 3.25], P.hub);
   if (lod === 0) {
     // Side stiffeners, the top rail and the rear door's latches.
     for (let z = -2.8; z <= 3.0; z += 0.62) {
       for (const s of [1, -1]) {
         const xs = [s * hw, s * (hw + 0.05)].sort((a, b) => a - b);
-        out.aabb([xs[0], 0.25, z - 0.05], [xs[1], 1.8, z + 0.05], P.crane_red);
+        out.aabb([xs[0], 0.25, z - 0.05], [xs[1], 1.8, z + 0.05], P.container_frame);
       }
     }
     for (const s of [1, -1]) {
       const xs = [s * (hw - 0.02), s * (hw + 0.06)].sort((a, b) => a - b);
-      out.aabb([xs[0], 1.75, -3.4], [xs[1], 1.88, 3.3], P.crane_red);
+      out.aabb([xs[0], 1.75, -3.4], [xs[1], 1.88, 3.3], P.container_frame);
     }
     for (const x of [-0.7, 0.7]) out.aabb([x - 0.03, 0.4, 3.3], [x + 0.03, 1.7, 3.36], P.lock_bar);
   }
