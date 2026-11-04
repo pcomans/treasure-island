@@ -80,7 +80,7 @@ const PART_COLORS := [
 ## photos (Sep 2025 9th St and Avenue I, Mar and Nov 2025 Avenue M, Mar 2025
 ## 3rd St, Jul 2023 Avenue E and 12th St).
 const COLOURS := {
-	"beige": Color(0.66, 0.6, 0.48),
+	"beige": Color(0.7, 0.62, 0.47),
 	"black": Color(0.05, 0.05, 0.055),
 	"blue": Color(0.14, 0.3, 0.58),
 	"blue_grey": Color(0.5, 0.58, 0.65),
@@ -140,7 +140,7 @@ const CONTAINER_H := 2.591
 const CONTAINER_HC_H := 2.896
 const CONTAINER_LENGTHS := {"40ft": 12.192, "20ft": 6.058, "10ft": 2.991}
 const WALL_GAP_M := 0.12
-const MAX_WALL_GAP_M := 0.6
+const MAX_WALL_GAP_M := 0.3
 ## Shed rows, fabric sheds, berms and ridges (tools/lib/street-yard-meshes.mjs).
 const SHED_BAY_M := 3.05
 const SHED_END_M := 0.15

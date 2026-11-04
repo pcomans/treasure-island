@@ -904,17 +904,24 @@ function buildPile(material, shape, lod) {
   gridSurface(out, grid, P[spec.part]);
   if (lod === 0 && material === "rubble") {
     // Broken slabs and blocks lying in the slope.
-    for (let i = 0; i < 110; i += 1) {
-      const rho = 0.1 + 0.88 * hash(i, seed, 1);
+    for (let i = 0; i < 120; i += 1) {
+      const rho = 0.08 + 0.9 * hash(i, seed, 1);
       const k = Math.floor(hash(i, seed, 2) * segments);
       const base = point(rho, k);
-      const size = 0.14 + 0.36 * hash(i, seed, 3) ** 1.6;
-      const yaw = hash(i, seed, 4) * Math.PI;
-      const tilt = (hash(i, seed, 5) - 0.5) * 0.9;
-      const ax = vnorm(v3(Math.cos(yaw), tilt * 0.4, Math.sin(yaw)));
-      const ay = vnorm(vcross(vnorm(v3(-Math.sin(yaw), tilt, Math.cos(yaw))), ax));
-      const az = vcross(ax, ay);
-      out.box(vadd(base, v3(0, size * 0.1, 0)), [size * (0.7 + 0.5 * hash(i, 6)), size * 0.22, size * (0.5 + 0.4 * hash(i, 7))], P.rubble, [ax, ay, az]);
+      // Lying in the slope: the chunk's up is the surface normal there.
+      const up = vnorm(vcross(vsub(point(Math.min(1, rho + 0.05), k), point(Math.max(0, rho - 0.05), k)), vsub(point(rho, (k + 1) % segments), point(rho, (k + segments - 1) % segments))));
+      const n = up[1] < 0 ? vscale(up, -1) : up;
+      const size = 0.12 + 0.34 * hash(i, seed, 3) ** 1.6;
+      const yaw = hash(i, seed, 4) * Math.PI * 2;
+      const ref = Math.abs(n[1]) < 0.95 ? Y : X;
+      const t1 = vnorm(vcross(ref, n));
+      const t2 = vcross(n, t1);
+      const ax = vnorm(vadd(vscale(t1, Math.cos(yaw)), vscale(t2, Math.sin(yaw))));
+      const az = vcross(ax, n);
+      const tilt = (hash(i, seed, 5) - 0.5) * 0.5;
+      const ay = vnorm(vadd(n, vscale(ax, tilt)));
+      out.box(vadd(base, vscale(n, size * 0.06)), [size * (0.7 + 0.5 * hash(i, 6)), size * 0.2, size * (0.5 + 0.4 * hash(i, 7))], P.rubble, [ax, ay, vnorm(vcross(ax, ay))]);
+      void az;
     }
   }
   if (lod === 0 && material === "tarp") {

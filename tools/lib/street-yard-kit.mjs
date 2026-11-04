@@ -407,12 +407,12 @@ export function yardPropFootprint(key, params) {
 // A container wall run, a pure function of length_m (the runtime builder,
 // game/scripts/world/street_yard_kit.gd, repeats it exactly): 40 ft
 // containers end to end from the run's -Z end, then 20 ft and 10 ft ones to
-// fill; the gaps between them widen evenly (up to MAX_WALL_GAP_M) to take up
+// fill; the gaps between them widen evenly (up to MAX_WALL_GAP_M, 0.3 m) to take up
 // what is left, and anything still left stays open at the +Z end. Returns
 // {containers: [{z_m (centre, row frame), length_m, size: "40ft"|"20ft"|"10ft"}],
 // covered_m}.
 const WALL_GAP_M = 0.12;
-const MAX_WALL_GAP_M = 0.6;
+const MAX_WALL_GAP_M = 0.3;
 export const CONTAINER_LENGTHS = Object.freeze({ "40ft": CONTAINER_40_L, "20ft": CONTAINER_20_L, "10ft": CONTAINER_10_L });
 export function containerWallLayout(params) {
   const length = params.length_m;
