@@ -55,7 +55,8 @@ export const STREET_GROUND_FEATURE_KINDS = Object.freeze(["street_kerb", "street
 // Zone ground surfaces (a zone's ground.surfaces): material key -> record key
 // prefix. The park_* ones are Cityside Park's; the rest are the yards' shared
 // ground (tools/lib/street-yard-generation.mjs): worn yard asphalt, compacted
-// yard gravel, grey concrete rubble and black plastic sheeting over earth.
+// yard gravel (beige-grey, or the pale grey of a fresh aggregate pad), grey
+// concrete rubble and black plastic sheeting over earth.
 export const PARK_SURFACE_MATERIALS = Object.freeze({
   park_asphalt: "park-asphalt",
   park_concrete: "park-concrete",
@@ -70,6 +71,7 @@ export const PARK_SURFACE_MATERIALS = Object.freeze({
   rubble_grey: "rubble-grey",
   yard_asphalt: "yard-asphalt",
   yard_gravel: "yard-gravel",
+  yard_gravel_pale: "yard-gravel-pale",
 });
 const RECORD_KINDS = Object.freeze({
   ...Object.fromEntries(Object.entries(PARK_SURFACE_MATERIALS).map(([material, prefix]) => [material, [prefix, "street_paint", material, "none", false]])),

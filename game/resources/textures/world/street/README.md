@@ -77,3 +77,13 @@ the street-fences work notes.
 | `street_fence_barbed.png` | the three strands of barbed wire on the arms of industrial chain-link, drawn like the chain-link; a crop of three barb repeats, alpha from brightness | three strands of galvanised barbed wire, flat-on, on solid black |
 | `street_fence_screen.png` | construction windscreen fabric, tinted black or dark green by the kit | seamless grey woven polypropylene windscreen |
 | `street_fence_wood.png` | the wood board fence: six boards (0.84 m) per tile | seamless weathered cedar privacy fence boards |
+
+Yard ground for the large-clutter yards' pale aggregate pads (the yard_gravel_pale
+zone surface, `world_chunk_builder.gd`), generated 2026-11-04 with
+`tools/generate-texture` (one image, text prompt only; no photograph was given to the
+generator or copied) and resized from 1254 to 512 px with ImageMagick; it tiles
+seamlessly over 2 m (world UV):
+
+| File | Use | Source prompt (short) |
+|---|---|---|
+| `yard_gravel_pale.png` | the pale grey compacted crushed-aggregate pads of the construction yards (Gate 5's pad, May 2026 aerial: the palest ground there) | seamless pale grey compacted crushed-aggregate yard surface, low contrast, no marks |

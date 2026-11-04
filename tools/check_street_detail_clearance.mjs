@@ -125,7 +125,8 @@ function main() {
 // Ground a built fence shuts in. Around each built fence (its runs plus a margin)
 // a grid marks what the stock capsule's centre cannot reach: buildings, built
 // fence runs and street props grown by the capsule radius, and everything off
-// the island. Free cells that do not connect to the grid's edge are shut in.
+// the island. Free cells that do not connect to the grid's edge are shut in,
+// unless the buildings and the shore alone already shut them in.
 const POCKET_CELL_M = 0.2;
 const POCKET_MARGIN_M = 20;
 function fencedPockets(manifest, detail) {
@@ -190,31 +191,39 @@ function fencedPockets(manifest, detail) {
       const grow = PLAYER_CAPSULE_RADIUS_M;
       mark(Math.min(...xs) - grow, Math.max(...xs) + grow, Math.min(...zs) - grow, Math.max(...zs) + grow, (point) => planDistance([point], [...triangle, triangle[0]]) <= grow || insideTriangle(point, triangle));
     }
+    // Flood the free cells from the grid's edge.
+    const flood = () => {
+      const reached = new Uint8Array(width * depth);
+      const queue = [];
+      for (let i = 0; i < width; i += 1) for (const j of [0, depth - 1]) queue.push(j * width + i);
+      for (let j = 0; j < depth; j += 1) for (const i of [0, width - 1]) queue.push(j * width + i);
+      for (let head = 0; head < queue.length; head += 1) {
+        const index = queue[head];
+        if (blocked[index] || reached[index]) continue;
+        reached[index] = 1;
+        const i = index % width;
+        const j = (index - i) / width;
+        if (i > 0) queue.push(index - 1);
+        if (i < width - 1) queue.push(index + 1);
+        if (j > 0) queue.push(index - width);
+        if (j < depth - 1) queue.push(index + width);
+      }
+      return reached;
+    };
+    // Ground the buildings and the shore alone already enclose (a courtyard
+    // inside a building's walls) is not the street detail's doing: only free
+    // ground reachable before the street solids stand and unreachable after counts.
+    const open = flood();
     for (const solid of solids) {
       const xs = solid.points.map((point) => point[0]);
       const zs = solid.points.map((point) => point[1]);
       mark(Math.min(...xs) - solid.radius, Math.max(...xs) + solid.radius, Math.min(...zs) - solid.radius, Math.max(...zs) + solid.radius, (point) => planDistance([point], solid.points) <= solid.radius);
     }
-    // Flood the free cells from the grid's edge.
-    const reached = new Uint8Array(width * depth);
-    const queue = [];
-    for (let i = 0; i < width; i += 1) for (const j of [0, depth - 1]) queue.push(j * width + i);
-    for (let j = 0; j < depth; j += 1) for (const i of [0, width - 1]) queue.push(j * width + i);
-    for (let head = 0; head < queue.length; head += 1) {
-      const index = queue[head];
-      if (blocked[index] || reached[index]) continue;
-      reached[index] = 1;
-      const i = index % width;
-      const j = (index - i) / width;
-      if (i > 0) queue.push(index - 1);
-      if (i < width - 1) queue.push(index + 1);
-      if (j > 0) queue.push(index - width);
-      if (j < depth - 1) queue.push(index + width);
-    }
+    const reached = flood();
     let shut = 0;
     let example = null;
     for (let index = 0; index < blocked.length; index += 1) {
-      if (blocked[index] || reached[index]) continue;
+      if (blocked[index] || reached[index] || !open[index]) continue;
       shut += 1;
       example ??= centre(index % width, Math.floor(index / width));
     }

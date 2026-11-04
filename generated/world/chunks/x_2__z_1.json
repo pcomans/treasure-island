@@ -2312,6 +2312,53 @@
       ]
     },
     {
+      "collision_kind": "none",
+      "feature_kind": "street_paint",
+      "indices": [
+        1,
+        2,
+        0
+      ],
+      "material_key": "black_plastic",
+      "normals": [
+        -0.005,
+        1,
+        0.015,
+        -0.013,
+        1,
+        -0.012,
+        -0.019,
+        1,
+        -0.014
+      ],
+      "object_key": "black-plastic:x_2__z_1",
+      "opaque": false,
+      "receiver_kind": "none",
+      "source_keys": [
+        "w1252737732"
+      ],
+      "surface_bias_m": 0.09,
+      "uvs": [
+        51.2,
+        31.163,
+        51.517,
+        30.661,
+        51.2,
+        30.46
+      ],
+      "vertices": [
+        512,
+        9.473,
+        311.625,
+        515.172,
+        8.33,
+        306.605,
+        512,
+        8.189,
+        304.601
+      ]
+    },
+    {
       "collision_kind": "world_solid",
       "feature_kind": "building_roof",
       "flat_base_elevation_m": 3.2,
