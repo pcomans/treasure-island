@@ -933,8 +933,10 @@ function validateStreetDetail(worldRoot, manifest, records) {
         if (yardPropRests(row.prop)) {
           const gaps = yardRestGaps(row.footprint_m, [row.position_m[0], row.position_m[2]], row.yaw_radians, row.position_m[1] + (row.surface?.bias_m ?? 0), row.prop_params, groundAt);
           const sink = yardMaxSink(row.prop, row.prop_params);
-          invariant(gaps.every((gap) => gap !== null && gap <= YARD_MAX_FLOAT_M + 0.005 && gap >= -sink - 0.005),
-            `${row.id} ${row.prop} does not rest on the ground: its plan floats (+) or sinks (-) ${gaps.map((gap) => (gap === null ? "off the ground" : gap.toFixed(3))).join(", ")} m (sink limit ${sink} m)`);
+          const bad = gaps.filter((gap) => gap === null || gap > YARD_MAX_FLOAT_M + 0.005 || gap < -sink - 0.005);
+          const known = gaps.filter((gap) => gap !== null);
+          invariant(bad.length === 0, `${row.id} ${row.prop} does not rest on the ground: ${bad.length} of its ${gaps.length} rest points float more than ${YARD_MAX_FLOAT_M} m or sink more than ${sink} m `
+            + `(${gaps.length - known.length} off the ground, highest ${Math.max(...known).toFixed(3)} m, lowest ${Math.min(...known).toFixed(3)} m)`);
         }
       }
       // A furniture prop on legs: its rest on the ground under its feet, a small tilt and lift.
