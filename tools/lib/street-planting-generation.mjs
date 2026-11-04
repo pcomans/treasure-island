@@ -35,8 +35,8 @@
 //     at the rule's largest scale inside) and stays on ground flatter than
 //     DRIFT_ROW_MAX_SLOPE;
 //   - paving: no crown, nor a drift's whole width, comes within PAVING_CLEAR_M
-//     of a walking or driving surface (PAVED_MATERIALS: sidewalks, roads, paths,
-//     plazas) on the visible ground, so nothing grows out over a sidewalk.
+//     of a walking or driving surface (any visible ground but SPILL_GROUNDS:
+//     sidewalks, roads, paths, plazas), so nothing grows out over a sidewalk.
 // Every draw is seeded from the world seed, the zone and the rule, so the world
 // generator stays deterministic. The plants' widths are the street-vegetation
 // kit's (game/scripts/world/street_vegetation_kit.gd). Positions, mixes and
@@ -88,16 +88,18 @@ const DRIFT_VARIANTS = Object.freeze({
 export const DRIFT_ROW_MAX_SLOPE = 0.1;
 // How far inside its bed's edge a single plant's centre stays (m).
 const EDGE_CLEAR_M = 0.1;
-// The walking and driving surfaces of the visible ground: sidewalks and curb
-// ramps, plaza paving, roads with their paint, gutters and parking lanes,
-// paths, the parks' paved paths and plazas, and parking lots. A low plant's
-// crown spills over mulch, gravel and lawn, never over these.
-export const PAVED_MATERIALS = Object.freeze([
-  "major_area_paved", "park_asphalt", "park_concrete", "park_dg", "park_paint_pink", "park_plaza_lens", "park_plaza_zigzag",
-  "road_path", "road_path_pedestrian", "street_gutter", "street_kerb_concrete", "street_kerb_support", "street_marking",
-  "street_parking", "street_plaza_pavers", "street_wear",
+// The visible ground a low plant's crown may spill over: mulch, gravel, lawn,
+// the streets' planting strips and grass verges, bare land, the grassy area
+// overlays and natural shore. Any other ground is paving, a walking or driving
+// surface (sidewalks and curb ramps, plaza paving, roads with their paint and
+// parking lanes, paths, the parks' paved paths and plazas, parking lots,
+// piers), that no crown reaches over; so is any ground added later until it is
+// listed here.
+export const SPILL_GROUNDS = Object.freeze([
+  "land_ground", "major_area_amenity", "major_area_landuse", "major_area_leisure", "park_gravel", "park_lawn", "park_mulch",
+  "street_kerb_planting", "street_kerb_verge", "terrain_riprap", "terrain_sand", "terrain_wetland",
 ]);
-const PAVED = new Set(PAVED_MATERIALS);
+const SPILL = new Set(SPILL_GROUNDS);
 // How far a low plant's crown, or a drift's whole width, keeps clear of paving (m).
 export const PAVING_CLEAR_M = 0.1;
 // pavingUnder's sample rings: [fraction of the radius, points].
@@ -244,14 +246,15 @@ export function crownRadius(prop, variant, scale) {
   return (width * scale) / 2;
 }
 
-// The paving (a PAVED_MATERIALS key) that a disc of the given radius round xz
-// reaches on the visible ground, or null: groundAt is the street-vegetation
+// The paving (any visible ground but SPILL_GROUNDS) that a disc of the given
+// radius round xz reaches, or null: groundAt is the street-vegetation
 // visible-ground query (visibleGroundIndex of street-clutter-generation.mjs),
-// sampled at the centre and on rings of [fraction of the radius, points].
+// sampled at the centre and on rings of [fraction of the radius, points]. Where
+// there is no visible ground (off the land), there is no paving.
 export function pavingUnder(xz, radius, groundAt, rings = PAVING_RINGS) {
   const paving = (point) => {
     const material = groundAt(point)?.material_key;
-    return PAVED.has(material) ? material : null;
+    return material === undefined || SPILL.has(material) ? null : material;
   };
   let found = paving(xz);
   for (const [fraction, points] of rings) {
