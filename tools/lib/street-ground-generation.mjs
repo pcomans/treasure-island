@@ -750,8 +750,12 @@ export function generateStreetGround({
   const kerbRegion = union("kerb region", zoneRegions.filter((zone) => zone.settings.kerbs).map((zone) => zone.region));
   const zonesAt = (point) => zoneRegions.filter((zone) => inBox(zone.box, point) && zone.index.contains(point));
 
-  // Frozen source geometry near the pilot.
-  const nearPilot = (object, margin) => boxesOverlap(boxOfMulti(object.geometry), pilotBox, margin);
+  // Frozen source geometry near the pilot: near one of its zones, so zones far
+  // apart (the yards across the island) don't pull in everything between them.
+  const nearPilot = (object, margin) => {
+    const box = boxOfMulti(object.geometry);
+    return boxesOverlap(box, pilotBox, margin) && zoneRegions.some((zone) => boxesOverlap(box, zone.box, margin));
+  };
   const lineOf = new Map();
   const wayLine = (object) => {
     if (!lineOf.has(object.row.source_key)) lineOf.set(object.row.source_key, rawWayLine(rawOsm, object.row.osm_id));
@@ -799,7 +803,7 @@ export function generateStreetGround({
   ]));
   const hardKeepout = union("stair keepout", hardShapes
     .filter((shape) => ["stair", "door", "approach"].includes(shape.component))
-    .filter((shape) => shape.points.some(([x, z]) => inBox(pilotBox, [x, -z], 30)))
+    .filter((shape) => shape.points.some(([x, z]) => zoneRegions.some((zone) => inBox(zone.box, [x, -z], 30))))
     .map((shape) => (shape.points.length === 1
       ? circle([shape.points[0][0], -shape.points[0][1]], shape.radius_m)
       : lineRibbon(shape.points.map(([x, z]) => [x, -z]), shape.radius_m * 2, `keepout ${shape.source_id}`))));
