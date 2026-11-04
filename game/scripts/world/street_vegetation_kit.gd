@@ -40,9 +40,10 @@ extends RefCounted
 ## about 0.65 x their summed widths apart so the crowns overlap, with more
 ## sagebrush and woolly sunflower than the rest for the strand garden's grey
 ## mass; the grass accents (reedgrass, rush, bronze) in ones to threes repeated
-## through the bed; then the groundcovers (dense_sedge, seaside_daisy,
-## blue_eyed_grass, sea_thrift, whose variant 3 is a drift) filling the bare
-## ground, largest variant first, about 0.55 x their summed widths apart, to
+## through the bed, or as their drift (variant 3) in the stormwater beds; then
+## the groundcovers (dense_sedge, whose variants 3 and 4 are drifts, and
+## seaside_daisy, blue_eyed_grass and sea_thrift, whose variant 3 is) filling the
+## bare ground, largest variant first, about 0.55 x their summed widths apart, to
 ## about 80-85 % canopy cover with a few 0.35-0.5 m gaps; thrift and
 ## blue-eyed grass in the gravel; rows within 0.1 m of a bed's edge, so the
 ## wider plants spill over it; variants mixed and scaled 0.85-1.15.
