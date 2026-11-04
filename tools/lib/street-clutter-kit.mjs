@@ -39,26 +39,27 @@ const PART = Object.freeze(Object.fromEntries(CLUTTER_KIT_PARTS.map((name, index
 export const CLUTTER_KIT_PART_COUNT = CLUTTER_KIT_PARTS.length;
 
 // ---------------------------------------------------------------- vectors
-const v3 = (x, y, z) => [x, y, z];
-const vsub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
-const vadd = (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
-const vscale = (a, s) => [a[0] * s, a[1] * s, a[2] * s];
-const vdot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
-const vcross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
-const vlen = (a) => Math.hypot(a[0], a[1], a[2]);
-const vnorm = (a) => {
+// Shared with the yard kit (tools/lib/street-yard-kit.mjs).
+export const v3 = (x, y, z) => [x, y, z];
+export const vsub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+export const vadd = (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
+export const vscale = (a, s) => [a[0] * s, a[1] * s, a[2] * s];
+export const vdot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+export const vcross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+export const vlen = (a) => Math.hypot(a[0], a[1], a[2]);
+export const vnorm = (a) => {
   const l = vlen(a);
   return l > 1e-12 ? [a[0] / l, a[1] / l, a[2] / l] : [0, 1, 0];
 };
-const lerp = (a, b, t) => a + (b - a) * t;
-const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+export const lerp = (a, b, t) => a + (b - a) * t;
+export const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const smooth = (t) => {
   const c = clamp(t, 0, 1);
   return c * c * (3 - 2 * c);
 };
 
 // Monotone cubic interpolation through [x, y] keys (Fritsch-Carlson), flat beyond the ends.
-function curve(input) {
+export function curve(input) {
   // Keys sharing an x (one profile's end and the next one's start) collapse to the later one.
   const keys = [];
   for (const key of input) {
@@ -103,8 +104,10 @@ function curve(input) {
 }
 
 // ---------------------------------------------------------------- mesh builder
-class MeshBuilder {
-  constructor() {
+// partCount is the size of the part list UV.x indexes (the yard kit has its own).
+export class MeshBuilder {
+  constructor(partCount = CLUTTER_KIT_PART_COUNT) {
+    this.partCount = partCount;
     this.positions = [];
     this.normals = [];
     this.uvs = [];
@@ -114,7 +117,7 @@ class MeshBuilder {
   vertex(position, normal, part, ao = 1) {
     this.positions.push(position[0], position[1], position[2]);
     this.normals.push(normal[0], normal[1], normal[2]);
-    this.uvs.push((part + 0.5) / CLUTTER_KIT_PART_COUNT, clamp(ao, 0, 1));
+    this.uvs.push((part + 0.5) / this.partCount, clamp(ao, 0, 1));
     return this.positions.length / 3 - 1;
   }
 
@@ -500,7 +503,8 @@ function tubRing(fns, body, zf, hw, end) {
   ];
 }
 
-function buildCar(name, lodIndex) {
+// Exported for the yard kit's cargo van (tools/lib/street-yard-kit.mjs).
+export function buildCar(name, lodIndex) {
   const body = CAR_BODIES[name];
   const lod = LODS[lodIndex];
   const fns = bodyFunctions(body);
