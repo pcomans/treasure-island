@@ -59,10 +59,12 @@ import {
 } from "./lib/street-detail-generation.mjs";
 import { CAR_BODY_NAMES, CAR_FINISHES, CAR_PAINTS, MAX_TWIST_M, STREET_CLUTTER_PROPS, visibleGroundIndex } from "./lib/street-clutter-generation.mjs";
 import {
-  fenceHeight, fenceParamsError, STREET_FENCE_BANNER_TYPES, STREET_FENCE_GATE_HINGES, STREET_FENCE_GATE_STYLES, STREET_FENCE_GATED_TYPES, STREET_FENCE_INSIDE, STREET_FENCE_SCREENS, STREET_FENCE_TYPES,
+  fenceHeight, fenceParamsError, gateLeaves, STREET_FENCE_BANNER_TYPES, STREET_FENCE_GATE_HINGES, STREET_FENCE_GATE_STYLES, STREET_FENCE_GATED_TYPES, STREET_FENCE_INSIDE,
+  STREET_FENCE_TYPES,
 } from "./lib/street-fence-generation.mjs";
 import { MAX_LEG_DROP_M, MAX_REST_TILT_RAD, restTilt, STREET_FURNITURE_FEET, STREET_FURNITURE_PROPS } from "./lib/street-furniture-generation.mjs";
-import { YARD_KIT_KEYS, yardPropFootprint, yardPropParamsError } from "./lib/street-yard-kit.mjs";
+import { YARD_KIT_KEYS, YARD_KIT_PARTS, YARD_MAX_FLOAT_M, YARD_MAX_SINK_M, yardCornerGaps, yardPropFootprint, yardPropParamsError, yardPropRests } from "./lib/street-yard-kit.mjs";
+import { yardKitMeshes } from "./lib/street-yard-meshes.mjs";
 import {
   STREET_VEGETATION_BURY_M,
   STREET_VEGETATION_MAX_FOOT_SPREAD_M,
@@ -881,6 +883,13 @@ function validateStreetDetail(worldRoot, manifest, records) {
         const plan = yardPropFootprint(row.prop, row.prop_params);
         invariant(row.footprint_m !== undefined && Math.abs(row.footprint_m.x_m - plan.x_m) <= 0.002 && Math.abs(row.footprint_m.z_m - plan.z_m) <= 0.002,
           `${row.id} footprint_m differs from its ${row.prop} plan ${plan.x_m} x ${plan.z_m}`);
+        // It rests on the visible ground: no corner floats or sinks past the
+        // limits at its pitch, roll and lift (a barge floats instead).
+        if (yardPropRests(row.prop)) {
+          const gaps = yardCornerGaps(row.footprint_m, [row.position_m[0], row.position_m[2]], row.yaw_radians, row.position_m[1] + (row.surface?.bias_m ?? 0), row.prop_params, groundAt);
+          invariant(gaps.every((gap) => gap !== null && gap <= YARD_MAX_FLOAT_M + 0.005 && gap >= -YARD_MAX_SINK_M - 0.005),
+            `${row.id} ${row.prop} does not rest on the ground: its corners float (+) or sink (-) ${gaps.map((gap) => (gap === null ? "off the ground" : gap.toFixed(3))).join(", ")} m`);
+        }
       }
       // A furniture prop on legs: its rest on the ground under its feet, a small tilt and lift.
       if (row.layer === "furniture" && row.prop !== undefined && STREET_FURNITURE_FEET[row.prop] !== undefined) {
@@ -924,16 +933,19 @@ function validateFenceRow(row, grounded, inBoundary) {
   const fence = row.fence;
   const spec = STREET_FENCE_TYPES[fence.type];
   invariant(spec && fence.height_m === fenceHeight(fence.type, fence.params) && fence.half_thickness_m === spec.half_thickness_m && typeof fence.type_basis === "string", `${row.id} fence type is invalid`);
-  invariant(STREET_FENCE_INSIDE.includes(fence.params?.inside) && (fence.type !== "chain_link_screened" || row.source === "osm" || STREET_FENCE_SCREENS.includes(fence.params.screen))
+  invariant(STREET_FENCE_INSIDE.includes(fence.params?.inside) && (fence.type !== "chain_link_screened" || row.source === "osm" || fenceParamsError(fence.type, fence.params) === null)
     && (fence.type !== "chain_link_slatted" || fenceParamsError(fence.type, fence.params) === null), `${row.id} fence params are invalid`);
-  // Open gate leaves: a style, optionally a hinge side, and the two grounded
-  // ends of their opening.
+  // Open gate leaves: a style, optionally a hinge side, the two grounded ends
+  // of their opening, and the leaves' plan segments as the fence kit draws
+  // and collides them (the clearance checks read them).
   if (fence.gates !== undefined) {
     invariant(STREET_FENCE_GATED_TYPES.includes(fence.type) && Array.isArray(fence.gates), `${row.id} a ${fence.type} fence carries no gates`);
     fence.gates.forEach((gate, index) => {
       invariant(STREET_FENCE_GATE_STYLES.includes(gate.style) && (gate.hinge === undefined || STREET_FENCE_GATE_HINGES.includes(gate.hinge))
         && gate.points_m?.length === 2 && gate.terrain_supports?.length === 2 && gate.surface_bias_m?.length === 2, `${row.id} gate ${index} is invalid`);
       gate.points_m.forEach((point, end) => grounded(`${row.id} gate ${index} end ${end}`, point[0], point[1], point[2], gate.terrain_supports[end][0], gate.terrain_supports[end][1]));
+      const expected = gateLeaves(gate.points_m.map((point) => [point[0], point[2]]), gate.style, gate.hinge, fence.params.inside);
+      invariant(stableJson(gate.leaves) === stableJson(expected), `${row.id} gate ${index} leaves differ from its ends, style and hinge`);
     });
   }
   // Banners: a white sheet between two grounded ends on a solid run, lower than the fence.
@@ -1143,6 +1155,50 @@ function validateShoreline(worldRoot, manifest, records) {
   return { document, placements };
 }
 
+// The yard kit (tools/lib/street-yard-kit.mjs, -meshes.mjs): its shader and
+// runtime keep one entry per kit part and name the parts they treat specially
+// by their place in YARD_KIT_PARTS; every heap's collision hull (<mesh>_hull)
+// has no face steeper than 45 degrees, so the player walks up it (the floor
+// limit is 48), and holds the heap's visible mesh to within 0.1 m.
+function validateYardKit() {
+  const parts = YARD_KIT_PARTS;
+  const shader = readFileSync(resolve(projectRoot, "game/resources/materials/world/street/street_yard.gdshader"), "utf8");
+  const arrays = [...shader.matchAll(/const (int|float) ([A-Z]+)\[(\d+)\] = \1\[\3\]\(([^;]*)\);/gu)];
+  invariant(arrays.length > 0, "The yard shader has no part arrays");
+  for (const [, , name, size, values] of arrays) {
+    invariant(Number(size) === parts.length && values.split(",").length === parts.length, `The yard shader's ${name} is not one entry per kit part (${parts.length})`);
+  }
+  invariant(Number(shader.match(/const int PART_COUNT = (\d+);/u)?.[1]) === parts.length, "The yard shader's PART_COUNT is not the kit's part count");
+  for (const [, name, index] of shader.matchAll(/const int PART_([A-Z_]+) = (\d+);/gu)) {
+    if (name !== "COUNT") invariant(parts[Number(index)] === name.toLowerCase(), `The yard shader's PART_${name} is part ${index}, ${parts[Number(index)]}`);
+  }
+  const kit = readFileSync(resolve(projectRoot, "game/scripts/world/street_yard_kit.gd"), "utf8");
+  const colours = kit.slice(kit.indexOf("const PART_COLORS := ["), kit.indexOf("]", kit.indexOf("const PART_COLORS := [")));
+  invariant((colours.match(/Color\(/gu) ?? []).length === parts.length, "The yard kit's PART_COLORS is not one colour per kit part");
+  const meshes = new Map(yardKitMeshes().map((mesh) => [mesh.name, mesh]));
+  for (const [name, hull] of meshes) {
+    if (!name.endsWith("_hull")) continue;
+    const planes = [];
+    for (let index = 0; index < hull.indices.length; index += 3) {
+      const [a, b, c] = [0, 1, 2].map((corner) => hull.positions.slice(hull.indices[index + corner] * 3, hull.indices[index + corner] * 3 + 3));
+      const u = [b[0] - a[0], b[1] - a[1], b[2] - a[2]];
+      const v = [c[0] - a[0], c[1] - a[1], c[2] - a[2]];
+      const normal = [u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0]];
+      const length = Math.hypot(...normal);
+      if (length < 1e-9) continue;
+      const n = normal.map((value) => value / length);
+      invariant(n[1] <= 0.01 || Math.acos(Math.min(1, n[1])) <= (45.05 * Math.PI) / 180, `The yard kit's ${name} has a face steeper than 45 degrees`);
+      planes.push([n, n[0] * a[0] + n[1] * a[1] + n[2] * a[2]]);
+    }
+    const near = meshes.get(`${name.slice(0, -"_hull".length)}_lod0`);
+    for (let index = 0; index < near.positions.length; index += 3) {
+      const point = [near.positions[index], Math.max(0, near.positions[index + 1]), near.positions[index + 2]];
+      const outside = Math.max(...planes.map(([n, d]) => n[0] * point[0] + n[1] * point[1] + n[2] * point[2] - d));
+      invariant(outside <= 0.1, `The yard kit's ${name} leaves its visible mesh ${outside.toFixed(2)} m outside`);
+    }
+  }
+}
+
 function validateManifest(worldRoot) {
   verifySourceContract(projectRoot);
   const manifestPath = resolve(worldRoot, "manifest.json");
@@ -1193,6 +1249,7 @@ function main() {
   const land = validateLandProvenance(records, terrain);
   const streetDetail = validateStreetDetail(worldRoot, manifest, records);
   const shoreline = validateShoreline(worldRoot, manifest, records);
+  validateYardKit();
   process.stdout.write(stableJson({
     status: "valid",
     world: relative(projectRoot, worldRoot).replaceAll("\\", "/"),

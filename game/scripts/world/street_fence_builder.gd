@@ -60,7 +60,7 @@ func build(document: Dictionary) -> Dictionary:
 		for gate_value: Variant in (fence as Dictionary).get("gates", []):
 			if gate_value is Dictionary:
 				var gate := gate_value as Dictionary
-				bay_boxes.append_array(kit.add_gate(cells, CELL_M, type, row.prop_params, _posts(gate), str(gate.get("style", "")), str(gate.get("hinge", "start"))))
+				bay_boxes.append_array(kit.add_gate(cells, CELL_M, type, row.prop_params, _posts(gate), gate.get("leaves", []) as Array))
 		for banner_value: Variant in (fence as Dictionary).get("banners", []):
 			if banner_value is Dictionary:
 				kit.add_banner(cells, CELL_M, type, row.prop_params, _posts(banner_value), float((banner_value as Dictionary).get("height_m", 1.0)))

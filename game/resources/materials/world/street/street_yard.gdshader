@@ -22,7 +22,18 @@ render_mode depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx;
 
 uniform sampler2D palette : source_color, filter_nearest, repeat_disable;
 
-// Parts (tools/lib/street-yard-kit.mjs YARD_KIT_PARTS), 46 used of 64 slots.
+// Parts (tools/lib/street-yard-kit.mjs YARD_KIT_PARTS), 46 used of 64 slots;
+// the arrays below have one entry per part, and the parts the shader treats
+// specially are named (tools/validate_godot_world.mjs checks both against
+// YARD_KIT_PARTS).
+const int PART_COUNT = 46;
+const int PART_PAINT = 0;
+const int PART_CONTAINER_ROOF = 17;
+const int PART_CONTAINER_DOOR = 18;
+const int PART_RUBBLE = 29;
+const int PART_PLASTIC = 30;
+const int PART_HULL = 33;
+const int PART_DECK = 35;
 // SOURCE: 0 the part's own colour, 1 primary, 2 secondary, 3 tertiary paint.
 const int SOURCE[46] = int[46](1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	1, 1, 1, 1, 0, 2, 3, 1, 2, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 2, 3, 0, 1, 2, 0, 0, 0, 0, 1, 0);
@@ -105,7 +116,7 @@ vec3 paint(float column) {
 }
 
 void vertex() {
-	part = clamp(int(UV.x * 64.0), 0, 45);
+	part = clamp(int(UV.x * 64.0), 0, PART_COUNT - 1);
 	v_pos = VERTEX;
 	v_normal_model = NORMAL;
 	v_custom = INSTANCE_CUSTOM;
@@ -179,7 +190,7 @@ void fragment() {
 	// barge's hull and deck are modules stretched per instance, so they take
 	// metres along the barge instead, or their weathering would stretch with them.
 	vec2 w = roof ? v_pos.xz : vec2(v_u, v_pos.y);
-	bool barge = p == 33 || p == 35;
+	bool barge = p == PART_HULL || p == PART_DECK;
 	if (barge) {
 		w = roof ? v_barge.yx : vec2(v_barge.x, v_pos.y);
 	}
@@ -229,7 +240,7 @@ void fragment() {
 	}
 	// Vehicle paint: a little tone from panel to panel and dirt runs down
 	// from the roof line (RV sidewalls especially).
-	if (p == 0) {
+	if (p == PART_PAINT) {
 		albedo *= 0.96 + 0.06 * hash12(floor(vec2(v_u / 1.4, v_pos.y / 0.9)) + seed * 3.0);
 		float run = roof ? 0.0 : smoothstep(0.6, 0.9, vnoise(vec2(ws.x * 2.5, 0.0))) * smoothstep(0.4, 2.2, v_pos.y);
 		albedo *= 1.0 - (0.08 + 0.15 * level) * run * (1.0 - smoothstep(0.3, 0.8, fwidth(ws.x) * 2.5));
@@ -247,7 +258,7 @@ void fragment() {
 		float n0 = fbm(q);
 		vec2 g = vec2(fbm(q + vec2(e, 0.0)) - n0, fbm(q + vec2(0.0, e)) - n0) / e;
 		float keep = 1.0 - smoothstep(0.6, 2.4, fwidth(v_u) * 0.9);
-		NORMAL = normalize(NORMAL + (v_across * g.x + v_along * g.y) * (p == 30 ? 0.14 : 0.22) * keep);
+		NORMAL = normalize(NORMAL + (v_across * g.x + v_along * g.y) * (p == PART_PLASTIC ? 0.14 : 0.22) * keep);
 		albedo *= 0.85 + 0.3 * n0;
 	}
 	if (pattern == 7) {
@@ -261,7 +272,7 @@ void fragment() {
 		float fine = vnoise(g * 9.0);
 		float keep = 1.0 - smoothstep(0.3, 1.2, fwidth(g.x) * 9.0);
 		albedo *= 0.75 + 0.4 * coarse + 0.25 * (fine - 0.5) * keep;
-		if (p == 29) {
+		if (p == PART_RUBBLE) {
 			// A rubble pile's fines are small broken pieces in soil: cells of
 			// about 0.17 m, each its own shade and tilt (some dark soil), with
 			// shadow between.
@@ -276,7 +287,7 @@ void fragment() {
 		}
 	}
 	// Container door markings: two small blocks of dark text near the top.
-	if (p == 18) {
+	if (p == PART_CONTAINER_DOOR) {
 		vec2 d = v_pos.xy;
 		bool block = (d.x > 0.28 && d.x < 0.98 && d.y > 2.0 && d.y < 2.2) || (d.x > 0.28 && d.x < 0.7 && d.y > 1.84 && d.y < 1.94);
 		if (block) {
@@ -286,7 +297,7 @@ void fragment() {
 		}
 	}
 	// A barge deck's steel plates: seams and a little tone plate to plate.
-	if (p == 35 && roof) {
+	if (p == PART_DECK && roof) {
 		vec2 plate = vec2(v_barge.x / 9.1, v_barge.y / 2.44);
 		vec2 to_seam = abs(fract(plate + 0.5) - 0.5) * vec2(9.1, 2.44);
 		vec2 fw = fwidth(plate) * vec2(9.1, 2.44);
@@ -295,7 +306,7 @@ void fragment() {
 		albedo *= (0.94 + 0.12 * hash12(floor(plate) + seed * 5.0)) * (1.0 - 0.3 * seam * near);
 	}
 	// Sun-faded container roofs (the May 2026 aerial: red boxes read salmon from above).
-	if (p == 17) {
+	if (p == PART_CONTAINER_ROOF) {
 		albedo = mix(albedo, vec3(0.45), 0.35);
 	}
 	// Rust: a few patches, thin streaks running down from the top rail, and

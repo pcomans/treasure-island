@@ -731,7 +731,7 @@ export function placeStreetFurniture({
 
 // A local point of a prop at rest, turned as the runtime turns it: Godot's
 // Basis(UP, yaw) * Basis(RIGHT, pitch) * Basis(BACK, -roll), in world x, y, z.
-function restOffset([x, y, z], yaw, pitch, roll) {
+export function restOffset([x, y, z], yaw, pitch, roll) {
   const x1 = x * Math.cos(roll) + y * Math.sin(roll);
   const y1 = -x * Math.sin(roll) + y * Math.cos(roll);
   const y2 = y1 * Math.cos(pitch) - z * Math.sin(pitch);
@@ -740,7 +740,7 @@ function restOffset([x, y, z], yaw, pitch, roll) {
 }
 
 // The least-squares plane y = h + a x + b z through points {x, z, y}: [h, a, b].
-function leastSquaresPlane(points) {
+export function leastSquaresPlane(points) {
   const m = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
   const r = [0, 0, 0];
   for (const { x, z, y } of points) {

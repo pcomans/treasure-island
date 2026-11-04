@@ -41,6 +41,11 @@ function hash(...values) {
   return (h >>> 0) / 4294967296;
 }
 
+function smoothstep(edge0, edge1, x) {
+  const t = clamp((x - edge0) / (edge1 - edge0), 0, 1);
+  return t * t * (3 - 2 * t);
+}
+
 // ---------------------------------------------------------------- builder
 class YardBuilder extends MeshBuilder {
   // lod: the detail level being built (swept bodies use fewer round slices far away).
@@ -764,9 +769,11 @@ function buildFabricEnd(span, dir, lod) {
 // aerial and Jun 2021 Avenue H view): a long, low trapezoid with rounded
 // shoulders, extruded in 6 m modules with rounded ends; the sheets overlap
 // down the slope at every module joint.
+// cap_m: the rounded end's length (half a module on the low berm, a whole one
+// on the high berm, whose 3.2 m would otherwise end steeper than 45 degrees).
 export const BERM_SPECS = Object.freeze({
-  low: { sx: 1, sy: 1 },
-  high: { sx: 15 / 9, sy: 3.2 / 1.8 },
+  low: { sx: 1, sy: 1, cap_m: 3 },
+  high: { sx: 15 / 9, sy: 3.2 / 1.8, cap_m: 6 },
 });
 const BERM_PROFILE = Object.freeze([[-4.5, 0], [-3.9, 0.2], [-3.1, 0.7], [-2.4, 1.22], [-1.9, 1.55], [-1.3, 1.72], [-0.65, 1.79], [0, 1.8], [0.65, 1.79], [1.3, 1.72], [1.9, 1.55], [2.4, 1.22], [3.1, 0.7], [3.9, 0.2], [4.5, 0]]);
 const BERM_MODULE = 6;
@@ -842,19 +849,20 @@ function buildBermMid(variant, lod) {
 function buildBermEnd(variant, dir, lod) {
   const out = new YardBuilder();
   const fractions = lod === 0 ? [0, 0.3, 0.52, 0.7, 0.83, 0.92, 0.97, 1] : [0, 0.55, 0.85, 1];
-  const half = BERM_MODULE / 2;
-  const stations = fractions.map((f) => dir * f * half);
+  const cap = BERM_SPECS[variant].cap_m;
+  const stations = fractions.map((f) => dir * f * cap);
+  // Round in plan; its height falls as a cosine, so its slope stays finite
+  // at the tip (under 45 degrees).
   const grid = bermGrid(variant, stations, (z) => {
-    const t = Math.min(1, Math.abs(z) / half);
-    const s = Math.sqrt(Math.max(0, 1 - t * t));
-    return { x: Math.max(s, 0.001), y: s };
+    const t = Math.min(1, Math.abs(z) / cap);
+    return { x: Math.max(Math.sqrt(Math.max(0, 1 - t * t)), 0.001), y: Math.cos((Math.PI / 2) * t) };
   }, (i, z) => {
     if (lod > 0) return 0;
     // The ring the cap shares with a middle module (or the other cap) takes the
     // middle's wrinkle at its end, fading toward the tip, so they meet without
     // a gap; the cap's own wrinkle grows toward the tip.
-    const t = Math.abs(z) / half;
-    const shared = bermWrinkle(lod)(i, half) * Math.max(0, 1 - t / 0.52);
+    const t = Math.abs(z) / cap;
+    const shared = bermWrinkle(lod)(i, BERM_MODULE / 2) * Math.max(0, 1 - t / 0.52);
     return shared + (t < 0.95 ? 0.025 * Math.sin(5 * z + hash(i, 3) * 6) * t : 0);
   });
   gridSurface(out, grid, P.plastic);
@@ -868,9 +876,9 @@ function buildBermEnd(variant, dir, lod) {
 // tyres (Avenue N, Nov 2025).
 export const PILE_SPECS = Object.freeze({
   gravel: { x: 8, z: 8, h: 3, part: "gravel", rough: 0.05, cone: true },
-  rubble: { x: 12, z: 12, h: 4.5, part: "rubble", rough: 0.16, lumps: 0.18, chunks: [260, 60] },
+  rubble: { x: 12, z: 12, h: 4.5, part: "rubble", rough: 0.16, lumps: 0.18, chunks: [260, 60], fit: 0.92 },
   soil: { x: 12, z: 12, h: 4, part: "earth", rough: 0.1 },
-  tarp: { x: 6, z: 8, h: 2.2, part: "tarp", rough: 0.04, flat: true, folds: 0.24 },
+  tarp: { x: 6, z: 8, h: 2.2, part: "tarp", rough: 0.04, flat: true, folds: 0.24, fit: 0.86 },
 });
 
 // A broken concrete chunk: a box with its corners pushed about, faceted, its
@@ -937,7 +945,7 @@ function buildPile(material, shape, lod) {
   const mounds = [0, 1, 2].map((k) => ({
     x: (hash(seed, k, 11) - 0.5) * 0.9,
     z: (hash(seed, k, 12) - 0.5) * 0.9,
-    r: 0.55 + 0.3 * hash(seed, k, 13),
+    r: 0.7 + 0.3 * hash(seed, k, 13),
     h: k === 0 ? 1 : 0.55 + 0.35 * hash(seed, k, 14),
   }));
   const draped = (rho, a) => {
@@ -946,7 +954,7 @@ function buildPile(material, shape, lod) {
     let top = 0;
     for (const mound of mounds) {
       const d = Math.hypot(x - mound.x, z - mound.z) / mound.r;
-      top = Math.max(top, mound.h * Math.pow(Math.max(0, 1 - d * d), 0.7));
+      top = Math.max(top, mound.h * Math.max(0, 1 - d ** 1.15));
     }
     return top * Math.pow(Math.max(0, 1 - rho ** 6), 0.5);
   };
@@ -954,7 +962,9 @@ function buildPile(material, shape, lod) {
     let base;
     if (spec.cone) base = Math.min(1, (1 - rho) * 1.08) - 0.06 * Math.max(0, 0.08 - (1 - rho));
     else if (spec.flat) base = draped(rho, a);
-    else base = Math.pow(Math.max(0, 1 - rho * rho), 1.2);
+    // A stockpile: a cone with a rounded crown, its sides about the angle of
+    // repose (under 45 degrees, so its hull is walkable).
+    else base = Math.max(0, 1 - rho ** 1.15);
     // Bumps (and a rubble pile's lumps of a metre or so) in plan coordinates.
     const r = nominal * outline(a) * rho;
     const px = r * Math.cos(a);
@@ -985,8 +995,11 @@ function buildPile(material, shape, lod) {
     maxX = Math.max(maxX, Math.abs(p[0]));
     maxZ = Math.max(maxZ, Math.abs(p[2]));
   }
-  const sx = (spec.x / 2) * 0.98 / maxX;
-  const sz = (spec.z / 2) * 0.98 / maxZ;
+  // (A heap whose foot is steep fits a little inside its plan, so the foot of
+  // its collision hull, which reaches past it, still keeps to the plan.)
+  const fit = spec.fit ?? 0.98;
+  const sx = (spec.x / 2) * fit / maxX;
+  const sz = (spec.z / 2) * fit / maxZ;
   const surface = (rho, a, hem = 0) => {
     const p = raw(rho, a, hem);
     return v3(p[0] * sx, p[1], p[2] * sz);
@@ -1013,7 +1026,8 @@ function buildPile(material, shape, lod) {
     for (let i = 0; i < count; i += 1) {
       const rho = Math.sqrt(0.003 + 0.9 * hash(i, seed, 1));
       const a = hash(i, seed, 2) * Math.PI * 2;
-      const size = 0.12 + 0.28 * hash(i, seed, 3) ** 2.2;
+      // Smaller toward the foot, which stays walkable.
+      const size = (0.12 + 0.28 * hash(i, seed, 3) ** 2.2) * (1 - 0.6 * smoothstep(0.7, 0.95, rho));
       pieces.push({ i, rho, a, size });
     }
     pieces.sort((p, q) => q.size - p.size);
@@ -2573,7 +2587,7 @@ function buildRidge(part, lod) {
     const fractions = lod === 0 ? [0, 0.35, 0.6, 0.8, 0.93, 1] : [0, 0.6, 1];
     const endGrid = fractions.map((f) => {
       const s = Math.sqrt(Math.max(0, 1 - f * f));
-      return RIDGE_PROFILE.map(([x, y]) => v3(x * Math.max(s, 0.001), y * s, dir * f * half));
+      return RIDGE_PROFILE.map(([x, y]) => v3(x * Math.max(s, 0.001), y * Math.cos((Math.PI / 2) * f), dir * f * half));
     });
     gridSurface(out, endGrid, P.earth);
   }
@@ -2581,6 +2595,116 @@ function buildRidge(part, lod) {
 }
 
 
+
+// ---------------------------------------------------------------- collision hulls
+// A heap's collision is a convex hull, and its top is walked on, so no face of
+// the hull may be steeper than 45 degrees (the player's floor limit is 48).
+// The hull is built over the visible (near) mesh's highest point in each
+// 0.25 m plan cell, plus a 45-degree slope from each down to the ground: a
+// cone round it ("cone") or, for a module that continues along Z (a berm or
+// windrow middle), the two slopes across it ("prism"). Every supporting plane
+// of that set is at most 45 degrees, and the hull holds the visible mesh, so
+// feet never sink into it; where the mesh is steeper than 45 degrees the hull
+// reaches a little past it at its foot.
+const HULL_CELL_M = 0.25;
+const HULL_SLOPE_RING = 12;
+
+// A convex hull of points: [{v: [i, j, k], n, d}] faces, outward normals.
+function convexHull(points) {
+  const sub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+  const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+  const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  const n = points.length;
+  let i1 = 0;
+  let best = 0;
+  for (let i = 1; i < n; i += 1) {
+    const d = dot(sub(points[i], points[0]), sub(points[i], points[0]));
+    if (d > best) [best, i1] = [d, i];
+  }
+  let i2 = 0;
+  best = 0;
+  for (let i = 0; i < n; i += 1) {
+    const c = cross(sub(points[i1], points[0]), sub(points[i], points[0]));
+    if (dot(c, c) > best) [best, i2] = [dot(c, c), i];
+  }
+  const normal = cross(sub(points[i1], points[0]), sub(points[i2], points[0]));
+  let i3 = 0;
+  best = 0;
+  for (let i = 0; i < n; i += 1) {
+    const d = Math.abs(dot(normal, sub(points[i], points[0])));
+    if (d > best) [best, i3] = [d, i];
+  }
+  const centre = [0, 1, 2].map((k) => (points[0][k] + points[i1][k] + points[i2][k] + points[i3][k]) / 4);
+  const face = (a, b, c) => {
+    let nn = cross(sub(points[b], points[a]), sub(points[c], points[a]));
+    if (dot(nn, sub(centre, points[a])) > 0) {
+      [b, c] = [c, b];
+      nn = nn.map((value) => -value);
+    }
+    const length = Math.hypot(...nn);
+    return { v: [a, b, c], n: nn.map((value) => value / length), d: dot(nn, points[a]) / length };
+  };
+  let faces = [face(0, i1, i2), face(0, i1, i3), face(0, i2, i3), face(i1, i2, i3)];
+  for (let p = 0; p < n; p += 1) {
+    const visible = faces.filter((f) => dot(f.n, points[p]) - f.d > 1e-7);
+    if (visible.length === 0) continue;
+    const edges = new Map();
+    for (const f of visible) {
+      for (let k = 0; k < 3; k += 1) {
+        const a = f.v[k];
+        const b = f.v[(k + 1) % 3];
+        if (edges.has(`${b},${a}`)) edges.delete(`${b},${a}`);
+        else edges.set(`${a},${b}`, [a, b]);
+      }
+    }
+    faces = faces.filter((f) => !visible.includes(f));
+    for (const [a, b] of edges.values()) faces.push(face(a, b, p));
+  }
+  return faces;
+}
+
+// The collision hull of a heap from its near mesh, as a mesh of the hull's
+// faces (the runtime takes its points).
+function heapHull(mesh, mode) {
+  const p = mesh.positions;
+  const cells = new Map();
+  for (let i = 0; i < p.length; i += 3) {
+    const point = [p[i], Math.max(0, p[i + 1]), p[i + 2]];
+    const key = `${Math.floor(point[0] / HULL_CELL_M)},${Math.floor(point[2] / HULL_CELL_M)}`;
+    const held = cells.get(key);
+    if (!held || point[1] > held[1]) cells.set(key, point);
+  }
+  const points = [];
+  for (const point of [...cells.keys()].sort().map((key) => cells.get(key))) {
+    points.push(point);
+    if (point[1] < 0.02) continue;
+    if (mode === "prism") {
+      for (const s of [1, -1]) points.push([point[0] + s * point[1], 0, point[2]]);
+    } else {
+      const r = point[1] / Math.cos(Math.PI / HULL_SLOPE_RING);
+      for (let k = 0; k < HULL_SLOPE_RING; k += 1) {
+        const a = (2 * Math.PI * k) / HULL_SLOPE_RING;
+        points.push([point[0] + r * Math.cos(a), 0, point[2] + r * Math.sin(a)]);
+      }
+    }
+  }
+  // (One normal for every corner, so each hull point is stored once: only
+  // the points matter to the runtime.)
+  const out = new YardBuilder(1);
+  for (const f of convexHull(points)) {
+    const [a, b, c] = f.v.map((index) => points[index]);
+    out.triangle(a, b, c, [Y, Y, Y], P.earth);
+  }
+  return out.result();
+}
+
+// The heaps whose collision is a hull, and how their hull slopes.
+function hullMode(name) {
+  if (/^pile_/.test(name)) return "cone";
+  if (/^(berm_[a-z]+|ridge)_mid$/.test(name)) return "prism";
+  if (/^(berm_[a-z]+|ridge)_end_(neg|pos)$/.test(name)) return "cone";
+  return null;
+}
 
 // ---------------------------------------------------------------- the kit
 // Every mesh of the kit by name (<name>_lod0, <name>_lod1), as the runtime
@@ -2656,6 +2780,9 @@ export function yardKitMeshes() {
   const meshes = [];
   for (const [name, build] of kitEntries()) {
     for (let lod = 0; lod < YARD_KIT_LOD_COUNT; lod += 1) meshes.push({ name: `${name}_lod${lod}`, ...build(lod) });
+    // A heap's collision hull (<name>_hull), from its near mesh.
+    const mode = hullMode(name);
+    if (mode) meshes.push({ name: `${name}_hull`, ...heapHull(meshes.find((mesh) => mesh.name === `${name}_lod0`), mode) });
   }
   return meshes;
 }
