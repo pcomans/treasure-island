@@ -91,7 +91,7 @@ const STREET_GROUND_SURFACES := {
 	# concrete rubble (the shoreline riprap, lighter, 1.25 m tiles) and black
 	# plastic sheeting over earth (the bitumen map darkened, with a sheen).
 	"yard_asphalt": {"albedo": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"), "uv_scale": 4.76, "roughness": 1.0, "tint": Color(1.04, 1.05, 1.05)},
-	"yard_gravel": {"albedo": preload("res://game/resources/textures/world/vegetation/park_gravel.png"), "uv_scale": 5.0, "roughness": 0.97, "tint": Color(1.18, 1.08, 0.92)},
+	"yard_gravel": {"albedo": preload("res://game/resources/textures/world/vegetation/park_gravel.png"), "uv_scale": 5.0, "roughness": 0.97, "tint": Color(1.22, 1.2, 1.15)},
 	"rubble_grey": {"albedo": preload("res://game/resources/textures/world/shoreline/riprap_albedo.png"), "uv_scale": 8.0, "roughness": 0.95, "tint": Color(1.12, 1.12, 1.1)},
 	"black_plastic": {"albedo": preload("res://game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg"), "uv_scale": 2.0, "roughness": 0.45, "tint": Color(0.3, 0.3, 0.32)},
 }
