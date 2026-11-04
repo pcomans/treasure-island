@@ -128,6 +128,10 @@ void fragment() {
 	} else {
 		albedo = texture(palette, vec2((float(p) + 0.5) / 64.0, 0.25)).rgb;
 	}
+	// Two boxes of one paint are never quite the same shade.
+	if (source != 0) {
+		albedo *= 0.95 + 0.1 * fract(seed * 7.13 + 0.37);
+	}
 	bool roof = abs(v_normal_model.y) > 0.7;
 	// Weathering coordinates: along the face and up, or the plan on a roof.
 	vec2 w = roof ? v_pos.xz : vec2(v_u, v_pos.y);
@@ -193,9 +197,9 @@ void fragment() {
 			albedo = mix(albedo, vec3(0.012), glyph * keep * 0.85 + (1.0 - keep) * 0.25);
 		}
 	}
-	// Sun-faded container roofs.
+	// Sun-faded container roofs (the May 2026 aerial: red boxes read salmon from above).
 	if (p == 17) {
-		albedo = mix(albedo, vec3(0.5), 0.3);
+		albedo = mix(albedo, vec3(0.45), 0.35);
 	}
 	// Rust: patches, streaks running down from the top rail, and the bottom edge.
 	float rust_amount = RUST[p] * level;

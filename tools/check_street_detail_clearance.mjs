@@ -122,7 +122,9 @@ function main() {
 const POCKET_CELL_M = 0.2;
 const POCKET_MARGIN_M = 20;
 function fencedPockets(manifest, detail) {
-  const fences = detail.rows.filter((row) => row.status === "placed" && row.fence && row.prop != null);
+  // A gate-only fence row (a slatted gate between two container walls) has no
+  // solid run and shuts nothing in.
+  const fences = detail.rows.filter((row) => row.status === "placed" && row.fence && row.prop != null && row.fence.runs.length > 0);
   const failures = [];
   if (fences.length === 0) return { fences: 0, cells: 0, failures };
   const roofs = [];

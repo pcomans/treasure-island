@@ -603,8 +603,10 @@ static func _validate_street_fence(row: Dictionary, land_records: Dictionary, bo
 	if not is_equal_approx(float(fence.get("height_m", -1.0)), STREET_FENCE_KIT.height_of(str(fence.type), fence.get("params", null))) or not is_equal_approx(float(fence.get("half_thickness_m", -1.0)), float(spec.half_thickness_m)):
 		return _failure("street_detail_fence", "Street-detail fence height or half thickness differs from the fence kit: %s" % row_id)
 	var runs: Array = fence.runs
-	if (str(row.get("status", "")) == "placed") != (runs.size() > 0):
-		return _failure("street_detail_fence", "Street-detail fence status does not follow its runs: %s" % row_id)
+	var gates: Variant = fence.get("gates", [])
+	var gate_count := (gates as Array).size() if gates is Array else 0
+	if (str(row.get("status", "")) == "placed") != (runs.size() > 0 or gate_count > 0):
+		return _failure("street_detail_fence", "Street-detail fence status does not follow its runs and gates: %s" % row_id)
 	for run_value: Variant in runs:
 		if not run_value is Dictionary:
 			return _failure("street_detail_fence", "Street-detail fence run is not an object: %s" % row_id)

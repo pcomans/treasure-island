@@ -16,11 +16,14 @@ extends RefCounted
 
 const KIT_SCENE := preload("res://game/resources/models/street/street_yard_kit.glb")
 const SHADER := preload("res://game/resources/materials/world/street/street_yard.gdshader")
-const CLUTTER_KIT := preload("res://game/scripts/world/street_clutter_kit.gd")
 const SLOTS := 64
-## Detail levels: the near mesh within LOD_NEAR_M of its cell's centre (the
-## street-clutter kit's hand-over, so both kits switch at one distance).
-const LOD_NEAR_M := CLUTTER_KIT.LOD_NEAR_M
+## Detail levels: the near mesh within LOD_NEAR_M of its render cell's centre,
+## the far mesh beyond. Yard props are big and stand in dense blocks, so they
+## switch further out than the street clutter and batch in larger cells (the
+## same 0.4 share of the switch distance): a yard of a few hundred pieces is a
+## few dozen MultiMeshes per level, not hundreds.
+const LOD_NEAR_M := 100.0
+const CELL_M := LOD_NEAR_M * 0.4
 
 ## Part colours (sRGB), in the order of YARD_KIT_PARTS; parts painted by the
 ## instance (SOURCE in the shader) keep a placeholder grey.
@@ -226,7 +229,7 @@ static func _unit(seed: int, index: int) -> float:
 
 ## What to build for one placed row: {ok, pieces: [{mesh_key, meshes: [near,
 ## far], transform, custom}], shapes: [{shape, transform}], range_m,
-## lod_near_m, shadow}, or {ok: false, message}. default_seed varies the
+## lod_near_m, cell_m, shadow}, or {ok: false, message}. default_seed varies the
 ## weathering when the row has no seed.
 func pieces(prop: String, params: Dictionary, default_seed: int = 0) -> Dictionary:
 	if not PROPS.has(prop):
@@ -238,7 +241,7 @@ func pieces(prop: String, params: Dictionary, default_seed: int = 0) -> Dictiona
 	var variant := int(variant_value)
 	var seed := int(params.get("seed", default_seed)) & 0x7fffffff
 	var level := float(params.get("weathering", WEATHERING.get(prop, 0.2)))
-	var result := {"ok": true, "pieces": [], "shapes": [], "range_m": float(PROPS[prop].range_m), "lod_near_m": LOD_NEAR_M, "shadow": true}
+	var result := {"ok": true, "pieces": [], "shapes": [], "range_m": float(PROPS[prop].range_m), "lod_near_m": LOD_NEAR_M, "cell_m": CELL_M, "shadow": true}
 	var error := ""
 	match prop:
 		"shipping_container":

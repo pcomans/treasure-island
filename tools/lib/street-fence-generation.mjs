@@ -391,12 +391,13 @@ export function placeStreetFences({
       openings,
       runs: built,
     };
-    // A slatted fence's gates: their open leaves are drawn between the solid
-    // runs either side (a gate at a line end, or narrower than 0.9 m, has none).
+    // A slatted fence's gates: posts at both ends of the gate's opening and the
+    // open leaves (a gate may fill a whole short line, as between two container
+    // walls; one narrower than 0.9 m has none).
     if (type === "chainlink_slatted" && posts) {
       const gateLeaves = [];
       for (const opening of openings) {
-        if (!opening.reason.split("+").includes("gate") || opening.from_m <= 0.001 || opening.to_m >= total - 0.001) continue;
+        if (!opening.reason.split("+").includes("gate")) continue;
         const width = opening.to_m - opening.from_m;
         if (width < 0.9) continue;
         const ends = [pointAt(line, lengths, opening.from_m), pointAt(line, lengths, opening.to_m)].map((point) => [roundCoordinate(point[0]), roundCoordinate(point[1])]);
@@ -408,7 +409,8 @@ export function placeStreetFences({
     return block;
   };
   const applyStatus = (row) => {
-    if (row.fence.runs.length > 0) {
+    // A fence stands where it has solid runs or gates.
+    if (row.fence.runs.length > 0 || (row.fence.gates?.length ?? 0) > 0) {
       row.status = "placed";
       row.exclusion = null;
       return;

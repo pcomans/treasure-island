@@ -911,7 +911,7 @@ function validateFenceRow(row, grounded, inBoundary) {
     invariant(typeof opening.reason === "string" && opening.reason !== "" && Array.isArray(opening.source_ids), `${row.id} fence opening is unnamed`);
     previous = opening.to_m;
   }
-  invariant(row.status === (fence.runs.length > 0 ? "placed" : "excluded"), `${row.id} status does not match its fence runs`);
+  invariant(row.status === (fence.runs.length > 0 || (fence.gates?.length ?? 0) > 0 ? "placed" : "excluded"), `${row.id} status does not match its fence runs and gates`);
   fence.runs.forEach((run, runIndex) => {
     invariant(Array.isArray(run.points_m) && run.points_m.length >= 2 && run.terrain_supports?.length === run.points_m.length && run.surface_bias_m?.length === run.points_m.length, `${row.id} run ${runIndex} arrays are inconsistent`);
     run.points_m.forEach((point, index) => {
