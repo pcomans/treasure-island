@@ -964,3 +964,9 @@ On 2026-11-03 several units recorded as massing only (1447 and 1442 Chinook, 110
 ## Count "no bound photo", not "no photo"
 
 An evidence inventory built from incomplete photo bindings overstates gaps. On 2026-11-03 a draft inventory counted sides labelled "unbound" or "none (inherits)" as unphotographed; many of those rows were only "unbound", 4 of 5 spot-checked unbound photos clearly showed the side, and "none (inherits)" meant no retained photo was linked in our notes, not that none exists (the recapture found new end-wall views easily). The owner withdrew it as misleading. Label such counts "no bound photo" and verify unbound sides before publishing.
+
+## Preview procedural meshes offline before the first engine run
+
+The yard kit (2026-11-04) builds about 80 meshes in Node. A small z-buffer rasterizer that painted back faces magenta, plus a check of every triangle's winding against its normals and of coplanar overlaps on the flat sides, found four real bugs before or between engine runs: swept-body bands wound inward, the rounded side edges built the wrong way round (roof and side faces swapped across the edge), earcut holes touching each other or leaving their outline (overlapping coplanar triangles), and wheel arches drawn below the sill when the sill stood above the wheel centre. The first engine render had none of them. A winding check alone missed the swapped edge, because there the normals and the winding were both wrong; only the magenta in the preview showed it. For any procedural mesh, render a quick offline preview from two or three sides and run a winding and overlap check before spending a slot.
+
+The first scratch driver of that work failed to parse: `var x := callable.call()` infers a Variant, and the project treats that warning as an error. Give every `.call()` and untyped dictionary read a declared type before an engine run.
