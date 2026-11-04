@@ -12,9 +12,10 @@ extends RefCounted
 ## with it and the spray ray stops on it (never a receiver), while the camera arm
 ## ignores it, as for the street furniture.
 ## The yard kit's props (street_yard_kit.gd: containers, container walls, shed
-## rows, yard vehicles, fabric sheds, equipment, piles, berms and barges) are
-## built the same way from their rows: each row becomes the kit's pieces (one
-## MultiMesh instance each, in the yard material, in the yard kit's own cells
+## rows, yard vehicles, fabric sheds, equipment, piles, berms, pole flags and
+## barges) are built the same way from their rows: each row becomes the kit's
+## pieces (one MultiMesh instance each, in the yard material or a piece's own,
+## as a flag's, in the yard kit's own cells
 ## and hand-over distance) and collision shapes, turned by its yaw and resting
 ## on the ground by its optional pitch, roll and lift.
 
@@ -189,7 +190,7 @@ func _add_yard_row(yard: Variant, row: Dictionary, prop: String, params: Diction
 	for piece: Dictionary in built.pieces:
 		var key := "yard:%s" % piece.mesh_key
 		if not batches.has(key):
-			batches[key] = {"meshes": piece.meshes, "range_m": float(built.range_m), "shadow": bool(built.shadow), "material": yard.material(), "lod_near_m": float(built.lod_near_m), "cells": {}}
+			batches[key] = {"meshes": piece.meshes, "range_m": float(built.range_m), "shadow": bool(built.shadow), "material": piece.get("material", yard.material()), "lod_near_m": float(built.lod_near_m), "cells": {}}
 		var world: Transform3D = placement * (piece.transform as Transform3D)
 		var cells: Dictionary = batches[key].cells
 		var cell := _cell([world.origin.x, world.origin.y, world.origin.z], float(built.cell_m))

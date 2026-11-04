@@ -1,7 +1,7 @@
 // The yard kit: the large clutter of Treasure Island's storage, truck and
 // construction yards (shipping containers, container walls, self-storage shed
 // rows, RVs, buses, trucks, trailers, boats, fabric sheds, equipment, material
-// piles, plastic-covered berms and the Pier 1 crane barges), written to
+// piles, plastic-covered berms, pole flags and the Pier 1 crane barges), written to
 // game/resources/models/street/street_yard_kit.glb by
 // tools/build_street_yard_kit.mjs and drawn at runtime by
 // game/scripts/world/street_yard_kit.gd (through the street-clutter builder)
@@ -299,6 +299,17 @@ export const YARD_KIT_PROPS = Object.freeze({
     params: { modules: intRange(1, 60) },
     required: ["modules"],
   },
+  // A flag on a slim galvanised pole (9th St, Sep 2025: two above the
+  // storage yard's fence; the 810 Avenue D lot corner): a 1.5 x 0.9 m flag in
+  // red, white and blue bands, SELF STORAGE on the white band (legible in the
+  // photo) or plain, flying along +X from the pole's top. The plan is the
+  // pole's foot; height_m is the pole's height.
+  pole_flag: {
+    collision: "cylinder",
+    range_m: 600,
+    variants: [{ name: "flag", x_m: 0.15, z_m: 0.15, h_m: 6.5 }],
+    params: { height_m: numRange(5, 8), text: oneOf("self_storage", "none") },
+  },
   // Pier 1's work barges and crane (May 2026 aerial, Mar 2025 Avenue N view).
   // Visual context outside the playable boundary: no collision. A barge's
   // origin is on its waterline; width_m x length_m is its deck, raked at both
@@ -404,6 +415,8 @@ export function yardPropFootprint(key, params) {
         return { x_m: variant.x_m, z_m: round(plan), h_m: round(modules * CONVEYOR_MODULE_M * Math.sin(CONVEYOR_INCLINE) + CONVEYOR_FOOT_M + 1.0) };
       }
       return { x_m: variant.x_m, z_m: variant.z_m, h_m: variant.h_m };
+    case "pole_flag":
+      return { x_m: variant.x_m, z_m: variant.z_m, h_m: round(params.height_m ?? variant.h_m) };
     case "crane_barge":
       if (variant.name === "pier_crane") return { x_m: variant.x_m, z_m: variant.z_m, h_m: variant.h_m };
       return { x_m: round(params.width_m ?? variant.x_m), z_m: round(params.length_m ?? variant.z_m), h_m: variant.h_m };

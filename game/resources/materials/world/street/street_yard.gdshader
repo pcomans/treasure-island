@@ -14,7 +14,10 @@ shader_type spatial;
 // fades out as the profile shrinks below a few pixels, so distant walls keep
 // their average shade without shimmering. Weathering (rust patches, streaks
 // under the top rail, dirt splashed up from the ground, sun-faded roofs) is
-// value noise in the same coordinates, offset by each instance's seed.
+// value noise in the same coordinates, offset by each instance's seed (a
+// barge's stretched hull and deck modules use metres along the barge instead).
+// Heavier weathering spreads and deepens the rust. A rubble pile's fines are
+// cells of small broken pieces, and a barge deck shows its steel plates.
 render_mode depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx;
 
 uniform sampler2D palette : source_color, filter_nearest, repeat_disable;
@@ -50,9 +53,10 @@ varying float v_w;
 varying vec3 v_across;
 varying vec3 v_along;
 varying flat vec4 v_custom;
-varying vec3 v_world;
-varying float v_u_world;
-varying float v_w_world;
+// A barge's surface coordinates in world metres: along the profile direction
+// and the second direction (one varying, to stay well inside the
+// Compatibility renderer's varying budget).
+varying vec2 v_barge;
 
 float hash12(vec2 p) {
 	vec3 p3 = fract(vec3(p.xyx) * 0.1031);
@@ -105,7 +109,7 @@ void vertex() {
 	v_pos = VERTEX;
 	v_normal_model = NORMAL;
 	v_custom = INSTANCE_CUSTOM;
-	v_world = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+	vec3 world = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
 	// The direction the profile varies along: up a roll-up door, along Z on a
 	// roof, horizontally across any wall.
 	vec3 across;
@@ -117,12 +121,12 @@ void vertex() {
 		across = normalize(vec3(-NORMAL.z, 0.0, NORMAL.x) + vec3(1e-5, 0.0, 0.0));
 	}
 	v_u = dot(VERTEX, across);
-	v_u_world = dot(v_world, normalize((MODEL_MATRIX * vec4(across, 0.0)).xyz));
+	v_barge.x = dot(world, normalize((MODEL_MATRIX * vec4(across, 0.0)).xyz));
 	v_across = normalize((MODELVIEW_MATRIX * vec4(across, 0.0)).xyz);
 	// The second direction in the surface, for sheeting wrinkles.
 	vec3 along = normalize(cross(NORMAL, across) + vec3(0.0, 1e-5, 0.0));
 	v_w = dot(VERTEX, along);
-	v_w_world = dot(v_world, normalize((MODEL_MATRIX * vec4(along, 0.0)).xyz));
+	v_barge.y = dot(world, normalize((MODEL_MATRIX * vec4(along, 0.0)).xyz));
 	v_along = normalize((MODELVIEW_MATRIX * vec4(along, 0.0)).xyz);
 }
 
@@ -173,11 +177,11 @@ void fragment() {
 	bool roof = abs(v_normal_model.y) > 0.7;
 	// Weathering coordinates: along the face and up, or the plan on a roof. A
 	// barge's hull and deck are modules stretched per instance, so they take
-	// world coordinates instead, or their weathering would stretch with them.
+	// metres along the barge instead, or their weathering would stretch with them.
 	vec2 w = roof ? v_pos.xz : vec2(v_u, v_pos.y);
 	bool barge = p == 33 || p == 35;
 	if (barge) {
-		w = roof ? v_world.xz : vec2(v_u_world, v_pos.y);
+		w = roof ? v_barge.yx : vec2(v_barge.x, v_pos.y);
 	}
 	vec2 ws = w + vec2(seed * 137.0, seed * 59.0);
 	// Profiles.
@@ -263,10 +267,10 @@ void fragment() {
 			// shadow between.
 			vec2 x = v_pos.xz * 6.0;
 			vec2 c = cells(x);
-			float near = 1.0 - smoothstep(0.2, 0.5, fwidth(x.x));
-			float gap = smoothstep(0.0, 0.09, c.x);
-			float tone = c.y < 0.28 ? 0.6 : 0.82 + 0.4 * c.y;
-			albedo *= mix(0.88, mix(0.62, tone, gap), near);
+			float near = 1.0 - smoothstep(0.12, 0.35, fwidth(x.x));
+			float gap = smoothstep(0.0, 0.06, c.x);
+			float tone = c.y < 0.28 ? 0.66 : 0.84 + 0.36 * c.y;
+			albedo *= mix(0.9, mix(0.8, tone, gap), near);
 			vec2 tilt = vec2(hash12(vec2(c.y, 1.7)), hash12(vec2(c.y, 5.3))) - 0.5;
 			NORMAL = normalize(NORMAL + (v_across * tilt.x + v_along * tilt.y) * 0.6 * near * gap);
 		}
@@ -283,7 +287,7 @@ void fragment() {
 	}
 	// A barge deck's steel plates: seams and a little tone plate to plate.
 	if (p == 35 && roof) {
-		vec2 plate = vec2(v_u_world / 9.1, v_w_world / 2.44);
+		vec2 plate = vec2(v_barge.x / 9.1, v_barge.y / 2.44);
 		vec2 to_seam = abs(fract(plate + 0.5) - 0.5) * vec2(9.1, 2.44);
 		vec2 fw = fwidth(plate) * vec2(9.1, 2.44);
 		float seam = 1.0 - smoothstep(0.0, 0.03 + fw.x, to_seam.x) * smoothstep(0.0, 0.03 + fw.y, to_seam.y);

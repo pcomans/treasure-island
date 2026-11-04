@@ -1479,6 +1479,57 @@
       "yaw": 2.2,
       "reason": "A-frame barricades on the sidewalk beside the Avenue H truck lot's gate, facing the street; the gate itself is left clear.",
       "reference": "large-clutter-20261104 06-trucklot-avenue-h (pano 1NT4Oh9iXeuKRp6LjDoB5w, Sep 2025)"
+    },
+    {
+      "id": "storage_9th_flag_east",
+      "kind": "pole_flag",
+      "prop": "pole_flag",
+      "params": {
+        "variant": 0,
+        "height_m": 6.5,
+        "text": "self_storage"
+      },
+      "xz": [
+        -12.87,
+        -131.84
+      ],
+      "yaw": 0.0,
+      "reason": "A red, white and blue SELF STORAGE pole flag above the central self-storage yard's 9th Street fence, beside the stacked red containers, flying east with the prevailing west wind.",
+      "reference": "large-clutter-20261104 01c-central-9th-st (pano gzVv8NBB1YJxjGX0y0Qdog, Sep 2025): two SELF STORAGE pole flags above the 9th Street fence; positions production inference"
+    },
+    {
+      "id": "storage_9th_flag_west",
+      "kind": "pole_flag",
+      "prop": "pole_flag",
+      "params": {
+        "variant": 0,
+        "height_m": 6.5,
+        "text": "self_storage"
+      },
+      "xz": [
+        -59.73,
+        -105.79
+      ],
+      "yaw": 0.0,
+      "reason": "A second SELF STORAGE pole flag further west along the 9th Street fence, between the two sheds, flying east.",
+      "reference": "large-clutter-20261104 01c-central-9th-st (pano gzVv8NBB1YJxjGX0y0Qdog, Sep 2025): two SELF STORAGE pole flags above the 9th Street fence; positions production inference"
+    },
+    {
+      "id": "storage_lot_corner_flag",
+      "kind": "pole_flag",
+      "prop": "pole_flag",
+      "params": {
+        "variant": 0,
+        "height_m": 6.5,
+        "text": "none"
+      },
+      "xz": [
+        -136.69,
+        -69.5
+      ],
+      "yaw": 0.0,
+      "reason": "A red, white and blue pole flag inside the vehicle lot's cut corner at 9th Street and Avenue D, above the green container wall, flying east; its text is too small to read in the photo, so it is plain.",
+      "reference": "verify-810-avenue-d-20261104 05-9thst-2025-09 (pano zymx-sHLgpe6167colQIQQ, Sep 2025): a red, white and blue flag above the wall near the corner; position production inference"
     }
   ]
 }
