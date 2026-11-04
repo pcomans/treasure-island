@@ -120,7 +120,7 @@ const PROPS := {
 	"boat_on_trailer": {"range_m": 600.0, "variants": ["runabout", "cabin"]},
 	"trailer": {"range_m": 700.0, "variants": ["trailer_cargo", "trailer_utility", "trailer_semi", "trailer_office"]},
 	"fabric_shed": {"range_m": 1500.0, "variants": ["span10", "span15", "span20", "span30"]},
-	"equipment": {"range_m": 700.0, "variants": ["excavator", "wheel_loader", "crane_mats", "cylinder_section", "open_bin", "hopper", "conveyor"]},
+	"equipment": {"range_m": 700.0, "variants": ["excavator", "wheel_loader", "crane_mats", "cylinder_section", "open_bin", "hopper", "conveyor", "water_barrier"]},
 	"material_pile": {"range_m": 1500.0, "variants": ["gravel", "rubble", "soil", "tarp", "ridge"]},
 	"plastic_berm": {"range_m": 1500.0, "variants": ["low", "high"]},
 	"crane_barge": {"range_m": 2500.0, "variants": ["crane", "deck", "pier_crane"]},
@@ -135,7 +135,7 @@ const PLANS := {
 	"food_truck": [[2.4, 7.3, 3.3], [2.44, 6.2, 3.0]],
 	"boat_on_trailer": [[2.5, 7.3, 2.2], [2.6, 8.8, 2.9]],
 	"trailer": [[2.6, 7.3, 3.0], [2.4, 4.5, 1.55], [2.6, 16.2, 4.1], [3.66, 14.6, 3.5]],
-	"equipment": [[3.2, 10.0, 4.5], [3.0, 8.0, 3.5], [1.2, 9.1, 1.2], [1.8, 1.8, 1.3], [2.44, 6.9, 1.85], [4.0, 4.0, 8.0], [1.4, 0.0, 0.0]],
+	"equipment": [[3.2, 10.0, 4.5], [3.0, 8.0, 3.5], [1.2, 9.1, 1.2], [1.8, 1.8, 1.3], [2.44, 6.9, 1.85], [4.0, 4.0, 8.0], [1.4, 0.0, 0.0], [0.6, 1.9, 1.0]],
 }
 ## Containers (tools/lib/street-yard-kit.mjs): width, heights, lengths.
 const CONTAINER_W := 2.438
@@ -507,11 +507,13 @@ func _equipment(result: Dictionary, variant: int, mesh: String, params: Dictiona
 		cylinder.height = 1.3
 		(result.shapes as Array).append({"shape": cylinder, "transform": Transform3D(Basis.IDENTITY, Vector3(0, 0.65, 0))})
 		return _add(result, mesh, Transform3D.IDENTITY, _custom(tone, tone, tone, level, seed))
-	# A hopper is white unless the row paints it; machines take the paint
-	# (yellow by default) in a machine's red; an open bin's blue is sun-faded
-	# and its steel rusted through (Avenue M, Nov 2025).
-	var paint := _colour(params, "paint", "white" if mesh == "hopper" else "yellow")
-	if paint == "red" and (mesh == "excavator" or mesh == "wheel_loader"):
+	# A hopper is white and a water barrier red unless the row paints them;
+	# machines take the paint (yellow by default), red in a machine's red; an
+	# open bin's blue is sun-faded and its steel rusted through (Avenue M,
+	# Nov 2025).
+	var fallback := "white" if mesh == "hopper" else ("red" if mesh == "water_barrier" else "yellow")
+	var paint := _colour(params, "paint", fallback)
+	if paint == "red" and mesh in ["excavator", "wheel_loader", "water_barrier"]:
 		paint = "machine_red"
 	if mesh == "open_bin":
 		if paint == "blue":
@@ -573,16 +575,20 @@ func _barge(result: Dictionary, variant: String, params: Dictionary, level: floa
 	error += _add(result, "barge_end_pos", Transform3D(Basis.IDENTITY.scaled(Vector3(width, 1, 1)), Vector3(0, 0, middle / 2.0)), hull)
 	var deck := BARGE_FREEBOARD_M
 	if variant == "crane":
-		error += _add(result, "crawler_crane_barge", Transform3D(Basis.IDENTITY, Vector3(0, deck, length / 2.0 - 7.5)), red)
+		var crane := "crawler_crane_barge_lowered" if str(params.get("boom", "raised")) == "lowered" else "crawler_crane_barge"
+		error += _add(result, crane, Transform3D(Basis.IDENTITY, Vector3(0, deck, length / 2.0 - 7.5)), red)
+	# Deck room from the -Z rake to the crane (or the +Z rake).
+	var deck_from := -length / 2.0 + BARGE_RAKE_M + 1.0
+	var deck_to := length / 2.0 - BARGE_RAKE_M - (16.0 if variant == "crane" else 1.0)
 	match str(params.get("cargo", "none")):
 		"containers":
 			# One red 40 ft box, then white 20 ft boxes, in a row along the deck.
-			var z := -length / 2.0 + BARGE_RAKE_M + 1.0
+			var z := deck_from
 			var index := 0
 			while true:
 				var forty := index == 0
 				var box_length := 12.192 if forty else 6.058
-				if z + box_length > length / 2.0 - BARGE_RAKE_M - (16.0 if variant == "crane" else 1.0):
+				if z + box_length > deck_to:
 					break
 				var colour := "red" if forty else "white"
 				error += _add(result, "container_40ft" if forty else "container_20ft", Transform3D(Basis.IDENTITY, Vector3(0, deck, z + box_length / 2.0)), _custom(colour, "white", "door_grey", 0.6, seed + index))
@@ -590,6 +596,18 @@ func _barge(result: Dictionary, variant: String, params: Dictionary, level: floa
 				index += 1
 		"materials":
 			error += _add(result, "deck_materials", Transform3D(Basis.IDENTITY, Vector3(0, deck, -length / 4.0)), _custom("grey", "grey", "grey", 0.4, seed))
+		"box_block":
+			# White 20 ft boxes two rows wide, as many long (up to four) as fit.
+			var count := clampi(int(floor((deck_to - deck_from + 0.3) / (6.058 + 0.3))), 1, 4)
+			for index in count:
+				for row_side: float in [-1.0, 1.0]:
+					var z := deck_from + index * (6.058 + 0.3) + 3.029
+					error += _add(result, "container_20ft", Transform3D(Basis.IDENTITY, Vector3(row_side * (CONTAINER_W * 0.5 + 0.15), deck, z)), _custom("white", "white", "door_grey", 0.4, seed + index * 2 + int(row_side > 0.0)))
+		"equipment":
+			# Red machinery and a stack of mats and beams, side by side.
+			var centre := (deck_from + deck_to) * 0.5
+			error += _add(result, "deck_equipment", Transform3D(Basis.IDENTITY, Vector3(-width * 0.22, deck, centre)), _custom("machine_red", "machine_red", "dark_grey", 0.5, seed))
+			error += _add(result, "deck_materials", Transform3D(Basis.IDENTITY, Vector3(width * 0.22, deck, centre - 6.0)), _custom("grey", "grey", "grey", 0.4, seed))
 	if str(params.get("deckhouse", "none")) == "small":
 		error += _add(result, "deckhouse", Transform3D(Basis.IDENTITY, Vector3(width / 2.0 - 2.4, deck, length / 2.0 - BARGE_RAKE_M - 3.0)), _custom("white", "white", "white", 0.3, seed))
 	return error
