@@ -249,7 +249,9 @@ export const YARD_KIT_PROPS = Object.freeze({
     collision: "box",
     range_m: 700,
     variants: [
-      { name: "excavator", x_m: 3.2, z_m: 10.0, h_m: 3.2 },
+      // Parked with the arm hanging and the bucket curled under the boom tip;
+      // the boom's knee stands highest.
+      { name: "excavator", x_m: 3.2, z_m: 10.0, h_m: 4.5 },
       { name: "wheel_loader", x_m: 3.0, z_m: 8.0, h_m: 3.5 },
       { name: "crane_mats", x_m: 1.2, z_m: 9.1, h_m: 1.2 },
       // Short hollow cylinder sections standing on end (Gate 5 yard, May 2026
@@ -262,8 +264,15 @@ export const YARD_KIT_PROPS = Object.freeze({
       // A long inclined belt conveyor on legs (recycling yard, May 2026 aerial:
       // plain form), rising toward +Z; length_m is its plan length.
       { name: "conveyor", x_m: 1.4, z_m: null, h_m: null, required: ["length_m"], only: ["length_m"] },
+      // A water-filled plastic barrier, jersey profile, one unit (Gate 5 yard,
+      // Nov 2025, and Avenue H, Jun 2021: red barriers in clusters and lines);
+      // red unless the row paints it.
+      { name: "water_barrier", x_m: 0.6, z_m: 1.9, h_m: 1.0 },
     ],
-    params: { paint: oneOf("yellow", "red", "orange", "blue", "white"), tone: oneOf("light", "dark"), length_m: numRange(12, 60) },
+    // paint: a machine's (or bin's, or hopper's) colour; house: an excavator's
+    // upper structure, the paint unless it differs (Avenue M, Nov 2025: a red
+    // boom on a white house); tone: a cylinder section's concrete.
+    params: { paint: oneOf("yellow", "red", "orange", "blue", "white"), house: oneOf("same", "white", "light_grey"), tone: oneOf("light", "dark"), length_m: numRange(12, 60) },
   },
   material_pile: {
     collision: "hull",
@@ -284,8 +293,8 @@ export const YARD_KIT_PROPS = Object.freeze({
     collision: "hull",
     range_m: 1500,
     variants: [
-      { name: "low", x_m: 9, z_m: null, h_m: 2.5 },
-      { name: "high", x_m: 15, z_m: null, h_m: 4.5 },
+      { name: "low", x_m: 9, z_m: null, h_m: 1.8 },
+      { name: "high", x_m: 15, z_m: null, h_m: 3.2 },
     ],
     params: { modules: intRange(1, 60) },
     required: ["modules"],
@@ -293,13 +302,14 @@ export const YARD_KIT_PROPS = Object.freeze({
   // Pier 1's work barges and crane (May 2026 aerial, Mar 2025 Avenue N view).
   // Visual context outside the playable boundary: no collision. A barge's
   // origin is on its waterline; width_m x length_m is its deck, raked at both
-  // ends. The crane barge carries a red crawler crane at its +Z end.
+  // ends. The crane barge carries a red crawler crane at its +Z end, its boom
+  // over the deck toward -Z (lowered: nearly level, out past the bow).
   crane_barge: {
     collision: "none",
     range_m: 2500,
     variants: [
-      { name: "crane", x_m: 30, z_m: 40, h_m: 46 },
-      { name: "deck", x_m: 18, z_m: 36, h_m: 4.2 },
+      { name: "crane", x_m: 30, z_m: 40, h_m: 46, only: ["length_m", "width_m", "hull", "deck", "cargo", "deckhouse", "boom"] },
+      { name: "deck", x_m: 18, z_m: 36, h_m: 4.2, only: ["length_m", "width_m", "hull", "deck", "cargo", "deckhouse"] },
       // A crawler crane standing on the pier: its origin is on the ground.
       { name: "pier_crane", x_m: 6, z_m: 9, h_m: 60, only: [] },
     ],
@@ -307,11 +317,15 @@ export const YARD_KIT_PROPS = Object.freeze({
       length_m: numRange(15, 100),
       width_m: numRange(8, 40),
       hull: oneOf("dark_grey", "rust", "light_grey"),
-      deck: oneOf("rust", "dark_grey", "light_grey"),
-      // On the deck: nothing, containers (one red 40 ft and white 20 ft boxes,
-      // as photographed) or materials (stacked mats and beams).
-      cargo: oneOf("none", "containers", "materials"),
+      deck: oneOf("dark_grey", "rust", "light_grey", "red"),
+      // On the deck, generic shapes as the aerial shows them: nothing,
+      // containers (one red 40 ft and white 20 ft boxes in a row), materials
+      // (stacked mats and beams), a box block (white 20 ft boxes two rows
+      // wide, three or four long) or equipment (red machinery and stacked
+      // materials, the crane decks' clutter).
+      cargo: oneOf("none", "containers", "materials", "box_block", "equipment"),
       deckhouse: oneOf("none", "small"),
+      boom: oneOf("raised", "lowered"),
     },
   },
 });
