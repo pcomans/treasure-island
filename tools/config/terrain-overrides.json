@@ -520,7 +520,7 @@
       "id": "construction_9th_avenue_h",
       "name": "9th Street and Avenue H construction site",
       "basis": "production_inference",
-      "evidence": "Large-clutter place #12 (OSM w775820811 landuse=construction). The 2023 USGS raster still holds a soil stockpile up to 21.9 m (about 18 m above the 3.3-3.6 m streets) across x 10..150, z -125..185, which is gone: Google Street View on 9th St (Sep 2025, camera x 52, z -151, heading 156) looks straight across that ground at 60-190 m and shows a flat cleared site behind construction panels, with the Bay Bridge visible beyond; Esri World Imagery (Vantor capture 2026-05-26, 0.34 m) shows graded ground with a concrete slab and early structure at about x 100..140, z -80..5, soil piles and equipment. Levelled to the surrounding grade; owner-approved 2026-11-04 (as the Cityside Park correction). The scope reaches 16 m past the Job Corps fence on the site's west side, where the 32 m land grid smears the stockpile's flank; 449 Avenue H (w34313512), the land cell beside 516 Avenue H and the streets stay outside it.",
+      "evidence": "Large-clutter place #12 (OSM w775820811 landuse=construction). The 2023 USGS raster still holds a soil stockpile up to 21.9 m (about 18 m above the 3.3-3.6 m streets) across x 10..150, z -125..185, which is gone: Google Street View on 9th St (Sep 2025, camera x 52, z -151, heading 156) looks straight across that ground at 60-190 m and shows a flat cleared site behind construction panels, with the Bay Bridge visible beyond; Esri World Imagery (Vantor capture 2026-05-26, 0.34 m) shows graded ground with a concrete slab and early structure at about x 100..140, z -80..5, soil piles and equipment. Levelled to the surrounding grade; owner-approved 2026-11-04 (as the Cityside Park correction). The scope reaches 16 m past the Job Corps fence on the site's west side, where the 32 m land grid smears the stockpile's flank; 449 Avenue H (w34313512) and the streets stay outside it. Strips 3 m wide straddle every edge of the OSM area, so the traced bands and the area overlap instead of leaving slivers; the land cell beside 516 Avenue H (w110188516) is levelled too, and a sliver of that building's own cell (between Avenue H and its west wall) joins the scope so its foundation is re-cut from the re-meshed facets rather than split around. Pits from the May 2026 aerial are cut 1 m into the levelled site (owner-approved levelling, 2026-11-04; review round 3, 2026-11-04).",
       "scope": {
         "source_keys": [
           "w775820811"
@@ -681,6 +681,240 @@
               80.3,
               191.5
             ]
+          ],
+          [
+            [
+              -29.3,
+              -85.63
+            ],
+            [
+              61.0,
+              -134.61
+            ],
+            [
+              59.57,
+              -137.25
+            ],
+            [
+              -30.73,
+              -88.26
+            ]
+          ],
+          [
+            [
+              58.26,
+              -133.21
+            ],
+            [
+              84.06,
+              -145.59
+            ],
+            [
+              82.76,
+              -148.29
+            ],
+            [
+              56.97,
+              -135.92
+            ]
+          ],
+          [
+            [
+              80.01,
+              -146.84
+            ],
+            [
+              130.33,
+              -60.06
+            ],
+            [
+              132.93,
+              -61.57
+            ],
+            [
+              82.6,
+              -148.34
+            ]
+          ],
+          [
+            [
+              128.85,
+              -62.74
+            ],
+            [
+              176.31,
+              27.6
+            ],
+            [
+              178.97,
+              26.21
+            ],
+            [
+              131.51,
+              -64.14
+            ]
+          ],
+          [
+            [
+              177.57,
+              23.55
+            ],
+            [
+              137.14,
+              44.79
+            ],
+            [
+              138.54,
+              47.45
+            ],
+            [
+              178.97,
+              26.21
+            ]
+          ],
+          [
+            [
+              137.57,
+              44.03
+            ],
+            [
+              138.51,
+              58.05
+            ],
+            [
+              141.5,
+              57.85
+            ],
+            [
+              140.57,
+              43.83
+            ]
+          ],
+          [
+            [
+              137.87,
+              55.85
+            ],
+            [
+              182.86,
+              138.73
+            ],
+            [
+              185.49,
+              137.3
+            ],
+            [
+              140.51,
+              54.42
+            ]
+          ],
+          [
+            [
+              184.06,
+              134.66
+            ],
+            [
+              78.76,
+              191.83
+            ],
+            [
+              80.19,
+              194.47
+            ],
+            [
+              185.49,
+              137.3
+            ]
+          ],
+          [
+            [
+              82.82,
+              193.03
+            ],
+            [
+              10.98,
+              60.67
+            ],
+            [
+              8.34,
+              62.1
+            ],
+            [
+              80.19,
+              194.47
+            ]
+          ],
+          [
+            [
+              9.77,
+              64.73
+            ],
+            [
+              45.24,
+              45.48
+            ],
+            [
+              43.81,
+              42.84
+            ],
+            [
+              8.34,
+              62.1
+            ]
+          ],
+          [
+            [
+              45.24,
+              45.48
+            ],
+            [
+              -28.09,
+              -89.69
+            ],
+            [
+              -30.73,
+              -88.26
+            ],
+            [
+              42.61,
+              46.91
+            ]
+          ],
+          [
+            [
+              84.48,
+              -132.65
+            ],
+            [
+              113.02,
+              -78.65
+            ],
+            [
+              141.31,
+              -93.61
+            ],
+            [
+              112.77,
+              -147.61
+            ]
+          ],
+          [
+            [
+              132.0,
+              -153.0
+            ],
+            [
+              138.0,
+              -153.0
+            ],
+            [
+              138.0,
+              -147.0
+            ],
+            [
+              132.0,
+              -147.0
+            ]
           ]
         ],
         "exclude_ways": [
@@ -688,12 +922,10 @@
             "source_keys": [
               "w255330072",
               "w255330071",
-              "w255330034",
-              "w8917792",
-              "w215879079"
+              "w8917792"
             ],
             "half_width_m": 7.0,
-            "reason": "9th Street, Avenue H, 5th Street and the site road keep their generated grade."
+            "reason": "9th Street and 5th Street keep their generated grade (Avenue H keeps its own outside the levelled stretch, by the traced corridors; the old service road into 449's parcel is levelled with the site)."
           }
         ],
         "exclude_xz": [
@@ -721,23 +953,124 @@
           {
             "points_xz": [
               [
-                96.0,
-                -128.0
+                82.72,
+                -163.82
               ],
               [
-                128.0,
-                -128.0
+                87.01,
+                -155.74
               ],
               [
-                128.0,
-                -96.0
+                89.3,
+                -151.34
               ],
               [
-                96.0,
-                -96.0
+                95.97,
+                -138.73
+              ],
+              [
+                108.35,
+                -145.27
+              ],
+              [
+                101.7,
+                -157.86
+              ],
+              [
+                99.39,
+                -162.26
+              ],
+              [
+                95.08,
+                -170.38
               ]
             ],
-            "reason": "The 32 m land cell beside w110188516 (east of Avenue H, its west wall on the cell edge) stays unsplit, so that building's foundation keeps its triangles."
+            "reason": "Avenue H south of the levelled stretch keeps its generated grade (its corridor, 7 m either side of the centre line)."
+          },
+          {
+            "points_xz": [
+              [
+                124.51,
+                -84.73
+              ],
+              [
+                130.01,
+                -74.34
+              ],
+              [
+                170.69,
+                3.33
+              ],
+              [
+                178.09,
+                17.63
+              ],
+              [
+                185.48,
+                31.82
+              ],
+              [
+                187.37,
+                35.5
+              ],
+              [
+                193.46,
+                47.38
+              ],
+              [
+                205.36,
+                70.88
+              ],
+              [
+                232.09,
+                123.12
+              ],
+              [
+                272.0,
+                199.06
+              ],
+              [
+                284.4,
+                192.54
+              ],
+              [
+                244.51,
+                116.68
+              ],
+              [
+                217.84,
+                64.52
+              ],
+              [
+                205.94,
+                41.02
+              ],
+              [
+                199.83,
+                29.1
+              ],
+              [
+                197.92,
+                25.38
+              ],
+              [
+                190.51,
+                11.17
+              ],
+              [
+                183.11,
+                -3.13
+              ],
+              [
+                142.39,
+                -80.86
+              ],
+              [
+                136.89,
+                -91.27
+              ]
+            ],
+            "reason": "Avenue H north of the levelled stretch keeps its generated grade (its corridor, 7 m either side of the centre line)."
           }
         ],
         "edge_blend_m": 4.0
@@ -765,16 +1098,16 @@
                 -146.3
               ],
               [
-                84.0,
-                -143.0
+                92.8,
+                -142.6
               ],
               [
-                84.0,
-                -84.0
+                112.0,
+                -106.3
               ],
               [
-                118.2,
-                -84.0
+                129.1,
+                -73.9
               ],
               [
                 130.9,
@@ -815,7 +1148,929 @@
             "kind": "level",
             "elevation_m": 3.5
           },
-          "reason": "The cleared construction site and its west haul road read flat in the Sep 2025 Street View and the May 2026 aerial; 3.5 m is the grade of the streets round it (3.2-3.6 m). The region stops 12 m short of the land cell kept beside 516 Avenue H, so the grade ramps up to that cell's ground instead of stepping."
+          "reason": "The cleared construction site and its west haul road read flat in the Sep 2025 Street View and the May 2026 aerial; 3.5 m is the grade of the streets round it (3.2-3.6 m). It reaches the Avenue H corridor, which keeps its generated grade."
+        },
+        {
+          "id": "pit_west",
+          "shape": {
+            "center_xz": [
+              41.0,
+              -17.0
+            ],
+            "radii_m": [
+              9.5,
+              5.5
+            ],
+            "rotation_deg": 60.9
+          },
+          "rule": {
+            "kind": "sink",
+            "depth_m": 1.0,
+            "side_run_m": 3.0
+          },
+          "reason": "An excavation pit of the foundation works, dug about 1 m into the levelled site: Esri World Imagery, Vantor capture 2026-05-26 (large-clutter research tile t-centre, 0.4 m): a dark pit about 19 by 11 m beside the trench line."
+        },
+        {
+          "id": "pit_middle",
+          "shape": {
+            "center_xz": [
+              53.0,
+              5.0
+            ],
+            "radii_m": [
+              8.5,
+              7.5
+            ],
+            "rotation_deg": 60.0
+          },
+          "rule": {
+            "kind": "sink",
+            "depth_m": 1.0,
+            "side_run_m": 3.0
+          },
+          "reason": "An excavation pit of the foundation works, dug about 1 m into the levelled site: Esri World Imagery, Vantor capture 2026-05-26 (large-clutter research tile t-centre, 0.4 m): a dark pit about 17 by 15 m with a lighter rim."
+        },
+        {
+          "id": "pit_east",
+          "shape": {
+            "center_xz": [
+              66.0,
+              -6.0
+            ],
+            "radii_m": [
+              8.5,
+              5.0
+            ],
+            "rotation_deg": -24.0
+          },
+          "rule": {
+            "kind": "sink",
+            "depth_m": 1.0,
+            "side_run_m": 3.0
+          },
+          "reason": "An excavation pit of the foundation works, dug about 1 m into the levelled site: Esri World Imagery, Vantor capture 2026-05-26 (large-clutter research tile t-centre, 0.4 m): a dark pit about 17 by 10 m."
+        },
+        {
+          "id": "pit_south_east",
+          "shape": {
+            "center_xz": [
+              78.0,
+              8.0
+            ],
+            "radii_m": [
+              8.0,
+              5.0
+            ],
+            "rotation_deg": -24.0
+          },
+          "rule": {
+            "kind": "sink",
+            "depth_m": 1.0,
+            "side_run_m": 3.0
+          },
+          "reason": "An excavation pit of the foundation works, dug about 1 m into the levelled site: Esri World Imagery, Vantor capture 2026-05-26 (large-clutter research tile t-centre, 0.4 m): a dark pit about 16 by 10 m."
+        },
+        {
+          "id": "trench",
+          "shape": {
+            "center_xz": [
+              85.5,
+              28.5
+            ],
+            "radii_m": [
+              30.0,
+              6.0
+            ],
+            "rotation_deg": -22.7
+          },
+          "rule": {
+            "kind": "sink",
+            "depth_m": 1.0,
+            "side_run_m": 3.0
+          },
+          "reason": "An excavation pit of the foundation works, dug about 1 m into the levelled site: Esri World Imagery, Vantor capture 2026-05-26 (large-clutter research tile t-centre, 0.4 m): a long dark excavation about 60 by 12 m, shadowed along its south wall."
+        }
+      ]
+    },
+    {
+      "id": "hangar_earthworks_pad",
+      "name": "Hangar earthworks pad",
+      "basis": "production_inference",
+      "evidence": "Large-clutter place #11 (inside OSM w1252737732 landuse=construction). Esri World Imagery, Vantor capture 2026-05-26 (large-clutter research tile t-southeast, 0.6 m) shows a flat, pale graded pad closed by a ring of black-plastic berms, the old embankment on its south-east side and shallow ponds at its west end; the 2023 USGS raster still holds the stockpiles that were graded since (the pad reads 2.4 to 10.6 m there). The pad and the ring's north-west, north, north-east and south-west sides are levelled to 2.8 m, the pad's own grade (the median of the raster inside it); the south-east embankment (to about 11 m) stays as the ring's base, its inner slope cut back to the band's edge in the aerial, the scope reaching 14 m into it so the grade ramps up gently under the plastic. The hangars (Buildings 2 and 3), the Job Corps grounds (the scope stops 1.5 m inside their fence, w1252737750) and the streets stay outside it, and so does every 32 m land cell beside a building (the pad's west corner and south-west side among them), so no foundation is re-cut. Owner-approved levelling 2026-11-04; review round 3, 2026-11-04.",
+      "scope": {
+        "source_keys": [],
+        "add_xz": [
+          [
+            [
+              82.93,
+              414.82
+            ],
+            [
+              143.92,
+              384.95
+            ],
+            [
+              167.73369439788866,
+              370.0263353805551
+            ],
+            [
+              241.33,
+              329.22
+            ],
+            [
+              291.61,
+              300.06
+            ],
+            [
+              332.56,
+              280.61
+            ],
+            [
+              362.61,
+              267.58
+            ],
+            [
+              392.61,
+              253.58
+            ],
+            [
+              423.12,
+              240.36
+            ],
+            [
+              469.17,
+              222.22
+            ],
+            [
+              487.2,
+              246.26
+            ],
+            [
+              500.81,
+              271.4
+            ],
+            [
+              516.5,
+              300.16
+            ],
+            [
+              511.84,
+              314.64
+            ],
+            [
+              491.07,
+              340.48
+            ],
+            [
+              477.77,
+              358.28
+            ],
+            [
+              459.87,
+              370.81
+            ],
+            [
+              442.03,
+              383.05
+            ],
+            [
+              424.16,
+              392.8
+            ],
+            [
+              406.34,
+              403.12
+            ],
+            [
+              387.19,
+              410.8
+            ],
+            [
+              369.69,
+              419.36
+            ],
+            [
+              352.39,
+              429.36
+            ],
+            [
+              334.2,
+              438.25
+            ],
+            [
+              316.68,
+              447.71
+            ],
+            [
+              300.14,
+              456.07
+            ],
+            [
+              286.11,
+              469.36
+            ],
+            [
+              268.99,
+              482.55
+            ],
+            [
+              250.61,
+              492.64
+            ],
+            [
+              233.44,
+              501.62
+            ],
+            [
+              215.89,
+              512.9
+            ],
+            [
+              196.6,
+              520.06
+            ],
+            [
+              179.1,
+              528.85
+            ],
+            [
+              152.37,
+              542.88
+            ],
+            [
+              140.63,
+              532.52
+            ]
+          ]
+        ],
+        "exclude_xz": [
+          {
+            "points_xz": [
+              [
+                63.7,
+                383.7
+              ],
+              [
+                96.3,
+                383.7
+              ],
+              [
+                96.3,
+                416.3
+              ],
+              [
+                63.7,
+                416.3
+              ]
+            ],
+            "reason": "A land cell beside a building (the hangars, the Job Corps buildings) stays unsplit, so no foundation is re-cut."
+          },
+          {
+            "points_xz": [
+              [
+                63.7,
+                415.7
+              ],
+              [
+                96.3,
+                415.7
+              ],
+              [
+                96.3,
+                448.3
+              ],
+              [
+                63.7,
+                448.3
+              ]
+            ],
+            "reason": "A land cell beside a building (the hangars, the Job Corps buildings) stays unsplit, so no foundation is re-cut."
+          },
+          {
+            "points_xz": [
+              [
+                95.7,
+                383.7
+              ],
+              [
+                128.3,
+                383.7
+              ],
+              [
+                128.3,
+                416.3
+              ],
+              [
+                95.7,
+                416.3
+              ]
+            ],
+            "reason": "A land cell beside a building (the hangars, the Job Corps buildings) stays unsplit, so no foundation is re-cut."
+          },
+          {
+            "points_xz": [
+              [
+                95.7,
+                415.7
+              ],
+              [
+                128.3,
+                415.7
+              ],
+              [
+                128.3,
+                448.3
+              ],
+              [
+                95.7,
+                448.3
+              ]
+            ],
+            "reason": "A land cell beside a building (the hangars, the Job Corps buildings) stays unsplit, so no foundation is re-cut."
+          },
+          {
+            "points_xz": [
+              [
+                95.7,
+                447.7
+              ],
+              [
+                128.3,
+                447.7
+              ],
+              [
+                128.3,
+                480.3
+              ],
+              [
+                95.7,
+                480.3
+              ]
+            ],
+            "reason": "A land cell beside a building (the hangars, the Job Corps buildings) stays unsplit, so no foundation is re-cut."
+          },
+          {
+            "points_xz": [
+              [
+                95.7,
+                479.7
+              ],
+              [
+                128.3,
+                479.7
+              ],
+              [
+                128.3,
+                512.3
+              ],
+              [
+                95.7,
+                512.3
+              ]
+            ],
+            "reason": "A land cell beside a building (the hangars, the Job Corps buildings) stays unsplit, so no foundation is re-cut."
+          },
+          {
+            "points_xz": [
+              [
+                127.7,
+                351.7
+              ],
+              [
+                160.3,
+                351.7
+              ],
+              [
+                160.3,
+                384.3
+              ],
+              [
+                127.7,
+                384.3
+              ]
+            ],
+            "reason": "A land cell beside a building (the hangars, the Job Corps buildings) stays unsplit, so no foundation is re-cut."
+          },
+          {
+            "points_xz": [
+              [
+                127.7,
+                383.7
+              ],
+              [
+                160.3,
+                383.7
+              ],
+              [
+                160.3,
+                416.3
+              ],
+              [
+                127.7,
+                416.3
+              ]
+            ],
+            "reason": "A land cell beside a building (the hangars, the Job Corps buildings) stays unsplit, so no foundation is re-cut."
+          },
+          {
+            "points_xz": [
+              [
+                127.7,
+                479.7
+              ],
+              [
+                160.3,
+                479.7
+              ],
+              [
+                160.3,
+                512.3
+              ],
+              [
+                127.7,
+                512.3
+              ]
+            ],
+            "reason": "A land cell beside a building (the hangars, the Job Corps buildings) stays unsplit, so no foundation is re-cut."
+          },
+          {
+            "points_xz": [
+              [
+                127.7,
+                511.7
+              ],
+              [
+                160.3,
+                511.7
+              ],
+              [
+                160.3,
+                544.3
+              ],
+              [
+                127.7,
+                544.3
+              ]
+            ],
+            "reason": "A land cell beside a building (the hangars, the Job Corps buildings) stays unsplit, so no foundation is re-cut."
+          },
+          {
+            "points_xz": [
+              [
+                159.7,
+                351.7
+              ],
+              [
+                192.3,
+                351.7
+              ],
+              [
+                192.3,
+                384.3
+              ],
+              [
+                159.7,
+                384.3
+              ]
+            ],
+            "reason": "A land cell beside a building (the hangars, the Job Corps buildings) stays unsplit, so no foundation is re-cut."
+          },
+          {
+            "points_xz": [
+              [
+                191.7,
+                511.7
+              ],
+              [
+                224.3,
+                511.7
+              ],
+              [
+                224.3,
+                544.3
+              ],
+              [
+                191.7,
+                544.3
+              ]
+            ],
+            "reason": "A land cell beside a building (the hangars, the Job Corps buildings) stays unsplit, so no foundation is re-cut."
+          },
+          {
+            "points_xz": [
+              [
+                255.7,
+                479.7
+              ],
+              [
+                288.3,
+                479.7
+              ],
+              [
+                288.3,
+                512.3
+              ],
+              [
+                255.7,
+                512.3
+              ]
+            ],
+            "reason": "A land cell beside a building (the hangars, the Job Corps buildings) stays unsplit, so no foundation is re-cut."
+          },
+          {
+            "points_xz": [
+              [
+                351.7,
+                415.7
+              ],
+              [
+                384.3,
+                415.7
+              ],
+              [
+                384.3,
+                448.3
+              ],
+              [
+                351.7,
+                448.3
+              ]
+            ],
+            "reason": "A land cell beside a building (the hangars, the Job Corps buildings) stays unsplit, so no foundation is re-cut."
+          },
+          {
+            "points_xz": [
+              [
+                415.7,
+                383.7
+              ],
+              [
+                448.3,
+                383.7
+              ],
+              [
+                448.3,
+                416.3
+              ],
+              [
+                415.7,
+                416.3
+              ]
+            ],
+            "reason": "A land cell beside a building (the hangars, the Job Corps buildings) stays unsplit, so no foundation is re-cut."
+          },
+          {
+            "points_xz": [
+              [
+                447.7,
+                351.7
+              ],
+              [
+                480.3,
+                351.7
+              ],
+              [
+                480.3,
+                384.3
+              ],
+              [
+                447.7,
+                384.3
+              ]
+            ],
+            "reason": "A land cell beside a building (the hangars, the Job Corps buildings) stays unsplit, so no foundation is re-cut."
+          },
+          {
+            "points_xz": [
+              [
+                479.7,
+                351.7
+              ],
+              [
+                512.3,
+                351.7
+              ],
+              [
+                512.3,
+                384.3
+              ],
+              [
+                479.7,
+                384.3
+              ]
+            ],
+            "reason": "A land cell beside a building (the hangars, the Job Corps buildings) stays unsplit, so no foundation is re-cut."
+          }
+        ],
+        "exclude_ways": [
+          {
+            "source_keys": [
+              "w1252737727",
+              "w1252737728"
+            ],
+            "half_width_m": 6.0,
+            "reason": "The ends of Avenue H and Avenue I keep their generated grade."
+          }
+        ],
+        "edge_blend_m": 8.0
+      },
+      "grade": {
+        "grid_m": 2,
+        "iterations": 3000,
+        "relaxation": 1.9
+      },
+      "regions": [
+        {
+          "id": "graded_pad",
+          "shape": {
+            "points_xz": [
+              [
+                140,
+                468
+              ],
+              [
+                172,
+                468
+              ],
+              [
+                172,
+                516.77
+              ],
+              [
+                172.7,
+                516.4
+              ],
+              [
+                180,
+                512.73
+              ],
+              [
+                180,
+                500
+              ],
+              [
+                210.07,
+                500
+              ],
+              [
+                226.4,
+                489.5
+              ],
+              [
+                244,
+                480.3
+              ],
+              [
+                244,
+                468
+              ],
+              [
+                264.93,
+                468
+              ],
+              [
+                277,
+                458.7
+              ],
+              [
+                292,
+                444.5
+              ],
+              [
+                310.2,
+                435.3
+              ],
+              [
+                327.8,
+                425.8
+              ],
+              [
+                340,
+                419.84
+              ],
+              [
+                340,
+                404
+              ],
+              [
+                369.23,
+                404
+              ],
+              [
+                381.5,
+                398
+              ],
+              [
+                400.2,
+                390.5
+              ],
+              [
+                404,
+                388.3
+              ],
+              [
+                404,
+                372
+              ],
+              [
+                433.05,
+                372
+              ],
+              [
+                434.7,
+                371.1
+              ],
+              [
+                436,
+                370.21
+              ],
+              [
+                436,
+                340
+              ],
+              [
+                473.95,
+                340
+              ],
+              [
+                480,
+                331.9
+              ],
+              [
+                507.99,
+                297.09
+              ],
+              [
+                495.54,
+                274.27
+              ],
+              [
+                482.13,
+                249.51
+              ],
+              [
+                467.11,
+                229.48
+              ],
+              [
+                425.41,
+                245.91
+              ],
+              [
+                395.08,
+                259.06
+              ],
+              [
+                365.08,
+                273.06
+              ],
+              [
+                335.04,
+                286.07
+              ],
+              [
+                294.41,
+                305.37
+              ],
+              [
+                244.22,
+                334.48
+              ],
+              [
+                204,
+                355.85
+              ],
+              [
+                204,
+                396
+              ],
+              [
+                172,
+                396
+              ],
+              [
+                172,
+                428
+              ]
+            ],
+            "buffer_m": -1.0
+          },
+          "rule": {
+            "kind": "level",
+            "elevation_m": 2.8
+          },
+          "reason": "The graded pad and the berm ring's base read flat in the May 2026 aerial; 2.8 m is the median of the raster over the pad. The region keeps 12 m from the land cells left unsplit beside buildings, so the grade ramps to their ground."
+        }
+      ]
+    },
+    {
+      "id": "concrete_recycling_avenue_m",
+      "name": "Avenue M beside the concrete recycling yard",
+      "basis": "production_inference",
+      "evidence": "Large-clutter place #7. The 32 m land grid smears the yard's rubble mound (the 2023 USGS raster, about 11 m) out over its Avenue M wall line and Avenue M itself, which rise 3-7 m there; Google Street View, 92 Avenue M, Nov 2025 (camera x 525, z 154, heading 64) shows Avenue M flat and the double-stacked container wall standing at street level with the rubble only just showing over it. Avenue M and the strip inside the wall are levelled to the street's grade (4.0 m); the mound inside rises from behind the wall as the raster has it. Land cells beside buildings stay unsplit (so no foundation is re-cut). Production inference, 2026-11-04.",
+      "scope": {
+        "source_keys": [],
+        "add_xz": [
+          [
+            [
+              537.39,
+              198.04
+            ],
+            [
+              492.51,
+              114.01
+            ],
+            [
+              536.61,
+              90.46
+            ],
+            [
+              581.5,
+              174.48
+            ]
+          ]
+        ],
+        "exclude_xz": [
+          {
+            "points_xz": [
+              [
+                479.7,
+                95.7
+              ],
+              [
+                512.3,
+                95.7
+              ],
+              [
+                512.3,
+                128.3
+              ],
+              [
+                479.7,
+                128.3
+              ]
+            ],
+            "reason": "A land cell beside a building stays unsplit, so no foundation is re-cut."
+          },
+          {
+            "points_xz": [
+              [
+                511.7,
+                63.7
+              ],
+              [
+                544.3,
+                63.7
+              ],
+              [
+                544.3,
+                96.3
+              ],
+              [
+                511.7,
+                96.3
+              ]
+            ],
+            "reason": "A land cell beside a building stays unsplit, so no foundation is re-cut."
+          }
+        ],
+        "exclude_ways": [],
+        "edge_blend_m": 6.0
+      },
+      "grade": {
+        "grid_m": 2,
+        "iterations": 3000,
+        "relaxation": 1.9
+      },
+      "regions": [
+        {
+          "id": "street_and_wall_base",
+          "shape": {
+            "points_xz": [
+              [
+                536.33,
+                191.81
+              ],
+              [
+                497.1,
+                118.36
+              ],
+              [
+                521.36,
+                105.41
+              ],
+              [
+                560.59,
+                178.85
+              ]
+            ],
+            "buffer_m": -1.0
+          },
+          "rule": {
+            "kind": "level",
+            "elevation_m": 4.0
+          },
+          "reason": "Avenue M and the container wall's base read flat at street level in the Nov 2025 Street View; 4.0 m is the street's grade either side of the smear."
         }
       ]
     }

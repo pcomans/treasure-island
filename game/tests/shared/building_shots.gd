@@ -492,10 +492,7 @@ func _measure_view(view: Dictionary, target: Vector3, gallery: Dictionary) -> St
 	var shown := {}
 	for group: String in gallery.groups:
 		shown[group] = (gallery.groups[group] as Node3D).visible
-	var vsync := DisplayServer.window_get_vsync_mode()
-	var max_fps := Engine.max_fps
-	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
-	Engine.max_fps = 0
+	var uncapped := _uncap_frames()
 	var blocks := 3
 	var per_block := maxi(10, int(view.measure_frames) / blocks)
 	# Packed arrays are values in GDScript: keep one local per state, not two in a dictionary.
@@ -506,29 +503,17 @@ func _measure_view(view: Dictionary, target: Vector3, gallery: Dictionary) -> St
 		var state := "plants" if block % 2 == 0 else "empty"
 		for group: String in gallery.groups:
 			(gallery.groups[group] as Node3D).visible = bool(shown[group]) and state == "plants"
-		# Let the change settle before timing.
-		for _i in 20:
-			await RenderingServer.frame_post_draw
-		var last := Time.get_ticks_usec()
-		for _i in per_block:
-			await RenderingServer.frame_post_draw
-			var now := Time.get_ticks_usec()
-			if state == "plants":
-				plants_times.append((now - last) / 1000.0)
-			else:
-				empty_times.append((now - last) / 1000.0)
-			last = now
+		var times := await _frame_times(per_block, 20)
+		if state == "plants":
+			plants_times.append_array(times)
+		else:
+			empty_times.append_array(times)
 		info[state] = [RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME), RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_PRIMITIVES_IN_FRAME)]
-	DisplayServer.window_set_vsync_mode(vsync)
-	Engine.max_fps = max_fps
+	_restore_frames(uncapped)
 	for state: String in ["plants", "empty"]:
-		var list := plants_times if state == "plants" else empty_times
-		var total := 0.0
-		for time in list:
-			total += time
-		list.sort()
-		print("FRAME_TIME view=%s state=%s frames=%d mean_ms=%.2f median_ms=%.2f p95_ms=%.2f draw_calls=%d primitives=%d renderer=%s/%s" % [view.name, state, list.size(), total / list.size(),
-			list[list.size() / 2], list[int(list.size() * 0.95)], info[state][0], info[state][1], RenderingServer.get_current_rendering_method(), RenderingServer.get_video_adapter_name()])
+		var stats := _frame_stats(plants_times if state == "plants" else empty_times)
+		print("FRAME_TIME view=%s state=%s frames=%d mean_ms=%.2f median_ms=%.2f p95_ms=%.2f draw_calls=%d primitives=%d renderer=%s/%s" % [view.name, state, stats.frames, stats.mean,
+			stats.median, stats.p95, info[state][0], info[state][1], RenderingServer.get_current_rendering_method(), RenderingServer.get_video_adapter_name()])
 	if free != null:
 		free.queue_free()
 		_h.player.get_camera().make_current()
@@ -565,32 +550,54 @@ func _shoot_view(view: Dictionary, target: Vector3, path: String) -> String:
 func _frame_time(frames: Variant, label: String) -> String:
 	if not _numbers([frames], 1) or float(frames) != floorf(float(frames)) or float(frames) < 10.0 or float(frames) > 3000.0:
 		return "frame_time_frames must be a whole number from 10 to 3000"
-	var vsync := DisplayServer.window_get_vsync_mode()
-	var max_fps := Engine.max_fps
+	var uncapped := _uncap_frames()
+	# Let the change and any first-use work settle before timing.
+	var stats := _frame_stats(await _frame_times(int(frames), 30))
+	_restore_frames(uncapped)
+	print("FRAME_TIME %s frames=%d mean_ms=%.2f median_ms=%.2f p95_ms=%.2f mean_fps=%.1f method=%s adapter=%s" % [
+		label, stats.frames, stats.mean, stats.median, stats.p95,
+		1000.0 / stats.mean, RenderingServer.get_current_rendering_method(), RenderingServer.get_video_adapter_name(),
+	])
+	return ""
+
+
+## Turns vsync and the frame cap off for timing; returns what to restore.
+func _uncap_frames() -> Array:
+	var saved := [DisplayServer.window_get_vsync_mode(), Engine.max_fps]
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 	Engine.max_fps = 0
-	# Let the change and any first-use work settle before timing.
-	for _i in 30:
+	return saved
+
+
+func _restore_frames(saved: Array) -> void:
+	DisplayServer.window_set_vsync_mode(saved[0])
+	Engine.max_fps = saved[1]
+
+
+## The wall time (ms) between each of `frames` drawn frames, after `settle`
+## frames that let a change settle; the shared timer of measure_frames and
+## frame_time_frames.
+func _frame_times(frames: int, settle: int) -> PackedFloat64Array:
+	for _i in settle:
 		await RenderingServer.frame_post_draw
 	var times := PackedFloat64Array()
 	var last := Time.get_ticks_usec()
-	for _i in int(frames):
+	for _i in frames:
 		await RenderingServer.frame_post_draw
 		var now := Time.get_ticks_usec()
 		times.append(float(now - last) / 1000.0)
 		last = now
-	DisplayServer.window_set_vsync_mode(vsync)
-	Engine.max_fps = max_fps
-	times.sort()
+	return times
+
+
+## Frame count, mean, median and 95th percentile (ms) of frame times.
+func _frame_stats(times: PackedFloat64Array) -> Dictionary:
+	var sorted := times.duplicate()
+	sorted.sort()
 	var total := 0.0
-	for time in times:
+	for time in sorted:
 		total += time
-	var mean := total / float(times.size())
-	print("FRAME_TIME %s frames=%d mean_ms=%.2f median_ms=%.2f p95_ms=%.2f mean_fps=%.1f method=%s adapter=%s" % [
-		label, times.size(), mean, times[times.size() / 2], times[mini(times.size() - 1, int(times.size() * 0.95))],
-		1000.0 / mean, RenderingServer.get_current_rendering_method(), RenderingServer.get_video_adapter_name(),
-	])
-	return ""
+	return {"frames": sorted.size(), "mean": total / float(sorted.size()), "median": sorted[sorted.size() / 2], "p95": sorted[mini(sorted.size() - 1, int(sorted.size() * 0.95))]}
 
 
 ## The view's free camera at camera_xyz aimed at target, made current, or null

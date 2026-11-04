@@ -53579,8 +53579,7 @@
       "opaque": false,
       "receiver_kind": "none",
       "source_keys": [
-        "w1428380753",
-        "w775820811"
+        "w1428380753"
       ],
       "surface_bias_m": 0.1,
       "uvs": [
