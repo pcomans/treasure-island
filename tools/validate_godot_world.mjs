@@ -58,7 +58,7 @@ import {
   STREET_DETAIL_SOURCES,
 } from "./lib/street-detail-generation.mjs";
 import { CAR_BODY_NAMES, CAR_FINISHES, CAR_PAINTS, MAX_TWIST_M, STREET_CLUTTER_PROPS, visibleGroundIndex } from "./lib/street-clutter-generation.mjs";
-import { STREET_FENCE_INSIDE, STREET_FENCE_SCREENS, STREET_FENCE_TYPES } from "./lib/street-fence-generation.mjs";
+import { fenceHeight, fenceParamsError, STREET_FENCE_GATE_STYLES, STREET_FENCE_INSIDE, STREET_FENCE_SCREENS, STREET_FENCE_TYPES } from "./lib/street-fence-generation.mjs";
 import { MAX_LEG_DROP_M, MAX_REST_TILT_RAD, restTilt, STREET_FURNITURE_FEET, STREET_FURNITURE_PROPS } from "./lib/street-furniture-generation.mjs";
 import { YARD_KIT_KEYS, yardPropFootprint, yardPropParamsError } from "./lib/street-yard-kit.mjs";
 import { isMooredRow, MOORED_PROP_VARIANTS } from "./lib/street-yard-generation.mjs";
@@ -947,8 +947,17 @@ function validateStreetDetail(worldRoot, manifest, records) {
 function validateFenceRow(row, grounded, inBoundary) {
   const fence = row.fence;
   const spec = STREET_FENCE_TYPES[fence.type];
-  invariant(spec && fence.height_m === spec.height_m && fence.half_thickness_m === spec.half_thickness_m && typeof fence.type_basis === "string", `${row.id} fence type is invalid`);
-  invariant(STREET_FENCE_INSIDE.includes(fence.params?.inside) && (fence.type !== "chain_link_screened" || row.source === "osm" || STREET_FENCE_SCREENS.includes(fence.params.screen)), `${row.id} fence params are invalid`);
+  invariant(spec && fence.height_m === fenceHeight(fence.type, fence.params) && fence.half_thickness_m === spec.half_thickness_m && typeof fence.type_basis === "string", `${row.id} fence type is invalid`);
+  invariant(STREET_FENCE_INSIDE.includes(fence.params?.inside) && (fence.type !== "chain_link_screened" || row.source === "osm" || STREET_FENCE_SCREENS.includes(fence.params.screen))
+    && (fence.type !== "chainlink_slatted" || fenceParamsError(fence.type, fence.params) === null), `${row.id} fence params are invalid`);
+  // A slatted fence's open gate leaves: a style and the two grounded ends of their opening.
+  if (fence.gates !== undefined) {
+    invariant(fence.type === "chainlink_slatted" && Array.isArray(fence.gates), `${row.id} only a slatted fence carries gates`);
+    fence.gates.forEach((gate, index) => {
+      invariant(STREET_FENCE_GATE_STYLES.includes(gate.style) && gate.points_m?.length === 2 && gate.terrain_supports?.length === 2 && gate.surface_bias_m?.length === 2, `${row.id} gate ${index} is invalid`);
+      gate.points_m.forEach((point, end) => grounded(`${row.id} gate ${index} end ${end}`, point[0], point[1], point[2], gate.terrain_supports[end][0], gate.terrain_supports[end][1]));
+    });
+  }
   invariant(Number.isFinite(fence.length_m) && fence.length_m > 0, `${row.id} fence length is invalid`);
   let previous = 0;
   for (const opening of fence.openings) {
@@ -956,7 +965,7 @@ function validateFenceRow(row, grounded, inBoundary) {
     invariant(typeof opening.reason === "string" && opening.reason !== "" && Array.isArray(opening.source_ids), `${row.id} fence opening is unnamed`);
     previous = opening.to_m;
   }
-  invariant(row.status === (fence.runs.length > 0 ? "placed" : "excluded"), `${row.id} status does not match its fence runs`);
+  invariant(row.status === (fence.runs.length > 0 || (fence.gates?.length ?? 0) > 0 ? "placed" : "excluded"), `${row.id} status does not match its fence runs and gates`);
   fence.runs.forEach((run, runIndex) => {
     invariant(Array.isArray(run.points_m) && run.points_m.length >= 2 && run.terrain_supports?.length === run.points_m.length && run.surface_bias_m?.length === run.points_m.length, `${row.id} run ${runIndex} arrays are inconsistent`);
     run.points_m.forEach((point, index) => {

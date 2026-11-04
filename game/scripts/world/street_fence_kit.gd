@@ -4,7 +4,8 @@ extends RefCounted
 ## (tools/lib/street-fence-generation.mjs places them). One shared kit for every
 ## fence type: plain chain-link, chain-link with barbed wire (industrial),
 ## chain-link with a privacy windscreen and temporary chain-link panels
-## (construction), and a wood board fence (housing).
+## (construction), a wood board fence (housing), and chain-link with privacy
+## slats woven through it, with its gates standing open (storage yards).
 ##
 ## Metal parts are tubes and boxes of the street-furniture kit's builder, sharing
 ## its galvanised atlas cell; fabric, screens and boards are textured quads tiled
@@ -35,6 +36,7 @@ const WOOD := preload("res://game/resources/textures/world/street/street_fence_w
 ## half thickness of each bay's collision box: panels are jittered at their
 ## joints by up to PANEL_JITTER_M, which stays within the clearance.
 const TYPES := {
+	"chainlink_slatted": {"height_m": 1.83, "half_thickness_m": 0.06, "collision_half_m": 0.06},
 	"chain_link": {"height_m": 1.83, "half_thickness_m": 0.06, "collision_half_m": 0.06},
 	"chain_link_barbed": {"height_m": 2.13, "half_thickness_m": 0.25, "collision_half_m": 0.06},
 	"chain_link_screened": {"height_m": 1.83, "half_thickness_m": 0.06, "collision_half_m": 0.06},
@@ -52,6 +54,15 @@ const INSIDE := ["left", "right", "center"]
 ## are warm.
 const SCREENS := {"black": Color(0.32, 0.32, 0.43), "green": Color(0.34, 0.5, 0.4)}
 const SCREEN_OPACITY := 0.92
+## Privacy slat colours (sRGB, multiplied with the slat stripes), from the
+## photos: dark teal-green (9th St, Sep 2025; Avenue M, Mar 2025), brown
+## (12th St, Jul 2023), black.
+const SLATS := {"green": Color(0.19, 0.3, 0.29), "brown": Color(0.3, 0.26, 0.21), "black": Color(0.08, 0.08, 0.085)}
+## Slatted fences come 6 or 8 ft tall (tools/lib/street-fence-generation.mjs).
+const SLATTED_HEIGHTS := [1.83, 2.44]
+## A slat tile: eight slats across SLAT_TILE_M, one fabric height tall.
+const SLAT_TILE_M := 0.4
+const GATE_STYLES := ["swing_single", "swing_double", "sliding"]
 const SCREEN_BACKLIGHT := Color(0.73, 0.73, 0.73)
 ## Visible ranges (m): a fence is long and low, so it reaches as far as a lamp pole.
 const RANGE_M := 260.0
@@ -84,6 +95,7 @@ var _barbed_shadow: ShaderMaterial
 var _wood: StandardMaterial3D
 var _screens: Dictionary = {}
 var _screen_shadow: StandardMaterial3D
+var _slats: Dictionary = {}
 
 
 func _init() -> void:
@@ -120,6 +132,27 @@ func _init() -> void:
 		# light through it, so the screens take no shadows.
 		screen.disable_receive_shadows = true
 		_screens[colour] = screen
+	# Privacy slats: opaque stripes, one slat per mesh column with a dark
+	# seam between, a little uneven in tone (a texture made here, no file).
+	var stripes := Image.create_empty(64, 16, false, Image.FORMAT_RGBA8)
+	for x in 64:
+		var slat := x / 8
+		var tone := 0.86 + 0.14 * float((slat * 37 + 11) % 7) / 6.0
+		for y in 16:
+			var seam := x % 8 == 7
+			var value := 0.32 if seam else tone * (0.97 + 0.03 * float((x * 13 + y * 7) % 5) / 4.0)
+			stripes.set_pixel(x, y, Color(value, value, value))
+	stripes.generate_mipmaps()
+	var stripe_texture := ImageTexture.create_from_image(stripes)
+	for colour: String in SLATS:
+		var slat_material := StandardMaterial3D.new()
+		slat_material.resource_name = "street_fence_slats_" + colour
+		slat_material.albedo_texture = stripe_texture
+		slat_material.albedo_color = SLATS[colour]
+		slat_material.roughness = 0.82
+		slat_material.cull_mode = BaseMaterial3D.CULL_DISABLED
+		slat_material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+		_slats[colour] = slat_material
 	# Blended surfaces cast no shadow: an opaque, shadow-only copy of each screen does.
 	_screen_shadow = StandardMaterial3D.new()
 	_screen_shadow.resource_name = "street_fence_screen_shadow"
@@ -157,7 +190,20 @@ static func params_error(type: String, params: Variant) -> String:
 		return "fence params need inside left, right or center"
 	if type == "chain_link_screened" and str((params as Dictionary).get("screen", "black")) not in SCREENS:
 		return "unknown screen colour %s" % (params as Dictionary).get("screen")
+	if type == "chainlink_slatted":
+		if str((params as Dictionary).get("slats", "")) not in SLATS:
+			return "slatted fence needs slats green, brown or black"
+		var height: Variant = (params as Dictionary).get("height_m", 1.83)
+		if not (height is float or height is int) or not SLATTED_HEIGHTS.any(func(value: float) -> bool: return is_equal_approx(value, float(height))):
+			return "slatted fence height_m must be 1.83 or 2.44"
 	return ""
+
+
+## The height of a fence of this type with these params.
+static func height_of(type: String, params: Variant) -> float:
+	if type == "chainlink_slatted" and params is Dictionary and (params as Dictionary).has("height_m"):
+		return float((params as Dictionary).height_m)
+	return float(TYPES[type].height_m)
 
 
 ## Adds one run's geometry to the cell builders (cells: key -> builders, filled
@@ -170,6 +216,8 @@ func add_run(cells: Dictionary, cell_size_m: float, type: String, params: Dictio
 			return _panels(cells, cell_size_m, posts, side, seed)
 		"wood_privacy":
 			return _wood_fence(cells, cell_size_m, posts, side)
+		"chainlink_slatted":
+			return _slatted(cells, cell_size_m, posts, side, str(params.get("slats", "green")), height_of(type, params))
 		_:
 			return _chain_link(cells, cell_size_m, type, posts, side, str(params.get("screen", "black")))
 
@@ -190,6 +238,8 @@ func commit(cell: Dictionary) -> Dictionary:
 	for colour: String in SCREENS:
 		_add_surface(fabric, cell["screen_" + colour], _screens[colour])
 		_add_surface(shadow, cell["screen_" + colour], _screen_shadow)
+	for colour: String in SLATS:
+		_add_surface(solid, cell["slats_" + colour], _slats[colour])
 	return {
 		"solid": solid if solid.get_surface_count() > 0 else null,
 		"fabric": fabric if fabric.get_surface_count() > 0 else null,
@@ -218,6 +268,9 @@ func _cell(cells: Dictionary, cell_size_m: float, position: Vector3) -> Dictiona
 			"wood": Quads.new(),
 			"screen_black": Quads.new(),
 			"screen_green": Quads.new(),
+			"slats_green": Quads.new(),
+			"slats_brown": Quads.new(),
+			"slats_black": Quads.new(),
 		}
 	return cells[key]
 
@@ -312,6 +365,89 @@ static func _post_normal(posts: PackedVector3Array, index: int) -> Vector3:
 	var after := _flat(posts[index + 1] - posts[index]) if index < posts.size() - 1 else Vector3.ZERO
 	var direction := (before + after).normalized() if (before + after).length() > 0.001 else (after if after != Vector3.ZERO else before)
 	return _left(direction)
+
+
+# ---------------------------------------------------------------- slatted
+
+## Chain-link with privacy slats: line posts with a top rail and a bottom
+## tension wire, the slats woven through the fabric (an opaque striped sheet in
+## the fabric's plane) and the wire over them on the outside.
+func _slatted(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, side: float, slats: String, height: float) -> Array[Dictionary]:
+	var boxes: Array[Dictionary] = []
+	var along_m := 0.0
+	for index in posts.size():
+		var metal: FURNITURE.Builder = _cell(cells, cell_size_m, posts[index]).metal
+		var terminal := _terminal(posts, index)
+		var radius := 0.03 if terminal else 0.024
+		var top := height + (0.06 if terminal else 0.03)
+		var foot := posts[index]
+		metal.tube(PackedVector3Array([foot + Vector3(0, -0.3, 0), foot + Vector3(0, top, 0)]), PackedFloat32Array([radius, radius]), 8, GALVANIZED, FURNITURE.CELL_METAL, false, false)
+		metal.tube(PackedVector3Array([foot + Vector3(0, top, 0), foot + Vector3(0, top + 0.04, 0)]), PackedFloat32Array([radius + 0.007, radius + 0.004]), 8, GALVANIZED, FURNITURE.CELL_METAL, false, true)
+	for index in posts.size() - 1:
+		var a := posts[index]
+		var b := posts[index + 1]
+		var length := Vector2(b.x - a.x, b.z - a.z).length()
+		var cell := _cell(cells, cell_size_m, (a + b) * 0.5)
+		var metal: FURNITURE.Builder = cell.metal
+		var normal := _left(_flat(b - a))
+		metal.tube(PackedVector3Array([a + Vector3(0, height - 0.02, 0), b + Vector3(0, height - 0.02, 0)]), PackedFloat32Array([0.021, 0.021]), 8, GALVANIZED, FURNITURE.CELL_METAL, false, false)
+		metal.tube(PackedVector3Array([a + Vector3(0, 0.07, 0), b + Vector3(0, 0.07, 0)]), PackedFloat32Array([0.004, 0.004]), 4, GALVANIZED, FURNITURE.CELL_METAL, false, false)
+		var shift := normal * side * 0.035
+		(cell["slats_" + slats] as Quads).wall(a + shift, b + shift, 0.05, height - 0.04, along_m, Vector2(SLAT_TILE_M, height))
+		# The wire on the outside of the slats (outward: away from the inside).
+		var wire := normal * (side * 0.035 - (side if side != 0.0 else 1.0) * 0.012)
+		(cell.chain as Quads).wall(a + wire, b + wire, 0.05, height - 0.04, along_m, CHAIN_TILE)
+		boxes.append(_bay_box(a, b, height, float(TYPES.chainlink_slatted.collision_half_m)))
+		along_m += length
+	return boxes
+
+
+## A slatted fence's open gate between the solid runs either side of it: two
+## stout gate posts, and the leaves swung back square to the fence on its
+## inside (swing gates) or slid along the fence beyond the post (a sliding
+## gate). Returns the leaves' collision boxes; the opening itself stays clear.
+func add_gate(cells: Dictionary, cell_size_m: float, params: Dictionary, ends: PackedVector3Array, style: String) -> Array[Dictionary]:
+	var boxes: Array[Dictionary] = []
+	if ends.size() != 2 or style not in GATE_STYLES:
+		return boxes
+	var height := height_of("chainlink_slatted", params)
+	var slats := str(params.get("slats", "green"))
+	var side := {"left": 1.0, "right": -1.0}.get(str(params.get("inside", "center")), 1.0) as float
+	if side == 0.0:
+		side = 1.0
+	var a := ends[0]
+	var b := ends[1]
+	var along := _flat(b - a)
+	var inside := _left(along) * side
+	var width := Vector2(b.x - a.x, b.z - a.z).length()
+	for foot: Vector3 in [a, b]:
+		var metal: FURNITURE.Builder = _cell(cells, cell_size_m, foot).metal
+		metal.tube(PackedVector3Array([foot + Vector3(0, -0.3, 0), foot + Vector3(0, height + 0.12, 0)]), PackedFloat32Array([0.045, 0.045]), 8, GALVANIZED, FURNITURE.CELL_METAL, false, true)
+	var leaves: Array = []
+	match style:
+		"swing_single":
+			leaves.append([a + inside * 0.06, inside, width - 0.12])
+		"swing_double":
+			leaves.append([a + inside * 0.06, inside, width * 0.5 - 0.08])
+			leaves.append([b + inside * 0.06, inside, width * 0.5 - 0.08])
+		"sliding":
+			# Parked along the fence, inside it, from the post back over the run.
+			leaves.append([a + inside * 0.16, -along, width + 0.3])
+	for leaf: Array in leaves:
+		var hinge: Vector3 = leaf[0]
+		var direction: Vector3 = leaf[1]
+		var leaf_width: float = leaf[2]
+		var far := hinge + direction * leaf_width
+		var cell := _cell(cells, cell_size_m, (hinge + far) * 0.5)
+		var metal: FURNITURE.Builder = cell.metal
+		var lift := Vector3(0, 0.05, 0)
+		var frame := PackedVector3Array([hinge + lift, hinge + lift + Vector3(0, height - 0.08, 0), far + lift + Vector3(0, height - 0.08, 0), far + lift, hinge + lift])
+		metal.tube(frame, PackedFloat32Array([0.022, 0.022, 0.022, 0.022, 0.022]), 6, GALVANIZED, FURNITURE.CELL_METAL, false, false)
+		metal.tube(PackedVector3Array([hinge + lift + Vector3(0, (height - 0.08) * 0.5, 0), far + lift + Vector3(0, (height - 0.08) * 0.5, 0)]), PackedFloat32Array([0.018, 0.018]), 6, GALVANIZED, FURNITURE.CELL_METAL, false, false)
+		(cell["slats_" + slats] as Quads).wall(hinge + lift, far + lift, 0.03, height - 0.1, 0.0, Vector2(SLAT_TILE_M, height))
+		(cell.chain as Quads).wall(hinge + lift + _left(direction) * 0.012, far + lift + _left(direction) * 0.012, 0.03, height - 0.1, 0.0, CHAIN_TILE)
+		boxes.append(_bay_box(hinge, far, height, 0.04))
+	return boxes
 
 
 # ---------------------------------------------------------------- panels
