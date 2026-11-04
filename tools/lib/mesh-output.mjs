@@ -130,7 +130,9 @@ function terrainNormal(east, north, elevationSampler, sampleDistanceM = 2) {
   return [-slopeEast / length, 1 / length, slopeNorth / length];
 }
 
-export function terrainSurfaceMesh(multiPolygon, elevationSampler, label = "terrain surface") {
+// allowEmpty: a sliver whose every triangle rounds to a degenerate one leaves an
+// empty mesh instead of failing (the caller decides whether that is acceptable).
+export function terrainSurfaceMesh(multiPolygon, elevationSampler, label = "terrain surface", { allowEmpty = false } = {}) {
   const mesh = emptyMesh();
   let trianglePlanArea = 0;
   let rejectedDegenerateTriangles = 0;
@@ -169,7 +171,7 @@ export function terrainSurfaceMesh(multiPolygon, elevationSampler, label = "terr
     Math.abs(trianglePlanArea - polygonArea) <= tolerance,
     `${label} plan triangle area ${trianglePlanArea} differs from polygon area ${polygonArea} by more than ${tolerance}`,
   );
-  validateMesh(mesh, label);
+  validateMesh(mesh, label, { allowEmpty });
   return {
     ...mesh,
     plan_area_m2: polygonArea,

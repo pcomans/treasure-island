@@ -58,6 +58,12 @@
       "name": "1434 Halibut Court",
       "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (0.5 m), frozen footprint drawn on it 2026-11-04: a bare concrete slab of the footprint's shape, no roof. Google Street View Mar 2025 (Halibut Ct, the SSE front): an empty slab; the building still stood in Apr 2019 (pano HKFHgtqE2Sph_6ZMyo34oA).",
       "approval": "owner-approved 2026-11-04"
+    },
+    {
+      "source_key": "w34313512",
+      "name": "449 Avenue H",
+      "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (0.4 m), frozen footprint drawn on it 2026-11-04: no roof; bare graded construction ground fills the whole footprint, part of the 9th Street and Avenue H construction site (w775820811). Google Street View on 9th St, Sep 2025 (camera x 52, z -151, heading 156): looking across the cleared site, no 10 m building stands at the footprint about 270 m away.",
+      "approval": "owner-approved 2026-11-04"
     }
   ]
 }

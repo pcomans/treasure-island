@@ -515,6 +515,309 @@
           "reason": "The oval stormwater forebay beside the pump station (CMG plan label, aerial 2025-08-29 and 2026-05-26: about 7.5 by 4.7 m)."
         }
       ]
+    },
+    {
+      "id": "construction_9th_avenue_h",
+      "name": "9th Street and Avenue H construction site",
+      "basis": "production_inference",
+      "evidence": "Large-clutter place #12 (OSM w775820811 landuse=construction). The 2023 USGS raster still holds a soil stockpile up to 21.9 m (about 18 m above the 3.3-3.6 m streets) across x 10..150, z -125..185, which is gone: Google Street View on 9th St (Sep 2025, camera x 52, z -151, heading 156) looks straight across that ground at 60-190 m and shows a flat cleared site behind construction panels, with the Bay Bridge visible beyond; Esri World Imagery (Vantor capture 2026-05-26, 0.34 m) shows graded ground with a concrete slab and early structure at about x 100..140, z -80..5, soil piles and equipment. Levelled to the surrounding grade; owner-approved 2026-11-04 (as the Cityside Park correction). The scope reaches 16 m past the Job Corps fence on the site's west side, where the 32 m land grid smears the stockpile's flank; 449 Avenue H (w34313512), the land cell beside 516 Avenue H and the streets stay outside it.",
+      "scope": {
+        "source_keys": [
+          "w775820811"
+        ],
+        "add_xz": [
+          [
+            [
+              -47.68,
+              -79.02
+            ],
+            [
+              12.52,
+              36.75
+            ],
+            [
+              -20.22,
+              53.77
+            ],
+            [
+              60.21,
+              205.28
+            ],
+            [
+              80.7,
+              191.4
+            ],
+            [
+              11.0,
+              61.9
+            ],
+            [
+              43.4,
+              43.9
+            ],
+            [
+              -27.8,
+              -87.3
+            ]
+          ],
+          [
+            [
+              -28.7,
+              -87.7
+            ],
+            [
+              -3.0,
+              -124.0
+            ],
+            [
+              32.0,
+              -138.0
+            ],
+            [
+              73.0,
+              -159.0
+            ],
+            [
+              83.0,
+              -147.0
+            ],
+            [
+              82.5,
+              -145.4
+            ],
+            [
+              59.45,
+              -134.3
+            ],
+            [
+              -28.2,
+              -86.8
+            ]
+          ],
+          [
+            [
+              110.4,
+              -95.5
+            ],
+            [
+              127.5,
+              -96.0
+            ],
+            [
+              127.5,
+              -64.0
+            ],
+            [
+              130.0,
+              -61.6
+            ]
+          ],
+          [
+            [
+              130.0,
+              -61.6
+            ],
+            [
+              144.4,
+              -62.0
+            ],
+            [
+              177.0,
+              0.0
+            ],
+            [
+              176.9,
+              25.6
+            ],
+            [
+              176.0,
+              26.1
+            ]
+          ],
+          [
+            [
+              138.4,
+              44.6
+            ],
+            [
+              176.9,
+              24.6
+            ],
+            [
+              186.5,
+              36.5
+            ],
+            [
+              152.5,
+              54.5
+            ],
+            [
+              194.5,
+              129.5
+            ],
+            [
+              182.6,
+              137.3
+            ],
+            [
+              139.0,
+              57.0
+            ]
+          ],
+          [
+            [
+              183.0,
+              135.8
+            ],
+            [
+              188.0,
+              147.0
+            ],
+            [
+              105.0,
+              191.0
+            ],
+            [
+              80.3,
+              191.5
+            ]
+          ]
+        ],
+        "exclude_ways": [
+          {
+            "source_keys": [
+              "w255330072",
+              "w255330071",
+              "w255330034",
+              "w8917792",
+              "w215879079"
+            ],
+            "half_width_m": 7.0,
+            "reason": "9th Street, Avenue H, 5th Street and the site road keep their generated grade."
+          }
+        ],
+        "exclude_xz": [
+          {
+            "points_xz": [
+              [
+                152.5,
+                54.5
+              ],
+              [
+                186.5,
+                36.5
+              ],
+              [
+                226.5,
+                110.5
+              ],
+              [
+                194.5,
+                129.5
+              ]
+            ],
+            "reason": "449 Avenue H (w34313512) and a 3 m margin keep their generated ground (owner, 2026-11-04: keep it out of the regions)."
+          },
+          {
+            "points_xz": [
+              [
+                96.0,
+                -128.0
+              ],
+              [
+                128.0,
+                -128.0
+              ],
+              [
+                128.0,
+                -96.0
+              ],
+              [
+                96.0,
+                -96.0
+              ]
+            ],
+            "reason": "The 32 m land cell beside w110188516 (east of Avenue H, its west wall on the cell edge) stays unsplit, so that building's foundation keeps its triangles."
+          }
+        ],
+        "edge_blend_m": 4.0
+      },
+      "grade": {
+        "grid_m": 2,
+        "iterations": 3000,
+        "relaxation": 1.9
+      },
+      "regions": [
+        {
+          "id": "cleared_site",
+          "shape": {
+            "points_xz": [
+              [
+                -31.0,
+                -86.5
+              ],
+              [
+                59.0,
+                -135.2
+              ],
+              [
+                82.1,
+                -146.3
+              ],
+              [
+                84.0,
+                -143.0
+              ],
+              [
+                84.0,
+                -84.0
+              ],
+              [
+                118.2,
+                -84.0
+              ],
+              [
+                130.9,
+                -62.1
+              ],
+              [
+                176.9,
+                25.6
+              ],
+              [
+                139.2,
+                45.4
+              ],
+              [
+                139.9,
+                56.5
+              ],
+              [
+                183.5,
+                136.7
+              ],
+              [
+                80.8,
+                192.4
+              ],
+              [
+                10.4,
+                62.7
+              ],
+              [
+                35.5,
+                47.0
+              ]
+            ],
+            "buffer_m": -2.0
+          },
+          "rule": {
+            "kind": "level",
+            "elevation_m": 3.5
+          },
+          "reason": "The cleared construction site and its west haul road read flat in the Sep 2025 Street View and the May 2026 aerial; 3.5 m is the grade of the streets round it (3.2-3.6 m). The region stops 12 m short of the land cell kept beside 516 Avenue H, so the grade ramps up to that cell's ground instead of stepping."
+        }
+      ]
     }
   ]
 }

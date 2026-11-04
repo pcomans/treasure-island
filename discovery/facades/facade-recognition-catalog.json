@@ -796,7 +796,12 @@
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "accepted"
+        "reference_recognizable": "demolished"
+      },
+      "demolition": {
+        "approval": "owner-approved 2026-11-04",
+        "config": "tools/config/demolished-buildings.json",
+        "status_before": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {

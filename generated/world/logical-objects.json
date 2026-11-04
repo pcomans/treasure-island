@@ -5177,9 +5177,7 @@
       ]
     },
     {
-      "chunk_ids": [
-        "x_0__z_0"
-      ],
+      "chunk_ids": [],
       "heights": [
         {
           "height_m": 10,
@@ -5188,10 +5186,7 @@
         }
       ],
       "logical_object_key": "building:w34313512",
-      "physical_object_keys": [
-        "building:w34313512:roof",
-        "building:w34313512:wall"
-      ],
+      "physical_object_keys": [],
       "representation": "direct",
       "roles": [
         "building"

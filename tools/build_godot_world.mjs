@@ -773,7 +773,12 @@ function coherentDrapedSurfaceMesh(multiPolygon, facets, biasM, label) {
       clipped,
       (east, north) => facetElevation(facet, east, north).elevation + biasM,
       `${label}/${facet.id}`,
+      { allowEmpty: true },
     );
+    // A sliver of the overlay at a facet corner (an OSM edge passing within
+    // millimetres of a land vertex) can triangulate to nothing once rounded;
+    // it holds no area the overall area check would miss.
+    if (piece.indices.length === 0) continue;
     pieces.push(piece);
     audits.push(auditCoherentSurface(piece, [facet], biasM, `${label}/${facet.id}`, facet));
   }
