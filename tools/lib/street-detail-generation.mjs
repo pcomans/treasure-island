@@ -17,7 +17,16 @@ import { geometryToLine, pointInMultiPolygon, pointInRing, selectGeometry } from
 import { footprintPiece, placeStreetClutter, STREET_CLUTTER_FOOTPRINTS, STREET_CLUTTER_PROPS, validateClutterRules, visibleGroundIndex } from "./street-clutter-generation.mjs";
 import { placeStreetFences, validateFenceRules } from "./street-fence-generation.mjs";
 import { placeStreetFurniture, settleOnFeet, STREET_FURNITURE_FEET, STREET_FURNITURE_PROPS, streetFurnitureFootprint, validateFurnitureRules } from "./street-furniture-generation.mjs";
-import { packPlantingRows, planDrifts, planFill, plantingState, validatePlantingRule } from "./street-planting-generation.mjs";
+import {
+  PAVING_CLEAR_M,
+  crownRadius,
+  packPlantingRows,
+  pavingUnder,
+  planDrifts,
+  planFill,
+  plantingState,
+  validatePlantingRule,
+} from "./street-planting-generation.mjs";
 import {
   STREET_VEGETATION_PROPS,
   bedOffsets,
@@ -1307,6 +1316,7 @@ export function generateStreetDetail({
       bed: (xz) => ground.site.parkBed([xz[0], -xz[1]], rule.surfaces),
       onBed: (xz) => ground.site.parkBedOn([xz[0], -xz[1]], rule.surfaces),
       slopeAt,
+      paving: (xz, radius) => pavingUnder(xz, radius, groundAt),
       state: plantingStates.get(zone.id),
       accept,
     });
@@ -1415,7 +1425,16 @@ export function generateStreetDetail({
           const { y, support } = grounded(xz);
           let planted = null;
           if (rule.prop) {
-            const { variant, scale } = drawVegetationVariant(seed, identity, rule.params);
+            let { variant, scale } = drawVegetationVariant(seed, identity, rule.params);
+            // A low plant keeps its whole crown clear of paving, as the planted
+            // beds do: the drawn variant, else the next lower one that clears.
+            if (!STREET_VEGETATION_PROPS[rule.prop].trunk) {
+              while (variant >= rule.params.variants[0] && pavingUnder(xz, crownRadius(rule.prop, variant, scale) + PAVING_CLEAR_M, groundAt)) variant -= 1;
+              if (variant < rule.params.variants[0]) {
+                count(audit.scatter.rejected_by_reason, "crown_paving");
+                continue;
+              }
+            }
             planted = plantRow({ prop: rule.prop, kind: rule.kind, variant, scale, xz, landY: y, surface, groundAt });
             if (planted.problem) {
               count(audit.scatter.rejected_by_reason, planted.problem);

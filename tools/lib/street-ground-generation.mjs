@@ -1557,6 +1557,8 @@ export function generateStreetGround({
   // Beds of the park layers with the given materials: whether a point lies on
   // one and how far it is from the nearest bed edge (inside or out), searched
   // within BED_REACH_M; for planting drifts (tools/lib/street-planting-generation.mjs).
+  // A bed is the park ground the player sees: where the raised street ground
+  // (sidewalks, curb ramps) is drawn over a park layer, that part is no bed.
   const BED_REACH_M = 8;
   const BED_CELL_M = 2;
   // Each cell lists the bed edges that come within BED_EDGE_MARGIN_M of it: a
@@ -1571,7 +1573,7 @@ export function generateStreetGround({
     const key = [...materials].sort().join("|");
     if (!bedIndexes.has(key)) {
       const parts = parkLayers.filter((entry) => materials.includes(entry.layer.material)).map((entry) => entry.polygon);
-      const region = union(`park beds ${key}`, parts);
+      const region = difference(`park beds ${key} uncovered`, union(`park beds ${key}`, parts), [bandOriginal, notchUnion]);
       const cells = new Map();
       for (const polygon of region) {
         for (const raw of polygon) {

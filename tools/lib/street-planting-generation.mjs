@@ -28,11 +28,15 @@
 //     each other (the shared state keeps overlapping rules apart);
 //   - band_m keeps a species within a band of distances from the bed edge (tall
 //     plants inward, low ones along the paths), spill_m lets a single plant's
-//     crown reach that far past the edge over the path margin (its centre stays
-//     EDGE_CLEAR_M inside the bed), and max_slope keeps it off steeper ground. A
-//     drift variant, several plants in one row that is settled as one, keeps its
-//     whole drift on the bed (its centre half the drift's width at the rule's
-//     largest scale inside) and stays on ground flatter than DRIFT_ROW_MAX_SLOPE.
+//     crown reach that far past the edge over soft ground, mulch, gravel or lawn
+//     (its centre stays EDGE_CLEAR_M inside the bed), and max_slope keeps it off
+//     steeper ground. A drift variant, several plants in one row that is settled
+//     as one, keeps its whole drift on the bed (its centre half the drift's width
+//     at the rule's largest scale inside) and stays on ground flatter than
+//     DRIFT_ROW_MAX_SLOPE;
+//   - paving: no crown, nor a drift's whole width, comes within PAVING_CLEAR_M
+//     of a walking or driving surface (PAVED_MATERIALS: sidewalks, roads, paths,
+//     plazas) on the visible ground, so nothing grows out over a sidewalk.
 // Every draw is seeded from the world seed, the zone and the rule, so the world
 // generator stays deterministic. The plants' widths are the street-vegetation
 // kit's (game/scripts/world/street_vegetation_kit.gd). Positions, mixes and
@@ -43,17 +47,19 @@ import { createHash } from "node:crypto";
 
 import { invariant, roundCoordinate } from "./world-contract.mjs";
 
-// The visual crown width of each kit variant (m), smallest variant first, for
-// spacing, cover and bed edges: the kit's widths, and for a drift variant the
-// drift's width as the kit's owner gives it (2026-11-04). A tree's is the clear ground
-// round its trunk that low plants keep (a young tree's crown overhangs them; an
-// old cypress shades a wide ring). DRIFT_VARIANTS are the variants that hold a
-// drift of several plants in one row.
+// The visual crown width of each kit variant (m), in the kit's variant order, for
+// spacing, cover, bed edges and paving: the kit's widths, and for a drift variant
+// the drift's width as the kit's owner gives it (2026-11-04). A tree's is the clear
+// ground round its trunk that low plants keep (a young tree's crown overhangs them;
+// an old cypress shades a wide ring). clump_grass, the streets' mulch-bed grass,
+// takes its widths from the kit's GRASSES. DRIFT_VARIANTS are the variants that
+// hold a drift of several plants in one row.
 export const PLANT_WIDTHS_M = Object.freeze({
   blue_eyed_grass: Object.freeze([0.22, 0.28, 0.34, 0.6]),
   bronze_clump_grass: Object.freeze([0.5, 0.62, 0.75, 1.6]),
   california_buckwheat: Object.freeze([0.65, 0.95, 1.25]),
   california_sagebrush: Object.freeze([0.75, 1.1, 1.45]),
+  clump_grass: Object.freeze([0.92, 1.15, 1.0, 1.25]),
   dense_sedge: Object.freeze([0.55, 0.75, 0.95, 1.6, 2.5]),
   dune_tansy: Object.freeze([0.42, 0.62, 0.82]),
   island_oak_young: Object.freeze([1.0, 1.2, 1.4]),
@@ -82,6 +88,20 @@ const DRIFT_VARIANTS = Object.freeze({
 export const DRIFT_ROW_MAX_SLOPE = 0.1;
 // How far inside its bed's edge a single plant's centre stays (m).
 const EDGE_CLEAR_M = 0.1;
+// The walking and driving surfaces of the visible ground: sidewalks and curb
+// ramps, plaza paving, roads with their paint, gutters and parking lanes,
+// paths, the parks' paved paths and plazas, and parking lots. A low plant's
+// crown spills over mulch, gravel and lawn, never over these.
+export const PAVED_MATERIALS = Object.freeze([
+  "major_area_paved", "park_asphalt", "park_concrete", "park_dg", "park_paint_pink", "park_plaza_lens", "park_plaza_zigzag",
+  "road_path", "road_path_pedestrian", "street_gutter", "street_kerb_concrete", "street_kerb_support", "street_marking",
+  "street_parking", "street_plaza_pavers", "street_wear",
+]);
+const PAVED = new Set(PAVED_MATERIALS);
+// How far a low plant's crown, or a drift's whole width, keeps clear of paving (m).
+export const PAVING_CLEAR_M = 0.1;
+// pavingUnder's sample rings: [fraction of the radius, points].
+const PAVING_RINGS = Object.freeze([[0.5, 12], [1, 24]]);
 // A plant covers a disc of this times its width (0.9 of its half width).
 const COVER_FACTOR = 0.45;
 // The cover raster's cell (m) and the plant index's cell.
@@ -216,6 +236,33 @@ function pickByShare(unit, entries) {
   return entries.at(-1);
 }
 
+// A low plant's crown radius (m): its kit variant's width (PLANT_WIDTHS_M; a
+// drift variant's, the whole drift's) at its scale.
+export function crownRadius(prop, variant, scale) {
+  const width = PLANT_WIDTHS_M[prop]?.[variant];
+  invariant(width !== undefined, `No crown width for ${prop} variant ${variant}`);
+  return (width * scale) / 2;
+}
+
+// The paving (a PAVED_MATERIALS key) that a disc of the given radius round xz
+// reaches on the visible ground, or null: groundAt is the street-vegetation
+// visible-ground query (visibleGroundIndex of street-clutter-generation.mjs),
+// sampled at the centre and on rings of [fraction of the radius, points].
+export function pavingUnder(xz, radius, groundAt, rings = PAVING_RINGS) {
+  const paving = (point) => {
+    const material = groundAt(point)?.material_key;
+    return PAVED.has(material) ? material : null;
+  };
+  let found = paving(xz);
+  for (const [fraction, points] of rings) {
+    for (let index = 0; index < points && found === null; index += 1) {
+      const angle = (2 * Math.PI * index) / points;
+      found = paving([xz[0] + Math.cos(angle) * radius * fraction, xz[1] + Math.sin(angle) * radius * fraction]);
+    }
+  }
+  return found;
+}
+
 // The plants a zone's planting rules have placed so far, with their widths, and
 // the ground they cover. A zone's rules share one.
 export function plantingState() {
@@ -265,9 +312,9 @@ function addPlant(state, prop, half, x, z) {
 }
 
 // What both patterns share: the seeded draws, the gap noise, and the test of a
-// species' variant at a point (band, spill, slope, spacing), which returns its
-// candidate or null.
-function plantingContext({ rule, zoneId, seed, bed, slopeAt }) {
+// species' variant at a point (band, spill, slope, spacing, paving), which
+// returns its candidate or null.
+function plantingContext({ rule, zoneId, seed, bed, slopeAt, paving }) {
   const tag = `${seed}|${zoneId}|${rule.id}`;
   const gapNoise = valueNoise(`${tag}|gaps`);
   const hashUnit = (text, slot = 0) => createHash("sha256").update(`${tag}|${text}`, "utf8").digest().readUInt32BE(slot * 4) / 0xffffffff;
@@ -287,6 +334,7 @@ function plantingContext({ rule, zoneId, seed, bed, slopeAt }) {
     if (where.distance < Math.max(entry.band_m[0], inside) || where.distance > entry.band_m[1]) return reject("band");
     if (slope > entry.max_slope || (drift && slope > DRIFT_ROW_MAX_SLOPE)) return reject("slope");
     if (!fits(state, entry.prop, half, point[0], point[1], spacing[0], spacing[1])) return reject("spacing");
+    if (paving(point, (drift ? (PLANT_WIDTHS_M[entry.prop][variant] * entry.scale[1]) / 2 : half) + PAVING_CLEAR_M)) return reject("paving");
     return { xz: [roundCoordinate(point[0]), roundCoordinate(point[1])], prop: entry.prop, variant, scale, half, identity };
   };
   return { tag, hashUnit, inGap, rejected, reject, tryVariant, bed, slopeAt };
@@ -294,11 +342,12 @@ function plantingContext({ rule, zoneId, seed, bed, slopeAt }) {
 
 // Places a drifts rule's plants. bed(xz) gives {on, distance} (whether a point
 // lies on the rule's bed and how far it is from the bed's edge), onBed(xz) the
-// "on" alone, cheaply. accept(candidate) runs the site's own checks and builds
+// "on" alone, cheaply; paving(xz, radius) the paving a disc there reaches, or
+// null (pavingUnder). accept(candidate) runs the site's own checks and builds
 // the row, returning whether it did; candidate is {xz, prop, variant, scale,
 // identity}. Returns {placed, centres, rejected}.
-export function planDrifts({ rule, zoneId, seed, bed, onBed, slopeAt, state, accept }) {
-  const context = plantingContext({ rule, zoneId, seed, bed, slopeAt });
+export function planDrifts({ rule, zoneId, seed, bed, onBed, slopeAt, paving, state, accept }) {
+  const context = plantingContext({ rule, zoneId, seed, bed, slopeAt, paving });
   const { tag, hashUnit, inGap, reject, tryVariant } = context;
   const random = generator(`${tag}|centres`);
   const spacingNoise = valueNoise(`${tag}|spacing`);
@@ -364,8 +413,8 @@ export function planDrifts({ rule, zoneId, seed, bed, onBed, slopeAt, state, acc
 // Places a fill rule's groundcover into the bare bed until the plants cover
 // rule.cover of it or rule.max_per_m2 is reached. Arguments and result as
 // planDrifts; the result also gives the cover reached.
-export function planFill({ rule, zoneId, seed, bed, onBed, slopeAt, state, accept }) {
-  const context = plantingContext({ rule, zoneId, seed, bed, slopeAt });
+export function planFill({ rule, zoneId, seed, bed, onBed, slopeAt, paving, state, accept }) {
+  const context = plantingContext({ rule, zoneId, seed, bed, slopeAt, paving });
   const { tag, hashUnit, inGap, reject, tryVariant } = context;
   const random = generator(`${tag}|cells`);
   const spacingNoise = valueNoise(`${tag}|spacing`);

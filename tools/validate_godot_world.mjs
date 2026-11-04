@@ -76,7 +76,7 @@ import {
   STREET_VEGETATION_SCALE_RANGE,
   footSamples,
 } from "./lib/street-vegetation-generation.mjs";
-import { unpackPlantingRows } from "./lib/street-planting-generation.mjs";
+import { crownRadius, pavingUnder, unpackPlantingRows } from "./lib/street-planting-generation.mjs";
 import {
   STREET_GROUND_FEATURE_KINDS,
   STREET_GROUND_MAXIMUM_HEIGHT_M,
@@ -819,10 +819,15 @@ function chunksOf(records) {
   return chunks;
 }
 
+// A low plant's crown is sampled more densely here than the generator samples
+// it (which also keeps PAVING_CLEAR_M from paving): [fraction of the radius, points].
+const CROWN_CHECK_RINGS = Object.freeze([[1 / 3, 8], [2 / 3, 16], [1, 32]]);
+
 // A planted vegetation row: a kit prop of its kind with a variant and scale in
 // range, and a foot that meets the visible ground: nowhere under the foot is the
 // ground lower than the foot (it would float) and nowhere is it higher than the
-// trunk runs on below it (it would show a gap round a buried foot).
+// trunk runs on below it (it would show a gap round a buried foot). A low plant
+// (no trunk) holds its whole crown off sidewalks, roads, paths and plazas.
 function validatePlantedRow(row, groundAt) {
   const spec = STREET_VEGETATION_PROPS[row.prop];
   invariant(spec && spec.kinds.includes(row.kind) && row.status === "placed", `${row.id} prop ${row.prop} does not plant a placed ${row.kind} row`);
@@ -843,6 +848,10 @@ function validatePlantedRow(row, groundAt) {
   // Coordinates are rounded to the millimetre on both sides of this comparison.
   invariant(foot <= low + 0.002, `${row.id} floats ${(foot - low).toFixed(3)} m above the visible ground`);
   invariant(high - foot <= Math.min(STREET_VEGETATION_MAX_FOOT_SPREAD_M, STREET_VEGETATION_BURY_M) + 0.002, `${row.id} foot is buried ${(high - foot).toFixed(3)} m deep on one side`);
+  if (!spec.trunk) {
+    const paving = pavingUnder([row.position_m[0], row.position_m[2]], crownRadius(row.prop, params.variant, params.scale), groundAt, CROWN_CHECK_RINGS);
+    invariant(paving === null, `${row.id} (${row.prop}) reaches over ${paving} at ${row.position_m[0]}, ${row.position_m[2]}`);
+  }
   if (params.well_m > 0) {
     invariant(Number.isFinite(params.well_lift_m) && Array.isArray(params.well_slope) && params.well_slope.length === 2 && params.well_slope.every(Number.isFinite), `${row.id} mulch pit is invalid`);
     // The pit's rim lies on the plane of the paving, within a centimetre and a half.
