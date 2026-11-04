@@ -925,7 +925,7 @@ function validateFenceRow(row, grounded, inBoundary) {
   const spec = STREET_FENCE_TYPES[fence.type];
   invariant(spec && fence.height_m === fenceHeight(fence.type, fence.params) && fence.half_thickness_m === spec.half_thickness_m && typeof fence.type_basis === "string", `${row.id} fence type is invalid`);
   invariant(STREET_FENCE_INSIDE.includes(fence.params?.inside) && (fence.type !== "chain_link_screened" || row.source === "osm" || STREET_FENCE_SCREENS.includes(fence.params.screen))
-    && (fence.type !== "chainlink_slatted" || fenceParamsError(fence.type, fence.params) === null), `${row.id} fence params are invalid`);
+    && (fence.type !== "chain_link_slatted" || fenceParamsError(fence.type, fence.params) === null), `${row.id} fence params are invalid`);
   // Open gate leaves: a style, optionally a hinge side, and the two grounded
   // ends of their opening.
   if (fence.gates !== undefined) {
