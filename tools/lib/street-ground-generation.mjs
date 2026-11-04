@@ -52,7 +52,10 @@ import {
 
 export const STREET_GROUND_FEATURE_KINDS = Object.freeze(["street_kerb", "street_kerb_support", "street_paint"]);
 // Record kinds in emission order: [object key prefix, feature kind, material, collision, opaque].
-// Park surfaces (a zone's ground.surfaces): material key -> record key prefix.
+// Zone ground surfaces (a zone's ground.surfaces): material key -> record key
+// prefix. The park_* ones are Cityside Park's; the rest are the yards' shared
+// ground (tools/lib/street-yard-generation.mjs): worn yard asphalt, compacted
+// yard gravel, grey concrete rubble and black plastic sheeting over earth.
 export const PARK_SURFACE_MATERIALS = Object.freeze({
   park_asphalt: "park-asphalt",
   park_concrete: "park-concrete",
@@ -63,6 +66,10 @@ export const PARK_SURFACE_MATERIALS = Object.freeze({
   park_paint_pink: "park-paint-pink",
   park_plaza_lens: "park-plaza-lens",
   park_plaza_zigzag: "park-plaza-zigzag",
+  black_plastic: "black-plastic",
+  rubble_grey: "rubble-grey",
+  yard_asphalt: "yard-asphalt",
+  yard_gravel: "yard-gravel",
 });
 const RECORD_KINDS = Object.freeze({
   ...Object.fromEntries(Object.entries(PARK_SURFACE_MATERIALS).map(([material, prefix]) => [material, [prefix, "street_paint", material, "none", false]])),
@@ -743,8 +750,12 @@ export function generateStreetGround({
   const kerbRegion = union("kerb region", zoneRegions.filter((zone) => zone.settings.kerbs).map((zone) => zone.region));
   const zonesAt = (point) => zoneRegions.filter((zone) => inBox(zone.box, point) && zone.index.contains(point));
 
-  // Frozen source geometry near the pilot.
-  const nearPilot = (object, margin) => boxesOverlap(boxOfMulti(object.geometry), pilotBox, margin);
+  // Frozen source geometry near the pilot: near one of its zones, so zones far
+  // apart (the yards across the island) don't pull in everything between them.
+  const nearPilot = (object, margin) => {
+    const box = boxOfMulti(object.geometry);
+    return boxesOverlap(box, pilotBox, margin) && zoneRegions.some((zone) => boxesOverlap(box, zone.box, margin));
+  };
   const lineOf = new Map();
   const wayLine = (object) => {
     if (!lineOf.has(object.row.source_key)) lineOf.set(object.row.source_key, rawWayLine(rawOsm, object.row.osm_id));
@@ -792,7 +803,7 @@ export function generateStreetGround({
   ]));
   const hardKeepout = union("stair keepout", hardShapes
     .filter((shape) => ["stair", "door", "approach"].includes(shape.component))
-    .filter((shape) => shape.points.some(([x, z]) => inBox(pilotBox, [x, -z], 30)))
+    .filter((shape) => shape.points.some(([x, z]) => zoneRegions.some((zone) => inBox(zone.box, [x, -z], 30))))
     .map((shape) => (shape.points.length === 1
       ? circle([shape.points[0][0], -shape.points[0][1]], shape.radius_m)
       : lineRibbon(shape.points.map(([x, z]) => [x, -z]), shape.radius_m * 2, `keepout ${shape.source_id}`))));

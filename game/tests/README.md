@@ -7,7 +7,7 @@ It must pass before anything is pushed to `main`.
 | --- | --- |
 | junk check (in `tools/test.sh`) | New files add no screenshots, videos, builds, logs, reference photos or files over 5 MB outside `game/resources/` and `generated/`. |
 | `headless_scene_parse.gd` | The gameplay scenes parse. |
-| `headless_startup_configuration_contract.gd` | Dummy audio is selected; the building catalog lists 213 buildings and every accepted one has a reviewer verdict. Prints the score. |
+| `headless_startup_configuration_contract.gd` | Dummy audio is selected; every catalog building has one recognition status, every accepted one has a reviewer verdict, and the demolished ones are exactly those `tools/config/demolished-buildings.json` lists. Prints the score out of the standing buildings. |
 | `validate_generated_world.gd` | The generated world data is valid and matches its manifest. |
 | `headless_gameplay_contract.gd` | Controls, movement and jetpack defaults, water, skyline billboard. |
 | `headless_touch_controls.gd` | The browser touch controls: proportional stick, independent fingers, release, pause and teardown. |

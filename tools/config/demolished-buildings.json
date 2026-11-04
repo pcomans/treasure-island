@@ -1,0 +1,63 @@
+{
+  "schema_version": "ti.demolished-buildings/1",
+  "notes": [
+    "Owner decision 2026-11-04: buildings the dated imagery shows demolished are left out of the game. This is an approved, documented exception to the OSM time setting and the building inventory: the frozen OSM snapshot is not edited; tools/build_godot_world.mjs keeps each entry's coverage row with the status demolished and no geometry, and its catalog unit is marked demolished, so it is neither built nor scored.",
+    "Add a building only when the dated aerial at full zoom, with the frozen footprint drawn on it, shows no building, and a dated ground photo agrees where one exists. If either is uncertain, leave it standing."
+  ],
+  "entries": [
+    {
+      "source_key": "w109905031",
+      "name": "Education Center Building 29A, 550 Avenue H",
+      "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (0.25-0.34 m), frozen footprint drawn on it 2026-11-04: no roof; trucks, trailers and bare ground fill the footprint. Google Street View Sep 2025 (651 Avenue H, pano 1NT4Oh9iXeuKRp6LjDoB5w): no building above the green container wall of the truck lot.",
+      "approval": "owner-approved 2026-11-04"
+    },
+    {
+      "source_key": "w109905037",
+      "name": "Education Center Building 29C, 550 Avenue H",
+      "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (0.25-0.34 m), frozen footprint drawn on it 2026-11-04: no roof; parked trucks and bare ground fill the footprint. Google Street View Sep 2025 (651 Avenue H, pano 1NT4Oh9iXeuKRp6LjDoB5w): no building above the green container wall of the truck lot.",
+      "approval": "owner-approved 2026-11-04"
+    },
+    {
+      "source_key": "w109905040",
+      "name": "Education Center Building 29E, 550 Avenue H",
+      "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (0.25-0.34 m), frozen footprint drawn on it 2026-11-04: no roof; box trucks, a coach and bare ground fill the footprint. Google Street View Sep 2025 (651 Avenue H, pano 1NT4Oh9iXeuKRp6LjDoB5w): no building above the green container wall of the truck lot.",
+      "approval": "owner-approved 2026-11-04"
+    },
+    {
+      "source_key": "w109905044",
+      "name": "Education Center Building 29D, 550 Avenue H",
+      "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (0.25-0.34 m), frozen footprint drawn on it 2026-11-04: no roof; parked trucks, vans and bare ground fill the footprint. Google Street View Sep 2025 (651 Avenue H, pano 1NT4Oh9iXeuKRp6LjDoB5w): no building above the green container wall of the truck lot.",
+      "approval": "owner-approved 2026-11-04"
+    },
+    {
+      "source_key": "w34313523",
+      "name": "Education Center Building 29B, 768 Avenue H",
+      "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (0.25-0.34 m), frozen footprint drawn on it 2026-11-04: no roof; parked trucks and bare ground fill the footprint. Google Street View Sep 2025 (651 Avenue H, pano 1NT4Oh9iXeuKRp6LjDoB5w): no building above the green container wall of the truck lot.",
+      "approval": "owner-approved 2026-11-04"
+    },
+    {
+      "source_key": "w95934093",
+      "name": "1432 Halibut Court",
+      "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (0.5 m), frozen footprint drawn on it 2026-11-04: a bare concrete slab of the footprint's shape, no roof. Google Street View Mar 2025 (1432 Halibut Ct, the SSE front): an empty slab; the building still stood in Apr 2019 (pano jkNuxefU6_JE_YO8WfTmLA).",
+      "approval": "owner-approved 2026-11-04"
+    },
+    {
+      "source_key": "w95934098",
+      "name": "1435 Halibut Court",
+      "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (0.5 m), frozen footprint drawn on it 2026-11-04: a bare concrete slab of the footprint's shape, no roof. Google Street View Mar 2025 (Halibut Ct, the NNW front and from the SE): an empty slab and cleared lot; the building still stood in Apr 2019 (pano HKFHgtqE2Sph_6ZMyo34oA).",
+      "approval": "owner-approved 2026-11-04"
+    },
+    {
+      "source_key": "w95934099",
+      "name": "1433 Halibut Court",
+      "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (0.5 m), frozen footprint drawn on it 2026-11-04: a bare concrete slab of the footprint's shape, no roof. Google Street View Mar 2025 (Halibut Ct, the NNW front): an empty slab; the building still stood in Apr 2019 (pano iR9ORV9MD29o9MsEIekpgQ).",
+      "approval": "owner-approved 2026-11-04"
+    },
+    {
+      "source_key": "w95934122",
+      "name": "1434 Halibut Court",
+      "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (0.5 m), frozen footprint drawn on it 2026-11-04: a bare concrete slab of the footprint's shape, no roof. Google Street View Mar 2025 (Halibut Ct, the SSE front): an empty slab; the building still stood in Apr 2019 (pano HKFHgtqE2Sph_6ZMyo34oA).",
+      "approval": "owner-approved 2026-11-04"
+    }
+  ]
+}

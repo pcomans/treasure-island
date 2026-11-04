@@ -110,6 +110,7 @@ import {
   wallSurfaceMesh,
 } from "./lib/mesh-output.mjs";
 import { loadTerrainRaster } from "./lib/terrain-raster.mjs";
+import { DEMOLISHED_STATUS, loadDemolishedBuildings } from "./lib/demolished-buildings.mjs";
 import { loadTerrainOverrides, planTerrainOverrides } from "./lib/terrain-overrides.mjs";
 import {
   generateStreetDetail,
@@ -1808,6 +1809,7 @@ function playableBoundaryManifest(boundary) {
 
 function sourceStatus(object) {
   if (object.row.scope === "context") return object.representation === "composite" ? "composite_member" : "context";
+  if (object.demolished) return DEMOLISHED_STATUS;
   return object.representation === "composite" ? "composite_member" : "represented";
 }
 
@@ -1820,7 +1822,8 @@ function coverageRows(allObjects, chunks, contextDocument) {
   for (const record of contextDocument.boundary_attached_visuals) physical.set(record.object_key, record);
   return [...allObjects.values()].map((object) => {
     const records = [...object.physical_object_keys].map((key) => physical.get(key)).filter(Boolean);
-    invariant(records.length > 0, `${object.row.source_key} coverage has no resolved physical record`);
+    // A demolished building keeps its row and height rule, and has no geometry.
+    invariant(object.demolished ? records.length === 0 && object.chunk_ids.size === 0 : records.length > 0, `${object.row.source_key} coverage has no resolved physical record`);
     const height = object.height;
     const compositeKey = object.representation === "composite" ||
       object.logical_key === `land:${PLAYABLE_BOUNDARY_SOURCE_KEY}`
@@ -1841,7 +1844,9 @@ function coverageRows(allObjects, chunks, contextDocument) {
       dimension_rule: height?.rule ?? "",
       height_m: height?.height_m ?? "",
       composite_key: compositeKey,
-      note: object.row.source_key === SHARED_COASTLINE_SOURCE_KEY
+      note: object.demolished
+        ? `Demolished: ${object.demolished.approval}; tools/config/demolished-buildings.json`
+        : object.row.source_key === SHARED_COASTLINE_SOURCE_KEY
         ? "Represented by exact Treasure Island land edge; no YBI ribbon"
         : BOUNDARY_ATTACHED_SOURCE_KEYS.includes(object.row.source_key)
           ? "Exact-touch-only source polygon rendered as explicit non-colliding boundary-attached visual context"
@@ -2024,6 +2029,23 @@ function main() {
       1e-9,
     );
     const playableObjects = buildPlayableObjects(joinedLedger, boundary);
+    // Buildings the dated imagery shows demolished (an owner-approved exception,
+    // tools/config/demolished-buildings.json) leave the playable objects: nothing
+    // is built, draped, levelled or placed against them, and only their coverage
+    // row remains, with the status demolished.
+    const demolished = loadDemolishedBuildings(projectRoot);
+    const demolishedObjects = new Map();
+    for (const entry of demolished.entries) {
+      const object = playableObjects.get(entry.source_key);
+      invariant(
+        object && object.roles.length === 1 && object.roles[0] === "building" &&
+          ![ISLE_HOUSE_PARENT_KEY, ...ISLE_HOUSE_PART_KEYS].includes(entry.source_key),
+        `Demolished building ${entry.source_key} is not a standalone playable OSM building`,
+      );
+      object.demolished = entry;
+      demolishedObjects.set(entry.source_key, object);
+      playableObjects.delete(entry.source_key);
+    }
     const streetConfig = loadStreetDetailZones(projectRoot);
     const shorelineConfig = loadShorelineConfig(projectRoot);
     const shorelinePlan = planShoreline({ config: shorelineConfig.config, boundary, playableObjects, rawOsm: loaded.rawOsm });
@@ -2072,7 +2094,7 @@ function main() {
       rawOsm: loaded.rawOsm,
     });
     const context = buildContext(joinedLedger, boundary, loaded.rawOsm, loaded.rawSources, playableObjects, terrain);
-    const allObjects = new Map([...playableObjects, ...context.objects]);
+    const allObjects = new Map([...playableObjects, ...demolishedObjects, ...context.objects]);
     const coverage = coverageRows(allObjects, chunks, context.document);
     coverage.sort((left, right) => sourceRows.findIndex((row) => row.source_key === left.source_key) -
       sourceRows.findIndex((row) => row.source_key === right.source_key));
@@ -2279,6 +2301,8 @@ function main() {
       terrain: terrainDescriptor,
       street_detail: streetDetailDescriptor,
       shoreline: shorelineDescriptor,
+      // The OSM buildings left out as demolished, and the config that lists them.
+      demolished_buildings: demolished.descriptor,
       chunks: chunkDescriptors.map((descriptor) => ({
         chunk_id: descriptor.path.slice("chunks/".length, -".json".length),
         ...descriptor,

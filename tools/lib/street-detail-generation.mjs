@@ -17,6 +17,7 @@ import { geometryToLine, pointInMultiPolygon, pointInRing, selectGeometry } from
 import { footprintPiece, placeStreetClutter, STREET_CLUTTER_FOOTPRINTS, STREET_CLUTTER_PROPS, validateClutterRules, visibleGroundIndex } from "./street-clutter-generation.mjs";
 import { placeStreetFences, validateFenceRules } from "./street-fence-generation.mjs";
 import { YARD_KIT_KEYS, yardKindRadius, yardPropFootprint } from "./street-yard-kit.mjs";
+import { isYardRow, isYardZone, placeStreetYards, validateYardRules, yardRowPieces } from "./street-yard-generation.mjs";
 import { placeStreetFurniture, settleOnFeet, STREET_FURNITURE_FEET, STREET_FURNITURE_PROPS, streetFurnitureFootprint, validateFurnitureRules } from "./street-furniture-generation.mjs";
 import { packPlantingRows, planDrifts, planFill, plantingState, validatePlantingRule } from "./street-planting-generation.mjs";
 import {
@@ -507,7 +508,8 @@ export function loadStreetDetailZones(projectRoot) {
     validateFurnitureRules(zone, STREET_DETAIL_KINDS);
     validateFenceRules(zone, STREET_DETAIL_KINDS);
     validateClutterRules(zone, STREET_DETAIL_KINDS);
-    for (const rule of [...(zone.furniture ?? []), ...(zone.fences ?? []), ...(zone.clutter ?? [])]) {
+    validateYardRules(zone, STREET_DETAIL_KINDS);
+    for (const rule of [...(zone.furniture ?? []), ...(zone.fences ?? []), ...(zone.clutter ?? []), ...(zone.yard ?? [])]) {
       invariant(!ruleIds.has(rule.id), `Street detail zone ${zone.id} rule id ${rule.id} is used twice`);
       ruleIds.add(rule.id);
     }
@@ -578,13 +580,14 @@ export function loadStreetDetailSetPieces(projectRoot) {
   return document;
 }
 
-// Every catalog stair flight, accepted or not: the stairs exist either way.
+// Every catalog stair flight, accepted or not: the stairs exist either way,
+// unless the building is demolished (tools/config/demolished-buildings.json).
 export function loadStreetDetailStairFlights(projectRoot) {
   const catalog = readJson(projectRoot, STREET_DETAIL_INPUTS.stair_catalog);
   invariant(Array.isArray(catalog.units), "Building catalog units are missing");
   const flights = [];
   for (const unit of catalog.units) {
-    if (unit.stairs == null) continue;
+    if (unit.stairs == null || unit.claim_status?.reference_recognizable === "demolished") continue;
     invariant(typeof unit.anchor_source_key === "string" && Array.isArray(unit.stairs), `Catalog stairs are malformed for ${unit.unit_id}`);
     unit.stairs.forEach((flight, index) => {
       invariant(isXZ(flight?.bottom) && isXZ(flight?.top), `Catalog stair ${index} of ${unit.anchor_source_key} needs bottom/top [x, z]`);
@@ -742,9 +745,11 @@ export function streetDetailZoneShapes(config, properSources) {
 // The plan footprint of a placed row for clearance checks, as pieces of
 // {points (world x, z), radius}: a fence's solid runs with its half thickness;
 // a row with a footprint (a parked car, a long bench) the stadium that holds
-// its rectangle; any other row its point or polyline with its kind's radius.
+// its rectangle, a yard prop its rectangle in narrow strips (yardRowPieces);
+// any other row its point or polyline with its kind's radius.
 export function streetDetailPieces(row) {
   if (row.fence) return row.fence.runs.map((run) => ({ points: run.points_m.map((point) => [point[0], point[2]]), radius: row.fence.half_thickness_m }));
+  if (isYardRow(row)) return yardRowPieces(row);
   if (row.footprint_m) return [footprintPiece([row.position_m[0], row.position_m[2]], row.yaw_radians, row.footprint_m)];
   const kind = STREET_DETAIL_KINDS[row.kind];
   return [{
@@ -1107,6 +1112,27 @@ export function generateStreetDetail({
     });
   };
   rows.forEach(occupy);
+
+  // (a2) The yards (tools/lib/street-yard-generation.mjs): container walls,
+  // shed rows, container blocks and vehicle rows of the zones' yard rules,
+  // after the fences and before everything else, which then works around them.
+  const yards = placeStreetYards({
+    config,
+    kinds: STREET_DETAIL_KINDS,
+    zoneShapes,
+    seed,
+    occupied,
+    hardShapes,
+    hardViolation,
+    buildings,
+    roads,
+    onLand,
+    grounded,
+    surfaceAt,
+    groundAt,
+    exclusions,
+  });
+  rows.push(...yards.rows);
   // Site checks for a set piece that is a street prop (it stands on the street
   // ground like the street furniture): the mask, land, walls, the carriageway,
   // curb ramps and crosswalks, and a player's width from every other item.
@@ -1528,6 +1554,9 @@ export function generateStreetDetail({
       pattern: rule.pattern,
       placed: clutter.audit.rules[`${zone.id}/${rule.id}`] ?? 0,
     }));
+    if (isYardZone(zone)) {
+      summary.yard = zone.yard.map((rule) => ({ id: rule.id, pattern: rule.pattern, placed: yards.audit.rules[`${zone.id}/${rule.id}`] ?? 0 }));
+    }
   }
 
   rows.sort((left, right) => compareText(left.id, right.id));
@@ -1578,6 +1607,7 @@ export function generateStreetDetail({
       source_position_m: "a stop sign's OSM node position, kept when the sign moves to the curb of its approach",
       fence: "fence rows: the kit type and why (type_basis), height and collision half thickness, the stretches cut open along points_m (openings, metres along the line, with what opens them) and the solid runs left (posts on the ground: points_m, terrain_supports, surface_bias_m); a fence row with a prop is built (game/scripts/world/street_fence_kit.gd)",
       fenced_approaches: "scored-building sides a built fence closes, which the building fit may skip (game/tests/shared/building_fit.gd)",
+      yard: "the rows of a zone's yard rules (tools/lib/street-yard-generation.mjs): clutter rows of a yard kit prop (tools/lib/street-yard-kit.mjs) with its plan rectangle as footprint_m and its rest on the visible ground in prop_params (pitch raises the -Z end and roll the left side, radians; lift takes the origin from y + bias_m to the rest); the zone summary lists each rule's placed count",
       planting_rows: "the rows of drifts and fill rules (park beds) in compact blocks, one per rule: the shared id prefix, kind and source id, the props, surfaces, land records and zone sets the rows index, and one array per row in fields order, its number in the block giving its id; readers expand them into the usual rows (unpackPlantingRows in tools/lib/street-planting-generation.mjs, its twin in game/scripts/world/generated_world_contract.gd), and counts count them",
     },
     layers: STREET_DETAIL_LAYERS,
@@ -1618,6 +1648,7 @@ export function generateStreetDetail({
       furniture: furniture.audit,
       fences: fences.audit,
       clutter: clutter.audit,
+      yards: yards.audit,
       minimum_placed_clearances_m: Object.fromEntries(
         STREET_DETAIL_HARD_COMPONENTS.map((component) => [component, Number.isFinite(minimumClearances[component]) ? round3(minimumClearances[component]) : null]),
       ),

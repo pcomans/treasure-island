@@ -243,6 +243,8 @@ What matters: the building looks good, it fits into the island, and the island a
 
 Then mark the building accepted in `discovery/facades/facade-recognition-catalog.json`: set its `claim_status.reference_recognizable` to `accepted` and add an `acceptance_records` entry naming the review (`review_id`, `review_kind`, `status`). The score is the number of accepted buildings; `island_test.gd` checks each one loads and fits. Run `tools/test.sh` and merge. Record each building's verdicts in the ordinary task note or commit message. Do not create acceptance packets, image-tree digests, package receipts, candidate or exact-current exports, release-closure or publication records, or new per-building evidence-check scripts. Preserve the 213-unit inventory, previously accepted credit, protected scope and reference privacy. Several ready buildings may be merged together, each with its own verdicts.
 
+Exception (owner, 2026-11-04): a building the dated imagery shows demolished goes in `tools/config/demolished-buildings.json` with its evidence and approval; the generator leaves it out of the world (OSM stays unedited), the catalog marks it `demolished`, and the score counts the accepted buildings among those still standing.
+
 ### What done means for a street-detail area
 
 A street-detail area is done and merged to `main` when all of these pass:
