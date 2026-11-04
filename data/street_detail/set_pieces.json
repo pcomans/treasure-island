@@ -1421,11 +1421,11 @@
       "prop": "traffic_cone",
       "params": {},
       "xz": [
-        174.38,
-        -24.28
+        174.24,
+        -24.55
       ],
       "yaw": 0.3,
-      "reason": "Cones and A-frame barricades stand on the sidewalk in front of the Avenue H truck lot's gate.",
+      "reason": "Cones on the sidewalk at the Avenue H truck lot's gate and beside it; the gate itself is left clear.",
       "reference": "large-clutter-20261104 06-trucklot-avenue-h (pano 1NT4Oh9iXeuKRp6LjDoB5w, Sep 2025)"
     },
     {
@@ -1434,11 +1434,11 @@
       "prop": "traffic_cone",
       "params": {},
       "xz": [
-        175.38,
-        -21.99
+        178.2,
+        -16.69
       ],
       "yaw": 1.1,
-      "reason": "Cones and A-frame barricades stand on the sidewalk in front of the Avenue H truck lot's gate.",
+      "reason": "Cones on the sidewalk at the Avenue H truck lot's gate and beside it; the gate itself is left clear.",
       "reference": "large-clutter-20261104 06-trucklot-avenue-h (pano 1NT4Oh9iXeuKRp6LjDoB5w, Sep 2025)"
     },
     {
@@ -1447,11 +1447,11 @@
       "prop": "traffic_cone",
       "params": {},
       "xz": [
-        178.84,
-        -15.9
+        181.42,
+        -11.04
       ],
       "yaw": 2.4,
-      "reason": "Cones and A-frame barricades stand on the sidewalk in front of the Avenue H truck lot's gate.",
+      "reason": "Cones on the sidewalk at the Avenue H truck lot's gate and beside it; the gate itself is left clear.",
       "reference": "large-clutter-20261104 06-trucklot-avenue-h (pano 1NT4Oh9iXeuKRp6LjDoB5w, Sep 2025)"
     },
     {
@@ -1460,11 +1460,11 @@
       "prop": "barricade",
       "params": {},
       "xz": [
-        175.82,
-        -20.3
+        178.54,
+        -15.17
       ],
       "yaw": 2.06,
-      "reason": "A-frame barricades on the sidewalk in front of the Avenue H truck lot's gate, facing the street.",
+      "reason": "A-frame barricades on the sidewalk beside the Avenue H truck lot's gate, facing the street; the gate itself is left clear.",
       "reference": "large-clutter-20261104 06-trucklot-avenue-h (pano 1NT4Oh9iXeuKRp6LjDoB5w, Sep 2025)"
     },
     {
@@ -1473,11 +1473,11 @@
       "prop": "barricade",
       "params": {},
       "xz": [
-        177.09,
-        -17.91
+        179.81,
+        -12.79
       ],
       "yaw": 2.2,
-      "reason": "A-frame barricades on the sidewalk in front of the Avenue H truck lot's gate, facing the street.",
+      "reason": "A-frame barricades on the sidewalk beside the Avenue H truck lot's gate, facing the street; the gate itself is left clear.",
       "reference": "large-clutter-20261104 06-trucklot-avenue-h (pano 1NT4Oh9iXeuKRp6LjDoB5w, Sep 2025)"
     }
   ]
