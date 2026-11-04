@@ -713,8 +713,8 @@
       "prop": "lamp_disc",
       "params": {},
       "xz": [
-        -214.02,
-        463.79
+        -229.62,
+        486.99
       ],
       "yaw": 0.0,
       "reason": "A 14 ft disc-head light at the south plaza's south-east edge, between its benches.",
@@ -726,8 +726,8 @@
       "prop": "lamp_disc",
       "params": {},
       "xz": [
-        -224.16,
-        478.87
+        -238.2,
+        499.75
       ],
       "yaw": 0.0,
       "reason": "A 14 ft disc-head light at the south plaza's south-east edge, between its benches.",
@@ -739,21 +739,8 @@
       "prop": "lamp_disc",
       "params": {},
       "xz": [
-        -234.3,
-        493.95
-      ],
-      "yaw": 0.0,
-      "reason": "A 14 ft disc-head light at the south plaza's south-east edge, between its benches.",
-      "reference": "ph10 (Sep 2025); cmg08, cmg14; 2024 art-location plan label 'Light Pole 14 ft'"
-    },
-    {
-      "id": "cityside_plaza_light_4",
-      "kind": "street_lamp",
-      "prop": "lamp_disc",
-      "params": {},
-      "xz": [
-        -244.44,
-        509.03
+        -246.78,
+        512.51
       ],
       "yaw": 0.0,
       "reason": "A 14 ft disc-head light at the south plaza's south-east edge, between its benches.",
@@ -1289,8 +1276,8 @@
         476.25
       ],
       "yaw": -1.09,
-      "reason": "Cityside Park's stormwater pump station: a single-storey dark grey concrete box with a pale roof and a fenced equipment yard at its south-east end, by the avenue. It is not in the frozen OSM building inventory, so it is a site structure here; its form and size are inference from the aerial and CMG's photo.",
-      "reference": "CMG photo 4 and project text ('pump station', 2025-2026); Esri World Imagery 2026-05-26; CMG/TIDA site plan 2025-04-16"
+      "reason": "Cityside Park's stormwater pump station: an open-topped compound of tall grey cast-concrete walls round a pale floor, divided by a lower inner wall, by the avenue. It is not in the frozen OSM building inventory, so it is a site structure here, kept to simple massing: no doors or other detail that no dated photo shows. Size and orientation are inference from the aerial.",
+      "reference": "CMG photo 4 (cmg04, 2025-2026: the walled compound beside the forebay and the cycle track); CMG project text ('pump station'); Esri World Imagery 2026-05-26; CMG/TIDA site plan 2025-04-16"
     },
     {
       "id": "cityside_lawn_chair_1",

@@ -68,7 +68,7 @@
     "maximum_clearance_m": 0.081,
     "maximum_serialization_tolerance_m": 0.01,
     "minimum_clearance_m": 0.019,
-    "sample_points": 243600
+    "sample_points": 244174
   },
   "raster_bbox_wgs84": [
     -122.380001708984,
@@ -115,7 +115,7 @@
       "z": -104.818
     },
     {
-      "elevation_m": 3.055,
+      "elevation_m": 2.997,
       "id": "04-southwest",
       "x": -293.543,
       "z": 335.72
@@ -209,11 +209,11 @@
     "basis": "production_inference",
     "config": {
       "path": "tools/config/terrain-overrides.json",
-      "sha256": "9873878a01293a9f875bc54784e2e5360d19b665bb28d79105cc7f11a97fa2c4"
+      "sha256": "5944dc282f5edc819e4f7e534ac1ea00791e5bbdff60ab5e2a1ba2c25abf8b32"
     },
     "corrected_cells": 39,
-    "leaves": 987,
-    "maximum_cut_m": 1.344,
+    "leaves": 1023,
+    "maximum_cut_m": 1.492,
     "maximum_raise_m": 1.412,
     "mesh": {
       "cell_m": 32,
@@ -459,7 +459,7 @@
       ]
     ],
     "refined_cells": 39,
-    "refined_triangles": 2341,
+    "refined_triangles": 2417,
     "schema_version": "ti.terrain-overrides/1",
     "sites": [
       {

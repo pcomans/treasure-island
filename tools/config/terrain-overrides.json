@@ -270,7 +270,7 @@
           },
           "rule": {
             "kind": "sink",
-            "depth_m": 0.3,
+            "depth_m": 0.45,
             "side_run_m": 3.5
           },
           "reason": "The north stormwater bioretention beds between the lawn ring and the cycle track (SFAC plan: Stormwater Bioretention Area; S9: basins and channels): a shallow planted basin below the paths."
@@ -320,7 +320,7 @@
           },
           "rule": {
             "kind": "sink",
-            "depth_m": 0.25,
+            "depth_m": 0.4,
             "side_run_m": 3.5
           },
           "reason": "The central stormwater meadow (ph08 Sep 2025): a shallow planted basin round the decomposed-granite meander."
@@ -362,7 +362,7 @@
           },
           "rule": {
             "kind": "sink",
-            "depth_m": 0.25,
+            "depth_m": 0.4,
             "side_run_m": 3.0
           },
           "reason": "The bioretention round the pump station (CMG site plan 2025-04-16: stormwater gardens, conveyance swale, forebay)."

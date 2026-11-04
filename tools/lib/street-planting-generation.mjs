@@ -43,31 +43,42 @@ import { createHash } from "node:crypto";
 import { invariant, roundCoordinate } from "./world-contract.mjs";
 
 // The visual crown width of each kit variant (m), smallest variant first, for
-// spacing and cover. A tree's is the clear ground round its trunk that low
-// plants keep (a young tree's crown overhangs them; an old cypress shades a
-// wide ring). DRIFT_VARIANTS are the variants that hold a drift of several
-// plants in one row.
+// spacing and cover: the kit's widths, and for a drift variant about four fifths
+// of the extent of its plants (the drift has gaps). A tree's is the clear ground
+// round its trunk that low plants keep (a young tree's crown overhangs them; an
+// old cypress shades a wide ring). DRIFT_VARIANTS are the variants that hold a
+// drift of several plants in one row.
 export const PLANT_WIDTHS_M = Object.freeze({
   blue_eyed_grass: Object.freeze([0.22, 0.28, 0.34, 0.9]),
-  bronze_clump_grass: Object.freeze([0.5, 0.62, 0.75]),
-  california_buckwheat: Object.freeze([0.6, 0.9, 1.2]),
+  bronze_clump_grass: Object.freeze([0.5, 0.62, 0.75, 1.45]),
+  california_buckwheat: Object.freeze([0.65, 0.95, 1.25]),
   california_sagebrush: Object.freeze([0.75, 1.1, 1.45]),
-  dense_sedge: Object.freeze([0.55, 0.75, 0.95, 1.6]),
+  dense_sedge: Object.freeze([0.55, 0.75, 0.95, 1.6, 2.4]),
   dune_tansy: Object.freeze([0.42, 0.62, 0.82]),
   island_oak_young: Object.freeze([1.0, 1.2, 1.4]),
   monterey_cypress: Object.freeze([17.0, 12.5, 2.0, 1.4, 1.1]),
-  pacific_reedgrass: Object.freeze([0.85, 1.05, 1.3]),
-  rush: Object.freeze([0.45, 0.6, 0.75]),
-  sea_thrift: Object.freeze([0.22, 0.3, 0.38, 1.1]),
-  seaside_daisy: Object.freeze([0.55, 0.8, 1.05, 1.9]),
+  pacific_reedgrass: Object.freeze([0.85, 1.05, 1.3, 2.3]),
+  rush: Object.freeze([0.45, 0.6, 0.75, 1.35]),
+  sea_thrift: Object.freeze([0.24, 0.32, 0.4, 1.35]),
+  seaside_daisy: Object.freeze([0.55, 0.8, 1.05, 1.95]),
   seaside_woolly_sunflower: Object.freeze([0.8, 1.15, 1.5]),
   seep_monkeyflower: Object.freeze([0.38, 0.52, 0.66]),
   shrubby_sage: Object.freeze([0.6, 0.85, 1.1]),
   sydney_blue_gum_young: Object.freeze([0.8, 0.8, 0.8]),
   white_umbel_perennial: Object.freeze([0.32, 0.42, 0.52]),
 });
-const DRIFT_VARIANTS = Object.freeze({ blue_eyed_grass: 3, dense_sedge: 3, sea_thrift: 3, seaside_daisy: 3 });
-export const DRIFT_ROW_MAX_SLOPE = 0.05;
+const DRIFT_VARIANTS = Object.freeze({
+  blue_eyed_grass: Object.freeze([3]),
+  bronze_clump_grass: Object.freeze([3]),
+  dense_sedge: Object.freeze([3, 4]),
+  pacific_reedgrass: Object.freeze([3]),
+  rush: Object.freeze([3]),
+  sea_thrift: Object.freeze([3]),
+  seaside_daisy: Object.freeze([3]),
+});
+// A drift variant's plants run 0.15 m into the ground, so its row may lie on a
+// bed this steep (street_vegetation_kit.gd).
+export const DRIFT_ROW_MAX_SLOPE = 0.1;
 // A plant covers a disc of this times its width (0.9 of its half width).
 const COVER_FACTOR = 0.45;
 // The cover raster's cell (m) and the plant index's cell.
@@ -268,7 +279,7 @@ function plantingContext({ rule, zoneId, seed, bed, slopeAt }) {
     const scale = roundCoordinate(entry.scale[0] + (entry.scale[1] - entry.scale[0]) * hashUnit(`${identity}:scale`));
     const half = (PLANT_WIDTHS_M[entry.prop][variant] * scale) / 2;
     if (where.distance < Math.max(entry.band_m[0], half - entry.spill_m, 0.05) || where.distance > entry.band_m[1]) return reject("band");
-    if (slope > entry.max_slope || (DRIFT_VARIANTS[entry.prop] === variant && slope > DRIFT_ROW_MAX_SLOPE)) return reject("slope");
+    if (slope > entry.max_slope || (DRIFT_VARIANTS[entry.prop]?.includes(variant) && slope > DRIFT_ROW_MAX_SLOPE)) return reject("slope");
     if (!fits(state, entry.prop, half, point[0], point[1], spacing[0], spacing[1])) return reject("spacing");
     return { xz: [roundCoordinate(point[0]), roundCoordinate(point[1])], prop: entry.prop, variant, scale, half, identity };
   };

@@ -169,7 +169,7 @@
     "maximum_clearance_m": 0.081,
     "maximum_serialization_tolerance_m": 0.01,
     "minimum_clearance_m": 0.019,
-    "sample_points": 243600
+    "sample_points": 244174
   },
   "road_batch_quantization_audits": [
     {

@@ -57,7 +57,7 @@ export const STREET_FURNITURE_FOOTPRINTS = Object.freeze({
   bench_wedge: Object.freeze({ x_m: 4.1, z_m: 0.6 }),
   bike_rack: Object.freeze({ x_m: 0.8, z_m: 0.12 }),
   map_board: Object.freeze({ x_m: 1.34, z_m: 0.2 }),
-  pump_station: Object.freeze({ x_m: 16.9, z_m: 7.7 }),
+  pump_station: Object.freeze({ x_m: 16.3, z_m: 11.2 }),
   waste_basket: Object.freeze({ x_m: 0.6, z_m: 0.6 }),
 });
 // The plan size of a kit prop whose size comes from its params (the long park

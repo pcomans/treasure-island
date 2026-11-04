@@ -2,10 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
+uid="uid://b8um6qwl77tat"
+path="res://.godot/imported/park_asphalt.png-9a5b60e3625509b23972e08edd98a33c.ctex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
 source_file="res://game/resources/textures/world/street/park_asphalt.png"
+dest_files=["res://.godot/imported/park_asphalt.png-9a5b60e3625509b23972e08edd98a33c.ctex"]
 
 [params]
 

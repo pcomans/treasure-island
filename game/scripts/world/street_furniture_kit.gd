@@ -79,10 +79,8 @@ const BENCH_TIMBER := Color(0.76, 0.63, 0.47)
 const STEEL_BLACK := Color(0.09, 0.09, 0.095)
 const DRIFTWOOD := Color(0.7, 0.64, 0.55)
 const END_GRAIN := Color(0.79, 0.7, 0.56)
-const PUMP_CONCRETE := Color(0.44, 0.44, 0.43)
-const PUMP_ROOF := Color(0.74, 0.74, 0.72)
-const PUMP_DOOR := Color(0.27, 0.31, 0.29)
-const TRANSFORMER_GREEN := Color(0.24, 0.33, 0.27)
+const PUMP_CONCRETE := Color(0.5, 0.5, 0.49)
+const PUMP_FLOOR := Color(0.72, 0.72, 0.7)
 ## Canopy of Sky (Ned Kahn; TIDA art-selection report 2024-09-11, ph05 Sep 2025):
 ## a 20 ft stainless ring hung on cables from four curved aluminium poles that
 ## stand outside the walkway, holding a shallow dish of hanging polycarbonate
@@ -92,11 +90,13 @@ const CANOPY_RING_Y := 5.1
 const CANOPY_SAG_M := 0.55
 const CANOPY_POLE_RADIUS_M := 4.3
 const CANOPY_POLE_TOP_M := 7.3
-## The pump station's house (size, and its centre along local X) and the far end
-## of its fenced yard: inference from the aerial.
-const PUMP_HOUSE_M := Vector3(10.4, 3.9, 7.6)
-const PUMP_HOUSE_X_M := -3.2
-const PUMP_YARD_END_M := 8.4
+## The pump station's walled compound: outer size along local X and Z, wall
+## height, wall thickness, and its inner wall's place along X and height. Sizes
+## are inference from the aerial and CMG photo 4.
+const PUMP_WALLS_M := Vector3(16.2, 3.6, 11.1)
+const PUMP_WALL_THICKNESS_M := 0.3
+const PUMP_INNER_WALL_X_M := -1.8
+const PUMP_INNER_WALL_HEIGHT_M := 2.4
 
 ## Per prop: visibility range (m) and whether it casts a sun shadow. Tall poles
 ## keep their shadows and reach; small items fade out early for the web build.
@@ -296,12 +296,12 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 					_box_shape(result, Vector3(size, 0.5, 0.56), Vector3(0.0, 0.25, 0.0))
 		"pump_station":
 			_piece(result, "pump_station", func(b: Builder) -> void: _pump_station(b))
-			_box_shape(result, Vector3(PUMP_HOUSE_M.x, PUMP_HOUSE_M.y + 0.35, PUMP_HOUSE_M.z), Vector3(PUMP_HOUSE_X_M, (PUMP_HOUSE_M.y + 0.35) * 0.5, 0.0))
-			var yard_start := PUMP_HOUSE_X_M + PUMP_HOUSE_M.x * 0.5
-			var yard_length := PUMP_YARD_END_M - yard_start
+			var walls := PUMP_WALLS_M
+			var thick := PUMP_WALL_THICKNESS_M
 			for side: float in [-1.0, 1.0]:
-				_box_shape(result, Vector3(yard_length, 2.1, 0.1), Vector3(yard_start + yard_length * 0.5, 1.05, side * PUMP_HOUSE_M.z * 0.5))
-			_box_shape(result, Vector3(0.1, 2.1, PUMP_HOUSE_M.z), Vector3(PUMP_YARD_END_M, 1.05, 0.0))
+				_box_shape(result, Vector3(walls.x, walls.y, thick), Vector3(0.0, walls.y * 0.5, side * (walls.z - thick) * 0.5))
+				_box_shape(result, Vector3(thick, walls.y, walls.z - thick * 2.0), Vector3(side * (walls.x - thick) * 0.5, walls.y * 0.5, 0.0))
+			_box_shape(result, Vector3(thick, PUMP_INNER_WALL_HEIGHT_M, walls.z - thick * 2.0), Vector3(PUMP_INNER_WALL_X_M, PUMP_INNER_WALL_HEIGHT_M * 0.5, 0.0))
 	return result
 
 
@@ -924,51 +924,18 @@ func _log_seat(b: Builder, form: String, size: float) -> void:
 
 
 ## Cityside Park's stormwater pump station (not in the frozen OSM building
-## inventory, so a site structure; CMG photo 4 and the aerial of 2026-05-26 show
-## a pale-roofed single-storey box by the avenue with a fenced equipment yard at
-## its south-east end): dark grey board-formed concrete under a low parapet, two
-## pairs of steel doors and louvres on its front (-Z), and a yard of dark steel
-## pickets round a transformer and switchgear. Sizes and details are inference.
+## inventory, so a site structure): an open-topped compound of tall grey cast
+## concrete walls round a pale concrete floor, divided by a lower inner wall
+## (CMG photo 4, 2025-2026; the aerial of 2026-05-26). Simple massing only, with
+## no doors, openings or other detail that no dated photo shows.
 func _pump_station(b: Builder) -> void:
-	var size := PUMP_HOUSE_M
-	var center := Vector3(PUMP_HOUSE_X_M, 0.0, 0.0)
-	b.box(center + Vector3(0.0, size.y * 0.5 - 0.15, 0.0), Basis.IDENTITY, Vector3(size.x, size.y + 0.3, size.z), PUMP_CONCRETE, CELL_WHITE)
-	# Board-form joints round the walls.
-	for level in range(1, 6):
-		b.box(center + Vector3(0.0, 0.62 * float(level), 0.0), Basis.IDENTITY, Vector3(size.x + 0.02, 0.03, size.z + 0.02), PUMP_CONCRETE * 0.78, CELL_WHITE)
-	# Parapet, roof membrane, a rooftop unit and a hatch.
+	var walls := PUMP_WALLS_M
+	var thick := PUMP_WALL_THICKNESS_M
 	for side: float in [-1.0, 1.0]:
-		b.box(center + Vector3(0.0, size.y + 0.17, side * (size.z * 0.5 - 0.12)), Basis.IDENTITY, Vector3(size.x, 0.34, 0.24), PUMP_CONCRETE, CELL_WHITE)
-		b.box(center + Vector3(side * (size.x * 0.5 - 0.12), size.y + 0.17, 0.0), Basis.IDENTITY, Vector3(0.24, 0.34, size.z - 0.48), PUMP_CONCRETE, CELL_WHITE)
-	b.box(center + Vector3(0.0, size.y + 0.03, 0.0), Basis.IDENTITY, Vector3(size.x - 0.48, 0.06, size.z - 0.48), PUMP_ROOF, CELL_WHITE)
-	b.box(center + Vector3(-1.6, size.y + 0.55, 1.2), Basis.IDENTITY, Vector3(1.7, 1.0, 1.1), BIN_STEEL, CELL_METAL)
-	b.box(center + Vector3(2.4, size.y + 0.12, -1.0), Basis.IDENTITY, Vector3(1.0, 0.18, 1.0), BIN_STEEL * 0.8, CELL_METAL)
-	# Front: two pairs of steel doors and louvres above them.
-	for x: float in [-2.9, 2.2]:
-		b.box(center + Vector3(x, 1.25, -size.z * 0.5 - 0.02), Basis.IDENTITY, Vector3(1.9, 2.5, 0.06), PUMP_DOOR, CELL_WHITE)
-		b.box(center + Vector3(x, 1.25, -size.z * 0.5 - 0.055), Basis.IDENTITY, Vector3(0.03, 2.4, 0.02), PUMP_DOOR * 0.6, CELL_WHITE)
-		b.box(center + Vector3(x, 3.05, -size.z * 0.5 - 0.02), Basis.IDENTITY, Vector3(1.5, 0.7, 0.06), BIN_STEEL * 0.7, CELL_METAL)
-	# The yard: a dark steel picket fence on three sides, the house the fourth.
-	var x0 := PUMP_HOUSE_X_M + size.x * 0.5
-	var x1 := PUMP_YARD_END_M
-	var half := size.z * 0.5
-	var runs := [[Vector3(x0, 0.0, -half), Vector3(x1, 0.0, -half)], [Vector3(x1, 0.0, -half), Vector3(x1, 0.0, half)], [Vector3(x1, 0.0, half), Vector3(x0, 0.0, half)]]
-	for run: Array in runs:
-		var from: Vector3 = run[0]
-		var to: Vector3 = run[1]
-		var along := to - from
-		var length := along.length()
-		var direction := along / length
-		var basis := Basis(direction, Vector3.UP, direction.cross(Vector3.UP))
-		for rail_y: float in [0.12, 2.0]:
-			b.box(from + along * 0.5 + Vector3(0.0, rail_y, 0.0), basis, Vector3(length, 0.05, 0.04), STEEL_BLACK, CELL_WHITE)
-		for index in roundi(length / 2.2) + 1:
-			b.box(from + direction * minf(2.2 * float(index), length) + Vector3(0.0, 1.05, 0.0), Basis.IDENTITY, Vector3(0.07, 2.1, 0.07), STEEL_BLACK, CELL_WHITE)
-		for index in floori(length / 0.13):
-			b.box(from + direction * (0.065 + 0.13 * float(index)) + Vector3(0.0, 1.03, 0.0), Basis.IDENTITY, Vector3(0.022, 2.0, 0.022), STEEL_BLACK, CELL_WHITE)
-	b.box(Vector3(x0 + 2.0, 0.65, -1.4), Basis.IDENTITY, Vector3(1.5, 1.3, 1.2), TRANSFORMER_GREEN, CELL_WHITE)
-	b.box(Vector3(x1 - 1.4, 0.95, 2.6), Basis.IDENTITY, Vector3(2.2, 1.9, 0.7), BIN_STEEL, CELL_METAL)
-	b.box(Vector3((x0 + x1) * 0.5, 0.04, 0.0), Basis.IDENTITY, Vector3(x1 - x0 - 0.2, 0.08, size.z - 0.2), PAD_CONCRETE * 0.9, CELL_WHITE)
+		b.box(Vector3(0.0, walls.y * 0.5 - 0.15, side * (walls.z - thick) * 0.5), Basis.IDENTITY, Vector3(walls.x, walls.y + 0.3, thick), PUMP_CONCRETE, CELL_WHITE)
+		b.box(Vector3(side * (walls.x - thick) * 0.5, walls.y * 0.5 - 0.15, 0.0), Basis.IDENTITY, Vector3(thick, walls.y + 0.3, walls.z - thick * 2.0), PUMP_CONCRETE, CELL_WHITE)
+	b.box(Vector3(0.0, 0.05, 0.0), Basis.IDENTITY, Vector3(walls.x - thick * 2.0, 0.1, walls.z - thick * 2.0), PUMP_FLOOR, CELL_WHITE)
+	b.box(Vector3(PUMP_INNER_WALL_X_M, PUMP_INNER_WALL_HEIGHT_M * 0.5 - 0.1, 0.0), Basis.IDENTITY, Vector3(thick, PUMP_INNER_WALL_HEIGHT_M + 0.2, walls.z - thick * 2.0), PUMP_CONCRETE, CELL_WHITE)
 
 
 func _rectangle(width: float, height: float) -> PackedVector2Array:
