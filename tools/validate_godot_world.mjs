@@ -101,7 +101,12 @@ const STREET_GROUND_RECORDS = Object.freeze({
   "street-parking": ["street_paint", "street_parking", "none", false],
   "street-marking": ["street_paint", "street_marking", "none", false],
   "street-wear": ["street_paint", "street_wear", "none", false],
-  // A park zone's flat-lying ground (tools/lib/street-ground-generation.mjs PARK_SURFACE_MATERIALS).
+  // A zone's flat-lying ground (tools/lib/street-ground-generation.mjs PARK_SURFACE_MATERIALS):
+  // the yards' shared surfaces and Cityside Park's.
+  "black-plastic": ["street_paint", "black_plastic", "none", false],
+  "rubble-grey": ["street_paint", "rubble_grey", "none", false],
+  "yard-asphalt": ["street_paint", "yard_asphalt", "none", false],
+  "yard-gravel": ["street_paint", "yard_gravel", "none", false],
   "park-asphalt": ["street_paint", "park_asphalt", "none", false],
   "park-concrete": ["street_paint", "park_concrete", "none", false],
   "park-dg": ["street_paint", "park_dg", "none", false],
@@ -141,7 +146,18 @@ function validateCoverage(worldRoot, manifest) {
   invariant(new Set(rows.map((row) => row.source_key)).size === rows.length, "Coverage has duplicate source keys");
   invariant(rows.filter((row) => row.scope === "playable").length === EXPECTED_COUNTS.playable_rows, "Playable coverage count drift");
   invariant(rows.filter((row) => row.scope === "context").length === EXPECTED_COUNTS.context_rows, "Context coverage count drift");
-  invariant(rows.every((row) => ["represented", "composite_member", "context"].includes(row.derived_world_status)), "Coverage has an invalid status");
+  // Buildings left out as demolished (tools/config/demolished-buildings.json, listed
+  // in the manifest) keep their row with the status demolished and no geometry.
+  const demolished = new Set(manifest.demolished_buildings?.source_keys ?? []);
+  invariant(Array.isArray(manifest.demolished_buildings?.source_keys) && stableJson([...demolished].sort()) === stableJson(manifest.demolished_buildings.source_keys), "Manifest demolished buildings must be a sorted, unique key list");
+  for (const row of rows) {
+    if (row.derived_world_status !== "demolished" && !demolished.has(row.source_key)) continue;
+    invariant(demolished.has(row.source_key) && row.derived_world_status === "demolished", `${row.source_key} demolished status and manifest list disagree`);
+    invariant(row.scope === "playable" && row.categories === "building" && row.derived_object_key === `building:${row.source_key}` && row.representation_kind === "direct", `${row.source_key} demolished row is not a standalone building`);
+    invariant(row.part_keys === "" && row.chunk_ids === "" && row.vertex_count === "0" && row.triangle_count === "0" && row.collision_triangle_count === "0", `${row.source_key} demolished row keeps geometry`);
+  }
+  invariant(rows.filter((row) => row.derived_world_status === "demolished").length === demolished.size, "A manifest demolished building has no coverage row");
+  invariant(rows.every((row) => ["represented", "composite_member", "context", "demolished"].includes(row.derived_world_status)), "Coverage has an invalid status");
   invariant(rows.every((row) => row.validation === "pass"), "Coverage has a non-pass validation cell");
   const byKey = new Map(rows.map((row) => [row.source_key, row]));
   const landCompositeKey = `land:${PLAYABLE_BOUNDARY_SOURCE_KEY}`;
@@ -263,7 +279,7 @@ function validateRecords(worldRoot, manifest, coverage) {
 
   for (const row of coverage.rows) {
     const partKeys = splitValues(row.part_keys);
-    invariant(partKeys.length > 0, `${row.source_key} has no part keys`);
+    invariant(partKeys.length > 0 || row.derived_world_status === "demolished", `${row.source_key} has no part keys`);
     for (const key of partKeys) invariant(physical.has(key), `${row.source_key} references missing physical ${key}`);
     for (const chunkId of splitValues(row.chunk_ids)) {
       invariant(chunkIds.includes(chunkId), `${row.source_key} references missing chunk ${chunkId}`);
@@ -272,7 +288,10 @@ function validateRecords(worldRoot, manifest, coverage) {
   }
   for (const { record } of physical.values()) {
     invariant(Array.isArray(record.source_keys) && record.source_keys.length > 0, `${record.object_key} has no source keys`);
-    for (const sourceKey of record.source_keys) invariant(coverage.byKey.has(sourceKey), `${record.object_key} references unknown source ${sourceKey}`);
+    for (const sourceKey of record.source_keys) {
+      invariant(coverage.byKey.has(sourceKey), `${record.object_key} references unknown source ${sourceKey}`);
+      invariant(coverage.byKey.get(sourceKey).derived_world_status !== "demolished", `${record.object_key} builds the demolished ${sourceKey}`);
+    }
   }
   return { physical, context };
 }

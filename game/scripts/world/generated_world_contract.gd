@@ -134,6 +134,8 @@ const SURFACE_RECORD_FIELDS := ["surface_bias_m"]
 ## street paint draped over the land, carrying their lift like other draped
 ## surfaces so VisibleGround can stand visuals on them.
 const PARK_SURFACE_MATERIAL_PREFIX := "park_"
+## The yards' shared zone ground surfaces, draped the same way.
+const YARD_SURFACE_MATERIALS := ["black_plastic", "rubble_grey", "yard_asphalt", "yard_gravel"]
 const BUILDING_LEVEL_FIELDS := ["flat_base_elevation_m", "source_height_m", "top_elevation_m"]
 const BUILDING_WALL_FIELDS := ["exterior_foundation_segments", "shared_wall_segments"]
 const CONTEXT_RECORD_FIELDS := [
@@ -164,8 +166,14 @@ static func load_and_validate(manifest_path: String) -> Dictionary:
 	if not result.ok:
 		return result
 
+	# Buildings left out as demolished (tools/config/demolished-buildings.json): their
+	# coverage rows remain, with the status demolished and no geometry.
+	var demolished_result := _demolished_sources(manifest)
+	if not demolished_result.ok:
+		return demolished_result
+	var demolished: Dictionary = demolished_result.keys
 	var coverage_path := _resolve_artifact_path(manifest_path, str(manifest.coverage_ledger.path))
-	var coverage_result := _read_and_validate_coverage(coverage_path)
+	var coverage_result := _read_and_validate_coverage(coverage_path, demolished)
 	if not coverage_result.ok:
 		return coverage_result
 	var coverage_rows: Array = coverage_result.rows
@@ -212,12 +220,12 @@ static func load_and_validate(manifest_path: String) -> Dictionary:
 	if not result.ok:
 		return result
 
-	result = _validate_coverage_references(coverage_rows, record_keys, represented_playable, represented_context, approved_composite_sources)
+	result = _validate_coverage_references(coverage_rows, record_keys, represented_playable, represented_context, approved_composite_sources, demolished)
 	if not result.ok:
 		return result
 	for key_value: Variant in source_scopes.keys():
 		var key := str(key_value)
-		if source_scopes[key] == "playable" and not represented_playable.has(key):
+		if source_scopes[key] == "playable" and not represented_playable.has(key) and not demolished.has(key):
 			return _failure("coverage_missing_geometry", "Playable source %s has no chunk record." % key, [key])
 		if source_scopes[key] == "context" and not represented_context.has(key):
 			return _failure("context_missing_geometry", "Context source %s has no context record." % key, [key])
@@ -888,7 +896,21 @@ static func _integer_counts_match(actual_value: Variant, expected: Dictionary) -
 	return true
 
 
-static func _read_and_validate_coverage(path: String) -> Dictionary:
+## The manifest's demolished buildings as a key set: {ok, keys} or a failure.
+static func _demolished_sources(manifest: Dictionary) -> Dictionary:
+	var entry: Variant = manifest.get("demolished_buildings", null)
+	if not entry is Dictionary or not (entry as Dictionary).get("source_keys", null) is Array:
+		return _failure("manifest_demolished", "Manifest demolished building list is missing.")
+	var listed: Array = entry.source_keys
+	if _sorted_unique_strings(listed) != listed:
+		return _failure("manifest_demolished", "Manifest demolished buildings must be sorted and unique.")
+	var keys: Dictionary = {}
+	for key_value: Variant in listed:
+		keys[str(key_value)] = true
+	return {"ok": true, "keys": keys}
+
+
+static func _read_and_validate_coverage(path: String, demolished: Dictionary) -> Dictionary:
 	var file := FileAccess.open(path, FileAccess.READ)
 	if file == null:
 		return _failure("coverage_open", "Could not open coverage ledger: %s" % path)
@@ -927,7 +949,14 @@ static func _read_and_validate_coverage(path: String) -> Dictionary:
 		if scope != "playable" and scope != "context":
 			return _failure("coverage_scope", "Invalid coverage scope for %s." % source_key, [source_key])
 		var status := str(row.derived_world_status)
-		if scope == "playable" and status != "represented" and status != "composite_member":
+		var is_demolished := demolished.has(source_key)
+		if is_demolished != (status == "demolished"):
+			return _failure("coverage_demolished", "Coverage status of %s disagrees with the manifest's demolished buildings." % source_key, [source_key])
+		if is_demolished and (scope != "playable" or str(row.categories) != "building" or str(row.derived_object_key) != "building:" + source_key \
+		or not str(row.part_keys).is_empty() or not str(row.chunk_ids).is_empty() or str(row.vertex_count) != "0" \
+		or str(row.triangle_count) != "0" or str(row.collision_triangle_count) != "0"):
+			return _failure("coverage_demolished", "Demolished building %s keeps geometry or is not a standalone building." % source_key, [source_key])
+		if scope == "playable" and status != "represented" and status != "composite_member" and not is_demolished:
 			return _failure("coverage_unresolved", "Playable source %s is not represented." % source_key, [source_key])
 		if scope == "context":
 			var expected_context_status := "context" if source_key == "w26767311" else "composite_member"
@@ -940,11 +969,11 @@ static func _read_and_validate_coverage(path: String) -> Dictionary:
 			return _failure("coverage_representation", "Coverage row %s has an unknown representation kind." % source_key, [source_key])
 		if (status == "composite_member") != (representation_kind == "composite"):
 			return _failure("coverage_representation", "Coverage status and representation kind disagree for %s." % source_key, [source_key])
-		if str(row.validation) != "pass" or str(row.derived_object_key).is_empty() or str(row.part_keys).is_empty():
+		if str(row.validation) != "pass" or str(row.derived_object_key).is_empty() or (str(row.part_keys).is_empty() and not is_demolished):
 			return _failure("coverage_validation", "Coverage row %s is incomplete or failed." % source_key, [source_key])
 		if not str(row.vertex_count).is_valid_int() or not str(row.triangle_count).is_valid_int() or not str(row.collision_triangle_count).is_valid_int():
 			return _failure("coverage_geometry_counts", "Coverage geometry counts are invalid for %s." % source_key, [source_key])
-		if int(row.vertex_count) <= 0 or int(row.triangle_count) <= 0:
+		if (int(row.vertex_count) <= 0 or int(row.triangle_count) <= 0) and not is_demolished:
 			return _failure("coverage_empty_geometry", "Coverage geometry is empty for %s." % source_key, [source_key])
 		var categories := _split_semicolon(str(row.categories))
 		if categories.is_empty():
@@ -968,7 +997,7 @@ static func _read_and_validate_coverage(path: String) -> Dictionary:
 			return rule_result
 		if scope == "context":
 			context_keys.append(source_key)
-		elif str(row.chunk_ids).is_empty() and not BOUNDARY_ATTACHED_SOURCE_KEYS.has(source_key):
+		elif str(row.chunk_ids).is_empty() and not BOUNDARY_ATTACHED_SOURCE_KEYS.has(source_key) and not is_demolished:
 			return _failure("coverage_chunks", "Playable row %s has no chunk reference." % source_key, [source_key])
 		if BOUNDARY_ATTACHED_SOURCE_KEYS.has(source_key):
 			var expected_boundary_object := str(BOUNDARY_ATTACHED_OBJECTS[source_key].object_key)
@@ -1296,7 +1325,7 @@ static func _validate_mesh_record(record: Dictionary, allowed_kinds: Array, sour
 	return {"ok": true}
 
 
-static func _validate_coverage_references(rows: Array, record_keys: Dictionary, represented_playable: Dictionary, represented_context: Dictionary, approved_composite_sources: Dictionary) -> Dictionary:
+static func _validate_coverage_references(rows: Array, record_keys: Dictionary, represented_playable: Dictionary, represented_context: Dictionary, approved_composite_sources: Dictionary, demolished: Dictionary) -> Dictionary:
 	for row_value: Variant in rows:
 		var row: Dictionary = row_value
 		var source_key := str(row.source_key)
@@ -1329,6 +1358,10 @@ static func _validate_coverage_references(rows: Array, record_keys: Dictionary, 
 		if scope == "context" and (_sorted_strings(referenced_chunks.keys()) != ["context"] or not chunks.is_empty()):
 			return _failure("coverage_context_reference", "Context source %s has invalid part/chunk references." % source_key, [source_key])
 		var status := str(row.derived_world_status)
+		if demolished.has(source_key):
+			if represented_playable.has(source_key):
+				return _failure("coverage_demolished", "A playable record builds the demolished %s." % source_key, [source_key])
+			continue
 		if scope == "playable" and not represented_playable.has(source_key):
 			if status == "composite_member" and approved_composite_sources.has(source_key):
 				represented_playable[source_key] = true
@@ -1645,8 +1678,9 @@ static func _sorted_unique_chunk_ids(values: Array[String]) -> Array[String]:
 
 
 static func _is_park_surface(record: Dictionary) -> bool:
+	var material := str(record.get("material_key", ""))
 	return str(record.get("feature_kind", "")) == "street_paint" \
-		and str(record.get("material_key", "")).begins_with(PARK_SURFACE_MATERIAL_PREFIX)
+		and (material.begins_with(PARK_SURFACE_MATERIAL_PREFIX) or material in YARD_SURFACE_MATERIALS)
 
 
 static func _has_exact_fields(value: Dictionary, expected_fields: Array) -> bool:
