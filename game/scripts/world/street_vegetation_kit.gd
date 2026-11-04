@@ -1,11 +1,11 @@
 extends RefCounted
-## The street-vegetation kit: generated trees and grass clumps for
-## PlayableWorld/StreetDetail/Vegetation. street_vegetation_builder.gd places
+## The street-vegetation kit: generated trees, grasses, perennials and shrubs
+## for PlayableWorld/StreetDetail/Vegetation. street_vegetation_builder.gd places
 ## them from the vegetation rows tools/lib/street-vegetation-generation.mjs
 ## writes; this kit draws them. It grew out of the 2026-11-02 tree shootout's
 ## code-generated variant A, which the owner chose.
 ##
-## Only species photographed on Treasure Island (dated evidence in
+## Only species photographed or recorded on Treasure Island (dated evidence in
 ## tools/config/street-detail-zones.json and data/street_detail/set_pieces.json):
 ##   mexican_fan_palm  Washingtonia robusta: a slim grey ringed trunk, slightly
 ##                     curved, swelling to a rooted foot; a small tight grey-green
@@ -13,16 +13,47 @@ extends RefCounted
 ##   canary_date_palm  Phoenix canariensis: a thick trunk of diamond leaf scars,
 ##                     the trimmed "pineapple" knob and a full arching crown.
 ##   monterey_cypress  Hesperocyparis macrocarpa: the wind-shaped, flat-topped
-##                     old tree, and a dense young conical one.
+##                     old tree, and dense young conical ones.
 ##   clump_grass       the clumping ornamental grasses of the mulch beds.
+## Cityside Park's planting (Phase 1, opened Sep 2025; CMG and TIDA site plans,
+## Google Maps contributor photos Sep 2025-Jun 2026 and iNaturalist records in
+## the park 2025-09 to 2026-10), drawn as it stands in November, late in the dry
+## season, when most flowering is over:
+##   sydney_blue_gum_young  Eucalyptus saligna in the windrow plazas' double rows.
+##   island_oak_young       Quercus tomentella, young trees in the beds.
+##   pacific_reedgrass, dense_sedge, rush, bronze_clump_grass: the stormwater
+##                     beds' grasses, sedges and rushes, in clump_grass's look.
+##   seaside_daisy, sea_thrift, seaside_woolly_sunflower, california_sagebrush,
+##   shrubby_sage, california_buckwheat, blue_eyed_grass, seep_monkeyflower,
+##   dune_tansy        the strand garden's and the beds' perennials and shrubs.
+##   white_umbel_perennial  a yarrow-like plant with flat white heads seen in a
+##                     CMG photo of the strand garden; its species is not
+##                     confirmed, so the form is inference.
 ## Each prop has a few fixed variants whose meshes every instance shares; an
-## instance only turns about +Y and scales uniformly. Shapes and sizes are
-## production inference from the photos, not survey data.
+## instance only turns about +Y and scales uniformly. A species' variants run
+## from its smallest (0) to its largest. Shapes and sizes are production
+## inference from the photos, not survey data.
+##
+## Composing a bed of the low plants (what the reviewed Cityside demonstrator
+## beds used; the zone placer's own rules decide the real ones): the shrubs
+## (woolly sunflower, sagebrush, sage, buckwheat) in drifts of 3-7 set inward,
+## about 0.65 x their summed widths apart so the crowns overlap, with more
+## sagebrush and woolly sunflower than the rest for the strand garden's grey
+## mass; the grass accents (reedgrass, rush, bronze) in ones to threes repeated
+## through the bed, or as their drift (variant 3) in the stormwater beds; then
+## the groundcovers (dense_sedge, whose variants 3 and 4 are drifts, and
+## seaside_daisy, blue_eyed_grass and sea_thrift, whose variant 3 is) filling the
+## bare ground, largest variant first, about 0.55 x their summed widths apart, to
+## about 80-85 % canopy cover with a few 0.35-0.5 m gaps; thrift and
+## blue-eyed grass in the gravel; rows within 0.1 m of a bed's edge, so the
+## wider plants spill over it; variants mixed and scaled 0.85-1.15.
 ##
 ## Trees have LOD0, LOD1 and a far level: a palm keeps a low trunk under a
-## camera-facing crown impostor, a cypress becomes one impostor; the images are
-## baked from LOD0 by tools/vegetation/bake_impostors.gd. Grass has one level.
-## Collision is the trunk only (capsules), so crowns never stop a jetpack flight.
+## camera-facing crown impostor, a cypress, gum or oak becomes one impostor; the
+## images are baked from LOD0 by tools/vegetation/bake_impostors.gd. Low plants
+## (grasses, perennials, shrubs) have one level that dissolves away before its
+## range ends. Collision is the trunk only (capsules), so crowns never stop a
+## jetpack flight and low plants have none.
 ## Units are metres. A prototype's origin is the foot of its trunk on the visible
 ## ground; the trunk runs on BURY_M below it, so a foot on slightly uneven ground
 ## sinks in a little instead of showing a gap.
@@ -38,7 +69,10 @@ const BURY_M := 0.35
 const WELL_LIFT_M := 0.015
 ## The uniform scale and foot settling the generator may give an instance
 ## (tools/lib/street-vegetation-generation.mjs).
-const SCALE_RANGE := Vector2(0.8, 1.25)
+## Plain floats, not a Vector2: its 32-bit 0.8 is a hair above 0.8 and would
+## turn away a generated scale of exactly 0.8.
+const SCALE_MIN := 0.8
+const SCALE_MAX := 1.25
 const MAX_FOOT_SPREAD_M := 0.25
 const MAX_LIFT_M := 0.6
 
@@ -55,17 +89,59 @@ const CANARY_FRONDS := [Rect2(0.0, 0.0, 0.5, 1.0), Rect2(0.5, 0.0, 0.5, 1.0)]
 const CYPRESS_CLUMP := Rect2(0.0, 0.0, 0.5, 1.0)
 const CYPRESS_PLATE := Rect2(0.5, 0.0, 0.5, 1.0)
 const GRASS_CELLS := {"green": Rect2(0.0, 0.0, 0.5, 1.0), "straw": Rect2(0.5, 171.0 / 512.0, 0.5, 341.0 / 512.0)}
+## Low-plant atlas cells: name -> [material, UV rect]. The meadow atlas
+## (2048 x 2048) holds whole clumps, shrubs and flower stalks seen from the
+## side, drawn on crossed upright cards, and the litter; the perennial atlas
+## (2048 x 1536) holds face-on clusters of foliage, drawn on the cards round a
+## mound, and the top views drawn on caps and domes.
+## tools/vegetation/prepare_textures.gd packs both.
+const LOW_CELLS := {
+	"reedgrass": ["meadow", Rect2(0.0, 0.0, 0.25, 0.25)],
+	"sedge": ["meadow", Rect2(0.25, 0.0, 0.25, 0.25)],
+	"rush": ["meadow", Rect2(0.5, 0.0, 0.25, 0.25)],
+	"bronze": ["meadow", Rect2(0.75, 0.0, 0.25, 0.25)],
+	"blue_eyed": ["meadow", Rect2(0.0, 0.25, 0.25, 0.25)],
+	"thrift_stalks": ["meadow", Rect2(0.25, 0.25, 0.25, 0.25)],
+	"umbel_stalks": ["meadow", Rect2(0.5, 0.25, 0.25, 0.25)],
+	"buckwheat_mound": ["meadow", Rect2(0.75, 0.25, 0.25, 0.25)],
+	"woolly_stalks": ["meadow", Rect2(0.0, 0.5, 0.25, 0.25)],
+	"monkey_stalks": ["meadow", Rect2(0.25, 0.5, 0.25, 0.25)],
+	"tansy_stalks": ["meadow", Rect2(0.5, 0.5, 0.25, 0.25)],
+	"buckwheat_stalks": ["meadow", Rect2(0.75, 0.5, 0.25, 0.25)],
+	"sagebrush_wands": ["meadow", Rect2(0.0, 0.75, 0.25, 0.25)],
+	"sage_stems": ["meadow", Rect2(0.25, 0.75, 0.25, 0.25)],
+	"litter": ["meadow", Rect2(0.5, 0.75, 0.25, 0.25)],
+	"daisy": ["perennial", Rect2(0.0, 0.0, 0.25, 1.0 / 3.0)],
+	"thrift": ["perennial", Rect2(0.25, 0.0, 0.25, 1.0 / 3.0)],
+	"woolly": ["perennial", Rect2(0.5, 0.0, 0.25, 1.0 / 3.0)],
+	"sagebrush": ["perennial", Rect2(0.75, 0.0, 0.25, 1.0 / 3.0)],
+	"yarrow": ["perennial", Rect2(0.0, 1.0 / 3.0, 0.25, 1.0 / 3.0)],
+	"buckwheat": ["perennial", Rect2(0.25, 1.0 / 3.0, 0.25, 1.0 / 3.0)],
+	"monkeyflower": ["perennial", Rect2(0.5, 1.0 / 3.0, 0.25, 1.0 / 3.0)],
+	"tansy": ["perennial", Rect2(0.75, 1.0 / 3.0, 0.25, 1.0 / 3.0)],
+	"tussock_top": ["perennial", Rect2(0.0, 2.0 / 3.0, 0.25, 1.0 / 3.0)],
+	"bronze_top": ["perennial", Rect2(0.25, 2.0 / 3.0, 0.25, 1.0 / 3.0)],
+	"daisy_flowers": ["perennial", Rect2(0.5, 2.0 / 3.0, 0.25, 1.0 / 3.0)],
+}
+## The young trees' foliage atlas: a hanging spray of gum leaves, a cluster of oak leaves.
+const GUM_SPRAY := Rect2(0.0, 0.0, 0.5, 1.0)
+const OAK_CLUSTER := Rect2(0.5, 0.0, 0.5, 1.0)
 
 ## Side of one repeat of each square bark texture.
 const FAN_BARK_M := 0.6
 const CANARY_BARK_M := 0.8
 const CANARY_KNOB_M := 0.55
 const CYPRESS_BARK_M := 1.0
+const GUM_BARK_M := 0.7
+const OAK_BARK_M := 0.5
 
 ## How far a trunk top sways downwind per metre of height (the wind shader's
 ## UV2.x): palms rock, the cypress barely moves.
 const PALM_SWAY := 0.011
 const CYPRESS_SWAY := 0.0025
+## The young gums' slender trunks rock in the wind (ph10, Sep 2025); the oaks are stiff.
+const GUM_SWAY := 0.012
+const OAK_SWAY := 0.004
 
 ## Variants. height is the trunk from the ground to where the crown (fan palm)
 ## or the knob (date palm) starts. Avenue of the Palms fan palms are young
@@ -87,12 +163,15 @@ const CANARY_PALMS := [
 	{"seed": 23, "height": 7.6, "lean": 0.16, "radius_low": 0.42, "radius_top": 0.39, "flare": 0.18, "knob": 1.55, "knob_radius": 0.62, "fronds": 70, "frond": 4.9},
 	{"seed": 24, "height": 9.8, "lean": 0.2, "radius_low": 0.44, "radius_top": 0.4, "flare": 0.19, "knob": 1.65, "knob_radius": 0.65, "fronds": 72, "frond": 5.1},
 ]
-## Two old wind-shaped cypresses (Building 1 grounds, Sep 2025 and Jul 2023)
-## and a young conical one (the Waterfront Plaza, Sep 2025).
+## Two old wind-shaped cypresses (Building 1 grounds, Sep 2025 and Jul 2023),
+## a young conical one (the Waterfront Plaza, Sep 2025) and two smaller young
+## ones (Cityside Park's beds: ph08 Sep 2025, cmg08; 2-4 m).
 const CYPRESSES := [
 	{"form": "old", "seed": 1, "height": 13.0, "spread": 17.0, "trunk_radius": 0.5, "fork": 2.4, "leaders": 4, "shear": 0.3},
 	{"form": "old", "seed": 7, "height": 11.0, "spread": 12.5, "trunk_radius": 0.42, "fork": 2.0, "leaders": 3, "shear": 0.4},
 	{"form": "young", "seed": 5, "height": 4.6, "spread": 3.0, "trunk_radius": 0.14},
+	{"form": "young", "seed": 8, "height": 3.4, "spread": 2.3, "trunk_radius": 0.1},
+	{"form": "young", "seed": 9, "height": 2.6, "spread": 1.8, "trunk_radius": 0.075},
 ]
 ## The Treasure Island prevailing wind is westerly, so old crowns reach east (+X).
 const CYPRESS_LEE := Vector2(1.0, 0.0)
@@ -103,18 +182,252 @@ const GRASSES := [
 	{"seed": 34, "cell": "straw", "height": 0.82, "width": 1.25, "cards": 5},
 ]
 
+## Cityside Park's young Sydney blue gums in the windrow plazas' double rows
+## (ph10 Sep 2025, cmg01, cmg08, cmg14): a slender pale trunk, bare for its
+## lowest 2-3.5 m and leaning downwind, under a narrow, wind-tossed grey-green
+## crown of drooping lance leaves on ascending branches, staked. clear is the
+## bare trunk as a fraction of the height, crown the crown's width, lean the
+## top's lean in metres.
+const GUMS := [
+	{"seed": 41, "height": 5.0, "trunk_radius": 0.06, "clear": 0.42, "crown": 1.7, "branches": 10, "lean": 0.45},
+	{"seed": 42, "height": 6.0, "trunk_radius": 0.07, "clear": 0.45, "crown": 2.0, "branches": 12, "lean": 0.6},
+	{"seed": 43, "height": 7.0, "trunk_radius": 0.085, "clear": 0.48, "crown": 2.3, "branches": 14, "lean": 0.75},
+]
+## The windrow gums' tree stakes (ph10): two posts either side of the trunk,
+## STAKE_M tall and STAKE_SPACING_M apart, tied to it near the top.
+const STAKE_M := 2.3
+const STAKE_SPACING_M := 0.7
+const STAKE_RADIUS_M := 0.03
+## Young island oaks in the beds (named on the 2024 art-location plan and in the
+## 2025 acceptance minutes; no dated photo, so the form is a young oak of the
+## species' habit, production inference): two or three stems branching low into
+## a dense, rounded, lumpy crown of small dark leaves, about as wide as it is
+## tall. clear is the bare stem in metres, lobes the smaller crown lobes round
+## the main one, lopsided how far the crown sits off its stems (a fraction of
+## its width), so no two read as the same clipped ball.
+const OAKS := [
+	# A low, wide one; a narrow upright one; a broad, lopsided one.
+	{"seed": 51, "height": 2.3, "crown": 2.5, "trunk_radius": 0.04, "clear": 0.3, "stems": 2, "lobes": 3, "lopsided": 0.18, "cards": 120},
+	{"seed": 52, "height": 3.4, "crown": 2.0, "trunk_radius": 0.05, "clear": 0.4, "stems": 3, "lobes": 3, "lopsided": 0.1, "cards": 130},
+	{"seed": 53, "height": 4.0, "crown": 3.4, "trunk_radius": 0.065, "clear": 0.45, "stems": 2, "lobes": 6, "lopsided": 0.28, "cards": 210},
+]
+## Cityside Park's low plants as they stand in late November, built in layers
+## (_build_low): crossed side-view cards for clumps, shrubs' wands and flower
+## stalks, shell cards round a mound for foliage, and a dish of litter under the
+## shrubs. Flowers stand on their own stalk cards over the foliage, few or none
+## now the season is over. Sizes are in metres; lean tips a plant over by that
+## fraction of its height. A drift variant packs several of the species' plants
+## into one row, so a groundcover can reach dense cover with few rows.
+const REEDGRASSES := [
+	# Calamagrostis nutkaensis (iNat 352893747, 352887700, Apr 2026): a coarse dark
+	# green fountain under a few weathered grey-tan plumes.
+	{"seed": 61, "lean": 0.06, "layers": [{"kind": "crossed", "cell": "reedgrass", "cards": 4, "width": 0.85, "height": 0.8, "splay_deg": 10.0, "flop_deg": 22.0, "flutter": 0.06},
+		{"kind": "cap", "cell": "tussock_top", "width": 0.54, "height": 0.265, "drop": 0.5}]},
+	{"seed": 62, "lean": 0.1, "layers": [{"kind": "crossed", "cell": "reedgrass", "cards": 5, "width": 1.05, "height": 1.0, "splay_deg": 10.0, "flop_deg": 28.0, "flutter": 0.065},
+		{"kind": "cap", "cell": "tussock_top", "width": 0.662, "height": 0.318, "drop": 0.5}]},
+	{"seed": 63, "lean": 0.08, "layers": [{"kind": "crossed", "cell": "reedgrass", "cards": 5, "width": 1.3, "height": 1.2, "splay_deg": 12.0, "flop_deg": 28.0, "flutter": 0.07},
+		{"kind": "cap", "cell": "tussock_top", "width": 0.806, "height": 0.371, "drop": 0.5}]},
+	# A drift of four clumps grown together, about 2.2 m across.
+	{"seed": 110, "drift": [[0.0, 0.0, 2, 1.0, 0.0], [0.85, 0.35, 1, 0.95, 1.7], [-0.75, 0.45, 0, 1.05, 3.1], [0.2, -0.85, 1, 0.9, 4.4]]},
+]
+const SEDGES := [
+	# Carex densa (iNat 352894107, Apr 2026): a soft green tussock in the mulch.
+	# Each size a slightly different green, so a drift is not one colour.
+	{"seed": 64, "hue": 0.14, "layers": [{"kind": "crossed", "cell": "sedge", "cards": 4, "width": 0.55, "height": 0.3, "splay_deg": 18.0, "flutter": 0.035, "tint": Color(0.96, 0.98, 0.84)},
+		{"kind": "cap", "cell": "tussock_top", "width": 0.374, "height": 0.133, "drop": 0.5, "tint": Color(0.96, 0.98, 0.84)}]},
+	{"seed": 65, "hue": 0.14, "lean": 0.08, "layers": [{"kind": "crossed", "cell": "sedge", "cards": 4, "width": 0.75, "height": 0.45, "splay_deg": 18.0, "flop_deg": 30.0, "flutter": 0.04},
+		{"kind": "cap", "cell": "tussock_top", "width": 0.504, "height": 0.185, "drop": 0.5}]},
+	{"seed": 66, "hue": 0.14, "lean": 0.06, "layers": [{"kind": "crossed", "cell": "sedge", "cards": 5, "width": 0.95, "height": 0.58, "splay_deg": 16.0, "flop_deg": 34.0, "flutter": 0.045, "tint": Color(0.82, 0.88, 0.85)},
+		{"kind": "cap", "cell": "tussock_top", "width": 0.634, "height": 0.239, "drop": 0.5, "tint": Color(0.82, 0.88, 0.85)}]},
+	# A drift of five tussocks about 1.5 m across.
+	{"seed": 67, "drift": [[0.0, 0.0, 1, 1.0, 0.0], [0.55, 0.25, 0, 1.1, 1.3], [-0.5, 0.3, 1, 0.9, 2.1], [0.15, -0.55, 2, 0.85, 0.7], [-0.35, -0.45, 0, 1.0, 3.0]]},
+	# A drift of twelve tussocks of every size, about 2.5 m across.
+	{"seed": 113, "drift": [[0.0, 0.0, 2, 1.0, 0.0], [0.62, 0.1, 1, 0.95, 0.9], [-0.6, 0.18, 1, 1.05, 1.8], [0.2, 0.6, 0, 1.1, 2.7], [-0.25, -0.58, 2, 0.85, 3.6], [0.55, -0.52, 0, 1.0, 4.5],
+		[-0.95, -0.2, 0, 0.9, 5.4], [0.98, 0.42, 0, 1.15, 0.4], [-0.5, 0.82, 1, 0.9, 1.3], [0.35, 1.05, 0, 0.8, 2.2], [0.05, -1.1, 1, 1.0, 3.1], [-1.05, 0.55, 0, 0.95, 4.0]]},
+]
+const RUSHES := [
+	# Juncus (iNat 346410332, Mar 2026): stiff upright stems with brown flower tufts.
+	{"seed": 68, "layers": [{"kind": "crossed", "cell": "rush", "cards": 3, "width": 0.45, "height": 0.55, "curl": 0.04, "splay_deg": 4.0, "flutter": 0.025}]},
+	{"seed": 69, "lean": 0.05, "layers": [{"kind": "crossed", "cell": "rush", "cards": 5, "width": 0.6, "height": 0.75, "curl": 0.04, "splay_deg": 5.0, "flop_deg": 14.0, "flutter": 0.03}]},
+	{"seed": 70, "lean": 0.04, "layers": [{"kind": "crossed", "cell": "rush", "cards": 5, "width": 0.75, "height": 1.0, "curl": 0.04, "splay_deg": 6.0, "flop_deg": 16.0, "flutter": 0.035}]},
+	# A drift of six clumps about 1.5 m across.
+	{"seed": 111, "drift": [[0.0, 0.0, 1, 1.0, 0.0], [0.45, 0.2, 0, 1.1, 1.2], [-0.42, 0.25, 2, 0.9, 2.4], [0.15, -0.48, 0, 1.0, 3.6], [-0.3, -0.4, 1, 0.95, 4.8], [0.55, -0.25, 0, 0.85, 5.9]]},
+]
+const BRONZE_GRASSES := [
+	# The copper clumps among the green ones in the stormwater meadow (ph08, Sep 2025).
+	{"seed": 71, "layers": [{"kind": "crossed", "cell": "bronze", "cards": 3, "width": 0.5, "height": 0.3, "splay_deg": 16.0, "flutter": 0.04},
+		{"kind": "cap", "cell": "bronze_top", "width": 0.331, "height": 0.119, "drop": 0.5}]},
+	{"seed": 72, "lean": 0.08, "layers": [{"kind": "crossed", "cell": "bronze", "cards": 4, "width": 0.62, "height": 0.4, "splay_deg": 16.0, "flop_deg": 30.0, "flutter": 0.045},
+		{"kind": "cap", "cell": "bronze_top", "width": 0.418, "height": 0.159, "drop": 0.5}]},
+	{"seed": 73, "lean": 0.06, "layers": [{"kind": "crossed", "cell": "bronze", "cards": 4, "width": 0.75, "height": 0.5, "splay_deg": 14.0, "flop_deg": 30.0, "flutter": 0.05},
+		{"kind": "cap", "cell": "bronze_top", "width": 0.504, "height": 0.199, "drop": 0.5}]},
+	# A drift of five tufts about 1.6 m across.
+	{"seed": 112, "drift": [[0.0, 0.0, 1, 1.0, 0.0], [0.5, 0.25, 0, 1.1, 1.3], [-0.48, 0.3, 2, 0.9, 2.6], [0.1, -0.5, 0, 1.0, 3.9], [-0.4, -0.38, 1, 0.9, 5.1]]},
+]
+const BLUE_EYED_GRASSES := [
+	# Sisyrinchium bellum (iNat 387980572, Aug 2026): bluish iris-like fans, a flower or none in November.
+	{"seed": 74, "layers": [{"kind": "crossed", "cell": "blue_eyed", "cards": 3, "width": 0.22, "height": 0.2, "splay_deg": 14.0, "flutter": 0.02},
+		{"kind": "cap", "cell": "tussock_top", "width": 0.13, "height": 0.066, "drop": 0.5, "tint": Color(0.8, 0.9, 0.92)}]},
+	{"seed": 75, "layers": [{"kind": "crossed", "cell": "blue_eyed", "cards": 3, "width": 0.28, "height": 0.25, "splay_deg": 14.0, "flutter": 0.025},
+		{"kind": "cap", "cell": "tussock_top", "width": 0.158, "height": 0.08, "drop": 0.5, "tint": Color(0.8, 0.9, 0.92)}]},
+	{"seed": 76, "lean": 0.08, "layers": [{"kind": "crossed", "cell": "blue_eyed", "cards": 3, "width": 0.34, "height": 0.3, "splay_deg": 14.0, "flop_deg": 30.0, "flutter": 0.025},
+		{"kind": "cap", "cell": "tussock_top", "width": 0.187, "height": 0.093, "drop": 0.5, "tint": Color(0.8, 0.9, 0.92)}]},
+	# A clump of six tufts grown together, about 0.6 m across.
+	{"seed": 77, "drift": [[0.0, 0.0, 1, 1.0, 0.0], [0.16, 0.08, 0, 1.1, 1.2], [-0.15, 0.1, 2, 0.9, 2.3], [0.05, -0.17, 0, 1.0, 3.4], [-0.12, -0.14, 1, 0.85, 4.5], [0.22, -0.12, 0, 0.9, 5.6]]},
+]
+const DAISIES := [
+	# Erigeron glaucus: low grey-green mats, a few lilac daisies still out in
+	# October 2026 (iNat 408817767) over brown seed heads; cmg07.
+	{"seed": 81, "layers": [{"kind": "shell", "cell": "daisy", "cards": 14, "card": 0.4, "width": 0.55, "height": 0.15, "flat": 0.55, "rough": 0.6}]},
+	{"seed": 82, "layers": [{"kind": "shell", "cell": "daisy", "cards": 18, "card": 0.36, "width": 0.8, "height": 0.18, "flat": 0.55, "rough": 0.6},
+		{"kind": "shell", "cell": "daisy_flowers", "cards": 3, "card": 0.16, "width": 0.66, "height": 0.21, "flat": 0.95}]},
+	{"seed": 83, "layers": [{"kind": "shell", "cell": "daisy", "cards": 24, "card": 0.32, "width": 1.05, "height": 0.21, "flat": 0.55, "rough": 0.6},
+		{"kind": "shell", "cell": "daisy_flowers", "cards": 4, "card": 0.13, "width": 0.88, "height": 0.24, "flat": 0.95}]},
+	# A drift of five mats about 1.8 m across.
+	{"seed": 84, "drift": [[0.0, 0.0, 2, 1.0, 0.0], [0.75, 0.35, 1, 1.0, 1.7], [-0.7, 0.25, 0, 1.1, 0.4], [0.1, -0.7, 1, 0.9, 2.6], [-0.45, -0.55, 0, 1.0, 4.0]]},
+]
+const THRIFTS := [
+	# Armeria maritima (iNat 353060642, 352887520, 345762695): tight needle-leaf
+	# cushions hugging the gravel, a smooth bristly dome each; in November a few
+	# papery heads on stalks.
+	{"seed": 85, "layers": [{"kind": "dome", "cell": "thrift", "width": 0.24, "height": 0.12}]},
+	{"seed": 86, "layers": [{"kind": "dome", "cell": "thrift", "width": 0.32, "height": 0.15},
+		{"kind": "crossed", "cell": "thrift_stalks", "cards": 1, "width": 0.24, "height": 0.28, "base": 0.06, "flutter": 0.03}]},
+	{"seed": 87, "layers": [{"kind": "dome", "cell": "thrift", "width": 0.4, "height": 0.18},
+		{"kind": "crossed", "cell": "thrift_stalks", "cards": 1, "width": 0.28, "height": 0.32, "base": 0.08, "flutter": 0.03}]},
+	# An irregular cluster: three cushions grown together, three apart.
+	{"seed": 88, "drift": [[0.0, 0.0, 1, 1.0, 0.0], [0.2, 0.1, 0, 0.9, 1.1], [0.06, -0.21, 2, 1.0, 2.2], [0.62, 0.32, 0, 1.1, 3.3], [-0.58, 0.4, 1, 0.85, 4.4], [-0.2, -0.62, 0, 0.9, 5.5]]},
+]
+const WOOLLY_SUNFLOWERS := [
+	# Eriophyllum staechadifolium (ph03 Sep 2025, iNat 345762841): a loose, open
+	# grey mound with flower clusters on stalks above it, mostly spent and brown.
+	{"seed": 89, "lean": 0.05, "layers": [{"kind": "litter", "cell": "litter", "radius": 0.55},
+		{"kind": "shell", "cell": "woolly", "cards": 10, "card": 0.55, "width": 0.8, "height": 0.45, "flat": 0.15},
+		{"kind": "crossed", "cell": "woolly_stalks", "cards": 1, "width": 0.45, "height": 0.55, "base": 0.12, "flutter": 0.04}]},
+	{"seed": 90, "lean": 0.08, "layers": [{"kind": "litter", "cell": "litter", "radius": 0.75},
+		{"kind": "shell", "cell": "woolly", "cards": 13, "card": 0.5, "width": 1.15, "height": 0.65, "flat": 0.15},
+		{"kind": "crossed", "cell": "woolly_stalks", "cards": 1, "width": 0.62, "height": 0.75, "base": 0.18, "flutter": 0.045}]},
+	{"seed": 91, "lean": 0.06, "layers": [{"kind": "litter", "cell": "litter", "radius": 0.95},
+		{"kind": "shell", "cell": "woolly", "cards": 17, "card": 0.46, "width": 1.5, "height": 0.85, "flat": 0.15},
+		{"kind": "crossed", "cell": "woolly_stalks", "cards": 2, "width": 0.8, "height": 0.95, "base": 0.22, "splay_deg": 10.0, "flutter": 0.05}]},
+]
+const SAGEBRUSHES := [
+	# Artemisia californica (iNat 383028886, 337562529): loose upright and arching
+	# wands of feathery grey-green, darker inside, over a low base.
+	{"seed": 92, "lean": 0.06, "layers": [{"kind": "litter", "cell": "litter", "radius": 0.5},
+		{"kind": "shell", "cell": "sagebrush", "cards": 5, "card": 0.6, "width": 0.5, "height": 0.3, "tint": Color(0.72, 0.76, 0.7)},
+		{"kind": "crossed", "cell": "sagebrush_wands", "cards": 5, "width": 0.75, "height": 0.65, "splay_deg": 10.0, "flop_deg": 24.0, "flutter": 0.045},
+		{"kind": "cap", "cell": "sagebrush", "width": 0.5, "height": 0.48, "tint": Color(0.7, 0.76, 0.68)}]},
+	{"seed": 93, "lean": 0.08, "layers": [{"kind": "litter", "cell": "litter", "radius": 0.7},
+		{"kind": "shell", "cell": "sagebrush", "cards": 6, "card": 0.56, "width": 0.7, "height": 0.45, "tint": Color(0.72, 0.76, 0.7)},
+		{"kind": "crossed", "cell": "sagebrush_wands", "cards": 5, "width": 1.1, "height": 1.0, "splay_deg": 10.0, "flop_deg": 26.0, "flutter": 0.05},
+		{"kind": "cap", "cell": "sagebrush", "width": 0.72, "height": 0.72, "tint": Color(0.7, 0.76, 0.68)}]},
+	{"seed": 94, "lean": 0.07, "layers": [{"kind": "litter", "cell": "litter", "radius": 0.9},
+		{"kind": "shell", "cell": "sagebrush", "cards": 7, "card": 0.52, "width": 0.9, "height": 0.6, "tint": Color(0.72, 0.76, 0.7)},
+		{"kind": "crossed", "cell": "sagebrush_wands", "cards": 6, "width": 1.45, "height": 1.4, "splay_deg": 12.0, "flop_deg": 28.0, "flutter": 0.055},
+		{"kind": "cap", "cell": "sagebrush", "width": 0.95, "height": 1.0, "tint": Color(0.7, 0.76, 0.68)}]},
+]
+const SAGES := [
+	# Salvia sp. (iNat 334414817, 334414816, Jan 2026): upright, airy grey-green
+	# stems with dried whorls toward their tops.
+	{"seed": 95, "lean": 0.05, "layers": [{"kind": "litter", "cell": "litter", "radius": 0.45},
+		{"kind": "shell", "cell": "sagebrush", "cards": 4, "card": 0.6, "width": 0.4, "height": 0.25, "tint": Color(0.66, 0.74, 0.64)},
+		{"kind": "crossed", "cell": "sage_stems", "cards": 4, "width": 0.6, "height": 0.65, "splay_deg": 6.0, "flop_deg": 16.0, "flutter": 0.04},
+		{"kind": "cap", "cell": "sagebrush", "width": 0.4, "height": 0.45, "tint": Color(0.62, 0.7, 0.6)}]},
+	{"seed": 96, "lean": 0.07, "layers": [{"kind": "litter", "cell": "litter", "radius": 0.6},
+		{"kind": "shell", "cell": "sagebrush", "cards": 5, "card": 0.56, "width": 0.55, "height": 0.35, "tint": Color(0.66, 0.74, 0.64)},
+		{"kind": "crossed", "cell": "sage_stems", "cards": 5, "width": 0.85, "height": 0.95, "splay_deg": 7.0, "flop_deg": 18.0, "flutter": 0.045},
+		{"kind": "cap", "cell": "sagebrush", "width": 0.55, "height": 0.66, "tint": Color(0.62, 0.7, 0.6)}]},
+	{"seed": 97, "lean": 0.06, "layers": [{"kind": "litter", "cell": "litter", "radius": 0.75},
+		{"kind": "shell", "cell": "sagebrush", "cards": 6, "card": 0.52, "width": 0.7, "height": 0.45, "tint": Color(0.66, 0.74, 0.64)},
+		{"kind": "crossed", "cell": "sage_stems", "cards": 5, "width": 1.1, "height": 1.25, "splay_deg": 8.0, "flop_deg": 20.0, "flutter": 0.05},
+		{"kind": "cap", "cell": "sagebrush", "width": 0.7, "height": 0.86, "tint": Color(0.62, 0.7, 0.6)}]},
+]
+const BUCKWHEATS := [
+	# Eriogonum fasciculatum (iNat 352896292): a fine needle-leaf mound with dry
+	# rust heads held on stems above it; no inner shell (from low views its dark
+	# floor read as a hole), the side-view mound and the cap carry the volume.
+	{"seed": 98, "lean": 0.05, "layers": [{"kind": "litter", "cell": "litter", "radius": 0.45},
+		{"kind": "crossed", "cell": "buckwheat_mound", "cards": 4, "width": 0.65, "height": 0.45, "splay_deg": 12.0, "flop_deg": 24.0, "flutter": 0.03},
+		{"kind": "cap", "cell": "buckwheat", "width": 0.45, "height": 0.32, "tint": Color(0.74, 0.76, 0.7)},
+		{"kind": "crossed", "cell": "buckwheat_stalks", "cards": 1, "width": 0.42, "height": 0.52, "base": 0.14, "flutter": 0.035}]},
+	{"seed": 99, "lean": 0.06, "layers": [{"kind": "litter", "cell": "litter", "radius": 0.6},
+		{"kind": "crossed", "cell": "buckwheat_mound", "cards": 5, "width": 0.95, "height": 0.65, "splay_deg": 14.0, "flop_deg": 26.0, "flutter": 0.035},
+		{"kind": "cap", "cell": "buckwheat", "width": 0.65, "height": 0.46, "tint": Color(0.74, 0.76, 0.7)},
+		{"kind": "crossed", "cell": "buckwheat_stalks", "cards": 1, "width": 0.58, "height": 0.72, "base": 0.2, "flutter": 0.04}]},
+	{"seed": 100, "lean": 0.05, "layers": [{"kind": "litter", "cell": "litter", "radius": 0.8},
+		{"kind": "crossed", "cell": "buckwheat_mound", "cards": 5, "width": 1.25, "height": 0.85, "splay_deg": 14.0, "flop_deg": 28.0, "flutter": 0.04},
+		{"kind": "cap", "cell": "buckwheat", "width": 0.85, "height": 0.6, "tint": Color(0.74, 0.76, 0.7)},
+		{"kind": "crossed", "cell": "buckwheat_stalks", "cards": 2, "width": 0.72, "height": 0.92, "base": 0.26, "splay_deg": 10.0, "flutter": 0.045}]},
+]
+const MONKEYFLOWERS := [
+	# Erythranthe guttata (iNat 353060948, 352898225): low, soft, sprawling green
+	# clumps in the wet spots, a yellow flower or two.
+	{"seed": 101, "layers": [{"kind": "shell", "cell": "monkeyflower", "cards": 7, "card": 0.6, "width": 0.38, "height": 0.18, "flat": 0.3, "rough": 0.8}]},
+	{"seed": 102, "lean": 0.1, "layers": [{"kind": "shell", "cell": "monkeyflower", "cards": 8, "card": 0.55, "width": 0.52, "height": 0.28, "flat": 0.3, "rough": 0.8},
+		{"kind": "crossed", "cell": "monkey_stalks", "cards": 1, "width": 0.4, "height": 0.38, "base": 0.05, "flutter": 0.04}]},
+	{"seed": 103, "lean": 0.12, "layers": [{"kind": "shell", "cell": "monkeyflower", "cards": 9, "card": 0.5, "width": 0.66, "height": 0.38, "flat": 0.25, "rough": 0.8},
+		{"kind": "crossed", "cell": "monkey_stalks", "cards": 1, "width": 0.5, "height": 0.55, "base": 0.08, "flutter": 0.045}]},
+]
+const TANSIES := [
+	# Tanacetum bipinnatum (iNat 336112235, Jan 2026): ferny mid green, buttons gone brown.
+	{"seed": 104, "layers": [{"kind": "shell", "cell": "tansy", "cards": 7, "card": 0.62, "width": 0.42, "height": 0.28, "flat": 0.1, "rough": 0.8}]},
+	{"seed": 105, "lean": 0.08, "layers": [{"kind": "shell", "cell": "tansy", "cards": 8, "card": 0.56, "width": 0.62, "height": 0.4, "flat": 0.1, "rough": 0.8},
+		{"kind": "crossed", "cell": "tansy_stalks", "cards": 1, "width": 0.45, "height": 0.5, "base": 0.08, "flutter": 0.04}]},
+	{"seed": 106, "lean": 0.06, "layers": [{"kind": "shell", "cell": "tansy", "cards": 10, "card": 0.5, "width": 0.82, "height": 0.5, "flat": 0.1, "rough": 0.8},
+		{"kind": "crossed", "cell": "tansy_stalks", "cards": 2, "width": 0.55, "height": 0.62, "base": 0.1, "flutter": 0.045}]},
+]
+const WHITE_UMBELS := [
+	# Flat heads at 0.4-0.6 m over feathery leaves (cmg09); species unconfirmed.
+	{"seed": 107, "layers": [{"kind": "shell", "cell": "yarrow", "cards": 6, "card": 0.75, "width": 0.32, "height": 0.12, "flat": 0.4},
+		{"kind": "crossed", "cell": "umbel_stalks", "cards": 2, "width": 0.3, "height": 0.42, "base": 0.04, "splay_deg": 6.0, "flutter": 0.04}]},
+	{"seed": 108, "lean": 0.08, "layers": [{"kind": "shell", "cell": "yarrow", "cards": 7, "card": 0.7, "width": 0.42, "height": 0.15, "flat": 0.4},
+		{"kind": "crossed", "cell": "umbel_stalks", "cards": 2, "width": 0.36, "height": 0.5, "base": 0.05, "splay_deg": 8.0, "flutter": 0.045}]},
+	{"seed": 109, "lean": 0.1, "layers": [{"kind": "shell", "cell": "yarrow", "cards": 8, "card": 0.66, "width": 0.52, "height": 0.18, "flat": 0.4},
+		{"kind": "crossed", "cell": "umbel_stalks", "cards": 3, "width": 0.42, "height": 0.6, "base": 0.06, "splay_deg": 8.0, "flop_deg": 20.0, "flutter": 0.05}]},
+]
+## Low plants stand in grass_clump rows or, spaced wider, in planting_slot rows.
+const LOW_KINDS := ["grass_clump", "planting_slot"]
 ## Per prop: its variants, visibility ranges in metres (LOD0 until the first,
-## LOD1 until the second, the far level until the third; grass has only LOD0)
-## and the radius of its foot on the ground, which the generator settles on the
-## visible surface (tools/lib/street-vegetation-generation.mjs keeps the same
-## variant counts and foot radii). The far impostors are baked from these forms:
-## re-run tools/vegetation/bake_impostors.gd after any kit geometry change.
+## LOD1 until the second, the far level until the third; a low plant has only
+## LOD0), the radius of its foot on the ground, which the generator settles on
+## the visible surface (tools/lib/street-vegetation-generation.mjs keeps the same
+## variant counts and foot radii), how its variants are built (form) and, for a
+## low plant, whether it casts shadows (the taller ones; trees always do). The
+## far impostors are baked from these forms: re-run
+## tools/vegetation/bake_impostors.gd after any kit geometry change.
 const PROPS := {
-	"mexican_fan_palm": {"kinds": ["palm_slot", "tree"], "variants": FAN_PALMS, "ranges": [35.0, 95.0, 900.0], "foot_m": 0.45},
-	"canary_date_palm": {"kinds": ["palm_slot", "tree"], "variants": CANARY_PALMS, "ranges": [45.0, 110.0, 900.0], "foot_m": 0.7},
-	"monterey_cypress": {"kinds": ["tree"], "variants": CYPRESSES, "ranges": [45.0, 110.0, 900.0], "foot_m": 0.8},
-	"clump_grass": {"kinds": ["grass_clump"], "variants": GRASSES, "ranges": [70.0], "foot_m": 0.3},
+	"mexican_fan_palm": {"kinds": ["palm_slot", "tree"], "variants": FAN_PALMS, "ranges": [35.0, 95.0, 900.0], "foot_m": 0.45, "form": "fan_palm"},
+	"canary_date_palm": {"kinds": ["palm_slot", "tree"], "variants": CANARY_PALMS, "ranges": [45.0, 110.0, 900.0], "foot_m": 0.7, "form": "canary_palm"},
+	"monterey_cypress": {"kinds": ["tree"], "variants": CYPRESSES, "ranges": [45.0, 110.0, 900.0], "foot_m": 0.8, "form": "cypress"},
+	"sydney_blue_gum_young": {"kinds": ["tree"], "variants": GUMS, "ranges": [40.0, 100.0, 900.0], "foot_m": 0.3, "form": "gum"},
+	"island_oak_young": {"kinds": ["tree"], "variants": OAKS, "ranges": [35.0, 90.0, 700.0], "foot_m": 0.3, "form": "oak"},
+	"clump_grass": {"kinds": ["grass_clump"], "variants": GRASSES, "ranges": [70.0], "foot_m": 0.3, "form": "grass"},
+	"pacific_reedgrass": {"kinds": LOW_KINDS, "variants": REEDGRASSES, "ranges": [70.0], "foot_m": 0.25, "form": "low", "shadow": true},
+	"dense_sedge": {"kinds": LOW_KINDS, "variants": SEDGES, "ranges": [55.0], "foot_m": 0.18, "form": "low"},
+	"rush": {"kinds": LOW_KINDS, "variants": RUSHES, "ranges": [60.0], "foot_m": 0.2, "form": "low", "shadow": true},
+	"bronze_clump_grass": {"kinds": LOW_KINDS, "variants": BRONZE_GRASSES, "ranges": [55.0], "foot_m": 0.18, "form": "low"},
+	"blue_eyed_grass": {"kinds": LOW_KINDS, "variants": BLUE_EYED_GRASSES, "ranges": [40.0], "foot_m": 0.1, "form": "low"},
+	"seaside_daisy": {"kinds": LOW_KINDS, "variants": DAISIES, "ranges": [50.0], "foot_m": 0.2, "form": "low"},
+	"sea_thrift": {"kinds": LOW_KINDS, "variants": THRIFTS, "ranges": [40.0], "foot_m": 0.12, "form": "low"},
+	"seaside_woolly_sunflower": {"kinds": LOW_KINDS, "variants": WOOLLY_SUNFLOWERS, "ranges": [70.0], "foot_m": 0.3, "form": "low", "shadow": true},
+	"california_sagebrush": {"kinds": LOW_KINDS, "variants": SAGEBRUSHES, "ranges": [70.0], "foot_m": 0.3, "form": "low", "shadow": true},
+	"shrubby_sage": {"kinds": LOW_KINDS, "variants": SAGES, "ranges": [70.0], "foot_m": 0.3, "form": "low", "shadow": true},
+	"california_buckwheat": {"kinds": LOW_KINDS, "variants": BUCKWHEATS, "ranges": [65.0], "foot_m": 0.25, "form": "low", "shadow": true},
+	"seep_monkeyflower": {"kinds": LOW_KINDS, "variants": MONKEYFLOWERS, "ranges": [45.0], "foot_m": 0.15, "form": "low"},
+	"dune_tansy": {"kinds": LOW_KINDS, "variants": TANSIES, "ranges": [50.0], "foot_m": 0.2, "form": "low"},
+	"white_umbel_perennial": {"kinds": LOW_KINDS, "variants": WHITE_UMBELS, "ranges": [50.0], "foot_m": 0.15, "form": "low"},
 }
+## A low plant dissolves over the last LOW_FADE_M of its range. Its vertex
+## colour's alpha carries where that range ends, in units of FADE_SCALE_M
+## (vegetation_foliage.gdshader's distance_fade).
+const LOW_FADE_M := 12.0
+const FADE_SCALE_M := 100.0
+const GOLDEN_ANGLE := 2.39996323
+## How far a drift member's base runs on below the ground (see _build_low).
+const DRIFT_BURY_M := 0.15
+## The frame of a card drawn in its prop's own space (no lean, no transform).
+const IDENTITY_FRAME := {"xf": Transform3D.IDENTITY, "scale": 1.0, "lean": Vector3.ZERO, "height": 1.0, "tint": Color.WHITE}
 
 ## The impostor bake turns the breeze off on every material it draws.
 var wind_strength := 1.0
@@ -175,6 +488,11 @@ static func variant_count(prop: String) -> int:
 	return (PROPS[prop].variants as Array).size() if PROPS.has(prop) else 0
 
 
+## Whether a prop is a low plant (a grass, perennial or shrub): one detail level, no trunk.
+static func is_low_plant(prop: String) -> bool:
+	return PROPS.has(prop) and (PROPS[prop].ranges as Array).size() == 1
+
+
 ## What is wrong with a planted row's prop for this kit, or "" (the generated
 ## world contract and the builder both ask before building it).
 static func params_error(prop: String, kind: String, params: Variant) -> String:
@@ -192,7 +510,7 @@ static func params_error(prop: String, kind: String, params: Variant) -> String:
 		var value: Variant = p.get(field, null)
 		if not (value is float or value is int) or not is_finite(float(value)):
 			return "%s params need a finite %s" % [prop, field]
-	if float(p.scale) < SCALE_RANGE.x or float(p.scale) > SCALE_RANGE.y:
+	if float(p.scale) < SCALE_MIN or float(p.scale) > SCALE_MAX:
 		return "%s scale %s is out of range" % [prop, p.scale]
 	if absf(float(p.lift_m)) > MAX_LIFT_M or float(p.foot_spread_m) < 0.0 or float(p.foot_spread_m) > MAX_FOOT_SPREAD_M or float(p.well_m) < 0.0:
 		return "%s foot settling is out of range" % prop
@@ -218,7 +536,7 @@ func prototype(prop: String, variant: int) -> Dictionary:
 		return _prototypes[key]
 	var tree := build(prop, variant)
 	var ranges: Array = PROPS[prop].ranges
-	var levels: Array[Dictionary] = [{"name": "lod0", "mesh": tree.lod0, "begin_m": 0.0, "end_m": float(ranges[0]), "shadow": prop != "clump_grass"}]
+	var levels: Array[Dictionary] = [{"name": "lod0", "mesh": tree.lod0, "begin_m": 0.0, "end_m": float(ranges[0]), "shadow": ranges.size() > 1 or bool(PROPS[prop].get("shadow", false))}]
 	if ranges.size() > 1:
 		var far := impostor_mesh(prop, variant)
 		levels.append({"name": "lod1", "mesh": tree.lod1, "begin_m": float(ranges[0]), "end_m": float(ranges[1] if far != null else ranges[2]), "shadow": true})
@@ -238,13 +556,20 @@ func build(prop: String, variant: int) -> Dictionary:
 		return _trees[key]
 	var params: Dictionary = (PROPS[prop].variants as Array)[variant]
 	var tree: Dictionary
-	match prop:
-		"mexican_fan_palm":
+	match str(PROPS[prop].form):
+		"fan_palm":
 			tree = _build_fan_palm(params)
-		"canary_date_palm":
+		"canary_palm":
 			tree = _build_canary_palm(params)
-		"monterey_cypress":
+		"cypress":
 			tree = _build_cypress(params)
+		"gum":
+			tree = _build_gum(params)
+		"oak":
+			tree = _build_oak(params)
+		"low":
+			# A layered low plant dissolves away before its one range ends.
+			tree = _build_low(prop, params, float(PROPS[prop].ranges[0]))
 		_:
 			tree = _build_grass(params)
 	tree.prop = prop
@@ -679,7 +1004,7 @@ func _build_cypress(p: Dictionary) -> Dictionary:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = int(p.seed)
 	var skeleton := _cypress_skeleton(p, rng) if str(p.form) == "old" else _cypress_young_skeleton(p, rng)
-	var cards := _cypress_cards(rng, skeleton.clusters, str(p.form) == "young")
+	var cards := _cypress_cards(rng, skeleton.clusters, str(p.form) == "young", float(skeleton.get("card_scale", 1.0)))
 	var meshes: Array[ArrayMesh] = []
 	for lod in 2:
 		var mesh := ArrayMesh.new()
@@ -779,11 +1104,13 @@ func _cypress_skeleton(p: Dictionary, rng: RandomNumberGenerator) -> Dictionary:
 
 ## A young cypress: one leaning stem with short ascending branches, each ending
 ## in a ragged tuft, so the crown reads as an irregular dark cone with gaps
-## rather than a clipped hedge.
+## rather than a clipped hedge. A tree smaller than the 4.6 m plaza one has
+## tufts and cards shrunk with it (card_scale).
 func _cypress_young_skeleton(p: Dictionary, rng: RandomNumberGenerator) -> Dictionary:
 	var height := float(p.height)
 	var radius := float(p.spread) * 0.5
 	var trunk_radius := float(p.trunk_radius)
+	var shrink := clampf(height / 4.6, 0.5, 1.0)
 	var lean := Vector3(rng.randf_range(-0.25, 0.25), 0.0, rng.randf_range(-0.25, 0.25))
 	var stem := PackedVector3Array()
 	var radii := PackedFloat32Array()
@@ -808,9 +1135,9 @@ func _cypress_young_skeleton(p: Dictionary, rng: RandomNumberGenerator) -> Dicti
 			var origin := lean * f * f + Vector3.UP * maxf(0.15, y - 0.3)
 			var tip := origin + out * reach + Vector3.UP * rng.randf_range(0.2, 0.5)
 			branches.append({"depth": 2, "points": PackedVector3Array([origin, origin.lerp(tip, 0.55) + Vector3.UP * 0.1, tip]), "radii": PackedFloat32Array([0.035, 0.025, 0.012])})
-			clusters.append({"center": tip, "reach": maxf(0.38, reach * rng.randf_range(0.45, 0.62)), "half_height": rng.randf_range(0.3, 0.48)})
-	clusters.append({"center": lean + Vector3.UP * (height * 0.93), "reach": 0.32, "half_height": 0.42})
-	return {"branches": branches, "clusters": clusters, "crown": _cloud_centroid(clusters), "radius": radius, "height": height, "young": true}
+			clusters.append({"center": tip, "reach": maxf(0.38 * shrink, reach * rng.randf_range(0.45, 0.62)), "half_height": rng.randf_range(0.3, 0.48) * shrink})
+	clusters.append({"center": lean + Vector3.UP * (height * 0.93), "reach": 0.32 * shrink, "half_height": 0.42 * shrink})
+	return {"branches": branches, "clusters": clusters, "crown": _cloud_centroid(clusters), "radius": radius, "height": height, "young": true, "card_scale": shrink}
 
 
 func _cloud_centroid(clusters: Array) -> Vector3:
@@ -836,8 +1163,8 @@ func _polyline_at(points: PackedVector3Array, s: float) -> Vector3:
 
 
 ## Foliage cards for the clouds: wind-flattened plates, and upright clumps
-## round their rims (a young tree has only the clumps).
-func _cypress_cards(rng: RandomNumberGenerator, clusters: Array, young: bool) -> Array:
+## round their rims (a young tree has only the clumps, card_scale their size).
+func _cypress_cards(rng: RandomNumberGenerator, clusters: Array, young: bool, card_scale := 1.0) -> Array:
 	var cards := []
 	for cloud: Dictionary in clusters:
 		var center: Vector3 = cloud.center
@@ -868,7 +1195,7 @@ func _cypress_cards(rng: RandomNumberGenerator, clusters: Array, young: bool) ->
 				"center": center + out * reach * rng.randf_range(0.6, 0.9) + Vector3(0.0, rng.randf_range(-0.2, 0.3) * half_height, 0.0),
 				"normal": (out + Vector3(0.0, rng.randf_range(0.1, 0.45), 0.0)).normalized(),
 				"spin": rng.randf_range(-0.3, 0.3),
-				"size": rng.randf_range(0.9, 1.3) if young else rng.randf_range(1.0, 1.5),
+				"size": rng.randf_range(0.9, 1.3) * card_scale if young else rng.randf_range(1.0, 1.5),
 				"cloud": cloud,
 				"lod1": i % 3 == 0,
 				"shade": rng.randf_range(0.9, 1.08),
@@ -938,6 +1265,289 @@ func _cypress_card(s: Surf, card: Dictionary, skeleton: Dictionary, lod: int) ->
 			s.quad(a, a + 1, a + grid + 2, a + grid + 1, normal)
 
 
+# --- Young Sydney blue gum ------------------------------------------------------------------------
+
+
+## A young Sydney blue gum: a slender pale trunk with a lean and a slight bend,
+## bare at the bottom, and ascending branches through its upper part, each with
+## hanging sprays of lance leaves (two crossed cards per spray) along its outer
+## half, and two sprays on the leader. The crown is narrow and ragged, as the
+## wind-tossed windrow trees are; a few sprays carry reddish young leaves.
+func _build_gum(p: Dictionary) -> Dictionary:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = int(p.seed)
+	var height := float(p.height)
+	var trunk_radius := float(p.trunk_radius)
+	# Leaning downwind: the prevailing westerly pushes the windrows east (+X).
+	var lean_angle := rng.randf_range(-0.6, 0.6)
+	var lean := Vector3(cos(lean_angle), 0.0, sin(lean_angle)) * float(p.lean)
+	var bow_angle := lean_angle + rng.randf_range(1.2, 2.0)
+	var bow := Vector3(cos(bow_angle), 0.0, sin(bow_angle)) * float(p.lean) * 0.3
+	var sway_top := GUM_SWAY * height
+	var stem := PackedVector3Array([Vector3.DOWN * BURY_M])
+	var stem_radii := PackedFloat32Array([trunk_radius * 1.3])
+	for i in 9:
+		var t := float(i) / 8.0
+		stem.append(_gum_axis(height, lean, bow, t))
+		# A little flare at the foot, tapering to a whip at the top.
+		stem_radii.append(lerpf(trunk_radius, 0.012, pow(t, 0.85)) + trunk_radius * 0.3 * exp(-t * height / 0.25))
+	var clear := float(p.clear)
+	var half := float(p.crown) * 0.5
+	var count := int(p.branches)
+	var spray_size := 0.5 + 0.06 * height
+	var branches := []
+	var sprays := []
+	var phase := rng.randf() * TAU
+	for b in count:
+		var f := (float(b) + rng.randf_range(0.15, 0.85)) / count
+		var origin := _gum_axis(height, lean, bow, lerpf(clear, 0.9, f))
+		var azimuth := phase + b * GOLDEN_ANGLE + rng.randf_range(-0.4, 0.4)
+		var out := Vector3(cos(azimuth), 0.0, sin(azimuth))
+		# Longest in the lower crown, short near the top, steeply ascending; the
+		# wind-tossed crowns reach a little further downwind (east, +X).
+		var reach := half * lerpf(1.05, 0.45, f) * rng.randf_range(0.8, 1.15) * (1.0 + 0.3 * out.x)
+		var rise := deg_to_rad(rng.randf_range(35.0, 62.0))
+		var tip := origin + out * reach + Vector3.UP * (reach * tan(rise))
+		var middle := origin.lerp(tip, 0.5) + out * (reach * 0.1)
+		var base_radius := lerpf(trunk_radius * 0.5, 0.014, f)
+		branches.append({"points": PackedVector3Array([origin, middle, tip]), "radii": PackedFloat32Array([base_radius, base_radius * 0.6, 0.006]), "big": f < 0.7})
+		var along := [0.35, 0.6, 0.8, 1.0] if reach > half * 0.8 else ([0.55, 0.8, 1.0] if reach > half * 0.5 else [0.7, 1.0])
+		for k in along.size():
+			var at := origin.lerp(tip, float(along[k]))
+			sprays.append({
+				"at": at + Vector3.DOWN * 0.04,
+				"azimuth": azimuth + rng.randf_range(-0.5, 0.5),
+				"size": spray_size * rng.randf_range(0.85, 1.15) * lerpf(1.0, 0.8, f),
+				"young": k == along.size() - 1 and f > 0.5 and rng.randf() < 0.25,
+				"shade": rng.randf_range(0.9, 1.08),
+			})
+	# Short shoots on the trunk itself fill the crown between the branches.
+	for k in 4:
+		var at := _gum_axis(height, lean, bow, lerpf(clear + 0.08, 0.85, (float(k) + 0.5) / 4.0))
+		sprays.append({"at": at, "azimuth": phase + k * 2.1 + rng.randf_range(-0.5, 0.5), "size": spray_size * 0.8, "young": false, "shade": 0.85})
+	var top := _gum_axis(height, lean, bow, 1.0)
+	for k in 2:
+		sprays.append({"at": top + Vector3.UP * 0.12, "azimuth": phase + PI * k + rng.randf_range(-0.4, 0.4), "size": spray_size * 0.85, "young": k == 0, "shade": 1.04})
+	var crown := Vector3.ZERO
+	for spray: Dictionary in sprays:
+		crown += spray.at
+	crown /= maxf(1.0, sprays.size())
+	var low_y := _gum_axis(height, lean, bow, clear).y
+	# The stakes stand across the lean, so the trunk leans between them.
+	var stake_side := Vector3(-lean.z, 0.0, lean.x).normalized() * STAKE_SPACING_M * 0.5
+	var meshes: Array[ArrayMesh] = []
+	for lod in 2:
+		var mesh := ArrayMesh.new()
+		var bark := Surf.new()
+		var leaves := Surf.new()
+		var colors := PackedColorArray()
+		var winds := PackedVector2Array()
+		for point in stem:
+			var ao := lerpf(0.78, 1.0, clampf(point.y / 0.6, 0.0, 1.0)) * lerpf(1.0, 0.8, clampf((point.y - low_y) / maxf(0.5, height - low_y), 0.0, 1.0))
+			colors.append(Color(ao, ao, ao))
+			winds.append(Vector2(sway_top * pow(clampf(point.y / height, 0.0, 1.0), 2.0), 0.0))
+		if lod == 0:
+			_tube(bark, stem, stem_radii, colors, winds, 10, maxf(1.0, roundf(TAU * trunk_radius / GUM_BARK_M)), GUM_BARK_M)
+		else:
+			var points := PackedVector3Array()
+			var radii := PackedFloat32Array()
+			var ring_colors := PackedColorArray()
+			var ring_winds := PackedVector2Array()
+			for i in [0, 1, 3, 5, 7, 9]:
+				points.append(stem[i])
+				radii.append(stem_radii[i])
+				ring_colors.append(colors[i])
+				ring_winds.append(winds[i])
+			_tube(bark, points, radii, ring_colors, ring_winds, 6, 1.0, GUM_BARK_M)
+		for branch: Dictionary in branches:
+			if lod == 1 and not bool(branch.big):
+				continue
+			var points: PackedVector3Array = branch.points
+			var branch_colors := PackedColorArray()
+			var branch_winds := PackedVector2Array()
+			for point in points:
+				var shade := lerpf(0.7, 0.95, clampf((point.y - low_y) / maxf(0.5, height - low_y), 0.0, 1.0))
+				branch_colors.append(Color(shade, shade, shade))
+				branch_winds.append(Vector2(sway_top * pow(clampf(point.y / height, 0.0, 1.0), 2.0), 0.005))
+			_tube(bark, points, branch.radii, branch_colors, branch_winds, 5 if lod == 0 else 3, 1.0, GUM_BARK_M)
+		for index in sprays.size():
+			# The far level keeps two sprays in three at nearly their size, so the
+			# crown stays narrow and open instead of filling into a round head.
+			if lod == 1 and index % 3 == 2:
+				continue
+			var spray: Dictionary = sprays[index]
+			for card in 2:
+				_gum_spray_card(leaves, spray, float(spray.azimuth) + card * PI * 0.5, float(spray.size) * (1.15 if lod == 1 else 1.0), crown, half, low_y, height, sway_top)
+		_gum_stakes(bark, stake_side, lod)
+		bark.commit(mesh, material("gum_bark"))
+		leaves.commit(mesh, material("young_tree_foliage"))
+		meshes.append(mesh)
+	return {
+		"lod0": meshes[0],
+		"lod1": meshes[1],
+		"crown_surface": -1,
+		"top_m": top.y + spray_size * 0.2,
+		"capsules": [
+			{"radius_m": trunk_radius * 1.15, "from": Vector3.ZERO, "to": _gum_axis(height, lean, bow, minf(clear, 2.2 / height))},
+			{"radius_m": STAKE_RADIUS_M, "from": stake_side, "to": stake_side + Vector3.UP * STAKE_M},
+			{"radius_m": STAKE_RADIUS_M, "from": -stake_side, "to": -stake_side + Vector3.UP * STAKE_M},
+		],
+	}
+
+
+## The two tree stakes either side of the trunk, pale tan wood (the bark
+## texture tinted), joined across the trunk by a tie near their tops.
+func _gum_stakes(s: Surf, side: Vector3, lod: int) -> void:
+	var wood := Color(0.86, 0.74, 0.56)
+	var sides := 5 if lod == 0 else 4
+	for sign: float in [1.0, -1.0]:
+		var foot := side * sign
+		_tube(s, PackedVector3Array([foot + Vector3.DOWN * BURY_M, foot + Vector3.UP * STAKE_M]), PackedFloat32Array([STAKE_RADIUS_M, STAKE_RADIUS_M * 0.9]),
+			PackedColorArray([wood * 0.8, wood]), PackedVector2Array([Vector2.ZERO, Vector2.ZERO]), sides, 1.0, GUM_BARK_M)
+	var tie_y := Vector3.UP * (STAKE_M - 0.35)
+	_tube(s, PackedVector3Array([side + tie_y, -side + tie_y]), PackedFloat32Array([0.012, 0.012]), PackedColorArray([wood * 0.6, wood * 0.6]),
+		PackedVector2Array([Vector2.ZERO, Vector2.ZERO]), 4, 1.0, GUM_BARK_M)
+
+
+## The gum's trunk axis at t (0 foot .. 1 top): a lean growing toward the top plus a slight sideways bend.
+func _gum_axis(height: float, lean: Vector3, bow: Vector3, t: float) -> Vector3:
+	return Vector3.UP * (height * 0.93 * t) + lean * t * t + bow * sin(PI * t)
+
+
+## One card of a hanging spray: the twig along its top edge at the spray's
+## attachment, its leaves hanging below, facing azimuth. Darker low in the
+## crown and toward the trunk; reddish when the spray holds young leaves.
+func _gum_spray_card(s: Surf, spray: Dictionary, azimuth: float, size: float, crown: Vector3, half: float, low_y: float, height: float, sway_top: float) -> void:
+	var facing := Vector3(cos(azimuth), 0.0, sin(azimuth))
+	var across := Vector3(-facing.z, 0.0, facing.x)
+	var at: Vector3 = spray.at
+	# The leaves hang a little out from the twig, not straight down.
+	var down := (Vector3.DOWN + facing * 0.15).normalized()
+	var tint := Color(1.0, 0.88, 0.85) if bool(spray.young) else Color.WHITE
+	var first := s.verts.size()
+	for j in 2:
+		for i in 2:
+			var x := float(i) - 0.5
+			var position := at + across * (x * size) + down * (float(j) * size)
+			var height_f := clampf((position.y - low_y) / maxf(0.5, height - low_y), 0.0, 1.0)
+			var outward := clampf(Vector2(position.x - crown.x, position.z - crown.z).length() / maxf(0.3, half), 0.0, 1.0)
+			var c := float(spray.shade) * lerpf(0.62, 1.0, height_f) * lerpf(0.78, 1.0, outward)
+			var n := ((position - crown).normalized() * 0.6 + facing * 0.4).normalized()
+			var wind := Vector2(sway_top * pow(clampf(position.y / height, 0.0, 1.0), 2.0), 0.012 + 0.03 * float(j))
+			s.add(position, n, GUM_SPRAY.position + Vector2(float(i), float(j)) * GUM_SPRAY.size, Color(c * tint.r, c * tint.g, c * tint.b), wind)
+	s.quad(first, first + 1, first + 3, first + 2, facing)
+
+
+# --- Young island oak ---------------------------------------------------------------------------------
+
+
+## A young island oak: two or three stems from the ground, forking low into
+## scaffold limbs, under a dense, irregular, rounded crown: a main lobe and a
+## few smaller ones round it, each filled with crossed leaf-cluster cards,
+## darker underneath and inside, so the outline is lumpy rather than a clipped ball.
+func _build_oak(p: Dictionary) -> Dictionary:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = int(p.seed)
+	var height := float(p.height)
+	var crown_width := float(p.crown)
+	var clear := float(p.clear)
+	var trunk_radius := float(p.trunk_radius)
+	var half := Vector3(crown_width * 0.5, (height - clear) * 0.5, crown_width * 0.5)
+	var lopsided_angle := rng.randf() * TAU
+	var center := Vector3(cos(lopsided_angle), 0.0, sin(lopsided_angle)) * crown_width * float(p.get("lopsided", 0.0)) + Vector3.UP * (clear + half.y)
+	var sway_top := OAK_SWAY * height
+	var phase := rng.randf() * TAU
+	var lobes := [{"center": center, "half": half * 0.8}]
+	var lobe_count := int(p.lobes)
+	for k in lobe_count:
+		var azimuth := phase + TAU * k / lobe_count + rng.randf_range(-0.4, 0.4)
+		var out := Vector3(cos(azimuth), 0.0, sin(azimuth))
+		var lobe_half := half * rng.randf_range(0.42, 0.7)
+		lobes.append({"center": center + out * half.x * rng.randf_range(0.38, 0.5) + Vector3.UP * half.y * rng.randf_range(-0.3, 0.45), "half": lobe_half})
+	var stems := []
+	var stem_count := int(p.stems)
+	for k in stem_count:
+		# The stems spread from one root crown, leaning out a little each.
+		var out := Vector3(cos(phase + TAU * k / stem_count), 0.0, sin(phase + TAU * k / stem_count)) * (0.0 if stem_count == 1 else 1.0)
+		var fork := Vector3(0.0, clear, 0.0) + out * 0.16
+		var radius := trunk_radius * (1.0 if k == 0 else 0.8)
+		stems.append({"points": PackedVector3Array([Vector3.DOWN * BURY_M + out * 0.02, out * 0.03, out * 0.06 + Vector3.UP * clear * 0.5, fork, fork + Vector3.UP * 0.25]),
+			"radii": PackedFloat32Array([radius * 1.25, radius * 1.1, radius, radius * 0.85, radius * 0.6])})
+	# Scaffold limbs from the fork out to each lobe.
+	var limbs := []
+	for lobe: Dictionary in lobes:
+		var origin := Vector3(0.0, clear * rng.randf_range(0.9, 1.08), 0.0)
+		var tip: Vector3 = (lobe.center as Vector3).lerp(origin, 0.25)
+		limbs.append({"points": PackedVector3Array([origin, origin.lerp(tip, 0.5) + Vector3.UP * 0.12, tip]), "radii": PackedFloat32Array([trunk_radius * 0.6, trunk_radius * 0.4, 0.01])})
+	# Leaf clusters through the crown's lobes, each of crossed cards: one facing
+	# out from the lobe and one turned a quarter about the vertical (a cluster on
+	# the crown's top, whose first card lies flat, gets two upright ones), so from
+	# any side one card of a cluster faces the viewer and the outline is leaves,
+	# not card edges. Most sit near the outside, some deeper in and darker.
+	var cards := []
+	var total := 0.0
+	for lobe: Dictionary in lobes:
+		total += pow((lobe.half as Vector3).x, 2.0)
+	var cluster := 0
+	for lobe: Dictionary in lobes:
+		var lobe_center: Vector3 = lobe.center
+		var lobe_half: Vector3 = lobe.half
+		var count := maxi(4, int(round(float(p.cards) * 0.5 * pow(lobe_half.x, 2.0) / total)))
+		for i in count:
+			# Round the lobe from its top to its underside, the very bottom left open.
+			var t := (float(i) + rng.randf_range(0.2, 0.8)) / count
+			var polar := lerpf(0.15, 2.4, t)
+			var azimuth := phase + i * GOLDEN_ANGLE + rng.randf_range(-0.3, 0.3)
+			var out := Vector3(cos(azimuth), 0.0, sin(azimuth))
+			var unit := out * sin(polar) + Vector3.UP * cos(polar)
+			var depth := lerpf(0.5, 0.86, sqrt(rng.randf()))
+			var position := lobe_center + Vector3(unit.x * lobe_half.x, unit.y * lobe_half.y, unit.z * lobe_half.z) * depth
+			var first := (Vector3(unit.x / lobe_half.x, unit.y / lobe_half.y, unit.z / lobe_half.z).normalized() + Vector3(rng.randf_range(-0.3, 0.3), rng.randf_range(-0.2, 0.3), rng.randf_range(-0.3, 0.3))).normalized()
+			var normals: Array[Vector3] = [first]
+			if absf(first.y) < 0.7:
+				normals.append(first.rotated(Vector3.UP, PI * 0.5))
+			else:
+				var upright := first.rotated(first.cross(out).normalized(), PI * 0.5)
+				normals.append(upright)
+				normals.append(upright.rotated(Vector3.UP, PI * 0.5))
+			var size := minf(0.62, lobe_half.x * rng.randf_range(0.48, 0.62))
+			var shade := rng.randf_range(0.88, 1.04) * lerpf(0.72, 1.0, (depth - 0.5) / 0.36)
+			for normal: Vector3 in normals:
+				cards.append({"center": position, "normal": normal, "out": out, "size": size, "spin": rng.randf_range(-0.6, 0.6), "shade": shade, "cluster": cluster})
+			cluster += 1
+	var crown_low := center.y - half.y
+	var meshes: Array[ArrayMesh] = []
+	for lod in 2:
+		var mesh := ArrayMesh.new()
+		var bark := Surf.new()
+		var leaves := Surf.new()
+		for branch: Dictionary in stems + (limbs if lod == 0 else []):
+			var points: PackedVector3Array = branch.points
+			var colors := PackedColorArray()
+			var winds := PackedVector2Array()
+			for point in points:
+				var ao := lerpf(0.72, 1.0, clampf(point.y / 0.5, 0.0, 1.0)) * lerpf(1.0, 0.6, clampf((point.y - clear * 0.8) / maxf(0.3, half.y), 0.0, 1.0))
+				colors.append(Color(ao, ao, ao))
+				winds.append(Vector2(sway_top * pow(clampf(point.y / height, 0.0, 1.0), 2.0), 0.0))
+			_tube(bark, points, branch.radii, colors, winds, (8 if lod == 0 else 5) if branch in stems else 4, 1.0, OAK_BARK_M)
+		for card: Dictionary in cards:
+			# The far level keeps every other cluster, whole and a little larger.
+			if lod == 1 and int(card.cluster) % 2 == 1:
+				continue
+			_shell_card(leaves, IDENTITY_FRAME, card.center, card.normal, card.out, float(card.size) * (1.3 if lod == 1 else 1.0), 0.0, OAK_CLUSTER, float(card.spin), center,
+				crown_low, height, float(card.shade), Color.WHITE, 1.0, Vector2(sway_top, 0.015))
+		bark.commit(mesh, material("oak_bark"))
+		leaves.commit(mesh, material("young_tree_foliage"))
+		meshes.append(mesh)
+	return {
+		"lod0": meshes[0],
+		"lod1": meshes[1],
+		"crown_surface": -1,
+		"top_m": height,
+		"capsules": [{"radius_m": trunk_radius * 1.2, "from": Vector3.ZERO, "to": Vector3(0.0, clear, 0.0)}],
+	}
+
+
 # --- Clumping grass ------------------------------------------------------------------------------
 
 
@@ -977,6 +1587,266 @@ func _build_grass(p: Dictionary) -> Dictionary:
 				leaves.quad(a, a + 1, a + 4, a + 3, normal)
 	leaves.commit(mesh, material("grass"))
 	return {"lod0": mesh, "lod1": mesh, "crown_surface": -1, "top_m": height, "capsules": []}
+
+
+# --- Low plants: Cityside's grasses, perennials and shrubs --------------------------------------------
+
+
+## A low plant built from the variant's layers, or a drift of several of the
+## species' other variants in one mesh ("drift": [[x, z, variant, scale, yaw],
+## ...]), so one placed row can carry a whole patch of groundcover. A drift's
+## members are not settled one by one, so their bases run on DRIFT_BURY_M below
+## the ground: on a bed sloping up to about 10 % none of them floats. Layers:
+##   crossed  upright cards of a side-view image (a clump, a shrub's wands, a
+##            bunch of flower stalks) crossing at the foot, splayed out from it,
+##            one of them flopping further, their tops swaying;
+##   shell    face-on foliage cards round a lumpy half-ellipsoid, cupped, sunk
+##            in so their ragged edges make the outline and sprawling out over
+##            the ground at the rim, over a dark floor that hides the hollow;
+##            flat lays them down for a low mat, upright stretches them up;
+##   cap      a domed card of a top-view image over a clump or shrub, so it
+##            reads as a tuft from above (the jetpack's view), not an X of cards;
+##   dome     a low lumpy half-ellipsoid mesh wearing a top-view image, its
+##            ragged edge the image's own: a tight cushion;
+##   litter   a shallow dish of fallen leaves and stalks round the foot.
+## The whole plant leans by lean (a fraction of its height) to one side, and
+## each plant takes a slightly different shade and hue from its seed. Colours
+## darken toward the ground. Every vertex carries where the plant's dissolve
+## ends in its colour's alpha (vegetation_foliage.gdshader's distance_fade).
+func _build_low(prop: String, p: Dictionary, fade_m: float) -> Dictionary:
+	var surfs := {}
+	var top := 0.0
+	if p.has("drift"):
+		var drift: Array = p.drift
+		for index in drift.size():
+			var member: Array = drift[index]
+			var part: Dictionary = (PROPS[prop].variants as Array)[int(member[2])]
+			var scale := float(member[3])
+			var frame := {"xf": Transform3D(Basis(Vector3.UP, float(member[4])).scaled(Vector3.ONE * scale), Vector3(float(member[0]), 0.0, float(member[1]))), "scale": scale, "bury": DRIFT_BURY_M / scale}
+			# Each member grows from its own seed, so a drift holds no two alike.
+			top = maxf(top, _low_layers(part, int(p.seed) * 31 + index, frame, fade_m, surfs) * scale)
+	else:
+		top = _low_layers(p, int(p.seed), {"xf": Transform3D.IDENTITY, "scale": 1.0}, fade_m, surfs)
+	var mesh := ArrayMesh.new()
+	var keys := surfs.keys()
+	keys.sort()
+	for key: String in keys:
+		(surfs[key] as Surf).commit(mesh, material(key))
+	return {"lod0": mesh, "lod1": mesh, "crown_surface": -1, "top_m": top, "capsules": []}
+
+
+## Adds one plant's layers to surfs (material key -> Surf) through frame (its
+## transform and scale); returns its height.
+func _low_layers(p: Dictionary, seed: int, frame: Dictionary, fade_m: float, surfs: Dictionary) -> float:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = seed
+	var height := 0.0
+	for layer: Dictionary in p.layers:
+		height = maxf(height, float(layer.get("height", 0.0)))
+	var lean_angle := rng.randf() * TAU
+	frame.lean = Vector3(cos(lean_angle), 0.0, sin(lean_angle)) * float(p.get("lean", 0.0)) * height
+	frame.height = maxf(height, 0.05)
+	# No two plants of a drift or a bed quite the same shade.
+	var shade := rng.randf_range(0.88, 1.0)
+	var hue := float(p.get("hue", 0.05))
+	frame.tint = Color(shade * rng.randf_range(1.0 - hue, 1.0), shade * rng.randf_range(1.0 - hue * 0.6, 1.0), shade * rng.randf_range(1.0 - hue * 1.4, 1.0))
+	var alpha := fade_m / FADE_SCALE_M
+	for layer: Dictionary in p.layers:
+		var cell: Array = LOW_CELLS[str(layer.cell)]
+		if not surfs.has(cell[0]):
+			surfs[cell[0]] = Surf.new()
+		var surf: Surf = surfs[cell[0]]
+		match str(layer.kind):
+			"crossed":
+				_crossed_layer(surf, rng, layer, cell[1], frame, alpha)
+			"shell":
+				_shell_layer(surf, rng, layer, cell[1], frame, alpha)
+			"dome":
+				_dome_layer(surf, rng, layer, cell[1], frame, alpha)
+			"cap":
+				# Domed over the clump, its rim dipping into the side cards, swaying with
+				# the blade tips; shaded like the clump's interior at that height, so from
+				# eye height it reads as more of the clump, not a pale disc inside it.
+				var at := float(layer.height)
+				var tint: Color = layer.get("tint", Color.WHITE)
+				var cap_shade := float(layer.get("shade", 0.62))
+				_dish(surf, frame, cell[1], at, float(layer.width) * 0.5, at * float(layer.get("drop", 0.35)), Color(cap_shade * tint.r, cap_shade * tint.g, cap_shade * tint.b, alpha), rng.randf() * TAU,
+					Vector2(0.0, float(layer.get("flutter", 0.04))))
+			"litter":
+				var litter := float(layer.get("shade", 0.8))
+				_dish(surf, frame, cell[1], 0.012, float(layer.radius), 0.05, Color(litter, litter, litter, alpha), rng.randf() * TAU)
+	return height
+
+
+## Adds a vertex through a low plant's frame: the plant's lean (growing with
+## height), then its transform. Returns the vertex index.
+func _low_add(s: Surf, frame: Dictionary, position: Vector3, normal: Vector3, uv: Vector2, color: Color, wind: Vector2) -> int:
+	# A drift member's parts that reach below the ground run on deeper.
+	if position.y < 0.0:
+		position.y -= float(frame.get("bury", 0.0))
+	var leaned := position + (frame.lean as Vector3) * pow(clampf(position.y / float(frame.height), 0.0, 1.0), 1.5)
+	var xf: Transform3D = frame.xf
+	var tint: Color = frame.get("tint", Color.WHITE)
+	return s.add(xf * leaned, xf.basis * normal, uv, Color(color.r * tint.r, color.g * tint.g, color.b * tint.b, color.a), wind * float(frame.scale))
+
+
+func _crossed_layer(s: Surf, rng: RandomNumberGenerator, layer: Dictionary, cell: Rect2, frame: Dictionary, alpha: float) -> void:
+	var cards := int(layer.cards)
+	var width := float(layer.width)
+	var height := float(layer.height)
+	var base := float(layer.get("base", -0.05))
+	var curl_range := float(layer.get("curl", 0.12))
+	var splay := tan(deg_to_rad(float(layer.get("splay_deg", 0.0))))
+	var flop := tan(deg_to_rad(float(layer.get("flop_deg", 0.0))))
+	var flutter := float(layer.get("flutter", 0.05))
+	var low := float(layer.get("shade_low", 0.5))
+	var tint: Color = layer.get("tint", Color.WHITE)
+	var phase := rng.randf() * PI
+	for k in cards:
+		var angle := phase + PI * k / cards + rng.randf_range(-0.2, 0.2)
+		var along := Vector3(cos(angle), 0.0, sin(angle))
+		var normal := Vector3(-along.z, 0.0, along.x)
+		var card_height := height * rng.randf_range(0.88, 1.08)
+		var card_width := width * rng.randf_range(0.88, 1.06)
+		var curl := rng.randf_range(-curl_range, curl_range)
+		# Alternate cards lean out to either side of the foot; the first flops furthest.
+		var lean_out := normal * ((1.0 if k % 2 == 0 else -1.0) * (flop if k == 0 and flop > 0.0 else splay))
+		var first := s.verts.size()
+		for j in 3:
+			var f := float(j) / 2.0
+			var y := lerpf(base, card_height, f)
+			for i in 3:
+				var x := (float(i) / 2.0 - 0.5) * card_width
+				var position := along * x + normal * (curl * f * f * card_width) + Vector3.UP * y + lean_out * maxf(y, 0.0)
+				var outward := Vector3(position.x, 0.0, position.z)
+				var n := Vector3.UP * 0.65 + (outward.normalized() * 0.35 if outward.length() > 0.01 else Vector3.ZERO)
+				var shade := lerpf(low, 1.0, f)
+				_low_add(s, frame, position, n, cell.position + Vector2(float(i) / 2.0, 1.0 - f) * cell.size, Color(shade * tint.r, shade * tint.g, shade * tint.b, alpha), Vector2(0.0, flutter * f * f))
+		for j in 2:
+			for i in 2:
+				var a := first + j * 3 + i
+				s.quad(a, a + 1, a + 4, a + 3, (frame.xf as Transform3D).basis * normal)
+
+
+func _shell_layer(s: Surf, rng: RandomNumberGenerator, layer: Dictionary, cell: Rect2, frame: Dictionary, alpha: float) -> void:
+	var radius := float(layer.width) * 0.5
+	var height := float(layer.height)
+	var flat := float(layer.get("flat", 0.0))
+	var upright := float(layer.get("upright", 0.0))
+	# rough (0..1) breaks the outline further: deeper lumps, cards scattered in and out.
+	var rough := float(layer.get("rough", 0.0))
+	var tint: Color = layer.get("tint", Color.WHITE)
+	var count := int(layer.cards)
+	var side := float(layer.card) * float(layer.width)
+	var heart := Vector3(0.0, height * 0.3, 0.0)
+	# The mound sways a little at the top and its leaves flutter.
+	var wind := Vector2(0.03 * height, 0.02)
+	var phase := rng.randf() * TAU
+	# It bulges unevenly round its sides, so no two read as the same egg.
+	var lumps := [rng.randf_range(0.08, 0.18) * (1.0 + rough), rng.randf() * TAU, rng.randf_range(0.05, 0.12) * (1.0 + rough), rng.randf() * TAU]
+	# A dark floor of the same foliage hides the hollow inside from low views.
+	_dish(s, frame, cell, 0.03, radius * 0.75, 0.04, Color(0.32 * tint.r, 0.32 * tint.g, 0.32 * tint.b, alpha), rng.randf() * TAU)
+	for i in count:
+		# Spread over the dome from its crown to just above the ground, more toward the rim.
+		var t := (float(i) + rng.randf_range(0.2, 0.8)) / count
+		var polar := lerpf(0.12, 1.42, pow(t, 0.75))
+		var azimuth := phase + i * GOLDEN_ANGLE + rng.randf_range(-0.35, 0.35)
+		var out := Vector3(cos(azimuth), 0.0, sin(azimuth))
+		var bulge := 1.0 + float(lumps[0]) * sin(2.0 * azimuth + float(lumps[1])) + float(lumps[2]) * sin(3.0 * azimuth + float(lumps[3]))
+		var surface := out * (radius * bulge * sin(polar)) + Vector3.UP * (height * (0.9 + 0.1 * bulge) * cos(polar))
+		var normal := (out * (sin(polar) / radius) + Vector3.UP * (cos(polar) / height)).normalized()
+		normal = (normal + Vector3.UP * flat * 2.0).normalized()
+		# Low on the mound the cards sprawl out over the ground past the outline.
+		var rim := smoothstep(1.0, 1.42, polar)
+		var center := surface * rng.randf_range(0.66 - 0.2 * rough, 0.9 + 0.12 * rough) + out * (radius * 0.15 * rim)
+		var size := side * rng.randf_range(0.8, 1.2)
+		_shell_card(s, frame, center, normal, out, size, upright - flat * 0.45, cell, rng.randf_range(-0.5, 0.5), heart, 0.0, height, rng.randf_range(0.88, 1.05), tint, alpha, wind)
+
+
+## A tight cushion: a lumpy half-ellipsoid width across and height up, the
+## cell's top-view image laid over it from above (its ragged rim on the dome's
+## foot), shaded from its heart and darker toward the ground.
+func _dome_layer(s: Surf, rng: RandomNumberGenerator, layer: Dictionary, cell: Rect2, frame: Dictionary, alpha: float) -> void:
+	var radius := float(layer.width) * 0.5
+	var height := float(layer.height)
+	var sides := 12
+	var lumps := [rng.randf_range(0.04, 0.09), rng.randf() * TAU, rng.randf_range(0.03, 0.06), rng.randf() * TAU]
+	var spin := rng.randf() * TAU
+	var heart := Vector3(0.0, height * 0.2, 0.0)
+	var top := _low_add(s, frame, Vector3.UP * height, Vector3.UP, cell.get_center(), Color(1.0, 1.0, 1.0, alpha), Vector2(0.0, 0.004))
+	var previous := PackedInt32Array()
+	# A paraboloid that meets the ground at a slant (the top view laid over a
+	# vertical skirt would streak down it), its last ring just below the ground.
+	var fractions := [0.3, 0.55, 0.75, 0.9, 1.0, 1.06]
+	for ring in range(1, fractions.size() + 1):
+		var f := float(fractions[ring - 1])
+		var current := PackedInt32Array()
+		for k in sides:
+			var azimuth := TAU * k / sides
+			var bulge := 1.0 + float(lumps[0]) * sin(3.0 * azimuth + float(lumps[1])) + float(lumps[2]) * sin(5.0 * azimuth + float(lumps[3]))
+			var out := Vector3(cos(azimuth), 0.0, sin(azimuth))
+			var position := out * (radius * bulge * f) + Vector3.UP * maxf(height * (1.0 - f * f), -0.03)
+			var normal := ((position - heart).normalized() + Vector3.UP * 0.3).normalized()
+			# The image laid on from above, a little smaller than the dome so its bristly rim falls on the dome's foot.
+			var uv := cell.get_center() + Vector2(position.x, position.z).rotated(spin) / (radius * 2.3) * cell.size
+			var shade := lerpf(0.5, 1.0, clampf(position.y / height, 0.0, 1.0))
+			current.append(_low_add(s, frame, position, normal, uv, Color(shade, shade, shade, alpha), Vector2(0.0, 0.004 * clampf(position.y / height, 0.0, 1.0))))
+		for k in sides:
+			var a := current[k]
+			var b := current[(k + 1) % sides]
+			if ring == 1:
+				s.tri(top, a, b, Vector3.UP)
+			else:
+				s.quad(previous[k], previous[(k + 1) % sides], b, a, (s.verts[a] - (frame.xf as Transform3D) * heart).normalized())
+		previous = current
+
+
+## A shallow dish radius across, its middle at y and its rim drop metres lower:
+## on the ground round the foot (a mound's dark floor, a ring of litter), where
+## on uneven ground its edge sinks in rather than floats, or over a clump (a cap).
+func _dish(s: Surf, frame: Dictionary, cell: Rect2, y: float, radius: float, drop: float, color: Color, spin: float, wind := Vector2.ZERO) -> void:
+	var across := Vector3(cos(spin), 0.0, sin(spin))
+	var depth := Vector3(-across.z, 0.0, across.x)
+	var first := s.verts.size()
+	for j in 3:
+		for i in 3:
+			var u := float(i) - 1.0
+			var v := float(j) - 1.0
+			var position := (across * u + depth * v) * radius + Vector3.UP * (y - drop * minf(1.0, (u * u + v * v) * 0.5))
+			_low_add(s, frame, position, Vector3.UP, cell.position + Vector2(float(i) / 2.0, float(j) / 2.0) * cell.size, color, wind)
+	for j in 2:
+		for i in 2:
+			var a := first + j * 3 + i
+			s.quad(a, a + 1, a + 4, a + 3, Vector3.UP)
+
+
+## One foliage card of a mound or a crown, through frame (a low plant's, or
+## IDENTITY_FRAME): side metres across (taller by upright), centred at center
+## and facing normal, its image upright along the surface (outward on top),
+## turned by spin and cupped back at its corners. Normals lean from heart;
+## colour darkens from top_y down to base_y. wind is the UV2 sway and flutter
+## at top_y, less below.
+func _shell_card(s: Surf, frame: Dictionary, center: Vector3, normal: Vector3, out: Vector3, side: float, upright: float, cell: Rect2, spin: float, heart: Vector3, base_y: float, top_y: float, shade: float, tint: Color, alpha: float, wind: Vector2) -> void:
+	var up_axis := Vector3.UP - normal * normal.dot(Vector3.UP)
+	if up_axis.length() < 0.25:
+		up_axis = out
+	up_axis = up_axis.normalized().rotated(normal, spin)
+	var across := up_axis.cross(normal).normalized()
+	var tall := side * (1.0 + upright)
+	var first := s.verts.size()
+	for j in 3:
+		for i in 3:
+			var x := float(i) / 2.0 - 0.5
+			var y := float(j) / 2.0 - 0.5
+			var position := center + across * (x * side) + up_axis * (y * tall) - normal * (0.18 * side * (x * x + y * y))
+			var n := ((position - heart).normalized() * 0.65 + normal * 0.35).normalized()
+			var height_f := clampf((position.y - base_y) / maxf(0.01, top_y - base_y), 0.0, 1.0)
+			var c := shade * lerpf(0.42, 1.0, pow(height_f, 0.8))
+			_low_add(s, frame, position, n, cell.position + Vector2(x + 0.5, 0.5 - y) * cell.size, Color(c * tint.r, c * tint.g, c * tint.b, alpha), wind * height_f)
+	for j in 2:
+		for i in 2:
+			var a := first + j * 3 + i
+			s.quad(a, a + 1, a + 4, a + 3, (frame.xf as Transform3D).basis * normal)
 
 
 # --- Shared geometry --------------------------------------------------------------------------------
@@ -1021,7 +1891,8 @@ func _perpendicular(direction: Vector3) -> Vector3:
 
 ## Where a variant's impostor image is framed on its LOD0: centre and size in
 ## metres, looking along -Z. A palm's impostor is only its crown (its trunk stays
-## geometry); a cypress's is the whole tree. The bake renders exactly this frame.
+## geometry); a cypress's, gum's or oak's is the whole tree. The bake renders
+## exactly this frame.
 func impostor_frame(prop: String, variant: int) -> Dictionary:
 	var tree := build(prop, variant)
 	var mesh: ArrayMesh = tree.lod0
@@ -1034,16 +1905,17 @@ static func impostor_texture_path(prop: String, variant: int) -> String:
 
 
 ## The far mesh of a tree: a palm's low trunk (and knob) under its crown
-## impostor, or a cypress's impostor alone; null when the image hasn't been baked.
+## impostor, or a cypress's, gum's or oak's impostor alone; null for a low plant
+## or when the image hasn't been baked.
 func impostor_mesh(prop: String, variant: int) -> ArrayMesh:
-	if prop == "clump_grass" or not ResourceLoader.exists(impostor_texture_path(prop, variant)):
+	if is_low_plant(prop) or not ResourceLoader.exists(impostor_texture_path(prop, variant)):
 		return null
 	var frame := impostor_frame(prop, variant)
 	var tree: Dictionary = frame.tree
 	var center: Vector3 = frame.center
 	var size: Vector2 = frame.size
 	var mesh := ArrayMesh.new()
-	if prop != "monterey_cypress":
+	if str(PROPS[prop].form) in ["fan_palm", "canary_palm"]:
 		var bark := Surf.new()
 		var shade := func(_h: float) -> Color: return Color(0.9, 0.9, 0.9)
 		var wood := "fan_palm_bark" if prop == "mexican_fan_palm" else "canary_bark"
@@ -1098,6 +1970,21 @@ func material(key: String) -> Material:
 		"grass":
 			made = _foliage("grass_atlas.png", Color(0.92, 0.94, 0.86), Color(0.18, 0.2, 0.1), Vector2(1024.0, 512.0), 0.1, 0.9)
 			made.set_shader_parameter("alpha_cutoff", 0.4)
+		"meadow":
+			made = _foliage("meadow_atlas.png", Color(0.92, 0.94, 0.86), Color(0.18, 0.2, 0.1), Vector2(2048.0, 2048.0), 0.1, 0.9)
+			made.set_shader_parameter("alpha_cutoff", 0.4)
+			made.set_shader_parameter("distance_fade", true)
+			made.set_shader_parameter("fade_length_m", LOW_FADE_M)
+		"perennial":
+			made = _foliage("perennial_atlas.png", Color(0.95, 0.95, 0.92), Color(0.12, 0.14, 0.07), Vector2(2048.0, 1536.0), 0.08, 0.92)
+			made.set_shader_parameter("distance_fade", true)
+			made.set_shader_parameter("fade_length_m", LOW_FADE_M)
+		"young_tree_foliage":
+			made = _foliage("young_tree_foliage_atlas.png", Color(0.88, 0.92, 0.86), Color(0.1, 0.13, 0.05), Vector2(1024.0, 512.0), 0.12, 0.85)
+		"gum_bark":
+			made = _bark("gum_bark.png", Color(0.95, 0.95, 0.93))
+		"oak_bark":
+			made = _bark("oak_bark.png", Color(0.85, 0.83, 0.8))
 	made.set_shader_parameter("wind_strength", wind_strength)
 	made.resource_name = "street_vegetation_" + key
 	_materials[key] = made

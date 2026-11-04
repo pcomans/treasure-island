@@ -29,6 +29,16 @@ packed with ImageMagick:
 | `street_mulch.png` | planting strips, darkened and desaturated | seamless dark reddish-brown shredded bark mulch |
 | `street_plaza_pavers.png` | Waterfront Plaza banded paving; band contrast pulled down to the photographed plaza | seamless charcoal and mid-grey stack-bond pavers in alternating bands |
 
+Park ground textures for Cityside Park's paths (park_* records), generated
+2026-11-03 with `tools/generate-texture` (one image per call, text prompt only;
+no photograph was given to the generator or copied) and resized to 512 px with
+ImageMagick; both tile seamlessly over 2 m (world UV):
+
+| File | Use | Source prompt (short) |
+|---|---|---|
+| `park_dg.png` | decomposed-granite paths through the beds | seamless tan decomposed granite path surface |
+| `park_asphalt.png` | the park's new dark asphalt paths, cycle track and lawn ring | seamless new dark charcoal asphalt with fine grey aggregate, no markings |
+
 ## Street furniture
 
 `street_furniture_atlas.png` (1024 x 512, eight 256 px cells) is the one texture of

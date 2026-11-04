@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import { createHash } from "node:crypto";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -35,6 +34,7 @@ import {
 } from "./lib/world-contract.mjs";
 import { validateMesh } from "./lib/mesh-output.mjs";
 import { geometryToMultiPolygon, pointInMultiPolygon } from "./lib/osm-geometry.mjs";
+import { loadTerrainRaster } from "./lib/terrain-raster.mjs";
 import {
   SHORELINE_BANDS,
   SHORELINE_BOULDER_MATERIAL,
@@ -70,6 +70,7 @@ import {
   STREET_VEGETATION_SCALE_RANGE,
   footSamples,
 } from "./lib/street-vegetation-generation.mjs";
+import { unpackPlantingRows } from "./lib/street-planting-generation.mjs";
 import {
   STREET_GROUND_FEATURE_KINDS,
   STREET_GROUND_MAXIMUM_HEIGHT_M,
@@ -102,8 +103,17 @@ const STREET_GROUND_RECORDS = Object.freeze({
   "street-parking": ["street_paint", "street_parking", "none", false],
   "street-marking": ["street_paint", "street_marking", "none", false],
   "street-wear": ["street_paint", "street_wear", "none", false],
+  // A park zone's flat-lying ground (tools/lib/street-ground-generation.mjs PARK_SURFACE_MATERIALS).
+  "park-asphalt": ["street_paint", "park_asphalt", "none", false],
+  "park-concrete": ["street_paint", "park_concrete", "none", false],
+  "park-dg": ["street_paint", "park_dg", "none", false],
+  "park-gravel": ["street_paint", "park_gravel", "none", false],
+  "park-lawn": ["street_paint", "park_lawn", "none", false],
+  "park-mulch": ["street_paint", "park_mulch", "none", false],
+  "park-paint-pink": ["street_paint", "park_paint_pink", "none", false],
+  "park-plaza-lens": ["street_paint", "park_plaza_lens", "none", false],
+  "park-plaza-zigzag": ["street_paint", "park_plaza_zigzag", "none", false],
 });
-const EXPECTED_PHYSICAL_COLLISION_SHA256 = "3c5571828de1498622fbcf074a0f3ec03790b14ad36160c9302652421c345296";
 
 function listFiles(root, current = root) {
   const files = [];
@@ -557,6 +567,40 @@ function pointInPlayableBoundary(point, boundary) {
     pointInRingXZ(point, component.outer) && !component.holes.some((hole) => pointInRingXZ(point, hole)));
 }
 
+// The land the player walks on is the frozen USGS surface (the generator's
+// sampler, at the serialized millimetre position) everywhere except the cells a
+// declared terrain override re-meshes, edges included (terrain.json
+// terrain_overrides, tools/lib/terrain-overrides.mjs). Visual passes (pavement,
+// areas, street paint) add no land collision; their records are checked above.
+function validateLandProvenance(records, terrain) {
+  const raster = loadTerrainRaster(resolve(projectRoot, SOURCE_CONTRACT.terrain_dem.path));
+  const cells = terrain.terrain_overrides?.refined_cell_bounds_m ?? [];
+  invariant(Array.isArray(cells) && cells.every((cell) => Array.isArray(cell) && cell.length === 4 && cell.every(Number.isFinite)), "Terrain override cell bounds are malformed");
+  const overridden = (x, z) => cells.some(([minX, minZ, maxX, maxZ]) =>
+    x >= minX - COORDINATE_ROUNDING_M && x <= maxX + COORDINATE_ROUNDING_M && z >= minZ - COORDINATE_ROUNDING_M && z <= maxZ + COORDINATE_ROUNDING_M);
+  let sampled = 0;
+  let corrected = 0;
+  for (const { record } of records.physical.values()) {
+    if (record.feature_kind !== "land_ground") continue;
+    invariant(record.collision_kind === "world_solid" && record.opaque === true, `${record.object_key} land lost its collision`);
+    for (let index = 0; index < record.vertices.length; index += 3) {
+      const [x, y, z] = [record.vertices[index], record.vertices[index + 1], record.vertices[index + 2]];
+      if (overridden(x, z)) {
+        corrected += 1;
+        continue;
+      }
+      const expected = raster.sampleTerrainEastNorth(x, -z);
+      invariant(
+        Math.abs(y - expected) <= COORDINATE_ROUNDING_M * 2,
+        `${record.object_key} land vertex at ${x},${z} sits at ${y}, off the USGS surface (${expected}) outside every terrain override`,
+      );
+      sampled += 1;
+    }
+  }
+  invariant(sampled > 0, "No land vertex was checked against the USGS surface");
+  return { usgs_vertices: sampled, terrain_override_vertices: corrected };
+}
+
 function validatePavementSkin(worldRoot, manifest, coverage, records, terrain) {
   const auditPath = "qa/pavement-skin.json";
   const auditDescriptor = manifest.files.find((entry) => entry.path === auditPath);
@@ -708,26 +752,10 @@ function validatePavementSkin(worldRoot, manifest, coverage, records, terrain) {
   );
   invariant(terrain.building_foundations.maximum_positive_gap_m === 0, "Pavement pass changed the zero-gap foundation contract");
 
-  // The visual pavement pass must not change land, building or other collision.
-  // Street-ground kerbs and their ramps are a separate, deliberate collision
-  // layer with their own checks (record semantics and the height band above).
-  const collisionPayload = [...records.physical.values()]
-    .map(({ record }) => record)
-    .filter((record) => record.collision_kind === "world_solid" && !STREET_GROUND_FEATURE_KINDS.includes(record.feature_kind))
-    .sort((left, right) => left.object_key.localeCompare(right.object_key))
-    .map((record) => ({
-      object_key: record.object_key,
-      feature_kind: record.feature_kind,
-      vertices: record.vertices,
-      indices: record.indices,
-    }));
-  const collisionSha256 = createHash("sha256").update(stableJson(collisionPayload)).digest("hex");
-  invariant(collisionSha256 === EXPECTED_PHYSICAL_COLLISION_SHA256, "Visual pavement pass changed physical collision geometry");
   return {
     base_records: baseEntries.length,
     pedestrian_records: pedestrianEntries.length,
     visible_pedestrian_sources: visiblePedestrianSourceKeys.size,
-    collision_sha256: collisionSha256,
     relative_luminance_difference: audit.materials.pedestrian_vs_vehicle_relative_luminance_difference,
   };
 }
@@ -790,7 +818,7 @@ function validatePlantedRow(row, groundAt) {
 function validateStreetDetail(worldRoot, manifest, records) {
   invariant(manifest.street_detail?.path === "street_detail.json", "Manifest street-detail descriptor is missing");
   invariant(stableJson(descriptor(worldRoot, manifest.street_detail.path)) === stableJson(manifest.street_detail), "Street-detail descriptor drift");
-  const document = JSON.parse(readFileSync(resolve(worldRoot, manifest.street_detail.path), "utf8"));
+  const document = unpackPlantingRows(JSON.parse(readFileSync(resolve(worldRoot, manifest.street_detail.path), "utf8")));
   invariant(document.schema_version === STREET_DETAIL_SCHEMA, "Street-detail schema drift");
   invariant(Number.isInteger(document.seed), "Street-detail seed is missing");
   invariant(stableJson(document.layers) === stableJson(STREET_DETAIL_LAYERS) && document.ground_layer === STREET_DETAIL_GROUND_LAYER, "Street-detail layer list drift");
@@ -1162,6 +1190,7 @@ function main() {
   const records = validateRecords(worldRoot, manifest, coverage);
   const coherentGeometry = validateCoherentGeometry(records, terrain);
   const pavement = validatePavementSkin(worldRoot, manifest, coverage, records, terrain);
+  const land = validateLandProvenance(records, terrain);
   const streetDetail = validateStreetDetail(worldRoot, manifest, records);
   const shoreline = validateShoreline(worldRoot, manifest, records);
   process.stdout.write(stableJson({
@@ -1178,6 +1207,7 @@ function main() {
     flat_roof_cells: coherentGeometry.roofCells,
     street_ground_samples: coherentGeometry.streetGroundSamples,
     pavement,
+    land,
     street_detail_rows: streetDetail.counts.total,
     shoreline_placements: shoreline.placements,
   }));

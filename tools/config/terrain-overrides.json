@@ -1,0 +1,520 @@
+{
+  "schema_version": "ti.terrain-overrides/1",
+  "notes": [
+    "Local corrections of the generated land where the frozen 2023 USGS raster predates what was built (tools/lib/terrain-overrides.mjs). World metres: +X east, +Z south.",
+    "A site's scope is its OSM areas plus traced polygons (add_xz), minus corridors round protected ways (exclude_ways) and traced polygons (exclude_xz), inside the land. The correction fades to exactly zero over edge_blend_m at the scope's edge, so the land outside the scope and on the coastline keeps its generated surface.",
+    "The site's grade is a harmonic membrane on a grid_m grid (relaxation over-relaxation factor, a fixed number of iterations): it takes the generated land outside the scope and the level and profile targets inside their shapes, and is as smooth as possible everywhere else, so the 32 m land grid's waves smooth out and designed surfaces meet their surroundings in gentle ramps. Regions apply in order: level holds a flat elevation_m inside its shape, profile holds control elevations_m along its line, sink cuts depth_m below the grade with a smoothstep rim side_run_m wide. Shapes: points_xz (optionally grown by buffer_m, negative to inset), line_xz with width_m, or an ellipse (center_xz, radii_m, rotation_deg turning +X toward +Z).",
+    "Every 32 m land cell the correction reaches is re-meshed as a quadtree of leaves down to min_leaf_m, split until each leaf's two triangles stay within tolerance_m of the corrected surface (sampled every sample_m); shared edges stay watertight, coarse neighbours keep their surface.",
+    "All elevations, depths and rims here are production inference for game art, traced from the designer's plan and dated photos, not survey data."
+  ],
+  "mesh": {
+    "min_leaf_m": 4,
+    "sample_m": 0.5,
+    "tolerance_m": 0.08
+  },
+  "sites": [
+    {
+      "id": "cityside_park",
+      "name": "Cityside Park",
+      "basis": "production_inference",
+      "evidence": "OSM w1428380753 (leisure=park, 2025-09-09); CMG/TIDA Phase 1 site plan 2025-04-16 (event lawn, stormwater treatment areas, forebay, promenade); SFAC art-location plan 2024-02 (Stormwater Bioretention Area x3, Stormwater Channel); Esri World Imagery 2026-05-26 and 2025-08-29; CMG photos (Sep 2025 to Oct 2026), Google Maps contributor photos ph05, ph08, ph10 (Sep 2025). The 2023 USGS raster (CA_SanFrancisco_B23) predates the 2024-2025 grading: it shows a pit where the lawn is and fill mounds along the future promenade.",
+      "scope": {
+        "source_keys": [
+          "w1428380753"
+        ],
+        "add_xz": [
+          [
+            [
+              -352.78,
+              324.11
+            ],
+            [
+              -180.85,
+              663.85
+            ],
+            [
+              -212.05,
+              679.65
+            ],
+            [
+              -383.98,
+              339.91
+            ]
+          ]
+        ],
+        "exclude_ways": [
+          {
+            "source_keys": [
+              "w1001544697"
+            ],
+            "half_width_m": 13.0,
+            "reason": "Avenue of the Palms: its carriageway, parking lanes, curbs, sidewalks and the street ground beside them (planting strips, verges, the west palms) keep their generated surface; the cycle track runs inside this corridor."
+          }
+        ],
+        "exclude_xz": [
+          {
+            "points_xz": [
+              [
+                -215.5,
+                547.3
+              ],
+              [
+                -177.0,
+                512.2
+              ],
+              [
+                -170.5,
+                512.6
+              ],
+              [
+                -205.0,
+                563.0
+              ]
+            ],
+            "reason": "The fenced lawn lot south-east of the park (Jun 2026 pano p10, aerial 2026-05-26): the OSM park polygon takes in its north-west corner up to the construction-panel fence, which is not part of the opened park."
+          },
+          {
+            "points_xz": [
+              [
+                -192.5,
+                479.5
+              ],
+              [
+                -159.5,
+                479.5
+              ],
+              [
+                -159.5,
+                544.5
+              ],
+              [
+                -192.5,
+                544.5
+              ]
+            ],
+            "reason": "The two land cells beside Isle House (w1249412094) stay as generated: re-meshing them would split the cells under the building and re-cut the foundation its landmark form matches. Only the park's edge strip by the avenue lies here, where the grade follows the USGS land anyway."
+          }
+        ],
+        "edge_blend_m": 3
+      },
+      "grade": {
+        "grid_m": 1,
+        "iterations": 3000,
+        "relaxation": 1.9
+      },
+      "regions": [
+        {
+          "id": "promenade",
+          "shape": {
+            "line_xz": [
+              [
+                -343.63,
+                343.06
+              ],
+              [
+                -334.37,
+                360.79
+              ],
+              [
+                -325.11,
+                378.52
+              ],
+              [
+                -315.85,
+                396.24
+              ],
+              [
+                -306.6,
+                413.97
+              ],
+              [
+                -297.34,
+                431.7
+              ],
+              [
+                -283.68,
+                446.15
+              ],
+              [
+                -277.08,
+                452.59
+              ],
+              [
+                -269.59,
+                460.35
+              ],
+              [
+                -264.83,
+                465.27
+              ],
+              [
+                -258.64,
+                475.27
+              ],
+              [
+                -248.57,
+                494.14
+              ],
+              [
+                -239.36,
+                511.9
+              ],
+              [
+                -230.18,
+                529.66
+              ],
+              [
+                -220.99,
+                547.43
+              ],
+              [
+                -211.81,
+                565.2
+              ],
+              [
+                -202.62,
+                582.96
+              ],
+              [
+                -193.44,
+                600.73
+              ],
+              [
+                -184.25,
+                618.49
+              ],
+              [
+                -175.07,
+                636.26
+              ],
+              [
+                -172.55,
+                641.13
+              ]
+            ],
+            "width_m": 10.0
+          },
+          "rule": {
+            "kind": "profile",
+            "elevations_m": [
+              3.12,
+              3.1,
+              3.08,
+              3.06,
+              3.04,
+              3.03,
+              3.11,
+              3.35,
+              3.62,
+              3.8,
+              3.85,
+              3.81,
+              3.84,
+              3.94,
+              3.93,
+              3.84,
+              3.71,
+              3.61,
+              3.65,
+              3.77,
+              3.86
+            ]
+          },
+          "reason": "The light concrete promenade and the dark path inside it run level along the riprap crest (aerial 2026-05-26, CMG photos); north of the lawn the 2023 raster already shows the old shore path at 3.0-3.1 m. The line is the OSM Perimeter Path (w1530613461) moved 1.4 m seaward to the photographed band's middle; the south end rises gently to the Waterfront Plaza."
+        },
+        {
+          "id": "event_lawn",
+          "shape": {
+            "points_xz": [
+              [
+                -324.7,
+                337.6
+              ],
+              [
+                -315.2,
+                334.1
+              ],
+              [
+                -302.3,
+                337.6
+              ],
+              [
+                -290.4,
+                350.6
+              ],
+              [
+                -279.8,
+                363.6
+              ],
+              [
+                -269.2,
+                375.4
+              ],
+              [
+                -263.3,
+                387.2
+              ],
+              [
+                -264.5,
+                396.7
+              ],
+              [
+                -278.6,
+                405.0
+              ],
+              [
+                -296.4,
+                400.2
+              ],
+              [
+                -304.6,
+                392.0
+              ],
+              [
+                -317.6,
+                377.8
+              ],
+              [
+                -326.5,
+                360.0
+              ],
+              [
+                -327.0,
+                348.3
+              ]
+            ],
+            "buffer_m": 3.0
+          },
+          "rule": {
+            "kind": "level",
+            "elevation_m": 3.05
+          },
+          "reason": "The oval event lawn and its asphalt ring path read flat in every photo (cmg04, cmg12, cmg13, ph05); level with the promenade beside it. The 2023 raster has a pit there (2.0-2.9 m), filled when the park was built."
+        },
+        {
+          "id": "z3_bioretention",
+          "shape": {
+            "points_xz": [
+              [
+                -295.3,
+                291.0
+              ],
+              [
+                -247.7,
+                381.9
+              ],
+              [
+                -256.0,
+                392.0
+              ],
+              [
+                -260.0,
+                384.0
+              ],
+              [
+                -265.0,
+                372.0
+              ],
+              [
+                -276.0,
+                359.0
+              ],
+              [
+                -287.0,
+                346.0
+              ],
+              [
+                -299.0,
+                333.0
+              ],
+              [
+                -313.0,
+                329.5
+              ],
+              [
+                -327.0,
+                331.0
+              ]
+            ],
+            "buffer_m": -1.2
+          },
+          "rule": {
+            "kind": "sink",
+            "depth_m": 0.45,
+            "side_run_m": 3.5
+          },
+          "reason": "The north stormwater bioretention beds between the lawn ring and the cycle track (SFAC plan: Stormwater Bioretention Area; S9: basins and channels): a shallow planted basin below the paths."
+        },
+        {
+          "id": "z4_meadow",
+          "shape": {
+            "points_xz": [
+              [
+                -247.7,
+                381.9
+              ],
+              [
+                -222.0,
+                431.0
+              ],
+              [
+                -232.0,
+                434.0
+              ],
+              [
+                -262.0,
+                433.0
+              ],
+              [
+                -287.0,
+                428.0
+              ],
+              [
+                -296.0,
+                406.0
+              ],
+              [
+                -279.0,
+                410.0
+              ],
+              [
+                -262.0,
+                402.0
+              ],
+              [
+                -256.0,
+                392.0
+              ]
+            ],
+            "buffer_m": -1.2
+          },
+          "rule": {
+            "kind": "sink",
+            "depth_m": 0.4,
+            "side_run_m": 3.5
+          },
+          "reason": "The central stormwater meadow (ph08 Sep 2025): a shallow planted basin round the decomposed-granite meander."
+        },
+        {
+          "id": "z7_bioretention",
+          "shape": {
+            "points_xz": [
+              [
+                -210.7,
+                457.6
+              ],
+              [
+                -208.5,
+                455.5
+              ],
+              [
+                -196.5,
+                482.0
+              ],
+              [
+                -220.8,
+                537.5
+              ],
+              [
+                -222.0,
+                533.0
+              ],
+              [
+                -234.0,
+                509.0
+              ],
+              [
+                -238.0,
+                498.5
+              ]
+            ],
+            "buffer_m": -1.2
+          },
+          "rule": {
+            "kind": "sink",
+            "depth_m": 0.4,
+            "side_run_m": 3.0
+          },
+          "reason": "The bioretention round the pump station (CMG site plan 2025-04-16: stormwater gardens, conveyance swale, forebay)."
+        },
+        {
+          "id": "z7_swale",
+          "shape": {
+            "line_xz": [
+              [
+                -231.0,
+                499.0
+              ],
+              [
+                -224.0,
+                492.0
+              ],
+              [
+                -216.5,
+                488.5
+              ]
+            ],
+            "width_m": 3.0
+          },
+          "rule": {
+            "kind": "sink",
+            "depth_m": 0.2,
+            "side_run_m": 1.2
+          },
+          "min_leaf_m": 2,
+          "reason": "The conveyance swale from the south plaza to the forebay (the curved channel edge on the 2025-08-29 aerial)."
+        },
+        {
+          "id": "pump_station_pad",
+          "shape": {
+            "points_xz": [
+              [
+                -207.32,
+                465.69
+              ],
+              [
+                -199.27,
+                481.12
+              ],
+              [
+                -210.18,
+                486.81
+              ],
+              [
+                -218.23,
+                471.38
+              ]
+            ]
+          },
+          "rule": {
+            "kind": "level",
+            "elevation_m": 4.0
+          },
+          "min_leaf_m": 2,
+          "reason": "The level concrete pad of the stormwater pump station (aerial 2025-08-29: a 16 by 11 m box parallel to the avenue; cmg04)."
+        },
+        {
+          "id": "z7_forebay",
+          "shape": {
+            "center_xz": [
+              -213.0,
+              487.25
+            ],
+            "radii_m": [
+              3.7,
+              2.35
+            ],
+            "rotation_deg": 8
+          },
+          "rule": {
+            "kind": "sink",
+            "depth_m": 0.45,
+            "side_run_m": 1.0
+          },
+          "min_leaf_m": 1,
+          "reason": "The oval stormwater forebay beside the pump station (CMG plan label, aerial 2025-08-29 and 2026-05-26: about 7.5 by 4.7 m)."
+        }
+      ]
+    }
+  ]
+}

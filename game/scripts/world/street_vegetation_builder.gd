@@ -1,9 +1,11 @@
 class_name StreetVegetationBuilder
 extends RefCounted
-## Builds the trees and grass clumps of PlayableWorld/StreetDetail/Vegetation
-## from the placed vegetation rows that carry a street-vegetation kit prop
-## (tools/lib/street-vegetation-generation.mjs places them and settles each foot
-## on the visible ground; street_vegetation_kit.gd draws them).
+## Builds the trees and low plants (grass clumps, perennials and shrubs) of
+## PlayableWorld/StreetDetail/Vegetation from the placed vegetation rows that
+## carry a street-vegetation kit prop (tools/lib/street-vegetation-generation.mjs
+## places them and settles each foot on the visible ground;
+## street_vegetation_kit.gd draws them). Low plants count as grass_clumps in the
+## build report.
 ##
 ## Each prop variant is one MultiMesh per square cell and detail level. The
 ## levels of one cell share one box, so they measure their visibility range from
@@ -11,13 +13,14 @@ extends RefCounted
 ## would draw both levels or neither for a moment); the far level's range is
 ## extended by the farthest instance's offset from that centre, so no tree
 ## vanishes early. Trees use small cells, so a hand-over happens close to each
-## tree's own distance; grass uses larger ones and has a single short range.
+## tree's own distance; low plants use larger ones and have a single short
+## range (the newer ones dissolve before it ends, in their shader).
 ##
 ## Collision is the trunk only: capsules on the street-prop layer, which the
 ## player collides with and the spray ray stops on (never a receiver), while
-## the camera arm ignores it, as for the street furniture. Crowns and grass have
-## none, so the jetpack flies through a crown. A tree standing in paving gets
-## its round mulch pit, drawn just above the paving's plane.
+## the camera arm ignores it, as for the street furniture. Crowns and low plants
+## have none, so the jetpack flies through a crown. A tree standing in paving
+## gets its round mulch pit, drawn just above the paving's plane.
 
 const KIT := preload("res://game/scripts/world/street_vegetation_kit.gd")
 const MULCH := preload("res://game/resources/textures/world/street/street_mulch.png")
@@ -75,7 +78,7 @@ func build(document: Dictionary) -> Dictionary:
 		var yaw_value: Variant = row.get("yaw_radians", null)
 		var yaw := float(yaw_value) if yaw_value is float or yaw_value is int else 0.0
 		var placement := Transform3D(Basis(Vector3.UP, yaw).scaled(Vector3.ONE * scale), foot)
-		var is_grass := prop == "clump_grass"
+		var is_grass := KIT.is_low_plant(prop)
 		var cell := _cell(foot, GRASS_CELL_M if is_grass else TREE_CELL_M)
 		var key := "%s_%d" % [prop, variant]
 		if not batches.has(key):

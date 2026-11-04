@@ -1,18 +1,21 @@
 extends SceneTree
 ## Bakes the far-impostor image of every tree variant of the street-vegetation
 ## kit (game/scripts/world/street_vegetation_kit.gd) from its LOD0, framed as
-## the kit frames it (a palm's crown, a whole cypress), and writes them to
-## game/resources/textures/world/vegetation/impostors/. The bake is lit by flat
-## white ambient light only, with the breeze off, so the image holds the leaves'
-## colour and shading; the game lights the impostor at runtime.
+## the kit frames it (a palm's crown, a whole cypress, gum or oak), and writes
+## them to game/resources/textures/world/vegetation/impostors/. The bake is lit
+## by flat white ambient light only, with the breeze off, so the image holds
+## the leaves' colour and shading; the game lights the impostor at runtime.
 ##
-##   tools/godot --path . --script tools/vegetation/bake_impostors.gd
+##   tools/godot --path . --script tools/vegetation/bake_impostors.gd [-- --only PROP[:VARIANT],...]
 ##   tools/godot --headless --path . --import   # then import the new PNGs
+##
+## --only bakes just those props (every variant) or prop variants, so the
+## images of trees that did not change are left as they are.
 
 const Kit := preload("res://game/scripts/world/street_vegetation_kit.gd")
 const TextureImport := preload("res://tools/vegetation/texture_import.gd")
 ## Longest side of the saved image per prop; the bake renders at twice this and halves it.
-const PIXELS := {"mexican_fan_palm": 256, "canary_date_palm": 256, "monterey_cypress": 512}
+const PIXELS := {"mexican_fan_palm": 256, "canary_date_palm": 256, "monterey_cypress": 512, "sydney_blue_gum_young": 256, "island_oak_young": 256}
 
 var _errors: Array[String] = []
 
@@ -26,13 +29,28 @@ func _run() -> void:
 		push_error("baking needs a renderer; omit --headless")
 		quit(1)
 		return
+	var only := {}
+	var args := OS.get_cmdline_user_args()
+	if not args.is_empty():
+		if args.size() != 2 or args[0] != "--only":
+			push_error("usage: [-- --only PROP[:VARIANT],...]")
+			quit(2)
+			return
+		for entry: String in args[1].split(","):
+			var parts := entry.split(":")
+			if not PIXELS.has(parts[0]) or parts.size() > 2 or (parts.size() == 2 and (not parts[1].is_valid_int() or int(parts[1]) < 0 or int(parts[1]) >= Kit.variant_count(parts[0]))):
+				push_error("--only: no tree variant %s" % entry)
+				quit(2)
+				return
+			only[entry] = true
 	print("BAKE_RENDERER %s / %s / %s" % [RenderingServer.get_current_rendering_method(), RenderingServer.get_video_adapter_name(), DisplayServer.get_name()])
 	var kit := Kit.new()
 	kit.wind_strength = 0.0
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(Kit.TEXTURES + "impostors"))
 	for prop: String in PIXELS.keys():
 		for variant in Kit.variant_count(prop):
-			await _bake(kit, prop, variant)
+			if only.is_empty() or only.has(prop) or only.has("%s:%d" % [prop, variant]):
+				await _bake(kit, prop, variant)
 	for message in _errors:
 		push_error(message)
 	quit(0 if _errors.is_empty() else 1)

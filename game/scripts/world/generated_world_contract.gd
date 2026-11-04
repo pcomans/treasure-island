@@ -18,6 +18,10 @@ const STREET_DETAIL_LAYERS := ["vegetation", "furniture", "fences", "clutter"]
 ## Rows of the ground layer feed the always-on chunk surfaces.
 const STREET_DETAIL_GROUND_LAYER := "ground"
 const STREET_DETAIL_SOURCES := ["osm", "scatter", "set_piece"]
+## Compact blocks of planting rows in street_detail.json (packPlantingRows in
+## tools/lib/street-planting-generation.mjs), expanded before validation.
+const PLANTING_ROWS_SCHEMA := "ti.street-detail-planting-rows/1"
+const PLANTING_ROW_FIELDS := ["prop", "variant", "x", "y", "z", "yaw_radians", "scale", "lift_m", "foot_spread_m", "surface", "land", "triangle_index", "zones"]
 ## Shoreline riprap (tools/lib/shoreline-generation.mjs): visual-only slope
 ## records and boulder placements outside the playable land.
 const SHORELINE_SCHEMA := "ti.shoreline/3"
@@ -126,6 +130,10 @@ const MESH_RECORD_FIELDS := [
 	"opaque", "receiver_kind", "source_keys", "uvs", "vertices",
 ]
 const SURFACE_RECORD_FIELDS := ["surface_bias_m"]
+## A park zone's ground layers (tools/lib/street-ground-generation.mjs) are
+## street paint draped over the land, carrying their lift like other draped
+## surfaces so VisibleGround can stand visuals on them.
+const PARK_SURFACE_MATERIAL_PREFIX := "park_"
 const BUILDING_LEVEL_FIELDS := ["flat_base_elevation_m", "source_height_m", "top_elevation_m"]
 const BUILDING_WALL_FIELDS := ["exterior_foundation_segments", "shared_wall_segments"]
 const CONTEXT_RECORD_FIELDS := [
@@ -188,6 +196,9 @@ static func load_and_validate(manifest_path: String) -> Dictionary:
 		return result
 	var street_detail_path := _resolve_artifact_path(manifest_path, str(manifest.street_detail.path))
 	var street_detail_result := _read_json_object(street_detail_path)
+	if not street_detail_result.ok:
+		return street_detail_result
+	street_detail_result = _expand_planting_rows(street_detail_result.data)
 	if not street_detail_result.ok:
 		return street_detail_result
 	result = _validate_street_detail(street_detail_result.data, chunk_results, manifest.playable_boundary)
@@ -586,6 +597,68 @@ static func _validate_street_detail(document: Dictionary, chunks: Array[Dictiona
 	or not _integer_counts_match(counts.get("by_status", null), tallies.status):
 		return _failure("street_detail_counts", "Street-detail counts do not match its rows.")
 	return {"ok": true}
+
+
+## The street detail with its compact planting blocks expanded into the usual
+## rows, in id order, so they are validated and built like any other row (the
+## twin of unpackPlantingRows in tools/lib/street-planting-generation.mjs).
+static func _expand_planting_rows(document: Dictionary) -> Dictionary:
+	if not document.has("planting_rows"):
+		return {"ok": true, "data": document}
+	var packed: Variant = document.planting_rows
+	if not packed is Dictionary or str((packed as Dictionary).get("schema_version", "")) != PLANTING_ROWS_SCHEMA \
+	or (packed as Dictionary).get("fields", null) != PLANTING_ROW_FIELDS or not (packed as Dictionary).get("blocks", null) is Array \
+	or not document.get("rows", null) is Array:
+		return _failure("street_detail_planting", "Street-detail planting rows are malformed.")
+	var rows: Array = (document.rows as Array).duplicate()
+	for block_value: Variant in packed.blocks:
+		if not block_value is Dictionary:
+			return _failure("street_detail_planting", "Street-detail planting block is malformed.")
+		var block: Dictionary = block_value
+		for field: String in ["props", "surfaces", "lands", "zones", "rows"]:
+			if not block.get(field, null) is Array:
+				return _failure("street_detail_planting", "Street-detail planting block is malformed.")
+		var lists := [block.props, block.surfaces, block.lands, block.zones]
+		for index in (block.rows as Array).size():
+			var row_id := "%s%05d" % [str(block.get("id_prefix", "")), index]
+			var values_value: Variant = block.rows[index]
+			if not values_value is Array or (values_value as Array).size() != PLANTING_ROW_FIELDS.size():
+				return _failure("street_detail_planting", "Street-detail planting row is malformed: %s" % row_id)
+			var values: Array = values_value
+			for value: Variant in values:
+				if not _is_finite_number(value):
+					return _failure("street_detail_planting", "Street-detail planting row is malformed: %s" % row_id)
+			# prop, surface, land and zones index the block's lists.
+			var picks := []
+			for pick: Array in [[0, 0], [9, 1], [10, 2], [12, 3]]:
+				var at := float(values[pick[0]])
+				var list: Array = lists[pick[1]]
+				if at != floorf(at) or at < 0.0 or int(at) >= list.size():
+					return _failure("street_detail_planting", "Street-detail planting row indexes a missing entry: %s" % row_id)
+				picks.append(list[int(at)])
+			rows.append({
+				"exclusion": null,
+				"geometry": "point",
+				"id": row_id,
+				"kind": block.get("kind", ""),
+				"layer": "vegetation",
+				"position_m": [values[2], values[3], values[4]],
+				"prop": picks[0],
+				"prop_params": {"foot_spread_m": values[8], "lift_m": values[7], "scale": values[6], "variant": values[1], "well_m": 0.0},
+				"source": "scatter",
+				"source_id": block.get("source_id", ""),
+				"status": "placed",
+				"surface": picks[1],
+				"terrain_support": {"elevation_m": values[3], "object_key": picks[2], "triangle_index": values[11]},
+				"yaw_radians": values[5],
+				"yaw_source": "seeded",
+				"zones": picks[3],
+			})
+	rows.sort_custom(func(left: Dictionary, right: Dictionary) -> bool: return str(left.id) < str(right.id))
+	var expanded := document.duplicate()
+	expanded.erase("planting_rows")
+	expanded.rows = rows
+	return {"ok": true, "data": expanded}
 
 
 ## A fence row (tools/lib/street-fence-generation.mjs): a known kit type, solid
@@ -997,7 +1070,7 @@ static func _validate_chunk(chunk: Dictionary, expected_chunk_id: String, source
 			return _failure("chunk_record", "Chunk %s contains a non-object record." % expected_chunk_id)
 		var expected_record_fields := MESH_RECORD_FIELDS.duplicate()
 		var feature_kind := str(record_value.get("feature_kind", ""))
-		if feature_kind in ["road_path", "major_area", "terrain_overlay"]:
+		if feature_kind in ["road_path", "major_area", "terrain_overlay"] or _is_park_surface(record_value):
 			expected_record_fields.append_array(SURFACE_RECORD_FIELDS)
 		if feature_kind in ["building_roof", "building_part_roof", "building_wall", "building_part_wall"]:
 			expected_record_fields.append_array(BUILDING_LEVEL_FIELDS)
@@ -1178,7 +1251,7 @@ static func _validate_mesh_record(record: Dictionary, allowed_kinds: Array, sour
 		if collision_kind != "world_solid" or not bool(record.get("opaque", false)) or (feature_kind != "building_wall" and feature_kind != "building_part_wall"):
 			return _failure("record_receiver", "Record %s violates the opaque building-wall receiver contract." % object_key)
 	if expected_scope == "playable":
-		if feature_kind in ["road_path", "major_area", "terrain_overlay"] \
+		if (feature_kind in ["road_path", "major_area", "terrain_overlay"] or _is_park_surface(record)) \
 		and not _is_finite_number(record.get("surface_bias_m", null)):
 			return _failure("surface_conformance", "Record %s has no finite coherent-surface bias." % object_key)
 		if feature_kind == "road_path":
@@ -1571,6 +1644,11 @@ static func _sorted_unique_chunk_ids(values: Array[String]) -> Array[String]:
 			return []
 		seen[value] = true
 	return _sorted_chunk_ids(values)
+
+
+static func _is_park_surface(record: Dictionary) -> bool:
+	return str(record.get("feature_kind", "")) == "street_paint" \
+		and str(record.get("material_key", "")).begins_with(PARK_SURFACE_MATERIAL_PREFIX)
 
 
 static func _has_exact_fields(value: Dictionary, expected_fields: Array) -> bool:

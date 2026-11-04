@@ -178,7 +178,9 @@ export function terrainSurfaceMesh(multiPolygon, elevationSampler, label = "terr
   };
 }
 
-export function griddedTerrainSurfaceMesh(multiPolygon, cellSizeM, elevationSampler, label = "gridded terrain") {
+// cellMesh(west, south, clipped, piece, label), when given, may replace a cell's
+// piece (terrain overrides, tools/lib/terrain-overrides.mjs).
+export function griddedTerrainSurfaceMesh(multiPolygon, cellSizeM, elevationSampler, label = "gridded terrain", cellMesh = null) {
   invariant(Number.isFinite(cellSizeM) && cellSizeM > 0, `${label} has invalid grid size`);
   const bounds = multiPolygonBounds(multiPolygon);
   const minimumX = Math.floor(bounds.min_x / cellSizeM) * cellSizeM;
@@ -193,7 +195,8 @@ export function griddedTerrainSurfaceMesh(multiPolygon, cellSizeM, elevationSamp
         rectangleMultiPolygon(west, south, west + cellSizeM, south + cellSizeM),
       );
       if (clipped.length === 0 || multiPolygonArea(clipped) <= 1e-8) continue;
-      pieces.push(terrainSurfaceMesh(clipped, elevationSampler, `${label}/${west}/${south}`));
+      const piece = terrainSurfaceMesh(clipped, elevationSampler, `${label}/${west}/${south}`);
+      pieces.push(cellMesh ? cellMesh(west, south, clipped, piece, `${label}/${west}/${south}`) : piece);
     }
   }
   const mesh = mergeMeshes(pieces, label);

@@ -1,10 +1,12 @@
-// Street vegetation: the trees and grass clumps of PlayableWorld/StreetDetail/Vegetation.
+// Street vegetation: the trees, grasses, perennials and shrubs of
+// PlayableWorld/StreetDetail/Vegetation.
 //
 // A vegetation row is built when it carries a prop of the street-vegetation kit
 // (game/scripts/world/street_vegetation_kit.gd, which keeps the same variant
 // counts and foot radii as STREET_VEGETATION_PROPS). Props come from:
 //   - zone scatter rules that name one (tools/config/street-detail-zones.json):
-//     the Avenue of the Palms fan palms and the grass clumps of the mulch beds;
+//     the Avenue of the Palms fan palms, the grass clumps of the mulch beds and
+//     the planted beds of parks such as Cityside Park;
 //   - set pieces (data/street_detail/set_pieces.json) where dated photos show
 //     particular trees: Building 1's date palms, tall fan palms and cypresses,
 //     the Waterfront Plaza's young cypresses.
@@ -24,12 +26,41 @@ import { createHash } from "node:crypto";
 import { invariant, roundCoordinate } from "./world-contract.mjs";
 
 // Kit props, the row kinds that may carry each, how many fixed variants the kit
-// draws and the radius of the foot the generator settles (m).
+// draws, the radius of the foot the generator settles (m) and whether the prop
+// has a trunk. A trunk is solid (the kit gives it a capsule the player meets)
+// and stands in a round mulch pit where its foot reaches paving; grasses,
+// perennials and shrubs have neither. A species' variants run from its
+// smallest (0) to its largest, so a rule picks a size class with [first, last];
+// a drift variant packs several plants into one row: variant 3 of dense_sedge,
+// blue_eyed_grass, seaside_daisy, sea_thrift, pacific_reedgrass, rush and
+// bronze_clump_grass (about 1-2.5 m across) and variant 4 of dense_sedge (twelve
+// tussocks, about 2.5 m); its plants' bases run 0.15 m into the ground, so a
+// drift row may lie on a bed sloping up to about 10 %.
+const vegetationProp = (kinds, variants, footM, trunk) => Object.freeze({ kinds: Object.freeze(kinds), variants, foot_m: footM, trunk });
+// Low plants stand in grass_clump rows (a 0.35 m footprint) or, spaced wider,
+// in planting_slot rows (0.8 m).
+const LOW_PLANT_KINDS = Object.freeze(["grass_clump", "planting_slot"]);
 export const STREET_VEGETATION_PROPS = Object.freeze({
-  canary_date_palm: Object.freeze({ kinds: Object.freeze(["palm_slot", "tree"]), variants: 4, foot_m: 0.7 }),
-  clump_grass: Object.freeze({ kinds: Object.freeze(["grass_clump"]), variants: 4, foot_m: 0.3 }),
-  mexican_fan_palm: Object.freeze({ kinds: Object.freeze(["palm_slot", "tree"]), variants: 6, foot_m: 0.45 }),
-  monterey_cypress: Object.freeze({ kinds: Object.freeze(["tree"]), variants: 3, foot_m: 0.8 }),
+  blue_eyed_grass: vegetationProp(LOW_PLANT_KINDS, 4, 0.1, false),
+  bronze_clump_grass: vegetationProp(LOW_PLANT_KINDS, 4, 0.18, false),
+  california_buckwheat: vegetationProp(LOW_PLANT_KINDS, 3, 0.25, false),
+  california_sagebrush: vegetationProp(LOW_PLANT_KINDS, 3, 0.3, false),
+  canary_date_palm: vegetationProp(["palm_slot", "tree"], 4, 0.7, true),
+  clump_grass: vegetationProp(["grass_clump"], 4, 0.3, false),
+  dense_sedge: vegetationProp(LOW_PLANT_KINDS, 5, 0.18, false),
+  dune_tansy: vegetationProp(LOW_PLANT_KINDS, 3, 0.2, false),
+  island_oak_young: vegetationProp(["tree"], 3, 0.3, true),
+  mexican_fan_palm: vegetationProp(["palm_slot", "tree"], 6, 0.45, true),
+  monterey_cypress: vegetationProp(["tree"], 5, 0.8, true),
+  pacific_reedgrass: vegetationProp(LOW_PLANT_KINDS, 4, 0.25, false),
+  rush: vegetationProp(LOW_PLANT_KINDS, 4, 0.2, false),
+  sea_thrift: vegetationProp(LOW_PLANT_KINDS, 4, 0.12, false),
+  seaside_daisy: vegetationProp(LOW_PLANT_KINDS, 4, 0.2, false),
+  seaside_woolly_sunflower: vegetationProp(LOW_PLANT_KINDS, 3, 0.3, false),
+  seep_monkeyflower: vegetationProp(LOW_PLANT_KINDS, 3, 0.15, false),
+  shrubby_sage: vegetationProp(LOW_PLANT_KINDS, 3, 0.3, false),
+  sydney_blue_gum_young: vegetationProp(["tree"], 3, 0.3, true),
+  white_umbel_perennial: vegetationProp(LOW_PLANT_KINDS, 3, 0.15, false),
 });
 // How far the kit runs a trunk on below its foot (street_vegetation_kit.gd BURY_M):
 // the visible ground round a foot may rise at most this far above it.
@@ -159,7 +190,7 @@ function groundPlane(xz, radius, groundAt) {
 
 // The prop block of a planted row: its kit prop, variant and scale, and its rest
 // on the visible ground as lift_m, the offset from the row's y + surface bias
-// to the foot. A tree whose foot reaches a sidewalk or paving stands in a round
+// to the foot. A prop with a trunk whose foot reaches a sidewalk or paving stands in a round
 // mulch pit well_m across (0 for none) on the plane of that paving: well_lift_m
 // is the plane's height at the trunk over the foot, well_slope its rise per
 // metre along +X and +Z. Returns {prop, prop_params} or {problem}.
@@ -176,7 +207,7 @@ export function plantRow({ prop, kind, variant, scale, xz, landY, surface, groun
     foot_spread_m: roundCoordinate(rest.spread_m),
     well_m: 0,
   };
-  if (kind !== "grass_clump" && rest.materials.some((material) => WELL_SURFACES.includes(material))) {
+  if (spec.trunk && rest.materials.some((material) => WELL_SURFACES.includes(material))) {
     const well = roundCoordinate(2 * (foot + WELL_MARGIN_M));
     const plane = groundPlane(xz, well / 2, groundAt);
     if (!plane || !plane.materials.every((material) => WELL_SURFACES.includes(material))) return { problem: "well_off_paving" };
