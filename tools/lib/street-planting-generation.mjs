@@ -27,11 +27,12 @@
 //     polygon too, so zones traced to a few metres still reach the paths and
 //     each other (the shared state keeps overlapping rules apart);
 //   - band_m keeps a species within a band of distances from the bed edge (tall
-//     plants inward, low ones along the paths), spill_m lets its crown reach that
-//     far past the edge over the path margin (its foot stays in the bed), and
-//     max_slope keeps it off steeper ground; a drift variant, several plants in
-//     one row that is settled as one, stays on ground flatter than
-//     DRIFT_ROW_MAX_SLOPE.
+//     plants inward, low ones along the paths), spill_m lets a single plant's
+//     crown reach that far past the edge over the path margin (its centre stays
+//     EDGE_CLEAR_M inside the bed), and max_slope keeps it off steeper ground. A
+//     drift variant, several plants in one row that is settled as one, keeps its
+//     whole drift on the bed (its centre half the drift's width at the rule's
+//     largest scale inside) and stays on ground flatter than DRIFT_ROW_MAX_SLOPE.
 // Every draw is seeded from the world seed, the zone and the rule, so the world
 // generator stays deterministic. The plants' widths are the street-vegetation
 // kit's (game/scripts/world/street_vegetation_kit.gd). Positions, mixes and
@@ -43,24 +44,24 @@ import { createHash } from "node:crypto";
 import { invariant, roundCoordinate } from "./world-contract.mjs";
 
 // The visual crown width of each kit variant (m), smallest variant first, for
-// spacing and cover: the kit's widths, and for a drift variant about four fifths
-// of the extent of its plants (the drift has gaps). A tree's is the clear ground
+// spacing, cover and bed edges: the kit's widths, and for a drift variant the
+// drift's width as the kit's owner gives it (2026-11-04). A tree's is the clear ground
 // round its trunk that low plants keep (a young tree's crown overhangs them; an
 // old cypress shades a wide ring). DRIFT_VARIANTS are the variants that hold a
 // drift of several plants in one row.
 export const PLANT_WIDTHS_M = Object.freeze({
-  blue_eyed_grass: Object.freeze([0.22, 0.28, 0.34, 0.9]),
-  bronze_clump_grass: Object.freeze([0.5, 0.62, 0.75, 1.45]),
+  blue_eyed_grass: Object.freeze([0.22, 0.28, 0.34, 0.6]),
+  bronze_clump_grass: Object.freeze([0.5, 0.62, 0.75, 1.6]),
   california_buckwheat: Object.freeze([0.65, 0.95, 1.25]),
   california_sagebrush: Object.freeze([0.75, 1.1, 1.45]),
-  dense_sedge: Object.freeze([0.55, 0.75, 0.95, 1.6, 2.4]),
+  dense_sedge: Object.freeze([0.55, 0.75, 0.95, 1.6, 2.5]),
   dune_tansy: Object.freeze([0.42, 0.62, 0.82]),
   island_oak_young: Object.freeze([1.0, 1.2, 1.4]),
   monterey_cypress: Object.freeze([17.0, 12.5, 2.0, 1.4, 1.1]),
-  pacific_reedgrass: Object.freeze([0.85, 1.05, 1.3, 2.3]),
-  rush: Object.freeze([0.45, 0.6, 0.75, 1.35]),
-  sea_thrift: Object.freeze([0.24, 0.32, 0.4, 1.35]),
-  seaside_daisy: Object.freeze([0.55, 0.8, 1.05, 1.95]),
+  pacific_reedgrass: Object.freeze([0.85, 1.05, 1.3, 2.2]),
+  rush: Object.freeze([0.45, 0.6, 0.75, 1.5]),
+  sea_thrift: Object.freeze([0.24, 0.32, 0.4, 1.1]),
+  seaside_daisy: Object.freeze([0.55, 0.8, 1.05, 1.9]),
   seaside_woolly_sunflower: Object.freeze([0.8, 1.15, 1.5]),
   seep_monkeyflower: Object.freeze([0.38, 0.52, 0.66]),
   shrubby_sage: Object.freeze([0.6, 0.85, 1.1]),
@@ -79,6 +80,8 @@ const DRIFT_VARIANTS = Object.freeze({
 // A drift variant's plants run 0.15 m into the ground, so its row may lie on a
 // bed this steep (street_vegetation_kit.gd).
 export const DRIFT_ROW_MAX_SLOPE = 0.1;
+// How far inside its bed's edge a single plant's centre stays (m).
+const EDGE_CLEAR_M = 0.1;
 // A plant covers a disc of this times its width (0.9 of its half width).
 const COVER_FACTOR = 0.45;
 // The cover raster's cell (m) and the plant index's cell.
@@ -278,8 +281,11 @@ function plantingContext({ rule, zoneId, seed, bed, slopeAt }) {
   const tryVariant = ({ entry, variant, point, where, slope, identity, state, spacing }) => {
     const scale = roundCoordinate(entry.scale[0] + (entry.scale[1] - entry.scale[0]) * hashUnit(`${identity}:scale`));
     const half = (PLANT_WIDTHS_M[entry.prop][variant] * scale) / 2;
-    if (where.distance < Math.max(entry.band_m[0], half - entry.spill_m, 0.05) || where.distance > entry.band_m[1]) return reject("band");
-    if (slope > entry.max_slope || (DRIFT_VARIANTS[entry.prop]?.includes(variant) && slope > DRIFT_ROW_MAX_SLOPE)) return reject("slope");
+    // A drift keeps its whole width on the bed; a single plant's crown may spill.
+    const drift = DRIFT_VARIANTS[entry.prop]?.includes(variant);
+    const inside = drift ? (PLANT_WIDTHS_M[entry.prop][variant] * entry.scale[1]) / 2 : Math.max(half - entry.spill_m, EDGE_CLEAR_M);
+    if (where.distance < Math.max(entry.band_m[0], inside) || where.distance > entry.band_m[1]) return reject("band");
+    if (slope > entry.max_slope || (drift && slope > DRIFT_ROW_MAX_SLOPE)) return reject("slope");
     if (!fits(state, entry.prop, half, point[0], point[1], spacing[0], spacing[1])) return reject("spacing");
     return { xz: [roundCoordinate(point[0]), roundCoordinate(point[1])], prop: entry.prop, variant, scale, half, identity };
   };

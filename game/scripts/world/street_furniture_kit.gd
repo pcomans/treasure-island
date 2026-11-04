@@ -798,14 +798,15 @@ func _canopy_frame(b: Builder) -> void:
 
 
 ## The canopy's hanging polycarbonate discs (about 7000 on the real piece; fewer
-## and larger here): rings of small discs filling the ring in a shallow dish that
+## and larger here, overlapping so the dish reads near solid from afar): rings of
+## small discs filling the ring in a shallow dish that
 ## sags CANOPY_SAG_M at the middle, each turned and swung a little by the wind,
 ## pale silver with a faint sky tint. The disc material lets the sun through, so
 ## the dish glows when seen from below.
 func _canopy_discs(b: Builder) -> void:
 	var random := RandomNumberGenerator.new()
 	random.seed = 7000
-	var step := 0.2
+	var step := 0.16
 	for ring in int(CANOPY_RING_RADIUS_M / step):
 		var radius := step * (float(ring) + 0.55)
 		var count := maxi(6, roundi(TAU * radius / step))
@@ -815,7 +816,7 @@ func _canopy_discs(b: Builder) -> void:
 			var y := CANOPY_RING_Y - CANOPY_SAG_M * (1.0 - pow(r / CANOPY_RING_RADIUS_M, 2.0)) - random.randf_range(0.0, 0.07)
 			var normal := Vector3(random.randf_range(-0.6, 0.6), -1.0, random.randf_range(-0.6, 0.6)).normalized()
 			var shade := random.randf_range(0.8, 0.98)
-			b.disc(Vector3(cos(angle) * r, y, sin(angle) * r), normal, 0.088, 8, Color(shade * 0.97, shade * 0.99, minf(1.0, shade * 1.04)))
+			b.disc(Vector3(cos(angle) * r, y, sin(angle) * r), normal, 0.1, 8, Color(shade * 0.97, shade * 0.99, minf(1.0, shade * 1.04)))
 
 
 ## Cityside Park's 14 ft path lights (2024 art-location plan label "Light Pole
