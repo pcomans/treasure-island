@@ -172,7 +172,7 @@ const BARGE_FREEBOARD_M := 1.0
 ## The photographed container walls are clean paint with light streaks.
 const WEATHERING := {
 	"shipping_container": 0.5, "container_wall": 0.3, "storage_shed_row": 0.35, "fabric_shed": 0.3,
-	"crane_barge": 0.6, "equipment": 0.45, "trailer": 0.3,
+	"crane_barge": 0.6, "equipment": 0.45, "trailer": 0.3, "rv": 0.35,
 }
 
 var _material: ShaderMaterial

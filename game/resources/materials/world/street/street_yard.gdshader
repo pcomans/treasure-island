@@ -52,6 +52,7 @@ varying vec3 v_along;
 varying flat vec4 v_custom;
 varying vec3 v_world;
 varying float v_u_world;
+varying float v_w_world;
 
 float hash12(vec2 p) {
 	vec3 p3 = fract(vec3(p.xyx) * 0.1031);
@@ -68,6 +69,31 @@ float vnoise(vec2 p) {
 
 float fbm(vec2 p) {
 	return 0.55 * vnoise(p) + 0.3 * vnoise(p * 2.13 + 7.1) + 0.15 * vnoise(p * 4.37 + 3.3);
+}
+
+// Cells of packed broken pieces round x (unit cells): the gap to the nearest
+// cell border (0 on it) and the cell's own random value.
+vec2 cells(vec2 x) {
+	vec2 n = floor(x);
+	vec2 f = fract(x);
+	float d1 = 8.0;
+	float d2 = 8.0;
+	vec2 id = n;
+	for (int j = -1; j <= 1; j++) {
+		for (int i = -1; i <= 1; i++) {
+			vec2 g = vec2(float(i), float(j));
+			vec2 r = g + vec2(hash12(n + g), hash12(n + g + 17.3)) - f;
+			float d = dot(r, r);
+			if (d < d1) {
+				d2 = d1;
+				d1 = d;
+				id = n + g;
+			} else if (d < d2) {
+				d2 = d;
+			}
+		}
+	}
+	return vec2(sqrt(d2) - sqrt(d1), hash12(id + 3.1));
 }
 
 vec3 paint(float column) {
@@ -96,6 +122,7 @@ void vertex() {
 	// The second direction in the surface, for sheeting wrinkles.
 	vec3 along = normalize(cross(NORMAL, across) + vec3(0.0, 1e-5, 0.0));
 	v_w = dot(VERTEX, along);
+	v_w_world = dot(v_world, normalize((MODEL_MATRIX * vec4(along, 0.0)).xyz));
 	v_along = normalize((MODELVIEW_MATRIX * vec4(along, 0.0)).xyz);
 }
 
@@ -196,12 +223,12 @@ void fragment() {
 		float shade = mix(0.88, 1.0, shape.y);
 		albedo *= mix(0.94, shade, keep);
 	}
-	// Vehicle paint: a little tone from panel to panel and faint dirt runs
-	// down from the roof line (RV sidewalls especially).
+	// Vehicle paint: a little tone from panel to panel and dirt runs down
+	// from the roof line (RV sidewalls especially).
 	if (p == 0) {
-		albedo *= 0.97 + 0.045 * hash12(floor(vec2(v_u / 1.4, v_pos.y / 0.9)) + seed * 3.0);
-		float run = roof ? 0.0 : smoothstep(0.62, 0.92, vnoise(vec2(ws.x * 2.5, 0.0))) * smoothstep(0.4, 2.2, v_pos.y);
-		albedo *= 1.0 - (0.04 + 0.12 * level) * run * (1.0 - smoothstep(0.3, 0.8, fwidth(ws.x) * 2.5));
+		albedo *= 0.96 + 0.06 * hash12(floor(vec2(v_u / 1.4, v_pos.y / 0.9)) + seed * 3.0);
+		float run = roof ? 0.0 : smoothstep(0.6, 0.9, vnoise(vec2(ws.x * 2.5, 0.0))) * smoothstep(0.4, 2.2, v_pos.y);
+		albedo *= 1.0 - (0.08 + 0.15 * level) * run * (1.0 - smoothstep(0.3, 0.8, fwidth(ws.x) * 2.5));
 	}
 	if (pattern == 9) {
 		// The membrane's seams over the portal frames, every 5 m.
@@ -230,6 +257,17 @@ void fragment() {
 		float fine = vnoise(g * 9.0);
 		float keep = 1.0 - smoothstep(0.3, 1.2, fwidth(g.x) * 9.0);
 		albedo *= 0.75 + 0.4 * coarse + 0.25 * (fine - 0.5) * keep;
+		if (p == 29) {
+			// A rubble pile's fines are small broken pieces packed together:
+			// cells of about 0.3 m, each its own shade and tilt, dark between.
+			vec2 x = v_pos.xz * 3.4;
+			vec2 c = cells(x);
+			float near = 1.0 - smoothstep(0.25, 0.6, fwidth(x.x));
+			float gap = smoothstep(0.0, 0.16, c.x);
+			albedo *= mix(0.86, mix(0.5, 0.85 + 0.35 * c.y, gap), near);
+			vec2 tilt = vec2(hash12(vec2(c.y, 1.7)), hash12(vec2(c.y, 5.3))) - 0.5;
+			NORMAL = normalize(NORMAL + (v_across * tilt.x + v_along * tilt.y) * 0.5 * near * gap);
+		}
 	}
 	// Container door markings: two small blocks of dark text near the top.
 	if (p == 18) {
@@ -241,6 +279,15 @@ void fragment() {
 			albedo = mix(albedo, vec3(0.012), glyph * keep * 0.85 + (1.0 - keep) * 0.25);
 		}
 	}
+	// A barge deck's steel plates: seams and a little tone plate to plate.
+	if (p == 35 && roof) {
+		vec2 plate = vec2(v_u_world / 9.1, v_w_world / 2.44);
+		vec2 to_seam = abs(fract(plate + 0.5) - 0.5) * vec2(9.1, 2.44);
+		vec2 fw = fwidth(plate) * vec2(9.1, 2.44);
+		float seam = 1.0 - smoothstep(0.0, 0.03 + fw.x, to_seam.x) * smoothstep(0.0, 0.03 + fw.y, to_seam.y);
+		float near = 1.0 - smoothstep(0.1, 0.4, max(fw.x, fw.y));
+		albedo *= (0.94 + 0.12 * hash12(floor(plate) + seed * 5.0)) * (1.0 - 0.3 * seam * near);
+	}
 	// Sun-faded container roofs (the May 2026 aerial: red boxes read salmon from above).
 	if (p == 17) {
 		albedo = mix(albedo, vec3(0.45), 0.35);
@@ -250,13 +297,15 @@ void fragment() {
 	// so it never aliases into arcs.
 	float rust_amount = RUST[p] * level;
 	if (rust_amount > 0.0) {
+		// Heavier weathering spreads the patches and deepens them.
+		float cover = clamp(rust_amount, 0.0, 1.0);
 		float detail = 1.0 - smoothstep(0.25, 0.6, fwidth(ws.x) * 7.0);
-		float patches = smoothstep(0.66, 0.82, fbm(ws * 0.7));
+		float patches = smoothstep(0.7 - 0.22 * cover, 0.84 - 0.16 * cover, fbm(ws * 0.7));
 		float spots = smoothstep(0.78, 0.9, fbm(ws * 3.3 + 5.0)) * 0.5 * detail;
 		float streak_noise = mix(0.35, vnoise(vec2(ws.x * 7.0, 0.5)), detail);
 		float streak = roof ? 0.0 : smoothstep(0.55, 0.9, streak_noise) * smoothstep(0.9, 2.45, v_pos.y) * 0.8;
 		float edge = roof ? 0.0 : smoothstep(0.3, 0.0, v_pos.y) * 0.6;
-		float rust = clamp((patches * 0.55 + spots + streak * 0.7 + edge) * rust_amount, 0.0, 0.85);
+		float rust = clamp(patches * (0.1 + 1.05 * cover * cover) + (spots + streak * 0.7 + edge) * rust_amount, 0.0, 0.88);
 		// A barge's rust is old and dark; a container's fresh and orange.
 		vec3 rust_colour = barge ? RUST_COLOUR * 0.5 : RUST_COLOUR;
 		albedo = mix(albedo, rust_colour * (0.85 + 0.3 * mix(0.5, vnoise(ws * 5.0), detail)), rust);

@@ -41,14 +41,6 @@ function hash(...values) {
   return (h >>> 0) / 4294967296;
 }
 
-// Smooth 1D value noise, period-free.
-function noise1(x, seed) {
-  const i = Math.floor(x);
-  const f = x - i;
-  const t = f * f * (3 - 2 * f);
-  return lerp(hash(i, seed), hash(i + 1, seed), t);
-}
-
 // ---------------------------------------------------------------- builder
 class YardBuilder extends MeshBuilder {
   // lod: the detail level being built (swept bodies use fewer round slices far away).
@@ -2084,7 +2076,7 @@ function buildExcavator(lod) {
     ["mouth", [[-4.1, 1.22]]],
     ["shell", [[-4.72, 1.24], ...arcPts(-4.45, 0.55, 0.5, 125, 275, lod === 0 ? 6 : 3), [-3.85, 0.03]]],
   ]);
-  sweepAt(out, bucket, 0.55, { mouth: P.metal, shell: P.crane_red }, v3(bx, 0, 0), { r: 0.03, steps: 1, side: { part: P.crane_red } });
+  sweepAt(out, bucket, 0.55, { mouth: P.gravel, shell: P.crane_red }, v3(bx, 0, 0), { r: 0.03, steps: 1, side: { part: P.crane_red } });
   if (lod === 0) {
     for (const x of [-0.39, -0.13, 0.13, 0.39]) out.aabb([bx + x - 0.045, 0.01, -3.9], [bx + x + 0.045, 0.1, -3.74], P.metal);
     // Boom rams from the house front up under the boom; the arm ram over the
@@ -2164,15 +2156,15 @@ function buildWheelLoader(lod) {
   }
   // The bucket, flat on the ground and open to the front: a steel plate
   // bent into floor, curved back and spill guard between two side plates;
-  // the worn inside shows.
+  // the dirty inside shows.
   const arcSteps = lod === 0 ? 7 : 3;
   const outer = [[-4.0, 0.0], [-3.42, 0.0], ...arcPts(-3.42, 0.6, 0.6, 270, 450, arcSteps).slice(1), [-3.76, 1.24]];
   const inner = [[-3.76, 1.17], ...arcPts(-3.42, 0.6, 0.54, 90, -90, arcSteps), [-3.97, 0.06]];
   const plate = profileOf([["edge", [outer[0]]], ["shell", outer.slice(1)], ["inside", inner]]);
-  sweepTagged(out, plate, 1.42, { edge: P.metal, shell: P.crane_red, inside: P.metal }, { r: 0.01, steps: 1, side: { part: P.crane_red } });
+  sweepTagged(out, plate, 1.42, { edge: P.metal, shell: P.crane_red, inside: P.gravel }, { r: 0.01, steps: 1, side: { part: P.crane_red } });
   for (const s of [1, -1]) {
     polygonFace(out, v3(s * 1.45, 0, 0), Z, Y, outer, [], v3(s, 0, 0), P.crane_red);
-    polygonFace(out, v3(s * 1.42, 0, 0), Z, Y, outer, [], v3(-s, 0, 0), P.metal, 0.7);
+    polygonFace(out, v3(s * 1.42, 0, 0), Z, Y, outer, [], v3(-s, 0, 0), P.gravel, 0.7);
   }
   axle(out, frontAxle, track, R, 0.6, lod, { rimColour: P.crane_red, inner: true });
   axle(out, rearAxle, track, R, 0.6, lod, { rimColour: P.crane_red, inner: true });
@@ -2488,7 +2480,7 @@ export function yardKitMeshes() {
 }
 
 export {
-  YardBuilder, sweptBody, rectHole, roundedProfile, wheel, axle, polygonFace, recessed, hash, noise1, P as YARD_PART,
+  YardBuilder, sweptBody, rectHole, roundedProfile, wheel, axle, polygonFace, recessed, hash, P as YARD_PART,
   buildContainer, buildShedBay, buildShedEnd, buildFabricBay, buildFabricEnd, buildBermMid, buildBermEnd, buildPile, buildCylinderSection, buildCraneMats,
   buildBoxTruck, buildBus, buildRv, buildVan, buildFoodTruck, buildTrailer, buildBoat, buildExcavator, buildWheelLoader,
   buildBargeMid, buildBargeEnd, buildCrawlerCrane, buildDeckhouse, buildDeckMaterials, buildRidge,
