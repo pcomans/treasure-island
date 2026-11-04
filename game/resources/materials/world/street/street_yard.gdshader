@@ -258,15 +258,17 @@ void fragment() {
 		float keep = 1.0 - smoothstep(0.3, 1.2, fwidth(g.x) * 9.0);
 		albedo *= 0.75 + 0.4 * coarse + 0.25 * (fine - 0.5) * keep;
 		if (p == 29) {
-			// A rubble pile's fines are small broken pieces packed together:
-			// cells of about 0.3 m, each its own shade and tilt, dark between.
-			vec2 x = v_pos.xz * 3.4;
+			// A rubble pile's fines are small broken pieces in soil: cells of
+			// about 0.17 m, each its own shade and tilt (some dark soil), with
+			// shadow between.
+			vec2 x = v_pos.xz * 6.0;
 			vec2 c = cells(x);
-			float near = 1.0 - smoothstep(0.25, 0.6, fwidth(x.x));
-			float gap = smoothstep(0.0, 0.16, c.x);
-			albedo *= mix(0.86, mix(0.5, 0.85 + 0.35 * c.y, gap), near);
+			float near = 1.0 - smoothstep(0.2, 0.5, fwidth(x.x));
+			float gap = smoothstep(0.0, 0.09, c.x);
+			float tone = c.y < 0.28 ? 0.6 : 0.82 + 0.4 * c.y;
+			albedo *= mix(0.88, mix(0.62, tone, gap), near);
 			vec2 tilt = vec2(hash12(vec2(c.y, 1.7)), hash12(vec2(c.y, 5.3))) - 0.5;
-			NORMAL = normalize(NORMAL + (v_across * tilt.x + v_along * tilt.y) * 0.5 * near * gap);
+			NORMAL = normalize(NORMAL + (v_across * tilt.x + v_along * tilt.y) * 0.6 * near * gap);
 		}
 	}
 	// Container door markings: two small blocks of dark text near the top.

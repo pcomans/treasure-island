@@ -871,7 +871,7 @@ function chunk(out, center, axes, half, seed, part, ao) {
   const [ax, ay, az] = axes;
   const corners = [];
   for (let i = 0; i < 8; i += 1) {
-    const jitter = (k) => 1 + 0.6 * (hash(seed, i, k) - 0.5);
+    const jitter = (k) => 1 + 0.9 * (hash(seed, i, k) - 0.5);
     corners.push(vadd(center, vadd(vscale(ax, (i & 1 ? 1 : -1) * half[0] * jitter(0)), vadd(vscale(ay, (i & 2 ? 1 : -1) * half[1] * jitter(1)), vscale(az, (i & 4 ? 1 : -1) * half[2] * jitter(2))))));
   }
   for (const [a, b, c, d] of [[0, 2, 6, 4], [1, 5, 7, 3], [2, 3, 7, 6], [0, 1, 3, 2], [4, 6, 7, 5]]) {
@@ -987,7 +987,7 @@ function buildPile(material, shape, lod) {
     for (let i = 0; i < count; i += 1) {
       const rho = Math.sqrt(0.003 + 0.9 * hash(i, seed, 1));
       const a = hash(i, seed, 2) * Math.PI * 2;
-      const size = 0.13 + 0.34 * hash(i, seed, 3) ** 2.2;
+      const size = 0.12 + 0.28 * hash(i, seed, 3) ** 2.2;
       pieces.push({ i, rho, a, size });
     }
     pieces.sort((p, q) => q.size - p.size);

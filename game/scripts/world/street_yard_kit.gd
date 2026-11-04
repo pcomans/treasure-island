@@ -103,7 +103,7 @@ const COLOURS := {
 	"door_grey": Color(0.6, 0.61, 0.62),
 	"machine_red": Color(0.7, 0.13, 0.09),
 	"plank": Color(0.5, 0.43, 0.33),
-	"rubble_concrete": Color(0.72, 0.68, 0.6),
+	"rubble_concrete": Color(0.66, 0.62, 0.55),
 }
 
 ## Props: far range (m), whether they cast shadows, their variants (mesh
@@ -509,14 +509,14 @@ func _equipment(result: Dictionary, variant: int, mesh: String, params: Dictiona
 		return _add(result, mesh, Transform3D.IDENTITY, _custom(tone, tone, tone, level, seed))
 	# A hopper is white unless the row paints it; machines take the paint
 	# (yellow by default) in a machine's red; an open bin's blue is sun-faded
-	# and its steel rusts through (Avenue M, Nov 2025).
+	# and its steel rusted through (Avenue M, Nov 2025).
 	var paint := _colour(params, "paint", "white" if mesh == "hopper" else "yellow")
 	if paint == "red" and (mesh == "excavator" or mesh == "wheel_loader"):
 		paint = "machine_red"
 	if mesh == "open_bin":
 		if paint == "blue":
 			paint = "bin_blue"
-		level = maxf(level, 0.85)
+		level = 1.0
 	var house := paint
 	match str(params.get("house", "same")):
 		"white":
