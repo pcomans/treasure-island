@@ -875,7 +875,7 @@ function buildBermEnd(variant, dir, lod) {
 // sheeting folded over a mound, its hem loose on the ground and held by
 // tyres (Avenue N, Nov 2025).
 export const PILE_SPECS = Object.freeze({
-  gravel: { x: 8, z: 8, h: 3, part: "gravel", rough: 0.05, cone: true },
+  gravel: { x: 8, z: 8, h: 3, part: "gravel", rough: 0.05 },
   rubble: { x: 12, z: 12, h: 4.5, part: "rubble", rough: 0.16, lumps: 0.18, chunks: [260, 60], fit: 0.92 },
   soil: { x: 12, z: 12, h: 4, part: "earth", rough: 0.1 },
   tarp: { x: 6, z: 8, h: 2.2, part: "tarp", rough: 0.04, flat: true, folds: 0.24, fit: 0.86 },
@@ -969,13 +969,10 @@ function buildPile(material, shape, lod) {
     return top * Math.pow(Math.max(0, 1 - rho ** 6), 0.5);
   };
   const heightAt = (rho, a) => {
-    let base;
-    if (spec.cone) base = Math.min(1, (1 - rho) * 1.08) - 0.06 * Math.max(0, 0.08 - (1 - rho));
-    else if (spec.flat) base = draped(rho, a);
-    // A stockpile: a cone with a rounded crown (no point for a foot to catch
-    // on), its sides about the angle of repose (under 45 degrees, so its hull
-    // is walkable).
-    else base = Math.max(0, stockpile(rho));
+    // A tarp drapes over its mounds; a stockpile is a cone with a rounded
+    // crown (no point for a foot to catch on), its sides about the angle of
+    // repose (under 45 degrees, so its hull is walkable).
+    const base = spec.flat ? draped(rho, a) : Math.max(0, stockpile(rho));
     // Bumps (and a rubble pile's lumps of a metre or so) in plan coordinates.
     const r = nominal * outline(a) * rho;
     const px = r * Math.cos(a);
