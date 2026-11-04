@@ -2619,6 +2619,10 @@ function buildRidge(part, lod) {
 // reaches a little past it at its foot.
 const HULL_CELL_M = 0.25;
 const HULL_SLOPE_RING = 12;
+// A heap that peaks in one point gets a small flat top instead: walking
+// straight over a single topmost vertex, the stock player stops dead on it.
+const HULL_PLATEAU_M = 0.35;
+const HULL_PLATEAU_DROP_M = 0.03;
 
 // A convex hull of points: [{v: [i, j, k], n, d}] faces, outward normals.
 function convexHull(points) {
@@ -2685,8 +2689,22 @@ function heapHull(mesh, mode) {
     const held = cells.get(key);
     if (!held || point[1] > held[1]) cells.set(key, point);
   }
+  const tops = [...cells.keys()].sort().map((key) => cells.get(key));
+  if (mode === "cone") {
+    const peak = Math.max(...tops.map((point) => point[1]));
+    const apex = tops.filter((point) => point[1] > peak - 0.02);
+    if (apex.length < 3) {
+      const level = peak - HULL_PLATEAU_DROP_M;
+      const [x, z] = [apex[0][0], apex[0][2]];
+      for (const point of tops) point[1] = Math.min(point[1], level);
+      for (let k = 0; k < 8; k += 1) {
+        const a = (2 * Math.PI * k) / 8;
+        tops.push([x + HULL_PLATEAU_M * Math.cos(a), level, z + HULL_PLATEAU_M * Math.sin(a)]);
+      }
+    }
+  }
   const points = [];
-  for (const point of [...cells.keys()].sort().map((key) => cells.get(key))) {
+  for (const point of tops) {
     points.push(point);
     if (point[1] < 0.02) continue;
     if (mode === "prism") {
