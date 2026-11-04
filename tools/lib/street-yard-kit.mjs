@@ -81,6 +81,7 @@ export const YARD_COLOURS = Object.freeze([
   "dark_grey",
   "green",
   "grey",
+  "light_grey",
   "orange",
   "red",
   "rust",
@@ -104,8 +105,9 @@ const SHED_ENDS_M = 0.3;
 // Fabric shed frame bay and end allowance.
 const FABRIC_BAY_M = 5.0;
 const FABRIC_ENDS_M = 0.4;
-// A plastic berm's module length.
+// A plastic berm's module length, and a soil ridge's (windrow).
 const BERM_MODULE_M = 6.0;
+const RIDGE_MODULE_M = 4.0;
 
 const CONTAINER_COLOURS = ["white", "beige", "red", "rust", "orange", "green", "grey", "blue_grey", "blue", "brown"];
 const WALL_COLOURS = ["green", "beige", "white", "grey", "blue_grey", "red", "rust", "blue"];
@@ -262,8 +264,12 @@ export const YARD_KIT_PROPS = Object.freeze({
       { name: "rubble", x_m: 12, z_m: 12, h_m: 4.5 },
       { name: "soil", x_m: 12, z_m: 12, h_m: 4 },
       { name: "tarp", x_m: 6, z_m: 8, h_m: 2.2 },
+      // A windrow: a long low soil ridge in 4 m modules (505 Avenue N, May 2026
+      // aerial: ~12 parallel ridges ~3 m wide, ~1 m high, ~60 m long).
+      { name: "ridge", x_m: 3, z_m: null, h_m: 1, required: ["length_m"], only: ["length_m"] },
     ],
-    params: { scale: numRange(0.5, 3), shape: intRange(0, 2) },
+    // scale and shape for the mounds; length_m (rounded to whole 4 m modules) for a ridge.
+    params: { scale: numRange(0.5, 3), shape: intRange(0, 2), length_m: numRange(RIDGE_MODULE_M, 240) },
   },
   plastic_berm: {
     collision: "hull",
@@ -275,16 +281,29 @@ export const YARD_KIT_PROPS = Object.freeze({
     params: { modules: intRange(1, 60) },
     required: ["modules"],
   },
+  // Pier 1's work barges and crane (May 2026 aerial, Mar 2025 Avenue N view).
+  // Visual context outside the playable boundary: no collision. A barge's
+  // origin is on its waterline; width_m x length_m is its deck, raked at both
+  // ends. The crane barge carries a red crawler crane at its +Z end.
   crane_barge: {
-    collision: "boxes",
+    collision: "none",
     range_m: 2500,
     variants: [
-      { name: "crane", x_m: 12.2, z_m: 33.5, h_m: 45 },
-      { name: "deck", x_m: 12.2, z_m: 33.5, h_m: 6 },
+      { name: "crane", x_m: 30, z_m: 40, h_m: 46 },
+      { name: "deck", x_m: 18, z_m: 36, h_m: 4.2 },
       // A crawler crane standing on the pier: its origin is on the ground.
-      { name: "pier_crane", x_m: 6, z_m: 9, h_m: 60 },
+      { name: "pier_crane", x_m: 6, z_m: 9, h_m: 60, only: [] },
     ],
-    params: {},
+    params: {
+      length_m: numRange(15, 100),
+      width_m: numRange(8, 40),
+      hull: oneOf("dark_grey", "rust", "light_grey"),
+      deck: oneOf("rust", "dark_grey", "light_grey"),
+      // On the deck: nothing, containers (one red 40 ft and white 20 ft boxes,
+      // as photographed) or materials (stacked mats and beams).
+      cargo: oneOf("none", "containers", "materials"),
+      deckhouse: oneOf("none", "small"),
+    },
   },
 });
 export const YARD_KIT_KEYS = Object.freeze(Object.keys(YARD_KIT_PROPS));
@@ -314,7 +333,19 @@ export function yardPropParamsError(key, params) {
     if (spec.type === "int" && !(Number.isInteger(value) && value >= spec.min && value <= spec.max)) return `${name} must be an integer ${spec.min}..${spec.max}`;
     if (spec.type === "number" && !(typeof value === "number" && Number.isFinite(value) && value >= spec.min && value <= spec.max)) return `${name} must be a number ${spec.min}..${spec.max}`;
   }
-  for (const name of prop.required ?? []) if (params[name] === undefined) return `${key} needs ${name}`;
+  const variant = prop.variants[params.variant];
+  for (const name of [...(prop.required ?? []), ...(variant.required ?? [])]) if (params[name] === undefined) return `${key} ${variant.name} needs ${name}`;
+  // A variant may take only some of its prop's params (a ridge takes length_m, not scale).
+  if (variant.only) {
+    for (const name of Object.keys(prop.params)) {
+      if (params[name] !== undefined && !variant.only.includes(name)) return `${key} ${variant.name} takes no ${name}`;
+    }
+  } else {
+    for (const name of Object.keys(prop.params)) {
+      const onlyElsewhere = prop.variants.some((other) => other.only?.includes(name));
+      if (params[name] !== undefined && onlyElsewhere) return `${key} ${variant.name} takes no ${name}`;
+    }
+  }
   return null;
 }
 
@@ -339,9 +370,13 @@ export function yardPropFootprint(key, params) {
     case "plastic_berm":
       return { x_m: variant.x_m, z_m: round(params.modules * BERM_MODULE_M), h_m: variant.h_m };
     case "material_pile": {
+      if (variant.name === "ridge") return { x_m: variant.x_m, z_m: ridgeModules(params.length_m) * RIDGE_MODULE_M, h_m: variant.h_m };
       const s = params.scale ?? 1;
       return { x_m: round(variant.x_m * s), z_m: round(variant.z_m * s), h_m: round(variant.h_m * s) };
     }
+    case "crane_barge":
+      if (variant.name === "pier_crane") return { x_m: variant.x_m, z_m: variant.z_m, h_m: variant.h_m };
+      return { x_m: round(params.width_m ?? variant.x_m), z_m: round(params.length_m ?? variant.z_m), h_m: variant.h_m };
     case "van":
       if (variant.car_body) {
         const body = carBodyGeometry(variant.car_body);
@@ -388,6 +423,11 @@ export function containerWallLayout(params) {
   return { containers, covered_m: Math.round(covered * 1000) / 1000 };
 }
 
+// A soil ridge's whole 4 m modules for a requested length.
+export function ridgeModules(lengthM) {
+  return Math.max(1, Math.round(lengthM / RIDGE_MODULE_M));
+}
+
 // The kind table radius for a yard prop: half the short side of its smallest
 // plan (a long prop at its shortest length, a pile at its smallest scale).
 export function yardKindRadius(key) {
@@ -395,8 +435,9 @@ export function yardKindRadius(key) {
   let smallest = Infinity;
   prop.variants.forEach((variant, index) => {
     const params = { variant: index };
-    for (const name of prop.required ?? []) params[name] = prop.params[name].min;
-    if (key === "material_pile") params.scale = prop.params.scale.min;
+    for (const name of [...(prop.required ?? []), ...(variant.required ?? [])]) params[name] = prop.params[name].min;
+    if (key === "material_pile" && variant.name !== "ridge") params.scale = prop.params.scale.min;
+    if (key === "crane_barge" && variant.name !== "pier_crane") params.width_m = prop.params.width_m.min;
     const footprint = yardPropFootprint(key, params);
     smallest = Math.min(smallest, footprint.x_m, footprint.z_m);
   });
