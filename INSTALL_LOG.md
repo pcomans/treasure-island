@@ -319,3 +319,18 @@ passed. Existing Godot debug-symbol binary supplied native stack names; Mesa/RAD
 internals remained stripped. `perf` was absent and an own-process userspace
 perf_event_open probe returned EPERM; no perf package, sysctl or security change
 was attempted. Installation log: /tmp/ti-native-rootcause-20261025-gdb-install.log.
+
+### 2026-11-03 — GitHub Actions Mac build (runner-side installs)
+
+- Date and time (UTC): 2026-11-03, runs 41584183972, 41585341573, 41586459134 and 41589016800.
+- Status: `completed`
+- Exact package and version: on each GitHub-hosted `ubuntu-26.04` runner (image 20261025.179.1) the workflow installs Ubuntu `weston` 14.0.2-5, `mesa-vulkan-drivers` 26.0.8-1ubuntu0.3 (lavapipe), `libvulkan1` 1.4.341.0-1 and `libgl1` (apt-resolved versions, as logged by those runs), and Godot `4.7.2-stable` with its export templates through `.devcontainer/setup-godot.sh`. Actions pinned to commits: `actions/checkout` v7.0.1 `3d3c42e5aac5ba805825da76410c181273ba90b1`, `actions/cache` v6.1.0 `55cc8345863c7cc4c66a329aec7e433d2d1c52a9`, `actions/upload-artifact` v7.0.2 `cf430e030ddbb5b0abf93d22962f4752f3646cd9`, `actions/download-artifact` v8.0.2 `9000827ccba6bdab643e8b6fd33ac0654aef8333`.
+- Publisher and source URL: Ubuntu archive; Godot official builds, https://github.com/godotengine/godot-builds/releases/tag/4.7.2-stable; GitHub's `actions/*` repositories.
+- Checksum, signature, notarization, or registry integrity evidence: setup-godot.sh's unchanged SHA-256 pins; apt's archive signatures; actions pinned by full commit SHA.
+- Exact command or installation method: `.github/workflows/mac-build.yml` (`sudo apt-get install -y -qq weston libgl1 libvulkan1 mesa-vulkan-drivers`, then `.devcontainer/setup-godot.sh`, whose result is cached in the repository's Actions cache keyed on the script's hash, about 260 MB).
+- Purpose: build the Mac app on every push to `main` and publish it at a fixed download link.
+- Scope and install location: ephemeral GitHub-hosted runners only; nothing changes in the devcontainer or on the owner's machines.
+- Authorizing decision or request: owner, 2026-11-03: build on every push to `main`, newest build at one fixed link.
+- Trust and malware checks: official publishers only; a checksum mismatch stops setup-godot.sh and the build.
+- Verification and result: Godot reported `4.7.2.stable.official.ed1daf0bf`; the bake reported `BAKE_RENDERER Wayland / llvmpipe (LLVM 21.1.8, 256 bits)`; all four runs built, audited and launched the app.
+- Removal steps: delete `.github/workflows/mac-build.yml`, its Actions cache entry and the `mac-latest` release.

@@ -13,6 +13,9 @@ references before assigning work; it is neither failure nor automatic permission
 to remodel or revoke credit. Simple generated massing, a historical recognition
 credit, a scoped facade PASS or a source adapter alone does not complete a stage.
 C does not imply as-built fidelity, survey precision or unseen-side observation.
+From 2026-11-03 stage 2 covers photographed sides only: a side without a dated
+photo stays as it is (no invented detail), and inferred detail already added is
+left as it is.
 
 Owner goal (2026-10-17): a recognizable, believable Treasure Island at modern
 AAA video-game quality, [breadth first](../AGENTS.md#zoom-in-authoring-pattern).

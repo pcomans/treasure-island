@@ -175,6 +175,8 @@ static func glazing(p: Node3D,x: float,w: float,open_bay: bool=false, sliding: b
 	if optical_pilot: frame = mat("bac1bd",0.85,0.24)
 	# One consistent clear dielectric envelope; actual opposing exterior is visible.
 	# Perimeter depth replaces opaque fake infill. No furnished interior is authored.
+	# PREMUL_ALPHA_FACTOR keeps its default 1.0 and is not written: Godot 4.7.2's
+	# Compatibility (web) compiler never declares it, so writing it fails to compile.
 	var optical:=Shader.new()
 	optical.code="""shader_type spatial;
 render_mode blend_premul_alpha, depth_draw_never, cull_back, fog_disabled;
@@ -187,13 +189,14 @@ void fragment() {
 	ALBEDO=mix(vec3(0.008,0.017,0.016),vec3(0.075,0.087,0.079),deposits);
 	METALLIC=0.0;ROUGHNESS=mix(0.055,0.42,deposits);SPECULAR=0.8;
 	float fresnel=0.12+0.88*pow(1.0-facing,5.0);
-	ALPHA=mix(fresnel,0.48,deposits);PREMUL_ALPHA_FACTOR=1.0;
+	ALPHA=mix(fresnel,0.48,deposits);
 }
 """
 	var custom_glass := ShaderMaterial.new()
 	custom_glass.shader=optical
+	# The web build uses this same glass: it compiles in Compatibility (above).
 	var glass: Material = custom_glass
-	if optical_pilot or OS.has_feature("web") or OS.get_cmdline_user_args().has("--web-world-bake"):
+	if optical_pilot:
 		# Native PBR glass variant: restrained tint over actual shaded exterior depth.
 		# Reuses family geometry; parameters are game-art inference, not measured glass.
 		var native_glass := StandardMaterial3D.new()
@@ -416,7 +419,8 @@ static func building(source: String,wall_record: Dictionary,mural_asset_path: St
 			var paint := Node3D.new()
 			paint.position.x=-2.7
 			g.add_child(paint)
-			mural(paint,6.2,mural_asset_path)
+			# The mural covers the closed corrugated run left of the glazing bay.
+			mural(paint,6.2,mural_asset_path,Vector2(cuts[0],cuts[1])-Vector2.ONE*paint.position.x)
 		if source=="w1098437841" and i==3:
 			for x in [-1.45,1.45]:restroom_door(g,x)
 		# Thin cap, drain line and container weld plates give the roof a legible edge.
@@ -434,23 +438,78 @@ static func building(source: String,wall_record: Dictionary,mural_asset_path: St
 		box(g,Vector3(0,-depth/2+0.10,-0.09),Vector3(a.distance_to(b),depth,0.16),mat("aaa796"))
 	return p
 
-static func mural(g: Node3D,length: float,mural_asset_path: String) -> void:
+static func mural(g: Node3D,length: float,mural_asset_path: String,run: Vector2) -> void:
 	# Private prototype: finite source-inspired paint, projected onto existing ribs.
 	# Imported texture supports both source runs and later ordinary exports.
 	var texture := load(mural_asset_path) as Texture2D
+	var width: float=length-0.40
+	var size:=Vector2(width,width*827.0/1902.0)
+	var centre:=Vector3(0,1.47,0.035)
+	if RenderingServer.get_current_rendering_method()=="gl_compatibility":
+		# Compatibility, the web build's renderer (its world is baked under it), draws no Decal.
+		mural_sheet(g,texture,Rect2(Vector2(centre.x,centre.y)-size/2,size),run)
+		return
 	var decal := Decal.new()
 	decal.name="MerseaMuralPaint"
 	decal.texture_albedo=texture
-	var width: float=length-0.40
-	decal.size=Vector3(width,0.16,width*827.0/1902.0)
+	decal.size=Vector3(size.x,0.16,size.y)
 	# Rotate the image plane 180 degrees; retain +Y outward / -Y projection inward.
-	decal.transform=Transform3D(Basis(Vector3.RIGHT,Vector3.BACK,Vector3.DOWN),Vector3(0,1.47,0.035))
+	decal.transform=Transform3D(Basis(Vector3.RIGHT,Vector3.BACK,Vector3.DOWN),centre)
 	decal.cull_mask=2
 	decal.normal_fade=0.15
 	decal.upper_fade=0.02
 	decal.lower_fade=0.02
 	decal.set_meta("mersea_role","decor")
 	g.add_child(decal)
+
+## The mural where Decals aren't drawn: a copy of the corrugated sheet's front under
+## the Decal's footprint, with the image mapped as the Decal projects it. image: the
+## wall rectangle (x along g, y up) the image covers; run: the sheet's corrugated run
+## (left, right) in g. Decor only: no collision, so solidity and spray meet the wall.
+static func mural_sheet(g: Node3D,texture: Texture2D,image: Rect2,run: Vector2) -> void:
+	var left:=image.position.x;var right:=image.end.x;var top:=image.end.y
+	# The edge's bottom rail (0.16 m, 0.14 m tall) stands in front of the sheet below 0.23 m.
+	var bottom:=maxf(image.position.y,0.23)
+	var profile:=corrugation_profile(run.x,run.y)
+	var surface:=SurfaceTool.new()
+	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	for j in range(profile.size()-1):
+		var p:=profile[j];var q:=profile[j+1]
+		if q.x<=left or p.x>=right:continue
+		# The image's side edges cut the fold they cross, as the Decal's box does.
+		if p.x<left:p=p.lerp(q,(left-p.x)/(q.x-p.x))
+		if q.x>right:q=p.lerp(q,(right-p.x)/(q.x-p.x))
+		var a:=Vector3(p.x,bottom,p.y);var b:=Vector3(q.x,bottom,q.y)
+		var c:=Vector3(q.x,top,q.y);var d:=Vector3(p.x,top,p.y)
+		var normal:=(b-a).cross(d-a).normalized()
+		for v in [a,d,c,a,c,b]:
+			surface.set_normal(normal)
+			surface.set_uv(Vector2((v.x-left)/image.size.x,(top-v.y)/image.size.y))
+			surface.add_vertex(v)
+	var shader:=Shader.new()
+	shader.code="""shader_type spatial;
+uniform sampler2D mural: source_color, filter_linear_mipmap_anisotropic, repeat_disable;
+void vertex() {
+	// Drawn 0.1% of its view distance nearer along the same view ray: the same pixels,
+	// always in front of the sheet it copies at any range, while lighting keeps VERTEX.
+	POSITION=PROJECTION_MATRIX*vec4((MODELVIEW_MATRIX*vec4(VERTEX,1.0)).xyz*0.999,1.0);
+}
+void fragment() {
+	// The Decal replaced only the albedo; keep the sheet's own finish.
+	ALBEDO=texture(mural,UV).rgb;
+	ROUGHNESS=0.52;
+}
+"""
+	var paint:=ShaderMaterial.new()
+	paint.shader=shader
+	paint.set_shader_parameter("mural",texture)
+	var node:=MeshInstance3D.new()
+	node.name="MerseaMuralPaint"
+	node.mesh=surface.commit()
+	node.material_override=paint
+	node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	node.set_meta("mersea_role","decor")
+	g.add_child(node)
 
 static func terrain_y(land: Dictionary,x: float,z: float) -> float:
 	var v: Array=land.vertices;var ix: Array=land.indices
@@ -626,28 +685,34 @@ static func build(records: Dictionary,land: Dictionary,mural_asset_path: String)
 	return p
 
 
-static func corrugated_panel(parent: Node3D,left: float,right: float,bottom: float,top: float,material: Material) -> void:
-	# Trapezoidal pressed steel relief, 0.28m inferred cadence and 59mm peak-to-trough depth.
-	# Back plate closes the solid wall; profile supplies physically shaded folds.
-	box(parent,Vector3((left+right)/2,(bottom+top)/2,-0.058),Vector3(right-left,top-bottom,0.092),material)
-	var surface := SurfaceTool.new()
-	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+## The front of one corrugated run from left to right, as (x, depth) points: trapezoidal
+## pressed steel, 0.28m inferred cadence (a shorter last module) and 59mm peak to trough.
+static func corrugation_profile(left: float,right: float) -> PackedVector2Array:
+	var profile:=PackedVector2Array([Vector2(left,-0.004)])
 	var x:=left
 	while x<right-0.00001:
 		var next:=minf(right,x+0.28)
 		var span:=next-x
-		var profile: Array[Vector2]=[Vector2(x,-0.004),Vector2(x+span*0.22,-0.004),Vector2(x+span*0.38,0.055),Vector2(x+span*0.72,0.055),Vector2(x+span*0.88,-0.004),Vector2(next,-0.004)]
-		for j in range(profile.size()-1):
-			var a:=Vector3(profile[j].x,bottom,profile[j].y)
-			var b:=Vector3(profile[j+1].x,bottom,profile[j+1].y)
-			var c:=Vector3(profile[j+1].x,top,profile[j+1].y)
-			var d:=Vector3(profile[j].x,top,profile[j].y)
-			var normal:=(b-a).cross(d-a).normalized()
-			for v in [a,d,c,a,c,b]:
-				surface.set_normal(normal)
-				surface.set_uv(Vector2(v.x,v.y))
-				surface.add_vertex(v)
+		profile.append_array(PackedVector2Array([Vector2(x+span*0.22,-0.004),Vector2(x+span*0.38,0.055),Vector2(x+span*0.72,0.055),Vector2(x+span*0.88,-0.004),Vector2(next,-0.004)]))
 		x=next
+	return profile
+
+static func corrugated_panel(parent: Node3D,left: float,right: float,bottom: float,top: float,material: Material) -> void:
+	# Back plate closes the solid wall; profile supplies physically shaded folds.
+	box(parent,Vector3((left+right)/2,(bottom+top)/2,-0.058),Vector3(right-left,top-bottom,0.092),material)
+	var surface := SurfaceTool.new()
+	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var profile:=corrugation_profile(left,right)
+	for j in range(profile.size()-1):
+		var a:=Vector3(profile[j].x,bottom,profile[j].y)
+		var b:=Vector3(profile[j+1].x,bottom,profile[j+1].y)
+		var c:=Vector3(profile[j+1].x,top,profile[j+1].y)
+		var d:=Vector3(profile[j].x,top,profile[j].y)
+		var normal:=(b-a).cross(d-a).normalized()
+		for v in [a,d,c,a,c,b]:
+			surface.set_normal(normal)
+			surface.set_uv(Vector2(v.x,v.y))
+			surface.add_vertex(v)
 	surface.generate_tangents()
 	var node:=MeshInstance3D.new()
 	node.mesh=surface.commit()
