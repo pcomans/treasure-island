@@ -23371,6 +23371,9 @@ Carried by deploy-fix from the deploy agent's scratch log; text unchanged apart 
 - R10, what worked well: adding raised views to every species row exposed the top-down read directly. Pulling frames out of the sway GIF and diffing them turned "it sways" into checkable evidence of tip-weighted motion with anchored bases.
 - R10, what did not work well: the fix for one artifact (X-stars) created another (crescents) that shows at a different angle. The changelog described the intent, so the side effect was only visible in pixels. The sway shot left out the reference grass that the owner actually likes.
 - R10, what to change next time: after any shader or cap change, re-check the eye-height views as well as the angle the fix targeted. Put a deer grass in every sway capture as the baseline. Placement test views should include the bed boundary, so plants outside the bed are visible.
+- Delta check (8d11df7f, PASS), what worked well: the labelled delta sheet mapped each fix to the tile that proves it, and the raw renders sat behind every tile, so a bounded check took one pass. Having the deer grass in the sway frame made a measured parity judgement possible.
+- Delta check, what did not work well: the sway GIF uses partial-frame disposal, so naive frame diffs came out blank until I coalesced the frames. This cost a retry.
+- Delta check, what to change next time: deliver sway evidence as full PNG frames, or a coalesced GIF. Keep the deer grass in every sway capture as the fixed baseline.
 
 ### cityside-plants-20261103 — 2026-11-03 — Cityside Park species for the vegetation kit (WIP checkpoint, R07 rendered)
 
@@ -23398,3 +23401,5 @@ Carried by deploy-fix from the deploy agent's scratch log; text unchanged apart 
 - Worked well: the r07-beside-r11 sheets plus the new raised edge view 16, with detail on and off, answered "spill" and "naturalism" quickly.
 - Did not work well: the lawn-rim strip came in at r05 and I didn't check it against ph05 until this final pass.
 - Change next time: check every new ground-cover band against a dated photo when it first appears, not at the end.
+
+- Final checks (2026-11-04): tools/test.sh passed on 8d11df7f (ALL TESTS PASS, under suite.lock, then B, then C), after an earlier pass on 0b5e6a81; the generator accepts every key and the kit builds every variant. Engine runs after the hold: R08-R14 and two suites, within the budget of about ten.
