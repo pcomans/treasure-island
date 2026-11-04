@@ -51,6 +51,9 @@ const MAXIMUM_GATE_WIDTH_M = 8;
 const SAFE_ID = /^[a-z0-9_]+$/u;
 const RULE_FIELDS = Object.freeze(["basis", "evidence", "fence_type", "id", "kind", "legs", "params", "pattern", "rule"]);
 const OSM_WAY_RULE_FIELDS = Object.freeze(["basis", "evidence", "fence_type", "from_m", "id", "kind", "params", "pattern", "rule", "to_m", "way"]);
+// An osm_way rule may also shift its row sideways off the OSM line (offset_m,
+// + to the left of the way), where the line is mapped on a sidewalk's edge.
+const OSM_WAY_RULE_OPTIONAL = Object.freeze(["offset_m"]);
 // The fence_type of an osm_way rule that only cuts its stretch out of the OSM fence.
 export const FENCE_TYPE_NONE = "none";
 // An osm_way rule's along-distance may run this far past its way's end, which
@@ -153,7 +156,7 @@ export function validateFenceRules(zone, kinds) {
     invariant(typeof rule?.id === "string" && SAFE_ID.test(rule.id) && !ids.has(rule.id), `${label} needs a unique lower_snake id`);
     ids.add(rule.id);
     invariant(["legs", "osm_way"].includes(rule?.pattern), `${label} pattern must be legs or osm_way`);
-    const fields = rule.pattern === "legs" ? RULE_FIELDS : OSM_WAY_RULE_FIELDS;
+    const fields = rule.pattern === "legs" ? RULE_FIELDS : [...OSM_WAY_RULE_FIELDS, ...OSM_WAY_RULE_OPTIONAL.filter((field) => field in rule)].sort();
     invariant(JSON.stringify(Object.keys(rule).sort()) === JSON.stringify([...fields]), `${label} must have exactly ${fields.join(", ")}`);
     invariant(rule.kind === "fence" && kinds.fence?.layer === "fences", `${label} kind must be fence`);
     invariant(rule.basis === "production_inference", `${label}: rule-based fences are production_inference`);
@@ -162,6 +165,8 @@ export function validateFenceRules(zone, kinds) {
     if (rule.pattern === "osm_way") {
       invariant(/^w\d+$/u.test(rule.way), `${label} way must be an OSM way key`);
       invariant([rule.from_m, rule.to_m].every(isFiniteNumber) && rule.from_m >= 0 && rule.to_m >= 0 && Math.abs(rule.to_m - rule.from_m) >= MINIMUM_RUN_M, `${label} needs from_m and to_m at least ${MINIMUM_RUN_M} m apart`);
+      invariant(rule.offset_m === undefined || (isFiniteNumber(rule.offset_m) && rule.offset_m !== 0 && Math.abs(rule.offset_m) <= 3), `${label} offset_m must be a non-zero shift of at most 3 m`);
+      invariant(rule.offset_m === undefined || rule.fence_type !== FENCE_TYPE_NONE, `${label}: fence_type none takes no offset_m`);
       if (rule.fence_type === FENCE_TYPE_NONE) {
         invariant(Object.keys(rule.params).length === 0, `${label}: fence_type none takes no params`);
         continue;
@@ -459,7 +464,8 @@ export function placeStreetFences({
         const wayPoints = target.points_m.map((point) => [point[0], point[2]]);
         const wayLengths = cumulative(wayPoints);
         const [s0, s1] = [Math.min(rule.from_m, rule.to_m, wayLengths.at(-1)), Math.min(Math.max(rule.from_m, rule.to_m), wayLengths.at(-1))];
-        const piece = slice(wayPoints, wayLengths, s0, s1);
+        let piece = slice(wayPoints, wayLengths, s0, s1);
+        if (rule.offset_m !== undefined) piece = offsetLine(piece, rule.offset_m);
         if (rule.from_m > rule.to_m) piece.reverse();
         line.push(...piece);
         vertexSources.push(...piece.map(() => rule.way));
