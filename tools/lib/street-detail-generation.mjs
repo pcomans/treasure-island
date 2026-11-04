@@ -1323,6 +1323,23 @@ export function generateStreetDetail({
     for (const [reason, number] of Object.entries(plan.rejected)) count(audit.scatter.rejected_by_reason, `planting_${reason}`, number);
     ruleSummaries.set(`${zone.id}/${rule.id}`, { id: rule.id, kind: rule.kind, pattern: rule.pattern, candidates, placed, ...(plan.cover === undefined ? {} : { cover: plan.cover }) });
   };
+  // A low plant's spot and variant whose whole crown clears paving, as the
+  // planted beds keep theirs: its own point, else one nudged up to 0.45 m round
+  // it that still passes problemAt (the rule's own checks), in the drawn variant,
+  // else a lower one; null when there is none.
+  const CROWN_NUDGES = [[0, 0], ...[0.15, 0.3, 0.45].flatMap((step) =>
+    [0, 1, 2, 3, 4, 5, 6, 7].map((k) => [step * Math.cos((k * Math.PI) / 4), step * Math.sin((k * Math.PI) / 4)]))];
+  const crownSpot = (prop, params, drawn, xz, problemAt) => {
+    for (let variant = drawn.variant; variant >= params.variants[0]; variant -= 1) {
+      const reach = crownRadius(prop, variant, drawn.scale) + PAVING_CLEAR_M;
+      for (const [dx, dz] of CROWN_NUDGES) {
+        const spot = [round3(xz[0] + dx), round3(xz[1] + dz)];
+        if ((dx !== 0 || dz !== 0) && problemAt(spot) !== null) continue;
+        if (!pavingUnder(spot, reach, groundAt)) return { xz: spot, variant };
+      }
+    }
+    return null;
+  };
   const runScatter = (planting) => {
     for (const { zone, contains, bounds } of zoneShapes) {
       for (const rule of zone.scatter) {
@@ -1421,20 +1438,21 @@ export function generateStreetDetail({
             count(audit.scatter.rejected_by_reason, problem);
             continue;
           }
+          let drawn = rule.prop ? drawVegetationVariant(seed, identity, rule.params) : null;
+          if (drawn && !STREET_VEGETATION_PROPS[rule.prop].trunk) {
+            const spot = crownSpot(rule.prop, rule.params, drawn, xz, placementProblem);
+            if (!spot) {
+              count(audit.scatter.rejected_by_reason, "crown_paving");
+              continue;
+            }
+            xz = spot.xz;
+            drawn = { variant: spot.variant, scale: drawn.scale };
+          }
           const surface = surfaceAt(xz);
           const { y, support } = grounded(xz);
           let planted = null;
           if (rule.prop) {
-            let { variant, scale } = drawVegetationVariant(seed, identity, rule.params);
-            // A low plant keeps its whole crown clear of paving, as the planted
-            // beds do: the drawn variant, else the next lower one that clears.
-            if (!STREET_VEGETATION_PROPS[rule.prop].trunk) {
-              while (variant >= rule.params.variants[0] && pavingUnder(xz, crownRadius(rule.prop, variant, scale) + PAVING_CLEAR_M, groundAt)) variant -= 1;
-              if (variant < rule.params.variants[0]) {
-                count(audit.scatter.rejected_by_reason, "crown_paving");
-                continue;
-              }
-            }
+            const { variant, scale } = drawn;
             planted = plantRow({ prop: rule.prop, kind: rule.kind, variant, scale, xz, landY: y, surface, groundAt });
             if (planted.problem) {
               count(audit.scatter.rejected_by_reason, planted.problem);
