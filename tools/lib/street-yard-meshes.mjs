@@ -171,6 +171,8 @@ function polygonFace(out, origin, u, v, outer, holes, normal, part, ao = 1) {
 // side: {part, holes: [{points: [[z, y]...], part}]} draws the two flat side
 // faces (holes filled with their own part, coplanar).
 function sweptBody(out, { profile, hw, r = 0.08, steps = 3, partEdge, side, smoothDeg = 30, aoEdge = () => 1 }) {
+  // The far level draws rounded window corners chamfered.
+  if (side && out.lod > 0) side = { ...side, holes: (side.holes ?? []).map((hole) => (hole.rect ? { ...hole, points: hole.rect } : hole)) };
   const n = profile.length;
   // Orientation: outward normals of the profile edges in the (z, y) plane.
   let area = 0;
@@ -298,6 +300,7 @@ function bandHole(z0, z1, y0, y1, panes, pillar, part, pillarPart, { side = null
 // A rectangle hole for sweptBody sides: z0..z1, y0..y1 (optionally rounded corners).
 function rectHole(z0, z1, y0, y1, part, { radius = 0, side = null, ao = 1 } = {}) {
   if (radius <= 0) return { points: [[z0, y0], [z1, y0], [z1, y1], [z0, y1]], part, side, ao };
+  // (sweptBody draws the chamfered rectangle, rect, on the far level.)
   const points = [];
   const corners = [[z1 - radius, y0 + radius, -90], [z1 - radius, y1 - radius, 0], [z0 + radius, y1 - radius, 90], [z0 + radius, y0 + radius, 180]];
   for (const [cz, cy, start] of corners) {
@@ -306,7 +309,8 @@ function rectHole(z0, z1, y0, y1, part, { radius = 0, side = null, ao = 1 } = {}
       points.push([cz + radius * Math.cos(a), cy + radius * Math.sin(a)]);
     }
   }
-  return { points, part, side, ao };
+  const c = radius;
+  return { points, part, side, ao, rect: [[z0 + c, y0], [z1 - c, y0], [z1, y0 + c], [z1, y1 - c], [z1 - c, y1], [z0 + c, y1], [z0, y1 - c], [z0, y0 + c]] };
 }
 
 // A profile point list with rounded corners: each entry [z, y, radius].
@@ -353,20 +357,21 @@ function wheel(out, x, z, radius, width, side, lod, { dual = false, rimColour = 
   const axis = v3(side, 0, 0);
   const tw = dual ? width * 2 + 0.03 : width;
   const rimR = radius * (dual ? 0.56 : 0.6);
+  // The far wheel is a short hexagonal drum with a flat rim face.
   const profile = lod === 0
     ? [[radius - 0.02, -tw / 2], [radius, -tw / 2 + 0.05], [radius, tw / 2 - 0.05], [radius - 0.025, tw / 2 - 0.012], [radius - 0.07, tw / 2], [rimR, tw / 2], [rimR * 0.96, tw / 2 - (dual ? 0.09 : 0.03)]]
-    : [[radius, -tw / 2], [radius, tw / 2 - 0.04], [radius - 0.06, tw / 2], [rimR, tw / 2]];
-  const rimSegment = profile.length - 2;
-  const sides = lod === 0 ? 16 : 8;
+    : [[radius, -tw / 2], [radius, tw / 2], [rimR, tw / 2]];
+  const rimSegment = profile.length - (lod === 0 ? 2 : 1);
+  const sides = lod === 0 ? 16 : 6;
   out.lathe(center, axis, profile, sides, (i) => (i >= rimSegment ? rimColour : P.tire), Math.PI / sides, (i) => (i <= 1 ? 0.8 : 1));
   // The rim face: a disc (dished on a dual) with a darker hub and nut ring.
-  const depth = dual ? 0.09 : 0.03;
+  const depth = lod > 0 ? 0.005 : dual ? 0.09 : 0.03;
   const face = vadd(center, vscale(axis, tw / 2 - depth));
   const u = vnorm(vcross(axis, Y));
   const w = vcross(axis, u);
   const at = (r, angle, d = 0) => vadd(face, vadd(vscale(axis, d), vadd(vscale(u, r * Math.cos(angle)), vscale(w, r * Math.sin(angle)))));
-  const segments = lod === 0 ? 16 : 8;
-  const rings = lod === 0 ? [[0, P.hub, 0.012], [0.32, P.hub, 0.01], [0.4, rimColour, 0], [0.96, rimColour, 0]] : [[0, P.hub, 0], [0.45, rimColour, 0], [0.96, rimColour, 0]];
+  const segments = lod === 0 ? 16 : 6;
+  const rings = lod === 0 ? [[0, P.hub, 0.012], [0.32, P.hub, 0.01], [0.4, rimColour, 0], [0.96, rimColour, 0]] : [[0, P.hub, 0], [0.96, rimColour, 0]];
   for (let s = 0; s < segments; s += 1) {
     const a0 = (2 * Math.PI * s) / segments;
     const a1 = (2 * Math.PI * (s + 1)) / segments;
@@ -1302,7 +1307,7 @@ function buildShuttle(out, lod) {
 // The decal swooshes of an RV side: two bands of the stripe colour, low
 // along the body and sweeping up toward the front, broken where a door or a
 // window stands in their way (gaps: [[z0, z1], ...]).
-function swooshes(z0, z1, yLow, rise, gaps = []) {
+function swooshes(z0, z1, yLow, rise, gaps = [], segment = 0.5) {
   const bands = [];
   const yAt = (z, offset) => yLow + offset + rise * Math.pow((z1 - z) / (z1 - z0), 2.2);
   // The pieces of [z0, z1] outside the gaps.
@@ -1315,7 +1320,7 @@ function swooshes(z0, z1, yLow, rise, gaps = []) {
   if (z1 > start + 0.3) pieces.push([start, z1]);
   for (const [offset, height] of [[0, 0.16], [0.26, 0.08]]) {
     for (const [p0, p1] of pieces) {
-      const n = Math.max(2, Math.ceil((p1 - p0) / 0.5));
+      const n = Math.max(2, Math.ceil((p1 - p0) / segment));
       const lower = [];
       const upper = [];
       for (let i = 0; i <= n; i += 1) {
@@ -1369,7 +1374,7 @@ function classA(out, lod) {
     rectHole(2.35, 3.45, 1.95, 2.6, P.glass, { radius: 0.08 }),
     // The entry door on the right, behind the front axle.
     rectHole(-3.0, -2.35, 0.5, 2.75, P.white_body, { side: 1, radius: 0.04 }),
-    ...swooshes(-4.0, hl - 0.3, 1.27, 0.3, [[-3.1, -2.25]]),
+    ...swooshes(-4.0, hl - 0.3, 1.27, 0.3, [[-3.1, -2.25]], lod === 0 ? 0.5 : 1.6),
   ];
   sweepTagged(out, p, hw, {
     bumper: P.trim, grille: { face: P.grille, round: P.paint }, windshield: { face: P.glass, round: P.trim }, cap: P.paint,
@@ -1430,7 +1435,7 @@ function classC(out, lod) {
     rectHole(-1.9, -0.9, 1.7, 2.45, P.glass, { radius: 0.07 }),
     rectHole(1.8, 2.9, 1.8, 2.45, P.glass, { radius: 0.07 }),
     rectHole(-0.6, 0.05, 0.88, 2.7, P.white_body, { side: 1, radius: 0.04 }),
-    ...swooshes(-1.85, hl - 0.2, 1.05, 0.25, [[-0.7, 0.15]]),
+    ...swooshes(-1.85, hl - 0.2, 1.05, 0.25, [[-0.7, 0.15]], lod === 0 ? 0.5 : 1.6),
   ];
   sweepTagged(out, p, hw, { front: P.paint, bunk: P.paint, roof: P.paint, rear: P.paint, under: P.under, arch: P.under }, { r: 0.15, side: { part: P.paint, holes } });
   roofKit(out, lod, hw, roof, [0.6]);
@@ -1462,7 +1467,7 @@ function travelTrailer(out, lod) {
     rectHole(0.0, 0.9, 1.7, 2.35, P.glass, { radius: 0.08 }),
     rectHole(2.6, 3.7, 1.7, 2.35, P.glass, { radius: 0.08 }),
     rectHole(-1.05, -0.4, 0.82, 2.6, P.white_body, { side: 1, radius: 0.04 }),
-    ...swooshes(-2.9, hl - 0.2, 1.0, 0.25, [[-1.15, -0.3]]),
+    ...swooshes(-2.9, hl - 0.2, 1.0, 0.25, [[-1.15, -0.3]], lod === 0 ? 0.5 : 1.6),
   ];
   // The front window across the cap.
   sweepTagged(out, p, hw, { front: { face: P.paint, round: P.paint }, roof: P.paint, rear: P.paint, under: P.under, arch: P.under }, { r: 0.12, side: { part: P.paint, holes } });
@@ -1501,7 +1506,7 @@ function fifthWheel(out, lod) {
     rectHole(0.2, 1.2, 1.9, 2.65, P.glass, { radius: 0.08 }),
     rectHole(3.4, 4.5, 1.95, 2.65, P.glass, { radius: 0.08 }),
     rectHole(-0.65, 0.0, 0.9, 2.85, P.white_body, { side: 1, radius: 0.04 }),
-    ...swooshes(-2.9, hl - 0.25, 1.05, 0.45, [[-0.75, 0.1], [0.75, 3.65]]),
+    ...swooshes(-2.9, hl - 0.25, 1.05, 0.45, [[-0.75, 0.1], [0.75, 3.65]], lod === 0 ? 0.5 : 1.6),
   ];
   sweepTagged(out, p, hw, { neck: P.paint, front: { face: P.paint, round: P.paint }, roof: P.paint, rear: P.paint, under: P.under, arch: P.under }, { r: 0.15, side: { part: P.paint, holes } });
   if (lod === 0) {
