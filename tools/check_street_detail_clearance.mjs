@@ -125,8 +125,10 @@ function main() {
 // Ground a built fence shuts in. Around each built fence (its runs plus a margin)
 // a grid marks what the stock capsule's centre cannot reach: buildings, built
 // fence runs and street props grown by the capsule radius, and everything off
-// the island. Free cells that do not connect to the grid's edge are shut in,
-// unless the buildings and the shore alone already shut them in.
+// the island. Free ground the street solids cut off is shut in: cells that
+// reached the grid's edge before the street solids stood and no longer do, and
+// any piece split off ground the buildings and the shore alone already enclose
+// (a courtyard: the enclosure itself is not the street detail's doing).
 const POCKET_CELL_M = 0.2;
 const POCKET_MARGIN_M = 20;
 function fencedPockets(manifest, detail) {
@@ -192,40 +194,75 @@ function fencedPockets(manifest, detail) {
       mark(Math.min(...xs) - grow, Math.max(...xs) + grow, Math.min(...zs) - grow, Math.max(...zs) + grow, (point) => planDistance([point], [...triangle, triangle[0]]) <= grow || insideTriangle(point, triangle));
     }
     // Flood the free cells from the grid's edge.
-    const flood = () => {
-      const reached = new Uint8Array(width * depth);
-      const queue = [];
-      for (let i = 0; i < width; i += 1) for (const j of [0, depth - 1]) queue.push(j * width + i);
-      for (let j = 0; j < depth; j += 1) for (const i of [0, width - 1]) queue.push(j * width + i);
-      for (let head = 0; head < queue.length; head += 1) {
-        const index = queue[head];
-        if (blocked[index] || reached[index]) continue;
-        reached[index] = 1;
-        const i = index % width;
-        const j = (index - i) / width;
-        if (i > 0) queue.push(index - 1);
-        if (i < width - 1) queue.push(index + 1);
-        if (j > 0) queue.push(index - width);
-        if (j < depth - 1) queue.push(index + width);
+    // The free cells' connected pieces: ids[cell] is its piece (-1 when blocked),
+    // edge[piece] whether the piece reaches the grid's edge.
+    const pieces = () => {
+      const ids = new Int32Array(width * depth).fill(-1);
+      const sizes = [];
+      const edge = [];
+      const queue = new Int32Array(width * depth);
+      for (let seed = 0; seed < ids.length; seed += 1) {
+        if (blocked[seed] || ids[seed] !== -1) continue;
+        const id = sizes.length;
+        let size = 0;
+        let touches = false;
+        let tail = 0;
+        queue[tail++] = seed;
+        ids[seed] = id;
+        for (let head = 0; head < tail; head += 1) {
+          const index = queue[head];
+          size += 1;
+          const i = index % width;
+          const j = (index - i) / width;
+          if (i === 0 || j === 0 || i === width - 1 || j === depth - 1) touches = true;
+          for (const next of [i > 0 ? index - 1 : -1, i < width - 1 ? index + 1 : -1, j > 0 ? index - width : -1, j < depth - 1 ? index + width : -1]) {
+            if (next < 0 || blocked[next] || ids[next] !== -1) continue;
+            ids[next] = id;
+            queue[tail++] = next;
+          }
+        }
+        sizes.push(size);
+        edge.push(touches);
       }
-      return reached;
+      return { ids, sizes, edge };
     };
-    // Ground the buildings and the shore alone already enclose (a courtyard
-    // inside a building's walls) is not the street detail's doing: only free
-    // ground reachable before the street solids stand and unreachable after counts.
-    const open = flood();
+    // What the street detail shuts in is walkable ground it cuts off: free
+    // ground that reached the grid's edge before the street solids stood and no
+    // longer does, or a piece split off ground the buildings and the shore alone
+    // already enclose (a courtyard; the enclosure itself is not the street
+    // detail's doing, so its largest remaining piece does not count).
+    const before = pieces();
     for (const solid of solids) {
       const xs = solid.points.map((point) => point[0]);
       const zs = solid.points.map((point) => point[1]);
       mark(Math.min(...xs) - solid.radius, Math.max(...xs) + solid.radius, Math.min(...zs) - solid.radius, Math.max(...zs) + solid.radius, (point) => planDistance([point], solid.points) <= solid.radius);
     }
-    const reached = flood();
+    const after = pieces();
+    // Street solids only block cells, so each piece after lies inside one piece before.
+    const origin = new Int32Array(after.sizes.length).fill(-1);
+    const firstCell = new Int32Array(after.sizes.length).fill(-1);
+    for (let index = 0; index < after.ids.length; index += 1) {
+      const id = after.ids[index];
+      if (id < 0 || origin[id] !== -1) continue;
+      origin[id] = before.ids[index];
+      firstCell[id] = index;
+    }
+    const enclosed = new Map();
+    const cut = [];
+    for (let id = 0; id < after.sizes.length; id += 1) {
+      if (after.edge[id]) continue;
+      if (before.edge[origin[id]]) cut.push(id);
+      else enclosed.set(origin[id], [...(enclosed.get(origin[id]) ?? []), id]);
+    }
+    for (const split of enclosed.values()) {
+      split.sort((a, b) => after.sizes[b] - after.sizes[a]);
+      cut.push(...split.slice(1));
+    }
     let shut = 0;
     let example = null;
-    for (let index = 0; index < blocked.length; index += 1) {
-      if (blocked[index] || reached[index] || !open[index]) continue;
-      shut += 1;
-      example ??= centre(index % width, Math.floor(index / width));
+    for (const id of cut) {
+      shut += after.sizes[id];
+      example ??= centre(firstCell[id] % width, Math.floor(firstCell[id] / width));
     }
     cells += width * depth;
     // A single stray cell is grid noise in a corner; a capsule's footprint is not.
