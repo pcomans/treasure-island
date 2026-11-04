@@ -11765,9 +11765,7 @@
       ]
     },
     {
-      "chunk_ids": [
-        "x_-1__z_-1"
-      ],
+      "chunk_ids": [],
       "heights": [
         {
           "height_m": 4,
@@ -11776,10 +11774,7 @@
         }
       ],
       "logical_object_key": "building:w96698641",
-      "physical_object_keys": [
-        "building:w96698641:roof",
-        "building:w96698641:wall"
-      ],
+      "physical_object_keys": [],
       "representation": "direct",
       "roles": [
         "building"
@@ -12080,9 +12075,7 @@
       ]
     },
     {
-      "chunk_ids": [
-        "x_-1__z_-1"
-      ],
+      "chunk_ids": [],
       "heights": [
         {
           "height_m": 4,
@@ -12091,10 +12084,7 @@
         }
       ],
       "logical_object_key": "building:w96698653",
-      "physical_object_keys": [
-        "building:w96698653:roof",
-        "building:w96698653:wall"
-      ],
+      "physical_object_keys": [],
       "representation": "direct",
       "roles": [
         "building"
@@ -12125,9 +12115,7 @@
       ]
     },
     {
-      "chunk_ids": [
-        "x_-1__z_-1"
-      ],
+      "chunk_ids": [],
       "heights": [
         {
           "height_m": 4,
@@ -12136,10 +12124,7 @@
         }
       ],
       "logical_object_key": "building:w96698654",
-      "physical_object_keys": [
-        "building:w96698654:roof",
-        "building:w96698654:wall"
-      ],
+      "physical_object_keys": [],
       "representation": "direct",
       "roles": [
         "building"
@@ -12215,9 +12200,7 @@
       ]
     },
     {
-      "chunk_ids": [
-        "x_-1__z_-1"
-      ],
+      "chunk_ids": [],
       "heights": [
         {
           "height_m": 4,
@@ -12226,10 +12209,7 @@
         }
       ],
       "logical_object_key": "building:w96698660",
-      "physical_object_keys": [
-        "building:w96698660:roof",
-        "building:w96698660:wall"
-      ],
+      "physical_object_keys": [],
       "representation": "direct",
       "roles": [
         "building"

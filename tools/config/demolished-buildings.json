@@ -8,55 +8,79 @@
     {
       "source_key": "w109905031",
       "name": "Education Center Building 29A, 550 Avenue H",
-      "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (0.25-0.34 m), frozen footprint drawn on it 2026-11-04: no roof; trucks, trailers and bare ground fill the footprint. Google Street View Sep 2025 (651 Avenue H, pano 1NT4Oh9iXeuKRp6LjDoB5w): no building above the green container wall of the truck lot.",
+      "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (0.34 m source viewed at 0.25 m/px; the date checked in the Esri imagery metadata and against Wayback release 63116), frozen footprint drawn on it 2026-11-04: no roof; trucks, trailers and bare ground fill the footprint. Google Street View Sep 2025 (651 Avenue H, pano 1NT4Oh9iXeuKRp6LjDoB5w): no building above the green container wall of the truck lot.",
       "approval": "owner-approved 2026-11-04"
     },
     {
       "source_key": "w109905037",
       "name": "Education Center Building 29C, 550 Avenue H",
-      "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (0.25-0.34 m), frozen footprint drawn on it 2026-11-04: no roof; parked trucks and bare ground fill the footprint. Google Street View Sep 2025 (651 Avenue H, pano 1NT4Oh9iXeuKRp6LjDoB5w): no building above the green container wall of the truck lot.",
+      "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (0.34 m source viewed at 0.25 m/px; the date checked in the Esri imagery metadata and against Wayback release 63116), frozen footprint drawn on it 2026-11-04: no roof; parked trucks and bare ground fill the footprint. Google Street View Sep 2025 (651 Avenue H, pano 1NT4Oh9iXeuKRp6LjDoB5w): no building above the green container wall of the truck lot.",
       "approval": "owner-approved 2026-11-04"
     },
     {
       "source_key": "w109905040",
       "name": "Education Center Building 29E, 550 Avenue H",
-      "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (0.25-0.34 m), frozen footprint drawn on it 2026-11-04: no roof; box trucks, a coach and bare ground fill the footprint. Google Street View Sep 2025 (651 Avenue H, pano 1NT4Oh9iXeuKRp6LjDoB5w): no building above the green container wall of the truck lot.",
+      "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (0.34 m source viewed at 0.25 m/px; the date checked in the Esri imagery metadata and against Wayback release 63116), frozen footprint drawn on it 2026-11-04: no roof; box trucks, a coach and bare ground fill the footprint. Google Street View Sep 2025 (651 Avenue H, pano 1NT4Oh9iXeuKRp6LjDoB5w): no building above the green container wall of the truck lot.",
       "approval": "owner-approved 2026-11-04"
     },
     {
       "source_key": "w109905044",
       "name": "Education Center Building 29D, 550 Avenue H",
-      "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (0.25-0.34 m), frozen footprint drawn on it 2026-11-04: no roof; parked trucks, vans and bare ground fill the footprint. Google Street View Sep 2025 (651 Avenue H, pano 1NT4Oh9iXeuKRp6LjDoB5w): no building above the green container wall of the truck lot.",
+      "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (0.34 m source viewed at 0.25 m/px; the date checked in the Esri imagery metadata and against Wayback release 63116), frozen footprint drawn on it 2026-11-04: no roof; parked trucks, vans and bare ground fill the footprint. Google Street View Sep 2025 (651 Avenue H, pano 1NT4Oh9iXeuKRp6LjDoB5w): no building above the green container wall of the truck lot.",
       "approval": "owner-approved 2026-11-04"
     },
     {
       "source_key": "w34313523",
       "name": "Education Center Building 29B, 768 Avenue H",
-      "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (0.25-0.34 m), frozen footprint drawn on it 2026-11-04: no roof; parked trucks and bare ground fill the footprint. Google Street View Sep 2025 (651 Avenue H, pano 1NT4Oh9iXeuKRp6LjDoB5w): no building above the green container wall of the truck lot.",
+      "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (0.34 m source viewed at 0.25 m/px; the date checked in the Esri imagery metadata and against Wayback release 63116), frozen footprint drawn on it 2026-11-04: no roof; parked trucks and bare ground fill the footprint. Google Street View Sep 2025 (651 Avenue H, pano 1NT4Oh9iXeuKRp6LjDoB5w): no building above the green container wall of the truck lot.",
       "approval": "owner-approved 2026-11-04"
     },
     {
       "source_key": "w95934093",
       "name": "1432 Halibut Court",
-      "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (0.5 m), frozen footprint drawn on it 2026-11-04: a bare concrete slab of the footprint's shape, no roof. Google Street View Mar 2025 (1432 Halibut Ct, the SSE front): an empty slab; the building still stood in Apr 2019 (pano jkNuxefU6_JE_YO8WfTmLA).",
+      "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (viewed at 0.5 m/px; the date checked in the Esri imagery metadata), frozen footprint drawn on it 2026-11-04: a bare concrete slab of the footprint's shape, no roof. Google Street View Mar 2025 (1432 Halibut Ct, the SSE front): an empty slab; the building still stood in Apr 2019 (pano jkNuxefU6_JE_YO8WfTmLA).",
       "approval": "owner-approved 2026-11-04"
     },
     {
       "source_key": "w95934098",
       "name": "1435 Halibut Court",
-      "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (0.5 m), frozen footprint drawn on it 2026-11-04: a bare concrete slab of the footprint's shape, no roof. Google Street View Mar 2025 (Halibut Ct, the NNW front and from the SE): an empty slab and cleared lot; the building still stood in Apr 2019 (pano HKFHgtqE2Sph_6ZMyo34oA).",
+      "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (viewed at 0.5 m/px; the date checked in the Esri imagery metadata), frozen footprint drawn on it 2026-11-04: a bare concrete slab of the footprint's shape, no roof. Google Street View Mar 2025 (Halibut Ct, the NNW front and from the SE): an empty slab and cleared lot; the building still stood in Apr 2019 (pano HKFHgtqE2Sph_6ZMyo34oA).",
       "approval": "owner-approved 2026-11-04"
     },
     {
       "source_key": "w95934099",
       "name": "1433 Halibut Court",
-      "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (0.5 m), frozen footprint drawn on it 2026-11-04: a bare concrete slab of the footprint's shape, no roof. Google Street View Mar 2025 (Halibut Ct, the NNW front): an empty slab; the building still stood in Apr 2019 (pano iR9ORV9MD29o9MsEIekpgQ).",
+      "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (viewed at 0.5 m/px; the date checked in the Esri imagery metadata), frozen footprint drawn on it 2026-11-04: a bare concrete slab of the footprint's shape, no roof. Google Street View Mar 2025 (Halibut Ct, the NNW front): an empty slab; the building still stood in Apr 2019 (pano iR9ORV9MD29o9MsEIekpgQ).",
       "approval": "owner-approved 2026-11-04"
     },
     {
       "source_key": "w95934122",
       "name": "1434 Halibut Court",
-      "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (0.5 m), frozen footprint drawn on it 2026-11-04: a bare concrete slab of the footprint's shape, no roof. Google Street View Mar 2025 (Halibut Ct, the SSE front): an empty slab; the building still stood in Apr 2019 (pano HKFHgtqE2Sph_6ZMyo34oA).",
+      "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (viewed at 0.5 m/px; the date checked in the Esri imagery metadata), frozen footprint drawn on it 2026-11-04: a bare concrete slab of the footprint's shape, no roof. Google Street View Mar 2025 (Halibut Ct, the SSE front): an empty slab; the building still stood in Apr 2019 (pano HKFHgtqE2Sph_6ZMyo34oA).",
+      "approval": "owner-approved 2026-11-04"
+    },
+    {
+      "source_key": "w96698641",
+      "name": "Unnamed modular building on 9th Street, 810 Avenue D complex",
+      "evidence": "Esri World Imagery through Wayback at z19 (about 0.24 m/px), the frozen footprint drawn on it, dates checked in the Esri imagery metadata 2026-11-04: the 2022-11-29 capture (release 25982) still shows all four roofs of the complex on their footprints, which checks the overlay; the 2025-08-29 (release 13192) and 2026-05-26 Vantor (release 63116) captures show pavement and parked cars in the footprint. Google Street View, 9th St: standing in Jan 2023 (pano oclK85J4sfW8LYtDnRpRsg); in Mar 2025 a two-high container stack stands inside the footprint (pano n5Nh0GxrYGwxrIssjkdq4g), and in Sep 2025 only sky shows above the container wall where its roof stood (pano zymx-sHLgpe6167colQIQQ). Checked by verify-810-avenue-d-20261104 (private references).",
+      "approval": "owner-approved 2026-11-04"
+    },
+    {
+      "source_key": "w96698653",
+      "name": "Unnamed modular building with a ramp, 810 Avenue D complex",
+      "evidence": "Esri World Imagery through Wayback at z19 (about 0.24 m/px), the frozen footprint drawn on it, dates checked in the Esri imagery metadata 2026-11-04: the 2022-11-29 capture (release 25982) still shows all four roofs of the complex on their footprints, which checks the overlay; the 2025-08-29 (release 13192) and 2026-05-26 Vantor (release 63116) captures show box trucks, vans and pavement in the footprint. Google Street View: standing in Jan 2023 from 9th St and through the gap to the complex (panos oclK85J4sfW8LYtDnRpRsg, -NoQLqSMW3vWGqHcPSWbXw); in Mar 2025 (pano R16U0b2-eqff6bSOd218Qw) and Sep 2025 (pano zymx-sHLgpe6167colQIQQ) only sky shows above the container wall where its roof would clear it. Checked by verify-810-avenue-d-20261104 (private references).",
+      "approval": "owner-approved 2026-11-04"
+    },
+    {
+      "source_key": "w96698654",
+      "name": "Unnamed modular building at the back of the 810 Avenue D complex",
+      "evidence": "Esri World Imagery through Wayback at z19 (about 0.24 m/px), the frozen footprint drawn on it, dates checked in the Esri imagery metadata 2026-11-04: the 2022-11-29 capture (release 25982) still shows all four roofs of the complex on their footprints, which checks the overlay; the 2025-08-29 (release 13192) and 2026-05-26 Vantor (release 63116) captures agree: box trucks and pavement fill the footprint. Google Street View: standing in Jan 2023 (pano -NoQLqSMW3vWGqHcPSWbXw); its low roof sits below the 2025 container wall from every public street view, so the two dated aerials decide. Its three neighbours in the complex went in the same 2023-2025 window. Checked by verify-810-avenue-d-20261104 (private references).",
+      "approval": "owner-approved 2026-11-04"
+    },
+    {
+      "source_key": "w96698660",
+      "name": "810 Avenue D",
+      "evidence": "Esri World Imagery through Wayback at z19 (about 0.24 m/px), the frozen footprint drawn on it, dates checked in the Esri imagery metadata 2026-11-04: the 2022-11-29 capture (release 25982) still shows all four roofs of the complex on their footprints, which checks the overlay; the 2025-08-29 (release 13192) and 2026-05-26 Vantor (release 63116) captures show the container fence line and a parking strip across the footprint. Google Street View, Avenue D and 9th St corner: standing with its 810 sign in Jan 2023 (pano -r7fiRLWpVVHcX60UPtdWQ); in Mar 2025 only sky shows above the wall across its span and a white box 38 m away shows through where it stood (pano le1q7oLYgiyaWBAv2NBF2w); Sep 2025 from 9th St the same (pano zymx-sHLgpe6167colQIQQ). Checked by verify-810-avenue-d-20261104 (private references).",
       "approval": "owner-approved 2026-11-04"
     },
     {

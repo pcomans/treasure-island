@@ -25,11 +25,15 @@
 // face +Z): left or right of the line across it, forward or backward along it.
 // anchor (across only) puts the item's -Z end (minus_z) or +Z end (plus_z) on
 // the line instead of its middle, so back-to-back container rows share a spine.
+// skew_deg (across, middle anchor only) turns every item by that angle from
+// across the line, as in angled parking; side by side, the items stand that
+// much further apart along the line, so their gap stays gap_m.
 // allow_roads names OSM roads the items may stand over (a parking-lot aisle
-// mapped through the parked vans); every other OSM road stays clear. Long
-// props rest without roll and with a small pitch along their length;
-// segment_m splits a span line or a wall stretch into equal parts no longer
-// than it, each resting on its own, so a long row steps down a steeper slope.
+// mapped through the parked vans, or one a container wall now closes); every
+// other OSM road stays clear. Long props rest without roll and with a small
+// pitch along their length; segment_m splits a span line or a wall stretch
+// into equal parts no longer than it, each resting on its own, so a long row
+// steps down a steeper slope.
 //
 // Items are the yard kit's props (tools/lib/street-yard-kit.mjs, drawn by the
 // street-clutter builder): clutter-layer rows of the prop's own kind with their
@@ -48,9 +52,9 @@ import { invariant, roundCoordinate } from "./world-contract.mjs";
 export const STREET_YARD_PATTERNS = Object.freeze(["pack", "span", "wall", "moored"]);
 const COMMON_FIELDS = Object.freeze(["basis", "evidence", "id", "pattern", "rule"]);
 const PATTERN_FIELDS = Object.freeze({
-  pack: { required: ["lines", "orient", "facing", "items", "gap_m", "fill"], optional: ["frame", "anchor", "align", "jitter_m", "jitter_deg", "allow_roads"] },
+  pack: { required: ["lines", "orient", "facing", "items", "gap_m", "fill"], optional: ["frame", "anchor", "align", "jitter_m", "jitter_deg", "skew_deg", "allow_roads"] },
   span: { required: ["lines", "prop", "params", "facing"], optional: ["frame", "align", "allow_roads", "segment_m"] },
-  wall: { required: ["line_xz", "inside", "params"], optional: ["closed", "openings", "align", "segment_m"] },
+  wall: { required: ["line_xz", "inside", "params"], optional: ["closed", "openings", "align", "segment_m", "allow_roads"] },
   moored: { required: ["items"], optional: [] },
 });
 // The yard kit props (and variants) whose origin is on the waterline, which a
@@ -65,8 +69,11 @@ const SIZE_PARAMS = Object.freeze({ storage_shed_row: "bays", fabric_shed: "bays
 const LONG_PROPS = Object.freeze(Object.keys(SIZE_PARAMS));
 const LONG_MAX_PITCH_RAD = 0.03;
 // An item may sink this far into the visible ground at its lowest point (the
-// corner castings and tyres hide it), which keeps its other corners down.
+// corner castings and tyres hide it), which keeps its other corners down. A
+// long prop on uneven ground splits the difference, sinking at most
+// LONG_REST_SINK_M (its walls run into the ground) rather than floating.
 const REST_SINK_M = 0.03;
+const LONG_REST_SINK_M = 0.15;
 // Clear space an item keeps (m): from an OSM building wall, and between two
 // items of the yards (they may stand close, as containers do, but not touch).
 const BUILDING_CLEAR_M = 0.3;
@@ -197,7 +204,7 @@ export function validateYardRules(zone, kinds) {
     const checkProp = (prop, params, itemLabel) => {
       invariant(YARD_KIT_KEYS.includes(prop), `${itemLabel} prop ${prop} is not a yard kit prop`);
       invariant(kinds[prop]?.layer === "clutter", `${itemLabel} prop ${prop} has no clutter kind`);
-      invariant(isPlainObject(params) && Number.isInteger(params.variant), `${itemLabel} params need a fixed integer variant`);
+      invariant(isPlainObject(params) && (Number.isInteger(params.variant) || isPlainObject(params.variant)), `${itemLabel} params need a variant (an index or weighted indices)`);
       for (const [name, value] of Object.entries(params)) validateParamValue(value, `${itemLabel} param ${name}`);
     };
     if (rule.pattern === "pack") {
@@ -206,6 +213,7 @@ export function validateYardRules(zone, kinds) {
       invariant(facings.includes(rule.facing), `${label} facing is left/right across a line, forward/backward along it`);
       validateLines(rule.lines, label, facings);
       invariant(rule.anchor === undefined || (rule.orient === "across" && ["center", "minus_z", "plus_z"].includes(rule.anchor)), `${label} anchor (across only) is center, minus_z or plus_z`);
+      invariant(rule.skew_deg === undefined || (rule.orient === "across" && (rule.anchor ?? "center") === "center" && isFiniteNumber(rule.skew_deg) && Math.abs(rule.skew_deg) <= 60), `${label} skew_deg (across, middle anchor only) is at most 60 degrees either way`);
       invariant(Array.isArray(rule.items) && rule.items.length > 0, `${label} needs items`);
       rule.items.forEach((item, index) => {
         const itemLabel = `${label} item ${index}`;
@@ -236,6 +244,7 @@ export function validateYardRules(zone, kinds) {
       invariant(rule.closed === undefined || typeof rule.closed === "boolean", `${label} closed must be boolean`);
       invariant(["left", "right"].includes(rule.inside), `${label} inside is left or right`);
       checkProp(WALL_PROP, rule.params, label);
+      invariant(Number.isInteger(rule.params.variant), `${label} needs a fixed variant`);
       invariant(!("length_m" in rule.params), `${label} params leave out length_m, which each leg sets`);
       for (const params of paramCombinations(rule.params)) {
         const error = yardPropParamsError(WALL_PROP, { ...params, length_m: YARD_KIT_PROPS[WALL_PROP].params.length_m.min });
@@ -369,9 +378,10 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
     const a = sx > 0 && !long ? samples.reduce((sum, [x, , y]) => sum + x * (y - mean), 0) / sx : 0;
     let b = sz > 0 ? samples.reduce((sum, [, z, y]) => sum + z * (y - mean), 0) / sz : 0;
     if (long) b = Math.max(-Math.tan(LONG_MAX_PITCH_RAD), Math.min(Math.tan(LONG_MAX_PITCH_RAD), b));
-    // Raised until no sample is more than REST_SINK_M above it.
-    let raise = -Infinity;
-    for (const [x, z, y] of samples) raise = Math.max(raise, y - (mean + a * x + b * z) - REST_SINK_M);
+    // Raised until no sample is more than the allowed sink above it.
+    const residuals = samples.map(([x, z, y]) => y - (mean + a * x + b * z));
+    const top = Math.max(...residuals);
+    const raise = long ? Math.max((top + Math.min(...residuals)) / 2, top - LONG_REST_SINK_M) : top - REST_SINK_M;
     let float = 0;
     let sink = 0;
     for (const [x, z, y] of samples) {
@@ -495,6 +505,9 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
           const direction = unit(sub(end, start));
           const left = leftOf(direction);
           const facing = rule.lines[lineIndex][4] ?? rule.facing;
+          const skew = ((rule.skew_deg ?? 0) * Math.PI) / 180;
+          // Side by side, a skewed item takes 1 / cos(skew) more of the line.
+          const stretch = 1 / Math.cos(skew);
           // Slots first, so the packed run can be aligned on its line.
           const slots = [];
           let at = 0;
@@ -505,10 +518,10 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
             const item = rule.items[Number(pickWeighted(weights, hashUnit(seed, identity, "item")))];
             const params = drawParams(item.params, seed, identity);
             const footprint = yardPropFootprint(item.prop, params);
-            const along = rule.orient === "across" ? footprint.x_m : footprint.z_m;
+            const along = rule.orient === "across" ? footprint.x_m * stretch : footprint.z_m;
             if (at + along > total + 1e-6) break;
             slots.push({ cell, identity, item, params, footprint, at, along, filled: hashUnit(seed, identity, "fill") < rule.fill });
-            at += along + rule.gap_m[0] + (rule.gap_m[1] - rule.gap_m[0]) * hashUnit(seed, identity, "gap");
+            at += along + (rule.gap_m[0] + (rule.gap_m[1] - rule.gap_m[0]) * hashUnit(seed, identity, "gap")) * stretch;
           }
           if (slots.length === 0) return;
           const shift = alignShift(rule.align, total - (slots.at(-1).at + slots.at(-1).along));
@@ -518,7 +531,7 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
               continue;
             }
             const jitter = rule.jitter_m ?? 0;
-            const turn = (((rule.jitter_deg ?? 0) * Math.PI) / 180) * (hashUnit(seed, slot.identity, "yaw") * 2 - 1);
+            const turn = skew + (((rule.jitter_deg ?? 0) * Math.PI) / 180) * (hashUnit(seed, slot.identity, "yaw") * 2 - 1);
             let front = rule.orient === "across" ? (facing === "left" ? left : scale(left, -1)) : (facing === "forward" ? direction : scale(direction, -1));
             const anchor = rule.anchor ?? "center";
             // The item's -Z end (minus_z) or +Z end (plus_z) on the line, else its middle.
@@ -539,20 +552,26 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
         worldLines(rule).forEach(([lineStart, lineEnd], lineIndex) => {
           const lineTotal = length(sub(lineEnd, lineStart));
           const direction = unit(sub(lineEnd, lineStart));
-          for (const part of segments(lineTotal, rule.segment_m)) {
-            const start = add(lineStart, scale(direction, part.from));
-            const total = part.length;
+          const front = rule.facing === "forward" ? direction : scale(direction, -1);
+          // The line's parts, each sized to its share; the sized parts stand end
+          // to end SEGMENT_GAP_M apart and the run is aligned on the line, so
+          // any length the sizes leave over goes to the line's ends.
+          const parts = segments(lineTotal, rule.segment_m).map((part) => {
             const cell = `l${String(lineIndex).padStart(2, "0")}${part.label}`;
             const params = drawParams(rule.params, seed, `${zone.id}:${rule.id}:${cell}`);
-            const sized = fitSize(rule.prop, params, sizeParam, total);
-            if (!sized) {
-              count(audit.rejected_by_reason, reasonKey("line_too_short"));
-              continue;
-            }
-            const along = sized.footprint.z_m;
-            const centre = add(start, scale(direction, alignShift(rule.align, total - along) + along / 2));
-            const front = rule.facing === "forward" ? direction : scale(direction, -1);
-            const result = addItem(zone, rule, cell, rule.prop, sized.params, centre, front);
+            return { cell, sized: fitSize(rule.prop, params, sizeParam, part.length) };
+          });
+          if (parts.some((part) => !part.sized)) {
+            count(audit.rejected_by_reason, reasonKey("line_too_short"));
+            return;
+          }
+          const used = parts.reduce((sum, part) => sum + part.sized.footprint.z_m, 0) + SEGMENT_GAP_M * (parts.length - 1);
+          let at = alignShift(rule.align, lineTotal - used);
+          for (const part of parts) {
+            const along = part.sized.footprint.z_m;
+            const centre = add(lineStart, scale(direction, at + along / 2));
+            at += along + SEGMENT_GAP_M;
+            const result = addItem(zone, rule, part.cell, rule.prop, part.sized.params, centre, front);
             if (result.problem) count(audit.rejected_by_reason, reasonKey(result.problem));
           }
         });
@@ -584,8 +603,8 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
             const b = to - walked;
             pieces = pieces.flatMap(([p0, p1]) => [[p0, Math.min(p1, a)], [Math.max(p0, b), p1]]).filter(([p0, p1]) => p1 - p0 > 0.05);
           }
-          pieces.forEach(([piece0, piece1], pieceIndex) => segments(piece1 - piece0, rule.segment_m).forEach((part) => {
-            const [p0, p1] = [piece0 + part.from, piece0 + part.from + part.length];
+          pieces.forEach(([piece0, piece1], pieceIndex) => wallParts(piece0, piece1, rule.segment_m, rule.align === "end").forEach((part) => {
+            const [p0, p1] = [part.from, part.to];
             const cell = `g${String(leg - 1).padStart(2, "0")}p${pieceIndex}${part.label}`;
             const params = drawParams(rule.params, seed, `${zone.id}:${rule.id}:${cell}`);
             const run = p1 - p0;
@@ -664,7 +683,27 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
 function segments(total, segmentM) {
   const count = segmentM === undefined ? 1 : Math.max(1, Math.ceil((total + SEGMENT_GAP_M) / (segmentM + SEGMENT_GAP_M)));
   const part = (total - SEGMENT_GAP_M * (count - 1)) / count;
-  return Array.from({ length: count }, (_, index) => ({ from: index * (part + SEGMENT_GAP_M), length: part, label: count === 1 ? "" : `s${index}` }));
+  return Array.from({ length: count }, (_, index) => ({ from: index * (part + SEGMENT_GAP_M), length: part, label: count === 1 ? "" : `s${String(index).padStart(2, "0")}` }));
+}
+
+// A wall stretch [p0, p1] in parts of segment_m (one part without it): each
+// part's containers start where the previous part's end, SEGMENT_GAP_M on,
+// filling from the stretch's start (from its end when fromEnd), so the parts
+// stand container to container; the last part takes what is left.
+function wallParts(p0, p1, segmentM, fromEnd) {
+  const total = p1 - p0;
+  if (segmentM === undefined) return [{ from: p0, to: p1, label: "" }];
+  const parts = [];
+  let done = 0;
+  while (total - done >= containerWallLayoutMinimum()) {
+    const last = total - done < segmentM + SEGMENT_GAP_M + containerWallLayoutMinimum();
+    const length = last ? total - done : segmentM;
+    const label = `s${String(parts.length).padStart(2, "0")}`;
+    parts.push(fromEnd ? { from: p1 - done - length, to: p1 - done, label } : { from: p0 + done, to: p0 + done + length, label });
+    if (last) break;
+    done += containerWallLayout({ length_m: length }).covered_m + SEGMENT_GAP_M;
+  }
+  return parts.length === 1 ? [{ ...parts[0], label: "" }] : parts;
 }
 
 function containerWallLayoutMinimum() {

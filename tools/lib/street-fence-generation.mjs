@@ -57,14 +57,18 @@ const GATE_WIDTH_M = 1.5;
 const MAXIMUM_GATE_WIDTH_M = 8;
 const SAFE_ID = /^[a-z0-9_]+$/u;
 const RULE_FIELDS = Object.freeze(["basis", "evidence", "fence_type", "id", "kind", "legs", "params", "pattern", "rule"]);
+// Optional rule fields: gates [{at_m, width_m, style}] along the rule's line.
+const OPTIONAL_RULE_FIELDS = Object.freeze(["gates"]);
 const OSM_WAY_RULE_FIELDS = Object.freeze(["basis", "evidence", "fence_type", "from_m", "id", "kind", "params", "pattern", "rule", "to_m", "way"]);
+// An osm_way rule may also shift its row sideways off the OSM line (offset_m,
+// + to the left of the way), where the line is mapped on a sidewalk's edge,
+// and name gates along its stretch like a traced rule.
+const OSM_WAY_RULE_OPTIONAL = Object.freeze(["gates", "offset_m"]);
 // The fence_type of an osm_way rule that only cuts its stretch out of the OSM fence.
 export const FENCE_TYPE_NONE = "none";
 // An osm_way rule's along-distance may run this far past its way's end, which
 // then means the end (along-distances are read off a map to the decimetre).
 const OSM_WAY_END_SLACK_M = 1.0;
-// Optional fields of a legs rule: gates [{at_m, width_m, style}] along the rule's line.
-const OPTIONAL_RULE_FIELDS = Object.freeze(["gates"]);
 const OSM_FENCE_TYPES = Object.freeze({
   chain_link: "chain_link",
   metal: "chain_link",
@@ -162,12 +166,10 @@ export function validateFenceRules(zone, kinds) {
     invariant(typeof rule?.id === "string" && SAFE_ID.test(rule.id) && !ids.has(rule.id), `${label} needs a unique lower_snake id`);
     ids.add(rule.id);
     invariant(["legs", "osm_way"].includes(rule?.pattern), `${label} pattern must be legs or osm_way`);
-    if (rule.pattern === "legs") {
-      invariant(JSON.stringify(Object.keys(rule).filter((key) => !OPTIONAL_RULE_FIELDS.includes(key)).sort()) === JSON.stringify([...RULE_FIELDS]),
-        `${label} must have exactly ${RULE_FIELDS.join(", ")} (and optionally ${OPTIONAL_RULE_FIELDS.join(", ")})`);
-    } else {
-      invariant(JSON.stringify(Object.keys(rule).sort()) === JSON.stringify([...OSM_WAY_RULE_FIELDS]), `${label} must have exactly ${OSM_WAY_RULE_FIELDS.join(", ")}`);
-    }
+    const fields = rule.pattern === "legs" ? RULE_FIELDS : OSM_WAY_RULE_FIELDS;
+    const optional = rule.pattern === "legs" ? OPTIONAL_RULE_FIELDS : OSM_WAY_RULE_OPTIONAL;
+    invariant(JSON.stringify(Object.keys(rule).filter((key) => !optional.includes(key)).sort()) === JSON.stringify([...fields]),
+      `${label} must have exactly ${fields.join(", ")} (and optionally ${optional.join(", ")})`);
     invariant(rule.kind === "fence" && kinds.fence?.layer === "fences", `${label} kind must be fence`);
     invariant(rule.basis === "production_inference", `${label}: rule-based fences are production_inference`);
     for (const field of ["rule", "evidence"]) invariant(typeof rule[field] === "string" && rule[field].trim() !== "", `${label} needs ${field}`);
@@ -175,12 +177,12 @@ export function validateFenceRules(zone, kinds) {
     if (rule.pattern === "osm_way") {
       invariant(/^w\d+$/u.test(rule.way), `${label} way must be an OSM way key`);
       invariant([rule.from_m, rule.to_m].every(isFiniteNumber) && rule.from_m >= 0 && rule.to_m >= 0 && Math.abs(rule.to_m - rule.from_m) >= MINIMUM_RUN_M, `${label} needs from_m and to_m at least ${MINIMUM_RUN_M} m apart`);
+      invariant(rule.offset_m === undefined || (isFiniteNumber(rule.offset_m) && rule.offset_m !== 0 && Math.abs(rule.offset_m) <= 3), `${label} offset_m must be a non-zero shift of at most 3 m`);
       if (rule.fence_type === FENCE_TYPE_NONE) {
-        invariant(Object.keys(rule.params).length === 0, `${label}: fence_type none takes no params`);
+        invariant(Object.keys(rule.params).length === 0 && rule.offset_m === undefined && rule.gates === undefined, `${label}: fence_type none takes no params, offset_m or gates`);
         continue;
       }
     }
-    invariant(STREET_FENCE_TYPES[rule.fence_type], `${label} fence_type must be one of ${Object.keys(STREET_FENCE_TYPES).join(", ")}${rule.pattern === "osm_way" ? `, or ${FENCE_TYPE_NONE}` : ""}`);
     invariant(fenceParamsError(rule.fence_type, rule.params) === null, `${label}: ${fenceParamsError(rule.fence_type, rule.params)}`);
     if (rule.gates !== undefined) {
       invariant(rule.fence_type === "chainlink_slatted", `${label}: only chainlink_slatted rules take gates`);
@@ -527,7 +529,8 @@ export function placeStreetFences({
         const wayPoints = target.points_m.map((point) => [point[0], point[2]]);
         const wayLengths = cumulative(wayPoints);
         const [s0, s1] = [Math.min(rule.from_m, rule.to_m, wayLengths.at(-1)), Math.min(Math.max(rule.from_m, rule.to_m), wayLengths.at(-1))];
-        const piece = slice(wayPoints, wayLengths, s0, s1);
+        let piece = slice(wayPoints, wayLengths, s0, s1);
+        if (rule.offset_m !== undefined) piece = offsetLine(piece, rule.offset_m);
         if (rule.from_m > rule.to_m) piece.reverse();
         line.push(...piece);
         vertexSources.push(...piece.map(() => rule.way));
@@ -586,10 +589,9 @@ export function placeStreetFences({
         basis: rule.basis,
       };
       // A rule along an OSM fence opens where that fence would (its gates, roads
-      // and street ground); a traced rule must keep off the street ground and
-      // opens at its own gates.
+      // and street ground); a traced rule must keep off the street ground.
       const ruleGates = (rule.gates ?? []).map((gate, index) => ({ at_m: gate.at_m, width_m: gate.width_m, style: gate.style, source_id: `${rule.id}:gate_${index}` }));
-      row.fence = fenceBlock(points, rule.fence_type, "rule", params, label, rule.pattern === "osm_way" ? { gates } : { rule: `${zone.id}/${rule.id}`, gates: ruleGates });
+      row.fence = fenceBlock(points, rule.fence_type, "rule", params, label, rule.pattern === "osm_way" ? { gates: [...gates, ...ruleGates] } : { rule: `${zone.id}/${rule.id}`, gates: ruleGates });
       applyStatus(row);
       invariant(row.status === "placed", `${label} is open along its whole length`);
       setProp(row, params);
