@@ -23,7 +23,7 @@ uniform float lens_width_m = 0.6;
 uniform float lens_gap_m = 0.1;
 uniform sampler2D detail : hint_default_white, filter_linear_mipmap, repeat_enable;
 uniform float detail_m = 2.5;
-uniform float detail_strength = 0.18;
+uniform float detail_strength = 0.3;
 
 float tri_wave(float x) {
 	return abs(fract(x) - 0.5) * 4.0 - 1.0;
@@ -62,8 +62,11 @@ void fragment() {
 		float row = floor(q.y / pitch_y);
 		float along = q.x + mod(row, 2.0) * pitch_x * 0.5;
 		vec2 local = (vec2(fract(along / pitch_x), fract(q.y / pitch_y)) - 0.5) * vec2(pitch_x, pitch_y);
-		float a = lens_length_m * 0.5;
-		float b = lens_width_m * 0.5;
+		// Each leaf a little longer or shorter than its neighbours (cmg14, ph10).
+		vec2 cell = vec2(floor(along / pitch_x), row);
+		float vary = fract(sin(dot(cell, vec2(127.1, 311.7))) * 43758.5453);
+		float a = lens_length_m * 0.5 * (0.84 + 0.2 * vary);
+		float b = lens_width_m * 0.5 * (0.86 + 0.18 * fract(vary * 7.31));
 		float r = (a * a + b * b) / (2.0 * b);
 		float leaf = max(length(local - vec2(0.0, r - b)), length(local + vec2(0.0, r - b))) - r;
 		color = mix(color_dark, color_light, cover(leaf, pixel));

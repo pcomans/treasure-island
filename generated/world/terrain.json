@@ -68,7 +68,7 @@
     "maximum_clearance_m": 0.081,
     "maximum_serialization_tolerance_m": 0.01,
     "minimum_clearance_m": 0.019,
-    "sample_points": 244174
+    "sample_points": 245168
   },
   "raster_bbox_wgs84": [
     -122.380001708984,
@@ -209,11 +209,11 @@
     "basis": "production_inference",
     "config": {
       "path": "tools/config/terrain-overrides.json",
-      "sha256": "5944dc282f5edc819e4f7e534ac1ea00791e5bbdff60ab5e2a1ba2c25abf8b32"
+      "sha256": "fc65eae14dcdf227d864a5c34df538a38e463ee74d620cd63a97a3f200540384"
     },
     "corrected_cells": 39,
-    "leaves": 1023,
-    "maximum_cut_m": 1.492,
+    "leaves": 1107,
+    "maximum_cut_m": 1.294,
     "maximum_raise_m": 1.412,
     "mesh": {
       "cell_m": 32,
@@ -221,7 +221,7 @@
       "sample_m": 0.5,
       "tolerance_m": 0.08
     },
-    "neighbour_edge_vertices": 46,
+    "neighbour_edge_vertices": 43,
     "refined_cell_bounds_m": [
       [
         -320,
@@ -459,14 +459,14 @@
       ]
     ],
     "refined_cells": 39,
-    "refined_triangles": 2417,
+    "refined_triangles": 2549,
     "schema_version": "ti.terrain-overrides/1",
     "sites": [
       {
         "edge_blend_m": 3,
         "grade": {
           "final_sweep_change_m": 0,
-          "free_nodes": 16132,
+          "free_nodes": 16140,
           "kind": "harmonic"
         },
         "id": "cityside_park",

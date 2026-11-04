@@ -1221,7 +1221,8 @@ export function generateStreetDetail({
   // A drifts or fill rule (tools/lib/street-planting-generation.mjs): its plants
   // keep the gameplay mask, the land, walls and every placed item except low
   // plants and the zone's other planted rows (no collision), which the zone's
-  // planting state keeps apart by their crown widths instead.
+  // planting state keeps apart by their crown widths instead; and each stands
+  // where its bed is the visible ground (not under a walk drawn over the bed).
   const slopeAt = (xz) => {
     const step = 0.6;
     const at = (dx, dz) => groundAt([xz[0] + dx, xz[1] + dz])?.y;
@@ -1261,6 +1262,7 @@ export function generateStreetDetail({
       else if (hardViolation(hardShapes, [xz], radius)) problem = hardViolation(hardShapes, [xz], radius).reason;
       else if (buildings.nearest(xz, exclusions.building_buffer_m + radius).distance < exclusions.building_buffer_m + radius) problem = "building_buffer";
       else if (shorelineOverlays.nearest(xz, radius).distance < radius) problem = "shoreline_overlay";
+      else if (!rule.surfaces.includes(surfaceAt(xz).material_key)) problem = "rule_surface";
       else {
         const near = blockers.get(`${Math.floor(xz[0] / BLOCK_CELL_M)},${Math.floor(xz[1] / BLOCK_CELL_M)}`) ?? [];
         if (near.some((item) => polylineDistance(xz, item.points) < item.radius_m + radius)) problem = "overlap";
