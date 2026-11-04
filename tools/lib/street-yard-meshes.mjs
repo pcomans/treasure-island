@@ -1040,7 +1040,7 @@ function softened(height, hx, hz) {
   let grid = [];
   for (let j = -nz; j <= nz; j += 1) for (let i = -nx; i <= nx; i += 1) grid.push(height(i * SOFTEN_CELL_M, j * SOFTEN_CELL_M));
   const taps = [1 / 16, 4 / 16, 6 / 16, 4 / 16, 1 / 16];
-  for (const [di, dj] of [[1, 0], [0, 1]]) {
+  for (const [di, dj] of [[1, 0], [0, 1], [1, 0], [0, 1]]) {
     const out = grid.slice();
     for (let j = 0; j <= 2 * nz; j += 1) {
       for (let i = 0; i <= 2 * nx; i += 1) {
@@ -1070,7 +1070,7 @@ function buildPile(material, shape, lod) {
   const spec = PILE_SPECS[material];
   const out = new YardBuilder(lod);
   const segments = lod === 0 ? (spec.folds ? 60 : spec.chunks ? 40 : 28) : 12;
-  const rings = lod === 0 ? (spec.chunks ? 12 : 9) : 4;
+  const rings = lod === 0 ? (spec.chunks ? 14 : 9) : 4;
   const seed = 31 * (shape + 1) + material.length;
   // Folds: ridges of a sheet draped over the mound, running down to the hem.
   const fold = (a) => (spec.folds ? 0.6 * (1 - Math.abs(Math.sin(3.5 * a + seed))) ** 3 + 0.4 * (1 - Math.abs(Math.sin(5.5 * a + 2.1 * seed))) ** 4 : 0);
@@ -1080,7 +1080,8 @@ function buildPile(material, shape, lod) {
   const elongation = material === "tarp" ? 1.3 : 1 + 0.15 * hash(seed, 2);
   const nominal = Math.max(spec.x, spec.z / elongation) / 2;
   // A tarp drapes over two or three mounds of what it covers, sagging
-  // between them (plan positions in units of the nominal radius).
+  // between them, and rubble is dumped on them (plan positions in units of
+  // the nominal radius).
   const mounds = [0, 1, 2].map((k) => ({
     x: (hash(seed, k, 11) - 0.5) * 0.9,
     z: (hash(seed, k, 12) - 0.5) * 0.9,
@@ -1097,11 +1098,20 @@ function buildPile(material, shape, lod) {
     }
     return top * Math.pow(Math.max(0, 1 - rho ** 6), 0.5);
   };
+  // Rubble is truckloads dumped together: stockpiles on the same mounds,
+  // merged, so its crest has several tops and saddles between them.
+  const dumped = (rho, a) => {
+    const x = rho * Math.cos(a);
+    const z = rho * Math.sin(a);
+    let top = 0;
+    for (const mound of mounds) top = Math.max(top, mound.h * stockpile(Math.min(1, Math.hypot(x - mound.x, z - mound.z) / mound.r)));
+    return top;
+  };
   const heightAt = (rho, a) => {
     // A tarp drapes over its mounds; a stockpile is a cone with a rounded
-    // crown (no point for a foot to catch on), its sides about the angle of
-    // repose (under 45 degrees, so its hull is walkable).
-    const base = spec.flat ? draped(rho, a) : Math.max(0, stockpile(rho));
+    // crown (no point for a foot to catch on). Settled (below), its sides
+    // stand at most at the angle of repose.
+    const base = spec.flat ? draped(rho, a) : spec.chunks ? dumped(rho, a) : Math.max(0, stockpile(rho));
     // Bumps (and a rubble pile's lumps of a metre or so) in plan coordinates.
     const r = nominal * outline(a) * rho;
     const px = r * Math.cos(a);
