@@ -24,11 +24,12 @@ uniform sampler2D palette : source_color, filter_nearest, repeat_disable;
 const int SOURCE[46] = int[46](1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	1, 1, 1, 1, 0, 2, 3, 1, 2, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 2, 3, 0, 1, 2, 0, 0, 0, 0, 1, 0);
 // PATTERN: 0 none, 1 container wall, 2 container roof, 3 container door,
-// 4 roll-up door, 5 ribbed wall, 6 ribbed roof, 7 wood grain, 8 aggregate.
+// 4 roll-up door, 5 ribbed wall, 6 ribbed roof, 7 wood grain, 8 aggregate,
+// 9 fabric over frames (a seam every 5 m), 10 wrinkled sheeting.
 const int PATTERN[46] = int[46](0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	1, 2, 3, 0, 0, 0, 4, 5, 6, 0, 7, 8, 8, 8, 0, 8, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+	1, 2, 3, 0, 0, 0, 4, 5, 6, 9, 7, 8, 8, 8, 10, 8, 0, 0, 10, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 const float ROUGH[46] = float[46](0.38, 0.38, 0.05, 0.86, 0.35, 0.55, 0.6, 0.14, 0.07, 0.12, 0.5, 0.95, 0.42, 0.55, 0.45, 0.42,
-	0.55, 0.62, 0.55, 0.6, 0.45, 0.4, 0.5, 0.5, 0.48, 0.85, 0.9, 0.95, 0.95, 0.92, 0.28, 0.9, 0.5, 0.75, 0.6, 0.85, 0.6, 0.95, 0.25, 0.85, 0.5, 0.8, 0.45, 0.55, 0.6, 0.8);
+	0.55, 0.62, 0.55, 0.6, 0.45, 0.4, 0.5, 0.5, 0.48, 0.85, 0.9, 0.95, 0.95, 0.92, 0.42, 0.9, 0.5, 0.75, 0.55, 0.85, 0.6, 0.95, 0.25, 0.85, 0.5, 0.8, 0.45, 0.55, 0.6, 0.8);
 const float METAL[46] = float[46](0.0, 0.0, 0.0, 0.0, 0.85, 0.3, 0.0, 1.0, 0.55, 0.0, 0.0, 0.0, 0.2, 0.0, 0.0, 0.75,
 	0.25, 0.2, 0.25, 0.25, 0.7, 0.0, 0.3, 0.3, 0.35, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.1, 0.3, 0.0, 0.2, 0.15, 0.0, 0.0, 0.0, 0.2, 0.0, 0.0, 0.3, 0.2, 0.0);
 const float SPEC[46] = float[46](0.5, 0.5, 0.8, 0.3, 0.5, 0.4, 0.4, 0.5, 0.6, 0.5, 0.4, 0.2, 0.4, 0.5, 0.5, 0.5,
@@ -45,7 +46,9 @@ varying flat int part;
 varying vec3 v_pos;
 varying vec3 v_normal_model;
 varying float v_u;
+varying float v_w;
 varying vec3 v_across;
+varying vec3 v_along;
 varying flat vec4 v_custom;
 
 float hash12(vec2 p) {
@@ -86,6 +89,10 @@ void vertex() {
 	}
 	v_u = dot(VERTEX, across);
 	v_across = normalize((MODELVIEW_MATRIX * vec4(across, 0.0)).xyz);
+	// The second direction in the surface, for sheeting wrinkles.
+	vec3 along = normalize(cross(NORMAL, across) + vec3(0.0, 1e-5, 0.0));
+	v_w = dot(VERTEX, along);
+	v_along = normalize((MODELVIEW_MATRIX * vec4(along, 0.0)).xyz);
 }
 
 // A profile's slope (normal tilt) and its height (0 valley .. 1 crest) at u.
@@ -174,6 +181,21 @@ void fragment() {
 		// Valleys and flanks hold a little shade; far away, their average.
 		float shade = mix(0.86, 1.0, profile.y);
 		albedo *= mix(0.93, shade, keep);
+	}
+	if (pattern == 9) {
+		// The membrane's seams over the portal frames, every 5 m.
+		float frame = abs(fract((v_u + 2.5) / 5.0 + 0.5) - 0.5) * 5.0;
+		float seam = 1.0 - smoothstep(0.04, 0.09 + fwidth(v_u), frame);
+		albedo *= 1.0 - 0.22 * seam;
+	} else if (pattern == 10) {
+		// Plastic sheeting and tarps: folds and wrinkles tilt the normal.
+		vec2 q = vec2(v_u, v_w) * 0.9 + seed * 17.0;
+		float e = 0.07;
+		float n0 = fbm(q);
+		vec2 g = vec2(fbm(q + vec2(e, 0.0)) - n0, fbm(q + vec2(0.0, e)) - n0) / e;
+		float keep = 1.0 - smoothstep(0.6, 2.4, fwidth(v_u) * 0.9);
+		NORMAL = normalize(NORMAL + (v_across * g.x + v_along * g.y) * 0.22 * keep);
+		albedo *= 0.85 + 0.3 * n0;
 	}
 	if (pattern == 7) {
 		// Wood grain along the length and plank-to-plank shade.

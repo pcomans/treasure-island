@@ -704,7 +704,7 @@ function buildFabricBay(span, lod, length = FABRIC_BAY, sag = true, rails = true
   // The far mesh has no base rail: its membrane reaches the ground.
   const section = fabricSection(spec).map(([x, y]) => [x, lod > 0 && y < 1 ? 0 : y]);
   const strips = lod === 0 && sag ? 8 : 1;
-  const amp = (j) => (j === 1 || j === 2 ? 0.09 : 0.05);
+  const amp = (j) => (j === 1 || j === 2 ? 0.13 : 0.07);
   for (let j = 0; j < section.length - 1; j += 1) {
     const [x0, y0] = section[j];
     const [x1, y1] = section[j + 1];
@@ -904,17 +904,17 @@ function buildPile(material, shape, lod) {
   gridSurface(out, grid, P[spec.part]);
   if (lod === 0 && material === "rubble") {
     // Broken slabs and blocks lying in the slope.
-    for (let i = 0; i < 46; i += 1) {
-      const rho = 0.15 + 0.8 * hash(i, seed, 1);
+    for (let i = 0; i < 110; i += 1) {
+      const rho = 0.1 + 0.88 * hash(i, seed, 1);
       const k = Math.floor(hash(i, seed, 2) * segments);
       const base = point(rho, k);
-      const size = 0.25 + 0.6 * hash(i, seed, 3);
+      const size = 0.14 + 0.36 * hash(i, seed, 3) ** 1.6;
       const yaw = hash(i, seed, 4) * Math.PI;
       const tilt = (hash(i, seed, 5) - 0.5) * 0.9;
       const ax = vnorm(v3(Math.cos(yaw), tilt * 0.4, Math.sin(yaw)));
       const ay = vnorm(vcross(vnorm(v3(-Math.sin(yaw), tilt, Math.cos(yaw))), ax));
       const az = vcross(ax, ay);
-      out.box(vadd(base, v3(0, size * 0.18, 0)), [size * (0.7 + 0.5 * hash(i, 6)), size * 0.3, size * (0.5 + 0.4 * hash(i, 7))], P.rubble, [ax, ay, az]);
+      out.box(vadd(base, v3(0, size * 0.1, 0)), [size * (0.7 + 0.5 * hash(i, 6)), size * 0.22, size * (0.5 + 0.4 * hash(i, 7))], P.rubble, [ax, ay, az]);
     }
   }
   if (lod === 0 && material === "tarp") {
@@ -1793,13 +1793,12 @@ function buildBoat(variant, covered, lod) {
   }
   // The transom: close the stern with the last ring's face.
   const cockpit = (z) => z > zBow + length * (cabin ? 0.62 : 0.35) && z < zStern - 0.35;
+  // Ring segments: 0 the V bottom, 1 the chine (a dark boot stripe), 2 the
+  // topsides, 3 the rub rail, 4 the deck edge, 5 the deck (or the cockpit).
   out.loft(grid, (k, j) => {
     const z = (grid[k][0][2] + grid[k + 1][0][2]) / 2;
-    if (j <= 1) return P.fiberglass;
-    if (j === 2) return P.trim; // boot stripe at the chine
-    if (j === 3) return P.fiberglass;
-    if (j === 4) return P.trim; // rub rail
-    if (cockpit(z)) return covered ? P.canvas : P.inside;
+    if (j === 1 || j === 3) return P.trim;
+    if (j === 5 && cockpit(z)) return covered ? P.canvas : P.inside;
     return P.fiberglass;
   }, { crease: 50 });
   const last = grid.at(-1);

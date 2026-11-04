@@ -91,7 +91,7 @@ const COLOURS := {
 	"grey": Color(0.56, 0.58, 0.59),
 	"light_grey": Color(0.72, 0.73, 0.72),
 	"orange": Color(0.78, 0.38, 0.13),
-	"red": Color(0.5, 0.16, 0.13),
+	"red": Color(0.43, 0.13, 0.11),
 	"rust": Color(0.48, 0.24, 0.14),
 	"silver": Color(0.66, 0.68, 0.7),
 	"tan": Color(0.66, 0.58, 0.44),
