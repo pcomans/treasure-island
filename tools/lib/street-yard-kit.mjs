@@ -63,6 +63,8 @@ export const YARD_KIT_PARTS = Object.freeze([
   "seal", // rubber seals and gaskets
   "white_body", // fixed white (RV caps, office trim)
   "vent", // roof vents and AC units
+  "tank", // hoppers and tanks: body colour, welded, weathered
+  "belt", // a conveyor's rubber belt
 ]);
 export const YARD_KIT_PART_SLOTS = 64;
 const P = Object.freeze(Object.fromEntries(YARD_KIT_PARTS.map((name, index) => [name, index])));
@@ -215,8 +217,8 @@ export const YARD_KIT_PROPS = Object.freeze({
     collision: "box",
     range_m: 600,
     variants: [
-      { name: "runabout", x_m: 2.5, z_m: 7.0, h_m: 2.5 },
-      { name: "cabin", x_m: 2.6, z_m: 8.8, h_m: 3.4 },
+      { name: "runabout", x_m: 2.5, z_m: 7.3, h_m: 2.2 },
+      { name: "cabin", x_m: 2.6, z_m: 8.8, h_m: 2.9 },
     ],
     params: { hull: oneOf("white", "cream", "blue", "grey"), cover: oneOf("none", "blue", "grey", "tan", "black") },
   },
@@ -225,7 +227,7 @@ export const YARD_KIT_PROPS = Object.freeze({
     range_m: 700,
     variants: [
       { name: "cargo", x_m: 2.6, z_m: 7.3, h_m: 3.0 },
-      { name: "utility", x_m: 2.1, z_m: 4.5, h_m: 1.2 },
+      { name: "utility", x_m: 2.4, z_m: 4.5, h_m: 1.55 },
       { name: "semi", x_m: 2.6, z_m: 16.2, h_m: 4.1 },
       { name: "office", x_m: 3.66, z_m: 14.6, h_m: 3.5 },
     ],
@@ -253,8 +255,15 @@ export const YARD_KIT_PROPS = Object.freeze({
       // Short hollow cylinder sections standing on end (Gate 5 yard, May 2026
       // aerial: light rims, dark centres, ~1.8 m across, ~1.3 m from shadows).
       { name: "cylinder_section", x_m: 1.8, z_m: 1.8, h_m: 1.3, collision: "cylinder" },
+      // An open-top steel bin (roll-off container; Avenue M, Nov 2025: blue, rusted).
+      { name: "open_bin", x_m: 2.44, z_m: 6.9, h_m: 1.85 },
+      // A cone-bottomed hopper on four legs (SFFD training yard, 10th St, Nov 2025).
+      { name: "hopper", x_m: 4.0, z_m: 4.0, h_m: 8.0 },
+      // A long inclined belt conveyor on legs (recycling yard, May 2026 aerial:
+      // plain form), rising toward +Z; length_m is its plan length.
+      { name: "conveyor", x_m: 1.4, z_m: null, h_m: null, required: ["length_m"], only: ["length_m"] },
     ],
-    params: { paint: oneOf("yellow", "red", "orange"), tone: oneOf("light", "dark") },
+    params: { paint: oneOf("yellow", "red", "orange", "blue", "white"), tone: oneOf("light", "dark"), length_m: numRange(12, 60) },
   },
   material_pile: {
     collision: "hull",
@@ -374,6 +383,13 @@ export function yardPropFootprint(key, params) {
       const s = params.scale ?? 1;
       return { x_m: round(variant.x_m * s), z_m: round(variant.z_m * s), h_m: round(variant.h_m * s) };
     }
+    case "equipment":
+      if (variant.name === "conveyor") {
+        const modules = conveyorModules(params.length_m);
+        const plan = modules * CONVEYOR_MODULE_M * Math.cos(CONVEYOR_INCLINE);
+        return { x_m: variant.x_m, z_m: round(plan), h_m: round(modules * CONVEYOR_MODULE_M * Math.sin(CONVEYOR_INCLINE) + CONVEYOR_FOOT_M + 1.0) };
+      }
+      return { x_m: variant.x_m, z_m: variant.z_m, h_m: variant.h_m };
     case "crane_barge":
       if (variant.name === "pier_crane") return { x_m: variant.x_m, z_m: variant.z_m, h_m: variant.h_m };
       return { x_m: round(params.width_m ?? variant.x_m), z_m: round(params.length_m ?? variant.z_m), h_m: variant.h_m };
@@ -421,6 +437,14 @@ export function containerWallLayout(params) {
   const last = containers.at(-1);
   const covered = last ? last.z_m + last.length_m / 2 + length / 2 : 0;
   return { containers, covered_m: Math.round(covered * 1000) / 1000 };
+}
+
+// A conveyor: 6 m truss modules rising at 16 degrees from a foot 1.2 m up.
+export const CONVEYOR_MODULE_M = 6.0;
+export const CONVEYOR_INCLINE = (16 * Math.PI) / 180;
+export const CONVEYOR_FOOT_M = 1.2;
+export function conveyorModules(lengthM) {
+  return Math.max(2, Math.round(lengthM / (CONVEYOR_MODULE_M * Math.cos(CONVEYOR_INCLINE))));
 }
 
 // A soil ridge's whole 4 m modules for a requested length.

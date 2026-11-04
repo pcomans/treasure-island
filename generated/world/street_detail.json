@@ -1959,7 +1959,7 @@
       "yaw_rule": "host_road"
     },
     "trailer": {
-      "footprint_radius_m": 1.05,
+      "footprint_radius_m": 1.2,
       "geometry": "point",
       "layer": "clutter",
       "overhead": false,

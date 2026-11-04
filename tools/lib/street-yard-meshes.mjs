@@ -13,7 +13,7 @@
 import earcut from "earcut";
 
 import { buildCar, clamp, lerp, MeshBuilder, v3, vadd, vcross, vdot, vlen, vnorm, vscale, vsub } from "./street-clutter-kit.mjs";
-import { CONTAINER_LENGTHS, YARD_KIT_PART_SLOTS, YARD_KIT_PARTS } from "./street-yard-kit.mjs";
+import { CONTAINER_LENGTHS, CONVEYOR_FOOT_M, CONVEYOR_INCLINE, CONVEYOR_MODULE_M, YARD_KIT_PART_SLOTS, YARD_KIT_PARTS } from "./street-yard-kit.mjs";
 
 const P = Object.freeze(Object.fromEntries(YARD_KIT_PARTS.map((name, index) => [name, index])));
 const X = v3(1, 0, 0);
@@ -58,9 +58,12 @@ class YardBuilder extends MeshBuilder {
   }
 
   // A planar quad from four corners (in order around it), facing `normal`.
+  // Its winding comes from the whole outline (Newell), so a quad with two
+  // corners in one point (a disc's centre) still faces the right way.
   face(corners, normal, part, ao = [1, 1, 1, 1]) {
     const [a, b, c, d] = corners;
-    const n = vcross(vsub(b, a), vsub(c, a));
+    let n = v3(0, 0, 0);
+    for (let i = 0; i < 4; i += 1) n = vadd(n, vcross(corners[i], corners[(i + 1) % 4]));
     const aoList = typeof ao === "number" ? [ao, ao, ao, ao] : ao;
     if (vdot(n, normal) >= 0) this.quad(a, b, c, d, [normal, normal, normal, normal], part, aoList);
     else this.quad(a, d, c, b, [normal, normal, normal, normal], part, [aoList[0], aoList[3], aoList[2], aoList[1]]);
@@ -187,7 +190,10 @@ function sweptBody(out, { profile, hw, r = 0.08, steps = 3, partEdge, side, smoo
     return ccw ? [dy / l, -dz / l] : [-dy / l, dz / l];
   };
   const normals = profile.map((_, i) => edgeNormal(i));
-  // Inset polygon by d (mitred), for the rounded side edges.
+  // Inset polygon by d (mitred), for the rounded side edges. A vertex moves
+  // no further than 0.45 of its shorter edge, so short edges at concave corners
+  // (wheel arches, cab steps) don't fold over.
+  const edgeLength = (i) => Math.hypot(profile[(i + 1) % n][0] - profile[i][0], profile[(i + 1) % n][1] - profile[i][1]);
   const inset = (d) => profile.map((point, i) => {
     const before = normals[(i - 1 + n) % n];
     const after = normals[i];
@@ -195,16 +201,17 @@ function sweptBody(out, { profile, hw, r = 0.08, steps = 3, partEdge, side, smoo
     const l = Math.hypot(sum[0], sum[1]);
     const miter = l > 1e-9 ? [sum[0] / l, sum[1] / l] : after;
     const cos = Math.max(0.35, miter[0] * after[0] + miter[1] * after[1]);
-    return [point[0] - (miter[0] * d) / cos, point[1] - (miter[1] * d) / cos];
+    const reach = Math.min(d / cos, 0.45 * Math.min(edgeLength((i - 1 + n) % n), edgeLength(i)) + d * 0.2);
+    return [point[0] - miter[0] * reach, point[1] - miter[1] * reach];
   });
-  // Slices from the side face (a = 0: x = hw, inset r) to the flat middle (a = 90: x = hw - r, inset 0).
-  const slices = [];
+  // Slices over the rounded edge: from the flat middle (a = 0: x = hw - r,
+  // the full profile) out to the side face (a = 90 deg: x = hw, inset by r).
+  const rings = [];
   for (let s = 0; s <= steps; s += 1) {
     const a = (Math.PI / 2) * (s / steps);
-    slices.push({ x: hw - r + r * Math.sin(a), d: r * (1 - Math.cos(a)), a });
+    const d = r * (1 - Math.cos(a));
+    rings.push({ x: hw - r + r * Math.sin(a), d, a, points: inset(d) });
   }
-  slices.reverse(); // from the middle (a = 90 deg) out to the side face (a = 0)
-  const rings = slices.map((slice) => ({ ...slice, points: inset(slice.d) }));
   // Smoothed vertex normals across edges meeting at a shallow angle.
   const cosSmooth = Math.cos((smoothDeg * Math.PI) / 180);
   const vertexNormal = (i, edge) => {
@@ -215,7 +222,8 @@ function sweptBody(out, { profile, hw, r = 0.08, steps = 3, partEdge, side, smoo
     const l = Math.hypot(s[0], s[1]) || 1;
     return [s[0] / l, s[1] / l];
   };
-  const normal3 = (nzy, a, sign) => vnorm(v3(sign * Math.cos(a), nzy[1] * Math.sin(a), nzy[0] * Math.sin(a)));
+  // The normal over the rounded edge: the profile's at the middle, ±X at the side face.
+  const normal3 = (nzy, a, sign) => vnorm(v3(sign * Math.sin(a), nzy[1] * Math.cos(a), nzy[0] * Math.cos(a)));
   for (let j = 0; j < n; j += 1) {
     const j1 = (j + 1) % n;
     const mid = [(profile[j][0] + profile[j1][0]) / 2, (profile[j][1] + profile[j1][1]) / 2];
@@ -229,7 +237,9 @@ function sweptBody(out, { profile, hw, r = 0.08, steps = 3, partEdge, side, smoo
       const p = (i, sign) => v3(sign * ring.x, ring.points[i][1], ring.points[i][0]);
       const nn0 = v3(0, n0[1], n0[0]);
       const nn1 = v3(0, n1[1], n1[0]);
-      out.quad(p(j, 1), p(j1, 1), p(j1, -1), p(j, -1), [nn0, nn1, nn1, nn0], facePart, [ao, ao, ao, ao]);
+      const [a, b, c, d] = [p(j, 1), p(j1, 1), p(j1, -1), p(j, -1)];
+      if (vdot(vcross(vsub(b, a), vsub(c, a)), vadd(nn0, nn1)) >= 0) out.quad(a, b, c, d, [nn0, nn1, nn1, nn0], facePart, [ao, ao, ao, ao]);
+      else out.quad(a, d, c, b, [nn0, nn0, nn1, nn1], facePart, [ao, ao, ao, ao]);
     }
     const roundPart = partEdge(j, mid, "round");
     if (roundPart === null || roundPart === undefined) continue;
@@ -261,11 +271,28 @@ function sweptBody(out, { profile, hw, r = 0.08, steps = 3, partEdge, side, smoo
       const holes = (side.holes ?? []).filter((hole) => !hole.side || hole.side === sign);
       polygonFace(out, v3(sign * hw, 0, 0), Z, Y, outer, holes.map((hole) => hole.points), v3(sign, 0, 0), side.part, side.ao ?? 1);
       for (const hole of holes) {
-        if (hole.part === null) continue;
-        polygonFace(out, v3(sign * hw, 0, 0), Z, Y, hole.points, [], v3(sign, 0, 0), hole.part, hole.ao ?? 1);
+        // A hole is filled with its part, or with its own fills (panes and
+        // pillars of one window band, which must not touch as separate holes).
+        for (const fill of hole.fills ?? [hole]) {
+          if (fill.part === null) continue;
+          polygonFace(out, v3(sign * hw, 0, 0), Z, Y, fill.points, [], v3(sign, 0, 0), fill.part, fill.ao ?? 1);
+        }
       }
     }
   }
+}
+
+// A window band for sweptBody sides: one hole from z0 to z1, filled with
+// panes of `part` and pillars of `pillarPart` between them.
+function bandHole(z0, z1, y0, y1, panes, pillar, part, pillarPart, { side = null } = {}) {
+  const pane = (z1 - z0 - pillar * (panes - 1)) / panes;
+  const fills = [];
+  for (let i = 0; i < panes; i += 1) {
+    const a = z0 + i * (pane + pillar);
+    fills.push({ points: [[a, y0], [a + pane, y0], [a + pane, y1], [a, y1]], part });
+    if (i < panes - 1) fills.push({ points: [[a + pane, y0], [a + pane + pillar, y0], [a + pane + pillar, y1], [a + pane, y1]], part: pillarPart });
+  }
+  return { points: [[z0, y0], [z1, y0], [z1, y1], [z0, y1]], part, side, fills };
 }
 
 // A rectangle hole for sweptBody sides: z0..z1, y0..y1 (optionally rounded corners).
@@ -355,9 +382,18 @@ function wheel(out, x, z, radius, width, side, lod, { dual = false, rimColour = 
 }
 
 // Both wheels of an axle: track between tyre centres, and a dark axle bar.
+// well: the wheel arch's radius, to close the arch behind each tyre with a
+// dark liner, so the arch never shows through the body.
 function axle(out, z, track, radius, width, lod, options = {}) {
   for (const side of [1, -1]) wheel(out, side * track / 2, z, radius, width, side, lod, options);
   if (lod === 0) out.aabb([-track / 2 + 0.1, radius - 0.06, z - 0.06], [track / 2 - 0.1, radius + 0.06, z + 0.06], P.under, { ao: 0.4 });
+  if (options.well) {
+    const tyre = options.dual ? width * 2 + 0.03 : width;
+    for (const side of [1, -1]) {
+      const x = side * (track / 2 - tyre / 2 - 0.04);
+      out.face([v3(x, 0.08, z - options.well), v3(x, 0.08, z + options.well), v3(x, radius + options.well, z + options.well), v3(x, radius + options.well, z - options.well)], v3(side, 0, 0), P.under, 0.3);
+    }
+  }
 }
 
 // ---------------------------------------------------------------- containers
@@ -657,7 +693,7 @@ function fabricSection(spec) {
   ];
 }
 
-function buildFabricBay(span, lod, length = FABRIC_BAY, sag = true) {
+function buildFabricBay(span, lod, length = FABRIC_BAY, sag = true, rails = true) {
   const spec = FABRIC_SPECS[span];
   const out = new YardBuilder();
   // The far mesh has no base rail: its membrane reaches the ground.
@@ -688,7 +724,7 @@ function buildFabricBay(span, lod, length = FABRIC_BAY, sag = true) {
       else out.quad(a, d, c, b, [normals[0], normals[3], normals[2], normals[1]], P.fabric);
     }
   }
-  if (lod === 0) {
+  if (lod === 0 && rails) {
     // Steel base rails along both sides.
     for (const s of [1, -1]) {
       const xs = [s * (spec.hw - 0.03), s * (spec.hw + 0.05)].sort((a, b) => a - b);
@@ -702,7 +738,7 @@ function buildFabricBay(span, lod, length = FABRIC_BAY, sag = true) {
 // recessed 0.1 m behind it, outward toward dir.
 function buildFabricEnd(span, dir, lod) {
   const spec = FABRIC_SPECS[span];
-  const band = buildFabricBay(span, lod, FABRIC_END, false);
+  const band = buildFabricBay(span, lod, FABRIC_END, false, false);
   const out = new YardBuilder();
   // Re-centre the band on [0, dir * FABRIC_END].
   const offset = (dir * FABRIC_END) / 2;
@@ -945,7 +981,7 @@ function arcPts(cz, cy, r, a0, a1, n) {
 }
 
 // A profile assembled from tagged runs; edge j (point j to j+1) takes the tag
-// of the run point j belongs to.
+// of the run point j+1 belongs to: a run lists the points its edges reach.
 function profileOf(runs) {
   const points = [];
   const tags = [];
@@ -967,11 +1003,22 @@ function profileOf(runs) {
   return { points, tags };
 }
 
-// A wheel arch along a bottom edge running toward -z: from z + ra down at the
-// sill, over the wheel and back down at z - ra.
+// A wheel arch along a bottom edge running toward -z: from the sill up over
+// the wheel (a circle of radius ra about the wheel centre) and back down. When
+// the sill stands above the wheel centre the arch starts where the circle
+// meets the sill.
 function archRun(zc, wheelR, ra, sill) {
-  const top = arcPts(zc, wheelR, ra, 0, 180, 7);
-  return [[zc + ra, sill], ...top, [zc - ra, sill]];
+  if (sill >= wheelR) {
+    const start = (Math.asin(clamp((sill - wheelR) / ra, -1, 0.95)) * 180) / Math.PI;
+    return arcPts(zc, wheelR, ra, start, 180 - start, 7);
+  }
+  return [[zc + ra, sill], ...arcPts(zc, wheelR, ra, 0, 180, 7), [zc - ra, sill]];
+}
+
+// A wheel well for a bogie of axles along a bottom edge running toward -z: a
+// notch from z1 down to z0 (z1 > z0) up to `top`, its upper corners rounded.
+function wellRun(z0, z1, top, sill, radius = 0.25) {
+  return [[z1, sill], ...arcPts(z1 - radius, top - radius, radius, 0, 90, 3), ...arcPts(z0 + radius, top - radius, radius, 90, 180, 3), [z0, sill]];
 }
 
 // Sweeps a tagged profile; parts: {tag: part | {face, round}} (null: leave out).
@@ -984,12 +1031,12 @@ function sweepTagged(out, profile, hw, parts, { r = 0.06, steps = 2, side, smoot
     smoothDeg,
     side,
     partEdge: (j, mid, band) => {
-      const entry = parts[profile.tags[j]];
+      const entry = parts[profile.tags[(j + 1) % profile.tags.length]];
       if (entry === undefined) return P.paint;
       if (entry === null || typeof entry === "number") return entry;
       return entry[band];
     },
-    aoEdge: (j) => (["under", "arch"].includes(profile.tags[j]) ? 0.45 : 1),
+    aoEdge: (j) => (["under", "arch"].includes(profile.tags[(j + 1) % profile.tags.length]) ? 0.45 : 1),
   });
 }
 
@@ -1129,7 +1176,7 @@ function buildBoxTruck(variant, lod) {
   }
   // Wheels: single front, dual rear.
   const tw = large ? 0.28 : 0.23;
-  axle(out, frontAxle, 2 * cabHw - tw - 0.04, R, tw, lod);
+  axle(out, frontAxle, 2 * cabHw - tw - 0.04, R, tw, lod, { well: R + 0.07 });
   axle(out, rearAxle, 2 * boxHw - tw * 2 - 0.12, R, tw, lod, { dual: true });
   return out.result();
 }
@@ -1161,14 +1208,9 @@ function buildBus(variant, lod) {
   ]);
   const holes = [];
   // Passenger windows: dark panes with black pillars, a driver's window, the door on the right.
-  for (let i = 0; i < 7; i += 1) {
-    const z0 = -4.85 + i * 1.6;
-    holes.push(rectHole(z0, z0 + 1.48, 1.95, 3.18, P.glass, { radius: 0.04 }));
-    if (i < 6) holes.push(rectHole(z0 + 1.48, z0 + 1.6, 1.95, 3.18, P.trim));
-  }
-  holes.push(rectHole(front + 0.32, -5.0, 1.3, 3.18, P.glass, { side: -1, radius: 0.04 }));
-  holes.push(rectHole(front + 0.32, -5.4, 0.45, 3.18, P.glass, { side: 1, radius: 0.04 }));
-  holes.push(rectHole(-5.32, -4.95, 1.95, 3.18, P.glass, { side: 1 }));
+  holes.push(bandHole(-4.85, 6.27, 1.95, 3.18, 7, 0.12, P.glass, P.trim));
+  holes.push(rectHole(front + 0.45, -5.0, 1.3, 3.1, P.glass, { side: -1, radius: 0.04 }));
+  holes.push(rectHole(front + 0.45, -5.4, 0.56, 3.1, P.glass, { side: 1, radius: 0.04 }));
   // Luggage bays in brushed metal and the accent band under the windows.
   for (const [z0, z1] of [[-3.95, -2.15], [-2.05, -0.25], [-0.15, 1.65]]) holes.push(rectHole(z0, z1, 0.52, 1.42, P.metal));
   holes.push(rectHole(-4.85, hl - 0.2, 1.56, 1.76, P.accent));
@@ -1187,9 +1229,9 @@ function buildBus(variant, lod) {
     }
     lamp(out, v3(0, 0.6, hl + 0.015), v3(0.16, 0.08, 0.008), P.plate);
   }
-  axle(out, axles[0], 2 * hw - 0.34, R, 0.3, lod);
-  axle(out, axles[1], 2 * hw - 0.66, R, 0.28, lod, { dual: true });
-  axle(out, axles[2], 2 * hw - 0.34, R, 0.28, lod);
+  axle(out, axles[0], 2 * hw - 0.34, R, 0.3, lod, { well: R + 0.07 });
+  axle(out, axles[1], 2 * hw - 0.66, R, 0.28, lod, { dual: true, well: R + 0.07 });
+  axle(out, axles[2], 2 * hw - 0.34, R, 0.28, lod, { well: R + 0.07 });
   return out.result();
 }
 
@@ -1239,11 +1281,11 @@ function buildShuttle(out, lod) {
   ]);
   const holes = [];
   for (let i = 0; i < 4; i += 1) {
-    const z0 = -1.35 + i * 1.32;
-    holes.push(rectHole(z0, z0 + 1.2, 1.58, 2.6, P.glass, { radius: 0.05 }));
+    const z0 = -1.1 + i * 1.28;
+    holes.push(rectHole(z0, z0 + 1.16, 1.58, 2.6, P.glass, { radius: 0.05 }));
   }
-  holes.push(rectHole(boxFront + 0.12, boxFront + 1.0, 0.75, 2.75, P.glass, { side: 1, radius: 0.04 }));
-  holes.push(rectHole(-1.6, hl - 0.15, 1.3, 1.45, P.accent));
+  holes.push(rectHole(boxFront + 0.12, boxFront + 1.0, 0.88, 2.75, P.glass, { side: 1, radius: 0.04 }));
+  holes.push(rectHole(-1.15, hl - 0.2, 1.3, 1.45, P.accent));
   sweepTagged(out, p, hw, { front: P.paint, roof: P.paint, rear: { face: P.paint, round: P.paint }, under: P.under, arch: P.under }, { r: 0.14, side: { part: P.paint, holes } });
   if (lod === 0) {
     lamp(out, v3(0, 2.55, hl + 0.012), v3(0.7, 0.32, 0.012), P.glass);
@@ -1251,28 +1293,39 @@ function buildShuttle(out, lod) {
   }
   out.aabb([-hw + 0.05, 0.45, hl - 0.1], [hw - 0.05, 0.62, hl + 0.05], P.trim);
   out.aabb([-0.4, 0.5, frontAxle + 0.5], [0.4, 0.75, hl - 0.4], P.under, { ao: 0.4 });
-  axle(out, frontAxle, 1.75, R, 0.22, lod);
-  axle(out, rearAxle, 2 * hw - 0.62, R, 0.22, lod, { dual: true });
+  axle(out, frontAxle, 1.75, R, 0.22, lod, { well: R + 0.06 });
+  axle(out, rearAxle, 2 * hw - 0.62, R, 0.22, lod, { dual: true, well: R + 0.07 });
   return out.result();
 }
 
 // ---- motorhomes and RV trailers
-// The decal swooshes of an RV side: bands of the stripe colour.
-function swooshes(z0, z1, yLow, rise, lift = 0.3) {
+// The decal swooshes of an RV side: two bands of the stripe colour, low
+// along the body and sweeping up toward the front, broken where a door or a
+// window stands in their way (gaps: [[z0, z1], ...]).
+function swooshes(z0, z1, yLow, rise, gaps = []) {
   const bands = [];
+  const yAt = (z, offset) => yLow + offset + rise * Math.pow((z1 - z) / (z1 - z0), 2.2);
+  // The pieces of [z0, z1] outside the gaps.
+  const pieces = [];
+  let start = z0;
+  for (const [g0, g1] of [...gaps].sort((a, b) => a[0] - b[0])) {
+    if (g0 > start + 0.3) pieces.push([start, Math.min(g0, z1)]);
+    start = Math.max(start, g1);
+  }
+  if (z1 > start + 0.3) pieces.push([start, z1]);
   for (const [offset, height] of [[0, 0.16], [0.26, 0.08]]) {
-    const n = 14;
-    const lower = [];
-    const upper = [];
-    for (let i = 0; i <= n; i += 1) {
-      const t = i / n;
-      const z = lerp(z1, z0, t);
-      // Low along the body, sweeping up toward the front.
-      const y = yLow + offset + rise * Math.pow(t, 2.2) + lift * Math.sin(Math.PI * t) * 0.15;
-      lower.push([z, y]);
-      upper.push([z, y + height * (1 - 0.4 * t)]);
+    for (const [p0, p1] of pieces) {
+      const n = Math.max(2, Math.ceil((p1 - p0) / 0.5));
+      const lower = [];
+      const upper = [];
+      for (let i = 0; i <= n; i += 1) {
+        const z = lerp(p1, p0, i / n);
+        const y = yAt(z, offset);
+        lower.push([z, y]);
+        upper.push([z, y + height]);
+      }
+      bands.push({ points: [...lower, ...upper.reverse()], part: P.accent, ao: 1 });
     }
-    bands.push({ points: [...lower, ...upper.reverse()], part: P.accent, ao: 1 });
   }
   return bands;
 }
@@ -1311,12 +1364,12 @@ function classA(out, lod) {
   ]);
   const holes = [
     rectHole(front + 0.95, front + 1.75, 1.45, 2.45, P.glass, { radius: 0.08 }),
-    rectHole(-3.75, -2.55, 1.85, 2.6, P.glass, { radius: 0.08 }),
-    rectHole(-0.95, 0.65, 1.85, 2.6, P.glass, { radius: 0.08 }),
+    rectHole(-2.15, -1.05, 1.85, 2.6, P.glass, { radius: 0.08 }),
+    rectHole(-0.25, 1.05, 1.85, 2.6, P.glass, { radius: 0.08 }),
     rectHole(2.35, 3.45, 1.95, 2.6, P.glass, { radius: 0.08 }),
-    // The entry door on the right, with its small window.
-    rectHole(-4.5, -3.85, 0.5, 2.75, P.white_body, { side: 1, radius: 0.04 }),
-    ...swooshes(-3.6, hl - 0.25, 0.95, 0.55),
+    // The entry door on the right, behind the front axle.
+    rectHole(-3.0, -2.35, 0.5, 2.75, P.white_body, { side: 1, radius: 0.04 }),
+    ...swooshes(-4.0, hl - 0.3, 1.27, 0.3, [[-3.1, -2.25]]),
   ];
   sweepTagged(out, p, hw, {
     bumper: P.trim, grille: { face: P.grille, round: P.paint }, windshield: { face: P.glass, round: P.trim }, cap: P.paint,
@@ -1334,8 +1387,8 @@ function classA(out, lod) {
     for (const x of [0.55, 0.95]) out.aabb([x - 0.015, 1.0, hl + 0.06], [x + 0.015, roof, hl + 0.09], P.metal);
     for (let y = 1.15; y < roof; y += 0.3) out.aabb([0.55, y - 0.012, hl + 0.06], [0.95, y + 0.012, hl + 0.09], P.metal);
   }
-  axle(out, frontAxle, 2 * hw - 0.34, R, 0.28, lod);
-  axle(out, rearAxle, 2 * hw - 0.64, R, 0.26, lod, { dual: true });
+  axle(out, frontAxle, 2 * hw - 0.34, R, 0.28, lod, { well: R + 0.08 });
+  axle(out, rearAxle, 2 * hw - 0.64, R, 0.26, lod, { dual: true, well: R + 0.08 });
   return out.result();
 }
 
@@ -1376,15 +1429,15 @@ function classC(out, lod) {
     rectHole(front + 1.0, front + 1.6, 2.5, 2.85, P.glass, { radius: 0.06 }),
     rectHole(-1.9, -0.9, 1.7, 2.45, P.glass, { radius: 0.07 }),
     rectHole(1.8, 2.9, 1.8, 2.45, P.glass, { radius: 0.07 }),
-    rectHole(-0.6, 0.05, 0.75, 2.7, P.white_body, { side: 1, radius: 0.04 }),
-    ...swooshes(-0.7, hl - 0.2, 1.05, 0.25, 0.1).map((band) => band),
-  ].filter((hole, index, all) => index < 4 || !all.slice(0, 4).some(() => false));
+    rectHole(-0.6, 0.05, 0.88, 2.7, P.white_body, { side: 1, radius: 0.04 }),
+    ...swooshes(-1.85, hl - 0.2, 1.05, 0.25, [[-0.7, 0.15]]),
+  ];
   sweepTagged(out, p, hw, { front: P.paint, bunk: P.paint, roof: P.paint, rear: P.paint, under: P.under, arch: P.under }, { r: 0.15, side: { part: P.paint, holes } });
   roofKit(out, lod, hw, roof, [0.6]);
   if (lod === 0) for (const s of [1, -1]) lamp(out, v3(s * (hw - 0.14), 1.2, hl + 0.012), v3(0.07, 0.28, 0.012), P.tail_lamp);
   out.aabb([-0.4, 0.5, frontAxle + 0.5], [0.4, 0.75, hl - 0.4], P.under, { ao: 0.4 });
-  axle(out, frontAxle, 1.75, R, 0.22, lod);
-  axle(out, rearAxle, 2 * hw - 0.6, R, 0.22, lod, { dual: true });
+  axle(out, frontAxle, 1.75, R, 0.22, lod, { well: R + 0.06 });
+  axle(out, rearAxle, 2 * hw - 0.6, R, 0.22, lod, { dual: true, well: R + 0.07 });
   return out.result();
 }
 
@@ -1400,16 +1453,16 @@ function travelTrailer(out, lod) {
     ["front", [[bodyFront + 0.1, sill], [bodyFront - 0.15, 1.15], [bodyFront - 0.18, 2.35], ...arcPts(bodyFront + 0.25, roof - 0.42, 0.42, 165, 90, 4)]],
     ["roof", [[hl - 0.15, roof], ...arcPts(hl - 0.15, roof - 0.15, 0.15, 90, 0, 2)]],
     ["rear", [[hl, sill + 0.05]]],
-    ["under", [[axles[1] + R + 0.1, sill]]],
-    ["arch", archRun((axles[0] + axles[1]) / 2, R, 0.82, sill)],
+    ["under", [[axles[1] + R + 0.12, sill]]],
+    ["arch", wellRun(axles[0] - R - 0.12, axles[1] + R + 0.12, 2 * R + 0.1, sill)],
     ["under", [[bodyFront + 0.15, sill]]],
   ]);
   const holes = [
-    rectHole(-2.4, -1.4, 1.65, 2.35, P.glass, { radius: 0.08 }),
+    rectHole(-2.4, -1.4, 1.7, 2.35, P.glass, { radius: 0.08 }),
     rectHole(0.0, 0.9, 1.7, 2.35, P.glass, { radius: 0.08 }),
     rectHole(2.6, 3.7, 1.7, 2.35, P.glass, { radius: 0.08 }),
-    rectHole(-1.05, -0.4, 0.68, 2.6, P.white_body, { side: 1, radius: 0.04 }),
-    ...swooshes(-2.9, hl - 0.15, 1.05, 0.7),
+    rectHole(-1.05, -0.4, 0.82, 2.6, P.white_body, { side: 1, radius: 0.04 }),
+    ...swooshes(-2.9, hl - 0.2, 1.0, 0.25, [[-1.15, -0.3]]),
   ];
   // The front window across the cap.
   sweepTagged(out, p, hw, { front: { face: P.paint, round: P.paint }, roof: P.paint, rear: P.paint, under: P.under, arch: P.under }, { r: 0.12, side: { part: P.paint, holes } });
@@ -1420,7 +1473,7 @@ function travelTrailer(out, lod) {
   roofKit(out, lod, hw, roof, [0.6]);
   tongue(out, bodyFront + 0.05, -hl, 0.5, 0.8, lod, { tanks: true });
   out.aabb([-0.9, 0.42, bodyFront], [0.9, sill, hl - 0.2], P.under, { ao: 0.4 });
-  for (const z of axles) axle(out, z, 2 * hw - 0.3, R, 0.2, lod);
+  for (const z of axles) axle(out, z, 2 * hw - 0.3, R, 0.2, lod, { well: 0.48 });
   return out.result();
 }
 
@@ -1438,8 +1491,8 @@ function fifthWheel(out, lod) {
     ["front", [...arcPts(front + 0.35, 1.85, 0.35, 270, 180, 3), [front, 2.6], ...arcPts(front + 0.6, roof - 0.6, 0.6, 180, 90, 5)]],
     ["roof", [[hl - 0.2, roof], ...arcPts(hl - 0.2, roof - 0.2, 0.2, 90, 0, 2)]],
     ["rear", [[hl, sill + 0.05]]],
-    ["under", [[axles[2] + R + 0.1, sill]]],
-    ["arch", archRun((axles[0] + axles[2]) / 2, R, 1.32, sill)],
+    ["under", [[axles[2] + R + 0.12, sill]]],
+    ["arch", wellRun(axles[0] - R - 0.12, axles[2] + R + 0.12, 2 * R + 0.1, sill)],
     ["under", [[neck + 0.05, sill]]],
   ]);
   const holes = [
@@ -1447,8 +1500,8 @@ function fifthWheel(out, lod) {
     rectHole(-2.4, -1.2, 1.9, 2.65, P.glass, { radius: 0.08 }),
     rectHole(0.2, 1.2, 1.9, 2.65, P.glass, { radius: 0.08 }),
     rectHole(3.4, 4.5, 1.95, 2.65, P.glass, { radius: 0.08 }),
-    rectHole(-0.65, 0.0, 0.72, 2.85, P.white_body, { side: 1, radius: 0.04 }),
-    ...swooshes(-2.9, hl - 0.2, 1.1, 1.0, 0.2),
+    rectHole(-0.65, 0.0, 0.9, 2.85, P.white_body, { side: 1, radius: 0.04 }),
+    ...swooshes(-2.9, hl - 0.25, 1.05, 0.45, [[-0.75, 0.1], [0.75, 3.65]]),
   ];
   sweepTagged(out, p, hw, { neck: P.paint, front: { face: P.paint, round: P.paint }, roof: P.paint, rear: P.paint, under: P.under, arch: P.under }, { r: 0.15, side: { part: P.paint, holes } });
   if (lod === 0) {
@@ -1463,7 +1516,7 @@ function fifthWheel(out, lod) {
   }
   roofKit(out, lod, hw, roof, [-1.5, 2.6]);
   out.aabb([-0.9, 0.48, neck], [0.9, sill, hl - 0.2], P.under, { ao: 0.4 });
-  for (const z of axles) axle(out, z, 2 * hw - 0.32, R, 0.22, lod);
+  for (const z of axles) axle(out, z, 2 * hw - 0.32, R, 0.22, lod, { well: 0.52 });
   return out.result();
 }
 
@@ -1507,8 +1560,8 @@ function stepVan(out, lod, { length, height, food }) {
   ]);
   const holes = [
     // Folding entry doors at the front of both sides, glazed above.
-    rectHole(front + 0.7, front + 1.55, 1.3, 2.45, P.glass, { radius: 0.04 }),
-    rectHole(front + 0.7, front + 1.55, sill + 0.05, 1.22, P.seal),
+    rectHole(front + 1.85, front + 2.6, 1.3, 2.45, P.glass, { radius: 0.04 }),
+    rectHole(front + 1.85, front + 2.6, sill + 0.16, 1.22, P.seal),
   ];
   if (food) {
     // The serving window on the right, closed by a steel flap.
@@ -1534,8 +1587,8 @@ function stepVan(out, lod, { length, height, food }) {
     out.aabb([-0.75, height - 0.02, 1.2], [-0.05, height + 0.25, 2.0], (face) => (face === "-y" ? null : P.vent));
   }
   out.aabb([-hw + 0.05, 0.42, hl - 0.1], [hw - 0.05, 0.6, hl + 0.05], P.trim);
-  axle(out, frontAxle, 1.95, R, 0.23, lod);
-  axle(out, rearAxle, 2 * hw - 0.58, R, 0.22, lod, { dual: true });
+  axle(out, frontAxle, 1.95, R, 0.23, lod, { well: R + 0.07 });
+  axle(out, rearAxle, 2 * hw - 0.58, R, 0.22, lod, { dual: true, well: R + 0.07 });
   return out.result();
 }
 
@@ -1560,13 +1613,13 @@ function buildFoodTruck(variant, lod) {
   ]);
   sweepTagged(out, p, hw, { front: P.paint, roof: P.paint, rear: P.paint, under: P.under, arch: P.under }, {
     r: 0.1,
-    side: { part: P.paint, holes: [rectHole(-1.3, 1.1, 1.2, 2.1, P.metal, { side: 1 }), rectHole(1.6, 2.4, 0.65, 2.4, P.white_body, { side: -1, radius: 0.03 })] },
+    side: { part: P.paint, holes: [rectHole(-1.3, 1.1, 1.2, 2.1, P.metal, { side: 1 }), rectHole(1.6, 2.4, 0.8, 2.4, P.white_body, { side: -1, radius: 0.03 })] },
   });
   out.aabb([hw, 1.14, -1.25], [hw + 0.28, 1.2, 1.05], P.metal);
   out.aabb([-0.4, roof - 0.02, -0.6], [0.4, roof + 0.28, 0.3], (face) => (face === "-y" ? null : P.vent));
   tongue(out, bodyFront + 0.05, -hl, 0.48, 0.75, lod, { tanks: true });
   out.aabb([-0.9, 0.4, bodyFront], [0.9, sill, hl - 0.2], P.under, { ao: 0.4 });
-  axle(out, 0.7, 2 * hw - 0.3, R, 0.2, lod);
+  axle(out, 0.7, 2 * hw - 0.3, R, 0.2, lod, { well: R + 0.12 });
   if (lod === 0) for (const s of [1, -1]) lamp(out, v3(s * (hw - 0.12), 0.95, hl + 0.012), v3(0.07, 0.12, 0.012), P.tail_lamp);
   return out.result();
 }
@@ -1591,7 +1644,7 @@ function buildTrailer(variant, lod) {
       ]);
       sweepTagged(out, p, hw, { front: P.paint, roof: P.paint, rear: { face: P.paint, round: P.paint }, under: P.under }, {
         r: 0.08,
-        side: { part: P.paint, holes: [rectHole(-1.9, -1.15, 0.6, 2.35, P.paint, { side: 1 })] },
+        side: { part: P.paint, holes: [rectHole(-1.9, -1.15, 0.66, 2.35, P.paint, { side: 1 })] },
       });
       if (lod === 0) {
         // Side door outline, rear ramp door hinges and latches.
@@ -1673,7 +1726,7 @@ function buildTrailer(variant, lod) {
       const holes = [];
       for (const z of [-5.2, -2.6, 0.9, 3.4, 5.9]) holes.push(rectHole(z - 0.55, z + 0.55, 1.45, 2.4, P.glass));
       holes.push(rectHole(-1.55, -0.65, 0.65, 2.6, P.white_body, { side: 1 }));
-      holes.push(rectHole(bodyFront + 0.02, hl - 0.02, 0.02, bottom, P.cab_paint));
+      holes.push(rectHole(bodyFront + 0.06, hl - 0.06, 0.06, bottom, P.cab_paint));
       sweepTagged(out, p, hw, { front: P.shed_wall, roof: P.white_body, rear: P.shed_wall, under: P.under }, { r: 0.03, steps: 1, side: { part: P.shed_wall, holes } });
       if (lod === 0) {
         // White window frames, the door's steps and landing, the hitch.
@@ -1707,7 +1760,7 @@ function buildBoat(variant, covered, lod) {
   const cabin = variant === "cabin";
   const length = cabin ? 7.7 : 6.1;
   const beam = cabin ? 2.5 : 2.36;
-  const zBow = cabin ? -3.75 : -2.85;
+  const zBow = cabin ? -3.75 : -3.0;
   const zStern = zBow + length;
   const keel = cabin ? 0.72 : 0.66;
   const sheer = cabin ? 1.85 : 1.6;
@@ -1800,7 +1853,7 @@ function buildBoat(variant, covered, lod) {
   }
   out.aabb([-0.06, 0.4, zBow - 0.35], [0.06, 1.25, zBow - 0.22], P.metal);
   if (lod === 0) out.cylinder(v3(-0.1, 1.05, zBow - 0.28), X, 0.07, 0.2, 8, P.metal);
-  tongue(out, zBow - 0.2, -3.5 - (cabin ? 0.9 : 0), 0.44, 0.6, lod);
+  tongue(out, zBow - 0.2, cabin ? -4.4 : -3.65, 0.44, 0.6, lod);
   for (const z of axles) axle(out, z, beam - 0.25, R, 0.18, lod);
   return out.result();
 }
@@ -1900,6 +1953,86 @@ function buildWheelLoader(lod) {
   return out.result();
 }
 
+// An open-top roll-off bin: a ribbed steel box on two rails, its front raked,
+// a hinged rear door; the open top shows the dark inside.
+function buildOpenBin(lod) {
+  const out = new YardBuilder(lod);
+  const hw = 1.22;
+  const p = profileOf([
+    ["bottom", [[3.3, 0.22], [-3.05, 0.22]]],
+    ["front", [[-3.45, 1.85]]],
+    ["top", [[3.3, 1.85]]],
+    ["rear", [[3.3, 0.22]]],
+  ]);
+  sweepTagged(out, p, hw, { bottom: P.under, front: P.crane_red, top: { face: P.inside, round: P.crane_red }, rear: P.crane_red }, { r: 0.04, steps: 1, side: { part: P.crane_red } });
+  for (const s of [1, -1]) out.aabb([s * 0.55 - 0.07, 0, -3.0], [s * 0.55 + 0.07, 0.22, 3.25], P.hub);
+  if (lod === 0) {
+    // Side stiffeners, the top rail and the rear door's latches.
+    for (let z = -2.8; z <= 3.0; z += 0.62) {
+      for (const s of [1, -1]) {
+        const xs = [s * hw, s * (hw + 0.05)].sort((a, b) => a - b);
+        out.aabb([xs[0], 0.25, z - 0.05], [xs[1], 1.8, z + 0.05], P.crane_red);
+      }
+    }
+    for (const s of [1, -1]) {
+      const xs = [s * (hw - 0.02), s * (hw + 0.06)].sort((a, b) => a - b);
+      out.aabb([xs[0], 1.75, -3.4], [xs[1], 1.88, 3.3], P.crane_red);
+    }
+    for (const x of [-0.7, 0.7]) out.aabb([x - 0.03, 0.4, 3.3], [x + 0.03, 1.7, 3.36], P.lock_bar);
+  }
+  return out.result();
+}
+
+// A cone-bottomed hopper on four legs, a roof cap and a ladder.
+function buildHopper(lod) {
+  const out = new YardBuilder(lod);
+  const sides = lod === 0 ? 24 : 12;
+  const R = 1.9;
+  out.lathe(v3(0, 0, 0), Y, [[0.25, 1.35], [0.32, 1.6], [R, 3.4], [R, 7.55], [R - 0.05, 7.62], [0.35, 8.0], [0, 8.0]], sides, (i) => (i === 0 ? P.metal : P.tank), 0, (i) => (i <= 1 ? 0.75 : 1));
+  for (const [x, z] of [[1, 1], [1, -1], [-1, 1], [-1, -1]]) {
+    const c = v3(x * 1.32, 0, z * 1.32);
+    out.aabb([c[0] - 0.1, 0, c[2] - 0.1], [c[0] + 0.1, 3.6, c[2] + 0.1], P.tank);
+    if (lod === 0) out.aabb([c[0] - 0.22, 0, c[2] - 0.22], [c[0] + 0.22, 0.03, c[2] + 0.22], P.metal);
+  }
+  if (lod === 0) {
+    for (const [a, b] of [[[1, 1], [1, -1]], [[-1, 1], [-1, -1]], [[1, 1], [-1, 1]], [[1, -1], [-1, -1]]]) {
+      out.beam(v3(a[0] * 1.32, 0.4, a[1] * 1.32), v3(b[0] * 1.32, 2.6, b[1] * 1.32), 0.06, 0.06, P.tank);
+      out.beam(v3(b[0] * 1.32, 0.4, b[1] * 1.32), v3(a[0] * 1.32, 2.6, a[1] * 1.32), 0.06, 0.06, P.tank);
+    }
+    for (const x of [-0.22, 0.22]) out.aabb([x - 0.02, 3.6, R + 0.18], [x + 0.02, 8.1, R + 0.22], P.metal);
+    for (let y = 3.8; y < 8.0; y += 0.3) out.aabb([-0.22, y - 0.015, R + 0.18], [0.22, y + 0.015, R + 0.22], P.metal);
+  }
+  return out.result();
+}
+
+// A conveyor truss module (6 m along its own Z, belt on top) and a leg (1 m
+// tall, scaled in height per instance).
+function buildConveyorModule(lod) {
+  const out = new YardBuilder(lod);
+  const half = CONVEYOR_MODULE_M / 2;
+  const hw = 0.55;
+  for (const s of [1, -1]) {
+    for (const y of [0, 0.75]) out.aabb([s * hw - 0.05, y, -half], [s * hw + 0.05, y + 0.08, half], P.metal);
+    if (lod === 0) {
+      for (let k = 0; k <= 6; k += 1) {
+        const z = -half + k;
+        out.aabb([s * hw - 0.03, 0.05, z - 0.03], [s * hw + 0.03, 0.8, z + 0.03], P.metal);
+        if (k < 6) out.beam(v3(s * hw, 0.08, z), v3(s * hw, 0.75, z + 1), 0.04, 0.04, P.metal);
+      }
+    }
+  }
+  out.aabb([-hw + 0.06, 0.8, -half], [hw - 0.06, 0.86, half], (face) => (face === "+y" ? P.belt : P.under));
+  if (lod === 0) for (let k = 0; k < 6; k += 1) out.aabb([-hw, 0.12, -half + k + 0.45], [hw, 0.18, -half + k + 0.55], P.metal);
+  return out.result();
+}
+
+function buildConveyorLeg(lod) {
+  const out = new YardBuilder(lod);
+  for (const s of [1, -1]) out.aabb([s * 0.5 - 0.06, 0, -0.06], [s * 0.5 + 0.06, 1, 0.06], P.metal);
+  out.aabb([-0.5, 0.85, -0.05], [0.5, 0.95, 0.05], P.metal);
+  return out.result();
+}
+
 // ---------------------------------------------------------------- barges and cranes
 // A deck barge hull module: the box between the rakes (mid, 1 m long and
 // 1 m wide, scaled per instance along X and Z), or a raked end (1 m wide,
@@ -1923,9 +2056,7 @@ function buildBargeEnd(dir, lod) {
   out.face([v3(-0.5, -BARGE_DRAFT, 0), v3(0.5, -BARGE_DRAFT, 0), v3(0.5, 0.6 - 0.6, z1), v3(-0.5, 0.0, z1)], rakeNormal, P.hull);
   out.face([v3(-0.5, 0.0, z1), v3(0.5, 0.0, z1), v3(0.5, BARGE_FREEBOARD, z1), v3(-0.5, BARGE_FREEBOARD, z1)], v3(0, 0, dir), P.hull);
   for (const s of [-0.5, 0.5]) {
-    const n = v3(Math.sign(s), 0, 0);
-    out.face([v3(s, -BARGE_DRAFT, 0), v3(s, BARGE_FREEBOARD, 0), v3(s, BARGE_FREEBOARD, z1), v3(s, 0.0, z1)], n, P.hull);
-    out.tri(v3(s, -BARGE_DRAFT, 0), v3(s, 0.0, z1), v3(s, BARGE_FREEBOARD, 0), n, P.hull);
+    out.face([v3(s, -BARGE_DRAFT, 0), v3(s, BARGE_FREEBOARD, 0), v3(s, BARGE_FREEBOARD, z1), v3(s, 0.0, z1)], v3(Math.sign(s), 0, 0), P.hull);
   }
   void lod;
   return out.result();
@@ -2094,6 +2225,10 @@ function kitEntries() {
     for (let shape = 0; shape < 3; shape += 1) add(`pile_${material}_${shape}`, (lod) => buildPile(material, shape, lod));
   }
   add("cylinder_section", buildCylinderSection);
+  add("open_bin", buildOpenBin);
+  add("hopper", buildHopper);
+  add("conveyor_module", buildConveyorModule);
+  add("conveyor_leg", buildConveyorLeg);
   add("crane_mats", buildCraneMats);
   add("excavator", buildExcavator);
   add("wheel_loader", buildWheelLoader);

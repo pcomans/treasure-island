@@ -69,6 +69,8 @@ const PART_COLORS := [
 	Color(0.06, 0.06, 0.06), # seal
 	Color(0.9, 0.9, 0.88), # white_body
 	Color(0.78, 0.78, 0.76), # vent
+	Color(0.5, 0.5, 0.5), # tank
+	Color(0.06, 0.06, 0.065), # belt
 ]
 ## Named paints (sRGB): the params' colour names (YARD_COLOURS) and a few the
 ## kit picks itself. Container and wall colours are sampled from the dated
@@ -112,7 +114,7 @@ const PROPS := {
 	"boat_on_trailer": {"range_m": 600.0, "variants": ["runabout", "cabin"]},
 	"trailer": {"range_m": 700.0, "variants": ["trailer_cargo", "trailer_utility", "trailer_semi", "trailer_office"]},
 	"fabric_shed": {"range_m": 1500.0, "variants": ["span10", "span15", "span20", "span30"]},
-	"equipment": {"range_m": 700.0, "variants": ["excavator", "wheel_loader", "crane_mats", "cylinder_section"]},
+	"equipment": {"range_m": 700.0, "variants": ["excavator", "wheel_loader", "crane_mats", "cylinder_section", "open_bin", "hopper", "conveyor"]},
 	"material_pile": {"range_m": 1500.0, "variants": ["gravel", "rubble", "soil", "tarp", "ridge"]},
 	"plastic_berm": {"range_m": 1500.0, "variants": ["low", "high"]},
 	"crane_barge": {"range_m": 2500.0, "variants": ["crane", "deck", "pier_crane"]},
@@ -125,9 +127,9 @@ const PLANS := {
 	"box_truck": [[2.4, 7.4, 3.5], [2.6, 10.4, 4.0]],
 	"van": [[2.02, 5.93, 2.65], [2.4, 7.0, 3.0]],
 	"food_truck": [[2.4, 7.3, 3.3], [2.44, 6.2, 3.0]],
-	"boat_on_trailer": [[2.5, 7.0, 2.5], [2.6, 8.8, 3.4]],
-	"trailer": [[2.6, 7.3, 3.0], [2.1, 4.5, 1.2], [2.6, 16.2, 4.1], [3.66, 14.6, 3.5]],
-	"equipment": [[3.2, 10.0, 3.2], [3.0, 8.0, 3.5], [1.2, 9.1, 1.2], [1.8, 1.8, 1.3]],
+	"boat_on_trailer": [[2.5, 7.3, 2.2], [2.6, 8.8, 2.9]],
+	"trailer": [[2.6, 7.3, 3.0], [2.4, 4.5, 1.55], [2.6, 16.2, 4.1], [3.66, 14.6, 3.5]],
+	"equipment": [[3.2, 10.0, 3.2], [3.0, 8.0, 3.5], [1.2, 9.1, 1.2], [1.8, 1.8, 1.3], [2.44, 6.9, 1.85], [4.0, 4.0, 8.0], [1.4, 0.0, 0.0]],
 }
 ## Containers (tools/lib/street-yard-kit.mjs): width, heights, lengths.
 const CONTAINER_W := 2.438
@@ -154,6 +156,10 @@ const FABRICS := {
 }
 const BERM_MODULE_M := 6.0
 const RIDGE_MODULE_M := 4.0
+## A conveyor: 6 m truss modules rising at 16 degrees from a foot 1.2 m up.
+const CONVEYOR_MODULE_M := 6.0
+const CONVEYOR_INCLINE := deg_to_rad(16.0)
+const CONVEYOR_FOOT_M := 1.2
 const BARGE_RAKE_M := 3.0
 const BARGE_FREEBOARD_M := 1.0
 ## Default weathering (0..1) by prop; a row's weathering param overrides it.
@@ -484,23 +490,47 @@ func _vehicle(result: Dictionary, prop: String, variant: int, mesh: String, para
 
 
 func _equipment(result: Dictionary, variant: int, mesh: String, params: Dictionary, level: float, seed: int) -> String:
-	var paint := _colour(params, "paint", "yellow")
+	if mesh == "conveyor":
+		return _conveyor(result, float(params.get("length_m", 0.0)), level, seed)
 	if mesh == "cylinder_section":
 		var tone := "concrete_dark" if str(params.get("tone", "light")) == "dark" else "concrete_light"
-		var error := _add(result, mesh, Transform3D.IDENTITY, _custom(tone, tone, tone, level, seed))
-		var shape := CylinderShape3D.new()
-		shape.radius = 0.9
-		shape.height = 1.3
-		(result.shapes as Array).append({"shape": shape, "transform": Transform3D(Basis.IDENTITY, Vector3(0, 0.65, 0))})
-		return error
-	var plan: Array = PLANS.equipment[variant]
-	var error := _add(result, mesh, Transform3D.IDENTITY, _custom(paint, paint, "dark_grey", level, seed))
+		var cylinder := CylinderShape3D.new()
+		cylinder.radius = 0.9
+		cylinder.height = 1.3
+		(result.shapes as Array).append({"shape": cylinder, "transform": Transform3D(Basis.IDENTITY, Vector3(0, 0.65, 0))})
+		return _add(result, mesh, Transform3D.IDENTITY, _custom(tone, tone, tone, level, seed))
+	# A hopper is white unless the row paints it; machines take the paint (yellow by default).
+	var paint := _colour(params, "paint", "white" if mesh == "hopper" else "yellow")
 	if mesh == "excavator":
 		# The machine, and its boom and bucket out in front.
 		_box(result, Vector3(3.2, 3.2, 4.9), Vector3(0, 1.6, 0.4))
 		_box(result, Vector3(1.3, 3.1, 4.6), Vector3(0.2, 1.55, -3.7))
 	else:
+		var plan: Array = PLANS.equipment[variant]
 		_box(result, Vector3(plan[0], plan[2], plan[1]), Vector3(0, float(plan[2]) * 0.5, 0))
+	return _add(result, mesh, Transform3D.IDENTITY, _custom(paint, paint, "dark_grey", level, seed))
+
+
+## A conveyor: its truss modules end to end up the incline (rising toward +Z),
+## a leg under every joint; the legs are its collision.
+func _conveyor(result: Dictionary, length_m: float, level: float, seed: int) -> String:
+	if length_m < 12.0:
+		return "conveyor needs length_m"
+	var modules := maxi(2, roundi(length_m / (CONVEYOR_MODULE_M * cos(CONVEYOR_INCLINE))))
+	var plan := modules * CONVEYOR_MODULE_M * cos(CONVEYOR_INCLINE)
+	var pitch := Basis(Vector3.RIGHT, -CONVEYOR_INCLINE)
+	var custom := _custom("grey", "grey", "grey", level, seed)
+	var error := ""
+	for index in modules:
+		var t := (index + 0.5) * CONVEYOR_MODULE_M
+		var centre := Vector3(0, CONVEYOR_FOOT_M + t * sin(CONVEYOR_INCLINE), -plan / 2.0 + t * cos(CONVEYOR_INCLINE))
+		error += _add(result, "conveyor_module", Transform3D(pitch, centre), custom)
+	for joint in modules + 1:
+		var t := joint * CONVEYOR_MODULE_M
+		var height := CONVEYOR_FOOT_M + t * sin(CONVEYOR_INCLINE)
+		var z := -plan / 2.0 + t * cos(CONVEYOR_INCLINE)
+		error += _add(result, "conveyor_leg", Transform3D(Basis.IDENTITY.scaled(Vector3(1, height, 1)), Vector3(0, 0, z)), custom)
+		_box(result, Vector3(1.12, height, 0.12), Vector3(0, height * 0.5, z))
 	return error
 
 

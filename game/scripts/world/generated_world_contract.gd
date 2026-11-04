@@ -600,7 +600,7 @@ static func _validate_street_fence(row: Dictionary, land_records: Dictionary, bo
 	var fence: Dictionary = fence_value
 	# The generator's type table (tools/lib/street-fence-generation.mjs) and the kit's must agree.
 	var spec: Dictionary = STREET_FENCE_KIT.TYPES[str(fence.type)]
-	if not is_equal_approx(float(fence.get("height_m", -1.0)), float(spec.height_m)) or not is_equal_approx(float(fence.get("half_thickness_m", -1.0)), float(spec.half_thickness_m)):
+	if not is_equal_approx(float(fence.get("height_m", -1.0)), STREET_FENCE_KIT.height_of(str(fence.type), fence.get("params", null))) or not is_equal_approx(float(fence.get("half_thickness_m", -1.0)), float(spec.half_thickness_m)):
 		return _failure("street_detail_fence", "Street-detail fence height or half thickness differs from the fence kit: %s" % row_id)
 	var runs: Array = fence.runs
 	if (str(row.get("status", "")) == "placed") != (runs.size() > 0):
