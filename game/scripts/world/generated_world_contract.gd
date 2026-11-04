@@ -615,12 +615,15 @@ static func _expand_planting_rows(document: Dictionary) -> Dictionary:
 		if not block_value is Dictionary:
 			return _failure("street_detail_planting", "Street-detail planting block is malformed.")
 		var block: Dictionary = block_value
+		for field: String in ["id_prefix", "kind", "source_id"]:
+			if not block.get(field, null) is String:
+				return _failure("street_detail_planting", "Street-detail planting block is malformed.")
 		for field: String in ["props", "surfaces", "lands", "zones", "rows"]:
 			if not block.get(field, null) is Array:
 				return _failure("street_detail_planting", "Street-detail planting block is malformed.")
 		var lists := [block.props, block.surfaces, block.lands, block.zones]
 		for index in (block.rows as Array).size():
-			var row_id := "%s%05d" % [str(block.get("id_prefix", "")), index]
+			var row_id := "%s%05d" % [block.id_prefix, index]
 			var values_value: Variant = block.rows[index]
 			if not values_value is Array or (values_value as Array).size() != PLANTING_ROW_FIELDS.size():
 				return _failure("street_detail_planting", "Street-detail planting row is malformed: %s" % row_id)
@@ -640,13 +643,13 @@ static func _expand_planting_rows(document: Dictionary) -> Dictionary:
 				"exclusion": null,
 				"geometry": "point",
 				"id": row_id,
-				"kind": block.get("kind", ""),
+				"kind": block.kind,
 				"layer": "vegetation",
 				"position_m": [values[2], values[3], values[4]],
 				"prop": picks[0],
 				"prop_params": {"foot_spread_m": values[8], "lift_m": values[7], "scale": values[6], "variant": values[1], "well_m": 0.0},
 				"source": "scatter",
-				"source_id": block.get("source_id", ""),
+				"source_id": block.source_id,
 				"status": "placed",
 				"surface": picks[1],
 				"terrain_support": {"elevation_m": values[3], "object_key": picks[2], "triangle_index": values[11]},

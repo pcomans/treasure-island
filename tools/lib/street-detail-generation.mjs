@@ -1305,6 +1305,7 @@ export function generateStreetDetail({
       zoneId: zone.id,
       seed,
       bed: (xz) => ground.site.parkBed([xz[0], -xz[1]], rule.surfaces),
+      onBed: (xz) => ground.site.parkBedOn([xz[0], -xz[1]], rule.surfaces),
       slopeAt,
       state: plantingStates.get(zone.id),
       accept,

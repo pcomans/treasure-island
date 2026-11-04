@@ -33,7 +33,16 @@ import {
   verifySourceContract,
 } from "./lib/world-contract.mjs";
 import { validateMesh } from "./lib/mesh-output.mjs";
-import { geometryToMultiPolygon, pointInMultiPolygon } from "./lib/osm-geometry.mjs";
+import {
+  differenceMultiPolygons,
+  geometryToMultiPolygon,
+  intersectMultiPolygons,
+  multiPolygonArea,
+  multiPolygonBounds,
+  pointInMultiPolygon,
+  rectangleMultiPolygon,
+} from "./lib/osm-geometry.mjs";
+import { loadTerrainOverrides } from "./lib/terrain-overrides.mjs";
 import { loadTerrainRaster } from "./lib/terrain-raster.mjs";
 import {
   SHORELINE_BANDS,
@@ -564,15 +573,50 @@ function pointInPlayableBoundary(point, boundary) {
     pointInRingXZ(point, component.outer) && !component.holes.some((hole) => pointInRingXZ(point, hole)));
 }
 
+// A terrain override re-meshes only land its config names: each cell it
+// declares must overlap the scope of a site in tools/config/terrain-overrides.json,
+// that is the generated surfaces of the site's OSM areas or its traced polygons,
+// less its traced exclusions. Its protected way corridors stay in, so this bound
+// is never stricter than the generator's own.
+function assertOverrideCellsInScope(cells, records) {
+  if (cells.length === 0) return;
+  const { config } = loadTerrainOverrides(projectRoot);
+  const eastNorth = (points) => [[points.map(([x, z]) => [x, -z])]];
+  const sites = config.sites.map((site) => {
+    const keys = new Set(site.scope.source_keys);
+    const parts = site.scope.add_xz.map(eastNorth);
+    for (const { record } of records.physical.values()) {
+      if (!["major_area", "terrain_overlay"].includes(record.feature_kind) || record.source_keys.length !== 1 || !keys.has(record.source_keys[0])) continue;
+      for (let offset = 0; offset < record.indices.length; offset += 3) {
+        parts.push(eastNorth([0, 1, 2].map((corner) => {
+          const index = record.indices[offset + corner] * 3;
+          return [record.vertices[index], record.vertices[index + 2]];
+        })));
+      }
+    }
+    return { parts, exclusions: site.scope.exclude_xz.map((entry) => eastNorth(entry.points_xz)) };
+  });
+  for (const [minX, minZ, maxX, maxZ] of cells) {
+    const cell = rectangleMultiPolygon(minX, -maxZ, maxX, -minZ);
+    const inScope = sites.some(({ parts, exclusions }) => parts.some((part) => {
+      const bounds = multiPolygonBounds(part);
+      if (bounds.max_x <= minX || bounds.min_x >= maxX || bounds.max_y <= -maxZ || bounds.min_y >= -minZ) return false;
+      return multiPolygonArea(differenceMultiPolygons(intersectMultiPolygons(cell, part), ...exclusions)) > 1e-6;
+    }));
+    invariant(inScope, `Terrain override cell [${minX}, ${minZ}, ${maxX}, ${maxZ}] lies outside every site scope in tools/config/terrain-overrides.json`);
+  }
+}
+
 // The land the player walks on is the frozen USGS surface (the generator's
 // sampler, at the serialized millimetre position) everywhere except the cells a
-// declared terrain override re-meshes, edges included (terrain.json
+// configured terrain override re-meshes, edges included (terrain.json
 // terrain_overrides, tools/lib/terrain-overrides.mjs). Visual passes (pavement,
 // areas, street paint) add no land collision; their records are checked above.
 function validateLandProvenance(records, terrain) {
   const raster = loadTerrainRaster(resolve(projectRoot, SOURCE_CONTRACT.terrain_dem.path));
   const cells = terrain.terrain_overrides?.refined_cell_bounds_m ?? [];
   invariant(Array.isArray(cells) && cells.every((cell) => Array.isArray(cell) && cell.length === 4 && cell.every(Number.isFinite)), "Terrain override cell bounds are malformed");
+  assertOverrideCellsInScope(cells, records);
   const overridden = (x, z) => cells.some(([minX, minZ, maxX, maxZ]) =>
     x >= minX - COORDINATE_ROUNDING_M && x <= maxX + COORDINATE_ROUNDING_M && z >= minZ - COORDINATE_ROUNDING_M && z <= maxZ + COORDINATE_ROUNDING_M);
   let sampled = 0;

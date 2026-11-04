@@ -292,10 +292,12 @@ function plantingContext({ rule, zoneId, seed, bed, slopeAt }) {
   return { tag, hashUnit, inGap, rejected, reject, tryVariant, bed, slopeAt };
 }
 
-// Places a drifts rule's plants. accept(candidate) runs the site's own checks
-// and builds the row, returning whether it did; candidate is {xz, prop, variant,
-// scale, identity}. Returns {placed, centres, rejected}.
-export function planDrifts({ rule, zoneId, seed, bed, slopeAt, state, accept }) {
+// Places a drifts rule's plants. bed(xz) gives {on, distance} (whether a point
+// lies on the rule's bed and how far it is from the bed's edge), onBed(xz) the
+// "on" alone, cheaply. accept(candidate) runs the site's own checks and builds
+// the row, returning whether it did; candidate is {xz, prop, variant, scale,
+// identity}. Returns {placed, centres, rejected}.
+export function planDrifts({ rule, zoneId, seed, bed, onBed, slopeAt, state, accept }) {
   const context = plantingContext({ rule, zoneId, seed, bed, slopeAt });
   const { tag, hashUnit, inGap, reject, tryVariant } = context;
   const random = generator(`${tag}|centres`);
@@ -310,7 +312,7 @@ export function planDrifts({ rule, zoneId, seed, bed, slopeAt, state, accept }) 
     if (!inRule(rule, point)) continue;
     const radius = rule.drift_m * (0.75 + 0.5 * spacingNoise(point[0], point[1], rule.drift_m * 1.5));
     if (centres.some((centre) => Math.hypot(centre.point[0] - point[0], centre.point[1] - point[1]) < Math.min(radius, centre.radius))) continue;
-    if (inGap(point[0], point[1]) || !bed(point).on) continue;
+    if (inGap(point[0], point[1]) || !onBed(point)) continue;
     centres.push({ point, radius });
   }
 
@@ -343,11 +345,11 @@ export function planDrifts({ rule, zoneId, seed, bed, slopeAt, state, accept }) 
         reject("gap");
         continue;
       }
-      const pointWhere = bed(point);
-      if (!pointWhere.on) {
+      if (!onBed(point)) {
         reject("off_bed");
         continue;
       }
+      const pointWhere = bed(point);
       const variant = Math.min(last, first + Math.floor(hashUnit(`${identity}:variant`) * (last - first + 1)));
       const candidate = tryVariant({ entry, variant, point, where: pointWhere, slope: slopeAt(point), identity, state, spacing: [rule.spacing.same, rule.spacing.other] });
       if (!candidate || !accept(candidate)) continue;
@@ -362,7 +364,7 @@ export function planDrifts({ rule, zoneId, seed, bed, slopeAt, state, accept }) 
 // Places a fill rule's groundcover into the bare bed until the plants cover
 // rule.cover of it or rule.max_per_m2 is reached. Arguments and result as
 // planDrifts; the result also gives the cover reached.
-export function planFill({ rule, zoneId, seed, bed, slopeAt, state, accept }) {
+export function planFill({ rule, zoneId, seed, bed, onBed, slopeAt, state, accept }) {
   const context = plantingContext({ rule, zoneId, seed, bed, slopeAt });
   const { tag, hashUnit, inGap, reject, tryVariant } = context;
   const random = generator(`${tag}|cells`);
@@ -371,12 +373,19 @@ export function planFill({ rule, zoneId, seed, bed, slopeAt, state, accept }) {
   const warpZ = valueNoise(`${tag}|warp-z`);
   const box = ruleBox(rule);
   // The species patches: the seeds nearest a noise-displaced point, nearest first.
-  const seedAt = (i, j) => ({
-    x: (i + 0.15 + 0.7 * hashUnit(`seed:${i},${j}`, 0)) * rule.drift_m,
-    z: (j + 0.15 + 0.7 * hashUnit(`seed:${i},${j}`, 1)) * rule.drift_m,
-    unit: hashUnit(`seed:${i},${j}`, 2),
-    id: `${i},${j}`,
-  });
+  const seeds = new Map();
+  const seedAt = (i, j) => {
+    const id = `${i},${j}`;
+    if (!seeds.has(id)) {
+      seeds.set(id, {
+        x: (i + 0.15 + 0.7 * hashUnit(`seed:${id}`, 0)) * rule.drift_m,
+        z: (j + 0.15 + 0.7 * hashUnit(`seed:${id}`, 1)) * rule.drift_m,
+        unit: hashUnit(`seed:${id}`, 2),
+        id,
+      });
+    }
+    return seeds.get(id);
+  };
   const patchSeeds = (x, z) => {
     const ragged = 0.35 * rule.drift_m;
     const wx = x + (warpX(x, z, rule.drift_m * 0.8) - 0.5) * 2 * ragged;
@@ -401,7 +410,7 @@ export function planFill({ rule, zoneId, seed, bed, slopeAt, state, accept }) {
   for (let i = Math.floor(box.min_x / COVER_CELL_M); i <= Math.floor(box.max_x / COVER_CELL_M); i += 1) {
     for (let j = Math.floor(box.min_z / COVER_CELL_M); j <= Math.floor(box.max_z / COVER_CELL_M); j += 1) {
       const point = [(i + 0.5) * COVER_CELL_M, (j + 0.5) * COVER_CELL_M];
-      if (inRule(rule, point) && bed(point).on) cells.push(`${i},${j}`);
+      if (inRule(rule, point) && onBed(point)) cells.push(`${i},${j}`);
     }
   }
   const bedCells = new Set(cells);
@@ -425,11 +434,11 @@ export function planFill({ rule, zoneId, seed, bed, slopeAt, state, accept }) {
         reject("gap");
         continue;
       }
-      const where = bed(point);
-      if (!where.on) {
+      if (!onBed(point)) {
         reject("off_bed");
         continue;
       }
+      const where = bed(point);
       const slope = slopeAt(point);
       const allowed = rule.mix.filter((entry) => where.distance >= entry.band_m[0] && where.distance <= entry.band_m[1] && slope <= entry.max_slope);
       if (allowed.length === 0) {
@@ -553,10 +562,10 @@ export function packPlantingRows(rows, sourceIds) {
 export function unpackPlantingRows(document) {
   if (document.planting_rows === undefined) return document;
   const packed = document.planting_rows;
-  invariant(packed?.schema_version === PLANTING_ROWS_SCHEMA && JSON.stringify(packed.fields) === JSON.stringify(PLANTING_ROW_FIELDS) && Array.isArray(packed.blocks), "Street-detail planting rows are malformed");
+  invariant(packed?.schema_version === PLANTING_ROWS_SCHEMA && JSON.stringify(packed.fields) === JSON.stringify(PLANTING_ROW_FIELDS) && Array.isArray(packed.blocks) && Array.isArray(document.rows), "Street-detail planting rows are malformed");
   const rows = [...document.rows];
   for (const block of packed.blocks) {
-    invariant(typeof block?.id_prefix === "string" && ["props", "surfaces", "lands", "zones", "rows"].every((field) => Array.isArray(block[field])), "Street-detail planting block is malformed");
+    invariant(["id_prefix", "kind", "source_id"].every((field) => typeof block?.[field] === "string") && ["props", "surfaces", "lands", "zones", "rows"].every((field) => Array.isArray(block[field])), "Street-detail planting block is malformed");
     block.rows.forEach((values, index) => {
       const id = rowId(block.id_prefix, index);
       invariant(Array.isArray(values) && values.length === PLANTING_ROW_FIELDS.length && values.every(isFiniteNumber), `Street-detail planting row ${id} is malformed`);
