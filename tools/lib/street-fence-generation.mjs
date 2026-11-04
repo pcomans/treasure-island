@@ -39,7 +39,11 @@ export const STREET_FENCE_TYPES = Object.freeze({
   construction_panel: Object.freeze({ height_m: 1.83, post_spacing_m: 3.66, half_thickness_m: 0.3 }),
   wood_privacy: Object.freeze({ height_m: 1.83, post_spacing_m: 2.44, half_thickness_m: 0.08 }),
 });
-export const STREET_FENCE_SCREENS = Object.freeze(["black", "green"]);
+// Windscreen colours; orange is the open safety mesh of construction sites
+// (9th St, Sep 2025: about 1.2 m high behind construction panels).
+export const STREET_FENCE_SCREENS = Object.freeze(["black", "green", "orange"]);
+// A screen may stop below the fence top (screen_height_m), the wire bare above it.
+export const STREET_FENCE_SCREEN_MIN_M = 0.6;
 export const STREET_FENCE_SLATS = Object.freeze(["green", "brown", "black"]);
 // Gates stand open (the owner's fence rule): their leaves are drawn swung or
 // slid back on the inside of the fence. A slatted fence draws the leaves of
@@ -235,16 +239,20 @@ export function validateFenceRules(zone, kinds) {
 }
 
 // Why a fence type's params are unusable, or null: every type takes inside;
-// a screened fence its screen colour; a slatted one its slat colour and,
-// optionally, its height (6 or 8 ft).
+// a screened fence its screen colour and, optionally, the screen's height; a
+// slatted one its slat colour and, optionally, its height (6 or 8 ft).
 export function fenceParamsError(type, params) {
   const spec = STREET_FENCE_TYPES[type];
   if (!spec) return `unknown fence type ${type}`;
   if (params === null || typeof params !== "object" || Array.isArray(params)) return "params must be an object";
-  const allowed = type === "chain_link_screened" ? ["inside", "screen"] : type === "chain_link_slatted" ? ["height_m", "inside", "slats"] : ["inside"];
+  const allowed = type === "chain_link_screened" ? ["inside", "screen", "screen_height_m"] : type === "chain_link_slatted" ? ["height_m", "inside", "slats"] : ["inside"];
   if (!Object.keys(params).every((key) => allowed.includes(key))) return `params take only ${allowed.join(", ")}`;
   if (!STREET_FENCE_INSIDE.includes(params.inside)) return `params.inside must be ${STREET_FENCE_INSIDE.join(", ")}`;
-  if (type === "chain_link_screened" && !STREET_FENCE_SCREENS.includes(params.screen)) return `params.screen must be ${STREET_FENCE_SCREENS.join(" or ")}`;
+  if (type === "chain_link_screened") {
+    if (!STREET_FENCE_SCREENS.includes(params.screen)) return `params.screen must be ${STREET_FENCE_SCREENS.join(", ")}`;
+    const screen = params.screen_height_m;
+    if (screen !== undefined && !(isFiniteNumber(screen) && screen >= STREET_FENCE_SCREEN_MIN_M && screen <= spec.height_m)) return `params.screen_height_m must be ${STREET_FENCE_SCREEN_MIN_M}..${spec.height_m}`;
+  }
   if (type === "chain_link_slatted") {
     if (!STREET_FENCE_SLATS.includes(params.slats)) return `params.slats must be ${STREET_FENCE_SLATS.join(", ")}`;
     if (params.height_m !== undefined && !spec.heights_m.includes(params.height_m)) return `params.height_m must be ${spec.heights_m.join(" or ")}`;
@@ -261,6 +269,33 @@ export function fenceHeight(type, params) {
 // The style a gate opening of this width gets when no rule names one.
 export function defaultGateStyle(widthM) {
   return widthM <= 1.8 ? "swing_single" : widthM <= 5.0 ? "swing_double" : "sliding";
+}
+
+// A sliding gate's leaf parks along the run before the gate: this long.
+export const SLIDING_LEAF_EXTRA_M = 0.3;
+// A gate leaf's collision half thickness (game/scripts/world/street_fence_kit.gd).
+export const GATE_LEAF_HALF_M = 0.04;
+
+// The open leaves of a gate between its two ends (plan [x, z], in the line's
+// order), as the fence kit draws and collides them: [{xz: [[hinge x, z], [far
+// x, z]], post}], post the end (0 or 1) whose height the leaf hangs at. Swing
+// leaves stand square to the fence on its inside, hinged 0.06 m in from their
+// post (a single leaf on the start post unless hinge is "end"); a sliding leaf
+// lies along the fence 0.16 m inside it, back from the start post over the run
+// before the gate.
+export function gateLeaves(ends, style, hinge, inside) {
+  const [a, b] = ends;
+  const width = Math.hypot(b[0] - a[0], b[1] - a[1]);
+  const along = [(b[0] - a[0]) / width, (b[1] - a[1]) / width];
+  const side = inside === "right" ? -1 : 1;
+  const into = [along[1] * side, -along[0] * side];
+  const leaf = (end, post, offset, direction, length) => {
+    const at = [end[0] + into[0] * offset, end[1] + into[1] * offset];
+    return { xz: [at, [at[0] + direction[0] * length, at[1] + direction[1] * length]].map((point) => point.map(roundCoordinate)), post };
+  };
+  if (style === "swing_single") return [hinge === "end" ? leaf(b, 1, 0.06, into, width - 0.12) : leaf(a, 0, 0.06, into, width - 0.12)];
+  if (style === "swing_double") return [leaf(a, 0, 0.06, into, width / 2 - 0.08), leaf(b, 1, 0.06, into, width / 2 - 0.08)];
+  return [leaf(a, 0, 0.16, [-along[0], -along[1]], width + SLIDING_LEAF_EXTRA_M)];
 }
 
 // The kit type for an OSM fence way: its fence_type tag, else its context.
@@ -462,17 +497,29 @@ export function placeStreetFences({
     // plain and screened chain-link the rule's gates.
     const ends = (from, to) => [pointAt(line, lengths, from), pointAt(line, lengths, to)].map((point) => [roundCoordinate(point[0]), roundCoordinate(point[1])]);
     if (STREET_FENCE_GATED_TYPES.includes(type) && posts) {
-      const gateLeaves = [];
+      const gateRecords = [];
       for (const opening of openings) {
         if (!opening.reason.split("+").includes("gate")) continue;
         if (type !== "chain_link_slatted" && !opening.style) continue;
         const width = opening.to_m - opening.from_m;
         if (width < 0.9) continue;
-        const leaf = { style: opening.style ?? defaultGateStyle(width), from_m: opening.from_m, to_m: opening.to_m, ...runRecord(ends(opening.from_m, opening.to_m), deck) };
-        if (opening.hinge) leaf.hinge = opening.hinge;
-        gateLeaves.push(leaf);
+        let style = opening.style ?? defaultGateStyle(width);
+        // A sliding leaf needs a solid run before the gate at least as long as
+        // itself: a rule's sliding gate that has none fails; a default one
+        // swings open instead.
+        if (style === "sliding") {
+          const before = runs.find(([, s1]) => Math.abs(s1 - opening.from_m) < 1e-6);
+          const fits = before !== undefined && before[1] - before[0] >= width + SLIDING_LEAF_EXTRA_M;
+          invariant(fits || !opening.style, `${label}: its sliding gate at ${opening.from_m}..${opening.to_m} m has no solid run before it as long as its leaf (${(width + SLIDING_LEAF_EXTRA_M).toFixed(2)} m)`);
+          if (!fits) style = "swing_double";
+        }
+        const record = runRecord(ends(opening.from_m, opening.to_m), deck);
+        const plan = record.points_m.map((point) => [point[0], point[2]]);
+        const gate = { style, from_m: opening.from_m, to_m: opening.to_m, ...record, leaves: gateLeaves(plan, style, opening.hinge, params.inside) };
+        if (opening.hinge) gate.hinge = opening.hinge;
+        gateRecords.push(gate);
       }
-      if (gateLeaves.length > 0) block.gates = gateLeaves;
+      if (gateRecords.length > 0) block.gates = gateRecords;
     }
     // Banners hang on a solid run, never across an opening.
     if (banners.length > 0 && posts) {

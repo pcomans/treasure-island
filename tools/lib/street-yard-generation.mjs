@@ -52,7 +52,7 @@
 
 import { createHash } from "node:crypto";
 
-import { YARD_KIT_KEYS, YARD_KIT_PROPS, containerWallLayout, yardPropFootprint, yardPropParamsError } from "./street-yard-kit.mjs";
+import { YARD_KIT_KEYS, YARD_KIT_PROPS, YARD_MAX_FLOAT_M, YARD_MAX_SINK_M, containerWallLayout, yardCornerGaps, yardPropFootprint, yardPropParamsError } from "./street-yard-kit.mjs";
 import { WATER_Y_M } from "./shoreline-generation.mjs";
 import { invariant, roundCoordinate } from "./world-contract.mjs";
 
@@ -245,7 +245,10 @@ export function validateYardRules(zone, kinds) {
       invariant(!(SIZE_PARAMS[rule.prop] in rule.params), `${label} params leave out ${SIZE_PARAMS[rule.prop]}, which the line sets`);
       const sizeSpec = YARD_KIT_PROPS[rule.prop].params[SIZE_PARAMS[rule.prop]];
       for (const params of paramCombinations(rule.params)) {
-        const error = yardPropParamsError(rule.prop, { ...params, [SIZE_PARAMS[rule.prop]]: sizeSpec.min });
+        // At the smallest size the variant takes (a high berm needs two modules).
+        const sizes = sizeSpec.type === "int" ? Array.from({ length: sizeSpec.max - sizeSpec.min + 1 }, (_, index) => sizeSpec.min + index) : [sizeSpec.min, sizeSpec.max];
+        const size = sizes.find((value) => yardPropParamsError(rule.prop, { ...params, [SIZE_PARAMS[rule.prop]]: value }) === null) ?? sizeSpec.min;
+        const error = yardPropParamsError(rule.prop, { ...params, [SIZE_PARAMS[rule.prop]]: size });
         invariant(error === null, `${label}: ${error}`);
       }
       invariant(["forward", "backward"].includes(rule.facing), `${label} facing is forward or backward`);
@@ -456,6 +459,20 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
     return null;
   };
 
+  // A rest as the row's params give it ({pitch, roll, lift} from its base, y +
+  // bias): lowered until no corner floats past the kit's limit, or a problem
+  // when a corner then sinks past it (tools/lib/street-yard-kit.mjs yardCornerGaps).
+  const angle = (value) => Math.round(value * 1e4) / 1e4 || 0;
+  const cornerRest = (footprint, xz, yaw, base, settled, groundFn) => {
+    const rest = { pitch: angle(settled.pitch), roll: angle(settled.roll), lift: round3(settled.height - base) };
+    const gaps = yardCornerGaps(footprint, xz, yaw, base, rest, groundFn);
+    if (gaps.some((gap) => gap === null)) return { problem: "no_ground" };
+    const drop = Math.max(...gaps) - YARD_MAX_FLOAT_M;
+    if (drop > 0) rest.lift = round3(rest.lift - drop - 0.001);
+    if (gaps.some((gap) => gap - Math.max(0, drop) < -YARD_MAX_SINK_M)) return { problem: "uneven_ground" };
+    return rest;
+  };
+
   // One item: its row when it stands, else the reason it doesn't.
   const addItem = (zone, rule, cell, prop, params, centre, front) => {
     const footprint = yardPropFootprint(prop, params);
@@ -469,7 +486,8 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
     const xz = [round3(centre[0]), round3(centre[1])];
     const { y, support } = grounded(xz);
     const surface = surfaceAt(xz);
-    const angle = (value) => Math.round(value * 1e4) / 1e4 || 0;
+    const resting = cornerRest(footprint, xz, yaw, y + surface.bias_m, settled, groundAt);
+    if (resting.problem) return resting;
     const row = {
       id: `scatter:${zone.id}:${rule.id}:${cell}`,
       source: "scatter",
@@ -485,7 +503,7 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
       status: "placed",
       exclusion: null,
       prop,
-      prop_params: { ...params, pitch: angle(settled.pitch), roll: angle(settled.roll), lift: round3(settled.height - y - surface.bias_m) },
+      prop_params: { ...params, ...resting },
       footprint_m: { x_m: footprint.x_m, z_m: footprint.z_m },
       basis: rule.basis,
     };
@@ -522,6 +540,8 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
     }
     if (placed.some((other) => rectanglesOverlap(rect, other.rect, ITEM_CLEAR_M))) return { problem: "overlap" };
     const [{ y, support, material_key: materialKey }] = decked;
+    const resting = cornerRest(footprint, xz, yaw, y, settled, (sample) => deckSupport(rule.deck, sample));
+    if (resting.problem) return resting;
     const row = {
       id: `scatter:${zone.id}:${rule.id}:${cell}`,
       source: "scatter",
@@ -537,7 +557,7 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
       status: "placed",
       exclusion: null,
       prop,
-      prop_params: { ...params, pitch: Math.round(settled.pitch * 1e4) / 1e4 || 0, roll: Math.round(settled.roll * 1e4) / 1e4 || 0, lift: round3(settled.height - y) },
+      prop_params: { ...params, ...resting },
       footprint_m: { x_m: footprint.x_m, z_m: footprint.z_m },
       basis: rule.basis,
     };
@@ -788,6 +808,8 @@ function fitSize(prop, params, sizeParam, total) {
   let best = null;
   for (let value = spec.min; value <= spec.max; value += 1) {
     const sized = { ...params, [sizeParam]: value };
+    // Sizes the variant does not take (a high berm of one module) are skipped.
+    if (yardPropParamsError(prop, sized) !== null) continue;
     const footprint = yardPropFootprint(prop, sized);
     if (footprint.z_m > total + 1e-6) break;
     best = { params: sized, footprint };

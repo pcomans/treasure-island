@@ -68,7 +68,7 @@
     "maximum_clearance_m": 0.081,
     "maximum_serialization_tolerance_m": 0.01,
     "minimum_clearance_m": 0.019,
-    "sample_points": 285579
+    "sample_points": 297948
   },
   "raster_bbox_wgs84": [
     -122.380001708984,
@@ -209,10 +209,10 @@
     "basis": "production_inference",
     "config": {
       "path": "tools/config/terrain-overrides.json",
-      "sha256": "8ddd7da122c3fa0cbb81fef06d728f72f37860ad679adde51257e3a7771ca00c"
+      "sha256": "9cc1f93d4f6d63ba3e466cd3bd2aeb35adea4d30ab95debc8c1b41aa209fc921"
     },
-    "corrected_cells": 186,
-    "leaves": 3384,
+    "corrected_cells": 191,
+    "leaves": 4169,
     "maximum_cut_m": 20.205,
     "maximum_raise_m": 1.412,
     "mesh": {
@@ -221,7 +221,7 @@
       "sample_m": 0.5,
       "tolerance_m": 0.08
     },
-    "neighbour_edge_vertices": 256,
+    "neighbour_edge_vertices": 259,
     "refined_cell_bounds_m": [
       [
         0,
@@ -596,6 +596,18 @@
         128
       ],
       [
+        576,
+        96,
+        608,
+        128
+      ],
+      [
+        608,
+        96,
+        640,
+        128
+      ],
+      [
         0,
         128,
         32,
@@ -656,6 +668,18 @@
         160
       ],
       [
+        576,
+        128,
+        608,
+        160
+      ],
+      [
+        608,
+        128,
+        640,
+        160
+      ],
+      [
         32,
         160,
         64,
@@ -695,6 +719,12 @@
         576,
         160,
         608,
+        192
+      ],
+      [
+        608,
+        160,
+        640,
         192
       ],
       [
@@ -1340,8 +1370,8 @@
         672
       ]
     ],
-    "refined_cells": 186,
-    "refined_triangles": 7954,
+    "refined_cells": 191,
+    "refined_triangles": 9995,
     "schema_version": "ti.terrain-overrides/1",
     "sites": [
       {
@@ -1447,7 +1477,7 @@
         "edge_blend_m": 6,
         "grade": {
           "final_sweep_change_m": 0,
-          "free_nodes": 613,
+          "free_nodes": 943,
           "kind": "harmonic"
         },
         "id": "concrete_recycling_avenue_m",
@@ -1456,9 +1486,13 @@
           {
             "id": "street_and_wall_base",
             "rule": "level"
+          },
+          {
+            "id": "third_street_wall_base",
+            "rule": "level"
           }
         ],
-        "scope_area_m2": 4389.3
+        "scope_area_m2": 6552.9
       }
     ]
   },

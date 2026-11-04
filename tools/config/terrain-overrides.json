@@ -1988,6 +1988,24 @@
               581.5,
               174.48
             ]
+          ],
+          [
+            [
+              557.86,
+              198.38
+            ],
+            [
+              626.91,
+              162.12
+            ],
+            [
+              608.31,
+              126.7
+            ],
+            [
+              539.26,
+              162.97
+            ]
           ]
         ],
         "exclude_xz": [
@@ -2056,12 +2074,12 @@
                 118.36
               ],
               [
-                521.36,
-                105.41
+                521.8,
+                105.17
               ],
               [
-                560.59,
-                178.85
+                561.03,
+                178.62
               ]
             ],
             "buffer_m": -1.0
@@ -2070,7 +2088,38 @@
             "kind": "level",
             "elevation_m": 4.0
           },
+          "min_leaf_m": 1,
           "reason": "Avenue M and the container wall's base read flat at street level in the Nov 2025 Street View; 4.0 m is the street's grade either side of the smear."
+        },
+        {
+          "id": "third_street_wall_base",
+          "shape": {
+            "points_xz": [
+              [
+                561.31,
+                192.05
+              ],
+              [
+                614.43,
+                164.16
+              ],
+              [
+                606.99,
+                149.99
+              ],
+              [
+                553.87,
+                177.89
+              ]
+            ],
+            "buffer_m": -1.0
+          },
+          "rule": {
+            "kind": "level",
+            "elevation_m": 4.0
+          },
+          "min_leaf_m": 1,
+          "reason": "The 3rd St wall's base near the south corner reads at street level in the Mar 2025 Street View (3rd St), the rubble mound behind it."
         }
       ]
     }

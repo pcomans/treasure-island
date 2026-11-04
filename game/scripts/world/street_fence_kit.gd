@@ -51,9 +51,12 @@ const INSIDE := ["left", "right", "center"]
 ## visible through it. The knitted fabric is translucent, so sunlight through
 ## it lights the shaded face (SCREEN_BACKLIGHT, about half the sun in linear
 ## terms). The black tint leans blue because the island's sun and ambient light
-## are warm.
-const SCREENS := {"black": Color(0.32, 0.32, 0.43), "green": Color(0.34, 0.5, 0.4)}
-const SCREEN_OPACITY := 0.92
+## are warm. Orange is the open safety mesh of construction sites (9th St,
+## Sep 2025), bright and more see-through.
+const SCREENS := {"black": Color(0.32, 0.32, 0.43), "green": Color(0.34, 0.5, 0.4), "orange": Color(1.0, 0.46, 0.12)}
+const SCREEN_OPACITY := {"black": 0.92, "green": 0.92, "orange": 0.78}
+## A screen may stop below the fence top (screen_height_m), at least this tall.
+const SCREEN_MIN_M := 0.6
 ## Privacy slat colours (sRGB, multiplied with the slat stripes), from the
 ## photos: dark teal-green (9th St, Sep 2025; Avenue M, Mar 2025), brown
 ## (12th St, Jul 2023), black.
@@ -62,7 +65,9 @@ const SLATS := {"green": Color(0.19, 0.3, 0.29), "brown": Color(0.3, 0.26, 0.21)
 const SLATTED_HEIGHTS := [1.83, 2.44]
 ## A slat tile: eight slats across SLAT_TILE_M, one fabric height tall.
 const SLAT_TILE_M := 0.4
-const GATE_STYLES := ["swing_single", "swing_double", "sliding"]
+## A gate leaf's collision half thickness (GATE_LEAF_HALF_M in
+## tools/lib/street-fence-generation.mjs, which the clearance checks read).
+const GATE_LEAF_HALF_M := 0.04
 ## Fence types that take open gate leaves, and banners (white sheets tied to
 ## the fabric: Gate 5, Nov 2025).
 const GATED_TYPES := ["chain_link_slatted", "chain_link", "chain_link_screened"]
@@ -125,7 +130,7 @@ func _init() -> void:
 		var screen := StandardMaterial3D.new()
 		screen.resource_name = "street_fence_screen_" + colour
 		screen.albedo_texture = SCREEN
-		screen.albedo_color = Color(SCREENS[colour], SCREEN_OPACITY)
+		screen.albedo_color = Color(SCREENS[colour], float(SCREEN_OPACITY[colour]))
 		screen.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 		screen.depth_draw_mode = BaseMaterial3D.DEPTH_DRAW_ALWAYS
 		screen.roughness = 0.95
@@ -198,8 +203,12 @@ static func params_error(type: String, params: Variant) -> String:
 		return "unknown fence type %s" % type
 	if not params is Dictionary or str((params as Dictionary).get("inside", "")) not in INSIDE:
 		return "fence params need inside left, right or center"
-	if type == "chain_link_screened" and str((params as Dictionary).get("screen", "black")) not in SCREENS:
-		return "unknown screen colour %s" % (params as Dictionary).get("screen")
+	if type == "chain_link_screened":
+		if str((params as Dictionary).get("screen", "black")) not in SCREENS:
+			return "unknown screen colour %s" % (params as Dictionary).get("screen")
+		var screen_height: Variant = (params as Dictionary).get("screen_height_m", TYPES.chain_link_screened.height_m)
+		if not (screen_height is float or screen_height is int) or float(screen_height) < SCREEN_MIN_M or float(screen_height) > float(TYPES.chain_link_screened.height_m):
+			return "screen_height_m must be %.1f..%.2f" % [SCREEN_MIN_M, TYPES.chain_link_screened.height_m]
 	if type == "chain_link_slatted":
 		if str((params as Dictionary).get("slats", "")) not in SLATS:
 			return "slatted fence needs slats green, brown or black"
@@ -207,6 +216,15 @@ static func params_error(type: String, params: Variant) -> String:
 		if not (height is float or height is int) or not SLATTED_HEIGHTS.any(func(value: float) -> bool: return is_equal_approx(value, float(height))):
 			return "slatted fence height_m must be 1.83 or 2.44"
 	return ""
+
+
+## The top of a screened fence's windscreen above the ground: its
+## screen_height_m, or just under the top rail.
+static func screen_top_of(params: Variant) -> float:
+	var full := float(TYPES.chain_link_screened.height_m) - 0.07
+	if params is Dictionary and (params as Dictionary).has("screen_height_m"):
+		return minf(full, float((params as Dictionary).screen_height_m))
+	return full
 
 
 ## The height of a fence of this type with these params.
@@ -229,7 +247,7 @@ func add_run(cells: Dictionary, cell_size_m: float, type: String, params: Dictio
 		"chain_link_slatted":
 			return _slatted(cells, cell_size_m, posts, side, str(params.get("slats", "green")), height_of(type, params))
 		_:
-			return _chain_link(cells, cell_size_m, type, posts, side, str(params.get("screen", "black")))
+			return _chain_link(cells, cell_size_m, type, posts, side, str(params.get("screen", "black")), screen_top_of(params))
 
 
 ## The meshes of one cell's builders: "solid" (metal and boards, drawn with
@@ -279,6 +297,7 @@ func _cell(cells: Dictionary, cell_size_m: float, position: Vector3) -> Dictiona
 			"wood": Quads.new(),
 			"screen_black": Quads.new(),
 			"screen_green": Quads.new(),
+			"screen_orange": Quads.new(),
 			"slats_green": Quads.new(),
 			"slats_brown": Quads.new(),
 			"slats_black": Quads.new(),
@@ -324,7 +343,7 @@ static func _bay_box(a: Vector3, b: Vector3, height: float, half_m: float) -> Di
 ## Chain-link on line posts with a top rail and a bottom tension wire; the
 ## screened type adds a windscreen on the inside, the barbed type angled arms
 ## with three strands of barbed wire leaning outward.
-func _chain_link(cells: Dictionary, cell_size_m: float, type: String, posts: PackedVector3Array, side: float, screen: String) -> Array[Dictionary]:
+func _chain_link(cells: Dictionary, cell_size_m: float, type: String, posts: PackedVector3Array, side: float, screen: String, screen_top: float) -> Array[Dictionary]:
 	var spec: Dictionary = TYPES[type]
 	var fabric_h := 1.83
 	var boxes: Array[Dictionary] = []
@@ -353,13 +372,16 @@ func _chain_link(cells: Dictionary, cell_size_m: float, type: String, posts: Pac
 		metal.tube(PackedVector3Array([a + Vector3(0, fabric_h - 0.02, 0), b + Vector3(0, fabric_h - 0.02, 0)]), PackedFloat32Array([0.021, 0.021]), 8, GALVANIZED, FURNITURE.CELL_METAL, false, false)
 		metal.tube(PackedVector3Array([a + Vector3(0, 0.07, 0), b + Vector3(0, 0.07, 0)]), PackedFloat32Array([0.004, 0.004]), 4, GALVANIZED, FURNITURE.CELL_METAL, false, false)
 		# Fabric just inside the posts (or through them on a centred fence). Behind
-		# a windscreen the wire is barely visible, so the screen stands for both.
+		# a windscreen the wire is barely visible, so the screen stands for both;
+		# above a screen lower than the fence the wire shows.
 		var shift := normal * side * 0.035
-		if type != "chain_link_screened":
-			(cell.chain as Quads).wall(a + shift, b + shift, 0.05, fabric_h - 0.04, along_m, CHAIN_TILE)
+		var wire_from := 0.05
 		if type == "chain_link_screened":
 			var screen_shift := normal * (side if side != 0.0 else 1.0) * 0.055
-			(cell["screen_" + screen] as Quads).wall(a + screen_shift, b + screen_shift, 0.03, fabric_h - 0.07, along_m, Vector2(SCREEN_TILE_M, SCREEN_TILE_M))
+			(cell["screen_" + screen] as Quads).wall(a + screen_shift, b + screen_shift, 0.03, screen_top, along_m, Vector2(SCREEN_TILE_M, SCREEN_TILE_M))
+			wire_from = screen_top
+		if wire_from < fabric_h - 0.1:
+			(cell.chain as Quads).wall(a + shift, b + shift, wire_from, fabric_h - 0.04, along_m, CHAIN_TILE)
 		if type == "chain_link_barbed":
 			var out_a := _post_normal(posts, index) * (-side if side != 0.0 else 1.0)
 			var out_b := _post_normal(posts, index + 1) * (-side if side != 0.0 else 1.0)
@@ -415,45 +437,33 @@ func _slatted(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, 
 
 
 ## An open gate between the solid runs either side of it (a slatted, plain or
-## screened chain-link fence): two stout gate posts, and the leaves swung back
-## square to the fence on its inside (swing gates; a single leaf on its start
-## post unless hinge_side is "end") or slid along the fence beyond the post (a
-## sliding gate). A leaf is filled like its fence: slats and wire, wire, or
-## wire and windscreen. Returns the leaves' collision boxes; the opening
-## itself stays clear.
-func add_gate(cells: Dictionary, cell_size_m: float, type: String, params: Dictionary, ends: PackedVector3Array, style: String, hinge_side: String = "start") -> Array[Dictionary]:
+## screened chain-link fence): two stout gate posts, and its open leaves as the
+## generator lays them out (tools/lib/street-fence-generation.mjs gateLeaves:
+## swung square to the fence on its inside, or a sliding leaf parked along it),
+## each [{xz: [[hinge x, z], [far x, z]], post}] hanging at its post's height.
+## A leaf is filled like its fence: slats and wire, wire, or wire and
+## windscreen. Returns the leaves' collision boxes; the opening stays clear.
+func add_gate(cells: Dictionary, cell_size_m: float, type: String, params: Dictionary, ends: PackedVector3Array, leaves: Array) -> Array[Dictionary]:
 	var boxes: Array[Dictionary] = []
-	if ends.size() != 2 or style not in GATE_STYLES or type not in GATED_TYPES:
+	if ends.size() != 2 or type not in GATED_TYPES:
 		return boxes
 	var height := height_of(type, params)
 	var slats := str(params.get("slats", "green"))
 	var screen := str(params.get("screen", "black"))
-	var side := {"left": 1.0, "right": -1.0}.get(str(params.get("inside", "center")), 1.0) as float
-	if side == 0.0:
-		side = 1.0
-	var a := ends[0]
-	var b := ends[1]
-	var along := _flat(b - a)
-	var inside := _left(along) * side
-	var width := Vector2(b.x - a.x, b.z - a.z).length()
-	for foot: Vector3 in [a, b]:
+	for foot: Vector3 in [ends[0], ends[1]]:
 		var metal: FURNITURE.Builder = _cell(cells, cell_size_m, foot).metal
 		metal.tube(PackedVector3Array([foot + Vector3(0, -0.3, 0), foot + Vector3(0, height + 0.12, 0)]), PackedFloat32Array([0.045, 0.045]), 8, GALVANIZED, FURNITURE.CELL_METAL, false, true)
-	var leaves: Array = []
-	match style:
-		"swing_single":
-			leaves.append([(b if hinge_side == "end" else a) + inside * 0.06, inside, width - 0.12])
-		"swing_double":
-			leaves.append([a + inside * 0.06, inside, width * 0.5 - 0.08])
-			leaves.append([b + inside * 0.06, inside, width * 0.5 - 0.08])
-		"sliding":
-			# Parked along the fence, inside it, from the post back over the run.
-			leaves.append([a + inside * 0.16, -along, width + 0.3])
-	for leaf: Array in leaves:
-		var hinge: Vector3 = leaf[0]
-		var direction: Vector3 = leaf[1]
-		var leaf_width: float = leaf[2]
-		var far := hinge + direction * leaf_width
+	for leaf_value: Variant in leaves:
+		if not leaf_value is Dictionary:
+			continue
+		var leaf := leaf_value as Dictionary
+		var xz: Array = leaf.get("xz", [])
+		if xz.size() != 2:
+			continue
+		var y := ends[clampi(int(leaf.get("post", 0)), 0, 1)].y
+		var hinge := Vector3(float(xz[0][0]), y, float(xz[0][1]))
+		var far := Vector3(float(xz[1][0]), y, float(xz[1][1]))
+		var direction := _flat(far - hinge)
 		var cell := _cell(cells, cell_size_m, (hinge + far) * 0.5)
 		var metal: FURNITURE.Builder = cell.metal
 		var lift := Vector3(0, 0.05, 0)
@@ -465,10 +475,13 @@ func add_gate(cells: Dictionary, cell_size_m: float, type: String, params: Dicti
 				(cell["slats_" + slats] as Quads).wall(hinge + lift, far + lift, 0.03, height - 0.1, 0.0, Vector2(SLAT_TILE_M, height))
 				(cell.chain as Quads).wall(hinge + lift + _left(direction) * 0.012, far + lift + _left(direction) * 0.012, 0.03, height - 0.1, 0.0, CHAIN_TILE)
 			"chain_link_screened":
-				(cell["screen_" + screen] as Quads).wall(hinge + lift, far + lift, 0.03, height - 0.1, 0.0, Vector2(SCREEN_TILE_M, SCREEN_TILE_M))
+				var screen_top := minf(screen_top_of(params), height - 0.1)
+				(cell["screen_" + screen] as Quads).wall(hinge + lift, far + lift, 0.03, screen_top, 0.0, Vector2(SCREEN_TILE_M, SCREEN_TILE_M))
+				if screen_top < height - 0.2:
+					(cell.chain as Quads).wall(hinge + lift, far + lift, screen_top, height - 0.1, 0.0, CHAIN_TILE)
 			_:
 				(cell.chain as Quads).wall(hinge + lift, far + lift, 0.03, height - 0.1, 0.0, CHAIN_TILE)
-		boxes.append(_bay_box(hinge, far, height, 0.04))
+		boxes.append(_bay_box(hinge, far, height, GATE_LEAF_HALF_M))
 	return boxes
 
 

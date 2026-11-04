@@ -15,8 +15,8 @@ import { resolve } from "node:path";
 import { projectLonLat } from "./coordinates.mjs";
 import { geometryToLine, pointInMultiPolygon, pointInRing, selectGeometry } from "./osm-geometry.mjs";
 import { footprintPiece, placeStreetClutter, STREET_CLUTTER_FOOTPRINTS, STREET_CLUTTER_PROPS, validateClutterRules, visibleGroundIndex } from "./street-clutter-generation.mjs";
-import { placeStreetFences, validateFenceRules } from "./street-fence-generation.mjs";
-import { YARD_KIT_KEYS, yardKindRadius, yardPropFootprint } from "./street-yard-kit.mjs";
+import { GATE_LEAF_HALF_M, placeStreetFences, validateFenceRules } from "./street-fence-generation.mjs";
+import { settleYardProp, YARD_KIT_KEYS, yardKindRadius, yardPropFootprint, yardPropRests } from "./street-yard-kit.mjs";
 import { isYardRow, isYardZone, placeStreetYards, validateYardRules, yardRowPieces } from "./street-yard-generation.mjs";
 import { placeStreetFurniture, settleOnFeet, STREET_FURNITURE_FEET, STREET_FURNITURE_PROPS, streetFurnitureFootprint, validateFurnitureRules } from "./street-furniture-generation.mjs";
 import { packPlantingRows, planDrifts, planFill, plantingState, validatePlantingRule } from "./street-planting-generation.mjs";
@@ -748,7 +748,13 @@ export function streetDetailZoneShapes(config, properSources) {
 // its rectangle, a yard prop its rectangle in narrow strips (yardRowPieces);
 // any other row its point or polyline with its kind's radius.
 export function streetDetailPieces(row) {
-  if (row.fence) return row.fence.runs.map((run) => ({ points: run.points_m.map((point) => [point[0], point[2]]), radius: row.fence.half_thickness_m }));
+  // A fence: its solid runs, and its gates' open leaves (they collide too).
+  if (row.fence) {
+    return [
+      ...row.fence.runs.map((run, index) => ({ points: run.points_m.map((point) => [point[0], point[2]]), radius: row.fence.half_thickness_m, label: `run${index}` })),
+      ...(row.fence.gates ?? []).flatMap((gate, index) => gate.leaves.map((leaf, side) => ({ points: leaf.xz, radius: GATE_LEAF_HALF_M, label: `gate${index}leaf${side}` }))),
+    ];
+  }
   if (isYardRow(row)) return yardRowPieces(row);
   if (row.footprint_m) return [footprintPiece([row.position_m[0], row.position_m[2]], row.yaw_radians, row.footprint_m)];
   const kind = STREET_DETAIL_KINDS[row.kind];
@@ -1121,7 +1127,7 @@ export function generateStreetDetail({
   }
 
   // Footprints already claimed by placed switchable rows, for overlap checks: a
-  // fence claims each of its solid runs, its half thickness wide; a parked car
+  // fence claims each of its solid runs (and open gate leaves), its half thickness wide; a parked car
   // or a long prop its footprint (streetDetailPieces); a tree in paving its
   // mulch pit, so nothing later stands or parks in it.
   const occupied = [];
@@ -1134,7 +1140,7 @@ export function generateStreetDetail({
     // Low plants (grass clumps, planting slots) have no collision; drift planting may overlap them.
     const lowPlant = row.layer === "vegetation" && (row.kind === "grass_clump" || row.kind === "planting_slot");
     streetDetailPieces(row).forEach((piece, index) => {
-      occupied.push({ id: row.fence ? `${row.id}#run${index}` : row.id, points: piece.points, radius_m: Math.max(piece.radius, pit), lowPlant, planted });
+      occupied.push({ id: row.fence ? `${row.id}#${piece.label ?? index}` : row.id, points: piece.points, radius_m: Math.max(piece.radius, pit), lowPlant, planted });
     });
   };
   rows.forEach(occupy);
@@ -1247,6 +1253,13 @@ export function generateStreetDetail({
     if (feet) {
       const rest = settleOnFeet(feet, xz, normalizedYaw(entry.yaw), y + surface.bias_m, groundAt);
       invariant(!rest.problem, `Street detail set piece ${entry.id} cannot stand on its feet: ${rest.problem}`);
+      params = { ...entry.params, ...rest };
+    }
+    // A yard prop settles on the ground under its plan unless the set piece
+    // gives its rest (a barge floats).
+    if (yardFootprint && yardPropRests(entry.prop) && ["pitch", "roll", "lift"].every((key) => entry.params?.[key] === undefined)) {
+      const rest = settleYardProp(yardFootprint, xz, normalizedYaw(entry.yaw), y + surface.bias_m, groundAt);
+      invariant(!rest.problem, `Street detail set piece ${entry.id} cannot rest on the ground: ${rest.problem}`);
       params = { ...entry.params, ...rest };
     }
     const row = {

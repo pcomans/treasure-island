@@ -71,7 +71,7 @@ function main() {
     const kind = STREET_DETAIL_KINDS[row.kind];
     if (row.status !== "placed" || !STREET_DETAIL_LAYERS.includes(row.layer) || kind.overhead) continue;
     streetDetailPieces(row).forEach((piece, index) => {
-      items.push({ id: row.fence ? `${row.id} run ${index}` : row.id, layer: row.layer, points: piece.points, radius: piece.radius });
+      items.push({ id: row.fence ? `${row.id} ${piece.label ?? index}` : row.id, layer: row.layer, points: piece.points, radius: piece.radius });
     });
   }
 
@@ -132,11 +132,11 @@ function main() {
 const POCKET_CELL_M = 0.2;
 const POCKET_MARGIN_M = 20;
 function fencedPockets(manifest, detail) {
-  // A gate-only fence row (a gate between two container walls) has no
-  // solid run and shuts nothing in.
-  const fences = detail.rows.filter((row) => row.status === "placed" && row.fence && row.prop != null && row.fence.runs.length > 0);
+  // A built fence's runs and open gate leaves (a gate-only row, as between two
+  // container walls, has leaves but no run).
+  const fences = detail.rows.filter((row) => row.status === "placed" && row.fence && row.prop != null && (row.fence.runs.length > 0 || (row.fence.gates?.length ?? 0) > 0));
   const yards = loadStreetDetailZones(projectRoot).zones.filter(isYardZone);
-  // The regions flooded: around each built fence's runs, and over each yard.
+  // The regions flooded: around each built fence's runs and gate leaves, and over each yard.
   const regions = [
     ...fences.map((fence) => ({ id: fence.id, points: streetDetailPieces(fence).flatMap((piece) => piece.points) })),
     ...yards.map((zone) => ({ id: `yard ${zone.id}`, points: zone.shape.points_xz })),

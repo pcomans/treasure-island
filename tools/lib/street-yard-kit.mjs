@@ -29,6 +29,8 @@
 // rather than any make. Nothing here copies a photo.
 
 import { carBodyGeometry, CLUTTER_KIT_PARTS } from "./street-clutter-kit.mjs";
+import { leastSquaresPlane, restOffset } from "./street-furniture-generation.mjs";
+import { roundCoordinate } from "./world-contract.mjs";
 
 // ---------------------------------------------------------------- parts
 // The first sixteen are the car kit's (so a car body re-encodes by its UV.x
@@ -70,29 +72,6 @@ export const YARD_KIT_PART_SLOTS = 64;
 const P = Object.freeze(Object.fromEntries(YARD_KIT_PARTS.map((name, index) => [name, index])));
 if (YARD_KIT_PARTS.length > YARD_KIT_PART_SLOTS) throw new Error("Yard kit has more parts than UV slots");
 
-// ---------------------------------------------------------------- palette
-// Colour names a prop's params may choose; game/scripts/world/street_yard_kit.gd
-// holds their sRGB values (sampled from the dated photos).
-export const YARD_COLOURS = Object.freeze([
-  "beige",
-  "black",
-  "blue",
-  "blue_grey",
-  "brown",
-  "cream",
-  "dark_grey",
-  "green",
-  "grey",
-  "light_grey",
-  "orange",
-  "red",
-  "rust",
-  "silver",
-  "tan",
-  "white",
-  "yellow",
-]);
-
 // ---------------------------------------------------------------- registry
 // Container trade sizes (ISO 668): 8 ft wide, 8 ft 6 in (high cube 9 ft 6 in) tall.
 const CONTAINER_W = 2.438;
@@ -119,16 +98,17 @@ const numRange = (min, max) => Object.freeze({ type: "number", min, max });
 const oneOf = (...values) => Object.freeze({ type: "enum", values: Object.freeze(values.flat()) });
 
 // Every prop: its variants in index order with their plan size and height,
-// its collision kind, its far range and its params. A param list's first
-// value is its default. Every row may also carry seed (int), and pitch, roll
-// (radians) and lift (metres) for its rest on uneven ground.
+// its collision kind and its params (the runtime, street_yard_kit.gd, holds
+// its far range and colour values). A param list's first value is its
+// default. Every row may also carry seed (int), and pitch, roll (radians) and
+// lift (metres) for its rest on uneven ground (settleYardProp).
 //   collision: box (one box per body), boxes (one per container or part),
-//   hull (a convex hull: its top is walkable up to the player's floor angle),
-//   cylinder.
+//   hull (the convex hull the kit builds over the visible mesh, no face
+//   steeper than 45 degrees, so the player walks up it), cylinder, or none
+//   (a barge floats; it rests on no ground).
 export const YARD_KIT_PROPS = Object.freeze({
   shipping_container: {
     collision: "box",
-    range_m: 1500,
     variants: [
       { name: "20ft", x_m: CONTAINER_W, z_m: CONTAINER_20_L, h_m: CONTAINER_H },
       { name: "40ft", x_m: CONTAINER_W, z_m: CONTAINER_40_L, h_m: CONTAINER_H },
@@ -144,7 +124,6 @@ export const YARD_KIT_PROPS = Object.freeze({
   },
   container_wall: {
     collision: "boxes",
-    range_m: 1500,
     variants: [
       { name: "single", x_m: CONTAINER_W, z_m: null, h_m: CONTAINER_H },
       { name: "double", x_m: CONTAINER_W, z_m: null, h_m: 2 * CONTAINER_H },
@@ -154,7 +133,6 @@ export const YARD_KIT_PROPS = Object.freeze({
   },
   storage_shed_row: {
     collision: "hull",
-    range_m: 1500,
     variants: [
       // Units back to back, doors on both long sides.
       { name: "double", x_m: 7.32, z_m: null, h_m: 3.1, eave_m: 2.62, doors: [1, -1] },
@@ -167,7 +145,6 @@ export const YARD_KIT_PROPS = Object.freeze({
   },
   rv: {
     collision: "box",
-    range_m: 700,
     variants: [
       { name: "class_a", x_m: 2.55, z_m: 11.6, h_m: 3.75 },
       { name: "class_c", x_m: 2.4, z_m: 8.5, h_m: 3.45 },
@@ -178,7 +155,6 @@ export const YARD_KIT_PROPS = Object.freeze({
   },
   bus: {
     collision: "box",
-    range_m: 700,
     variants: [
       { name: "coach", x_m: 2.6, z_m: 13.7, h_m: 3.7 },
       { name: "shuttle", x_m: 2.4, z_m: 8.2, h_m: 3.2 },
@@ -187,7 +163,6 @@ export const YARD_KIT_PROPS = Object.freeze({
   },
   box_truck: {
     collision: "box",
-    range_m: 700,
     variants: [
       { name: "medium", x_m: 2.4, z_m: 7.4, h_m: 3.5 },
       { name: "large", x_m: 2.6, z_m: 10.4, h_m: 4.0 },
@@ -196,7 +171,6 @@ export const YARD_KIT_PROPS = Object.freeze({
   },
   van: {
     collision: "box",
-    range_m: 600,
     variants: [
       // The car kit's high-roof cargo van body.
       { name: "cargo", x_m: null, z_m: null, h_m: null, car_body: "van" },
@@ -206,7 +180,6 @@ export const YARD_KIT_PROPS = Object.freeze({
   },
   food_truck: {
     collision: "box",
-    range_m: 600,
     variants: [
       { name: "step_van", x_m: 2.4, z_m: 7.3, h_m: 3.3 },
       { name: "trailer", x_m: 2.44, z_m: 6.2, h_m: 3.0 },
@@ -215,7 +188,6 @@ export const YARD_KIT_PROPS = Object.freeze({
   },
   boat_on_trailer: {
     collision: "box",
-    range_m: 600,
     variants: [
       { name: "runabout", x_m: 2.5, z_m: 7.3, h_m: 2.2 },
       { name: "cabin", x_m: 2.6, z_m: 8.8, h_m: 2.9 },
@@ -224,7 +196,6 @@ export const YARD_KIT_PROPS = Object.freeze({
   },
   trailer: {
     collision: "box",
-    range_m: 700,
     variants: [
       { name: "cargo", x_m: 2.6, z_m: 7.3, h_m: 3.0 },
       { name: "utility", x_m: 2.4, z_m: 4.5, h_m: 1.55 },
@@ -235,7 +206,6 @@ export const YARD_KIT_PROPS = Object.freeze({
   },
   fabric_shed: {
     collision: "hull",
-    range_m: 1500,
     variants: [
       { name: "span10", x_m: 10, z_m: null, h_m: 5.2, eave_m: 3.5 },
       { name: "span15", x_m: 15, z_m: null, h_m: 6.4, eave_m: 4.0 },
@@ -247,7 +217,6 @@ export const YARD_KIT_PROPS = Object.freeze({
   },
   equipment: {
     collision: "box",
-    range_m: 700,
     variants: [
       // Parked with the arm hanging and the bucket curled under the boom tip;
       // the boom's knee stands highest.
@@ -276,7 +245,6 @@ export const YARD_KIT_PROPS = Object.freeze({
   },
   material_pile: {
     collision: "hull",
-    range_m: 1500,
     variants: [
       { name: "gravel", x_m: 8, z_m: 8, h_m: 3 },
       { name: "rubble", x_m: 12, z_m: 12, h_m: 4.5 },
@@ -291,10 +259,10 @@ export const YARD_KIT_PROPS = Object.freeze({
   },
   plastic_berm: {
     collision: "hull",
-    range_m: 1500,
     variants: [
       { name: "low", x_m: 9, z_m: null, h_m: 1.8 },
-      { name: "high", x_m: 15, z_m: null, h_m: 3.2 },
+      // Its rounded ends take a whole module each, so it needs two.
+      { name: "high", x_m: 15, z_m: null, h_m: 3.2, minimum: { modules: 2 } },
     ],
     params: { modules: intRange(1, 60) },
     required: ["modules"],
@@ -306,7 +274,6 @@ export const YARD_KIT_PROPS = Object.freeze({
   // pole's foot; height_m is the pole's height.
   pole_flag: {
     collision: "cylinder",
-    range_m: 600,
     variants: [{ name: "flag", x_m: 0.15, z_m: 0.15, h_m: 6.5 }],
     params: { height_m: numRange(5, 8), text: oneOf("self_storage", "none") },
   },
@@ -317,7 +284,6 @@ export const YARD_KIT_PROPS = Object.freeze({
   // over the deck toward -Z (lowered: nearly level, out past the bow).
   crane_barge: {
     collision: "none",
-    range_m: 2500,
     variants: [
       { name: "crane", x_m: 30, z_m: 40, h_m: 46, only: ["length_m", "width_m", "hull", "deck", "cargo", "deckhouse", "boom"] },
       { name: "deck", x_m: 18, z_m: 36, h_m: 4.2, only: ["length_m", "width_m", "hull", "deck", "cargo", "deckhouse"] },
@@ -369,6 +335,7 @@ export function yardPropParamsError(key, params) {
   }
   const variant = prop.variants[params.variant];
   for (const name of [...(prop.required ?? []), ...(variant.required ?? [])]) if (params[name] === undefined) return `${key} ${variant.name} needs ${name}`;
+  for (const [name, least] of Object.entries(variant.minimum ?? {})) if (params[name] !== undefined && params[name] < least) return `${key} ${variant.name} needs ${name} >= ${least}`;
   // A variant may take only some of its prop's params (a ridge takes length_m, not scale).
   if (variant.only) {
     for (const name of Object.keys(prop.params)) {
@@ -486,11 +453,69 @@ export function yardKindRadius(key) {
   let smallest = Infinity;
   prop.variants.forEach((variant, index) => {
     const params = { variant: index };
-    for (const name of [...(prop.required ?? []), ...(variant.required ?? [])]) params[name] = prop.params[name].min;
+    for (const name of [...(prop.required ?? []), ...(variant.required ?? [])]) params[name] = Math.max(prop.params[name].min, variant.minimum?.[name] ?? -Infinity);
     if (key === "material_pile" && variant.name !== "ridge") params.scale = prop.params.scale.min;
     if (key === "crane_barge" && variant.name !== "pier_crane") params.width_m = prop.params.width_m.min;
     const footprint = yardPropFootprint(key, params);
     smallest = Math.min(smallest, footprint.x_m, footprint.z_m);
   });
   return Math.round((smallest / 2) * 1000) / 1000;
+}
+
+// ---------------------------------------------------------------- rest on the ground
+// A yard prop rests on the visible ground on its plan's underside: the plane
+// through the ground under its corners and edge midpoints gives its pitch
+// (raising its front, -Z), roll (its left side) and lift (metres from the row's
+// base, y + bias_m, to that plane at its middle), as the runtime turns it
+// (Basis(UP, yaw) * Basis(RIGHT, pitch) * Basis(BACK, -roll)). Resting so, no
+// corner may float more than YARD_MAX_FLOAT_M over the ground or sink more than
+// YARD_MAX_SINK_M into it. A barge floats, so it has no rest.
+export const YARD_MAX_FLOAT_M = 0.08;
+export const YARD_MAX_SINK_M = 0.3;
+export const YARD_MAX_TILT_RAD = 0.35;
+export function yardPropRests(key) {
+  return YARD_KIT_PROPS[key]?.collision !== "none";
+}
+
+function planPoints(footprint, withMidpoints) {
+  const [hx, hz] = [footprint.x_m / 2, footprint.z_m / 2];
+  const corners = [[-hx, -hz], [hx, -hz], [-hx, hz], [hx, hz]];
+  return withMidpoints ? [...corners, [0, -hz], [0, hz], [-hx, 0], [hx, 0], [0, 0]] : corners;
+}
+
+// How far each plan corner floats over the visible ground (+) or sinks into it
+// (-) for a row at world xz, yaw, base height and rest; null where a corner
+// has no ground.
+export function yardCornerGaps(footprint, xz, yaw, base, rest, groundAt) {
+  return planPoints(footprint, false).map(([x, z]) => {
+    const offset = restOffset([x, 0, z], yaw, rest.pitch ?? 0, rest.roll ?? 0);
+    const ground = groundAt([xz[0] + offset[0], xz[1] + offset[2]]);
+    return ground ? base + (rest.lift ?? 0) + offset[1] - ground.y : null;
+  });
+}
+
+// The rest a yard prop takes on the visible ground: {pitch, roll, lift}, or
+// {problem} where a point of its plan has no ground, the ground tilts more
+// than YARD_MAX_TILT_RAD or it is too uneven for its corners to sit within
+// YARD_MAX_FLOAT_M and YARD_MAX_SINK_M.
+export function settleYardProp(footprint, xz, yaw, base, groundAt) {
+  const samples = [];
+  for (const [x, z] of planPoints(footprint, true)) {
+    const offset = restOffset([x, 0, z], yaw, 0, 0);
+    const ground = groundAt([xz[0] + offset[0], xz[1] + offset[2]]);
+    if (!ground) return { problem: "no_ground" };
+    samples.push({ x, z, y: ground.y });
+  }
+  const [height, slopeX, slopeZ] = leastSquaresPlane(samples);
+  const pitch = Math.round(Math.atan(-slopeZ) * 1e4) / 1e4 || 0;
+  const roll = Math.round(Math.atan(-slopeX * Math.cos(pitch)) * 1e4) / 1e4 || 0;
+  if (Math.abs(pitch) > YARD_MAX_TILT_RAD || Math.abs(roll) > YARD_MAX_TILT_RAD) return { problem: "too_steep" };
+  const rest = { pitch, roll, lift: roundCoordinate(height - base) };
+  const gaps = yardCornerGaps(footprint, xz, yaw, base, rest, groundAt);
+  if (gaps.some((gap) => gap === null)) return { problem: "no_ground" };
+  // Sit on the highest ground under it rather than float off the lowest.
+  const drop = Math.max(...gaps) - YARD_MAX_FLOAT_M;
+  if (drop > 0) rest.lift = roundCoordinate(rest.lift - drop);
+  if (gaps.some((gap) => gap - Math.max(0, drop) < -YARD_MAX_SINK_M)) return { problem: "uneven_ground" };
+  return rest;
 }
