@@ -27,6 +27,10 @@
 //   street-wear   street_paint         cracks, patches, stains, manholes, drains
 //   street-marking street_paint        road paint, crosswalks, stop bars, stalls,
 //                                      tactile pads; visual only
+//   park-*        street_paint         a park zone's ground (ground.surfaces): mulch
+//                                      and gravel beds, lawn, concrete, asphalt and
+//                                      decomposed-granite paths, painted plazas,
+//                                      draped flat over the land; visual only
 
 import { createHash } from "node:crypto";
 import earcut from "earcut";
@@ -48,7 +52,20 @@ import {
 
 export const STREET_GROUND_FEATURE_KINDS = Object.freeze(["street_kerb", "street_kerb_support", "street_paint"]);
 // Record kinds in emission order: [object key prefix, feature kind, material, collision, opaque].
+// Park surfaces (a zone's ground.surfaces): material key -> record key prefix.
+export const PARK_SURFACE_MATERIALS = Object.freeze({
+  park_asphalt: "park-asphalt",
+  park_concrete: "park-concrete",
+  park_dg: "park-dg",
+  park_gravel: "park-gravel",
+  park_lawn: "park-lawn",
+  park_mulch: "park-mulch",
+  park_paint_pink: "park-paint-pink",
+  park_plaza_lens: "park-plaza-lens",
+  park_plaza_zigzag: "park-plaza-zigzag",
+});
 const RECORD_KINDS = Object.freeze({
+  ...Object.fromEntries(Object.entries(PARK_SURFACE_MATERIALS).map(([material, prefix]) => [material, [prefix, "street_paint", material, "none", false]])),
   kerb: ["street-kerb", "street_kerb", "street_kerb_concrete", "world_solid", true],
   planting: ["street-planting", "street_kerb", "street_kerb_planting", "world_solid", true],
   plaza: ["street-plaza", "street_kerb", "street_plaza_pavers", "world_solid", true],
@@ -100,6 +117,15 @@ const CENTERLINE_STYLES = Object.freeze(["double_yellow", "dashed_faded"]);
 const PLANTING_MODES = Object.freeze(["none", "curb_strip"]);
 const PLAZA_FIELDS = ["depth_m", "paver_tile_m", "reason", "side_point_xz", "source_keys", "walk_m"];
 const WEAR_FIELDS = ["crack_per_100m2", "drain_spacing_m", "manhole_spacing_m", "oil_per_100m2", "patch_per_100m2"];
+const SURFACE_LAYER_FIELDS = ["evidence", "id", "material", "reason", "shape"];
+// Cut a path's surface into cells this size so its panel frame follows its bends.
+const PATH_FRAME_CELL_M = 8;
+// Park path markings (a layer's markings): line width, the edge lines' inset
+// from the path edge, the centre line's dash and gap, and their lift over the path.
+const PARK_LINE_WIDTH_M = 0.1;
+const PARK_EDGE_LINE_INSET_M = 0.25;
+const PARK_DASH_M = 3;
+const PARK_PAINT_LIFT_M = 0.006;
 
 function isFiniteNumber(value) {
   return typeof value === "number" && Number.isFinite(value);
@@ -108,6 +134,64 @@ function isFiniteNumber(value) {
 function exactKeys(value, keys, label) {
   invariant(value != null && typeof value === "object" && !Array.isArray(value), `${label} must be an object`);
   invariant(JSON.stringify(Object.keys(value).sort()) === JSON.stringify([...keys].sort()), `${label} must define exactly ${[...keys].sort().join(", ")}`);
+}
+
+// A park zone's ground: its OSM source, the lift above the land and the layers,
+// each a material over a shape; later layers replace earlier ones where they
+// overlap, so the zone ends up one partition of flat-lying ground.
+//   shape {zone: true}                    the zone itself
+//   shape {points_xz: [...]}              a traced polygon
+//   shape {line_xz: [...], width_m}       a ribbon along a traced line
+//   shape {way: "w...", width_m, offset_m} a ribbon along an OSM way, moved
+//                                         offset_m to its left
+//   shape {osm_paths: true}               the zone's OSM footway and cycleway ribbons
+// Any shape may add minus_sources: OSM areas cut out of it (a breakwater). A
+// layer may add frame {origin_xz, axis_xz}: plaza paint is laid out in metres
+// along axis_xz from origin_xz. A way or line layer may add markings {edges,
+// centre}: painted edge lines and a dashed centre line along it (STREET_PAINT_KINDS
+// names, or null for none), as on a two-way cycle track.
+function validateParkSurfaces(surfaces, label) {
+  exactKeys(surfaces, ["layers", "lift_m", "source_keys"], label);
+  invariant(isFiniteNumber(surfaces.lift_m) && surfaces.lift_m > ROAD_SURFACE_BIASES_M.pedestrian && surfaces.lift_m < STREET_GROUND_MAXIMUM_HEIGHT_M, `${label} lift_m must lie above the pedestrian path skin and inside the street-ground band`);
+  invariant(Array.isArray(surfaces.source_keys) && surfaces.source_keys.length > 0 && surfaces.source_keys.every((key) => /^[wr]\d+$/u.test(key)), `${label} needs OSM source_keys`);
+  invariant(Array.isArray(surfaces.layers) && surfaces.layers.length > 0, `${label} needs layers`);
+  const ids = new Set();
+  for (const layer of surfaces.layers) {
+    const layerLabel = `${label} layer ${layer?.id}`;
+    exactKeys(layer, [...SURFACE_LAYER_FIELDS, ...["frame", "markings"].filter((field) => field in (layer ?? {}))], layerLabel);
+    invariant(typeof layer.id === "string" && SAFE_ID.test(layer.id) && !ids.has(layer.id), `${layerLabel} needs a unique lower_snake id`);
+    ids.add(layer.id);
+    invariant(PARK_SURFACE_MATERIALS[layer.material] !== undefined, `${layerLabel} material must be one of ${Object.keys(PARK_SURFACE_MATERIALS).join(", ")}`);
+    for (const field of ["reason", "evidence"]) invariant(typeof layer[field] === "string" && layer[field].trim() !== "", `${layerLabel} needs ${field}`);
+    const shape = layer.shape;
+    invariant(shape != null && typeof shape === "object", `${layerLabel} needs a shape`);
+    const minus = "minus_sources" in shape ? ["minus_sources"] : [];
+    if (minus.length > 0) invariant(Array.isArray(shape.minus_sources) && shape.minus_sources.every((key) => /^[wr]\d+$/u.test(key)), `${layerLabel} minus_sources must be OSM area keys`);
+    const isXZ = (point) => Array.isArray(point) && point.length === 2 && point.every(isFiniteNumber);
+    if (shape.zone === true) exactKeys(shape, ["zone", ...minus], `${layerLabel} zone shape`);
+    else if (shape.osm_paths === true) exactKeys(shape, ["osm_paths", ...minus], `${layerLabel} osm_paths shape`);
+    else if (shape.points_xz) {
+      exactKeys(shape, ["points_xz", ...minus], `${layerLabel} polygon shape`);
+      invariant(shape.points_xz.length >= 3 && shape.points_xz.every(isXZ), `${layerLabel} polygon needs 3+ [x, z] points`);
+    } else if (shape.line_xz) {
+      exactKeys(shape, ["line_xz", "width_m", ...minus], `${layerLabel} line shape`);
+      invariant(shape.line_xz.length >= 2 && shape.line_xz.every(isXZ) && isFiniteNumber(shape.width_m) && shape.width_m > 0, `${layerLabel} line needs 2+ [x, z] points and a positive width_m`);
+    } else if (shape.way) {
+      exactKeys(shape, ["offset_m", "way", "width_m", ...minus], `${layerLabel} way shape`);
+      invariant(/^w\d+$/u.test(shape.way) && isFiniteNumber(shape.width_m) && shape.width_m > 0 && isFiniteNumber(shape.offset_m), `${layerLabel} way shape needs an OSM way, a positive width_m and offset_m`);
+    } else {
+      throw new Error(`${layerLabel} shape must be zone, osm_paths, points_xz, line_xz or way`);
+    }
+    if (layer.frame !== undefined) {
+      exactKeys(layer.frame, ["axis_xz", "origin_xz"], `${layerLabel} frame`);
+      invariant(isXZ(layer.frame.origin_xz) && isXZ(layer.frame.axis_xz) && Math.hypot(...layer.frame.axis_xz) > 1e-6, `${layerLabel} frame needs origin_xz and a non-zero axis_xz`);
+    }
+    invariant(!layer.material.startsWith("park_plaza_") || layer.frame !== undefined, `${layerLabel}: painted plazas need a frame`);
+    if (layer.markings !== undefined) {
+      exactKeys(layer.markings, ["centre", "edges"], `${layerLabel} markings`);
+      invariant((shape.way || shape.line_xz) && ["centre", "edges"].every((field) => layer.markings[field] === null || STREET_PAINT_KINDS[layer.markings[field]] !== undefined), `${layerLabel} markings go on a way or line layer and name paint kinds (or null)`);
+    }
+  }
 }
 
 // The validated "ground" settings: config.ground plus each pilot zone's ground block.
@@ -138,8 +222,9 @@ export function streetGroundSettings(config) {
   const zones = [];
   for (const zone of config.zones) {
     if (!zone.pilot || zone.ground == null) continue;
-    exactKeys(zone.ground, ZONE_GROUND_FIELDS, `Street ground zone ${zone.id}`);
+    exactKeys(zone.ground, "surfaces" in zone.ground ? [...ZONE_GROUND_FIELDS, "surfaces"] : ZONE_GROUND_FIELDS, `Street ground zone ${zone.id}`);
     const settings = zone.ground;
+    if (settings.surfaces !== undefined) validateParkSurfaces(settings.surfaces, `Street ground zone ${zone.id} surfaces`);
     for (const key of ["kerbs", "lane_markings", "parking_stalls"]) {
       invariant(typeof settings[key] === "boolean", `Street ground zone ${zone.id} ${key} must be boolean`);
     }
@@ -481,6 +566,24 @@ function strip(label, points, from, to) {
   return union(label, quads);
 }
 
+// Dashes along a polyline at an offset to its left: dash metres painted, then as
+// many left bare, each dash a straight quad between its ends.
+function dashedStrip(label, points, offset, width, dash) {
+  const quads = [];
+  const total = polylineLength(points);
+  for (let start = dash / 2; start + dash <= total; start += dash * 2) {
+    const ends = [pointAlong(points, start), pointAlong(points, start + dash)];
+    const corners = ends.flatMap(({ point, tangent }) => {
+      const left = [-tangent[1], tangent[0]];
+      return [add(point, scale(left, offset - width / 2)), add(point, scale(left, offset + width / 2))];
+    });
+    const ring = [corners[0], corners[2], corners[3], corners[1]];
+    if (Math.abs(ringArea(ring)) < 1e-6) continue;
+    quads.push([[ringArea(ring) > 0 ? ring : ring.reverse()]]);
+  }
+  return union(label, quads);
+}
+
 function polylineLength(points) {
   let total = 0;
   for (let index = 1; index < points.length; index += 1) total += length(sub(points[index], points[index - 1]));
@@ -613,6 +716,9 @@ export function generateStreetGround({
   facetElevation,
   spawnXZ,
   hardShapes,
+  // The land's smooth shading normal at a plan point, or null (terrain overrides):
+  // park surfaces over re-meshed land shade with it rather than per land triangle.
+  normalAt = null,
 }) {
   const settings = streetGroundSettings(config);
   const { kerb, crossings, lines, lifts } = settings;
@@ -895,13 +1001,14 @@ export function generateStreetGround({
     gutter: new Set(kerbSources),
     wear: new Set(),
     marking: new Set(),
+    ...Object.fromEntries(Object.keys(PARK_SURFACE_MATERIALS).map((material) => [material, new Set()])),
   };
   for (const key of joinedSidewalks) {
     sources.kerb.add(key);
     sources.planting.add(key);
   }
-  const addPiece = (record, polygon, height, uv) => {
-    if (polygon.length > 0) pieces.push({ record, polygon, height, uv });
+  const addPiece = (record, polygon, height, uv, smooth = false) => {
+    if (polygon.length > 0) pieces.push({ record, polygon, height, uv, smooth });
   };
 
   // Raised tops take their panel or paver frame from a kerbed road. Each road
@@ -1348,6 +1455,151 @@ export function generateStreetGround({
     }
   }
 
+  // ---------------------------------------------------------------- park surfaces
+  // Each park zone's layers, later ones replacing earlier ones: one partition of
+  // the zone into flat-lying ground draped lift_m over the land.
+  const pedestrianWays = roads.filter((object) => object.road_visual_class === "pedestrian");
+  const sourceGeometry = (key) => {
+    const object = playableObjects.get(key);
+    invariant(object && object.geometry?.length > 0, `Park surface source ${key} has no geometry`);
+    return object.geometry;
+  };
+  const layerLine = (layer) => {
+    const shape = layer.shape;
+    if (shape.line_xz) return { line: shape.line_xz.map(([x, z]) => [x, -z]), offset: 0 };
+    if (shape.way) return { line: rawWayLine(rawOsm, shape.way.slice(1)), offset: shape.offset_m };
+    return null;
+  };
+  const layerShape = (zone, layer) => {
+    const shape = layer.shape;
+    let polygon;
+    if (shape.zone) {
+      polygon = zone.region;
+    } else if (shape.osm_paths) {
+      polygon = union(`park ${layer.id} paths`, pedestrianWays.filter((object) => intersect(`park ${layer.id} path test`, object.geometry, zone.region).length > 0).map((object) => object.geometry));
+    } else if (shape.points_xz) {
+      const ring = shape.points_xz.map(([x, z]) => [x, -z]);
+      polygon = union(`park ${layer.id}`, [[[ringArea(ring) > 0 ? ring : ring.reverse()]]]);
+    } else {
+      const { line, offset } = layerLine(layer);
+      polygon = strip(`park ${layer.id}`, line, offset - shape.width_m / 2, offset + shape.width_m / 2);
+    }
+    if (shape.minus_sources) polygon = difference(`park ${layer.id} minus`, polygon, shape.minus_sources.map(sourceGeometry));
+    return intersect(`park ${layer.id} in zone`, polygon, zone.region);
+  };
+  const parkLayers = [];
+  const parkLifts = new Map();
+  for (const zone of zoneRegions) {
+    const surfaces = zone.settings.surfaces;
+    if (!surfaces) continue;
+    const shapes = surfaces.layers.map((layer) => layerShape(zone, layer));
+    let covered = [];
+    for (let index = surfaces.layers.length - 1; index >= 0; index -= 1) {
+      const layer = surfaces.layers[index];
+      const own = cleanPolygons(difference(`park ${layer.id} uncovered`, shapes[index], [covered]), 0.05, 0.05);
+      covered = union(`park ${zone.id} cover`, [covered, shapes[index]]);
+      if (own.length === 0) continue;
+      invariant((parkLifts.get(layer.material) ?? surfaces.lift_m) === surfaces.lift_m, `Park surface ${layer.material} has two lifts`);
+      parkLifts.set(layer.material, surfaces.lift_m);
+      parkLayers.push({ zone, layer, polygon: own, index: polygonIndex(own), box: boxOfMulti(own), lift: surfaces.lift_m, sources: surfaces.source_keys });
+    }
+  }
+  for (const entry of parkLayers) {
+    const { layer, polygon, lift } = entry;
+    for (const key of entry.sources) sources[layer.material].add(key);
+    const height = constantHeight(lift);
+    const path = layer.material === "park_concrete" ? layerLine(layer) : null;
+    if (layer.frame) {
+      // Plaza paint laid out in metres along the plaza's axis.
+      const origin = [layer.frame.origin_xz[0], -layer.frame.origin_xz[1]];
+      const axis = unit([layer.frame.axis_xz[0], -layer.frame.axis_xz[1]]);
+      addPiece(layer.material, polygon, height, (point) => [dot(sub(point, origin), axis), cross(axis, sub(point, origin))], true);
+    } else if (path) {
+      // Concrete paths in poured panels that follow the path's bends.
+      for (const cell of gridCells(boxOfMulti(polygon), PATH_FRAME_CELL_M)) {
+        const piece = intersect(`park ${layer.id} cell`, polygon, cell);
+        if (multiArea(piece) < 1e-6) continue;
+        const box = boxOfMulti(piece);
+        addPiece(layer.material, piece, height, roadFrameUv(path.line, [(box.min_x + box.max_x) / 2, (box.min_y + box.max_y) / 2], kerb.panel_m * 2), true);
+      }
+    } else {
+      // Concrete elsewhere in panels on the world grid; other ground in world UV.
+      addPiece(layer.material, polygon, height, layer.material === "park_concrete" ? tiledUv(kerb.panel_m * 2) : worldUv, true);
+    }
+    if (layer.markings) {
+      // Painted lines on the path itself, just above it: edge lines in from
+      // both edges and a dashed centre line.
+      const { line, offset } = layerLine(layer);
+      const half = layer.shape.width_m / 2;
+      const lines = [];
+      if (layer.markings.edges) {
+        for (const side of [-1, 1]) {
+          const at = offset + side * (half - PARK_EDGE_LINE_INSET_M);
+          lines.push([layer.markings.edges, strip(`park ${layer.id} edge line`, line, at - PARK_LINE_WIDTH_M / 2, at + PARK_LINE_WIDTH_M / 2)]);
+        }
+      }
+      if (layer.markings.centre) lines.push([layer.markings.centre, dashedStrip(`park ${layer.id} centre line`, line, offset, PARK_LINE_WIDTH_M, PARK_DASH_M)]);
+      for (const [kind, band] of lines) {
+        const painted = intersect(`park ${layer.id} paint`, band, polygon);
+        if (painted.length === 0) continue;
+        addPiece("marking", painted, constantHeight(lift + PARK_PAINT_LIFT_M), kindUv(STREET_PAINT_KINDS[kind]));
+        for (const key of entry.sources) sources.marking.add(key);
+      }
+    }
+  }
+  const parkAt = (point) => parkLayers.find((entry) => inBox(entry.box, point) && entry.index.contains(point)) ?? null;
+  // Beds of the park layers with the given materials: whether a point lies on
+  // one and how far it is from the nearest bed edge (inside or out), searched
+  // within BED_REACH_M; for planting drifts (tools/lib/street-planting-generation.mjs).
+  const BED_REACH_M = 8;
+  const BED_CELL_M = 2;
+  const bedIndexes = new Map();
+  const bedIndex = (materials) => {
+    const key = [...materials].sort().join("|");
+    if (!bedIndexes.has(key)) {
+      const parts = parkLayers.filter((entry) => materials.includes(entry.layer.material)).map((entry) => entry.polygon);
+      const region = union(`park beds ${key}`, parts);
+      const cells = new Map();
+      for (const polygon of region) {
+        for (const raw of polygon) {
+          const ring = openRing(raw);
+          ring.forEach((a, index) => {
+            const b = ring[(index + 1) % ring.length];
+            for (let i = Math.floor(Math.min(a[0], b[0]) / BED_CELL_M); i <= Math.floor(Math.max(a[0], b[0]) / BED_CELL_M); i += 1) {
+              for (let j = Math.floor(Math.min(a[1], b[1]) / BED_CELL_M); j <= Math.floor(Math.max(a[1], b[1]) / BED_CELL_M); j += 1) {
+                const cell = `${i},${j}`;
+                if (!cells.has(cell)) cells.set(cell, []);
+                cells.get(cell).push([a, b]);
+              }
+            }
+          });
+        }
+      }
+      bedIndexes.set(key, { index: polygonIndex(region), cells });
+    }
+    return bedIndexes.get(key);
+  };
+  const parkBed = (point, materials) => {
+    const { index, cells } = bedIndex(materials);
+    const ci = Math.floor(point[0] / BED_CELL_M);
+    const cj = Math.floor(point[1] / BED_CELL_M);
+    let best = BED_REACH_M;
+    for (let ring = 0; ring * BED_CELL_M <= BED_REACH_M; ring += 1) {
+      if ((ring - 1) * BED_CELL_M > best) break;
+      for (let di = -ring; di <= ring; di += 1) {
+        for (let dj = -ring; dj <= ring; dj += 1) {
+          if (Math.max(Math.abs(di), Math.abs(dj)) !== ring) continue;
+          for (const [a, b] of cells.get(`${ci + di},${cj + dj}`) ?? []) {
+            const edge = sub(b, a);
+            const t = Math.max(0, Math.min(1, dot(sub(point, a), edge) / Math.max(1e-12, dot(edge, edge))));
+            best = Math.min(best, length(sub(point, add(a, scale(edge, t)))));
+          }
+        }
+      }
+    }
+    return { on: index.contains(point), distance: best };
+  };
+
   // ---------------------------------------------------------------- drape
   const meshes = new Map();
   const meshFor = (record, id) => {
@@ -1404,7 +1656,7 @@ export function generateStreetGround({
           for (const point of points) {
             const land = facetElevation(facet, point[0], point[1]).elevation;
             mesh.vertices.push(roundCoordinate(point[0]), roundCoordinate(land + heightAt(piece.height, point)), roundCoordinate(-point[1]));
-            mesh.normals.push(...normal.map(roundCoordinate));
+            mesh.normals.push(...((piece.smooth && normalAt?.(point[0], point[1])) || normal).map(roundCoordinate));
             mesh.uvs.push(...piece.uv(point).map(roundCoordinate));
           }
           pushTriangles(mesh, triangles.map((index) => index + offset), normal);
@@ -1475,6 +1727,9 @@ export function generateStreetGround({
       collisionKind,
       opaque,
     });
+    // Park ground is drawn its lift over the land: what the player's feet and
+    // props stand on (VisibleGround), though the land is what collides.
+    if (parkLifts.has(materialKey)) record.surface_bias_m = parkLifts.get(materialKey);
     if (!records.has(mesh.chunk)) records.set(mesh.chunk, []);
     records.get(mesh.chunk).push(record);
   }
@@ -1482,6 +1737,8 @@ export function generateStreetGround({
   // The raised surface under a world point, for placing street-detail items on it.
   const surfaceAt = (xz) => {
     const point = [xz[0], -xz[1]];
+    const park = parkAt(point);
+    if (park) return { kind: "street_paint", material_key: park.layer.material, source_key: park.sources[0], bias_m: roundCoordinate(park.lift) };
     for (const notch of notches) {
       if (notchIndex.contains(point) && pointInMultiCheap(notch.piece, point)) {
         return { kind: "street_kerb", material_key: "street_kerb_concrete", source_key: notch.source_key, bias_m: roundCoordinate(heightAt(notch.height, point)) };
@@ -1527,6 +1784,8 @@ export function generateStreetGround({
       parking_lane_area_m2: roundCoordinate(multiArea(parkingSurface)),
       curb_face_m: roundCoordinate(faces.reduce((sum, edge) => sum + length(sub(edge.b, edge.a)), 0)),
       wear_by_cell: Object.fromEntries(Object.entries(STREET_WEAR_CELLS).map(([name, cell]) => [name, counts.wear[cell] ?? 0])),
+      park_surface_area_m2: Object.fromEntries(Object.keys(PARK_SURFACE_MATERIALS).map((material) => [material,
+        roundCoordinate(parkLayers.filter((entry) => entry.layer.material === material).reduce((sum, entry) => sum + multiArea(entry.polygon), 0))])),
     },
     records: [...records.entries()].sort(([left], [right]) => compareChunkIds(left, right))
       .flatMap(([, list]) => list.map((record) => ({ object_key: record.object_key, triangles: record.indices.length / 3 }))),
@@ -1570,6 +1829,8 @@ export function generateStreetGround({
     rampDistance: (point, reach = 6) => distanceTo(rampIndex, point, reach),
     // On the raised street ground: sidewalk, planting strip or plaza top.
     raised: (point) => raisedIndex.contains(point),
+    // A park bed of the given materials under an east/north point: {on, distance to its edge}.
+    parkBed,
     // Parking lanes: the roads that have them, with the curb's offset from the
     // centre line on both sides (the frozen ribbon's half width plus the lane).
     parking_lanes: [...parkingWidth.entries()].sort(([left], [right]) => compareSourceKeys(left, right)).map(([key, width]) => {

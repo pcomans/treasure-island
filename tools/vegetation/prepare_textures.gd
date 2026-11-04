@@ -2,44 +2,108 @@ extends SceneTree
 ## Packs the street-vegetation textures (game/resources/textures/world/vegetation/)
 ## from the untouched generated source images, which stay outside Git with the
 ## vegetation work notes (the texture README names each one's prompt). Keys the
-## flat magenta backgrounds of the leaf and grass images into alpha, removes the
-## magenta spill, fills transparent pixels with nearby leaf colour (so mipmaps
-## don't halo), grades and packs the atlases whose cells
-## game/scripts/world/street_vegetation_kit.gd reads, and resizes the tiled barks.
-## Writes each PNG's `.import` beside it (tools/vegetation/texture_import.gd:
-## lossless, with mipmaps), so a re-pack always imports with the mip chain the
-## foliage and bark shaders sample.
+## flat magenta (or, behind pink and lilac flowers, cyan) backgrounds of the leaf
+## and grass images into alpha, removes the key colour's spill, fills transparent
+## pixels with nearby leaf colour (so mipmaps don't halo), grades and packs the
+## atlases whose cells game/scripts/world/street_vegetation_kit.gd reads, and
+## resizes the tiled barks. Writes each PNG's `.import` beside it
+## (tools/vegetation/texture_import.gd: lossless, with mipmaps), so a re-pack
+## always imports with the mip chain the foliage and bark shaders sample.
 ##
-##   tools/godot --headless --path . --script tools/vegetation/prepare_textures.gd -- --source DIR
+##   tools/godot --headless --path . --script tools/vegetation/prepare_textures.gd -- --source DIR [--only SET,...]
 ##   tools/godot --headless --path . --import   # then import the new PNGs
+##
+## --only packs just the named sets (default: all of them).
 
 const TextureImport := preload("res://tools/vegetation/texture_import.gd")
 const OUT := "res://game/resources/textures/world/vegetation/"
-## The sources this tool reads, by file name in the source folder.
-const SOURCES := [
-	"palm_fan_leaf.png", "palm_dead_leaf.png", "palm_boot.png",
-	"fan_bark_grey.png",
-	"canary_frond_a.png", "canary_frond_b.png", "canary_trunk_a.png", "canary_knob.png",
-	"cypress_clump.png", "cypress_plate.png", "cypress_bark.png",
-	"grass_clump_a.png", "grass_clump_b.png",
+## The sets this tool packs and the sources each reads, by file name in the source folder.
+const SETS := {
+	"palms": ["palm_fan_leaf.png", "palm_dead_leaf.png", "palm_boot.png", "canary_frond_a.png", "canary_frond_b.png"],
+	"cypress": ["cypress_clump.png", "cypress_plate.png"],
+	"grass": ["grass_clump_a.png", "grass_clump_b.png"],
+	"barks": ["fan_bark_grey.png", "canary_trunk_a.png", "canary_knob.png", "cypress_bark.png"],
+	"meadow": MEADOW_CELLS,
+	"perennial": PERENNIAL_CELLS,
+	"young_trees": ["gum_leaves.png", "oak_leaves.png", "gum_bark.png", "oak_bark.png"],
+	"park_ground": ["park_mulch.png", "park_gravel.png"],
+}
+## The meadow atlas's 512 x 512 cells, row by row in 2048 x 2048 (LOW_CELLS in
+## the kit): side views drawn on crossed cards, and the litter.
+const MEADOW_CELLS := [
+	"reedgrass_clump.png", "sedge_tussock.png", "rush_clump.png", "bronze_grass.png",
+	"blue_eyed_grass.png", "thrift_stalks.png", "umbel_stalks.png", "thrift_side.png",
+	"woolly_stalks.png", "monkey_stalks.png", "tansy_stalks.png", "buckwheat_stalks.png",
+	"sagebrush_side.png", "sage_side.png", "litter.png", "buckwheat_side.png",
 ]
+## The perennial atlas's 512 x 512 cells in 2048 x 1536: face-on foliage
+## clusters, and the top views the kit lays over clumps as caps.
+const PERENNIAL_CELLS := [
+	"daisy_foliage.png", "thrift_cushion.png", "woolly_foliage.png", "sagebrush_foliage.png",
+	"yarrow_foliage.png", "buckwheat_foliage.png", "monkeyflower_foliage.png", "tansy_foliage.png",
+	"tussock_top.png", "bronze_top.png", "daisy_bloom.png",
+]
+const MAGENTA := Color(1.0, 0.0, 1.0)
+const CYAN := Color(0.0, 1.0, 1.0)
+## Sources generated on cyan, so their pink, lilac and blue flowers survive the key.
+const ON_CYAN := ["blue_eyed_grass.png", "thrift_stalks.png", "daisy_bloom.png", "sage_side.png"]
+## Pixels a low-plant image keeps clear round its atlas cell's edge, so mipmaps
+## don't pull a neighbouring cell's leaves into a card's outline.
+const CELL_MARGIN := 8
+## Top views the kit lays over clumps as caps fade out from their middle, so a
+## cap fills a clump's dense core from above without a flat rim of its own.
+const CAP_CELLS := ["tussock_top.png", "bronze_top.png", "thrift_cushion.png"]
+## Low-plant images graded toward the dated Cityside photos and November:
+## [tint, desaturation]. The generated sedge, tansy and monkeyflower came out
+## lime, the rush yellow-green, the bronze sedge orange rather than copper-tan,
+## the sagebrush frosty, the dried flower heads too red; the litter is pulled
+## down to dull debris.
+const LOW_GRADES := {
+	"sedge_tussock.png": [Color(0.72, 0.78, 0.68), 0.5],
+	"rush_clump.png": [Color(0.86, 0.92, 0.88), 0.2],
+	"bronze_grass.png": [Color(0.82, 0.74, 0.66), 0.6],
+	"sagebrush_foliage.png": [Color(0.8, 0.86, 0.78), 0.0],
+	"sagebrush_side.png": [Color(0.74, 0.84, 0.72), 0.0],
+	"litter.png": [Color(0.78, 0.74, 0.7), 0.35],
+	"woolly_stalks.png": [Color(0.78, 0.72, 0.66), 0.55],
+	"buckwheat_stalks.png": [Color(0.74, 0.68, 0.62), 0.85],
+	"buckwheat_side.png": [Color(0.84, 0.85, 0.8), 0.45],
+	"monkeyflower_foliage.png": [Color(0.86, 0.9, 0.82), 0.2],
+	"tansy_foliage.png": [Color(0.84, 0.88, 0.8), 0.25],
+	"daisy_foliage.png": [Color(0.86, 0.9, 0.86), 0.3],
+	"daisy_bloom.png": [Color(0.9, 0.92, 0.9), 0.15],
+	"woolly_foliage.png": [Color(0.74, 0.8, 0.72), 0.15],
+	"tussock_top.png": [Color(0.9, 0.95, 0.85), 0.2],
+	"bronze_top.png": [Color(0.9, 0.85, 0.8), 0.3],
+	"thrift_side.png": [Color(0.82, 0.88, 0.82), 0.15],
+	"thrift_cushion.png": [Color(0.86, 0.9, 0.86), 0.1],
+}
 
 
 func _initialize() -> void:
 	var args := OS.get_cmdline_user_args()
-	if args.size() != 2 or args[0] != "--source" or args[1].begins_with("--"):
-		push_error("usage: -- --source DIR (the folder of untouched generated source images)")
+	var sets: Array = SETS.keys()
+	if args.size() == 4 and args[2] == "--only":
+		sets = Array(args[3].split(","))
+	if not (args.size() == 2 or args.size() == 4) or args[0] != "--source" or args[1].begins_with("--") or sets.any(func(name: Variant) -> bool: return not SETS.has(name)):
+		push_error("usage: -- --source DIR [--only SET,...] (DIR: the folder of untouched generated source images; SET: %s)" % ", ".join(PackedStringArray(SETS.keys())))
 		quit(2)
 		return
 	var source_dir := args[1].trim_suffix("/") + "/"
 	var errors: Array[String] = []
 	var images := {}
-	for name: String in SOURCES:
-		images[name] = _load(source_dir + name, errors)
+	for set_name: String in sets:
+		for name: String in SETS[set_name]:
+			images[name] = _load(source_dir + name, errors)
 	if not errors.is_empty():
 		_finish(errors)
 		return
+	for set_name: String in sets:
+		call("_pack_" + set_name, images, errors)
+	_finish(errors)
 
+
+func _pack_palms(images: Dictionary, errors: Array[String]) -> void:
 	# Fan palm atlas, 1024 x 1024 (UV rects in street_vegetation_kit.gd):
 	#   live fan (0,0)-(512,512)            dead frond A (512,0)-(768,512)
 	#   leaf-base boot (0,512)-(512,1024)   dead frond B (768,0)-(1024,512)
@@ -85,12 +149,16 @@ func _initialize() -> void:
 		fronds.blit_rect(frond, Rect2i(0, 0, 256, 2048), Vector2i(256 * index, 0))
 	_save(fronds, OUT + "canary_frond_atlas.png", errors)
 
+
+func _pack_cypress(images: Dictionary, errors: Array[String]) -> void:
 	# Cypress atlas, 1024 x 512: side clump (0,0)-(512,512), top plate (512,0)-(1024,512).
 	var cypress := Image.create_empty(1024, 512, false, Image.FORMAT_RGBA8)
 	cypress.blit_rect(_keyed(images["cypress_clump.png"], 512, 512), Rect2i(0, 0, 512, 512), Vector2i(0, 0))
 	cypress.blit_rect(_keyed(images["cypress_plate.png"], 512, 512), Rect2i(0, 0, 512, 512), Vector2i(512, 0))
 	_save(cypress, OUT + "cypress_foliage_atlas.png", errors)
 
+
+func _pack_grass(images: Dictionary, errors: Array[String]) -> void:
 	# Clumping grass, 1024 x 512: the green clump fills (0,0)-(512,512); the
 	# wider straw clump keeps its 3:2 shape, bottom-aligned in (512,171)-(1024,512).
 	var grass := Image.create_empty(1024, 512, false, Image.FORMAT_RGBA8)
@@ -103,6 +171,8 @@ func _initialize() -> void:
 	_fill_transparent(grass)
 	_save(grass, OUT + "grass_atlas.png", errors)
 
+
+func _pack_barks(images: Dictionary, errors: Array[String]) -> void:
 	# Tiled barks, 512 x 512 opaque: [output, tint, desaturation].
 	var barks := {
 		"fan_bark_grey.png": ["fan_palm_bark.png", Color(1.0, 1.0, 1.0), 0.0],
@@ -114,13 +184,86 @@ func _initialize() -> void:
 		# The generated bark is redder than Monterey cypress's grey-brown.
 		"cypress_bark.png": ["cypress_bark.png", Color(0.95, 0.93, 0.92), 0.45],
 	}
+	_save_barks(images, barks, errors)
+
+
+func _save_barks(images: Dictionary, barks: Dictionary, errors: Array[String]) -> void:
 	for source: String in barks.keys():
 		var bark: Image = images[source]
 		bark.resize(512, 512, Image.INTERPOLATE_LANCZOS)
 		_grade(bark, barks[source][1], barks[source][2])
 		bark.convert(Image.FORMAT_RGB8)
 		_save(bark, OUT + str(barks[source][0]), errors)
-	_finish(errors)
+
+
+## Cityside Park's grasses, sedges and rushes, its shrubs seen from the side,
+## the flower stalks of its perennials and the litter under its shrubs, 2048 x
+## 2048 in 512 x 512 cells (MEADOW_CELLS), each image cropped to its plant and
+## stretched to fill its cell inside CELL_MARGIN; the kit's card sizes set the
+## plants' proportions.
+func _pack_meadow(images: Dictionary, errors: Array[String]) -> void:
+	var cells := MEADOW_CELLS
+	var atlas := Image.create_empty(2048, 2048, false, Image.FORMAT_RGBA8)
+	for index in cells.size():
+		var name: String = cells[index]
+		var cell := _keyed_fit(images[name], 512 - 2 * CELL_MARGIN, 512 - 2 * CELL_MARGIN, CYAN if name in ON_CYAN else MAGENTA)
+		# Clears the pink the magenta key leaves in pale blade tips (not the copper sedge's orange).
+		if name in ["reedgrass_clump.png", "sedge_tussock.png", "rush_clump.png"]:
+			_straw(cell)
+		if LOW_GRADES.has(name):
+			_grade(cell, LOW_GRADES[name][0], LOW_GRADES[name][1])
+		atlas.blit_rect(cell, Rect2i(Vector2i.ZERO, cell.get_size()), Vector2i(512 * (index % 4) + CELL_MARGIN, 512 * (index / 4) + CELL_MARGIN))
+	_fill_transparent(atlas)
+	_save(atlas, OUT + "meadow_atlas.png", errors)
+
+
+## The perennials' and shrubs' face-on foliage clusters and the caps' top views,
+## 2048 x 1536 in 512 x 512 cells like the meadow atlas (PERENNIAL_CELLS).
+func _pack_perennial(images: Dictionary, errors: Array[String]) -> void:
+	var cells := PERENNIAL_CELLS
+	var atlas := Image.create_empty(2048, 1536, false, Image.FORMAT_RGBA8)
+	for index in cells.size():
+		var name: String = cells[index]
+		var cell := _keyed_fit(images[name], 512 - 2 * CELL_MARGIN, 512 - 2 * CELL_MARGIN, CYAN if name in ON_CYAN else MAGENTA)
+		if LOW_GRADES.has(name):
+			_grade(cell, LOW_GRADES[name][0], LOW_GRADES[name][1])
+		if name in CAP_CELLS:
+			_radial_fade(cell, 0.22, 0.48)
+		atlas.blit_rect(cell, Rect2i(Vector2i.ZERO, cell.get_size()), Vector2i(512 * (index % 4) + CELL_MARGIN, 512 * (index / 4) + CELL_MARGIN))
+	_fill_transparent(atlas)
+	_save(atlas, OUT + "perennial_atlas.png", errors)
+
+
+## The young trees: their foliage atlas, 1024 x 512, a hanging spray of gum
+## leaves (0,0)-(512,512) and a cluster of oak leaves (512,0)-(1024,512), and
+## their tiled barks.
+func _pack_young_trees(images: Dictionary, errors: Array[String]) -> void:
+	var atlas := Image.create_empty(1024, 512, false, Image.FORMAT_RGBA8)
+	for index in 2:
+		var name: String = ["gum_leaves.png", "oak_leaves.png"][index]
+		var cell := _keyed_fit(images[name], 512 - 2 * CELL_MARGIN, 512 - 2 * CELL_MARGIN, MAGENTA)
+		# Sydney blue gum crowns read grey-green (ph10), with few bronze young leaves.
+		if name == "gum_leaves.png":
+			_grade(cell, Color(0.9, 0.96, 0.94), 0.4)
+		atlas.blit_rect(cell, Rect2i(Vector2i.ZERO, cell.get_size()), Vector2i(512 * index + CELL_MARGIN, CELL_MARGIN))
+	_fill_transparent(atlas)
+	_save(atlas, OUT + "young_tree_foliage_atlas.png", errors)
+	_save_barks(images, {
+		# The gum's pale bark, a little greyer than generated (ph10, cmg14).
+		"gum_bark.png": ["gum_bark.png", Color(0.98, 0.98, 0.97), 0.15],
+		"oak_bark.png": ["oak_bark.png", Color(1.0, 1.0, 1.0), 0.1],
+	}, errors)
+
+
+## The park beds' ground, 512 x 512 tiles like the street mulch: the grey
+## shredded wood mulch and the pea gravel of Cityside Park's beds.
+func _pack_park_ground(images: Dictionary, errors: Array[String]) -> void:
+	_save_barks(images, {
+		# Darker than generated: in the game's sun the generated mulch read pale pink-grey
+		# and the gravel near white, against the dark beds of the dated photos.
+		"park_mulch.png": ["park_mulch.png", Color(0.72, 0.7, 0.68), 0.2],
+		"park_gravel.png": ["park_gravel.png", Color(0.62, 0.62, 0.62), 0.1],
+	}, errors)
 
 
 func _load(path: String, errors: Array[String]) -> Image:
@@ -140,6 +283,17 @@ func _keyed(source: Image, width: int, height: int) -> Image:
 	return image
 
 
+## Keyed on key, cropped to the plant and stretched to fill width x height.
+func _keyed_fit(source: Image, width: int, height: int, key: Color) -> Image:
+	var image := _key(source, key)
+	var leaf := image.get_region(_solid_rect(image))
+	# Refill before resizing too, so the stretch blends leaf colour, not key colour, into the edges.
+	_fill_transparent(leaf)
+	leaf.resize(width, height, Image.INTERPOLATE_LANCZOS)
+	_fill_transparent(leaf)
+	return leaf
+
+
 ## Keyed, cropped to the leaf (symmetric about its middle, so its axis stays on
 ## the cell's centre line) and stretched to fill width x height.
 func _keyed_stretch(source: Image, width: int, height: int) -> Image:
@@ -156,28 +310,57 @@ func _keyed_stretch(source: Image, width: int, height: int) -> Image:
 	return leaf
 
 
-func _key(source: Image) -> Image:
+## The bounds of an image's mostly opaque pixels (alpha 128 and up), so a stray
+## faint pixel left by the key does not widen a crop.
+func _solid_rect(image: Image) -> Rect2i:
+	var w := image.get_width()
+	var data := image.get_data()
+	var low := Vector2i(w, image.get_height())
+	var high := Vector2i(-1, -1)
+	for i in range(3, data.size(), 4):
+		if data[i] >= 128:
+			var pixel := (i - 3) / 4
+			var x := pixel % w
+			var y := pixel / w
+			low = Vector2i(mini(low.x, x), mini(low.y, y))
+			high = Vector2i(maxi(high.x, x), maxi(high.y, y))
+	if high.x < 0:
+		return Rect2i(Vector2i.ZERO, image.get_size())
+	return Rect2i(low, high - low + Vector2i.ONE)
+
+
+## Keys the flat background colour (pure magenta or pure cyan) into alpha.
+func _key(source: Image, key := MAGENTA) -> Image:
 	var image := source.duplicate() as Image
 	image.convert(Image.FORMAT_RGBA8)
 	var data := image.get_data()
+	var cyan := key.is_equal_approx(CYAN)
 	for i in range(0, data.size(), 4):
 		var r := data[i] / 255.0
 		var g := data[i + 1] / 255.0
 		var b := data[i + 2] / 255.0
-		var distance := sqrt((1.0 - r) * (1.0 - r) + g * g + (1.0 - b) * (1.0 - b))
+		var distance := sqrt((key.r - r) * (key.r - r) + (key.g - g) * (key.g - g) + (key.b - b) * (key.b - b))
 		var alpha := clampf((distance - 0.18) / 0.5, 0.0, 1.0)
 		if alpha <= 0.0:
 			data[i + 3] = 0
 			continue
-		# Remove the magenta share of an edge blend, then any remaining spill:
-		# natural leaf and bark colours never have both red and blue above green.
-		r = clampf((r - (1.0 - alpha)) / alpha, 0.0, 1.0)
-		g = clampf(g / alpha, 0.0, 1.0)
-		b = clampf((b - (1.0 - alpha)) / alpha, 0.0, 1.0)
-		var spill := minf(r, b) - g
-		if spill > 0.0:
-			r -= spill
-			b -= spill
+		# Remove the key's share of an edge blend, then any remaining spill:
+		# natural leaf and bark colours never have both key channels above the
+		# third (on magenta: red and blue above green; on cyan: green and blue
+		# above red, which keeps pink and lilac petals).
+		r = clampf((r - (1.0 - alpha) * key.r) / alpha, 0.0, 1.0)
+		g = clampf((g - (1.0 - alpha) * key.g) / alpha, 0.0, 1.0)
+		b = clampf((b - (1.0 - alpha) * key.b) / alpha, 0.0, 1.0)
+		if cyan:
+			var spill := minf(g, b) - r
+			if spill > 0.0:
+				g -= spill
+				b -= spill
+		else:
+			var spill := minf(r, b) - g
+			if spill > 0.0:
+				r -= spill
+				b -= spill
 		data[i] = int(round(r * 255.0))
 		data[i + 1] = int(round(g * 255.0))
 		data[i + 2] = int(round(b * 255.0))
@@ -242,6 +425,19 @@ func _straw(image: Image) -> void:
 		data[i + 2] = mini(data[i + 2], int(g * 0.88))
 		data[i] = mini(data[i], int(g * 1.18) + 10)
 	image.set_data(image.get_width(), image.get_height(), false, Image.FORMAT_RGBA8, data)
+
+
+## Fades alpha out from inner to outer (fractions of the image's width) from its middle.
+func _radial_fade(image: Image, inner: float, outer: float) -> void:
+	var w := image.get_width()
+	var h := image.get_height()
+	var data := image.get_data()
+	for y in h:
+		for x in w:
+			var r := Vector2((x + 0.5) / w - 0.5, (y + 0.5) / h - 0.5).length()
+			var i := (y * w + x) * 4 + 3
+			data[i] = int(round(data[i] * (1.0 - smoothstep(inner, outer, r))))
+	image.set_data(w, h, false, Image.FORMAT_RGBA8, data)
 
 
 ## Multiplies visible colour by tint and pulls it toward grey by desaturate (0..1).

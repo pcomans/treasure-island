@@ -524,6 +524,864 @@
       "yaw": -0.8,
       "reason": "A young Mexican fan palm beside it at the north pavilion's west corner.",
       "reference": "building1-references northwest-sep2025 (California Ave, Sep 2025)"
+    },
+    {
+      "id": "cityside_canopy_of_sky",
+      "kind": "artwork",
+      "prop": "canopy_of_sky",
+      "params": {},
+      "xz": [
+        -276.5,
+        360.5
+      ],
+      "yaw": -0.887,
+      "reason": "Ned Kahn's Canopy of Sky (2025): a 20 ft stainless ring of hanging polycarbonate discs on cables from four curved aluminium poles, over the asphalt lawn ring where the pink Y is painted, the poles outside the walkway. Position read from ph05 and the aerial's pink Y; the note's inferred spot by the promenade bend is an undocumented oval pad.",
+      "reference": "TIDA art-selection report 2024-09-11 (20 ft ring, 4 curved poles, about 7000 discs, moving parts above 13 ft); TIDA acceptance 2025-07-09; ph05 (Google Maps contributor, Sep 2025); Esri World Imagery 2026-05-26 z19, 2025-08-29 z20"
+    },
+    {
+      "id": "cityside_path_light_01",
+      "kind": "street_lamp",
+      "prop": "lamp_disc",
+      "params": {},
+      "xz": [
+        -323.26,
+        330.12
+      ],
+      "yaw": 0.0,
+      "reason": "A 14 ft park path light with a flat disc head beside the asphalt path, about every 16 m on the bed side (spacing inferred).",
+      "reference": "2024 art-location plan label 'Light Pole 14 ft' (SFAC, Wayback 2025-06-12); ph08 and ph10 (Sep 2025); cmg08, cmg11"
+    },
+    {
+      "id": "cityside_path_light_02",
+      "kind": "street_lamp",
+      "prop": "lamp_disc",
+      "params": {},
+      "xz": [
+        -305.81,
+        329.71
+      ],
+      "yaw": 0.0,
+      "reason": "A 14 ft park path light with a flat disc head beside the asphalt path, about every 16 m on the bed side (spacing inferred).",
+      "reference": "2024 art-location plan label 'Light Pole 14 ft' (SFAC, Wayback 2025-06-12); ph08 and ph10 (Sep 2025); cmg08, cmg11"
+    },
+    {
+      "id": "cityside_path_light_03",
+      "kind": "street_lamp",
+      "prop": "lamp_disc",
+      "params": {},
+      "xz": [
+        -291.4,
+        339.42
+      ],
+      "yaw": 0.0,
+      "reason": "A 14 ft park path light with a flat disc head beside the asphalt path, about every 16 m on the bed side (spacing inferred).",
+      "reference": "2024 art-location plan label 'Light Pole 14 ft' (SFAC, Wayback 2025-06-12); ph08 and ph10 (Sep 2025); cmg08, cmg11"
+    },
+    {
+      "id": "cityside_path_light_04",
+      "kind": "street_lamp",
+      "prop": "lamp_disc",
+      "params": {},
+      "xz": [
+        -280.74,
+        351.59
+      ],
+      "yaw": 0.0,
+      "reason": "A 14 ft park path light with a flat disc head beside the asphalt path, about every 16 m on the bed side (spacing inferred).",
+      "reference": "2024 art-location plan label 'Light Pole 14 ft' (SFAC, Wayback 2025-06-12); ph08 and ph10 (Sep 2025); cmg08, cmg11"
+    },
+    {
+      "id": "cityside_path_light_05",
+      "kind": "street_lamp",
+      "prop": "lamp_disc",
+      "params": {},
+      "xz": [
+        -270.48,
+        363.69
+      ],
+      "yaw": 0.0,
+      "reason": "A 14 ft park path light with a flat disc head beside the asphalt path, about every 16 m on the bed side (spacing inferred).",
+      "reference": "2024 art-location plan label 'Light Pole 14 ft' (SFAC, Wayback 2025-06-12); ph08 and ph10 (Sep 2025); cmg08, cmg11"
+    },
+    {
+      "id": "cityside_path_light_06",
+      "kind": "street_lamp",
+      "prop": "lamp_disc",
+      "params": {},
+      "xz": [
+        -260.63,
+        377.23
+      ],
+      "yaw": 0.0,
+      "reason": "A 14 ft park path light with a flat disc head beside the asphalt path, about every 16 m on the bed side (spacing inferred).",
+      "reference": "2024 art-location plan label 'Light Pole 14 ft' (SFAC, Wayback 2025-06-12); ph08 and ph10 (Sep 2025); cmg08, cmg11"
+    },
+    {
+      "id": "cityside_path_light_07",
+      "kind": "street_lamp",
+      "prop": "lamp_disc",
+      "params": {},
+      "xz": [
+        -257.77,
+        394.39
+      ],
+      "yaw": 0.0,
+      "reason": "A 14 ft park path light with a flat disc head beside the asphalt path, about every 16 m on the bed side (spacing inferred).",
+      "reference": "2024 art-location plan label 'Light Pole 14 ft' (SFAC, Wayback 2025-06-12); ph08 and ph10 (Sep 2025); cmg08, cmg11"
+    },
+    {
+      "id": "cityside_path_light_08",
+      "kind": "street_lamp",
+      "prop": "lamp_disc",
+      "params": {},
+      "xz": [
+        -269.99,
+        407.58
+      ],
+      "yaw": 0.0,
+      "reason": "A 14 ft park path light with a flat disc head beside the asphalt path, about every 16 m on the bed side (spacing inferred).",
+      "reference": "2024 art-location plan label 'Light Pole 14 ft' (SFAC, Wayback 2025-06-12); ph08 and ph10 (Sep 2025); cmg08, cmg11"
+    },
+    {
+      "id": "cityside_path_light_09",
+      "kind": "street_lamp",
+      "prop": "lamp_disc",
+      "params": {},
+      "xz": [
+        -287.75,
+        409.51
+      ],
+      "yaw": 0.0,
+      "reason": "A 14 ft park path light with a flat disc head beside the asphalt path, about every 16 m on the bed side (spacing inferred).",
+      "reference": "2024 art-location plan label 'Light Pole 14 ft' (SFAC, Wayback 2025-06-12); ph08 and ph10 (Sep 2025); cmg08, cmg11"
+    },
+    {
+      "id": "cityside_path_light_10",
+      "kind": "street_lamp",
+      "prop": "lamp_disc",
+      "params": {},
+      "xz": [
+        -286.09,
+        431.57
+      ],
+      "yaw": 0.0,
+      "reason": "A 14 ft park path light with a flat disc head beside the asphalt path, about every 16 m on the bed side (spacing inferred).",
+      "reference": "2024 art-location plan label 'Light Pole 14 ft' (SFAC, Wayback 2025-06-12); ph08 and ph10 (Sep 2025); cmg08, cmg11"
+    },
+    {
+      "id": "cityside_path_light_11",
+      "kind": "street_lamp",
+      "prop": "lamp_disc",
+      "params": {},
+      "xz": [
+        -270.31,
+        435.66
+      ],
+      "yaw": 0.0,
+      "reason": "A 14 ft park path light with a flat disc head beside the asphalt path, about every 16 m on the bed side (spacing inferred).",
+      "reference": "2024 art-location plan label 'Light Pole 14 ft' (SFAC, Wayback 2025-06-12); ph08 and ph10 (Sep 2025); cmg08, cmg11"
+    },
+    {
+      "id": "cityside_path_light_12",
+      "kind": "street_lamp",
+      "prop": "lamp_disc",
+      "params": {},
+      "xz": [
+        -254.31,
+        437.99
+      ],
+      "yaw": 0.0,
+      "reason": "A 14 ft park path light with a flat disc head beside the asphalt path, about every 16 m on the bed side (spacing inferred).",
+      "reference": "2024 art-location plan label 'Light Pole 14 ft' (SFAC, Wayback 2025-06-12); ph08 and ph10 (Sep 2025); cmg08, cmg11"
+    },
+    {
+      "id": "cityside_path_light_13",
+      "kind": "street_lamp",
+      "prop": "lamp_disc",
+      "params": {},
+      "xz": [
+        -238.3,
+        439.55
+      ],
+      "yaw": 0.0,
+      "reason": "A 14 ft park path light with a flat disc head beside the asphalt path, about every 16 m on the bed side (spacing inferred).",
+      "reference": "2024 art-location plan label 'Light Pole 14 ft' (SFAC, Wayback 2025-06-12); ph08 and ph10 (Sep 2025); cmg08, cmg11"
+    },
+    {
+      "id": "cityside_plaza_light_1",
+      "kind": "street_lamp",
+      "prop": "lamp_disc",
+      "params": {},
+      "xz": [
+        -229.62,
+        486.99
+      ],
+      "yaw": 0.0,
+      "reason": "A 14 ft disc-head light at the south plaza's south-east edge, between its benches.",
+      "reference": "ph10 (Sep 2025); cmg08, cmg14; 2024 art-location plan label 'Light Pole 14 ft'"
+    },
+    {
+      "id": "cityside_plaza_light_2",
+      "kind": "street_lamp",
+      "prop": "lamp_disc",
+      "params": {},
+      "xz": [
+        -238.2,
+        499.75
+      ],
+      "yaw": 0.0,
+      "reason": "A 14 ft disc-head light at the south plaza's south-east edge, between its benches.",
+      "reference": "ph10 (Sep 2025); cmg08, cmg14; 2024 art-location plan label 'Light Pole 14 ft'"
+    },
+    {
+      "id": "cityside_plaza_light_3",
+      "kind": "street_lamp",
+      "prop": "lamp_disc",
+      "params": {},
+      "xz": [
+        -246.78,
+        512.51
+      ],
+      "yaw": 0.0,
+      "reason": "A 14 ft disc-head light at the south plaza's south-east edge, between its benches.",
+      "reference": "ph10 (Sep 2025); cmg08, cmg14; 2024 art-location plan label 'Light Pole 14 ft'"
+    },
+    {
+      "id": "cityside_event_pole_1",
+      "kind": "street_lamp",
+      "prop": "event_pole",
+      "params": {},
+      "xz": [
+        -318.65,
+        328.22
+      ],
+      "yaw": -2.654,
+      "reason": "A 30 ft event light pole at the lawn's edge, its floodlights turned to the lawn (positions inferred, about 26 m or more apart).",
+      "reference": "2024 art-location plan label 'Light Pole 30 ft (event use only)'; ph08 (Sep 2025: tall poles at the lawn's far edge); street-fences p2 (Sep 2026)"
+    },
+    {
+      "id": "cityside_event_pole_2",
+      "kind": "street_lamp",
+      "prop": "event_pole",
+      "params": {},
+      "xz": [
+        -288.07,
+        342.33
+      ],
+      "yaw": 2.818,
+      "reason": "A 30 ft event light pole at the lawn's edge, its floodlights turned to the lawn (positions inferred, about 26 m or more apart).",
+      "reference": "2024 art-location plan label 'Light Pole 30 ft (event use only)'; ph08 (Sep 2025: tall poles at the lawn's far edge); street-fences p2 (Sep 2026)"
+    },
+    {
+      "id": "cityside_event_pole_3",
+      "kind": "street_lamp",
+      "prop": "event_pole",
+      "params": {},
+      "xz": [
+        -266.93,
+        366.94
+      ],
+      "yaw": 1.639,
+      "reason": "A 30 ft event light pole at the lawn's edge, its floodlights turned to the lawn (positions inferred, about 26 m or more apart).",
+      "reference": "2024 art-location plan label 'Light Pole 30 ft (event use only)'; ph08 (Sep 2025: tall poles at the lawn's far edge); street-fences p2 (Sep 2026)"
+    },
+    {
+      "id": "cityside_event_pole_4",
+      "kind": "street_lamp",
+      "prop": "event_pole",
+      "params": {},
+      "xz": [
+        -256.8,
+        389.03
+      ],
+      "yaw": 1.109,
+      "reason": "A 30 ft event light pole at the lawn's edge, its floodlights turned to the lawn (positions inferred, about 26 m or more apart).",
+      "reference": "2024 art-location plan label 'Light Pole 30 ft (event use only)'; ph08 (Sep 2025: tall poles at the lawn's far edge); street-fences p2 (Sep 2026)"
+    },
+    {
+      "id": "cityside_event_pole_5",
+      "kind": "street_lamp",
+      "prop": "event_pole",
+      "params": {},
+      "xz": [
+        -273.79,
+        409.59
+      ],
+      "yaw": 0.52,
+      "reason": "A 30 ft event light pole at the lawn's edge, its floodlights turned to the lawn (positions inferred, about 26 m or more apart).",
+      "reference": "2024 art-location plan label 'Light Pole 30 ft (event use only)'; ph08 (Sep 2025: tall poles at the lawn's far edge); street-fences p2 (Sep 2026)"
+    },
+    {
+      "id": "cityside_event_pole_6",
+      "kind": "street_lamp",
+      "prop": "event_pole",
+      "params": {},
+      "xz": [
+        -297.76,
+        407.42
+      ],
+      "yaw": -0.02,
+      "reason": "A 30 ft event light pole at the lawn's edge, its floodlights turned to the lawn (positions inferred, about 26 m or more apart).",
+      "reference": "2024 art-location plan label 'Light Pole 30 ft (event use only)'; ph08 (Sep 2025: tall poles at the lawn's far edge); street-fences p2 (Sep 2026)"
+    },
+    {
+      "id": "cityside_event_pole_7",
+      "kind": "street_lamp",
+      "prop": "event_pole",
+      "params": {},
+      "xz": [
+        -311.12,
+        387.25
+      ],
+      "yaw": -0.659,
+      "reason": "A 30 ft event light pole at the lawn's edge, its floodlights turned to the lawn (positions inferred, about 26 m or more apart).",
+      "reference": "2024 art-location plan label 'Light Pole 30 ft (event use only)'; ph08 (Sep 2025: tall poles at the lawn's far edge); street-fences p2 (Sep 2026)"
+    },
+    {
+      "id": "cityside_event_pole_8",
+      "kind": "street_lamp",
+      "prop": "event_pole",
+      "params": {},
+      "xz": [
+        -324.76,
+        366.98
+      ],
+      "yaw": -1.643,
+      "reason": "A 30 ft event light pole at the lawn's edge, its floodlights turned to the lawn (positions inferred, about 26 m or more apart).",
+      "reference": "2024 art-location plan label 'Light Pole 30 ft (event use only)'; ph08 (Sep 2025: tall poles at the lawn's far edge); street-fences p2 (Sep 2026)"
+    },
+    {
+      "id": "cityside_plaza_bench_1",
+      "kind": "bench",
+      "prop": "bench_long",
+      "params": {
+        "length_m": 2.4,
+        "back": true
+      },
+      "xz": [
+        -220.75,
+        470.21
+      ],
+      "yaw": 0.974,
+      "reason": "A long timber bench with a backrest on dark steel frames along the south plaza's south-east edge, facing into the plaza.",
+      "reference": "ph10 (Sep 2025); 2024 art-location plan callout 'Park Bench - Rough&Ready 6 by Streetlife'; cmg08"
+    },
+    {
+      "id": "cityside_plaza_bench_2",
+      "kind": "bench",
+      "prop": "bench_long",
+      "params": {
+        "length_m": 2.4,
+        "back": true
+      },
+      "xz": [
+        -230.89,
+        485.29
+      ],
+      "yaw": 0.974,
+      "reason": "A long timber bench with a backrest on dark steel frames along the south plaza's south-east edge, facing into the plaza.",
+      "reference": "ph10 (Sep 2025); 2024 art-location plan callout 'Park Bench - Rough&Ready 6 by Streetlife'; cmg08"
+    },
+    {
+      "id": "cityside_plaza_bench_3",
+      "kind": "bench",
+      "prop": "bench_long",
+      "params": {
+        "length_m": 2.4,
+        "back": true
+      },
+      "xz": [
+        -241.03,
+        500.37
+      ],
+      "yaw": 0.974,
+      "reason": "A long timber bench with a backrest on dark steel frames along the south plaza's south-east edge, facing into the plaza.",
+      "reference": "ph10 (Sep 2025); 2024 art-location plan callout 'Park Bench - Rough&Ready 6 by Streetlife'; cmg08"
+    },
+    {
+      "id": "cityside_overlook_bench_1",
+      "kind": "bench",
+      "prop": "bench_long",
+      "params": {
+        "length_m": 3.0,
+        "back": true
+      },
+      "xz": [
+        -251.71,
+        512.54
+      ],
+      "yaw": 2.545,
+      "reason": "The shore overlook at the end of the south plaza: long timber benches facing the San Francisco skyline over the riprap.",
+      "reference": "cmg10 (2025-2026); ph10 (Sep 2025); zone plan S4 shore overlook"
+    },
+    {
+      "id": "cityside_overlook_bench_2",
+      "kind": "bench",
+      "prop": "bench_long",
+      "params": {
+        "length_m": 3.0,
+        "back": true
+      },
+      "xz": [
+        -256.11,
+        509.55
+      ],
+      "yaw": 2.545,
+      "reason": "The shore overlook at the end of the south plaza: long timber benches facing the San Francisco skyline over the riprap.",
+      "reference": "cmg10 (2025-2026); ph10 (Sep 2025); zone plan S4 shore overlook"
+    },
+    {
+      "id": "cityside_lawn_bench_1",
+      "kind": "bench",
+      "prop": "bench_long",
+      "params": {
+        "length_m": 4.0,
+        "back": false
+      },
+      "xz": [
+        -296.19,
+        400.62
+      ],
+      "yaw": 2.677,
+      "reason": "A long timber bench on a pale concrete plinth at the lawn's edge (the white rectangles round the lawn on the aerial).",
+      "reference": "Esri World Imagery 2026-05-26; 2024 art-location plan 'Bench' callouts; ph08 (Sep 2025: a long bench at the lawn's edge)"
+    },
+    {
+      "id": "cityside_lawn_bench_2",
+      "kind": "bench",
+      "prop": "bench_long",
+      "params": {
+        "length_m": 4.0,
+        "back": false
+      },
+      "xz": [
+        -302.8,
+        395.49
+      ],
+      "yaw": 2.339,
+      "reason": "A long timber bench on a pale concrete plinth at the lawn's edge (the white rectangles round the lawn on the aerial).",
+      "reference": "Esri World Imagery 2026-05-26; 2024 art-location plan 'Bench' callouts; ph08 (Sep 2025: a long bench at the lawn's edge)"
+    },
+    {
+      "id": "cityside_lawn_bench_3",
+      "kind": "bench",
+      "prop": "bench_long",
+      "params": {
+        "length_m": 4.0,
+        "back": false
+      },
+      "xz": [
+        -308.35,
+        389.66
+      ],
+      "yaw": 2.319,
+      "reason": "A long timber bench on a pale concrete plinth at the lawn's edge (the white rectangles round the lawn on the aerial).",
+      "reference": "Esri World Imagery 2026-05-26; 2024 art-location plan 'Bench' callouts; ph08 (Sep 2025: a long bench at the lawn's edge)"
+    },
+    {
+      "id": "cityside_picnic_table_1",
+      "kind": "picnic_table",
+      "prop": "picnic_table_long",
+      "params": {
+        "length_m": 6.1
+      },
+      "xz": [
+        -313.26,
+        289.34
+      ],
+      "yaw": -2.265,
+      "reason": "A 20 ft picnic table of thick fresh timber on black steel frames in one of the north plaza's picnic alcoves.",
+      "reference": "CMG news (Sep 2025: 20 ft picnic tables, BBQs); SF.gov 2025-09-13; ph09 (Sep 2025); CMG/TIDA site plan 2025-04-16 (picnic alcoves)"
+    },
+    {
+      "id": "cityside_bbq_grill_1",
+      "kind": "bbq",
+      "prop": "bbq_grill",
+      "params": {},
+      "xz": [
+        -316.71,
+        293.49
+      ],
+      "yaw": -2.265,
+      "reason": "A park BBQ grill at the end of the picnic table.",
+      "reference": "ph09 (Sep 2025); SF RPD facility page (BBQ grills), checked 2026-11-03"
+    },
+    {
+      "id": "cityside_picnic_table_2",
+      "kind": "picnic_table",
+      "prop": "picnic_table_long",
+      "params": {
+        "length_m": 6.1
+      },
+      "xz": [
+        -321.57,
+        299.33
+      ],
+      "yaw": -2.265,
+      "reason": "A 20 ft picnic table of thick fresh timber on black steel frames in one of the north plaza's picnic alcoves.",
+      "reference": "CMG news (Sep 2025: 20 ft picnic tables, BBQs); SF.gov 2025-09-13; ph09 (Sep 2025); CMG/TIDA site plan 2025-04-16 (picnic alcoves)"
+    },
+    {
+      "id": "cityside_bbq_grill_2",
+      "kind": "bbq",
+      "prop": "bbq_grill",
+      "params": {},
+      "xz": [
+        -325.03,
+        303.48
+      ],
+      "yaw": -2.265,
+      "reason": "A park BBQ grill at the end of the picnic table.",
+      "reference": "ph09 (Sep 2025); SF RPD facility page (BBQ grills), checked 2026-11-03"
+    },
+    {
+      "id": "cityside_picnic_table_3",
+      "kind": "picnic_table",
+      "prop": "picnic_table_long",
+      "params": {
+        "length_m": 6.1
+      },
+      "xz": [
+        -329.89,
+        309.32
+      ],
+      "yaw": -2.265,
+      "reason": "A 20 ft picnic table of thick fresh timber on black steel frames in one of the north plaza's picnic alcoves.",
+      "reference": "CMG news (Sep 2025: 20 ft picnic tables, BBQs); SF.gov 2025-09-13; ph09 (Sep 2025); CMG/TIDA site plan 2025-04-16 (picnic alcoves)"
+    },
+    {
+      "id": "cityside_bbq_grill_3",
+      "kind": "bbq",
+      "prop": "bbq_grill",
+      "params": {},
+      "xz": [
+        -333.35,
+        313.47
+      ],
+      "yaw": -2.265,
+      "reason": "A park BBQ grill at the end of the picnic table.",
+      "reference": "ph09 (Sep 2025); SF RPD facility page (BBQ grills), checked 2026-11-03"
+    },
+    {
+      "id": "cityside_picnic_table_4",
+      "kind": "picnic_table",
+      "prop": "picnic_table_long",
+      "params": {
+        "length_m": 6.1
+      },
+      "xz": [
+        -338.21,
+        319.31
+      ],
+      "yaw": -2.265,
+      "reason": "A 20 ft picnic table of thick fresh timber on black steel frames in one of the north plaza's picnic alcoves.",
+      "reference": "CMG news (Sep 2025: 20 ft picnic tables, BBQs); SF.gov 2025-09-13; ph09 (Sep 2025); CMG/TIDA site plan 2025-04-16 (picnic alcoves)"
+    },
+    {
+      "id": "cityside_bbq_grill_4",
+      "kind": "bbq",
+      "prop": "bbq_grill",
+      "params": {},
+      "xz": [
+        -341.66,
+        323.46
+      ],
+      "yaw": -2.265,
+      "reason": "A park BBQ grill at the end of the picnic table.",
+      "reference": "ph09 (Sep 2025); SF RPD facility page (BBQ grills), checked 2026-11-03"
+    },
+    {
+      "id": "cityside_strand_log_1",
+      "kind": "bench",
+      "prop": "log_seat",
+      "params": {
+        "form": "log",
+        "size_m": 3.4
+      },
+      "xz": [
+        -249.4,
+        524.61
+      ],
+      "yaw": -1.251,
+      "reason": "A salvaged, barkless eucalyptus log from Yerba Buena Island laid as a seat at a nook off the strand path.",
+      "reference": "CMG (furnishings from salvaged Yerba Buena Island trees); ph02 and ph03 (Sep 2025)"
+    },
+    {
+      "id": "cityside_strand_stump_1",
+      "kind": "bench",
+      "prop": "log_seat",
+      "params": {
+        "form": "stump",
+        "size_m": 0.7
+      },
+      "xz": [
+        -249.03,
+        521.43
+      ],
+      "yaw": 0.0,
+      "reason": "A salvaged eucalyptus stump stool beside the log.",
+      "reference": "ph02 (Sep 2025); CMG"
+    },
+    {
+      "id": "cityside_strand_slab_2",
+      "kind": "bench",
+      "prop": "log_seat",
+      "params": {
+        "form": "slab",
+        "size_m": 1.7
+      },
+      "xz": [
+        -225.09,
+        540.03
+      ],
+      "yaw": 1.956,
+      "reason": "A broad salvaged eucalyptus stump slab as a seat at a nook off the strand path.",
+      "reference": "ph02 (Sep 2025: the bean-shaped stump seat); CMG"
+    },
+    {
+      "id": "cityside_strand_log_3",
+      "kind": "bench",
+      "prop": "log_seat",
+      "params": {
+        "form": "log",
+        "size_m": 2.8
+      },
+      "xz": [
+        -227.5,
+        564.52
+      ],
+      "yaw": -1.322,
+      "reason": "A salvaged, barkless eucalyptus log from Yerba Buena Island laid as a seat at a nook off the strand path.",
+      "reference": "CMG (furnishings from salvaged Yerba Buena Island trees); ph02 and ph03 (Sep 2025)"
+    },
+    {
+      "id": "cityside_strand_stump_3",
+      "kind": "bench",
+      "prop": "log_seat",
+      "params": {
+        "form": "stump",
+        "size_m": 0.7
+      },
+      "xz": [
+        -226.9,
+        561.38
+      ],
+      "yaw": 0.0,
+      "reason": "A salvaged eucalyptus stump stool beside the log.",
+      "reference": "ph02 (Sep 2025); CMG"
+    },
+    {
+      "id": "cityside_strand_stump_4",
+      "kind": "bench",
+      "prop": "log_seat",
+      "params": {
+        "form": "stump",
+        "size_m": 0.75
+      },
+      "xz": [
+        -206.69,
+        578.72
+      ],
+      "yaw": 2.243,
+      "reason": "A salvaged eucalyptus stump stool at a nook off the strand path.",
+      "reference": "ph02 (Sep 2025: the bean-shaped stump seat); CMG"
+    },
+    {
+      "id": "cityside_strand_log_5",
+      "kind": "bench",
+      "prop": "log_seat",
+      "params": {
+        "form": "log",
+        "size_m": 3.6
+      },
+      "xz": [
+        -207.02,
+        602.12
+      ],
+      "yaw": -1.922,
+      "reason": "A salvaged, barkless eucalyptus log from Yerba Buena Island laid as a seat at a nook off the strand path.",
+      "reference": "CMG (furnishings from salvaged Yerba Buena Island trees); ph02 and ph03 (Sep 2025)"
+    },
+    {
+      "id": "cityside_strand_stump_5",
+      "kind": "bench",
+      "prop": "log_seat",
+      "params": {
+        "form": "stump",
+        "size_m": 0.7
+      },
+      "xz": [
+        -204.76,
+        599.86
+      ],
+      "yaw": 0.0,
+      "reason": "A salvaged eucalyptus stump stool beside the log.",
+      "reference": "ph02 (Sep 2025); CMG"
+    },
+    {
+      "id": "cityside_strand_slab_6",
+      "kind": "bench",
+      "prop": "log_seat",
+      "params": {
+        "form": "slab",
+        "size_m": 1.5
+      },
+      "xz": [
+        -188.14,
+        624.83
+      ],
+      "yaw": 0.86,
+      "reason": "A broad salvaged eucalyptus stump slab as a seat at a nook off the strand path.",
+      "reference": "ph02 (Sep 2025: the bean-shaped stump seat); CMG"
+    },
+    {
+      "id": "cityside_strand_log_7",
+      "kind": "bench",
+      "prop": "log_seat",
+      "params": {
+        "form": "log",
+        "size_m": 3.0
+      },
+      "xz": [
+        -193.08,
+        643.74
+      ],
+      "yaw": -1.121,
+      "reason": "A salvaged, barkless eucalyptus log from Yerba Buena Island laid as a seat at a nook off the strand path.",
+      "reference": "CMG (furnishings from salvaged Yerba Buena Island trees); ph02 and ph03 (Sep 2025)"
+    },
+    {
+      "id": "cityside_strand_stump_7",
+      "kind": "bench",
+      "prop": "log_seat",
+      "params": {
+        "form": "stump",
+        "size_m": 0.7
+      },
+      "xz": [
+        -193.12,
+        640.54
+      ],
+      "yaw": 0.0,
+      "reason": "A salvaged eucalyptus stump stool beside the log.",
+      "reference": "ph02 (Sep 2025); CMG"
+    },
+    {
+      "id": "cityside_pump_station",
+      "kind": "site_structure",
+      "prop": "pump_station",
+      "params": {},
+      "xz": [
+        -208.75,
+        476.25
+      ],
+      "yaw": -1.09,
+      "reason": "Cityside Park's stormwater pump station: an open-topped compound of tall grey cast-concrete walls round a pale floor, divided by a lower inner wall, by the avenue. It is not in the frozen OSM building inventory, so it is a site structure here, kept to simple massing: no doors or other detail that no dated photo shows. Size and orientation are inference from the aerial.",
+      "reference": "CMG photo 4 (cmg04, 2025-2026: the walled compound beside the forebay and the cycle track); CMG project text ('pump station'); Esri World Imagery 2026-05-26; CMG/TIDA site plan 2025-04-16"
+    },
+    {
+      "id": "cityside_lawn_chair_1",
+      "kind": "chair",
+      "prop": "adirondack_chair",
+      "params": {},
+      "xz": [
+        -318.0,
+        360.5
+      ],
+      "yaw": 1.956,
+      "reason": "A movable blue Adirondack chair in a loose group on the lawn, turned to the skyline view.",
+      "reference": "ph05 (Sep 2025); cmg12 (2025-2026); ph04 (Sep 2025)"
+    },
+    {
+      "id": "cityside_lawn_chair_2",
+      "kind": "chair",
+      "prop": "adirondack_chair",
+      "params": {},
+      "xz": [
+        -316.2,
+        362.8
+      ],
+      "yaw": 2.206,
+      "reason": "A movable blue Adirondack chair in a loose group on the lawn, turned to the skyline view.",
+      "reference": "ph05 (Sep 2025); cmg12 (2025-2026); ph04 (Sep 2025)"
+    },
+    {
+      "id": "cityside_lawn_chair_3",
+      "kind": "chair",
+      "prop": "adirondack_chair",
+      "params": {},
+      "xz": [
+        -314.5,
+        359.0
+      ],
+      "yaw": 1.806,
+      "reason": "A movable blue Adirondack chair in a loose group on the lawn, turned to the skyline view.",
+      "reference": "ph05 (Sep 2025); cmg12 (2025-2026); ph04 (Sep 2025)"
+    },
+    {
+      "id": "cityside_lawn_chair_4",
+      "kind": "chair",
+      "prop": "adirondack_chair",
+      "params": {},
+      "xz": [
+        -317.5,
+        365.5
+      ],
+      "yaw": 2.356,
+      "reason": "A movable blue Adirondack chair in a loose group on the lawn, turned to the skyline view.",
+      "reference": "ph05 (Sep 2025); cmg12 (2025-2026); ph04 (Sep 2025)"
+    },
+    {
+      "id": "cityside_lawn_chair_5",
+      "kind": "chair",
+      "prop": "adirondack_chair",
+      "params": {},
+      "xz": [
+        -308.0,
+        383.0
+      ],
+      "yaw": 1.906,
+      "reason": "A movable blue Adirondack chair in a loose group on the lawn, turned to the skyline view.",
+      "reference": "ph05 (Sep 2025); cmg12 (2025-2026); ph04 (Sep 2025)"
+    },
+    {
+      "id": "cityside_lawn_chair_6",
+      "kind": "chair",
+      "prop": "adirondack_chair",
+      "params": {},
+      "xz": [
+        -305.8,
+        385.2
+      ],
+      "yaw": 2.156,
+      "reason": "A movable blue Adirondack chair in a loose group on the lawn, turned to the skyline view.",
+      "reference": "ph05 (Sep 2025); cmg12 (2025-2026); ph04 (Sep 2025)"
+    },
+    {
+      "id": "cityside_lawn_chair_7",
+      "kind": "chair",
+      "prop": "adirondack_chair",
+      "params": {},
+      "xz": [
+        -303.6,
+        382.6
+      ],
+      "yaw": 1.756,
+      "reason": "A movable blue Adirondack chair in a loose group on the lawn, turned to the skyline view.",
+      "reference": "ph05 (Sep 2025); cmg12 (2025-2026); ph04 (Sep 2025)"
+    },
+    {
+      "id": "cityside_lawn_chair_8",
+      "kind": "chair",
+      "prop": "adirondack_chair",
+      "params": {},
+      "xz": [
+        -307.0,
+        387.4
+      ],
+      "yaw": 2.406,
+      "reason": "A movable blue Adirondack chair in a loose group on the lawn, turned to the skyline view.",
+      "reference": "ph05 (Sep 2025); cmg12 (2025-2026); ph04 (Sep 2025)"
     }
   ]
 }

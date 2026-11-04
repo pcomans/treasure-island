@@ -1,13 +1,13 @@
 {
   "building_foundations": {
     "burial_margin_m": 0.02,
-    "exterior_segments": 4968,
+    "exterior_segments": 4975,
     "flat_roof_cells": 214,
     "maximum_height_deviation_m": 0,
     "maximum_positive_gap_m": 0,
     "maximum_roof_elevation_range_m": 0,
     "minimum_embed_m": -4.062,
-    "sample_points": 14904,
+    "sample_points": 14925,
     "shared_segments": 3,
     "tolerance_m": 0.001,
     "water_datum_m": 0,
@@ -68,7 +68,7 @@
     "maximum_clearance_m": 0.081,
     "maximum_serialization_tolerance_m": 0.01,
     "minimum_clearance_m": 0.019,
-    "sample_points": 206381
+    "sample_points": 244174
   },
   "raster_bbox_wgs84": [
     -122.380001708984,
@@ -115,7 +115,7 @@
       "z": -104.818
     },
     {
-      "elevation_m": 3.199,
+      "elevation_m": 2.997,
       "id": "04-southwest",
       "x": -293.543,
       "z": 335.72
@@ -205,5 +205,309 @@
       "z": 629.439
     }
   ],
+  "terrain_overrides": {
+    "basis": "production_inference",
+    "config": {
+      "path": "tools/config/terrain-overrides.json",
+      "sha256": "5944dc282f5edc819e4f7e534ac1ea00791e5bbdff60ab5e2a1ba2c25abf8b32"
+    },
+    "corrected_cells": 39,
+    "leaves": 1023,
+    "maximum_cut_m": 1.492,
+    "maximum_raise_m": 1.412,
+    "mesh": {
+      "cell_m": 32,
+      "min_leaf_m": 4,
+      "sample_m": 0.5,
+      "tolerance_m": 0.08
+    },
+    "neighbour_edge_vertices": 46,
+    "refined_cell_bounds_m": [
+      [
+        -320,
+        256,
+        -288,
+        288
+      ],
+      [
+        -352,
+        288,
+        -320,
+        320
+      ],
+      [
+        -320,
+        288,
+        -288,
+        320
+      ],
+      [
+        -288,
+        288,
+        -256,
+        320
+      ],
+      [
+        -384,
+        320,
+        -352,
+        352
+      ],
+      [
+        -352,
+        320,
+        -320,
+        352
+      ],
+      [
+        -320,
+        320,
+        -288,
+        352
+      ],
+      [
+        -288,
+        320,
+        -256,
+        352
+      ],
+      [
+        -352,
+        352,
+        -320,
+        384
+      ],
+      [
+        -320,
+        352,
+        -288,
+        384
+      ],
+      [
+        -288,
+        352,
+        -256,
+        384
+      ],
+      [
+        -256,
+        352,
+        -224,
+        384
+      ],
+      [
+        -352,
+        384,
+        -320,
+        416
+      ],
+      [
+        -320,
+        384,
+        -288,
+        416
+      ],
+      [
+        -288,
+        384,
+        -256,
+        416
+      ],
+      [
+        -256,
+        384,
+        -224,
+        416
+      ],
+      [
+        -320,
+        416,
+        -288,
+        448
+      ],
+      [
+        -288,
+        416,
+        -256,
+        448
+      ],
+      [
+        -256,
+        416,
+        -224,
+        448
+      ],
+      [
+        -224,
+        416,
+        -192,
+        448
+      ],
+      [
+        -320,
+        448,
+        -288,
+        480
+      ],
+      [
+        -288,
+        448,
+        -256,
+        480
+      ],
+      [
+        -256,
+        448,
+        -224,
+        480
+      ],
+      [
+        -224,
+        448,
+        -192,
+        480
+      ],
+      [
+        -288,
+        480,
+        -256,
+        512
+      ],
+      [
+        -256,
+        480,
+        -224,
+        512
+      ],
+      [
+        -224,
+        480,
+        -192,
+        512
+      ],
+      [
+        -288,
+        512,
+        -256,
+        544
+      ],
+      [
+        -256,
+        512,
+        -224,
+        544
+      ],
+      [
+        -224,
+        512,
+        -192,
+        544
+      ],
+      [
+        -256,
+        544,
+        -224,
+        576
+      ],
+      [
+        -224,
+        544,
+        -192,
+        576
+      ],
+      [
+        -256,
+        576,
+        -224,
+        608
+      ],
+      [
+        -224,
+        576,
+        -192,
+        608
+      ],
+      [
+        -192,
+        576,
+        -160,
+        608
+      ],
+      [
+        -224,
+        608,
+        -192,
+        640
+      ],
+      [
+        -192,
+        608,
+        -160,
+        640
+      ],
+      [
+        -224,
+        640,
+        -192,
+        672
+      ],
+      [
+        -192,
+        640,
+        -160,
+        672
+      ]
+    ],
+    "refined_cells": 39,
+    "refined_triangles": 2417,
+    "schema_version": "ti.terrain-overrides/1",
+    "sites": [
+      {
+        "edge_blend_m": 3,
+        "grade": {
+          "final_sweep_change_m": 0,
+          "free_nodes": 16132,
+          "kind": "harmonic"
+        },
+        "id": "cityside_park",
+        "name": "Cityside Park",
+        "regions": [
+          {
+            "id": "promenade",
+            "rule": "profile"
+          },
+          {
+            "id": "event_lawn",
+            "rule": "level"
+          },
+          {
+            "id": "z3_bioretention",
+            "rule": "sink"
+          },
+          {
+            "id": "z4_meadow",
+            "rule": "sink"
+          },
+          {
+            "id": "z7_bioretention",
+            "rule": "sink"
+          },
+          {
+            "id": "z7_swale",
+            "rule": "sink"
+          },
+          {
+            "id": "pump_station_pad",
+            "rule": "level"
+          },
+          {
+            "id": "z7_forebay",
+            "rule": "sink"
+          }
+        ],
+        "scope_area_m2": 23141
+      }
+    ]
+  },
   "vertical_datum": "NAVD 88"
 }

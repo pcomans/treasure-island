@@ -110,6 +110,7 @@ import {
   wallSurfaceMesh,
 } from "./lib/mesh-output.mjs";
 import { loadTerrainRaster } from "./lib/terrain-raster.mjs";
+import { loadTerrainOverrides, planTerrainOverrides } from "./lib/terrain-overrides.mjs";
 import {
   generateStreetDetail,
   loadStreetDetailStairFlights,
@@ -760,7 +761,11 @@ function containingLandFacet(facets, east, north) {
 function coherentDrapedSurfaceMesh(multiPolygon, facets, biasM, label) {
   const pieces = [];
   const audits = [];
+  const box = multiPolygonBounds(multiPolygon);
   for (const facet of facets) {
+    // Facets clear of the overlay's bounds cannot intersect it.
+    if (facet.bounds.max_x < box.min_x || facet.bounds.min_x > box.max_x ||
+      facet.bounds.max_y < box.min_y || facet.bounds.min_y > box.max_y) continue;
     const clipped = intersectMultiPolygons(multiPolygon, facet.geometry);
     if (clipped.length === 0 || multiPolygonArea(clipped) <= 1e-8) continue;
     const piece = terrainSurfaceMesh(
@@ -960,7 +965,7 @@ function updateFoundationAudit(store, segments, label) {
   }
 }
 
-function addChunkedTopSurface(store, object, style, terrain, sourceKeys = [object.row.source_key]) {
+function addChunkedTopSurface(store, object, style, terrain, sourceKeys = [object.row.source_key], terrainPlan = null) {
   for (const chunk of chunkRangeForGeometry(object.geometry)) {
     const clipped = geometryForChunk(object.geometry, chunk.x, chunk.z);
     if (clipped.length === 0 || multiPolygonArea(clipped) <= 1e-8) continue;
@@ -974,6 +979,7 @@ function addChunkedTopSurface(store, object, style, terrain, sourceKeys = [objec
         TERRAIN_MESH_GRID_SIZE_M,
         terrain.sampleTerrainEastNorth,
         label,
+        terrainPlan?.cellMesh ?? null,
       )
       : coherentDrapedSurfaceMesh(rounded, facets, style.elevation_m, label);
     const objectKey = `${object.logical_key}:${chunk.id}`;
@@ -1371,7 +1377,30 @@ function buildBuildings(store, objects) {
   invariant(buildings.every((object) => object.physical_object_keys.size > 0), "At least one building has no physical geometry");
 }
 
-function buildChunks(objects, boundary, terrain, shorelinePlan) {
+// The exact rounded land polygon the land pass meshes for one terrain grid cell
+// (addChunkedTopSurface, then griddedTerrainSurfaceMesh), for terrain overrides.
+function landCellPolygons(land) {
+  const chunks = new Map();
+  return (west, south) => {
+    const x = Math.floor(west / CHUNK_SIZE_M);
+    const z = Math.floor(-(south + TERRAIN_MESH_GRID_SIZE_M) / CHUNK_SIZE_M);
+    const id = chunkId(x, z);
+    if (!chunks.has(id)) {
+      const clipped = geometryForChunk(land.geometry, x, z);
+      chunks.set(id, clipped.length === 0 || multiPolygonArea(clipped) <= 1e-8
+        ? []
+        : roundedCanonicalGeometry(clipped, `${land.row.source_key}/${id}`));
+    }
+    const rounded = chunks.get(id);
+    if (rounded.length === 0) return [];
+    return intersectMultiPolygons(
+      rounded,
+      rectangleMultiPolygon(west, south, west + TERRAIN_MESH_GRID_SIZE_M, south + TERRAIN_MESH_GRID_SIZE_M),
+    );
+  };
+}
+
+function buildChunks(objects, boundary, terrain, shorelinePlan, terrainPlan) {
   const store = chunkStore();
   store.road_batch_audits = [];
   store.pavement_skin_audits = [];
@@ -1381,7 +1410,7 @@ function buildChunks(objects, boundary, terrain, shorelinePlan) {
     feature_kind: "land_ground",
     material_key: "land_ground",
     elevation_m: 0,
-  }, terrain, [PLAYABLE_BOUNDARY_SOURCE_KEY, SHARED_COASTLINE_SOURCE_KEY]);
+  }, terrain, [PLAYABLE_BOUNDARY_SOURCE_KEY, SHARED_COASTLINE_SOURCE_KEY], terrainPlan);
   for (const key of land.physical_object_keys) coastline.physical_object_keys.add(key);
   for (const id of land.chunk_ids) coastline.chunk_ids.add(id);
   store.land_facets = allLandFacets(store.chunks);
@@ -1998,7 +2027,17 @@ function main() {
     const streetConfig = loadStreetDetailZones(projectRoot);
     const shorelineConfig = loadShorelineConfig(projectRoot);
     const shorelinePlan = planShoreline({ config: shorelineConfig.config, boundary, playableObjects, rawOsm: loaded.rawOsm });
-    const chunks = buildChunks(playableObjects, boundary, terrain, shorelinePlan);
+    // Local corrections of the land where the 2023 raster predates what was built.
+    const terrainPlan = planTerrainOverrides({
+      loaded: loadTerrainOverrides(projectRoot),
+      playableObjects,
+      rawOsm: loaded.rawOsm,
+      boundary,
+      sampler: terrain.sampleTerrainEastNorth,
+      cellSizeM: TERRAIN_MESH_GRID_SIZE_M,
+      cellPolygon: landCellPolygons(playableObjects.get(PLAYABLE_BOUNDARY_SOURCE_KEY)),
+    });
+    const chunks = buildChunks(playableObjects, boundary, terrain, shorelinePlan, terrainPlan);
     // The spawn reads only land and roads, so it is fixed before street ground lands.
     const spawn = findInitialSpawn(boundary, playableObjects, loaded.rawOsm, loaded.rawSources, chunks);
     const spawnXZ = [spawn.origin[0], spawn.origin[2]];
@@ -2012,6 +2051,7 @@ function main() {
       facetElevation,
       spawnXZ,
       hardShapes,
+      normalAt: terrainPlan.smoothNormalAt,
     });
     for (const [id, records] of streetGround.records) {
       const chunk = chunks.get(id);
@@ -2055,13 +2095,15 @@ function main() {
       elevation_m: terrainElevationFromChunks(chunks, anchor.x, -anchor.z),
     }));
     terrainDocument.playable_surface_conformance = chunks.surface_conformance;
+    terrainDocument.terrain_overrides = terrainPlan.document();
     terrainDocument.building_foundations = chunks.foundation_audit;
 
     writeArtifact(stagingRoot, "coverage-ledger.csv", serializeCsv(coverage, COVERAGE_HEADERS));
     writeArtifact(stagingRoot, "context.json", context.document);
     writeArtifact(stagingRoot, "logical-objects.json", logicalObjects);
     writeArtifact(stagingRoot, "terrain.json", terrainDocument);
-    writeArtifact(stagingRoot, "street_detail.json", streetDetail);
+    // Compact, like the shoreline: planted beds make it mostly thousands of small rows.
+    writeArtifact(stagingRoot, "street_detail.json", `${JSON.stringify(sortJson(streetDetail))}\n`);
     // Compact: the shoreline is mostly number arrays, and it grows segment by segment.
     writeArtifact(stagingRoot, "shoreline.json", `${JSON.stringify(sortJson(shoreline.document))}\n`);
     writeArtifact(stagingRoot, "qa/pavement-skin.json", chunks.pavement_skin);
