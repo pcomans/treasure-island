@@ -204,9 +204,9 @@ const STAKE_RADIUS_M := 0.03
 ## its width), so no two read as the same clipped ball.
 const OAKS := [
 	# A low, wide one; a narrow upright one; a broad, lopsided one.
-	{"seed": 51, "height": 2.3, "crown": 2.5, "trunk_radius": 0.04, "clear": 0.3, "stems": 2, "lobes": 3, "lopsided": 0.18, "cards": 75},
-	{"seed": 52, "height": 3.4, "crown": 2.0, "trunk_radius": 0.05, "clear": 0.4, "stems": 3, "lobes": 3, "lopsided": 0.1, "cards": 85},
-	{"seed": 53, "height": 4.0, "crown": 3.4, "trunk_radius": 0.065, "clear": 0.45, "stems": 2, "lobes": 6, "lopsided": 0.28, "cards": 130},
+	{"seed": 51, "height": 2.3, "crown": 2.5, "trunk_radius": 0.04, "clear": 0.3, "stems": 2, "lobes": 3, "lopsided": 0.18, "cards": 120},
+	{"seed": 52, "height": 3.4, "crown": 2.0, "trunk_radius": 0.05, "clear": 0.4, "stems": 3, "lobes": 3, "lopsided": 0.1, "cards": 130},
+	{"seed": 53, "height": 4.0, "crown": 3.4, "trunk_radius": 0.065, "clear": 0.45, "stems": 2, "lobes": 6, "lopsided": 0.28, "cards": 210},
 ]
 ## Cityside Park's low plants as they stand in late November, built in layers
 ## (_build_low): crossed side-view cards for clumps, shrubs' wands and flower
@@ -219,11 +219,11 @@ const REEDGRASSES := [
 	# Calamagrostis nutkaensis (iNat 352893747, 352887700, Apr 2026): a coarse dark
 	# green fountain under a few weathered grey-tan plumes.
 	{"seed": 61, "lean": 0.06, "layers": [{"kind": "crossed", "cell": "reedgrass", "cards": 4, "width": 0.85, "height": 0.8, "splay_deg": 10.0, "flop_deg": 22.0, "flutter": 0.06},
-		{"kind": "cap", "cell": "tussock_top", "width": 0.54, "height": 0.312, "drop": 0.5}]},
+		{"kind": "cap", "cell": "tussock_top", "width": 0.54, "height": 0.265, "drop": 0.5}]},
 	{"seed": 62, "lean": 0.1, "layers": [{"kind": "crossed", "cell": "reedgrass", "cards": 5, "width": 1.05, "height": 1.0, "splay_deg": 10.0, "flop_deg": 28.0, "flutter": 0.065},
-		{"kind": "cap", "cell": "tussock_top", "width": 0.662, "height": 0.374, "drop": 0.5}]},
+		{"kind": "cap", "cell": "tussock_top", "width": 0.662, "height": 0.318, "drop": 0.5}]},
 	{"seed": 63, "lean": 0.08, "layers": [{"kind": "crossed", "cell": "reedgrass", "cards": 5, "width": 1.3, "height": 1.2, "splay_deg": 12.0, "flop_deg": 28.0, "flutter": 0.07},
-		{"kind": "cap", "cell": "tussock_top", "width": 0.806, "height": 0.437, "drop": 0.5}]},
+		{"kind": "cap", "cell": "tussock_top", "width": 0.806, "height": 0.371, "drop": 0.5}]},
 	# A drift of four clumps grown together, about 2.2 m across.
 	{"seed": 110, "drift": [[0.0, 0.0, 2, 1.0, 0.0], [0.85, 0.35, 1, 0.95, 1.7], [-0.75, 0.45, 0, 1.05, 3.1], [0.2, -0.85, 1, 0.9, 4.4]]},
 ]
@@ -231,11 +231,11 @@ const SEDGES := [
 	# Carex densa (iNat 352894107, Apr 2026): a soft green tussock in the mulch.
 	# Each size a slightly different green, so a drift is not one colour.
 	{"seed": 64, "hue": 0.14, "layers": [{"kind": "crossed", "cell": "sedge", "cards": 4, "width": 0.55, "height": 0.3, "splay_deg": 18.0, "flutter": 0.035, "tint": Color(0.96, 0.98, 0.84)},
-		{"kind": "cap", "cell": "tussock_top", "width": 0.374, "height": 0.156, "drop": 0.5, "tint": Color(0.96, 0.98, 0.84)}]},
+		{"kind": "cap", "cell": "tussock_top", "width": 0.374, "height": 0.133, "drop": 0.5, "tint": Color(0.96, 0.98, 0.84)}]},
 	{"seed": 65, "hue": 0.14, "lean": 0.08, "layers": [{"kind": "crossed", "cell": "sedge", "cards": 4, "width": 0.75, "height": 0.45, "splay_deg": 18.0, "flop_deg": 30.0, "flutter": 0.04},
-		{"kind": "cap", "cell": "tussock_top", "width": 0.504, "height": 0.218, "drop": 0.5}]},
+		{"kind": "cap", "cell": "tussock_top", "width": 0.504, "height": 0.185, "drop": 0.5}]},
 	{"seed": 66, "hue": 0.14, "lean": 0.06, "layers": [{"kind": "crossed", "cell": "sedge", "cards": 5, "width": 0.95, "height": 0.58, "splay_deg": 16.0, "flop_deg": 34.0, "flutter": 0.045, "tint": Color(0.82, 0.88, 0.85)},
-		{"kind": "cap", "cell": "tussock_top", "width": 0.634, "height": 0.281, "drop": 0.5, "tint": Color(0.82, 0.88, 0.85)}]},
+		{"kind": "cap", "cell": "tussock_top", "width": 0.634, "height": 0.239, "drop": 0.5, "tint": Color(0.82, 0.88, 0.85)}]},
 	# A drift of five tussocks about 1.5 m across.
 	{"seed": 67, "drift": [[0.0, 0.0, 1, 1.0, 0.0], [0.55, 0.25, 0, 1.1, 1.3], [-0.5, 0.3, 1, 0.9, 2.1], [0.15, -0.55, 2, 0.85, 0.7], [-0.35, -0.45, 0, 1.0, 3.0]]},
 	# A drift of twelve tussocks of every size, about 2.5 m across.
@@ -253,22 +253,22 @@ const RUSHES := [
 const BRONZE_GRASSES := [
 	# The copper clumps among the green ones in the stormwater meadow (ph08, Sep 2025).
 	{"seed": 71, "layers": [{"kind": "crossed", "cell": "bronze", "cards": 3, "width": 0.5, "height": 0.3, "splay_deg": 16.0, "flutter": 0.04},
-		{"kind": "cap", "cell": "bronze_top", "width": 0.331, "height": 0.14, "drop": 0.5}]},
+		{"kind": "cap", "cell": "bronze_top", "width": 0.331, "height": 0.119, "drop": 0.5}]},
 	{"seed": 72, "lean": 0.08, "layers": [{"kind": "crossed", "cell": "bronze", "cards": 4, "width": 0.62, "height": 0.4, "splay_deg": 16.0, "flop_deg": 30.0, "flutter": 0.045},
-		{"kind": "cap", "cell": "bronze_top", "width": 0.418, "height": 0.187, "drop": 0.5}]},
+		{"kind": "cap", "cell": "bronze_top", "width": 0.418, "height": 0.159, "drop": 0.5}]},
 	{"seed": 73, "lean": 0.06, "layers": [{"kind": "crossed", "cell": "bronze", "cards": 4, "width": 0.75, "height": 0.5, "splay_deg": 14.0, "flop_deg": 30.0, "flutter": 0.05},
-		{"kind": "cap", "cell": "bronze_top", "width": 0.504, "height": 0.234, "drop": 0.5}]},
+		{"kind": "cap", "cell": "bronze_top", "width": 0.504, "height": 0.199, "drop": 0.5}]},
 	# A drift of five tufts about 1.6 m across.
 	{"seed": 112, "drift": [[0.0, 0.0, 1, 1.0, 0.0], [0.5, 0.25, 0, 1.1, 1.3], [-0.48, 0.3, 2, 0.9, 2.6], [0.1, -0.5, 0, 1.0, 3.9], [-0.4, -0.38, 1, 0.9, 5.1]]},
 ]
 const BLUE_EYED_GRASSES := [
 	# Sisyrinchium bellum (iNat 387980572, Aug 2026): bluish iris-like fans, a flower or none in November.
 	{"seed": 74, "layers": [{"kind": "crossed", "cell": "blue_eyed", "cards": 3, "width": 0.22, "height": 0.2, "splay_deg": 14.0, "flutter": 0.02},
-		{"kind": "cap", "cell": "tussock_top", "width": 0.13, "height": 0.078, "drop": 0.5, "tint": Color(0.8, 0.9, 0.92)}]},
+		{"kind": "cap", "cell": "tussock_top", "width": 0.13, "height": 0.066, "drop": 0.5, "tint": Color(0.8, 0.9, 0.92)}]},
 	{"seed": 75, "layers": [{"kind": "crossed", "cell": "blue_eyed", "cards": 3, "width": 0.28, "height": 0.25, "splay_deg": 14.0, "flutter": 0.025},
-		{"kind": "cap", "cell": "tussock_top", "width": 0.158, "height": 0.094, "drop": 0.5, "tint": Color(0.8, 0.9, 0.92)}]},
+		{"kind": "cap", "cell": "tussock_top", "width": 0.158, "height": 0.08, "drop": 0.5, "tint": Color(0.8, 0.9, 0.92)}]},
 	{"seed": 76, "lean": 0.08, "layers": [{"kind": "crossed", "cell": "blue_eyed", "cards": 3, "width": 0.34, "height": 0.3, "splay_deg": 14.0, "flop_deg": 30.0, "flutter": 0.025},
-		{"kind": "cap", "cell": "tussock_top", "width": 0.187, "height": 0.109, "drop": 0.5, "tint": Color(0.8, 0.9, 0.92)}]},
+		{"kind": "cap", "cell": "tussock_top", "width": 0.187, "height": 0.093, "drop": 0.5, "tint": Color(0.8, 0.9, 0.92)}]},
 	# A clump of six tufts grown together, about 0.6 m across.
 	{"seed": 77, "drift": [[0.0, 0.0, 1, 1.0, 0.0], [0.16, 0.08, 0, 1.1, 1.2], [-0.15, 0.1, 2, 0.9, 2.3], [0.05, -0.17, 0, 1.0, 3.4], [-0.12, -0.14, 1, 0.85, 4.5], [0.22, -0.12, 0, 0.9, 5.6]]},
 ]
@@ -342,19 +342,17 @@ const SAGES := [
 ]
 const BUCKWHEATS := [
 	# Eriogonum fasciculatum (iNat 352896292): a fine needle-leaf mound with dry
-	# rust heads held on stems above it.
+	# rust heads held on stems above it; no inner shell (from low views its dark
+	# floor read as a hole), the side-view mound and the cap carry the volume.
 	{"seed": 98, "lean": 0.05, "layers": [{"kind": "litter", "cell": "litter", "radius": 0.45},
-		{"kind": "shell", "cell": "buckwheat", "cards": 5, "card": 0.6, "width": 0.45, "height": 0.25, "tint": Color(0.7, 0.72, 0.66)},
 		{"kind": "crossed", "cell": "buckwheat_mound", "cards": 4, "width": 0.65, "height": 0.45, "splay_deg": 12.0, "flop_deg": 24.0, "flutter": 0.03},
 		{"kind": "cap", "cell": "buckwheat", "width": 0.45, "height": 0.32, "tint": Color(0.74, 0.76, 0.7)},
 		{"kind": "crossed", "cell": "buckwheat_stalks", "cards": 1, "width": 0.42, "height": 0.52, "base": 0.14, "flutter": 0.035}]},
 	{"seed": 99, "lean": 0.06, "layers": [{"kind": "litter", "cell": "litter", "radius": 0.6},
-		{"kind": "shell", "cell": "buckwheat", "cards": 6, "card": 0.56, "width": 0.65, "height": 0.35, "tint": Color(0.7, 0.72, 0.66)},
 		{"kind": "crossed", "cell": "buckwheat_mound", "cards": 5, "width": 0.95, "height": 0.65, "splay_deg": 14.0, "flop_deg": 26.0, "flutter": 0.035},
 		{"kind": "cap", "cell": "buckwheat", "width": 0.65, "height": 0.46, "tint": Color(0.74, 0.76, 0.7)},
 		{"kind": "crossed", "cell": "buckwheat_stalks", "cards": 1, "width": 0.58, "height": 0.72, "base": 0.2, "flutter": 0.04}]},
 	{"seed": 100, "lean": 0.05, "layers": [{"kind": "litter", "cell": "litter", "radius": 0.8},
-		{"kind": "shell", "cell": "buckwheat", "cards": 7, "card": 0.52, "width": 0.85, "height": 0.45, "tint": Color(0.7, 0.72, 0.66)},
 		{"kind": "crossed", "cell": "buckwheat_mound", "cards": 5, "width": 1.25, "height": 0.85, "splay_deg": 14.0, "flop_deg": 28.0, "flutter": 0.04},
 		{"kind": "cap", "cell": "buckwheat", "width": 0.85, "height": 0.6, "tint": Color(0.74, 0.76, 0.7)},
 		{"kind": "crossed", "cell": "buckwheat_stalks", "cards": 2, "width": 0.72, "height": 0.92, "base": 0.26, "splay_deg": 10.0, "flutter": 0.045}]},
@@ -1442,7 +1440,7 @@ func _gum_spray_card(s: Surf, spray: Dictionary, azimuth: float, size: float, cr
 
 ## A young island oak: two or three stems from the ground, forking low into
 ## scaffold limbs, under a dense, irregular, rounded crown: a main lobe and a
-## few smaller ones round it, each of leaf-cluster cards round an ellipsoid,
+## few smaller ones round it, each filled with crossed leaf-cluster cards,
 ## darker underneath and inside, so the outline is lumpy rather than a clipped ball.
 func _build_oak(p: Dictionary) -> Dictionary:
 	var rng := RandomNumberGenerator.new()
@@ -1478,30 +1476,42 @@ func _build_oak(p: Dictionary) -> Dictionary:
 		var origin := Vector3(0.0, clear * rng.randf_range(0.9, 1.08), 0.0)
 		var tip: Vector3 = (lobe.center as Vector3).lerp(origin, 0.25)
 		limbs.append({"points": PackedVector3Array([origin, origin.lerp(tip, 0.5) + Vector3.UP * 0.12, tip]), "radii": PackedFloat32Array([trunk_radius * 0.6, trunk_radius * 0.4, 0.01])})
+	# Leaf clusters through the crown's lobes, each of crossed cards: one facing
+	# out from the lobe and one turned a quarter about the vertical (a cluster on
+	# the crown's top, whose first card lies flat, gets two upright ones), so from
+	# any side one card of a cluster faces the viewer and the outline is leaves,
+	# not card edges. Most sit near the outside, some deeper in and darker.
 	var cards := []
 	var total := 0.0
 	for lobe: Dictionary in lobes:
 		total += pow((lobe.half as Vector3).x, 2.0)
+	var cluster := 0
 	for lobe: Dictionary in lobes:
 		var lobe_center: Vector3 = lobe.center
 		var lobe_half: Vector3 = lobe.half
-		var count := maxi(6, int(round(float(p.cards) * pow(lobe_half.x, 2.0) / total)))
+		var count := maxi(4, int(round(float(p.cards) * 0.5 * pow(lobe_half.x, 2.0) / total)))
 		for i in count:
 			# Round the lobe from its top to its underside, the very bottom left open.
 			var t := (float(i) + rng.randf_range(0.2, 0.8)) / count
-			var polar := lerpf(0.1, 2.45, t)
+			var polar := lerpf(0.15, 2.4, t)
 			var azimuth := phase + i * GOLDEN_ANGLE + rng.randf_range(-0.3, 0.3)
 			var out := Vector3(cos(azimuth), 0.0, sin(azimuth))
 			var unit := out * sin(polar) + Vector3.UP * cos(polar)
-			var normal := Vector3(unit.x / lobe_half.x, unit.y / lobe_half.y, unit.z / lobe_half.z).normalized()
-			cards.append({"center": lobe_center + Vector3(unit.x * lobe_half.x, unit.y * lobe_half.y, unit.z * lobe_half.z) * rng.randf_range(0.78, 0.98), "normal": normal, "out": out,
-				"size": minf(0.75, lobe_half.x * rng.randf_range(0.55, 0.75)), "spin": rng.randf_range(-0.6, 0.6), "shade": rng.randf_range(0.88, 1.06)})
-	for i in 6:
-		# A few inside the crown fill the gaps between the outer clusters.
-		var unit := Vector3(rng.randf_range(-1.0, 1.0), rng.randf_range(-0.6, 0.8), rng.randf_range(-1.0, 1.0)).normalized()
-		var azimuth := rng.randf() * TAU
-		cards.append({"center": center + Vector3(unit.x * half.x, unit.y * half.y, unit.z * half.z) * 0.45, "normal": unit, "out": Vector3(cos(azimuth), 0.0, sin(azimuth)),
-			"size": minf(0.8, crown_width * 0.3), "spin": rng.randf_range(-0.6, 0.6), "shade": 0.78})
+			var depth := lerpf(0.5, 0.86, sqrt(rng.randf()))
+			var position := lobe_center + Vector3(unit.x * lobe_half.x, unit.y * lobe_half.y, unit.z * lobe_half.z) * depth
+			var first := (Vector3(unit.x / lobe_half.x, unit.y / lobe_half.y, unit.z / lobe_half.z).normalized() + Vector3(rng.randf_range(-0.3, 0.3), rng.randf_range(-0.2, 0.3), rng.randf_range(-0.3, 0.3))).normalized()
+			var normals: Array[Vector3] = [first]
+			if absf(first.y) < 0.7:
+				normals.append(first.rotated(Vector3.UP, PI * 0.5))
+			else:
+				var upright := first.rotated(first.cross(out).normalized(), PI * 0.5)
+				normals.append(upright)
+				normals.append(upright.rotated(Vector3.UP, PI * 0.5))
+			var size := minf(0.62, lobe_half.x * rng.randf_range(0.48, 0.62))
+			var shade := rng.randf_range(0.88, 1.04) * lerpf(0.72, 1.0, (depth - 0.5) / 0.36)
+			for normal: Vector3 in normals:
+				cards.append({"center": position, "normal": normal, "out": out, "size": size, "spin": rng.randf_range(-0.6, 0.6), "shade": shade, "cluster": cluster})
+			cluster += 1
 	var crown_low := center.y - half.y
 	var meshes: Array[ArrayMesh] = []
 	for lod in 2:
@@ -1517,10 +1527,10 @@ func _build_oak(p: Dictionary) -> Dictionary:
 				colors.append(Color(ao, ao, ao))
 				winds.append(Vector2(sway_top * pow(clampf(point.y / height, 0.0, 1.0), 2.0), 0.0))
 			_tube(bark, points, branch.radii, colors, winds, (8 if lod == 0 else 5) if branch in stems else 4, 1.0, OAK_BARK_M)
-		for index in cards.size():
-			if lod == 1 and index % 2 == 1:
+		for card: Dictionary in cards:
+			# The far level keeps every other cluster, whole and a little larger.
+			if lod == 1 and int(card.cluster) % 2 == 1:
 				continue
-			var card: Dictionary = cards[index]
 			_shell_card(leaves, IDENTITY_FRAME, card.center, card.normal, card.out, float(card.size) * (1.3 if lod == 1 else 1.0), 0.0, OAK_CLUSTER, float(card.spin), center,
 				crown_low, height, float(card.shade), Color.WHITE, 1.0, Vector2(sway_top, 0.015))
 		bark.commit(mesh, material("oak_bark"))
@@ -1651,10 +1661,13 @@ func _low_layers(p: Dictionary, seed: int, frame: Dictionary, fade_m: float, sur
 			"dome":
 				_dome_layer(surf, rng, layer, cell[1], frame, alpha)
 			"cap":
-				# Domed over the clump, its rim dipping into the side cards, swaying with the blade tips.
+				# Domed over the clump, its rim dipping into the side cards, swaying with
+				# the blade tips; shaded like the clump's interior at that height, so from
+				# eye height it reads as more of the clump, not a pale disc inside it.
 				var at := float(layer.height)
 				var tint: Color = layer.get("tint", Color.WHITE)
-				_dish(surf, frame, cell[1], at, float(layer.width) * 0.5, at * float(layer.get("drop", 0.35)), Color(0.95 * tint.r, 0.95 * tint.g, 0.95 * tint.b, alpha), rng.randf() * TAU,
+				var cap_shade := float(layer.get("shade", 0.62))
+				_dish(surf, frame, cell[1], at, float(layer.width) * 0.5, at * float(layer.get("drop", 0.35)), Color(cap_shade * tint.r, cap_shade * tint.g, cap_shade * tint.b, alpha), rng.randf() * TAU,
 					Vector2(0.0, float(layer.get("flutter", 0.04))))
 			"litter":
 				var litter := float(layer.get("shade", 0.8))
@@ -1754,21 +1767,22 @@ func _dome_layer(s: Surf, rng: RandomNumberGenerator, layer: Dictionary, cell: R
 	var radius := float(layer.width) * 0.5
 	var height := float(layer.height)
 	var sides := 12
-	var rings := 4
 	var lumps := [rng.randf_range(0.04, 0.09), rng.randf() * TAU, rng.randf_range(0.03, 0.06), rng.randf() * TAU]
 	var spin := rng.randf() * TAU
 	var heart := Vector3(0.0, height * 0.2, 0.0)
 	var top := _low_add(s, frame, Vector3.UP * height, Vector3.UP, cell.get_center(), Color(1.0, 1.0, 1.0, alpha), Vector2(0.0, 0.004))
 	var previous := PackedInt32Array()
-	for ring in range(1, rings + 1):
-		# Down to just below the ground, so the rim never floats.
-		var polar := lerpf(0.0, PI * 0.53, float(ring) / rings)
+	# A paraboloid that meets the ground at a slant (the top view laid over a
+	# vertical skirt would streak down it), its last ring just below the ground.
+	var fractions := [0.3, 0.55, 0.75, 0.9, 1.0, 1.06]
+	for ring in range(1, fractions.size() + 1):
+		var f := float(fractions[ring - 1])
 		var current := PackedInt32Array()
 		for k in sides:
 			var azimuth := TAU * k / sides
 			var bulge := 1.0 + float(lumps[0]) * sin(3.0 * azimuth + float(lumps[1])) + float(lumps[2]) * sin(5.0 * azimuth + float(lumps[3]))
 			var out := Vector3(cos(azimuth), 0.0, sin(azimuth))
-			var position := out * (radius * bulge * sin(polar)) + Vector3.UP * (height * cos(polar))
+			var position := out * (radius * bulge * f) + Vector3.UP * maxf(height * (1.0 - f * f), -0.03)
 			var normal := ((position - heart).normalized() + Vector3.UP * 0.3).normalized()
 			# The image laid on from above, a little smaller than the dome so its bristly rim falls on the dome's foot.
 			var uv := cell.get_center() + Vector2(position.x, position.z).rotated(spin) / (radius * 2.3) * cell.size

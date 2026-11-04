@@ -64,17 +64,18 @@ const LOW_GRADES := {
 	"bronze_grass.png": [Color(0.82, 0.74, 0.66), 0.6],
 	"sagebrush_foliage.png": [Color(0.8, 0.86, 0.78), 0.0],
 	"sagebrush_side.png": [Color(0.74, 0.84, 0.72), 0.0],
-	"litter.png": [Color(0.78, 0.74, 0.7), 0.35],
+	"litter.png": [Color(0.64, 0.62, 0.6), 0.55],
 	"woolly_stalks.png": [Color(0.78, 0.72, 0.66), 0.55],
 	"buckwheat_stalks.png": [Color(0.84, 0.74, 0.64), 0.7],
+	"buckwheat_foliage.png": [Color(0.8, 0.76, 0.68), 0.55],
 	"buckwheat_side.png": [Color(0.82, 0.84, 0.78), 0.6],
 	"monkeyflower_foliage.png": [Color(0.86, 0.9, 0.82), 0.2],
 	"tansy_foliage.png": [Color(0.84, 0.88, 0.8), 0.25],
 	"daisy_foliage.png": [Color(0.82, 0.86, 0.82), 0.45],
 	"woolly_foliage.png": [Color(0.74, 0.8, 0.72), 0.15],
-	"tussock_top.png": [Color(0.9, 0.95, 0.85), 0.2],
+	"tussock_top.png": [Color(0.8, 0.9, 0.78), 0.3],
 	"bronze_top.png": [Color(0.9, 0.85, 0.8), 0.3],
-	"thrift_cushion.png": [Color(0.86, 0.9, 0.86), 0.1],
+	"thrift_cushion.png": [Color(0.84, 0.88, 0.84), 0.3],
 }
 
 
@@ -226,7 +227,7 @@ func _pack_perennial(images: Dictionary, errors: Array[String]) -> void:
 		if LOW_GRADES.has(name):
 			_grade(cell, LOW_GRADES[name][0], LOW_GRADES[name][1])
 		if name in CAP_CELLS:
-			_radial_fade(cell, 0.22, 0.48)
+			_radial_fade(cell, 0.14, 0.36)
 		atlas.blit_rect(cell, Rect2i(Vector2i.ZERO, cell.get_size()), Vector2i(512 * (index % 4) + CELL_MARGIN, 512 * (index / 4) + CELL_MARGIN))
 	_fill_transparent(atlas)
 	_save(atlas, OUT + "perennial_atlas.png", errors)
@@ -239,11 +240,14 @@ func _pack_young_trees(images: Dictionary, errors: Array[String]) -> void:
 	var atlas := Image.create_empty(1024, 512, false, Image.FORMAT_RGBA8)
 	for index in 2:
 		var name: String = ["gum_leaves.png", "oak_leaves.png"][index]
-		var cell := _keyed_fit(images[name], 512 - 2 * CELL_MARGIN, 512 - 2 * CELL_MARGIN, MAGENTA)
+		# The oak's round cluster is kept clear of the cell's edges, so a card
+		# never shows a straight cut through the leaves.
+		var inset := CELL_MARGIN + (48 if name == "oak_leaves.png" else 0)
+		var cell := _keyed_fit(images[name], 512 - 2 * inset, 512 - 2 * inset, MAGENTA)
 		# Sydney blue gum crowns read grey-green (ph10), with few bronze young leaves.
 		if name == "gum_leaves.png":
-			_grade(cell, Color(0.9, 0.96, 0.94), 0.4)
-		atlas.blit_rect(cell, Rect2i(Vector2i.ZERO, cell.get_size()), Vector2i(512 * index + CELL_MARGIN, CELL_MARGIN))
+			_grade(cell, Color(0.86, 0.94, 0.95), 0.5)
+		atlas.blit_rect(cell, Rect2i(Vector2i.ZERO, cell.get_size()), Vector2i(512 * index + inset, inset))
 	_fill_transparent(atlas)
 	_save(atlas, OUT + "young_tree_foliage_atlas.png", errors)
 	_save_barks(images, {
