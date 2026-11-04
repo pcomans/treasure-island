@@ -193,8 +193,12 @@ export const MATERIAL_KEYS = Object.freeze([
   "terrain_sand",
   "terrain_wetland",
   "yard_asphalt",
+  "yard_concrete",
   "yard_gravel",
   "yard_gravel_pale",
+  "yard_pond",
+  "yard_sand_pale",
+  "yard_soil_dark",
 ]);
 
 export const COVERAGE_HEADERS = Object.freeze([

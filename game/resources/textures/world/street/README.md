@@ -99,3 +99,14 @@ carries SELF STORAGE in blue DejaVu Sans Bold capitals on the white band, as
 legible in that photo; the lower half is plain. Each flag is drawn at its 5:3
 shape (480 x 288) and the pair is packed into the square. The drawing script is
 kept outside Git with the clutter-kit work notes.
+
+More yard ground, generated 2026-11-04 the same way (three images, one per call,
+text prompts only; no photograph was given to the generator or copied) and resized
+from 1254 to 512 px with ImageMagick; each tiles seamlessly (the sand and soil over
+2 m, the pond over 5 m of world UV):
+
+| File | Use | Source prompt (short) |
+|---|---|---|
+| `yard_sand_pale.png` | yard_sand_pale: the pale cream graded sand of the earthworks pads (#11's pad, #13's sand square; May 2026 aerial) | seamless pale cream graded construction sand fill, low contrast |
+| `yard_soil_dark.png` | yard_soil_dark: dark excavated soil in the pits of the 9th St / Avenue H site (May 2026 aerial) | seamless dark damp excavated construction soil, bucket scrape marks |
+| `yard_pond.png` | yard_pond: the shallow murky ponds on #11's pad (May 2026 aerial) | seamless murky green-grey shallow pond water from above, matte |

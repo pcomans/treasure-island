@@ -231,7 +231,7 @@
       "sha256": "f6fd17666df382f89b51dff1b5a3b906e1c17fdc36d4af3e1aa4ecf4aad817a5"
     }
   ],
-  "content_sha256": "43c25bcbd7523cbdd1c46759d22bf4aa28326256e55783365f18e29261de975f",
+  "content_sha256": "375f9079e4545fe697106a24010c3271e0b331d9374f1d1eb2dc47078a72cbac",
   "context": {
     "bytes": 675130,
     "path": "context.json",
@@ -529,9 +529,9 @@
       "sha256": "e4816438dac07ff0983d9e481e626c698e6749f09b771f566f900ce56428031d"
     },
     {
-      "bytes": 3254216,
+      "bytes": 3254286,
       "path": "street_detail.json",
-      "sha256": "d6071d607e4916dac49d30909ca576d1691c6e2d3c949047a16212860aed79ec"
+      "sha256": "75933c3bdeb817c90e496fc3eb723425e20d63bb05e21a8cd0fb46d85508ba64"
     },
     {
       "bytes": 13914,
@@ -596,8 +596,12 @@
     "terrain_sand",
     "terrain_wetland",
     "yard_asphalt",
+    "yard_concrete",
     "yard_gravel",
-    "yard_gravel_pale"
+    "yard_gravel_pale",
+    "yard_pond",
+    "yard_sand_pale",
+    "yard_soil_dark"
   ],
   "playable_boundary": {
     "components": [
@@ -1195,9 +1199,9 @@
     }
   },
   "street_detail": {
-    "bytes": 3254216,
+    "bytes": 3254286,
     "path": "street_detail.json",
-    "sha256": "d6071d607e4916dac49d30909ca576d1691c6e2d3c949047a16212860aed79ec"
+    "sha256": "75933c3bdeb817c90e496fc3eb723425e20d63bb05e21a8cd0fb46d85508ba64"
   },
   "terrain": {
     "bytes": 13914,
