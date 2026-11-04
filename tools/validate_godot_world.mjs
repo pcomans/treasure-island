@@ -58,7 +58,9 @@ import {
   STREET_DETAIL_SOURCES,
 } from "./lib/street-detail-generation.mjs";
 import { CAR_BODY_NAMES, CAR_FINISHES, CAR_PAINTS, MAX_TWIST_M, STREET_CLUTTER_PROPS, visibleGroundIndex } from "./lib/street-clutter-generation.mjs";
-import { fenceHeight, fenceParamsError, STREET_FENCE_GATE_STYLES, STREET_FENCE_INSIDE, STREET_FENCE_SCREENS, STREET_FENCE_TYPES } from "./lib/street-fence-generation.mjs";
+import {
+  fenceHeight, fenceParamsError, STREET_FENCE_BANNER_TYPES, STREET_FENCE_GATE_HINGES, STREET_FENCE_GATE_STYLES, STREET_FENCE_GATED_TYPES, STREET_FENCE_INSIDE, STREET_FENCE_SCREENS, STREET_FENCE_TYPES,
+} from "./lib/street-fence-generation.mjs";
 import { MAX_LEG_DROP_M, MAX_REST_TILT_RAD, restTilt, STREET_FURNITURE_FEET, STREET_FURNITURE_PROPS } from "./lib/street-furniture-generation.mjs";
 import { YARD_KIT_KEYS, yardPropFootprint, yardPropParamsError } from "./lib/street-yard-kit.mjs";
 import {
@@ -943,12 +945,23 @@ function validateFenceRow(row, grounded, inBoundary) {
   invariant(spec && fence.height_m === fenceHeight(fence.type, fence.params) && fence.half_thickness_m === spec.half_thickness_m && typeof fence.type_basis === "string", `${row.id} fence type is invalid`);
   invariant(STREET_FENCE_INSIDE.includes(fence.params?.inside) && (fence.type !== "chain_link_screened" || row.source === "osm" || STREET_FENCE_SCREENS.includes(fence.params.screen))
     && (fence.type !== "chainlink_slatted" || fenceParamsError(fence.type, fence.params) === null), `${row.id} fence params are invalid`);
-  // A slatted fence's open gate leaves: a style and the two grounded ends of their opening.
+  // Open gate leaves: a style, optionally a hinge side, and the two grounded
+  // ends of their opening.
   if (fence.gates !== undefined) {
-    invariant(fence.type === "chainlink_slatted" && Array.isArray(fence.gates), `${row.id} only a slatted fence carries gates`);
+    invariant(STREET_FENCE_GATED_TYPES.includes(fence.type) && Array.isArray(fence.gates), `${row.id} a ${fence.type} fence carries no gates`);
     fence.gates.forEach((gate, index) => {
-      invariant(STREET_FENCE_GATE_STYLES.includes(gate.style) && gate.points_m?.length === 2 && gate.terrain_supports?.length === 2 && gate.surface_bias_m?.length === 2, `${row.id} gate ${index} is invalid`);
+      invariant(STREET_FENCE_GATE_STYLES.includes(gate.style) && (gate.hinge === undefined || STREET_FENCE_GATE_HINGES.includes(gate.hinge))
+        && gate.points_m?.length === 2 && gate.terrain_supports?.length === 2 && gate.surface_bias_m?.length === 2, `${row.id} gate ${index} is invalid`);
       gate.points_m.forEach((point, end) => grounded(`${row.id} gate ${index} end ${end}`, point[0], point[1], point[2], gate.terrain_supports[end][0], gate.terrain_supports[end][1]));
+    });
+  }
+  // Banners: a white sheet between two grounded ends on a solid run, lower than the fence.
+  if (fence.banners !== undefined) {
+    invariant(STREET_FENCE_BANNER_TYPES.includes(fence.type) && Array.isArray(fence.banners) && fence.banners.length > 0, `${row.id} a ${fence.type} fence carries no banners`);
+    fence.banners.forEach((banner, index) => {
+      invariant(Number.isFinite(banner.height_m) && banner.height_m >= 0.3 && banner.height_m <= fence.height_m - 0.2 && banner.to_m > banner.from_m
+        && banner.points_m?.length === 2 && banner.terrain_supports?.length === 2 && banner.surface_bias_m?.length === 2, `${row.id} banner ${index} is invalid`);
+      banner.points_m.forEach((point, end) => grounded(`${row.id} banner ${index} end ${end}`, point[0], point[1], point[2], banner.terrain_supports[end][0], banner.terrain_supports[end][1]));
     });
   }
   invariant(Number.isFinite(fence.length_m) && fence.length_m > 0, `${row.id} fence length is invalid`);
