@@ -2067,6 +2067,7 @@ export function generateStreetGround({
   // Red curb paint (fire lanes): the stretches of a rule street's curb its rule
   // gives from dated photographs: the curb face (painted below, with the faces)
   // and a strip of the curb top.
+  const paintedStretches = new Set();
   for (const edge of faces) {
     if (edge.kind !== "curb") continue;
     const middle = scale(add(edge.a, edge.b), 0.5);
@@ -2080,11 +2081,14 @@ export function generateStreetGround({
     // The parts of the edge inside a stretch, as fractions along it (one straight
     // curb edge can run on past a stretch's end).
     const [fromAlong, toAlong] = [closestOnPolyline(line, edge.a).along, closestOnPolyline(line, edge.b).along];
-    const spans = stretches.flatMap(([from, to]) => {
-      if (Math.abs(toAlong - fromAlong) < 1e-6) return near.along >= from && near.along <= to ? [[0, 1]] : [];
-      const ends = [(from - fromAlong) / (toAlong - fromAlong), (to - fromAlong) / (toAlong - fromAlong)];
+    const spans = stretches.flatMap((stretch) => {
+      const [from, to] = stretch;
+      const ends = Math.abs(toAlong - fromAlong) < 1e-6 ? (near.along >= from && near.along <= to ? [0, 1] : [0, 0]) :
+        [(from - fromAlong) / (toAlong - fromAlong), (to - fromAlong) / (toAlong - fromAlong)];
       const [start, end] = [Math.max(0, Math.min(...ends)), Math.min(1, Math.max(...ends))];
-      return end > start ? [[start, end]] : [];
+      if (end <= start) return [];
+      paintedStretches.add(stretch);
+      return [[start, end]];
     });
     if (spans.length === 0) continue;
     edge.red = { wear: rule.treatment.paint_wear, spans };
@@ -2095,6 +2099,20 @@ export function generateStreetGround({
         kindUv(STREET_PAINT_KINDS.red_curb, edge.red.wear));
     }
     sources.marking.add(owner.row.source_key);
+  }
+  // Each stretch is photo evidence: one past its way's end, or that finds no curb
+  // to paint, is a mistake in the rules, so it fails rather than vanishing.
+  for (const street of rules?.streets ?? []) {
+    for (const [way, sides] of Object.entries(street.redCurb)) {
+      const road = ruleRoads.find((object) => object.row.source_key === way);
+      invariant(road, `Street ground red curb way ${way} is not a rule street's vehicle road`);
+      for (const [side, stretches] of Object.entries(sides)) {
+        for (const stretch of stretches) {
+          invariant(stretch[0] >= 0 && stretch[1] <= polylineLength(wayLine(road)) + 0.5, `Street ground red curb ${way} ${side} ${stretch.join("-")} m runs past the way`);
+          invariant(paintedStretches.has(stretch), `Street ground red curb ${way} ${side} ${stretch.join("-")} m finds no curb to paint`);
+        }
+      }
+    }
   }
 
   // ---------------------------------------------------------------- markings

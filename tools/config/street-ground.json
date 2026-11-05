@@ -402,7 +402,7 @@
         "w52721875"
       ],
       "treatment": "village",
-      "evidence": "Google Street View Sep 2025 on Gateview Avenue (heading 238) and Mar 2025 at its junctions: two-line crosswalks, patched asphalt. Sep 2025 on Gateview Avenue (camera x -386.8, z -668.1, heading 238): lawn to the red curb on the left, a concrete walk behind the red curb on the right. Mar 2025 at 1200 Northpoint Dr: the walks round the Northpoint corners run on along Gateview Avenue's north side. Red curb, each stretch as dated photographs show it. Left: Sep 2025 at 1430 and 1418 Gateview Ave (headings 200 and 225) and Jul 2023 (heading 270), s 13-88; Sep 2025 at 1414 Gateview Ave (heading 324), past Mariner Drive; Sep 2025 (heading 238), the corner before Mariner Drive; Mar 2025 at 1395 Gateview Ave (heading 199), faded, past 13th Street. Right: Sep 2025 at 1414 Gateview Ave (heading 324); Sep 2025 at 1394 Gateview Ave (headings 15 and 35); Sep 2025 (heading 238); Mar 2025 at 1395 and 1349 Gateview Ave (headings 199 and 250). Between these the curb is unpainted: no photograph shows it.",
+      "evidence": "Google Street View Sep 2025 on Gateview Avenue (heading 238) and Mar 2025 at its junctions: two-line crosswalks, patched asphalt. Sep 2025 on Gateview Avenue (camera x -386.8, z -668.1, heading 238): lawn to the red curb on the left, a concrete walk behind the red curb on the right. Mar 2025 at 1200 Northpoint Dr: the walks round the Northpoint corners run on along Gateview Avenue's north side. Red curb, each stretch as dated photographs show it. Left: Sep 2025 at 1430 and 1418 Gateview Ave (headings 200 and 225) and Jul 2023 (heading 270), s 13-88; Sep 2025 at 1414 Gateview Ave (heading 324), past Mariner Drive; Sep 2025 (heading 238), the corner before Mariner Drive; Mar 2025 at 1395 Gateview Ave (heading 199), faded, past 13th Street. Right: Sep 2025 at 1414 Gateview Ave (heading 324); Sep 2025 at 1394 Gateview Ave (headings 15 and 35); Sep 2025 (heading 238); Mar 2025 at 1395 and 1349 Gateview Ave (headings 199 and 250). Far curbs across the junctions, read at native resolution: Mar 2025 at 1440 Gateview Ct (heading 58), a thin red line along the right curb across the whole frame; Mar 2025 at 1225 Exposition Dr (heading 228), along the left curb; Mar 2025 at 1177 13th St (heading 284), faintly along the right curb. The far curbs at Northpoint Drive and Bayside Drive show none. Between these stretches the curb is unpainted: no photograph shows it.",
       "sides": {
         "w52721875": {
           "right": [
@@ -443,10 +443,6 @@
             ],
             [
               48,
-              88
-            ],
-            [
-              124,
               140
             ],
             [
@@ -460,6 +456,10 @@
           ],
           "right": [
             [
+              28,
+              68
+            ],
+            [
               114,
               165
             ],
@@ -472,7 +472,7 @@
               445
             ],
             [
-              645,
+              635,
               735
             ]
           ]
@@ -533,7 +533,7 @@
         "w8916722"
       ],
       "treatment": "village",
-      "evidence": "Google Street View Mar 2025 at 1230 Gateview Ct (w8916716, heading 20): no curb mid-block, the paving runs flat into the parking under the carports, red only on the two short corner curbs at Gateview Avenue. Mar 2025 at 1440 Gateview Ct (w8916722, heading 58): red NO PARKING FIRE LANE on both corner curbs, two crosswalk lines and STOP at the junction; Mar 2025 at 1420 Gateview Ct (headings 340 and 245): flat paving into the stalls. Mar 2025 at 1395 Gateview Ct (w8916719, heading 290): a faded red curb round a lawn on the left, flat drives beyond it. Aerial 2026-05-26: lawn at the corners, carports along both sides beyond them.",
+      "evidence": "Google Street View Mar 2025 at 1230 Gateview Ct (w8916716, heading 20): no curb mid-block, the paving runs flat into the parking under the carports, red only on the two short corner curbs at Gateview Avenue. Mar 2025 at 1440 Gateview Ct (w8916722, heading 58): red NO PARKING FIRE LANE on both corner curbs, two crosswalk lines and STOP at the junction; Mar 2025 at 1420 Gateview Ct (headings 340 and 245): flat paving into the stalls. Mar 2025 at 1395 Gateview Ct (w8916719, heading 290): a faded red curb round a lawn on the left, flat drives beyond it. That lawn's edge lies at the housing site's own parking apron, about 9 m from the centre line (game/resources/housing_family/w96215667.json), beyond a rule's curb at the road edge, so it is not drawn here. Aerial 2026-05-26: lawn at the corners, carports along both sides beyond them.",
       "widen": {
         "w8916716": {
           "right": 0.4
@@ -579,16 +579,6 @@
             ],
             [
               14,
-              44,
-              "none"
-            ],
-            [
-              44,
-              52,
-              "verge"
-            ],
-            [
-              52,
               69,
               "none"
             ]
@@ -645,14 +635,6 @@
             [
               3,
               16.5
-            ]
-          ]
-        },
-        "w8916719": {
-          "left": [
-            [
-              44,
-              51
             ]
           ]
         },
@@ -734,7 +716,7 @@
         "w8917169"
       ],
       "treatment": "village",
-      "evidence": "Google Street View Mar 2025 at 1226 Bayside Drive: red curb, two crosswalk lines; aerial 2026-05-26: lawn behind the curbs, parking bays in front of the blocks. Red curb: Mar 2025 at 1203 Bayside Dr (camera x -507, z -688, heading 115, looking back along the way), the curb on the right; Mar 2025 at 1255 Bayside Dr (heading 300), the lawn's curb on the right; Mar 2025 at 1226 Bayside Dr (heading 149), on the left by the junction.",
+      "evidence": "Google Street View Mar 2025 at 1226 Bayside Drive: red curb, two crosswalk lines; aerial 2026-05-26: lawn behind the curbs, parking bays in front of the blocks. Red curb: Mar 2025 at 1203 Bayside Dr (camera x -507, z -688, heading 115, looking back along the way), the curb on the right as far as the bay; Mar 2025 at 1255 Bayside Dr (heading 300), the lawn's curb on the right; Mar 2025 at 1226 Bayside Dr (heading 149), on the left by the junction.",
       "red_curb": {
         "w8917169": {
           "left": [
@@ -745,7 +727,7 @@
           ],
           "right": [
             [
-              35,
+              64,
               84
             ],
             [
@@ -996,7 +978,7 @@
         "w28353434"
       ],
       "treatment": "village",
-      "evidence": "Google Street View Jul 2023 (contributor) and Nov 2025 at Gateview Avenue: curbs with red corners, STOP legend and stop line, a walk on the west side; OSM sidewalk along part of the west side. Red curb: left, Nov 2025 by 9th Street (heading 163), Mar 2025 at 1304 Avenue B (heading 333, the corner) and Nov 2025 at Gateview Avenue (heading 283, the corner); right, Mar 2025 at 1304 Avenue B, Jul 2023 toward 12th Street (heading 333) and Mar 2025 toward Sturgeon Street (heading 333, faded). Mar 2025 at 1400 Sturgeon St (heading 249): the far (west) curb is pale, cars parked along it, no red; Mar 2025 on the east branch (heading 153): grey curbs.",
+      "evidence": "Google Street View Jul 2023 (contributor) and Nov 2025 at Gateview Avenue: curbs with red corners, STOP legend and stop line, a walk on the west side; OSM sidewalk along part of the west side. Red curb: left, Nov 2025 by 9th Street (heading 163), Mar 2025 at 1304 Avenue B (heading 333, the corner) and Nov 2025 at Gateview Avenue (heading 283, the corner); right, Mar 2025 at 1304 Avenue B, Jul 2023 toward 12th Street (heading 333) and Mar 2025 toward Sturgeon Street (heading 333, faded). Mar 2025 at 148 12th St (heading 238): red on the far (west) curb, south of the junction. Mar 2025 at 1400 Sturgeon St (heading 249): the far (west) curb is pale, cars parked along it, no red; Mar 2025 on the east branch (heading 153): grey curbs.",
       "sides": {
         "w8921273": {
           "left": "walk"
@@ -1012,6 +994,10 @@
             [
               128,
               141
+            ],
+            [
+              262,
+              274
             ],
             [
               488,
@@ -1080,7 +1066,7 @@
         "w8919233"
       ],
       "treatment": "village",
-      "evidence": "Google Street View Mar 2025 at 1198 13th Street (heading 112): curbs both sides with red corners; Sep 2025 at 729 13th Street (Avenue I) and 751 13th Street (Avenue M): no curbs east of Avenue I. The west 300 m (to Avenue I) is curbed, the rest is industrial. Mar 2025 at 1198 13th St (heading 106): a walk behind the red curb on the left; on the right a pale walk beside the road up to a driveway, then a faded red curb with lawn behind it. Mar 2025 at 1177 13th St (heading 284): red on both curbs up to Gateview Avenue. Mar 2025 at 1047 and 1007 13th St (headings 40 and 335): red on the left; Sep 2025 on the approach to Avenue I (heading 57): red on the left corner. Sep 2025 at Avenue M (heading 58): no curb, no red.",
+      "evidence": "Google Street View Mar 2025 at 1198 13th Street (heading 112): curbs both sides with red corners; Sep 2025 at 729 13th Street (Avenue I) and 751 13th Street (Avenue M): no curbs east of Avenue I. The west 300 m (to Avenue I) is curbed, the rest is industrial. Mar 2025 at 1198 13th St (heading 106): a walk behind the red curb on the left, red round the driveway's near corner and on past it; on the right a pale walk beside the road up to a driveway, then a faded red curb with lawn behind it. Mar 2025 at 1177 13th St (heading 284): red on both curbs up to Gateview Avenue. Mar 2025 at 1047 and 1007 13th St (headings 40 and 335): red on the left; Sep 2025 on the approach to Avenue I (heading 57): red on the left corner. Sep 2025 at Avenue M (heading 58): no curb, no red.",
       "widen": {
         "w11315800": {
           "left": 2.2,
@@ -1133,11 +1119,15 @@
             ],
             [
               46,
-              58
+              55
             ],
             [
-              62,
-              70
+              63,
+              67
+            ],
+            [
+              78,
+              103
             ]
           ],
           "right": [
