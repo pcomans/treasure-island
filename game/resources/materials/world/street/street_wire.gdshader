@@ -3,9 +3,11 @@
 // radius. Far away a wire would shrink below a pixel and break into dashes, so
 // the ring grows to keep the wire min_pixels wide on screen at any distance,
 // and fades by the share of that width the real wire would cover (no darker
-// than min_alpha), as a thin line does against the sky.
+// than min_alpha), as a thin line does against the sky. Unshaded: the faces of
+// the four-sided tube would each catch the sun differently and glint in
+// dashes along a sagging span; a wire reads as a plain dark line.
 shader_type spatial;
-render_mode cull_disabled, depth_draw_opaque;
+render_mode cull_disabled, depth_draw_opaque, unshaded;
 
 uniform vec4 albedo : source_color = vec4(0.07, 0.07, 0.075, 1.0);
 uniform float min_pixels = 1.9;
@@ -29,6 +31,5 @@ void vertex() {
 
 void fragment() {
 	ALBEDO = albedo.rgb;
-	ROUGHNESS = 0.55;
 	ALPHA = mix(min_alpha, 1.0, clamp(coverage, 0.0, 1.0));
 }
