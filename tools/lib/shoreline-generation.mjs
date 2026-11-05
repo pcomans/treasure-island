@@ -157,7 +157,7 @@ const CREST_FIELDS = ["depth_m", "drop_per_m", "fill", "rise_m", "size_m", "size
 const CREST_FILL_FIELDS = ["fill", "rise_m", "size_m"];
 const POSTURE_FIELDS = ["broad_face", "even", "max_aspect"];
 const HEAP_FIELDS = ["bury", "classes", "overlap", "small_reach_m", "tilt_deg", "toe_extra_m"];
-const COBBLE_FIELDS = ["edge_m", "fill", "outline_bias", "path_clearance_m", "reach_m", "size_m", "top_m"];
+const COBBLE_FIELDS = ["edge_m", "fill", "outline_bias", "overlap", "path_clearance_m", "reach_m", "size_m", "top_m"];
 const DRIFTWOOD_FIELDS = ["acceptance", "from_waterline_m", "length_m", "radius_m", "sink", "spacing_m", "yaw_jitter_deg"];
 const PLANK_FIELDS = ["above_water_m", "length_m", "near_xz", "segment", "width_m", "yaw_deg"];
 const STRUCTURE_FIELDS = ["clearance_m", "slope", "tags", "under_drop_m"];
@@ -166,7 +166,7 @@ const SEGMENT_FIELDS = ["crest_fill_scale", "crest_rise_m", "id", "outline_sourc
 // another segment builds: no crest rows, no core, no shoulder) and cobble (its
 // own fill, reach_m and size_m for the cobbles inside the band).
 const SEGMENT_OPTIONAL_FIELDS = ["cobble", "crest_rows"];
-const SEGMENT_COBBLE_FIELDS = ["fill", "reach_m", "size_m", "top_m"];
+const SEGMENT_COBBLE_FIELDS = ["fill", "overlap", "reach_m", "size_m", "top_m"];
 const CLOSURE_SETTINGS_FIELDS = ["coping_m", "ramp_bottom_y_m", "ramp_grade", "ramp_wall_m", "wall_bottom_y_m"];
 const CLOSURE_FIELDS = ["id", "kind", "reason", "reference", "s_m", "source_keys"];
 
@@ -295,6 +295,8 @@ export function shorelineSettings(config) {
   for (const key of ["size_m", "top_m"]) requireRange(stones.cobble[key], 0, `Shoreline stones.cobble.${key}`);
   invariant(stones.cobble.top_m[1] <= SHORELINE_COBBLE_MAX_TOP_M, `Shoreline cobbles may rise at most ${SHORELINE_COBBLE_MAX_TOP_M} m above the walkable land`);
   for (const key of ["fill", "edge_m", "path_clearance_m", "outline_bias", "reach_m"]) invariant(isFiniteNumber(stones.cobble[key]) && stones.cobble[key] >= 0, `Shoreline stones.cobble.${key} must be non-negative`);
+  // How close two cobbles may lie (as a share of their radii's sum): buried, they may overlap.
+  invariant(isFiniteNumber(stones.cobble.overlap) && stones.cobble.overlap > 0.3 && stones.cobble.overlap <= 1, "Shoreline stones.cobble.overlap must be in (0.3, 1]");
   exactKeys(stones.driftwood, DRIFTWOOD_FIELDS, "Shoreline stones.driftwood");
   for (const key of ["from_waterline_m", "length_m", "radius_m"]) requireRange(stones.driftwood[key], 0, `Shoreline stones.driftwood.${key}`);
   invariant(isFiniteNumber(stones.driftwood.spacing_m) && stones.driftwood.spacing_m > 2, "Shoreline stones.driftwood.spacing_m must exceed 2 m");
@@ -348,6 +350,7 @@ export function shorelineSettings(config) {
       requireRange(segment.cobble.top_m, 0, `Shoreline segment ${segment.id} cobble.top_m`);
       invariant(segment.cobble.top_m[1] <= SHORELINE_COBBLE_MAX_TOP_M, `Shoreline segment ${segment.id} cobbles may rise at most ${SHORELINE_COBBLE_MAX_TOP_M} m above the walkable land`);
       for (const key of ["fill", "reach_m"]) invariant(isFiniteNumber(segment.cobble[key]) && segment.cobble[key] >= 0, `Shoreline segment ${segment.id} cobble.${key} must be non-negative`);
+      invariant(isFiniteNumber(segment.cobble.overlap) && segment.cobble.overlap > 0.3 && segment.cobble.overlap <= 1, `Shoreline segment ${segment.id} cobble.overlap must be in (0.3, 1]`);
     }
     invariant(typeof segment.id === "string" && SAFE_ID.test(segment.id) && !ids.has(segment.id), `Shoreline segment ${segment.id} needs a unique lower_snake id`);
     ids.add(segment.id);
@@ -2407,7 +2410,7 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
         // Lying on a broad face, a little tilted, as a stone settles in dirt.
         const o = orient(prototype, [0, 1, 0], 12, rng, { broad_face: 0.5, max_aspect: 0.9, even: true });
         const radius = o.radius * size;
-        if (edgeDistance(band, plan2) < size * 0.5 + cobble.edge_m || !fits(plan2, radius, 0.95) || blocked(plan2, size * 0.5, true)) continue;
+        if (edgeDistance(band, plan2) < size * 0.5 + cobble.edge_m || !fits(plan2, radius, cobble.overlap) || blocked(plan2, size * 0.5, true)) continue;
         const ground = landAt(plan2);
         if (ground == null) continue;
         // Bury it so only its top shows, top_m above the land.

@@ -131,6 +131,7 @@
       "fill": 0.012,
       "edge_m": 0.05,
       "outline_bias": 1.5,
+      "overlap": 0.95,
       "path_clearance_m": 0.25,
       "reach_m": 0.8
     },
@@ -320,14 +321,15 @@
       "crest_fill_scale": 1.0,
       "crest_rows": false,
       "cobble": {
-        "fill": 0.9,
+        "fill": 1.6,
+        "overlap": 0.7,
         "reach_m": 4.5,
         "size_m": [
-          0.35,
-          0.75
+          0.5,
+          0.9
         ],
         "top_m": [
-          0.09,
+          0.11,
           0.15
         ]
       },
