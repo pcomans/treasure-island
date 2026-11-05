@@ -14,11 +14,12 @@
 // traced outlines are production inference, not survey data. The map is drawn
 // from the generated world (its records and the playable boundary), so it
 // follows the drawn buildings and roads; tools/build_ground_cover_map.mjs writes
-// it and tools/check_godot_world_determinism.mjs checks the committed copy
-// against a fresh draw. World x, z (+X east, +Z south), metres.
+// it, and so does tools/build_godot_world.mjs each time it writes the committed
+// generated/world; tools/check_godot_world_determinism.mjs checks the committed
+// copy against a fresh draw. World x, z (+X east, +Z south), metres.
 
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
 import { deflateSync, inflateSync } from "node:zlib";
 
 import { invariant } from "./world-contract.mjs";
@@ -394,6 +395,16 @@ export function drawGroundCoverMap(config, world) {
 export function buildGroundCoverMap({ projectRoot, worldRoot }) {
   const config = loadGroundCoverConfig(projectRoot);
   return drawGroundCoverMap(config, loadGroundCoverWorld(worldRoot));
+}
+
+// Draws the map from worldRoot and writes it as the PNG at output (by default
+// the committed GROUND_COVER_MAP_PATH); returns the drawn map and the PNG's size.
+export function writeGroundCoverMap({ projectRoot, worldRoot, output = resolve(projectRoot, GROUND_COVER_MAP_PATH) }) {
+  const map = buildGroundCoverMap({ projectRoot, worldRoot });
+  const png = encodeGroundCoverPng(map.grid.width, map.grid.height, map.rgba);
+  mkdirSync(dirname(output), { recursive: true });
+  writeFileSync(output, png);
+  return { map, output, bytes: png.length };
 }
 
 // PNG: 8-bit RGBA (its alpha is the bare weight, not transparency), one

@@ -120,6 +120,7 @@ import {
   streetDetailHardShapes,
 } from "./lib/street-detail-generation.mjs";
 import { generateStreetGround } from "./lib/street-ground-generation.mjs";
+import { writeGroundCoverMap } from "./lib/ground-cover-map.mjs";
 import {
   SHORELINE_OVERLAY_MATERIAL,
   SHORELINE_OVERLAY_PREFIX,
@@ -2374,6 +2375,8 @@ function main() {
     writeArtifact(stagingRoot, "manifest.json", manifest);
     commitStagedOutput(stagingRoot, output);
     committed = true;
+    // The committed world's ground-cover map follows it (game/resources, drawn from the world just written).
+    if (output === resolve(projectRoot, "generated/world")) writeGroundCoverMap({ projectRoot, worldRoot: output });
     process.stdout.write(`${stableJson({
       status: "generated",
       output: relative(projectRoot, output).replaceAll("\\", "/"),
