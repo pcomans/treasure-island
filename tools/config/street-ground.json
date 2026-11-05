@@ -218,7 +218,11 @@
         "w1212173448"
       ],
       "treatment": "new_district",
-      "evidence": "Google Street View Sep 2025 on Seven Seas Avenue (heading 160, south part): double yellow, green bike lanes along both curbs inside a white line, planted strips behind the curbs; Sep 2025 at its north end (heading 140): the white lane line, a lot with no curb on the east side. Aerial 2026-05-26: sidewalks on both curbs, continental crosswalks. The measured width stops at the green paint, so the asphalt is widened by a bike lane's width each side.",
+      "evidence": "Google Street View Sep 2025 on Seven Seas Avenue (heading 160, south part): double yellow, green bike lanes along both curbs inside a white line, planted strips behind the curbs; Sep 2025 at its north end (heading 140): the white lane line, a lot with no curb on the east side. Aerial 2026-05-26: sidewalks on both curbs, continental crosswalks. The measured width stops at the green paint, so the asphalt is widened by a bike lane's width each side. The planted strips: a curb, then about 2 m of shrubs and grasses, then the sidewalk (Sep 2025, heading 160), drawn as a 2 m verge with the OSM sidewalks beyond it.",
+      "set": {
+        "bike_lanes": "green",
+        "verge_width_m": 2.0
+      },
       "widen": {
         "w1001544696": {
           "left": 1.5,
@@ -229,8 +233,15 @@
           "right": 1.5
         }
       },
-      "set": {
-        "bike_lanes": "green"
+      "sides": {
+        "w1001544696": {
+          "left": "verge",
+          "right": "verge"
+        },
+        "w1212173448": {
+          "left": "verge",
+          "right": "verge"
+        }
       }
     },
     {
