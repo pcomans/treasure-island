@@ -7,7 +7,7 @@
 # legend and y along it, the top toward the far end, as on the STOP legend: a
 # legend is drawn at the shape it is painted (its length along by its width
 # across) and squeezed into its cell, which the paint stretches back.
-#   0 TOUR BUS PARKING, one line across a bus bay (painted about 7.2 m across, 2.2 m along)
+#   0 TOUR BUS PARKING, one spaced line across the bus stalls (painted about 10.5 m across, 1.2 m along)
 #   1 straight arrow, 2 left-turn arrow, 3 right-turn arrow (painted about 1.2 m across, 4.8 m along)
 #   4 the International Symbol of Access (painted about 1.5 m square)
 #   5-7 spare (black)
@@ -19,11 +19,12 @@ here="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 out="${1:-${here}/game/resources/textures/world/street/street_legends.png}"
 work="$(mktemp -d)"
 trap 'rm -rf "${work}"' EXIT
-# 0: TOUR BUS PARKING at 7.2 x 2.2 m (720 x 220 px, 1 cm per px), white capitals.
+# 0: TOUR BUS PARKING at 10.5 x 1.2 m (1050 x 120 px, 1 cm per px), white capitals
+# set wide apart, as stencilled across the Mersea lot's bus stalls (Sep 2025).
 # Pavement legend letters are long in the direction of travel: the line is set
-# flat (700 x 64) and stretched along to the 2.2 m it is painted.
-convert -background black -fill white -font DejaVu-Sans-Bold -size 700x64 -gravity center label:'TOUR BUS PARKING' \
-  -resize '720x200!' -gravity center -extent 720x220 -resize '256x512!' "${work}/c0.png"
+# flat (1000 x 44) and stretched along to about 0.7 m letters.
+convert -background black -fill white -font DejaVu-Sans-Bold -kerning 22 -interword-spacing 70 -size 1000x44 -gravity center label:'TOUR BUS PARKING' \
+  -resize '1030x104!' -gravity center -extent 1050x120 -resize '256x512!' "${work}/c0.png"
 # 1-3: arrows at 1.2 x 4.8 m (120 x 480 px), pointing up (the far end).
 convert -size 120x480 xc:black -fill white -draw 'polygon 60,0 120,150 80,150 80,480 40,480 40,150 0,150' -resize '256x512!' "${work}/c1.png"
 convert -size 120x480 xc:black -fill none -stroke white -strokewidth 40 -draw "path 'M 70,480 L 70,210 Q 70,130 34,130'" \

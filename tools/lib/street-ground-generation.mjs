@@ -106,11 +106,14 @@ const RECORD_KINDS = Object.freeze({
 // same numbers. The integer part of a marking's UV.x is kind + stride * variant:
 // for painted lines and legends the variant is a wear step (0 fresh to 3 mostly
 // worn away; PAINT_WEAR_STEPS), for kind legend it is the cell of the legend
-// atlas (STREET_LEGEND_CELLS). red_curb is curb paint, blue an accessible stall.
+// atlas (STREET_LEGEND_CELLS) plus STREET_LEGEND_ATLAS_CELLS times its wear step.
+// red_curb is curb paint, blue an accessible stall.
 export const STREET_PAINT_KINDS = Object.freeze({ white: 0, yellow: 1, red: 2, green: 3, tactile: 4, stop_legend: 5, yellow_faded: 6, red_curb: 7, blue: 8, legend: 9 });
 export const PAINT_VARIANT_STRIDE = 16;
 export const PAINT_WEAR_STEPS = 4;
 export const STREET_LEGEND_CELLS = Object.freeze({ tour_bus_parking: 0, arrow_straight: 1, arrow_left: 2, arrow_right: 3, accessible: 4 });
+// The legend atlas's cell count (street_legends.png, street_paint.gdshader legend_cells).
+export const STREET_LEGEND_ATLAS_CELLS = 8;
 export const STREET_WEAR_CELLS = Object.freeze({ crack_a: 0, crack_b: 1, oil_a: 2, oil_b: 3, patch: 4, manhole: 5, drain: 6 });
 // The deepest any street-ground vertex may sit above the land under it (m);
 // validators reuse it.
@@ -142,9 +145,13 @@ const CURB_TOP_M = 0.25;
 const RED_CURB_APPROACH_M = 10;
 // Red curb paint: the strip of the curb top it covers.
 const RED_CURB_TOP_M = 0.15;
+// A street-side bay's pavement and stalls keep this far off any building.
+const BAY_BUILDING_CLEARANCE_M = 0.5;
 // A lot rule's own pavement lies at the yards' ground lift (a step over the road
 // paint), its stall paint and legends PARK_PAINT_LIFT_M over that.
 const LOT_SURFACE_LIFT_M = 0.09;
+// A lot surface's wear (decals per 100 m2 of its pavement), a step over the surface.
+const LOT_WEAR_FIELDS = Object.freeze(["crack_per_100m2", "oil_per_100m2", "patch_per_100m2"]);
 // A lot island's curb faces run down to the land (under the lot's surface).
 const ISLAND_FOOT_M = 0;
 // Two-line crosswalks (lines, ladder): each line this wide; a lines crosswalk
@@ -447,7 +454,9 @@ export function validateStreetGroundRules(rules) {
     // A lot's own pavement where the photographs show it unlike the lots' asphalt:
     // a yard or park ground material draped over the whole lot at LOT_SURFACE_LIFT_M.
     if (lot.surface !== undefined) {
-      exactKeys(lot.surface, ["evidence", "material"], `${label} surface`);
+      exactKeys(lot.surface, ["evidence", "material", "wear"], `${label} surface`);
+      exactKeys(lot.surface.wear, LOT_WEAR_FIELDS, `${label} surface wear`);
+      for (const key of LOT_WEAR_FIELDS) invariant(isFiniteNumber(lot.surface.wear[key]) && lot.surface.wear[key] >= 0, `${label} surface wear.${key} must be non-negative`);
       invariant(PARK_SURFACE_MATERIALS[lot.surface.material] !== undefined && typeof lot.surface.evidence === "string" && lot.surface.evidence.trim() !== "",
         `${label} surface needs a ground material (${Object.keys(PARK_SURFACE_MATERIALS).join(", ")}) and evidence`);
     }
@@ -466,9 +475,10 @@ export function validateStreetGroundRules(rules) {
       invariant(SAFE_ID.test(island.id) && Array.isArray(island.points_xz) && island.points_xz.length >= 3 && island.points_xz.every(isXZ), `${label} island ${island.id} needs 3+ points`);
     }
     for (const legend of lot.legends) {
-      exactKeys(legend, ["at_xz", "cell", "facing_xz", "length_m", "width_m"], `${label} legend`);
+      exactKeys(legend, ["at_xz", "cell", "facing_xz", "length_m", "paint_wear", "width_m"], `${label} legend`);
       invariant(STREET_LEGEND_CELLS[legend.cell] !== undefined && isXZ(legend.at_xz) && isXZ(legend.facing_xz) && Math.hypot(...legend.facing_xz) > 1e-6 &&
-        isFiniteNumber(legend.length_m) && legend.length_m > 0 && isFiniteNumber(legend.width_m) && legend.width_m > 0, `${label} legend is malformed`);
+        isFiniteNumber(legend.length_m) && legend.length_m > 0 && isFiniteNumber(legend.width_m) && legend.width_m > 0 &&
+        Number.isInteger(legend.paint_wear) && legend.paint_wear >= 0 && legend.paint_wear < PAINT_WEAR_STEPS, `${label} legend is malformed`);
     }
   }
   return { ...rules, streets, wayOwner };
@@ -1322,7 +1332,12 @@ export function generateStreetGround({
   const halfWidthSide = (object, sign) => ROAD_WIDTHS_M[object.tags.highway] / 2 + (parkingWidth.get(object.row.source_key) ?? 0) +
     (widenOf.get(object.row.source_key)?.[sign > 0 ? "left" : "right"] ?? 0);
   // Bays: perpendicular parking bays paved off a rule street's edge, between two
-  // along-way distances; the curb runs round them.
+  // along-way distances; the curb runs round them. A bay stops short of any
+  // building (BAY_BUILDING_CLEARANCE_M), and a stall reaching that close gets no
+  // lines or parked-car slot.
+  const bayBuildings = partsIndex("bay buildings", objects
+    .filter((object) => object.roles.includes("building") || object.roles.includes("building_part"))
+    .map((object) => object.geometry));
   const bays = [];
   for (const bay of rules?.bays ?? []) {
     const road = vehicles.find((object) => object.row.source_key === bay.way);
@@ -1334,7 +1349,11 @@ export function generateStreetGround({
     const hw = halfWidthSide(road, sign);
     const along = polylineSlice(line, bay.from_m, Math.min(bay.to_m, total));
     const [from, to] = sign > 0 ? [hw - CARRIAGEWAY_OVERLAP_M, hw + bay.depth_m] : [-hw - bay.depth_m, -hw + CARRIAGEWAY_OVERLAP_M];
-    parkingParts.push(strip(`bay ${bay.way} ${bay.from_m}`, along, from, to));
+    const paved = strip(`bay ${bay.way} ${bay.from_m}`, along, from, to);
+    const box = boxOfMulti(paved);
+    const near = bayBuildings.near(box, BAY_BUILDING_CLEARANCE_M);
+    parkingParts.push(near.length === 0 ? paved : difference(`bay ${bay.way} ${bay.from_m} off buildings`, paved,
+      near.map((polygon) => union(`bay building clearance ${bay.way}`, [[polygon], ...polygon.map((ring) => lineBuffer(`bay building edge ${bay.way}`, [...openRing(ring), ring[0]], BAY_BUILDING_CLEARANCE_M))]))));
     bays.push({ bay, road, line, sign, hw });
   }
   const parkingSurface = difference("parking lanes", union("parking lanes", parkingParts), [osmCarriageway]);
@@ -2254,12 +2273,22 @@ export function generateStreetGround({
     const wear = ruleOf.get(bay.way).treatment.paint_wear;
     const count = Math.floor((bay.to_m - bay.from_m) / bay.stall_width_m + 1e-9);
     const start = (bay.from_m + bay.to_m) / 2 - (count * bay.stall_width_m) / 2;
+    // A stall is kept when no corner of it comes within the clearance of a building.
+    const kept = Array.from({ length: count }, (_, index) => {
+      const middle = pointAlong(line, start + (index + 0.5) * bay.stall_width_m);
+      const out = scale(leftOf(middle.tangent), sign);
+      const corners = [hw, hw + bay.depth_m].flatMap((reach) => [-0.5, 0.5].map((half) =>
+        add(add(middle.point, scale(out, reach)), scale(middle.tangent, half * bay.stall_width_m))));
+      return corners.every((corner) => bayBuildings.distance(corner, 2) > BAY_BUILDING_CLEARANCE_M);
+    });
     const marks = [];
     for (let index = 0; index <= count; index += 1) {
-      const at = pointAlong(line, start + index * bay.stall_width_m);
-      const outward = scale(leftOf(at.tangent), sign);
-      marks.push(rectangle(add(at.point, scale(outward, hw)), outward, at.tangent, 0.3, bay.depth_m - 0.3, -lines.width_m / 2, lines.width_m / 2));
-      if (index === count) break;
+      if (kept[index - 1] || kept[index]) {
+        const at = pointAlong(line, start + index * bay.stall_width_m);
+        const outward = scale(leftOf(at.tangent), sign);
+        marks.push(rectangle(add(at.point, scale(outward, hw)), outward, at.tangent, 0.3, bay.depth_m - 0.3, -lines.width_m / 2, lines.width_m / 2));
+      }
+      if (index === count || !kept[index]) continue;
       const middle = pointAlong(line, start + (index + 0.5) * bay.stall_width_m);
       const middleOut = scale(leftOf(middle.tangent), sign);
       stallSlots.push({
@@ -2267,19 +2296,19 @@ export function generateStreetGround({
         entry: add(middle.point, scale(middleOut, hw)), outward: middleOut, along: middle.tangent,
         depth_m: bay.depth_m, width_m: bay.stall_width_m, kind: "bay",
       });
+      counts.bays += 1;
     }
-    if (bay.lines) paint(STREET_PAINT_KINDS.white, roadPaint("bay lines", union("bay lines", marks)), bay.way, wear);
-    counts.bays += count;
+    if (bay.lines && marks.length > 0) paint(STREET_PAINT_KINDS.white, roadPaint("bay lines", union("bay lines", marks)), bay.way, wear);
   }
 
   // Lot rules: stall rows (separator lines, accessible stalls filled blue with
   // their symbol, bus stalls with their legend) and legends.
-  // A legend of the atlas painted at a centre, reading up along facing, at a paint height.
-  const legendPiece = (cell, center, facing, lengthM, widthM, sourceKey, paintHeight) => {
+  // A legend of the atlas painted at a centre, reading up along facing, at a paint height and wear step.
+  const legendPiece = (cell, center, facing, lengthM, widthM, sourceKey, paintHeight, wear) => {
     const along = unit(facing);
     const across = [along[1], -along[0]];
     addPiece("marking", rectangle(center, along, across, -lengthM / 2, lengthM / 2, -widthM / 2, widthM / 2), constantHeight(paintHeight),
-      frameUv(STREET_PAINT_KINDS.legend + PAINT_VARIANT_STRIDE * cell, center, along, across, lengthM, widthM));
+      frameUv(STREET_PAINT_KINDS.legend + PAINT_VARIANT_STRIDE * (cell + STREET_LEGEND_ATLAS_CELLS * wear), center, along, across, lengthM, widthM));
     sources.marking.add(sourceKey);
   };
   for (const { lot, object } of lotRules) {
@@ -2300,7 +2329,9 @@ export function generateStreetGround({
       const axis = [direction[0] * Math.cos(theta) - sign * direction[1] * Math.sin(theta), sign * direction[0] * Math.sin(theta) + direction[1] * Math.cos(theta)];
       const pitch = row.stall_width_m / Math.sin(theta);
       const reach = row.depth_m / Math.sin(theta);
-      const wear = row.style === "faded" ? PAINT_WEAR_STEPS - 1 : 1;
+      // Stall paint wear by row style: faded rows mostly worn away, the bus stalls
+      // worn (Sep 2025 photos of the Mersea lot), plain and accessible rows step 1.
+      const wear = { faded: PAINT_WEAR_STEPS - 1, bus: 2 }[row.style] ?? 1;
       const separators = [];
       for (let index = 0; index <= row.count; index += 1) {
         const base = add(p0, scale(direction, index * pitch));
@@ -2314,7 +2345,7 @@ export function generateStreetGround({
           const fill = rectangle(entry, axis, leftOf(axis), 0.15, row.depth_m - 0.15, -row.stall_width_m / 2 + 0.15, row.stall_width_m / 2 - 0.15);
           paintLot(STREET_PAINT_KINDS.blue, intersect(`lot ${lot.id} accessible`, fill, object.geometry), 1);
           // The symbol a step over the blue fill.
-          legendPiece(STREET_LEGEND_CELLS.accessible, middle, scale(axis, -1), Math.min(1.6, row.depth_m * 0.4), Math.min(1.6, row.stall_width_m * 0.6), lot.source_key, lotPaint + DRAPED_LAYER_STEP_M);
+          legendPiece(STREET_LEGEND_CELLS.accessible, middle, scale(axis, -1), Math.min(1.6, row.depth_m * 0.4), Math.min(1.6, row.stall_width_m * 0.6), lot.source_key, lotPaint + DRAPED_LAYER_STEP_M, 1);
         }
         stallSlots.push({
           aisle_key: lot.source_key, side: row.side, s: roundCoordinate((index + 0.5) * pitch), entry, outward: axis, along: direction,
@@ -2324,7 +2355,7 @@ export function generateStreetGround({
       counts.lot_stalls += row.count;
     }
     for (const legend of lot.legends) {
-      legendPiece(STREET_LEGEND_CELLS[legend.cell], [legend.at_xz[0], -legend.at_xz[1]], [legend.facing_xz[0], -legend.facing_xz[1]], legend.length_m, legend.width_m, lot.source_key, lotPaint);
+      legendPiece(STREET_LEGEND_CELLS[legend.cell], [legend.at_xz[0], -legend.at_xz[1]], [legend.facing_xz[0], -legend.facing_xz[1]], legend.length_m, legend.width_m, lot.source_key, lotPaint, legend.paint_wear);
     }
   }
 
@@ -2506,6 +2537,34 @@ export function generateStreetGround({
     const polygon = object.geometry;
     parkLayers.push({ zone: null, layer: { material, id: lot.id }, polygon, index: polygonIndex(polygon), box: boxOfMulti(polygon), lift: LOT_SURFACE_LIFT_M, sources: [lot.source_key] });
     addPiece(material, polygon, constantHeight(LOT_SURFACE_LIFT_M), worldUv, true);
+    // Its cracks, patches and oil stains a step over it (under its paint),
+    // anywhere on the open pavement, in any direction.
+    const lotIndex = polygonIndex(polygon);
+    const lotBox = boxOfMulti(polygon);
+    const lotArea = multiArea(polygon);
+    for (const [kindName, perHundred, cells, size] of [
+      ["crack", lot.surface.wear.crack_per_100m2, [STREET_WEAR_CELLS.crack_a, STREET_WEAR_CELLS.crack_b], [3.2, 1.6]],
+      ["patch", lot.surface.wear.patch_per_100m2, [STREET_WEAR_CELLS.patch], [2.2, 1.4]],
+      ["oil", lot.surface.wear.oil_per_100m2, [STREET_WEAR_CELLS.oil_a, STREET_WEAR_CELLS.oil_b], [1.4, 1.4]],
+    ]) {
+      const wanted = Math.round((lotArea * perHundred) / 100);
+      let placed = 0;
+      for (let attempt = 0; placed < wanted && attempt < wanted * 12; attempt += 1) {
+        const identity = `${lot.id}:${kindName}:${attempt}`;
+        const center = [lotBox.min_x + hashUnit(seed, identity, 0) * (lotBox.max_x - lotBox.min_x), lotBox.min_y + hashUnit(seed, identity, 1) * (lotBox.max_y - lotBox.min_y)];
+        const angle = hashUnit(seed, identity, 2) * 2 * Math.PI;
+        const along = [Math.cos(angle), Math.sin(angle)];
+        const scaleBy = 0.75 + hashUnit(seed, identity, 5) * 0.5;
+        const [alongSize, acrossSize] = [size[0] * scaleBy, size[1] * scaleBy];
+        const quad = rectangle(center, along, leftOf(along), -alongSize / 2, alongSize / 2, -acrossSize / 2, acrossSize / 2);
+        if (!openRing(quad[0][0]).every((corner) => lotIndex.contains(corner) && !islandIndex.contains(corner) && !bandIndex.contains(corner))) continue;
+        const cell = cells[Math.floor(hashUnit(seed, identity, 4) * cells.length) % cells.length];
+        addPiece("wear", quad, constantHeight(LOT_SURFACE_LIFT_M + DRAPED_LAYER_STEP_M), frameUv(cell, center, along, leftOf(along), alongSize, acrossSize));
+        sources.wear.add(lot.source_key);
+        counts.wear[cell] = (counts.wear[cell] ?? 0) + 1;
+        placed += 1;
+      }
+    }
   }
   const parkAt = (point) => parkLayers.find((entry) => inBox(entry.box, point) && entry.index.contains(point)) ?? null;
   // Beds of the park layers with the given materials: whether a point lies on

@@ -10,9 +10,10 @@ render_mode depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx;
 // UV.x's integer part is kind + 16 * variant (street-ground-generation.mjs
 // STREET_PAINT_KINDS and PAINT_VARIANT_STRIDE): kinds 0 white, 1 yellow, 2 red
 // lane, 3 green lane, 4 tactile pad, 5 STOP legend, 6 faded yellow, 7 red curb,
-// 8 accessible blue, 9 a legend of the atlas. For kind 9 the variant is the atlas
-// cell; for the others it is the paint's wear step, 0 fresh to 3 mostly worn
-// away. A legend's fraction and UV.y are its local coordinates.
+// 8 accessible blue, 9 a legend of the atlas. The variant is the paint's wear
+// step, 0 fresh to 3 mostly worn away; for kind 9 it is the atlas cell plus
+// legend_cells times the wear step (STREET_LEGEND_ATLAS_CELLS). A legend's
+// fraction and UV.y are its local coordinates.
 uniform sampler2D paint_wear : hint_default_white, filter_linear_mipmap_anisotropic, repeat_enable;
 uniform sampler2D tactile : source_color, filter_linear_mipmap_anisotropic, repeat_enable;
 uniform sampler2D stop_legend : hint_default_black, filter_linear_mipmap_anisotropic, repeat_disable;
@@ -63,7 +64,9 @@ void fragment() {
 	// Fresh line paint is cut through only where the mask is below 0.25 (about 5 %
 	// of it); each wear step dulls it toward worn grey and wears more of it through.
 	float wear = texture(paint_wear, world_position.xz / paint_tile_m).r;
-	float worn = kind > 8.5 ? 0.0 : clamp(variant / 3.0, 0.0, 1.0);
+	float cell = mod(variant, legend_cells);
+	float wear_step = kind > 8.5 ? floor(variant / legend_cells + 0.001) : variant;
+	float worn = clamp(wear_step / 3.0, 0.0, 1.0);
 	vec3 albedo = white_paint;
 	float coverage = wear + 0.25 - worn * 0.3;
 	float rough = 0.75;
@@ -97,8 +100,8 @@ void fragment() {
 		albedo = accessible_blue * mix(0.82, 1.0, wear);
 		coverage = 1.0 - worn * 0.35 * (1.0 - wear);
 	} else {
-		// A legend of the atlas (cell = variant).
-		coverage = (wear + 0.25) * texture(legends, vec2((variant + local.x) / legend_cells, local.y)).r;
+		// A legend of the atlas, worn like the line paint.
+		coverage = (wear + 0.25 - worn * 0.3) * texture(legends, vec2((cell + local.x) / legend_cells, local.y)).r;
 	}
 	albedo = mix(albedo, worn_paint, worn * 0.45);
 	ALBEDO = albedo;

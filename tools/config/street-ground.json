@@ -4,7 +4,7 @@
     "The street ground of every Treasure Island street outside the pilot zones (tools/config/street-detail-zones.json), built by tools/lib/street-ground-generation.mjs. Each rule is production inference for game art read from the dated sources it cites, not survey data; a street with no imagery gets the plainest treatment its class supports.",
     "A treatment is how a class of street looks: each side's curb (walk: a concrete sidewalk sidewalk_width_m wide at the curb; verge: a concrete curb top, then grass, verge_width_m in all; none: the asphalt edge onto the ground), the fill between the curb and an OSM sidewalk set back from it (concrete, lawn or mulch), the centre line (double_yellow, dashed_faded, dashed_white or null), white edge lines, the paint of its marked crossings (continental bars, two transverse lines, or ladder: both), the paint wear (0 fresh to 3 mostly worn away), red fire-lane curb paint (none, along junction approaches, or all) and the asphalt wear (decals per 100 m2 of asphalt, manhole and drain spacing).",
     "A street names its OSM ways and treatment; set changes treatment fields for it; sides gives a way's left or right curb (relative to the way's own direction) as one kind or [from_m, to_m, kind] stretches along it; widen adds asphalt beyond the frozen ribbon on a side (the curb-to-curb width read from the aerial) and parking lists the stretches where the aerial shows cars at that curb, for the parked cars.",
-    "crossings gives the paint of an OSM crossing node (or none) as the dated aerial shows it, overriding its OSM tags: read off 0.25 m contact sheets of every OSM crossing node (2026-05-26 capture). An untagged node gets paint only where it is listed; where two nodes mark one crosswalk only one is listed. stops adds a stop line and STOP legend on an approach the photographs show and OSM lacks; bays are perpendicular parking bays paved off a street's edge (OSM maps none); lots paint a parking lot's stall rows, legends and raised islands. pilot sets the pilot zones' crosswalk paint wear.",
+    "crossings gives the paint of an OSM crossing node (or none) as the dated aerial shows it, overriding its OSM tags: read off 0.25 m contact sheets of every OSM crossing node (2026-05-26 capture). An untagged node gets paint only where it is listed; where two nodes mark one crosswalk only one is listed. stops adds a stop line and STOP legend on an approach the photographs show and OSM lacks; bays are perpendicular parking bays paved off a street's edge (OSM maps none); lots paint a parking lot's stall rows, legends (each at a paint wear step) and raised islands, and may lay their own pavement with its cracks, patches and oil stains where the photographs show it unlike the island's lot asphalt. pilot sets the pilot zones' crosswalk paint wear.",
     "Sources: Esri World Imagery, the Vantor capture of 2026-05-26 (0.34 m), exported at 0.25 m per pixel (0.32 m Web Mercator: map level 19 or coarser; Esri draws a different capture, 2025-08-29, at level 20, finer than about 0.15 m), its date checked 2026-11-05 with the service's identify at the export scale; Google Street View, dated per entry, cameras in game metres (x east, z south) with compass headings; the clutter layer's curb-parking survey of the same aerial (2026-11-05)."
   ],
   "pilot": {
@@ -239,7 +239,10 @@
         "w1001544695"
       ],
       "treatment": "new_district",
-      "evidence": "Aerial 2026-05-26: sidewalks on both curbs, cars parked along both curbs, continental crosswalks at its ends.",
+      "evidence": "Aerial 2026-05-26: sidewalks on both curbs, cars parked along both curbs, continental crosswalks at its ends. Google Street View Sep 2025 at 55 Cravath St and the aerial: no centre line between the parked cars.",
+      "set": {
+        "centerline": null
+      },
       "widen": {
         "w1001544695": {
           "left": 2.4,
@@ -319,12 +322,10 @@
       "id": "ninth_street",
       "ways": [
         "w255330072",
-        "w255330071",
-        "w8919277",
-        "w1212176121"
+        "w255330071"
       ],
       "treatment": "boulevard",
-      "evidence": "Google Street View Mar 2025 (9th St, camera x -398, z 94, heading 64); aerial 2026-05-26: double yellow, white edge lines, sidewalks on both sides.",
+      "evidence": "Aerial 2026-05-26: double yellow, white edge lines along both sides east of Avenue D, sidewalks on both sides.",
       "widen": {
         "w255330072": {
           "right": 1.1
@@ -332,7 +333,21 @@
         "w255330071": {
           "left": 4,
           "right": 4
-        },
+        }
+      }
+    },
+    {
+      "id": "ninth_street_west",
+      "ways": [
+        "w8919277",
+        "w1212176121"
+      ],
+      "treatment": "boulevard",
+      "evidence": "Google Street View Mar 2025 (9th St near Avenue B, camera x -399, z 92, heading 64): double yellow, no edge lines, cars at both curbs, sidewalks on both sides; aerial 2026-05-26.",
+      "set": {
+        "edge_lines": false
+      },
+      "widen": {
         "w8919277": {
           "left": 1.4,
           "right": 2.4
@@ -496,7 +511,10 @@
         "w11315404"
       ],
       "treatment": "village_walk",
-      "evidence": "Google Street View Mar 2025 at 1400 Sturgeon Street (toward Avenue B): a walk at the curb, two crosswalk lines and a stop line at Avenue B; OSM sidewalks along these courts; fish-streets references (Mar 2025).",
+      "evidence": "Google Street View Mar 2025 at 1400 Sturgeon Street (toward Avenue B): a walk at the curb, two crosswalk lines and a stop line at Avenue B; OSM sidewalks along these courts; fish-streets references (Mar 2025). Mar 2025 at Sturgeon Street and Avenue B: grey curbs, no red paint at the corner.",
+      "set": {
+        "red_curb": "none"
+      },
       "widen": {
         "w8918733": {
           "left": 2.2,
@@ -1074,72 +1092,122 @@
     {
       "way": "w8919063",
       "side": "left",
-      "from_m": 15,
-      "to_m": 65,
+      "from_m": 26,
+      "to_m": 62,
       "depth_m": 5.5,
       "stall_width_m": 2.7,
       "lines": true,
-      "evidence": "Clutter layer's curb-parking survey of the 2026-05-26 aerial (street-side bays, 2026-11-05); stall lines in the bays on the aerial strips: Mariner Drive"
+      "evidence": "2026-05-26 aerial (0.25 m export), read along the way with metre ticks (2026-11-05): perpendicular cars in a paved strip on the north-east side; Mariner Drive. Located by the clutter layer's curb-parking survey of the same aerial."
     },
     {
       "way": "w8919063",
       "side": "left",
-      "from_m": 150,
-      "to_m": 185,
+      "from_m": 95,
+      "to_m": 123,
       "depth_m": 5.5,
       "stall_width_m": 2.7,
       "lines": true,
-      "evidence": "Clutter layer's curb-parking survey of the 2026-05-26 aerial (street-side bays, 2026-11-05); stall lines in the bays on the aerial strips: Mariner Drive"
+      "evidence": "2026-05-26 aerial (0.25 m export), read along the way with metre ticks (2026-11-05): a paved strip with cars on the north side; Mariner Drive. Located by the clutter layer's curb-parking survey of the same aerial."
     },
     {
       "way": "w8919063",
       "side": "right",
-      "from_m": 140,
-      "to_m": 190,
+      "from_m": 98,
+      "to_m": 132,
       "depth_m": 5.5,
       "stall_width_m": 2.7,
       "lines": true,
-      "evidence": "Clutter layer's curb-parking survey of the 2026-05-26 aerial (street-side bays, 2026-11-05); stall lines in the bays on the aerial strips: Mariner Drive"
+      "evidence": "2026-05-26 aerial (0.25 m export), read along the way with metre ticks (2026-11-05): perpendicular cars in a paved strip on the south side; Mariner Drive. Located by the clutter layer's curb-parking survey of the same aerial."
     },
     {
-      "way": "w8917767",
+      "way": "w8919063",
       "side": "right",
-      "from_m": 80,
-      "to_m": 160,
+      "from_m": 141,
+      "to_m": 184,
       "depth_m": 5.5,
       "stall_width_m": 2.7,
       "lines": true,
-      "evidence": "Clutter layer's curb-parking survey of the 2026-05-26 aerial (street-side bays, 2026-11-05); stall lines in the bays on the aerial strips: Exposition Drive, outer side"
+      "evidence": "2026-05-26 aerial (0.25 m export), read along the way with metre ticks (2026-11-05): perpendicular cars in a paved strip on the south side; Mariner Drive. Located by the clutter layer's curb-parking survey of the same aerial."
+    },
+    {
+      "way": "w8919063",
+      "side": "right",
+      "from_m": 200,
+      "to_m": 224,
+      "depth_m": 5.5,
+      "stall_width_m": 2.7,
+      "lines": true,
+      "evidence": "2026-05-26 aerial (0.25 m export), read along the way with metre ticks (2026-11-05): perpendicular cars on the south side at the east end; Mariner Drive. Located by the clutter layer's curb-parking survey of the same aerial."
     },
     {
       "way": "w8917767",
       "side": "left",
-      "from_m": 2,
-      "to_m": 40,
+      "from_m": 24,
+      "to_m": 58,
       "depth_m": 5.5,
       "stall_width_m": 2.7,
       "lines": true,
-      "evidence": "Clutter layer's curb-parking survey of the 2026-05-26 aerial (street-side bays, 2026-11-05); stall lines in the bays on the aerial strips: Exposition Drive"
+      "evidence": "2026-05-26 aerial (0.25 m export), read along the way with metre ticks (2026-11-05): a paved strip with a car in front of the north-west block (grass and a tree from the junction to 23 m, as the Mar 2025 photo at 1225 Exposition Dr shows); Exposition Drive. Located by the clutter layer's curb-parking survey of the same aerial."
     },
     {
-      "way": "w8920838",
+      "way": "w8917767",
       "side": "left",
-      "from_m": 160,
-      "to_m": 200,
+      "from_m": 88,
+      "to_m": 126,
       "depth_m": 5.5,
       "stall_width_m": 2.7,
       "lines": true,
-      "evidence": "Clutter layer's curb-parking survey of the 2026-05-26 aerial (street-side bays, 2026-11-05); stall lines in the bays on the aerial strips: Northpoint Drive"
+      "evidence": "2026-05-26 aerial (0.25 m export), read along the way with metre ticks (2026-11-05): striped perpendicular stalls with cars on the outer side of the bend; Exposition Drive. Located by the clutter layer's curb-parking survey of the same aerial."
     },
     {
       "way": "w8920838",
       "side": "right",
-      "from_m": 280,
-      "to_m": 320,
+      "from_m": 156,
+      "to_m": 210,
       "depth_m": 5.5,
       "stall_width_m": 2.7,
       "lines": true,
-      "evidence": "Clutter layer's curb-parking survey of the 2026-05-26 aerial (street-side bays, 2026-11-05); stall lines in the bays on the aerial strips: Northpoint Drive"
+      "evidence": "2026-05-26 aerial (0.25 m export), read along the way with metre ticks (2026-11-05): striped perpendicular stalls with cars on the inner side of the bend; Northpoint Drive. Located by the clutter layer's curb-parking survey of the same aerial."
+    },
+    {
+      "way": "w8920838",
+      "side": "left",
+      "from_m": 276,
+      "to_m": 300,
+      "depth_m": 5.5,
+      "stall_width_m": 2.7,
+      "lines": true,
+      "evidence": "2026-05-26 aerial (0.25 m export), read along the way with metre ticks (2026-11-05): a paved apron with stalls and cars on the east side; Northpoint Drive. Located by the clutter layer's curb-parking survey of the same aerial."
+    },
+    {
+      "way": "w8920838",
+      "side": "left",
+      "from_m": 318,
+      "to_m": 345,
+      "depth_m": 5.5,
+      "stall_width_m": 2.7,
+      "lines": true,
+      "evidence": "2026-05-26 aerial (0.25 m export), read along the way with metre ticks (2026-11-05): perpendicular cars in a paved strip on the east side; Northpoint Drive. Located by the clutter layer's curb-parking survey of the same aerial."
+    },
+    {
+      "way": "w8916719",
+      "side": "right",
+      "from_m": 14,
+      "to_m": 60,
+      "depth_m": 5.5,
+      "stall_width_m": 2.7,
+      "lines": true,
+      "evidence": "2026-05-26 aerial (0.25 m export), read along the way with metre ticks (2026-11-05): perpendicular cars on the court's east side; Gateview Court. Located by the clutter layer's curb-parking survey of the same aerial."
+    },
+    {
+      "way": "w8916719",
+      "side": "left",
+      "from_m": 14,
+      "to_m": 44,
+      "depth_m": 5.5,
+      "stall_width_m": 2.7,
+      "lines": true,
+      "evidence": "2026-05-26 aerial (0.25 m export), read along the way with metre ticks (2026-11-05): perpendicular cars on the court's west side; Gateview Court. Located by the clutter layer's curb-parking survey of the same aerial."
     }
   ],
   "lots": [
@@ -1335,8 +1403,9 @@
             0.869,
             -0.495
           ],
-          "length_m": 1.8,
-          "width_m": 10.5
+          "length_m": 1.2,
+          "width_m": 10.5,
+          "paint_wear": 2
         },
         {
           "cell": "arrow_left",
@@ -1349,12 +1418,18 @@
             -0.869
           ],
           "length_m": 4.8,
-          "width_m": 1.2
+          "width_m": 1.2,
+          "paint_wear": 2
         }
       ],
       "surface": {
         "material": "yard_asphalt_pale",
-        "evidence": "Google Street View Sep 2025 inside the lot (panos TKhpp, UmL4 and LtXS): pale, sun-bleached, cracked and patched asphalt across the field and the Avenue A strip, much lighter than the island's darker lot asphalt; the yards' pale worn asphalt (yard_asphalt_pale) at the yards' lift."
+        "evidence": "Google Street View Sep 2025 inside the lot (panos TKhpp, UmL4 and LtXS): pale, sun-bleached, cracked and patched asphalt across the field and the Avenue A strip, much lighter than the island's darker lot asphalt; the yards' pale worn asphalt (yard_asphalt_pale) at the yards' lift. Cracks, sealed cracks and darker patches throughout (Sep 2025 photos, headings 10, 70 and 190; the 2026-05-26 aerial).",
+        "wear": {
+          "crack_per_100m2": 2.0,
+          "oil_per_100m2": 0.3,
+          "patch_per_100m2": 0.8
+        }
       }
     }
   ]
