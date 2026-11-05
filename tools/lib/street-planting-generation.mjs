@@ -64,7 +64,7 @@ export const PLANT_WIDTHS_M = Object.freeze({
   conical_shrub: Object.freeze([2.0, 2.4]),
   dense_sedge: Object.freeze([0.55, 0.75, 0.95, 1.6, 2.5]),
   dune_tansy: Object.freeze([0.42, 0.62, 0.82]),
-  eucalyptus_mature: Object.freeze([2.0, 2.4]),
+  eucalyptus_mature: Object.freeze([3.0, 3.4]),
   indian_hawthorn: Object.freeze([2.0, 2.5, 3.0]),
   island_oak_young: Object.freeze([1.0, 1.2, 1.4]),
   monterey_cypress: Object.freeze([17.0, 12.5, 2.0, 1.4, 1.1]),
@@ -82,6 +82,7 @@ export const PLANT_WIDTHS_M = Object.freeze({
   seep_monkeyflower: Object.freeze([0.38, 0.52, 0.66]),
   shrubby_sage: Object.freeze([0.6, 0.85, 1.1]),
   spreading_broadleaf: Object.freeze([3.0, 3.6, 4.4, 5.0]),
+  weeping_broadleaf: Object.freeze([2.5, 2.5]),
   sydney_blue_gum_young: Object.freeze([0.8, 0.8, 0.8]),
   white_umbel_perennial: Object.freeze([0.32, 0.42, 0.52]),
 });

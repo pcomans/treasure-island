@@ -58,7 +58,7 @@ export const STREET_VEGETATION_PROPS = Object.freeze({
   conical_shrub: vegetationProp(["planting_slot", "tree"], 2, 0.4, false),
   dense_sedge: vegetationProp(LOW_PLANT_KINDS, 5, 0.18, false),
   dune_tansy: vegetationProp(LOW_PLANT_KINDS, 3, 0.2, false),
-  eucalyptus_mature: vegetationProp(["tree"], 2, 0.6, true),
+  eucalyptus_mature: vegetationProp(["tree"], 2, 0.9, true),
   indian_hawthorn: vegetationProp(["planting_slot"], 3, 0.6, false),
   island_oak_young: vegetationProp(["tree"], 3, 0.3, true),
   mexican_fan_palm: vegetationProp(["palm_slot", "tree"], 6, 0.45, true),
@@ -77,6 +77,7 @@ export const STREET_VEGETATION_PROPS = Object.freeze({
   seep_monkeyflower: vegetationProp(LOW_PLANT_KINDS, 3, 0.15, false),
   shrubby_sage: vegetationProp(LOW_PLANT_KINDS, 3, 0.3, false),
   spreading_broadleaf: vegetationProp(["tree"], 4, 0.7, true),
+  weeping_broadleaf: vegetationProp(["tree"], 2, 0.5, true),
   sydney_blue_gum_young: vegetationProp(["tree"], 3, 0.3, true),
   white_umbel_perennial: vegetationProp(LOW_PLANT_KINDS, 3, 0.15, false),
 });

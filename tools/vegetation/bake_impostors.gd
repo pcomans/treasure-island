@@ -31,7 +31,7 @@ const TextureImport := preload("res://tools/vegetation/texture_import.gd")
 ## Longest side of the saved image of one view; the bake renders at twice this and halves it.
 const PIXELS := {
 	"mexican_fan_palm": 256, "canary_date_palm": 256, "monterey_cypress": 512, "sydney_blue_gum_young": 256, "island_oak_young": 256,
-	"monterey_pine": 256, "spreading_broadleaf": 256, "nz_christmas_tree": 192, "eucalyptus_mature": 256, "norfolk_island_pine": 128,
+	"monterey_pine": 256, "spreading_broadleaf": 256, "nz_christmas_tree": 192, "eucalyptus_mature": 256, "weeping_broadleaf": 256, "norfolk_island_pine": 128,
 	"indian_hawthorn": 96, "pittosporum_tobira": 96, "red_tip_shrub": 64, "conical_shrub": 128, "nz_flax": 64,
 }
 ## The bake's light: ambient, and a light straight down that shades a crown from
@@ -43,11 +43,12 @@ const BAKE_TOP_LIGHT := 0.6
 const EYE_M := 2.2
 const CHECK_PIXELS := 256
 ## Mean sRGB of leaves in the dated crops, kept with the vegetation work notes
-## outside Git (p5, c2 and c4, b5, n1, s1, s2, s3); they vary with the light of the
+## outside Git (p5, c2 and c4, b5, the owner's Job Corps photos, n1, s1, s2, s3); they vary with the light of the
 ## day, and a crop shows the lit part of a plant where the check takes all of it,
 ## darker by about 1.3 in sRGB, so read a gap as a direction, not a number to hit.
 const FOLIAGE_CROPS := {
 	"monterey_pine": [88, 97, 71], "spreading_broadleaf": [79, 84, 63], "nz_christmas_tree": [68, 70, 58], "norfolk_island_pine": [121, 120, 78],
+	"eucalyptus_mature": [95, 97, 83], "weeping_broadleaf": [82, 83, 68],
 	"indian_hawthorn": [116, 117, 59], "pittosporum_tobira": [110, 111, 61], "conical_shrub": [99, 104, 68],
 }
 ## How far the ramp of gain may go at either end of a plant.
