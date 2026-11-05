@@ -37,12 +37,13 @@
       "Sidewalks are poured concrete in panel_m squares that follow the street. closing_m fills gaps narrower than twice it between raised pieces. A zone with planting curb_strip turns the raised ground between the curb and a sidewalk set back by planting_gap_m or more, and the ground beyond the default sidewalk where an OSM sidewalk crowds the curb, into mulch beds (Avenue of the Palms, Sep 2025 photos ih02 and ih05). planting_behind_walk names OSM sidewalks photographed at the curb instead: the default walk stays there and the bed takes the ground behind it.",
       "A plaza is a concrete walk walk_m wide at the curb plus banded paving out to depth_m, on the side of its roads nearest side_point_xz, clipped to its zone.",
       "parking_lanes add width_m of asphalt beyond the frozen ribbon on both sides of the listed roads inside the zone; the curb, its ramps and the sidewalk move out with it (Avenue of the Palms: cars park along both curbs in Sep 2025 ih02 and ih05).",
-      "centerlines picks a style per road class: double_yellow, or dashed_faded (a worn yellow dash dash_m long every dash_m + dash_gap_m)."
+      "centerlines picks a style per road class: double_yellow, or dashed_faded (a worn yellow dash dash_m long every dash_m + dash_gap_m).",
+      "The drawn layers over the road lie, bottom to top, at least 2 mm (a layer step) apart where they overlap, so none share a plane: the road (and its parking lanes, at the same height but drawn clear of every road and path ribbon), the pedestrian skin 2 mm up, gutter pans gutter_m up, asphalt wear midway between the gutter and the paint, and road paint paint_m up. A curb ramp's foot stands ramp_foot_m over the road, under the paint. A zone's ground surfaces lie at least 2 mm over the paint; where two zones' ground overlaps, the zone listed later replaces the earlier one's."
     ],
     "kerb": {"reveal_m": 0.15, "sidewalk_width_m": 2.2, "sidewalk_reach_m": 5.0, "support_run_m": 0.45, "back_slope_run_m": 0.8, "flare_run_m": 0.6, "gutter_width_m": 0.35, "building_clearance_m": 0.3, "minimum_width_m": 0.6, "closing_m": 1.4, "planting_gap_m": 1.0, "panel_m": 1.5},
-    "crossings": {"bar_width_m": 0.6, "bar_gap_m": 0.6, "walk_width_m": 4.5, "ramp_width_m": 3.6, "ramp_depth_m": 1.5, "tactile_depth_m": 0.9},
+    "crossings": {"bar_width_m": 0.6, "bar_gap_m": 0.6, "walk_width_m": 4.5, "ramp_width_m": 3.6, "ramp_depth_m": 1.5, "ramp_foot_m": 0.006, "tactile_depth_m": 0.9},
     "lines": {"width_m": 0.1, "double_gap_m": 0.1, "edge_inset_m": 0.3, "bike_lane_width_m": 1.5, "bus_lane_width_m": 2.0, "conflict_length_m": 9.0, "dash_m": 3.0, "dash_gap_m": 9.0, "stop_bar_width_m": 0.45, "stop_legend_length_m": 2.4, "stop_legend_gap_m": 1.5, "stall_length_m": 5.2, "stall_spacing_m": 2.7},
-    "lifts": {"paint_m": 0.006, "gutter_m": 0.003}
+    "lifts": {"paint_m": 0.008, "gutter_m": 0.004}
   },
   "zones": [
     {
