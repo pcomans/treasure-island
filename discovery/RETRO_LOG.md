@@ -23724,7 +23724,7 @@ Carried by deploy-fix from the deploy agent's scratch log; text unchanged apart 
 ### street-clutter-rollout-20261105 — 2026-11-05 — fix round: walk-up lanes, the arrival ray, Mersea can and dumpster
 
 - What worked well: measuring before building. Comparing the predicted start with the test (178 of 696 sides differed) stopped a drift check being built on a model that couldn't hold. ROOT then flipped the dependency: the test already closes lanes on street solids, so the generator only keeps lanes free. Generating the world for two, three, four and all lanes gave real car counts and logged lane risks in one pass, and pointed to a rule that cost no more cars than two lanes. Reading one failing walk's own log lines located the "stuck without hitting anything" cause, and a ray probe confirmed it was a sill at chest height, not the ground.
-- What did not work well: I modelled the fit test in the generator twice (all lanes, then the predicted start) before asking how the test reacts to a blocked lane. The second try added a test mode that would have pinned recorded starts. Two free lanes then failed on a building's own stoops, which the generator can't see, so the rule took a third pass. My first probe used the harness's 120 s load limit and timed out with the other slots busy, and my sheet script split captions on the first pipe, which blanked the panels until I looked at the file size. 12th Street's stretch had been measured from the wrong end of its way; it only showed once the ground had room for those cars and the aerial sat beside them.
+- What did not work well: I modelled the fit test in the generator twice (all lanes, then the predicted start) before asking how the test reacts to a blocked lane. The second try added a test mode that would have pinned recorded starts. Two free lanes then failed on a building's own stoops, which the generator can't see, so the rule took a third pass. My first probe used the harness's 120 s load limit and timed out with the other slots busy, and my sheet script split captions on the first pipe, which blanked the panels until I looked at the file size. 12th Street's stretch had been measured from the wrong end of its way; it only showed once the ground had room for those cars and the aerial sat beside them. My first run of the seven stock walks hit its own 900 s limit during the last walk's return, because a fixed-step tick with frames saved took about 0.15 s; the walk log was buffered, so I had to re-run them with fewer frames and a longer limit.
 - What the team should change next time: before fixing a test failure in a generator, read how the test handles the obstacle and add only the slack it needs. Report the cost per lot or street at the time of the fix. When a count goes from zero to placed, put that street beside its dated panel before calling it done; a stretch nobody has seen rendered is unchecked.
 
 ### street-ground-rollout-20261105 — last commit — 2026-11-05 — red curbs from photos, flat courts, review notes (no suite this round; clutter's suite covers it)
@@ -23746,3 +23746,22 @@ Carried by deploy-fix from the deploy agent's scratch log; text unchanged apart 
 (Relayed verbatim by the coordinator; added by street-ground-rollout-20261105.)
 
 - Rebuilding the generator with logging, then comparing real polygons rather than triangle sets, turned the author's open questions into measurements in minutes; a pass that repairs problems before its own check runs still needs a limit on what it may repair, or the check proves nothing.
+
+### street-ground-rollout-20261105 — far curbs and stretch checks — 2026-11-05
+
+- What worked well: Measuring R minus the larger of G and B along each far curb in the native photos, against one known-red and one known-grey curb, separated thin red from shaded grey without guessing, and a ray per image column put each reading at a distance along the way. That found three more far curbs beyond the one asked for, and cleared Northpoint's and Bayside's. Failing the build on a stretch that paints nothing turns a typo in the evidence into an error.
+- What did not work well: I painted near curbs only in the first pass and missed these, so the reviewer found the one at 1440 Gateview Ct. I also wrote Bayside's stretch and one 13th stretch without checking them against the bay and the driveway in the same place, so part of each could never paint; the code reviewer's coverage count caught that.
+  The render asked for at w8916719 could not show the short curb I had added there in r4: it fell below the frame, 1.8 m from the camera. Checking the data showed that it mattered. The strip stood on the housing site's parking apron, about 6 m in front of the lawn it stood for, so I removed it. That removal was not paint only: every later storm drain moved, because drain spacing runs on from one curb edge to the next across the whole island, pilot zones included. That touched 32 chunks and two parked cars' rest by about 2 mm.
+- What the team should change next time: After writing a rule that paints an existing edge, print how much of it actually painted against how much was asked for. Before placing a curb from a photo, check the building's own `local_ground`, since a rule can only put a curb at the road edge. When a render is meant to show something close to the camera, check first that it falls inside the frame. Restart the drain spacing per road, so a curb change stays local.
+
+### visual-review-street-ground — r4 delta
+
+(Relayed verbatim by the coordinator; added by street-ground-rollout-20261105.)
+
+My "left only" came from a downscaled sheet and the author's native-resolution read overturned it, so judge paint presence from native photos, and when painting from photos check far curbs as well as near ones.
+
+### code-review-ground-clutter — ground delta 2 b0ebbabf PASS
+
+(Relayed verbatim by the coordinator; added by street-ground-rollout-20261105.)
+
+- Sampling the real collision mesh showed that the alarming 0.23 m "steps" were seam artefacts and the true lips are about 6 cm, so a raw height scan needs filtering before anyone believes it, and it still doesn't replace a stock walk.
