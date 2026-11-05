@@ -105,7 +105,7 @@ below use. Place #8 is two zones.
 | #5 Treasure Island Drive-Up Self Storage | `yard_ti_drive_up` | 2 est. | Yards A (as #1): parallel shed rows on paved aisles, beige container walls | 3: secondary items |
 | #6 City View Commissary | `yard_food_truck_commissary` | 2 est. | Yards A (as #1): food trucks, white fabric sheds, beige container wall | 3: secondary items |
 | #7 Bay Area Concrete Recycling yard | `concrete_recycling_yard` | 2 est. | Yards B visual rounds 2–6 and B08/B09 deltas, code PASS at `8f24ca9e`: container walls, conveyors, aggregate piles, machines; owner-approved levelling | 3: secondary items |
-| #8 8th Street and Avenue N yard (north) | `eighth_avenue_n_north_yard` | 2 est. | Yards B (as #7): trailers, work vehicles, mats and pipe sections, tarp piles on pale gravel. Open: its ground overlaps #15's by 219 m² near (412, -339) at the same lift and z-fights (push-7 RETRO), an L1 surface defect to fix first | 3: the portable toilets the photos show (not in the kit) |
+| #8 8th Street and Avenue N yard (north) | `eighth_avenue_n_north_yard` | 2 est. | Yards B (as #7): trailers, work vehicles, mats and pipe sections, tarp piles on pale gravel | 3: the portable toilets the photos show (not in the kit) |
 | #8 8th Street and Avenue N yard (south) | `eighth_avenue_n_south_yard` | 2 est. | Yards B (as #7): white fabric shed, vehicles and equipment behind slatted chain-link | 3: secondary items |
 | #9 Avenue M contractor staging yard | `avenue_m_staging_yard` | 2 est. | Yards B (as #7): owner-approved soil mound with the excavator on top, plastic stockpile, trailers, RVs and work vehicles | 3: secondary items |
 | #10 Pier 1 barges | `pier1_barges` | 2 est. | Yards B (as #7): crane and deck barges moored at Pier 1, deck cargo, pier-root fences | 3: deck detail from a closer dated photo |
@@ -113,7 +113,7 @@ below use. Place #8 is two zones.
 | #12 9th Street and Avenue H construction site | `construction_9th_avenue_h` | 2 est. | Yards B (as #7): slab, office trailer, boxes, machines, panels with orange safety mesh | 3: secondary items |
 | #13 Seven Seas Avenue Gate 5 staging yard | `gate5_staging_yard` | 2 est. | Yards B (as #7): bermed sand square, soil piles, cylinder sections, containers, fabric sheds | 3: secondary items |
 | #14 505 Avenue N soil spread | `avenue_n_soil_spread` | 2 est. | Yards B (as #7): staggered windrows across the spread, OSM construction panels | 3: edges |
-| #15 SFFD training facility yard | `fire_training_yard` | 2 est. | Yards B (as #7): rubble pile, white work vehicles. Open: the 219 m² z-fight with #8 north (see that row) | 3: secondary items |
+| #15 SFFD training facility yard | `fire_training_yard` | 2 est. | Yards B (as #7): rubble pile, white work vehicles | 3: secondary items |
 | #16 Fenced Navy investigation lots | `navy_investigation_lots` | 2 est. | Yards B (as #7): the OSM barbed chain-link fence is its only content; the lots are grass and old slabs | 3: the old slabs, where a dated photo shows them |
 
 ### OSM parks, plazas and pitches
