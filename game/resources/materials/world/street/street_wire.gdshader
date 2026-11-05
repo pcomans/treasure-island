@@ -4,7 +4,8 @@
 // wire would shrink below a pixel and break into dashes, so each ring vertex
 // moves out along its radial normal until the wire is min_pixels wide on
 // screen, and the wire fades by the share of that width the real wire would
-// cover (no fainter than min_alpha), as a thin line does against the sky.
+// cover (no fainter than min_alpha), as a thin line does against the sky: a
+// conductor 100 m off reads as a faint continuous line, not a dark rope.
 // The growth is worked out in world space: Forward+ hands the vertex function a
 // VERTEX already moved by the instance transform (MODEL_MATRIX the node's),
 // Compatibility may hand it the unit tube (MODEL_MATRIX node and instance), and
@@ -14,8 +15,8 @@ shader_type spatial;
 render_mode cull_disabled, depth_draw_opaque, unshaded;
 
 uniform vec4 albedo : source_color = vec4(0.07, 0.07, 0.075, 1.0);
-uniform float min_pixels = 1.9;
-uniform float min_alpha = 0.3;
+uniform float min_pixels = 1.5;
+uniform float min_alpha = 0.12;
 varying float coverage;
 
 void vertex() {
