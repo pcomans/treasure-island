@@ -1007,9 +1007,11 @@ In the street-clutter rollout (2026-11-05), fit runs on the accepted units withi
 
 The first fix cleared all five lanes on every side for 10.5 m. It passed, but it cost 23 cars against the aerial counts, emptied Flounder Court of most of its cars, and only the audit showed the cost.
 
-The kept fix clears only the walk the test would take. The generator predicts that start for each side from what stands there without the island items (predictWalkUps in tools/lib/street-detail-generation.mjs) and bars only the island cars in that walk. Every aerial count then held. The lane order and margins live in tools/config/walk-up-lanes.json, which both the test and the generator read. `island_test.gd -- --walk-up-predictions` checks that the prediction still equals the test's first open start.
+A second attempt predicted the start the test would take and cleared only that walk. The prediction disagreed with the test on 178 of 696 sides: the test also closes lanes on the building's own stoops, on missing walkable ground and by its native-wall rules.
 
-When a test failure is fixed in a generator, fix the failing condition, report its cost against the evidence, and run the island test before the suite rather than fits sampled near the new props.
+The kept fix doesn't model the test's choice. The test already closes a lane whose start or corridor a street-detail solid occupies, and walks the first lane that is open. So the generator places the island items as the evidence says. Each scored side then keeps at least two of the lanes its site leaves open free of street solids. Only where fewer are free does it bar the island cars in the lanes that need the fewest moves (walkUpLanes and walkUpOccupancy in tools/lib/street-detail-generation.mjs). Every aerial lot and bay count held, and 4 rows moved. The lane geometry lives in tools/config/walk-up-lanes.json, which both the test and the generator read.
+
+When a test failure is fixed in a generator, fix the failing condition with some slack rather than modelling the test's choices. Report the fix's cost against the evidence, and run the island test before the suite rather than fits sampled near the new props.
 
 ## A walk-up start that is open can still be unwalkable
 
