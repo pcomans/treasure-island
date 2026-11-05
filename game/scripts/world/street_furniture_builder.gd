@@ -102,7 +102,7 @@ func build(document: Dictionary) -> Dictionary:
 		root.free()
 		return wires
 	if not (wires.cells as Dictionary).is_empty():
-		batches["power_wire"] = {"mesh": kit.wire_mesh(), "range_m": KIT.WIRE_RANGE_M, "shadow": false, "cells": wires.cells}
+		batches["power_wire"] = {"mesh": kit.wire_mesh(), "range_m": KIT.WIRE_RANGE_M, "shadow": false, "cells": wires.cells, "custom": wires.custom}
 		prop_counts["power_wires"] = wire_rows.size()
 	var multimeshes := 0
 	var batch_keys: Array = batches.keys()
@@ -113,8 +113,11 @@ func build(document: Dictionary) -> Dictionary:
 		cell_keys.sort()
 		for cell: String in cell_keys:
 			var transforms: Array = batch.cells[cell]
+			# Per-instance custom data where the batch has it (the wires' radii).
+			var customs: Array = (batch.get("custom", {}) as Dictionary).get(cell, [])
 			var multimesh := MultiMesh.new()
 			multimesh.transform_format = MultiMesh.TRANSFORM_3D
+			multimesh.use_custom_data = not customs.is_empty()
 			multimesh.mesh = batch.mesh
 			multimesh.instance_count = transforms.size()
 			var mesh_box: AABB = (batch.mesh as Mesh).get_aabb()
@@ -122,6 +125,8 @@ func build(document: Dictionary) -> Dictionary:
 			var centers := PackedVector3Array()
 			for index in transforms.size():
 				multimesh.set_instance_transform(index, transforms[index])
+				if not customs.is_empty():
+					multimesh.set_instance_custom_data(index, customs[index])
 				var box: AABB = (transforms[index] as Transform3D) * mesh_box
 				bounds = box if index == 0 else bounds.merge(box)
 				centers.append(box.get_center())
@@ -208,7 +213,9 @@ func build(document: Dictionary) -> Dictionary:
 
 
 ## The wire pieces of the power lines and spurs: {ok, spans, cells: {cell ->
-## [Transform3D]}} for the shared wire mesh (a unit tube along +Z). Each line's
+## [Transform3D]}, custom: {cell -> [Color(radius, 0, 0, 0)]}} for the shared
+## wire mesh (a unit tube along +Z; its shader reads each piece's radius from
+## the custom data). Each line's
 ## prop_params.poles lists its poles in order along it (null where a vertex has
 ## none); a span joins each two consecutive built poles, and each spur its two
 ## poles. At each end it takes the crossarm squarest to the span, and pairs the
@@ -228,6 +235,7 @@ func _wire_pieces(rows: Array[Dictionary], spurs: Array, poles: Dictionary) -> D
 	for spur: Array in spurs:
 		pairs.append([spur[0], spur[1], spur[0]])
 	var cells: Dictionary = {}
+	var custom: Dictionary = {}
 	var spans := 0
 	for pair: Array in pairs:
 		if not poles.has(pair[0]) or not poles.has(pair[1]):
@@ -244,12 +252,12 @@ func _wire_pieces(rows: Array[Dictionary], spurs: Array, poles: Dictionary) -> D
 		var tops_a := _across_order(_attachments(a, span), across)
 		var tops_b := _across_order(_attachments(b, -span), across)
 		for conductor in mini(tops_a.size(), tops_b.size()):
-			_hang(cells, tops_a[conductor], tops_b[conductor], KIT.WIRE_SAG, KIT.WIRE_RADIUS_M)
+			_hang(cells, custom, tops_a[conductor], tops_b[conductor], KIT.WIRE_SAG, KIT.WIRE_RADIUS_M)
 		var lower_a: Vector3 = (a.placement as Transform3D) * (a.wires.lower as Vector3)
 		var lower_b: Vector3 = (b.placement as Transform3D) * (b.wires.lower as Vector3)
-		_hang(cells, lower_a, lower_b, KIT.WIRE_LOWER_SAG, KIT.WIRE_LOWER_RADIUS_M)
+		_hang(cells, custom, lower_a, lower_b, KIT.WIRE_LOWER_SAG, KIT.WIRE_LOWER_RADIUS_M)
 		spans += 1
-	return {"ok": true, "spans": spans, "cells": cells}
+	return {"ok": true, "spans": spans, "cells": cells, "custom": custom}
 
 
 ## The world insulator tops of the crossarm of a pole squarest to a span
@@ -277,8 +285,9 @@ func _across_order(points: Array[Vector3], across: Vector3) -> Array[Vector3]:
 
 
 ## One wire from a to b, sagging `sag` of its length at mid span, as straight
-## pieces of the unit wire tube (radius `radius`), filed by their midpoint's cell.
-func _hang(cells: Dictionary, a: Vector3, b: Vector3, sag: float, radius: float) -> void:
+## pieces of the unit wire tube (radius `radius`, also kept in custom for the
+## shader), filed by their midpoint's cell.
+func _hang(cells: Dictionary, custom: Dictionary, a: Vector3, b: Vector3, sag: float, radius: float) -> void:
 	var length := a.distance_to(b)
 	var pieces := maxi(4, ceili(length / KIT.WIRE_SEGMENT_M))
 	var drop := length * sag
@@ -297,5 +306,7 @@ func _hang(cells: Dictionary, a: Vector3, b: Vector3, sag: float, radius: float)
 		var cell := "%d_%d" % [floori(middle.x / CELL_MAX_M), floori(middle.z / CELL_MAX_M)]
 		if not cells.has(cell):
 			cells[cell] = []
+			custom[cell] = []
 		(cells[cell] as Array).append(Transform3D(Basis(x, y, along), previous))
+		(custom[cell] as Array).append(Color(radius, 0.0, 0.0, 0.0))
 		previous = point

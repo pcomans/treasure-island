@@ -217,6 +217,8 @@ const BLADE_HEIGHT_M := 0.24
 const BLADE_LOWER_Y_M := 3.18
 const BLADE_STEP_Y_M := 0.27
 const BLADE_POST_TOP_M := 3.03
+## How far a blade clamped beside a lamp pole starts from the pole's axis.
+const LAMP_BLADE_REACH_M := 0.14
 const BLADE_MARGIN_M := 0.09
 
 var _opaque: StandardMaterial3D
@@ -303,6 +305,11 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 			# upswept arm (the owner lot's island lamp).
 			var bend := snappedf(clampf(_number(params, "bend_m", 1.2), 0.2, 1.2), 0.05)
 			_piece(result, "lamp_cobra_h%.1f_a%.1f_c%d_b%.2f" % [height, arm, int(classic), bend], func(b: Builder) -> void: _lamp_cobra(b, height, arm, classic, bend))
+			# blades: a junction's name blades clamped beside the pole at mid-height
+			# (Avenue B at Gateview Avenue, Nov 2025), each reaching out along its street.
+			var lamp_blades: Variant = params.get("blades", null)
+			if lamp_blades is Array:
+				_blades(result, lamp_blades, LAMP_BLADE_REACH_M)
 			_capsule(result, 0.13, height - 0.9)
 		"lamp_lot":
 			var lot_height := _number(params, "height_m", 6.0)
@@ -790,7 +797,7 @@ func _name_sign(result: Dictionary, params: Dictionary) -> void:
 ## The white name blades of a junction on top of a post, one per street (at
 ## most two, the second above the first), each turned along its street by its
 ## yaw; the names are Label3D in black on both faces.
-func _blades(result: Dictionary, blades: Array) -> void:
+func _blades(result: Dictionary, blades: Array, beside := 0.0) -> void:
 	var font := ThemeDB.fallback_font
 	for index in mini(blades.size(), 2):
 		var blade: Variant = blades[index]
@@ -800,8 +807,13 @@ func _blades(result: Dictionary, blades: Array) -> void:
 		var text_m := font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, LABEL_FONT_SIZE).x * LABEL_PIXEL_M
 		var length := snappedf(maxf(0.6, text_m + BLADE_MARGIN_M * 2.0), 0.05)
 		var y := BLADE_LOWER_Y_M + BLADE_STEP_Y_M * float(index)
-		var placement := Transform3D(Basis(Vector3.UP, _number(blade, "yaw", 0.0)), Vector3(0, y, 0))
+		var turn := Basis(Vector3.UP, _number(blade, "yaw", 0.0))
+		# On a post the blades sit centred on its top; beside a pole (beside > 0)
+		# each one is clamped by its end, clear of the pole.
+		var placement := Transform3D(turn, turn * Vector3(length * 0.5 + beside if beside > 0.0 else 0.0, y, 0))
 		_piece(result, "name_blade_white_l%.2f" % length, func(b: Builder) -> void: _blade(b, length), placement)
+		if beside > 0.0:
+			_piece(result, "name_blade_clamp", func(b: Builder) -> void: b.box(Vector3(0.5 * beside, 0, 0), Basis.IDENTITY, Vector3(beside + 0.02, 0.06, 0.05), GALVANIZED, CELL_METAL), Transform3D(turn, Vector3(0, y, 0)))
 		# Text on both faces: Label3D faces +Z, so the front copy turns half round.
 		result.labels.append({"text": text, "color": NAME_TEXT, "transform": placement * Transform3D(Basis(Vector3.UP, PI), Vector3(0, 0, -0.014))})
 		result.labels.append({"text": text, "color": NAME_TEXT, "transform": placement * Transform3D(Basis.IDENTITY, Vector3(0, 0, 0.014))})
@@ -866,10 +878,13 @@ func _bus_stop_sign(b: Builder) -> void:
 	_muni_flag(b, Vector3.ZERO)
 
 
-## The square galvanised post of a Muni stop at `foot`, its navy flag standing
-## out toward the road (-Z), faces along X.
+## The galvanised U-channel post of a Muni stop at `foot` (as at Avenue B and
+## Gateview Avenue, Nov 2025), its navy flag standing out toward the road (-Z),
+## faces along X: the channel's web toward the flag, its two flanges back.
 func _muni_flag(b: Builder, foot: Vector3) -> void:
-	b.box(foot + Vector3(0, 1.45, 0), Basis.IDENTITY, Vector3(0.05, 3.5, 0.05), GALVANIZED, CELL_METAL)
+	b.box(foot + Vector3(0, 1.45, -0.022), Basis.IDENTITY, Vector3(0.056, 3.5, 0.006), GALVANIZED, CELL_METAL)
+	for side: float in [-1.0, 1.0]:
+		b.box(foot + Vector3(side * 0.025, 1.45, -0.004), Basis.IDENTITY, Vector3(0.006, 3.5, 0.036), GALVANIZED, CELL_METAL)
 	var basis := Basis.looking_at(Vector3.LEFT, Vector3.UP)
 	for dy: float in [-0.24, 0.24]:
 		b.box(foot + Vector3(0, 2.6 + dy, -0.05), Basis.IDENTITY, Vector3(0.04, 0.04, 0.1), GALVANIZED, CELL_METAL)

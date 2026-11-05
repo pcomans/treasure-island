@@ -122,6 +122,13 @@ if [ -s "${baked}" ]; then
 fi
 rm -f "${baked}"
 
+# A street prop in front of a wall blocks the spray: aimed low at w95934125's
+# wall through the transformer pad of OSM cabinet n11629097460 standing before
+# it, the spray must be refused with the pad (street_furniture) as the first hit.
+# If the pad or the building moves, re-aim game/tests/shared/street_prop_spray.json.
+echo "== game/tests/shared/building_fit_test.gd -- --source w95934125 --spray (street prop blocker)"
+check_godot "street prop blocks the spray (building_fit_test.gd w95934125)" 600 tools/godot --fixed-fps 60 --path . --audio-driver Dummy --script game/tests/shared/building_fit_test.gd -- --source w95934125 --street-detail on --spray res://game/tests/shared/street_prop_spray.json
+
 echo "== tools/validate_godot_world.mjs"
 node tools/validate_godot_world.mjs >/dev/null || failed+=("tools/validate_godot_world.mjs")
 
