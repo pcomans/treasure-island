@@ -45,27 +45,30 @@ const SHRUB_CELL_SOURCES := [
 	"hedge_mat.png", "glossy_mat.png", "hedge_stems_open.png", "phormium_leaf.png",
 ]
 ## The rollout models' leaf images graded toward the dated Street View crops:
-## [tint, desaturation]. The generated pine came out a little greener than the
-## dark blue-green crowns of p1-p6, the bronze clump orange rather than the dull
-## reddish-bronze of b1/b3, the Christmas tree's in-flower spray a greener leaf than
-## its plain one, the flax wine red rather than the near-black maroon of its
-## planters, the hedge stems pale.
+## [tint, desaturation]. Set from the mean colour of their crowns beside the crops':
+## every generated leaf came out far more saturated than the crops (0.4-0.7 against
+## 0.2-0.45 in HSV), and the spreading broadleaf much darker (value 0.23 against
+## 0.33), so it is brightened past its source. The bronze clump came out orange, the
+## flax wine red rather than near-black maroon, the hedge stems pale. The cells with
+## flowers keep more of their colour.
 const ROLLOUT_GRADES := {
-	"pine_crest.png": [Color(0.86, 0.9, 0.84), 0.15],
-	"pine_crest_candles.png": [Color(0.86, 0.9, 0.84), 0.1],
+	"pine_crest.png": [Color(0.88, 0.92, 0.86), 0.36],
+	"pine_crest_candles.png": [Color(0.88, 0.92, 0.86), 0.3],
 	"pine_candle_row.png": [Color(0.84, 0.78, 0.7), 0.55],
-	"broadleaf_clump.png": [Color(0.92, 0.94, 0.86), 0.1],
-	"broadleaf_bronze.png": [Color(0.86, 0.82, 0.74), 0.4],
-	"christmas_spray.png": [Color(0.82, 0.88, 0.82), 0.1],
-	"christmas_spray_flowers.png": [Color(0.78, 0.8, 0.76), 0.1],
-	"eucalyptus_clump.png": [Color(0.9, 0.95, 0.95), 0.25],
-	"eucalyptus_hanging.png": [Color(0.9, 0.95, 0.95), 0.25],
-	"norfolk_branch_top.png": [Color(0.94, 0.96, 0.9), 0.15],
-	"norfolk_branch_side.png": [Color(0.94, 0.96, 0.9), 0.15],
-	"hawthorn_spray.png": [Color(0.9, 0.92, 0.76), 0.22],
-	"hedge_mat.png": [Color(0.82, 0.88, 0.76), 0.15],
+	"broadleaf_clump.png": [Color(1.12, 1.12, 1.04), 0.38],
+	"broadleaf_bronze.png": [Color(1.02, 0.98, 0.9), 0.52],
+	"christmas_spray.png": [Color(0.82, 0.84, 0.8), 0.38],
+	"christmas_spray_flowers.png": [Color(0.8, 0.8, 0.78), 0.25],
+	"eucalyptus_clump.png": [Color(1.0, 1.04, 1.04), 0.45],
+	"eucalyptus_hanging.png": [Color(1.0, 1.04, 1.04), 0.45],
+	"norfolk_branch_top.png": [Color(0.98, 0.98, 0.92), 0.42],
+	"norfolk_branch_side.png": [Color(0.98, 0.98, 0.92), 0.42],
+	"hawthorn_spray.png": [Color(0.9, 0.92, 0.8), 0.36],
+	"pittosporum_spray.png": [Color(0.96, 0.96, 0.92), 0.26],
+	"hedge_mat.png": [Color(0.74, 0.8, 0.7), 0.42],
+	"glossy_mat.png": [Color(0.92, 0.96, 0.92), 0.4],
 	"red_tip_shoots.png": [Color(0.92, 0.92, 0.86), 0.15],
-	"conical_spray.png": [Color(0.74, 0.84, 0.7), 0.2],
+	"conical_spray.png": [Color(0.84, 0.92, 0.78), 0.42],
 	"hedge_stems_open.png": [Color(0.46, 0.44, 0.42), 0.35],
 	"phormium_leaf.png": [Color(0.42, 0.33, 0.35), 0.3],
 }
@@ -381,8 +384,8 @@ func _pack_shrubs(images: Dictionary, errors: Array[String]) -> void:
 	_fill_transparent(atlas)
 	_save(atlas, OUT + "shrub_foliage_atlas.png", errors)
 	_save_barks(images, {
-		"hedge_surface.png": ["hedge_surface.png", Color(0.9, 0.95, 0.9), 0.1],
-		"escallonia_flower_surface.png": ["escallonia_surface.png", Color(0.95, 1.0, 0.95), 0.0, 1.2],
+		"hedge_surface.png": ["hedge_surface.png", Color(0.8, 0.86, 0.78), 0.4],
+		"escallonia_flower_surface.png": ["escallonia_surface.png", Color(0.95, 1.0, 0.95), 0.36, 1.2],
 	}, errors)
 
 

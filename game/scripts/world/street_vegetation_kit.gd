@@ -2610,7 +2610,8 @@ func _build_broadleaf(p: Dictionary) -> Dictionary:
 		var cloud: Dictionary = clouds[int(site.lobe)]
 		var height_f := clampf((position.y - crown_low) / maxf(1.0, height - crown_low), 0.0, 1.0)
 		var radial := clampf(Vector2(position.x - crown_center.x, position.z - crown_center.z).length() / radius, 0.0, 1.0)
-		var shade := rng.randf_range(0.9, 1.06) * lerpf(0.64, 1.0, height_f) * lerpf(0.72, 1.0, radial) * lerpf(1.0, 0.54, clampf(-out.y, 0.0, 1.0))
+		# The Christmas tree is shaded as one dark mass; the broadleaf's pads stay lit round their sides.
+		var shade := rng.randf_range(0.9, 1.06) * lerpf(0.64 if christmas else 0.74, 1.0, height_f) * lerpf(0.72 if christmas else 0.84, 1.0, radial) * lerpf(1.0, 0.54 if christmas else 0.6, clampf(-out.y, 0.0, 1.0))
 		var cell := CHRISTMAS_CLUMP if christmas else BROADLEAF_CLUMP
 		if christmas and out.y > -0.1 and rng.randf() < flower_share:
 			cell = CHRISTMAS_FLOWERS
@@ -3734,7 +3735,7 @@ func material(key: String) -> Material:
 		"christmas_bark":
 			made = _bark("christmas_bark.png", Color(0.95, 0.94, 0.92))
 		"broadleaf_foliage":
-			made = _crown_foliage("broadleaf_foliage_atlas.png", Color(0.88, 0.9, 0.84), Color(0.08, 0.1, 0.03), Vector2(1024.0, 1024.0), 0.12, 0.8)
+			made = _crown_foliage("broadleaf_foliage_atlas.png", Color(1.0, 1.0, 0.96), Color(0.08, 0.1, 0.03), Vector2(1024.0, 1024.0), 0.12, 0.8)
 		"eucalyptus_bark":
 			made = _bark("eucalyptus_bark.png", Color(0.92, 0.91, 0.9))
 		"set_piece_foliage":
