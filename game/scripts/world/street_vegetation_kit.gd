@@ -410,23 +410,25 @@ const CONICAL_SHRUBS := [
 ]
 ## Near-black maroon New Zealand flax (the Mersea lot's planters, Sep 2025; the
 ## Sturgeon stair, Mar 2025): a fan of broad straps (leaves of them, each width
-## wide) standing to about height, their tips arching over.
+## wide), height their length; their tips arch over, so the clump stands about a
+## fifth lower, 1-1.5 m.
 const FLAXES := [
-	{"seed": 701, "height": 0.9, "leaves": 30, "width": 0.09},
-	{"seed": 702, "height": 1.2, "leaves": 36, "width": 0.11},
-	{"seed": 703, "height": 1.5, "leaves": 42, "width": 0.13},
+	{"seed": 701, "height": 1.35, "leaves": 30, "width": 0.09},
+	{"seed": 702, "height": 1.45, "leaves": 36, "width": 0.11},
+	{"seed": 703, "height": 1.8, "leaves": 42, "width": 0.13},
 ]
 ## Clipped hedges, laid along a line (hedge_into): style rounded (a rolling top
 ## with rounded shoulders and bulging sides) or box (upright sides, soft top
 ## corners); the leafy canopy from canopy_base to height, depth deep; under a
 ## rounded hedge's canopy, open crooked stems. lobes is how far its top rolls up
 ## and down, surface and tile its core's material key and how far that repeats,
-## mats its leaf mats' cell.
+## mats its leaf mats' cell. height and depth are the core's: its mats stand out of
+## it to the hedge's full size.
 const HEDGES := [
 	# Residential (h1, Mariner, Mar 2025): small leaves, 1.0-1.2 m tall, 0.8-1 m deep, on leggy stems.
-	{"seed": 801, "style": "rounded", "height": 1.1, "depth": 0.9, "canopy_base": 0.42, "lobes": 0.12, "surface": "hedge_leaves", "tile": 0.7, "mats": "hedge_mat"},
+	{"seed": 801, "style": "rounded", "height": 0.88, "depth": 0.62, "canopy_base": 0.42, "lobes": 0.12, "surface": "hedge_leaves", "tile": 0.7, "mats": "hedge_mat"},
 	# Job Corps (h2, 2025 gallery): a solid block 1.2-1.5 m tall of small glossy dark leaves with white flowers, down to the ground.
-	{"seed": 802, "style": "box", "height": 1.35, "depth": 1.0, "canopy_base": 0.0, "lobes": 0.04, "surface": "glossy_hedge_leaves", "tile": 1.0, "mats": "glossy_mat"},
+	{"seed": 802, "style": "box", "height": 1.14, "depth": 0.76, "canopy_base": 0.0, "lobes": 0.04, "surface": "glossy_hedge_leaves", "tile": 1.0, "mats": "glossy_mat"},
 ]
 ## Cityside Park's low plants as they stand in late November, built in layers
 ## (_build_low): crossed side-view cards for clumps, shrubs' wands and flower
@@ -1973,7 +1975,7 @@ func _build_mature_gum(p: Dictionary) -> Dictionary:
 		var origin := _mature_gum_axis(axis, lerpf(clear, 0.9, f))
 		var azimuth := phase + b * GOLDEN_ANGLE + rng.randf_range(-0.6, 0.6)
 		var out := (Vector3(cos(azimuth), 0.0, sin(azimuth)) + (axis.out as Vector3) * 0.4).normalized()
-		var reach := half * lerpf(0.95, 0.42, pow(f, 1.6)) * rng.randf_range(0.6, 1.15)
+		var reach := half * lerpf(0.7, 0.34, pow(f, 1.6)) * rng.randf_range(0.6, 1.15)
 		var climb := reach * tan(deg_to_rad(rng.randf_range(38.0, 66.0)))
 		var tip := origin + out * reach + Vector3.UP * climb
 		tip.y = minf(tip.y, height - 0.3)
@@ -1983,7 +1985,7 @@ func _build_mature_gum(p: Dictionary) -> Dictionary:
 		for k in rng.randi_range(3, 4):
 			var from := tip if k == 0 else _polyline_at(points, rng.randf_range(0.45, 0.92))
 			var angle := azimuth + rng.randf_range(-1.5, 1.5)
-			var end := from + Vector3(cos(angle), rng.randf_range(0.05, 0.7), sin(angle)) * rng.randf_range(0.8, 1.9)
+			var end := from + Vector3(cos(angle), rng.randf_range(0.05, 0.7), sin(angle)) * rng.randf_range(0.7, 1.4)
 			end.y = minf(end.y, height - 0.2)
 			if k > 0:
 				branches.append({"depth": 2, "points": PackedVector3Array([from, from.lerp(end, 0.5) + Vector3.UP * 0.12, end]), "radii": PackedFloat32Array([0.035, 0.022, 0.008])})
@@ -2847,11 +2849,11 @@ func _build_shrub(p: Dictionary) -> Dictionary:
 	match str(p.shape):
 		"mound":
 			# Mats about a third of the shrub across, their leaves true to size; the dome
-			# keeps a little inside the shrub's nominal size, which their outline meets.
+			# keeps inside the shrub's nominal size, which their outline meets.
 			var card_w := clampf(radius * 0.62, 0.6, 1.0)
 			var card_h := card_w * 0.5
 			radius -= card_w * 0.22
-			height -= card_h * 0.4
+			height -= card_h * 0.85
 			var lobes: Array[Dictionary] = [{"center": Vector3(0.0, height * 0.42, 0.0), "half": Vector3(radius * 0.88, height * 0.58, radius * 0.88)}]
 			for k in int(p.lobes):
 				var azimuth := phase + TAU * k / int(p.lobes) + rng.randf_range(-0.4, 0.4)
@@ -2892,7 +2894,7 @@ func _build_shrub(p: Dictionary) -> Dictionary:
 			# the one below, shrinking to the point.
 			var flame := clampf(radius * 1.15, 0.9, 1.25)
 			var top_y := height - flame * 0.3
-			var ogive := func(t: float) -> float: return radius * 0.86 * pow(maxf(1.0 - t, 0.0), 0.7) * lerpf(0.72, 1.0, smoothstep(0.0, 0.2, t))
+			var ogive := func(t: float) -> float: return radius * 0.68 * pow(maxf(1.0 - t, 0.0), 0.7) * lerpf(0.72, 1.0, smoothstep(0.0, 0.2, t))
 			var sites := []
 			var y := flame * 0.12
 			var row := 0
@@ -3059,7 +3061,7 @@ const HEDGE_PIECE_STATIONS := 32
 ## base to its top), the mat's facing out, and up]. The first row stands upright
 ## along the top, its upper edge the hedge's leafy skyline.
 const HEDGE_MAT_M := 1.05
-const HEDGE_ROUNDED_ROWS := [[0.36, 0.94, 1.0, 0.1], [0.82, 0.86, 0.7, 0.7], [1.03, 0.58, 1.0, 0.25], [1.0, 0.2, 1.0, -0.1]]
+const HEDGE_ROUNDED_ROWS := [[0.36, 0.84, 1.0, 0.1], [0.82, 0.86, 0.7, 0.7], [1.03, 0.58, 1.0, 0.25], [1.0, 0.2, 1.0, -0.1]]
 const HEDGE_BOX_ROWS := [[0.45, 0.95, 1.0, 0.1], [0.92, 0.93, 0.7, 0.7], [1.03, 0.7, 1.0, 0.1], [1.03, 0.42, 1.0, 0.0], [1.03, 0.14, 1.0, 0.0]]
 ## A hedge's core under its mats reads as the soft shade between them; alone, at the
 ## far level, it stands for them, as big as they make the hedge, and a rounded
