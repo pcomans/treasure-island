@@ -23679,3 +23679,19 @@ Carried by deploy-fix from the deploy agent's scratch log; text unchanged apart 
 - What worked well: Deriving each island rule from dated Street View, then checking photo, main and branch at matched pano poses, located poles and lamps pole by pole. For example, six of six poles matched on the lot strip, and the corner davit at 12th / Avenue B appeared once the lamp rule was anchored at junctions. Generator invariants caught stale data before any engine run: every on_stops cell must match a stop, spur targets must be built poles, and pads must rest. The owner lot's one-offs went in as set pieces, each with its pano and bearing: the unmapped strip pole with its spur wires, the tow-away sign, the Mersea sign and the ChargePoint bay.
 - What did not work well: I applied the first name-blade rule ("blades on the junction's first stop") island-wide before tabulating negative cases, and the reviewer found bare stop posts in four photos. Undrawn OSM crossing nodes pushed stop signs 10–20 m back from the corners. A cross-module import (footprintPiece) closed a cycle that only the determinism check's import order exposes. E01 died at once on a relative script path, because run.sh changes into the tree first. The base re-shoot and the walks timed out under the parallel suites' GPU load. Frame times shifted up to ±12 ms between identical baseline runs, so the r2 perf comparison is noise-bound.
 - What the team should change next time: Contact-sheet every photographed junction and tabulate positive and negative cases before applying a convention island-wide. Constrain visible objects only by ground features the game draws, not by raw OSM nodes. Run tools/check_godot_world_determinism.mjs after any new cross-module import. Pass absolute paths to engine wrappers. Take frame-time comparisons only when no other engine slot is busy, or label them noise-bound.
+
+### visual-review-street-objects (2026-11-05, r2 re-review)
+
+(Relayed verbatim by the coordinator; added by street-objects-rollout-20261105.)
+
+- Worked well: the detail montage and the in-lane re-poses made the claim-by-claim check fast. Same-pose native crops compared r1 against r2 directly and caught a fix that never landed (wires).
+- Didn't work well: a fix claim ("≥1.9 px wires") went out without a before/after crop at the distance where the defect lives. The sheets record the rendered commit (d8839b4b) and the handoff names the pushed commit (21086577), so I had to verify with git that only RETRO_LOG differs.
+- Next time: attach one same-pose r(n-1)/r(n) native crop for each claimed finish fix, and name the rendered commit in the handoff. List rule applications with no nearby capture before applying them, so ROOT can decide on them first.
+
+### code-review-street-objects — 21086577 PASS
+
+(Relayed verbatim by the coordinator; added by street-objects-rollout-20261105.)
+
+- What worked well: trial-merging every parallel branch onto the reviewed commit showed the real conflicts quickly, and querying the generated JSON for lamp spacing confirmed the duplicate-lamp question with data instead of guesswork.
+- What did not work well: two branches defined and used `ISLAND_OSM_KINDS` and `OSM_PROPS` in parallel, with different meanings. Nobody had agreed who owns those names, so the conflict was only found at review. The determinism check takes about 8 minutes, which dominates a Node-only review.
+- What the team should change next time: when two rollouts touch one module, have the first to land own the shared tables, and have the second rebase onto it before review. Give per-branch lists names that say whose they are.
