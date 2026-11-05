@@ -3887,7 +3887,8 @@
       "opaque": false,
       "receiver_kind": "none",
       "source_keys": [
-        "w1252737732"
+        "w1252737732",
+        "w899364786"
       ],
       "surface_bias_m": 0.09,
       "uvs": [
@@ -17078,7 +17079,7 @@
       "receiver_kind": "none",
       "source_keys": [
         "w1252737732",
-        "w899364786",
+        "w26767313",
         "w899364787"
       ],
       "surface_bias_m": 0.09,
@@ -18822,7 +18823,8 @@
       "opaque": false,
       "receiver_kind": "none",
       "source_keys": [
-        "w1252737732"
+        "w1252737732",
+        "w899364786"
       ],
       "surface_bias_m": 0.09,
       "uvs": [

@@ -52,7 +52,7 @@
 
 import { createHash } from "node:crypto";
 
-import { YARD_KIT_KEYS, YARD_KIT_PROPS, YARD_MAX_FLOAT_M, YARD_MAX_SINK_M, containerWallLayout, yardCornerGaps, yardPropFootprint, yardPropParamsError } from "./street-yard-kit.mjs";
+import { YARD_KIT_KEYS, YARD_KIT_PROPS, YARD_MAX_FLOAT_M, containerWallLayout, yardMaxSink, yardPropFootprint, yardPropParamsError, yardRestGaps } from "./street-yard-kit.mjs";
 import { WATER_Y_M } from "./shoreline-generation.mjs";
 import { invariant, roundCoordinate } from "./world-contract.mjs";
 
@@ -460,16 +460,18 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
   };
 
   // A rest as the row's params give it ({pitch, roll, lift} from its base, y +
-  // bias): lowered until no corner floats past the kit's limit, or a problem
-  // when a corner then sinks past it (tools/lib/street-yard-kit.mjs yardCornerGaps).
+  // bias): lowered until none of the kit's rest points (yardRestGaps, a grid
+  // over the plan no coarser than 3 m, corners included) floats past
+  // YARD_MAX_FLOAT_M, or a problem when one then sinks past the prop's limit
+  // (yardMaxSink: less for wheels and tracks).
   const angle = (value) => Math.round(value * 1e4) / 1e4 || 0;
-  const cornerRest = (footprint, xz, yaw, base, settled, groundFn) => {
+  const gridRest = (prop, params, footprint, xz, yaw, base, settled, groundFn) => {
     const rest = { pitch: angle(settled.pitch), roll: angle(settled.roll), lift: round3(settled.height - base) };
-    const gaps = yardCornerGaps(footprint, xz, yaw, base, rest, groundFn);
+    const gaps = yardRestGaps(footprint, xz, yaw, base, rest, groundFn);
     if (gaps.some((gap) => gap === null)) return { problem: "no_ground" };
     const drop = Math.max(...gaps) - YARD_MAX_FLOAT_M;
     if (drop > 0) rest.lift = round3(rest.lift - drop - 0.001);
-    if (gaps.some((gap) => gap - Math.max(0, drop) < -YARD_MAX_SINK_M)) return { problem: "uneven_ground" };
+    if (gaps.some((gap) => gap - Math.max(0, drop) < -yardMaxSink(prop, params))) return { problem: "uneven_ground" };
     return rest;
   };
 
@@ -486,7 +488,7 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
     const xz = [round3(centre[0]), round3(centre[1])];
     const { y, support } = grounded(xz);
     const surface = surfaceAt(xz);
-    const resting = cornerRest(footprint, xz, yaw, y + surface.bias_m, settled, groundAt);
+    const resting = gridRest(prop, params, footprint, xz, yaw, y + surface.bias_m, settled, groundAt);
     if (resting.problem) return resting;
     const row = {
       id: `scatter:${zone.id}:${rule.id}:${cell}`,
@@ -540,7 +542,7 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
     }
     if (placed.some((other) => rectanglesOverlap(rect, other.rect, ITEM_CLEAR_M))) return { problem: "overlap" };
     const [{ y, support, material_key: materialKey }] = decked;
-    const resting = cornerRest(footprint, xz, yaw, y, settled, (sample) => deckSupport(rule.deck, sample));
+    const resting = gridRest(prop, params, footprint, xz, yaw, y, settled, (sample) => deckSupport(rule.deck, sample));
     if (resting.problem) return resting;
     const row = {
       id: `scatter:${zone.id}:${rule.id}:${cell}`,

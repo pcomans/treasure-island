@@ -56300,7 +56300,8 @@
       "opaque": false,
       "receiver_kind": "none",
       "source_keys": [
-        "w1252737732"
+        "w1252737732",
+        "w899364786"
       ],
       "surface_bias_m": 0.09,
       "uvs": [
@@ -98795,7 +98796,8 @@
       "opaque": false,
       "receiver_kind": "none",
       "source_keys": [
-        "w1252737732"
+        "w1252737732",
+        "w899364786"
       ],
       "surface_bias_m": 0.09,
       "uvs": [

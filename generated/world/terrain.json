@@ -68,7 +68,7 @@
     "maximum_clearance_m": 0.081,
     "maximum_serialization_tolerance_m": 0.01,
     "minimum_clearance_m": 0.019,
-    "sample_points": 301105
+    "sample_points": 317695
   },
   "raster_bbox_wgs84": [
     -122.380001708984,
@@ -209,19 +209,19 @@
     "basis": "production_inference",
     "config": {
       "path": "tools/config/terrain-overrides.json",
-      "sha256": "e35a9a084d9afc28840c283a28e44255d237958e663c7686391f73ebb1a2e782"
+      "sha256": "f7dd14e9802061691e12c2d21467e3f42fd8a67c46cfd749708940db262e06d2"
     },
-    "corrected_cells": 182,
-    "leaves": 4334,
+    "corrected_cells": 193,
+    "leaves": 5281,
     "maximum_cut_m": 20.205,
-    "maximum_raise_m": 1.412,
+    "maximum_raise_m": 8.015,
     "mesh": {
       "cell_m": 32,
       "min_leaf_m": 4,
       "sample_m": 0.5,
       "tolerance_m": 0.08
     },
-    "neighbour_edge_vertices": 296,
+    "neighbour_edge_vertices": 303,
     "refined_cell_bounds_m": [
       [
         0,
@@ -638,6 +638,18 @@
         160
       ],
       [
+        640,
+        128,
+        672,
+        160
+      ],
+      [
+        672,
+        128,
+        704,
+        160
+      ],
+      [
         32,
         160,
         64,
@@ -686,6 +698,18 @@
         192
       ],
       [
+        640,
+        160,
+        672,
+        192
+      ],
+      [
+        672,
+        160,
+        704,
+        192
+      ],
+      [
         448,
         192,
         480,
@@ -701,6 +725,30 @@
         544,
         192,
         576,
+        224
+      ],
+      [
+        576,
+        192,
+        608,
+        224
+      ],
+      [
+        608,
+        192,
+        640,
+        224
+      ],
+      [
+        640,
+        192,
+        672,
+        224
+      ],
+      [
+        672,
+        192,
+        704,
         224
       ],
       [
@@ -725,6 +773,24 @@
         480,
         224,
         512,
+        256
+      ],
+      [
+        576,
+        224,
+        608,
+        256
+      ],
+      [
+        608,
+        224,
+        640,
+        256
+      ],
+      [
+        640,
+        224,
+        672,
         256
       ],
       [
@@ -1316,8 +1382,8 @@
         672
       ]
     ],
-    "refined_cells": 182,
-    "refined_triangles": 10306,
+    "refined_cells": 193,
+    "refined_triangles": 12524,
     "schema_version": "ti.terrain-overrides/1",
     "sites": [
       {
@@ -1423,7 +1489,7 @@
         "edge_blend_m": 6,
         "grade": {
           "final_sweep_change_m": 0,
-          "free_nodes": 943,
+          "free_nodes": 1111,
           "kind": "harmonic"
         },
         "id": "concrete_recycling_avenue_m",
@@ -1436,9 +1502,34 @@
           {
             "id": "third_street_wall_base",
             "rule": "level"
+          },
+          {
+            "id": "third_street_wall_base_east",
+            "rule": "level"
           }
         ],
-        "scope_area_m2": 6552.9
+        "scope_area_m2": 7433.1
+      },
+      {
+        "edge_blend_m": 6,
+        "grade": {
+          "final_sweep_change_m": 0,
+          "free_nodes": 1409,
+          "kind": "harmonic"
+        },
+        "id": "avenue_m_staging_mounds",
+        "name": "Avenue M staging yard's soil mound and plastic stockpile",
+        "regions": [
+          {
+            "id": "soil_mound_top",
+            "rule": "level"
+          },
+          {
+            "id": "plastic_stockpile_crest",
+            "rule": "level"
+          }
+        ],
+        "scope_area_m2": 6820.2
       }
     ]
   },

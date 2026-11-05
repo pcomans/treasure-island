@@ -273,8 +273,12 @@ export function defaultGateStyle(widthM) {
 
 // A sliding gate's leaf parks along the run before the gate: this long.
 export const SLIDING_LEAF_EXTRA_M = 0.3;
-// A gate leaf's collision half thickness (game/scripts/world/street_fence_kit.gd).
+// A gate leaf's collision half thickness, and how far its bottom rail stands
+// over its post's foot (game/scripts/world/street_fence_kit.gd). A leaf does
+// not bend to the ground: hung level, it needs ground no higher than its rail
+// all the way to its tip (the validator checks it).
 export const GATE_LEAF_HALF_M = 0.04;
+export const GATE_LEAF_LIFT_M = 0.05;
 
 // The open leaves of a gate between its two ends (plan [x, z], in the line's
 // order), as the fence kit draws and collides them: [{xz: [[hinge x, z], [far

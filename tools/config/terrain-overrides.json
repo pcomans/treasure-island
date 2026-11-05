@@ -1923,7 +1923,7 @@
       "id": "concrete_recycling_avenue_m",
       "name": "Avenue M beside the concrete recycling yard",
       "basis": "production_inference",
-      "evidence": "Large-clutter place #7. The 32 m land grid smears the yard's rubble mound (the 2023 USGS raster, about 11 m) out over its Avenue M wall line and Avenue M itself, which rise 3-7 m there; Google Street View, 92 Avenue M, Nov 2025 (camera x 525, z 154, heading 64) shows Avenue M flat and the double-stacked container wall standing at street level with the rubble only just showing over it. Avenue M and the strip inside the wall are levelled to the street's grade (4.0 m); the mound inside rises from behind the wall as the raster has it. Land cells beside buildings stay unsplit (so no foundation is re-cut). Production inference, 2026-11-04.",
+      "evidence": "Large-clutter place #7. The 32 m land grid smears the yard's rubble mound (the 2023 USGS raster, about 11 m) out over its Avenue M wall line and Avenue M itself, which rise 3-7 m there; Google Street View, 92 Avenue M, Nov 2025 (camera x 525, z 154, heading 64) shows Avenue M flat and the double-stacked container wall standing at street level with the rubble only just showing over it. Google Street View, 3rd St, Mar 2025 (camera x 598, z 170, heading 354) shows the 3rd St wall standing at street level near the south corner, the rubble mound behind it. Avenue M and the strip inside the wall are levelled to the street's grade (4.0 m), and the 3rd St wall's base with them, stepping down 0.2 m to 3rd St's own 3.8 m past the smear; the mound inside rises from behind the wall as the raster has it. Land cells beside buildings stay unsplit (so no foundation is re-cut). Owner-approved levelling 2026-11-05 (as the #12 and Cityside Park corrections).",
       "scope": {
         "source_keys": [],
         "add_xz": [
@@ -1951,12 +1951,12 @@
               198.38
             ],
             [
-              626.91,
-              162.12
+              646.39,
+              151.89
             ],
             [
-              608.31,
-              126.7
+              627.79,
+              116.47
             ],
             [
               539.26,
@@ -2009,7 +2009,7 @@
           }
         ],
         "exclude_ways": [],
-        "edge_blend_m": 6
+        "edge_blend_m": 6.0
       },
       "grade": {
         "grid_m": 2,
@@ -2038,11 +2038,11 @@
                 178.62
               ]
             ],
-            "buffer_m": -1
+            "buffer_m": -1.0
           },
           "rule": {
             "kind": "level",
-            "elevation_m": 4
+            "elevation_m": 4.0
           },
           "min_leaf_m": 1,
           "reason": "Avenue M and the container wall's base read flat at street level in the Nov 2025 Street View; 4.0 m is the street's grade either side of the smear."
@@ -2056,26 +2056,187 @@
                 192.05
               ],
               [
-                614.43,
-                164.16
+                619.74,
+                161.37
               ],
               [
-                606.99,
-                149.99
+                612.3,
+                147.2
               ],
               [
                 553.87,
                 177.89
               ]
             ],
-            "buffer_m": -1
+            "buffer_m": -1.0
           },
           "rule": {
             "kind": "level",
-            "elevation_m": 4
+            "elevation_m": 4.0
           },
           "min_leaf_m": 1,
           "reason": "The 3rd St wall's base near the south corner reads at street level in the Mar 2025 Street View (3rd St), the rubble mound behind it."
+        },
+        {
+          "id": "third_street_wall_base_east",
+          "shape": {
+            "points_xz": [
+              [
+                628.59,
+                156.72
+              ],
+              [
+                639.22,
+                151.14
+              ],
+              [
+                631.78,
+                136.97
+              ],
+              [
+                621.15,
+                142.55
+              ]
+            ],
+            "buffer_m": -1.0
+          },
+          "rule": {
+            "kind": "level",
+            "elevation_m": 3.8
+          },
+          "min_leaf_m": 1,
+          "reason": "Further along 3rd St the wall's base is at the street's own grade, 3.8 m (the raster beside it); the grade ramps the 0.2 m between the two over 10 m."
+        }
+      ]
+    },
+    {
+      "id": "avenue_m_staging_mounds",
+      "name": "Avenue M staging yard's soil mound and plastic stockpile",
+      "basis": "production_inference",
+      "evidence": "Large-clutter place #9 (inside OSM w899364786 landuse=construction). The 2023 USGS raster is flat here (3.0-3.6 m). Esri World Imagery, Vantor capture 2026-05-26 (0.5 m island tile and large-clutter research tile z-ne-yard, 0.25 m) shows a tan soil mound about 65 by 65 m (x 585-650, z 165-230) with an excavator and a truck on it, and east of it, between 3rd St and Avenue N, a black-plastic-covered stockpile about 45 m wide at its north end, tapering over 90 m; Google Street View, 22 Avenue M, Nov 2025 (camera x 587, z 271, heading 54) shows the big mound behind the yard's screened fence with an excavator working on top. The mound rises about 8 m to a flat working top (11.5 m) and the stockpile about 5 m to a narrow crest (8.5 m); the grade between them and the streets is the site's smooth membrane, its slopes walkable (under 48 degrees). 3rd St, Avenue N and Avenue M keep their generated grade; no land cell beside a building is near. Owner-approved 2026-11-05.",
+      "scope": {
+        "source_keys": [],
+        "add_xz": [
+          [
+            [
+              578,
+              200
+            ],
+            [
+              600,
+              172
+            ],
+            [
+              690,
+              128
+            ],
+            [
+              700,
+              140
+            ],
+            [
+              672,
+              236
+            ],
+            [
+              640,
+              240
+            ],
+            [
+              600,
+              238
+            ],
+            [
+              580,
+              222
+            ]
+          ]
+        ],
+        "exclude_xz": [],
+        "exclude_ways": [
+          {
+            "source_keys": [
+              "w11315153",
+              "w8921530",
+              "w945294691"
+            ],
+            "half_width_m": 7.0,
+            "reason": "3rd St, Avenue N and Avenue M keep their generated grade."
+          }
+        ],
+        "edge_blend_m": 6.0
+      },
+      "grade": {
+        "grid_m": 2,
+        "iterations": 3000,
+        "relaxation": 1.9
+      },
+      "regions": [
+        {
+          "id": "soil_mound_top",
+          "shape": {
+            "points_xz": [
+              [
+                604,
+                194
+              ],
+              [
+                627,
+                186
+              ],
+              [
+                634,
+                204
+              ],
+              [
+                611,
+                214
+              ]
+            ]
+          },
+          "rule": {
+            "kind": "level",
+            "elevation_m": 11.5
+          },
+          "min_leaf_m": 2,
+          "reason": "The soil mound's flat working top, about 8 m over the yard, where the excavator and a truck stand: Esri World Imagery, Vantor capture 2026-05-26 (0.5 m island tile and large-clutter research tile z-ne-yard, 0.25 m); Google Street View, 22 Avenue M, Nov 2025 (camera x 587, z 271, heading 54)."
+        },
+        {
+          "id": "plastic_stockpile_crest",
+          "shape": {
+            "points_xz": [
+              [
+                658,
+                160
+              ],
+              [
+                675,
+                152
+              ],
+              [
+                668,
+                184
+              ],
+              [
+                658,
+                210
+              ],
+              [
+                653,
+                208
+              ],
+              [
+                653,
+                182
+              ]
+            ]
+          },
+          "rule": {
+            "kind": "level",
+            "elevation_m": 8.5
+          },
+          "min_leaf_m": 2,
+          "reason": "The black-plastic stockpile's crest, about 5 m over the yard, along its length between the mound and Avenue N: Esri World Imagery, Vantor capture 2026-05-26 (0.5 m island tile and large-clutter research tile z-ne-yard, 0.25 m)."
         }
       ]
     }

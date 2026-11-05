@@ -39891,7 +39891,7 @@
         65,
         63
       ],
-      "material_key": "yard_gravel",
+      "material_key": "yard_gravel_pale",
       "normals": [
         -0.033,
         0.999,
@@ -40092,11 +40092,13 @@
         1,
         0.011
       ],
-      "object_key": "yard-gravel:x_1__z_-2",
+      "object_key": "yard-gravel-pale:x_1__z_-2",
       "opaque": false,
       "receiver_kind": "none",
       "source_keys": [
-        "w26767313"
+        "w1252737732",
+        "w26767313",
+        "w899364787"
       ],
       "surface_bias_m": 0.09,
       "uvs": [
