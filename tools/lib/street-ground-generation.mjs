@@ -1557,6 +1557,8 @@ export function generateStreetGround({
   // Beds of the park layers with the given materials: whether a point lies on
   // one and how far it is from the nearest bed edge (inside or out), searched
   // within BED_REACH_M; for planting drifts (tools/lib/street-planting-generation.mjs).
+  // A bed is the park ground the player sees: where the raised street ground
+  // (sidewalks, curb ramps) is drawn over a park layer, that part is no bed.
   const BED_REACH_M = 8;
   const BED_CELL_M = 2;
   // Each cell lists the bed edges that come within BED_EDGE_MARGIN_M of it: a
@@ -1571,7 +1573,7 @@ export function generateStreetGround({
     const key = [...materials].sort().join("|");
     if (!bedIndexes.has(key)) {
       const parts = parkLayers.filter((entry) => materials.includes(entry.layer.material)).map((entry) => entry.polygon);
-      const region = union(`park beds ${key}`, parts);
+      const region = difference(`park beds ${key} uncovered`, union(`park beds ${key}`, parts), [bandOriginal, notchUnion]);
       const cells = new Map();
       for (const polygon of region) {
         for (const raw of polygon) {
@@ -1766,17 +1768,19 @@ export function generateStreetGround({
     records.get(mesh.chunk).push(record);
   }
 
-  // The raised surface under a world point, for placing street-detail items on it.
+  // The raised surface under a world point, for placing street-detail items on
+  // it: a curb ramp or the raised street ground drawn over everything else, then
+  // park ground, then a parking lane.
   const surfaceAt = (xz) => {
     const point = [xz[0], -xz[1]];
-    const park = parkAt(point);
-    if (park) return { kind: "street_paint", material_key: park.layer.material, source_key: park.sources[0], bias_m: roundCoordinate(park.lift) };
     for (const notch of notches) {
       if (notchIndex.contains(point) && pointInMultiCheap(notch.piece, point)) {
         return { kind: "street_kerb", material_key: "street_kerb_concrete", source_key: notch.source_key, bias_m: roundCoordinate(heightAt(notch.height, point)) };
       }
     }
     if (!raisedIndex.contains(point)) {
+      const park = parkAt(point);
+      if (park) return { kind: "street_paint", material_key: park.layer.material, source_key: park.sources[0], bias_m: roundCoordinate(park.lift) };
       // Parking lanes widen the asphalt beyond the frozen road ribbons.
       if (!parkingIndex.contains(point)) return null;
       return { kind: "street_paint", material_key: "street_parking", source_key: nearestRoad(point).road.row.source_key, bias_m: ROAD_TOP_M };
