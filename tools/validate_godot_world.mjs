@@ -75,6 +75,7 @@ import {
 import { MAX_LEG_DROP_M, MAX_REST_TILT_RAD, restTilt, STREET_FURNITURE_FEET, STREET_FURNITURE_PROPS } from "./lib/street-furniture-generation.mjs";
 import { YARD_KIT_KEYS, YARD_KIT_PARTS, YARD_KIT_PROPS, YARD_MAX_FLOAT_M, yardMaxSink, yardPropFootprint, yardPropParamsError, yardPropRests, yardRestGaps } from "./lib/street-yard-kit.mjs";
 import { BERM_MODULE, BERM_SPECS, RIDGE_MODULE, yardKitMeshes } from "./lib/street-yard-meshes.mjs";
+import { isYardRow } from "./lib/street-yard-generation.mjs";
 import {
   STREET_VEGETATION_BURY_M,
   STREET_VEGETATION_MAX_FOOT_SPREAD_M,
@@ -898,7 +899,9 @@ function validatePlantedRow(row, groundAt) {
 // parked car's tyres, set from its pitch, roll, twist and lift, rest on the
 // ground at their centres: they float at most the yard vehicles' 0.1 m (the
 // settle lifts a car about a centimetre off a lip or paint line) and sink 2 cm
-// at most. A yard kit prop rests on its corners and is checked there.
+// at most. A yard kit prop (isYardRow) rests on its plan's corners and a grid
+// over it, checked there (validateYardRest). Any other clutter prop fails: a
+// new prop needs its own branch here, so none is placed unchecked.
 const PROP_REST_FLOAT_M = 0.08;
 const PROP_REST_SINK_M = 0.08;
 const ANCHORED_CLUTTER = Object.freeze(["barricade", "traffic_cone"]);
@@ -925,7 +928,25 @@ function validatePropRest(row, groundAt) {
     const point = [row.position_m[0], row.position_m[2]];
     const ground = groundAt(point);
     rests(ground ? base - ground.y : null, row.prop, point);
+  } else if (isYardRow(row)) {
+    validateYardRest(row, groundAt);
+  } else {
+    invariant(false, `${row.id} clutter prop ${row.prop} has no rest check: give it a branch in validatePropRest`);
   }
+}
+
+// A yard kit prop rests on the visible ground: no point of its plan (corners
+// and a grid no coarser than 3 m) floats or sinks past the limits at its
+// pitch, roll and lift. A barge floats instead: its prop collides with
+// nothing and rests on no ground (yardPropRests).
+function validateYardRest(row, groundAt) {
+  if (!yardPropRests(row.prop)) return;
+  const gaps = yardRestGaps(row.footprint_m, [row.position_m[0], row.position_m[2]], row.yaw_radians, row.position_m[1] + (row.surface?.bias_m ?? 0), row.prop_params, groundAt);
+  const sink = yardMaxSink(row.prop, row.prop_params);
+  const bad = gaps.filter((gap) => gap === null || gap > YARD_MAX_FLOAT_M + 0.005 || gap < -sink - 0.005);
+  const known = gaps.filter((gap) => gap !== null);
+  invariant(bad.length === 0, `${row.id} ${row.prop} does not rest on the ground: ${bad.length} of its ${gaps.length} rest points float more than ${YARD_MAX_FLOAT_M} m or sink more than ${sink} m `
+    + `(${gaps.length - known.length} off the ground, highest ${Math.max(...known).toFixed(3)} m, lowest ${Math.min(...known).toFixed(3)} m)`);
 }
 
 // Structure and grounding only: the street-detail content changes as steps add it.
@@ -988,24 +1009,14 @@ function validateStreetDetail(worldRoot, manifest, records) {
         invariant(Number.isFinite(params.twist) && Math.abs(params.twist) <= MAX_TWIST_M, `${row.id} car twist is invalid`);
         invariant(row.footprint_m !== undefined, `${row.id} parked car has no footprint`);
       }
-      // A yard kit prop: usable params and its own rectangle as its footprint.
+      // A yard kit prop: usable params and its own rectangle as its footprint
+      // (its rest on the ground: validatePropRest, below).
       if (row.layer === "clutter" && YARD_KIT_KEYS.includes(row.prop)) {
         const error = yardPropParamsError(row.prop, row.prop_params);
         invariant(error === null, `${row.id} ${row.prop} params are invalid: ${error}`);
         const plan = yardPropFootprint(row.prop, row.prop_params);
         invariant(row.footprint_m !== undefined && Math.abs(row.footprint_m.x_m - plan.x_m) <= 0.002 && Math.abs(row.footprint_m.z_m - plan.z_m) <= 0.002,
           `${row.id} footprint_m differs from its ${row.prop} plan ${plan.x_m} x ${plan.z_m}`);
-        // It rests on the visible ground: no point of its plan (corners and a
-        // grid no coarser than 3 m) floats or sinks past the limits at its
-        // pitch, roll and lift (a barge floats instead).
-        if (yardPropRests(row.prop)) {
-          const gaps = yardRestGaps(row.footprint_m, [row.position_m[0], row.position_m[2]], row.yaw_radians, row.position_m[1] + (row.surface?.bias_m ?? 0), row.prop_params, groundAt);
-          const sink = yardMaxSink(row.prop, row.prop_params);
-          const bad = gaps.filter((gap) => gap === null || gap > YARD_MAX_FLOAT_M + 0.005 || gap < -sink - 0.005);
-          const known = gaps.filter((gap) => gap !== null);
-          invariant(bad.length === 0, `${row.id} ${row.prop} does not rest on the ground: ${bad.length} of its ${gaps.length} rest points float more than ${YARD_MAX_FLOAT_M} m or sink more than ${sink} m `
-            + `(${gaps.length - known.length} off the ground, highest ${Math.max(...known).toFixed(3)} m, lowest ${Math.min(...known).toFixed(3)} m)`);
-        }
       }
       // A furniture prop on legs: its rest on the ground under its feet, a small tilt and lift.
       if (row.layer === "furniture" && row.prop !== undefined && STREET_FURNITURE_FEET[row.prop] !== undefined) {
