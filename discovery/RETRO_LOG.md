@@ -23639,3 +23639,17 @@ Carried by deploy-fix from the deploy agent's scratch log; text unchanged apart 
 - What worked well: checking each code-level item at its source before writing it kept the list honest. Grepping the named symbol and reading the few lines around it settled most items in one call each (the duplicated `MOVE_ACTIONS`, the uncoupled `WALK_SPEED`, the vegetation script reading a `generated/world/vegetation.json` that no longer exists, the README `--headless` fit command against `world_harness.gd`'s refusal). The yard z-fight's area came from the two zones' polygons in `street-detail-zones.json`, a 0.2 m point grid giving 219 m² centred at (412, −339), which matched the note. The three coplanar street-ground pairs follow from the constants (parking at `ROAD_TOP_M`, gutter and wear both at 0.078 + 0.003), and the 2026-11-05 area-zfight RETRO had already measured their areas. A 200,000-case Node simulation of `parkBed`'s ring search, written from the code, found no missed distance under its 8 m cap, so I left the "exact only to about 6 m" item out rather than repeat an unconfirmed claim.
 - What did not work well: most visual items carry no traceable date. RETRO_LOG and commit messages don't name them, so many entries say "seen in review, by 2026-11-05" instead of a review date. Some notes also described code loosely: the #8 "beam stacks" are crane mats and pipe sections, and `_moving_view` has no `MOVE_REST`. I reworded both to match the code.
 - What the team should change next time: when ROOT collects review findings for a status document, keep each one's date and source next to it, so the document can cite them. When a reviewer reports an exactness bound, as with the bed search, write down the derivation or a reproducing probe, so a later reader can confirm or refute it without guessing.
+
+### code-review-zfight-areas (follow-up) — 2026-11-05 — review of fix/layer-zfight-20261105 at 2aabe31b
+
+(Relayed verbatim by the coordinator; added by push-8-layers-docs-20261105.)
+
+- What worked well: limiting the diff to `tools game` kept it to 5 files. A 20-line read-only Node script compared colliding records in the changed chunks between the two revisions (81 colliding, 0 changed), which settled the collision question without a worktree or the engine.
+- What did not work well: the merge-risk question was about a branch with nothing pushed. Its tree turned out to be mid-merge of this very commit, so I had to read a live working copy that someone else owns, without touching it.
+- What the team should change next time: when ROOT asks for merge risk against a branch that isn't pushed, say whether its owner is already merging, so the reviewer reads that resolution instead of predicting conflicts. Any rule that depends on config order (later zone wins) should name the winner explicitly, or have a check that notices a reorder.
+
+### visual-review-clutter-yards — layer z-fight fix (01b05007)
+
+(Relayed verbatim by the coordinator; added by push-8-layers-docs-20261105.)
+
+- A same-pose repeat for the sway control made judging the controls clear-cut. Render only from a clean commit, though, so the label on the sheet matches the head that was rendered.
