@@ -70,6 +70,7 @@ extends SceneTree
 ##   shows and hides that layer the same way, in the pass where it is on.
 
 const WorldHarness := preload("res://game/tests/shared/world_harness.gd")
+const GROUND_COVER := preload("res://game/scripts/world/ground_cover.gd")
 const VegetationKit := preload("res://game/scripts/world/street_vegetation_kit.gd")
 ## A gallery bed's ground textures (2 m tiles), its grid step and its lift over
 ## the drawn ground, in metres; each later bed lies BED_LAYER_M over the earlier.
@@ -522,11 +523,15 @@ func _show_groups(gallery: Dictionary, view: Dictionary) -> String:
 ## drift in the machine's load falls on both. With "measure_layer": NAME the
 ## view needs no plants: the world's street-detail layer of that name is shown
 ## and hidden instead (a view taken while that layer is off prints a
-## FRAME_TIME_SKIPPED line). Prints one FRAME_TIME line per state, with the
-## last frame's draw calls and primitives, then restores what was shown.
+## FRAME_TIME_SKIPPED line). With "measure_ground": true it times the ground-cover
+## shader's bare-soil branch instead: "plants" is the ground as it is, "empty" the
+## same with every family's bare threshold out of reach, which skips that branch.
+## Prints one FRAME_TIME line per state, with the last frame's draw calls and
+## primitives, then restores what was shown.
 ## Returns an error, or "".
 func _measure_view(view: Dictionary, target: Vector3, gallery: Dictionary) -> String:
 	var toggled: Array[Node3D] = []
+	var ground := view.has("measure_ground")
 	if view.has("measure_layer"):
 		var layer := str(view.measure_layer)
 		if not layer in WorldLoader.STREET_DETAIL_LAYERS:
@@ -541,8 +546,8 @@ func _measure_view(view: Dictionary, target: Vector3, gallery: Dictionary) -> St
 	elif gallery.has("groups"):
 		for group: String in gallery.groups:
 			toggled.append(gallery.groups[group] as Node3D)
-	if not _numbers([view.get("measure_frames")], 1) or float(view.measure_frames) < 30.0 or float(view.measure_frames) > 3000.0 or toggled.is_empty():
-		return "measure_frames needs 30-3000 frames and plants in the plan or a measure_layer"
+	if not _numbers([view.get("measure_frames")], 1) or float(view.measure_frames) < 30.0 or float(view.measure_frames) > 3000.0 or (toggled.is_empty() and not ground):
+		return "measure_frames needs 30-3000 frames and plants in the plan, a measure_layer or measure_ground"
 	var error := await _h.settle_player(Vector2(view.player_xz[0], view.player_xz[1]))
 	if error != "":
 		return error
@@ -563,6 +568,8 @@ func _measure_view(view: Dictionary, target: Vector3, gallery: Dictionary) -> St
 		var state := "plants" if block % 2 == 0 else "empty"
 		for index in toggled.size():
 			toggled[index].visible = shown[index] and state == "plants"
+		if ground:
+			_set_ground_bare(state == "plants")
 		var times := await _frame_times(per_block, 20)
 		if state == "plants":
 			plants_times.append_array(times)
@@ -572,6 +579,8 @@ func _measure_view(view: Dictionary, target: Vector3, gallery: Dictionary) -> St
 	_restore_frames(uncapped)
 	for index in toggled.size():
 		toggled[index].visible = shown[index]
+	if ground:
+		_set_ground_bare(true)
 	for state: String in ["plants", "empty"]:
 		var stats := _frame_stats(plants_times if state == "plants" else empty_times)
 		print("FRAME_TIME view=%s state=%s frames=%d mean_ms=%.2f median_ms=%.2f p95_ms=%.2f draw_calls=%d primitives=%d renderer=%s/%s" % [view.name, state, stats.frames, stats.mean,
@@ -580,6 +589,18 @@ func _measure_view(view: Dictionary, target: Vector3, gallery: Dictionary) -> St
 		free.queue_free()
 		_h.player.get_camera().make_current()
 	return ""
+
+
+## Every ground-cover family's bare soil on as configured, or off by a bare
+## threshold out of reach (the shader then skips its bare branch).
+func _set_ground_bare(on: bool) -> void:
+	for family: String in GROUND_COVER.FAMILIES:
+		var made := GROUND_COVER.material(family)
+		var preset: Dictionary = GROUND_COVER.FAMILIES[family]
+		made.set_shader_parameter("bare_threshold", float(preset.bare_threshold) if on else 2.0)
+		for uniform: String in GROUND_COVER.COVER_MAP_RECIPES:
+			var recipe: Dictionary = GROUND_COVER.FAMILIES[GROUND_COVER.COVER_MAP_RECIPES[uniform]]
+			made.set_shader_parameter(uniform, Vector3(recipe.dry_threshold, float(recipe.bare_threshold) if on else 2.0, recipe.green_dryness))
 
 
 ## Settles the player at the view's player_xz and saves one screenshot from the
