@@ -93,6 +93,7 @@ const CHARGER_GREY := Color(0.80, 0.81, 0.80)
 const CHARGER_HEAD := Color(0.16, 0.17, 0.18)
 const CHARGER_SCREEN := Color(0.25, 0.55, 0.62)
 const BOLLARD_RUST := Color(0.78, 0.40, 0.17)
+const BOLLARD_GRIME := Color(0.36, 0.24, 0.16)
 ## Ferry plaza furniture (Sep and Mar 2025 photos): pale cast concrete, dark
 ## stained timber, charcoal frames, bright blue plastic chairs, grey steel bins.
 const CONCRETE := Color(0.8, 0.79, 0.76)
@@ -1445,9 +1446,17 @@ func _ev_charger_bay(b: Builder) -> void:
 			b.box(Vector3(x, 1.6, -0.122), Basis.IDENTITY, Vector3(0.2, 0.14, 0.006), CHARGER_SCREEN, CELL_WHITE, Rect2(), Color.WHITE, 1)
 		# The holstered cable's loop down to the pad.
 		b.tube(PackedVector3Array([Vector3(x + 0.12, 1.25, -0.08), Vector3(x + 0.3, 0.7, -0.25), Vector3(x + 0.2, 0.2, -0.35), Vector3(x - 0.05, 0.16, -0.3)]), PackedFloat32Array([0.02, 0.02, 0.02, 0.02]), 5, CHARGER_HEAD * 0.4, CELL_WHITE, false, false)
-	for spot: Vector2 in [Vector2(-1.35, -0.42), Vector2(-0.95, -0.47), Vector2(-0.05, -0.47), Vector2(0.85, -0.47), Vector2(1.3, -0.42), Vector2(-1.25, 0.43), Vector2(-0.05, 0.47), Vector2(1.2, 0.43)]:
+	# Weathered paint: each bollard faded a little differently, with road grime
+	# splashed dark round its foot.
+	var fades := [1.0, 0.86, 0.94, 0.8, 1.0, 0.9, 0.84, 0.96]
+	var spots := [Vector2(-1.35, -0.42), Vector2(-0.95, -0.47), Vector2(-0.05, -0.47), Vector2(0.85, -0.47), Vector2(1.3, -0.42), Vector2(-1.25, 0.43), Vector2(-0.05, 0.47), Vector2(1.2, 0.43)]
+	for index in spots.size():
+		var spot: Vector2 = spots[index]
 		var foot := Vector3(spot.x, 0.1, spot.y)
-		b.tube(PackedVector3Array([foot, foot + Vector3(0, 0.82, 0)]), PackedFloat32Array([0.07, 0.07]), 8, BOLLARD_RUST, CELL_WHITE, false, false)
+		var paint := BOLLARD_RUST * float(fades[index])
+		paint.a = 1.0
+		b.tube(PackedVector3Array([foot, foot + Vector3(0, 0.16, 0)]), PackedFloat32Array([0.071, 0.071]), 8, BOLLARD_GRIME, CELL_WHITE, false, false)
+		b.tube(PackedVector3Array([foot + Vector3(0, 0.16, 0), foot + Vector3(0, 0.82, 0)]), PackedFloat32Array([0.07, 0.07]), 8, paint, CELL_WHITE, false, false)
 		b.tube(PackedVector3Array([foot + Vector3(0, 0.82, 0), foot + Vector3(0, 0.9, 0)]), PackedFloat32Array([0.072, 0.072]), 8, BLADE_BLACK, CELL_WHITE, false, false)
 		b.tube(PackedVector3Array([foot + Vector3(0, 0.9, 0), foot + Vector3(0, 0.98, 0)]), PackedFloat32Array([0.072, 0.07]), 8, BLADE_WHITE, CELL_WHITE, false, true)
 	b.box(Vector3(1.75, 0.8, 0), Basis.IDENTITY, Vector3(0.06, 1.7, 0.06), GALVANIZED, CELL_METAL)
