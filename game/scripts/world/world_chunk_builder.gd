@@ -119,9 +119,11 @@ const STREET_GROUND_SURFACES := {
 	# mottling and stains spread over 20 m, tinted until a top-down sunlit
 	# render samples like the May 2026 aerial (decks about 196/193/180, the
 	# marina's grounds darker, about 178/176/165) and the dated Pier 1 Street
-	# View's light grey. The concrete driveway skin (an OSM surface=concrete
-	# vehicle way, the Gate 5 apron in the Nov 2025 Street View): the sidewalk
-	# panels at 1.5 m, a shade under the sidewalks.
+	# View's light grey. Those marina grounds (w110183752) stay concrete, not
+	# ground cover: the aerial shows an old apron with slab joints, rectangular
+	# foundation outlines and tyre tracks. The concrete driveway skin (an OSM
+	# surface=concrete vehicle way, the Gate 5 apron in the Nov 2025 Street
+	# View): the sidewalk panels at 1.5 m, a shade under the sidewalks.
 	"context_boundary_pier": {"albedo": preload("res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_diff_1k.jpg"), "uv_scale": 0.5, "roughness": 0.92, "tint": Color(0.98, 1.0, 0.97)},
 	"terrain_pier": {"albedo": preload("res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_diff_1k.jpg"), "uv_scale": 0.5, "roughness": 0.92, "tint": Color(0.98, 1.0, 0.97)},
 	"terrain_marina": {"albedo": preload("res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_diff_1k.jpg"), "uv_scale": 0.5, "roughness": 0.92, "tint": Color(0.885, 0.91, 0.895)},

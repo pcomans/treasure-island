@@ -23693,3 +23693,15 @@ Carried by deploy-fix from the deploy agent's scratch log; text unchanged apart 
 - What worked well: reprojecting each dated Street View frame into the render camera at the same position (a pure rotation, so exact for a pinhole camera; about 80 lines of Node) gave references that line up with the zoom renders pixel for pixel. Laying the offline preview's mesh over them showed the cable's height along the whole span, which settled the landing without an engine run: at 350 m the Pier 1 view matches within about a photo pixel at two stations, and the visible landing is at photo x 423 against 425. Taking the deck's seam from the overlay's own vertices, including the ones lying part-way along the outline's edges, made the join exact by construction, and the crease went with the step. Committing the merge on its own (regenerated at the merge state, validator and clearance passing) and then restoring the fix sources gave a regeneration byte-identical to the scratch run, and a fix commit that reads alone. Grepping the open branches for the keys I changed, as the code reviewer asked, found the vegetation branch's terrain_marina family and the shoreline branch's w1222505176 wall in a few minutes.
 - What did not work well: I fitted the first landing (280 m, in the commit R6 rendered) on the one point where the cable visibly meets the deck. That hung the cable too low along most of the span in both views and cost a second engine run. At Gate 5 the two measures still disagree: the visible landing wants about 280 m and the heights want more than 350 m, and the photo's cable is lost among the deck's lamp posts at the point in question. My first matched crops also assumed the 1600 px width passed to --resolution, but the shots came out 1440x900, so they were 80 px off and looked like a 5-degree placement error for a while; the 2x Gate 5 view also leaves the tower outside its frame. An offline zero-engine check of the crops on the old renders caught this before the sheet was built.
 - What the team should change next time: for far landmark scenery, compare a shape along its length on a reference reprojected into the render camera, not at one end point, and be wary of end points a blurred photo hides. Read an actual render's size before computing crops from a projection.
+
+### visual-review-piers-bridge — delta f860af85 PASS
+
+(Relayed verbatim by the coordinator; added by polish-piers-bridge-20261105.)
+
+- Matched-scale crops from the reprojected reference settled both fixes quickly and exposed two errors in my first report (the tapered-top wording and the low reference ratios), so reviewers should take form and ratio claims only from matched crops.
+
+### code-review-piers-bridge — delta c37e5a10 PASS
+
+(Relayed verbatim by the coordinator; added by polish-piers-bridge-20261105.)
+
+- A clean rebuild plus direct mesh checks closed all five findings quickly, though near-collinear seam vertices can still fold under earcut, so check the actual triangles rather than only the vertex heights.
