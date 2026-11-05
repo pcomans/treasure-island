@@ -2066,8 +2066,9 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
       const normals = [sections[i].landNormal, sections[i + 1].landNormal, sections[i + 1].landNormal, sections[i].landNormal];
       const vertices = corners.map((corner, k) => ({ plan: [corner[0], -corner[2]], y: corner[1], normal: normals[k] }));
       if (nearHulls(rampHulls, vertices)) {
-        pushCut(mesh, [vertices[0], vertices[1], vertices[2]], rampHulls);
-        pushCut(mesh, [vertices[0], vertices[2], vertices[3]], rampHulls);
+        const skirt = { mesh: faces[recordOf((sections[i].s + sections[i + 1].s) / 2)], bottom: closureRule.wall_bottom_y_m };
+        pushCut(mesh, [vertices[0], vertices[1], vertices[2]], rampHulls, skirt);
+        pushCut(mesh, [vertices[0], vertices[2], vertices[3]], rampHulls, skirt);
         continue;
       }
       const ids = corners.map((corner, k) => pushVertex(mesh, corner, normals[k]));

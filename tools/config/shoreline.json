@@ -45,7 +45,7 @@
       "joint_blend_m": 12.0
     },
     "waterline": {
-      "smoothing_m": 30.0,
+      "smoothing_m": 40.0,
       "core_m": 0.2,
       "gradient_m_per_m": [
         0.3,

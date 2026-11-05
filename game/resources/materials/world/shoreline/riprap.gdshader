@@ -81,7 +81,7 @@ uniform float stone_last_dim = 0.6;
 // that tone near by as well.
 uniform bool rock_face = false;
 uniform float gap_brightness = 0.14;
-uniform float band_brightness = 0.47;
+uniform float band_brightness = 0.27;
 // The underlay stays matt, wet or dry: a smooth wet sheen on so broad and dark
 // a surface would mirror the pale sky along the water at grazing angles.
 uniform float underlay_specular = 0.1;
