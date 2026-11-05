@@ -1641,6 +1641,7 @@ export function generateStreetDetail({
     pieceViolation: (piece, ignore) => propSiteViolation(piece, true, ignore),
     groundAt,
     pathDistance,
+    footprintPiece,
   });
   rows.push(...furniture.rows);
   // (b2) The planting scatter: trees and grass round the furniture placed above.

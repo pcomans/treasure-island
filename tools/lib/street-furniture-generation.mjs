@@ -30,7 +30,6 @@
 import { createHash } from "node:crypto";
 import { projectLonLat } from "./coordinates.mjs";
 import { pointInMultiPolygon } from "./osm-geometry.mjs";
-import { footprintPiece } from "./street-clutter-generation.mjs";
 import { compareSourceKeys, invariant, roundCoordinate } from "./world-contract.mjs";
 
 // Kit props built by game/scripts/world/street_furniture_kit.gd, with the row
@@ -408,6 +407,9 @@ export function placeStreetFurniture({
   pieceViolation,
   groundAt,
   pathDistance,
+  // street-clutter-generation.mjs's footprint stadium, passed in: importing it
+  // here would close an import cycle (it reaches this module through the yard kit).
+  footprintPiece,
 }) {
   const pilotShapes = zoneShapes.filter(({ zone }) => zone.pilot);
   const inPilot = (xz) => pilotShapes.some(({ contains }) => contains(xz));
