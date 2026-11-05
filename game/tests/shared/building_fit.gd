@@ -37,9 +37,9 @@ var _fenced_sides_loaded := false
 var _fenced_sides: Dictionary = {}
 ## The walk-up's lane geometry (lanes as shares of the side's width, start
 ## margins beyond the box, and how far past the box's middle a lane looks for
-## its wall). The street-detail generator reads the same file to keep island
-## clutter out of the start this walk-up takes. Loaded once; empty when the
-## file is missing or malformed, which fails every walk-up.
+## its wall). The street-detail generator reads the same file to keep walk-up
+## lanes free of its island clutter. Loaded once; empty when the file is missing
+## or malformed, which fails every walk-up.
 const WALK_UP_LANES_PATH := "res://tools/config/walk-up-lanes.json"
 var _walk_up_lanes: Dictionary = {}
 var _walk_up_lanes_loaded := false
@@ -85,42 +85,6 @@ func diagnose_side(source_key: String, side_name: String) -> String:
 		_unsafe = true
 		return "diagnostic changed player/recovery state or lost disabled/input-released state"
 	return "" if setup.ok else "candidate preflight HOLD: " + str(setup.reason)
-
-
-## Preplacement inspection only, as diagnose_side: for each side of a source,
-## the start the walk-up would take and the first start that passes every
-## mandatory check (the one the street-detail generator predicts and keeps its
-## island clutter out of), as "lane 0.00 / 5.0 m" candidate labels, "" where
-## there is none. Returns {ok, reason, sides: {side: {selected, first_viable}}}.
-## No movement, fit, active-rest or acceptance credit.
-func walk_up_starts(source_key: String) -> Dictionary:
-	if _unsafe or not _diagnostic_player_idle():
-		_unsafe = true
-		return {"ok": false, "reason": "walk-up start query prerequisite failed: unsafe driver or active player/input", "sides": {}}
-	var before := _h.player.global_transform
-	var recoveries := _h.world.get_runtime_evidence().recovery_count
-	var nodes := _h.building_nodes(source_key)
-	var architecture := _h.architectural_walls(nodes)
-	if not architecture.ok:
-		return {"ok": false, "reason": "walk-up start query source geometry: " + architecture.reason, "sides": {}}
-	var support := _h.approach_support(source_key, nodes, architecture)
-	if not support.ok:
-		return {"ok": false, "reason": "walk-up start query support identity: " + support.reason, "sides": {}}
-	_support_context = support.context
-	_source = source_key
-	_prefix = "%s: " % source_key
-	var box: AABB = architecture.bounds
-	var sides := {}
-	for side_name: String in ["north", "south", "west", "east"]:
-		var side: Vector3 = {"north": Vector3.FORWARD, "south": Vector3.BACK, "west": Vector3.LEFT, "east": Vector3.RIGHT}[side_name]
-		var half_depth := absf(side.x) * box.size.x * 0.5 + absf(side.z) * box.size.z * 0.5
-		var half_width := absf(side.z) * box.size.x * 0.5 + absf(side.x) * box.size.z * 0.5
-		var setup := _walk_start(box.get_center(), side, half_depth, half_width, architecture.rids, architecture.shapes, architecture.faces)
-		sides[side_name] = {"selected": str(setup.get("candidate", "")) if setup.ok else "", "first_viable": str(setup.get("first_viable", "")) if setup.ok else ""}
-	if _h.player.global_transform != before or _h.world.get_runtime_evidence().recovery_count != recoveries or not _diagnostic_player_idle():
-		_unsafe = true
-		return {"ok": false, "reason": "walk-up start query changed player/recovery state or lost disabled/input-released state", "sides": sides}
-	return {"ok": true, "reason": "", "sides": sides}
 
 
 func _diagnostic_player_idle() -> bool:
@@ -431,11 +395,7 @@ func _walk_start(center: Vector3, side: Vector3, half_depth: float, half_width: 
 			var result := {"ok": true, "xz": xz, "destination": (crossing.position as Vector3) - side,
 				"start_log": "%sWALK_START side=%s candidate=%s at=%s margin=%.1f support=%s rejected=%s" % [_prefix, _side_name(side), proposal.label, xz, margin, (ground.collider as Node).get_path(), rejected],
 				"target_log": "%sWALK_TARGET side=%s at=%s body=%s shape=%s normal=%s" % [_prefix, _side_name(side), crossing.position, (crossing.collider as Node).get_path(), crossing.shape, crossing.normal],
-				"preference_reason": preference,
-				"candidate": "%s / %.1f m" % [proposal.label, margin]}
-			# The first start that passes every mandatory check, which the
-			# street-detail generator predicts (walk_up_starts reports it).
-			result["first_viable"] = result.candidate if fallback.is_empty() else fallback.candidate
+				"preference_reason": preference}
 			if preference == "":
 				return _selected_walk_start(result, "preferred broad wall")
 			# Articulated or narrow walls can still satisfy every mandatory

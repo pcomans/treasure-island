@@ -55,8 +55,6 @@ export const BIKE_RACK_HOOP_SPACING_M = 0.9;
 // Each hoop's legs reach 0.1 m below the rack's origin: the ground under every
 // hoop stays this close to the ground at its centre (m).
 const BIKE_RACK_LEVEL_M = 0.06;
-// A hoop's half width, for the buildings' walk-up lanes (m).
-const BIKE_RACK_HOOP_HALF_M = 0.45;
 // Plan sizes {x_m, z_m} (along the prop's local X and Z) of the kit props that
 // are longer than their kind's radius covers; set pieces carry them as their
 // footprint for the shared mask.
@@ -131,7 +129,7 @@ const OSM_PROPS = Object.freeze({
 // only in the pilot zones: benches, waste baskets and bike racks at their OSM
 // nodes. One whose node lies on a road or path moves beside it (ISLAND_NUDGES_M).
 const ISLAND_FURNITURE_KINDS = Object.freeze(["bench", "bicycle_parking", "waste_basket"]);
-const ISLAND_NUDGES_M = Object.freeze([0.6, 1.2, 1.8, 2.4, 3.0, 3.6, 4.2]);
+const ISLAND_NUDGES_M = Object.freeze([0.6, 1.2, 1.8, 2.4]);
 // ... and one whose node lies on ground drawn off its surface's height (a
 // verge's sloped back, which the street ground's surface query does not give)
 // moves to the nearest level spot: the visible ground within this of the
@@ -291,7 +289,6 @@ export function placeStreetFurniture({
   grounded,
   surfaceAt,
   groundAt = null,
-  walkUps = null,
 }) {
   const pilotShapes = zoneShapes.filter(({ zone }) => zone.pilot);
   const inPilot = (xz) => pilotShapes.some(({ contains }) => contains(xz));
@@ -407,26 +404,20 @@ export function placeStreetFurniture({
       const visible = groundAt?.(xz) ?? null;
       return visible !== null && Math.abs(visible.y - (grounded(xz).y + surfaceAt(xz).bias_m)) > ISLAND_LEVEL_M;
     };
-    // A spot in the walk-up the building fit test takes on a scored side
-    // (predictWalkUps in street-detail-generation.mjs).
-    const inLane = (xz, radius) => walkUps?.blocking([xz], radius) != null;
-    const radiusOf = kinds[row.kind].footprint_radius_m;
     const onRoad = ISLAND_FURNITURE_KINDS.includes(row.kind) && surfaceAt(at).kind === "road_path";
     const sloped = ISLAND_FURNITURE_KINDS.includes(row.kind) && !onRoad && offLevel(at);
-    const laned = ISLAND_FURNITURE_KINDS.includes(row.kind) && !onRoad && !sloped && inLane(at, radiusOf);
-    if (onRoad || sloped || laned) {
-      // The nearest clear, level spot off the road or path and out of the
-      // buildings' walk-ups, in rings round the node.
+    if (onRoad || sloped) {
+      // The nearest clear, level spot off the road or path, in rings round the node.
       let moved = null;
       for (const radius of ISLAND_NUDGES_M) {
         for (let step = 0; step < 16 && !moved; step += 1) {
           const angle = (step * Math.PI) / 8;
           const xz = round2([at[0] + radius * Math.cos(angle), at[1] + radius * Math.sin(angle)]);
-          if (surfaceAt(xz).kind !== "road_path" && !reject(row.kind, xz, { ignore: new Set([row.id]) }) && !offLevel(xz) && !inLane(xz, radiusOf)) moved = xz;
+          if (surfaceAt(xz).kind !== "road_path" && !reject(row.kind, xz, { ignore: new Set([row.id]) }) && !offLevel(xz)) moved = xz;
         }
         if (moved) break;
       }
-      const why = onRoad ? "on a road or path" : sloped ? "on sloped ground" : "in a building's walk-up";
+      const why = onRoad ? "on a road or path" : "on sloped ground";
       if (!moved) {
         audit.osm_unbuilt.push({ id: row.id, kind: row.kind, reason: `${why} with no clear spot beside it` });
         continue;
@@ -520,8 +511,7 @@ export function placeStreetFurniture({
       let problem = yaw === null ? "no road to face" : null;
       for (let index = 0; index < hoops && !problem; index += 1) {
         const point = hoopAt(index);
-        problem = reject(row.kind, point, { ignore }) ?? (Math.abs(visibleY(point) - centreY) > BIKE_RACK_LEVEL_M ? "uneven ground" : null)
-          ?? (walkUps?.blocking([point], BIKE_RACK_HOOP_HALF_M) ? "walk-up" : null);
+        problem = reject(row.kind, point, { ignore }) ?? (Math.abs(visibleY(point) - centreY) > BIKE_RACK_LEVEL_M ? "uneven ground" : null);
       }
       if (problem) {
         audit.racks_as_one_hoop.push({ id: row.id, hoops, reason: problem });

@@ -605,18 +605,22 @@ export function loadStreetDetailSetPieces(projectRoot) {
 
 // The building fit test (game/tests/shared/building_fit.gd) walks the stock
 // player up to every scored unit from each side of its box. The test and this
-// generator read the walk-up's lane geometry from WALK_UP_INPUT. The test tries
-// a start on each lane in turn (an offset across the side, a share of the box's
-// width), at each margin beyond the box in turn, and walks the first open one to
-// the wall its lane crosses. The generator predicts that start for each scored
-// side from what else stands there, and keeps the island-wide clutter and
-// furniture out of the predicted walk only, so the test walks where it walked
-// before they existed. Island items may stand in every other lane.
+// generator read the walk-up's lane geometry from WALK_UP_INPUT: lanes square to
+// the side (offsets across it, shares of the box's width), starts at margins
+// beyond the box. The test closes a lane whose start or corridor a street-detail
+// solid occupies, and walks the first lane open by all its rules. The island-wide
+// items are placed as the evidence says; then each scored side keeps at least
+// WALK_UP_FREE_LANES of the lanes its site leaves open free of street solids,
+// barring the island clutter in the lanes that need the fewest moves where fewer
+// are free.
 export const WALK_UP_INPUT = "tools/config/walk-up-lanes.json";
-// Island items keep this far from a predicted walk: the capsule's sweep, and room
-// for the footprint's box standing in for the test's box of the unit's walls (m).
+const WALK_UP_FREE_LANES = 2;
+// A solid occupies a lane when it comes this close to the lane's corridor (from
+// its first start to the unit's wall): the capsule's sweep, and room for the
+// footprint standing in for the test's walls (m).
 const WALK_UP_KEEP_CLEAR_M = 0.9;
-// Walks are sampled every this much (m), and indexed in cells this size (m).
+// Lanes are sampled every this much for the unit's wall (m), and corridors
+// indexed in cells this size (m).
 const WALK_UP_STEP_M = 0.1;
 const WALK_UP_CELL_M = 16;
 // The test's sides: north (Godot's forward, -z), south, west and east.
@@ -642,21 +646,21 @@ export function loadWalkUpLanes(projectRoot) {
   return lanes;
 }
 
-// Each scored side's candidate starts, in the test's order: {source_key, side,
-// candidates: [{lane, margin, walk}]}. walk is the start and the point where the
-// lane first meets the unit's footprint, or null where nothing can open the
-// start: the lane meets no wall of the unit, the start is off the land or in
-// another building, or the walk runs through another building.
-export function walkUpCandidates({ objects, scoredKeys, lanes, onLand, buildings }) {
+// Each scored side's lanes, in the test's order: [{source_key, side, corridors}].
+// A corridor runs from the lane's first start to where the lane first meets the
+// unit's footprint, or is null where the site closes the lane: it meets no wall of
+// the unit, or its start is off the land, or it starts in or runs through another
+// building. The footprint's bounds stand in for the test's box of the unit's walls.
+export function walkUpLanes({ objects, scoredKeys, lanes, onLand, buildings }) {
   const scored = new Set(scoredKeys);
   const footprints = new Map();
   for (const object of objects) {
     if (!object.roles.includes("building") || !scored.has(object.row.source_key)) continue;
     footprints.set(object.row.source_key, [...(footprints.get(object.row.source_key) ?? []), ...object.geometry]);
   }
+  const margin = lanes.start_margins_m[0];
   const sides = [];
   for (const [sourceKey, geometry] of [...footprints.entries()].sort(([left], [right]) => compareSourceKeys(left, right))) {
-    // The test's box is its walls' bounds, which the footprint's bounds stand in for.
     const box = [Infinity, -Infinity, Infinity, -Infinity];
     for (const polygon of geometry) {
       for (const [east, north] of polygon[0]) {
@@ -669,105 +673,68 @@ export function walkUpCandidates({ objects, scoredKeys, lanes, onLand, buildings
     const center = [(box[0] + box[1]) / 2, (box[2] + box[3]) / 2];
     const size = [box[1] - box[0], box[3] - box[2]];
     const inUnit = (xz) => pointInMultiPolygon(toEastNorth(xz), geometry, true);
-    const otherBuilding = (xz, reach) => {
-      const near = buildings.nearest(xz, reach);
-      return near.key !== null && near.key !== sourceKey && near.distance < reach;
+    const inOtherBuilding = (xz) => {
+      const near = buildings.nearest(xz, PLAYER_CAPSULE_RADIUS_M);
+      return near.key !== null && near.key !== sourceKey && near.distance < PLAYER_CAPSULE_RADIUS_M;
     };
     for (const [sideName, side] of WALK_UP_SIDES) {
       const across = [side[1], -side[0]];
       const halfDepth = (Math.abs(side[0]) * size[0] + Math.abs(side[1]) * size[1]) / 2;
       const halfWidth = (Math.abs(side[1]) * size[0] + Math.abs(side[0]) * size[1]) / 2;
-      const candidates = [];
-      for (const lane of lanes.lanes_of_width) {
+      const corridors = lanes.lanes_of_width.map((lane) => {
         const laneCenter = [center[0] + across[0] * halfWidth * 2 * lane, center[1] + across[1] * halfWidth * 2 * lane];
-        for (const margin of lanes.start_margins_m) {
-          const start = [laneCenter[0] + side[0] * (halfDepth + margin), laneCenter[1] + side[1] * (halfDepth + margin)];
-          const far = [laneCenter[0] - side[0] * (halfDepth + lanes.far_beyond_m), laneCenter[1] - side[1] * (halfDepth + lanes.far_beyond_m)];
-          const length = Math.hypot(far[0] - start[0], far[1] - start[1]);
-          let wall = null;
-          for (let step = 0; step * WALK_UP_STEP_M <= length; step += 1) {
-            const t = (step * WALK_UP_STEP_M) / length;
-            const point = [start[0] + (far[0] - start[0]) * t, start[1] + (far[1] - start[1]) * t];
-            if (inUnit(point)) {
-              wall = point;
-              break;
-            }
-          }
-          let walk = wall === null || !onLand(start, PLAYER_CAPSULE_RADIUS_M) || otherBuilding(start, PLAYER_CAPSULE_RADIUS_M) ? null : [start, wall];
-          if (walk !== null) {
-            const run = Math.hypot(wall[0] - start[0], wall[1] - start[1]);
-            for (let step = 0; step * WALK_UP_STEP_M < run - PLAYER_CAPSULE_RADIUS_M; step += 1) {
-              const t = (step * WALK_UP_STEP_M) / run;
-              if (otherBuilding([start[0] + (wall[0] - start[0]) * t, start[1] + (wall[1] - start[1]) * t], PLAYER_CAPSULE_RADIUS_M)) {
-                walk = null;
-                break;
-              }
-            }
-          }
-          candidates.push({ lane, margin, walk });
+        const start = [laneCenter[0] + side[0] * (halfDepth + margin), laneCenter[1] + side[1] * (halfDepth + margin)];
+        const far = [laneCenter[0] - side[0] * (halfDepth + lanes.far_beyond_m), laneCenter[1] - side[1] * (halfDepth + lanes.far_beyond_m)];
+        const along = (to, distance) => {
+          const length = Math.hypot(to[0] - start[0], to[1] - start[1]);
+          return [start[0] + ((to[0] - start[0]) * distance) / length, start[1] + ((to[1] - start[1]) * distance) / length];
+        };
+        let wall = null;
+        const length = Math.hypot(far[0] - start[0], far[1] - start[1]);
+        for (let step = 0; step * WALK_UP_STEP_M <= length && wall === null; step += 1) {
+          const point = along(far, step * WALK_UP_STEP_M);
+          if (inUnit(point)) wall = point;
         }
-      }
-      sides.push({ source_key: sourceKey, side: sideName, candidates });
+        if (wall === null || !onLand(start, PLAYER_CAPSULE_RADIUS_M)) return null;
+        const run = Math.hypot(wall[0] - start[0], wall[1] - start[1]);
+        for (let step = 0; step * WALK_UP_STEP_M < run - PLAYER_CAPSULE_RADIUS_M; step += 1) {
+          if (inOtherBuilding(along(wall, step * WALK_UP_STEP_M))) return null;
+        }
+        return [start, wall];
+      });
+      sides.push({ source_key: sourceKey, side: sideName, corridors });
     }
   }
   return sides;
 }
 
-// The start the test takes on each side among rows: the first candidate whose
-// walk no built solid among them closes (within the capsule's radius), leaving
-// out the rows skip(row) names. Sides with no open candidate are left out.
-// Returns [{source_key, side, lane, margin, walk}].
-export function predictWalkUps(sides, rows, skip) {
+// The lanes each row occupies: occupiedLanes(row) gives [{side, lane}] (indices
+// into sides and their corridors) for every open corridor one of the row's pieces
+// comes within WALK_UP_KEEP_CLEAR_M of.
+export function walkUpOccupancy(sides) {
   const cells = new Map();
   const cell = (value) => Math.floor(value / WALK_UP_CELL_M);
-  for (const solid of streetSolids(rows.filter((row) => !skip(row)))) {
-    const xs = solid.points.map((point) => point[0]);
-    const zs = solid.points.map((point) => point[1]);
-    for (let i = cell(Math.min(...xs) - solid.radius); i <= cell(Math.max(...xs) + solid.radius); i += 1) {
-      for (let j = cell(Math.min(...zs) - solid.radius); j <= cell(Math.max(...zs) + solid.radius); j += 1) cells.set(`${i},${j}`, [...(cells.get(`${i},${j}`) ?? []), solid]);
-    }
-  }
-  const closed = (walk) => {
-    const near = new Set();
-    for (let i = cell(Math.min(walk[0][0], walk[1][0])); i <= cell(Math.max(walk[0][0], walk[1][0])); i += 1) {
-      for (let j = cell(Math.min(walk[0][1], walk[1][1])); j <= cell(Math.max(walk[0][1], walk[1][1])); j += 1) {
-        for (const solid of cells.get(`${i},${j}`) ?? []) near.add(solid);
-      }
-    }
-    return [...near].some((solid) => planDistance(walk, solid.points) < solid.radius);
-  };
-  const walks = [];
-  for (const { source_key: sourceKey, side, candidates } of sides) {
-    const open = candidates.find((candidate) => candidate.walk !== null && !closed(candidate.walk));
-    if (open) walks.push({ source_key: sourceKey, side, lane: open.lane, margin: open.margin, walk: open.walk });
-  }
-  return walks;
-}
-
-// A query over predicted walks: blocking(points, radius) gives the walk a piece
-// (a point or a segment, its radius) comes within WALK_UP_KEEP_CLEAR_M of, or null.
-export function walkUpIndex(walks) {
-  const cells = new Map();
-  const cell = (value) => Math.floor(value / WALK_UP_CELL_M);
-  for (const walk of walks) {
-    const [[x0, z0], [x1, z1]] = walk.walk;
+  sides.forEach((entry, side) => entry.corridors.forEach((corridor, lane) => {
+    if (corridor === null) return;
+    const [[x0, z0], [x1, z1]] = corridor;
     for (let i = cell(Math.min(x0, x1) - WALK_UP_KEEP_CLEAR_M); i <= cell(Math.max(x0, x1) + WALK_UP_KEEP_CLEAR_M); i += 1) {
-      for (let j = cell(Math.min(z0, z1) - WALK_UP_KEEP_CLEAR_M); j <= cell(Math.max(z0, z1) + WALK_UP_KEEP_CLEAR_M); j += 1) cells.set(`${i},${j}`, [...(cells.get(`${i},${j}`) ?? []), walk]);
+      for (let j = cell(Math.min(z0, z1) - WALK_UP_KEEP_CLEAR_M); j <= cell(Math.max(z0, z1) + WALK_UP_KEEP_CLEAR_M); j += 1) cells.set(`${i},${j}`, [...(cells.get(`${i},${j}`) ?? []), { side, lane, corridor }]);
     }
-  }
-  return {
-    walks,
-    blocking(points, radius) {
-      const near = new Set();
-      const xs = points.map((point) => point[0]);
-      const zs = points.map((point) => point[1]);
-      for (let i = cell(Math.min(...xs) - radius); i <= cell(Math.max(...xs) + radius); i += 1) {
-        for (let j = cell(Math.min(...zs) - radius); j <= cell(Math.max(...zs) + radius); j += 1) {
-          for (const walk of cells.get(`${i},${j}`) ?? []) near.add(walk);
+  }));
+  return (row) => {
+    const hits = new Map();
+    for (const piece of streetDetailPieces(row)) {
+      const xs = piece.points.map((point) => point[0]);
+      const zs = piece.points.map((point) => point[1]);
+      for (let i = cell(Math.min(...xs) - piece.radius); i <= cell(Math.max(...xs) + piece.radius); i += 1) {
+        for (let j = cell(Math.min(...zs) - piece.radius); j <= cell(Math.max(...zs) + piece.radius); j += 1) {
+          for (const entry of cells.get(`${i},${j}`) ?? []) {
+            if (!hits.has(`${entry.side}/${entry.lane}`) && planDistance(piece.points, entry.corridor) < piece.radius + WALK_UP_KEEP_CLEAR_M) hits.set(`${entry.side}/${entry.lane}`, { side: entry.side, lane: entry.lane });
+          }
         }
       }
-      return [...near].find((walk) => planDistance(points, walk.walk) < radius + WALK_UP_KEEP_CLEAR_M) ?? null;
-    },
+    }
+    return [...hits.values()];
   };
 }
 
@@ -1045,9 +1012,8 @@ export function generateStreetDetail({
 
   const landEdgeDistance = (xz) => distanceToMultiPolygonEdges(toEastNorth(xz), boundary);
   const onLand = (xz, margin) => pointInMultiPolygon(toEastNorth(xz), boundary, false) && landEdgeDistance(xz) >= margin;
-  // The scored units' walk-up candidates (walkUpCandidates): the island-wide
-  // furniture and clutter keep out of the walk-ups predicted from them.
-  const walkUpSides = walkUpCandidates({ objects, scoredKeys: loadStreetDetailScoredUnits(projectRoot), lanes: loadWalkUpLanes(projectRoot), onLand, buildings });
+  // The scored units' walk-up lanes, of which each side keeps WALK_UP_FREE_LANES free.
+  const walkUpSides = walkUpLanes({ objects, scoredKeys: loadStreetDetailScoredUnits(projectRoot), lanes: loadWalkUpLanes(projectRoot), onLand, buildings });
   const grounded = (xz) => {
     const support = terrainSupportAt(chunks, xz[0], -xz[1]);
     return { y: support.elevation_m, support };
@@ -1764,8 +1730,6 @@ export function generateStreetDetail({
     grounded,
     surfaceAt,
     groundAt,
-    // The walk-ups predicted from what stands before the furniture.
-    walkUps: walkUpIndex(predictWalkUps(walkUpSides, rows, () => false)),
   });
   rows.push(...furniture.rows);
   // (b2) The planting scatter: trees and grass round the furniture placed above.
@@ -1834,19 +1798,21 @@ export function generateStreetDetail({
   // (e2) The island-wide rules place their cars and cans as the evidence says.
   // Then a row's place (stall, curb place, bay or can) is barred and the clutter
   // placed again, so the row moves to its rule's next place and the counts hold
-  // while places last, when the row:
-  //   - stands in the walk-up the building fit test would take on a scored side
-  //     without the island rows (predictWalkUps; the furniture and the pilot
-  //     zones' clutter stand), or
-  //   - shuts walkable ground in: the clearance check's flood (shutInPockets)
-  //     over each fence and yard region an island row stands in, barring the row
-  //     most of whose grown footprint borders the shut-in cells. Pockets no
-  //     island row borders are left to the clearance check to report.
+  // while places last, when:
+  //   - a scored side keeps fewer than WALK_UP_FREE_LANES of the walk-up lanes
+  //     its site leaves open free of street solids: the island rows in the lanes
+  //     that need the fewest moves (the test's order on ties) are barred, until
+  //     enough are free. Other solids (furniture at its node, fences, trunks, the
+  //     pilot zones' clutter) stay, so a lane one occupies stays occupied.
+  //   - the row shuts walkable ground in: the clearance check's flood
+  //     (shutInPockets) over each fence and yard region an island row stands in
+  //     bars the row most of whose grown footprint borders the shut-in cells.
+  //     Pockets no island row borders are left to the clearance check to report.
   const barred = new Set();
   const moves = [];
   const walkUpMoves = [];
-  let walkUpPredictions = [];
   const isIslandRow = (row) => row.source_id.startsWith("island:");
+  let walkUpShort = [];
   if (clutter.rows.some(isIslandRow)) {
     const roofs = roofTriangles([...chunks.values()].flatMap((chunk) => chunk.records));
     const onIsland = (point) => pointInMultiPolygon(toEastNorth(point), playableBoundary, false);
@@ -1864,19 +1830,42 @@ export function generateStreetDetail({
       return point[0] >= x0 - POCKET_MARGIN_M && point[0] <= x1 + POCKET_MARGIN_M && point[1] >= z0 - POCKET_MARGIN_M && point[1] <= z1 + POCKET_MARGIN_M;
     };
     const allRegions = pocketRegions(rows, config.zones.filter(isYardZone));
-    // The walk-ups without the island rows; the rounds move only island rows.
-    const walkUps = walkUpIndex(predictWalkUps(walkUpSides, [...rows, ...clutter.rows], isIslandRow));
-    walkUpPredictions = walkUps.walks.map(({ source_key: sourceKey, side, lane, margin }) => ({ source_key: sourceKey, side, lane, margin_m: margin }));
+    const occupiedLanes = walkUpOccupancy(walkUpSides);
+    // The lanes the solids no bar moves occupy.
+    const fixed = new Set(rows.filter(isStreetSolid).flatMap((row) => occupiedLanes(row).map(({ side, lane }) => `${side}/${lane}`)));
     for (let round = 0; round < 60; round += 1) {
       const islandCars = clutter.rows.filter(isIslandRow);
       let barredMore = false;
-      for (const row of islandCars) {
-        if (barred.has(row.id)) continue;
-        const walk = streetDetailPieces(row).map((piece) => walkUps.blocking(piece.points, piece.radius)).find((found) => found !== null);
-        if (!walk) continue;
-        barred.add(row.id);
-        walkUpMoves.push({ id: row.id, source_key: walk.source_key, side: walk.side });
-        barredMore = true;
+      const occupants = new Map();
+      const held = new Set(fixed);
+      for (const row of clutter.rows) {
+        if (!isStreetSolid(row)) continue;
+        for (const { side, lane } of occupiedLanes(row)) {
+          if (!isIslandRow(row)) held.add(`${side}/${lane}`);
+          else occupants.set(`${side}/${lane}`, [...(occupants.get(`${side}/${lane}`) ?? []), row]);
+        }
+      }
+      const sidesWithCars = new Set([...occupants.keys()].map((key) => Number(key.split("/")[0])));
+      walkUpShort = [];
+      for (const side of [...sidesWithCars].sort((left, right) => left - right)) {
+        const open = walkUpSides[side].corridors.flatMap((corridor, lane) => (corridor === null ? [] : [{ key: `${side}/${lane}`, lane }]));
+        let free = open.filter(({ key }) => !occupants.has(key) && !held.has(key)).length;
+        if (free >= WALK_UP_FREE_LANES) continue;
+        // The lanes only island rows occupy, fewest rows first (the test's order on ties).
+        const movable = open.map(({ key, lane }) => ({ key, lane, cars: occupants.get(key) ?? [] }))
+          .filter(({ key, cars }) => !held.has(key) && cars.length > 0)
+          .sort((left, right) => left.cars.length - right.cars.length || left.lane - right.lane);
+        for (const { lane, cars } of movable) {
+          if (free >= WALK_UP_FREE_LANES) break;
+          for (const row of cars) {
+            if (barred.has(row.id)) continue;
+            barred.add(row.id);
+            walkUpMoves.push({ id: row.id, source_key: walkUpSides[side].source_key, side: walkUpSides[side].side, lane });
+            barredMore = true;
+          }
+          free += 1;
+        }
+        if (free < WALK_UP_FREE_LANES) walkUpShort.push({ source_key: walkUpSides[side].source_key, side: walkUpSides[side].side, open: open.length, free });
       }
       const regions = allRegions.filter((region) => islandCars.some((row) => near(region.points, carPoint(row))));
       const failing = shutInPockets({ regions, roofs, solids: streetSolids([...rows, ...clutter.rows]), onIsland }).regions;
@@ -1900,9 +1889,8 @@ export function generateStreetDetail({
   }
   clutter.audit.shut_in_moves = moves;
   clutter.audit.walk_up_moves = walkUpMoves;
-  // The predicted walk-ups, which the building fit's prediction check
-  // (island_test.gd --walk-up-predictions) compares with the test's own.
-  clutter.audit.walk_ups = walkUpPredictions;
+  // Sides with island rows in their lanes that still keep fewer than WALK_UP_FREE_LANES free.
+  clutter.audit.walk_up_short = walkUpShort;
   rows.push(...clutter.rows);
   for (const summary of zoneSummaries) {
     const zone = config.zones.find((candidate) => candidate.id === summary.id);

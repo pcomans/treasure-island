@@ -503,8 +503,8 @@ export function settleParkedCar(body, center, front, groundAt) {
 //   place of a zone id;
 //   barredIds: row ids of island places not to use (a lot stall, curb place,
 //   bay or bus stop's can): the generator bars a place whose row shuts
-//   walkable ground in or stands in a scored building's walk-up, and places
-//   the clutter again.
+//   walkable ground in or leaves a scored side too few free walk-up lanes, and
+//   places the clutter again.
 export function placeStreetClutter({
   kinds,
   rows,
