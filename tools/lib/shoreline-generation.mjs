@@ -156,7 +156,8 @@ const MOUND_FIELDS = ["centerline_xz", "crest_min_m", "crest_y_m", "gradient", "
 const SLOPE_FIELDS = ["berm", "clamp_reach_m", "columns", "dem_fit_m", "end_cap_bottom_y_m", "gradient_m_per_m", "gradient_smoothing_m", "relief_m", "relief_wavelength_m", "section_m", "shoulder_m", "station_m", "toe_y_m", "top_blend_m", "waterline"];
 const WATERLINE_FIELDS = ["core_m", "gradient_m_per_m", "smoothing_m"];
 const BERM_FIELDS = ["below_crest_m", "cap_taper_m", "drop_per_m", "inner_m", "joint_blend_m", "wavelength_m", "width_m"];
-const STONE_FIELDS = ["big", "chink", "cobble", "crest", "crest_fill", "driftwood", "heap", "pebbles", "planks", "posture", "prototypes", "section_m", "setback_m", "shoulder", "thinning", "top"];
+const STONE_FIELDS = ["big", "chink", "cobble", "crest", "crest_fill", "driftwood", "heap", "pebbles", "planks", "posture", "prototypes", "ramp_foot", "section_m", "setback_m", "shoulder", "thinning", "top"];
+const RAMP_FOOT_FIELDS = ["from_m", "out_share", "overlap", "size_m", "spacing_m", "to_m"];
 const THINNING_FIELDS = ["max_m", "min_m", "reach_per_m", "start", "wood_m"];
 const CHINK_FIELDS = ["fill", "overlap", "rise_m", "size_m"];
 const BIG_FIELDS = ["above_m", "families"];
@@ -254,6 +255,12 @@ export function shorelineSettings(config) {
   requireRange(stones.chink.rise_m, 0, "Shoreline stones.chink.rise_m");
   invariant(isFiniteNumber(stones.chink.fill) && stones.chink.fill >= 0 && stones.chink.fill <= 1.5 && isFiniteNumber(stones.chink.overlap) && stones.chink.overlap > 0.3 && stones.chink.overlap <= 1,
     "Shoreline stones.chink needs fill in [0, 1.5] and overlap in (0.3, 1]");
+  // Stones along a ramp's foot: from_m to to_m along its sides from the land
+  // edge, each out_share of its radius off the slab's edge.
+  exactKeys(stones.ramp_foot, RAMP_FOOT_FIELDS, "Shoreline stones.ramp_foot");
+  requireRange(stones.ramp_foot.size_m, 0.1, "Shoreline stones.ramp_foot.size_m");
+  requireRange(stones.ramp_foot.spacing_m, 0.1, "Shoreline stones.ramp_foot.spacing_m");
+  for (const key of ["from_m", "to_m", "out_share", "overlap"]) invariant(isFiniteNumber(stones.ramp_foot[key]) && stones.ramp_foot[key] >= 0, `Shoreline stones.ramp_foot.${key} must be non-negative`);
   // The biggest stones take only the irregular quarry families (a big clean
   // block or slab reads as a box).
   exactKeys(stones.big, BIG_FIELDS, "Shoreline stones.big");
@@ -1671,7 +1678,17 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
         pushTriangle(mesh, [ids[i][0], ids[i + 1][1], ids[i][1]], slabNormal);
       }
       const footprint = [...edge.map((station) => station.point), ...edge.map((station) => add(station.point, scale(normal, run))).reverse()];
-      rampStructures.push({ source_key: piece.id, kind: "ramp", slope: "cut", clearance_m: 0.15, under_drop_m: null, area: indexedArea([[signedRingArea(footprint) > 0 ? footprint : footprint.reverse()]]) });
+      // The ramp's two sides, from the land edge out (each with the outline
+      // distance of its head corner and its way out from the slab), for the
+      // stones that lie along its foot.
+      const sides = [[edge[0], -1, piece.s0], [edge.at(-1), 1, piece.s1]].map(([station, sign, s]) => ({
+        s,
+        from: station.point,
+        to: add(station.point, scale(normal, run)),
+        outward: scale([-normal[1], normal[0]], sign),
+        fall: [station.land, slabTop(station, run)],
+      }));
+      rampStructures.push({ source_key: piece.id, kind: "ramp", slope: "cut", clearance_m: 0.15, under_drop_m: null, sides, area: indexedArea([[signedRingArea(footprint) > 0 ? footprint : footprint.reverse()]]) });
       // Side walls: from ramp_wall_m above the slab down to below the toe,
       // faced both ways (the curb seen from the ramp, its back from the water).
       for (const [station, sign] of [[edge[0], -1], [edge.at(-1), 1]]) {
@@ -2493,6 +2510,28 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
         if (Math.max(...shown.map((point) => dot(sub([point[0], -point[2]], section.point), section.normal))) > section.water_m + heap.past_water_m) continue;
         keep(stone);
         placed += 1;
+      }
+    }
+    // Stones along a ramp's foot: small blocks tumbled against the slab's edge
+    // at this segment's end, over the cut's face, so stone meets the slab.
+    const rampFoot = rules.ramp_foot;
+    for (const ramp of structures.filter((structure) => structure.kind === "ramp")) {
+      for (const side of ramp.sides) {
+        const atEnd = outline.wrap(side.s - s0) < JOINT_TOLERANCE_M || outline.wrap(s1 - side.s) < JOINT_TOLERANCE_M;
+        if (!atEnd) continue;
+        const along = unit(sub(side.to, side.from));
+        const run = length(sub(side.to, side.from));
+        const rng = random(seed, `${segment.id}:ramp-foot`);
+        for (let t = rampFoot.from_m; t < Math.min(rampFoot.to_m, run); t += pick(rampFoot.spacing_m, rng)) {
+          const size = pick(rampFoot.size_m, rng);
+          const prototype = shapeFor(size, rng);
+          const o = orient(prototype, [0, 1, 0], topRule.tilt_deg, rng, crestPosture);
+          const plan2 = add(add(side.from, scale(along, t)), scale(side.outward, o.radius * size * rampFoot.out_share));
+          if (!fits(plan2, o.radius * size, rampFoot.overlap)) continue;
+          const bedY = lerp(side.fall[0], side.fall[1], t / run) - 0.03;
+          const stone = makeStone({ band: "heap", s: side.s, d: -1, plan2, size, prototype, o, bedY, settle: false });
+          if (clearance(stone.placed) >= SHORELINE_OUTSIDE_CLEARANCE_M) keep(stone);
+        }
       }
     }
     // Cobbles: a few small blocks set in the band just inside the outline,
