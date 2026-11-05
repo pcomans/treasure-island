@@ -94,7 +94,7 @@ const CONTAINER_COLOURS = ["white", "beige", "red", "rust", "orange", "green", "
 const WALL_COLOURS = ["green", "beige", "white", "grey", "blue_grey", "red", "rust", "blue"];
 
 const intRange = (min, max) => Object.freeze({ type: "int", min, max });
-const numRange = (min, max) => Object.freeze({ type: "number", min, max });
+const numRange = (min, max, step = null) => Object.freeze({ type: "number", min, max, step });
 const oneOf = (...values) => Object.freeze({ type: "enum", values: Object.freeze(values.flat()) });
 
 // Every prop: its variants in index order with their plan size and height,
@@ -255,8 +255,9 @@ export const YARD_KIT_PROPS = Object.freeze({
       // aerial: ~12 parallel ridges ~3 m wide, ~1 m high, ~60 m long).
       { name: "ridge", x_m: 3, z_m: null, h_m: 1, required: ["length_m"], only: ["length_m"] },
     ],
-    // scale and shape for the mounds; length_m (rounded to whole 4 m modules) for a ridge.
-    params: { scale: numRange(0.5, 3), shape: intRange(0, 2), length_m: numRange(RIDGE_MODULE_M, 240) },
+    // scale (in steps of 0.05, so piles share their floor shapes) and shape for
+    // the mounds; length_m (rounded to whole 4 m modules) for a ridge.
+    params: { scale: numRange(0.5, 3, 0.05), shape: intRange(0, 2), length_m: numRange(RIDGE_MODULE_M, 240) },
   },
   plastic_berm: {
     collision: "floor",
@@ -333,6 +334,7 @@ export function yardPropParamsError(key, params) {
     if (spec.type === "enum" && !spec.values.includes(value)) return `${name} must be one of ${spec.values.join(", ")}`;
     if (spec.type === "int" && !(Number.isInteger(value) && value >= spec.min && value <= spec.max)) return `${name} must be an integer ${spec.min}..${spec.max}`;
     if (spec.type === "number" && !(typeof value === "number" && Number.isFinite(value) && value >= spec.min && value <= spec.max)) return `${name} must be a number ${spec.min}..${spec.max}`;
+    if (spec.step && Math.abs(value / spec.step - Math.round(value / spec.step)) > 1e-6) return `${name} must be a multiple of ${spec.step}`;
   }
   const variant = prop.variants[params.variant];
   for (const name of [...(prop.required ?? []), ...(variant.required ?? [])]) if (params[name] === undefined) return `${key} ${variant.name} needs ${name}`;
