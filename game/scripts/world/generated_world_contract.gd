@@ -619,6 +619,11 @@ static func _validate_street_detail(document: Dictionary, chunks: Array[Dictiona
 					return _failure("street_detail_grounding", "Street-detail polyline vertex is off the island or not grounded: %s" % row_id)
 			if (kind_name == "fence") != row.has("fence"):
 				return _failure("street_detail_fence", "Every street-detail fence row, and only a fence row, carries a fence block: %s" % row_id)
+			# A planted hedge: a street-vegetation kit hedge the builder can lay along the line.
+			if layer == "vegetation" and row.has("prop"):
+				var hedge_error := STREET_VEGETATION_KIT.line_params_error(str(row.prop), kind_name, row.get("prop_params", null), points.size())
+				if hedge_error != "" or status != "placed":
+					return _failure("street_detail_vegetation", "Street-detail hedge row is invalid (%s): %s" % [hedge_error, row_id])
 			if row.has("fence"):
 				var fence_check := _validate_street_fence(row, land_records, boundary, deck_only)
 				if not fence_check.ok:

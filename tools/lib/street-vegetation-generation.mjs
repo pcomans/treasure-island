@@ -35,7 +35,10 @@ import { invariant, roundCoordinate } from "./world-contract.mjs";
 // blue_eyed_grass, seaside_daisy, sea_thrift, pacific_reedgrass, rush and
 // bronze_clump_grass (about 1-2.5 m across) and variant 4 of dense_sedge (twelve
 // tussocks, about 2.5 m); its plants' bases run 0.15 m into the ground, so a
-// drift row may lie on a bed sloping up to about 10 %.
+// drift row may lie on a bed sloping up to about 10 %. clipped_hedge is not
+// planted at a point: a hedge line row carries it with prop_params {variant,
+// ground_y_m}, the visible ground's height under each of the line's points
+// (the kit's hedge_into lays it there; its foot radius is half its depth).
 const vegetationProp = (kinds, variants, footM, trunk) => Object.freeze({ kinds: Object.freeze(kinds), variants, foot_m: footM, trunk });
 // Low plants stand in grass_clump rows (a 0.35 m footprint) or, spaced wider,
 // in planting_slot rows (0.8 m).
@@ -45,20 +48,31 @@ export const STREET_VEGETATION_PROPS = Object.freeze({
   bronze_clump_grass: vegetationProp(LOW_PLANT_KINDS, 4, 0.18, false),
   california_buckwheat: vegetationProp(LOW_PLANT_KINDS, 3, 0.25, false),
   california_sagebrush: vegetationProp(LOW_PLANT_KINDS, 3, 0.3, false),
-  canary_date_palm: vegetationProp(["palm_slot", "tree"], 4, 0.7, true),
+  canary_date_palm: vegetationProp(["palm_slot", "tree"], 6, 0.7, true),
+  clipped_hedge: vegetationProp(["hedge"], 2, 0.45, false),
   clump_grass: vegetationProp(["grass_clump"], 4, 0.3, false),
+  conical_shrub: vegetationProp(["planting_slot", "tree"], 2, 0.4, false),
   dense_sedge: vegetationProp(LOW_PLANT_KINDS, 5, 0.18, false),
   dune_tansy: vegetationProp(LOW_PLANT_KINDS, 3, 0.2, false),
+  eucalyptus_mature: vegetationProp(["tree"], 2, 0.6, true),
+  indian_hawthorn: vegetationProp(["planting_slot"], 3, 0.6, false),
   island_oak_young: vegetationProp(["tree"], 3, 0.3, true),
   mexican_fan_palm: vegetationProp(["palm_slot", "tree"], 6, 0.45, true),
   monterey_cypress: vegetationProp(["tree"], 5, 0.8, true),
+  monterey_pine: vegetationProp(["tree"], 6, 0.6, true),
+  norfolk_island_pine: vegetationProp(["tree"], 2, 0.2, true),
+  nz_christmas_tree: vegetationProp(["tree"], 2, 0.5, true),
+  nz_flax: vegetationProp(LOW_PLANT_KINDS, 3, 0.25, false),
   pacific_reedgrass: vegetationProp(LOW_PLANT_KINDS, 4, 0.25, false),
+  pittosporum_tobira: vegetationProp(["planting_slot"], 3, 0.5, false),
+  red_tip_shrub: vegetationProp(LOW_PLANT_KINDS, 2, 0.25, false),
   rush: vegetationProp(LOW_PLANT_KINDS, 4, 0.2, false),
   sea_thrift: vegetationProp(LOW_PLANT_KINDS, 4, 0.12, false),
   seaside_daisy: vegetationProp(LOW_PLANT_KINDS, 4, 0.2, false),
   seaside_woolly_sunflower: vegetationProp(LOW_PLANT_KINDS, 3, 0.3, false),
   seep_monkeyflower: vegetationProp(LOW_PLANT_KINDS, 3, 0.15, false),
   shrubby_sage: vegetationProp(LOW_PLANT_KINDS, 3, 0.3, false),
+  spreading_broadleaf: vegetationProp(["tree"], 4, 0.7, true),
   sydney_blue_gum_young: vegetationProp(["tree"], 3, 0.3, true),
   white_umbel_perennial: vegetationProp(LOW_PLANT_KINDS, 3, 0.15, false),
 });

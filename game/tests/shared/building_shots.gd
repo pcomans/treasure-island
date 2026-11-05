@@ -55,7 +55,11 @@ extends SceneTree
 ##   ones, its edge fading out unevenly over edge_m when that is set,
 ##   and "plants": [{"group": "...", "prop": "...", "variant": 0, "scale": 1.0,
 ##   "xz": [x,z], "yaw": 0.0}] stands kit props on the beds (or on the drawn
-##   ground), built as the world builds its vegetation; the aiming reticle is
+##   ground), built as the world builds its vegetation; a hedge prop takes a
+##   "path": [[x,z], ...] instead of xz, laid on the ground under each point. A
+##   plant may add "level": "lod0", "lod1" or "far" to draw its group at that
+##   detail level only, at any distance (every plant of the group the same), so
+##   a sheet can set the levels side by side. The aiming reticle is
 ##   hidden while they stand. A view may then add "show": ["GROUP", ...] to
 ##   draw only those groups, and "measure_frames": N to time N drawn frames with
 ##   them shown and N with every group hidden, in three alternating blocks each,
@@ -333,13 +337,41 @@ func _plant_gallery(plan: Dictionary) -> Dictionary:
 		grids.push_front(grid)
 		root.add_child(_bed_mesh(str(bed.name), grid, str(bed.get("ground", "mulch")), float(bed.get("edge_m", 0.0))))
 	var rows := {}
+	var levels := {}
 	for index in (plants as Array).size():
 		var plant: Variant = plants[index]
-		if not plant is Dictionary or not plant.get("group") is String or str(plant.group) == "" or not plant.get("prop") is String or not _numbers(plant.get("xz"), 2) \
+		var hedge := plant is Dictionary and VegetationKit.is_hedge(str(plant.get("prop", "")))
+		if not plant is Dictionary or not plant.get("group") is String or str(plant.group) == "" or not plant.get("prop") is String \
+		or not (_numbers(plant.get("xz"), 2) if not hedge else plant.get("path") is Array and (plant.path as Array).size() >= 2) \
 		or not _numbers([plant.get("scale", 1.0), plant.get("yaw", 0.0), plant.get("variant")], 3):
 			root.free()
-			return {"error": "plant %d needs a group, prop, variant and xz, and numeric scale and yaw" % index}
+			return {"error": "plant %d needs a group, prop, variant and xz (a hedge, a path of at least two [x,z]), and numeric scale and yaw" % index}
+		var level: Variant = plant.get("level", null)
+		if (level != null and not level in ["lod0", "lod1", "far"]) or (levels.has(plant.group) and levels[plant.group] != level):
+			root.free()
+			return {"error": "plant %d: a level is lod0, lod1 or far, the same for every plant of a group" % index}
+		levels[plant.group] = level
 		var prop := str(plant.prop)
+		if not rows.has(plant.group):
+			rows[plant.group] = []
+		if hedge:
+			var line := []
+			var ground_y := []
+			for point: Variant in plant.path:
+				if not _numbers(point, 2):
+					root.free()
+					return {"error": "plant %d: a path point is [x, z]" % index}
+				var y := _bed_height(grids, Vector2(point[0], point[1]))
+				if is_nan(y):
+					y = _drawn_ground(Vector2(point[0], point[1]), ground)
+				if is_nan(y):
+					root.free()
+					return {"error": "plant %d has no ground under its path" % index}
+				line.append([float(point[0]), y, float(point[1])])
+				ground_y.append(y)
+			(rows[plant.group] as Array).append({"id": "gallery:%d" % index, "status": "placed", "layer": "vegetation", "kind": "hedge", "geometry": "line",
+				"prop": prop, "prop_params": {"variant": plant.variant, "ground_y_m": ground_y}, "points_m": line})
+			continue
 		var params := {"variant": plant.variant, "scale": float(plant.get("scale", 1.0)), "lift_m": 0.0, "foot_spread_m": 0.0, "well_m": 0.0}
 		var problem := VegetationKit.params_error(prop, str((VegetationKit.PROPS[prop].kinds as Array)[0]) if VegetationKit.PROPS.has(prop) else "", params)
 		if problem != "":
@@ -353,8 +385,6 @@ func _plant_gallery(plan: Dictionary) -> Dictionary:
 				root.free()
 				return {"error": "plant %d has no ground under it" % index}
 			y = drawn
-		if not rows.has(plant.group):
-			rows[plant.group] = []
 		(rows[plant.group] as Array).append({"id": "gallery:%d" % index, "status": "placed", "layer": "vegetation", "kind": (VegetationKit.PROPS[prop].kinds as Array)[0],
 			"prop": prop, "prop_params": params, "position_m": [xz.x, y, xz.y], "surface": {"bias_m": 0.0}, "yaw_radians": float(plant.get("yaw", 0.0))})
 	var groups := {}
@@ -365,6 +395,14 @@ func _plant_gallery(plan: Dictionary) -> Dictionary:
 			return {"error": "group %s: %s" % [group, built.message]}
 		var node: Node3D = built.node
 		node.name = "Group_" + group.validate_node_name()
+		if levels[group] != null:
+			# Only the chosen detail level, drawn at any distance.
+			for child in node.get_children():
+				if child is GeometryInstance3D:
+					var drawn := ("_%s__c" % levels[group]) in str(child.name) or "_shadow__c" in str(child.name)
+					(child as GeometryInstance3D).visible = drawn
+					(child as GeometryInstance3D).visibility_range_begin = 0.0
+					(child as GeometryInstance3D).visibility_range_end = 0.0
 		root.add_child(node)
 		groups[group] = node
 	# The aiming reticle would sit on the plants in the middle of every shot.
