@@ -29,6 +29,42 @@ extends RefCounted
 ##   white_umbel_perennial  a yarrow-like plant with flat white heads seen in a
 ##                     CMG photo of the strand garden; its species is not
 ##                     confirmed, so the form is inference.
+## The island-wide rollout's trees, shrubs and hedges (vegetation species pass,
+## 2026-11-05; dated Street View crops p1-p6, c2-c4, b1-b8, n1-n2, s1-s3, h1-h2
+## kept with the vegetation-inventory work notes, outside Git):
+##   monterey_pine     Pinus radiata: a dense, rounded-to-domed crown of brush-like
+##                     needle tufts on a short, thick, bent trunk of dark furrowed
+##                     bark; the residential form branching low (Keppler, Mar 2025)
+##                     and the wind-pruned low domes of the SFFD frontage (9th
+##                     Street, Sep 2025).
+##   spreading_broadleaf  the commonest big residential tree, its species
+##                     unresolved, so the photographed form: a short thick grey
+##                     trunk forking low into wide sinuous limbs under a layered,
+##                     cloud-like crown of drooping clumps of narrow glossy olive
+##                     leaves with reddish-bronze patches; old (leaning, very wide)
+##                     and mid (round) forms (Gateview and Northpoint, Mar and Sep
+##                     2025).
+##   nz_christmas_tree Metrosideros excelsa: smooth pale multi-stem trunks leaning
+##                     from near the ground under a very dense dark crown with a
+##                     few red brush flowers (Sturgeon, Mar 2025).
+##   eucalyptus_mature the Job Corps entrance tree (the owner's identification,
+##                     2026-11-05; 2025 gallery photo): two or three tall trunks
+##                     under an open, irregular crown of drooping tassels, the
+##                     young gum's generator grown up.
+##   norfolk_island_pine  Araucaria heterophylla, young: whorled tiers of level
+##                     branches with upturned soft branchlets (Chinook, Mar 2025).
+##   indian_hawthorn, pittosporum_tobira  the Avenue N seawall's mounded shrubs:
+##                     leathery leaves with a few pale pink flower clusters, and
+##                     glossy rosettes (Nov 2025).
+##   red_tip_shrub, conical_shrub  two more Avenue N forms whose species are
+##                     unresolved: a slender upright shrub with red new growth,
+##                     and a narrow conical one of olive leaves with bronze tips.
+##   nz_flax           a dark red New Zealand flax (Phormium) fan of stiff straps,
+##                     as in the Mersea lot's planters (Sep 2025).
+##   clipped_hedge     a hedge strip along a line: the residential small-leaved,
+##                     flat-topped, rounded hedge on leggy dark stems (Mariner,
+##                     Mar 2025), and a solid glossy box (Job Corps, 2025 gallery).
+##                     Not a point prop: hedge_into() lays it along a polyline.
 ## Each prop has a few fixed variants whose meshes every instance shares; an
 ## instance only turns about +Y and scales uniformly. A species' variants run
 ## from its smallest (0) to its largest. Shapes and sizes are production
@@ -50,10 +86,12 @@ extends RefCounted
 ##
 ## Trees have LOD0, LOD1 and a far level: a palm keeps a low trunk under a
 ## camera-facing crown impostor, a cypress, gum or oak becomes one impostor; the
-## images are baked from LOD0 by tools/vegetation/bake_impostors.gd. Low plants
+## images are baked from LOD0 by tools/vegetation/bake_impostors.gd. The rollout's
+## shrubs and flax have the same three levels (their far impostor ends at a short
+## range), and a hedge's far level is its plain core. Cityside's low plants
 ## (grasses, perennials, shrubs) have one level that dissolves away before its
 ## range ends. Collision is the trunk only (capsules), so crowns never stop a
-## jetpack flight and low plants have none.
+## jetpack flight; shrubs, flax, hedges and low plants have none.
 ## Units are metres. A prototype's origin is the foot of its trunk on the visible
 ## ground; the trunk runs on BURY_M below it, so a foot on slightly uneven ground
 ## sinks in a little instead of showing a gap.
@@ -126,6 +164,35 @@ const LOW_CELLS := {
 ## The young trees' foliage atlas: a hanging spray of gum leaves, a cluster of oak leaves.
 const GUM_SPRAY := Rect2(0.0, 0.0, 0.5, 1.0)
 const OAK_CLUSTER := Rect2(0.5, 0.0, 0.5, 1.0)
+## The pine's atlas: a branch end of needle tufts from the side, and a face-on
+## cluster of tufts from outside the crown.
+const PINE_TUFTS := Rect2(0.0, 0.0, 0.5, 1.0)
+const PINE_FACE := Rect2(0.5, 0.0, 0.5, 1.0)
+## The broadleaf atlas: the spreading broadleaf's drooping olive clump and its
+## bronze-tipped clump; the Christmas tree's leaf rosettes, plain and in flower.
+const BROADLEAF_CLUMP := Rect2(0.0, 0.0, 0.5, 0.5)
+const BROADLEAF_BRONZE := Rect2(0.5, 0.0, 0.5, 0.5)
+const CHRISTMAS_CLUMP := Rect2(0.0, 0.5, 0.5, 0.5)
+const CHRISTMAS_FLOWERS := Rect2(0.5, 0.5, 0.5, 0.5)
+## The set pieces' atlas: a eucalyptus's drooping tassel (a tall cell, its twig
+## along the top edge), and a Norfolk Island pine branch from above and from the
+## side (its axis along the cell's middle, from the trunk on the left).
+const EUCALYPTUS_TASSEL := Rect2(0.0, 0.0, 0.5, 1.0)
+const NORFOLK_TOP := Rect2(0.5, 0.0, 0.5, 0.5)
+const NORFOLK_SIDE := Rect2(0.5, 0.5, 0.5, 0.5)
+## The shrub atlas (2048 x 1024, 512 x 512 cells): face-on foliage clusters of
+## the Avenue N shrubs, the hedges' sprigs and bare stems seen from the side,
+## and one dark red flax leaf.
+const SHRUB_CELLS := {
+	"hawthorn": Rect2(0.0, 0.0, 0.25, 0.5),
+	"pittosporum": Rect2(0.25, 0.0, 0.25, 0.5),
+	"red_tip": Rect2(0.5, 0.0, 0.25, 0.5),
+	"upright_shrub": Rect2(0.75, 0.0, 0.25, 0.5),
+	"hedge_sprigs": Rect2(0.0, 0.5, 0.25, 0.5),
+	"glossy_sprigs": Rect2(0.25, 0.5, 0.25, 0.5),
+	"hedge_stems": Rect2(0.5, 0.5, 0.25, 0.5),
+	"flax_leaf": Rect2(0.75, 0.5, 0.25, 0.5),
+}
 
 ## Side of one repeat of each square bark texture.
 const FAN_BARK_M := 0.6
@@ -134,6 +201,12 @@ const CANARY_KNOB_M := 0.55
 const CYPRESS_BARK_M := 1.0
 const GUM_BARK_M := 0.7
 const OAK_BARK_M := 0.5
+const PINE_BARK_M := 1.0
+const BROADLEAF_BARK_M := 0.9
+const CHRISTMAS_BARK_M := 0.8
+const EUCALYPTUS_BARK_M := 1.2
+## A hedge's clipped leaf surface repeats every HEDGE_TILE_M along and up it.
+const HEDGE_TILE_M := 0.7
 
 ## How far a trunk top sways downwind per metre of height (the wind shader's
 ## UV2.x): palms rock, the cypress barely moves.
@@ -142,6 +215,13 @@ const CYPRESS_SWAY := 0.0025
 ## The young gums' slender trunks rock in the wind (ph10, Sep 2025); the oaks are stiff.
 const GUM_SWAY := 0.012
 const OAK_SWAY := 0.004
+## The big pines and broadleaves barely rock; the tall eucalyptus and the young
+## Norfolk Island pine sway more; shrubs only flutter.
+const PINE_SWAY := 0.003
+const BROADLEAF_SWAY := 0.003
+const MATURE_GUM_SWAY := 0.007
+const NORFOLK_SWAY := 0.008
+const SHRUB_SWAY := 0.008
 
 ## Variants. height is the trunk from the ground to where the crown (fan palm)
 ## or the knob (date palm) starts. Avenue of the Palms fan palms are young
@@ -210,6 +290,108 @@ const OAKS := [
 	{"seed": 51, "height": 2.3, "crown": 2.5, "trunk_radius": 0.04, "clear": 0.3, "stems": 2, "lobes": 3, "lopsided": 0.18, "cards": 120},
 	{"seed": 52, "height": 3.4, "crown": 2.0, "trunk_radius": 0.05, "clear": 0.4, "stems": 3, "lobes": 3, "lopsided": 0.1, "cards": 130},
 	{"seed": 53, "height": 4.0, "crown": 3.4, "trunk_radius": 0.065, "clear": 0.45, "stems": 2, "lobes": 6, "lopsided": 0.28, "cards": 210},
+]
+## Monterey pines: three residential trees (p5/p6, Keppler, Mar 2025: 10-14 m
+## tall, 8-12 m crowns, branching low) and three wind-pruned low domes (p2-p4,
+## the SFFD frontage, Sep 2025: 6-9 m tall and as wide over 1.5-2.5 m of clear,
+## leaning trunk). clear is the bare trunk under the crown, fork where the
+## trunk splits into leaders, lean the trunk's lean at the fork in metres (the
+## pruned trees' downwind), shear how far the wind has pushed the crown
+## downwind and pruned its windward side (a fraction of its spread), lobes the
+## crown's sub-domes and clusters its foliage clusters.
+const PINES := [
+	{"form": "residential", "seed": 201, "height": 10.0, "spread": 8.5, "clear": 1.5, "fork": 2.4, "trunk_radius": 0.27, "leaders": 2, "lean": 0.5, "shear": 0.0, "lobes": 9, "clusters": 150},
+	{"form": "residential", "seed": 202, "height": 12.0, "spread": 10.5, "clear": 1.8, "fork": 2.8, "trunk_radius": 0.33, "leaders": 3, "lean": 0.7, "shear": 0.0, "lobes": 11, "clusters": 190},
+	{"form": "residential", "seed": 203, "height": 14.0, "spread": 12.0, "clear": 2.1, "fork": 3.2, "trunk_radius": 0.4, "leaders": 3, "lean": 0.9, "shear": 0.0, "lobes": 13, "clusters": 230},
+	{"form": "pruned", "seed": 204, "height": 6.5, "spread": 6.5, "clear": 1.6, "fork": 1.7, "trunk_radius": 0.22, "leaders": 2, "lean": 0.6, "shear": 0.1, "lobes": 7, "clusters": 120},
+	{"form": "pruned", "seed": 205, "height": 7.8, "spread": 8.0, "clear": 2.0, "fork": 2.1, "trunk_radius": 0.26, "leaders": 3, "lean": 0.8, "shear": 0.12, "lobes": 8, "clusters": 150},
+	{"form": "pruned", "seed": 206, "height": 9.0, "spread": 9.0, "clear": 2.4, "fork": 2.5, "trunk_radius": 0.3, "leaders": 3, "lean": 1.0, "shear": 0.14, "lobes": 9, "clusters": 175},
+]
+## The spreading broadleaf (species unresolved, the photographed form): two mid
+## trees (b1/b4, Northpoint, Mar 2025: 7-10 m, a round 8-10 m crown on a trunk
+## forking at about 2 m into upright limbs) and two old ones (c2/c3 Gateview,
+## Sep 2025; c4/b8 the Avenue B park: 10-13 m tall, 14-18 m wide, leaning, wide
+## sinuous limbs under layered clouds of foliage). fork is the trunk's height to
+## its first fork, lean the fork's offset in metres, limbs the main limbs, rise
+## how steeply they climb (1 straight up, 0 level), clouds the side clouds each
+## limb carries, cloud a cloud's reach as a fraction of the spread, flat its
+## height over its reach, density its clusters per square metre of cloud,
+## bronze the share of clouds tipped reddish-bronze.
+const BROADLEAVES := [
+	{"seed": 301, "height": 7.5, "spread": 8.0, "fork": 1.8, "trunk_radius": 0.24, "limbs": 3, "lean": 0.35, "rise": 0.7, "clouds": 2, "cloud": 0.24, "flat": 0.62, "density": 2.2, "bronze": 0.35},
+	{"seed": 302, "height": 9.5, "spread": 10.0, "fork": 2.0, "trunk_radius": 0.32, "limbs": 3, "lean": 0.5, "rise": 0.65, "clouds": 2, "cloud": 0.23, "flat": 0.6, "density": 2.0, "bronze": 0.35},
+	{"seed": 303, "height": 11.0, "spread": 15.0, "fork": 2.2, "trunk_radius": 0.42, "limbs": 4, "lean": 1.2, "rise": 0.45, "clouds": 3, "cloud": 0.17, "flat": 0.55, "density": 1.7, "bronze": 0.3},
+	{"seed": 304, "height": 12.5, "spread": 17.5, "fork": 2.4, "trunk_radius": 0.5, "limbs": 5, "lean": 2.2, "rise": 0.4, "clouds": 3, "cloud": 0.16, "flat": 0.55, "density": 1.6, "bronze": 0.3},
+]
+## New Zealand Christmas trees (b5/b6, Sturgeon, Mar 2025): 3-5 smooth pale
+## stems leaning out from the ground under a very dense, dark, rounded crown,
+## 7-9 m tall and 7-8 m wide; flowers is the share of outer clusters showing a
+## few red brushes in November.
+const CHRISTMAS_TREES := [
+	{"seed": 311, "height": 7.0, "spread": 7.0, "stems": 3, "fork": 0.5, "trunk_radius": 0.12, "limbs": 3, "lean": 0.3, "rise": 0.7, "clouds": 2, "cloud": 0.3, "flat": 0.72, "density": 3.0, "flowers": 0.14},
+	{"seed": 312, "height": 8.5, "spread": 8.0, "stems": 4, "fork": 0.6, "trunk_radius": 0.14, "limbs": 4, "lean": 0.4, "rise": 0.7, "clouds": 2, "cloud": 0.28, "flat": 0.72, "density": 2.8, "flowers": 0.12},
+]
+## The Job Corps entrance tree, a mature eucalyptus (the owner's identification,
+## 2026-11-05; n2, 2025 gallery photo): two or three tall trunks from near the
+## ground, an open, irregular crown about 8 m wide of drooping tassels on
+## ascending branches, 15-18 m tall. crown is its width, clear the bare trunk as
+## a fraction of the height, branches its branches, droop how far a branch's
+## outer part bends down (a fraction of its reach).
+const MATURE_GUMS := [
+	{"seed": 401, "height": 15.5, "crown": 7.5, "stems": 2, "trunk_radius": 0.22, "clear": 0.3, "branches": 18, "lean": 0.7, "droop": 0.35},
+	{"seed": 402, "height": 17.5, "crown": 8.5, "stems": 3, "trunk_radius": 0.25, "clear": 0.28, "branches": 22, "lean": 0.9, "droop": 0.4},
+]
+## Young Norfolk Island pines (n1, Chinook, Mar 2025: about 5 m tall, a crown
+## 2-2.5 m wide): a straight trunk with a whorl of level branches every tier
+## metres, branches per whorl, from near the ground to the leader.
+const NORFOLK_PINES := [
+	{"seed": 501, "height": 4.2, "spread": 2.0, "trunk_radius": 0.07, "tier": 0.42, "branches": 5},
+	{"seed": 502, "height": 5.2, "spread": 2.4, "trunk_radius": 0.085, "tier": 0.45, "branches": 6},
+]
+## The Avenue N seawall's shrubs (s1-s3, Nov 2025). shape: mound (a lumpy dome
+## clothed in crossed clusters), upright (slender stems, crossed side-view
+## cards) or cone (a narrow ogive on a short stem); cell is the shrub atlas
+## cell, width and height its size, lobes and clusters its mound's sub-domes and
+## foliage clusters.
+const HAWTHORNS := [
+	# Rhaphiolepis: round leathery mounds 1.2-1.8 m tall and 2-3 m wide, a few pale pink flower clusters.
+	{"seed": 601, "shape": "mound", "cell": "hawthorn", "height": 1.2, "width": 2.0, "lobes": 4, "clusters": 34},
+	{"seed": 602, "shape": "mound", "cell": "hawthorn", "height": 1.5, "width": 2.5, "lobes": 5, "clusters": 46},
+	{"seed": 603, "shape": "mound", "cell": "hawthorn", "height": 1.8, "width": 3.0, "lobes": 6, "clusters": 60},
+]
+const PITTOSPORUMS := [
+	# Pittosporum tobira: glossy mounds 1-1.5 m tall and 1.5-2.5 m wide.
+	{"seed": 611, "shape": "mound", "cell": "pittosporum", "height": 1.0, "width": 1.5, "lobes": 3, "clusters": 26},
+	{"seed": 612, "shape": "mound", "cell": "pittosporum", "height": 1.25, "width": 2.0, "lobes": 4, "clusters": 36},
+	{"seed": 613, "shape": "mound", "cell": "pittosporum", "height": 1.5, "width": 2.5, "lobes": 5, "clusters": 48},
+]
+const RED_TIPS := [
+	# Slender, to 1.5 m, red new growth at the tips (species unresolved).
+	{"seed": 621, "shape": "upright", "cell": "red_tip", "height": 1.1, "width": 0.7, "stems": 4},
+	{"seed": 622, "shape": "upright", "cell": "red_tip", "height": 1.5, "width": 0.9, "stems": 5},
+]
+const CONICAL_SHRUBS := [
+	# A narrow cone of olive leaves with bronze tips, 3-4 m tall and 2 m wide (species unresolved).
+	{"seed": 631, "shape": "cone", "cell": "upright_shrub", "height": 3.0, "width": 1.7, "clusters": 70},
+	{"seed": 632, "shape": "cone", "cell": "upright_shrub", "height": 3.8, "width": 2.1, "clusters": 95},
+]
+## Dark red New Zealand flax (the Mersea lot's planters, Sep 2025): a fan of
+## stiff straps (leaves of them, each width wide) standing to about height.
+const FLAXES := [
+	{"seed": 701, "height": 0.9, "leaves": 24, "width": 0.05},
+	{"seed": 702, "height": 1.2, "leaves": 30, "width": 0.06},
+	{"seed": 703, "height": 1.5, "leaves": 36, "width": 0.07},
+]
+## Clipped hedges, laid along a line (hedge_into): style rounded (a flat top
+## with rounded shoulders and bulging sides) or box (flat top, upright sides);
+## the leafy canopy from canopy_base to height, depth deep; under a rounded
+## hedge's canopy, leggy dark stems. surface and sprigs are its materials'
+## keys and its sprig cell.
+const HEDGES := [
+	# Residential (h1, Mariner, Mar 2025): small leaves, 1.0-1.2 m tall, 0.8-1 m deep, on leggy stems.
+	{"seed": 801, "style": "rounded", "height": 1.1, "depth": 0.9, "canopy_base": 0.3, "surface": "hedge_leaves", "sprigs": "hedge_sprigs"},
+	# Job Corps (h2, 2025 gallery): a solid box 1.2-1.5 m tall of small glossy dark leaves, down to the ground.
+	{"seed": 802, "style": "box", "height": 1.35, "depth": 1.0, "canopy_base": 0.0, "surface": "glossy_hedge_leaves", "sprigs": "glossy_sprigs"},
 ]
 ## Cityside Park's low plants as they stand in late November, built in layers
 ## (_build_low): crossed side-view cards for clumps, shrubs' wands and flower
@@ -402,6 +584,17 @@ const PROPS := {
 	"monterey_cypress": {"kinds": ["tree"], "variants": CYPRESSES, "ranges": [45.0, 110.0, 900.0], "foot_m": 0.8, "form": "cypress"},
 	"sydney_blue_gum_young": {"kinds": ["tree"], "variants": GUMS, "ranges": [40.0, 100.0, 900.0], "foot_m": 0.3, "form": "gum"},
 	"island_oak_young": {"kinds": ["tree"], "variants": OAKS, "ranges": [35.0, 90.0, 700.0], "foot_m": 0.3, "form": "oak"},
+	"monterey_pine": {"kinds": ["tree"], "variants": PINES, "ranges": [50.0, 120.0, 900.0], "foot_m": 0.6, "form": "pine"},
+	"spreading_broadleaf": {"kinds": ["tree"], "variants": BROADLEAVES, "ranges": [55.0, 130.0, 900.0], "foot_m": 0.7, "form": "broadleaf"},
+	"nz_christmas_tree": {"kinds": ["tree"], "variants": CHRISTMAS_TREES, "ranges": [45.0, 110.0, 800.0], "foot_m": 0.5, "form": "broadleaf"},
+	"eucalyptus_mature": {"kinds": ["tree"], "variants": MATURE_GUMS, "ranges": [55.0, 130.0, 900.0], "foot_m": 0.6, "form": "gum"},
+	"norfolk_island_pine": {"kinds": ["tree"], "variants": NORFOLK_PINES, "ranges": [35.0, 90.0, 600.0], "foot_m": 0.2, "form": "araucaria"},
+	"indian_hawthorn": {"kinds": ["planting_slot"], "variants": HAWTHORNS, "ranges": [30.0, 75.0, 160.0], "foot_m": 0.6, "form": "shrub"},
+	"pittosporum_tobira": {"kinds": ["planting_slot"], "variants": PITTOSPORUMS, "ranges": [30.0, 75.0, 160.0], "foot_m": 0.5, "form": "shrub"},
+	"red_tip_shrub": {"kinds": LOW_KINDS, "variants": RED_TIPS, "ranges": [25.0, 60.0, 140.0], "foot_m": 0.25, "form": "shrub"},
+	"conical_shrub": {"kinds": ["planting_slot", "tree"], "variants": CONICAL_SHRUBS, "ranges": [40.0, 100.0, 300.0], "foot_m": 0.4, "form": "shrub"},
+	"nz_flax": {"kinds": LOW_KINDS, "variants": FLAXES, "ranges": [25.0, 60.0, 140.0], "foot_m": 0.25, "form": "flax"},
+	"clipped_hedge": {"kinds": ["hedge"], "variants": HEDGES, "ranges": [45.0, 100.0, 170.0], "foot_m": 0.45, "form": "hedge"},
 	"clump_grass": {"kinds": ["grass_clump"], "variants": GRASSES, "ranges": [70.0], "foot_m": 0.3, "form": "grass"},
 	"pacific_reedgrass": {"kinds": LOW_KINDS, "variants": REEDGRASSES, "ranges": [70.0], "foot_m": 0.25, "form": "low", "shadow": true},
 	"dense_sedge": {"kinds": LOW_KINDS, "variants": SEDGES, "ranges": [55.0], "foot_m": 0.18, "form": "low"},
@@ -498,14 +691,14 @@ static func is_low_plant(prop: String) -> bool:
 static func params_error(prop: String, kind: String, params: Variant) -> String:
 	if not PROPS.has(prop):
 		return "unknown street-vegetation prop %s" % prop
-	if kind not in PROPS[prop].kinds:
+	if kind not in PROPS[prop].kinds or is_hedge(prop):
 		return "%s does not stand in a %s row" % [prop, kind]
 	if not params is Dictionary:
 		return "%s params must be an object" % prop
 	var p: Dictionary = params
-	var variant: Variant = p.get("variant", null)
-	if not (variant is int or (variant is float and float(variant) == floorf(float(variant)))) or int(variant) < 0 or int(variant) >= variant_count(prop):
-		return "%s has no variant %s" % [prop, variant]
+	var variant_problem := _variant_error(prop, p.get("variant", null))
+	if variant_problem != "":
+		return variant_problem
 	for field: String in ["scale", "lift_m", "foot_spread_m", "well_m"]:
 		var value: Variant = p.get(field, null)
 		if not (value is float or value is int) or not is_finite(float(value)):
@@ -523,6 +716,40 @@ static func params_error(prop: String, kind: String, params: Variant) -> String:
 	return ""
 
 
+static func _variant_error(prop: String, variant: Variant) -> String:
+	if not (variant is int or (variant is float and float(variant) == floorf(float(variant)))) or int(variant) < 0 or int(variant) >= variant_count(prop):
+		return "%s has no variant %s" % [prop, variant]
+	return ""
+
+
+## Whether a prop is laid along a line (a hedge) rather than planted at a point.
+static func is_hedge(prop: String) -> bool:
+	return PROPS.has(prop) and str(PROPS[prop].form) == "hedge"
+
+
+## What is wrong with a hedge row for this kit, or "": a vegetation line row of
+## kind hedge whose params are {variant, ground_y_m}, ground_y_m the visible
+## ground's height under each of its point_count points (where the hedge stands;
+## the line's own points lie on the land under it). The generated world
+## contract and the builder both ask before laying it.
+static func line_params_error(prop: String, kind: String, params: Variant, point_count: int) -> String:
+	if not is_hedge(prop) or kind not in PROPS[prop].kinds:
+		return "%s is not laid along a %s line" % [prop, kind]
+	if not params is Dictionary:
+		return "%s params must be an object" % prop
+	var p: Dictionary = params
+	var variant_problem := _variant_error(prop, p.get("variant", null))
+	if variant_problem != "":
+		return variant_problem
+	var ground: Variant = p.get("ground_y_m", null)
+	if not ground is Array or (ground as Array).size() != point_count or point_count < 2:
+		return "%s needs a ground_y_m for each of its points" % prop
+	for value: Variant in ground:
+		if not (value is float or value is int) or not is_finite(float(value)):
+			return "%s ground_y_m must be finite" % prop
+	return ""
+
+
 ## What the builder needs for one variant of a prop: {ok, levels: [{name, mesh,
 ## begin_m, end_m, shadow}], capsules: [{radius_m, from, to}] in the prop's
 ## frame, foot_m}, or {ok: false, message}. Shared by every instance.
@@ -531,6 +758,8 @@ func prototype(prop: String, variant: int) -> Dictionary:
 		return {"ok": false, "message": "unknown street-vegetation prop %s" % prop}
 	if variant < 0 or variant >= variant_count(prop):
 		return {"ok": false, "message": "%s has no variant %d" % [prop, variant]}
+	if is_hedge(prop):
+		return {"ok": false, "message": "%s is laid along a line (hedge_into), not planted at a point" % prop}
 	var key := "%s_%d" % [prop, variant]
 	if _prototypes.has(key):
 		return _prototypes[key]
@@ -567,6 +796,19 @@ func build(prop: String, variant: int) -> Dictionary:
 			tree = _build_gum(params)
 		"oak":
 			tree = _build_oak(params)
+		"pine":
+			tree = _build_pine(params)
+		"broadleaf":
+			tree = _build_broadleaf(params)
+		"araucaria":
+			tree = _build_araucaria(params)
+		"shrub":
+			tree = _build_shrub(params)
+		"flax":
+			tree = _build_flax(params)
+		"hedge":
+			# A straight sample run, for form sheets; the world lays hedges with hedge_into().
+			tree = _build_hedge_sample(variant)
 		"low":
 			# A layered low plant dissolves away before its one range ends.
 			tree = _build_low(prop, params, float(PROPS[prop].ranges[0]))
@@ -1274,6 +1516,8 @@ func _cypress_card(s: Surf, card: Dictionary, skeleton: Dictionary, lod: int) ->
 ## half, and two sprays on the leader. The crown is narrow and ragged, as the
 ## wind-tossed windrow trees are; a few sprays carry reddish young leaves.
 func _build_gum(p: Dictionary) -> Dictionary:
+	if p.has("stems"):
+		return _build_mature_gum(p)
 	var rng := RandomNumberGenerator.new()
 	rng.seed = int(p.seed)
 	var height := float(p.height)
@@ -1546,6 +1790,970 @@ func _build_oak(p: Dictionary) -> Dictionary:
 		"top_m": height,
 		"capsules": [{"radius_m": trunk_radius * 1.2, "from": Vector3.ZERO, "to": Vector3(0.0, clear, 0.0)}],
 	}
+
+
+# --- Mature eucalyptus (the young gum grown up) -----------------------------------------------------------
+
+
+## A mature eucalyptus (the Job Corps entrance tree, n2): two or three tall
+## trunks leaning apart from near the ground, bare for about a third of their
+## height, then branches climbing out at 35-60 degrees whose outer parts bend
+## down, each carrying a mass of hanging tassels (crossed cards of drooping
+## sickle leaves) at a few heights, so the crown is open and irregular, its
+## tips drooping and its trunks showing through it. The young gum's trunk taper,
+## bark and breeze, grown tall, without its stakes.
+func _build_mature_gum(p: Dictionary) -> Dictionary:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = int(p.seed)
+	var height := float(p.height)
+	var half := float(p.crown) * 0.5
+	var trunk_radius := float(p.trunk_radius)
+	var clear := float(p.clear)
+	var droop := float(p.droop)
+	var sway_top := MATURE_GUM_SWAY * height
+	var stems := int(p.stems)
+	# Leaning downwind, as the windrow gums do (the prevailing westerly, east is +X).
+	var lean_angle := rng.randf_range(-0.6, 0.6)
+	var lean := Vector3(cos(lean_angle), 0.0, sin(lean_angle)) * float(p.lean)
+	var phase := rng.randf() * TAU
+	var branches := []
+	var axes: Array[Dictionary] = []
+	for k in stems:
+		var azimuth := phase + TAU * k / stems + rng.randf_range(-0.3, 0.3)
+		var out := Vector3(cos(azimuth), 0.0, sin(azimuth))
+		var base := out * 0.12
+		var stem_height := height * (1.0 if k == 0 else rng.randf_range(0.82, 0.94))
+		var top := base + out * half * rng.randf_range(0.18, 0.32) + lean * rng.randf_range(0.7, 1.1) + Vector3.UP * stem_height
+		var radius := trunk_radius * (1.0 if k == 0 else rng.randf_range(0.75, 0.9))
+		var axis := {"base": base, "top": top, "bow": Vector3(-out.z, 0.0, out.x) * rng.randf_range(-0.5, 0.5), "radius": radius, "out": out, "height": stem_height}
+		axes.append(axis)
+		var points := PackedVector3Array([base + Vector3.DOWN * BURY_M])
+		var radii := PackedFloat32Array([radius * 1.35])
+		for i in 9:
+			var t := float(i) / 8.0
+			points.append(_mature_gum_axis(axis, t))
+			# A flare at the foot, tapering to a slender leader.
+			radii.append(lerpf(radius, 0.03, pow(t, 0.9)) + radius * 0.3 * exp(-t * stem_height / 0.4))
+		branches.append({"depth": 0, "points": points, "radii": radii})
+	var count := int(p.branches)
+	var per_stem := ceili(float(count) / stems)
+	var tassels := []
+	for b in count:
+		var axis: Dictionary = axes[b % stems]
+		var f := (float(b / stems) + rng.randf_range(0.1, 0.9)) / per_stem
+		var origin := _mature_gum_axis(axis, lerpf(clear, 0.93, f))
+		var azimuth := phase + b * GOLDEN_ANGLE + rng.randf_range(-0.4, 0.4)
+		# Each stem's branches lean out on its own side of the crown.
+		var out := (Vector3(cos(azimuth), 0.0, sin(azimuth)) + (axis.out as Vector3) * 0.5).normalized()
+		# Longest low in the crown, short near the top: a crown much taller than wide.
+		var reach := half * lerpf(0.95, 0.4, f) * rng.randf_range(0.75, 1.15)
+		var climb := reach * tan(deg_to_rad(rng.randf_range(35.0, 60.0))) * 0.55
+		var tip := origin + out * reach + Vector3.UP * (climb - droop * reach)
+		var points := _bezier(origin, origin + out * reach * 0.15 + Vector3.UP * climb * 0.75, origin + out * reach * 0.7 + Vector3.UP * climb, tip, 5)
+		branches.append({"depth": 1 if f < 0.7 else 2, "points": points, "radii": _taper(lerpf(float(axis.radius) * 0.5, 0.04, f), 0.012, points.size(), 0.8)})
+		# A mass of tassels round the branch's outer part, hanging at a few heights.
+		for m in 4 + int(round(reach * 0.9)):
+			var at := _polyline_at(points, rng.randf_range(0.5, 1.0)) + Vector3(rng.randf_range(-0.45, 0.45), rng.randf_range(-0.2, 0.25), rng.randf_range(-0.45, 0.45))
+			tassels.append({"at": at, "azimuth": azimuth + rng.randf_range(-1.2, 1.2), "size": rng.randf_range(0.75, 1.05) * (0.85 + 0.02 * height), "shade": rng.randf_range(0.86, 1.05)})
+	# Each trunk ends in a tuft of tassels.
+	for axis: Dictionary in axes:
+		for m in 3:
+			tassels.append({"at": (axis.top as Vector3) + Vector3(rng.randf_range(-0.3, 0.3), rng.randf_range(-0.1, 0.2), rng.randf_range(-0.3, 0.3)), "azimuth": phase + m * 2.1,
+				"size": rng.randf_range(0.7, 0.9) * (0.85 + 0.02 * height), "shade": 1.05})
+	var crown := Vector3.ZERO
+	for tassel: Dictionary in tassels:
+		crown += tassel.at
+	crown /= maxf(1.0, tassels.size())
+	var low_y := height * clear
+	var cards := []
+	for index in tassels.size():
+		var tassel: Dictionary = tassels[index]
+		var at: Vector3 = tassel.at
+		var height_f := clampf((at.y - low_y) / maxf(1.0, height - low_y), 0.0, 1.0)
+		var radial := clampf(Vector2(at.x - crown.x, at.z - crown.z).length() / maxf(0.5, half), 0.0, 1.0)
+		var shade := float(tassel.shade) * lerpf(0.62, 1.0, height_f) * lerpf(0.8, 1.0, radial)
+		var size := float(tassel.size)
+		for card in 2:
+			var facing := Vector3(cos(float(tassel.azimuth) + card * PI * 0.5), 0.0, sin(float(tassel.azimuth) + card * PI * 0.5))
+			# The tassel hangs from its twig at the card's top edge, a little out from straight down.
+			cards.append(_card(at, facing, (Vector3.UP + facing * 0.12).normalized(), size * 0.75, size * 1.5, 1.0, 0.0, EUCALYPTUS_TASSEL, Color(shade, shade, shade), crown, index, 0.035))
+	var meshes: Array[ArrayMesh] = []
+	for lod in 2:
+		var mesh := ArrayMesh.new()
+		var bark := Surf.new()
+		var leaves := Surf.new()
+		_emit_limbs(bark, branches, lod, height, low_y, sway_top, EUCALYPTUS_BARK_M, [[10, 5, 4], [6, 4, 3]])
+		_emit_cards(leaves, cards, lod, height, sway_top)
+		bark.commit(mesh, material("eucalyptus_bark"))
+		leaves.commit(mesh, material("set_piece_foliage"))
+		meshes.append(mesh)
+	var capsules := []
+	for axis: Dictionary in axes:
+		capsules.append({"radius_m": float(axis.radius) * 1.15, "from": axis.base, "to": _mature_gum_axis(axis, minf(clear, 3.0 / float(axis.height)))})
+	return {"lod0": meshes[0], "lod1": meshes[1], "crown_surface": -1, "top_m": height, "capsules": capsules}
+
+
+## A mature gum's trunk axis at t (0 foot .. 1 top): straight from its foot to its top, bowed a little sideways.
+func _mature_gum_axis(axis: Dictionary, t: float) -> Vector3:
+	return (axis.base as Vector3).lerp(axis.top as Vector3, t) + (axis.bow as Vector3) * sin(PI * t)
+
+
+# --- Shared crown helpers (the rollout's trees and shrubs) --------------------------------------------------
+
+
+## A foliage card for _emit_cards: centred on center at its anchor (the share
+## of its height, from its bottom edge, that sits there: 0 a standing tuft, 0.5
+## a clump, 1 a hanging tassel), facing normal with its image upright along up,
+## w by h, turned by spin; color its shade, heart where its normals lean from,
+## cluster the cluster it belongs to (the far level keeps even clusters),
+## flutter how far its free edge flaps.
+func _card(center: Vector3, normal: Vector3, up: Vector3, w: float, h: float, anchor: float, spin: float, cell: Rect2, color: Color, heart: Vector3, cluster: int, flutter := 0.02) -> Dictionary:
+	return {"center": center, "normal": normal, "up": up, "w": w, "h": h, "anchor": anchor, "spin": spin, "cell": cell, "color": color, "heart": heart, "cluster": cluster, "flutter": flutter}
+
+
+## Draws cards for one level: LOD0 every card as a cupped 3 x 3 grid; LOD1 the
+## cards of even clusters (or every card marked lod1), grown by lod1_grow
+## (default 1.3) to close the gaps, each a single quad.
+func _emit_cards(s: Surf, cards: Array, lod: int, tree_height: float, sway_top: float) -> void:
+	for card: Dictionary in cards:
+		if lod == 1 and not bool(card.get("lod1", int(card.cluster) % 2 == 0)):
+			continue
+		var grow := float(card.get("lod1_grow", 1.3)) if lod == 1 else 1.0
+		_foliage_card(s, card.center, card.normal, card.up, float(card.w) * grow, float(card.h) * grow, float(card.anchor), float(card.spin), card.cell, card.color,
+			card.heart, float(card.get("heart_weight", 0.55)), tree_height, sway_top, float(card.flutter), lod == 0)
+
+
+## One foliage card (see _card): a cupped 3 x 3 grid (fine) or a single quad,
+## its image's left edge on its left as seen from its front. Normals lean from
+## heart by heart_weight; colour brightens a little toward its top edge. The
+## crown sways sway_top at tree_height, easing in with the square of height,
+## and the card's free edge flutters along its normal.
+func _foliage_card(s: Surf, center: Vector3, normal: Vector3, up: Vector3, width: float, height: float, anchor: float, spin: float, cell: Rect2, color: Color,
+		heart: Vector3, heart_weight: float, tree_height: float, sway_top: float, flutter: float, fine: bool) -> void:
+	var up_axis := up - normal * normal.dot(up)
+	if up_axis.length() < 0.2:
+		up_axis = _perpendicular(normal)
+	up_axis = up_axis.normalized().rotated(normal, spin)
+	var across := up_axis.cross(normal).normalized()
+	var steps := 2 if fine else 1
+	var cup := 0.16 if fine else 0.0
+	var first := s.verts.size()
+	for j in steps + 1:
+		for i in steps + 1:
+			var x := float(i) / steps - 0.5
+			var y := float(j) / steps
+			var position := center + across * (x * width) + up_axis * ((y - anchor) * height) - normal * (cup * width * (x * x + (y - 0.5) * (y - 0.5)))
+			var n := ((position - heart).normalized() * heart_weight + normal * (1.0 - heart_weight)).normalized()
+			var c := lerpf(0.84, 1.0, y)
+			var sway := sway_top * pow(clampf(position.y / maxf(tree_height, 0.1), 0.0, 1.0), 2.0)
+			s.add(position, n, cell.position + Vector2(x + 0.5, 1.0 - y) * cell.size, Color(color.r * c, color.g * c, color.b * c), Vector2(sway, flutter * absf(y - anchor)))
+	for j in steps:
+		for i in steps:
+			var a := first + j * (steps + 1) + i
+			s.quad(a, a + 1, a + steps + 2, a + steps + 1, normal)
+
+
+## The normals of a crossed cluster facing out: one card facing out and one
+## turned a quarter about the vertical, so from any side one card of the
+## cluster faces the viewer and the outline is leaves, not card edges. A
+## cluster facing up (its first card nearly flat) gets two upright cards too.
+func _cluster_normals(out: Vector3, rng: RandomNumberGenerator, jitter: float) -> Array[Vector3]:
+	var first := (out + Vector3(rng.randf_range(-jitter, jitter), rng.randf_range(-jitter * 0.6, jitter), rng.randf_range(-jitter, jitter))).normalized()
+	var normals: Array[Vector3] = [first]
+	if absf(first.y) < 0.7:
+		normals.append(first.rotated(Vector3.UP, PI * 0.5))
+	else:
+		var level := Vector3(out.x, 0.0, out.z)
+		if level.length() < 0.05:
+			var angle := rng.randf() * TAU
+			level = Vector3(cos(angle), 0.0, sin(angle))
+		level = level.normalized()
+		normals.append(level)
+		normals.append(level.rotated(Vector3.UP, PI * 0.5))
+	return normals
+
+
+## Sites for foliage clusters over a crown's lobes ({center, half: Vector3}):
+## count in all, shared by the lobes' sizes, spread evenly over each lobe's
+## surface from polar_min to polar_max (radians from its top) at depth.x-depth.y
+## of its radii. A site buried in another lobe is dropped, so only the crown's
+## outside is clothed. Returns [{center, out (the lobe's surface normal), lobe}].
+func _lobe_sites(rng: RandomNumberGenerator, lobes: Array, count: int, polar_min: float, polar_max: float, depth: Vector2) -> Array:
+	var total := 0.0
+	for lobe: Dictionary in lobes:
+		var half: Vector3 = lobe.half
+		total += half.x * (half.x + half.y)
+	var sites := []
+	var phase := rng.randf() * TAU
+	for index in lobes.size():
+		var lobe: Dictionary = lobes[index]
+		var half: Vector3 = lobe.half
+		var center: Vector3 = lobe.center
+		var n := maxi(3, int(round(count * half.x * (half.x + half.y) / maxf(total, 0.001))))
+		for i in n:
+			# Even over the surface: cos(polar) stratified, azimuth by the golden angle.
+			var u := lerpf(cos(polar_min), cos(polar_max), (float(i) + rng.randf_range(0.15, 0.85)) / n)
+			var polar := acos(clampf(u, -1.0, 1.0))
+			var azimuth := phase + i * GOLDEN_ANGLE + rng.randf_range(-0.25, 0.25)
+			var unit := Vector3(sin(polar) * cos(azimuth), cos(polar), sin(polar) * sin(azimuth))
+			var position := center + Vector3(unit.x * half.x, unit.y * half.y, unit.z * half.z) * rng.randf_range(depth.x, depth.y)
+			var buried := false
+			for other_index in lobes.size():
+				if other_index == index:
+					continue
+				var other: Dictionary = lobes[other_index]
+				var q: Vector3 = (position - (other.center as Vector3)) / (other.half as Vector3)
+				if q.length() < 0.9:
+					buried = true
+					break
+			if buried:
+				continue
+			sites.append({"center": position, "out": Vector3(unit.x / half.x, unit.y / half.y, unit.z / half.z).normalized(), "lobe": index})
+	return sites
+
+
+## Tubes for a form's limbs ({depth, points, radii}): LOD1 keeps depths 0 and 1
+## with fewer sides (sides[lod][depth]). Lit on the open trunk, darker inside the
+## crown (above crown_low) and at the foot; they sway with the crown.
+func _emit_limbs(s: Surf, branches: Array, lod: int, tree_height: float, crown_low: float, sway_top: float, tile_m: float, sides: Array) -> void:
+	for branch: Dictionary in branches:
+		var depth := int(branch.depth)
+		if lod == 1 and depth > 1:
+			continue
+		var points: PackedVector3Array = branch.points
+		var radii: PackedFloat32Array = branch.radii
+		var colors := PackedColorArray()
+		var winds := PackedVector2Array()
+		for point in points:
+			var ao := lerpf(0.72, 1.0, clampf(point.y / 0.6, 0.0, 1.0)) * lerpf(1.0, 0.58, clampf((point.y - crown_low) / maxf(1.0, tree_height - crown_low), 0.0, 1.0))
+			colors.append(Color(ao, ao, ao))
+			winds.append(Vector2(sway_top * pow(clampf(point.y / tree_height, 0.0, 1.0), 2.0), 0.0))
+		_tube(s, points, radii, colors, winds, int(sides[lod][mini(depth, 2)]), maxf(1.0, roundf(TAU * radii[0] / tile_m)), tile_m)
+
+
+## Points along a cubic Bezier from a to d (b and c its handles): segments + 1 of them.
+static func _bezier(a: Vector3, b: Vector3, c: Vector3, d: Vector3, segments: int) -> PackedVector3Array:
+	var points := PackedVector3Array()
+	for i in segments + 1:
+		var t := float(i) / segments
+		var u := 1.0 - t
+		points.append(a * (u * u * u) + b * (3.0 * u * u * t) + c * (3.0 * u * t * t) + d * (t * t * t))
+	return points
+
+
+## count radii tapering from r0 to r1, faster early when power < 1.
+static func _taper(r0: float, r1: float, count: int, power: float) -> PackedFloat32Array:
+	var radii := PackedFloat32Array()
+	for i in count:
+		radii.append(lerpf(r0, r1, pow(float(i) / maxf(1.0, count - 1), power)))
+	return radii
+
+
+## A repeatable number in [0, 1) from a seed and two indices.
+static func _hash01(seed: int, a: int, b: int) -> float:
+	return float(hash([seed, a, b]) & 0xFFFFFF) / 16777216.0
+
+
+# --- Monterey pine ------------------------------------------------------------------------------------
+
+
+## A Monterey pine (p1-p6): a short, thick trunk of dark furrowed bark, bent and
+## leaning, splitting at fork into a few big ascending leaders under a dense
+## dome of lobes. Each lobe is clothed in crossed cards of face-on tuft
+## clusters, darker inside and underneath; upright cards of side-view tufts
+## bristle out of the upper lobes and the rim, so the outline reads as brush-like
+## tufts rather than a smooth ball. Limbs run out from the trunk to the lower
+## lobes, where they show under the crown. A pruned tree's crown is pushed
+## downwind (east, +X) and its windward side cut back and lowered.
+func _build_pine(p: Dictionary) -> Dictionary:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = int(p.seed)
+	var height := float(p.height)
+	var spread := float(p.spread)
+	var clear := float(p.clear)
+	var fork_y := float(p.fork)
+	var trunk_radius := float(p.trunk_radius)
+	var shear := float(p.get("shear", 0.0))
+	var sway_top := PINE_SWAY * height
+	var lee := Vector3(CYPRESS_LEE.x, 0.0, CYPRESS_LEE.y).normalized()
+	var turn := rng.randf()
+	var lean_dir := lee.rotated(Vector3.UP, (turn - 0.5) * 1.2) if shear > 0.0 else Vector3(cos(turn * TAU), 0.0, sin(turn * TAU))
+	var lean := lean_dir * float(p.lean)
+	var bow := lean_dir.rotated(Vector3.UP, PI * 0.5) * float(p.lean) * rng.randf_range(-0.4, 0.4)
+	# The trunk, from below the foot to the fork, leaning and bowed, swelling at the foot.
+	var trunk := PackedVector3Array()
+	var trunk_radii := PackedFloat32Array()
+	for i in 7:
+		var t := float(i) / 6.0
+		var point := Vector3(0.0, -BURY_M + (fork_y + BURY_M) * t, 0.0) + lean * pow(t, 1.6) + bow * sin(PI * t)
+		trunk.append(point)
+		trunk_radii.append(trunk_radius * (lerpf(1.0, 0.82, t) + 0.35 * exp(-maxf(point.y, 0.0) / 0.35)))
+	var fork := trunk[6]
+	# It runs on a little past the fork, so the leaders grow out of it.
+	trunk.append(fork + (fork - trunk[5]).normalized() * 0.5)
+	trunk_radii.append(trunk_radius * 0.55)
+	# The crown's envelope: a dome over the crown base, centred over the leaning
+	# trunk and pushed downwind; a pruned tree's windward side is cut back and lower.
+	var crown_depth := height - clear
+	var center := Vector3(0.0, clear + crown_depth * 0.45, 0.0) + lean * 1.15 + lee * (spread * shear)
+	var radius := spread * 0.5
+	var up_radius := height - center.y
+	var down_radius := center.y - clear
+	var envelope := func(dir: Vector3) -> Vector3:
+		var windward := minf(0.0, dir.x * lee.x + dir.z * lee.z)
+		var cut := 1.0 + shear * 2.2 * windward
+		return center + Vector3(dir.x * radius * cut, dir.y * (up_radius if dir.y > 0.0 else down_radius) * (1.0 + shear * 1.2 * windward), dir.z * radius * cut)
+	# A cap lobe over the top, then lobes round the dome from its shoulders to under its rim.
+	var lobes: Array[Dictionary] = [{"center": center + Vector3(0.0, up_radius * 0.45, 0.0), "half": Vector3(radius * 0.5, up_radius * 0.55, radius * 0.5)}]
+	var count := int(p.lobes)
+	var phase := rng.randf() * TAU
+	for i in count:
+		var polar := lerpf(0.5, 2.15, (float(i) + rng.randf_range(0.2, 0.8)) / count)
+		var azimuth := phase + i * GOLDEN_ANGLE + rng.randf_range(-0.3, 0.3)
+		var surface: Vector3 = envelope.call(Vector3(sin(polar) * cos(azimuth), cos(polar), sin(polar) * sin(azimuth)))
+		var size := spread * rng.randf_range(0.17, 0.24)
+		lobes.append({"center": center.lerp(surface, rng.randf_range(0.6, 0.72)), "half": Vector3(size, size * rng.randf_range(0.7, 0.9), size)})
+	var cards := []
+	var sites := _lobe_sites(rng, lobes, int(p.clusters), 0.08, 2.25, Vector2(0.88, 1.0))
+	for index in sites.size():
+		var site: Dictionary = sites[index]
+		var out: Vector3 = site.out
+		var position: Vector3 = site.center
+		var lobe: Dictionary = lobes[int(site.lobe)]
+		# Darker underneath and toward the crown's middle; the sunlit top lightest.
+		var height_f := clampf((position.y - clear) / crown_depth, 0.0, 1.0)
+		var radial := clampf(Vector2(position.x - center.x, position.z - center.z).length() / radius, 0.0, 1.0)
+		var shade := rng.randf_range(0.88, 1.05) * lerpf(0.62, 1.0, height_f) * lerpf(0.8, 1.0, radial) * lerpf(1.0, 0.62, clampf(-out.y, 0.0, 1.0))
+		var color := Color(shade, shade, shade)
+		var size := clampf((lobe.half as Vector3).x * rng.randf_range(0.5, 0.62), 0.8, 1.5)
+		for normal in _cluster_normals(out, rng, 0.3):
+			cards.append(_card(position, normal, Vector3.UP, size, size, 0.5, rng.randf_range(-0.5, 0.5), PINE_FACE, color, lobe.center, index))
+		# Tufts bristle out of the upper crown and its rim.
+		if out.y > -0.15 and rng.randf() < lerpf(0.35, 0.75, clampf(out.y + 0.15, 0.0, 1.0)):
+			var tuft := size * rng.randf_range(0.75, 0.95)
+			var rise := (Vector3.UP * 0.7 + out * 0.45).normalized()
+			var facing := Vector3(out.x, 0.0, out.z)
+			if facing.length() < 0.1:
+				facing = Vector3(cos(rng.randf() * TAU), 0.0, sin(rng.randf() * TAU))
+			facing = facing.normalized()
+			for k in 2:
+				cards.append(_card(position + out * size * 0.1, facing.rotated(Vector3.UP, PI * 0.5 * k + rng.randf_range(-0.25, 0.25)), rise, tuft, tuft, 0.25,
+					rng.randf_range(-0.15, 0.15), PINE_TUFTS, color * 1.04, lobe.center, index, 0.03))
+	var branches := [{"depth": 0, "points": trunk, "radii": trunk_radii}]
+	# Leaders from the fork up into the highest lobes.
+	var by_height := range(lobes.size())
+	by_height.sort_custom(func(a: int, b: int) -> bool: return (lobes[a].center as Vector3).y > (lobes[b].center as Vector3).y)
+	var leader_lobes := {}
+	for k in mini(int(p.leaders), lobes.size()):
+		var lobe: Dictionary = lobes[by_height[k]]
+		leader_lobes[by_height[k]] = true
+		var target: Vector3 = (lobe.center as Vector3) - Vector3(0.0, (lobe.half as Vector3).y * 0.3, 0.0)
+		var start := fork - Vector3(0.0, 0.18 * k, 0.0)
+		var points := _bezier(start, start + Vector3.UP * (target.y - start.y) * 0.45, target.lerp(start, 0.3) + Vector3.UP * 0.4, target, 6)
+		branches.append({"depth": 1, "points": points, "radii": _taper(trunk_radius * 0.7, 0.05, points.size(), 0.8)})
+	# Limbs from the trunk out to the lower lobes, the low branching under the crown.
+	for index in lobes.size():
+		var lobe: Dictionary = lobes[index]
+		var target: Vector3 = lobe.center
+		if leader_lobes.has(index) or target.y > center.y + up_radius * 0.3:
+			continue
+		var start := _polyline_at(trunk, clampf((target.y - 0.8) / maxf(fork_y, 0.5), 0.35, 1.0) * 6.0 / 7.0)
+		var end := target.lerp(Vector3(center.x, target.y, center.z), 0.25)
+		var middle := start.lerp(end, 0.5) + Vector3.UP * (0.12 * start.distance_to(end))
+		var points := _bezier(start, start.lerp(middle, 0.6), middle.lerp(end, 0.4), end, 4)
+		branches.append({"depth": 2, "points": points, "radii": _taper(trunk_radius * 0.42, 0.03, points.size(), 0.8)})
+	var meshes: Array[ArrayMesh] = []
+	for lod in 2:
+		var mesh := ArrayMesh.new()
+		var bark := Surf.new()
+		var leaves := Surf.new()
+		_emit_limbs(bark, branches, lod, height, clear, sway_top, PINE_BARK_M, [[10, 7, 5], [6, 4, 3]])
+		_emit_cards(leaves, cards, lod, height, sway_top)
+		bark.commit(mesh, material("pine_bark"))
+		leaves.commit(mesh, material("pine_foliage"))
+		meshes.append(mesh)
+	return {"lod0": meshes[0], "lod1": meshes[1], "crown_surface": -1, "top_m": height,
+		"capsules": [{"radius_m": trunk_radius * 1.1, "from": Vector3.ZERO, "to": fork}]}
+
+
+# --- Spreading broadleaf and New Zealand Christmas tree -----------------------------------------------
+
+
+## The spreading broadleaf (c2-c4, b1-b8) and the Christmas tree (b5/b6), one
+## builder: a trunk forking low (or, with stems, a few pale stems leaning out
+## from the root crown) into limbs that climb and then arch out sinuously to
+## clouds of foliage: flattened, lumpy pads, each clothed in crossed cards of
+## leaf clumps over its top and sides, the clumps round its rim hanging, its
+## underside sparse and dark. Side branches carry smaller clouds, and a few
+## clouds close the crown's top. Between the clouds the limbs show. The
+## broadleaf's clouds are separate layers with gaps, some tipped bronze; the
+## Christmas tree's overlap into one dense, dark, rounded crown with a few red
+## brushes.
+func _build_broadleaf(p: Dictionary) -> Dictionary:
+	var christmas := p.has("stems")
+	var rng := RandomNumberGenerator.new()
+	rng.seed = int(p.seed)
+	var height := float(p.height)
+	var spread := float(p.spread)
+	var fork_y := float(p.fork)
+	var trunk_radius := float(p.trunk_radius)
+	var sway_top := BROADLEAF_SWAY * height
+	var radius := spread * 0.5
+	var lean_angle := rng.randf() * TAU
+	var lean_dir := Vector3(cos(lean_angle), 0.0, sin(lean_angle))
+	var lean := lean_dir * float(p.lean)
+	var crown_center := Vector3(0.0, height * 0.62, 0.0) + lean * 1.3
+	var branches := []
+	# Where the limbs start: {point, out, radius}.
+	var starts: Array[Dictionary] = []
+	if christmas:
+		var stems := int(p.stems)
+		for k in stems:
+			var azimuth := lean_angle + TAU * k / stems + rng.randf_range(-0.35, 0.35)
+			var out := Vector3(cos(azimuth), 0.0, sin(azimuth))
+			var tilt := deg_to_rad(rng.randf_range(12.0, 26.0))
+			var length := height * rng.randf_range(0.42, 0.55)
+			var base := out * 0.06
+			var top := base + (out * sin(tilt) + Vector3.UP * cos(tilt)) * length + lean * 0.5
+			var side := Vector3(-out.z, 0.0, out.x) * rng.randf_range(-0.3, 0.3)
+			var points := _bezier(base + Vector3.DOWN * BURY_M, base + Vector3.UP * length * 0.35 + side, top - (top - base) * 0.3 + side * 0.5, top, 6)
+			var r := trunk_radius * rng.randf_range(0.85, 1.1)
+			branches.append({"depth": 0, "points": points, "radii": _taper(r * 1.25, r * 0.65, points.size(), 1.0)})
+			starts.append({"point": top, "out": out, "radius": r * 0.65})
+	else:
+		var bow := lean_dir.rotated(Vector3.UP, PI * 0.5) * float(p.lean) * rng.randf_range(-0.3, 0.3)
+		var points := PackedVector3Array()
+		var radii := PackedFloat32Array()
+		for i in 6:
+			var t := float(i) / 5.0
+			var point := Vector3(0.0, -BURY_M + (fork_y + BURY_M) * t, 0.0) + lean * pow(t, 1.4) + bow * sin(PI * t)
+			points.append(point)
+			radii.append(trunk_radius * (lerpf(1.0, 0.88, t) + 0.4 * exp(-maxf(point.y, 0.0) / 0.4)))
+		var fork := points[5]
+		points.append(fork + (fork - points[4]).normalized() * 0.4)
+		radii.append(trunk_radius * 0.6)
+		branches.append({"depth": 0, "points": points, "radii": radii})
+		starts.append({"point": fork, "out": lean_dir, "radius": trunk_radius * 0.72})
+	var rise := float(p.rise)
+	var flat := float(p.flat)
+	var cloud_reach := spread * float(p.cloud)
+	var bronze_share := float(p.get("bronze", 0.0))
+	# Clouds: {center, half: Vector3, accent} (accent: the cloud is tipped bronze).
+	var clouds: Array[Dictionary] = []
+	var phase := rng.randf() * TAU
+	var limbs := int(p.limbs)
+	for k in limbs:
+		var from: Dictionary = starts[k % starts.size()]
+		# Every other limb splits off a little lower.
+		var start: Vector3 = (from.point as Vector3) - Vector3(0.0, 0.35 if k % 2 == 1 and not christmas else 0.0, 0.0)
+		var out := Vector3(cos(phase + TAU * k / limbs + rng.randf_range(-0.35, 0.35)), 0.0, sin(phase + TAU * k / limbs + rng.randf_range(-0.35, 0.35)))
+		if christmas:
+			out = (out + (from.out as Vector3) * 0.8).normalized()
+		var reach := radius * rng.randf_range(0.5, 0.68)
+		var target := Vector3(crown_center.x, 0.0, crown_center.z) + out * reach
+		target.y = minf(height * rng.randf_range(0.6, 0.76), height - cloud_reach * flat * 1.1)
+		var side := Vector3(-out.z, 0.0, out.x) * rng.randf_range(-1.0, 1.0)
+		# Climbs out of the fork (steeply when rise is high), then arches out to its cloud.
+		var points := _bezier(start, start + Vector3.UP * (target.y - start.y) * lerpf(0.3, 0.75, rise) + out * reach * lerpf(0.35, 0.1, rise) + side * 0.6,
+			target - out * reach * lerpf(0.25, 0.45, rise) + Vector3.UP * cloud_reach * 0.2 - side * 0.4, target, 7)
+		var r0 := float(from.radius) * rng.randf_range(0.85, 1.0)
+		branches.append({"depth": 1, "points": points, "radii": _taper(r0, 0.05, points.size(), 0.8)})
+		var main_reach := cloud_reach * rng.randf_range(0.95, 1.15)
+		clouds.append({"center": target + Vector3(0.0, main_reach * flat * 0.25, 0.0), "half": Vector3(main_reach, main_reach * flat, main_reach), "accent": rng.randf() < bronze_share})
+		# Side branches off the limb's outer part, each ending in a smaller cloud.
+		for b in int(p.clouds):
+			var origin := _polyline_at(points, rng.randf_range(0.4, 0.85))
+			var branch_out := out.rotated(Vector3.UP, (1.0 if (b + k) % 2 == 0 else -1.0) * rng.randf_range(0.6, 1.3))
+			var length := radius * rng.randf_range(0.28, 0.45)
+			var elevation := deg_to_rad(rng.randf_range(-12.0, 22.0))
+			var end := origin + (branch_out * cos(elevation) + Vector3.UP * sin(elevation)) * length
+			end.y = minf(end.y, height - cloud_reach * flat)
+			var middle := origin.lerp(end, 0.5) + Vector3.UP * length * 0.12
+			var side_points := _bezier(origin, origin.lerp(middle, 0.6), middle.lerp(end, 0.5), end, 4)
+			branches.append({"depth": 2, "points": side_points, "radii": _taper(r0 * 0.45, 0.03, side_points.size(), 0.8)})
+			var small := cloud_reach * rng.randf_range(0.65, 0.85)
+			clouds.append({"center": end + Vector3(0.0, small * flat * 0.2, 0.0), "half": Vector3(small, small * flat * rng.randf_range(0.85, 1.1), small), "accent": rng.randf() < bronze_share})
+	# Clouds over the crown's top close it into a layered dome, each on a limb of its own.
+	var tops := 3 if christmas else 2
+	for i in tops:
+		var angle := phase + TAU * (i + 0.5) / tops + rng.randf_range(-0.4, 0.4)
+		var top_reach := cloud_reach * rng.randf_range(0.9, 1.1)
+		var cloud_center := Vector3(crown_center.x, 0.0, crown_center.z) + Vector3(cos(angle), 0.0, sin(angle)) * radius * rng.randf_range(0.1, 0.3)
+		cloud_center.y = height - top_reach * flat
+		clouds.append({"center": cloud_center, "half": Vector3(top_reach, top_reach * flat, top_reach), "accent": rng.randf() < bronze_share})
+		var from: Dictionary = starts[i % starts.size()]
+		var start: Vector3 = from.point
+		var end := cloud_center - Vector3(0.0, top_reach * flat * 0.5, 0.0)
+		var points := _bezier(start, start + Vector3.UP * (end.y - start.y) * 0.6, end - (end - start) * 0.25, end, 6)
+		branches.append({"depth": 1, "points": points, "radii": _taper(float(from.radius) * 0.75, 0.04, points.size(), 0.8)})
+	var lobes := []
+	var area := 0.0
+	for cloud in clouds:
+		lobes.append({"center": cloud.center, "half": cloud.half})
+		area += PI * (cloud.half as Vector3).x * (cloud.half as Vector3).x
+	var sites := _lobe_sites(rng, lobes, int(round(area * float(p.density))), 0.06, 2.2, Vector2(0.85, 1.0))
+	var flower_share := float(p.get("flowers", 0.0))
+	var crown_low := fork_y if not christmas else height * 0.35
+	var cards := []
+	for index in sites.size():
+		var site: Dictionary = sites[index]
+		var out: Vector3 = site.out
+		var position: Vector3 = site.center
+		var cloud: Dictionary = clouds[int(site.lobe)]
+		var half: Vector3 = cloud.half
+		var height_f := clampf((position.y - crown_low) / maxf(1.0, height - crown_low), 0.0, 1.0)
+		var radial := clampf(Vector2(position.x - crown_center.x, position.z - crown_center.z).length() / radius, 0.0, 1.0)
+		var shade := rng.randf_range(0.88, 1.06) * lerpf(0.66, 1.0, height_f) * lerpf(0.82, 1.0, radial) * lerpf(1.0, 0.58, clampf(-out.y, 0.0, 1.0))
+		var cell := CHRISTMAS_CLUMP if christmas else BROADLEAF_CLUMP
+		if christmas and out.y > -0.1 and rng.randf() < flower_share:
+			cell = CHRISTMAS_FLOWERS
+		elif not christmas and out.y > -0.2 and rng.randf() < (0.45 if bool(cloud.accent) else 0.05):
+			cell = BROADLEAF_BRONZE
+		var size := clampf(half.x * rng.randf_range(0.38, 0.5), 0.75, 1.5)
+		# Clumps round the rim and under it hang down off their twigs.
+		var hanging := out.y < 0.2
+		var anchor := 0.75 if hanging else 0.5
+		var up := Vector3.UP if hanging else (Vector3.UP + out * 0.3).normalized()
+		for normal in _cluster_normals(out + (Vector3.DOWN * 0.3 if hanging else Vector3.ZERO), rng, 0.3):
+			cards.append(_card(position, normal, up, size, size, anchor, rng.randf_range(-0.4, 0.4), cell, Color(shade, shade, shade), cloud.center, index, 0.025))
+	var bark_key := "christmas_bark" if christmas else "broadleaf_bark"
+	var meshes: Array[ArrayMesh] = []
+	for lod in 2:
+		var mesh := ArrayMesh.new()
+		var bark := Surf.new()
+		var leaves := Surf.new()
+		_emit_limbs(bark, branches, lod, height, crown_low, sway_top, CHRISTMAS_BARK_M if christmas else BROADLEAF_BARK_M, [[10, 6, 4], [6, 4, 3]])
+		_emit_cards(leaves, cards, lod, height, sway_top)
+		bark.commit(mesh, material(bark_key))
+		leaves.commit(mesh, material("broadleaf_foliage"))
+		meshes.append(mesh)
+	var capsules := []
+	for branch: Dictionary in branches:
+		if int(branch.depth) == 0:
+			var points: PackedVector3Array = branch.points
+			var radii: PackedFloat32Array = branch.radii
+			# The stem from the foot to its fork, or its first 2.2 m.
+			capsules.append({"radius_m": radii[2] * 1.1, "from": Vector3(points[0].x, 0.0, points[0].z), "to": _polyline_at(points, clampf(2.2 / maxf(points[points.size() - 1].y, 0.1), 0.2, 1.0) * 0.85)})
+	return {"lod0": meshes[0], "lod1": meshes[1], "crown_surface": -1, "top_m": height, "capsules": capsules}
+
+
+# --- Young Norfolk Island pine -----------------------------------------------------------------------
+
+
+## A young Norfolk Island pine (n1): a straight trunk under whorls of level
+## branches, each a frond of soft upturned branchlets on two crossed cards (one
+## lying along it, seen from above, one standing along it, seen from the side),
+## shortening tier by tier to the leader, so the tree reads as a symmetric stack
+## of tiers with the trunk showing between them.
+func _build_araucaria(p: Dictionary) -> Dictionary:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = int(p.seed)
+	var height := float(p.height)
+	var spread := float(p.spread)
+	var trunk_radius := float(p.trunk_radius)
+	var tier := float(p.tier)
+	var per_whorl := int(p.branches)
+	var sway_top := NORFOLK_SWAY * height
+	var lean := Vector3(rng.randf_range(-0.06, 0.06), 0.0, rng.randf_range(-0.06, 0.06))
+	var axis := func(y: float) -> Vector3: return Vector3.UP * y + lean * pow(clampf(y / height, 0.0, 1.0), 2.0)
+	var trunk := PackedVector3Array([Vector3.DOWN * BURY_M])
+	var trunk_radii := PackedFloat32Array([trunk_radius * 1.25])
+	for i in 6:
+		var t := float(i) / 5.0
+		trunk.append(axis.call(height * t))
+		trunk_radii.append(lerpf(trunk_radius, 0.012, pow(t, 0.9)) + trunk_radius * 0.2 * exp(-t * height / 0.3))
+	var branches := [{"depth": 0, "points": trunk, "radii": trunk_radii}]
+	var cards := []
+	var y := tier * 0.9
+	var whorl := 0
+	while y < height - 0.3:
+		var f := y / height
+		var length := spread * 0.5 * pow(1.0 - f, 0.8) * rng.randf_range(0.92, 1.06) + 0.12
+		var twist := whorl * 0.55 + rng.randf_range(-0.1, 0.1)
+		var base: Vector3 = axis.call(y)
+		for k in per_whorl:
+			var azimuth := twist + TAU * k / per_whorl + rng.randf_range(-0.12, 0.12)
+			var out := Vector3(cos(azimuth), 0.0, sin(azimuth))
+			var side := Vector3(-out.z, 0.0, out.x)
+			var elevation := deg_to_rad(rng.randf_range(4.0, 14.0) + 6.0 * f)
+			var along := (out * cos(elevation) + Vector3.UP * sin(elevation)).normalized()
+			var shade := rng.randf_range(0.9, 1.05) * lerpf(0.72, 1.0, f)
+			var middle := base + along * length * 0.52
+			# Seen from above: the frond lies along the branch, its trunk end on the image's left.
+			var flat := along.cross(side).normalized()
+			if flat.y < 0.0:
+				flat = -flat
+			var top_card := _card(middle + Vector3.UP * 0.02, flat, -side, length * 1.04, length * 0.44, 0.5, 0.0, NORFOLK_TOP, Color(shade, shade, shade), base + Vector3.UP * 0.4, cards.size(), 0.025)
+			# Seen from the side: the branchlets turn up off the branch.
+			var side_card := _card(base + along * length * 0.5 - Vector3.UP * 0.03, side, Vector3.UP, length, length * 0.4, 0.2, 0.0, NORFOLK_SIDE, Color(shade, shade, shade) * 0.94, base + Vector3.UP * 0.4, cards.size(), 0.025)
+			for card: Dictionary in [top_card, side_card]:
+				card.lod1 = true
+				card.lod1_grow = 1.0
+				card.heart_weight = 0.35
+				cards.append(card)
+			branches.append({"depth": 2, "points": PackedVector3Array([base, base + along * length * 0.85]), "radii": PackedFloat32Array([0.022, 0.006])})
+		y += tier * rng.randf_range(0.9, 1.1)
+		whorl += 1
+	# The leader's soft tip.
+	var tip: Vector3 = axis.call(height)
+	for k in 2:
+		var facing := Vector3(cos(k * PI * 0.5), 0.0, sin(k * PI * 0.5))
+		var leader := _card(tip - Vector3.UP * 0.05, facing, Vector3.UP, 0.32, 0.5, 0.1, PI * 0.5, NORFOLK_TOP, Color(1.02, 1.02, 1.02), tip, cards.size(), 0.03)
+		leader.lod1 = true
+		leader.lod1_grow = 1.0
+		cards.append(leader)
+	var meshes: Array[ArrayMesh] = []
+	for lod in 2:
+		var mesh := ArrayMesh.new()
+		var bark := Surf.new()
+		var leaves := Surf.new()
+		_emit_limbs(bark, branches, lod, height, 0.3, sway_top, PINE_BARK_M, [[8, 4, 3], [5, 3, 3]])
+		_emit_cards(leaves, cards, lod, height, sway_top)
+		bark.commit(mesh, material("pine_bark"))
+		leaves.commit(mesh, material("set_piece_foliage"))
+		meshes.append(mesh)
+	return {"lod0": meshes[0], "lod1": meshes[1], "crown_surface": -1, "top_m": height,
+		"capsules": [{"radius_m": trunk_radius * 1.2, "from": Vector3.ZERO, "to": axis.call(minf(1.6, height * 0.5))}]}
+
+
+# --- Avenue N shrubs --------------------------------------------------------------------------------------
+
+
+## The Avenue N shrubs (s1-s3): a mound is a lumpy dome of a few lobes clothed
+## in crossed clusters of the shrub's foliage down to the ground, over a dark
+## floor that hides its hollow; a cone stacks lobes up a narrowing ogive; an
+## upright shrub is a few slender stems, each drawn on crossed side-view
+## cards. Darker low and inside; the foliage flutters, the crown sways a little.
+func _build_shrub(p: Dictionary) -> Dictionary:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = int(p.seed)
+	var height := float(p.height)
+	var radius := float(p.width) * 0.5
+	var cell: Rect2 = SHRUB_CELLS[str(p.cell)]
+	var sway_top := SHRUB_SWAY * height
+	var phase := rng.randf() * TAU
+	var heart := Vector3(0.0, height * 0.4, 0.0)
+	var cards := []
+	var lobes := []
+	match str(p.shape):
+		"mound":
+			lobes.append({"center": Vector3(0.0, height * 0.45, 0.0), "half": Vector3(radius * 0.8, height * 0.55, radius * 0.8)})
+			for k in int(p.lobes):
+				var azimuth := phase + TAU * k / int(p.lobes) + rng.randf_range(-0.4, 0.4)
+				var lobe_radius := radius * rng.randf_range(0.42, 0.55)
+				lobes.append({"center": Vector3(cos(azimuth), 0.0, sin(azimuth)) * radius * rng.randf_range(0.38, 0.5) + Vector3.UP * height * rng.randf_range(0.32, 0.55),
+					"half": Vector3(lobe_radius, height * rng.randf_range(0.38, 0.5), lobe_radius)})
+		"cone":
+			var levels := maxi(3, int(round(height / (radius * 0.65))))
+			for i in levels:
+				var f := (float(i) + 0.5) / levels
+				# An ogive, widest a little above the ground, narrowing to a soft point.
+				var level_radius := radius * sin(PI * lerpf(0.35, 0.97, f))
+				var y := height * lerpf(0.1, 0.9, f)
+				for k in 3:
+					var azimuth := phase + i * 1.3 + TAU * k / 3.0 + rng.randf_range(-0.4, 0.4)
+					lobes.append({"center": Vector3(cos(azimuth), 0.0, sin(azimuth)) * level_radius * 0.4 + Vector3.UP * y,
+						"half": Vector3(level_radius * 0.66, height / levels * 0.75, level_radius * 0.66)})
+	if not lobes.is_empty():
+		var sites := _lobe_sites(rng, lobes, int(p.clusters), 0.05, 1.85 if str(p.shape) == "mound" else 2.1, Vector2(0.85, 1.0))
+		for index in sites.size():
+			var site: Dictionary = sites[index]
+			var out: Vector3 = site.out
+			var position: Vector3 = site.center
+			position.y = maxf(position.y, 0.08)
+			var shade := rng.randf_range(0.88, 1.06) * lerpf(0.55, 1.0, pow(clampf(position.y / height, 0.0, 1.0), 0.7)) * lerpf(1.0, 0.7, clampf(-out.y, 0.0, 1.0))
+			var size := clampf(radius * rng.randf_range(0.42, 0.58), 0.3, 0.95)
+			for normal in _cluster_normals(out, rng, 0.3):
+				cards.append(_card(position, normal, Vector3.UP, size, size, 0.5, rng.randf_range(-0.5, 0.5), cell, Color(shade, shade, shade), heart, index, 0.02))
+	else:
+		# Upright: slender stems from one base, each on crossed side-view cards.
+		var stems := int(p.stems)
+		for k in stems:
+			var azimuth := phase + TAU * k / stems + rng.randf_range(-0.3, 0.3)
+			var out := Vector3(cos(azimuth), 0.0, sin(azimuth))
+			var tilt := deg_to_rad(rng.randf_range(4.0, 14.0))
+			var length := height * rng.randf_range(0.72, 1.0)
+			var up := (Vector3.UP * cos(tilt) + out * sin(tilt)).normalized()
+			var shade := rng.randf_range(0.88, 1.04)
+			for card in 2:
+				var normal := out.rotated(Vector3.UP, PI * 0.5 + card * PI * 0.5 + rng.randf_range(-0.2, 0.2))
+				var stem_card := _card(out * 0.05 - Vector3.UP * 0.04, normal, up, radius * rng.randf_range(1.1, 1.4), length, 0.0, 0.0, cell, Color(shade, shade, shade), heart, k, 0.03)
+				stem_card.heart_weight = 0.3
+				cards.append(stem_card)
+	var meshes: Array[ArrayMesh] = []
+	for lod in 2:
+		var mesh := ArrayMesh.new()
+		var leaves := Surf.new()
+		if str(p.shape) == "mound":
+			# A dark floor of the same foliage hides the hollow inside from low views.
+			_dish(leaves, IDENTITY_FRAME, cell, 0.05, radius * 0.75, 0.04, Color(0.3, 0.3, 0.3), phase)
+		_emit_cards(leaves, cards, lod, height, sway_top)
+		leaves.commit(mesh, material("shrub_foliage"))
+		meshes.append(mesh)
+	return {"lod0": meshes[0], "lod1": meshes[1], "crown_surface": -1, "top_m": height, "capsules": []}
+
+
+# --- New Zealand flax ---------------------------------------------------------------------------------------
+
+
+## Dark red New Zealand flax (the Mersea lot's planters, Sep 2025): stiff strap
+## leaves in three overlapping fans from one base, the middle ones upright, the
+## outer ones leaning out and arching over at their tips; each a ribbon folded
+## along its midrib, the leaf image stretched from base to tip.
+func _build_flax(p: Dictionary) -> Dictionary:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = int(p.seed)
+	var height := float(p.height)
+	var width := float(p.width)
+	var count := int(p.leaves)
+	var cell: Rect2 = SHRUB_CELLS.flax_leaf
+	var sway_top := SHRUB_SWAY * height
+	var phase := rng.randf() * TAU
+	var leaves := []
+	for i in count:
+		var fan := phase + (i % 3) * PI / 3.0 + rng.randf_range(-0.15, 0.15)
+		var in_plane := Vector3(cos(fan), 0.0, sin(fan))
+		var spread := deg_to_rad(rng.randf_range(-58.0, 58.0))
+		var outward := absf(spread) / deg_to_rad(58.0)
+		var direction := (Vector3.UP * cos(spread) + in_plane * sin(spread)).normalized()
+		leaves.append({
+			"base": in_plane * rng.randf_range(-0.06, 0.06) + Vector3(rng.randf_range(-0.03, 0.03), -0.05, rng.randf_range(-0.03, 0.03)),
+			"direction": direction,
+			"length": height * lerpf(1.05, 0.72, outward) * rng.randf_range(0.88, 1.05),
+			"droop": 0.08 + 0.42 * pow(outward, 1.5),
+			"face": Vector3(-in_plane.z, 0.0, in_plane.x) * (1.0 if rng.randf() < 0.5 else -1.0),
+			"width": width * rng.randf_range(0.85, 1.1),
+			"shade": rng.randf_range(0.82, 1.06),
+		})
+	var meshes: Array[ArrayMesh] = []
+	for lod in 2:
+		var mesh := ArrayMesh.new()
+		var s := Surf.new()
+		var segments := 6 if lod == 0 else 3
+		for index in leaves.size():
+			if lod == 1 and index % 2 == 1:
+				continue
+			var leaf: Dictionary = leaves[index]
+			var base: Vector3 = leaf.base
+			var direction: Vector3 = leaf.direction
+			var length := float(leaf.length)
+			var droop := float(leaf.droop)
+			var face: Vector3 = leaf.face
+			var half := float(leaf.width) * (0.5 if lod == 0 else 0.75)
+			var first := s.verts.size()
+			for j in segments + 1:
+				var t := float(j) / segments
+				var position := base + direction * (length * t) + Vector3.DOWN * (droop * length * t * t)
+				var tangent := (direction * length + Vector3.DOWN * (2.0 * droop * length * t)).normalized()
+				var across := face.cross(tangent).normalized()
+				var c := float(leaf.shade) * lerpf(0.55, 1.0, sqrt(t))
+				var wind := Vector2(sway_top * t * t, 0.01 + 0.03 * t * t)
+				var v := cell.end.y - t * cell.size.y
+				# Folded along its midrib: the keel sits a little behind the edges.
+				s.add(position - across * half, face, Vector2(cell.position.x, v), Color(c, c, c), wind)
+				s.add(position - face * half * 0.35, face, Vector2(cell.position.x + cell.size.x * 0.5, v), Color(c * 0.9, c * 0.9, c * 0.9), wind)
+				s.add(position + across * half, face, Vector2(cell.end.x, v), Color(c, c, c), wind)
+			for j in segments:
+				var a := first + j * 3
+				s.quad(a, a + 1, a + 4, a + 3, face)
+				s.quad(a + 1, a + 2, a + 5, a + 4, face)
+		s.commit(mesh, material("shrub_foliage"))
+		meshes.append(mesh)
+	return {"lod0": meshes[0], "lod1": meshes[1], "crown_surface": -1, "top_m": height, "capsules": []}
+
+
+# --- Clipped hedge ------------------------------------------------------------------------------------------
+
+
+## A hedge's stations are this far apart at LOD0; LOD1 keeps every other and the
+## far level every fourth, so a piece cut at a multiple of HEDGE_PIECE_STATIONS
+## stations meets its neighbour at every level.
+const HEDGE_STEP_M := 0.35
+const HEDGE_PIECE_STATIONS := 32
+
+
+## Lays a clipped hedge of variant along points (its centre line: x, the
+## visible ground's height, z) from from_m to to_m of its length into surfs
+## (material key -> Surf, added when missing): an opaque leafy core extruded
+## along the line (a rounded or boxy profile, lumpy where it was clipped), sprig
+## cards along its top shoulders and a few on its sides, and under a rounded
+## hedge's canopy its leggy dark stems. lod 2 is the far level: the core alone,
+## coarser. The lumps come from seed and each station's index, so pieces of one
+## hedge laid separately meet exactly; only the hedge's own ends are capped.
+## Bends are rounded off over about a metre.
+func hedge_into(surfs: Dictionary, variant: int, points: PackedVector3Array, from_m: float, to_m: float, lod: int, seed: int) -> void:
+	var p: Dictionary = HEDGES[variant]
+	var lengths := PackedFloat32Array([0.0])
+	for i in range(1, points.size()):
+		lengths.append(lengths[i - 1] + Vector2(points[i].x - points[i - 1].x, points[i].z - points[i - 1].z).length())
+	var total := lengths[lengths.size() - 1]
+	from_m = clampf(from_m, 0.0, total)
+	to_m = clampf(to_m, from_m, total)
+	if to_m - from_m < 0.05:
+		return
+	var step: float = HEDGE_STEP_M * float([1.0, 2.0, 4.0][lod])
+	# The level's grid stations in the stretch, and its ends where they fall between them.
+	var stations := PackedFloat64Array()
+	var first := ceili(from_m / step - 0.001)
+	var last := floori(to_m / step + 0.001)
+	if absf(first * step - from_m) > 0.001:
+		stations.append(from_m)
+	for j in range(first, last + 1):
+		stations.append(j * step)
+	if absf(last * step - to_m) > 0.001:
+		stations.append(to_m)
+	var top := float(p.height)
+	var base := float(p.canopy_base)
+	var d := float(p.depth) * 0.5
+	var rounded := str(p.style) == "rounded"
+	# The profile across the hedge, [lateral, height] from its left foot over its top to its right foot.
+	var profile: Array[Vector2] = []
+	if rounded:
+		var mid := lerpf(base, top, 0.55)
+		var shoulder: Array = [[-0.78, base], [-0.98, lerpf(base, top, 0.22)], [-1.0, mid], [-0.9, top - 0.13], [-0.62, top - 0.02], [-0.2, top]] if lod < 2 else [[-0.85, base], [-1.0, mid], [-0.7, top - 0.04]]
+		for entry: Array in shoulder:
+			profile.append(Vector2(float(entry[0]) * d, float(entry[1])))
+	else:
+		profile.append_array([Vector2(-d, -BURY_M), Vector2(-d, top - 0.07), Vector2(-d + 0.07, top)])
+	for index in range(profile.size() - 1, -1, -1):
+		profile.append(Vector2(-profile[index].x, profile[index].y))
+	if rounded:
+		# Closed underneath, over the stems.
+		profile.append(profile[0])
+	var surface_key := str(p.surface)
+	if not surfs.has(surface_key):
+		surfs[surface_key] = Surf.new()
+	var core: Surf = surfs[surface_key]
+	var phases := Vector2(_hash01(seed, -1, 0) * TAU, _hash01(seed, -2, 0) * TAU)
+	var rings: Array[PackedInt32Array] = []
+	var frames: Array[Dictionary] = []
+	for station in stations:
+		var frame := _hedge_frame(points, lengths, station)
+		frames.append(frame)
+		var right: Vector3 = frame.right
+		var ground: Vector3 = frame.position
+		var index := roundi(station / HEDGE_STEP_M)
+		var on_grid := absf(station - index * HEDGE_STEP_M) < 0.001
+		# Slow lumps along the hedge, and each clipped station a little different.
+		var bulge := 0.03 * sin(station * 1.7 + phases.x) + 0.02 * sin(station * 4.1 + phases.y)
+		var ring := PackedInt32Array()
+		var perimeter := 0.0
+		for k in profile.size():
+			var corner := profile[k]
+			if k > 0:
+				perimeter += corner.distance_to(profile[k - 1])
+			var lateral := corner.x * (1.0 + bulge / maxf(d, 0.1))
+			var lift := corner.y
+			if on_grid and corner.y > base + 0.05:
+				lateral += signf(corner.x) * (_hash01(seed, index, k) - 0.5) * 0.05
+				if corner.y > top - 0.15:
+					lift += (_hash01(seed, index, k + 100) - 0.5) * 0.05 + bulge * 0.6
+			var previous := profile[maxi(k - 1, 0)]
+			var following := profile[mini(k + 1, profile.size() - 1)]
+			var edge := (following - previous).normalized()
+			# Outward: the profile runs from the left foot over the top to the right
+			# foot (and, rounded, back under), so its normal is the edge turned.
+			var outward_2d := Vector2(-edge.y, edge.x)
+			var normal := (right * outward_2d.x + Vector3.UP * outward_2d.y).normalized()
+			var position := ground + right * lateral + Vector3.UP * lift
+			var bottom := lift <= base + 0.01
+			var shade := 0.3 if bottom and rounded else lerpf(0.55, 1.0, clampf((lift - base) / maxf(top - base, 0.1), 0.0, 1.0))
+			ring.append(core.add(position, normal, Vector2(station / HEDGE_TILE_M, perimeter / HEDGE_TILE_M), Color(shade, shade, shade), Vector2(0.01 * pow(clampf(lift / top, 0.0, 1.0), 2.0), 0.0)))
+		rings.append(ring)
+	for i in rings.size() - 1:
+		for k in profile.size() - 1:
+			var a := rings[i][k]
+			var b := rings[i][k + 1]
+			core.quad(a, rings[i + 1][k], rings[i + 1][k + 1], b, core.normals[a] + core.normals[b])
+	# The hedge's own ends are capped, a little rounded.
+	for end in 2:
+		var station := stations[0] if end == 0 else stations[stations.size() - 1]
+		if (end == 0 and station > 0.001) or (end == 1 and station < total - 0.001):
+			continue
+		var frame: Dictionary = frames[0 if end == 0 else frames.size() - 1]
+		var ring: PackedInt32Array = rings[0 if end == 0 else rings.size() - 1]
+		var outward: Vector3 = (frame.tangent as Vector3) * (-1.0 if end == 0 else 1.0)
+		var centre := Vector3.ZERO
+		for vertex in ring:
+			centre += core.verts[vertex]
+		centre = centre / ring.size() + outward * 0.12
+		var middle := core.add(centre, outward, Vector2(0.5, 0.5), Color(0.8, 0.8, 0.8), Vector2(0.005, 0.0))
+		for k in profile.size() - 1:
+			core.tri(middle, ring[k], ring[k + 1], outward)
+	if lod == 2:
+		return
+	var sprig_cell: Rect2 = SHRUB_CELLS[str(p.sprigs)]
+	if not surfs.has("shrub_foliage"):
+		surfs["shrub_foliage"] = Surf.new()
+	var cards: Surf = surfs["shrub_foliage"]
+	var heart_lift := Vector3.UP * (top * 0.4)
+	for i in frames.size():
+		var station := stations[i]
+		var index := roundi(station / HEDGE_STEP_M)
+		# A station where two pieces meet carries its cards in the later piece only.
+		if absf(station - index * HEDGE_STEP_M) > 0.001 or (lod == 1 and index % 2 == 1) or (station > to_m - 0.001 and to_m < total - 0.001):
+			continue
+		var frame: Dictionary = frames[i]
+		var right: Vector3 = frame.right
+		var tangent: Vector3 = frame.tangent
+		var ground: Vector3 = frame.position
+		# Sprigs stand out of the top shoulders, alternating sides, and a few out of the middle.
+		var side := 1.0 if index % 2 == 0 else -1.0
+		var along := (_hash01(seed, index, 300) - 0.5) * 0.2
+		var at := ground + right * (side * d * 0.55) + tangent * along + Vector3.UP * (top - 0.04)
+		var width := 0.55 * lerpf(0.85, 1.15, _hash01(seed, index, 301))
+		var tall := 0.3 * lerpf(0.8, 1.2, _hash01(seed, index, 302))
+		var shade := lerpf(0.88, 1.04, _hash01(seed, index, 303))
+		var up := (Vector3.UP * 0.85 + right * side * 0.35).normalized()
+		for k in 2:
+			var facing := (right * side).rotated(Vector3.UP, PI * 0.5 * k + (_hash01(seed, index, 304 + k) - 0.5) * 0.5)
+			_foliage_card(cards, at, facing, up, width, tall, 0.3, 0.0, sprig_cell, Color(shade, shade, shade), ground + heart_lift, 0.4, top, 0.01, 0.02, lod == 0)
+		if lod == 0 and index % 2 == 0:
+			# A sprig out of a side face now and then, so the clipped sides aren't smooth.
+			var height_on_side := lerpf(base + 0.3, top - 0.25, _hash01(seed, index, 310))
+			var lateral := d * (0.98 if rounded else 1.0)
+			_foliage_card(cards, ground + right * (side * -1.0 * (lateral + 0.04)) + Vector3.UP * height_on_side, right * -side, Vector3.UP, 0.42, 0.34, 0.5,
+				(_hash01(seed, index, 311) - 0.5) * 1.2, sprig_cell, Color(shade * 0.9, shade * 0.9, shade * 0.9), ground + heart_lift, 0.3, top, 0.01, 0.02, true)
+		if rounded and index % 2 == 0:
+			# The leggy stems under the canopy, on both sides.
+			for flank: float in [1.0, -1.0]:
+				_foliage_card(cards, ground + right * (flank * d * 0.55) + Vector3.DOWN * 0.06, right * flank, Vector3.UP, 0.9, base + 0.22, 0.0, 0.0,
+					SHRUB_CELLS.hedge_stems, Color(0.55, 0.55, 0.55), ground + heart_lift, 0.2, top, 0.0, 0.0, lod == 0)
+
+
+## Where a hedge stands at distance along its line: {position (the visible
+## ground on its centre line), tangent (along it, smoothed over about a metre, so
+## bends come out rounded), right}.
+func _hedge_frame(points: PackedVector3Array, lengths: PackedFloat32Array, distance: float) -> Dictionary:
+	var position := _line_point(points, lengths, distance)
+	var ahead := _line_point(points, lengths, minf(distance + 0.5, lengths[lengths.size() - 1]))
+	var behind := _line_point(points, lengths, maxf(distance - 0.5, 0.0))
+	var tangent := Vector3(ahead.x - behind.x, 0.0, ahead.z - behind.z).normalized()
+	return {"position": position, "tangent": tangent, "right": tangent.cross(Vector3.UP).normalized()}
+
+
+func _line_point(points: PackedVector3Array, lengths: PackedFloat32Array, distance: float) -> Vector3:
+	for i in range(1, points.size()):
+		if distance <= lengths[i] or i == points.size() - 1:
+			var span := maxf(lengths[i] - lengths[i - 1], 0.0001)
+			return points[i - 1].lerp(points[i], clampf((distance - lengths[i - 1]) / span, 0.0, 1.0))
+	return points[0]
+
+
+## A straight 4 m run of a hedge variant, for form sheets: {lod0, lod1, far, ...}.
+func _build_hedge_sample(variant: int) -> Dictionary:
+	var points := PackedVector3Array([Vector3(-2.0, 0.0, 0.0), Vector3(2.0, 0.0, 0.0)])
+	var meshes: Array[ArrayMesh] = []
+	for lod in 3:
+		var surfs := {}
+		hedge_into(surfs, variant, points, 0.0, 4.0, lod, 801)
+		var mesh := ArrayMesh.new()
+		var keys := surfs.keys()
+		keys.sort()
+		for key: String in keys:
+			(surfs[key] as Surf).commit(mesh, material(key))
+		meshes.append(mesh)
+	return {"lod0": meshes[0], "lod1": meshes[1], "far": meshes[2], "crown_surface": -1, "top_m": float(HEDGES[variant].height), "capsules": []}
 
 
 # --- Clumping grass ------------------------------------------------------------------------------
@@ -1985,6 +3193,28 @@ func material(key: String) -> Material:
 			made = _bark("gum_bark.png", Color(0.95, 0.95, 0.93))
 		"oak_bark":
 			made = _bark("oak_bark.png", Color(0.85, 0.83, 0.8))
+		"pine_bark":
+			made = _bark("pine_bark.png", Color(0.9, 0.88, 0.86))
+		"pine_foliage":
+			made = _foliage("pine_foliage_atlas.png", Color(0.84, 0.88, 0.82), Color(0.05, 0.08, 0.03), Vector2(1024.0, 512.0), 0.08, 0.9)
+		"broadleaf_bark":
+			made = _bark("broadleaf_bark.png", Color(0.92, 0.9, 0.88))
+		"christmas_bark":
+			made = _bark("christmas_bark.png", Color(0.95, 0.94, 0.92))
+		"broadleaf_foliage":
+			made = _foliage("broadleaf_foliage_atlas.png", Color(0.88, 0.9, 0.84), Color(0.08, 0.1, 0.03), Vector2(1024.0, 1024.0), 0.12, 0.8)
+		"eucalyptus_bark":
+			made = _bark("eucalyptus_bark.png", Color(0.92, 0.91, 0.9))
+		"set_piece_foliage":
+			made = _foliage("set_piece_foliage_atlas.png", Color(0.9, 0.92, 0.88), Color(0.08, 0.1, 0.04), Vector2(1024.0, 1024.0), 0.1, 0.85)
+		"shrub_foliage":
+			made = _foliage("shrub_foliage_atlas.png", Color(0.9, 0.92, 0.88), Color(0.08, 0.1, 0.04), Vector2(2048.0, 1024.0), 0.12, 0.82)
+		"hedge_leaves":
+			made = _bark("hedge_surface.png", Color(0.86, 0.9, 0.84))
+		"glossy_hedge_leaves":
+			made = _bark("escallonia_surface.png", Color(0.86, 0.9, 0.86))
+			made.set_shader_parameter("specular", 0.35)
+			made.set_shader_parameter("roughness", 0.65)
 	made.set_shader_parameter("wind_strength", wind_strength)
 	made.resource_name = "street_vegetation_" + key
 	_materials[key] = made

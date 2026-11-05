@@ -2,8 +2,10 @@
 
 The textures of the street-vegetation kit (`game/scripts/world/street_vegetation_kit.gd`):
 the Mexican fan palm, the Canary Island date palm, the Monterey cypress, the
-clumping grass, and Cityside Park's young gums and oaks, grasses, perennials and
-shrubs of `PlayableWorld/StreetDetail/Vegetation`, drawn by
+clumping grass, Cityside Park's young gums and oaks, grasses, perennials and
+shrubs, and the island-wide rollout's pines, broadleaves, Christmas trees,
+eucalyptus, Norfolk Island pine, Avenue N shrubs, flax and clipped hedges, of
+`PlayableWorld/StreetDetail/Vegetation`, drawn by
 `game/resources/materials/world/vegetation/vegetation_{bark,foliage,impostor}.gdshader`,
 and the park beds' mulch and gravel.
 
@@ -12,7 +14,8 @@ generation, one image per call, text prompts only; no photograph was given to th
 generator or copied): the palm leaf, palm boot, palm and cypress bark and cypress
 foliage images on 2026-11-02 for the tree shootout (its variant A), the palms' other
 images and the clumping grass on 2026-11-03 for the street-vegetation pilot, and the
-Cityside Park plants' and the park ground's on 2026-11-03 (cityside-plants-20261103).
+Cityside Park plants' and the park ground's on 2026-11-03 (cityside-plants-20261103),
+and the rollout models' on 2026-11-05 (vegetation-models-20261105).
 `tools/vegetation/prepare_textures.gd` packs them (`--only` packs a set at a time):
 it keys the flat magenta (or, behind pink, lilac and blue flowers, cyan) backgrounds
 of the leaf and grass images into alpha, removes the key's spill, refills transparent
@@ -42,4 +45,12 @@ after any kit geometry change.
 | `gum_bark.png` | the young gum's trunk and branches, 512 px per 0.7 m; tinted tan, its tree stakes | seamless smooth pale bark of a young Sydney blue gum, white-grey and cream with pale blue-grey and grey-green patches and a few peeling strips |
 | `oak_bark.png` | the young oak's stems and limbs, 512 px per 0.5 m | seamless smooth grey-brown young oak bark with faint fissures and lichen spots |
 | `park_mulch.png`, `park_gravel.png` | the park beds' ground, 512 px per 2 m like `street_mulch.png`: grey-brown shredded wood mulch and grey pea gravel (Cityside Park's beds) | seamless shredded wood-chip mulch in dark grey-brown; seamless rounded grey pea gravel |
-| `impostors/*.png` | each tree variant's far impostor: its LOD0 crown (palms) or whole tree (cypress, gum, oak), baked by `tools/vegetation/bake_impostors.gd` under flat white light | (rendered from the kit, not generated) |
+| `pine_foliage_atlas.png` | 1024 x 512: a Monterey pine branch end of needle tufts from the side (0,0)-(512,512) and a face-on cluster of tufts (512,0)-(1024,512), kept clear of its cell's edges; both graded darker and bluer | one Monterey pine branch end from the side: shoots ending in dense brush-like tufts of long dark green needles, sunlit yellow-green tips, small cones, on magenta; a dense round cluster of brush-like needle tufts seen face-on from outside the crown, on magenta |
+| `pine_bark.png` | the pine's trunk and limbs, 512 px per 1 m | seamless dark grey-brown Monterey pine bark of thick ridges and deep furrows, the ridges flattened into long plates |
+| `broadleaf_foliage_atlas.png` | 1024 x 1024: the spreading broadleaf's drooping clump of narrow glossy olive leaves (0,0)-(512,512) and the same with bronze young leaves (512,0)-(1024,512), graded duller; the Christmas tree's leathery leaf rosettes (0,512)-(512,1024) and the same with red brush flowers (512,512)-(1024,1024); each kept clear of its cell's edges | a drooping clump of narrow lance-shaped glossy olive-green leaves crowded at twig ends, on magenta (and with about half the leaves reddish-bronze); a dense round cluster of thick leathery oval dark glossy leaves with some silvery undersides, on magenta (and with four crimson brush flowers, on cyan) |
+| `broadleaf_bark.png`, `christmas_bark.png` | the broadleaf's and the Christmas tree's trunks, 512 px per 0.9 m and 0.8 m | seamless grey corky bark with fine interlacing fissures and lichen patches; seamless smooth pale grey bark with faint striations and thin flaky patches |
+| `set_piece_foliage_atlas.png` | 1024 x 1024: a eucalyptus's drooping tassel of sickle leaves in the tall left cell (0,0)-(512,1024), keeping its proportions, its twig at the top edge; a Norfolk Island pine branch from above (512,0)-(1024,512) and from the side (512,512)-(1024,1024) | one long drooping eucalyptus branch tip of narrow grey-green sickle leaves in loose tassels, on magenta; a young Norfolk Island pine branch seen from above, rope-like branchlets in two rows like a fern frond, and seen from the side, the branchlets turned up like comb teeth, bright yellow-green, on magenta |
+| `eucalyptus_bark.png` | the mature eucalyptus's trunks, 512 px per 1.2 m, graded greyer | seamless smooth grey, tan and cream mature eucalyptus bark with strips of shedding grey-brown bark |
+| `shrub_foliage_atlas.png` | 2048 x 1024 in 512 x 512 cells (`SHRUB_CELLS` in the kit), each image cropped to its plant and stretched to fill its cell (the face-on clusters kept clear of the edges). Row 0: Indian hawthorn, Pittosporum tobira, the red-tipped shrub's stems, the upright olive shrub; row 1: the residential hedge's sprigs, the glossy hedge's sprigs, a hedge's bare lower stems, one dark red flax leaf | November: round leathery hawthorn leaves with a few pale pink flower clusters (on cyan); glossy rounded leaves in whorled rosettes; slender reddish stems with green leaves and coppery red tips (on cyan); narrow olive leaves with bronze tips; leafy sprigs of a small-leaved clipped hedge from the side; the same with small glossy dark leaves and a few white flowers; crooked dark woody stems under a hedge; one straight dark burgundy strap leaf of New Zealand flax (on cyan) |
+| `hedge_surface.png`, `escallonia_surface.png` | the clipped hedges' leafy cores, 512 px per 0.7 m | seamless clipped surface of a small-leaved evergreen hedge, a dense mat of tiny dull green leaves; seamless clipped surface of a hedge of small glossy dark leaves with scattered tiny white flowers |
+| `impostors/*.png` | each tree, shrub and flax variant's far impostor: its LOD0 crown (palms) or the whole plant (the others), baked by `tools/vegetation/bake_impostors.gd` under flat white light | (rendered from the kit, not generated) |

@@ -1,7 +1,7 @@
 extends SceneTree
-## Bakes the far-impostor image of every tree variant of the street-vegetation
-## kit (game/scripts/world/street_vegetation_kit.gd) from its LOD0, framed as
-## the kit frames it (a palm's crown, a whole cypress, gum or oak), and writes
+## Bakes the far-impostor image of every tree, shrub and flax variant of the
+## street-vegetation kit (game/scripts/world/street_vegetation_kit.gd) from its
+## LOD0, framed as the kit frames it (a palm's crown, any other whole plant), and writes
 ## them to game/resources/textures/world/vegetation/impostors/. The bake is lit
 ## by flat white ambient light only, with the breeze off, so the image holds
 ## the leaves' colour and shading; the game lights the impostor at runtime.
@@ -15,7 +15,11 @@ extends SceneTree
 const Kit := preload("res://game/scripts/world/street_vegetation_kit.gd")
 const TextureImport := preload("res://tools/vegetation/texture_import.gd")
 ## Longest side of the saved image per prop; the bake renders at twice this and halves it.
-const PIXELS := {"mexican_fan_palm": 256, "canary_date_palm": 256, "monterey_cypress": 512, "sydney_blue_gum_young": 256, "island_oak_young": 256}
+const PIXELS := {
+	"mexican_fan_palm": 256, "canary_date_palm": 256, "monterey_cypress": 512, "sydney_blue_gum_young": 256, "island_oak_young": 256,
+	"monterey_pine": 512, "spreading_broadleaf": 512, "nz_christmas_tree": 384, "eucalyptus_mature": 512, "norfolk_island_pine": 256,
+	"indian_hawthorn": 256, "pittosporum_tobira": 256, "red_tip_shrub": 128, "conical_shrub": 256, "nz_flax": 128,
+}
 
 var _errors: Array[String] = []
 

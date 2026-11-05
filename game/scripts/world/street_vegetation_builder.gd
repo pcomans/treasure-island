@@ -21,6 +21,12 @@ extends RefCounted
 ## the camera arm ignores it, as for the street furniture. Crowns and low plants
 ## have none, so the jetpack flies through a crown. A tree standing in paving
 ## gets its round mulch pit, drawn just above the paving's plane.
+##
+## A hedge row (a vegetation line row of kind hedge carrying a hedge prop; the
+## kit's hedge_into lays it) is cut into pieces of HEDGE_PIECE_STATIONS
+## stations, and the pieces in each tree cell are merged into one mesh per
+## detail level (the leafy core, its sprigs and stems), the levels sharing one
+## box like the trees'. Hedges have no collision.
 
 const KIT := preload("res://game/scripts/world/street_vegetation_kit.gd")
 const MULCH := preload("res://game/resources/textures/world/street/street_mulch.png")
@@ -52,15 +58,26 @@ func build(document: Dictionary) -> Dictionary:
 	# render cell -> [{center, radius, slope}]
 	var wells: Dictionary = {}
 	var capsules: Dictionary = {}
+	# tree cell -> [{variant, points, from_m, to_m, seed}]
+	var hedges: Dictionary = {}
 	var prop_counts: Dictionary = {}
 	var trees := 0
 	var grass := 0
+	var hedge_rows := 0
 	for row_value: Variant in document.get("rows", []):
 		var row: Dictionary = row_value
 		if str(row.get("status", "")) != "placed" or str(row.get("layer", "")) != "vegetation" or not row.get("prop", null) is String:
 			continue
 		var prop := str(row.prop)
 		var params: Variant = row.get("prop_params", null)
+		if KIT.is_hedge(prop):
+			var hedge_problem := _add_hedge(hedges, row)
+			if hedge_problem != "":
+				root.free()
+				return {"ok": false, "code": "street_vegetation_prop", "message": "%s: %s" % [row.get("id", "?"), hedge_problem], "source_keys": []}
+			prop_counts[prop] = int(prop_counts.get(prop, 0)) + 1
+			hedge_rows += 1
+			continue
 		var problem := KIT.params_error(prop, str(row.get("kind", "")), params)
 		if problem != "":
 			root.free()
@@ -164,6 +181,10 @@ func build(document: Dictionary) -> Dictionary:
 		instance.visibility_range_end = WELL_RANGE_M
 		instance.set_meta("street_detail_layer", "vegetation")
 		root.add_child(instance)
+	var hedge_cells: Array = hedges.keys()
+	hedge_cells.sort()
+	for cell: String in hedge_cells:
+		_build_hedge_cell(root, kit, cell, hedges[cell])
 	var shape_count := 0
 	var shape_cells: Array = shapes.keys()
 	shape_cells.sort()
@@ -196,11 +217,90 @@ func build(document: Dictionary) -> Dictionary:
 		"node": root,
 		"trees": trees,
 		"grass_clumps": grass,
+		"hedges": hedge_rows,
 		"prop_counts": prop_counts,
 		"multimesh_batches": multimeshes,
 		"mulch_pits": well_cells.size(),
 		"collision_shapes": shape_count,
 	}
+
+
+## Checks a hedge row and files its pieces under the tree cells of their
+## middles: {variant, points (x, the visible ground's height, z), from_m, to_m,
+## seed}. Returns what is wrong with the row, or "".
+func _add_hedge(hedges: Dictionary, row: Dictionary) -> String:
+	var points_value: Variant = row.get("points_m", null)
+	if str(row.get("geometry", "")) != "line" or not points_value is Array:
+		return "a hedge needs a line of points_m"
+	var line: Array = points_value
+	var problem := KIT.line_params_error(str(row.prop), str(row.get("kind", "")), row.get("prop_params", null), line.size())
+	if problem != "":
+		return problem
+	var ground: Array = row.prop_params.ground_y_m
+	var points := PackedVector3Array()
+	for index in line.size():
+		var point: Variant = line[index]
+		if not point is Array or (point as Array).size() != 3 or not (point[0] is float or point[0] is int) or not (point[2] is float or point[2] is int):
+			return "a hedge point must be [x, y, z]"
+		points.append(Vector3(float(point[0]), float(ground[index]), float(point[2])))
+	var total := 0.0
+	for index in range(1, points.size()):
+		total += Vector2(points[index].x - points[index - 1].x, points[index].z - points[index - 1].z).length()
+	if total < 0.1:
+		return "a hedge must be at least 0.1 m long"
+	var piece := KIT.HEDGE_PIECE_STATIONS * KIT.HEDGE_STEP_M
+	var seed := hash(str(row.get("id", "")))
+	var from := 0.0
+	while from < total - 0.001:
+		var to := minf(from + piece, total)
+		var lengths := 0.0
+		var middle := points[0]
+		# The piece's middle, for its cell.
+		for index in range(1, points.size()):
+			var span := Vector2(points[index].x - points[index - 1].x, points[index].z - points[index - 1].z).length()
+			if lengths + span >= (from + to) * 0.5 or index == points.size() - 1:
+				middle = points[index - 1].lerp(points[index], clampf(((from + to) * 0.5 - lengths) / maxf(span, 0.0001), 0.0, 1.0))
+				break
+			lengths += span
+		var cell := _cell(middle, TREE_CELL_M)
+		if not hedges.has(cell):
+			hedges[cell] = []
+		(hedges[cell] as Array).append({"variant": int(row.prop_params.variant), "points": points, "from_m": from, "to_m": to, "seed": seed})
+		from = to
+	return ""
+
+
+## One cell's hedge pieces merged into a mesh per detail level (the kit's
+## clipped_hedge ranges), the levels sharing the union of their boxes so they
+## hand over at one distance.
+func _build_hedge_cell(root: Node3D, kit: KIT, cell: String, pieces: Array) -> void:
+	var ranges: Array = KIT.PROPS.clipped_hedge.ranges
+	var meshes: Array[ArrayMesh] = []
+	var box := AABB()
+	for lod in 3:
+		var surfs := {}
+		for piece: Dictionary in pieces:
+			kit.hedge_into(surfs, int(piece.variant), piece.points, float(piece.from_m), float(piece.to_m), lod, int(piece.seed))
+		var mesh := ArrayMesh.new()
+		var keys: Array = surfs.keys()
+		keys.sort()
+		for key: String in keys:
+			surfs[key].commit(mesh, kit.material(key))
+		meshes.append(mesh)
+		box = mesh.get_aabb() if lod == 0 else box.merge(mesh.get_aabb())
+	for lod in 3:
+		var instance := MeshInstance3D.new()
+		instance.name = "Hedges_%s__c%s" % [["lod0", "lod1", "far"][lod], cell]
+		meshes[lod].custom_aabb = box
+		instance.mesh = meshes[lod]
+		instance.layers = RENDER_WORLD_VISIBLE
+		instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON if lod < 2 else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		instance.visibility_range_begin = 0.0 if lod == 0 else float(ranges[lod - 1])
+		instance.visibility_range_end = float(ranges[lod])
+		instance.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_DISABLED
+		instance.set_meta("street_detail_layer", "vegetation")
+		instance.set_meta("placement_count", pieces.size())
+		root.add_child(instance)
 
 
 ## A trunk capsule from one cap centre to the other (world space), shared by

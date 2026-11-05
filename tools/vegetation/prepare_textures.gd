@@ -2,8 +2,8 @@ extends SceneTree
 ## Packs the street-vegetation textures (game/resources/textures/world/vegetation/)
 ## from the untouched generated source images, which stay outside Git with the
 ## vegetation work notes (the texture README names each one's prompt). Keys the
-## flat magenta (or, behind pink and lilac flowers, cyan) backgrounds of the leaf
-## and grass images into alpha, removes the key colour's spill, fills transparent
+## flat magenta (or, behind pink, lilac and red flowers and red leaves, cyan)
+## backgrounds of the leaf and grass images into alpha, removes the key colour's spill, fills transparent
 ## pixels with nearby leaf colour (so mipmaps don't halo), grades and packs the
 ## atlases whose cells game/scripts/world/street_vegetation_kit.gd reads, and
 ## resizes the tiled barks. Writes each PNG's `.import` beside it
@@ -27,6 +27,39 @@ const SETS := {
 	"perennial": PERENNIAL_CELLS,
 	"young_trees": ["gum_leaves.png", "oak_leaves.png", "gum_bark.png", "oak_bark.png"],
 	"park_ground": ["park_mulch.png", "park_gravel.png"],
+	"pine": ["pine_tufts_side.png", "pine_cluster_face.png", "pine_bark.png"],
+	"broadleaf": ["broadleaf_clump.png", "broadleaf_bronze.png", "christmas_clump.png", "christmas_flowers.png", "broadleaf_bark.png", "christmas_bark.png"],
+	"set_pieces": ["eucalyptus_hanging.png", "norfolk_branch_top.png", "norfolk_branch_side.png", "eucalyptus_bark.png"],
+	"shrubs": [
+		"hawthorn.png", "pittosporum.png", "red_tip.png", "upright_shrub.png",
+		"hedge_sprigs.png", "escallonia_sprigs.png", "hedge_stems.png", "phormium_leaf.png",
+		"hedge_surface.png", "escallonia_surface.png",
+	],
+}
+## The shrub atlas's 512 x 512 cells, row by row in 2048 x 1024 (SHRUB_CELLS in
+## the kit): face-on clusters of the Avenue N shrubs, the hedges' sprigs and
+## stems from the side, and the flax leaf.
+const SHRUB_CELL_SOURCES := [
+	"hawthorn.png", "pittosporum.png", "red_tip.png", "upright_shrub.png",
+	"hedge_sprigs.png", "escallonia_sprigs.png", "hedge_stems.png", "phormium_leaf.png",
+]
+## The rollout models' leaf images graded toward the dated Street View crops:
+## [tint, desaturation]. The generated pine came out greener and yellower than
+## the dark blue-green crowns of p1-p6, the bronze clump orange rather than the
+## dull reddish-bronze of b1/b3, the upright shrub too red for s3's olive.
+const ROLLOUT_GRADES := {
+	"pine_tufts_side.png": [Color(0.8, 0.88, 0.84), 0.25],
+	"pine_cluster_face.png": [Color(0.76, 0.84, 0.8), 0.3],
+	"broadleaf_clump.png": [Color(0.92, 0.94, 0.86), 0.1],
+	"broadleaf_bronze.png": [Color(0.86, 0.82, 0.74), 0.4],
+	"christmas_clump.png": [Color(0.9, 0.94, 0.9), 0.1],
+	"christmas_flowers.png": [Color(0.9, 0.94, 0.9), 0.05],
+	"eucalyptus_hanging.png": [Color(0.9, 0.95, 0.95), 0.25],
+	"norfolk_branch_top.png": [Color(0.94, 0.96, 0.9), 0.15],
+	"norfolk_branch_side.png": [Color(0.94, 0.96, 0.9), 0.15],
+	"hawthorn.png": [Color(0.92, 0.95, 0.9), 0.1],
+	"upright_shrub.png": [Color(0.88, 0.94, 0.86), 0.35],
+	"hedge_stems.png": [Color(0.8, 0.78, 0.76), 0.3],
 }
 ## The meadow atlas's 512 x 512 cells, row by row in 2048 x 2048 (LOW_CELLS in
 ## the kit): side views drawn on crossed cards, and the litter.
@@ -46,7 +79,7 @@ const PERENNIAL_CELLS := [
 const MAGENTA := Color(1.0, 0.0, 1.0)
 const CYAN := Color(0.0, 1.0, 1.0)
 ## Sources generated on cyan, so their pink, lilac and blue flowers survive the key.
-const ON_CYAN := ["blue_eyed_grass.png", "thrift_stalks.png", "daisy_flowers.png", "sage_side.png"]
+const ON_CYAN := ["blue_eyed_grass.png", "thrift_stalks.png", "daisy_flowers.png", "sage_side.png", "christmas_flowers.png", "hawthorn.png", "red_tip.png", "phormium_leaf.png"]
 ## Pixels a low-plant image keeps clear round its atlas cell's edge, so mipmaps
 ## don't pull a neighbouring cell's leaves into a card's outline.
 const CELL_MARGIN := 8
@@ -266,6 +299,86 @@ func _pack_park_ground(images: Dictionary, errors: Array[String]) -> void:
 		"park_mulch.png": ["park_mulch.png", Color(0.72, 0.7, 0.68), 0.2],
 		"park_gravel.png": ["park_gravel.png", Color(0.62, 0.62, 0.62), 0.1],
 	}, errors)
+
+
+## The Monterey pine: its foliage atlas, 1024 x 512, a branch end of tufts from
+## the side (0,0)-(512,512) and a face-on cluster (512,0)-(1024,512), the cluster
+## kept clear of its cell's edges so a card never shows a straight cut through
+## the needles; and its tiled bark.
+func _pack_pine(images: Dictionary, errors: Array[String]) -> void:
+	var atlas := Image.create_empty(1024, 512, false, Image.FORMAT_RGBA8)
+	_pack_cell(atlas, images, "pine_tufts_side.png", Rect2i(0, 0, 512, 512), CELL_MARGIN)
+	_pack_cell(atlas, images, "pine_cluster_face.png", Rect2i(512, 0, 512, 512), CELL_MARGIN + 40)
+	_fill_transparent(atlas)
+	_save(atlas, OUT + "pine_foliage_atlas.png", errors)
+	_save_barks(images, {"pine_bark.png": ["pine_bark.png", Color(1.0, 1.0, 1.0), 0.0]}, errors)
+
+
+## The broadleaf atlas, 1024 x 1024 (BROADLEAF_* and CHRISTMAS_* in the kit):
+## the spreading broadleaf's drooping clump and its bronze-tipped clump on top,
+## the Christmas tree's leaf rosettes, plain and in flower, below, each kept
+## clear of its cell's edges; and the two trees' tiled barks.
+func _pack_broadleaf(images: Dictionary, errors: Array[String]) -> void:
+	var atlas := Image.create_empty(1024, 1024, false, Image.FORMAT_RGBA8)
+	_pack_cell(atlas, images, "broadleaf_clump.png", Rect2i(0, 0, 512, 512), CELL_MARGIN + 24)
+	_pack_cell(atlas, images, "broadleaf_bronze.png", Rect2i(512, 0, 512, 512), CELL_MARGIN + 24)
+	_pack_cell(atlas, images, "christmas_clump.png", Rect2i(0, 512, 512, 512), CELL_MARGIN + 40)
+	_pack_cell(atlas, images, "christmas_flowers.png", Rect2i(512, 512, 512, 512), CELL_MARGIN + 40)
+	_fill_transparent(atlas)
+	_save(atlas, OUT + "broadleaf_foliage_atlas.png", errors)
+	_save_barks(images, {
+		"broadleaf_bark.png": ["broadleaf_bark.png", Color(1.0, 1.0, 1.0), 0.1],
+		"christmas_bark.png": ["christmas_bark.png", Color(1.0, 1.0, 1.0), 0.0],
+	}, errors)
+
+
+## The set pieces' atlas, 1024 x 1024 (EUCALYPTUS_TASSEL and NORFOLK_* in the
+## kit): the eucalyptus tassel in the tall left cell, keeping its proportions,
+## centred with its twig along the top edge; a Norfolk Island pine branch from
+## above and from the side in the right column's upper cells; and the
+## eucalyptus's tiled bark, a little greyer than generated (n2's trunks).
+func _pack_set_pieces(images: Dictionary, errors: Array[String]) -> void:
+	var atlas := Image.create_empty(1024, 1024, false, Image.FORMAT_RGBA8)
+	var tassel := _key(images["eucalyptus_hanging.png"], MAGENTA)
+	var leaf := tassel.get_region(_solid_rect(tassel))
+	_fill_transparent(leaf)
+	var room := Vector2i(512 - 2 * CELL_MARGIN, 1024 - 2 * CELL_MARGIN)
+	var fit := minf(float(room.x) / leaf.get_width(), float(room.y) / leaf.get_height())
+	leaf.resize(maxi(1, int(leaf.get_width() * fit)), maxi(1, int(leaf.get_height() * fit)), Image.INTERPOLATE_LANCZOS)
+	_fill_transparent(leaf)
+	_grade(leaf, ROLLOUT_GRADES["eucalyptus_hanging.png"][0], ROLLOUT_GRADES["eucalyptus_hanging.png"][1])
+	atlas.blit_rect(leaf, Rect2i(Vector2i.ZERO, leaf.get_size()), Vector2i((512 - leaf.get_width()) / 2, CELL_MARGIN))
+	_pack_cell(atlas, images, "norfolk_branch_top.png", Rect2i(512, 0, 512, 512), CELL_MARGIN)
+	_pack_cell(atlas, images, "norfolk_branch_side.png", Rect2i(512, 512, 512, 512), CELL_MARGIN)
+	_fill_transparent(atlas)
+	_save(atlas, OUT + "set_piece_foliage_atlas.png", errors)
+	_save_barks(images, {"eucalyptus_bark.png": ["eucalyptus_bark.png", Color(0.94, 0.92, 0.9), 0.2]}, errors)
+
+
+## The shrub atlas, 2048 x 1024 (SHRUB_CELL_SOURCES; SHRUB_CELLS in the kit), the
+## face-on clusters kept clear of their cells' edges; and the hedges' two tiled
+## clipped-leaf surfaces.
+func _pack_shrubs(images: Dictionary, errors: Array[String]) -> void:
+	var atlas := Image.create_empty(2048, 1024, false, Image.FORMAT_RGBA8)
+	for index in SHRUB_CELL_SOURCES.size():
+		var name: String = SHRUB_CELL_SOURCES[index]
+		var inset := CELL_MARGIN + (40 if name in ["hawthorn.png", "pittosporum.png", "upright_shrub.png"] else 0)
+		_pack_cell(atlas, images, name, Rect2i(512 * (index % 4), 512 * (index / 4), 512, 512), inset)
+	_fill_transparent(atlas)
+	_save(atlas, OUT + "shrub_foliage_atlas.png", errors)
+	_save_barks(images, {
+		"hedge_surface.png": ["hedge_surface.png", Color(0.9, 0.95, 0.9), 0.1],
+		"escallonia_surface.png": ["escallonia_surface.png", Color(0.95, 1.0, 0.95), 0.0],
+	}, errors)
+
+
+## Keys a source on its background, crops it to the plant, stretches it to fill
+## cell less inset all round, grades it (ROLLOUT_GRADES) and blits it in.
+func _pack_cell(atlas: Image, images: Dictionary, name: String, cell: Rect2i, inset: int) -> void:
+	var image := _keyed_fit(images[name], cell.size.x - 2 * inset, cell.size.y - 2 * inset, CYAN if name in ON_CYAN else MAGENTA)
+	if ROLLOUT_GRADES.has(name):
+		_grade(image, ROLLOUT_GRADES[name][0], ROLLOUT_GRADES[name][1])
+	atlas.blit_rect(image, Rect2i(Vector2i.ZERO, image.get_size()), cell.position + Vector2i(inset, inset))
 
 
 func _load(path: String, errors: Array[String]) -> Image:

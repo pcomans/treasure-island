@@ -1175,6 +1175,7 @@ function validateStreetDetail(worldRoot, manifest, records) {
       });
       invariant((row.kind === "fence") === (row.fence !== undefined), `${row.id}: every fence row, and only a fence row, carries a fence block`);
       if (row.fence !== undefined) validateFenceRow(row, grounded, inBoundary, groundAt);
+      if (row.layer === "vegetation" && row.prop !== undefined) validateHedgeRow(row, groundAt);
     }
   }
   const builtFences = new Set(rows.filter((row) => row.fence && row.prop !== undefined).map((row) => row.id));
@@ -1189,6 +1190,22 @@ function validateStreetDetail(worldRoot, manifest, records) {
   invariant(stableJson(document.counts.by_source) === stableJson(tally("source", STREET_DETAIL_SOURCES)), "Street-detail source counts differ from its rows");
   invariant(stableJson(document.counts.by_status) === stableJson(tally("status", ["excluded", "placed"])), "Street-detail status counts differ from its rows");
   return document;
+}
+
+// A planted hedge: a kit hedge prop of a placed hedge row, a variant, and the
+// visible ground's height under each of its points (ground_y_m), where the kit
+// lays it (street_vegetation_kit.gd hedge_into), within a centimetre and a half
+// of the visible ground there.
+function validateHedgeRow(row, groundAt) {
+  const spec = STREET_VEGETATION_PROPS[row.prop];
+  invariant(spec && spec.kinds.includes(row.kind) && row.kind === "hedge" && row.status === "placed", `${row.id} prop ${row.prop} does not plant a placed hedge`);
+  const params = row.prop_params ?? {};
+  invariant(Number.isInteger(params.variant) && params.variant >= 0 && params.variant < spec.variants, `${row.id} variant is invalid`);
+  invariant(Array.isArray(params.ground_y_m) && params.ground_y_m.length === row.points_m.length && params.ground_y_m.every(Number.isFinite), `${row.id} needs the visible ground's height under each point`);
+  row.points_m.forEach((point, index) => {
+    const ground = groundAt([point[0], point[2]]);
+    invariant(ground && Math.abs(ground.y - params.ground_y_m[index]) <= 0.015, `${row.id} point ${index} is ${ground ? `${(params.ground_y_m[index] - ground.y).toFixed(3)} m off` : "off"} the visible ground`);
+  });
 }
 
 // A fence row: its kit type, openings along the line and solid runs of grounded
