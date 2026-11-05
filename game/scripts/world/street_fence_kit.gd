@@ -611,7 +611,13 @@ func _picket_fence(cells: Dictionary, cell_size_m: float, posts: PackedVector3Ar
 		var metal: FURNITURE.Builder = _cell(cells, cell_size_m, posts[index]).metal
 		var foot := posts[index]
 		metal.tube(PackedVector3Array([foot + Vector3(0, -0.3, 0), foot + Vector3(0, height + 0.04, 0)]), PackedFloat32Array([0.04, 0.04]), 4, PICKET_BLACK, FURNITURE.CELL_METAL, false, true)
-		metal.tube(PackedVector3Array([foot + Vector3(0, height + 0.04, 0), foot + Vector3(0, height + 0.08, 0), foot + Vector3(0, height + 0.12, 0)]), PackedFloat32Array([0.035, 0.045, 0.0]), 6, PICKET_BLACK, FURNITURE.CELL_METAL, false, true)
+		# A square cap plate, a neck and a ball finial (the Mersea lot's posts, Sep 2025).
+		var finial := PackedVector3Array()
+		var finial_radii := PackedFloat32Array()
+		for profile: Vector2 in [Vector2(0.04, 0.055), Vector2(0.06, 0.055), Vector2(0.07, 0.022), Vector2(0.09, 0.04), Vector2(0.115, 0.05), Vector2(0.14, 0.04), Vector2(0.16, 0.0)]:
+			finial.append(foot + Vector3(0, height + profile.x, 0))
+			finial_radii.append(profile.y)
+		metal.tube(finial, finial_radii, 8, PICKET_BLACK, FURNITURE.CELL_METAL, false, true)
 	for index in posts.size() - 1:
 		var a := posts[index]
 		var b := posts[index + 1]

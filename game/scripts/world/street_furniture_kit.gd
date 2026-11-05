@@ -775,9 +775,10 @@ static func _frame(x_axis: Vector3, y_axis: Vector3) -> Basis:
 	return Basis(x, y, x.cross(y))
 
 
-## An inverted-U bike rack ("staple") of dark painted tube, its loop along X
-## (Ave of the Palms at Johnson St, Nov 2025): `hoops` of them in a row along Z,
-## BIKE_RACK_HOOP_SPACING_M apart and centred on the origin.
+## An inverted-U bike rack ("staple") of dark powder-coated tube, its loop
+## along X (Ave of the Palms at Johnson St, Nov 2025), each leg on a square base
+## flange: `hoops` of them in a row along Z, BIKE_RACK_HOOP_SPACING_M apart and
+## centred on the origin.
 func _bike_rack(b: Builder, hoops: int) -> void:
 	for hoop in hoops:
 		var z := BIKE_RACK_HOOP_SPACING_M * (float(hoop) - float(hoops - 1) * 0.5)
@@ -789,7 +790,9 @@ func _bike_rack(b: Builder, hoops: int) -> void:
 			radii.append(0.026)
 		path.append(Vector3(0.36, -0.1, z))
 		radii.append(0.026)
-		b.tube(path, radii, 8, RACK_DARK, CELL_WHITE, false, false)
+		b.tube(path, radii, 8, RACK_DARK, CELL_METAL, false, false)
+		for x: float in [-0.36, 0.36]:
+			b.box(Vector3(x, 0.008, z), Basis.IDENTITY, Vector3(0.13, 0.016, 0.13), RACK_DARK * 1.15, CELL_METAL)
 
 
 # ---------------------------------------------------------------- Cityside Park

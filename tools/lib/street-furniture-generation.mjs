@@ -11,7 +11,7 @@
 //     a drive, lights around a parking lot). Every rule says it is production
 //     inference and names its dated photo evidence.
 // Only pilot zones get props; other rows stay data until the rollout, except the
-// kinds built island-wide (ISLAND_OSM_KINDS).
+// kinds built island-wide (ISLAND_FURNITURE_KINDS).
 //
 // Plan geometry here is east/north (the ground generator's frame); rows use
 // world x, z with z = -north. A prop's front is its local -Z (the lamp arm, the
@@ -130,8 +130,8 @@ const OSM_PROPS = Object.freeze({
 // OSM kinds built across the whole island (the street-clutter rollout), not
 // only in the pilot zones: benches, waste baskets and bike racks at their OSM
 // nodes. One whose node lies on a road or path moves beside it (ISLAND_NUDGES_M).
-const ISLAND_OSM_KINDS = Object.freeze(["bench", "bicycle_parking", "waste_basket"]);
-const ISLAND_NUDGES_M = Object.freeze([0.6, 1.2, 1.8, 2.4]);
+const ISLAND_FURNITURE_KINDS = Object.freeze(["bench", "bicycle_parking", "waste_basket"]);
+const ISLAND_NUDGES_M = Object.freeze([0.6, 1.2, 1.8, 2.4, 3.0, 3.6, 4.2]);
 // ... and one whose node lies on ground drawn off its surface's height (a
 // verge's sloped back, which the street ground's surface query does not give)
 // moves to the nearest level spot: the visible ground within this of the
@@ -291,7 +291,7 @@ export function placeStreetFurniture({
   grounded,
   surfaceAt,
   groundAt = null,
-  approach = null,
+  walkUps = null,
 }) {
   const pilotShapes = zoneShapes.filter(({ zone }) => zone.pilot);
   const inPilot = (xz) => pilotShapes.some(({ contains }) => contains(xz));
@@ -391,7 +391,7 @@ export function placeStreetFurniture({
     return null;
   };
   const candidates = rows.filter((row) => row.source === "osm" && row.geometry === "point" && row.status === "placed" &&
-    kinds[row.kind].layer === "furniture" && (inPilot([row.position_m[0], row.position_m[2]]) || ISLAND_OSM_KINDS.includes(row.kind)));
+    kinds[row.kind].layer === "furniture" && (inPilot([row.position_m[0], row.position_m[2]]) || ISLAND_FURNITURE_KINDS.includes(row.kind)));
   // Stops with a painted bar first: a stop node beside the road then joins the
   // sign already on its approach rather than doubling it.
   candidates.sort((left, right) => (left.kind === "stop_sign" && !stopBar.has(left.source_id)) - (right.kind === "stop_sign" && !stopBar.has(right.source_id)));
@@ -407,15 +407,16 @@ export function placeStreetFurniture({
       const visible = groundAt?.(xz) ?? null;
       return visible !== null && Math.abs(visible.y - (grounded(xz).y + surfaceAt(xz).bias_m)) > ISLAND_LEVEL_M;
     };
-    // A spot in a scored building's walk-up lane (approachLanes).
-    const inLane = (xz, radius) => approach?.blocking([xz], radius) != null;
+    // A spot in the walk-up the building fit test takes on a scored side
+    // (predictWalkUps in street-detail-generation.mjs).
+    const inLane = (xz, radius) => walkUps?.blocking([xz], radius) != null;
     const radiusOf = kinds[row.kind].footprint_radius_m;
-    const onRoad = ISLAND_OSM_KINDS.includes(row.kind) && surfaceAt(at).kind === "road_path";
-    const sloped = ISLAND_OSM_KINDS.includes(row.kind) && !onRoad && offLevel(at);
-    const laned = ISLAND_OSM_KINDS.includes(row.kind) && !onRoad && !sloped && inLane(at, radiusOf);
+    const onRoad = ISLAND_FURNITURE_KINDS.includes(row.kind) && surfaceAt(at).kind === "road_path";
+    const sloped = ISLAND_FURNITURE_KINDS.includes(row.kind) && !onRoad && offLevel(at);
+    const laned = ISLAND_FURNITURE_KINDS.includes(row.kind) && !onRoad && !sloped && inLane(at, radiusOf);
     if (onRoad || sloped || laned) {
       // The nearest clear, level spot off the road or path and out of the
-      // buildings' walk-up lanes, in rings round the node.
+      // buildings' walk-ups, in rings round the node.
       let moved = null;
       for (const radius of ISLAND_NUDGES_M) {
         for (let step = 0; step < 16 && !moved; step += 1) {
@@ -425,7 +426,7 @@ export function placeStreetFurniture({
         }
         if (moved) break;
       }
-      const why = onRoad ? "on a road or path" : sloped ? "on sloped ground" : "in a building's walk-up lane";
+      const why = onRoad ? "on a road or path" : sloped ? "on sloped ground" : "in a building's walk-up";
       if (!moved) {
         audit.osm_unbuilt.push({ id: row.id, kind: row.kind, reason: `${why} with no clear spot beside it` });
         continue;
@@ -520,7 +521,7 @@ export function placeStreetFurniture({
       for (let index = 0; index < hoops && !problem; index += 1) {
         const point = hoopAt(index);
         problem = reject(row.kind, point, { ignore }) ?? (Math.abs(visibleY(point) - centreY) > BIKE_RACK_LEVEL_M ? "uneven ground" : null)
-          ?? (approach?.blocking([point], BIKE_RACK_HOOP_HALF_M) ? "walk-up lane" : null);
+          ?? (walkUps?.blocking([point], BIKE_RACK_HOOP_HALF_M) ? "walk-up" : null);
       }
       if (problem) {
         audit.racks_as_one_hoop.push({ id: row.id, hoops, reason: problem });

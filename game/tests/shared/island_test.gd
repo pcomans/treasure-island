@@ -11,6 +11,11 @@ extends SceneTree
 ## the street-detail layers to load (default: the project setting, on).
 ## Optional -- --diagnose-after SOURCE: query four sides of subsequent scored
 ## units only, without placement/input; always diagnostic HOLD and exit1.
+## Optional -- --walk-up-predictions: without placement or input, compare each
+## scored side's first start that passes every mandatory check with the start
+## the street-detail generator predicted for it (and kept its island clutter out
+## of; the generated street detail's audit.clutter.walk_ups). Passes when they
+## agree on every side; exits 1 on any difference. No fit or acceptance credit.
 
 const WorldHarness := preload("res://game/tests/shared/world_harness.gd")
 const BuildingFit := preload("res://game/tests/shared/building_fit.gd")
@@ -38,6 +43,9 @@ func _run() -> void:
 			if at + 1 < raw.size() and not raw[at + 1].begins_with("--"):
 				raw.remove_at(at + 1)
 			raw.remove_at(at)
+	var predictions := raw.size() == 1 and raw[0] == "--walk-up-predictions"
+	if predictions:
+		raw.clear()
 	var diagnostic := not raw.is_empty()
 	var diagnostic_units: Array[Dictionary] = []
 	if diagnostic:
@@ -73,6 +81,11 @@ func _run() -> void:
 			print("FAIL: " + problem)
 		h.main.queue_free()
 		quit(1)
+		return
+	if predictions:
+		var code := _check_walk_up_predictions(h)
+		h.main.queue_free()
+		quit(code)
 		return
 	if diagnostic:
 		var diagnostic_fit := BuildingFit.new(h)
@@ -114,3 +127,49 @@ func _run() -> void:
 			print("FAIL: " + message)
 	h.main.queue_free()
 	quit(0 if failures.is_empty() else 1)
+
+
+## Compares every accepted unit's sides (see --walk-up-predictions): the fit
+## test's first start passing every mandatory check against the generator's
+## predicted lane and margin. Prints each difference and a PASS or FAIL line;
+## returns the exit code.
+func _check_walk_up_predictions(h: WorldHarness) -> int:
+	var manifest_path := h.world.default_manifest_path
+	var manifest: Variant = JSON.parse_string(FileAccess.get_file_as_string(manifest_path))
+	if not manifest is Dictionary or not manifest.get("street_detail") is Dictionary:
+		print("FAIL: walk-up predictions: no street detail in %s" % manifest_path)
+		return 1
+	var detail: Variant = JSON.parse_string(FileAccess.get_file_as_string(manifest_path.get_base_dir().path_join(str(manifest.street_detail.get("path", "")))))
+	var walk_ups: Variant = detail.get("audit", {}).get("clutter", {}).get("walk_ups") if detail is Dictionary else null
+	if not walk_ups is Array or walk_ups.is_empty():
+		print("FAIL: walk-up predictions: the generated street detail has no audit.clutter.walk_ups")
+		return 1
+	var predicted := {}
+	for entry: Variant in walk_ups:
+		predicted["%s/%s" % [entry.get("source_key", ""), entry.get("side", "")]] = "lane %.2f / %.1f m" % [float(entry.get("lane", 0.0)), float(entry.get("margin_m", 0.0))]
+	var fit := BuildingFit.new(h)
+	var sides := 0
+	var differences: Array[String] = []
+	for unit: Dictionary in Catalog.accepted_units():
+		var key := str(unit.anchor_source_key)
+		var starts := fit.walk_up_starts(key)
+		if not starts.ok:
+			print("FAIL: walk-up predictions: %s: %s" % [key, starts.reason])
+			return 1
+		for side: String in ["north", "south", "west", "east"]:
+			sides += 1
+			var test_start := str(starts.sides[side].first_viable)
+			# The generator predicts lanes only: a side whose first open start is
+			# a native-wall anchor, or that has none, has no predicted lane either.
+			if not test_start.begins_with("lane "):
+				test_start = ""
+			var generator_start := str(predicted.get("%s/%s" % [key, side], ""))
+			if test_start != generator_start:
+				differences.append("%s/%s: test %s, generator %s" % [key, side, test_start if test_start != "" else "no open lane", generator_start if generator_start != "" else "no open lane"])
+	for difference in differences:
+		print("FAIL: walk-up prediction differs: " + difference)
+	if not differences.is_empty():
+		print("FAIL: walk-up predictions differ on %d of %d scored sides" % [differences.size(), sides])
+		return 1
+	print("PASS: walk-up predictions match the fit test's first open start on all %d scored sides" % sides)
+	return 0

@@ -35,6 +35,14 @@ var _composite_records_error := ""
 ## detail (fenced_approaches): "source/side" -> fence row ids. Loaded once.
 var _fenced_sides_loaded := false
 var _fenced_sides: Dictionary = {}
+## The walk-up's lane geometry (lanes as shares of the side's width, start
+## margins beyond the box, and how far past the box's middle a lane looks for
+## its wall). The street-detail generator reads the same file to keep island
+## clutter out of the start this walk-up takes. Loaded once; empty when the
+## file is missing or malformed, which fails every walk-up.
+const WALK_UP_LANES_PATH := "res://tools/config/walk-up-lanes.json"
+var _walk_up_lanes: Dictionary = {}
+var _walk_up_lanes_loaded := false
 
 
 func _init(harness: WorldHarness) -> void:
@@ -77,6 +85,42 @@ func diagnose_side(source_key: String, side_name: String) -> String:
 		_unsafe = true
 		return "diagnostic changed player/recovery state or lost disabled/input-released state"
 	return "" if setup.ok else "candidate preflight HOLD: " + str(setup.reason)
+
+
+## Preplacement inspection only, as diagnose_side: for each side of a source,
+## the start the walk-up would take and the first start that passes every
+## mandatory check (the one the street-detail generator predicts and keeps its
+## island clutter out of), as "lane 0.00 / 5.0 m" candidate labels, "" where
+## there is none. Returns {ok, reason, sides: {side: {selected, first_viable}}}.
+## No movement, fit, active-rest or acceptance credit.
+func walk_up_starts(source_key: String) -> Dictionary:
+	if _unsafe or not _diagnostic_player_idle():
+		_unsafe = true
+		return {"ok": false, "reason": "walk-up start query prerequisite failed: unsafe driver or active player/input", "sides": {}}
+	var before := _h.player.global_transform
+	var recoveries := _h.world.get_runtime_evidence().recovery_count
+	var nodes := _h.building_nodes(source_key)
+	var architecture := _h.architectural_walls(nodes)
+	if not architecture.ok:
+		return {"ok": false, "reason": "walk-up start query source geometry: " + architecture.reason, "sides": {}}
+	var support := _h.approach_support(source_key, nodes, architecture)
+	if not support.ok:
+		return {"ok": false, "reason": "walk-up start query support identity: " + support.reason, "sides": {}}
+	_support_context = support.context
+	_source = source_key
+	_prefix = "%s: " % source_key
+	var box: AABB = architecture.bounds
+	var sides := {}
+	for side_name: String in ["north", "south", "west", "east"]:
+		var side: Vector3 = {"north": Vector3.FORWARD, "south": Vector3.BACK, "west": Vector3.LEFT, "east": Vector3.RIGHT}[side_name]
+		var half_depth := absf(side.x) * box.size.x * 0.5 + absf(side.z) * box.size.z * 0.5
+		var half_width := absf(side.z) * box.size.x * 0.5 + absf(side.x) * box.size.z * 0.5
+		var setup := _walk_start(box.get_center(), side, half_depth, half_width, architecture.rids, architecture.shapes, architecture.faces)
+		sides[side_name] = {"selected": str(setup.get("candidate", "")) if setup.ok else "", "first_viable": str(setup.get("first_viable", "")) if setup.ok else ""}
+	if _h.player.global_transform != before or _h.world.get_runtime_evidence().recovery_count != recoveries or not _diagnostic_player_idle():
+		_unsafe = true
+		return {"ok": false, "reason": "walk-up start query changed player/recovery state or lost disabled/input-released state", "sides": sides}
+	return {"ok": true, "reason": "", "sides": sides}
 
 
 func _diagnostic_player_idle() -> bool:
@@ -335,13 +379,16 @@ func _walk_start(center: Vector3, side: Vector3, half_depth: float, half_width: 
 	var candidates: Array[Dictionary] = []
 	var points: Array[Vector2] = []
 	var blockers: Array[String] = []
-	for lane: float in [0.0, -0.25, 0.25, -0.125, 0.125]:
+	var geometry := _walk_up_geometry()
+	if geometry.is_empty():
+		return {"ok": false, "reason": "walk-up lane geometry %s is missing or malformed" % WALK_UP_LANES_PATH, "points": points, "blockers": blockers}
+	for lane: float in geometry.lanes_of_width:
 		candidates.append({"offset": half_width * 2.0 * lane, "label": "lane %.2f" % lane})
 	for anchor: float in _wall_anchors(center, side, wall_faces, wall_shapes, candidates):
 		candidates.append({"offset": anchor, "label": "native-wall offset %.3f" % anchor})
 	for proposal: Dictionary in candidates:
 		var lane_center := center + across * float(proposal.offset)
-		for margin: float in [5.0, 2.0, 10.0]:
+		for margin: float in geometry.start_margins_m:
 			var candidate := str(proposal.label) + " / "
 			var xz := Vector2(lane_center.x, lane_center.z) + Vector2(side.x, side.z) * (half_depth + margin)
 			points.append(xz)
@@ -365,7 +412,7 @@ func _walk_start(center: Vector3, side: Vector3, half_depth: float, half_width: 
 				rejected.append(candidate + ("%.1f m: %s" % [margin, descent.reason]))
 				continue
 			var chest := Vector3(xz.x, (ground.position as Vector3).y + 1.0, xz.y)
-			var far := Vector3(lane_center.x, chest.y, lane_center.z) - side * (half_depth + 2.0)
+			var far := Vector3(lane_center.x, chest.y, lane_center.z) - side * (half_depth + float(geometry.far_beyond_m))
 			var crossing := _wall_hit(chest, far, own, wall_shapes)
 			if crossing.is_empty():
 				rejected.append(candidate + ("%.1f m: no qualified native wall crossing" % margin))
@@ -384,7 +431,11 @@ func _walk_start(center: Vector3, side: Vector3, half_depth: float, half_width: 
 			var result := {"ok": true, "xz": xz, "destination": (crossing.position as Vector3) - side,
 				"start_log": "%sWALK_START side=%s candidate=%s at=%s margin=%.1f support=%s rejected=%s" % [_prefix, _side_name(side), proposal.label, xz, margin, (ground.collider as Node).get_path(), rejected],
 				"target_log": "%sWALK_TARGET side=%s at=%s body=%s shape=%s normal=%s" % [_prefix, _side_name(side), crossing.position, (crossing.collider as Node).get_path(), crossing.shape, crossing.normal],
-				"preference_reason": preference}
+				"preference_reason": preference,
+				"candidate": "%s / %.1f m" % [proposal.label, margin]}
+			# The first start that passes every mandatory check, which the
+			# street-detail generator predicts (walk_up_starts reports it).
+			result["first_viable"] = result.candidate if fallback.is_empty() else fallback.candidate
 			if preference == "":
 				return _selected_walk_start(result, "preferred broad wall")
 			# Articulated or narrow walls can still satisfy every mandatory
@@ -395,6 +446,36 @@ func _walk_start(center: Vector3, side: Vector3, half_depth: float, half_width: 
 	if not fallback.is_empty():
 		return _selected_walk_start(fallback, "first mandatory-qualified fallback")
 	return {"ok": false, "reason": "; ".join(rejected), "points": points, "blockers": blockers}
+
+
+## The walk-up lane geometry from WALK_UP_LANES_PATH: {lanes_of_width,
+## start_margins_m, far_beyond_m}, or {} when it is missing or malformed.
+func _walk_up_geometry() -> Dictionary:
+	if _walk_up_lanes_loaded:
+		return _walk_up_lanes
+	_walk_up_lanes_loaded = true
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(WALK_UP_LANES_PATH))
+	if not parsed is Dictionary:
+		return _walk_up_lanes
+	var lanes: Variant = parsed.get("lanes_of_width")
+	var margins: Variant = parsed.get("start_margins_m")
+	var beyond: Variant = parsed.get("far_beyond_m")
+	if not (lanes is Array and margins is Array and (beyond is float or beyond is int)) or lanes.is_empty() or margins.is_empty() or float(beyond) <= 0.0:
+		return _walk_up_lanes
+	for value: Variant in lanes:
+		if not (value is float or value is int) or absf(float(value)) > 0.5:
+			return _walk_up_lanes
+	for value: Variant in margins:
+		if not (value is float or value is int) or float(value) <= 0.0:
+			return _walk_up_lanes
+	var lane_values: Array[float] = []
+	for value: Variant in lanes:
+		lane_values.append(float(value))
+	var margin_values: Array[float] = []
+	for value: Variant in margins:
+		margin_values.append(float(value))
+	_walk_up_lanes = {"lanes_of_width": lane_values, "start_margins_m": margin_values, "far_beyond_m": float(beyond)}
+	return _walk_up_lanes
 
 
 ## A side is site-blocked only when every candidate start on it lies outside the
