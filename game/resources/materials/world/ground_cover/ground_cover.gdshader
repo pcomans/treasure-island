@@ -59,9 +59,11 @@ uniform vec3 recipe_straw = vec3(2.0, 2.0, 0.0);
 uniform vec3 recipe_dry_field = vec3(2.0, 2.0, 0.0);
 uniform vec3 recipe_bare = vec3(2.0, 2.0, 0.0);
 
-// Artificial turf: turf_amount pulls the green layer to an even dark pitch green.
+// Artificial turf: turf_amount pulls the green layer to an even dark pitch green
+// (the 2026-05-26 aerial's pitch reads about sRGB 32,61,37 from above; drawn a
+// little lighter).
 uniform float turf_amount = 0.0;
-uniform vec3 turf_color : source_color = vec3(0.12, 0.21, 0.10);
+uniform vec3 turf_color : source_color = vec3(0.08, 0.17, 0.065);
 
 // A watered pitch's sprinkler grid: dry patches midway between the heads of a
 // grid_m square grid turned grid_angle radians from world +X, at grid_amount.

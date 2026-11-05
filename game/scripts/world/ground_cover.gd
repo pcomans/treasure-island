@@ -54,12 +54,13 @@ const FAMILIES := {
 	# bare in most 200 m boxes).
 	"field": {"dry_threshold": 0.378, "bare_threshold": 0.567, "green_dryness": 0.35, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
 	# Dry straw grass, about 4 / 90 / 6: the residential grounds and the
-	# Avenue N verge (map), GAA Field B and the old Job Corps ballfield.
+	# Avenue N verge (map), the Job Corps campus, GAA Field B and the old Job
+	# Corps ballfield.
 	"straw": {"dry_threshold": 0.30, "bare_threshold": 0.76, "green_dryness": 0.6, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
-	# Rough grass, about 35 / 62 / 3: the west shore parcel, olive to brown.
-	"rough_grass": {"dry_threshold": 0.44, "bare_threshold": 0.80, "green_dryness": 0.35, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
-	# Dry grass and bare ground, about 8 / 62 / 30: the Job Corps campus, the
-	# Cultural Park, the Marina Plaza grounds round Building 1 and Clipper Cove.
+	# Rough grass, about 44 / 53 / 3: the west shore parcel, olive to brown.
+	"rough_grass": {"dry_threshold": 0.48, "bare_threshold": 0.80, "green_dryness": 0.3, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
+	# Dry grass and bare ground, about 8 / 62 / 30: the Cultural Park, the
+	# Marina Plaza grounds round Building 1 and Clipper Cove.
 	"dry_meadow": {"dry_threshold": 0.30, "bare_threshold": 0.588, "green_dryness": 0.4, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
 	# Dry grass with much bare ground, about 5 / 50 / 45: the industrial core's
 	# land (map) and the Avenue N construction parcel w1252737734.
@@ -112,7 +113,7 @@ const FAMILY_BY_SOURCE := {
 	"w1252737732": "bare", # landuse=construction: same
 	"r17241152": "rough_grass", # landuse=construction: the west shore parcel is rough grass and trees (2026-05-26 aerial: 77 % dry, 21 % green)
 	"w1252737734": "dry_field", # landuse=construction: dry grass and bare ground (2026-05-26 aerial: 44 % dry, 42 % bare)
-	"w1252737750": "dry_meadow", # amenity=college, Job Corps: dry grass and bare ground (2026-05-26 aerial: 71 % dry, 23 % bare, 7 % lawn of the open ground); its dorm lawns are drawn by the map
+	"w1252737750": "straw", # amenity=college, Job Corps: dry grass (2026-05-26 aerial: 71-90 % dry, 8-23 % bare, 2-7 % lawn of the open ground); its dorm lawns are drawn by the map
 	"w1252737754": "turf", # landuse=construction: a finished synthetic-turf soccer pitch (2026-05-26 aerial: even dark green with white lines; Street View Sep 2025 at 749 9th St: goals and floodlights behind the windscreen); its apron is drawn bare by the map
 	"w269856850": "bare", # landuse=industrial: yard, overheads show gravel and bare ground
 	"w545387428": "bare", # leisure=pitch sport=boules: gravel court
