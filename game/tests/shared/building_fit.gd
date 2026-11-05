@@ -1021,11 +1021,12 @@ func _check_spray(source: String, plan: Dictionary, bounds: AABB) -> void:
 		_failures.append(_prefix+"spray expect must be \"placed\" or \"receiver_rejection\"")
 		_unsafe=true
 		return
-	var blocker: Variant = plan.get("blocker", "")
-	if not blocker is String or (blocker != "" and expect != "receiver_rejection"):
+	var blocker_value: Variant = plan.get("blocker", "")
+	if not blocker_value is String or (blocker_value != "" and expect != "receiver_rejection"):
 		_failures.append(_prefix+"spray blocker must be a feature kind, with expect receiver_rejection")
 		_unsafe=true
 		return
+	var blocker: String = blocker_value
 	for value: Variant in plan.target_xyz:
 		if not (value is float or value is int) or not is_finite(float(value)):
 			_failures.append(_prefix+"spray target must be finite")
@@ -1083,8 +1084,8 @@ func _check_spray(source: String, plan: Dictionary, bounds: AABB) -> void:
 	for child: Node in pool.get_children():
 		if child is Decal and child not in before:placed.append(child)
 	if expect=="receiver_rejection":
-		var blocked_by:=first_node!=null and not first_receiver and (blocker=="" or first_feature==blocker)
-		var refused:=results==["receiver_rejection"] and placed.is_empty() and blocked_by
+		var blocked_by: bool = first_node!=null and not first_receiver and (blocker=="" or first_feature==blocker)
+		var refused: bool = results==["receiver_rejection"] and placed.is_empty() and blocked_by
 		print("SPRAY source=%s result=%s expected=receiver_rejection blocker=%s refused=%s" % [source, results, blocker if blocker!="" else "any", refused])
 		var refusal_rest:=await _rest_and_disable(recoveries)
 		if refusal_rest!="":_failures.append(_prefix+"spray "+refusal_rest)
