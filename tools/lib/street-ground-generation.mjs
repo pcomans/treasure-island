@@ -140,10 +140,11 @@ const STREET_CORRIDOR_HALF_M = 18;
 const CURB_TOP_M = 0.25;
 // Red curb paint along approaches: curb within this distance of a junction node.
 const RED_CURB_APPROACH_M = 10;
-// Red curb paint: the strip of the curb top it covers, and how far in front of
-// the curb face its face paint stands.
+// Red curb paint: the strip of the curb top it covers.
 const RED_CURB_TOP_M = 0.15;
-const RED_CURB_FACE_OFFSET_M = 0.003;
+// A lot rule's own pavement lies at the yards' ground lift (a step over the road
+// paint), its stall paint and legends PARK_PAINT_LIFT_M over that.
+const LOT_SURFACE_LIFT_M = 0.09;
 // A lot island's curb faces run down to the land (under the lot's surface).
 const ISLAND_FOOT_M = 0;
 // Two-line crosswalks (lines, ladder): each line this wide; a lines crosswalk
@@ -345,7 +346,8 @@ const CROSSWALK_STYLES = Object.freeze(["continental", "ladder", "lines", "none"
 const FILL_KINDS = Object.freeze(["concrete", "lawn", "mulch"]);
 const RED_CURB_MODES = Object.freeze(["none", "approaches", "all"]);
 const RULE_CENTERLINES = Object.freeze(["double_yellow", "dashed_faded", "dashed_white"]);
-const TREATMENT_FIELDS = Object.freeze(["centerline", "crosswalk", "edge_lines", "evidence", "fill", "paint_wear", "reason", "red_curb", "sides", "sidewalk_width_m", "verge_width_m", "wear"]);
+const TREATMENT_FIELDS = Object.freeze(["bike_lanes", "centerline", "crosswalk", "edge_lines", "evidence", "fill", "paint_wear", "reason", "red_curb", "sides", "sidewalk_width_m", "verge_width_m", "wear"]);
+const BIKE_LANE_KINDS = Object.freeze(["none", "line", "green"]);
 const STREET_RULE_FIELDS = Object.freeze(["evidence", "id", "treatment", "ways"]);
 const STREET_RULE_OPTIONAL = Object.freeze(["parking", "set", "sides", "widen"]);
 const STALL_STYLES = Object.freeze(["plain", "faded", "accessible", "bus"]);
@@ -363,6 +365,7 @@ function validateTreatment(treatment, label) {
   invariant(FILL_KINDS.includes(treatment.fill), `${label} fill must be ${FILL_KINDS.join(", ")}`);
   invariant(RED_CURB_MODES.includes(treatment.red_curb), `${label} red_curb must be ${RED_CURB_MODES.join(", ")}`);
   invariant(typeof treatment.edge_lines === "boolean", `${label} edge_lines must be boolean`);
+  invariant(BIKE_LANE_KINDS.includes(treatment.bike_lanes), `${label} bike_lanes must be ${BIKE_LANE_KINDS.join(", ")}`);
   invariant(Number.isInteger(treatment.paint_wear) && treatment.paint_wear >= 0 && treatment.paint_wear < PAINT_WEAR_STEPS, `${label} paint_wear must be a wear step 0-${PAINT_WEAR_STEPS - 1}`);
   invariant(isFiniteNumber(treatment.sidewalk_width_m) && treatment.sidewalk_width_m >= 0.9 && treatment.sidewalk_width_m <= 4, `${label} sidewalk_width_m must be 0.9-4 m`);
   invariant(isFiniteNumber(treatment.verge_width_m) && treatment.verge_width_m >= 0.6 && treatment.verge_width_m <= 3, `${label} verge_width_m must be 0.6-3 m`);
@@ -440,7 +443,14 @@ export function validateStreetGroundRules(rules) {
   const lotIds = new Set();
   for (const lot of rules.lots) {
     const label = `Street ground lot ${lot?.id}`;
-    exactKeys(lot, ["evidence", "id", "islands", "legends", "rows", "source_key"], label);
+    exactKeys(lot, ["evidence", "id", "islands", "legends", "rows", "source_key", ...("surface" in (lot ?? {}) ? ["surface"] : [])], label);
+    // A lot's own pavement where the photographs show it unlike the lots' asphalt:
+    // a yard or park ground material draped over the whole lot at LOT_SURFACE_LIFT_M.
+    if (lot.surface !== undefined) {
+      exactKeys(lot.surface, ["evidence", "material"], `${label} surface`);
+      invariant(PARK_SURFACE_MATERIALS[lot.surface.material] !== undefined && typeof lot.surface.evidence === "string" && lot.surface.evidence.trim() !== "",
+        `${label} surface needs a ground material (${Object.keys(PARK_SURFACE_MATERIALS).join(", ")}) and evidence`);
+    }
     invariant(typeof lot.id === "string" && SAFE_ID.test(lot.id) && !lotIds.has(lot.id), `${label} needs a unique lower_snake id`);
     lotIds.add(lot.id);
     invariant(/^w\d+$/u.test(lot.source_key) && typeof lot.evidence === "string" && lot.evidence.trim() !== "", `${label} needs its OSM parking area and evidence`);
@@ -1223,12 +1233,18 @@ export function generateStreetGround({
   // The island's land (the playable boundary's own geometry), which rule streets stay on.
   const land = [...playableObjects.values()].find((object) => object.roles.includes("land_boundary"));
   invariant(land, "Street ground needs the playable land boundary");
+  // The pilot zones without kerbs hold ground of their own (the yards, the park)
+  // and the props on it: a rule street's band keeps its back slope's run (and a
+  // little more) clear of them.
+  const pilotGround = union("pilot ground zones", zoneRegions.filter((zone) => !zone.settings.kerbs).map((zone) => zone.region));
+  const pilotGroundMargin = pilotGround.length === 0 ? [] :
+    union("pilot ground zone margin", [pilotGround, boundaryBand("pilot ground zone outline", pilotGround, kerb.back_slope_run_m + 0.2)]);
   const ruleOf = new Map();
   for (const street of rules?.streets ?? []) {
     for (const key of street.ways) ruleOf.set(key, street);
     const corridor = union(`street ${street.id}`, street.ways.map((key) =>
       lineBuffer(`street ${street.id} ${key}`, rawWayLine(rawOsm, key.slice(1)), STREET_CORRIDOR_HALF_M)));
-    const region = difference(`street ${street.id} outside pilot`, intersect(`street ${street.id} on land`, corridor, land.geometry), [pilotRegion]);
+    const region = difference(`street ${street.id} outside pilot`, intersect(`street ${street.id} on land`, corridor, land.geometry), [pilotRegion, pilotGroundMargin]);
     if (region.length === 0) continue;
     zoneRegions.push({
       id: `street_${street.id}`,
@@ -2061,7 +2077,7 @@ export function generateStreetGround({
     if (!zone) continue;
     const treatment = zone.rule.treatment;
     const style = road.tags.oneway === "yes" ? null : treatment.centerline;
-    if (style === null && !treatment.edge_lines) continue;
+    if (style === null && !treatment.edge_lines && treatment.bike_lanes === "none") continue;
     const roadBox = boxOfMulti(road.geometry);
     const line = wayLine(road);
     const half = ROAD_WIDTHS_M[road.tags.highway] / 2;
@@ -2089,6 +2105,20 @@ export function generateStreetGround({
       for (const sign of [1, -1]) {
         const [from, to] = sign > 0 ? [half - lines.edge_inset_m - lines.width_m, half - lines.edge_inset_m] : [-half + lines.edge_inset_m, -half + lines.edge_inset_m + lines.width_m];
         paint(STREET_PAINT_KINDS.white, clip("rule edge line", strip("rule edge line", line, from, to)), road.row.source_key, wear);
+      }
+    }
+    // Bike lanes along both curbs, on the whole carriageway (widening included):
+    // a white line bike_lane_width_m in from the curb, and green paint in the lane.
+    if (treatment.bike_lanes !== "none") {
+      const laneClip = (label, polygon) => difference(label, paintClip(label, polygon, [zone]), [junctions, crosswalkKeepout]);
+      for (const sign of [1, -1]) {
+        const curb = halfWidthSide(road, sign) - kerb.gutter_width_m;
+        const inner = curb - lines.bike_lane_width_m;
+        const side = (from, to) => (sign > 0 ? [from, to] : [-to, -from]);
+        paint(STREET_PAINT_KINDS.white, laneClip("rule bike lane line", strip("rule bike lane line", line, ...side(inner - lines.width_m, inner))), road.row.source_key, wear);
+        if (treatment.bike_lanes === "green") {
+          paint(STREET_PAINT_KINDS.green, laneClip("rule bike lane", strip("rule bike lane", line, ...side(inner + 0.05, curb))), road.row.source_key, wear);
+        }
       }
     }
   }
@@ -2244,15 +2274,22 @@ export function generateStreetGround({
 
   // Lot rules: stall rows (separator lines, accessible stalls filled blue with
   // their symbol, bus stalls with their legend) and legends.
-  // A legend of the atlas painted at a centre, reading up along facing.
-  const legendPiece = (cell, center, facing, lengthM, widthM, sourceKey) => {
+  // A legend of the atlas painted at a centre, reading up along facing, at a paint height.
+  const legendPiece = (cell, center, facing, lengthM, widthM, sourceKey, paintHeight) => {
     const along = unit(facing);
     const across = [along[1], -along[0]];
-    addPiece("marking", rectangle(center, along, across, -lengthM / 2, lengthM / 2, -widthM / 2, widthM / 2), constantHeight(ROAD_TOP_M + lifts.paint_m),
+    addPiece("marking", rectangle(center, along, across, -lengthM / 2, lengthM / 2, -widthM / 2, widthM / 2), constantHeight(paintHeight),
       frameUv(STREET_PAINT_KINDS.legend + PAINT_VARIANT_STRIDE * cell, center, along, across, lengthM, widthM));
     sources.marking.add(sourceKey);
   };
   for (const { lot, object } of lotRules) {
+    // Paint on the lot's own pavement when it has one, else over the lot like the aisles' paint.
+    const lotPaint = lot.surface ? LOT_SURFACE_LIFT_M + PARK_PAINT_LIFT_M : ROAD_TOP_M + lifts.paint_m;
+    const paintLot = (kind, polygon, wear) => {
+      if (polygon.length === 0) return;
+      addPiece("marking", polygon, constantHeight(lotPaint), kindUv(kind, wear));
+      sources.marking.add(lot.source_key);
+    };
     for (const row of lot.rows) {
       const p0 = [row.line_xz[0][0], -row.line_xz[0][1]];
       const p1 = [row.line_xz[1][0], -row.line_xz[1][1]];
@@ -2269,16 +2306,15 @@ export function generateStreetGround({
         const base = add(p0, scale(direction, index * pitch));
         separators.push(rectangle(base, axis, leftOf(axis), 0, reach, -lines.width_m / 2, lines.width_m / 2));
       }
-      paint(STREET_PAINT_KINDS.white, intersect(`lot ${lot.id} ${row.id}`, union(`lot ${lot.id} ${row.id} lines`, separators), object.geometry), lot.source_key, wear);
+      paintLot(STREET_PAINT_KINDS.white, intersect(`lot ${lot.id} ${row.id}`, union(`lot ${lot.id} ${row.id} lines`, separators), object.geometry), wear);
       for (let index = 0; index < row.count; index += 1) {
         const entry = add(p0, scale(direction, (index + 0.5) * pitch));
         const middle = add(entry, scale(axis, row.depth_m / 2));
         if (row.style === "accessible") {
           const fill = rectangle(entry, axis, leftOf(axis), 0.15, row.depth_m - 0.15, -row.stall_width_m / 2 + 0.15, row.stall_width_m / 2 - 0.15);
-          paint(STREET_PAINT_KINDS.blue, intersect(`lot ${lot.id} accessible`, fill, object.geometry), lot.source_key, 1);
-          legendPiece(STREET_LEGEND_CELLS.accessible, middle, scale(axis, -1), Math.min(1.6, row.depth_m * 0.4), Math.min(1.6, row.stall_width_m * 0.6), lot.source_key);
-        } else if (row.style === "bus") {
-          legendPiece(STREET_LEGEND_CELLS.tour_bus_parking, middle, scale(axis, -1), Math.min(row.depth_m * 0.7, 9), Math.min(row.stall_width_m * 0.55, 1.8), lot.source_key);
+          paintLot(STREET_PAINT_KINDS.blue, intersect(`lot ${lot.id} accessible`, fill, object.geometry), 1);
+          // The symbol a step over the blue fill.
+          legendPiece(STREET_LEGEND_CELLS.accessible, middle, scale(axis, -1), Math.min(1.6, row.depth_m * 0.4), Math.min(1.6, row.stall_width_m * 0.6), lot.source_key, lotPaint + DRAPED_LAYER_STEP_M);
         }
         stallSlots.push({
           aisle_key: lot.source_key, side: row.side, s: roundCoordinate((index + 0.5) * pitch), entry, outward: axis, along: direction,
@@ -2288,7 +2324,7 @@ export function generateStreetGround({
       counts.lot_stalls += row.count;
     }
     for (const legend of lot.legends) {
-      legendPiece(STREET_LEGEND_CELLS[legend.cell], [legend.at_xz[0], -legend.at_xz[1]], [legend.facing_xz[0], -legend.facing_xz[1]], legend.length_m, legend.width_m, lot.source_key);
+      legendPiece(STREET_LEGEND_CELLS[legend.cell], [legend.at_xz[0], -legend.at_xz[1]], [legend.facing_xz[0], -legend.facing_xz[1]], legend.length_m, legend.width_m, lot.source_key, lotPaint);
     }
   }
 
@@ -2459,6 +2495,17 @@ export function generateStreetGround({
         for (const key of entry.sources) sources.marking.add(key);
       }
     }
+  }
+  // Lot rules' own pavement over their whole lot, at the yards' lift (one lift per material).
+  for (const { lot, object } of lotRules) {
+    if (!lot.surface) continue;
+    const material = lot.surface.material;
+    invariant((parkLifts.get(material) ?? LOT_SURFACE_LIFT_M) === LOT_SURFACE_LIFT_M, `Street ground lot ${lot.id} surface ${material} already lies at another lift`);
+    parkLifts.set(material, LOT_SURFACE_LIFT_M);
+    sources[material].add(lot.source_key);
+    const polygon = object.geometry;
+    parkLayers.push({ zone: null, layer: { material, id: lot.id }, polygon, index: polygonIndex(polygon), box: boxOfMulti(polygon), lift: LOT_SURFACE_LIFT_M, sources: [lot.source_key] });
+    addPiece(material, polygon, constantHeight(LOT_SURFACE_LIFT_M), worldUv, true);
   }
   const parkAt = (point) => parkLayers.find((entry) => inBox(entry.box, point) && entry.index.contains(point)) ?? null;
   // Beds of the park layers with the given materials: whether a point lies on
@@ -2650,15 +2697,14 @@ export function generateStreetGround({
           mesh.uvs.push(roundCoordinate(along / kerb.panel_m), roundCoordinate((h - ROAD_TOP_M) / kerb.panel_m + 0.1));
         }
         pushTriangles(mesh, [offset, offset + 1, offset + 2, offset, offset + 2, offset + 3], normal);
+        // Red paint on the face itself: the paint shader pulls its vertices toward
+        // the camera, so it draws over the concrete face it shares.
         if (edge.red) {
-          // Red paint on the face, a hair in front of it.
           const paintMesh = meshFor("marking", chunk.id);
           const paintOffset = paintMesh.vertices.length / 3;
-          const out = scale(edge.outward, RED_CURB_FACE_OFFSET_M);
           for (const [point, h] of [[p0, ROAD_TOP_M], [p1, ROAD_TOP_M], [p1, edgeTop(p1) + lifts.paint_m], [p0, edgeTop(p0) + lifts.paint_m]]) {
             const land = facetElevation(facet, point[0], point[1]).elevation;
-            const at = add(point, out);
-            paintMesh.vertices.push(roundCoordinate(at[0]), roundCoordinate(land + h), roundCoordinate(-at[1]));
+            paintMesh.vertices.push(roundCoordinate(point[0]), roundCoordinate(land + h), roundCoordinate(-point[1]));
             paintMesh.normals.push(...normal.map(roundCoordinate));
             paintMesh.uvs.push(...kindUv(STREET_PAINT_KINDS.red_curb, edge.red.wear)().map(roundCoordinate));
           }
