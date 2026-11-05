@@ -55,6 +55,8 @@ export const BIKE_RACK_HOOP_SPACING_M = 0.9;
 // Each hoop's legs reach 0.1 m below the rack's origin: the ground under every
 // hoop stays this close to the ground at its centre (m).
 const BIKE_RACK_LEVEL_M = 0.06;
+// A hoop's half width, for the buildings' walk-up lanes (m).
+const BIKE_RACK_HOOP_HALF_M = 0.45;
 // Plan sizes {x_m, z_m} (along the prop's local X and Z) of the kit props that
 // are longer than their kind's radius covers; set pieces carry them as their
 // footprint for the shared mask.
@@ -289,6 +291,7 @@ export function placeStreetFurniture({
   grounded,
   surfaceAt,
   groundAt = null,
+  approach = null,
 }) {
   const pilotShapes = zoneShapes.filter(({ zone }) => zone.pilot);
   const inPilot = (xz) => pilotShapes.some(({ contains }) => contains(xz));
@@ -404,25 +407,32 @@ export function placeStreetFurniture({
       const visible = groundAt?.(xz) ?? null;
       return visible !== null && Math.abs(visible.y - (grounded(xz).y + surfaceAt(xz).bias_m)) > ISLAND_LEVEL_M;
     };
-    if (ISLAND_OSM_KINDS.includes(row.kind) && (surfaceAt(at).kind === "road_path" || offLevel(at))) {
-      // The nearest clear, level spot off the road or path, in rings round the node.
-      const onRoad = surfaceAt(at).kind === "road_path";
+    // A spot in a scored building's walk-up lane (approachLanes).
+    const inLane = (xz, radius) => approach?.blocking([xz], radius) != null;
+    const radiusOf = kinds[row.kind].footprint_radius_m;
+    const onRoad = ISLAND_OSM_KINDS.includes(row.kind) && surfaceAt(at).kind === "road_path";
+    const sloped = ISLAND_OSM_KINDS.includes(row.kind) && !onRoad && offLevel(at);
+    const laned = ISLAND_OSM_KINDS.includes(row.kind) && !onRoad && !sloped && inLane(at, radiusOf);
+    if (onRoad || sloped || laned) {
+      // The nearest clear, level spot off the road or path and out of the
+      // buildings' walk-up lanes, in rings round the node.
       let moved = null;
       for (const radius of ISLAND_NUDGES_M) {
         for (let step = 0; step < 16 && !moved; step += 1) {
           const angle = (step * Math.PI) / 8;
           const xz = round2([at[0] + radius * Math.cos(angle), at[1] + radius * Math.sin(angle)]);
-          if (surfaceAt(xz).kind !== "road_path" && !reject(row.kind, xz, { ignore: new Set([row.id]) }) && !offLevel(xz)) moved = xz;
+          if (surfaceAt(xz).kind !== "road_path" && !reject(row.kind, xz, { ignore: new Set([row.id]) }) && !offLevel(xz) && !inLane(xz, radiusOf)) moved = xz;
         }
         if (moved) break;
       }
+      const why = onRoad ? "on a road or path" : sloped ? "on sloped ground" : "in a building's walk-up lane";
       if (!moved) {
-        audit.osm_unbuilt.push({ id: row.id, kind: row.kind, reason: onRoad ? "on a road or path with no clear spot beside it" : "on sloped ground with no level spot beside it" });
+        audit.osm_unbuilt.push({ id: row.id, kind: row.kind, reason: `${why} with no clear spot beside it` });
         continue;
       }
       row.source_position_m = [...row.position_m];
       Object.assign(row, surfaceRow(moved));
-      row.placement = onRoad ? "beside the road or path its OSM node lies on (production_inference)" : "beside the sloped ground its OSM node lies on (production_inference)";
+      row.placement = `moved beside the spot its OSM node lies on, ${why} (production_inference)`;
       const index = occupied.findIndex((item) => item.id === row.id);
       if (index >= 0) occupied.splice(index, 1);
       occupy(row.id, row.kind, moved);
@@ -509,7 +519,8 @@ export function placeStreetFurniture({
       let problem = yaw === null ? "no road to face" : null;
       for (let index = 0; index < hoops && !problem; index += 1) {
         const point = hoopAt(index);
-        problem = reject(row.kind, point, { ignore }) ?? (Math.abs(visibleY(point) - centreY) > BIKE_RACK_LEVEL_M ? "uneven ground" : null);
+        problem = reject(row.kind, point, { ignore }) ?? (Math.abs(visibleY(point) - centreY) > BIKE_RACK_LEVEL_M ? "uneven ground" : null)
+          ?? (approach?.blocking([point], BIKE_RACK_HOOP_HALF_M) ? "walk-up lane" : null);
       }
       if (problem) {
         audit.racks_as_one_hoop.push({ id: row.id, hoops, reason: problem });

@@ -502,7 +502,9 @@ export function settleParkedCar(body, center, front, groundAt) {
 //   list), which name their own lots or streets; their rows take "island" in
 //   place of a zone id;
 //   barredIds: row ids of island lot stalls not to use (the generator bars a
-//   stall whose car shuts walkable ground in, and places the clutter again).
+//   stall whose car shuts walkable ground in, and places the clutter again);
+//   approach: the scored buildings' walk-up lanes (approachLanes in
+//   street-detail-generation.mjs), which the island rules keep clear.
 export function placeStreetClutter({
   kinds,
   rows,
@@ -526,6 +528,7 @@ export function placeStreetClutter({
   stallLines = null,
   islandRules = [],
   barredIds = new Set(),
+  approach = null,
 }) {
   const pilotShapes = zoneShapes.filter(({ zone }) => zone.pilot);
   // Cars along a road's parking lanes: per side, its curb offset and the
@@ -610,7 +613,7 @@ export function placeStreetClutter({
           }
           const jitter = (hashUnit(seed, identity, "yaw") - 0.5) * 0.02;
           const facing = [front[0] * Math.cos(jitter) - front[1] * Math.sin(jitter), front[0] * Math.sin(jitter) + front[1] * Math.cos(jitter)];
-          const rest = fit(center, facing, footprint, "road", params.body);
+          const rest = fit(center, facing, footprint, "road", params.body, null, zone.island === true);
           if (rest.problem) {
             count(audit.rejected_by_reason, `${rule.id}:${rest.problem}`);
             s = endS + gap;
@@ -702,10 +705,12 @@ export function placeStreetClutter({
   // carriageway, a parking lane or the lot, never the raised street ground),
   // clear of the building entrances and of placed items. An island lot
   // (lot_occupancy) is its own OSM polygon, which the ground's lot index may not
-  // cover; a car may overhang a road (its aisle) there too.
-  const reject = (center, front, footprint, surface, lot = null) => {
+  // cover; a car may overhang a road (its aisle) there too. An island rule's car
+  // also keeps out of the scored buildings' walk-up lanes (keepLanes).
+  const reject = (center, front, footprint, surface, lot = null, keepLanes = false) => {
     const xz = toWorld(center);
     const piece = footprintPiece(xz, yawToward(front), footprint);
+    if (keepLanes && approach?.blocking(piece.points, piece.radius)) return "approach";
     if (!onLand(xz, exclusions.land_edge_buffer_m + footprint.z_m / 2)) return "land_edge";
     const hard = hardViolation(hardShapes, piece.points, piece.radius);
     if (hard) return hard.reason;
@@ -820,8 +825,8 @@ export function placeStreetClutter({
     return row;
   };
   // The site checks, then the rest on the ground; the reason when either fails.
-  const fit = (center, front, footprint, surface, body, lot = null) => {
-    const problem = reject(center, front, footprint, surface, lot);
+  const fit = (center, front, footprint, surface, body, lot = null, keepLanes = false) => {
+    const problem = reject(center, front, footprint, surface, lot, keepLanes);
     if (problem) return { problem };
     return settleParkedCar(body, center, front, groundAt);
   };
@@ -863,6 +868,7 @@ export function placeStreetClutter({
               if (buildings.nearest(xz, exclusions.wall_buffer_m + radius).distance < exclusions.wall_buffer_m + radius) continue;
               if ([...occupiedNear([xz], radius + ITEM_CLEAR_M)].some((item) => item.id !== stop.id && (item.points.length > 1 ? distanceToPolyline(xz, item.points) : length(sub(xz, item.points[0]))) < item.radius_m + radius + ITEM_CLEAR_M)) continue;
               if (ruleRows.some((row) => row.footprint_m && streetFootprintDistance(row, xz) < radius + ITEM_CLEAR_M)) continue;
+              if (zone.island && approach?.blocking([xz], radius)) continue;
               spot = xz;
             }
             if (spot) break;
@@ -950,7 +956,7 @@ export function placeStreetClutter({
           const jitter = (hashUnit(seed, identity, "yaw") - 0.5) * LOT_YAW_JITTER_RAD * 2;
           const base = headIn ? slot.outward : scale(slot.outward, -1);
           const facing = [base[0] * Math.cos(jitter) - base[1] * Math.sin(jitter), base[0] * Math.sin(jitter) + base[1] * Math.cos(jitter)];
-          const rest = fit(center, facing, footprint, "bay", params.body);
+          const rest = fit(center, facing, footprint, "bay", params.body, null, zone.island === true);
           if (rest.problem) {
             count(audit.rejected_by_reason, `${rule.id}:${rest.problem}`);
             continue;
@@ -1082,7 +1088,7 @@ export function placeStreetClutter({
               reject_("car");
               return false;
             }
-            const rest = fit(center, facing, footprint, "lot", params.body, lot);
+            const rest = fit(center, facing, footprint, "lot", params.body, lot, true);
             if (rest.problem) {
               reject_(rest.problem);
               return false;

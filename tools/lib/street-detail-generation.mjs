@@ -603,6 +603,87 @@ export function loadStreetDetailSetPieces(projectRoot) {
   return document;
 }
 
+// The building fit test (game/tests/shared/building_fit.gd) walks the stock
+// player up to a scored unit from each side of its box, from five lanes square
+// to the side (its middle, and an eighth and a quarter of its width either side)
+// starting 2, 5 or 10 m out. Island-wide clutter and furniture keep out of those
+// lanes for every scored unit, accepted or not, so no parked car, can or rack
+// closes a side the test walks: the box grown a little for eaves, each lane as
+// wide as the capsule's sweep with room either side, reaching past the farthest
+// start.
+const APPROACH_LANE_OFFSETS = Object.freeze([0, -0.25, 0.25, -0.125, 0.125]);
+const APPROACH_LANE_HALF_M = 0.9;
+const APPROACH_LANE_REACH_M = 10.5;
+const APPROACH_BOX_GROW_M = 0.5;
+const APPROACH_CELL_M = 16;
+
+// The anchor source keys of the catalog's scored units, unless demolished.
+export function loadStreetDetailScoredUnits(projectRoot) {
+  const catalog = readJson(projectRoot, STREET_DETAIL_INPUTS.stair_catalog);
+  invariant(Array.isArray(catalog.units), "Building catalog units are missing");
+  return [...new Set(catalog.units
+    .filter((unit) => unit.claim_status?.reference_recognizable !== "demolished")
+    .map((unit) => unit.anchor_source_key))].sort(compareSourceKeys);
+}
+
+// The walk-up lanes of the scored units' buildings (world [x0, x1, z0, z1]
+// rectangles), with blocking(points, radius): the first lane within radius of a
+// point or a segment ([[x, z]] or [[x, z], [x, z]]), or null.
+export function approachLanes(objects, scoredKeys) {
+  const scored = new Set(scoredKeys);
+  const boxes = new Map();
+  for (const object of objects) {
+    if (!object.roles.includes("building") || !scored.has(object.row.source_key)) continue;
+    const box = boxes.get(object.row.source_key) ?? [Infinity, -Infinity, Infinity, -Infinity];
+    for (const polygon of object.geometry) {
+      for (const [east, north] of polygon[0]) {
+        box[0] = Math.min(box[0], east);
+        box[1] = Math.max(box[1], east);
+        box[2] = Math.min(box[2], -north);
+        box[3] = Math.max(box[3], -north);
+      }
+    }
+    boxes.set(object.row.source_key, box);
+  }
+  const lanes = [];
+  for (const [sourceKey, raw] of [...boxes.entries()].sort(([left], [right]) => compareSourceKeys(left, right))) {
+    const [x0, x1, z0, z1] = [raw[0] - APPROACH_BOX_GROW_M, raw[1] + APPROACH_BOX_GROW_M, raw[2] - APPROACH_BOX_GROW_M, raw[3] + APPROACH_BOX_GROW_M];
+    const [cx, cz] = [(x0 + x1) / 2, (z0 + z1) / 2];
+    for (const offset of APPROACH_LANE_OFFSETS) {
+      const [x, z] = [cx + (x1 - x0) * offset, cz + (z1 - z0) * offset];
+      lanes.push({ source_key: sourceKey, side: "north", rect: [x - APPROACH_LANE_HALF_M, x + APPROACH_LANE_HALF_M, z0 - APPROACH_LANE_REACH_M, z0] });
+      lanes.push({ source_key: sourceKey, side: "south", rect: [x - APPROACH_LANE_HALF_M, x + APPROACH_LANE_HALF_M, z1, z1 + APPROACH_LANE_REACH_M] });
+      lanes.push({ source_key: sourceKey, side: "west", rect: [x0 - APPROACH_LANE_REACH_M, x0, z - APPROACH_LANE_HALF_M, z + APPROACH_LANE_HALF_M] });
+      lanes.push({ source_key: sourceKey, side: "east", rect: [x1, x1 + APPROACH_LANE_REACH_M, z - APPROACH_LANE_HALF_M, z + APPROACH_LANE_HALF_M] });
+    }
+  }
+  const cells = new Map();
+  const cell = (value) => Math.floor(value / APPROACH_CELL_M);
+  for (const lane of lanes) {
+    for (let i = cell(lane.rect[0]); i <= cell(lane.rect[1]); i += 1) {
+      for (let j = cell(lane.rect[2]); j <= cell(lane.rect[3]); j += 1) cells.set(`${i},${j}`, [...(cells.get(`${i},${j}`) ?? []), lane]);
+    }
+  }
+  const rectDistance = (point, rect) => Math.hypot(Math.max(rect[0] - point[0], 0, point[0] - rect[1]), Math.max(rect[2] - point[1], 0, point[1] - rect[3]));
+  const blocking = (points, radius) => {
+    const a = points[0];
+    const b = points[points.length - 1];
+    const steps = Math.max(1, Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1]) / 0.25));
+    const samples = Array.from({ length: steps + 1 }, (_, index) => [a[0] + ((b[0] - a[0]) * index) / steps, a[1] + ((b[1] - a[1]) * index) / steps]);
+    const near = new Set();
+    for (let i = cell(Math.min(a[0], b[0]) - radius); i <= cell(Math.max(a[0], b[0]) + radius); i += 1) {
+      for (let j = cell(Math.min(a[1], b[1]) - radius); j <= cell(Math.max(a[1], b[1]) + radius); j += 1) {
+        for (const lane of cells.get(`${i},${j}`) ?? []) near.add(lane);
+      }
+    }
+    for (const lane of near) {
+      if (samples.some((point) => rectDistance(point, lane.rect) < radius)) return lane;
+    }
+    return null;
+  };
+  return { lanes, blocking };
+}
+
 // Every catalog stair flight, accepted or not: the stairs exist either way,
 // unless the building is demolished (tools/config/demolished-buildings.json).
 export function loadStreetDetailStairFlights(projectRoot) {
@@ -816,6 +897,8 @@ export function generateStreetDetail({
   const buildings = polygonSet(objects
     .filter((object) => object.roles.includes("building") || object.roles.includes("building_part"))
     .map((object) => ({ key: object.row.source_key, geometry: object.geometry })));
+  // The scored units' walk-up lanes, which island-wide clutter and furniture keep clear.
+  const approach = approachLanes(objects, loadStreetDetailScoredUnits(projectRoot));
   const roads = polygonSet(objects
     .filter((object) => object.roles.includes("roads_paths"))
     .map((object) => ({ key: object.row.source_key, geometry: object.geometry, visual_class: object.road_visual_class })));
@@ -1593,6 +1676,7 @@ export function generateStreetDetail({
     grounded,
     surfaceAt,
     groundAt,
+    approach,
   });
   rows.push(...furniture.rows);
   // (b2) The planting scatter: trees and grass round the furniture placed above.
@@ -1656,6 +1740,7 @@ export function generateStreetDetail({
     entrances,
     stallLines: { length_m: config.ground.lines.stall_length_m, spacing_m: config.ground.lines.stall_spacing_m },
     islandRules: config.clutter ?? [],
+    approach,
   };
   let clutter = placeStreetClutter(clutterInputs);
   // (e2) No island-wide parked car may shut walkable ground in. The clearance
