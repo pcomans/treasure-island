@@ -108,6 +108,7 @@ instead of generating it; `tools/test.sh` runs the whole-island check on it too.
 - [CLAUDE.md](CLAUDE.md#persisted-entrypoints): agent roles and the building skill.
 - [LEARNINGS.md](LEARNINGS.md): lessons from earlier work.
 - [HUMAN.md](HUMAN.md): things only the owner can do.
+- [KNOWN_ISSUES.md](KNOWN_ISSUES.md): known issues and planned work.
 - Older records: Git history and `evidence/`.
 
 
