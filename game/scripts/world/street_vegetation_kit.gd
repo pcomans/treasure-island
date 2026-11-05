@@ -92,7 +92,7 @@ extends RefCounted
 ## camera-facing crown impostor, a cypress, gum or oak becomes one impostor; the
 ## images are baked from LOD0 by tools/vegetation/bake_impostors.gd. The rollout's
 ## shrubs and flax have the same three levels (their far impostor ends at a short
-## range), and a hedge's far level is its plain core on dark posts. The rollout's
+## range), and a hedge's far level is its plain core over its stems. The rollout's
 ## impostors hold several views round the plant, the shader showing the camera's
 ## side of each instance, so a leaning tree keeps its lean. Their crowns are not
 ## tiled from round balls: cards of ragged sprays clothe one body of crown (or
@@ -2446,9 +2446,9 @@ func _build_pine(p: Dictionary) -> Dictionary:
 			card.lod1 = site.has("lod1")
 			card.lod1_grow = 1.9
 			cards.append(card)
-		# A spray of pale candles standing out of the sunlit crown, a little larger
+		# A tuft of slim pale candles standing out of the sunlit crown, a little larger
 		# than life so they still read from across a street.
-		if out.y > 0.1 and rng.randf() < 0.45:
+		if out.y > 0.1 and rng.randf() < 0.55:
 			var strip := PINE_CANDLE_ROW
 			strip.size.x *= 0.25
 			strip.position.x += rng.randf_range(0.0, 0.75)
@@ -2456,7 +2456,7 @@ func _build_pine(p: Dictionary) -> Dictionary:
 			if facing.length() < 0.1:
 				facing = Vector3.RIGHT
 			for k in 2:
-				var spray := _card(position + rise * card_h * 0.42, facing.normalized().rotated(Vector3.UP, PI * 0.5 * k + rng.randf_range(-0.3, 0.3)), rise, 0.9, 0.55, 0.1, rng.randf_range(-0.1, 0.1), strip, color * 1.08, heart, index, 0.03)
+				var spray := _card(position + rise * card_h * 0.42, facing.normalized().rotated(Vector3.UP, PI * 0.5 * k + rng.randf_range(-0.3, 0.3)), rise, 0.45, 0.42, 0.1, rng.randf_range(-0.1, 0.1), strip, color * 0.95, heart, index, 0.03)
 				spray.coarse = true
 				spray.heart_weight = 0.72
 				spray.lod1 = false
@@ -2872,7 +2872,12 @@ func _build_shrub(p: Dictionary) -> Dictionary:
 				var mirror := 1.0 if rng.randf() < 0.5 else -1.0
 				# Standing up and out, never pointing down into the ground.
 				var rise := (Vector3.UP * 0.5 + Vector3(out.x, maxf(out.y, 0.0), out.z) * 0.85).normalized()
-				for normal in _cluster_normals(out, rng, 0.2):
+				var normals := _cluster_normals(out, rng, 0.2)
+				if normals.size() == 2:
+					# On the mound's side both face out, turned a little each way: a card
+					# turned a quarter would stick out of it like a fin.
+					normals = [normals[0].rotated(Vector3.UP, -0.5), normals[0].rotated(Vector3.UP, 0.5)]
+				for normal in normals:
 					var card := _card(position, normal, rise, card_w * size * mirror, card_h * size, 0.45, rng.randf_range(-0.35, 0.35), cell, Color(shade, shade, shade), heart, index, 0.02)
 					card.coarse = true
 					card.root = 0.66
@@ -3052,12 +3057,14 @@ const HEDGE_PIECE_STATIONS := 32
 ## side: [lateral (a share of its half depth), height (a share of the canopy from its
 ## base to its top), the mat's facing out, and up]. The first row stands upright
 ## along the top, its upper edge the hedge's leafy skyline.
-const HEDGE_MAT_M := 0.9
+const HEDGE_MAT_M := 1.05
 const HEDGE_ROUNDED_ROWS := [[0.36, 0.94, 1.0, 0.1], [0.82, 0.86, 0.7, 0.7], [1.03, 0.58, 1.0, 0.25], [1.0, 0.2, 1.0, -0.1]]
 const HEDGE_BOX_ROWS := [[0.45, 0.95, 1.0, 0.1], [0.92, 0.93, 0.7, 0.7], [1.03, 0.7, 1.0, 0.1], [1.03, 0.42, 1.0, 0.0], [1.03, 0.14, 1.0, 0.0]]
-## A hedge's core under its mats reads as the shade between them; alone, at the far
-## level, it stands for them.
-const HEDGE_CORE_SHADE := 0.5
+## A hedge's core under its mats reads as the soft shade between them; alone, at the
+## far level, it stands for them, as big as they make the hedge, and a rounded
+## hedge keeps the stems the nearer levels draw.
+const HEDGE_CORE_SHADE := 0.68
+const HEDGE_FAR_GROW := Vector3(1.12, 0.14, 0.1)
 
 
 ## Lays a clipped hedge of variant along points (its centre line: x, the
@@ -3067,10 +3074,10 @@ const HEDGE_CORE_SHADE := 0.5
 ## was clipped), dark where it shows between the rows of ragged leaf mats that
 ## clothe its top, shoulders and sides (their upright top row its leafy skyline),
 ## and under a rounded hedge's uneven hem its open crooked stems. lod 2 is the far
-## level: the core alone, coarser and lit as the mats are, a rounded hedge standing
-## on dark posts for its stems. The lumps come from seed and each station's index,
-## so pieces of one hedge laid separately meet exactly; only the hedge's own ends
-## are capped. Bends are rounded off over about a metre.
+## level: the core alone, coarser, grown and lit as the mats make it, over the same
+## stems. The lumps come from seed and each station's index, so pieces of one
+## hedge laid separately meet exactly; only the hedge's own ends are capped. Bends
+## are rounded off over about a metre.
 func hedge_into(surfs: Dictionary, variant: int, points: PackedVector3Array, from_m: float, to_m: float, lod: int, seed: int) -> void:
 	var p: Dictionary = HEDGES[variant]
 	var lengths := PackedFloat32Array([0.0])
@@ -3111,6 +3118,10 @@ func hedge_into(surfs: Dictionary, variant: int, points: PackedVector3Array, fro
 	if rounded:
 		# Closed underneath, over the stems.
 		profile.append(profile[0])
+	if lod == 2:
+		var low := base - HEDGE_FAR_GROW.y if rounded else base
+		for k in profile.size():
+			profile[k] = Vector2(profile[k].x * HEDGE_FAR_GROW.x, remap(profile[k].y, base, top, low, top + HEDGE_FAR_GROW.z))
 	var tile := float(p.tile)
 	var surface_key := str(p.surface)
 	if not surfs.has(surface_key):
@@ -3141,7 +3152,7 @@ func hedge_into(surfs: Dictionary, variant: int, points: PackedVector3Array, fro
 			var rise := clampf((corner.y - base) / maxf(top - base, 0.1), 0.0, 1.0)
 			var lateral := corner.x * (1.0 + (bulge + roll * 0.5 * rise) / maxf(d, 0.1))
 			var lift := corner.y + roll * rise * rise
-			if rounded and absf(corner.y - base) < 0.01:
+			if rounded and corner.y <= base + 0.01:
 				lift += hem
 			if on_grid and corner.y > base + 0.05:
 				lateral += signf(corner.x) * (_hash01(seed, index, k) - 0.5) * (0.05 if rounded else 0.08)
@@ -3181,21 +3192,6 @@ func hedge_into(surfs: Dictionary, variant: int, points: PackedVector3Array, fro
 		var middle := core.add(centre, outward, Vector2(0.5, 0.5), Color(0.8, 0.8, 0.8), Vector2(0.005, 0.0))
 		for k in profile.size() - 1:
 			core.tri(middle, ring[k], ring[k + 1], outward)
-	if lod == 2:
-		if rounded:
-			# The stems: dark posts here and there under the hem.
-			for i in frames.size():
-				var station := stations[i]
-				if station > to_m - 0.001 and to_m < total - 0.001:
-					continue
-				var index := roundi(station / HEDGE_STEP_M)
-				if _hash01(seed, index, 341) < 0.4:
-					continue
-				var foot: Vector3 = (frames[i].position as Vector3) + (frames[i].right as Vector3) * ((_hash01(seed, index, 340) - 0.5) * d)
-				var post := lerpf(0.06, 0.11, _hash01(seed, index, 342))
-				_tube(core, PackedVector3Array([foot + Vector3.DOWN * 0.05, foot + Vector3.UP * (base + 0.08)]), PackedFloat32Array([post, post * 0.7]), PackedColorArray([Color(0.2, 0.18, 0.16), Color(0.14, 0.13, 0.12)]),
-					PackedVector2Array([Vector2.ZERO, Vector2.ZERO]), 3, 1.0, tile)
-		return
 	var mat_cell: Rect2 = SHRUB_CELLS[str(p.mats)]
 	if not surfs.has("hedge_foliage"):
 		surfs["hedge_foliage"] = Surf.new()
@@ -3212,7 +3208,8 @@ func hedge_into(surfs: Dictionary, variant: int, points: PackedVector3Array, fro
 		var tangent: Vector3 = frame.tangent
 		var ground: Vector3 = frame.position
 		var roll := float(p.lobes) * (0.62 * sin(station * 1.15 + phases.x) + 0.38 * sin(station * 2.6 + phases.y))
-		var rows: Array = HEDGE_ROUNDED_ROWS if rounded else HEDGE_BOX_ROWS
+		# The far level draws no mats.
+		var rows: Array = [] if lod == 2 else (HEDGE_ROUNDED_ROWS if rounded else HEDGE_BOX_ROWS)
 		# Mats at every other station on each side, each row offset from the last;
 		# LOD1 keeps every row, with fewer, larger mats along it.
 		for flank: float in [1.0, -1.0]:

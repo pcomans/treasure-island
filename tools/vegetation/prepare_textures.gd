@@ -53,7 +53,7 @@ const SHRUB_CELL_SOURCES := [
 const ROLLOUT_GRADES := {
 	"pine_crest.png": [Color(0.86, 0.9, 0.84), 0.15],
 	"pine_crest_candles.png": [Color(0.86, 0.9, 0.84), 0.1],
-	"pine_candle_row.png": [Color(0.94, 0.9, 0.8), 0.35],
+	"pine_candle_row.png": [Color(0.84, 0.78, 0.7), 0.55],
 	"broadleaf_clump.png": [Color(0.92, 0.94, 0.86), 0.1],
 	"broadleaf_bronze.png": [Color(0.86, 0.82, 0.74), 0.4],
 	"christmas_spray.png": [Color(0.82, 0.88, 0.82), 0.1],
