@@ -48,14 +48,14 @@ const SHRUB_CELL_SOURCES := [
 ## [tint, desaturation]. Set from the mean colour of their crowns beside the crops':
 ## every generated leaf came out far more saturated than the crops (0.4-0.7 against
 ## 0.2-0.45 in HSV), and the spreading broadleaf much darker (value 0.23 against
-## 0.33), so it is brightened past its source. The bronze clump came out orange, the
-## flax wine red rather than near-black maroon, the hedge stems pale. The cells with
-## flowers keep more of their colour.
+## 0.33) and yellower, so it is brightened past its source and cooled. The bronze
+## clump came out orange, the flax wine red rather than near-black maroon, the hedge
+## stems pale. The cells with flowers keep more of their colour.
 const ROLLOUT_GRADES := {
 	"pine_crest.png": [Color(0.88, 0.92, 0.86), 0.36],
 	"pine_crest_candles.png": [Color(0.88, 0.92, 0.86), 0.3],
 	"pine_candle_row.png": [Color(0.84, 0.78, 0.7), 0.55],
-	"broadleaf_clump.png": [Color(1.12, 1.12, 1.04), 0.38],
+	"broadleaf_clump.png": [Color(1.17, 1.25, 1.16), 0.62],
 	"broadleaf_bronze.png": [Color(1.02, 0.98, 0.9), 0.52],
 	"christmas_spray.png": [Color(0.82, 0.84, 0.8), 0.38],
 	"christmas_spray_flowers.png": [Color(0.8, 0.8, 0.78), 0.25],

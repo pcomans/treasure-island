@@ -11,7 +11,9 @@ extends SceneTree
 ## are brightened or darkened until they meet their near level under the game's
 ## own sun and sky (main.tscn); a BAKE_CHECK line reports how the impostor and the
 ## near level compare from four sides, at the hand-over distance (LOD1, what the
-## impostor replaces) and at 30 m (LOD0): tone, top height, width and covered pixels.
+## impostor replaces) and at 30 m (LOD0): tone overall, side by side and in the
+## plant's upper and lower halves (the gain evens out the overall tone, so a fault
+## shows in the others), top height, width and covered pixels.
 ##
 ##   tools/godot --path . --script tools/vegetation/bake_impostors.gd [-- --only PROP[:VARIANT],...]
 ##   tools/godot --headless --path . --import   # then import the new PNGs
@@ -236,7 +238,7 @@ func _match_tone(kit: Kit, prop: String, variant: int, atlas: Image) -> Image:
 func _report(stats: Dictionary) -> String:
 	var near: Vector3 = stats.near_mean
 	var far: Vector3 = stats.far_mean
-	return "tone %+.0f%% (sides %s) top %+.1f%% width %+.1f%% cover %+.0f%%" % [(_luma(far) / maxf(_luma(near), 0.0001) - 1.0) * 100.0, stats.sides, stats.top_gap * 100.0, stats.width_gap * 100.0, stats.cover_gap * 100.0]
+	return "tone %+.0f%% (sides %s, upper %+.0f%%, lower %+.0f%%) top %+.1f%% width %+.1f%% cover %+.0f%%" % [(_luma(far) / maxf(_luma(near), 0.0001) - 1.0) * 100.0, stats.sides, stats.upper_gap * 100.0, stats.lower_gap * 100.0, stats.top_gap * 100.0, stats.width_gap * 100.0, stats.cover_gap * 100.0]
 
 
 static func _luma(color: Vector3) -> float:
@@ -299,6 +301,7 @@ func _compare(scene: Dictionary, near_key: String, distance: float, box: AABB, e
 	var width_gap := 0.0
 	var cover_gap := 0.0
 	var sides := PackedStringArray()
+	var halves := [Vector2.ZERO, Vector2.ZERO]
 	var aim := box.get_center()
 	for side in 4:
 		var turn := TAU * (float(side) + 0.15) / 4.0
@@ -308,14 +311,17 @@ func _compare(scene: Dictionary, near_key: String, distance: float, box: AABB, e
 		near_sum += near.mean
 		far_sum += far.mean
 		sides.append("%+.0f" % ((_luma(far.mean) / maxf(_luma(near.mean), 0.0001) - 1.0) * 100.0))
+		halves[0] += Vector2(far.upper, near.upper)
+		halves[1] += Vector2(far.lower, near.lower)
 		var tall := maxf(float(near.bottom - near.top), 1.0)
 		top_gap += float(near.top - far.top) / tall
 		width_gap += float((far.right - far.left) - (near.right - near.left)) / maxf(float(near.right - near.left), 1.0)
 		cover_gap += float(far.count) / maxf(float(near.count), 1.0) - 1.0
-	return {"near_mean": near_sum, "far_mean": far_sum, "sides": "/".join(sides), "top_gap": top_gap / 4.0, "width_gap": width_gap / 4.0, "cover_gap": cover_gap / 4.0}
+	return {"near_mean": near_sum, "far_mean": far_sum, "sides": "/".join(sides), "upper_gap": halves[0].x / maxf(halves[0].y, 0.0001) - 1.0, "lower_gap": halves[1].x / maxf(halves[1].y, 0.0001) - 1.0,
+		"top_gap": top_gap / 4.0, "width_gap": width_gap / 4.0, "cover_gap": cover_gap / 4.0}
 
 
-## One level alone in the frame: {mean linear colour, count, top, bottom, left, right} of its covered pixels.
+## One level alone in the frame: {mean linear colour, its luma in the upper and lower halves of its height, count, top, bottom, left, right} of its covered pixels.
 func _frame(scene: Dictionary, key: String) -> Dictionary:
 	var meshes: Dictionary = scene.meshes
 	for name: String in meshes:
@@ -332,18 +338,33 @@ func _frame(scene: Dictionary, key: String) -> Dictionary:
 	var bottom := 0
 	var left := image.get_width()
 	var right := 0
+	var row_luma := PackedFloat32Array()
+	var row_count := PackedInt32Array()
+	row_luma.resize(image.get_height())
+	row_count.resize(image.get_height())
 	for y in image.get_height():
 		for x in image.get_width():
 			var i := (y * image.get_width() + x) * 4
 			if data[i + 3] < 128:
 				continue
-			sum += Vector3(_LINEAR[data[i]], _LINEAR[data[i + 1]], _LINEAR[data[i + 2]])
+			var pixel := Vector3(_LINEAR[data[i]], _LINEAR[data[i + 1]], _LINEAR[data[i + 2]])
+			sum += pixel
+			row_luma[y] += _luma(pixel)
+			row_count[y] += 1
 			count += 1
 			top = mini(top, y)
 			bottom = maxi(bottom, y)
 			left = mini(left, x)
 			right = maxi(right, x)
-	return {"mean": sum / maxf(float(count), 1.0), "count": count, "top": top, "bottom": bottom, "left": left, "right": right}
+	var middle := (top + bottom) / 2
+	var upper := Vector2.ZERO
+	var lower := Vector2.ZERO
+	for y in image.get_height():
+		if y <= middle:
+			upper += Vector2(row_luma[y], row_count[y])
+		else:
+			lower += Vector2(row_luma[y], row_count[y])
+	return {"mean": sum / maxf(float(count), 1.0), "upper": upper.x / maxf(upper.y, 1.0), "lower": lower.x / maxf(lower.y, 1.0), "count": count, "top": top, "bottom": bottom, "left": left, "right": right}
 
 
 ## atlas with each channel scaled by gain in linear light, through a table per channel.

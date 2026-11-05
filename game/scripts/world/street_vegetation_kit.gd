@@ -3735,7 +3735,7 @@ func material(key: String) -> Material:
 		"christmas_bark":
 			made = _bark("christmas_bark.png", Color(0.95, 0.94, 0.92))
 		"broadleaf_foliage":
-			made = _crown_foliage("broadleaf_foliage_atlas.png", Color(1.0, 1.0, 0.96), Color(0.08, 0.1, 0.03), Vector2(1024.0, 1024.0), 0.12, 0.8)
+			made = _crown_foliage("broadleaf_foliage_atlas.png", Color.WHITE, Color(0.08, 0.1, 0.03), Vector2(1024.0, 1024.0), 0.12, 0.8)
 		"eucalyptus_bark":
 			made = _bark("eucalyptus_bark.png", Color(0.92, 0.91, 0.9))
 		"set_piece_foliage":
@@ -3761,15 +3761,16 @@ func _impostor_material(prop: String, variant: int, image: Texture2D = null) -> 
 	var key := "impostor_%s_%d" % [prop, variant]
 	if image != null or not _materials.has(key):
 		var made := ShaderMaterial.new()
-		# A flat quad through the crown would catch the shadow mesh's shadow as hard
-		# straight lines; the rollout's images hold the crown's own shade instead.
-		made.shader = IMPOSTOR_UNSHADOWED_SHADER if PROPS[prop].has("impostor_grid") else IMPOSTOR_SHADER
+		var params: Dictionary = PROPS[prop].variants[variant]
+		var rollout: bool = PROPS[prop].has("impostor_grid") or params.has("impostor_forward")
+		# A flat quad through the crown would catch the shadow mesh's shadow as a hard
+		# black shape; the rollout's images hold the crown's own shade instead.
+		made.shader = IMPOSTOR_UNSHADOWED_SHADER if rollout else IMPOSTOR_SHADER
 		made.set_shader_parameter("albedo_texture", image if image != null else load(impostor_texture_path(prop, variant)))
 		made.set_shader_parameter("view_grid", PROPS[prop].get("impostor_grid", Vector2i.ONE))
 		made.set_shader_parameter("mip_alpha_boost", float(PROPS[prop].get("impostor_alpha", 0.0)))
-		var params: Dictionary = PROPS[prop].variants[variant]
 		made.set_shader_parameter("toward_camera_m", float(params.get("impostor_forward", 0.0)))
-		if PROPS[prop].has("impostor_grid") or params.has("impostor_forward"):
+		if rollout:
 			made.set_shader_parameter("dome", IMPOSTOR_DOME)
 			# A palm's crown is thin too.
 			made.set_shader_parameter("sky_lean", IMPOSTOR_THIN_SKY_LEAN if params.has("impostor_forward") else float(PROPS[prop].get("impostor_sky_lean", IMPOSTOR_SKY_LEAN)))
