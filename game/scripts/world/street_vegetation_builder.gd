@@ -288,7 +288,7 @@ func _shadow_instance(key: String, cell: String, mesh: Mesh, end_m: float, trans
 ## seed}. Returns what is wrong with the row, or "".
 func _add_hedge(hedges: Dictionary, row: Dictionary) -> String:
 	var points_value: Variant = row.get("points_m", null)
-	if str(row.get("geometry", "")) != "line" or not points_value is Array:
+	if str(row.get("geometry", "")) != "polyline" or not points_value is Array:
 		return "a hedge needs a line of points_m"
 	var line: Array = points_value
 	var problem := KIT.line_params_error(str(row.prop), str(row.get("kind", "")), row.get("prop_params", null), line.size())

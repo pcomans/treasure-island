@@ -752,33 +752,33 @@
      "mix": [
       {
        "prop": "spreading_broadleaf",
-       "share": 40,
+       "share": 36,
        "variants": [0, 3],
        "scale": [0.85, 1.2]
       },
       {
        "prop": "monterey_pine",
-       "share": 16,
-       "variants": [3, 5],
+       "share": 22,
+       "variants": [0, 2],
        "scale": [0.85, 1.25]
       },
       {
        "prop": "monterey_cypress",
-       "share": 45,
+       "share": 64,
        "variants": [0, 1],
        "scale": [0.85, 1.15]
       },
       {
        "prop": "nz_christmas_tree",
-       "share": 5,
+       "share": 16,
        "variants": [0, 1],
        "scale": [0.85, 1.25]
       }
      ],
-     "fit": 0.2,
+     "fit": 0.3,
      "nudge_m": 6,
      "basis": "production_inference",
-     "rule": "The housing's trees: the spreading broadleaf is the commonest big tree, then Monterey pines, wind-shaped cypresses and New Zealand Christmas trees, at about 45/25/15/10; each stands at a crown of the aerial its own crown fits, so these weights are higher for the forms few crowns fit. Pines use the dome variants 3-5 until the residential crown lands (then variants 0-2).",
+     "rule": "The housing's trees: the spreading broadleaf is the commonest big tree, then Monterey pines, wind-shaped cypresses and New Zealand Christmas trees, at about 45/25/15/10; each stands at a crown of the aerial its own crown fits, so these weights are higher for the forms few crowns fit.",
      "evidence": "Species pass 2026-11-05: Gateview (c2, c3, b7) and Northpoint (b1-b4) broadleaves, Keppler pines (p5, p6, Mar 2025), Sturgeon Christmas tree (b5, b6, Mar 2025), Avenue B park cypresses (c4, c6, Sep 2025); starting shares 45/25/15/10, the rest set pieces. Crowns: 2026-05-26 aerial."
     },
     {
@@ -802,7 +802,7 @@
       {
        "prop": "monterey_pine",
        "share": 20,
-       "variants": [3, 5],
+       "variants": [0, 2],
        "scale": [0.85, 1.25]
       }
      ],
@@ -821,7 +821,7 @@
       {
        "prop": "monterey_pine",
        "share": 40,
-       "variants": [3, 5],
+       "variants": [0, 5],
        "scale": [0.85, 1.25]
       },
       {
@@ -829,12 +829,6 @@
        "share": 40,
        "variants": [0, 3],
        "scale": [0.85, 1.2]
-      },
-      {
-       "prop": "eucalyptus_mature",
-       "share": 5,
-       "variants": [0, 1],
-       "scale": [0.9, 1.15]
       },
       {
        "prop": "monterey_cypress",
@@ -846,8 +840,8 @@
      "fit": 0.2,
      "nudge_m": 6,
      "basis": "production_inference",
-     "rule": "The campus's groves and lot trees: pines and big dark domes at the aerial's crowns, the trees of its parking lots in mulch pits, and a few of the entrance eucalyptus's form.",
-     "evidence": "2026-05-26 aerial (crowns) and the 2025 gallery photos (species pass c1, n2): large dark domes and pine forms round the dorms; the owner's identification 2026-11-05 of the eucalyptus at the entrance.",
+     "rule": "The campus's groves and lot trees: pines and big dark domes at the aerial's crowns, the trees of its parking lots in mulch pits.",
+     "evidence": "2026-05-26 aerial (crowns) and the 2025 gallery photos (species pass c1, n2): large dark domes and pine forms round the dorms.",
      "in_lots": true
     },
     {
@@ -934,7 +928,7 @@
       {
        "prop": "monterey_pine",
        "share": 35,
-       "variants": [3, 5],
+       "variants": [0, 5],
        "scale": [0.85, 1.25]
       },
       {

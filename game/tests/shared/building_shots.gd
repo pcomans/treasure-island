@@ -370,7 +370,7 @@ func _plant_gallery(plan: Dictionary) -> Dictionary:
 					return {"error": "plant %d has no ground under its path" % index}
 				line.append([float(point[0]), y, float(point[1])])
 				ground_y.append(y)
-			(rows[plant.group] as Array).append({"id": "gallery:%d" % index, "status": "placed", "layer": "vegetation", "kind": "hedge", "geometry": "line",
+			(rows[plant.group] as Array).append({"id": "gallery:%d" % index, "status": "placed", "layer": "vegetation", "kind": "hedge", "geometry": "polyline",
 				"prop": prop, "prop_params": {"variant": plant.variant, "ground_y_m": ground_y}, "points_m": line})
 			continue
 		var params := {"variant": plant.variant, "scale": float(plant.get("scale", 1.0)), "lift_m": 0.0, "foot_spread_m": 0.0, "well_m": 0.0}
