@@ -187,6 +187,11 @@ const CANOPY_WALL_MARGIN_M = 2;
 // The directions tried round a crown whose centre cannot take a trunk.
 const CANOPY_NUDGE_STEP_M = 1.5;
 const CANOPY_NUDGE_DIRECTIONS = 12;
+// Clipped hedges: how often a hedge line is sampled against its site (m), the
+// spacing of its points on the ground, and the shortest run worth planting.
+const HEDGE_SAMPLE_M = 0.5;
+const HEDGE_POINT_STEP_M = 3;
+const HEDGE_MIN_RUN_M = 2.5;
 const GATE_VALUES = Object.freeze(["gate", "hampshire_gate", "kissing_gate", "lift_gate", "sliding_gate", "swing_gate", "wicket_gate"]);
 const LINE_BARRIER_KINDS = Object.freeze({
   fence: "fence",
@@ -442,10 +447,23 @@ function validateExclusions(exclusions) {
 // kit prop (tools/lib/street-vegetation-generation.mjs) with the variants and
 // scale it draws, the surfaces it may stand on, a polygon it keeps within and,
 // like the furniture rules, its basis, rule and dated evidence.
+function validateHedgeRule(rule, label) {
+  invariant(STREET_VEGETATION_PROPS[rule.prop]?.kinds.includes("hedge"), `${label} prop must be a hedge`);
+  invariant(rule.pattern === "hedge_lines", `${label}: a hedge rule's pattern is hedge_lines`);
+  invariant(Number.isInteger(rule.variant) && rule.variant >= 0 && rule.variant < STREET_VEGETATION_PROPS[rule.prop].variants, `${label} variant is invalid`);
+  invariant(typeof rule.group === "string" && rule.group !== "", `${label} needs a hedge group`);
+  invariant(rule.basis === "production_inference", `${label} basis must be production_inference`);
+  for (const field of ["rule", "evidence"]) invariant(typeof rule[field] === "string" && rule[field].trim() !== "", `${label} needs ${field}`);
+}
+
 function validateScatterRule(rule, zoneId, ruleIds) {
   const label = `Street detail zone ${zoneId} scatter rule ${rule?.id}`;
   invariant(typeof rule?.id === "string" && SAFE_ID.test(rule.id) && !ruleIds.has(rule.id), `${label} needs a unique lower_snake id`);
   ruleIds.add(rule.id);
+  if (rule.kind === "hedge") {
+    validateHedgeRule(rule, label);
+    return;
+  }
   const kind = STREET_DETAIL_KINDS[rule.kind];
   invariant(kind && kind.geometry === "point" && STREET_DETAIL_LAYERS.includes(kind.layer), `${label} has a non-scatter kind ${rule.kind}`);
   if (PLANTING_PATTERNS.includes(rule.pattern)) {
@@ -497,6 +515,10 @@ function validateScatterRule(rule, zoneId, ruleIds) {
   }
   if (rule.surfaces != null) {
     invariant(Array.isArray(rule.surfaces) && rule.surfaces.length > 0 && rule.surfaces.every((key) => typeof key === "string" && key !== "") && new Set(rule.surfaces).size === rule.surfaces.length, `${label} surfaces must list material keys`);
+  }
+  if (rule.visible_surfaces != null) {
+    // Planted on what the eye sees: the street ground's grass tops read as its concrete to surfaces.
+    invariant(rule.prop != null && Array.isArray(rule.visible_surfaces) && rule.visible_surfaces.length > 0 && rule.visible_surfaces.every((key) => typeof key === "string" && key !== ""), `${label} visible_surfaces must list material keys, on a planted rule`);
   }
   if (rule.within_xz != null) {
     invariant(Array.isArray(rule.within_xz) && rule.within_xz.length >= 3 && rule.within_xz.every(isXZ), `${label} within_xz must be a polygon of 3+ [x, z] points`);
@@ -1446,8 +1468,8 @@ export function generateStreetDetail({
   // aerial's positions are good to about that) to the nearest spot that can, and
   // a crown close to a wall comes down to a size that barely reaches it.
   const placeCanopy = (zone, rule, contains) => {
-    const crowns = treeCrowns[rule.group] ?? [];
-    invariant(treeCrowns[rule.group], `Street detail rule ${zone.id}/${rule.id} names unknown crown group ${rule.group}`);
+    const crowns = treeCrowns.groups[rule.group];
+    invariant(crowns, `Street detail rule ${zone.id}/${rule.id} names unknown crown group ${rule.group}`);
     const problemAt = (xz) => {
       if (!contains(xz)) return "outside_zone";
       if (rule.within_xz && !pointInRing(xz, rule.within_xz, true)) return "outside_rule_area";
@@ -1509,10 +1531,96 @@ export function generateStreetDetail({
     });
     ruleSummaries.set(`${zone.id}/${rule.id}`, { id: rule.id, kind: rule.kind, pattern: rule.pattern, candidates: crowns.length, placed });
   };
+  // A hedge rule: clipped hedges along the lines of a hedge group read from the
+  // dated aerial. Each line is sampled against its site; its clear stretches
+  // become hedge rows. Hedges have no collision, so they keep the gameplay mask for
+  // looks, not for movement.
+  const hedgeClear = (xz) => {
+    if (!onLand(xz, exclusions.land_edge_buffer_m)) return false;
+    if (hardViolation(hardShapes, [xz], STREET_DETAIL_KINDS.hedge.footprint_radius_m)) return false;
+    if (buildings.nearest(xz, 0.6).distance < 0.6) return false;
+    if (plantRoads.nearest(xz, exclusions.road_buffer_m).distance < exclusions.road_buffer_m) return false;
+    if (shorelineOverlays.nearest(xz, 0.5).distance < 0.5) return false;
+    if (UNPLANTABLE_MATERIALS.includes(surfaceAt(xz).material_key)) return false;
+    return !occupied.some((item) => !item.lowPlant && polylineDistance(xz, item.points) < item.radius_m + 0.35);
+  };
+  const placeHedgeLine = (zone, rule, line, index) => {
+    // The line's sample stations and whether each is clear.
+    const length = polylineLength(line);
+    const stations = [];
+    for (let at = 0; at <= length + 1e-6; at += HEDGE_SAMPLE_M) {
+      const point = alongPoint(line, Math.min(at, length), 0);
+      stations.push({ at, xz: [round3(point[0]), round3(point[1])] });
+    }
+    let placed = 0;
+    let start = null;
+    const flush = (end) => {
+      if (start === null) return;
+      const from = stations[start].at;
+      const to = stations[end].at;
+      start = null;
+      if (to - from < HEDGE_MIN_RUN_M) return;
+      const count = Math.max(2, Math.ceil((to - from) / HEDGE_POINT_STEP_M) + 1);
+      const points = [];
+      for (let k = 0; k < count; k += 1) {
+        const point = alongPoint(line, from + ((to - from) * k) / (count - 1), 0);
+        points.push([round3(point[0]), round3(point[1])]);
+      }
+      const grounds = points.map((point) => groundAt(point));
+      if (grounds.some((ground) => !ground)) return;
+      const supports = points.map((point) => grounded(point));
+      const id = `scatter:${zone.id}:${rule.id}:l${String(index).padStart(4, "0")}_${String(placed).padStart(2, "0")}`;
+      const row = {
+        id,
+        source: "scatter",
+        source_id: `zone:${zone.id}/${rule.id}`,
+        kind: "hedge",
+        layer: "vegetation",
+        geometry: "polyline",
+        points_m: points.map((point, k) => [point[0], supports[k].y, point[1]]),
+        terrain_supports: supports.map(({ support }) => [support.object_key, support.triangle_index]),
+        vertex_source_ids: points.map((_, k) => `${id}:${k}`),
+        closed: false,
+        length_m: round3(to - from),
+        attached_ids: [],
+        prop: rule.prop,
+        prop_params: { variant: rule.variant, ground_y_m: grounds.map((ground) => round3(ground.y)) },
+        status: "placed",
+        exclusion: null,
+        basis: rule.basis,
+      };
+      rows.push(row);
+      occupied.push({ id, points, radius_m: STREET_DETAIL_KINDS.hedge.footprint_radius_m, lowPlant: true, planted: true });
+      placed += 1;
+      audit.scatter.placed += 1;
+    };
+    stations.forEach((station, at) => {
+      if (hedgeClear(station.xz)) {
+        if (start === null) start = at;
+      } else {
+        flush(Math.max(0, at - 1));
+      }
+    });
+    flush(stations.length - 1);
+    return placed;
+  };
+  const placeHedges = (zone, rule) => {
+    const lines = treeCrowns.hedges[rule.group];
+    invariant(lines, `Street detail rule ${zone.id}/${rule.id} names unknown hedge group ${rule.group}`);
+    let placed = 0;
+    lines.forEach((line, index) => {
+      placed += placeHedgeLine(zone, rule, line, index);
+    });
+    ruleSummaries.set(`${zone.id}/${rule.id}`, { id: rule.id, kind: rule.kind, pattern: rule.pattern, candidates: lines.length, placed });
+  };
   const runScatter = (planting) => {
     for (const { zone, contains, bounds } of zoneShapes) {
       for (const rule of zone.scatter) {
         if ((rule.prop != null || rule.pattern === "canopy" || PLANTING_PATTERNS.includes(rule.pattern)) !== planting) continue;
+        if (rule.kind === "hedge") {
+          placeHedges(zone, rule);
+          continue;
+        }
         if (rule.pattern === "canopy") {
           placeCanopy(zone, rule, contains);
           continue;
@@ -1568,7 +1676,9 @@ export function generateStreetDetail({
             const violation = siteViolation(rule.kind, xz, exclusions.building_buffer_m);
             if (violation) return violation.reason;
             const material = surfaceAt(xz).material_key;
-            if (STREET_DETAIL_KINDS[rule.kind].layer === "vegetation" && UNPLANTABLE_MATERIALS.includes(material)) return "unplantable_surface";
+            if (rule.visible_surfaces) {
+              if (!footSamples(xz, STREET_DETAIL_KINDS[rule.kind].footprint_radius_m).every((point) => rule.visible_surfaces.includes(groundAt(point)?.material_key))) return "rule_surface";
+            } else if (STREET_DETAIL_KINDS[rule.kind].layer === "vegetation" && UNPLANTABLE_MATERIALS.includes(material)) return "unplantable_surface";
             // The whole footprint stands on the rule's surfaces, so a plant keeps
             // inside its bed, clear of the curb and the cars parked along it.
             if (rule.surfaces && !footSamples(xz, STREET_DETAIL_KINDS[rule.kind].footprint_radius_m).every((point) => rule.surfaces.includes(surfaceAt(point).material_key))) return "rule_surface";

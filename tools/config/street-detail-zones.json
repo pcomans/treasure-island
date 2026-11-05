@@ -975,6 +975,80 @@
      "basis": "production_inference",
      "rule": "Young date palms in the rows of the 4th Street lot's islands, traced palm by palm.",
      "evidence": "2026-05-26 aerial (May 2026 z19 tiles): about 25 star-shaped young palm crowns in rows across the lot at x 200-260, z 135-228."
+    },
+    {
+     "id": "residential_hedges",
+     "kind": "hedge",
+     "pattern": "hedge_lines",
+     "group": "residential",
+     "prop": "clipped_hedge",
+     "variant": 0,
+     "basis": "production_inference",
+     "rule": "Clipped small-leaved hedges 1.0-1.2 m tall on leggy stems along the housing's walls, in runs where the aerial shows dark foliage along them.",
+     "evidence": "Species pass h1 (Street View Mar 2025, 1230 Gateview Ct, pano j3ugQSzJZtl9lpbb5i58bQ); 2026-05-26 aerial (May 2026 z19 tiles) for the lines."
+    },
+    {
+     "id": "job_corps_hedges",
+     "kind": "hedge",
+     "pattern": "hedge_lines",
+     "group": "job_corps",
+     "prop": "clipped_hedge",
+     "variant": 1,
+     "basis": "production_inference",
+     "rule": "Solid clipped hedges 1.2-1.5 m tall of small glossy dark leaves along the campus's foundations.",
+     "evidence": "Species pass h2 (2025 Job Corps gallery photo); 2026-05-26 aerial (May 2026 z19 tiles) for the lines."
+    }
+   ]
+  },
+  {
+   "id": "mersea_median",
+   "name": "Shrub strip between 9th Street and the Mersea lot",
+   "pilot": false,
+   "reason": "The planted strip along 9th Street on the north-west edge of the Mersea lot's north field (vegetation rollout, ROOT item 2026-11-05).",
+   "reference": "Street View Sep 2025 9th St (pano zSYuqR9R0oyboW2wFZ-wEw); aerials 2025-08-29 (form) and 2026-05-26",
+   "shape": {
+    "type": "polygon",
+    "points_xz": [[-392, 88], [-372, 78], [-345, 62], [-318, 52], [-312, 62], [-338, 80], [-362, 97], [-384, 106]]
+   },
+   "scatter": [
+    {
+     "id": "median_shrubs",
+     "kind": "planting_slot",
+     "pattern": "along",
+     "line_xz": [[-379.0, 94.9], [-365.8, 87.9], [-352.6, 80.8], [-339.6, 73.3], [-331.4, 67.4], [-322.6, 62.7]],
+     "offsets_m": [1.1, -1.1],
+     "stagger_m": 1.3,
+     "spacing_m": 2.6,
+     "jitter_m": 0.7,
+     "acceptance": 0.85,
+     "visible_surfaces": ["street_kerb_verge"],
+     "prop": "pittosporum_tobira",
+     "params": {
+      "variants": [0, 1],
+      "scale": [0.8, 1.0]
+     },
+     "basis": "production_inference",
+     "rule": "Low rounded dark shrubs in a loose double row along the strip, the closest form of the kit to the photo's.",
+     "evidence": "Street View Sep 2025 on 9th St (pano zSYuqR9R0oyboW2wFZ-wEw, heading 150): scruffy dark green shrubs under a metre tall with some dead brown stems on bare mulch; aerial (Aug 2025, ol-north crop, form only) and 2026-05-26 (z19): one strip of them along the lot's whole north-west edge."
+    },
+    {
+     "id": "median_stems",
+     "kind": "planting_slot",
+     "pattern": "along",
+     "line_xz": [[-379.0, 94.9], [-365.8, 87.9], [-352.6, 80.8], [-339.6, 73.3], [-331.4, 67.4], [-322.6, 62.7]],
+     "offsets_m": [0.0],
+     "spacing_m": 7.5,
+     "jitter_m": 2.0,
+     "acceptance": 0.8,
+     "visible_surfaces": ["street_kerb_verge"],
+     "prop": "red_tip_shrub",
+     "params": {
+      "variants": [0, 1],
+      "scale": [0.8, 1.0]
+     },
+     "basis": "production_inference",
+     "rule": "Thin brown-red stems among the mounds.",
+     "evidence": "Street View Sep 2025 on 9th St (pano zSYuqR9R0oyboW2wFZ-wEw, heading 150): scruffy dark green shrubs under a metre tall with some dead brown stems on bare mulch; aerial (Aug 2025, ol-north crop, form only) and 2026-05-26 (z19): one strip of them along the lot's whole north-west edge."
     }
    ]
   }

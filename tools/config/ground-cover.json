@@ -103,6 +103,16 @@
    "evidence": "2026-05-26 aerial: lawn 68 % of the open ground inside this outline."
   },
   {
+   "id": "mersea_median_ground",
+   "channel": "bare",
+   "surfaces": ["street_kerb_verge"],
+   "within_xz": [[-392, 88], [-372, 78], [-345, 62], [-318, 52], [-312, 62], [-338, 80], [-362, 97], [-384, 106]],
+   "feather_m": 1,
+   "basis": "production_inference",
+   "reason": "Bare dark soil and mulch under the strip's shrubs, not grass.",
+   "evidence": "Street View Sep 2025 on 9th St (pano zSYuqR9R0oyboW2wFZ-wEw, heading 150)."
+  },
+  {
    "id": "job_corps_kerb_verges",
    "channel": "straw",
    "surfaces": ["street_kerb_verge"],

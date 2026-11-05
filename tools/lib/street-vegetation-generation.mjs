@@ -12,7 +12,8 @@
 //     the Waterfront Plaza's young cypresses;
 //   - canopy rules, which plant the tree crowns read from the dated aerial
 //     (data/street_detail/tree_crowns.json) with a mix of species whose crowns
-//     fit: the island's housing, campus and industrial trees.
+//     fit: the island's housing, campus and industrial trees; hedge rules lay
+//     that file's hedges along the walls.
 // Only species photographed on Treasure Island are props. Each rule and set
 // piece names its dated evidence; positions, sizes and counts are production
 // inference, not survey data.
@@ -236,7 +237,8 @@ export function plantRow({ prop, kind, variant, scale, xz, landY, surface, groun
   return { prop, prop_params: params };
 }
 
-// Tree crowns read from the dated aerial, by group: {group: [[x, z, crown_m], ...]}.
+// Tree crowns and hedges read from the dated aerial, by group: {groups: {group:
+// [[x, z, crown_m], ...]}, hedges: {group: [[[x, z], [x, z]], ...]}}.
 export const TREE_CROWNS_SCHEMA = "ti.tree-crowns/1";
 export function validateTreeCrowns(document) {
   invariant(document?.schema_version === TREE_CROWNS_SCHEMA, "Tree crowns schema drift");
@@ -245,7 +247,12 @@ export function validateTreeCrowns(document) {
     invariant(Array.isArray(crowns) && crowns.length > 0 && crowns.every((crown) => Array.isArray(crown) && crown.length === 3 && crown.every(isFiniteNumber) && crown[2] > 0),
       `Tree crown group ${group} must list [x, z, crown_m]`);
   }
-  return document.groups;
+  invariant(document.hedges != null && typeof document.hedges === "object" && !Array.isArray(document.hedges), "Tree crowns need hedges");
+  for (const [group, lines] of Object.entries(document.hedges)) {
+    invariant(Array.isArray(lines) && lines.length > 0 && lines.every((line) => Array.isArray(line) && line.length >= 2 && line.every((point) => Array.isArray(point) && point.length === 2 && point.every(isFiniteNumber))),
+      `Hedge group ${group} must list lines of [x, z] points`);
+  }
+  return document;
 }
 
 // The crown width (m) of each kit variant a canopy rule may plant (the kit's

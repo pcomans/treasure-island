@@ -620,6 +620,12 @@ const LOW_KINDS := ["grass_clump", "planting_slot"]
 ## mip_alpha_boost).
 const IMPOSTOR_TREE_GRID := Vector2i(4, 2)
 const IMPOSTOR_SHRUB_GRID := Vector2i(2, 2)
+## A tree's far impostor also holds views from this far above the horizon, one per
+## cell of the high grid (its own image, saved by bake_impostors.gd --high), so a
+## crown stays round from a jetpack or an overview: the side views alone are an
+## upright card that thins to a line from above.
+const IMPOSTOR_HIGH_DEG := 55.0
+const IMPOSTOR_HIGH_GRID := Vector2i(2, 2)
 ## How far their impostors' normals lean out at the corners and up overall (the
 ## impostor shader's dome and sky_lean), set from the bake's per-side check, which
 ## finds a dense crown much brighter from its sun side than a thin one, whose light
@@ -3638,10 +3644,21 @@ static func impostor_texture_path(prop: String, variant: int) -> String:
 	return TEXTURES + "impostors/%s_%d.png" % [prop, variant]
 
 
+static func impostor_high_path(prop: String, variant: int) -> String:
+	return TEXTURES + "impostors/%s_%d_high.png" % [prop, variant]
+
+
+## The side of the square that frames a plant of the side views' size from
+## IMPOSTOR_HIGH_DEG above the horizon, and holds its side views too.
+static func impostor_high_frame_m(size: Vector2) -> float:
+	var angle := deg_to_rad(IMPOSTOR_HIGH_DEG)
+	return maxf(maxf(size.x, size.y), size.y * cos(angle) + size.x * sin(angle))
+
+
 ## The far mesh of a tree: a palm's low trunk (and knob) under its crown
 ## impostor, or any other tree's impostor alone; null for a low plant or when the
 ## image hasn't been baked. The bake passes the image it is checking as image.
-func impostor_mesh(prop: String, variant: int, image: Texture2D = null) -> ArrayMesh:
+func impostor_mesh(prop: String, variant: int, image: Texture2D = null, high_image: Texture2D = null) -> ArrayMesh:
 	if is_low_plant(prop) or (image == null and not ResourceLoader.exists(impostor_texture_path(prop, variant))):
 		return null
 	var frame := impostor_frame(prop, variant)
@@ -3664,10 +3681,14 @@ func impostor_mesh(prop: String, variant: int, image: Texture2D = null) -> Array
 		# UV2 holds the corner's offset from the pivot (the shader turns the quad).
 		quad.add(center, Vector3.BACK, Vector2(corner.x + 0.5, 0.5 - corner.y), Color.WHITE, corner * size)
 	quad.indices.append_array(PackedInt32Array([first, first + 1, first + 2, first, first + 2, first + 3]))
-	quad.commit(mesh, _impostor_material(prop, variant, image))
+	var made := _impostor_material(prop, variant, image, high_image, impostor_high_frame_m(size))
+	quad.commit(mesh, made)
 	# The quad turns in the vertex shader; bound every direction it can face.
-	var reach := maxf(size.x * 0.5, 0.1) + float((tree.params as Dictionary).get("impostor_forward", 0.0))
-	mesh.custom_aabb = (tree.lod0 as ArrayMesh).get_aabb().merge(AABB(center - Vector3(reach, size.y * 0.5, reach), Vector3(reach * 2.0, size.y, reach * 2.0)))
+	var half := size * 0.5
+	if (made as ShaderMaterial).get_shader_parameter("high_texture") != null:
+		half = Vector2.ONE * impostor_high_frame_m(size) * 0.5
+	var reach := maxf(half.x, 0.1) + float((tree.params as Dictionary).get("impostor_forward", 0.0))
+	mesh.custom_aabb = (tree.lod0 as ArrayMesh).get_aabb().merge(AABB(center - Vector3(reach, half.y, reach), Vector3(reach * 2.0, half.y * 2.0, reach * 2.0)))
 	return mesh
 
 
@@ -3759,7 +3780,7 @@ func material(key: String) -> Material:
 	return made
 
 
-func _impostor_material(prop: String, variant: int, image: Texture2D = null) -> Material:
+func _impostor_material(prop: String, variant: int, image: Texture2D = null, high_image: Texture2D = null, high_frame_m: float = 0.0) -> Material:
 	var key := "impostor_%s_%d" % [prop, variant]
 	if image != null or not _materials.has(key):
 		var made := ShaderMaterial.new()
@@ -3772,6 +3793,13 @@ func _impostor_material(prop: String, variant: int, image: Texture2D = null) -> 
 		made.set_shader_parameter("view_grid", PROPS[prop].get("impostor_grid", Vector2i.ONE))
 		made.set_shader_parameter("mip_alpha_boost", float(PROPS[prop].get("impostor_alpha", 0.0)))
 		made.set_shader_parameter("toward_camera_m", float(params.get("impostor_forward", 0.0)))
+		var high: Texture2D = high_image
+		if high == null and image == null and ResourceLoader.exists(impostor_high_path(prop, variant)):
+			high = load(impostor_high_path(prop, variant))
+		if high != null:
+			made.set_shader_parameter("high_texture", high)
+			made.set_shader_parameter("high_grid", IMPOSTOR_HIGH_GRID)
+			made.set_shader_parameter("high_frame_m", high_frame_m)
 		if rollout:
 			made.set_shader_parameter("dome", IMPOSTOR_DOME)
 			# A palm's crown is thin too.
