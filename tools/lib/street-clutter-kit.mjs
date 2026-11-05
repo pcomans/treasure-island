@@ -866,8 +866,9 @@ function buildBarricade(lodIndex) {
 // A two-yard front-load dumpster on casters (the Mersea lot, Sep 2025 photos:
 // three grey steel bins at the lot's west end): a box with a vertical back and a
 // front that leans out toward the top, two lids falling toward the front, fork
-// sleeves along both sides and a white label on the front. The body and lids
-// take the instance paint (a matte finish); about 1.8 m wide, 1.3 m deep at the
+// sleeves along both sides and a white label on the front. The body takes the
+// instance paint (a matte finish), the lids (the roof part) the body's or their
+// own (params.lid: a darker grey, or green plastic); about 1.8 m wide, 1.3 m deep at the
 // top and 1.25 m tall, production inference from the photos and common
 // two-yard bins, not measured. Front (the leaning side) toward -Z.
 export const DUMPSTER_SIZE = Object.freeze({ width_m: 1.8, back_z: 0.55, front_bottom_z: -0.45, front_top_z: -0.72, base_y: 0.17, back_top_y: 1.22, front_top_y: 1.06 });
@@ -905,7 +906,7 @@ function buildDumpster(lodIndex) {
   const deckMiddle = vscale(vadd(sideProfile[1], sideProfile[2]), 0.5);
   const lidAxes = [v3(1, 0, 0), deckNormal, deck];
   for (const side of [1, -1]) {
-    out.box(vadd(vadd(deckMiddle, vscale(deckNormal, 0.025)), vadd(v3(side * hx / 2, 0, 0), vscale(deck, 0.03))), [hx / 2 - 0.02, 0.018, deckLength / 2 + 0.03], PART.paint, lidAxes);
+    out.box(vadd(vadd(deckMiddle, vscale(deckNormal, 0.025)), vadd(v3(side * hx / 2, 0, 0), vscale(deck, 0.03))), [hx / 2 - 0.02, 0.018, deckLength / 2 + 0.03], PART.roof, lidAxes);
   }
   out.box(vadd(deckMiddle, vscale(deckNormal, 0.012)), [0.03, 0.012, deckLength / 2], PART.trim, lidAxes);
   // Fork sleeves along both sides.
@@ -925,10 +926,101 @@ function buildDumpster(lodIndex) {
   return out.result();
 }
 
+// A galvanised oval stock tank used as a planter, on a wooden pallet (the
+// Mersea lot, Sep 2025: a row of eight along the strip's fence): an 8 x 2.5 ft
+// tank 2 ft deep with a rolled rim and three ribs, filled with soil to a hand
+// below the rim (the dark tyre part). The pallet takes the instance paint
+// (matte, its weathered wood). Production inference from the photos and the
+// common stock tank sizes, not measured. Long axis along Z.
+export const STOCK_TANK_SIZE = Object.freeze({ length_m: 2.44, width_m: 0.76, height_m: 0.61, pallet_m: 0.14, pallet_length_m: 2.5, pallet_width_m: 1.0 });
+function buildStockTankPlanter(lodIndex) {
+  const out = new MeshBuilder();
+  const { length_m: length, width_m: width, height_m: height, pallet_m: pallet, pallet_length_m: palletLength, pallet_width_m: palletWidth } = STOCK_TANK_SIZE;
+  const radius = width / 2;
+  const straight = (length - width) / 2;
+  const arc = lodIndex === 0 ? 8 : 4;
+  // The tank's outline (x, z) counter-clockwise seen from above, with outward directions.
+  const outline = [];
+  // The back half circle round (0, +straight), then the front one round (0, -straight).
+  for (const [centre, start] of [[straight, 0], [-straight, Math.PI]]) {
+    for (let k = 0; k <= arc; k += 1) {
+      const angle = start + (Math.PI * k) / arc;
+      outline.push({ x: radius * Math.cos(angle), z: centre + radius * Math.sin(angle), nx: Math.cos(angle), nz: Math.sin(angle) });
+    }
+  }
+  const y0 = pallet;
+  const y1 = pallet + height;
+  const ring = (offset, y) => outline.map((p) => v3(p.x + p.nx * offset, y, p.z + p.nz * offset));
+  const normals = outline.map((p) => v3(p.nx, 0, p.nz));
+  // A band of the wall between two heights at an outward offset, facing out (or in).
+  const band = (offset, yLow, yHigh, part, inward = false, ao = [1, 1]) => {
+    const low = ring(offset, yLow);
+    const high = ring(offset, yHigh);
+    for (let k = 0; k < outline.length; k += 1) {
+      const next = (k + 1) % outline.length;
+      const n = [normals[k], normals[next]].map((normal) => (inward ? vscale(normal, -1) : normal));
+      const corners = [low[k], low[next], high[next], high[k]];
+      const facing = vcross(vsub(corners[1], corners[0]), vsub(corners[2], corners[0]));
+      const want = vadd(n[0], n[1]);
+      const aoQuad = [ao[0], ao[0], ao[1], ao[1]];
+      if (vdot(facing, want) >= 0) out.quad(corners[0], corners[1], corners[2], corners[3], [n[0], n[1], n[1], n[0]], part, aoQuad);
+      else out.quad(corners[0], corners[3], corners[2], corners[1], [n[0], n[0], n[1], n[1]], part, [aoQuad[0], aoQuad[3], aoQuad[2], aoQuad[1]]);
+    }
+  };
+  // A flat ring between two outward offsets at one height, facing up.
+  const flat = (inner, outer, y, part) => {
+    const a = ring(inner, y);
+    const b = ring(outer, y);
+    for (let k = 0; k < outline.length; k += 1) {
+      const next = (k + 1) % outline.length;
+      const up = v3(0, 1, 0);
+      const corners = [a[k], a[next], b[next], b[k]];
+      const facing = vcross(vsub(corners[1], corners[0]), vsub(corners[2], corners[0]));
+      if (vdot(facing, up) >= 0) out.quad(corners[0], corners[1], corners[2], corners[3], [up, up, up, up], part);
+      else out.quad(corners[0], corners[3], corners[2], corners[1], [up, up, up, up], part);
+    }
+  };
+  band(0, y0, y1, PART.metal, false, [0.62, 1]);
+  if (lodIndex === 0) {
+    for (const rib of [0.14, 0.3, 0.46]) {
+      band(0.01, y0 + rib - 0.02, y0 + rib + 0.02, PART.metal, false, [0.85, 1]);
+      flat(0, 0.01, y0 + rib + 0.02, PART.metal);
+    }
+  }
+  // Rolled rim: out, over the top and back down the inside to the soil.
+  band(0.014, y1 - 0.035, y1 + 0.01, PART.metal);
+  flat(-0.006, 0.014, y1 + 0.01, PART.metal);
+  const soil = y1 - 0.08;
+  band(-0.006, soil, y1 + 0.01, PART.metal, true, [0.55, 0.9]);
+  // The soil: a fan over the inside of the outline.
+  const surface = ring(-0.006, soil);
+  const centre = v3(0, soil, 0);
+  const up = v3(0, 1, 0);
+  for (let k = 0; k < outline.length; k += 1) {
+    const next = (k + 1) % outline.length;
+    const facing = vcross(vsub(surface[k], centre), vsub(surface[next], centre));
+    if (vdot(facing, up) >= 0) out.triangle(centre, surface[k], surface[next], [up, up, up], PART.tire, [0.8, 0.95, 0.95]);
+    else out.triangle(centre, surface[next], surface[k], [up, up, up], PART.tire, [0.8, 0.95, 0.95]);
+  }
+  // The pallet: deck boards across it over three runners (one box far away).
+  if (lodIndex === 0) {
+    for (const x of [-palletWidth / 2 + 0.05, 0, palletWidth / 2 - 0.05]) out.box(v3(x, 0.05, 0), [0.04, 0.05, palletLength / 2], PART.paint);
+    const boards = 9;
+    for (let k = 0; k < boards; k += 1) {
+      const z = -palletLength / 2 + 0.06 + ((palletLength - 0.12) * k) / (boards - 1);
+      out.box(v3(0, pallet - 0.02, z), [palletWidth / 2, 0.02, 0.05], PART.paint);
+    }
+  } else {
+    out.box(v3(0, pallet / 2, 0), [palletWidth / 2, pallet / 2, palletLength / 2], PART.paint);
+  }
+  return out.result();
+}
+
 export const CLUTTER_PROPS_KIT = Object.freeze({
   traffic_cone: { build: buildCone },
   barricade: { build: buildBarricade },
   dumpster: { build: buildDumpster },
+  stock_tank_planter: { build: buildStockTankPlanter },
 });
 
 export const CLUTTER_LOD_COUNT = LODS.length;

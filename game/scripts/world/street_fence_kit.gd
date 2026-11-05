@@ -42,6 +42,7 @@ const TYPES := {
 	"chain_link_screened": {"height_m": 1.83, "half_thickness_m": 0.06, "collision_half_m": 0.06},
 	"construction_panel": {"height_m": 1.83, "half_thickness_m": 0.3, "collision_half_m": 0.22},
 	"wood_privacy": {"height_m": 1.83, "half_thickness_m": 0.08, "collision_half_m": 0.08},
+	"steel_picket": {"height_m": 1.37, "half_thickness_m": 0.05, "collision_half_m": 0.05},
 }
 const INSIDE := ["left", "right", "center"]
 ## Windscreen colours (sRGB, multiplied with the soft grey screen texture) and
@@ -91,6 +92,10 @@ const BARBED_TILE_M := 0.48
 const PANEL_JITTER_M := 0.08
 
 const GALVANIZED := Color(0.86, 0.87, 0.88)
+## Black powder-coated steel pickets (the Mersea grounds, Sep 2025).
+const PICKET_BLACK := Color(0.06, 0.062, 0.068)
+## Pickets stand about this far apart (m).
+const PICKET_SPACING_M := 0.125
 const STAND_GREY := Color(0.24, 0.24, 0.25)
 ## Wire is thin: up close the mesh is see-through and far away it is a faint
 ## haze of its average coverage (about 15 % for the chain-link texture), so the
@@ -250,6 +255,8 @@ func add_run(cells: Dictionary, cell_size_m: float, type: String, params: Dictio
 			return _panels(cells, cell_size_m, posts, side, seed)
 		"wood_privacy":
 			return _wood_fence(cells, cell_size_m, posts, side)
+		"steel_picket":
+			return _picket_fence(cells, cell_size_m, posts)
 		"chain_link_slatted":
 			return _slatted(cells, cell_size_m, posts, side, str(params.get("slats", "green")), height_of(type, params))
 		_:
@@ -587,6 +594,37 @@ func _wood_fence(cells: Dictionary, cell_size_m: float, posts: PackedVector3Arra
 		wood.skewed(a, b, height, height + 0.03, 0.14, normal, along_m, WOOD_TILE_M)
 		boxes.append(_bay_box(a, b, height + 0.03, float(spec.collision_half_m)))
 		along_m += length
+	return boxes
+
+
+# ---------------------------------------------------------------- picket
+
+## A black steel picket fence (the Mersea grounds beside its lot, Sep 2025):
+## square posts with ball caps on 8 ft bays, a bottom and a top rail, and square
+## pickets about 12 cm apart rising past the top rail to points. The pickets
+## follow the ground between the posts.
+func _picket_fence(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array) -> Array[Dictionary]:
+	var spec: Dictionary = TYPES.steel_picket
+	var height := float(spec.height_m)
+	var boxes: Array[Dictionary] = []
+	for index in posts.size():
+		var metal: FURNITURE.Builder = _cell(cells, cell_size_m, posts[index]).metal
+		var foot := posts[index]
+		metal.tube(PackedVector3Array([foot + Vector3(0, -0.3, 0), foot + Vector3(0, height + 0.04, 0)]), PackedFloat32Array([0.04, 0.04]), 4, PICKET_BLACK, FURNITURE.CELL_METAL, false, true)
+		metal.tube(PackedVector3Array([foot + Vector3(0, height + 0.04, 0), foot + Vector3(0, height + 0.08, 0), foot + Vector3(0, height + 0.12, 0)]), PackedFloat32Array([0.035, 0.045, 0.0]), 6, PICKET_BLACK, FURNITURE.CELL_METAL, false, true)
+	for index in posts.size() - 1:
+		var a := posts[index]
+		var b := posts[index + 1]
+		var length := Vector2(b.x - a.x, b.z - a.z).length()
+		var metal: FURNITURE.Builder = _cell(cells, cell_size_m, (a + b) * 0.5).metal
+		for rail_y: float in [0.14, height - 0.12]:
+			metal.tube(PackedVector3Array([a + Vector3(0, rail_y, 0), b + Vector3(0, rail_y, 0)]), PackedFloat32Array([0.018, 0.018]), 4, PICKET_BLACK, FURNITURE.CELL_METAL, false, false)
+		var count := maxi(1, roundi(length / PICKET_SPACING_M))
+		for step in range(1, count):
+			var foot := a.lerp(b, float(step) / float(count))
+			metal.tube(PackedVector3Array([foot + Vector3(0, 0.06, 0), foot + Vector3(0, height - 0.03, 0)]), PackedFloat32Array([0.011, 0.011]), 4, PICKET_BLACK, FURNITURE.CELL_METAL, false, false)
+			metal.tube(PackedVector3Array([foot + Vector3(0, height - 0.03, 0), foot + Vector3(0, height + 0.05, 0)]), PackedFloat32Array([0.014, 0.0]), 4, PICKET_BLACK, FURNITURE.CELL_METAL, false, true)
+		boxes.append(_bay_box(a, b, height + 0.05, float(spec.collision_half_m)))
 	return boxes
 
 

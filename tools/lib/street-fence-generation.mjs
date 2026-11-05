@@ -38,6 +38,9 @@ export const STREET_FENCE_TYPES = Object.freeze({
   chain_link_screened: Object.freeze({ height_m: 1.83, post_spacing_m: 3.05, half_thickness_m: 0.06 }),
   construction_panel: Object.freeze({ height_m: 1.83, post_spacing_m: 3.66, half_thickness_m: 0.3 }),
   wood_privacy: Object.freeze({ height_m: 1.83, post_spacing_m: 2.44, half_thickness_m: 0.08 }),
+  // Black steel picket panels, 4.5 ft on 8 ft bays (the Mersea grounds beside
+  // its lot, Sep 2025).
+  steel_picket: Object.freeze({ height_m: 1.37, post_spacing_m: 2.44, half_thickness_m: 0.05 }),
 });
 // Windscreen colours; orange is the open safety mesh of construction sites
 // (9th St, Sep 2025: about 1.2 m high behind construction panels).

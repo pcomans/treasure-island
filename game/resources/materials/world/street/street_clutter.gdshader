@@ -9,7 +9,8 @@ shader_type spatial;
 // black roof, bit 3 dark rims) and carries its suspension twist (b, metres): the
 // front-left and rear-right wheels rise by it, the other two drop by it, so all
 // four tyres stand on uneven ground. A dumpster takes the instance paint the same
-// way, with finish 3: matte, weathered painted steel.
+// way, with finish 3: matte, weathered painted steel; a nonzero a picks its own
+// palette column for the roof part (a dumpster's lids).
 render_mode depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx;
 
 uniform sampler2D palette : source_color, filter_nearest, repeat_disable;
@@ -23,11 +24,13 @@ const float PART_SPECULAR[16] = float[16](0.5, 0.5, 0.8, 0.3, 0.5, 0.4, 0.4, 0.5
 
 varying flat int part;
 varying flat float paint_u;
+varying flat float roof_u;
 varying flat int style;
 
 void vertex() {
 	part = clamp(int(UV.x * 16.0), 0, 15);
 	paint_u = INSTANCE_CUSTOM.r;
+	roof_u = INSTANCE_CUSTOM.a;
 	style = int(INSTANCE_CUSTOM.g * 16.0);
 	// Tyre, rim and hub: the wheel follows the ground (front is -Z, right +X).
 	if (part >= 3 && part <= 5) {
@@ -43,7 +46,7 @@ void fragment() {
 	bool painted = p == 0 || (p == 1 && !black_roof);
 	vec3 albedo;
 	if (painted) {
-		albedo = texture(palette, vec2(paint_u, 0.75)).rgb;
+		albedo = texture(palette, vec2(p == 1 && roof_u > 0.0 ? roof_u : paint_u, 0.75)).rgb;
 	} else {
 		int colour = p == 1 ? 6 : (p == 4 && dark_rims ? 5 : p);
 		albedo = texture(palette, vec2((float(colour) + 0.5) / 16.0 * 0.5, 0.25)).rgb;

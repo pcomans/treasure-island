@@ -154,6 +154,9 @@ export const STREET_DETAIL_KINDS = Object.freeze({
   // the radius is its half width for whoever reads only the kind.
   parked_car: pointKind("clutter", 1.0, "seeded"),
   picnic_table: pointKind("furniture", 1.0, "seeded"),
+  // A planter standing on the ground (the clutter kit's stock tank on its
+  // pallet); a row carries its rectangle as footprint_m.
+  planter: pointKind("clutter", 0.5, "seeded"),
   planting_slot: pointKind("vegetation", 0.8, "seeded"),
   post_box: pointKind("furniture", 0.35, "faces_road"),
   power_line: lineKind("clutter", 0, true),
@@ -1629,7 +1632,7 @@ export function generateStreetDetail({
     .map((object) => ({ source_key: object.row.source_key, line: rawWay(object.row.source_key).points.map(toEastNorth), half_width_m: ROAD_WIDTHS_M[object.tags.highway] / 2, parking_aisle: object.tags.service === "parking_aisle" }));
   const entrances = sourceKeys.filter((key) => key[0] === "n" && properSources.get(key).metadata.tags.entrance != null)
     .map((key) => toWorld(projectLonLat(properSources.get(key).features.find((feature) => feature.type === "Point").coordinates)));
-  const clutter = placeStreetClutter({
+  const clutterInputs = {
     kinds: STREET_DETAIL_KINDS,
     rows,
     occupied,
@@ -1651,51 +1654,53 @@ export function generateStreetDetail({
     entrances,
     stallLines: { length_m: config.ground.lines.stall_length_m, spacing_m: config.ground.lines.stall_spacing_m },
     islandRules: config.clutter ?? [],
-  });
-  rows.push(...clutter.rows);
-  // (e2) No island-wide parked car may shut walkable ground in: the clearance
+  };
+  let clutter = placeStreetClutter(clutterInputs);
+  // (e2) No island-wide parked car may shut walkable ground in. The clearance
   // check's flood (shutInPockets) runs over each fence and yard region an
-  // island car stands in, and while a region shuts ground in, the island car
-  // most of whose grown footprint borders the shut-in cells is dropped.
-  const islandCarIds = new Set(clutter.rows.filter((row) => row.source_id.startsWith("island:")).map((row) => row.id));
-  clutter.audit.shut_in_drops = [];
-  if (islandCarIds.size > 0) {
+  // island car stands in; while a region shuts ground in, the stall of the
+  // island car most of whose grown footprint borders the shut-in cells is
+  // barred and the clutter is placed again, so the car moves to its lot's next
+  // stall and the lot keeps the aerial's count while stalls last. Pockets no
+  // island car borders are left to the clearance check to report.
+  const barred = new Set();
+  const moves = [];
+  const isIslandCar = (row) => row.source_id.startsWith("island:");
+  if (clutter.rows.some(isIslandCar)) {
     const roofs = roofTriangles([...chunks.values()].flatMap((chunk) => chunk.records));
     const onIsland = (point) => pointInMultiPolygon(toEastNorth(point), playableBoundary, false);
     const carPoint = (row) => [row.position_m[0], row.position_m[2]];
-    const touches = (region, point) => {
-      const xs = region.points.map((p) => p[0]);
-      const zs = region.points.map((p) => p[1]);
+    const near = (points, point) => {
+      const xs = points.map((p) => p[0]);
+      const zs = points.map((p) => p[1]);
       return point[0] >= Math.min(...xs) - POCKET_MARGIN_M && point[0] <= Math.max(...xs) + POCKET_MARGIN_M && point[1] >= Math.min(...zs) - POCKET_MARGIN_M && point[1] <= Math.max(...zs) + POCKET_MARGIN_M;
     };
-    let regions = pocketRegions(rows, config.zones.filter(isYardZone))
-      .filter((region) => rows.some((row) => islandCarIds.has(row.id) && touches(region, carPoint(row))));
-    for (let round = 0; round < 200 && regions.length > 0; round += 1) {
-      const failing = shutInPockets({ regions, roofs, solids: streetSolids(rows), onIsland }).regions;
-      if (failing.length === 0) break;
-      let dropped = false;
+    const allRegions = pocketRegions(rows, config.zones.filter(isYardZone));
+    for (let round = 0; round < 60; round += 1) {
+      const islandCars = clutter.rows.filter(isIslandCar);
+      const regions = allRegions.filter((region) => islandCars.some((row) => near(region.points, carPoint(row))));
+      const failing = shutInPockets({ regions, roofs, solids: streetSolids([...rows, ...clutter.rows]), onIsland }).regions;
+      let barredMore = false;
       for (const pocket of failing) {
         // The island car bordering most shut-in cells (its grown pieces within a cell of them).
         let best = null;
-        for (const row of rows) {
-          if (!islandCarIds.has(row.id) || !touches({ points: pocket.cut }, carPoint(row))) continue;
+        for (const row of islandCars) {
+          if (!near(pocket.cut, carPoint(row))) continue;
           const pieces = streetDetailPieces(row);
           const border = pocket.cut.filter((cell) => pieces.some((piece) => planDistance([cell], piece.points) <= piece.radius + PLAYER_CAPSULE_RADIUS_M + POCKET_CELL_M)).length;
           if (border > 0 && (!best || border > best.border || (border === best.border && row.id < best.row.id))) best = { row, border };
         }
-        if (!best) continue;
-        rows.splice(rows.indexOf(best.row), 1);
-        clutter.rows.splice(clutter.rows.indexOf(best.row), 1);
-        islandCarIds.delete(best.row.id);
-        clutter.audit.rules[`island/${best.row.source_id.slice("island:".length)}`] -= 1;
-        if (clutter.lotOf.has(best.row.id)) clutter.audit.lots[clutter.lotOf.get(best.row.id)].placed -= 1;
-        clutter.audit.shut_in_drops.push({ id: best.row.id, region: pocket.id, shut_m2: round3(pocket.shut_m2) });
-        dropped = true;
+        if (!best || barred.has(best.row.id)) continue;
+        barred.add(best.row.id);
+        moves.push({ id: best.row.id, region: pocket.id, shut_m2: round3(pocket.shut_m2) });
+        barredMore = true;
       }
-      if (!dropped) break;
-      regions = regions.filter((region) => failing.some((pocket) => pocket.id === region.id));
+      if (!barredMore) break;
+      clutter = placeStreetClutter({ ...clutterInputs, barredIds: barred });
     }
   }
+  clutter.audit.shut_in_moves = moves;
+  rows.push(...clutter.rows);
   for (const summary of zoneSummaries) {
     const zone = config.zones.find((candidate) => candidate.id === summary.id);
     summary.clutter = (zone.clutter ?? []).map((rule) => ({

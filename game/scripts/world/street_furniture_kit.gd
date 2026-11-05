@@ -667,21 +667,29 @@ func _bench_park(b: Builder) -> void:
 
 ## A litter receptacle: a grey steel can with a domed lid, the plaza's
 ## timber-slatted can under a grey band, or a black steel-slat can under a black
-## band and lid (the Mersea lot, Sep 2025).
+## band and a domed lid with a dark opening on its front (-Z) (the Mersea lot,
+## Sep 2025: its vertical bars stand proud of the body).
 func _waste_basket(b: Builder, style: String) -> void:
 	var timber := style == "timber"
 	var slats := timber or style == "black_slat"
 	var body := TIMBER_WEATHERED if timber else (BIN_BLACK if style == "black_slat" else BIN_STEEL)
 	b.tube(PackedVector3Array([Vector3(0, 0.0, 0), Vector3(0, 0.78, 0)]), PackedFloat32Array([0.27, 0.28]), 14, body, CELL_WHITE if timber else CELL_METAL, false, false)
-	if slats:
-		# Vertical slats read as dark grooves (timber) or light-catching ribs (black steel).
-		var groove := TIMBER * 0.55 if timber else BIN_BLACK * 1.8
+	if timber:
+		# Vertical slats read as dark grooves.
 		for index in 10:
 			var angle := TAU * float(index) / 10.0
-			b.box(Vector3(cos(angle) * 0.282, 0.4, sin(angle) * 0.282), Basis(Vector3.UP, -angle), Vector3(0.012, 0.7, 0.012), groove, CELL_WHITE)
+			b.box(Vector3(cos(angle) * 0.282, 0.4, sin(angle) * 0.282), Basis(Vector3.UP, -angle), Vector3(0.012, 0.7, 0.012), TIMBER * 0.55, CELL_WHITE)
+	elif slats:
+		# Black steel bars standing proud of the body, catching the light.
+		for index in 16:
+			var angle := TAU * float(index) / 16.0
+			b.box(Vector3(cos(angle) * 0.295, 0.39, sin(angle) * 0.295), Basis(Vector3.UP, -angle), Vector3(0.03, 0.74, 0.03), BIN_BLACK * 2.2, CELL_METAL)
 	var band := FRAME_CHARCOAL if timber else (BIN_BLACK if style == "black_slat" else BIN_STEEL * 0.8)
 	b.tube(PackedVector3Array([Vector3(0, 0.78, 0), Vector3(0, 0.9, 0)]), PackedFloat32Array([0.29, 0.29]), 14, band, CELL_METAL, false, false)
 	b.tube(PackedVector3Array([Vector3(0, 0.9, 0), Vector3(0, 0.94, 0), Vector3(0, 0.98, 0)]), PackedFloat32Array([0.29, 0.24, 0.1]), 14, band, CELL_METAL, false, true)
+	if style == "black_slat":
+		# The lid's opening: a dark mouth in the front of the dome.
+		b.box(Vector3(0, 0.935, -0.255), Basis(Vector3.RIGHT, 0.6), Vector3(0.26, 0.07, 0.02), Color(0.012, 0.012, 0.014), CELL_METAL)
 	b.disc(Vector3(0, 0.005, 0), Vector3.DOWN, 0.27, 14, body)
 
 
