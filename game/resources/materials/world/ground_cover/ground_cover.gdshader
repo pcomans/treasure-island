@@ -72,6 +72,16 @@ uniform vec3 recipe_bare = vec3(2.0, 2.0, 0.0);
 uniform float turf_amount = 0.0;
 uniform vec3 turf_color : source_color = vec3(0.08, 0.17, 0.065);
 
+// The red marsh: rust_amount lays a dark red and rust carpet of low succulent
+// plants, with olive-green patches, over the family's own share of the ground
+// (the ditch beside the Mersea lot, owner photos, Nov 2026: about sRGB 100,52,40
+// and 75,72,42 in low sun).
+uniform float rust_amount = 0.0;
+uniform vec3 rust_gap : source_color = vec3(0.150, 0.042, 0.030);
+uniform vec3 rust_blade : source_color = vec3(0.235, 0.062, 0.038);
+uniform vec3 rust_straw : source_color = vec3(0.300, 0.150, 0.075);
+uniform vec3 marsh_olive : source_color = vec3(0.105, 0.102, 0.040);
+
 // A watered pitch's sprinkler grid: dry patches midway between the heads of a
 // grid_m square grid turned grid_angle radians from world +X, at grid_amount.
 uniform float grid_m = 18.0;
@@ -172,6 +182,12 @@ void fragment() {
 	lawn = mix(lawn, turf_color * (0.92 + 0.16 * m.x), turf_amount);
 	vec3 green = mix(lawn, dry, mix_settings.z);
 	vec3 ground = mix(green, dry, dry_w);
+	if (rust_amount > 0.0) {
+		float olive_w = smoothstep(0.50, 0.62, 0.7 * value_noise(p / 13.0 + vec2(7.3, 51.9)) + 0.3 * n_fine);
+		vec3 red = cover_layer(rust_gap, rust_blade, rust_straw, m, 0.6, fade);
+		vec3 olive = marsh_olive * mix(0.72 + 0.56 * m.x, 1.0, fade);
+		ground = mix(ground, mix(red, olive, olive_w), rust_amount * own);
+	}
 	if (mix_settings.y <= 1.0 + patch_softness) {
 		float bare = bare_level(p, fade);
 		// A crisp edge near the camera, a little softer where the fraying has faded out.

@@ -166,6 +166,7 @@ export const MATERIAL_KEYS = Object.freeze([
   "building_part_wall",
   "building_roof",
   "building_wall",
+  "ditch_puddle",
   "land_ground",
   "major_area_amenity",
   "major_area_landuse",

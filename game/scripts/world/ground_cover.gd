@@ -73,11 +73,11 @@ const FAMILIES := {
 	# land (map) and the Avenue N construction parcel w1252737734.
 	"dry_field": {"dry_threshold": 0.29, "bare_threshold": 0.635, "green_dryness": 0.5, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
 	"bare": {"dry_threshold": -1.0, "bare_threshold": 0.345, "green_dryness": 0.0, "patch_scale_m": 20.0, "bare_scale_m": 15.0},
-	# The seasonal marsh (natural=wetland) east of the Mersea lot: olive rushes
-	# at its edges round pale dry grass and sand, about 23 / 52 / 25
-	# (2026-05-26 aerial: 10 % green, 28 % dry, 63 % pale of its open ground;
-	# drawn before as a flat water-like cyan).
-	"marsh": {"dry_threshold": 0.40, "bare_threshold": 0.62, "green_dryness": 0.55, "patch_scale_m": 24.0, "bare_scale_m": 14.0},
+	# The seasonal marsh (natural=wetland) east of the Mersea lot: a dark red and
+	# rust carpet of low succulent plants with olive patches on the basin floor
+	# (owner photos, Nov 2026; drawn before as a flat water-like cyan). The map
+	# draws its banks' straw and bare fill over it, by height.
+	"red_marsh": {"dry_threshold": 2.0, "bare_threshold": 2.0, "green_dryness": 0.5, "patch_scale_m": 24.0, "bare_scale_m": 14.0, "rust_amount": 1.0},
 	# The old sand courts (natural=sand) in the residential north: pale bare
 	# ground grown over with dry weeds, about 0 / 60 / 40 (2026-05-26 aerial:
 	# 78 % dry, 16 % bare of their open ground).
@@ -109,7 +109,7 @@ const FAMILY_BY_MATERIAL_KEY := {
 	# Terrain overlays on the land: the old sand courts and the marsh east of the
 	# Mersea lot.
 	"terrain_sand": "sand_pad",
-	"terrain_wetland": "marsh",
+	"terrain_wetland": "red_marsh",
 }
 
 ## Frozen 2026-08-27 OSM areas whose tags the generated material keys merge.

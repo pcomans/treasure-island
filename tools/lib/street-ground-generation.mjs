@@ -86,6 +86,7 @@ export const PARK_SURFACE_MATERIALS = Object.freeze({
   yard_gravel_pale: "yard-gravel-pale",
   yard_concrete: "yard-concrete",
   yard_pond: "yard-pond",
+  ditch_puddle: "ditch-puddle",
   yard_sand_pale: "yard-sand-pale",
   yard_soil_dark: "yard-soil-dark",
 });

@@ -260,11 +260,12 @@ export function validateTreeCrowns(document) {
 // spread or crown), null for a form no canopy rule draws.
 const CANOPY_CROWNS_M = Object.freeze({
   canary_date_palm: Object.freeze([6.5, 7.0, 7.5, 8.0, 8.5, 9.0]),
-  eucalyptus_mature: Object.freeze([7.5, 8.5]),
+  eucalyptus_mature: Object.freeze([19.0, 20.0]),
   monterey_cypress: Object.freeze([17.0, 12.5, null, null, null]),
   monterey_pine: Object.freeze([8.5, 10.0, 11.2, 7.2, 8.2, 8.6]),
   nz_christmas_tree: Object.freeze([7.0, 8.0]),
   spreading_broadleaf: Object.freeze([8.0, 10.0, 15.0, 17.5]),
+  weeping_broadleaf: Object.freeze([12.0, 11.0]),
 });
 const CANOPY_ENTRY_FIELDS = Object.freeze(["prop", "scale", "share", "variants"]);
 

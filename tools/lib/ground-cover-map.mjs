@@ -11,8 +11,8 @@
 // on the cells whose top drawn ground is a given OSM area or surface (every
 // rule names one, so a rule never reaches other records; a surface rule may be
 // narrowed to the surface drawn inside some areas, such as the kerb verges over
-// the residential grounds), inside a traced polygon, or near buildings, roads
-// and lots. Each names its dated aerial or photo evidence; widths, distances and
+// the residential grounds), inside a traced polygon, near buildings, roads and
+// lots, or above a height of the land. Each names its dated aerial or photo evidence; widths, distances and
 // traced outlines are production inference, not survey data. Drawn cells off
 // the ruled ground (roads, paths, kerb tops and paint, roofs, lots, and kerb
 // verges no rule drew on) then take the weights of the nearest ruled cell: an
@@ -45,7 +45,7 @@ export const GROUND_COVER_NEAR_KINDS = Object.freeze(["building", "vehicle_road"
 // cell of this ground, and so does a kerb verge no rule draws on.
 export const GROUND_COVER_SURFACES = Object.freeze(["land_ground", "major_area_amenity", "major_area_landuse", "major_area_leisure", "street_kerb_verge", "terrain_riprap", "terrain_sand", "terrain_wetland"]);
 const SAFE_ID = /^[a-z0-9_]+$/u;
-const RULE_FIELDS = Object.freeze(["basis", "channel", "evidence", "feather_m", "id", "inside_sources", "near", "reason", "surfaces", "weight", "within_sources", "within_xz"]);
+const RULE_FIELDS = Object.freeze(["above_m", "basis", "channel", "evidence", "feather_m", "id", "inside_sources", "near", "reason", "surfaces", "weight", "within_sources", "within_xz"]);
 
 function isFiniteNumber(value) {
   return typeof value === "number" && Number.isFinite(value);
@@ -86,6 +86,10 @@ export function validateGroundCoverConfig(config) {
     if (rule.surfaces != null) {
       invariant(Array.isArray(rule.surfaces) && rule.surfaces.length > 0 && rule.surfaces.every((key) => GROUND_COVER_SURFACES.includes(key)),
         `${label} surfaces must list ground material keys: ${GROUND_COVER_SURFACES.join(", ")}`);
+    }
+    if (rule.above_m != null) {
+      invariant(Object.keys(rule.above_m).sort().join(",") === "from_m,to_m" && isFiniteNumber(rule.above_m.from_m) && isFiniteNumber(rule.above_m.to_m) && rule.above_m.to_m > rule.above_m.from_m,
+        `${label} above_m must be {from_m, to_m}, to_m above from_m`);
     }
     // inside_sources reaches surfaces drawn over an area (a kerb verge over the
     // residential grounds), so it only narrows a surfaces rule.
@@ -319,16 +323,25 @@ function smoothstep(edge0, edge1, value) {
   return t * t * (3 - 2 * t);
 }
 
-// The plan triangles of a generated record (world x, z).
+// The plan triangles of a generated record: world x, z and each corner's height.
 function recordTriangles(record) {
   const triangles = [];
   for (let offset = 0; offset < record.indices.length; offset += 3) {
     triangles.push([0, 1, 2].map((k) => {
       const vertex = record.indices[offset + k] * 3;
-      return [record.vertices[vertex], record.vertices[vertex + 2]];
+      return [record.vertices[vertex], record.vertices[vertex + 2], record.vertices[vertex + 1]];
     }));
   }
   return triangles;
+}
+
+// The height of a triangle of recordTriangles at plan point x, z.
+function triangleHeight([a, b, c], x, z) {
+  const area = (b[1] - c[1]) * (a[0] - c[0]) + (c[0] - b[0]) * (a[1] - c[1]);
+  if (Math.abs(area) < 1e-9) return a[2];
+  const u = ((b[1] - c[1]) * (x - c[0]) + (c[0] - b[0]) * (z - c[1])) / area;
+  const v = ((c[1] - a[1]) * (x - c[0]) + (a[0] - c[0]) * (z - c[1])) / area;
+  return u * a[2] + v * b[2] + (1 - u - v) * c[2];
 }
 
 // Draw order of the generated ground, low to high: the land, then areas and
@@ -389,12 +402,16 @@ export function drawGroundCoverMap(config, world) {
     .sort((left, right) => left.rank - right.rank || left.record.object_key.localeCompare(right.record.object_key));
   const top = new Int32Array(cells).fill(-1);
   const nearMasks = Object.fromEntries(GROUND_COVER_NEAR_KINDS.map((kind) => [kind, new Uint8Array(cells)]));
+  // The land's height under each cell, for the rules that draw by height.
+  const landHeight = config.rules.some((rule) => rule.above_m) ? new Float32Array(cells).fill(-Infinity) : null;
   ground.forEach(({ record }, index) => {
     const kind = nearKind(record);
+    const land = landHeight && record.feature_kind === "land_ground";
     for (const triangle of recordTriangles(record)) {
       rasterizeTriangle(grid, triangle, (cell) => {
         top[cell] = index;
         if (kind) nearMasks[kind][cell] = 1;
+        if (land) landHeight[cell] = triangleHeight(triangle, grid.centerX(cell % grid.width), grid.centerZ(Math.floor(cell / grid.width)));
       });
     }
   });
@@ -468,6 +485,9 @@ export function drawGroundCoverMap(config, world) {
         const shift = wobble > 0 ? wobble * (2 * wobbleNoise(grid.centerX(i), grid.centerZ(j)) - 1) : 0;
         weight[cell] *= 1 - smoothstep(rule.near.full_m, rule.near.zero_m, distance[cell] + shift);
       }
+    }
+    if (rule.above_m) {
+      for (let cell = 0; cell < cells; cell += 1) weight[cell] *= smoothstep(rule.above_m.from_m, rule.above_m.to_m, landHeight[cell]);
     }
     // Over: the rule's recipe covers its weight of whatever lies under it.
     const channel = GROUND_COVER_CHANNELS.indexOf(rule.channel);

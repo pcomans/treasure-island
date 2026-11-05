@@ -4,7 +4,7 @@
   "notes": [
     "Zone scatter for procedural street detail. Coordinates are world metres: +X east, +Z south (the game's frame).",
     "Zone shapes and scatter densities are production inference for the ferry-arrival pilot, not survey data.",
-    "A canopy rule (pattern canopy) plants the crowns of a group of data/street_detail/tree_crowns.json, read from the dated aerial: at each crown a species of its mix whose crown fits within fit (a fraction of the crown), its trunk moved up to nudge_m where the crown's centre cannot take one; in_lots lets a trunk stand in a parking lot, in its mulch pit. A hedge rule (kind hedge, pattern hedge_lines) lays the same file's hedge lines where their site is clear. visible_surfaces limits a planted rule to the ground the eye sees (the street ground's grass tops read as its concrete to surfaces).",
+    "A canopy rule (pattern canopy) plants the crowns of a group of data/street_detail/tree_crowns.json, read from the dated aerial: at each crown a species of its mix whose crown fits within fit (a fraction of the crown), its trunk moved up to nudge_m where the crown's centre cannot take one; in_lots lets a trunk stand in a parking lot, in its mulch pit. A hedge rule (kind hedge, pattern hedge_lines) lays the same file's hedge lines where their site is clear. visible_surfaces limits a planted rule to the ground the eye sees (the street ground's grass tops read as its concrete to surfaces). height_m limits a planted rule to visible ground between two heights (a basin's bank or floor).",
     "Step 0 scatter emits placement slots only; later steps assign assets per slot kind. The runtime builds nothing from slots yet.",
     "Furniture rules place the vertical street objects of the pilot zones (tools/lib/street-furniture-generation.mjs) where OSM leaves gaps: kerb (along the curbs of named kerbed roads), signalized_crossings and near_signals (at OSM crossings with signals), junctions (named-street corners), all_way_stops (the other approaches of an OSM stop=all junction), drive_entries (traffic turning into a kerbed service drive from a named road) and lot_edge (around a parking lot). Each is production inference with its dated photo evidence; prop is the kit prop the runtime builds and params its settings.",
     "Exclusions are the shared mask for every street-detail source. These values size walk, camera and doorway clearance. spawn_forward keeps the first walk clear: a corridor from the ferry spawn straight along its facing direction.",
@@ -1044,6 +1044,188 @@
      "basis": "production_inference",
      "rule": "Thin brown-red stems among the mounds.",
      "evidence": "Street View Sep 2025 on 9th St (pano zSYuqR9R0oyboW2wFZ-wEw, heading 150): scruffy dark green shrubs under a metre tall with some dead brown stems on bare mulch; aerial (Aug 2025, ol-north crop, form only) and 2026-05-26 (z19): one strip of them along the lot's whole north-west edge."
+    }
+   ]
+  },
+  {
+   "id": "mersea_ditch",
+   "name": "The ditch next to Mersea",
+   "pilot": true,
+   "reason": "The seasonal wetland beside the owner's priority lot, in view of the city skyline: red marsh on the floor, puddles at its low points, a dry bank with loose pale-seeded shrubs.",
+   "reference": "Owner photos, Nov 2026 (three, from the lot's west curb at about (-266, 203)); OSM w1473022589 (natural=wetland); the land's own basin, 1.8 m at the floor and 4.3 m at the bank",
+   "ground": {
+    "kerbs": false,
+    "centerlines": {},
+    "lane_markings": false,
+    "planting": "none",
+    "parking_lanes": [],
+    "planting_behind_walk": [],
+    "plazas": [],
+    "parking_stalls": false,
+    "wear": {
+     "crack_per_100m2": 0.0,
+     "patch_per_100m2": 0.0,
+     "oil_per_100m2": 0.0,
+     "manhole_spacing_m": 0,
+     "drain_spacing_m": 0
+    },
+    "surfaces": {
+     "source_keys": ["w1473022589"],
+     "lift_m": 0.09,
+     "layers": [
+      {
+       "id": "mud_1",
+       "material": "yard_soil_dark",
+       "shape": {
+        "points_xz": [[-294.2, 194.0], [-298.4, 193.4], [-302.5, 197.8], [-306.9, 201.7], [-313.2, 208.6], [-317.3, 213.4], [-322.1, 219.7], [-326.0, 224.8], [-322.9, 228.0], [-316.7, 226.1], [-311.4, 222.2], [-305.7, 219.3], [-300.8, 213.5], [-296.7, 207.7], [-293.9, 202.3], [-291.5, 197.2]]
+       },
+       "reason": "Wet dark mud round a puddle.",
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions production inference."
+      },
+      {
+       "id": "mud_2",
+       "material": "yard_soil_dark",
+       "shape": {
+        "points_xz": [[-329.2, 228.0], [-334.4, 230.9], [-338.5, 234.8], [-344.3, 239.7], [-350.3, 246.0], [-355.2, 251.5], [-358.1, 256.8], [-356.9, 262.0], [-352.6, 263.1], [-349.6, 258.1], [-345.4, 253.2], [-340.1, 248.9], [-334.7, 244.8], [-329.8, 239.4], [-325.9, 234.3]]
+       },
+       "reason": "Wet dark mud round a puddle.",
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions production inference."
+      },
+      {
+       "id": "mud_3",
+       "material": "yard_soil_dark",
+       "shape": {
+        "points_xz": [[-313.1, 145.3], [-306.1, 141.7], [-298.0, 144.2], [-294.7, 150.0], [-298.0, 155.8], [-305.0, 158.3], [-312.1, 154.7], [-315.3, 150.0]]
+       },
+       "reason": "Wet dark mud round a puddle.",
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions production inference."
+      },
+      {
+       "id": "mud_4",
+       "material": "yard_soil_dark",
+       "shape": {
+        "points_xz": [[-289.6, 170.9], [-285.9, 168.7], [-282.1, 172.1], [-283.2, 181.0], [-287.1, 185.3], [-290.8, 182.0]]
+       },
+       "reason": "Wet dark mud round a puddle.",
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions production inference."
+      },
+      {
+       "id": "puddle_1",
+       "material": "ditch_puddle",
+       "shape": {
+        "points_xz": [[-295, 195], [-299, 194.5], [-303, 199], [-307, 203], [-312, 209], [-316, 213], [-321, 219], [-325, 224], [-322, 227], [-316, 225], [-311, 221], [-306, 218], [-302, 213], [-298, 208], [-295, 203], [-292.5, 198]]
+       },
+       "reason": "A shallow puddle of standing water: visual only, walked through.",
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions production inference."
+      },
+      {
+       "id": "puddle_2",
+       "material": "ditch_puddle",
+       "shape": {
+        "points_xz": [[-330, 229], [-335, 232], [-339, 236], [-344, 241], [-349, 246], [-354, 251], [-357, 256], [-356, 261], [-352, 262], [-349, 257], [-345, 252], [-341, 248], [-336, 245], [-331, 240], [-327, 235]]
+       },
+       "reason": "A shallow puddle of standing water: visual only, walked through.",
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions production inference."
+      },
+      {
+       "id": "puddle_3",
+       "material": "ditch_puddle",
+       "shape": {
+        "points_xz": [[-312, 146], [-306, 143], [-299, 145], [-296, 150], [-299, 155], [-305, 157], [-311, 154], [-314, 150]]
+       },
+       "reason": "A shallow puddle of standing water: visual only, walked through.",
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions production inference."
+      },
+      {
+       "id": "puddle_4",
+       "material": "ditch_puddle",
+       "shape": {
+        "points_xz": [[-289, 172], [-286, 170], [-283, 173], [-284, 180], [-287, 184], [-290, 181]]
+       },
+       "reason": "A shallow puddle of standing water: visual only, walked through.",
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions production inference."
+      }
+     ]
+    }
+   },
+   "shape": {
+    "type": "polygon",
+    "points_xz": [[-385, 105], [-255, 105], [-255, 215], [-300, 262], [-325, 318], [-395, 318]]
+   },
+   "scatter": [
+    {
+     "id": "bank_seed_shrubs",
+     "kind": "planting_slot",
+     "pattern": "grid",
+     "spacing_m": 7.0,
+     "jitter_m": 3.0,
+     "acceptance": 0.62,
+     "visible_surfaces": ["land_ground", "terrain_wetland"],
+     "within_xz": [[-292, 120], [-258, 120], [-255, 215], [-305, 262], [-345, 305], [-375, 300], [-345, 250], [-315, 225], [-285, 190], [-279, 150]],
+     "height_m": [2.7, 4.4],
+     "prop": "california_buckwheat",
+     "params": {
+      "variants": [1, 2],
+      "scale": [0.9, 1.25]
+     },
+     "basis": "production_inference",
+     "rule": "Loose pale-seeded shrubs 0.5-1.2 m tall scattered along the bank; the kit's closest form to the photographed one.",
+     "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea: loose white-flowered shrubs along the bank (species unconfirmed)."
+    },
+    {
+     "id": "bank_dry_tufts",
+     "kind": "grass_clump",
+     "pattern": "grid",
+     "spacing_m": 3.6,
+     "jitter_m": 1.6,
+     "acceptance": 0.42,
+     "visible_surfaces": ["land_ground", "terrain_wetland"],
+     "within_xz": [[-292, 120], [-258, 120], [-255, 215], [-305, 262], [-345, 305], [-375, 300], [-345, 250], [-315, 225], [-285, 190], [-279, 150]],
+     "height_m": [2.4, 4.4],
+     "prop": "bronze_clump_grass",
+     "params": {
+      "variants": [1, 2],
+      "scale": [0.9, 1.25]
+     },
+     "basis": "production_inference",
+     "rule": "Dry brown grass tufts on the slope.",
+     "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea: dry straw grass on the slope."
+    },
+    {
+     "id": "bank_foot_reeds",
+     "kind": "grass_clump",
+     "pattern": "grid",
+     "spacing_m": 3.4,
+     "jitter_m": 1.5,
+     "acceptance": 0.55,
+     "visible_surfaces": ["terrain_wetland"],
+     "height_m": [2.15, 2.6],
+     "prop": "pacific_reedgrass",
+     "params": {
+      "variants": [1, 2],
+      "scale": [0.9, 1.25]
+     },
+     "basis": "production_inference",
+     "rule": "Taller dry reeds and sedge along the foot of the bank.",
+     "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea: taller dry reeds and sedge at the bank's foot and the far ends."
+    },
+    {
+     "id": "floor_sedge",
+     "kind": "grass_clump",
+     "pattern": "grid",
+     "spacing_m": 7.5,
+     "jitter_m": 3.2,
+     "acceptance": 0.34,
+     "visible_surfaces": ["terrain_wetland"],
+     "height_m": [1.7, 2.25],
+     "prop": "dense_sedge",
+     "params": {
+      "variants": [1, 3],
+      "scale": [0.9, 1.2]
+     },
+     "basis": "production_inference",
+     "rule": "Scattered olive sedge clumps on the marsh floor.",
+     "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea: olive-green patches on the floor."
     }
    ]
   }

@@ -518,6 +518,9 @@ function validateScatterRule(rule, zoneId, ruleIds) {
   if (rule.surfaces != null) {
     invariant(Array.isArray(rule.surfaces) && rule.surfaces.length > 0 && rule.surfaces.every((key) => typeof key === "string" && key !== "") && new Set(rule.surfaces).size === rule.surfaces.length, `${label} surfaces must list material keys`);
   }
+  if (rule.height_m != null) {
+    invariant(rule.prop != null && Array.isArray(rule.height_m) && rule.height_m.length === 2 && rule.height_m.every(isFiniteNumber) && rule.height_m[0] < rule.height_m[1], `${label} height_m must be [low, high] of the visible ground, on a planted rule`);
+  }
   if (rule.visible_surfaces != null) {
     // Planted on what the eye sees: the street ground's grass tops read as its concrete to surfaces.
     invariant(rule.prop != null && Array.isArray(rule.visible_surfaces) && rule.visible_surfaces.length > 0 && rule.visible_surfaces.every((key) => typeof key === "string" && key !== ""), `${label} visible_surfaces must list material keys, on a planted rule`);
@@ -1262,7 +1265,7 @@ export function generateStreetDetail({
   };
 
   // Site checks shared by scatter and set pieces, after the gameplay mask.
-  const siteViolation = (kindName, xz, buildingBuffer) => {
+  const siteViolation = (kindName, xz, buildingBuffer, onOverlay = false) => {
     const kind = STREET_DETAIL_KINDS[kindName];
     const radius = kind.footprint_radius_m;
     if (!onLand(xz, exclusions.land_edge_buffer_m + radius)) return { reason: "land_edge", source_id: PLAYABLE_BOUNDARY_SOURCE_KEY, observed_m: 0, required_m: exclusions.land_edge_buffer_m };
@@ -1276,7 +1279,7 @@ export function generateStreetDetail({
     if (road.distance < exclusions.road_buffer_m + radius) {
       return { reason: "road", source_id: road.key, observed_m: round3(Math.max(0, road.distance - radius)), required_m: exclusions.road_buffer_m };
     }
-    const overlay = shorelineOverlays.nearest(xz, radius);
+    const overlay = onOverlay ? { distance: Infinity } : shorelineOverlays.nearest(xz, radius);
     if (overlay.distance < radius || overlay.distance === 0) return { reason: "shoreline_overlay", source_id: overlay.key, observed_m: round3(overlay.distance), required_m: radius };
     for (const item of occupied) {
       const distance = polylineDistance(xz, item.points);
@@ -1675,7 +1678,12 @@ export function generateStreetDetail({
           const placementProblem = (xz) => {
             if (!contains(xz)) return "outside_zone";
             if (rule.within_xz && !pointInRing(xz, rule.within_xz, true)) return "outside_rule_area";
-            const violation = siteViolation(rule.kind, xz, exclusions.building_buffer_m);
+            if (rule.height_m) {
+              const y = groundAt(xz)?.y;
+              if (y === undefined || y < rule.height_m[0] || y > rule.height_m[1]) return "outside_rule_height";
+            }
+            // A rule planted on what the eye sees may name an overlay's ground (a marsh).
+            const violation = siteViolation(rule.kind, xz, exclusions.building_buffer_m, rule.visible_surfaces !== undefined);
             if (violation) return violation.reason;
             const material = surfaceAt(xz).material_key;
             if (rule.visible_surfaces) {
