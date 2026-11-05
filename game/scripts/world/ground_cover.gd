@@ -60,6 +60,11 @@ const FAMILIES := {
 	# land (map) and the Avenue N construction parcel w1252737734.
 	"dry_field": {"dry_threshold": 0.33, "bare_threshold": 0.555, "green_dryness": 0.5, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
 	"bare": {"dry_threshold": -1.0, "bare_threshold": 0.345, "green_dryness": 0.0, "patch_scale_m": 20.0, "bare_scale_m": 15.0},
+	# The seasonal marsh (natural=wetland) east of the Mersea lot: olive rushes
+	# at its edges round pale dry grass and sand, about 23 / 52 / 25
+	# (2026-05-26 aerial: 10 % green, 28 % dry, 63 % pale of its open ground;
+	# drawn before as a flat water-like cyan).
+	"marsh": {"dry_threshold": 0.40, "bare_threshold": 0.62, "green_dryness": 0.55, "patch_scale_m": 24.0, "bare_scale_m": 14.0},
 	# The old sand courts (natural=sand) in the residential north: pale bare
 	# ground grown over with dry weeds, about 0 / 45 / 55 (2026-05-26 aerial).
 	"sand_pad": {"dry_threshold": 0.2, "bare_threshold": 0.49, "green_dryness": 0.5, "patch_scale_m": 12.0, "bare_scale_m": 9.0},
@@ -69,8 +74,9 @@ const FAMILIES := {
 	"verge": {"dry_threshold": 0.25, "bare_threshold": 0.55, "green_dryness": 0.5, "patch_scale_m": 16.0, "bare_scale_m": 7.0},
 }
 
-## Family per generated material key. Parking, roads, buildings, the other
-## terrain overlays and the Yerba Buena context keep their existing materials.
+## Family per generated material key. Parking, roads, buildings, the shore
+## overlays (breakwater, riprap, pier) and the Yerba Buena context keep their
+## existing materials.
 const FAMILY_BY_MATERIAL_KEY := {
 	"land_ground": "field",
 	# Back slopes of the raised street ground match the land (planting strips are mulch).
@@ -82,8 +88,13 @@ const FAMILY_BY_MATERIAL_KEY := {
 	"major_area_amenity": "field",
 	# A park zone's lawn (tools/lib/street-ground-generation.mjs park surfaces).
 	"park_lawn": "park_lawn",
-	# The old sand courts, a terrain overlay.
+	# Terrain overlays on the land: the old sand courts, the marsh east of the
+	# Mersea lot and the Sailing Center's yard (leisure=marina), which the
+	# 2026-05-26 aerial shows as pale gravel and fill (94 % of its open ground),
+	# drawn before as a flat water-like cyan.
 	"terrain_sand": "sand_pad",
+	"terrain_wetland": "marsh",
+	"terrain_marina": "bare",
 }
 
 ## Frozen 2026-08-27 OSM areas whose tags the generated material keys merge.
@@ -120,8 +131,9 @@ const FAMILY_BY_SOURCE := {
 static var _materials: Dictionary = {}
 
 
-## The family for a generated land, area, sand overlay or planted street-kerb
-## record: a FAMILIES key, PAVED, or "" when the builder keeps its own material.
+## The family for a generated land, area, land overlay (sand, marsh, marina
+## yard) or planted street-kerb record: a FAMILIES key, PAVED, or "" when the
+## builder keeps its own material.
 static func family_for(record: Dictionary, is_context: bool) -> String:
 	if is_context:
 		return ""
@@ -131,7 +143,7 @@ static func family_for(record: Dictionary, is_context: bool) -> String:
 		if sources.size() == 1 and FAMILY_BY_SOURCE.has(str(sources[0])):
 			return str(FAMILY_BY_SOURCE[str(sources[0])])
 	elif feature == "terrain_overlay":
-		if str(record.get("material_key", "")) != "terrain_sand":
+		if str(record.get("material_key", "")) not in ["terrain_sand", "terrain_wetland", "terrain_marina"]:
 			return ""
 	elif feature != "land_ground" and feature != "street_kerb" and feature != "street_paint":
 		return ""

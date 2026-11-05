@@ -37,6 +37,8 @@ const GROUND_ROUTES := [
 	["major_area", "major_area_amenity", "w1043836449", "field"],
 	["major_area", "major_area_paved", "w95934095", ""],
 	["terrain_overlay", "terrain_sand", "w109042224", "sand_pad"],
+	["terrain_overlay", "terrain_wetland", "w1473022589", "marsh"],
+	["terrain_overlay", "terrain_marina", "w110183752", "bare"],
 	["terrain_overlay", "terrain_breakwater", "w1222684027", ""],
 ]
 
