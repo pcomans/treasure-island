@@ -418,12 +418,22 @@
         "w52721875"
       ],
       "treatment": "village",
-      "evidence": "Google Street View Sep 2025 on Gateview Avenue (heading 238) and Mar 2025 at its junctions: red curbs along both sides, two-line crosswalks, patched asphalt. Sep 2025 on Gateview Avenue (camera x -386.8, z -668.1, heading 238): lawn to the red curb on the left, a concrete walk behind the red curb on the right.",
+      "evidence": "Google Street View Sep 2025 on Gateview Avenue (heading 238) and Mar 2025 at its junctions: red curbs along both sides, two-line crosswalks, patched asphalt. Sep 2025 on Gateview Avenue (camera x -386.8, z -668.1, heading 238): lawn to the red curb on the left, a concrete walk behind the red curb on the right. Mar 2025 at 1200 Northpoint Dr: the walks round the Northpoint corners run on along Gateview Avenue's north side.",
       "sides": {
         "w52721875": {
           "right": [
             [
               0,
+              289,
+              "verge"
+            ],
+            [
+              289,
+              329,
+              "walk"
+            ],
+            [
+              329,
               360,
               "verge"
             ],
@@ -504,10 +514,22 @@
         "w8920838"
       ],
       "treatment": "village",
-      "evidence": "Google Street View Mar 2025 at 1200 Northpoint Drive: red curbs, STOP legend, two crosswalk lines, a curb ramp at the corner. Mar 2025 at 1200 Northpoint Dr: a concrete walk and curb ramp at the Gateview Avenue corner on the right (the way's left).",
+      "evidence": "Google Street View Mar 2025 at 1200 Northpoint Drive: red curbs, STOP legend, two crosswalk lines, a curb ramp at the corner. Mar 2025 at 1200 Northpoint Dr (heading 175): concrete walks behind the red curbs on both sides, curving round both corners onto Gateview Avenue, curb ramps at the two-line crosswalk.",
       "sides": {
         "w8920838": {
           "left": [
+            [
+              0,
+              30,
+              "walk"
+            ],
+            [
+              30,
+              510,
+              "verge"
+            ]
+          ],
+          "right": [
             [
               0,
               30,
@@ -1321,7 +1343,7 @@
     {
       "id": "mersea_lot",
       "source_key": "w28356874",
-      "evidence": "Owner-priority lot by Mersea (699 Avenue of the Palms). Aerial 2026-05-26 (0.25 m, traced in the lot's own frame along its north-west edge): four rows of 90-degree stalls square to 9th Street in the north field (the north-west row, a back-to-back pair, and the row along the south-east aisle). Google Street View Sep 2025 inside the lot (pano TKhpp at x -365.5, z 142.7, headings 70, 110, 190 and 10; panos UmL4 and LtXS up the Avenue A strip): TOUR BUS PARKING across three wide stalls along the strip's east fence, faded stall marks along both edges of the strip, blue accessible stalls by the event trailers at its west side, a small raised island holding a lamp and a litter can, a white turn arrow by it. Stall counts and exact positions are production inference from the aerial. Fix round (2026-11-05): the Avenue A strip's rows sit about 5 m further out (May 2026 aerial: the east cars' centres about 10.4 m from the OSM centre line, noses at the planters; the west-edge car about 12.6 m out); the lamp island stands just off the OSM road ribbon (Sep 2025, heading 10); hatched zones at the field rows' ends and the outlined box at the west end from the aerial; the field's stall paint mostly worn (step 3) and the strip's nearly worn away (step 4, faded rows), the accessible stalls outlined in blue; long tar-sealed joints and patched strips along the Avenue A strip (Sep 2025 photos up the strip; none drawn in the north field, whose photos show cracks but no joints).",
+      "evidence": "Owner-priority lot by Mersea (699 Avenue of the Palms). Aerial 2026-05-26 (0.25 m, traced in the lot's own frame along its north-west edge): four rows of 90-degree stalls square to 9th Street in the north field (the north-west row, a back-to-back pair, and the row along the south-east aisle). Google Street View Sep 2025 inside the lot (pano TKhpp at x -365.5, z 142.7, headings 70, 110, 190 and 10; panos UmL4 and LtXS up the Avenue A strip): TOUR BUS PARKING across three wide stalls along the strip's east fence, faded stall marks along both edges of the strip, blue accessible stalls by the event trailers at its west side, a small raised island holding a lamp and a litter can, a white left-turn arrow on the drive about 9.7 m ahead of the heading-10 camera. Stall counts and exact positions are production inference from the aerial. Fix round (2026-11-05): the Avenue A strip's rows sit about 5 m further out (May 2026 aerial: the east cars' centres about 10.4 m from the OSM centre line, noses at the planters; the west-edge car about 12.6 m out); the lamp island stands just off the OSM road ribbon (Sep 2025, heading 10); hatched zones at the field rows' ends and the outlined box at the west end from the aerial; the field's stall paint mostly worn (step 3) and the strip's nearly worn away (step 4, faded rows), the accessible stalls outlined in blue; long tar-sealed joints and patched strips along the Avenue A strip (Sep 2025 photos up the strip; none drawn in the north field, whose photos show cracks but no joints).",
       "paint_wear": 3,
       "surface": {
         "material": "yard_asphalt_pale",
@@ -1725,12 +1747,12 @@
         {
           "cell": "arrow_left",
           "at_xz": [
-            -366.4,
-            139.0
+            -367.0,
+            133.2
           ],
           "facing_xz": [
-            -0.495,
-            -0.869
+            -0.17,
+            -0.985
           ],
           "length_m": 4.8,
           "width_m": 1.2,
