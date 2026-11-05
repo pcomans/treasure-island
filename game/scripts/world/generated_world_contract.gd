@@ -24,17 +24,28 @@ const PLANTING_ROWS_SCHEMA := "ti.street-detail-planting-rows/1"
 ## The water plane a moored street-detail row floats on (WATER_Y_M of tools/lib/shoreline-generation.mjs).
 const STREET_DETAIL_WATER_Y_M := -0.12
 const PLANTING_ROW_FIELDS := ["prop", "variant", "x", "y", "z", "yaw_radians", "scale", "lift_m", "foot_spread_m", "surface", "land", "triangle_index", "zones"]
-## Shoreline riprap (tools/lib/shoreline-generation.mjs): visual-only slope
-## records and boulder placements outside the playable land.
-const SHORELINE_SCHEMA := "ti.shoreline/3"
-## Underlay records: the riprap slope, and the shoulder strip, which carries the land's UVs.
-const SHORELINE_RECORD_KINDS := {"shoreline-slope:": "shoreline_riprap", "shoreline-verge:": "shoreline_verge"}
+## Shoreline riprap (tools/lib/shoreline-generation.mjs): visual-only slope,
+## shoulder and closure records and stone placements outside the playable
+## land, packed as quantized base64 arrays (unpackShorelineRecord and
+## unpackShorelineBatch there; _expand_shoreline here is their twin).
+const SHORELINE_SCHEMA := "ti.shoreline/4"
+## Underlay records: the riprap slope, the shoulder strip (its UVs are the
+## land's, world x / 10 and z / 10) and the concrete closure faces.
+const SHORELINE_RECORD_KINDS := {"shoreline-slope:": "shoreline_riprap", "shoreline-verge:": "shoreline_verge", "shoreline-wall:": "shoreline_wall"}
+const SHORELINE_VERGE_MATERIAL := "shoreline_verge"
 const SHORELINE_BANDS := ["cobble", "driftwood", "heap", "top"]
+const SHORELINE_CLOSURE_KINDS := ["none", "ramp", "wall"]
 const SHORELINE_PROTOTYPE_MATERIALS := {"boulder": "shoreline_boulder", "log": "shoreline_driftwood", "plank": "shoreline_driftwood"}
-const SHORELINE_FIELDS := ["batches", "config", "generator", "overlay", "prototypes", "records", "schema_version", "seed", "segments", "visual_only", "water_y_m"]
-const SHORELINE_BATCH_FIELDS := ["band", "cast_shadow", "id", "placements", "prototype", "section", "segment", "visibility_end_m", "visibility_margin_m"]
-## Position (3), rotation quaternion (4), per-axis scale (3), tint (3).
-const SHORELINE_PLACEMENT_LENGTH := 13
+const SHORELINE_FIELDS := ["batches", "closures", "config", "generator", "overlay", "packing", "prototypes", "records", "schema_version", "seed", "segments", "visual_only", "water_y_m"]
+const SHORELINE_RECORD_FIELDS := ["indices", "material_key", "normals", "object_key", "origin", "positions", "section", "segment", "source_keys", "vertex_count"]
+const SHORELINE_BATCH_FIELDS := ["band", "cast_shadow", "count", "id", "origin", "placements", "prototype", "section", "segment", "visibility_end_m", "visibility_margin_m"]
+## The packing's steps (SHORELINE_POSITION_STEP_M and the rest in the generator).
+const SHORELINE_POSITION_STEP_M := 0.002
+const SHORELINE_SCALE_STEP_M := 0.0005
+const SHORELINE_ROTATION_SCALE := 32767.0
+const SHORELINE_NORMAL_SCALE := 127.0
+## Floats per expanded placement: position (3), rotation quaternion (4), per-axis scale (3).
+const SHORELINE_PLACEMENT_LENGTH := 10
 const BOUNDARY_TOLERANCE_M := 0.001
 const MIN_TRIANGLE_AREA_M2 := 0.00000001
 const BOUNDARY_SOURCE_KEY := "w26767313"
@@ -216,6 +227,9 @@ static func load_and_validate(manifest_path: String) -> Dictionary:
 		return result
 	var shoreline_path := _resolve_artifact_path(manifest_path, str(manifest.shoreline.path))
 	var shoreline_result := _read_json_object(shoreline_path)
+	if not shoreline_result.ok:
+		return shoreline_result
+	shoreline_result = _expand_shoreline(shoreline_result.data)
 	if not shoreline_result.ok:
 		return shoreline_result
 	result = _validate_shoreline(shoreline_result.data, source_scopes)
@@ -745,53 +759,174 @@ static func _validate_street_fence(row: Dictionary, land_records: Dictionary, bo
 	return {"ok": true}
 
 
-## Shoreline structure and identity: valid visual meshes owned by playable
-## sources, prototypes with valid LOD index sets, and batches of finite
-## placements (unit rotation, positive scale, tint in (0, 1]) of known
-## prototypes. No pinned totals: the shoreline grows segment by segment. Which
-## side of the outline each band keeps is checked by tools/validate_godot_world.mjs.
-static func _validate_shoreline(document: Dictionary, source_scopes: Dictionary) -> Dictionary:
+## The shoreline with its packed records and batches expanded (the twin of
+## unpackShorelineRecord and unpackShorelineBatch in
+## tools/lib/shoreline-generation.mjs): each record gains vertices, normals and
+## indices (and a shoulder record its UVs) as packed arrays, each batch
+## "transforms", SHORELINE_PLACEMENT_LENGTH floats per placement (position,
+## normalized rotation quaternion, per-axis scale). Validation and the builder
+## read the expanded document.
+static func _expand_shoreline(document: Dictionary) -> Dictionary:
 	if not _has_exact_fields(document, SHORELINE_FIELDS) or str(document.get("schema_version", "")) != SHORELINE_SCHEMA:
 		return _failure("shoreline_schema", "Generated shoreline schema is invalid.")
+	var packing: Variant = document.packing
+	if not packing is Dictionary or not is_equal_approx(float((packing as Dictionary).get("position_step_m", 0.0)), SHORELINE_POSITION_STEP_M) \
+	or not is_equal_approx(float((packing as Dictionary).get("scale_step_m", 0.0)), SHORELINE_SCALE_STEP_M) \
+	or not is_equal_approx(float((packing as Dictionary).get("rotation_scale", 0.0)), SHORELINE_ROTATION_SCALE) \
+	or not is_equal_approx(float((packing as Dictionary).get("normal_scale", 0.0)), SHORELINE_NORMAL_SCALE):
+		return _failure("shoreline_schema", "Generated shoreline packing steps drifted.")
+	if not document.get("records", null) is Array or not document.get("batches", null) is Array or not document.get("prototypes", null) is Array:
+		return _failure("shoreline_schema", "Generated shoreline is missing records, batches or prototypes.")
+	var kinds := {}
+	for prototype_value: Variant in document.prototypes:
+		if prototype_value is Dictionary:
+			kinds[str((prototype_value as Dictionary).get("id", ""))] = str((prototype_value as Dictionary).get("kind", ""))
+	var records: Array = []
+	for record_value: Variant in document.records:
+		if not record_value is Dictionary or not _has_exact_fields(record_value, SHORELINE_RECORD_FIELDS):
+			return _failure("shoreline_records", "Shoreline record has missing or unknown fields.")
+		var record: Dictionary = (record_value as Dictionary).duplicate()
+		var label := str(record.object_key)
+		var count_value: Variant = record.vertex_count
+		var origin: Variant = record.origin
+		if not _is_nonnegative_json_integer(count_value) or int(count_value) < 3 or not origin is Array or (origin as Array).size() != 3 \
+		or not record.positions is String or not record.normals is String or not record.indices is String:
+			return _failure("shoreline_records", "Shoreline record %s is malformed." % label)
+		for value: Variant in origin:
+			if not _is_finite_number(value):
+				return _failure("shoreline_records", "Shoreline record %s has a non-finite origin." % label)
+		var count := int(count_value)
+		var positions := Marshalls.base64_to_raw(str(record.positions))
+		var packed_normals := Marshalls.base64_to_raw(str(record.normals))
+		var packed_indices := Marshalls.base64_to_raw(str(record.indices))
+		if positions.size() != count * 6 or packed_normals.size() != count * 3 or packed_indices.is_empty() or packed_indices.size() % 6 != 0:
+			return _failure("shoreline_records", "Shoreline record %s packed arrays do not match its vertex count." % label)
+		var base := Vector3(float(origin[0]), float(origin[1]), float(origin[2]))
+		var vertices := PackedVector3Array()
+		var normals := PackedVector3Array()
+		vertices.resize(count)
+		normals.resize(count)
+		for index in count:
+			vertices[index] = base + Vector3(positions.decode_u16(index * 6), positions.decode_u16(index * 6 + 2), positions.decode_u16(index * 6 + 4)) * SHORELINE_POSITION_STEP_M
+			var normal := Vector3(packed_normals.decode_s8(index * 3), packed_normals.decode_s8(index * 3 + 1), packed_normals.decode_s8(index * 3 + 2)) / SHORELINE_NORMAL_SCALE
+			if normal.length() < 0.5:
+				return _failure("shoreline_records", "Shoreline record %s has a zero normal." % label)
+			normals[index] = normal.normalized()
+		var indices := PackedInt32Array()
+		indices.resize(packed_indices.size() / 2)
+		for index in indices.size():
+			indices[index] = packed_indices.decode_u16(index * 2)
+		record.vertices = vertices
+		record.normals = normals
+		record.indices = indices
+		record.erase("positions")
+		if str(record.material_key) == SHORELINE_VERGE_MATERIAL:
+			var uvs := PackedVector2Array()
+			uvs.resize(count)
+			for index in count:
+				uvs[index] = Vector2(vertices[index].x / 10.0, vertices[index].z / 10.0)
+			record.uvs = uvs
+		records.append(record)
+	var batches: Array = []
+	for batch_value: Variant in document.batches:
+		if not batch_value is Dictionary or not _has_exact_fields(batch_value, SHORELINE_BATCH_FIELDS):
+			return _failure("shoreline_batches", "Shoreline batch has missing or unknown fields.")
+		var batch: Dictionary = (batch_value as Dictionary).duplicate()
+		var label := str(batch.id)
+		var kind := str(kinds.get(str(batch.prototype), ""))
+		var origin: Variant = batch.origin
+		if kind.is_empty() or not _is_nonnegative_json_integer(batch.count) or int(batch.count) < 1 or not batch.placements is String \
+		or not origin is Array or (origin as Array).size() != 3:
+			return _failure("shoreline_batches", "Shoreline batch %s is malformed." % label)
+		for value: Variant in origin:
+			if not _is_finite_number(value):
+				return _failure("shoreline_batches", "Shoreline batch %s has a non-finite origin." % label)
+		var count := int(batch.count)
+		var stride := 16 if kind == "boulder" else 20
+		var bytes := Marshalls.base64_to_raw(str(batch.placements))
+		if bytes.size() != count * stride:
+			return _failure("shoreline_placement", "Shoreline batch %s placement bytes do not match its count." % label)
+		var transforms := PackedFloat32Array()
+		transforms.resize(count * SHORELINE_PLACEMENT_LENGTH)
+		for index in count:
+			var at := index * stride
+			var out := index * SHORELINE_PLACEMENT_LENGTH
+			for axis in 3:
+				transforms[out + axis] = float(origin[axis]) + bytes.decode_u16(at + axis * 2) * SHORELINE_POSITION_STEP_M
+			var rotation := Quaternion(bytes.decode_s16(at + 6), bytes.decode_s16(at + 8), bytes.decode_s16(at + 10), bytes.decode_s16(at + 12))
+			if Vector4(rotation.x, rotation.y, rotation.z, rotation.w).length() < SHORELINE_ROTATION_SCALE * 0.5:
+				return _failure("shoreline_placement", "Shoreline placement in %s is not a unit rotation." % label)
+			rotation = rotation.normalized()
+			transforms[out + 3] = rotation.x
+			transforms[out + 4] = rotation.y
+			transforms[out + 5] = rotation.z
+			transforms[out + 6] = rotation.w
+			for axis in 3:
+				var step := 0 if kind == "boulder" else axis
+				transforms[out + 7 + axis] = bytes.decode_u16(at + 14 + step * 2) * SHORELINE_SCALE_STEP_M
+		batch.transforms = transforms
+		batch.erase("placements")
+		batches.append(batch)
+	var expanded := document.duplicate()
+	expanded.records = records
+	expanded.batches = batches
+	return {"ok": true, "data": expanded}
+
+
+## Shoreline structure and identity, on the expanded document: valid visual
+## meshes owned by playable sources and known pieces, prototypes with valid LOD
+## index sets, and batches of placements (unit rotation, positive scale,
+## uniform for a stone) of known prototypes. No pinned totals: segments and
+## closures are configured. Which side of the outline each band keeps is
+## checked by tools/validate_godot_world.mjs.
+static func _validate_shoreline(document: Dictionary, source_scopes: Dictionary) -> Dictionary:
 	if document.get("visual_only", false) != true or not _is_finite_number(document.get("water_y_m", null)):
 		return _failure("shoreline_contract", "Shoreline must be visual-only with a finite water level.")
+	var piece_ids: Dictionary = {}
 	var segment_ids: Dictionary = {}
-	if not document.get("segments", null) is Array or (document.segments as Array).is_empty():
+	if not document.get("segments", null) is Array or (document.segments as Array).is_empty() or not document.get("closures", null) is Array:
 		return _failure("shoreline_segments", "Shoreline has no segments.")
 	for segment_value: Variant in document.segments:
 		if not segment_value is Dictionary or str(source_scopes.get(str((segment_value as Dictionary).get("source_key", "")), "")) != "playable":
 			return _failure("shoreline_segments", "Shoreline segment does not name a playable source.")
 		segment_ids[str((segment_value as Dictionary).get("id", ""))] = true
+		piece_ids[str((segment_value as Dictionary).get("id", ""))] = true
+	for closure_value: Variant in document.closures:
+		if not closure_value is Dictionary or not SHORELINE_CLOSURE_KINDS.has(str((closure_value as Dictionary).get("kind", ""))) \
+		or not (closure_value as Dictionary).get("source_keys", null) is Array:
+			return _failure("shoreline_segments", "Shoreline closure is malformed.")
+		for key_value: Variant in ((closure_value as Dictionary).source_keys as Array):
+			if str(source_scopes.get(str(key_value), "")) != "playable":
+				return _failure("shoreline_segments", "Shoreline closure names an unknown source.", [str(key_value)])
+		var closure_id := str((closure_value as Dictionary).get("id", ""))
+		if piece_ids.has(closure_id):
+			return _failure("shoreline_segments", "Shoreline piece id %s is not unique." % closure_id)
+		piece_ids[closure_id] = true
 	var object_keys: Dictionary = {}
-	if not document.get("records", null) is Array or (document.records as Array).is_empty():
+	if (document.records as Array).is_empty():
 		return _failure("shoreline_records", "Shoreline has no slope records.")
 	for record_value: Variant in document.records:
-		if not record_value is Dictionary:
-			return _failure("shoreline_records", "Shoreline record is not an object.")
 		var record: Dictionary = record_value
 		var object_key := str(record.get("object_key", ""))
 		var kind := object_key.substr(0, object_key.find(":") + 1)
-		if not SHORELINE_RECORD_KINDS.has(kind) or object_keys.has(object_key) or str(record.get("material_key", "")) != str(SHORELINE_RECORD_KINDS[kind]):
-			return _failure("shoreline_records", "Shoreline record key or material is invalid: %s" % object_key)
+		if not SHORELINE_RECORD_KINDS.has(kind) or object_keys.has(object_key) or str(record.get("material_key", "")) != str(SHORELINE_RECORD_KINDS[kind]) \
+		or not piece_ids.has(str(record.get("segment", ""))):
+			return _failure("shoreline_records", "Shoreline record key, material or piece is invalid: %s" % object_key)
 		object_keys[object_key] = true
+		var vertices: PackedVector3Array = record.vertices
 		if kind == "shoreline-verge:":
-			var uvs: Array = record.get("uvs", []) if record.get("uvs", null) is Array else []
-			var vertex_values: Array = record.get("vertices", []) if record.get("vertices", null) is Array else []
-			if uvs.is_empty() or uvs.size() * 3 != vertex_values.size() * 2:
+			if not record.get("uvs", null) is PackedVector2Array or (record.uvs as PackedVector2Array).size() != vertices.size():
 				return _failure("shoreline_records", "Shoreline shoulder record %s needs one UV per vertex." % object_key)
-			for value: Variant in uvs:
-				if not _is_finite_number(value):
-					return _failure("shoreline_records", "Shoreline shoulder record %s has a non-finite UV." % object_key)
 		if not record.get("source_keys", null) is Array or (record.source_keys as Array).is_empty():
 			return _failure("shoreline_records", "Shoreline record %s has no source." % object_key)
 		for key_value: Variant in record.source_keys:
 			if str(source_scopes.get(str(key_value), "")) != "playable":
 				return _failure("shoreline_records", "Shoreline record %s names an unknown source." % object_key, [str(key_value)])
-		var mesh_result := _validate_shoreline_mesh(record, record.get("indices", null), object_key)
+		var mesh_result := _validate_shoreline_packed_mesh(vertices, record.normals, record.indices, object_key)
 		if not mesh_result.ok:
 			return mesh_result
 	var prototype_ids: Dictionary = {}
-	if not document.get("prototypes", null) is Array or (document.prototypes as Array).is_empty():
+	if (document.prototypes as Array).is_empty():
 		return _failure("shoreline_prototypes", "Shoreline has no prototypes.")
 	for prototype_value: Variant in document.prototypes:
 		if not prototype_value is Dictionary:
@@ -802,7 +937,7 @@ static func _validate_shoreline(document: Dictionary, source_scopes: Dictionary)
 		if prototype_id.is_empty() or prototype_ids.has(prototype_id) or not SHORELINE_PROTOTYPE_MATERIALS.has(kind) \
 		or str(prototype.get("material_key", "")) != str(SHORELINE_PROTOTYPE_MATERIALS[kind]):
 			return _failure("shoreline_prototypes", "Shoreline prototype id, kind or material is invalid: %s" % prototype_id)
-		prototype_ids[prototype_id] = true
+		prototype_ids[prototype_id] = kind
 		var mesh_result := _validate_shoreline_mesh(prototype, prototype.get("indices", null), prototype_id)
 		if not mesh_result.ok:
 			return mesh_result
@@ -817,11 +952,9 @@ static func _validate_shoreline(document: Dictionary, source_scopes: Dictionary)
 			if not lod_result.ok:
 				return lod_result
 	var batch_ids: Dictionary = {}
-	if not document.get("batches", null) is Array or (document.batches as Array).is_empty():
+	if (document.batches as Array).is_empty():
 		return _failure("shoreline_batches", "Shoreline has no stone batches.")
 	for batch_value: Variant in document.batches:
-		if not batch_value is Dictionary or not _has_exact_fields(batch_value, SHORELINE_BATCH_FIELDS):
-			return _failure("shoreline_batches", "Shoreline batch has missing or unknown fields.")
 		var batch: Dictionary = batch_value
 		var batch_id := str(batch.id)
 		if batch_id.is_empty() or batch_ids.has(batch_id) or not SHORELINE_BANDS.has(str(batch.band)) or not prototype_ids.has(str(batch.prototype)) \
@@ -830,27 +963,28 @@ static func _validate_shoreline(document: Dictionary, source_scopes: Dictionary)
 		or float(batch.visibility_margin_m) <= 0.0 or float(batch.visibility_end_m) <= float(batch.visibility_margin_m):
 			return _failure("shoreline_batches", "Shoreline batch identity or visibility is invalid: %s" % batch_id)
 		batch_ids[batch_id] = true
-		if not batch.placements is Array or (batch.placements as Array).is_empty():
-			return _failure("shoreline_batches", "Shoreline batch %s has no placements." % batch_id)
-		for placement_value: Variant in batch.placements:
-			var placement: Array = placement_value if placement_value is Array else []
-			if placement.size() != SHORELINE_PLACEMENT_LENGTH:
-				return _failure("shoreline_placement", "Shoreline placement in %s is malformed." % batch_id)
-			for value: Variant in placement:
-				if not _is_finite_number(value):
+		var boulder := str(prototype_ids[str(batch.prototype)]) == "boulder"
+		if (str(batch.band) == "driftwood") == boulder:
+			return _failure("shoreline_batches", "Shoreline batch %s puts the wrong prototype kind in its band." % batch_id)
+		var transforms: PackedFloat32Array = batch.transforms
+		for start in range(0, transforms.size(), SHORELINE_PLACEMENT_LENGTH):
+			for offset in SHORELINE_PLACEMENT_LENGTH:
+				if not is_finite(transforms[start + offset]):
 					return _failure("shoreline_placement", "Shoreline placement in %s has a non-finite value." % batch_id)
-			var quaternion_length := sqrt(float(placement[3]) * float(placement[3]) + float(placement[4]) * float(placement[4]) + float(placement[5]) * float(placement[5]) + float(placement[6]) * float(placement[6]))
-			if absf(quaternion_length - 1.0) > 0.01:
+			var rotation := Vector4(transforms[start + 3], transforms[start + 4], transforms[start + 5], transforms[start + 6])
+			if absf(rotation.length() - 1.0) > 0.001:
 				return _failure("shoreline_placement", "Shoreline placement in %s is not a unit rotation." % batch_id)
 			for axis in range(7, 10):
-				if float(placement[axis]) <= 0.0:
+				if transforms[start + axis] <= 0.0:
 					return _failure("shoreline_placement", "Shoreline placement in %s has a non-positive scale." % batch_id)
-			for channel in range(10, 13):
-				if float(placement[channel]) <= 0.0 or float(placement[channel]) > 1.0:
-					return _failure("shoreline_placement", "Shoreline placement tint in %s must lie in (0, 1]." % batch_id)
+			if boulder and (transforms[start + 7] != transforms[start + 8] or transforms[start + 8] != transforms[start + 9]):
+				return _failure("shoreline_placement", "Shoreline batch %s scales a stone unevenly." % batch_id)
 	return {"ok": true}
 
 
+## A plain generated mesh (the prototypes: vertices and normals as flat number
+## arrays) is valid: consistent arrays, finite values, indices in range and no
+## degenerate triangle.
 static func _validate_shoreline_mesh(mesh: Dictionary, indices_value: Variant, label: String) -> Dictionary:
 	var vertices: Array = mesh.get("vertices", []) if mesh.get("vertices", null) is Array else []
 	var normals: Array = mesh.get("normals", []) if mesh.get("normals", null) is Array else []
@@ -860,20 +994,33 @@ static func _validate_shoreline_mesh(mesh: Dictionary, indices_value: Variant, l
 	for value: Variant in vertices + normals:
 		if not _is_finite_number(value):
 			return _failure("shoreline_mesh", "Shoreline mesh %s has a non-finite value." % label)
-	var vertex_count := int(vertices.size() / 3)
+	var points := PackedVector3Array()
+	var directions := PackedVector3Array()
+	for index in range(0, vertices.size(), 3):
+		points.append(Vector3(float(vertices[index]), float(vertices[index + 1]), float(vertices[index + 2])))
+		directions.append(Vector3(float(normals[index]), float(normals[index + 1]), float(normals[index + 2])))
+	var triangles := PackedInt32Array()
 	for index_value: Variant in indices:
-		if not _is_finite_number(index_value) or float(index_value) != floorf(float(index_value)) or float(index_value) < 0.0 or float(index_value) >= float(vertex_count):
+		if not _is_finite_number(index_value) or float(index_value) != floorf(float(index_value)):
+			return _failure("shoreline_mesh", "Shoreline mesh %s has an invalid index." % label)
+		triangles.append(int(index_value))
+	return _validate_shoreline_packed_mesh(points, directions, triangles, label)
+
+
+## An expanded shoreline mesh is valid: one normal per vertex, indices in
+## range and no degenerate triangle.
+static func _validate_shoreline_packed_mesh(vertices: PackedVector3Array, normals: PackedVector3Array, indices: PackedInt32Array, label: String) -> Dictionary:
+	if vertices.size() < 3 or normals.size() != vertices.size() or indices.size() < 3 or indices.size() % 3 != 0:
+		return _failure("shoreline_mesh", "Shoreline mesh %s has inconsistent arrays." % label)
+	for vertex in vertices:
+		if not vertex.is_finite():
+			return _failure("shoreline_mesh", "Shoreline mesh %s has a non-finite value." % label)
+	for index in indices:
+		if index < 0 or index >= vertices.size():
 			return _failure("shoreline_mesh", "Shoreline mesh %s has an invalid index." % label)
 	for triangle in range(0, indices.size(), 3):
-		var a := int(indices[triangle]) * 3
-		var b := int(indices[triangle + 1]) * 3
-		var c := int(indices[triangle + 2]) * 3
-		var ab := [float(vertices[b]) - float(vertices[a]), float(vertices[b + 1]) - float(vertices[a + 1]), float(vertices[b + 2]) - float(vertices[a + 2])]
-		var ac := [float(vertices[c]) - float(vertices[a]), float(vertices[c + 1]) - float(vertices[a + 1]), float(vertices[c + 2]) - float(vertices[a + 2])]
-		var nx: float = ab[1] * ac[2] - ab[2] * ac[1]
-		var ny: float = ab[2] * ac[0] - ab[0] * ac[2]
-		var nz: float = ab[0] * ac[1] - ab[1] * ac[0]
-		if sqrt(nx * nx + ny * ny + nz * nz) * 0.5 <= MIN_TRIANGLE_AREA_M2:
+		var a := vertices[indices[triangle]]
+		if (vertices[indices[triangle + 1]] - a).cross(vertices[indices[triangle + 2]] - a).length() * 0.5 <= MIN_TRIANGLE_AREA_M2:
 			return _failure("shoreline_mesh", "Shoreline mesh %s contains a degenerate triangle." % label)
 	return {"ok": true}
 
@@ -1169,8 +1316,8 @@ static func _validate_context(context: Dictionary, source_scopes: Dictionary, re
 	or not context.get("records", null) is Array \
 	or not context.get("boundary_attached_visuals", null) is Array:
 		return _failure("context_schema", "Context file schema is invalid.")
-	if context.records.size() != 2:
-		return _failure("context_count", "Context must contain exactly one YBI and one Bay Bridge record.")
+	if context.records.size() < 2:
+		return _failure("context_count", "Context must contain at least one YBI and one Bay Bridge record.")
 	var kinds_seen: Dictionary = {}
 	var prior_main_object_key := ""
 	for record_value: Variant in context.records:
@@ -1190,7 +1337,7 @@ static func _validate_context(context: Dictionary, source_scopes: Dictionary, re
 		prior_main_object_key = main_object_key
 		if str(record.get("collision_kind", "")) != "none" or str(record.get("receiver_kind", "")) != "none" or bool(record.get("opaque", true)):
 			return _failure("context_isolation", "Context record %s has gameplay collision or receiver semantics." % str(record.get("object_key", "")))
-		if str(record.context_kind) == "ybi":
+		if str(record.object_key) == "context:ybi":
 			var minimum_elevation := INF
 			var maximum_elevation := -INF
 			for vertex_index in range(1, record.vertices.size(), 3):
@@ -1199,7 +1346,7 @@ static func _validate_context(context: Dictionary, source_scopes: Dictionary, re
 				maximum_elevation = maxf(maximum_elevation, elevation)
 			if not is_equal_approx(minimum_elevation, 0.0) or maximum_elevation < 100.0:
 				return _failure("context_terrain", "YBI must retain USGS high ground and shoreline sides meeting the waterline.", record.source_keys)
-		elif str(record.get("material_key", "")) != "context_bay_bridge":
+		elif str(record.object_key) == "context:bay-bridge" and str(record.get("material_key", "")) != "context_bay_bridge":
 			return _failure("context_bridge_material", "Bay Bridge context material key drifted.", record.source_keys)
 		var expected_sources := ["w26767311"] if str(record.context_kind) == "ybi" else ["r13543937", "r13543938", "w1011568818"]
 		if record.source_keys != expected_sources:

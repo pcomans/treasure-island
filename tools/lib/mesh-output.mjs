@@ -132,7 +132,7 @@ function terrainNormal(east, north, elevationSampler, sampleDistanceM = 2) {
 
 // allowEmpty: a sliver whose every triangle rounds to a degenerate one leaves an
 // empty mesh instead of failing (the caller decides whether that is acceptable).
-export function terrainSurfaceMesh(multiPolygon, elevationSampler, label = "terrain surface", { allowEmpty = false } = {}) {
+export function terrainSurfaceMesh(multiPolygon, elevationSampler, label = "terrain surface", { allowEmpty = false, uvSampler = null } = {}) {
   const mesh = emptyMesh();
   let trianglePlanArea = 0;
   let rejectedDegenerateTriangles = 0;
@@ -145,7 +145,7 @@ export function terrainSurfaceMesh(multiPolygon, elevationSampler, label = "terr
         mesh,
         [point[0], elevation, -point[1]],
         terrainNormal(point[0], point[1], elevationSampler),
-        [point[0] / 10, -point[1] / 10],
+        uvSampler ? uvSampler(point[0], point[1]) : [point[0] / 10, -point[1] / 10],
       );
     }
     for (let index = 0; index < triangulated.indices.length; index += 3) {
@@ -206,13 +206,14 @@ export function griddedTerrainSurfaceMesh(multiPolygon, cellSizeM, elevationSamp
   return mesh;
 }
 
-export function terrainSkirtMesh(multiPolygon, elevationSampler, baseElevationM = 0, label = "terrain skirt") {
+export function terrainSkirtMesh(multiPolygon, elevationSampler, baseElevationM = 0, label = "terrain skirt", skipEdge = null) {
   const mesh = emptyMesh();
   for (const polygon of multiPolygon) {
     for (const ring of polygon) {
       for (let index = 0; index < ring.length; index += 1) {
         const start = ring[index];
         const end = ring[(index + 1) % ring.length];
+        if (skipEdge && skipEdge(start, end)) continue;
         const startTop = elevationSampler(start[0], start[1]);
         const endTop = elevationSampler(end[0], end[1]);
         if (Math.max(startTop, endTop) - baseElevationM <= 0.001) continue;

@@ -58,6 +58,7 @@ const STREET_DECAL_MATERIALS := {
 			"paint_wear": preload("res://game/resources/textures/world/street/street_paint_wear.png"),
 			"tactile": preload("res://game/resources/textures/world/street/street_tactile.png"),
 			"stop_legend": preload("res://game/resources/textures/world/street/street_stop_legend.png"),
+			"legends": preload("res://game/resources/textures/world/street/street_legends.png"),
 		},
 	},
 	"street_wear": {
@@ -622,6 +623,8 @@ func build_context(context: Dictionary, context_parents: Dictionary) -> Dictiona
 			return record_result
 		var proxy := Node3D.new()
 		proxy.name = str(record.object_key).validate_node_name()
+		if str(record.object_key) == "boundary_context:w644986117":
+			proxy.visible = false
 		proxy.add_child(record_result.node)
 		proxy.set_meta("target_parent", context_parents[str(record.context_kind)])
 		staging.add_child(proxy)
@@ -630,6 +633,11 @@ func build_context(context: Dictionary, context_parents: Dictionary) -> Dictiona
 		report.triangles += int(record_result.triangles)
 		for key_value: Variant in record.source_keys:
 			report.source_keys[str(key_value)] = true
+	if context_parents.has("ybi"):
+		var ybi_veg := _build_ybi_vegetation(context.records)
+		if ybi_veg != null:
+			ybi_veg.set_meta("target_parent", context_parents["ybi"])
+			staging.add_child(ybi_veg)
 	return report
 
 
@@ -756,13 +764,13 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 		var first := int(record.indices[index])
 		var second := int(record.indices[index + 1])
 		var third := int(record.indices[index + 2])
-		# The old western span is a disconnected component west of X=500 m.
+		# The old western span is a disconnected component west of X=250 m.
 		# Its imported replacement is owned by world_root.tscn; retain the modern
 		# eastern-span component from the same generated context record.
-		if is_context and str(record.feature_kind) == "bay_bridge" \
-		and vertices[first].x < WESTERN_BRIDGE_REPLACEMENT_MAX_X_M \
-		and vertices[second].x < WESTERN_BRIDGE_REPLACEMENT_MAX_X_M \
-		and vertices[third].x < WESTERN_BRIDGE_REPLACEMENT_MAX_X_M:
+		if is_context and str(record.object_key) == "context:bay-bridge" \
+		and vertices[first].x < 250.0 \
+		and vertices[second].x < 250.0 \
+		and vertices[third].x < 250.0:
 			continue
 		indices.append(first)
 		indices.append(third)
@@ -780,13 +788,17 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 	# The ground-cover shader needs UVs and tangents, so a record without UVs
 	# falls back to the builder's own material.
 	var ground_family := "" if uvs.is_empty() else GROUND_COVER.family_for(record, is_context)
-	if ground_family == "" and not uvs.is_empty() and not is_context and str(record.material_key) == SHORELINE_RIPRAP_OVERLAY:
+	if ground_family == "" and not uvs.is_empty() and str(record.material_key) == SHORELINE_RIPRAP_OVERLAY:
 		ground_family = ShorelineBuilder.BAND_GROUND_FAMILY
-	if (POLYHAVEN_MATERIAL_TEXTURE_SET.has(str(record.material_key)) or ground_family != "") and not uvs.is_empty():
+	if (POLYHAVEN_MATERIAL_TEXTURE_SET.has(str(record.material_key)) or ground_family != "" or str(record.material_key) in ["shoreline_riprap", "shoreline_boulder"]) and not uvs.is_empty():
 		arrays[Mesh.ARRAY_TANGENT] = _tangents_for(vertices, normals, uvs, indices)
 	var placeholder_material: Material
 	if STREET_DECAL_MATERIALS.has(str(record.material_key)):
 		placeholder_material = _street_decal_material(str(record.material_key))
+	elif str(record.material_key) == "shoreline_riprap":
+		placeholder_material = ShorelineBuilder.slope_material()
+	elif str(record.material_key) == "shoreline_boulder":
+		placeholder_material = ShorelineBuilder.stone_material()
 	elif str(record.material_key) == PARK_BED_MATERIAL_KEY and not uvs.is_empty():
 		placeholder_material = _park_bed_material()
 	elif STREET_GROUND_SURFACES.has(str(record.material_key)) and not uvs.is_empty():
@@ -801,7 +813,7 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 		placeholder_material = _material_for(str(record.material_key), str(record.feature_kind), is_context)
 	# Quiet provisional finish for generated roof slabs only. Keep the authored
 	# roof inputs and Poly Haven cache intact; neither directional map is used.
-	if not is_context and str(record.feature_kind) in ["building_roof", "building_part_roof"]:
+	if str(record.feature_kind) in ["building_roof", "building_part_roof"] or str(record.material_key) in ["building_roof", "building_part_roof"]:
 		if _generic_roof_material == null:
 			_generic_roof_material = StandardMaterial3D.new()
 			_generic_roof_material.resource_name = "generic_roof_provisional"
@@ -1121,11 +1133,27 @@ func _tangents_for(vertices: PackedVector3Array, normals: PackedVector3Array, uv
 
 func _color_for(material_key: String, feature_kind: String, is_context: bool) -> Color:
 	if is_context:
-		if feature_kind == "ybi":
+		if material_key == "context_ybi":
 			return Color("66765c")
+		if material_key == "context_bay_bridge":
+			return Color("e4e2dc")
 		if feature_kind == "boundary_attached_visual":
 			return Color("718b8c") if "marina" in material_key else Color("a4947e")
-		return Color("bbb7af")
+		if material_key == "road_path_pedestrian":
+			return Color("8b918e")
+		if material_key == "road_path":
+			return Color("555b60")
+		if material_key == "major_area_paved":
+			return Color("707573")
+		if material_key == "terrain_sand":
+			return Color("d7c78e")
+		if material_key == "building_part_wall":
+			return Color("ece9e2")
+		if material_key == "building_wall":
+			return Color("c6b79f")
+		if material_key in ["building_roof", "building_part_roof"]:
+			return Color("827468")
+		return Color("e4e2dc")
 	match feature_kind:
 		"land_ground":
 			return Color("8ca777")
@@ -1166,3 +1194,124 @@ func _parent_key_for_feature(feature_kind: String) -> String:
 	if feature_kind.begins_with("building_") or feature_kind.begins_with("building_part_"):
 		return "buildings"
 	return "ground"
+
+
+func _build_ybi_vegetation(records: Array) -> Node3D:
+	var blocked: Dictionary = {}
+	var mark_blocked := func(x: float, z: float, radius_cells: int) -> void:
+		var cx := floori(x / 10.0)
+		var cz := floori(z / 10.0)
+		for dx in range(-radius_cells, radius_cells + 1):
+			for dz in range(-radius_cells, radius_cells + 1):
+				blocked[Vector2i(cx + dx, cz + dz)] = true
+	for record_value: Variant in records:
+		var rec: Dictionary = record_value
+		var key := str(rec.get("object_key", ""))
+		if key in ["context:ybi:roads", "context:ybi:paths", "context:ybi:kerbs", "context:ybi:parking", "context:ybi:buildings-wall", "context:ybi:bristol-wall", "context:ybi:riprap-slope"]:
+			var verts: Array = rec.get("vertices", [])
+			var r_cells := 1 if "buildings" in key or "bristol" in key or "roads" in key else 0
+			for i in range(0, verts.size(), 3):
+				mark_blocked.call(float(verts[i]), float(verts[i + 2]), r_cells)
+			var inds: Array = rec.get("indices", [])
+			for i in range(0, inds.size(), 3):
+				var i0 := int(inds[i]) * 3
+				var i1 := int(inds[i + 1]) * 3
+				var i2 := int(inds[i + 2]) * 3
+				var mx := (float(verts[i0]) + float(verts[i1]) + float(verts[i2])) / 3.0
+				var mz := (float(verts[i0 + 2]) + float(verts[i1 + 2]) + float(verts[i2 + 2])) / 3.0
+				mark_blocked.call(mx, mz, r_cells)
+	var veg_kit := preload("res://game/scripts/world/street_vegetation_kit.gd").new()
+	var species_specs: Array[Array] = [
+		["monterey_cypress", 2],
+		["monterey_cypress", 3],
+		["sydney_blue_gum_young", 2],
+		["island_oak_young", 2],
+		["monterey_cypress", 1],
+	]
+	var transforms_by_spec: Array = [[], [], [], [], []]
+	var occupied: Dictionary = {}
+	for record_value: Variant in records:
+		var rec: Dictionary = record_value
+		var key := str(rec.get("object_key", ""))
+		var is_woodland := key == "context:ybi:woodland"
+		var is_terrain := key == "context:ybi"
+		if not is_woodland and not is_terrain:
+			continue
+		var verts: Array = rec.get("vertices", [])
+		var norms: Array = rec.get("normals", [])
+		var inds: Array = rec.get("indices", [])
+		var spacing := 14.0 if is_woodland else 22.0
+		for i in range(0, inds.size(), 3):
+			var ia := int(inds[i]) * 3
+			var ib := int(inds[i + 1]) * 3
+			var ic := int(inds[i + 2]) * 3
+			var a := Vector3(float(verts[ia]), float(verts[ia + 1]), float(verts[ia + 2]))
+			var b := Vector3(float(verts[ib]), float(verts[ib + 1]), float(verts[ib + 2]))
+			var c := Vector3(float(verts[ic]), float(verts[ic + 1]), float(verts[ic + 2]))
+			var ny := (float(norms[ia + 1]) + float(norms[ib + 1]) + float(norms[ic + 1])) / 3.0
+			if ny < 0.62:
+				continue
+			var min_y := minf(a.y, minf(b.y, c.y))
+			if min_y < (3.5 if is_woodland else 10.0):
+				continue
+			if minf(a.z, minf(b.z, c.z)) < 985.0:
+				continue
+			var area_xz := absf((b.x - a.x) * (c.z - a.z) - (c.x - a.x) * (b.z - a.z)) * 0.5
+			if area_xz < 18.0:
+				continue
+			var count := clampi(roundi(area_xz / (spacing * spacing)), 1, 5)
+			for s in count:
+				var seed_val: int = absi(roundi(a.x * 13.0 + a.z * 31.0 + b.x * 17.0 + c.z * 23.0) + s * 97)
+				var r1 := fmod(float((seed_val * 1103515245 + 12345) & 0x7fffffff) / 2147483647.0, 1.0)
+				var r2 := fmod(float(((seed_val + 37) * 1103515245 + 12345) & 0x7fffffff) / 2147483647.0, 1.0)
+				var sr1 := sqrt(r1)
+				var w0 := 1.0 - sr1
+				var w1 := sr1 * (1.0 - r2)
+				var w2 := sr1 * r2
+				var pos := a * w0 + b * w1 + c * w2
+				if blocked.has(Vector2i(floori(pos.x / 10.0), floori(pos.z / 10.0))):
+					continue
+				var cell_key := Vector2i(floori(pos.x / 11.0), floori(pos.z / 11.0))
+				if occupied.has(cell_key):
+					continue
+				occupied[cell_key] = true
+				var spec_idx: int = seed_val % species_specs.size()
+				var yaw := fmod(float(seed_val) * 0.61803398875, 1.0) * TAU
+				var sc := 1.15 + fmod(float(seed_val) * 0.381966, 1.0) * 0.55
+				var basis := Basis(Vector3.UP, yaw).scaled(Vector3.ONE * sc)
+				(transforms_by_spec[spec_idx] as Array).append(Transform3D(basis, pos))
+	var holder := Node3D.new()
+	holder.name = "context_ybi_vegetation"
+	holder.set_meta("derived_object_key", "context:ybi:vegetation")
+	holder.set_meta("source_keys", ["w26767311"])
+	holder.set_meta("feature_kind", "ybi")
+	for spec_idx in species_specs.size():
+		var list: Array = transforms_by_spec[spec_idx]
+		if list.is_empty():
+			continue
+		var spec: Array = species_specs[spec_idx]
+		var proto: Dictionary = veg_kit.prototype(str(spec[0]), int(spec[1]))
+		if not bool(proto.get("ok", false)):
+			continue
+		var levels: Array = proto.levels
+		var level_idx: int = mini(1, levels.size() - 1)
+		var level: Dictionary = levels[level_idx]
+		var mm := MultiMesh.new()
+		mm.transform_format = MultiMesh.TRANSFORM_3D
+		mm.mesh = level.mesh
+		mm.instance_count = list.size()
+		var box := AABB()
+		var mesh_aabb := (level.mesh as Mesh).get_aabb()
+		for idx in list.size():
+			var xform: Transform3D = list[idx]
+			mm.set_instance_transform(idx, xform)
+			var inst_box := xform * mesh_aabb
+			box = inst_box if idx == 0 else box.merge(inst_box)
+		mm.custom_aabb = box
+		var mmi := MultiMeshInstance3D.new()
+		mmi.name = "YbiTrees_%s_%d" % [str(spec[0]), int(spec[1])]
+		mmi.multimesh = mm
+		mmi.layers = RENDER_WORLD_VISIBLE
+		mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+		holder.add_child(mmi)
+	return holder
