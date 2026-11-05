@@ -216,7 +216,7 @@ vec3 stone_tint(vec3 origin, vec4 t) {
 	if (family < t.z) {
 		tint = vec3(0.92, 0.92, 0.94) * (0.55 + 0.2 * pick);
 	} else if (family < t.z + t.y) {
-		tint = vec3(1.0, 0.9, 0.78) * (0.75 + 0.2 * pick);
+		tint = vec3(1.0, 0.86, 0.7) * (0.75 + 0.2 * pick);
 	} else if (family < t.z + t.y + 0.1) {
 		tint = vec3(0.93, 0.96, 0.85) * (0.75 + 0.2 * pick);
 	} else if (family < t.z + t.y + 0.1 + t.w) {
@@ -229,7 +229,7 @@ vec3 stone_tint(vec3 origin, vec4 t) {
 // charcoal tone's (0.83): the underlay's stand-in takes it.
 vec3 tone_tint(vec4 t) {
 	float grey = max(0.0, 1.0 - t.z - t.y - 0.1 - t.w);
-	vec3 mean = vec3(0.92, 0.92, 0.94) * 0.65 * t.z + vec3(1.0, 0.9, 0.78) * 0.85 * t.y
+	vec3 mean = vec3(0.92, 0.92, 0.94) * 0.65 * t.z + vec3(1.0, 0.86, 0.7) * 0.85 * t.y
 		+ vec3(0.93, 0.96, 0.85) * 0.85 * 0.1 + vec3(1.0, 0.98, 0.95) * 1.1 * t.w + vec3(0.89) * grey;
 	return mean * t.x / 0.83;
 }

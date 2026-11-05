@@ -274,16 +274,16 @@
         0.05
       ],
       "grey_tan": [
-        1.3,
-        0.28,
-        0.06,
-        0.14
+        1.6,
+        0.3,
+        0.03,
+        0.2
       ],
       "brown_grey": [
-        1.2,
-        0.42,
-        0.08,
-        0.08
+        1.35,
+        0.46,
+        0.06,
+        0.1
       ]
     }
   },
@@ -325,6 +325,10 @@
         "size_m": [
           0.35,
           0.75
+        ],
+        "top_m": [
+          0.09,
+          0.15
         ]
       },
       "reason": "The seaward edge of the sliver the OSM outline splits off the north-west shore (its slit, s 308-450, runs back up inside it): in the aerial the whole band from the shore path to the water is one riprap slope, so the crest runs along the slit (segment west fills it) and this edge is only the slope's foot: no crest rows, the heap down from the sliver's edge to the water, and the sliver itself set with flat-topped stones.",

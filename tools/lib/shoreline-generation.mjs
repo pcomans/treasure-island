@@ -132,6 +132,13 @@ const JOINT_TOLERANCE_M = 0.05;
 const MINIMUM_CLAMP_WIDTH_M = 0.25;
 // A mound's records and stone batches are its segment's sections from here on.
 const MOUND_SECTION_BASE = 100;
+// The concrete skirt along a ramp's cut through a segment's slope (or a
+// mound's) is that piece's wall record at this section (plus the mound base).
+const SKIRT_SECTION = 90;
+// A capped end's last cross-section stands this far inside the segment, so
+// it never lies along a closure face that juts out at the end (its grid
+// points would sit on the outline and drop out).
+const CAP_INSET_M = 0.05;
 const MINIMUM_TRIANGLE_AREA_M2 = 1e-6;
 const SAFE_ID = /^[a-z0-9_]+$/u;
 
@@ -159,7 +166,7 @@ const SEGMENT_FIELDS = ["crest_fill_scale", "crest_rise_m", "id", "outline_sourc
 // another segment builds: no crest rows, no core, no shoulder) and cobble (its
 // own fill, reach_m and size_m for the cobbles inside the band).
 const SEGMENT_OPTIONAL_FIELDS = ["cobble", "crest_rows"];
-const SEGMENT_COBBLE_FIELDS = ["fill", "reach_m", "size_m"];
+const SEGMENT_COBBLE_FIELDS = ["fill", "reach_m", "size_m", "top_m"];
 const CLOSURE_SETTINGS_FIELDS = ["coping_m", "ramp_bottom_y_m", "ramp_grade", "ramp_wall_m", "wall_bottom_y_m"];
 const CLOSURE_FIELDS = ["id", "kind", "reason", "reference", "s_m", "source_keys"];
 
@@ -338,6 +345,8 @@ export function shorelineSettings(config) {
     if (segment.cobble !== undefined) {
       exactKeys(segment.cobble, SEGMENT_COBBLE_FIELDS, `Shoreline segment ${segment.id} cobble`);
       requireRange(segment.cobble.size_m, 0, `Shoreline segment ${segment.id} cobble.size_m`);
+      requireRange(segment.cobble.top_m, 0, `Shoreline segment ${segment.id} cobble.top_m`);
+      invariant(segment.cobble.top_m[1] <= SHORELINE_COBBLE_MAX_TOP_M, `Shoreline segment ${segment.id} cobbles may rise at most ${SHORELINE_COBBLE_MAX_TOP_M} m above the walkable land`);
       for (const key of ["fill", "reach_m"]) invariant(isFiniteNumber(segment.cobble[key]) && segment.cobble[key] >= 0, `Shoreline segment ${segment.id} cobble.${key} must be non-negative`);
     }
     invariant(typeof segment.id === "string" && SAFE_ID.test(segment.id) && !ids.has(segment.id), `Shoreline segment ${segment.id} needs a unique lower_snake id`);
@@ -1694,11 +1703,12 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
   // Whether any vertex ({ plan }) of a polygon lies within a hull's bounds.
   const nearHulls = (hulls, vertices) => hulls.some(({ bounds }) => vertices.some(({ plan }) => nearBounds({ bounds }, plan, 0.01)));
   // A convex polygon of vertices ({ plan, y, normal }) as a fan of triangles,
-  // the hulls cut out of it. With skirtBottom, each cut edge that runs along a
-  // hull edge also gets a skirt: a face from the cut down to skirtBottom,
-  // facing into the hull (the ramp), so the open edge of the slope never
+  // the hulls cut out of it. With a skirt ({ mesh, bottom }), each cut edge
+  // that runs along a hull edge also gets a concrete face in skirt.mesh, from
+  // the cut down to skirt.bottom, facing into the hull (the ramp): the ramp's
+  // side wall carried up to the riprap, so the open edge of the slope never
   // shows the water through it.
-  const pushCut = (mesh, polygon, hulls, skirtBottom = null) => {
+  const pushCut = (mesh, polygon, hulls, skirt = null) => {
     let pieces = [polygon];
     hulls.forEach(({ hull }, h) => {
       pieces = pieces.flatMap((piece) => subtractHull(piece, hull, h));
@@ -1706,7 +1716,7 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
     for (const piece of pieces) {
       const ids = piece.map((vertex) => pushVertex(mesh, [vertex.plan[0], vertex.y, -vertex.plan[1]], vertex.normal));
       for (let k = 1; k + 1 < ids.length; k += 1) pushTriangle(mesh, [ids[0], ids[k], ids[k + 1]], [0, 1, 0]);
-      if (skirtBottom == null) continue;
+      if (skirt == null) continue;
       piece.forEach((a, index) => {
         const b = piece[(index + 1) % piece.length];
         if (a.cut == null || b.cut == null || a.cut[0] !== b.cut[0] || a.cut[1] !== b.cut[1]) return;
@@ -1724,13 +1734,15 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
           const f = Math.abs(tb - ta) < 1e-12 ? 0 : (t - ta) / (tb - ta);
           return { plan: add(start, scale(edge, t)), y: lerp(a.y, b.y, f) };
         };
-        // Into the hull: left of a counterclockwise edge (world x, z).
+        // Into the hull: left of a counterclockwise edge (world x, z); set 2 cm
+        // back behind the ramp's curb, which shares the hull's side.
         const facing = unit3([-edge[1], 0, -edge[0]]);
-        const [p, q] = [at(lo), at(hi)];
-        const top = [p, q].map((vertex) => pushVertex(mesh, [vertex.plan[0], vertex.y, -vertex.plan[1]], facing));
-        const bottom = [p, q].map((vertex) => pushVertex(mesh, [vertex.plan[0], skirtBottom, -vertex.plan[1]], facing));
-        pushTriangle(mesh, [top[0], top[1], bottom[1]], facing);
-        pushTriangle(mesh, [top[0], bottom[1], bottom[0]], facing);
+        const back = scale(unit([edge[1], -edge[0]]), 0.02);
+        const [p, q] = [at(lo), at(hi)].map((vertex) => ({ plan: add(vertex.plan, back), y: vertex.y }));
+        const top = [p, q].map((vertex) => pushVertex(skirt.mesh, [vertex.plan[0], vertex.y, -vertex.plan[1]], facing));
+        const bottom = [p, q].map((vertex) => pushVertex(skirt.mesh, [vertex.plan[0], skirt.bottom, -vertex.plan[1]], facing));
+        pushTriangle(skirt.mesh, [top[0], top[1], bottom[1]], facing);
+        pushTriangle(skirt.mesh, [top[0], bottom[1], bottom[0]], facing);
       });
     }
   };
@@ -1776,7 +1788,9 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
     // Stations: every station_m, plus each land-edge breakpoint and ring
     // vertex on the outline so the slope's top edge follows the land edge
     // exactly.
-    const forced = new Set([s0, s1, ...outline.breakpoints(s0, s1)]);
+    const sFirst = segment.join_start ? s0 : s0 + CAP_INSET_M;
+    const sLast = segment.join_end ? s1 : s1 - CAP_INSET_M;
+    const forced = new Set([sFirst, sLast, ...outline.breakpoints(sFirst, sLast)]);
     const seen = new Set();
     for (let s = s0; s <= s1 + 19.999; s += 20) {
       const p = outline.pointAt(Math.min(s, s1));
@@ -1788,14 +1802,14 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
           let along = outline.distanceOf([vertex.east, vertex.north], EDGE_VERTEX_TOLERANCE_M);
           if (along == null) continue;
           if (along < s0) along += outline.perimeter;
-          if (along > s0 && along < s1) forced.add(along);
+          if (along > sFirst && along < sLast) forced.add(along);
         }
       }
     }
     const stationList = [...forced];
-    const count = Math.ceil((s1 - s0) / slope.station_m);
+    const count = Math.ceil((sLast - sFirst) / slope.station_m);
     for (let step = 1; step < count; step += 1) {
-      const s = s0 + ((s1 - s0) * step) / count;
+      const s = sFirst + ((sLast - sFirst) * step) / count;
       if (![...forced].some((f) => Math.abs(f - s) < slope.station_m * 0.35)) stationList.push(s);
     }
     stationList.sort((left, right) => left - right);
@@ -1945,6 +1959,7 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
     // slipway by whole quads.
     const cuts = structures.filter((structure) => structure.slope === "cut" && structure.kind !== "ramp");
     const rampHulls = structures.filter((structure) => structure.kind === "ramp").map(hullOf);
+    const skirt = { mesh: { vertices: [], normals: [], indices: [] }, bottom: closureRule.wall_bottom_y_m };
     const cutAway = (points) => {
       const centroid = scale(points.reduce((sum, p) => add(sum, p), [0, 0]), 1 / points.length);
       return cuts.some((structure) => nearBounds(structure.area, centroid, structure.clearance_m)
@@ -1996,7 +2011,7 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
         const quad = [cell(i, column), cell(i + 1, column), cell(i + 1, column + 1), cell(i, column + 1)];
         if (nearHulls(rampHulls, quad)) {
           const [qa, qb, qc, qd] = quad;
-          for (const triangle of (i + column) % 2 === 0 ? [[qa, qb, qc], [qa, qc, qd]] : [[qa, qb, qd], [qb, qc, qd]]) pushCut(mesh, triangle, rampHulls, slope.end_cap_bottom_y_m);
+          for (const triangle of (i + column) % 2 === 0 ? [[qa, qb, qc], [qa, qc, qd]] : [[qa, qb, qd], [qb, qc, qd]]) pushCut(mesh, triangle, rampHulls, skirt);
           continue;
         }
         const [a, b, c, d] = [index(i, column), index(i + 1, column), index(i + 1, column + 1), index(i, column + 1)];
@@ -2044,6 +2059,16 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
       });
     });
     invariant(records.some((record) => record.segment === segment.id), `Shoreline segment ${segment.id} has no slope triangles`);
+    if (skirt.mesh.indices.length > 0) {
+      records.push({
+        object_key: `shoreline-wall:${segment.id}:${SKIRT_SECTION}`,
+        segment: segment.id,
+        section: SKIRT_SECTION,
+        source_keys: [segment.source_key],
+        material_key: SHORELINE_WALL_MATERIAL,
+        ...packMesh(skirt.mesh, `shoreline-wall:${segment.id}:${SKIRT_SECTION}`),
+      });
+    }
     verges.forEach((mesh, index) => {
       if (mesh.indices.length === 0) return;
       records.push({
@@ -2592,6 +2617,7 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
     }));
     const moundSections = Math.max(1, Math.round(total / slope.section_m));
     const moundRampHulls = rampStructures.map(hullOf);
+    const moundSkirt = { mesh: { vertices: [], normals: [], indices: [] }, bottom: closureRule.wall_bottom_y_m };
     const normalAt = (row, column) => {
       const at = (r, c) => grid[Math.max(0, Math.min(grid.length - 1, r))][Math.max(0, Math.min(grid[0].length - 1, c))].world;
       const normal = unit3(cross3(sub3(at(row, column + 1), at(row, column - 1)), sub3(at(row + 1, column), at(row - 1, column))));
@@ -2612,8 +2638,8 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
         // A ramp beside the mound cuts it exactly, as it cuts the shore's slope.
         const corners = [[i, column], [i + 1, column], [i + 1, column + 1], [i, column + 1]].map(([row, col]) => ({ plan: grid[row][col].plan, y: grid[row][col].world[1], normal: normalAt(row, col) }));
         if (nearHulls(moundRampHulls, corners)) {
-          pushCut(mesh, [corners[0], corners[1], corners[2]], moundRampHulls, slope.end_cap_bottom_y_m);
-          pushCut(mesh, [corners[0], corners[2], corners[3]], moundRampHulls, slope.end_cap_bottom_y_m);
+          pushCut(mesh, [corners[0], corners[1], corners[2]], moundRampHulls, moundSkirt);
+          pushCut(mesh, [corners[0], corners[2], corners[3]], moundRampHulls, moundSkirt);
           continue;
         }
         const [a, b, c, d] = [vertexAt(i, column), vertexAt(i + 1, column), vertexAt(i + 1, column + 1), vertexAt(i, column + 1)];
@@ -2633,6 +2659,16 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
       });
     });
     invariant(meshes.some((mesh) => mesh.indices.length > 0), `Shoreline mound ${mound.id} built no faces`);
+    if (moundSkirt.mesh.indices.length > 0) {
+      records.push({
+        object_key: `shoreline-wall:${segment.id}:${MOUND_SECTION_BASE + SKIRT_SECTION}`,
+        segment: segment.id,
+        section: MOUND_SECTION_BASE + SKIRT_SECTION,
+        source_keys: [segment.source_key],
+        material_key: SHORELINE_WALL_MATERIAL,
+        ...packMesh(moundSkirt.mesh, `shoreline-wall:${segment.id}:${MOUND_SECTION_BASE + SKIRT_SECTION}`),
+      });
+    }
 
     // Stones. The nearest cross-section to a point, for settling on the mound.
     const sectionNear = (t) => sections[Math.max(0, Math.min(sections.length - 1, Math.round((t / total) * (sections.length - 1))))];
