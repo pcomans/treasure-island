@@ -42,11 +42,12 @@ const EYE_M := 2.2
 const CHECK_PIXELS := 256
 ## Mean sRGB of leaves in the dated crops, kept with the vegetation work notes
 ## outside Git (p5, c2 and c4, b5, the owner's Job Corps photos, n1, s1, s2, s3); they vary with the light of the
-## day, and a crop shows the lit part of a plant where the check takes all of it,
-## darker by about 1.3 in sRGB, so read a gap as a direction, not a number to hit.
+## day, and the check reads about 1.3 darker in sRGB than the game's own frames, its
+## viewport having no sky to light it, so read a gap as a direction, not a number to
+## hit, and measure colour from frames.
 const FOLIAGE_CROPS := {
 	"monterey_pine": [88, 97, 71], "spreading_broadleaf": [79, 84, 63], "nz_christmas_tree": [68, 70, 58], "norfolk_island_pine": [121, 120, 78],
-	"eucalyptus_mature": [95, 97, 83], "weeping_broadleaf": [82, 83, 68],
+	"eucalyptus_mature": [80, 80, 68], "weeping_broadleaf": [70, 69, 57],
 	"indian_hawthorn": [116, 117, 59], "pittosporum_tobira": [110, 111, 61], "conical_shrub": [99, 104, 68],
 }
 ## How far the ramp of gain may go at either end of a plant.

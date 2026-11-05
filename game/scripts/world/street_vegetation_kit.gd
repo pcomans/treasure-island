@@ -243,7 +243,7 @@ const BROADLEAF_SWAY := 0.003
 const MATURE_GUM_SWAY := 0.004
 const WEEPING_SWAY := 0.005
 ## How much darker the weeping tree's arching shoots are than the eucalyptus spray they share.
-const WEEPING_SHOOT_SHADE := 0.56
+const WEEPING_SHOOT_SHADE := 0.86
 const NORFOLK_SWAY := 0.008
 const SHRUB_SWAY := 0.008
 
@@ -391,8 +391,8 @@ const MATURE_GUMS := [
 ## in metres, and hem is how high above the ground its curtains end, [lowest, highest],
 ## in slow waves round the tree.
 const WEEPING_TREES := [
-	{"seed": 451, "height": 12.5, "spread": 11.5, "fork": 3.0, "trunk_radius": 0.34, "limbs": 4, "lean": 0.7, "rise": 0.6, "crown_y": 0.56, "polar": 2.2, "clouds": 16, "cloud": 0.16, "flat": 0.75, "spacing": 0.8, "gap": 0.6, "hem": [0.6, 3.0]},
-	{"seed": 452, "height": 14.5, "spread": 10.5, "fork": 4.2, "trunk_radius": 0.36, "limbs": 3, "lean": 1.2, "rise": 0.7, "crown_y": 0.6, "polar": 2.0, "clouds": 11, "cloud": 0.15, "flat": 0.7, "spacing": 0.85, "gap": 0.95, "hem": [1.0, 5.0]},
+	{"seed": 451, "height": 12.5, "spread": 11.5, "fork": 3.0, "trunk_radius": 0.34, "limbs": 4, "lean": 0.7, "rise": 0.6, "crown_y": 0.56, "polar": 2.2, "clouds": 16, "cloud": 0.16, "flat": 0.75, "spacing": 0.62, "gap": 0.6, "hem": [0.6, 3.0]},
+	{"seed": 452, "height": 14.5, "spread": 10.5, "fork": 4.2, "trunk_radius": 0.36, "limbs": 3, "lean": 1.2, "rise": 0.7, "crown_y": 0.6, "polar": 2.0, "clouds": 11, "cloud": 0.15, "flat": 0.7, "spacing": 0.7, "gap": 0.95, "hem": [1.0, 5.0]},
 ]
 ## Young Norfolk Island pines (n1, Chinook, Mar 2025: about 5 m tall, a crown
 ## 2-2.5 m wide): a straight trunk with a whorl of near-level branches every tier
@@ -2030,7 +2030,8 @@ func _build_mature_gum(p: Dictionary) -> Dictionary:
 		leaves.commit(mesh, material("set_piece_foliage"))
 		meshes.append(mesh)
 	return {"lod0": meshes[0], "lod1": meshes[1], "crown_surface": -1, "top_m": height,
-		"shadow": _shadow_mesh(branches, lobes, [], EUCALYPTUS_SPRAY, "eucalyptus_bark", "set_piece_foliage", EUCALYPTUS_BARK_M, height, crown_low, sway_top, rng),
+		# Through its own cards, thinned: a few big cards per pad would lay hard patches over the crown.
+		"shadow": _shadow_mesh(branches, [], cards, EUCALYPTUS_SPRAY, "eucalyptus_bark", "set_piece_foliage", EUCALYPTUS_BARK_M, height, crown_low, sway_top, rng),
 		"capsules": [{"radius_m": trunk_radius * 1.05, "from": Vector3.ZERO, "to": trunk_points[6]}]}
 
 
@@ -2114,8 +2115,8 @@ func _build_weeping(p: Dictionary) -> Dictionary:
 		var mirror := 1.0 if rng.randf() < 0.5 else -1.0
 		var width := clampf(drop * 0.42, 1.3, 2.4) * mirror
 		# The strands hang straight down, wherever on the crown they start. Over the top
-		# are arching shoots instead, a spray turned up, so the crown's outline is leaf
-		# tips, not the straight top edge of a strand card; tipped back to show from above.
+		# are arching shoots instead, so the crown's outline is leaves, not the straight top
+		# edge of a strand card; tipped back to show from above.
 		var over := out.y > 0.32
 		var facing := Vector3(out.x, 0.0, out.z)
 		if facing.length() < 0.25:
@@ -2126,11 +2127,11 @@ func _build_weeping(p: Dictionary) -> Dictionary:
 			var card: Dictionary
 			if over:
 				var size := rng.randf_range(1.4, 1.9)
-				card = _card(position, normal, Vector3.UP, size * mirror, size * 0.72, 0.42, PI + rng.randf_range(-0.3, 0.3), EUCALYPTUS_SPRAY, color * WEEPING_SHOOT_SHADE, (site.center as Vector3).lerp(heart, 0.8), index, 0.04)
+				card = _card(position, normal, Vector3.UP, size * mirror, size * 0.72, 0.62, rng.randf_range(-0.3, 0.3), EUCALYPTUS_SPRAY, color * WEEPING_SHOOT_SHADE, (site.center as Vector3).lerp(heart, 0.8), index, 0.04)
 			else:
 				card = _card(position + Vector3.UP * 0.25, normal, Vector3.UP, width, drop, 1.0, rng.randf_range(-0.05, 0.05), WEEPING_CURTAIN, color, (site.center as Vector3).lerp(heart, 0.8), index, 0.04)
 			card.coarse = true
-			card.root = 1.0 if over else 0.9
+			card.root = 0.9
 			card.heart_weight = 0.7
 			card.lod1 = site.has("lod1")
 			# Grown, but not through the ground.
@@ -2148,7 +2149,7 @@ func _build_weeping(p: Dictionary) -> Dictionary:
 		leaves.commit(mesh, material("set_piece_foliage"))
 		meshes.append(mesh)
 	return {"lod0": meshes[0], "lod1": meshes[1], "crown_surface": -1, "top_m": height,
-		"shadow": _shadow_mesh(branches, lobes, [], WEEPING_CURTAIN, "pine_bark", "set_piece_foliage", PINE_BARK_M, height, fork_y, sway_top, rng),
+		"shadow": _shadow_mesh(branches, [], cards, WEEPING_CURTAIN, "pine_bark", "set_piece_foliage", PINE_BARK_M, height, fork_y, sway_top, rng),
 		"capsules": [{"radius_m": trunk_radius * 1.1, "from": Vector3.ZERO, "to": trunk_points[5]}]}
 
 

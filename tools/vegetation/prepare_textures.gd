@@ -48,7 +48,9 @@ const SHRUB_CELL_SOURCES := [
 ## [tint, desaturation]. Set from the mean colour of their crowns beside the crops':
 ## every generated leaf came out far more saturated than the crops (0.4-0.7 against
 ## 0.2-0.45 in HSV), and the spreading broadleaf much darker (value 0.23 against
-## 0.33) and yellower, so it is brightened past its source and cooled. The bronze
+## 0.33) and yellower, so it is brightened past its source and cooled; the Job Corps
+## trees, in the shade of their own big crowns, are measured from frames against the
+## whole crown in the owner's photos, not its sunlit part. The bronze
 ## clump came out orange, the flax wine red rather than near-black maroon, the hedge
 ## stems pale. The cells with flowers keep more of their colour.
 const ROLLOUT_GRADES := {
@@ -59,8 +61,8 @@ const ROLLOUT_GRADES := {
 	"broadleaf_bronze.png": [Color(0.94, 0.84, 0.8), 0.62],
 	"christmas_spray.png": [Color(0.82, 0.84, 0.8), 0.38],
 	"christmas_spray_flowers.png": [Color(1.0, 0.76, 0.82), 0.3],
-	"eucalyptus_spray.png": [Color(1.0, 1.04, 1.1), 0.45],
-	"weeping_curtain.png": [Color(1.08, 1.1, 1.24), 0.4],
+	"eucalyptus_spray.png": [Color(0.65, 0.67, 0.69), 0.45],
+	"weeping_curtain.png": [Color(0.72, 0.72, 0.74), 0.3],
 	"norfolk_branch_top.png": [Color(0.98, 0.98, 0.92), 0.42],
 	"norfolk_branch_side.png": [Color(0.98, 0.98, 0.92), 0.42],
 	"hawthorn_spray.png": [Color(0.81, 0.81, 0.87), 0.36],
