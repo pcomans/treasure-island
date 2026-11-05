@@ -10,7 +10,8 @@ render_mode depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx;
 // UV.x's integer part is kind + 16 * variant (street-ground-generation.mjs
 // STREET_PAINT_KINDS and PAINT_VARIANT_STRIDE): kinds 0 white, 1 yellow, 2 red
 // lane, 3 green lane, 4 tactile pad, 5 STOP legend, 6 faded yellow, 7 red curb,
-// 8 accessible blue, 9 a legend of the atlas. The variant is the paint's wear
+// 8 accessible blue, 9 a legend of the atlas, 10 a lot's tar-sealed joint, 11 a
+// lot's patched strip. The variant is the paint's wear
 // step, 0 fresh to 3 mostly worn away; for kind 9 it is the atlas cell plus
 // legend_cells times the wear step (STREET_LEGEND_ATLAS_CELLS). A legend's
 // fraction and UV.y are its local coordinates.
@@ -39,6 +40,10 @@ uniform vec3 faded_yellow : source_color = vec3(0.674, 0.566, 0.306);
 uniform vec3 curb_red : source_color = vec3(0.640, 0.230, 0.215);
 uniform vec3 accessible_blue : source_color = vec3(0.150, 0.330, 0.600);
 uniform vec3 worn_paint : source_color = vec3(0.560, 0.560, 0.540);
+// A parking lot's crack sealant and its patched strips (Sep 2025 photos of the
+// lot by Mersea: near-black joints, darker grey asphalt patches).
+uniform vec3 sealant : source_color = vec3(0.085, 0.085, 0.090);
+uniform vec3 patch_asphalt : source_color = vec3(0.300, 0.300, 0.305);
 
 varying vec3 world_position;
 
@@ -99,9 +104,19 @@ void fragment() {
 		// An accessible stall's blue fill, mottled where worn.
 		albedo = accessible_blue * mix(0.82, 1.0, wear);
 		coverage = 1.0 - worn * 0.35 * (1.0 - wear);
-	} else {
+	} else if (kind < 9.5) {
 		// A legend of the atlas, worn like the line paint.
 		coverage = (wear + 0.25 - worn * 0.3) * texture(legends, vec2((cell + local.x) / legend_cells, local.y)).r;
+	} else if (kind < 10.5) {
+		// Tar sealant along a lot joint: near-black, a little glossy, broken where worn.
+		albedo = sealant;
+		coverage = wear + 0.6;
+		rough = 0.55;
+	} else {
+		// A patched strip of darker asphalt, mottled, never cut through.
+		albedo = patch_asphalt * mix(0.85, 1.05, wear);
+		coverage = 1.0;
+		rough = 0.95;
 	}
 	albedo = mix(albedo, worn_paint, worn * 0.45);
 	ALBEDO = albedo;

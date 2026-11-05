@@ -107,8 +107,9 @@ const RECORD_KINDS = Object.freeze({
 // for painted lines and legends the variant is a wear step (0 fresh to 3 mostly
 // worn away; PAINT_WEAR_STEPS), for kind legend it is the cell of the legend
 // atlas (STREET_LEGEND_CELLS) plus STREET_LEGEND_ATLAS_CELLS times its wear step.
-// red_curb is curb paint, blue an accessible stall.
-export const STREET_PAINT_KINDS = Object.freeze({ white: 0, yellow: 1, red: 2, green: 3, tactile: 4, stop_legend: 5, yellow_faded: 6, red_curb: 7, blue: 8, legend: 9 });
+// red_curb is curb paint, blue an accessible stall; sealant and patch are a lot's
+// tar-sealed joints and patched strips.
+export const STREET_PAINT_KINDS = Object.freeze({ white: 0, yellow: 1, red: 2, green: 3, tactile: 4, stop_legend: 5, yellow_faded: 6, red_curb: 7, blue: 8, legend: 9, sealant: 10, patch: 11 });
 export const PAINT_VARIANT_STRIDE = 16;
 export const PAINT_WEAR_STEPS = 4;
 export const STREET_LEGEND_CELLS = Object.freeze({ tour_bus_parking: 0, arrow_straight: 1, arrow_left: 2, arrow_right: 3, accessible: 4 });
@@ -141,17 +142,21 @@ const RAMP_LANDING_M = 1.5;
 const STREET_CORRIDOR_HALF_M = 18;
 // A verge side: this much concrete curb top at the curb, then grass.
 const CURB_TOP_M = 0.25;
-// Red curb paint along approaches: curb within this distance of a junction node.
-const RED_CURB_APPROACH_M = 10;
 // Red curb paint: the strip of the curb top it covers.
 const RED_CURB_TOP_M = 0.15;
+// A curb face longer than this with road on both sides fails the build (a
+// hairline of band left in the lane); shorter spikes at corners are noise.
+const INTERIOR_CURB_MIN_M = 0.25;
 // A street-side bay's pavement and stalls keep this far off any building.
 const BAY_BUILDING_CLEARANCE_M = 0.5;
 // A lot rule's own pavement lies at the yards' ground lift (a step over the road
 // paint), its stall paint and legends PARK_PAINT_LIFT_M over that.
 const LOT_SURFACE_LIFT_M = 0.09;
-// A lot surface's wear (decals per 100 m2 of its pavement), a step over the surface.
+// A lot surface's wear (decals per 100 m2 of its pavement).
 const LOT_WEAR_FIELDS = Object.freeze(["crack_per_100m2", "oil_per_100m2", "patch_per_100m2"]);
+// A lot with its own pavement stacks its layers a draped step apart over it:
+// patched strips, wear decals, sealed joints, stall paint, then legends and hatching.
+const LOT_LAYER_STEPS = Object.freeze({ patch: 1, wear: 2, seam: 3, paint: 4, top: 5 });
 // A lot island's curb faces run down to the land (under the lot's surface).
 const ISLAND_FOOT_M = 0;
 // Two-line crosswalks (lines, ladder): each line this wide; a lines crosswalk
@@ -353,10 +358,10 @@ const CROSSWALK_STYLES = Object.freeze(["continental", "ladder", "lines", "none"
 const FILL_KINDS = Object.freeze(["concrete", "lawn", "mulch"]);
 const RED_CURB_MODES = Object.freeze(["none", "approaches", "all"]);
 const RULE_CENTERLINES = Object.freeze(["double_yellow", "dashed_faded", "dashed_white"]);
-const TREATMENT_FIELDS = Object.freeze(["bike_lanes", "centerline", "crosswalk", "edge_lines", "evidence", "fill", "paint_wear", "reason", "red_curb", "sides", "sidewalk_width_m", "verge_width_m", "wear"]);
+const TREATMENT_FIELDS = Object.freeze(["bike_lanes", "centerline", "crosswalk", "edge_lines", "evidence", "fill", "paint_wear", "reason", "red_curb", "red_curb_approach_m", "sides", "sidewalk_width_m", "tactile_pads", "verge_width_m", "wear"]);
 const BIKE_LANE_KINDS = Object.freeze(["none", "line", "green"]);
 const STREET_RULE_FIELDS = Object.freeze(["evidence", "id", "treatment", "ways"]);
-const STREET_RULE_OPTIONAL = Object.freeze(["parking", "set", "sides", "widen"]);
+const STREET_RULE_OPTIONAL = Object.freeze(["parking", "red_curb", "set", "sides", "widen"]);
 const STALL_STYLES = Object.freeze(["plain", "faded", "accessible", "bus"]);
 
 function isXZ(point) {
@@ -371,6 +376,8 @@ function validateTreatment(treatment, label) {
   invariant(CROSSWALK_STYLES.includes(treatment.crosswalk), `${label} crosswalk must be ${CROSSWALK_STYLES.join(", ")}`);
   invariant(FILL_KINDS.includes(treatment.fill), `${label} fill must be ${FILL_KINDS.join(", ")}`);
   invariant(RED_CURB_MODES.includes(treatment.red_curb), `${label} red_curb must be ${RED_CURB_MODES.join(", ")}`);
+  invariant(isFiniteNumber(treatment.red_curb_approach_m) && treatment.red_curb_approach_m >= 0 && treatment.red_curb_approach_m <= 60, `${label} red_curb_approach_m must be 0-60 m`);
+  invariant(typeof treatment.tactile_pads === "boolean", `${label} tactile_pads must be boolean`);
   invariant(typeof treatment.edge_lines === "boolean", `${label} edge_lines must be boolean`);
   invariant(BIKE_LANE_KINDS.includes(treatment.bike_lanes), `${label} bike_lanes must be ${BIKE_LANE_KINDS.join(", ")}`);
   invariant(Number.isInteger(treatment.paint_wear) && treatment.paint_wear >= 0 && treatment.paint_wear < PAINT_WEAR_STEPS, `${label} paint_wear must be a wear step 0-${PAINT_WEAR_STEPS - 1}`);
@@ -387,7 +394,7 @@ export function loadStreetGroundRules(projectRoot) {
 
 // The validated rules, with each street's treatment fields resolved.
 export function validateStreetGroundRules(rules) {
-  exactKeys(rules, ["bays", "crossings", "lots", "notes", "pilot", "schema_version", "stops", "streets", "treatments"], "Street ground rules");
+  exactKeys(rules, ["bays", "crossings", "crosswalks", "lots", "notes", "pilot", "schema_version", "stalls", "stops", "streets", "treatments"], "Street ground rules");
   invariant(rules.schema_version === STREET_GROUND_RULES_SCHEMA, "Street ground rules schema drift");
   // The pilot zones' crosswalk paint wear (their other paint stays as built).
   exactKeys(rules.pilot, ["crosswalk_paint_wear", "evidence"], "Street ground rules pilot");
@@ -431,7 +438,14 @@ export function validateStreetGroundRules(rules) {
     `${at} must be ${SIDE_KINDS.join(", ")} or [from_m, to_m, kind] stretches`));
     const widen = perWay("widen", (value, at) => invariant(isFiniteNumber(value) && value >= 0 && value <= 6, `${at} must be 0-6 m`));
     const parking = perWay("parking", (value, at) => invariant(Array.isArray(value) && value.every((stretch) => Array.isArray(stretch) && stretch.length === 2 && stretch.every(isFiniteNumber) && stretch[0] < stretch[1]), `${at} must list [from_m, to_m] stretches`));
-    return { id: street.id, ways: street.ways, treatment_id: street.treatment, treatment, sides, widen, parking, evidence: street.evidence };
+    // A side's red curb paint as photographed: a mode, or a mode and [from_m, to_m]
+    // stretches painted besides it.
+    const redCurb = perWay("red_curb", (value, at) => invariant(RED_CURB_MODES.includes(value) ||
+      (value !== null && typeof value === "object" && !Array.isArray(value) && Object.keys(value).every((key) => ["mode", "stretches"].includes(key)) &&
+        RED_CURB_MODES.includes(value.mode) && Array.isArray(value.stretches) &&
+        value.stretches.every((stretch) => Array.isArray(stretch) && stretch.length === 2 && stretch.every(isFiniteNumber) && stretch[0] < stretch[1])),
+    `${at} must be ${RED_CURB_MODES.join(", ")} or {mode, stretches}`));
+    return { id: street.id, ways: street.ways, treatment_id: street.treatment, treatment, sides, widen, parking, redCurb, evidence: street.evidence };
   });
   invariant(rules.crossings !== null && typeof rules.crossings === "object" && !Array.isArray(rules.crossings), "Street ground crossings must map node keys to styles");
   for (const [key, style] of Object.entries(rules.crossings)) {
@@ -440,6 +454,19 @@ export function validateStreetGroundRules(rules) {
   for (const stop of rules.stops) {
     exactKeys(stop, ["evidence", "node", "way"], "Street ground stop");
     invariant(/^n\d+$/u.test(stop.node) && /^w\d+$/u.test(stop.way) && typeof stop.evidence === "string" && stop.evidence.trim() !== "", "Street ground stop needs a node, its approach way and evidence");
+  }
+  // Crosswalks photographed where OSM maps no crossing: across a way at a distance along it.
+  for (const walk of rules.crosswalks) {
+    exactKeys(walk, ["at_m", "evidence", "style", "way"], "Street ground crosswalk");
+    invariant(/^w\d+$/u.test(walk.way) && isFiniteNumber(walk.at_m) && walk.at_m >= 0 && CROSSWALK_STYLES.includes(walk.style) && walk.style !== "none" &&
+      typeof walk.evidence === "string" && walk.evidence.trim() !== "", `Street ground crosswalk on ${walk.way} is malformed`);
+  }
+  // Stall lines painted across a widened shoulder (no new pavement).
+  for (const stall of rules.stalls) {
+    exactKeys(stall, ["evidence", "from_m", "side", "stall_width_m", "to_m", "way"], "Street ground shoulder stalls");
+    invariant(/^w\d+$/u.test(stall.way) && ["left", "right"].includes(stall.side) && isFiniteNumber(stall.from_m) && isFiniteNumber(stall.to_m) && stall.to_m - stall.from_m >= 2.4 &&
+      isFiniteNumber(stall.stall_width_m) && stall.stall_width_m >= 2.2 && stall.stall_width_m <= 3.5 && typeof stall.evidence === "string" && stall.evidence.trim() !== "",
+    `Street ground shoulder stalls on ${stall.way} are malformed`);
   }
   for (const bay of rules.bays) {
     exactKeys(bay, ["depth_m", "evidence", "from_m", "lines", "side", "stall_width_m", "to_m", "way"], "Street ground bay");
@@ -450,13 +477,28 @@ export function validateStreetGroundRules(rules) {
   const lotIds = new Set();
   for (const lot of rules.lots) {
     const label = `Street ground lot ${lot?.id}`;
-    exactKeys(lot, ["evidence", "id", "islands", "legends", "rows", "source_key", ...("surface" in (lot ?? {}) ? ["surface"] : [])], label);
+    exactKeys(lot, ["evidence", "hatches", "id", "islands", "legends", "paint_wear", "rows", "source_key", ...("surface" in (lot ?? {}) ? ["surface"] : [])], label);
+    invariant(Number.isInteger(lot.paint_wear) && lot.paint_wear >= 0 && lot.paint_wear < PAINT_WEAR_STEPS, `${label} paint_wear must be a wear step`);
+    for (const hatch of lot.hatches) {
+      exactKeys(hatch, ["id", "points_xz", "stripes"], `${label} hatch`);
+      invariant(SAFE_ID.test(hatch.id) && Array.isArray(hatch.points_xz) && hatch.points_xz.length >= 3 && hatch.points_xz.every(isXZ) && typeof hatch.stripes === "boolean",
+        `${label} hatch ${hatch.id} needs 3+ points and stripes`);
+    }
     // A lot's own pavement where the photographs show it unlike the lots' asphalt:
     // a yard or park ground material draped over the whole lot at LOT_SURFACE_LIFT_M.
     if (lot.surface !== undefined) {
-      exactKeys(lot.surface, ["evidence", "material", "wear"], `${label} surface`);
+      exactKeys(lot.surface, ["evidence", "material", "patch_strips", "seams", "wear"], `${label} surface`);
       exactKeys(lot.surface.wear, LOT_WEAR_FIELDS, `${label} surface wear`);
       for (const key of LOT_WEAR_FIELDS) invariant(isFiniteNumber(lot.surface.wear[key]) && lot.surface.wear[key] >= 0, `${label} surface wear.${key} must be non-negative`);
+      // Long tar-sealed joints parallel to an axis, a spacing apart, and patched strips.
+      exactKeys(lot.surface.seams, ["axis_xz", "spacing_m", "width_m"], `${label} surface seams`);
+      invariant(isXZ(lot.surface.seams.axis_xz) && Math.hypot(...lot.surface.seams.axis_xz) > 1e-6 && isFiniteNumber(lot.surface.seams.spacing_m) && lot.surface.seams.spacing_m >= 1 &&
+        isFiniteNumber(lot.surface.seams.width_m) && lot.surface.seams.width_m > 0 && lot.surface.seams.width_m <= 0.3, `${label} surface seams are malformed`);
+      for (const strip of lot.surface.patch_strips) {
+        exactKeys(strip, ["line_xz", "width_m"], `${label} surface patch strip`);
+        invariant(Array.isArray(strip.line_xz) && strip.line_xz.length === 2 && strip.line_xz.every(isXZ) && isFiniteNumber(strip.width_m) && strip.width_m > 0 && strip.width_m <= 4,
+          `${label} surface patch strip is malformed`);
+      }
       invariant(PARK_SURFACE_MATERIALS[lot.surface.material] !== undefined && typeof lot.surface.evidence === "string" && lot.surface.evidence.trim() !== "",
         `${label} surface needs a ground material (${Object.keys(PARK_SURFACE_MATERIALS).join(", ")}) and evidence`);
     }
@@ -647,6 +689,9 @@ const RETRY_LATTICES = Object.freeze([1024, 256, 64]);
 function finiteMulti(multi) {
   return multi.every((polygon) => polygon.every((ring) => ring.every(([x, y]) => Number.isFinite(x) && Number.isFinite(y))));
 }
+// A boolean that failed on every lattice; callers that can fall back catch only this.
+class BooleanFailure extends Error {}
+
 function guarded(label, operation, operands) {
   let failure = null;
   for (const steps of [null, ...RETRY_LATTICES]) {
@@ -658,7 +703,7 @@ function guarded(label, operation, operands) {
       failure ??= error;
     }
   }
-  throw new Error(`Street ground ${label} boolean failed: ${failure.message}`, { cause: failure });
+  throw new BooleanFailure(`Street ground ${label} boolean failed: ${failure.message}`, { cause: failure });
 }
 
 function union(label, parts) {
@@ -1297,6 +1342,8 @@ export function generateStreetGround({
   // photographs show cars parked along the curb and the OSM sidewalks sit that
   // far out; the curb then follows the widened edge.
   const parkingParts = [];
+  // A rule street's own widened asphalt and bays (the pilot's lanes stay as built).
+  const ruleParkingParts = [];
   const parkingWidth = new Map();
   for (const zone of zoneRegions) {
     for (const lane of zone.settings.parking_lanes) {
@@ -1324,7 +1371,11 @@ export function generateStreetGround({
       const parts = [];
       if (sides.left > 0) parts.push(strip(`widen left ${key}`, wayLine(road), hw - CARRIAGEWAY_OVERLAP_M, hw + sides.left));
       if (sides.right > 0) parts.push(strip(`widen right ${key}`, wayLine(road), -hw - sides.right, -hw + CARRIAGEWAY_OVERLAP_M));
-      if (parts.length > 0) parkingParts.push(intersect(`widen ${key}`, union(`widen ${key}`, parts), zone.region));
+      if (parts.length > 0) {
+        const widened = intersect(`widen ${key}`, union(`widen ${key}`, parts), zone.region);
+        parkingParts.push(widened);
+        ruleParkingParts.push(widened);
+      }
     }
   }
   // The carriageway's half width on one side of a road (sign +1 left of its
@@ -1352,16 +1403,22 @@ export function generateStreetGround({
     const paved = strip(`bay ${bay.way} ${bay.from_m}`, along, from, to);
     const box = boxOfMulti(paved);
     const near = bayBuildings.near(box, BAY_BUILDING_CLEARANCE_M);
-    parkingParts.push(near.length === 0 ? paved : difference(`bay ${bay.way} ${bay.from_m} off buildings`, paved,
-      near.map((polygon) => union(`bay building clearance ${bay.way}`, [[polygon], ...polygon.map((ring) => lineBuffer(`bay building edge ${bay.way}`, [...openRing(ring), ring[0]], BAY_BUILDING_CLEARANCE_M))]))));
+    const bayPart = near.length === 0 ? paved : difference(`bay ${bay.way} ${bay.from_m} off buildings`, paved,
+      near.map((polygon) => union(`bay building clearance ${bay.way}`, [[polygon], ...polygon.map((ring) => lineBuffer(`bay building edge ${bay.way}`, [...openRing(ring), ring[0]], BAY_BUILDING_CLEARANCE_M))])));
+    parkingParts.push(bayPart);
+    ruleParkingParts.push(bayPart);
     bays.push({ bay, road, line, sign, hw });
   }
   const parkingSurface = difference("parking lanes", union("parking lanes", parkingParts), [osmCarriageway]);
   const parkingIndex = polygonIndex(parkingSurface);
-  const vehicleUnion = union("carriageway", [osmCarriageway, parkingSurface]);
+  // The blockers and point tests use the parts as built (overlapping the ribbon by
+  // CARRIAGEWAY_OVERLAP_M), not the ribbon plus the difference: a hairline crack
+  // along the ribbon's edge under a widened side left a curb in the lane (Bruton).
+  const vehicleUnion = union("carriageway", [osmCarriageway, ...parkingParts]);
   // The carriageway as its parts (road ribbons and parking lanes) for point,
   // distance and local cuts; vehicleUnion stays for the few whole-island cuts.
-  const vehicleIndex = partsIndex("carriageway", [...vehicles.map((object) => object.geometry), parkingSurface]);
+  const vehicleIndex = partsIndex("carriageway", [...vehicles.map((object) => object.geometry), ...parkingParts]);
+  const vehicleIndexRibbons = partsIndex("road ribbons", vehicles.map((object) => object.geometry));
   const inKerbRegion = (object) => intersect(`kerb test ${object.row.source_key}`, object.geometry, kerbRegion).length > 0;
   const kerbRoads = vehicles.filter((object) => object.tags.service !== "parking_aisle" && inKerbRegion(object));
   // A rule road's curb on one side, as stretches [from_m, to_m, kind] along it:
@@ -1609,9 +1666,9 @@ export function generateStreetGround({
   const crosswalkPaint = (center, host, nodeStyle) => {
     const rule = host && !pilotIndex.contains(center) ? ruleOf.get(host.row.source_key) : null;
     const style = nodeStyle ?? (rule ? rule.treatment.crosswalk : "continental");
-    return { style, wear: rule ? rule.treatment.paint_wear : (rules?.pilot.crosswalk_paint_wear ?? 0) };
+    return { style, wear: rule ? rule.treatment.paint_wear : (rules?.pilot.crosswalk_paint_wear ?? 0), tactile: rule ? rule.treatment.tactile_pads : true, rule: rule !== null };
   };
-  const addCrosswalk = (sourceKey, center, direction, signals = false, paintOf = { style: "continental", wear: 0 }) => {
+  const addCrosswalk = (sourceKey, center, direction, signals = false, paintOf = { style: "continental", wear: 0, tactile: true, rule: false }, host = null) => {
     if (paintOf.style === "none" || zonesAt(center).length === 0) return;
     const start = add(center, scale(direction, -25));
     const end = add(center, scale(direction, 25));
@@ -1626,17 +1683,38 @@ export function generateStreetGround({
       const s1 = fractions[index] * 50 - 25;
       if (s0 <= 0.5 && s1 >= -0.5 && (!span || Math.abs(s0 + s1) < Math.abs(span[0] + span[1]))) span = [s0, s1];
     }
+    if (span && paintOf.rule && host) {
+      const reach = halfWidth(host) + 1;
+      span = [Math.max(span[0], -reach), Math.min(span[1], reach)];
+    }
     if (!span || span[1] - span[0] < 2) return;
+    if (crosswalks.some((walk) => length(sub(walk.center, center)) < 2.5 && Math.abs(dot(walk.direction, direction)) > 0.9)) return;
     const width = paintOf.style === "lines" ? LINES_WALK_WIDTH_M : crossings.walk_width_m;
-    crosswalks.push({ source_key: sourceKey, center, direction, across: leftOf(direction), span, signals, style: paintOf.style, width_m: width, paint_wear: paintOf.wear });
+    crosswalks.push({ source_key: sourceKey, center, direction, across: leftOf(direction), span, signals, style: paintOf.style, width_m: width, paint_wear: paintOf.wear, tactile: paintOf.tactile });
   };
   for (const way of crossingWays) {
     const line = wayLine(way);
     const middle = pointAlong(line, polylineLength(line) / 2);
     const chord = sub(line.at(-1), line[0]);
-    const signals = signalTags(way.tags) || rawOsm.ways.get(way.row.osm_id).node_refs.some((ref) => signalTags(nodeTags(ref)));
+    const refs = rawOsm.ways.get(way.row.osm_id).node_refs;
+    const signals = signalTags(way.tags) || refs.some((ref) => signalTags(nodeTags(ref)));
+    // One OSM crossing way can run across several roads (9th Street at Avenue H):
+    // outside the pilot it gets a crosswalk at each of its crossing nodes on a
+    // road, in that node's style, rather than one at its middle.
+    const onRoads = pilotIndex.contains(middle.point) ? [] : refs
+      .filter((ref) => nodeTags(ref).highway === "crossing" && rawOsm.nodes.get(ref))
+      .map((ref) => ({ ref, host: vehicles.find((object) => rawOsm.ways.get(object.row.osm_id).node_refs.includes(ref)) }))
+      .filter((entry) => entry.host);
+    if (onRoads.length >= 2) {
+      for (const { ref, host } of onRoads) {
+        const style = ruleCrossing(ref) ?? wayCrossing(way);
+        const position = closestOnPolyline(wayLine(host), projectLonLat(rawOsm.nodes.get(ref).coordinate));
+        addCrosswalk(way.row.source_key, position.point, leftOf(position.tangent), signals, crosswalkPaint(position.point, host, style), host);
+      }
+      continue;
+    }
     const host = nearestRoad(middle.point)?.road ?? null;
-    addCrosswalk(way.row.source_key, middle.point, length(chord) > 1 ? unit(chord) : middle.tangent, signals, crosswalkPaint(middle.point, host, wayCrossing(way)));
+    addCrosswalk(way.row.source_key, middle.point, length(chord) > 1 ? unit(chord) : middle.tangent, signals, crosswalkPaint(middle.point, host, wayCrossing(way)), host);
   }
   for (const [sourceKey, source] of [...properSources.entries()].sort(([left], [right]) => compareSourceKeys(left, right))) {
     if (sourceKey[0] !== "n" || source.metadata.tags.highway !== "crossing" || carriedNodes.has(sourceKey.slice(1))) continue;
@@ -1646,7 +1724,16 @@ export function generateStreetGround({
     const host = node ? vehicles.find((object) => rawOsm.ways.get(object.row.osm_id).node_refs.includes(sourceKey.slice(1))) : null;
     if (!host) continue;
     const position = closestOnPolyline(wayLine(host), projectLonLat(node.coordinate));
-    addCrosswalk(host.row.source_key, position.point, leftOf(position.tangent), signalTags(source.metadata.tags), crosswalkPaint(position.point, host, nodeStyle));
+    addCrosswalk(host.row.source_key, position.point, leftOf(position.tangent), signalTags(source.metadata.tags), crosswalkPaint(position.point, host, nodeStyle), host);
+  }
+  for (const walk of rules?.crosswalks ?? []) {
+    const host = vehicles.find((object) => object.row.source_key === walk.way);
+    invariant(host && ruleOf.has(walk.way), `Street ground crosswalk way ${walk.way} is not a rule street's vehicle road`);
+    invariant(walk.at_m <= polylineLength(wayLine(host)), `Street ground crosswalk on ${walk.way} lies past the way's end`);
+    const at = pointAlong(wayLine(host), walk.at_m);
+    const before = crosswalks.length;
+    addCrosswalk(walk.way, at.point, leftOf(at.tangent), false, crosswalkPaint(at.point, host, walk.style), host);
+    invariant(crosswalks.length > before, `Street ground crosswalk on ${walk.way} at ${walk.at_m} m found no carriageway to cross`);
   }
   crosswalks.sort((left, right) => left.center[0] - right.center[0] || left.center[1] - right.center[1]);
   const crosswalkKeepout = union("crosswalk keepout", crosswalks.map((walk) =>
@@ -1669,7 +1756,7 @@ export function generateStreetGround({
         he: (rise / crossings.ramp_depth_m) * outward[0],
         hn: (rise / crossings.ramp_depth_m) * outward[1],
       };
-      notches.push({ source_key: walk.source_key, landing, outward, across: walk.across, rect, piece, box: boxOfMulti(piece), height });
+      notches.push({ source_key: walk.source_key, landing, outward, across: walk.across, rect, piece, box: boxOfMulti(piece), height, tactile: walk.tactile });
     }
   }
   const notchUnion = union("curb ramp notches", notches.map((notch) => notch.rect));
@@ -1715,7 +1802,7 @@ export function generateStreetGround({
       [union("curb tops", curbTops), plantedTop, paverTop, ...landings]), 0.3, 0.3);
   }
 
-  const counts = { crosswalks: crosswalks.length, curb_ramps: notches.length, centerline_m: 0, stop_bars: 0, stall_lines: 0, bays: 0, lot_stalls: 0, red_curb_m: 0, skirt_split_fallbacks: 0, wear: {} };
+  const counts = { crosswalks: crosswalks.length, curb_ramps: notches.length, centerline_m: 0, stop_bars: 0, stall_lines: 0, bays: 0, shoulder_stalls: 0, lot_stalls: 0, red_curb_m: 0, skirt_split_fallbacks: 0, wear: {} };
   const pieces = [];
   const faces = [];
   const sources = {
@@ -1885,6 +1972,10 @@ export function generateStreetGround({
     }
   }
   edgeLoops(bandRaised, () => top, classifyRaised);
+  const interiorCurbs = faces.filter((edge) => edge.kind === "curb" && length(sub(edge.b, edge.a)) > INTERIOR_CURB_MIN_M &&
+    vehicleIndex.contains(add(add(edge.a, scale(sub(edge.b, edge.a), 0.5)), scale(edge.outward, -0.05))));
+  invariant(interiorCurbs.length === 0, `Street ground curbs inside the carriageway (road on both sides): ${interiorCurbs.slice(0, 5)
+    .map((edge) => `(${roundCoordinate(edge.a[0])}, ${roundCoordinate(-edge.a[1])})`).join(", ")}${interiorCurbs.length > 5 ? ` and ${interiorCurbs.length - 5} more` : ""}`);
   for (const notch of notches) edgeLoops(notch.piece, (point) => heightAt(notch.height, point), classifyRamp);
 
   // Split each skirt triangle into its road part (invisible collision ramp) and
@@ -1906,7 +1997,8 @@ export function generateStreetGround({
     try {
       support = roadParts.length === 0 ? [] : inRoad ? triangle : intersect("skirt road part", triangle, roadParts);
       open = roadParts.length === 0 ? triangle : inRoad ? [] : difference("skirt open part", triangle, roadParts);
-    } catch {
+    } catch (error) {
+      if (!(error instanceof BooleanFailure)) throw error;
       // polygon-clipping could not split this triangle on any lattice: it goes
       // whole to the side its centroid lies on (counted in the summary).
       const centroid = scale(add(add(skirt.points[0], skirt.points[1]), skirt.points[2]), 1 / 3);
@@ -1940,11 +2032,27 @@ export function generateStreetGround({
   }
   const gutters = intersect("gutters", union("gutter strips", gutterSkirts), vehicleUnion);
   addPiece("gutter", gutters, constantHeight(ROAD_TOP_M + lifts.gutter_m), worldUv);
+  // Where a rule street's widening or bays pave over an OSM path (a footway that
+  // ended at the old ribbon's edge, a crossing path), asphalt covers the path's
+  // pale skin a step over it, beside the gutters at their height (Cravath).
+  const gutterIndex = partsIndex("gutters", [gutters]);
+  const pathCover = ruleParkingParts.flatMap((part) => part.flatMap((polygon) => {
+    const box = boxOfPoints(polygon[0]);
+    const paths = pedestrianIndex.local(box, 0.1);
+    if (paths.length === 0) return [];
+    const onWidening = intersect("path cover", [polygon], paths);
+    const ribbons = vehicleIndexRibbons.local(box, 0.1);
+    const covered = ribbons.length === 0 ? onWidening : difference("path cover off the ribbon", onWidening, [ribbons]);
+    const nearGutters = gutterIndex.local(box, 0.1);
+    return nearGutters.length === 0 ? covered : difference("path cover off gutters", covered, nearGutters);
+  }));
+  addPiece("parking", cleanPolygons(union("path covers", pathCover), 0.05, 0.05), constantHeight(ROAD_TOP_M + lifts.gutter_m), worldUv);
 
   // Red curb paint (fire lanes): a rule street's curb along its junction
-  // approaches (within RED_CURB_APPROACH_M of a node it shares with another
-  // road) or all of it, per its treatment: the curb face (painted below, with
-  // the faces) and a strip of the curb top.
+  // approaches (within its treatment's red_curb_approach_m of a node it shares
+  // with another road), all of it or none, per side as its rule gives or else per
+  // its treatment, plus any photographed stretches: the curb face (painted below,
+  // with the faces) and a strip of the curb top.
   const junctionPoints = new Map();
   const junctionsOf = (road) => {
     if (!junctionPoints.has(road.row.source_key)) {
@@ -1960,9 +2068,14 @@ export function generateStreetGround({
     if (pilotIndex.contains(middle) || bandRoads.length === 0) continue;
     const owner = bandRoads[kerbLineAt(middle).index];
     const rule = ruleOf.get(owner.row.source_key);
-    if (!rule || rule.treatment.red_curb === "none") continue;
-    if (rule.treatment.red_curb === "approaches" &&
-      !junctionsOf(owner).some((point) => length(sub(point, middle)) <= RED_CURB_APPROACH_M + halfWidth(owner))) continue;
+    if (!rule) continue;
+    // The side's own photographed paint when the street gives one, else its treatment's.
+    const near = closestOnPolyline(wayLine(owner), middle);
+    const side = rule.redCurb[owner.row.source_key]?.[cross(near.tangent, sub(middle, near.point)) >= 0 ? "left" : "right"];
+    const mode = side === undefined ? rule.treatment.red_curb : typeof side === "string" ? side : side.mode;
+    const stretches = side && typeof side === "object" ? side.stretches : [];
+    const approach = () => junctionsOf(owner).some((point) => length(sub(point, middle)) <= rule.treatment.red_curb_approach_m + halfWidth(owner));
+    if (!(mode === "all" || (mode === "approaches" && approach()) || stretches.some(([from, to]) => near.along >= from && near.along <= to))) continue;
     edge.red = { wear: rule.treatment.paint_wear, source_key: owner.row.source_key };
     const along = sub(edge.b, edge.a);
     const topStrip = rectangle(edge.a, unit(along), scale(edge.outward, -1), 0, length(along), 0, RED_CURB_TOP_M);
@@ -2014,8 +2127,9 @@ export function generateStreetGround({
     paint(STREET_PAINT_KINDS.white, roadPaint("crosswalk", union("crosswalk paint", parts)), walk.source_key, walk.paint_wear);
   }
 
-  // Tactile pads at the foot of every curb ramp.
+  // Tactile pads at the foot of a curb ramp where the street's photographs show them.
   for (const notch of notches) {
+    if (!notch.tactile) continue;
     const core = crossings.ramp_width_m / 2 - kerb.flare_run_m - 0.05;
     const pad = intersect("tactile pad", rectangle(notch.landing, notch.outward, notch.across, 0.15, 0.15 + crossings.tactile_depth_m, -core, core), notch.piece);
     if (pad.length === 0) continue;
@@ -2173,7 +2287,7 @@ export function generateStreetGround({
     const legendCenter = add(add(barCenter, scale(travel, -(lines.stop_bar_width_m / 2 + lines.stop_legend_gap_m + lines.stop_legend_length_m / 2))), scale(right, half / 2));
     const legend = roadPaint("stop legend", rectangle(legendCenter, travel, right, -lines.stop_legend_length_m / 2, lines.stop_legend_length_m / 2, -legendWidth / 2, legendWidth / 2));
     if (legend.length > 0) {
-      addPiece("marking", legend, constantHeight(ROAD_TOP_M + lifts.paint_m), frameUv(STREET_PAINT_KINDS.stop_legend + PAINT_VARIANT_STRIDE * wear, legendCenter, travel, right, lines.stop_legend_length_m, legendWidth));
+      addPiece("marking", legend, constantHeight(ROAD_TOP_M + lifts.paint_m + DRAPED_LAYER_STEP_M), frameUv(STREET_PAINT_KINDS.stop_legend + PAINT_VARIANT_STRIDE * wear, legendCenter, travel, right, lines.stop_legend_length_m, legendWidth));
     }
     stopBars.push({ node_key: nodeKey, host_key: host.row.source_key, bar_center: barCenter, travel, right, kerb_offset_m: halfWidthSide(host, forward ? -1 : 1) });
     counts.stop_bars += 1;
@@ -2298,11 +2412,42 @@ export function generateStreetGround({
       });
       counts.bays += 1;
     }
-    if (bay.lines && marks.length > 0) paint(STREET_PAINT_KINDS.white, roadPaint("bay lines", union("bay lines", marks)), bay.way, wear);
+    if (bay.lines && marks.length > 0) paint(STREET_PAINT_KINDS.white, difference("bay lines off crosswalks", roadPaint("bay lines", union("bay lines", marks)), [crosswalkKeepout]), bay.way, wear);
+  }
+  // Shoulder stalls: thin lines square to the road across a rule street's widened
+  // shoulder, from just outside its edge line to short of the shoulder's edge, and
+  // a stall per pitch for the parked cars (kind shoulder: entry at the edge line).
+  for (const stall of rules?.stalls ?? []) {
+    const road = vehicles.find((object) => object.row.source_key === stall.way);
+    invariant(road && ruleOf.has(stall.way), `Street ground shoulder stalls way ${stall.way} is not a rule street's vehicle road`);
+    const line = wayLine(road);
+    const sign = stall.side === "left" ? 1 : -1;
+    const inner = ROAD_WIDTHS_M[road.tags.highway] / 2 - lines.edge_inset_m + 0.05;
+    const outer = halfWidthSide(road, sign) - 0.2;
+    invariant(outer - inner >= 2, `Street ground shoulder stalls on ${stall.way} need a widened ${stall.side} side`);
+    const count = Math.floor((stall.to_m - stall.from_m) / stall.stall_width_m + 1e-9);
+    const start = (stall.from_m + stall.to_m) / 2 - (count * stall.stall_width_m) / 2;
+    const marks = [];
+    for (let index = 0; index <= count; index += 1) {
+      const at = pointAlong(line, start + index * stall.stall_width_m);
+      const outward = scale(leftOf(at.tangent), sign);
+      marks.push(rectangle(add(at.point, scale(outward, inner)), outward, at.tangent, 0, outer - inner, -lines.width_m / 2, lines.width_m / 2));
+      if (index === count) break;
+      const middle = pointAlong(line, start + (index + 0.5) * stall.stall_width_m);
+      const middleOut = scale(leftOf(middle.tangent), sign);
+      stallSlots.push({
+        aisle_key: stall.way, side: stall.side, s: roundCoordinate(start + (index + 0.5) * stall.stall_width_m),
+        entry: add(middle.point, scale(middleOut, inner)), outward: middleOut, along: middle.tangent,
+        depth_m: roundCoordinate(outer - inner), width_m: stall.stall_width_m, kind: "shoulder",
+      });
+      counts.shoulder_stalls += 1;
+    }
+    paint(STREET_PAINT_KINDS.white, difference("shoulder stall lines off crosswalks", roadPaint("shoulder stall lines", union("shoulder stall lines", marks)), [crosswalkKeepout]),
+      stall.way, ruleOf.get(stall.way).treatment.paint_wear);
   }
 
-  // Lot rules: stall rows (separator lines, accessible stalls filled blue with
-  // their symbol, bus stalls with their legend) and legends.
+  // Lot rules: stall rows (separator lines; accessible stalls outlined in blue
+  // round their symbol; bus stalls with their legend), hatched zones and legends.
   // A legend of the atlas painted at a centre, reading up along facing, at a paint height and wear step.
   const legendPiece = (cell, center, facing, lengthM, widthM, sourceKey, paintHeight, wear) => {
     const along = unit(facing);
@@ -2311,14 +2456,22 @@ export function generateStreetGround({
       frameUv(STREET_PAINT_KINDS.legend + PAINT_VARIANT_STRIDE * (cell + STREET_LEGEND_ATLAS_CELLS * wear), center, along, across, lengthM, widthM));
     sources.marking.add(sourceKey);
   };
+  // A rectangle's outline, a band inset from its edge.
+  const outlineRing = (center, along, across, length0, length1, width0, width1, band) => difference("outline",
+    rectangle(center, along, across, length0, length1, width0, width1), [rectangle(center, along, across, length0 + band, length1 - band, width0 + band, width1 - band)]);
   for (const { lot, object } of lotRules) {
-    // Paint on the lot's own pavement when it has one, else over the lot like the aisles' paint.
-    const lotPaint = lot.surface ? LOT_SURFACE_LIFT_M + PARK_PAINT_LIFT_M : ROAD_TOP_M + lifts.paint_m;
-    const paintLot = (kind, polygon, wear) => {
+    // On the lot's own pavement its paint and legends take their steps over it;
+    // otherwise they lie over the lot like the aisles' paint.
+    const lotLevel = (layer) => LOT_SURFACE_LIFT_M + LOT_LAYER_STEPS[layer] * DRAPED_LAYER_STEP_M;
+    const lotPaint = lot.surface ? lotLevel("paint") : ROAD_TOP_M + lifts.paint_m;
+    const lotTop = lot.surface ? lotLevel("top") : lotPaint + DRAPED_LAYER_STEP_M;
+    const paintLot = (kind, polygon, wear, height = lotPaint) => {
       if (polygon.length === 0) return;
-      addPiece("marking", polygon, constantHeight(lotPaint), kindUv(kind, wear));
+      addPiece("marking", polygon, constantHeight(height), kindUv(kind, wear));
       sources.marking.add(lot.source_key);
     };
+    // Rows stop at the lot's raised islands: no line or stall on an island.
+    const offIslands = (label, polygon) => (islandUnion.length === 0 ? polygon : difference(label, polygon, [islandUnion]));
     for (const row of lot.rows) {
       const p0 = [row.line_xz[0][0], -row.line_xz[0][1]];
       const p1 = [row.line_xz[1][0], -row.line_xz[1][1]];
@@ -2329,33 +2482,58 @@ export function generateStreetGround({
       const axis = [direction[0] * Math.cos(theta) - sign * direction[1] * Math.sin(theta), sign * direction[0] * Math.sin(theta) + direction[1] * Math.cos(theta)];
       const pitch = row.stall_width_m / Math.sin(theta);
       const reach = row.depth_m / Math.sin(theta);
-      // Stall paint wear by row style: faded rows mostly worn away, the bus stalls
-      // worn (Sep 2025 photos of the Mersea lot), plain and accessible rows step 1.
-      const wear = { faded: PAINT_WEAR_STEPS - 1, bus: 2 }[row.style] ?? 1;
+      // Faded rows are worn away entirely; the rest at the lot's paint wear.
+      const wear = row.style === "faded" ? PAINT_WEAR_STEPS - 1 : lot.paint_wear;
       const separators = [];
       for (let index = 0; index <= row.count; index += 1) {
         const base = add(p0, scale(direction, index * pitch));
         separators.push(rectangle(base, axis, leftOf(axis), 0, reach, -lines.width_m / 2, lines.width_m / 2));
       }
-      paintLot(STREET_PAINT_KINDS.white, intersect(`lot ${lot.id} ${row.id}`, union(`lot ${lot.id} ${row.id} lines`, separators), object.geometry), wear);
+      paintLot(STREET_PAINT_KINDS.white, offIslands(`lot ${lot.id} ${row.id} off islands`,
+        intersect(`lot ${lot.id} ${row.id}`, union(`lot ${lot.id} ${row.id} lines`, separators), object.geometry)), wear);
       for (let index = 0; index < row.count; index += 1) {
         const entry = add(p0, scale(direction, (index + 0.5) * pitch));
         const middle = add(entry, scale(axis, row.depth_m / 2));
+        const footprint = rectangle(entry, axis, leftOf(axis), 0, row.depth_m, -row.stall_width_m / 2, row.stall_width_m / 2);
+        if (islandUnion.length > 0 && intersect(`lot ${lot.id} stall on island`, footprint, islandUnion).length > 0) continue;
         if (row.style === "accessible") {
-          const fill = rectangle(entry, axis, leftOf(axis), 0.15, row.depth_m - 0.15, -row.stall_width_m / 2 + 0.15, row.stall_width_m / 2 - 0.15);
-          paintLot(STREET_PAINT_KINDS.blue, intersect(`lot ${lot.id} accessible`, fill, object.geometry), 1);
-          // The symbol a step over the blue fill.
-          legendPiece(STREET_LEGEND_CELLS.accessible, middle, scale(axis, -1), Math.min(1.6, row.depth_m * 0.4), Math.min(1.6, row.stall_width_m * 0.6), lot.source_key, lotPaint + DRAPED_LAYER_STEP_M, 1);
+          // A blue outline inside the white separators and the symbol, on grey.
+          paintLot(STREET_PAINT_KINDS.blue, intersect(`lot ${lot.id} accessible`,
+            outlineRing(entry, axis, leftOf(axis), 0.2, row.depth_m - 0.2, -row.stall_width_m / 2 + 0.2, row.stall_width_m / 2 - 0.2, 0.12), object.geometry), Math.min(wear, 2));
+          legendPiece(STREET_LEGEND_CELLS.accessible, middle, scale(axis, -1), Math.min(1.6, row.depth_m * 0.4), Math.min(1.6, row.stall_width_m * 0.6), lot.source_key, lotTop, Math.min(wear, 2));
         }
         stallSlots.push({
           aisle_key: lot.source_key, side: row.side, s: roundCoordinate((index + 0.5) * pitch), entry, outward: axis, along: direction,
           depth_m: row.depth_m, width_m: row.stall_width_m, kind: "lot_row", lot_id: lot.id, row_id: row.id, style: row.style,
         });
+        counts.lot_stalls += 1;
       }
-      counts.lot_stalls += row.count;
+    }
+    // Hatched no-parking zones: an outline, and stripes at 45 degrees to its first edge.
+    for (const hatch of lot.hatches) {
+      const raw = hatch.points_xz.map(([x, z]) => [x, -z]);
+      const ring = ringArea(raw) > 0 ? raw : [...raw].reverse();
+      const zone = [[ring]];
+      // The outline: a band inside each edge (the inside lies left of a CCW ring's edges).
+      const parts = ring.map((a, index) => {
+        const b = ring[(index + 1) % ring.length];
+        const edge = unit(sub(b, a));
+        return rectangle(a, edge, leftOf(edge), 0, length(sub(b, a)), 0, 0.12);
+      });
+      if (hatch.stripes) {
+        const first = unit(sub(ring[1], ring[0]));
+        const stripe = unit([first[0] - first[1], first[1] + first[0]]);
+        const box = boxOfMulti(zone);
+        const centre = [(box.min_x + box.max_x) / 2, (box.min_y + box.max_y) / 2];
+        const radius = Math.hypot(box.max_x - box.min_x, box.max_y - box.min_y) / 2 + 1;
+        for (let offset = -radius; offset <= radius; offset += 0.75) {
+          parts.push(rectangle(add(centre, scale(leftOf(stripe), offset)), stripe, leftOf(stripe), -radius, radius, -0.06, 0.06));
+        }
+      }
+      paintLot(STREET_PAINT_KINDS.white, intersect(`lot ${lot.id} ${hatch.id}`, union(`lot ${lot.id} ${hatch.id} paint`, parts), zone), lot.paint_wear, lotTop);
     }
     for (const legend of lot.legends) {
-      legendPiece(STREET_LEGEND_CELLS[legend.cell], [legend.at_xz[0], -legend.at_xz[1]], [legend.facing_xz[0], -legend.facing_xz[1]], legend.length_m, legend.width_m, lot.source_key, lotPaint, legend.paint_wear);
+      legendPiece(STREET_LEGEND_CELLS[legend.cell], [legend.at_xz[0], -legend.at_xz[1]], [legend.facing_xz[0], -legend.facing_xz[1]], legend.length_m, legend.width_m, lot.source_key, lotTop, legend.paint_wear);
     }
   }
 
@@ -2537,8 +2715,35 @@ export function generateStreetGround({
     const polygon = object.geometry;
     parkLayers.push({ zone: null, layer: { material, id: lot.id }, polygon, index: polygonIndex(polygon), box: boxOfMulti(polygon), lift: LOT_SURFACE_LIFT_M, sources: [lot.source_key] });
     addPiece(material, polygon, constantHeight(LOT_SURFACE_LIFT_M), worldUv, true);
-    // Its cracks, patches and oil stains a step over it (under its paint),
-    // anywhere on the open pavement, in any direction.
+    const lotStep = (layer) => constantHeight(LOT_SURFACE_LIFT_M + LOT_LAYER_STEPS[layer] * DRAPED_LAYER_STEP_M);
+    const openPavement = (label, piece) => difference(label, intersect(`${label} in lot`, piece, polygon), [islandUnion, bandOriginal].filter((part) => part.length > 0));
+    // Patched strips along the lot (dark asphalt), then its long tar-sealed joints.
+    for (const [index, strip] of lot.surface.patch_strips.entries()) {
+      const a = [strip.line_xz[0][0], -strip.line_xz[0][1]];
+      const b = [strip.line_xz[1][0], -strip.line_xz[1][1]];
+      const along = unit(sub(b, a));
+      const piece = openPavement(`lot ${lot.id} patch strip ${index}`, rectangle(a, along, leftOf(along), 0, length(sub(b, a)), -strip.width_m / 2, strip.width_m / 2));
+      if (piece.length === 0) continue;
+      addPiece("marking", piece, lotStep("patch"), kindUv(STREET_PAINT_KINDS.patch));
+      sources.marking.add(lot.source_key);
+    }
+    const seamAxis = unit([lot.surface.seams.axis_xz[0], -lot.surface.seams.axis_xz[1]]);
+    const seamBox = boxOfMulti(polygon);
+    const seamCentre = [(seamBox.min_x + seamBox.max_x) / 2, (seamBox.min_y + seamBox.max_y) / 2];
+    const seamReach = Math.hypot(seamBox.max_x - seamBox.min_x, seamBox.max_y - seamBox.min_y) / 2 + 1;
+    const seams = [];
+    for (let offset = -seamReach, index = 0; offset <= seamReach; offset += lot.surface.seams.spacing_m, index += 1) {
+      const jitter = (hashUnit(seed, `${lot.id}:seam:${index}`, 0) - 0.5) * lot.surface.seams.spacing_m * 0.3;
+      seams.push(rectangle(add(seamCentre, scale(leftOf(seamAxis), offset + jitter)), seamAxis, leftOf(seamAxis), -seamReach, seamReach,
+        -lot.surface.seams.width_m / 2, lot.surface.seams.width_m / 2));
+    }
+    const sealed = openPavement(`lot ${lot.id} seams`, union(`lot ${lot.id} seam lines`, seams));
+    if (sealed.length > 0) {
+      addPiece("marking", sealed, lotStep("seam"), kindUv(STREET_PAINT_KINDS.sealant));
+      sources.marking.add(lot.source_key);
+    }
+    // Its cracks, patches and oil stains (under its joints and paint), anywhere
+    // on the open pavement, in any direction.
     const lotIndex = polygonIndex(polygon);
     const lotBox = boxOfMulti(polygon);
     const lotArea = multiArea(polygon);
@@ -2559,7 +2764,7 @@ export function generateStreetGround({
         const quad = rectangle(center, along, leftOf(along), -alongSize / 2, alongSize / 2, -acrossSize / 2, acrossSize / 2);
         if (!openRing(quad[0][0]).every((corner) => lotIndex.contains(corner) && !islandIndex.contains(corner) && !bandIndex.contains(corner))) continue;
         const cell = cells[Math.floor(hashUnit(seed, identity, 4) * cells.length) % cells.length];
-        addPiece("wear", quad, constantHeight(LOT_SURFACE_LIFT_M + DRAPED_LAYER_STEP_M), frameUv(cell, center, along, leftOf(along), alongSize, acrossSize));
+        addPiece("wear", quad, lotStep("wear"), frameUv(cell, center, along, leftOf(along), alongSize, acrossSize));
         sources.wear.add(lot.source_key);
         counts.wear[cell] = (counts.wear[cell] ?? 0) + 1;
         placed += 1;
@@ -2711,6 +2916,82 @@ export function generateStreetGround({
       }
     }
   };
+  // No two paint pieces of the marking record overlap closer than a draped step:
+  // the validator compares records with each other, not the pieces inside one.
+  const markingPieces = pieces.filter((piece) => piece.record === "marking").flatMap((piece) =>
+    piece.polygon.map((polygon) => ({ piece, polygon, box: boxOfPoints(polygon[0]) })));
+  const paintCells = new Map();
+  markingPieces.forEach((entry, index) => {
+    for (let i = Math.floor(entry.box.min_x / 8); i <= Math.floor(entry.box.max_x / 8); i += 1) {
+      for (let j = Math.floor(entry.box.min_y / 8); j <= Math.floor(entry.box.max_y / 8); j += 1) {
+        const key = `${i},${j}`;
+        if (!paintCells.has(key)) paintCells.set(key, []);
+        paintCells.get(key).push(index);
+      }
+    }
+  });
+  // Where two paint pieces at one height overlap, the later one gives way (two
+  // crosswalks sharing a junction corner, a stop bar over an edge line, adjacent
+  // red curb tops): its overlap is cut out, then the check below runs on the result.
+  const giveWay = new Map();
+  {
+    const seen = new Set();
+    for (const indices of paintCells.values()) {
+      for (let x = 0; x < indices.length; x += 1) {
+        for (let y = x + 1; y < indices.length; y += 1) {
+          const [earlier, later] = indices[x] < indices[y] ? [indices[x], indices[y]] : [indices[y], indices[x]];
+          const [first, second] = [markingPieces[earlier], markingPieces[later]];
+          if (first.piece === second.piece || !boxesOverlap(first.box, second.box) || seen.has(`${earlier}:${later}`)) continue;
+          seen.add(`${earlier}:${later}`);
+          const overlap = intersect("paint give way", [first.polygon], [second.polygon]);
+          if (multiArea(overlap) < 1e-5) continue;
+          const probe = overlap[0][0][0];
+          if (Math.abs(heightAt(first.piece.height, probe) - heightAt(second.piece.height, probe)) >= DRAPED_LAYER_STEP_M - 1e-6) continue;
+          if (!giveWay.has(later)) giveWay.set(later, []);
+          giveWay.get(later).push([first.polygon]);
+        }
+      }
+    }
+    for (const [index, cuts] of giveWay) {
+      const entry = markingPieces[index];
+      const kept = difference("paint giving way", [entry.polygon], cuts);
+      entry.piece.polygon = entry.piece.polygon.flatMap((polygon) => (polygon === entry.polygon ? cleanPolygons(kept, 0.001, 0.01) : [polygon]));
+      entry.polygon = null;
+    }
+  }
+  const resolvedPieces = pieces.filter((piece) => piece.record === "marking").flatMap((piece) =>
+    piece.polygon.map((polygon) => ({ piece, polygon, box: boxOfPoints(polygon[0]) })));
+  markingPieces.length = 0;
+  markingPieces.push(...resolvedPieces);
+  paintCells.clear();
+  markingPieces.forEach((entry, index) => {
+    for (let i = Math.floor(entry.box.min_x / 8); i <= Math.floor(entry.box.max_x / 8); i += 1) {
+      for (let j = Math.floor(entry.box.min_y / 8); j <= Math.floor(entry.box.max_y / 8); j += 1) {
+        const key = `${i},${j}`;
+        if (!paintCells.has(key)) paintCells.set(key, []);
+        paintCells.get(key).push(index);
+      }
+    }
+  });
+  const paintClashes = [];
+  const comparedPairs = new Set();
+  for (const indices of paintCells.values()) {
+    for (let x = 0; x < indices.length; x += 1) {
+      for (let y = x + 1; y < indices.length; y += 1) {
+        const [first, second] = [markingPieces[indices[x]], markingPieces[indices[y]]];
+        if (first.piece === second.piece || !boxesOverlap(first.box, second.box)) continue;
+        const pair = `${Math.min(indices[x], indices[y])}:${Math.max(indices[x], indices[y])}`;
+        if (comparedPairs.has(pair)) continue;
+        comparedPairs.add(pair);
+        const overlap = intersect("paint overlap", [first.polygon], [second.polygon]);
+        if (multiArea(overlap) < 1e-4) continue;
+        const probe = overlap[0][0][0];
+        if (Math.abs(heightAt(first.piece.height, probe) - heightAt(second.piece.height, probe)) < DRAPED_LAYER_STEP_M - 1e-6) paintClashes.push(probe);
+      }
+    }
+  }
+  invariant(paintClashes.length === 0, `Street ground paint pieces overlap less than a draped step apart at ${paintClashes.slice(0, 5)
+    .map((point) => `(${roundCoordinate(point[0])}, ${roundCoordinate(-point[1])})`).join(", ")}${paintClashes.length > 5 ? ` and ${paintClashes.length - 5} more` : ""}`);
   for (const piece of pieces) drape(piece);
 
   // Curb faces: vertical quads from the road surface to the raised edge, split
@@ -2756,12 +3037,19 @@ export function generateStreetGround({
           mesh.uvs.push(roundCoordinate(along / kerb.panel_m), roundCoordinate((h - ROAD_TOP_M) / kerb.panel_m + 0.1));
         }
         pushTriangles(mesh, [offset, offset + 1, offset + 2, offset, offset + 2, offset + 3], normal);
-        // Red paint on the face itself: the paint shader pulls its vertices toward
-        // the camera, so it draws over the concrete face it shares.
+        // Red paint on the face itself, a draped step out from the concrete face.
         if (edge.red) {
           const paintMesh = meshFor("marking", chunk.id);
           const paintOffset = paintMesh.vertices.length / 3;
-          for (const [point, h] of [[p0, ROAD_TOP_M], [p1, ROAD_TOP_M], [p1, edgeTop(p1) + lifts.paint_m], [p0, edgeTop(p0) + lifts.paint_m]]) {
+          // Stepped out where that stays on this chunk's land (at a chunk seam the end stays put).
+          const out = scale(edge.outward, DRAPED_LAYER_STEP_M);
+          const onLand = (point) => {
+            const [x, y] = [roundCoordinate(point[0]), roundCoordinate(point[1])];
+            return facets.some((candidate) => inBox(candidate.bounds, [x, y], 1e-6) && facetElevation(candidate, x, y).inside);
+          };
+          const q0 = onLand(add(p0, out)) ? add(p0, out) : p0;
+          const q1 = onLand(add(p1, out)) ? add(p1, out) : p1;
+          for (const [point, h] of [[q0, ROAD_TOP_M], [q1, ROAD_TOP_M], [q1, edgeTop(p1) + lifts.paint_m], [q0, edgeTop(p0) + lifts.paint_m]]) {
             const land = facetElevation(facet, point[0], point[1]).elevation;
             paintMesh.vertices.push(roundCoordinate(point[0]), roundCoordinate(land + h), roundCoordinate(-point[1]));
             paintMesh.normals.push(...normal.map(roundCoordinate));
@@ -2847,6 +3135,7 @@ export function generateStreetGround({
       stop_bars: counts.stop_bars,
       stall_lines: counts.stall_lines,
       bay_stalls: counts.bays,
+      shoulder_stalls: counts.shoulder_stalls,
       lot_stalls: counts.lot_stalls,
       red_curb_m: roundCoordinate(counts.red_curb_m),
       skirt_split_fallbacks: counts.skirt_split_fallbacks,
