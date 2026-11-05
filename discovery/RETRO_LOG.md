@@ -23785,3 +23785,15 @@ My "left only" came from a downscaled sheet and the author's native-resolution r
 - What worked well: drawing the config's rows, the tanks and the built cars over the dated panel showed the cause at once, and also what no count could: the tanks stand against the fence, and the cars in front of them stop short. Timing the re-place loop showed the flood took 507 s of a 623 s build; flooding only regions near moved rows cut the build to 249 s. Diffing the built rows against the suite-passed world proved only Mersea moved.
 - What did not work well: I reported 29 of 29 and handed off without reading built positions against the config's `observed` text. The ground merge had moved the row into my planters, and nothing I ran could see it. I also learned the set-piece mask's rules one 80-second failure at a time, five times, instead of reading the check first.
 - What the team should change next time: after merging a sibling's geometry, re-read every row that shares an edge with yours. Report clusters, not totals. Read a validator's rule before iterating against it.
+
+### code-review-ground-clutter — clutter delta 7ccf14c7 PASS
+
+(Relayed verbatim by the coordinator; added by street-clutter-rollout-20261105.)
+
+- Putting the old full flood back and comparing the output showed the speed-up changed nothing on this data, and a shortcut like this is only safe because the full check still runs in the suite.
+
+### street-clutter-rollout-20261105 — 2026-11-05 — last review nits (G1 to G3)
+
+- What worked well: the rebuilt world was compared with the committed one, so "no change" is a diff rather than a claim.
+- What did not work well: my tight-tank exemption applied to every neighbour when only the fence and other tanks needed it. I made it wider than the case in front of me.
+- What the team should change next time: when an exemption goes into a shared check, name exactly what it exempts from, and state in the code which check backstops a shortcut.

@@ -221,8 +221,9 @@ const PROP_RAMP_CLEAR_M = 0.9;
 const PLAYER_WIDTH_M = 0.7;
 // Street props keep a player's width clear of what they stand beside, except these:
 // the stock tanks stand in a tight row against the chain-link, as photographed, so
-// their plan capsules (a little longer than the pallets) may overlap this much (m).
-// The clearance flood still checks what that shuts in.
+// their plan capsules (a little longer than the pallets) may overlap each other and
+// a fence run this much (m). Anything else stays a player's width away. The
+// clearance flood still checks what that shuts in.
 const PROPS_STANDING_TIGHT = Object.freeze(["stock_tank_planter"]);
 const TIGHT_PROP_GAP_M = -0.3;
 const SAFE_ID = /^[a-z0-9_]+$/u;
@@ -1314,7 +1315,7 @@ export function generateStreetDetail({
     // Low plants (grass clumps, planting slots) have no collision; drift planting may overlap them.
     const lowPlant = row.layer === "vegetation" && (row.kind === "grass_clump" || row.kind === "planting_slot");
     streetDetailPieces(row).forEach((piece, index) => {
-      occupied.push({ id: row.fence ? `${row.id}#${piece.label ?? index}` : row.id, points: piece.points, radius_m: Math.max(piece.radius, pit), lowPlant, planted });
+      occupied.push({ id: row.fence ? `${row.id}#${piece.label ?? index}` : row.id, points: piece.points, radius_m: Math.max(piece.radius, pit), lowPlant, planted, tightNeighbour: row.fence != null || PROPS_STANDING_TIGHT.includes(row.prop) });
     });
   };
   rows.forEach(occupy);
@@ -1348,7 +1349,7 @@ export function generateStreetDetail({
     const across = (en[0] - walk.center[0]) * walk.across[0] + (en[1] - walk.center[1]) * walk.across[1];
     return along >= walk.span[0] - 1 && along <= walk.span[1] + 1 && Math.abs(across) <= ground.site.walk_width_m / 2 + 0.5;
   });
-  const propSiteViolation = (piece, gap = PLAYER_WIDTH_M) => {
+  const propSiteViolation = (piece, tight = false) => {
     const { radius } = piece;
     // The footprint's segment, sampled every half metre for the site tests.
     const samples = [];
@@ -1369,6 +1370,7 @@ export function generateStreetDetail({
     }
     for (const item of occupied) {
       const distance = polylinePolylineDistance(piece.points, item.points);
+      const gap = tight && item.tightNeighbour ? TIGHT_PROP_GAP_M : PLAYER_WIDTH_M;
       if (distance < item.radius_m + radius + gap) return { reason: "overlap", source_id: item.id, observed_m: round3(distance), required_m: round3(item.radius_m + radius + gap) };
     }
     return null;
@@ -1412,7 +1414,7 @@ export function generateStreetDetail({
     const piece = footprint
       ? footprintPiece(xz, normalizedYaw(entry.yaw), footprint)
       : { points: [xz], radius: STREET_DETAIL_KINDS[entry.kind].footprint_radius_m };
-    const violation = entry.prop === undefined || tree ? siteViolation(entry.kind, xz, exclusions.wall_buffer_m) : propSiteViolation(piece, PROPS_STANDING_TIGHT.includes(entry.prop) ? TIGHT_PROP_GAP_M : PLAYER_WIDTH_M);
+    const violation = entry.prop === undefined || tree ? siteViolation(entry.kind, xz, exclusions.wall_buffer_m) : propSiteViolation(piece, PROPS_STANDING_TIGHT.includes(entry.prop));
     invariant(!violation, `Street detail set piece ${entry.id} fails the exclusion mask: ${JSON.stringify(violation)}`);
     const { y, support } = grounded(xz);
     const surface = surfaceAt(xz);
@@ -1851,6 +1853,8 @@ export function generateStreetDetail({
     const fixed = new Set(rows.filter(isStreetSolid).flatMap((row) => occupiedLanes(row).map(({ side, lane }) => `${side}/${lane}`)));
     // The island rows' places in the last round: only the regions near a row that
     // moved since can shut anything new in, and the flood is the slow part.
+    // tools/check_street_detail_clearance.mjs floods every region of the finished
+    // world in the suite: it is the full backstop for this shortcut, so keep it.
     let lastPlaces = new Map();
     for (let round = 0; round < 60; round += 1) {
       const islandCars = clutter.rows.filter(isIslandRow);
@@ -1909,10 +1913,10 @@ export function generateStreetDetail({
       if (!barredMore) break;
       clutter = placeStreetClutter({ ...clutterInputs, barredIds: barred });
     }
-    const occupied = new Set([...rows, ...clutter.rows].filter(isStreetSolid).flatMap((row) => occupiedLanes(row).map(({ side, lane }) => `${side}/${lane}`)));
+    const takenLanes = new Set([...rows, ...clutter.rows].filter(isStreetSolid).flatMap((row) => occupiedLanes(row).map(({ side, lane }) => `${side}/${lane}`)));
     walkUpShort = walkUpSides.flatMap(({ source_key: sourceKey, side: sideName, corridors }, side) => {
       const open = corridors.flatMap((corridor, lane) => (corridor === null ? [] : [lane]));
-      const free = open.filter((lane) => !occupied.has(`${side}/${lane}`)).length;
+      const free = open.filter((lane) => !takenLanes.has(`${side}/${lane}`)).length;
       return free < WALK_UP_FREE_LANES ? [{ source_key: sourceKey, side: sideName, open: open.length, free }] : [];
     });
   }
