@@ -59,6 +59,7 @@ import {
   sha256File,
   sortJson,
   stableJson,
+  stableJsonInlineNumbers,
   verifySourceContract,
 } from "./lib/world-contract.mjs";
 import {
@@ -119,7 +120,7 @@ import {
   loadStreetDetailZones,
   streetDetailHardShapes,
 } from "./lib/street-detail-generation.mjs";
-import { generateStreetGround } from "./lib/street-ground-generation.mjs";
+import { generateStreetGround, loadStreetGroundRules } from "./lib/street-ground-generation.mjs";
 import { writeGroundCoverMap } from "./lib/ground-cover-map.mjs";
 import {
   SHORELINE_OVERLAY_MATERIAL,
@@ -2136,6 +2137,7 @@ function main() {
       spawnXZ,
       hardShapes,
       normalAt: terrainPlan.smoothNormalAt,
+      rules: loadStreetGroundRules(projectRoot),
     });
     for (const [id, records] of streetGround.records) {
       const chunk = chunks.get(id);
@@ -2193,7 +2195,8 @@ function main() {
     writeArtifact(stagingRoot, "shoreline.json", `${JSON.stringify(sortJson(shoreline.document))}\n`);
     writeArtifact(stagingRoot, "qa/pavement-skin.json", chunks.pavement_skin);
     for (const chunk of [...chunks.values()].sort((left, right) => compareChunkIds(left.chunk_id, right.chunk_id))) {
-      writeArtifact(stagingRoot, `chunks/${chunk.chunk_id}.json`, chunk);
+      // Number arrays on one line (stableJsonInlineNumbers): mesh arrays are most of a chunk.
+      writeArtifact(stagingRoot, `chunks/${chunk.chunk_id}.json`, stableJsonInlineNumbers(chunk));
     }
     const statusTotals = Object.fromEntries(
       [...new Set(coverage.map((row) => row.derived_world_status))].sort().map((status) => [
