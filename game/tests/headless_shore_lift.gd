@@ -5,9 +5,10 @@ extends SceneTree
 ##   1. the lift keeps their x and z, puts them about 5 m above the higher of
 ##      their own height and the land edge below, with no velocity, airborne;
 ##   2. no second lift while they float; doing nothing, they drift back down
-##      onto the wall and are lifted again there;
+##      onto the wall and are lifted again there; the jetpack raises them
+##      from the float with no lift on the way;
 ##   3. floating off over the water past the float radius puts them back above
-##      the first lift;
+##      the first lift, keeping their extra height;
 ##   4. holding the move input toward land brings them back onto walkable
 ##      ground with no further lift.
 ## Physics only (run with --headless), in the real generated world.
@@ -138,8 +139,17 @@ func _run() -> void:
 		_finish(main)
 		return
 
+	# The jetpack works from the float: straight up, no lift on the way.
+	Input.action_press("jetpack")
+	for _tick in 30:
+		await physics_frame
+	_release()
+	if not _require(_lifts.size() == 2 and player.global_position.y > to2.y + 1.0 and _same_xz(player.global_position, to2), "Jetpacking from the float did not rise straight up with no lift: %s lifts=%d." % [player.global_position, _lifts.size()]):
+		_finish(main)
+		return
+
 	# 3. Run off over the water: past the float radius the player goes back
-	# above the first lift, keeping any extra height.
+	# above the first lift, keeping the height the jetpack gave them.
 	_face(rig, out3)
 	Input.action_press("move_forward")
 	Input.action_press("run")
@@ -157,7 +167,7 @@ func _run() -> void:
 	var floated := Vector2(from3.x - to1.x, from3.z - to1.z).length()
 	print("LIFT 3 floated=%.3fm from=%s to=%s" % [floated, from3, to3])
 	if not _require(floated > recovery.boundary_float_radius_m and floated < recovery.boundary_float_radius_m + 1.0, "The float-away lift came %.3f m from the first lift, not just past %.1f m." % [floated, recovery.boundary_float_radius_m]) \
-	or not _require(_same_xz(to3, to1) and absf(to3.y - maxf(from3.y, to1.y)) <= 0.001, "The float-away lift did not return above the first lift %s: %s." % [to1, to3]):
+	or not _require(_same_xz(to3, to1) and from3.y > to1.y and absf(to3.y - from3.y) <= 0.001, "The float-away lift did not return above the first lift %s at its own height: %s to %s." % [to1, from3, to3]):
 		_finish(main)
 		return
 
@@ -184,7 +194,7 @@ func _run() -> void:
 		_finish(main)
 		return
 	print("LANDED at=%s ground=%s inland_of_first_lift=%.3fm" % [rest_at, str((below.collider as Node).get_parent().get_meta("feature_kind", "")), Vector2(rest_at.x - to1.x, rest_at.z - to1.z).length()])
-	print("PASS: the edge lifted the stock player 5 m straight up where it stepped onto the riprap (no velocity, airborne, no second lift while floating), lifted it again once it drifted back down onto the wall, brought it back above the first lift when it floated off over the water, and holding toward land returned it to walkable ground with no further lift")
+	print("PASS: the edge lifted the stock player 5 m straight up where it stepped onto the riprap (no velocity, airborne, no second lift while floating), lifted it again once it drifted back down onto the wall, let the jetpack raise it from the float, brought it back above the first lift when it floated off over the water, and holding toward land returned it to walkable ground with no further lift")
 	_finish(main)
 
 
