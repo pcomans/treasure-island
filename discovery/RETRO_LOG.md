@@ -23794,3 +23794,23 @@ My "left only" came from a downscaled sheet and the author's native-resolution r
 (Relayed verbatim by the coordinator; added by street-ground-rollout-20261105.)
 
 - Sampling the real collision mesh showed that the alarming 0.23 m "steps" were seam artefacts and the true lips are about 6 cm, so a raw height scan needs filtering before anyone believes it, and it still doesn't replace a stock walk.
+
+### visual-review-clutter-rollout — final re-review 90b7ed4b
+
+(Relayed verbatim by the coordinator; added by street-clutter-rollout-20261105.)
+
+- What worked well: dated, zoom-captioned panels next to each changed count made the review fast, and Flounder, Keppler and Hutchins closed on final pixels. Reading the built positions against the config's own `observed` text found what a total hid.
+- What did not work well: "29 of 29" passed while half the strip row had moved to the other side. A count check can't see a car that lands in the wrong place. My L2 acceptance came from an earlier state and had to be withdrawn.
+- What the team should change next time: when a lot has named clusters, report placed cars per cluster, not per lot. Where rejected stalls push cars elsewhere, say so in the handoff. Reviewers should re-check any acceptance given on an older commit.
+
+### code-review-ground-clutter — clutter delta 90b7ed4b PASS
+
+(Relayed verbatim by the coordinator; added by street-clutter-rollout-20261105.)
+
+- Stating the rule as an outcome (place by evidence, then keep two free lanes) took island clutter moved from 348 rejected attempts to 18 cars moved with no lot short of the aerial, but an audit that only looks where a rule acted can't show where the guarantee doesn't hold.
+
+### street-clutter-rollout-20261105 — 2026-11-05 — Mersea strip east row and the review lows
+
+- What worked well: drawing the config's rows, the tanks and the built cars over the dated panel showed the cause at once, and also what no count could: the tanks stand against the fence, and the cars in front of them stop short. Timing the re-place loop showed the flood took 507 s of a 623 s build; flooding only regions near moved rows cut the build to 249 s. Diffing the built rows against the suite-passed world proved only Mersea moved.
+- What did not work well: I reported 29 of 29 and handed off without reading built positions against the config's `observed` text. The ground merge had moved the row into my planters, and nothing I ran could see it. I also learned the set-piece mask's rules one 80-second failure at a time, five times, instead of reading the check first.
+- What the team should change next time: after merging a sibling's geometry, re-read every row that shares an edge with yours. Report clusters, not totals. Read a validator's rule before iterating against it.

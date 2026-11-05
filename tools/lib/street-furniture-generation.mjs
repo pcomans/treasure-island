@@ -501,6 +501,7 @@ export function placeStreetFurniture({
     if (carriagewayDistance(en) < KERB_CLEAR_M + radius) return "carriageway";
     if (site.rampDistance(en) < RAMP_CLEAR_M + radius) return "curb_ramp";
     if (options.raised && !site.raised(en)) return "off_sidewalk";
+    if (options.radius === undefined && offRest(xz)) return "off_rest";
     for (const item of occupied) {
       if (options.ignore?.has(item.id)) continue;
       // A line item (a fence run) counts by its segments, not only its vertices.
@@ -510,6 +511,8 @@ export function placeStreetFurniture({
     return null;
   };
   const occupy = (id, kindName, xz) => occupied.push({ id, points: [xz], radius_m: kinds[kindName].footprint_radius_m });
+  // A row's base at xz: the land plus the surface's bias.
+  const baseAt = (xz) => grounded(xz).y + surfaceAt(xz).bias_m;
   const surfaceRow = (xz) => {
     const { y, support } = grounded(xz);
     return {
@@ -674,11 +677,11 @@ export function placeStreetFurniture({
     }
     return true;
   };
-  // Whether a post at xz has its base (the land plus the surface's bias) further
-  // from the visible ground than the props' rest limit.
+  // Whether a post at xz has its base further from the visible ground than the
+  // props' rest limit.
   const offRest = (xz) => {
     const visible = groundAt?.(xz) ?? null;
-    return visible !== null && Math.abs(grounded(xz).y + surfaceAt(xz).bias_m - visible.y) > PROP_REST_M;
+    return visible !== null && Math.abs(baseAt(xz) - visible.y) > PROP_REST_M;
   };
   // A post that does not rest moves to the nearest clear spot that does, in
   // rings round it. False when it rests already or has moved; true when no spot does.
@@ -724,7 +727,7 @@ export function placeStreetFurniture({
           count(reasons, violation.source_id ? `${violation.reason}:${violation.source_id}` : violation.reason);
           continue;
         }
-        const pad = settlePad(footprint, xz, yaw, groundAt);
+        const pad = settlePad(footprint, xz, yaw, groundAt, baseAt(xz));
         if (pad.problem) {
           count(audit.rejected_by_reason, `bus_shelter:${pad.problem}`);
           count(reasons, pad.problem);
@@ -908,7 +911,7 @@ export function placeStreetFurniture({
             const xz = round2(toWorld(add(en, scale(away, step))));
             if (onPath(xz)) continue;
             const violation = pieceViolation(footprintPiece(xz, row.yaw_radians ?? 0, row.footprint_m), new Set([row.id]));
-            if (violation || settlePad(row.footprint_m, xz, row.yaw_radians ?? 0, groundAt).problem) continue;
+            if (violation || settlePad(row.footprint_m, xz, row.yaw_radians ?? 0, groundAt, baseAt(xz)).problem) continue;
             moveRow(row, xz, `stepped off the paved path beside ${best?.road.source_key ?? "its road"} (production_inference)`);
             audit.pads_off_paths += 1;
             moved = true;
@@ -916,7 +919,7 @@ export function placeStreetFurniture({
           }
           if (!moved) count(audit.rejected_by_reason, "transformer_pad:on_path_no_clear_spot");
         }
-        const pad = settlePad(row.footprint_m, [row.position_m[0], row.position_m[2]], row.yaw_radians ?? 0, groundAt);
+        const pad = settlePad(row.footprint_m, [row.position_m[0], row.position_m[2]], row.yaw_radians ?? 0, groundAt, baseAt([row.position_m[0], row.position_m[2]]));
         if (pad.problem) {
           audit.osm_unbuilt.push({ id: row.id, kind: row.kind, reason: `its pad cannot rest level here (${pad.problem})` });
           continue;
@@ -1707,14 +1710,15 @@ export function placeStreetFurniture({
 
 // A level pad (a STREET_FURNITURE_PADS prop) of footprint {x_m, z_m} at world
 // xz turned by yaw, on the visible ground (groundAt): it rises to the highest
-// ground under its edge, lift metres over the ground at its centre (the row's
-// base), and its skirt hides what its low side floats. {lift}, or {problem}
-// when the ground is missing or the low side would float past PAD_SKIRT_M.
-export function settlePad(footprint, xz, yaw, groundAt) {
+// ground under it, lift metres over base (the row's land plus its surface bias,
+// which a verge's sloped back can leave under the visible ground), and its skirt
+// hides what its low side floats. {lift}, or {problem} when the ground is
+// missing or the low side would float past PAD_SKIRT_M.
+export function settlePad(footprint, xz, yaw, groundAt, base) {
   const centre = groundAt(xz);
   if (!centre) return { problem: "no_ground" };
   const [c, s] = [Math.cos(yaw), Math.sin(yaw)];
-  const heights = [];
+  const heights = [centre.y];
   const corners = [[-1, -1], [1, -1], [1, 1], [-1, 1]];
   for (let index = 0; index < 4; index += 1) {
     const [a, b] = [corners[index], corners[(index + 1) % 4]];
@@ -1726,8 +1730,8 @@ export function settlePad(footprint, xz, yaw, groundAt) {
       heights.push(ground.y);
     }
   }
-  const lift = roundCoordinate(Math.max(0, Math.max(...heights) - centre.y));
-  if (centre.y + lift - Math.min(...heights) > PAD_SKIRT_M) return { problem: "uneven_ground" };
+  const lift = roundCoordinate(Math.max(0, Math.max(...heights) - base));
+  if (base + lift - Math.min(...heights) > PAD_SKIRT_M) return { problem: "uneven_ground" };
   return { lift };
 }
 
