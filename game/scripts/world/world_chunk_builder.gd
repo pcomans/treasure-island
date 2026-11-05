@@ -111,15 +111,15 @@ const STREET_GROUND_SURFACES := {
 	# world in 10 m units. Pier decks (Pier 1 as context past the playable
 	# boundary, the other piers' overlays and decks) and a marina's paved
 	# grounds: weathered light-grey concrete, the Poly Haven grey plaster's
-	# mottling and stains spread over 10 m, tinted until a top-down sunlit
+	# mottling and stains spread over 20 m, tinted until a top-down sunlit
 	# render samples like the May 2026 aerial (decks about 196/193/180, the
 	# marina's grounds darker, about 178/176/165) and the dated Pier 1 Street
 	# View's light grey. The concrete driveway skin (an OSM surface=concrete
 	# vehicle way, the Gate 5 apron in the Nov 2025 Street View): the sidewalk
 	# panels at 1.5 m, a shade under the sidewalks.
-	"context_boundary_pier": {"albedo": preload("res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_diff_1k.jpg"), "uv_scale": 1.0, "roughness": 0.92, "tint": Color(0.98, 1.0, 0.97)},
-	"terrain_pier": {"albedo": preload("res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_diff_1k.jpg"), "uv_scale": 1.0, "roughness": 0.92, "tint": Color(0.98, 1.0, 0.97)},
-	"terrain_marina": {"albedo": preload("res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_diff_1k.jpg"), "uv_scale": 1.0, "roughness": 0.92, "tint": Color(0.885, 0.91, 0.895)},
+	"context_boundary_pier": {"albedo": preload("res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_diff_1k.jpg"), "uv_scale": 0.5, "roughness": 0.92, "tint": Color(0.98, 1.0, 0.97)},
+	"terrain_pier": {"albedo": preload("res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_diff_1k.jpg"), "uv_scale": 0.5, "roughness": 0.92, "tint": Color(0.98, 1.0, 0.97)},
+	"terrain_marina": {"albedo": preload("res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_diff_1k.jpg"), "uv_scale": 0.5, "roughness": 0.92, "tint": Color(0.885, 0.91, 0.895)},
 	"road_path_concrete": {"albedo": preload("res://game/resources/textures/world/street/street_concrete_panels.png"), "uv_scale": 3.33, "roughness": 0.9, "tint": Color(0.96, 0.94, 0.86)},
 }
 ## A park's planted beds (park_mulch records): the vegetation kit's dark
