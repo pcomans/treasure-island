@@ -1591,6 +1591,7 @@ export function generateStreetDetail({
     onLand,
     grounded,
     surfaceAt,
+    groundAt,
   });
   rows.push(...furniture.rows);
   // (b2) The planting scatter: trees and grass round the furniture placed above.

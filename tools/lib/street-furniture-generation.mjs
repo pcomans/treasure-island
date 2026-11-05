@@ -130,6 +130,11 @@ const OSM_PROPS = Object.freeze({
 // nodes. One whose node lies on a road or path moves beside it (ISLAND_NUDGES_M).
 const ISLAND_OSM_KINDS = Object.freeze(["bench", "bicycle_parking", "waste_basket"]);
 const ISLAND_NUDGES_M = Object.freeze([0.6, 1.2, 1.8, 2.4]);
+// ... and one whose node lies on ground drawn off its surface's height (a
+// verge's sloped back, which the street ground's surface query does not give)
+// moves to the nearest level spot: the visible ground within this of the
+// surface's height (m).
+const ISLAND_LEVEL_M = 0.03;
 const STOP_SIGN = Object.freeze({ setback_m: 0.55, upstream_m: Array.from({ length: 20 }, (_, index) => roundCoordinate(0.6 * (index + 1))) });
 // Site margins (m) beyond an item's footprint: from the carriageway edge, and
 // from a curb ramp (its flares and landing). Footprint radii are at least each
@@ -283,6 +288,7 @@ export function placeStreetFurniture({
   onLand,
   grounded,
   surfaceAt,
+  groundAt = null,
 }) {
   const pilotShapes = zoneShapes.filter(({ zone }) => zone.pilot);
   const inPilot = (xz) => pilotShapes.some(({ contains }) => contains(xz));
@@ -393,24 +399,30 @@ export function placeStreetFurniture({
       audit.osm_unbuilt.push({ id: row.id, kind: row.kind });
       continue;
     }
-    if (ISLAND_OSM_KINDS.includes(row.kind) && surfaceAt(at).kind === "road_path") {
-      // The nearest clear spot off the road or path, in rings round the node.
+    // Ground drawn off the surface's height at a spot (a verge's sloped back).
+    const offLevel = (xz) => {
+      const visible = groundAt?.(xz) ?? null;
+      return visible !== null && Math.abs(visible.y - (grounded(xz).y + surfaceAt(xz).bias_m)) > ISLAND_LEVEL_M;
+    };
+    if (ISLAND_OSM_KINDS.includes(row.kind) && (surfaceAt(at).kind === "road_path" || offLevel(at))) {
+      // The nearest clear, level spot off the road or path, in rings round the node.
+      const onRoad = surfaceAt(at).kind === "road_path";
       let moved = null;
       for (const radius of ISLAND_NUDGES_M) {
         for (let step = 0; step < 16 && !moved; step += 1) {
           const angle = (step * Math.PI) / 8;
           const xz = round2([at[0] + radius * Math.cos(angle), at[1] + radius * Math.sin(angle)]);
-          if (surfaceAt(xz).kind !== "road_path" && !reject(row.kind, xz, { ignore: new Set([row.id]) })) moved = xz;
+          if (surfaceAt(xz).kind !== "road_path" && !reject(row.kind, xz, { ignore: new Set([row.id]) }) && !offLevel(xz)) moved = xz;
         }
         if (moved) break;
       }
       if (!moved) {
-        audit.osm_unbuilt.push({ id: row.id, kind: row.kind, reason: "on a road or path with no clear spot beside it" });
+        audit.osm_unbuilt.push({ id: row.id, kind: row.kind, reason: onRoad ? "on a road or path with no clear spot beside it" : "on sloped ground with no level spot beside it" });
         continue;
       }
       row.source_position_m = [...row.position_m];
       Object.assign(row, surfaceRow(moved));
-      row.placement = "beside the road or path its OSM node lies on (production_inference)";
+      row.placement = onRoad ? "beside the road or path its OSM node lies on (production_inference)" : "beside the sloped ground its OSM node lies on (production_inference)";
       const index = occupied.findIndex((item) => item.id === row.id);
       if (index >= 0) occupied.splice(index, 1);
       occupy(row.id, row.kind, moved);
@@ -489,8 +501,10 @@ export function placeStreetFurniture({
         xz[0] + Math.sin(yaw) * BIKE_RACK_HOOP_SPACING_M * (index - (hoops - 1) / 2),
         xz[1] + Math.cos(yaw) * BIKE_RACK_HOOP_SPACING_M * (index - (hoops - 1) / 2),
       ]);
-      const visibleY = (point) => grounded(point).y + surfaceAt(point).bias_m;
-      const centreY = visibleY(xz);
+      // The row's base, and the ground each hoop's legs stand in (the visible
+      // ground where the generator has it, else the surface).
+      const centreY = grounded(xz).y + surfaceAt(xz).bias_m;
+      const visibleY = (point) => groundAt?.(point)?.y ?? grounded(point).y + surfaceAt(point).bias_m;
       const ignore = new Set([row.id]);
       let problem = yaw === null ? "no road to face" : null;
       for (let index = 0; index < hoops && !problem; index += 1) {
