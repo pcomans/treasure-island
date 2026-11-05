@@ -533,7 +533,7 @@
         "w8916722"
       ],
       "treatment": "village",
-      "evidence": "Google Street View Mar 2025 at 1230 Gateview Ct (w8916716, heading 20): no curb mid-block, the paving runs flat into the parking under the carports, red only on the two short corner curbs at Gateview Avenue. Mar 2025 at 1440 Gateview Ct (w8916722, heading 58): red NO PARKING FIRE LANE on both corner curbs, two crosswalk lines and STOP at the junction; Mar 2025 at 1420 Gateview Ct (headings 340 and 245): flat paving into the stalls. Mar 2025 at 1395 Gateview Ct (w8916719, heading 290): a faded red curb round a lawn on the left, flat drives beyond it. Aerial 2026-05-26: lawn at the corners, carports along both sides beyond them.",
+      "evidence": "Google Street View Mar 2025 at 1230 Gateview Ct (w8916716, heading 20): no curb mid-block, the paving runs flat into the parking under the carports, red only on the two short corner curbs at Gateview Avenue. Mar 2025 at 1440 Gateview Ct (w8916722, heading 58): red NO PARKING FIRE LANE on both corner curbs, two crosswalk lines and STOP at the junction; Mar 2025 at 1420 Gateview Ct (headings 340 and 245): flat paving into the stalls. Mar 2025 at 1395 Gateview Ct (w8916719, heading 290): a faded red curb round a lawn on the left, flat drives beyond it. That lawn's edge lies at the housing site's own parking apron, about 9 m from the centre line (game/resources/housing_family/w96215667.json), beyond a rule's curb at the road edge, so it is not drawn here. Aerial 2026-05-26: lawn at the corners, carports along both sides beyond them.",
       "widen": {
         "w8916716": {
           "right": 0.4
@@ -579,16 +579,6 @@
             ],
             [
               14,
-              44,
-              "none"
-            ],
-            [
-              44,
-              52,
-              "verge"
-            ],
-            [
-              52,
               69,
               "none"
             ]
@@ -645,14 +635,6 @@
             [
               3,
               16.5
-            ]
-          ]
-        },
-        "w8916719": {
-          "left": [
-            [
-              44,
-              51
             ]
           ]
         },
