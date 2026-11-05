@@ -7,9 +7,9 @@ extends RefCounted
 ## the world ground-cover map (tools/lib/ground-cover-map.mjs, rules in
 ## tools/config/ground-cover.json), which draws the lawn, straw, dry-field and
 ## bare recipes over a record's own mix where its rules place them: the
-## residential lawns round the buildings, the Job Corps dorm lawns, the drier
-## industrial core, the Avenue N verge. Mesh arrays, collision and every other
-## record keep the builder's handling.
+## residential lawns along the streets and round the buildings, the Job Corps
+## dorm and YMCA lawns, the drier industrial core, the Avenue N verge. Mesh
+## arrays, collision and every other record keep the builder's handling.
 
 const SHADER := preload("res://game/resources/materials/world/ground_cover/ground_cover.gdshader")
 const DETAIL_ALBEDO := preload("res://game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_diff_1k.jpg")
@@ -27,11 +27,13 @@ const COVER_MAP_RECIPES := {"recipe_lawn": "lawn", "recipe_straw": "straw", "rec
 ## material (parking lots are asphalt).
 const PAVED := "paved"
 
-## Shader mix per family. Thresholds are levels of the shader's patch noise
-## (median 0.5; read shares off its distribution): green lawn turns dry where
-## the patch level passes dry_threshold, bare soil shows where the bare noise
-## passes bare_threshold (above 1 none), and green_dryness pulls the remaining
-## green toward olive. Shares (green / dry / bare) are of the drawn ground.
+## Shader mix per family. Thresholds are levels of the shader's patch and bare
+## noises (both median 0.5, with about 27 % above 0.6, 10 % above 0.7 and 2.5 %
+## above 0.8): green lawn turns dry where the patch level passes dry_threshold,
+## bare soil shows where the bare level passes bare_threshold (above 1 none;
+## the lower it is, the paler the soil, from field dirt to graded fill), and
+## green_dryness pulls the remaining green toward olive. Shares (green / dry /
+## bare) are of the drawn ground.
 const FAMILIES := {
 	# Maintained lawn, about 90 / 10 / 0: the parks' and the commons' lawns
 	# and, drawn by the map, the residential and Job Corps lawns.
@@ -48,23 +50,28 @@ const FAMILIES := {
 	# The synthetic-turf soccer pitch on w1252737754 (2026-05-26 aerial: an
 	# even dark green field with line markings).
 	"turf": {"dry_threshold": 2.0, "bare_threshold": 2.0, "green_dryness": 0.0, "patch_scale_m": 28.0, "bare_scale_m": 23.0, "turf_amount": 1.0},
-	# Open land, about 15 / 50 / 35: the default for land and OSM areas, under
-	# the map. The 2026-05-26 aerial shows the island's unbuilt land as dry grass
-	# over much pale bare ground (open ground 2-6 % green, 20-45 % dry, 50-75 %
-	# bare in most 200 m boxes).
-	"field": {"dry_threshold": 0.378, "bare_threshold": 0.567, "green_dryness": 0.35, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
-	# Dry straw grass, about 4 / 90 / 6: the residential grounds and the
-	# Avenue N verge (map), the Job Corps campus, GAA Field B and the old Job
-	# Corps ballfield.
-	"straw": {"dry_threshold": 0.30, "bare_threshold": 0.76, "green_dryness": 0.6, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
+	# Open land, about 21 / 68 / 12: the default for land and OSM areas, under
+	# the map. The 2026-05-26 aerial shows the island's unbuilt land as dry
+	# grass, its bare ground mostly whole graded lots and yards (open ground
+	# 2-6 % green, 20-45 % dry and 50-75 % pale in most 200 m boxes, the pale
+	# share counting gravel and concrete yards); in the fields themselves bare
+	# dirt shows in a few patches and along tracks, which these patches stand
+	# for (2026-11-05 visual review: evenly spread pale blobs read as desert
+	# camouflage from above).
+	"field": {"dry_threshold": 0.378, "bare_threshold": 0.69, "green_dryness": 0.35, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
+	# Dry straw grass, about 11 / 88 / 1: the residential grounds and the
+	# Avenue N verge (map), the Job Corps campus, GAA Field B, the old Job
+	# Corps ballfield and the dry Avenue D medians. The aerial shows only a
+	# handful of dirt patches in the residential grounds.
+	"straw": {"dry_threshold": 0.30, "bare_threshold": 0.84, "green_dryness": 0.6, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
 	# Rough grass, about 44 / 53 / 3: the west shore parcel, olive to brown.
 	"rough_grass": {"dry_threshold": 0.48, "bare_threshold": 0.80, "green_dryness": 0.3, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
-	# Dry grass and bare ground, about 8 / 62 / 30: the Cultural Park, the
+	# Dry grass and bare dirt, about 9 / 73 / 18: the Cultural Park, the
 	# Marina Plaza grounds round Building 1 and Clipper Cove.
-	"dry_meadow": {"dry_threshold": 0.30, "bare_threshold": 0.588, "green_dryness": 0.4, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
-	# Dry grass with much bare ground, about 5 / 50 / 45: the industrial core's
+	"dry_meadow": {"dry_threshold": 0.30, "bare_threshold": 0.65, "green_dryness": 0.4, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
+	# Dry grass with more bare dirt, about 8 / 72 / 20: the industrial core's
 	# land (map) and the Avenue N construction parcel w1252737734.
-	"dry_field": {"dry_threshold": 0.29, "bare_threshold": 0.52, "green_dryness": 0.5, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
+	"dry_field": {"dry_threshold": 0.29, "bare_threshold": 0.635, "green_dryness": 0.5, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
 	"bare": {"dry_threshold": -1.0, "bare_threshold": 0.345, "green_dryness": 0.0, "patch_scale_m": 20.0, "bare_scale_m": 15.0},
 	# The seasonal marsh (natural=wetland) east of the Mersea lot: olive rushes
 	# at its edges round pale dry grass and sand, about 23 / 52 / 25
@@ -82,26 +89,27 @@ const FAMILIES := {
 }
 
 ## Family per generated material key. Parking, roads, buildings, the shore
-## overlays (breakwater, riprap, pier) and the Yerba Buena context keep their
-## existing materials.
+## overlays (breakwater, riprap, pier, the marina yard) and the Yerba Buena
+## context keep their existing materials.
 const FAMILY_BY_MATERIAL_KEY := {
 	"land_ground": "field",
-	# Back slopes of the raised street ground match the land (planting strips are mulch).
+	# Back slopes of the raised street ground and planted kerb verges match the
+	# land (planting strips are mulch); the map gives them the weights of the
+	# ground beside them.
 	"street_kerb_verge": "field",
-	# Residential, construction and grass landuse; the map draws the residential lawns.
+	# Of the landuse areas only the residential relation r17241151 keeps this
+	# (the map draws its lawns and straw); the construction parcels, the yard
+	# and the landuse=grass strips are routed by source below.
 	"major_area_landuse": "field",
 	"major_area_leisure": "lawn",
-	# The SFFD training facility (Job Corps has its own family below).
+	# The SFFD training facility w1043836449 (Job Corps has its own family below).
 	"major_area_amenity": "field",
 	# A park zone's lawn (tools/lib/street-ground-generation.mjs park surfaces).
 	"park_lawn": "park_lawn",
-	# Terrain overlays on the land: the old sand courts, the marsh east of the
-	# Mersea lot and the Sailing Center's yard (leisure=marina), which the
-	# 2026-05-26 aerial shows as pale gravel and fill (94 % of its open ground),
-	# drawn before as a flat water-like cyan.
+	# Terrain overlays on the land: the old sand courts and the marsh east of the
+	# Mersea lot.
 	"terrain_sand": "sand_pad",
 	"terrain_wetland": "marsh",
-	"terrain_marina": "bare",
 }
 
 ## Frozen 2026-08-27 OSM areas whose tags the generated material keys merge.
@@ -134,14 +142,37 @@ const FAMILY_BY_SOURCE := {
 	"w1428380762": "dry_meadow", # leisure=park, Cultural Park: dry grass and bare ground (2026-05-26 aerial: 67 % dry, 20 % bare)
 	"w1428380764": "dry_meadow", # leisure=park, Clipper Cove: dry verges by the marina (2026-05-26 aerial: 34 % dry, 10 % bare, 2 % lawn)
 	"r19585233": "dry_meadow", # leisure=park, Marina Plaza round Building 1: dry grass (Sep 2025 photo at 17 Treasure Island Rd); its east field is drawn bare by the map
+	# The landuse=grass strips: medians and verges along Avenue D (x -140..80,
+	# z -35..372), beside the storage yard (x -200..-88, z -153..-54) and by the
+	# south-west park (x -444..-358, z 59..124). 2026-05-26 aerial (May 2026 z19
+	# tiles), share of each strip's open ground: most are dry straw with trees
+	# and shrubs; two near the middle of Avenue D hold green grass.
+	"w1098437822": "straw", # 91 % dry, 9 % bare
+	"w1098437829": "straw", # 66 % dry, 34 % bare (half the strip shaded by the yard fence)
+	"w1098437839": "straw", # 72 % dry, 28 % bare
+	"w1098437845": "straw", # 36 % dry, 34 % green, 30 % bare under its palms (canopy 34 % of the strip)
+	"w1098437846": "straw", # 60 % dry, 16 % green, 24 % bare under its palms (canopy 37 %)
+	"w1098437861": "straw", # 94 % dry
+	"w1098437862": "straw", # 88 % dry, 12 % bare
+	"w1098437863": "straw", # 86 % dry under a tree
+	"w1098437864": "straw", # 70 % dry, 30 % bare
+	"w1098437865": "straw", # 85 % dry, 15 % bare
+	"w1098437866": "straw", # 58 % dry, 42 % bare (12 m2)
+	"w1098437867": "straw", # 94 % dry
+	"w1098437868": "rough_grass", # 53 % green, 44 % dry: olive median grass
+	"w1098437869": "lawn", # 89 % green
+	"w1098437870": "straw", # 80 % dry, 14 % green
+	"w1098437871": "straw", # 89 % dry
+	"w1098437872": "straw", # 66 % dry, 26 % green round its shrubs
+	"w1098437879": "straw", # 94 % dry
 }
 
 static var _materials: Dictionary = {}
 
 
-## The family for a generated land, area, land overlay (sand, marsh, marina
-## yard) or planted street-kerb record: a FAMILIES key, PAVED, or "" when the
-## builder keeps its own material.
+## The family for a generated land, area, land overlay (sand, marsh) or
+## planted street-kerb record: a FAMILIES key, PAVED, or "" when the builder
+## keeps its own material.
 static func family_for(record: Dictionary, is_context: bool) -> String:
 	if is_context:
 		return ""
@@ -151,7 +182,7 @@ static func family_for(record: Dictionary, is_context: bool) -> String:
 		if sources.size() == 1 and FAMILY_BY_SOURCE.has(str(sources[0])):
 			return str(FAMILY_BY_SOURCE[str(sources[0])])
 	elif feature == "terrain_overlay":
-		if str(record.get("material_key", "")) not in ["terrain_sand", "terrain_wetland", "terrain_marina"]:
+		if str(record.get("material_key", "")) not in ["terrain_sand", "terrain_wetland"]:
 			return ""
 	elif feature != "land_ground" and feature != "street_kerb" and feature != "street_paint":
 		return ""

@@ -496,7 +496,10 @@ func _measure_view(view: Dictionary, target: Vector3, gallery: Dictionary) -> St
 		if not layer in _h.world.get_street_detail_layers():
 			print("FRAME_TIME_SKIPPED view=%s layer=%s is off in this pass" % [view.name, layer])
 			return ""
-		toggled.append(_h.world.street_detail_layer(layer))
+		var node := _h.world.street_detail_layer(layer)
+		if node == null:
+			return "measure_layer %s has no street-detail node" % layer
+		toggled.append(node)
 	elif gallery.has("groups"):
 		for group: String in gallery.groups:
 			toggled.append(gallery.groups[group] as Node3D)

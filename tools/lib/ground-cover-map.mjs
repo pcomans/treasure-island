@@ -10,13 +10,19 @@
 // The rules (tools/config/ground-cover.json) say where each recipe applies:
 // on the cells whose top drawn ground is a given OSM area or surface (every
 // rule names one, so a rule never reaches other records), inside a traced
-// polygon, near buildings, roads and lots, or within a distance of the shore. Each names its dated aerial or photo evidence; widths, distances and
-// traced outlines are production inference, not survey data. The map is drawn
-// from the generated world (its records and the playable boundary), so it
-// follows the drawn buildings and roads; tools/build_ground_cover_map.mjs writes
-// it, and so does tools/build_godot_world.mjs each time it writes the committed
-// generated/world; tools/check_godot_world_determinism.mjs checks the committed
-// copy against a fresh draw. World x, z (+X east, +Z south), metres.
+// polygon, or near buildings, roads and lots. Each names its dated aerial or
+// photo evidence; widths, distances and traced outlines are production
+// inference, not survey data. Cells whose top drawn ground is not land or an
+// area (roads, paths, street kerbs and paint, roofs, lots) then take the weights
+// of the nearest land or area cell: the planted kerb verges drawn there match
+// the ground beside them, and the texture's filtering and mipmaps never blend a
+// lawn or straw edge toward the record's own family at a road or wall; cells
+// with no generated ground (the shoreline's shoulder, the water) keep none. The map
+// is drawn from the generated world's records, so it follows the drawn
+// buildings and roads; tools/build_ground_cover_map.mjs writes it, and so does
+// tools/build_godot_world.mjs each time it writes the committed generated/world;
+// tools/check_godot_world_determinism.mjs checks the committed copy against a
+// fresh draw. World x, z (+X east, +Z south), metres.
 
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -31,8 +37,11 @@ export const GROUND_COVER_MAP_PATH = "game/resources/textures/world/ground_cover
 export const GROUND_COVER_CHANNELS = Object.freeze(["lawn", "straw", "dry_field", "bare"]);
 // What a rule may measure distance from ("near"): generated record kinds.
 export const GROUND_COVER_NEAR_KINDS = Object.freeze(["building", "vehicle_road", "paved_area", "street_kerb"]);
+// The ground the rules draw on (material keys of land, areas and the ground-cover
+// overlays); every other cell takes the weights of the nearest cell of this ground.
+export const GROUND_COVER_SURFACES = Object.freeze(["land_ground", "major_area_amenity", "major_area_landuse", "major_area_leisure", "terrain_riprap", "terrain_sand", "terrain_wetland"]);
 const SAFE_ID = /^[a-z0-9_]+$/u;
-const RULE_FIELDS = Object.freeze(["basis", "channel", "evidence", "feather_m", "id", "near", "reason", "shore", "surfaces", "weight", "within_sources", "within_xz"]);
+const RULE_FIELDS = Object.freeze(["basis", "channel", "evidence", "feather_m", "id", "near", "reason", "surfaces", "weight", "within_sources", "within_xz"]);
 
 function isFiniteNumber(value) {
   return typeof value === "number" && Number.isFinite(value);
@@ -71,7 +80,8 @@ export function validateGroundCoverConfig(config) {
       invariant(Array.isArray(rule.within_sources) && rule.within_sources.length > 0 && rule.within_sources.every((key) => /^[wr]\d+$/u.test(key)), `${label} within_sources must list OSM area keys`);
     }
     if (rule.surfaces != null) {
-      invariant(Array.isArray(rule.surfaces) && rule.surfaces.length > 0 && rule.surfaces.every((key) => typeof key === "string" && key !== ""), `${label} surfaces must list material keys`);
+      invariant(Array.isArray(rule.surfaces) && rule.surfaces.length > 0 && rule.surfaces.every((key) => GROUND_COVER_SURFACES.includes(key)),
+        `${label} surfaces must list ground material keys: ${GROUND_COVER_SURFACES.join(", ")}`);
     }
     if (rule.within_xz != null) {
       invariant(Array.isArray(rule.within_xz) && rule.within_xz.length >= 3 && rule.within_xz.every(isXZ), `${label} within_xz must be a polygon of 3+ [x, z] points`);
@@ -84,10 +94,6 @@ export function validateGroundCoverConfig(config) {
       invariant(Array.isArray(rule.near.kinds) && rule.near.kinds.length > 0 && rule.near.kinds.every((kind) => GROUND_COVER_NEAR_KINDS.includes(kind)),
         `${label} near.kinds must list ${GROUND_COVER_NEAR_KINDS.join(", ")}`);
       invariant(Object.keys(rule.near).sort().join(",") === "full_m,kinds,zero_m", `${label} near must be exactly {kinds, full_m, zero_m}`);
-    }
-    if (rule.shore != null) {
-      validateRange(rule.shore, `${label} shore`);
-      invariant(Object.keys(rule.shore).sort().join(",") === "full_m,zero_m", `${label} shore must be exactly {full_m, zero_m}`);
     }
   }
   return config;
@@ -218,17 +224,68 @@ export function distanceToMask(grid, mask) {
   return distance;
 }
 
+// The index of the nearest mask cell to every cell (Euclidean between cell
+// centres: the nearest mask column of each row, then the lower envelope of
+// those rows' parabolas down each column); -1 everywhere when the mask is empty.
+export function nearestMaskCell(grid, mask) {
+  const { width, height } = grid;
+  const rowNearest = new Int32Array(width * height).fill(-1);
+  for (let j = 0; j < height; j += 1) {
+    let last = -1;
+    for (let i = 0; i < width; i += 1) {
+      if (mask[j * width + i]) last = i;
+      rowNearest[j * width + i] = last;
+    }
+    let next = -1;
+    for (let i = width - 1; i >= 0; i -= 1) {
+      if (mask[j * width + i]) next = i;
+      const before = rowNearest[j * width + i];
+      if (next >= 0 && (before < 0 || next - i < i - before)) rowNearest[j * width + i] = next;
+    }
+  }
+  const nearest = new Int32Array(width * height).fill(-1);
+  const cost = new Float64Array(height);
+  const rows = new Int32Array(height);
+  const bounds = new Float64Array(height + 1);
+  for (let i = 0; i < width; i += 1) {
+    let k = -1;
+    for (let q = 0; q < height; q += 1) {
+      const column = rowNearest[q * width + i];
+      if (column < 0) continue;
+      cost[q] = (i - column) * (i - column);
+      if (k < 0) {
+        k = 0;
+        rows[0] = q;
+        bounds[0] = -Infinity;
+        bounds[1] = Infinity;
+        continue;
+      }
+      let s;
+      for (;;) {
+        const p = rows[k];
+        s = ((cost[q] + q * q) - (cost[p] + p * p)) / (2 * q - 2 * p);
+        if (s <= bounds[k]) k -= 1;
+        else break;
+      }
+      k += 1;
+      rows[k] = q;
+      bounds[k] = s;
+      bounds[k + 1] = Infinity;
+    }
+    if (k < 0) continue;
+    let r = 0;
+    for (let q = 0; q < height; q += 1) {
+      while (bounds[r + 1] < q) r += 1;
+      const p = rows[r];
+      nearest[q * width + i] = p * width + rowNearest[p * width + i];
+    }
+  }
+  return nearest;
+}
+
 function smoothstep(edge0, edge1, value) {
   const t = Math.min(1, Math.max(0, (value - edge0) / (edge1 - edge0)));
   return t * t * (3 - 2 * t);
-}
-
-function pointSegmentDistance(x, z, ax, az, bx, bz) {
-  const dx = bx - ax;
-  const dz = bz - az;
-  const length2 = dx * dx + dz * dz;
-  const t = length2 > 0 ? Math.max(0, Math.min(1, ((x - ax) * dx + (z - az) * dz) / length2)) : 0;
-  return Math.hypot(x - ax - t * dx, z - az - t * dz);
 }
 
 // The plan triangles of a generated record (world x, z).
@@ -268,7 +325,14 @@ function nearKind(record) {
   return null;
 }
 
-// Reads the generated world's chunk records and playable boundary.
+// Whether the rules draw on a record's cells (land, areas other than lots, and
+// the ground-cover overlays).
+function takesRules(record) {
+  return (record.feature_kind === "land_ground" || record.feature_kind === "major_area" || record.feature_kind === "terrain_overlay")
+    && GROUND_COVER_SURFACES.includes(record.material_key);
+}
+
+// Reads the generated world's chunk records.
 export function loadGroundCoverWorld(worldRoot) {
   const manifest = JSON.parse(readFileSync(resolve(worldRoot, "manifest.json"), "utf8"));
   const records = [];
@@ -276,7 +340,7 @@ export function loadGroundCoverWorld(worldRoot) {
     const chunk = JSON.parse(readFileSync(resolve(worldRoot, entry.path), "utf8"));
     records.push(...chunk.records);
   }
-  return { records, boundary: manifest.playable_boundary };
+  return { records };
 }
 
 // The map for a validated config and a loaded world: {grid, rgba (Uint8Array,
@@ -311,28 +375,6 @@ export function drawGroundCoverMap(config, world) {
     }
     return nearDistances.get(key);
   };
-  let shoreDistance = null;
-  const shore = () => {
-    if (shoreDistance) return shoreDistance;
-    const segments = [];
-    for (const component of world.boundary.components) {
-      for (const ring of [component.outer, ...(component.holes ?? [])]) {
-        for (let k = 0; k < ring.length; k += 1) segments.push([...ring[k], ...ring[(k + 1) % ring.length]]);
-      }
-    }
-    shoreDistance = new Float32Array(cells);
-    for (let j = 0; j < grid.height; j += 1) {
-      const z = grid.centerZ(j);
-      for (let i = 0; i < grid.width; i += 1) {
-        const x = grid.centerX(i);
-        let best = Infinity;
-        for (const [ax, az, bx, bz] of segments) best = Math.min(best, pointSegmentDistance(x, z, ax, az, bx, bz));
-        shoreDistance[j * grid.width + i] = best;
-      }
-    }
-    return shoreDistance;
-  };
-
   const weights = GROUND_COVER_CHANNELS.map(() => new Float32Array(cells));
   const summaries = [];
   for (const rule of config.rules) {
@@ -368,10 +410,6 @@ export function drawGroundCoverMap(config, world) {
       const distance = nearDistance(rule.near.kinds);
       for (let cell = 0; cell < cells; cell += 1) weight[cell] *= 1 - smoothstep(rule.near.full_m, rule.near.zero_m, distance[cell]);
     }
-    if (rule.shore) {
-      const distance = shore();
-      for (let cell = 0; cell < cells; cell += 1) weight[cell] *= 1 - smoothstep(rule.shore.full_m, rule.shore.zero_m, distance[cell]);
-    }
     // Over: the rule's recipe covers its weight of whatever lies under it.
     const channel = GROUND_COVER_CHANNELS.indexOf(rule.channel);
     let covered = 0;
@@ -383,6 +421,16 @@ export function drawGroundCoverMap(config, world) {
       if (w >= 0.5) covered += 1;
     }
     summaries.push({ id: rule.id, channel: rule.channel, area_m2: Math.round(covered * grid.cell * grid.cell) });
+  }
+  // Drawn cells off the ruled ground (roads, kerbs, paint, roofs, lots) take the
+  // weights of the nearest ruled cell. Cells with no generated ground keep none:
+  // the shoreline's shoulder strip there draws the verge family's own mix.
+  const ruled = new Uint8Array(cells);
+  for (let cell = 0; cell < cells; cell += 1) ruled[cell] = top[cell] >= 0 && takesRules(ground[top[cell]].record) ? 1 : 0;
+  const nearest = nearestMaskCell(grid, ruled);
+  for (let cell = 0; cell < cells; cell += 1) {
+    if (ruled[cell] || top[cell] < 0 || nearest[cell] < 0) continue;
+    for (const layer of weights) layer[cell] = layer[nearest[cell]];
   }
   const channels = GROUND_COVER_CHANNELS.length;
   const rgba = new Uint8Array(cells * channels);

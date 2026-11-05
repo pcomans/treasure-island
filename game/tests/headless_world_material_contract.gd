@@ -29,6 +29,7 @@ const GROUND_ROUTES := [
 	["major_area", "major_area_landuse", "r17241151", "field"],
 	["major_area", "major_area_landuse", "w1252737732", "bare"],
 	["major_area", "major_area_landuse", "w1252737754", "turf"],
+	["major_area", "major_area_landuse", "w1098437861", "straw"],
 	["major_area", "major_area_leisure", "w1428380753", "lawn"],
 	["major_area", "major_area_leisure", "w1428380754", "park_lawn"],
 	["major_area", "major_area_leisure", "w99060807", "watered_pitch"],
@@ -38,7 +39,6 @@ const GROUND_ROUTES := [
 	["major_area", "major_area_paved", "w95934095", ""],
 	["terrain_overlay", "terrain_sand", "w109042224", "sand_pad"],
 	["terrain_overlay", "terrain_wetland", "w1473022589", "marsh"],
-	["terrain_overlay", "terrain_marina", "w110183752", "bare"],
 	["terrain_overlay", "terrain_breakwater", "w1222684027", ""],
 ]
 
