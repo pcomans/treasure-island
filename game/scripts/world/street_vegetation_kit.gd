@@ -618,10 +618,12 @@ const LOW_KINDS := ["grass_clump", "planting_slot"]
 const IMPOSTOR_TREE_GRID := Vector2i(4, 2)
 const IMPOSTOR_SHRUB_GRID := Vector2i(2, 2)
 ## How far their impostors' normals lean out at the corners and up overall (the
-## impostor shader's dome and sky_lean), set from the bake's per-side check: a
-## real crown is only about 1.3 times as bright from its sun side as its shaded one.
+## impostor shader's dome and sky_lean), set from the bake's per-side check, which
+## finds a dense crown much brighter from its sun side than a thin one, whose light
+## comes through: a thin crown leans further (impostor_sky_lean).
 const IMPOSTOR_DOME := 2.0
-const IMPOSTOR_SKY_LEAN := 3.0
+const IMPOSTOR_SKY_LEAN := 1.7
+const IMPOSTOR_THIN_SKY_LEAN := 3.0
 const PROPS := {
 	"mexican_fan_palm": {"kinds": ["palm_slot", "tree"], "variants": FAN_PALMS, "ranges": [35.0, 95.0, 900.0], "foot_m": 0.45, "form": "fan_palm"},
 	"canary_date_palm": {"kinds": ["palm_slot", "tree"], "variants": CANARY_PALMS, "ranges": [45.0, 110.0, 900.0], "foot_m": 0.7, "form": "canary_palm"},
@@ -631,8 +633,8 @@ const PROPS := {
 	"monterey_pine": {"kinds": ["tree"], "variants": PINES, "ranges": [45.0, 110.0, 900.0], "foot_m": 0.6, "form": "pine", "impostor_grid": IMPOSTOR_TREE_GRID, "impostor_alpha": 0.06},
 	"spreading_broadleaf": {"kinds": ["tree"], "variants": BROADLEAVES, "ranges": [45.0, 110.0, 900.0], "foot_m": 0.7, "form": "broadleaf", "impostor_grid": IMPOSTOR_TREE_GRID, "impostor_alpha": 0.05},
 	"nz_christmas_tree": {"kinds": ["tree"], "variants": CHRISTMAS_TREES, "ranges": [40.0, 100.0, 800.0], "foot_m": 0.5, "form": "broadleaf", "impostor_grid": IMPOSTOR_TREE_GRID, "impostor_alpha": 0.05},
-	"eucalyptus_mature": {"kinds": ["tree"], "variants": MATURE_GUMS, "ranges": [50.0, 120.0, 900.0], "foot_m": 0.6, "form": "gum", "impostor_grid": IMPOSTOR_TREE_GRID, "impostor_alpha": 0.08},
-	"norfolk_island_pine": {"kinds": ["tree"], "variants": NORFOLK_PINES, "ranges": [35.0, 90.0, 600.0], "foot_m": 0.2, "form": "araucaria", "impostor_grid": IMPOSTOR_TREE_GRID, "impostor_alpha": 0.1},
+	"eucalyptus_mature": {"kinds": ["tree"], "variants": MATURE_GUMS, "ranges": [50.0, 120.0, 900.0], "foot_m": 0.6, "form": "gum", "impostor_grid": IMPOSTOR_TREE_GRID, "impostor_alpha": 0.08, "impostor_sky_lean": IMPOSTOR_THIN_SKY_LEAN},
+	"norfolk_island_pine": {"kinds": ["tree"], "variants": NORFOLK_PINES, "ranges": [35.0, 90.0, 600.0], "foot_m": 0.2, "form": "araucaria", "impostor_grid": IMPOSTOR_TREE_GRID, "impostor_alpha": 0.1, "impostor_sky_lean": IMPOSTOR_THIN_SKY_LEAN},
 	"indian_hawthorn": {"kinds": ["planting_slot"], "variants": HAWTHORNS, "ranges": [30.0, 75.0, 160.0], "foot_m": 0.6, "form": "shrub", "impostor_grid": IMPOSTOR_SHRUB_GRID, "impostor_alpha": 0.1},
 	"pittosporum_tobira": {"kinds": ["planting_slot"], "variants": PITTOSPORUMS, "ranges": [30.0, 75.0, 160.0], "foot_m": 0.5, "form": "shrub", "impostor_grid": IMPOSTOR_SHRUB_GRID, "impostor_alpha": 0.1},
 	"red_tip_shrub": {"kinds": LOW_KINDS, "variants": RED_TIPS, "ranges": [25.0, 60.0, 140.0], "foot_m": 0.25, "form": "shrub", "impostor_grid": IMPOSTOR_SHRUB_GRID, "impostor_alpha": 0.16},
@@ -2365,7 +2367,7 @@ func _build_pine(p: Dictionary) -> Dictionary:
 	# back and lower. The cards stand out of it by about half their height, which the
 	# envelope keeps inside the tree's nominal height and spread.
 	var crown_depth := height - clear
-	var card_w := clampf(spread * 0.26, 1.9, 2.8)
+	var card_w := clampf(spread * 0.19, 1.5, 2.1)
 	var card_h := card_w * 0.5
 	var center := Vector3(0.0, clear + crown_depth * (0.32 if pruned else 0.42), 0.0) + lean * 1.15 + lee * (spread * shear)
 	var radius := spread * 0.5 - card_w * 0.18
@@ -2392,10 +2394,16 @@ func _build_pine(p: Dictionary) -> Dictionary:
 		var reach := maxf((surface - center).length(), 0.1)
 		var uneven := rng.randf_range(-0.04, 0.02) if pruned else rng.randf_range(-0.12, 0.08)
 		lobes.append({"center": center.lerp(surface, clampf(1.0 - size * 0.86 / reach + uneven, 0.25, 0.95)), "half": Vector3(size, size * flat, size)})
+	if not pruned:
+		# Heavy low boughs reach out on a side or two, so it is no ball on a stick.
+		for k in 3:
+			var azimuth := phase + k * 2.3 + rng.randf_range(-0.5, 0.5)
+			var size := spread * rng.randf_range(0.2, 0.27)
+			lobes.append({"center": Vector3(center.x, clear + card_h * 0.6 + size * 0.35, center.z) + Vector3(cos(azimuth), 0.0, sin(azimuth)) * radius * rng.randf_range(0.55, 0.7), "half": Vector3(size, size * 0.5, size)})
 	var cards := []
 	var spacing := card_w * 0.34
 	var sites := _crown_sites(rng, lobes, spacing, 2.75, clear * 0.92)
-	_mark_lod1(sites, spacing * 1.5)
+	_mark_lod1(sites, spacing * 2.0)
 	var heart := center - Vector3(0.0, up_radius * 0.2, 0.0)
 	for index in sites.size():
 		var site: Dictionary = sites[index]
@@ -2419,7 +2427,7 @@ func _build_pine(p: Dictionary) -> Dictionary:
 			card.root = 0.55
 			card.heart_weight = 0.72
 			card.lod1 = site.has("lod1")
-			card.lod1_grow = 1.45
+			card.lod1_grow = 1.9
 			cards.append(card)
 		# A spray of pale candles standing out of the sunlit crown, a little larger
 		# than life so they still read from across a street.
@@ -2537,9 +2545,10 @@ func _build_broadleaf(p: Dictionary) -> Dictionary:
 		starts.append({"point": fork, "out": lean_dir, "radius": trunk_radius * 0.8})
 	var flat := float(p.flat)
 	var cloud_reach := spread * float(p.cloud)
-	# Clumps about three fifths of a cloud's reach across; the clouds keep about half
-	# of one under the tree's nominal height, which the clumps' outline meets.
-	var card_size := clampf(cloud_reach * 0.6, 0.9, 1.5)
+	# Clumps under half a cloud's reach across, so their leaves are about life size (a
+	# Christmas spray a little more); the clouds keep about half of one under the
+	# tree's nominal height, which the clumps' outline meets.
+	var card_size := clampf(cloud_reach * 0.6, 0.9, 1.5) if christmas else clampf(cloud_reach * 0.42, 0.75, 1.1)
 	var crown_low := height * 0.38 if christmas else fork_y
 	var stretch := float(p.stretch)
 	var inside := radius - card_size * 0.3
@@ -2553,7 +2562,7 @@ func _build_broadleaf(p: Dictionary) -> Dictionary:
 	# The clumps closely spaced over each cloud's top, sides and underside.
 	var spacing := card_size * float(p.spacing)
 	var sites := _crown_sites(rng, lobes, spacing, 2.6)
-	_mark_lod1(sites, spacing * 1.5)
+	_mark_lod1(sites, spacing * (1.5 if christmas else 2.0))
 	var flower_share := float(p.get("flowers", 0.0))
 	var heart := crown_center - Vector3(0.0, 0.1 * height, 0.0)
 	var cards := []
@@ -2584,7 +2593,7 @@ func _build_broadleaf(p: Dictionary) -> Dictionary:
 			card.root = 0.68
 			card.heart_weight = 0.65
 			card.lod1 = site.has("lod1")
-			card.lod1_grow = 1.45
+			card.lod1_grow = 1.45 if christmas else 1.9
 			cards.append(card)
 	_filler_cards(cards, lobes, 0.55, CHRISTMAS_CLUMP if christmas else BROADLEAF_CLUMP, 0.32, rng)
 	var bark_key := "christmas_bark" if christmas else "broadleaf_bark"
@@ -3722,7 +3731,8 @@ func _impostor_material(prop: String, variant: int, image: Texture2D = null) -> 
 		made.set_shader_parameter("toward_camera_m", float(params.get("impostor_forward", 0.0)))
 		if PROPS[prop].has("impostor_grid") or params.has("impostor_forward"):
 			made.set_shader_parameter("dome", IMPOSTOR_DOME)
-			made.set_shader_parameter("sky_lean", IMPOSTOR_SKY_LEAN)
+			# A palm's crown is thin too.
+			made.set_shader_parameter("sky_lean", IMPOSTOR_THIN_SKY_LEAN if params.has("impostor_forward") else float(PROPS[prop].get("impostor_sky_lean", IMPOSTOR_SKY_LEAN)))
 		made.resource_name = "street_vegetation_" + key
 		if image != null:
 			return made

@@ -223,7 +223,7 @@ func _match_tone(kit: Kit, prop: String, variant: int, atlas: Image) -> Image:
 		if attempt == 0:
 			start = far / near
 		gain *= Vector3(near.x / maxf(far.x, 0.0001), near.y / maxf(far.y, 0.0001), near.z / maxf(far.z, 0.0001))
-		gain = gain.clamp(Vector3.ONE * 0.2, Vector3.ONE * 2.5)
+		gain = gain.clamp(Vector3.ONE * 0.04, Vector3.ONE * 2.5)
 	material.set_shader_parameter("tint", Color(gain.x, gain.y, gain.z).linear_to_srgb())
 	stats = await _compare(scene, "lod1", hand_over, box, extent)
 	var close: Dictionary = await _compare(scene, "lod0", 30.0, box, extent)
