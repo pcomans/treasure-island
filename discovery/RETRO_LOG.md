@@ -23698,3 +23698,23 @@ Carried by deploy-fix from the deploy agent's scratch log; text unchanged apart 
 - What worked well: checking geometry against the real config, and diffing generated rows between the two commits, answered "pilot untouched?" and "is it test-gaming?" with evidence instead of guesses. `git merge-tree` exposed the semantic `ISLAND_OSM_KINDS` collision without a worktree.
 - What did not work well: the clutter fix copied the fit test's lane constants and was applied to every building and lane to clear failures on two. Its cost (cars below the aerial counts) showed only in the audit, and nobody reported it. The draped-layer validator skips same-record overlaps, so same-height paint in one marking record goes unchecked.
 - What to change next time: when a test failure is fixed in a generator, fix the specific failing condition (no clear lane on a side) and report what it costs in evidence. Give each new paint layer an explicit step instead of reusing a shared height. Run the merge-tree check against the sibling branches before handing off.
+
+### street-ground-rollout-20261105 — last commit — 2026-11-05 — red curbs from photos, flat courts, review notes (no suite this round; clutter's suite covers it)
+
+- What worked well: Mapping every capture with a recorded camera onto its way (distance along, side, looking along or back) turned "check every dated photo" into a table I could work down, about 60 photos from four sets. Taking the class default out of the schema, rather than turning it off, means an unphotographed curb cannot be red by accident. Reading the building pads' distance from the centreline before changing the courts showed why removing the curb was not enough: on w8916716 a 2.5 m strip of ground would have stayed between the road and the parking, so the commit adds an apron rule. A plan plot of the dumped records caught the bug below before any engine run.
+- What did not work well: My stretches first painted almost nothing near 13th Street's junction. The rule tested each curb edge's midpoint, and one straight edge can run far past a stretch, so r3's "fixed" per-side red had only worked where edges happened to be short. Paint is now clipped along the edge. At contact-sheet size I read faded maroon curbs as grey on three sides (13th's right, Gateview's left past 13th, Avenue B's right); only full-resolution crops showed them, and two of those contradict what I told the reviewer in r3. The aerial can't settle it either: a test against known red and grey curbs showed no usable signal at 0.25 m. Some older Mariner and Northpoint captures have no camera record, so I read them but could not place paint from them.
+- What the team should change next time: Keep camera position and heading in every reference note, so a later rule check can place each photo on its way. Judge paint colour on full-resolution crops, never on contact sheets. A per-stretch rule must clip the geometry it paints; test it with a stretch shorter than the longest edge.
+
+### visual-review-street-ground — r3 delta
+
+(Relayed verbatim by the coordinator; added by street-ground-rollout-20261105.)
+
+- What worked well: photo | r2 | r3 rows made each claim quick to check, and the added join views closed a real evidence gap. A second reviewer's merged pose caught what the fix-round sheets could not.
+- What did not work well: per-side red was fixed only at the photographed sheet poses, so unsheeted ways kept the default and sv04 failed. My first review also put a pavement legend out of layer.
+- What the team should change next time: when a rule default is contradicted, check every dated photo on that class, not only the sheet poses, and default to no paint where no photo supports it.
+
+### code-review-ground-clutter — ground delta e0760720 PASS
+
+(Relayed verbatim by the coordinator; added by street-ground-rollout-20261105.)
+
+- Rebuilding the generator with logging, then comparing real polygons rather than triangle sets, turned the author's open questions into measurements in minutes; a pass that repairs problems before its own check runs still needs a limit on what it may repair, or the check proves nothing.
