@@ -74,7 +74,10 @@ import {
   fenceHeight, fenceParamsError, GATE_LEAF_LIFT_M, gateLeaves, STREET_FENCE_BANNER_TYPES, STREET_FENCE_GATE_HINGES, STREET_FENCE_GATE_STYLES, STREET_FENCE_GATED_TYPES, STREET_FENCE_INSIDE,
   STREET_FENCE_TYPES,
 } from "./lib/street-fence-generation.mjs";
-import { MAX_LEG_DROP_M, MAX_REST_TILT_RAD, MAX_SPUR_M, PAD_SKIRT_M, restTilt, STREET_FURNITURE_FEET, STREET_FURNITURE_PADS, STREET_FURNITURE_PROPS } from "./lib/street-furniture-generation.mjs";
+import {
+  BIKE_RACK_HOOP_SPACING_M, BIKE_RACK_MAX_HOOPS, MAX_LEG_DROP_M, MAX_REST_TILT_RAD, MAX_SPUR_M, PAD_SKIRT_M, restTilt, STREET_FURNITURE_FEET, STREET_FURNITURE_PADS, STREET_FURNITURE_PROPS,
+  streetFurnitureFootprint,
+} from "./lib/street-furniture-generation.mjs";
 import { YARD_KIT_KEYS, YARD_KIT_PARTS, YARD_KIT_PROPS, YARD_MAX_FLOAT_M, yardMaxSink, yardPropFootprint, yardPropParamsError, yardPropRests, yardRestGaps } from "./lib/street-yard-kit.mjs";
 import { BERM_MODULE, BERM_SPECS, RIDGE_MODULE, yardKitMeshes } from "./lib/street-yard-meshes.mjs";
 import { isDeckRow, isMooredRow, isYardRow, MOORED_PROP_VARIANTS } from "./lib/street-yard-generation.mjs";
@@ -1000,7 +1003,7 @@ function validatePlantedRow(row, groundAt) {
 // new prop needs its own branch here, so none is placed unchecked.
 const PROP_REST_FLOAT_M = 0.08;
 const PROP_REST_SINK_M = 0.08;
-const ANCHORED_CLUTTER = Object.freeze(["barricade", "traffic_cone"]);
+const ANCHORED_CLUTTER = Object.freeze(["barricade", "dumpster", "stock_tank_planter", "traffic_cone"]);
 const TYRE_REST_FLOAT_M = 0.1;
 const TYRE_REST_SINK_M = 0.02;
 
@@ -1034,6 +1037,17 @@ function validatePropRest(row, groundAt) {
       const gap = ground ? base - ground.y : null;
       invariant(gap !== null && gap >= -PROP_REST_SINK_M && gap <= PAD_SKIRT_M + 0.005,
         `${row.id} ${row.prop} pad ${gap === null ? "has no visible ground under it" : gap > 0 ? `floats ${gap.toFixed(3)} m, past its skirt,` : `sinks ${(-gap).toFixed(3)} m into the visible ground`} at ${point.map((value) => value.toFixed(2)).join(", ")}`);
+    }
+  } else if (row.prop === "bike_rack" && params.hoops !== undefined) {
+    // A row of bike-rack hoops rests at every hoop (along its local Z, centred)
+    // and carries the row's rectangle as its footprint.
+    invariant(Number.isInteger(params.hoops) && params.hoops > 1 && params.hoops <= BIKE_RACK_MAX_HOOPS
+      && row.footprint_m?.z_m === streetFurnitureFootprint("bike_rack", params).z_m, `${row.id} bike rack hoops or footprint are invalid`);
+    for (let index = 0; index < params.hoops; index += 1) {
+      const offset = BIKE_RACK_HOOP_SPACING_M * (index - (params.hoops - 1) / 2);
+      const point = [row.position_m[0] + Math.sin(row.yaw_radians) * offset, row.position_m[2] + Math.cos(row.yaw_radians) * offset];
+      const ground = groundAt(point);
+      rests(ground ? base - ground.y : null, `bike_rack hoop ${index}`, point);
     }
   } else if (row.layer === "furniture" || ANCHORED_CLUTTER.includes(row.prop)) {
     const point = [row.position_m[0], row.position_m[2]];
@@ -1155,6 +1169,11 @@ function validateStreetDetail(worldRoot, manifest, records) {
         invariant(["pitch", "roll", "lift"].every((key) => Number.isFinite(params[key]) && Math.abs(params[key]) < 0.25), `${row.id} car tilt is invalid`);
         invariant(Number.isFinite(params.twist) && Math.abs(params.twist) <= MAX_TWIST_M, `${row.id} car twist is invalid`);
         invariant(row.footprint_m !== undefined, `${row.id} parked car has no footprint`);
+      }
+      // A dumpster or a planter: a known paint (the car paints) and its rectangle.
+      if (row.prop === "dumpster" || row.prop === "stock_tank_planter") {
+        invariant(CAR_PAINTS.includes(row.prop_params?.paint) && row.footprint_m !== undefined, `${row.id} ${row.prop} needs a known paint and its footprint`);
+        invariant(row.prop_params.lid === undefined || (row.prop === "dumpster" && (row.prop_params.lid === "body" || CAR_PAINTS.includes(row.prop_params.lid))), `${row.id} ${row.prop} lid must be body or a known paint`);
       }
       // A yard kit prop: usable params and its own rectangle as its footprint
       // (its rest on the ground: validatePropRest, below).

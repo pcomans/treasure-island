@@ -19,6 +19,12 @@ var _touched: Array[Object] = []
 var _wall_touched := false
 ## Closest the player came to the target during the last _walk_toward (metres).
 var _closest := INF
+## Height of the chest ray whose wall hit released forward input in the last
+## _walk_toward, or NAN when no near-wall release happened. The walk-up's arrival
+## check casts its ray at this height, so release and arrival measure the same
+## surface: a sill or band whose top sits at chest height can otherwise catch
+## one ray and let the other pass over it.
+var _release_chest_y := NAN
 var _prefix := ""
 var _unsafe := false
 var _support_context: Dictionary = {}
@@ -35,6 +41,14 @@ var _composite_records_error := ""
 ## detail (fenced_approaches): "source/side" -> fence row ids. Loaded once.
 var _fenced_sides_loaded := false
 var _fenced_sides: Dictionary = {}
+## The walk-up's lane geometry (lanes as shares of the side's width, start
+## margins beyond the box, and how far past the box's middle a lane looks for
+## its wall). The street-detail generator reads the same file to keep walk-up
+## lanes free of its island clutter. Loaded once; empty when the file is missing
+## or malformed, which fails every walk-up.
+const WALK_UP_LANES_PATH := "res://tools/config/walk-up-lanes.json"
+var _walk_up_lanes: Dictionary = {}
+var _walk_up_lanes_loaded := false
 
 
 func _init(harness: WorldHarness) -> void:
@@ -335,13 +349,16 @@ func _walk_start(center: Vector3, side: Vector3, half_depth: float, half_width: 
 	var candidates: Array[Dictionary] = []
 	var points: Array[Vector2] = []
 	var blockers: Array[String] = []
-	for lane: float in [0.0, -0.25, 0.25, -0.125, 0.125]:
+	var geometry := _walk_up_geometry()
+	if geometry.is_empty():
+		return {"ok": false, "reason": "walk-up lane geometry %s is missing or malformed" % WALK_UP_LANES_PATH, "points": points, "blockers": blockers}
+	for lane: float in geometry.lanes_of_width:
 		candidates.append({"offset": half_width * 2.0 * lane, "label": "lane %.2f" % lane})
 	for anchor: float in _wall_anchors(center, side, wall_faces, wall_shapes, candidates):
 		candidates.append({"offset": anchor, "label": "native-wall offset %.3f" % anchor})
 	for proposal: Dictionary in candidates:
 		var lane_center := center + across * float(proposal.offset)
-		for margin: float in [5.0, 2.0, 10.0]:
+		for margin: float in geometry.start_margins_m:
 			var candidate := str(proposal.label) + " / "
 			var xz := Vector2(lane_center.x, lane_center.z) + Vector2(side.x, side.z) * (half_depth + margin)
 			points.append(xz)
@@ -365,7 +382,7 @@ func _walk_start(center: Vector3, side: Vector3, half_depth: float, half_width: 
 				rejected.append(candidate + ("%.1f m: %s" % [margin, descent.reason]))
 				continue
 			var chest := Vector3(xz.x, (ground.position as Vector3).y + 1.0, xz.y)
-			var far := Vector3(lane_center.x, chest.y, lane_center.z) - side * (half_depth + 2.0)
+			var far := Vector3(lane_center.x, chest.y, lane_center.z) - side * (half_depth + float(geometry.far_beyond_m))
 			var crossing := _wall_hit(chest, far, own, wall_shapes)
 			if crossing.is_empty():
 				rejected.append(candidate + ("%.1f m: no qualified native wall crossing" % margin))
@@ -395,6 +412,36 @@ func _walk_start(center: Vector3, side: Vector3, half_depth: float, half_width: 
 	if not fallback.is_empty():
 		return _selected_walk_start(fallback, "first mandatory-qualified fallback")
 	return {"ok": false, "reason": "; ".join(rejected), "points": points, "blockers": blockers}
+
+
+## The walk-up lane geometry from WALK_UP_LANES_PATH: {lanes_of_width,
+## start_margins_m, far_beyond_m}, or {} when it is missing or malformed.
+func _walk_up_geometry() -> Dictionary:
+	if _walk_up_lanes_loaded:
+		return _walk_up_lanes
+	_walk_up_lanes_loaded = true
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(WALK_UP_LANES_PATH))
+	if not parsed is Dictionary:
+		return _walk_up_lanes
+	var lanes: Variant = parsed.get("lanes_of_width")
+	var margins: Variant = parsed.get("start_margins_m")
+	var beyond: Variant = parsed.get("far_beyond_m")
+	if not (lanes is Array and margins is Array and (beyond is float or beyond is int)) or lanes.is_empty() or margins.is_empty() or float(beyond) <= 0.0:
+		return _walk_up_lanes
+	for value: Variant in lanes:
+		if not (value is float or value is int) or absf(float(value)) > 0.5:
+			return _walk_up_lanes
+	for value: Variant in margins:
+		if not (value is float or value is int) or float(value) <= 0.0:
+			return _walk_up_lanes
+	var lane_values: Array[float] = []
+	for value: Variant in lanes:
+		lane_values.append(float(value))
+	var margin_values: Array[float] = []
+	for value: Variant in margins:
+		margin_values.append(float(value))
+	_walk_up_lanes = {"lanes_of_width": lane_values, "start_margins_m": margin_values, "far_beyond_m": float(beyond)}
+	return _walk_up_lanes
 
 
 ## A side is site-blocked only when every candidate start on it lies outside the
@@ -866,7 +913,7 @@ func _check_walk_up(box: AABB, own: Array[RID], wall_shapes: Dictionary, wall_fa
 		var arrived := false
 		if problem != "":
 			_failures.append(_prefix + "%s: %s" % [name, problem])
-		elif _wall_touched or _distance_to_walls(at, destination, own, wall_shapes) <= ARRIVAL_DISTANCE_M:
+		elif _wall_touched or _distance_to_walls(at, destination, own, wall_shapes, _release_chest_y) <= ARRIVAL_DISTANCE_M:
 			arrived = true
 		elif blocker != "":
 			_failures.append(_prefix + "%s was blocked by %s at (%.1f, %.1f)" % [name, blocker, at.x, at.z])
@@ -1163,6 +1210,7 @@ func _walk_toward(target: Vector3, own: Array[RID] = [], wall_shapes: Dictionary
 	Input.action_press("move_forward")
 	_touched = []
 	_wall_touched = false
+	_release_chest_y = NAN
 	_observed_adjacent_support = false
 	var still_frames := 0
 	_closest = INF
@@ -1203,6 +1251,7 @@ func _walk_toward(target: Vector3, own: Array[RID] = [], wall_shapes: Dictionary
 			var wall := _wall_hit(chest, Vector3(target.x, chest.y, target.z), own, wall_shapes)
 			if not wall.is_empty() and chest.distance_to(wall.position as Vector3) <= ARRIVAL_DISTANCE_M:
 				print("%sWALK_NEAR_WALL active=true grounded=true rid=%s shape=%d position=%s distance=%.6f player=%s" % [_prefix, wall.rid, int(wall.shape), wall.position, chest.distance_to(wall.position as Vector3), at])
+				_release_chest_y = chest.y
 				_h.release_input()
 				break
 		# Stop on arrival, on reaching the building, or once the player has
@@ -1314,10 +1363,12 @@ func _wall_hit(from: Vector3, to: Vector3, own: Array[RID], wall_shapes: Diction
 	return {}
 
 
-## Distance from the player to the building's own collision toward its centre.
+## Distance from the player to the building's own collision toward its centre,
+## from the chest, or from chest_y (the height a walk's near-wall release cast
+## its ray at) when given.
 ## No wall hit cannot prove arrival; actual openings are checked separately.
-func _distance_to_walls(at: Vector3, center: Vector3, own: Array[RID], wall_shapes: Dictionary) -> float:
-	var chest := at + Vector3.UP
+func _distance_to_walls(at: Vector3, center: Vector3, own: Array[RID], wall_shapes: Dictionary, chest_y: float = NAN) -> float:
+	var chest := at + Vector3.UP if is_nan(chest_y) else Vector3(at.x, chest_y, at.z)
 	var wall := _wall_hit(chest, Vector3(center.x, chest.y, center.z), own, wall_shapes)
 	return chest.distance_to(wall.position as Vector3) if not wall.is_empty() else INF
 

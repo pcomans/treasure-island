@@ -29,6 +29,15 @@ packed with ImageMagick:
 | `street_mulch.png` | planting strips, darkened and desaturated | seamless dark reddish-brown shredded bark mulch |
 | `street_plaza_pavers.png` | Waterfront Plaza banded paving; band contrast pulled down to the photographed plaza | seamless charcoal and mid-grey stack-bond pavers in alternating bands |
 
+`street_legends.png` (2048 x 512, eight 256 x 512 cells, white on black) holds the
+pavement legends of parking lots that `street_paint.gdshader` paints as its legend
+kind: TOUR BUS PARKING, straight, left and right arrows and the International
+Symbol of Access; three cells are spare. Not generated: drawn 2026-11-05 with
+ImageMagick (DejaVu Sans Bold capitals, polygons and arcs) after the Mersea lot's
+stencils (Google Street View, Sep 2025), each legend at its painted shape and
+squeezed into its cell, by `tools/draw_street_legends.sh`, which redraws it byte for
+byte.
+
 Park ground textures for Cityside Park's paths (park_* records), generated
 2026-11-03 with `tools/generate-texture` (one image per call, text prompt only;
 no photograph was given to the generator or copied) and resized to 512 px with

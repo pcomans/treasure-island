@@ -111,6 +111,13 @@ const CHAIR_BLUE := Color(0.11, 0.43, 0.72)
 ## checks that these legs stand on it (standing_vertices).
 const CHAIR_LEG_X := 0.3
 const BIN_STEEL := Color(0.42, 0.43, 0.44)
+## Black powder-coated steel (the Mersea lot's slatted can).
+const BIN_BLACK := Color(0.07, 0.075, 0.08)
+## A bike rack's hoops (params.hoops): at most this many, this far apart along Z.
+const BIKE_RACK_MAX_HOOPS := 10
+const BIKE_RACK_HOOP_SPACING_M := 0.9
+## Waste basket styles (prop_params.style).
+const WASTE_BASKET_STYLES := ["steel", "timber", "black_slat"]
 const RACK_DARK := Color(0.2, 0.17, 0.14)
 const LENS_RED_OFF := Color(0.22, 0.03, 0.03)
 const LENS_AMBER_OFF := Color(0.26, 0.16, 0.03)
@@ -400,8 +407,10 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 			_piece(result, "bench_park", func(b: Builder) -> void: _bench_park(b))
 			_box_shape(result, Vector3(1.86, 0.84, 0.62), Vector3(0.0, 0.42, 0.04))
 		"waste_basket":
-			var timber := str(params.get("style", "steel")) == "timber"
-			_piece(result, "waste_basket_%s" % ("timber" if timber else "steel"), func(b: Builder) -> void: _waste_basket(b, timber))
+			var style := str(params.get("style", "steel"))
+			if not style in WASTE_BASKET_STYLES:
+				style = "steel"
+			_piece(result, "waste_basket_%s" % style, func(b: Builder) -> void: _waste_basket(b, style))
 			_capsule(result, 0.3, 0.98)
 		"map_board":
 			_piece(result, "map_board", func(b: Builder) -> void: _map_board(b))
@@ -417,8 +426,10 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 			_piece(result, chair_key, func(b: Builder) -> void: _adirondack_chair(b, drops), rest, _plastic)
 			_box_shape(result, Vector3(0.74, 0.6, 0.84), Vector3(0.0, 0.3, 0.0), rest)
 		"bike_rack":
-			_piece(result, "bike_rack", func(b: Builder) -> void: _bike_rack(b))
-			_box_shape(result, Vector3(0.78, 0.86, 0.06), Vector3(0.0, 0.43, 0.0))
+			# A row of hoops (params.hoops, OSM capacity / 2) along local Z, 0.9 m apart; one box for the row.
+			var hoops := clampi(roundi(_number(params, "hoops", 1.0)), 1, BIKE_RACK_MAX_HOOPS)
+			_piece(result, "bike_rack_h%d" % hoops, func(b: Builder) -> void: _bike_rack(b, hoops))
+			_box_shape(result, Vector3(0.78, 0.86, 0.06 + BIKE_RACK_HOOP_SPACING_M * float(hoops - 1)), Vector3(0.0, 0.43, 0.0))
 		"canopy_of_sky":
 			_piece(result, "canopy_of_sky_frame", func(b: Builder) -> void: _canopy_frame(b))
 			_piece(result, "canopy_of_sky_discs", func(b: Builder) -> void: _canopy_discs(b), Transform3D.IDENTITY, _discs)
@@ -936,18 +947,31 @@ func _bench_park(b: Builder) -> void:
 		b.box(Vector3(0.0, 0.58 + 0.12 * float(index), 0.25 + 0.025 * float(index)), back, Vector3(1.8, 0.09, 0.03), TIMBER, CELL_WHITE)
 
 
-## A litter receptacle: a grey steel can with a domed lid, or the plaza's
-## timber-slatted can under a grey band.
-func _waste_basket(b: Builder, timber: bool) -> void:
-	var body := TIMBER_WEATHERED if timber else BIN_STEEL
+## A litter receptacle: a grey steel can with a domed lid, the plaza's
+## timber-slatted can under a grey band, or a black steel-slat can under a black
+## band and a domed lid with a dark opening on its front (-Z) (the Mersea lot,
+## Sep 2025: its vertical bars stand proud of the body).
+func _waste_basket(b: Builder, style: String) -> void:
+	var timber := style == "timber"
+	var slats := timber or style == "black_slat"
+	var body := TIMBER_WEATHERED if timber else (BIN_BLACK if style == "black_slat" else BIN_STEEL)
 	b.tube(PackedVector3Array([Vector3(0, 0.0, 0), Vector3(0, 0.78, 0)]), PackedFloat32Array([0.27, 0.28]), 14, body, CELL_WHITE if timber else CELL_METAL, false, false)
 	if timber:
 		# Vertical slats read as dark grooves.
 		for index in 10:
 			var angle := TAU * float(index) / 10.0
 			b.box(Vector3(cos(angle) * 0.282, 0.4, sin(angle) * 0.282), Basis(Vector3.UP, -angle), Vector3(0.012, 0.7, 0.012), TIMBER * 0.55, CELL_WHITE)
-	b.tube(PackedVector3Array([Vector3(0, 0.78, 0), Vector3(0, 0.9, 0)]), PackedFloat32Array([0.29, 0.29]), 14, FRAME_CHARCOAL if timber else BIN_STEEL * 0.8, CELL_METAL, false, false)
-	b.tube(PackedVector3Array([Vector3(0, 0.9, 0), Vector3(0, 0.94, 0), Vector3(0, 0.98, 0)]), PackedFloat32Array([0.29, 0.24, 0.1]), 14, FRAME_CHARCOAL if timber else BIN_STEEL * 0.8, CELL_METAL, false, true)
+	elif slats:
+		# Black steel bars standing proud of the body, catching the light.
+		for index in 16:
+			var angle := TAU * float(index) / 16.0
+			b.box(Vector3(cos(angle) * 0.295, 0.39, sin(angle) * 0.295), Basis(Vector3.UP, -angle), Vector3(0.03, 0.74, 0.03), BIN_BLACK * 2.2, CELL_METAL)
+	var band := FRAME_CHARCOAL if timber else (BIN_BLACK if style == "black_slat" else BIN_STEEL * 0.8)
+	b.tube(PackedVector3Array([Vector3(0, 0.78, 0), Vector3(0, 0.9, 0)]), PackedFloat32Array([0.29, 0.29]), 14, band, CELL_METAL, false, false)
+	b.tube(PackedVector3Array([Vector3(0, 0.9, 0), Vector3(0, 0.94, 0), Vector3(0, 0.98, 0)]), PackedFloat32Array([0.29, 0.24, 0.1]), 14, band, CELL_METAL, false, true)
+	if style == "black_slat":
+		# The lid's opening: a dark mouth in the front of the dome.
+		b.box(Vector3(0, 0.935, -0.255), Basis(Vector3.RIGHT, 0.6), Vector3(0.26, 0.07, 0.02), Color(0.012, 0.012, 0.014), CELL_METAL)
 	b.disc(Vector3(0, 0.005, 0), Vector3.DOWN, 0.27, 14, body)
 
 
@@ -1028,18 +1052,24 @@ static func _frame(x_axis: Vector3, y_axis: Vector3) -> Basis:
 	return Basis(x, y, x.cross(y))
 
 
-## An inverted-U bike rack ("staple") of dark painted tube, its loop along X
-## (Ave of the Palms at Johnson St, Nov 2025).
-func _bike_rack(b: Builder) -> void:
-	var path := PackedVector3Array([Vector3(-0.36, -0.1, 0), Vector3(-0.36, 0.62, 0)])
-	var radii := PackedFloat32Array([0.026, 0.026])
-	for step in range(1, 7):
-		var angle := PI - PI * float(step) / 6.0
-		path.append(Vector3(cos(angle) * 0.36, 0.62 + sin(angle) * 0.2, 0.0))
+## An inverted-U bike rack ("staple") of dark powder-coated tube, its loop
+## along X (Ave of the Palms at Johnson St, Nov 2025), each leg on a square base
+## flange: `hoops` of them in a row along Z, BIKE_RACK_HOOP_SPACING_M apart and
+## centred on the origin.
+func _bike_rack(b: Builder, hoops: int) -> void:
+	for hoop in hoops:
+		var z := BIKE_RACK_HOOP_SPACING_M * (float(hoop) - float(hoops - 1) * 0.5)
+		var path := PackedVector3Array([Vector3(-0.36, -0.1, z), Vector3(-0.36, 0.62, z)])
+		var radii := PackedFloat32Array([0.026, 0.026])
+		for step in range(1, 7):
+			var angle := PI - PI * float(step) / 6.0
+			path.append(Vector3(cos(angle) * 0.36, 0.62 + sin(angle) * 0.2, z))
+			radii.append(0.026)
+		path.append(Vector3(0.36, -0.1, z))
 		radii.append(0.026)
-	path.append(Vector3(0.36, -0.1, 0))
-	radii.append(0.026)
-	b.tube(path, radii, 8, RACK_DARK, CELL_WHITE, false, false)
+		b.tube(path, radii, 8, RACK_DARK, CELL_METAL, false, false)
+		for x: float in [-0.36, 0.36]:
+			b.box(Vector3(x, 0.008, z), Basis.IDENTITY, Vector3(0.13, 0.016, 0.13), RACK_DARK * 1.15, CELL_METAL)
 
 
 # ---------------------------------------------------------------- Cityside Park

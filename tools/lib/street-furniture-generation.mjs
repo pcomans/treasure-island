@@ -1,14 +1,15 @@
 // Street furniture: the vertical street objects of PlayableWorld/StreetDetail/Furniture.
 //
 // Three sources, all resolved to rows of generated/world/street_detail.json:
-//   - OSM rows of a furniture kind get a kit prop. The kinds in ISLAND_STREET_OBJECT_KINDS
-//     (utility poles, lamps, hydrants, transformer cabinets, bus stops and stop
-//     signs) get it island-wide, the others in the pilot zones only. A stop sign
-//     moves from its node on the road to the right-hand curb of the approach it
-//     controls, beside the painted stop bar; an item mapped on the frozen
-//     carriageway (a generator width, not the surveyed curb) steps off it; a bus
-//     stop with a shelter gets one beside its road; and the OSM power lines
-//     carry wires between their built poles (power_wires).
+//   - OSM rows of a furniture kind get a kit prop. The kinds in
+//     ISLAND_STREET_OBJECT_KINDS (utility poles, lamps, hydrants, transformer
+//     cabinets, bus stops and stop signs) and ISLAND_FURNITURE_KINDS (benches,
+//     waste baskets, bike racks) get it island-wide, the others in the pilot
+//     zones only. A stop sign moves from its node on the road to the right-hand
+//     curb of the approach it controls, beside the painted stop bar; an item
+//     mapped on the frozen carriageway (a generator width, not the surveyed
+//     curb) steps off it; a bus stop with a shelter gets one beside its road;
+//     and the OSM power lines carry wires between their built poles (power_wires).
 //   - rule rows from the "furniture" lists of the zones in
 //     tools/config/street-detail-zones.json fill what OSM leaves out in the
 //     pilot zones (lamps along curbs, signal poles at signalized crossings, the
@@ -18,9 +19,9 @@
 //   - the island-wide rules of its "island_furniture" block, applied to every
 //     matching OSM feature: street lights on the road-side utility poles and
 //     along named streets, stop signs on the minor approaches of junctions,
-//     street-name blades at every junction of named streets (on the post of its
-//     stop sign when it has one), the other approaches of all-way stops and
-//     signal poles at signalized crossings.
+//     street names at the junctions of named streets (on a photographed stop
+//     post or lamp, else on their own corner post), the other approaches of
+//     all-way stops and signal poles at signalized crossings.
 // Every rule says it is production inference and names its dated photo evidence.
 //
 // Plan geometry here is east/north (the ground generator's frame); rows use
@@ -66,6 +67,13 @@ export const STREET_FURNITURE_PROPS = Object.freeze({
   utility_pole: "power_pole",
   waste_basket: "waste_basket",
 });
+// A bike rack's row: at most this many hoops, this far apart along its local Z,
+// centred on its origin (street_furniture_kit.gd).
+export const BIKE_RACK_MAX_HOOPS = 10;
+export const BIKE_RACK_HOOP_SPACING_M = 0.9;
+// Each hoop's legs reach 0.1 m below the rack's origin: the ground under every
+// hoop stays this close to the ground at its centre (m).
+const BIKE_RACK_LEVEL_M = 0.06;
 // Plan sizes {x_m, z_m} (along the prop's local X and Z) of the kit props that
 // are longer than their kind's radius covers; set pieces and the rows of these
 // props carry them as their footprint for the shared mask.
@@ -89,6 +97,7 @@ export const STREET_FURNITURE_FOOTPRINTS = Object.freeze({
 export function streetFurnitureFootprint(prop, params) {
   const number = (key, fallback, low, high) => Math.min(high, Math.max(low, isFiniteNumber(params?.[key]) ? params[key] : fallback));
   if (prop === "bench_long") return { x_m: roundCoordinate(number("length_m", 2.4, 1.2, 6.0) + 0.1), z_m: 0.7 };
+  if (prop === "bike_rack") return { x_m: 0.8, z_m: roundCoordinate(0.12 + BIKE_RACK_HOOP_SPACING_M * (Math.round(number("hoops", 1, 1, BIKE_RACK_MAX_HOOPS)) - 1)) };
   if (prop === "picnic_table_long") return { x_m: roundCoordinate(number("length_m", 6.1, 2.0, 7.0) + 0.1), z_m: 2.1 };
   if (prop === "log_seat") {
     const size = number("size_m", 3.2, 0.5, 5.0);
@@ -131,9 +140,14 @@ export const STREET_FURNITURE_PATTERNS = Object.freeze([
 const ISLAND_PATTERNS = Object.freeze(["pole_fixtures", "street_lamps", "junction_stops", "junction_names", "hydrant_style", "all_way_stops", "signalized_crossings", "near_signals"]);
 const ZONE_PATTERNS = Object.freeze(["kerb", "signalized_crossings", "near_signals", "junctions", "all_way_stops", "drive_entries", "lot_edge"]);
 // Default props for OSM rows; kinds without one stay unbuilt.
+// A bench OSM tags backless is the park's backless bench on its plinth.
 const OSM_PROPS = Object.freeze({
-  bench: () => ({ prop: "bench_park", params: {} }),
-  bicycle_parking: () => ({ prop: "bike_rack", params: {} }),
+  bench: (tags) => (tags.backrest === "no" ? { prop: "bench_long", params: { length_m: 1.8, back: false } } : { prop: "bench_park", params: {} }),
+  // A row of hoops for the bikes OSM's capacity counts, two to a hoop (one hoop takes no params).
+  bicycle_parking: (tags) => {
+    const hoops = Math.min(BIKE_RACK_MAX_HOOPS, Math.ceil((Number.parseInt(tags.capacity ?? "2", 10) || 2) / 2));
+    return { prop: "bike_rack", params: hoops > 1 ? { hoops } : {} };
+  },
   bus_stop: (tags) => ({ prop: tags.shelter === "yes" ? "bus_shelter" : "bus_stop_sign", params: {} }),
   fire_hydrant: () => ({ prop: "hydrant", params: { style: "yellow" } }),
   power_pole: (tags) => ({ prop: "utility_pole", params: tags["location:transition"] === "yes" ? { riser: true } : {} }),
@@ -142,9 +156,25 @@ const OSM_PROPS = Object.freeze({
   street_lamp: () => ({ prop: "lamp_cobra", params: {} }),
   waste_basket: (tags) => ({ prop: "waste_basket", params: { style: tags.material === "wood" ? "timber" : "steel" } }),
 });
-// The OSM kinds that get their prop island-wide; the others only in pilot zones.
+// The OSM kinds that get their prop island-wide, the street-objects rollout's
+// and the street-clutter rollout's; the others only in pilot zones.
 const ISLAND_STREET_OBJECT_KINDS = Object.freeze(["bus_stop", "fire_hydrant", "power_pole", "stop_sign", "street_cabinet", "street_lamp"]);
+// Benches, waste baskets and bike racks stand at their OSM nodes. One whose node
+// lies on a road or path moves beside it (ISLAND_NUDGES_M).
+const ISLAND_FURNITURE_KINDS = Object.freeze(["bench", "bicycle_parking", "waste_basket"]);
+const ISLAND_NUDGES_M = Object.freeze([0.6, 1.2, 1.8, 2.4]);
+// ... and one whose node lies on ground drawn off its surface's height (a
+// verge's sloped back, which the street ground's surface query does not give)
+// moves to the nearest level spot: the visible ground within this of the
+// surface's height (m).
+const ISLAND_LEVEL_M = 0.03;
+// How far a post's base may stand from the visible ground (m), inside the
+// validator's rest limit for a prop (0.08 m).
+const PROP_REST_M = 0.07;
 const STOP_SIGN = Object.freeze({ setback_m: 0.55, upstream_m: Array.from({ length: 20 }, (_, index) => roundCoordinate(0.6 * (index + 1))) });
+// How far up an approach (m) the street ground looks for what a stop line must
+// clear: a crosswalk this close to the junction comes before the stop sign.
+const STOP_WALK_REACH_M = 16;
 // Site margins (m) beyond an item's footprint: from the carriageway edge, and
 // from a curb ramp (its flares and landing). Footprint radii are at least each
 // prop's collision extent, so two items keep at least the stock player's width
@@ -162,7 +192,8 @@ const CABINET_SITE_STEP_M = 1.0;
 const NAME_SUFFIXES = Object.freeze({ Avenue: "Av", Boulevard: "Blvd", Court: "Ct", Drive: "Dr", Lane: "Ln", Place: "Pl", Road: "Rd", Street: "St" });
 // How far an OSM item mapped on the carriageway may step past the road edge
 // (m, beyond its own clearance) to find a clear spot on its side.
-const STEP_OFF_EXTRA_M = Object.freeze([0, 0.25, 0.5, 0.75, 1, 1.5, 2, 2.5, 3]);
+const STEP_OFF_EXTRA_M = Object.freeze([0, 0.25, 0.5, 0.75, 1, 1.5, 2, 2.5, 3, 4, 5, 6, 7]);
+const STEP_OFF_SLIDES_M = Object.freeze([0, 1.5, -1.5, 3, -3]);
 // A bus shelter beside its road: the gaps (m) tried between the road edge and
 // its open front, and the slides (m) along the road from its OSM node.
 const SHELTER_GAPS_M = Object.freeze([0.9, 1.4, 2.0, 2.8, 3.6]);
@@ -438,6 +469,7 @@ export function placeStreetFurniture({
   const audit = {
     osm_props: 0,
     osm_unbuilt: [],
+    racks_as_one_hoop: [],
     stops_moved: 0,
     stepped_off: 0,
     shelters: 0,
@@ -553,6 +585,7 @@ export function placeStreetFurniture({
       across: leftOf(direction),
       span: [-host.kerb_offset_m, host.kerb_offset_m],
       signals: tags.crossing === "traffic_signals" || tags["crossing:signals"] === "yes",
+      width_m: site.walk_width_m,
     });
   }
   const allWalks = [...site.crosswalks, ...derivedWalks];
@@ -572,25 +605,42 @@ export function placeStreetFurniture({
     return best;
   };
   // How far from a junction a sign on one of its arms must stand: past the
-  // crossing street's curb and upstream of any drawn crosswalk (the street
-  // ground's) across the arm. An OSM crossing node the ground does not draw
-  // does not push a stop back: the dated photos show the island's stop signs
-  // at the corner, a metre or three behind the crossing street's curb.
+  // crossing street's curb and upstream of any crosswalk across the arm within
+  // the stop line's reach, as the dated photos show at 9th/Avenue B and at
+  // 13th/Gateview: the sign a step before the crosswalk. A crossing further up
+  // the street is its own (Avenue B's, 20 m from Gateview): the sign stays at
+  // the corner with the painted bar. Distances run along the road, so a walk
+  // on another stretch of a looping way (Bayside Drive) is not this arm's.
   const armClearance = (center, road, outward, crossKerb, clear, walks = site.crosswalks) => {
+    const at = closestOnPolyline(road.line, center);
+    const sign = dot(at.tangent, outward) >= 0 ? 1 : -1;
     let distance = crossKerb + clear;
     for (const walk of walks) {
-      const along = dot(sub(walk.center, center), outward);
-      if (along <= 0 || along > 25 || closestOnPolyline(road.line, walk.center).distance > 2) continue;
-      distance = Math.max(distance, along + site.walk_width_m / 2 + clear);
+      const near = closestOnPolyline(road.line, walk.center);
+      const along = sign * (near.along - at.along);
+      if (near.distance > 2 || along <= 0 || along > STOP_WALK_REACH_M) continue;
+      distance = Math.max(distance, along + walk.width_m / 2 + clear);
     }
     return distance;
   };
   // The first clear spot on the right-hand curb of traffic moving along travel,
-  // stepping from base upstream (step -1) or downstream (step 1).
-  const stopPosition = (id, base, travel, reach, step = -1) => {
-    const right = [travel[1], -travel[0]];
-    for (const distance of STOP_SIGN.upstream_m) {
-      const xz = toWorld(add(add(base, scale(right, reach + STOP_SIGN.setback_m)), scale(travel, step * distance)));
+  // stepping along the road from base, upstream (step -1) or downstream (step 1);
+  // then, where the curb that way has no room (a parking bay, a container wall),
+  // up to back metres the other way: the dated photos at 1440 Gateview Court and
+  // Bayside/Gateview show the sign level with the crosswalk.
+  const stopPosition = (id, road, base, travel, step = -1, back = 0) => {
+    const at = closestOnPolyline(road.line, base);
+    const direction = dot(at.tangent, travel) >= 0 ? 1 : -1;
+    const reach = direction > 0 ? road.kerb_offset_right_m : road.kerb_offset_left_m;
+    const total = polylineLength(road.line);
+    const shifts = [...STOP_SIGN.upstream_m.map((distance) => step * distance),
+      ...STOP_SIGN.upstream_m.filter((distance) => distance <= back).map((distance) => -step * distance)];
+    for (const shift of shifts) {
+      const station = at.along + direction * shift;
+      const along = pointAlong(road.line, station);
+      // Past a way's end the curb runs on straight.
+      const foot = add(along.point, scale(along.tangent, station < 0 ? station : Math.max(0, station - total)));
+      const xz = toWorld(add(foot, scale(leftOf(along.tangent), -direction * (reach + STOP_SIGN.setback_m))));
       const problem = reject("stop_sign", xz, { ignore: new Set([id]) });
       if (!problem) return round2(xz);
       count(audit.rejected_by_reason, `stop_sign:${problem}`);
@@ -607,15 +657,40 @@ export function placeStreetFurniture({
     const best = nearestRoad(en);
     if (best) {
       const away = best.near.distance > 1e-6 ? unit(sub(en, best.near.point)) : leftOf(best.near.tangent);
-      for (const extra of STEP_OFF_EXTRA_M) {
-        const xz = round2(toWorld(add(best.near.point, scale(away, best.road.kerb_offset_m + KERB_CLEAR_M + radius + extra))));
-        const problem = reject(row.kind, xz, { ignore: new Set([row.id]), radius });
-        if (problem) {
-          count(audit.rejected_by_reason, `step_off:${row.kind}:${problem}`);
-          continue;
+      for (const slide of STEP_OFF_SLIDES_M) {
+        const foot = pointAlong(best.road.line, best.near.along + slide).point;
+        for (const extra of STEP_OFF_EXTRA_M) {
+          const xz = round2(toWorld(add(foot, scale(away, best.road.kerb_offset_m + KERB_CLEAR_M + radius + extra))));
+          const problem = reject(row.kind, xz, { ignore: new Set([row.id]), radius });
+          if (problem) {
+            count(audit.rejected_by_reason, `step_off:${row.kind}:${problem}`);
+            continue;
+          }
+          moveRow(row, xz, `stepped off the frozen carriageway of ${best.road.source_key} to its edge (production_inference)`);
+          audit.stepped_off += 1;
+          return false;
         }
-        moveRow(row, xz, `stepped off the frozen carriageway of ${best.road.source_key} to its edge (production_inference)`);
-        audit.stepped_off += 1;
+      }
+    }
+    return true;
+  };
+  // Whether a post at xz has its base (the land plus the surface's bias) further
+  // from the visible ground than the props' rest limit.
+  const offRest = (xz) => {
+    const visible = groundAt?.(xz) ?? null;
+    return visible !== null && Math.abs(grounded(xz).y + surfaceAt(xz).bias_m - visible.y) > PROP_REST_M;
+  };
+  // A post that does not rest moves to the nearest clear spot that does, in
+  // rings round it. False when it rests already or has moved; true when no spot does.
+  const stepOffSlope = (row) => {
+    const at = [row.position_m[0], row.position_m[2]];
+    if (!offRest(at)) return false;
+    for (const radius of ISLAND_NUDGES_M) {
+      for (let step = 0; step < 16; step += 1) {
+        const angle = (step * Math.PI) / 8;
+        const xz = round2([at[0] + radius * Math.cos(angle), at[1] + radius * Math.sin(angle)]);
+        if (reject(row.kind, xz, { ignore: new Set([row.id]) }) || offRest(xz)) continue;
+        moveRow(row, xz, "moved off the sloped back of a verge to level ground (production_inference)");
         return false;
       }
     }
@@ -670,16 +745,46 @@ export function placeStreetFurniture({
   // --- OSM rows: props, stop signs moved to their curbs, items off the carriageway.
   const stopBar = new Map(site.stop_bars.map((bar) => [bar.node_key, bar]));
   const candidates = rows.filter((row) => row.source === "osm" && row.geometry === "point" && row.status === "placed" &&
-    kinds[row.kind].layer === "furniture" && (ISLAND_STREET_OBJECT_KINDS.includes(row.kind) || inPilot([row.position_m[0], row.position_m[2]])));
+    kinds[row.kind].layer === "furniture" && (ISLAND_STREET_OBJECT_KINDS.includes(row.kind) || ISLAND_FURNITURE_KINDS.includes(row.kind) || inPilot([row.position_m[0], row.position_m[2]])));
   // Stops with a painted bar first: a stop node beside the road then joins the
   // sign already on its approach rather than doubling it.
   candidates.sort((left, right) => (left.kind === "stop_sign" && !stopBar.has(left.source_id)) - (right.kind === "stop_sign" && !stopBar.has(right.source_id)));
   for (const row of candidates) {
     const at = [row.position_m[0], row.position_m[2]];
-    const choice = OSM_PROPS[row.kind]?.(row.tags ?? {});
+    let choice = OSM_PROPS[row.kind]?.(row.tags ?? {});
     if (!choice) {
       audit.osm_unbuilt.push({ id: row.id, kind: row.kind });
       continue;
+    }
+    // Ground drawn off the surface's height at a spot (a verge's sloped back).
+    const offLevel = (xz) => {
+      const visible = groundAt?.(xz) ?? null;
+      return visible !== null && Math.abs(visible.y - (grounded(xz).y + surfaceAt(xz).bias_m)) > ISLAND_LEVEL_M;
+    };
+    const onRoad = ISLAND_FURNITURE_KINDS.includes(row.kind) && surfaceAt(at).kind === "road_path";
+    const sloped = ISLAND_FURNITURE_KINDS.includes(row.kind) && !onRoad && offLevel(at);
+    if (onRoad || sloped) {
+      // The nearest clear, level spot off the road or path, in rings round the node.
+      let moved = null;
+      for (const radius of ISLAND_NUDGES_M) {
+        for (let step = 0; step < 16 && !moved; step += 1) {
+          const angle = (step * Math.PI) / 8;
+          const xz = round2([at[0] + radius * Math.cos(angle), at[1] + radius * Math.sin(angle)]);
+          if (surfaceAt(xz).kind !== "road_path" && !reject(row.kind, xz, { ignore: new Set([row.id]) }) && !offLevel(xz)) moved = xz;
+        }
+        if (moved) break;
+      }
+      const why = onRoad ? "on a road or path" : "on sloped ground";
+      if (!moved) {
+        audit.osm_unbuilt.push({ id: row.id, kind: row.kind, reason: `${why} with no clear spot beside it` });
+        continue;
+      }
+      row.source_position_m = [...row.position_m];
+      Object.assign(row, surfaceRow(moved));
+      row.placement = `moved beside the spot its OSM node lies on, ${why} (production_inference)`;
+      const index = occupied.findIndex((item) => item.id === row.id);
+      if (index >= 0) occupied.splice(index, 1);
+      occupy(row.id, row.kind, moved);
     }
     if (row.kind === "stop_sign") {
       // A painted bar gives the approach; a stop node beside the road marks the
@@ -688,6 +793,7 @@ export function placeStreetFurniture({
       let road;
       let base;
       let travel;
+      let back = 0;
       if (bar) {
         road = kerbLines.find((candidate) => candidate.source_key === bar.host_key);
         ({ travel } = bar);
@@ -712,9 +818,13 @@ export function placeStreetFurniture({
         // At least as far out as a crosswalk across this arm of the junction.
         const outward = scale(travel, -1);
         const others = (meetings.get(ahead.ref) ?? []).filter((other) => other !== road);
-        const needed = armClearance(ahead.point, road, outward, Math.max(0, ...others.map((other) => other.kerb_offset_m)), 1.0);
+        const crossKerb = Math.max(0, ...others.map((other) => other.kerb_offset_m));
+        const needed = armClearance(ahead.point, road, outward, crossKerb, 1.0);
         const out = dot(sub(base, ahead.point), outward);
-        if (out < needed) base = add(base, scale(outward, needed - out));
+        if (out < needed) {
+          base = add(base, scale(outward, needed - out));
+          back = needed - crossKerb - 1.0;
+        }
       }
       invariant(road, `${row.id}: stop bar road is not a vehicle road`);
       const junction = meetings.get(row.source_id.slice(1))?.length > 1 ? row.source_id.slice(1) : junctionAhead(road, base, travel)?.ref ?? null;
@@ -723,7 +833,7 @@ export function placeStreetFurniture({
         audit.osm_unbuilt.push({ id: row.id, kind: row.kind, reason: `same approach as ${covering.id}` });
         continue;
       }
-      const xz = stopPosition(row.id, base, travel, road.kerb_offset_m);
+      const xz = stopPosition(row.id, road, base, travel, -1, back);
       if (!xz) {
         audit.osm_unbuilt.push({ id: row.id, kind: row.kind, reason: "no clear curb position" });
         continue;
@@ -775,6 +885,12 @@ export function placeStreetFurniture({
         audit.osm_unbuilt.push({ id: row.id, kind: row.kind, reason: "on the carriageway, no clear spot beside it" });
         continue;
       }
+      // A pole or lamp mapped on the sloped back of a verge would sink past the
+      // props' rest limit: it moves to the nearest spot that rests.
+      if (choice.prop !== "transformer_pad" && stepOffSlope(row)) {
+        audit.osm_unbuilt.push({ id: row.id, kind: row.kind, reason: "on sloped ground with no level spot beside it" });
+        continue;
+      }
       // A cabinet's pad mapped on a paved path (an OSM footway) steps across it,
       // away from the road first, to the first spot clear of the path and of
       // everything else; it settles level on the ground under it.
@@ -806,6 +922,42 @@ export function placeStreetFurniture({
           continue;
         }
         choice.params = { ...choice.params, lift: pad.lift };
+      }
+    }
+    if (row.kind === "bicycle_parking" && choice.params.hoops > 1) {
+      // A row of hoops runs along the road, each hoop square to it: a quarter
+      // turn from facing the road (the kit draws the row along its local Z).
+      // Each hoop must pass the site check and stand on ground level with the
+      // row's centre; a row that does not, or has no road to face, is one hoop.
+      const { hoops } = choice.params;
+      const xz = [row.position_m[0], row.position_m[2]];
+      const turned = row.yaw_radians === null ? null : row.yaw_radians + Math.PI / 2;
+      const yaw = turned === null ? null : roundCoordinate(Math.atan2(Math.sin(turned), Math.cos(turned)));
+      // Godot yaw about +Y: local Z is (sin yaw, cos yaw) in world x, z.
+      const hoopAt = (index) => round2([
+        xz[0] + Math.sin(yaw) * BIKE_RACK_HOOP_SPACING_M * (index - (hoops - 1) / 2),
+        xz[1] + Math.cos(yaw) * BIKE_RACK_HOOP_SPACING_M * (index - (hoops - 1) / 2),
+      ]);
+      // The row's base, and the ground each hoop's legs stand in (the visible
+      // ground where the generator has it, else the surface).
+      const centreY = grounded(xz).y + surfaceAt(xz).bias_m;
+      const visibleY = (point) => groundAt?.(point)?.y ?? grounded(point).y + surfaceAt(point).bias_m;
+      const ignore = new Set([row.id]);
+      let problem = yaw === null ? "no road to face" : null;
+      for (let index = 0; index < hoops && !problem; index += 1) {
+        const point = hoopAt(index);
+        problem = reject(row.kind, point, { ignore }) ?? (Math.abs(visibleY(point) - centreY) > BIKE_RACK_LEVEL_M ? "uneven ground" : null);
+      }
+      if (problem) {
+        audit.racks_as_one_hoop.push({ id: row.id, hoops, reason: problem });
+        choice = { prop: choice.prop, params: {} };
+      } else {
+        row.yaw_radians = yaw;
+        row.yaw_source = `${row.yaw_source}+row_along_road`;
+        row.footprint_m = streetFurnitureFootprint("bike_rack", choice.params);
+        const index = occupied.findIndex((item) => item.id === row.id);
+        if (index >= 0) occupied.splice(index, 1);
+        occupied.push({ id: row.id, points: [hoopAt(0), hoopAt(hoops - 1)], radius_m: kinds[row.kind].footprint_radius_m });
       }
     }
     row.prop = choice.prop;
@@ -972,19 +1124,17 @@ export function placeStreetFurniture({
         const end = last.line.at(-1);
         if (length(sub(end, line[0])) < 0.01) {
           last.line.push(...line.slice(1));
-          last.offsets.push(...line.slice(1).map(() => road.kerb_offset_m));
           last.roads.push(...line.slice(1).map(() => road));
           continue;
         }
         if (length(sub(end, line.at(-1))) < 0.01) {
           const reversed = line.reverse();
           last.line.push(...reversed.slice(1));
-          last.offsets.push(...reversed.slice(1).map(() => road.kerb_offset_m));
           last.roads.push(...reversed.slice(1).map(() => road));
           continue;
         }
       }
-      result.push({ key, line, offsets: line.map(() => road.kerb_offset_m), roads: line.map(() => road) });
+      result.push({ key, line, roads: line.map(() => road) });
     }
     return result;
   };
@@ -1026,7 +1176,7 @@ export function placeStreetFurniture({
           grown = true;
         }
       }
-      result.push({ key: first.source_key, name: first.name, line, refs, roads, offsets: roads.map((road) => road.kerb_offset_m) });
+      result.push({ key: first.source_key, name: first.name, line, refs, roads });
     }
     return result;
   };
@@ -1034,14 +1184,19 @@ export function placeStreetFurniture({
   // lamp beside a kerbed stretch must stand on it; elsewhere on the land).
   const groundBuiltNear = (en) => [0, 1, 2, 3, 4, 5, 6, 7].some((k) => [1.5, 3].some((r) =>
     site.raised(add(en, [r * Math.cos((k * Math.PI) / 4), r * Math.sin((k * Math.PI) / 4)]))));
-  const offsetAt = (chain, s) => {
-    // The curb offset of the segment that holds distance s.
+  const offsetAt = (chain, s, side) => {
+    // The curb offset on one side of the chain (1 left, -1 right) at the segment
+    // that holds distance s; a chain can run against its ways.
     let walked = 0;
-    for (let index = 1; index < chain.line.length; index += 1) {
+    let index = 1;
+    for (; index < chain.line.length - 1; index += 1) {
       walked += length(sub(chain.line[index], chain.line[index - 1]));
-      if (walked >= s) return chain.offsets[index];
+      if (walked >= s) break;
     }
-    return chain.offsets.at(-1);
+    const road = chain.roads[index];
+    const segment = sub(chain.line[index], chain.line[index - 1]);
+    const alongWay = dot(closestOnPolyline(road.line, add(chain.line[index - 1], scale(segment, 0.5))).tangent, segment) >= 0;
+    return side > 0 === alongWay ? road.kerb_offset_left_m : road.kerb_offset_right_m;
   };
   const roadAt = (chain, s) => {
     let walked = 0;
@@ -1127,8 +1282,9 @@ export function placeStreetFurniture({
       if (!inbound && coveredBy(ref, road.source_key, travel)) continue;
       const crossKerb = Math.max(0, ...crossing.map((other) => other.kerb_offset_m));
       const cell = `n${ref}_${road.source_key}_${sign > 0 ? "b" : "a"}`;
-      const base = add(center, scale(outward, armClearance(center, road, outward, crossKerb, rule.clear_m, walks)));
-      const xz = stopPosition(`scatter:${zone.id}:${rule.id}:${cell}`, base, travel, road.kerb_offset_m, inbound ? 1 : -1);
+      const clearance = armClearance(center, road, outward, crossKerb, rule.clear_m, walks);
+      const base = add(center, scale(outward, clearance));
+      const xz = stopPosition(`scatter:${zone.id}:${rule.id}:${cell}`, road, base, travel, inbound ? 1 : -1, clearance - crossKerb - rule.clear_m);
       if (!xz) {
         count(audit.rejected_by_reason, `${rule.id}:no_clear_curb`);
         continue;
@@ -1217,8 +1373,9 @@ export function placeStreetFurniture({
     const cell = `n${junction.ref}_${arm.road.source_key}_${arm.sign > 0 ? "b" : "a"}${passes > 1 ? `_i${arm.index}` : ""}`;
     const id = `scatter:${zone.id}:${rule.id}:${cell}`;
     if (ruleRows.some((row) => row.id === id)) return;
-    const base = add(junction.center, scale(outward, armClearance(junction.center, arm.road, outward, crossKerb, rule.clear_m)));
-    const xz = stopPosition(id, base, travel, arm.road.kerb_offset_m, -1);
+    const clearance = armClearance(junction.center, arm.road, outward, crossKerb, rule.clear_m);
+    const base = add(junction.center, scale(outward, clearance));
+    const xz = stopPosition(id, arm.road, base, travel, -1, clearance - crossKerb - rule.clear_m);
     if (!xz) {
       count(audit.rejected_by_reason, `${rule.id}:no_clear_curb`);
       return;
@@ -1273,7 +1430,7 @@ export function placeStreetFurniture({
           for (let station = 0, s = rule.phase_m; s <= total; station += 1, s += rule.spacing_m) {
             const candidates = slides(rule.slide_m).filter((delta) => s + delta >= 0 && s + delta <= total).map((delta) => {
               const along = pointAlong(chain.line, s + delta);
-              return add(along.point, scale(leftOf(along.tangent), side * (offsetAt(chain, s + delta) + rule.setback_m)));
+              return add(along.point, scale(leftOf(along.tangent), side * (offsetAt(chain, s + delta, side) + rule.setback_m)));
             });
             const en = firstClear(rule, contains, candidates, { raised: true, spacing_m: rule.spacing_m });
             if (!en) continue;
@@ -1296,7 +1453,7 @@ export function placeStreetFurniture({
             const deltas = slides(rule.slide_m).filter((delta) => s + delta >= 0 && s + delta <= total);
             const candidates = deltas.map((delta) => {
               const along = pointAlong(chain.line, s + delta);
-              return add(along.point, scale(leftOf(along.tangent), side * (offsetAt(chain, s + delta) + rule.setback_m)));
+              return add(along.point, scale(leftOf(along.tangent), side * (offsetAt(chain, s + delta, side) + rule.setback_m)));
             });
             const own = `scatter:${zone.id}:${rule.id}:${chain.key}_`;
             const en = firstClear(rule, contains, candidates, { raisedAt: groundBuiltNear, spacing_m: corner ? 2 * LAMP_CORNER_CLEAR_M : rule.spacing_m, own });
@@ -1408,7 +1565,10 @@ export function placeStreetFurniture({
     } else if (rule.pattern === "signalized_crossings" || rule.pattern === "near_signals") {
       const walks = zone.id === "island" ? allWalks : site.crosswalks;
       for (const walk of walks.filter((candidate) => candidate.signals && contains(toWorld(candidate.center)))) {
-        if (!once(`${rule.pattern}:${walk.source_key}`)) continue;
+        // One crossing way can cross several roads: each of its walks is its own.
+        const sameWay = walks.filter((other) => other.source_key === walk.source_key);
+        const cell = sameWay.length > 1 ? `${walk.source_key}_${sameWay.indexOf(walk)}` : walk.source_key;
+        if (!once(`${rule.pattern}:${cell}`)) continue;
         // Each landing gets the far-side pole of the traffic that keeps that curb on its right.
         const landings = [[-1, walk.span[0]], [1, walk.span[1]]].map(([sign, s]) => {
           const outward = scale(walk.direction, sign);
@@ -1423,7 +1583,7 @@ export function placeStreetFurniture({
               continue;
             }
             const candidates = [0, 0.5, 1, 1.5, 2, 3, 4].map((extra) => add(add(landing.landing, scale(landing.outward, rule.setback_m)),
-              scale(landing.travel, site.walk_width_m / 2 + rule.beyond_m + extra)));
+              scale(landing.travel, walk.width_m / 2 + rule.beyond_m + extra)));
             const en = firstClear(rule, contains, candidates, { raised: zone.id !== "island" });
             if (!en) continue;
             // The mast arm reaches over the lanes of the road the crosswalk
@@ -1440,7 +1600,7 @@ export function placeStreetFurniture({
               .sort((left, right) => closestOnPolyline(left.line, walk.center).distance - closestOnPolyline(right.line, walk.center).distance)[0] : null;
             const litPole = rows.some((row) => row.prop === "utility_pole" && row.status === "placed" && row.prop_params?.lamp
               && length(sub(toEastNorth([row.position_m[0], row.position_m[2]]), en)) < MAST_LIT_POLE_M);
-            addRow(zone, rule, `${walk.source_key}_${landing.sign > 0 ? "b" : "a"}`, en, scale(landing.outward, -1), {
+            addRow(zone, rule, `${cell}_${landing.sign > 0 ? "b" : "a"}`, en, scale(landing.outward, -1), {
               arm_m: arm, head_m: roundCoordinate(arm - 0.4), heads, ...(crossing ? { name: abbreviateStreetName(crossing.name) } : {}),
               ...(litPole ? { lamp: false } : {}),
             });
@@ -1450,7 +1610,7 @@ export function placeStreetFurniture({
           // the most paved street ground around it (a plaza or a wide sidewalk).
           let best = null;
           for (const landing of landings) {
-            const pole = add(add(landing.landing, scale(landing.outward, 0.6)), scale(landing.travel, site.walk_width_m / 2 + 1));
+            const pole = add(add(landing.landing, scale(landing.outward, 0.6)), scale(landing.travel, walk.width_m / 2 + 1));
             const candidates = [0, 0.5, 1, 1.5].map((extra) => add(add(pole, scale(landing.outward, rule.back_m + extra)), scale(landing.travel, rule.along_m)));
             const en = firstClear(rule, contains, candidates, {});
             if (!en) continue;
@@ -1462,7 +1622,7 @@ export function placeStreetFurniture({
             }
             if (!best || paved > best.paved) best = { landing, en, paved };
           }
-          if (best) addRow(zone, rule, `${walk.source_key}_${best.landing.sign > 0 ? "b" : "a"}`, best.en, scale(best.landing.outward, -1));
+          if (best) addRow(zone, rule, `${cell}_${best.landing.sign > 0 ? "b" : "a"}`, best.en, scale(best.landing.outward, -1));
         }
       }
     } else if (rule.pattern === "junctions") {
