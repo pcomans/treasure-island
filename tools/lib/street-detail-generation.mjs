@@ -33,9 +33,12 @@ import {
 import {
   STREET_VEGETATION_PROPS,
   bedOffsets,
+  drawCanopyTree,
   drawVegetationVariant,
   footSamples,
   plantRow,
+  validateCanopyMix,
+  validateTreeCrowns,
   validateVegetationRuleParams,
   validateVegetationSetPieceParams,
 } from "./street-vegetation-generation.mjs";
@@ -57,6 +60,7 @@ export const STREET_DETAIL_SET_PIECES_SCHEMA = "ti.street-detail-set-pieces/1";
 export const STREET_DETAIL_INPUTS = Object.freeze({
   zones: "tools/config/street-detail-zones.json",
   set_pieces: "data/street_detail/set_pieces.json",
+  tree_crowns: "data/street_detail/tree_crowns.json",
   stair_catalog: "discovery/facades/facade-recognition-catalog.json",
 });
 // Runtime subtrees under PlayableWorld/StreetDetail, in node order; each one
@@ -177,6 +181,12 @@ export const STREET_DETAIL_KINDS = Object.freeze({
 const AMENITY_KINDS = Object.freeze(["bench", "bicycle_parking", "post_box", "waste_basket"]);
 // Scatter patterns that plant naturalistic beds (tools/lib/street-planting-generation.mjs).
 const PLANTING_PATTERNS = Object.freeze(["drifts", "fill"]);
+// A canopy rule's crown may shrink toward a wall: at most this wide at a distance from it.
+const CANOPY_WALL_SPREAD = 2.5;
+const CANOPY_WALL_MARGIN_M = 2;
+// The directions tried round a crown whose centre cannot take a trunk.
+const CANOPY_NUDGE_STEP_M = 1.5;
+const CANOPY_NUDGE_DIRECTIONS = 12;
 const GATE_VALUES = Object.freeze(["gate", "hampshire_gate", "kissing_gate", "lift_gate", "sliding_gate", "swing_gate", "wicket_gate"]);
 const LINE_BARRIER_KINDS = Object.freeze({
   fence: "fence",
@@ -447,7 +457,19 @@ function validateScatterRule(rule, zoneId, ruleIds) {
     }, (prop) => STREET_VEGETATION_PROPS[prop]?.variants ?? 0);
     return;
   }
-  invariant(["grid", "along", "along_beds"].includes(rule.pattern), `${label} pattern must be grid, along, along_beds, drifts or fill`);
+  if (rule.pattern === "canopy") {
+    // The tree crowns read from the dated aerial (data/street_detail/tree_crowns.json).
+    invariant(rule.kind === "tree", `${label}: canopy rules plant trees`);
+    invariant(typeof rule.group === "string" && rule.group !== "", `${label} needs a crown group`);
+    validateCanopyMix(rule.mix, label);
+    invariant(isFiniteNumber(rule.fit) && rule.fit > 0 && rule.fit < 1, `${label} fit must be in (0, 1)`);
+    invariant(isFiniteNumber(rule.nudge_m) && rule.nudge_m >= 0 && rule.nudge_m <= 8, `${label} nudge_m must be in [0, 8]`);
+    if (rule.in_lots != null) invariant(typeof rule.in_lots === "boolean", `${label} in_lots must be a boolean`);
+    invariant(rule.basis === "production_inference", `${label} basis must be production_inference`);
+    for (const field of ["rule", "evidence"]) invariant(typeof rule[field] === "string" && rule[field].trim() !== "", `${label} needs ${field}`);
+    return;
+  }
+  invariant(["grid", "along", "along_beds"].includes(rule.pattern), `${label} pattern must be grid, along, along_beds, canopy, drifts or fill`);
   invariant(isFiniteNumber(rule.spacing_m) && rule.spacing_m > 0, `${label} spacing must be positive`);
   invariant(isFiniteNumber(rule.jitter_m) && rule.jitter_m >= 0 && rule.jitter_m < rule.spacing_m, `${label} jitter must be below spacing`);
   invariant(isFiniteNumber(rule.acceptance) && rule.acceptance > 0 && rule.acceptance <= 1, `${label} acceptance must be in (0, 1]`);
@@ -526,6 +548,10 @@ export function loadStreetDetailZones(projectRoot) {
   }
   validateFencedApproaches(config.fenced_approaches);
   return config;
+}
+
+export function loadTreeCrowns(projectRoot) {
+  return validateTreeCrowns(readJson(projectRoot, STREET_DETAIL_INPUTS.tree_crowns));
 }
 
 // Scored-building sides a real fence closes, which the building fit may then skip
@@ -789,6 +815,7 @@ export function generateStreetDetail({
 }) {
   const config = loadStreetDetailZones(projectRoot);
   const setPieceDocument = loadStreetDetailSetPieces(projectRoot);
+  const treeCrowns = loadTreeCrowns(projectRoot);
   const stairFlights = loadStreetDetailStairFlights(projectRoot);
   const exclusions = config.exclusions;
   const seed = config.seed;
@@ -1414,10 +1441,82 @@ export function generateStreetDetail({
     }
     return null;
   };
+  // A canopy rule: a tree at each crown of its group, of a species whose crown
+  // fits; a trunk that cannot stand at the crown's centre moves up to nudge_m (the
+  // aerial's positions are good to about that) to the nearest spot that can, and
+  // a crown close to a wall comes down to a size that barely reaches it.
+  const placeCanopy = (zone, rule, contains) => {
+    const crowns = treeCrowns[rule.group] ?? [];
+    invariant(treeCrowns[rule.group], `Street detail rule ${zone.id}/${rule.id} names unknown crown group ${rule.group}`);
+    const problemAt = (xz) => {
+      if (!contains(xz)) return "outside_zone";
+      if (rule.within_xz && !pointInRing(xz, rule.within_xz, true)) return "outside_rule_area";
+      const violation = siteViolation(rule.kind, xz, exclusions.building_buffer_m);
+      if (violation) return violation.reason;
+      // in_lots: a trunk may stand in a parking lot, in its round mulch pit.
+      const material = surfaceAt(xz).material_key;
+      return UNPLANTABLE_MATERIALS.includes(material) && !(rule.in_lots && material === "major_area_paved") ? "unplantable_surface" : null;
+    };
+    let placed = 0;
+    crowns.forEach(([x, z, crownM], index) => {
+      const identity = `${zone.id}:${rule.id}:c${String(index).padStart(4, "0")}`;
+      audit.scatter.candidates += 1;
+      const centre = [round3(x), round3(z)];
+      let spot = null;
+      let problem = problemAt(centre);
+      if (problem === null) spot = centre;
+      for (let reach = CANOPY_NUDGE_STEP_M; spot === null && reach <= rule.nudge_m + 1e-9; reach += CANOPY_NUDGE_STEP_M) {
+        for (let step = 0; spot === null && step < CANOPY_NUDGE_DIRECTIONS; step += 1) {
+          const angle = (Math.PI * 2 * step) / CANOPY_NUDGE_DIRECTIONS;
+          const point = [round3(x + reach * Math.cos(angle)), round3(z + reach * Math.sin(angle))];
+          if (problemAt(point) === null) spot = point;
+        }
+      }
+      if (spot === null) {
+        count(audit.scatter.rejected_by_reason, problem);
+        return;
+      }
+      const wall = buildings.nearest(spot, crownM).distance;
+      const crown = Math.min(crownM, CANOPY_WALL_SPREAD * wall + CANOPY_WALL_MARGIN_M);
+      const drawn = drawCanopyTree(seed, identity, crown, rule.mix, rule.fit);
+      const surface = surfaceAt(spot);
+      const { y, support } = grounded(spot);
+      const planted = plantRow({ prop: drawn.prop, kind: rule.kind, variant: drawn.variant, scale: drawn.scale, xz: spot, landY: y, surface, groundAt });
+      if (planted.problem) {
+        count(audit.scatter.rejected_by_reason, planted.problem);
+        return;
+      }
+      const row = {
+        id: `scatter:${identity}`,
+        source: "scatter",
+        source_id: `zone:${zone.id}/${rule.id}`,
+        kind: rule.kind,
+        layer: STREET_DETAIL_KINDS[rule.kind].layer,
+        geometry: "point",
+        position_m: [spot[0], y, spot[1]],
+        terrain_support: { object_key: support.object_key, triangle_index: support.triangle_index, elevation_m: support.elevation_m },
+        surface,
+        yaw_radians: normalizedYaw(unit(hashBytes(seed, identity), 12) * Math.PI * 2 - Math.PI),
+        yaw_source: "seeded",
+        ...planted,
+        status: "placed",
+        exclusion: null,
+      };
+      rows.push(row);
+      occupy(row);
+      placed += 1;
+      audit.scatter.placed += 1;
+    });
+    ruleSummaries.set(`${zone.id}/${rule.id}`, { id: rule.id, kind: rule.kind, pattern: rule.pattern, candidates: crowns.length, placed });
+  };
   const runScatter = (planting) => {
     for (const { zone, contains, bounds } of zoneShapes) {
       for (const rule of zone.scatter) {
-        if ((rule.prop != null || PLANTING_PATTERNS.includes(rule.pattern)) !== planting) continue;
+        if ((rule.prop != null || rule.pattern === "canopy" || PLANTING_PATTERNS.includes(rule.pattern)) !== planting) continue;
+        if (rule.pattern === "canopy") {
+          placeCanopy(zone, rule, contains);
+          continue;
+        }
         if (PLANTING_PATTERNS.includes(rule.pattern)) {
           placePlanting(zone, rule, contains);
           continue;
@@ -1698,6 +1797,7 @@ export function generateStreetDetail({
       zones: { path: STREET_DETAIL_INPUTS.zones, sha256: sha256File(resolve(projectRoot, STREET_DETAIL_INPUTS.zones)) },
       street_ground: { path: STREET_GROUND_RULES_PATH, sha256: sha256File(resolve(projectRoot, STREET_GROUND_RULES_PATH)) },
       set_pieces: { path: STREET_DETAIL_INPUTS.set_pieces, sha256: sha256File(resolve(projectRoot, STREET_DETAIL_INPUTS.set_pieces)) },
+      tree_crowns: { path: STREET_DETAIL_INPUTS.tree_crowns, sha256: sha256File(resolve(projectRoot, STREET_DETAIL_INPUTS.tree_crowns)) },
       // Only the stairs are read; acceptance edits to the catalog do not change this output.
       stair_catalog: { path: STREET_DETAIL_INPUTS.stair_catalog, field: "units[].stairs", flights: stairFlights.length },
     },

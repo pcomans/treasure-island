@@ -1530,6 +1530,8 @@
       "yaw": 0.0,
       "reason": "A red, white and blue pole flag inside the vehicle lot's cut corner at 9th Street and Avenue D, above the green container wall, flying east; its text is too small to read in the photo, so it is plain.",
       "reference": "verify-810-avenue-d-20261104 05-9thst-2025-09 (pano zymx-sHLgpe6167colQIQQ, Sep 2025): a red, white and blue flag above the wall near the corner; position production inference"
-    }
+    },
+    {"id": "chinook_norfolk_pine", "kind": "tree", "prop": "norfolk_island_pine", "params": {"variant": 1, "scale": 1.0}, "xz": [-338.0, -10.0], "yaw": 0.6, "reason": "The one young Norfolk Island pine seen on the island, about 5 m tall, in front of 1436 Chinook Court.", "reference": "Species pass n1 (Street View Mar 2025, pano 6UKuCNItHFdFsY2UXP5vOQ, heading 336)"},
+    {"id": "job_corps_entrance_eucalyptus", "kind": "tree", "prop": "eucalyptus_mature", "params": {"variant": 1, "scale": 1.0}, "xz": [8.0, 428.0], "yaw": 2.1, "reason": "The tall eucalyptus outside the Job Corps, 15-18 m with an open irregular crown; the owner identified it on 2026-11-05 (he lives on the island). Its exact spot is production inference: the photo's camera is not pinned.", "reference": "Owner's identification 2026-11-05; 2025 gallery photo (species pass c1, n2)"}
   ]
 }

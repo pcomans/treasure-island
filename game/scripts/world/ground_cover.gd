@@ -59,11 +59,11 @@ const FAMILIES := {
 	# for (2026-11-05 visual review: evenly spread pale blobs read as desert
 	# camouflage from above).
 	"field": {"dry_threshold": 0.378, "bare_threshold": 0.69, "green_dryness": 0.35, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
-	# Dry straw grass, about 11 / 88 / 1: the residential grounds and the
+	# Dry straw grass, about 11 / 89 / 0: the residential grounds and the
 	# Avenue N verge (map), the Job Corps campus, GAA Field B, the old Job
 	# Corps ballfield and the dry Avenue D medians. The aerial shows only a
 	# handful of dirt patches in the residential grounds.
-	"straw": {"dry_threshold": 0.30, "bare_threshold": 0.84, "green_dryness": 0.6, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
+	"straw": {"dry_threshold": 0.30, "bare_threshold": 0.90, "green_dryness": 0.6, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
 	# Rough grass, about 44 / 53 / 3: the west shore parcel, olive to brown.
 	"rough_grass": {"dry_threshold": 0.48, "bare_threshold": 0.80, "green_dryness": 0.3, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
 	# Dry grass and bare dirt, about 9 / 73 / 18: the Cultural Park, the

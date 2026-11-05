@@ -9,7 +9,10 @@
 //     the planted beds of parks such as Cityside Park;
 //   - set pieces (data/street_detail/set_pieces.json) where dated photos show
 //     particular trees: Building 1's date palms, tall fan palms and cypresses,
-//     the Waterfront Plaza's young cypresses.
+//     the Waterfront Plaza's young cypresses;
+//   - canopy rules, which plant the tree crowns read from the dated aerial
+//     (data/street_detail/tree_crowns.json) with a mix of species whose crowns
+//     fit: the island's housing, campus and industrial trees.
 // Only species photographed on Treasure Island are props. Each rule and set
 // piece names its dated evidence; positions, sizes and counts are production
 // inference, not survey data.
@@ -231,6 +234,72 @@ export function plantRow({ prop, kind, variant, scale, xz, landY, surface, groun
     params.well_slope = plane.slope.map((value) => Math.round(value * 1e5) / 1e5);
   }
   return { prop, prop_params: params };
+}
+
+// Tree crowns read from the dated aerial, by group: {group: [[x, z, crown_m], ...]}.
+export const TREE_CROWNS_SCHEMA = "ti.tree-crowns/1";
+export function validateTreeCrowns(document) {
+  invariant(document?.schema_version === TREE_CROWNS_SCHEMA, "Tree crowns schema drift");
+  invariant(document.groups != null && typeof document.groups === "object" && !Array.isArray(document.groups), "Tree crowns need groups");
+  for (const [group, crowns] of Object.entries(document.groups)) {
+    invariant(Array.isArray(crowns) && crowns.length > 0 && crowns.every((crown) => Array.isArray(crown) && crown.length === 3 && crown.every(isFiniteNumber) && crown[2] > 0),
+      `Tree crown group ${group} must list [x, z, crown_m]`);
+  }
+  return document.groups;
+}
+
+// The crown width (m) of each kit variant a canopy rule may plant (the kit's
+// spread or crown), null for a form no canopy rule draws.
+const CANOPY_CROWNS_M = Object.freeze({
+  canary_date_palm: Object.freeze([6.5, 7.0, 7.5, 8.0, 8.5, 9.0]),
+  eucalyptus_mature: Object.freeze([7.5, 8.5]),
+  monterey_cypress: Object.freeze([17.0, 12.5, null, null, null]),
+  monterey_pine: Object.freeze([8.5, 10.0, 11.2, 7.2, 8.2, 8.6]),
+  nz_christmas_tree: Object.freeze([7.0, 8.0]),
+  spreading_broadleaf: Object.freeze([8.0, 10.0, 15.0, 17.5]),
+});
+const CANOPY_ENTRY_FIELDS = Object.freeze(["prop", "scale", "share", "variants"]);
+
+// A canopy rule's mix: entries {prop, share, variants: [first, last], scale: [low, high]}.
+export function validateCanopyMix(mix, label) {
+  invariant(Array.isArray(mix) && mix.length > 0, `${label} needs a mix`);
+  mix.forEach((entry, index) => {
+    const entryLabel = `${label} mix ${index}`;
+    invariant(entry != null && JSON.stringify(Object.keys(entry).sort()) === JSON.stringify(CANOPY_ENTRY_FIELDS), `${entryLabel} must be exactly {prop, scale, share, variants}`);
+    invariant(CANOPY_CROWNS_M[entry.prop], `${entryLabel}: ${entry.prop} has no canopy crown widths`);
+    invariant(isFiniteNumber(entry.share) && entry.share > 0, `${entryLabel} share must be positive`);
+    validateVegetationRuleParams(entry.prop, { variants: entry.variants, scale: entry.scale }, entryLabel);
+    for (let variant = entry.variants[0]; variant <= entry.variants[1]; variant += 1) {
+      invariant(CANOPY_CROWNS_M[entry.prop][variant] != null, `${entryLabel}: ${entry.prop} variant ${variant} is not a canopy form`);
+    }
+  });
+}
+
+// The tree for a crown crownM wide: each entry's closest variant at the scale
+// that best fits the crown, among the entries that come within fit of its width
+// (a fraction) the rule's shares pick one by the row identity; failing that, the
+// entry that comes closest. Returns {prop, variant, scale}.
+export function drawCanopyTree(seed, identity, crownM, mix, fit) {
+  const options = mix.map((entry) => {
+    let best = null;
+    for (let variant = entry.variants[0]; variant <= entry.variants[1]; variant += 1) {
+      const width = CANOPY_CROWNS_M[entry.prop][variant];
+      const scale = Math.min(entry.scale[1], Math.max(entry.scale[0], crownM / width));
+      const miss = Math.abs(width * scale - crownM) / crownM;
+      // Variants that fit equally well take turns, by the identity.
+      const tie = hashUnit(seed, `${identity}:${variant}`, 2) * 0.02;
+      if (!best || miss + tie < best.rank) best = { prop: entry.prop, variant, scale, miss, rank: miss + tie, share: entry.share };
+    }
+    return best;
+  });
+  const fitting = options.filter((option) => option.miss <= fit);
+  const pool = fitting.length > 0 ? fitting : [options.reduce((closest, option) => (option.miss < closest.miss ? option : closest))];
+  let pick = hashUnit(seed, identity, 3) * pool.reduce((sum, option) => sum + option.share, 0);
+  const chosen = pool.find((option) => {
+    pick -= option.share;
+    return pick <= 0;
+  }) ?? pool[pool.length - 1];
+  return { prop: chosen.prop, variant: chosen.variant, scale: roundCoordinate(chosen.scale) };
 }
 
 // Bed stations: for the along_beds scatter pattern, the offsets across a way

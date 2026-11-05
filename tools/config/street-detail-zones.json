@@ -725,9 +725,259 @@
       "reference": "OSM w8921530 (Avenue N); Google Street View Nov 2025 pano ttrmGi5rdijqAHRqMz7bsQ (505 Avenue N); Wayback aerials 2026-05-26 and 2025-08-29",
       "shape": {"type": "corridor", "source_keys": ["w8921530"], "half_width_m": 20},
       "scatter": [
-        {"id": "seawall_canary_palms", "kind": "tree", "pattern": "along", "source_keys": ["w8921530"], "offsets_m": [-8.0], "spacing_m": 10, "jitter_m": 1.0, "acceptance": 0.95, "surfaces": ["land_ground"], "within_xz": [[683.7, 184.6], [697.7, 136.4], [675.5, 91.4], [652.5, 47], [629.2, 2.7], [605.5, -41.3], [581.8, -85.3], [558.7, -129.6], [535.5, -173.9], [512.3, -218.2], [489.1, -262.5], [465.7, -306.7], [442.3, -350.9], [418.9, -395.1], [395.5, -439.3], [387.2, -454.8], [400.5, -461.9], [408.7, -446.3], [432.2, -402.1], [455.6, -357.9], [479, -313.8], [502.4, -269.6], [525.6, -225.2], [548.8, -180.9], [571.9, -136.6], [595, -92.4], [618.7, -48.4], [642.4, -4.4], [665.8, 40.1], [688.8, 84.5], [712.4, 133.3], [697.9, 189.4]], "prop": "canary_date_palm", "params": {"variants": [2, 3], "scale": [0.9, 1.15]}, "basis": "production_inference", "rule": "Mature Canary Island date palms (Phoenix canariensis: a thick trunk of diamond leaf scars 7.6-9.8 m tall under the trimmed knob and a full arching crown) stand in one row on the seawall side of Avenue N, about 5 m beyond the game's curb (8 m right of the OSM centre line) and about 10 m apart, from the bend near z 185 to the way's north end, with a few gaps where a palm is missing; the verge under them is dry straw (tools/config/ground-cover.json).", "evidence": "Google Street View Nov 2025, pano ttrmGi5rdijqAHRqMz7bsQ at 505 Avenue N (game about (572, -103)), headings 20 and 75 (inventory refs sv02, sv03): mature date palms in a row beyond the sidewalk on the seawall side; Wayback aerials 2026-05-26 (a19-east-avN-strip) and 2025-08-29 (a20-east-seawall-row): one row of palm crowns about 10 m apart between the road and the riprap, about 715 m from (400, -470) to (700, 180)"}
+        {"id": "seawall_canary_palms", "kind": "tree", "pattern": "along", "source_keys": ["w8921530"], "offsets_m": [-8.0], "spacing_m": 10, "jitter_m": 1.0, "acceptance": 0.95, "surfaces": ["land_ground"], "within_xz": [[683.7, 184.6], [697.7, 136.4], [675.5, 91.4], [652.5, 47], [629.2, 2.7], [605.5, -41.3], [581.8, -85.3], [558.7, -129.6], [535.5, -173.9], [512.3, -218.2], [489.1, -262.5], [465.7, -306.7], [442.3, -350.9], [418.9, -395.1], [395.5, -439.3], [387.2, -454.8], [400.5, -461.9], [408.7, -446.3], [432.2, -402.1], [455.6, -357.9], [479, -313.8], [502.4, -269.6], [525.6, -225.2], [548.8, -180.9], [571.9, -136.6], [595, -92.4], [618.7, -48.4], [642.4, -4.4], [665.8, 40.1], [688.8, 84.5], [712.4, 133.3], [697.9, 189.4]], "prop": "canary_date_palm", "params": {"variants": [2, 3], "scale": [0.9, 1.15]}, "basis": "production_inference", "rule": "Mature Canary Island date palms (Phoenix canariensis: a thick trunk of diamond leaf scars 7.6-9.8 m tall under the trimmed knob and a full arching crown) stand in one row on the seawall side of Avenue N, about 5 m beyond the game's curb (8 m right of the OSM centre line) and about 10 m apart, from the bend near z 185 to the way's north end, with a few gaps where a palm is missing; the verge under them is dry straw (tools/config/ground-cover.json).", "evidence": "Google Street View Nov 2025, pano ttrmGi5rdijqAHRqMz7bsQ at 505 Avenue N (game about (572, -103)), headings 20 and 75 (inventory refs sv02, sv03): mature date palms in a row beyond the sidewalk on the seawall side; Wayback aerials 2026-05-26 (a19-east-avN-strip) and 2025-08-29 (a20-east-seawall-row): one row of palm crowns about 10 m apart between the road and the riprap, about 715 m from (400, -470) to (700, 180)"},
+        {"id": "seawall_hawthorn", "kind": "planting_slot", "pattern": "along", "source_keys": ["w8921530"], "offsets_m": [-11.0], "spacing_m": 40, "jitter_m": 11, "acceptance": 0.95, "surfaces": ["land_ground"], "within_xz": [[683.7, 184.6], [697.7, 136.4], [675.5, 91.4], [652.5, 47], [629.2, 2.7], [605.5, -41.3], [581.8, -85.3], [558.7, -129.6], [535.5, -173.9], [512.3, -218.2], [489.1, -262.5], [465.7, -306.7], [442.3, -350.9], [418.9, -395.1], [395.5, -439.3], [387.2, -454.8], [400.5, -461.9], [408.7, -446.3], [432.2, -402.1], [455.6, -357.9], [479, -313.8], [502.4, -269.6], [525.6, -225.2], [548.8, -180.9], [571.9, -136.6], [595, -92.4], [618.7, -48.4], [642.4, -4.4], [665.8, 40.1], [688.8, 84.5], [712.4, 133.3], [697.9, 189.4]], "prop": "indian_hawthorn", "params": {"variants": [1, 2], "scale": [0.9, 1.15]}, "basis": "production_inference", "rule": "Round pink-flowered mounds 1.2-1.8 m tall between the palms and the riprap.", "evidence": "Species pass s1-s3 (Street View Nov 2025, pano ttrmGi5rdijqAHRqMz7bsQ, 505 Avenue N; refs sv02, sv03): pink round mounds, glossy mounds, slender red-tipped shoots and a conical shrub between the palms and the riprap, about one shrub every 15-30 m."},
+        {"id": "seawall_pittosporum", "kind": "planting_slot", "pattern": "along", "source_keys": ["w8921530"], "offsets_m": [-11.5], "spacing_m": 44, "jitter_m": 12, "acceptance": 0.95, "surfaces": ["land_ground"], "within_xz": [[683.7, 184.6], [697.7, 136.4], [675.5, 91.4], [652.5, 47], [629.2, 2.7], [605.5, -41.3], [581.8, -85.3], [558.7, -129.6], [535.5, -173.9], [512.3, -218.2], [489.1, -262.5], [465.7, -306.7], [442.3, -350.9], [418.9, -395.1], [395.5, -439.3], [387.2, -454.8], [400.5, -461.9], [408.7, -446.3], [432.2, -402.1], [455.6, -357.9], [479, -313.8], [502.4, -269.6], [525.6, -225.2], [548.8, -180.9], [571.9, -136.6], [595, -92.4], [618.7, -48.4], [642.4, -4.4], [665.8, 40.1], [688.8, 84.5], [712.4, 133.3], [697.9, 189.4]], "prop": "pittosporum_tobira", "params": {"variants": [1, 2], "scale": [0.9, 1.15]}, "basis": "production_inference", "rule": "Glossy mounds 1-1.5 m tall between the palms and the riprap.", "evidence": "Species pass s1-s3 (Street View Nov 2025, pano ttrmGi5rdijqAHRqMz7bsQ, 505 Avenue N; refs sv02, sv03): pink round mounds, glossy mounds, slender red-tipped shoots and a conical shrub between the palms and the riprap, about one shrub every 15-30 m."},
+        {"id": "seawall_red_tips", "kind": "planting_slot", "pattern": "along", "source_keys": ["w8921530"], "offsets_m": [-10.0], "spacing_m": 70, "jitter_m": 18, "acceptance": 0.9, "surfaces": ["land_ground"], "within_xz": [[683.7, 184.6], [697.7, 136.4], [675.5, 91.4], [652.5, 47], [629.2, 2.7], [605.5, -41.3], [581.8, -85.3], [558.7, -129.6], [535.5, -173.9], [512.3, -218.2], [489.1, -262.5], [465.7, -306.7], [442.3, -350.9], [418.9, -395.1], [395.5, -439.3], [387.2, -454.8], [400.5, -461.9], [408.7, -446.3], [432.2, -402.1], [455.6, -357.9], [479, -313.8], [502.4, -269.6], [525.6, -225.2], [548.8, -180.9], [571.9, -136.6], [595, -92.4], [618.7, -48.4], [642.4, -4.4], [665.8, 40.1], [688.8, 84.5], [712.4, 133.3], [697.9, 189.4]], "prop": "red_tip_shrub", "params": {"variants": [0, 1], "scale": [0.9, 1.15]}, "basis": "production_inference", "rule": "Slender shrubs with dull red new shoots beside the mounds.", "evidence": "Species pass s1-s3 (Street View Nov 2025, pano ttrmGi5rdijqAHRqMz7bsQ, 505 Avenue N; refs sv02, sv03): pink round mounds, glossy mounds, slender red-tipped shoots and a conical shrub between the palms and the riprap, about one shrub every 15-30 m."},
+        {"id": "seawall_conical", "kind": "planting_slot", "pattern": "along", "source_keys": ["w8921530"], "offsets_m": [-11.0], "spacing_m": 100, "jitter_m": 25, "acceptance": 0.9, "surfaces": ["land_ground"], "within_xz": [[683.7, 184.6], [697.7, 136.4], [675.5, 91.4], [652.5, 47], [629.2, 2.7], [605.5, -41.3], [581.8, -85.3], [558.7, -129.6], [535.5, -173.9], [512.3, -218.2], [489.1, -262.5], [465.7, -306.7], [442.3, -350.9], [418.9, -395.1], [395.5, -439.3], [387.2, -454.8], [400.5, -461.9], [408.7, -446.3], [432.2, -402.1], [455.6, -357.9], [479, -313.8], [502.4, -269.6], [525.6, -225.2], [548.8, -180.9], [571.9, -136.6], [595, -92.4], [618.7, -48.4], [642.4, -4.4], [665.8, 40.1], [688.8, 84.5], [712.4, 133.3], [697.9, 189.4]], "prop": "conical_shrub", "params": {"variants": [0, 1], "scale": [0.9, 1.1]}, "basis": "production_inference", "rule": "The odd conical shrub 3-4 m tall.", "evidence": "Species pass s1-s3 (Street View Nov 2025, pano ttrmGi5rdijqAHRqMz7bsQ, 505 Avenue N; refs sv02, sv03): pink round mounds, glossy mounds, slender red-tipped shoots and a conical shrub between the palms and the riprap, about one shrub every 15-30 m."}
       ]
+    },
+  {
+   "id": "island_trees",
+   "name": "The island's trees",
+   "pilot": false,
+   "reason": "The trees of the housing, the Job Corps campus and the industrial core, planted at the crowns of the dated aerial, so the groves, street rows and lone trees stand where they stand (vegetation rollout R4-R6).",
+   "reference": "Tree crowns read from the 2026-05-26 aerial (May 2026 z19 tiles; data/street_detail/tree_crowns.json); species pass 2026-11-05 (refs/species crops, Mar and Sep 2025 Street View)",
+   "shape": {
+    "type": "polygon",
+    "points_xz": [[-720, -960], [720, -960], [720, 960], [-720, 960]]
+   },
+   "scatter": [
+    {
+     "id": "residential_canopy",
+     "kind": "tree",
+     "pattern": "canopy",
+     "group": "residential",
+     "mix": [
+      {
+       "prop": "spreading_broadleaf",
+       "share": 40,
+       "variants": [0, 3],
+       "scale": [0.85, 1.2]
+      },
+      {
+       "prop": "monterey_pine",
+       "share": 16,
+       "variants": [3, 5],
+       "scale": [0.85, 1.25]
+      },
+      {
+       "prop": "monterey_cypress",
+       "share": 45,
+       "variants": [0, 1],
+       "scale": [0.85, 1.15]
+      },
+      {
+       "prop": "nz_christmas_tree",
+       "share": 5,
+       "variants": [0, 1],
+       "scale": [0.85, 1.25]
+      }
+     ],
+     "fit": 0.2,
+     "nudge_m": 6,
+     "basis": "production_inference",
+     "rule": "The housing's trees: the spreading broadleaf is the commonest big tree, then Monterey pines, wind-shaped cypresses and New Zealand Christmas trees, at about 45/25/15/10; each stands at a crown of the aerial its own crown fits, so these weights are higher for the forms few crowns fit. Pines use the dome variants 3-5 until the residential crown lands (then variants 0-2).",
+     "evidence": "Species pass 2026-11-05: Gateview (c2, c3, b7) and Northpoint (b1-b4) broadleaves, Keppler pines (p5, p6, Mar 2025), Sturgeon Christmas tree (b5, b6, Mar 2025), Avenue B park cypresses (c4, c6, Sep 2025); starting shares 45/25/15/10, the rest set pieces. Crowns: 2026-05-26 aerial."
+    },
+    {
+     "id": "west_parcel_canopy",
+     "kind": "tree",
+     "pattern": "canopy",
+     "group": "west_parcel",
+     "mix": [
+      {
+       "prop": "spreading_broadleaf",
+       "share": 50,
+       "variants": [0, 3],
+       "scale": [0.85, 1.2]
+      },
+      {
+       "prop": "monterey_cypress",
+       "share": 30,
+       "variants": [0, 1],
+       "scale": [0.85, 1.15]
+      },
+      {
+       "prop": "monterey_pine",
+       "share": 20,
+       "variants": [3, 5],
+       "scale": [0.85, 1.25]
+      }
+     ],
+     "fit": 0.2,
+     "nudge_m": 6,
+     "basis": "production_inference",
+     "rule": "The old trees on the fenced west shore parcel, among its rough grass.",
+     "evidence": "Street View Mar 2025 sv22 (1349 Gateview Ave) and sv08 (1318 Gateview Ave): an old twisted broadleaf and dark wind-shaped trees behind the fence. Crowns: 2026-05-26 aerial."
+    },
+    {
+     "id": "job_corps_canopy",
+     "kind": "tree",
+     "pattern": "canopy",
+     "group": "job_corps",
+     "mix": [
+      {
+       "prop": "monterey_pine",
+       "share": 40,
+       "variants": [3, 5],
+       "scale": [0.85, 1.25]
+      },
+      {
+       "prop": "spreading_broadleaf",
+       "share": 40,
+       "variants": [0, 3],
+       "scale": [0.85, 1.2]
+      },
+      {
+       "prop": "eucalyptus_mature",
+       "share": 5,
+       "variants": [0, 1],
+       "scale": [0.9, 1.15]
+      },
+      {
+       "prop": "monterey_cypress",
+       "share": 10,
+       "variants": [0, 1],
+       "scale": [0.85, 1.15]
+      }
+     ],
+     "fit": 0.2,
+     "nudge_m": 6,
+     "basis": "production_inference",
+     "rule": "The campus's groves and lot trees: pines and big dark domes at the aerial's crowns, the trees of its parking lots in mulch pits, and a few of the entrance eucalyptus's form.",
+     "evidence": "2026-05-26 aerial (crowns) and the 2025 gallery photos (species pass c1, n2): large dark domes and pine forms round the dorms; the owner's identification 2026-11-05 of the eucalyptus at the entrance.",
+     "in_lots": true
+    },
+    {
+     "id": "ninth_street_row",
+     "kind": "tree",
+     "pattern": "canopy",
+     "group": "ninth_street_row",
+     "mix": [
+      {
+       "prop": "monterey_pine",
+       "share": 70,
+       "variants": [3, 5],
+       "scale": [0.85, 1.25]
+      },
+      {
+       "prop": "monterey_cypress",
+       "share": 30,
+       "variants": [0, 1],
+       "scale": [0.85, 1.15]
+      }
+     ],
+     "fit": 0.3,
+     "nudge_m": 6,
+     "basis": "production_inference",
+     "rule": "The dark wind-shaped row along 9th Street by the market.",
+     "evidence": "Street View Jul 2023 sv18 (9th St at Island Cove Market): a row of dark low-crowned wind-shaped trees. Crowns: 2026-05-26 aerial."
+    },
+    {
+     "id": "sffd_frontage_pines",
+     "kind": "tree",
+     "pattern": "canopy",
+     "group": "sffd_frontage",
+     "mix": [
+      {
+       "prop": "monterey_pine",
+       "share": 100,
+       "variants": [3, 5],
+       "scale": [0.85, 1.25]
+      }
+     ],
+     "fit": 0.4,
+     "nudge_m": 6,
+     "basis": "production_inference",
+     "rule": "The wind-pruned Monterey pines in a row along the SFFD frontage on Avenue M.",
+     "evidence": "Species pass p1-p4 and Street View Sep 2025 sv14, sv17 (751 9th St): low wide domes 6-9 m tall on 1.5-2.5 m trunks. Crowns: 2026-05-26 aerial."
+    },
+    {
+     "id": "sffd_north_pines",
+     "kind": "tree",
+     "pattern": "canopy",
+     "group": "sffd_north",
+     "mix": [
+      {
+       "prop": "monterey_pine",
+       "share": 80,
+       "variants": [3, 5],
+       "scale": [0.85, 1.25]
+      },
+      {
+       "prop": "monterey_cypress",
+       "share": 20,
+       "variants": [0, 1],
+       "scale": [0.85, 1.15]
+      }
+     ],
+     "fit": 0.4,
+     "nudge_m": 6,
+     "basis": "production_inference",
+     "rule": "The same wind-pruned pines along the north edge of the SFFD grounds.",
+     "evidence": "2026-05-26 aerial (crowns in a row along 10th Street); the species pass's SFFD pines."
+    },
+    {
+     "id": "island_canopy",
+     "kind": "tree",
+     "pattern": "canopy",
+     "group": "island",
+     "mix": [
+      {
+       "prop": "spreading_broadleaf",
+       "share": 40,
+       "variants": [0, 3],
+       "scale": [0.85, 1.2]
+      },
+      {
+       "prop": "monterey_pine",
+       "share": 35,
+       "variants": [3, 5],
+       "scale": [0.85, 1.25]
+      },
+      {
+       "prop": "monterey_cypress",
+       "share": 15,
+       "variants": [0, 1],
+       "scale": [0.85, 1.15]
+      },
+      {
+       "prop": "nz_christmas_tree",
+       "share": 10,
+       "variants": [0, 1],
+       "scale": [0.85, 1.25]
+      }
+     ],
+     "fit": 0.2,
+     "nudge_m": 6,
+     "basis": "production_inference",
+     "rule": "The remaining trees of the island's edges, lots and streets: the housing's mix without the rarer forms, at the aerial's crowns.",
+     "evidence": "2026-05-26 aerial (crowns); Street View Sep 2025 sv13 (14th St): a dense stand of broadleaf crowns; the species pass's common forms.",
+     "in_lots": true
+    },
+    {
+     "id": "fourth_street_lot_palms",
+     "kind": "tree",
+     "pattern": "canopy",
+     "group": "fourth_street_lot_palms",
+     "mix": [
+      {
+       "prop": "canary_date_palm",
+       "share": 1,
+       "variants": [0, 1],
+       "scale": [0.8, 1.0]
+      }
+     ],
+     "fit": 0.5,
+     "nudge_m": 3,
+     "in_lots": true,
+     "basis": "production_inference",
+     "rule": "Young date palms in the rows of the 4th Street lot's islands, traced palm by palm.",
+     "evidence": "2026-05-26 aerial (May 2026 z19 tiles): about 25 star-shaped young palm crowns in rows across the lot at x 200-260, z 135-228."
     }
+   ]
+  }
   ],
   "fenced_approaches": {
     "notes": [

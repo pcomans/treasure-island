@@ -3,7 +3,7 @@
  "notes": [
   "Where the ground-cover shader (game/resources/materials/world/ground_cover/ground_cover.gdshader) draws a recipe over a record's own family: tools/lib/ground-cover-map.mjs draws these rules into the world map game/resources/textures/world/ground_cover/cover_map.png (rebuild it with tools/build_ground_cover_map.mjs after the world or this file changes). Coordinates are world metres: +X east, +Z south.",
   "Channels name the recipe families of game/scripts/world/ground_cover.gd: lawn (maintained lawn with some dry patches), straw (dry straw grass), dry_field (dry grass with much bare ground) and bare (bare fill soil with a little dry grass). A rule's weight covers what the rules before it drew (in order), so later rules win.",
-  "within_sources limits a rule to the cells whose top drawn ground is that OSM area; surfaces to the cells whose top drawn ground has that material key (land, areas, the ground-cover overlays or the street ground's planted kerb verges, street_kerb_verge); inside_sources narrows a surfaces rule to that surface where it is drawn inside the outline of those OSM areas; within_xz to a traced polygon whose edge fades over feather_m; near to within full_m of buildings, vehicle roads, lots or street kerbs, fading out by zero_m; weight scales the rule. Drawn cells off the ruled ground (roads, paths, kerb tops and paint, roofs, lots, and kerb verges no rule drew on) then take the weights of the nearest ruled cell, so an unruled verge matches the ground behind it.",
+  "within_sources limits a rule to the cells whose top drawn ground is that OSM area; surfaces to the cells whose top drawn ground has that material key (land, areas, the ground-cover overlays or the street ground's planted kerb verges, street_kerb_verge); inside_sources narrows a surfaces rule to that surface where it is drawn inside the outline of those OSM areas; within_xz to a traced polygon whose edge fades over feather_m; near to within full_m of buildings, vehicle roads, lots or street kerbs, fading out by zero_m, the band's width wandering by up to wobble_m; weight scales the rule. Drawn cells off the ruled ground (roads, paths, kerb tops and paint, roofs, lots, and kerb verges no rule drew on) then take the weights of the nearest ruled cell, so an unruled verge matches the ground behind it.",
   "Look anchored to the 2026-05-26 aerial (Wayback release 2026-10-29, Vantor Vivid Advanced, 0.34 m, the late-spring dry fields), with the 2025-08-29 aerial and dated Street View as corroboration. Widths, distances and traced outlines are production inference, not survey data; OSM and the imagery are offset 3-6 m, so traced outlines follow the OSM buildings beside them."
  ],
  "map": {
@@ -27,7 +27,8 @@
    "near": {
     "kinds": ["vehicle_road", "paved_area", "street_kerb"],
     "full_m": 5,
-    "zero_m": 10
+    "zero_m": 10,
+    "wobble_m": 3
    },
    "basis": "production_inference",
    "reason": "The housing's streets and parking lots are lined with mown lawn: full within 5 m of the carriageway (its parking lanes included), the kerb and sidewalk or the lot edge (the kerb verges and front lawns), fading into the dry grounds by 10 m.",
@@ -40,7 +41,8 @@
    "near": {
     "kinds": ["building"],
     "full_m": 2.5,
-    "zero_m": 8
+    "zero_m": 8,
+    "wobble_m": 2
    },
    "weight": 0.85,
    "basis": "production_inference",
@@ -99,6 +101,15 @@
    "basis": "production_inference",
    "reason": "A mown lawn beside the loop road's west bend, beyond the band.",
    "evidence": "2026-05-26 aerial: lawn 68 % of the open ground inside this outline."
+  },
+  {
+   "id": "job_corps_kerb_verges",
+   "channel": "straw",
+   "surfaces": ["street_kerb_verge"],
+   "inside_sources": ["w1252737750"],
+   "basis": "production_inference",
+   "reason": "The grass strips behind the campus's kerbs are dry straw like the campus, not the default field.",
+   "evidence": "2026-05-26 aerial over w1252737750 (May 2026 z19 tiles): 79 % dry, 20 % bare of the open ground, 2-7 % lawn; the code review counted 3,506 m2 of its verges on the field family."
   },
   {
    "id": "job_corps_dorm_lawn_courtyard",
