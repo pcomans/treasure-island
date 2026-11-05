@@ -101,12 +101,15 @@ do
   echo "== ${test}"
   # --fixed-fps 60: physics (the island test's walk-ups) runs as fast as the CPU allows.
   display_args=(--headless)
+  time_limit=600
   # The dummy renderer does not retain the visible MultiMesh transforms that
   # the shared island fit check compares against collision and stock movement.
+  # It walks every scored building, so its hang guard is longer than the others'.
   if [ "${test}" = game/tests/shared/island_test.gd ]; then
     display_args=()
+    time_limit=900
   fi
-  check_godot "${test}" 600 tools/godot "${display_args[@]}" --fixed-fps 60 --path . --audio-driver Dummy --script "${test}"
+  check_godot "${test}" "${time_limit}" tools/godot "${display_args[@]}" --fixed-fps 60 --path . --audio-driver Dummy --script "${test}"
 done
 
 # Desktop exports load a baked world instead of generating it at startup
@@ -118,7 +121,7 @@ echo "== tools/prebuild-static-world.sh native"
 check_godot "tools/prebuild-static-world.sh native" 900 tools/prebuild-static-world.sh native
 if [ -s "${baked}" ]; then
   echo "== game/tests/shared/island_test.gd -- --use-prebuilt-world"
-  check_godot "game/tests/shared/island_test.gd (prebuilt world)" 600 tools/godot --fixed-fps 60 --path . --audio-driver Dummy --script game/tests/shared/island_test.gd -- --use-prebuilt-world
+  check_godot "game/tests/shared/island_test.gd (prebuilt world)" 900 tools/godot --fixed-fps 60 --path . --audio-driver Dummy --script game/tests/shared/island_test.gd -- --use-prebuilt-world
 fi
 rm -f "${baked}"
 
