@@ -1,0 +1,1447 @@
+{
+  "schema_version": "ti.street-ground-rules/1",
+  "notes": [
+    "The street ground of every Treasure Island street outside the pilot zones (tools/config/street-detail-zones.json), built by tools/lib/street-ground-generation.mjs. Each rule is production inference for game art read from the dated sources it cites, not survey data; a street with no imagery gets the plainest treatment its class supports.",
+    "A treatment is how a class of street looks: each side's curb (walk: a concrete sidewalk sidewalk_width_m wide at the curb; verge: a concrete curb top, then grass, verge_width_m in all; none: the asphalt edge onto the ground), the fill between the curb and an OSM sidewalk set back from it (concrete, lawn or mulch), the centre line (double_yellow, dashed_faded, dashed_white or null), white edge lines, the paint of its marked crossings (continental bars, two transverse lines, or ladder: both), the paint wear (0 fresh to 3 mostly worn away), red fire-lane curb paint (none, along junction approaches, or all) and the asphalt wear (decals per 100 m2 of asphalt, manhole and drain spacing).",
+    "A street names its OSM ways and treatment; set changes treatment fields for it; sides gives a way's left or right curb (relative to the way's own direction) as one kind or [from_m, to_m, kind] stretches along it; widen adds asphalt beyond the frozen ribbon on a side (the curb-to-curb width read from the aerial) and parking lists the stretches where the aerial shows cars at that curb, for the parked cars.",
+    "crossings gives the paint of an OSM crossing node (or none) as the dated aerial shows it, overriding its OSM tags: read off 0.25 m contact sheets of every OSM crossing node (2026-05-26 capture). An untagged node gets paint only where it is listed; where two nodes mark one crosswalk only one is listed. stops adds a stop line and STOP legend on an approach the photographs show and OSM lacks; bays are perpendicular parking bays paved off a street's edge (OSM maps none); lots paint a parking lot's stall rows, legends (each at a paint wear step) and raised islands, and may lay their own pavement with its cracks, patches and oil stains where the photographs show it unlike the island's lot asphalt. pilot sets the pilot zones' crosswalk paint wear.",
+    "Sources: Esri World Imagery, the Vantor capture of 2026-05-26 (0.34 m), exported at 0.25 m per pixel (0.32 m Web Mercator: map level 19 or coarser; Esri draws a different capture, 2025-08-29, at level 20, finer than about 0.15 m), its date checked 2026-11-05 with the service's identify at the export scale; Google Street View, dated per entry, cameras in game metres (x east, z south) with compass headings; the clutter layer's curb-parking survey of the same aerial (2026-11-05)."
+  ],
+  "pilot": {
+    "crosswalk_paint_wear": 2,
+    "evidence": "Sep 2025 photos of the Treasure Island Road crosswalks read about 53 % bright against about 83 % for the fresh pilot paint (street-ground visual review, 2026-11-02): worn bars, some edges gone."
+  },
+  "treatments": {
+    "new_district": {
+      "reason": "The 2020s streets of the new district: concrete curbs with a sidewalk at the curb on both sides, poured in panels; continental crosswalks; new asphalt, lightly worn.",
+      "evidence": "Aerial 2026-05-26 (0.25 m): sidewalks along both curbs of Seven Seas Avenue, Cravath, Bruton and Johnson Streets, Clipper Cove Way and Treasure Island Road north of the plaza, continental crosswalks with yellow tactile pads at their crossings. Google Street View Sep 2025 at 39 Bruton St and 55 Cravath St, Nov 2025 at 57 Johnson St: double yellow centre lines, cars along both curbs, continental crosswalks, curb ramps with yellow pads.",
+      "sides": "walk",
+      "sidewalk_width_m": 2.2,
+      "verge_width_m": 1.2,
+      "fill": "concrete",
+      "centerline": "double_yellow",
+      "edge_lines": false,
+      "crosswalk": "continental",
+      "paint_wear": 1,
+      "red_curb": "none",
+      "wear": {
+        "crack_per_100m2": 0.1,
+        "patch_per_100m2": 0.02,
+        "oil_per_100m2": 0.08,
+        "manhole_spacing_m": 90,
+        "drain_spacing_m": 55
+      },
+      "bike_lanes": "none"
+    },
+    "boulevard": {
+      "reason": "The old main streets through the residential and civic grid (9th Street, Avenue D): curbs on both sides, a sidewalk set back behind a grass strip, a centre line and edge lines, worn paint, patched asphalt.",
+      "evidence": "Google Street View Mar 2025 on 9th Street (camera x -398, z 94, heading 64): double yellow centre line, curbs on both sides, sidewalks behind lawn, cars at the curb. Aerial 2026-05-26: 9th Street's double yellow and white edge lines, ladder crosswalks at Avenues D, E and H; Avenue D's walks set back behind grass and dirt strips with a dashed white centre line.",
+      "sides": "walk",
+      "sidewalk_width_m": 1.6,
+      "verge_width_m": 1.4,
+      "fill": "lawn",
+      "centerline": "double_yellow",
+      "edge_lines": true,
+      "crosswalk": "ladder",
+      "paint_wear": 2,
+      "red_curb": "none",
+      "wear": {
+        "crack_per_100m2": 0.5,
+        "patch_per_100m2": 0.12,
+        "oil_per_100m2": 0.12,
+        "manhole_spacing_m": 80,
+        "drain_spacing_m": 50
+      },
+      "bike_lanes": "none"
+    },
+    "village": {
+      "reason": "The Villages housing streets: a concrete curb with lawn behind it on both sides, red NO PARKING FIRE LANE curbs along the junction approaches, two-line crosswalks and a STOP legend where a side street meets a through street, no centre line, cracked and patched asphalt.",
+      "evidence": "Google Street View Mar 2025 at the Gateview Avenue junctions of Bayside Drive (1226 Bayside), Exposition Drive (1225 Exposition), Mariner Drive (1217 Mariner), Northpoint Drive (1200 Northpoint) and Gateview Court (1440 Gateview Ct), at 1198 13th Street, 1177 13th Street and 12th Street at Avenue B; Sep 2025 on Gateview Avenue: red curbs at the corners, two white crosswalk lines, STOP legends, alligator-cracked and patched asphalt. Aerial 2026-05-26: lawn behind most curbs, two-line crosswalks at the junctions.",
+      "sides": "verge",
+      "sidewalk_width_m": 1.3,
+      "verge_width_m": 1.5,
+      "fill": "lawn",
+      "centerline": null,
+      "edge_lines": false,
+      "crosswalk": "lines",
+      "paint_wear": 2,
+      "red_curb": "approaches",
+      "wear": {
+        "crack_per_100m2": 0.9,
+        "patch_per_100m2": 0.25,
+        "oil_per_100m2": 0.12,
+        "manhole_spacing_m": 70,
+        "drain_spacing_m": 0
+      },
+      "bike_lanes": "none"
+    },
+    "village_walk": {
+      "reason": "Villages streets with a sidewalk at the curb (Gateview Avenue's western loop, the fish-street courts): as village, with a concrete walk at the curb.",
+      "evidence": "Google Street View Mar 2025 at 1311 Gateview Avenue (heading 3): a concrete walk at the curb with red fire-lane curb paint; Mar 2025 at 1400 Sturgeon Street (toward Avenue B): a concrete walk at the curb, grey curbs, two crosswalk lines and a stop line (the fish streets set red_curb none); OSM maps sidewalks along both curbs of these streets (frozen 2026-08-27 snapshot).",
+      "sides": "walk",
+      "sidewalk_width_m": 1.3,
+      "verge_width_m": 1.5,
+      "fill": "lawn",
+      "centerline": null,
+      "edge_lines": false,
+      "crosswalk": "lines",
+      "paint_wear": 2,
+      "red_curb": "approaches",
+      "wear": {
+        "crack_per_100m2": 0.9,
+        "patch_per_100m2": 0.25,
+        "oil_per_100m2": 0.12,
+        "manhole_spacing_m": 70,
+        "drain_spacing_m": 0
+      },
+      "bike_lanes": "none"
+    },
+    "industrial": {
+      "reason": "The former Navy industrial streets: the asphalt edge runs onto dirt and gravel with no curb, no lane lines, worn crossings and STOP legends at some junctions, heavily cracked asphalt.",
+      "evidence": "Google Street View Mar 2025 at 496 and 320 Avenue M, 651 8th Street; Sep 2025 at 4th Street and Avenue H (651 4th St), 13th Street and Avenue M (751 13th St); Nov 2025 at 4th Street and Avenue M (849 4th St): no curbs, dirt and gravel shoulders, alligator cracking, faded crossings. Aerial 2026-05-26.",
+      "sides": "none",
+      "sidewalk_width_m": 1.2,
+      "verge_width_m": 1.2,
+      "fill": "concrete",
+      "centerline": null,
+      "edge_lines": false,
+      "crosswalk": "ladder",
+      "paint_wear": 3,
+      "red_curb": "none",
+      "wear": {
+        "crack_per_100m2": 1.1,
+        "patch_per_100m2": 0.3,
+        "oil_per_100m2": 0.2,
+        "manhole_spacing_m": 90,
+        "drain_spacing_m": 0
+      },
+      "bike_lanes": "none"
+    },
+    "industrial_curbed": {
+      "reason": "Industrial streets with old curbs and narrow cracked sidewalks along the building fronts.",
+      "evidence": "Google Street View Sep 2025 on Avenue I (camera x 74, z -432, heading 152): curbs on both sides with narrow weedy sidewalks, a STOP legend at 13th Street, no centre line.",
+      "sides": "walk",
+      "sidewalk_width_m": 1.2,
+      "verge_width_m": 1.2,
+      "fill": "concrete",
+      "centerline": null,
+      "edge_lines": false,
+      "crosswalk": "ladder",
+      "paint_wear": 3,
+      "red_curb": "none",
+      "wear": {
+        "crack_per_100m2": 1.0,
+        "patch_per_100m2": 0.3,
+        "oil_per_100m2": 0.2,
+        "manhole_spacing_m": 90,
+        "drain_spacing_m": 60
+      },
+      "bike_lanes": "none"
+    },
+    "shore_arterial": {
+      "reason": "Avenue N along the east shore: a wide road with a double yellow centre line and white edge lines, no curbs, dirt on the land side and palms in gravel on the shore side.",
+      "evidence": "Google Street View Nov 2025 at 500 Avenue N (heading 332): double yellow, white edge lines, no curbs; aerial 2026-05-26: the double yellow and edge lines along its whole length.",
+      "sides": "none",
+      "sidewalk_width_m": 1.2,
+      "verge_width_m": 1.2,
+      "fill": "concrete",
+      "centerline": "double_yellow",
+      "edge_lines": true,
+      "crosswalk": "ladder",
+      "paint_wear": 2,
+      "red_curb": "none",
+      "wear": {
+        "crack_per_100m2": 0.6,
+        "patch_per_100m2": 0.1,
+        "oil_per_100m2": 0.08,
+        "manhole_spacing_m": 120,
+        "drain_spacing_m": 0
+      },
+      "bike_lanes": "none"
+    },
+    "avenue_h": {
+      "reason": "Avenue H through the industrial grid: a double yellow centre line with white edge lines and no curb along most of it.",
+      "evidence": "Google Street View Sep 2025 at 850 Avenue H (camera x 1, z -334, heading 152) and at 9th Street (841 Avenue H, camera x 108, z -132, heading 332): double yellow, white edge lines, dirt and gravel shoulders, faded parking stalls on the west shoulder; aerial 2026-05-26.",
+      "sides": "none",
+      "sidewalk_width_m": 1.3,
+      "verge_width_m": 1.2,
+      "fill": "concrete",
+      "centerline": "double_yellow",
+      "edge_lines": true,
+      "crosswalk": "ladder",
+      "paint_wear": 2,
+      "red_curb": "none",
+      "wear": {
+        "crack_per_100m2": 1.0,
+        "patch_per_100m2": 0.25,
+        "oil_per_100m2": 0.15,
+        "manhole_spacing_m": 90,
+        "drain_spacing_m": 0
+      },
+      "bike_lanes": "none"
+    }
+  },
+  "streets": [
+    {
+      "id": "treasure_island_road",
+      "ways": [
+        "w1115934722",
+        "w1249797943",
+        "w1248964742",
+        "w28353118"
+      ],
+      "treatment": "new_district",
+      "evidence": "Aerial 2026-05-26: double yellow and sidewalks on both sides north of the ferry plaza, as in the pilot corridor; Google Street View Sep 2025 (pilot references)."
+    },
+    {
+      "id": "trade_winds_avenue",
+      "ways": [
+        "w1249797946"
+      ],
+      "treatment": "new_district",
+      "evidence": "Google Street View Sep 2025 at 240 California Ave (pano uaCXrmhXmnA7PI3RNh5MOA, camera x 20.8, z 635.7, heading 59): the camera in a lane north of the OSM centre line, a curbed planted median on its north side, then the two-way cycle track (OSM w1212173467); OSM lanes=3 (two forward, one backward), cycleway:right=lane. Aerial 2026-05-26: the carriageway's north edge about 7 m north of the OSM centre line (widened 2 m, short of the OSM cycle track), double yellow, sidewalks on the south curb, continental crosswalks at Seven Seas Avenue.",
+      "widen": {
+        "w1249797946": {
+          "left": 2.0
+        }
+      },
+      "sides": {
+        "w1249797946": {
+          "left": "verge"
+        }
+      }
+    },
+    {
+      "id": "seven_seas_avenue",
+      "ways": [
+        "w1001544696",
+        "w1212173448"
+      ],
+      "treatment": "new_district",
+      "evidence": "Google Street View Sep 2025 on Seven Seas Avenue (heading 160, south part): double yellow, green bike lanes along both curbs inside a white line, planted strips behind the curbs; Sep 2025 at its north end (heading 140): the white lane line, a lot with no curb on the east side. Aerial 2026-05-26: sidewalks on both curbs, continental crosswalks. The measured width stops at the green paint, so the asphalt is widened by a bike lane's width each side. The planted strips: a curb, then about 2 m of shrubs and grasses, then the sidewalk (Sep 2025, heading 160), drawn as a 2 m verge with the OSM sidewalks beyond it.",
+      "set": {
+        "bike_lanes": "green",
+        "verge_width_m": 2.0
+      },
+      "widen": {
+        "w1001544696": {
+          "left": 1.5,
+          "right": 1.5
+        },
+        "w1212173448": {
+          "left": 1.5,
+          "right": 1.5
+        }
+      },
+      "sides": {
+        "w1001544696": {
+          "left": "verge",
+          "right": "verge"
+        },
+        "w1212173448": {
+          "left": "verge",
+          "right": "verge"
+        }
+      }
+    },
+    {
+      "id": "cravath_street",
+      "ways": [
+        "w1001544695"
+      ],
+      "treatment": "new_district",
+      "evidence": "Aerial 2026-05-26: sidewalks on both curbs, cars parked along both curbs, continental crosswalks at its ends. Google Street View Sep 2025 at 55 Cravath St and the aerial: no centre line between the parked cars.",
+      "set": {
+        "centerline": null
+      },
+      "widen": {
+        "w1001544695": {
+          "left": 2.4,
+          "right": 2.4
+        }
+      },
+      "parking": {
+        "w1001544695": {
+          "left": [
+            [
+              0,
+              147
+            ]
+          ],
+          "right": [
+            [
+              0,
+              147
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "bruton_street",
+      "ways": [
+        "w1212176122"
+      ],
+      "treatment": "new_district",
+      "evidence": "Aerial 2026-05-26: sidewalks on both curbs, cars along both curbs, continental crosswalks.",
+      "widen": {
+        "w1212176122": {
+          "left": 2.4,
+          "right": 2.4
+        }
+      },
+      "parking": {
+        "w1212176122": {
+          "left": [
+            [
+              40,
+              120
+            ]
+          ],
+          "right": [
+            [
+              40,
+              200
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "johnson_street",
+      "ways": [
+        "w1076140200"
+      ],
+      "treatment": "new_district",
+      "evidence": "Aerial 2026-05-26: sidewalks on both curbs, continental crosswalks.",
+      "widen": {
+        "w1076140200": {
+          "right": 0.4
+        }
+      }
+    },
+    {
+      "id": "clipper_cove_way",
+      "ways": [
+        "w131820353",
+        "w1212176123"
+      ],
+      "treatment": "new_district",
+      "evidence": "Aerial 2026-05-26: sidewalks along it (OSM maps them on both sides of w131820353)."
+    },
+    {
+      "id": "ninth_street",
+      "ways": [
+        "w255330072",
+        "w255330071"
+      ],
+      "treatment": "boulevard",
+      "evidence": "Aerial 2026-05-26: double yellow, white edge lines along both sides east of Avenue D, sidewalks on both sides.",
+      "widen": {
+        "w255330072": {
+          "right": 1.1
+        },
+        "w255330071": {
+          "left": 4,
+          "right": 4
+        }
+      }
+    },
+    {
+      "id": "ninth_street_west",
+      "ways": [
+        "w8919277",
+        "w1212176121"
+      ],
+      "treatment": "boulevard",
+      "evidence": "Google Street View Mar 2025 (9th St near Avenue B, camera x -399, z 92, heading 64): double yellow, no edge lines, cars at both curbs, sidewalks on both sides; aerial 2026-05-26.",
+      "set": {
+        "edge_lines": false
+      },
+      "widen": {
+        "w8919277": {
+          "left": 1.4,
+          "right": 2.4
+        },
+        "w1212176121": {
+          "left": 1.1,
+          "right": 1.6
+        }
+      }
+    },
+    {
+      "id": "avenue_d",
+      "ways": [
+        "w8921288",
+        "w1473253277",
+        "w1473253278",
+        "w1473253279",
+        "w1473253280",
+        "w1473253281"
+      ],
+      "treatment": "boulevard",
+      "set": {
+        "centerline": "dashed_white",
+        "edge_lines": false
+      },
+      "evidence": "Google Street View Mar 2025 at 900 Avenue D (heading 152): curbs on both sides, lawns, walks; aerial 2026-05-26: walks set back behind grass and dirt strips, a dashed white centre line, ladder crosswalks at 9th, 10th and 11th Streets.",
+      "widen": {
+        "w8921288": {
+          "left": 3.1,
+          "right": 3.4
+        },
+        "w1473253277": {
+          "left": 1.4,
+          "right": 3.1
+        }
+      }
+    },
+    {
+      "id": "gateview_avenue",
+      "ways": [
+        "w52721875"
+      ],
+      "treatment": "village",
+      "evidence": "Google Street View Sep 2025 on Gateview Avenue (heading 238) and Mar 2025 at its junctions: red curbs along both sides, two-line crosswalks, patched asphalt."
+    },
+    {
+      "id": "gateview_avenue_loop",
+      "ways": [
+        "w8922388"
+      ],
+      "treatment": "village_walk",
+      "evidence": "Google Street View Mar 2025 at 1311 Gateview Avenue (heading 3): a walk at the curb with red fire-lane paint; OSM sidewalks on both sides.",
+      "widen": {
+        "w8922388": {
+          "left": 1.9,
+          "right": 2.2
+        }
+      },
+      "parking": {
+        "w8922388": {
+          "right": [
+            [
+              360,
+              495
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "gateview_court",
+      "ways": [
+        "w8916716",
+        "w8916719",
+        "w8916722"
+      ],
+      "treatment": "village",
+      "evidence": "Google Street View Mar 2025 at 1440 Gateview Court (heading into Gateview Avenue): red curbs, two crosswalk lines and STOP at the junction.",
+      "widen": {
+        "w8916716": {
+          "right": 0.4
+        },
+        "w8916722": {
+          "left": 0.9,
+          "right": 0.9
+        }
+      }
+    },
+    {
+      "id": "northpoint_drive",
+      "ways": [
+        "w8920838"
+      ],
+      "treatment": "village",
+      "evidence": "Google Street View Mar 2025 at 1200 Northpoint Drive: red curbs, STOP legend, two crosswalk lines, a curb ramp at the corner."
+    },
+    {
+      "id": "bayside_drive",
+      "ways": [
+        "w8917169"
+      ],
+      "treatment": "village",
+      "evidence": "Google Street View Mar 2025 at 1226 Bayside Drive: red curb, two crosswalk lines; aerial 2026-05-26: lawn behind the curbs, parking bays in front of the blocks."
+    },
+    {
+      "id": "mariner_drive",
+      "ways": [
+        "w8919063"
+      ],
+      "treatment": "village",
+      "evidence": "Google Street View Mar 2025 at 1217 Mariner Drive: red curbs both sides, STOP legend, two crosswalk lines."
+    },
+    {
+      "id": "exposition_drive",
+      "ways": [
+        "w8917767"
+      ],
+      "treatment": "village",
+      "evidence": "Google Street View Mar 2025 at 1225 Exposition Drive: red curbs both sides with fire-lane text, STOP legend."
+    },
+    {
+      "id": "villages_courts",
+      "ways": [
+        "w8919778",
+        "w1473022595",
+        "w8921589",
+        "w8916045",
+        "w11315799",
+        "w1473022608",
+        "w8919923",
+        "w8916727"
+      ],
+      "treatment": "village",
+      "evidence": "Aerial 2026-05-26: short curbed links into the housing lots; the Villages' curb and crosswalk practice (Google Street View Mar 2025 at the Gateview Avenue junctions).",
+      "widen": {
+        "w8919778": {
+          "left": 2.1
+        },
+        "w8921589": {
+          "left": 0.4
+        }
+      }
+    },
+    {
+      "id": "westside_drive",
+      "ways": [
+        "w108982423",
+        "w1473022594"
+      ],
+      "treatment": "village",
+      "evidence": "Aerial 2026-05-26: curbed residential link; Villages practice."
+    },
+    {
+      "id": "fish_streets",
+      "ways": [
+        "w8918733",
+        "w8917439",
+        "w8916874",
+        "w8916349",
+        "w11315406",
+        "w11315404"
+      ],
+      "treatment": "village_walk",
+      "evidence": "Google Street View Mar 2025 at 1400 Sturgeon Street (toward Avenue B): a walk at the curb, two crosswalk lines and a stop line at Avenue B; OSM sidewalks along these courts; fish-streets references (Mar 2025). Mar 2025 at Sturgeon Street and Avenue B: grey curbs, no red paint at the corner.",
+      "set": {
+        "red_curb": "none"
+      },
+      "widen": {
+        "w8918733": {
+          "left": 2.2,
+          "right": 2.4
+        },
+        "w8917439": {
+          "left": 2.4,
+          "right": 2.2
+        },
+        "w8916874": {
+          "left": 2.2,
+          "right": 2.2
+        },
+        "w8916349": {
+          "left": 2.2,
+          "right": 3.6
+        },
+        "w11315406": {
+          "left": 2.4,
+          "right": 3.1
+        },
+        "w11315404": {
+          "left": 2.2,
+          "right": 2.2
+        }
+      },
+      "parking": {
+        "w8918733": {
+          "left": [
+            [
+              0,
+              191
+            ]
+          ],
+          "right": [
+            [
+              0,
+              191
+            ]
+          ]
+        },
+        "w8917439": {
+          "left": [
+            [
+              0,
+              104
+            ]
+          ],
+          "right": [
+            [
+              0,
+              104
+            ]
+          ]
+        },
+        "w8916874": {
+          "left": [
+            [
+              20,
+              100
+            ]
+          ],
+          "right": [
+            [
+              20,
+              100
+            ]
+          ]
+        },
+        "w8916349": {
+          "left": [
+            [
+              0,
+              121
+            ]
+          ],
+          "right": [
+            [
+              0,
+              121
+            ]
+          ]
+        },
+        "w11315406": {
+          "left": [
+            [
+              0,
+              188
+            ]
+          ],
+          "right": [
+            [
+              0,
+              188
+            ]
+          ]
+        },
+        "w11315404": {
+          "left": [
+            [
+              0,
+              60
+            ]
+          ],
+          "right": [
+            [
+              0,
+              60
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "avenue_b",
+      "ways": [
+        "w8921273",
+        "w28353434"
+      ],
+      "treatment": "village",
+      "sides": {
+        "w8921273": {
+          "left": "walk"
+        }
+      },
+      "evidence": "Google Street View Jul 2023 (contributor) and Nov 2025 at Gateview Avenue: curbs with red corners, STOP legend and stop line, a walk on the west side; OSM sidewalk along part of the west side."
+    },
+    {
+      "id": "twelfth_street",
+      "ways": [
+        "w8921121"
+      ],
+      "treatment": "village",
+      "sides": {
+        "w8921121": {
+          "left": "none"
+        }
+      },
+      "evidence": "Google Street View Mar 2025 at 148 12th Street toward Avenue B: red curb on the housing side, STOP sign; aerial 2026-05-26: houses with driveways on the north side, a vacant lot with no curb on the south.",
+      "widen": {
+        "w8921121": {
+          "right": 2.2
+        }
+      },
+      "parking": {
+        "w8921121": {
+          "right": [
+            [
+              60,
+              110
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "thirteenth_street",
+      "ways": [
+        "w11315800",
+        "w8919233"
+      ],
+      "treatment": "village",
+      "sides": {
+        "w11315800": {
+          "left": [
+            [
+              0,
+              300,
+              "verge"
+            ],
+            [
+              300,
+              536,
+              "none"
+            ]
+          ],
+          "right": [
+            [
+              0,
+              300,
+              "verge"
+            ],
+            [
+              300,
+              536,
+              "none"
+            ]
+          ]
+        }
+      },
+      "evidence": "Google Street View Mar 2025 at 1198 13th Street (heading 112): curbs both sides with red corners; Sep 2025 at 729 13th Street (Avenue I) and 751 13th Street (Avenue M): no curbs east of Avenue I. The west 300 m (to Avenue I) is curbed, the rest is industrial.",
+      "widen": {
+        "w11315800": {
+          "left": 2.2,
+          "right": 2.2
+        },
+        "w8919233": {
+          "right": 0.9
+        }
+      },
+      "parking": {
+        "w11315800": {
+          "left": [
+            [
+              40,
+              160
+            ]
+          ],
+          "right": [
+            [
+              190,
+              210
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "fourteenth_street",
+      "ways": [
+        "w11315848"
+      ],
+      "treatment": "village",
+      "sides": {
+        "w11315848": {
+          "left": "none"
+        }
+      },
+      "evidence": "Aerial 2026-05-26: lawn and trees with a curb on the housing (south) side, a yard fence on the north side.",
+      "widen": {
+        "w11315848": {
+          "left": 1.1,
+          "right": 1.4
+        }
+      }
+    },
+    {
+      "id": "avenue_i",
+      "ways": [
+        "w8921338"
+      ],
+      "treatment": "industrial_curbed",
+      "evidence": "Google Street View Sep 2025 on Avenue I (camera x 74, z -432, heading 152) and Nov 2025 at 13th Street: curbs on both sides, narrow cracked walks, STOP at 13th Street.",
+      "widen": {
+        "w8921338": {
+          "left": 0.6,
+          "right": 2.6
+        }
+      },
+      "parking": {
+        "w8921338": {
+          "right": [
+            [
+              150,
+              330
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "avenue_i_ends",
+      "ways": [
+        "w11315850",
+        "w8921339"
+      ],
+      "treatment": "industrial",
+      "evidence": "Aerial 2026-05-26: industrial frontages; no ground photograph of these ends.",
+      "widen": {
+        "w8921339": {
+          "right": 1.9
+        }
+      }
+    },
+    {
+      "id": "avenue_h",
+      "ways": [
+        "w255330034",
+        "w8921331",
+        "w1252737727",
+        "w681687035"
+      ],
+      "treatment": "avenue_h",
+      "evidence": "Google Street View Sep 2025 at 850 and 841 Avenue H and at 4th Street (351 Avenue H): double yellow, white edge lines, parking on wide shoulders, dirt and gravel edges; the street-clutter research's Sep 2025 views of the truck lot gate at 651 Avenue H: a sidewalk on the east side. Aerial 2026-05-26: angled parking along both shoulders of the north part, a curb and walk along the buildings on the east side of the south part, dirt on its west side.",
+      "widen": {
+        "w255330034": {
+          "left": 1.0
+        },
+        "w8921331": {
+          "left": 2.1,
+          "right": 3.6
+        },
+        "w1252737727": {
+          "left": 1.9,
+          "right": 2.9
+        }
+      },
+      "sides": {
+        "w255330034": {
+          "left": "walk"
+        }
+      }
+    },
+    {
+      "id": "avenue_n",
+      "ways": [
+        "w8921530"
+      ],
+      "treatment": "shore_arterial",
+      "evidence": "Google Street View Nov 2025 at 500 Avenue N; aerial 2026-05-26.",
+      "widen": {
+        "w8921530": {
+          "left": 1.1,
+          "right": 2.1
+        }
+      },
+      "parking": {
+        "w8921530": {
+          "left": [
+            [
+              0,
+              1036
+            ]
+          ],
+          "right": [
+            [
+              0,
+              1036
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "avenue_m",
+      "ways": [
+        "w8921372",
+        "w945294691",
+        "w775820809",
+        "w945294692"
+      ],
+      "treatment": "industrial",
+      "evidence": "Google Street View Mar 2025 at 496 and 320 Avenue M, Sep 2025 at 13th Street (heading 332): no curbs, no centre line, heavy cracking.",
+      "widen": {
+        "w8921372": {
+          "left": 1.4,
+          "right": 1.1
+        },
+        "w945294691": {
+          "left": 2.5,
+          "right": 1.1
+        },
+        "w775820809": {
+          "left": 0.6
+        },
+        "w945294692": {
+          "left": 1.9
+        }
+      }
+    },
+    {
+      "id": "eleventh_street",
+      "ways": [
+        "w8917790"
+      ],
+      "treatment": "industrial",
+      "evidence": "Google Street View Mar 2025 at 11th Street (heading 64) and at Avenue D: worn asphalt, STOP and crosswalks at its junctions; aerial 2026-05-26: ladder crosswalks at Avenues D and I.",
+      "widen": {
+        "w8917790": {
+          "left": 2.5
+        }
+      }
+    },
+    {
+      "id": "industrial_streets",
+      "ways": [
+        "w11315153",
+        "w215879087",
+        "w8920145",
+        "w1246235705",
+        "w1252738864",
+        "w1252738865",
+        "w1473253275",
+        "w52721873",
+        "w8917792",
+        "w1252738866",
+        "w1252737735",
+        "w8916310",
+        "w8921139",
+        "w8921138",
+        "w110188515",
+        "w466953902",
+        "w499105917",
+        "w1144270956",
+        "w569261760",
+        "w131937148",
+        "w1252737729"
+      ],
+      "treatment": "industrial",
+      "evidence": "Google Street View Mar, Sep and Nov 2025 on 4th Street (at Avenues H and M), 8th Street (651 8th St) and 10th Street at Avenue D; aerial 2026-05-26 along 3rd, 5th, 6th, 10th Streets and Avenues E and G: no curbs, dirt and gravel edges.",
+      "widen": {
+        "w11315153": {
+          "left": 2.5,
+          "right": 1.1
+        },
+        "w215879087": {
+          "left": 1.9,
+          "right": 2.5
+        },
+        "w8920145": {
+          "right": 2.5
+        },
+        "w1246235705": {
+          "left": 1.4,
+          "right": 2.4
+        },
+        "w52721873": {
+          "left": 2.5,
+          "right": 2.1
+        },
+        "w8917792": {
+          "left": 0.9
+        },
+        "w1252737735": {
+          "left": 2.5
+        },
+        "w8916310": {
+          "left": 2.5
+        },
+        "w8921139": {
+          "right": 1.1
+        },
+        "w8921138": {
+          "left": 0.9
+        },
+        "w110188515": {
+          "left": 2.5,
+          "right": 2.5
+        },
+        "w499105917": {
+          "left": 1.1,
+          "right": 0.4
+        },
+        "w1144270956": {
+          "left": 0.6,
+          "right": 1.1
+        }
+      },
+      "parking": {
+        "w8916310": {
+          "left": [
+            [
+              0,
+              147
+            ]
+          ]
+        }
+      }
+    }
+  ],
+  "crossings": {
+    "n100656597": "lines",
+    "n311393363": "lines",
+    "n1249019311": "continental",
+    "n1249019318": "lines",
+    "n1249019323": "ladder",
+    "n1249019330": "ladder",
+    "n1249019333": "continental",
+    "n1249019344": "lines",
+    "n1249019345": "lines",
+    "n1249019357": "lines",
+    "n1249019367": "lines",
+    "n1249019368": "lines",
+    "n1249019380": "ladder",
+    "n1249019381": "lines",
+    "n1249019388": "ladder",
+    "n1249019395": "lines",
+    "n1249019397": "continental",
+    "n1249019398": "ladder",
+    "n1249019401": "lines",
+    "n1249019402": "lines",
+    "n1249019403": "continental",
+    "n1249019404": "continental",
+    "n1249019406": "lines",
+    "n1249019408": "lines",
+    "n1249019409": "ladder",
+    "n1249019410": "continental",
+    "n1249019411": "lines",
+    "n1249019417": "lines",
+    "n1249019418": "ladder",
+    "n1249019423": "lines",
+    "n1249019425": "continental",
+    "n1249019427": "lines",
+    "n1249019430": "lines",
+    "n1249019432": "ladder",
+    "n1249019433": "lines",
+    "n1249019436": "continental",
+    "n1249019437": "lines",
+    "n1249336059": "lines",
+    "n1249336073": "lines",
+    "n10057579663": "continental",
+    "n10057579696": "lines",
+    "n10057579699": "continental",
+    "n10057579721": "continental",
+    "n10057579913": "lines",
+    "n10057579914": "lines",
+    "n10057579975": "none",
+    "n10057580031": "ladder",
+    "n10057580034": "lines",
+    "n10057580038": "none",
+    "n12146354890": "continental"
+  },
+  "stops": [],
+  "bays": [
+    {
+      "way": "w8917169",
+      "side": "left",
+      "from_m": 36,
+      "to_m": 62,
+      "depth_m": 5.5,
+      "stall_width_m": 2.7,
+      "lines": true,
+      "evidence": "Clutter layer's curb-parking survey of the 2026-05-26 aerial (street-side bays, 2026-11-05); stall lines in the bays on the aerial strips: Bayside Drive, outside the loop"
+    },
+    {
+      "way": "w8917169",
+      "side": "left",
+      "from_m": 98,
+      "to_m": 130,
+      "depth_m": 5.5,
+      "stall_width_m": 2.7,
+      "lines": true,
+      "evidence": "Clutter layer's curb-parking survey of the 2026-05-26 aerial (street-side bays, 2026-11-05); stall lines in the bays on the aerial strips: Bayside Drive, outside the loop"
+    },
+    {
+      "way": "w8917169",
+      "side": "right",
+      "from_m": 22,
+      "to_m": 64,
+      "depth_m": 5.5,
+      "stall_width_m": 2.7,
+      "lines": true,
+      "evidence": "Clutter layer's curb-parking survey of the 2026-05-26 aerial (street-side bays, 2026-11-05); stall lines in the bays on the aerial strips: Bayside Drive, inside the loop"
+    },
+    {
+      "way": "w8917169",
+      "side": "right",
+      "from_m": 142,
+      "to_m": 172,
+      "depth_m": 5.5,
+      "stall_width_m": 2.7,
+      "lines": true,
+      "evidence": "Clutter layer's curb-parking survey of the 2026-05-26 aerial (street-side bays, 2026-11-05); stall lines in the bays on the aerial strips: Bayside Drive, inside the loop"
+    },
+    {
+      "way": "w8917169",
+      "side": "right",
+      "from_m": 196,
+      "to_m": 226,
+      "depth_m": 5.5,
+      "stall_width_m": 2.7,
+      "lines": true,
+      "evidence": "Clutter layer's curb-parking survey of the 2026-05-26 aerial (street-side bays, 2026-11-05); stall lines in the bays on the aerial strips: Bayside Drive, inside the loop"
+    },
+    {
+      "way": "w8917169",
+      "side": "right",
+      "from_m": 311,
+      "to_m": 344,
+      "depth_m": 5.5,
+      "stall_width_m": 2.7,
+      "lines": true,
+      "evidence": "Clutter layer's curb-parking survey of the 2026-05-26 aerial (street-side bays, 2026-11-05); stall lines in the bays on the aerial strips: Bayside Drive, inside the loop"
+    },
+    {
+      "way": "w8919063",
+      "side": "left",
+      "from_m": 26,
+      "to_m": 62,
+      "depth_m": 5.5,
+      "stall_width_m": 2.7,
+      "lines": true,
+      "evidence": "2026-05-26 aerial (0.25 m export), read along the way with metre ticks (2026-11-05): perpendicular cars in a paved strip on the north-east side; Mariner Drive. Located by the clutter layer's curb-parking survey of the same aerial."
+    },
+    {
+      "way": "w8919063",
+      "side": "left",
+      "from_m": 95,
+      "to_m": 123,
+      "depth_m": 5.5,
+      "stall_width_m": 2.7,
+      "lines": true,
+      "evidence": "2026-05-26 aerial (0.25 m export), read along the way with metre ticks (2026-11-05): a paved strip with cars on the north side; Mariner Drive. Located by the clutter layer's curb-parking survey of the same aerial."
+    },
+    {
+      "way": "w8919063",
+      "side": "right",
+      "from_m": 98,
+      "to_m": 132,
+      "depth_m": 5.5,
+      "stall_width_m": 2.7,
+      "lines": true,
+      "evidence": "2026-05-26 aerial (0.25 m export), read along the way with metre ticks (2026-11-05): perpendicular cars in a paved strip on the south side; Mariner Drive. Located by the clutter layer's curb-parking survey of the same aerial."
+    },
+    {
+      "way": "w8919063",
+      "side": "right",
+      "from_m": 141,
+      "to_m": 184,
+      "depth_m": 5.5,
+      "stall_width_m": 2.7,
+      "lines": true,
+      "evidence": "2026-05-26 aerial (0.25 m export), read along the way with metre ticks (2026-11-05): perpendicular cars in a paved strip on the south side; Mariner Drive. Located by the clutter layer's curb-parking survey of the same aerial."
+    },
+    {
+      "way": "w8919063",
+      "side": "right",
+      "from_m": 200,
+      "to_m": 224,
+      "depth_m": 5.5,
+      "stall_width_m": 2.7,
+      "lines": true,
+      "evidence": "2026-05-26 aerial (0.25 m export), read along the way with metre ticks (2026-11-05): perpendicular cars on the south side at the east end; Mariner Drive. Located by the clutter layer's curb-parking survey of the same aerial."
+    },
+    {
+      "way": "w8917767",
+      "side": "left",
+      "from_m": 24,
+      "to_m": 58,
+      "depth_m": 5.5,
+      "stall_width_m": 2.7,
+      "lines": true,
+      "evidence": "2026-05-26 aerial (0.25 m export), read along the way with metre ticks (2026-11-05): a paved strip with a car in front of the north-west block (grass and a tree from the junction to 23 m, as the Mar 2025 photo at 1225 Exposition Dr shows); Exposition Drive. Located by the clutter layer's curb-parking survey of the same aerial."
+    },
+    {
+      "way": "w8917767",
+      "side": "left",
+      "from_m": 88,
+      "to_m": 126,
+      "depth_m": 5.5,
+      "stall_width_m": 2.7,
+      "lines": true,
+      "evidence": "2026-05-26 aerial (0.25 m export), read along the way with metre ticks (2026-11-05): striped perpendicular stalls with cars on the outer side of the bend; Exposition Drive. Located by the clutter layer's curb-parking survey of the same aerial."
+    },
+    {
+      "way": "w8920838",
+      "side": "right",
+      "from_m": 156,
+      "to_m": 210,
+      "depth_m": 5.5,
+      "stall_width_m": 2.7,
+      "lines": true,
+      "evidence": "2026-05-26 aerial (0.25 m export), read along the way with metre ticks (2026-11-05): striped perpendicular stalls with cars on the inner side of the bend; Northpoint Drive. Located by the clutter layer's curb-parking survey of the same aerial."
+    },
+    {
+      "way": "w8920838",
+      "side": "left",
+      "from_m": 276,
+      "to_m": 300,
+      "depth_m": 5.5,
+      "stall_width_m": 2.7,
+      "lines": true,
+      "evidence": "2026-05-26 aerial (0.25 m export), read along the way with metre ticks (2026-11-05): a paved apron with stalls and cars on the east side; Northpoint Drive. Located by the clutter layer's curb-parking survey of the same aerial."
+    },
+    {
+      "way": "w8920838",
+      "side": "left",
+      "from_m": 318,
+      "to_m": 345,
+      "depth_m": 5.5,
+      "stall_width_m": 2.7,
+      "lines": true,
+      "evidence": "2026-05-26 aerial (0.25 m export), read along the way with metre ticks (2026-11-05): perpendicular cars in a paved strip on the east side; Northpoint Drive. Located by the clutter layer's curb-parking survey of the same aerial."
+    },
+    {
+      "way": "w8916719",
+      "side": "right",
+      "from_m": 14,
+      "to_m": 60,
+      "depth_m": 5.5,
+      "stall_width_m": 2.7,
+      "lines": true,
+      "evidence": "2026-05-26 aerial (0.25 m export), read along the way with metre ticks (2026-11-05): perpendicular cars on the court's east side; Gateview Court. Located by the clutter layer's curb-parking survey of the same aerial."
+    },
+    {
+      "way": "w8916719",
+      "side": "left",
+      "from_m": 14,
+      "to_m": 44,
+      "depth_m": 5.5,
+      "stall_width_m": 2.7,
+      "lines": true,
+      "evidence": "2026-05-26 aerial (0.25 m export), read along the way with metre ticks (2026-11-05): perpendicular cars on the court's west side; Gateview Court. Located by the clutter layer's curb-parking survey of the same aerial."
+    }
+  ],
+  "lots": [
+    {
+      "id": "mersea_lot",
+      "source_key": "w28356874",
+      "evidence": "Owner-priority lot by Mersea (699 Avenue of the Palms). Aerial 2026-05-26 (0.25 m, traced in the lot's own frame along its north-west edge): four rows of 90-degree stalls square to 9th Street in the north field (the north-west row, a back-to-back pair, and the row along the south-east aisle). Google Street View Sep 2025 inside the lot (pano TKhpp at x -365.5, z 142.7, headings 70, 110, 190 and 10; panos UmL4 and LtXS up the Avenue A strip): TOUR BUS PARKING across three wide stalls along the strip's east fence, faded stall marks along both edges of the strip, blue accessible stalls by the event trailers at its west side, a small raised island holding a lamp and a litter can, a white turn arrow by it. Stall counts and exact positions are production inference from the aerial.",
+      "rows": [
+        {
+          "id": "field_north_west",
+          "line_xz": [
+            [
+              -375.958,
+              104.895
+            ],
+            [
+              -305.569,
+              64.8
+            ]
+          ],
+          "side": "left",
+          "count": 30,
+          "depth_m": 5.0,
+          "stall_width_m": 2.7,
+          "angle_deg": 90,
+          "style": "plain"
+        },
+        {
+          "id": "field_middle_north",
+          "line_xz": [
+            [
+              -357.247,
+              101.373
+            ],
+            [
+              -324.399,
+              82.662
+            ]
+          ],
+          "side": "right",
+          "count": 14,
+          "depth_m": 5.5,
+          "stall_width_m": 2.7,
+          "angle_deg": 90,
+          "style": "plain"
+        },
+        {
+          "id": "field_middle_south",
+          "line_xz": [
+            [
+              -351.802,
+              110.932
+            ],
+            [
+              -318.954,
+              92.221
+            ]
+          ],
+          "side": "left",
+          "count": 14,
+          "depth_m": 5.5,
+          "stall_width_m": 2.7,
+          "angle_deg": 90,
+          "style": "plain"
+        },
+        {
+          "id": "field_south_east",
+          "line_xz": [
+            [
+              -366.217,
+              130.078
+            ],
+            [
+              -314.599,
+              100.674
+            ]
+          ],
+          "side": "right",
+          "count": 22,
+          "depth_m": 5.5,
+          "stall_width_m": 2.7,
+          "angle_deg": 90,
+          "style": "plain"
+        },
+        {
+          "id": "strip_tour_bus",
+          "line_xz": [
+            [
+              -366.355,
+              139.939
+            ],
+            [
+              -356.455,
+              157.319
+            ]
+          ],
+          "side": "left",
+          "count": 5,
+          "depth_m": 11.0,
+          "stall_width_m": 4.0,
+          "angle_deg": 90,
+          "style": "bus"
+        },
+        {
+          "id": "strip_east",
+          "line_xz": [
+            [
+              -355.465,
+              159.057
+            ],
+            [
+              -332.2,
+              199.9
+            ]
+          ],
+          "side": "left",
+          "count": 17,
+          "depth_m": 5.5,
+          "stall_width_m": 2.7,
+          "angle_deg": 90,
+          "style": "faded"
+        },
+        {
+          "id": "strip_west",
+          "line_xz": [
+            [
+              -360.679,
+              162.027
+            ],
+            [
+              -337.414,
+              202.87
+            ]
+          ],
+          "side": "right",
+          "count": 17,
+          "depth_m": 5.0,
+          "stall_width_m": 2.7,
+          "angle_deg": 90,
+          "style": "faded"
+        },
+        {
+          "id": "strip_accessible",
+          "line_xz": [
+            [
+              -367.862,
+              153.458
+            ],
+            [
+              -364.397,
+              159.541
+            ]
+          ],
+          "side": "right",
+          "count": 2,
+          "depth_m": 5.5,
+          "stall_width_m": 3.5,
+          "angle_deg": 90,
+          "style": "accessible"
+        }
+      ],
+      "islands": [
+        {
+          "id": "lamp_island",
+          "points_xz": [
+            [
+              -364.118,
+              136.593
+            ],
+            [
+              -360.642,
+              134.613
+            ],
+            [
+              -359.949,
+              135.829
+            ],
+            [
+              -363.425,
+              137.809
+            ]
+          ]
+        }
+      ],
+      "legends": [
+        {
+          "cell": "tour_bus_parking",
+          "at_xz": [
+            -358.171,
+            142.183
+          ],
+          "facing_xz": [
+            0.869,
+            -0.495
+          ],
+          "length_m": 1.2,
+          "width_m": 10.5,
+          "paint_wear": 2
+        },
+        {
+          "cell": "arrow_left",
+          "at_xz": [
+            -369.699,
+            136.089
+          ],
+          "facing_xz": [
+            -0.495,
+            -0.869
+          ],
+          "length_m": 4.8,
+          "width_m": 1.2,
+          "paint_wear": 2
+        }
+      ],
+      "surface": {
+        "material": "yard_asphalt_pale",
+        "evidence": "Google Street View Sep 2025 inside the lot (panos TKhpp, UmL4 and LtXS): pale, sun-bleached, cracked and patched asphalt across the field and the Avenue A strip, much lighter than the island's darker lot asphalt; the yards' pale worn asphalt (yard_asphalt_pale) at the yards' lift. Cracks, sealed cracks and darker patches throughout (Sep 2025 photos, headings 10, 70 and 190; the 2026-05-26 aerial).",
+        "wear": {
+          "crack_per_100m2": 2.0,
+          "oil_per_100m2": 0.3,
+          "patch_per_100m2": 0.8
+        }
+      }
+    }
+  ]
+}

@@ -58,6 +58,7 @@ const STREET_DECAL_MATERIALS := {
 			"paint_wear": preload("res://game/resources/textures/world/street/street_paint_wear.png"),
 			"tactile": preload("res://game/resources/textures/world/street/street_tactile.png"),
 			"stop_legend": preload("res://game/resources/textures/world/street/street_stop_legend.png"),
+			"legends": preload("res://game/resources/textures/world/street/street_legends.png"),
 		},
 	},
 	"street_wear": {
