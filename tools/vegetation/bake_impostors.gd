@@ -9,11 +9,14 @@ extends SceneTree
 ## runtime. The rollout's models (the kit's impostor_frame says which) add a light
 ## straight down, so their images hold the crown's own shade from any side, then
 ## are brightened or darkened until they meet their near level under the game's
-## own sun and sky (main.tscn); a BAKE_CHECK line reports how the impostor and the
-## near level compare from four sides, at the hand-over distance (LOD1, what the
-## impostor replaces) and at 30 m (LOD0): tone overall, side by side and in the
-## plant's upper and lower halves (the gain evens out the overall tone, so a fault
-## shows in the others), top height, width and covered pixels.
+## own sun and sky (main.tscn), with a ramp of gain down the image that meets the
+## near level's upper and lower halves. A BAKE_CHECK line reports how the impostor
+## and the near level compare from four sides and with the instance turned so the
+## camera falls halfway between two views, at the hand-over distance (LOD1, what the
+## impostor replaces) and at 30 m (LOD0): tone overall, side by side and by half (the
+## gain evens out the overall tone, so a fault shows in the others), top height,
+## width and covered pixels; and the near level's mean leaf colour from the sun side
+## beside the mean of its dated crop (FOLIAGE_CROPS).
 ##
 ##   tools/godot --path . --script tools/vegetation/bake_impostors.gd [-- [--high] [--only PROP[:VARIANT],...]]
 ##   tools/godot --headless --path . --import   # then import the new PNGs
@@ -39,6 +42,16 @@ const BAKE_TOP_LIGHT := 0.6
 ## The eye height of the tone and height check, and the side of its square frames.
 const EYE_M := 2.2
 const CHECK_PIXELS := 256
+## Mean sRGB of leaves in the dated crops, kept with the vegetation work notes
+## outside Git (p5, c2 and c4, b5, n1, s1, s2, s3); they vary with the light of the
+## day, and a crop shows the lit part of a plant where the check takes all of it,
+## darker by about 1.3 in sRGB, so read a gap as a direction, not a number to hit.
+const FOLIAGE_CROPS := {
+	"monterey_pine": [88, 97, 71], "spreading_broadleaf": [79, 84, 63], "nz_christmas_tree": [68, 70, 58], "norfolk_island_pine": [121, 120, 78],
+	"indian_hawthorn": [116, 117, 59], "pittosporum_tobira": [110, 111, 61], "conical_shrub": [99, 104, 68],
+}
+## How far the ramp of gain may go at either end of a plant.
+const RAMP_LIMITS := Vector2(0.6, 1.6)
 ## Each 8-bit sRGB value in linear light.
 var _LINEAR := PackedFloat32Array()
 
@@ -187,7 +200,7 @@ func _bake_high(kit: Kit, prop: String, variant: int) -> void:
 	viewport.queue_free()
 	_fill_transparent(atlas)
 	if bool(frame.match_tone):
-		atlas = await _match_tone(kit, prop, variant, atlas, Kit.IMPOSTOR_HIGH_DEG)
+		atlas = await _match_high_tone(kit, prop, variant, atlas)
 	var path := Kit.impostor_high_path(prop, variant)
 	var error := atlas.save_png(ProjectSettings.globalize_path(path))
 	if error == OK:
@@ -196,6 +209,46 @@ func _bake_high(kit: Kit, prop: String, variant: int) -> void:
 		_errors.append("could not save %s (error %d)" % [path, error])
 		return
 	print("BAKED %s %dx%d from %d deg, frame %.2f m" % [path, atlas.get_width(), atlas.get_height(), int(Kit.IMPOSTOR_HIGH_DEG), square])
+
+
+## The views from above brightened or darkened (per colour channel, in linear
+## light) until the impostor's mean colour under the game's light meets its near
+## level's at the hand-over distance from that height, seen from four sides.
+func _match_high_tone(kit: Kit, prop: String, variant: int, atlas: Image) -> Image:
+	var tree := kit.build(prop, variant)
+	var side := Image.load_from_file(ProjectSettings.globalize_path(Kit.impostor_texture_path(prop, variant)))
+	side.generate_mipmaps()
+	var mipped := atlas.duplicate() as Image
+	mipped.generate_mipmaps()
+	var far_mesh := kit.impostor_mesh(prop, variant, ImageTexture.create_from_image(side), ImageTexture.create_from_image(mipped))
+	if far_mesh == null:
+		return atlas
+	var hand_over := float((Kit.PROPS[prop].ranges as Array)[1])
+	var box: AABB = (tree.lod0 as ArrayMesh).get_aabb()
+	var extent := maxf(box.size.y, maxf(box.size.x, box.size.z))
+	var scene := _lit_scene(tree, far_mesh)
+	var camera: Camera3D = scene.camera
+	camera.fov = rad_to_deg(2.0 * atan(extent * 0.5 / maxf(hand_over - extent * 0.5, 1.0) * 1.1))
+	var material: ShaderMaterial = far_mesh.surface_get_material(far_mesh.get_surface_count() - 1)
+	var angle := deg_to_rad(Kit.IMPOSTOR_HIGH_DEG)
+	var aim := box.get_center()
+	var gain := Vector3.ONE
+	var near := Vector3.ZERO
+	var far := Vector3.ZERO
+	for attempt in 3:
+		material.set_shader_parameter("tint", Color(gain.x, gain.y, gain.z).linear_to_srgb())
+		near = Vector3.ZERO
+		far = Vector3.ZERO
+		for side_index in 4:
+			var turn := TAU * (float(side_index) + 0.15) / 4.0
+			camera.look_at_from_position(aim + Vector3(sin(turn) * cos(angle), sin(angle), cos(turn) * cos(angle)) * hand_over, aim, Vector3.UP)
+			near += (await _frame(scene, "lod1")).mean
+			far += (await _frame(scene, "far")).mean
+		gain *= Vector3(near.x / maxf(far.x, 0.0001), near.y / maxf(far.y, 0.0001), near.z / maxf(far.z, 0.0001))
+		gain = gain.clamp(Vector3.ONE * 0.04, Vector3.ONE * 2.5)
+	(scene.viewport as SubViewport).queue_free()
+	print("BAKE_CHECK_HIGH %s %d gain=%s last near/far luma %.3f" % [prop, variant, gain, _luma(near) / maxf(_luma(far), 0.0001)])
+	return _graded(atlas, gain, Vector2.ONE, Kit.IMPOSTOR_HIGH_GRID.y)
 
 
 ## A transparent viewport of the frame's mesh (a palm's crown surface alone), its
@@ -253,52 +306,58 @@ func _bake_viewport(frame: Dictionary, pixels: Vector2i, shaded: bool) -> SubVie
 
 ## The image brightened or darkened (per colour channel, in linear light) until
 ## the impostor's mean colour under the game's light meets its near level's at the
-## hand-over distance, seen from four sides; prints the BAKE_CHECK comparison. With
-## height_deg the image is the tree's views from above, seen from that height.
-func _match_tone(kit: Kit, prop: String, variant: int, atlas: Image, height_deg: float = 0.0) -> Image:
+## hand-over distance, seen from four sides, then ramped down its height to meet
+## the near level's upper and lower halves; prints the BAKE_CHECK comparison.
+func _match_tone(kit: Kit, prop: String, variant: int, atlas: Image) -> Image:
 	var tree := kit.build(prop, variant)
 	var mipped := atlas.duplicate() as Image
 	mipped.generate_mipmaps()
-	var texture := ImageTexture.create_from_image(mipped)
-	var far_mesh: ArrayMesh = null
-	if height_deg > 0.0:
-		var side := Image.load_from_file(ProjectSettings.globalize_path(Kit.impostor_texture_path(prop, variant)))
-		side.generate_mipmaps()
-		far_mesh = kit.impostor_mesh(prop, variant, ImageTexture.create_from_image(side), texture)
-	else:
-		far_mesh = kit.impostor_mesh(prop, variant, texture)
+	var far_mesh := kit.impostor_mesh(prop, variant, ImageTexture.create_from_image(mipped))
 	if far_mesh == null:
 		return atlas
 	var hand_over := float((Kit.PROPS[prop].ranges as Array)[1])
 	var box: AABB = (tree.lod0 as ArrayMesh).get_aabb()
 	var extent := maxf(box.size.y, maxf(box.size.x, box.size.z))
 	var scene := _lit_scene(tree, far_mesh)
+	var grid: Vector2i = kit.impostor_frame(prop, variant).grid
+	var views := grid.x * grid.y
 	var material: ShaderMaterial = far_mesh.surface_get_material(far_mesh.get_surface_count() - 1)
 	var gain := Vector3.ONE
 	var start := Vector3.ZERO
 	var stats := {}
 	for attempt in 3:
 		material.set_shader_parameter("tint", Color(gain.x, gain.y, gain.z).linear_to_srgb())
-		stats = await _compare(scene, "lod1", hand_over, box, extent, height_deg)
+		stats = await _compare(scene, "lod1", hand_over, box, extent, views)
 		var near: Vector3 = stats.near_mean
 		var far: Vector3 = stats.far_mean
 		if attempt == 0:
 			start = far / near
 		gain *= Vector3(near.x / maxf(far.x, 0.0001), near.y / maxf(far.y, 0.0001), near.z / maxf(far.z, 0.0001))
 		gain = gain.clamp(Vector3.ONE * 0.04, Vector3.ONE * 2.5)
+	# The gain is settled; measure the halves with it, and bake both into the image.
 	material.set_shader_parameter("tint", Color(gain.x, gain.y, gain.z).linear_to_srgb())
-	stats = await _compare(scene, "lod1", hand_over, box, extent, height_deg)
-	var close: Dictionary = await _compare(scene, "lod0", 30.0, box, extent, height_deg)
+	stats = await _compare(scene, "lod1", hand_over, box, extent, views)
+	var ramp := Vector2(clampf(1.0 / (1.0 + float(stats.upper_gap)), RAMP_LIMITS.x, RAMP_LIMITS.y), clampf(1.0 / (1.0 + float(stats.lower_gap)), RAMP_LIMITS.x, RAMP_LIMITS.y))
+	var graded := _graded(atlas, gain, ramp, grid.y)
+	mipped = graded.duplicate() as Image
+	mipped.generate_mipmaps()
+	material.set_shader_parameter("albedo_texture", ImageTexture.create_from_image(mipped))
+	material.set_shader_parameter("tint", Color.WHITE)
+	stats = await _compare(scene, "lod1", hand_over, box, extent, views)
+	var close: Dictionary = await _compare(scene, "lod0", 30.0, box, extent, views)
 	(scene.viewport as SubViewport).queue_free()
-	print("BAKE_CHECK %s %d gain=%s tone_before=%+.0f%% | at %dm vs LOD1: %s | at 30m vs LOD0: %s" % [prop, variant, gain, (_luma(start) - 1.0) * 100.0, int(hand_over), _report(stats), _report(close)])
-	return _graded(atlas, gain)
+	var leaf: Vector3 = close.leaf
+	var crop: Array = FOLIAGE_CROPS.get(prop, [])
+	print("BAKE_CHECK %s %d gain=%s ramp=%s tone_before=%+.0f%% | at %dm vs LOD1: %s | at 30m vs LOD0: %s | leaf rgb %d,%d,%d crop %s" % [prop, variant, gain, ramp, (_luma(start) - 1.0) * 100.0, int(hand_over), _report(stats), _report(close),
+		roundi(leaf.x), roundi(leaf.y), roundi(leaf.z), ",".join(PackedStringArray(crop.map(func(value: int) -> String: return str(value)))) if not crop.is_empty() else "none"])
+	return graded
 
 
 ## How far the impostor is from the near level in stats, each as a share of the near level's.
 func _report(stats: Dictionary) -> String:
 	var near: Vector3 = stats.near_mean
 	var far: Vector3 = stats.far_mean
-	return "tone %+.0f%% (sides %s, upper %+.0f%%, lower %+.0f%%) top %+.1f%% width %+.1f%% cover %+.0f%%" % [(_luma(far) / maxf(_luma(near), 0.0001) - 1.0) * 100.0, stats.sides, stats.upper_gap * 100.0, stats.lower_gap * 100.0, stats.top_gap * 100.0, stats.width_gap * 100.0, stats.cover_gap * 100.0]
+	return "tone %+.0f%% (sides %s, turned %s, upper %+.0f%%, lower %+.0f%%) top %+.1f%% width %+.1f%% cover %+.0f%%" % [(_luma(far) / maxf(_luma(near), 0.0001) - 1.0) * 100.0, stats.sides, stats.turned, stats.upper_gap * 100.0, stats.lower_gap * 100.0, stats.top_gap * 100.0, stats.width_gap * 100.0, stats.cover_gap * 100.0]
 
 
 static func _luma(color: Vector3) -> float:
@@ -341,17 +400,22 @@ func _lit_scene(tree: Dictionary, far_mesh: Mesh) -> Dictionary:
 	far.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	viewport.add_child(far)
 	meshes["far"] = far
+	var turning: Array[MeshInstance3D] = [meshes.lod0, meshes.lod1, far]
 	if tree.has("shadow"):
 		var shadow := MeshInstance3D.new()
 		shadow.mesh = tree.shadow
 		shadow.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
 		viewport.add_child(shadow)
-	return {"viewport": viewport, "camera": camera, "meshes": meshes}
+		turning.append(shadow)
+	return {"viewport": viewport, "camera": camera, "meshes": meshes, "turning": turning}
 
 
-## The near level against the impostor from four sides at distance, at eye
-## height: their mean linear colours, and how much lower, narrower and thinner the impostor is.
-func _compare(scene: Dictionary, near_key: String, distance: float, box: AABB, extent: float, height_deg: float = 0.0) -> Dictionary:
+## The near level against the impostor from four sides at distance, at eye height:
+## their mean linear colours, how much lower, narrower and thinner the impostor is,
+## and the near level's mean leaf colour from the sun side (the first side, about
+## 15 degrees off the sun's bearing); then their tone with the plant turned so
+## the camera falls halfway between two of its views (of views), as an instance can.
+func _compare(scene: Dictionary, near_key: String, distance: float, box: AABB, extent: float, views: int) -> Dictionary:
 	var camera: Camera3D = scene.camera
 	# A frame with room for the plant's near side at that distance; only the zoom changes, not the perspective.
 	camera.fov = rad_to_deg(2.0 * atan(extent * 0.5 / maxf(distance - extent * 0.5, 1.0) * 1.1))
@@ -362,14 +426,11 @@ func _compare(scene: Dictionary, near_key: String, distance: float, box: AABB, e
 	var cover_gap := 0.0
 	var sides := PackedStringArray()
 	var halves := [Vector2.ZERO, Vector2.ZERO]
+	var leaf := Vector3.ZERO
 	var aim := box.get_center()
 	for side in 4:
 		var turn := TAU * (float(side) + 0.15) / 4.0
-		var offset := Vector3(sin(turn) * distance, EYE_M - aim.y, cos(turn) * distance)
-		if height_deg > 0.0:
-			var angle := deg_to_rad(height_deg)
-			offset = Vector3(sin(turn) * cos(angle), sin(angle), cos(turn) * cos(angle)) * distance
-		camera.look_at_from_position(aim + offset, aim, Vector3.UP)
+		camera.look_at_from_position(aim + Vector3(sin(turn) * distance, EYE_M - aim.y, cos(turn) * distance), aim, Vector3.UP)
 		var near := await _frame(scene, near_key)
 		var far := await _frame(scene, "far")
 		near_sum += near.mean
@@ -377,15 +438,27 @@ func _compare(scene: Dictionary, near_key: String, distance: float, box: AABB, e
 		sides.append("%+.0f" % ((_luma(far.mean) / maxf(_luma(near.mean), 0.0001) - 1.0) * 100.0))
 		halves[0] += Vector2(far.upper, near.upper)
 		halves[1] += Vector2(far.lower, near.lower)
+		if side == 0:
+			leaf = near.leaf
 		var tall := maxf(float(near.bottom - near.top), 1.0)
 		top_gap += float(near.top - far.top) / tall
 		width_gap += float((far.right - far.left) - (near.right - near.left)) / maxf(float(near.right - near.left), 1.0)
 		cover_gap += float(far.count) / maxf(float(near.count), 1.0) - 1.0
+	var turning: Array[MeshInstance3D] = scene.turning
+	var yaw := PI / float(views)
+	for instance in turning:
+		instance.rotation.y = yaw
+	var turned_aim := aim.rotated(Vector3.UP, yaw)
+	camera.look_at_from_position(turned_aim + Vector3(0.0, EYE_M - aim.y, distance), turned_aim, Vector3.UP)
+	var near_turned := await _frame(scene, near_key)
+	var far_turned := await _frame(scene, "far")
+	for instance in turning:
+		instance.rotation.y = 0.0
 	return {"near_mean": near_sum, "far_mean": far_sum, "sides": "/".join(sides), "upper_gap": halves[0].x / maxf(halves[0].y, 0.0001) - 1.0, "lower_gap": halves[1].x / maxf(halves[1].y, 0.0001) - 1.0,
-		"top_gap": top_gap / 4.0, "width_gap": width_gap / 4.0, "cover_gap": cover_gap / 4.0}
+		"turned": "%+.0f" % ((_luma(far_turned.mean) / maxf(_luma(near_turned.mean), 0.0001) - 1.0) * 100.0), "leaf": leaf, "top_gap": top_gap / 4.0, "width_gap": width_gap / 4.0, "cover_gap": cover_gap / 4.0}
 
 
-## One level alone in the frame: {mean linear colour, its luma in the upper and lower halves of its height, count, top, bottom, left, right} of its covered pixels.
+## One level alone in the frame: {mean linear colour, its luma in the upper and lower halves of its height, mean sRGB of its leaves (not bark), count, top, bottom, left, right} of its covered pixels.
 func _frame(scene: Dictionary, key: String) -> Dictionary:
 	var meshes: Dictionary = scene.meshes
 	for name: String in meshes:
@@ -397,6 +470,8 @@ func _frame(scene: Dictionary, key: String) -> Dictionary:
 	image.convert(Image.FORMAT_RGBA8)
 	var data := image.get_data()
 	var sum := Vector3.ZERO
+	var leaf := Vector3.ZERO
+	var leaves := 0
 	var count := 0
 	var top := image.get_height()
 	var bottom := 0
@@ -416,6 +491,9 @@ func _frame(scene: Dictionary, key: String) -> Dictionary:
 			row_luma[y] += _luma(pixel)
 			row_count[y] += 1
 			count += 1
+			if data[i + 1] >= data[i + 2] + 6 and data[i + 1] >= data[i] - 14:
+				leaf += Vector3(data[i], data[i + 1], data[i + 2])
+				leaves += 1
 			top = mini(top, y)
 			bottom = maxi(bottom, y)
 			left = mini(left, x)
@@ -428,25 +506,36 @@ func _frame(scene: Dictionary, key: String) -> Dictionary:
 			upper += Vector2(row_luma[y], row_count[y])
 		else:
 			lower += Vector2(row_luma[y], row_count[y])
-	return {"mean": sum / maxf(float(count), 1.0), "upper": upper.x / maxf(upper.y, 1.0), "lower": lower.x / maxf(lower.y, 1.0), "count": count, "top": top, "bottom": bottom, "left": left, "right": right}
+	return {"mean": sum / maxf(float(count), 1.0), "upper": upper.x / maxf(upper.y, 1.0), "lower": lower.x / maxf(lower.y, 1.0), "leaf": leaf / maxf(float(leaves), 1.0), "count": count, "top": top, "bottom": bottom, "left": left, "right": right}
 
 
-## atlas with each channel scaled by gain in linear light, through a table per channel.
-func _graded(atlas: Image, gain: Vector3) -> Image:
-	var tables: Array[PackedByteArray] = []
-	for channel in 3:
-		var table := PackedByteArray()
-		table.resize(256)
-		for value in 256:
-			var linear: float = _LINEAR[value] * gain[channel]
-			var encoded := Color(linear, linear, linear).linear_to_srgb().r
-			table[value] = clampi(roundi(encoded * 255.0), 0, 255)
-		tables.append(table)
+## atlas with each channel scaled by gain in linear light, and by a ramp from ramp.x
+## at the top of each of its rows of views to ramp.y at the bottom, through a table
+## per channel and step of the ramp.
+func _graded(atlas: Image, gain: Vector3, ramp: Vector2, view_rows: int) -> Image:
 	var data := atlas.get_data()
-	for i in range(0, data.size(), 4):
-		for channel in 3:
-			data[i + channel] = tables[channel][data[i + channel]]
-	return Image.create_from_data(atlas.get_width(), atlas.get_height(), false, Image.FORMAT_RGBA8, data)
+	var width := atlas.get_width()
+	var view_height := atlas.get_height() / view_rows
+	var tables := {}
+	for y in atlas.get_height():
+		var v := float(y % view_height) / float(view_height)
+		var scale := snappedf(lerpf(ramp.x, ramp.y, smoothstep(0.2, 0.8, v)), 0.01)
+		if not tables.has(scale):
+			var steps: Array[PackedByteArray] = []
+			for channel in 3:
+				var table := PackedByteArray()
+				table.resize(256)
+				for value in 256:
+					var linear: float = _LINEAR[value] * gain[channel] * scale
+					table[value] = clampi(roundi(Color(linear, linear, linear).linear_to_srgb().r * 255.0), 0, 255)
+				steps.append(table)
+			tables[scale] = steps
+		var row: Array[PackedByteArray] = tables[scale]
+		for x in width:
+			var i := (y * width + x) * 4
+			for channel in 3:
+				data[i + channel] = row[channel][data[i + channel]]
+	return Image.create_from_data(width, atlas.get_height(), false, Image.FORMAT_RGBA8, data)
 
 
 func _unpremultiply(image: Image) -> void:

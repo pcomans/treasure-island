@@ -23742,3 +23742,25 @@ Carried by deploy-fix from the deploy agent's scratch log; text unchanged apart 
 (Relayed verbatim by the coordinator; added by street-ground-rollout-20261105.)
 
 - Rebuilding the generator with logging, then comparing real polygons rather than triangle sets, turned the author's open questions into measurements in minutes; a pass that repairs problems before its own check runs still needs a limit on what it may repair, or the check proves nothing.
+
+### vegetation-models-20261105 — 2026-11-05 — R3 tree, shrub and hedge models (R01 to R04, reviewed at R02 and R03)
+
+- What worked well: the headless kit check caught parse, budget and size errors with no engine run. After the R03 verdict, a small offline preview of the kit's meshes (a Godot dump into a Node rasterizer with sun shadows, about 2 seconds a sheet) took the residential pine through five forms between two engine rounds. Hand-over pairs at the real switch and the bake's per-side check found faults a single forced pose hid. A shadow-only mesh took the broadleaf from 6.3K to about 3K primitives per instance. Computing a grade from the source's measured mean landed three shrubs within about 5 sRGB levels of their crops, where tuning by eye had not.
+- What did not work well: R03 took nine slot holds. Crops and renders were only set side by side at R03d and mean colour only measured at R03g, so leaf scale and saturation errors sat for rounds. I gave the mature palms a shadow mesh without moving them to the unshadowed shader; the black shape lasted three rounds, because the check's gain evened out the number it reported, and I found it only by opening the sheet. One patch script wrote part of its edits before an assert failed. Sizes against the brief were only checked after the sheets were finished, so the fixes missed that review. I also moved one setting the wrong way before reading its history across rounds: raising the pine's sky lean made its shaded side worse. Scratch headless kit checks ran outside the slot, as the assignment allowed.
+- What the team should change next time: put crop and render in one frame, and measure mean colour and sizes against the brief in round one. Read native-pixel crops, not montages. Preview form offline before any engine run. Don't let a check report the value its own correction just set.
+
+### visual-review-vegetation — models R02
+
+(Relayed verbatim by the coordinator; added by vegetation-models-20261105.)
+
+- What worked well: dated crops above the renders, with the R01 row underneath, made each species judgement quick. Forced LOD frames at one pose exposed the palm bake fault at once.
+- What did not work well: single hand-over frames can't show a pop. One sheet per species also hid the shared pom-pom crown until several had been seen. The hedges had no hand-over frames and the palm had no timing.
+- What to change next time: render each hand-over as a pair at the switch distance. Add one contact sheet of all models at 40 m, and an automated LOD0-against-impostor tone and height check in the bake step.
+
+### visual-review-vegetation — models R03
+
+(Relayed verbatim by the coordinator; added by vegetation-models-20261105.)
+
+- What worked well: the contact sheet exposed shared faults at once, and the hand-over pairs and bake check answered R02's limits. Stating doubts in advance focused the review.
+- What did not work well: the sheets show one bearing per model, so a worst-case blend looked like a view bug and took a side check to clear. The bake check runs at unrotated poses, so it cannot test instance yaw.
+- What to change next time: add one hand-over pair at a bearing on a baked view and one halfway between. Add a yawed instance to the bake check. Measure foliage colour against crops in the check, since colour drifted in both directions across rounds.

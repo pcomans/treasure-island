@@ -3,12 +3,13 @@
 // the tree's LOD0 (tools/vegetation/bake_impostors.gd). VERTEX holds the quad's
 // pivot, UV2 the corner offset from it in metres. With view_grid above 1 x 1 the
 // texture holds that many views of the tree, turned evenly round it from +Z
-// toward +X, row by row; the quad shows the two views nearest the camera's side
-// of the tree, blended, so the tree keeps its lean and width from every side and
-// each instance's own turn. With high_frame_m above 0 the tree also has views from
-// above: the quad grows to that square, leans back to face a camera above it, and
-// crossfades to high_texture's views, so a far tree keeps its round crown from a
-// jetpack or an overview instead of thinning to a line.
+// toward +X, row by row; the quad shows the view nearest the camera's side of the
+// tree, crossing to the next over a narrow band (a long blend softens its limbs), so
+// the tree keeps its lean and width from every side and each instance's own turn.
+// With high_frame_m above 0 the tree also has views from above: the quad grows to
+// that square, leans back to face a camera above it, and crossfades to
+// high_texture's views, so a far tree keeps its round crown from a jetpack or an
+// overview instead of thinning to a line.
 uniform sampler2D albedo_texture : source_color, filter_linear_mipmap, repeat_disable;
 uniform vec4 tint : source_color = vec4(1.0);
 uniform float alpha_cutoff : hint_range(0.05, 0.95) = 0.5;
@@ -35,6 +36,9 @@ uniform float high_frame_m = 0.0;
 // The camera's height angle (radians) where the crossfade to the views from above runs.
 const float HIGH_FADE_START = 0.21;
 const float HIGH_FADE_END = 0.66;
+
+// How far either side of halfway between two views the crossing runs (0.5 blends all the way).
+const float VIEW_BLEND = 0.16;
 
 // First view, second view, the share of the second.
 varying flat vec3 views;
@@ -95,7 +99,7 @@ void fragment() {
 	vec2 framed_uv = clamp(side_uv, 0.0, 1.0);
 	vec4 tex = texture(albedo_texture, view_uv(framed_uv, views.x));
 	if (view_grid.x * view_grid.y > 1) {
-		tex = mix(tex, texture(albedo_texture, view_uv(framed_uv, views.y)), views.z);
+		tex = mix(tex, texture(albedo_texture, view_uv(framed_uv, views.y)), smoothstep(0.5 - VIEW_BLEND, 0.5 + VIEW_BLEND, views.z));
 	}
 	tex.a *= step(abs(side_uv.x - 0.5), 0.5) * step(abs(side_uv.y - 0.5), 0.5);
 	if (high_views.w > 0.0) {
