@@ -612,9 +612,13 @@ export function loadStreetDetailSetPieces(projectRoot) {
 // items are placed as the evidence says; then each scored side keeps at least
 // WALK_UP_FREE_LANES of the lanes its site leaves open free of street solids,
 // barring the island clutter in the lanes that need the fewest moves where fewer
-// are free.
+// are free. The test also closes lanes on the unit's own stoops and steps, which
+// this generator can't see, so a lane it counts as free can still be shut. Where a
+// lot's or bays' cars can move without losing a car (another stall or bay takes
+// them), a side keeps all but WALK_UP_OCCUPIED_LANES of its lanes free too.
 export const WALK_UP_INPUT = "tools/config/walk-up-lanes.json";
 const WALK_UP_FREE_LANES = 2;
+const WALK_UP_OCCUPIED_LANES = 2;
 // A solid occupies a lane when it comes this close to the lane's corridor (from
 // its first start to the unit's wall): the capsule's sweep, and room for the
 // footprint standing in for the test's walls (m).
@@ -1799,11 +1803,12 @@ export function generateStreetDetail({
   // Then a row's place (stall, curb place, bay or can) is barred and the clutter
   // placed again, so the row moves to its rule's next place and the counts hold
   // while places last, when:
-  //   - a scored side keeps fewer than WALK_UP_FREE_LANES of the walk-up lanes
-  //     its site leaves open free of street solids: the island rows in the lanes
-  //     that need the fewest moves (the test's order on ties) are barred, until
-  //     enough are free. Other solids (furniture at its node, fences, trunks, the
-  //     pilot zones' clutter) stay, so a lane one occupies stays occupied.
+  //   - a scored side keeps too few of the walk-up lanes its site leaves open free
+  //     of street solids: the island rows in the lanes that need the fewest moves
+  //     (the test's order on ties) are barred, until WALK_UP_FREE_LANES are free,
+  //     or all but WALK_UP_OCCUPIED_LANES where only cars that keep their count
+  //     move. Other solids (furniture at its node, fences, trunks, the pilot
+  //     zones' clutter) stay, so a lane one occupies stays occupied.
   //   - the row shuts walkable ground in: the clearance check's flood
   //     (shutInPockets) over each fence and yard region an island row stands in
   //     bars the row most of whose grown footprint borders the shut-in cells.
@@ -1812,6 +1817,9 @@ export function generateStreetDetail({
   const moves = [];
   const walkUpMoves = [];
   const isIslandRow = (row) => row.source_id.startsWith("island:");
+  // A lot's or bays' car moves to another stall or bay, and its count holds.
+  const movingRules = new Set((config.clutter ?? []).filter((rule) => ["lot_occupancy", "bay_occupancy"].includes(rule.pattern)).map((rule) => rule.id));
+  const keepsItsCount = (row) => movingRules.has(row.id.split(":")[2]);
   let walkUpShort = [];
   if (clutter.rows.some(isIslandRow)) {
     const roofs = roofTriangles([...chunks.values()].flatMap((chunk) => chunk.records));
@@ -1850,13 +1858,15 @@ export function generateStreetDetail({
       for (const side of [...sidesWithCars].sort((left, right) => left - right)) {
         const open = walkUpSides[side].corridors.flatMap((corridor, lane) => (corridor === null ? [] : [{ key: `${side}/${lane}`, lane }]));
         let free = open.filter(({ key }) => !occupants.has(key) && !held.has(key)).length;
-        if (free >= WALK_UP_FREE_LANES) continue;
+        const wanted = Math.max(WALK_UP_FREE_LANES, open.length - WALK_UP_OCCUPIED_LANES);
+        if (free >= wanted) continue;
         // The lanes only island rows occupy, fewest rows first (the test's order on ties).
         const movable = open.map(({ key, lane }) => ({ key, lane, cars: occupants.get(key) ?? [] }))
           .filter(({ key, cars }) => !held.has(key) && cars.length > 0)
           .sort((left, right) => left.cars.length - right.cars.length || left.lane - right.lane);
         for (const { lane, cars } of movable) {
-          if (free >= WALK_UP_FREE_LANES) break;
+          if (free >= wanted) break;
+          if (free >= WALK_UP_FREE_LANES && !cars.every(keepsItsCount)) continue;
           for (const row of cars) {
             if (barred.has(row.id)) continue;
             barred.add(row.id);
