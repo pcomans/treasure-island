@@ -19,6 +19,12 @@ var _touched: Array[Object] = []
 var _wall_touched := false
 ## Closest the player came to the target during the last _walk_toward (metres).
 var _closest := INF
+## Height of the chest ray whose wall hit released forward input in the last
+## _walk_toward, or NAN when no near-wall release happened. The walk-up's arrival
+## check casts its ray at this height, so release and arrival measure the same
+## surface: a sill or band whose top sits at chest height can otherwise catch
+## one ray and let the other pass over it.
+var _release_chest_y := NAN
 var _prefix := ""
 var _unsafe := false
 var _support_context: Dictionary = {}
@@ -907,7 +913,7 @@ func _check_walk_up(box: AABB, own: Array[RID], wall_shapes: Dictionary, wall_fa
 		var arrived := false
 		if problem != "":
 			_failures.append(_prefix + "%s: %s" % [name, problem])
-		elif _wall_touched or _distance_to_walls(at, destination, own, wall_shapes) <= ARRIVAL_DISTANCE_M:
+		elif _wall_touched or _distance_to_walls(at, destination, own, wall_shapes, _release_chest_y) <= ARRIVAL_DISTANCE_M:
 			arrived = true
 		elif blocker != "":
 			_failures.append(_prefix + "%s was blocked by %s at (%.1f, %.1f)" % [name, blocker, at.x, at.z])
@@ -1187,6 +1193,7 @@ func _walk_toward(target: Vector3, own: Array[RID] = [], wall_shapes: Dictionary
 	Input.action_press("move_forward")
 	_touched = []
 	_wall_touched = false
+	_release_chest_y = NAN
 	_observed_adjacent_support = false
 	var still_frames := 0
 	_closest = INF
@@ -1227,6 +1234,7 @@ func _walk_toward(target: Vector3, own: Array[RID] = [], wall_shapes: Dictionary
 			var wall := _wall_hit(chest, Vector3(target.x, chest.y, target.z), own, wall_shapes)
 			if not wall.is_empty() and chest.distance_to(wall.position as Vector3) <= ARRIVAL_DISTANCE_M:
 				print("%sWALK_NEAR_WALL active=true grounded=true rid=%s shape=%d position=%s distance=%.6f player=%s" % [_prefix, wall.rid, int(wall.shape), wall.position, chest.distance_to(wall.position as Vector3), at])
+				_release_chest_y = chest.y
 				_h.release_input()
 				break
 		# Stop on arrival, on reaching the building, or once the player has
@@ -1338,10 +1346,12 @@ func _wall_hit(from: Vector3, to: Vector3, own: Array[RID], wall_shapes: Diction
 	return {}
 
 
-## Distance from the player to the building's own collision toward its centre.
+## Distance from the player to the building's own collision toward its centre,
+## from the chest, or from chest_y (the height a walk's near-wall release cast
+## its ray at) when given.
 ## No wall hit cannot prove arrival; actual openings are checked separately.
-func _distance_to_walls(at: Vector3, center: Vector3, own: Array[RID], wall_shapes: Dictionary) -> float:
-	var chest := at + Vector3.UP
+func _distance_to_walls(at: Vector3, center: Vector3, own: Array[RID], wall_shapes: Dictionary, chest_y: float = NAN) -> float:
+	var chest := at + Vector3.UP if is_nan(chest_y) else Vector3(at.x, chest_y, at.z)
 	var wall := _wall_hit(chest, Vector3(center.x, chest.y, center.z), own, wall_shapes)
 	return chest.distance_to(wall.position as Vector3) if not wall.is_empty() else INF
 
