@@ -3,9 +3,9 @@
 // the tree's LOD0 (tools/vegetation/bake_impostors.gd). VERTEX holds the quad's
 // pivot, UV2 the corner offset from it in metres. With view_grid above 1 x 1 the
 // texture holds that many views of the tree, turned evenly round it from +Z
-// toward +X, row by row; the quad shows the two views nearest the camera's side
-// of the tree, blended, so the tree keeps its lean and width from every side and
-// each instance's own turn.
+// toward +X, row by row; the quad shows the view nearest the camera's side of the
+// tree, crossing to the next over a narrow band (a long blend softens its limbs), so
+// the tree keeps its lean and width from every side and each instance's own turn.
 uniform sampler2D albedo_texture : source_color, filter_linear_mipmap, repeat_disable;
 uniform vec4 tint : source_color = vec4(1.0);
 uniform float alpha_cutoff : hint_range(0.05, 0.95) = 0.5;
@@ -23,6 +23,9 @@ uniform float toward_camera_m : hint_range(0.0, 4.0) = 0.0;
 // let light through, so it looks only a little darker from its shaded side.
 uniform float dome : hint_range(0.0, 3.0) = 0.0;
 uniform float sky_lean : hint_range(0.0, 5.0) = 0.8;
+
+// How far either side of halfway between two views the crossing runs (0.5 blends all the way).
+const float VIEW_BLEND = 0.16;
 
 // First view, second view, the share of the second.
 varying flat vec3 views;
@@ -52,7 +55,7 @@ void vertex() {
 void fragment() {
 	vec4 tex = texture(albedo_texture, view_uv(UV, views.x));
 	if (view_grid.x * view_grid.y > 1) {
-		tex = mix(tex, texture(albedo_texture, view_uv(UV, views.y)), views.z);
+		tex = mix(tex, texture(albedo_texture, view_uv(UV, views.y)), smoothstep(0.5 - VIEW_BLEND, 0.5 + VIEW_BLEND, views.z));
 	}
 	ALBEDO = tex.rgb * tint.rgb;
 	ROUGHNESS = roughness;
