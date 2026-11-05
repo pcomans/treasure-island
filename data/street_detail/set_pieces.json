@@ -1530,6 +1530,66 @@
       "yaw": 0.0,
       "reason": "A red, white and blue pole flag inside the vehicle lot's cut corner at 9th Street and Avenue D, above the green container wall, flying east; its text is too small to read in the photo, so it is plain.",
       "reference": "verify-810-avenue-d-20261104 05-9thst-2025-09 (pano zymx-sHLgpe6167colQIQQ, Sep 2025): a red, white and blue flag above the wall near the corner; position production inference"
+    },
+    {
+      "id": "owner_lot_island_lamp",
+      "kind": "street_lamp",
+      "prop": "lamp_cobra",
+      "params": {
+        "height_m": 8.8,
+        "arm_m": 2.4,
+        "head": "cobra"
+      },
+      "xz": [
+        -360.2,
+        133.5
+      ],
+      "yaw": 1.0472,
+      "reason": "The galvanised davit pole with a cobra head on the small concrete island at the lot's west end, its arm reaching west-north-west; position from the photo's bearing and depression at the 2.5 m Street View camera, f 518 px for 75y (production inference).",
+      "reference": "street-clutter-rollout-20261105/owner-lot-notes.md (owner-priority Mersea lot, OSM w28356874); Street View pano TKhppKcV_DAxZRV9LsEh2A (Sep 2025, camera x -365.5, z 142.7), heading 10 (lot-w-north; street-objects-rollout refs lot-tkhpp-h010-f75)"
+    },
+    {
+      "id": "owner_lot_line_pole",
+      "kind": "power_pole",
+      "prop": "utility_pole",
+      "params": {
+        "line": "w1249294081"
+      },
+      "xz": [
+        -355.3,
+        126.6
+      ],
+      "yaw": 1.8865,
+      "reason": "A wooden utility pole with a crossarm behind the lot's west island, under the OSM line w1249294081 between its poles n11611626249 and n11611626250, which OSM lacks; it joins that line's wires. On the line at the photo's bearing (production inference).",
+      "reference": "street-clutter-rollout-20261105/owner-lot-notes.md (owner-priority Mersea lot, OSM w28356874); Street View pano TKhppKcV_DAxZRV9LsEh2A (Sep 2025), heading 10 (lot-w-north)"
+    },
+    {
+      "id": "owner_lot_towaway_sign",
+      "kind": "street_sign",
+      "prop": "post_sign",
+      "params": {
+        "sign": "tow_away"
+      },
+      "xz": [
+        -346.6,
+        146.1
+      ],
+      "yaw": 1.3963,
+      "reason": "A red, yellow and white tow-away / no-parking sign on a post at the chain-link field fence east of the bus stalls, facing the lot; its small print is unreadable, so the face is a generic tow-away sign (production inference).",
+      "reference": "street-clutter-rollout-20261105/owner-lot-notes.md (owner-priority Mersea lot, OSM w28356874); Street View pano TKhppKcV_DAxZRV9LsEh2A (Sep 2025), heading 110 (lot-w-east; street-objects-rollout refs lot-tkhpp-h110-f75)"
+    },
+    {
+      "id": "owner_lot_ev_chargers",
+      "kind": "charging_station",
+      "prop": "ev_charger_bay",
+      "params": {},
+      "xz": [
+        -359.4,
+        108.7
+      ],
+      "yaw": -0.769,
+      "reason": "The ChargePoint charging station of the owner's Google Maps place: two charger pedestals (one hooded) with coiled cables on a narrow concrete pad ringed by rust-orange steel bollards, a service meter post at its east end by the lamp pole, between the stall rows at the north-west of the lot, its long axis square to the view from the drive (production inference); the twin-arm lot light (OSM n11230361247) stands about 5 m beyond its east end.",
+      "reference": "street-clutter-rollout-20261105/owner-lot-notes.md (owner-priority Mersea lot, OSM w28356874); Street View pano ExXe8Y9HtxQppbFix_QBDA (Sep 2025, camera x -375.1, z 124.8), headings 35, 40 and 42 (street-objects-rollout refs lot-exxe-h035-z25, lot-exxe-h040-f75, lot-exxe-h042-z12)"
     }
   ]
 }

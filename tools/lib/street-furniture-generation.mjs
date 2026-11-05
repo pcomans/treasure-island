@@ -1,16 +1,27 @@
 // Street furniture: the vertical street objects of PlayableWorld/StreetDetail/Furniture.
 //
-// Two sources, both resolved to rows of generated/world/street_detail.json:
-//   - OSM rows of a furniture kind (lamps, hydrants, bus stops, stop signs) get a
-//     kit prop; a stop sign moves from its node on the road to the right-hand
-//     curb of the approach it controls, beside the painted stop bar;
-//   - rule rows from the "furniture" lists of tools/config/street-detail-zones.json
-//     fill what OSM leaves out (lamps along curbs, signal poles at signalized
-//     crossings, the controller cabinet, street-name signs at junctions, the
-//     other approaches of an all-way stop, a stop sign for traffic turning into
-//     a drive, lights around a parking lot). Every rule says it is production
-//     inference and names its dated photo evidence.
-// Only pilot zones get props; other rows stay data until the rollout.
+// Three sources, all resolved to rows of generated/world/street_detail.json:
+//   - OSM rows of a furniture kind get a kit prop. The kinds in ISLAND_OSM_KINDS
+//     (utility poles, lamps, hydrants, transformer cabinets, bus stops and stop
+//     signs) get it island-wide, the others in the pilot zones only. A stop sign
+//     moves from its node on the road to the right-hand curb of the approach it
+//     controls, beside the painted stop bar; an item mapped on the frozen
+//     carriageway (a generator width, not the surveyed curb) steps off it; a bus
+//     stop with a shelter gets one beside its road; and the OSM power lines
+//     carry wires between their built poles (power_wires).
+//   - rule rows from the "furniture" lists of the zones in
+//     tools/config/street-detail-zones.json fill what OSM leaves out in the
+//     pilot zones (lamps along curbs, signal poles at signalized crossings, the
+//     controller cabinet, street-name signs at junctions, the other approaches
+//     of an all-way stop, a stop sign for traffic turning into a drive, lights
+//     around a parking lot);
+//   - the island-wide rules of its "island_furniture" block, applied to every
+//     matching OSM feature: street lights on the road-side utility poles and
+//     along named streets, stop signs on the minor approaches of junctions,
+//     street-name blades at every junction of named streets (on the post of its
+//     stop sign when it has one), the other approaches of all-way stops and
+//     signal poles at signalized crossings.
+// Every rule says it is production inference and names its dated photo evidence.
 //
 // Plan geometry here is east/north (the ground generator's frame); rows use
 // world x, z with z = -north. A prop's front is its local -Z (the lamp arm, the
@@ -18,6 +29,7 @@
 
 import { projectLonLat } from "./coordinates.mjs";
 import { pointInMultiPolygon } from "./osm-geometry.mjs";
+import { footprintPiece } from "./street-clutter-generation.mjs";
 import { compareSourceKeys, invariant, roundCoordinate } from "./world-contract.mjs";
 
 // Kit props built by game/scripts/world/street_furniture_kit.gd, with the row
@@ -29,8 +41,10 @@ export const STREET_FURNITURE_PROPS = Object.freeze({
   bench_park: "bench",
   bench_wedge: "bench",
   bike_rack: "bicycle_parking",
+  bus_shelter: "bus_stop",
   bus_stop_sign: "bus_stop",
   canopy_of_sky: "artwork",
+  ev_charger_bay: "charging_station",
   event_pole: "street_lamp",
   hydrant: "fire_hydrant",
   lamp_cobra: "street_lamp",
@@ -41,23 +55,30 @@ export const STREET_FURNITURE_PROPS = Object.freeze({
   map_board: "information_board",
   name_sign: "street_sign",
   picnic_table_long: "picnic_table",
+  power_wires: "power_line",
+  post_sign: "street_sign",
   pump_station: "site_structure",
   signal_cabinet: "street_cabinet",
   signal_mast: "traffic_signals",
   stop_sign: "stop_sign",
+  transformer_pad: "street_cabinet",
+  utility_pole: "power_pole",
   waste_basket: "waste_basket",
 });
 // Plan sizes {x_m, z_m} (along the prop's local X and Z) of the kit props that
-// are longer than their kind's radius covers; set pieces carry them as their
-// footprint for the shared mask.
+// are longer than their kind's radius covers; set pieces and the rows of these
+// props carry them as their footprint for the shared mask.
 export const STREET_FURNITURE_FOOTPRINTS = Object.freeze({
   adirondack_chair: Object.freeze({ x_m: 0.8, z_m: 0.92 }),
   bbq_grill: Object.freeze({ x_m: 0.8, z_m: 0.6 }),
   bench_park: Object.freeze({ x_m: 1.9, z_m: 0.66 }),
   bench_wedge: Object.freeze({ x_m: 4.1, z_m: 0.6 }),
   bike_rack: Object.freeze({ x_m: 0.8, z_m: 0.12 }),
+  bus_shelter: Object.freeze({ x_m: 3.9, z_m: 1.8 }),
+  ev_charger_bay: Object.freeze({ x_m: 3.4, z_m: 1.3 }),
   map_board: Object.freeze({ x_m: 1.34, z_m: 0.2 }),
   pump_station: Object.freeze({ x_m: 16.3, z_m: 11.2 }),
+  transformer_pad: Object.freeze({ x_m: 1.5, z_m: 1.35 }),
   waste_basket: Object.freeze({ x_m: 0.6, z_m: 0.6 }),
 });
 // The plan size of a kit prop whose size comes from its params (the long park
@@ -100,17 +121,27 @@ const LEG_DROP_STEP_M = 0.005;
 // ground stops the build, and the tilted collision box stays inside the
 // footprint's clearance stadium.
 export const MAX_REST_TILT_RAD = 0.15;
-export const STREET_FURNITURE_PATTERNS = Object.freeze(["kerb", "signalized_crossings", "near_signals", "junctions", "all_way_stops", "drive_entries", "lot_edge"]);
-// Default props for OSM rows in pilot zones; kinds without one stay unbuilt.
+export const STREET_FURNITURE_PATTERNS = Object.freeze([
+  "kerb", "signalized_crossings", "near_signals", "junctions", "all_way_stops", "drive_entries", "lot_edge",
+  "pole_fixtures", "street_lamps", "junction_stops", "junction_names", "hydrant_style",
+]);
+// The patterns of the island-wide block: they need no zone of their own.
+const ISLAND_PATTERNS = Object.freeze(["pole_fixtures", "street_lamps", "junction_stops", "junction_names", "hydrant_style", "all_way_stops", "signalized_crossings", "near_signals"]);
+const ZONE_PATTERNS = Object.freeze(["kerb", "signalized_crossings", "near_signals", "junctions", "all_way_stops", "drive_entries", "lot_edge"]);
+// Default props for OSM rows; kinds without one stay unbuilt.
 const OSM_PROPS = Object.freeze({
   bench: () => ({ prop: "bench_park", params: {} }),
   bicycle_parking: () => ({ prop: "bike_rack", params: {} }),
-  bus_stop: (tags) => (tags.shelter === "yes" ? null : { prop: "bus_stop_sign", params: {} }),
-  fire_hydrant: () => ({ prop: "hydrant", params: {} }),
+  bus_stop: (tags) => ({ prop: tags.shelter === "yes" ? "bus_shelter" : "bus_stop_sign", params: {} }),
+  fire_hydrant: () => ({ prop: "hydrant", params: { style: "yellow" } }),
+  power_pole: (tags) => ({ prop: "utility_pole", params: tags["location:transition"] === "yes" ? { riser: true } : {} }),
   stop_sign: (tags) => ({ prop: "stop_sign", params: { all_way: tags.stop === "all" } }),
+  street_cabinet: () => ({ prop: "transformer_pad", params: {} }),
   street_lamp: () => ({ prop: "lamp_cobra", params: {} }),
   waste_basket: (tags) => ({ prop: "waste_basket", params: { style: tags.material === "wood" ? "timber" : "steel" } }),
 });
+// The OSM kinds that get their prop island-wide; the others only in pilot zones.
+const ISLAND_OSM_KINDS = Object.freeze(["bus_stop", "fire_hydrant", "power_pole", "stop_sign", "street_cabinet", "street_lamp"]);
 const STOP_SIGN = Object.freeze({ setback_m: 0.55, upstream_m: Array.from({ length: 20 }, (_, index) => roundCoordinate(0.6 * (index + 1))) });
 // Site margins (m) beyond an item's footprint: from the carriageway edge, and
 // from a curb ramp (its flares and landing). Footprint radii are at least each
@@ -127,6 +158,32 @@ const STRAIGHT_CORNER_RAD = 2.97;
 const CABINET_SITE_STEP_M = 1.0;
 // Street-name abbreviations used on the blades (the last word only).
 const NAME_SUFFIXES = Object.freeze({ Avenue: "Av", Boulevard: "Blvd", Court: "Ct", Drive: "Dr", Lane: "Ln", Place: "Pl", Road: "Rd", Street: "St" });
+// How far an OSM item mapped on the carriageway may step past the road edge
+// (m, beyond its own clearance) to find a clear spot on its side.
+const STEP_OFF_EXTRA_M = Object.freeze([0, 0.25, 0.5, 0.75, 1, 1.5, 2, 2.5, 3]);
+// A bus shelter beside its road: the gaps (m) tried between the road edge and
+// its open front, and the slides (m) along the road from its OSM node.
+const SHELTER_GAPS_M = Object.freeze([0.9, 1.4, 2.0, 2.8, 3.6]);
+const SHELTER_SLIDES_M = Object.freeze([0, 1, -1, 2, -2, 3, -3, 4, -4]);
+// Props on a level concrete pad (STREET_FURNITURE_PADS): the pad's skirt runs
+// PAD_SKIRT_M below its top's foot, so a pad settled on sloping ground (raised
+// to its highest corner by its params' lift) may float that much at its low
+// side; a rest that would float more stops the build or takes another spot.
+export const STREET_FURNITURE_PADS = Object.freeze(["bus_shelter", "ev_charger_bay", "transformer_pad"]);
+export const PAD_SKIRT_M = 0.3;
+// The ground is sampled at the pad's corners and this many points along each side.
+const PAD_SIDE_SAMPLES = 4;
+// A junction's through street: two arms of the same name at least this far
+// apart (radians), or failing that the straightest pair at least STRAIGHT_PAIR_RAD apart.
+const SAME_STREET_PAIR_RAD = (110 * Math.PI) / 180;
+const STRAIGHT_PAIR_RAD = (150 * Math.PI) / 180;
+// A road class's rank for choosing a junction's major street.
+const ROAD_RANK = Object.freeze({ tertiary: 2, unclassified: 1, residential: 1, track: 0, service: 0 });
+// A second crossarm turns with a line that leaves a pole more than this far off
+// the pole's own line (radians, either way along it).
+const SECOND_ARM_RAD = (25 * Math.PI) / 180;
+// A street corner's signal mast serves every crosswalk landing within this (m).
+const MAST_CORNER_M = 9;
 const SAFE_ID = /^[a-z0-9_]+$/u;
 const RULE_FIELDS = Object.freeze({
   kerb: ["source_keys", "sides", "spacing_m", "phase_m", "setback_m", "slide_m"],
@@ -136,6 +193,11 @@ const RULE_FIELDS = Object.freeze({
   all_way_stops: ["clear_m"],
   drive_entries: ["clear_m"],
   lot_edge: ["source_keys", "spacing_m", "phase_m", "setback_m", "slide_m"],
+  pole_fixtures: ["max_gap_m", "min_spacing_m", "except_streets"],
+  street_lamps: ["streets", "sides", "spacing_m", "phase_m", "setback_m", "slide_m"],
+  junction_stops: ["clear_m", "except"],
+  junction_names: ["setback_m"],
+  hydrant_style: ["streets"],
 });
 const COMMON_FIELDS = Object.freeze(["basis", "evidence", "id", "kind", "params", "pattern", "prop", "rule"]);
 
@@ -147,6 +209,7 @@ const sub = (a, b) => [a[0] - b[0], a[1] - b[1]];
 const add = (a, b) => [a[0] + b[0], a[1] + b[1]];
 const scale = (a, s) => [a[0] * s, a[1] * s];
 const dot = (a, b) => a[0] * b[0] + a[1] * b[1];
+const cross = (a, b) => a[0] * b[1] - a[1] * b[0];
 const length = (a) => Math.hypot(a[0], a[1]);
 const unit = (a) => {
   const l = length(a);
@@ -194,6 +257,15 @@ function closestOnPolyline(points, point) {
   return best;
 }
 
+// Whether the segments ab and cd cross (touching ends do not count).
+function segmentsCross(a, b, c, d) {
+  const d1 = cross(sub(d, c), sub(a, c));
+  const d2 = cross(sub(d, c), sub(b, c));
+  const d3 = cross(sub(b, a), sub(c, a));
+  const d4 = cross(sub(b, a), sub(d, a));
+  return ((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) && ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0));
+}
+
 // World xz <-> east/north.
 const toWorld = (en) => [en[0], -en[1]];
 const toEastNorth = (xz) => [xz[0], -xz[1]];
@@ -220,7 +292,8 @@ export function abbreviateStreetName(name) {
   return words.join(" ");
 }
 
-export function validateFurnitureRules(zone, kinds) {
+// The rules of a zone, or with island the rules of the island-wide block.
+export function validateFurnitureRules(zone, kinds, island = false) {
   if (zone.furniture == null) return;
   invariant(Array.isArray(zone.furniture), `Street detail zone ${zone.id} furniture must be a list`);
   const ids = new Set();
@@ -228,7 +301,8 @@ export function validateFurnitureRules(zone, kinds) {
     const label = `Street detail zone ${zone.id} furniture rule ${rule?.id}`;
     invariant(typeof rule?.id === "string" && SAFE_ID.test(rule.id) && !ids.has(rule.id), `${label} needs a unique lower_snake id`);
     ids.add(rule.id);
-    invariant(STREET_FURNITURE_PATTERNS.includes(rule.pattern), `${label} pattern must be one of ${STREET_FURNITURE_PATTERNS.join(", ")}`);
+    const patterns = island ? ISLAND_PATTERNS : ZONE_PATTERNS;
+    invariant(patterns.includes(rule.pattern), `${label} pattern must be one of ${patterns.join(", ")}`);
     const allowed = [...COMMON_FIELDS, ...RULE_FIELDS[rule.pattern]].sort();
     const present = Object.keys(rule).sort();
     invariant(present.every((key) => allowed.includes(key)), `${label} has fields outside ${allowed.join(", ")}`);
@@ -237,7 +311,7 @@ export function validateFurnitureRules(zone, kinds) {
     invariant(rule.basis === "production_inference", `${label}: rule-based furniture is production_inference`);
     for (const field of ["rule", "evidence"]) invariant(typeof rule[field] === "string" && rule[field].trim() !== "", `${label} needs ${field}`);
     invariant(rule.params != null && typeof rule.params === "object" && !Array.isArray(rule.params), `${label} params must be an object`);
-    for (const field of ["spacing_m", "setback_m", "beyond_m", "back_m"]) {
+    for (const field of ["spacing_m", "setback_m", "beyond_m", "back_m", "max_gap_m", "min_spacing_m"]) {
       if (field in rule) invariant(isFiniteNumber(rule[field]) && rule[field] > 0, `${label} ${field} must be positive`);
     }
     for (const field of ["phase_m", "slide_m", "along_m", "clear_m"]) {
@@ -245,11 +319,34 @@ export function validateFurnitureRules(zone, kinds) {
     }
     if ("source_keys" in rule) invariant(Array.isArray(rule.source_keys) && rule.source_keys.length > 0 && rule.source_keys.every((key) => /^w\d+$/u.test(key)), `${label} needs OSM way source_keys`);
     if ("sides" in rule) invariant(Array.isArray(rule.sides) && rule.sides.length > 0 && rule.sides.every((side) => ["left", "right"].includes(side)), `${label} sides are left and/or right`);
+    if ("streets" in rule) invariant(Array.isArray(rule.streets) && rule.streets.length > 0 && rule.streets.every((name) => typeof name === "string" && name.trim() !== ""), `${label} streets are OSM street names`);
+    if ("except_streets" in rule) invariant(Array.isArray(rule.except_streets) && rule.except_streets.every((name) => typeof name === "string" && name.trim() !== ""), `${label} except_streets are OSM street names`);
+    if ("except" in rule) {
+      // Photographed junctions where the rule does not hold: the approaches (by
+      // OSM street name) at the node that keep no stop sign, and why.
+      invariant(Array.isArray(rule.except), `${label} except must be a list`);
+      for (const entry of rule.except) {
+        invariant(JSON.stringify(Object.keys(entry ?? {}).sort()) === JSON.stringify(["approaches", "evidence", "node", "reason"]), `${label} except entries are {node, approaches, reason, evidence}`);
+        invariant(/^n\d+$/u.test(entry.node) && Array.isArray(entry.approaches) && entry.approaches.length > 0 && entry.approaches.every((name) => typeof name === "string" && name !== ""), `${label} except ${entry.node} needs an OSM node and approach street names`);
+        for (const field of ["reason", "evidence"]) invariant(typeof entry[field] === "string" && entry[field].trim() !== "", `${label} except ${entry.node} needs ${field}`);
+      }
+    }
   }
 }
 
-// Resolves furniture for the pilot zones. Mutates the OSM rows it gives props
-// (and moves stop signs); returns the new rule rows and an audit.
+// The island-wide block: {notes, rules} with the island patterns.
+export function validateIslandFurniture(island, kinds) {
+  invariant(island != null && typeof island === "object" && !Array.isArray(island), "Street detail island_furniture must be an object");
+  invariant(JSON.stringify(Object.keys(island).sort()) === JSON.stringify(["notes", "rules"]), "Street detail island_furniture must have exactly {notes, rules}");
+  invariant(Array.isArray(island.notes) && island.notes.every((note) => typeof note === "string"), "Street detail island_furniture needs notes");
+  invariant(Array.isArray(island.rules), "Street detail island_furniture rules must be a list");
+  validateFurnitureRules({ id: "island", furniture: island.rules }, kinds, true);
+}
+
+// Resolves the street furniture. Mutates the OSM rows it gives props (moves
+// stop signs and the items it steps off the carriageway, gives the utility poles
+// their crossarms and lamps and the power lines their wires); returns the new
+// rule rows and an audit.
 export function placeStreetFurniture({
   kinds,
   rows,
@@ -264,26 +361,44 @@ export function placeStreetFurniture({
   onLand,
   grounded,
   surfaceAt,
+  island,
+  islandRoads,
+  carriagewayDistance,
+  pieceViolation,
+  groundAt,
 }) {
   const pilotShapes = zoneShapes.filter(({ zone }) => zone.pilot);
   const inPilot = (xz) => pilotShapes.some(({ contains }) => contains(xz));
-  const audit = { osm_props: 0, osm_unbuilt: [], stops_moved: 0, rules: {}, rejected_by_reason: {} };
+  const audit = {
+    osm_props: 0,
+    osm_unbuilt: [],
+    stops_moved: 0,
+    stepped_off: 0,
+    shelters: 0,
+    pole_lamps: 0,
+    second_arms: 0,
+    wire_spans: 0,
+    blades_on_stops: 0,
+    rules: {},
+    rejected_by_reason: {},
+  };
   const count = (table, key) => {
     table[key] = (table[key] ?? 0) + 1;
   };
 
   // The furniture site check: gameplay mask, walls, kerb and ramps, other items.
   // options.raised: must stand on the raised street ground; options.ignore: ids
-  // whose footprints do not count (the row being moved).
+  // whose footprints do not count (the row being moved); options.radius: the
+  // item's radius when it is not its kind's.
   const reject = (kindName, xz, options = {}) => {
-    const radius = kinds[kindName].footprint_radius_m;
+    const radius = options.radius ?? kinds[kindName].footprint_radius_m;
     if (!onLand(xz, exclusions.land_edge_buffer_m + radius)) return "land_edge";
     const hard = hardViolation(hardShapes, [xz], radius);
     if (hard) return hard.reason;
     const building = buildings.nearest(xz, exclusions.wall_buffer_m + radius);
     if (building.distance < exclusions.wall_buffer_m + radius) return building.distance === 0 ? "inside_building" : "wall_buffer";
     const en = toEastNorth(xz);
-    if (site.carriagewayDistance(en) < KERB_CLEAR_M + radius) return "carriageway";
+    if (carriagewayDistance(en) < KERB_CLEAR_M + radius) return "carriageway";
     if (site.rampDistance(en) < RAMP_CLEAR_M + radius) return "curb_ramp";
     if (options.raised && !site.raised(en)) return "off_sidewalk";
     for (const item of occupied) {
@@ -304,27 +419,75 @@ export function placeStreetFurniture({
     };
   };
   const round2 = (en) => [roundCoordinate(en[0]), roundCoordinate(en[1])];
+  // Moves a placed row (keeping its first OSM position as source_position_m)
+  // and its claim in the shared mask: its footprint's stadium when it has one.
+  const moveRow = (row, xz, placement) => {
+    if (row.source === "osm" && row.source_position_m === undefined) row.source_position_m = [...row.position_m];
+    Object.assign(row, surfaceRow(xz));
+    row.placement = placement;
+    const index = occupied.findIndex((item) => item.id === row.id);
+    if (index >= 0) occupied.splice(index, 1);
+    if (row.footprint_m) {
+      const piece = footprintPiece(xz, row.yaw_radians ?? 0, row.footprint_m);
+      occupied.push({ id: row.id, points: piece.points, radius_m: piece.radius });
+    } else {
+      occupy(row.id, row.kind, xz);
+    }
+  };
 
-  // --- OSM rows: props, and stop signs moved to their curbs.
-  const stopBar = new Map(site.stop_bars.map((bar) => [bar.node_key, bar]));
-  const kerbLines = site.kerb_roads;
+  // --- The island's roads: lines in the east/north frame, their edge offsets.
+  const kerbLines = islandRoads;
   const nodePoint = (ref) => {
     const node = rawOsm.nodes.get(ref);
     invariant(node, `Street furniture needs OSM node n${ref}, which the raw extract lacks`);
     return projectLonLat(node.coordinate);
   };
-  // Nodes where two kerbed roads meet.
-  const meetings = new Map();
-  const wayRefs = (road) => {
-    const way = rawOsm.ways.get(road.source_key.slice(1));
-    invariant(way, `Street furniture needs OSM way ${road.source_key}, which the raw extract lacks`);
-    return new Set(way.node_refs);
+  // The road whose edge is nearest an east/north point, among those filter
+  // keeps: {road, near, gap} (gap: from the edge, negative inside the ribbon).
+  const nearestRoad = (en, filter = () => true) => {
+    let best = null;
+    for (const road of kerbLines) {
+      if (!filter(road)) continue;
+      const near = closestOnPolyline(road.line, en);
+      if (!near) continue;
+      const gap = near.distance - road.kerb_offset_m;
+      if (!best || gap < best.gap) best = { road, near, gap };
+    }
+    return best;
   };
+  // Nodes where two roads meet.
+  const meetings = new Map();
   for (const road of kerbLines) {
-    for (const ref of wayRefs(road)) meetings.set(ref, [...(meetings.get(ref) ?? []), road]);
+    for (const ref of new Set(road.refs)) meetings.set(ref, [...(meetings.get(ref) ?? []), road]);
   }
   const junctionPoints = [...meetings.entries()].filter(([, roads]) => roads.length > 1)
     .map(([ref]) => ({ ref, point: nodePoint(ref) }));
+
+  // Marked crossings beyond the street ground, from the OSM crossing nodes on a
+  // vehicle road: a walk across that road at the node, as wide as its ribbon,
+  // signalized when the node says so. The street ground's own walks win where
+  // one lies within 6 m.
+  const derivedWalks = [];
+  for (const row of rows.filter((candidate) => candidate.source === "osm" && candidate.kind === "crossing" && candidate.status === "placed")) {
+    const tags = row.tags ?? {};
+    if (tags["crossing:markings"] === "no" || tags.crossing === "unmarked") continue;
+    const ref = row.source_id.slice(1);
+    const host = kerbLines.find((road) => road.refs.includes(ref));
+    if (!host) continue;
+    const near = closestOnPolyline(host.line, nodePoint(ref));
+    if (site.crosswalks.some((walk) => length(sub(walk.center, near.point)) < 6)) continue;
+    const direction = leftOf(near.tangent);
+    derivedWalks.push({
+      source_key: row.source_id,
+      center: near.point,
+      direction,
+      across: leftOf(direction),
+      span: [-host.kerb_offset_m, host.kerb_offset_m],
+      signals: tags.crossing === "traffic_signals" || tags["crossing:signals"] === "yes",
+    });
+  }
+  const allWalks = [...site.crosswalks, ...derivedWalks];
+
   // Stop signs placed so far, by approach: the junction, the road and the direction of travel.
   const stopSigns = [];
   const coveredBy = (junction, roadKey, travel) => stopSigns.find((sign) => sign.road_key === roadKey && dot(sign.travel, travel) > 0.7 &&
@@ -340,10 +503,11 @@ export function placeStreetFurniture({
     return best;
   };
   // How far from a junction a sign on one of its arms must stand: past the
-  // crossing street's curb and upstream of any crosswalk across the arm.
-  const armClearance = (center, road, outward, crossKerb, clear) => {
+  // crossing street's curb and upstream of any crosswalk across the arm. The
+  // island rules also keep clear of the marked crossings beyond the street ground.
+  const armClearance = (center, road, outward, crossKerb, clear, walks = site.crosswalks) => {
     let distance = crossKerb + clear;
-    for (const walk of site.crosswalks) {
+    for (const walk of walks) {
       const along = dot(sub(walk.center, center), outward);
       if (along <= 0 || along > 25 || closestOnPolyline(road.line, walk.center).distance > 2) continue;
       distance = Math.max(distance, along + site.walk_width_m / 2 + clear);
@@ -362,8 +526,73 @@ export function placeStreetFurniture({
     }
     return null;
   };
+  // An OSM item mapped on (or at the edge of) the frozen carriageway, whose
+  // ribbon is a generator width and not the surveyed curb, steps out across the
+  // nearest road edge to the first clear spot on its own side. False when it
+  // stands clear already or has moved; true when no spot was clear.
+  const stepOffCarriageway = (row, radius) => {
+    const en = toEastNorth([row.position_m[0], row.position_m[2]]);
+    if (carriagewayDistance(en) >= KERB_CLEAR_M + radius) return false;
+    const best = nearestRoad(en);
+    if (best) {
+      const away = best.near.distance > 1e-6 ? unit(sub(en, best.near.point)) : leftOf(best.near.tangent);
+      for (const extra of STEP_OFF_EXTRA_M) {
+        const xz = round2(toWorld(add(best.near.point, scale(away, best.road.kerb_offset_m + KERB_CLEAR_M + radius + extra))));
+        const problem = reject(row.kind, xz, { ignore: new Set([row.id]), radius });
+        if (problem) {
+          count(audit.rejected_by_reason, `step_off:${row.kind}:${problem}`);
+          continue;
+        }
+        moveRow(row, xz, `stepped off the frozen carriageway of ${best.road.source_key} to its edge (production_inference)`);
+        audit.stepped_off += 1;
+        return false;
+      }
+    }
+    return true;
+  };
+  // A bus shelter beside its street: its open front toward the road, its whole
+  // footprint off the carriageway, the mask and every other item; the first
+  // clear spot from the OSM node outward and along the road. True when placed.
+  const placeShelter = (row) => {
+    const en = toEastNorth([row.position_m[0], row.position_m[2]]);
+    const best = nearestRoad(en, (road) => road.service == null);
+    if (!best || best.gap > 25) return false;
+    const side = cross(best.near.tangent, sub(en, best.near.point)) >= 0 ? 1 : -1;
+    const footprint = STREET_FURNITURE_FOOTPRINTS.bus_shelter;
+    for (const slide of SHELTER_SLIDES_M) {
+      const at = best.near.along + slide;
+      if (at < 0 || at > polylineLength(best.road.line)) continue;
+      const along = pointAlong(best.road.line, at);
+      const away = scale(leftOf(along.tangent), side);
+      for (const gap of SHELTER_GAPS_M) {
+        const xz = round2(toWorld(add(along.point, scale(away, best.road.kerb_offset_m + gap + footprint.z_m / 2))));
+        const yaw = yawToward(scale(away, -1));
+        const violation = pieceViolation(footprintPiece(xz, yaw, footprint), new Set([row.id]));
+        if (violation) {
+          count(audit.rejected_by_reason, `bus_shelter:${violation.reason}`);
+          continue;
+        }
+        const pad = settlePad(footprint, xz, yaw, groundAt);
+        if (pad.problem) {
+          count(audit.rejected_by_reason, `bus_shelter:${pad.problem}`);
+          continue;
+        }
+        row.yaw_radians = yaw;
+        row.yaw_source = `faces_road:${best.road.source_key}`;
+        row.footprint_m = { ...footprint };
+        row.pad_lift = pad.lift;
+        moveRow(row, xz, `shelter beside ${best.road.source_key}, its open front to the road (production_inference)`);
+        audit.shelters += 1;
+        return true;
+      }
+    }
+    return false;
+  };
+
+  // --- OSM rows: props, stop signs moved to their curbs, items off the carriageway.
+  const stopBar = new Map(site.stop_bars.map((bar) => [bar.node_key, bar]));
   const candidates = rows.filter((row) => row.source === "osm" && row.geometry === "point" && row.status === "placed" &&
-    kinds[row.kind].layer === "furniture" && inPilot([row.position_m[0], row.position_m[2]]));
+    kinds[row.kind].layer === "furniture" && (ISLAND_OSM_KINDS.includes(row.kind) || inPilot([row.position_m[0], row.position_m[2]])));
   // Stops with a painted bar first: a stop node beside the road then joins the
   // sign already on its approach rather than doubling it.
   candidates.sort((left, right) => (left.kind === "stop_sign" && !stopBar.has(left.source_id)) - (right.kind === "stop_sign" && !stopBar.has(right.source_id)));
@@ -376,7 +605,7 @@ export function placeStreetFurniture({
     }
     if (row.kind === "stop_sign") {
       // A painted bar gives the approach; a stop node beside the road marks the
-      // approach of the nearest kerbed road toward its nearest junction.
+      // approach of the nearest road toward its nearest junction.
       const bar = stopBar.get(row.source_id);
       let road;
       let base;
@@ -392,7 +621,7 @@ export function placeStreetFurniture({
           const near = closestOnPolyline(candidate.line, en);
           if (!best || near.distance - candidate.kerb_offset_m < best.gap) best = { road: candidate, near, gap: near.distance - candidate.kerb_offset_m };
         }
-        invariant(best, `${row.id}: no kerbed road for a stop sign`);
+        invariant(best, `${row.id}: no road for a stop sign`);
         road = best.road;
         base = best.near.point;
         const ahead = [1, -1].map((sign) => junctionAhead(road, base, scale(best.near.tangent, sign))).filter(Boolean)
@@ -405,11 +634,11 @@ export function placeStreetFurniture({
         // At least as far out as a crosswalk across this arm of the junction.
         const outward = scale(travel, -1);
         const others = (meetings.get(ahead.ref) ?? []).filter((other) => other !== road);
-        const needed = armClearance(ahead.point, road, outward, Math.max(0, ...others.map((other) => other.kerb_offset_m)), 1.0);
+        const needed = armClearance(ahead.point, road, outward, Math.max(0, ...others.map((other) => other.kerb_offset_m)), 1.0, allWalks);
         const out = dot(sub(base, ahead.point), outward);
         if (out < needed) base = add(base, scale(outward, needed - out));
       }
-      invariant(road, `${row.id}: stop bar road is not kerbed`);
+      invariant(road, `${row.id}: stop bar road is not a vehicle road`);
       const junction = meetings.get(row.source_id.slice(1))?.length > 1 ? row.source_id.slice(1) : junctionAhead(road, base, travel)?.ref ?? null;
       const covering = coveredBy(junction, road.source_key, travel);
       if (covering) {
@@ -427,16 +656,121 @@ export function placeStreetFurniture({
       row.yaw_source = bar ? `stop_bar:${bar.host_key}` : `approach:${road.source_key}`;
       row.placement = bar
         ? "right-hand curb of the approach beside its painted stop bar (production_inference)"
-        : "right-hand curb of the nearest kerbed road's approach to its nearest junction (production_inference)";
+        : "right-hand curb of the nearest road's approach to its nearest junction (production_inference)";
       const index = occupied.findIndex((item) => item.id === row.id);
       if (index >= 0) occupied.splice(index, 1);
       occupy(row.id, row.kind, xz);
-      stopSigns.push({ id: row.id, junction, road_key: road.source_key, travel });
+      stopSigns.push({ id: row.id, row, junction, road_key: road.source_key, travel });
       audit.stops_moved += 1;
+    } else if (row.kind === "bus_stop") {
+      // A shelter where OSM has one, else (or with no clear spot for it) the stop's flag.
+      if (choice.prop === "bus_shelter" && !placeShelter(row)) {
+        count(audit.rejected_by_reason, "bus_shelter:no_clear_spot");
+        choice.prop = "bus_stop_sign";
+      }
+      if (choice.prop === "bus_stop_sign" && stepOffCarriageway(row, 0.3)) {
+        audit.osm_unbuilt.push({ id: row.id, kind: row.kind, reason: "on the carriageway, no clear spot beside it" });
+        continue;
+      }
+    } else if (ISLAND_OSM_KINDS.includes(row.kind)) {
+      // A cabinet claims its whole box and pad.
+      if (choice.prop === "transformer_pad") {
+        // Doors toward the nearest road, however far it is (a footprint needs a yaw).
+        if (row.yaw_radians === null) {
+          const best = nearestRoad(toEastNorth(at));
+          if (best && best.near.distance > 1e-6) {
+            row.yaw_radians = yawToward(unit(sub(best.near.point, toEastNorth(at))));
+            row.yaw_source = `faces_road:${best.road.source_key}`;
+          } else {
+            row.yaw_radians = 0;
+            row.yaw_source = "default";
+          }
+        }
+        row.footprint_m = { ...STREET_FURNITURE_FOOTPRINTS.transformer_pad };
+        const index = occupied.findIndex((item) => item.id === row.id);
+        if (index >= 0) occupied.splice(index, 1);
+        const piece = footprintPiece(at, row.yaw_radians ?? 0, row.footprint_m);
+        occupied.push({ id: row.id, points: piece.points, radius_m: piece.radius });
+      }
+      const radius = row.footprint_m ? footprintPiece(at, row.yaw_radians ?? 0, row.footprint_m).radius : kinds[row.kind].footprint_radius_m;
+      if (stepOffCarriageway(row, radius)) {
+        audit.osm_unbuilt.push({ id: row.id, kind: row.kind, reason: "on the carriageway, no clear spot beside it" });
+        continue;
+      }
+      // A cabinet's pad settles level on the ground under it.
+      if (choice.prop === "transformer_pad") {
+        const pad = settlePad(row.footprint_m, [row.position_m[0], row.position_m[2]], row.yaw_radians ?? 0, groundAt);
+        if (pad.problem) {
+          audit.osm_unbuilt.push({ id: row.id, kind: row.kind, reason: `its pad cannot rest level here (${pad.problem})` });
+          continue;
+        }
+        choice.params = { ...choice.params, lift: pad.lift };
+      }
     }
     row.prop = choice.prop;
-    row.prop_params = choice.params;
+    row.prop_params = row.pad_lift === undefined ? choice.params : { ...choice.params, lift: row.pad_lift };
+    delete row.pad_lift;
     audit.osm_props += 1;
+  }
+
+  // --- The utility poles: a second crossarm where another line turns off, or
+  // where a line carries two circuits; the power lines' wires between built poles.
+  const poleRows = new Map(rows.filter((row) => row.kind === "power_pole").map((row) => [row.id, row]));
+  const builtPole = (row) => row !== undefined && row.status === "placed" && row.prop === "utility_pole";
+  const powerLines = rows.filter((row) => row.source === "osm" && row.kind === "power_line" && row.status === "placed")
+    .sort((left, right) => (left.id < right.id ? -1 : left.id > right.id ? 1 : 0));
+  // Each pole's lines with their direction at it (east/north, along the line).
+  const poleLines = new Map();
+  for (const line of powerLines) {
+    const points = line.points_m.map((point) => [point[0], -point[2]]);
+    line.vertex_source_ids.forEach((id, index) => {
+      const before = index > 0 ? unit(sub(points[index], points[index - 1])) : null;
+      const after = index < points.length - 1 ? unit(sub(points[index + 1], points[index])) : null;
+      const sum = before && after ? add(before, after) : before ?? after;
+      const direction = length(sum) > 1e-6 ? unit(sum) : after ?? before;
+      const key = `osm:${id}`;
+      poleLines.set(key, [...(poleLines.get(key) ?? []), { line, direction, circuits: line.tags?.cables === "6" || line.tags?.circuits === "2" ? 2 : 1 }]);
+    });
+  }
+  for (const [key, lines] of [...poleLines.entries()].sort(([left], [right]) => (left < right ? -1 : left > right ? 1 : 0))) {
+    const pole = poleRows.get(key);
+    if (!builtPole(pole)) continue;
+    const yaw = pole.yaw_radians ?? 0;
+    // The pole's own line runs along its front (-Z): (-sin yaw, cos yaw) east/north.
+    const own = [-Math.sin(yaw), Math.cos(yaw)];
+    const turned = lines.find((entry) => Math.acos(Math.min(1, Math.abs(dot(entry.direction, own)))) > SECOND_ARM_RAD);
+    if (turned) {
+      pole.prop_params = { ...pole.prop_params, arm2_yaw: relativeYaw(yawToward(turned.direction), yaw) };
+    } else if (lines.some((entry) => entry.circuits === 2)) {
+      pole.prop_params = { ...pole.prop_params, arm2_yaw: 0 };
+    }
+    if (pole.prop_params.arm2_yaw !== undefined) audit.second_arms += 1;
+  }
+  // A photographed pole OSM lacks (a utility_pole set piece naming its line as
+  // params.line) joins that line where it stands along it. Each line's wires
+  // run between consecutive built poles of its pole list (null where a vertex
+  // has none), in order along the line.
+  const insertedPoles = rows.filter((row) => row.source === "set_piece" && row.prop === "utility_pole" && typeof row.prop_params?.line === "string");
+  for (const line of powerLines) {
+    const points = line.points_m.map((point) => [point[0], -point[2]]);
+    const stations = [];
+    let walked = 0;
+    line.vertex_source_ids.forEach((id, index) => {
+      if (index > 0) walked += length(sub(points[index], points[index - 1]));
+      stations.push({ along: walked, id: builtPole(poleRows.get(`osm:${id}`)) ? `osm:${id}` : null });
+    });
+    for (const pole of insertedPoles.filter((row) => row.prop_params.line === line.source_id)) {
+      const near = closestOnPolyline(points, toEastNorth([pole.position_m[0], pole.position_m[2]]));
+      invariant(near && near.distance < 5, `${pole.id} stands ${near?.distance.toFixed(2)} m off its line ${line.source_id}; a photographed pole must stand under it`);
+      stations.push({ along: near.along, id: pole.id });
+    }
+    stations.sort((left, right) => left.along - right.along);
+    let spans = 0;
+    for (let index = 1; index < stations.length; index += 1) if (stations[index - 1].id && stations[index].id) spans += 1;
+    if (spans === 0) continue;
+    line.prop = "power_wires";
+    line.prop_params = { circuits: line.tags?.cables === "6" || line.tags?.circuits === "2" ? 2 : 1, poles: stations.map((station) => station.id) };
+    audit.wire_spans += spans;
   }
 
   // --- Rule rows.
@@ -447,7 +781,7 @@ export function placeStreetFurniture({
     const row = {
       id: `scatter:${zone.id}:${rule.id}:${cell}`,
       source: "scatter",
-      source_id: `zone:${zone.id}/${rule.id}`,
+      source_id: rule.source_id,
       kind: rule.kind,
       layer: kinds[rule.kind].layer,
       geometry: "point",
@@ -468,8 +802,9 @@ export function placeStreetFurniture({
   // Tries the candidates in order; returns the first clear east/north point, or
   // null. With options.spacing_m, a row with the same prop from another source
   // (an OSM lamp, say) within half of it takes the station, which is skipped.
-  const sameKindNear = (rule, xz, distance) => [...rows, ...ruleRows].some((row) => row.prop === rule.prop && row.source_id !== rule.source_id &&
-    row.status === "placed" && row.geometry === "point" && Math.hypot(row.position_m[0] - xz[0], row.position_m[2] - xz[1]) < distance);
+  // options.raisedAt(en): whether that candidate must stand on the street ground.
+  const sameKindNear = (rule, xz, distance) => [...rows, ...ruleRows].some((row) => (row.prop === rule.prop || (rule.kind === "street_lamp" && row.prop === "utility_pole" && row.prop_params?.lamp)) &&
+    row.source_id !== rule.source_id && row.status === "placed" && row.geometry === "point" && Math.hypot(row.position_m[0] - xz[0], row.position_m[2] - xz[1]) < distance);
   const firstClear = (rule, contains, candidates, options) => {
     for (const en of candidates) {
       const xz = toWorld(en);
@@ -481,13 +816,13 @@ export function placeStreetFurniture({
         count(audit.rejected_by_reason, `${rule.id}:same_kind_near`);
         return null;
       }
-      const problem = reject(rule.kind, xz, options);
+      const problem = reject(rule.kind, xz, { ...options, raised: options.raisedAt ? options.raisedAt(en) : options.raised });
       if (!problem) return en;
       count(audit.rejected_by_reason, `${rule.id}:${problem}`);
     }
     return null;
   };
-  // A crossing or junction shared by two zones is furnished once.
+  // A crossing or junction shared by two zones (or a zone and the island) is furnished once.
   const done = new Set();
   const once = (key) => {
     if (done.has(key)) return false;
@@ -504,7 +839,7 @@ export function placeStreetFurniture({
     const result = [];
     for (const key of keys) {
       const road = kerbByKey.get(key);
-      invariant(road, `Street furniture kerb rule names ${key}, which is not a kerbed road`);
+      invariant(road, `Street furniture kerb rule names ${key}, which is not a vehicle road`);
       const line = road.line.map((point) => [...point]);
       const last = result.at(-1);
       if (last) {
@@ -512,19 +847,67 @@ export function placeStreetFurniture({
         if (length(sub(end, line[0])) < 0.01) {
           last.line.push(...line.slice(1));
           last.offsets.push(...line.slice(1).map(() => road.kerb_offset_m));
+          last.roads.push(...line.slice(1).map(() => road));
           continue;
         }
         if (length(sub(end, line.at(-1))) < 0.01) {
           const reversed = line.reverse();
           last.line.push(...reversed.slice(1));
           last.offsets.push(...reversed.slice(1).map(() => road.kerb_offset_m));
+          last.roads.push(...reversed.slice(1).map(() => road));
           continue;
         }
       }
-      result.push({ key, line, offsets: line.map(() => road.kerb_offset_m) });
+      result.push({ key, line, offsets: line.map(() => road.kerb_offset_m), roads: line.map(() => road) });
     }
     return result;
   };
+  // The ways of the named streets, chained end to end in a stable order: each
+  // chain starts at the remaining way with the smallest key and grows at both
+  // ends while another way of the same name shares an end node.
+  const streetChains = (names) => {
+    const ways = kerbLines.filter((road) => names.includes(road.name)).sort((left, right) => compareSourceKeys(left.source_key, right.source_key));
+    const left = new Set(ways);
+    const result = [];
+    while (left.size > 0) {
+      const first = [...left][0];
+      left.delete(first);
+      let refs = [...first.refs];
+      let line = first.line.map((point) => [...point]);
+      let roads = line.map(() => first);
+      for (let grown = true; grown;) {
+        grown = false;
+        for (const road of [...left]) {
+          if (road.name !== first.name) continue;
+          const [a, b] = [road.refs[0], road.refs.at(-1)];
+          const forward = road.line.map((point) => [...point]);
+          if (a === refs.at(-1) || b === refs.at(-1)) {
+            const part = a === refs.at(-1) ? forward : forward.reverse();
+            const partRefs = a === refs.at(-1) ? road.refs : [...road.refs].reverse();
+            line = [...line, ...part.slice(1)];
+            refs = [...refs, ...partRefs.slice(1)];
+            roads = [...roads, ...part.slice(1).map(() => road)];
+          } else if (a === refs[0] || b === refs[0]) {
+            const part = b === refs[0] ? forward : forward.reverse();
+            const partRefs = b === refs[0] ? road.refs : [...road.refs].reverse();
+            line = [...part.slice(0, -1), ...line];
+            refs = [...partRefs.slice(0, -1), ...refs];
+            roads = [...part.slice(0, -1).map(() => road), ...roads];
+          } else {
+            continue;
+          }
+          left.delete(road);
+          grown = true;
+        }
+      }
+      result.push({ key: first.source_key, name: first.name, line, roads, offsets: roads.map((road) => road.kerb_offset_m) });
+    }
+    return result;
+  };
+  // Whether the street ground is built within 3 m of an east/north point (a
+  // lamp beside a kerbed stretch must stand on it; elsewhere on the land).
+  const groundBuiltNear = (en) => [0, 1, 2, 3, 4, 5, 6, 7].some((k) => [1.5, 3].some((r) =>
+    site.raised(add(en, [r * Math.cos((k * Math.PI) / 4), r * Math.sin((k * Math.PI) / 4)]))));
   const offsetAt = (chain, s) => {
     // The curb offset of the segment that holds distance s.
     let walked = 0;
@@ -534,13 +917,22 @@ export function placeStreetFurniture({
     }
     return chain.offsets.at(-1);
   };
+  const roadAt = (chain, s) => {
+    let walked = 0;
+    for (let index = 1; index < chain.line.length; index += 1) {
+      walked += length(sub(chain.line[index], chain.line[index - 1]));
+      if (walked >= s) return chain.roads[index];
+    }
+    return chain.roads.at(-1);
+  };
 
-  // Junctions of differently named kerbed roads, from the raw topology.
+  // Junctions of differently named roads, from the raw topology (the pilot's
+  // rule: each road's arms, 8 m out along it).
   const junctions = () => {
     const use = new Map();
     for (const road of kerbLines) {
       if (road.name == null) continue;
-      for (const ref of wayRefs(road)) {
+      for (const ref of new Set(road.refs)) {
         const list = use.get(ref) ?? [];
         list.push({ road });
         use.set(ref, list);
@@ -558,7 +950,7 @@ export function placeStreetFurniture({
         for (const sign of [-1, 1]) {
           const target = at + sign * Math.min(8, sign > 0 ? total - at : at);
           if (Math.abs(target - at) < 1) continue;
-          arms.push({ road, direction: unit(sub(pointAlong(road.line, target).point, center)) });
+          arms.push({ road, direction: unit(sub(pointAlong(road.line, target).point, center)), sign });
         }
       }
       found.push({ ref, center, arms });
@@ -566,11 +958,38 @@ export function placeStreetFurniture({
     return found;
   };
 
+  // A street-name assembly at the corner of a junction: the corner between two
+  // streets first (widest first), the straight side of a T last. Returns the
+  // row, or null when no corner is clear.
+  const nameCorner = (zone, rule, contains, junction) => {
+    const arms = junction.arms.map((arm) => ({ ...arm, angle: Math.atan2(arm.direction[1], arm.direction[0]) })).sort((left, right) => left.angle - right.angle);
+    const corners = arms.map((arm, index) => {
+      const next = arms[(index + 1) % arms.length];
+      let gap = next.angle - arm.angle;
+      if (gap <= 0) gap += Math.PI * 2;
+      const bisector = unit([Math.cos(arm.angle + gap / 2), Math.sin(arm.angle + gap / 2)]);
+      const offset = Math.max(arm.road.kerb_offset_m, next.road.kerb_offset_m) + rule.setback_m;
+      const radius = Math.min(14, offset / Math.max(0.2, Math.sin(Math.min(gap, Math.PI) / 2)));
+      return { gap, bisector, point: add(junction.center, scale(bisector, radius)) };
+    }).sort((left, right) => (left.gap >= STRAIGHT_CORNER_RAD) - (right.gap >= STRAIGHT_CORNER_RAD) || right.gap - left.gap);
+    const en = firstClear(rule, contains, corners.map((corner) => corner.point), { raisedAt: groundBuiltNear });
+    if (!en) return null;
+    const front = unit(sub(junction.center, en));
+    return addRow(zone, rule, `n${junction.ref}`, en, front, { blades: bladesFor(arms, yawToward(front)) });
+  };
+  // The two name blades of a junction's streets, each along its street,
+  // relative to a post turned by yaw.
+  const bladesFor = (arms, yaw) => {
+    const names = [];
+    for (const arm of arms) if (!names.some((entry) => entry.name === arm.road.name)) names.push({ name: arm.road.name, direction: arm.direction });
+    return names.slice(0, 2).map((entry) => ({ text: abbreviateStreetName(entry.name), yaw: relativeYaw(yawAlong(entry.direction), yaw) }));
+  };
+
   // Stop signs on the arms of `road` at junction `ref`, on the right-hand curb,
   // past the crossing roads' curbs and any crosswalk across the arm. They face
   // traffic approaching the junction, or with inbound traffic leaving it into
   // the arm (and stand downstream of that crosswalk).
-  const signArms = (zone, rule, ref, center, road, crossing, inbound = false) => {
+  const signArms = (zone, rule, ref, center, road, crossing, inbound = false, walks = site.crosswalks) => {
     const total = polylineLength(road.line);
     const at = closestOnPolyline(road.line, center).along;
     for (const sign of [-1, 1]) {
@@ -579,154 +998,369 @@ export function placeStreetFurniture({
       const outward = unit(sub(pointAlong(road.line, at + sign * Math.min(8, room)).point, center));
       const travel = inbound ? outward : scale(outward, -1);
       if (!inbound && coveredBy(ref, road.source_key, travel)) continue;
-      const cross = Math.max(0, ...crossing.map((other) => other.kerb_offset_m));
+      const crossKerb = Math.max(0, ...crossing.map((other) => other.kerb_offset_m));
       const cell = `n${ref}_${road.source_key}_${sign > 0 ? "b" : "a"}`;
-      const base = add(center, scale(outward, armClearance(center, road, outward, cross, rule.clear_m)));
+      const base = add(center, scale(outward, armClearance(center, road, outward, crossKerb, rule.clear_m, walks)));
       const xz = stopPosition(`scatter:${zone.id}:${rule.id}:${cell}`, base, travel, road.kerb_offset_m, inbound ? 1 : -1);
       if (!xz) {
         count(audit.rejected_by_reason, `${rule.id}:no_clear_curb`);
         continue;
       }
       const row = addRow(zone, rule, cell, toEastNorth(xz), scale(travel, -1), {}, `${inbound ? "inbound" : "approach"}:${road.source_key}`);
-      if (!inbound) stopSigns.push({ id: row.id, junction: ref, road_key: road.source_key, travel });
+      if (!inbound) stopSigns.push({ id: row.id, row, junction: ref, road_key: road.source_key, travel });
+    }
+  };
+
+  // The island's junctions of named streets for the junction rules: every
+  // node of a named road that another named road shares, with an arm for each
+  // direction a road leaves it (8 m out along it, at least 1 m), and the
+  // distinct street names of its arms.
+  const islandJunctions = (() => {
+    const use = new Map();
+    for (const road of kerbLines) {
+      if (road.name == null) continue;
+      for (const ref of new Set(road.refs)) use.set(ref, [...(use.get(ref) ?? []), road]);
+    }
+    const found = [];
+    for (const [ref, roads] of [...use.entries()].sort(([left], [right]) => compareSourceKeys(`n${left}`, `n${right}`))) {
+      if (roads.length < 2) continue;
+      const center = nodePoint(ref);
+      const arms = [];
+      for (const road of roads) {
+        road.refs.forEach((nodeRef, index) => {
+          if (nodeRef !== ref) return;
+          for (const sign of [-1, 1]) {
+            let walked = 0;
+            let target = null;
+            for (let at = index + sign; at >= 0 && at < road.line.length; at += sign) {
+              const step = length(sub(road.line[at], road.line[at - sign]));
+              if (walked + step >= 8) {
+                target = add(road.line[at - sign], scale(sub(road.line[at], road.line[at - sign]), (8 - walked) / step));
+                break;
+              }
+              walked += step;
+              target = road.line[at];
+            }
+            if (!target || length(sub(target, center)) < 1) continue;
+            arms.push({ road, direction: unit(sub(target, center)), sign, index });
+          }
+        });
+      }
+      const names = [...new Set(arms.map((arm) => arm.road.name))];
+      if (arms.length >= 3 && names.length >= 2) found.push({ ref, center, arms, names });
+    }
+    return found;
+  })();
+  const signalNodes = new Set(rows.filter((row) => row.source === "osm" && row.kind === "traffic_signals").map((row) => row.source_id.slice(1)));
+  // The approaches of a junction that stop: the arms off its through street
+  // (the pair of arms of one street name, else the straightest pair, of the
+  // highest road class); at a crossroads of two streets of one class, every arm.
+  const minorApproaches = (junction) => {
+    const { arms } = junction;
+    const rank = (arm) => ROAD_RANK[arm.road.highway] ?? 0;
+    const pairs = [];
+    for (let i = 0; i < arms.length; i += 1) {
+      for (let j = i + 1; j < arms.length; j += 1) {
+        const angle = Math.acos(Math.max(-1, Math.min(1, dot(arms[i].direction, arms[j].direction))));
+        const same = arms[i].road.name === arms[j].road.name;
+        if ((same && angle >= SAME_STREET_PAIR_RAD) || angle >= STRAIGHT_PAIR_RAD) pairs.push({ i, j, same, angle, rank: Math.min(rank(arms[i]), rank(arms[j])) });
+      }
+    }
+    if (pairs.length === 0) return [];
+    pairs.sort((left, right) => right.rank - left.rank || Number(right.same) - Number(left.same) || right.angle - left.angle || left.i - right.i || left.j - right.j);
+    const through = pairs[0];
+    const others = arms.map((arm, index) => ({ arm, index })).filter(({ index }) => index !== through.i && index !== through.j);
+    if (others.length === 2) {
+      const [a, b] = others;
+      const angle = Math.acos(Math.max(-1, Math.min(1, dot(a.arm.direction, b.arm.direction))));
+      const crossStreet = (a.arm.road.name === b.arm.road.name && angle >= SAME_STREET_PAIR_RAD) || angle >= STRAIGHT_PAIR_RAD;
+      if (crossStreet && Math.min(rank(a.arm), rank(b.arm)) === through.rank) return { arms, allWay: true };
+    }
+    return { arms: others.map(({ arm }) => arm), allWay: false };
+  };
+  // A stop sign for the traffic approaching a junction along one arm.
+  const signApproach = (zone, rule, junction, arm, allWay) => {
+    const outward = arm.direction;
+    const travel = scale(outward, -1);
+    if (coveredBy(junction.ref, arm.road.source_key, travel)) return;
+    const crossing = junction.arms.filter((other) => other.road !== arm.road).map((other) => other.road);
+    const crossKerb = Math.max(0, ...crossing.map((road) => road.kerb_offset_m));
+    const cell = `n${junction.ref}_${arm.road.source_key}_${arm.sign > 0 ? "b" : "a"}${arm.index > 0 && arm.index < arm.road.refs.length - 1 ? "" : ""}`;
+    const id = `scatter:${zone.id}:${rule.id}:${cell}`;
+    if (ruleRows.some((row) => row.id === id)) return;
+    const base = add(junction.center, scale(outward, armClearance(junction.center, arm.road, outward, crossKerb, rule.clear_m, allWalks)));
+    const xz = stopPosition(id, base, travel, arm.road.kerb_offset_m, -1);
+    if (!xz) {
+      count(audit.rejected_by_reason, `${rule.id}:no_clear_curb`);
+      return;
+    }
+    const row = addRow(zone, rule, cell, toEastNorth(xz), scale(travel, -1), { all_way: allWay }, `approach:${arm.road.source_key}`);
+    stopSigns.push({ id: row.id, row, junction: junction.ref, road_key: arm.road.source_key, travel });
+  };
+
+  const runRule = (zone, rule, contains) => {
+    if (rule.pattern === "kerb") {
+      for (const chain of chains(rule.source_keys)) {
+        const total = polylineLength(chain.line);
+        for (const sideName of rule.sides) {
+          const side = sideName === "left" ? 1 : -1;
+          for (let station = 0, s = rule.phase_m; s <= total; station += 1, s += rule.spacing_m) {
+            const candidates = slides(rule.slide_m).filter((delta) => s + delta >= 0 && s + delta <= total).map((delta) => {
+              const along = pointAlong(chain.line, s + delta);
+              return add(along.point, scale(leftOf(along.tangent), side * (offsetAt(chain, s + delta) + rule.setback_m)));
+            });
+            const en = firstClear(rule, contains, candidates, { raised: true, spacing_m: rule.spacing_m });
+            if (!en) continue;
+            const near = closestOnPolyline(chain.line, en);
+            addRow(zone, rule, `${chain.key}_${sideName}_${String(station).padStart(3, "0")}`, en, unit(sub(near.point, en)));
+          }
+        }
+      }
+    } else if (rule.pattern === "street_lamps") {
+      // Lamps along the named streets at a spacing, on the street ground where
+      // a zone builds it, else beside the frozen road ribbon.
+      for (const chain of streetChains(rule.streets)) {
+        const total = polylineLength(chain.line);
+        for (const sideName of rule.sides) {
+          const side = sideName === "left" ? 1 : -1;
+          for (let station = 0, s = rule.phase_m; s <= total; station += 1, s += rule.spacing_m) {
+            const deltas = slides(rule.slide_m).filter((delta) => s + delta >= 0 && s + delta <= total);
+            const candidates = deltas.map((delta) => {
+              const along = pointAlong(chain.line, s + delta);
+              return add(along.point, scale(leftOf(along.tangent), side * (offsetAt(chain, s + delta) + rule.setback_m)));
+            });
+            const en = firstClear(rule, contains, candidates, { raisedAt: groundBuiltNear, spacing_m: rule.spacing_m });
+            if (!en) continue;
+            const near = closestOnPolyline(chain.line, en);
+            addRow(zone, rule, `${chain.key}_${sideName}_${String(station).padStart(3, "0")}`, en, unit(sub(near.point, en)));
+          }
+        }
+      }
+    } else if (rule.pattern === "pole_fixtures") {
+      // Street lights on the utility poles beside a named street: a pole whose
+      // centre stands within max_gap_m of the street's edge carries a lamp arm
+      // reaching over it, unless a lit pole on the same side of that street stands
+      // within min_spacing_m; streets in except_streets keep their poles unlit.
+      const lit = [];
+      const sameSide = (a, b, name) => kerbLines.filter((road) => road.name === name)
+        .every((road) => road.line.every((point, index) => index === 0 || !segmentsCross(a, b, road.line[index - 1], point)));
+      // OSM poles only: a photographed set-piece pole carries what its photo shows.
+      const poles = [...poleRows.values()].filter((row) => row.source === "osm" && builtPole(row) && contains([row.position_m[0], row.position_m[2]]))
+        .sort((left, right) => (left.id < right.id ? -1 : left.id > right.id ? 1 : 0));
+      for (const pole of poles) {
+        const at = toEastNorth([pole.position_m[0], pole.position_m[2]]);
+        const best = nearestRoad(at, (road) => road.name != null);
+        if (!best || best.gap < 0 || best.gap > rule.max_gap_m) continue;
+        if (rule.except_streets.includes(best.road.name)) {
+          count(audit.rejected_by_reason, `${rule.id}:except_street`);
+          continue;
+        }
+        if (lit.some((entry) => entry.name === best.road.name && length(sub(entry.at, at)) < rule.min_spacing_m && sameSide(entry.at, at, entry.name))) {
+          count(audit.rejected_by_reason, `${rule.id}:spacing`);
+          continue;
+        }
+        const toward = unit(sub(best.near.point, at));
+        // The arm reaches about half a metre past the road edge, at most arm_m,
+        // in half-metre steps (so poles share their lamp meshes).
+        const arm = Math.max(1.5, Math.min(rule.params.arm_m, Math.round((best.gap + 0.5) * 2) / 2));
+        pole.prop_params = { ...pole.prop_params, lamp: { ...rule.params, arm_m: arm, yaw: relativeYaw(yawToward(toward), pole.yaw_radians ?? 0) } };
+        pole.lamp_rule = rule.source_id;
+        lit.push({ name: best.road.name, at });
+        count(audit.rules, `${zone.id}/${rule.id}`);
+        audit.pole_lamps += 1;
+      }
+    } else if (rule.pattern === "junction_stops") {
+      // Stop signs on the minor approaches of every junction of named streets
+      // that OSM leaves unsigned: the photographed exceptions keep none.
+      const except = new Map(rule.except.map((entry) => [entry.node, entry]));
+      for (const junction of islandJunctions) {
+        if (!contains(toWorld(junction.center)) || signalNodes.has(junction.ref)) continue;
+        if (!once(`junction_stops:${junction.ref}`)) continue;
+        const minor = minorApproaches(junction);
+        for (const arm of minor.arms ?? []) {
+          if (arm.road.highway === "service") continue;
+          if (except.get(`n${junction.ref}`)?.approaches.includes(arm.road.name)) {
+            count(audit.rejected_by_reason, `${rule.id}:photographed_exception`);
+            continue;
+          }
+          signApproach(zone, rule, junction, arm, minor.allWay);
+        }
+      }
+    } else if (rule.pattern === "hydrant_style") {
+      // The OSM hydrants whose nearest named street is one of the rule's streets
+      // take its style (the kit's default is the ochre yellow of the Navy-era streets).
+      for (const row of rows.filter((candidate) => candidate.source === "osm" && candidate.prop === "hydrant" && candidate.status === "placed")) {
+        const best = nearestRoad(toEastNorth([row.position_m[0], row.position_m[2]]), (road) => road.name != null);
+        if (!best || !rule.streets.includes(best.road.name) || !contains([row.position_m[0], row.position_m[2]])) continue;
+        row.prop_params = { ...row.prop_params, ...rule.params };
+        count(audit.rules, `${zone.id}/${rule.id}`);
+      }
+    } else if (rule.pattern === "junction_names") {
+      // Name blades at every junction of named streets that no zone furnished:
+      // on the post of a stop sign there (the first by id), else on a corner post.
+      for (const junction of islandJunctions) {
+        if (!contains(toWorld(junction.center)) || !once(`junction:${junction.ref}`)) continue;
+        const sign = stopSigns.filter((entry) => entry.junction === junction.ref && entry.row.prop === "stop_sign")
+          .sort((left, right) => (left.id < right.id ? -1 : left.id > right.id ? 1 : 0))[0];
+        if (sign) {
+          sign.row.prop_params = { ...sign.row.prop_params, blades: bladesFor(junction.arms, sign.row.yaw_radians) };
+          audit.blades_on_stops += 1;
+          count(audit.rules, `${zone.id}/${rule.id}`);
+          continue;
+        }
+        nameCorner(zone, rule, contains, junction);
+      }
+    } else if (rule.pattern === "signalized_crossings" || rule.pattern === "near_signals") {
+      const walks = zone.id === "island" ? allWalks : site.crosswalks;
+      for (const walk of walks.filter((candidate) => candidate.signals && contains(toWorld(candidate.center)))) {
+        if (!once(`${rule.pattern}:${walk.source_key}`)) continue;
+        // Each landing gets the far-side pole of the traffic that keeps that curb on its right.
+        const landings = [[-1, walk.span[0]], [1, walk.span[1]]].map(([sign, s]) => {
+          const outward = scale(walk.direction, sign);
+          return { sign, s, outward, travel: leftOf(outward), landing: add(walk.center, scale(walk.direction, s)) };
+        });
+        if (rule.pattern === "signalized_crossings") {
+          for (const landing of landings) {
+            // One mast pole per street corner: on the island a landing whose corner
+            // already has one (from a crossing of the other street) adds none.
+            if (zone.id === "island" && ruleRows.some((row) => row.prop === rule.prop && length(sub(toEastNorth([row.position_m[0], row.position_m[2]]), landing.landing)) < MAST_CORNER_M)) {
+              count(audit.rejected_by_reason, `${rule.id}:corner_has_mast`);
+              continue;
+            }
+            const candidates = [0, 0.5, 1, 1.5, 2, 3, 4].map((extra) => add(add(landing.landing, scale(landing.outward, rule.setback_m)),
+              scale(landing.travel, site.walk_width_m / 2 + rule.beyond_m + extra)));
+            const en = firstClear(rule, contains, candidates, { raised: zone.id !== "island" });
+            if (!en) continue;
+            // The mast arm reaches over the lanes of its own direction, toward
+            // the centre line of the road the crosswalk crosses.
+            const reach = Math.min(...kerbLines.map((road) => closestOnPolyline(road.line, en).distance));
+            const arm = Math.round(Math.max(3, Math.min(7, 0.85 * reach)) * 2) / 2;
+            addRow(zone, rule, `${walk.source_key}_${landing.sign > 0 ? "b" : "a"}`, en, scale(landing.outward, -1), { arm_m: arm, head_m: roundCoordinate(Math.min(arm - 0.4, 0.7 * reach)) });
+          }
+        } else {
+          // One cabinet per crossing, behind the far-side pole of the landing with
+          // the most paved street ground around it (a plaza or a wide sidewalk).
+          let best = null;
+          for (const landing of landings) {
+            const pole = add(add(landing.landing, scale(landing.outward, 0.6)), scale(landing.travel, site.walk_width_m / 2 + 1));
+            const candidates = [0, 0.5, 1, 1.5].map((extra) => add(add(pole, scale(landing.outward, rule.back_m + extra)), scale(landing.travel, rule.along_m)));
+            const en = firstClear(rule, contains, candidates, {});
+            if (!en) continue;
+            let paved = 0;
+            for (let i = -2; i <= 2; i += 1) {
+              for (let j = -2; j <= 2; j += 1) {
+                if (site.raised(add(en, [i * CABINET_SITE_STEP_M, j * CABINET_SITE_STEP_M]))) paved += 1;
+              }
+            }
+            if (!best || paved > best.paved) best = { landing, en, paved };
+          }
+          if (best) addRow(zone, rule, `${walk.source_key}_${best.landing.sign > 0 ? "b" : "a"}`, best.en, scale(best.landing.outward, -1));
+        }
+      }
+    } else if (rule.pattern === "junctions") {
+      for (const junction of junctions()) {
+        if (!contains(toWorld(junction.center)) || !once(`junction:${junction.ref}`)) continue;
+        const arms = junction.arms.map((arm) => ({ ...arm, angle: Math.atan2(arm.direction[1], arm.direction[0]) })).sort((left, right) => left.angle - right.angle);
+        // Corners between two streets first (widest first), the straight side of a T last.
+        const corners = arms.map((arm, index) => {
+          const next = arms[(index + 1) % arms.length];
+          let gap = next.angle - arm.angle;
+          if (gap <= 0) gap += Math.PI * 2;
+          const bisector = unit([Math.cos(arm.angle + gap / 2), Math.sin(arm.angle + gap / 2)]);
+          const offset = Math.max(arm.road.kerb_offset_m, next.road.kerb_offset_m) + rule.setback_m;
+          const radius = Math.min(14, offset / Math.max(0.2, Math.sin(Math.min(gap, Math.PI) / 2)));
+          return { gap, bisector, point: add(junction.center, scale(bisector, radius)) };
+        }).sort((left, right) => (left.gap >= STRAIGHT_CORNER_RAD) - (right.gap >= STRAIGHT_CORNER_RAD) || right.gap - left.gap);
+        const en = firstClear(rule, contains, corners.map((corner) => corner.point), { raised: true });
+        if (!en) continue;
+        const front = unit(sub(junction.center, en));
+        addRow(zone, rule, `n${junction.ref}`, en, front, { blades: bladesFor(arms, yawToward(front)) });
+      }
+    } else if (rule.pattern === "all_way_stops") {
+      // An OSM stop=all junction stops every approach: a sign on the right-hand
+      // curb of each arm not already signed, clear of the crossing street.
+      for (const stop of rows.filter((row) => row.source === "osm" && row.kind === "stop_sign" && row.tags?.stop === "all")) {
+        const ref = stop.source_id.slice(1);
+        const roads = meetings.get(ref) ?? [];
+        if (roads.length < 2) continue;
+        const center = nodePoint(ref);
+        if (!contains(toWorld(center)) || !once(`all_way:${ref}`)) continue;
+        for (const road of roads) signArms(zone, rule, ref, center, road, roads.filter((other) => other !== road), false, zone.id === "island" ? allWalks : site.crosswalks);
+      }
+    } else if (rule.pattern === "drive_entries") {
+      // Traffic turning off a named road into a kerbed service drive stops: a
+      // sign on its right-hand curb, just past any crosswalk across the drive.
+      for (const [ref, roads] of [...meetings.entries()].sort(([left], [right]) => compareSourceKeys(`n${left}`, `n${right}`))) {
+        const named = roads.filter((road) => road.name != null);
+        const drives = roads.filter((road) => road.name == null && road.highway === "service" && road.kerbed);
+        if (named.length === 0 || drives.length === 0) continue;
+        const center = nodePoint(ref);
+        if (!contains(toWorld(center)) || !once(`drive_entry:${ref}`)) continue;
+        for (const road of drives) signArms(zone, rule, ref, center, road, named, true);
+      }
+    } else if (rule.pattern === "lot_edge") {
+      // Lights around a parking lot: just outside its outer edge, facing in.
+      for (const key of rule.source_keys) {
+        const lot = site.lots.find((candidate) => candidate.source_key === key);
+        invariant(lot, `Street furniture lot rule names ${key}, which is not a parking lot near the pilot`);
+        lot.geometry.forEach((polygon, polygonIndex) => {
+          const ring = polygon[0];
+          const line = length(sub(ring[0], ring.at(-1))) < 1e-9 ? ring : [...ring, ring[0]];
+          const total = polylineLength(line);
+          const inside = (point) => pointInMultiPolygon(point, lot.geometry, false);
+          for (let station = 0, s = rule.phase_m; s < total; station += 1, s += rule.spacing_m) {
+            const candidates = slides(rule.slide_m).map((delta) => {
+              const along = pointAlong(line, ((s + delta) % total + total) % total);
+              const left = leftOf(along.tangent);
+              const outward = inside(add(along.point, scale(left, 0.5))) ? scale(left, -1) : left;
+              return add(along.point, scale(outward, rule.setback_m));
+            });
+            // A lot can reach past its own zone; its lights follow it anywhere in the pilot.
+            const en = firstClear(rule, inPilot, candidates, { spacing_m: rule.spacing_m });
+            if (!en) continue;
+            const near = closestOnPolyline(line, en);
+            addRow(zone, rule, `${key}_p${polygonIndex}_s${String(station).padStart(3, "0")}`, en, unit(sub(near.point, en)));
+          }
+        });
+      }
     }
   };
 
   for (const { zone, contains } of pilotShapes) {
-    for (const zoneRule of zone.furniture ?? []) {
-      const rule = { ...zoneRule, source_id: `zone:${zone.id}/${zoneRule.id}` };
-      if (rule.pattern === "kerb") {
-        for (const chain of chains(rule.source_keys)) {
-          const total = polylineLength(chain.line);
-          for (const sideName of rule.sides) {
-            const side = sideName === "left" ? 1 : -1;
-            for (let station = 0, s = rule.phase_m; s <= total; station += 1, s += rule.spacing_m) {
-              const candidates = slides(rule.slide_m).filter((delta) => s + delta >= 0 && s + delta <= total).map((delta) => {
-                const along = pointAlong(chain.line, s + delta);
-                return add(along.point, scale(leftOf(along.tangent), side * (offsetAt(chain, s + delta) + rule.setback_m)));
-              });
-              const en = firstClear(rule, contains, candidates, { raised: true, spacing_m: rule.spacing_m });
-              if (!en) continue;
-              const near = closestOnPolyline(chain.line, en);
-              addRow(zone, rule, `${chain.key}_${sideName}_${String(station).padStart(3, "0")}`, en, unit(sub(near.point, en)));
-            }
-          }
-        }
-      } else if (rule.pattern === "signalized_crossings" || rule.pattern === "near_signals") {
-        for (const walk of site.crosswalks.filter((candidate) => candidate.signals && contains(toWorld(candidate.center)))) {
-          if (!once(`${rule.pattern}:${walk.source_key}`)) continue;
-          // Each landing gets the far-side pole of the traffic that keeps that curb on its right.
-          const landings = [[-1, walk.span[0]], [1, walk.span[1]]].map(([sign, s]) => {
-            const outward = scale(walk.direction, sign);
-            return { sign, s, outward, travel: leftOf(outward), landing: add(walk.center, scale(walk.direction, s)) };
-          });
-          if (rule.pattern === "signalized_crossings") {
-            for (const landing of landings) {
-              const candidates = [0, 0.5, 1, 1.5, 2, 3, 4].map((extra) => add(add(landing.landing, scale(landing.outward, rule.setback_m)),
-                scale(landing.travel, site.walk_width_m / 2 + rule.beyond_m + extra)));
-              const en = firstClear(rule, contains, candidates, { raised: true });
-              if (!en) continue;
-              // The mast arm reaches over the lanes of its own direction, toward
-              // the centre line of the road the crosswalk crosses.
-              const reach = Math.min(...kerbLines.map((road) => closestOnPolyline(road.line, en).distance));
-              const arm = Math.round(Math.max(3, Math.min(7, 0.85 * reach)) * 2) / 2;
-              addRow(zone, rule, `${walk.source_key}_${landing.sign > 0 ? "b" : "a"}`, en, scale(landing.outward, -1), { arm_m: arm, head_m: roundCoordinate(Math.min(arm - 0.4, 0.7 * reach)) });
-            }
-          } else {
-            // One cabinet per crossing, behind the far-side pole of the landing with
-            // the most paved street ground around it (a plaza or a wide sidewalk).
-            let best = null;
-            for (const landing of landings) {
-              const pole = add(add(landing.landing, scale(landing.outward, 0.6)), scale(landing.travel, site.walk_width_m / 2 + 1));
-              const candidates = [0, 0.5, 1, 1.5].map((extra) => add(add(pole, scale(landing.outward, rule.back_m + extra)), scale(landing.travel, rule.along_m)));
-              const en = firstClear(rule, contains, candidates, {});
-              if (!en) continue;
-              let paved = 0;
-              for (let i = -2; i <= 2; i += 1) {
-                for (let j = -2; j <= 2; j += 1) {
-                  if (site.raised(add(en, [i * CABINET_SITE_STEP_M, j * CABINET_SITE_STEP_M]))) paved += 1;
-                }
-              }
-              if (!best || paved > best.paved) best = { landing, en, paved };
-            }
-            if (best) addRow(zone, rule, `${walk.source_key}_${best.landing.sign > 0 ? "b" : "a"}`, best.en, scale(best.landing.outward, -1));
-          }
-        }
-      } else if (rule.pattern === "junctions") {
-        for (const junction of junctions()) {
-          if (!contains(toWorld(junction.center)) || !once(`junction:${junction.ref}`)) continue;
-          const arms = junction.arms.map((arm) => ({ ...arm, angle: Math.atan2(arm.direction[1], arm.direction[0]) })).sort((left, right) => left.angle - right.angle);
-          // Corners between two streets first (widest first), the straight side of a T last.
-          const corners = arms.map((arm, index) => {
-            const next = arms[(index + 1) % arms.length];
-            let gap = next.angle - arm.angle;
-            if (gap <= 0) gap += Math.PI * 2;
-            const bisector = unit([Math.cos(arm.angle + gap / 2), Math.sin(arm.angle + gap / 2)]);
-            const offset = Math.max(arm.road.kerb_offset_m, next.road.kerb_offset_m) + rule.setback_m;
-            const radius = Math.min(14, offset / Math.max(0.2, Math.sin(Math.min(gap, Math.PI) / 2)));
-            return { gap, bisector, point: add(junction.center, scale(bisector, radius)) };
-          }).sort((left, right) => (left.gap >= STRAIGHT_CORNER_RAD) - (right.gap >= STRAIGHT_CORNER_RAD) || right.gap - left.gap);
-          const en = firstClear(rule, contains, corners.map((corner) => corner.point), { raised: true });
-          if (!en) continue;
-          const front = unit(sub(junction.center, en));
-          const yaw = yawToward(front);
-          const names = [];
-          for (const arm of arms) if (!names.some((entry) => entry.name === arm.road.name)) names.push({ name: arm.road.name, direction: arm.direction });
-          const blades = names.slice(0, 2).map((entry) => ({ text: abbreviateStreetName(entry.name), yaw: relativeYaw(yawAlong(entry.direction), yaw) }));
-          addRow(zone, rule, `n${junction.ref}`, en, front, { blades });
-        }
-      } else if (rule.pattern === "all_way_stops") {
-        // An OSM stop=all junction stops every approach: a sign on the right-hand
-        // curb of each arm not already signed, clear of the crossing street.
-        for (const stop of rows.filter((row) => row.source === "osm" && row.kind === "stop_sign" && row.tags?.stop === "all")) {
-          const ref = stop.source_id.slice(1);
-          const roads = meetings.get(ref) ?? [];
-          if (roads.length < 2) continue;
-          const center = nodePoint(ref);
-          if (!contains(toWorld(center)) || !once(`all_way:${ref}`)) continue;
-          for (const road of roads) signArms(zone, rule, ref, center, road, roads.filter((other) => other !== road));
-        }
-      } else if (rule.pattern === "drive_entries") {
-        // Traffic turning off a named road into a kerbed service drive stops: a
-        // sign on its right-hand curb, just past any crosswalk across the drive.
-        for (const [ref, roads] of [...meetings.entries()].sort(([left], [right]) => compareSourceKeys(`n${left}`, `n${right}`))) {
-          const named = roads.filter((road) => road.name != null);
-          const drives = roads.filter((road) => road.name == null && road.highway === "service");
-          if (named.length === 0 || drives.length === 0) continue;
-          const center = nodePoint(ref);
-          if (!contains(toWorld(center)) || !once(`drive_entry:${ref}`)) continue;
-          for (const road of drives) signArms(zone, rule, ref, center, road, named, true);
-        }
-      } else if (rule.pattern === "lot_edge") {
-        // Lights around a parking lot: just outside its outer edge, facing in.
-        for (const key of rule.source_keys) {
-          const lot = site.lots.find((candidate) => candidate.source_key === key);
-          invariant(lot, `Street furniture lot rule names ${key}, which is not a parking lot near the pilot`);
-          lot.geometry.forEach((polygon, polygonIndex) => {
-            const ring = polygon[0];
-            const line = length(sub(ring[0], ring.at(-1))) < 1e-9 ? ring : [...ring, ring[0]];
-            const total = polylineLength(line);
-            const inside = (point) => pointInMultiPolygon(point, lot.geometry, false);
-            for (let station = 0, s = rule.phase_m; s < total; station += 1, s += rule.spacing_m) {
-              const candidates = slides(rule.slide_m).map((delta) => {
-                const along = pointAlong(line, ((s + delta) % total + total) % total);
-                const left = leftOf(along.tangent);
-                const outward = inside(add(along.point, scale(left, 0.5))) ? scale(left, -1) : left;
-                return add(along.point, scale(outward, rule.setback_m));
-              });
-              // A lot can reach past its own zone; its lights follow it anywhere in the pilot.
-              const en = firstClear(rule, inPilot, candidates, { spacing_m: rule.spacing_m });
-              if (!en) continue;
-              const near = closestOnPolyline(line, en);
-              addRow(zone, rule, `${key}_p${polygonIndex}_s${String(station).padStart(3, "0")}`, en, unit(sub(near.point, en)));
-            }
-          });
-        }
-      }
-    }
+    for (const zoneRule of zone.furniture ?? []) runRule(zone, { ...zoneRule, source_id: `zone:${zone.id}/${zoneRule.id}` }, contains);
   }
+  // The island-wide rules, after the zones' (which keep their streets and junctions).
+  const islandZone = { id: "island" };
+  const onIsland = (xz) => onLand(xz, 0);
+  for (const islandRule of island?.rules ?? []) runRule(islandZone, { ...islandRule, source_id: `island:${islandRule.id}` }, onIsland);
   audit.osm_unbuilt.sort((left, right) => (left.id < right.id ? -1 : left.id > right.id ? 1 : 0));
   return { rows: ruleRows, audit };
+}
+
+// A level pad (a STREET_FURNITURE_PADS prop) of footprint {x_m, z_m} at world
+// xz turned by yaw, on the visible ground (groundAt): it rises to the highest
+// ground under its edge, lift metres over the ground at its centre (the row's
+// base), and its skirt hides what its low side floats. {lift}, or {problem}
+// when the ground is missing or the low side would float past PAD_SKIRT_M.
+export function settlePad(footprint, xz, yaw, groundAt) {
+  const centre = groundAt(xz);
+  if (!centre) return { problem: "no_ground" };
+  const [c, s] = [Math.cos(yaw), Math.sin(yaw)];
+  const heights = [];
+  const corners = [[-1, -1], [1, -1], [1, 1], [-1, 1]];
+  for (let index = 0; index < 4; index += 1) {
+    const [a, b] = [corners[index], corners[(index + 1) % 4]];
+    for (let step = 0; step < PAD_SIDE_SAMPLES; step += 1) {
+      const t = step / PAD_SIDE_SAMPLES;
+      const [x, z] = [((a[0] + (b[0] - a[0]) * t) * footprint.x_m) / 2, ((a[1] + (b[1] - a[1]) * t) * footprint.z_m) / 2];
+      const ground = groundAt([xz[0] + x * c + z * s, xz[1] - x * s + z * c]);
+      if (!ground) return { problem: "no_ground" };
+      heights.push(ground.y);
+    }
+  }
+  const lift = roundCoordinate(Math.max(0, Math.max(...heights) - centre.y));
+  if (centre.y + lift - Math.min(...heights) > PAD_SKIRT_M) return { problem: "uneven_ground" };
+  return { lift };
 }
 
 // A local point of a prop at rest, turned as the runtime turns it: Godot's

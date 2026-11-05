@@ -74,7 +74,7 @@ import {
   fenceHeight, fenceParamsError, GATE_LEAF_LIFT_M, gateLeaves, STREET_FENCE_BANNER_TYPES, STREET_FENCE_GATE_HINGES, STREET_FENCE_GATE_STYLES, STREET_FENCE_GATED_TYPES, STREET_FENCE_INSIDE,
   STREET_FENCE_TYPES,
 } from "./lib/street-fence-generation.mjs";
-import { MAX_LEG_DROP_M, MAX_REST_TILT_RAD, restTilt, STREET_FURNITURE_FEET, STREET_FURNITURE_PROPS } from "./lib/street-furniture-generation.mjs";
+import { MAX_LEG_DROP_M, MAX_REST_TILT_RAD, PAD_SKIRT_M, restTilt, STREET_FURNITURE_FEET, STREET_FURNITURE_PADS, STREET_FURNITURE_PROPS } from "./lib/street-furniture-generation.mjs";
 import { YARD_KIT_KEYS, YARD_KIT_PARTS, YARD_KIT_PROPS, YARD_MAX_FLOAT_M, yardMaxSink, yardPropFootprint, yardPropParamsError, yardPropRests, yardRestGaps } from "./lib/street-yard-kit.mjs";
 import { BERM_MODULE, BERM_SPECS, RIDGE_MODULE, yardKitMeshes } from "./lib/street-yard-meshes.mjs";
 import { isDeckRow, isMooredRow, isYardRow, MOORED_PROP_VARIANTS } from "./lib/street-yard-generation.mjs";
@@ -1001,6 +1001,21 @@ function validatePropRest(row, groundAt) {
       const tyre = base - Math.tan(params.pitch) * z - Math.tan(params.roll) * x + params.twist * Math.sign(x) * Math.sign(z);
       rests(ground ? tyre - ground.y : null, `${name} tyre`, point);
     }
+  } else if (row.layer === "furniture" && STREET_FURNITURE_PADS.includes(row.prop)) {
+    // A prop on a level pad (a bus shelter, a transformer, a charger bay): at
+    // its centre and round the edge of its plan the pad's foot sinks at most
+    // the props' limit and floats at most its skirt (settlePad).
+    invariant(row.footprint_m !== undefined && Number.isFinite(params.lift) && params.lift >= 0, `${row.id} ${row.prop} needs its footprint and pad lift`);
+    const [c, s] = [Math.cos(row.yaw_radians ?? 0), Math.sin(row.yaw_radians ?? 0)];
+    const points = [[0, 0]];
+    for (const [lx, lz] of [[-1, -1], [1, -1], [1, 1], [-1, 1], [0, -1], [1, 0], [0, 1], [-1, 0]]) points.push([(lx * row.footprint_m.x_m) / 2, (lz * row.footprint_m.z_m) / 2]);
+    for (const [x, z] of points) {
+      const point = [row.position_m[0] + x * c + z * s, row.position_m[2] - x * s + z * c];
+      const ground = groundAt(point);
+      const gap = ground ? base - ground.y : null;
+      invariant(gap !== null && gap >= -PROP_REST_SINK_M && gap <= PAD_SKIRT_M + 0.005,
+        `${row.id} ${row.prop} pad ${gap === null ? "has no visible ground under it" : gap > 0 ? `floats ${gap.toFixed(3)} m, past its skirt,` : `sinks ${(-gap).toFixed(3)} m into the visible ground`} at ${point.map((value) => value.toFixed(2)).join(", ")}`);
+    }
   } else if (row.layer === "furniture" || ANCHORED_CLUTTER.includes(row.prop)) {
     const point = [row.position_m[0], row.position_m[2]];
     const ground = groundAt(point);
@@ -1157,6 +1172,16 @@ function validateStreetDetail(worldRoot, manifest, records) {
       invariant((row.kind === "fence") === (row.fence !== undefined), `${row.id}: every fence row, and only a fence row, carries a fence block`);
       if (row.fence !== undefined) validateFenceRow(row, grounded, inBoundary, groundAt);
     }
+  }
+  // The power lines' wires: a power_wires row is a placed power line whose pole
+  // list names, in order along it, placed utility poles (null where a vertex
+  // has none), with at least one span of two built poles side by side.
+  const utilityPoles = new Set(rows.filter((row) => row.prop === "utility_pole" && row.status === "placed").map((row) => row.id));
+  for (const row of rows.filter((candidate) => candidate.prop === "power_wires")) {
+    const poles = row.prop_params?.poles;
+    invariant(row.kind === "power_line" && row.layer === "furniture" && row.status === "placed" && Array.isArray(poles) && poles.every((id) => id === null || utilityPoles.has(id)),
+      `${row.id} power_wires must list placed utility poles`);
+    invariant(poles.some((id, index) => index > 0 && id !== null && poles[index - 1] !== null), `${row.id} power_wires has no span between two built poles`);
   }
   const builtFences = new Set(rows.filter((row) => row.fence && row.prop !== undefined).map((row) => row.id));
   invariant(Array.isArray(document.fenced_approaches) && document.fenced_approaches.every((entry) =>

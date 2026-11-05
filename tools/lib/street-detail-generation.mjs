@@ -18,7 +18,17 @@ import { footprintPiece, placeStreetClutter, STREET_CLUTTER_FOOTPRINTS, STREET_C
 import { GATE_LEAF_HALF_M, placeStreetFences, validateFenceRules } from "./street-fence-generation.mjs";
 import { settleYardProp, YARD_KIT_KEYS, yardKindRadius, yardMaxSink, yardPropFootprint, yardPropRests } from "./street-yard-kit.mjs";
 import { isYardRow, isYardZone, placeStreetYards, validateYardRules, yardRowPieces } from "./street-yard-generation.mjs";
-import { placeStreetFurniture, settleOnFeet, STREET_FURNITURE_FEET, STREET_FURNITURE_PROPS, streetFurnitureFootprint, validateFurnitureRules } from "./street-furniture-generation.mjs";
+import {
+  placeStreetFurniture,
+  settleOnFeet,
+  settlePad,
+  STREET_FURNITURE_FEET,
+  STREET_FURNITURE_PADS,
+  STREET_FURNITURE_PROPS,
+  streetFurnitureFootprint,
+  validateFurnitureRules,
+  validateIslandFurniture,
+} from "./street-furniture-generation.mjs";
 import {
   PAVING_CLEAR_M,
   crownRadius,
@@ -42,6 +52,7 @@ import {
   BOUNDARY_ATTACHED_SOURCE_KEYS,
   PLAYABLE_BOUNDARY_SOURCE_KEY,
   ROAD_SURFACE_BIASES_M,
+  ROAD_WIDTHS_M,
   SHARED_COASTLINE_SOURCE_KEY,
   SOURCE_CONTRACT,
   compareSourceKeys,
@@ -133,6 +144,8 @@ export const STREET_DETAIL_KINDS = Object.freeze({
   bollard: pointKind("furniture", 0.15, "host_barrier"),
   bus_stop: pointKind("furniture", 1.5, "faces_road"),
   chair: pointKind("furniture", 0.45, "seeded"),
+  // An EV charging bay (a photographed set piece): its pad, pedestals and bollards.
+  charging_station: pointKind("furniture", 0.8, "seeded"),
   clutter_slot: pointKind("clutter", 0.4, "seeded"),
   crossing: pointKind(STREET_DETAIL_GROUND_LAYER, 0, "crossing"),
   fence: lineKind("fences", 0.05),
@@ -152,8 +165,10 @@ export const STREET_DETAIL_KINDS = Object.freeze({
   picnic_table: pointKind("furniture", 1.0, "seeded"),
   planting_slot: pointKind("vegetation", 0.8, "seeded"),
   post_box: pointKind("furniture", 0.35, "faces_road"),
-  power_line: lineKind("clutter", 0, true),
-  power_pole: pointKind("clutter", 0.2, "host_power_line"),
+  // The overhead distribution lines and their wooden poles stand with the other
+  // vertical street objects (tools/lib/street-furniture-generation.mjs).
+  power_line: lineKind("furniture", 0, true),
+  power_pole: pointKind("furniture", 0.2, "host_power_line"),
   retaining_wall: lineKind("fences", 0.2),
   // A small park building outside the OSM inventory (Cityside Park's pump
   // station): its footprint is its own rectangle (footprint_m on the row).
@@ -524,6 +539,7 @@ export function loadStreetDetailZones(projectRoot) {
     }
   }
   validateFencedApproaches(config.fenced_approaches);
+  validateIslandFurniture(config.island_furniture, STREET_DETAIL_KINDS);
   return config;
 }
 
@@ -1183,7 +1199,15 @@ export function generateStreetDetail({
     const across = (en[0] - walk.center[0]) * walk.across[0] + (en[1] - walk.center[1]) * walk.across[1];
     return along >= walk.span[0] - 1 && along <= walk.span[1] + 1 && Math.abs(across) <= ground.site.walk_width_m / 2 + 0.5;
   });
-  const propSiteViolation = (piece) => {
+  // The vehicle carriageways of the whole island (frozen road ribbons), with the
+  // street ground's widened lanes where a zone has them: the plan distance from
+  // an east/north point, 0 inside, Infinity beyond reach.
+  const vehicleRoads = polygonSet(roads.items.filter((item) => item.visual_class === "vehicle"));
+  const carriagewayDistance = (en, reach = 12) => Math.min(ground.site.carriagewayDistance(en, reach), vehicleRoads.nearest(toWorld(en), reach).distance);
+  // withIsland: also keep off the carriageways beyond the street ground (the
+  // island-wide street furniture), ignoring the occupied items in ignore (the
+  // row being moved); set pieces keep the street ground's own check.
+  const propSiteViolation = (piece, withIsland = false, ignore = null) => {
     const { radius } = piece;
     // The footprint's segment, sampled every half metre for the site tests.
     const samples = [];
@@ -1198,11 +1222,12 @@ export function generateStreetDetail({
       const building = buildings.nearest(xz, exclusions.wall_buffer_m + radius);
       if (building.distance < exclusions.wall_buffer_m + radius) return violation(building.distance === 0 ? "inside_building" : "wall_buffer", building.key);
       const en = toEastNorth(xz);
-      if (ground.site.carriagewayDistance(en) < PROP_KERB_CLEAR_M + radius) return violation("carriageway");
+      if ((withIsland ? carriagewayDistance(en) : ground.site.carriagewayDistance(en)) < PROP_KERB_CLEAR_M + radius) return violation("carriageway");
       if (ground.site.rampDistance(en) < PROP_RAMP_CLEAR_M + radius) return violation("curb_ramp");
       if (crosswalkAt(en)) return violation("crosswalk");
     }
     for (const item of occupied) {
+      if (ignore?.has(item.id)) continue;
       const distance = polylinePolylineDistance(piece.points, item.points);
       if (distance < item.radius_m + radius + PLAYER_WIDTH_M) return { reason: "overlap", source_id: item.id, observed_m: round3(distance), required_m: round3(item.radius_m + radius + PLAYER_WIDTH_M) };
     }
@@ -1263,6 +1288,13 @@ export function generateStreetDetail({
       const rest = settleOnFeet(feet, xz, normalizedYaw(entry.yaw), y + surface.bias_m, groundAt);
       invariant(!rest.problem, `Street detail set piece ${entry.id} cannot stand on its feet: ${rest.problem}`);
       params = { ...entry.params, ...rest };
+    }
+    // A furniture prop on a level pad (a charger bay) rises to the highest
+    // ground under its pad, its skirt hiding the low side.
+    if (entry.prop !== undefined && STREET_FURNITURE_PADS.includes(entry.prop)) {
+      const pad = settlePad(footprint, xz, normalizedYaw(entry.yaw), groundAt);
+      invariant(!pad.problem, `Street detail set piece ${entry.id} cannot rest level on its pad: ${pad.problem}`);
+      params = { ...params, lift: pad.lift };
     }
     // A yard prop settles on the ground under its plan unless the set piece
     // gives its rest (a barge floats).
@@ -1562,6 +1594,29 @@ export function generateStreetDetail({
   // (d) Street furniture, after everything above so it works around it: kit
   // props for the pilot zones' OSM rows (stop signs move to their curbs) and the
   // zones' furniture rules (tools/lib/street-furniture-generation.mjs).
+  // The island-wide rules (island_furniture) need every vehicle road (parking
+  // aisles aside), each with its raw centre line in the east/north frame (one
+  // point per OSM node) and the offset of its edge from it: the street ground's
+  // curb where a zone builds one, else the frozen ribbon's half width.
+  const kerbOffsets = new Map(ground.site.kerb_roads.map((road) => [road.source_key, road.kerb_offset_m]));
+  const islandRoads = objects
+    .filter((object) => object.roles.includes("roads_paths") && object.road_visual_class === "vehicle" && object.row.osm_type === "way" && object.tags.service !== "parking_aisle")
+    .sort((left, right) => compareSourceKeys(left.row.source_key, right.row.source_key))
+    .map((object) => {
+      const key = object.row.source_key;
+      const way = rawOsm.ways.get(key.slice(1));
+      invariant(way, `Street furniture needs OSM way ${key}, which the raw extract lacks`);
+      return {
+        source_key: key,
+        name: object.tags.name ?? null,
+        highway: object.tags.highway,
+        service: object.tags.service ?? null,
+        refs: way.node_refs,
+        line: way.node_refs.map((ref) => projectLonLat(rawOsm.nodes.get(ref).coordinate)),
+        kerb_offset_m: kerbOffsets.get(key) ?? ROAD_WIDTHS_M[object.tags.highway] / 2,
+        kerbed: kerbOffsets.has(key),
+      };
+    });
   const furniture = placeStreetFurniture({
     kinds: STREET_DETAIL_KINDS,
     rows,
@@ -1576,6 +1631,11 @@ export function generateStreetDetail({
     onLand,
     grounded,
     surfaceAt,
+    island: config.island_furniture,
+    islandRoads,
+    carriagewayDistance,
+    pieceViolation: (piece, ignore) => propSiteViolation(piece, true, ignore),
+    groundAt,
   });
   rows.push(...furniture.rows);
   // (b2) The planting scatter: trees and grass round the furniture placed above.

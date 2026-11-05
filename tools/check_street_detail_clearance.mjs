@@ -156,7 +156,9 @@ function fencedPockets(manifest, detail) {
   for (const row of detail.rows) {
     if (row.status !== "placed") continue;
     // Built fences, street props, parked cars and tree trunks (every row the
-    // runtime builds with collision), each grown by the capsule radius.
+    // runtime builds with collision), each grown by the capsule radius. The
+    // overhead power lines' wires have no collision.
+    if (STREET_DETAIL_KINDS[row.kind].overhead) continue;
     if (row.prop != null && (row.fence || ["furniture", "clutter"].includes(row.layer) || (row.layer === "vegetation" && STREET_VEGETATION_PROPS[row.prop]?.trunk))) {
       for (const piece of streetDetailPieces(row)) solids.push({ points: piece.points, radius: piece.radius + PLAYER_CAPSULE_RADIUS_M });
     }

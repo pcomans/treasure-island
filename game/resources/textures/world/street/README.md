@@ -41,14 +41,15 @@ ImageMagick; both tile seamlessly over 2 m (world UV):
 
 ## Street furniture
 
-`street_furniture_atlas.png` (1024 x 512, eight 256 px cells) is the one texture of
+`street_furniture_atlas.png` (1024 x 1024, sixteen 256 px cells) is the one texture of
 the street-furniture kit (`game/scripts/world/street_furniture_kit.gd`): poles, sign
-faces, signal heads and cabinets multiply its cells by a vertex colour. Generated
-2026-11-02 with `tools/generate-texture` (eight images, one per call, text prompts
-only; no photograph was given to the generator or copied), each resized into its
-cell with ImageMagick. The packing script and the untouched sources are kept outside
-Git with the street-objects work notes. Street names are not in the atlas: the kit
-writes them with `Label3D` from the OSM names.
+faces, signal heads and cabinets multiply its cells by a vertex colour. Rows 0 and 1
+were generated 2026-11-02 with `tools/generate-texture` (eight images, one per call,
+text prompts only; no photograph was given to the generator or copied), each resized
+into its cell with ImageMagick; rows 2 and 3 and the new (1, 1) were added 2026-11-05
+for the island-wide rollout the same way (three images). The packing scripts and the
+untouched sources are kept outside Git with the street-objects work notes. Street
+names are not in the atlas: the kit writes them with `Label3D` from the OSM names.
 
 | Cell (column, row) | Use | Source prompt (short) |
 |---|---|---|
@@ -57,11 +58,14 @@ writes them with `Label3D` from the OSM names.
 | (2, 0) | stop sign face | United States STOP sign face, red octagon, white border and legend |
 | (3, 0) | pedestrian signal face (drawn unshaded, as lit) | pedestrian countdown head face, lit orange hand, dark countdown |
 | (0, 1) | NO STOPPING ANY TIME sign | white parking regulation sign, NO STOPPING / ANY / TIME in red |
-| (1, 1) | bus stop flag (both faces) | generic bus stop flag, red band, bus pictogram, BUS STOP |
+| (1, 1) | the Muni bus stop flag (both faces; 2026-11-05, replacing the pilot's generic flag) | navy transit stop flag with a white route number 25, TREASURE ISLAND, white rules, no logo |
 | (2, 1) top | ALL WAY plaque under all-way stop signs | ALL WAY plaque, red letters on white |
-| (2, 1) bottom | blank name blade (border kept at the ends, the middle stretches) | blank green street name blade with a thin white border |
+| (2, 1) bottom | blank green name blade (no longer drawn: the name blades are white, see the kit) | blank green street name blade with a thin white border |
 | (3, 1) top half | the ferry plaza information board's island map | not generated: drawn 2026-11-02 with ImageMagick from the frozen OSM data (the island outline turned to fill the panel, its streets, the ferry landing marked, a legend band of colour blocks); the drawing script is kept outside Git with the street-clutter work notes |
 | (3, 1) bottom half | plain white, for vertex-coloured parts | (filled by the packing script) |
+| (0, 2) | weathered wood of the utility poles and their crossarms | seamless weathered creosote wooden utility pole surface, vertical grain and checks |
+| (1, 2) | the tow-away sign at the owner's lot fence | white parking regulation sign: red TOW-AWAY band, NO PARKING, yellow ANY TIME band |
+| (2, 2), (3, 2), row 3 | plain white, spare | (filled by the packing script) |
 
 ## Street fences
 
