@@ -519,7 +519,8 @@ export function validateStreetGroundRules(rules) {
         isFiniteNumber(row.angle_deg) && row.angle_deg >= 45 && row.angle_deg <= 90, `${label} row ${row.id} is malformed`);
     }
     for (const island of lot.islands) {
-      exactKeys(island, ["id", "points_xz"], `${label} island`);
+      exactKeys(island, ["id", "points_xz", ...("fill" in (island ?? {}) ? ["fill"] : [])], `${label} island`);
+      invariant(island.fill === undefined || island.fill === "mulch", `${label} island ${island.id} fill must be mulch`);
       invariant(SAFE_ID.test(island.id) && Array.isArray(island.points_xz) && island.points_xz.length >= 3 && island.points_xz.every(isXZ), `${label} island ${island.id} needs 3+ points`);
     }
     for (const legend of lot.legends) {
@@ -1547,6 +1548,13 @@ export function generateStreetGround({
   const ruleSidewalkParts = [];
   // Rule walks set back from the curb: the ground between, filled per treatment.
   const ruleFills = { mulch: [], lawn: [] };
+  // A planted lot island: mulch inside its curb.
+  for (const { lot } of lotRules) {
+    for (const island of lot.islands.filter(({ fill }) => fill === "mulch")) {
+      const ring = island.points_xz.map(([x, z]) => [x, -z]);
+      ruleFills.mulch.push([[ringArea(ring) > 0 ? ring : ring.reverse()]]);
+    }
+  }
   const wideGapParts = [];
   const wideGapWalks = [];
   // OSM sidewalks whose walk is photographed at the curb with the bed behind it.

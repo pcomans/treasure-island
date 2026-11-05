@@ -2113,6 +2113,7 @@
           "paint_wear": 2
         }
       ]
-    }
+    },
+    {"id": "keppler_court", "source_key": "w95934133", "evidence": "Street View Apr 2019, 1117 Keppler Ct (pano b6Gbr0M_gm59xek6WMNAkg, heading 175): a kerbed planted island at the head of the court's middle row of parked cars; 2026-05-26 aerial (z19): the same island and its planting at about (-510, -424). Its size is production inference. The court's stalls are not painted here.", "paint_wear": 2, "hatches": [], "legends": [], "rows": [], "islands": [{"id": "planted_island", "fill": "mulch", "points_xz": [[-513.95, -425.05], [-507.11, -422.81], [-508.05, -419.95], [-514.89, -422.19]]}]}
   ]
 }
