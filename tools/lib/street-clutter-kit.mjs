@@ -863,9 +863,72 @@ function buildBarricade(lodIndex) {
   return out.result();
 }
 
+// A two-yard front-load dumpster on casters (the Mersea lot, Sep 2025 photos:
+// three grey steel bins at the lot's west end): a box with a vertical back and a
+// front that leans out toward the top, two lids falling toward the front, fork
+// sleeves along both sides and a white label on the front. The body and lids
+// take the instance paint (a matte finish); about 1.8 m wide, 1.3 m deep at the
+// top and 1.25 m tall, production inference from the photos and common
+// two-yard bins, not measured. Front (the leaning side) toward -Z.
+export const DUMPSTER_SIZE = Object.freeze({ width_m: 1.8, back_z: 0.55, front_bottom_z: -0.45, front_top_z: -0.72, base_y: 0.17, back_top_y: 1.22, front_top_y: 1.06 });
+function buildDumpster(lodIndex) {
+  const out = new MeshBuilder();
+  const { width_m: width, back_z: zb, front_bottom_z: zf0, front_top_z: zf1, base_y: y0, back_top_y: yb, front_top_y: yf } = DUMPSTER_SIZE;
+  const hx = width / 2;
+  const sideProfile = [v3(0, y0, zb), v3(0, yb, zb), v3(0, yf, zf1), v3(0, y0, zf0)];
+  const at = (point, x) => v3(x, point[1], point[2]);
+  // Back, lid deck, leaning front and bottom: quads across the width.
+  for (let index = 0; index < 4; index += 1) {
+    const a = sideProfile[index];
+    const b = sideProfile[(index + 1) % 4];
+    const tangent = vnorm(vsub(b, a));
+    // Outward in the (z, y) plane: the profile runs clockwise seen from +X.
+    const normal = vnorm(v3(0, -tangent[2], tangent[1]));
+    const corners = [at(a, -hx), at(b, -hx), at(b, hx), at(a, hx)];
+    const n = vcross(vsub(corners[1], corners[0]), vsub(corners[2], corners[0]));
+    const part = index === 1 ? PART.paint : PART.paint;
+    if (vdot(n, normal) >= 0) out.quad(corners[0], corners[1], corners[2], corners[3], [normal, normal, normal, normal], part, index === 3 ? [0.4, 0.4, 0.4, 0.4] : [1, 1, 1, 1]);
+    else out.quad(corners[0], corners[3], corners[2], corners[1], [normal, normal, normal, normal], part, index === 3 ? [0.4, 0.4, 0.4, 0.4] : [1, 1, 1, 1]);
+  }
+  // The two sides: the quad of the profile at each end.
+  for (const side of [1, -1]) {
+    const normal = v3(side, 0, 0);
+    const corners = sideProfile.map((point) => at(point, side * hx));
+    const n = vcross(vsub(corners[1], corners[0]), vsub(corners[2], corners[0]));
+    if (vdot(n, normal) >= 0) out.quad(corners[0], corners[1], corners[2], corners[3], [normal, normal, normal, normal], PART.paint, [0.85, 1, 1, 0.85]);
+    else out.quad(corners[0], corners[3], corners[2], corners[1], [normal, normal, normal, normal], PART.paint, [0.85, 0.85, 1, 1]);
+  }
+  // Lids: two plates along the deck, a little proud of it and over the front, with a dark seam between.
+  const deck = vnorm(vsub(sideProfile[2], sideProfile[1]));
+  const deckNormal = vnorm(v3(0, -deck[2], deck[1]));
+  const deckLength = vlen(vsub(sideProfile[2], sideProfile[1]));
+  const deckMiddle = vscale(vadd(sideProfile[1], sideProfile[2]), 0.5);
+  const lidAxes = [v3(1, 0, 0), deckNormal, deck];
+  for (const side of [1, -1]) {
+    out.box(vadd(vadd(deckMiddle, vscale(deckNormal, 0.025)), vadd(v3(side * hx / 2, 0, 0), vscale(deck, 0.03))), [hx / 2 - 0.02, 0.018, deckLength / 2 + 0.03], PART.paint, lidAxes);
+  }
+  out.box(vadd(deckMiddle, vscale(deckNormal, 0.012)), [0.03, 0.012, deckLength / 2], PART.trim, lidAxes);
+  // Fork sleeves along both sides.
+  for (const side of [1, -1]) out.box(v3(side * (hx + 0.045), 0.86, (zb + zf0) / 2 - 0.02), [0.045, 0.075, (zb - zf0) / 2 + 0.06], PART.paint);
+  // The white label on the leaning front.
+  const front = vnorm(vsub(sideProfile[2], sideProfile[3]));
+  const frontNormal = vnorm(v3(0, front[2], -front[1]));
+  const frontMiddle = vadd(vscale(vadd(sideProfile[2], sideProfile[3]), 0.5), v3(0.45, 0, 0));
+  out.box(vadd(frontMiddle, vscale(frontNormal, 0.006)), [0.2, 0.004, 0.14], PART.white, [v3(1, 0, 0), frontNormal, front]);
+  // Casters: a bracket and a dark wheel under each corner.
+  for (const x of [-hx + 0.16, hx - 0.16]) {
+    for (const z of [zb - 0.16, zf0 + 0.16]) {
+      if (lodIndex === 0) out.box(v3(x, y0 - 0.035, z), [0.05, 0.035, 0.05], PART.metal);
+      out.box(v3(x, 0.065, z), [0.03, 0.065, 0.065], PART.tire);
+    }
+  }
+  return out.result();
+}
+
 export const CLUTTER_PROPS_KIT = Object.freeze({
   traffic_cone: { build: buildCone },
   barricade: { build: buildBarricade },
+  dumpster: { build: buildDumpster },
 });
 
 export const CLUTTER_LOD_COUNT = LODS.length;

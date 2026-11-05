@@ -1,7 +1,7 @@
 extends RefCounted
 ## The street-clutter kit: meshes, collision and the shared material for the
 ## items of PlayableWorld/StreetDetail/Clutter (parked cars, cones, A-frame
-## barricades). The meshes are built offline by tools/lib/street-clutter-kit.mjs
+## barricades, dumpsters). The meshes are built offline by tools/lib/street-clutter-kit.mjs
 ## into street_clutter_kit.glb, two detail levels each; one shader
 ## (street_clutter.gdshader) colours their parts from a palette texture, and each
 ## parked car is a MultiMesh instance whose custom data picks its paint and style
@@ -53,6 +53,9 @@ const PAINTS := {
 	"brown": Color(0.3, 0.2, 0.14),
 }
 const FINISHES := ["solid", "metallic", "pearl"]
+## The finish index the shader reads as matte (weathered painted steel): a
+## dumpster's body and lids, which take the instance paint like a car's.
+const MATTE_FINISH := 3
 ## Car bodies of the kit (tools/lib/street-clutter-kit.mjs CAR_BODIES); a
 ## prop's collision box is its near mesh's bounds.
 const CAR_BODIES := ["crossover", "suv", "sedan", "fastback", "hatchback", "wagon", "pickup", "utility", "van"]
@@ -66,6 +69,7 @@ const PROPS := {
 	"parked_car": {"range_m": 260.0, "shadow": true},
 	"traffic_cone": {"range_m": 90.0, "shadow": true},
 	"barricade": {"range_m": 110.0, "shadow": true},
+	"dumpster": {"range_m": 120.0, "shadow": true},
 }
 
 var _material: ShaderMaterial
@@ -124,6 +128,12 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 			return {"ok": false, "message": "parked_car twist must be a number within %.2f m: %s" % [MAX_TWIST_M, params]}
 		var paint_index := paint_names().find(paint)
 		result.custom = Color((float(paint_index) + 0.5) / 32.0, (float(style) + 0.5) / 16.0, float(twist), 0.0)
+	elif prop == "dumpster":
+		var bin_paint := str(params.get("paint", ""))
+		if not PAINTS.has(bin_paint):
+			return {"ok": false, "message": "dumpster needs a known paint: %s" % [params]}
+		base = prop
+		result.custom = Color((float(paint_names().find(bin_paint)) + 0.5) / 32.0, (float(MATTE_FINISH) + 0.5) / 16.0, 0.0, 0.0)
 	else:
 		base = prop
 	var near: Variant = _meshes.get("%s_lod0" % base, null)

@@ -717,6 +717,22 @@
       ]
     }
   ],
+  "clutter": [
+    {"id": "island_lot_cars", "kind": "parked_car", "prop": "parked_car", "pattern": "lot_occupancy", "lots": [
+      {"source_key": "w28356874", "cars": 36, "observed": "Avenue A lot at the Skyline Vista: about 36 cars, in three rows at its west end beside the building and along its south strip; the painted north field stands empty"},
+      {"source_key": "w28356892", "cars": 15, "observed": "lot off 4th Street and Seven Seas Avenue: about 15 cars, most along its east aisle"},
+      {"source_key": "w95934095", "cars": 8, "observed": "Reeves Court lot (the Villages): 8 cars in about 30 stalls"},
+      {"source_key": "w95934109", "cars": 15, "observed": "13th Street lot by Hutchins Court (the Villages): 15 cars in about 30 stalls"},
+      {"source_key": "w95934133", "cars": 22, "observed": "Keppler Court lot (the Villages): 22 cars in about 40 stalls"},
+      {"source_key": "w95934134", "cars": 10, "observed": "Mason Court lot (the Villages): 10 cars in about 40 stalls"},
+      {"source_key": "w95934141", "cars": 16, "observed": "Ozbourn Court lot (the Villages): 16 cars in about 45 stalls"},
+      {"source_key": "w96665901", "cars": 9, "observed": "13th Street street-side lot: 9 cars along its 13th Street edge"},
+      {"source_key": "w96698621", "cars": 25, "observed": "Avenue I lot: about 25 cars round the buildings in its middle and south-east; the painted north field nearly empty"},
+      {"source_key": "w96698661", "cars": 8, "observed": "4th Street lot by the Job Corps campus: 8 cars in about 150 stalls"},
+      {"source_key": "w850003199", "cars": 13, "observed": "Clipper Cove strip lot by the ferry: 13 cars in about 30 stalls"},
+      {"source_key": "w1252737739", "cars": 16, "observed": "Avenue M street-side lot: 16 cars nose in along Avenue M"}
+    ], "head_in": 0.75, "mix": {"crossover": 30, "suv": 9, "sedan": 17, "fastback": 11, "hatchback": 10, "wagon": 7, "pickup": 4, "van": 2}, "paints": {"white": 25, "pearl_white": 6, "silver": 16, "light_grey": 9, "grey": 15, "dark_grey": 7, "black": 10, "navy": 3, "blue": 4, "red": 3, "beige": 2}, "basis": "production_inference", "rule": "Every OSM parking lot outside the pilot holds the number of cars the May 2026 aerial shows in it, mostly nose first. A part-full lot is fullest by its buildings and empties toward its far side (the Avenue A and Avenue I lots: cars round the buildings, the far painted fields empty). Lots the aerial shows empty stay empty: the 13th Street school lot w1102659944, the small lot w109022552 off Seven Seas Avenue and the dirt lot w1473022596 by Lester Court. The cars are the residential mix photographed along Avenue of the Palms (mostly compact SUVs and sedans, white, silver and grey).", "evidence": "Esri World Imagery, Vantor capture 2026-05-26, 0.34 m (capture date checked 2026-11-05 at five points on the island): each lot counted in a 0.15 m export (counts per lot above); body and paint mix as palms_parked_cars (isle-house ih01, ih02, ih05, Sep 2025; large-batch1 palms-s-end03, Nov 2025). The Building 1 forecourt lot keeps its own rule (forecourt_lot_cars); the central storage lot w96698665 belongs to the storage yard (yard_central_storage)."}
+  ],
   "fenced_approaches": {
     "notes": [
       "Scored-building sides a built fence closes (north, south, west or east, as the building fit names them). The fit skips such a side only when every start it tries there is blocked by the listed fence rows, another building or the island's edge, and prints the fence; a fence that closes a side without being listed here fails the fit. List a side only with dated evidence that the fence is real and closes it."

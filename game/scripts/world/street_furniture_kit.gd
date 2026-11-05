@@ -64,6 +64,10 @@ const CHAIR_BLUE := Color(0.11, 0.43, 0.72)
 ## checks that these legs stand on it (standing_vertices).
 const CHAIR_LEG_X := 0.3
 const BIN_STEEL := Color(0.42, 0.43, 0.44)
+## Black powder-coated steel (the Mersea lot's slatted can).
+const BIN_BLACK := Color(0.07, 0.075, 0.08)
+## Waste basket styles (prop_params.style).
+const WASTE_BASKET_STYLES := ["steel", "timber", "black_slat"]
 const RACK_DARK := Color(0.2, 0.17, 0.14)
 const LENS_RED_OFF := Color(0.22, 0.03, 0.03)
 const LENS_AMBER_OFF := Color(0.26, 0.16, 0.03)
@@ -233,8 +237,10 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 			_piece(result, "bench_park", func(b: Builder) -> void: _bench_park(b))
 			_box_shape(result, Vector3(1.86, 0.84, 0.62), Vector3(0.0, 0.42, 0.04))
 		"waste_basket":
-			var timber := str(params.get("style", "steel")) == "timber"
-			_piece(result, "waste_basket_%s" % ("timber" if timber else "steel"), func(b: Builder) -> void: _waste_basket(b, timber))
+			var style := str(params.get("style", "steel"))
+			if not style in WASTE_BASKET_STYLES:
+				style = "steel"
+			_piece(result, "waste_basket_%s" % style, func(b: Builder) -> void: _waste_basket(b, style))
 			_capsule(result, 0.3, 0.98)
 		"map_board":
 			_piece(result, "map_board", func(b: Builder) -> void: _map_board(b))
@@ -659,18 +665,23 @@ func _bench_park(b: Builder) -> void:
 		b.box(Vector3(0.0, 0.58 + 0.12 * float(index), 0.25 + 0.025 * float(index)), back, Vector3(1.8, 0.09, 0.03), TIMBER, CELL_WHITE)
 
 
-## A litter receptacle: a grey steel can with a domed lid, or the plaza's
-## timber-slatted can under a grey band.
-func _waste_basket(b: Builder, timber: bool) -> void:
-	var body := TIMBER_WEATHERED if timber else BIN_STEEL
+## A litter receptacle: a grey steel can with a domed lid, the plaza's
+## timber-slatted can under a grey band, or a black steel-slat can under a black
+## band and lid (the Mersea lot, Sep 2025).
+func _waste_basket(b: Builder, style: String) -> void:
+	var timber := style == "timber"
+	var slats := timber or style == "black_slat"
+	var body := TIMBER_WEATHERED if timber else (BIN_BLACK if style == "black_slat" else BIN_STEEL)
 	b.tube(PackedVector3Array([Vector3(0, 0.0, 0), Vector3(0, 0.78, 0)]), PackedFloat32Array([0.27, 0.28]), 14, body, CELL_WHITE if timber else CELL_METAL, false, false)
-	if timber:
-		# Vertical slats read as dark grooves.
+	if slats:
+		# Vertical slats read as dark grooves (timber) or light-catching ribs (black steel).
+		var groove := TIMBER * 0.55 if timber else BIN_BLACK * 1.8
 		for index in 10:
 			var angle := TAU * float(index) / 10.0
-			b.box(Vector3(cos(angle) * 0.282, 0.4, sin(angle) * 0.282), Basis(Vector3.UP, -angle), Vector3(0.012, 0.7, 0.012), TIMBER * 0.55, CELL_WHITE)
-	b.tube(PackedVector3Array([Vector3(0, 0.78, 0), Vector3(0, 0.9, 0)]), PackedFloat32Array([0.29, 0.29]), 14, FRAME_CHARCOAL if timber else BIN_STEEL * 0.8, CELL_METAL, false, false)
-	b.tube(PackedVector3Array([Vector3(0, 0.9, 0), Vector3(0, 0.94, 0), Vector3(0, 0.98, 0)]), PackedFloat32Array([0.29, 0.24, 0.1]), 14, FRAME_CHARCOAL if timber else BIN_STEEL * 0.8, CELL_METAL, false, true)
+			b.box(Vector3(cos(angle) * 0.282, 0.4, sin(angle) * 0.282), Basis(Vector3.UP, -angle), Vector3(0.012, 0.7, 0.012), groove, CELL_WHITE)
+	var band := FRAME_CHARCOAL if timber else (BIN_BLACK if style == "black_slat" else BIN_STEEL * 0.8)
+	b.tube(PackedVector3Array([Vector3(0, 0.78, 0), Vector3(0, 0.9, 0)]), PackedFloat32Array([0.29, 0.29]), 14, band, CELL_METAL, false, false)
+	b.tube(PackedVector3Array([Vector3(0, 0.9, 0), Vector3(0, 0.94, 0), Vector3(0, 0.98, 0)]), PackedFloat32Array([0.29, 0.24, 0.1]), 14, band, CELL_METAL, false, true)
 	b.disc(Vector3(0, 0.005, 0), Vector3.DOWN, 0.27, 14, body)
 
 

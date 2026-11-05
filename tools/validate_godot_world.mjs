@@ -981,7 +981,7 @@ function validatePlantedRow(row, groundAt) {
 // new prop needs its own branch here, so none is placed unchecked.
 const PROP_REST_FLOAT_M = 0.08;
 const PROP_REST_SINK_M = 0.08;
-const ANCHORED_CLUTTER = Object.freeze(["barricade", "traffic_cone"]);
+const ANCHORED_CLUTTER = Object.freeze(["barricade", "dumpster", "traffic_cone"]);
 const TYRE_REST_FLOAT_M = 0.1;
 const TYRE_REST_SINK_M = 0.02;
 
@@ -1121,6 +1121,10 @@ function validateStreetDetail(worldRoot, manifest, records) {
         invariant(["pitch", "roll", "lift"].every((key) => Number.isFinite(params[key]) && Math.abs(params[key]) < 0.25), `${row.id} car tilt is invalid`);
         invariant(Number.isFinite(params.twist) && Math.abs(params.twist) <= MAX_TWIST_M, `${row.id} car twist is invalid`);
         invariant(row.footprint_m !== undefined, `${row.id} parked car has no footprint`);
+      }
+      // A dumpster: a known paint (the car paints) and its rectangle.
+      if (row.prop === "dumpster") {
+        invariant(CAR_PAINTS.includes(row.prop_params?.paint) && row.footprint_m !== undefined, `${row.id} dumpster needs a known paint and its footprint`);
       }
       // A yard kit prop: usable params and its own rectangle as its footprint
       // (its rest on the ground: validatePropRest, below).

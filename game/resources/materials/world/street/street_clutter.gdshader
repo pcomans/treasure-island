@@ -8,7 +8,8 @@ shader_type spatial;
 // data picks its paint (r: palette column) and style (g: bit 0-1 finish, bit 2
 // black roof, bit 3 dark rims) and carries its suspension twist (b, metres): the
 // front-left and rear-right wheels rise by it, the other two drop by it, so all
-// four tyres stand on uneven ground.
+// four tyres stand on uneven ground. A dumpster takes the instance paint the same
+// way, with finish 3: matte, weathered painted steel.
 render_mode depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx;
 
 uniform sampler2D palette : source_color, filter_nearest, repeat_disable;
@@ -51,9 +52,9 @@ void fragment() {
 	float metallic = PART_METALLIC[p];
 	if (painted) {
 		int finish = style & 3;
-		// 0 solid gloss, 1 metallic, 2 pearl.
-		metallic = finish == 1 ? 0.55 : (finish == 2 ? 0.25 : 0.0);
-		roughness = finish == 1 ? 0.34 : 0.26;
+		// 0 solid gloss, 1 metallic, 2 pearl, 3 matte.
+		metallic = finish == 1 ? 0.55 : (finish == 2 ? 0.25 : (finish == 3 ? 0.1 : 0.0));
+		roughness = finish == 1 ? 0.34 : (finish == 3 ? 0.72 : 0.26);
 	}
 	if (p == 4 && dark_rims) {
 		metallic = 0.4;

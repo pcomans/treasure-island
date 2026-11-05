@@ -10,7 +10,8 @@
 //     other approaches of an all-way stop, a stop sign for traffic turning into
 //     a drive, lights around a parking lot). Every rule says it is production
 //     inference and names its dated photo evidence.
-// Only pilot zones get props; other rows stay data until the rollout.
+// Only pilot zones get props; other rows stay data until the rollout, except the
+// kinds built island-wide (ISLAND_OSM_KINDS).
 //
 // Plan geometry here is east/north (the ground generator's frame); rows use
 // world x, z with z = -north. A prop's front is its local -Z (the lamp arm, the
@@ -102,8 +103,9 @@ const LEG_DROP_STEP_M = 0.005;
 export const MAX_REST_TILT_RAD = 0.15;
 export const STREET_FURNITURE_PATTERNS = Object.freeze(["kerb", "signalized_crossings", "near_signals", "junctions", "all_way_stops", "drive_entries", "lot_edge"]);
 // Default props for OSM rows in pilot zones; kinds without one stay unbuilt.
+// A bench OSM tags backless is the park's backless bench on its plinth.
 const OSM_PROPS = Object.freeze({
-  bench: () => ({ prop: "bench_park", params: {} }),
+  bench: (tags) => (tags.backrest === "no" ? { prop: "bench_long", params: { length_m: 1.8, back: false } } : { prop: "bench_park", params: {} }),
   bicycle_parking: () => ({ prop: "bike_rack", params: {} }),
   bus_stop: (tags) => (tags.shelter === "yes" ? null : { prop: "bus_stop_sign", params: {} }),
   fire_hydrant: () => ({ prop: "hydrant", params: {} }),
@@ -111,6 +113,11 @@ const OSM_PROPS = Object.freeze({
   street_lamp: () => ({ prop: "lamp_cobra", params: {} }),
   waste_basket: (tags) => ({ prop: "waste_basket", params: { style: tags.material === "wood" ? "timber" : "steel" } }),
 });
+// OSM kinds built across the whole island (the street-clutter rollout), not
+// only in the pilot zones: benches, waste baskets and bike racks at their OSM
+// nodes. One whose node lies on a road or path moves beside it (ISLAND_NUDGES_M).
+const ISLAND_OSM_KINDS = Object.freeze(["bench", "bicycle_parking", "waste_basket"]);
+const ISLAND_NUDGES_M = Object.freeze([0.6, 1.2, 1.8, 2.4]);
 const STOP_SIGN = Object.freeze({ setback_m: 0.55, upstream_m: Array.from({ length: 20 }, (_, index) => roundCoordinate(0.6 * (index + 1))) });
 // Site margins (m) beyond an item's footprint: from the carriageway edge, and
 // from a curb ramp (its flares and landing). Footprint radii are at least each
@@ -363,7 +370,7 @@ export function placeStreetFurniture({
     return null;
   };
   const candidates = rows.filter((row) => row.source === "osm" && row.geometry === "point" && row.status === "placed" &&
-    kinds[row.kind].layer === "furniture" && inPilot([row.position_m[0], row.position_m[2]]));
+    kinds[row.kind].layer === "furniture" && (inPilot([row.position_m[0], row.position_m[2]]) || ISLAND_OSM_KINDS.includes(row.kind)));
   // Stops with a painted bar first: a stop node beside the road then joins the
   // sign already on its approach rather than doubling it.
   candidates.sort((left, right) => (left.kind === "stop_sign" && !stopBar.has(left.source_id)) - (right.kind === "stop_sign" && !stopBar.has(right.source_id)));
@@ -373,6 +380,28 @@ export function placeStreetFurniture({
     if (!choice) {
       audit.osm_unbuilt.push({ id: row.id, kind: row.kind });
       continue;
+    }
+    if (ISLAND_OSM_KINDS.includes(row.kind) && surfaceAt(at).kind === "road_path") {
+      // The nearest clear spot off the road or path, in rings round the node.
+      let moved = null;
+      for (const radius of ISLAND_NUDGES_M) {
+        for (let step = 0; step < 16 && !moved; step += 1) {
+          const angle = (step * Math.PI) / 8;
+          const xz = round2([at[0] + radius * Math.cos(angle), at[1] + radius * Math.sin(angle)]);
+          if (surfaceAt(xz).kind !== "road_path" && !reject(row.kind, xz, { ignore: new Set([row.id]) })) moved = xz;
+        }
+        if (moved) break;
+      }
+      if (!moved) {
+        audit.osm_unbuilt.push({ id: row.id, kind: row.kind, reason: "on a road or path with no clear spot beside it" });
+        continue;
+      }
+      row.source_position_m = [...row.position_m];
+      Object.assign(row, surfaceRow(moved));
+      row.placement = "beside the road or path its OSM node lies on (production_inference)";
+      const index = occupied.findIndex((item) => item.id === row.id);
+      if (index >= 0) occupied.splice(index, 1);
+      occupy(row.id, row.kind, moved);
     }
     if (row.kind === "stop_sign") {
       // A painted bar gives the approach; a stop node beside the road marks the

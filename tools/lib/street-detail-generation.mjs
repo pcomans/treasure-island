@@ -41,7 +41,9 @@ import {
 import {
   BOUNDARY_ATTACHED_SOURCE_KEYS,
   PLAYABLE_BOUNDARY_SOURCE_KEY,
+  PLAYER_CAPSULE_RADIUS_M,
   ROAD_SURFACE_BIASES_M,
+  ROAD_WIDTHS_M,
   SHARED_COASTLINE_SOURCE_KEY,
   SOURCE_CONTRACT,
   compareSourceKeys,
@@ -135,6 +137,8 @@ export const STREET_DETAIL_KINDS = Object.freeze({
   chair: pointKind("furniture", 0.45, "seeded"),
   clutter_slot: pointKind("clutter", 0.4, "seeded"),
   crossing: pointKind(STREET_DETAIL_GROUND_LAYER, 0, "crossing"),
+  // A front-load dumpster (the clutter kit's); a row carries its rectangle as footprint_m.
+  dumpster: pointKind("clutter", 0.8, "seeded"),
   fence: lineKind("fences", 0.05),
   fire_hydrant: pointKind("furniture", 0.25, "faces_road"),
   gate: pointKind("fences", 0.1, "host_barrier"),
@@ -523,6 +527,12 @@ export function loadStreetDetailZones(projectRoot) {
       ruleIds.add(rule.id);
     }
   }
+  // Island-wide clutter rules (the street-clutter rollout): not tied to a zone
+  // shape, each names its own lots or streets.
+  if (config.clutter != null) {
+    validateClutterRules({ id: "island", clutter: config.clutter }, STREET_DETAIL_KINDS);
+    for (const rule of config.clutter) invariant(!zoneIds.has(rule.id), `Street detail island clutter rule ${rule.id} shares an id with a zone`);
+  }
   validateFencedApproaches(config.fenced_approaches);
   return config;
 }
@@ -776,6 +786,8 @@ export function streetDetailPieces(row) {
 export function generateStreetDetail({
   projectRoot,
   boundary,
+  // The playable boundary with its piers (the manifest's), for the shut-in check.
+  playableBoundary = boundary,
   playableObjects,
   chunks,
   terrainSupportAt,
@@ -1603,8 +1615,20 @@ export function generateStreetDetail({
 
   // (e) Street clutter, last: the parked cars of the zones' clutter rules
   // (tools/lib/street-clutter-generation.mjs) along the parking lanes and in
-  // the painted lot stalls, clear of everything placed above (the furniture
-  // rules have already claimed their footprints).
+  // the lots' stalls, clear of everything placed above (the furniture rules
+  // have already claimed their footprints) and of the OSM building entrances.
+  const parkingLots = new Map(objects
+    .filter((object) => object.roles.includes("major_area") && object.tags.amenity === "parking")
+    .sort((left, right) => compareSourceKeys(left.row.source_key, right.row.source_key))
+    .map((object) => [object.row.source_key, { source_key: object.row.source_key, geometry: object.geometry }]));
+  // A lot's drives: its OSM parking aisles, and the plain service roads (an
+  // internal drive such as Avenue A through its lot) that run through lots.
+  const parkingAisles = objects
+    .filter((object) => object.roles.includes("roads_paths") && object.row.osm_type === "way" && object.tags.highway === "service" && (object.tags.service == null || object.tags.service === "parking_aisle"))
+    .sort((left, right) => compareSourceKeys(left.row.source_key, right.row.source_key))
+    .map((object) => ({ source_key: object.row.source_key, line: rawWay(object.row.source_key).points.map(toEastNorth), half_width_m: ROAD_WIDTHS_M[object.tags.highway] / 2, parking_aisle: object.tags.service === "parking_aisle" }));
+  const entrances = sourceKeys.filter((key) => key[0] === "n" && properSources.get(key).metadata.tags.entrance != null)
+    .map((key) => toWorld(projectLonLat(properSources.get(key).features.find((feature) => feature.type === "Point").coordinates)));
   const clutter = placeStreetClutter({
     kinds: STREET_DETAIL_KINDS,
     rows,
@@ -1621,8 +1645,57 @@ export function generateStreetDetail({
     grounded,
     surfaceAt,
     chunks,
+    parkingLots,
+    parkingAisles,
+    roads,
+    entrances,
+    stallLines: { length_m: config.ground.lines.stall_length_m, spacing_m: config.ground.lines.stall_spacing_m },
+    islandRules: config.clutter ?? [],
   });
   rows.push(...clutter.rows);
+  // (e2) No island-wide parked car may shut walkable ground in: the clearance
+  // check's flood (shutInPockets) runs over each fence and yard region an
+  // island car stands in, and while a region shuts ground in, the island car
+  // most of whose grown footprint borders the shut-in cells is dropped.
+  const islandCarIds = new Set(clutter.rows.filter((row) => row.source_id.startsWith("island:")).map((row) => row.id));
+  clutter.audit.shut_in_drops = [];
+  if (islandCarIds.size > 0) {
+    const roofs = roofTriangles([...chunks.values()].flatMap((chunk) => chunk.records));
+    const onIsland = (point) => pointInMultiPolygon(toEastNorth(point), playableBoundary, false);
+    const carPoint = (row) => [row.position_m[0], row.position_m[2]];
+    const touches = (region, point) => {
+      const xs = region.points.map((p) => p[0]);
+      const zs = region.points.map((p) => p[1]);
+      return point[0] >= Math.min(...xs) - POCKET_MARGIN_M && point[0] <= Math.max(...xs) + POCKET_MARGIN_M && point[1] >= Math.min(...zs) - POCKET_MARGIN_M && point[1] <= Math.max(...zs) + POCKET_MARGIN_M;
+    };
+    let regions = pocketRegions(rows, config.zones.filter(isYardZone))
+      .filter((region) => rows.some((row) => islandCarIds.has(row.id) && touches(region, carPoint(row))));
+    for (let round = 0; round < 200 && regions.length > 0; round += 1) {
+      const failing = shutInPockets({ regions, roofs, solids: streetSolids(rows), onIsland }).regions;
+      if (failing.length === 0) break;
+      let dropped = false;
+      for (const pocket of failing) {
+        // The island car bordering most shut-in cells (its grown pieces within a cell of them).
+        let best = null;
+        for (const row of rows) {
+          if (!islandCarIds.has(row.id) || !touches({ points: pocket.cut }, carPoint(row))) continue;
+          const pieces = streetDetailPieces(row);
+          const border = pocket.cut.filter((cell) => pieces.some((piece) => planDistance([cell], piece.points) <= piece.radius + PLAYER_CAPSULE_RADIUS_M + POCKET_CELL_M)).length;
+          if (border > 0 && (!best || border > best.border || (border === best.border && row.id < best.row.id))) best = { row, border };
+        }
+        if (!best) continue;
+        rows.splice(rows.indexOf(best.row), 1);
+        clutter.rows.splice(clutter.rows.indexOf(best.row), 1);
+        islandCarIds.delete(best.row.id);
+        clutter.audit.rules[`island/${best.row.source_id.slice("island:".length)}`] -= 1;
+        if (clutter.lotOf.has(best.row.id)) clutter.audit.lots[clutter.lotOf.get(best.row.id)].placed -= 1;
+        clutter.audit.shut_in_drops.push({ id: best.row.id, region: pocket.id, shut_m2: round3(pocket.shut_m2) });
+        dropped = true;
+      }
+      if (!dropped) break;
+      regions = regions.filter((region) => failing.some((pocket) => pocket.id === region.id));
+    }
+  }
   for (const summary of zoneSummaries) {
     const zone = config.zones.find((candidate) => candidate.id === summary.id);
     summary.clutter = (zone.clutter ?? []).map((rule) => ({
@@ -1734,4 +1807,183 @@ export function generateStreetDetail({
     rows: packed.rows,
     planting_rows: packed.planting_rows,
   };
+}
+
+// ---------------------------------------------------------------- shut-in pockets
+// Walkable ground the street detail shuts in, shared by the street-detail
+// clearance check (tools/check_street_detail_clearance.mjs) and the generator,
+// which drops the island-wide rules' parked cars that would shut ground in.
+//
+// Around each built fence (its runs and open gate leaves, plus a margin) and over
+// each yard polygon, a grid marks what the stock capsule's centre cannot reach:
+// buildings (their roof triangles), built fence runs and street props grown by
+// the capsule radius, and everything off the island. Free ground the street
+// solids cut off is shut in: cells that reached the grid's edge before the
+// street solids stood and no longer do, and any piece split off ground the
+// buildings and the shore alone already enclose (a courtyard: the enclosure
+// itself is not the street detail's doing).
+export const POCKET_CELL_M = 0.2;
+export const POCKET_MARGIN_M = 20;
+
+// The regions flooded: around each built fence's runs and gate leaves, and over
+// each yard zone's polygon. A built fence's row has runs or open gate leaves (a
+// gate-only row, as between two container walls, has leaves but no run).
+export function pocketRegions(rows, yardZones) {
+  const fences = rows.filter((row) => row.status === "placed" && row.fence && row.prop != null && (row.fence.runs.length > 0 || (row.fence.gates?.length ?? 0) > 0));
+  return [
+    ...fences.map((fence) => ({ id: fence.id, points: streetDetailPieces(fence).flatMap((piece) => piece.points) })),
+    ...yardZones.map((zone) => ({ id: `yard ${zone.id}`, points: zone.shape.points_xz })),
+  ];
+}
+
+// Whether a placed row is built with collision: built fences, street props,
+// parked cars and tree trunks (the vegetation props without a trunk have none).
+export function isStreetSolid(row) {
+  return row.status === "placed" && row.prop != null && (row.fence != null || ["furniture", "clutter"].includes(row.layer) || (row.layer === "vegetation" && STREET_VEGETATION_PROPS[row.prop]?.trunk === true));
+}
+
+// The plan pieces of every street solid, grown by the capsule radius: [{id, points, radius}].
+export function streetSolids(rows) {
+  const solids = [];
+  for (const row of rows) {
+    if (!isStreetSolid(row)) continue;
+    for (const piece of streetDetailPieces(row)) solids.push({ id: row.id, points: piece.points, radius: piece.radius + PLAYER_CAPSULE_RADIUS_M });
+  }
+  return solids;
+}
+
+// The roof triangles ([[x, z] x 3]) of the building records of the given chunk records.
+export function roofTriangles(records) {
+  const roofs = [];
+  for (const record of records) {
+    if (!["building_roof", "building_part_roof"].includes(record.feature_kind)) continue;
+    for (let index = 0; index < record.indices.length; index += 3) {
+      roofs.push([0, 1, 2].map((corner) => [record.vertices[record.indices[index + corner] * 3], record.vertices[record.indices[index + corner] * 3 + 2]]));
+    }
+  }
+  return roofs;
+}
+
+// Floods each region; returns {cells, regions: [{id, shut_cells, shut_m2, example, cut}]} for every
+// region whose shut-in ground reaches a capsule's footprint (a single stray cell
+// is grid noise in a corner; a capsule's footprint is not). cut lists the world
+// [x, z] centres of the shut-in cells. onIsland(point) says whether a world
+// point is on the playable land.
+export function shutInPockets({ regions, roofs, solids, onIsland }) {
+  const results = [];
+  let cells = 0;
+  for (const region of regions) {
+    const all = region.points;
+    const x0 = Math.min(...all.map((point) => point[0])) - POCKET_MARGIN_M;
+    const z0 = Math.min(...all.map((point) => point[1])) - POCKET_MARGIN_M;
+    const width = Math.ceil((Math.max(...all.map((point) => point[0])) + POCKET_MARGIN_M - x0) / POCKET_CELL_M);
+    const depth = Math.ceil((Math.max(...all.map((point) => point[1])) + POCKET_MARGIN_M - z0) / POCKET_CELL_M);
+    const blocked = new Uint8Array(width * depth);
+    const centre = (i, j) => [x0 + (i + 0.5) * POCKET_CELL_M, z0 + (j + 0.5) * POCKET_CELL_M];
+    const mark = (minX, maxX, minZ, maxZ, test) => {
+      const i0 = Math.max(0, Math.floor((minX - x0) / POCKET_CELL_M));
+      const i1 = Math.min(width - 1, Math.floor((maxX - x0) / POCKET_CELL_M));
+      const j0 = Math.max(0, Math.floor((minZ - z0) / POCKET_CELL_M));
+      const j1 = Math.min(depth - 1, Math.floor((maxZ - z0) / POCKET_CELL_M));
+      for (let j = j0; j <= j1; j += 1) for (let i = i0; i <= i1; i += 1) if (!blocked[j * width + i] && test(centre(i, j))) blocked[j * width + i] = 1;
+    };
+    for (let j = 0; j < depth; j += 1) for (let i = 0; i < width; i += 1) if (!onIsland(centre(i, j))) blocked[j * width + i] = 1;
+    for (const triangle of roofs) {
+      const xs = triangle.map((point) => point[0]);
+      const zs = triangle.map((point) => point[1]);
+      // Grown by the capsule radius: a centre this close to a wall cannot stand there.
+      const grow = PLAYER_CAPSULE_RADIUS_M;
+      mark(Math.min(...xs) - grow, Math.max(...xs) + grow, Math.min(...zs) - grow, Math.max(...zs) + grow, (point) => planDistance([point], [...triangle, triangle[0]]) <= grow || insideTriangle(point, triangle));
+    }
+    // The free cells' connected pieces: ids[cell] is its piece (-1 when blocked),
+    // edge[piece] whether the piece reaches the grid's edge.
+    const pieces = () => {
+      const ids = new Int32Array(width * depth).fill(-1);
+      const sizes = [];
+      const edge = [];
+      const queue = new Int32Array(width * depth);
+      for (let seed = 0; seed < ids.length; seed += 1) {
+        if (blocked[seed] || ids[seed] !== -1) continue;
+        const id = sizes.length;
+        let size = 0;
+        let touches = false;
+        let tail = 0;
+        queue[tail++] = seed;
+        ids[seed] = id;
+        for (let head = 0; head < tail; head += 1) {
+          const index = queue[head];
+          size += 1;
+          const i = index % width;
+          const j = (index - i) / width;
+          if (i === 0 || j === 0 || i === width - 1 || j === depth - 1) touches = true;
+          for (const next of [i > 0 ? index - 1 : -1, i < width - 1 ? index + 1 : -1, j > 0 ? index - width : -1, j < depth - 1 ? index + width : -1]) {
+            if (next < 0 || blocked[next] || ids[next] !== -1) continue;
+            ids[next] = id;
+            queue[tail++] = next;
+          }
+        }
+        sizes.push(size);
+        edge.push(touches);
+      }
+      return { ids, sizes, edge };
+    };
+    // What the street detail shuts in is walkable ground it cuts off: free
+    // ground that reached the grid's edge before the street solids stood and no
+    // longer does, or a piece split off ground the buildings and the shore alone
+    // already enclose (a courtyard; the enclosure itself is not the street
+    // detail's doing, so its largest remaining piece does not count).
+    const before = pieces();
+    for (const solid of solids) {
+      const xs = solid.points.map((point) => point[0]);
+      const zs = solid.points.map((point) => point[1]);
+      mark(Math.min(...xs) - solid.radius, Math.max(...xs) + solid.radius, Math.min(...zs) - solid.radius, Math.max(...zs) + solid.radius, (point) => planDistance([point], solid.points) <= solid.radius);
+    }
+    const after = pieces();
+    // Street solids only block cells, so each piece after lies inside one piece before.
+    const origin = new Int32Array(after.sizes.length).fill(-1);
+    for (let index = 0; index < after.ids.length; index += 1) {
+      const id = after.ids[index];
+      if (id < 0 || origin[id] !== -1) continue;
+      origin[id] = before.ids[index];
+    }
+    const firstCell = new Int32Array(after.sizes.length).fill(-1);
+    for (let index = 0; index < after.ids.length; index += 1) {
+      const id = after.ids[index];
+      if (id >= 0 && firstCell[id] === -1) firstCell[id] = index;
+    }
+    const enclosed = new Map();
+    const cut = [];
+    for (let id = 0; id < after.sizes.length; id += 1) {
+      if (after.edge[id]) continue;
+      if (before.edge[origin[id]]) cut.push(id);
+      else enclosed.set(origin[id], [...(enclosed.get(origin[id]) ?? []), id]);
+    }
+    for (const split of enclosed.values()) {
+      split.sort((a, b) => after.sizes[b] - after.sizes[a]);
+      cut.push(...split.slice(1));
+    }
+    cells += width * depth;
+    let shut = 0;
+    let example = null;
+    for (const id of cut) {
+      shut += after.sizes[id];
+      example ??= centre(firstCell[id] % width, Math.floor(firstCell[id] / width));
+    }
+    const cutIds = new Set(cut);
+    const cutCells = [];
+    for (let index = 0; index < after.ids.length; index += 1) {
+      if (after.ids[index] >= 0 && cutIds.has(after.ids[index])) cutCells.push(centre(index % width, Math.floor(index / width)));
+    }
+    const footprintCells = Math.ceil((Math.PI * PLAYER_CAPSULE_RADIUS_M ** 2) / POCKET_CELL_M ** 2);
+    if (shut >= footprintCells) results.push({ id: region.id, shut_cells: shut, shut_m2: shut * POCKET_CELL_M ** 2, example, cut: cutCells });
+  }
+  return { cells, regions: results };
+}
+
+function insideTriangle(point, [a, b, c]) {
+  const sign = (p, q, r) => (p[0] - r[0]) * (q[1] - r[1]) - (q[0] - r[0]) * (p[1] - r[1]);
+  const d1 = sign(point, a, b);
+  const d2 = sign(point, b, c);
+  const d3 = sign(point, c, a);
+  return !((d1 < 0 || d2 < 0 || d3 < 0) && (d1 > 0 || d2 > 0 || d3 > 0));
 }

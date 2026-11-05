@@ -1530,6 +1530,66 @@
       "yaw": 0.0,
       "reason": "A red, white and blue pole flag inside the vehicle lot's cut corner at 9th Street and Avenue D, above the green container wall, flying east; its text is too small to read in the photo, so it is plain.",
       "reference": "verify-810-avenue-d-20261104 05-9thst-2025-09 (pano zymx-sHLgpe6167colQIQQ, Sep 2025): a red, white and blue flag above the wall near the corner; position production inference"
+    },
+    {
+      "id": "mersea_lot_dumpster_1",
+      "kind": "dumpster",
+      "prop": "dumpster",
+      "params": {
+        "paint": "light_grey"
+      },
+      "xz": [
+        -359.8,
+        137.6
+      ],
+      "yaw": 1.45,
+      "reason": "Three grey two-yard front-load dumpsters on casters stand east of Avenue A at the west end of the Mersea lot, beside the island with the litter can; this is the nearest of them.",
+      "reference": "mersea-lot Street View pano TKhppKcV_DAxZRV9LsEh2A (Avenue A inside the Mersea lot, 699 Ave of the Palms, Sep 2025; camera at x -365.5, z 142.7), headings 70 and 10; positions and facings production inference from the two views"
+    },
+    {
+      "id": "mersea_lot_dumpster_2",
+      "kind": "dumpster",
+      "prop": "dumpster",
+      "params": {
+        "paint": "grey"
+      },
+      "xz": [
+        -360.6,
+        133.8
+      ],
+      "yaw": 1.62,
+      "reason": "The second grey front-load dumpster at the west end of the Mersea lot, side by side with the first to its north (a clear walking gap between them).",
+      "reference": "mersea-lot Street View pano TKhppKcV_DAxZRV9LsEh2A (Avenue A inside the Mersea lot, 699 Ave of the Palms, Sep 2025; camera at x -365.5, z 142.7), headings 70 and 10; positions and facings production inference from the two views"
+    },
+    {
+      "id": "mersea_lot_dumpster_3",
+      "kind": "dumpster",
+      "prop": "dumpster",
+      "params": {
+        "paint": "light_grey"
+      },
+      "xz": [
+        -356.5,
+        128.0
+      ],
+      "yaw": 1.3,
+      "reason": "The third grey front-load dumpster at the west end of the Mersea lot, a few metres east of the other two toward the TOUR BUS stalls (inside the OSM lot, whose edge cuts the corner there).",
+      "reference": "mersea-lot Street View pano TKhppKcV_DAxZRV9LsEh2A (Avenue A inside the Mersea lot, 699 Ave of the Palms, Sep 2025; camera at x -365.5, z 142.7), headings 70 and 10; positions and facings production inference from the two views"
+    },
+    {
+      "id": "mersea_lot_basket",
+      "kind": "waste_basket",
+      "prop": "waste_basket",
+      "params": {
+        "style": "black_slat"
+      },
+      "xz": [
+        -362.5,
+        131.0
+      ],
+      "yaw": 0.0,
+      "reason": "A black steel-slat litter can stands on the small island at the west end of the Mersea lot, north of the dumpsters.",
+      "reference": "mersea-lot Street View pano TKhppKcV_DAxZRV9LsEh2A (Avenue A inside the Mersea lot, 699 Ave of the Palms, Sep 2025; camera at x -365.5, z 142.7), headings 70 and 10; positions and facings production inference from the two views"
     }
   ]
 }
