@@ -43,7 +43,7 @@ export const STREET_CLUTTER_PROPS = Object.freeze({
   traffic_cone: "traffic_cone",
   ...Object.fromEntries(YARD_KIT_KEYS.map((key) => [key, key])),
 });
-export const STREET_CLUTTER_PATTERNS = Object.freeze(["bus_stop_bins", "curb_parking", "lot_occupancy", "lot_stalls"]);
+export const STREET_CLUTTER_PATTERNS = Object.freeze(["bay_occupancy", "bus_stop_bins", "curb_parking", "curb_stretches", "lot_occupancy", "lot_stalls"]);
 export const CAR_BODY_NAMES = Object.freeze(Object.keys(CAR_BODIES));
 export const CAR_PAINTS = Object.freeze(["beige", "black", "blue", "brown", "dark_grey", "green", "grey", "light_grey", "navy", "pearl_white", "red", "silver", "white"]);
 export const CAR_FINISHES = Object.freeze(["solid", "metallic", "pearl"]);
@@ -64,22 +64,31 @@ const PAINT_FINISHES = Object.freeze({
   white: ["solid"],
 });
 const RULE_FIELDS = Object.freeze({
+  // The street ground's street-side bays: per way side, the cars the dated aerial shows in them.
+  bay_occupancy: ["cars", "head_in", "mix", "paints"],
   // A litter can beside every OSM bus stop tagged with a shelter or a bin.
   bus_stop_bins: ["params"],
   curb_parking: ["source_keys", "sides", "curb_gap_m", "gap_m", "daylight_m", "hydrant_m", "mix", "paints"],
+  // Every stretch the street ground marks parked (its parking lanes' parked
+  // stretches, where the dated aerial shows cars at the curb): per way side,
+  // the number of cars the aerial shows there.
+  curb_stretches: ["cars", "curb_gap_m", "gap_m", "daylight_m", "hydrant_m", "mix", "paints"],
   lot_occupancy: ["lots", "head_in", "mix", "paints"],
   lot_stalls: ["source_keys", "near_key", "near_m", "far_m", "fill_near", "fill_far", "head_in", "mix", "paints"],
 });
 // The kit prop and kind each pattern places.
 const PATTERN_PROPS = Object.freeze({
+  bay_occupancy: { prop: "parked_car", kind: "parked_car" },
   bus_stop_bins: { prop: "waste_basket", kind: "waste_basket" },
+  curb_stretches: { prop: "parked_car", kind: "parked_car" },
   curb_parking: { prop: "parked_car", kind: "parked_car" },
   lot_occupancy: { prop: "parked_car", kind: "parked_car" },
   lot_stalls: { prop: "parked_car", kind: "parked_car" },
 });
 // A lot_occupancy rule's entry per lot: the OSM lot, the cars the dated aerial
 // shows in it and what was seen, and optionally focus_xz, the world [x, z]
-// points where the aerial shows them gathered.
+// points where the aerial shows them gathered, or [x, z, cars] to give each
+// point its share of the lot's cars (each takes the free stalls nearest it).
 const LOT_ENTRY_FIELDS = Object.freeze(["cars", "observed", "source_key"]);
 const LOT_ENTRY_OPTIONAL_FIELDS = Object.freeze(["focus_xz"]);
 const COMMON_FIELDS = Object.freeze(["basis", "evidence", "id", "kind", "pattern", "prop", "rule"]);
@@ -142,6 +151,8 @@ const LOT_YAW_JITTER_RAD = 0.01;
 const BIN_RINGS_M = Object.freeze([1.5, 2.5, 3.5]);
 const BIN_ROAD_CLEAR_M = 0.6;
 const BIN_ROAD_REACH_M = 4.0;
+// A basket within this much of a stop already serves it (m).
+const BIN_STOP_REACH_M = 6.0;
 // An aisle's rows stop where it turns more than this from its main direction (radians).
 const AISLE_ROW_TURN_RAD = (25 * Math.PI) / 180;
 // The occupied-item grid for the site checks (m).
@@ -155,7 +166,8 @@ const LOT_OVERHANG_M = 1.3;
 // Chunk record kinds the visible ground is made of, and the surfaces (by
 // material) a parked car's tyre may stand on.
 const VISIBLE_GROUND_KINDS = new Set(["land_ground", "major_area", "road_path", "street_kerb", "street_paint", "terrain_overlay"]);
-const WHEEL_SURFACES = new Set(["major_area_paved", "road_path", "street_gutter", "street_marking", "street_parking", "street_wear"]);
+// The street ground drapes some lots with a yard pavement (asphalt or concrete).
+const WHEEL_SURFACES = new Set(["major_area_paved", "road_path", "street_gutter", "street_marking", "street_parking", "street_wear", "yard_asphalt", "yard_asphalt_pale", "yard_concrete"]);
 const GROUND_CELL_M = 4;
 // A tyre's contact patch, sampled across its width (fractions) and along it (m).
 const PATCH_ACROSS = Object.freeze([-0.35, 0, 0.35]);
@@ -268,6 +280,18 @@ export function validateClutterRules(zone, kinds) {
     }
     validateWeights(rule.mix, CAR_BODY_NAMES, `${label} mix`);
     validateWeights(rule.paints, CAR_PAINTS, `${label} paints`);
+    if (rule.pattern === "curb_stretches" || rule.pattern === "bay_occupancy") {
+      invariant(rule.cars != null && typeof rule.cars === "object" && Object.entries(rule.cars).every(([way, sides]) => /^w\d+$/u.test(way) && sides != null && typeof sides === "object"
+        && Object.entries(sides).every(([side, cars]) => ["left", "right"].includes(side) && Number.isInteger(cars) && cars >= 0)), `${label} cars must map OSM ways to {left, right} car counts`);
+      if (rule.pattern === "bay_occupancy") {
+        invariant(isFiniteNumber(rule.head_in) && rule.head_in >= 0 && rule.head_in <= 1, `${label} head_in must be in [0, 1]`);
+      } else {
+        invariant(Array.isArray(rule.gap_m) && rule.gap_m.length === 2 && rule.gap_m.every(isFiniteNumber) && rule.gap_m[0] >= 1.0 && rule.gap_m[1] >= rule.gap_m[0],
+          `${label} gap_m is [min, max] with min at least 1 m (a player passes between two cars)`);
+        for (const field of ["curb_gap_m", "daylight_m", "hydrant_m"]) invariant(isFiniteNumber(rule[field]) && rule[field] >= 0, `${label} ${field} must be non-negative`);
+      }
+      continue;
+    }
     if (rule.pattern !== "lot_occupancy") {
       invariant(Array.isArray(rule.source_keys) && rule.source_keys.length > 0 && rule.source_keys.every((key) => /^w\d+$/u.test(key)), `${label} needs OSM way source_keys`);
     }
@@ -278,8 +302,12 @@ export function validateClutterRules(zone, kinds) {
         const entryLabel = `${label} lot ${entry?.source_key}`;
         invariant(entry != null && typeof entry === "object" && LOT_ENTRY_FIELDS.every((key) => key in entry) && Object.keys(entry).every((key) => LOT_ENTRY_FIELDS.includes(key) || LOT_ENTRY_OPTIONAL_FIELDS.includes(key)),
           `${entryLabel} must have ${LOT_ENTRY_FIELDS.join(", ")} and optionally ${LOT_ENTRY_OPTIONAL_FIELDS.join(", ")}`);
-        invariant(entry.focus_xz === undefined || (Array.isArray(entry.focus_xz) && entry.focus_xz.length > 0 && entry.focus_xz.every((point) => Array.isArray(point) && point.length === 2 && point.every(isFiniteNumber))),
-          `${entryLabel} focus_xz must list world [x, z] points`);
+        invariant(entry.focus_xz === undefined || (Array.isArray(entry.focus_xz) && entry.focus_xz.length > 0 && entry.focus_xz.every((point) => Array.isArray(point)
+          && ((point.length === 2 && point.every(isFiniteNumber)) || (point.length === 3 && isFiniteNumber(point[0]) && isFiniteNumber(point[1]) && Number.isInteger(point[2]) && point[2] > 0)))),
+          `${entryLabel} focus_xz must list world [x, z] points, or [x, z, cars] with the lot's cars shared out`);
+        const counted = (entry.focus_xz ?? []).filter((point) => point.length === 3);
+        invariant(counted.length === 0 || (counted.length === entry.focus_xz.length && counted.reduce((sum, point) => sum + point[2], 0) === entry.cars),
+          `${entryLabel}: when focus_xz gives cars, every point gives them and they add up to cars`);
         invariant(/^w\d+$/u.test(entry.source_key) && !keys.has(entry.source_key), `${entryLabel} needs a unique OSM way source_key`);
         keys.add(entry.source_key);
         invariant(Number.isInteger(entry.cars) && entry.cars > 0, `${entryLabel} cars must be a positive whole number (leave an empty lot out)`);
@@ -485,6 +513,110 @@ export function placeStreetClutter({
   barredIds = new Set(),
 }) {
   const pilotShapes = zoneShapes.filter(({ zone }) => zone.pilot);
+  // Cars along a road's parking lanes: per side, its curb offset and the
+  // stretches [from_m, to_m, fill] along the way to fill, nose to tail with the
+  // rule's gaps, the curb kept clear at junctions and crosswalks (daylight_m),
+  // fire hydrants (hydrant_m) and bus stops.
+  const placeCurbRuns = (zone, rule, contains, lane, sides) => {
+    const key = lane.source_key;
+    const line = lane.line;
+    const total = polylineLength(line);
+    const way = rawOsm.ways.get(key.slice(1));
+    invariant(way, `Street clutter road ${key} is missing from the raw extract`);
+    // Stretches of curb kept clear, as [from, to] along the road, per side.
+    const blocked = { left: [], right: [] };
+    const both = (from, to) => {
+      blocked.left.push([from, to]);
+      blocked.right.push([from, to]);
+    };
+    for (const ref of new Set(way.node_refs)) {
+      if ((roadsAtNode.get(ref) ?? []).filter((other) => other !== key).length === 0) continue;
+      const node = rawOsm.nodes.get(ref);
+      if (!node) continue;
+      const near = closestOnPolyline(line, projectLonLat(node.coordinate));
+      // Past the crossing road's curb and the daylighting.
+      both(near.along - rule.daylight_m - 8, near.along + rule.daylight_m + 8);
+    }
+    for (const walk of site.crosswalks) {
+      const near = closestOnPolyline(line, walk.center);
+      if (near.distance > lane.kerb_offset_m + 3) continue;
+      both(near.along - site.walk_width_m / 2 - rule.daylight_m, near.along + site.walk_width_m / 2 + rule.daylight_m);
+    }
+    for (const row of rows) {
+      if (row.status !== "placed" || row.geometry !== "point" || !["fire_hydrant", "bus_stop"].includes(row.kind)) continue;
+      const near = closestOnPolyline(line, toEastNorth([row.position_m[0], row.position_m[2]]));
+      if (near.distance > lane.kerb_offset_m + 4) continue;
+      const side = near.side > 0 ? "left" : "right";
+      const reach = row.kind === "fire_hydrant" ? rule.hydrant_m : BUS_STOP_CLEAR_M;
+      blocked[side].push([near.along - reach, near.along + reach]);
+    }
+    for (const [sideName, { kerb_offset_m: kerbOffset, stretches, cars = null }] of Object.entries(sides)) {
+      const side = sideName === "left" ? 1 : -1;
+      let index = 0;
+      // With a car count, the run is walked nose to tail at the shortest gap and
+      // that many of the places that fit are taken (by seeded rank).
+      const places = [];
+      for (const [from, to, fill] of stretches) {
+        let s = Math.max(0, from);
+        const end = Math.min(total, to);
+        while (s < end) {
+          const cell = `${key}_${sideName}_${String(index).padStart(3, "0")}`;
+          const identity = `${zone.id}:${rule.id}:${cell}`;
+          const params = carParams(rule, identity);
+          const dims = carBodyGeometry(params.body);
+          const footprint = { x_m: dims.width_m, z_m: dims.length_m };
+          const gap = cars === null ? rule.gap_m[0] + (rule.gap_m[1] - rule.gap_m[0]) * hashUnit(seed, identity, "gap") : rule.gap_m[0];
+          index += 1;
+          const startS = s;
+          const endS = s + footprint.z_m;
+          if (endS > end) break;
+          const clash = blocked[sideName].find(([a, b]) => endS > a && startS < b);
+          if (clash) {
+            count(audit.rejected_by_reason, `${rule.id}:curb_kept_clear`);
+            s = Math.max(s + 0.5, clash[1] + 0.3);
+            continue;
+          }
+          const taken = cars !== null || hashUnit(seed, identity, "fill") < fill;
+          if (!taken) {
+            count(audit.rejected_by_reason, `${rule.id}:fill`);
+            s = endS + gap;
+            continue;
+          }
+          const at = pointAlong(line, (startS + endS) / 2);
+          // Right-hand traffic: a car faces along the travel of its curb's lane.
+          const front = side > 0 ? scale(at.tangent, -1) : at.tangent;
+          const offset = kerbOffset - rule.curb_gap_m - footprint.x_m / 2 - 0.05 * hashUnit(seed, identity, "offset");
+          const center = add(at.point, scale(leftOf(at.tangent), side * offset));
+          const xz = toWorld(center);
+          if (!contains(xz)) {
+            count(audit.rejected_by_reason, `${rule.id}:outside_zone`);
+            s = endS + gap;
+            continue;
+          }
+          const jitter = (hashUnit(seed, identity, "yaw") - 0.5) * 0.02;
+          const facing = [front[0] * Math.cos(jitter) - front[1] * Math.sin(jitter), front[0] * Math.sin(jitter) + front[1] * Math.cos(jitter)];
+          const rest = fit(center, facing, footprint, "road", params.body);
+          if (rest.problem) {
+            count(audit.rejected_by_reason, `${rule.id}:${rest.problem}`);
+            s = endS + gap;
+            continue;
+          }
+          if (cars === null) addCar(zone, rule, cell, center, facing, params, footprint, rest);
+          else places.push({ cell, center, facing, params, footprint, rest, rank: hashUnit(seed, identity, "pick") });
+          s = endS + gap;
+        }
+      }
+      if (cars !== null) {
+        const picked = new Set([...places].sort((left, right) => left.rank - right.rank).slice(0, cars));
+        for (const place of places) {
+          if (picked.has(place)) addCar(zone, rule, place.cell, place.center, place.facing, place.params, place.footprint, place.rest);
+          else count(audit.rejected_by_reason, `${rule.id}:fill`);
+        }
+        audit.curbs ??= {};
+        audit.curbs[`${key}/${sideName}`] = { cars, places: places.length, placed: Math.min(cars, places.length) };
+      }
+    }
+  };
   // The rule sets: each pilot zone's clutter rules within its shape, then the island-wide rules.
   const ruleSets = [
     ...pilotShapes.map(({ zone, contains }) => ({ zone, contains, rules: zone.clutter ?? [] })),
@@ -569,7 +701,7 @@ export function placeStreetClutter({
     }
     for (const corner of corners(center, front, footprint)) {
       if (site.raised(corner)) return "raised_ground";
-      if (surface === "road" && site.carriagewayDistance(corner, 1) > 0) return "off_asphalt";
+      if ((surface === "road" || surface === "bay") && site.carriagewayDistance(corner, 1) > 0) return "off_asphalt";
       if (surface === "lot" && !lot && !site.inLot(corner) && site.carriagewayDistance(corner, 1) > 0) return "off_lot";
       // An island lot car stands wholly off the drives (their ribbons), inside its lot.
       if (lot && (!pointInMultiPolygon(corner, lot.geometry, true) || roads.containing(toWorld(corner)).length > 0)) return "off_lot";
@@ -697,8 +829,14 @@ export function placeStreetClutter({
         const stops = rows.filter((row) => row.source === "osm" && row.kind === "bus_stop" && row.status === "placed" && (row.tags?.shelter === "yes" || row.tags?.bin === "yes"))
           .sort((left, right) => (left.id < right.id ? -1 : 1));
         const radius = kinds[rule.kind].footprint_radius_m;
+        const baskets = rows.filter((row) => row.kind === "waste_basket" && row.status === "placed" && row.prop != null);
         for (const stop of stops) {
           const at = [stop.position_m[0], stop.position_m[2]];
+          // A stop OSM already gives a waste basket keeps that one.
+          if (baskets.some((row) => Math.hypot(row.position_m[0] - at[0], row.position_m[2] - at[1]) <= BIN_STOP_REACH_M)) {
+            count(audit.rejected_by_reason, `${rule.id}:has_a_basket`);
+            continue;
+          }
           let spot = null;
           for (const ring of BIN_RINGS_M) {
             for (let step = 0; step < 16 && !spot; step += 1) {
@@ -745,91 +883,67 @@ export function placeStreetClutter({
         for (const key of rule.source_keys) {
           const lane = site.parking_lanes.find((candidate) => candidate.source_key === key);
           invariant(lane, `Street clutter curb rule names ${key}, which has no parking lane in the street ground`);
-          const line = lane.line;
-          const total = polylineLength(line);
-          const way = rawOsm.ways.get(key.slice(1));
-          invariant(way, `Street clutter road ${key} is missing from the raw extract`);
-          // Stretches of curb kept clear, as [from, to] along the road, per side.
-          const blocked = { left: [], right: [] };
-          const both = (from, to) => {
-            blocked.left.push([from, to]);
-            blocked.right.push([from, to]);
-          };
-          for (const ref of new Set(way.node_refs)) {
-            if ((roadsAtNode.get(ref) ?? []).filter((other) => other !== key).length === 0) continue;
-            const node = rawOsm.nodes.get(ref);
-            if (!node) continue;
-            const near = closestOnPolyline(line, projectLonLat(node.coordinate));
-            // Past the crossing road's curb and the daylighting.
-            both(near.along - rule.daylight_m - 8, near.along + rule.daylight_m + 8);
-          }
-          for (const walk of site.crosswalks) {
-            const near = closestOnPolyline(line, walk.center);
-            if (near.distance > lane.kerb_offset_m + 3) continue;
-            both(near.along - site.walk_width_m / 2 - rule.daylight_m, near.along + site.walk_width_m / 2 + rule.daylight_m);
-          }
-          for (const row of rows) {
-            if (row.status !== "placed" || row.geometry !== "point" || !["fire_hydrant", "bus_stop"].includes(row.kind)) continue;
-            const near = closestOnPolyline(line, toEastNorth([row.position_m[0], row.position_m[2]]));
-            if (near.distance > lane.kerb_offset_m + 4) continue;
-            const side = near.side > 0 ? "left" : "right";
-            const reach = row.kind === "fire_hydrant" ? rule.hydrant_m : BUS_STOP_CLEAR_M;
-            blocked[side].push([near.along - reach, near.along + reach]);
-          }
-          for (const [sideName, stretches] of Object.entries(rule.sides)) {
-            const side = sideName === "left" ? 1 : -1;
-            let index = 0;
-            for (const [from, to, fill] of stretches) {
-              let s = Math.max(0, from);
-              const end = Math.min(total, to);
-              while (s < end) {
-                const cell = `${key}_${sideName}_${String(index).padStart(3, "0")}`;
-                const identity = `${zone.id}:${rule.id}:${cell}`;
-                const params = carParams(rule, identity);
-                const dims = carBodyGeometry(params.body);
-                const footprint = { x_m: dims.width_m, z_m: dims.length_m };
-                const gap = rule.gap_m[0] + (rule.gap_m[1] - rule.gap_m[0]) * hashUnit(seed, identity, "gap");
-                index += 1;
-                const startS = s;
-                const endS = s + footprint.z_m;
-                if (endS > end) break;
-                const clash = blocked[sideName].find(([a, b]) => endS > a && startS < b);
-                if (clash) {
-                  count(audit.rejected_by_reason, `${rule.id}:curb_kept_clear`);
-                  s = Math.max(s + 0.5, clash[1] + 0.3);
-                  continue;
-                }
-                const taken = hashUnit(seed, identity, "fill") < fill;
-                if (!taken) {
-                  count(audit.rejected_by_reason, `${rule.id}:fill`);
-                  s = endS + gap;
-                  continue;
-                }
-                const at = pointAlong(line, (startS + endS) / 2);
-                // Right-hand traffic: a car faces along the travel of its curb's lane.
-                const front = side > 0 ? scale(at.tangent, -1) : at.tangent;
-                const offset = lane.kerb_offset_m - rule.curb_gap_m - footprint.x_m / 2 - 0.05 * hashUnit(seed, identity, "offset");
-                const center = add(at.point, scale(leftOf(at.tangent), side * offset));
-                const xz = toWorld(center);
-                if (!contains(xz)) {
-                  count(audit.rejected_by_reason, `${rule.id}:outside_zone`);
-                  s = endS + gap;
-                  continue;
-                }
-                const jitter = (hashUnit(seed, identity, "yaw") - 0.5) * 0.02;
-                const facing = [front[0] * Math.cos(jitter) - front[1] * Math.sin(jitter), front[0] * Math.sin(jitter) + front[1] * Math.cos(jitter)];
-                const rest = fit(center, facing, footprint, "road", params.body);
-                if (rest.problem) {
-                  count(audit.rejected_by_reason, `${rule.id}:${rest.problem}`);
-                  s = endS + gap;
-                  continue;
-                }
-                addCar(zone, rule, cell, center, facing, params, footprint, rest);
-                s = endS + gap;
-              }
-            }
-          }
+          placeCurbRuns(zone, rule, contains, lane, Object.fromEntries(Object.entries(rule.sides).map(([side, stretches]) => [side, { kerb_offset_m: lane.kerb_offset_m, stretches }])));
         }
+      } else if (rule.pattern === "curb_stretches") {
+        // Every lane the street ground marks parked (none on a ground without them).
+        for (const lane of site.parking_lanes) {
+          if (!lane.parked) continue;
+          const sides = {};
+          for (const side of ["left", "right"]) {
+            const stretches = (lane.parked[side] ?? []).map(([from, to]) => [from, to, 1]);
+            const cars = rule.cars[lane.source_key]?.[side];
+            if (stretches.length === 0) continue;
+            if (!Number.isInteger(cars)) {
+              count(audit.rejected_by_reason, `${rule.id}:no_count:${lane.source_key}/${side}`);
+              continue;
+            }
+            sides[side] = { kerb_offset_m: lane[`kerb_offset_${side}_m`] ?? lane.kerb_offset_m, stretches, cars };
+          }
+          if (Object.keys(sides).length > 0) placeCurbRuns(zone, rule, contains, lane, sides);
+        }
+      } else if (rule.pattern === "bay_occupancy") {
+        // The street ground's street-side bays (none on a ground without them),
+        // each taken at the rule's fill, mostly nose in, centred and square.
+        const baySlots = site.stalls.filter((candidate) => candidate.kind === "bay");
+        const taken = new Map();
+        // Each way side's bays in seeded rank; the first rule.cars[way][side] that fit take cars.
+        const ranked = baySlots.map((slot) => {
+          const cell = `${slot.aisle_key}_${slot.side}_b${String(Math.round(slot.s * 10)).padStart(4, "0")}`;
+          return { slot, cell, identity: `${zone.id}:${rule.id}:${cell}` };
+        }).sort((left, right) => hashUnit(seed, left.identity, "pick") - hashUnit(seed, right.identity, "pick") || (left.cell < right.cell ? -1 : 1));
+        for (const { slot, cell, identity } of ranked) {
+          const wanted = rule.cars[slot.aisle_key]?.[slot.side];
+          if (!Number.isInteger(wanted)) {
+            count(audit.rejected_by_reason, `${rule.id}:no_count:${slot.aisle_key}/${slot.side}`);
+            continue;
+          }
+          const sideKey = `${slot.aisle_key}/${slot.side}`;
+          if ((taken.get(sideKey) ?? 0) >= wanted) {
+            count(audit.rejected_by_reason, `${rule.id}:fill`);
+            continue;
+          }
+          const params = carParams(rule, identity);
+          const dims = carBodyGeometry(params.body);
+          const footprint = { x_m: dims.width_m, z_m: dims.length_m };
+          if (footprint.z_m > slot.depth_m - LOT_BACK_GAP_M) {
+            count(audit.rejected_by_reason, `${rule.id}:too_long`);
+            continue;
+          }
+          const center = add(slot.entry, scale(slot.outward, slot.depth_m - LOT_BACK_GAP_M - footprint.z_m / 2));
+          const headIn = hashUnit(seed, identity, "head_in") < rule.head_in;
+          const jitter = (hashUnit(seed, identity, "yaw") - 0.5) * LOT_YAW_JITTER_RAD * 2;
+          const base = headIn ? slot.outward : scale(slot.outward, -1);
+          const facing = [base[0] * Math.cos(jitter) - base[1] * Math.sin(jitter), base[0] * Math.sin(jitter) + base[1] * Math.cos(jitter)];
+          const rest = fit(center, facing, footprint, "bay", params.body);
+          if (rest.problem) {
+            count(audit.rejected_by_reason, `${rule.id}:${rest.problem}`);
+            continue;
+          }
+          addCar(zone, rule, cell, center, facing, params, footprint, rest);
+          taken.set(sideKey, (taken.get(sideKey) ?? 0) + 1);
+        }
+        audit.bays = Object.fromEntries([...taken.entries()].sort());
       } else if (rule.pattern === "lot_stalls") {
         const near = buildings.items.find((item) => item.key === rule.near_key);
         invariant(near, `Street clutter lot rule names ${rule.near_key}, which is not a building`);
@@ -895,7 +1009,7 @@ export function placeStreetClutter({
           // The painted stalls where the street ground has them, else stalls
           // along the lot's mapped aisles, else along its edges.
           let layout = "painted";
-          let slots = site.stalls.filter((slot) => inLot(middleOf(slot)));
+          let slots = site.stalls.filter((slot) => slot.kind !== "bay" && inLot(middleOf(slot)));
           if (slots.length === 0) {
             layout = "aisles";
             // Its parking aisles, and a service road with at least 10 m inside it.
@@ -926,11 +1040,11 @@ export function placeStreetClutter({
           };
           // The footprints of the cars placed in this lot so far.
           const parked = [];
-          for (const { slot, cell, identity } of ranked) {
-            if (placed >= entry.cars) break;
+          // Tries one stall; true when a car now stands in it.
+          const tryStall = ({ slot, cell, identity }) => {
             if (barredIds.has(`scatter:${zone.id}:${rule.id}:${cell}`)) {
               reject_("shuts_ground_in");
-              continue;
+              return false;
             }
             const params = carParams(rule, identity);
             const dims = carBodyGeometry(params.body);
@@ -938,7 +1052,7 @@ export function placeStreetClutter({
             const backGap = footprint.z_m > slot.depth_m - LOT_BACK_GAP_M ? LOT_LONG_BACK_GAP_M : LOT_BACK_GAP_M;
             if (footprint.z_m - (slot.depth_m - backGap) > LOT_OVERHANG_M) {
               reject_("too_long");
-              continue;
+              return false;
             }
             // Centred in its stall and nearly square to it: neighbours in a row
             // then stand a stall's spacing less their half widths apart (0.67 to
@@ -951,20 +1065,44 @@ export function placeStreetClutter({
             const box = { center, front: facing, half_length: footprint.z_m / 2 + LOT_CAR_CLEAR_M / 2, half_width: footprint.x_m / 2 + LOT_CAR_CLEAR_M / 2 };
             if (parked.some((other) => boxesOverlap(box, other))) {
               reject_("car");
-              continue;
+              return false;
             }
             const rest = fit(center, facing, footprint, "lot", params.body, lot);
             if (rest.problem) {
               reject_(rest.problem);
-              continue;
+              return false;
             }
             if (trapGap(center, facing, footprint)) {
               reject_("trap_gap");
-              continue;
+              return false;
             }
             addCar(zone, rule, cell, center, facing, params, footprint, rest);
             parked.push(box);
-            placed += 1;
+            return true;
+          };
+          const shares = (entry.focus_xz ?? []).filter((point) => point.length === 3);
+          if (shares.length > 0) {
+            // Each focus point takes its share from the free stalls nearest it.
+            const used = new Set();
+            for (const [fx, fz, share] of shares) {
+              const order = ranked.map((item) => {
+                const middle = toWorld(middleOf(item.slot));
+                return { ...item, near: Math.hypot(fx - middle[0], fz - middle[1]) + LOT_PRIORITY_JITTER_M * hashUnit(seed, item.identity, "priority") };
+              }).sort((left, right) => left.near - right.near || (left.cell < right.cell ? -1 : left.cell > right.cell ? 1 : 0));
+              let here = 0;
+              for (const item of order) {
+                if (here >= share) break;
+                if (used.has(item.cell)) continue;
+                used.add(item.cell);
+                if (tryStall(item)) here += 1;
+              }
+              placed += here;
+            }
+          } else {
+            for (const item of ranked) {
+              if (placed >= entry.cars) break;
+              if (tryStall(item)) placed += 1;
+            }
           }
           audit.lots[entry.source_key] = { layout, stalls: slots.length, cars: entry.cars, placed, rejected };
         }

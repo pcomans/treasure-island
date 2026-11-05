@@ -74,7 +74,9 @@ import {
   fenceHeight, fenceParamsError, GATE_LEAF_LIFT_M, gateLeaves, STREET_FENCE_BANNER_TYPES, STREET_FENCE_GATE_HINGES, STREET_FENCE_GATE_STYLES, STREET_FENCE_GATED_TYPES, STREET_FENCE_INSIDE,
   STREET_FENCE_TYPES,
 } from "./lib/street-fence-generation.mjs";
-import { MAX_LEG_DROP_M, MAX_REST_TILT_RAD, restTilt, STREET_FURNITURE_FEET, STREET_FURNITURE_PROPS } from "./lib/street-furniture-generation.mjs";
+import {
+  BIKE_RACK_HOOP_SPACING_M, BIKE_RACK_MAX_HOOPS, MAX_LEG_DROP_M, MAX_REST_TILT_RAD, restTilt, STREET_FURNITURE_FEET, STREET_FURNITURE_PROPS, streetFurnitureFootprint,
+} from "./lib/street-furniture-generation.mjs";
 import { YARD_KIT_KEYS, YARD_KIT_PARTS, YARD_KIT_PROPS, YARD_MAX_FLOAT_M, yardMaxSink, yardPropFootprint, yardPropParamsError, yardPropRests, yardRestGaps } from "./lib/street-yard-kit.mjs";
 import { BERM_MODULE, BERM_SPECS, RIDGE_MODULE, yardKitMeshes } from "./lib/street-yard-meshes.mjs";
 import { isDeckRow, isMooredRow, isYardRow, MOORED_PROP_VARIANTS } from "./lib/street-yard-generation.mjs";
@@ -1000,6 +1002,17 @@ function validatePropRest(row, groundAt) {
       const ground = groundAt(point);
       const tyre = base - Math.tan(params.pitch) * z - Math.tan(params.roll) * x + params.twist * Math.sign(x) * Math.sign(z);
       rests(ground ? tyre - ground.y : null, `${name} tyre`, point);
+    }
+  } else if (row.prop === "bike_rack" && params.hoops !== undefined) {
+    // A row of bike-rack hoops rests at every hoop (along its local Z, centred)
+    // and carries the row's rectangle as its footprint.
+    invariant(Number.isInteger(params.hoops) && params.hoops > 1 && params.hoops <= BIKE_RACK_MAX_HOOPS
+      && row.footprint_m?.z_m === streetFurnitureFootprint("bike_rack", params).z_m, `${row.id} bike rack hoops or footprint are invalid`);
+    for (let index = 0; index < params.hoops; index += 1) {
+      const offset = BIKE_RACK_HOOP_SPACING_M * (index - (params.hoops - 1) / 2);
+      const point = [row.position_m[0] + Math.sin(row.yaw_radians) * offset, row.position_m[2] + Math.cos(row.yaw_radians) * offset];
+      const ground = groundAt(point);
+      rests(ground ? base - ground.y : null, `bike_rack hoop ${index}`, point);
     }
   } else if (row.layer === "furniture" || ANCHORED_CLUTTER.includes(row.prop)) {
     const point = [row.position_m[0], row.position_m[2]];

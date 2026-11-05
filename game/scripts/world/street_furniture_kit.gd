@@ -66,6 +66,9 @@ const CHAIR_LEG_X := 0.3
 const BIN_STEEL := Color(0.42, 0.43, 0.44)
 ## Black powder-coated steel (the Mersea lot's slatted can).
 const BIN_BLACK := Color(0.07, 0.075, 0.08)
+## A bike rack's hoops (params.hoops): at most this many, this far apart along Z.
+const BIKE_RACK_MAX_HOOPS := 10
+const BIKE_RACK_HOOP_SPACING_M := 0.9
 ## Waste basket styles (prop_params.style).
 const WASTE_BASKET_STYLES := ["steel", "timber", "black_slat"]
 const RACK_DARK := Color(0.2, 0.17, 0.14)
@@ -256,8 +259,10 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 			_piece(result, chair_key, func(b: Builder) -> void: _adirondack_chair(b, drops), rest, _plastic)
 			_box_shape(result, Vector3(0.74, 0.6, 0.84), Vector3(0.0, 0.3, 0.0), rest)
 		"bike_rack":
-			_piece(result, "bike_rack", func(b: Builder) -> void: _bike_rack(b))
-			_box_shape(result, Vector3(0.78, 0.86, 0.06), Vector3(0.0, 0.43, 0.0))
+			# A row of hoops (params.hoops, OSM capacity / 2) along local Z, 0.9 m apart; one box for the row.
+			var hoops := clampi(roundi(_number(params, "hoops", 1.0)), 1, BIKE_RACK_MAX_HOOPS)
+			_piece(result, "bike_rack_h%d" % hoops, func(b: Builder) -> void: _bike_rack(b, hoops))
+			_box_shape(result, Vector3(0.78, 0.86, 0.06 + BIKE_RACK_HOOP_SPACING_M * float(hoops - 1)), Vector3(0.0, 0.43, 0.0))
 		"canopy_of_sky":
 			_piece(result, "canopy_of_sky_frame", func(b: Builder) -> void: _canopy_frame(b))
 			_piece(result, "canopy_of_sky_discs", func(b: Builder) -> void: _canopy_discs(b), Transform3D.IDENTITY, _discs)
@@ -772,16 +777,18 @@ static func _frame(x_axis: Vector3, y_axis: Vector3) -> Basis:
 
 ## An inverted-U bike rack ("staple") of dark painted tube, its loop along X
 ## (Ave of the Palms at Johnson St, Nov 2025).
-func _bike_rack(b: Builder) -> void:
-	var path := PackedVector3Array([Vector3(-0.36, -0.1, 0), Vector3(-0.36, 0.62, 0)])
-	var radii := PackedFloat32Array([0.026, 0.026])
-	for step in range(1, 7):
-		var angle := PI - PI * float(step) / 6.0
-		path.append(Vector3(cos(angle) * 0.36, 0.62 + sin(angle) * 0.2, 0.0))
+func _bike_rack(b: Builder, hoops: int) -> void:
+	for hoop in hoops:
+		var z := BIKE_RACK_HOOP_SPACING_M * (float(hoop) - float(hoops - 1) * 0.5)
+		var path := PackedVector3Array([Vector3(-0.36, -0.1, z), Vector3(-0.36, 0.62, z)])
+		var radii := PackedFloat32Array([0.026, 0.026])
+		for step in range(1, 7):
+			var angle := PI - PI * float(step) / 6.0
+			path.append(Vector3(cos(angle) * 0.36, 0.62 + sin(angle) * 0.2, z))
+			radii.append(0.026)
+		path.append(Vector3(0.36, -0.1, z))
 		radii.append(0.026)
-	path.append(Vector3(0.36, -0.1, 0))
-	radii.append(0.026)
-	b.tube(path, radii, 8, RACK_DARK, CELL_WHITE, false, false)
+		b.tube(path, radii, 8, RACK_DARK, CELL_WHITE, false, false)
 
 
 # ---------------------------------------------------------------- Cityside Park

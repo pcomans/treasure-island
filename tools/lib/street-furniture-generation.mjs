@@ -48,6 +48,13 @@ export const STREET_FURNITURE_PROPS = Object.freeze({
   stop_sign: "stop_sign",
   waste_basket: "waste_basket",
 });
+// A bike rack's row: at most this many hoops, this far apart along its local Z,
+// centred on its origin (street_furniture_kit.gd).
+export const BIKE_RACK_MAX_HOOPS = 10;
+export const BIKE_RACK_HOOP_SPACING_M = 0.9;
+// Each hoop's legs reach 0.1 m below the rack's origin: the ground under every
+// hoop stays this close to the ground at its centre (m).
+const BIKE_RACK_LEVEL_M = 0.06;
 // Plan sizes {x_m, z_m} (along the prop's local X and Z) of the kit props that
 // are longer than their kind's radius covers; set pieces carry them as their
 // footprint for the shared mask.
@@ -67,6 +74,7 @@ export const STREET_FURNITURE_FOOTPRINTS = Object.freeze({
 export function streetFurnitureFootprint(prop, params) {
   const number = (key, fallback, low, high) => Math.min(high, Math.max(low, isFiniteNumber(params?.[key]) ? params[key] : fallback));
   if (prop === "bench_long") return { x_m: roundCoordinate(number("length_m", 2.4, 1.2, 6.0) + 0.1), z_m: 0.7 };
+  if (prop === "bike_rack") return { x_m: 0.8, z_m: roundCoordinate(0.12 + BIKE_RACK_HOOP_SPACING_M * (Math.round(number("hoops", 1, 1, BIKE_RACK_MAX_HOOPS)) - 1)) };
   if (prop === "picnic_table_long") return { x_m: roundCoordinate(number("length_m", 6.1, 2.0, 7.0) + 0.1), z_m: 2.1 };
   if (prop === "log_seat") {
     const size = number("size_m", 3.2, 0.5, 5.0);
@@ -106,7 +114,11 @@ export const STREET_FURNITURE_PATTERNS = Object.freeze(["kerb", "signalized_cros
 // A bench OSM tags backless is the park's backless bench on its plinth.
 const OSM_PROPS = Object.freeze({
   bench: (tags) => (tags.backrest === "no" ? { prop: "bench_long", params: { length_m: 1.8, back: false } } : { prop: "bench_park", params: {} }),
-  bicycle_parking: () => ({ prop: "bike_rack", params: {} }),
+  // A row of hoops for the bikes OSM's capacity counts, two to a hoop (one hoop takes no params).
+  bicycle_parking: (tags) => {
+    const hoops = Math.min(BIKE_RACK_MAX_HOOPS, Math.ceil((Number.parseInt(tags.capacity ?? "2", 10) || 2) / 2));
+    return { prop: "bike_rack", params: hoops > 1 ? { hoops } : {} };
+  },
   bus_stop: (tags) => (tags.shelter === "yes" ? null : { prop: "bus_stop_sign", params: {} }),
   fire_hydrant: () => ({ prop: "hydrant", params: {} }),
   stop_sign: (tags) => ({ prop: "stop_sign", params: { all_way: tags.stop === "all" } }),
@@ -274,7 +286,7 @@ export function placeStreetFurniture({
 }) {
   const pilotShapes = zoneShapes.filter(({ zone }) => zone.pilot);
   const inPilot = (xz) => pilotShapes.some(({ contains }) => contains(xz));
-  const audit = { osm_props: 0, osm_unbuilt: [], stops_moved: 0, rules: {}, rejected_by_reason: {} };
+  const audit = { osm_props: 0, osm_unbuilt: [], racks_as_one_hoop: [], stops_moved: 0, rules: {}, rejected_by_reason: {} };
   const count = (table, key) => {
     table[key] = (table[key] ?? 0) + 1;
   };
@@ -376,7 +388,7 @@ export function placeStreetFurniture({
   candidates.sort((left, right) => (left.kind === "stop_sign" && !stopBar.has(left.source_id)) - (right.kind === "stop_sign" && !stopBar.has(right.source_id)));
   for (const row of candidates) {
     const at = [row.position_m[0], row.position_m[2]];
-    const choice = OSM_PROPS[row.kind]?.(row.tags ?? {});
+    let choice = OSM_PROPS[row.kind]?.(row.tags ?? {});
     if (!choice) {
       audit.osm_unbuilt.push({ id: row.id, kind: row.kind });
       continue;
@@ -462,6 +474,40 @@ export function placeStreetFurniture({
       occupy(row.id, row.kind, xz);
       stopSigns.push({ id: row.id, junction, road_key: road.source_key, travel });
       audit.stops_moved += 1;
+    }
+    if (row.kind === "bicycle_parking" && choice.params.hoops > 1) {
+      // A row of hoops runs along the road, each hoop square to it: a quarter
+      // turn from facing the road (the kit draws the row along its local Z).
+      // Each hoop must pass the site check and stand on ground level with the
+      // row's centre; a row that does not, or has no road to face, is one hoop.
+      const { hoops } = choice.params;
+      const xz = [row.position_m[0], row.position_m[2]];
+      const turned = row.yaw_radians === null ? null : row.yaw_radians + Math.PI / 2;
+      const yaw = turned === null ? null : roundCoordinate(Math.atan2(Math.sin(turned), Math.cos(turned)));
+      // Godot yaw about +Y: local Z is (sin yaw, cos yaw) in world x, z.
+      const hoopAt = (index) => round2([
+        xz[0] + Math.sin(yaw) * BIKE_RACK_HOOP_SPACING_M * (index - (hoops - 1) / 2),
+        xz[1] + Math.cos(yaw) * BIKE_RACK_HOOP_SPACING_M * (index - (hoops - 1) / 2),
+      ]);
+      const visibleY = (point) => grounded(point).y + surfaceAt(point).bias_m;
+      const centreY = visibleY(xz);
+      const ignore = new Set([row.id]);
+      let problem = yaw === null ? "no road to face" : null;
+      for (let index = 0; index < hoops && !problem; index += 1) {
+        const point = hoopAt(index);
+        problem = reject(row.kind, point, { ignore }) ?? (Math.abs(visibleY(point) - centreY) > BIKE_RACK_LEVEL_M ? "uneven ground" : null);
+      }
+      if (problem) {
+        audit.racks_as_one_hoop.push({ id: row.id, hoops, reason: problem });
+        choice = { prop: choice.prop, params: {} };
+      } else {
+        row.yaw_radians = yaw;
+        row.yaw_source = `${row.yaw_source}+row_along_road`;
+        row.footprint_m = streetFurnitureFootprint("bike_rack", choice.params);
+        const index = occupied.findIndex((item) => item.id === row.id);
+        if (index >= 0) occupied.splice(index, 1);
+        occupied.push({ id: row.id, points: [hoopAt(0), hoopAt(hoops - 1)], radius_m: kinds[row.kind].footprint_radius_m });
+      }
     }
     row.prop = choice.prop;
     row.prop_params = choice.params;
