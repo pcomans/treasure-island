@@ -312,7 +312,8 @@ void fragment() {
 		albedo *= mix(contact_dark, 1.0, smoothstep(0.0, contact_height, share));
 		albedo *= 1.0 + top_bleach * smoothstep(0.55, 1.0, share) * max(n.y, 0.0);
 	} else if (surface == 0) {
-		float stand_in = smoothstep(underlay_fade_m.x, underlay_fade_m.y, length(world_position - MAIN_CAM_INV_VIEW_MATRIX[3].xyz));
+		// The rendering camera is the main camera here (no colour in a shadow pass).
+		float stand_in = smoothstep(underlay_fade_m.x, underlay_fade_m.y, distance_m);
 		albedo *= tone_tint(tone) * mix(gap_brightness, band_brightness, stand_in);
 	}
 	if (!wood) {
