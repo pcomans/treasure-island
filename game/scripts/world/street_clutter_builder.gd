@@ -11,8 +11,16 @@ extends RefCounted
 ## Every item has a box on the street-prop physics layer: the player collides
 ## with it and the spray ray stops on it (never a receiver), while the camera arm
 ## ignores it, as for the street furniture.
+## The yard kit's props (street_yard_kit.gd: containers, container walls, shed
+## rows, yard vehicles, fabric sheds, equipment, piles, berms, pole flags and
+## barges) are built the same way from their rows: each row becomes the kit's
+## pieces (one MultiMesh instance each, in the yard material or a piece's own,
+## as a flag's, in the yard kit's own cells
+## and hand-over distance) and collision shapes, turned by its yaw and resting
+## on the ground by its optional pitch, roll and lift.
 
 const KIT := preload("res://game/scripts/world/street_clutter_kit.gd")
+const YARD_KIT := preload("res://game/scripts/world/street_yard_kit.gd")
 ## Render cell (m): this share of the near-mesh distance, as the street
 ## furniture sizes its cells from its ranges, so an item's own hand-over stays
 ## close to LOD_NEAR_M wherever it stands in its cell.
@@ -30,9 +38,10 @@ static func _cell(position: Array, size_m: float) -> String:
 
 func build(document: Dictionary) -> Dictionary:
 	var kit := KIT.new()
+	var yard: Variant = null
 	var root := Node3D.new()
 	root.name = "GeneratedStreetClutter"
-	# batch key -> {meshes, range_m, shadow, cells: {cell -> [[Transform3D, Color]]}}
+	# batch key -> {meshes, range_m, shadow, material, cells: {cell -> [[Transform3D, Color]]}}
 	var batches: Dictionary = {}
 	var shapes: Dictionary = {}
 	var prop_counts: Dictionary = {}
@@ -43,6 +52,16 @@ func build(document: Dictionary) -> Dictionary:
 			continue
 		var prop := str(row.prop)
 		var params: Variant = row.get("prop_params", {})
+		if YARD_KIT.is_prop(prop):
+			if yard == null:
+				yard = YARD_KIT.new()
+			var added := _add_yard_row(yard, row, prop, params if params is Dictionary else {}, batches, shapes)
+			if added != "":
+				root.free()
+				return {"ok": false, "code": "street_clutter_prop", "message": "%s: %s" % [row.get("id", "?"), added], "source_keys": []}
+			prop_counts[prop] = int(prop_counts.get(prop, 0)) + 1
+			items += 1
+			continue
 		var parts := kit.parts(prop, params if params is Dictionary else {})
 		if not parts.ok:
 			root.free()
@@ -61,7 +80,7 @@ func build(document: Dictionary) -> Dictionary:
 		var placement := Transform3D(basis, Vector3(float(position[0]), float(position[1]) + float(surface.get("bias_m", 0.0)) + lift, float(position[2])))
 		var key := str(parts.mesh_key)
 		if not batches.has(key):
-			batches[key] = {"meshes": parts.meshes, "range_m": float(parts.range_m), "shadow": bool(parts.shadow), "cells": {}}
+			batches[key] = {"meshes": parts.meshes, "range_m": float(parts.range_m), "shadow": bool(parts.shadow), "material": kit.material(), "lod_near_m": KIT.LOD_NEAR_M, "cells": {}}
 		var cells: Dictionary = batches[key].cells
 		var cell := _cell(position, CELL_M)
 		if not cells.has(cell):
@@ -105,15 +124,15 @@ func build(document: Dictionary) -> Dictionary:
 				var instance := MultiMeshInstance3D.new()
 				instance.name = "%s_lod%d__c%s" % [key, level, cell]
 				instance.multimesh = multimesh
-				instance.material_override = kit.material()
+				instance.material_override = batch.material
 				instance.layers = RENDER_WORLD_VISIBLE
 				instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON if bool(batch.shadow) else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 				# No margins: a margin is hysteresis, which would let both levels
 				# (or neither) draw for a moment at the hand-over.
 				if level == 0:
-					instance.visibility_range_end = KIT.LOD_NEAR_M
+					instance.visibility_range_end = float(batch.lod_near_m)
 				else:
-					instance.visibility_range_begin = KIT.LOD_NEAR_M
+					instance.visibility_range_begin = float(batch.lod_near_m)
 					instance.visibility_range_end = float(batch.range_m) + ceilf(slack)
 				instance.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_DISABLED
 				instance.set_meta("street_detail_layer", "clutter")
@@ -153,3 +172,36 @@ func build(document: Dictionary) -> Dictionary:
 		"multimesh_batches": multimeshes,
 		"collision_shapes": shape_count,
 	}
+
+
+## Adds one yard-kit row's pieces to the render batches and its shapes to the
+## physics cells; "" or why it can't be built.
+func _add_yard_row(yard: Variant, row: Dictionary, prop: String, params: Dictionary, batches: Dictionary, shapes: Dictionary) -> String:
+	var footprint: Variant = row.get("footprint_m", {})
+	var built: Dictionary = yard.pieces(prop, params, hash(str(row.id)) & 0x7fffffff, footprint if footprint is Dictionary else {})
+	if not built.ok:
+		return str(built.message)
+	var position: Array = row.position_m
+	var surface: Dictionary = row.get("surface", {})
+	var yaw_value: Variant = row.get("yaw_radians", null)
+	var yaw := float(yaw_value) if yaw_value is float or yaw_value is int else 0.0
+	# Its rest on uneven ground: pitch raises the front (-Z), roll the left side, lift the whole.
+	var basis := Basis(Vector3.UP, yaw) * Basis(Vector3.RIGHT, float(params.get("pitch", 0.0))) * Basis(Vector3.BACK, -float(params.get("roll", 0.0)))
+	var placement := Transform3D(basis, Vector3(float(position[0]), float(position[1]) + float(surface.get("bias_m", 0.0)) + float(params.get("lift", 0.0)), float(position[2])))
+	for piece: Dictionary in built.pieces:
+		var key := "yard:%s" % piece.mesh_key
+		if not batches.has(key):
+			batches[key] = {"meshes": piece.meshes, "range_m": float(built.range_m), "shadow": bool(built.shadow), "material": piece.get("material", yard.material()), "lod_near_m": float(built.lod_near_m), "cells": {}}
+		var world: Transform3D = placement * (piece.transform as Transform3D)
+		var cells: Dictionary = batches[key].cells
+		var cell := _cell([world.origin.x, world.origin.y, world.origin.z], float(built.cell_m))
+		if not cells.has(cell):
+			cells[cell] = []
+		(cells[cell] as Array).append([world, piece.custom])
+	for entry: Dictionary in built.shapes:
+		var shape_world: Transform3D = placement * (entry.transform as Transform3D)
+		var physics_cell := _cell([shape_world.origin.x, shape_world.origin.y, shape_world.origin.z], PHYSICS_CELL_M)
+		if not shapes.has(physics_cell):
+			shapes[physics_cell] = []
+		(shapes[physics_cell] as Array).append({"id": str(row.id), "shape": entry.shape, "transform": shape_world})
+	return ""

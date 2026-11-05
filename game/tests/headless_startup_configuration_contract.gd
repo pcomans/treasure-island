@@ -2,6 +2,7 @@ extends SceneTree
 
 const EXPECTED_AUDIO_DRIVER := "Dummy"
 const CATALOG_PATH := "res://discovery/facades/facade-recognition-catalog.json"
+const DEMOLISHED_PATH := "res://tools/config/demolished-buildings.json"
 
 
 func _initialize() -> void:
@@ -24,12 +25,33 @@ func _initialize() -> void:
 	if not (catalog_value is Dictionary):
 		_fail("The building catalog did not parse.")
 		return
-	# Every one of the 213 buildings has exactly one recognition status, and the
-	# accepted ones carry the reviewer verdict they were accepted on.
+	var demolished_value: Variant = JSON.parse_string(FileAccess.get_file_as_string(DEMOLISHED_PATH))
+	if not (demolished_value is Dictionary) or not (demolished_value as Dictionary).get("entries", null) is Array:
+		_fail("The demolished-buildings config did not parse.")
+		return
+	var listed: Dictionary = {}
+	for entry: Dictionary in (demolished_value as Dictionary).entries:
+		listed[str(entry.get("source_key", ""))] = true
+	# Every building has exactly one recognition status: accepted ones carry the
+	# reviewer verdict they were accepted on, and demolished ones are exactly the
+	# buildings the demolished-buildings config leaves out of the world. The score
+	# counts the accepted buildings among those still standing.
 	var units := (catalog_value as Dictionary).get("units", []) as Array
 	var accepted := 0
+	var standing := 0
 	for unit: Dictionary in units:
 		var status := str((unit.get("claim_status", {}) as Dictionary).get("reference_recognizable", ""))
+		var key := str(unit.get("anchor_source_key", ""))
+		if (status == "demolished") != listed.has(key):
+			_fail("%s: catalog status '%s' disagrees with %s." % [unit.get("unit_id", "?"), status, DEMOLISHED_PATH])
+			return
+		if status == "demolished":
+			if not unit.get("demolition", null) is Dictionary:
+				_fail("%s is demolished without its demolition record." % unit.get("unit_id", "?"))
+				return
+			listed.erase(key)
+			continue
+		standing += 1
 		if status == "accepted":
 			accepted += 1
 			if (unit.get("acceptance_records", []) as Array).is_empty():
@@ -38,10 +60,13 @@ func _initialize() -> void:
 		elif status != "not_evaluated":
 			_fail("%s has unknown recognition status '%s'." % [unit.get("unit_id", "?"), status])
 			return
-	if units.size() != 213:
-		_fail("The catalog lists %d buildings, not 213." % units.size())
+	if not listed.is_empty():
+		_fail("Demolished buildings missing from the catalog: %s" % ", ".join(PackedStringArray(listed.keys())))
 		return
-	print("PASS: Dummy audio selected before AudioServer initialization; catalog score %d/213" % accepted)
+	if standing == 0:
+		_fail("The catalog lists no standing buildings.")
+		return
+	print("PASS: Dummy audio selected before AudioServer initialization; catalog score %d/%d (%d demolished)" % [accepted, standing, units.size() - standing])
 	quit(0)
 
 

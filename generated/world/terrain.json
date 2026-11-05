@@ -1,13 +1,13 @@
 {
   "building_foundations": {
     "burial_margin_m": 0.02,
-    "exterior_segments": 4975,
-    "flat_roof_cells": 214,
+    "exterior_segments": 4773,
+    "flat_roof_cells": 201,
     "maximum_height_deviation_m": 0,
     "maximum_positive_gap_m": 0,
     "maximum_roof_elevation_range_m": 0,
     "minimum_embed_m": -4.062,
-    "sample_points": 14925,
+    "sample_points": 14319,
     "shared_segments": 3,
     "tolerance_m": 0.001,
     "water_datum_m": 0,

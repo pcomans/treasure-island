@@ -26,7 +26,10 @@
 // parked car, tree trunk or the island's edge covers, at the stock capsule's
 // reach, must all connect to the open ground beyond, so a player anywhere near a
 // fence can walk out without the jetpack. Grass clumps, perennials and shrubs (the
-// vegetation props without a trunk) have no collision.
+// vegetation props without a trunk) have no collision. Each yard (a zone with yard
+// rules, tools/lib/street-yard-generation.mjs) is flooded the same way over its
+// whole polygon, walls, shed rows, containers and vehicles included, so no yard
+// shuts walkable ground in (its gates stay open).
 
 import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -43,6 +46,7 @@ import {
   streetDetailPieces,
 } from "./lib/street-detail-generation.mjs";
 import { unpackPlantingRows } from "./lib/street-planting-generation.mjs";
+import { isYardZone } from "./lib/street-yard-generation.mjs";
 import { STREET_VEGETATION_PROPS } from "./lib/street-vegetation-generation.mjs";
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -67,7 +71,7 @@ function main() {
     const kind = STREET_DETAIL_KINDS[row.kind];
     if (row.status !== "placed" || !STREET_DETAIL_LAYERS.includes(row.layer) || kind.overhead) continue;
     streetDetailPieces(row).forEach((piece, index) => {
-      items.push({ id: row.fence ? `${row.id} run ${index}` : row.id, layer: row.layer, points: piece.points, radius: piece.radius });
+      items.push({ id: row.fence ? `${row.id} ${piece.label ?? index}` : row.id, layer: row.layer, points: piece.points, radius: piece.radius });
     });
   }
 
@@ -115,7 +119,7 @@ function main() {
   const byLayer = STREET_DETAIL_LAYERS.map((layer) => `${items.filter((item) => item.layer === layer).length} ${layer}`).join(", ");
   const closest = Object.entries(minimum).map(([name, value]) => `${name} ${value.toFixed(2)} m`).join(", ");
   console.log(`PASS: street detail with all layers on (${byLayer}) clears ${stairs} stair flights with their doors and approaches, the spawn, its walk-forward line and the QA corridors; closest: ${closest}`);
-  console.log(`PASS: ${pockets.fences} built fences shut no walkable ground in (${pockets.cells} cells of ${POCKET_CELL_M} m checked)`);
+  console.log(`PASS: ${pockets.fences} built fences and ${pockets.yards} yards shut no walkable ground in (${pockets.cells} cells of ${POCKET_CELL_M} m checked)`);
 }
 
 // Ground a built fence shuts in. Around each built fence (its runs plus a margin)
@@ -125,9 +129,17 @@ function main() {
 const POCKET_CELL_M = 0.2;
 const POCKET_MARGIN_M = 20;
 function fencedPockets(manifest, detail) {
-  const fences = detail.rows.filter((row) => row.status === "placed" && row.fence && row.prop != null);
+  // A built fence's runs and open gate leaves (a gate-only row, as between two
+  // container walls, has leaves but no run).
+  const fences = detail.rows.filter((row) => row.status === "placed" && row.fence && row.prop != null && (row.fence.runs.length > 0 || (row.fence.gates?.length ?? 0) > 0));
+  const yards = loadStreetDetailZones(projectRoot).zones.filter(isYardZone);
+  // The regions flooded: around each built fence's runs and gate leaves, and over each yard.
+  const regions = [
+    ...fences.map((fence) => ({ id: fence.id, points: streetDetailPieces(fence).flatMap((piece) => piece.points) })),
+    ...yards.map((zone) => ({ id: `yard ${zone.id}`, points: zone.shape.points_xz })),
+  ];
   const failures = [];
-  if (fences.length === 0) return { fences: 0, cells: 0, failures };
+  if (regions.length === 0) return { fences: 0, yards: 0, cells: 0, failures };
   const roofs = [];
   for (const entry of manifest.chunks) {
     for (const record of readJson(resolve(worldRoot, entry.path)).records) {
@@ -155,8 +167,8 @@ function fencedPockets(manifest, detail) {
   };
   const onIsland = (point) => manifest.playable_boundary.components.some((component) => inRing(point, component.outer) && !component.holes.some((hole) => inRing(point, hole)));
   let cells = 0;
-  for (const fence of fences) {
-    const all = streetDetailPieces(fence).flatMap((piece) => piece.points);
+  for (const region of regions) {
+    const all = region.points;
     const x0 = Math.min(...all.map((point) => point[0])) - POCKET_MARGIN_M;
     const z0 = Math.min(...all.map((point) => point[1])) - POCKET_MARGIN_M;
     const width = Math.ceil((Math.max(...all.map((point) => point[0])) + POCKET_MARGIN_M - x0) / POCKET_CELL_M);
@@ -210,10 +222,10 @@ function fencedPockets(manifest, detail) {
     // A single stray cell is grid noise in a corner; a capsule's footprint is not.
     const footprintCells = Math.ceil((Math.PI * PLAYER_CAPSULE_RADIUS_M ** 2) / POCKET_CELL_M ** 2);
     if (shut >= footprintCells) {
-      failures.push(`${fence.id} shuts ${(shut * POCKET_CELL_M ** 2).toFixed(1)} m2 of walkable ground in, e.g. at (${example.map((value) => value.toFixed(1)).join(", ")}); leave an opening`);
+      failures.push(`${region.id} shuts ${(shut * POCKET_CELL_M ** 2).toFixed(1)} m2 of walkable ground in, e.g. at (${example.map((value) => value.toFixed(1)).join(", ")}); leave an opening`);
     }
   }
-  return { fences: fences.length, cells, failures };
+  return { fences: fences.length, yards: yards.length, cells, failures };
 }
 
 function insideTriangle(point, [a, b, c]) {

@@ -4,7 +4,8 @@ extends RefCounted
 ## (tools/lib/street-fence-generation.mjs places them). One shared kit for every
 ## fence type: plain chain-link, chain-link with barbed wire (industrial),
 ## chain-link with a privacy windscreen and temporary chain-link panels
-## (construction), and a wood board fence (housing).
+## (construction), a wood board fence (housing), and chain-link with privacy
+## slats woven through it, with its gates standing open (storage yards).
 ##
 ## Metal parts are tubes and boxes of the street-furniture kit's builder, sharing
 ## its galvanised atlas cell; fabric, screens and boards are textured quads tiled
@@ -35,6 +36,7 @@ const WOOD := preload("res://game/resources/textures/world/street/street_fence_w
 ## half thickness of each bay's collision box: panels are jittered at their
 ## joints by up to PANEL_JITTER_M, which stays within the clearance.
 const TYPES := {
+	"chain_link_slatted": {"height_m": 1.83, "half_thickness_m": 0.06, "collision_half_m": 0.06},
 	"chain_link": {"height_m": 1.83, "half_thickness_m": 0.06, "collision_half_m": 0.06},
 	"chain_link_barbed": {"height_m": 2.13, "half_thickness_m": 0.25, "collision_half_m": 0.06},
 	"chain_link_screened": {"height_m": 1.83, "half_thickness_m": 0.06, "collision_half_m": 0.06},
@@ -49,9 +51,30 @@ const INSIDE := ["left", "right", "center"]
 ## visible through it. The knitted fabric is translucent, so sunlight through
 ## it lights the shaded face (SCREEN_BACKLIGHT, about half the sun in linear
 ## terms). The black tint leans blue because the island's sun and ambient light
-## are warm.
-const SCREENS := {"black": Color(0.32, 0.32, 0.43), "green": Color(0.34, 0.5, 0.4)}
-const SCREEN_OPACITY := 0.92
+## are warm. Orange is the open safety mesh of construction sites (9th St,
+## Sep 2025), bright and more see-through.
+const SCREENS := {"black": Color(0.32, 0.32, 0.43), "green": Color(0.34, 0.5, 0.4), "orange": Color(1.0, 0.46, 0.12)}
+const SCREEN_OPACITY := {"black": 0.92, "green": 0.92, "orange": 0.78}
+## A screen may stop below the fence top (screen_height_m), at least this tall.
+const SCREEN_MIN_M := 0.6
+## Privacy slat colours (sRGB, multiplied with the slat stripes), from the
+## photos: dark teal-green (9th St, Sep 2025; Avenue M, Mar 2025), brown
+## (12th St, Jul 2023), black.
+const SLATS := {"green": Color(0.19, 0.3, 0.29), "brown": Color(0.3, 0.26, 0.21), "black": Color(0.08, 0.08, 0.085)}
+## Slatted fences come 6 or 8 ft tall (tools/lib/street-fence-generation.mjs).
+const SLATTED_HEIGHTS := [1.83, 2.44]
+## A slat tile: eight slats across SLAT_TILE_M, one fabric height tall.
+const SLAT_TILE_M := 0.4
+## A gate leaf's collision half thickness (GATE_LEAF_HALF_M in
+## tools/lib/street-fence-generation.mjs, which the clearance checks read), and
+## how far its bottom rail stands over its post's foot (GATE_LEAF_LIFT_M, which
+## the validator holds the ground under the leaf to).
+const GATE_LEAF_HALF_M := 0.04
+const GATE_LEAF_LIFT_M := 0.05
+## Fence types that take open gate leaves, and banners (white sheets tied to
+## the fabric: Gate 5, Nov 2025).
+const GATED_TYPES := ["chain_link_slatted", "chain_link", "chain_link_screened"]
+const BANNER_COLOR := Color(0.9, 0.9, 0.88)
 const SCREEN_BACKLIGHT := Color(0.73, 0.73, 0.73)
 ## Visible ranges (m): a fence is long and low, so it reaches as far as a lamp pole.
 const RANGE_M := 260.0
@@ -84,6 +107,8 @@ var _barbed_shadow: ShaderMaterial
 var _wood: StandardMaterial3D
 var _screens: Dictionary = {}
 var _screen_shadow: StandardMaterial3D
+var _slats: Dictionary = {}
+var _banner: StandardMaterial3D
 
 
 func _init() -> void:
@@ -108,7 +133,7 @@ func _init() -> void:
 		var screen := StandardMaterial3D.new()
 		screen.resource_name = "street_fence_screen_" + colour
 		screen.albedo_texture = SCREEN
-		screen.albedo_color = Color(SCREENS[colour], SCREEN_OPACITY)
+		screen.albedo_color = Color(SCREENS[colour], float(SCREEN_OPACITY[colour]))
 		screen.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 		screen.depth_draw_mode = BaseMaterial3D.DEPTH_DRAW_ALWAYS
 		screen.roughness = 0.95
@@ -120,6 +145,32 @@ func _init() -> void:
 		# light through it, so the screens take no shadows.
 		screen.disable_receive_shadows = true
 		_screens[colour] = screen
+	# Privacy slats: opaque stripes, one slat per mesh column with a dark
+	# seam between, a little uneven in tone (a texture made here, no file).
+	var stripes := Image.create_empty(64, 16, false, Image.FORMAT_RGBA8)
+	for x in 64:
+		var slat := x / 8
+		var tone := 0.86 + 0.14 * float((slat * 37 + 11) % 7) / 6.0
+		for y in 16:
+			var seam := x % 8 == 7
+			var value := 0.32 if seam else tone * (0.97 + 0.03 * float((x * 13 + y * 7) % 5) / 4.0)
+			stripes.set_pixel(x, y, Color(value, value, value))
+	stripes.generate_mipmaps()
+	var stripe_texture := ImageTexture.create_from_image(stripes)
+	for colour: String in SLATS:
+		var slat_material := StandardMaterial3D.new()
+		slat_material.resource_name = "street_fence_slats_" + colour
+		slat_material.albedo_texture = stripe_texture
+		slat_material.albedo_color = SLATS[colour]
+		slat_material.roughness = 0.82
+		slat_material.cull_mode = BaseMaterial3D.CULL_DISABLED
+		slat_material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+		_slats[colour] = slat_material
+	_banner = StandardMaterial3D.new()
+	_banner.resource_name = "street_fence_banner"
+	_banner.albedo_color = BANNER_COLOR
+	_banner.roughness = 0.8
+	_banner.cull_mode = BaseMaterial3D.CULL_DISABLED
 	# Blended surfaces cast no shadow: an opaque, shadow-only copy of each screen does.
 	_screen_shadow = StandardMaterial3D.new()
 	_screen_shadow.resource_name = "street_fence_screen_shadow"
@@ -155,9 +206,35 @@ static func params_error(type: String, params: Variant) -> String:
 		return "unknown fence type %s" % type
 	if not params is Dictionary or str((params as Dictionary).get("inside", "")) not in INSIDE:
 		return "fence params need inside left, right or center"
-	if type == "chain_link_screened" and str((params as Dictionary).get("screen", "black")) not in SCREENS:
-		return "unknown screen colour %s" % (params as Dictionary).get("screen")
+	if type == "chain_link_screened":
+		if str((params as Dictionary).get("screen", "black")) not in SCREENS:
+			return "unknown screen colour %s" % (params as Dictionary).get("screen")
+		var screen_height: Variant = (params as Dictionary).get("screen_height_m", TYPES.chain_link_screened.height_m)
+		if not (screen_height is float or screen_height is int) or float(screen_height) < SCREEN_MIN_M or float(screen_height) > float(TYPES.chain_link_screened.height_m):
+			return "screen_height_m must be %.1f..%.2f" % [SCREEN_MIN_M, TYPES.chain_link_screened.height_m]
+	if type == "chain_link_slatted":
+		if str((params as Dictionary).get("slats", "")) not in SLATS:
+			return "slatted fence needs slats green, brown or black"
+		var height: Variant = (params as Dictionary).get("height_m", 1.83)
+		if not (height is float or height is int) or not SLATTED_HEIGHTS.any(func(value: float) -> bool: return is_equal_approx(value, float(height))):
+			return "slatted fence height_m must be 1.83 or 2.44"
 	return ""
+
+
+## The top of a screened fence's windscreen above the ground: its
+## screen_height_m, or just under the top rail.
+static func screen_top_of(params: Variant) -> float:
+	var full := float(TYPES.chain_link_screened.height_m) - 0.07
+	if params is Dictionary and (params as Dictionary).has("screen_height_m"):
+		return minf(full, float((params as Dictionary).screen_height_m))
+	return full
+
+
+## The height of a fence of this type with these params.
+static func height_of(type: String, params: Variant) -> float:
+	if type == "chain_link_slatted" and params is Dictionary and (params as Dictionary).has("height_m"):
+		return float((params as Dictionary).height_m)
+	return float(TYPES[type].height_m)
 
 
 ## Adds one run's geometry to the cell builders (cells: key -> builders, filled
@@ -170,8 +247,10 @@ func add_run(cells: Dictionary, cell_size_m: float, type: String, params: Dictio
 			return _panels(cells, cell_size_m, posts, side, seed)
 		"wood_privacy":
 			return _wood_fence(cells, cell_size_m, posts, side)
+		"chain_link_slatted":
+			return _slatted(cells, cell_size_m, posts, side, str(params.get("slats", "green")), height_of(type, params))
 		_:
-			return _chain_link(cells, cell_size_m, type, posts, side, str(params.get("screen", "black")))
+			return _chain_link(cells, cell_size_m, type, posts, side, str(params.get("screen", "black")), screen_top_of(params))
 
 
 ## The meshes of one cell's builders: "solid" (metal and boards, drawn with
@@ -190,6 +269,9 @@ func commit(cell: Dictionary) -> Dictionary:
 	for colour: String in SCREENS:
 		_add_surface(fabric, cell["screen_" + colour], _screens[colour])
 		_add_surface(shadow, cell["screen_" + colour], _screen_shadow)
+	for colour: String in SLATS:
+		_add_surface(solid, cell["slats_" + colour], _slats[colour])
+	_add_surface(solid, cell.banner, _banner)
 	return {
 		"solid": solid if solid.get_surface_count() > 0 else null,
 		"fabric": fabric if fabric.get_surface_count() > 0 else null,
@@ -218,6 +300,11 @@ func _cell(cells: Dictionary, cell_size_m: float, position: Vector3) -> Dictiona
 			"wood": Quads.new(),
 			"screen_black": Quads.new(),
 			"screen_green": Quads.new(),
+			"screen_orange": Quads.new(),
+			"slats_green": Quads.new(),
+			"slats_brown": Quads.new(),
+			"slats_black": Quads.new(),
+			"banner": Quads.new(),
 		}
 	return cells[key]
 
@@ -259,7 +346,7 @@ static func _bay_box(a: Vector3, b: Vector3, height: float, half_m: float) -> Di
 ## Chain-link on line posts with a top rail and a bottom tension wire; the
 ## screened type adds a windscreen on the inside, the barbed type angled arms
 ## with three strands of barbed wire leaning outward.
-func _chain_link(cells: Dictionary, cell_size_m: float, type: String, posts: PackedVector3Array, side: float, screen: String) -> Array[Dictionary]:
+func _chain_link(cells: Dictionary, cell_size_m: float, type: String, posts: PackedVector3Array, side: float, screen: String, screen_top: float) -> Array[Dictionary]:
 	var spec: Dictionary = TYPES[type]
 	var fabric_h := 1.83
 	var boxes: Array[Dictionary] = []
@@ -288,13 +375,16 @@ func _chain_link(cells: Dictionary, cell_size_m: float, type: String, posts: Pac
 		metal.tube(PackedVector3Array([a + Vector3(0, fabric_h - 0.02, 0), b + Vector3(0, fabric_h - 0.02, 0)]), PackedFloat32Array([0.021, 0.021]), 8, GALVANIZED, FURNITURE.CELL_METAL, false, false)
 		metal.tube(PackedVector3Array([a + Vector3(0, 0.07, 0), b + Vector3(0, 0.07, 0)]), PackedFloat32Array([0.004, 0.004]), 4, GALVANIZED, FURNITURE.CELL_METAL, false, false)
 		# Fabric just inside the posts (or through them on a centred fence). Behind
-		# a windscreen the wire is barely visible, so the screen stands for both.
+		# a windscreen the wire is barely visible, so the screen stands for both;
+		# above a screen lower than the fence the wire shows.
 		var shift := normal * side * 0.035
-		if type != "chain_link_screened":
-			(cell.chain as Quads).wall(a + shift, b + shift, 0.05, fabric_h - 0.04, along_m, CHAIN_TILE)
+		var wire_from := 0.05
 		if type == "chain_link_screened":
 			var screen_shift := normal * (side if side != 0.0 else 1.0) * 0.055
-			(cell["screen_" + screen] as Quads).wall(a + screen_shift, b + screen_shift, 0.03, fabric_h - 0.07, along_m, Vector2(SCREEN_TILE_M, SCREEN_TILE_M))
+			(cell["screen_" + screen] as Quads).wall(a + screen_shift, b + screen_shift, 0.03, screen_top, along_m, Vector2(SCREEN_TILE_M, SCREEN_TILE_M))
+			wire_from = screen_top
+		if wire_from < fabric_h - 0.1:
+			(cell.chain as Quads).wall(a + shift, b + shift, wire_from, fabric_h - 0.04, along_m, CHAIN_TILE)
 		if type == "chain_link_barbed":
 			var out_a := _post_normal(posts, index) * (-side if side != 0.0 else 1.0)
 			var out_b := _post_normal(posts, index + 1) * (-side if side != 0.0 else 1.0)
@@ -312,6 +402,105 @@ static func _post_normal(posts: PackedVector3Array, index: int) -> Vector3:
 	var after := _flat(posts[index + 1] - posts[index]) if index < posts.size() - 1 else Vector3.ZERO
 	var direction := (before + after).normalized() if (before + after).length() > 0.001 else (after if after != Vector3.ZERO else before)
 	return _left(direction)
+
+
+# ---------------------------------------------------------------- slatted
+
+## Chain-link with privacy slats: line posts with a top rail and a bottom
+## tension wire, the slats woven through the fabric (an opaque striped sheet in
+## the fabric's plane) and the wire over them on the outside.
+func _slatted(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, side: float, slats: String, height: float) -> Array[Dictionary]:
+	var boxes: Array[Dictionary] = []
+	var along_m := 0.0
+	for index in posts.size():
+		var metal: FURNITURE.Builder = _cell(cells, cell_size_m, posts[index]).metal
+		var terminal := _terminal(posts, index)
+		var radius := 0.03 if terminal else 0.024
+		var top := height + (0.06 if terminal else 0.03)
+		var foot := posts[index]
+		metal.tube(PackedVector3Array([foot + Vector3(0, -0.3, 0), foot + Vector3(0, top, 0)]), PackedFloat32Array([radius, radius]), 8, GALVANIZED, FURNITURE.CELL_METAL, false, false)
+		metal.tube(PackedVector3Array([foot + Vector3(0, top, 0), foot + Vector3(0, top + 0.04, 0)]), PackedFloat32Array([radius + 0.007, radius + 0.004]), 8, GALVANIZED, FURNITURE.CELL_METAL, false, true)
+	for index in posts.size() - 1:
+		var a := posts[index]
+		var b := posts[index + 1]
+		var length := Vector2(b.x - a.x, b.z - a.z).length()
+		var cell := _cell(cells, cell_size_m, (a + b) * 0.5)
+		var metal: FURNITURE.Builder = cell.metal
+		var normal := _left(_flat(b - a))
+		metal.tube(PackedVector3Array([a + Vector3(0, height - 0.02, 0), b + Vector3(0, height - 0.02, 0)]), PackedFloat32Array([0.021, 0.021]), 8, GALVANIZED, FURNITURE.CELL_METAL, false, false)
+		metal.tube(PackedVector3Array([a + Vector3(0, 0.07, 0), b + Vector3(0, 0.07, 0)]), PackedFloat32Array([0.004, 0.004]), 4, GALVANIZED, FURNITURE.CELL_METAL, false, false)
+		var shift := normal * side * 0.035
+		(cell["slats_" + slats] as Quads).wall(a + shift, b + shift, 0.05, height - 0.04, along_m, Vector2(SLAT_TILE_M, height))
+		# The wire on the outside of the slats (outward: away from the inside).
+		var wire := normal * (side * 0.035 - (side if side != 0.0 else 1.0) * 0.012)
+		(cell.chain as Quads).wall(a + wire, b + wire, 0.05, height - 0.04, along_m, CHAIN_TILE)
+		boxes.append(_bay_box(a, b, height, float(TYPES.chain_link_slatted.collision_half_m)))
+		along_m += length
+	return boxes
+
+
+## An open gate between the solid runs either side of it (a slatted, plain or
+## screened chain-link fence): two stout gate posts, and its open leaves as the
+## generator lays them out (tools/lib/street-fence-generation.mjs gateLeaves:
+## swung square to the fence on its inside, or a sliding leaf parked along it),
+## each [{xz: [[hinge x, z], [far x, z]], post}] hanging at its post's height.
+## A leaf is filled like its fence: slats and wire, wire, or wire and
+## windscreen. Returns the leaves' collision boxes; the opening stays clear.
+func add_gate(cells: Dictionary, cell_size_m: float, type: String, params: Dictionary, ends: PackedVector3Array, leaves: Array) -> Array[Dictionary]:
+	var boxes: Array[Dictionary] = []
+	if ends.size() != 2 or type not in GATED_TYPES:
+		return boxes
+	var height := height_of(type, params)
+	var slats := str(params.get("slats", "green"))
+	var screen := str(params.get("screen", "black"))
+	for foot: Vector3 in [ends[0], ends[1]]:
+		var metal: FURNITURE.Builder = _cell(cells, cell_size_m, foot).metal
+		metal.tube(PackedVector3Array([foot + Vector3(0, -0.3, 0), foot + Vector3(0, height + 0.12, 0)]), PackedFloat32Array([0.045, 0.045]), 8, GALVANIZED, FURNITURE.CELL_METAL, false, true)
+	for leaf_value: Variant in leaves:
+		if not leaf_value is Dictionary:
+			continue
+		var leaf := leaf_value as Dictionary
+		var xz: Array = leaf.get("xz", [])
+		if xz.size() != 2:
+			continue
+		var y := ends[clampi(int(leaf.get("post", 0)), 0, 1)].y
+		var hinge := Vector3(float(xz[0][0]), y, float(xz[0][1]))
+		var far := Vector3(float(xz[1][0]), y, float(xz[1][1]))
+		var direction := _flat(far - hinge)
+		var cell := _cell(cells, cell_size_m, (hinge + far) * 0.5)
+		var metal: FURNITURE.Builder = cell.metal
+		var lift := Vector3(0, GATE_LEAF_LIFT_M, 0)
+		var frame := PackedVector3Array([hinge + lift, hinge + lift + Vector3(0, height - 0.08, 0), far + lift + Vector3(0, height - 0.08, 0), far + lift, hinge + lift])
+		metal.tube(frame, PackedFloat32Array([0.022, 0.022, 0.022, 0.022, 0.022]), 6, GALVANIZED, FURNITURE.CELL_METAL, false, false)
+		metal.tube(PackedVector3Array([hinge + lift + Vector3(0, (height - 0.08) * 0.5, 0), far + lift + Vector3(0, (height - 0.08) * 0.5, 0)]), PackedFloat32Array([0.018, 0.018]), 6, GALVANIZED, FURNITURE.CELL_METAL, false, false)
+		match type:
+			"chain_link_slatted":
+				(cell["slats_" + slats] as Quads).wall(hinge + lift, far + lift, 0.03, height - 0.1, 0.0, Vector2(SLAT_TILE_M, height))
+				(cell.chain as Quads).wall(hinge + lift + _left(direction) * 0.012, far + lift + _left(direction) * 0.012, 0.03, height - 0.1, 0.0, CHAIN_TILE)
+			"chain_link_screened":
+				var screen_top := minf(screen_top_of(params), height - 0.1)
+				(cell["screen_" + screen] as Quads).wall(hinge + lift, far + lift, 0.03, screen_top, 0.0, Vector2(SCREEN_TILE_M, SCREEN_TILE_M))
+				if screen_top < height - 0.2:
+					(cell.chain as Quads).wall(hinge + lift, far + lift, screen_top, height - 0.1, 0.0, CHAIN_TILE)
+			_:
+				(cell.chain as Quads).wall(hinge + lift, far + lift, 0.03, height - 0.1, 0.0, CHAIN_TILE)
+		boxes.append(_bay_box(hinge, far, height, GATE_LEAF_HALF_M))
+	return boxes
+
+
+## A banner tied to a chain-link fence between two grounded ends: a plain white
+## sheet height_m tall, centred on the fence's height, on its outer face (the
+## side away from the inside; a centred fence's left).
+func add_banner(cells: Dictionary, cell_size_m: float, type: String, params: Dictionary, ends: PackedVector3Array, height_m: float) -> void:
+	if ends.size() != 2 or type not in GATED_TYPES:
+		return
+	var fence_h := height_of(type, params)
+	var side := {"left": 1.0, "right": -1.0}.get(str(params.get("inside", "center")), 0.0) as float
+	var outward := _left(_flat(ends[1] - ends[0])) * (-side if side != 0.0 else 1.0)
+	var shift := outward * 0.045
+	var bottom := maxf(0.1, (fence_h - height_m) * 0.5)
+	var cell := _cell(cells, cell_size_m, (ends[0] + ends[1]) * 0.5)
+	(cell.banner as Quads).wall(ends[0] + shift, ends[1] + shift, bottom, bottom + height_m, 0.0, Vector2(1.0, 1.0))
 
 
 # ---------------------------------------------------------------- panels

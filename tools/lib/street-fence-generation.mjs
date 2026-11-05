@@ -4,8 +4,12 @@
 //   - OSM barrier=fence ways (rows made by street-detail-generation.mjs); their
 //     fence type comes from fence_type, else from the way's other tags;
 //   - rule rows from the "fences" lists of tools/config/street-detail-zones.json,
-//     where dated photos show fencing OSM lacks. Every rule is production
-//     inference and names its dated photo evidence.
+//     where dated photos show fencing OSM lacks (pattern legs), or a different
+//     fence along a stretch of an OSM fence way (pattern osm_way: that stretch is
+//     cut out of the OSM row and built as the rule's own row of the photographed
+//     type, or left open with fence_type none where something else, such as a
+//     container wall, stands on the line). Every rule is production inference and
+//     names its dated photo evidence.
 // A fence stays solid except where it opens: where a road or path crosses it, at
 // an OSM gate on it, where it would enter a gameplay clearance of the shared mask
 // (spawn, QA corridors, stairs, doors, approaches) or a building, or off the land.
@@ -26,13 +30,34 @@ import { compareSourceKeys, invariant, roundCoordinate } from "./world-contract.
 // Dimensions are US fence-trade sizes (6 ft fabric, 10 ft line-post spacing,
 // 6 x 12 ft temporary panels, 8 ft wood bays), production inference, not survey.
 export const STREET_FENCE_TYPES = Object.freeze({
+  // Chain-link with privacy slats woven through it (storage yards: green on 9th
+  // St, Sep 2025, and Avenue M, Mar 2025; brown on 12th St, Jul 2023), 6 or 8 ft.
+  chain_link_slatted: Object.freeze({ height_m: 1.83, post_spacing_m: 3.05, half_thickness_m: 0.06, heights_m: Object.freeze([1.83, 2.44]) }),
   chain_link: Object.freeze({ height_m: 1.83, post_spacing_m: 3.05, half_thickness_m: 0.06 }),
   chain_link_barbed: Object.freeze({ height_m: 2.13, post_spacing_m: 3.05, half_thickness_m: 0.25 }),
   chain_link_screened: Object.freeze({ height_m: 1.83, post_spacing_m: 3.05, half_thickness_m: 0.06 }),
   construction_panel: Object.freeze({ height_m: 1.83, post_spacing_m: 3.66, half_thickness_m: 0.3 }),
   wood_privacy: Object.freeze({ height_m: 1.83, post_spacing_m: 2.44, half_thickness_m: 0.08 }),
 });
-export const STREET_FENCE_SCREENS = Object.freeze(["black", "green"]);
+// Windscreen colours; orange is the open safety mesh of construction sites
+// (9th St, Sep 2025: about 1.2 m high behind construction panels).
+export const STREET_FENCE_SCREENS = Object.freeze(["black", "green", "orange"]);
+// A screen may stop below the fence top (screen_height_m), the wire bare above it.
+export const STREET_FENCE_SCREEN_MIN_M = 0.6;
+export const STREET_FENCE_SLATS = Object.freeze(["green", "brown", "black"]);
+// Gates stand open (the owner's fence rule): their leaves are drawn swung or
+// slid back on the inside of the fence. A slatted fence draws the leaves of
+// every gate opening; plain and screened chain-link those of its rule gates
+// (Seven Seas Ave Gate 5, Nov 2025: one leaf swung in from its post). A
+// single leaf hangs on the gate's start post (first along the line) unless
+// the rule hinges it at the end.
+export const STREET_FENCE_GATE_STYLES = Object.freeze(["swing_single", "swing_double", "sliding"]);
+export const STREET_FENCE_GATED_TYPES = Object.freeze(["chain_link_slatted", "chain_link", "chain_link_screened"]);
+export const STREET_FENCE_GATE_HINGES = Object.freeze(["start", "end"]);
+// A banner tied to a chain-link fence: a plain white sheet, no text, centred
+// on the fence's height (Gate 5, Nov 2025: a contractor's banner on the green
+// screen).
+export const STREET_FENCE_BANNER_TYPES = Object.freeze(["chain_link_slatted", "chain_link", "chain_link_screened"]);
 export const STREET_FENCE_INSIDE = Object.freeze(["left", "right", "center"]);
 // Along-fence sampling step (m) for openings, and the clear margin (m) an opening
 // keeps on both sides of a crossing road or path.
@@ -46,6 +71,19 @@ const GATE_WIDTH_M = 1.5;
 const MAXIMUM_GATE_WIDTH_M = 8;
 const SAFE_ID = /^[a-z0-9_]+$/u;
 const RULE_FIELDS = Object.freeze(["basis", "evidence", "fence_type", "id", "kind", "legs", "params", "pattern", "rule"]);
+// Optional rule fields along the rule's line: gates [{at_m, width_m, style,
+// hinge?}] and banners [{at_m, width_m, height_m}].
+const OPTIONAL_RULE_FIELDS = Object.freeze(["banners", "gates"]);
+const OSM_WAY_RULE_FIELDS = Object.freeze(["basis", "evidence", "fence_type", "from_m", "id", "kind", "params", "pattern", "rule", "to_m", "way"]);
+// An osm_way rule may also shift its row sideways off the OSM line (offset_m,
+// + to the left of the way), where the line is mapped on a sidewalk's edge,
+// and name gates and banners along its stretch like a traced rule.
+const OSM_WAY_RULE_OPTIONAL = Object.freeze(["banners", "gates", "offset_m"]);
+// The fence_type of an osm_way rule that only cuts its stretch out of the OSM fence.
+export const FENCE_TYPE_NONE = "none";
+// An osm_way rule's along-distance may run this far past its way's end, which
+// then means the end (along-distances are read off a map to the decimetre).
+const OSM_WAY_END_SLACK_M = 1.0;
 const OSM_FENCE_TYPES = Object.freeze({
   chain_link: "chain_link",
   metal: "chain_link",
@@ -142,17 +180,46 @@ export function validateFenceRules(zone, kinds) {
     const label = `Street detail zone ${zone.id} fence rule ${rule?.id}`;
     invariant(typeof rule?.id === "string" && SAFE_ID.test(rule.id) && !ids.has(rule.id), `${label} needs a unique lower_snake id`);
     ids.add(rule.id);
-    invariant(JSON.stringify(Object.keys(rule).sort()) === JSON.stringify([...RULE_FIELDS]), `${label} must have exactly ${RULE_FIELDS.join(", ")}`);
+    invariant(["legs", "osm_way"].includes(rule?.pattern), `${label} pattern must be legs or osm_way`);
+    const fields = rule.pattern === "legs" ? RULE_FIELDS : OSM_WAY_RULE_FIELDS;
+    const optional = rule.pattern === "legs" ? OPTIONAL_RULE_FIELDS : OSM_WAY_RULE_OPTIONAL;
+    invariant(JSON.stringify(Object.keys(rule).filter((key) => !optional.includes(key)).sort()) === JSON.stringify([...fields]),
+      `${label} must have exactly ${fields.join(", ")} (and optionally ${optional.join(", ")})`);
     invariant(rule.kind === "fence" && kinds.fence?.layer === "fences", `${label} kind must be fence`);
-    invariant(STREET_FENCE_TYPES[rule.fence_type], `${label} fence_type must be one of ${Object.keys(STREET_FENCE_TYPES).join(", ")}`);
-    invariant(rule.pattern === "legs", `${label} pattern must be legs`);
     invariant(rule.basis === "production_inference", `${label}: rule-based fences are production_inference`);
     for (const field of ["rule", "evidence"]) invariant(typeof rule[field] === "string" && rule[field].trim() !== "", `${label} needs ${field}`);
     invariant(rule.params != null && typeof rule.params === "object" && !Array.isArray(rule.params), `${label} params must be an object`);
-    const allowedParams = rule.fence_type === "chain_link_screened" ? ["inside", "screen"] : ["inside"];
-    invariant(Object.keys(rule.params).every((key) => allowedParams.includes(key)), `${label} params take only ${allowedParams.join(", ")}`);
-    invariant(STREET_FENCE_INSIDE.includes(rule.params.inside), `${label} params.inside must be ${STREET_FENCE_INSIDE.join(", ")}`);
-    if (rule.fence_type === "chain_link_screened") invariant(STREET_FENCE_SCREENS.includes(rule.params.screen), `${label} params.screen must be ${STREET_FENCE_SCREENS.join(" or ")}`);
+    if (rule.pattern === "osm_way") {
+      invariant(/^w\d+$/u.test(rule.way), `${label} way must be an OSM way key`);
+      invariant([rule.from_m, rule.to_m].every(isFiniteNumber) && rule.from_m >= 0 && rule.to_m >= 0 && Math.abs(rule.to_m - rule.from_m) >= MINIMUM_RUN_M, `${label} needs from_m and to_m at least ${MINIMUM_RUN_M} m apart`);
+      invariant(rule.offset_m === undefined || (isFiniteNumber(rule.offset_m) && rule.offset_m !== 0 && Math.abs(rule.offset_m) <= 3), `${label} offset_m must be a non-zero shift of at most 3 m`);
+      if (rule.fence_type === FENCE_TYPE_NONE) {
+        invariant(Object.keys(rule.params).length === 0 && rule.offset_m === undefined && rule.gates === undefined && rule.banners === undefined, `${label}: fence_type none takes no params, offset_m, gates or banners`);
+        continue;
+      }
+    }
+    invariant(fenceParamsError(rule.fence_type, rule.params) === null, `${label}: ${fenceParamsError(rule.fence_type, rule.params)}`);
+    if (rule.gates !== undefined) {
+      invariant(STREET_FENCE_GATED_TYPES.includes(rule.fence_type), `${label}: only ${STREET_FENCE_GATED_TYPES.join(", ")} rules take gates`);
+      invariant(Array.isArray(rule.gates) && rule.gates.length > 0, `${label} gates must be a nonempty list`);
+      for (const gate of rule.gates) {
+        invariant(JSON.stringify(Object.keys(gate ?? {}).filter((key) => key !== "hinge").sort()) === JSON.stringify(["at_m", "style", "width_m"]), `${label}: a gate is {at_m, width_m, style} and optionally hinge`);
+        invariant(isFiniteNumber(gate.at_m) && gate.at_m >= 0 && isFiniteNumber(gate.width_m) && gate.width_m >= 0.9 && gate.width_m <= 12, `${label}: a gate needs at_m >= 0 and width_m 0.9..12`);
+        invariant(STREET_FENCE_GATE_STYLES.includes(gate.style), `${label}: gate style must be ${STREET_FENCE_GATE_STYLES.join(", ")}`);
+        invariant(gate.hinge === undefined || STREET_FENCE_GATE_HINGES.includes(gate.hinge), `${label}: gate hinge must be ${STREET_FENCE_GATE_HINGES.join(" or ")}`);
+      }
+    }
+    if (rule.banners !== undefined) {
+      invariant(STREET_FENCE_BANNER_TYPES.includes(rule.fence_type), `${label}: only ${STREET_FENCE_BANNER_TYPES.join(", ")} rules take banners`);
+      invariant(Array.isArray(rule.banners) && rule.banners.length > 0, `${label} banners must be a nonempty list`);
+      const height = fenceHeight(rule.fence_type, rule.params);
+      for (const banner of rule.banners) {
+        invariant(JSON.stringify(Object.keys(banner ?? {}).sort()) === JSON.stringify(["at_m", "height_m", "width_m"]), `${label}: a banner is exactly {at_m, width_m, height_m}`);
+        invariant(isFiniteNumber(banner.at_m) && banner.at_m >= 0 && isFiniteNumber(banner.width_m) && banner.width_m >= 0.5 && banner.width_m <= 6
+          && isFiniteNumber(banner.height_m) && banner.height_m >= 0.3 && banner.height_m <= height - 0.2, `${label}: a banner needs at_m >= 0, width_m 0.5..6 and height_m 0.3..${(height - 0.2).toFixed(2)}`);
+      }
+    }
+    if (rule.pattern === "osm_way") continue;
     invariant(Array.isArray(rule.legs) && rule.legs.length > 0, `${label} needs legs`);
     for (const leg of rule.legs) {
       if ("xz" in leg) {
@@ -164,6 +231,70 @@ export function validateFenceRules(zone, kinds) {
       }
     }
   }
+}
+
+// Why a fence type's params are unusable, or null: every type takes inside;
+// a screened fence its screen colour and, optionally, the screen's height; a
+// slatted one its slat colour and, optionally, its height (6 or 8 ft).
+export function fenceParamsError(type, params) {
+  const spec = STREET_FENCE_TYPES[type];
+  if (!spec) return `unknown fence type ${type}`;
+  if (params === null || typeof params !== "object" || Array.isArray(params)) return "params must be an object";
+  const allowed = type === "chain_link_screened" ? ["inside", "screen", "screen_height_m"] : type === "chain_link_slatted" ? ["height_m", "inside", "slats"] : ["inside"];
+  if (!Object.keys(params).every((key) => allowed.includes(key))) return `params take only ${allowed.join(", ")}`;
+  if (!STREET_FENCE_INSIDE.includes(params.inside)) return `params.inside must be ${STREET_FENCE_INSIDE.join(", ")}`;
+  if (type === "chain_link_screened") {
+    if (!STREET_FENCE_SCREENS.includes(params.screen)) return `params.screen must be ${STREET_FENCE_SCREENS.join(", ")}`;
+    const screen = params.screen_height_m;
+    if (screen !== undefined && !(isFiniteNumber(screen) && screen >= STREET_FENCE_SCREEN_MIN_M && screen <= spec.height_m)) return `params.screen_height_m must be ${STREET_FENCE_SCREEN_MIN_M}..${spec.height_m}`;
+  }
+  if (type === "chain_link_slatted") {
+    if (!STREET_FENCE_SLATS.includes(params.slats)) return `params.slats must be ${STREET_FENCE_SLATS.join(", ")}`;
+    if (params.height_m !== undefined && !spec.heights_m.includes(params.height_m)) return `params.height_m must be ${spec.heights_m.join(" or ")}`;
+  }
+  return null;
+}
+
+// A fence's height: a slatted fence may be the taller 8 ft kind.
+export function fenceHeight(type, params) {
+  const spec = STREET_FENCE_TYPES[type];
+  return type === "chain_link_slatted" && params?.height_m !== undefined ? params.height_m : spec.height_m;
+}
+
+// The style a gate opening of this width gets when no rule names one.
+export function defaultGateStyle(widthM) {
+  return widthM <= 1.8 ? "swing_single" : widthM <= 5.0 ? "swing_double" : "sliding";
+}
+
+// A sliding gate's leaf parks along the run before the gate: this long.
+export const SLIDING_LEAF_EXTRA_M = 0.3;
+// A gate leaf's collision half thickness, and how far its bottom rail stands
+// over its post's foot (game/scripts/world/street_fence_kit.gd). A leaf does
+// not bend to the ground: hung level, it needs ground no higher than its rail
+// all the way to its tip (the validator checks it).
+export const GATE_LEAF_HALF_M = 0.04;
+export const GATE_LEAF_LIFT_M = 0.05;
+
+// The open leaves of a gate between its two ends (plan [x, z], in the line's
+// order), as the fence kit draws and collides them: [{xz: [[hinge x, z], [far
+// x, z]], post}], post the end (0 or 1) whose height the leaf hangs at. Swing
+// leaves stand square to the fence on its inside, hinged 0.06 m in from their
+// post (a single leaf on the start post unless hinge is "end"); a sliding leaf
+// lies along the fence 0.16 m inside it, back from the start post over the run
+// before the gate.
+export function gateLeaves(ends, style, hinge, inside) {
+  const [a, b] = ends;
+  const width = Math.hypot(b[0] - a[0], b[1] - a[1]);
+  const along = [(b[0] - a[0]) / width, (b[1] - a[1]) / width];
+  const side = inside === "right" ? -1 : 1;
+  const into = [along[1] * side, -along[0] * side];
+  const leaf = (end, post, offset, direction, length) => {
+    const at = [end[0] + into[0] * offset, end[1] + into[1] * offset];
+    return { xz: [at, [at[0] + direction[0] * length, at[1] + direction[1] * length]].map((point) => point.map(roundCoordinate)), post };
+  };
+  if (style === "swing_single") return [hinge === "end" ? leaf(b, 1, 0.06, into, width - 0.12) : leaf(a, 0, 0.06, into, width - 0.12)];
+  if (style === "swing_double") return [leaf(a, 0, 0.06, into, width / 2 - 0.08), leaf(b, 1, 0.06, into, width / 2 - 0.08)];
+  return [leaf(a, 0, 0.16, [-along[0], -along[1]], width + SLIDING_LEAF_EXTRA_M)];
 }
 
 // The kit type for an OSM fence way: its fence_type tag, else its context.
@@ -228,8 +359,9 @@ export function placeStreetFences({
     });
   };
 
-  // Openings along a fence line: [{from_m, to_m, reason, source_id}], sorted.
-  const openingsOf = (line, halfThickness, { rule, gates }) => {
+  // Openings along a fence line: [{from_m, to_m, reason, source_id}], sorted;
+  // a rule gate's opening keeps its style and hinge.
+  const openingsOf = (line, halfThickness, { rule, gates, cuts }) => {
     const lengths = cumulative(line);
     const total = lengths.at(-1);
     const nearbyRoads = near(roads, line, 2);
@@ -276,8 +408,9 @@ export function placeStreetFences({
       });
     }
     for (const gate of gates) {
-      intervals.push({ from_m: Math.max(0, gate.at_m - gate.width_m / 2), to_m: Math.min(total, gate.at_m + gate.width_m / 2), reason: "gate", source_id: gate.source_id });
+      intervals.push({ from_m: Math.max(0, gate.at_m - gate.width_m / 2), to_m: Math.min(total, gate.at_m + gate.width_m / 2), reason: "gate", source_id: gate.source_id, style: gate.style ?? null, hinge: gate.hinge ?? null });
     }
+    for (const cut of cuts) intervals.push({ from_m: cut.from_m, to_m: cut.to_m, reason: "osm_way_rule", source_id: cut.source_id });
     intervals.sort((left, right) => left.from_m - right.from_m || compareSourceKeys(left.source_id, right.source_id));
     // Runs left between openings, dropping stubs too short to stand.
     const runs = [];
@@ -294,12 +427,17 @@ export function placeStreetFences({
       if (s0 - at > 1e-9) {
         const inside = intervals.filter((interval) => interval.to_m > at && interval.from_m < s0);
         const named = inside.length > 0 ? inside : [{ reason: "short_run", source_id: "" }];
-        openings.push({
+        const opening = {
           from_m: roundCoordinate(at),
           to_m: roundCoordinate(s0),
           reason: [...new Set(named.map((interval) => interval.reason))].sort().join("+"),
           source_ids: [...new Set(named.map((interval) => interval.source_id).filter(Boolean))].sort(compareSourceKeys),
-        });
+        };
+        const styled = named.find((interval) => interval.style);
+        if (styled) opening.style = styled.style;
+        const hinged = named.find((interval) => interval.hinge);
+        if (hinged) opening.hinge = hinged.hinge;
+        openings.push(opening);
       }
       at = s1;
     }
@@ -327,25 +465,66 @@ export function placeStreetFences({
     };
   };
   // A row that will be built gets its posts; a data-only row keeps its vertices.
-  const fenceBlock = (line, type, typeBasis, params, label, { rule = null, gates = [], posts = true } = {}) => {
+  const fenceBlock = (line, type, typeBasis, params, label, { rule = null, gates = [], cuts = [], banners = [], posts = true } = {}) => {
     const spec = STREET_FENCE_TYPES[type];
-    const { lengths, total, runs, openings } = openingsOf(line, spec.half_thickness_m, { rule, gates });
+    const { lengths, total, runs, openings } = openingsOf(line, spec.half_thickness_m, { rule, gates, cuts });
     for (const opening of openings) count(opening.reason);
     const built = runs.map(([s0, s1]) => runRecord(postsOf(line, lengths, s0, s1, posts ? spec.post_spacing_m : Infinity)));
     invariant(built.every((run) => run.points_m.length >= 2), `${label} has a run without two posts`);
-    return {
+    const block = {
       type,
       type_basis: typeBasis,
-      height_m: spec.height_m,
+      height_m: fenceHeight(type, params),
       half_thickness_m: spec.half_thickness_m,
       params,
       length_m: roundCoordinate(total),
       openings,
       runs: built,
     };
+    // Gates: posts at both ends of the gate's opening and the open leaves (a
+    // gate may fill a whole short line, as between two container walls; one
+    // narrower than 0.9 m has none). A slatted fence takes every gate opening,
+    // plain and screened chain-link the rule's gates.
+    const ends = (from, to) => [pointAt(line, lengths, from), pointAt(line, lengths, to)].map((point) => [roundCoordinate(point[0]), roundCoordinate(point[1])]);
+    if (STREET_FENCE_GATED_TYPES.includes(type) && posts) {
+      const gateRecords = [];
+      for (const opening of openings) {
+        if (!opening.reason.split("+").includes("gate")) continue;
+        if (type !== "chain_link_slatted" && !opening.style) continue;
+        const width = opening.to_m - opening.from_m;
+        if (width < 0.9) continue;
+        let style = opening.style ?? defaultGateStyle(width);
+        // A sliding leaf needs a solid run before the gate at least as long as
+        // itself: a rule's sliding gate that has none fails; a default one
+        // swings open instead.
+        if (style === "sliding") {
+          const before = runs.find(([, s1]) => Math.abs(s1 - opening.from_m) < 1e-6);
+          const fits = before !== undefined && before[1] - before[0] >= width + SLIDING_LEAF_EXTRA_M;
+          invariant(fits || !opening.style, `${label}: its sliding gate at ${opening.from_m}..${opening.to_m} m has no solid run before it as long as its leaf (${(width + SLIDING_LEAF_EXTRA_M).toFixed(2)} m)`);
+          if (!fits) style = "swing_double";
+        }
+        const record = runRecord(ends(opening.from_m, opening.to_m));
+        const plan = record.points_m.map((point) => [point[0], point[2]]);
+        const gate = { style, from_m: opening.from_m, to_m: opening.to_m, ...record, leaves: gateLeaves(plan, style, opening.hinge, params.inside) };
+        if (opening.hinge) gate.hinge = opening.hinge;
+        gateRecords.push(gate);
+      }
+      if (gateRecords.length > 0) block.gates = gateRecords;
+    }
+    // Banners hang on a solid run, never across an opening.
+    if (banners.length > 0 && posts) {
+      block.banners = banners.map((banner, index) => {
+        const from = roundCoordinate(Math.max(0, banner.at_m - banner.width_m / 2));
+        const to = roundCoordinate(Math.min(total, banner.at_m + banner.width_m / 2));
+        invariant(runs.some(([s0, s1]) => from >= s0 - 1e-6 && to <= s1 + 1e-6), `${label} banner ${index} (${from}..${to} m) does not hang on one solid run`);
+        return { from_m: from, to_m: to, height_m: banner.height_m, ...runRecord(ends(from, to)) };
+      });
+    }
+    return block;
   };
   const applyStatus = (row) => {
-    if (row.fence.runs.length > 0) {
+    // A fence stands where it has solid runs or gates.
+    if (row.fence.runs.length > 0 || (row.fence.gates?.length ?? 0) > 0) {
       row.status = "placed";
       row.exclusion = null;
       return;
@@ -371,10 +550,30 @@ export function placeStreetFences({
   };
 
   // --- OSM fence ways.
-  for (const row of rows.filter((candidate) => candidate.source === "osm" && candidate.kind === "fence")) {
-    audit.osm_fences += 1;
-    const line = row.points_m.map((point) => [point[0], point[2]]);
-    const lengths = cumulative(line);
+  // The stretches the pilot zones' osm_way rules take over, by OSM way.
+  const osmFenceRows = new Map(rows.filter((candidate) => candidate.source === "osm" && candidate.kind === "fence").map((row) => [row.source_id, row]));
+  const wayRules = new Map();
+  for (const { zone } of pilotShapes) {
+    for (const rule of zone.fences ?? []) {
+      if (rule.pattern !== "osm_way") continue;
+      const label = `Street fence rule ${zone.id}/${rule.id}`;
+      const target = osmFenceRows.get(rule.way);
+      invariant(target, `${label} names ${rule.way}, which is not an OSM fence row on the land`);
+      // An end within OSM_WAY_END_SLACK_M past the way's end means its end.
+      const total = cumulative(target.points_m.map((point) => [point[0], point[2]])).at(-1);
+      invariant(Math.max(rule.from_m, rule.to_m) <= total + OSM_WAY_END_SLACK_M, `${label} runs past the end of ${rule.way} (${roundCoordinate(total)} m)`);
+      if (!wayRules.has(rule.way)) wayRules.set(rule.way, []);
+      wayRules.get(rule.way).push({ zone, rule, from_m: Math.min(rule.from_m, rule.to_m, total), to_m: Math.min(Math.max(rule.from_m, rule.to_m), total) });
+    }
+  }
+  for (const stretches of wayRules.values()) {
+    stretches.sort((left, right) => left.from_m - right.from_m);
+    for (let index = 1; index < stretches.length; index += 1) {
+      invariant(stretches[index].from_m >= stretches[index - 1].to_m, `Street fence rules ${stretches[index - 1].rule.id} and ${stretches[index].rule.id} overlap on ${stretches[index].rule.way}`);
+    }
+  }
+  // The gates (OSM gate nodes) on a fence way, at along-distances of its line.
+  const gatesOf = (row, lengths) => {
     const way = rawOsm.ways.get(row.source_id.slice(1));
     invariant(way, `${row.id} has no raw topology`);
     const gates = [];
@@ -385,9 +584,17 @@ export function placeStreetFences({
       const width = Number.isFinite(tagged) && tagged > 0 ? Math.min(tagged, MAXIMUM_GATE_WIDTH_M) : GATE_WIDTH_M;
       gates.push({ at_m: lengths[index], width_m: width + 2 * CROSSING_MARGIN_M, source_id: `n${ref}` });
     });
+    return gates;
+  };
+  for (const row of osmFenceRows.values()) {
+    audit.osm_fences += 1;
+    const line = row.points_m.map((point) => [point[0], point[2]]);
+    const lengths = cumulative(line);
+    const gates = gatesOf(row, lengths);
+    const cuts = (wayRules.get(row.source_id) ?? []).map(({ zone, rule, from_m, to_m }) => ({ from_m, to_m, source_id: `zone:${zone.id}/${rule.id}` }));
     const { type, basis } = osmFenceType(row.tags ?? {});
     const pilot = reachesPilot(line);
-    row.fence = fenceBlock(line, type, basis, { inside: "center" }, row.id, { gates, posts: pilot });
+    row.fence = fenceBlock(line, type, basis, { inside: "center" }, row.id, { gates, cuts, posts: pilot });
     applyStatus(row);
     if (row.status === "placed" && pilot) {
       setProp(row, { inside: "center" });
@@ -402,7 +609,24 @@ export function placeStreetFences({
       const label = `Street fence rule ${zone.id}/${rule.id}`;
       const line = [];
       const vertexSources = [];
-      for (const leg of rule.legs) {
+      let gates = [];
+      if (rule.pattern === "osm_way") {
+        if (rule.fence_type === FENCE_TYPE_NONE) continue;
+        // The OSM fence's own line between the rule's along-distances, with its gates.
+        const target = osmFenceRows.get(rule.way);
+        const wayPoints = target.points_m.map((point) => [point[0], point[2]]);
+        const wayLengths = cumulative(wayPoints);
+        const [s0, s1] = [Math.min(rule.from_m, rule.to_m, wayLengths.at(-1)), Math.min(Math.max(rule.from_m, rule.to_m), wayLengths.at(-1))];
+        let piece = slice(wayPoints, wayLengths, s0, s1);
+        if (rule.offset_m !== undefined) piece = offsetLine(piece, rule.offset_m);
+        if (rule.from_m > rule.to_m) piece.reverse();
+        line.push(...piece);
+        vertexSources.push(...piece.map(() => rule.way));
+        gates = gatesOf(target, wayLengths)
+          .filter((gate) => gate.at_m > s0 && gate.at_m < s1)
+          .map((gate) => ({ ...gate, at_m: rule.from_m > rule.to_m ? s1 - gate.at_m : gate.at_m - s0 }));
+      }
+      for (const leg of rule.legs ?? []) {
         if ("xz" in leg) {
           line.push([...leg.xz]);
           vertexSources.push("rule_point");
@@ -452,7 +676,11 @@ export function placeStreetFences({
         exclusion: null,
         basis: rule.basis,
       };
-      row.fence = fenceBlock(points, rule.fence_type, "rule", params, label, { rule: `${zone.id}/${rule.id}` });
+      // A rule along an OSM fence opens where that fence would (its gates, roads
+      // and street ground); a traced rule must keep off the street ground.
+      const ruleGates = (rule.gates ?? []).map((gate, index) => ({ at_m: gate.at_m, width_m: gate.width_m, style: gate.style, hinge: gate.hinge, source_id: `${rule.id}:gate_${index}` }));
+      const banners = rule.banners ?? [];
+      row.fence = fenceBlock(points, rule.fence_type, "rule", params, label, rule.pattern === "osm_way" ? { gates: [...gates, ...ruleGates], banners } : { rule: `${zone.id}/${rule.id}`, gates: ruleGates, banners });
       applyStatus(row);
       invariant(row.status === "placed", `${label} is open along its whole length`);
       setProp(row, params);

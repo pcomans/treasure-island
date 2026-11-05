@@ -20,13 +20,17 @@ import { createHash } from "node:crypto";
 import { projectLonLat } from "./coordinates.mjs";
 import { pointInMultiPolygon } from "./osm-geometry.mjs";
 import { carBodyGeometry, CAR_BODIES } from "./street-clutter-kit.mjs";
+import { YARD_KIT_KEYS } from "./street-yard-kit.mjs";
 import { compareSourceKeys, invariant, roundCoordinate } from "./world-contract.mjs";
 
-// Kit props of the clutter layer, with the row kind each one stands for.
+// Kit props of the clutter layer, with the row kind each one stands for: the
+// street-clutter kit's, and the yard kit's (tools/lib/street-yard-kit.mjs),
+// each the kind of its own name.
 export const STREET_CLUTTER_PROPS = Object.freeze({
   barricade: "barricade",
   parked_car: "parked_car",
   traffic_cone: "traffic_cone",
+  ...Object.fromEntries(YARD_KIT_KEYS.map((key) => [key, key])),
 });
 export const STREET_CLUTTER_PATTERNS = Object.freeze(["curb_parking", "lot_stalls"]);
 export const CAR_BODY_NAMES = Object.freeze(Object.keys(CAR_BODIES));

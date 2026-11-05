@@ -155,6 +155,7 @@ export const FEATURE_KINDS = Object.freeze([
 ]);
 
 export const MATERIAL_KEYS = Object.freeze([
+  "black_plastic",
   "building_part_roof",
   "building_part_wall",
   "building_roof",
@@ -175,6 +176,7 @@ export const MATERIAL_KEYS = Object.freeze([
   "park_plaza_zigzag",
   "road_path",
   "road_path_pedestrian",
+  "rubble_grey",
   "street_gutter",
   "street_kerb_concrete",
   "street_kerb_planting",
@@ -190,6 +192,9 @@ export const MATERIAL_KEYS = Object.freeze([
   "terrain_riprap",
   "terrain_sand",
   "terrain_wetland",
+  "yard_asphalt",
+  "yard_asphalt_pale",
+  "yard_gravel",
 ]);
 
 export const COVERAGE_HEADERS = Object.freeze([

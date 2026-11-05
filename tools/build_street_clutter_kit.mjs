@@ -23,7 +23,12 @@ const UNSIGNED_SHORT = 5123;
 const UNSIGNED_INT = 5125;
 
 export function buildStreetClutterKitGlb() {
-  const meshes = clutterKitMeshes();
+  return glbFromMeshes(clutterKitMeshes(), { generator: "tools/build_street_clutter_kit.mjs", scene: "street_clutter_kit" });
+}
+
+// One binary glTF of named meshes ({name, positions, normals, uvs, indices}),
+// one node each; also used for the yard kit (tools/build_street_yard_kit.mjs).
+export function glbFromMeshes(meshes, { generator, scene }) {
   const chunks = [];
   let byteLength = 0;
   const bufferViews = [];
@@ -71,9 +76,9 @@ export function buildStreetClutterKitGlb() {
   }
   align();
   const json = {
-    asset: { version: "2.0", generator: "tools/build_street_clutter_kit.mjs" },
+    asset: { version: "2.0", generator },
     scene: 0,
-    scenes: [{ name: "street_clutter_kit", nodes: nodes.map((_, index) => index) }],
+    scenes: [{ name: scene, nodes: nodes.map((_, index) => index) }],
     nodes,
     meshes: gltfMeshes,
     accessors,

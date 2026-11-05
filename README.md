@@ -6,8 +6,10 @@ and spray a tag on building walls. The whole island
 comes from a frozen OpenStreetMap snapshot; agents improve its buildings one at a
 time so they look like the real ones.
 
-**Score:** the number of buildings (out of 213) that recognizably match their real
-counterparts, i.e. accepted buildings in [the building catalog](discovery/facades/facade-recognition-catalog.json).
+**Score:** the number of buildings that recognizably match their real
+counterparts, i.e. accepted buildings in [the building catalog](discovery/facades/facade-recognition-catalog.json),
+out of the catalog's standing buildings (the frozen OSM buildings less those the dated imagery shows
+demolished, [tools/config/demolished-buildings.json](tools/config/demolished-buildings.json)).
 `tools/test.sh` prints it.
 
 ## Develop

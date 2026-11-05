@@ -45,16 +45,16 @@
       "sha256": "7426b8fa948fa7bc002d5c114c8d91671743926e7f50a7e4bf937bcdd9e141c5"
     },
     {
-      "bytes": 644248,
+      "bytes": 649001,
       "chunk_id": "x_-2__z_-2",
       "path": "chunks/x_-2__z_-2.json",
-      "sha256": "3a07310461da7d9e76667412c6ca18dac8bdea89923cd8392436421882132ef9"
+      "sha256": "272457c0da803d649bb8f7b4f2af2e487bbc2ece8e8a234f497477336a666437"
     },
     {
-      "bytes": 911426,
+      "bytes": 872051,
       "chunk_id": "x_-2__z_-1",
       "path": "chunks/x_-2__z_-1.json",
-      "sha256": "6de57eb30f5771f43b33d7b71b53952be5ea6ec17706102be634a781152a3ee2"
+      "sha256": "a21410bcb219f1748e5a2d41dc0dd7125b642dacd07f7c9fd5f4026f4a093a00"
     },
     {
       "bytes": 674061,
@@ -87,16 +87,16 @@
       "sha256": "d82a0767672898b348115d9df812a1a33bee96bca0d5d58713c52087591011bc"
     },
     {
-      "bytes": 177573,
+      "bytes": 195479,
       "chunk_id": "x_-1__z_-2",
       "path": "chunks/x_-1__z_-2.json",
-      "sha256": "09f3b10d05f8852964d935a87899fc95a38304fac9d7078c65597a10e66da973"
+      "sha256": "59667efa4d98fe4407e79c742fa41cec9448634904bcd861d2fa8f68141c3016"
     },
     {
-      "bytes": 448596,
+      "bytes": 454777,
       "chunk_id": "x_-1__z_-1",
       "path": "chunks/x_-1__z_-1.json",
-      "sha256": "5e3b7efb7a2c61e1092c6a42ca9c04212c7d2603890b7a3f4c5e46777005f17b"
+      "sha256": "7c89462be906df0bfa1bc876cfd4a68d81e11c3391822070482d82ed5531e2ba"
     },
     {
       "bytes": 469613,
@@ -129,28 +129,28 @@
       "sha256": "b9ed8d18acdcfe4f89e3d7fb1d69c11ba7152e174398c0943bfe295be2b12954"
     },
     {
-      "bytes": 215303,
+      "bytes": 226249,
       "chunk_id": "x_0__z_-3",
       "path": "chunks/x_0__z_-3.json",
-      "sha256": "6dfa4b8f4b91f309b313428829e37cedd13e4067ff94f896a8e2e5ef05002a1d"
+      "sha256": "342c30fac184172035c03b4ac3518d8b622481187576c6be65dbc3938f1f0082"
     },
     {
-      "bytes": 262873,
+      "bytes": 269989,
       "chunk_id": "x_0__z_-2",
       "path": "chunks/x_0__z_-2.json",
-      "sha256": "c0e1f86787410d975ad90272482e5f4971c4aedc7eb83132cd28b22acf1a3456"
+      "sha256": "6315afc6a537e6769e4f3413069d858683a1f64f67b8f9b9e7d30744d98f5e4c"
     },
     {
-      "bytes": 306658,
+      "bytes": 268093,
       "chunk_id": "x_0__z_-1",
       "path": "chunks/x_0__z_-1.json",
-      "sha256": "52ab0da6e6598839261e4b65ce7fadee9bac1b5c727210dccd6b2f7cb962331e"
+      "sha256": "aa8d5b0301a4d4afe71ea44d46baee5d9579c8f4ce17edf09b630ff81304c324"
     },
     {
-      "bytes": 245112,
+      "bytes": 256802,
       "chunk_id": "x_0__z_0",
       "path": "chunks/x_0__z_0.json",
-      "sha256": "ce3f058affe28f4d4040a2f50a68e2f3f8c0fae667fbf969d233dadfd486add8"
+      "sha256": "9212612cc98e2e2b12cfd722f4250550b3d8f668ce48564408943687dc4b8201"
     },
     {
       "bytes": 418952,
@@ -183,16 +183,16 @@
       "sha256": "432cac0daf8d91ec5c642e040fac0a1f3f65053daca722a07fa0062744d18828"
     },
     {
-      "bytes": 199328,
+      "bytes": 208938,
       "chunk_id": "x_1__z_-1",
       "path": "chunks/x_1__z_-1.json",
-      "sha256": "a952756b1c6d8d547669dffb89723c2be81d6c9a4b3afd2ae7f2dc3702a82b0d"
+      "sha256": "d065728501cf420146394897903af608abe55990b0ff8acac2c44c107a5dfc6c"
     },
     {
-      "bytes": 119327,
+      "bytes": 164749,
       "chunk_id": "x_1__z_0",
       "path": "chunks/x_1__z_0.json",
-      "sha256": "a952e4b16557561f6d8655e20d2c3d02041f859110f1c37d4693acc9952d59f3"
+      "sha256": "5111d63f0bbde414465ea17f1dbe7bdb73d665793624ba42cf93c956b3039ecb"
     },
     {
       "bytes": 125231,
@@ -231,7 +231,7 @@
       "sha256": "f6fd17666df382f89b51dff1b5a3b906e1c17fdc36d4af3e1aa4ecf4aad817a5"
     }
   ],
-  "content_sha256": "e965a36f5240e1b40f1c401ed37f0ba8203e537bf3e5e65fa9004fafce28d673",
+  "content_sha256": "6f85dd2851ab988121d12a62aceabe9572e8c6e5b4c1dfaa9315599614d986ed",
   "context": {
     "bytes": 675130,
     "path": "context.json",
@@ -265,9 +265,28 @@
     "unresolved_rows": 0
   },
   "coverage_ledger": {
-    "bytes": 156361,
+    "bytes": 156565,
     "path": "coverage-ledger.csv",
-    "sha256": "989c050b57d0c2114c16137fc1c5bb673cce18cf3efdeb37e89c7a74dcc11fc6"
+    "sha256": "11195bcf5e889cb35873c93dc4c1026ae505bb9b483fbaf83087240c8b216bd3"
+  },
+  "demolished_buildings": {
+    "path": "tools/config/demolished-buildings.json",
+    "sha256": "54393e523942c203b129de5e1f31e39ea058abe408f2771b4705ede52c974192",
+    "source_keys": [
+      "w109905031",
+      "w109905037",
+      "w109905040",
+      "w109905044",
+      "w34313523",
+      "w95934093",
+      "w95934098",
+      "w95934099",
+      "w95934122",
+      "w96698641",
+      "w96698653",
+      "w96698654",
+      "w96698660"
+    ]
   },
   "feature_kinds": [
     "building_part_roof",
@@ -284,14 +303,14 @@
   ],
   "files": [
     {
-      "bytes": 448596,
+      "bytes": 454777,
       "path": "chunks/x_-1__z_-1.json",
-      "sha256": "5e3b7efb7a2c61e1092c6a42ca9c04212c7d2603890b7a3f4c5e46777005f17b"
+      "sha256": "7c89462be906df0bfa1bc876cfd4a68d81e11c3391822070482d82ed5531e2ba"
     },
     {
-      "bytes": 177573,
+      "bytes": 195479,
       "path": "chunks/x_-1__z_-2.json",
-      "sha256": "09f3b10d05f8852964d935a87899fc95a38304fac9d7078c65597a10e66da973"
+      "sha256": "59667efa4d98fe4407e79c742fa41cec9448634904bcd861d2fa8f68141c3016"
     },
     {
       "bytes": 583940,
@@ -324,14 +343,14 @@
       "sha256": "d944f73d99f6d0cb1aa8e0647ff7b5490f80df64bbbcd41c656c78fbe15608d2"
     },
     {
-      "bytes": 911426,
+      "bytes": 872051,
       "path": "chunks/x_-2__z_-1.json",
-      "sha256": "6de57eb30f5771f43b33d7b71b53952be5ea6ec17706102be634a781152a3ee2"
+      "sha256": "a21410bcb219f1748e5a2d41dc0dd7125b642dacd07f7c9fd5f4026f4a093a00"
     },
     {
-      "bytes": 644248,
+      "bytes": 649001,
       "path": "chunks/x_-2__z_-2.json",
-      "sha256": "3a07310461da7d9e76667412c6ca18dac8bdea89923cd8392436421882132ef9"
+      "sha256": "272457c0da803d649bb8f7b4f2af2e487bbc2ece8e8a234f497477336a666437"
     },
     {
       "bytes": 650675,
@@ -384,19 +403,19 @@
       "sha256": "1cd2caaf02334a9aa39228e681a85b659b6da8e5fda3e7a875126071260ee74c"
     },
     {
-      "bytes": 306658,
+      "bytes": 268093,
       "path": "chunks/x_0__z_-1.json",
-      "sha256": "52ab0da6e6598839261e4b65ce7fadee9bac1b5c727210dccd6b2f7cb962331e"
+      "sha256": "aa8d5b0301a4d4afe71ea44d46baee5d9579c8f4ce17edf09b630ff81304c324"
     },
     {
-      "bytes": 262873,
+      "bytes": 269989,
       "path": "chunks/x_0__z_-2.json",
-      "sha256": "c0e1f86787410d975ad90272482e5f4971c4aedc7eb83132cd28b22acf1a3456"
+      "sha256": "6315afc6a537e6769e4f3413069d858683a1f64f67b8f9b9e7d30744d98f5e4c"
     },
     {
-      "bytes": 215303,
+      "bytes": 226249,
       "path": "chunks/x_0__z_-3.json",
-      "sha256": "6dfa4b8f4b91f309b313428829e37cedd13e4067ff94f896a8e2e5ef05002a1d"
+      "sha256": "342c30fac184172035c03b4ac3518d8b622481187576c6be65dbc3938f1f0082"
     },
     {
       "bytes": 132875,
@@ -404,9 +423,9 @@
       "sha256": "b9ed8d18acdcfe4f89e3d7fb1d69c11ba7152e174398c0943bfe295be2b12954"
     },
     {
-      "bytes": 245112,
+      "bytes": 256802,
       "path": "chunks/x_0__z_0.json",
-      "sha256": "ce3f058affe28f4d4040a2f50a68e2f3f8c0fae667fbf969d233dadfd486add8"
+      "sha256": "9212612cc98e2e2b12cfd722f4250550b3d8f668ce48564408943687dc4b8201"
     },
     {
       "bytes": 418952,
@@ -424,9 +443,9 @@
       "sha256": "9c5bbebdee1c652f780d5315f14afa65313226d31119bd98d856853e5785c706"
     },
     {
-      "bytes": 199328,
+      "bytes": 208938,
       "path": "chunks/x_1__z_-1.json",
-      "sha256": "a952756b1c6d8d547669dffb89723c2be81d6c9a4b3afd2ae7f2dc3702a82b0d"
+      "sha256": "d065728501cf420146394897903af608abe55990b0ff8acac2c44c107a5dfc6c"
     },
     {
       "bytes": 479124,
@@ -439,9 +458,9 @@
       "sha256": "c7413816a37f78f146cd9ac7c3b5aa0e24e59718342a78c98b85fda74531cd0a"
     },
     {
-      "bytes": 119327,
+      "bytes": 164749,
       "path": "chunks/x_1__z_0.json",
-      "sha256": "a952e4b16557561f6d8655e20d2c3d02041f859110f1c37d4693acc9952d59f3"
+      "sha256": "5111d63f0bbde414465ea17f1dbe7bdb73d665793624ba42cf93c956b3039ecb"
     },
     {
       "bytes": 125231,
@@ -479,19 +498,19 @@
       "sha256": "4008473d014530211eba8e77e5b6f3ebe977c283a4750bacb57d6739b239a037"
     },
     {
-      "bytes": 156361,
+      "bytes": 156565,
       "path": "coverage-ledger.csv",
-      "sha256": "989c050b57d0c2114c16137fc1c5bb673cce18cf3efdeb37e89c7a74dcc11fc6"
+      "sha256": "11195bcf5e889cb35873c93dc4c1026ae505bb9b483fbaf83087240c8b216bd3"
     },
     {
-      "bytes": 81538,
+      "bytes": 81562,
       "path": "coverage-summary.json",
-      "sha256": "f23852d5be19835f5aab7697e27e28aa2ec9770958bedbfbd17da817a30e10f2"
+      "sha256": "8ee6de0320382cff311aaa3fef0989f0145b0a0b5f79adf62e923c8b0d5856d3"
     },
     {
-      "bytes": 1285385,
+      "bytes": 1284030,
       "path": "logical-objects.json",
-      "sha256": "90f296c123039561df2ddf4950f690115933c619682976686716d1af31587f3f"
+      "sha256": "3c3d3a8b562e1e7ef1318f3531e4b27d26170809d1898b95c2b8b416f1868b4d"
     },
     {
       "bytes": 23820,
@@ -509,14 +528,14 @@
       "sha256": "e4816438dac07ff0983d9e481e626c698e6749f09b771f566f900ce56428031d"
     },
     {
-      "bytes": 2360142,
+      "bytes": 3061176,
       "path": "street_detail.json",
-      "sha256": "7fed44c22ebb793c2d01f0c92fe6d140f112bd210291cdc099ac2aa862fed3df"
+      "sha256": "b60ad1edf517becaf88222eb6fb948990be3d11a4e3926f759f0e18c93388a15"
     },
     {
       "bytes": 8955,
       "path": "terrain.json",
-      "sha256": "a00cd76a481c2521411ac5b7c1f5999a7cb46dab3f38db36b29671cb9c19e66e"
+      "sha256": "9b170c93853aa6e707023d10af81911983e6f075b3c07e913f72fe9cc57f9e91"
     }
   ],
   "generator": {
@@ -534,6 +553,7 @@
     "yaw": -0.119
   },
   "material_keys": [
+    "black_plastic",
     "building_part_roof",
     "building_part_wall",
     "building_roof",
@@ -558,6 +578,7 @@
     "park_plaza_zigzag",
     "road_path",
     "road_path_pedestrian",
+    "rubble_grey",
     "street_gutter",
     "street_kerb_concrete",
     "street_kerb_planting",
@@ -572,7 +593,10 @@
     "terrain_pier",
     "terrain_riprap",
     "terrain_sand",
-    "terrain_wetland"
+    "terrain_wetland",
+    "yard_asphalt",
+    "yard_asphalt_pale",
+    "yard_gravel"
   ],
   "playable_boundary": {
     "components": [
@@ -1170,13 +1194,13 @@
     }
   },
   "street_detail": {
-    "bytes": 2360142,
+    "bytes": 3061176,
     "path": "street_detail.json",
-    "sha256": "7fed44c22ebb793c2d01f0c92fe6d140f112bd210291cdc099ac2aa862fed3df"
+    "sha256": "b60ad1edf517becaf88222eb6fb948990be3d11a4e3926f759f0e18c93388a15"
   },
   "terrain": {
     "bytes": 8955,
     "path": "terrain.json",
-    "sha256": "a00cd76a481c2521411ac5b7c1f5999a7cb46dab3f38db36b29671cb9c19e66e"
+    "sha256": "9b170c93853aa6e707023d10af81911983e6f075b3c07e913f72fe9cc57f9e91"
   }
 }

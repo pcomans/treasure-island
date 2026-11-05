@@ -56,6 +56,14 @@ func build(document: Dictionary) -> Dictionary:
 			for index in posts.size() - 1:
 				length_m += Vector2(posts[index + 1].x - posts[index].x, posts[index + 1].z - posts[index].z).length()
 			bay_boxes.append_array(kit.add_run(cells, CELL_M, type, row.prop_params, posts, (id + ":" + str(run_index)).hash()))
+		# Gates stand open, their leaves back on the inside; banners hang on the runs.
+		for gate_value: Variant in (fence as Dictionary).get("gates", []):
+			if gate_value is Dictionary:
+				var gate := gate_value as Dictionary
+				bay_boxes.append_array(kit.add_gate(cells, CELL_M, type, row.prop_params, _posts(gate), gate.get("leaves", []) as Array))
+		for banner_value: Variant in (fence as Dictionary).get("banners", []):
+			if banner_value is Dictionary:
+				kit.add_banner(cells, CELL_M, type, row.prop_params, _posts(banner_value), float((banner_value as Dictionary).get("height_m", 1.0)))
 		var group := Node3D.new()
 		group.name = "Fence__" + id.validate_node_name()
 		group.set_meta("street_detail_id", id)
