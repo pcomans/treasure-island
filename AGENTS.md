@@ -49,6 +49,8 @@ Select the lowest unfinished zoom level island-wide using the [working stage che
 
 The same five levels apply to the **island environment layers**, because they dominate the look at gameplay distance: terrain and ground surfaces, roads and paths, shoreline and water, and lighting, sky and atmosphere. Track them in the checklist; under geometry first, schedule them after building Levels 1–2 island-wide, apart from the approved lighting and colour changes above. Vegetation stays deferred to the future vegetation pass (see [Authoring](#authoring)).
 
+Sites (parking lots, parks, plazas, yards, street-detail zones) and reusable asset types (props, vehicles, plants, the avatar) use the same five levels in the [site and asset inventory](discovery/SITE_AND_ASSET_INVENTORY.md). When work adds or improves a site or an asset type, the change updates its row there; integration pushes reconcile rows from parallel branches.
+
 Keep reference and layout comparison active throughout. Before choosing work at each level, inspect full target-reference and actual whole-building/site gameplay originals, using faithful original-pixel crops where needed to resolve architecture/opening/material families. Follow the [source-sufficiency guidance](.agents/skills/building-texture/SKILL.md#reference-sufficiency-before-authoring). Where meaningful bounded source attempts leave a side without a dated photo, that side stays as it is: no invented detail ([owner, 2026-11-03](#facade-recognizability-policy), superseding the earlier inference of such sides). Build in this order:
 
 1. **Basic building/site shape:** establish footprint/local ground fit, main volumes, massing, proportions, relative placement and coarse roof silhouette within the frozen source layout.
