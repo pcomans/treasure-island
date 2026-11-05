@@ -242,6 +242,8 @@ const PINE_SWAY := 0.003
 const BROADLEAF_SWAY := 0.003
 const MATURE_GUM_SWAY := 0.004
 const WEEPING_SWAY := 0.005
+## How much darker the weeping tree's arching shoots are than the eucalyptus spray they share.
+const WEEPING_SHOOT_SHADE := 0.56
 const NORFOLK_SWAY := 0.008
 const SHRUB_SWAY := 0.008
 
@@ -372,15 +374,16 @@ const CHRISTMAS_TREES := [
 ## The Job Corps entrance eucalypts (the owner's identification and photos, Nov 2026;
 ## sizes estimated from a street light beside them, about 9 m): 20-25 m tall, 18-20 m
 ## wide, a trunk about 1.5 m across at its foot, its first limb low and the rest
-## forking at about two fifths of its height. fork is the trunk's height to that
+## forking at about a third of its height, the crown reaching down to about a
+## quarter of it. fork is the trunk's height to that
 ## fork, lean its offset in metres, limbs the big limbs, rise how steeply they climb;
 ## crown_y is the dome's middle as a share of the height, polar how far round it its
 ## pads run from the top in radians, clouds its pads, cloud a pad's reach as a
 ## fraction of the spread, flat its height over its reach, spacing how far apart its
 ## sprays sit (a fraction of a spray's width), gap how far apart the pads stay.
 const MATURE_GUMS := [
-	{"seed": 401, "height": 21.0, "spread": 18.0, "fork": 8.0, "trunk_radius": 0.68, "limbs": 5, "lean": 0.5, "rise": 0.8, "crown_y": 0.59, "polar": 2.35, "clouds": 36, "cloud": 0.115, "flat": 0.8, "spacing": 0.74, "gap": 0.68},
-	{"seed": 402, "height": 24.0, "spread": 20.0, "fork": 9.2, "trunk_radius": 0.76, "limbs": 6, "lean": 0.7, "rise": 0.8, "crown_y": 0.59, "polar": 2.35, "clouds": 38, "cloud": 0.11, "flat": 0.8, "spacing": 0.8, "gap": 0.68},
+	{"seed": 401, "height": 21.0, "spread": 18.0, "fork": 7.0, "trunk_radius": 0.68, "limbs": 5, "lean": 0.5, "rise": 0.8, "crown_y": 0.55, "polar": 2.55, "clouds": 44, "cloud": 0.125, "flat": 0.8, "spacing": 0.72, "gap": 0.58},
+	{"seed": 402, "height": 24.0, "spread": 20.0, "fork": 8.0, "trunk_radius": 0.76, "limbs": 6, "lean": 0.7, "rise": 0.8, "crown_y": 0.55, "polar": 2.55, "clouds": 50, "cloud": 0.12, "flat": 0.8, "spacing": 0.72, "gap": 0.58},
 ]
 ## The weeping trees flanking them (owner photos, Nov 2026; species unresolved, so the
 ## photographed form; sizes estimated): a dense dome on the left, an open tree with
@@ -656,7 +659,7 @@ const PROPS := {
 	"monterey_pine": {"kinds": ["tree"], "variants": PINES, "ranges": [45.0, 110.0, 900.0], "foot_m": 0.6, "form": "pine", "impostor_grid": IMPOSTOR_TREE_GRID, "impostor_alpha": 0.06, "impostor_sky_lean": IMPOSTOR_PINE_SKY_LEAN},
 	"spreading_broadleaf": {"kinds": ["tree"], "variants": BROADLEAVES, "ranges": [45.0, 110.0, 900.0], "foot_m": 0.7, "form": "broadleaf", "impostor_grid": IMPOSTOR_TREE_GRID, "impostor_alpha": 0.05},
 	"nz_christmas_tree": {"kinds": ["tree"], "variants": CHRISTMAS_TREES, "ranges": [40.0, 100.0, 800.0], "foot_m": 0.5, "form": "broadleaf", "impostor_grid": IMPOSTOR_TREE_GRID, "impostor_alpha": 0.05},
-	"eucalyptus_mature": {"kinds": ["tree"], "variants": MATURE_GUMS, "ranges": [60.0, 140.0, 900.0], "foot_m": 0.9, "form": "gum", "impostor_grid": IMPOSTOR_TREE_GRID, "impostor_alpha": 0.04, "impostor_sky_lean": IMPOSTOR_THIN_SKY_LEAN},
+	"eucalyptus_mature": {"kinds": ["tree"], "variants": MATURE_GUMS, "ranges": [60.0, 140.0, 900.0], "foot_m": 0.9, "form": "gum", "impostor_grid": IMPOSTOR_TREE_GRID, "impostor_alpha": 0.04},
 	"weeping_broadleaf": {"kinds": ["tree"], "variants": WEEPING_TREES, "ranges": [50.0, 120.0, 900.0], "foot_m": 0.5, "form": "weeping", "impostor_grid": IMPOSTOR_TREE_GRID, "impostor_alpha": 0.04},
 	"norfolk_island_pine": {"kinds": ["tree"], "variants": NORFOLK_PINES, "ranges": [35.0, 90.0, 600.0], "foot_m": 0.2, "form": "araucaria", "impostor_grid": IMPOSTOR_TREE_GRID, "impostor_alpha": 0.1, "impostor_sky_lean": IMPOSTOR_THIN_SKY_LEAN},
 	"indian_hawthorn": {"kinds": ["planting_slot"], "variants": HAWTHORNS, "ranges": [30.0, 75.0, 160.0], "foot_m": 0.6, "form": "shrub", "impostor_grid": IMPOSTOR_SHRUB_GRID, "impostor_alpha": 0.1},
@@ -1973,7 +1976,7 @@ func _build_mature_gum(p: Dictionary) -> Dictionary:
 	var fork := trunk_points[8]
 	var crown_center := Vector3(0.0, height * float(p.crown_y), 0.0) + lean * 1.4
 	var cloud_reach := spread * float(p.cloud)
-	var card_size := clampf(cloud_reach * 0.72, 1.4, 2.2)
+	var card_size := clampf(cloud_reach * 0.9, 1.6, 2.4)
 	var inside := spread * 0.5 - cloud_reach * 0.85
 	var up_radius := height * (1.0 - float(p.crown_y)) - cloud_reach * 0.7
 	var clouds := _dome_clouds(rng, crown_center, Vector3(inside, up_radius, inside), float(p.polar), int(p.clouds), cloud_reach, float(p.flat), float(p.gap))
@@ -2000,17 +2003,17 @@ func _build_mature_gum(p: Dictionary) -> Dictionary:
 		var height_f := clampf((position.y - crown_low) / (height - crown_low), 0.0, 1.0)
 		# Each pad its own tone, darker low in the crown and underneath: a dome of a lot of
 		# dark hollows, not one bright surface.
-		var tone := lerpf(0.84, 1.0, _hash01(int(p.seed), int(site.lobe), 5))
-		var shade := rng.randf_range(0.94, 1.05) * tone * lerpf(0.76, 1.0, height_f) * lerpf(1.0, 0.64, clampf(-out.y, 0.0, 1.0))
+		var tone := lerpf(0.8, 1.0, _hash01(int(p.seed), int(site.lobe), 5))
+		var shade := rng.randf_range(0.94, 1.05) * tone * lerpf(0.78, 1.0, height_f) * lerpf(1.0, 0.64, clampf(-out.y, 0.0, 1.0))
 		var color := Color(shade, shade, shade)
 		var size := card_size * rng.randf_range(0.85, 1.2)
 		var mirror := 1.0 if rng.randf() < 0.5 else -1.0
 		# The sprays hang from their twigs at the card's top edge.
 		for normal in _cluster_normals(out + Vector3.DOWN * 0.2, rng, 0.35):
-			var card := _card(position, normal, Vector3.UP, size * mirror, size * 0.8, 0.8, rng.randf_range(-0.25, 0.25), EUCALYPTUS_SPRAY, color, (cloud.center as Vector3).lerp(heart, 0.7), index, 0.03)
+			var card := _card(position, normal, Vector3.UP, size * mirror, size * 0.8, 0.8, rng.randf_range(-0.25, 0.25), EUCALYPTUS_SPRAY, color, (cloud.center as Vector3).lerp(heart, 0.9), index, 0.03)
 			card.coarse = true
 			card.root = 0.8
-			card.heart_weight = 0.72
+			card.heart_weight = 0.8
 			card.lod1 = site.has("lod1")
 			card.lod1_grow = 1.8
 			cards.append(card)
@@ -2043,7 +2046,7 @@ func _gum_bark(s: Surf, trunk_radius: float, fork_y: float, phase: float) -> voi
 			s.verts[index] = position + s.normals[index] * trunk_radius * 0.3 * buttress * exp(-maxf(position.y, 0.0) / 1.0)
 		var pale := smoothstep(fork_y * 0.7, fork_y * 1.8, position.y)
 		var color := s.colors[index]
-		s.colors[index] = Color(color.r * lerpf(0.86, 1.0, pale), color.g * lerpf(0.8, 0.99, pale), color.b * lerpf(0.74, 0.97, pale))
+		s.colors[index] = Color(color.r * lerpf(0.9, 1.0, pale), color.g * lerpf(0.88, 0.99, pale), color.b * lerpf(0.86, 0.97, pale))
 
 
 # --- Weeping tree ---------------------------------------------------------------------------------------------
@@ -2051,9 +2054,9 @@ func _gum_bark(s: Surf, trunk_radius: float, fork_y: float, phase: float) -> voi
 
 ## A weeping tree (flanking the Job Corps eucalypts; owner photos, Nov 2026; its species
 ## is unresolved, so the photographed form): a dark, furrowed, leaning trunk forking
-## into a few big limbs that climb and arch over, thatched with hanging strands: short
-## ones over the crown's top, lengthening down its sides into long curtains that fall
-## almost to the ground. Its upper crown is pads over a dome, as the broadleaf's.
+## into a few big limbs that climb and arch over a rounded crown of pads: arching
+## shoots over its top, their leaf tips its outline, and hanging strands down its sides,
+## lengthening into long curtains that fall almost to the ground.
 func _build_weeping(p: Dictionary) -> Dictionary:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = int(p.seed)
@@ -2100,33 +2103,40 @@ func _build_weeping(p: Dictionary) -> Dictionary:
 		var azimuth := atan2(position.z - crown_center.z, position.x - crown_center.x)
 		var wave := 0.5 + 0.3 * sin(3.0 * azimuth + phase) + 0.2 * sin(5.0 * azimuth - phase * 2.0)
 		var hem_y := lerpf(float(hem[0]), float(hem[1]), clampf(wave * rng.randf_range(0.7, 1.3) + 0.25 * pow(radial, 3.0), 0.0, 1.0))
-		var drop := lerpf(rng.randf_range(1.5, 2.6), maxf(position.y - hem_y, 1.6), side)
-		var tone := lerpf(0.86, 1.0, _hash01(int(p.seed), int(site.lobe), 5))
+		# Few strands reach a card's bottom edge, so it runs on past the hem they should reach.
+		# Some stop well short of it, so the crown falls in layers, not one flat curtain.
+		var layer := 1.0 if rng.randf() < 0.45 else rng.randf_range(0.4, 0.75)
+		var drop := minf(lerpf(rng.randf_range(2.0, 3.2), maxf(position.y - hem_y, 1.6) * 1.25 * layer, side), position.y - 0.2)
+		# Each pad its own tone, so the crown reads as masses over dark hollows.
+		var tone := lerpf(0.68, 1.06, _hash01(int(p.seed), int(site.lobe), 5))
 		var shade := rng.randf_range(0.93, 1.05) * tone * lerpf(0.74, 1.0, height_f) * lerpf(0.82, 1.0, radial) * lerpf(1.0, 0.68, clampf(-out.y, 0.0, 1.0))
 		var color := Color(shade, shade, shade)
 		var mirror := 1.0 if rng.randf() < 0.5 else -1.0
 		var width := clampf(drop * 0.42, 1.3, 2.4) * mirror
-		# The strands hang straight down, wherever on the crown they start; on the top
-		# their cards tip back to show from above, never lying flat, and turn over, so
-		# the crown's outline is their ragged tips, not the card's straight top edge.
-		var over := out.y > 0.3
-		if over:
-			drop = rng.randf_range(1.0, 1.5)
+		# The strands hang straight down, wherever on the crown they start. Over the top
+		# are arching shoots instead, a spray turned up, so the crown's outline is leaf
+		# tips, not the straight top edge of a strand card; tipped back to show from above.
+		var over := out.y > 0.32
 		var facing := Vector3(out.x, 0.0, out.z)
 		if facing.length() < 0.25:
 			var turn := rng.randf() * TAU
 			facing = Vector3(cos(turn), 0.0, sin(turn))
 		facing = facing.normalized() + Vector3.UP * clampf(out.y, 0.0, 0.8)
 		for normal: Vector3 in [facing.normalized(), facing.rotated(Vector3.UP, PI * 0.5 + rng.randf_range(-0.3, 0.3)).normalized()]:
-			var card := _card(position + Vector3.UP * 0.25, normal, Vector3.UP, width, drop, 0.22 if over else 1.0, (PI if over else 0.0) + rng.randf_range(-0.05, 0.05), WEEPING_CURTAIN, color, (site.center as Vector3).lerp(heart, 0.8), index, 0.04)
+			var card: Dictionary
+			if over:
+				var size := rng.randf_range(1.4, 1.9)
+				card = _card(position, normal, Vector3.UP, size * mirror, size * 0.72, 0.42, PI + rng.randf_range(-0.3, 0.3), EUCALYPTUS_SPRAY, color * WEEPING_SHOOT_SHADE, (site.center as Vector3).lerp(heart, 0.8), index, 0.04)
+			else:
+				card = _card(position + Vector3.UP * 0.25, normal, Vector3.UP, width, drop, 1.0, rng.randf_range(-0.05, 0.05), WEEPING_CURTAIN, color, (site.center as Vector3).lerp(heart, 0.8), index, 0.04)
 			card.coarse = true
-			card.root = 0.9
+			card.root = 1.0 if over else 0.9
 			card.heart_weight = 0.7
 			card.lod1 = site.has("lod1")
 			# Grown, but not through the ground.
 			card.lod1_grow = clampf((position.y - 0.3) / drop, 1.0, 1.45)
 			cards.append(card)
-	_filler_cards(cards, lobes, 0.62, WEEPING_CURTAIN, 0.52, rng)
+	_filler_cards(cards, lobes, 0.62, EUCALYPTUS_SPRAY, 0.36, rng)
 	var meshes: Array[ArrayMesh] = []
 	for lod in 2:
 		var mesh := ArrayMesh.new()

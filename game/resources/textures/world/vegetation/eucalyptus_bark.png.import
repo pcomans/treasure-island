@@ -3,15 +3,10 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://o4cne62o2b4f"
-path="res://.godot/imported/eucalyptus_bark.png-f873ffca4761d8f0e78bfcfe7d4e67c9.ctex"
-metadata={
-"vram_texture": false
-}
 
 [deps]
 
 source_file="res://game/resources/textures/world/vegetation/eucalyptus_bark.png"
-dest_files=["res://.godot/imported/eucalyptus_bark.png-f873ffca4761d8f0e78bfcfe7d4e67c9.ctex"]
 
 [params]
 
