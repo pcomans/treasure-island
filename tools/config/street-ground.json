@@ -2,7 +2,7 @@
   "schema_version": "ti.street-ground-rules/1",
   "notes": [
     "The street ground of every Treasure Island street outside the pilot zones (tools/config/street-detail-zones.json), built by tools/lib/street-ground-generation.mjs. Each rule is production inference for game art read from the dated sources it cites, not survey data; a street with no imagery gets the plainest treatment its class supports.",
-    "A treatment is how a class of street looks: each side's curb (walk: a concrete sidewalk sidewalk_width_m wide at the curb; verge: a concrete curb top, then grass, verge_width_m in all; none: the asphalt edge onto the ground), the fill between the curb and an OSM sidewalk set back from it (concrete, lawn or mulch), the centre line (double_yellow, dashed_faded, dashed_white or null), white edge lines, the paint of its marked crossings (continental bars, two transverse lines, or ladder: both), the paint wear (0 fresh to 3 mostly worn away), red fire-lane curb paint (none, along junction approaches red_curb_approach_m long, or all), yellow tactile pads at curb ramps or none (tactile_pads) and the asphalt wear (decals per 100 m2 of asphalt, manhole and drain spacing).",
+    "A treatment is how a class of street looks: each side's curb (walk: a concrete sidewalk sidewalk_width_m wide at the curb; verge: a concrete curb top, then grass, verge_width_m in all; none: the asphalt edge onto the ground), the fill between the curb and an OSM sidewalk set back from it (concrete, lawn or mulch), the centre line (double_yellow, dashed_faded, dashed_white or null), white edge lines, the paint of its marked crossings (continental bars, two transverse lines, or ladder: both), the paint wear (0 fresh, 3 mostly worn, 4 nearly worn away), red fire-lane curb paint (none, along junction approaches red_curb_approach_m long, or all), yellow tactile pads at curb ramps or none (tactile_pads) and the asphalt wear (decals per 100 m2 of asphalt, manhole and drain spacing).",
     "A street names its OSM ways and treatment; set changes treatment fields for it; sides gives a way's left or right curb (relative to the way's own direction) as one kind or [from_m, to_m, kind] stretches along it; widen adds asphalt beyond the frozen ribbon on a side (the curb-to-curb width read from the aerial), parking lists the stretches where the aerial shows cars at that curb, for the parked cars, and red_curb gives a side's red curb paint as photographed (a mode, or a mode and [from_m, to_m] stretches).",
     "crossings gives the paint of an OSM crossing node (or none) as the dated aerial shows it, overriding its OSM tags: read off 0.25 m contact sheets of every OSM crossing node (2026-05-26 capture). An untagged node gets paint only where it is listed; where two nodes mark one crosswalk only one is drawn. crosswalks adds a photographed crosswalk where OSM maps no crossing, across a way at a distance along it. stops adds a stop line and STOP legend on an approach the photographs show and OSM lacks; stalls paint stall lines across a widened shoulder; bays are perpendicular parking bays paved off a street's edge (OSM maps none); lots paint a parking lot's stall rows, legends (each at a paint wear step), hatched zones and raised islands, and may lay their own pavement with its patched strips, cracks, oil stains and sealed joints where the photographs show it unlike the island's lot asphalt. pilot sets the pilot zones' crosswalk paint wear.",
     "Sources: Esri World Imagery, the Vantor capture of 2026-05-26 (0.34 m), exported at 0.25 m per pixel (0.32 m Web Mercator: map level 19 or coarser; Esri draws a different capture, 2025-08-29, at level 20, finer than about 0.15 m), its date checked 2026-11-05 with the service's identify at the export scale; Google Street View, dated per entry, cameras in game metres (x east, z south) with compass headings; the clutter layer's curb-parking survey of the same aerial (2026-11-05)."
@@ -1089,7 +1089,7 @@
     "n1249019406": "lines",
     "n1249019408": "lines",
     "n1249019409": "ladder",
-    "n1249019410": "lines",
+    "n1249019410": "continental",
     "n1249019411": "lines",
     "n1249019417": "lines",
     "n1249019418": "ladder",
@@ -1118,9 +1118,10 @@
   "crosswalks": [
     {
       "way": "w1473253277",
-      "at_m": 66,
+      "at_m": 60.85,
+      "width_m": 9.0,
       "style": "lines",
-      "evidence": "Google Street View Mar 2025 at 900 Avenue D (heading 152): two faded transverse bars across Avenue D just south of 11th Street; OSM maps no crossing node there."
+      "evidence": "Google Street View Mar 2025 at 900 Avenue D (heading 152): two faded transverse bars across Avenue D about 10.7 and 19.4 m ahead of the camera (at 45.8 m along the way), the far one at the mouth of 11th Street; OSM maps no crossing there."
     }
   ],
   "stops": [],
@@ -1320,7 +1321,7 @@
     {
       "id": "mersea_lot",
       "source_key": "w28356874",
-      "evidence": "Owner-priority lot by Mersea (699 Avenue of the Palms). Aerial 2026-05-26 (0.25 m, traced in the lot's own frame along its north-west edge): four rows of 90-degree stalls square to 9th Street in the north field (the north-west row, a back-to-back pair, and the row along the south-east aisle). Google Street View Sep 2025 inside the lot (pano TKhpp at x -365.5, z 142.7, headings 70, 110, 190 and 10; panos UmL4 and LtXS up the Avenue A strip): TOUR BUS PARKING across three wide stalls along the strip's east fence, faded stall marks along both edges of the strip, blue accessible stalls by the event trailers at its west side, a small raised island holding a lamp and a litter can, a white turn arrow by it. Stall counts and exact positions are production inference from the aerial. Fix round (2026-11-05): the Avenue A strip's rows sit about 5 m further out (May 2026 aerial: the east cars' centres about 10.4 m from the OSM centre line, noses at the planters; the west-edge car about 12.6 m out); the lamp island stands just off the OSM road ribbon (Sep 2025, heading 10); hatched zones at the field rows' ends and the outlined box at the west end from the aerial; stall paint nearly worn away, the accessible stalls outlined in blue; long tar-sealed joints and patched strips along the lot (Sep 2025 photos up the strip).",
+      "evidence": "Owner-priority lot by Mersea (699 Avenue of the Palms). Aerial 2026-05-26 (0.25 m, traced in the lot's own frame along its north-west edge): four rows of 90-degree stalls square to 9th Street in the north field (the north-west row, a back-to-back pair, and the row along the south-east aisle). Google Street View Sep 2025 inside the lot (pano TKhpp at x -365.5, z 142.7, headings 70, 110, 190 and 10; panos UmL4 and LtXS up the Avenue A strip): TOUR BUS PARKING across three wide stalls along the strip's east fence, faded stall marks along both edges of the strip, blue accessible stalls by the event trailers at its west side, a small raised island holding a lamp and a litter can, a white turn arrow by it. Stall counts and exact positions are production inference from the aerial. Fix round (2026-11-05): the Avenue A strip's rows sit about 5 m further out (May 2026 aerial: the east cars' centres about 10.4 m from the OSM centre line, noses at the planters; the west-edge car about 12.6 m out); the lamp island stands just off the OSM road ribbon (Sep 2025, heading 10); hatched zones at the field rows' ends and the outlined box at the west end from the aerial; the field's stall paint mostly worn (step 3) and the strip's nearly worn away (step 4, faded rows), the accessible stalls outlined in blue; long tar-sealed joints and patched strips along the Avenue A strip (Sep 2025 photos up the strip; none drawn in the north field, whose photos show cracks but no joints).",
       "paint_wear": 3,
       "surface": {
         "material": "yard_asphalt_pale",
@@ -1330,40 +1331,112 @@
           "oil_per_100m2": 0.2,
           "patch_per_100m2": 0.0
         },
-        "seams": {
-          "axis_xz": [
-            0.495,
-            0.869
-          ],
-          "spacing_m": 6.5,
-          "width_m": 0.12
-        },
-        "patch_strips": [
+        "seams": [
           {
             "line_xz": [
               [
-                -361.06,
-                147.53
+                -369.448,
+                153.062
               ],
               [
-                -332.0,
-                202.89
+                -339.243,
+                210.607
               ]
             ],
-            "width_m": 1.2
+            "width_m": 0.07
           },
           {
             "line_xz": [
               [
-                -366.71,
-                150.74
+                -366.615,
+                151.575
               ],
               [
-                -337.65,
-                206.1
+                -336.41,
+                209.12
               ]
             ],
-            "width_m": 0.9
+            "width_m": 0.07
+          },
+          {
+            "line_xz": [
+              [
+                -363.605,
+                149.995
+              ],
+              [
+                -333.4,
+                207.54
+              ]
+            ],
+            "width_m": 0.07
+          },
+          {
+            "line_xz": [
+              [
+                -360.064,
+                148.136
+              ],
+              [
+                -329.859,
+                205.681
+              ]
+            ],
+            "width_m": 0.07
+          },
+          {
+            "line_xz": [
+              [
+                -357.408,
+                146.742
+              ],
+              [
+                -327.203,
+                204.287
+              ]
+            ],
+            "width_m": 0.07
+          }
+        ],
+        "patch_strips": [
+          {
+            "line_xz": [
+              [
+                -366.638,
+                154.975
+              ],
+              [
+                -357.344,
+                172.681
+              ]
+            ],
+            "width_m": 1.4
+          },
+          {
+            "line_xz": [
+              [
+                -354.556,
+                177.992
+              ],
+              [
+                -342.473,
+                201.01
+              ]
+            ],
+            "width_m": 1.4
+          },
+          {
+            "line_xz": [
+              [
+                -357.829,
+                157.127
+              ],
+              [
+                -342.03,
+                187.227
+              ]
+            ],
+            "width_m": 1.1
           }
         ]
       },
@@ -1615,20 +1688,20 @@
           "id": "west_box",
           "points_xz": [
             [
-              -371.162,
-              117.356
+              -375.78,
+              111.067
             ],
             [
-              -365.948,
-              114.386
+              -370.566,
+              108.097
             ],
             [
-              -360.008,
-              124.814
+              -364.626,
+              118.525
             ],
             [
-              -365.222,
-              127.784
+              -369.84,
+              121.495
             ]
           ],
           "stripes": false

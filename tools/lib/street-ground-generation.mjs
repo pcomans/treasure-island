@@ -104,14 +104,14 @@ const RECORD_KINDS = Object.freeze({
 // Paint kinds (street-marking UV.x integer part, modulo PAINT_VARIANT_STRIDE)
 // and wear atlas cells (street-wear UV.x integer part); the shaders read the
 // same numbers. The integer part of a marking's UV.x is kind + stride * variant:
-// for painted lines and legends the variant is a wear step (0 fresh to 3 mostly
-// worn away; PAINT_WEAR_STEPS), for kind legend it is the cell of the legend
+// for painted lines and legends the variant is a wear step (0 fresh, 3 mostly worn,
+// 4 nearly worn away; PAINT_WEAR_STEPS), for kind legend it is the cell of the legend
 // atlas (STREET_LEGEND_CELLS) plus STREET_LEGEND_ATLAS_CELLS times its wear step.
 // red_curb is curb paint, blue an accessible stall; sealant and patch are a lot's
 // tar-sealed joints and patched strips.
 export const STREET_PAINT_KINDS = Object.freeze({ white: 0, yellow: 1, red: 2, green: 3, tactile: 4, stop_legend: 5, yellow_faded: 6, red_curb: 7, blue: 8, legend: 9, sealant: 10, patch: 11 });
 export const PAINT_VARIANT_STRIDE = 16;
-export const PAINT_WEAR_STEPS = 4;
+export const PAINT_WEAR_STEPS = 5;
 export const STREET_LEGEND_CELLS = Object.freeze({ tour_bus_parking: 0, arrow_straight: 1, arrow_left: 2, arrow_right: 3, accessible: 4 });
 // The legend atlas's cell count (street_legends.png, street_paint.gdshader legend_cells).
 export const STREET_LEGEND_ATLAS_CELLS = 8;
@@ -457,8 +457,9 @@ export function validateStreetGroundRules(rules) {
   }
   // Crosswalks photographed where OSM maps no crossing: across a way at a distance along it.
   for (const walk of rules.crosswalks) {
-    exactKeys(walk, ["at_m", "evidence", "style", "way"], "Street ground crosswalk");
+    exactKeys(walk, ["at_m", "evidence", "style", "way", ...("width_m" in (walk ?? {}) ? ["width_m"] : [])], "Street ground crosswalk");
     invariant(/^w\d+$/u.test(walk.way) && isFiniteNumber(walk.at_m) && walk.at_m >= 0 && CROSSWALK_STYLES.includes(walk.style) && walk.style !== "none" &&
+      (walk.width_m === undefined || (isFiniteNumber(walk.width_m) && walk.width_m >= 2 && walk.width_m <= 12)) &&
       typeof walk.evidence === "string" && walk.evidence.trim() !== "", `Street ground crosswalk on ${walk.way} is malformed`);
   }
   // Stall lines painted across a widened shoulder (no new pavement).
@@ -490,10 +491,12 @@ export function validateStreetGroundRules(rules) {
       exactKeys(lot.surface, ["evidence", "material", "patch_strips", "seams", "wear"], `${label} surface`);
       exactKeys(lot.surface.wear, LOT_WEAR_FIELDS, `${label} surface wear`);
       for (const key of LOT_WEAR_FIELDS) invariant(isFiniteNumber(lot.surface.wear[key]) && lot.surface.wear[key] >= 0, `${label} surface wear.${key} must be non-negative`);
-      // Long tar-sealed joints parallel to an axis, a spacing apart, and patched strips.
-      exactKeys(lot.surface.seams, ["axis_xz", "spacing_m", "width_m"], `${label} surface seams`);
-      invariant(isXZ(lot.surface.seams.axis_xz) && Math.hypot(...lot.surface.seams.axis_xz) > 1e-6 && isFiniteNumber(lot.surface.seams.spacing_m) && lot.surface.seams.spacing_m >= 1 &&
-        isFiniteNumber(lot.surface.seams.width_m) && lot.surface.seams.width_m > 0 && lot.surface.seams.width_m <= 0.3, `${label} surface seams are malformed`);
+      // Long tar-sealed joints and patched strips, each along a line.
+      for (const seam of lot.surface.seams) {
+        exactKeys(seam, ["line_xz", "width_m"], `${label} surface seam`);
+        invariant(Array.isArray(seam.line_xz) && seam.line_xz.length === 2 && seam.line_xz.every(isXZ) && isFiniteNumber(seam.width_m) && seam.width_m > 0 && seam.width_m <= 0.3,
+          `${label} surface seam is malformed`);
+      }
       for (const strip of lot.surface.patch_strips) {
         exactKeys(strip, ["line_xz", "width_m"], `${label} surface patch strip`);
         invariant(Array.isArray(strip.line_xz) && strip.line_xz.length === 2 && strip.line_xz.every(isXZ) && isFiniteNumber(strip.width_m) && strip.width_m > 0 && strip.width_m <= 4,
@@ -1668,7 +1671,7 @@ export function generateStreetGround({
     const style = nodeStyle ?? (rule ? rule.treatment.crosswalk : "continental");
     return { style, wear: rule ? rule.treatment.paint_wear : (rules?.pilot.crosswalk_paint_wear ?? 0), tactile: rule ? rule.treatment.tactile_pads : true, rule: rule !== null };
   };
-  const addCrosswalk = (sourceKey, center, direction, signals = false, paintOf = { style: "continental", wear: 0, tactile: true, rule: false }, host = null) => {
+  const addCrosswalk = (sourceKey, center, direction, signals = false, paintOf = { style: "continental", wear: 0, tactile: true, rule: false }, host = null, widthM = null) => {
     if (paintOf.style === "none" || zonesAt(center).length === 0) return;
     const start = add(center, scale(direction, -25));
     const end = add(center, scale(direction, 25));
@@ -1689,7 +1692,7 @@ export function generateStreetGround({
     }
     if (!span || span[1] - span[0] < 2) return;
     if (crosswalks.some((walk) => length(sub(walk.center, center)) < 2.5 && Math.abs(dot(walk.direction, direction)) > 0.9)) return;
-    const width = paintOf.style === "lines" ? LINES_WALK_WIDTH_M : crossings.walk_width_m;
+    const width = widthM ?? (paintOf.style === "lines" ? LINES_WALK_WIDTH_M : crossings.walk_width_m);
     crosswalks.push({ source_key: sourceKey, center, direction, across: leftOf(direction), span, signals, style: paintOf.style, width_m: width, paint_wear: paintOf.wear, tactile: paintOf.tactile });
   };
   for (const way of crossingWays) {
@@ -1732,7 +1735,7 @@ export function generateStreetGround({
     invariant(walk.at_m <= polylineLength(wayLine(host)), `Street ground crosswalk on ${walk.way} lies past the way's end`);
     const at = pointAlong(wayLine(host), walk.at_m);
     const before = crosswalks.length;
-    addCrosswalk(walk.way, at.point, leftOf(at.tangent), false, crosswalkPaint(at.point, host, walk.style), host);
+    addCrosswalk(walk.way, at.point, leftOf(at.tangent), false, crosswalkPaint(at.point, host, walk.style), host, walk.width_m ?? null);
     invariant(crosswalks.length > before, `Street ground crosswalk on ${walk.way} at ${walk.at_m} m found no carriageway to cross`);
   }
   crosswalks.sort((left, right) => left.center[0] - right.center[0] || left.center[1] - right.center[1]);
@@ -2727,17 +2730,17 @@ export function generateStreetGround({
       addPiece("marking", piece, lotStep("patch"), kindUv(STREET_PAINT_KINDS.patch));
       sources.marking.add(lot.source_key);
     }
-    const seamAxis = unit([lot.surface.seams.axis_xz[0], -lot.surface.seams.axis_xz[1]]);
-    const seamBox = boxOfMulti(polygon);
-    const seamCentre = [(seamBox.min_x + seamBox.max_x) / 2, (seamBox.min_y + seamBox.max_y) / 2];
-    const seamReach = Math.hypot(seamBox.max_x - seamBox.min_x, seamBox.max_y - seamBox.min_y) / 2 + 1;
-    const seams = [];
-    for (let offset = -seamReach, index = 0; offset <= seamReach; offset += lot.surface.seams.spacing_m, index += 1) {
-      const jitter = (hashUnit(seed, `${lot.id}:seam:${index}`, 0) - 0.5) * lot.surface.seams.spacing_m * 0.3;
-      seams.push(rectangle(add(seamCentre, scale(leftOf(seamAxis), offset + jitter)), seamAxis, leftOf(seamAxis), -seamReach, seamReach,
-        -lot.surface.seams.width_m / 2, lot.surface.seams.width_m / 2));
-    }
-    const sealed = openPavement(`lot ${lot.id} seams`, union(`lot ${lot.id} seam lines`, seams));
+    // Each joint wanders a little either side of its line (a 2.5 m step, up to 0.12 m).
+    const seams = lot.surface.seams.map((seam, index) => {
+      const a = [seam.line_xz[0][0], -seam.line_xz[0][1]];
+      const b = [seam.line_xz[1][0], -seam.line_xz[1][1]];
+      const along = unit(sub(b, a));
+      const steps = Math.max(1, Math.round(length(sub(b, a)) / 2.5));
+      const points = Array.from({ length: steps + 1 }, (_, step) => add(add(a, scale(sub(b, a), step / steps)),
+        scale(leftOf(along), step === 0 || step === steps ? 0 : (hashUnit(seed, `${lot.id}:seam:${index}:${step}`, 0) - 0.5) * 0.24)));
+      return strip(`lot ${lot.id} seam ${index}`, points, -seam.width_m / 2, seam.width_m / 2);
+    });
+    const sealed = seams.length === 0 ? [] : openPavement(`lot ${lot.id} seams`, union(`lot ${lot.id} seam lines`, seams));
     if (sealed.length > 0) {
       addPiece("marking", sealed, lotStep("seam"), kindUv(STREET_PAINT_KINDS.sealant));
       sources.marking.add(lot.source_key);
