@@ -2,10 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
+uid="uid://cfg3yiu0cgrkb"
+path="res://.godot/imported/cover_map.png-c1959aab5ad2b199622f5a0518554930.ctex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
 source_file="res://game/resources/textures/world/ground_cover/cover_map.png"
+dest_files=["res://.godot/imported/cover_map.png-c1959aab5ad2b199622f5a0518554930.ctex"]
 
 [params]
 

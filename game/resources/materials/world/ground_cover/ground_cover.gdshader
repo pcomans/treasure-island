@@ -27,9 +27,11 @@ uniform vec3 lawn_straw : source_color = vec3(0.537, 0.575, 0.248);
 uniform vec3 dry_gap : source_color = vec3(0.48, 0.42, 0.29);
 uniform vec3 dry_blade : source_color = vec3(0.55, 0.53, 0.32);
 uniform vec3 dry_straw : source_color = vec3(0.76, 0.69, 0.50);
-uniform vec3 soil_gap : source_color = vec3(0.52, 0.45, 0.34);
-uniform vec3 soil_blade : source_color = vec3(0.49, 0.44, 0.32);
-uniform vec3 soil_straw : source_color = vec3(0.555, 0.485, 0.375);
+// Bare soil: the pale, warm-neutral fill of the 2026-05-26 aerial's bare
+// ground (about sRGB 185-195, 180-189, 158-167 from above in sun).
+uniform vec3 soil_gap : source_color = vec3(0.54, 0.50, 0.41);
+uniform vec3 soil_blade : source_color = vec3(0.51, 0.49, 0.385);
+uniform vec3 soil_straw : source_color = vec3(0.58, 0.545, 0.45);
 
 // Family mix. A point turns dry where the patch noise exceeds dry_threshold and
 // bare where the bare noise exceeds bare_threshold; above 1 disables a layer,
@@ -44,7 +46,7 @@ uniform float patch_softness = 0.08;
 // The world map of recipe weights and its rectangle: origin x, z and the
 // inverse of its width and depth in metres. A black map leaves every family as is.
 uniform sampler2D cover_map : hint_default_black, filter_linear_mipmap, repeat_disable;
-uniform vec4 cover_map_rect = vec4(-720.0, -960.0, 1.0 / 1440.0, 1.0 / 1920.0);
+uniform vec4 cover_map_rect = vec4(-720.0, -960.0, 0.000694444, 0.000520833);
 uniform vec3 recipe_lawn = vec3(2.0, 2.0, 0.0);
 uniform vec3 recipe_straw = vec3(2.0, 2.0, 0.0);
 uniform vec3 recipe_dry_field = vec3(2.0, 2.0, 0.0);
@@ -52,7 +54,7 @@ uniform vec3 recipe_bare = vec3(2.0, 2.0, 0.0);
 
 // Artificial turf: turf_amount pulls the green layer to an even dark pitch green.
 uniform float turf_amount = 0.0;
-uniform vec3 turf_color : source_color = vec3(0.13, 0.25, 0.12);
+uniform vec3 turf_color : source_color = vec3(0.16, 0.26, 0.15);
 
 // A watered pitch's sprinkler grid: dry patches midway between the heads of a
 // grid_m square grid turned grid_angle radians from world +X, at grid_amount.
