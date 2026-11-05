@@ -23589,3 +23589,15 @@ Carried by deploy-fix from the deploy agent's scratch log; text unchanged apart 
 (Relayed verbatim by the coordinator; added by clutter-yards-b.)
 
 - Sending the delta as a single B07/B08 sheet at matched poses made this a two-minute check. Keep that format for small follow-up commits.
+
+### code-review-clutter-kit (yards-b delta) — 8f24ca9e PASS
+
+(Relayed verbatim by the coordinator; added by clutter-yards-b.)
+
+- Measuring the generated land again, not the guard, confirmed the fix (11 faces over 48° against main's 12, none in an override site); next time, check slope caps on the triangles actually written out.
+
+### visual-review-clutter-yards — B09 delta (8f24ca9e)
+
+(Relayed verbatim by the coordinator; added by clutter-yards-b.)
+
+- Pairing before and after at fixed poses for code-review fixes made the no-regression check a 2-minute task. Keep it for any later shape-only change.
