@@ -48,7 +48,9 @@ const SHRUB_CELL_SOURCES := [
 ## [tint, desaturation]. Set from the mean colour of their crowns beside the crops':
 ## every generated leaf came out far more saturated than the crops (0.4-0.7 against
 ## 0.2-0.45 in HSV), and the spreading broadleaf much darker (value 0.23 against
-## 0.33) and yellower, so it is brightened past its source and cooled. The bronze
+## 0.33) and yellower, so it is brightened past its source and cooled; the Job Corps
+## trees, in the shade of their own big crowns, are measured from frames against the
+## whole crown in the owner's photos, not its sunlit part. The bronze
 ## clump came out orange, the flax wine red rather than near-black maroon, the hedge
 ## stems pale. The cells with flowers keep more of their colour.
 const ROLLOUT_GRADES := {
@@ -59,8 +61,8 @@ const ROLLOUT_GRADES := {
 	"broadleaf_bronze.png": [Color(0.94, 0.84, 0.8), 0.62],
 	"christmas_spray.png": [Color(0.82, 0.84, 0.8), 0.38],
 	"christmas_spray_flowers.png": [Color(1.0, 0.76, 0.82), 0.3],
-	"eucalyptus_spray.png": [Color(1.0, 1.04, 1.04), 0.45],
-	"weeping_curtain.png": [Color(1.0, 1.02, 1.0), 0.4],
+	"eucalyptus_spray.png": [Color(0.65, 0.67, 0.69), 0.45],
+	"weeping_curtain.png": [Color(0.72, 0.72, 0.74), 0.3],
 	"norfolk_branch_top.png": [Color(0.98, 0.98, 0.92), 0.42],
 	"norfolk_branch_side.png": [Color(0.98, 0.98, 0.92), 0.42],
 	"hawthorn_spray.png": [Color(0.81, 0.81, 0.87), 0.36],
@@ -369,6 +371,7 @@ func _pack_set_pieces(images: Dictionary, errors: Array[String]) -> void:
 	var atlas := Image.create_empty(1024, 1024, false, Image.FORMAT_RGBA8)
 	_pack_cell(atlas, images, "eucalyptus_spray.png", Rect2i(0, 0, 512, 512), CELL_MARGIN)
 	_pack_cell(atlas, images, "weeping_curtain.png", Rect2i(0, 512, 512, 512), CELL_MARGIN)
+	_ragged_top(atlas, Rect2i(0, 512, 512, 512), 80)
 	_pack_cell(atlas, images, "norfolk_branch_top.png", Rect2i(512, 0, 512, 512), CELL_MARGIN)
 	_pack_cell(atlas, images, "norfolk_branch_side.png", Rect2i(512, 512, 512, 512), CELL_MARGIN)
 	_fill_transparent(atlas)
@@ -388,6 +391,15 @@ func _pack_shrubs(images: Dictionary, errors: Array[String]) -> void:
 		"hedge_surface.png": ["hedge_surface.png", Color(0.8, 0.84, 0.82), 0.42],
 		"glossy_hedge_flower_surface.png": ["glossy_hedge_surface.png", Color(0.88, 0.88, 0.98), 0.5, 1.2],
 	}, errors)
+
+
+## Clears an uneven strip off the top of cell, up to depth pixels, so a card of strands
+## running off its top edge doesn't end in a straight line.
+func _ragged_top(atlas: Image, cell: Rect2i, depth: int) -> void:
+	for x in cell.size.x:
+		var cut := int(depth * (0.5 + 0.3 * sin(x * 0.09) + 0.2 * sin(x * 0.23 + 1.0)))
+		for y in cut:
+			atlas.set_pixel(cell.position.x + x, cell.position.y + y, Color(0.0, 0.0, 0.0, 0.0))
 
 
 ## Keys a source on its background, crops it to the plant, stretches it to fill
