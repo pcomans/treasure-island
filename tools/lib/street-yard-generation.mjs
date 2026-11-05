@@ -375,7 +375,8 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
   const groundY = (xz) => groundAt(xz)?.y ?? null;
   // An item's rest on the visible ground (or on a deck, by groundOf): the plane
   // through the ground under its rectangle (least squares), raised until no
-  // sample is above it.
+  // sample is more than the allowed sink above it; gridRest then holds it to
+  // the kit's rest limits.
   const rest = (rect, prop, groundOf = groundY) => {
     const samples = [];
     const nx = Math.max(1, Math.ceil((rect.halfX * 2) / REST_SAMPLE_M));
@@ -402,18 +403,11 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
     const residuals = samples.map(([x, z, y]) => y - (mean + a * x + b * z));
     const top = Math.max(...residuals);
     const raise = long ? Math.max((top + Math.min(...residuals)) / 2, top - LONG_REST_SINK_M) : top - REST_SINK_M;
-    let float = 0;
-    let sink = 0;
-    for (const [x, z, y] of samples) {
-      const gap = mean + raise + a * x + b * z - y;
-      float = Math.max(float, gap);
-      sink = Math.max(sink, -gap);
-    }
     // pitch raises the -Z end, roll the left (-X) side, as for the parked cars.
     const pitch = Math.atan(-b);
     const roll = Math.atan(-a);
     if (Math.abs(pitch) > MAX_REST_RAD || Math.abs(roll) > MAX_REST_RAD) return { problem: "steep_ground" };
-    return { height: mean + raise, pitch, roll, float, sink };
+    return { height: mean + raise, pitch, roll };
   };
 
   // Why an item cannot stand at its rectangle, or null.
@@ -459,20 +453,21 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
     return null;
   };
 
-  // A rest as the row's params give it ({pitch, roll, lift} from its base, y +
-  // bias): lowered until none of the kit's rest points (yardRestGaps, a grid
-  // over the plan no coarser than 3 m, corners included) floats past
-  // YARD_MAX_FLOAT_M, or a problem when one then sinks past the prop's limit
-  // (yardMaxSink: less for wheels and tracks).
+  // The kit's rest limits on a row's rest points (yardRestGaps, a grid over the
+  // plan no coarser than 3 m, corners included), for the rest the row's params
+  // give it ({pitch, roll, lift} from its base, y + bias, on the ground or deck
+  // groundFn gives): lowered until none floats more than YARD_MAX_FLOAT_M, and
+  // left out where one then sinks more than the prop's limit (yardMaxSink, less
+  // for wheels and tracks). {rest, gaps} with the settled gaps, or {problem}.
   const angle = (value) => Math.round(value * 1e4) / 1e4 || 0;
   const gridRest = (prop, params, footprint, xz, yaw, base, settled, groundFn) => {
     const rest = { pitch: angle(settled.pitch), roll: angle(settled.roll), lift: round3(settled.height - base) };
     const gaps = yardRestGaps(footprint, xz, yaw, base, rest, groundFn);
     if (gaps.some((gap) => gap === null)) return { problem: "no_ground" };
-    const drop = Math.max(...gaps) - YARD_MAX_FLOAT_M;
-    if (drop > 0) rest.lift = round3(rest.lift - drop - 0.001);
-    if (gaps.some((gap) => gap - Math.max(0, drop) < -yardMaxSink(prop, params))) return { problem: "uneven_ground" };
-    return rest;
+    const drop = Math.max(0, Math.max(...gaps) - YARD_MAX_FLOAT_M);
+    if (gaps.some((gap) => gap - drop < -yardMaxSink(prop, params))) return { problem: "uneven_ground" };
+    rest.lift = round3(rest.lift - drop);
+    return { rest, gaps: gaps.map((gap) => gap - drop) };
   };
 
   // One item: its row when it stands, else the reason it doesn't.
@@ -490,6 +485,7 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
     const surface = surfaceAt(xz);
     const resting = gridRest(prop, params, footprint, xz, yaw, y + surface.bias_m, settled, groundAt);
     if (resting.problem) return resting;
+    const { rest: restParams, gaps: settledGaps } = resting;
     const row = {
       id: `scatter:${zone.id}:${rule.id}:${cell}`,
       source: "scatter",
@@ -505,7 +501,7 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
       status: "placed",
       exclusion: null,
       prop,
-      prop_params: { ...params, ...resting },
+      prop_params: { ...params, ...restParams },
       footprint_m: { x_m: footprint.x_m, z_m: footprint.z_m },
       basis: rule.basis,
     };
@@ -514,9 +510,12 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
     rows.push(row);
     placed.push({ id: row.id, rect: rowRectangle(row) });
     for (const piece of yardRowPieces(row)) occupied.push({ id: row.id, points: piece.points, radius_m: piece.radius, yard: true });
-    audit.rest.max_tilt_rad = Math.max(audit.rest.max_tilt_rad, Math.abs(settled.pitch), Math.abs(settled.roll));
-    if (settled.float > audit.rest.max_float_m) Object.assign(audit.rest, { max_float_m: round3(settled.float), max_float_row: row.id });
-    if (settled.sink > audit.rest.max_sink_m) Object.assign(audit.rest, { max_sink_m: round3(settled.sink), max_sink_row: row.id });
+    // The audit reports the corner gaps the validator checks.
+    const float = Math.max(0, ...settledGaps);
+    const sink = Math.max(0, ...settledGaps.map((gap) => -gap));
+    audit.rest.max_tilt_rad = Math.max(audit.rest.max_tilt_rad, Math.abs(restParams.pitch), Math.abs(restParams.roll));
+    if (float > audit.rest.max_float_m) Object.assign(audit.rest, { max_float_m: round3(float), max_float_row: row.id });
+    if (sink > audit.rest.max_sink_m) Object.assign(audit.rest, { max_sink_m: round3(sink), max_sink_row: row.id });
     count(audit.rules, `${zone.id}/${rule.id}`);
     return { row };
   };
@@ -544,6 +543,7 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
     const [{ y, support, material_key: materialKey }] = decked;
     const resting = gridRest(prop, params, footprint, xz, yaw, y, settled, (sample) => deckSupport(rule.deck, sample));
     if (resting.problem) return resting;
+    const { rest: restParams } = resting;
     const row = {
       id: `scatter:${zone.id}:${rule.id}:${cell}`,
       source: "scatter",
@@ -559,7 +559,7 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
       status: "placed",
       exclusion: null,
       prop,
-      prop_params: { ...params, ...resting },
+      prop_params: { ...params, ...restParams },
       footprint_m: { x_m: footprint.x_m, z_m: footprint.z_m },
       basis: rule.basis,
     };

@@ -71,6 +71,7 @@ export const PARK_SURFACE_MATERIALS = Object.freeze({
   black_plastic: "black-plastic",
   rubble_grey: "rubble-grey",
   yard_asphalt: "yard-asphalt",
+  yard_asphalt_pale: "yard-asphalt-pale",
   yard_gravel: "yard-gravel",
   yard_gravel_pale: "yard-gravel-pale",
   yard_concrete: "yard-concrete",

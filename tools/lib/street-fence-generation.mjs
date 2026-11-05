@@ -81,8 +81,8 @@ const OPTIONAL_RULE_FIELDS = Object.freeze(["banners", "deck", "gates"]);
 const OSM_WAY_RULE_FIELDS = Object.freeze(["basis", "evidence", "fence_type", "from_m", "id", "kind", "params", "pattern", "rule", "to_m", "way"]);
 // An osm_way rule may also shift its row sideways off the OSM line (offset_m,
 // + to the left of the way), where the line is mapped on a sidewalk's edge,
-// and name gates along its stretch like a traced rule.
-const OSM_WAY_RULE_OPTIONAL = Object.freeze(["gates", "offset_m"]);
+// and name gates and banners along its stretch like a traced rule.
+const OSM_WAY_RULE_OPTIONAL = Object.freeze(["banners", "gates", "offset_m"]);
 // The fence_type of an osm_way rule that only cuts its stretch out of the OSM fence.
 export const FENCE_TYPE_NONE = "none";
 // An osm_way rule's along-distance may run this far past its way's end, which
@@ -198,7 +198,7 @@ export function validateFenceRules(zone, kinds) {
       invariant([rule.from_m, rule.to_m].every(isFiniteNumber) && rule.from_m >= 0 && rule.to_m >= 0 && Math.abs(rule.to_m - rule.from_m) >= MINIMUM_RUN_M, `${label} needs from_m and to_m at least ${MINIMUM_RUN_M} m apart`);
       invariant(rule.offset_m === undefined || (isFiniteNumber(rule.offset_m) && rule.offset_m !== 0 && Math.abs(rule.offset_m) <= 3), `${label} offset_m must be a non-zero shift of at most 3 m`);
       if (rule.fence_type === FENCE_TYPE_NONE) {
-        invariant(Object.keys(rule.params).length === 0 && rule.offset_m === undefined && rule.gates === undefined, `${label}: fence_type none takes no params, offset_m or gates`);
+        invariant(Object.keys(rule.params).length === 0 && rule.offset_m === undefined && rule.gates === undefined && rule.banners === undefined, `${label}: fence_type none takes no params, offset_m, gates or banners`);
         continue;
       }
     }
@@ -478,7 +478,7 @@ export function placeStreetFences({
     };
   };
   // A row that will be built gets its posts; a data-only row keeps its vertices.
-  const fenceBlock = (line, type, typeBasis, params, label, { rule = null, gates = [], banners = [], cuts = [], posts = true, deck = null } = {}) => {
+  const fenceBlock = (line, type, typeBasis, params, label, { rule = null, gates = [], cuts = [], banners = [], posts = true, deck = null } = {}) => {
     const spec = STREET_FENCE_TYPES[type];
     const { lengths, total, runs, openings } = openingsOf(line, spec.half_thickness_m, { rule, gates, cuts, deck });
     for (const opening of openings) count(opening.reason);
@@ -693,7 +693,8 @@ export function placeStreetFences({
       // A rule along an OSM fence opens where that fence would (its gates, roads
       // and street ground); a traced rule must keep off the street ground.
       const ruleGates = (rule.gates ?? []).map((gate, index) => ({ at_m: gate.at_m, width_m: gate.width_m, style: gate.style, hinge: gate.hinge, source_id: `${rule.id}:gate_${index}` }));
-      row.fence = fenceBlock(points, rule.fence_type, "rule", params, label, rule.pattern === "osm_way" ? { gates: [...gates, ...ruleGates] } : { rule: `${zone.id}/${rule.id}`, gates: ruleGates, banners: rule.banners ?? [], deck: rule.deck ?? null });
+      const banners = rule.banners ?? [];
+      row.fence = fenceBlock(points, rule.fence_type, "rule", params, label, rule.pattern === "osm_way" ? { gates: [...gates, ...ruleGates], banners } : { rule: `${zone.id}/${rule.id}`, gates: ruleGates, banners, deck: rule.deck ?? null });
       applyStatus(row);
       invariant(row.status === "placed", `${label} is open along its whole length`);
       setProp(row, params);
