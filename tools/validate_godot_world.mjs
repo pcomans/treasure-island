@@ -5,6 +5,7 @@ import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import {
+  AREA_SURFACE_LAYER_STEP_M,
   BRIDGE_SOURCE_KEYS,
   BOUNDARY_ATTACHED_SOURCE_KEYS,
   CATEGORY_MEMBERSHIPS,
@@ -41,6 +42,7 @@ import {
   multiPolygonBounds,
   pointInMultiPolygon,
   rectangleMultiPolygon,
+  signedRingArea,
 } from "./lib/osm-geometry.mjs";
 import { loadTerrainOverrides } from "./lib/terrain-overrides.mjs";
 import { loadTerrainRaster } from "./lib/terrain-raster.mjs";
@@ -526,6 +528,76 @@ function validateCoherentGeometry(records, terrain) {
   invariant(roofCells === foundations.flat_roof_cells && maximumRoofRange <= foundations.tolerance_m && maximumHeightDeviation <= foundations.tolerance_m, "Building roof/base/height contract drift");
   invariant(maximumFoundationGap <= foundations.tolerance_m, "Foundation gap exceeds descriptor tolerance");
   return { surfaceSamples, maximumBiasDeviation, exteriorSegments, foundationSamples, waterSupportedSegments, roofCells, streetGroundSamples };
+}
+
+// The plan area two counter-clockwise triangles ([x, z] corners) share: the
+// first clipped by each edge of the second (both are convex).
+function triangleOverlapArea(subject, clip) {
+  let polygon = subject;
+  for (let edge = 0; edge < 3 && polygon.length > 0; edge += 1) {
+    const [ax, az] = clip[edge];
+    const [bx, bz] = clip[(edge + 1) % 3];
+    const side = ([x, z]) => (bx - ax) * (z - az) - (bz - az) * (x - ax);
+    const kept = [];
+    for (let index = 0; index < polygon.length; index += 1) {
+      const point = polygon[index];
+      const next = polygon[(index + 1) % polygon.length];
+      const here = side(point);
+      const there = side(next);
+      if (here >= 0) kept.push(point);
+      if ((here >= 0) !== (there >= 0)) {
+        const t = here / (here - there);
+        kept.push([point[0] + (next[0] - point[0]) * t, point[1] + (next[1] - point[1]) * t]);
+      }
+    }
+    polygon = kept;
+  }
+  return polygon.length < 3 ? 0 : signedRingArea(polygon);
+}
+
+// Draped areas (OSM areas and shoreline overlays) that overlap in plan must lie
+// at least one layer step apart: two surfaces in one plane fight in the depth
+// buffer and draw in stripes (planAreaSurfaces in tools/build_godot_world.mjs
+// lifts the smaller). An overlap under the 0.01 m2 floor of the serialization
+// area tolerance is what millimetre rounding alone can leave along an edge.
+function validateAreaSurfaceLayers(records) {
+  const byChunk = new Map();
+  for (const { record, chunk_id: chunkId } of records.physical.values()) {
+    if (chunkId == null || !["major_area", "terrain_overlay"].includes(record.feature_kind)) continue;
+    const triangles = byChunk.get(chunkId) ?? [];
+    for (let offset = 0; offset < record.indices.length; offset += 3) {
+      const points = [0, 1, 2].map((corner) => {
+        const index = record.indices[offset + corner] * 3;
+        return [record.vertices[index], record.vertices[index + 2]];
+      });
+      if (signedRingArea(points) < 0) points.reverse();
+      const xs = points.map((point) => point[0]);
+      const zs = points.map((point) => point[1]);
+      triangles.push({ record, points, minX: Math.min(...xs), maxX: Math.max(...xs), minZ: Math.min(...zs), maxZ: Math.max(...zs) });
+    }
+    byChunk.set(chunkId, triangles);
+  }
+  const shared = new Map();
+  for (const triangles of byChunk.values()) {
+    for (let first = 0; first < triangles.length; first += 1) {
+      const a = triangles[first];
+      for (let second = first + 1; second < triangles.length; second += 1) {
+        const b = triangles[second];
+        if (a.record === b.record || Math.abs(a.record.surface_bias_m - b.record.surface_bias_m) >= AREA_SURFACE_LAYER_STEP_M - 1e-9) continue;
+        if (a.maxX <= b.minX || b.maxX <= a.minX || a.maxZ <= b.minZ || b.maxZ <= a.minZ) continue;
+        const area = triangleOverlapArea(a.points, b.points);
+        if (area <= 0) continue;
+        const pair = [a.record.object_key, b.record.object_key].sort().join(" and ");
+        shared.set(pair, (shared.get(pair) ?? 0) + area);
+      }
+    }
+  }
+  const crowded = [...shared].filter(([, area]) => area >= 0.01).sort((left, right) => right[1] - left[1]);
+  invariant(
+    crowded.length === 0,
+    `${crowded.length} draped area pairs overlap less than ${AREA_SURFACE_LAYER_STEP_M} m apart: ` +
+      crowded.map(([pair, area]) => `${pair} (${area.toFixed(3)} m2)`).join("; "),
+  );
 }
 
 function validateTerrain(worldRoot, manifest) {
@@ -1478,6 +1550,7 @@ function main() {
   const terrain = validateTerrain(worldRoot, manifest);
   const records = validateRecords(worldRoot, manifest, coverage);
   const coherentGeometry = validateCoherentGeometry(records, terrain);
+  validateAreaSurfaceLayers(records);
   const pavement = validatePavementSkin(worldRoot, manifest, coverage, records, terrain);
   const land = validateLandProvenance(records, terrain);
   const streetDetail = validateStreetDetail(worldRoot, manifest, records);

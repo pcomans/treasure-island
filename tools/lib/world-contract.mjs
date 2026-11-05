@@ -140,6 +140,11 @@ export const ROAD_SURFACE_BIASES_M = Object.freeze({
   pedestrian: 0.08,
 });
 
+// Overlapping draped areas of one class are lifted this far apart, the
+// separation of the pedestrian skin over the road base, so that no two of them
+// share a plane (planAreaSurfaces in tools/build_godot_world.mjs).
+export const AREA_SURFACE_LAYER_STEP_M = 0.002;
+
 export const FEATURE_KINDS = Object.freeze([
   "building_part_roof",
   "building_part_wall",
