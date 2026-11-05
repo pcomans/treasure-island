@@ -57,6 +57,19 @@
    "evidence": "Street View Mar 2025 sv04 (1230 Gateview Ct), sv06 (1255 Bayside Dr) and sv08 (1318 Gateview Ave): mown green between the kerb and the sidewalk or fence; 2026-05-26 aerial (May 2026 z19 tiles, crop z1-oval): solid green bands along both sides of the Villages loop road."
   },
   {
+   "id": "west_parcel_kerb_strip",
+   "channel": "lawn",
+   "within_sources": ["r17241152"],
+   "near": {
+    "kinds": ["street_kerb"],
+    "full_m": 2.5,
+    "zero_m": 4.5
+   },
+   "basis": "production_inference",
+   "reason": "The mown strip between the sidewalk and the fence of the west shore parcel, the one stretch of the housing streets whose kerb ground is not r17241151; about 3 m wide behind the street ground's kerb and sidewalk, so it draws only where those are built.",
+   "evidence": "Street View Mar 2025 sv08 (1318 Gateview Ave): mown green between the sidewalk and the windscreen fence. The 2026-05-26 aerial (May 2026 z19 tiles) does not resolve this shaded strip, so the March photo sets it."
+  },
+  {
    "id": "residential_loop_lawn_west",
    "channel": "lawn",
    "within_sources": ["r17241151"],
