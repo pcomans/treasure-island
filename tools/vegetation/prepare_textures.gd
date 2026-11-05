@@ -27,22 +27,22 @@ const SETS := {
 	"perennial": PERENNIAL_CELLS,
 	"young_trees": ["gum_leaves.png", "oak_leaves.png", "gum_bark.png", "oak_bark.png"],
 	"park_ground": ["park_mulch.png", "park_gravel.png"],
-	"pine": ["pine_crest.png", "pine_crest_candles.png", "pine_bark.png"],
+	"pine": ["pine_crest.png", "pine_crest_candles.png", "pine_candle_row.png", "pine_bark.png"],
 	"broadleaf": ["broadleaf_clump.png", "broadleaf_bronze.png", "christmas_spray.png", "christmas_spray_flowers.png", "broadleaf_bark.png", "christmas_bark.png"],
 	"set_pieces": ["eucalyptus_clump.png", "eucalyptus_hanging.png", "norfolk_branch_top.png", "norfolk_branch_side.png", "eucalyptus_bark.png"],
 	"shrubs": [
 		"hawthorn_spray.png", "pittosporum_spray.png", "red_tip_shoots.png", "conical_spray.png",
-		"hedge_sprigs.png", "escallonia_sprigs.png", "hedge_stems_open.png", "phormium_leaf.png",
+		"hedge_mat.png", "glossy_mat.png", "hedge_stems_open.png", "phormium_leaf.png",
 		"hedge_surface.png", "escallonia_flower_surface.png",
 	],
 }
 ## The shrub atlas's 512 x 512 cells, row by row in 2048 x 1024 (SHRUB_CELLS in
 ## the kit): the Avenue N shrubs' ragged mats, stems and upright flame, the
-## hedges' sprigs and stems from the side, and the flax leaf, each stretched to
-## fill its cell; the kit's card sizes set their proportions.
+## hedges' ragged mats and stems, and the flax leaf, each stretched to fill its
+## cell; the kit's card sizes set their proportions.
 const SHRUB_CELL_SOURCES := [
 	"hawthorn_spray.png", "pittosporum_spray.png", "red_tip_shoots.png", "conical_spray.png",
-	"hedge_sprigs.png", "escallonia_sprigs.png", "hedge_stems_open.png", "phormium_leaf.png",
+	"hedge_mat.png", "glossy_mat.png", "hedge_stems_open.png", "phormium_leaf.png",
 ]
 ## The rollout models' leaf images graded toward the dated Street View crops:
 ## [tint, desaturation]. The generated pine came out a little greener than the
@@ -53,6 +53,7 @@ const SHRUB_CELL_SOURCES := [
 const ROLLOUT_GRADES := {
 	"pine_crest.png": [Color(0.86, 0.9, 0.84), 0.15],
 	"pine_crest_candles.png": [Color(0.86, 0.9, 0.84), 0.1],
+	"pine_candle_row.png": [Color(0.94, 0.9, 0.8), 0.35],
 	"broadleaf_clump.png": [Color(0.92, 0.94, 0.86), 0.1],
 	"broadleaf_bronze.png": [Color(0.86, 0.82, 0.74), 0.4],
 	"christmas_spray.png": [Color(0.82, 0.88, 0.82), 0.1],
@@ -62,8 +63,7 @@ const ROLLOUT_GRADES := {
 	"norfolk_branch_top.png": [Color(0.94, 0.96, 0.9), 0.15],
 	"norfolk_branch_side.png": [Color(0.94, 0.96, 0.9), 0.15],
 	"hawthorn_spray.png": [Color(0.9, 0.92, 0.76), 0.22],
-	"hedge_sprigs.png": [Color(0.66, 0.8, 0.6), 0.15],
-	"escallonia_sprigs.png": [Color(0.6, 0.72, 0.6), 0.1],
+	"hedge_mat.png": [Color(0.82, 0.88, 0.76), 0.15],
 	"red_tip_shoots.png": [Color(0.92, 0.92, 0.86), 0.15],
 	"conical_spray.png": [Color(0.74, 0.84, 0.7), 0.2],
 	"hedge_stems_open.png": [Color(0.46, 0.44, 0.42), 0.35],
@@ -325,12 +325,14 @@ func _pack_park_ground(images: Dictionary, errors: Array[String]) -> void:
 
 
 ## The Monterey pine: its foliage atlas, 1024 x 1024, a crest of upright needle
-## tufts (0,0)-(1024,512) and the same with candles (0,512)-(1024,1024); and its
-## tiled bark, dark grey-brown (p4) rather than the generated red-brown.
+## tufts (0,0)-(1024,448), the same with candles (0,448)-(1024,896) and a row of
+## candles alone (0,896)-(1024,1024); and its tiled bark, dark grey-brown (p4)
+## rather than the generated red-brown.
 func _pack_pine(images: Dictionary, errors: Array[String]) -> void:
 	var atlas := Image.create_empty(1024, 1024, false, Image.FORMAT_RGBA8)
-	_pack_cell(atlas, images, "pine_crest.png", Rect2i(0, 0, 1024, 512), CELL_MARGIN)
-	_pack_cell(atlas, images, "pine_crest_candles.png", Rect2i(0, 512, 1024, 512), CELL_MARGIN)
+	_pack_cell(atlas, images, "pine_crest.png", Rect2i(0, 0, 1024, 448), CELL_MARGIN)
+	_pack_cell(atlas, images, "pine_crest_candles.png", Rect2i(0, 448, 1024, 448), CELL_MARGIN)
+	_pack_cell(atlas, images, "pine_candle_row.png", Rect2i(0, 896, 1024, 128), CELL_MARGIN)
 	_fill_transparent(atlas)
 	_save(atlas, OUT + "pine_foliage_atlas.png", errors)
 	_save_barks(images, {"pine_bark.png": ["pine_bark.png", Color(0.72, 0.72, 0.74), 0.6, 1.3]}, errors)
@@ -371,7 +373,7 @@ func _pack_set_pieces(images: Dictionary, errors: Array[String]) -> void:
 
 
 ## The shrub atlas, 2048 x 1024 (SHRUB_CELL_SOURCES; SHRUB_CELLS in the kit); and
-## the hedges' two tiled clipped-leaf surfaces, the glossy one in flower.
+## the hedges' two tiled clipped-leaf cores, the glossy one in flower.
 func _pack_shrubs(images: Dictionary, errors: Array[String]) -> void:
 	var atlas := Image.create_empty(2048, 1024, false, Image.FORMAT_RGBA8)
 	for index in SHRUB_CELL_SOURCES.size():
@@ -380,7 +382,7 @@ func _pack_shrubs(images: Dictionary, errors: Array[String]) -> void:
 	_save(atlas, OUT + "shrub_foliage_atlas.png", errors)
 	_save_barks(images, {
 		"hedge_surface.png": ["hedge_surface.png", Color(0.9, 0.95, 0.9), 0.1],
-		"escallonia_flower_surface.png": ["escallonia_surface.png", Color(0.95, 1.0, 0.95), 0.0],
+		"escallonia_flower_surface.png": ["escallonia_surface.png", Color(0.95, 1.0, 0.95), 0.0, 1.2],
 	}, errors)
 
 

@@ -19,7 +19,8 @@ extends RefCounted
 ## A big tree's levels cast no shadow of their own: its kit shadow mesh does, a
 ## cheap outline drawn only into the shadow maps, one MultiMesh per variant and
 ## SHADOW_CELL_M cell, since most of a dense crown's primitives and draw calls
-## were its shadow passes. Its range runs on to the farthest tree's LOD1 end.
+## were its shadow passes. Its range runs on past the impostor switch (the kit's
+## SHADOW_RANGE_M), so the tree keeps its ground shadow there.
 ##
 ## Collision is the trunk only: capsules on the street-prop layer, which the
 ## player collides with and the spray ray stops on (never a receiver), while
