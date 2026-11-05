@@ -1204,6 +1204,10 @@ export function generateStreetDetail({
   // an east/north point, 0 inside, Infinity beyond reach.
   const vehicleRoads = polygonSet(roads.items.filter((item) => item.visual_class === "vehicle"));
   const carriagewayDistance = (en, reach = 12) => Math.min(ground.site.carriagewayDistance(en, reach), vehicleRoads.nearest(toWorld(en), reach).distance);
+  // The paved paths (OSM footways and other pedestrian ways): the plan distance
+  // from an east/north point, 0 on a path, Infinity beyond reach.
+  const pedestrianWays = polygonSet(roads.items.filter((item) => item.visual_class === "pedestrian"));
+  const pathDistance = (en, reach = 6) => pedestrianWays.nearest(toWorld(en), reach).distance;
   // withIsland: also keep off the carriageways beyond the street ground (the
   // island-wide street furniture), ignoring the occupied items in ignore (the
   // row being moved); set pieces keep the street ground's own check.
@@ -1636,6 +1640,7 @@ export function generateStreetDetail({
     carriagewayDistance,
     pieceViolation: (piece, ignore) => propSiteViolation(piece, true, ignore),
     groundAt,
+    pathDistance,
   });
   rows.push(...furniture.rows);
   // (b2) The planting scatter: trees and grass round the furniture placed above.
@@ -1742,7 +1747,10 @@ export function generateStreetDetail({
       planted: "a vegetation row's prop_params: the kit variant and uniform scale, and its rest on the visible ground (settlePlant in tools/lib/street-vegetation-generation.mjs): lift_m takes the foot from y + bias_m to the lowest visible surface round it, foot_spread_m is how much higher the rest of that ground lies (the trunk runs on below the foot); a tree whose foot reaches paving stands in a round mulch pit well_m across on the plane of that paving (well_lift_m its height over the foot at the trunk, well_slope its rise per metre along +X and +Z), which other items keep clear of",
       standing_prop: "a furniture set piece on legs (an Adirondack chair) carries its rest on the visible ground under its feet in prop_params (settleOnFeet in tools/lib/street-furniture-generation.mjs): pitch raises its front and roll its left side (radians, together at most 0.15 rad from upright), lift takes its origin from y + bias_m to that rest, and leg_drops_m, where the ground folds under it, lengthens (+) or shortens (-) each leg in the kit's order (front-left, front-right, back-left, back-right; metres, in 5 mm steps)",
       prop_feet: "per kit prop on legs, the flat bottom of each foot {x, z, half_x, half_z} in the prop's frame (front -Z, right +X) in the kit's leg order: the feet a standing prop settles on, which the kit's legs must stand on",
-      source_position_m: "a stop sign's OSM node position, kept when the sign moves to the curb of its approach",
+      source_position_m: "an OSM item's node position, kept when it moves: a stop sign to the curb of its approach, a bus stop's shelter beside its road, or a pole, hydrant, cabinet, lamp or bus stop flag mapped on the frozen carriageway to its edge (placement says which)",
+      pad: "a furniture prop on a level concrete pad (STREET_FURNITURE_PADS in tools/lib/street-furniture-generation.mjs: a bus shelter, a transformer, a charger bay) rises to the highest visible ground under its pad: prop_params.lift is that rise over y + bias_m, and the pad's skirt (PAD_SKIRT_M) hides its low side",
+      utility_pole: "a power pole's prop_params: riser (the line goes underground there), arm2_yaw (a second crossarm, turned about the pole relative to its yaw, where another line or a spur turns off or two circuits run), lamp ({yaw relative to the pole, arm_m, height_m, head}: a street light from the island rule pole_fixtures or a photograph), wood (dark: a creosote shaft, DARK_POLE_SHARE of the OSM poles by a hash of the id) and, on a photographed set-piece pole, wires_to (the built poles its spur wires run to, each within MAX_SPUR_M)",
+      power_wires: "an OSM power line's wires: prop_params.poles lists the utility pole rows along it in order (null where a vertex has no built pole; photographed set-piece poles join where they stand), and circuits its circuit count; the runtime hangs wires between each two consecutive built poles",
       fence: "fence rows: the kit type and why (type_basis), height and collision half thickness, the stretches cut open along points_m (openings, metres along the line, with what opens them) and the solid runs left (posts on the ground: points_m, terrain_supports, surface_bias_m); a fence row with a prop is built (game/scripts/world/street_fence_kit.gd)",
       fenced_approaches: "scored-building sides a built fence closes, which the building fit may skip (game/tests/shared/building_fit.gd)",
       yard: "the rows of a zone's yard rules (tools/lib/street-yard-generation.mjs): clutter rows of a yard kit prop (tools/lib/street-yard-kit.mjs) with its plan rectangle as footprint_m and its rest on the visible ground in prop_params (pitch raises the -Z end and roll the left side, radians; lift takes the origin from y + bias_m to the rest); the zone summary lists each rule's placed count",

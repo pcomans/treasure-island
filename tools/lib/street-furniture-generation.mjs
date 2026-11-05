@@ -27,6 +27,7 @@
 // world x, z with z = -north. A prop's front is its local -Z (the lamp arm, the
 // signal mast arm, a sign's face); yaw turns it toward the given direction.
 
+import { createHash } from "node:crypto";
 import { projectLonLat } from "./coordinates.mjs";
 import { pointInMultiPolygon } from "./osm-geometry.mjs";
 import { footprintPiece } from "./street-clutter-generation.mjs";
@@ -53,6 +54,7 @@ export const STREET_FURNITURE_PROPS = Object.freeze({
   lamp_plaza: "street_lamp",
   log_seat: "bench",
   map_board: "information_board",
+  monument_sign: "street_sign",
   name_sign: "street_sign",
   picnic_table_long: "picnic_table",
   power_wires: "power_line",
@@ -77,6 +79,7 @@ export const STREET_FURNITURE_FOOTPRINTS = Object.freeze({
   bus_shelter: Object.freeze({ x_m: 3.9, z_m: 1.8 }),
   ev_charger_bay: Object.freeze({ x_m: 3.4, z_m: 1.3 }),
   map_board: Object.freeze({ x_m: 1.34, z_m: 0.2 }),
+  monument_sign: Object.freeze({ x_m: 1.3, z_m: 0.3 }),
   pump_station: Object.freeze({ x_m: 16.3, z_m: 11.2 }),
   transformer_pad: Object.freeze({ x_m: 1.5, z_m: 1.35 }),
   waste_basket: Object.freeze({ x_m: 0.6, z_m: 0.6 }),
@@ -164,7 +167,10 @@ const STEP_OFF_EXTRA_M = Object.freeze([0, 0.25, 0.5, 0.75, 1, 1.5, 2, 2.5, 3]);
 // A bus shelter beside its road: the gaps (m) tried between the road edge and
 // its open front, and the slides (m) along the road from its OSM node.
 const SHELTER_GAPS_M = Object.freeze([0.9, 1.4, 2.0, 2.8, 3.6]);
-const SHELTER_SLIDES_M = Object.freeze([0, 1, -1, 2, -2, 3, -3, 4, -4]);
+const SHELTER_SLIDES_M = Object.freeze([0, 1, -1, 2, -2, 3, -3, 4, -4, 5, -5, 6, -6, 7, -7, 8, -8]);
+// A cabinet's pad mapped on a paved path (an OSM footway) steps across it, away
+// from the road first, by these distances (m) to the first spot clear of it.
+const PAD_PATH_STEPS_M = Object.freeze([1, 1.5, 2, 2.5, 3, 3.5, 4, -1, -1.5, -2, -2.5]);
 // Props on a level concrete pad (STREET_FURNITURE_PADS): the pad's skirt runs
 // PAD_SKIRT_M below its top's foot, so a pad settled on sloping ground (raised
 // to its highest corner by its params' lift) may float that much at its low
@@ -184,6 +190,31 @@ const ROAD_RANK = Object.freeze({ tertiary: 2, unclassified: 1, residential: 1, 
 const SECOND_ARM_RAD = (25 * Math.PI) / 180;
 // A street corner's signal mast serves every crosswalk landing within this (m).
 const MAST_CORNER_M = 9;
+// A signal mast's arm reaches MAST_ARM_PAST_M past the centre line of the road
+// it spans, between these lengths (m), with two heads over the lanes from an
+// arm of MAST_TWO_HEADS_M and three from MAST_THREE_HEADS_M; a junction within
+// SIGNAL_NAMES_M of a mast takes its street names from the masts' arm signs,
+// not from a name post.
+const MAST_ARM_MIN_M = 3;
+const MAST_ARM_MAX_M = 11;
+const MAST_ARM_PAST_M = 1;
+const MAST_TWO_HEADS_M = 4;
+const MAST_THREE_HEADS_M = 8.5;
+const SIGNAL_NAMES_M = 25;
+// A name post keeps this far (m) from a junction's stop signs: the dated photos
+// show the stop posts bare except where on_stops lists them.
+const NAME_POST_STOP_CLEAR_M = 6;
+// A junction-anchored lamp (street_lamps anchor "junctions") stands this far (m)
+// past the crossing street's curb.
+const LAMP_CORNER_M = 1.5;
+// The longest spur (m) a photographed pole's wires may run to a pole it names
+// (params.wires_to): about one ordinary span.
+export const MAX_SPUR_M = 60;
+// The share of utility poles with a darker creosote shaft (prop_params.wood
+// "dark", chosen by a hash of the row id); the rest are weathered grey. The dated
+// photos show both, weathered poles far more often (production inference).
+const DARK_POLE_SHARE = 0.2;
+const darkPole = (id) => createHash("sha256").update(`pole_wood|${id}`, "utf8").digest().readUInt32BE(0) / 0xffffffff < DARK_POLE_SHARE;
 const SAFE_ID = /^[a-z0-9_]+$/u;
 const RULE_FIELDS = Object.freeze({
   kerb: ["source_keys", "sides", "spacing_m", "phase_m", "setback_m", "slide_m"],
@@ -194,9 +225,9 @@ const RULE_FIELDS = Object.freeze({
   drive_entries: ["clear_m"],
   lot_edge: ["source_keys", "spacing_m", "phase_m", "setback_m", "slide_m"],
   pole_fixtures: ["max_gap_m", "min_spacing_m", "except_streets"],
-  street_lamps: ["streets", "sides", "spacing_m", "phase_m", "setback_m", "slide_m"],
+  street_lamps: ["streets", "sides", "spacing_m", "phase_m", "setback_m", "slide_m", "anchor"],
   junction_stops: ["clear_m", "except"],
-  junction_names: ["setback_m"],
+  junction_names: ["setback_m", "on_stops"],
   hydrant_style: ["streets"],
 });
 const COMMON_FIELDS = Object.freeze(["basis", "evidence", "id", "kind", "params", "pattern", "prop", "rule"]);
@@ -321,6 +352,16 @@ export function validateFurnitureRules(zone, kinds, island = false) {
     if ("sides" in rule) invariant(Array.isArray(rule.sides) && rule.sides.length > 0 && rule.sides.every((side) => ["left", "right"].includes(side)), `${label} sides are left and/or right`);
     if ("streets" in rule) invariant(Array.isArray(rule.streets) && rule.streets.length > 0 && rule.streets.every((name) => typeof name === "string" && name.trim() !== ""), `${label} streets are OSM street names`);
     if ("except_streets" in rule) invariant(Array.isArray(rule.except_streets) && rule.except_streets.every((name) => typeof name === "string" && name.trim() !== ""), `${label} except_streets are OSM street names`);
+    if ("anchor" in rule) invariant(["start", "junctions"].includes(rule.anchor), `${label} anchor is "start" (from phase_m) or "junctions"`);
+    if ("on_stops" in rule) {
+      // The stop signs the dated photos show carrying name blades, by their rule
+      // cell (n<junction>_w<approach way>_<a|b>), each with its evidence.
+      invariant(Array.isArray(rule.on_stops), `${label} on_stops must be a list`);
+      for (const entry of rule.on_stops) {
+        invariant(JSON.stringify(Object.keys(entry ?? {}).sort()) === JSON.stringify(["evidence", "stop"]) && /^n\d+_w\d+_[ab]$/u.test(entry.stop)
+          && typeof entry.evidence === "string" && entry.evidence.trim() !== "", `${label} on_stops entries are {stop: "n<node>_w<way>_<a|b>", evidence}`);
+      }
+    }
     if ("except" in rule) {
       // Photographed junctions where the rule does not hold: the approaches (by
       // OSM street name) at the node that keep no stop sign, and why.
@@ -366,6 +407,7 @@ export function placeStreetFurniture({
   carriagewayDistance,
   pieceViolation,
   groundAt,
+  pathDistance,
 }) {
   const pilotShapes = zoneShapes.filter(({ zone }) => zone.pilot);
   const inPilot = (xz) => pilotShapes.some(({ contains }) => contains(xz));
@@ -375,6 +417,8 @@ export function placeStreetFurniture({
     stops_moved: 0,
     stepped_off: 0,
     shelters: 0,
+    shelter_fallbacks: [],
+    pads_off_paths: 0,
     pole_lamps: 0,
     second_arms: 0,
     wire_spans: 0,
@@ -479,6 +523,7 @@ export function placeStreetFurniture({
     const direction = leftOf(near.tangent);
     derivedWalks.push({
       source_key: row.source_id,
+      host_key: host.source_key,
       center: near.point,
       direction,
       across: leftOf(direction),
@@ -503,8 +548,10 @@ export function placeStreetFurniture({
     return best;
   };
   // How far from a junction a sign on one of its arms must stand: past the
-  // crossing street's curb and upstream of any crosswalk across the arm. The
-  // island rules also keep clear of the marked crossings beyond the street ground.
+  // crossing street's curb and upstream of any drawn crosswalk (the street
+  // ground's) across the arm. An OSM crossing node the ground does not draw
+  // does not push a stop back: the dated photos show the island's stop signs
+  // at the corner, a metre or three behind the crossing street's curb.
   const armClearance = (center, road, outward, crossKerb, clear, walks = site.crosswalks) => {
     let distance = crossKerb + clear;
     for (const walk of walks) {
@@ -556,7 +603,12 @@ export function placeStreetFurniture({
   const placeShelter = (row) => {
     const en = toEastNorth([row.position_m[0], row.position_m[2]]);
     const best = nearestRoad(en, (road) => road.service == null);
-    if (!best || best.gap > 25) return false;
+    const reasons = {};
+    const fail = () => {
+      audit.shelter_fallbacks.push({ id: row.id, reasons: best && best.gap <= 25 ? reasons : { no_road_within_25_m: 1 } });
+      return false;
+    };
+    if (!best || best.gap > 25) return fail();
     const side = cross(best.near.tangent, sub(en, best.near.point)) >= 0 ? 1 : -1;
     const footprint = STREET_FURNITURE_FOOTPRINTS.bus_shelter;
     for (const slide of SHELTER_SLIDES_M) {
@@ -570,11 +622,13 @@ export function placeStreetFurniture({
         const violation = pieceViolation(footprintPiece(xz, yaw, footprint), new Set([row.id]));
         if (violation) {
           count(audit.rejected_by_reason, `bus_shelter:${violation.reason}`);
+          count(reasons, violation.source_id ? `${violation.reason}:${violation.source_id}` : violation.reason);
           continue;
         }
         const pad = settlePad(footprint, xz, yaw, groundAt);
         if (pad.problem) {
           count(audit.rejected_by_reason, `bus_shelter:${pad.problem}`);
+          count(reasons, pad.problem);
           continue;
         }
         row.yaw_radians = yaw;
@@ -586,7 +640,7 @@ export function placeStreetFurniture({
         return true;
       }
     }
-    return false;
+    return fail();
   };
 
   // --- OSM rows: props, stop signs moved to their curbs, items off the carriageway.
@@ -634,7 +688,7 @@ export function placeStreetFurniture({
         // At least as far out as a crosswalk across this arm of the junction.
         const outward = scale(travel, -1);
         const others = (meetings.get(ahead.ref) ?? []).filter((other) => other !== road);
-        const needed = armClearance(ahead.point, road, outward, Math.max(0, ...others.map((other) => other.kerb_offset_m)), 1.0, allWalks);
+        const needed = armClearance(ahead.point, road, outward, Math.max(0, ...others.map((other) => other.kerb_offset_m)), 1.0);
         const out = dot(sub(base, ahead.point), outward);
         if (out < needed) base = add(base, scale(outward, needed - out));
       }
@@ -697,8 +751,31 @@ export function placeStreetFurniture({
         audit.osm_unbuilt.push({ id: row.id, kind: row.kind, reason: "on the carriageway, no clear spot beside it" });
         continue;
       }
-      // A cabinet's pad settles level on the ground under it.
+      // A cabinet's pad mapped on a paved path (an OSM footway) steps across it,
+      // away from the road first, to the first spot clear of the path and of
+      // everything else; it settles level on the ground under it.
       if (choice.prop === "transformer_pad") {
+        const onPath = (xz) => {
+          const piece = footprintPiece(xz, row.yaw_radians ?? 0, row.footprint_m);
+          return piece.points.some((point) => pathDistance(toEastNorth(point), 4) < piece.radius + PAD_SKIRT_M);
+        };
+        if (onPath([row.position_m[0], row.position_m[2]])) {
+          const en = toEastNorth([row.position_m[0], row.position_m[2]]);
+          const best = nearestRoad(en);
+          const away = best && best.near.distance > 1e-6 ? unit(sub(en, best.near.point)) : [-Math.sin(row.yaw_radians ?? 0), Math.cos(row.yaw_radians ?? 0)];
+          let moved = false;
+          for (const step of PAD_PATH_STEPS_M) {
+            const xz = round2(toWorld(add(en, scale(away, step))));
+            if (onPath(xz)) continue;
+            const violation = pieceViolation(footprintPiece(xz, row.yaw_radians ?? 0, row.footprint_m), new Set([row.id]));
+            if (violation || settlePad(row.footprint_m, xz, row.yaw_radians ?? 0, groundAt).problem) continue;
+            moveRow(row, xz, `stepped off the paved path beside ${best?.road.source_key ?? "its road"} (production_inference)`);
+            audit.pads_off_paths += 1;
+            moved = true;
+            break;
+          }
+          if (!moved) count(audit.rejected_by_reason, "transformer_pad:on_path_no_clear_spot");
+        }
         const pad = settlePad(row.footprint_m, [row.position_m[0], row.position_m[2]], row.yaw_radians ?? 0, groundAt);
         if (pad.problem) {
           audit.osm_unbuilt.push({ id: row.id, kind: row.kind, reason: `its pad cannot rest level here (${pad.problem})` });
@@ -709,6 +786,7 @@ export function placeStreetFurniture({
     }
     row.prop = choice.prop;
     row.prop_params = row.pad_lift === undefined ? choice.params : { ...choice.params, lift: row.pad_lift };
+    if (row.prop === "utility_pole" && darkPole(row.id)) row.prop_params = { ...row.prop_params, wood: "dark" };
     delete row.pad_lift;
     audit.osm_props += 1;
   }
@@ -731,6 +809,23 @@ export function placeStreetFurniture({
       const key = `osm:${id}`;
       poleLines.set(key, [...(poleLines.get(key) ?? []), { line, direction, circuits: line.tags?.cables === "6" || line.tags?.circuits === "2" ? 2 : 1 }]);
     });
+  }
+  // A photographed pole whose wires OSM lacks (a utility_pole set piece with
+  // params.wires_to) hangs a spur to each built pole it names; the far pole
+  // turns a second crossarm toward a spur like toward any turned line.
+  for (const pole of rows.filter((row) => row.source === "set_piece" && row.prop === "utility_pole" && row.prop_params?.wires_to !== undefined)) {
+    const targets = pole.prop_params.wires_to;
+    invariant(Array.isArray(targets) && targets.length > 0 && targets.every((id) => typeof id === "string" && id !== pole.id), `${pole.id} wires_to must list other poles' row ids`);
+    const at = toEastNorth([pole.position_m[0], pole.position_m[2]]);
+    for (const id of targets) {
+      const target = poleRows.get(id);
+      invariant(builtPole(target), `${pole.id} wires_to ${id}, which is not a built utility pole`);
+      const from = toEastNorth([target.position_m[0], target.position_m[2]]);
+      const span = length(sub(at, from));
+      invariant(span >= 5 && span <= MAX_SPUR_M, `${pole.id} spur to ${id} is ${span.toFixed(1)} m long (5-${MAX_SPUR_M} m)`);
+      poleLines.set(id, [...(poleLines.get(id) ?? []), { line: null, direction: unit(sub(at, from)), circuits: 1 }]);
+      audit.wire_spans += 1;
+    }
   }
   for (const [key, lines] of [...poleLines.entries()].sort(([left], [right]) => (left < right ? -1 : left > right ? 1 : 0))) {
     const pole = poleRows.get(key);
@@ -803,8 +898,15 @@ export function placeStreetFurniture({
   // null. With options.spacing_m, a row with the same prop from another source
   // (an OSM lamp, say) within half of it takes the station, which is skipped.
   // options.raisedAt(en): whether that candidate must stand on the street ground.
-  const sameKindNear = (rule, xz, distance) => [...rows, ...ruleRows].some((row) => (row.prop === rule.prop || (rule.kind === "street_lamp" && row.prop === "utility_pole" && row.prop_params?.lamp)) &&
-    row.source_id !== rule.source_id && row.status === "placed" && row.geometry === "point" && Math.hypot(row.position_m[0] - xz[0], row.position_m[2] - xz[1]) < distance);
+  // A lamp rule also counts the lamps on utility poles and, on the island, the
+  // luminaires of signal masts, so a lit corner gets no extra lamp post.
+  const litByOther = (rule, row) => rule.kind === "street_lamp" && ((row.prop === "utility_pole" && row.prop_params?.lamp)
+    || (rule.source_id.startsWith("island:") && row.prop === "signal_mast" && row.prop_params?.lamp !== false));
+  // A rule's own rows count too, except those of the same run (options.own, a
+  // row id prefix: a street chain, both its sides), which its stations space.
+  const sameKindNear = (rule, xz, distance, own = null) => [...rows, ...ruleRows].some((row) => (row.prop === rule.prop || litByOther(rule, row)) &&
+    (row.source_id !== rule.source_id || (own !== null && !row.id.startsWith(own))) && row.status === "placed" && row.geometry === "point"
+    && Math.hypot(row.position_m[0] - xz[0], row.position_m[2] - xz[1]) < distance);
   const firstClear = (rule, contains, candidates, options) => {
     for (const en of candidates) {
       const xz = toWorld(en);
@@ -812,7 +914,7 @@ export function placeStreetFurniture({
         count(audit.rejected_by_reason, `${rule.id}:outside_zone`);
         continue;
       }
-      if (options.spacing_m && sameKindNear(rule, xz, options.spacing_m / 2)) {
+      if (options.spacing_m && sameKindNear(rule, xz, options.spacing_m / 2, options.own ?? null)) {
         count(audit.rejected_by_reason, `${rule.id}:same_kind_near`);
         return null;
       }
@@ -900,7 +1002,7 @@ export function placeStreetFurniture({
           grown = true;
         }
       }
-      result.push({ key: first.source_key, name: first.name, line, roads, offsets: roads.map((road) => road.kerb_offset_m) });
+      result.push({ key: first.source_key, name: first.name, line, refs, roads, offsets: roads.map((road) => road.kerb_offset_m) });
     }
     return result;
   };
@@ -961,7 +1063,7 @@ export function placeStreetFurniture({
   // A street-name assembly at the corner of a junction: the corner between two
   // streets first (widest first), the straight side of a T last. Returns the
   // row, or null when no corner is clear.
-  const nameCorner = (zone, rule, contains, junction) => {
+  const nameCorner = (zone, rule, contains, junction, avoid = []) => {
     const arms = junction.arms.map((arm) => ({ ...arm, angle: Math.atan2(arm.direction[1], arm.direction[0]) })).sort((left, right) => left.angle - right.angle);
     const corners = arms.map((arm, index) => {
       const next = arms[(index + 1) % arms.length];
@@ -971,7 +1073,8 @@ export function placeStreetFurniture({
       const offset = Math.max(arm.road.kerb_offset_m, next.road.kerb_offset_m) + rule.setback_m;
       const radius = Math.min(14, offset / Math.max(0.2, Math.sin(Math.min(gap, Math.PI) / 2)));
       return { gap, bisector, point: add(junction.center, scale(bisector, radius)) };
-    }).sort((left, right) => (left.gap >= STRAIGHT_CORNER_RAD) - (right.gap >= STRAIGHT_CORNER_RAD) || right.gap - left.gap);
+    }).sort((left, right) => (left.gap >= STRAIGHT_CORNER_RAD) - (right.gap >= STRAIGHT_CORNER_RAD) || right.gap - left.gap)
+      .filter((corner) => avoid.every((row) => length(sub(toEastNorth([row.position_m[0], row.position_m[2]]), corner.point)) >= NAME_POST_STOP_CLEAR_M));
     const en = firstClear(rule, contains, corners.map((corner) => corner.point), { raisedAt: groundBuiltNear });
     if (!en) return null;
     const front = unit(sub(junction.center, en));
@@ -1088,7 +1191,7 @@ export function placeStreetFurniture({
     const cell = `n${junction.ref}_${arm.road.source_key}_${arm.sign > 0 ? "b" : "a"}${arm.index > 0 && arm.index < arm.road.refs.length - 1 ? "" : ""}`;
     const id = `scatter:${zone.id}:${rule.id}:${cell}`;
     if (ruleRows.some((row) => row.id === id)) return;
-    const base = add(junction.center, scale(outward, armClearance(junction.center, arm.road, outward, crossKerb, rule.clear_m, allWalks)));
+    const base = add(junction.center, scale(outward, armClearance(junction.center, arm.road, outward, crossKerb, rule.clear_m)));
     const xz = stopPosition(id, base, travel, arm.road.kerb_offset_m, -1);
     if (!xz) {
       count(audit.rejected_by_reason, `${rule.id}:no_clear_curb`);
@@ -1096,6 +1199,46 @@ export function placeStreetFurniture({
     }
     const row = addRow(zone, rule, cell, toEastNorth(xz), scale(travel, -1), { all_way: allWay }, `approach:${arm.road.source_key}`);
     stopSigns.push({ id: row.id, row, junction: junction.ref, road_key: arm.road.source_key, travel });
+  };
+
+  // The stations of a junction-anchored lamp run (street_lamps anchor
+  // "junctions"), as distances along a street chain: one LAMP_CORNER_M past the
+  // crossing street's curb at each junction with another named street (on the
+  // far side, or the near side at the chain's end), the dated photos' corner
+  // lamps; then evenly between those at most spacing apart, and on at the
+  // spacing out to the chain's ends.
+  const junctionByRef = new Map(islandJunctions.map((junction) => [junction.ref, junction]));
+  const junctionStations = (chain, spacing) => {
+    const total = polylineLength(chain.line);
+    const anchors = [];
+    let walked = 0;
+    chain.refs.forEach((ref, index) => {
+      if (index > 0) walked += length(sub(chain.line[index], chain.line[index - 1]));
+      const junction = junctionByRef.get(ref);
+      if (!junction) return;
+      const cross = Math.max(0, ...junction.arms.filter((arm) => arm.road.name !== chain.name).map((arm) => arm.road.kerb_offset_m));
+      if (cross === 0) return;
+      const past = cross + LAMP_CORNER_M;
+      anchors.push(walked + past <= total ? walked + past : walked - past);
+    });
+    const marks = [...new Set(anchors.filter((s) => s >= 0 && s <= total).map((s) => Math.round(s * 10) / 10))].sort((left, right) => left - right);
+    const stations = [];
+    if (marks.length === 0) {
+      for (let s = 0; s <= total; s += spacing) stations.push(s);
+      return stations;
+    }
+    for (let s = marks[0] - spacing; s >= 0; s -= spacing) stations.push(s);
+    marks.forEach((mark, index) => {
+      stations.push(mark);
+      const next = marks[index + 1];
+      if (next === undefined) {
+        for (let s = mark + spacing; s <= total; s += spacing) stations.push(s);
+        return;
+      }
+      const parts = Math.ceil((next - mark) / spacing - 1e-9);
+      for (let k = 1; k < parts; k += 1) stations.push(mark + ((next - mark) * k) / parts);
+    });
+    return stations.sort((left, right) => left - right);
   };
 
   const runRule = (zone, rule, contains) => {
@@ -1117,23 +1260,27 @@ export function placeStreetFurniture({
         }
       }
     } else if (rule.pattern === "street_lamps") {
-      // Lamps along the named streets at a spacing, on the street ground where
-      // a zone builds it, else beside the frozen road ribbon.
+      // Lamps along the named streets, on the street ground where a zone builds
+      // it, else beside the frozen road ribbon: from phase_m at a spacing, or
+      // (anchor "junctions") at the street corners and evenly between them.
       for (const chain of streetChains(rule.streets)) {
         const total = polylineLength(chain.line);
+        const stations = rule.anchor === "junctions" ? junctionStations(chain, rule.spacing_m) : [];
+        if (rule.anchor !== "junctions") for (let s = rule.phase_m; s <= total; s += rule.spacing_m) stations.push(s);
         for (const sideName of rule.sides) {
           const side = sideName === "left" ? 1 : -1;
-          for (let station = 0, s = rule.phase_m; s <= total; station += 1, s += rule.spacing_m) {
+          stations.forEach((s, station) => {
             const deltas = slides(rule.slide_m).filter((delta) => s + delta >= 0 && s + delta <= total);
             const candidates = deltas.map((delta) => {
               const along = pointAlong(chain.line, s + delta);
               return add(along.point, scale(leftOf(along.tangent), side * (offsetAt(chain, s + delta) + rule.setback_m)));
             });
-            const en = firstClear(rule, contains, candidates, { raisedAt: groundBuiltNear, spacing_m: rule.spacing_m });
-            if (!en) continue;
+            const own = `scatter:${zone.id}:${rule.id}:${chain.key}_`;
+            const en = firstClear(rule, contains, candidates, { raisedAt: groundBuiltNear, spacing_m: rule.spacing_m, own });
+            if (!en) return;
             const near = closestOnPolyline(chain.line, en);
             addRow(zone, rule, `${chain.key}_${sideName}_${String(station).padStart(3, "0")}`, en, unit(sub(near.point, en)));
-          }
+          });
         }
       }
     } else if (rule.pattern === "pole_fixtures") {
@@ -1196,20 +1343,31 @@ export function placeStreetFurniture({
         count(audit.rules, `${zone.id}/${rule.id}`);
       }
     } else if (rule.pattern === "junction_names") {
-      // Name blades at every junction of named streets that no zone furnished:
-      // on the post of a stop sign there (the first by id), else on a corner post.
+      // Name blades at each junction of named streets that no zone furnished and
+      // no signal mast serves (the masts' arm signs carry its names): on the stop
+      // post the dated photos show carrying them (on_stops), else on their own
+      // post at a corner clear of the junction's stop signs, whose posts the
+      // photos mostly show bare.
+      const onStops = new Map(rule.on_stops.map((entry) => [entry.stop, false]));
       for (const junction of islandJunctions) {
         if (!contains(toWorld(junction.center)) || !once(`junction:${junction.ref}`)) continue;
-        const sign = stopSigns.filter((entry) => entry.junction === junction.ref && entry.row.prop === "stop_sign")
-          .sort((left, right) => (left.id < right.id ? -1 : left.id > right.id ? 1 : 0))[0];
+        if (ruleRows.some((row) => row.prop === "signal_mast" && length(sub(toEastNorth([row.position_m[0], row.position_m[2]]), junction.center)) < SIGNAL_NAMES_M)) {
+          count(audit.rejected_by_reason, `${rule.id}:signal_mast_names`);
+          continue;
+        }
+        const signs = stopSigns.filter((entry) => entry.junction === junction.ref && entry.row.prop === "stop_sign");
+        const sign = signs.find((entry) => onStops.has(entry.id.split(":").at(-1)));
         if (sign) {
+          onStops.set(sign.id.split(":").at(-1), true);
           sign.row.prop_params = { ...sign.row.prop_params, blades: bladesFor(junction.arms, sign.row.yaw_radians) };
           audit.blades_on_stops += 1;
           count(audit.rules, `${zone.id}/${rule.id}`);
           continue;
         }
-        nameCorner(zone, rule, contains, junction);
+        nameCorner(zone, rule, contains, junction, signs.map((entry) => entry.row));
       }
+      const unused = [...onStops.entries()].filter(([, used]) => !used).map(([stop]) => stop);
+      invariant(unused.length === 0, `Street furniture rule ${rule.id}: on_stops ${unused.join(", ")} name no rule stop sign at an unfurnished junction`);
     } else if (rule.pattern === "signalized_crossings" || rule.pattern === "near_signals") {
       const walks = zone.id === "island" ? allWalks : site.crosswalks;
       for (const walk of walks.filter((candidate) => candidate.signals && contains(toWorld(candidate.center)))) {
@@ -1231,11 +1389,21 @@ export function placeStreetFurniture({
               scale(landing.travel, site.walk_width_m / 2 + rule.beyond_m + extra)));
             const en = firstClear(rule, contains, candidates, { raised: zone.id !== "island" });
             if (!en) continue;
-            // The mast arm reaches over the lanes of its own direction, toward
-            // the centre line of the road the crosswalk crosses.
-            const reach = Math.min(...kerbLines.map((road) => closestOnPolyline(road.line, en).distance));
-            const arm = Math.round(Math.max(3, Math.min(7, 0.85 * reach)) * 2) / 2;
-            addRow(zone, rule, `${walk.source_key}_${landing.sign > 0 ? "b" : "a"}`, en, scale(landing.outward, -1), { arm_m: arm, head_m: roundCoordinate(Math.min(arm - 0.4, 0.7 * reach)) });
+            // The mast arm reaches over the lanes of the road the crosswalk
+            // crosses, a metre past its centre line (the dated photos' long
+            // arms over the lanes), with its heads spread along it and, at a
+            // junction, a green sign naming the crossing street (the photos'
+            // arm signs).
+            const host = (walk.host_key ? kerbByKey.get(walk.host_key) : null) ?? kerbLines.map((road) => ({ road, gap: closestOnPolyline(road.line, walk.center).distance }))
+              .sort((left, right) => left.gap - right.gap)[0]?.road ?? null;
+            const reach = host ? closestOnPolyline(host.line, en).distance : MAST_ARM_MIN_M;
+            const arm = Math.round(Math.max(MAST_ARM_MIN_M, Math.min(MAST_ARM_MAX_M, reach + MAST_ARM_PAST_M)) * 2) / 2;
+            const heads = arm >= MAST_THREE_HEADS_M ? 3 : arm >= MAST_TWO_HEADS_M ? 2 : 1;
+            const crossing = host ? kerbLines.filter((road) => road.name && road.name !== host.name && closestOnPolyline(road.line, walk.center).distance < 15)
+              .sort((left, right) => closestOnPolyline(left.line, walk.center).distance - closestOnPolyline(right.line, walk.center).distance)[0] : null;
+            addRow(zone, rule, `${walk.source_key}_${landing.sign > 0 ? "b" : "a"}`, en, scale(landing.outward, -1), {
+              arm_m: arm, head_m: roundCoordinate(arm - 0.4), heads, ...(crossing ? { name: abbreviateStreetName(crossing.name) } : {}),
+            });
           }
         } else {
           // One cabinet per crossing, behind the far-side pole of the landing with
@@ -1285,7 +1453,7 @@ export function placeStreetFurniture({
         if (roads.length < 2) continue;
         const center = nodePoint(ref);
         if (!contains(toWorld(center)) || !once(`all_way:${ref}`)) continue;
-        for (const road of roads) signArms(zone, rule, ref, center, road, roads.filter((other) => other !== road), false, zone.id === "island" ? allWalks : site.crosswalks);
+        for (const road of roads) signArms(zone, rule, ref, center, road, roads.filter((other) => other !== road), false);
       }
     } else if (rule.pattern === "drive_entries") {
       // Traffic turning off a named road into a kerbed service drive stops: a

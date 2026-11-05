@@ -1013,10 +1013,17 @@ func _check_spray(source: String, plan: Dictionary, bounds: AABB) -> void:
 		_unsafe=true
 		return
 	# "placed" (default): one source-bound wall decal. "receiver_rejection": a
-	# non-receiver solid in front of the wall (a prop, say) stops the spray.
+	# non-receiver solid in front of the wall (a prop, say) stops the spray;
+	# with "blocker" (a body's feature_kind, as "street_furniture") the first
+	# solid the spray ray meets must be of that kind.
 	var expect: Variant = plan.get("expect", "placed")
 	if not expect is String or expect not in ["placed", "receiver_rejection"]:
 		_failures.append(_prefix+"spray expect must be \"placed\" or \"receiver_rejection\"")
+		_unsafe=true
+		return
+	var blocker: Variant = plan.get("blocker", "")
+	if not blocker is String or (blocker != "" and expect != "receiver_rejection"):
+		_failures.append(_prefix+"spray blocker must be a feature kind, with expect receiver_rejection")
 		_unsafe=true
 		return
 	for value: Variant in plan.target_xyz:
@@ -1058,7 +1065,15 @@ func _check_spray(source: String, plan: Dictionary, bounds: AABB) -> void:
 	var first:=_h.player.get_world_3d().direct_space_state.intersect_ray(query)
 	var first_node:=first.get("collider") as Node
 	var first_receiver:=first_node!=null and first_node.is_in_group("spray_receiver_wall")
-	print("SPRAY_HIT source=%s expect=%s collider=%s feature=%s receiver=%s at=%s" % [source, expect, first_node.get_path() if first_node!=null else "none", first_node.get_meta("feature_kind", "") if first_node!=null else "", first_receiver, first.get("position", "none")])
+	var first_feature:=str(first_node.get_meta("feature_kind", "")) if first_node!=null else ""
+	# The street-detail item behind the hit shape, when the body is a street prop body.
+	var first_item:=""
+	if first_node is CollisionObject3D and first.has("shape"):
+		var body:=first_node as CollisionObject3D
+		var shape_owner:=body.shape_owner_get_owner(body.shape_find_owner(int(first.shape))) as Node
+		if shape_owner!=null:
+			first_item=str(shape_owner.get_meta("street_detail_id", ""))
+	print("SPRAY_HIT source=%s expect=%s collider=%s feature=%s item=%s receiver=%s at=%s" % [source, expect, first_node.get_path() if first_node!=null else "none", first_feature, first_item, first_receiver, first.get("position", "none")])
 	var results: Array[String]=[]
 	var record:=func(code: String) -> void:results.append(code)
 	spray.spray_result.connect(record)
@@ -1068,12 +1083,13 @@ func _check_spray(source: String, plan: Dictionary, bounds: AABB) -> void:
 	for child: Node in pool.get_children():
 		if child is Decal and child not in before:placed.append(child)
 	if expect=="receiver_rejection":
-		var refused:=results==["receiver_rejection"] and placed.is_empty() and first_node!=null and not first_receiver
-		print("SPRAY source=%s result=%s expected=receiver_rejection refused=%s" % [source, results, refused])
+		var blocked_by:=first_node!=null and not first_receiver and (blocker=="" or first_feature==blocker)
+		var refused:=results==["receiver_rejection"] and placed.is_empty() and blocked_by
+		print("SPRAY source=%s result=%s expected=receiver_rejection blocker=%s refused=%s" % [source, results, blocker if blocker!="" else "any", refused])
 		var refusal_rest:=await _rest_and_disable(recoveries)
 		if refusal_rest!="":_failures.append(_prefix+"spray "+refusal_rest)
 		if not refused:
-			_failures.append(_prefix+"spray at a non-receiver solid was not refused: "+str(results))
+			_failures.append(_prefix+"spray at a non-receiver solid was not refused by %s: %s (first hit %s %s)" % [blocker if blocker!="" else "a solid", str(results), first_feature, first_item])
 			_unsafe=true
 		if before.is_empty():pool.clear_tags()
 		return

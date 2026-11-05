@@ -31,11 +31,16 @@ const CELL_MAP := Rect2(0.75, 0.25, 0.25, 0.125)
 const CELL_WHITE := Rect2(0.8, 0.42, 0.15, 0.06)
 const CELL_POLE_WOOD := Rect2(0.0, 0.5, 0.25, 0.25)
 const CELL_TOW_AWAY := Rect2(0.25, 0.5, 0.25, 0.25)
+const CELL_MERSEA := Rect2(0.5, 0.5, 0.25, 0.25)
 
 ## Vertex colours (sRGB), multiplied with the atlas cell they sample.
-const GALVANIZED := Color(1.0, 1.0, 1.0)
+## Galvanised steel: the metal cell darkened to the dated photos' mid grey
+## (untinted it read near-white in the sun).
+const GALVANIZED := Color(0.7, 0.71, 0.72)
 const CHARCOAL := Color(0.42, 0.43, 0.45)
 const SIGNAL_BLACK := Color(0.07, 0.07, 0.075)
+## The green of the street-name signs on the signal mast arms.
+const MAST_SIGN_GREEN := Color(0.02, 0.36, 0.2)
 const LUMINAIRE_GREY := Color(0.36, 0.37, 0.39)
 const LENS_GREY := Color(0.80, 0.82, 0.84)
 const SIGN_BACK := Color(0.78, 0.79, 0.80)
@@ -59,6 +64,9 @@ const NAME_TEXT := Color(0.04, 0.04, 0.045)
 ## Gateview Avenue, Mar and Sep 2025 photos): weathered grey-brown wood poles
 ## with timber crossarms, grey insulators and galvanised hardware.
 const POLE_WOOD := Color(1.0, 1.0, 1.0)
+const MONUMENT_POST := Color(0.86, 0.86, 0.84)
+## The darker creosote shaft of a minority of poles (prop_params.wood "dark").
+const POLE_WOOD_DARK := Color(0.52, 0.47, 0.42)
 const CROSSARM_WOOD := Color(0.72, 0.68, 0.62)
 const INSULATOR_GREY := Color(0.66, 0.68, 0.67)
 const CONDUIT_GREY := Color(0.58, 0.59, 0.58)
@@ -166,6 +174,7 @@ const PROPS := {
 	"transformer_pad": {"range_m": 130.0, "shadow": true},
 	"bus_shelter": {"range_m": 220.0, "shadow": true},
 	"post_sign": {"range_m": 110.0, "shadow": false},
+	"monument_sign": {"range_m": 120.0, "shadow": true},
 	"ev_charger_bay": {"range_m": 120.0, "shadow": true},
 }
 ## The power lines' wires: drawn to this range, never casting shadows, each span
@@ -190,11 +199,24 @@ const ARM2_DROP_M := 1.35
 const INSULATOR_XS := [-1.02, 0.36, 1.02]
 const INSULATOR_TOP_M := 0.2
 const LOWER_CABLE_M := 6.6
+## The tow-away sign's post, up to just above the sign's top (1.77 m).
+const TOW_AWAY_POST_M := 1.8
 const WIRE_SHADER := preload("res://game/resources/materials/world/street/street_wire.gdshader")
 const LABEL_RANGE_M := 60.0
 const LABEL_FONT_SIZE := 64
 const LABEL_PIXEL_M := 0.0021
+## The mast arm signs' letters, larger than the blades' (scale on LABEL_PIXEL_M).
+const MAST_NAME_SCALE := 2.0
+## The spacing of a signal mast's heads along its arm, inward from head_m, and
+## the closest a head hangs to the pole.
+const MAST_HEAD_STEP_M := 2.8
+const MAST_HEAD_MIN_M := 1.8
 const BLADE_HEIGHT_M := 0.24
+## The lower name blade's centre height, the step to the upper blade, and the
+## post top just under the lower blade's bracket.
+const BLADE_LOWER_Y_M := 3.18
+const BLADE_STEP_Y_M := 0.27
+const BLADE_POST_TOP_M := 3.03
 const BLADE_MARGIN_M := 0.09
 
 var _opaque: StandardMaterial3D
@@ -276,7 +298,11 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 			# head: "led" (the new district's flat LED heads) or "cobra" (the classic
 			# cobra heads of the davit poles in the housing).
 			var classic := str(params.get("head", "led")) == "cobra"
-			_piece(result, "lamp_cobra_h%.1f_a%.1f_c%d" % [height, arm, int(classic)], func(b: Builder) -> void: _lamp_cobra(b, height, arm, classic))
+			# bend_m: the radius of the bend from the shaft into the arm; the
+			# davits' smooth crook by default, a tight knee for a near-straight
+			# upswept arm (the owner lot's island lamp).
+			var bend := snappedf(clampf(_number(params, "bend_m", 1.2), 0.2, 1.2), 0.05)
+			_piece(result, "lamp_cobra_h%.1f_a%.1f_c%d_b%.2f" % [height, arm, int(classic), bend], func(b: Builder) -> void: _lamp_cobra(b, height, arm, classic, bend))
 			_capsule(result, 0.13, height - 0.9)
 		"lamp_lot":
 			var lot_height := _number(params, "height_m", 6.0)
@@ -290,15 +316,25 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 		"signal_mast":
 			var mast_arm := _number(params, "arm_m", 4.0)
 			var head_at := snappedf(_number(params, "head_m", mast_arm * 0.8), 0.05)
+			# heads: three-section heads spread along the arm from the outermost
+			# (head_m) inward (_mast_heads).
+			var heads := clampi(int(_number(params, "heads", 1)), 1, 3)
 			var lamp := bool(params.get("lamp", true))
 			var sign_kind := str(params.get("sign", ""))
-			_piece(result, "signal_mast_a%.1f_h%.2f_l%d_%s" % [mast_arm, head_at, int(lamp), sign_kind], func(b: Builder) -> void: _signal_mast(b, mast_arm, head_at, lamp, sign_kind))
+			_piece(result, "signal_mast_a%.1f_h%.2f_n%d_l%d_%s" % [mast_arm, head_at, heads, int(lamp), sign_kind], func(b: Builder) -> void: _signal_mast(b, mast_arm, head_at, heads, lamp, sign_kind))
 			_capsule(result, 0.18, 8.4 if lamp else 6.6)
+			# name: the crossing street on a green sign hung from the arm, its
+			# white letters toward the approaching traffic (-X, as the heads).
+			var arm_name := str(params.get("name", ""))
+			if not arm_name.is_empty():
+				_mast_name_sign(result, arm_name, mast_arm, _mast_heads(head_at, heads))
 		"stop_sign":
-			var all_way := bool(params.get("all_way", false))
+			# An ALL WAY plaque where the photos show one (plaque, by default at an
+			# all-way stop; the island-wide rules set it false, unconfirmed there).
+			var plaque := bool(params.get("plaque", bool(params.get("all_way", false))))
 			# With name blades on top (blades), the post runs up to carry them.
 			var bladed := params.get("blades", null) is Array and not (params.blades as Array).is_empty()
-			_piece(result, "stop_sign_w%d_b%d" % [int(all_way), int(bladed)], func(b: Builder) -> void: _stop_sign(b, all_way, bladed))
+			_piece(result, "stop_sign_w%d_b%d" % [int(plaque), int(bladed)], func(b: Builder) -> void: _stop_sign(b, plaque, bladed))
 			_capsule(result, 0.06, 3.0)
 			if bladed:
 				_blades(result, params.blades)
@@ -328,7 +364,10 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 		"post_sign":
 			var post_kind := str(params.get("sign", "tow_away"))
 			_piece(result, "post_sign_%s" % post_kind, func(b: Builder) -> void: _post_sign(b, post_kind))
-			_capsule(result, 0.05, 2.5)
+			_capsule(result, 0.05, TOW_AWAY_POST_M if post_kind == "tow_away" else 2.5)
+		"monument_sign":
+			_piece(result, "monument_sign", func(b: Builder) -> void: _monument_sign(b))
+			_box_shape(result, Vector3(1.24, 1.06, 0.12), Vector3(0.0, 0.53, 0.0))
 		"ev_charger_bay":
 			var bay_lift := Transform3D(Basis.IDENTITY, Vector3(0.0, _number(params, "lift", 0.0), 0.0))
 			_piece(result, "ev_charger_bay", func(b: Builder) -> void: _ev_charger_bay(b), bay_lift)
@@ -508,11 +547,11 @@ func _capsule(result: Dictionary, radius: float, height: float, offset := Vector
 ## Galvanised bent-mast pole: a tapered shaft that bends into an arm over the
 ## road (-Z), ending in a flat LED cobra head (Treasure Island Road, Ave of the
 ## Palms) or, with `classic`, the davit's rounded cobra head (Avenue B, Gateview Avenue).
-func _lamp_cobra(b: Builder, height: float, arm: float, classic := false) -> void:
-	var bend_y := height - 1.3
+func _lamp_cobra(b: Builder, height: float, arm: float, classic := false, bend := 1.2) -> void:
+	var bend_y := height - 0.1 - bend
 	var path := PackedVector3Array([Vector3(0, -0.3, 0), Vector3(0, 0.0, 0), Vector3(0, bend_y * 0.5, 0), Vector3(0, bend_y, 0)])
 	var radii := PackedFloat32Array([0.11, 0.11, 0.09, 0.072])
-	_append_bend(path, radii, Vector3(0, bend_y, 0), 1.2, 75.0, arm, 0.066, 0.05)
+	_append_bend(path, radii, Vector3(0, bend_y, 0), bend, 75.0 if bend > 0.6 else 78.0, arm, 0.066, 0.05)
 	b.tube(path, radii, 12, GALVANIZED, CELL_METAL, false, true)
 	b.tube(PackedVector3Array([Vector3(0, -0.05, 0), Vector3(0, 0.07, 0)]), PackedFloat32Array([0.19, 0.17]), 12, GALVANIZED, CELL_METAL, false, true)
 	if classic:
@@ -596,7 +635,7 @@ func _lamp_plaza(b: Builder, height: float, heads: int) -> void:
 ## traffic (-X); on the pole a near-side head for the opposite direction (+X), a
 ## pedestrian head facing across the crosswalk and a NO STOPPING ANY TIME sign
 ## facing the road; when `lamp`, a street lamp on top (ferry crossing photos).
-func _signal_mast(b: Builder, arm: float, head_at: float, lamp: bool, sign_kind: String) -> void:
+func _signal_mast(b: Builder, arm: float, head_at: float, heads: int, lamp: bool, sign_kind: String) -> void:
 	var top := 8.4 if lamp else 6.6
 	var path := PackedVector3Array([Vector3(0, -0.3, 0), Vector3(0, 0.0, 0), Vector3(0, 5.5, 0)])
 	var radii := PackedFloat32Array([0.15, 0.15, 0.115])
@@ -620,9 +659,10 @@ func _signal_mast(b: Builder, arm: float, head_at: float, lamp: bool, sign_kind:
 		arm_radii.append(lerpf(0.1, 0.055, t))
 	b.tube(arm_path, arm_radii, 10, GALVANIZED, CELL_METAL, false, true)
 	b.tube(PackedVector3Array([Vector3(0, 4.75, -0.12), Vector3(0, 5.1, -0.5), Vector3(0, 5.38, -1.1), Vector3(0, _arm_y(1.7 / arm), -1.7)]), PackedFloat32Array([0.035, 0.035, 0.035, 0.035]), 6, GALVANIZED, CELL_METAL, false, false)
-	var hang_y := _arm_y(clampf(head_at / arm, 0.0, 1.0))
-	b.box(Vector3(0, hang_y - 0.12, -head_at), Basis.IDENTITY, Vector3(0.06, 0.24, 0.06), SIGNAL_BLACK, CELL_WHITE)
-	_signal_head(b, Vector3(0, hang_y - 0.24 - 0.5, -head_at), Vector3.LEFT)
+	for at: float in _mast_heads(head_at, heads):
+		var hang_y := _arm_y(clampf(at / arm, 0.0, 1.0))
+		b.box(Vector3(0, hang_y - 0.12, -at), Basis.IDENTITY, Vector3(0.06, 0.24, 0.06), SIGNAL_BLACK, CELL_WHITE)
+		_signal_head(b, Vector3(0, hang_y - 0.24 - 0.5, -at), Vector3.LEFT)
 	# Near-side head for the opposite direction, on the downstream side of the pole.
 	b.box(Vector3(0.2, 3.4, 0), Basis.IDENTITY, Vector3(0.18, 0.08, 0.08), SIGNAL_BLACK, CELL_WHITE)
 	_signal_head(b, Vector3(0.42, 3.4, 0), Vector3.RIGHT)
@@ -631,6 +671,60 @@ func _signal_mast(b: Builder, arm: float, head_at: float, lamp: bool, sign_kind:
 	_ped_head(b, Vector3(-0.17, 2.75, -0.34), Vector3.FORWARD)
 	if sign_kind == "no_stopping":
 		_pole_sign(b, Vector3(0, 1.95, -0.17), Vector3.FORWARD, Vector2(0.4, 0.6), CELL_NO_STOPPING)
+
+
+## Where a mast's heads hang along its arm (m from the pole): the outermost at
+## head_at, the others inward, MAST_HEAD_STEP_M apart at most and no nearer the
+## pole than MAST_HEAD_MIN_M.
+func _mast_heads(head_at: float, heads: int) -> Array[float]:
+	var spots: Array[float] = []
+	var step := minf(MAST_HEAD_STEP_M, (head_at - MAST_HEAD_MIN_M) / float(heads - 1)) if heads > 1 else 0.0
+	for index in heads:
+		spots.append(head_at - step * float(index))
+	return spots
+
+
+## The green street-name sign hung from a mast arm (the dated photos' arm
+## signs) in the longest stretch of arm clear of its heads: a white-bordered
+## green panel sized to the name (its letters shrink to fit a short stretch),
+## the name in white Label3D letters toward the approaching traffic (-X).
+func _mast_name_sign(result: Dictionary, text: String, arm: float, heads: Array[float]) -> void:
+	var edges: Array[float] = [0.45]
+	var inward := heads.duplicate()
+	inward.sort()
+	for spot: float in inward:
+		edges.append(spot - 0.32)
+		edges.append(spot + 0.32)
+	edges.append(arm - 0.1)
+	var best_from := 0.0
+	var best_to := 0.0
+	for index in range(0, edges.size(), 2):
+		if edges[index + 1] - edges[index] > best_to - best_from:
+			best_from = edges[index]
+			best_to = edges[index + 1]
+	var room := best_to - best_from
+	if room < 0.6:
+		return
+	var font := ThemeDB.fallback_font
+	var text_m := font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, LABEL_FONT_SIZE).x * LABEL_PIXEL_M * MAST_NAME_SCALE
+	var length := snappedf(minf(room, maxf(1.0, text_m + 0.3)), 0.05)
+	var letters := MAST_NAME_SCALE * minf(1.0, (length - 0.3) / maxf(text_m, 0.01))
+	var at := (best_from + best_to) * 0.5
+	var y := _arm_y(clampf(at / arm, 0.0, 1.0)) - 0.33
+	var placement := Transform3D(Basis.IDENTITY, Vector3(0, y, -at))
+	_piece(result, "mast_name_sign_l%.2f" % length, func(b: Builder) -> void: _mast_sign_panel(b, length), placement)
+	var facing := Basis(Vector3.UP, -PI * 0.5).scaled(Vector3.ONE * letters)
+	result.labels.append({"text": text, "color": Color(0.96, 0.97, 0.95), "transform": placement * Transform3D(facing, Vector3(-0.022, 0, 0))})
+
+
+## A green name panel in the arm's plane (along Z), facing ±X, with a white
+## border and a short hanger up to the arm.
+func _mast_sign_panel(b: Builder, length: float) -> void:
+	b.box(Vector3.ZERO, Basis.IDENTITY, Vector3(0.03, 0.44, length), BLADE_WHITE, CELL_WHITE)
+	b.box(Vector3(-0.016, 0, 0), Basis.IDENTITY, Vector3(0.004, 0.38, length - 0.06), MAST_SIGN_GREEN, CELL_WHITE)
+	b.box(Vector3(0.016, 0, 0), Basis.IDENTITY, Vector3(0.004, 0.38, length - 0.06), MAST_SIGN_GREEN, CELL_WHITE)
+	for side: float in [-1.0, 1.0]:
+		b.box(Vector3(0, 0.27, side * (length * 0.5 - 0.15)), Basis.IDENTITY, Vector3(0.03, 0.12, 0.03), GALVANIZED, CELL_METAL)
 
 
 ## Height of the arched mast arm at fraction t of its length.
@@ -667,18 +761,20 @@ func _pole_sign(b: Builder, center: Vector3, facing: Vector3, size: Vector2, cel
 
 
 ## An R1-1 stop sign (30 inch octagon) on a square galvanised post, with an ALL
-## WAY plaque under it at an all-way stop; with `bladed` the post runs on up to
-## carry the junction's name blades (_blades).
-func _stop_sign(b: Builder, all_way: bool, bladed := false) -> void:
-	var top := 3.62 if bladed else 2.94
+## WAY plaque under it with `plaque`; with `bladed` the post runs on up to the
+## bracket that carries the junction's name blades (_blades).
+func _stop_sign(b: Builder, plaque: bool, bladed := false) -> void:
+	var top := BLADE_POST_TOP_M if bladed else 2.94
 	b.box(Vector3(0, (top - 0.3) * 0.5, 0), Basis.IDENTITY, Vector3(0.05, top + 0.3, 0.05), GALVANIZED, CELL_METAL)
+	if bladed:
+		_blade_bracket(b)
 	var octagon := PackedVector2Array()
 	var circumradius := 0.375 / cos(PI / 8.0)
 	for corner in 8:
 		var angle := PI / 8.0 + TAU * float(corner) / 8.0
 		octagon.append(Vector2(cos(angle), sin(angle)) * circumradius)
 	b.plate(Vector3(0, 2.55, -0.04), Basis.IDENTITY, octagon, 0.012, CELL_STOP, Color.WHITE, SIGN_BACK, CELL_METAL)
-	if all_way:
+	if plaque:
 		b.plate(Vector3(0, 2.05, -0.04), Basis.IDENTITY, _rectangle(0.46, 0.19), 0.012, CELL_ALL_WAY, Color.WHITE, SIGN_BACK, CELL_METAL)
 
 
@@ -703,7 +799,7 @@ func _blades(result: Dictionary, blades: Array) -> void:
 		var text := str(blade.text)
 		var text_m := font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, LABEL_FONT_SIZE).x * LABEL_PIXEL_M
 		var length := snappedf(maxf(0.6, text_m + BLADE_MARGIN_M * 2.0), 0.05)
-		var y := 3.18 + 0.27 * float(index)
+		var y := BLADE_LOWER_Y_M + BLADE_STEP_Y_M * float(index)
 		var placement := Transform3D(Basis(Vector3.UP, _number(blade, "yaw", 0.0)), Vector3(0, y, 0))
 		_piece(result, "name_blade_white_l%.2f" % length, func(b: Builder) -> void: _blade(b, length), placement)
 		# Text on both faces: Label3D faces +Z, so the front copy turns half round.
@@ -712,8 +808,18 @@ func _blades(result: Dictionary, blades: Array) -> void:
 
 
 func _name_post(b: Builder) -> void:
-	b.tube(PackedVector3Array([Vector3(0, -0.3, 0), Vector3(0, 3.62, 0)]), PackedFloat32Array([0.04, 0.036]), 8, GALVANIZED, CELL_METAL, false, true)
-	b.box(Vector3(0, 3.5, 0), Basis.IDENTITY, Vector3(0.1, 0.06, 0.1), GALVANIZED, CELL_METAL)
+	b.tube(PackedVector3Array([Vector3(0, -0.3, 0), Vector3(0, BLADE_POST_TOP_M, 0)]), PackedFloat32Array([0.04, 0.036]), 8, GALVANIZED, CELL_METAL, false, true)
+	_blade_bracket(b)
+
+
+## The cast bracket on a post top that holds the name blades: a cap under the
+## lower blade's bottom edge and a short block between the two blades, so the
+## post never runs through a blade's lettering.
+func _blade_bracket(b: Builder) -> void:
+	var lower_bottom := BLADE_LOWER_Y_M - BLADE_HEIGHT_M * 0.5
+	b.box(Vector3(0, lower_bottom - 0.005, 0), Basis.IDENTITY, Vector3(0.09, 0.05, 0.07), GALVANIZED, CELL_METAL)
+	var gap_mid := BLADE_LOWER_Y_M + BLADE_STEP_Y_M * 0.5
+	b.box(Vector3(0, gap_mid, 0), Basis.IDENTITY, Vector3(0.06, BLADE_STEP_Y_M - BLADE_HEIGHT_M + 0.03, 0.06), GALVANIZED, CELL_METAL)
 
 
 ## A blank white name blade along X: a thin black blade with a white face on
@@ -1100,11 +1206,13 @@ func _pump_station(b: Builder) -> void:
 ## crossarms along X): the pole with its top crossarm, a second crossarm where
 ## another line turns off or two circuits run (arm2_yaw, turned about the
 ## pole), a riser conduit where the line goes underground (riser) and a street
-## lamp on an arm toward its street (lamp: {yaw, arm_m, height_m, head}).
+## lamp on an arm toward its street (lamp: {yaw, arm_m, height_m, head}). Most
+## shafts are weathered grey; wood "dark" draws a darker creosote one.
 func _utility_pole(result: Dictionary, params: Dictionary) -> void:
 	var height := POLE_HEIGHT_M
 	var riser := bool(params.get("riser", false))
-	_piece(result, "utility_pole_r%d" % int(riser), func(b: Builder) -> void: _pole_body(b, height, riser))
+	var dark := str(params.get("wood", "")) == "dark"
+	_piece(result, "utility_pole_r%d_w%d" % [int(riser), int(dark)], func(b: Builder) -> void: _pole_body(b, height, riser, POLE_WOOD_DARK if dark else POLE_WOOD))
 	var arm2: Variant = params.get("arm2_yaw", null)
 	if arm2 is float or arm2 is int:
 		_piece(result, "utility_pole_arm2", func(b: Builder) -> void: _crossarm(b, height - ARM2_DROP_M), Transform3D(Basis(Vector3.UP, float(arm2)), Vector3.ZERO))
@@ -1116,11 +1224,11 @@ func _utility_pole(result: Dictionary, params: Dictionary) -> void:
 	_capsule(result, 0.16, height)
 
 
-## The pole: a weathered wood shaft tapering to its cap, the top crossarm with
-## its braces and pin insulators, the lower cable's bracket and, with `riser`,
-## a grey conduit up its back to a terminator bracket.
-func _pole_body(b: Builder, height: float, riser: bool) -> void:
-	b.tube(PackedVector3Array([Vector3(0, -0.3, 0), Vector3(0, height * 0.5, 0), Vector3(0, height, 0)]), PackedFloat32Array([0.155, 0.135, 0.11]), 10, POLE_WOOD, CELL_POLE_WOOD, false, true)
+## The pole: a wood shaft (tinted `wood`) tapering to its cap, the top crossarm
+## with its braces and pin insulators, the lower cable's bracket and, with
+## `riser`, a grey conduit up its back to a terminator bracket.
+func _pole_body(b: Builder, height: float, riser: bool, wood: Color) -> void:
+	b.tube(PackedVector3Array([Vector3(0, -0.3, 0), Vector3(0, height * 0.5, 0), Vector3(0, height, 0)]), PackedFloat32Array([0.155, 0.135, 0.11]), 10, wood, CELL_POLE_WOOD, false, true)
 	_crossarm(b, height - ARM_DROP_M)
 	b.box(Vector3(0, LOWER_CABLE_M, -0.13), Basis.IDENTITY, Vector3(0.06, 0.14, 0.06), GALVANIZED, CELL_METAL)
 	if riser:
@@ -1283,12 +1391,25 @@ func _bus_shelter_roof(b: Builder) -> void:
 	_roof_arc(b, 0.0, SHELTER_HALF_X * 2.0 + 0.1, Color.WHITE, 0.02)
 
 
-## A sign on its own square galvanised post, facing -Z: "tow_away", the
-## red-and-white tow-away sign at the owner's lot fence.
+## A sign on its own square galvanised post, facing -Z: "tow_away", the banded
+## tow-away sign at the owner's lot fence (0.6 x 0.92 m, its top level with the
+## fence's top rail, as the Sep 2025 photos show), else a no-stopping plate.
 func _post_sign(b: Builder, kind: String) -> void:
+	if kind == "tow_away":
+		b.box(Vector3(0, TOW_AWAY_POST_M * 0.5 - 0.15, 0), Basis.IDENTITY, Vector3(0.05, TOW_AWAY_POST_M + 0.3, 0.05), GALVANIZED, CELL_METAL)
+		_pole_sign(b, Vector3(0, 1.31, -0.04), Vector3.FORWARD, Vector2(0.6, 0.92), CELL_TOW_AWAY)
+		return
 	b.box(Vector3(0, 0.95, 0), Basis.IDENTITY, Vector3(0.05, 2.5, 0.05), GALVANIZED, CELL_METAL)
-	var cell := CELL_TOW_AWAY if kind == "tow_away" else CELL_NO_STOPPING
-	_pole_sign(b, Vector3(0, 1.75, -0.04), Vector3.FORWARD, Vector2(0.46, 0.6), cell)
+	_pole_sign(b, Vector3(0, 1.75, -0.04), Vector3.FORWARD, Vector2(0.46, 0.6), CELL_NO_STOPPING)
+
+
+## A low monument sign at a lot entrance, facing -Z: a 1.05 x 0.72 m painted
+## panel (CELL_MERSEA: an original generic face for the owner lot's Mersea
+## sign) between two square white posts, its foot 0.3 m up (Sep 2025 photo).
+func _monument_sign(b: Builder) -> void:
+	for side: float in [-1.0, 1.0]:
+		b.box(Vector3(side * 0.56, 0.38, 0), Basis.IDENTITY, Vector3(0.07, 1.36, 0.07), MONUMENT_POST, CELL_WHITE)
+	_pole_sign(b, Vector3(0, 0.66, -0.01), Vector3.FORWARD, Vector2(1.05, 0.72), CELL_MERSEA)
 
 
 ## The lot's ChargePoint bay (local X along the pad): a narrow concrete pad, two

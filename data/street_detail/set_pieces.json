@@ -1538,14 +1538,15 @@
       "params": {
         "height_m": 8.8,
         "arm_m": 2.4,
-        "head": "cobra"
+        "head": "cobra",
+        "bend_m": 0.3
       },
       "xz": [
         -360.2,
         133.5
       ],
       "yaw": 1.0472,
-      "reason": "The galvanised davit pole with a cobra head on the small concrete island at the lot's west end, its arm reaching west-north-west; position from the photo's bearing and depression at the 2.5 m Street View camera, f 518 px for 75y (production inference).",
+      "reason": "The galvanised pole with a cobra head on the small concrete island at the lot's west end, its near-straight arm upswept from a tight knee at the pole top, reaching west-north-west; position from the photo's bearing and depression at the 2.5 m Street View camera, f 518 px for 75y (production inference).",
       "reference": "street-clutter-rollout-20261105/owner-lot-notes.md (owner-priority Mersea lot, OSM w28356874); Street View pano TKhppKcV_DAxZRV9LsEh2A (Sep 2025, camera x -365.5, z 142.7), heading 10 (lot-w-north; street-objects-rollout refs lot-tkhpp-h010-f75)"
     },
     {
@@ -1564,6 +1565,30 @@
       "reference": "street-clutter-rollout-20261105/owner-lot-notes.md (owner-priority Mersea lot, OSM w28356874); Street View pano TKhppKcV_DAxZRV9LsEh2A (Sep 2025), heading 10 (lot-w-north)"
     },
     {
+      "id": "owner_lot_strip_pole",
+      "kind": "power_pole",
+      "prop": "utility_pole",
+      "params": {
+        "wood": "dark",
+        "wires_to": [
+          "osm:n11611626250"
+        ],
+        "lamp": {
+          "yaw": -2.0498,
+          "arm_m": 2.3,
+          "height_m": 8.4,
+          "head": "cobra"
+        }
+      },
+      "xz": [
+        -360.8,
+        173.2
+      ],
+      "yaw": 0.479,
+      "reason": "The dark creosote wooden utility pole on the west side of the lot's Avenue A strip, which OSM lacks: a crossarm whose wires run north-north-west to the OSM line's pole n11611626250 (a spur OSM also lacks), and a cobra light on a curved arm reaching east over the drive at about 8.4 m. Both views agree on its place (bearing 170.5 degrees, 30.7 m from the TKhpp camera; bearing 313.6 degrees, 45.8 m from the LtXS camera, from the post foot's depression below the 2.5 m camera, f 518 px for 75y); heights from the same views (production inference). The wires that run on south to a far pole are left out: that pole's place is too uncertain.",
+      "reference": "street-clutter-rollout-20261105/owner-lot-notes.md (owner-priority Mersea lot, OSM w28356874); Street View pano TKhppKcV_DAxZRV9LsEh2A (Sep 2025, camera x -365.5, z 142.7), heading 190 (street-objects-rollout refs lot-tkhpp-h190-f75); pano LtXShSEN6YyhB4uQoFoS-A (Sep 2025, camera x -328.1, z 205.1), heading 330 (refs lot-ltxs-h330-f75)"
+    },
+    {
       "id": "owner_lot_towaway_sign",
       "kind": "street_sign",
       "prop": "post_sign",
@@ -1575,8 +1600,8 @@
         146.1
       ],
       "yaw": 1.3963,
-      "reason": "A red, yellow and white tow-away / no-parking sign on a post at the chain-link field fence east of the bus stalls, facing the lot; its small print is unreadable, so the face is a generic tow-away sign (production inference).",
-      "reference": "street-clutter-rollout-20261105/owner-lot-notes.md (owner-priority Mersea lot, OSM w28356874); Street View pano TKhppKcV_DAxZRV9LsEh2A (Sep 2025), heading 110 (lot-w-east; street-objects-rollout refs lot-tkhpp-h110-f75)"
+      "reason": "A tow-away / no-parking sign on its own post in front of the chain-link field fence east of the tour-bus stalls, facing the lot: a portrait face about 0.6 by 0.9 m with its top at the fence's top rail, banded red, black with yellow lettering, red, then white with small print. Its print is unreadable, so the face is an original generic tow-away sign with that banding (production inference). Placed on the bearing both views agree on (about 100 degrees from the camera) at the post foot's depression below the 2.5 m camera, f 518 px for 75y.",
+      "reference": "street-clutter-rollout-20261105/owner-lot-notes.md (owner-priority Mersea lot, OSM w28356874); Street View pano TKhppKcV_DAxZRV9LsEh2A (Sep 2025, camera x -365.5, z 142.7), headings 70 and 110 (street-objects-rollout refs lot-tkhpp-h070-f75, lot-tkhpp-h110-f75)"
     },
     {
       "id": "owner_lot_ev_chargers",
@@ -1590,6 +1615,19 @@
       "yaw": -0.769,
       "reason": "The ChargePoint charging station of the owner's Google Maps place: two charger pedestals (one hooded) with coiled cables on a narrow concrete pad ringed by rust-orange steel bollards, a service meter post at its east end by the lamp pole, between the stall rows at the north-west of the lot, its long axis square to the view from the drive (production inference); the twin-arm lot light (OSM n11230361247) stands about 5 m beyond its east end.",
       "reference": "street-clutter-rollout-20261105/owner-lot-notes.md (owner-priority Mersea lot, OSM w28356874); Street View pano ExXe8Y9HtxQppbFix_QBDA (Sep 2025, camera x -375.1, z 124.8), headings 35, 40 and 42 (street-objects-rollout refs lot-exxe-h035-z25, lot-exxe-h040-f75, lot-exxe-h042-z12)"
+    },
+    {
+      "id": "owner_lot_mersea_sign",
+      "kind": "street_sign",
+      "prop": "monument_sign",
+      "params": {},
+      "xz": [
+        -370.33,
+        119.44
+      ],
+      "yaw": 2.467,
+      "reason": "The low green Mersea monument sign in the planted island at the lot entrance from Avenue A, facing the drive: a painted panel about 1.05 x 0.72 m between two white posts, its foot about 0.3 m up. The face is an original generic sign (the name and Treasure Island / San Francisco in plain white lettering with a small star), not the restaurant's logo; size, place and facing from the photo's bearing and depression at the 2.5 m camera, f 518 px for 75y (production inference), nudged 0.8 m off the frozen Avenue A ribbon, which runs where the photo's island splits the drive. The island's planting and curb are the ground and vegetation layers'.",
+      "reference": "street-clutter-rollout-20261105/owner-lot-notes.md (owner-priority Mersea lot, OSM w28356874); Street View pano ExXe8Y9HtxQppbFix_QBDA (Sep 2025, camera x -375.1, z 124.8), heading 40 (street-objects-rollout refs lot-exxe-h040-f75)"
     }
   ]
 }

@@ -13,7 +13,8 @@ extends RefCounted
 ## between the camera and the player does not pull the camera in. Street names
 ## are Label3D. The power lines' wires (power_wires rows) hang between the
 ## crossarms of their built utility poles, in straight pieces of one shared
-## wire mesh, with no collision.
+## wire mesh, with no collision; so do a photographed pole's spur wires to the
+## poles its prop_params.wires_to names.
 
 const KIT := preload("res://game/scripts/world/street_furniture_kit.gd")
 ## Largest render cell (m) and its share of a prop's visibility range.
@@ -39,9 +40,11 @@ func build(document: Dictionary) -> Dictionary:
 	var shapes: Dictionary = {}
 	var labels: Dictionary = {}
 	var prop_counts: Dictionary = {}
-	# A built utility pole's placement and wire attachments, by row id.
+	# A built utility pole's placement and wire attachments, by row id, and the
+	# spans [pole id, pole id] of the spurs that photographed poles name.
 	var poles: Dictionary = {}
 	var wire_rows: Array[Dictionary] = []
+	var spurs: Array = []
 	var props := 0
 	for row_value: Variant in document.get("rows", []):
 		var row: Dictionary = row_value
@@ -66,6 +69,12 @@ func build(document: Dictionary) -> Dictionary:
 		var placement := Transform3D(Basis(Vector3.UP, yaw), Vector3(float(position[0]), float(position[1]) + float(surface.get("bias_m", 0.0)), float(position[2])))
 		if prop == "utility_pole":
 			poles[str(row.id)] = {"placement": placement, "wires": kit.wire_levels(params if params is Dictionary else {})}
+			var wires_to: Variant = (params as Dictionary).get("wires_to", []) if params is Dictionary else []
+			if not wires_to is Array:
+				root.free()
+				return {"ok": false, "code": "street_furniture_prop", "message": "%s: wires_to must list pole ids" % row.get("id", "?"), "source_keys": []}
+			for target: Variant in wires_to:
+				spurs.append([str(row.id), str(target)])
 		var range_m := float(parts.range_m)
 		var cell := _cell(position, minf(CELL_MAX_M, range_m * CELL_RANGE_SHARE))
 		var physics_cell := _cell(position, PHYSICS_CELL_M)
@@ -88,7 +97,7 @@ func build(document: Dictionary) -> Dictionary:
 			(labels[label_cell] as Array).append({"id": str(row.id), "text": str(label.text), "color": label.get("color", Color(0.96, 0.97, 0.95)), "transform": placement * (label.transform as Transform3D)})
 		prop_counts[prop] = int(prop_counts.get(prop, 0)) + 1
 		props += 1
-	var wires := _wire_pieces(wire_rows, poles)
+	var wires := _wire_pieces(wire_rows, spurs, poles)
 	if not wires.ok:
 		root.free()
 		return wires
@@ -198,42 +207,48 @@ func build(document: Dictionary) -> Dictionary:
 	}
 
 
-## The wire pieces of the power lines: {ok, spans, cells: {cell -> [Transform3D]}}
-## for the shared wire mesh (a unit tube along +Z). Each line's prop_params.poles
-## lists its poles in order along it (null where a vertex has none); a span joins
-## each two consecutive built poles. At each end it takes the crossarm squarest
-## to the span, and pairs the two ends' insulators in order across the span, so
-## no two conductors cross; the lower cable hangs from the poles' brackets.
-func _wire_pieces(rows: Array[Dictionary], poles: Dictionary) -> Dictionary:
-	var cells: Dictionary = {}
-	var spans := 0
+## The wire pieces of the power lines and spurs: {ok, spans, cells: {cell ->
+## [Transform3D]}} for the shared wire mesh (a unit tube along +Z). Each line's
+## prop_params.poles lists its poles in order along it (null where a vertex has
+## none); a span joins each two consecutive built poles, and each spur its two
+## poles. At each end it takes the crossarm squarest to the span, and pairs the
+## two ends' insulators in order across the span, so no two conductors cross;
+## the lower cable hangs from the poles' brackets.
+func _wire_pieces(rows: Array[Dictionary], spurs: Array, poles: Dictionary) -> Dictionary:
+	# [from id, to id, owner id] for every span.
+	var pairs: Array = []
 	for row: Dictionary in rows:
 		var params: Variant = row.get("prop_params", null)
 		if not params is Dictionary or not (params as Dictionary).get("poles", null) is Array:
 			return {"ok": false, "code": "street_furniture_prop", "message": "%s: power_wires needs its pole list" % row.get("id", "?"), "source_keys": []}
 		var ids: Array = params.poles
 		for index in range(1, ids.size()):
-			if not ids[index - 1] is String or not ids[index] is String:
-				continue
-			if not poles.has(ids[index - 1]) or not poles.has(ids[index]):
-				return {"ok": false, "code": "street_furniture_prop", "message": "%s: span pole %s or %s is not a built utility pole" % [row.get("id", "?"), ids[index - 1], ids[index]], "source_keys": []}
-			var a: Dictionary = poles[ids[index - 1]]
-			var b: Dictionary = poles[ids[index]]
-			var origin_a: Vector3 = (a.placement as Transform3D).origin
-			var origin_b: Vector3 = (b.placement as Transform3D).origin
-			var span := origin_b - origin_a
-			span.y = 0.0
-			if span.length() < 1.0:
-				continue
-			var across := Vector3.UP.cross(span.normalized())
-			var tops_a := _across_order(_attachments(a, span), across)
-			var tops_b := _across_order(_attachments(b, -span), across)
-			for conductor in mini(tops_a.size(), tops_b.size()):
-				_hang(cells, tops_a[conductor], tops_b[conductor], KIT.WIRE_SAG, KIT.WIRE_RADIUS_M)
-			var lower_a: Vector3 = (a.placement as Transform3D) * (a.wires.lower as Vector3)
-			var lower_b: Vector3 = (b.placement as Transform3D) * (b.wires.lower as Vector3)
-			_hang(cells, lower_a, lower_b, KIT.WIRE_LOWER_SAG, KIT.WIRE_LOWER_RADIUS_M)
-			spans += 1
+			if ids[index - 1] is String and ids[index] is String:
+				pairs.append([ids[index - 1], ids[index], str(row.get("id", "?"))])
+	for spur: Array in spurs:
+		pairs.append([spur[0], spur[1], spur[0]])
+	var cells: Dictionary = {}
+	var spans := 0
+	for pair: Array in pairs:
+		if not poles.has(pair[0]) or not poles.has(pair[1]):
+			return {"ok": false, "code": "street_furniture_prop", "message": "%s: span pole %s or %s is not a built utility pole" % [pair[2], pair[0], pair[1]], "source_keys": []}
+		var a: Dictionary = poles[pair[0]]
+		var b: Dictionary = poles[pair[1]]
+		var origin_a: Vector3 = (a.placement as Transform3D).origin
+		var origin_b: Vector3 = (b.placement as Transform3D).origin
+		var span := origin_b - origin_a
+		span.y = 0.0
+		if span.length() < 1.0:
+			continue
+		var across := Vector3.UP.cross(span.normalized())
+		var tops_a := _across_order(_attachments(a, span), across)
+		var tops_b := _across_order(_attachments(b, -span), across)
+		for conductor in mini(tops_a.size(), tops_b.size()):
+			_hang(cells, tops_a[conductor], tops_b[conductor], KIT.WIRE_SAG, KIT.WIRE_RADIUS_M)
+		var lower_a: Vector3 = (a.placement as Transform3D) * (a.wires.lower as Vector3)
+		var lower_b: Vector3 = (b.placement as Transform3D) * (b.wires.lower as Vector3)
+		_hang(cells, lower_a, lower_b, KIT.WIRE_LOWER_SAG, KIT.WIRE_LOWER_RADIUS_M)
+		spans += 1
 	return {"ok": true, "spans": spans, "cells": cells}
 
 

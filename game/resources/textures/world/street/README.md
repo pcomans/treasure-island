@@ -63,9 +63,10 @@ names are not in the atlas: the kit writes them with `Label3D` from the OSM name
 | (2, 1) bottom | blank green name blade (no longer drawn: the name blades are white, see the kit) | blank green street name blade with a thin white border |
 | (3, 1) top half | the ferry plaza information board's island map | not generated: drawn 2026-11-02 with ImageMagick from the frozen OSM data (the island outline turned to fill the panel, its streets, the ferry landing marked, a legend band of colour blocks); the drawing script is kept outside Git with the street-clutter work notes |
 | (3, 1) bottom half | plain white, for vertex-coloured parts | (filled by the packing script) |
-| (0, 2) | weathered wood of the utility poles and their crossarms | seamless weathered creosote wooden utility pole surface, vertical grain and checks |
-| (1, 2) | the tow-away sign at the owner's lot fence | white parking regulation sign: red TOW-AWAY band, NO PARKING, yellow ANY TIME band |
-| (2, 2), (3, 2), row 3 | plain white, spare | (filled by the packing script) |
+| (0, 2) | weathered wood of the utility poles and their crossarms (packed lightened and greyed, ImageMagick -modulate 150,40, toward the dated photos' weathered poles; the kit darkens a creosote minority by vertex colour) | seamless weathered creosote wooden utility pole surface, vertical grain and checks |
+| (1, 2) | the tow-away sign at the owner's lot fence (regenerated 2026-11-05 with the Sep 2025 photos' banding; its print is unreadable there, so the text is generic) | original generic private-lot tow-away sign: red NO PARKING block, black band with yellow TOW-AWAY, red ZONE block, white panel of small black print and a dark blue bottom line |
+| (2, 2) | the owner lot's Mersea monument sign face (2026-11-05; an original generic face: plain lettering, no logo) | original generic low monument sign face: dark green panel, thin white border, small TREASURE ISLAND, large MERSEA in a simple geometric sans-serif, a small six-pointed star, small SAN FRANCISCO |
+| (3, 2), row 3 | plain white, spare | (filled by the packing script) |
 
 ## Street fences
 

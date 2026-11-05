@@ -74,7 +74,7 @@ import {
   fenceHeight, fenceParamsError, GATE_LEAF_LIFT_M, gateLeaves, STREET_FENCE_BANNER_TYPES, STREET_FENCE_GATE_HINGES, STREET_FENCE_GATE_STYLES, STREET_FENCE_GATED_TYPES, STREET_FENCE_INSIDE,
   STREET_FENCE_TYPES,
 } from "./lib/street-fence-generation.mjs";
-import { MAX_LEG_DROP_M, MAX_REST_TILT_RAD, PAD_SKIRT_M, restTilt, STREET_FURNITURE_FEET, STREET_FURNITURE_PADS, STREET_FURNITURE_PROPS } from "./lib/street-furniture-generation.mjs";
+import { MAX_LEG_DROP_M, MAX_REST_TILT_RAD, MAX_SPUR_M, PAD_SKIRT_M, restTilt, STREET_FURNITURE_FEET, STREET_FURNITURE_PADS, STREET_FURNITURE_PROPS } from "./lib/street-furniture-generation.mjs";
 import { YARD_KIT_KEYS, YARD_KIT_PARTS, YARD_KIT_PROPS, YARD_MAX_FLOAT_M, yardMaxSink, yardPropFootprint, yardPropParamsError, yardPropRests, yardRestGaps } from "./lib/street-yard-kit.mjs";
 import { BERM_MODULE, BERM_SPECS, RIDGE_MODULE, yardKitMeshes } from "./lib/street-yard-meshes.mjs";
 import { isDeckRow, isMooredRow, isYardRow, MOORED_PROP_VARIANTS } from "./lib/street-yard-generation.mjs";
@@ -1182,6 +1182,15 @@ function validateStreetDetail(worldRoot, manifest, records) {
     invariant(row.kind === "power_line" && row.layer === "furniture" && row.status === "placed" && Array.isArray(poles) && poles.every((id) => id === null || utilityPoles.has(id)),
       `${row.id} power_wires must list placed utility poles`);
     invariant(poles.some((id, index) => index > 0 && id !== null && poles[index - 1] !== null), `${row.id} power_wires has no span between two built poles`);
+  }
+  // A photographed pole's spur: its wires_to names other placed utility poles,
+  // each at most MAX_SPUR_M away.
+  const rowById = new Map(rows.map((row) => [row.id, row]));
+  for (const row of rows.filter((candidate) => candidate.prop === "utility_pole" && candidate.prop_params?.wires_to !== undefined)) {
+    const targets = row.prop_params.wires_to;
+    invariant(row.source === "set_piece" && Array.isArray(targets) && targets.length > 0 && targets.every((id) => id !== row.id && utilityPoles.has(id)
+      && Math.hypot(rowById.get(id).position_m[0] - row.position_m[0], rowById.get(id).position_m[2] - row.position_m[2]) <= MAX_SPUR_M),
+    `${row.id} wires_to must name other placed utility poles within ${MAX_SPUR_M} m`);
   }
   const builtFences = new Set(rows.filter((row) => row.fence && row.prop !== undefined).map((row) => row.id));
   invariant(Array.isArray(document.fenced_approaches) && document.fenced_approaches.every((entry) =>
