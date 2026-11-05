@@ -536,8 +536,6 @@ function distanceToSegment(point, a, b) {
   return length(sub(point, add(a, scale(delta, t))));
 }
 
-// A multipolygon with its bounds and edge list, for repeated distance and
-// containment queries.
 // The convex hull of plan points, counterclockwise (monotone chain).
 function convexHull(points) {
   const sorted = [...points].sort((a, b) => a[0] - b[0] || a[1] - b[1]);
@@ -586,6 +584,8 @@ function subtractHull(polygon, hull) {
   return pieces.filter((piece) => piece.length >= 3);
 }
 
+// A multipolygon with its bounds and edge list, for repeated distance and
+// containment queries.
 function indexedArea(multi) {
   const edges = [];
   for (const polygon of multi) {
