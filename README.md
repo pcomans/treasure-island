@@ -98,6 +98,9 @@ instead of generating it; `tools/test.sh` runs the whole-island check on it too.
 - Mouse looks around.
 - Hold `Space` to jetpack upward; release it to descend slowly.
 - Fences stop you on foot (gates and path crossings stay open); the jetpack clears them.
+- Stepping off the island onto the shore rocks, or flying out over the water,
+  lifts you about 5 m into the air where you are; float down and steer or
+  jetpack back to land.
 - Primary click sprays the center-reticle target.
 - `R` recovers to a safe position.
 - `Esc` pauses; `Q` quits while paused; `F3` toggles runtime evidence.
