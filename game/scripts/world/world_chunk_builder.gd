@@ -10,7 +10,7 @@ const WESTERN_BRIDGE_REPLACEMENT_MAX_X_M := 500.0
 ## face by its UV, which picks one texel of this palette, in order: light
 ## concrete for the tower, columns, caps and cables; the girders' sides mid
 ## grey; their undersides darker; the roadway on top road grey.
-const BAY_BRIDGE_PALETTE: Array[Color] = [Color("c4c1b9"), Color("9d9b95"), Color("85837e"), Color("5d6164")]
+const BAY_BRIDGE_PALETTE: Array[Color] = [Color("c4c1b9"), Color("8a8883"), Color("75736e"), Color("5d6164")]
 const POLYHAVEN_DEFAULT_NORMAL_STRENGTH := 0.2
 const HAWKINS_MASSING := preload("res://game/scripts/world/massing/hawkins_77_bruton_massing.gd")
 const BUILDING_3_MASSING := preload("res://game/scripts/world/massing/building_3_600_california_massing.gd")

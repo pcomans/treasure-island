@@ -55,7 +55,7 @@ const TOWER_HEIGHT_M = 160;
 const TOWER_BASE_HALF_M = Object.freeze({ along: 4.5, across: 3.5 });
 const TOWER_SHAFT_TOP_M = 150;
 const TOWER_SHAFT_TAPER = 0.67;
-const TOWER_CROWN_TAPER = 0.53;
+const TOWER_CROWN_TAPER = 0.9;
 // Main cables: one over each deck, from deck anchorages at the ends of the
 // suspension span to the saddle; drawn a little thicker than the real 0.78 m
 // so they hold together at a kilometre.
@@ -65,11 +65,13 @@ const CABLE_ANCHOR_RISE_M = 1.5;
 const CABLE_SADDLE_DROP_M = 2.5;
 // The main span's cables meet the deck this far (in plan) from the tower and
 // run on along it to their anchorage at the span's east end; the back span's
-// meet it at W2. Fitted to the dated photos: the main cable merges with the
-// deck line about 240 m out seen from Gate 5 and about 310 m out from Pier 1
-// (1.2-1.3 times as far from the tower as the back span's landing), where an
-// anchorage-low parabola to the span's east end shows nearly twice as far.
-const MAIN_CABLE_LANDING_M = 280;
+// meet it at W2. Fitted on the dated Pier 1 and Gate 5 photos, reprojected
+// into render cameras at their poses: at 350 m the cable's height over the
+// deck matches both within a few photo pixels. A landing at 280 m hangs it
+// too low in both, and a parabola down to the span's east end (400-435 m) too
+// high from Pier 1, meeting the deck half as far again from the tower as the
+// Gate 5 photo shows.
+const MAIN_CABLE_LANDING_M = 350;
 // The low run along the deck to the anchorage, in pieces about this long.
 const CABLE_DECK_STEP_M = 20;
 // Suspenders (50 groups a side on the real span) hang every SUSPENDER_SPACING_M
