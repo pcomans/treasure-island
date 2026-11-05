@@ -1365,11 +1365,94 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
 
   const records = [];
   const segmentSummaries = [];
+  // ------------------------------------------------------------ closures
+  // A wall: a concrete face along the outline from just above the land edge
+  // (its coping) to below the water. A ramp: a slab running out from the land
+  // edge at ramp_grade to under the water, between two low side walls, with
+  // the face under the land edge beside it.
+  const closureRule = settings.closure;
+  const closureSummaries = [];
+  // Each ramp's plan footprint: the segments beside it cut their slope there
+  // and keep their stones clear of it, like a mapped slipway.
+  const rampStructures = [];
+  for (const piece of plan.closures) {
+    closureSummaries.push({ id: piece.id, kind: piece.closure_kind, s_m: [roundCoordinate(outline.wrap(piece.s0)), roundCoordinate(piece.s1 > outline.perimeter ? outline.wrap(piece.s1) : piece.s1)], source_keys: [...piece.source_keys], reason: piece.reason, reference: piece.reference });
+    if (piece.closure_kind === "none") continue;
+    const mesh = { vertices: [], normals: [], indices: [] };
+    const stations = [piece.s0, ...outline.breakpoints(piece.s0, piece.s1), piece.s1];
+    for (let s = piece.s0 + 2; s < piece.s1 - 0.5; s += 2) if (!stations.some((station) => Math.abs(station - s) < 0.5)) stations.push(s);
+    stations.sort((left, right) => left - right);
+    const edge = stations.map((s) => {
+      const point = outline.pointAt(Math.min(Math.max(s, piece.s0 + 0.01), piece.s1 - 0.01));
+      const exact = outline.pointAt(s);
+      const land = landAt(point);
+      invariant(land != null, `Shoreline closure ${piece.id} has no land under the outline at s=${s.toFixed(2)}`);
+      return { s, point: exact, land, top: land + closureRule.coping_m, normal: outline.normalAt(s, 1.5, piece.s0, piece.s1) };
+    });
+    // The face under the land edge, per outline edge between stations.
+    for (let i = 0; i + 1 < edge.length; i += 1) {
+      const [a, b] = [edge[i], edge[i + 1]];
+      const facing = unit3([(a.normal[0] + b.normal[0]) / 2, 0, -(a.normal[1] + b.normal[1]) / 2]);
+      const ids = [
+        pushVertex(mesh, [a.point[0], a.top, -a.point[1]], facing),
+        pushVertex(mesh, [b.point[0], b.top, -b.point[1]], facing),
+        pushVertex(mesh, [b.point[0], closureRule.wall_bottom_y_m, -b.point[1]], facing),
+        pushVertex(mesh, [a.point[0], closureRule.wall_bottom_y_m, -a.point[1]], facing),
+      ];
+      pushTriangle(mesh, [ids[0], ids[1], ids[2]], facing);
+      pushTriangle(mesh, [ids[0], ids[2], ids[3]], facing);
+    }
+    if (piece.closure_kind === "ramp") {
+      // The slab, straight out from the mean land edge along the mean normal.
+      const normal = unit(edge.reduce((sum, station) => add(sum, station.normal), [0, 0]));
+      const run = (edge.reduce((sum, station) => sum + station.land, 0) / edge.length - closureRule.ramp_bottom_y_m) / closureRule.ramp_grade;
+      const slabTop = (station, d) => station.land - closureRule.ramp_grade * d;
+      const ids = [];
+      for (const station of edge) {
+        const outer = add(station.point, scale(normal, run));
+        ids.push([
+          pushVertex(mesh, [station.point[0], station.land + 0.01, -station.point[1]], [0, 1, 0]),
+          pushVertex(mesh, [outer[0], slabTop(station, run), -outer[1]], [0, 1, 0]),
+        ]);
+      }
+      for (let i = 0; i + 1 < ids.length; i += 1) {
+        pushTriangle(mesh, [ids[i][0], ids[i + 1][0], ids[i + 1][1]], [0, 1, 0]);
+        pushTriangle(mesh, [ids[i][0], ids[i + 1][1], ids[i][1]], [0, 1, 0]);
+      }
+      const footprint = [...edge.map((station) => station.point), ...edge.map((station) => add(station.point, scale(normal, run))).reverse()];
+      rampStructures.push({ source_key: piece.id, kind: "ramp", slope: "cut", clearance_m: 0.4, under_drop_m: null, area: indexedArea([[signedRingArea(footprint) > 0 ? footprint : footprint.reverse()]]) });
+      // Side walls: from ramp_wall_m above the slab down to below the toe, both
+      // faces outward.
+      for (const [station, sign] of [[edge[0], -1], [edge.at(-1), 1]]) {
+        const tangent = [-normal[1], normal[0]];
+        const facing = [tangent[0] * sign, 0, -tangent[1] * sign];
+        const outer = add(station.point, scale(normal, run));
+        const wall = [
+          pushVertex(mesh, [station.point[0], station.land + closureRule.ramp_wall_m, -station.point[1]], facing),
+          pushVertex(mesh, [outer[0], slabTop(station, run) + closureRule.ramp_wall_m, -outer[1]], facing),
+          pushVertex(mesh, [outer[0], closureRule.wall_bottom_y_m, -outer[1]], facing),
+          pushVertex(mesh, [station.point[0], closureRule.wall_bottom_y_m, -station.point[1]], facing),
+        ];
+        pushTriangle(mesh, [wall[0], wall[1], wall[2]], facing);
+        pushTriangle(mesh, [wall[0], wall[2], wall[3]], facing);
+      }
+    }
+    invariant(mesh.indices.length > 0, `Shoreline closure ${piece.id} built no faces`);
+    records.push({
+      object_key: `shoreline-wall:${piece.id}:0`,
+      segment: piece.id,
+      section: 0,
+      source_keys: [...new Set([PLAYABLE_BOUNDARY_SOURCE_KEY, ...piece.source_keys])].sort(),
+      material_key: SHORELINE_WALL_MATERIAL,
+      ...packMesh(mesh, `shoreline-wall:${piece.id}`),
+    });
+  }
+
   for (const segment of plan.segments) {
     const { s0, s1 } = segment;
     const [clipLo, clipHi] = segment.clip;
-    const structures = structuresNear(settings, playableObjects, rawOsm, segment.window);
     const windowBounds = multiPolygonBounds(segment.window);
+    const structures = [...structuresNear(settings, playableObjects, rawOsm, segment.window), ...rampStructures.filter((ramp) => boundsOverlap(ramp.area.bounds, windowBounds))];
     const nearRoads = roadAreas.filter((area) => boundsOverlap(area.bounds, windowBounds));
     // Why a point cannot hold a stone of this radius, or null. Structures clear
     // stones, except stones that top out under_drop_m below the land edge
@@ -2018,104 +2101,29 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
     });
   }
 
-  // ------------------------------------------------------------ closures
-  // A wall: a concrete face along the outline from just above the land edge
-  // (its coping) to below the water. A ramp: a slab running out from the land
-  // edge at ramp_grade to under the water, between two low side walls, with
-  // the face under the land edge beside it.
-  const closureRule = settings.closure;
-  const closureSummaries = [];
-  for (const piece of plan.closures) {
-    closureSummaries.push({ id: piece.id, kind: piece.closure_kind, s_m: [roundCoordinate(outline.wrap(piece.s0)), roundCoordinate(piece.s1 > outline.perimeter ? outline.wrap(piece.s1) : piece.s1)], source_keys: [...piece.source_keys], reason: piece.reason, reference: piece.reference });
-    if (piece.closure_kind === "none") continue;
-    const mesh = { vertices: [], normals: [], indices: [] };
-    const stations = [piece.s0, ...outline.breakpoints(piece.s0, piece.s1), piece.s1];
-    for (let s = piece.s0 + 2; s < piece.s1 - 0.5; s += 2) if (!stations.some((station) => Math.abs(station - s) < 0.5)) stations.push(s);
-    stations.sort((left, right) => left - right);
-    const edge = stations.map((s) => {
-      const point = outline.pointAt(Math.min(Math.max(s, piece.s0 + 0.01), piece.s1 - 0.01));
-      const exact = outline.pointAt(s);
-      const land = landAt(point);
-      invariant(land != null, `Shoreline closure ${piece.id} has no land under the outline at s=${s.toFixed(2)}`);
-      return { s, point: exact, land, top: land + closureRule.coping_m, normal: outline.normalAt(s, 1.5, piece.s0, piece.s1) };
-    });
-    // The face under the land edge, per outline edge between stations.
-    for (let i = 0; i + 1 < edge.length; i += 1) {
-      const [a, b] = [edge[i], edge[i + 1]];
-      const facing = unit3([(a.normal[0] + b.normal[0]) / 2, 0, -(a.normal[1] + b.normal[1]) / 2]);
-      const ids = [
-        pushVertex(mesh, [a.point[0], a.top, -a.point[1]], facing),
-        pushVertex(mesh, [b.point[0], b.top, -b.point[1]], facing),
-        pushVertex(mesh, [b.point[0], closureRule.wall_bottom_y_m, -b.point[1]], facing),
-        pushVertex(mesh, [a.point[0], closureRule.wall_bottom_y_m, -a.point[1]], facing),
-      ];
-      pushTriangle(mesh, [ids[0], ids[1], ids[2]], facing);
-      pushTriangle(mesh, [ids[0], ids[2], ids[3]], facing);
-    }
-    if (piece.closure_kind === "ramp") {
-      // The slab, straight out from the mean land edge along the mean normal.
-      const normal = unit(edge.reduce((sum, station) => add(sum, station.normal), [0, 0]));
-      const run = (edge.reduce((sum, station) => sum + station.land, 0) / edge.length - closureRule.ramp_bottom_y_m) / closureRule.ramp_grade;
-      const slabTop = (station, d) => station.land - closureRule.ramp_grade * d;
-      const ids = [];
-      for (const station of edge) {
-        const outer = add(station.point, scale(normal, run));
-        ids.push([
-          pushVertex(mesh, [station.point[0], station.land + 0.01, -station.point[1]], [0, 1, 0]),
-          pushVertex(mesh, [outer[0], slabTop(station, run), -outer[1]], [0, 1, 0]),
-        ]);
-      }
-      for (let i = 0; i + 1 < ids.length; i += 1) {
-        pushTriangle(mesh, [ids[i][0], ids[i + 1][0], ids[i + 1][1]], [0, 1, 0]);
-        pushTriangle(mesh, [ids[i][0], ids[i + 1][1], ids[i][1]], [0, 1, 0]);
-      }
-      // Side walls: from ramp_wall_m above the slab down to below the toe, both
-      // faces outward.
-      for (const [station, sign] of [[edge[0], -1], [edge.at(-1), 1]]) {
-        const tangent = [-normal[1], normal[0]];
-        const facing = [tangent[0] * sign, 0, -tangent[1] * sign];
-        const outer = add(station.point, scale(normal, run));
-        const wall = [
-          pushVertex(mesh, [station.point[0], station.land + closureRule.ramp_wall_m, -station.point[1]], facing),
-          pushVertex(mesh, [outer[0], slabTop(station, run) + closureRule.ramp_wall_m, -outer[1]], facing),
-          pushVertex(mesh, [outer[0], closureRule.wall_bottom_y_m, -outer[1]], facing),
-          pushVertex(mesh, [station.point[0], closureRule.wall_bottom_y_m, -station.point[1]], facing),
-        ];
-        pushTriangle(mesh, [wall[0], wall[1], wall[2]], facing);
-        pushTriangle(mesh, [wall[0], wall[2], wall[3]], facing);
-      }
-    }
-    invariant(mesh.indices.length > 0, `Shoreline closure ${piece.id} built no faces`);
-    records.push({
-      object_key: `shoreline-wall:${piece.id}:0`,
-      segment: piece.id,
-      section: 0,
-      source_keys: [...new Set([PLAYABLE_BOUNDARY_SOURCE_KEY, ...piece.source_keys])].sort(),
-      material_key: SHORELINE_WALL_MATERIAL,
-      ...packMesh(mesh, `shoreline-wall:${piece.id}`),
-    });
-  }
-
   // One batch (one MultiMesh) per segment, section, band and prototype, so
   // each culls, picks its LOD and fades on its own. The small stones fade
   // sooner than the big ones.
   const batches = new Map();
   for (const stone of stones) {
-    const id = `${stone.segment}:${String(stone.section).padStart(2, "0")}:${stone.band}:${stone.prototypeId}`;
+    const pebble = stone.prototypeId.startsWith("pebble_");
+    // The small stones of the crest rows draw with the heap's: same shapes,
+    // same range, no shadows.
+    const band = pebble && stone.band === "top" ? "heap" : stone.band;
+    const id = `${stone.segment}:${String(stone.section).padStart(2, "0")}:${band}:${stone.prototypeId}`;
     if (!batches.has(id)) {
-      const pebble = stone.prototypeId.startsWith("pebble_");
-      const visibility = stone.band === "cobble" || stone.band === "driftwood" ? stone.band : pebble ? "pebble" : stone.band;
+      const visibility = band === "cobble" || band === "driftwood" ? band : pebble ? "pebble" : band;
       const [end, margin] = rules.visibility_m[visibility];
       batches.set(id, {
         id,
         segment: stone.segment,
         section: stone.section,
-        band: stone.band,
+        band,
         prototype: stone.prototypeId,
         // The heap and cobbles are shaded by their texture and the shader's
         // contact darkening; the big stones of the top row and the wood also
         // cast shadows.
-        cast_shadow: (stone.band === "top" && !pebble) || stone.band === "driftwood",
+        cast_shadow: (band === "top" && !pebble) || band === "driftwood",
         visibility_end_m: end,
         visibility_margin_m: margin,
         placements: [],
