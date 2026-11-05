@@ -19,6 +19,7 @@ import { GATE_LEAF_HALF_M, placeStreetFences, validateFenceRules } from "./stree
 import { settleYardProp, YARD_KIT_KEYS, yardKindRadius, yardMaxSink, yardPropFootprint, yardPropRests } from "./street-yard-kit.mjs";
 import { isYardRow, isYardZone, placeStreetYards, validateYardRules, yardRowPieces } from "./street-yard-generation.mjs";
 import { placeStreetFurniture, settleOnFeet, STREET_FURNITURE_FEET, STREET_FURNITURE_PROPS, streetFurnitureFootprint, validateFurnitureRules } from "./street-furniture-generation.mjs";
+import { STREET_GROUND_RULES_PATH } from "./street-ground-generation.mjs";
 import {
   PAVING_CLEAR_M,
   crownRadius,
@@ -1695,6 +1696,7 @@ export function generateStreetDetail({
     inputs: {
       osm_extract: { path: SOURCE_CONTRACT.proper_extract.path, sha256: SOURCE_CONTRACT.proper_extract.sha256 },
       zones: { path: STREET_DETAIL_INPUTS.zones, sha256: sha256File(resolve(projectRoot, STREET_DETAIL_INPUTS.zones)) },
+      street_ground: { path: STREET_GROUND_RULES_PATH, sha256: sha256File(resolve(projectRoot, STREET_GROUND_RULES_PATH)) },
       set_pieces: { path: STREET_DETAIL_INPUTS.set_pieces, sha256: sha256File(resolve(projectRoot, STREET_DETAIL_INPUTS.set_pieces)) },
       // Only the stairs are read; acceptance edits to the catalog do not change this output.
       stair_catalog: { path: STREET_DETAIL_INPUTS.stair_catalog, field: "units[].stairs", flights: stairFlights.length },

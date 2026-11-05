@@ -337,6 +337,27 @@ export function stableJson(value) {
   return `${JSON.stringify(sortJson(value), null, 2)}\n`;
 }
 
+// stableJson with each array of numbers written on one line. The same JSON
+// values: objects and other arrays keep stableJson's layout. A chunk file is
+// mostly vertex, normal, UV and index arrays, which stableJson writes one
+// number per indented line, about 2.6 times the bytes.
+export function stableJsonInlineNumbers(value) {
+  const write = (node, indent) => {
+    if (Array.isArray(node)) {
+      if (node.length === 0) return "[]";
+      if (node.every((item) => typeof item === "number")) return `[${node.map((item) => JSON.stringify(item)).join(",")}]`;
+      return `[\n${node.map((item) => `${indent}  ${write(item, `${indent}  `)}`).join(",\n")}\n${indent}]`;
+    }
+    if (node != null && typeof node === "object") {
+      const keys = Object.keys(node);
+      if (keys.length === 0) return "{}";
+      return `{\n${keys.map((key) => `${indent}  ${JSON.stringify(key)}: ${write(node[key], `${indent}  `)}`).join(",\n")}\n${indent}}`;
+    }
+    return JSON.stringify(node);
+  };
+  return `${write(sortJson(value), "")}\n`;
+}
+
 export function sortJson(value) {
   if (Array.isArray(value)) return value.map(sortJson);
   if (value != null && typeof value === "object") {

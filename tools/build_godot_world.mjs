@@ -59,6 +59,7 @@ import {
   sha256File,
   sortJson,
   stableJson,
+  stableJsonInlineNumbers,
   verifySourceContract,
 } from "./lib/world-contract.mjs";
 import {
@@ -119,7 +120,7 @@ import {
   loadStreetDetailZones,
   streetDetailHardShapes,
 } from "./lib/street-detail-generation.mjs";
-import { generateStreetGround } from "./lib/street-ground-generation.mjs";
+import { generateStreetGround, loadStreetGroundRules } from "./lib/street-ground-generation.mjs";
 import {
   SHORELINE_OVERLAY_MATERIAL,
   SHORELINE_OVERLAY_PREFIX,
@@ -127,6 +128,7 @@ import {
   loadShorelineConfig,
   planShoreline,
 } from "./lib/shoreline-generation.mjs";
+import { buildEnhancedContext } from "./lib/ybi-context-generation.mjs";
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(scriptDirectory, "..");
@@ -1554,8 +1556,18 @@ function buildContext(ledger, boundary, rawOsm, rawSources, playableObjects, ter
     terrain.sampleTerrainEastNorth,
     "YBI terrain context",
   );
-  const ybiSideMesh = terrainSkirtMesh(ybiGeometry, terrain.sampleTerrainEastNorth, 0, "YBI shoreline sides");
+  const ybiSideMesh = terrainSkirtMesh(
+    ybiGeometry,
+    terrain.sampleTerrainEastNorth,
+    0,
+    "YBI shoreline sides",
+    (start, end) => distanceToMultiPolygonEdges([(start[0] + end[0]) / 2, (start[1] + end[1]) / 2], boundary) <= 0.25,
+  );
   const ybiMesh = mergeMeshes([ybiTopMesh, ybiSideMesh], "YBI terrain and shoreline sides");
+  const ybiFacets = landFacetsFromRecords(
+    [{ feature_kind: "land_ground", object_key: "context:ybi", ...ybiTopMesh }],
+    "ybi",
+  );
 
   const west = byKey.get("w1011568818");
   invariant(west?.exported, "West Span area view is missing from raw export");
@@ -1571,25 +1583,22 @@ function buildContext(ledger, boundary, rawOsm, rawSources, playableObjects, ter
   const bridgeGeometry = differenceMultiPolygons(bridgeSourceGeometry, boundary);
   roundingAreaAudit(bridgeGeometry, "Bay Bridge context");
   invariant(bridgeGeometry.length > 0, "Bay Bridge context is empty after TI subtraction");
-  const bridgeMesh = topSurfaceMesh(bridgeGeometry, 12, "Bay Bridge context");
 
-  const records = [
-    contextRecord(meshRecord({
-      objectKey: "context:ybi",
-      featureKind: "context",
-      sourceKeys: [YBI_SOURCE_KEY],
-      materialKey: "context_ybi",
-      mesh: ybiMesh,
-    }), "ybi"),
-    contextRecord(meshRecord({
-      objectKey: "context:bay-bridge",
-      featureKind: "context",
-      sourceKeys: BRIDGE_SOURCE_KEYS,
-      materialKey: "context_bay_bridge",
-      mesh: bridgeMesh,
-    }), "bay_bridge"),
-  ];
-  records.sort((left, right) => left.object_key.localeCompare(right.object_key));
+  const enhanced = buildEnhancedContext({
+    ledger,
+    boundary,
+    rawOsm,
+    playableObjects,
+    terrain,
+    ybiGeometry,
+    ybiMesh,
+    ybiFacets,
+    westGeometry,
+    eastMemberWayIds: memberWayIds,
+    bridgeGeometry,
+    contextRecord,
+  });
+  const records = enhanced.records;
   const boundaryAttachedVisuals = BOUNDARY_ATTACHED_SOURCE_KEYS.map((sourceKey) => {
     const object = playableObjects.get(sourceKey);
     invariant(object?.boundary_attached_visual, `${sourceKey} boundary-attached object is missing`);
@@ -1634,7 +1643,7 @@ function buildContext(ledger, boundary, rawOsm, rawSources, playableObjects, ter
       quantization_delta_m: quantizationAudit.quantization_delta_m,
       post_serialization_normalized_error: quantizationAudit.normalized_error,
       height: null,
-      physical_object_keys: new Set([isYbi ? "context:ybi" : "context:bay-bridge"]),
+      physical_object_keys: new Set(isYbi ? enhanced.ybiPhysicalKeys : enhanced.bridgePhysicalKeys),
       chunk_ids: new Set(),
     });
   }
@@ -2108,7 +2117,7 @@ function main() {
     }
     const streetConfig = loadStreetDetailZones(projectRoot);
     const shorelineConfig = loadShorelineConfig(projectRoot);
-    const shorelinePlan = planShoreline({ config: shorelineConfig.config, boundary, playableObjects, rawOsm: loaded.rawOsm });
+    const shorelinePlan = planShoreline({ config: shorelineConfig.config, boundary, playableObjects });
     // Local corrections of the land where the 2023 raster predates what was built.
     const terrainPlan = planTerrainOverrides({
       loaded: loadTerrainOverrides(projectRoot),
@@ -2135,6 +2144,7 @@ function main() {
       spawnXZ,
       hardShapes,
       normalAt: terrainPlan.smoothNormalAt,
+      rules: loadStreetGroundRules(projectRoot),
     });
     for (const [id, records] of streetGround.records) {
       const chunk = chunks.get(id);
@@ -2192,7 +2202,8 @@ function main() {
     writeArtifact(stagingRoot, "shoreline.json", `${JSON.stringify(sortJson(shoreline.document))}\n`);
     writeArtifact(stagingRoot, "qa/pavement-skin.json", chunks.pavement_skin);
     for (const chunk of [...chunks.values()].sort((left, right) => compareChunkIds(left.chunk_id, right.chunk_id))) {
-      writeArtifact(stagingRoot, `chunks/${chunk.chunk_id}.json`, chunk);
+      // Number arrays on one line (stableJsonInlineNumbers): mesh arrays are most of a chunk.
+      writeArtifact(stagingRoot, `chunks/${chunk.chunk_id}.json`, stableJsonInlineNumbers(chunk));
     }
     const statusTotals = Object.fromEntries(
       [...new Set(coverage.map((row) => row.derived_world_status))].sort().map((status) => [
@@ -2356,6 +2367,8 @@ function main() {
         "context_boundary_marina",
         "context_boundary_pier",
         "context_ybi",
+        "shoreline_boulder",
+        "shoreline_riprap",
       ].sort(),
       feature_kinds: FEATURE_KINDS,
       coverage_ledger: coverageDescriptor,
