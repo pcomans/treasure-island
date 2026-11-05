@@ -39,7 +39,9 @@ const FAMILIES := {
 	# Irrigated turf lawn, about 98 / 2 / 0: the ferry plaza and Cityside Park
 	# lawns, green in the Sep 2025 photos (24, 25) and both dated aerials.
 	"park_lawn": {"dry_threshold": 0.80, "bare_threshold": 2.0, "green_dryness": 0.0, "patch_scale_m": 18.0, "bare_scale_m": 23.0},
-	"sports": {"dry_threshold": 0.55, "bare_threshold": 2.0, "green_dryness": 0.15, "patch_scale_m": 28.0, "bare_scale_m": 23.0},
+	# Irrigated ball fields, about 80 / 20 / 0: the Little League fields and the
+	# baseball pitch (green in both dated aerials).
+	"sports": {"dry_threshold": 0.64, "bare_threshold": 2.0, "green_dryness": 0.1, "patch_scale_m": 28.0, "bare_scale_m": 23.0},
 	# GAA Field A: a watered pitch, green with dry patches between its
 	# sprinkler heads, 18 m apart on the pitch's axes (2026-05-26 aerial).
 	"watered_pitch": {"dry_threshold": 0.6, "bare_threshold": 2.0, "green_dryness": 0.1, "patch_scale_m": 28.0, "bare_scale_m": 23.0, "grid_m": 18.0, "grid_angle": -0.4887, "grid_amount": 0.5},
