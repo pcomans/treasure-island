@@ -69,6 +69,10 @@ uniform float stone_reach_per_m = 130.0;
 uniform float stone_reach_min_m = 65.0;
 uniform float stone_reach_max_m = 160.0;
 uniform float stone_thin_start = 0.6;
+// A stone darkens toward the heap's apparent tone (its lit top is paler than
+// the heap's mix of tops, sides and gaps) as it nears its own drop-out, so the
+// last stones do not read as pale chips on the band.
+uniform float stone_last_dim = 0.6;
 // Underlay: dark in the gaps near by (gap_brightness); as the stones thin out
 // (underlay_fade_m) it takes the heap's apparent tone (band_brightness: a flat
 // face looks lighter than a pile of the same stones with their shaded sides
@@ -76,8 +80,11 @@ uniform float stone_thin_start = 0.6;
 // end, the fill of a narrow inlet) stands bare, with no heap on it: it takes
 // that tone near by as well.
 uniform bool rock_face = false;
-uniform float gap_brightness = 0.09;
-uniform float band_brightness = 0.15;
+uniform float gap_brightness = 0.14;
+uniform float band_brightness = 0.47;
+// The underlay stays matt, wet or dry: a smooth wet sheen on so broad and dark
+// a surface would mirror the pale sky along the water at grazing angles.
+uniform float underlay_specular = 0.1;
 uniform vec2 underlay_fade_m = vec2(30.0, 160.0);
 // The segment's tone, [brightness, warm share, dark share, pale share], and its
 // neighbours' at its ends: the outline point there (x, z) and the shore
@@ -139,6 +146,7 @@ varying vec3 world_normal;
 varying vec3 instance_origin;
 varying float instance_scale;
 varying vec4 tone;
+varying float stone_going;
 // Wood: the vertex in its own frame, scaled to metres (length along x).
 varying vec3 local_metres;
 
@@ -181,7 +189,9 @@ void vertex() {
 		// The main camera's distance, the same in the shadow pass.
 		float reach = clamp(instance_scale * stone_reach_per_m, stone_reach_min_m, stone_reach_max_m);
 		float keep = mix(stone_thin_start, 1.0, hash12(instance_origin.xz * 0.613 + vec2(4.7, 1.3)));
-		if (distance(instance_origin, MAIN_CAM_INV_VIEW_MATRIX[3].xyz) > reach * keep) {
+		float away = distance(instance_origin, MAIN_CAM_INV_VIEW_MATRIX[3].xyz) / (reach * keep);
+		stone_going = smoothstep(0.5, 1.0, away);
+		if (away > 1.0) {
 			// Collapsed to a point: no fragments.
 			VERTEX = vec3(0.0);
 		}
@@ -315,6 +325,7 @@ void fragment() {
 		albedo *= stone_tint(instance_origin, tone);
 		albedo *= mix(contact_dark, 1.0, smoothstep(0.0, contact_height, share));
 		albedo *= 1.0 + top_bleach * smoothstep(0.55, 1.0, share) * max(n.y, 0.0);
+		albedo *= mix(1.0, stone_last_dim, stone_going);
 	} else if (surface == 0) {
 		// The rendering camera is the main camera here (no colour in a shadow pass).
 		float stand_in = rock_face ? 1.0 : smoothstep(underlay_fade_m.x, underlay_fade_m.y, distance_m);
@@ -338,5 +349,9 @@ void fragment() {
 	// Wet rock stays dark: little more sheen than dry rock, so it does not
 	// lighten toward the sky's reflection at grazing angles.
 	SPECULAR = mix(0.3, 0.34, wet);
+	if (surface == 0) {
+		ROUGHNESS = 1.0;
+		SPECULAR = underlay_specular;
+	}
 	METALLIC = 0.0;
 }

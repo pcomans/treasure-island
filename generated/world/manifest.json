@@ -231,7 +231,7 @@
       "sha256": "ae40d6b533fd46630da3caf1e048e4507fcf207dc8a292301afa981e7da3c043"
     }
   ],
-  "content_sha256": "cd1af71348729465df8caf0d6c291339e867f89fb50795db80129172024373f1",
+  "content_sha256": "796c70157ac1ee68794095416a12096d750240467091afa405a84e50dc2a5920",
   "context": {
     "bytes": 675130,
     "path": "context.json",
@@ -524,9 +524,9 @@
       "sha256": "afe1d34d0c743c9a16f058b8613f4276bd44ee7bddc3cd062657dfe65304e7a9"
     },
     {
-      "bytes": 4441485,
+      "bytes": 4399107,
       "path": "shoreline.json",
-      "sha256": "91fe63652bf66794590b6c9c373cce856c9c723ee7e911abfaa35af5da817221"
+      "sha256": "b0bd23a1e147c761734cb220e2b8afe5d90491b752c00c49f046cac1258e7f10"
     },
     {
       "bytes": 3440486,
@@ -1163,9 +1163,9 @@
   },
   "schema_version": "ti.godot-world/2",
   "shoreline": {
-    "bytes": 4441485,
+    "bytes": 4399107,
     "path": "shoreline.json",
-    "sha256": "91fe63652bf66794590b6c9c373cce856c9c723ee7e911abfaa35af5da817221"
+    "sha256": "b0bd23a1e147c761734cb220e2b8afe5d90491b752c00c49f046cac1258e7f10"
   },
   "sources": {
     "extraction_polygon": {

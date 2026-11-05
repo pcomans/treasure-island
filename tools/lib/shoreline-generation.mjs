@@ -142,9 +142,6 @@ const JOINT_TOLERANCE_M = 0.05;
 const MINIMUM_CLAMP_WIDTH_M = 0.25;
 // A mound's records and stone batches are its segment's sections from here on.
 const MOUND_SECTION_BASE = 100;
-// The concrete skirt along a ramp's cut through a segment's slope (or a
-// mound's) is that piece's wall record at this section (plus the mound base).
-const SKIRT_SECTION = 90;
 // A capped end's last cross-section stands this far inside the segment, so
 // it never lies along a closure face that juts out at the end (its grid
 // points would sit on the outline and drop out).
@@ -156,7 +153,8 @@ const CONFIG_FIELDS = ["closure", "closures", "mounds", "notes", "overlay_bias_m
 const ROCK_GROUND_FIELDS = ["id", "reason", "reference", "s_m", "source_key"];
 const TONE_SETTINGS_FIELDS = ["blend_m", "palettes"];
 const MOUND_FIELDS = ["centerline_xz", "crest_min_m", "crest_y_m", "gradient", "half_width_m", "id", "reason", "reference", "segment", "taper_m"];
-const SLOPE_FIELDS = ["berm", "clamp_reach_m", "columns", "dem_fit_m", "end_cap_bottom_y_m", "gradient_m_per_m", "gradient_smoothing_m", "relief_m", "relief_wavelength_m", "section_m", "shoulder_m", "station_m", "toe_y_m", "top_blend_m"];
+const SLOPE_FIELDS = ["berm", "clamp_reach_m", "columns", "dem_fit_m", "end_cap_bottom_y_m", "gradient_m_per_m", "gradient_smoothing_m", "relief_m", "relief_wavelength_m", "section_m", "shoulder_m", "station_m", "toe_y_m", "top_blend_m", "waterline"];
+const WATERLINE_FIELDS = ["core_m", "gradient_m_per_m", "smoothing_m"];
 const BERM_FIELDS = ["below_crest_m", "cap_taper_m", "drop_per_m", "inner_m", "joint_blend_m", "wavelength_m", "width_m"];
 const STONE_FIELDS = ["big", "chink", "cobble", "crest", "crest_fill", "driftwood", "heap", "pebbles", "planks", "posture", "prototypes", "section_m", "setback_m", "shoulder", "thinning", "top"];
 const THINNING_FIELDS = ["max_m", "min_m", "reach_per_m", "start", "wood_m"];
@@ -167,7 +165,7 @@ const TOP_FIELDS = ["bury", "out_jitter_m", "size_m", "size_skew", "spacing", "t
 const CREST_FIELDS = ["depth_m", "drop_per_m", "fill", "rise_m", "size_m", "size_skew"];
 const CREST_FILL_FIELDS = ["fill", "rise_m", "size_m"];
 const POSTURE_FIELDS = ["broad_face", "even", "max_aspect"];
-const HEAP_FIELDS = ["bury", "classes", "overlap", "small_reach_m", "tilt_deg", "toe_extra_m"];
+const HEAP_FIELDS = ["bury", "classes", "overlap", "past_water_m", "small_reach_m", "tilt_deg", "toe_extra_m"];
 const COBBLE_FIELDS = ["edge_m", "fill", "outline_bias", "overlap", "path_clearance_m", "reach_m", "size_m", "top_m"];
 const DRIFTWOOD_FIELDS = ["acceptance", "from_waterline_m", "length_m", "radius_m", "sink", "spacing_m", "yaw_jitter_deg"];
 const PLANK_FIELDS = ["above_water_m", "length_m", "near_xz", "segment", "width_m", "yaw_deg"];
@@ -175,7 +173,7 @@ const STRUCTURE_FIELDS = ["clearance_m", "slope", "tags", "under_drop_m"];
 const SEGMENT_FIELDS = ["crest_fill_scale", "crest_rise_m", "id", "outline_source_key", "reason", "reference", "s_m", "source_key", "stone_tone"];
 // Optional per segment: crest_rows false (the lower slope of a crest that
 // another segment builds: no crest rows, no core, no shoulder) and cobble (its
-// own fill, reach_m and size_m for the cobbles inside the band).
+// own fill, overlap, reach_m, size_m and top_m for the cobbles inside the band).
 const SEGMENT_OPTIONAL_FIELDS = ["cobble", "crest_rows"];
 const SEGMENT_COBBLE_FIELDS = ["fill", "overlap", "reach_m", "size_m", "top_m"];
 const CLOSURE_SETTINGS_FIELDS = ["coping_m", "ramp_bottom_y_m", "ramp_grade", "ramp_wall_m", "wall_bottom_y_m"];
@@ -225,6 +223,13 @@ export function shorelineSettings(config) {
   for (const key of ["cap_taper_m", "inner_m", "joint_blend_m", "wavelength_m"]) invariant(isFiniteNumber(slope.berm[key]) && slope.berm[key] > 0, `Shoreline slope.berm.${key} must be positive`);
   for (const key of ["below_crest_m", "drop_per_m"]) invariant(isFiniteNumber(slope.berm[key]) && slope.berm[key] >= 0, `Shoreline slope.berm.${key} must be non-negative`);
   requireRange(slope.berm.width_m, 0.2, "Shoreline slope.berm.width_m");
+  // The underlay's waterline runs smoothly round the island: smoothing_m either
+  // way of each point, for a core of core_m; each cross-section's fall is then
+  // solved to reach it, within gradient_m_per_m.
+  exactKeys(slope.waterline, WATERLINE_FIELDS, "Shoreline slope.waterline");
+  invariant(isFiniteNumber(slope.waterline.smoothing_m) && slope.waterline.smoothing_m > 0, "Shoreline slope.waterline.smoothing_m must be positive");
+  invariant(isFiniteNumber(slope.waterline.core_m) && slope.waterline.core_m >= 0, "Shoreline slope.waterline.core_m must be non-negative");
+  invariant(isRange(slope.waterline.gradient_m_per_m, 0.1) && slope.waterline.gradient_m_per_m[1] <= 1.5, "Shoreline slope.waterline.gradient_m_per_m must be [low, high] in (0.1, 1.5]");
   // Each slope record holds one section; its vertices are packed as uint16.
   invariant(slope.section_m <= 120, "Shoreline slope.section_m must stay within 120 m (packed record extents)");
   const stones = config.stones;
@@ -294,6 +299,7 @@ export function shorelineSettings(config) {
   invariant(isFiniteNumber(stones.heap.overlap) && stones.heap.overlap > 0.4 && stones.heap.overlap <= 1, "Shoreline stones.heap.overlap must be in (0.4, 1]");
   invariant(isFiniteNumber(stones.heap.tilt_deg) && stones.heap.tilt_deg >= 0 && stones.heap.tilt_deg < 45, "Shoreline stones.heap.tilt_deg must be in [0, 45)");
   invariant(isFiniteNumber(stones.heap.small_reach_m) && stones.heap.small_reach_m > 0, "Shoreline stones.heap.small_reach_m must be positive");
+  invariant(isFiniteNumber(stones.heap.past_water_m) && stones.heap.past_water_m >= 0, "Shoreline stones.heap.past_water_m must be non-negative");
   invariant(stones.prototypes >= QUARRY_FAMILIES.length, `Shoreline stones.prototypes must cover the ${QUARRY_FAMILIES.length} quarry-stone families`);
   invariant(isFiniteNumber(stones.heap.toe_extra_m) && stones.heap.toe_extra_m >= 0, "Shoreline stones.heap.toe_extra_m must be non-negative");
   invariant(Array.isArray(stones.heap.classes) && stones.heap.classes.length > 0, "Shoreline stones.heap.classes must list size classes");
@@ -1497,6 +1503,35 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
     const h = (k) => cellHash(seed, ((k % bermCells) + bermCells) % bermCells, 0, 7);
     return lerp(berm.width_m[0], berm.width_m[1], lerp(h(cellIndex), h(cellIndex + 1), f * f * (3 - 2 * f)));
   };
+  // The underlay's waterline, its distance out from the outline: at each whole
+  // metre what the land's height and the DEM's gradient give for a core of
+  // waterline.core_m, then smoothed over waterline.smoothing_m either way. A
+  // lattice shared by every segment, so two segments that meet compute the
+  // same cross-section at their joint. Without the smoothing the land's and the
+  // gradient's own wanderings put jogs of a metre or more in the far band's edge.
+  const latticeWaterline = new Map();
+  const rawWaterline = (sl) => {
+    const key = outline.wrap(sl).toFixed(0);
+    if (!latticeWaterline.has(key)) {
+      const point = outline.pointAt(sl);
+      const land = landAt(point) ?? terrain.sampleEastNorth(point[0], point[1]);
+      const width = bermWidthAt(sl);
+      const fall = land + bias + slope.waterline.core_m - berm.drop_per_m * width - WATER_Y_M;
+      latticeWaterline.set(key, slope.shoulder_m + berm.inner_m + width + fall / smoothedGradient(sl));
+    }
+    return latticeWaterline.get(key);
+  };
+  const smoothedWaterline = (s) => {
+    let sum = 0;
+    let weight = 0;
+    for (let sl = Math.ceil(s - slope.waterline.smoothing_m); sl <= Math.floor(s + slope.waterline.smoothing_m); sl += 1) {
+      const w = 1 - Math.abs(sl - s) / (slope.waterline.smoothing_m + 1e-9);
+      if (w <= 0) continue;
+      sum += rawWaterline(sl) * w;
+      weight += w;
+    }
+    return sum / weight;
+  };
 
   const prototypes = [];
   // Per stone shape: the faces it may come to rest on and its hull points
@@ -1739,10 +1774,9 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
   const nearHulls = (hulls, vertices) => hulls.some(({ bounds }) => vertices.some(({ plan }) => nearBounds({ bounds }, plan, 0.01)));
   // A convex polygon of vertices ({ plan, y, normal }) as a fan of triangles,
   // the hulls cut out of it. With a skirt ({ mesh, bottom }), each cut edge
-  // that runs along a hull edge also gets a concrete face in skirt.mesh, from
-  // the cut down to skirt.bottom, facing into the hull (the ramp): the ramp's
-  // side wall carried up to the riprap, so the open edge of the slope never
-  // shows the water through it.
+  // that runs along a hull edge also gets a rock face in skirt.mesh, from the
+  // cut down to skirt.bottom, facing into the hull (the ramp), so the open edge
+  // of the slope never shows the water through it.
   const pushCut = (mesh, polygon, hulls, skirt = null) => {
     let pieces = [polygon];
     hulls.forEach(({ hull }, h) => {
@@ -1770,7 +1804,7 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
           return { plan: add(start, scale(edge, t)), y: lerp(a.y, b.y, f) };
         };
         // Into the hull: left of a counterclockwise edge (world x, z); set 2 cm
-        // back behind the ramp's curb, which shares the hull's side.
+        // back behind the ramp's side, which shares the hull's edge.
         const facing = unit3([-edge[1], 0, -edge[0]]);
         const back = scale(unit([edge[1], -edge[0]]), 0.02);
         const [p, q] = [at(lo), at(hi)].map((vertex) => ({ plan: add(vertex.plan, back), y: vertex.y }));
@@ -1931,6 +1965,10 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
         width: crest.rows * bermWidthAt(s),
         clamp: null,
       };
+      // The fall that reaches the smoothed waterline.
+      const run = smoothedWaterline(s) - crestEndOf(section);
+      const fall = section.top + section.core - berm.drop_per_m * section.width - WATER_Y_M;
+      section.gradient = Math.max(slope.waterline.gradient_m_per_m[0], Math.min(slope.waterline.gradient_m_per_m[1], fall / Math.max(run, 0.5)));
       section.toe_m = unclampedToeOf(section);
       const hit = outline.rayHit(point, normal, section.toe_m + slope.clamp_reach_m);
       if (hit) {
@@ -1994,7 +2032,6 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
     // slipway by whole quads.
     const cuts = structures.filter((structure) => structure.slope === "cut" && structure.kind !== "ramp");
     const rampHulls = structures.filter((structure) => structure.kind === "ramp").map(hullOf);
-    const skirt = { mesh: { vertices: [], normals: [], indices: [] }, bottom: closureRule.wall_bottom_y_m };
     const cutAway = (points) => {
       const centroid = scale(points.reduce((sum, p) => add(sum, p), [0, 0]), 1 / points.length);
       return cuts.some((structure) => nearBounds(structure.area, centroid, structure.clearance_m)
@@ -2051,6 +2088,7 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
         const quad = [cell(i, column), cell(i + 1, column), cell(i + 1, column + 1), cell(i, column + 1)];
         if (nearHulls(rampHulls, quad)) {
           const [qa, qb, qc, qd] = quad;
+          const skirt = { mesh: faces[recordOf((sections[i].s + sections[i + 1].s) / 2)], bottom: closureRule.wall_bottom_y_m };
           for (const triangle of (i + column) % 2 === 0 ? [[qa, qb, qc], [qa, qc, qd]] : [[qa, qb, qd], [qb, qc, qd]]) pushCut(mesh, triangle, rampHulls, skirt);
           continue;
         }
@@ -2110,16 +2148,6 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
         ...packMesh(mesh, `shoreline-face:${segment.id}:${index}`),
       });
     });
-    if (skirt.mesh.indices.length > 0) {
-      records.push({
-        object_key: `shoreline-wall:${segment.id}:${SKIRT_SECTION}`,
-        segment: segment.id,
-        section: SKIRT_SECTION,
-        source_keys: [segment.source_key],
-        material_key: SHORELINE_WALL_MATERIAL,
-        ...packMesh(skirt.mesh, `shoreline-wall:${segment.id}:${SKIRT_SECTION}`),
-      });
-    }
     verges.forEach((mesh, index) => {
       if (mesh.indices.length === 0) return;
       records.push({
@@ -2392,10 +2420,11 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
     // (pebble shapes) fill only the upper slope, within small_reach_m of the
     // outline, where the player sees them close; lower down the voids between
     // the big blocks stay dark, as on the photographed riprap. From just above
-    // the waterline out, a stone either stands well clear of the water (and
-    // lies within a metre past the waterline, against the pile) or is not
-    // kept: one that would just break the surface, or stand alone farther out,
-    // would read as a wedge floating offshore.
+    // the waterline out, a stone stands well clear of the water and shows no
+    // more than past_water_m beyond the waterline, or is not kept: one that
+    // would just break the surface, or stand off the pile, reads as a wedge
+    // floating offshore, and the band's edge must stay where it is when the
+    // stones thin out with distance.
     const heap = rules.heap;
     const meanToe = sections.reduce((sum, section) => sum + section.toe_m, 0) / sections.length;
     for (const [classIndex, sizeClass] of heap.classes.entries()) {
@@ -2428,10 +2457,13 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
         const bedY = planeAt(section, d) - Math.max(0.05, height * pick(heap.bury, rng));
         const top = bedY + height;
         const atWater = d > section.water_m - 0.3;
-        if (atWater && (top < WATER_Y_M + 0.3 || d > section.water_m + 1.0)) continue;
+        if (atWater && (top < WATER_Y_M + 0.3 || d > section.water_m + heap.past_water_m)) continue;
         if (!fits(plan2, radius, heap.overlap) || blocked(plan2, radius, false, section.land - top - 0.1)) continue;
         const stone = makeStone({ band: "heap", s: sAt, d, plan2, size, prototype, o, bedY });
         if (stone.top < WATER_Y_M + (atWater ? 0.25 : 0.08) || !outsideOk(stone)) continue;
+        // Its farthest point out that shows above the water.
+        const shown = stone.placed.filter((point) => point[1] > WATER_Y_M);
+        if (Math.max(...shown.map((point) => dot(sub([point[0], -point[2]], section.point), section.normal))) > section.water_m + heap.past_water_m) continue;
         keep(stone);
         placed += 1;
       }
@@ -2575,7 +2607,9 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
       ends: [segment.join_start ? "joint" : "cap", segment.join_end ? "joint" : "cap"],
       clamped_sections: clampedCount,
       structures: structures.map((structure) => ({ source_key: structure.source_key, kind: structure.kind, slope: structure.slope })),
-      tone: { stone: toneOf(segment), start: jointOf(s0, 1, s1 - s0, segment.tone_previous), end: jointOf(s1, -1, s1 - s0, segment.tone_next), blend_m: settings.tones.blend_m },
+      // A blend reaches no farther than the segment itself, so a short segment's
+      // two ends leave each other alone.
+      tone: { stone: toneOf(segment), start: jointOf(s0, 1, s1 - s0, segment.tone_previous), end: jointOf(s1, -1, s1 - s0, segment.tone_next), blend_m: Math.min(settings.tones.blend_m, s1 - s0) },
       top_y_m: [roundCoordinate(Math.min(...sections.map((x) => x.top))), roundCoordinate(Math.max(...sections.map((x) => x.top)))],
       crest_core_m: [roundCoordinate(Math.min(...sections.map((x) => x.core))), roundCoordinate(Math.max(...sections.map((x) => x.core)))],
       gradient_m_per_m: [round3(Math.min(...sections.map((x) => x.gradient))), round3(Math.max(...sections.map((x) => x.gradient)))],
@@ -2712,12 +2746,12 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
     invariant(meshes.some((mesh) => mesh.indices.length > 0), `Shoreline mound ${mound.id} built no faces`);
     if (moundSkirt.mesh.indices.length > 0) {
       records.push({
-        object_key: `shoreline-wall:${segment.id}:${MOUND_SECTION_BASE + SKIRT_SECTION}`,
+        object_key: `shoreline-face:${segment.id}:${MOUND_SECTION_BASE}`,
         segment: segment.id,
-        section: MOUND_SECTION_BASE + SKIRT_SECTION,
+        section: MOUND_SECTION_BASE,
         source_keys: [segment.source_key],
-        material_key: SHORELINE_WALL_MATERIAL,
-        ...packMesh(moundSkirt.mesh, `shoreline-wall:${segment.id}:${MOUND_SECTION_BASE + SKIRT_SECTION}`),
+        material_key: SHORELINE_FACE_MATERIAL,
+        ...packMesh(moundSkirt.mesh, `shoreline-face:${segment.id}:${MOUND_SECTION_BASE}`),
       });
     }
 
@@ -2755,7 +2789,9 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
       // As on the shore: from the waterline out a stone stands well clear of the
       // water, against the mound, or is not kept.
       const waterline = section.sides[u >= 0 ? 0 : 1].crest + (section.crestY - crown - WATER_Y_M) / mound.gradient;
-      if (Math.abs(u) > waterline - 0.3 && (top < WATER_Y_M + 0.3 || Math.abs(u) > waterline + 1.0)) return null;
+      if (Math.abs(u) > waterline - 0.3 && (top < WATER_Y_M + 0.3 || Math.abs(u) > waterline + rules.heap.past_water_m)) return null;
+      const shown = placed.filter((point) => point[1] > WATER_Y_M);
+      if (Math.max(...shown.map((point) => Math.abs(dot(sub([point[0], -point[2]], section.p), section.left)))) > waterline + rules.heap.past_water_m) return null;
       if (top < WATER_Y_M + 0.08 || clearance(placed) < SHORELINE_OUTSIDE_CLEARANCE_M || !clearOfRampHulls(placed)) return null;
       const stone = {
         band, s: segment.s1 + MOUND_SECTION_BASE * rules.section_m + t, d: u, plan: plan2, radius, prototype, prototypeId: prototype.id,

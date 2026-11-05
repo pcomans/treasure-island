@@ -48,6 +48,9 @@ const GROUND_COVER := preload("res://game/scripts/world/ground_cover.gd")
 ## ground cover family the shoreline's shoulder continues past the outline
 ## (ShorelineBuilder.BAND_GROUND_FAMILY); the shoreline's cobbles are set in it.
 const SHORELINE_RIPRAP_OVERLAY := "terrain_riprap"
+## What is left of the flat breakwater overlay: land the aerial shows as stone
+## (the shoreline config's rock_grounds), drawn as the riprap's bare rock.
+const SHORELINE_ROCK_OVERLAY := "terrain_breakwater"
 ## Street ground (tools/lib/street-ground-generation.mjs): road paint is opaque
 ## with a cut-out for worn paint, asphalt wear is a blended decal; parking lanes
 ## reuse the road asphalt. Decal material key -> its shader and textures.
@@ -107,9 +110,6 @@ const STREET_GROUND_SURFACES := {
 	"yard_pond": {"albedo": preload("res://game/resources/textures/world/street/yard_pond.png"), "uv_scale": 2.0, "roughness": 0.15},
 	"rubble_grey": {"albedo": preload("res://game/resources/textures/world/shoreline/riprap_albedo.png"), "uv_scale": 8.0, "roughness": 0.95, "tint": Color(1.12, 1.12, 1.1)},
 	"black_plastic": {"albedo": preload("res://game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg"), "uv_scale": 2.0, "roughness": 0.45, "tint": Color(0.3, 0.3, 0.32)},
-	# The flat breakwater overlay: land the aerial shows as stone (the shoreline
-	# config's rock_grounds), in the riprap's own 4.2 m tiles at the heap's tone.
-	"terrain_breakwater": {"albedo": preload("res://game/resources/textures/world/shoreline/riprap_albedo.png"), "uv_scale": 2.38, "roughness": 0.95, "tint": Color(0.56, 0.56, 0.56)},
 }
 ## A park's planted beds (park_mulch records): the vegetation kit's dark
 ## grey-brown shredded mulch in 2 m tiles of the world UV, blending to the
@@ -796,6 +796,8 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 		placeholder_material = _street_ground_material(str(record.material_key))
 	elif PARK_PAVING_MATERIALS.has(str(record.material_key)) and not uvs.is_empty():
 		placeholder_material = _park_paving_material(str(record.material_key))
+	elif str(record.material_key) == SHORELINE_ROCK_OVERLAY and not is_context:
+		placeholder_material = ShorelineBuilder.rock_ground_material()
 	elif ground_family == GROUND_COVER.PAVED:
 		placeholder_material = _material_for("major_area_court", "major_area", false)
 	elif ground_family != "":

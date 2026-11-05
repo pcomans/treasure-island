@@ -4,15 +4,14 @@ extends RefCounted
 ## (tools/lib/shoreline-generation.mjs), as GeneratedWorldContract expands it:
 ## the flat shoulder just outside the island outline, the underlay slope behind
 ## it and its bare rock faces, the concrete closure faces (pier and platform
-## edges, boat ramps), the
-## instanced quarry stones (top row, back row, shoulder stones and heap), the
-## low cobbles in the band inside the outline and the driftwood, each
-## segment's stones and underlay in their own materials (its stone tone,
-## blended into its neighbours' at its ends). Visual only,
-## like the Yerba Buena context: no collision and no spray receiver. The band
-## inside the outline is an ordinary chunk overlay; it and the shoulder share
-## BAND_GROUND_FAMILY, the dry grass-and-dirt verge at the top of the riprap,
-## so the verge runs on past the outline to the stones.
+## edges, boat ramps), the instanced quarry stones (top row, back row, shoulder
+## stones and heap), the low cobbles in the band inside the outline and the
+## driftwood, each segment's stones and underlay in their own materials (its
+## stone tone, blended into its neighbours' at its ends). Visual only, like the
+## Yerba Buena context: no collision and no spray receiver. The band inside the
+## outline is an ordinary chunk overlay; it and the shoulder share
+## BAND_GROUND_FAMILY, the dry grass-and-dirt verge at the top of the riprap, so
+## the verge runs on past the outline to the stones.
 
 const RIPRAP_SHADER := preload("res://game/resources/materials/world/shoreline/riprap.gdshader")
 const GROUND_COVER := preload("res://game/scripts/world/ground_cover.gd")
@@ -26,6 +25,7 @@ const SURFACE_WOOD := 2
 const SURFACE_WALL := 3
 const SLOPE_MATERIAL := "shoreline_riprap"
 const FACE_MATERIAL := "shoreline_face"
+const ROCK_GROUND_MATERIAL := "shoreline_rock_ground"
 const VERGE_MATERIAL := "shoreline_verge"
 const WALL_MATERIAL := "shoreline_wall"
 const STONE_MATERIAL := "shoreline_boulder"
@@ -55,6 +55,14 @@ static func driftwood_material() -> ShaderMaterial:
 ## The concrete closure faces: pier and platform edges, boat ramps.
 static func wall_material() -> ShaderMaterial:
 	return _riprap_material(WALL_MATERIAL, SURFACE_WALL)
+
+
+## Land that is stone in the aerial (the flat breakwater overlay left on a rock
+## ground): the underlay's bare rock.
+static func rock_ground_material() -> ShaderMaterial:
+	var material := _riprap_material(ROCK_GROUND_MATERIAL, SURFACE_SLOPE)
+	material.set_shader_parameter("rock_face", true)
+	return material
 
 
 ## The shoulder strip outside the outline: the verge's own ground cover.
@@ -132,7 +140,7 @@ func build(document: Dictionary) -> Dictionary:
 		var instance := MeshInstance3D.new()
 		instance.name = str(record.object_key).validate_node_name()
 		var record_material := _record_material(str(record.material_key))
-		if str(record.material_key) == SLOPE_MATERIAL and segment_materials.has(str(record.segment)):
+		if str(record.material_key) == SLOPE_MATERIAL:
 			record_material = segment_materials[str(record.segment)].slope
 		elif str(record.material_key) == FACE_MATERIAL:
 			record_material = segment_materials[str(record.segment)].face
