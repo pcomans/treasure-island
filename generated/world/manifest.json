@@ -231,11 +231,11 @@
       "sha256": "dc076cf4cb68126c3fa084425a79807a5759d8784483954346b2bd746129b1ee"
     }
   ],
-  "content_sha256": "c182a1285c62907372da6705aae3075068db59563e3ce77c2f7fa36ac48a1c6c",
+  "content_sha256": "0c3088fb7eb9a9d2e1d7e3e4dd569ee0e7a5cecd71f0a64e17f657f605f90ad3",
   "context": {
-    "bytes": 2070146,
+    "bytes": 2062145,
     "path": "context.json",
-    "sha256": "27c39577ae57bd99c352dc37af9176f5b8a35791af2d5ca6dee868c142ebd4c7"
+    "sha256": "c95eddd926c815d9ba9d3f5bbe1a315c682282b46698c2c14faa57ea6932db72"
   },
   "coordinate_system": {
     "coordinate_rounding_m": 0.001,
@@ -265,9 +265,9 @@
     "unresolved_rows": 0
   },
   "coverage_ledger": {
-    "bytes": 156896,
+    "bytes": 156775,
     "path": "coverage-ledger.csv",
-    "sha256": "92fd2c16ef4b48baee9b35d7b57ab1dc23a73d61014069aac063bc474eec7ea5"
+    "sha256": "73df2d3dd2de39646aeb01af1fb0daa0aba1696bc0d492b6523fe812e803eac9"
   },
   "demolished_buildings": {
     "path": "tools/config/demolished-buildings.json",
@@ -494,24 +494,24 @@
       "sha256": "dc076cf4cb68126c3fa084425a79807a5759d8784483954346b2bd746129b1ee"
     },
     {
-      "bytes": 2070146,
+      "bytes": 2062145,
       "path": "context.json",
-      "sha256": "27c39577ae57bd99c352dc37af9176f5b8a35791af2d5ca6dee868c142ebd4c7"
+      "sha256": "c95eddd926c815d9ba9d3f5bbe1a315c682282b46698c2c14faa57ea6932db72"
     },
     {
-      "bytes": 156896,
+      "bytes": 156775,
       "path": "coverage-ledger.csv",
-      "sha256": "92fd2c16ef4b48baee9b35d7b57ab1dc23a73d61014069aac063bc474eec7ea5"
+      "sha256": "73df2d3dd2de39646aeb01af1fb0daa0aba1696bc0d492b6523fe812e803eac9"
     },
     {
       "bytes": 81920,
       "path": "coverage-summary.json",
-      "sha256": "0309689aed098521a7c508851440a9613eff6b6b3d90ca2dab01bd833d3606da"
+      "sha256": "e30aea1d9e1b1b9b86f0b6c15be524631e25ada2760e0658f7ea708f64e5e779"
     },
     {
-      "bytes": 1284043,
+      "bytes": 1284003,
       "path": "logical-objects.json",
-      "sha256": "6eb388fb4d838deb7ba00522ac66463650c09018939e912486a9fc758117fb6d"
+      "sha256": "8b9a563a49f9494472f5452dd7dccc92edc7b32e83c19483b9ccdbfb89094b77"
     },
     {
       "bytes": 28504,

@@ -6,6 +6,11 @@ const PHYSICS_SPRAY_SURFACE := 1 << 2
 const RENDER_WORLD_VISIBLE := 1 << 0
 const RENDER_BUILDING_WALL := 1 << 1
 const WESTERN_BRIDGE_REPLACEMENT_MAX_X_M := 500.0
+## The modern eastern span (tools/lib/east-span-generation.mjs) colours each
+## face by its UV, which picks one texel of this palette, in order: light
+## concrete for the tower, columns, caps and cables; the girders' sides mid
+## grey; their undersides darker; the roadway on top road grey.
+const BAY_BRIDGE_PALETTE: Array[Color] = [Color("c4c1b9"), Color("9d9b95"), Color("85837e"), Color("5d6164")]
 const POLYHAVEN_DEFAULT_NORMAL_STRENGTH := 0.2
 const HAWKINS_MASSING := preload("res://game/scripts/world/massing/hawkins_77_bruton_massing.gd")
 const BUILDING_3_MASSING := preload("res://game/scripts/world/massing/building_3_600_california_massing.gd")
@@ -1040,6 +1045,13 @@ func _material_for(material_key: String, feature_kind: String, is_context: bool)
 		material.cull_mode = BaseMaterial3D.CULL_DISABLED
 	if feature_kind == "road_path" or material_key in ["street_parking", "major_area_paved"]:
 		material.roughness = 1.0
+	if material_key == "context_bay_bridge":
+		var palette := Image.create(BAY_BRIDGE_PALETTE.size(), 1, false, Image.FORMAT_RGB8)
+		for index in BAY_BRIDGE_PALETTE.size():
+			palette.set_pixel(index, 0, BAY_BRIDGE_PALETTE[index])
+		material.albedo_texture = ImageTexture.create_from_image(palette)
+		material.albedo_color = Color.WHITE
+		material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
 	_apply_polyhaven_textures(material, material_key)
 	_materials[cache_key] = material
 	return material
@@ -1138,8 +1150,9 @@ func _color_for(material_key: String, feature_kind: String, is_context: bool) ->
 		if feature_kind == "ybi":
 			return Color("66765c")
 		if feature_kind == "boundary_attached_visual":
-			# The marina basin (water, floats and boats); the pier deck is textured.
-			return Color("718b8c")
+			# The marina basin (water, floats and boats). A pier deck draws its
+			# concrete (STREET_GROUND_SURFACES); without UVs, that concrete's mean.
+			return Color("718b8c") if "marina" in material_key else Color("908e7c")
 		return Color("bbb7af")
 	match feature_kind:
 		"land_ground":

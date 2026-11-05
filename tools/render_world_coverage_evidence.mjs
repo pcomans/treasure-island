@@ -16,6 +16,8 @@ import { spawnSync } from "node:child_process";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { BOUNDARY_ATTACHED_SOURCE_KEYS, PIER_DECK_SOURCE_KEYS } from "./lib/world-contract.mjs";
+
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(scriptDirectory, "..");
 const DEFAULT_WORLD = resolve(projectRoot, "generated/world");
@@ -36,14 +38,9 @@ const EXPECTED_CONTEXT_KEYS = Object.freeze([
   "w1011568818",
   "w26767311",
 ]);
-// Boundary-attached context records: the two whole-source visuals and the
-// decks of the piers that reach past the island outline.
-const EXPECTED_BOUNDARY_ATTACHED_KEYS = Object.freeze([
-  "w1222505176",
-  "w1222505177",
-  "w319406837",
-  "w644986117",
-]);
+// Boundary-attached context records: the whole-source visuals and the decks of
+// the piers that reach past the island outline.
+const EXPECTED_BOUNDARY_ATTACHED_KEYS = Object.freeze([...BOUNDARY_ATTACHED_SOURCE_KEYS, ...PIER_DECK_SOURCE_KEYS].sort());
 const SVG_WIDTH = 1600;
 const SVG_HEIGHT = 1200;
 

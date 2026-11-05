@@ -49,7 +49,6 @@ export const BOUNDARY_ATTACHED_SOURCE_KEYS = Object.freeze([
 // the island is a playable overlay, and the deck beyond it is drawn as a
 // visual-only boundary-attached context record (boundary_context:KEY).
 export const PIER_DECK_SOURCE_KEYS = Object.freeze([
-  "w1222505176",
   "w1222505177",
 ]);
 export const BRIDGE_SOURCE_KEYS = Object.freeze([

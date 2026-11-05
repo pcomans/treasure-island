@@ -58,7 +58,7 @@ const BOUNDARY_ATTACHED_SOURCE_KEYS := ["w319406837", "w644986117"]
 ## Piers reaching out over the water past the island outline: their part on the
 ## island is a playable overlay, and the deck beyond it a visual-only
 ## boundary-attached record (boundary_context:KEY, pier concrete).
-const PIER_DECK_SOURCE_KEYS := ["w1222505176", "w1222505177"]
+const PIER_DECK_SOURCE_KEYS := ["w1222505177"]
 const ISLE_HOUSE_COMPOSITE_KEY := "building-composite:w1249412094"
 const ISLE_HOUSE_COMPOSITE_PART_KEYS := [
 	"building-composite:w1249412094:w1282547786:roof",

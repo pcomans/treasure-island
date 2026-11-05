@@ -16,8 +16,11 @@
 // girders lifted about 46 m above the water, 160 m Skyway spans on piers 14-35
 // m tall) and the dated photographs; they are not surveyed.
 //
-// Everything is one light-concrete mesh in the generated context record; the
-// runtime builds it without collision like the rest of the context.
+// Everything is one mesh in the generated context record, built without
+// collision like the rest of the context. Each face's UV picks its role's texel
+// in the runtime's bay bridge palette (EAST_SPAN_PALETTE_UV): light concrete
+// for the tower, columns and cables, mid grey girder sides, darker undersides
+// and a road-grey deck top.
 
 import earcut from "earcut";
 
@@ -45,11 +48,14 @@ const OUTLINE_STEP_M = 40;
 // The centreline is sampled at this east spacing.
 const CENTRELINE_STEP_M = 5;
 const TOWER_HEIGHT_M = 160;
-// Four legs with narrow slots between them, tapering to TOWER_TOP_SCALE of
-// their base section, joined by the cable saddle at the top.
-const TOWER_LEG_FRACTION = 0.46;
-const TOWER_TOP_SCALE = 0.72;
-const TOWER_SADDLE_DEPTH_M = 7;
+// The tower is one slender shaft (the dated photos show a single white shaft
+// about 0.07-0.09 as wide as it is tall above the deck): TOWER_BASE_HALF_M half
+// sizes along and across the deck at the water, tapering by TOWER_SHAFT_TAPER
+// to TOWER_SHAFT_TOP_M and by TOWER_CROWN_TAPER more to its top.
+const TOWER_BASE_HALF_M = Object.freeze({ along: 4.5, across: 3.5 });
+const TOWER_SHAFT_TOP_M = 150;
+const TOWER_SHAFT_TAPER = 0.67;
+const TOWER_CROWN_TAPER = 0.53;
 // Main cables: one over each deck, from deck anchorages at the ends of the
 // suspension span to the saddle; drawn a little thicker than the real 0.78 m
 // so they hold together at a kilometre.
@@ -57,6 +63,15 @@ const CABLE_SIZE_M = 1.1;
 const CABLE_SEGMENTS = 24;
 const CABLE_ANCHOR_RISE_M = 1.5;
 const CABLE_SADDLE_DROP_M = 2.5;
+// The main span's cables meet the deck this far (in plan) from the tower and
+// run on along it to their anchorage at the span's east end; the back span's
+// meet it at W2. Fitted to the dated photos: the main cable merges with the
+// deck line about 240 m out seen from Gate 5 and about 310 m out from Pier 1
+// (1.2-1.3 times as far from the tower as the back span's landing), where an
+// anchorage-low parabola to the span's east end shows nearly twice as far.
+const MAIN_CABLE_LANDING_M = 280;
+// The low run along the deck to the anchorage, in pieces about this long.
+const CABLE_DECK_STEP_M = 20;
 // Suspenders (50 groups a side on the real span) hang every SUSPENDER_SPACING_M
 // of the cable's plan length, a little thicker than real so they read as the
 // span's fine comb; none in the last stretch at the tower.
@@ -85,6 +100,15 @@ const END_COLUMN = Object.freeze({ across: 9, along: 6.5 });
 const DECK_HALF_WIDTH_M = 13;
 // Footings of the tower and columns, under the water line.
 const FOOTING_M = -1;
+
+// Each face's UV: the centre of its role's texel in the runtime's 4 x 1 bay
+// bridge palette (WorldChunkBuilder.BAY_BRIDGE_PALETTE, in this order).
+export const EAST_SPAN_PALETTE_UV = Object.freeze({
+  structure: Object.freeze([0.125, 0.5]),
+  fascia: Object.freeze([0.375, 0.5]),
+  soffit: Object.freeze([0.625, 0.5]),
+  roadway: Object.freeze([0.875, 0.5]),
+});
 
 function emptyMesh() {
   return { vertices: [], normals: [], uvs: [], indices: [] };
@@ -124,9 +148,9 @@ function pushIndexedTriangle(mesh, indices, normal) {
 }
 
 // A flat convex face (corners in order round it) sharing its corners between
-// the triangles of its fan.
-function pushFace(mesh, corners, normal, uvs) {
-  const indices = corners.map((corner, index) => pushVertex(mesh, corner, normal, uvs[index]));
+// the triangles of its fan, all with the palette UV `uv`.
+function pushFace(mesh, corners, normal, uv) {
+  const indices = corners.map((corner) => pushVertex(mesh, corner, normal, uv));
   for (let index = 1; index + 1 < indices.length; index += 1) {
     pushIndexedTriangle(mesh, [indices[0], indices[index], indices[index + 1]], normal);
   }
@@ -167,9 +191,9 @@ function addGirder(mesh, ring) {
   invariant(triangles.length > 0 && triangles.length % 3 === 0, "East span deck triangulation failed");
   const top = (point) => [point[0], eastSpanDeckTop(point[0]), -point[1]];
   const bottom = (point) => [point[0], eastSpanDeckTop(point[0]) - GIRDER_DEPTH_M, -point[1]];
-  for (const [level, normal] of [[top, [0, 1, 0]], [bottom, [0, -1, 0]]]) {
+  for (const [level, normal, uv] of [[top, [0, 1, 0], EAST_SPAN_PALETTE_UV.roadway], [bottom, [0, -1, 0], EAST_SPAN_PALETTE_UV.soffit]]) {
     const first = mesh.vertices.length / 3;
-    for (const point of dense) pushVertex(mesh, level(point), normal, [point[0] / 10, -point[1] / 10]);
+    for (const point of dense) pushVertex(mesh, level(point), normal, uv);
     for (let index = 0; index < triangles.length; index += 3) {
       pushIndexedTriangle(mesh, [first + triangles[index], first + triangles[index + 1], first + triangles[index + 2]], normal);
     }
@@ -181,19 +205,14 @@ function addGirder(mesh, ring) {
     const length = Math.hypot(end[0] - start[0], end[1] - start[1]);
     if (length <= 1e-6) continue;
     const outward = [(end[1] - start[1]) / length, 0, (end[0] - start[0]) / length];
-    pushFace(
-      mesh,
-      [bottom(start), bottom(end), top(end), top(start)],
-      outward,
-      [[0, 0], [length / 10, 0], [length / 10, GIRDER_DEPTH_M / 10], [0, GIRDER_DEPTH_M / 10]],
-    );
+    pushFace(mesh, [bottom(start), bottom(end), top(end), top(start)], outward, EAST_SPAN_PALETTE_UV.fascia);
   }
 }
 
-// A box from y0 to y1 over a plan rectangle centred on `center` (east/north)
-// with half sizes along `axis` (unit, east/north) and across it. The bottom
-// stands in the ground or water and is left open, as is a top that something
-// covers (`closed` false).
+// A light-concrete box from y0 to y1 over a plan rectangle centred on `center`
+// (east/north) with half sizes along `axis` (unit, east/north) and across it,
+// tapering to `topScale` of them at y1. The bottom stands in the ground or
+// water and is left open, as is a top that something covers (`closed` false).
 function addBox(mesh, center, axis, halfAlong, halfAcross, y0, y1, topScale = 1, closed = true) {
   const across = [-axis[1], axis[0]];
   const corner = (sa, sc, scale) => [
@@ -210,11 +229,9 @@ function addBox(mesh, center, axis, halfAlong, halfAcross, y0, y1, topScale = 1,
     const b = at(base[next], y0);
     const c = at(head[next], y1);
     const d = at(head[index], y1);
-    const outward = unit(cross(sub(b, a), sub(d, a)));
-    const width = Math.hypot(b[0] - a[0], b[2] - a[2]);
-    pushFace(mesh, [a, b, c, d], outward, [[0, y0 / 10], [width / 10, y0 / 10], [width / 10, y1 / 10], [0, y1 / 10]]);
+    pushFace(mesh, [a, b, c, d], unit(cross(sub(b, a), sub(d, a))), EAST_SPAN_PALETTE_UV.structure);
   }
-  if (closed) pushFace(mesh, head.map((point) => at(point, y1)), [0, 1, 0], head.map((point) => [point[0] / 10, -point[1] / 10]));
+  if (closed) pushFace(mesh, head.map((point) => at(point, y1)), [0, 1, 0], EAST_SPAN_PALETTE_UV.structure);
 }
 
 // A square-section tube along a polyline of world points (the main cables).
@@ -231,7 +248,6 @@ function addTube(mesh, points, size) {
       side[1] * s * half + up[1] * u * half,
       side[2] * s * half + up[2] * u * half,
     ]);
-    const length = Math.hypot(...sub(end, start));
     for (let face = 0; face < 4; face += 1) {
       const o0 = offsets[face];
       const o1 = offsets[(face + 1) % 4];
@@ -245,7 +261,7 @@ function addTube(mesh, points, size) {
           [end[0] + o0[0], end[1] + o0[1], end[2] + o0[2]],
         ],
         mid,
-        [[0, 0], [size / 10, 0], [size / 10, length / 10], [0, length / 10]],
+        EAST_SPAN_PALETTE_UV.structure,
       );
     }
   }
@@ -372,43 +388,47 @@ export function eastSpanMesh(rawOsm, memberWayIds, groundAt) {
   const westEnd = beams[0].center;
   const eastEnd = beams.at(-1).center;
 
-  // Tower: four tapering legs in the OSM footprint and the saddle on top.
+  // Tower: one slender shaft on the OSM footprint's centre, its long side along
+  // the deck, tapering up to a narrower crown.
   const tower = rectangleFrame(rawWayFootprint(rawOsm, TOWER_WAY_ID)[0][0], "East span tower");
-  const saddleBottom = TOWER_HEIGHT_M - TOWER_SADDLE_DEPTH_M;
-  const legAlong = tower.along * TOWER_LEG_FRACTION / 2;
-  const legAcross = tower.across * TOWER_LEG_FRACTION / 2;
-  const normal = [-tower.axis[1], tower.axis[0]];
-  for (const [sa, sc] of [[1, 1], [1, -1], [-1, -1], [-1, 1]]) {
-    const offsetAlong = sa * (tower.along / 2 - legAlong);
-    const offsetAcross = sc * (tower.across / 2 - legAcross);
-    const center = [
-      tower.center[0] + tower.axis[0] * offsetAlong + normal[0] * offsetAcross,
-      tower.center[1] + tower.axis[1] * offsetAlong + normal[1] * offsetAcross,
-    ];
-    addBox(mesh, center, tower.axis, legAlong, legAcross, FOOTING_M, saddleBottom + 0.5, TOWER_TOP_SCALE, false);
-  }
-  addBox(mesh, tower.center, tower.axis, tower.along * 0.42, tower.across * 0.42, saddleBottom, TOWER_HEIGHT_M);
+  const spanLength = Math.hypot(eastEnd[0] - westEnd[0], eastEnd[1] - westEnd[1]);
+  const spanAxis = [(eastEnd[0] - westEnd[0]) / spanLength, (eastEnd[1] - westEnd[1]) / spanLength];
+  addBox(mesh, tower.center, spanAxis, TOWER_BASE_HALF_M.along, TOWER_BASE_HALF_M.across,
+    FOOTING_M, TOWER_SHAFT_TOP_M, TOWER_SHAFT_TAPER, false);
+  addBox(mesh, tower.center, spanAxis, TOWER_BASE_HALF_M.along * TOWER_SHAFT_TAPER, TOWER_BASE_HALF_M.across * TOWER_SHAFT_TAPER,
+    TOWER_SHAFT_TOP_M, TOWER_HEIGHT_M, TOWER_CROWN_TAPER);
 
-  // Main cables over each deck: a parabola from the deck anchorage (its low,
-  // flat end) up to the saddle, on each side of the tower, with the
-  // suspenders hanging from it to the deck.
+  // Main cables over each deck: from the saddle a parabola falls to the deck
+  // at its landing (W2 for the back span, MAIN_CABLE_LANDING_M out for the
+  // main span), then runs along the deck to the anchorage; the suspenders hang
+  // from the parabola to the deck.
   const saddle = [tower.center[0], TOWER_HEIGHT_M - CABLE_SADDLE_DROP_M, -tower.center[1]];
   for (const deck of decks) {
     for (const end of [westEnd, eastEnd]) {
       const anchor = alongLine(deck.line, arcLengthAtEast(deck.line, end[0])).point;
-      const anchorY = eastSpanDeckTop(anchor[0]) + CABLE_ANCHOR_RISE_M;
-      const cableAt = (u) => [
-        anchor[0] + (saddle[0] - anchor[0]) * u,
-        anchorY + (saddle[1] - anchorY) * u * u,
-        -anchor[1] + (saddle[2] + anchor[1]) * u,
-      ];
-      const points = [];
-      for (let index = 0; index <= CABLE_SEGMENTS; index += 1) points.push(cableAt(index / CABLE_SEGMENTS));
-      addTube(mesh, points, CABLE_SIZE_M);
       const reach = Math.hypot(saddle[0] - anchor[0], saddle[2] + anchor[1]);
-      const axis = [(saddle[0] - anchor[0]) / reach, -(saddle[2] + anchor[1]) / reach];
-      for (let distance = SUSPENDER_SPACING_M; distance < reach - SUSPENDER_TOWER_CLEAR_M; distance += SUSPENDER_SPACING_M) {
-        const [east, y, z] = cableAt(distance / reach);
+      const landing = end === eastEnd ? Math.min(MAIN_CABLE_LANDING_M, reach) : reach;
+      // A plan point `distance` out from the tower along the line to the anchorage.
+      const planAt = (distance) => [
+        saddle[0] + (anchor[0] - saddle[0]) * distance / reach,
+        -saddle[2] + (anchor[1] + saddle[2]) * distance / reach,
+      ];
+      const deckAt = (distance) => eastSpanDeckTop(planAt(distance)[0]) + CABLE_ANCHOR_RISE_M;
+      const cableAt = (distance) => {
+        const [east, north] = planAt(distance);
+        const y = distance >= landing
+          ? deckAt(distance)
+          : deckAt(landing) + (saddle[1] - deckAt(landing)) * ((landing - distance) / landing) ** 2;
+        return [east, y, -north];
+      };
+      const points = [];
+      for (let index = 0; index <= CABLE_SEGMENTS; index += 1) points.push(cableAt(landing * index / CABLE_SEGMENTS));
+      const runs = Math.ceil((reach - landing) / CABLE_DECK_STEP_M);
+      for (let index = 1; index <= runs; index += 1) points.push(cableAt(landing + (reach - landing) * index / runs));
+      addTube(mesh, points, CABLE_SIZE_M);
+      const axis = [(anchor[0] - saddle[0]) / reach, (anchor[1] + saddle[2]) / reach];
+      for (let distance = SUSPENDER_TOWER_CLEAR_M + SUSPENDER_SPACING_M / 2; distance < landing; distance += SUSPENDER_SPACING_M) {
+        const [east, y, z] = cableAt(distance);
         const deckTop = eastSpanDeckTop(east);
         if (y - deckTop < 1) continue;
         addBox(mesh, [east, -z], axis, SUSPENDER_SIZE_M / 2, SUSPENDER_SIZE_M / 2, deckTop - 0.2, y, 1, false);

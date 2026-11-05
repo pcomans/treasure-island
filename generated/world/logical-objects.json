@@ -38671,7 +38671,6 @@
       "heights": [],
       "logical_object_key": "terrain:w1222505176",
       "physical_object_keys": [
-        "boundary_context:w1222505176",
         "terrain:w1222505176:x_1__z_2"
       ],
       "representation": "direct",

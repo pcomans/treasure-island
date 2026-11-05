@@ -16,6 +16,8 @@ import { tmpdir } from "node:os";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import earcut from "earcut";
+
 import {
   BRIDGE_SOURCE_KEYS,
   BOUNDARY_ATTACHED_SOURCE_KEYS,
@@ -121,7 +123,7 @@ import {
   loadStreetDetailZones,
   streetDetailHardShapes,
 } from "./lib/street-detail-generation.mjs";
-import { eastSpanMesh } from "./lib/east-span-generation.mjs";
+import { EAST_SPAN_PALETTE_UV, eastSpanMesh } from "./lib/east-span-generation.mjs";
 import { generateStreetGround } from "./lib/street-ground-generation.mjs";
 import {
   SHORELINE_OVERLAY_MATERIAL,
@@ -146,11 +148,11 @@ const FOUNDATION_BURIAL_MARGIN_M = 0.02;
 // imported western-span model stands there; WorldChunkBuilder
 // WESTERN_BRIDGE_REPLACEMENT_MAX_X_M).
 const WESTERN_SPAN_RUNTIME_CUT_X_M = 500;
-// A pier's deck past the island outline is drawn when it covers more than this
-// (smaller remainders are digitizing slivers along the coastline).
-const PIER_DECK_MINIMUM_M2 = 1;
-// Pier deck context: level with the pier's overlay at its root, with a fascia
-// this deep round its edges.
+// A pier's deck past the island outline is drawn when it covers more than this.
+// Smaller remainders are coastline digitizing slips: w1222505176's 5.5 m² lies
+// over the riprap, where the May 2026 aerial shows rocks and no deck.
+const PIER_DECK_MINIMUM_M2 = 20;
+// The fascia hanging from a pier deck's edges over the water.
 const PIER_DECK_SLAB_M = 0.6;
 const WATER_DATUM_M = 0;
 const FACET_CONTAINMENT_TOLERANCE_M = COORDINATE_ROUNDING_M * 2;
@@ -1614,38 +1616,112 @@ function contextRecord(record, contextKind) {
   return { ...rest, context_kind: contextKind };
 }
 
-// A pier's deck past the island outline (its part on the island is a playable
-// overlay draped on the land): level with the highest point of that overlay,
-// with a PIER_DECK_SLAB_M fascia round its edges.
-function pierDeckMesh(object, chunks, label) {
-  const overlays = [...chunks.values()].flatMap((chunk) => chunk.records)
-    .filter((record) => object.physical_object_keys.has(record.object_key));
-  invariant(overlays.length > 0, `${label} has no playable overlay on the island`);
-  const top = roundCoordinate(Math.max(...overlays.flatMap((record) =>
-    record.vertices.filter((_value, index) => index % 3 === 1))));
-  const bottom = roundCoordinate(top - PIER_DECK_SLAB_M);
-  const fascia = { vertices: [], normals: [], uvs: [], indices: [] };
-  for (const polygon of object.pier_deck_beyond) {
-    for (const ring of polygon) {
-      for (let index = 0; index < ring.length; index += 1) {
-        const start = ring[index];
-        const end = ring[(index + 1) % ring.length];
-        const length = Math.hypot(end[0] - start[0], end[1] - start[1]);
-        if (length <= COORDINATE_ROUNDING_M) continue;
-        // Canonical rings keep the deck on their left: outward is to the right.
-        const normal = [(end[1] - start[1]) / length, 0, (end[0] - start[0]) / length].map(roundCoordinate);
-        const offset = fascia.vertices.length / 3;
-        for (const [point, y, u] of [[start, bottom, 0], [end, bottom, length], [end, top, length], [start, top, 0]]) {
-          fascia.vertices.push(roundCoordinate(point[0]), y, roundCoordinate(-point[1]));
-          fascia.normals.push(...normal);
-          fascia.uvs.push(roundCoordinate(u / 10), roundCoordinate(y / 10));
-        }
-        // Counterclockwise around the outward normal, as the contract stores triangles.
-        fascia.indices.push(offset, offset + 1, offset + 2, offset, offset + 2, offset + 3);
-      }
-    }
+// A pier's deck past the island outline; its part on the island is a playable
+// overlay draped on the land. Along the seam on the outline the deck takes the
+// overlay's own edge, every vertex and height, so the two meet without a step
+// or gap; every other deck vertex continues the seam's height straight out
+// from the nearest point of the seam. A PIER_DECK_SLAB_M fascia hangs from the
+// edges over the water.
+function pierDeckMesh(object, boundary, chunks, label) {
+  invariant(
+    object.pier_deck_beyond.length === 1 && object.pier_deck_beyond[0].length === 1,
+    `${label} is not one simple deck outline`,
+  );
+  const overlayPoints = [...chunks.values()].flatMap((chunk) => chunk.records)
+    .filter((record) => object.physical_object_keys.has(record.object_key))
+    .flatMap((record) => Array.from({ length: record.vertices.length / 3 }, (_value, index) => ({
+      point: [record.vertices[index * 3], -record.vertices[index * 3 + 2]],
+      y: record.vertices[index * 3 + 1],
+    })));
+  invariant(overlayPoints.length > 0, `${label} has no playable overlay on the island`);
+  const near = COORDINATE_ROUNDING_M * 2;
+  const seamHeight = (point) => overlayPoints.find((overlay) =>
+    Math.hypot(overlay.point[0] - point[0], overlay.point[1] - point[1]) <= near)?.y ?? null;
+  // The deck outline with the overlay's vertices on its edges put in, in order.
+  const ring = object.pier_deck_beyond[0][0];
+  const outline = [];
+  for (let index = 0; index < ring.length; index += 1) {
+    const start = ring[index];
+    const end = ring[(index + 1) % ring.length];
+    const lengthSquared = (end[0] - start[0]) ** 2 + (end[1] - start[1]) ** 2;
+    outline.push({ point: start, y: seamHeight(start) });
+    outline.push(...overlayPoints
+      .filter((overlay) => pointToSegmentDistance(overlay.point, start, end) <= near)
+      .map((overlay) => ({
+        ...overlay,
+        t: ((overlay.point[0] - start[0]) * (end[0] - start[0]) + (overlay.point[1] - start[1]) * (end[1] - start[1])) / lengthSquared,
+      }))
+      .filter((overlay) => overlay.t * Math.sqrt(lengthSquared) > near && (1 - overlay.t) * Math.sqrt(lengthSquared) > near)
+      .sort((left, right) => left.t - right.t)
+      .filter((overlay, order, list) => order === 0 || (overlay.t - list[order - 1].t) * Math.sqrt(lengthSquared) > near)
+      .map(({ point, y }) => ({ point, y })));
   }
-  return mergeMeshes([topSurfaceMesh(object.pier_deck_beyond, top, `${label}/top`), fascia], label);
+  // Seam edges: both ends on the overlay and the edge on the island outline.
+  const isSeam = (index) => {
+    const start = outline[index];
+    const end = outline[(index + 1) % outline.length];
+    const middle = [(start.point[0] + end.point[0]) / 2, (start.point[1] + end.point[1]) / 2];
+    return start.y != null && end.y != null && distanceToMultiPolygonEdges(middle, boundary) <= near;
+  };
+  const seams = outline.map((_value, index) => index).filter(isSeam);
+  invariant(seams.length > 0, `${label} meets no part of its overlay on the outline`);
+  for (const vertex of outline) {
+    if (vertex.y != null && seams.some((index) => outline[index] === vertex || outline[(index + 1) % outline.length] === vertex)) continue;
+    let best = null;
+    for (const index of seams) {
+      const start = outline[index];
+      const end = outline[(index + 1) % outline.length];
+      const lengthSquared = (end.point[0] - start.point[0]) ** 2 + (end.point[1] - start.point[1]) ** 2;
+      const t = Math.max(0, Math.min(1, ((vertex.point[0] - start.point[0]) * (end.point[0] - start.point[0]) +
+        (vertex.point[1] - start.point[1]) * (end.point[1] - start.point[1])) / lengthSquared));
+      const distance = Math.hypot(
+        vertex.point[0] - (start.point[0] + (end.point[0] - start.point[0]) * t),
+        vertex.point[1] - (start.point[1] + (end.point[1] - start.point[1]) * t),
+      );
+      if (best == null || distance < best.distance) best = { distance, y: start.y + (end.y - start.y) * t };
+    }
+    vertex.y = best.y;
+  }
+  const at = (vertex, drop = 0) => [vertex.point[0], vertex.y - drop, -vertex.point[1]].map(roundCoordinate);
+  const mesh = { vertices: [], normals: [], uvs: [], indices: [] };
+  const face = (corners, uvs, outward = null) => {
+    const ab = [corners[1][0] - corners[0][0], corners[1][1] - corners[0][1], corners[1][2] - corners[0][2]];
+    const ac = [corners[2][0] - corners[0][0], corners[2][1] - corners[0][1], corners[2][2] - corners[0][2]];
+    let normal = [ab[1] * ac[2] - ab[2] * ac[1], ab[2] * ac[0] - ab[0] * ac[2], ab[0] * ac[1] - ab[1] * ac[0]];
+    const area = Math.hypot(...normal) / 2;
+    if (area <= 1e-6) return;
+    normal = normal.map((value) => value / (2 * area));
+    // Counterclockwise around the face's outward side, as the contract stores triangles.
+    const flip = outward ? normal[0] * outward[0] + normal[2] * outward[2] < 0 : normal[1] < 0;
+    const ordered = flip ? [0, 2, 1] : [0, 1, 2];
+    const offset = mesh.vertices.length / 3;
+    for (const order of ordered) {
+      mesh.vertices.push(...corners[order]);
+      mesh.normals.push(...(flip ? normal.map((value) => -value) : normal).map(roundCoordinate));
+      mesh.uvs.push(...uvs[order].map(roundCoordinate));
+    }
+    mesh.indices.push(offset, offset + 1, offset + 2);
+  };
+  const triangles = earcut(outline.flatMap((vertex) => vertex.point), [], 2);
+  for (let index = 0; index < triangles.length; index += 3) {
+    const corners = [triangles[index], triangles[index + 1], triangles[index + 2]].map((corner) => outline[corner]);
+    face(corners.map((vertex) => at(vertex)), corners.map((vertex) => [vertex.point[0] / 10, -vertex.point[1] / 10]));
+  }
+  for (let index = 0; index < outline.length; index += 1) {
+    if (seams.includes(index)) continue;
+    const start = outline[index];
+    const end = outline[(index + 1) % outline.length];
+    const length = Math.hypot(end.point[0] - start.point[0], end.point[1] - start.point[1]);
+    if (length <= COORDINATE_ROUNDING_M) continue;
+    // The outline keeps the deck on its left: outward is to the right.
+    const outward = [(end.point[1] - start.point[1]) / length, 0, (end.point[0] - start.point[0]) / length];
+    const corners = [at(start, PIER_DECK_SLAB_M), at(end, PIER_DECK_SLAB_M), at(end), at(start)];
+    const uvs = [[0, 0], [length / 10, 0], [length / 10, PIER_DECK_SLAB_M / 10], [0, PIER_DECK_SLAB_M / 10]];
+    face([corners[0], corners[1], corners[2]], [uvs[0], uvs[1], uvs[2]], outward);
+    face([corners[0], corners[2], corners[3]], [uvs[0], uvs[2], uvs[3]], outward);
+  }
+  validateMesh(mesh, label);
+  return mesh;
 }
 
 function buildContext(ledger, boundary, rawOsm, rawSources, playableObjects, terrain, chunks) {
@@ -1691,10 +1767,11 @@ function buildContext(ledger, boundary, rawOsm, rawSources, playableObjects, ter
   );
   const eastSpanGeometry = eastSpanMesh(rawOsm, memberWayIds, (east, north) =>
     pointInMultiPolygon([east, north], ybiSourceGeometry, true) ? terrain.sampleTerrainEastNorth(east, north) : null);
-  const bridgeMesh = mergeMeshes([
-    topSurfaceMesh(westSpanGeometry, 12, "Bay Bridge western span context"),
-    eastSpanGeometry,
-  ], "Bay Bridge context");
+  // The record's UVs pick the bay bridge palette's texels; the flat western
+  // sheet takes the light concrete one.
+  const westSpanSheet = topSurfaceMesh(westSpanGeometry, 12, "Bay Bridge western span context");
+  westSpanSheet.uvs = westSpanSheet.uvs.map((_value, index) => EAST_SPAN_PALETTE_UV.structure[index % 2]);
+  const bridgeMesh = mergeMeshes([westSpanSheet, eastSpanGeometry], "Bay Bridge context");
 
   const records = [
     contextRecord(meshRecord({
@@ -1749,7 +1826,7 @@ function buildContext(ledger, boundary, rawOsm, rawSources, playableObjects, ter
       featureKind: "context",
       sourceKeys: [sourceKey],
       materialKey: "context_boundary_pier",
-      mesh: pierDeckMesh(object, chunks, `${sourceKey}/pier-deck`),
+      mesh: pierDeckMesh(object, boundary, chunks, `${sourceKey}/pier-deck`),
     }), "boundary_attached_visual");
     object.physical_object_keys.add(record.object_key);
     boundaryAttachedVisuals.push(record);
