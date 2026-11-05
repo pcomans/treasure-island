@@ -17,7 +17,6 @@ import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import {
-  AREA_SURFACE_LAYER_STEP_M,
   BRIDGE_SOURCE_KEYS,
   BOUNDARY_ATTACHED_SOURCE_KEYS,
   CATEGORY_MEMBERSHIPS,
@@ -26,6 +25,7 @@ import {
   COORDINATE_ROUNDING_M,
   CONTEXT_SCHEMA,
   COVERAGE_HEADERS,
+  DRAPED_LAYER_STEP_M,
   EXPECTED_COUNTS,
   FERRY_SPAWN_INLAND_DISTANCE_M,
   FERRY_SPAWN_SOURCE_KEYS,
@@ -1414,7 +1414,7 @@ function landCellPolygons(land) {
 // that overlap would lie in one plane, and the depth test would alternate
 // between them in stripes wherever they look different (a parking lot on a
 // campus, a court in a park). So within a class each surface is lifted
-// AREA_SURFACE_LAYER_STEP_M above the highest larger surface of the class it
+// DRAPED_LAYER_STEP_M above the highest larger surface of the class it
 // overlaps: the smaller, more specific area draws on top, and every class stays
 // a step under the next one up. Only the bias changes, never the plan geometry,
 // coverage or collision. styleFor gives an area's drawn style to placement.
@@ -1467,9 +1467,9 @@ function planAreaSurfaces(objects, shorelinePlan) {
         if (multiPolygonArea(intersectMultiPolygons(member.geometry, larger.geometry)) <= 1e-8) continue;
         member.level = larger.level + 1;
       }
-      const elevation = roundCoordinate(classBias + member.level * AREA_SURFACE_LAYER_STEP_M);
+      const elevation = roundCoordinate(classBias + member.level * DRAPED_LAYER_STEP_M);
       invariant(
-        elevation + AREA_SURFACE_LAYER_STEP_M <= ceiling + 1e-9,
+        elevation + DRAPED_LAYER_STEP_M <= ceiling + 1e-9,
         `${member.label}: layer ${member.level} over the ${classBias} m class reaches the next surface at ${ceiling} m`,
       );
       member.surface.style = { ...member.surface.style, elevation_m: elevation };
