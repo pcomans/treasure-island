@@ -50,8 +50,8 @@ const SAFE_ID = /^[a-z0-9_]+$/u;
 // Central-difference steps for shading normals (m): the raster's, as the coarse
 // land (mesh-output.mjs terrainNormal), and the correction's.
 const RASTER_NORMAL_STEP_M = 2;
-// The steepest corrected ground between neighbouring samples (rise per metre):
-// the stock player's floor limit, 48 degrees.
+// The steepest corrected ground on any triangle of the sample grid (its full
+// gradient, rise per metre): the stock player's floor limit, 48 degrees.
 const MAX_CORRECTED_RISE = Math.tan((48 * Math.PI) / 180);
 const DELTA_NORMAL_STEP_M = 0.5;
 const MM = 1000;
@@ -567,15 +567,21 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
       }
     }
     audit.sampled_points += samples.length;
-    // Corrected ground stays walkable: between neighbouring samples the
-    // correction touches, no slope steeper than the stock player's floor.
-    for (let j = 0; j <= steps; j += 1) {
-      for (let i = 0; i <= steps; i += 1) {
-        const index = j * (steps + 1) + i;
-        if (!inside[index]) continue;
-        for (const other of [i < steps ? index + 1 : -1, j < steps ? index + steps + 1 : -1]) {
-          if (other < 0 || !inside[other] || (deltas[index] === 0 && deltas[other] === 0)) continue;
-          invariant(Math.abs(samples[other] - samples[index]) <= MAX_CORRECTED_RISE * sampleM, `Terrain override ground at east ${cell.west + i * sampleM}, north ${cell.south + j * sampleM} is steeper than the player can walk (48 degrees)`);
+    // Corrected ground stays walkable: no triangle of the sample grid the
+    // correction touches (each square's two SW-NE triangles, as the leaves
+    // split them) slopes more than the stock player's floor, measured as the
+    // plane's full gradient, not only along the grid's east and north lines
+    // (two 48 degree grid steps make a 57.6 degree diagonal face).
+    for (let j = 0; j < steps; j += 1) {
+      for (let i = 0; i < steps; i += 1) {
+        const sw = j * (steps + 1) + i;
+        const se = sw + 1;
+        const nw = sw + steps + 1;
+        const ne = nw + 1;
+        // Each triangle with its rise east and north across one sample step.
+        for (const [corners, east, north] of [[[sw, se, ne], samples[se] - samples[sw], samples[ne] - samples[se]], [[sw, ne, nw], samples[ne] - samples[nw], samples[nw] - samples[sw]]]) {
+          if (corners.some((corner) => !inside[corner]) || corners.every((corner) => deltas[corner] === 0)) continue;
+          invariant(Math.hypot(east, north) <= MAX_CORRECTED_RISE * sampleM, `Terrain override ground at east ${cell.west + i * sampleM}, north ${cell.south + j * sampleM} is steeper than the player can walk (48 degrees)`);
         }
       }
     }

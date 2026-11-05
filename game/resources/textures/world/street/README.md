@@ -78,6 +78,8 @@ the street-fences work notes.
 | `street_fence_screen.png` | construction windscreen fabric, tinted black or dark green by the kit | seamless grey woven polypropylene windscreen |
 | `street_fence_wood.png` | the wood board fence: six boards (0.84 m) per tile | seamless weathered cedar privacy fence boards |
 
+## Yard ground
+
 Yard ground for the large-clutter yards' pale aggregate pads (the yard_gravel_pale
 zone surface, `world_chunk_builder.gd`), generated 2026-11-04 with
 `tools/generate-texture` (one image, text prompt only; no photograph was given to the
@@ -99,9 +101,6 @@ from 1254 to 512 px with ImageMagick; each tiles seamlessly (the sand and soil o
 | `yard_soil_dark.png` | yard_soil_dark: dark excavated soil in the pits of the 9th St / Avenue H site (May 2026 aerial) | seamless dark damp excavated construction soil, bucket scrape marks |
 | `yard_pond.png` | yard_pond: the shallow murky ponds on #11's pad (May 2026 aerial) | seamless murky green-grey shallow pond water from above, matte |
 
-shape (480 x 288) and the pair is packed into the square, by
-`tools/draw_pole_flag_texture.sh`, which redraws it byte for byte.
-
 ## Yard kit
 
 `street_pole_flag.png` (512 x 512) is the face of the yard kit's pole flag
@@ -111,5 +110,5 @@ ImageMagick as three horizontal bands, red, white and blue, after the two flags
 above the 9th St storage yard (Google Street View, Sep 2025). The upper half
 carries SELF STORAGE in blue DejaVu Sans Bold capitals on the white band, as
 legible in that photo; the lower half is plain. Each flag is drawn at its 5:3
-shape (480 x 288) and the pair is packed into the square. The drawing script is
-kept outside Git with the clutter-kit work notes.
+shape (480 x 288) and the pair is packed into the square, by
+`tools/draw_pole_flag_texture.sh`, which redraws it byte for byte.

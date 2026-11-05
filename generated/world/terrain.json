@@ -68,7 +68,7 @@
     "maximum_clearance_m": 0.081,
     "maximum_serialization_tolerance_m": 0.01,
     "minimum_clearance_m": 0.019,
-    "sample_points": 317695
+    "sample_points": 317303
   },
   "raster_bbox_wgs84": [
     -122.380001708984,
@@ -209,19 +209,19 @@
     "basis": "production_inference",
     "config": {
       "path": "tools/config/terrain-overrides.json",
-      "sha256": "f7dd14e9802061691e12c2d21467e3f42fd8a67c46cfd749708940db262e06d2"
+      "sha256": "86783b8b6fd6182dcc0bb7d7473b3e735f70a9ac7b2b28bd943dfccc3ec3baa9"
     },
     "corrected_cells": 193,
-    "leaves": 5281,
+    "leaves": 5176,
     "maximum_cut_m": 20.205,
-    "maximum_raise_m": 8.015,
+    "maximum_raise_m": 8.018,
     "mesh": {
       "cell_m": 32,
       "min_leaf_m": 4,
       "sample_m": 0.5,
       "tolerance_m": 0.08
     },
-    "neighbour_edge_vertices": 303,
+    "neighbour_edge_vertices": 297,
     "refined_cell_bounds_m": [
       [
         0,
@@ -1383,7 +1383,7 @@
       ]
     ],
     "refined_cells": 193,
-    "refined_triangles": 12524,
+    "refined_triangles": 12246,
     "schema_version": "ti.terrain-overrides/1",
     "sites": [
       {
@@ -1486,7 +1486,7 @@
         "scope_area_m2": 53502
       },
       {
-        "edge_blend_m": 6,
+        "edge_blend_m": 10,
         "grade": {
           "final_sweep_change_m": 0,
           "free_nodes": 1111,
@@ -1514,7 +1514,7 @@
         "edge_blend_m": 6,
         "grade": {
           "final_sweep_change_m": 0,
-          "free_nodes": 1409,
+          "free_nodes": 1427,
           "kind": "harmonic"
         },
         "id": "avenue_m_staging_mounds",

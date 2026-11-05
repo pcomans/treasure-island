@@ -23546,6 +23546,7 @@ Carried by deploy-fix from the deploy agent's scratch log; text unchanged apart 
 - What worked well: pinning every aerial to its capture with level-19 and level-20 cache tiles settled the date question for all ten places in minutes. Drawing configs and generated rows on the dated aerial at full zoom caught most layout errors before any engine run, and sheets pairing each Street View with the shot at its pose, matched before/after poses, a top-down view and the plain aerial let the reviewer decide each yard from one sheet. For terrain, a debug world generated without the slope invariant, scanned at 0.5 m for steep land, found every 48° failure in one pass; the owner-approved site mechanism then raised the #9 mound in one generation (nested level regions under the smooth membrane gave walkable slopes and a top the excavator stands on). A trial merge in a scratch worktree showed the kit tip's fallout before the real tree was free.
 - What did not work well: I twice reported things I had not checked at full zoom (two buildings I first called demolished, and the #11 embankment I first called new). The 32 m land grid smears raster stockpiles over roads and wall lines, and scope bands that only met the OSM area's edge left slivers that became ridges. My first complete render (B05) still showed things a top-down colour sample would have caught: the pale sand and gravel rendered 10-20% brighter and bluer than the aerial, and span pieces just under a whole module long left 20-60 m of each berm line empty. One walk ran off the shore. The kit's 3 m rest grid and gate-leaf check landed after B06 and broke a #7 wall segment, its red-top box and Gate 5's leaf; moving a zone outline shifted the pocket grid and exposed a rim joint sitting in the 0.45-1.3 m trap band. A queued fit run blocked the tree while I waited for a coordinator relay, and I had to cancel it.
 - What the team should change next time: give every terrain-override scope band a strip that straddles the OSM edge it meets, exclude every 32 m cell beside a standing building plus its neighbours, and keep level regions about 12 m clear of them. Before the first render, sample each new ground material top-down against the dated aerial, size span segments to whole modules, keep every solid joint clearly open or shut, and end every walk on land. Queue engine runs only when the tree can stay frozen for their length, and date-check a Street View against the aerial before using it as layout evidence (SV15's November 2025 lot had filled by May 2026).
+- Addendum after the code review (2026-11-05): I trusted the generator's 48 degree guard, which compared grid neighbours only; scanning the emitted land triangles found three faces of 49-51 degrees at the plateau's and crest's sharp corners and at a 6 m blend into the #7 mound. Rounding the level regions and widening the blend to 10 m fixed them; the guard now checks each triangle's full gradient. The 449 Avenue H entry needed the 810 standard (dated Wayback captures with the outline checked on the standing roof, and the ground view beside it) before it could stand.
 
 ### visual-review-clutter-yards — 2026-11-04 — yards-b review round 2 (#10, #13)
 
@@ -23568,3 +23569,23 @@ Carried by deploy-fix from the deploy agent's scratch log; text unchanged apart 
 - What worked well: Putting re-shots of the unchanged yards after the merges on the same sheets as B06 made the regression check a quick side-by-side. The wider gridded aerial for #9 settled the mound's extent without guesswork.
 - What did not work well: A later commit (81cfd0e4) touching the yard under review wasn't in the reviewed render, so #9 needs one more look.
 - What the team should change next time: Freeze the yard's commit before the review capture, or send the delta re-shot together with the sheets in the same handoff.
+
+### code-review-clutter-kit (yards-b) — 2026-11-05 — review at 18b93092 (FAIL: terrain slope cap, 449 Avenue H evidence)
+
+(Relayed verbatim by the coordinator; added by clutter-yards-b.)
+
+- What worked well: measuring the generated output directly rather than trusting the guards. A scan of every land triangle against main showed the three new over-48° faces in the override sites. Running main's clearance script on this world, then instrumenting the flood, showed why the shut-in check changed: a courtyard already enclosed by buildings, and grid noise. An independent rest computation on the 6 deck rows, plus a check that the deck is a single layer, settled the deck question without an engine run.
+- What did not work well: the terrain guard looks like a 48° cap but only checks the two grid directions. It passed quietly until this branch built the first real mounds. A merge brought back a stale README paragraph that nothing checks. The demolition entry was written more thinly than its sibling 810 entry.
+- What the team should change next time: check a slope cap on the triangles actually emitted, or on the slope in every direction, not on grid differences. After a merge, diff each touched document against both parents. Write each demolition entry to the 810 standard: the metadata date check, an earlier capture to confirm the outline, and a ground view of the footprint itself.
+
+### visual-review-cityside-site — added palm s015 confirmation (main 9784400f)
+
+(Relayed verbatim by the coordinator; added by clutter-yards-b.)
+
+- Frames aimed at the specific object made this a one-pass confirmation. Keep using them for any object a code review says was moved or added.
+
+### visual-review-clutter-yards — #9 delta (B08)
+
+(Relayed verbatim by the coordinator; added by clutter-yards-b.)
+
+- Sending the delta as a single B07/B08 sheet at matched poses made this a two-minute check. Keep that format for small follow-up commits.

@@ -86,7 +86,7 @@
     {
       "source_key": "w34313512",
       "name": "449 Avenue H",
-      "evidence": "Esri World Imagery, Vantor capture 2026-05-26 (0.4 m), frozen footprint drawn on it 2026-11-04: no roof; bare graded construction ground fills the whole footprint, part of the 9th Street and Avenue H construction site (w775820811). Google Street View on 9th St, Sep 2025 (camera x 52, z -151, heading 156): looking across the cleared site, no 10 m building stands at the footprint about 270 m away.",
+      "evidence": "Esri World Imagery through Wayback at z19 (about 0.24 m/px), the frozen footprint drawn on each capture, dates checked in the Esri imagery metadata at the footprint's centroid 2026-11-05: the 2022-07-11 (release 47963) and 2022-11-29 (release 25982) captures show its long flat roof on the footprint, which checks the overlay; the 2025-08-29 (release 13192) and 2026-05-26 Vantor (release 63116) captures show bare graded ground across the whole footprint, part of the 9th Street and Avenue H construction site (w775820811). Google Street View on Avenue H beside its east face (389 Avenue H), Sep 2025 (pano X-ZBhq4IjZOfXMW1FwSUyg), headings 250 and 305: graded dirt behind construction panels where it stood, 10-40 m away; from 9th St, Sep 2025 (camera x 52, z -151, heading 156): no building across the cleared site. Checked by clutter-yards-b-20261104 (private references).",
       "approval": "owner-approved 2026-11-04"
     }
   ]

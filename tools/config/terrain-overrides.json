@@ -1923,7 +1923,7 @@
       "id": "concrete_recycling_avenue_m",
       "name": "Avenue M beside the concrete recycling yard",
       "basis": "production_inference",
-      "evidence": "Large-clutter place #7. The 32 m land grid smears the yard's rubble mound (the 2023 USGS raster, about 11 m) out over its Avenue M wall line and Avenue M itself, which rise 3-7 m there; Google Street View, 92 Avenue M, Nov 2025 (camera x 525, z 154, heading 64) shows Avenue M flat and the double-stacked container wall standing at street level with the rubble only just showing over it. Google Street View, 3rd St, Mar 2025 (camera x 598, z 170, heading 354) shows the 3rd St wall standing at street level near the south corner, the rubble mound behind it. Avenue M and the strip inside the wall are levelled to the street's grade (4.0 m), and the 3rd St wall's base with them, stepping down 0.2 m to 3rd St's own 3.8 m past the smear; the mound inside rises from behind the wall as the raster has it. Land cells beside buildings stay unsplit (so no foundation is re-cut). Owner-approved levelling 2026-11-05 (as the #12 and Cityside Park corrections).",
+      "evidence": "Large-clutter place #7. The 32 m land grid smears the yard's rubble mound (the 2023 USGS raster, about 11 m) out over its Avenue M wall line and Avenue M itself, which rise 3-7 m there; Google Street View, 92 Avenue M, Nov 2025 (camera x 525, z 154, heading 64) shows Avenue M flat and the double-stacked container wall standing at street level with the rubble only just showing over it. Google Street View, 3rd St, Mar 2025 (camera x 598, z 170, heading 354) shows the 3rd St wall standing at street level near the south corner, the rubble mound behind it. Avenue M and the strip inside the wall are levelled to the street's grade (4.0 m), and the 3rd St wall's base with them, stepping down 0.2 m to 3rd St's own 3.8 m past the smear; the mound inside rises from behind the wall as the raster has it, the ramp from the wall base fading into the kept mound over 10 m so that no face is steeper than 48 degrees. Land cells beside buildings stay unsplit (so no foundation is re-cut). Owner-approved levelling 2026-11-05 (as the #12 and Cityside Park corrections).",
       "scope": {
         "source_keys": [],
         "add_xz": [
@@ -2009,7 +2009,7 @@
           }
         ],
         "exclude_ways": [],
-        "edge_blend_m": 6.0
+        "edge_blend_m": 10.0
       },
       "grade": {
         "grid_m": 2,
@@ -2177,20 +2177,52 @@
           "shape": {
             "points_xz": [
               [
-                604,
-                194
+                633.2,
+                204.7
               ],
               [
-                627,
-                186
+                629.6,
+                209.3
               ],
               [
-                634,
-                204
+                623.1,
+                211.4
               ],
               [
-                611,
-                214
+                615.5,
+                210.4
+              ],
+              [
+                608.9,
+                206.7
+              ],
+              [
+                604.9,
+                201.1
+              ],
+              [
+                604.8,
+                195.3
+              ],
+              [
+                608.4,
+                190.7
+              ],
+              [
+                614.9,
+                188.6
+              ],
+              [
+                622.5,
+                189.6
+              ],
+              [
+                629.1,
+                193.3
+              ],
+              [
+                633.1,
+                198.9
               ]
             ]
           },
@@ -2206,28 +2238,52 @@
           "shape": {
             "points_xz": [
               [
-                658,
+                655,
                 160
               ],
               [
-                675,
+                662,
+                155
+              ],
+              [
+                671,
                 152
               ],
               [
+                673,
+                157
+              ],
+              [
                 668,
-                184
+                171
               ],
               [
-                658,
-                210
+                663,
+                185
+              ],
+              [
+                659,
+                199
+              ],
+              [
+                656,
+                209
               ],
               [
                 653,
-                208
+                207
+              ],
+              [
+                652,
+                194
+              ],
+              [
+                652,
+                180
               ],
               [
                 653,
-                182
+                167
               ]
             ]
           },
