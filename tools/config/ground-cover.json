@@ -3,7 +3,7 @@
  "notes": [
   "Where the ground-cover shader (game/resources/materials/world/ground_cover/ground_cover.gdshader) draws a recipe over a record's own family: tools/lib/ground-cover-map.mjs draws these rules into the world map game/resources/textures/world/ground_cover/cover_map.png (rebuild it with tools/build_ground_cover_map.mjs after the world or this file changes). Coordinates are world metres: +X east, +Z south.",
   "Channels name the recipe families of game/scripts/world/ground_cover.gd: lawn (maintained lawn with some dry patches), straw (dry straw grass), dry_field (dry grass with much bare ground) and bare (bare fill soil with a little dry grass). A rule's weight covers what the rules before it drew (in order), so later rules win.",
-  "within_sources limits a rule to the cells whose top drawn ground is that OSM area; surfaces to the cells whose top drawn ground has that material key (land, areas or the ground-cover overlays); within_xz to a traced polygon whose edge fades over feather_m; near to within full_m of buildings, vehicle roads, lots or street kerbs, fading out by zero_m; weight scales the rule. Cells whose top drawn ground is not land or an area (roads, paths, street kerbs and paint, roofs, lots) then take the weights of the nearest land or area cell, so a planted kerb verge matches the ground beside it.",
+  "within_sources limits a rule to the cells whose top drawn ground is that OSM area; surfaces to the cells whose top drawn ground has that material key (land, areas, the ground-cover overlays or the street ground's planted kerb verges, street_kerb_verge); inside_sources narrows a surfaces rule to that surface where it is drawn inside the outline of those OSM areas; within_xz to a traced polygon whose edge fades over feather_m; near to within full_m of buildings, vehicle roads, lots or street kerbs, fading out by zero_m; weight scales the rule. Drawn cells off the ruled ground (roads, paths, kerb tops and paint, roofs, lots, and kerb verges no rule drew on) then take the weights of the nearest ruled cell, so an unruled verge matches the ground behind it.",
   "Look anchored to the 2026-05-26 aerial (Wayback release 2026-10-29, Vantor Vivid Advanced, 0.34 m, the late-spring dry fields), with the 2025-08-29 aerial and dated Street View as corroboration. Widths, distances and traced outlines are production inference, not survey data; OSM and the imagery are offset 3-6 m, so traced outlines follow the OSM buildings beside them."
  ],
  "map": {
@@ -46,6 +46,15 @@
    "basis": "production_inference",
    "reason": "A strip of mown lawn along the housing's walls (the unit fronts), full to 2.5 m and fading out by 8 m, so the green meets the walls rather than the straw; weight 0.85 leaves a few worn spots.",
    "evidence": "2026-05-26 aerial over r17241151 (May 2026 z19 tiles): loose green 43-55 % of the non-canopy ground within 18 m of the buildings in the Z1 loop, highest at 2-4 m (48-55 %). Street View Mar 2025 sv06 (1255 Bayside Dr) and sv04: lawn up to the unit fronts. Phase 1 review: straw against the walls with green further out read backwards (views near-straw, z1-belt)."
+  },
+  {
+   "id": "residential_kerb_verges",
+   "channel": "lawn",
+   "surfaces": ["street_kerb_verge"],
+   "inside_sources": ["r17241151"],
+   "basis": "production_inference",
+   "reason": "The grass strips between the housing's kerbs and its sidewalks or fences (the street ground's planted kerb verges, drawn over the residential grounds) are mown lawn, like the kerb lawns beside them.",
+   "evidence": "Street View Mar 2025 sv04 (1230 Gateview Ct), sv06 (1255 Bayside Dr) and sv08 (1318 Gateview Ave): mown green between the kerb and the sidewalk or fence; 2026-05-26 aerial (May 2026 z19 tiles, crop z1-oval): solid green bands along both sides of the Villages loop road."
   },
   {
    "id": "residential_loop_lawn_west",

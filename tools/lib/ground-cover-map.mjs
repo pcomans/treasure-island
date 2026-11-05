@@ -9,15 +9,17 @@
 //
 // The rules (tools/config/ground-cover.json) say where each recipe applies:
 // on the cells whose top drawn ground is a given OSM area or surface (every
-// rule names one, so a rule never reaches other records), inside a traced
-// polygon, or near buildings, roads and lots. Each names its dated aerial or
-// photo evidence; widths, distances and traced outlines are production
-// inference, not survey data. Cells whose top drawn ground is not land or an
-// area (roads, paths, street kerbs and paint, roofs, lots) then take the weights
-// of the nearest land or area cell: the planted kerb verges drawn there match
-// the ground beside them, and the texture's filtering and mipmaps never blend a
-// lawn or straw edge toward the record's own family at a road or wall; cells
-// with no generated ground (the shoreline's shoulder, the water) keep none. The map
+// rule names one, so a rule never reaches other records; a surface rule may be
+// narrowed to the surface drawn inside some areas, such as the kerb verges over
+// the residential grounds), inside a traced polygon, or near buildings, roads
+// and lots. Each names its dated aerial or photo evidence; widths, distances and
+// traced outlines are production inference, not survey data. Drawn cells off
+// the ruled ground (roads, paths, kerb tops and paint, roofs, lots, and kerb
+// verges no rule drew on) then take the weights of the nearest ruled cell: an
+// unruled verge matches the ground behind it, and the texture's filtering and
+// mipmaps never blend a lawn or straw edge toward the record's own family at a
+// road or wall; cells with no generated ground (the shoreline's shoulder, the
+// water) keep none. The map
 // is drawn from the generated world's records, so it follows the drawn
 // buildings and roads; tools/build_ground_cover_map.mjs writes it, and so does
 // tools/build_godot_world.mjs each time it writes the committed generated/world;
@@ -37,11 +39,13 @@ export const GROUND_COVER_MAP_PATH = "game/resources/textures/world/ground_cover
 export const GROUND_COVER_CHANNELS = Object.freeze(["lawn", "straw", "dry_field", "bare"]);
 // What a rule may measure distance from ("near"): generated record kinds.
 export const GROUND_COVER_NEAR_KINDS = Object.freeze(["building", "vehicle_road", "paved_area", "street_kerb"]);
-// The ground the rules draw on (material keys of land, areas and the ground-cover
-// overlays); every other cell takes the weights of the nearest cell of this ground.
-export const GROUND_COVER_SURFACES = Object.freeze(["land_ground", "major_area_amenity", "major_area_landuse", "major_area_leisure", "terrain_riprap", "terrain_sand", "terrain_wetland"]);
+// The ground the rules draw on: material keys of land, areas, the ground-cover
+// overlays and the street ground's planted kerb verges (street_kerb_verge, the
+// grass strips behind kerbs). Other drawn cells take the weights of the nearest
+// cell of this ground, and so does a kerb verge no rule draws on.
+export const GROUND_COVER_SURFACES = Object.freeze(["land_ground", "major_area_amenity", "major_area_landuse", "major_area_leisure", "street_kerb_verge", "terrain_riprap", "terrain_sand", "terrain_wetland"]);
 const SAFE_ID = /^[a-z0-9_]+$/u;
-const RULE_FIELDS = Object.freeze(["basis", "channel", "evidence", "feather_m", "id", "near", "reason", "surfaces", "weight", "within_sources", "within_xz"]);
+const RULE_FIELDS = Object.freeze(["basis", "channel", "evidence", "feather_m", "id", "inside_sources", "near", "reason", "surfaces", "weight", "within_sources", "within_xz"]);
 
 function isFiniteNumber(value) {
   return typeof value === "number" && Number.isFinite(value);
@@ -82,6 +86,12 @@ export function validateGroundCoverConfig(config) {
     if (rule.surfaces != null) {
       invariant(Array.isArray(rule.surfaces) && rule.surfaces.length > 0 && rule.surfaces.every((key) => GROUND_COVER_SURFACES.includes(key)),
         `${label} surfaces must list ground material keys: ${GROUND_COVER_SURFACES.join(", ")}`);
+    }
+    // inside_sources reaches surfaces drawn over an area (a kerb verge over the
+    // residential grounds), so it only narrows a surfaces rule.
+    if (rule.inside_sources != null) {
+      invariant(Array.isArray(rule.inside_sources) && rule.inside_sources.length > 0 && rule.inside_sources.every((key) => /^[wr]\d+$/u.test(key)), `${label} inside_sources must list OSM area keys`);
+      invariant(rule.surfaces != null, `${label}: inside_sources goes with surfaces`);
     }
     if (rule.within_xz != null) {
       invariant(Array.isArray(rule.within_xz) && rule.within_xz.length >= 3 && rule.within_xz.every(isXZ), `${label} within_xz must be a polygon of 3+ [x, z] points`);
@@ -325,10 +335,10 @@ function nearKind(record) {
   return null;
 }
 
-// Whether the rules draw on a record's cells (land, areas other than lots, and
-// the ground-cover overlays).
+// Whether the rules draw on a record's cells: land, areas other than lots, the
+// ground-cover overlays and the planted kerb verges.
 function takesRules(record) {
-  return (record.feature_kind === "land_ground" || record.feature_kind === "major_area" || record.feature_kind === "terrain_overlay")
+  return (record.feature_kind === "land_ground" || record.feature_kind === "major_area" || record.feature_kind === "terrain_overlay" || record.feature_kind === "street_kerb")
     && GROUND_COVER_SURFACES.includes(record.material_key);
 }
 
@@ -375,10 +385,29 @@ export function drawGroundCoverMap(config, world) {
     }
     return nearDistances.get(key);
   };
+  // The cells inside the drawn outline of some OSM areas, whatever lies over them.
+  const footprints = new Map();
+  const footprint = (keys) => {
+    const key = [...keys].sort().join("+");
+    if (!footprints.has(key)) {
+      const mask = new Uint8Array(cells);
+      for (const { record } of ground) {
+        if (record.feature_kind !== "major_area" || !record.source_keys.some((source) => keys.includes(source))) continue;
+        for (const triangle of recordTriangles(record)) rasterizeTriangle(grid, triangle, (cell) => { mask[cell] = 1; });
+      }
+      footprints.set(key, mask);
+    }
+    return footprints.get(key);
+  };
   const weights = GROUND_COVER_CHANNELS.map(() => new Float32Array(cells));
+  const drawn = new Uint8Array(cells);
   const summaries = [];
   for (const rule of config.rules) {
     const weight = new Float32Array(cells).fill(rule.weight ?? 1);
+    if (rule.inside_sources) {
+      const inside = footprint(rule.inside_sources);
+      for (let cell = 0; cell < cells; cell += 1) if (!inside[cell]) weight[cell] = 0;
+    }
     if (rule.within_sources || rule.surfaces) {
       const sources = new Set(rule.within_sources ?? []);
       const surfaces = new Set(rule.surfaces ?? []);
@@ -418,15 +447,20 @@ export function drawGroundCoverMap(config, world) {
       if (w <= 0) continue;
       for (const layer of weights) layer[cell] *= 1 - w;
       weights[channel][cell] += w;
+      drawn[cell] = 1;
       if (w >= 0.5) covered += 1;
     }
     summaries.push({ id: rule.id, channel: rule.channel, area_m2: Math.round(covered * grid.cell * grid.cell) });
   }
-  // Drawn cells off the ruled ground (roads, kerbs, paint, roofs, lots) take the
-  // weights of the nearest ruled cell. Cells with no generated ground keep none:
-  // the shoreline's shoulder strip there draws the verge family's own mix.
+  // Drawn cells off the ruled ground (roads, kerb tops, paint, roofs, lots, and
+  // kerb verges no rule drew on) take the weights of the nearest ruled cell, so
+  // an unruled verge matches the ground behind it. Cells with no generated ground
+  // keep none: the shoreline's shoulder strip there draws the verge family's own mix.
   const ruled = new Uint8Array(cells);
-  for (let cell = 0; cell < cells; cell += 1) ruled[cell] = top[cell] >= 0 && takesRules(ground[top[cell]].record) ? 1 : 0;
+  for (let cell = 0; cell < cells; cell += 1) {
+    const record = top[cell] >= 0 ? ground[top[cell]].record : null;
+    ruled[cell] = record && takesRules(record) && (record.feature_kind !== "street_kerb" || drawn[cell]) ? 1 : 0;
+  }
   const nearest = nearestMaskCell(grid, ruled);
   for (let cell = 0; cell < cells; cell += 1) {
     if (ruled[cell] || top[cell] < 0 || nearest[cell] < 0) continue;
