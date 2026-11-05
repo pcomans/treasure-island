@@ -517,5 +517,63 @@
       "reason": "The slipway at the base of the north rock jetty (OSM w1473022597, highway=service leisure=slipway).",
       "reference": "Street View contributor May 2024 (refs/sv 23, 30): a jointed concrete boat ramp, about 8-10 m wide, from the path down into the water, riprap on both sides, the jetty alongside"
     }
+  ],
+  "mounds": [
+    {
+      "id": "north_jetty",
+      "segment": "north_tip",
+      "centerline_xz": [
+        [
+          -205.9,
+          -952.4
+        ],
+        [
+          -201.9,
+          -957.7
+        ],
+        [
+          -198.7,
+          -965.5
+        ],
+        [
+          -188.3,
+          -998.3
+        ],
+        [
+          -180.4,
+          -1018.5
+        ],
+        [
+          -170.6,
+          -1030.5
+        ],
+        [
+          -158.9,
+          -1042.2
+        ],
+        [
+          -145.7,
+          -1049.9
+        ],
+        [
+          -133.7,
+          -1054.7
+        ],
+        [
+          -127.5,
+          -1056.5
+        ]
+      ],
+      "crest_y_m": 1.4,
+      "crest_min_m": 2.0,
+      "gradient": 0.62,
+      "half_width_m": [
+        3.5,
+        5.5
+      ],
+      "taper_m": 6.0,
+      "reason": "The rock jetty at the north tip, the stretch of OSM breakwater w26767328 (material=rock) that runs out into the bay from beside the slipway: a long, low, flat-topped rubble mound. Its centreline runs between the polygon's two long sides; the polygon's edge is its waterline.",
+      "reference": "Street View contributor May 2024 (John Ewing; refs/sv 22 and 23): a long, low, flat-topped mound of grey angular stone, its crest about 1-2 m above the water, curving out from beside the boat ramp, waves breaking on its outer face; 2026-05-26 Vantor aerial (Esri level 19) plot a04-north-tip: the mound about 10-12 m wide over about 115 m. Its dark marker post near the end is not built (known gap)."
+    }
   ]
 }

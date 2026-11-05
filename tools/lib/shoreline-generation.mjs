@@ -126,10 +126,13 @@ const EDGE_VERTEX_TOLERANCE_M = 0.003;
 const JOINT_TOLERANCE_M = 0.05;
 // A clamped cross-section narrower than this builds nothing.
 const MINIMUM_CLAMP_WIDTH_M = 0.25;
+// A mound's records and stone batches are its segment's sections from here on.
+const MOUND_SECTION_BASE = 100;
 const MINIMUM_TRIANGLE_AREA_M2 = 1e-6;
 const SAFE_ID = /^[a-z0-9_]+$/u;
 
-const CONFIG_FIELDS = ["closure", "closures", "notes", "overlay_bias_m", "schema_version", "seed", "segments", "slope", "stones", "structures"];
+const CONFIG_FIELDS = ["closure", "closures", "mounds", "notes", "overlay_bias_m", "schema_version", "seed", "segments", "slope", "stones", "structures"];
+const MOUND_FIELDS = ["centerline_xz", "crest_min_m", "crest_y_m", "gradient", "half_width_m", "id", "reason", "reference", "segment", "taper_m"];
 const SLOPE_FIELDS = ["berm", "clamp_reach_m", "columns", "dem_fit_m", "end_cap_bottom_y_m", "gradient_m_per_m", "gradient_smoothing_m", "relief_m", "relief_wavelength_m", "section_m", "shoulder_m", "station_m", "toe_y_m", "top_blend_m"];
 const BERM_FIELDS = ["below_crest_m", "drop_per_m", "inner_m", "joint_blend_m", "wavelength_m", "width_m"];
 const STONE_FIELDS = ["cobble", "crest", "crest_fill", "driftwood", "heap", "pebbles", "planks", "posture", "prototypes", "section_m", "setback_m", "shoulder", "top", "visibility_m"];
@@ -332,6 +335,20 @@ export function shorelineSettings(config) {
     }
   }
   for (const plank of stones.planks) invariant(segmentIds.has(plank.segment), `Shoreline plank names unknown segment ${plank.segment}`);
+  invariant(Array.isArray(config.mounds), "Shoreline mounds must be a list");
+  for (const mound of config.mounds) {
+    exactKeys(mound, MOUND_FIELDS, `Shoreline mound ${mound?.id}`);
+    invariant(typeof mound.id === "string" && SAFE_ID.test(mound.id) && !ids.has(mound.id), `Shoreline mound ${mound.id} needs a unique lower_snake id`);
+    ids.add(mound.id);
+    invariant(segmentIds.has(mound.segment), `Shoreline mound ${mound.id} names unknown segment ${mound.segment}`);
+    invariant(Array.isArray(mound.centerline_xz) && mound.centerline_xz.length >= 2 && mound.centerline_xz.every((point) => Array.isArray(point) && point.length === 2 && point.every(isFiniteNumber)),
+      `Shoreline mound ${mound.id} centerline_xz must list world [x, z] points`);
+    invariant(isFiniteNumber(mound.crest_y_m) && mound.crest_y_m > WATER_Y_M + 0.3, `Shoreline mound ${mound.id} crest_y_m must stand clear of the water`);
+    for (const key of ["crest_min_m", "taper_m"]) invariant(isFiniteNumber(mound[key]) && mound[key] > 0, `Shoreline mound ${mound.id} ${key} must be positive`);
+    invariant(isFiniteNumber(mound.gradient) && mound.gradient > 0.2 && mound.gradient <= 1, `Shoreline mound ${mound.id} gradient must be in (0.2, 1]`);
+    requireRange(mound.half_width_m, 0.5, `Shoreline mound ${mound.id} half_width_m`);
+    for (const field of ["reason", "reference"]) invariant(typeof mound[field] === "string" && mound[field].trim() !== "", `Shoreline mound ${mound.id} needs ${field}`);
+  }
   return config;
 }
 
@@ -1458,7 +1475,7 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
         pushTriangle(mesh, [ids[i][0], ids[i + 1][1], ids[i][1]], slabNormal);
       }
       const footprint = [...edge.map((station) => station.point), ...edge.map((station) => add(station.point, scale(normal, run))).reverse()];
-      rampStructures.push({ source_key: piece.id, kind: "ramp", slope: "cut", clearance_m: 0.4, under_drop_m: null, area: indexedArea([[signedRingArea(footprint) > 0 ? footprint : footprint.reverse()]]) });
+      rampStructures.push({ source_key: piece.id, kind: "ramp", slope: "cut", clearance_m: 0.15, under_drop_m: null, area: indexedArea([[signedRingArea(footprint) > 0 ? footprint : footprint.reverse()]]) });
       // Side walls: from ramp_wall_m above the slab down to below the toe, both
       // faces outward.
       for (const [station, sign] of [[edge[0], -1], [edge.at(-1), 1]]) {
@@ -1485,6 +1502,61 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
       ...packMesh(mesh, `shoreline-wall:${piece.id}`),
     });
   }
+
+  // Stones under pebbles.below_m use the clean pebble shapes.
+  const shapeFor = (size, rng) => (size < rules.pebbles.below_m ? pebbles : boulders)[Math.floor(rng() * (size < rules.pebbles.below_m ? pebbles : boulders).length)];
+  // `base` tilted by up to maxDeg about a random horizontal axis.
+  const leanUp = (base, maxDeg, rng) => {
+    const tilt = ((rng() - 0.5) * 2 * maxDeg * Math.PI) / 180;
+    const axis = rng() * Math.PI * 2;
+    return unit3(add3(unit3(base), [Math.sin(tilt) * Math.cos(axis), 0, Math.sin(tilt) * Math.sin(axis)]));
+  };
+  // A dumped stone comes to rest on one of its broad faces (a face of at
+  // least posture.broad_face of its largest face's area; each equally often
+  // when posture.even, otherwise larger faces more often), that face against
+  // its bed (`up` is the bed's normal, tilted up to tiltDeg), turned any way
+  // about it, and stands no taller than posture.max_aspect times its
+  // narrower width: no teeth or tombstones. After eight draws that fail, it
+  // lies on its flattest face. Returns the rotation and, for a stone of size
+  // 1, its lowest and highest point relative to its centroid and its mean
+  // horizontal half-extent (radius).
+  const orient = (prototype, up, tiltDeg, rng, posture) => {
+    const { faces, points } = shapes.get(prototype.id);
+    const largest = faces.reduce((best, face) => (face.area > best.area ? face : best), faces[0]);
+    const broad = faces.filter((face) => face.area >= posture.broad_face * largest.area);
+    const pose = (face, bed, yaw) => {
+      const turned = quaternionMultiply(quaternionFor(bed, yaw), arcQuaternion(face.n, [0, -1, 0]));
+      const length4 = Math.hypot(...turned);
+      const q = turned.map((value) => value / length4);
+      const placed = placedPoints(points, q, [1, 1, 1], [0, 0, 0]);
+      const span = (axis) => Math.max(...placed.map((p) => p[axis])) - Math.min(...placed.map((p) => p[axis]));
+      const low = Math.min(...placed.map((p) => p[1]));
+      const high = Math.max(...placed.map((p) => p[1]));
+      const aspect = (high - low) / Math.min(span(0), span(2));
+      return { q, low, high, radius: (span(0) + span(2)) / 4, aspect, upright: aspect > posture.max_aspect };
+    };
+    for (let attempt = 0; attempt < 8; attempt += 1) {
+      const weight = (face) => (posture.even ? 1 : face.area);
+      let pickAt = rng() * broad.reduce((sum, face) => sum + weight(face), 0);
+      let face = broad[broad.length - 1];
+      for (const candidate of broad) {
+        pickAt -= weight(candidate);
+        if (pickAt <= 0) {
+          face = candidate;
+          break;
+        }
+      }
+      const result = pose(face, leanUp(up, tiltDeg, rng), rng() * Math.PI * 2);
+      if (!result.upright) return result;
+    }
+    // The flattest of every face, untilted.
+    const yaw = rng() * Math.PI * 2;
+    return faces.map((face) => pose(face, unit3(up), yaw)).reduce((best, candidate) => (candidate.aspect < best.aspect ? candidate : best));
+  };
+  const crestPosture = rules.posture.crest;
+  const heapPosture = rules.posture.heap;
+  // A size in range, mostly toward its low end for skew > 1.
+  const pickSize = (range, skew, rng) => lerp(range[0], range[1], rng() ** skew);
 
   for (const segment of plan.segments) {
     const { s0, s1 } = segment;
@@ -1697,9 +1769,17 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
     // The shoulder strip, from the outline (d = 0) to the slope's first column,
     // flat at the land edge's height; its normals are the land's at the edge
     // (its UVs, world x / 10 and z / 10, are rebuilt on unpacking), so the
-    // verge's ground cover continues across the outline in the same tone.
+    // verge's ground cover continues across the outline in the same tone. Its
+    // inner edge meets what is drawn inside: the riprap overlay (overlay_bias_m
+    // up) where the segment's breakwater covers the land there, else the land
+    // itself (a gap between two breakwaters), so no open step shows the void.
     const verges = Array.from({ length: slopeSections }, () => ({ vertices: [], normals: [], indices: [] }));
-    const inner = sections.map((section) => [section.point[0], section.top, -section.point[1]]);
+    const band = indexedArea(segment.inner);
+    const inner = sections.map((section) => {
+      const inside = add(section.point, scale(section.normal, -0.1));
+      const covered = nearBounds(band, inside, 0) && pointInMultiPolygon(inside, band.multi);
+      return [section.point[0], covered ? section.top : section.land, -section.point[1]];
+    });
     for (let i = 0; i + 1 < grid.length; i += 1) {
       if (!open[i][0] || !open[i + 1][0] || cutAway([sections[i].point, sections[i + 1].point, grid[i + 1][0].plan, grid[i][0].plan])) continue;
       const mesh = verges[recordOf((sections[i].s + sections[i + 1].s) / 2)];
@@ -1811,60 +1891,6 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
     // Plan angle of the shore direction (counterclockwise along the outline).
     const tangentAngle = (section) => Math.atan2(section.normal[0], -section.normal[1]);
     const batchSection = (s) => Math.max(0, Math.floor((s - s0) / rules.section_m));
-    // Stones under pebbles.below_m use the clean pebble shapes.
-    const shapeFor = (size, rng) => (size < rules.pebbles.below_m ? pebbles : boulders)[Math.floor(rng() * (size < rules.pebbles.below_m ? pebbles : boulders).length)];
-    // `base` tilted by up to maxDeg about a random horizontal axis.
-    const leanUp = (base, maxDeg, rng) => {
-      const tilt = ((rng() - 0.5) * 2 * maxDeg * Math.PI) / 180;
-      const axis = rng() * Math.PI * 2;
-      return unit3(add3(unit3(base), [Math.sin(tilt) * Math.cos(axis), 0, Math.sin(tilt) * Math.sin(axis)]));
-    };
-    // A dumped stone comes to rest on one of its broad faces (a face of at
-    // least posture.broad_face of its largest face's area; each equally often
-    // when posture.even, otherwise larger faces more often), that face against
-    // its bed (`up` is the bed's normal, tilted up to tiltDeg), turned any way
-    // about it, and stands no taller than posture.max_aspect times its
-    // narrower width: no teeth or tombstones. After eight draws that fail, it
-    // lies on its flattest face. Returns the rotation and, for a stone of size
-    // 1, its lowest and highest point relative to its centroid and its mean
-    // horizontal half-extent (radius).
-    const orient = (prototype, up, tiltDeg, rng, posture) => {
-      const { faces, points } = shapes.get(prototype.id);
-      const largest = faces.reduce((best, face) => (face.area > best.area ? face : best), faces[0]);
-      const broad = faces.filter((face) => face.area >= posture.broad_face * largest.area);
-      const pose = (face, bed, yaw) => {
-        const turned = quaternionMultiply(quaternionFor(bed, yaw), arcQuaternion(face.n, [0, -1, 0]));
-        const length4 = Math.hypot(...turned);
-        const q = turned.map((value) => value / length4);
-        const placed = placedPoints(points, q, [1, 1, 1], [0, 0, 0]);
-        const span = (axis) => Math.max(...placed.map((p) => p[axis])) - Math.min(...placed.map((p) => p[axis]));
-        const low = Math.min(...placed.map((p) => p[1]));
-        const high = Math.max(...placed.map((p) => p[1]));
-        const aspect = (high - low) / Math.min(span(0), span(2));
-        return { q, low, high, radius: (span(0) + span(2)) / 4, aspect, upright: aspect > posture.max_aspect };
-      };
-      for (let attempt = 0; attempt < 8; attempt += 1) {
-        const weight = (face) => (posture.even ? 1 : face.area);
-        let pickAt = rng() * broad.reduce((sum, face) => sum + weight(face), 0);
-        let face = broad[broad.length - 1];
-        for (const candidate of broad) {
-          pickAt -= weight(candidate);
-          if (pickAt <= 0) {
-            face = candidate;
-            break;
-          }
-        }
-        const result = pose(face, leanUp(up, tiltDeg, rng), rng() * Math.PI * 2);
-        if (!result.upright) return result;
-      }
-      // The flattest of every face, untilted.
-      const yaw = rng() * Math.PI * 2;
-      return faces.map((face) => pose(face, unit3(up), yaw)).reduce((best, candidate) => (candidate.aspect < best.aspect ? candidate : best));
-    };
-    const crestPosture = rules.posture.crest;
-    const heapPosture = rules.posture.heap;
-    // A size in range, mostly toward its low end for skew > 1.
-    const pickSize = (range, skew, rng) => lerp(range[0], range[1], rng() ** skew);
     // One stone of `prototype` in orientation o, scaled uniformly to `size`,
     // its lowest point at bedY, quantized as it will be packed (position on
     // the 2 mm grid, rotation and size as their packed integers), then
@@ -2084,7 +2110,6 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
     // one), within reach_m of the outline, more of them toward it, and no
     // higher than the player can walk over without seeming to sink into rock.
     const cobble = { ...rules.cobble, ...(segment.cobble ?? {}) };
-    const band = indexedArea(segment.inner);
     if (cobble.fill > 0) {
       const meanSize = (cobble.size_m[0] + cobble.size_m[1]) / 2;
       const target = Math.ceil(((s1 - s0) * cobble.reach_m * cobble.fill) / (Math.PI * (meanSize * 0.42) ** 2));
@@ -2225,6 +2250,215 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
       reason: segment.reason,
       reference: segment.reference,
     });
+  }
+
+  // ------------------------------------------------------------ mounds
+  // A rubble mound standing out in the water, part of a segment's OSM
+  // breakwater (the north tip's jetty, w26767328): a flat-topped ridge along
+  // centerline_xz, its crest crest_y_m high with a slight crown, its sides
+  // falling at `gradient` to toe_y_m. The breakwater polygon traces the stone
+  // above the water, so each side's waterline lies at the polygon's edge
+  // (half_width_m bounds it), which sets the crest's width (at least
+  // crest_min_m); over taper_m at the far end the crest sinks under the water.
+  // Big blocks lie flat on the crest, the heap's classes on the sides; nothing
+  // reaches the outline or a ramp. Its records and stone batches belong to the
+  // segment, numbered from MOUND_SECTION_BASE on.
+  for (const mound of settings.mounds) {
+    const segment = plan.segments.find((piece) => piece.id === mound.segment);
+    invariant(segment, `Shoreline mound ${mound.id} names unknown segment ${mound.segment}`);
+    const polygon = playableObjects.get(segment.source_key).geometry;
+    const line = mound.centerline_xz.map(([x, z]) => [x, -z]);
+    const cumulative = [0];
+    for (let index = 1; index < line.length; index += 1) cumulative.push(cumulative[index - 1] + length(sub(line[index], line[index - 1])));
+    const total = cumulative.at(-1);
+    const along = (t) => {
+      let index = 0;
+      while (index + 2 < line.length && cumulative[index + 1] < t) index += 1;
+      const f = Math.max(0, Math.min(1, (t - cumulative[index]) / (cumulative[index + 1] - cumulative[index])));
+      return add(line[index], scale(sub(line[index + 1], line[index]), f));
+    };
+    // The left normal of the centreline at t, smoothed over 6 m so the sections never fold.
+    const leftAt = (t) => {
+      const tangent = unit(sub(along(Math.min(total, t + 3)), along(Math.max(0, t - 3))));
+      return [-tangent[1], tangent[0]];
+    };
+    // Distance from p along dir to the polygon's edge (the waterline).
+    const toEdge = (p, dir) => {
+      let best = Infinity;
+      for (const part of polygon) {
+        for (const ring of part) {
+          for (let index = 0; index + 1 < ring.length; index += 1) {
+            const edge = sub(ring[index + 1], ring[index]);
+            const denominator = cross(dir, edge);
+            if (Math.abs(denominator) < 1e-12) continue;
+            const offset = sub(ring[index], p);
+            const t = cross(offset, edge) / denominator;
+            const u = cross(offset, dir) / denominator;
+            if (t > 0 && u >= 0 && u <= 1) best = Math.min(best, t);
+          }
+        }
+      }
+      return Math.max(mound.half_width_m[0], Math.min(mound.half_width_m[1], best));
+    };
+    const rise = (crestY) => (crestY - WATER_Y_M) / mound.gradient;
+    // Cross-section at t: crest height, crest and toe half-widths left and right.
+    const sectionAt = (t) => {
+      const p = along(t);
+      const left = leftAt(t);
+      const crestY = mound.crest_y_m - (mound.crest_y_m - (WATER_Y_M - 0.25)) * smoothstep(total - mound.taper_m, total, t);
+      const sides = [1, -1].map((sign) => {
+        const crest = Math.max(mound.crest_min_m / 2, toEdge(p, scale(left, sign)) - rise(mound.crest_y_m));
+        return { crest, toe: crest + (crestY - slope.toe_y_m) / mound.gradient };
+      });
+      return { t, p, left, crestY, sides };
+    };
+    // Height at signed distance u across (left positive), without relief.
+    const crown = 0.08;
+    const profile = (section, u) => {
+      const side = section.sides[u >= 0 ? 0 : 1];
+      const a = Math.abs(u);
+      if (a <= side.crest) return section.crestY - crown * (a / side.crest) ** 2;
+      return Math.max(slope.toe_y_m, section.crestY - crown - mound.gradient * (a - side.crest));
+    };
+    const sections = [];
+    for (let k = 0, count = Math.max(2, Math.ceil(total / slope.station_m)); k <= count; k += 1) sections.push(sectionAt((total * k) / count));
+    // Underlay: columns at the toes, half-way up the sides, the crest edges, half-way to and on the centreline.
+    const columnsOf = (section) => {
+      const [left, right] = section.sides;
+      return [-right.toe, -(right.crest + right.toe) / 2, -right.crest, -right.crest / 2, 0, left.crest / 2, left.crest, (left.crest + left.toe) / 2, left.toe];
+    };
+    const grid = sections.map((section) => columnsOf(section).map((u, column, all) => {
+      const plan2 = add(section.p, scale(section.left, u));
+      const edge = column === 0 || column === all.length - 1;
+      const y = profile(section, u) + (edge ? 0 : slope.relief_m * rockRelief(seed, plan2[0], plan2[1], slope.relief_wavelength_m));
+      return { u, plan: plan2, world: [plan2[0], y, -plan2[1]], open: outline.signedDistance(plan2) > 0.005 };
+    }));
+    const moundSections = Math.max(1, Math.round(total / slope.section_m));
+    const meshes = Array.from({ length: moundSections }, () => ({ vertices: [], normals: [], indices: [], shared: new Map() }));
+    const columns = grid[0].length;
+    for (let i = 0; i + 1 < grid.length; i += 1) {
+      const mesh = meshes[Math.min(moundSections - 1, Math.floor((((sections[i].t + sections[i + 1].t) / 2) / total) * moundSections))];
+      const vertexAt = (row, column) => {
+        const key = row * columns + column;
+        if (!mesh.shared.has(key)) {
+          const at = (r, c) => grid[Math.max(0, Math.min(grid.length - 1, r))][Math.max(0, Math.min(columns - 1, c))].world;
+          let normal = unit3(cross3(sub3(at(row, column + 1), at(row, column - 1)), sub3(at(row + 1, column), at(row - 1, column))));
+          if (normal[1] < 0) normal = scale3(normal, -1);
+          mesh.shared.set(key, pushVertex(mesh, grid[row][column].world, normal));
+        }
+        return mesh.shared.get(key);
+      };
+      for (let column = 0; column + 1 < columns; column += 1) {
+        const cells = [grid[i][column], grid[i + 1][column], grid[i + 1][column + 1], grid[i][column + 1]];
+        if (!cells.every((cell) => cell.open)) continue;
+        // A ramp beside the mound cuts it, as it cuts the shore's slope.
+        const centroid = scale(cells.reduce((sum, cell) => add(sum, cell.plan), [0, 0]), 0.25);
+        if (rampStructures.some((ramp) => pointInMultiPolygon(centroid, ramp.area.multi) || edgeDistance(ramp.area, centroid) < ramp.clearance_m)) continue;
+        const [a, b, c, d] = [vertexAt(i, column), vertexAt(i + 1, column), vertexAt(i + 1, column + 1), vertexAt(i, column + 1)];
+        pushTriangle(mesh, [a, b, c], [0, 1, 0]);
+        pushTriangle(mesh, [a, c, d], [0, 1, 0]);
+      }
+    }
+    meshes.forEach((mesh, index) => {
+      if (mesh.indices.length === 0) return;
+      records.push({
+        object_key: `shoreline-slope:${segment.id}:${MOUND_SECTION_BASE + index}`,
+        segment: segment.id,
+        section: MOUND_SECTION_BASE + index,
+        source_keys: [segment.source_key],
+        material_key: SHORELINE_SLOPE_MATERIAL,
+        ...packMesh(mesh, `shoreline-slope:${segment.id}:${MOUND_SECTION_BASE + index}`),
+      });
+    });
+    invariant(meshes.some((mesh) => mesh.indices.length > 0), `Shoreline mound ${mound.id} built no faces`);
+
+    // Stones. The nearest cross-section to a point, for settling on the mound.
+    const sectionNear = (t) => sections[Math.max(0, Math.min(sections.length - 1, Math.round((t / total) * (sections.length - 1))))];
+    const surfaceUnder = (section, plan2) => profile(section, dot(sub(plan2, section.p), section.left));
+    const clearOfRamps = (plan2, radius) => rampStructures.every((ramp) => !(pointInMultiPolygon(plan2, ramp.area.multi) || edgeDistance(ramp.area, plan2) < ramp.clearance_m + radius));
+    const placeOnMound = ({ band, t, u, size, prototype, o, bury }) => {
+      const section = sectionAt(t);
+      const plan2 = add(section.p, scale(section.left, u));
+      const height = (o.high - o.low) * size;
+      const radius = o.radius * size;
+      if (!fits(plan2, radius, rules.heap.overlap) || !clearOfRamps(plan2, radius)) return null;
+      const rotation = quantizeRotation(o.q);
+      const sizeQ = quantizeScale(size);
+      const scales = [sizeQ.value, sizeQ.value, sizeQ.value];
+      const { points } = shapes.get(prototype.id);
+      const bedY = profile(section, u) - Math.max(0.05, height * bury);
+      let origin = [onGrid(plan2[0]), onGrid(bedY - o.low * size), onGrid(-plan2[1])];
+      let placed = placedPoints(points, rotation.q, scales, origin);
+      // Settled: lowered where its underside would hang over the mound.
+      const low = Math.min(...placed.map((p) => p[1]));
+      const high = Math.max(...placed.map((p) => p[1]));
+      let hang = -Infinity;
+      for (const p of placed) {
+        if (p[1] > low + (high - low) * 0.35) continue;
+        hang = Math.max(hang, p[1] - surfaceUnder(sectionNear(t), [p[0], -p[2]]));
+      }
+      if (hang > -0.01) {
+        origin = [origin[0], onGrid(origin[1] - hang - 0.012), origin[2]];
+        placed = placedPoints(points, rotation.q, scales, origin);
+      }
+      const top = Math.max(...placed.map((p) => p[1]));
+      // As on the shore: from the waterline out a stone stands well clear of the
+      // water, against the mound, or is not kept.
+      const waterline = section.sides[u >= 0 ? 0 : 1].crest + (section.crestY - crown - WATER_Y_M) / mound.gradient;
+      if (Math.abs(u) > waterline - 0.3 && (top < WATER_Y_M + 0.3 || Math.abs(u) > waterline + 1.0)) return null;
+      if (top < WATER_Y_M + 0.08 || clearance(placed) < SHORELINE_OUTSIDE_CLEARANCE_M) return null;
+      const stone = {
+        band, s: segment.s1 + MOUND_SECTION_BASE * rules.section_m + t, d: u, plan: plan2, radius, prototype, prototypeId: prototype.id,
+        section: MOUND_SECTION_BASE + Math.floor(t / rules.section_m), segment: segment.id,
+        rotation: rotation.ints, q: rotation.q, scale: [sizeQ.steps], scales, origin, placed, top,
+        reach: Math.max(...placed.map((p) => Math.hypot(p[0] - origin[0], p[2] - origin[2]))),
+      };
+      keep(stone);
+      return stone;
+    };
+    const meanCrest = sections.reduce((sum, section) => sum + section.sides[0].crest + section.sides[1].crest, 0) / sections.length;
+    const meanSides = sections.reduce((sum, section) => sum + section.sides[0].toe - section.sides[0].crest + section.sides[1].toe - section.sides[1].crest, 0) / sections.length;
+    // Crest blocks: big stones lying flat.
+    {
+      const rule = rules.crest;
+      const meanSize = (rule.size_m[0] + rule.size_m[1]) / 2;
+      const target = Math.ceil((total * meanCrest * rule.fill) / (Math.PI * (meanSize * 0.42) ** 2));
+      const rng = random(seed, `${mound.id}:crest`);
+      let placedCount = 0;
+      for (let attempt = 0; attempt < target * 12 && placedCount < target; attempt += 1) {
+        const size = pickSize(rule.size_m, rule.size_skew, rng);
+        const t = rng() * total;
+        const section = sectionAt(t);
+        const u = lerp(-section.sides[1].crest, section.sides[0].crest, rng());
+        const prototype = shapeFor(size, rng);
+        const o = orient(prototype, [0, 1, 0], rules.top.tilt_deg, rng, crestPosture);
+        if (placeOnMound({ band: "top", t, u, size, prototype, o, bury: pick(rules.top.bury, rng) })) placedCount += 1;
+      }
+    }
+    // Sides: the heap's size classes, largest first, down past the waterline.
+    for (const [classIndex, sizeClass] of rules.heap.classes.entries()) {
+      if (sizeClass.size_m[1] <= rules.pebbles.below_m) continue;
+      const meanSize = (sizeClass.size_m[0] + sizeClass.size_m[1]) / 2;
+      const target = Math.ceil((total * meanSides * sizeClass.fill) / (Math.PI * (meanSize * 0.42) ** 2));
+      const rng = random(seed, `${mound.id}:heap:${classIndex}`);
+      let placedCount = 0;
+      for (let attempt = 0; attempt < target * 12 && placedCount < target; attempt += 1) {
+        const size = pick(sizeClass.size_m, rng);
+        const t = rng() * total;
+        const section = sectionAt(t);
+        const sign = rng() < 0.5 ? 1 : -1;
+        const side = section.sides[sign > 0 ? 0 : 1];
+        const u = sign * lerp(side.crest, side.toe + rules.heap.toe_extra_m, rng());
+        const prototype = shapeFor(size, rng);
+        const n = unit3([section.left[0] * sign * mound.gradient, 1, -section.left[1] * sign * mound.gradient]);
+        const o = orient(prototype, add3(scale3(n, 0.7), [0, 0.3, 0]), rules.heap.tilt_deg, rng, heapPosture);
+        if (placeOnMound({ band: "heap", t, u, size, prototype, o, bury: pick(rules.heap.bury, rng) })) placedCount += 1;
+      }
+    }
+    const summary = segmentSummaries.find((entry) => entry.id === segment.id);
+    summary.mounds = [...(summary.mounds ?? []), {
+      id: mound.id, length_m: roundCoordinate(total), crest_y_m: mound.crest_y_m, gradient: mound.gradient, reason: mound.reason, reference: mound.reference,
+    }];
   }
 
   // One batch (one MultiMesh) per segment, section, band and prototype, so
