@@ -32,11 +32,11 @@ extends RefCounted
 ## The island-wide rollout's trees, shrubs and hedges (vegetation species pass,
 ## 2026-11-05; dated Street View crops p1-p6, c2-c4, b1-b8, n1-n2, s1-s3, h1-h2
 ## kept with the vegetation-inventory work notes, outside Git):
-##   monterey_pine     Pinus radiata: a dense, rounded-to-domed crown of brush-like
-##                     needle tufts on a short, thick, bent trunk of dark furrowed
-##                     bark; the residential form branching low (Keppler, Mar 2025)
-##                     and the wind-pruned low domes of the SFFD frontage (9th
-##                     Street, Sep 2025).
+##   monterey_pine     Pinus radiata: one dense, irregular crown of brush-like
+##                     needle tufts pointing up and out, some with pale candles, on
+##                     a short, thick, bent trunk of dark furrowed bark; the
+##                     residential form branching low (Keppler, Mar 2025) and the
+##                     wind-pruned low domes of the SFFD frontage (9th Street, Sep 2025).
 ##   spreading_broadleaf  the commonest big residential tree, its species
 ##                     unresolved, so the photographed form: a short thick grey
 ##                     trunk forking low into wide sinuous limbs under a layered,
@@ -45,26 +45,30 @@ extends RefCounted
 ##                     and mid (round) forms (Gateview and Northpoint, Mar and Sep
 ##                     2025).
 ##   nz_christmas_tree Metrosideros excelsa: smooth pale multi-stem trunks leaning
-##                     from near the ground under a very dense dark crown with a
-##                     few red brush flowers (Sturgeon, Mar 2025).
+##                     from near the ground under a very dense, dark, broad dome
+##                     with a few red brush flowers (Sturgeon, Mar 2025).
 ##   eucalyptus_mature the Job Corps entrance tree (the owner's identification,
-##                     2026-11-05; 2025 gallery photo): two or three tall trunks
-##                     under an open, irregular crown of drooping tassels, the
-##                     young gum's generator grown up.
-##   norfolk_island_pine  Araucaria heterophylla, young: whorled tiers of level
-##                     branches with upturned soft branchlets (Chinook, Mar 2025).
+##                     2026-11-05; the form is a typical mature eucalyptus): two or
+##                     three tall trunks under an open, irregular crown of loose
+##                     clumps of hanging leaves at the branch ends.
+##   norfolk_island_pine  Araucaria heterophylla, young: close whorled tiers of
+##                     near-level branches with upturned soft branchlets, to a
+##                     pointed leader (Chinook, Mar 2025).
 ##   indian_hawthorn, pittosporum_tobira  the Avenue N seawall's mounded shrubs:
-##                     leathery leaves with a few pale pink flower clusters, and
-##                     glossy rosettes (Nov 2025).
+##                     sunlit yellow-olive leathery leaves with a few pale pink
+##                     flower clusters, and deep olive glossy rosettes (Nov 2025).
 ##   red_tip_shrub, conical_shrub  two more Avenue N forms whose species are
-##                     unresolved: a slender upright shrub with red new growth,
-##                     and a narrow conical one of olive leaves with bronze tips.
-##   nz_flax           a dark red New Zealand flax (Phormium) fan of stiff straps,
-##                     as in the Mersea lot's planters (Sep 2025).
-##   clipped_hedge     a hedge strip along a line: the residential small-leaved,
-##                     flat-topped, rounded hedge on leggy dark stems (Mariner,
-##                     Mar 2025), and a solid glossy box (Job Corps, 2025 gallery).
-##                     Not a point prop: hedge_into() lays it along a polyline.
+##                     unresolved: a slender upright shrub with dull red new growth
+##                     at its shoot tips, and a dense fine-leaved ogive of olive
+##                     foliage, narrowing to a soft point.
+##   nz_flax           a near-black maroon New Zealand flax (Phormium) fan of broad
+##                     straps arching at their tips, for planters, as in the Mersea
+##                     lot (Sep 2025) and at the Sturgeon stair (Mar 2025).
+##   clipped_hedge     a hedge strip along a line: the residential small-leaved
+##                     hedge with a rolling top on open crooked stems (Mariner, Mar
+##                     2025), and a solid glossy block with small white flowers
+##                     (Job Corps, 2025 gallery). Not a point prop: hedge_into()
+##                     lays it along a polyline.
 ## Each prop has a few fixed variants whose meshes every instance shares; an
 ## instance only turns about +Y and scales uniformly. A species' variants run
 ## from its smallest (0) to its largest. Shapes and sizes are production
@@ -88,7 +92,14 @@ extends RefCounted
 ## camera-facing crown impostor, a cypress, gum or oak becomes one impostor; the
 ## images are baked from LOD0 by tools/vegetation/bake_impostors.gd. The rollout's
 ## shrubs and flax have the same three levels (their far impostor ends at a short
-## range), and a hedge's far level is its plain core. Cityside's low plants
+## range), and a hedge's far level is its plain core on dark posts. The rollout's
+## impostors hold several views round the plant, the shader showing the camera's
+## side of each instance, so a leaning tree keeps its lean. Their crowns are not
+## tiled from round balls: cards of ragged sprays clothe one body of crown (or
+## separate pads, on the broadleaf), shaded from the crown's heart, and fade out
+## edge-on. Their big trees cast through a cheap shadow mesh of main limbs and a few
+## large cards (_shadow_mesh), the builder drawing it into the shadow maps alone,
+## past the impostor switch. Cityside's low plants
 ## (grasses, perennials, shrubs) have one level that dissolves away before its
 ## range ends. Collision is the trunk only (capsules), so crowns never stop a
 ## jetpack flight; shrubs, flax, hedges and low plants have none.
@@ -606,8 +617,11 @@ const LOW_KINDS := ["grass_clump", "planting_slot"]
 ## mip_alpha_boost).
 const IMPOSTOR_TREE_GRID := Vector2i(4, 2)
 const IMPOSTOR_SHRUB_GRID := Vector2i(2, 2)
-## How far their impostors' corner normals lean out (the impostor shader's dome).
-const IMPOSTOR_DOME := 1.0
+## How far their impostors' normals lean out at the corners and up overall (the
+## impostor shader's dome and sky_lean), set from the bake's per-side check: a
+## real crown is only about 1.3 times as bright from its sun side as its shaded one.
+const IMPOSTOR_DOME := 2.0
+const IMPOSTOR_SKY_LEAN := 3.0
 const PROPS := {
 	"mexican_fan_palm": {"kinds": ["palm_slot", "tree"], "variants": FAN_PALMS, "ranges": [35.0, 95.0, 900.0], "foot_m": 0.45, "form": "fan_palm"},
 	"canary_date_palm": {"kinds": ["palm_slot", "tree"], "variants": CANARY_PALMS, "ranges": [45.0, 110.0, 900.0], "foot_m": 0.7, "form": "canary_palm"},
@@ -3161,10 +3175,10 @@ func hedge_into(surfs: Dictionary, variant: int, points: PackedVector3Array, fro
 			var height_on_side := lerpf(base + 0.25, top - 0.2, _hash01(seed, index, 310))
 			var lateral := d * (0.98 if rounded else 1.0)
 			_foliage_card(cards, ground + right * (side * (lateral + 0.03)) + Vector3.UP * height_on_side, right * side, (Vector3.UP + right * side * 0.4).normalized(), 0.6, 0.32, 0.5,
-				(_hash01(seed, index, 311) - 0.5) * 1.2, sprig_cell, tone * 0.9, ground + heart_lift, 0.3, top, 0.01, 0.02, false)
-		if rounded and index % 6 == 0:
+				(_hash01(seed, index, 311) - 0.5) * 0.4, sprig_cell, tone * 0.9, ground + heart_lift, 0.3, top, 0.01, 0.02, false)
+		if rounded and index % 6 == 0 and station > 1.6 and station < total - 1.6:
 			# The open stems under the canopy: a wide card, so a few to the metre, on one
-			# side and then the other, with gaps between them.
+			# side and then the other, with gaps between them, stopping short of its ends.
 			var flank := 1.0 if (index / 6) % 2 == 0 else -1.0
 			var shift := tangent * ((_hash01(seed, index, 320) - 0.5) * 0.8)
 			_foliage_card(cards, ground + right * (flank * d * lerpf(0.25, 0.6, _hash01(seed, index, 323))) + shift + Vector3.DOWN * 0.06, right * flank, Vector3.UP,
@@ -3706,7 +3720,9 @@ func _impostor_material(prop: String, variant: int, image: Texture2D = null) -> 
 		made.set_shader_parameter("mip_alpha_boost", float(PROPS[prop].get("impostor_alpha", 0.0)))
 		var params: Dictionary = PROPS[prop].variants[variant]
 		made.set_shader_parameter("toward_camera_m", float(params.get("impostor_forward", 0.0)))
-		made.set_shader_parameter("dome", IMPOSTOR_DOME if PROPS[prop].has("impostor_grid") or params.has("impostor_forward") else 0.0)
+		if PROPS[prop].has("impostor_grid") or params.has("impostor_forward"):
+			made.set_shader_parameter("dome", IMPOSTOR_DOME)
+			made.set_shader_parameter("sky_lean", IMPOSTOR_SKY_LEAN)
 		made.resource_name = "street_vegetation_" + key
 		if image != null:
 			return made
