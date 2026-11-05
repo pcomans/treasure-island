@@ -752,25 +752,25 @@
      "mix": [
       {
        "prop": "spreading_broadleaf",
-       "share": 36,
+       "share": 42,
        "variants": [0, 3],
        "scale": [0.85, 1.2]
       },
       {
        "prop": "monterey_pine",
-       "share": 22,
+       "share": 26,
        "variants": [0, 2],
        "scale": [0.85, 1.25]
       },
       {
        "prop": "monterey_cypress",
-       "share": 64,
+       "share": 36,
        "variants": [0, 1],
        "scale": [0.85, 1.15]
       },
       {
        "prop": "nz_christmas_tree",
-       "share": 16,
+       "share": 8,
        "variants": [0, 1],
        "scale": [0.85, 1.25]
       }
