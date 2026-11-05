@@ -330,6 +330,8 @@ function groundRank(record) {
 function nearKind(record) {
   if (record.feature_kind === "building_roof" || record.feature_kind === "building_part_roof") return "building";
   if (record.feature_kind === "road_path" && record.material_key === "road_path") return "vehicle_road";
+  // A street's parking lanes (the street ground's parking paint) are part of its carriageway.
+  if (record.feature_kind === "street_paint" && record.material_key === "street_parking") return "vehicle_road";
   if (record.material_key === "major_area_paved") return "paved_area";
   if (record.feature_kind === "street_kerb") return "street_kerb";
   return null;

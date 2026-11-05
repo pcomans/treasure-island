@@ -25,12 +25,12 @@
    "channel": "lawn",
    "within_sources": ["r17241151"],
    "near": {
-    "kinds": ["vehicle_road", "paved_area"],
+    "kinds": ["vehicle_road", "paved_area", "street_kerb"],
     "full_m": 5,
     "zero_m": 10
    },
    "basis": "production_inference",
-   "reason": "The housing's streets and parking lots are lined with mown lawn: full within 5 m of the carriageway or lot edge (the kerb verges and front lawns), fading into the dry grounds by 10 m.",
+   "reason": "The housing's streets and parking lots are lined with mown lawn: full within 5 m of the carriageway (its parking lanes included), the kerb and sidewalk or the lot edge (the kerb verges and front lawns), fading into the dry grounds by 10 m.",
    "evidence": "2026-05-26 aerial over r17241151 (May 2026 z19 tiles), loose green share of the non-canopy ground (g > r + 4, g > b + 14) by distance to the vehicle roads: 51-67 % within 12 m in the Z1 loop (x -470..-150, z -740..-590), 40-44 % in Z2 (x -560..-300, z -300..40), falling to 16-25 % at 16-22 m in Z2; street trees (phase 2) cover another 13-42 % within 12 m. Crop z1-oval: solid green bands on both sides of the loop road. Street View Mar 2025 sv04 (1230 Gateview Ct), sv06 (1255 Bayside Dr) and sv08 (1318 Gateview Ave): mown green at the kerbs. With the unit lawns below, the residential ground draws about half lawn, against 30-48 % green plus 16-29 % canopy in the aerial."
   },
   {
