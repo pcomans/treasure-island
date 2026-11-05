@@ -67,6 +67,7 @@ import {
   STREET_DETAIL_SOURCES,
 } from "./lib/street-detail-generation.mjs";
 import { CAR_BODY_NAMES, CAR_FINISHES, CAR_PAINTS, MAX_TWIST_M, STREET_CLUTTER_PROPS, visibleGroundIndex } from "./lib/street-clutter-generation.mjs";
+import { carBodyGeometry } from "./lib/street-clutter-kit.mjs";
 import {
   fenceHeight, fenceParamsError, GATE_LEAF_LIFT_M, gateLeaves, STREET_FENCE_BANNER_TYPES, STREET_FENCE_GATE_HINGES, STREET_FENCE_GATE_STYLES, STREET_FENCE_GATED_TYPES, STREET_FENCE_INSIDE,
   STREET_FENCE_TYPES,
@@ -82,7 +83,7 @@ import {
   STREET_VEGETATION_SCALE_RANGE,
   footSamples,
 } from "./lib/street-vegetation-generation.mjs";
-import { unpackPlantingRows } from "./lib/street-planting-generation.mjs";
+import { crownRadius, pavingUnder, unpackPlantingRows } from "./lib/street-planting-generation.mjs";
 import {
   STREET_GROUND_FEATURE_KINDS,
   STREET_GROUND_MAXIMUM_HEIGHT_M,
@@ -850,10 +851,15 @@ function chunksOf(records) {
   return chunks;
 }
 
+// A low plant's crown is sampled more densely here than the generator samples
+// it (which also keeps PAVING_CLEAR_M from paving): [fraction of the radius, points].
+const CROWN_CHECK_RINGS = Object.freeze([[1 / 3, 8], [2 / 3, 16], [1, 32]]);
+
 // A planted vegetation row: a kit prop of its kind with a variant and scale in
 // range, and a foot that meets the visible ground: nowhere under the foot is the
 // ground lower than the foot (it would float) and nowhere is it higher than the
-// trunk runs on below it (it would show a gap round a buried foot).
+// trunk runs on below it (it would show a gap round a buried foot). A low plant
+// (no trunk) holds its whole crown off sidewalks, roads, paths and plazas.
 function validatePlantedRow(row, groundAt) {
   const spec = STREET_VEGETATION_PROPS[row.prop];
   invariant(spec && spec.kinds.includes(row.kind) && row.status === "placed", `${row.id} prop ${row.prop} does not plant a placed ${row.kind} row`);
@@ -874,6 +880,10 @@ function validatePlantedRow(row, groundAt) {
   // Coordinates are rounded to the millimetre on both sides of this comparison.
   invariant(foot <= low + 0.002, `${row.id} floats ${(foot - low).toFixed(3)} m above the visible ground`);
   invariant(high - foot <= Math.min(STREET_VEGETATION_MAX_FOOT_SPREAD_M, STREET_VEGETATION_BURY_M) + 0.002, `${row.id} foot is buried ${(high - foot).toFixed(3)} m deep on one side`);
+  if (!spec.trunk) {
+    const paving = pavingUnder([row.position_m[0], row.position_m[2]], crownRadius(row.prop, params.variant, params.scale), groundAt, CROWN_CHECK_RINGS);
+    invariant(paving === null, `${row.id} (${row.prop}) reaches over ${paving} at ${row.position_m[0]}, ${row.position_m[2]}`);
+  }
   if (params.well_m > 0) {
     invariant(Number.isFinite(params.well_lift_m) && Array.isArray(params.well_slope) && params.well_slope.length === 2 && params.well_slope.every(Number.isFinite), `${row.id} mulch pit is invalid`);
     // The pit's rim lies on the plane of the paving, within a centimetre and a half.
@@ -884,6 +894,64 @@ function validatePlantedRow(row, groundAt) {
       invariant(Math.abs(plane - ground.y) <= 0.015, `${row.id} mulch pit leaves its paving by ${(plane - ground.y).toFixed(3)} m`);
     }
   }
+}
+
+// A street prop stands on the visible ground, never sunk into a sidewalk or
+// floating over it. Furniture and the anchored clutter (barricades, cones)
+// keep their base, the row's y with its surface bias and any lift, within these
+// of the ground at their anchor (m): the yard rows' float limit both ways, as a
+// prop on paving has no reason to sink (they rest within a millimetre). A
+// parked car's tyres, set from its pitch, roll, twist and lift, rest on the
+// ground at their centres: they float at most the yard vehicles' 0.1 m (the
+// settle lifts a car about a centimetre off a lip or paint line) and sink 2 cm
+// at most. A yard kit prop (isYardRow) rests on its plan's corners and a grid
+// over it, checked there (validateYardRest). Any other clutter prop fails: a
+// new prop needs its own branch here, so none is placed unchecked.
+const PROP_REST_FLOAT_M = 0.08;
+const PROP_REST_SINK_M = 0.08;
+const ANCHORED_CLUTTER = Object.freeze(["barricade", "traffic_cone"]);
+const TYRE_REST_FLOAT_M = 0.1;
+const TYRE_REST_SINK_M = 0.02;
+
+function validatePropRest(row, groundAt) {
+  const params = row.prop_params ?? {};
+  const base = row.position_m[1] + row.surface.bias_m + (Number.isFinite(params.lift) ? params.lift : 0);
+  const rests = (gap, what, where) => invariant(gap !== null && gap <= (row.prop === "parked_car" ? TYRE_REST_FLOAT_M : PROP_REST_FLOAT_M) && gap >= -(row.prop === "parked_car" ? TYRE_REST_SINK_M : PROP_REST_SINK_M),
+    `${row.id} ${what} ${gap === null ? "has no visible ground under it" : gap > 0 ? `floats ${gap.toFixed(3)} m above the visible ground` : `sinks ${(-gap).toFixed(3)} m into the visible ground`} at ${where.map((value) => value.toFixed(2)).join(", ")}`);
+  if (row.prop === "parked_car") {
+    const geometry = carBodyGeometry(params.body);
+    const front = [-Math.sin(row.yaw_radians), Math.cos(row.yaw_radians)];
+    const right = [front[1], -front[0]];
+    for (const [name, [x, , z]] of Object.entries(geometry.wheels)) {
+      // The tyre's centre in world x, z (z = -north); the car frame's z runs back.
+      const point = [row.position_m[0] + right[0] * x - front[0] * z, row.position_m[2] - right[1] * x + front[1] * z];
+      const ground = groundAt(point);
+      const tyre = base - Math.tan(params.pitch) * z - Math.tan(params.roll) * x + params.twist * Math.sign(x) * Math.sign(z);
+      rests(ground ? tyre - ground.y : null, `${name} tyre`, point);
+    }
+  } else if (row.layer === "furniture" || ANCHORED_CLUTTER.includes(row.prop)) {
+    const point = [row.position_m[0], row.position_m[2]];
+    const ground = groundAt(point);
+    rests(ground ? base - ground.y : null, row.prop, point);
+  } else if (isYardRow(row)) {
+    validateYardRest(row, groundAt);
+  } else {
+    invariant(false, `${row.id} clutter prop ${row.prop} has no rest check: give it a branch in validatePropRest`);
+  }
+}
+
+// A yard kit prop rests on the visible ground: no point of its plan (corners
+// and a grid no coarser than 3 m) floats or sinks past the limits at its
+// pitch, roll and lift. A barge floats instead: its prop collides with
+// nothing and rests on no ground (yardPropRests).
+function validateYardRest(row, groundAt) {
+  if (!yardPropRests(row.prop)) return;
+  const gaps = yardRestGaps(row.footprint_m, [row.position_m[0], row.position_m[2]], row.yaw_radians, row.position_m[1] + (row.surface?.bias_m ?? 0), row.prop_params, groundAt);
+  const sink = yardMaxSink(row.prop, row.prop_params);
+  const bad = gaps.filter((gap) => gap === null || gap > YARD_MAX_FLOAT_M + 0.005 || gap < -sink - 0.005);
+  const known = gaps.filter((gap) => gap !== null);
+  invariant(bad.length === 0, `${row.id} ${row.prop} does not rest on the ground: ${bad.length} of its ${gaps.length} rest points float more than ${YARD_MAX_FLOAT_M} m or sink more than ${sink} m `
+    + `(${gaps.length - known.length} off the ground, highest ${Math.max(...known).toFixed(3)} m, lowest ${Math.min(...known).toFixed(3)} m)`);
 }
 
 // Structure and grounding only: the street-detail content changes as steps add it.
@@ -982,26 +1050,14 @@ function validateStreetDetail(worldRoot, manifest, records) {
         invariant(Number.isFinite(params.twist) && Math.abs(params.twist) <= MAX_TWIST_M, `${row.id} car twist is invalid`);
         invariant(row.footprint_m !== undefined, `${row.id} parked car has no footprint`);
       }
-      // A yard kit prop: usable params and its own rectangle as its footprint.
+      // A yard kit prop: usable params and its own rectangle as its footprint
+      // (its rest on the ground: validatePropRest, below).
       if (row.layer === "clutter" && YARD_KIT_KEYS.includes(row.prop)) {
         const error = yardPropParamsError(row.prop, row.prop_params);
         invariant(error === null, `${row.id} ${row.prop} params are invalid: ${error}`);
         const plan = yardPropFootprint(row.prop, row.prop_params);
         invariant(row.footprint_m !== undefined && Math.abs(row.footprint_m.x_m - plan.x_m) <= 0.002 && Math.abs(row.footprint_m.z_m - plan.z_m) <= 0.002,
           `${row.id} footprint_m differs from its ${row.prop} plan ${plan.x_m} x ${plan.z_m}`);
-        // It rests on the visible ground: no point of its plan (corners and a
-        // grid no coarser than 3 m) floats or sinks past the limits at its
-        // pitch, roll and lift (a barge floats instead).
-        if (yardPropRests(row.prop)) {
-          // A deck row rests on its context deck rather than the land.
-          const ground = isDeckRow(row) ? deckGround(row.surface.source_key) : groundAt;
-          const gaps = yardRestGaps(row.footprint_m, [row.position_m[0], row.position_m[2]], row.yaw_radians, row.position_m[1] + (row.surface?.bias_m ?? 0), row.prop_params, ground);
-          const sink = yardMaxSink(row.prop, row.prop_params);
-          const bad = gaps.filter((gap) => gap === null || gap > YARD_MAX_FLOAT_M + 0.005 || gap < -sink - 0.005);
-          const known = gaps.filter((gap) => gap !== null);
-          invariant(bad.length === 0, `${row.id} ${row.prop} does not rest on the ground: ${bad.length} of its ${gaps.length} rest points float more than ${YARD_MAX_FLOAT_M} m or sink more than ${sink} m `
-            + `(${gaps.length - known.length} off the ground, highest ${Math.max(...known).toFixed(3)} m, lowest ${Math.min(...known).toFixed(3)} m)`);
-        }
       }
       // A furniture prop on legs: its rest on the ground under its feet, a small tilt and lift.
       if (row.layer === "furniture" && row.prop !== undefined && STREET_FURNITURE_FEET[row.prop] !== undefined) {
@@ -1014,6 +1070,8 @@ function validateStreetDetail(worldRoot, manifest, records) {
       if (row.footprint_m !== undefined) {
         invariant(Number.isFinite(row.footprint_m.x_m) && row.footprint_m.x_m > 0 && Number.isFinite(row.footprint_m.z_m) && row.footprint_m.z_m > 0 && Number.isFinite(row.yaw_radians), `${row.id} footprint is invalid`);
       }
+      // A deck row rests on its context deck rather than the land.
+      if (row.status === "placed" && row.prop !== undefined && (row.layer === "furniture" || row.layer === "clutter")) validatePropRest(row, isDeckRow(row) ? deckGround(row.surface.source_key) : groundAt);
     } else {
       const points = row.points_m;
       invariant(Array.isArray(points) && points.length >= 2 && row.terrain_supports?.length === points.length && row.vertex_source_ids?.length === points.length, `${row.id} polyline arrays are inconsistent`);
