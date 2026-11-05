@@ -17,6 +17,7 @@ import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import {
+  AREA_SURFACE_LAYER_STEP_M,
   BRIDGE_SOURCE_KEYS,
   BOUNDARY_ATTACHED_SOURCE_KEYS,
   CATEGORY_MEMBERSHIPS,
@@ -1406,7 +1407,83 @@ function landCellPolygons(land) {
   };
 }
 
-function buildChunks(objects, boundary, terrain, shorelinePlan, terrainPlan) {
+// The surfaces draped over the land other than the land itself (roads and
+// buildings aside): each OSM area at its class's bias (areaStyle) and the
+// riprap verge of a breakwater at the shoreline overlay's. Areas of one class
+// that overlap would lie in one plane, and the depth test would alternate
+// between them in stripes wherever they look different (a parking lot on a
+// campus, a court in a park). So within a class each surface is lifted
+// AREA_SURFACE_LAYER_STEP_M above the highest larger surface of the class it
+// overlaps: the smaller, more specific area draws on top, and every class stays
+// a step under the next one up. Only the bias changes, never the plan geometry,
+// coverage or collision. styleFor gives an area's drawn style to placement.
+function planAreaSurfaces(objects, shorelinePlan) {
+  const land = objects.get(PLAYABLE_BOUNDARY_SOURCE_KEY);
+  const coastline = objects.get(SHARED_COASTLINE_SOURCE_KEY);
+  const surfaces = [];
+  for (const object of objects.values()) {
+    if (object === land || object === coastline) continue;
+    if (object.boundary_attached_visual) continue;
+    if (object.roles.includes("roads_paths") || object.roles.includes("building") || object.roles.includes("building_part")) continue;
+    // Shoreline segments drape the breakwater's inside band as riprap instead
+    // of the flat breakwater overlay (tools/lib/shoreline-generation.mjs). Both
+    // stay non-colliding overlays of the same source; land_ground is unchanged.
+    const riprap = shorelinePlan.innerBySource.get(object.row.source_key);
+    if (riprap) {
+      const rest = differenceMultiPolygons(object.geometry, riprap);
+      if (rest.length > 0 && multiPolygonArea(rest) > 1e-8) {
+        surfaces.push({ object: { ...object, geometry: rest }, style: areaStyle(object.tags, object.roles) });
+      }
+      surfaces.push({
+        object: { ...object, geometry: riprap, logical_key: `${SHORELINE_OVERLAY_PREFIX}:${object.row.source_key}` },
+        style: { feature_kind: "terrain_overlay", material_key: SHORELINE_OVERLAY_MATERIAL, elevation_m: shorelinePlan.overlay_bias_m },
+      });
+      continue;
+    }
+    surfaces.push({ object, style: areaStyle(object.tags, object.roles) });
+  }
+
+  const classBiases = [...new Set(surfaces.map((surface) => surface.style.elevation_m))].sort((left, right) => left - right);
+  invariant(classBiases.at(-1) < ROAD_SURFACE_BIASES_M.base, "Draped areas must stay under the road base");
+  for (const [classIndex, classBias] of classBiases.entries()) {
+    const ceiling = classBiases[classIndex + 1] ?? ROAD_SURFACE_BIASES_M.base;
+    // Largest first, so each surface meets every larger one it may lie on. The
+    // overlap test uses the millimetre geometry the chunks are drawn from.
+    const members = surfaces
+      .filter((surface) => surface.style.elevation_m === classBias)
+      .map((surface) => {
+        const label = `${surface.object.logical_key} layering`;
+        const geometry = roundedCanonicalGeometry(surface.object.geometry, label);
+        return { surface, label, geometry, area: multiPolygonArea(geometry), bounds: multiPolygonBounds(geometry), level: 0 };
+      })
+      .sort((left, right) => right.area - left.area || left.surface.object.logical_key.localeCompare(right.surface.object.logical_key));
+    members.forEach((member, index) => {
+      for (const larger of members.slice(0, index)) {
+        if (larger.level < member.level) continue;
+        const a = member.bounds;
+        const b = larger.bounds;
+        if (a.max_x <= b.min_x || b.max_x <= a.min_x || a.max_y <= b.min_y || b.max_y <= a.min_y) continue;
+        if (multiPolygonArea(intersectMultiPolygons(member.geometry, larger.geometry)) <= 1e-8) continue;
+        member.level = larger.level + 1;
+      }
+      const elevation = roundCoordinate(classBias + member.level * AREA_SURFACE_LAYER_STEP_M);
+      invariant(
+        elevation + AREA_SURFACE_LAYER_STEP_M <= ceiling + 1e-9,
+        `${member.label}: layer ${member.level} over the ${classBias} m class reaches the next surface at ${ceiling} m`,
+      );
+      member.surface.style = { ...member.surface.style, elevation_m: elevation };
+    });
+  }
+  const styleBySource = new Map(surfaces
+    .filter((surface) => !surface.object.logical_key.startsWith(`${SHORELINE_OVERLAY_PREFIX}:`))
+    .map((surface) => [surface.object.row.source_key, surface.style]));
+  return {
+    surfaces,
+    styleFor: (object) => styleBySource.get(object.row.source_key) ?? areaStyle(object.tags, object.roles),
+  };
+}
+
+function buildChunks(objects, boundary, terrain, areaSurfaces, terrainPlan) {
   const store = chunkStore();
   store.road_batch_audits = [];
   store.pavement_skin_audits = [];
@@ -1422,29 +1499,7 @@ function buildChunks(objects, boundary, terrain, shorelinePlan, terrainPlan) {
   store.land_facets = allLandFacets(store.chunks);
   store.land_facets_by_id = new Map(store.land_facets.map((facet) => [facet.id, facet]));
 
-  for (const object of objects.values()) {
-    if (object === land || object === coastline) continue;
-    if (object.boundary_attached_visual) continue;
-    if (object.roles.includes("roads_paths") || object.roles.includes("building") || object.roles.includes("building_part")) continue;
-    // Shoreline segments drape the breakwater's inside band as riprap instead
-    // of the flat breakwater overlay (tools/lib/shoreline-generation.mjs). Both
-    // stay non-colliding overlays of the same source; land_ground is unchanged.
-    const riprap = shorelinePlan.innerBySource.get(object.row.source_key);
-    if (riprap) {
-      const rest = differenceMultiPolygons(object.geometry, riprap);
-      if (rest.length > 0 && multiPolygonArea(rest) > 1e-8) {
-        addChunkedTopSurface(store, { ...object, geometry: rest }, areaStyle(object.tags, object.roles), terrain);
-      }
-      addChunkedTopSurface(
-        store,
-        { ...object, geometry: riprap, logical_key: `${SHORELINE_OVERLAY_PREFIX}:${object.row.source_key}` },
-        { feature_kind: "terrain_overlay", material_key: SHORELINE_OVERLAY_MATERIAL, elevation_m: shorelinePlan.overlay_bias_m },
-        terrain,
-      );
-      continue;
-    }
-    addChunkedTopSurface(store, object, areaStyle(object.tags, object.roles), terrain);
-  }
+  for (const { object, style } of areaSurfaces.surfaces) addChunkedTopSurface(store, object, style, terrain);
   buildRoadChunks(store, objects);
   buildBuildings(store, objects);
   for (const chunk of store.chunks.values()) {
@@ -2064,7 +2119,8 @@ function main() {
       cellSizeM: TERRAIN_MESH_GRID_SIZE_M,
       cellPolygon: landCellPolygons(playableObjects.get(PLAYABLE_BOUNDARY_SOURCE_KEY)),
     });
-    const chunks = buildChunks(playableObjects, boundary, terrain, shorelinePlan, terrainPlan);
+    const areaSurfaces = planAreaSurfaces(playableObjects, shorelinePlan);
+    const chunks = buildChunks(playableObjects, boundary, terrain, areaSurfaces, terrainPlan);
     // The spawn reads only land and roads, so it is fixed before street ground lands.
     const spawn = findInitialSpawn(boundary, playableObjects, loaded.rawOsm, loaded.rawSources, chunks);
     const spawnXZ = [spawn.origin[0], spawn.origin[2]];
@@ -2111,7 +2167,7 @@ function main() {
       playableObjects,
       chunks,
       terrainSupportAt: terrainSupportFromChunks,
-      areaStyleFor: (object) => areaStyle(object.tags, object.roles),
+      areaStyleFor: areaSurfaces.styleFor,
       properSources: loaded.properSources,
       rawOsm: loaded.rawOsm,
       spawn: { xz: spawnXZ, yaw: spawn.yaw },

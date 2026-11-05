@@ -3,7 +3,8 @@ extends RefCounted
 ## How far the drawn ground stands above the land collision at a point.
 ##
 ## The world generator drapes its visible-only surfaces over the land: roads and
-## paths 0.078-0.08 m up, areas 0.02-0.05 m, terrain overlays 0.03-0.06 m (their
+## paths 0.078-0.08 m up, areas 0.02-0.05 m, terrain overlays 0.03-0.06 m, an area
+## a few millimetres higher where it overlaps a larger one of its class (their
 ## records' `surface_bias_m`). The stock player stands on the land collision under
 ## them, so anything that should touch the drawn ground, such as the player
 ## character's feet, adds this lift where the land is what it stands on.
