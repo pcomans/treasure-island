@@ -31,6 +31,13 @@
 //                                      and gravel beds, lawn, concrete, asphalt and
 //                                      decomposed-granite paths, painted plazas,
 //                                      draped flat over the land; visual only
+//
+// The visual layers over the road lie, bottom to top, each at least a layer step
+// (DRAPED_LAYER_STEP_M) over the one below where they overlap: road base (and the
+// parking lanes beside it at the same height, drawn clear of every road and path
+// ribbon), pedestrian skin, gutter (lifts.gutter_m), wear (midway between the
+// gutter and the paint) and paint (lifts.paint_m). A zone's ground lies at least
+// a step over the paint.
 
 import { createHash } from "node:crypto";
 import earcut from "earcut";
@@ -41,6 +48,7 @@ import { meshRecord } from "./mesh-output.mjs";
 import { lineRibbon, pointInRing, rawWayLine } from "./osm-geometry.mjs";
 import {
   CHUNK_SIZE_M,
+  DRAPED_LAYER_STEP_M,
   ROAD_SURFACE_BIASES_M,
   ROAD_WIDTHS_M,
   chunkId,
@@ -103,7 +111,9 @@ export const STREET_GROUND_MINIMUM_HEIGHT_M = -0.02;
 const ROAD_TOP_M = ROAD_SURFACE_BIASES_M.base;
 const SKIRT_FOOT_M = -0.01;
 const MINIMUM_TRIANGLE_AREA_M2 = 1e-6;
-const EDGE_MERGE_M = 0.01;
+// openRing merges ring vertices closer than this, so two layers that each build a
+// shared edge can differ along it by that much; the validator reuses it.
+export const STREET_GROUND_EDGE_MERGE_M = 0.01;
 // Parking strips start this far inside the frozen carriageway (and are then cut
 // back to it), so where a ribbon bends their inner edge leaves no gap.
 const CARRIAGEWAY_OVERLAP_M = 0.5;
@@ -121,7 +131,7 @@ const SAFE_ID = /^[a-z0-9_]+$/u;
 
 const GROUND_SCHEMA = Object.freeze({
   kerb: ["back_slope_run_m", "building_clearance_m", "closing_m", "flare_run_m", "gutter_width_m", "minimum_width_m", "panel_m", "planting_gap_m", "reveal_m", "sidewalk_reach_m", "sidewalk_width_m", "support_run_m"],
-  crossings: ["bar_gap_m", "bar_width_m", "ramp_depth_m", "ramp_width_m", "tactile_depth_m", "walk_width_m"],
+  crossings: ["bar_gap_m", "bar_width_m", "ramp_depth_m", "ramp_foot_m", "ramp_width_m", "tactile_depth_m", "walk_width_m"],
   lines: ["bike_lane_width_m", "bus_lane_width_m", "conflict_length_m", "dash_gap_m", "dash_m", "double_gap_m", "edge_inset_m", "stall_length_m", "stall_spacing_m", "stop_bar_width_m", "stop_legend_gap_m", "stop_legend_length_m", "width_m"],
   lifts: ["gutter_m", "paint_m"],
 });
@@ -165,9 +175,9 @@ function exactKeys(value, keys, label) {
 // along axis_xz from origin_xz. A way or line layer may add markings {edges,
 // centre}: painted edge lines and a dashed centre line along it (STREET_PAINT_KINDS
 // names, or null for none), as on a two-way cycle track.
-function validateParkSurfaces(surfaces, label) {
+function validateParkSurfaces(surfaces, label, minimumLift) {
   exactKeys(surfaces, ["layers", "lift_m", "source_keys"], label);
-  invariant(isFiniteNumber(surfaces.lift_m) && surfaces.lift_m > ROAD_SURFACE_BIASES_M.pedestrian && surfaces.lift_m < STREET_GROUND_MAXIMUM_HEIGHT_M, `${label} lift_m must lie above the pedestrian path skin and inside the street-ground band`);
+  invariant(isFiniteNumber(surfaces.lift_m) && surfaces.lift_m >= minimumLift - 1e-9 && surfaces.lift_m < STREET_GROUND_MAXIMUM_HEIGHT_M, `${label} lift_m must lie a layer step over the road paint (${minimumLift} m) and inside the street-ground band`);
   invariant(Array.isArray(surfaces.source_keys) && surfaces.source_keys.length > 0 && surfaces.source_keys.every((key) => /^[wr]\d+$/u.test(key)), `${label} needs OSM source_keys`);
   invariant(Array.isArray(surfaces.layers) && surfaces.layers.length > 0, `${label} needs layers`);
   const ids = new Set();
@@ -231,7 +241,15 @@ export function streetGroundSettings(config) {
   }
   invariant(crossings.ramp_depth_m > 0 && Math.atan2(kerb.reveal_m, crossings.ramp_depth_m) <= (15 * Math.PI) / 180, "Curb ramps must stay gentler than 15 degrees");
   invariant(crossings.ramp_width_m > 2 * kerb.flare_run_m, "Curb ramps must be wider than their two flares");
-  invariant(lifts.paint_m > lifts.gutter_m && lifts.gutter_m > 0, "Paint must sit above the gutter, which sits above the road");
+  // Each layer over the road a step over the one below (see the header): the
+  // gutter a step over the pedestrian skin, the paint two over the gutter with
+  // the wear midway, and a curb ramp's foot (solid) under the paint.
+  invariant(
+    lifts.gutter_m >= ROAD_SURFACE_BIASES_M.pedestrian - ROAD_TOP_M + DRAPED_LAYER_STEP_M - 1e-9 &&
+      lifts.paint_m >= lifts.gutter_m + 2 * DRAPED_LAYER_STEP_M - 1e-9,
+    "The gutter must sit a layer step over the pedestrian skin, and the paint two steps over the gutter",
+  );
+  invariant(crossings.ramp_foot_m > 0 && crossings.ramp_foot_m <= lifts.paint_m, "A curb ramp's foot must lie over the road and under the paint");
   invariant(lines.width_m > 0 && lines.stall_spacing_m > lines.width_m && crossings.bar_width_m > 0, "Line widths must be positive");
   invariant(lines.dash_m > 0 && lines.dash_gap_m > 0 && kerb.panel_m > 0 && kerb.closing_m >= 0, "Dashes, panels and gap closing need positive sizes");
   const zones = [];
@@ -239,7 +257,7 @@ export function streetGroundSettings(config) {
     if (!zone.pilot || zone.ground == null) continue;
     exactKeys(zone.ground, "surfaces" in zone.ground ? [...ZONE_GROUND_FIELDS, "surfaces"] : ZONE_GROUND_FIELDS, `Street ground zone ${zone.id}`);
     const settings = zone.ground;
-    if (settings.surfaces !== undefined) validateParkSurfaces(settings.surfaces, `Street ground zone ${zone.id} surfaces`);
+    if (settings.surfaces !== undefined) validateParkSurfaces(settings.surfaces, `Street ground zone ${zone.id} surfaces`, ROAD_TOP_M + lifts.paint_m + DRAPED_LAYER_STEP_M);
     for (const key of ["kerbs", "lane_markings", "parking_stalls"]) {
       invariant(typeof settings[key] === "boolean", `Street ground zone ${zone.id} ${key} must be boolean`);
     }
@@ -358,9 +376,9 @@ function openRing(ring) {
   const points = ring.length > 1 && ring[0][0] === ring.at(-1)[0] && ring[0][1] === ring.at(-1)[1] ? ring.slice(0, -1) : ring.slice();
   const merged = [];
   for (const point of points) {
-    if (merged.length === 0 || length(sub(point, merged.at(-1))) > EDGE_MERGE_M) merged.push(point);
+    if (merged.length === 0 || length(sub(point, merged.at(-1))) > STREET_GROUND_EDGE_MERGE_M) merged.push(point);
   }
-  while (merged.length > 2 && length(sub(merged[0], merged.at(-1))) <= EDGE_MERGE_M) merged.pop();
+  while (merged.length > 2 && length(sub(merged[0], merged.at(-1))) <= STREET_GROUND_EDGE_MERGE_M) merged.pop();
   return merged;
 }
 
@@ -989,9 +1007,9 @@ export function generateStreetGround({
       const rect = rectangle(landing, outward, walk.across, -0.05, crossings.ramp_depth_m, -crossings.ramp_width_m / 2, crossings.ramp_width_m / 2);
       const piece = intersect("curb ramp", rect, bandIndex.near(boxOfMulti(rect), 1));
       if (multiArea(piece) < 0.5) continue;
-      const rise = top - (ROAD_TOP_M + lifts.paint_m);
+      const rise = top - (ROAD_TOP_M + crossings.ramp_foot_m);
       const height = {
-        h0: ROAD_TOP_M + lifts.paint_m - (rise / crossings.ramp_depth_m) * dot(landing, outward),
+        h0: ROAD_TOP_M + crossings.ramp_foot_m - (rise / crossings.ramp_depth_m) * dot(landing, outward),
         he: (rise / crossings.ramp_depth_m) * outward[0],
         hn: (rise / crossings.ramp_depth_m) * outward[1],
       };
@@ -1081,7 +1099,10 @@ export function generateStreetGround({
     addCells(difference(`${record} unowned`, polygon, [framed]), null);
   };
   addFramed("kerb", difference("concrete tops", bandRaised, [plantedTop, paverTop]), kerb.panel_m);
-  addPiece("parking", parkingSurface, constantHeight(ROAD_TOP_M), worldUv);
+  // A parking lane meets the road base at its height, so it is drawn clear of
+  // the paths that cross it too (their pavement and pedestrian skin draw there).
+  addPiece("parking", difference("parking lanes off paths", parkingSurface,
+    roads.filter((object) => object.road_visual_class === "pedestrian").map((object) => object.geometry)), constantHeight(ROAD_TOP_M), worldUv);
   addPiece("planting", intersect("planted tops", bandRaised, plantedTop), constantHeight(top), tiledUv(2));
   for (const part of paverParts) addFramed("plaza", intersect("plaza tops", bandRaised, part.region), part.plaza.paver_tile_m);
   for (const notch of notches) {
@@ -1406,7 +1427,7 @@ export function generateStreetGround({
     const across = leftOf(along);
     const quad = rectangle(center, along, across, -alongSize / 2, alongSize / 2, -acrossSize / 2, acrossSize / 2);
     if (!openRing(quad[0][0]).every((point) => vehicleIndex.contains(point))) return false;
-    addPiece("wear", quad, constantHeight(ROAD_TOP_M + lifts.paint_m * 0.5), frameUv(cell, center, along, across, alongSize, acrossSize));
+    addPiece("wear", quad, constantHeight(ROAD_TOP_M + (lifts.gutter_m + lifts.paint_m) / 2), frameUv(cell, center, along, across, alongSize, acrossSize));
     sources.wear.add(sourceKey);
     counts.wear[cell] = (counts.wear[cell] ?? 0) + 1;
     return true;
@@ -1482,7 +1503,9 @@ export function generateStreetGround({
 
   // ---------------------------------------------------------------- park surfaces
   // Each park zone's layers, later ones replacing earlier ones: one partition of
-  // the zone into flat-lying ground draped lift_m over the land.
+  // the zone into flat-lying ground draped lift_m over the land. Zones share the
+  // ground the same way: where two zones' ground overlaps, the zone listed later
+  // in the config replaces the earlier one's, so no two zones draw there.
   const pedestrianWays = roads.filter((object) => object.road_visual_class === "pedestrian");
   const sourceGeometry = (key) => {
     const object = playableObjects.get(key);
@@ -1514,11 +1537,14 @@ export function generateStreetGround({
   };
   const parkLayers = [];
   const parkLifts = new Map();
-  for (const zone of zoneRegions) {
+  const groundZones = zoneRegions.filter((zone) => zone.settings.surfaces);
+  const zoneShapes = new Map(groundZones.map((zone) => [zone, zone.settings.surfaces.layers.map((layer) => layerShape(zone, layer))]));
+  for (const [zoneIndex, zone] of groundZones.entries()) {
     const surfaces = zone.settings.surfaces;
-    if (!surfaces) continue;
-    const shapes = surfaces.layers.map((layer) => layerShape(zone, layer));
-    let covered = [];
+    const shapes = zoneShapes.get(zone);
+    const later = groundZones.slice(zoneIndex + 1).filter((other) => boxesOverlap(zone.box, other.box) &&
+      multiArea(intersect(`zones ${zone.id} ${other.id}`, zone.region, other.region)) > 1e-8);
+    let covered = union(`park ${zone.id} later zones`, later.flatMap((other) => zoneShapes.get(other)));
     for (let index = surfaces.layers.length - 1; index >= 0; index -= 1) {
       const layer = surfaces.layers[index];
       const own = cleanPolygons(difference(`park ${layer.id} uncovered`, shapes[index], [covered]), 0.05, 0.05);
