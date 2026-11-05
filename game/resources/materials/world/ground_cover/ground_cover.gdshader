@@ -77,10 +77,10 @@ uniform vec3 turf_color : source_color = vec3(0.08, 0.17, 0.065);
 // (the ditch beside the Mersea lot, owner photos, Nov 2026: about sRGB 100,52,40
 // and 75,72,42 in low sun).
 uniform float rust_amount = 0.0;
-uniform vec3 rust_gap : source_color = vec3(0.150, 0.042, 0.030);
-uniform vec3 rust_blade : source_color = vec3(0.235, 0.062, 0.038);
-uniform vec3 rust_straw : source_color = vec3(0.300, 0.150, 0.075);
-uniform vec3 marsh_olive : source_color = vec3(0.105, 0.102, 0.040);
+uniform vec3 rust_gap : source_color = vec3(0.200, 0.070, 0.030);
+uniform vec3 rust_blade : source_color = vec3(0.305, 0.146, 0.040);
+uniform vec3 rust_straw : source_color = vec3(0.390, 0.270, 0.160);
+uniform vec3 marsh_olive : source_color = vec3(0.235, 0.225, 0.095);
 
 // A watered pitch's sprinkler grid: dry patches midway between the heads of a
 // grid_m square grid turned grid_angle radians from world +X, at grid_amount.
@@ -183,10 +183,16 @@ void fragment() {
 	vec3 green = mix(lawn, dry, mix_settings.z);
 	vec3 ground = mix(green, dry, dry_w);
 	if (rust_amount > 0.0) {
-		float olive_w = smoothstep(0.50, 0.62, 0.7 * value_noise(p / 13.0 + vec2(7.3, 51.9)) + 0.3 * n_fine);
+		float n_mid = value_noise(p / 3.4 + vec2(23.7, 11.1));
+		float olive_level = 0.55 * value_noise(p / 17.0 + vec2(7.3, 51.9)) + 0.25 * n_fine + 0.2 * n_mid;
+		float olive_w = smoothstep(0.50, 0.60, olive_level);
+		float straw_w = smoothstep(0.60, 0.70, 0.6 * value_noise(p / 9.0 + vec2(37.1, 3.3)) + 0.4 * n_mid);
 		vec3 red = cover_layer(rust_gap, rust_blade, rust_straw, m, 0.6, fade);
 		vec3 olive = marsh_olive * mix(0.72 + 0.56 * m.x, 1.0, fade);
-		ground = mix(ground, mix(red, olive, olive_w), rust_amount * own);
+		vec3 marsh = mix(mix(red, olive, olive_w), dry, 0.8 * straw_w);
+		// The carpet's edge breaks up in patches where the map's recipes take over.
+		float carpet = smoothstep(0.15, 0.55, own + 0.5 * (n_blend - 0.5) + 0.3 * (n_mid - 0.5));
+		ground = mix(ground, marsh, rust_amount * carpet);
 	}
 	if (mix_settings.y <= 1.0 + patch_softness) {
 		float bare = bare_level(p, fade);

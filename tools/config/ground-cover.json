@@ -107,8 +107,8 @@
    "channel": "straw",
    "surfaces": ["land_ground", "terrain_wetland"],
    "above_m": {
-    "from_m": 2.3,
-    "to_m": 2.75
+    "from_m": 2.75,
+    "to_m": 3.25
    },
    "basis": "production_inference",
    "reason": "The basin's banks are dry straw grass above its red floor, following the land's own 1.8-4.3 m basin.",

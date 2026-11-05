@@ -1052,7 +1052,7 @@
    "name": "The ditch next to Mersea",
    "pilot": true,
    "reason": "The seasonal wetland beside the owner's priority lot, in view of the city skyline: red marsh on the floor, puddles at its low points, a dry bank with loose pale-seeded shrubs.",
-   "reference": "Owner photos, Nov 2026 (three, from the lot's west curb at about (-266, 203)); OSM w1473022589 (natural=wetland); the land's own basin, 1.8 m at the floor and 4.3 m at the bank",
+   "reference": "Owner photos, Nov 2026 (three, from the lot's west corner at about (-266, 203)); OSM w1473022589 (natural=wetland); the land's own basin, 1.8 m at the floor and 4.3 m at the bank",
    "ground": {
     "kerbs": false,
     "centerlines": {},
@@ -1077,73 +1077,217 @@
        "id": "mud_1",
        "material": "yard_soil_dark",
        "shape": {
-        "points_xz": [[-294.2, 194.0], [-298.4, 193.4], [-302.5, 197.8], [-306.9, 201.7], [-313.2, 208.6], [-317.3, 213.4], [-322.1, 219.7], [-326.0, 224.8], [-322.9, 228.0], [-316.7, 226.1], [-311.4, 222.2], [-305.7, 219.3], [-300.8, 213.5], [-296.7, 207.7], [-293.9, 202.3], [-291.5, 197.2]]
+        "points_xz": [[-316.1, 221.0], [-316.3, 220.3], [-315.6, 218.8], [-315.3, 217.7], [-315.7, 217.3], [-316.2, 216.8], [-316.0, 215.7], [-315.1, 214.2], [-314.0, 212.6], [-312.9, 211.0], [-311.6, 209.4], [-310.1, 208.1], [-308.8, 207.2], [-307.5, 206.0], [-305.8, 204.0], [-303.7, 201.7], [-301.9, 200.3], [-300.9, 200.3], [-300.6, 201.3], [-300.5, 202.2], [-300.3, 203.0], [-300.5, 204.1], [-301.0, 205.5], [-301.4, 206.6], [-301.2, 207.1], [-300.8, 207.5], [-301.0, 208.5], [-301.9, 209.9], [-302.7, 211.1], [-303.0, 212.3], [-303.4, 213.9], [-304.5, 216.0], [-306.3, 218.0], [-308.2, 219.5], [-309.8, 220.5], [-311.2, 221.1], [-312.2, 221.2], [-312.6, 220.4], [-312.8, 219.7], [-313.5, 219.8], [-314.9, 220.6]]
        },
        "reason": "Wet dark mud round a puddle.",
-       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions production inference."
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions and outlines production inference."
       },
       {
        "id": "mud_2",
        "material": "yard_soil_dark",
        "shape": {
-        "points_xz": [[-329.2, 228.0], [-334.4, 230.9], [-338.5, 234.8], [-344.3, 239.7], [-350.3, 246.0], [-355.2, 251.5], [-358.1, 256.8], [-356.9, 262.0], [-352.6, 263.1], [-349.6, 258.1], [-345.4, 253.2], [-340.1, 248.9], [-334.7, 244.8], [-329.8, 239.4], [-325.9, 234.3]]
+        "points_xz": [[-335.8, 240.1], [-335.7, 239.0], [-334.7, 237.2], [-333.4, 235.4], [-333.2, 234.5], [-333.7, 234.1], [-333.6, 233.1], [-332.5, 231.6], [-331.3, 230.2], [-330.1, 228.5], [-328.5, 226.5], [-326.6, 224.9], [-324.9, 223.7], [-323.2, 222.9], [-322.3, 222.9], [-322.6, 224.6], [-323.5, 226.6], [-323.3, 227.2], [-322.0, 226.6], [-321.0, 226.5], [-320.9, 227.3], [-321.1, 228.4], [-321.3, 229.4], [-322.0, 230.8], [-323.2, 232.4], [-324.5, 233.9], [-325.8, 235.7], [-327.5, 237.3], [-329.0, 238.0], [-330.0, 238.1], [-331.3, 238.9], [-333.2, 240.3], [-334.7, 241.0], [-335.4, 240.7]]
        },
        "reason": "Wet dark mud round a puddle.",
-       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions production inference."
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions and outlines production inference."
       },
       {
        "id": "mud_3",
        "material": "yard_soil_dark",
        "shape": {
-        "points_xz": [[-313.1, 145.3], [-306.1, 141.7], [-298.0, 144.2], [-294.7, 150.0], [-298.0, 155.8], [-305.0, 158.3], [-312.1, 154.7], [-315.3, 150.0]]
+        "points_xz": [[-354.1, 262.6], [-354.0, 261.6], [-354.0, 260.7], [-354.2, 260.0], [-354.1, 259.0], [-353.2, 257.3], [-352.0, 255.4], [-351.0, 253.9], [-350.7, 252.8], [-350.4, 251.7], [-349.6, 250.1], [-348.3, 248.4], [-346.9, 247.2], [-345.7, 246.4], [-344.7, 245.5], [-343.6, 244.4], [-342.5, 243.4], [-341.4, 242.5], [-339.9, 241.1], [-338.0, 239.1], [-335.8, 237.0], [-334.3, 236.1], [-334.0, 236.9], [-334.6, 238.7], [-335.1, 240.3], [-335.2, 241.3], [-335.2, 242.3], [-335.9, 243.9], [-337.3, 246.0], [-338.8, 248.0], [-340.0, 249.5], [-340.9, 250.7], [-341.7, 251.9], [-342.6, 252.9], [-343.4, 253.9], [-344.3, 255.5], [-345.6, 257.8], [-347.5, 260.4], [-349.3, 262.4], [-350.5, 263.0], [-351.2, 262.9], [-352.0, 262.8], [-352.9, 263.1], [-353.8, 263.2]]
        },
        "reason": "Wet dark mud round a puddle.",
-       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions production inference."
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions and outlines production inference."
       },
       {
        "id": "mud_4",
        "material": "yard_soil_dark",
        "shape": {
-        "points_xz": [[-289.6, 170.9], [-285.9, 168.7], [-282.1, 172.1], [-283.2, 181.0], [-287.1, 185.3], [-290.8, 182.0]]
+        "points_xz": [[-352.7, 286.6], [-353.2, 285.0], [-353.3, 282.9], [-353.7, 281.8], [-354.0, 280.7], [-354.3, 279.7], [-354.8, 278.4], [-354.9, 276.3], [-354.2, 274.2], [-353.6, 272.2], [-352.9, 269.8], [-352.0, 268.6], [-351.1, 269.2], [-350.5, 270.1], [-349.9, 270.9], [-349.5, 271.8], [-348.7, 271.2], [-347.6, 270.3], [-347.1, 271.5], [-347.2, 273.7], [-347.3, 275.6], [-347.4, 277.6], [-347.9, 279.7], [-348.5, 281.5], [-349.3, 283.2], [-350.1, 283.8], [-350.9, 284.1], [-351.7, 285.6]]
        },
        "reason": "Wet dark mud round a puddle.",
-       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions production inference."
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions and outlines production inference."
+      },
+      {
+       "id": "mud_5",
+       "material": "yard_soil_dark",
+       "shape": {
+        "points_xz": [[-299.7, 203.4], [-300.8, 203.2], [-301.0, 201.7], [-301.1, 200.2], [-300.8, 198.5], [-299.3, 196.7], [-298.3, 195.7], [-297.8, 194.5], [-297.0, 193.0], [-295.8, 191.4], [-294.4, 190.1], [-293.4, 190.5], [-292.4, 190.8], [-291.3, 191.0], [-291.4, 192.7], [-291.9, 194.6], [-291.9, 195.8], [-292.3, 197.3], [-292.8, 198.8], [-293.8, 200.4], [-295.0, 200.7], [-296.0, 201.1], [-297.2, 202.6], [-298.5, 203.4]]
+       },
+       "reason": "Wet dark mud round a puddle.",
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions and outlines production inference."
+      },
+      {
+       "id": "mud_6",
+       "material": "yard_soil_dark",
+       "shape": {
+        "points_xz": [[-300.9, 186.2], [-302.1, 186.1], [-303.2, 184.3], [-304.1, 183.4], [-305.4, 183.1], [-306.3, 181.5], [-306.6, 179.6], [-307.3, 177.7], [-307.6, 175.5], [-307.5, 173.2], [-307.2, 170.8], [-305.8, 170.1], [-303.9, 171.8], [-302.8, 172.5], [-301.9, 171.9], [-300.9, 172.0], [-299.8, 172.2], [-298.4, 172.7], [-297.5, 174.2], [-296.6, 176.1], [-295.6, 178.4], [-296.0, 180.7], [-297.5, 181.8], [-298.4, 182.8], [-299.0, 184.2], [-299.9, 185.1]]
+       },
+       "reason": "Wet dark mud round a puddle.",
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions and outlines production inference."
+      },
+      {
+       "id": "mud_7",
+       "material": "yard_soil_dark",
+       "shape": {
+        "points_xz": [[-299.1, 153.2], [-298.5, 154.7], [-298.5, 156.1], [-299.8, 156.9], [-301.4, 157.5], [-303.2, 158.0], [-305.6, 157.6], [-308.1, 156.1], [-309.8, 154.9], [-311.3, 154.5], [-313.4, 154.5], [-315.4, 153.7], [-316.5, 152.6], [-317.4, 151.4], [-318.1, 150.2], [-317.9, 149.2], [-317.3, 148.3], [-317.7, 147.2], [-318.8, 145.6], [-318.6, 144.4], [-316.8, 144.0], [-315.2, 143.7], [-314.1, 142.8], [-312.6, 142.0], [-310.3, 142.0], [-307.9, 142.9], [-305.8, 143.9], [-304.4, 145.3], [-304.1, 147.0], [-304.4, 148.2], [-303.5, 148.9], [-301.3, 149.7], [-299.6, 150.9], [-299.3, 152.0]]
+       },
+       "reason": "Wet dark mud round a puddle.",
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions and outlines production inference."
+      },
+      {
+       "id": "mud_8",
+       "material": "yard_soil_dark",
+       "shape": {
+        "points_xz": [[-300.3, 154.3], [-299.8, 153.0], [-298.7, 151.9], [-297.8, 151.0], [-297.3, 150.1], [-296.2, 149.5], [-295.1, 149.0], [-293.9, 147.9], [-292.2, 147.3], [-290.7, 147.6], [-289.6, 148.2], [-289.4, 149.3], [-289.1, 150.2], [-288.0, 150.9], [-288.3, 152.1], [-289.6, 153.1], [-290.5, 154.0], [-291.6, 154.7], [-292.8, 155.2], [-294.1, 155.7], [-295.3, 155.6], [-296.6, 155.6], [-298.8, 156.1], [-300.3, 155.6]]
+       },
+       "reason": "Wet dark mud round a puddle.",
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions and outlines production inference."
+      },
+      {
+       "id": "mud_9",
+       "material": "yard_soil_dark",
+       "shape": {
+        "points_xz": [[-314.4, 168.0], [-315.1, 168.6], [-316.0, 168.9], [-316.9, 169.1], [-318.0, 169.0], [-319.1, 168.1], [-320.0, 167.3], [-321.0, 166.7], [-321.5, 165.7], [-321.7, 164.7], [-322.2, 163.7], [-322.4, 162.5], [-322.5, 161.2], [-322.0, 160.2], [-320.3, 160.6], [-318.9, 161.4], [-317.9, 161.6], [-317.0, 162.2], [-316.1, 162.8], [-315.2, 163.4], [-314.5, 164.3], [-313.5, 165.4], [-312.6, 166.8], [-313.3, 167.7]]
+       },
+       "reason": "Wet dark mud round a puddle.",
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions and outlines production inference."
+      },
+      {
+       "id": "mud_10",
+       "material": "yard_soil_dark",
+       "shape": {
+        "points_xz": [[-292.8, 133.5], [-293.4, 134.5], [-293.5, 135.7], [-294.5, 136.7], [-296.0, 137.4], [-297.7, 138.1], [-299.8, 137.8], [-301.6, 137.1], [-303.7, 137.1], [-306.1, 136.7], [-307.0, 135.5], [-307.1, 134.2], [-306.4, 133.1], [-305.2, 132.2], [-305.6, 131.2], [-305.8, 129.9], [-304.4, 129.3], [-303.1, 128.5], [-301.4, 127.4], [-299.0, 127.3], [-296.8, 128.0], [-295.3, 129.2], [-295.4, 130.7], [-295.3, 131.7], [-293.4, 132.4]]
+       },
+       "reason": "Wet dark mud round a puddle.",
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions and outlines production inference."
+      },
+      {
+       "id": "mud_11",
+       "material": "yard_soil_dark",
+       "shape": {
+        "points_xz": [[-286.1, 179.8], [-286.9, 179.9], [-287.5, 179.4], [-288.4, 179.2], [-289.5, 178.8], [-289.8, 177.4], [-289.5, 175.9], [-289.1, 174.7], [-288.4, 173.9], [-287.9, 173.1], [-287.4, 172.2], [-286.6, 172.2], [-285.9, 172.0], [-285.0, 171.3], [-284.1, 171.7], [-283.5, 172.7], [-283.1, 173.8], [-283.0, 175.0], [-282.7, 176.1], [-282.4, 177.6], [-283.1, 178.7], [-283.9, 179.2], [-284.6, 179.8], [-285.4, 179.8]]
+       },
+       "reason": "Wet dark mud round a puddle.",
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions and outlines production inference."
+      },
+      {
+       "id": "mud_12",
+       "material": "yard_soil_dark",
+       "shape": {
+        "points_xz": [[-325.5, 141.0], [-326.7, 140.7], [-327.1, 139.9], [-326.7, 138.8], [-326.2, 137.7], [-325.1, 136.7], [-323.8, 135.9], [-322.5, 135.4], [-321.4, 135.9], [-320.8, 136.4], [-319.6, 136.0], [-318.3, 135.9], [-317.2, 136.3], [-316.5, 136.9], [-316.9, 138.1], [-317.4, 139.2], [-317.8, 140.3], [-319.2, 141.1], [-320.5, 141.6], [-321.6, 142.2], [-322.7, 142.6], [-324.0, 142.9], [-325.1, 142.7], [-325.3, 141.8]]
+       },
+       "reason": "Wet dark mud round a puddle.",
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions and outlines production inference."
       },
       {
        "id": "puddle_1",
        "material": "ditch_puddle",
        "shape": {
-        "points_xz": [[-295, 195], [-299, 194.5], [-303, 199], [-307, 203], [-312, 209], [-316, 213], [-321, 219], [-325, 224], [-322, 227], [-316, 225], [-311, 221], [-306, 218], [-302, 213], [-298, 208], [-295, 203], [-292.5, 198]]
+        "points_xz": [[-314.7, 219.4], [-315.7, 219.9], [-315.6, 219.1], [-314.9, 217.8], [-314.2, 216.6], [-313.3, 215.3], [-311.9, 213.8], [-310.9, 212.6], [-310.6, 211.4], [-309.9, 209.5], [-308.3, 207.2], [-306.5, 205.6], [-305.0, 204.6], [-303.5, 203.6], [-302.3, 202.9], [-301.8, 203.3], [-301.9, 204.2], [-301.7, 204.7], [-301.8, 205.5], [-302.9, 207.1], [-304.1, 208.5], [-303.7, 208.6], [-302.1, 208.0], [-301.4, 208.4], [-302.2, 210.0], [-303.7, 211.8], [-305.2, 213.7], [-306.9, 215.4], [-308.5, 216.5], [-309.8, 217.3], [-311.2, 218.7], [-312.8, 220.3], [-313.7, 220.5], [-313.5, 219.4], [-313.6, 218.8]]
        },
-       "reason": "A shallow puddle of standing water: visual only, walked through.",
-       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions production inference."
+       "reason": "A shallow puddle.",
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions and outlines production inference."
       },
       {
        "id": "puddle_2",
        "material": "ditch_puddle",
        "shape": {
-        "points_xz": [[-330, 229], [-335, 232], [-339, 236], [-344, 241], [-349, 246], [-354, 251], [-357, 256], [-356, 261], [-352, 262], [-349, 257], [-345, 252], [-341, 248], [-336, 245], [-331, 240], [-327, 235]]
+        "points_xz": [[-333.5, 237.7], [-332.7, 236.4], [-333.4, 236.4], [-335.0, 237.0], [-335.0, 236.0], [-333.6, 234.1], [-331.8, 232.0], [-329.7, 230.4], [-328.1, 229.7], [-327.0, 228.8], [-325.7, 227.6], [-325.1, 227.6], [-324.8, 227.8], [-323.2, 226.5], [-321.3, 225.1], [-320.4, 224.9], [-320.0, 225.3], [-320.6, 226.7], [-322.8, 229.1], [-324.5, 230.7], [-325.0, 232.0], [-326.3, 233.7], [-327.9, 235.0], [-329.3, 236.0], [-330.6, 237.0], [-331.4, 237.1], [-332.1, 237.4], [-333.3, 238.2]]
        },
-       "reason": "A shallow puddle of standing water: visual only, walked through.",
-       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions production inference."
+       "reason": "A shallow puddle.",
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions and outlines production inference."
       },
       {
        "id": "puddle_3",
        "material": "ditch_puddle",
        "shape": {
-        "points_xz": [[-312, 146], [-306, 143], [-299, 145], [-296, 150], [-299, 155], [-305, 157], [-311, 154], [-314, 150]]
+        "points_xz": [[-353.5, 261.9], [-354.0, 261.8], [-353.5, 260.5], [-352.7, 258.9], [-352.6, 258.1], [-352.8, 257.5], [-352.0, 255.9], [-350.1, 253.6], [-348.0, 251.7], [-346.7, 250.5], [-345.8, 249.6], [-345.0, 248.7], [-344.2, 247.6], [-343.1, 246.0], [-341.3, 243.4], [-339.3, 240.8], [-338.0, 239.7], [-337.4, 239.8], [-336.9, 239.8], [-335.7, 239.1], [-334.8, 238.8], [-335.3, 240.2], [-336.9, 242.7], [-338.5, 244.9], [-339.6, 246.5], [-340.7, 248.0], [-341.8, 249.3], [-342.4, 250.4], [-342.8, 251.6], [-343.6, 253.4], [-345.0, 255.3], [-346.3, 256.2], [-347.2, 256.7], [-348.2, 257.6], [-349.5, 259.1], [-350.7, 260.3], [-351.6, 260.7], [-352.5, 261.2]]
        },
-       "reason": "A shallow puddle of standing water: visual only, walked through.",
-       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions production inference."
+       "reason": "A shallow puddle.",
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions and outlines production inference."
       },
       {
        "id": "puddle_4",
        "material": "ditch_puddle",
        "shape": {
-        "points_xz": [[-289, 172], [-286, 170], [-283, 173], [-284, 180], [-287, 184], [-290, 181]]
+        "points_xz": [[-352.6, 286.0], [-352.9, 284.4], [-352.4, 281.0], [-352.6, 280.3], [-353.0, 279.5], [-352.9, 277.6], [-352.6, 275.7], [-352.0, 274.3], [-351.5, 272.6], [-350.9, 270.1], [-350.3, 270.1], [-349.7, 269.8], [-348.9, 268.8], [-348.6, 270.2], [-348.6, 272.2], [-349.4, 275.0], [-350.0, 276.7], [-349.8, 278.0], [-349.9, 280.0], [-350.4, 281.9], [-351.1, 284.4], [-351.8, 285.5]]
        },
-       "reason": "A shallow puddle of standing water: visual only, walked through.",
-       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions production inference."
+       "reason": "A shallow puddle.",
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions and outlines production inference."
+      },
+      {
+       "id": "puddle_5",
+       "material": "ditch_puddle",
+       "shape": {
+        "points_xz": [[-299.1, 202.4], [-299.0, 200.7], [-297.5, 198.4], [-298.1, 198.0], [-298.0, 196.8], [-297.4, 195.1], [-296.3, 193.6], [-295.0, 192.2], [-294.0, 192.0], [-293.9, 193.4], [-292.9, 193.1], [-292.9, 194.2], [-293.4, 195.8], [-294.6, 197.2], [-294.9, 198.6], [-295.7, 200.3], [-296.9, 201.5], [-298.3, 202.8]]
+       },
+       "reason": "A shallow puddle.",
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions and outlines production inference."
+      },
+      {
+       "id": "puddle_6",
+       "material": "ditch_puddle",
+       "shape": {
+        "points_xz": [[-301.0, 185.2], [-302.2, 184.2], [-303.2, 183.2], [-304.7, 183.2], [-305.1, 180.6], [-304.9, 178.4], [-305.0, 176.7], [-304.5, 175.3], [-304.4, 173.7], [-303.6, 173.0], [-303.1, 170.3], [-301.7, 168.6], [-300.5, 171.2], [-299.8, 173.8], [-299.8, 176.2], [-299.4, 177.6], [-299.1, 179.3], [-299.5, 180.6], [-298.9, 183.6], [-299.7, 185.3]]
+       },
+       "reason": "A shallow puddle.",
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions and outlines production inference."
+      },
+      {
+       "id": "puddle_7",
+       "material": "ditch_puddle",
+       "shape": {
+        "points_xz": [[-298.5, 153.4], [-298.0, 155.0], [-300.2, 155.3], [-302.1, 155.6], [-304.1, 155.7], [-306.6, 154.9], [-308.5, 154.0], [-310.1, 153.4], [-311.1, 152.2], [-311.7, 151.4], [-314.2, 151.2], [-317.9, 150.5], [-319.7, 149.1], [-319.9, 147.8], [-319.6, 146.6], [-317.9, 146.0], [-316.0, 145.8], [-315.1, 145.0], [-313.5, 144.7], [-311.1, 145.7], [-309.4, 146.4], [-307.7, 146.1], [-305.7, 146.4], [-304.2, 147.5], [-302.9, 148.5], [-302.3, 149.6], [-302.6, 150.5], [-301.3, 151.6]]
+       },
+       "reason": "A shallow puddle.",
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions and outlines production inference."
+      },
+      {
+       "id": "puddle_8",
+       "material": "ditch_puddle",
+       "shape": {
+        "points_xz": [[-296.7, 153.0], [-297.1, 152.5], [-296.9, 151.8], [-297.6, 150.4], [-295.9, 149.6], [-294.1, 149.5], [-293.0, 150.0], [-291.9, 149.9], [-291.0, 150.2], [-291.0, 150.9], [-289.9, 151.4], [-290.5, 152.3], [-291.4, 153.1], [-292.7, 153.7], [-293.9, 155.0], [-295.5, 155.1], [-296.3, 154.2], [-296.5, 153.5]]
+       },
+       "reason": "A shallow puddle.",
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions and outlines production inference."
+      },
+      {
+       "id": "puddle_9",
+       "material": "ditch_puddle",
+       "shape": {
+        "points_xz": [[-315.4, 167.1], [-315.7, 167.8], [-316.7, 167.7], [-317.8, 167.0], [-318.8, 166.9], [-319.7, 166.1], [-320.1, 165.2], [-319.5, 164.6], [-320.4, 163.7], [-320.5, 162.9], [-320.2, 162.2], [-319.5, 161.7], [-318.3, 162.2], [-317.3, 163.3], [-317.2, 164.5], [-316.2, 164.9], [-315.5, 165.6], [-315.1, 166.6]]
+       },
+       "reason": "A shallow puddle.",
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions and outlines production inference."
+      },
+      {
+       "id": "puddle_10",
+       "material": "ditch_puddle",
+       "shape": {
+        "points_xz": [[-292.4, 133.5], [-294.4, 134.4], [-296.3, 134.8], [-297.5, 135.2], [-299.0, 135.4], [-300.6, 135.7], [-302.6, 135.5], [-306.1, 135.8], [-307.4, 134.5], [-306.0, 133.1], [-304.7, 132.3], [-303.7, 131.7], [-303.5, 130.8], [-301.8, 130.7], [-300.3, 129.7], [-297.9, 129.5], [-296.3, 130.6], [-295.2, 131.5], [-294.4, 132.4]]
+       },
+       "reason": "A shallow puddle.",
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions and outlines production inference."
+      },
+      {
+       "id": "puddle_11",
+       "material": "ditch_puddle",
+       "shape": {
+        "points_xz": [[-286.1, 178.8], [-286.4, 177.8], [-286.9, 177.9], [-287.5, 177.5], [-288.0, 176.6], [-287.6, 175.4], [-287.3, 174.5], [-287.1, 173.2], [-286.5, 172.9], [-285.9, 172.9], [-285.5, 173.7], [-285.0, 173.9], [-285.1, 175.1], [-284.6, 175.6], [-284.0, 176.7], [-284.1, 178.2], [-284.9, 178.8], [-285.6, 178.5]]
+       },
+       "reason": "A shallow puddle.",
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions and outlines production inference."
+      },
+      {
+       "id": "puddle_12",
+       "material": "ditch_puddle",
+       "shape": {
+        "points_xz": [[-325.6, 141.1], [-324.6, 139.9], [-323.7, 139.2], [-323.7, 138.7], [-323.5, 137.7], [-322.4, 136.8], [-321.2, 136.8], [-319.9, 136.3], [-319.3, 136.8], [-318.9, 137.2], [-319.1, 138.0], [-318.9, 138.6], [-320.0, 139.4], [-321.1, 139.7], [-321.7, 140.6], [-322.9, 141.5], [-324.4, 142.1], [-324.9, 141.4]]
+       },
+       "reason": "A shallow puddle.",
+       "evidence": "Owner photos, Nov 2026: shallow puddles of standing water at the basin's low points, reflecting the sky; they lie along the land's own low line, positions and outlines production inference."
       }
      ]
     }
@@ -1154,78 +1298,97 @@
    },
    "scatter": [
     {
-     "id": "bank_seed_shrubs",
+     "id": "bank_pale_shrubs",
      "kind": "planting_slot",
      "pattern": "grid",
-     "spacing_m": 7.0,
-     "jitter_m": 3.0,
-     "acceptance": 0.62,
+     "spacing_m": 6.5,
+     "jitter_m": 2.8,
+     "acceptance": 0.6,
      "visible_surfaces": ["land_ground", "terrain_wetland"],
      "within_xz": [[-292, 120], [-258, 120], [-255, 215], [-305, 262], [-345, 305], [-375, 300], [-345, 250], [-315, 225], [-285, 190], [-279, 150]],
      "height_m": [2.7, 4.4],
-     "prop": "california_buckwheat",
+     "prop": "california_sagebrush",
      "params": {
-      "variants": [1, 2],
-      "scale": [0.9, 1.25]
+      "variants": [0, 2],
+      "scale": [0.8, 1.05]
      },
      "basis": "production_inference",
-     "rule": "Loose pale-seeded shrubs 0.5-1.2 m tall scattered along the bank; the kit's closest form to the photographed one.",
+     "rule": "Loose pale open shrubs 0.5-1.2 m tall scattered along the bank; the kit's closest form to the photographed one.",
+     "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea: loose white-flowered shrubs along the bank (species unconfirmed)."
+    },
+    {
+     "id": "bank_pale_sage",
+     "kind": "planting_slot",
+     "pattern": "grid",
+     "spacing_m": 9.0,
+     "jitter_m": 3.6,
+     "acceptance": 0.5,
+     "visible_surfaces": ["land_ground", "terrain_wetland"],
+     "within_xz": [[-292, 120], [-258, 120], [-255, 215], [-305, 262], [-345, 305], [-375, 300], [-345, 250], [-315, 225], [-285, 190], [-279, 150]],
+     "height_m": [2.6, 4.2],
+     "prop": "shrubby_sage",
+     "params": {
+      "variants": [0, 2],
+      "scale": [0.8, 1.05]
+     },
+     "basis": "production_inference",
+     "rule": "A second pale open shrub among them, so the scatter isn't one plant.",
      "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea: loose white-flowered shrubs along the bank (species unconfirmed)."
     },
     {
      "id": "bank_dry_tufts",
      "kind": "grass_clump",
      "pattern": "grid",
-     "spacing_m": 3.6,
-     "jitter_m": 1.6,
-     "acceptance": 0.42,
+     "spacing_m": 3.2,
+     "jitter_m": 1.5,
+     "acceptance": 0.45,
      "visible_surfaces": ["land_ground", "terrain_wetland"],
      "within_xz": [[-292, 120], [-258, 120], [-255, 215], [-305, 262], [-345, 305], [-375, 300], [-345, 250], [-315, 225], [-285, 190], [-279, 150]],
      "height_m": [2.4, 4.4],
-     "prop": "bronze_clump_grass",
+     "prop": "clump_grass",
      "params": {
-      "variants": [1, 2],
-      "scale": [0.9, 1.25]
+      "variants": [0, 3],
+      "scale": [0.8, 1.0]
      },
      "basis": "production_inference",
-     "rule": "Dry brown grass tufts on the slope.",
+     "rule": "Dry straw tufts on the slope.",
      "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea: dry straw grass on the slope."
     },
     {
-     "id": "bank_foot_reeds",
+     "id": "bank_foot_rushes",
      "kind": "grass_clump",
      "pattern": "grid",
-     "spacing_m": 3.4,
-     "jitter_m": 1.5,
-     "acceptance": 0.55,
+     "spacing_m": 4.2,
+     "jitter_m": 1.8,
+     "acceptance": 0.42,
      "visible_surfaces": ["terrain_wetland"],
-     "height_m": [2.15, 2.6],
-     "prop": "pacific_reedgrass",
+     "height_m": [2.1, 2.8],
+     "prop": "rush",
      "params": {
-      "variants": [1, 2],
-      "scale": [0.9, 1.25]
+      "variants": [0, 2],
+      "scale": [0.8, 1.15]
      },
      "basis": "production_inference",
-     "rule": "Taller dry reeds and sedge along the foot of the bank.",
-     "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea: taller dry reeds and sedge at the bank's foot and the far ends."
+     "rule": "Dark rush clumps along the foot of the bank.",
+     "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea: dark clumps at the bank's foot and across the floor."
     },
     {
      "id": "floor_sedge",
      "kind": "grass_clump",
      "pattern": "grid",
-     "spacing_m": 7.5,
-     "jitter_m": 3.2,
+     "spacing_m": 7.0,
+     "jitter_m": 3.0,
      "acceptance": 0.34,
      "visible_surfaces": ["terrain_wetland"],
-     "height_m": [1.7, 2.25],
+     "height_m": [1.7, 2.3],
      "prop": "dense_sedge",
      "params": {
       "variants": [1, 3],
-      "scale": [0.9, 1.2]
+      "scale": [0.8, 1.1]
      },
      "basis": "production_inference",
      "rule": "Scattered olive sedge clumps on the marsh floor.",
-     "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea: olive-green patches on the floor."
+     "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea: olive patches across the red floor."
     }
    ]
   }
