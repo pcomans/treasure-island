@@ -17,6 +17,9 @@ uniform float mip_alpha_boost : hint_range(0.0, 0.5) = 0.0;
 // How far the quad stands toward the camera from its pivot: a palm's crown
 // image in front of the trunk and knob, which stay geometry.
 uniform float toward_camera_m : hint_range(0.0, 4.0) = 0.0;
+// How far the quad's corner normals lean out from its middle, so the sun shades it
+// across like a rounded crown, not all at once like a flat card.
+uniform float dome : hint_range(0.0, 2.0) = 0.0;
 
 // First view, second view, the share of the second.
 varying flat vec3 views;
@@ -36,7 +39,7 @@ void vertex() {
 	vec3 right = vec3(forward.z, 0.0, -forward.x);
 	VERTEX = pivot + forward * toward_camera_m + right * UV2.x + vec3(0.0, UV2.y, 0.0);
 	// Light it like a rounded, mostly sky-facing crown rather than a flat card.
-	NORMAL = normalize(forward + vec3(0.0, 0.8, 0.0));
+	NORMAL = normalize(forward + vec3(0.0, 0.8, 0.0) + (right * sign(UV2.x) + vec3(0.0, sign(UV2.y), 0.0)) * dome);
 	float count = float(view_grid.x * view_grid.y);
 	float turn = fract(atan(forward.x, forward.z) / TAU) * count;
 	float first = min(floor(turn), count - 1.0);

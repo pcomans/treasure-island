@@ -19,9 +19,10 @@ uniform vec2 texture_size = vec2(1024.0);
 // 6 % of the full-size coverage to mip 5), so only a small boost is needed to hold
 // thin tips; 0.25 filled the distant crowns into solid lobes.
 uniform float mip_alpha_boost : hint_range(0.0, 0.5) = 0.05;
-// A card seen nearly edge-on fades out below this cosine of the angle between the
-// view and the card itself (not its authored crown normal), so it can't show as a
-// long streak across a crown. 0 keeps every card.
+// A card seen at a low angle fades out as the cosine of the angle between the view
+// and the card itself (not its authored crown normal) falls through this, so it
+// can't show as a long streak across a crown; a cluster's crossed cards leave one
+// facing the viewer. 0 keeps every card.
 uniform float edge_fade : hint_range(0.0, 0.6) = 0.0;
 // Low plants (grasses, perennials, shrubs) dissolve away over fade_length_m
 // before their visibility range ends, which the kit stores in the vertex
@@ -57,7 +58,7 @@ void fragment() {
 	ALPHA = tex.a * (1.0 + lod * mip_alpha_boost);
 	if (edge_fade > 0.0) {
 		vec3 card = normalize(cross(dFdx(VERTEX), dFdy(VERTEX)));
-		ALPHA *= smoothstep(0.0, edge_fade, abs(dot(card, VIEW)));
+		ALPHA *= smoothstep(edge_fade * 0.6, edge_fade, abs(dot(card, VIEW)));
 	}
 	if (fade < 1.0) {
 		// Blocks of the card drop out one by one as the plant recedes.

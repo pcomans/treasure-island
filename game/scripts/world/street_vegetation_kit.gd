@@ -606,17 +606,19 @@ const LOW_KINDS := ["grass_clump", "planting_slot"]
 ## mip_alpha_boost).
 const IMPOSTOR_TREE_GRID := Vector2i(4, 2)
 const IMPOSTOR_SHRUB_GRID := Vector2i(2, 2)
+## How far their impostors' corner normals lean out (the impostor shader's dome).
+const IMPOSTOR_DOME := 1.0
 const PROPS := {
 	"mexican_fan_palm": {"kinds": ["palm_slot", "tree"], "variants": FAN_PALMS, "ranges": [35.0, 95.0, 900.0], "foot_m": 0.45, "form": "fan_palm"},
 	"canary_date_palm": {"kinds": ["palm_slot", "tree"], "variants": CANARY_PALMS, "ranges": [45.0, 110.0, 900.0], "foot_m": 0.7, "form": "canary_palm"},
 	"monterey_cypress": {"kinds": ["tree"], "variants": CYPRESSES, "ranges": [45.0, 110.0, 900.0], "foot_m": 0.8, "form": "cypress"},
 	"sydney_blue_gum_young": {"kinds": ["tree"], "variants": GUMS, "ranges": [40.0, 100.0, 900.0], "foot_m": 0.3, "form": "gum"},
 	"island_oak_young": {"kinds": ["tree"], "variants": OAKS, "ranges": [35.0, 90.0, 700.0], "foot_m": 0.3, "form": "oak"},
-	"monterey_pine": {"kinds": ["tree"], "variants": PINES, "ranges": [45.0, 110.0, 900.0], "foot_m": 0.6, "form": "pine", "impostor_grid": IMPOSTOR_TREE_GRID, "impostor_alpha": 0.1},
-	"spreading_broadleaf": {"kinds": ["tree"], "variants": BROADLEAVES, "ranges": [45.0, 110.0, 900.0], "foot_m": 0.7, "form": "broadleaf", "impostor_grid": IMPOSTOR_TREE_GRID, "impostor_alpha": 0.1},
-	"nz_christmas_tree": {"kinds": ["tree"], "variants": CHRISTMAS_TREES, "ranges": [40.0, 100.0, 800.0], "foot_m": 0.5, "form": "broadleaf", "impostor_grid": IMPOSTOR_TREE_GRID, "impostor_alpha": 0.1},
-	"eucalyptus_mature": {"kinds": ["tree"], "variants": MATURE_GUMS, "ranges": [50.0, 120.0, 900.0], "foot_m": 0.6, "form": "gum", "impostor_grid": IMPOSTOR_TREE_GRID, "impostor_alpha": 0.16},
-	"norfolk_island_pine": {"kinds": ["tree"], "variants": NORFOLK_PINES, "ranges": [35.0, 90.0, 600.0], "foot_m": 0.2, "form": "araucaria", "impostor_grid": IMPOSTOR_TREE_GRID, "impostor_alpha": 0.16},
+	"monterey_pine": {"kinds": ["tree"], "variants": PINES, "ranges": [45.0, 110.0, 900.0], "foot_m": 0.6, "form": "pine", "impostor_grid": IMPOSTOR_TREE_GRID, "impostor_alpha": 0.06},
+	"spreading_broadleaf": {"kinds": ["tree"], "variants": BROADLEAVES, "ranges": [45.0, 110.0, 900.0], "foot_m": 0.7, "form": "broadleaf", "impostor_grid": IMPOSTOR_TREE_GRID, "impostor_alpha": 0.05},
+	"nz_christmas_tree": {"kinds": ["tree"], "variants": CHRISTMAS_TREES, "ranges": [40.0, 100.0, 800.0], "foot_m": 0.5, "form": "broadleaf", "impostor_grid": IMPOSTOR_TREE_GRID, "impostor_alpha": 0.05},
+	"eucalyptus_mature": {"kinds": ["tree"], "variants": MATURE_GUMS, "ranges": [50.0, 120.0, 900.0], "foot_m": 0.6, "form": "gum", "impostor_grid": IMPOSTOR_TREE_GRID, "impostor_alpha": 0.08},
+	"norfolk_island_pine": {"kinds": ["tree"], "variants": NORFOLK_PINES, "ranges": [35.0, 90.0, 600.0], "foot_m": 0.2, "form": "araucaria", "impostor_grid": IMPOSTOR_TREE_GRID, "impostor_alpha": 0.1},
 	"indian_hawthorn": {"kinds": ["planting_slot"], "variants": HAWTHORNS, "ranges": [30.0, 75.0, 160.0], "foot_m": 0.6, "form": "shrub", "impostor_grid": IMPOSTOR_SHRUB_GRID, "impostor_alpha": 0.1},
 	"pittosporum_tobira": {"kinds": ["planting_slot"], "variants": PITTOSPORUMS, "ranges": [30.0, 75.0, 160.0], "foot_m": 0.5, "form": "shrub", "impostor_grid": IMPOSTOR_SHRUB_GRID, "impostor_alpha": 0.1},
 	"red_tip_shrub": {"kinds": LOW_KINDS, "variants": RED_TIPS, "ranges": [25.0, 60.0, 140.0], "foot_m": 0.25, "form": "shrub", "impostor_grid": IMPOSTOR_SHRUB_GRID, "impostor_alpha": 0.16},
@@ -639,9 +641,11 @@ const PROPS := {
 	"dune_tansy": {"kinds": LOW_KINDS, "variants": TANSIES, "ranges": [50.0], "foot_m": 0.2, "form": "low"},
 	"white_umbel_perennial": {"kinds": LOW_KINDS, "variants": WHITE_UMBELS, "ranges": [50.0], "foot_m": 0.15, "form": "low"},
 }
-## Below this cosine of the angle between the view and a card, a rollout model's
-## card fades out, so it never shows as a long streak across the crown.
-const CARD_EDGE_FADE := 0.3
+## Below about this cosine of the angle between the view and a card, a rollout
+## model's card fades out, so it never shows as a long streak across the crown; a
+## shrub's small leaves smear sooner, so its cards fade sooner.
+const CARD_EDGE_FADE := 0.4
+const SHRUB_EDGE_FADE := 0.55
 ## How far a big tree's shadow mesh casts, past its impostor switch.
 const SHADOW_RANGE_M := 220.0
 ## A low plant dissolves over the last LOW_FADE_M of its range. Its vertex
@@ -1210,7 +1214,7 @@ func _build_canary_palm(p: Dictionary) -> Dictionary:
 				var kept: Dictionary = fronds[f_index]
 				if p.has("shag"):
 					kept = kept.duplicate()
-					kept.width = float(kept.width) * 1.45
+					kept.width = float(kept.width) * 1.6
 				_canary_frond(leaves, kept, crown, 4 if p.has("shag") else 3, sway_top)
 		bark.commit(mesh, material("canary_bark"))
 		knob_surf.commit(mesh, material("canary_knob"))
@@ -2808,8 +2812,8 @@ func _build_shrub(p: Dictionary) -> Dictionary:
 				position.y = maxf(position.y, card_h * size * 0.45)
 				var mirror := 1.0 if rng.randf() < 0.5 else -1.0
 				var rise := (Vector3.UP * 0.45 + out * 0.85).normalized()
-				for normal in _cluster_normals(out, rng, 0.35):
-					var card := _card(position, normal, rise, card_w * size * mirror, card_h * size, 0.45, rng.randf_range(-0.7, 0.7), cell, Color(shade, shade, shade), heart, index, 0.02)
+				for normal in _cluster_normals(out, rng, 0.2):
+					var card := _card(position, normal, rise, card_w * size * mirror, card_h * size, 0.45, rng.randf_range(-0.35, 0.35), cell, Color(shade, shade, shade), heart, index, 0.02)
 					card.coarse = true
 					card.root = 0.66
 					card.heart_weight = 0.72
@@ -2954,6 +2958,8 @@ func _build_flax(p: Dictionary) -> Dictionary:
 				var t := float(j) / segments
 				# Upright from the base, bending over toward the tip.
 				var position := base + direction * (length * t) + Vector3.DOWN * (droop * length * t * t * t)
+				# A long outer leaf's tip rests on the planting, not under it.
+				position.y = maxf(position.y, 0.04 * t)
 				var tangent := (direction * length + Vector3.DOWN * (3.0 * droop * length * t * t)).normalized()
 				var across := face.cross(tangent).normalized()
 				var c := float(leaf.shade) * lerpf(0.55, 1.0, sqrt(t))
@@ -3111,8 +3117,11 @@ func hedge_into(surfs: Dictionary, variant: int, points: PackedVector3Array, fro
 				if station > to_m - 0.001 and to_m < total - 0.001:
 					continue
 				var index := roundi(station / HEDGE_STEP_M)
+				if _hash01(seed, index, 341) < 0.4:
+					continue
 				var foot: Vector3 = (frames[i].position as Vector3) + (frames[i].right as Vector3) * ((_hash01(seed, index, 340) - 0.5) * d)
-				_tube(core, PackedVector3Array([foot + Vector3.DOWN * 0.05, foot + Vector3.UP * (base + 0.08)]), PackedFloat32Array([0.11, 0.07]), PackedColorArray([Color(0.2, 0.18, 0.16), Color(0.14, 0.13, 0.12)]),
+				var post := lerpf(0.06, 0.11, _hash01(seed, index, 342))
+				_tube(core, PackedVector3Array([foot + Vector3.DOWN * 0.05, foot + Vector3.UP * (base + 0.08)]), PackedFloat32Array([post, post * 0.7]), PackedColorArray([Color(0.2, 0.18, 0.16), Color(0.14, 0.13, 0.12)]),
 					PackedVector2Array([Vector2.ZERO, Vector2.ZERO]), 3, 1.0, HEDGE_TILE_M)
 		return
 	var sprig_cell: Rect2 = SHRUB_CELLS[str(p.sprigs)]
@@ -3137,7 +3146,7 @@ func hedge_into(surfs: Dictionary, variant: int, points: PackedVector3Array, fro
 		var at := ground + right * (side * d * (0.55 if rounded else 0.72)) + tangent * along + Vector3.UP * (top + roll - 0.05)
 		var width := 0.55 * lerpf(0.85, 1.15, _hash01(seed, index, 301))
 		var tall := 0.26 * lerpf(0.8, 1.2, _hash01(seed, index, 302))
-		var shade := lerpf(0.42, 0.6, _hash01(seed, index, 303))
+		var shade := lerpf(0.55, 0.75, _hash01(seed, index, 303))
 		var tone := Color(shade, shade, shade)
 		var up := (Vector3.UP * 0.85 + right * side * (0.35 if rounded else 0.6)).normalized()
 		for k in 2:
@@ -3154,12 +3163,13 @@ func hedge_into(surfs: Dictionary, variant: int, points: PackedVector3Array, fro
 			_foliage_card(cards, ground + right * (side * (lateral + 0.03)) + Vector3.UP * height_on_side, right * side, (Vector3.UP + right * side * 0.4).normalized(), 0.6, 0.32, 0.5,
 				(_hash01(seed, index, 311) - 0.5) * 1.2, sprig_cell, tone * 0.9, ground + heart_lift, 0.3, top, 0.01, 0.02, false)
 		if rounded and index % 6 == 0:
-			# The open stems under the canopy, on both sides: a wide card, so a few to the metre.
-			for flank: float in [1.0, -1.0]:
-				var shift := tangent * ((_hash01(seed, index, 320 + int(flank)) - 0.5) * 0.6)
-				_foliage_card(cards, ground + right * (flank * d * lerpf(0.25, 0.6, _hash01(seed, index, 323 + int(flank)))) + shift + Vector3.DOWN * 0.06, right * flank, Vector3.UP,
-					lerpf(2.0, 2.5, _hash01(seed, index, 325)) * (1.0 if _hash01(seed, index, 326 + int(flank)) < 0.5 else -1.0), base + 0.34, 0.0, 0.0,
-					SHRUB_CELLS.hedge_stems, Color(0.6, 0.6, 0.6), ground + heart_lift, 0.2, top, 0.0, 0.0, false)
+			# The open stems under the canopy: a wide card, so a few to the metre, on one
+			# side and then the other, with gaps between them.
+			var flank := 1.0 if (index / 6) % 2 == 0 else -1.0
+			var shift := tangent * ((_hash01(seed, index, 320) - 0.5) * 0.8)
+			_foliage_card(cards, ground + right * (flank * d * lerpf(0.25, 0.6, _hash01(seed, index, 323))) + shift + Vector3.DOWN * 0.06, right * flank, Vector3.UP,
+				lerpf(2.0, 2.5, _hash01(seed, index, 325)) * (1.0 if _hash01(seed, index, 326) < 0.5 else -1.0), base + 0.34, 0.0, 0.0,
+				SHRUB_CELLS.hedge_stems, Color(0.6, 0.6, 0.6), ground + heart_lift, 0.2, top, 0.0, 0.0, false)
 		if rounded and lod == 0 and index % 2 == 1:
 			# A leafy sprig hanging off the hem, so its edge isn't a straight line.
 			var flank := 1.0 if _hash01(seed, index, 330) < 0.5 else -1.0
@@ -3671,9 +3681,9 @@ func material(key: String) -> Material:
 		"set_piece_foliage":
 			made = _crown_foliage("set_piece_foliage_atlas.png", Color(0.9, 0.92, 0.88), Color(0.08, 0.1, 0.04), Vector2(1024.0, 1024.0), 0.1, 0.85)
 		"shrub_foliage":
-			made = _crown_foliage("shrub_foliage_atlas.png", Color(0.9, 0.92, 0.88), Color(0.08, 0.1, 0.04), Vector2(2048.0, 1024.0), 0.12, 0.82)
+			made = _crown_foliage("shrub_foliage_atlas.png", Color(0.9, 0.92, 0.88), Color(0.08, 0.1, 0.04), Vector2(2048.0, 1024.0), 0.12, 0.82, SHRUB_EDGE_FADE)
 		"hedge_leaves":
-			made = _bark("hedge_surface.png", Color(0.74, 0.8, 0.72))
+			made = _bark("hedge_surface.png", Color(0.84, 0.9, 0.76))
 		"glossy_hedge_leaves":
 			made = _bark("escallonia_surface.png", Color(0.86, 0.9, 0.86))
 			made.set_shader_parameter("specular", 0.15)
@@ -3694,7 +3704,9 @@ func _impostor_material(prop: String, variant: int, image: Texture2D = null) -> 
 		made.set_shader_parameter("albedo_texture", image if image != null else load(impostor_texture_path(prop, variant)))
 		made.set_shader_parameter("view_grid", PROPS[prop].get("impostor_grid", Vector2i.ONE))
 		made.set_shader_parameter("mip_alpha_boost", float(PROPS[prop].get("impostor_alpha", 0.0)))
-		made.set_shader_parameter("toward_camera_m", float((PROPS[prop].variants[variant] as Dictionary).get("impostor_forward", 0.0)))
+		var params: Dictionary = PROPS[prop].variants[variant]
+		made.set_shader_parameter("toward_camera_m", float(params.get("impostor_forward", 0.0)))
+		made.set_shader_parameter("dome", IMPOSTOR_DOME if PROPS[prop].has("impostor_grid") or params.has("impostor_forward") else 0.0)
 		made.resource_name = "street_vegetation_" + key
 		if image != null:
 			return made
@@ -3725,7 +3737,7 @@ func _foliage(file: String, tint: Color, translucency: Color, size: Vector2, spe
 
 
 ## A rollout model's foliage: its cards fade out edge-on (the shader's edge_fade).
-func _crown_foliage(file: String, tint: Color, translucency: Color, size: Vector2, specular: float, roughness: float) -> ShaderMaterial:
+func _crown_foliage(file: String, tint: Color, translucency: Color, size: Vector2, specular: float, roughness: float, edge_fade := CARD_EDGE_FADE) -> ShaderMaterial:
 	var foliage := _foliage(file, tint, translucency, size, specular, roughness)
-	foliage.set_shader_parameter("edge_fade", CARD_EDGE_FADE)
+	foliage.set_shader_parameter("edge_fade", edge_fade)
 	return foliage

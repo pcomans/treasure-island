@@ -27,10 +27,11 @@ const PIXELS := {
 	"monterey_pine": 256, "spreading_broadleaf": 256, "nz_christmas_tree": 192, "eucalyptus_mature": 256, "norfolk_island_pine": 128,
 	"indian_hawthorn": 96, "pittosporum_tobira": 96, "red_tip_shrub": 64, "conical_shrub": 128, "nz_flax": 64,
 }
-## The bake's light: soft ambient, and a light straight down that shades a crown
-## from the top from every side alike. The two add up to about white on a top leaf.
-const BAKE_AMBIENT := 0.62
-const BAKE_TOP_LIGHT := 0.42
+## The bake's light: ambient, and a light straight down that shades a crown from
+## the top from every side alike, its undersides and hollows well darker than its
+## top. The two add up to about white on a top leaf.
+const BAKE_AMBIENT := 0.45
+const BAKE_TOP_LIGHT := 0.6
 ## The eye height of the tone and height check, and the side of its square frames.
 const EYE_M := 2.2
 const CHECK_PIXELS := 256
@@ -235,7 +236,7 @@ func _match_tone(kit: Kit, prop: String, variant: int, atlas: Image) -> Image:
 func _report(stats: Dictionary) -> String:
 	var near: Vector3 = stats.near_mean
 	var far: Vector3 = stats.far_mean
-	return "tone %+.0f%% top %+.1f%% width %+.1f%% cover %+.0f%%" % [(_luma(far) / maxf(_luma(near), 0.0001) - 1.0) * 100.0, stats.top_gap * 100.0, stats.width_gap * 100.0, stats.cover_gap * 100.0]
+	return "tone %+.0f%% (sides %s) top %+.1f%% width %+.1f%% cover %+.0f%%" % [(_luma(far) / maxf(_luma(near), 0.0001) - 1.0) * 100.0, stats.sides, stats.top_gap * 100.0, stats.width_gap * 100.0, stats.cover_gap * 100.0]
 
 
 static func _luma(color: Vector3) -> float:
@@ -297,6 +298,7 @@ func _compare(scene: Dictionary, near_key: String, distance: float, box: AABB, e
 	var top_gap := 0.0
 	var width_gap := 0.0
 	var cover_gap := 0.0
+	var sides := PackedStringArray()
 	var aim := box.get_center()
 	for side in 4:
 		var turn := TAU * (float(side) + 0.15) / 4.0
@@ -305,11 +307,12 @@ func _compare(scene: Dictionary, near_key: String, distance: float, box: AABB, e
 		var far := await _frame(scene, "far")
 		near_sum += near.mean
 		far_sum += far.mean
+		sides.append("%+.0f" % ((_luma(far.mean) / maxf(_luma(near.mean), 0.0001) - 1.0) * 100.0))
 		var tall := maxf(float(near.bottom - near.top), 1.0)
 		top_gap += float(near.top - far.top) / tall
 		width_gap += float((far.right - far.left) - (near.right - near.left)) / maxf(float(near.right - near.left), 1.0)
 		cover_gap += float(far.count) / maxf(float(near.count), 1.0) - 1.0
-	return {"near_mean": near_sum, "far_mean": far_sum, "top_gap": top_gap / 4.0, "width_gap": width_gap / 4.0, "cover_gap": cover_gap / 4.0}
+	return {"near_mean": near_sum, "far_mean": far_sum, "sides": "/".join(sides), "top_gap": top_gap / 4.0, "width_gap": width_gap / 4.0, "cover_gap": cover_gap / 4.0}
 
 
 ## One level alone in the frame: {mean linear colour, count, top, bottom, left, right} of its covered pixels.
