@@ -33,7 +33,7 @@ const SETS := {
 	"shrubs": [
 		"hawthorn_spray.png", "pittosporum_broad.png", "red_tip_shoots.png", "conical_spray.png",
 		"hedge_mat.png", "glossy_mat.png", "hedge_stems_open.png", "phormium_leaf.png",
-		"hedge_surface.png", "escallonia_flower_surface.png",
+		"hedge_surface.png", "glossy_hedge_flower_surface.png",
 	],
 }
 ## The shrub atlas's 512 x 512 cells, row by row in 2048 x 1024 (SHRUB_CELLS in
@@ -385,7 +385,7 @@ func _pack_shrubs(images: Dictionary, errors: Array[String]) -> void:
 	_save(atlas, OUT + "shrub_foliage_atlas.png", errors)
 	_save_barks(images, {
 		"hedge_surface.png": ["hedge_surface.png", Color(0.8, 0.84, 0.82), 0.42],
-		"escallonia_flower_surface.png": ["escallonia_surface.png", Color(0.88, 0.88, 0.98), 0.5, 1.2],
+		"glossy_hedge_flower_surface.png": ["glossy_hedge_surface.png", Color(0.88, 0.88, 0.98), 0.5, 1.2],
 	}, errors)
 
 

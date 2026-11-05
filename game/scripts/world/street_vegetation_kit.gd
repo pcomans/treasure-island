@@ -3158,8 +3158,9 @@ func _build_flax(p: Dictionary) -> Dictionary:
 			"base": in_plane * rng.randf_range(-0.06, 0.06) + Vector3(rng.randf_range(-0.03, 0.03), -0.05, rng.randf_range(-0.03, 0.03)),
 			"direction": direction,
 			"length": height * lerpf(1.12, 0.8, outward) * rng.randf_range(0.88, 1.05),
-			# How far its tip arches over, the outer leaves farthest.
-			"droop": rng.randf_range(0.2, 0.34) + 0.5 * pow(outward, 1.3),
+			# How far its tip arches over, the outer leaves farthest, never down to the
+			# planting: a leaf lying flat would poke out over a planter's rim.
+			"droop": minf(rng.randf_range(0.2, 0.34) + 0.5 * pow(outward, 1.3), direction.y - 0.14),
 			"face": Vector3(-in_plane.z, 0.0, in_plane.x) * (1.0 if rng.randf() < 0.5 else -1.0),
 			"width": width * rng.randf_range(0.85, 1.1),
 			"shade": rng.randf_range(0.82, 1.06),
@@ -3184,8 +3185,6 @@ func _build_flax(p: Dictionary) -> Dictionary:
 				var t := float(j) / segments
 				# Upright from the base, bending over toward the tip.
 				var position := base + direction * (length * t) + Vector3.DOWN * (droop * length * t * t * t)
-				# A long outer leaf's tip rests on the planting, not under it.
-				position.y = maxf(position.y, 0.04 * t)
 				var tangent := (direction * length + Vector3.DOWN * (3.0 * droop * length * t * t)).normalized()
 				var across := face.cross(tangent).normalized()
 				var c := float(leaf.shade) * lerpf(0.55, 1.0, sqrt(t))
@@ -3910,7 +3909,7 @@ func material(key: String) -> Material:
 		"hedge_leaves":
 			made = _bark("hedge_surface.png", Color(0.84, 0.9, 0.76))
 		"glossy_hedge_leaves":
-			made = _bark("escallonia_surface.png", Color(0.82, 0.84, 0.84))
+			made = _bark("glossy_hedge_surface.png", Color(0.82, 0.84, 0.84))
 			made.set_shader_parameter("specular", 0.15)
 			made.set_shader_parameter("roughness", 0.8)
 	made.set_shader_parameter("wind_strength", wind_strength)
