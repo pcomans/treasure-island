@@ -17,7 +17,7 @@
    "channel": "straw",
    "within_sources": ["r17241151"],
    "basis": "production_inference",
-   "reason": "The residential grounds away from the buildings and streets are dry straw grass in late spring, the shore belt beside the riprap included; the band rule below draws the lawns over it.",
+   "reason": "The residential grounds away from the streets and walls are dry straw grass in late spring, the shore belt beside the riprap included; the kerb and unit lawn rules below draw the lawns over it.",
    "evidence": "2026-05-26 aerial over r17241151 (inventory heuristic classes, 1 m cells): more than 14 m from buildings, roads and lots the open ground is 85-97 % dry grass, 4-8 % lawn and 3-9 % bare, open-ground mean sRGB about (126,116,87); within 50 m of the outline 78-92 % dry. The 2025-08-29 aerial is drier still (Z1 lawn 4.8 % of the zone). Street View in Mar 2025 (sv05, 1236 Northpoint Dr) shows the same belt green after the winter rains; the game keeps the late-spring look of the 2026-10-17 ground-cover decision."
   },
   {
@@ -39,12 +39,12 @@
    "within_sources": ["r17241151"],
    "near": {
     "kinds": ["building"],
-    "full_m": 1.5,
-    "zero_m": 6
+    "full_m": 2.5,
+    "zero_m": 8
    },
    "weight": 0.85,
    "basis": "production_inference",
-   "reason": "A strip of mown lawn along the housing's walls (the unit fronts), fading out by 6 m, so the green meets the walls rather than the straw; weight 0.85 leaves a few worn spots.",
+   "reason": "A strip of mown lawn along the housing's walls (the unit fronts), full to 2.5 m and fading out by 8 m, so the green meets the walls rather than the straw; weight 0.85 leaves a few worn spots.",
    "evidence": "2026-05-26 aerial over r17241151 (May 2026 z19 tiles): loose green 43-55 % of the non-canopy ground within 18 m of the buildings in the Z1 loop, highest at 2-4 m (48-55 %). Street View Mar 2025 sv06 (1255 Bayside Dr) and sv04: lawn up to the unit fronts. Phase 1 review: straw against the walls with green further out read backwards (views near-straw, z1-belt)."
   },
   {

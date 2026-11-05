@@ -37,11 +37,13 @@ uniform vec3 dry_straw : source_color = vec3(0.637, 0.565, 0.418);
 // Bare soil: the grey-brown dirt of the 2026-05-26 aerial's fields from above
 // in sun (May 2026 z19 tiles: about sRGB 150-165, 145-157, 120-140), drawn
 // lighter on wholly bare ground toward its pale graded fill (about 178, 178,
-// 158; see soil_tone below). The earlier pale cream read as near white from
-// a distance.
-uniform vec3 soil_gap : source_color = vec3(0.490, 0.470, 0.390);
-uniform vec3 soil_blade : source_color = vec3(0.465, 0.455, 0.372);
-uniform vec3 soil_straw : source_color = vec3(0.530, 0.512, 0.436);
+// 158; see soil_tone below). Gap is the dirt, blade its clods and shade where
+// the detail photo has its tufts, straw the dead blades lying on it. The
+// earlier pale cream with little texture read as near white from a distance
+// and as spilled flour close up.
+uniform vec3 soil_gap : source_color = vec3(0.500, 0.480, 0.400);
+uniform vec3 soil_blade : source_color = vec3(0.400, 0.385, 0.320);
+uniform vec3 soil_straw : source_color = vec3(0.600, 0.560, 0.440);
 
 // Family mix. A point turns dry where the patch noise exceeds dry_threshold and
 // bare where the bare level (bare_level) exceeds bare_threshold; above 1
@@ -127,7 +129,10 @@ float bare_level(vec2 p, float fade) {
 	vec2 q = s + 0.9 * warp;
 	float level = 0.6 * value_noise(q + vec2(41.7, 9.2)) + 0.28 * value_noise(2.2 * q + vec2(5.3, 17.9)) + 0.12 * value_noise(4.9 * q + vec2(29.1, 3.7));
 	level += 0.3 * (value_noise(s / 6.0 + vec2(13.7, 71.3)) - 0.5);
-	return level + 0.1 * (value_noise(p / 1.3 + vec2(61.1, 2.3)) - 0.5) * (1.0 - fade);
+	if (fade < 1.0) {
+		level += 0.1 * (value_noise(p / 1.3 + vec2(61.1, 2.3)) - 0.5) * (1.0 - fade);
+	}
+	return level;
 }
 
 vec3 cover_layer(vec3 gap, vec3 blade, vec3 straw, vec3 m, float grain_gain, float fade) {
@@ -169,20 +174,22 @@ void fragment() {
 	vec3 ground = mix(green, dry, dry_w);
 	if (mix_settings.y <= 1.0 + patch_softness) {
 		float bare = bare_level(p, fade);
-		// A crisp edge near the camera, softer where the fraying has faded out.
-		float edge = mix(0.02, 0.08, fade);
+		// A crisp edge near the camera, a little softer where the fraying has faded out.
+		float edge = mix(0.02, 0.05, fade);
 		float bare_w = smoothstep(mix_settings.y - edge, mix_settings.y + edge, bare);
-		// Tufts of the ground around grow into a patch's edge, and sparsely in its middle.
+		// The detail photo's grass tufts, kept crisp, grow on into a patch's edge
+		// and sparsely in its middle.
 		float inside = smoothstep(mix_settings.y, mix_settings.y + 0.12, bare);
-		bare_w *= 1.0 - m.x * mix(0.85, 0.25, inside) * (1.0 - fade);
+		bare_w *= 1.0 - smoothstep(0.35, 0.65, m.x) * mix(1.0, 0.3, inside) * (1.0 - fade);
 		// soil_tone: the more of the ground is bare, the paler its soil, from the
 		// fields' dirt patches to wholly graded fill.
 		float soil_tone = mix(1.3, 1.0, smoothstep(0.35, 0.6, mix_settings.y));
-		vec3 soil = cover_layer(soil_gap, soil_blade, soil_straw, m, 0.4, fade) * soil_tone;
+		vec3 soil = cover_layer(soil_gap, soil_blade, soil_straw, m, 1.0, fade) * soil_tone;
 		// Compacted and crusted ground in light and dark mottles, settling to its
 		// mean with distance.
-		float mottle = 0.7 * value_noise(p / 3.7 + vec2(23.9, 47.3)) + 0.3 * value_noise(p / 0.9 + vec2(5.9, 31.7));
-		soil *= mix(0.86 + 0.28 * mottle, 1.0, fade);
+		if (fade < 1.0) {
+			soil *= mix(0.84 + 0.32 * value_noise(p / 3.7 + vec2(23.9, 47.3)), 1.0, fade);
+		}
 		ground = mix(ground, soil, bare_w);
 	}
 	ALBEDO = ground * (0.94 + 0.12 * n_fine);
