@@ -40,6 +40,7 @@ import {
 } from "./street-vegetation-generation.mjs";
 import {
   BOUNDARY_ATTACHED_SOURCE_KEYS,
+  CONCRETE_ROAD_SURFACE,
   PLAYABLE_BOUNDARY_SOURCE_KEY,
   ROAD_SURFACE_BIASES_M,
   SHARED_COASTLINE_SOURCE_KEY,
@@ -196,6 +197,7 @@ const UNPLANTABLE_MATERIALS = Object.freeze([
   "park_plaza_lens",
   "park_plaza_zigzag",
   "road_path",
+  "road_path_concrete",
   "road_path_pedestrian",
   "street_kerb_concrete",
   "street_parking",
@@ -802,7 +804,12 @@ export function generateStreetDetail({
     .map((object) => ({ key: object.row.source_key, geometry: object.geometry })));
   const roads = polygonSet(objects
     .filter((object) => object.roles.includes("roads_paths"))
-    .map((object) => ({ key: object.row.source_key, geometry: object.geometry, visual_class: object.road_visual_class })));
+    .map((object) => ({
+      key: object.row.source_key,
+      geometry: object.geometry,
+      visual_class: object.road_visual_class,
+      concrete: object.road_visual_class === "vehicle" && object.tags.surface === CONCRETE_ROAD_SURFACE,
+    })));
   // Plants keep off roads and paths too, except the OSM sidewalks a zone's
   // street ground photographed at the curb: their mulch bed takes that ground
   // (planting_behind_walk), so a plant may stand where the OSM line runs.
@@ -894,8 +901,12 @@ export function generateStreetDetail({
     const raised = ground.surfaceAt(xz);
     if (raised) return raised;
     const containingRoads = roads.containing(xz).sort((left, right) => compareSourceKeys(left.key, right.key));
-    const vehicle = containingRoads.find((item) => item.visual_class === "vehicle");
+    // An asphalt vehicle road is the top where it crosses, then a concrete
+    // vehicle way's skin (at the pedestrian height), then the pedestrian skin.
+    const vehicle = containingRoads.find((item) => item.visual_class === "vehicle" && !item.concrete);
     if (vehicle) return { kind: "road_path", material_key: "road_path", source_key: vehicle.key, bias_m: ROAD_SURFACE_BIASES_M.base };
+    const concrete = containingRoads.find((item) => item.concrete);
+    if (concrete) return { kind: "road_path", material_key: "road_path_concrete", source_key: concrete.key, bias_m: ROAD_SURFACE_BIASES_M.pedestrian };
     if (containingRoads.length > 0) {
       return { kind: "road_path", material_key: "road_path_pedestrian", source_key: containingRoads[0].key, bias_m: ROAD_SURFACE_BIASES_M.pedestrian };
     }

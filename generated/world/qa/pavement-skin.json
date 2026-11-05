@@ -1,5 +1,13 @@
 {
   "materials": {
+    "concrete": {
+      "albedo_srgb_hex": "8a8579",
+      "material_key": "road_path_concrete",
+      "relative_luminance": 0.236,
+      "source_count": 1,
+      "source_tag_rule": "vehicle-class way with surface=concrete",
+      "surface_bias_m": 0.08
+    },
     "paved_area": {
       "albedo_srgb_hex": "707573",
       "material_key": "major_area_paved",
@@ -65,9 +73,11 @@
       {
         "base_object_key": "roads:x_-3__z_-4",
         "chunk_id": "x_-3__z_-4",
+        "concrete_object_key": null,
         "pedestrian_object_key": "roads-pedestrian:x_-3__z_-4",
         "plan_area_m2": {
           "base_union": 35.633,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 35.633,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 35.633,
@@ -76,6 +86,7 @@
         },
         "source_counts": {
           "all": 1,
+          "concrete": 0,
           "pedestrian": 1,
           "pedestrian_visible": 1,
           "vehicle": 0
@@ -84,9 +95,11 @@
       {
         "base_object_key": "roads:x_-3__z_-3",
         "chunk_id": "x_-3__z_-3",
+        "concrete_object_key": null,
         "pedestrian_object_key": "roads-pedestrian:x_-3__z_-3",
         "plan_area_m2": {
           "base_union": 2597.967,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 837.835,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 821.573,
@@ -95,6 +108,7 @@
         },
         "source_counts": {
           "all": 8,
+          "concrete": 0,
           "pedestrian": 2,
           "pedestrian_visible": 2,
           "vehicle": 6
@@ -103,9 +117,11 @@
       {
         "base_object_key": "roads:x_-3__z_-2",
         "chunk_id": "x_-3__z_-2",
+        "concrete_object_key": null,
         "pedestrian_object_key": "roads-pedestrian:x_-3__z_-2",
         "plan_area_m2": {
           "base_union": 5357.395,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 1202.853,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 1162.271,
@@ -114,6 +130,7 @@
         },
         "source_counts": {
           "all": 21,
+          "concrete": 0,
           "pedestrian": 8,
           "pedestrian_visible": 8,
           "vehicle": 13
@@ -122,9 +139,11 @@
       {
         "base_object_key": "roads:x_-3__z_-1",
         "chunk_id": "x_-3__z_-1",
+        "concrete_object_key": null,
         "pedestrian_object_key": "roads-pedestrian:x_-3__z_-1",
         "plan_area_m2": {
           "base_union": 2823.339,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 1379.829,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 1361.2,
@@ -133,6 +152,7 @@
         },
         "source_counts": {
           "all": 7,
+          "concrete": 0,
           "pedestrian": 4,
           "pedestrian_visible": 4,
           "vehicle": 3
@@ -141,9 +161,11 @@
       {
         "base_object_key": "roads:x_-3__z_0",
         "chunk_id": "x_-3__z_0",
+        "concrete_object_key": null,
         "pedestrian_object_key": "roads-pedestrian:x_-3__z_0",
         "plan_area_m2": {
           "base_union": 71.21,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 71.21,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 71.21,
@@ -152,6 +174,7 @@
         },
         "source_counts": {
           "all": 1,
+          "concrete": 0,
           "pedestrian": 1,
           "pedestrian_visible": 1,
           "vehicle": 0
@@ -160,9 +183,11 @@
       {
         "base_object_key": "roads:x_-2__z_-4",
         "chunk_id": "x_-2__z_-4",
+        "concrete_object_key": null,
         "pedestrian_object_key": "roads-pedestrian:x_-2__z_-4",
         "plan_area_m2": {
           "base_union": 1743.76,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 745.402,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 745.402,
@@ -171,6 +196,7 @@
         },
         "source_counts": {
           "all": 4,
+          "concrete": 0,
           "pedestrian": 2,
           "pedestrian_visible": 2,
           "vehicle": 2
@@ -179,9 +205,11 @@
       {
         "base_object_key": "roads:x_-2__z_-3",
         "chunk_id": "x_-2__z_-3",
+        "concrete_object_key": null,
         "pedestrian_object_key": "roads-pedestrian:x_-2__z_-3",
         "plan_area_m2": {
           "base_union": 7710.501,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 461.11,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 446.201,
@@ -190,6 +218,7 @@
         },
         "source_counts": {
           "all": 14,
+          "concrete": 0,
           "pedestrian": 2,
           "pedestrian_visible": 2,
           "vehicle": 12
@@ -198,9 +227,11 @@
       {
         "base_object_key": "roads:x_-2__z_-2",
         "chunk_id": "x_-2__z_-2",
+        "concrete_object_key": null,
         "pedestrian_object_key": "roads-pedestrian:x_-2__z_-2",
         "plan_area_m2": {
           "base_union": 7510.224,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 779.627,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 755.627,
@@ -209,6 +240,7 @@
         },
         "source_counts": {
           "all": 26,
+          "concrete": 0,
           "pedestrian": 4,
           "pedestrian_visible": 4,
           "vehicle": 22
@@ -217,9 +249,11 @@
       {
         "base_object_key": "roads:x_-2__z_-1",
         "chunk_id": "x_-2__z_-1",
+        "concrete_object_key": null,
         "pedestrian_object_key": "roads-pedestrian:x_-2__z_-1",
         "plan_area_m2": {
           "base_union": 9585.706,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 2261.607,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 2182.502,
@@ -228,6 +262,7 @@
         },
         "source_counts": {
           "all": 21,
+          "concrete": 0,
           "pedestrian": 10,
           "pedestrian_visible": 10,
           "vehicle": 11
@@ -236,9 +271,11 @@
       {
         "base_object_key": "roads:x_-2__z_0",
         "chunk_id": "x_-2__z_0",
+        "concrete_object_key": null,
         "pedestrian_object_key": "roads-pedestrian:x_-2__z_0",
         "plan_area_m2": {
           "base_union": 7289.513,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 2896.684,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 2780.411,
@@ -247,6 +284,7 @@
         },
         "source_counts": {
           "all": 38,
+          "concrete": 0,
           "pedestrian": 25,
           "pedestrian_visible": 25,
           "vehicle": 13
@@ -255,9 +293,11 @@
       {
         "base_object_key": "roads:x_-2__z_1",
         "chunk_id": "x_-2__z_1",
+        "concrete_object_key": null,
         "pedestrian_object_key": "roads-pedestrian:x_-2__z_1",
         "plan_area_m2": {
           "base_union": 2790.7,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 2128.024,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 2101.833,
@@ -266,6 +306,7 @@
         },
         "source_counts": {
           "all": 13,
+          "concrete": 0,
           "pedestrian": 11,
           "pedestrian_visible": 11,
           "vehicle": 2
@@ -274,9 +315,11 @@
       {
         "base_object_key": "roads:x_-1__z_-4",
         "chunk_id": "x_-1__z_-4",
+        "concrete_object_key": null,
         "pedestrian_object_key": "roads-pedestrian:x_-1__z_-4",
         "plan_area_m2": {
           "base_union": 3229.953,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 543.925,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 527.635,
@@ -285,6 +328,7 @@
         },
         "source_counts": {
           "all": 9,
+          "concrete": 0,
           "pedestrian": 2,
           "pedestrian_visible": 2,
           "vehicle": 7
@@ -293,9 +337,11 @@
       {
         "base_object_key": "roads:x_-1__z_-3",
         "chunk_id": "x_-1__z_-3",
+        "concrete_object_key": null,
         "pedestrian_object_key": "roads-pedestrian:x_-1__z_-3",
         "plan_area_m2": {
           "base_union": 7915.778,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 357.287,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 342.278,
@@ -304,6 +350,7 @@
         },
         "source_counts": {
           "all": 17,
+          "concrete": 0,
           "pedestrian": 3,
           "pedestrian_visible": 3,
           "vehicle": 14
@@ -312,9 +359,11 @@
       {
         "base_object_key": "roads:x_-1__z_-2",
         "chunk_id": "x_-1__z_-2",
+        "concrete_object_key": null,
         "pedestrian_object_key": "roads-pedestrian:x_-1__z_-2",
         "plan_area_m2": {
           "base_union": 7005.034,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 45.176,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 45.176,
@@ -323,6 +372,7 @@
         },
         "source_counts": {
           "all": 22,
+          "concrete": 0,
           "pedestrian": 1,
           "pedestrian_visible": 1,
           "vehicle": 21
@@ -331,9 +381,11 @@
       {
         "base_object_key": "roads:x_-1__z_-1",
         "chunk_id": "x_-1__z_-1",
+        "concrete_object_key": null,
         "pedestrian_object_key": "roads-pedestrian:x_-1__z_-1",
         "plan_area_m2": {
           "base_union": 10092.016,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 1570.511,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 1538.758,
@@ -342,6 +394,7 @@
         },
         "source_counts": {
           "all": 27,
+          "concrete": 0,
           "pedestrian": 10,
           "pedestrian_visible": 10,
           "vehicle": 17
@@ -350,9 +403,11 @@
       {
         "base_object_key": "roads:x_-1__z_0",
         "chunk_id": "x_-1__z_0",
+        "concrete_object_key": null,
         "pedestrian_object_key": "roads-pedestrian:x_-1__z_0",
         "plan_area_m2": {
           "base_union": 10359.047,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 2516.917,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 2271.089,
@@ -361,6 +416,7 @@
         },
         "source_counts": {
           "all": 46,
+          "concrete": 0,
           "pedestrian": 28,
           "pedestrian_visible": 28,
           "vehicle": 18
@@ -369,9 +425,11 @@
       {
         "base_object_key": "roads:x_-1__z_1",
         "chunk_id": "x_-1__z_1",
+        "concrete_object_key": null,
         "pedestrian_object_key": "roads-pedestrian:x_-1__z_1",
         "plan_area_m2": {
           "base_union": 11265.008,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 4963.061,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 4734.72,
@@ -380,6 +438,7 @@
         },
         "source_counts": {
           "all": 59,
+          "concrete": 0,
           "pedestrian": 46,
           "pedestrian_visible": 46,
           "vehicle": 13
@@ -388,9 +447,11 @@
       {
         "base_object_key": "roads:x_-1__z_2",
         "chunk_id": "x_-1__z_2",
+        "concrete_object_key": null,
         "pedestrian_object_key": "roads-pedestrian:x_-1__z_2",
         "plan_area_m2": {
           "base_union": 8384.212,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 4160.148,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 4021.16,
@@ -399,6 +460,7 @@
         },
         "source_counts": {
           "all": 57,
+          "concrete": 0,
           "pedestrian": 44,
           "pedestrian_visible": 44,
           "vehicle": 13
@@ -407,9 +469,11 @@
       {
         "base_object_key": "roads:x_-1__z_3",
         "chunk_id": "x_-1__z_3",
+        "concrete_object_key": null,
         "pedestrian_object_key": "roads-pedestrian:x_-1__z_3",
         "plan_area_m2": {
           "base_union": 5153.953,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 1883.554,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 1799.545,
@@ -418,6 +482,7 @@
         },
         "source_counts": {
           "all": 46,
+          "concrete": 0,
           "pedestrian": 31,
           "pedestrian_visible": 31,
           "vehicle": 15
@@ -426,9 +491,11 @@
       {
         "base_object_key": "roads:x_0__z_-4",
         "chunk_id": "x_0__z_-4",
+        "concrete_object_key": null,
         "pedestrian_object_key": null,
         "plan_area_m2": {
           "base_union": 1355.365,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 0,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 0,
@@ -437,6 +504,7 @@
         },
         "source_counts": {
           "all": 10,
+          "concrete": 0,
           "pedestrian": 0,
           "pedestrian_visible": 0,
           "vehicle": 10
@@ -445,9 +513,11 @@
       {
         "base_object_key": "roads:x_0__z_-3",
         "chunk_id": "x_0__z_-3",
+        "concrete_object_key": null,
         "pedestrian_object_key": null,
         "plan_area_m2": {
           "base_union": 4368.353,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 0,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 0,
@@ -456,6 +526,7 @@
         },
         "source_counts": {
           "all": 10,
+          "concrete": 0,
           "pedestrian": 0,
           "pedestrian_visible": 0,
           "vehicle": 10
@@ -464,9 +535,11 @@
       {
         "base_object_key": "roads:x_0__z_-2",
         "chunk_id": "x_0__z_-2",
+        "concrete_object_key": null,
         "pedestrian_object_key": "roads-pedestrian:x_0__z_-2",
         "plan_area_m2": {
           "base_union": 6016.656,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 116.905,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 116.905,
@@ -475,6 +548,7 @@
         },
         "source_counts": {
           "all": 19,
+          "concrete": 0,
           "pedestrian": 1,
           "pedestrian_visible": 1,
           "vehicle": 18
@@ -483,9 +557,11 @@
       {
         "base_object_key": "roads:x_0__z_-1",
         "chunk_id": "x_0__z_-1",
+        "concrete_object_key": null,
         "pedestrian_object_key": "roads-pedestrian:x_0__z_-1",
         "plan_area_m2": {
           "base_union": 8446.943,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 835.933,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 739.922,
@@ -494,6 +570,7 @@
         },
         "source_counts": {
           "all": 19,
+          "concrete": 0,
           "pedestrian": 5,
           "pedestrian_visible": 5,
           "vehicle": 14
@@ -502,9 +579,11 @@
       {
         "base_object_key": "roads:x_0__z_0",
         "chunk_id": "x_0__z_0",
+        "concrete_object_key": null,
         "pedestrian_object_key": "roads-pedestrian:x_0__z_0",
         "plan_area_m2": {
           "base_union": 5383.32,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 418.229,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 405.249,
@@ -513,6 +592,7 @@
         },
         "source_counts": {
           "all": 17,
+          "concrete": 0,
           "pedestrian": 4,
           "pedestrian_visible": 4,
           "vehicle": 13
@@ -521,9 +601,11 @@
       {
         "base_object_key": "roads:x_0__z_1",
         "chunk_id": "x_0__z_1",
+        "concrete_object_key": null,
         "pedestrian_object_key": "roads-pedestrian:x_0__z_1",
         "plan_area_m2": {
           "base_union": 5350.614,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 1241.298,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 1161.284,
@@ -532,6 +614,7 @@
         },
         "source_counts": {
           "all": 24,
+          "concrete": 0,
           "pedestrian": 9,
           "pedestrian_visible": 9,
           "vehicle": 15
@@ -540,9 +623,11 @@
       {
         "base_object_key": "roads:x_0__z_2",
         "chunk_id": "x_0__z_2",
+        "concrete_object_key": "roads-concrete:x_0__z_2",
         "pedestrian_object_key": "roads-pedestrian:x_0__z_2",
         "plan_area_m2": {
           "base_union": 4967.927,
+          "concrete_visible_after_asphalt_precedence": 43.745,
           "pedestrian_union_before_precedence": 1848.312,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 1703.101,
@@ -551,6 +636,7 @@
         },
         "source_counts": {
           "all": 39,
+          "concrete": 1,
           "pedestrian": 31,
           "pedestrian_visible": 31,
           "vehicle": 8
@@ -559,9 +645,11 @@
       {
         "base_object_key": "roads:x_0__z_3",
         "chunk_id": "x_0__z_3",
+        "concrete_object_key": null,
         "pedestrian_object_key": "roads-pedestrian:x_0__z_3",
         "plan_area_m2": {
           "base_union": 1692.957,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 697.016,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 685.013,
@@ -570,6 +658,7 @@
         },
         "source_counts": {
           "all": 13,
+          "concrete": 0,
           "pedestrian": 9,
           "pedestrian_visible": 9,
           "vehicle": 4
@@ -578,9 +667,11 @@
       {
         "base_object_key": "roads:x_1__z_-2",
         "chunk_id": "x_1__z_-2",
+        "concrete_object_key": null,
         "pedestrian_object_key": "roads-pedestrian:x_1__z_-2",
         "plan_area_m2": {
           "base_union": 3269.19,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 122.971,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 122.971,
@@ -589,6 +680,7 @@
         },
         "source_counts": {
           "all": 8,
+          "concrete": 0,
           "pedestrian": 2,
           "pedestrian_visible": 2,
           "vehicle": 6
@@ -597,9 +689,11 @@
       {
         "base_object_key": "roads:x_1__z_-1",
         "chunk_id": "x_1__z_-1",
+        "concrete_object_key": null,
         "pedestrian_object_key": "roads-pedestrian:x_1__z_-1",
         "plan_area_m2": {
           "base_union": 5503.052,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 215.212,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 215.212,
@@ -608,6 +702,7 @@
         },
         "source_counts": {
           "all": 10,
+          "concrete": 0,
           "pedestrian": 1,
           "pedestrian_visible": 1,
           "vehicle": 9
@@ -616,9 +711,11 @@
       {
         "base_object_key": "roads:x_1__z_0",
         "chunk_id": "x_1__z_0",
+        "concrete_object_key": null,
         "pedestrian_object_key": null,
         "plan_area_m2": {
           "base_union": 4846.833,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 0,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 0,
@@ -627,6 +724,7 @@
         },
         "source_counts": {
           "all": 14,
+          "concrete": 0,
           "pedestrian": 0,
           "pedestrian_visible": 0,
           "vehicle": 14
@@ -635,9 +733,11 @@
       {
         "base_object_key": "roads:x_1__z_1",
         "chunk_id": "x_1__z_1",
+        "concrete_object_key": null,
         "pedestrian_object_key": null,
         "plan_area_m2": {
           "base_union": 263.03,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 0,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 0,
@@ -646,6 +746,7 @@
         },
         "source_counts": {
           "all": 1,
+          "concrete": 0,
           "pedestrian": 0,
           "pedestrian_visible": 0,
           "vehicle": 1
@@ -654,9 +755,11 @@
       {
         "base_object_key": "roads:x_1__z_2",
         "chunk_id": "x_1__z_2",
+        "concrete_object_key": null,
         "pedestrian_object_key": "roads-pedestrian:x_1__z_2",
         "plan_area_m2": {
           "base_union": 3259.168,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 92.529,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 87.224,
@@ -665,6 +768,7 @@
         },
         "source_counts": {
           "all": 11,
+          "concrete": 0,
           "pedestrian": 1,
           "pedestrian_visible": 1,
           "vehicle": 10
@@ -673,9 +777,11 @@
       {
         "base_object_key": "roads:x_2__z_-1",
         "chunk_id": "x_2__z_-1",
+        "concrete_object_key": null,
         "pedestrian_object_key": null,
         "plan_area_m2": {
           "base_union": 1470.788,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 0,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 0,
@@ -684,6 +790,7 @@
         },
         "source_counts": {
           "all": 1,
+          "concrete": 0,
           "pedestrian": 0,
           "pedestrian_visible": 0,
           "vehicle": 1
@@ -692,9 +799,11 @@
       {
         "base_object_key": "roads:x_2__z_0",
         "chunk_id": "x_2__z_0",
+        "concrete_object_key": null,
         "pedestrian_object_key": null,
         "plan_area_m2": {
           "base_union": 4306.744,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 0,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 0,
@@ -703,6 +812,7 @@
         },
         "source_counts": {
           "all": 4,
+          "concrete": 0,
           "pedestrian": 0,
           "pedestrian_visible": 0,
           "vehicle": 4
@@ -711,9 +821,11 @@
       {
         "base_object_key": "roads:x_2__z_1",
         "chunk_id": "x_2__z_1",
+        "concrete_object_key": null,
         "pedestrian_object_key": null,
         "plan_area_m2": {
           "base_union": 2363.298,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 0,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 0,
@@ -722,6 +834,7 @@
         },
         "source_counts": {
           "all": 6,
+          "concrete": 0,
           "pedestrian": 0,
           "pedestrian_visible": 0,
           "vehicle": 6
@@ -730,9 +843,11 @@
       {
         "base_object_key": "roads:x_2__z_2",
         "chunk_id": "x_2__z_2",
+        "concrete_object_key": null,
         "pedestrian_object_key": null,
         "plan_area_m2": {
           "base_union": 498.72,
+          "concrete_visible_after_asphalt_precedence": 0,
           "pedestrian_union_before_precedence": 0,
           "pedestrian_vehicle_overlap": 0,
           "pedestrian_visible_after_precedence": 0,
@@ -741,12 +856,15 @@
         },
         "source_counts": {
           "all": 2,
+          "concrete": 0,
           "pedestrian": 0,
           "pedestrian_visible": 0,
           "vehicle": 2
         }
       }
     ],
+    "concrete_record_count": 1,
+    "concrete_sources_with_visible_skin": 1,
     "continuous_filled_base_union": true,
     "maximum_pedestrian_vehicle_overlap_m2": 0,
     "pedestrian_record_count": 28,

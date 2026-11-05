@@ -55,6 +55,10 @@ const FEATURE_KINDS := [
 ]
 const CONTEXT_KINDS := ["bay_bridge", "ybi"]
 const BOUNDARY_ATTACHED_SOURCE_KEYS := ["w319406837", "w644986117"]
+## Piers reaching out over the water past the island outline: their part on the
+## island is a playable overlay, and the deck beyond it a visual-only
+## boundary-attached record (boundary_context:KEY, pier concrete).
+const PIER_DECK_SOURCE_KEYS := ["w1222505176", "w1222505177"]
 const ISLE_HOUSE_COMPOSITE_KEY := "building-composite:w1249412094"
 const ISLE_HOUSE_COMPOSITE_PART_KEYS := [
 	"building-composite:w1249412094:w1282547786:roof",
@@ -1212,8 +1216,10 @@ static func _validate_context(context: Dictionary, source_scopes: Dictionary, re
 	var context_keys := _sorted_strings(represented_context.keys())
 	if context_keys != CONTEXT_SOURCE_KEYS:
 		return _failure("context_sources", "Context geometry must resolve exactly the four context anchors.", context_keys)
-	if context.boundary_attached_visuals.size() != BOUNDARY_ATTACHED_SOURCE_KEYS.size():
-		return _failure("boundary_visual_count", "Context must contain exactly two approved boundary-attached visuals.")
+	var boundary_visual_sources: Array = BOUNDARY_ATTACHED_SOURCE_KEYS + PIER_DECK_SOURCE_KEYS
+	boundary_visual_sources.sort()
+	if context.boundary_attached_visuals.size() != boundary_visual_sources.size():
+		return _failure("boundary_visual_count", "Context must contain exactly the approved boundary-attached visuals and pier decks.")
 	var prior_object_key := ""
 	var boundary_keys_seen: Array[String] = []
 	for record_value: Variant in context.boundary_attached_visuals:
@@ -1225,9 +1231,13 @@ static func _validate_context(context: Dictionary, source_scopes: Dictionary, re
 		if not record.get("source_keys", null) is Array or record.source_keys.size() != 1:
 			return _failure("boundary_visual_source", "Boundary-attached visual must claim exactly one approved source.")
 		var source_key := str(record.source_keys[0])
-		if not BOUNDARY_ATTACHED_OBJECTS.has(source_key):
+		var expected: Dictionary
+		if BOUNDARY_ATTACHED_OBJECTS.has(source_key):
+			expected = BOUNDARY_ATTACHED_OBJECTS[source_key]
+		elif PIER_DECK_SOURCE_KEYS.has(source_key):
+			expected = {"object_key": "boundary_context:%s" % source_key, "material_key": "context_boundary_pier"}
+		else:
 			return _failure("boundary_visual_source", "Unapproved out-of-bound playable source %s." % source_key, [source_key])
-		var expected: Dictionary = BOUNDARY_ATTACHED_OBJECTS[source_key]
 		var object_key := str(record.get("object_key", ""))
 		if object_key != str(expected.object_key) or str(record.get("material_key", "")) != str(expected.material_key) \
 		or str(record.get("context_kind", "")) != "boundary_attached_visual" \
@@ -1245,8 +1255,8 @@ static func _validate_context(context: Dictionary, source_scopes: Dictionary, re
 		boundary_keys_seen.append(source_key)
 		represented_playable[source_key] = true
 	boundary_keys_seen.sort()
-	if boundary_keys_seen != BOUNDARY_ATTACHED_SOURCE_KEYS:
-		return _failure("boundary_visual_sources", "Boundary-attached visuals do not resolve the exact two approved playable sources.", boundary_keys_seen)
+	if boundary_keys_seen != boundary_visual_sources:
+		return _failure("boundary_visual_sources", "Boundary-attached visuals do not resolve the exact approved playable sources.", boundary_keys_seen)
 	return {"ok": true}
 
 
@@ -1329,6 +1339,10 @@ static func _validate_mesh_record(record: Dictionary, allowed_kinds: Array, sour
 			elif road_material == "road_path_pedestrian":
 				if not is_equal_approx(road_bias, ROAD_PEDESTRIAN_SURFACE_BIAS_M) or not object_key.begins_with("roads-pedestrian:"):
 					return _failure("pavement_skin", "Record %s violates the raised pedestrian-skin contract." % object_key)
+			elif road_material == "road_path_concrete":
+				# Concrete-surfaced vehicle ways: their own skin at the pedestrian height.
+				if not is_equal_approx(road_bias, ROAD_PEDESTRIAN_SURFACE_BIAS_M) or not object_key.begins_with("roads-concrete:"):
+					return _failure("pavement_skin", "Record %s violates the raised concrete-skin contract." % object_key)
 			else:
 				return _failure("pavement_skin", "Record %s has an unknown pavement material." % object_key)
 		if str(record.get("material_key", "")) == "major_area_paved" and feature_kind != "major_area":
@@ -1392,6 +1406,11 @@ static func _validate_coverage_references(rows: Array, record_keys: Dictionary, 
 		if scope == "playable" and BOUNDARY_ATTACHED_SOURCE_KEYS.has(source_key):
 			if _sorted_strings(referenced_chunks.keys()) != ["boundary_context"] or not chunks.is_empty():
 				return _failure("coverage_boundary_reference", "Boundary-attached source %s has invalid part/chunk references." % source_key, [source_key])
+		elif scope == "playable" and PIER_DECK_SOURCE_KEYS.has(source_key):
+			# Its playable chunks plus the deck past the outline.
+			if not referenced_chunks.erase("boundary_context") or chunks.is_empty() \
+			or _sorted_chunk_ids(_string_array(referenced_chunks.keys())) != chunks:
+				return _failure("coverage_boundary_reference", "Pier deck source %s has invalid part/chunk references." % source_key, [source_key])
 		elif scope == "playable" and _sorted_chunk_ids(_string_array(referenced_chunks.keys())) != chunks:
 			return _failure("coverage_chunk_reference", "Coverage source %s part/chunk references disagree." % source_key, [source_key])
 		if scope == "context" and (_sorted_strings(referenced_chunks.keys()) != ["context"] or not chunks.is_empty()):

@@ -92,7 +92,7 @@ const LOT_OVERHANG_M = 1.3;
 // Chunk record kinds the visible ground is made of, and the surfaces (by
 // material) a parked car's tyre may stand on.
 const VISIBLE_GROUND_KINDS = new Set(["land_ground", "major_area", "road_path", "street_kerb", "street_paint", "terrain_overlay"]);
-const WHEEL_SURFACES = new Set(["major_area_paved", "road_path", "street_gutter", "street_marking", "street_parking", "street_wear"]);
+const WHEEL_SURFACES = new Set(["major_area_paved", "road_path", "road_path_concrete", "street_gutter", "street_marking", "street_parking", "street_wear"]);
 const GROUND_CELL_M = 4;
 // A tyre's contact patch, sampled across its width (fractions) and along it (m).
 const PATCH_ACROSS = Object.freeze([-0.35, 0, 0.35]);

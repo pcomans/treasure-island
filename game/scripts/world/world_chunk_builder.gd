@@ -107,6 +107,20 @@ const STREET_GROUND_SURFACES := {
 	"yard_pond": {"albedo": preload("res://game/resources/textures/world/street/yard_pond.png"), "uv_scale": 2.0, "roughness": 0.15},
 	"rubble_grey": {"albedo": preload("res://game/resources/textures/world/shoreline/riprap_albedo.png"), "uv_scale": 8.0, "roughness": 0.95, "tint": Color(1.12, 1.12, 1.1)},
 	"black_plastic": {"albedo": preload("res://game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg"), "uv_scale": 2.0, "roughness": 0.45, "tint": Color(0.3, 0.3, 0.32)},
+	# Poured concrete outside the street ground, on records whose UVs are the
+	# world in 10 m units. Pier decks (Pier 1 as context past the playable
+	# boundary, the other piers' overlays and decks) and a marina's paved
+	# grounds: weathered light-grey concrete, the Poly Haven grey plaster's
+	# mottling and stains spread over 10 m, tinted until a top-down sunlit
+	# render samples like the May 2026 aerial (decks about 196/193/180, the
+	# marina's grounds darker, about 178/176/165) and the dated Pier 1 Street
+	# View's light grey. The concrete driveway skin (an OSM surface=concrete
+	# vehicle way, the Gate 5 apron in the Nov 2025 Street View): the sidewalk
+	# panels at 1.5 m, a shade under the sidewalks.
+	"context_boundary_pier": {"albedo": preload("res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_diff_1k.jpg"), "uv_scale": 1.0, "roughness": 0.92, "tint": Color(0.98, 1.0, 0.97)},
+	"terrain_pier": {"albedo": preload("res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_diff_1k.jpg"), "uv_scale": 1.0, "roughness": 0.92, "tint": Color(0.98, 1.0, 0.97)},
+	"terrain_marina": {"albedo": preload("res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_diff_1k.jpg"), "uv_scale": 1.0, "roughness": 0.92, "tint": Color(0.885, 0.91, 0.895)},
+	"road_path_concrete": {"albedo": preload("res://game/resources/textures/world/street/street_concrete_panels.png"), "uv_scale": 3.33, "roughness": 0.9, "tint": Color(0.96, 0.94, 0.86)},
 }
 ## A park's planted beds (park_mulch records): the vegetation kit's dark
 ## grey-brown shredded mulch in 2 m tiles of the world UV, blending to the
@@ -1124,7 +1138,8 @@ func _color_for(material_key: String, feature_kind: String, is_context: bool) ->
 		if feature_kind == "ybi":
 			return Color("66765c")
 		if feature_kind == "boundary_attached_visual":
-			return Color("718b8c") if "marina" in material_key else Color("a4947e")
+			# The marina basin (water, floats and boats); the pier deck is textured.
+			return Color("718b8c")
 		return Color("bbb7af")
 	match feature_kind:
 		"land_ground":
@@ -1140,10 +1155,8 @@ func _color_for(material_key: String, feature_kind: String, is_context: bool) ->
 		"terrain_overlay":
 			if "sand" in material_key:
 				return Color("d7c78e")
-			if "wet" in material_key or "marina" in material_key:
+			if "wet" in material_key:
 				return Color("78a49a")
-			if "pier" in material_key:
-				return Color("8b8174")
 			if "breakwater" in material_key:
 				return Color("777a73")
 			return Color("8fb486")

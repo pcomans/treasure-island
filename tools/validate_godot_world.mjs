@@ -10,6 +10,7 @@ import {
   BOUNDARY_ATTACHED_SOURCE_KEYS,
   CATEGORY_MEMBERSHIPS,
   CHUNK_SCHEMA,
+  CONCRETE_ROAD_SURFACE,
   COORDINATE_ROUNDING_M,
   CONTEXT_SCHEMA,
   COVERAGE_HEADERS,
@@ -18,6 +19,7 @@ import {
   ISLE_HOUSE_PARENT_KEY,
   ISLE_HOUSE_PART_KEYS,
   MATERIAL_KEYS,
+  PIER_DECK_SOURCE_KEYS,
   PLAYABLE_BOUNDARY_SOURCE_KEY,
   ROAD_SURFACE_BIASES_M,
   ROAD_VISUAL_CLASSES,
@@ -201,6 +203,12 @@ function validateCoverage(worldRoot, manifest) {
     invariant(row?.derived_object_key === `boundary_context:${key}`, `${key} boundary composite key drift`);
     invariant(row?.chunk_ids === "", `${key} must not enter playable chunks`);
   }
+  // A pier deck past the outline keeps its playable overlay and adds its deck.
+  for (const key of PIER_DECK_SOURCE_KEYS) {
+    const row = byKey.get(key);
+    invariant(row?.scope === "playable" && row.derived_object_key === `terrain:${key}`, `${key} pier deck source drift`);
+    invariant(splitValues(row.part_keys).includes(`boundary_context:${key}`) && row.chunk_ids !== "", `${key} pier deck parts drift`);
+  }
   invariant(byKey.get(YBI_SOURCE_KEY)?.derived_object_key === "context:ybi", "YBI context key drift");
   const playable = rows.filter((row) => row.scope === "playable");
   for (const [category, expected] of Object.entries(CATEGORY_MEMBERSHIPS)) {
@@ -286,13 +294,17 @@ function validateRecords(worldRoot, manifest, coverage) {
     invariant(!physical.has(record.object_key), `Duplicate context physical key ${record.object_key}`);
     physical.set(record.object_key, { record, chunk_id: null });
   }
+  const boundaryVisualSources = [...BOUNDARY_ATTACHED_SOURCE_KEYS, ...PIER_DECK_SOURCE_KEYS];
   invariant(
-    Array.isArray(context.boundary_attached_visuals) && context.boundary_attached_visuals.length === 2,
-    "Context must contain exactly two boundary-attached visuals",
+    Array.isArray(context.boundary_attached_visuals) && context.boundary_attached_visuals.length === boundaryVisualSources.length,
+    "Context must contain exactly the approved boundary-attached visuals and pier decks",
   );
   for (const record of context.boundary_attached_visuals) {
     invariant(record.context_kind === "boundary_attached_visual", `${record.object_key} boundary context kind drift`);
-    invariant(record.source_keys.length === 1 && BOUNDARY_ATTACHED_SOURCE_KEYS.includes(record.source_keys[0]), `${record.object_key} invalid boundary-attached source`);
+    invariant(record.source_keys.length === 1 && boundaryVisualSources.includes(record.source_keys[0]), `${record.object_key} invalid boundary-attached source`);
+    if (PIER_DECK_SOURCE_KEYS.includes(record.source_keys[0])) {
+      invariant(record.material_key === "context_boundary_pier", `${record.object_key} pier deck material drift`);
+    }
     invariant(record.object_key === `boundary_context:${record.source_keys[0]}`, `${record.object_key} boundary context object key drift`);
     invariant(record.collision_kind === "none" && record.receiver_kind === "none" && record.opaque === false, `${record.object_key} boundary context semantics leak`);
     validateMesh(record, record.object_key);
@@ -772,6 +784,8 @@ function validatePavementSkin(worldRoot, manifest, coverage, records, terrain) {
       audit.materials.pedestrian.material_key === "road_path_pedestrian" &&
       audit.materials.pedestrian.albedo_srgb_hex === "8b918e" &&
       audit.materials.pedestrian.surface_bias_m === ROAD_SURFACE_BIASES_M.pedestrian &&
+      audit.materials.concrete.material_key === "road_path_concrete" &&
+      audit.materials.concrete.surface_bias_m === ROAD_SURFACE_BIASES_M.pedestrian &&
       audit.materials.paved_area.material_key === "major_area_paved" &&
       audit.materials.paved_area.albedo_srgb_hex === "707573" &&
       audit.materials.paved_area.source_count === 17,
@@ -813,14 +827,17 @@ function validatePavementSkin(worldRoot, manifest, coverage, records, terrain) {
       parkingSourceKeys.add(row.source_key);
     }
   }
+  const expectedConcrete = new Set();
   for (const row of sourceRoads) {
-    const highway = JSON.parse(row.tags_json).highway;
+    const tags = JSON.parse(row.tags_json);
     const matches = Object.entries(ROAD_VISUAL_CLASSES)
-      .filter(([, values]) => values.includes(highway))
+      .filter(([, values]) => values.includes(tags.highway))
       .map(([visualClass]) => visualClass);
     invariant(matches.length === 1, `${row.source_key} has ${matches.length} pavement classes in independent validation`);
     expectedByClass[matches[0]].add(row.source_key);
+    if (matches[0] === "vehicle" && tags.surface === CONCRETE_ROAD_SURFACE) expectedConcrete.add(row.source_key);
   }
+  invariant(audit.materials.concrete.source_count === expectedConcrete.size, "Concrete vehicle-way count drift");
   invariant(
     expectedByClass.vehicle.size === 208 && expectedByClass.pedestrian.size === 219 && parkingSourceKeys.size === 17,
     "Independent OSM pavement classification counts drift",
@@ -829,10 +846,12 @@ function validatePavementSkin(worldRoot, manifest, coverage, records, terrain) {
   const roadEntries = [...records.physical.values()].filter(({ record }) => record.feature_kind === "road_path");
   const baseEntries = roadEntries.filter(({ record }) => record.material_key === "road_path");
   const pedestrianEntries = roadEntries.filter(({ record }) => record.material_key === "road_path_pedestrian");
+  const concreteEntries = roadEntries.filter(({ record }) => record.material_key === "road_path_concrete");
   invariant(
     baseEntries.length === audit.topology.base_record_count &&
       pedestrianEntries.length === audit.topology.pedestrian_record_count &&
-      roadEntries.length === baseEntries.length + pedestrianEntries.length,
+      concreteEntries.length === audit.topology.concrete_record_count &&
+      roadEntries.length === baseEntries.length + pedestrianEntries.length + concreteEntries.length,
     "Generated pavement record/material counts drift",
   );
   const baseByChunk = new Map(baseEntries.map((entry) => [entry.chunk_id, entry.record]));
@@ -878,6 +897,42 @@ function validatePavementSkin(worldRoot, manifest, coverage, records, terrain) {
   invariant(
     visiblePedestrianSourceKeys.size === audit.topology.pedestrian_sources_with_visible_skin,
     "Pedestrian visible-source audit drift",
+  );
+  // The concrete skin: only concrete-surfaced vehicle ways, at the pedestrian
+  // height, on its chunk's base, and never over the pedestrian skin.
+  const visibleConcreteSourceKeys = new Set();
+  const pedestrianByChunk = new Map(pedestrianEntries.map((entry) => [entry.chunk_id, entry.record]));
+  for (const { record, chunk_id: chunkId } of concreteEntries) {
+    invariant(record.surface_bias_m === ROAD_SURFACE_BIASES_M.pedestrian, `${record.object_key} concrete skin bias drift`);
+    invariant(record.object_key === `roads-concrete:${chunkId}`, `${record.object_key} concrete chunk ownership drift`);
+    const base = baseByChunk.get(chunkId);
+    invariant(base && base.surface_bias_m === ROAD_SURFACE_BIASES_M.base, `${record.object_key} has no lower filled base`);
+    for (const sourceKey of record.source_keys) {
+      invariant(expectedConcrete.has(sourceKey), `${record.object_key} contains non-concrete source ${sourceKey}`);
+      visibleConcreteSourceKeys.add(sourceKey);
+    }
+    const pedestrian = pedestrianByChunk.get(chunkId);
+    for (let offset = 0; offset < record.indices.length; offset += 3) {
+      const triangle = record.indices.slice(offset, offset + 3).map((index) => [
+        record.vertices[index * 3], record.vertices[index * 3 + 2],
+      ]);
+      const centroid = [
+        triangle.reduce((sum, point) => sum + point[0], 0) / 3,
+        triangle.reduce((sum, point) => sum + point[1], 0) / 3,
+      ];
+      invariant(
+        [...triangle, centroid].every((point) => pointToRecordDistance(point, base) <= COORDINATE_ROUNDING_M * 2),
+        `${record.object_key} escapes its continuous pavement base`,
+      );
+      invariant(
+        !pedestrian || pointToRecordDistance(centroid, pedestrian) > 0,
+        `${record.object_key} overlaps the pedestrian skin`,
+      );
+    }
+  }
+  invariant(
+    visibleConcreteSourceKeys.size === audit.topology.concrete_sources_with_visible_skin,
+    "Concrete visible-source audit drift",
   );
 
   for (const sourceKey of parkingSourceKeys) {

@@ -45,6 +45,13 @@ export const BOUNDARY_ATTACHED_SOURCE_KEYS = Object.freeze([
   "w319406837",
   "w644986117",
 ]);
+// Piers that reach out over the water past the island outline: their part on
+// the island is a playable overlay, and the deck beyond it is drawn as a
+// visual-only boundary-attached context record (boundary_context:KEY).
+export const PIER_DECK_SOURCE_KEYS = Object.freeze([
+  "w1222505176",
+  "w1222505177",
+]);
 export const BRIDGE_SOURCE_KEYS = Object.freeze([
   "r13543937",
   "r13543938",
@@ -140,6 +147,10 @@ export const ROAD_SURFACE_BIASES_M = Object.freeze({
   pedestrian: 0.08,
 });
 
+// A vehicle-class way with this OSM surface draws the concrete pavement skin
+// (road_path_concrete) at the pedestrian skin's height instead of asphalt.
+export const CONCRETE_ROAD_SURFACE = "concrete";
+
 // Overlapping draped areas of one class are lifted this far apart, the
 // separation of the pedestrian skin over the road base, so that no two of them
 // share a plane (planAreaSurfaces in tools/build_godot_world.mjs).
@@ -180,6 +191,7 @@ export const MATERIAL_KEYS = Object.freeze([
   "park_plaza_lens",
   "park_plaza_zigzag",
   "road_path",
+  "road_path_concrete",
   "road_path_pedestrian",
   "rubble_grey",
   "street_gutter",
