@@ -23779,4 +23779,3 @@ My "left only" came from a downscaled sheet and the author's native-resolution r
 (Relayed verbatim by the coordinator; added by street-clutter-rollout-20261105.)
 
 - Stating the rule as an outcome (place by evidence, then keep two free lanes) took island clutter moved from 348 rejected attempts to 18 cars moved with no lot short of the aerial, but an audit that only looks where a rule acted can't show where the guarantee doesn't hold.
-

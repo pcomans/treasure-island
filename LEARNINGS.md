@@ -1036,4 +1036,3 @@ On 2026-11-05, checking every dated photo for red curbs, I read three curbs as g
 ## A lot's total can hide cars on the wrong side
 
 The Mersea lot reported 29 of 29 cars while the May 2026 aerial's east row of the Avenue A strip had none (2026-11-05, final visual review). Ground had moved the strip's rows about 5 m out, so the stalls ran into the planters; rejected stalls silently pushed cars into the field and the west row, and the total still held. Stalls in different rows of one lot also shared cell ids, so a stall tried for one focus point was skipped for the next. When a lot has named clusters, report placed cars per cluster, and read built positions against the config's `observed` text rather than the count. After another layer moves a row, re-check what stands at its end.
-
