@@ -14,8 +14,8 @@
     "station_m": 1.25,
     "columns": 8,
     "gradient_m_per_m": [
-      0.34,
-      0.55
+      0.42,
+      0.65
     ],
     "dem_fit_m": [
       1.0,
@@ -28,7 +28,18 @@
     "top_blend_m": 1.0,
     "end_cap_bottom_y_m": -0.9,
     "section_m": 90,
-    "shoulder_m": 0.8,
+    "shoulder_m": 0.6,
+    "berm": {
+      "below_crest_m": 0.25,
+      "inner_m": 0.4,
+      "width_m": [
+        1.2,
+        2.0
+      ],
+      "wavelength_m": 23.0,
+      "drop_per_m": 0.04,
+      "joint_blend_m": 12.0
+    },
     "clamp_reach_m": 2.0
   },
   "stones": {
@@ -45,16 +56,16 @@
         25
       ],
       "heap": [
-        150,
-        30
+        165,
+        10
       ],
       "pebble": [
         70,
-        15
+        10
       ],
       "top": [
-        170,
-        30
+        175,
+        10
       ]
     },
     "top": {
@@ -119,22 +130,22 @@
     },
     "cobble": {
       "size_m": [
-        0.18,
-        0.35
+        0.22,
+        0.38
       ],
       "top_m": [
         0.04,
-        0.12
+        0.1
       ],
-      "fill": 0.02,
+      "fill": 0.012,
       "edge_m": 0.05,
       "outline_bias": 1.5,
       "path_clearance_m": 0.25,
-      "reach_m": 1.2
+      "reach_m": 0.8
     },
     "driftwood": {
-      "spacing_m": 36,
-      "acceptance": 0.5,
+      "spacing_m": 50,
+      "acceptance": 0.3,
       "length_m": [
         2.2,
         4.2
@@ -143,11 +154,11 @@
         0.12,
         0.2
       ],
-      "d_m": [
-        1.2,
-        3.2
+      "from_waterline_m": [
+        0.5,
+        1.8
       ],
-      "sink": 0.35,
+      "sink": 0.5,
       "yaw_jitter_deg": 30
     },
     "planks": [
@@ -157,7 +168,7 @@
           -133.0,
           779.5
         ],
-        "above_water_m": 0.12,
+        "above_water_m": 0.35,
         "length_m": 2.9,
         "width_m": 0.24,
         "yaw_deg": 32
@@ -169,8 +180,8 @@
         1.5
       ],
       "size_skew": 1.2,
-      "fill": 0.75,
-      "depth_m": 2.2,
+      "fill": 1.0,
+      "depth_m": 2.6,
       "rise_m": [
         0.55,
         1.05
@@ -182,7 +193,7 @@
         0.2,
         0.45
       ],
-      "fill": 0.1,
+      "fill": 0.05,
       "rise_m": [
         0.0,
         0.15
@@ -193,7 +204,7 @@
         0.35,
         0.8
       ],
-      "fill": 0.5,
+      "fill": 0.7,
       "rise_m": [
         0.2,
         0.8
@@ -238,8 +249,8 @@
   "closure": {
     "coping_m": 0.05,
     "wall_bottom_y_m": -0.9,
-    "ramp_grade": 0.14,
-    "ramp_bottom_y_m": -0.8,
+    "ramp_grade": 0.17,
+    "ramp_bottom_y_m": -0.45,
     "ramp_wall_m": 0.25
   },
   "segments": [
@@ -248,16 +259,41 @@
       "outline_source_key": "w26767313",
       "source_key": "w1222685424",
       "s_m": [
-        4712.63,
-        308.02
+        4708.26,
+        166.0
       ],
       "reason": "The north-west shore below the Gateview and Bayside housing, from the small concrete structure at the north-west corner past the island's westernmost point to the tip of the sliver the OSM outline splits off the shore; runs across the outline's start (s = 0).",
       "reference": "Street View contributor panoramas, May 2024 (John Ewing, from the shore path; refs/sv 01 s4800, 02 s5100, 03 s0, 04 s150, 05 s700, 26 s4708): a continuous crest of dumped angular grey and grey-tan stone 0.4-1.2 m, 0.3-0.8 m above a dry-grass or gravel verge, barely above the grass at s0; the 2026-05-26 Vantor aerial tiles t4750, t5000, t0000 and t0250 show the band with surf at its foot",
       "crest_rise_m": [
-        0.35,
-        0.85
+        0.5,
+        1.0
       ],
       "crest_fill_scale": 1.0
+    },
+    {
+      "id": "west_wedge",
+      "source_key": "w1222685424",
+      "outline_source_key": "w26767313",
+      "s_m": [
+        166.0,
+        308.02
+      ],
+      "crest_rise_m": [
+        0.1,
+        0.3
+      ],
+      "crest_fill_scale": 1.0,
+      "crest_rows": false,
+      "cobble": {
+        "fill": 0.4,
+        "reach_m": 4.5,
+        "size_m": [
+          0.3,
+          0.55
+        ]
+      },
+      "reason": "The seaward edge of the sliver the OSM outline splits off the north-west shore (its slit, s 308-450, runs back up inside it): in the aerial the whole band from the shore path to the water is one riprap slope, so the crest runs along the slit (segment west fills it) and this edge is only the slope's foot: no crest rows, the heap down from the sliver's edge to the water, and the sliver itself set with flat-topped stones.",
+      "reference": "2026-05-26 Vantor aerial (Esri level 19) tile t0250 and plot a05-west-hairpin: one band of stone from the path to the water, the outline's three lines inside it; Street View contributor May 2024 (refs/sv 04, s150/s450): one crest of dark angular stone 0.5-0.8 m above the grass"
     },
     {
       "id": "west",
@@ -286,10 +322,10 @@
       "reason": "The causeway's east flank and the south shore along the Treasure Island Yacht Harbor in Clipper Cove, to the small concrete pier w1222505174.",
       "reference": "2026-05-26 Vantor aerial tiles t1750 and t2000: dark stone along the marina's landward edge, the docks' gangways landing on it; Street View official Mar 2025 (refs/sv 07, s1840) shows the causeway's east flank as a vegetated slope down to the marina, its foot hidden, and official Nov 2025 (09, s1950) only construction fencing: the stone follows the OSM tag (known gap)",
       "crest_rise_m": [
-        0.3,
-        0.7
+        0.45,
+        0.85
       ],
-      "crest_fill_scale": 0.85
+      "crest_fill_scale": 0.9
     },
     {
       "id": "south_east",
@@ -302,10 +338,10 @@
       "reason": "The south shore east of the yacht harbor, to the Sailing Center's small piers.",
       "reference": "Street View contributor panoramas Aug 2017 (refs/sv 10) and May 2019 (11, s2230): riprap of grey-tan angular stones 0.3-0.8 m with a low crest down into the calm water of Clipper Cove and a green algae band about 0.5 m deep at the waterline; 2026-05-26 Vantor aerial tile t2250",
       "crest_rise_m": [
-        0.3,
-        0.7
+        0.45,
+        0.85
       ],
-      "crest_fill_scale": 0.85
+      "crest_fill_scale": 0.9
     },
     {
       "id": "sailing_west",
@@ -313,31 +349,31 @@
       "source_key": "w1222684024",
       "s_m": [
         2348.99,
-        2364.53
+        2367.38
       ],
       "reason": "The short stretch of stone between the Sailing Center's small piers and its boat ramp.",
       "reference": "2026-05-26 Vantor aerial plots a02-clipper-east and a06-sailing-ramp; no dated ground view of this stretch (known gap): the stone follows the OSM tag",
       "crest_rise_m": [
-        0.3,
-        0.7
+        0.45,
+        0.85
       ],
-      "crest_fill_scale": 0.85
+      "crest_fill_scale": 0.9
     },
     {
       "id": "sailing_east",
       "outline_source_key": "w26767313",
       "source_key": "w1222684025",
       "s_m": [
-        2370.22,
+        2367.38,
         2482.98
       ],
       "reason": "The south shore below the Treasure Island Sailing Center, from its boat ramp to its platform (pier w1222505177).",
       "reference": "2026-05-26 Vantor aerial plot a02-clipper-east: a grey stone band along the water; a May 2018 contributor place photo (refs/sv 31, located only by its pin) shows large brown-grey angular riprap 0.5-1.2 m near the Sailing Center; no recent ground view (known gap)",
       "crest_rise_m": [
-        0.3,
-        0.7
+        0.45,
+        0.85
       ],
-      "crest_fill_scale": 0.85
+      "crest_fill_scale": 0.9
     },
     {
       "id": "east_south",
@@ -350,10 +386,10 @@
       "reason": "The south-east shore from the Sailing Center platform north to Pier 1.",
       "reference": "Street View official Nov 2025 (refs/sv 13, s2650): a low irregular line of rubble and riprap with concrete debris and shrubs, about level with the asphalt apron; official Nov 2025 (15): low riprap south of Pier 1; 2026-05-26 Vantor aerial plot a03-se-pier1",
       "crest_rise_m": [
-        0.25,
-        0.6
+        0.4,
+        0.75
       ],
-      "crest_fill_scale": 0.7
+      "crest_fill_scale": 0.85
     },
     {
       "id": "east",
@@ -366,10 +402,10 @@
       "reason": "The east, north-east and north shores from Pier 1 past the palms of the east shore road and the treatment plant to the north tip's slipway.",
       "reference": "Street View official Mar 2025 (refs/sv 16 s2900, 17 s3100) and Nov 2025 (18 s3300, 19 s3500, 20 s3680): riprap of grey angular stones 0.3-1 m all along, its crest low, 0.3-0.6 m above the lot, grass or dirt verge (sparse below the palms at s3300-s3500, a low pipe rail on short posts at s2900-s3100); contributor May 2024 (24, s4400) low riprap beside the north lot; no dated view of s3900-s4250 (fenced, known gap); 2026-05-26 Vantor aerial tiles t2750-t4500",
       "crest_rise_m": [
-        0.25,
-        0.6
+        0.4,
+        0.8
       ],
-      "crest_fill_scale": 0.7
+      "crest_fill_scale": 0.85
     },
     {
       "id": "north_tip",
@@ -377,13 +413,13 @@
       "source_key": "w26767328",
       "s_m": [
         4504.71,
-        4703.89
+        4708.26
       ],
       "reason": "The north tip from the base of the rock jetty west to the small concrete structure at the north-west corner (the jetty itself, offshore, is not built).",
       "reference": "Street View contributor panoramas, May 2024 (John Ewing; refs/sv 21 s4500, 25 s4600, 26 s4708): a crest of grey and brown-grey angular stones 0.5-1.2 m, 0.5-1 m above the path or its dry-grass verge, a concrete pad reaching the edge at s4600; 22 shows the jetty, a long low flat-topped rubble mound (not built); 2026-05-26 Vantor aerial tiles t4500, t4750 and plot a04-north-tip",
       "crest_rise_m": [
-        0.4,
-        0.9
+        0.5,
+        1.0
       ],
       "crest_fill_scale": 1.0
     }
@@ -443,19 +479,6 @@
       "reference": "2026-05-26 Vantor aerial plots a02-clipper-east and a06-sailing-ramp: two small concrete structures at the water; no dated ground view (known gap): concrete faces"
     },
     {
-      "id": "sailing_ramp",
-      "kind": "ramp",
-      "s_m": [
-        2364.53,
-        2370.22
-      ],
-      "source_keys": [
-        "w26767313"
-      ],
-      "reason": "The Sailing Center's boat ramp (OSM leisure=slipway node 5271201097 at this gap between breakwaters w1222684024 and w1222684025).",
-      "reference": "OSM leisure=slipway node 5271201097; a May 2024 contributor place photo pinned here ('Boat & Kayak Launch Ramp', refs/sv 12) shows a timber wharf, gangway and floating dock, not the ramp itself; the aerial (a06-sailing-ramp) does not resolve it: the ramp follows the OSM tag (known gap)"
-    },
-    {
       "id": "sailing_platform",
       "kind": "wall",
       "s_m": [
@@ -493,19 +516,6 @@
       ],
       "reason": "The slipway at the base of the north rock jetty (OSM w1473022597, highway=service leisure=slipway).",
       "reference": "Street View contributor May 2024 (refs/sv 23, 30): a jointed concrete boat ramp, about 8-10 m wide, from the path down into the water, riprap on both sides, the jetty alongside"
-    },
-    {
-      "id": "north_outfall",
-      "kind": "wall",
-      "s_m": [
-        4703.89,
-        4712.63
-      ],
-      "source_keys": [
-        "w26767313"
-      ],
-      "reason": "The small concrete structure at the north-west corner where breakwaters w26767328 and w1222685424 meet.",
-      "reference": "2026-05-26 Vantor aerial tile t4750: a pale concrete square at the top of the stone; Street View contributor May 2024 (refs/sv 26) shows the stone either side; the square itself unresolved (known gap): a concrete face"
     }
   ]
 }

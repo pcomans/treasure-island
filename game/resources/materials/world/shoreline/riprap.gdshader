@@ -4,24 +4,28 @@ render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_burley, specular_sc
 // Shoreline riprap (tools/lib/shoreline-generation.mjs). One shader, four
 // materials (game/scripts/world/shoreline_builder.gd), chosen by `surface`:
 //   0  the underlay slope outside the outline. It shows only in the gaps of the
-//      stone heap nearby, so it is dark there (voids); far away, beyond the
-//      stones' visibility range, it stands in for the heap at far_brightness,
-//      about the heap's average tone, so the band does not lighten where the
-//      stones fade out;
+//      stone heap nearby, so it is dark there (voids); farther away, where the
+//      stones thin out, it stands in for the heap at far_brightness, about the
+//      heap's average tone, so the band keeps its tone where the stones go;
 //   1  the instanced stones (MultiMesh): the generated boulder skin on flat,
 //      hard-edged quarry faces, each stone tinted from two hashes of its
-//      position (the instances carry no colour): mid-to-dark grey as in the
-//      2025 photos, with the rust-brown and olive stones of 2021, some darker
-//      and a few paler weathered ones; darker toward its lower part where
+//      position (the instances carry no colour): mostly mid-to-dark grey and
+//      charcoal as in the 2024-2025 photos, some brown-grey and olive-grey
+//      ones and a few paler weathered ones; darker toward its lower part where
 //      neighbours meet it and lighter on sun-facing tops. A stone may rest on
 //      any face, so its height share comes from the world: the fragment's
 //      height above the stone's centroid (its instance origin) against its
-//      size (the instance scale);
+//      size (the instance scale). Stones thin out with distance one by one:
+//      each has a reach from its size and drops out at a random share of it,
+//      measured from the main camera (also in the shadow pass), so the heap
+//      fades into the underlay over a band rather than at a batch's edge;
 //   2  the driftwood (MultiMesh logs and planks, scaled to length along their
 //      local x): bleached grey wood, a little brown, its grain and long cracks
 //      running along the trunk, darker in the cracks and where bark clings;
 //   3  the concrete closures (pier and platform faces, boat ramps): pale
-//      weathered concrete, mottled, with darker streaks run down from the top.
+//      weathered concrete, mottled, with darker streaks run down from the top;
+//      a ramp's slab (a sloped face looking up) is laid in jointed panels,
+//      each a little lighter or darker, its joints across and along the slope.
 // (The band inside the outline is the land's own dry grass ground cover.)
 // The generated textures are sampled triplanar in world space (no UVs); each
 // stone offsets its sample by its own position so no two stones match. The
@@ -48,13 +52,21 @@ uniform float wall_tile_m = 2.6;
 // Grading: saturation kept, then a brightness multiplier (linear light).
 uniform float riprap_saturation = 0.3;
 uniform float slope_brightness = 0.5;
-uniform float stone_saturation = 0.85;
-uniform float stone_brightness = 0.8;
-// Underlay: dark voids within the stones' range, their average beyond it.
-uniform float void_brightness = 0.45;
-uniform float far_brightness = 0.75;
-uniform float void_fade_start_m = 140.0;
-uniform float void_fade_end_m = 200.0;
+uniform float stone_saturation = 0.45;
+uniform float stone_brightness = 0.62;
+// Stones thin out with distance: a stone of size s reaches s * stone_reach_per_m
+// (within [min, max]) and drops out at its own random share of that, at least
+// stone_thin_start of it.
+uniform float stone_reach_per_m = 130.0;
+uniform float stone_reach_min_m = 45.0;
+uniform float stone_reach_max_m = 160.0;
+uniform float stone_thin_start = 0.6;
+// Underlay: dark voids near by, the heap's average tone where the stones have
+// thinned out.
+uniform float void_brightness = 0.38;
+uniform float far_brightness = 0.52;
+uniform float void_fade_start_m = 60.0;
+uniform float void_fade_end_m = 150.0;
 // Stones: darker toward their lower part (height share 0) where they meet the
 // heap, lighter on sun-facing tops. stone_extent is a stone's typical vertical
 // extent for size 1 (the longest side).
@@ -71,6 +83,10 @@ uniform float wood_grain_around = 7.0;
 uniform vec3 concrete_color : source_color = vec3(0.66, 0.65, 0.62);
 uniform float concrete_mottle = 0.22;
 uniform float concrete_streaks = 0.25;
+// Ramp panels: length down the slope, width across, joint half-width.
+uniform float ramp_panel_length_m = 3.0;
+uniform float ramp_panel_width_m = 2.4;
+uniform float ramp_joint_m = 0.018;
 // Bump.
 uniform float bump_height_m = 0.035;
 uniform float stone_bump_height_m = 0.02;
@@ -104,16 +120,6 @@ varying float instance_scale;
 // Wood: the vertex in its own frame, scaled to metres (length along x).
 varying vec3 local_metres;
 
-void vertex() {
-	world_position = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
-	// Stones scale uniformly and logs only along and across their axis, so the
-	// model matrix keeps normals true.
-	world_normal = normalize(mat3(MODEL_MATRIX) * NORMAL);
-	instance_origin = MODEL_MATRIX[3].xyz;
-	instance_scale = length(MODEL_MATRIX[0].xyz);
-	local_metres = VERTEX * vec3(length(MODEL_MATRIX[0].xyz), length(MODEL_MATRIX[1].xyz), length(MODEL_MATRIX[2].xyz));
-}
-
 float hash12(vec2 p) {
 	vec3 p3 = fract(vec3(p.xyx) * 0.1031);
 	p3 += dot(p3, p3.yzx + 33.33);
@@ -131,6 +137,25 @@ float value_noise(vec2 p) {
 	return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
 }
 
+void vertex() {
+	instance_origin = MODEL_MATRIX[3].xyz;
+	instance_scale = length(MODEL_MATRIX[0].xyz);
+	if (surface == 1) {
+		// The main camera's distance, the same in the shadow pass.
+		float reach = clamp(instance_scale * stone_reach_per_m, stone_reach_min_m, stone_reach_max_m);
+		float keep = mix(stone_thin_start, 1.0, hash12(instance_origin.xz * 0.613 + vec2(4.7, 1.3)));
+		if (distance(instance_origin, MAIN_CAM_INV_VIEW_MATRIX[3].xyz) > reach * keep) {
+			// Collapsed to a point: no fragments.
+			VERTEX = vec3(0.0);
+		}
+	}
+	world_position = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+	// Stones scale uniformly and logs only along and across their axis, so the
+	// model matrix keeps normals true.
+	world_normal = normalize(mat3(MODEL_MATRIX) * NORMAL);
+	local_metres = VERTEX * vec3(length(MODEL_MATRIX[0].xyz), length(MODEL_MATRIX[1].xyz), length(MODEL_MATRIX[2].xyz));
+}
+
 vec3 triplanar(sampler2D tex, vec3 p, vec3 n, float tile, float bias) {
 	vec3 w = pow(abs(n), vec3(4.0));
 	w /= max(w.x + w.y + w.z, 0.0001);
@@ -145,24 +170,22 @@ vec3 grade(vec3 color, float saturation, float brightness) {
 	return mix(vec3(luminance), color, saturation) * brightness;
 }
 
-// A stone's tint from its position: about 40 % plain grey, 24 % rust-brown,
-// 13 % olive, 13 % dark and 10 % pale weathered, each family shaded at random
-// (at most 1).
+// A stone's tint from its position: about 45 % plain grey, 25 % charcoal,
+// 15 % brown-grey, 10 % olive-grey and 5 % pale weathered, each family shaded
+// at random.
 vec3 stone_tint(vec3 origin) {
 	float family = hash12(origin.xz * 0.731 + vec2(origin.y * 0.117 + 3.17, 1.91));
 	float pick = hash12(origin.zx * 1.373 + vec2(7.3, 2.9));
-	vec3 base = vec3(1.0);
-	if (family >= 0.4 && family < 0.64) {
-		base = vec3(1.0, 0.88, 0.74);
-	} else if (family >= 0.64 && family < 0.77) {
-		base = vec3(0.9, 0.93, 0.8);
-	} else if (family >= 0.77 && family < 0.9) {
-		base = vec3(0.7);
-	} else if (family >= 0.9) {
-		base = vec3(1.0, 0.98, 0.95);
+	if (family < 0.45) {
+		return vec3(0.78 + 0.22 * pick);
+	} else if (family < 0.7) {
+		return vec3(0.92, 0.92, 0.94) * (0.55 + 0.2 * pick);
+	} else if (family < 0.85) {
+		return vec3(1.0, 0.9, 0.78) * (0.75 + 0.2 * pick);
+	} else if (family < 0.95) {
+		return vec3(0.93, 0.96, 0.85) * (0.75 + 0.2 * pick);
 	}
-	float shade = family >= 0.9 ? 0.95 + 0.05 * pick : 0.72 + 0.26 * pick;
-	return base * shade;
+	return vec3(1.0, 0.98, 0.95) * (1.05 + 0.1 * pick);
 }
 
 void fragment() {
@@ -203,6 +226,15 @@ void fragment() {
 		float streaks = value_noise(vec2((p.x + p.z) * 1.7, p.y * 0.18));
 		albedo = concrete_color * (1.0 + concrete_mottle * mottle + 0.5 * (luminance - 0.35));
 		albedo *= 1.0 - concrete_streaks * smoothstep(0.55, 0.95, streaks);
+		// A ramp's slab tilts its normal down the slope: panels along and across it.
+		if (n.y > 0.6 && length(n.xz) > 0.02) {
+			vec2 down = normalize(n.xz);
+			float u = dot(p.xz, down) / ramp_panel_length_m;
+			float v = dot(p.xz, vec2(-down.y, down.x)) / ramp_panel_width_m;
+			float to_joint = min(abs(fract(u + 0.5) - 0.5) * ramp_panel_length_m, abs(fract(v + 0.5) - 0.5) * ramp_panel_width_m);
+			float joint = 1.0 - smoothstep(ramp_joint_m, ramp_joint_m + max(fwidth(to_joint), 0.01), to_joint);
+			albedo *= (0.9 + 0.2 * hash12(floor(vec2(u, v)) + vec2(3.1, 7.7))) * (1.0 - 0.55 * joint);
+		}
 		height_sample = dot(triplanar(riprap_albedo, p, n, wall_tile_m, height_mip_bias), vec3(0.3333));
 		strength = wall_bump_height_m;
 	} else if (stone) {
