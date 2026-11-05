@@ -181,7 +181,9 @@ export const STREET_DETAIL_KINDS = Object.freeze({
 const AMENITY_KINDS = Object.freeze(["bench", "bicycle_parking", "post_box", "waste_basket"]);
 // Scatter patterns that plant naturalistic beds (tools/lib/street-planting-generation.mjs).
 const PLANTING_PATTERNS = Object.freeze(["drifts", "fill"]);
-// A canopy rule's crown may shrink toward a wall: at most this wide at a distance from it.
+// A canopy tree beside a wall: its crown at most CANOPY_WALL_SPREAD times its
+// trunk's distance from the wall plus CANOPY_WALL_MARGIN_M, so it reaches the wall
+// without standing through it.
 const CANOPY_WALL_SPREAD = 2.5;
 const CANOPY_WALL_MARGIN_M = 2;
 // The directions tried round a crown whose centre cannot take a trunk.
@@ -1560,10 +1562,10 @@ export function generateStreetDetail({
       const to = stations[end].at;
       start = null;
       if (to - from < HEDGE_MIN_RUN_M) return;
-      const count = Math.max(2, Math.ceil((to - from) / HEDGE_POINT_STEP_M) + 1);
+      const pointCount = Math.max(2, Math.ceil((to - from) / HEDGE_POINT_STEP_M) + 1);
       const points = [];
-      for (let k = 0; k < count; k += 1) {
-        const point = alongPoint(line, from + ((to - from) * k) / (count - 1), 0);
+      for (let k = 0; k < pointCount; k += 1) {
+        const point = alongPoint(line, from + ((to - from) * k) / (pointCount - 1), 0);
         points.push([round3(point[0]), round3(point[1])]);
       }
       const grounds = points.map((point) => groundAt(point));
