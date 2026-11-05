@@ -78,8 +78,10 @@ const RULE_FIELDS = Object.freeze({
   curb_parking: ["source_keys", "sides", "curb_gap_m", "gap_m", "daylight_m", "hydrant_m", "mix", "paints"],
   // Every stretch the street ground marks parked (its parking lanes' parked
   // stretches, where the dated aerial shows cars at the curb): per way side,
-  // the number of cars the aerial shows there.
-  curb_stretches: ["cars", "curb_gap_m", "gap_m", "daylight_m", "hydrant_m", "mix", "paints"],
+  // the number of cars the aerial shows there. open_curbs lists, per way side,
+  // the roads joining across from a curb where the aerial shows cars parked, so
+  // their junction clearance leaves that curb open.
+  curb_stretches: ["cars", "open_curbs", "curb_gap_m", "gap_m", "daylight_m", "hydrant_m", "mix", "paints"],
   lot_occupancy: ["lots", "head_in", "mix", "paints"],
   lot_stalls: ["source_keys", "near_key", "near_m", "far_m", "fill_near", "fill_far", "head_in", "mix", "paints"],
 });
@@ -302,6 +304,8 @@ export function validateClutterRules(zone, kinds) {
         invariant(Array.isArray(rule.gap_m) && rule.gap_m.length === 2 && rule.gap_m.every(isFiniteNumber) && rule.gap_m[0] >= 1.0 && rule.gap_m[1] >= rule.gap_m[0],
           `${label} gap_m is [min, max] with min at least 1 m (a player passes between two cars)`);
         for (const field of ["curb_gap_m", "daylight_m", "hydrant_m"]) invariant(isFiniteNumber(rule[field]) && rule[field] >= 0, `${label} ${field} must be non-negative`);
+        invariant(rule.open_curbs != null && typeof rule.open_curbs === "object" && Object.entries(rule.open_curbs).every(([way, sides]) => /^w\d+$/u.test(way) && sides != null && typeof sides === "object"
+          && Object.entries(sides).every(([side, roads]) => ["left", "right"].includes(side) && Array.isArray(roads) && roads.every((road) => /^w\d+$/u.test(road)))), `${label} open_curbs must map OSM ways to {left, right} lists of OSM ways`);
       }
       continue;
     }
@@ -547,12 +551,16 @@ export function placeStreetClutter({
       blocked.right.push([from, to]);
     };
     for (const ref of new Set(way.node_refs)) {
-      if ((roadsAtNode.get(ref) ?? []).filter((other) => other !== key).length === 0) continue;
+      const others = (roadsAtNode.get(ref) ?? []).filter((other) => other !== key);
+      if (others.length === 0) continue;
       const node = rawOsm.nodes.get(ref);
       if (!node) continue;
       const near = closestOnPolyline(line, projectLonLat(node.coordinate));
-      // Past the crossing road's curb and the daylighting.
-      both(near.along - rule.daylight_m - 8, near.along + rule.daylight_m + 8);
+      // Past the crossing road's curb and the daylighting, on each curb not kept open across it.
+      for (const side of ["left", "right"]) {
+        if (others.every((other) => rule.open_curbs?.[key]?.[side]?.includes(other))) continue;
+        blocked[side].push([near.along - rule.daylight_m - 8, near.along + rule.daylight_m + 8]);
+      }
     }
     for (const walk of site.crosswalks) {
       const near = closestOnPolyline(line, walk.center);
