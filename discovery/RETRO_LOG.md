@@ -23500,3 +23500,11 @@ Carried by deploy-fix from the deploy agent's scratch log; text unchanged apart 
 (Relayed verbatim by the coordinator; added by clutter-yards-b.)
 
 - What worked well: Pairing B05 and B06 at matched poses with a top-down view and the plain aerial made each yard a one-sheet decision. I needed a raw shot only for the #12 mesh.
+
+### visual-review-clutter-yards — round 6
+
+(Relayed verbatim by the coordinator; added by clutter-yards-b.)
+
+- What worked well: Putting re-shots of the unchanged yards after the merges on the same sheets as B06 made the regression check a quick side-by-side. The wider gridded aerial for #9 settled the mound's extent without guesswork.
+- What did not work well: A later commit (81cfd0e4) touching the yard under review wasn't in the reviewed render, so #9 needs one more look.
+- What the team should change next time: Freeze the yard's commit before the review capture, or send the delta re-shot together with the sheets in the same handoff.
