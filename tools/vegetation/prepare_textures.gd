@@ -29,7 +29,7 @@ const SETS := {
 	"park_ground": ["park_mulch.png", "park_gravel.png"],
 	"pine": ["pine_crest.png", "pine_crest_candles.png", "pine_candle_row.png", "pine_bark.png"],
 	"broadleaf": ["broadleaf_clump.png", "broadleaf_bronze.png", "christmas_spray.png", "christmas_spray_flowers.png", "broadleaf_bark.png", "christmas_bark.png"],
-	"set_pieces": ["eucalyptus_clump.png", "eucalyptus_hanging.png", "norfolk_branch_top.png", "norfolk_branch_side.png", "eucalyptus_bark.png"],
+	"set_pieces": ["eucalyptus_spray.png", "weeping_curtain.png", "norfolk_branch_top.png", "norfolk_branch_side.png", "eucalyptus_shred_bark.png"],
 	"shrubs": [
 		"hawthorn_spray.png", "pittosporum_broad.png", "red_tip_shoots.png", "conical_spray.png",
 		"hedge_mat.png", "glossy_mat.png", "hedge_stems_open.png", "phormium_leaf.png",
@@ -59,8 +59,8 @@ const ROLLOUT_GRADES := {
 	"broadleaf_bronze.png": [Color(0.94, 0.84, 0.8), 0.62],
 	"christmas_spray.png": [Color(0.82, 0.84, 0.8), 0.38],
 	"christmas_spray_flowers.png": [Color(1.0, 0.76, 0.82), 0.3],
-	"eucalyptus_clump.png": [Color(1.0, 1.04, 1.04), 0.45],
-	"eucalyptus_hanging.png": [Color(1.0, 1.04, 1.04), 0.45],
+	"eucalyptus_spray.png": [Color(1.0, 1.04, 1.04), 0.45],
+	"weeping_curtain.png": [Color(1.0, 1.02, 1.0), 0.4],
 	"norfolk_branch_top.png": [Color(0.98, 0.98, 0.92), 0.42],
 	"norfolk_branch_side.png": [Color(0.98, 0.98, 0.92), 0.42],
 	"hawthorn_spray.png": [Color(0.81, 0.81, 0.87), 0.36],
@@ -360,19 +360,20 @@ func _pack_broadleaf(images: Dictionary, errors: Array[String]) -> void:
 	}, errors)
 
 
-## The set pieces' atlas, 1024 x 1024 (EUCALYPTUS_* and NORFOLK_* in the kit): the
-## eucalyptus's leafy branch end over its tassel in the left column, a Norfolk
-## Island pine branch from above and from the side in the right; and the
-## eucalyptus's tiled bark, a little greyer than generated.
+## The set pieces' atlas, 1024 x 1024 (EUCALYPTUS_SPRAY, WEEPING_CURTAIN and NORFOLK_*
+## in the kit): the eucalyptus's hanging spray over the weeping tree's curtain in
+## the left column, a Norfolk Island pine branch from above and from the side in the
+## right; and the eucalyptus's tiled bark, its ribbons pale enough for the kit's
+## vertex colours to warm them low on the trunk.
 func _pack_set_pieces(images: Dictionary, errors: Array[String]) -> void:
 	var atlas := Image.create_empty(1024, 1024, false, Image.FORMAT_RGBA8)
-	_pack_cell(atlas, images, "eucalyptus_clump.png", Rect2i(0, 0, 512, 512), CELL_MARGIN)
-	_pack_cell(atlas, images, "eucalyptus_hanging.png", Rect2i(0, 512, 512, 512), CELL_MARGIN)
+	_pack_cell(atlas, images, "eucalyptus_spray.png", Rect2i(0, 0, 512, 512), CELL_MARGIN)
+	_pack_cell(atlas, images, "weeping_curtain.png", Rect2i(0, 512, 512, 512), CELL_MARGIN)
 	_pack_cell(atlas, images, "norfolk_branch_top.png", Rect2i(512, 0, 512, 512), CELL_MARGIN)
 	_pack_cell(atlas, images, "norfolk_branch_side.png", Rect2i(512, 512, 512, 512), CELL_MARGIN)
 	_fill_transparent(atlas)
 	_save(atlas, OUT + "set_piece_foliage_atlas.png", errors)
-	_save_barks(images, {"eucalyptus_bark.png": ["eucalyptus_bark.png", Color(0.94, 0.92, 0.9), 0.2]}, errors)
+	_save_barks(images, {"eucalyptus_shred_bark.png": ["eucalyptus_bark.png", Color(0.9, 0.88, 0.87), 0.5]}, errors)
 
 
 ## The shrub atlas, 2048 x 1024 (SHRUB_CELL_SOURCES; SHRUB_CELLS in the kit); and
