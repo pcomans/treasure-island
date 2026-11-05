@@ -8,6 +8,12 @@ render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_burley, specular_sc
 // The albedo is read raw (no source_color) and split into a grass-tuft mask and
 // a straw mask; the palettes below then supply the colour, so the photo's red
 // soil never shows. Generated ground UVs are world XZ / 10.
+//
+// The world ground-cover map (tools/lib/ground-cover-map.mjs) draws recipe
+// families over a family's own mix where its rules place them: its red, green,
+// blue and alpha are the weights of the lawn, straw, dry-field and bare recipes
+// (each a dry threshold, bare threshold and green dryness), and whatever weight
+// is left keeps the family's own settings.
 
 uniform sampler2D detail_albedo : filter_linear_mipmap_anisotropic, repeat_enable;
 uniform sampler2D detail_normal : hint_normal, filter_linear_mipmap_anisotropic, repeat_enable;
@@ -34,6 +40,25 @@ uniform float green_dryness = 0.0;
 uniform float patch_scale_m = 24.0;
 uniform float bare_scale_m = 23.0;
 uniform float patch_softness = 0.08;
+
+// The world map of recipe weights and its rectangle: origin x, z and the
+// inverse of its width and depth in metres. A black map leaves every family as is.
+uniform sampler2D cover_map : hint_default_black, filter_linear_mipmap, repeat_disable;
+uniform vec4 cover_map_rect = vec4(-720.0, -960.0, 1.0 / 1440.0, 1.0 / 1920.0);
+uniform vec3 recipe_lawn = vec3(2.0, 2.0, 0.0);
+uniform vec3 recipe_straw = vec3(2.0, 2.0, 0.0);
+uniform vec3 recipe_dry_field = vec3(2.0, 2.0, 0.0);
+uniform vec3 recipe_bare = vec3(2.0, 2.0, 0.0);
+
+// Artificial turf: turf_amount pulls the green layer to an even dark pitch green.
+uniform float turf_amount = 0.0;
+uniform vec3 turf_color : source_color = vec3(0.13, 0.25, 0.12);
+
+// A watered pitch's sprinkler grid: dry patches midway between the heads of a
+// grid_m square grid turned grid_angle radians from world +X, at grid_amount.
+uniform float grid_m = 18.0;
+uniform float grid_angle = 0.0;
+uniform float grid_amount = 0.0;
 
 uniform float detail_repeat_m = 5.0;
 uniform float normal_strength = 0.3;
@@ -82,15 +107,27 @@ vec3 cover_layer(vec3 gap, vec3 blade, vec3 straw, vec3 m, float grain_gain, flo
 
 void fragment() {
 	vec2 p = UV * 10.0;
+	// The family's own mix, with the map's recipes drawn over it.
+	vec4 cover = texture(cover_map, (p - cover_map_rect.xy) * cover_map_rect.zw);
+	float own = clamp(1.0 - (cover.r + cover.g + cover.b + cover.a), 0.0, 1.0);
+	vec3 mix_settings = vec3(dry_threshold, bare_threshold, green_dryness) * own
+		+ recipe_lawn * cover.r + recipe_straw * cover.g + recipe_dry_field * cover.b + recipe_bare * cover.a;
 	float n_patch = value_noise(p / patch_scale_m);
 	float n_fine = value_noise(p / (patch_scale_m * 0.31) + vec2(17.31, 5.13));
 	float n_blend = value_noise(p / 7.3 + vec2(3.71, 29.17));
 	float patch_level = 0.65 * n_patch + 0.35 * n_fine;
-	float dry_w = smoothstep(dry_threshold - patch_softness, dry_threshold + patch_softness, patch_level);
+	if (grid_amount > 0.0) {
+		vec2 axis = vec2(cos(grid_angle), sin(grid_angle));
+		vec2 q = vec2(dot(p, axis), dot(p, vec2(-axis.y, axis.x))) * (TAU / grid_m);
+		// 0 at a sprinkler head, 1 midway between four.
+		float between = 0.5 - 0.25 * (cos(q.x) + cos(q.y));
+		patch_level = mix(patch_level, 0.75 * between + 0.25 * n_fine, grid_amount);
+	}
+	float dry_w = smoothstep(mix_settings.x - patch_softness, mix_settings.x + patch_softness, patch_level);
 	float bare_w = 0.0;
-	if (bare_threshold <= 1.0) {
+	if (mix_settings.y <= 1.0 + patch_softness) {
 		float bare = 0.7 * value_noise(p / bare_scale_m + vec2(41.7, 9.2)) + 0.3 * n_fine;
-		bare_w = smoothstep(bare_threshold - patch_softness, bare_threshold + patch_softness, bare);
+		bare_w = smoothstep(mix_settings.y - patch_softness, mix_settings.y + patch_softness, bare);
 	}
 
 	// Two detail samples at unrelated scales and angles hide the 5 m repeat.
@@ -100,7 +137,9 @@ void fragment() {
 	float fade = smoothstep(fade_start_m, fade_end_m, length(VERTEX));
 
 	vec3 dry = cover_layer(dry_gap, dry_blade, dry_straw, m, 0.6, fade);
-	vec3 green = mix(cover_layer(lawn_gap, lawn_blade, lawn_straw, m, 0.25, fade), dry, green_dryness);
+	vec3 lawn = cover_layer(lawn_gap, lawn_blade, lawn_straw, m, 0.25, fade);
+	lawn = mix(lawn, turf_color * (0.92 + 0.16 * m.x), turf_amount);
+	vec3 green = mix(lawn, dry, mix_settings.z);
 	vec3 soil = cover_layer(soil_gap, soil_blade, soil_straw, m, 0.4, fade);
 	ALBEDO = mix(mix(green, dry, dry_w), soil, bare_w) * (0.94 + 0.12 * n_fine);
 	// Matte, with a gentle normal fade, so distant ground does not turn paler

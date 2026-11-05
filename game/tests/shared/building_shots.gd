@@ -61,6 +61,9 @@ extends SceneTree
 ##   them shown and N with every group hidden, in three alternating blocks each,
 ##   with vsync and the frame cap off (FRAME_TIME lines, with the frame's draw
 ##   calls and primitives).
+##   Any street view may instead time a whole street-detail layer of the world:
+##   "measure_frames": N with "measure_layer": "vegetation" (or another layer)
+##   shows and hides that layer the same way, in the pass where it is on.
 
 const WorldHarness := preload("res://game/tests/shared/world_harness.gd")
 const VegetationKit := preload("res://game/scripts/world/street_vegetation_kit.gd")
@@ -478,20 +481,36 @@ func _show_groups(gallery: Dictionary, view: Dictionary) -> String:
 ## Times a view's drawn frames from its camera, with vsync and the frame cap
 ## off: measure_frames with its plant groups as shown and as many with every
 ## group hidden (the beds stay), in three alternating blocks each so a slow
-## drift in the machine's load falls on both. Prints one FRAME_TIME line per
-## state, with the last frame's draw calls and primitives. Returns an error, or "".
+## drift in the machine's load falls on both. With "measure_layer": NAME the
+## view needs no plants: the world's street-detail layer of that name is shown
+## and hidden instead (a view taken while that layer is off prints a
+## FRAME_TIME_SKIPPED line). Prints one FRAME_TIME line per state, with the
+## last frame's draw calls and primitives, then restores what was shown.
+## Returns an error, or "".
 func _measure_view(view: Dictionary, target: Vector3, gallery: Dictionary) -> String:
-	if not _numbers([view.get("measure_frames")], 1) or float(view.measure_frames) < 30.0 or float(view.measure_frames) > 3000.0 or not gallery.has("groups"):
-		return "measure_frames needs 30-3000 frames and plants in the plan"
+	var toggled: Array[Node3D] = []
+	if view.has("measure_layer"):
+		var layer := str(view.measure_layer)
+		if not layer in WorldLoader.STREET_DETAIL_LAYERS:
+			return "measure_layer must name a street-detail layer"
+		if not layer in _h.world.get_street_detail_layers():
+			print("FRAME_TIME_SKIPPED view=%s layer=%s is off in this pass" % [view.name, layer])
+			return ""
+		toggled.append(_h.world.street_detail_layer(layer))
+	elif gallery.has("groups"):
+		for group: String in gallery.groups:
+			toggled.append(gallery.groups[group] as Node3D)
+	if not _numbers([view.get("measure_frames")], 1) or float(view.measure_frames) < 30.0 or float(view.measure_frames) > 3000.0 or toggled.is_empty():
+		return "measure_frames needs 30-3000 frames and plants in the plan or a measure_layer"
 	var error := await _h.settle_player(Vector2(view.player_xz[0], view.player_xz[1]))
 	if error != "":
 		return error
 	var free := _free_camera(view, target)
 	if free == null:
 		_h.aim_camera(target)
-	var shown := {}
-	for group: String in gallery.groups:
-		shown[group] = (gallery.groups[group] as Node3D).visible
+	var shown: Array[bool] = []
+	for node in toggled:
+		shown.append(node.visible)
 	var uncapped := _uncap_frames()
 	var blocks := 3
 	var per_block := maxi(10, int(view.measure_frames) / blocks)
@@ -501,8 +520,8 @@ func _measure_view(view: Dictionary, target: Vector3, gallery: Dictionary) -> St
 	var info := {}
 	for block in blocks * 2:
 		var state := "plants" if block % 2 == 0 else "empty"
-		for group: String in gallery.groups:
-			(gallery.groups[group] as Node3D).visible = bool(shown[group]) and state == "plants"
+		for index in toggled.size():
+			toggled[index].visible = shown[index] and state == "plants"
 		var times := await _frame_times(per_block, 20)
 		if state == "plants":
 			plants_times.append_array(times)
@@ -510,6 +529,8 @@ func _measure_view(view: Dictionary, target: Vector3, gallery: Dictionary) -> St
 			empty_times.append_array(times)
 		info[state] = [RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME), RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_PRIMITIVES_IN_FRAME)]
 	_restore_frames(uncapped)
+	for index in toggled.size():
+		toggled[index].visible = shown[index]
 	for state: String in ["plants", "empty"]:
 		var stats := _frame_stats(plants_times if state == "plants" else empty_times)
 		print("FRAME_TIME view=%s state=%s frames=%d mean_ms=%.2f median_ms=%.2f p95_ms=%.2f draw_calls=%d primitives=%d renderer=%s/%s" % [view.name, state, stats.frames, stats.mean,

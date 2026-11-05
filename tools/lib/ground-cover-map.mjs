@@ -1,0 +1,483 @@
+// Ground-cover map: a world-space RGBA map of recipe weights that the shared
+// ground-cover shader (game/resources/materials/world/ground_cover/
+// ground_cover.gdshader) reads on every ground-cover family
+// (game/scripts/world/ground_cover.gd). Each channel is the weight of one
+// recipe family drawn over the record's own mix: red the maintained lawn,
+// green the dry straw, blue the drier, barer field, alpha bare fill soil.
+// Where every weight is 0 the record keeps its family; the weights never sum
+// past 1.
+//
+// The rules (tools/config/ground-cover.json) say where each recipe applies:
+// on the cells whose top drawn ground is a given OSM area or surface (every
+// rule names one, so a rule never reaches other records), inside a traced
+// polygon, near buildings, roads and lots, or within a distance of the shore. Each names its dated aerial or photo evidence; widths, distances and
+// traced outlines are production inference, not survey data. The map is drawn
+// from the generated world (its records and the playable boundary), so it
+// follows the drawn buildings and roads; tools/build_ground_cover_map.mjs writes
+// it and tools/check_godot_world_determinism.mjs checks the committed copy
+// against a fresh draw. World x, z (+X east, +Z south), metres.
+
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { deflateSync, inflateSync } from "node:zlib";
+
+import { invariant } from "./world-contract.mjs";
+
+export const GROUND_COVER_SCHEMA = "ti.ground-cover/1";
+export const GROUND_COVER_CONFIG_PATH = "tools/config/ground-cover.json";
+export const GROUND_COVER_MAP_PATH = "game/resources/textures/world/ground_cover/cover_map.png";
+// Map channels in RGBA order: the recipe family each one draws.
+export const GROUND_COVER_CHANNELS = Object.freeze(["lawn", "straw", "dry_field", "bare"]);
+// What a rule may measure distance from ("near"): generated record kinds.
+export const GROUND_COVER_NEAR_KINDS = Object.freeze(["building", "vehicle_road", "paved_area", "street_kerb"]);
+const SAFE_ID = /^[a-z0-9_]+$/u;
+const RULE_FIELDS = Object.freeze(["basis", "channel", "evidence", "feather_m", "id", "near", "reason", "shore", "surfaces", "weight", "within_sources", "within_xz"]);
+
+function isFiniteNumber(value) {
+  return typeof value === "number" && Number.isFinite(value);
+}
+
+function isXZ(value) {
+  return Array.isArray(value) && value.length === 2 && value.every(isFiniteNumber);
+}
+
+function validateRange(value, label) {
+  invariant(value != null && typeof value === "object" && !Array.isArray(value)
+    && isFiniteNumber(value.full_m) && isFiniteNumber(value.zero_m) && value.full_m >= 0 && value.zero_m > value.full_m,
+  `${label} needs full_m >= 0 below zero_m`);
+}
+
+export function validateGroundCoverConfig(config) {
+  invariant(config?.schema_version === GROUND_COVER_SCHEMA, "Ground-cover config schema drift");
+  invariant(Array.isArray(config.notes) && config.notes.every((note) => typeof note === "string"), "Ground-cover config needs notes");
+  const map = config.map;
+  invariant(map != null && isXZ(map.origin_xz) && isXZ(map.size_m) && isFiniteNumber(map.cell_m) && map.cell_m > 0, "Ground-cover map needs origin_xz, size_m and cell_m");
+  for (const size of map.size_m) invariant(size > 0 && Number.isInteger(size / map.cell_m), "Ground-cover map size must be a whole number of cells");
+  invariant(Array.isArray(config.rules) && config.rules.length > 0, "Ground-cover config needs rules");
+  const ids = new Set();
+  for (const rule of config.rules) {
+    const label = `Ground-cover rule ${rule?.id}`;
+    invariant(typeof rule?.id === "string" && SAFE_ID.test(rule.id) && !ids.has(rule.id), `${label} needs a unique lower_snake id`);
+    ids.add(rule.id);
+    invariant(Object.keys(rule).every((key) => RULE_FIELDS.includes(key)), `${label} has an unknown field`);
+    invariant(GROUND_COVER_CHANNELS.includes(rule.channel), `${label} channel must be one of ${GROUND_COVER_CHANNELS.join(", ")}`);
+    invariant(rule.basis === "production_inference", `${label} basis must be production_inference`);
+    for (const field of ["reason", "evidence"]) invariant(typeof rule[field] === "string" && rule[field].trim() !== "", `${label} needs ${field}`);
+    // The map is read by every ground-cover family, so each rule names the ground it may draw on.
+    invariant(rule.within_sources != null || rule.surfaces != null, `${label} needs within_sources or surfaces`);
+    if (rule.weight != null) invariant(isFiniteNumber(rule.weight) && rule.weight > 0 && rule.weight <= 1, `${label} weight must be in (0, 1]`);
+    if (rule.within_sources != null) {
+      invariant(Array.isArray(rule.within_sources) && rule.within_sources.length > 0 && rule.within_sources.every((key) => /^[wr]\d+$/u.test(key)), `${label} within_sources must list OSM area keys`);
+    }
+    if (rule.surfaces != null) {
+      invariant(Array.isArray(rule.surfaces) && rule.surfaces.length > 0 && rule.surfaces.every((key) => typeof key === "string" && key !== ""), `${label} surfaces must list material keys`);
+    }
+    if (rule.within_xz != null) {
+      invariant(Array.isArray(rule.within_xz) && rule.within_xz.length >= 3 && rule.within_xz.every(isXZ), `${label} within_xz must be a polygon of 3+ [x, z] points`);
+      invariant(isFiniteNumber(rule.feather_m) && rule.feather_m >= 0, `${label} within_xz needs a feather_m >= 0`);
+    } else {
+      invariant(rule.feather_m == null, `${label}: feather_m goes with within_xz`);
+    }
+    if (rule.near != null) {
+      validateRange(rule.near, `${label} near`);
+      invariant(Array.isArray(rule.near.kinds) && rule.near.kinds.length > 0 && rule.near.kinds.every((kind) => GROUND_COVER_NEAR_KINDS.includes(kind)),
+        `${label} near.kinds must list ${GROUND_COVER_NEAR_KINDS.join(", ")}`);
+      invariant(Object.keys(rule.near).sort().join(",") === "full_m,kinds,zero_m", `${label} near must be exactly {kinds, full_m, zero_m}`);
+    }
+    if (rule.shore != null) {
+      validateRange(rule.shore, `${label} shore`);
+      invariant(Object.keys(rule.shore).sort().join(",") === "full_m,zero_m", `${label} shore must be exactly {full_m, zero_m}`);
+    }
+  }
+  return config;
+}
+
+export function loadGroundCoverConfig(projectRoot) {
+  return validateGroundCoverConfig(JSON.parse(readFileSync(resolve(projectRoot, GROUND_COVER_CONFIG_PATH), "utf8")));
+}
+
+// The map grid: cell (i, j) is centred at (x0 + (i + 0.5) cell, z0 + (j + 0.5) cell);
+// rows run from north (-Z) to south, like the image's rows.
+export function groundCoverGrid(config) {
+  const [x0, z0] = config.map.origin_xz;
+  const cell = config.map.cell_m;
+  const width = Math.round(config.map.size_m[0] / cell);
+  const height = Math.round(config.map.size_m[1] / cell);
+  return { x0, z0, cell, width, height, centerX: (i) => x0 + (i + 0.5) * cell, centerZ: (j) => z0 + (j + 0.5) * cell };
+}
+
+// Calls fill(index) for every grid cell whose centre lies inside the plan
+// triangle [[x, z], [x, z], [x, z]] (edges count as inside).
+export function rasterizeTriangle(grid, triangle, fill) {
+  const zs = triangle.map((point) => point[1]);
+  const firstRow = Math.max(0, Math.ceil((Math.min(...zs) - grid.z0) / grid.cell - 0.5));
+  const lastRow = Math.min(grid.height - 1, Math.floor((Math.max(...zs) - grid.z0) / grid.cell - 0.5));
+  for (let j = firstRow; j <= lastRow; j += 1) {
+    const z = grid.centerZ(j);
+    let low = Infinity;
+    let high = -Infinity;
+    for (let k = 0; k < 3; k += 1) {
+      const [ax, az] = triangle[k];
+      const [bx, bz] = triangle[(k + 1) % 3];
+      if ((az <= z && bz >= z) || (bz <= z && az >= z)) {
+        if (az === bz) {
+          low = Math.min(low, ax, bx);
+          high = Math.max(high, ax, bx);
+        } else {
+          const x = ax + ((z - az) * (bx - ax)) / (bz - az);
+          low = Math.min(low, x);
+          high = Math.max(high, x);
+        }
+      }
+    }
+    if (low > high) continue;
+    const first = Math.max(0, Math.ceil((low - grid.x0) / grid.cell - 0.5));
+    const last = Math.min(grid.width - 1, Math.floor((high - grid.x0) / grid.cell - 0.5));
+    for (let i = first; i <= last; i += 1) fill(j * grid.width + i);
+  }
+}
+
+// Every cell whose centre lies inside the polygon (even-odd), as a 0/1 mask.
+export function rasterizePolygon(grid, ring) {
+  const mask = new Uint8Array(grid.width * grid.height);
+  for (let j = 0; j < grid.height; j += 1) {
+    const z = grid.centerZ(j);
+    const crossings = [];
+    for (let k = 0; k < ring.length; k += 1) {
+      const [ax, az] = ring[k];
+      const [bx, bz] = ring[(k + 1) % ring.length];
+      if ((az > z) !== (bz > z)) crossings.push(ax + ((z - az) * (bx - ax)) / (bz - az));
+    }
+    crossings.sort((left, right) => left - right);
+    for (let k = 0; k + 1 < crossings.length; k += 2) {
+      const first = Math.max(0, Math.ceil((crossings[k] - grid.x0) / grid.cell - 0.5));
+      const last = Math.min(grid.width - 1, Math.floor((crossings[k + 1] - grid.x0) / grid.cell - 0.5));
+      for (let i = first; i <= last; i += 1) mask[j * grid.width + i] = 1;
+    }
+  }
+  return mask;
+}
+
+// Exact Euclidean distance (metres, between cell centres) from every cell to
+// the nearest cell of the mask (Felzenszwalb and Huttenlocher's two-pass
+// squared-distance transform); Infinity everywhere when the mask is empty.
+export function distanceToMask(grid, mask) {
+  const { width, height, cell } = grid;
+  const big = 1e20;
+  const field = new Float64Array(width * height);
+  for (let index = 0; index < field.length; index += 1) field[index] = mask[index] ? 0 : big;
+  const line = new Float64Array(Math.max(width, height));
+  const out = new Float64Array(Math.max(width, height));
+  const parabolas = new Int32Array(Math.max(width, height));
+  const bounds = new Float64Array(Math.max(width, height) + 1);
+  const pass = (count) => {
+    let k = 0;
+    parabolas[0] = 0;
+    bounds[0] = -Infinity;
+    bounds[1] = Infinity;
+    for (let q = 1; q < count; q += 1) {
+      let s;
+      for (;;) {
+        const p = parabolas[k];
+        s = ((line[q] + q * q) - (line[p] + p * p)) / (2 * q - 2 * p);
+        if (s <= bounds[k] && k > 0) k -= 1;
+        else break;
+      }
+      if (s <= bounds[k]) {
+        parabolas[0] = q;
+        bounds[0] = -Infinity;
+        bounds[1] = Infinity;
+        k = 0;
+        continue;
+      }
+      k += 1;
+      parabolas[k] = q;
+      bounds[k] = s;
+      bounds[k + 1] = Infinity;
+    }
+    k = 0;
+    for (let q = 0; q < count; q += 1) {
+      while (bounds[k + 1] < q) k += 1;
+      const p = parabolas[k];
+      out[q] = (q - p) * (q - p) + line[p];
+    }
+  };
+  for (let j = 0; j < height; j += 1) {
+    for (let i = 0; i < width; i += 1) line[i] = field[j * width + i];
+    pass(width);
+    for (let i = 0; i < width; i += 1) field[j * width + i] = out[i];
+  }
+  for (let i = 0; i < width; i += 1) {
+    for (let j = 0; j < height; j += 1) line[j] = field[j * width + i];
+    pass(height);
+    for (let j = 0; j < height; j += 1) field[j * width + i] = out[j];
+  }
+  const distance = new Float32Array(width * height);
+  for (let index = 0; index < distance.length; index += 1) distance[index] = field[index] >= big / 2 ? Infinity : Math.sqrt(field[index]) * cell;
+  return distance;
+}
+
+function smoothstep(edge0, edge1, value) {
+  const t = Math.min(1, Math.max(0, (value - edge0) / (edge1 - edge0)));
+  return t * t * (3 - 2 * t);
+}
+
+function pointSegmentDistance(x, z, ax, az, bx, bz) {
+  const dx = bx - ax;
+  const dz = bz - az;
+  const length2 = dx * dx + dz * dz;
+  const t = length2 > 0 ? Math.max(0, Math.min(1, ((x - ax) * dx + (z - az) * dz) / length2)) : 0;
+  return Math.hypot(x - ax - t * dx, z - az - t * dz);
+}
+
+// The plan triangles of a generated record (world x, z).
+function recordTriangles(record) {
+  const triangles = [];
+  for (let offset = 0; offset < record.indices.length; offset += 3) {
+    triangles.push([0, 1, 2].map((k) => {
+      const vertex = record.indices[offset + k] * 3;
+      return [record.vertices[vertex], record.vertices[vertex + 2]];
+    }));
+  }
+  return triangles;
+}
+
+// Draw order of the generated ground, low to high: the land, then areas and
+// overlays by their surface bias, roads and paths, the street ground and
+// paint, buildings. -1 for records that are not ground.
+function groundRank(record) {
+  switch (record.feature_kind) {
+    case "land_ground": return 0;
+    case "major_area":
+    case "terrain_overlay": return 1 + Number(record.surface_bias_m ?? 0);
+    case "road_path": return 2;
+    case "street_kerb":
+    case "street_paint": return 3;
+    case "building_roof":
+    case "building_part_roof": return 4;
+    default: return -1;
+  }
+}
+
+function nearKind(record) {
+  if (record.feature_kind === "building_roof" || record.feature_kind === "building_part_roof") return "building";
+  if (record.feature_kind === "road_path" && record.material_key === "road_path") return "vehicle_road";
+  if (record.material_key === "major_area_paved") return "paved_area";
+  if (record.feature_kind === "street_kerb") return "street_kerb";
+  return null;
+}
+
+// Reads the generated world's chunk records and playable boundary.
+export function loadGroundCoverWorld(worldRoot) {
+  const manifest = JSON.parse(readFileSync(resolve(worldRoot, "manifest.json"), "utf8"));
+  const records = [];
+  for (const entry of manifest.chunks) {
+    const chunk = JSON.parse(readFileSync(resolve(worldRoot, entry.path), "utf8"));
+    records.push(...chunk.records);
+  }
+  return { records, boundary: manifest.playable_boundary };
+}
+
+// The map for a validated config and a loaded world: {grid, rgba (Uint8Array,
+// 4 bytes per cell, rows north to south), rules: [{id, channel, area_m2}]}.
+// area_m2 is the area where the rule's weight reaches 0.5.
+export function drawGroundCoverMap(config, world) {
+  const grid = groundCoverGrid(config);
+  const cells = grid.width * grid.height;
+  // The top drawn ground record of every cell.
+  const ground = world.records
+    .map((record) => ({ record, rank: groundRank(record) }))
+    .filter((entry) => entry.rank >= 0)
+    .sort((left, right) => left.rank - right.rank || left.record.object_key.localeCompare(right.record.object_key));
+  const top = new Int32Array(cells).fill(-1);
+  const nearMasks = Object.fromEntries(GROUND_COVER_NEAR_KINDS.map((kind) => [kind, new Uint8Array(cells)]));
+  ground.forEach(({ record }, index) => {
+    const kind = nearKind(record);
+    for (const triangle of recordTriangles(record)) {
+      rasterizeTriangle(grid, triangle, (cell) => {
+        top[cell] = index;
+        if (kind) nearMasks[kind][cell] = 1;
+      });
+    }
+  });
+  const nearDistances = new Map();
+  const nearDistance = (kinds) => {
+    const key = [...kinds].sort().join("+");
+    if (!nearDistances.has(key)) {
+      const mask = new Uint8Array(cells);
+      for (const kind of kinds) for (let cell = 0; cell < cells; cell += 1) mask[cell] |= nearMasks[kind][cell];
+      nearDistances.set(key, distanceToMask(grid, mask));
+    }
+    return nearDistances.get(key);
+  };
+  let shoreDistance = null;
+  const shore = () => {
+    if (shoreDistance) return shoreDistance;
+    const segments = [];
+    for (const component of world.boundary.components) {
+      for (const ring of [component.outer, ...(component.holes ?? [])]) {
+        for (let k = 0; k < ring.length; k += 1) segments.push([...ring[k], ...ring[(k + 1) % ring.length]]);
+      }
+    }
+    shoreDistance = new Float32Array(cells);
+    for (let j = 0; j < grid.height; j += 1) {
+      const z = grid.centerZ(j);
+      for (let i = 0; i < grid.width; i += 1) {
+        const x = grid.centerX(i);
+        let best = Infinity;
+        for (const [ax, az, bx, bz] of segments) best = Math.min(best, pointSegmentDistance(x, z, ax, az, bx, bz));
+        shoreDistance[j * grid.width + i] = best;
+      }
+    }
+    return shoreDistance;
+  };
+
+  const weights = GROUND_COVER_CHANNELS.map(() => new Float32Array(cells));
+  const summaries = [];
+  for (const rule of config.rules) {
+    const weight = new Float32Array(cells).fill(rule.weight ?? 1);
+    if (rule.within_sources || rule.surfaces) {
+      const sources = new Set(rule.within_sources ?? []);
+      const surfaces = new Set(rule.surfaces ?? []);
+      for (let cell = 0; cell < cells; cell += 1) {
+        const owner = top[cell] >= 0 ? ground[top[cell]].record : null;
+        const inSources = !rule.within_sources || (owner && owner.feature_kind === "major_area" && owner.source_keys.some((key) => sources.has(key)));
+        const onSurface = !rule.surfaces || (owner && surfaces.has(owner.material_key));
+        if (!inSources || !onSurface) weight[cell] = 0;
+      }
+    }
+    if (rule.within_xz) {
+      const inside = rasterizePolygon(grid, rule.within_xz);
+      if (rule.feather_m > 0) {
+        const outside = new Uint8Array(cells);
+        for (let cell = 0; cell < cells; cell += 1) outside[cell] = inside[cell] ? 0 : 1;
+        const toOutside = distanceToMask(grid, outside);
+        const toInside = distanceToMask(grid, inside);
+        const half = rule.feather_m / 2;
+        for (let cell = 0; cell < cells; cell += 1) {
+          // Signed distance from the outline between cell centres, + inside.
+          const signed = inside[cell] ? toOutside[cell] - grid.cell / 2 : -(toInside[cell] - grid.cell / 2);
+          weight[cell] *= smoothstep(-half, half, signed);
+        }
+      } else {
+        for (let cell = 0; cell < cells; cell += 1) if (!inside[cell]) weight[cell] = 0;
+      }
+    }
+    if (rule.near) {
+      const distance = nearDistance(rule.near.kinds);
+      for (let cell = 0; cell < cells; cell += 1) weight[cell] *= 1 - smoothstep(rule.near.full_m, rule.near.zero_m, distance[cell]);
+    }
+    if (rule.shore) {
+      const distance = shore();
+      for (let cell = 0; cell < cells; cell += 1) weight[cell] *= 1 - smoothstep(rule.shore.full_m, rule.shore.zero_m, distance[cell]);
+    }
+    // Over: the rule's recipe covers its weight of whatever lies under it.
+    const channel = GROUND_COVER_CHANNELS.indexOf(rule.channel);
+    let covered = 0;
+    for (let cell = 0; cell < cells; cell += 1) {
+      const w = weight[cell];
+      if (w <= 0) continue;
+      for (const layer of weights) layer[cell] *= 1 - w;
+      weights[channel][cell] += w;
+      if (w >= 0.5) covered += 1;
+    }
+    summaries.push({ id: rule.id, channel: rule.channel, area_m2: Math.round(covered * grid.cell * grid.cell) });
+  }
+  const channels = GROUND_COVER_CHANNELS.length;
+  const rgba = new Uint8Array(cells * channels);
+  for (let cell = 0; cell < cells; cell += 1) {
+    for (let channel = 0; channel < channels; channel += 1) rgba[cell * channels + channel] = Math.round(Math.min(1, Math.max(0, weights[channel][cell])) * 255);
+  }
+  return { grid, rgba, rules: summaries };
+}
+
+export function buildGroundCoverMap({ projectRoot, worldRoot }) {
+  const config = loadGroundCoverConfig(projectRoot);
+  return drawGroundCoverMap(config, loadGroundCoverWorld(worldRoot));
+}
+
+// PNG: 8-bit RGBA (its alpha is the bare weight, not transparency), one
+// unfiltered scanline per map row.
+const PNG_SIGNATURE = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+const CRC_TABLE = (() => {
+  const table = new Uint32Array(256);
+  for (let n = 0; n < 256; n += 1) {
+    let c = n;
+    for (let k = 0; k < 8; k += 1) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+    table[n] = c >>> 0;
+  }
+  return table;
+})();
+
+function crc32(bytes) {
+  let c = 0xffffffff;
+  for (const byte of bytes) c = CRC_TABLE[(c ^ byte) & 0xff] ^ (c >>> 8);
+  return (c ^ 0xffffffff) >>> 0;
+}
+
+function pngChunk(type, data) {
+  const length = Buffer.alloc(4);
+  length.writeUInt32BE(data.length);
+  const body = Buffer.concat([Buffer.from(type, "ascii"), data]);
+  const crc = Buffer.alloc(4);
+  crc.writeUInt32BE(crc32(body));
+  return Buffer.concat([length, body, crc]);
+}
+
+export function encodeGroundCoverPng(width, height, rgba) {
+  invariant(rgba.length === width * height * 4, "Ground-cover map size mismatch");
+  const stride = width * 4;
+  const raw = Buffer.alloc((stride + 1) * height);
+  for (let row = 0; row < height; row += 1) {
+    raw[row * (stride + 1)] = 0;
+    Buffer.from(rgba.buffer, rgba.byteOffset + row * stride, stride).copy(raw, row * (stride + 1) + 1);
+  }
+  const header = Buffer.alloc(13);
+  header.writeUInt32BE(width, 0);
+  header.writeUInt32BE(height, 4);
+  header[8] = 8;
+  header[9] = 6;
+  return Buffer.concat([PNG_SIGNATURE, pngChunk("IHDR", header), pngChunk("IDAT", deflateSync(raw, { level: 9 })), pngChunk("IEND", Buffer.alloc(0))]);
+}
+
+// The pixels of an 8-bit RGBA PNG (any scanline filters): {width, height, rgba}.
+export function decodeGroundCoverPng(buffer) {
+  invariant(buffer.subarray(0, 8).equals(PNG_SIGNATURE), "Not a PNG");
+  let offset = 8;
+  let header = null;
+  const data = [];
+  while (offset < buffer.length) {
+    const length = buffer.readUInt32BE(offset);
+    const type = buffer.toString("ascii", offset + 4, offset + 8);
+    const body = buffer.subarray(offset + 8, offset + 8 + length);
+    if (type === "IHDR") header = { width: body.readUInt32BE(0), height: body.readUInt32BE(4), depth: body[8], color: body[9], interlace: body[12] };
+    if (type === "IDAT") data.push(body);
+    offset += 12 + length;
+  }
+  invariant(header && header.depth === 8 && header.color === 6 && header.interlace === 0, "The ground-cover map must be an 8-bit RGBA PNG");
+  const raw = inflateSync(Buffer.concat(data));
+  const stride = header.width * 4;
+  const rgba = new Uint8Array(stride * header.height);
+  for (let row = 0; row < header.height; row += 1) {
+    const filter = raw[row * (stride + 1)];
+    const line = raw.subarray(row * (stride + 1) + 1, (row + 1) * (stride + 1));
+    for (let i = 0; i < stride; i += 1) {
+      const left = i >= 4 ? rgba[row * stride + i - 4] : 0;
+      const up = row > 0 ? rgba[(row - 1) * stride + i] : 0;
+      const corner = i >= 4 && row > 0 ? rgba[(row - 1) * stride + i - 4] : 0;
+      let predictor = 0;
+      if (filter === 1) predictor = left;
+      else if (filter === 2) predictor = up;
+      else if (filter === 3) predictor = (left + up) >> 1;
+      else if (filter === 4) {
+        const p = left + up - corner;
+        const pa = Math.abs(p - left);
+        const pb = Math.abs(p - up);
+        const pc = Math.abs(p - corner);
+        predictor = pa <= pb && pa <= pc ? left : pb <= pc ? up : corner;
+      } else invariant(filter === 0, `Unknown PNG filter ${filter}`);
+      rgba[row * stride + i] = (line[i] + predictor) & 0xff;
+    }
+  }
+  return { width: header.width, height: header.height, rgba };
+}
