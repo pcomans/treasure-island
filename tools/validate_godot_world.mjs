@@ -1321,6 +1321,9 @@ function validateYardKit() {
       invariant(!edge || y <= 0.02, `${label} ends ${y.toFixed(3)} m above the ground at ${x.toFixed(2)}, ${z.toFixed(2)}`);
     }
     const [floorTop, nearTop] = [meshTop(floor), meshTop(near)];
+    // A foot may bed into a loose chunk or tyre: the near mesh stands at most
+    // 0.1 m above the floor at scale 1, so 0.3 m at a pile's largest scale (3),
+    // as far as the floor may stand above the near mesh.
     for (let index = 0; index < near.positions.length; index += 3) {
       const [x, y, z] = near.positions.slice(index, index + 3);
       const above = y - floorTop(x, z);
