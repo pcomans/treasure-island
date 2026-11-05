@@ -7,7 +7,8 @@ render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_burley, specular_sc
 //      stone heap nearby, so it is dark there (gaps); farther away, as the
 //      stones thin out, it stands in for them by the share they leave
 //      (underlay_fade_m, fitted to the stones by the generator) at the heap's
-//      apparent tone, so the band keeps its tone and texture where they go;
+//      apparent tone, so the band keeps its tone and texture where they go.
+//      Its bare rock faces (rock_face) take that tone at any distance;
 //   1  the instanced stones (MultiMesh): the generated boulder skin on flat,
 //      hard-edged quarry faces, each stone tinted from two hashes of its
 //      position (the instances carry no colour) into a stone family: charcoal,
@@ -71,7 +72,10 @@ uniform float stone_thin_start = 0.6;
 // Underlay: dark in the gaps near by (gap_brightness); as the stones thin out
 // (underlay_fade_m) it takes the heap's apparent tone (band_brightness: a flat
 // face looks lighter than a pile of the same stones with their shaded sides
-// and gaps), tinted like the segment's stones.
+// and gaps), tinted like the segment's stones. A rock face (rock_face: a capped
+// end, the fill of a narrow inlet) stands bare, with no heap on it: it takes
+// that tone near by as well.
+uniform bool rock_face = false;
 uniform float gap_brightness = 0.09;
 uniform float band_brightness = 0.15;
 uniform vec2 underlay_fade_m = vec2(30.0, 160.0);
@@ -313,7 +317,7 @@ void fragment() {
 		albedo *= 1.0 + top_bleach * smoothstep(0.55, 1.0, share) * max(n.y, 0.0);
 	} else if (surface == 0) {
 		// The rendering camera is the main camera here (no colour in a shadow pass).
-		float stand_in = smoothstep(underlay_fade_m.x, underlay_fade_m.y, distance_m);
+		float stand_in = rock_face ? 1.0 : smoothstep(underlay_fade_m.x, underlay_fade_m.y, distance_m);
 		albedo *= tone_tint(tone) * mix(gap_brightness, band_brightness, stand_in);
 	}
 	if (!wood) {

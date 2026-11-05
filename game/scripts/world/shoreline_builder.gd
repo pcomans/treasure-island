@@ -3,7 +3,8 @@ extends RefCounted
 ## Shoreline riprap from generated/world/shoreline.json
 ## (tools/lib/shoreline-generation.mjs), as GeneratedWorldContract expands it:
 ## the flat shoulder just outside the island outline, the underlay slope behind
-## it, the concrete closure faces (pier and platform edges, boat ramps), the
+## it and its bare rock faces, the concrete closure faces (pier and platform
+## edges, boat ramps), the
 ## instanced quarry stones (top row, back row, shoulder stones and heap), the
 ## low cobbles in the band inside the outline and the driftwood, each
 ## segment's stones and underlay in their own materials (its stone tone,
@@ -24,6 +25,7 @@ const SURFACE_STONE := 1
 const SURFACE_WOOD := 2
 const SURFACE_WALL := 3
 const SLOPE_MATERIAL := "shoreline_riprap"
+const FACE_MATERIAL := "shoreline_face"
 const VERGE_MATERIAL := "shoreline_verge"
 const WALL_MATERIAL := "shoreline_wall"
 const STONE_MATERIAL := "shoreline_boulder"
@@ -122,7 +124,9 @@ func build(document: Dictionary) -> Dictionary:
 		segment_materials[str(segment.id)] = {
 			"stone": _segment_material(STONE_MATERIAL, SURFACE_STONE, segment, document.lod),
 			"slope": _segment_material(SLOPE_MATERIAL, SURFACE_SLOPE, segment, document.lod),
+			"face": _segment_material(FACE_MATERIAL, SURFACE_SLOPE, segment, document.lod),
 		}
+		(segment_materials[str(segment.id)].face as ShaderMaterial).set_shader_parameter("rock_face", true)
 	for record_value: Variant in document.records:
 		var record: Dictionary = record_value
 		var instance := MeshInstance3D.new()
@@ -130,6 +134,8 @@ func build(document: Dictionary) -> Dictionary:
 		var record_material := _record_material(str(record.material_key))
 		if str(record.material_key) == SLOPE_MATERIAL and segment_materials.has(str(record.segment)):
 			record_material = segment_materials[str(record.segment)].slope
+		elif str(record.material_key) == FACE_MATERIAL:
+			record_material = segment_materials[str(record.segment)].face
 		instance.mesh = _array_mesh(record, record_material)
 		instance.layers = RENDER_WORLD_VISIBLE
 		# Like the terrain overlays, the slope, shoulder and closure faces receive shadows but cast none.

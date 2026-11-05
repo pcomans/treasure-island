@@ -1438,6 +1438,10 @@ function planAreaSurfaces(objects, shorelinePlan) {
         object: { ...object, geometry: riprap, logical_key: `${SHORELINE_OVERLAY_PREFIX}:${object.row.source_key}` },
         style: { feature_kind: "terrain_overlay", material_key: SHORELINE_OVERLAY_MATERIAL, elevation_m: shorelinePlan.overlay_bias_m },
       });
+      // Land the aerial shows as stone keeps the flat overlay, over the verge.
+      for (const rock of shorelinePlan.rockBySource.get(object.row.source_key) ?? []) {
+        surfaces.push({ rock: true, object: { ...object, geometry: rock }, style: { ...areaStyle(object.tags, object.roles), elevation_m: shorelinePlan.rock_bias_m } });
+      }
       continue;
     }
     surfaces.push({ object, style: areaStyle(object.tags, object.roles) });
@@ -1475,7 +1479,7 @@ function planAreaSurfaces(objects, shorelinePlan) {
     });
   }
   const styleBySource = new Map(surfaces
-    .filter((surface) => !surface.object.logical_key.startsWith(`${SHORELINE_OVERLAY_PREFIX}:`))
+    .filter((surface) => !surface.rock && !surface.object.logical_key.startsWith(`${SHORELINE_OVERLAY_PREFIX}:`))
     .map((surface) => [surface.object.row.source_key, surface.style]));
   return {
     surfaces,

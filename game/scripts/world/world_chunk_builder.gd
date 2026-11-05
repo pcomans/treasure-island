@@ -107,6 +107,9 @@ const STREET_GROUND_SURFACES := {
 	"yard_pond": {"albedo": preload("res://game/resources/textures/world/street/yard_pond.png"), "uv_scale": 2.0, "roughness": 0.15},
 	"rubble_grey": {"albedo": preload("res://game/resources/textures/world/shoreline/riprap_albedo.png"), "uv_scale": 8.0, "roughness": 0.95, "tint": Color(1.12, 1.12, 1.1)},
 	"black_plastic": {"albedo": preload("res://game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg"), "uv_scale": 2.0, "roughness": 0.45, "tint": Color(0.3, 0.3, 0.32)},
+	# The flat breakwater overlay: land the aerial shows as stone (the shoreline
+	# config's rock_grounds), in the riprap's own 4.2 m tiles at the heap's tone.
+	"terrain_breakwater": {"albedo": preload("res://game/resources/textures/world/shoreline/riprap_albedo.png"), "uv_scale": 2.38, "roughness": 0.95, "tint": Color(0.56, 0.56, 0.56)},
 }
 ## A park's planted beds (park_mulch records): the vegetation kit's dark
 ## grey-brown shredded mulch in 2 m tiles of the world UV, blending to the

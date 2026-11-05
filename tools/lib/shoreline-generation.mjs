@@ -35,7 +35,10 @@
 // before its toe: it is clamped there and falls to the land on the far side
 // instead of to the water. A segment without crest rows (crest_rows false) is
 // only the lower slope of a crest another segment builds: the far side's own
-// seaward edge.
+// seaward edge. The land between them is stone in the aerial: a rock ground
+// (the flat breakwater overlay, drawn as rock) lies over the draped verge there.
+// Bare parts of the underlay (a clamped section's fill, a capped end's face)
+// are rock faces at the heap's apparent tone, not the dark gaps of a heap.
 //
 // The player is recovered as soon as it leaves the outline, so nothing beyond
 // the outline needs collision. Every stone and log outside stays clear of the
@@ -87,6 +90,9 @@ export const SHORELINE_SLOPE_MATERIAL = "shoreline_riprap";
 export const SHORELINE_VERGE_MATERIAL = "shoreline_verge";
 // Concrete closures: pier and platform faces, boat ramps.
 export const SHORELINE_WALL_MATERIAL = "shoreline_wall";
+// Rock faces that stand bare, with no heap on them: a capped end's face and the
+// fill of a narrow inlet. The underlay's rock at the heap's apparent tone.
+export const SHORELINE_FACE_MATERIAL = "shoreline_face";
 export const SHORELINE_BOULDER_MATERIAL = "shoreline_boulder";
 export const SHORELINE_DRIFTWOOD_MATERIAL = "shoreline_driftwood";
 // The overlay's object key prefix: "<prefix>:<source key>:<chunk>".
@@ -100,6 +106,7 @@ export const SHORELINE_TONE_LENGTH = 4;
 export const SHORELINE_PROTOTYPE_KINDS = Object.freeze(["boulder", "log", "plank"]);
 // Record kinds (the object key's first part) and their materials.
 export const SHORELINE_RECORD_MATERIALS = Object.freeze({
+  "shoreline-face": SHORELINE_FACE_MATERIAL,
   "shoreline-slope": SHORELINE_SLOPE_MATERIAL,
   "shoreline-verge": SHORELINE_VERGE_MATERIAL,
   "shoreline-wall": SHORELINE_WALL_MATERIAL,
@@ -111,6 +118,9 @@ export const SHORELINE_CLOSURE_KINDS = Object.freeze(["none", "ramp", "wall"]);
 export const SHORELINE_COBBLE_MAX_TOP_M = 0.15;
 // Stones and logs outside keep at least this far beyond the outline.
 export const SHORELINE_OUTSIDE_CLEARANCE_M = 0.1;
+// A rock ground lies this far over the draped band it covers (three draped
+// layer steps, clear of any band lifted over another).
+const SHORELINE_ROCK_LIFT_M = 0.006;
 // The game's water plane (world_root.tscn ContextWorld/Water).
 export const WATER_Y_M = -0.12;
 // Quantization of the packed document. Positions (mesh vertices and placement
@@ -142,7 +152,8 @@ const CAP_INSET_M = 0.05;
 const MINIMUM_TRIANGLE_AREA_M2 = 1e-6;
 const SAFE_ID = /^[a-z0-9_]+$/u;
 
-const CONFIG_FIELDS = ["closure", "closures", "mounds", "notes", "overlay_bias_m", "schema_version", "seed", "segments", "slope", "stones", "structures", "tones"];
+const CONFIG_FIELDS = ["closure", "closures", "mounds", "notes", "overlay_bias_m", "rock_grounds", "schema_version", "seed", "segments", "slope", "stones", "structures", "tones"];
+const ROCK_GROUND_FIELDS = ["id", "reason", "reference", "s_m", "source_key"];
 const TONE_SETTINGS_FIELDS = ["blend_m", "palettes"];
 const MOUND_FIELDS = ["centerline_xz", "crest_min_m", "crest_y_m", "gradient", "half_width_m", "id", "reason", "reference", "segment", "taper_m"];
 const SLOPE_FIELDS = ["berm", "clamp_reach_m", "columns", "dem_fit_m", "end_cap_bottom_y_m", "gradient_m_per_m", "gradient_smoothing_m", "relief_m", "relief_wavelength_m", "section_m", "shoulder_m", "station_m", "toe_y_m", "top_blend_m"];
@@ -384,6 +395,17 @@ export function shorelineSettings(config) {
     }
   }
   for (const plank of stones.planks) invariant(segmentIds.has(plank.segment), `Shoreline plank names unknown segment ${plank.segment}`);
+  // Land that is stone in the aerial: the flat breakwater overlay (the rock
+  // ground) lies over the riprap verge there.
+  invariant(Array.isArray(config.rock_grounds), "Shoreline rock_grounds must be a list");
+  for (const ground of config.rock_grounds) {
+    exactKeys(ground, ROCK_GROUND_FIELDS, `Shoreline rock ground ${ground?.id}`);
+    invariant(typeof ground.id === "string" && SAFE_ID.test(ground.id) && !ids.has(ground.id), `Shoreline rock ground ${ground.id} needs a unique lower_snake id`);
+    ids.add(ground.id);
+    invariant(config.segments.some((segment) => segment.source_key === ground.source_key), `Shoreline rock ground ${ground.id} names ${ground.source_key}, which no segment takes`);
+    invariant(Array.isArray(ground.s_m) && ground.s_m.length === 2 && ground.s_m.every(isFiniteNumber) && ground.s_m[1] > ground.s_m[0], `Shoreline rock ground ${ground.id} s_m must be [start, end] along the outline`);
+    for (const field of ["reason", "reference"]) invariant(typeof ground[field] === "string" && ground[field].trim() !== "", `Shoreline rock ground ${ground.id} needs ${field}`);
+  }
   invariant(Array.isArray(config.mounds), "Shoreline mounds must be a list");
   for (const mound of config.mounds) {
     exactKeys(mound, MOUND_FIELDS, `Shoreline mound ${mound?.id}`);
@@ -1373,7 +1395,17 @@ export function planShoreline({ config, boundary, playableObjects }) {
     // windows would only leave slivers of the flat overlay).
     innerBySource.set(segment.source_key, object.geometry);
   }
-  return { settings, outline, segments, closures, innerBySource, overlay_bias_m: settings.overlay_bias_m };
+  // A rock ground: the land within the outline from s_m[0] to s_m[1], closed by
+  // the chord back, which the world builder lays over the draped band as the
+  // flat breakwater overlay, drawn as rock.
+  const rockBySource = new Map();
+  for (const ground of settings.rock_grounds) {
+    const [from, to] = ground.s_m;
+    const ring = [from, ...outline.breakpoints(from, to), to].map((s) => outline.pointAt(s));
+    const oriented = signedRingArea(ring) > 0 ? ring : [...ring].reverse();
+    rockBySource.set(ground.source_key, [...(rockBySource.get(ground.source_key) ?? []), [[[...oriented, oriented[0]]]]]);
+  }
+  return { settings, outline, segments, closures, innerBySource, rockBySource, overlay_bias_m: settings.overlay_bias_m, rock_bias_m: settings.overlay_bias_m + SHORELINE_ROCK_LIFT_M };
 }
 
 // OSM structures near a window (piers, slipways ...) that clear the riprap,
@@ -1676,16 +1708,16 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
 
   // A segment's stone tone and, at each end, the joint the shader blends it
   // across (riprap.gdshader): the outline point there (world x, z) and the
-  // shore direction pointing into the segment, with the neighbour's tone.
+  // direction into the segment, with the neighbour's tone. The direction is
+  // the chord to the point the blend ends at: the outline's own direction at
+  // an end is often a corner's or a jog's, nothing like the shore's.
   const toneOf = (piece) => [...settings.tones.palettes[piece.stone_tone]];
-  const jointOf = (s, inward, neighbour) => {
+  const jointOf = (s, inward, span, neighbour) => {
     const point = outline.pointAt(s);
-    const normal = outline.normalAt(s, 3);
-    // The direction of travel along the outline is the outward normal turned
-    // a quarter left; in world x, z (z = -north).
+    const chord = unit(sub(outline.pointAt(s + inward * Math.min(settings.tones.blend_m, span)), point));
     return {
       at: [roundCoordinate(point[0]), roundCoordinate(-point[1])],
-      along: [round3(-normal[1] * inward), round3(-normal[0] * inward)],
+      along: [round3(chord[0]), round3(-chord[1])],
       stone: toneOf(neighbour),
     };
   };
@@ -1971,6 +2003,10 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
     const slopeSections = Math.max(1, Math.round((s1 - s0) / slope.section_m));
     const recordOf = (s) => Math.min(slopeSections - 1, Math.max(0, Math.floor(((s - s0) / (s1 - s0)) * slopeSections)));
     const meshes = Array.from({ length: slopeSections }, () => ({ vertices: [], normals: [], indices: [], shared: new Map() }));
+    // The parts of the underlay that stand bare (a clamped section's fill, a
+    // capped end's face, a strip with no verge) are rock faces, not the dark
+    // gaps of a heap.
+    const faces = Array.from({ length: slopeSections }, () => ({ vertices: [], normals: [], indices: [], shared: new Map() }));
     // The shoulder strip, from the outline (d = 0) to the slope's first column,
     // flat at the land edge's height; its normals are the land's at the edge
     // (its UVs, world x / 10 and z / 10, are rebuilt on unpacking), so the
@@ -1987,7 +2023,8 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
     });
     for (let i = 0; i + 1 < grid.length; i += 1) {
       if (!open[i][0] || !open[i + 1][0] || cutAway([sections[i].point, sections[i + 1].point, grid[i + 1][0].plan, grid[i][0].plan])) continue;
-      const mesh = verges[recordOf((sections[i].s + sections[i + 1].s) / 2)];
+      // A segment without crest rows is rock to its land edge: no verge strip.
+      const mesh = (crestRows ? verges : faces)[recordOf((sections[i].s + sections[i + 1].s) / 2)];
       const corners = [inner[i], inner[i + 1], grid[i + 1][0].world, grid[i][0].world];
       const normals = [sections[i].landNormal, sections[i + 1].landNormal, sections[i + 1].landNormal, sections[i].landNormal];
       const vertices = corners.map((corner, k) => ({ plan: [corner[0], -corner[2]], y: corner[1], normal: normals[k] }));
@@ -2001,7 +2038,7 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
       pushTriangle(mesh, [ids[0], ids[2], ids[3]], [0, 1, 0]);
     }
     for (let i = 0; i + 1 < grid.length; i += 1) {
-      const mesh = meshes[recordOf((sections[i].s + sections[i + 1].s) / 2)];
+      const mesh = (sections[i].clamp && sections[i + 1].clamp ? faces : meshes)[recordOf((sections[i].s + sections[i + 1].s) / 2)];
       const index = (row, column) => {
         const key = row * (lastColumn + 1) + column;
         if (!mesh.shared.has(key)) mesh.shared.set(key, pushVertex(mesh, grid[row][column].world, vertexNormal(row, column)));
@@ -2036,7 +2073,7 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
       const section = sections[rowIndex];
       const tangent = [-section.normal[1], section.normal[0]];
       const facing = [tangent[0] * sign, 0, -tangent[1] * sign];
-      const mesh = meshes[rowIndex === 0 ? 0 : slopeSections - 1];
+      const mesh = faces[rowIndex === 0 ? 0 : slopeSections - 1];
       const row = [{ world: inner[rowIndex] }, ...grid[rowIndex]];
       const usable = [true, ...open[rowIndex]];
       const tops = row.map((cell, column) => (usable[column] ? pushVertex(mesh, cell.world, facing) : -1));
@@ -2062,6 +2099,17 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
       });
     });
     invariant(records.some((record) => record.segment === segment.id), `Shoreline segment ${segment.id} has no slope triangles`);
+    faces.forEach((mesh, index) => {
+      if (mesh.indices.length === 0) return;
+      records.push({
+        object_key: `shoreline-face:${segment.id}:${index}`,
+        segment: segment.id,
+        section: index,
+        source_keys: [segment.source_key],
+        material_key: SHORELINE_FACE_MATERIAL,
+        ...packMesh(mesh, `shoreline-face:${segment.id}:${index}`),
+      });
+    });
     if (skirt.mesh.indices.length > 0) {
       records.push({
         object_key: `shoreline-wall:${segment.id}:${SKIRT_SECTION}`,
@@ -2527,7 +2575,7 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
       ends: [segment.join_start ? "joint" : "cap", segment.join_end ? "joint" : "cap"],
       clamped_sections: clampedCount,
       structures: structures.map((structure) => ({ source_key: structure.source_key, kind: structure.kind, slope: structure.slope })),
-      tone: { stone: toneOf(segment), start: jointOf(s0, 1, segment.tone_previous), end: jointOf(s1, -1, segment.tone_next), blend_m: settings.tones.blend_m },
+      tone: { stone: toneOf(segment), start: jointOf(s0, 1, s1 - s0, segment.tone_previous), end: jointOf(s1, -1, s1 - s0, segment.tone_next), blend_m: settings.tones.blend_m },
       top_y_m: [roundCoordinate(Math.min(...sections.map((x) => x.top))), roundCoordinate(Math.max(...sections.map((x) => x.top)))],
       crest_core_m: [roundCoordinate(Math.min(...sections.map((x) => x.core))), roundCoordinate(Math.max(...sections.map((x) => x.core)))],
       gradient_m_per_m: [round3(Math.min(...sections.map((x) => x.gradient))), round3(Math.max(...sections.map((x) => x.gradient)))],

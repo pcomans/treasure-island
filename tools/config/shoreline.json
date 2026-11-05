@@ -9,7 +9,8 @@
     "Stones are one shared set of fractured quarry blocks (prototypes, cycling through block, slab, long, wedge and chunky shapes): convex polyhedra with flat broken faces, sharp corners and edges, shallow creases across the big faces and chipped corners (12-20 faces; the clean block is the coarse LOD); stones under pebbles.below_m use pebbles, clean blocks without the creases and chips, and stones of big.above_m or more only the irregular big.families (a big clean block or slab reads as a box), each instance scaled uniformly by its size (its longest side) and dumped: resting on a broad face (posture) against the underlay's own surface there (flat on the shoulder and the core's top, tilted on the fall), turned any way and tilted up to tilt_deg, then lowered where its underside would hang over the underlay. A top row just outside the outline (inner faces at least setback_m beyond it, about the player's radius), a back row piled within depth_m behind it and crest_fill stones between them make the crest one continuous low heap, as high and as dense as each segment's photos show (its crest_rise_m above the land edge for the back row, the top row at most 5 cm more, the crest fill in proportion; crest_fill_scale times the rows' fill); small chink stones packed between the crest's blocks over the core (chink: lying flat, tops rise_m above the core, tucked under their neighbours by overlap); a few small shoulder stones in the shoulder; a heap packed over the slope to toe_extra_m past the toe, largest size class first, its small class only within small_reach_m of the outline (the upper slope the player sees close; lower down the voids stay dark); from just above the waterline out only stones that stand at least 0.3 m clear of the water within a metre past it are kept; and a few low cobbles (small stones mostly buried in the dirt) inside the band within reach_m of the outline, rising at most top_m above the land, so the player walks over them. No stone reaches more than a quarter of its size past a capped segment end, and none overhangs a ramp's cut. A segment may set its own cobble fill, reach_m and size_m (west_wedge: the sliver beyond the north-west slit, densely set with flat-topped stones so it reads as the stone it is in the aerial). Weathered driftwood logs lie sunk into the stone tops on the face below the crest (from_waterline_m up from the waterline), with stone under most of their length, and washed-up planks at the waterline. Everything is visual only; structures (piers keep the slope under them, slipways cut it) clear the stones by clearance_m, except stones that top out under_drop_m below the land edge under a pier, paths clear the cobbles, and the street-detail hard shapes (spawn, ferry path, QA route, stairs, doors, approaches) clear everything. Stones are batched per section_m of shore, band and shape. The shader thins them out one by one with distance (thinning: a stone drops out at its own share, start to 1, of its reach, size times reach_per_m within [min_m, max_m]); each batch is culled only beyond the farthest reach of its stones from the batch's centre, so no batch edge ever shows, and the underlay's stand-in follows the share of the heap still drawn (fitted to the stones as the document's lod.underlay_fade_m). The logs keep a fixed range, wood_m [end, margin].",
     "Closures: kind wall is a concrete face under the land edge (coping_m above it) down to wall_bottom_y_m, for pier and platform edges the photos show as vertical; kind ramp is a boat ramp, a slab running out from the land edge at ramp_grade to ramp_bottom_y_m between side walls ramp_wall_m high; kind none builds nothing (the causeway's Yerba Buena context terrain, or the inlet the next segment's clamped slope fills).",
     "Mounds: a rubble mound standing out in the water where a segment's breakwater runs out as a jetty (the north tip's w26767328): a flat-topped ridge along centerline_xz, its crest crest_y_m high with a slight crown, its sides falling at gradient to toe_y_m; each side's waterline lies at the breakwater polygon's edge (bounded by half_width_m), which sets the crest's width (at least crest_min_m); over taper_m at its far end the crest sinks under the water. Big blocks lie flat on the crest and the heap's size classes on the sides; a ramp cuts it as it cuts the shore. Its records and batches belong to the segment, numbered from section 100.",
-    "Tones: each segment's stones and underlay take a palette from tones.palettes, [brightness, warm share, dark share, pale share] of the shader's stone families (charcoal, brown-grey, olive-grey a tenth, pale weathered, the rest plain grey), sampled from the dated photos: charcoal along the north-west and west (refs/sv 02, 04, 05, ph01; dark grey to black), grey-tan in the east and south (16, 18, 20, 13, 11; lighter grey with tan faces), brown-grey at the Sailing Center and the north tip (31, 25, 21). At each end a segment's tone blends over blend_m half way into its neighbour's (across a closure too), so the two meet at the joint without a switch."
+    "Tones: each segment's stones and underlay take a palette from tones.palettes, [brightness, warm share, dark share, pale share] of the shader's stone families (charcoal, brown-grey, olive-grey a tenth, pale weathered, the rest plain grey), sampled from the dated photos: charcoal along the north-west and west (refs/sv 02, 04, 05, ph01; dark grey to black), grey-tan in the east and south (16, 18, 20, 13, 11; lighter grey with tan faces), brown-grey at the Sailing Center and the north tip (31, 25, 21). At each end a segment's tone blends over blend_m half way into its neighbour's (across a closure too), so the two meet at the joint without a switch.",
+    "Rock grounds: land that is stone in the aerial (the sliver beyond the north-west slit, s_m along the outline, closed by the chord back): its part of the breakwater keeps the flat breakwater overlay, drawn as the riprap at the heap's tone, instead of the verge. Bare parts of the underlay (the fill of a clamped inlet, a capped end's face, the edge of a segment without crest rows) are shoreline-face records at the heap's apparent tone, not the dark gaps of a heap."
   ],
   "overlay_bias_m": 0.06,
   "slope": {
@@ -288,6 +289,18 @@
       ]
     }
   },
+  "rock_grounds": [
+    {
+      "id": "west_sliver",
+      "source_key": "w1222685424",
+      "s_m": [
+        166.0,
+        450.0
+      ],
+      "reason": "The sliver of land the OSM outline splits off the north-west shore. It stands where the riprap's seaward slope stands in the aerial (the DEM falls across it from about 2.7 m to 1 m), and the player can walk it, so it stays land drawn as stone: the slope of the one crest beside the slit, not a verge between two walls.",
+      "reference": "2026-05-26 Vantor aerial (Esri level 19) tile t0250 and plot a05-west-hairpin: one band of stone from the path to the water, the outline's three lines inside it; Street View contributor May 2024 (refs/sv 04, s150/s450): one crest of dark angular stone seen from the path"
+    }
+  ],
   "segments": [
     {
       "id": "west_north",
@@ -321,19 +334,19 @@
       "crest_fill_scale": 1.0,
       "crest_rows": false,
       "cobble": {
-        "fill": 1.6,
-        "overlap": 0.7,
+        "fill": 0.7,
+        "overlap": 0.8,
         "reach_m": 4.5,
         "size_m": [
-          0.5,
-          0.9
+          0.4,
+          0.8
         ],
         "top_m": [
-          0.11,
+          0.1,
           0.15
         ]
       },
-      "reason": "The seaward edge of the sliver the OSM outline splits off the north-west shore (its slit, s 308-450, runs back up inside it): in the aerial the whole band from the shore path to the water is one riprap slope, so the crest runs along the slit (segment west fills it) and this edge is only the slope's foot: no crest rows, the heap down from the sliver's edge to the water, and the sliver itself set with flat-topped stones.",
+      "reason": "The seaward edge of the sliver the OSM outline splits off the north-west shore (its slit, s 308-450, runs back up inside it): in the aerial the whole band from the shore path to the water is one riprap slope, so the crest runs along the slit (segment west fills it) and this edge is only the slope's foot: no crest rows, the heap down from the sliver's edge to the water; the sliver itself is a rock ground, set with low flat-topped stones.",
       "reference": "2026-05-26 Vantor aerial (Esri level 19) tile t0250 and plot a05-west-hairpin: one band of stone from the path to the water, the outline's three lines inside it; Street View contributor May 2024 (refs/sv 04, s150/s450): one crest of dark angular stone 0.5-0.8 m above the grass",
       "stone_tone": "charcoal"
     },

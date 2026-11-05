@@ -31,7 +31,7 @@ const PLANTING_ROW_FIELDS := ["prop", "variant", "x", "y", "z", "yaw_radians", "
 const SHORELINE_SCHEMA := "ti.shoreline/4"
 ## Underlay records: the riprap slope, the shoulder strip (its UVs are the
 ## land's, world x / 10 and z / 10) and the concrete closure faces.
-const SHORELINE_RECORD_KINDS := {"shoreline-slope:": "shoreline_riprap", "shoreline-verge:": "shoreline_verge", "shoreline-wall:": "shoreline_wall"}
+const SHORELINE_RECORD_KINDS := {"shoreline-face:": "shoreline_face", "shoreline-slope:": "shoreline_riprap", "shoreline-verge:": "shoreline_verge", "shoreline-wall:": "shoreline_wall"}
 const SHORELINE_VERGE_MATERIAL := "shoreline_verge"
 const SHORELINE_BANDS := ["cobble", "driftwood", "heap", "top"]
 const SHORELINE_CLOSURE_KINDS := ["none", "ramp", "wall"]
