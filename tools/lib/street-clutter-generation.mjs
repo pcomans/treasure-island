@@ -1,10 +1,17 @@
 // Street clutter: the movable things of PlayableWorld/StreetDetail/Clutter.
 //
-// Parked cars come from the "clutter" rules of tools/config/street-detail-zones.json
-// (photographed cones and barricades are set pieces, data/street_detail/set_pieces.json):
+// Parked cars and bus-stop cans come from the "clutter" rules of
+// tools/config/street-detail-zones.json (photographed cones, barricades and
+// dumpsters are set pieces, data/street_detail/set_pieces.json):
 //   - curb_parking: cars along the curbs of the street ground's parking lanes,
 //     side by side stretches each filled at its own ratio; the curb stays clear
 //     at junctions, crosswalks (daylighting), fire hydrants and bus stops;
+//   - curb_stretches: the same along every stretch the street ground marks
+//     parked, with the number of cars the dated aerial shows per way side;
+//   - bay_occupancy: the street ground's street-side bays, with the aerial's
+//     number of cars per way side;
+//   - bus_stop_bins: a litter can beside every OSM bus stop with a shelter or
+//     a bin that has no OSM basket of its own;
 //   - lot_stalls: the painted stalls of an OSM parking lot, filled at a ratio
 //     that falls from fill_near beside a named building to fill_far away from it;
 //   - lot_occupancy: the OSM parking lots across the island, each with the
@@ -88,9 +95,11 @@ const PATTERN_PROPS = Object.freeze({
 // A lot_occupancy rule's entry per lot: the OSM lot, the cars the dated aerial
 // shows in it and what was seen, and optionally focus_xz, the world [x, z]
 // points where the aerial shows them gathered, or [x, z, cars] to give each
-// point its share of the lot's cars (each takes the free stalls nearest it).
+// point its share of the lot's cars (each takes the free stalls nearest it in
+// its row), and cross_runs: true where the aerial shows a row along an aisle's
+// runs across its main direction (a loop's ends) as well.
 const LOT_ENTRY_FIELDS = Object.freeze(["cars", "observed", "source_key"]);
-const LOT_ENTRY_OPTIONAL_FIELDS = Object.freeze(["focus_xz"]);
+const LOT_ENTRY_OPTIONAL_FIELDS = Object.freeze(["cross_runs", "focus_xz"]);
 const COMMON_FIELDS = Object.freeze(["basis", "evidence", "id", "kind", "pattern", "prop", "rule"]);
 const SAFE_ID = /^[a-z0-9_]+$/u;
 // A car's footprint for the shared mask: a stadium that holds its rectangle
@@ -153,6 +162,10 @@ const BIN_ROAD_CLEAR_M = 0.6;
 const BIN_ROAD_REACH_M = 4.0;
 // A basket within this much of a stop already serves it (m).
 const BIN_STOP_REACH_M = 6.0;
+// A focus share's row: stalls facing within 30 degrees of, and standing within
+// this depth (m) of the line of, the stall nearest its point.
+const SHARE_ROW_FACING_COS = Math.cos((30 * Math.PI) / 180);
+const SHARE_ROW_DEPTH_M = 1.5;
 // An aisle's rows stop where it turns more than this from its main direction (radians).
 const AISLE_ROW_TURN_RAD = (25 * Math.PI) / 180;
 // The occupied-item grid for the site checks (m).
@@ -308,6 +321,7 @@ export function validateClutterRules(zone, kinds) {
         const counted = (entry.focus_xz ?? []).filter((point) => point.length === 3);
         invariant(counted.length === 0 || (counted.length === entry.focus_xz.length && counted.reduce((sum, point) => sum + point[2], 0) === entry.cars),
           `${entryLabel}: when focus_xz gives cars, every point gives them and they add up to cars`);
+        invariant(entry.cross_runs === undefined || entry.cross_runs === true, `${entryLabel} cross_runs is true or left out`);
         invariant(/^w\d+$/u.test(entry.source_key) && !keys.has(entry.source_key), `${entryLabel} needs a unique OSM way source_key`);
         keys.add(entry.source_key);
         invariant(Number.isInteger(entry.cars) && entry.cars > 0, `${entryLabel} cars must be a positive whole number (leave an empty lot out)`);
@@ -476,7 +490,8 @@ export function settleParkedCar(body, center, front, groundAt) {
   return { height: height + raise, pitch: Math.atan(slopeForward), roll: Math.atan(slopeLeft), twist };
 }
 
-// Places the parked cars of the pilot zones' clutter rules. Returns the rows and an audit.
+// Places the parked cars and cans of the clutter rules (the pilot zones' and
+// the island-wide ones). Returns the rows and an audit.
 //   parkingLots: OSM parking lots by source key ({geometry}, east/north);
 //   parkingAisles: OSM parking aisles and plain service roads ({source_key, line
 //   (east/north), half_width_m, parking_aisle}), a lot's drives;
@@ -1014,7 +1029,7 @@ export function placeStreetClutter({
             layout = "aisles";
             // Its parking aisles, and a service road with at least 10 m inside it.
             const aisles = parkingAisles.filter((aisle) => samplePolyline(aisle.line, 2).filter(inLot).length >= (aisle.parking_aisle ? 1 : 5));
-            slots = aisles.flatMap((aisle) => aisleStallSlots(aisle, stallLines, blockedFor(aisle.source_key))).filter((slot) => inLot(middleOf(slot)));
+            slots = aisles.flatMap((aisle) => aisleStallSlots(aisle, stallLines, blockedFor(aisle.source_key), entry.cross_runs === true)).filter((slot) => inLot(middleOf(slot)));
           }
           if (slots.length === 0) {
             layout = "edges";
@@ -1082,13 +1097,20 @@ export function placeStreetClutter({
           };
           const shares = (entry.focus_xz ?? []).filter((point) => point.length === 3);
           if (shares.length > 0) {
-            // Each focus point takes its share from the free stalls nearest it.
+            // Each focus point takes its share from the free stalls nearest it in
+            // its row: the stalls in line with, and facing the same way as, the
+            // stall nearest the point (then from the others, nearest first).
             const used = new Set();
             for (const [fx, fz, share] of shares) {
-              const order = ranked.map((item) => {
+              const distance = (item) => {
                 const middle = toWorld(middleOf(item.slot));
-                return { ...item, near: Math.hypot(fx - middle[0], fz - middle[1]) + LOT_PRIORITY_JITTER_M * hashUnit(seed, item.identity, "priority") };
-              }).sort((left, right) => left.near - right.near || (left.cell < right.cell ? -1 : left.cell > right.cell ? 1 : 0));
+                return Math.hypot(fx - middle[0], fz - middle[1]);
+              };
+              const first = ranked.reduce((best, item) => (best === null || distance(item) < distance(best) ? item : best), null);
+              const inRow = (item) => dot(item.slot.outward, first.slot.outward) >= SHARE_ROW_FACING_COS
+                && Math.abs(dot(sub(middleOf(item.slot), middleOf(first.slot)), first.slot.outward)) <= SHARE_ROW_DEPTH_M;
+              const order = ranked.map((item) => ({ ...item, row: inRow(item) ? 0 : 1, near: distance(item) + LOT_PRIORITY_JITTER_M * hashUnit(seed, item.identity, "priority") }))
+                .sort((left, right) => left.row - right.row || left.near - right.near || (left.cell < right.cell ? -1 : left.cell > right.cell ? 1 : 0));
               let here = 0;
               for (const item of order) {
                 if (here >= share) break;
@@ -1120,10 +1142,11 @@ export function placeStreetClutter({
 // lines at least 2.5 m long. Only the aisle's main runs take stalls: where it
 // turns more than AISLE_ROW_TURN_RAD from its length-weighted main direction
 // (the ends of a loop round a lot's middle) the rows stop, so a lot's cars
-// stand in rows square to its drives. blocked(en) says why a line must stop
-// ("road" or "edge") or null. Slots are {aisle_key, side, s, entry, outward,
-// along, depth_m, width_m}, east/north.
-function aisleStallSlots(aisle, stallLines, blocked) {
+// stand in rows square to its drives; with crossRuns, every run takes stalls
+// (a lot whose aerial shows a row along a loop's ends). blocked(en) says why a
+// line must stop ("road" or "edge") or null. Slots are {aisle_key, side, s,
+// entry, outward, along, depth_m, width_m}, east/north.
+function aisleStallSlots(aisle, stallLines, blocked, crossRuns = false) {
   const slots = [];
   const total = polylineLength(aisle.line);
   // The aisle's main direction: the length-weighted mean of its segments' doubled angles.
@@ -1146,7 +1169,7 @@ function aisleStallSlots(aisle, stallLines, blocked) {
     let previous = null;
     for (let s = 1.5; s <= total - 1.5; s += stallLines.spacing_m) {
       const at = pointAlong(aisle.line, s);
-      if (!onMainRun(at.tangent)) {
+      if (!crossRuns && !onMainRun(at.tangent)) {
         previous = null;
         continue;
       }

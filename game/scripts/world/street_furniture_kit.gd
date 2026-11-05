@@ -776,7 +776,8 @@ static func _frame(x_axis: Vector3, y_axis: Vector3) -> Basis:
 
 
 ## An inverted-U bike rack ("staple") of dark painted tube, its loop along X
-## (Ave of the Palms at Johnson St, Nov 2025).
+## (Ave of the Palms at Johnson St, Nov 2025): `hoops` of them in a row along Z,
+## BIKE_RACK_HOOP_SPACING_M apart and centred on the origin.
 func _bike_rack(b: Builder, hoops: int) -> void:
 	for hoop in hoops:
 		var z := BIKE_RACK_HOOP_SPACING_M * (float(hoop) - float(hoops - 1) * 0.5)

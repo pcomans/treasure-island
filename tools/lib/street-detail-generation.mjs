@@ -1817,7 +1817,8 @@ export function generateStreetDetail({
 // ---------------------------------------------------------------- shut-in pockets
 // Walkable ground the street detail shuts in, shared by the street-detail
 // clearance check (tools/check_street_detail_clearance.mjs) and the generator,
-// which drops the island-wide rules' parked cars that would shut ground in.
+// which moves an island-wide rule's parked car that would shut ground in to
+// another stall.
 //
 // Around each built fence (its runs and open gate leaves, plus a margin) and over
 // each yard polygon, a grid marks what the stock capsule's centre cannot reach:
