@@ -1540,11 +1540,11 @@
         "lid": "dark_grey"
       },
       "xz": [
-        -359.8,
-        137.6
+        -358.7,
+        136.4
       ],
       "yaw": 1.45,
-      "reason": "Three grey two-yard front-load dumpsters on casters stand east of Avenue A at the west end of the Mersea lot, beside the island with the litter can; this is the nearest of them.",
+      "reason": "Three grey two-yard front-load dumpsters on casters stand east of Avenue A at the west end of the Mersea lot, beside the island with the litter can; this is the nearest of them, at the island's curb and off the TOUR BUS PARKING stencil.",
       "reference": "mersea-lot Street View pano TKhppKcV_DAxZRV9LsEh2A (Avenue A inside the Mersea lot, 699 Ave of the Palms, Sep 2025; camera at x -365.5, z 142.7), headings 70 and 10; positions and facings production inference from the two views"
     },
     {
@@ -1587,11 +1587,11 @@
         "style": "black_slat"
       },
       "xz": [
-        -362.5,
-        131.0
+        -360.82,
+        135.51
       ],
       "yaw": 0.0,
-      "reason": "A black steel-slat litter can stands on the small island at the west end of the Mersea lot, north of the dumpsters.",
+      "reason": "A black steel-slat litter can stands on the small island at the west end of the Mersea lot, beside the dumpsters.",
       "reference": "mersea-lot Street View pano TKhppKcV_DAxZRV9LsEh2A (Avenue A inside the Mersea lot, 699 Ave of the Palms, Sep 2025; camera at x -365.5, z 142.7), headings 70 and 10; positions and facings production inference from the two views"
     },
     {

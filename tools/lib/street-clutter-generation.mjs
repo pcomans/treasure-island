@@ -1040,7 +1040,7 @@ export function placeStreetClutter({
           // The painted stalls where the street ground has them, else stalls
           // along the lot's mapped aisles, else along its edges.
           let layout = "painted";
-          let slots = site.stalls.filter((slot) => slot.kind !== "bay" && inLot(middleOf(slot)));
+          let slots = site.stalls.filter((slot) => !["bay", "shoulder"].includes(slot.kind) && inLot(middleOf(slot)));
           if (slots.length === 0) {
             layout = "aisles";
             // Its parking aisles, and a service road with at least 10 m inside it.

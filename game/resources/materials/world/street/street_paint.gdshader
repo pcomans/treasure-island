@@ -10,8 +10,9 @@ render_mode depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx;
 // UV.x's integer part is kind + 16 * variant (street-ground-generation.mjs
 // STREET_PAINT_KINDS and PAINT_VARIANT_STRIDE): kinds 0 white, 1 yellow, 2 red
 // lane, 3 green lane, 4 tactile pad, 5 STOP legend, 6 faded yellow, 7 red curb,
-// 8 accessible blue, 9 a legend of the atlas. The variant is the paint's wear
-// step, 0 fresh to 3 mostly worn away; for kind 9 it is the atlas cell plus
+// 8 accessible blue, 9 a legend of the atlas, 10 a lot's tar-sealed joint, 11 a
+// lot's patched strip. The variant is the paint's wear
+// step, 0 fresh, 3 mostly worn, 4 nearly worn away; for kind 9 it is the atlas cell plus
 // legend_cells times the wear step (STREET_LEGEND_ATLAS_CELLS). A legend's
 // fraction and UV.y are its local coordinates.
 uniform sampler2D paint_wear : hint_default_white, filter_linear_mipmap_anisotropic, repeat_enable;
@@ -39,6 +40,11 @@ uniform vec3 faded_yellow : source_color = vec3(0.674, 0.566, 0.306);
 uniform vec3 curb_red : source_color = vec3(0.640, 0.230, 0.215);
 uniform vec3 accessible_blue : source_color = vec3(0.150, 0.330, 0.600);
 uniform vec3 worn_paint : source_color = vec3(0.560, 0.560, 0.540);
+// A parking lot's crack sealant and its patched strips (Sep 2025 photos of the
+// lot by Mersea: dark grey joints and darker grey asphalt patches on the pale
+// lot asphalt, which renders at about 0.40).
+uniform vec3 sealant : source_color = vec3(0.240, 0.240, 0.245);
+uniform vec3 patch_asphalt : source_color = vec3(0.360, 0.360, 0.365);
 
 varying vec3 world_position;
 
@@ -63,10 +69,14 @@ void fragment() {
 	// Grey wear mask tiled in world space: white = paint, dark = worn to asphalt.
 	// Fresh line paint is cut through only where the mask is below 0.25 (about 5 %
 	// of it); each wear step dulls it toward worn grey and wears more of it through.
+	// Step 4 (nearly worn away) also takes the mask's specks at a second scale and
+	// dulls the paint further, so little more than a faint broken trace is left.
 	float wear = texture(paint_wear, world_position.xz / paint_tile_m).r;
+	float wear_fine = texture(paint_wear, world_position.zx / (paint_tile_m * 0.43) + vec2(0.37, 0.71)).r;
 	float cell = mod(variant, legend_cells);
 	float wear_step = kind > 8.5 ? floor(variant / legend_cells + 0.001) : variant;
-	float worn = clamp(wear_step / 3.0, 0.0, 1.0);
+	float worn = clamp(wear_step / 3.0, 0.0, 4.0 / 3.0);
+	wear = mix(wear, min(wear, wear_fine) * 0.92, step(3.5, wear_step));
 	vec3 albedo = white_paint;
 	float coverage = wear + 0.25 - worn * 0.3;
 	float rough = 0.75;
@@ -99,9 +109,19 @@ void fragment() {
 		// An accessible stall's blue fill, mottled where worn.
 		albedo = accessible_blue * mix(0.82, 1.0, wear);
 		coverage = 1.0 - worn * 0.35 * (1.0 - wear);
-	} else {
+	} else if (kind < 9.5) {
 		// A legend of the atlas, worn like the line paint.
 		coverage = (wear + 0.25 - worn * 0.3) * texture(legends, vec2((cell + local.x) / legend_cells, local.y)).r;
+	} else if (kind < 10.5) {
+		// Tar sealant along a lot joint: dark grey, a little glossy, broken where worn.
+		albedo = sealant;
+		coverage = wear + 0.1;
+		rough = 0.6;
+	} else {
+		// A patched strip of darker asphalt, mottled, never cut through.
+		albedo = patch_asphalt * mix(0.88, 1.06, wear);
+		coverage = 1.0;
+		rough = 0.95;
 	}
 	albedo = mix(albedo, worn_paint, worn * 0.45);
 	ALBEDO = albedo;
