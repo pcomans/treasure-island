@@ -396,7 +396,7 @@ func _plant_gallery(plan: Dictionary) -> Dictionary:
 			# Only the chosen detail level, drawn at any distance.
 			for child in node.get_children():
 				if child is GeometryInstance3D:
-					var drawn := ("_%s__c" % levels[group]) in str(child.name)
+					var drawn := ("_%s__c" % levels[group]) in str(child.name) or "_shadow__c" in str(child.name)
 					(child as GeometryInstance3D).visible = drawn
 					(child as GeometryInstance3D).visibility_range_begin = 0.0
 					(child as GeometryInstance3D).visibility_range_end = 0.0

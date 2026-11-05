@@ -16,6 +16,11 @@ extends RefCounted
 ## tree's own distance; low plants use larger ones and have a single short
 ## range (the newer ones dissolve before it ends, in their shader).
 ##
+## A big tree's levels cast no shadow of their own: its kit shadow mesh does, a
+## cheap outline drawn only into the shadow maps, one MultiMesh per variant and
+## SHADOW_CELL_M cell, since most of a dense crown's primitives and draw calls
+## were its shadow passes. Its range runs on to the farthest tree's LOD1 end.
+##
 ## Collision is the trunk only: capsules on the street-prop layer, which the
 ## player collides with and the spray ray stops on (never a receiver), while
 ## the camera arm ignores it, as for the street furniture. Crowns and low plants
@@ -32,6 +37,7 @@ const KIT := preload("res://game/scripts/world/street_vegetation_kit.gd")
 const MULCH := preload("res://game/resources/textures/world/street/street_mulch.png")
 const TREE_CELL_M := 16.0
 const GRASS_CELL_M := 32.0
+const SHADOW_CELL_M := 48.0
 const PHYSICS_CELL_M := 96.0
 const RENDER_WORLD_VISIBLE := 1
 const PHYSICS_SPRAY_SURFACE := 1 << 2
@@ -53,6 +59,8 @@ func build(document: Dictionary) -> Dictionary:
 	root.name = "GeneratedStreetVegetation"
 	# batch key -> {prop, variant, levels, cells: {cell -> [Transform3D]}}
 	var batches: Dictionary = {}
+	# batch key -> {mesh, end_m, cells: {shadow cell -> [Transform3D]}}
+	var shadows: Dictionary = {}
 	# physics cell -> [{id, shape, transform}]
 	var shapes: Dictionary = {}
 	# render cell -> [{center, radius, slope}]
@@ -104,6 +112,14 @@ func build(document: Dictionary) -> Dictionary:
 		if not cells.has(cell):
 			cells[cell] = []
 		(cells[cell] as Array).append(placement)
+		if proto.has("shadow"):
+			if not shadows.has(key):
+				shadows[key] = {"mesh": proto.shadow.mesh, "end_m": proto.shadow.end_m, "cells": {}}
+			var shadow_cells: Dictionary = shadows[key].cells
+			var shadow_cell := _cell(foot, SHADOW_CELL_M)
+			if not shadow_cells.has(shadow_cell):
+				shadow_cells[shadow_cell] = []
+			(shadow_cells[shadow_cell] as Array).append(placement)
 		var physics_cell := _cell(foot, PHYSICS_CELL_M)
 		for capsule: Dictionary in proto.capsules:
 			if not shapes.has(physics_cell):
@@ -135,18 +151,9 @@ func build(document: Dictionary) -> Dictionary:
 		for cell: String in cell_keys:
 			var transforms: Array = batch.cells[cell]
 			# One box for every level of the cell (the union of their meshes).
-			var box := AABB()
-			var centers := PackedVector3Array()
-			for index in transforms.size():
-				var tree_box := AABB()
-				for level_index in levels.size():
-					var mesh_box: AABB = (transforms[index] as Transform3D) * (levels[level_index].mesh as Mesh).get_aabb()
-					tree_box = mesh_box if level_index == 0 else tree_box.merge(mesh_box)
-				box = tree_box if index == 0 else box.merge(tree_box)
-				centers.append(tree_box.get_center())
-			var slack := 0.0
-			for center: Vector3 in centers:
-				slack = maxf(slack, center.distance_to(box.get_center()))
+			var bounds := _cell_bounds(transforms, levels.map(func(level: Dictionary) -> Mesh: return level.mesh))
+			var box: AABB = bounds.box
+			var slack: float = bounds.slack
 			for level_index in levels.size():
 				var level: Dictionary = levels[level_index]
 				var multimesh := MultiMesh.new()
@@ -169,6 +176,15 @@ func build(document: Dictionary) -> Dictionary:
 				instance.set_meta("placement_count", transforms.size())
 				root.add_child(instance)
 				multimeshes += 1
+	var shadow_keys: Array = shadows.keys()
+	shadow_keys.sort()
+	for key: String in shadow_keys:
+		var batch: Dictionary = shadows[key]
+		var cell_keys: Array = (batch.cells as Dictionary).keys()
+		cell_keys.sort()
+		for cell: String in cell_keys:
+			root.add_child(_shadow_instance(key, cell, batch.mesh, float(batch.end_m), batch.cells[cell]))
+			multimeshes += 1
 	var well_cells: Array = wells.keys()
 	well_cells.sort()
 	var well_material := _well_material()
@@ -223,6 +239,47 @@ func build(document: Dictionary) -> Dictionary:
 		"mulch_pits": well_cells.size(),
 		"collision_shapes": shape_count,
 	}
+
+
+## The box round a cell's instances (the union of the meshes at each) and the
+## farthest instance's offset from its centre: {box, slack}.
+func _cell_bounds(transforms: Array, meshes: Array) -> Dictionary:
+	var box := AABB()
+	var centers := PackedVector3Array()
+	for index in transforms.size():
+		var tree_box := AABB()
+		for mesh_index in meshes.size():
+			var mesh_box: AABB = (transforms[index] as Transform3D) * (meshes[mesh_index] as Mesh).get_aabb()
+			tree_box = mesh_box if mesh_index == 0 else tree_box.merge(mesh_box)
+		box = tree_box if index == 0 else box.merge(tree_box)
+		centers.append(tree_box.get_center())
+	var slack := 0.0
+	for center: Vector3 in centers:
+		slack = maxf(slack, center.distance_to(box.get_center()))
+	return {"box": box, "slack": slack}
+
+
+## A shadow cell's trees of one variant: their shadow mesh, drawn only into the
+## shadow maps, out to end_m past the farthest of them from the cell's centre.
+func _shadow_instance(key: String, cell: String, mesh: Mesh, end_m: float, transforms: Array) -> MultiMeshInstance3D:
+	var bounds := _cell_bounds(transforms, [mesh])
+	var multimesh := MultiMesh.new()
+	multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	multimesh.mesh = mesh
+	multimesh.instance_count = transforms.size()
+	for index in transforms.size():
+		multimesh.set_instance_transform(index, transforms[index])
+	multimesh.custom_aabb = bounds.box
+	var instance := MultiMeshInstance3D.new()
+	instance.name = "%s_shadow__c%s" % [key, cell]
+	instance.multimesh = multimesh
+	instance.layers = RENDER_WORLD_VISIBLE
+	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
+	instance.visibility_range_end = end_m + ceilf(float(bounds.slack))
+	instance.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_DISABLED
+	instance.set_meta("street_detail_layer", "vegetation")
+	instance.set_meta("placement_count", transforms.size())
+	return instance
 
 
 ## Checks a hedge row and files its pieces under the tree cells of their
