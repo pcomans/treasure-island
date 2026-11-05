@@ -903,11 +903,11 @@ export function placeStreetClutter({
           if (Object.keys(sides).length > 0) placeCurbRuns(zone, rule, contains, lane, sides);
         }
       } else if (rule.pattern === "bay_occupancy") {
-        // The street ground's street-side bays (none on a ground without them),
-        // each taken at the rule's fill, mostly nose in, centred and square.
+        // The street ground's street-side bays (none on a ground without them):
+        // each way side's first cars[way][side] bays in seeded rank that fit
+        // take a car, mostly nose in, centred and square.
         const baySlots = site.stalls.filter((candidate) => candidate.kind === "bay");
         const taken = new Map();
-        // Each way side's bays in seeded rank; the first rule.cars[way][side] that fit take cars.
         const ranked = baySlots.map((slot) => {
           const cell = `${slot.aisle_key}_${slot.side}_b${String(Math.round(slot.s * 10)).padStart(4, "0")}`;
           return { slot, cell, identity: `${zone.id}:${rule.id}:${cell}` };
