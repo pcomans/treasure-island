@@ -25,8 +25,9 @@ void vertex() {
 	float radius = max(INSTANCE_CUSTOM.r, 1e-5);
 	vec3 camera = INV_VIEW_MATRIX[3].xyz;
 	// The size of a pixel at the wire: perspective grows it with distance, an
-	// orthographic camera keeps it.
-	float pixel = 2.0 / (PROJECTION_MATRIX[1][1] * VIEWPORT_SIZE.y);
+	// orthographic camera keeps it. The renderers hand PROJECTION_MATRIX over
+	// with its y axis flipped for their clip space, so [1][1] can be negative.
+	float pixel = 2.0 / (abs(PROJECTION_MATRIX[1][1]) * VIEWPORT_SIZE.y);
 	if (PROJECTION_MATRIX[3][3] < 0.5) {
 		pixel *= length(world - camera);
 	}
