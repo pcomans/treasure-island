@@ -5,7 +5,9 @@ extends RefCounted
 ## the flat shoulder just outside the island outline, the underlay slope behind
 ## it, the concrete closure faces (pier and platform edges, boat ramps), the
 ## instanced quarry stones (top row, back row, shoulder stones and heap), the
-## low cobbles in the band inside the outline and the driftwood. Visual only,
+## low cobbles in the band inside the outline and the driftwood, each
+## segment's stones and underlay in their own materials (its stone tone,
+## blended into its neighbours' at its ends). Visual only,
 ## like the Yerba Buena context: no collision and no spray receiver. The band
 ## inside the outline is an ordinary chunk overlay; it and the shoulder share
 ## BAND_GROUND_FAMILY, the dry grass-and-dirt verge at the top of the riprap,
@@ -29,9 +31,6 @@ const DRIFTWOOD_MATERIAL := "shoreline_driftwood"
 ## The ground cover family of the verge: the band inside the outline (a chunk
 ## overlay, see world_chunk_builder.gd) and the shoulder outside it.
 const BAND_GROUND_FAMILY := "verge"
-## Floats per expanded placement (GeneratedWorldContract.SHORELINE_PLACEMENT_LENGTH):
-## position, rotation quaternion (x, y, z, w), per-axis scale.
-const PLACEMENT_LENGTH := 10
 
 static var _riprap := {}
 
@@ -73,6 +72,31 @@ static func _riprap_material(key: String, surface: int) -> ShaderMaterial:
 	return _riprap[key]
 
 
+## A segment's stone or underlay material: the riprap shader with the
+## segment's tone and its neighbours' at its ends (document segments' tone), and
+## the document's thinning (lod).
+static func _segment_material(key: String, surface: int, segment: Dictionary, lod: Dictionary) -> ShaderMaterial:
+	var material := (_riprap_material(key, surface).duplicate() as ShaderMaterial)
+	material.resource_name = "%s:%s" % [key, str(segment.id)]
+	var tone: Dictionary = segment.tone
+	material.set_shader_parameter("tone_self", _vector4(tone.stone))
+	material.set_shader_parameter("tone_start", _vector4(tone.start.stone))
+	material.set_shader_parameter("tone_end", _vector4(tone.end.stone))
+	material.set_shader_parameter("joint_start", Vector4(float(tone.start.at[0]), float(tone.start.at[1]), float(tone.start.along[0]), float(tone.start.along[1])))
+	material.set_shader_parameter("joint_end", Vector4(float(tone.end.at[0]), float(tone.end.at[1]), float(tone.end.along[0]), float(tone.end.along[1])))
+	material.set_shader_parameter("tone_blend_m", float(tone.blend_m))
+	material.set_shader_parameter("stone_reach_per_m", float(lod.reach_per_m))
+	material.set_shader_parameter("stone_reach_min_m", float(lod.min_m))
+	material.set_shader_parameter("stone_reach_max_m", float(lod.max_m))
+	material.set_shader_parameter("stone_thin_start", float(lod.start))
+	material.set_shader_parameter("underlay_fade_m", Vector2(float(lod.underlay_fade_m[0]), float(lod.underlay_fade_m[1])))
+	return material
+
+
+static func _vector4(values: Array) -> Vector4:
+	return Vector4(float(values[0]), float(values[1]), float(values[2]), float(values[3]))
+
+
 static func _record_material(material_key: String) -> Material:
 	match material_key:
 		VERGE_MATERIAL:
@@ -90,11 +114,23 @@ func build(document: Dictionary) -> Dictionary:
 	root.set_meta("visual_only", true)
 	var triangles := 0
 	var mesh_instances := 0
+	# Each segment's stones and underlay take their own materials: its tone,
+	# blended into its neighbours' at its ends, and the document's thinning.
+	var segment_materials := {}
+	for segment_value: Variant in document.segments:
+		var segment: Dictionary = segment_value
+		segment_materials[str(segment.id)] = {
+			"stone": _segment_material(STONE_MATERIAL, SURFACE_STONE, segment, document.lod),
+			"slope": _segment_material(SLOPE_MATERIAL, SURFACE_SLOPE, segment, document.lod),
+		}
 	for record_value: Variant in document.records:
 		var record: Dictionary = record_value
 		var instance := MeshInstance3D.new()
 		instance.name = str(record.object_key).validate_node_name()
-		instance.mesh = _array_mesh(record, _record_material(str(record.material_key)))
+		var record_material := _record_material(str(record.material_key))
+		if str(record.material_key) == SLOPE_MATERIAL and segment_materials.has(str(record.segment)):
+			record_material = segment_materials[str(record.segment)].slope
+		instance.mesh = _array_mesh(record, record_material)
 		instance.layers = RENDER_WORLD_VISIBLE
 		# Like the terrain overlays, the slope, shoulder and closure faces receive shadows but cast none.
 		instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
@@ -109,8 +145,9 @@ func build(document: Dictionary) -> Dictionary:
 		var material: Material = stone_material() if str(prototype.material_key) == STONE_MATERIAL else driftwood_material()
 		prototypes[str(prototype.id)] = {"mesh": _array_mesh(prototype, material), "triangles": int(prototype.indices.size() / 3)}
 	# One MultiMesh per generated batch (segment, shore section, band and
-	# prototype), so each culls, picks its LOD and fades on its own. The stones
-	# carry no colour: the shader tints each one from its position.
+	# prototype), so each culls and picks its LOD on its own. The stones carry
+	# no colour: the shader tints each one from its position and its segment's
+	# tone, and thins them out one by one with distance.
 	var stones := Node3D.new()
 	stones.name = "Stones"
 	root.add_child(stones)
@@ -120,7 +157,7 @@ func build(document: Dictionary) -> Dictionary:
 		var batch: Dictionary = batch_value
 		var prototype: Dictionary = prototypes[str(batch.prototype)]
 		var transforms: PackedFloat32Array = batch.transforms
-		var count := int(transforms.size() / PLACEMENT_LENGTH)
+		var count := int(transforms.size() / GeneratedWorldContract.SHORELINE_PLACEMENT_LENGTH)
 		var multi_mesh := MultiMesh.new()
 		multi_mesh.transform_format = MultiMesh.TRANSFORM_3D
 		multi_mesh.use_colors = false
@@ -128,7 +165,7 @@ func build(document: Dictionary) -> Dictionary:
 		multi_mesh.mesh = prototype.mesh
 		multi_mesh.instance_count = count
 		for index in count:
-			var at := index * PLACEMENT_LENGTH
+			var at := index * GeneratedWorldContract.SHORELINE_PLACEMENT_LENGTH
 			var rotation := Quaternion(transforms[at + 3], transforms[at + 4], transforms[at + 5], transforms[at + 6]).normalized()
 			var basis := Basis(rotation) * Basis.from_scale(Vector3(transforms[at + 7], transforms[at + 8], transforms[at + 9]))
 			multi_mesh.set_instance_transform(index, Transform3D(basis, Vector3(transforms[at], transforms[at + 1], transforms[at + 2])))
@@ -139,7 +176,13 @@ func build(document: Dictionary) -> Dictionary:
 		node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON if bool(batch.cast_shadow) else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		node.visibility_range_end = float(batch.visibility_end_m)
 		node.visibility_range_end_margin = float(batch.visibility_margin_m)
-		node.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_SELF
+		if str(batch.band) == "driftwood":
+			node.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_SELF
+		else:
+			# The stones thin out one by one in the shader; the batch range only
+			# culls it once its last stone has gone.
+			node.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_DISABLED
+			node.material_override = segment_materials[str(batch.segment)].stone
 		node.set_meta("band", str(batch.band))
 		node.set_meta("placement_count", count)
 		node.set_meta("visual_only", true)

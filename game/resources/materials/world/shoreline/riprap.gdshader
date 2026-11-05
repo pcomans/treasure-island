@@ -4,21 +4,28 @@ render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_burley, specular_sc
 // Shoreline riprap (tools/lib/shoreline-generation.mjs). One shader, four
 // materials (game/scripts/world/shoreline_builder.gd), chosen by `surface`:
 //   0  the underlay slope outside the outline. It shows only in the gaps of the
-//      stone heap nearby, so it is dark there (voids); farther away, where the
-//      stones thin out, it stands in for the heap at far_brightness, about the
-//      heap's average tone, so the band keeps its tone where the stones go;
+//      stone heap nearby, so it is dark there (gaps); farther away, as the
+//      stones thin out, it stands in for them by the share they leave
+//      (underlay_fade_m, fitted to the stones by the generator) at the heap's
+//      apparent tone, so the band keeps its tone and texture where they go;
 //   1  the instanced stones (MultiMesh): the generated boulder skin on flat,
 //      hard-edged quarry faces, each stone tinted from two hashes of its
-//      position (the instances carry no colour): mostly mid-to-dark grey and
-//      charcoal as in the 2024-2025 photos, some brown-grey and olive-grey
-//      ones and a few paler weathered ones; darker toward its lower part where
-//      neighbours meet it and lighter on sun-facing tops. A stone may rest on
-//      any face, so its height share comes from the world: the fragment's
-//      height above the stone's centroid (its instance origin) against its
-//      size (the instance scale). Stones thin out with distance one by one:
-//      each has a reach from its size and drops out at a random share of it,
-//      measured from the main camera (also in the shadow pass), so the heap
-//      fades into the underlay over a band rather than at a batch's edge;
+//      position (the instances carry no colour) into a stone family: charcoal,
+//      brown-grey, olive-grey, pale weathered or plain grey, in the shares of
+//      the segment's tone (the dated photos: mostly dark grey and charcoal in
+//      the north and west, lighter grey-tan in the east and south, brown-grey
+//      at the Sailing Center and the north tip), shaded at random; darker
+//      toward its lower part where neighbours meet it and lighter on
+//      sun-facing tops. A stone may rest on any face, so its height share
+//      comes from the world: the fragment's height above the stone's centroid
+//      (its instance origin) against its size (the instance scale). Stones
+//      thin out with distance one by one: each has a reach from its size and
+//      drops out at a random share of it, measured from the main camera (also
+//      in the shadow pass), so the heap fades into the underlay over a band;
+//      its batch is culled only after the last of its stones has gone.
+//   Each segment has its own stone and underlay materials with its tone; at
+//   each end the tone blends, over tone_blend_m, half way into the next
+//   segment's, so the two meet at the joint and no switch shows;
 //   2  the driftwood (MultiMesh logs and planks, scaled to length along their
 //      local x): bleached grey wood, a little brown, its grain and long cracks
 //      running along the trunk, darker in the cracks and where bark clings;
@@ -56,17 +63,27 @@ uniform float stone_saturation = 0.45;
 uniform float stone_brightness = 0.62;
 // Stones thin out with distance: a stone of size s reaches s * stone_reach_per_m
 // (within [min, max]) and drops out at its own random share of that, at least
-// stone_thin_start of it.
+// stone_thin_start of it (the document's lod, set by the builder).
 uniform float stone_reach_per_m = 130.0;
-uniform float stone_reach_min_m = 45.0;
+uniform float stone_reach_min_m = 65.0;
 uniform float stone_reach_max_m = 160.0;
 uniform float stone_thin_start = 0.6;
-// Underlay: dark voids near by, the heap's average tone where the stones have
-// thinned out.
-uniform float void_brightness = 0.38;
-uniform float far_brightness = 0.52;
-uniform float void_fade_start_m = 60.0;
-uniform float void_fade_end_m = 150.0;
+// Underlay: dark in the gaps near by (gap_brightness); as the stones thin out
+// (underlay_fade_m) it takes the heap's apparent tone (band_brightness: a flat
+// face looks lighter than a pile of the same stones with their shaded sides
+// and gaps), tinted like the segment's stones.
+uniform float gap_brightness = 0.09;
+uniform float band_brightness = 0.15;
+uniform vec2 underlay_fade_m = vec2(30.0, 160.0);
+// The segment's tone, [brightness, warm share, dark share, pale share], and its
+// neighbours' at its ends: the outline point there (x, z) and the shore
+// direction into the segment (x, z), blended over tone_blend_m.
+uniform vec4 tone_self = vec4(1.0, 0.15, 0.25, 0.05);
+uniform vec4 tone_start = vec4(1.0, 0.15, 0.25, 0.05);
+uniform vec4 tone_end = vec4(1.0, 0.15, 0.25, 0.05);
+uniform vec4 joint_start = vec4(0.0, 0.0, 1.0, 0.0);
+uniform vec4 joint_end = vec4(0.0, 0.0, -1.0, 0.0);
+uniform float tone_blend_m = 40.0;
 // Stones: darker toward their lower part (height share 0) where they meet the
 // heap, lighter on sun-facing tops. stone_extent is a stone's typical vertical
 // extent for size 1 (the longest side).
@@ -117,6 +134,7 @@ varying vec3 world_position;
 varying vec3 world_normal;
 varying vec3 instance_origin;
 varying float instance_scale;
+varying vec4 tone;
 // Wood: the vertex in its own frame, scaled to metres (length along x).
 varying vec3 local_metres;
 
@@ -137,6 +155,21 @@ float value_noise(vec2 p) {
 	return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
 }
 
+// The tone at a world point: the segment's own, blended half way into each
+// neighbour's at the segment's ends.
+vec4 blended_tone(vec2 p) {
+	float into_start = dot(p - joint_start.xy, joint_start.zw);
+	float into_end = dot(p - joint_end.xy, joint_end.zw);
+	float w_start = 0.5 * (1.0 - smoothstep(0.0, tone_blend_m, into_start));
+	float w_end = 0.5 * (1.0 - smoothstep(0.0, tone_blend_m, into_end));
+	float total = w_start + w_end;
+	if (total > 0.95) {
+		w_start *= 0.95 / total;
+		w_end *= 0.95 / total;
+	}
+	return tone_self * (1.0 - w_start - w_end) + tone_start * w_start + tone_end * w_end;
+}
+
 void vertex() {
 	instance_origin = MODEL_MATRIX[3].xyz;
 	instance_scale = length(MODEL_MATRIX[0].xyz);
@@ -150,6 +183,8 @@ void vertex() {
 		}
 	}
 	world_position = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+	// A stone takes one tone (at its origin); the underlay blends per vertex.
+	tone = blended_tone(surface == 1 ? instance_origin.xz : world_position.xz);
 	// Stones scale uniformly and logs only along and across their axis, so the
 	// model matrix keeps normals true.
 	world_normal = normalize(mat3(MODEL_MATRIX) * NORMAL);
@@ -170,22 +205,33 @@ vec3 grade(vec3 color, float saturation, float brightness) {
 	return mix(vec3(luminance), color, saturation) * brightness;
 }
 
-// A stone's tint from its position: about 45 % plain grey, 25 % charcoal,
-// 15 % brown-grey, 10 % olive-grey and 5 % pale weathered, each family shaded
-// at random.
-vec3 stone_tint(vec3 origin) {
+// A stone's tint from its position and tone: its family from one hash (dark
+// share charcoal, then warm share brown-grey, a tenth olive-grey, pale share
+// pale weathered, the rest plain grey), its shade from another, times the
+// tone's brightness.
+vec3 stone_tint(vec3 origin, vec4 t) {
 	float family = hash12(origin.xz * 0.731 + vec2(origin.y * 0.117 + 3.17, 1.91));
 	float pick = hash12(origin.zx * 1.373 + vec2(7.3, 2.9));
-	if (family < 0.45) {
-		return vec3(0.78 + 0.22 * pick);
-	} else if (family < 0.7) {
-		return vec3(0.92, 0.92, 0.94) * (0.55 + 0.2 * pick);
-	} else if (family < 0.85) {
-		return vec3(1.0, 0.9, 0.78) * (0.75 + 0.2 * pick);
-	} else if (family < 0.95) {
-		return vec3(0.93, 0.96, 0.85) * (0.75 + 0.2 * pick);
+	vec3 tint = vec3(0.78 + 0.22 * pick);
+	if (family < t.z) {
+		tint = vec3(0.92, 0.92, 0.94) * (0.55 + 0.2 * pick);
+	} else if (family < t.z + t.y) {
+		tint = vec3(1.0, 0.9, 0.78) * (0.75 + 0.2 * pick);
+	} else if (family < t.z + t.y + 0.1) {
+		tint = vec3(0.93, 0.96, 0.85) * (0.75 + 0.2 * pick);
+	} else if (family < t.z + t.y + 0.1 + t.w) {
+		tint = vec3(1.0, 0.98, 0.95) * (1.05 + 0.1 * pick);
 	}
-	return vec3(1.0, 0.98, 0.95) * (1.05 + 0.1 * pick);
+	return tint * t.x;
+}
+
+// The average of stone_tint over a tone's families, relative to the reference
+// charcoal tone's (0.83): the underlay's stand-in takes it.
+vec3 tone_tint(vec4 t) {
+	float grey = max(0.0, 1.0 - t.z - t.y - 0.1 - t.w);
+	vec3 mean = vec3(0.92, 0.92, 0.94) * 0.65 * t.z + vec3(1.0, 0.9, 0.78) * 0.85 * t.y
+		+ vec3(0.93, 0.96, 0.85) * 0.85 * 0.1 + vec3(1.0, 0.98, 0.95) * 1.1 * t.w + vec3(0.89) * grey;
+	return mean * t.x / 0.83;
 }
 
 void fragment() {
@@ -262,11 +308,12 @@ void fragment() {
 	}
 	if (stone) {
 		float share = clamp(0.5 + (world_position.y - instance_origin.y) / max(instance_scale * stone_extent, 0.01), 0.0, 1.0);
-		albedo *= stone_tint(instance_origin);
+		albedo *= stone_tint(instance_origin, tone);
 		albedo *= mix(contact_dark, 1.0, smoothstep(0.0, contact_height, share));
 		albedo *= 1.0 + top_bleach * smoothstep(0.55, 1.0, share) * max(n.y, 0.0);
 	} else if (surface == 0) {
-		albedo *= mix(void_brightness, far_brightness, smoothstep(void_fade_start_m, void_fade_end_m, distance_m));
+		float stand_in = smoothstep(underlay_fade_m.x, underlay_fade_m.y, length(world_position - MAIN_CAM_INV_VIEW_MATRIX[3].xyz));
+		albedo *= tone_tint(tone) * mix(gap_brightness, band_brightness, stand_in);
 	}
 	if (!wood) {
 		vec2 rotated = mat2(vec2(0.8, 0.6), vec2(-0.6, 0.8)) * world_position.xz;

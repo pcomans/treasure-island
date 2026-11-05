@@ -59,6 +59,7 @@ import {
   SHORELINE_RECORD_MATERIALS,
   SHORELINE_SCHEMA,
   SHORELINE_SLOPE_MATERIAL,
+  SHORELINE_TONE_LENGTH,
   SHORELINE_VERGE_MATERIAL,
   WATER_Y_M,
   unpackShorelineBatch,
@@ -1312,6 +1313,18 @@ function validateShoreline(worldRoot, manifest, records) {
   const inside = (x, z) => pointInMultiPolygon([x, -z], island, false);
   const walkable = (x, z) => pointInPlayableBoundary([x, z], manifest.playable_boundary);
   invariant(Array.isArray(document.segments) && document.segments.length > 0 && Array.isArray(document.closures), "Shoreline segments or closures are missing");
+  // The thinning the shader applies, and each segment's stone tone with the
+  // joints at its ends that it blends across.
+  const finiteArray = (value, size) => Array.isArray(value) && value.length === size && value.every(Number.isFinite);
+  const lod = document.lod;
+  invariant(lod && ["reach_per_m", "min_m", "max_m", "start"].every((key) => Number.isFinite(lod[key])) && lod.reach_per_m > 0 && lod.min_m > 0 && lod.max_m >= lod.min_m
+    && lod.start > 0 && lod.start <= 1 && finiteArray(lod.underlay_fade_m, 2) && lod.underlay_fade_m[1] > lod.underlay_fade_m[0], "Shoreline thinning (lod) is malformed");
+  for (const segment of document.segments) {
+    const tone = segment.tone;
+    invariant(tone && finiteArray(tone.stone, SHORELINE_TONE_LENGTH) && Number.isFinite(tone.blend_m) && tone.blend_m > 0
+      && ["start", "end"].every((end) => tone[end] && finiteArray(tone[end].at, 2) && finiteArray(tone[end].along, 2) && finiteArray(tone[end].stone, SHORELINE_TONE_LENGTH)),
+    `Shoreline segment ${segment.id} tone is malformed`);
+  }
   // Every segment's source keeps its riprap overlay in the chunks.
   for (const segment of document.segments) {
     const overlays = [...records.physical.values()].filter(({ record }) => record.object_key.startsWith(`${SHORELINE_OVERLAY_PREFIX}:${segment.source_key}:`));

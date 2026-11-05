@@ -36,7 +36,12 @@ const SHORELINE_VERGE_MATERIAL := "shoreline_verge"
 const SHORELINE_BANDS := ["cobble", "driftwood", "heap", "top"]
 const SHORELINE_CLOSURE_KINDS := ["none", "ramp", "wall"]
 const SHORELINE_PROTOTYPE_MATERIALS := {"boulder": "shoreline_boulder", "log": "shoreline_driftwood", "plank": "shoreline_driftwood"}
-const SHORELINE_FIELDS := ["batches", "closures", "config", "generator", "overlay", "packing", "prototypes", "records", "schema_version", "seed", "segments", "visual_only", "water_y_m"]
+const SHORELINE_FIELDS := ["batches", "closures", "config", "generator", "lod", "overlay", "packing", "prototypes", "records", "schema_version", "seed", "segments", "visual_only", "water_y_m"]
+## Per placement: position (3 uint16) and rotation (4 int16), then one uint16
+## per scale component (one for a uniformly scaled stone, three for wood).
+const SHORELINE_PLACEMENT_HEAD_BYTES := 14
+## A stone tone: brightness, warm, dark and pale shares (riprap.gdshader).
+const SHORELINE_TONE_LENGTH := 4
 const SHORELINE_RECORD_FIELDS := ["indices", "material_key", "normals", "object_key", "origin", "positions", "section", "segment", "source_keys", "vertex_count"]
 const SHORELINE_BATCH_FIELDS := ["band", "cast_shadow", "count", "id", "origin", "placements", "prototype", "section", "segment", "visibility_end_m", "visibility_margin_m"]
 ## The packing's steps (SHORELINE_POSITION_STEP_M and the rest in the generator).
@@ -842,7 +847,8 @@ static func _expand_shoreline(document: Dictionary) -> Dictionary:
 			if not _is_finite_number(value):
 				return _failure("shoreline_batches", "Shoreline batch %s has a non-finite origin." % label)
 		var count := int(batch.count)
-		var stride := 16 if kind == "boulder" else 20
+		var scale_components := 1 if kind == "boulder" else 3
+		var stride := SHORELINE_PLACEMENT_HEAD_BYTES + 2 * scale_components
 		var bytes := Marshalls.base64_to_raw(str(batch.placements))
 		if bytes.size() != count * stride:
 			return _failure("shoreline_placement", "Shoreline batch %s placement bytes do not match its count." % label)
@@ -862,8 +868,8 @@ static func _expand_shoreline(document: Dictionary) -> Dictionary:
 			transforms[out + 5] = rotation.z
 			transforms[out + 6] = rotation.w
 			for axis in 3:
-				var step := 0 if kind == "boulder" else axis
-				transforms[out + 7 + axis] = bytes.decode_u16(at + 14 + step * 2) * SHORELINE_SCALE_STEP_M
+				var step := mini(axis, scale_components - 1)
+				transforms[out + 7 + axis] = bytes.decode_u16(at + SHORELINE_PLACEMENT_HEAD_BYTES + step * 2) * SHORELINE_SCALE_STEP_M
 		batch.transforms = transforms
 		batch.erase("placements")
 		batches.append(batch)
@@ -886,9 +892,23 @@ static func _validate_shoreline(document: Dictionary, source_scopes: Dictionary)
 	var segment_ids: Dictionary = {}
 	if not document.get("segments", null) is Array or (document.segments as Array).is_empty() or not document.get("closures", null) is Array:
 		return _failure("shoreline_segments", "Shoreline has no segments.")
+	var lod: Variant = document.get("lod", null)
+	if not lod is Dictionary or not _all_finite(lod, ["reach_per_m", "min_m", "max_m", "start"]) \
+	or float(lod.reach_per_m) <= 0.0 or float(lod.min_m) <= 0.0 or float(lod.max_m) < float(lod.min_m) or float(lod.start) <= 0.0 or float(lod.start) > 1.0 \
+	or not _finite_array(lod.get("underlay_fade_m", null), 2) or float(lod.underlay_fade_m[1]) <= float(lod.underlay_fade_m[0]):
+		return _failure("shoreline_lod", "Shoreline thinning (lod) is malformed.")
 	for segment_value: Variant in document.segments:
 		if not segment_value is Dictionary or str(source_scopes.get(str((segment_value as Dictionary).get("source_key", "")), "")) != "playable":
 			return _failure("shoreline_segments", "Shoreline segment does not name a playable source.")
+		# Its stone tone and the joints at its ends that the shader blends across.
+		var tone: Variant = (segment_value as Dictionary).get("tone", null)
+		if not tone is Dictionary or not _finite_array(tone.get("stone", null), SHORELINE_TONE_LENGTH) or not _is_finite_number(tone.get("blend_m", null)) or float(tone.blend_m) <= 0.0:
+			return _failure("shoreline_segments", "Shoreline segment tone is malformed.")
+		for end_key: String in ["start", "end"]:
+			var joint: Variant = tone.get(end_key, null)
+			if not joint is Dictionary or not _finite_array(joint.get("at", null), 2) or not _finite_array(joint.get("along", null), 2) \
+			or not _finite_array(joint.get("stone", null), SHORELINE_TONE_LENGTH):
+				return _failure("shoreline_segments", "Shoreline segment tone joint is malformed.")
 		segment_ids[str((segment_value as Dictionary).get("id", ""))] = true
 		piece_ids[str((segment_value as Dictionary).get("id", ""))] = true
 	for closure_value: Variant in document.closures:
@@ -980,6 +1000,24 @@ static func _validate_shoreline(document: Dictionary, source_scopes: Dictionary)
 			if boulder and (transforms[start + 7] != transforms[start + 8] or transforms[start + 8] != transforms[start + 9]):
 				return _failure("shoreline_placement", "Shoreline batch %s scales a stone unevenly." % batch_id)
 	return {"ok": true}
+
+
+## Whether each named field of a dictionary is a finite number.
+static func _all_finite(values: Dictionary, keys: Array) -> bool:
+	for key: Variant in keys:
+		if not _is_finite_number(values.get(key, null)):
+			return false
+	return true
+
+
+## Whether a value is an array of exactly `size` finite numbers.
+static func _finite_array(value: Variant, size: int) -> bool:
+	if not value is Array or (value as Array).size() != size:
+		return false
+	for item: Variant in value:
+		if not _is_finite_number(item):
+			return false
+	return true
 
 
 ## A plain generated mesh (the prototypes: vertices and normals as flat number
