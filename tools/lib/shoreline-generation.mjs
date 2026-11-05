@@ -14,12 +14,14 @@
 //      boundary recovery are unchanged;
 //   2. builds the visual-only rock armour (generateShoreline) for
 //      generated/world/shoreline.json: a flat shoulder just outside the outline
-//      that continues the verge's ground cover, an underlay slope behind it to
-//      under the water, and angular quarry stones over them (a top row just
-//      beyond the outline and a back row behind it at the crest, small stones
-//      in the shoulder, then the heap down past the waterline, largest stones
-//      first), a few low cobbles set in the band at the outline that the player
-//      walks over, and weathered driftwood lying in the stones.
+//      that continues the verge's ground cover, an underlay behind it that
+//      rises into the crest's core and falls to under the water, and angular
+//      quarry stones over them (a top row just beyond the outline and a back
+//      row behind it on the crest, small stones in the shoulder, then the heap
+//      down past the waterline, largest stones first), a few low cobbles set
+//      in the band at the outline that the player walks over, weathered
+//      driftwood lying in the stones, and rubble mounds standing out in the
+//      water where a segment's breakwater runs out as a jetty.
 // Segments that meet end to end join without a seam (one stone pile, one
 // slope). Closures cover the rest of the outline: a concrete face from the
 // land edge to below the water (a pier or platform edge), a boat ramp, or
@@ -31,7 +33,9 @@
 // Where the outline doubles back across a narrow inlet (the OSM outline has a
 // 0-9 m slit on the north-west shore), a cross-section meets the outline again
 // before its toe: it is clamped there and falls to the land on the far side
-// instead of to the water.
+// instead of to the water. A segment without crest rows (crest_rows false) is
+// only the lower slope of a crest another segment builds: the far side's own
+// seaward edge.
 //
 // The player is recovered as soon as it leaves the outline, so nothing beyond
 // the outline needs collision. Every stone and log outside stays clear of the
@@ -534,6 +538,54 @@ function distanceToSegment(point, a, b) {
 
 // A multipolygon with its bounds and edge list, for repeated distance and
 // containment queries.
+// The convex hull of plan points, counterclockwise (monotone chain).
+function convexHull(points) {
+  const sorted = [...points].sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  const half = (list) => {
+    const out = [];
+    for (const point of list) {
+      while (out.length >= 2 && cross(sub(out.at(-1), out.at(-2)), sub(point, out.at(-2))) <= 0) out.pop();
+      out.push(point);
+    }
+    out.pop();
+    return out;
+  };
+  return [...half(sorted), ...half([...sorted].reverse())];
+}
+
+// A convex polygon of vertices ({ plan, y, normal }) cut by a line: the part
+// where f(plan) >= 0, new vertices interpolated along the cut edges.
+function clipVertices(polygon, f) {
+  const kept = [];
+  polygon.forEach((a, index) => {
+    const b = polygon[(index + 1) % polygon.length];
+    const fa = f(a.plan);
+    const fb = f(b.plan);
+    if (fa >= 0) kept.push(a);
+    if ((fa >= 0) !== (fb >= 0)) {
+      const t = fa / (fa - fb);
+      kept.push({ plan: add(a.plan, scale(sub(b.plan, a.plan), t)), y: lerp(a.y, b.y, t), normal: unit3(add3(scale3(a.normal, 1 - t), scale3(b.normal, t))) });
+    }
+  });
+  return kept;
+}
+
+// A convex polygon minus a convex counterclockwise hull: the convex pieces
+// outside it, one per hull edge (outside that edge, inside the ones before).
+function subtractHull(polygon, hull) {
+  const pieces = [];
+  let rest = polygon;
+  for (let index = 0; index < hull.length && rest.length >= 3; index += 1) {
+    const a = hull[index];
+    const edge = sub(hull[(index + 1) % hull.length], a);
+    const inside = (plan) => cross(edge, sub(plan, a));
+    pieces.push(clipVertices(rest, (plan) => -inside(plan)));
+    rest = clipVertices(rest, inside);
+  }
+  if (rest.length < 3) return [polygon];
+  return pieces.filter((piece) => piece.length >= 3);
+}
+
 function indexedArea(multi) {
   const edges = [];
   for (const polygon of multi) {
@@ -1558,11 +1610,38 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
   // A size in range, mostly toward its low end for skew > 1.
   const pickSize = (range, skew, rng) => lerp(range[0], range[1], rng() ** skew);
 
+  // The OSM structures the ramp closures build (their own footprints cut the slope).
+  const builtByRamps = new Set(plan.closures.filter((piece) => piece.closure_kind === "ramp").flatMap((piece) => piece.source_keys));
+  // A ramp's cut: the convex hull of its footprint, with its bounds.
+  const hullOf = (ramp) => {
+    const hull = convexHull(ramp.area.multi.flatMap((part) => part[0]));
+    const xs = hull.map((point) => point[0]);
+    const ys = hull.map((point) => point[1]);
+    return { hull, bounds: { min_x: Math.min(...xs), max_x: Math.max(...xs), min_y: Math.min(...ys), max_y: Math.max(...ys) } };
+  };
+  const insideHull = (hull, point) => hull.every((a, index) => cross(sub(hull[(index + 1) % hull.length], a), sub(point, a)) > 0);
+  // Whether any vertex ({ plan }) of a polygon lies within a hull's bounds.
+  const nearHulls = (hulls, vertices) => hulls.some(({ bounds }) => vertices.some(({ plan }) => nearBounds({ bounds }, plan, 0.01)));
+  // A convex polygon of vertices ({ plan, y, normal }) as a fan of triangles,
+  // the hulls cut out of it.
+  const pushCut = (mesh, polygon, hulls) => {
+    let pieces = [polygon];
+    for (const { hull } of hulls) pieces = pieces.flatMap((piece) => subtractHull(piece, hull));
+    for (const piece of pieces) {
+      const ids = piece.map((vertex) => pushVertex(mesh, [vertex.plan[0], vertex.y, -vertex.plan[1]], vertex.normal));
+      for (let k = 1; k + 1 < ids.length; k += 1) pushTriangle(mesh, [ids[0], ids[k], ids[k + 1]], [0, 1, 0]);
+    }
+  };
   for (const segment of plan.segments) {
     const { s0, s1 } = segment;
     const [clipLo, clipHi] = segment.clip;
     const windowBounds = multiPolygonBounds(segment.window);
-    const structures = [...structuresNear(settings, playableObjects, rawOsm, segment.window), ...rampStructures.filter((ramp) => boundsOverlap(ramp.area.bounds, windowBounds))];
+    // An OSM structure a ramp closure builds (the north slipway) is cut by the
+    // ramp's own footprint, not again by its mapped one.
+    const structures = [
+      ...structuresNear(settings, playableObjects, rawOsm, segment.window).filter((structure) => !builtByRamps.has(structure.source_key)),
+      ...rampStructures.filter((ramp) => boundsOverlap(ramp.area.bounds, windowBounds)),
+    ];
     const nearRoads = roadAreas.filter((area) => boundsOverlap(area.bounds, windowBounds));
     // Why a point cannot hold a stone of this radius, or null. Structures clear
     // stones, except stones that top out under_drop_m below the land edge
@@ -1756,8 +1835,11 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
       if (normal[1] < 0) normal = scale3(normal, -1);
       return normal;
     };
-    // Structures whose slope is "cut" (slipways, ramps) open a hole in the slope.
-    const cuts = structures.filter((structure) => structure.slope === "cut");
+    // Structures whose slope is "cut" open a hole in the slope: a ramp exactly
+    // along its footprint's hull (its inner edge follows the outline), an OSM
+    // slipway by whole quads.
+    const cuts = structures.filter((structure) => structure.slope === "cut" && structure.kind !== "ramp");
+    const rampHulls = structures.filter((structure) => structure.kind === "ramp").map(hullOf);
     const cutAway = (points) => {
       const centroid = scale(points.reduce((sum, p) => add(sum, p), [0, 0]), 1 / points.length);
       return cuts.some((structure) => nearBounds(structure.area, centroid, structure.clearance_m)
@@ -1785,6 +1867,12 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
       const mesh = verges[recordOf((sections[i].s + sections[i + 1].s) / 2)];
       const corners = [inner[i], inner[i + 1], grid[i + 1][0].world, grid[i][0].world];
       const normals = [sections[i].landNormal, sections[i + 1].landNormal, sections[i + 1].landNormal, sections[i].landNormal];
+      const vertices = corners.map((corner, k) => ({ plan: [corner[0], -corner[2]], y: corner[1], normal: normals[k] }));
+      if (nearHulls(rampHulls, vertices)) {
+        pushCut(mesh, [vertices[0], vertices[1], vertices[2]], rampHulls);
+        pushCut(mesh, [vertices[0], vertices[2], vertices[3]], rampHulls);
+        continue;
+      }
       const ids = corners.map((corner, k) => pushVertex(mesh, corner, normals[k]));
       pushTriangle(mesh, [ids[0], ids[1], ids[2]], [0, 1, 0]);
       pushTriangle(mesh, [ids[0], ids[2], ids[3]], [0, 1, 0]);
@@ -1799,6 +1887,13 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
       for (let column = 0; column < lastColumn; column += 1) {
         if (!open[i][column] || !open[i + 1][column] || !open[i + 1][column + 1] || !open[i][column + 1]) continue;
         if (cutAway([grid[i][column].plan, grid[i + 1][column].plan, grid[i + 1][column + 1].plan, grid[i][column + 1].plan])) continue;
+        const cell = (row, col) => ({ plan: grid[row][col].plan, y: grid[row][col].world[1], normal: vertexNormal(row, col) });
+        const quad = [cell(i, column), cell(i + 1, column), cell(i + 1, column + 1), cell(i, column + 1)];
+        if (nearHulls(rampHulls, quad)) {
+          const [qa, qb, qc, qd] = quad;
+          for (const triangle of (i + column) % 2 === 0 ? [[qa, qb, qc], [qa, qc, qd]] : [[qa, qb, qd], [qb, qc, qd]]) pushCut(mesh, triangle, rampHulls);
+          continue;
+        }
         const [a, b, c, d] = [index(i, column), index(i + 1, column), index(i + 1, column + 1), index(i, column + 1)];
         const up = unit3(add3(vertexNormal(i, column), vertexNormal(i + 1, column + 1)));
         // Alternate the diagonal so the relief does not streak one way.
@@ -1825,6 +1920,9 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
       const bottoms = row.map((cell, column) => (usable[column] ? pushVertex(mesh, [cell.world[0], slope.end_cap_bottom_y_m, cell.world[2]], facing) : -1));
       for (let column = 0; column < row.length - 1; column += 1) {
         if (!usable[column] || !usable[column + 1]) continue;
+        // A cap face inside a ramp's footprint is the ramp's to close.
+        const middle = [(row[column].world[0] + row[column + 1].world[0]) / 2, -(row[column].world[2] + row[column + 1].world[2]) / 2];
+        if (rampHulls.some(({ hull }) => insideHull(hull, middle))) continue;
         pushTriangle(mesh, [tops[column], bottoms[column], bottoms[column + 1]], facing);
         pushTriangle(mesh, [tops[column], bottoms[column + 1], tops[column + 1]], facing);
       }
@@ -1937,13 +2035,13 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
     // Top row: quarry blocks dumped just beyond the outline, their inner faces
     // at least setback_m out (about the player's radius, so the player is
     // recovered before it can reach into one). Each is buried by a share of
-    // its own height, so big stones stand tall and small ones low, up to
-    // max_rise_m above the land edge; sizes, spacing and the face each rests
-    // on vary stone by stone, so the crest skyline breaks up as in the photos.
-    // The crest at each stone (crestAt): the back row rises crest_rise_m above
-    // the land edge, the top row at most a little more, the crest fill in
-    // proportion, and the crest rows are dumped crest_fill_scale as densely as
-    // the pilot's.
+    // its own height, so big stones stand tall and small ones low, up to 5 cm
+    // over the crest's highest rise above the land edge; sizes, spacing and
+    // the face each rests on vary stone by stone, so the crest skyline breaks
+    // up as in the photos. The crest at each stone (crestAt): the back row
+    // rises crest_rise_m above the land edge, the top row at most a little
+    // more, the crest fill in proportion, and the crest rows are dumped
+    // crest_fill_scale as densely as the pilot's.
     const topRule = rules.top;
     for (let s = s0, k = 0; crestRows && s < s1; k += 1) {
       const rng = random(seed, `${segment.id}:top:${k}`);
@@ -2334,26 +2432,31 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
       return { u, plan: plan2, world: [plan2[0], y, -plan2[1]], open: outline.signedDistance(plan2) > 0.005 };
     }));
     const moundSections = Math.max(1, Math.round(total / slope.section_m));
+    const moundRampHulls = rampStructures.map(hullOf);
+    const normalAt = (row, column) => {
+      const at = (r, c) => grid[Math.max(0, Math.min(grid.length - 1, r))][Math.max(0, Math.min(grid[0].length - 1, c))].world;
+      const normal = unit3(cross3(sub3(at(row, column + 1), at(row, column - 1)), sub3(at(row + 1, column), at(row - 1, column))));
+      return normal[1] < 0 ? scale3(normal, -1) : normal;
+    };
     const meshes = Array.from({ length: moundSections }, () => ({ vertices: [], normals: [], indices: [], shared: new Map() }));
     const columns = grid[0].length;
     for (let i = 0; i + 1 < grid.length; i += 1) {
       const mesh = meshes[Math.min(moundSections - 1, Math.floor((((sections[i].t + sections[i + 1].t) / 2) / total) * moundSections))];
       const vertexAt = (row, column) => {
         const key = row * columns + column;
-        if (!mesh.shared.has(key)) {
-          const at = (r, c) => grid[Math.max(0, Math.min(grid.length - 1, r))][Math.max(0, Math.min(columns - 1, c))].world;
-          let normal = unit3(cross3(sub3(at(row, column + 1), at(row, column - 1)), sub3(at(row + 1, column), at(row - 1, column))));
-          if (normal[1] < 0) normal = scale3(normal, -1);
-          mesh.shared.set(key, pushVertex(mesh, grid[row][column].world, normal));
-        }
+        if (!mesh.shared.has(key)) mesh.shared.set(key, pushVertex(mesh, grid[row][column].world, normalAt(row, column)));
         return mesh.shared.get(key);
       };
       for (let column = 0; column + 1 < columns; column += 1) {
         const cells = [grid[i][column], grid[i + 1][column], grid[i + 1][column + 1], grid[i][column + 1]];
         if (!cells.every((cell) => cell.open)) continue;
-        // A ramp beside the mound cuts it, as it cuts the shore's slope.
-        const centroid = scale(cells.reduce((sum, cell) => add(sum, cell.plan), [0, 0]), 0.25);
-        if (rampStructures.some((ramp) => pointInMultiPolygon(centroid, ramp.area.multi) || edgeDistance(ramp.area, centroid) < ramp.clearance_m)) continue;
+        // A ramp beside the mound cuts it exactly, as it cuts the shore's slope.
+        const corners = [[i, column], [i + 1, column], [i + 1, column + 1], [i, column + 1]].map(([row, col]) => ({ plan: grid[row][col].plan, y: grid[row][col].world[1], normal: normalAt(row, col) }));
+        if (nearHulls(moundRampHulls, corners)) {
+          pushCut(mesh, [corners[0], corners[1], corners[2]], moundRampHulls);
+          pushCut(mesh, [corners[0], corners[2], corners[3]], moundRampHulls);
+          continue;
+        }
         const [a, b, c, d] = [vertexAt(i, column), vertexAt(i + 1, column), vertexAt(i + 1, column + 1), vertexAt(i, column + 1)];
         pushTriangle(mesh, [a, b, c], [0, 1, 0]);
         pushTriangle(mesh, [a, c, d], [0, 1, 0]);
