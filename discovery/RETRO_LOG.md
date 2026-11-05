@@ -23653,3 +23653,9 @@ Carried by deploy-fix from the deploy agent's scratch log; text unchanged apart 
 (Relayed verbatim by the coordinator; added by push-8-layers-docs-20261105.)
 
 - A same-pose repeat for the sway control made judging the controls clear-cut. Render only from a clean commit, though, so the label on the sheet matches the head that was rendered.
+
+### docs-asset-inventory-20261105 — 2026-11-05 — site and asset inventory on the five building levels
+
+- What worked well: enumerating from the sources rather than from memory kept the lists complete: the zone config for the 23 zones, `YARD_KIT_PROPS`, `CAR_BODIES`, the furniture, fence and vegetation kits' `PROPS`/`TYPES` tables and the shoreline config for the assets, and the frozen OSM inventory for parks, pitches and lots. A script walking every zone's yard, clutter, scatter and furniture rules plus the set pieces gave each prop variant's real users, which showed the unplaced variants (high-cube and roll-up containers, the 30 m fabric span, the hopper, the high berm, the pier crane, the park bench, the wood fence). Area centres from the generated chunks, and a point-in-triangle test of zone outlines against park areas, found that Marina Plaza holds most of the Building 1 forecourt zone.
+- What did not work well: the review records rarely name a level, and most prop verdicts sit in family-wide sheets, so 38 of 69 asset rows stay unrated. Several owner quotes in the brief are not in the repo; I cited them as owner feedback, or used a repo commit that carries the owner's words, instead of quoting a private session.
+- What the team should change next time: reviewers should name the level they judged in their verdict line ("excavator: L2 accepted, L3 open"), and the author's commit should quote it. That turns an inventory update into a copy instead of an estimate.
