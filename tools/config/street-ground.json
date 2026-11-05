@@ -4,8 +4,8 @@
     "The street ground of every Treasure Island street outside the pilot zones (tools/config/street-detail-zones.json), built by tools/lib/street-ground-generation.mjs. Each rule is production inference for game art read from the dated sources it cites, not survey data; a street with no imagery gets the plainest treatment its class supports.",
     "A treatment is how a class of street looks: each side's curb (walk: a concrete sidewalk sidewalk_width_m wide at the curb; verge: a concrete curb top, then grass, verge_width_m in all; none: the asphalt edge onto the ground), the fill between the curb and an OSM sidewalk set back from it (concrete, lawn or mulch), the centre line (double_yellow, dashed_faded, dashed_white or null), white edge lines, the paint of its marked crossings (continental bars, two transverse lines, or ladder: both), the paint wear (0 fresh to 3 mostly worn away), red fire-lane curb paint (none, along junction approaches, or all) and the asphalt wear (decals per 100 m2 of asphalt, manhole and drain spacing).",
     "A street names its OSM ways and treatment; set changes treatment fields for it; sides gives a way's left or right curb (relative to the way's own direction) as one kind or [from_m, to_m, kind] stretches along it; widen adds asphalt beyond the frozen ribbon on a side (the curb-to-curb width read from the aerial) and parking lists the stretches where the aerial shows cars at that curb, for the parked cars.",
-    "crossings gives the paint of an OSM crossing node (or none) as the dated aerial shows it, overriding its OSM tags; stops adds a stop line and STOP legend on an approach the photographs show and OSM lacks; bays are perpendicular parking bays paved off a street's edge (OSM maps none); lots paint a parking lot's stall rows, legends and raised islands. pilot sets the pilot zones' crosswalk paint wear.",
-    "Sources: Esri World Imagery (Vantor capture 2026-05-26), exported at 0.25 m (checked 2026-11-05); Google Street View, dated per entry, cameras in game metres (x east, z south) with compass headings; the clutter layer's curb-parking survey of the same aerial (2026-11-05)."
+    "crossings gives the paint of an OSM crossing node (or none) as the dated aerial shows it, overriding its OSM tags: read off 0.25 m contact sheets of every OSM crossing node (2026-05-26 capture). An untagged node gets paint only where it is listed; where two nodes mark one crosswalk only one is listed. stops adds a stop line and STOP legend on an approach the photographs show and OSM lacks; bays are perpendicular parking bays paved off a street's edge (OSM maps none); lots paint a parking lot's stall rows, legends and raised islands. pilot sets the pilot zones' crosswalk paint wear.",
+    "Sources: Esri World Imagery, the Vantor capture of 2026-05-26 (0.34 m), exported at 0.25 m per pixel (0.32 m Web Mercator: map level 19 or coarser; Esri draws a different capture, 2025-08-29, at level 20, finer than about 0.15 m), its date checked 2026-11-05 with the service's identify at the export scale; Google Street View, dated per entry, cameras in game metres (x east, z south) with compass headings; the clutter layer's curb-parking survey of the same aerial (2026-11-05)."
   ],
   "pilot": {
     "crosswalk_paint_wear": 2,
@@ -199,7 +199,17 @@
         "w1249797946"
       ],
       "treatment": "new_district",
-      "evidence": "Aerial 2026-05-26: double yellow centre line, sidewalks on both curbs, continental crosswalks at Seven Seas Avenue."
+      "evidence": "Google Street View Sep 2025 at 240 California Ave (pano uaCXrmhXmnA7PI3RNh5MOA, camera x 20.8, z 635.7, heading 59): the camera in a lane north of the OSM centre line, a curbed planted median on its north side, then the two-way cycle track (OSM w1212173467); OSM lanes=3 (two forward, one backward), cycleway:right=lane. Aerial 2026-05-26: the carriageway's north edge about 7 m north of the OSM centre line (widened 2 m, short of the OSM cycle track), double yellow, sidewalks on the south curb, continental crosswalks at Seven Seas Avenue.",
+      "widen": {
+        "w1249797946": {
+          "left": 2.0
+        }
+      },
+      "sides": {
+        "w1249797946": {
+          "left": "verge"
+        }
+      }
     },
     {
       "id": "seven_seas_avenue",
@@ -947,7 +957,58 @@
       }
     }
   ],
-  "crossings": {},
+  "crossings": {
+    "n100656597": "lines",
+    "n311393363": "lines",
+    "n1249019311": "continental",
+    "n1249019318": "lines",
+    "n1249019323": "ladder",
+    "n1249019330": "ladder",
+    "n1249019333": "continental",
+    "n1249019344": "lines",
+    "n1249019345": "lines",
+    "n1249019357": "lines",
+    "n1249019367": "lines",
+    "n1249019368": "lines",
+    "n1249019380": "ladder",
+    "n1249019381": "lines",
+    "n1249019388": "ladder",
+    "n1249019395": "lines",
+    "n1249019397": "continental",
+    "n1249019398": "ladder",
+    "n1249019401": "lines",
+    "n1249019402": "lines",
+    "n1249019403": "continental",
+    "n1249019404": "continental",
+    "n1249019406": "lines",
+    "n1249019408": "lines",
+    "n1249019409": "ladder",
+    "n1249019410": "continental",
+    "n1249019411": "lines",
+    "n1249019417": "lines",
+    "n1249019418": "ladder",
+    "n1249019423": "lines",
+    "n1249019425": "continental",
+    "n1249019427": "lines",
+    "n1249019430": "lines",
+    "n1249019432": "ladder",
+    "n1249019433": "lines",
+    "n1249019436": "continental",
+    "n1249019437": "lines",
+    "n1249336059": "lines",
+    "n1249336073": "lines",
+    "n10057579663": "continental",
+    "n10057579696": "lines",
+    "n10057579699": "continental",
+    "n10057579721": "continental",
+    "n10057579913": "lines",
+    "n10057579914": "lines",
+    "n10057579975": "none",
+    "n10057580031": "ladder",
+    "n10057580034": "lines",
+    "n10057580038": "none",
+    "n12146354890": "continental"
+  },
   "stops": [],
   "bays": [
     {
