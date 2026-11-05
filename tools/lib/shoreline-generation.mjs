@@ -1503,12 +1503,14 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
     const h = (k) => cellHash(seed, ((k % bermCells) + bermCells) % bermCells, 0, 7);
     return lerp(berm.width_m[0], berm.width_m[1], lerp(h(cellIndex), h(cellIndex + 1), f * f * (3 - 2 * f)));
   };
-  // The underlay's waterline, its distance out from the outline: at each whole
-  // metre what the land's height and the DEM's gradient give for a core of
-  // waterline.core_m, then smoothed over waterline.smoothing_m either way. A
-  // lattice shared by every segment, so two segments that meet compute the
-  // same cross-section at their joint. Without the smoothing the land's and the
-  // gradient's own wanderings put jogs of a metre or more in the far band's edge.
+  // The underlay's waterline, as a plan curve round the island: at each whole
+  // metre the point out from the outline that the land's height and the DEM's
+  // gradient give for a core of waterline.core_m, then those points smoothed
+  // over waterline.smoothing_m either way. A lattice shared by every segment,
+  // so two segments that meet compute the same cross-section at their joint.
+  // Smoothing the plan points, not the distance out, also takes the corners of
+  // the outline's own jogs out of the far band's edge; without it the land's
+  // and the gradient's wanderings put jogs of a metre or more there too.
   const latticeWaterline = new Map();
   const rawWaterline = (sl) => {
     const key = outline.wrap(sl).toFixed(0);
@@ -1517,20 +1519,41 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
       const land = landAt(point) ?? terrain.sampleEastNorth(point[0], point[1]);
       const width = bermWidthAt(sl);
       const fall = land + bias + slope.waterline.core_m - berm.drop_per_m * width - WATER_Y_M;
-      latticeWaterline.set(key, slope.shoulder_m + berm.inner_m + width + fall / smoothedGradient(sl));
+      const out = slope.shoulder_m + berm.inner_m + width + fall / smoothedGradient(sl);
+      latticeWaterline.set(key, add(point, scale(outline.normalAt(sl, 3), out)));
     }
     return latticeWaterline.get(key);
   };
+  const smoothedLattice = new Map();
   const smoothedWaterline = (s) => {
-    let sum = 0;
-    let weight = 0;
-    for (let sl = Math.ceil(s - slope.waterline.smoothing_m); sl <= Math.floor(s + slope.waterline.smoothing_m); sl += 1) {
-      const w = 1 - Math.abs(sl - s) / (slope.waterline.smoothing_m + 1e-9);
-      if (w <= 0) continue;
-      sum += rawWaterline(sl) * w;
-      weight += w;
+    const key = outline.wrap(s).toFixed(0);
+    if (!smoothedLattice.has(key)) {
+      let sum = [0, 0];
+      let weight = 0;
+      for (let sl = s - slope.waterline.smoothing_m; sl <= s + slope.waterline.smoothing_m; sl += 1) {
+        const w = 1 - Math.abs(sl - s) / (slope.waterline.smoothing_m + 1);
+        sum = add(sum, scale(rawWaterline(sl), w));
+        weight += w;
+      }
+      smoothedLattice.set(key, scale(sum, 1 / weight));
     }
-    return sum / weight;
+    return smoothedLattice.get(key);
+  };
+  // How far out along a cross-section it meets the smoothed waterline: where
+  // the curve crosses the section's ray, the crossing nearest s.
+  const waterlineAlong = (s, point, normal) => {
+    const side = (k) => cross(normal, sub(smoothedWaterline(k), point));
+    const base = Math.round(s);
+    for (let step = 0; step <= slope.waterline.smoothing_m; step += 1) {
+      for (const k of step === 0 ? [base] : [base - step, base + step - 1]) {
+        const [a, b] = [side(k), side(k + 1)];
+        if (a * b > 0) continue;
+        const t = Math.abs(a - b) < 1e-9 ? 0 : a / (a - b);
+        const crossing = add(smoothedWaterline(k), scale(sub(smoothedWaterline(k + 1), smoothedWaterline(k)), t));
+        return dot(sub(crossing, point), normal);
+      }
+    }
+    return dot(sub(smoothedWaterline(base), point), normal);
   };
 
   const prototypes = [];
@@ -1965,8 +1988,8 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
         width: crest.rows * bermWidthAt(s),
         clamp: null,
       };
-      // The fall that reaches the smoothed waterline.
-      const run = smoothedWaterline(s) - crestEndOf(section);
+      // The fall that reaches the smoothed waterline along this section.
+      const run = waterlineAlong(s, point, normal) - crestEndOf(section);
       const fall = section.top + section.core - berm.drop_per_m * section.width - WATER_Y_M;
       section.gradient = Math.max(slope.waterline.gradient_m_per_m[0], Math.min(slope.waterline.gradient_m_per_m[1], fall / Math.max(run, 0.5)));
       section.toe_m = unclampedToeOf(section);
@@ -2088,9 +2111,12 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
         const cell = (row, col) => ({ plan: grid[row][col].plan, y: grid[row][col].world[1], normal: vertexNormal(row, col) });
         const quad = [cell(i, column), cell(i + 1, column), cell(i + 1, column + 1), cell(i, column + 1)];
         if (nearHulls(rampHulls, quad)) {
+          // Beside the ramp the stones keep clear of the cut, so the underlay
+          // stands bare: a rock face, not a heap's dark gap.
           const [qa, qb, qc, qd] = quad;
-          const skirt = { mesh: faces[recordOf((sections[i].s + sections[i + 1].s) / 2)], bottom: closureRule.wall_bottom_y_m };
-          for (const triangle of (i + column) % 2 === 0 ? [[qa, qb, qc], [qa, qc, qd]] : [[qa, qb, qd], [qb, qc, qd]]) pushCut(mesh, triangle, rampHulls, skirt);
+          const face = faces[recordOf((sections[i].s + sections[i + 1].s) / 2)];
+          const skirt = { mesh: face, bottom: closureRule.wall_bottom_y_m };
+          for (const triangle of (i + column) % 2 === 0 ? [[qa, qb, qc], [qa, qc, qd]] : [[qa, qb, qd], [qb, qc, qd]]) pushCut(face, triangle, rampHulls, skirt);
           continue;
         }
         const [a, b, c, d] = [index(i, column), index(i + 1, column), index(i + 1, column + 1), index(i, column + 1)];

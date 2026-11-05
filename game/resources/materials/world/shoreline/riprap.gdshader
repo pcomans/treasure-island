@@ -82,6 +82,9 @@ uniform float stone_last_dim = 0.6;
 uniform bool rock_face = false;
 uniform float gap_brightness = 0.14;
 uniform float band_brightness = 0.27;
+// A steep rock face turns from the sun and the sky: brighter albedo keeps it in
+// the stones' tone instead of black.
+uniform float steep_brightness = 0.8;
 // The underlay stays matt, wet or dry: a smooth wet sheen on so broad and dark
 // a surface would mirror the pale sky along the water at grazing angles.
 uniform float underlay_specular = 0.1;
@@ -329,7 +332,11 @@ void fragment() {
 	} else if (surface == 0) {
 		// The rendering camera is the main camera here (no colour in a shadow pass).
 		float stand_in = rock_face ? 1.0 : smoothstep(underlay_fade_m.x, underlay_fade_m.y, distance_m);
-		albedo *= tone_tint(tone) * mix(gap_brightness, band_brightness, stand_in);
+		float brightness = mix(gap_brightness, band_brightness, stand_in);
+		if (rock_face) {
+			brightness = mix(steep_brightness, brightness, smoothstep(0.25, 0.85, n.y));
+		}
+		albedo *= tone_tint(tone) * brightness;
 	}
 	if (!wood) {
 		vec2 rotated = mat2(vec2(0.8, 0.6), vec2(-0.6, 0.8)) * world_position.xz;
