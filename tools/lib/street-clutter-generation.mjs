@@ -178,6 +178,8 @@ const OCCUPIED_CELL_M = 8;
 const LOT_BACK_GAP_M = 0.3;
 const LOT_LONG_BACK_GAP_M = 0.1;
 const LOT_OVERHANG_M = 1.3;
+// The street ground's stalls that are not lot stalls: street-side bays and shoulders.
+const NON_LOT_STALLS = Object.freeze(["bay", "shoulder"]);
 // Chunk record kinds the visible ground is made of, and the surfaces (by
 // material) a parked car's tyre may stand on.
 const VISIBLE_GROUND_KINDS = new Set(["land_ground", "major_area", "road_path", "street_kerb", "street_paint", "terrain_overlay"]);
@@ -989,6 +991,7 @@ export function placeStreetClutter({
         let stallsInLots = 0;
         const lots = new Set(rule.source_keys);
         for (const stall of site.stalls) {
+          if (NON_LOT_STALLS.includes(stall.kind)) continue;
           const entry = stall.entry;
           const middle = add(entry, scale(stall.outward, stall.depth_m / 2));
           if (!lots.has(lotKeyAt(site, middle, rule.source_keys))) continue;
@@ -1048,7 +1051,7 @@ export function placeStreetClutter({
           // The painted stalls where the street ground has them, else stalls
           // along the lot's mapped aisles, else along its edges.
           let layout = "painted";
-          let slots = site.stalls.filter((slot) => !["bay", "shoulder"].includes(slot.kind) && inLot(middleOf(slot)));
+          let slots = site.stalls.filter((slot) => !NON_LOT_STALLS.includes(slot.kind) && inLot(middleOf(slot)));
           if (slots.length === 0) {
             layout = "aisles";
             // Its parking aisles, and a service road with at least 10 m inside it.

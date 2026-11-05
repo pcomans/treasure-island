@@ -11,6 +11,8 @@ const MIN_WALK_SECONDS := 15.0
 const WALK_ACCELERATION_ALLOWANCE_SECONDS := 2.0
 ## How close (metres) a walk must end to the building or stair top to count as arrived.
 const ARRIVAL_DISTANCE_M := 1.5
+## Arrival reuses the release ray's height while the rest chest is this close to it (metres).
+const RELEASE_HEIGHT_DRIFT_M := 0.05
 
 var _h: WorldHarness
 var _failures: Array[String] = []
@@ -1348,10 +1350,12 @@ func _wall_hit(from: Vector3, to: Vector3, own: Array[RID], wall_shapes: Diction
 
 ## Distance from the player to the building's own collision toward its centre,
 ## from the chest, or from chest_y (the height a walk's near-wall release cast
-## its ray at) when given.
+## its ray at) when given and within RELEASE_HEIGHT_DRIFT_M of the chest.
 ## No wall hit cannot prove arrival; actual openings are checked separately.
 func _distance_to_walls(at: Vector3, center: Vector3, own: Array[RID], wall_shapes: Dictionary, chest_y: float = NAN) -> float:
-	var chest := at + Vector3.UP if is_nan(chest_y) else Vector3(at.x, chest_y, at.z)
+	var chest := at + Vector3.UP
+	if absf(chest_y - chest.y) <= RELEASE_HEIGHT_DRIFT_M:
+		chest.y = chest_y
 	var wall := _wall_hit(chest, Vector3(center.x, chest.y, center.z), own, wall_shapes)
 	return chest.distance_to(wall.position as Vector3) if not wall.is_empty() else INF
 
