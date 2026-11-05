@@ -42,23 +42,26 @@ const FAMILIES := {
 	"sports": {"dry_threshold": 0.55, "bare_threshold": 2.0, "green_dryness": 0.15, "patch_scale_m": 28.0, "bare_scale_m": 23.0},
 	# GAA Field A: a watered pitch, green with dry patches between its
 	# sprinkler heads, 18 m apart on the pitch's axes (2026-05-26 aerial).
-	"watered_pitch": {"dry_threshold": 0.56, "bare_threshold": 2.0, "green_dryness": 0.1, "patch_scale_m": 28.0, "bare_scale_m": 23.0, "grid_m": 18.0, "grid_angle": -0.4887, "grid_amount": 0.85},
+	"watered_pitch": {"dry_threshold": 0.6, "bare_threshold": 2.0, "green_dryness": 0.1, "patch_scale_m": 28.0, "bare_scale_m": 23.0, "grid_m": 18.0, "grid_angle": -0.4887, "grid_amount": 0.5},
 	# The synthetic-turf soccer pitch on w1252737754 (2026-05-26 aerial: an
 	# even dark green field with line markings).
 	"turf": {"dry_threshold": 2.0, "bare_threshold": 2.0, "green_dryness": 0.0, "patch_scale_m": 28.0, "bare_scale_m": 23.0, "turf_amount": 1.0},
-	# Open land, about 28 / 54 / 18: the default for land and OSM areas, under the map.
-	"field": {"dry_threshold": 0.42, "bare_threshold": 0.66, "green_dryness": 0.35, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
+	# Open land, about 15 / 50 / 35: the default for land and OSM areas, under
+	# the map. The 2026-05-26 aerial shows the island's unbuilt land as dry grass
+	# over much pale bare ground (open ground 2-6 % green, 20-45 % dry, 50-75 %
+	# bare in most 200 m boxes).
+	"field": {"dry_threshold": 0.378, "bare_threshold": 0.567, "green_dryness": 0.35, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
 	# Dry straw grass, about 4 / 90 / 6: the residential grounds and the
 	# Avenue N verge (map), GAA Field B and the old Job Corps ballfield.
 	"straw": {"dry_threshold": 0.30, "bare_threshold": 0.76, "green_dryness": 0.6, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
-	# Rough grass, about 26 / 71 / 3: the west shore parcel, olive to brown.
-	"rough_grass": {"dry_threshold": 0.43, "bare_threshold": 0.79, "green_dryness": 0.45, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
-	# Dry grass and bare ground, about 13 / 64 / 23: the Cultural Park, the
-	# Marina Plaza grounds round Building 1 and Clipper Cove.
-	"dry_meadow": {"dry_threshold": 0.36, "bare_threshold": 0.61, "green_dryness": 0.4, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
-	# Dry grass with much bare ground, about 8 / 55 / 37: the industrial core's
+	# Rough grass, about 35 / 62 / 3: the west shore parcel, olive to brown.
+	"rough_grass": {"dry_threshold": 0.44, "bare_threshold": 0.80, "green_dryness": 0.35, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
+	# Dry grass and bare ground, about 8 / 62 / 30: the Job Corps campus, the
+	# Cultural Park, the Marina Plaza grounds round Building 1 and Clipper Cove.
+	"dry_meadow": {"dry_threshold": 0.30, "bare_threshold": 0.588, "green_dryness": 0.4, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
+	# Dry grass with much bare ground, about 5 / 50 / 45: the industrial core's
 	# land (map) and the Avenue N construction parcel w1252737734.
-	"dry_field": {"dry_threshold": 0.33, "bare_threshold": 0.555, "green_dryness": 0.5, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
+	"dry_field": {"dry_threshold": 0.29, "bare_threshold": 0.52, "green_dryness": 0.5, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
 	"bare": {"dry_threshold": -1.0, "bare_threshold": 0.345, "green_dryness": 0.0, "patch_scale_m": 20.0, "bare_scale_m": 15.0},
 	# The seasonal marsh (natural=wetland) east of the Mersea lot: olive rushes
 	# at its edges round pale dry grass and sand, about 23 / 52 / 25
@@ -66,8 +69,9 @@ const FAMILIES := {
 	# drawn before as a flat water-like cyan).
 	"marsh": {"dry_threshold": 0.40, "bare_threshold": 0.62, "green_dryness": 0.55, "patch_scale_m": 24.0, "bare_scale_m": 14.0},
 	# The old sand courts (natural=sand) in the residential north: pale bare
-	# ground grown over with dry weeds, about 0 / 45 / 55 (2026-05-26 aerial).
-	"sand_pad": {"dry_threshold": 0.2, "bare_threshold": 0.49, "green_dryness": 0.5, "patch_scale_m": 12.0, "bare_scale_m": 9.0},
+	# ground grown over with dry weeds, about 0 / 60 / 40 (2026-05-26 aerial:
+	# 78 % dry, 16 % bare of their open ground).
+	"sand_pad": {"dry_threshold": -1.0, "bare_threshold": 0.543, "green_dryness": 0.5, "patch_scale_m": 12.0, "bare_scale_m": 9.0},
 	# The shoreline verge at the top of the riprap (ShorelineBuilder): the field
 	# grown drier and dirtier, with dirt in small patches, so it meets the field
 	# without a hard change of tone.
@@ -84,7 +88,7 @@ const FAMILY_BY_MATERIAL_KEY := {
 	# Residential, construction and grass landuse; the map draws the residential lawns.
 	"major_area_landuse": "field",
 	"major_area_leisure": "lawn",
-	# Job Corps and the SFFD training facility: dry campus grounds.
+	# The SFFD training facility (Job Corps has its own family below).
 	"major_area_amenity": "field",
 	# A park zone's lawn (tools/lib/street-ground-generation.mjs park surfaces).
 	"park_lawn": "park_lawn",
@@ -106,6 +110,7 @@ const FAMILY_BY_SOURCE := {
 	"w1252737732": "bare", # landuse=construction: same
 	"r17241152": "rough_grass", # landuse=construction: the west shore parcel is rough grass and trees (2026-05-26 aerial: 77 % dry, 21 % green)
 	"w1252737734": "dry_field", # landuse=construction: dry grass and bare ground (2026-05-26 aerial: 44 % dry, 42 % bare)
+	"w1252737750": "dry_meadow", # amenity=college, Job Corps: dry grass and bare ground (2026-05-26 aerial: 71 % dry, 23 % bare, 7 % lawn of the open ground); its dorm lawns are drawn by the map
 	"w1252737754": "turf", # landuse=construction: a finished synthetic-turf soccer pitch (2026-05-26 aerial: even dark green with white lines; Street View Sep 2025 at 749 9th St: goals and floodlights behind the windscreen); its apron is drawn bare by the map
 	"w269856850": "bare", # landuse=industrial: yard, overheads show gravel and bare ground
 	"w545387428": "bare", # leisure=pitch sport=boules: gravel court

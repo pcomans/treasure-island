@@ -24,17 +24,21 @@ uniform sampler2D detail_roughness : filter_linear_mipmap_anisotropic, repeat_en
 // (about sRGB 92,113,74) and the ferry plaza lawn in the Sep 2025 photos
 // (about 85,108,70); the earlier March-photo tuning drew them 40-50 % brighter
 // and yellower than the aerial in a top-down render.
-uniform vec3 lawn_gap : source_color = vec3(0.248, 0.318, 0.115);
-uniform vec3 lawn_blade : source_color = vec3(0.321, 0.417, 0.160);
-uniform vec3 lawn_straw : source_color = vec3(0.400, 0.446, 0.218);
-uniform vec3 dry_gap : source_color = vec3(0.48, 0.42, 0.29);
-uniform vec3 dry_blade : source_color = vec3(0.55, 0.53, 0.32);
-uniform vec3 dry_straw : source_color = vec3(0.76, 0.69, 0.50);
+uniform vec3 lawn_gap : source_color = vec3(0.233, 0.300, 0.112);
+uniform vec3 lawn_blade : source_color = vec3(0.303, 0.394, 0.156);
+uniform vec3 lawn_straw : source_color = vec3(0.378, 0.422, 0.212);
+// Dry grass: the 2026-05-26 aerial's late-spring straw from above (about sRGB
+// 122-155, 110-133, 81-101; the residential grounds darker, the mown GAA B
+// paler), drawn about a tenth lighter than the aerial so the flat ground
+// reads like the sunlit straw of the Nov 2025 street photos (about 160,148,105).
+uniform vec3 dry_gap : source_color = vec3(0.399, 0.340, 0.239);
+uniform vec3 dry_blade : source_color = vec3(0.459, 0.432, 0.264);
+uniform vec3 dry_straw : source_color = vec3(0.637, 0.565, 0.418);
 // Bare soil: the pale, warm-neutral fill of the 2026-05-26 aerial's bare
 // ground (about sRGB 185-195, 180-189, 158-167 from above in sun).
-uniform vec3 soil_gap : source_color = vec3(0.54, 0.50, 0.41);
-uniform vec3 soil_blade : source_color = vec3(0.51, 0.49, 0.385);
-uniform vec3 soil_straw : source_color = vec3(0.58, 0.545, 0.45);
+uniform vec3 soil_gap : source_color = vec3(0.562, 0.530, 0.436);
+uniform vec3 soil_blade : source_color = vec3(0.530, 0.520, 0.410);
+uniform vec3 soil_straw : source_color = vec3(0.603, 0.578, 0.478);
 
 // Family mix. A point turns dry where the patch noise exceeds dry_threshold and
 // bare where the bare noise exceeds bare_threshold; above 1 disables a layer,
@@ -57,7 +61,7 @@ uniform vec3 recipe_bare = vec3(2.0, 2.0, 0.0);
 
 // Artificial turf: turf_amount pulls the green layer to an even dark pitch green.
 uniform float turf_amount = 0.0;
-uniform vec3 turf_color : source_color = vec3(0.16, 0.26, 0.15);
+uniform vec3 turf_color : source_color = vec3(0.12, 0.21, 0.10);
 
 // A watered pitch's sprinkler grid: dry patches midway between the heads of a
 // grid_m square grid turned grid_angle radians from world +X, at grid_amount.
