@@ -299,13 +299,26 @@ the landing pier.
 | Asset | Where used | Level | Evidence | Next level |
 |---|---|---|---|---|
 | Mexican fan palm | Avenue of the Palms (both curbs), Building 1 set pieces | 2 est. | Step 5 visual PASS: crown green sampled against ih02 (about 74/93/54 against 69/84/52), fronds stable in both renderers | 3: skirt and boot detail close up (the review asked for a web close-up) |
-| Canary Island date palm | Building 1 set pieces | 2 est. | Step 5 PASS: full arching crowns, knob texture graded (`947fff1f`, `39c13159`) | 3: leaf scars and knob close up |
+| Canary Island date palm (variants 0–3) | Building 1 set pieces | 2 est. | Step 5 PASS: full arching crowns, knob texture graded (`947fff1f`, `39c13159`) | 3: leaf scars and knob close up |
 | Monterey cypress, old (variants 0–1) | Building 1 set pieces | 1 est. | Step 5 review: reads as an umbrella tree with a slim, straight single trunk and a light canopy, against the dark, dense multi-stem cypresses in the dated photos | 2: a dense dark canopy on several stems, with a root flare |
 | Monterey cypress, young (variants 2–4) | ferry plaza set pieces, Cityside beds | 2 est. | Step 5 PASS (feathered to the ground, `947fff1f`); Cityside plant reviews | 3 |
 | Sydney blue gum, young | Cityside windrow plazas | 2 est. | Cityside plant reviews: crown reaching downwind, a narrow open silhouette at 40 m (`ce45ec4d`); delta PASS at `8d11df7f` | 3: spray and bark detail close up |
 | Island oak, young | Cityside beds | 2 est. | Cityside plant reviews: three distinct, filled crowns (`8d11df7f`, delta PASS). Its form is inference: no dated photo | A dated photo first, then 3 |
 | Clump grass | Avenue of the Palms mulch beds | 2 est. | Step 5 PASS | 3 |
 | Cityside low-plant kit (14 species: pacific reedgrass, dense sedge, rush, bronze clump grass, blue-eyed grass, seaside daisy, sea thrift, seaside woolly sunflower, California sagebrush, shrubby sage, California buckwheat, seep monkeyflower, dune tansy, white umbel perennial) | Cityside beds | 2 est. | Plant review R01 REWORK, R04 PASS WITH FIXES, R10 fixes, delta PASS at `8d11df7f`; whole-park PASS. The white umbel's species is unconfirmed, so its form is inference | 3: flower heads and leaf detail close up. Split a species into its own row when it is improved |
+| Monterey pine, residential (variants 0–2) | None yet: the vegetation rollout places them | 2 (visual-review-vegetation R03) | R03 REWORK, crown only: a round oak-like dome at 40 m with even terraces against p5. Crown rebuilt from boughs and plumes after that verdict, not yet reviewed | 3: a broken, open crown; a reviewed verdict on the rebuild |
+| Monterey pine, wind-pruned (variants 3–5) | None yet: the vegetation rollout places them | 2 (visual-review-vegetation R03) | R03 PASS WITH FIXES: low domes on clear trunks (p2–p4) | 3: side-to-side impostor tone |
+| Spreading broadleaf (variants 0–3) | None yet: the vegetation rollout places them | 3 (visual-review-vegetation R03) | R03: layered pads, limbs with forks and bark relief. Species unresolved, so the photographed form (c2–c4, b1–b8) | 4: joined, darker cloud masses and scattered bronze, reworked after the verdict and not yet reviewed |
+| New Zealand Christmas tree | None yet: the vegetation rollout places them | 2 (visual-review-vegetation R03) | R03: pom-pom crown closed; stems were straight tubes stopping at the crown, reworked after the verdict and not yet reviewed | 3: stems and limbs running into the crown (b5), a lighter underside |
+| Mature eucalyptus | None yet: the vegetation rollout places them | 2 (visual-review-vegetation R03) | R03: open crown of branch-end clumps. A typical mature form per the owner's identification; the photo's crown cannot be pinned to the tree | 3 |
+| Norfolk Island pine, young | None yet: the vegetation rollout places them | 3 (visual-review-vegetation R03) | R03 PASS: close tiers, pointed leader (n1) | 4 |
+| Canary Island date palm, mature (variants 4–5) | None yet: the vegetation rollout places them | 3 (visual-review-vegetation R03) | R03: shaggy trunk and drooping globe crown (sv01, sv02), far level rebaked from the crown alone | 4: crown tone and trunk pattern |
+| Indian hawthorn | None yet: the vegetation rollout places them | 3 (visual-review-vegetation R03) | R03: fine leathery mound with pale pink clusters (s1) | 4 |
+| Pittosporum tobira | None yet: the vegetation rollout places them | 2 (visual-review-vegetation R03) | R03: too dark, fine hair rather than broad glossy leaves (s2). Reworked with broad leaves after the verdict, not yet reviewed | 3 |
+| Red-tipped shrub | None yet: the vegetation rollout places them | 3 (visual-review-vegetation R03) | R03: slender, dull red at the shoot tips only. Species unresolved (s2) | 4 |
+| Conical shrub | None yet: the vegetation rollout places them | 3 (visual-review-vegetation R03) | R03: fine ogive with a soft point. Species unresolved (s3) | 4: impostor width |
+| New Zealand flax | None yet: the vegetation rollout places them, in planters | 2 (visual-review-vegetation R03) | R03: broad arching straps, but nearly black in sun; lifted after the verdict, not yet reviewed | 3 |
+| Clipped hedge (variants 0–1) | None yet: laid along a line by the vegetation rollout | 3 (visual-review-vegetation R03) | R03: rows of ragged leaf mats over a core, open stems on the residential hedge (h1), white flowers on the glossy one (h2) | 4: the residential far level |
 
 ### Player
 

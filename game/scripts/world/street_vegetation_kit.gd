@@ -331,7 +331,7 @@ const OAKS := [
 const PINES := [
 	{"form": "residential", "seed": 201, "height": 10.0, "spread": 8.5, "clear": 1.2, "fork": 2.0, "trunk_radius": 0.42, "leaders": 3, "lean": 0.5, "shear": 0.0, "boughs": 20},
 	{"form": "residential", "seed": 202, "height": 12.0, "spread": 10.0, "clear": 1.4, "fork": 2.3, "trunk_radius": 0.5, "leaders": 4, "lean": 0.7, "shear": 0.0, "boughs": 26},
-	{"form": "residential", "seed": 203, "height": 14.0, "spread": 11.2, "clear": 1.6, "fork": 2.6, "trunk_radius": 0.58, "leaders": 4, "lean": 0.9, "shear": 0.0, "boughs": 30},
+	{"form": "residential", "seed": 203, "height": 13.6, "spread": 11.2, "clear": 1.6, "fork": 2.6, "trunk_radius": 0.58, "leaders": 4, "lean": 0.9, "shear": 0.0, "boughs": 30},
 	{"form": "pruned", "seed": 204, "height": 6.0, "spread": 7.2, "clear": 1.7, "fork": 1.7, "trunk_radius": 0.26, "leaders": 2, "lean": 0.6, "shear": 0.1, "lobes": 8},
 	{"form": "pruned", "seed": 205, "height": 6.8, "spread": 8.2, "clear": 2.0, "fork": 2.0, "trunk_radius": 0.3, "leaders": 3, "lean": 0.8, "shear": 0.12, "lobes": 9},
 	{"form": "pruned", "seed": 206, "height": 7.6, "spread": 8.6, "clear": 2.4, "fork": 2.4, "trunk_radius": 0.34, "leaders": 3, "lean": 1.0, "shear": 0.14, "lobes": 10},
@@ -624,11 +624,12 @@ const IMPOSTOR_TREE_GRID := Vector2i(4, 2)
 const IMPOSTOR_SHRUB_GRID := Vector2i(2, 2)
 ## How far their impostors' normals lean out at the corners and up overall (the
 ## impostor shader's dome and sky_lean), set from the bake's per-side check, which
-## finds a dense crown much brighter from its sun side than a thin one, whose light
-## comes through: a thin crown leans further (impostor_sky_lean).
+## finds a dense crown much darker from its shaded side than a thin one, whose light
+## comes through: a thin crown leans further, and the densest, the pine, least
+## (impostor_sky_lean), or its far level stays too bright from the shaded side.
 const IMPOSTOR_DOME := 2.0
 const IMPOSTOR_SKY_LEAN := 1.7
-const IMPOSTOR_PINE_SKY_LEAN := 2.3
+const IMPOSTOR_PINE_SKY_LEAN := 1.1
 const IMPOSTOR_THIN_SKY_LEAN := 3.0
 const PROPS := {
 	"mexican_fan_palm": {"kinds": ["palm_slot", "tree"], "variants": FAN_PALMS, "ranges": [35.0, 95.0, 900.0], "foot_m": 0.45, "form": "fan_palm"},
@@ -2534,8 +2535,10 @@ func _build_residential_pine(p: Dictionary, rng: RandomNumberGenerator, trunk: P
 		leaders.append(points)
 		var size := radius * 0.42
 		heart_lobes.append({"center": _polyline_at(points, 0.42), "half": Vector3(size, size * 0.8, size)})
-	# Slow waves of reach round the tree and up it: [turns round it, per metre up, phase].
-	var waves: Array[Vector3] = [Vector3(2.0, 0.22, rng.randf() * TAU), Vector3(3.0, -0.35, rng.randf() * TAU), Vector3(5.0, 0.5, rng.randf() * TAU)]
+	# Slow waves of reach round the tree and up it: [turns round it, per metre up,
+	# phase]. None turns twice round it, which would make the crown an ellipse, narrow
+	# from two sides.
+	var waves: Array[Vector3] = [Vector3(3.0, 0.22, rng.randf() * TAU), Vector3(4.0, -0.35, rng.randf() * TAU), Vector3(5.0, 0.5, rng.randf() * TAU)]
 	var lobes: Array[Dictionary] = []
 	var lobe_plume: Array[int] = []
 	var plumes: Array[Dictionary] = []
@@ -2552,15 +2555,15 @@ func _build_residential_pine(p: Dictionary, rng: RandomNumberGenerator, trunk: P
 		for w: Vector3 in waves:
 			wave += sin(w.x * azimuth + w.y * y + w.z) * (1.0 / w.x * 2.0)
 		var lump := clampf(0.5 + wave * 0.42, 0.0, 1.0)
-		var reach := (radius - card_w * 0.3) * envelope * lerpf(0.5, 1.06, lump)
-		# Now and then a long thin spray reaches out past its neighbours.
-		var spray := b % 5 == 2
+		var reach := (radius - card_w * 0.3) * envelope * lerpf(0.62, 1.1, lump)
+		# Now and then a long thin spray reaches out past its neighbours, low in the crown.
+		var spray := b % 5 == 2 and f < 0.6
 		if spray:
 			reach = minf(maxf(reach * 1.25, (radius - card_w * 0.3) * 0.86), radius - card_w * 0.3)
 		var leader := leaders[b % leaders.size()]
 		var origin := _polyline_at(trunk, clampf(y / maxf(fork.y, 0.5), 0.3, 0.85)) if y < fork.y else _polyline_at(leader, clampf((y - fork.y) / maxf(leader[leader.size() - 1].y - fork.y, 0.5), 0.0, 1.0))
 		var axis := Vector3(fork.x, origin.y, fork.z)
-		var climb := maxf(reach, 1.0) * tan(deg_to_rad(lerpf(8.0, 42.0, f) + rng.randf_range(-6.0, 12.0)))
+		var climb := maxf(reach, 1.0) * tan(deg_to_rad(lerpf(6.0, 34.0, f) + rng.randf_range(-6.0, 10.0)))
 		var tip := axis + out * maxf(reach, 0.8) + Vector3.UP * climb
 		var sag := Vector3.DOWN * 0.1 * reach
 		var points := _bezier(origin, origin.lerp(tip, 0.34) + sag, tip - out * reach * 0.22 - Vector3.UP * climb * 0.45, tip, 5)
@@ -2578,6 +2581,11 @@ func _build_residential_pine(p: Dictionary, rng: RandomNumberGenerator, trunk: P
 			lobes.append({"center": at, "half": Vector3(lobe_size, lobe_size * 0.8, lobe_size)})
 			lobe_plume.append(plume)
 		plume_lobes.append(lobes[lobes.size() - 2])
+		# Where the wave crowds boughs together they swell into one of the crown's big masses.
+		if lump > 0.55 and not spray:
+			var swell := size * 1.5
+			lobes.append({"center": _polyline_at(points, 0.62) + Vector3.UP * swell * 0.2, "half": Vector3(swell, swell * 0.72, swell)})
+			lobe_plume.append(plume)
 	var cards := []
 	var spacing := card_w * 0.42
 	var sites := _crown_sites(rng, lobes, spacing, 2.75, clear * 0.92)
@@ -2677,21 +2685,21 @@ func _build_broadleaf(p: Dictionary) -> Dictionary:
 			var azimuth := lean_angle + TAU * k / stems + rng.randf_range(-0.35, 0.35)
 			var out := Vector3(cos(azimuth), 0.0, sin(azimuth))
 			var tilt := deg_to_rad(rng.randf_range(12.0, 26.0))
-			var length := height * rng.randf_range(0.42, 0.55)
+			var length := height * rng.randf_range(0.62, 0.72)
 			var base := out * 0.14
 			var top := base + (out * sin(tilt) + Vector3.UP * cos(tilt)) * length + lean * 0.5
 			var side := Vector3(-out.z, 0.0, out.x) * rng.randf_range(0.5, 0.95) * (1.0 if k % 2 == 0 else -1.0)
 			var points := _bezier(base + Vector3.DOWN * BURY_M, base + Vector3.UP * length * 0.35 + side - out * 0.2, top - (top - base) * 0.3 - side, top, 9)
 			var r := trunk_radius * rng.randf_range(0.85, 1.1)
-			var radii := _taper(r * 1.25, r * 0.65, points.size(), 1.0)
+			var radii := _taper(r * 1.25, r * 0.55, points.size(), 1.0)
 			var root := points[points.size() - 2]
-			# It closes just past the top, inside the crown.
+			# It runs up into the crown and closes there, hidden.
 			points.append(top + (top - root).normalized() * 0.3)
 			radii.append(0.02)
 			branches.append({"depth": 0, "points": points, "radii": radii})
 			starts.append({"point": top, "root": root, "out": out, "radius": r * 0.65})
 			# A second limb leaves it below the crown, so stems don't just stop in the leaves.
-			starts.append({"point": points[6], "root": points[5], "out": out.rotated(Vector3.UP, 0.8), "radius": r * 0.6})
+			starts.append({"point": points[7], "root": points[6], "out": out.rotated(Vector3.UP, 0.8), "radius": r * 0.5})
 	else:
 		var bow := lean_dir.rotated(Vector3.UP, PI * 0.5) * float(p.lean) * rng.randf_range(-0.3, 0.3)
 		var points := PackedVector3Array()
@@ -2797,7 +2805,8 @@ func _build_broadleaf(p: Dictionary) -> Dictionary:
 		bark.commit(mesh, material(bark_key))
 		leaves.commit(mesh, material("broadleaf_foliage"))
 		meshes.append(mesh)
-	var shadow := _shadow_mesh(branches, lobes, [], CHRISTMAS_CLUMP if christmas else BROADLEAF_CLUMP, bark_key, "broadleaf_foliage", tile, height, crown_low, sway_top, rng)
+	# A Christmas tree's shadow needs only its stems for a skeleton.
+	var shadow := _shadow_mesh(branches.slice(0, int(p.stems)) if christmas else branches, lobes, [], CHRISTMAS_CLUMP if christmas else BROADLEAF_CLUMP, bark_key, "broadleaf_foliage", tile, height, crown_low, sway_top, rng)
 	return {"lod0": meshes[0], "lod1": meshes[1], "crown_surface": -1, "top_m": height, "shadow": shadow, "capsules": capsules}
 
 
@@ -3186,7 +3195,7 @@ func _build_flax(p: Dictionary) -> Dictionary:
 				var v := cell.end.y - along * cell.size.y
 				# Folded along its midrib: the keel sits a little behind the edges. Its upper
 				# side faces the sky, so a dark leaf still catches the light along its length.
-				var lit := (face + Vector3.UP * 0.8).normalized()
+				var lit := (face + Vector3.UP * 0.6).normalized()
 				s.add(position - across * half, lit, Vector2(cell.position.x, v), Color(c, c, c), wind)
 				s.add(position - face * half * 0.35, lit, Vector2(cell.position.x + cell.size.x * 0.5, v), Color(c * 0.9, c * 0.9, c * 0.9), wind)
 				s.add(position + across * half, lit, Vector2(cell.end.x, v), Color(c, c, c), wind)

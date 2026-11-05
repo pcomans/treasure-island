@@ -15,8 +15,8 @@ extends SceneTree
 ## camera falls halfway between two views, at the hand-over distance (LOD1, what the
 ## impostor replaces) and at 30 m (LOD0): tone overall, side by side and by half (the
 ## gain evens out the overall tone, so a fault shows in the others), top height,
-## width and covered pixels; and the near level's mean leaf colour beside the mean
-## of its dated crop (FOLIAGE_CROPS).
+## width and covered pixels; and the near level's mean leaf colour from the sun side
+## beside the mean of its dated crop (FOLIAGE_CROPS).
 ##
 ##   tools/godot --path . --script tools/vegetation/bake_impostors.gd [-- --only PROP[:VARIANT],...]
 ##   tools/godot --headless --path . --import   # then import the new PNGs
@@ -42,7 +42,8 @@ const EYE_M := 2.2
 const CHECK_PIXELS := 256
 ## Mean sRGB of leaves in the dated crops, kept with the vegetation work notes
 ## outside Git (p5, c2 and c4, b5, n1, s1, s2, s3); they vary with the light of the
-## day, so read a gap as a direction, not a number to hit.
+## day, and a crop shows the lit part of a plant where the check takes all of it,
+## darker by about 1.3 in sRGB, so read a gap as a direction, not a number to hit.
 const FOLIAGE_CROPS := {
 	"monterey_pine": [88, 97, 71], "spreading_broadleaf": [79, 84, 63], "nz_christmas_tree": [68, 70, 58], "norfolk_island_pine": [121, 120, 78],
 	"indian_hawthorn": [116, 117, 59], "pittosporum_tobira": [110, 111, 61], "conical_shrub": [99, 104, 68],
@@ -319,7 +320,8 @@ func _lit_scene(tree: Dictionary, far_mesh: Mesh) -> Dictionary:
 
 ## The near level against the impostor from four sides at distance, at eye height:
 ## their mean linear colours, how much lower, narrower and thinner the impostor is,
-## and the near level's mean leaf colour; then their tone with the plant turned so
+## and the near level's mean leaf colour from the sun side (the first side, about
+## 15 degrees off the sun's bearing); then their tone with the plant turned so
 ## the camera falls halfway between two of its views (of views), as an instance can.
 func _compare(scene: Dictionary, near_key: String, distance: float, box: AABB, extent: float, views: int) -> Dictionary:
 	var camera: Camera3D = scene.camera
@@ -344,7 +346,8 @@ func _compare(scene: Dictionary, near_key: String, distance: float, box: AABB, e
 		sides.append("%+.0f" % ((_luma(far.mean) / maxf(_luma(near.mean), 0.0001) - 1.0) * 100.0))
 		halves[0] += Vector2(far.upper, near.upper)
 		halves[1] += Vector2(far.lower, near.lower)
-		leaf += near.leaf
+		if side == 0:
+			leaf = near.leaf
 		var tall := maxf(float(near.bottom - near.top), 1.0)
 		top_gap += float(near.top - far.top) / tall
 		width_gap += float((far.right - far.left) - (near.right - near.left)) / maxf(float(near.right - near.left), 1.0)
@@ -360,7 +363,7 @@ func _compare(scene: Dictionary, near_key: String, distance: float, box: AABB, e
 	for instance in turning:
 		instance.rotation.y = 0.0
 	return {"near_mean": near_sum, "far_mean": far_sum, "sides": "/".join(sides), "upper_gap": halves[0].x / maxf(halves[0].y, 0.0001) - 1.0, "lower_gap": halves[1].x / maxf(halves[1].y, 0.0001) - 1.0,
-		"turned": "%+.0f" % ((_luma(far_turned.mean) / maxf(_luma(near_turned.mean), 0.0001) - 1.0) * 100.0), "leaf": leaf / 4.0, "top_gap": top_gap / 4.0, "width_gap": width_gap / 4.0, "cover_gap": cover_gap / 4.0}
+		"turned": "%+.0f" % ((_luma(far_turned.mean) / maxf(_luma(near_turned.mean), 0.0001) - 1.0) * 100.0), "leaf": leaf, "top_gap": top_gap / 4.0, "width_gap": width_gap / 4.0, "cover_gap": cover_gap / 4.0}
 
 
 ## One level alone in the frame: {mean linear colour, its luma in the upper and lower halves of its height, mean sRGB of its leaves (not bark), count, top, bottom, left, right} of its covered pixels.
