@@ -63,8 +63,8 @@ const ROLLOUT_GRADES := {
 	"norfolk_branch_side.png": [Color(0.94, 0.96, 0.9), 0.15],
 	"hawthorn_spray.png": [Color(0.94, 0.95, 0.84), 0.12],
 	"red_tip_shoots.png": [Color(0.92, 0.92, 0.86), 0.15],
-	"conical_spray.png": [Color(0.88, 0.94, 0.82), 0.2],
-	"hedge_stems_open.png": [Color(0.62, 0.6, 0.58), 0.35],
+	"conical_spray.png": [Color(0.74, 0.84, 0.7), 0.2],
+	"hedge_stems_open.png": [Color(0.46, 0.44, 0.42), 0.35],
 	"phormium_leaf.png": [Color(0.42, 0.33, 0.35), 0.3],
 }
 ## The meadow atlas's 512 x 512 cells, row by row in 2048 x 2048 (LOW_CELLS in
@@ -348,7 +348,7 @@ func _pack_broadleaf(images: Dictionary, errors: Array[String]) -> void:
 	_fill_transparent(atlas)
 	_save(atlas, OUT + "broadleaf_foliage_atlas.png", errors)
 	_save_barks(images, {
-		"broadleaf_bark.png": ["broadleaf_bark.png", Color(0.76, 0.74, 0.74), 0.35, 1.5],
+		"broadleaf_bark.png": ["broadleaf_bark.png", Color(0.72, 0.7, 0.68), 0.55, 1.5],
 		"christmas_bark.png": ["christmas_bark.png", Color(1.0, 1.0, 1.0), 0.0],
 	}, errors)
 
