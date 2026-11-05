@@ -51,10 +51,13 @@ const INSIDE := ["left", "right", "center"]
 ## visible through it. The knitted fabric is translucent, so sunlight through
 ## it lights the shaded face (SCREEN_BACKLIGHT, about half the sun in linear
 ## terms). The black tint leans blue because the island's sun and ambient light
-## are warm. Orange is the open safety mesh of construction sites (9th St,
-## Sep 2025), bright and more see-through.
-const SCREENS := {"black": Color(0.32, 0.32, 0.43), "green": Color(0.34, 0.5, 0.4), "orange": Color(1.0, 0.46, 0.12)}
-const SCREEN_OPACITY := {"black": 0.92, "green": 0.92, "orange": 0.78}
+## are warm. Orange is the safety mesh of construction sites (9th St, Sep 2025):
+## a saturated safety orange, about as opaque as the windscreens. The grey
+## windscreen texture would darken it to brick red, so it is drawn plain
+## (SCREEN_PLAIN): its colour is its albedo.
+const SCREENS := {"black": Color(0.32, 0.32, 0.43), "green": Color(0.34, 0.5, 0.4), "orange": Color(1.0, 0.45, 0.05)}
+const SCREEN_OPACITY := {"black": 0.92, "green": 0.92, "orange": 0.92}
+const SCREEN_PLAIN := ["orange"]
 ## A screen may stop below the fence top (screen_height_m), at least this tall.
 const SCREEN_MIN_M := 0.6
 ## Privacy slat colours (sRGB, multiplied with the slat stripes), from the
@@ -132,7 +135,7 @@ func _init() -> void:
 	for colour: String in SCREENS:
 		var screen := StandardMaterial3D.new()
 		screen.resource_name = "street_fence_screen_" + colour
-		screen.albedo_texture = SCREEN
+		screen.albedo_texture = null if colour in SCREEN_PLAIN else SCREEN
 		screen.albedo_color = Color(SCREENS[colour], float(SCREEN_OPACITY[colour]))
 		screen.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 		screen.depth_draw_mode = BaseMaterial3D.DEPTH_DRAW_ALWAYS
