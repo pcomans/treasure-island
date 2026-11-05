@@ -546,7 +546,8 @@ func _shoot_view(view: Dictionary, target: Vector3, path: String) -> String:
 
 ## Holds the view's camera for `frames` more drawn frames, with vsync and the
 ## frame cap off, and prints the wall time between them as a FRAME_TIME line
-## (mean, median, 95th percentile and the mean's fps). Returns an error, or "".
+## (mean, median, 95th percentile and the mean's fps, and the last frame's
+## draw calls and primitives). Returns an error, or "".
 func _frame_time(frames: Variant, label: String) -> String:
 	if not _numbers([frames], 1) or float(frames) != floorf(float(frames)) or float(frames) < 10.0 or float(frames) > 3000.0:
 		return "frame_time_frames must be a whole number from 10 to 3000"
@@ -554,9 +555,11 @@ func _frame_time(frames: Variant, label: String) -> String:
 	# Let the change and any first-use work settle before timing.
 	var stats := _frame_stats(await _frame_times(int(frames), 30))
 	_restore_frames(uncapped)
-	print("FRAME_TIME %s frames=%d mean_ms=%.2f median_ms=%.2f p95_ms=%.2f mean_fps=%.1f method=%s adapter=%s" % [
-		label, stats.frames, stats.mean, stats.median, stats.p95,
-		1000.0 / stats.mean, RenderingServer.get_current_rendering_method(), RenderingServer.get_video_adapter_name(),
+	print("FRAME_TIME %s frames=%d mean_ms=%.2f median_ms=%.2f p95_ms=%.2f mean_fps=%.1f draw_calls=%d primitives=%d method=%s adapter=%s" % [
+		label, stats.frames, stats.mean, stats.median, stats.p95, 1000.0 / stats.mean,
+		RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME),
+		RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_PRIMITIVES_IN_FRAME),
+		RenderingServer.get_current_rendering_method(), RenderingServer.get_video_adapter_name(),
 	])
 	return ""
 

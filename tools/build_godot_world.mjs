@@ -2108,7 +2108,7 @@ function main() {
     }
     const streetConfig = loadStreetDetailZones(projectRoot);
     const shorelineConfig = loadShorelineConfig(projectRoot);
-    const shorelinePlan = planShoreline({ config: shorelineConfig.config, boundary, playableObjects, rawOsm: loaded.rawOsm });
+    const shorelinePlan = planShoreline({ config: shorelineConfig.config, boundary, playableObjects });
     // Local corrections of the land where the 2023 raster predates what was built.
     const terrainPlan = planTerrainOverrides({
       loaded: loadTerrainOverrides(projectRoot),
