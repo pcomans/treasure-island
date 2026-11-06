@@ -44,9 +44,9 @@ limbs (2), then bands, coins and shoes (3).
 
 ## How the ratings were made
 
-- **est.** means "initial estimate from review records, 2026-11-05". No review
-  has yet judged any of these rows in level terms, so every number here is an
-  estimate. The estimate is the highest level whose content exists in the code
+- **est.** means "initial estimate from review records, 2026-11-05". Rows from
+  before the rollouts' reviews are estimates: no review judged them in level
+  terms. The estimate is the highest level whose content exists in the code
   and that a review verdict or owner comment accepted, with nothing recorded as
   open below it. Sources: RETRO_LOG and LEARNINGS entries, review verdicts
   quoted in commits, and owner feedback.
@@ -54,9 +54,10 @@ limbs (2), then bands, coins and shoes (3).
   2026-11-05: no site work exists, so the row is 0.
 - A blank level means **unrated**: no review record judges that asset's form.
   Placement checks and whole-site verdicts don't rate the props in them.
-- No row is rated 4 or 5 yet. Where a review fixed a colour or a finish defect,
-  the evidence column says so, but no review has judged an asset's materials or
-  finish complete.
+- A review's name in the level column means that review gave the level in its
+  verdict. Only such rows are rated 4 or 5. Elsewhere, where a review fixed a
+  colour or a finish defect, the evidence column says so, but no review has
+  judged the asset's materials or finish complete.
 
 ## Upkeep
 
@@ -66,21 +67,15 @@ the integration push reconciles rows from parallel branches. Change a level
 only on actual review evidence; replace "est." with the review's name when a
 review judges the level itself.
 
-**In progress on 2026-11-05.** These rollouts are adding or changing sites and
-assets now, so their integrators fill in the rows (new rows for new kit props,
-species and zones):
+**Landed on 2026-11-06.** The street ground, street objects, parked cars, shoreline
+and vegetation ground rollouts reached `main` in one integration push; the rows
+below carry their reviews' levels. The street ground's review rated its street
+classes, which have no row here: village, new district and boulevard 3, the
+Mersea lot's paint and wear 4, the legends texture 4.
 
-- `street/ground-rollout-20261105`: curbs, sidewalks, markings, crosswalks and
-  wear island-wide (pilot step 1 extended to new zones).
-- `street/objects-rollout-20261105`: signs and the other vertical street objects
-  island-wide (lights, power poles, hydrants, cabinets, bus stops). Power poles
-  and lines, bollards and the post box are OSM rows the generator records but
-  doesn't build yet.
-- `street/clutter-rollout-20261105`: parked cars, bins and benches island-wide.
-- `street/shoreline-rollout-20261105`: riprap around the whole perimeter (today
-  only the `west_ferry_pilot` segment).
-- `street/vegetation-rollout-20261105`: ground tone, the Avenue N palms, and new
-  tree and shrub models.
+**In progress.** Tree and shrub placement and the new tree models
+(`street/vegetation-rollout-20261105`, `veg/models-20261105`): the tree push fills
+in the vegetation rows.
 
 ## Sites
 
@@ -92,7 +87,7 @@ below use. Place #8 is two zones.
 
 | Site | Zone / OSM | Level | Evidence | Next level |
 |---|---|---|---|---|
-| Ferry arrival and Waterfront Plaza | `ferry_arrival_plaza`; w1428380754 | 3 est. | Pilot steps 1–5 visual and code PASS: plaza paving, kerbs, plaza lamps, the OSM hydrant. Set pieces (map board, wedge benches, baskets, young cypresses) checked against Sep 2025 photos (step 4 PASS). Chairs rebuilt (plaza-chairs PASS at `1be722c2`) | 4: matched materials. Open: crosswalk paint too fresh (83 % against about 53 % in the photo); the lawn's dry patch under the chairs, where the photos show green turf |
+| Ferry arrival and Waterfront Plaza | `ferry_arrival_plaza`; w1428380754 | 3 est. | Pilot steps 1–5 visual and code PASS: plaza paving, kerbs, plaza lamps, the OSM hydrant. Set pieces (map board, wedge benches, baskets, young cypresses) checked against Sep 2025 photos (step 4 PASS). Chairs rebuilt (plaza-chairs PASS at `1be722c2`) | 4: matched materials. Open: crosswalk paint too fresh (83 % against about 53 % in the photo) |
 | Treasure Island Road, ferry crossing to Trade Winds | `treasure_island_road_south` | 3 est. | Step 1 visual: red west lane, double yellow, green east lane, continental crosswalk, kerb and gutter read as the Sep 2025 photo. Step 2: cobra lamps, signal masts, cabinets and name blades PASS | 4: materials (faded paint, worn crosswalks) |
 | Trade Winds Avenue to Avenue of the Palms link | `trade_winds_palms_link` | 2 est. | Step 1 ground, step 2 lamps, step 3 Cultural Park screened fence (r5 PASS, web shot at the screen) | 3: the Trade Winds bike lane (parked in step 1) and the corridor's markings |
 | Avenue of the Palms | `avenue_of_the_palms` | 3 est. | Step 1 parking lanes and mulch strips (strip order PASS at `25d2eeb5`); step 2 stop signs and name blades; step 4 curb cars PASS; step 5 palms and bed grasses PASS; Cityside panel fence (step 3) | 4: materials and paint wear |
@@ -115,6 +110,8 @@ below use. Place #8 is two zones.
 | #14 505 Avenue N soil spread | `avenue_n_soil_spread` | 2 est. | Yards B (as #7): staggered windrows across the spread, OSM construction panels | 3: edges |
 | #15 SFFD training facility yard | `fire_training_yard` | 2 est. | Yards B (as #7): rubble pile, white work vehicles | 3: secondary items |
 | #16 Fenced Navy investigation lots | `navy_investigation_lots` | 2 est. | Yards B (as #7): the OSM barbed chain-link fence is its only content; the lots are grass and old slabs | 3: the old slabs, where a dated photo shows them |
+| Mersea lot | `mersea_lot`; w28356874 | 2 (visual-review-clutter-rollout) | Re-check PASS at `7ccf14c7`: 29 cars from the May 2026 aerial, stall rows, the strip along Avenue A, chain-link and pickets. The objects contribution is level 3 (visual-review-objects), the street ground's paint and wear 4 | 3: planted planters (the tree push), the lot light's second arm, a longer planted lamp island. 4: the dumpsters' finish |
+| Avenue N seawall palm row | `avenue_n_seawall` | 1 (visual-review-vegetation) | 59 mature Canary palms between Avenue N and the riprap, from Nov 2025 Street View and the dated aerials | 2: the shrubs beside them (the tree push) |
 
 ### OSM parks, plazas and pitches
 
@@ -157,31 +154,34 @@ building and belongs to the building-stage checklist.
 
 Every `amenity=parking` area in the frozen snapshot. None has a name. Pilot
 step 1's fix round gave every parking area the road asphalt, which is still the
-generic material, so untouched lots stay 0.
+generic material, so untouched lots stay 0. The clutter rollout added cars from
+the May 2026 aerial to some lots; a lot left blank here has them but no level
+verdict yet.
 
 | OSM | Parking tag | Centre (x, z) | Level | Evidence | Next level |
 |---|---|---|---|---|---|
 | w96665914 | surface | (-44, 756) | see zone | Built as the Building 1 forecourt zone (stalls, cars, lot lights) | (zone row) |
 | w96698665 | surface | (-135, -143) | see zone | Its ground is yard #1's asphalt layer | (zone row) |
-| w28356874 | surface | (-340, 141) | 0 code | Generic asphalt | 1: stall paint, edges and ground fit from dated photos |
+| w28356874 | surface | (-340, 141) | see zone | The Mersea lot | (zone row) |
 | w28356892 | surface | (-32, 342) | 0 code | Generic asphalt | 1 |
 | w95934095 | surface | (-448, -565) | 0 code | Generic asphalt | 1 |
 | w95934109 | surface | (-488, -496) | 0 code | Generic asphalt | 1 |
 | w95934133 | surface | (-513, -412) | 0 code | Generic asphalt | 1 |
 | w95934134 | surface | (-595, -515) | 0 code | Generic asphalt | 1 |
 | w95934141 | surface | (-553, -610) | 0 code | Generic asphalt | 1 |
-| w96665901 | street_side | (-40, -527) | 0 code | Generic asphalt | 1 |
+| w96665901 | street_side | (-40, -527) | | Generic asphalt; 6 cars from the aerial | Rate |
 | w96698621 | surface | (174, -375) | 0 code | Generic asphalt | 1 |
 | w96698661 | surface | (230, 181) | 0 code | Generic asphalt | 1 |
 | w109022552 | surface | (43, 542) | 0 code | Generic asphalt; the z-fight fix `4f469784` layers it over the area it lies in | 1 |
 | w850003199 | (none) | (10, 805) | 0 code | Generic asphalt | 1 |
 | w1102659944 | (none) | (-286, -503) | 0 code | Generic asphalt | 1 |
-| w1252737739 | street_side, asphalt | (260, -323) | 0 code | Generic asphalt | 1 |
+| w1252737739 | street_side, asphalt | (260, -323) | | Generic asphalt; 9 cars from the aerial | Rate |
 | w1473022596 | (none) | (-620, -420) | 0 code | Generic asphalt | 1 |
 
 ## Asset types
 
-Read from the kit code on main `6ba040d3`. "Where used" names zones by yard
+Read from the kit code on main `6ba040d3`; the rollouts' rows were updated from
+their reviews on 2026-11-06. "Where used" names zones by yard
 number or zone id, and set pieces from
 [`data/street_detail/set_pieces.json`](../data/street_detail/set_pieces.json).
 A variant listed as "not placed" exists in the kit but nothing in the world uses
@@ -229,9 +229,11 @@ the rows below are rated only where a record names the prop.
 
 | Asset | Where used | Level | Evidence | Next level |
 |---|---|---|---|---|
-| Parked-car bodies (crossover, SUV, sedan, fastback, hatchback, wagon, pickup, utility pickup, van) | Avenue of the Palms curbs, Building 1 forecourt lot; the van body also in the yards | 3 est. | Owner on the first car sheet: the kit "looks pretty good"; the sinking it showed was fixed (LEARNINGS). Step 4 visual PASS with wheel close-ups. Lamps, plates, grille, chrome trim and mirrors are modelled | 4: paint, glass and tyre materials |
+| Parked-car bodies (crossover, SUV, sedan, fastback, hatchback, wagon, pickup, utility pickup, van) | Island-wide: curbs, bays and lots by rule, the pilot zones; the van body also in the yards | 3 est. | Owner on the first car sheet: the kit "looks pretty good"; the sinking it showed was fixed (LEARNINGS). Step 4 visual PASS with wheel close-ups. Lamps, plates, grille, chrome trim and mirrors are modelled | 4: paint, glass and tyre materials |
 | Traffic cone | set pieces: Avenue of the Palms, the #3 gate | | Step 4 PASS checked placement against the Nov 2025 photos only | Rate |
 | A-frame barricade | set pieces: Avenue of the Palms, the #3 gate | | Step 4 PASS, placement only | Rate |
+| Dumpster | Mersea lot set pieces | 3 est. | Mersea re-check at `7ccf14c7` leaves only its finish open, at level 4 | 4: finish |
+| Stock-tank planter | Mersea lot set pieces | 2 (visual-review-clutter-rollout) | Second look at `e1306ea4`: planters level 2, empty | 3: planted (the tree push) |
 
 ### Street furniture and objects kit
 
@@ -239,21 +241,29 @@ the rows below are rated only where a record names the prop.
 
 | Asset | Where used | Level | Evidence | Next level |
 |---|---|---|---|---|
-| Cobra-head street lamp | TI Road south, Trade Winds link, Avenue of the Palms | 2 est. | Step 2 visual PASS; lamp move confirmed on the web (delta PASS) | 3: luminaire and pole-base detail judged close up |
+| Cobra-head street lamp | Island-wide by rule (Seven Seas, Cravath, Bruton, Johnson), TI Road south, Trade Winds link, Avenue of the Palms | 3 (visual-review-objects) | Final check at `4377e33f`; delta PASS at `f4a6f827` | 4: materials |
+| Davit street lamp (`lamp_cobra`, davit rules) | Island-wide by rule in the housing streets | 4 (visual-review-objects) | Final check at `4377e33f`; delta PASS at `f4a6f827` | 5: wear |
+| Utility pole | 245 island-wide, from OSM and the strip pole set piece | 4 (visual-review-objects) | Final check at `4377e33f`; the strip pole 3 | 5: wear |
+| Power wires | 243 spans between the utility poles | 4 (visual-review-objects) | Delta PASS at `f4a6f827`: L4 accepted, L5 open. Shader keeps a minimum width at distance | 5: check for shimmer in motion (near wires about 1 px) |
+| Transformer pad | 32 OSM street cabinets island-wide | 3 (visual-review-objects) | Final check at `4377e33f` | 4: materials |
 | Lot lamp | Building 1 forecourt | 2 est. | Step 2 fix round, delta PASS; its post-top lantern is inferred from a soft, low-resolution photo | 3: the head from a sharper dated photo |
 | Plaza lamp | ferry plaza; two floodlight set pieces on 9th Street (#1) | | No prop-specific verdict | Rate |
-| Signal mast | TI Road south | 3 est. | Step 2 visual: the signal heads held up in 2–3x native crops | 4: materials |
+| Signal mast | TI Road south, Clipper Cove Way, Seven Seas Avenue | 3 (visual-review-objects) | Final check at `4377e33f`; step 2: the signal heads held up in 2–3x native crops | 4: materials |
 | Signal cabinet | TI Road south | 2 est. | Step 2: rendered 1.6x too bright and green against three dated photos, re-tinted in the fix round (PASS) | 3: door and pad detail close up |
-| Stop sign | Avenue of the Palms all-way stops, the forecourt exit, OSM stop signs in the pilot zones | 3 est. | Step 2: sign faces held up in native crops | 4: materials |
-| Street-name sign | TI Road south, Avenue of the Palms junctions | 3 est. | Step 2: name blades held up in native crops | 4: materials |
-| Fire hydrant | the OSM hydrant at the ferry plaza | 3 est. | Step 2: the hydrant held up in native crops | 4: materials |
-| Bus-stop sign | the OSM bus stop near Building 1 | | Step 2 checked its placement only | Rate |
+| Stop sign | 100 island-wide, from OSM and the junction rules | 4 (visual-review-objects) | Final check at `4377e33f`; delta PASS at `f4a6f827` | 5: wear |
+| Street-name sign | 68 posts and blades island-wide | 3 (visual-review-objects) | Final check at `4377e33f`; step 2: name blades held up in native crops | 4: materials |
+| Fire hydrant | 17 OSM hydrants island-wide | 3 (visual-review-objects) | Final check at `4377e33f`; step 2: the hydrant held up in native crops | 4: materials |
+| Bus-stop flag (`bus_stop_sign`) | OSM bus stops island-wide | 3 (visual-review-objects) | Final check at `4377e33f` | 4: the post's perforations and materials |
+| Bus shelter | 7 OSM shelters | 3 (visual-review-objects) | Final check at `4377e33f`; the Avenue B shelter moved into frame at `f4a6f827` | 4: materials |
+| Tow-away sign (`post_sign`) | Mersea lot set piece | 3 (visual-review-objects) | Final check at `4377e33f`; delta PASS | 4: materials |
+| Monument sign | Mersea lot set piece | 3 (visual-review-objects) | Final check at `4377e33f` | 4: materials |
+| EV charger bay | Mersea lot set piece | 3 (visual-review-objects) | Final check at `4377e33f` | 4: weathering (rusty bollards, bent posts) |
 | Concrete wedge bench | ferry plaza set pieces | | Step 4 PASS, placement only | Rate |
-| Park bench | not placed (OSM benches outside the pilot zones; clutter rollout) | | Not built yet | Rate when placed |
+| Park bench | OSM benches outside the pilot zones | | Placed by the clutter rollout; no prop-specific verdict | Rate |
 | Waste basket | ferry plaza and Avenue of the Palms set pieces; one OSM basket | | Step 4 PASS, placement only | Rate |
 | Map board | ferry plaza set piece | | Step 4 PASS, placement only; the map is an original drawing from the frozen OSM data | Rate |
 | Adirondack chair | ferry plaza and Cityside set pieces | 2 est. | Owner: the blue chairs "need a lot of work". Rebuilt with the flat-topped back and water-facing row of photos 24 and 25, colour sampled against them, feet settled (plaza-chairs PASS at `1be722c2`) | 3: slat and joint detail close up |
-| Bike rack | Avenue of the Palms set piece | | No prop-specific verdict | Rate |
+| Bike rack | Avenue of the Palms set piece, OSM racks | 2 (visual-review-clutter-rollout) | Second look at `e1306ea4`; hoop rows and flanges added after it | 3: secondary parts close up |
 | Canopy of Sky (artwork) | Cityside set piece | | Whole-park PASS only; the r04 view named for it was not framed on it | Rate against ph05 |
 | Disc lamp | Cityside set pieces | | Whole-park PASS only | Rate |
 | Event pole | Cityside set pieces | | Whole-park PASS only | Rate |
@@ -275,22 +285,25 @@ gate leaves and banners are parts of the same kit.
 | Chain-link with windscreen | Trade Winds link (Cultural Park), #1, #2, #6, #9, #12 (orange safety mesh), #13 | 2 est. | Step 3 r2 and r5: screen tone sampled and fixed, no sparkle at distance (PASS). Orange mesh saturated and opaque after the kit review (`e556bc40`) | 3: posts, rails and ties close up |
 | Chain-link with privacy slats | #1, #2, #4, #8 south | | No type-specific verdict | Rate |
 | Temporary construction panel | Avenue of the Palms (Cityside panels), #12, #14 (OSM w1252737734) | 3 est. | Step 3 r2: panel frame, clamps and stands clear in native crops; distance haze fixed (r5 PASS) | 4: materials |
+| Steel picket | Mersea lot | 3 (visual-review-clutter-rollout) | Second look at `e1306ea4`; finials added after it | 4: materials |
 | Wood privacy fence | not placed | | Not used yet | Rate when placed |
 
 ### Shoreline riprap
 
 [`tools/lib/shoreline-generation.mjs`](../tools/lib/shoreline-generation.mjs) with
 `tools/config/shoreline.json`, drawn by `game/scripts/world/shoreline_builder.gd`.
-All are used on the `west_ferry_pilot` segment, around the ferry plaza and under
-the landing pier.
+All are used round the whole island: ten segments and seven closures.
 
 | Asset | Where used | Level | Evidence | Next level |
 |---|---|---|---|---|
-| Quarry stones (5 boulder prototypes: top row, crest, shoulder, heap) | `west_ferry_pilot` | 3 est. | Step 1b round 3 visual PASS (`ce56ab45`): quarried blocks with chipped corners and mixed sizes, lying on broad faces. Owner direction (`4a0f9151`): quarried and dumped, so sharp corners; texture and colour stay | 4: materials. Carried finish: small flat chips litter the shoulder; a dark sliver under one crest stone |
-| Cobbles (inside band) | `west_ferry_pilot` | | No verdict | Rate |
-| Pebbles (3 prototypes, below the waterline) | `west_ferry_pilot` | | No verdict | Rate |
-| Driftwood log | `west_ferry_pilot` | 1 est. | Round 3 review: "a smooth, untextured pole resting across stone peaks" | 2: a log's form (broken ends, root flare, bends) |
+| Quarry stones (5 boulder prototypes: top row, crest, shoulder, heap) | every segment | 3 (visual-review-shoreline-rollout) | Crest level 3 at r7 (`6f76d265`), riprap level 3 at the final PASS (`07a0f9e5`). Step 1b round 3: quarried blocks with chipped corners and mixed sizes, lying on broad faces. Owner direction (`4a0f9151`): quarried and dumped, so sharp corners | 4: materials |
+| Cobbles (inside band) | every segment | | No verdict | Rate |
+| Pebbles (3 prototypes, below the waterline) | every segment | | No verdict | Rate |
+| Driftwood log | every segment, thinly | 1 est. | Round 3 review: "a smooth, untextured pole resting across stone peaks" | 2: a log's form (broken ends, root flare, bends) |
 | Plank | one near the ferry landing | | No verdict | Rate |
+| North slipway (closure `north_slipway`, OSM w1473022597) | the north tip | 3 (visual-review-shoreline-rollout) | Final PASS at `07a0f9e5`; two small dark tips stay | 4: materials |
+| Rock jetty (OSM w26767328) | the north tip | 2 (visual-review-shoreline-rollout) | r6 re-review | 3: its marker post |
+| Closures (pier, platform and causeway faces) | the causeway, Clipper Cove, the Sailing Center, Pier 1 | 2 (visual-review-shoreline-rollout) | r6 re-review | 3: secondary detail from dated photos |
 
 ### Vegetation
 

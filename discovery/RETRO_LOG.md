@@ -24000,3 +24000,59 @@ code-review-street-objects: Logging the stop-line search inside a scratch build 
 - What worked well: reading the trigger and the shoreline generator before designing showed the kill zone is an XZ outline test and the riprap has no collision, so a lift at the same x and z needed a float guard from the start, or the unchanged trigger would re-lift every 0.5 s cooldown. Picking the test spot from frozen data (outline segments, top-row stones, street-detail rows and building vertices along a 32 m lane) let the new test pass on its first run, after one rejected lane where a bench sat on the walk back. Running Forward+ and Compatibility in one slot hold on the same plan made the renderer check a tick-by-tick diff: 354 ticks, no differences. Keeping run outputs and the runner outside `tree/` meant the account cut-off lost nothing: the queued run finished on its own and its receipt showed that on resume.
 - What did not work well: the fresh worktree had no `node_modules`, so after 1 h 46 min in the queue the one budgeted suite failed its three Node stages at once. Every Godot stage had passed and those three passed alone at the same commit, but there is no single clean `tools/test.sh` run. RETRO already recorded this snag and I did not search for it. The worktree also had no Git author identity, and I chained `git push` after the failed commit with `;`, so the remote branch was first created at main's commit. I first put the worktree at the run root and had to recreate it under `tree/`. The first test run never reached the pull-back's "keeps extra height" branch and had no jetpack check, although ROOT had asked for jetpack escape; I only saw that on rereading the brief, which cost the spare engine run. Slot A waits were 8 and 17 minutes for runs that held it for 38 s and 4.4 min.
 - What the team should change next time: run `npm ci` in a new worktree before queuing the suite, and have `tools/test.sh` fail at its start when `node_modules` is missing, so the snag costs seconds rather than a queue slot. Chain commit and push with `&&`, and use `git -c user.name=... -c user.email=...` in a new worktree. Turn each "must" in a brief into a test phase before the first engine run, and check that every branch of a new guard is reached. When an owner describes a trigger by what the player touches, check what actually collides first: here nothing outside the outline does, and the brief's "stone top" had to become the land edge the stones sit on.
+
+### visual-review-objects (2026-11-06, delta check)
+
+(Relayed verbatim by the coordinator; added by integrate-1-20261106.)
+
+- **Worked well:** `moved-objects.txt` with poses per object made the delta quick to check, and the full-resolution curb crop settled a disagreement on evidence.
+- **Didn't work well:** I called the curb plain from contact-size panels, the same misread ground's LEARNINGS already records. The handoff also didn't mention the E13 exit 1 from the walk timeout.
+- **Next time:** check any colour or paint finding at full resolution before reporting it, and state any non-zero run exit in the handoff.
+
+### code-review-street-objects (2026-11-06, delta check)
+
+(Relayed verbatim by the coordinator; added by integrate-1-20261106.)
+
+- Checking each new config field for what happens when it goes stale found the weak ones (`shelter_anchors`, `except_cells`) faster than reading the placement code did.
+
+### Street ground final review (e1ed53f4)
+
+(Relayed verbatim by the coordinator; added by integrate-1-20261106.)
+
+- Render after the last world change, or say plainly which change the sheets don't include; here the strip removal landed after the renders, and the note saved it from being assumed checked.
+
+### visual-review-shoreline-rollout — final 07a0f9e5
+
+(Relayed verbatim by the coordinator; added by integrate-1-20261106.)
+
+- Rechecking a named leftover with a native crop found a second small spike nobody had listed, so a last-fix check should scan the whole joint, not just the named spot.
+
+### code-review-shoreline-rollout — final 07a0f9e5
+
+(Relayed verbatim by the coordinator; added by integrate-1-20261106.)
+
+- Comparing chunk records by collision_kind against the merge base answered the collider question for the whole branch in one pass; a hand-back is single-use, so a follow-up review's report has to go by SendMessage.
+
+### code-review-vegetation — delta 527cf1de
+
+(Relayed verbatim by the coordinator; added by integrate-1-20261106.)
+
+- Merging ground and redrawing the map proved the verge rule in minutes, since it draws nothing on this branch alone, but my wait loop's pgrep -f matched its own shell and never exited, which delayed this report.
+
+### code-review-shore-reset — cec25fd9
+
+(Relayed verbatim by the coordinator; added by integrate-1-20261106.)
+
+- checking the frozen outline, collider and prop data answered the clearance question without an engine run, and it also turned up the low-spit case that reading the code alone would have missed.
+
+### code-review-veg-models — last delta c46cc9d1
+
+(Relayed verbatim by the coordinator; added by integrate-1-20261106.)
+
+- code-review-veg-models last delta: comparing alpha, covered RGB and simulated mips per cell showed the large transparent-fill change in `perennial_atlas.png` is close to invisible in Cityside, so check what a repack changes at the mips, not just how many pixels moved.
+
+### visual-review-veg-models — R04c db3e7eca
+
+(Relayed by the coordinator as far as the notes hold it, cut off there; the rest was in the reviewer's hand-back. Added by integrate-1-20261106.)
+
+- the baked and halfway pairs answered the view-blend question directly...

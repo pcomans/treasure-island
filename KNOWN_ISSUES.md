@@ -8,31 +8,17 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 
 These are on branches in progress, not yet on `main`.
 
-- **Yard ground z-fight:** the 8th St / Avenue N north yard (#8, pale gravel) and the fire training yard (#15, asphalt) overlap at the same height over about 219 m² near x 412, z −339.
-- **Coplanar street-ground layers** (from a scan of the generated world, 2026-11-05):
-  - the parking-lane surface lies on the road at 0.078 m (about 55 m² in three places);
-  - the gutter and the asphalt wear both lie at 0.081 m (about 6.5 m²);
-  - the gutter lies only 1 mm above the pedestrian path (about 16 m²).
-- **Pier and apron colours:** the Pier 1 deck renders beige and the marina pier (OSM w1222505177) teal; both are grey concrete in photos. The Gate 5 driveway apron renders dark where Street View shows light concrete.
-- **Bay Bridge missing from Pier 1:** looking east (heading about 130) from Pier 1, the bridge isn't visible (seen in review, by 2026-11-05).
-- **Street detail island-wide.** Today the street-detail layers exist only along the pilot route (ferry → Treasure Island Rd → Avenue of the Palms → Building 1), in Cityside Park and in the clutter yards. The rollout covers:
-  - shoreline riprap around the whole island (only one segment, by the ferry plaza, today);
-  - curbs, sidewalks, road markings and crosswalks;
-  - street signs, lights, power poles, hydrants, cabinets and bus stops;
-  - parked cars, bins and benches;
-  - vegetation, including the ground tone: the generic lawn reads bright green on unmaintained lots that are dry scrub in aerials.
-
-  Everything is placed procedurally from rules backed by dated evidence.
+- **Trees, shrubs and hedges island-wide:** tree placement and the tree models. Of the vegetation rollout, `main` has only the ground tone and the Avenue N palm row so far.
 
 ## Known issues on main (not scheduled)
 
-- A thin strip of water shows between the grass and the root of Pier 1 (seen in review, by 2026-11-05).
+- A thin strip of water shows between the grass and the root of Pier 1 from the land side (seen in review, by 2026-11-05; still there on 2026-11-06).
+- The Clipper Cove marina past the playable boundary (OSM w644986117, x −9 to 162, z 804 to 1021) is a flat pale teal sheet on the water, plain in the island overviews (seen at integration, 2026-11-06; the same on the earlier `main`).
 - **Web build** (Godot's Compatibility renderer):
   - it looks about 15% brighter than desktop (seen in review, by 2026-11-05); parked by the owner;
   - it draws no decals, which the owner accepted, so spraying is off there and the Mersea mural is drawn as a mesh instead;
   - glass looks paler and more reflective than on desktop (seen in review, by 2026-11-05).
 - **Mersea mural colour:** in the real mural the ground reads charcoal or navy through the corrugation, and the mural fills more of the wall height (seen in review, by 2026-11-05).
-- **Ferry plaza lawn:** its dry-patch noise reads brown where photos show green turf (seen in review, 2026-11-03).
 - **Ferry plaza gravel:** the gravel "shards" on the dirt read as grey slate triangles up close (seen in review, 2026-11-03).
 
 ## Buildings
@@ -51,6 +37,10 @@ These are on branches in progress, not yet on `main`.
     - the recessed rear entries have no steps;
     - the belfry slots should be mid-grey slats;
   - Maceo May: the WSW ground-floor windows at its north end sit above a 2 m dip in the terrain, and its inner courtyard is untouched.
+- Mismatches the street reviews found against dated photos (seen in review, 2026-11-05):
+  - **Mersea lot:** at Street View pano TKhpp heading 190 (Sep 2025) a white event tent renders as a solid grey building with a roll-up door and windows; at heading 330 a white tent with a hedge renders as a flat white box.
+  - The Mersea venue's containers are green where the photo shows blue in front.
+  - The Cravath Street building at heading 42 is a blank brown box where the photo shows a modern white and grey panelled facade.
 
 ## Clutter yards: accepted 2026-11-05 with known gaps
 
@@ -77,11 +67,54 @@ From the yard reviews.
   - the containers under the cypresses;
   - a corrugated gate drawn as screened chain-link.
 
+## Street detail rollouts: landed 2026-11-06 with known gaps
+
+From the reviews of the shoreline, street ground, street objects, parked cars and vegetation ground layers.
+
+- **Stop signs placed by rule, for the owner to check.** The owner said to keep them and list them here. They follow the map's stop rules, but no dated photo lies within 30 m of the sign (checked on the merged world, 2026-11-06):
+  - all-way stops: 11th Street (2), Avenue D (2), Avenue E (1);
+  - minor stops: Avenue D (2), Avenue E, Avenue of the Palms, Bigelow Court, Bruton Street and Lester Court (1 each);
+  - streets where only some signs have a photo nearby: all-way on 9th Street (2 of 4); minor on 13th Street (1 of 3), 3rd Street (1 of 2), 4th Street (5 of 7), 8th Street (1 of 4), Avenue I (3 of 4) and Avenue M (3 of 4).
+- **Street ground:**
+  - Avenue B (OSM w8921273): the left curb's red stretch from 262 to 274 m along the way is shorter than in the photos.
+  - Gateview Avenue (OSM w52721875): the Mar 2025 photo at 1395 Gateview Ave shows a concrete walk behind the right curb, about 640 to 735 m along the way; the game draws a verge there.
+  - The red on the far curbs is too strong on Gateview Avenue's left side and on 13th Street.
+  - 1395 Gateview Ct: the photographed faded red curb round the lawn lies on the housing site's parking apron (asset w96215667), past where a street curb can go, so it isn't drawn.
+  - Gateview Court (OSM w8916719): the curb ends at the court's corners read as short blocks.
+  - The KEEP CLEAR legend at Trade Winds isn't painted.
+  - Asphalt tone: photos show paler, sun-bleached roads than the game. Parked as a look pass.
+- **Street objects:**
+  - Signs stand off their photographed spots at Bayside Drive / Gateview Avenue, Gateview Court / Gateview Avenue and Northpoint Drive / Gateview Avenue.
+  - In the matched view at 9th Street / Avenue B the stop sign is 8.3 m away; in the photo it is 4 to 5 m.
+  - The signal masts at the north Seven Seas Avenue crossing stand farther off than in the photo.
+  - The road is a different width from the photo at 4th Street / Avenue M, 4th Street / Avenue H and Seven Seas Avenue / Trade Winds.
+  - Pole n11611760988 is on the map but not in the Mar 2025 photo at Gateview Court.
+  - Bruton Street's south run of lamps is rule inference, with no photo.
+  - The merge with the street ground left some rule lamps unplaced: Johnson Street's left side has 3 of 5, Seven Seas Avenue 40 of 43.
+  - One all-way approach has no sign: n65324985 on the unnamed way w8921299. It wasn't signed before either.
+  - The "NO STOPPING ANY TIME" sign on the plaza mast isn't placed.
+  - Finish: the Muni flag post has no perforations, and the EV bay needs more weathering (rusty bollards, bent posts).
+  - Power lines: check them for shimmer in motion; the near wires are about 1 px wide.
+- **Mersea lot and strip:**
+  - The lot light (OSM n11230361247) has one arm where the photo shows two.
+  - The lamp's island is too short and has no planting.
+  - The built east row stands 1 to 3 m farther from the east edge than the real cars, and one west car is 5.9 m along the row.
+  - The dumpster group at heading 10 stands farther right than in the photo.
+  - The dumpsters have no finish yet. The planters are empty until the tree push plants them.
+  - The Sep 2025 photos of the strip show no cars; its row comes from the May 2026 aerial.
+- **Parked cars:** Keppler Court's planted central island is missing until the tree push. Avenue I's review is held, so its cars are unjudged.
+- **Shoreline:**
+  - Two small dark tips remain at the north slipway: one at the grass corner of the ramp's head, one at its water end.
+  - The offshore wave wall (OSM w1011830371) and the jetty's marker post aren't built, and neither is the pale concrete pad near x −373, z −855 that the aerial shows.
+- **East span of the Bay Bridge:** the west cable sags differently from the photos, the tower shaft has no slot, and the span has a single material.
+- **Ground tone:** one large dirt patch in the residential straw belt, and the lawn band along the residential kerbs is too even.
+- **Performance:** not measured since these layers landed. Before them the spawn drew about 24,600 draw calls and 3.8 million primitives at 1440 × 900 (`6ba040d3`). The ground-cover shader now runs six noise calls per fragment, cost unmeasured. A performance pass on a quiet machine is planned.
+
 ## Deferred by the owner
 
 - Drivable cars: after the release.
 - Audio: the game has no sound; "not now".
-- Fences island-wide from the map data: not picked for this release. Today only fences in the street-detail zones are built; the rest stay data.
+- Fences island-wide from the map data: not picked for this release. Today only fences in the street-detail zones are built; the rest stay data. The street reviews saw three that are missing: a container wall at 11th Street, a container wall at 4th Street / Avenue M, and wooden fences at 13th Street / Gateview Avenue, which hide a shelter in the photo.
 - Mac notarization: later. It needs a paid Apple Developer membership.
 - The pelican rider variant of the player: paused.
 
@@ -93,20 +126,33 @@ From the yard reviews.
   - The draped-area layer check in `tools/validate_godot_world.mjs` sums each pair's overlap over the chunk-clipped triangles, so slivers along a shared edge could add up to a false failure.
   - The yard-kit floor check tests floor vertices on the sides of the plan rectangle, not the mesh's actual open edges.
   - Yard props rest on a 3 m sample grid, which can miss ditches narrower than 3 m.
-  - The parked-car `reject` check in `tools/lib/street-clutter-generation.mjs` scans every placed item for each car, which is slow. The parked-cars rollout is fixing it.
   - `tools/render_naip_generated_vegetation_comparison.mjs` is broken: it reads `generated/world/vegetation.json`, which no longer exists. Fix or remove it with its outputs in `source_assets/vegetation/naip_2022/`.
+  - `tools/render_world_coverage_evidence.mjs` fails on an unknown demolished status.
+- **Street objects generator** (findings at `f4a6f827`, line numbers of that commit):
+  - `stepOffSlope` in `tools/lib/street-furniture-generation.mjs:722` tests a spot with the `bus_stop` kind's 1.5 m radius, so a flag could go quietly to `osm_unbuilt`.
+  - `except_cells` (`:1498`) is keyed by station index, so a spacing change can remove a different lamp.
+  - A stale `shelter_anchors` entry (`:743`) does nothing and says nothing.
+  - `on_posts` (`:1283`) has no distance limit.
+  - The comment on `reject` (`:518`) doesn't mention `options.pad`.
+  - In `tools/lib/street-ground-generation.mjs:2316-2324`, `own_line: false` overstates `counts.stop_bars` and needs no crosswalk.
+- **Shoreline and vegetation generators:**
+  - The rock ground's tone comes from shader defaults, not the segment's tone.
+  - In `tools/lib/shoreline-generation.mjs`, the "Side walls" comment (`:1692`) and the shoreline config's note are stale. So are the comments at `:43` and `:2299`, which still say the player is recovered at the outline (the shore lift replaced that).
+  - The ramp foot's seed (code review's low, at `07a0f9e5`).
+  - The Job Corps kerb verges (3,506 m²) stay `field` beside straw: add a rule, or fix the comment that says otherwise.
 - **Tests:**
   - The startup test (`game/tests/headless_startup_configuration_contract.gd`) checks that a demolished building has a demolition record, but doesn't compare it with the evidence in `tools/config/demolished-buildings.json`.
   - `building_shots.gd`'s `_moving_view` turns off the player controller right after the last move, without waiting for the player to come to rest.
   - `building_shots.gd`'s `MOVE_ACTIONS` duplicates the action list in `world_harness.gd`'s `release_input`; share one list.
-  - The fit test's spray `"expect": "receiver_rejection"` checks that something other than a receiver stopped the spray, not that it was a street prop.
-- **Player:** the chest avatar's `WALK_SPEED` (4.0) is a copy of `player_controller.walk_speed_mps`; couple them.
+  - `tools/godot` starts Weston without `--idle-time=0`, so a rendered run stalls after 300 s idle. Keep render plans under 280 s until it's fixed.
+- **Player:**
+  - The chest avatar's `WALK_SPEED` (4.0) is a copy of `player_controller.walk_speed_mps`; couple them.
+  - The shore lift could use `to.y = maxf(from.y, floor + lift)`, and its "Recovered" toast wording could say what happened.
 - **Mersea mural mesh** (`game/scripts/world/facades/mersea_model.gd`):
   - the view pull in its shader assumes a perspective camera, with no orthographic branch;
   - the 0.23 m clip should share a constant with the bottom rail;
   - the `ROUGHNESS` comment says the sheet keeps its own finish, but the shader sets a constant.
 - **Docs:**
   - README.md shows `building_fit_test.gd` run with `--headless`, which the test refuses.
-  - AGENTS.md still calls the vegetation a low-poly placeholder.
   - PLAYTEST.md and HUMAN.md should point to the Mac build that CI publishes.
   - AGENTS.md should state the decal policy: decals are used freely, and their absence on the web is acceptable.

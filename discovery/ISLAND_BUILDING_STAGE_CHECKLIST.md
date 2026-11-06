@@ -784,8 +784,9 @@ These layers dominate the look at gameplay distance, so the same five levels
 apply to them, read by analogy: 1 basic shape/layout and fit; 2 major features;
 3 secondary detail; 4 PBR/materials; 5 decals/finish. Every cell stays U until
 a study progress review inspects current gameplay originals and references for
-that layer. Vegetation stays deferred to the future vegetation pass. These 20
-cells are separate from the 1,065 building cells.
+that layer. Vegetation is tracked in the
+[site and asset inventory](SITE_AND_ASSET_INVENTORY.md). These 20 cells are
+separate from the 1,065 building cells.
 
 | Layer | 1 Shape/layout | 2 Major features | 3 Secondary | 4 PBR/materials | 5 Decals/finish | Evidence / next |
 |---|---|---|---|---|---|---|

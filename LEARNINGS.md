@@ -1076,3 +1076,11 @@ The shoreline's far band passed two reviews on tone and texture crops from one c
 ## Run npm ci in a new worktree before queuing the suite
 
 On 2026-11-05 shore-reset's one budgeted `tools/test.sh` waited 1 h 46 min for its locks, passed every Godot stage, then failed its last three stages at once with `ERR_MODULE_NOT_FOUND` (earcut, polygon-clipping), so that commit has no single clean suite run. An earlier review worktree and its author hit the same snag. `git worktree add` copies only tracked files, and `post-create.sh` runs `npm ci` only in the main checkout. Run `npm ci` in a new worktree before queuing the suite, and confirm `node_modules/earcut` exists.
+
+## Run the short contract tests on a merged tree before spending a suite
+
+Each rollout passed its own suite, then the first suite on the merged rollouts (2026-11-06) failed `headless_world_material_contract.gd` in its first minute: vegetation had added a route row saying `terrain_breakwater` keeps the builder's own material, while the shoreline had routed that overlay to its bare-rock material. Git merged both without a conflict, because neither branch had the other's line. A rule held in a test and a rule held in the code it tests can diverge across branches. After a merge, import and run the seconds-long headless contracts in the merged tree before queuing a suite with a fixed budget; a suite that fails in its first minute still runs to its end.
+
+## Caption an Esri aerial with the date of its zoom level
+
+Esri World Imagery serves a different capture at each zoom level. Over Treasure Island, levels 12 to 19 (about 0.24 m per pixel or coarser) are the Vantor capture of 2026-05-26, and level 20 (0.12 to 0.15 m) is 2025-08-29, checked with the service's identify call on 2026-11-05. In the clutter rollout a reviewer took the finer crop for the newer one and an August 2025 lot count reinforced that, until the metadata was checked: recounted on May 2026, the Mersea lot has 29 cars, not 36. Check the date for the exact level you use, caption each aerial with that date and its scale, and cite May 2026 only from level 19 or coarser. Resolution says nothing about date.
