@@ -376,8 +376,8 @@ const CHRISTMAS_TREES := [
 ## lean the fork's offset in metres, limbs its long limbs, crown_low the crown's foot
 ## as a share of the height, ends the crown's boughs, holes the patches left empty.
 const MATURE_GUMS := [
-	{"seed": 401, "height": 22.0, "spread": 14.5, "fork": 8.0, "sweep": 4.6, "trunk_radius": 0.68, "limbs": 4, "lean": 0.5, "crown_low": 0.22, "ends": 62, "holes": 4},
-	{"seed": 402, "height": 25.0, "spread": 16.5, "fork": 8.5, "trunk_radius": 0.76, "limbs": 5, "lean": 0.7, "crown_low": 0.22, "ends": 74, "holes": 5},
+	{"seed": 401, "height": 22.0, "spread": 14.5, "fork": 8.0, "sweep": 4.6, "trunk_radius": 0.68, "limbs": 4, "lean": 0.5, "crown_low": 0.26, "ends": 62, "holes": 4},
+	{"seed": 402, "height": 25.0, "spread": 16.5, "fork": 8.5, "trunk_radius": 0.76, "limbs": 5, "lean": 0.7, "crown_low": 0.26, "ends": 74, "holes": 5},
 ]
 ## The weeping trees flanking them (owner photos, Nov 2026; species unresolved, so the
 ## photographed form; sizes estimated): a dense dome narrowing to its top, and an open
@@ -2011,12 +2011,13 @@ func _build_mature_gum(p: Dictionary) -> Dictionary:
 	for end: Dictionary in ends:
 		var at: Vector3 = end.at
 		var height_f := clampf((at.y - crown_low) / (height - crown_low), 0.0, 1.0)
-		var tone := rng.randf_range(0.82, 1.04) * lerpf(0.76, 1.0, height_f)
+		# The sun lights the top and the underside goes dark, so the tone leans the other way.
+		var tone := rng.randf_range(0.82, 1.04) * lerpf(0.98, 0.9, height_f)
 		# An uneven clump: a few big, more middling, some barely a spray.
 		var clumps := rng.randi_range(3, 5) if rng.randf() < 0.65 else rng.randi_range(1, 3)
 		for c in clumps:
 			var size := rng.randf_range(0.6, 1.25) * (1.25 if c == 0 else 0.95)
-			var center_c := at + Vector3(rng.randf_range(-1.0, 1.0), rng.randf_range(-1.0, 0.5), rng.randf_range(-1.0, 1.0)) * (0.0 if c == 0 else 1.8)
+			var center_c := at + Vector3(rng.randf_range(-1.0, 1.0), rng.randf_range(-1.4, 0.7), rng.randf_range(-1.0, 1.0)) * (0.0 if c == 0 else 1.8)
 			var count := 3 if size < 0.9 else 4
 			for k in count:
 				var turn := rng.randf() * TAU
@@ -2024,13 +2025,14 @@ func _build_mature_gum(p: Dictionary) -> Dictionary:
 				var facing := Vector3(cos(turn), -rng.randf_range(0.0, 0.7) if k % 2 == 1 else 0.0, sin(turn)).normalized()
 				var shade := tone * rng.randf_range(0.94, 1.05)
 				var offset := Vector3(rng.randf_range(-1.0, 1.0), rng.randf_range(-0.5, 0.5), rng.randf_range(-1.0, 1.0)) * size * 0.5
-				var card := _card(center_c + offset, facing, Vector3.UP, size * 1.9 * (1.0 if k % 2 == 0 else -1.0), size * 1.5, 0.8, rng.randf_range(-0.3, 0.3), EUCALYPTUS_SPRAY, Color(shade, shade, shade), center_c.lerp(heart, 0.7), clump * 4 + mini(k, 1), 0.03)
+				var card := _card(center_c + offset, facing, Vector3.UP, size * 1.7 * (1.0 if k % 2 == 0 else -1.0), size * 1.7, 0.8, rng.randf_range(-0.3, 0.3), EUCALYPTUS_SPRAY, Color(shade, shade, shade), center_c.lerp(heart, 0.7), clump * 4 + mini(k, 1), 0.03)
 				card.coarse = true
 				card.root = 0.8
 				card.heart_weight = 0.7
-				# Every clump stays at LOD1, on fewer, larger cards, so no hole opens at the switch.
+				# Every clump stays at LOD1 on two cards, grown to the same area, so no hole
+				# opens at the switch and the crown doesn't fill in.
 				card.lod1 = k < 2
-				card.lod1_grow = 1.5
+				card.lod1_grow = sqrt(count * 0.5)
 				cards.append(card)
 			clump += 1
 	var meshes: Array[ArrayMesh] = []
@@ -2210,7 +2212,8 @@ func _build_weeping(p: Dictionary) -> Dictionary:
 			continue
 		var width := clampf(drop * rng.randf_range(0.7, 1.0) * float(p.slim), 1.1, 3.1)
 		var height_f := clampf((at.y - crown_low) / (height - crown_low), 0.0, 1.0)
-		var tone := rng.randf_range(0.72, 1.05) * lerpf(0.78, 1.0, height_f)
+		# The sun lights the top and the underside goes dark, so the tone leans the other way.
+		var tone := rng.randf_range(0.72, 1.05) * lerpf(1.0, 0.82, height_f)
 		var count := int(p.cards)
 		var phase := rng.randf() * TAU
 		for k in count:
@@ -2223,9 +2226,10 @@ func _build_weeping(p: Dictionary) -> Dictionary:
 			card.coarse = true
 			card.root = 0.84
 			card.heart_weight = 0.7
-			# Every mass stays at LOD1, on fewer, larger cards, so no hole opens at the switch.
+			# Every mass stays at LOD1 on two cards, grown to about the same area (and clear
+			# of the ground), so no hole opens at the switch and the crown doesn't fill in.
 			card.lod1 = k < 2
-			card.lod1_grow = clampf((at.y - 0.4) / tall, 1.0, 1.4)
+			card.lod1_grow = clampf((at.y - 0.4) / tall, 1.0, minf(sqrt(count * 0.5), 1.4))
 			cards.append(card)
 	if not open:
 		# A dark heart, so sky doesn't show right through the dense form.

@@ -62,7 +62,7 @@ const ROLLOUT_GRADES := {
 	"christmas_spray.png": [Color(0.82, 0.84, 0.8), 0.38],
 	"christmas_spray_flowers.png": [Color(1.0, 0.76, 0.82), 0.3],
 	"eucalyptus_spray.png": [Color(0.65, 0.67, 0.69), 0.45],
-	"weeping_mass.png": [Color(0.76, 0.74, 0.72), 0.3],
+	"weeping_mass.png": [Color(0.745, 0.74, 0.78), 0.3],
 	"norfolk_branch_top.png": [Color(0.98, 0.98, 0.92), 0.42],
 	"norfolk_branch_side.png": [Color(0.98, 0.98, 0.92), 0.42],
 	"hawthorn_spray.png": [Color(0.81, 0.81, 0.87), 0.36],
