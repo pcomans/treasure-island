@@ -24716,6 +24716,7 @@
       "heights": [],
       "logical_object_key": "road:w1370667322",
       "physical_object_keys": [
+        "roads-concrete:x_0__z_2",
         "roads:x_0__z_2"
       ],
       "representation": "direct",
@@ -38321,9 +38322,9 @@
       "heights": [],
       "logical_object_key": "terrain:r16681104",
       "physical_object_keys": [
-        "terrain:r16681104:x_-1__z_3",
-        "terrain:r16681104:x_0__z_2",
-        "terrain:r16681104:x_0__z_3"
+        "shoreline:r16681104:x_-1__z_3",
+        "shoreline:r16681104:x_0__z_2",
+        "shoreline:r16681104:x_0__z_3"
       ],
       "representation": "direct",
       "roles": [
@@ -38708,6 +38709,7 @@
       "heights": [],
       "logical_object_key": "terrain:w1222505177",
       "physical_object_keys": [
+        "boundary_context:w1222505177",
         "terrain:w1222505177:x_2__z_2"
       ],
       "representation": "direct",
@@ -38748,8 +38750,8 @@
       "heights": [],
       "logical_object_key": "terrain:w1222684023",
       "physical_object_keys": [
-        "terrain:w1222684023:x_0__z_2",
-        "terrain:w1222684023:x_1__z_2"
+        "shoreline:w1222684023:x_0__z_2",
+        "shoreline:w1222684023:x_1__z_2"
       ],
       "representation": "direct",
       "roles": [
@@ -38787,7 +38789,7 @@
       "heights": [],
       "logical_object_key": "terrain:w1222684024",
       "physical_object_keys": [
-        "terrain:w1222684024:x_1__z_2"
+        "shoreline:w1222684024:x_1__z_2"
       ],
       "representation": "direct",
       "roles": [
@@ -38826,8 +38828,8 @@
       "heights": [],
       "logical_object_key": "terrain:w1222684025",
       "physical_object_keys": [
-        "terrain:w1222684025:x_1__z_2",
-        "terrain:w1222684025:x_2__z_2"
+        "shoreline:w1222684025:x_1__z_2",
+        "shoreline:w1222684025:x_2__z_2"
       ],
       "representation": "direct",
       "roles": [
@@ -38866,8 +38868,8 @@
       "heights": [],
       "logical_object_key": "terrain:w1222684026",
       "physical_object_keys": [
-        "terrain:w1222684026:x_2__z_1",
-        "terrain:w1222684026:x_2__z_2"
+        "shoreline:w1222684026:x_2__z_1",
+        "shoreline:w1222684026:x_2__z_2"
       ],
       "representation": "direct",
       "roles": [
@@ -38913,15 +38915,15 @@
       "heights": [],
       "logical_object_key": "terrain:w1222684027",
       "physical_object_keys": [
-        "terrain:w1222684027:x_-1__z_-4",
-        "terrain:w1222684027:x_0__z_-3",
-        "terrain:w1222684027:x_0__z_-4",
-        "terrain:w1222684027:x_1__z_-1",
-        "terrain:w1222684027:x_1__z_-2",
-        "terrain:w1222684027:x_1__z_-3",
-        "terrain:w1222684027:x_2__z_-1",
-        "terrain:w1222684027:x_2__z_0",
-        "terrain:w1222684027:x_2__z_1"
+        "shoreline:w1222684027:x_-1__z_-4",
+        "shoreline:w1222684027:x_0__z_-3",
+        "shoreline:w1222684027:x_0__z_-4",
+        "shoreline:w1222684027:x_1__z_-1",
+        "shoreline:w1222684027:x_1__z_-2",
+        "shoreline:w1222684027:x_1__z_-3",
+        "shoreline:w1222684027:x_2__z_-1",
+        "shoreline:w1222684027:x_2__z_0",
+        "shoreline:w1222684027:x_2__z_1"
       ],
       "representation": "direct",
       "roles": [
@@ -38971,17 +38973,16 @@
       "physical_object_keys": [
         "shoreline:w1222685424:x_-1__z_2",
         "shoreline:w1222685424:x_-1__z_3",
-        "terrain:w1222685424:x_-1__z_2",
-        "terrain:w1222685424:x_-1__z_3",
-        "terrain:w1222685424:x_-2__z_-4",
-        "terrain:w1222685424:x_-2__z_0",
-        "terrain:w1222685424:x_-2__z_1",
-        "terrain:w1222685424:x_-2__z_2",
-        "terrain:w1222685424:x_-3__z_-1",
-        "terrain:w1222685424:x_-3__z_-2",
-        "terrain:w1222685424:x_-3__z_-3",
-        "terrain:w1222685424:x_-3__z_-4",
-        "terrain:w1222685424:x_-3__z_0"
+        "shoreline:w1222685424:x_-2__z_-4",
+        "shoreline:w1222685424:x_-2__z_0",
+        "shoreline:w1222685424:x_-2__z_1",
+        "shoreline:w1222685424:x_-2__z_2",
+        "shoreline:w1222685424:x_-3__z_-1",
+        "shoreline:w1222685424:x_-3__z_-2",
+        "shoreline:w1222685424:x_-3__z_-3",
+        "shoreline:w1222685424:x_-3__z_-4",
+        "shoreline:w1222685424:x_-3__z_0",
+        "terrain:w1222685424:x_-3__z_-1"
       ],
       "representation": "direct",
       "roles": [
@@ -39060,8 +39061,8 @@
       "heights": [],
       "logical_object_key": "terrain:w26767328",
       "physical_object_keys": [
-        "terrain:w26767328:x_-1__z_-4",
-        "terrain:w26767328:x_-2__z_-4"
+        "shoreline:w26767328:x_-1__z_-4",
+        "shoreline:w26767328:x_-2__z_-4"
       ],
       "representation": "direct",
       "roles": [

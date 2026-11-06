@@ -25,7 +25,7 @@ packed with ImageMagick:
 
 | File | Use | Source prompt (short) |
 |---|---|---|
-| `street_concrete_panels.png` | sidewalk concrete: 2 x 2 poured panels (one UV unit = one 1.5 m panel) with saw-cut joints drawn on the panel edges; broom lines turned to run across the walk, each panel toned slightly differently | seamless light grey broom-finished concrete, no joints |
+| `street_concrete_panels.png` | sidewalk concrete: 2 x 2 poured panels (one UV unit = one 1.5 m panel) with saw-cut joints drawn on the panel edges; broom lines turned to run across the walk, each panel toned slightly differently; also the concrete driveway skin (`road_path_concrete`) in 1.5 m panels | seamless light grey broom-finished concrete, no joints |
 | `street_mulch.png` | planting strips, darkened and desaturated | seamless dark reddish-brown shredded bark mulch |
 | `street_plaza_pavers.png` | Waterfront Plaza banded paving; band contrast pulled down to the photographed plaza | seamless charcoal and mid-grey stack-bond pavers in alternating bands |
 

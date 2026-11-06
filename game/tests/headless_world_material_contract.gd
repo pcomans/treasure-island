@@ -185,7 +185,8 @@ func _ground_cover_map_matches() -> bool:
 
 
 ## Built records get their family's material and tangents for its normal map;
-## parking and terrain overlays keep their own materials.
+## parking and terrain overlays keep their own materials, the flat breakwater's
+## being the riprap's bare rock.
 func _ground_routes_match(builder: WorldChunkBuilder) -> bool:
 	for route: Array in GROUND_ROUTES:
 		var record := {
@@ -215,6 +216,8 @@ func _ground_routes_match(builder: WorldChunkBuilder) -> bool:
 			expected = builder._material_for("major_area_court", "major_area", false)
 		elif family != "":
 			expected = GROUND_COVER.material(family)
+		elif str(route[1]) == WorldChunkBuilder.SHORELINE_ROCK_OVERLAY:
+			expected = ShorelineBuilder.rock_ground_material()
 		else:
 			expected = builder._material_for(str(route[1]), str(route[0]), false)
 		var arrays := mesh.surface_get_arrays(0)

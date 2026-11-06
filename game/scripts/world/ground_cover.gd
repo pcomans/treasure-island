@@ -82,9 +82,10 @@ const FAMILIES := {
 	# 78 % dry, 16 % bare of their open ground).
 	"sand_pad": {"dry_threshold": -1.0, "bare_threshold": 0.543, "green_dryness": 0.5, "patch_scale_m": 12.0, "bare_scale_m": 9.0},
 	# The shoreline verge at the top of the riprap (ShorelineBuilder): the field
-	# grown drier and dirtier, with dirt in small patches, so it meets the field
-	# without a hard change of tone.
-	"verge": {"dry_threshold": 0.25, "bare_threshold": 0.55, "green_dryness": 0.5, "patch_scale_m": 16.0, "bare_scale_m": 7.0},
+	# grown drier and dirtier. Its patches share the field's scales and green,
+	# so where the band meets the field the same patches run on across the edge,
+	# only drier and barer on the verge side, rather than meeting along a line.
+	"verge": {"dry_threshold": 0.3, "bare_threshold": 0.6, "green_dryness": 0.35, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
 }
 
 ## Family per generated material key. Parking, roads, buildings, the shore

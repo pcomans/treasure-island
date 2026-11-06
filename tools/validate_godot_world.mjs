@@ -9,6 +9,7 @@ import {
   BOUNDARY_ATTACHED_SOURCE_KEYS,
   CATEGORY_MEMBERSHIPS,
   CHUNK_SCHEMA,
+  CONCRETE_ROAD_SURFACE,
   COORDINATE_ROUNDING_M,
   CONTEXT_SCHEMA,
   COVERAGE_HEADERS,
@@ -18,6 +19,7 @@ import {
   ISLE_HOUSE_PARENT_KEY,
   ISLE_HOUSE_PART_KEYS,
   MATERIAL_KEYS,
+  PIER_DECK_SOURCE_KEYS,
   PLAYABLE_BOUNDARY_SOURCE_KEY,
   ROAD_SURFACE_BIASES_M,
   ROAD_VISUAL_CLASSES,
@@ -49,17 +51,21 @@ import { loadTerrainRaster } from "./lib/terrain-raster.mjs";
 import {
   SHORELINE_BANDS,
   SHORELINE_BOULDER_MATERIAL,
+  SHORELINE_CLOSURE_KINDS,
   SHORELINE_COBBLE_MAX_TOP_M,
   SHORELINE_DRIFTWOOD_MATERIAL,
   SHORELINE_OUTSIDE_CLEARANCE_M,
   SHORELINE_OVERLAY_MATERIAL,
   SHORELINE_OVERLAY_PREFIX,
-  SHORELINE_PLACEMENT_LENGTH,
   SHORELINE_PROTOTYPE_KINDS,
+  SHORELINE_RECORD_MATERIALS,
   SHORELINE_SCHEMA,
   SHORELINE_SLOPE_MATERIAL,
+  SHORELINE_TONE_LENGTH,
   SHORELINE_VERGE_MATERIAL,
   WATER_Y_M,
+  unpackShorelineBatch,
+  unpackShorelineRecord,
 } from "./lib/shoreline-generation.mjs";
 import {
   STREET_DETAIL_GROUND_LAYER,
@@ -208,6 +214,12 @@ function validateCoverage(worldRoot, manifest) {
     invariant(row?.derived_object_key === `boundary_context:${key}`, `${key} boundary composite key drift`);
     invariant(row?.chunk_ids === "", `${key} must not enter playable chunks`);
   }
+  // A pier deck past the outline keeps its playable overlay and adds its deck.
+  for (const key of PIER_DECK_SOURCE_KEYS) {
+    const row = byKey.get(key);
+    invariant(row?.scope === "playable" && row.derived_object_key === `terrain:${key}`, `${key} pier deck source drift`);
+    invariant(splitValues(row.part_keys).includes(`boundary_context:${key}`) && row.chunk_ids !== "", `${key} pier deck parts drift`);
+  }
   invariant(byKey.get(YBI_SOURCE_KEY)?.derived_object_key === "context:ybi", "YBI context key drift");
   const playable = rows.filter((row) => row.scope === "playable");
   for (const [category, expected] of Object.entries(CATEGORY_MEMBERSHIPS)) {
@@ -293,13 +305,17 @@ function validateRecords(worldRoot, manifest, coverage) {
     invariant(!physical.has(record.object_key), `Duplicate context physical key ${record.object_key}`);
     physical.set(record.object_key, { record, chunk_id: null });
   }
+  const boundaryVisualSources = [...BOUNDARY_ATTACHED_SOURCE_KEYS, ...PIER_DECK_SOURCE_KEYS];
   invariant(
-    Array.isArray(context.boundary_attached_visuals) && context.boundary_attached_visuals.length === 2,
-    "Context must contain exactly two boundary-attached visuals",
+    Array.isArray(context.boundary_attached_visuals) && context.boundary_attached_visuals.length === boundaryVisualSources.length,
+    "Context must contain exactly the approved boundary-attached visuals and pier decks",
   );
   for (const record of context.boundary_attached_visuals) {
     invariant(record.context_kind === "boundary_attached_visual", `${record.object_key} boundary context kind drift`);
-    invariant(record.source_keys.length === 1 && BOUNDARY_ATTACHED_SOURCE_KEYS.includes(record.source_keys[0]), `${record.object_key} invalid boundary-attached source`);
+    invariant(record.source_keys.length === 1 && boundaryVisualSources.includes(record.source_keys[0]), `${record.object_key} invalid boundary-attached source`);
+    if (PIER_DECK_SOURCE_KEYS.includes(record.source_keys[0])) {
+      invariant(record.material_key === "context_boundary_pier", `${record.object_key} pier deck material drift`);
+    }
     invariant(record.object_key === `boundary_context:${record.source_keys[0]}`, `${record.object_key} boundary context object key drift`);
     invariant(record.collision_kind === "none" && record.receiver_kind === "none" && record.opaque === false, `${record.object_key} boundary context semantics leak`);
     validateMesh(record, record.object_key);
@@ -797,6 +813,8 @@ function validatePavementSkin(worldRoot, manifest, coverage, records, terrain) {
       audit.materials.pedestrian.material_key === "road_path_pedestrian" &&
       audit.materials.pedestrian.albedo_srgb_hex === "8b918e" &&
       audit.materials.pedestrian.surface_bias_m === ROAD_SURFACE_BIASES_M.pedestrian &&
+      audit.materials.concrete.material_key === "road_path_concrete" &&
+      audit.materials.concrete.surface_bias_m === ROAD_SURFACE_BIASES_M.pedestrian &&
       audit.materials.paved_area.material_key === "major_area_paved" &&
       audit.materials.paved_area.albedo_srgb_hex === "707573" &&
       audit.materials.paved_area.source_count === 17,
@@ -838,14 +856,17 @@ function validatePavementSkin(worldRoot, manifest, coverage, records, terrain) {
       parkingSourceKeys.add(row.source_key);
     }
   }
+  const expectedConcrete = new Set();
   for (const row of sourceRoads) {
-    const highway = JSON.parse(row.tags_json).highway;
+    const tags = JSON.parse(row.tags_json);
     const matches = Object.entries(ROAD_VISUAL_CLASSES)
-      .filter(([, values]) => values.includes(highway))
+      .filter(([, values]) => values.includes(tags.highway))
       .map(([visualClass]) => visualClass);
     invariant(matches.length === 1, `${row.source_key} has ${matches.length} pavement classes in independent validation`);
     expectedByClass[matches[0]].add(row.source_key);
+    if (matches[0] === "vehicle" && tags.surface === CONCRETE_ROAD_SURFACE) expectedConcrete.add(row.source_key);
   }
+  invariant(audit.materials.concrete.source_count === expectedConcrete.size, "Concrete vehicle-way count drift");
   invariant(
     expectedByClass.vehicle.size === 208 && expectedByClass.pedestrian.size === 219 && parkingSourceKeys.size === 17,
     "Independent OSM pavement classification counts drift",
@@ -854,10 +875,12 @@ function validatePavementSkin(worldRoot, manifest, coverage, records, terrain) {
   const roadEntries = [...records.physical.values()].filter(({ record }) => record.feature_kind === "road_path");
   const baseEntries = roadEntries.filter(({ record }) => record.material_key === "road_path");
   const pedestrianEntries = roadEntries.filter(({ record }) => record.material_key === "road_path_pedestrian");
+  const concreteEntries = roadEntries.filter(({ record }) => record.material_key === "road_path_concrete");
   invariant(
     baseEntries.length === audit.topology.base_record_count &&
       pedestrianEntries.length === audit.topology.pedestrian_record_count &&
-      roadEntries.length === baseEntries.length + pedestrianEntries.length,
+      concreteEntries.length === audit.topology.concrete_record_count &&
+      roadEntries.length === baseEntries.length + pedestrianEntries.length + concreteEntries.length,
     "Generated pavement record/material counts drift",
   );
   const baseByChunk = new Map(baseEntries.map((entry) => [entry.chunk_id, entry.record]));
@@ -903,6 +926,42 @@ function validatePavementSkin(worldRoot, manifest, coverage, records, terrain) {
   invariant(
     visiblePedestrianSourceKeys.size === audit.topology.pedestrian_sources_with_visible_skin,
     "Pedestrian visible-source audit drift",
+  );
+  // The concrete skin: only concrete-surfaced vehicle ways, at the pedestrian
+  // height, on its chunk's base, and never over the pedestrian skin.
+  const visibleConcreteSourceKeys = new Set();
+  const pedestrianByChunk = new Map(pedestrianEntries.map((entry) => [entry.chunk_id, entry.record]));
+  for (const { record, chunk_id: chunkId } of concreteEntries) {
+    invariant(record.surface_bias_m === ROAD_SURFACE_BIASES_M.pedestrian, `${record.object_key} concrete skin bias drift`);
+    invariant(record.object_key === `roads-concrete:${chunkId}`, `${record.object_key} concrete chunk ownership drift`);
+    const base = baseByChunk.get(chunkId);
+    invariant(base && base.surface_bias_m === ROAD_SURFACE_BIASES_M.base, `${record.object_key} has no lower filled base`);
+    for (const sourceKey of record.source_keys) {
+      invariant(expectedConcrete.has(sourceKey), `${record.object_key} contains non-concrete source ${sourceKey}`);
+      visibleConcreteSourceKeys.add(sourceKey);
+    }
+    const pedestrian = pedestrianByChunk.get(chunkId);
+    for (let offset = 0; offset < record.indices.length; offset += 3) {
+      const triangle = record.indices.slice(offset, offset + 3).map((index) => [
+        record.vertices[index * 3], record.vertices[index * 3 + 2],
+      ]);
+      const centroid = [
+        triangle.reduce((sum, point) => sum + point[0], 0) / 3,
+        triangle.reduce((sum, point) => sum + point[1], 0) / 3,
+      ];
+      invariant(
+        [...triangle, centroid].every((point) => pointToRecordDistance(point, base) <= COORDINATE_ROUNDING_M * 2),
+        `${record.object_key} escapes its continuous pavement base`,
+      );
+      invariant(
+        !pedestrian || pointToRecordDistance(centroid, pedestrian) > 0,
+        `${record.object_key} overlaps the pedestrian skin`,
+      );
+    }
+  }
+  invariant(
+    visibleConcreteSourceKeys.size === audit.topology.concrete_sources_with_visible_skin,
+    "Concrete visible-source audit drift",
   );
 
   for (const sourceKey of parkingSourceKeys) {
@@ -1358,16 +1417,17 @@ function validateFenceRow(row, grounded, inBoundary, groundAt) {
 }
 
 // The shoreline: its riprap overlays are ordinary terrain overlays (checked
-// with the other coherent surfaces). Here: the visual-only slope and shoulder
-// stay outside the exact island polygon and the slope reaches under the water; prototypes and their
-// LOD index sets are valid meshes; every placement is a finite unit rotation
-// with positive scale. Then each stone is placed and checked against the
-// island the player walks on: cobbles lie wholly inside it and no higher than
-// SHORELINE_COBBLE_MAX_TOP_M above the land (the player walks over them, with
-// no collision); every other stone and log keeps SHORELINE_OUTSIDE_CLEARANCE_M
-// clear of it on the water side, and one that lies under a walkable pier (the
-// playable boundary's pier extensions) tops out at least 1 m below the land
-// edge, under the deck.
+// with the other coherent surfaces). Here, on the unpacked document: the
+// visual-only slope, shoulder and closure faces stay outside the exact island
+// polygon (closure faces stand on it) and the slope reaches under the water;
+// prototypes and their LOD index sets are valid meshes; every placement is a
+// unit rotation with positive, and for a stone uniform, scale. Then each stone
+// is placed and checked against the island the player walks on: cobbles lie
+// wholly inside it and no higher than SHORELINE_COBBLE_MAX_TOP_M above the
+// land (the player walks over them, with no collision); every other stone and
+// log keeps SHORELINE_OUTSIDE_CLEARANCE_M clear of it on the water side, and
+// one that lies under a walkable pier (the playable boundary's pier
+// extensions) tops out at least 1 m below the land edge, under the deck.
 function validateShoreline(worldRoot, manifest, records) {
   invariant(manifest.shoreline?.path === "shoreline.json", "Manifest shoreline descriptor is missing");
   invariant(stableJson(descriptor(worldRoot, manifest.shoreline.path)) === stableJson(manifest.shoreline), "Shoreline descriptor drift");
@@ -1407,6 +1467,19 @@ function validateShoreline(worldRoot, manifest, records) {
   };
   const inside = (x, z) => pointInMultiPolygon([x, -z], island, false);
   const walkable = (x, z) => pointInPlayableBoundary([x, z], manifest.playable_boundary);
+  invariant(Array.isArray(document.segments) && document.segments.length > 0 && Array.isArray(document.closures), "Shoreline segments or closures are missing");
+  // The thinning the shader applies, and each segment's stone tone with the
+  // joints at its ends that it blends across.
+  const finiteArray = (value, size) => Array.isArray(value) && value.length === size && value.every(Number.isFinite);
+  const lod = document.lod;
+  invariant(lod && ["reach_per_m", "min_m", "max_m", "start"].every((key) => Number.isFinite(lod[key])) && lod.reach_per_m > 0 && lod.min_m > 0 && lod.max_m >= lod.min_m
+    && lod.start > 0 && lod.start <= 1 && finiteArray(lod.underlay_fade_m, 2) && lod.underlay_fade_m[1] > lod.underlay_fade_m[0], "Shoreline thinning (lod) is malformed");
+  for (const segment of document.segments) {
+    const tone = segment.tone;
+    invariant(tone && finiteArray(tone.stone, SHORELINE_TONE_LENGTH) && Number.isFinite(tone.blend_m) && tone.blend_m > 0
+      && ["start", "end"].every((end) => tone[end] && finiteArray(tone[end].at, 2) && finiteArray(tone[end].along, 2) && finiteArray(tone[end].stone, SHORELINE_TONE_LENGTH)),
+    `Shoreline segment ${segment.id} tone is malformed`);
+  }
   // Every segment's source keeps its riprap overlay in the chunks.
   for (const segment of document.segments) {
     const overlays = [...records.physical.values()].filter(({ record }) => record.object_key.startsWith(`${SHORELINE_OVERLAY_PREFIX}:${segment.source_key}:`));
@@ -1419,21 +1492,28 @@ function validateShoreline(worldRoot, manifest, records) {
       );
     }
   }
+  const pieces = new Set();
+  for (const piece of [...document.segments, ...document.closures]) {
+    invariant(typeof piece.id === "string" && !pieces.has(piece.id), `Shoreline piece ${piece.id} is not unique`);
+    pieces.add(piece.id);
+  }
+  for (const closure of document.closures) invariant(SHORELINE_CLOSURE_KINDS.includes(closure.kind), `Shoreline closure ${closure.id} kind drift`);
   const keys = new Set();
   let minimumY = Infinity;
-  // The slope, and the shoulder strip, which carries the land's UVs (world x / 10, z / 10).
-  const recordKinds = { "shoreline-slope": SHORELINE_SLOPE_MATERIAL, "shoreline-verge": SHORELINE_VERGE_MATERIAL };
+  // The slope, the shoulder strip (it carries the land's UVs, world x / 10 and
+  // z / 10) and the closure faces.
   for (const record of document.records) {
     const kind = record.object_key.split(":")[0];
-    invariant(recordKinds[kind] !== undefined && !keys.has(record.object_key), `${record.object_key} is not a unique shoreline slope or shoulder key`);
+    invariant(SHORELINE_RECORD_MATERIALS[kind] !== undefined && !keys.has(record.object_key) && pieces.has(record.segment), `${record.object_key} is not a unique shoreline slope, shoulder or closure key of a known piece`);
     keys.add(record.object_key);
-    invariant(record.material_key === recordKinds[kind], `${record.object_key} material drift`);
-    invariant((kind === "shoreline-verge") === Array.isArray(record.uvs), `${record.object_key} UVs drift`);
-    validateMesh(kind === "shoreline-verge" ? record : { ...record, uvs: new Array((record.vertices.length / 3) * 2).fill(0) }, record.object_key);
-    for (let index = 0; index < record.vertices.length; index += 3) {
-      const [x, y, z] = [record.vertices[index], record.vertices[index + 1], record.vertices[index + 2]];
+    invariant(record.material_key === SHORELINE_RECORD_MATERIALS[kind], `${record.object_key} material drift`);
+    const mesh = unpackShorelineRecord(record);
+    invariant((kind === "shoreline-verge") === Array.isArray(mesh.uvs), `${record.object_key} UVs drift`);
+    validateMesh(kind === "shoreline-verge" ? mesh : { ...mesh, uvs: new Array((mesh.vertices.length / 3) * 2).fill(0) }, record.object_key);
+    for (let index = 0; index < mesh.vertices.length; index += 3) {
+      const [x, y, z] = [mesh.vertices[index], mesh.vertices[index + 1], mesh.vertices[index + 2]];
       invariant(!inside(x, z) || nearBoundary(x, z) <= 0.01, `${record.object_key} vertex ${index / 3} lies inside the island`);
-      minimumY = Math.min(minimumY, y);
+      if (kind === "shoreline-slope") minimumY = Math.min(minimumY, y);
     }
   }
   invariant(minimumY < WATER_Y_M, "Shoreline slope never reaches under the water plane");
@@ -1488,16 +1568,14 @@ function validateShoreline(worldRoot, manifest, records) {
       Number.isFinite(batch.visibility_end_m) && Number.isFinite(batch.visibility_margin_m) && batch.visibility_margin_m > 0 && batch.visibility_end_m > batch.visibility_margin_m,
     `Shoreline batch ${batch.id} identity or visibility drift`);
     batchIds.add(batch.id);
-    invariant(Array.isArray(batch.placements) && batch.placements.length > 0, `Shoreline batch ${batch.id} is empty`);
     const prototype = prototypes.get(batch.prototype);
     invariant((batch.band === "driftwood") === (prototype.kind !== "boulder"), `Shoreline batch ${batch.id} puts ${prototype.kind} in ${batch.band}`);
-    for (const placement of batch.placements) {
-      invariant(Array.isArray(placement) && placement.length === SHORELINE_PLACEMENT_LENGTH && placement.every(Number.isFinite), `Shoreline batch ${batch.id} has a malformed placement`);
+    for (const placement of unpackShorelineBatch(batch, prototype.kind)) {
+      invariant(placement.every(Number.isFinite), `Shoreline batch ${batch.id} has a malformed placement`);
       const [ox, oy, oz, qx, qy, qz, qw, sx, sy, sz] = placement;
-      invariant(Math.abs(Math.hypot(qx, qy, qz, qw) - 1) <= 0.01 && sx > 0 && sy > 0 && sz > 0, `Shoreline batch ${batch.id} has a placement that is not a scaled rotation`);
+      invariant(Math.abs(Math.hypot(qx, qy, qz, qw) - 1) <= 1e-9 && sx > 0 && sy > 0 && sz > 0, `Shoreline batch ${batch.id} has a placement that is not a scaled rotation`);
       // The stone shader turns normals by the model matrix alone: stones scale uniformly.
       invariant(prototype.kind !== "boulder" || (sx === sy && sy === sz), `Shoreline batch ${batch.id} scales a stone unevenly`);
-      invariant(placement.slice(10).every((value) => value > 0 && value <= 1), `Shoreline batch ${batch.id} has a tint outside (0, 1]`);
       const columns = [
         [(1 - 2 * (qy * qy + qz * qz)) * sx, 2 * (qx * qy + qz * qw) * sx, 2 * (qx * qz - qy * qw) * sx],
         [2 * (qx * qy - qz * qw) * sy, (1 - 2 * (qx * qx + qz * qz)) * sy, 2 * (qy * qz + qx * qw) * sy],

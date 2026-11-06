@@ -1,20 +1,24 @@
 {
-  "schema_version": "ti.shoreline-config/1",
+  "schema_version": "ti.shoreline-config/2",
   "seed": 1102,
   "notes": [
-    "Rock armour (riprap) along the island edge, built by tools/lib/shoreline-generation.mjs into the chunk records and generated/world/shoreline.json. Always-on scenery, not a switchable street-detail layer.",
-    "Every value here is an estimate for game art (production inference), read from the dated photos (Sep 2025 Street View at 83 Treasure Island Rd, a Sep 2026 view from the ferry float, Commons Aug 2021 c01/c08 and May 2025 c10/c11) and the USGS 3DEP 2023 DEM; none is survey data.",
-    "A segment takes the OSM breakwater polygon (man_made=breakwater, material=rock) between the distances s_m along the island outline w26767313 (start > end runs across the outline's start). Its part inside the outline, from the crest to the outline, is draped on the land as a terrain overlay with no collision, overlay_bias_m above the land: the verge at the top of the riprap (the 'verge' ground cover: dry grass and dirt), with low cobbles set in it. land_ground stays the only support there, so route QA, the regional anchors and boundary recovery are unchanged.",
-    "Outside the outline a flat shoulder shoulder_m wide continues the verge's ground cover at the land edge's height and in its shading (the dirt and small stones in front of the rocks in the photos), and behind it an underlay slope runs down past the water plane (y -0.12) to toe_y_m. The DEM's gradient between dem_fit_m along each cross-section, clamped to gradient_m_per_m (the photographed 2:1 to 3:1) and smoothed over gradient_smoothing_m, sets it; relief_m of boulder-scale bumps fades in over top_blend_m behind the shoulder. It shows between the stones and stands in for them beyond their visibility range; vertical rock faces close the segment ends.",
-    "Stones are one shared set of fractured quarry blocks (prototypes, cycling through block, slab, long, wedge and chunky shapes): convex polyhedra with flat broken faces, sharp corners and edges, shallow creases across the big faces and chipped corners (12-20 faces; the clean block is the coarse LOD); stones under pebbles.below_m use pebbles, clean blocks without the creases and chips, each instance scaled uniformly by its size (its longest side) and dumped: resting on a broad face (posture: a face of at least broad_face of the largest face's area, each equally often when even, never taller than max_aspect times its narrower width), turned any way and tilted up to tilt_deg. A top row of stones just outside the outline (inner faces at least setback_m beyond it, about the player's radius), sized over size_m mostly toward its low end (size_skew), spaced spacing sizes apart and pushed out_jitter_m further, each buried by a bury share of its own height, up to max_rise_m above the land edge; a back row piled within depth_m behind it, aiming rise_m above the land edge less drop_per_m per metre out but always bedded in the slope; mid-sized crest_fill stones packed between them, so the crest reads as one continuous low heap about a metre high; small shoulder stones in the shoulder, rising rise_m above it; a heap packed over the slope to toe_extra_m past the toe, largest size class first (neighbours overlap by up to 1 - overlap of their radii; bury is a share of each stone's height); past the waterline only stones that stand clear of the water are kept; and low cobbles (small stones mostly buried in the dirt) wholly inside the band, more of them toward the outline (outline_bias), rising at most top_m above the land, so the player walks over them. No stone spills past a segment end. Weathered grey driftwood logs rest on the stone tops along the crest (d_m from the outline), and washed-up planks at the waterline. Everything is visual only; structures (piers keep the slope under them, slipways cut it) clear the stones by clearance_m, except stones that top out under_drop_m below the land edge under a pier, paths clear the cobbles, and the street-detail hard shapes (spawn, ferry path, QA route, stairs, doors, approaches) clear everything. Stones are batched per section_m of shore, band and shape; each band fades out over its visibility_m [end, margin]."
+    "Rock armour (riprap) around the whole island edge, built by tools/lib/shoreline-generation.mjs into the chunk records and generated/world/shoreline.json. Always-on scenery, not a switchable street-detail layer.",
+    "Every value here is an estimate for game art (production inference), read from the dated photos (Sep 2025 Street View, Commons Aug 2021 and May 2025, the reference notes named per segment), the 2026-05-26 Vantor aerial (Esri World Imagery levels 12-19, 0.34 m; the 0.15 m level-20 exports a06/a07 show the 2025-08-29 capture) and the USGS 3DEP 2023 DEM; none is survey data.",
+    "Segments and closures cover the island outline w26767313 end to end, by distance s_m along it (start > end runs across the outline's start, s = 0). A segment takes the OSM breakwater polygon (man_made=breakwater, material=rock) of its source_key. Its part inside the outline, from the crest to the outline, is draped on the land as a terrain overlay with no collision, overlay_bias_m above the land: the verge at the top of the riprap (the 'verge' ground cover: dry grass and dirt), with a few low cobbles set in it at the outline. land_ground stays the only support there, so route QA, the regional anchors and boundary recovery are unchanged. Two segments that meet join into one pile and one slope; a segment that meets a closure ends in a rock face.",
+    "Outside the outline a flat shoulder shoulder_m wide continues the verge's ground cover in its shading (the dirt and small stones in front of the rocks in the photos), its inner edge at the height of what is drawn inside (the riprap overlay, or the land where no breakwater lies). Behind it the underlay rises into the crest's core (slope.berm): over inner_m to below_crest_m under the segment's lowest crest rise, flat for width_m (varying along the shore over wavelength_m) and falling drop_per_m, so the crest stones bedded on it stand as high above the verge as the photos show and the gaps between them show core, not water; then it runs down past the water plane (y -0.12) to toe_y_m. Two segments' crests blend over joint_blend_m either side of their joint; at a capped end (a pier, ramp or the causeway beside it) the core sinks to the land over cap_taper_m. The DEM's gradient between dem_fit_m along each cross-section, clamped to gradient_m_per_m (the photographed 1.5:1 to 2.5:1) and smoothed over gradient_smoothing_m, with the land's height sets a waterline for a core of waterline.core_m; that waterline, its plan points smoothed over waterline.smoothing_m either way so the band's edge has no jogs and no corners from the outline's own, then sets each cross-section's fall (within waterline.gradient_m_per_m); relief_m of boulder-scale bumps fades in over top_blend_m behind the shoulder. Where a cross-section meets the outline again within its toe plus clamp_reach_m (the 0-9 m slit the OSM outline cuts into the north-west shore), its profile is squeezed into the inlet and falls to the land on the far side. A segment with crest_rows false (that slit's seaward edge) is only the lower slope of a crest another segment builds: no shoulder, no core, no crest rows, and its own cobble rule. The underlay shows between the stones, dark in the gaps near by, and stands in for them at the heap's apparent tone as they thin out with distance.",
+    "Stones are one shared set of fractured quarry blocks (prototypes, cycling through block, slab, long, wedge and chunky shapes): convex polyhedra with flat broken faces, sharp corners and edges, shallow creases across the big faces and chipped corners (12-20 faces; the clean block is the coarse LOD); stones under pebbles.below_m use pebbles, clean blocks without the creases and chips, and stones of big.above_m or more only the irregular big.families (a big clean block or slab reads as a box), each instance scaled uniformly by its size (its longest side) and dumped: resting on a broad face (posture) against the underlay's own surface there (flat on the shoulder and the core's top, tilted on the fall), turned any way and tilted up to tilt_deg, then lowered where its underside would hang over the underlay. A top row just outside the outline (inner faces at least setback_m beyond it, about the player's radius), a back row piled within depth_m behind it and crest_fill stones between them make the crest one continuous low heap, as high and as dense as each segment's photos show (its crest_rise_m above the land edge for the back row, the top row at most 5 cm more, the crest fill in proportion; crest_fill_scale times the rows' fill); small chink stones packed between the crest's blocks over the core (chink: lying flat, tops rise_m above the core, tucked under their neighbours by overlap); a few small shoulder stones in the shoulder; small blocks tumbled along a ramp's foot over the cut's face (ramp_foot); a heap packed over the slope to toe_extra_m past the toe, largest size class first, its small class only within small_reach_m of the outline (the upper slope the player sees close; lower down the voids stay dark); from just above the waterline out only stones that stand at least 0.3 m clear of the water and show no more than past_water_m beyond it are kept, so the band's edge stays where it is when the stones thin out; and a few low cobbles (small stones mostly buried in the dirt) inside the band within reach_m of the outline, rising at most top_m above the land, so the player walks over them. No stone reaches more than a quarter of its size past a capped segment end, and none overhangs a ramp's cut. A segment may set its own cobble fill, reach_m and size_m (west_wedge: the sliver beyond the north-west slit, densely set with flat-topped stones so it reads as the stone it is in the aerial). Weathered driftwood logs lie sunk into the stone tops on the face below the crest (from_waterline_m up from the waterline), with stone under most of their length, and washed-up planks at the waterline. Everything is visual only; structures (piers keep the slope under them, slipways cut it) clear the stones by clearance_m, except stones that top out under_drop_m below the land edge under a pier, paths clear the cobbles, and the street-detail hard shapes (spawn, ferry path, QA route, stairs, doors, approaches) clear everything. Stones are batched per section_m of shore, band and shape. The shader thins them out one by one with distance (thinning: a stone drops out at its own share, start to 1, of its reach, size times reach_per_m within [min_m, max_m]); each batch is culled only beyond the farthest reach of its stones from the batch's centre, so no batch edge ever shows, and the underlay's stand-in follows the share of the heap still drawn (fitted to the stones as the document's lod.underlay_fade_m). The logs keep a fixed range, wood_m [end, margin].",
+    "Closures: kind wall is a concrete face under the land edge (coping_m above it) down to wall_bottom_y_m, for pier and platform edges the photos show as vertical; kind ramp is a boat ramp, a slab running out from the land edge at ramp_grade to ramp_bottom_y_m between side walls ramp_wall_m high; kind none builds nothing (the causeway's Yerba Buena context terrain, or the inlet the next segment's clamped slope fills).",
+    "Mounds: a rubble mound standing out in the water where a segment's breakwater runs out as a jetty (the north tip's w26767328): a flat-topped ridge along centerline_xz, its crest crest_y_m high with a slight crown, its sides falling at gradient to toe_y_m; each side's waterline lies at the breakwater polygon's edge (bounded by half_width_m), which sets the crest's width (at least crest_min_m); over taper_m at its far end the crest sinks under the water. Big blocks lie flat on the crest and the heap's size classes on the sides; a ramp cuts it as it cuts the shore. Its records and batches belong to the segment, numbered from section 100.",
+    "Tones: each segment's stones and underlay take a palette from tones.palettes, [brightness, warm share, dark share, pale share] of the shader's stone families (charcoal, brown-grey, olive-grey a tenth, pale weathered, the rest plain grey), sampled from the dated photos: charcoal along the north-west and west (refs/sv 02, 04, 05, ph01; dark grey to black), grey-tan in the east and south (16, 18, 20, 13, 11; lighter grey with tan faces), brown-grey at the Sailing Center and the north tip (31, 25, 21). At each end a segment's tone blends over blend_m (at most the segment's length) half way into its neighbour's, across a closure too, so the two meet at the joint without a switch. The underlay stands in for the stones in the same tone, so a segment keeps its tone into the far band.",
+    "Rock grounds: land that is stone in the aerial (the sliver beyond the north-west slit: all the land within the outline from s_m[0] to s_m[1], closed by the chord back). The flat breakwater overlay lies over the verge there, drawn as the riprap's bare rock, at the heap's tone. Bare parts of the underlay (the fill of a clamped inlet, a capped end's face, the cut beside a ramp, the edge of a segment without crest rows) are shoreline-face records in the same rock, not the dark gaps of a heap."
   ],
   "overlay_bias_m": 0.06,
   "slope": {
-    "station_m": 1.0,
-    "columns": 10,
+    "station_m": 1.25,
+    "columns": 8,
     "gradient_m_per_m": [
-      0.34,
-      0.55
+      0.42,
+      0.65
     ],
     "dem_fit_m": [
       1.0,
@@ -22,39 +26,52 @@
     ],
     "gradient_smoothing_m": 6.0,
     "toe_y_m": -0.6,
-    "relief_m": 0.1,
+    "relief_m": 0.14,
     "relief_wavelength_m": 1.4,
     "top_blend_m": 1.0,
     "end_cap_bottom_y_m": -0.9,
     "section_m": 90,
-    "shoulder_m": 0.8
+    "shoulder_m": 0.6,
+    "berm": {
+      "below_crest_m": 0.25,
+      "cap_taper_m": 5.0,
+      "inner_m": 0.4,
+      "width_m": [
+        1.2,
+        2.0
+      ],
+      "wavelength_m": 23.0,
+      "drop_per_m": 0.04,
+      "joint_blend_m": 12.0
+    },
+    "waterline": {
+      "smoothing_m": 40.0,
+      "core_m": 0.2,
+      "gradient_m_per_m": [
+        0.3,
+        0.85
+      ]
+    },
+    "clamp_reach_m": 2.0
   },
   "stones": {
     "prototypes": 5,
-    "section_m": 90,
+    "section_m": 60,
     "setback_m": 0.3,
-    "visibility_m": {
-      "cobble": [
-        80,
-        20
-      ],
-      "driftwood": [
-        240,
-        40
-      ],
-      "heap": [
-        240,
-        40
-      ],
-      "top": [
-        240,
-        40
+    "thinning": {
+      "reach_per_m": 130,
+      "min_m": 65,
+      "max_m": 160,
+      "start": 0.6,
+      "wood_m": [
+        140,
+        25
       ]
     },
     "top": {
       "size_m": [
         0.45,
-        1.5
+        1.25
       ],
       "size_skew": 1.25,
       "spacing": [
@@ -69,15 +86,14 @@
         0.06,
         0.22
       ],
-      "max_rise_m": 1.1,
       "tilt_deg": 8
     },
     "heap": {
       "classes": [
         {
           "size_m": [
-            1.0,
-            1.5
+            0.95,
+            1.25
           ],
           "fill": 0.22
         },
@@ -108,48 +124,53 @@
         0.35
       ],
       "overlap": 0.8,
+      "small_reach_m": 3.0,
       "tilt_deg": 18,
-      "toe_extra_m": 0.15
+      "toe_extra_m": 0.15,
+      "past_water_m": 0.4
     },
     "cobble": {
       "size_m": [
-        0.15,
-        0.35
+        0.22,
+        0.38
       ],
       "top_m": [
-        0.05,
-        0.13
+        0.04,
+        0.1
       ],
-      "fill": 0.025,
+      "fill": 0.012,
       "edge_m": 0.05,
-      "outline_bias": 2.5,
-      "path_clearance_m": 0.25
+      "outline_bias": 1.5,
+      "overlap": 0.95,
+      "path_clearance_m": 0.25,
+      "reach_m": 0.8
     },
     "driftwood": {
-      "spacing_m": 16,
-      "acceptance": 0.75,
+      "spacing_m": 50,
+      "acceptance": 0.3,
       "length_m": [
-        1.8,
-        4.0
+        2.2,
+        4.2
       ],
       "radius_m": [
-        0.1,
-        0.17
+        0.12,
+        0.2
       ],
-      "d_m": [
-        0.9,
-        2.8
+      "from_waterline_m": [
+        0.5,
+        1.8
       ],
+      "sink": 0.5,
       "yaw_jitter_deg": 30
     },
     "planks": [
       {
-        "segment": "west_ferry_pilot",
+        "segment": "west",
         "near_xz": [
           -133.0,
           779.5
         ],
-        "above_water_m": 0.12,
+        "above_water_m": 0.35,
         "length_m": 2.9,
         "width_m": 0.24,
         "yaw_deg": 32
@@ -158,11 +179,11 @@
     "crest": {
       "size_m": [
         0.55,
-        1.5
+        1.25
       ],
       "size_skew": 1.2,
-      "fill": 0.75,
-      "depth_m": 2.2,
+      "fill": 1.0,
+      "depth_m": 2.6,
       "rise_m": [
         0.55,
         1.05
@@ -171,10 +192,10 @@
     },
     "shoulder": {
       "size_m": [
-        0.18,
+        0.2,
         0.45
       ],
-      "fill": 0.2,
+      "fill": 0.05,
       "rise_m": [
         0.0,
         0.15
@@ -185,17 +206,43 @@
         0.35,
         0.8
       ],
-      "fill": 0.6,
+      "fill": 0.7,
       "rise_m": [
         0.2,
         0.8
       ]
     },
+    "chink": {
+      "size_m": [
+        0.2,
+        0.42
+      ],
+      "fill": 0.15,
+      "overlap": 0.6,
+      "rise_m": [
+        0.04,
+        0.18
+      ]
+    },
+    "ramp_foot": {
+      "from_m": 0.2,
+      "to_m": 9.0,
+      "spacing_m": [
+        0.28,
+        0.5
+      ],
+      "size_m": [
+        0.3,
+        0.6
+      ],
+      "out_share": 0.6,
+      "overlap": 0.5
+    },
     "posture": {
       "crest": {
-        "broad_face": 0.55,
-        "max_aspect": 0.85,
-        "even": true
+        "broad_face": 0.65,
+        "max_aspect": 0.75,
+        "even": false
       },
       "heap": {
         "broad_face": 0.35,
@@ -206,6 +253,14 @@
     "pebbles": {
       "prototypes": 3,
       "below_m": 0.45
+    },
+    "big": {
+      "above_m": 1.0,
+      "families": [
+        "long",
+        "wedge",
+        "chunky"
+      ]
     }
   },
   "structures": {
@@ -227,17 +282,384 @@
       "under_drop_m": null
     }
   },
+  "closure": {
+    "coping_m": 0.05,
+    "wall_bottom_y_m": -0.9,
+    "ramp_grade": 0.17,
+    "ramp_bottom_y_m": -0.45,
+    "ramp_wall_m": 0.0
+  },
+  "tones": {
+    "blend_m": 40.0,
+    "palettes": {
+      "charcoal": [
+        1.0,
+        0.15,
+        0.25,
+        0.05
+      ],
+      "grey_tan": [
+        1.6,
+        0.3,
+        0.03,
+        0.2
+      ],
+      "brown_grey": [
+        1.35,
+        0.46,
+        0.06,
+        0.1
+      ]
+    }
+  },
+  "rock_grounds": [
+    {
+      "id": "west_sliver",
+      "source_key": "w1222685424",
+      "s_m": [
+        166.0,
+        450.0
+      ],
+      "reason": "The sliver of land the OSM outline splits off the north-west shore. It stands where the riprap's seaward slope stands in the aerial (the DEM falls across it from about 2.7 m to 1 m), and the player can walk it, so it stays land drawn as stone: the slope of the one crest beside the slit, not a verge between two walls.",
+      "reference": "2026-05-26 Vantor aerial (Esri level 19) tile t0250 and plot a05-west-hairpin: one band of stone from the path to the water, the outline's three lines inside it; Street View contributor May 2024 (refs/sv 04, s150/s450): one crest of dark angular stone seen from the path"
+    }
+  ],
   "segments": [
     {
-      "id": "west_ferry_pilot",
+      "id": "west_north",
       "outline_source_key": "w26767313",
       "source_key": "w1222685424",
       "s_m": [
-        1380,
-        1740
+        4708.26,
+        166.0
       ],
-      "reason": "Pilot: the west shore from north of Waterfront Plaza past the ferry landing pier (w1011830367) to the causeway corner, the first shore a ferry arrival sees.",
-      "reference": "ferry-shelter refs: Sep 2025 Street View 12-sv-road-sw-zoom (83 Treasure Island Rd), Sep 2026 29-sv-water-ne from the float; Commons c01 and c08 (Aug 2021) and c10 (May 2025); USGS 3DEP 2023 profiles: crest 3.2-3.9 m NAVD88, 2:1 to 3:1 to the water"
+      "reason": "The north-west shore below the Gateview and Bayside housing, from the small concrete structure at the north-west corner past the island's westernmost point to the tip of the sliver the OSM outline splits off the shore; runs across the outline's start (s = 0).",
+      "reference": "Street View contributor panoramas, May 2024 (John Ewing, from the shore path; refs/sv 01 s4800, 02 s5100, 03 s0, 04 s150, 05 s700, 26 s4708): a continuous crest of dumped angular grey and grey-tan stone 0.4-1.2 m, 0.3-0.8 m above a dry-grass or gravel verge, barely above the grass at s0; the 2026-05-26 Vantor aerial tiles t4750, t5000, t0000 and t0250 show the band with surf at its foot",
+      "crest_rise_m": [
+        0.5,
+        1.0
+      ],
+      "crest_fill_scale": 1.0,
+      "stone_tone": "charcoal"
+    },
+    {
+      "id": "west_wedge",
+      "source_key": "w1222685424",
+      "outline_source_key": "w26767313",
+      "s_m": [
+        166.0,
+        308.02
+      ],
+      "crest_rise_m": [
+        0.1,
+        0.3
+      ],
+      "crest_fill_scale": 1.0,
+      "crest_rows": false,
+      "cobble": {
+        "fill": 1.0,
+        "overlap": 0.8,
+        "reach_m": 4.5,
+        "size_m": [
+          0.4,
+          0.8
+        ],
+        "top_m": [
+          0.1,
+          0.15
+        ]
+      },
+      "reason": "The seaward edge of the sliver the OSM outline splits off the north-west shore (its slit, s 308-450, runs back up inside it): in the aerial the whole band from the shore path to the water is one riprap slope, so the crest runs along the slit (segment west fills it) and this edge is only the slope's foot: no crest rows, the heap down from the sliver's edge to the water; the sliver itself is a rock ground, set with low flat-topped stones.",
+      "reference": "2026-05-26 Vantor aerial (Esri level 19) tile t0250 and plot a05-west-hairpin: one band of stone from the path to the water, the outline's three lines inside it; Street View contributor May 2024 (refs/sv 04, s150/s450): one crest of dark angular stone 0.5-0.8 m above the grass",
+      "stone_tone": "charcoal"
+    },
+    {
+      "id": "west",
+      "outline_source_key": "w26767313",
+      "source_key": "w1222685424",
+      "s_m": [
+        450.36,
+        1746.07
+      ],
+      "reason": "The west shore from the head of the OSM slit (its clamped slope fills the slit) past Cityside Park and the ferry plaza to the causeway, the first shore a ferry arrival sees; contains the step 1b pilot (s 1380-1740).",
+      "reference": "Cityside: Street View official Jan 2023 (refs/sv 06, before the park: a low crest of mixed brown and grey stone 0.5-1 m above a bare strip, water right behind) and a contributor place photo of Sep 2025 (Cityside refs ph01: a planted crest running up to dark angular riprap); ferry plaza: ferry-shelter refs, Sep 2025 Street View 12-sv-road-sw-zoom (83 Treasure Island Rd), Sep 2026 29-sv-water-ne from the float, Commons c01 and c08 (Aug 2021) and c10 (May 2025); 2026-05-26 Vantor aerial tiles t0250-t1750; USGS 3DEP 2023 profiles: crest 3.2-3.9 m NAVD88, 2:1 to 3:1 to the water",
+      "crest_rise_m": [
+        0.55,
+        1.05
+      ],
+      "crest_fill_scale": 1.0,
+      "stone_tone": "charcoal"
+    },
+    {
+      "id": "south_cove",
+      "outline_source_key": "w26767313",
+      "source_key": "r16681104",
+      "s_m": [
+        1797.7,
+        2117.42
+      ],
+      "reason": "The causeway's east flank and the south shore along the Treasure Island Yacht Harbor in Clipper Cove, to the small concrete pier w1222505174.",
+      "reference": "2026-05-26 Vantor aerial tiles t1750 and t2000: dark stone along the marina's landward edge, the docks' gangways landing on it; Street View official Mar 2025 (refs/sv 07, s1840) shows the causeway's east flank as a vegetated slope down to the marina, its foot hidden, and official Nov 2025 (09, s1950) only construction fencing: the stone follows the OSM tag (known gap)",
+      "crest_rise_m": [
+        0.45,
+        0.85
+      ],
+      "crest_fill_scale": 0.9,
+      "stone_tone": "grey_tan"
+    },
+    {
+      "id": "south_east",
+      "outline_source_key": "w26767313",
+      "source_key": "w1222684023",
+      "s_m": [
+        2130.02,
+        2335.02
+      ],
+      "reason": "The south shore east of the yacht harbor, to the Sailing Center's small piers.",
+      "reference": "Street View contributor panoramas Aug 2017 (refs/sv 10) and May 2019 (11, s2230): riprap of grey-tan angular stones 0.3-0.8 m with a low crest down into the calm water of Clipper Cove and a green algae band about 0.5 m deep at the waterline; 2026-05-26 Vantor aerial tile t2250",
+      "crest_rise_m": [
+        0.45,
+        0.85
+      ],
+      "crest_fill_scale": 0.9,
+      "stone_tone": "grey_tan"
+    },
+    {
+      "id": "sailing_west",
+      "outline_source_key": "w26767313",
+      "source_key": "w1222684024",
+      "s_m": [
+        2348.99,
+        2367.38
+      ],
+      "reason": "The short stretch of stone between the Sailing Center's small piers and its boat ramp.",
+      "reference": "2026-05-26 Vantor aerial plots a02-clipper-east and a06-sailing-ramp; no dated ground view of this stretch (known gap): the stone follows the OSM tag",
+      "crest_rise_m": [
+        0.45,
+        0.85
+      ],
+      "crest_fill_scale": 0.9,
+      "stone_tone": "brown_grey"
+    },
+    {
+      "id": "sailing_east",
+      "outline_source_key": "w26767313",
+      "source_key": "w1222684025",
+      "s_m": [
+        2367.38,
+        2482.98
+      ],
+      "reason": "The south shore below the Treasure Island Sailing Center, from its boat ramp to its platform (pier w1222505177).",
+      "reference": "2026-05-26 Vantor aerial plot a02-clipper-east: a grey stone band along the water; a May 2018 contributor place photo (refs/sv 31, located only by its pin) shows large brown-grey angular riprap 0.5-1.2 m near the Sailing Center; no recent ground view (known gap)",
+      "crest_rise_m": [
+        0.45,
+        0.85
+      ],
+      "crest_fill_scale": 0.9,
+      "stone_tone": "brown_grey"
+    },
+    {
+      "id": "east_south",
+      "outline_source_key": "w26767313",
+      "source_key": "w1222684026",
+      "s_m": [
+        2545.04,
+        2758.15
+      ],
+      "reason": "The south-east shore from the Sailing Center platform north to Pier 1.",
+      "reference": "Street View official Nov 2025 (refs/sv 13, s2650): a low irregular line of rubble and riprap with concrete debris and shrubs, about level with the asphalt apron; official Nov 2025 (15): low riprap south of Pier 1; 2026-05-26 Vantor aerial plot a03-se-pier1",
+      "crest_rise_m": [
+        0.4,
+        0.75
+      ],
+      "crest_fill_scale": 0.85,
+      "stone_tone": "grey_tan"
+    },
+    {
+      "id": "east",
+      "outline_source_key": "w26767313",
+      "source_key": "w1222684027",
+      "s_m": [
+        2794.36,
+        4494.27
+      ],
+      "reason": "The east, north-east and north shores from Pier 1 past the palms of the east shore road and the treatment plant to the north tip's slipway.",
+      "reference": "Street View official Mar 2025 (refs/sv 16 s2900, 17 s3100) and Nov 2025 (18 s3300, 19 s3500, 20 s3680): riprap of grey angular stones 0.3-1 m all along, its crest low, 0.3-0.6 m above the lot, grass or dirt verge (sparse below the palms at s3300-s3500, a low pipe rail on short posts at s2900-s3100); contributor May 2024 (24, s4400) low riprap beside the north lot; no dated view of s3900-s4250 (fenced, known gap); 2026-05-26 Vantor aerial tiles t2750-t4500",
+      "crest_rise_m": [
+        0.4,
+        0.8
+      ],
+      "crest_fill_scale": 0.85,
+      "stone_tone": "grey_tan"
+    },
+    {
+      "id": "north_tip",
+      "outline_source_key": "w26767313",
+      "source_key": "w26767328",
+      "s_m": [
+        4504.71,
+        4708.26
+      ],
+      "reason": "The north tip from the base of the rock jetty west to the small concrete structure at the north-west corner (the jetty itself, offshore, is not built).",
+      "reference": "Street View contributor panoramas, May 2024 (John Ewing; refs/sv 21 s4500, 25 s4600, 26 s4708): a crest of grey and brown-grey angular stones 0.5-1.2 m, 0.5-1 m above the path or its dry-grass verge, a concrete pad reaching the edge at s4600; 22 shows the jetty, a long low flat-topped rubble mound (not built); 2026-05-26 Vantor aerial tiles t4500, t4750 and plot a04-north-tip",
+      "crest_rise_m": [
+        0.5,
+        1.0
+      ],
+      "crest_fill_scale": 1.0,
+      "stone_tone": "brown_grey"
+    }
+  ],
+  "closures": [
+    {
+      "id": "west_slit",
+      "kind": "none",
+      "s_m": [
+        308.02,
+        450.36
+      ],
+      "source_keys": [
+        "w1222685424"
+      ],
+      "reason": "The far side of the 0-9 m slit the OSM outline cuts into the north-west shore (aerial: continuous stone): segment west's clamped slope fills the slit from the main shore to this sliver's edge.",
+      "reference": "2026-05-26 Vantor aerial tile t0250 and plot a05-west-hairpin; Street View contributor May 2024 (refs/sv 04): continuous stone along the shore path here"
+    },
+    {
+      "id": "causeway",
+      "kind": "none",
+      "s_m": [
+        1746.07,
+        1797.7
+      ],
+      "source_keys": [
+        "w26767313"
+      ],
+      "reason": "Where the outline crosses the causeway to Yerba Buena Island: the Yerba Buena context terrain (the causeway) meets the land edge here.",
+      "reference": "2026-05-26 Vantor aerial tile t1750 and plot a01-causeway; Street View contributor May 2024 (refs/sv 08) and official Mar 2025 (07): a post-and-rail fence at the west crest and a vegetated slope on the east, the edges themselves hidden"
+    },
+    {
+      "id": "cove_pier",
+      "kind": "wall",
+      "s_m": [
+        2117.42,
+        2130.02
+      ],
+      "source_keys": [
+        "w1222505174"
+      ],
+      "reason": "The small concrete pier w1222505174 on the south shore: its face to the water.",
+      "reference": "2026-05-26 Vantor aerial tile t2250: a pale concrete block at the water's edge; no dated ground view (known gap): a concrete face"
+    },
+    {
+      "id": "sailing_piers",
+      "kind": "wall",
+      "s_m": [
+        2335.02,
+        2348.99
+      ],
+      "source_keys": [
+        "w1222505175",
+        "w1222505176"
+      ],
+      "reason": "The Sailing Center's two small concrete piers: their faces to the water.",
+      "reference": "2026-05-26 Vantor aerial plots a02-clipper-east and a06-sailing-ramp: two small concrete structures at the water; no dated ground view (known gap): concrete faces"
+    },
+    {
+      "id": "sailing_platform",
+      "kind": "wall",
+      "s_m": [
+        2482.98,
+        2545.04
+      ],
+      "source_keys": [
+        "w1222505177"
+      ],
+      "reason": "The Sailing Center's platform (pier w1222505177, outside the playable outline): the face under the land edge where it meets the platform.",
+      "reference": "2026-05-26 Vantor aerial plot a07-sailing-platform: the Sailing Center's paved platform runs on past the outline (not built); Street View official Nov 2025 (refs/sv 13) and a Jun 2015 contributor panorama (29, weakly located) show a concrete wharf slab and a timber deck edge at the water: a concrete face where the land ends"
+    },
+    {
+      "id": "pier_1",
+      "kind": "wall",
+      "s_m": [
+        2758.15,
+        2794.36
+      ],
+      "source_keys": [
+        "w319406837"
+      ],
+      "reason": "Pier 1 (w319406837, its deck drawn as boundary-attached context): the bulkhead under its landward edge.",
+      "reference": "Street View official Nov 2025 (refs/sv 14, 15): Pier 1's deck at road level, its south edge a vertical concrete face at the water; 2026-05-26 Vantor aerial tile t2750 and plot a03-se-pier1"
+    },
+    {
+      "id": "north_slipway",
+      "kind": "ramp",
+      "s_m": [
+        4494.27,
+        4504.71
+      ],
+      "source_keys": [
+        "w1473022597"
+      ],
+      "reason": "The slipway at the base of the north rock jetty (OSM w1473022597, highway=service leisure=slipway).",
+      "reference": "Street View contributor May 2024 (refs/sv 23, 30): a jointed concrete boat ramp, about 8-10 m wide, from the path down into the water, riprap on both sides, the jetty alongside"
+    }
+  ],
+  "mounds": [
+    {
+      "id": "north_jetty",
+      "segment": "north_tip",
+      "centerline_xz": [
+        [
+          -205.9,
+          -952.4
+        ],
+        [
+          -201.9,
+          -957.7
+        ],
+        [
+          -198.7,
+          -965.5
+        ],
+        [
+          -188.3,
+          -998.3
+        ],
+        [
+          -180.4,
+          -1018.5
+        ],
+        [
+          -170.6,
+          -1030.5
+        ],
+        [
+          -158.9,
+          -1042.2
+        ],
+        [
+          -145.7,
+          -1049.9
+        ],
+        [
+          -133.7,
+          -1054.7
+        ],
+        [
+          -127.5,
+          -1056.5
+        ]
+      ],
+      "crest_y_m": 1.4,
+      "crest_min_m": 2.0,
+      "gradient": 0.62,
+      "half_width_m": [
+        3.5,
+        5.5
+      ],
+      "taper_m": 6.0,
+      "reason": "The rock jetty at the north tip, the stretch of OSM breakwater w26767328 (material=rock) that runs out into the bay from beside the slipway: a long, low, flat-topped rubble mound. Its centreline runs between the polygon's two long sides; the polygon's edge is its waterline.",
+      "reference": "Street View contributor May 2024 (John Ewing; refs/sv 22 and 23): a long, low, flat-topped mound of grey angular stone, its crest about 1-2 m above the water, curving out from beside the boat ramp, waves breaking on its outer face; 2026-05-26 Vantor aerial (Esri level 19) plot a04-north-tip: the mound about 10-12 m wide over about 115 m. Its dark marker post near the end is not built (known gap)."
     }
   ]
 }

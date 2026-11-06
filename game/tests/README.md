@@ -15,6 +15,7 @@ It must pass before anything is pushed to `main`.
 | `headless_facade_meter_uv_adapter_contract.gd` | Facade texture coordinates run continuously around corners. |
 | `headless_building_study_geometry_contract.gd` | The shared geometry helper (`support/building_study_geometry.gd`). |
 | `headless_facade_grid_contract.gd` | The shared facade window grid and assembly helpers (`scripts/world/facades/facade_grid.gd`, `facade_assembly.gd`) on hand-built grids. |
+| `headless_shore_lift.gd` | Stepping off the island onto the ferry-plaza riprap lifts the stock player 5 m straight up where it is, with no velocity and no second lift while it floats; doing nothing it is lifted again at the wall, the jetpack raises it from the float, floating off over the water brings it back above the first lift, and holding toward land returns it to walkable ground. |
 | `automated_route_qa.gd` | The player can walk the ferry-to-Trade-Winds road route without getting stuck or falling. Each checkpoint must sit on the land or on the always-on street ground over it (sidewalks, the Waterfront Plaza, curb ramps), within 0.35 m of its terrain anchor and on the road geometry it names. |
 | `shared/island_test.gd` | The island loads and every scored building is present, solid and grounded. |
 | `shared/island_test.gd -- --use-prebuilt-world` | The same, on the baked world desktop exports load (baked first by `tools/prebuild-static-world.sh native`, removed afterwards). |
