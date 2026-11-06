@@ -137,14 +137,11 @@ static func _add_group(boxes: Dictionary, group: Dictionary, side: Dictionary, m
 		if center_y + height * 0.5 + FRAME_THICKNESS_M > float(side.top_y) - 0.05:
 			return "inferred window row on %s rises above its wall top" % str(group.get("runs", []))
 		var cursor := (length - total) * 0.5
-		# Optional skip_indices leave photographed stretches of a row out in place.
-		var skip := windows.get("skip_indices", []) as Array
 		for index in widths.size():
 			var width := float(widths[index])
 			var u := cursor + width * 0.5
 			cursor += width + gap
-			if not float(index) in skip:
-				_add_opening(boxes, side, glass, frame, u, center_y, Vector2(width, height), int(panes[index]) - 1)
+			_add_opening(boxes, side, glass, frame, u, center_y, Vector2(width, height), int(panes[index]) - 1)
 	for door_value: Variant in group.get("doors", []) as Array:
 		var door := door_value as Dictionary
 		var u := float(door.get("u_m", -1.0))

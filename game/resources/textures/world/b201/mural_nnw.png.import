@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dkpqbkeedhngq"
-path="res://.godot/imported/mural_atlas.png-7abc08c433c8dc742684a8e4e090b290.ctex"
+uid="uid://bw8diuc1j1okf"
+path="res://.godot/imported/mural_nnw.png-e64a10d4b59cf86232f3a0ecd22d3a94.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://game/resources/textures/world/b201/mural_atlas.png"
-dest_files=["res://.godot/imported/mural_atlas.png-7abc08c433c8dc742684a8e4e090b290.ctex"]
+source_file="res://game/resources/textures/world/b201/mural_nnw.png"
+dest_files=["res://.godot/imported/mural_nnw.png-e64a10d4b59cf86232f3a0ecd22d3a94.ctex"]
 
 [params]
 
