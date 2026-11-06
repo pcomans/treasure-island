@@ -78,7 +78,7 @@ uniform vec3 turf_color : source_color = vec3(0.08, 0.17, 0.065);
 // family, and it fades out between marsh_radii from the ditch's axis (marsh_axis: its
 // ends' x, z) and on land too low to drain into it. A wandering height decides what
 // grows: a carpet of low succulents in mats of red, brown, olive and dead stems on the
-// floor; dull dark straw, pale gravel and stones on the banks (lit, their mean about
+// floor; dull dark straw and gravel on the banks (lit, their mean about
 // sRGB 126,109,93 and the mats' about 89,68,46). Water stands where the land is
 // lowest, in outlines the noise draws.
 uniform float marsh_amount = 0.0;
@@ -94,7 +94,6 @@ uniform vec3 bank_gap : source_color = vec3(0.216, 0.188, 0.160);
 uniform vec3 bank_blade : source_color = vec3(0.298, 0.262, 0.212);
 uniform vec3 bank_straw : source_color = vec3(0.405, 0.365, 0.292);
 uniform vec3 bank_gravel : source_color = vec3(0.470, 0.435, 0.380);
-uniform vec3 bank_stone : source_color = vec3(0.740, 0.700, 0.620);
 uniform vec3 marsh_far_red : source_color = vec3(0.370, 0.250, 0.100);
 uniform vec3 marsh_far_olive : source_color = vec3(0.330, 0.300, 0.110);
 uniform vec3 marsh_far_straw : source_color = vec3(0.500, 0.440, 0.270);
@@ -273,20 +272,6 @@ void fragment() {
 			ground = mix(ground, mix(bank, marsh, carpet), region * max(bank_w, carpet));
 			marsh_cover = region * carpet;
 			rough = region * (1.0 - carpet) * bank_w;
-
-			// Broken stone in patches: small uneven pieces with a dark foot, few on the
-			// floor, gone with distance.
-			float stones_near = (1.0 - smoothstep(14.0, 50.0, length(VERTEX))) * region * max(bank_w, carpet) * mix(1.0, 0.25, carpet);
-			if (stones_near > 0.0) {
-				vec2 lay = vec2(0.82 * p.x + 0.57 * p.y, 0.82 * p.y - 0.57 * p.x);
-				float stone_line = 0.93 - 0.2 * smoothstep(0.52, 0.7, 0.7 * n_patch8 + 0.3 * n_small);
-				float stone_level = 0.55 * value_noise(lay / 0.21 + vec2(11.3, 4.1)) + 0.45 * value_noise(lay / 0.085 + vec2(2.9, 17.3));
-				vec2 foot = lay + vec2(0.035, 0.03);
-				float foot_level = 0.55 * value_noise(foot / 0.21 + vec2(11.3, 4.1)) + 0.45 * value_noise(foot / 0.085 + vec2(2.9, 17.3));
-				ground *= 1.0 - 0.5 * smoothstep(stone_line - 0.03, stone_line + 0.02, foot_level) * stones_near;
-				float stone_tone = 0.3 + 0.5 * value_noise(lay / 0.7 + vec2(7.7, 1.9));
-				ground = mix(ground, bank_stone * stone_tone, smoothstep(stone_line, stone_line + 0.03, stone_level) * stones_near);
-			}
 
 			vec2 along = vec2(0.643 * p.x + 0.766 * p.y, 0.643 * p.y - 0.766 * p.x);
 			float water = 0.5 * value_noise(along / vec2(13.0, 4.5) + vec2(3.7, 19.1)) + 0.34 * value_noise(along / vec2(5.5, 2.4) + vec2(41.3, 7.9)) + 0.16 * n_small;
