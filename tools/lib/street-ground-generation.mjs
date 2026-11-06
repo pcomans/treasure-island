@@ -564,10 +564,12 @@ const LOT_MINIMUM_STALL_M = 2.2;
 const LOT_ARROW_LENGTH_M = 2;
 const LOT_ARROW_WIDTH_M = 1;
 const LOT_SYMBOL_M = 1.5;
-// The shoulder's outer edge wanders, a step at a time, as spread gravel does; its
-// strips run on past a joint with the next edge, so no wedge opens between them.
-const SHOULDER_STEP_M = 1.25;
-const SHOULDER_WANDER_M = 0.22;
+// The shoulder's outer edge wanders as spread gravel does, a slow drift over
+// SHOULDER_DRIFT_STEPS steps with a little grit on top; its strips run on past a
+// joint with the next edge, so no wedge opens between them.
+const SHOULDER_STEP_M = 1;
+const SHOULDER_DRIFT_STEPS = 5;
+const SHOULDER_WANDER_M = 0.3;
 const SHOULDER_JOIN_M = 1;
 function expandLotPattern(lot) {
   if (lot?.osm_exception === undefined) return lot;
@@ -2947,8 +2949,14 @@ export function generateStreetGround({
       const start = edges.includes((edge + outline.length - 1) % outline.length) ? add(a, scale(along, -SHOULDER_JOIN_M)) : a;
       const end = edges.includes((edge + 1) % outline.length) ? add(b, scale(along, SHOULDER_JOIN_M)) : b;
       const steps = Math.max(1, Math.round(length(sub(end, start)) / SHOULDER_STEP_M));
+      const noise = (slot, index) => hashUnit(seed, `${lot.id}:shoulder:${edge}:${index}`, slot) - 0.5;
+      const wandering = (step) => {
+        const knot = Math.floor(step / SHOULDER_DRIFT_STEPS);
+        const fraction = step / SHOULDER_DRIFT_STEPS - knot;
+        return (noise(0, knot) * (1 - fraction) + noise(0, knot + 1) * fraction) * 1.6 + noise(1, step) * 0.4;
+      };
       const outer = Array.from({ length: steps + 1 }, (_, step) => add(add(start, scale(sub(end, start), step / steps)),
-        scale(leftOf(along), outward * (width + (hashUnit(seed, `${lot.id}:shoulder:${edge}:${step}`, 0) - 0.5) * 2 * wander))));
+        scale(leftOf(along), outward * (width + wandering(step) * wander))));
       const ring = [start, end, ...outer.reverse()];
       return [[ringArea(ring) > 0 ? ring : ring.reverse()]];
     }));
