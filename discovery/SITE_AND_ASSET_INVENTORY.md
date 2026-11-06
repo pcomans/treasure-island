@@ -139,7 +139,7 @@ research areas.
 | Mersea strip | `mersea_median` | 2 (visual-review-veg-models) | 294 low plants on dark mulch, from the Sep 2025 Street View on 9th Street | 3: secondary items |
 | The ditch next to Mersea | `mersea_ditch`; w1473022589 | 2 (visual-review-veg-models) | 689 plants sown by fields that read the land, on the ground shader's red floor and banks; owner photos, Nov 2026 | 3: the bank's density at the owner's photo spot (with the Johnson St lot), the even bank-top line, the foreground where the stones were |
 | Ferry arrival and spawn | views `ferry-arrival-north`, `spawn` | 2 (visual-review-veg-models) | The trees as seen from the two arrival views; the plaza's own row is in the zones table | 3: secondary items |
-| Island overviews | the fixed overviews; `island_trees`: `island_canopy`, `fourth_street_lot_palms` | 2 (visual-review-veg-models) | The tree cover as a whole, with the rules no site above covers: 189 crowns of the May 2026 aerial across the island and 21 palms on the 4th Street lot | 3: secondary items |
+| Island overviews | the fixed overviews; `island_trees`: `island_canopy`, `fourth_street_lot_trees` | 2 (visual-review-veg-models) | The tree cover as a whole, with the rules no site above covers: 189 crowns of the May 2026 aerial across the island and 21 trees on the 4th Street lot, broadleaves but for three date palms | 3: secondary items |
 
 ### OSM parks, plazas and pitches
 
@@ -199,7 +199,7 @@ verdict yet.
 | w95934141 | surface | (-553, -610) | 0 code | Generic asphalt | 1 |
 | w96665901 | street_side | (-40, -527) | | Generic asphalt; 6 cars from the aerial | Rate |
 | w96698621 | surface | (174, -375) | 0 code | Generic asphalt | 1 |
-| w96698661 | surface | (230, 181) | 0 code | Generic asphalt | 1 |
+| w96698661 | surface | (230, 181) | 0 code | Generic asphalt; stall rows from the May 2026 aerial, curbed islands not built | 1 |
 | w109022552 | surface | (43, 542) | 0 code | Generic asphalt; the z-fight fix `4f469784` layers it over the area it lies in | 1 |
 | w850003199 | (none) | (10, 805) | 0 code | Generic asphalt | 1 |
 | w1102659944 | (none) | (-286, -503) | 0 code | Generic asphalt | 1 |

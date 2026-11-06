@@ -1120,6 +1120,8 @@ On 2026-11-06 a dull shrub material took a tint of 0.42 as if it meant 42 % brig
 
 Five bright 2 m marks in the Johnson St lot (2026-11-06) were first reported as cars and then as pole heads; at full zoom they had two lobes, and the owner's photo showed four of them were aisle arrows. An aerial at 0.24 m can't name a small mark on its own. Look at the shape at full zoom and find one ground photo before reporting what it is; until then call it a mark.
 
+A species named from an aerial alone must be checked against a dated street view: the 4th Street lot's young trees were traced as star-shaped palm crowns on the May 2026 aerial, and Sep 2025 photos showed open deciduous broadleaves (2026-11-06).
+
 ## Test a traced edge against one photographed distance
 
 The same lot's outline followed the aerial's dark edge, but a photo put the arrow 1.5 m from the curb where the trace had 2.2 m: the dark band behind the curb reads as asphalt from above. Where a photo shows an edge and a painted mark together, compare that one distance with the trace before building on the edge.

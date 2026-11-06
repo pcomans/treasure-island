@@ -24269,3 +24269,27 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: Reading the tests that walk the baked tree before writing the merge found the limit that shaped it, the ordered contact proof, and the offline census turned the what-if's best case into a real estimate before any engine run. Breaking the merge eleven ways against its new contract test, and feeding the geometry comparator synthetic defects, showed both could fail before they were trusted. A third configuration, the probe fix alone on the unmerged bake, split every look and timing difference between probe and merge, and proved the web glass change was the probe in one extra two-minute run. Freezing shader time made a rerun control nearly silent, so anything above it was real. Running the web smoke before the push kept a failed check off main, and a timestamp-only frame log, which changed nothing it measured, settled what three explanations hadn't.
 - What did not work well: My first probe fix broke generated-world startup: binding one method twice is one connection, so the bar probe never settled. The bake exited 0 and only its log showed it; I saw it by reading the log, not from any check of mine. Two chains of mine ignored a failed step: a push ran after a failed commit, and a commit went through after a failed whitespace check, each harmless only by luck. A look mismatch in the first proof was an artefact of hashing embedded resource paths, and three poses on my family sheet were blocked by trees or a wall until I opened the sheet. The smoke's run-speed check failed three times, and I named a cause too early each time: one stale frame, then a small stall new with this build, then my own tracer. The first two reached ROOT, and each fell to the next measurement; the real cause was a stall main already has, with a read landing either side of the catch-up. My "total distance matches stock" evidence was partly coincidence, because the stall delayed the key release by about as much time as it lost. My replacement check then failed its own proof, because I fitted its window to four passes of stall timing; ROOT rightly stopped me fitting another.
 - What the team should change next time: Run a generated-world launch as part of any change to code both world paths share, since a bake exiting 0 proves nothing about the path that doesn't run. When a timing check fails, get a passive measurement before naming a cause, and run the same check on the known-good build first. Chain each step on the one before with `&&`. Open every sheet before sending it, and choose poses from the building's clear sides. Have the bake fail on a broken merge, the review's top follow-up.
+
+### carmack-critique
+
+(Relayed by the coordinator; added by batch-20261106.)
+
+- **What worked well:** measuring pixels before asserting.
+- **What did not work well:** the first crops included Maps UI and missed surfaces.
+- **What to change next time:** brief critics with the worktree that made the renders, and give matched photo and render pairs.
+
+### water-clouds-research
+
+(Relayed by the coordinator; added by batch-20261106.)
+
+- **What worked well:** engine source settled what the docs omit.
+- **What did not work well:** PDF fetches failed, and some talks stayed unread.
+- **What to change next time:** provide a PDF text tool for research runs.
+
+### batch-20261106 — 2026-11-06 — fast drop on C, 4th Street lot trees and stalls, worn grass edges, bake safety
+
+(Written before the suite, for the commit it runs on; the suite's result is in the hand-back to ROOT.)
+
+- What worked well: Measuring the May 2026 aerial by distance from paving took one short script and under a second a run, and gave the two wear rules numbers instead of an impression. A one-second scratch run replaced my assumption about a script error inside a typed static (null) with the fact (an empty Dictionary) before it went into the bake's check. A negative bake with an injected problem proved the exit code end to end, and a mutation run proved the new merge fixtures fail without their guards. perf-2's R03 bake (same code as dae432a8) and its dump and compare scripts saved a baseline bake and a new proof tool; the proof came back exact on all 1,960,331 building triangles.
+- What did not work well: Three of five generator runs (6 minutes each) were spent on things I could have read first: the palm 5 mm inside a road's exclusion margin, stall rows clashing on the car row ids, and two crowns lost because a mulch pit can't stand on stall paint. I then spent a search on stall pitches and sides to dodge the id clash, which is a workaround, so it is logged rather than hidden. The first wear weight came from reasoning over thresholds and read as a dry kerb with green behind it; only the close-up showed that. My first shots plan stopped at a camera over a roof, which lost two views.
+- What the team should change next time: Before adding rows to a shared config, read what consumes them (here car ids and the pit check) and diff a scratch run of the placed rows. Have the world generator run its set-piece and id checks before its slow stages, or give it a street-detail-only mode, so a data slip costs seconds rather than minutes. When a rule blends into several ground families, compute the blend for each family before the first render.
