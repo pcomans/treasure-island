@@ -933,6 +933,9 @@ function buildDumpster(lodIndex) {
 // (matte, its weathered wood). Production inference from the photos and the
 // common stock tank sizes, not measured. Long axis along Z.
 export const STOCK_TANK_SIZE = Object.freeze({ length_m: 2.44, width_m: 0.76, height_m: 0.61, pallet_m: 0.14, pallet_length_m: 2.5, pallet_width_m: 1.0 });
+// The tank's soil below its rim, and above the ground (a plant in it stands there).
+const STOCK_TANK_SOIL_DROP_M = 0.08;
+export const STOCK_TANK_SOIL_M = STOCK_TANK_SIZE.pallet_m + STOCK_TANK_SIZE.height_m - STOCK_TANK_SOIL_DROP_M;
 function buildStockTankPlanter(lodIndex) {
   const out = new MeshBuilder();
   const { length_m: length, width_m: width, height_m: height, pallet_m: pallet, pallet_length_m: palletLength, pallet_width_m: palletWidth } = STOCK_TANK_SIZE;
@@ -990,7 +993,7 @@ function buildStockTankPlanter(lodIndex) {
   // Rolled rim: out, over the top and back down the inside to the soil.
   band(0.014, y1 - 0.035, y1 + 0.01, PART.metal);
   flat(-0.006, 0.014, y1 + 0.01, PART.metal);
-  const soil = y1 - 0.08;
+  const soil = y1 - STOCK_TANK_SOIL_DROP_M;
   band(-0.006, soil, y1 + 0.01, PART.metal, true, [0.55, 0.9]);
   // The soil: a fan over the inside of the outline.
   const surface = ring(-0.006, soil);

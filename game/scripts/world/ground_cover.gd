@@ -58,12 +58,12 @@ const FAMILIES := {
 	# dirt shows in a few patches and along tracks, which these patches stand
 	# for (2026-11-05 visual review: evenly spread pale blobs read as desert
 	# camouflage from above).
-	"field": {"dry_threshold": 0.378, "bare_threshold": 0.69, "green_dryness": 0.35, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
-	# Dry straw grass, about 11 / 88 / 1: the residential grounds and the
+	"field": {"dry_threshold": 0.378, "bare_threshold": 0.69, "green_dryness": 0.35, "patch_scale_m": 32.0, "bare_scale_m": 21.0, "marsh_amount": 1.0},
+	# Dry straw grass, about 11 / 89 / 0: the residential grounds and the
 	# Avenue N verge (map), the Job Corps campus, GAA Field B, the old Job
 	# Corps ballfield and the dry Avenue D medians. The aerial shows only a
 	# handful of dirt patches in the residential grounds.
-	"straw": {"dry_threshold": 0.30, "bare_threshold": 0.84, "green_dryness": 0.6, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
+	"straw": {"dry_threshold": 0.30, "bare_threshold": 0.90, "green_dryness": 0.6, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
 	# Rough grass, about 44 / 53 / 3: the west shore parcel, olive to brown.
 	"rough_grass": {"dry_threshold": 0.48, "bare_threshold": 0.80, "green_dryness": 0.3, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
 	# Dry grass and bare dirt, about 9 / 73 / 18: the Cultural Park, the
@@ -73,11 +73,10 @@ const FAMILIES := {
 	# land (map) and the Avenue N construction parcel w1252737734.
 	"dry_field": {"dry_threshold": 0.29, "bare_threshold": 0.635, "green_dryness": 0.5, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
 	"bare": {"dry_threshold": -1.0, "bare_threshold": 0.345, "green_dryness": 0.0, "patch_scale_m": 20.0, "bare_scale_m": 15.0},
-	# The seasonal marsh (natural=wetland) east of the Mersea lot: olive rushes
-	# at its edges round pale dry grass and sand, about 23 / 52 / 25
-	# (2026-05-26 aerial: 10 % green, 28 % dry, 63 % pale of its open ground;
-	# drawn before as a flat water-like cyan).
-	"marsh": {"dry_threshold": 0.40, "bare_threshold": 0.62, "green_dryness": 0.55, "patch_scale_m": 24.0, "bare_scale_m": 14.0},
+	# The seasonal marsh (natural=wetland) east of the Mersea lot. The shader draws
+	# its floor and banks from the land's height (marsh_amount), on this family and
+	# on the field round it alike.
+	"red_marsh": {"dry_threshold": 2.0, "bare_threshold": 2.0, "green_dryness": 0.5, "patch_scale_m": 24.0, "bare_scale_m": 14.0, "marsh_amount": 1.0},
 	# The old sand courts (natural=sand) in the residential north: pale bare
 	# ground grown over with dry weeds, about 0 / 60 / 40 (2026-05-26 aerial:
 	# 78 % dry, 16 % bare of their open ground).
@@ -110,7 +109,7 @@ const FAMILY_BY_MATERIAL_KEY := {
 	# Terrain overlays on the land: the old sand courts and the marsh east of the
 	# Mersea lot.
 	"terrain_sand": "sand_pad",
-	"terrain_wetland": "marsh",
+	"terrain_wetland": "red_marsh",
 }
 
 ## Frozen 2026-08-27 OSM areas whose tags the generated material keys merge.

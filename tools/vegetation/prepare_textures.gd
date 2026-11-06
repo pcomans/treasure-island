@@ -2,8 +2,8 @@ extends SceneTree
 ## Packs the street-vegetation textures (game/resources/textures/world/vegetation/)
 ## from the untouched generated source images, which stay outside Git with the
 ## vegetation work notes (the texture README names each one's prompt). Keys the
-## flat magenta (or, behind pink and lilac flowers, cyan) backgrounds of the leaf
-## and grass images into alpha, removes the key colour's spill, fills transparent
+## flat magenta (or, behind pink, lilac and red flowers and red leaves, cyan)
+## backgrounds of the leaf and grass images into alpha, removes the key colour's spill, fills transparent
 ## pixels with nearby leaf colour (so mipmaps don't halo), grades and packs the
 ## atlases whose cells game/scripts/world/street_vegetation_kit.gd reads, and
 ## resizes the tiled barks. Writes each PNG's `.import` beside it
@@ -27,6 +27,52 @@ const SETS := {
 	"perennial": PERENNIAL_CELLS,
 	"young_trees": ["gum_leaves.png", "oak_leaves.png", "gum_bark.png", "oak_bark.png"],
 	"park_ground": ["park_mulch.png", "park_gravel.png"],
+	"pine": ["pine_crest.png", "pine_crest_candles.png", "pine_candle_row.png", "pine_bark.png"],
+	"broadleaf": ["broadleaf_clump.png", "broadleaf_bronze.png", "christmas_spray.png", "christmas_spray_flowers.png", "broadleaf_bark.png", "christmas_bark.png"],
+	"set_pieces": ["eucalyptus_spray.png", "weeping_mass.png", "norfolk_branch_top.png", "norfolk_branch_side.png", "eucalyptus_shred_bark.png"],
+	"shrubs": [
+		"hawthorn_spray.png", "pittosporum_broad.png", "red_tip_shoots.png", "conical_spray.png",
+		"hedge_mat.png", "glossy_mat.png", "hedge_stems_open.png", "phormium_leaf.png",
+		"hedge_surface.png", "glossy_hedge_flower_surface.png",
+	],
+}
+## The shrub atlas's 512 x 512 cells, row by row in 2048 x 1024 (SHRUB_CELLS in
+## the kit): the Avenue N shrubs' ragged mats, stems and upright flame, the
+## hedges' ragged mats and stems, and the flax leaf, each stretched to fill its
+## cell; the kit's card sizes set their proportions.
+const SHRUB_CELL_SOURCES := [
+	"hawthorn_spray.png", "pittosporum_broad.png", "red_tip_shoots.png", "conical_spray.png",
+	"hedge_mat.png", "glossy_mat.png", "hedge_stems_open.png", "phormium_leaf.png",
+]
+## The rollout models' leaf images graded toward the dated Street View crops:
+## [tint, desaturation]. Set from the mean colour of their crowns beside the crops':
+## every generated leaf came out far more saturated than the crops (0.4-0.7 against
+## 0.2-0.45 in HSV), and the spreading broadleaf much darker (value 0.23 against
+## 0.33) and yellower, so it is brightened past its source and cooled; the Job Corps
+## trees, in the shade of their own big crowns, are measured from frames against the
+## whole crown in the owner's photos, not its sunlit part. The bronze
+## clump came out orange, the flax wine red rather than near-black maroon, the hedge
+## stems pale. The cells with flowers keep more of their colour.
+const ROLLOUT_GRADES := {
+	"pine_crest.png": [Color(0.9, 0.92, 0.94), 0.36],
+	"pine_crest_candles.png": [Color(0.9, 0.92, 0.94), 0.3],
+	"pine_candle_row.png": [Color(0.84, 0.78, 0.7), 0.55],
+	"broadleaf_clump.png": [Color(1.04, 1.12, 1.06), 0.62],
+	"broadleaf_bronze.png": [Color(0.94, 0.84, 0.8), 0.62],
+	"christmas_spray.png": [Color(0.82, 0.84, 0.8), 0.38],
+	"christmas_spray_flowers.png": [Color(1.0, 0.76, 0.82), 0.3],
+	"eucalyptus_spray.png": [Color(0.65, 0.67, 0.69), 0.45],
+	"weeping_mass.png": [Color(0.745, 0.74, 0.78), 0.3],
+	"norfolk_branch_top.png": [Color(0.98, 0.98, 0.92), 0.42],
+	"norfolk_branch_side.png": [Color(0.98, 0.98, 0.92), 0.42],
+	"hawthorn_spray.png": [Color(0.81, 0.81, 0.87), 0.36],
+	"pittosporum_broad.png": [Color(0.7, 0.67, 0.88), 0.34],
+	"hedge_mat.png": [Color(0.74, 0.78, 0.76), 0.42],
+	"glossy_mat.png": [Color(0.86, 0.84, 1.0), 0.52],
+	"red_tip_shoots.png": [Color(0.92, 0.92, 0.86), 0.15],
+	"conical_spray.png": [Color(0.9, 0.95, 0.96), 0.38],
+	"hedge_stems_open.png": [Color(0.46, 0.44, 0.42), 0.35],
+	"phormium_leaf.png": [Color(0.46, 0.36, 0.4), 0.3],
 }
 ## The meadow atlas's 512 x 512 cells, row by row in 2048 x 2048 (LOW_CELLS in
 ## the kit): side views drawn on crossed cards, and the litter.
@@ -34,19 +80,20 @@ const MEADOW_CELLS := [
 	"reedgrass_clump.png", "sedge_tussock.png", "rush_clump.png", "bronze_grass.png",
 	"blue_eyed_grass.png", "thrift_stalks.png", "umbel_stalks.png", "buckwheat_side.png",
 	"woolly_stalks.png", "monkey_stalks.png", "tansy_stalks.png", "buckwheat_stalks.png",
-	"sagebrush_side.png", "sage_side.png", "litter.png",
+	"sagebrush_side.png", "sage_side.png", "litter.png", "seeded_stems.png",
 ]
 ## The perennial atlas's 512 x 512 cells in 2048 x 1536: face-on foliage
-## clusters, and the top views the kit lays over clumps as caps.
+## clusters, the top views the kit lays over clumps as caps, and in the last
+## cell, the meadow atlas being full, a seed-laden shrub's side view.
 const PERENNIAL_CELLS := [
 	"daisy_foliage.png", "thrift_cushion.png", "woolly_foliage.png", "sagebrush_foliage.png",
 	"yarrow_foliage.png", "buckwheat_foliage.png", "monkeyflower_foliage.png", "tansy_foliage.png",
-	"tussock_top.png", "bronze_top.png", "daisy_flowers.png",
+	"tussock_top.png", "bronze_top.png", "daisy_flowers.png", "seeded_tufts.png",
 ]
 const MAGENTA := Color(1.0, 0.0, 1.0)
 const CYAN := Color(0.0, 1.0, 1.0)
 ## Sources generated on cyan, so their pink, lilac and blue flowers survive the key.
-const ON_CYAN := ["blue_eyed_grass.png", "thrift_stalks.png", "daisy_flowers.png", "sage_side.png"]
+const ON_CYAN := ["seeded_tufts.png", "blue_eyed_grass.png", "thrift_stalks.png", "daisy_flowers.png", "sage_side.png", "christmas_spray_flowers.png", "hawthorn_spray.png", "red_tip_shoots.png", "phormium_leaf.png"]
 ## Pixels a low-plant image keeps clear round its atlas cell's edge, so mipmaps
 ## don't pull a neighbouring cell's leaves into a card's outline.
 const CELL_MARGIN := 8
@@ -54,7 +101,8 @@ const CELL_MARGIN := 8
 ## cap fills a clump's dense core from above without a flat rim of its own.
 const CAP_CELLS := ["tussock_top.png", "bronze_top.png"]
 ## Low-plant images graded toward the dated Cityside photos and November:
-## [tint, desaturation]. The generated sedge, tansy and monkeyflower came out
+## [tint, desaturation] and optionally a power on each channel, which darkens the
+## stems of a card and leaves its pale seed heads. The generated sedge, tansy and monkeyflower came out
 ## lime, the rush yellow-green, the bronze sedge orange rather than copper-tan,
 ## the sagebrush frosty, the dried flower heads too red; the litter is pulled
 ## down to dull debris.
@@ -65,6 +113,8 @@ const LOW_GRADES := {
 	"sagebrush_foliage.png": [Color(0.8, 0.86, 0.78), 0.0],
 	"sagebrush_side.png": [Color(0.74, 0.84, 0.72), 0.0],
 	"litter.png": [Color(0.64, 0.62, 0.6), 0.55],
+	"seeded_stems.png": [Color(1.0, 0.95, 0.9), 0.55, 0.75],
+	"seeded_tufts.png": [Color(0.86, 0.84, 0.8), 0.7],
 	"woolly_stalks.png": [Color(0.78, 0.72, 0.66), 0.55],
 	"buckwheat_stalks.png": [Color(0.84, 0.74, 0.64), 0.7],
 	"buckwheat_foliage.png": [Color(0.8, 0.76, 0.68), 0.55],
@@ -186,13 +236,28 @@ func _pack_barks(images: Dictionary, errors: Array[String]) -> void:
 	_save_barks(images, barks, errors)
 
 
+## Tiled barks from source: [output, tint, desaturation, and optionally contrast
+## about the bark's mid tone, so a furrowed bark keeps its relief at a distance].
 func _save_barks(images: Dictionary, barks: Dictionary, errors: Array[String]) -> void:
 	for source: String in barks.keys():
 		var bark: Image = images[source]
 		bark.resize(512, 512, Image.INTERPOLATE_LANCZOS)
 		_grade(bark, barks[source][1], barks[source][2])
 		bark.convert(Image.FORMAT_RGB8)
+		if (barks[source] as Array).size() > 3:
+			_contrast(bark, float(barks[source][3]))
 		_save(bark, OUT + str(barks[source][0]), errors)
+
+
+func _contrast(image: Image, amount: float) -> void:
+	var data := image.get_data()
+	var mid := 0.0
+	for value in data:
+		mid += value
+	mid /= data.size()
+	for i in data.size():
+		data[i] = clampi(int(round(mid + (data[i] - mid) * amount)), 0, 255)
+	image.set_data(image.get_width(), image.get_height(), false, image.get_format(), data)
 
 
 ## Cityside Park's grasses, sedges and rushes, its shrubs seen from the side,
@@ -207,10 +272,10 @@ func _pack_meadow(images: Dictionary, errors: Array[String]) -> void:
 		var name: String = cells[index]
 		var cell := _keyed_fit(images[name], 512 - 2 * CELL_MARGIN, 512 - 2 * CELL_MARGIN, CYAN if name in ON_CYAN else MAGENTA)
 		# Clears the pink the magenta key leaves in pale blade tips (not the copper sedge's orange).
-		if name in ["reedgrass_clump.png", "sedge_tussock.png", "rush_clump.png"]:
+		if name in ["reedgrass_clump.png", "sedge_tussock.png", "rush_clump.png", "seeded_stems.png"]:
 			_straw(cell)
 		if LOW_GRADES.has(name):
-			_grade(cell, LOW_GRADES[name][0], LOW_GRADES[name][1])
+			_grade(cell, LOW_GRADES[name][0], LOW_GRADES[name][1], LOW_GRADES[name][2] if LOW_GRADES[name].size() > 2 else 1.0)
 		atlas.blit_rect(cell, Rect2i(Vector2i.ZERO, cell.get_size()), Vector2i(512 * (index % 4) + CELL_MARGIN, 512 * (index / 4) + CELL_MARGIN))
 	_fill_transparent(atlas)
 	_save(atlas, OUT + "meadow_atlas.png", errors)
@@ -225,7 +290,7 @@ func _pack_perennial(images: Dictionary, errors: Array[String]) -> void:
 		var name: String = cells[index]
 		var cell := _keyed_fit(images[name], 512 - 2 * CELL_MARGIN, 512 - 2 * CELL_MARGIN, CYAN if name in ON_CYAN else MAGENTA)
 		if LOW_GRADES.has(name):
-			_grade(cell, LOW_GRADES[name][0], LOW_GRADES[name][1])
+			_grade(cell, LOW_GRADES[name][0], LOW_GRADES[name][1], LOW_GRADES[name][2] if LOW_GRADES[name].size() > 2 else 1.0)
 		if name in CAP_CELLS:
 			_radial_fade(cell, 0.14, 0.36)
 		atlas.blit_rect(cell, Rect2i(Vector2i.ZERO, cell.get_size()), Vector2i(512 * (index % 4) + CELL_MARGIN, 512 * (index / 4) + CELL_MARGIN))
@@ -266,6 +331,78 @@ func _pack_park_ground(images: Dictionary, errors: Array[String]) -> void:
 		"park_mulch.png": ["park_mulch.png", Color(0.72, 0.7, 0.68), 0.2],
 		"park_gravel.png": ["park_gravel.png", Color(0.62, 0.62, 0.62), 0.1],
 	}, errors)
+
+
+## The Monterey pine: its foliage atlas, 1024 x 1024, a crest of upright needle
+## tufts (0,0)-(1024,448), the same with candles (0,448)-(1024,896) and a row of
+## candles alone (0,896)-(1024,1024); and its tiled bark, dark grey-brown (p4)
+## rather than the generated red-brown.
+func _pack_pine(images: Dictionary, errors: Array[String]) -> void:
+	var atlas := Image.create_empty(1024, 1024, false, Image.FORMAT_RGBA8)
+	_pack_cell(atlas, images, "pine_crest.png", Rect2i(0, 0, 1024, 448), CELL_MARGIN)
+	_pack_cell(atlas, images, "pine_crest_candles.png", Rect2i(0, 448, 1024, 448), CELL_MARGIN)
+	_pack_cell(atlas, images, "pine_candle_row.png", Rect2i(0, 896, 1024, 128), CELL_MARGIN)
+	_fill_transparent(atlas)
+	_save(atlas, OUT + "pine_foliage_atlas.png", errors)
+	_save_barks(images, {"pine_bark.png": ["pine_bark.png", Color(0.72, 0.72, 0.74), 0.6, 1.3]}, errors)
+
+
+## The broadleaf atlas, 1024 x 1024 (BROADLEAF_* and CHRISTMAS_* in the kit):
+## the spreading broadleaf's drooping clump and its bronze-tipped clump on top,
+## the Christmas tree's drooping sprays, plain and in flower, below, each stretched
+## to fill its cell; and the two trees' tiled barks, the broadleaf's a dark
+## fissured grey-brown (c2).
+func _pack_broadleaf(images: Dictionary, errors: Array[String]) -> void:
+	var atlas := Image.create_empty(1024, 1024, false, Image.FORMAT_RGBA8)
+	_pack_cell(atlas, images, "broadleaf_clump.png", Rect2i(0, 0, 512, 512), CELL_MARGIN + 24)
+	_pack_cell(atlas, images, "broadleaf_bronze.png", Rect2i(512, 0, 512, 512), CELL_MARGIN + 24)
+	_pack_cell(atlas, images, "christmas_spray.png", Rect2i(0, 512, 512, 512), CELL_MARGIN)
+	_pack_cell(atlas, images, "christmas_spray_flowers.png", Rect2i(512, 512, 512, 512), CELL_MARGIN)
+	_fill_transparent(atlas)
+	_save(atlas, OUT + "broadleaf_foliage_atlas.png", errors)
+	_save_barks(images, {
+		"broadleaf_bark.png": ["broadleaf_bark.png", Color(0.72, 0.7, 0.68), 0.55, 1.5],
+		"christmas_bark.png": ["christmas_bark.png", Color(1.0, 1.0, 1.0), 0.0],
+	}, errors)
+
+
+## The set pieces' atlas, 1024 x 1024 (EUCALYPTUS_SPRAY, WEEPING_MASS and NORFOLK_*
+## in the kit): the eucalyptus's hanging spray over the weeping tree's hanging mass in
+## the left column, a Norfolk Island pine branch from above and from the side in the
+## right; and the eucalyptus's tiled bark, its ribbons pale enough for the kit's
+## vertex colours to warm them low on the trunk.
+func _pack_set_pieces(images: Dictionary, errors: Array[String]) -> void:
+	var atlas := Image.create_empty(1024, 1024, false, Image.FORMAT_RGBA8)
+	_pack_cell(atlas, images, "eucalyptus_spray.png", Rect2i(0, 0, 512, 512), CELL_MARGIN)
+	_pack_cell(atlas, images, "weeping_mass.png", Rect2i(0, 512, 512, 512), CELL_MARGIN)
+	_pack_cell(atlas, images, "norfolk_branch_top.png", Rect2i(512, 0, 512, 512), CELL_MARGIN)
+	_pack_cell(atlas, images, "norfolk_branch_side.png", Rect2i(512, 512, 512, 512), CELL_MARGIN)
+	_fill_transparent(atlas)
+	_save(atlas, OUT + "set_piece_foliage_atlas.png", errors)
+	_save_barks(images, {"eucalyptus_shred_bark.png": ["eucalyptus_bark.png", Color(0.9, 0.88, 0.87), 0.5]}, errors)
+
+
+## The shrub atlas, 2048 x 1024 (SHRUB_CELL_SOURCES; SHRUB_CELLS in the kit); and
+## the hedges' two tiled clipped-leaf cores, the glossy one in flower.
+func _pack_shrubs(images: Dictionary, errors: Array[String]) -> void:
+	var atlas := Image.create_empty(2048, 1024, false, Image.FORMAT_RGBA8)
+	for index in SHRUB_CELL_SOURCES.size():
+		_pack_cell(atlas, images, SHRUB_CELL_SOURCES[index], Rect2i(512 * (index % 4), 512 * (index / 4), 512, 512), CELL_MARGIN)
+	_fill_transparent(atlas)
+	_save(atlas, OUT + "shrub_foliage_atlas.png", errors)
+	_save_barks(images, {
+		"hedge_surface.png": ["hedge_surface.png", Color(0.8, 0.84, 0.82), 0.42],
+		"glossy_hedge_flower_surface.png": ["glossy_hedge_surface.png", Color(0.88, 0.88, 0.98), 0.5, 1.2],
+	}, errors)
+
+
+## Keys a source on its background, crops it to the plant, stretches it to fill
+## cell less inset all round, grades it (ROLLOUT_GRADES) and blits it in.
+func _pack_cell(atlas: Image, images: Dictionary, name: String, cell: Rect2i, inset: int) -> void:
+	var image := _keyed_fit(images[name], cell.size.x - 2 * inset, cell.size.y - 2 * inset, CYAN if name in ON_CYAN else MAGENTA)
+	if ROLLOUT_GRADES.has(name):
+		_grade(image, ROLLOUT_GRADES[name][0], ROLLOUT_GRADES[name][1])
+	atlas.blit_rect(image, Rect2i(Vector2i.ZERO, image.get_size()), cell.position + Vector2i(inset, inset))
 
 
 func _load(path: String, errors: Array[String]) -> Image:
@@ -443,7 +580,7 @@ func _radial_fade(image: Image, inner: float, outer: float) -> void:
 
 
 ## Multiplies visible colour by tint and pulls it toward grey by desaturate (0..1).
-func _grade(image: Image, tint: Color, desaturate: float) -> void:
+func _grade(image: Image, tint: Color, desaturate: float, power := 1.0) -> void:
 	image.convert(Image.FORMAT_RGBA8)
 	var data := image.get_data()
 	for i in range(0, data.size(), 4):
@@ -451,9 +588,9 @@ func _grade(image: Image, tint: Color, desaturate: float) -> void:
 		var g := data[i + 1] / 255.0
 		var b := data[i + 2] / 255.0
 		var grey := r * 0.3 + g * 0.59 + b * 0.11
-		data[i] = int(round(clampf(lerpf(r, grey, desaturate) * tint.r, 0.0, 1.0) * 255.0))
-		data[i + 1] = int(round(clampf(lerpf(g, grey, desaturate) * tint.g, 0.0, 1.0) * 255.0))
-		data[i + 2] = int(round(clampf(lerpf(b, grey, desaturate) * tint.b, 0.0, 1.0) * 255.0))
+		data[i] = int(round(clampf(pow(lerpf(r, grey, desaturate), power) * tint.r, 0.0, 1.0) * 255.0))
+		data[i + 1] = int(round(clampf(pow(lerpf(g, grey, desaturate), power) * tint.g, 0.0, 1.0) * 255.0))
+		data[i + 2] = int(round(clampf(pow(lerpf(b, grey, desaturate), power) * tint.b, 0.0, 1.0) * 255.0))
 	image.set_data(image.get_width(), image.get_height(), false, Image.FORMAT_RGBA8, data)
 
 

@@ -58,7 +58,11 @@ extends SceneTree
 ##   ones, its edge fading out unevenly over edge_m when that is set,
 ##   and "plants": [{"group": "...", "prop": "...", "variant": 0, "scale": 1.0,
 ##   "xz": [x,z], "yaw": 0.0}] stands kit props on the beds (or on the drawn
-##   ground), built as the world builds its vegetation; the aiming reticle is
+##   ground), built as the world builds its vegetation; a hedge prop takes a
+##   "path": [[x,z], ...] instead of xz, laid on the ground under each point. A
+##   plant may add "level": "lod0", "lod1" or "far" to draw its group at that
+##   detail level only, at any distance (every plant of the group the same), so
+##   a sheet can set the levels side by side. The aiming reticle is
 ##   hidden while they stand. A view may then add "show": ["GROUP", ...] to
 ##   draw only those groups, and "measure_frames": N to time N drawn frames with
 ##   them shown and N with every group hidden, in three alternating blocks each,
@@ -69,6 +73,7 @@ extends SceneTree
 ##   shows and hides that layer the same way, in the pass where it is on.
 
 const WorldHarness := preload("res://game/tests/shared/world_harness.gd")
+const GROUND_COVER := preload("res://game/scripts/world/ground_cover.gd")
 const VegetationKit := preload("res://game/scripts/world/street_vegetation_kit.gd")
 ## A gallery bed's ground textures (2 m tiles), its grid step and its lift over
 ## the drawn ground, in metres; each later bed lies BED_LAYER_M over the earlier.
@@ -336,13 +341,41 @@ func _plant_gallery(plan: Dictionary) -> Dictionary:
 		grids.push_front(grid)
 		root.add_child(_bed_mesh(str(bed.name), grid, str(bed.get("ground", "mulch")), float(bed.get("edge_m", 0.0))))
 	var rows := {}
+	var levels := {}
 	for index in (plants as Array).size():
 		var plant: Variant = plants[index]
-		if not plant is Dictionary or not plant.get("group") is String or str(plant.group) == "" or not plant.get("prop") is String or not _numbers(plant.get("xz"), 2) \
+		var hedge := plant is Dictionary and VegetationKit.is_hedge(str(plant.get("prop", "")))
+		if not plant is Dictionary or not plant.get("group") is String or str(plant.group) == "" or not plant.get("prop") is String \
+		or not (_numbers(plant.get("xz"), 2) if not hedge else plant.get("path") is Array and (plant.path as Array).size() >= 2) \
 		or not _numbers([plant.get("scale", 1.0), plant.get("yaw", 0.0), plant.get("variant")], 3):
 			root.free()
-			return {"error": "plant %d needs a group, prop, variant and xz, and numeric scale and yaw" % index}
+			return {"error": "plant %d needs a group, prop, variant and xz (a hedge, a path of at least two [x,z]), and numeric scale and yaw" % index}
+		var level: Variant = plant.get("level", null)
+		if (level != null and not level in ["lod0", "lod1", "far"]) or (levels.has(plant.group) and levels[plant.group] != level):
+			root.free()
+			return {"error": "plant %d: a level is lod0, lod1 or far, the same for every plant of a group" % index}
+		levels[plant.group] = level
 		var prop := str(plant.prop)
+		if not rows.has(plant.group):
+			rows[plant.group] = []
+		if hedge:
+			var line := []
+			var ground_y := []
+			for point: Variant in plant.path:
+				if not _numbers(point, 2):
+					root.free()
+					return {"error": "plant %d: a path point is [x, z]" % index}
+				var y := _bed_height(grids, Vector2(point[0], point[1]))
+				if is_nan(y):
+					y = _drawn_ground(Vector2(point[0], point[1]), ground)
+				if is_nan(y):
+					root.free()
+					return {"error": "plant %d has no ground under its path" % index}
+				line.append([float(point[0]), y, float(point[1])])
+				ground_y.append(y)
+			(rows[plant.group] as Array).append({"id": "gallery:%d" % index, "status": "placed", "layer": "vegetation", "kind": "hedge", "geometry": "polyline",
+				"prop": prop, "prop_params": {"variant": plant.variant, "ground_y_m": ground_y}, "points_m": line})
+			continue
 		var params := {"variant": plant.variant, "scale": float(plant.get("scale", 1.0)), "lift_m": 0.0, "foot_spread_m": 0.0, "well_m": 0.0}
 		var problem := VegetationKit.params_error(prop, str((VegetationKit.PROPS[prop].kinds as Array)[0]) if VegetationKit.PROPS.has(prop) else "", params)
 		if problem != "":
@@ -356,8 +389,6 @@ func _plant_gallery(plan: Dictionary) -> Dictionary:
 				root.free()
 				return {"error": "plant %d has no ground under it" % index}
 			y = drawn
-		if not rows.has(plant.group):
-			rows[plant.group] = []
 		(rows[plant.group] as Array).append({"id": "gallery:%d" % index, "status": "placed", "layer": "vegetation", "kind": (VegetationKit.PROPS[prop].kinds as Array)[0],
 			"prop": prop, "prop_params": params, "position_m": [xz.x, y, xz.y], "surface": {"bias_m": 0.0}, "yaw_radians": float(plant.get("yaw", 0.0))})
 	var groups := {}
@@ -368,6 +399,14 @@ func _plant_gallery(plan: Dictionary) -> Dictionary:
 			return {"error": "group %s: %s" % [group, built.message]}
 		var node: Node3D = built.node
 		node.name = "Group_" + group.validate_node_name()
+		if levels[group] != null:
+			# Only the chosen detail level, drawn at any distance.
+			for child in node.get_children():
+				if child is GeometryInstance3D:
+					var drawn := ("_%s__c" % levels[group]) in str(child.name) or "_shadow__c" in str(child.name)
+					(child as GeometryInstance3D).visible = drawn
+					(child as GeometryInstance3D).visibility_range_begin = 0.0
+					(child as GeometryInstance3D).visibility_range_end = 0.0
 		root.add_child(node)
 		groups[group] = node
 	# The aiming reticle would sit on the plants in the middle of every shot.
@@ -487,11 +526,15 @@ func _show_groups(gallery: Dictionary, view: Dictionary) -> String:
 ## drift in the machine's load falls on both. With "measure_layer": NAME the
 ## view needs no plants: the world's street-detail layer of that name is shown
 ## and hidden instead (a view taken while that layer is off prints a
-## FRAME_TIME_SKIPPED line). Prints one FRAME_TIME line per state, with the
-## last frame's draw calls and primitives, then restores what was shown.
+## FRAME_TIME_SKIPPED line). With "measure_ground": true it times the ground-cover
+## shader's bare-soil branch instead: "plants" is the ground as it is, "empty" the
+## same with every family's bare threshold out of reach, which skips that branch.
+## Prints one FRAME_TIME line per state, with the last frame's draw calls and
+## primitives, then restores what was shown.
 ## Returns an error, or "".
 func _measure_view(view: Dictionary, target: Vector3, gallery: Dictionary) -> String:
 	var toggled: Array[Node3D] = []
+	var ground := view.has("measure_ground")
 	if view.has("measure_layer"):
 		var layer := str(view.measure_layer)
 		if not layer in WorldLoader.STREET_DETAIL_LAYERS:
@@ -506,8 +549,8 @@ func _measure_view(view: Dictionary, target: Vector3, gallery: Dictionary) -> St
 	elif gallery.has("groups"):
 		for group: String in gallery.groups:
 			toggled.append(gallery.groups[group] as Node3D)
-	if not _numbers([view.get("measure_frames")], 1) or float(view.measure_frames) < 30.0 or float(view.measure_frames) > 3000.0 or toggled.is_empty():
-		return "measure_frames needs 30-3000 frames and plants in the plan or a measure_layer"
+	if not _numbers([view.get("measure_frames")], 1) or float(view.measure_frames) < 30.0 or float(view.measure_frames) > 3000.0 or (toggled.is_empty() and not ground):
+		return "measure_frames needs 30-3000 frames and plants in the plan, a measure_layer or measure_ground"
 	var error := await _h.settle_player(Vector2(view.player_xz[0], view.player_xz[1]))
 	if error != "":
 		return error
@@ -528,6 +571,8 @@ func _measure_view(view: Dictionary, target: Vector3, gallery: Dictionary) -> St
 		var state := "plants" if block % 2 == 0 else "empty"
 		for index in toggled.size():
 			toggled[index].visible = shown[index] and state == "plants"
+		if ground:
+			_set_ground_bare(state == "plants")
 		var times := await _frame_times(per_block, 20)
 		if state == "plants":
 			plants_times.append_array(times)
@@ -537,6 +582,8 @@ func _measure_view(view: Dictionary, target: Vector3, gallery: Dictionary) -> St
 	_restore_frames(uncapped)
 	for index in toggled.size():
 		toggled[index].visible = shown[index]
+	if ground:
+		_set_ground_bare(true)
 	for state: String in ["plants", "empty"]:
 		var stats := _frame_stats(plants_times if state == "plants" else empty_times)
 		print("FRAME_TIME view=%s state=%s frames=%d mean_ms=%.2f median_ms=%.2f p95_ms=%.2f draw_calls=%d primitives=%d renderer=%s/%s" % [view.name, state, stats.frames, stats.mean,
@@ -545,6 +592,18 @@ func _measure_view(view: Dictionary, target: Vector3, gallery: Dictionary) -> St
 		free.queue_free()
 		_h.player.get_camera().make_current()
 	return ""
+
+
+## Every ground-cover family's bare soil on as configured, or off by a bare
+## threshold out of reach (the shader then skips its bare branch).
+func _set_ground_bare(on: bool) -> void:
+	for family: String in GROUND_COVER.FAMILIES:
+		var made := GROUND_COVER.material(family)
+		var preset: Dictionary = GROUND_COVER.FAMILIES[family]
+		made.set_shader_parameter("bare_threshold", float(preset.bare_threshold) if on else 2.0)
+		for uniform: String in GROUND_COVER.COVER_MAP_RECIPES:
+			var recipe: Dictionary = GROUND_COVER.FAMILIES[GROUND_COVER.COVER_MAP_RECIPES[uniform]]
+			made.set_shader_parameter(uniform, Vector3(recipe.dry_threshold, float(recipe.bare_threshold) if on else 2.0, recipe.green_dryness))
 
 
 ## Settles the player at the view's player_xz and saves one screenshot from the

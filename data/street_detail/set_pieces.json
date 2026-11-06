@@ -1531,6 +1531,24 @@
       "reason": "A red, white and blue pole flag inside the vehicle lot's cut corner at 9th Street and Avenue D, above the green container wall, flying east; its text is too small to read in the photo, so it is plain.",
       "reference": "verify-810-avenue-d-20261104 05-9thst-2025-09 (pano zymx-sHLgpe6167colQIQQ, Sep 2025): a red, white and blue flag above the wall near the corner; position production inference"
     },
+    {"id": "chinook_norfolk_pine", "kind": "tree", "prop": "norfolk_island_pine", "params": {"variant": 1, "scale": 1.0}, "xz": [-338.0, -10.0], "yaw": 0.6, "reason": "The one young Norfolk Island pine seen on the island, about 5 m tall, in front of 1436 Chinook Court.", "reference": "Species pass n1 (Street View Mar 2025, pano 6UKuCNItHFdFsY2UXP5vOQ, heading 336)"},
+    {"id": "sw_park_date_palm_1", "kind": "tree", "prop": "canary_date_palm", "params": {"variant": 5, "scale": 1.0}, "xz": [-391.0, 78.2], "yaw": 0.4, "reason": "A tall old date palm in the row along the south edge of the park at Avenue B and 9th Street.", "reference": "Street View Sep 2025, Avenue B at 9th St (pano pA9E-Qd3m4ljG7H3xFPbJA, refs sv16); 2026-05-26 aerial (z19): a row along the park's south edge, shifted to the game's curb"},
+    {"id": "sw_park_date_palm_2", "kind": "tree", "prop": "canary_date_palm", "params": {"variant": 5, "scale": 1.1}, "xz": [-384.2, 74.5], "yaw": 2.2, "reason": "The tallest date palm of the row, its thick trunk leaning a little.", "reference": "Street View Sep 2025, Avenue B at 9th St (pano pA9E-Qd3m4ljG7H3xFPbJA, refs sv16); 2026-05-26 aerial (z19): a row along the park's south edge, shifted to the game's curb"},
+    {"id": "sw_park_date_palm_3", "kind": "tree", "prop": "canary_date_palm", "params": {"variant": 4, "scale": 1.05}, "xz": [-378.0, 71.2], "yaw": -2.3, "reason": "A date palm of the row.", "reference": "Street View Sep 2025, Avenue B at 9th St (pano pA9E-Qd3m4ljG7H3xFPbJA, refs sv16); 2026-05-26 aerial (z19): a row along the park's south edge, shifted to the game's curb"},
+    {"id": "sw_park_date_palm_4", "kind": "tree", "prop": "canary_date_palm", "params": {"variant": 4, "scale": 0.95}, "xz": [-371.7, 67.8], "yaw": -1.0, "reason": "The row's east end.", "reference": "Street View Sep 2025, Avenue B at 9th St (pano pA9E-Qd3m4ljG7H3xFPbJA, refs sv16); 2026-05-26 aerial (z19): a row along the park's south edge, shifted to the game's curb"},
+    {"id": "sw_park_fan_palm", "kind": "tree", "prop": "mexican_fan_palm", "params": {"variant": 5, "scale": 1.0}, "xz": [-397.0, 81.5], "yaw": 1.1, "reason": "The tall old fan palm at the row's west end.", "reference": "Vegetation inventory zone Z2 notes, Avenue B and 9th Street park; Street View Sep 2025, Avenue B at 9th St (pano pA9E-Qd3m4ljG7H3xFPbJA, refs sv16); 2026-05-26 aerial (z19): a row along the park's south edge, shifted to the game's curb"},
+    {"id": "sffd_frontage_palm_1", "kind": "tree", "prop": "canary_date_palm", "params": {"variant": 1, "scale": 1.0}, "xz": [287.0, -305.9], "yaw": 0.9, "reason": "A young date palm among the wind-pruned pines of the SFFD frontage.", "reference": "Street View Sep 2025 at 751 9th St (pano ifdNQ-gh7K1ryx3rVMvW2w, refs sv14, sv17); 2026-05-26 aerial (z19): star-shaped young palm crowns in the row of pines"},
+    {"id": "sffd_frontage_palm_2", "kind": "tree", "prop": "canary_date_palm", "params": {"variant": 1, "scale": 1.05}, "xz": [302.5, -290.9], "yaw": 3.1, "reason": "The second young date palm of the frontage.", "reference": "Street View Sep 2025 at 751 9th St (pano ifdNQ-gh7K1ryx3rVMvW2w, refs sv14, sv17); 2026-05-26 aerial (z19): star-shaped young palm crowns in the row of pines"},
+    {"id": "sffd_frontage_palm_3", "kind": "tree", "prop": "canary_date_palm", "params": {"variant": 0, "scale": 1.1}, "xz": [310.0, -275.9], "yaw": -1.7, "reason": "The third young date palm, by the gate.", "reference": "Street View Sep 2025 at 751 9th St (pano ifdNQ-gh7K1ryx3rVMvW2w, refs sv14, sv17); 2026-05-26 aerial (z19): star-shaped young palm crowns in the row of pines"},
+    {"id": "keppler_island_tree_west", "kind": "tree", "prop": "spreading_broadleaf", "params": {"variant": 0, "scale": 0.8}, "xz": [-511.9, -423.6], "yaw": 0.7, "reason": "One of the two small round trees on Keppler Court's planted island.", "reference": "Street View Apr 2019, 1117 Keppler Ct (pano b6Gbr0M_gm59xek6WMNAkg, heading 175): a kerbed island at the head of the parked rows, a clipped shrub mass and two small round trees; 2026-05-26 aerial (z19): the same dark planting at the head of the court's middle row"},
+    {"id": "keppler_island_tree_east", "kind": "tree", "prop": "spreading_broadleaf", "params": {"variant": 0, "scale": 0.8}, "xz": [-509.6, -422.8], "yaw": -2.0, "reason": "The other small tree of the island.", "reference": "Street View Apr 2019, 1117 Keppler Ct (pano b6Gbr0M_gm59xek6WMNAkg, heading 175): a kerbed island at the head of the parked rows, a clipped shrub mass and two small round trees; 2026-05-26 aerial (z19): the same dark planting at the head of the court's middle row"},
+    {"id": "job_corps_eucalyptus_forked", "kind": "tree", "prop": "eucalyptus_mature", "params": {"variant": 0, "scale": 1.25}, "xz": [77.3, 538.0], "yaw": 0.4, "reason": "The forked eucalypt of the side-by-side pair. Species unresolved; the photographed form.", "reference": "Owner photos, Nov 2026, across the Job Corps south lot, read with the May 2026 aerial: camera about (18, 514), heading 111, from the anchor, the lot's lamp and two dark crowns; a tree's bearing comes from the photo and its distance from where its foot meets the lot"},
+    {"id": "job_corps_eucalyptus_straight", "kind": "tree", "prop": "eucalyptus_mature", "params": {"variant": 1, "scale": 1.25}, "xz": [81.1, 544.3], "yaw": 2.6, "reason": "The straight eucalypt of the pair. Species unresolved; the photographed form.", "reference": "Owner photos, Nov 2026, across the Job Corps south lot, read with the May 2026 aerial: camera about (18, 514), heading 111, from the anchor, the lot's lamp and two dark crowns; a tree's bearing comes from the photo and its distance from where its foot meets the lot"},
+    {"id": "job_corps_eucalyptus_left", "kind": "tree", "prop": "eucalyptus_mature", "params": {"variant": 1, "scale": 1.25}, "xz": [89.0, 528.5], "yaw": -2.356, "reason": "The tall crown left of the pair in the photo, its trunk hidden behind the weeping tree, 15 m from the pair as in the models' group frame. Species unresolved; the photographed form.", "reference": "Owner photos, Nov 2026, across the Job Corps south lot, read with the May 2026 aerial: camera about (18, 514), heading 111, from the anchor, the lot's lamp and two dark crowns; a tree's bearing comes from the photo and its distance from where its foot meets the lot"},
+    {"id": "job_corps_eucalyptus_back", "kind": "tree", "prop": "eucalyptus_mature", "params": {"variant": 0, "scale": 1.25}, "xz": [100.0, 547.5], "yaw": 1.1, "reason": "The aerial's big canopy reaches east of the pair; from the photo's angle this trunk hides behind them. Species unresolved; the photographed form.", "reference": "Owner photos, Nov 2026, across the Job Corps south lot, read with the May 2026 aerial: camera about (18, 514), heading 111, from the anchor, the lot's lamp and two dark crowns; a tree's bearing comes from the photo and its distance from where its foot meets the lot"},
+    {"id": "job_corps_weeping_lot_north", "kind": "tree", "prop": "weeping_broadleaf", "params": {"variant": 0, "scale": 1.06}, "xz": [52.6, 519.5], "yaw": 1.1, "reason": "The dense dark weeping dome at the island's east end, its foot level with the lamp's in the photo, in front of the eucalypts. Species unresolved; the photographed form.", "reference": "Owner photos, Nov 2026, across the Job Corps south lot, read with the May 2026 aerial: camera about (18, 514), heading 111, from the anchor, the lot's lamp and two dark crowns; a tree's bearing comes from the photo and its distance from where its foot meets the lot"},
+    {"id": "job_corps_weeping_lot_south", "kind": "tree", "prop": "weeping_broadleaf", "params": {"variant": 1, "scale": 1.06}, "xz": [68.0, 548.0], "yaw": -2.8, "reason": "The open weeping tree with its dark trunk showing, right of the pair. Species unresolved; the photographed form.", "reference": "Owner photos, Nov 2026, across the Job Corps south lot, read with the May 2026 aerial: camera about (18, 514), heading 111, from the anchor, the lot's lamp and two dark crowns; a tree's bearing comes from the photo and its distance from where its foot meets the lot"},
+    {"id": "job_corps_weeping_lot_west", "kind": "tree", "prop": "weeping_broadleaf", "params": {"variant": 1, "scale": 1.2}, "xz": [26.5, 537.5], "yaw": 0.6, "reason": "The near dark weeping tree at the photo's right edge. Species unresolved; the photographed form.", "reference": "Owner photos, Nov 2026, across the Job Corps south lot, read with the May 2026 aerial: camera about (18, 514), heading 111, from the anchor, the lot's lamp and two dark crowns; a tree's bearing comes from the photo and its distance from where its foot meets the lot"},
     {
       "id": "owner_lot_island_lamp",
       "kind": "street_lamp",
@@ -1704,7 +1722,7 @@
         187.92
       ],
       "yaw": 0.4775,
-      "reason": "One of the eight galvanised stock-tank planters on pallets in a row along the chain-link at the east edge of the Mersea lot's Avenue A strip; their plants (a dark red New Zealand flax and dull green shrubs) have no match in the vegetation kit, so the soil is bare.",
+      "reason": "One of the eight galvanised stock-tank planters on pallets in a row along the chain-link at the east edge of the Mersea lot's Avenue A strip; their plants (a dark red New Zealand flax and dull green shrubs) are the rule planter_plants'.",
       "reference": "Street View Sep 2025 inside the Mersea lot: pano UmL4Ss_-CFTPXI4O98FkOA (x -346.4, z 179.1) heading 340 and pano LtXShSEN6YyhB4uQoFoS-A (x -328.1, z 205.1) heading 330: a row of eight galvanised oval stock tanks on pallets along the chain-link at the strip's east edge; positions from the 2026-05-26 aerial (level 19), where their dark plants stand against the fence from about z 172 to 187 (the street props' player-width margins; gaps either shut or clearly open), position production inference"
     },
     {
@@ -1719,7 +1737,7 @@
         185.48
       ],
       "yaw": 0.4775,
-      "reason": "One of the eight galvanised stock-tank planters on pallets in a row along the chain-link at the east edge of the Mersea lot's Avenue A strip; their plants (a dark red New Zealand flax and dull green shrubs) have no match in the vegetation kit, so the soil is bare.",
+      "reason": "One of the eight galvanised stock-tank planters on pallets in a row along the chain-link at the east edge of the Mersea lot's Avenue A strip; their plants (a dark red New Zealand flax and dull green shrubs) are the rule planter_plants'.",
       "reference": "Street View Sep 2025 inside the Mersea lot: pano UmL4Ss_-CFTPXI4O98FkOA (x -346.4, z 179.1) heading 340 and pano LtXShSEN6YyhB4uQoFoS-A (x -328.1, z 205.1) heading 330: a row of eight galvanised oval stock tanks on pallets along the chain-link at the strip's east edge; positions from the 2026-05-26 aerial (level 19), where their dark plants stand against the fence from about z 172 to 187 (the street props' player-width margins; gaps either shut or clearly open), position production inference"
     },
     {
@@ -1734,7 +1752,7 @@
         183.04
       ],
       "yaw": 0.4775,
-      "reason": "One of the eight galvanised stock-tank planters on pallets in a row along the chain-link at the east edge of the Mersea lot's Avenue A strip; their plants (a dark red New Zealand flax and dull green shrubs) have no match in the vegetation kit, so the soil is bare.",
+      "reason": "One of the eight galvanised stock-tank planters on pallets in a row along the chain-link at the east edge of the Mersea lot's Avenue A strip; their plants (a dark red New Zealand flax and dull green shrubs) are the rule planter_plants'.",
       "reference": "Street View Sep 2025 inside the Mersea lot: pano UmL4Ss_-CFTPXI4O98FkOA (x -346.4, z 179.1) heading 340 and pano LtXShSEN6YyhB4uQoFoS-A (x -328.1, z 205.1) heading 330: a row of eight galvanised oval stock tanks on pallets along the chain-link at the strip's east edge; positions from the 2026-05-26 aerial (level 19), where their dark plants stand against the fence from about z 172 to 187 (the street props' player-width margins; gaps either shut or clearly open), position production inference"
     },
     {
@@ -1749,7 +1767,7 @@
         180.59
       ],
       "yaw": 0.4775,
-      "reason": "One of the eight galvanised stock-tank planters on pallets in a row along the chain-link at the east edge of the Mersea lot's Avenue A strip; their plants (a dark red New Zealand flax and dull green shrubs) have no match in the vegetation kit, so the soil is bare.",
+      "reason": "One of the eight galvanised stock-tank planters on pallets in a row along the chain-link at the east edge of the Mersea lot's Avenue A strip; their plants (a dark red New Zealand flax and dull green shrubs) are the rule planter_plants'.",
       "reference": "Street View Sep 2025 inside the Mersea lot: pano UmL4Ss_-CFTPXI4O98FkOA (x -346.4, z 179.1) heading 340 and pano LtXShSEN6YyhB4uQoFoS-A (x -328.1, z 205.1) heading 330: a row of eight galvanised oval stock tanks on pallets along the chain-link at the strip's east edge; positions from the 2026-05-26 aerial (level 19), where their dark plants stand against the fence from about z 172 to 187 (the street props' player-width margins; gaps either shut or clearly open), position production inference"
     },
     {
@@ -1764,7 +1782,7 @@
         178.15
       ],
       "yaw": 0.4775,
-      "reason": "One of the eight galvanised stock-tank planters on pallets in a row along the chain-link at the east edge of the Mersea lot's Avenue A strip; their plants (a dark red New Zealand flax and dull green shrubs) have no match in the vegetation kit, so the soil is bare.",
+      "reason": "One of the eight galvanised stock-tank planters on pallets in a row along the chain-link at the east edge of the Mersea lot's Avenue A strip; their plants (a dark red New Zealand flax and dull green shrubs) are the rule planter_plants'.",
       "reference": "Street View Sep 2025 inside the Mersea lot: pano UmL4Ss_-CFTPXI4O98FkOA (x -346.4, z 179.1) heading 340 and pano LtXShSEN6YyhB4uQoFoS-A (x -328.1, z 205.1) heading 330: a row of eight galvanised oval stock tanks on pallets along the chain-link at the strip's east edge; positions from the 2026-05-26 aerial (level 19), where their dark plants stand against the fence from about z 172 to 187 (the street props' player-width margins; gaps either shut or clearly open), position production inference"
     },
     {
@@ -1779,7 +1797,7 @@
         175.71
       ],
       "yaw": 0.4775,
-      "reason": "One of the eight galvanised stock-tank planters on pallets in a row along the chain-link at the east edge of the Mersea lot's Avenue A strip; their plants (a dark red New Zealand flax and dull green shrubs) have no match in the vegetation kit, so the soil is bare.",
+      "reason": "One of the eight galvanised stock-tank planters on pallets in a row along the chain-link at the east edge of the Mersea lot's Avenue A strip; their plants (a dark red New Zealand flax and dull green shrubs) are the rule planter_plants'.",
       "reference": "Street View Sep 2025 inside the Mersea lot: pano UmL4Ss_-CFTPXI4O98FkOA (x -346.4, z 179.1) heading 340 and pano LtXShSEN6YyhB4uQoFoS-A (x -328.1, z 205.1) heading 330: a row of eight galvanised oval stock tanks on pallets along the chain-link at the strip's east edge; positions from the 2026-05-26 aerial (level 19), where their dark plants stand against the fence from about z 172 to 187 (the street props' player-width margins; gaps either shut or clearly open), position production inference"
     },
     {
@@ -1794,7 +1812,7 @@
         173.27
       ],
       "yaw": 0.4775,
-      "reason": "One of the eight galvanised stock-tank planters on pallets in a row along the chain-link at the east edge of the Mersea lot's Avenue A strip; their plants (a dark red New Zealand flax and dull green shrubs) have no match in the vegetation kit, so the soil is bare.",
+      "reason": "One of the eight galvanised stock-tank planters on pallets in a row along the chain-link at the east edge of the Mersea lot's Avenue A strip; their plants (a dark red New Zealand flax and dull green shrubs) are the rule planter_plants'.",
       "reference": "Street View Sep 2025 inside the Mersea lot: pano UmL4Ss_-CFTPXI4O98FkOA (x -346.4, z 179.1) heading 340 and pano LtXShSEN6YyhB4uQoFoS-A (x -328.1, z 205.1) heading 330: a row of eight galvanised oval stock tanks on pallets along the chain-link at the strip's east edge; positions from the 2026-05-26 aerial (level 19), where their dark plants stand against the fence from about z 172 to 187 (the street props' player-width margins; gaps either shut or clearly open), position production inference"
     },
     {
@@ -1809,7 +1827,7 @@
         170.82
       ],
       "yaw": 0.4775,
-      "reason": "One of the eight galvanised stock-tank planters on pallets in a row along the chain-link at the east edge of the Mersea lot's Avenue A strip; their plants (a dark red New Zealand flax and dull green shrubs) have no match in the vegetation kit, so the soil is bare.",
+      "reason": "One of the eight galvanised stock-tank planters on pallets in a row along the chain-link at the east edge of the Mersea lot's Avenue A strip; their plants (a dark red New Zealand flax and dull green shrubs) are the rule planter_plants'.",
       "reference": "Street View Sep 2025 inside the Mersea lot: pano UmL4Ss_-CFTPXI4O98FkOA (x -346.4, z 179.1) heading 340 and pano LtXShSEN6YyhB4uQoFoS-A (x -328.1, z 205.1) heading 330: a row of eight galvanised oval stock tanks on pallets along the chain-link at the strip's east edge; positions from the 2026-05-26 aerial (level 19), where their dark plants stand against the fence from about z 172 to 187 (the street props' player-width margins; gaps either shut or clearly open), position production inference"
     }
   ]

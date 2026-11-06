@@ -196,6 +196,7 @@ export const MATERIAL_KEYS = Object.freeze([
   "rubble_grey",
   "street_gutter",
   "street_kerb_concrete",
+  "street_kerb_lot",
   "street_kerb_planting",
   "street_kerb_support",
   "street_kerb_verge",
@@ -211,11 +212,14 @@ export const MATERIAL_KEYS = Object.freeze([
   "terrain_wetland",
   "yard_asphalt",
   "yard_asphalt_pale",
+  "yard_asphalt_fresh",
   "yard_concrete",
   "yard_gravel",
   "yard_gravel_pale",
   "yard_pond",
   "yard_sand_pale",
+  "yard_shoulder_band",
+  "yard_shoulder_gravel",
   "yard_soil_dark",
 ]);
 
