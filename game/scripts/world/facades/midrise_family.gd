@@ -2941,10 +2941,16 @@ static func _part(ctx: Ctx, spec: Variant) -> void:
 			_part_umbrella(ctx, part)
 		"fence":
 			_part_fence(ctx, part)
+		"lights":
+			_part_lights(ctx, part)
 		"pad":
 			_part_pad(ctx, part)
 		"path":
 			_part_path(ctx, part)
+		"set":
+			_part_set(ctx, part)
+		"disc":
+			_part_disc(ctx, part)
 		_:
 			ctx.errors.append("unknown part kind " + str(part.get("kind", "")))
 
@@ -3059,16 +3065,18 @@ static func _part_art(ctx: Ctx, spec: Dictionary) -> void:
 	bucket.tri_uv(p0, p2, p3, Vector2(0.0, 1.0), Vector2(1.0, 0.0), Vector2(0.0, 0.0), facing)
 
 
-## Free-standing sign slab at `at`: `w` wide, `h` tall, `t` thick, `yaw` degrees from
-## +X, with an arched top when `arch` is true, in `material`; `face_material` shows
-## one image across the front (the side a quarter turn clockwise from +X seen above).
+## Free-standing sign blade at `at`: `w` wide, `h` tall, `t` thick, `yaw` degrees from
+## +X, bowed `bow` metres in plan like a paddle, with an arched top when `arch` is
+## true, in `material`; `face_material` shows one image across the convex front
+## (the side a quarter turn clockwise from +X seen from above). Support role.
 static func _part_slab(ctx: Ctx, spec: Dictionary) -> void:
 	var at := _plan_points([spec.get("at", [])])
 	var w := float(spec.get("w", 1.0))
 	var h := float(spec.get("h", 1.8))
 	var t := float(spec.get("t", 0.1))
-	if at.size() != 1 or not _in_range(w, 0.2, 4.0) or not _in_range(h, 0.3, 5.0) or not _in_range(t, 0.02, 0.5):
-		ctx.errors.append("slab part needs at, w 0.2-4, h 0.3-5 and t 0.02-0.5 m")
+	var bow := float(spec.get("bow", 0.0))
+	if at.size() != 1 or not _in_range(w, 0.2, 4.0) or not _in_range(h, 0.3, 5.0) or not _in_range(t, 0.02, 0.5) or not _in_range(bow, 0.0, 1.0):
+		ctx.errors.append("slab part needs at, w 0.2-4, h 0.3-5, t 0.02-0.5 and bow 0-1 m")
 		return
 	var yaw := deg_to_rad(float(spec.get("yaw", 0.0)))
 	var u := Vector2(cos(yaw), sin(yaw))
@@ -3076,48 +3084,48 @@ static func _part_slab(ctx: Ctx, spec: Dictionary) -> void:
 	var ground := _ground_y(ctx, at[0])
 	var base := ground - BURY_M
 	var top := ground + h
-	# Outline in (along, height), counter-clockwise from the bottom left.
-	var outline: Array[Vector2] = [Vector2(-w * 0.5, base), Vector2(w * 0.5, base)]
-	if bool(spec.get("arch", false)):
-		var radius := w * 0.5
-		for i in 13:
-			var a := PI * float(i) / 12.0
-			outline.append(Vector2(cos(a) * radius, top - radius + sin(a) * radius))
-	else:
-		outline.append(Vector2(w * 0.5, top))
-		outline.append(Vector2(-w * 0.5, top))
+	var radius := w * 0.5
+	var arch := bool(spec.get("arch", false))
+	var point := func(x: float, y: float, side: float) -> Vector3:
+		var q := at[0] + u * x + n * (bow * (1.0 - pow(x / radius, 2.0)) + side)
+		return Vector3(q.x, y, q.y)
+	var top_at := func(x: float) -> float:
+		return top - radius + sqrt(maxf(0.0, radius * radius - x * x)) if arch else top
 	var body := ctx.bucket("support", str(spec.get("material", "slab")))
 	var front := ctx.bucket("support", str(spec.get("face_material", spec.get("material", "slab"))))
-	var centre := Vector2(0.0, (base + top) * 0.5)
-	var at_side := func(p: Vector2, side: float) -> Vector3:
-		var q := at[0] + u * p.x + n * side
-		return Vector3(q.x, p.y, q.y)
-	var uv_of := func(p: Vector2) -> Vector2:
-		return Vector2(p.x / w + 0.5, 1.0 - (p.y - base) / (top - base))
-	var up_n := Vector3(n.x, 0.0, n.y)
-	var count := outline.size()
-	for i in count:
-		var a: Vector2 = outline[i]
-		var b: Vector2 = outline[(i + 1) % count]
-		var fa: Vector3 = at_side.call(a, t * 0.5)
-		var fb: Vector3 = at_side.call(b, t * 0.5)
-		var fc: Vector3 = at_side.call(centre, t * 0.5)
-		var ua: Vector2 = uv_of.call(a)
-		var ub: Vector2 = uv_of.call(b)
-		var uc: Vector2 = uv_of.call(centre)
-		front.tri_uv(fc, fa, fb, uc, ua, ub, up_n)
-		var ba: Vector3 = at_side.call(a, -t * 0.5)
-		var bb: Vector3 = at_side.call(b, -t * 0.5)
-		var bc: Vector3 = at_side.call(centre, -t * 0.5)
-		body.tri(bc, ba, bb, -up_n)
-		var edge := (b - a).normalized()
-		var out_dir := u * edge.y + Vector2.ZERO
-		body.quad(fa, fb, bb, ba, Vector3(out_dir.x, -edge.x, out_dir.y))
+	var facing := Vector3(n.x, 0.0, n.y)
+	var strips := 14
+	for i in strips:
+		var x0 := -radius + w * float(i) / float(strips)
+		var x1 := -radius + w * float(i + 1) / float(strips)
+		var y0: float = top_at.call(x0)
+		var y1: float = top_at.call(x1)
+		var lower := 1.0
+		var fa: Vector3 = point.call(x0, base, t * 0.5)
+		var fb: Vector3 = point.call(x1, base, t * 0.5)
+		var fc: Vector3 = point.call(x1, y1, t * 0.5)
+		var fd: Vector3 = point.call(x0, y0, t * 0.5)
+		var u0 := x0 / w + 0.5
+		var u1 := x1 / w + 0.5
+		var v0 := 1.0 - (y0 - base) / (top - base)
+		var v1 := 1.0 - (y1 - base) / (top - base)
+		front.tri_uv(fa, fb, fc, Vector2(u0, lower), Vector2(u1, lower), Vector2(u1, v1), facing)
+		front.tri_uv(fa, fc, fd, Vector2(u0, lower), Vector2(u1, v1), Vector2(u0, v0), facing)
+		var ba: Vector3 = point.call(x0, base, -t * 0.5)
+		var bb: Vector3 = point.call(x1, base, -t * 0.5)
+		var bc: Vector3 = point.call(x1, y1, -t * 0.5)
+		var bd: Vector3 = point.call(x0, y0, -t * 0.5)
+		body.quad(ba, bb, bc, bd, -facing)
+		var rim := Vector3(-u.x * (y1 - y0), x1 - x0, -u.y * (y1 - y0))
+		body.quad(fd, fc, bc, bd, rim)
+	for x: float in [-radius, radius]:
+		var y: float = top_at.call(x)
+		body.quad(point.call(x, base, t * 0.5), point.call(x, y, t * 0.5), point.call(x, y, -t * 0.5), point.call(x, base, -t * 0.5), Vector3(u.x * signf(x), 0.0, u.y * signf(x)))
 
 
 ## Patio umbrella at `at`: a pole in `pole_material` and a shallow canopy of `sides`
 ## panels and radius `r`, its rim `h` above grade, rising `rise` to the hub, with a
-## short valance. Support role, so it is solid.
+## `valance` metres deep. Support role, so it is solid.
 static func _part_umbrella(ctx: Ctx, spec: Dictionary) -> void:
 	var at := _plan_points([spec.get("at", [])])
 	var r := float(spec.get("r", 1.6))
@@ -3132,7 +3140,7 @@ static func _part_umbrella(ctx: Ctx, spec: Dictionary) -> void:
 	var pole := ctx.bucket("support", str(spec.get("pole_material", "rail")))
 	var hub := Vector3(at[0].x, ground + h + rise, at[0].y)
 	_plan_box(pole, at[0] - Vector2(0.03, 0.0), at[0] + Vector2(0.03, 0.0), Vector2(0.0, 1.0), ground - BURY_M, hub.y, 0.03)
-	var valance := 0.16
+	var valance := float(spec.get("valance", 0.16))
 	for i in sides:
 		var a := TAU * float(i) / float(sides)
 		var b := TAU * float(i + 1) / float(sides)
@@ -3140,11 +3148,115 @@ static func _part_umbrella(ctx: Ctx, spec: Dictionary) -> void:
 		var pb := at[0] + Vector2(cos(b), sin(b)) * r
 		var rim_a := Vector3(pa.x, ground + h, pa.y)
 		var rim_b := Vector3(pb.x, ground + h, pb.y)
-		canvas.tri(hub, rim_a, rim_b, Vector3.UP)
-		canvas.tri(hub - Vector3.UP * 0.02, rim_a, rim_b, Vector3.DOWN)
+		# Canvas bellies out over its ribs: a ring part way up, above the straight cone.
+		var ring_a := Vector3(at[0].x + (pa.x - at[0].x) * 0.55, ground + h + rise * 0.68, at[0].y + (pa.y - at[0].y) * 0.55)
+		var ring_b := Vector3(at[0].x + (pb.x - at[0].x) * 0.55, ground + h + rise * 0.68, at[0].y + (pb.y - at[0].y) * 0.55)
+		canvas.tri(hub, ring_a, ring_b, Vector3.UP)
+		canvas.quad(ring_a, ring_b, rim_b, rim_a, Vector3.UP)
+		canvas.tri(hub - Vector3.UP * 0.02, ring_a - Vector3.UP * 0.02, ring_b - Vector3.UP * 0.02, Vector3.DOWN)
+		canvas.quad(ring_a - Vector3.UP * 0.02, ring_b - Vector3.UP * 0.02, rim_b - Vector3.UP * 0.02, rim_a - Vector3.UP * 0.02, Vector3.DOWN)
 		var mid := (pa + pb) * 0.5 - at[0]
 		canvas.quad(rim_a, rim_b, rim_b - Vector3.UP * valance, rim_a - Vector3.UP * valance, Vector3(mid.x, 0.0, mid.y))
 		canvas.quad(rim_a, rim_b, rim_b - Vector3.UP * valance, rim_a - Vector3.UP * valance, Vector3(-mid.x, 0.0, -mid.y))
+
+
+## A round can on a wall, centred at station `s` of `edge`, spanning the `y` or `g`
+## height range, standing `depth` m out from the wall at `d`. Its side and lip are in
+## `rim_material`; its face, a little behind the lip, shows the image of `material`
+## fitted to the circle and turned `spin` degrees. Support role.
+static func _part_disc(ctx: Ctx, spec: Dictionary) -> void:
+	var face := _edge_face(ctx, spec)
+	if face == null:
+		return
+	var s := float(spec.get("s", 0.0))
+	var heights := _part_heights(ctx, spec, [face.a + face.d * s])
+	if heights.is_empty():
+		return
+	var r := (float(heights[1]) - float(heights[0])) * 0.5
+	var mid := (float(heights[0]) + float(heights[1])) * 0.5
+	var back := float(spec.get("d", 0.0))
+	var front := back - float(spec.get("depth", 0.1))
+	var inner := r - minf(0.03, r * 0.2)
+	var well := front + minf(0.03, r * 0.2)
+	var sides := clampi(roundi(r * 50.0), 10, 32)
+	var spin := deg_to_rad(float(spec.get("spin", 0.0)))
+	var rim := ctx.bucket("support", str(spec.get("rim_material", "rail")))
+	var plants := ctx.bucket("support", str(spec.get("material", "")))
+	var along := Vector3(face.d.x, 0.0, face.d.y)
+	var facing := face.out3()
+	for i in sides:
+		var a := TAU * float(i) / float(sides)
+		var b := TAU * float(i + 1) / float(sides)
+		var ca := Vector2(cos(a), sin(a))
+		var cb := Vector2(cos(b), sin(b))
+		var side := along * (ca.x + cb.x) + Vector3.UP * (ca.y + cb.y)
+		rim.quad(face.point(s + ca.x * r, mid + ca.y * r, back), face.point(s + cb.x * r, mid + cb.y * r, back),
+			face.point(s + cb.x * r, mid + cb.y * r, front), face.point(s + ca.x * r, mid + ca.y * r, front), side)
+		rim.quad(face.point(s + ca.x * r, mid + ca.y * r, front), face.point(s + cb.x * r, mid + cb.y * r, front),
+			face.point(s + cb.x * inner, mid + cb.y * inner, front), face.point(s + ca.x * inner, mid + ca.y * inner, front), facing)
+		rim.quad(face.point(s + ca.x * inner, mid + ca.y * inner, front), face.point(s + cb.x * inner, mid + cb.y * inner, front),
+			face.point(s + cb.x * inner, mid + cb.y * inner, well), face.point(s + ca.x * inner, mid + ca.y * inner, well), -side)
+		plants.tri_uv(face.point(s, mid, well), face.point(s + ca.x * inner, mid + ca.y * inner, well), face.point(s + cb.x * inner, mid + cb.y * inner, well),
+			Vector2(0.5, 0.5), Vector2(0.5, 0.5) + Vector2(cos(a + spin), -sin(a + spin)) * 0.5, Vector2(0.5, 0.5) + Vector2(cos(b + spin), -sin(b + spin)) * 0.5, facing)
+
+
+## One object of the config's `sets`, stood on the ground at `at` and turned `yaw` degrees
+## clockwise from +x seen from above. A set is a list of boxes [x0, x1, z0, z1, y0, y1,
+## material] in metres from its centre and the ground; a box from y 0 is sunk into the ground. Support role.
+static func _part_set(ctx: Ctx, spec: Dictionary) -> void:
+	var at := _plan_points([spec.get("at", [])])
+	var sets: Variant = ctx.cfg.get("sets", {})
+	var boxes: Variant = (sets as Dictionary).get(str(spec.get("name", "")), []) if sets is Dictionary else []
+	if at.size() != 1 or not boxes is Array or (boxes as Array).is_empty():
+		ctx.errors.append("set part needs at and the name of an entry in sets")
+		return
+	var turn := deg_to_rad(float(spec.get("yaw", 0.0)))
+	var u := Vector2(cos(turn), sin(turn))
+	var v := Vector2(-u.y, u.x)
+	var ground := _ground_y(ctx, at[0])
+	for entry: Variant in boxes:
+		if not entry is Array or (entry as Array).size() != 7:
+			ctx.errors.append("set box needs x0, x1, z0, z1, y0, y1, material")
+			return
+		var box: Array = entry
+		var across := (float(box[2]) + float(box[3])) * 0.5
+		var y0 := float(box[4])
+		_plan_box(ctx.bucket("support", str(box[6])), at[0] + u * float(box[0]) + v * across, at[0] + u * float(box[1]) + v * across, v,
+			ground + (y0 if y0 > 0.0 else -BURY_M), ground + float(box[5]), (float(box[3]) - float(box[2])) * 0.5)
+
+
+## A string of bulbs hung from `from` to `to` ([x, z, height above the building floor]),
+## sagging `sag` metres at mid-span, with a bulb every `every` metres: a thin wire in
+## `wire_material` and small bulbs in `material`. Support role.
+static func _part_lights(ctx: Ctx, spec: Dictionary) -> void:
+	var a: Variant = spec.get("from", [])
+	var b: Variant = spec.get("to", [])
+	var every := float(spec.get("every", 0.8))
+	var sag := float(spec.get("sag", 0.3))
+	if not (a is Array and b is Array and (a as Array).size() == 3 and (b as Array).size() == 3) or not _in_range(every, 0.2, 4.0) or not _in_range(sag, 0.0, 3.0):
+		ctx.errors.append("lights part needs from and to as [x, z, y], every 0.2-4 and sag 0-3 m")
+		return
+	var p0 := Vector3(float(a[0]), ctx.floor_y + float(a[2]), float(a[1]))
+	var p1 := Vector3(float(b[0]), ctx.floor_y + float(b[2]), float(b[1]))
+	var span := Vector2(p1.x - p0.x, p1.z - p0.z).length()
+	if span < 0.5:
+		ctx.errors.append("lights part needs a span of at least 0.5 m")
+		return
+	var wire := ctx.bucket("support", str(spec.get("wire_material", "frame")))
+	var bulbs := ctx.bucket("support", str(spec.get("material", "slab")))
+	var count := maxi(2, ceili(span / every))
+	var side := Vector3(p1.z - p0.z, 0.0, p0.x - p1.x).normalized()
+	var previous := p0
+	for i in range(1, count + 1):
+		var f := float(i) / float(count)
+		var here := p0.lerp(p1, f) + Vector3.DOWN * (4.0 * sag * f * (1.0 - f))
+		var thick := Vector3.UP * 0.012
+		wire.quad(previous - thick, here - thick, here + thick, previous + thick, side)
+		wire.quad(previous - thick, here - thick, here + thick, previous + thick, -side)
+		if i < count:
+			var q := Vector2(here.x, here.z)
+			_plan_box(bulbs, q - Vector2(0.024, 0.0), q + Vector2(0.024, 0.0), Vector2(0.0, 1.0), here.y - 0.09, here.y - 0.03, 0.024)
+		previous = here
 
 
 ## Solid fence along `path`: posts in `post_material` every `post_every`, `h` tall.
@@ -3274,7 +3386,7 @@ static func _make_materials(ctx: Ctx) -> void:
 			return
 		var texture_path := str(entry.get("texture", ""))
 		var cache_key := "%s|%s|%s|%s|%s|%s|%s" % [key, rgb[0], rgb[1], rgb[2], entry.get("alpha", 1.0), entry.get("roughness", 0.9), entry.get("metallic", 0.0)]
-		if not texture_path.is_empty():
+		if not texture_path.is_empty() or entry.has("emission"):
 			cache_key += "|%s|%s|%s|%s" % [texture_path, entry.get("uv_scale", 1.0), entry.get("texture_alpha", false), entry.get("emission", 0.0)]
 		if not _material_cache.has(cache_key):
 			var material := StandardMaterial3D.new()
@@ -3285,8 +3397,9 @@ static func _make_materials(ctx: Ctx) -> void:
 			if float(entry.get("alpha", 1.0)) < 1.0:
 				material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 				material.cull_mode = BaseMaterial3D.CULL_BACK
-			# Opt-in image: a whole picture on a panel, or a ground tile by world metres
-			# (uv_scale tiles per metre); texture_alpha blends it, emission makes it glow.
+			# Opt-in image: a whole picture on a panel, or a tile by world metres (uv_scale
+			# tiles per metre); texture_alpha blends it. Opt-in emission lights the
+			# material, or its image when it has one.
 			if not texture_path.is_empty():
 				var texture := load(texture_path) as Texture2D
 				if texture == null:
@@ -3298,10 +3411,13 @@ static func _make_materials(ctx: Ctx) -> void:
 				material.uv1_scale = Vector3(tiles, tiles, 1.0)
 				if bool(entry.get("texture_alpha", false)):
 					material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-				if float(entry.get("emission", 0.0)) > 0.0:
-					material.emission_enabled = true
+				if entry.has("emission"):
 					material.emission_texture = texture
-					material.emission_energy_multiplier = float(entry.get("emission", 0.0))
+			if float(entry.get("emission", 0.0)) > 0.0:
+				material.emission_enabled = true
+				# The image adds to the emission colour, so an image keeps it black.
+				material.emission = Color.BLACK if not texture_path.is_empty() else material.albedo_color
+				material.emission_energy_multiplier = float(entry.get("emission", 0.0))
 			_material_cache[cache_key] = material
 		ctx.materials[key] = _material_cache[cache_key]
 

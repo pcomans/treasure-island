@@ -1147,3 +1147,23 @@ A geometry proof between two bakes showed 11,431 triangles with a different mate
 ## Don't gate on a short timed sample in a browser
 
 The web smoke's run-speed check took two position reads 550 ms apart (2026-11-06). The merged build read 24 m/s against a limit of 21 while the player's true speed was 20: Chrome stalls for about 330 ms twice during a run, on main too, and the first read landed either side of the physics catch-up burst. Main passed only by that order. A replacement timed between the stalls failed when one reached its window. Gate on something a stall barely moves, such as distance over a hold, and say what the limit means as a true speed. Before naming a cause, log frame timestamps into a preallocated array, which changes nothing, and compare with the known-good build. Prove a new check can still fail.
+
+## An emission image adds to the emission colour
+
+On 2026-11-06 the Aracely storefront's dark glass came back flat grey after plain-colour emission was added for string-light bulbs. The new branch set `emission` to the albedo colour, white for an image material, and StandardMaterial3D's default operator adds the image to that colour, so every pixel gained the whole emission strength. Keep the emission colour black when a material has an emission image, and sample the glass in the next render rather than the bulbs that prompted the change.
+
+## Count a family's openings against the bays you wrote
+
+On 2026-11-06 midrise_family dropped windows on four faces of r133351 without a word: `_placed` returns nothing when a bay is narrower than the window plus its piers, and a neighbouring wall inset had moved one face's start by a metre. The build stayed valid and the first render was the first sign. After authoring a scheme, check each face's windows in the offline preview or dump before spending a render, and widen the bay or the window, never read a valid build as all openings placed.
+
+## Prove a ground-cover rule changed the map before you render it
+
+On 2026-11-06 a `within_sources` lawn rule for the school frontage named the relation the ground sits around, not a source that owns that ground, so the rule matched nothing, the generator ran clean and a full render showed the same dry grass. Read the map's channels at a point inside the rule's box after a generator run (`convert map.png -crop 3x1+x+y txt:-`; ImageMagick `compare` called the fixed map identical because the map's alpha is 0), and pick `surfaces` or `within_xz` by what the ground under the rule actually is.
+
+## Keep sun out of a texture; a shadow belongs to geometry
+
+On 2026-11-06 the owner set the direction for a future time of day: no sun-direction shadows or highlights painted into textures. An audit of the Aracely set found four images with light in them although their prompts said "even flat lighting": a louvred grille with a bright top and a shadow under every blade, blinds lit from above slat by slat, ledgestone with a dark band under each stone, and plants with sunlit tops. Say what the light must not do in the prompt ("no darker band under a stone, no bright top edge"), zoom to each image at full size before packing it, and build anything that should cast a shadow, such as louvres and wall planters, as geometry. Dark joints and weathering are fine.
+
+## Read a heavy feature off two photos before composing it
+
+On 2026-11-06 the Aracely mural's disc chain had been composed from one matched view and sat a metre too low and three metres off, hidden by planting, while still reading as "a chain" on the sheet. Zooming both dated photos showed it runs at 1.2-2.5 m with its largest disc at the wall's middle, and that the two steel heaters stand off the wall: the same heater lands on different stations in the two views. Take stations by cross-ratio against the wall's vanishing point, calibrate one photo with the features common to both, and use parallax between them for anything off the wall.

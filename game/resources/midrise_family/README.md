@@ -82,7 +82,8 @@ All opt-in; configs without them build as before. Coordinates in an edge's frame
 | block `roof.fascia_edges` | `{"<edge>": material}`: on a pitched block, the fascia of the sides facing as that footprint edge does. |
 | ground window `lights` | Further windows in the same bay, each merged over the ground window spec (a clerestory over a window). |
 | door `glazing` | Lobby or porch door: extra glazing fields (`glass`, `frame`). |
-| palette `texture` | Image on the material. On a part `art` panel or slab face it is stretched over the panel; on other surfaces it tiles by world metres, `uv_scale` tiles per metre. `texture_alpha` blends it; `emission` lights it from itself. |
+| palette `texture` | Image on the material. On a part `art` panel or slab face it is stretched over the panel; on other surfaces it tiles by world metres, `uv_scale` tiles per metre. `texture_alpha` blends it. |
+| palette `emission` | Energy: the material lights itself, from its image when it has one. |
 
 Top-level `parts` adds pieces a scheme has no field for. Heights for `box`, `glazing` and `art` are `y` (above the building floor) or `g` (above the highest grade under the part); `foot: true` runs the bottom into the ground.
 
@@ -91,8 +92,11 @@ Top-level `parts` adds pieces a scheme has no field for. Heights for `box`, `gla
 | `box` | `edge`, `s`, `d`, `material`, `role` (default support), `count`/`step` copies along the edge, `count_y`/`step_y` copies upward. |
 | `glazing` | A framed layer at depth `d` over `s`: `glass`, `frame`, `frame_w`, `bar_w`, `mullions`, `transoms` as for a window. Wall role. |
 | `art` | One image over `s` at depth `d` (a number, or `[bottom, top]` to lie on a sloped fascia), in a textured `material`. Wall role unless `role` says otherwise. |
-| `slab` | Free-standing sign at `at` [x, z]: `w`, `h`, `t`, `yaw` degrees, `arch`, `material`, `face_material` (one image across the front). Support role. |
-| `umbrella` | Patio umbrella at `at`: radius `r`, rim `h` above grade, `rise`, `sides`, `material`, `pole_material`. Support role. |
+| `slab` | Free-standing sign blade at `at` [x, z]: `w`, `h`, `t`, `yaw` degrees, `bow` (metres of curve in plan), `arch`, `material`, `face_material` (one image across the front). Support role. |
+| `umbrella` | Patio umbrella at `at`: radius `r`, rim `h` above grade, `rise`, `valance`, `sides`, `material`, `pole_material`. Its canvas bellies out over a ring part way up. Support role. |
+| `set` | One object from the top-level `sets`: `name`, stood at `at`, turned `yaw` degrees. A set is a list of boxes `[x0, x1, z0, z1, y0, y1, material]` from its centre and the ground, so a table or chair is written once and placed at any angle. Support role. |
+| `disc` | Round can on a wall: `edge`, `s`, height span `y` or `g`, `d`, `depth`, `rim_material`; `material` shows its image fitted to the face, turned `spin` degrees. Support role. |
+| `lights` | A string of bulbs `from` `to` ([x, z, height above the building floor]): `sag`, `every`, `material` (normally an emissive palette colour), `wire_material`. Support role. |
 | `fence` | Solid fence along `path`: `h`, `post_every`, `post_material`, and `style` `boards` (`board`, `gap`) or `ribs` (`rib`, `rib_material`). Support role. |
 | `pad` | Site paving over the simple polygon `poly`, `lift` above the frozen land. Visual only: like a road, it is drawn over the land the player walks on and has no collision. Keep `lift` clear of the area and road surfaces drawn there (0.02-0.05 and 0.08 m), and give overlapping pads their own lifts. |
 | `path` | A walk `w` wide along the polyline `line`, built as pads. |

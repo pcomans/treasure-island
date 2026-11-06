@@ -4,7 +4,7 @@
     "The street ground of every Treasure Island street outside the pilot zones (tools/config/street-detail-zones.json), built by tools/lib/street-ground-generation.mjs. Each rule is production inference for game art read from the dated sources it cites, not survey data; a street with no imagery gets the plainest treatment its class supports.",
     "A treatment is how a class of street looks: each side's curb (walk: a concrete sidewalk sidewalk_width_m wide at the curb; verge: a concrete curb top, then grass, verge_width_m in all; none: the asphalt edge onto the ground), the fill between the curb and an OSM sidewalk set back from it (concrete, lawn or mulch), the centre line (double_yellow, dashed_faded, dashed_white or null), white edge lines, the paint of its marked crossings (continental bars, two transverse lines, or ladder: both), the paint wear (0 fresh, 3 mostly worn, 4 nearly worn away), yellow tactile pads at curb ramps or none (tactile_pads) and the asphalt wear (decals per 100 m2 of asphalt, manhole and drain spacing).",
     "A street names its OSM ways and treatment; set changes treatment fields for it; sides gives a way's left or right curb (relative to the way's own direction) as one kind or [from_m, to_m, kind] stretches along it; widen adds asphalt beyond the frozen ribbon on a side (the curb-to-curb width read from the aerial), parking lists the stretches where the aerial shows cars at that curb, for the parked cars, and red_curb lists a side's [from_m, to_m] stretches of red fire-lane curb paint: only what a dated photograph shows, so a curb no photograph shows stays unpainted.",
-    "crossings gives the paint of an OSM crossing node (or none) as the dated aerial shows it, overriding its OSM tags: read off 0.25 m contact sheets of every OSM crossing node (2026-05-26 capture). An untagged node gets paint only where it is listed; where two nodes mark one crosswalk only one is drawn. crosswalks adds a photographed crosswalk where OSM maps no crossing, across a way at a distance along it. stops adds a stop line and STOP legend on an approach the photographs show and OSM lacks; stalls paint stall lines across a widened shoulder; bays are perpendicular parking bays paved off a street's edge (OSM maps none); aprons pave flush from a street's edge out to a building's parking, with no stalls; lots paint a parking lot's stall rows, legends (each at a paint wear step), hatched zones and raised islands, and may lay their own pavement with its patched strips, cracks, oil stains and sealed joints where the photographs show it unlike the island's lot asphalt. pilot sets the pilot zones' crosswalk paint wear.",
+    "crossings gives the paint of an OSM crossing node (or none) as the dated aerial shows it, overriding its OSM tags: read off 0.25 m contact sheets of every OSM crossing node (2026-05-26 capture). An untagged node gets paint only where it is listed; where two nodes mark one crosswalk only one is drawn. crosswalks adds a photographed crosswalk where OSM maps no crossing, across a way at a distance along it. stops adds a stop line and STOP legend on an approach the photographs show and OSM lacks; stalls paint stall lines across a widened shoulder; bays are perpendicular parking bays paved off a street's edge (OSM maps none); aprons pave flush from a street's edge out to a building's parking, with no stalls; paved_backs names forecourts a building draws for itself, so a sidewalk's back slope running down onto one is concrete, not grass; lots paint a parking lot's stall rows, legends (each at a paint wear step), hatched zones and raised islands, and may lay their own pavement with its patched strips, cracks, oil stains and sealed joints where the photographs show it unlike the island's lot asphalt. pilot sets the pilot zones' crosswalk paint wear.",
     "Sources: Esri World Imagery, the Vantor capture of 2026-05-26 (0.34 m), exported at 0.25 m per pixel (0.32 m Web Mercator: map level 19 or coarser; Esri draws a different capture, 2025-08-29, at level 20, finer than about 0.15 m), its date checked 2026-11-05 with the service's identify at the export scale; Google Street View, dated per entry, cameras in game metres (x east, z south) with compass headings; the clutter layer's curb-parking survey of the same aerial (2026-11-05)."
   ],
   "pilot": {
@@ -1066,7 +1066,7 @@
         "w8919233"
       ],
       "treatment": "village",
-      "evidence": "Google Street View Mar 2025 at 1198 13th Street (heading 112): curbs both sides with red corners; Sep 2025 at 729 13th Street (Avenue I) and 751 13th Street (Avenue M): no curbs east of Avenue I. The west 300 m (to Avenue I) is curbed, the rest is industrial. Mar 2025 at 1198 13th St (heading 106): a walk behind the red curb on the left, red round the driveway's near corner and on past it; on the right a pale walk beside the road up to a driveway, then a faded red curb with lawn behind it. Mar 2025 at 1177 13th St (heading 284): red on both curbs up to Gateview Avenue. Mar 2025 at 1047 and 1007 13th St (headings 40 and 335): red on the left; Sep 2025 on the approach to Avenue I (heading 57): red on the left corner. Sep 2025 at Avenue M (heading 58): no curb, no red.",
+      "evidence": "Google Street View Mar 2025 at 1198 13th Street (heading 112): curbs both sides with red corners; Sep 2025 at 729 13th Street (Avenue I) and 751 13th Street (Avenue M): no curbs east of Avenue I. The west 300 m (to Avenue I) is curbed, the rest is industrial. Mar 2025 at 1198 13th St (heading 106): a walk behind the red curb on the left, red round the driveway's near corner and on past it; on the right a pale walk beside the road up to a driveway, then a faded red curb with lawn behind it. Mar 2025 at 1177 13th St (heading 284): red on both curbs up to Gateview Avenue. Mar 2025 at 1083 and 1049 13th St (panos 6UrJ and gWJc): a concrete walk behind the curb along the school. Mar 2025 at 1047 and 1007 13th St (headings 40 and 335): red on the left; Sep 2025 on the approach to Avenue I (heading 57): red on the left corner. Sep 2025 at Avenue M (heading 58): no curb, no red.",
       "widen": {
         "w11315800": {
           "left": 2.2,
@@ -1077,6 +1077,20 @@
         }
       },
       "sides": {
+        "w11315800": {
+          "left": [
+            [
+              0,
+              95,
+              "walk"
+            ],
+            [
+              95,
+              535.6,
+              "verge"
+            ]
+          ]
+        },
         "w8919233": {
           "left": "walk",
           "right": [
@@ -1662,6 +1676,12 @@
       "stall_width_m": 2.7,
       "lines": true,
       "evidence": "2026-05-26 aerial (0.25 m export), read along the way with metre ticks (2026-11-05): perpendicular cars on the court's west side; Gateview Court. Located by the clutter layer's curb-parking survey of the same aerial."
+    }
+  ],
+  "paved_backs": [
+    {
+      "points_xz": [[-264, -421.5], [-259.5, -422.5], [-255.5, -425.5], [-244.5, -432.5], [-246.2, -436.8], [-257, -430.2], [-262, -426.8], [-265, -424]],
+      "evidence": "Street View Mar 2025 panos aTtd and 4BjM at Aracely Cafe: the concrete forecourt runs to the back of the sidewalk with no grass between. The forecourt is the r133351 study's own pad."
     }
   ],
   "aprons": [

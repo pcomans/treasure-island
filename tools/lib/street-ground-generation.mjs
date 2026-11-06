@@ -405,7 +405,7 @@ export function loadStreetGroundRules(projectRoot) {
 
 // The validated rules, with each street's treatment fields resolved.
 export function validateStreetGroundRules(rules) {
-  exactKeys(rules, ["aprons", "bays", "crossings", "crosswalks", "lots", "notes", "pilot", "schema_version", "stalls", "stops", "streets", "treatments"], "Street ground rules");
+  exactKeys(rules, ["aprons", "bays", "crossings", "crosswalks", "lots", "notes", "paved_backs", "pilot", "schema_version", "stalls", "stops", "streets", "treatments"], "Street ground rules");
   invariant(rules.schema_version === STREET_GROUND_RULES_SCHEMA, "Street ground rules schema drift");
   // The pilot zones' crosswalk paint wear (their other paint stays as built).
   exactKeys(rules.pilot, ["crosswalk_paint_wear", "evidence"], "Street ground rules pilot");
@@ -471,6 +471,11 @@ export function validateStreetGroundRules(rules) {
       typeof walk.evidence === "string" && walk.evidence.trim() !== "", `Street ground crosswalk on ${walk.way} is malformed`);
   }
   // Pavement flush with a street's edge, out to a building's parking (no stalls).
+  for (const back of rules.paved_backs) {
+    exactKeys(back, ["evidence", "points_xz"], "Street ground paved back");
+    invariant(Array.isArray(back.points_xz) && back.points_xz.length >= 3 && back.points_xz.every((point) => Array.isArray(point) && point.length === 2 && point.every(isFiniteNumber)) &&
+      typeof back.evidence === "string" && back.evidence.trim() !== "", "Street ground paved back is malformed");
+  }
   for (const apron of rules.aprons) {
     exactKeys(apron, ["depth_m", "evidence", "from_m", "side", "to_m", "way"], "Street ground apron");
     invariant(/^w\d+$/u.test(apron.way) && ["left", "right"].includes(apron.side) && isFiniteNumber(apron.from_m) && isFiniteNumber(apron.to_m) && apron.to_m > apron.from_m &&
@@ -1628,6 +1633,11 @@ export function generateStreetGround({
   const exceptionLotIndex = polygonIndex(union("exception lots", exceptionLots.map(({ object }) => object.geometry)));
   const lotUnion = union("parking lots", [...lots, ...exceptionLots.map(({ object }) => object)].map((object) => object.geometry));
   const lotIndex = polygonIndex(lotUnion);
+  // Forecourts a building draws for itself: a sidewalk's back slope runs down onto them in concrete.
+  const pavedBackIndex = polygonIndex(union("paved backs", (rules?.paved_backs ?? []).map((back) => {
+    const ring = back.points_xz.map(([x, z]) => [x, -z]);
+    return [[ringArea(ring) > 0 ? ring : [...ring].reverse()]];
+  })));
   // The rules' lots, and their raised islands (curbed all round, in the band).
   const lotRules = (rules?.lots ?? []).map((lot) => {
     const exception = exceptionLots.find((entry) => entry.lot === lot);
@@ -2251,7 +2261,7 @@ export function generateStreetGround({
     const probe = add(middle, scale(skirt.edge.outward, runOf[skirt.kind] * 0.7));
     const inner = add(middle, scale(skirt.edge.outward, -0.05));
     const planted = skirt.kind === "back" && plantedIndex.contains(inner);
-    const paved = skirt.kind === "flare" || skirt.kind === "curb" || notchIndex.contains(probe) || pedestrianIndex.contains(probe) || lotIndex.contains(probe) || vehicleIndex.contains(probe);
+    const paved = skirt.kind === "flare" || skirt.kind === "curb" || notchIndex.contains(probe) || pedestrianIndex.contains(probe) || lotIndex.contains(probe) || pavedBackIndex.contains(probe) || vehicleIndex.contains(probe);
     if (planted) addPiece("planting", visible, height, tiledUv(2));
     else if (paved) addPiece("kerb", visible, height, roadFrameUv(nearestKerbLine(middle), middle, kerb.panel_m));
     else addPiece("verge", visible, height, worldUv);

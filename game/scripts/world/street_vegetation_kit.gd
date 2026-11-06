@@ -452,6 +452,8 @@ const FLAXES := [
 	{"seed": 701, "height": 1.35, "leaves": 30, "width": 0.09},
 	{"seed": 702, "height": 1.45, "leaves": 36, "width": 0.11},
 	{"seed": 703, "height": 1.8, "leaves": 42, "width": 0.13},
+	# A foxtail agave's rosette (Aracely Cafe, Aug 2026 and Jan 2026 visitor photos): broad pale leaves spiralling out from the heart, about 1.2 m across.
+	{"seed": 704, "height": 0.85, "leaves": 26, "width": 0.2, "leaf": "agave_foliage", "rosette": true},
 ]
 ## Clipped hedges, laid along a line (hedge_into): style rounded (a rolling top
 ## with rounded shoulders and bulging sides) or box (upright sides, soft top
@@ -465,6 +467,8 @@ const HEDGES := [
 	{"seed": 801, "style": "rounded", "height": 0.88, "depth": 0.62, "canopy_base": 0.42, "lobes": 0.12, "surface": "hedge_leaves", "tile": 0.7, "mats": "hedge_mat"},
 	# Job Corps (h2, 2025 gallery): a solid block 1.2-1.5 m tall of small glossy dark leaves with white flowers, down to the ground.
 	{"seed": 802, "style": "box", "height": 1.14, "depth": 0.76, "canopy_base": 0.0, "lobes": 0.04, "surface": "glossy_hedge_leaves", "tile": 1.0, "mats": "glossy_mat"},
+	# 13th Street (Street View Mar 2025): a bright yellow-green wall of fine leaves about twice a person's height, 2.5-3 m deep, shaggy rather than clipped.
+	{"seed": 803, "style": "box", "height": 3.2, "depth": 2.5, "canopy_base": 0.0, "lobes": 0.16, "surface": "bright_hedge_leaves", "tile": 1.2, "mats": "hedge_mat", "foliage": "bright_hedge_foliage", "tall": true},
 ]
 ## Cityside Park's low plants as they stand in late November, built in layers
 ## (_build_low): crossed side-view cards for clumps, shrubs' wands and flower
@@ -3412,7 +3416,8 @@ func _build_flax(p: Dictionary) -> Dictionary:
 	var height := float(p.height)
 	var width := float(p.width)
 	var count := int(p.leaves)
-	var cell: Rect2 = SHRUB_CELLS.flax_leaf
+	var leaf_material := str(p.get("leaf", "shrub_foliage"))
+	var cell: Rect2 = SHRUB_CELLS.flax_leaf if leaf_material == "shrub_foliage" else Rect2(0.0, 0.0, 1.0, 1.0)
 	var sway_top := SHRUB_SWAY * height
 	var phase := rng.randf() * TAU
 	var leaves := []
@@ -3423,7 +3428,7 @@ func _build_flax(p: Dictionary) -> Dictionary:
 		var spread := deg_to_rad((1.0 if rng.randf() < 0.5 else -1.0) * pow(rng.randf(), 1.3) * 50.0)
 		var outward := absf(spread) / deg_to_rad(50.0)
 		var direction := (Vector3.UP * cos(spread) + in_plane * sin(spread)).normalized()
-		leaves.append({
+		var leaf := {
 			"base": in_plane * rng.randf_range(-0.06, 0.06) + Vector3(rng.randf_range(-0.03, 0.03), -0.05, rng.randf_range(-0.03, 0.03)),
 			"direction": direction,
 			"length": height * lerpf(1.12, 0.8, outward) * rng.randf_range(0.88, 1.05),
@@ -3433,7 +3438,18 @@ func _build_flax(p: Dictionary) -> Dictionary:
 			"face": Vector3(-in_plane.z, 0.0, in_plane.x) * (1.0 if rng.randf() < 0.5 else -1.0),
 			"width": width * rng.randf_range(0.85, 1.1),
 			"shade": rng.randf_range(0.82, 1.06),
-		})
+		}
+		if p.get("rosette", false):
+			# Each leaf a golden angle round from the last, the heart's upright, the outer ones nearly flat.
+			var ring := float(i) / float(count - 1)
+			var out := Vector3(cos(i * 2.4), 0.0, sin(i * 2.4))
+			var tilt := deg_to_rad(lerpf(14.0, 72.0, sqrt(ring)))
+			leaf.direction = Vector3.UP * cos(tilt) + out * sin(tilt)
+			leaf.base = out * 0.05 + Vector3.DOWN * 0.05
+			leaf.face = (Vector3.UP * sin(tilt) - out * cos(tilt)).normalized()
+			leaf.length = height * lerpf(0.72, 1.0, ring) * rng.randf_range(0.92, 1.05)
+			leaf.droop = minf(0.08 + 0.2 * ring, cos(tilt) - 0.14)
+		leaves.append(leaf)
 	var meshes: Array[ArrayMesh] = []
 	for lod in 2:
 		var mesh := ArrayMesh.new()
@@ -3458,8 +3474,11 @@ func _build_flax(p: Dictionary) -> Dictionary:
 				var across := face.cross(tangent).normalized()
 				var c := float(leaf.shade) * lerpf(0.55, 1.0, sqrt(t))
 				var wind := Vector2(sway_top * t * t, 0.01 + 0.03 * t * t)
-				# The leaf image's widest stretch runs most of the strap, its point the last quarter.
-				var along := lerpf(0.15, 0.42, t / 0.72) if t < 0.72 else lerpf(0.42, 1.0, (t - 0.72) / 0.28)
+				# The flax image's widest stretch runs most of the strap, its point the last
+				# quarter. A leaf with an image of its own shows it whole.
+				var along := t
+				if leaf_material == "shrub_foliage":
+					along = lerpf(0.15, 0.42, t / 0.72) if t < 0.72 else lerpf(0.42, 1.0, (t - 0.72) / 0.28)
 				var v := cell.end.y - along * cell.size.y
 				# Folded along its midrib: the keel sits a little behind the edges. Its upper
 				# side faces the sky, so a dark leaf still catches the light along its length.
@@ -3471,7 +3490,7 @@ func _build_flax(p: Dictionary) -> Dictionary:
 				var a := first + j * 3
 				s.quad(a, a + 1, a + 4, a + 3, face)
 				s.quad(a + 1, a + 2, a + 5, a + 4, face)
-		s.commit(mesh, material("shrub_foliage"))
+		s.commit(mesh, material(leaf_material))
 		meshes.append(mesh)
 	return {"lod0": meshes[0], "lod1": meshes[1], "crown_surface": -1, "top_m": height, "capsules": []}
 
@@ -3494,6 +3513,9 @@ const HEDGE_MIN_PIECE_M := 0.05
 const HEDGE_MAT_M := 1.05
 const HEDGE_ROUNDED_ROWS := [[0.36, 0.84, 1.0, 0.1], [0.82, 0.86, 0.7, 0.7], [1.03, 0.58, 1.0, 0.25], [1.0, 0.2, 1.0, -0.1]]
 const HEDGE_BOX_ROWS := [[0.45, 0.95, 1.0, 0.1], [0.92, 0.93, 0.7, 0.7], [1.03, 0.7, 1.0, 0.1], [1.03, 0.42, 1.0, 0.0], [1.03, 0.14, 1.0, 0.0]]
+## A hedge about twice a person's height: its mats keep to the same size, so it takes more rows.
+const HEDGE_TALL_ROWS := [[0.45, 0.97, 1.0, 0.1], [0.92, 0.96, 0.7, 0.7], [1.03, 0.87, 1.0, 0.1], [1.03, 0.77, 1.0, 0.05], [1.03, 0.67, 1.0, 0.0], [1.03, 0.57, 1.0, 0.0],
+	[1.03, 0.47, 1.0, 0.0], [1.03, 0.37, 1.0, 0.0], [1.03, 0.27, 1.0, 0.0], [1.03, 0.17, 1.0, 0.0], [1.03, 0.07, 1.0, 0.0]]
 ## A hedge's core under its mats reads as the soft shade between them; alone, at the
 ## far level, it stands for them, as big as they make the hedge, and a rounded
 ## hedge keeps the stems the nearer levels draw.
@@ -3627,9 +3649,10 @@ func hedge_into(surfs: Dictionary, variant: int, points: PackedVector3Array, fro
 		for k in profile.size() - 1:
 			core.tri(middle, ring[k], ring[k + 1], outward)
 	var mat_cell: Rect2 = SHRUB_CELLS[str(p.mats)]
-	if not surfs.has("hedge_foliage"):
-		surfs["hedge_foliage"] = Surf.new()
-	var cards: Surf = surfs["hedge_foliage"]
+	var foliage_key := str(p.get("foliage", "hedge_foliage"))
+	if not surfs.has(foliage_key):
+		surfs[foliage_key] = Surf.new()
+	var cards: Surf = surfs[foliage_key]
 	var heart_lift := Vector3.UP * (top * 0.4)
 	for i in frames.size():
 		var station := stations[i]
@@ -3643,7 +3666,7 @@ func hedge_into(surfs: Dictionary, variant: int, points: PackedVector3Array, fro
 		var ground: Vector3 = frame.position
 		var roll := float(p.lobes) * (0.62 * sin(station * 1.15 + phases.x) + 0.38 * sin(station * 2.6 + phases.y))
 		# The far level draws no mats.
-		var rows: Array = [] if lod == 2 else (HEDGE_ROUNDED_ROWS if rounded else HEDGE_BOX_ROWS)
+		var rows: Array = [] if lod == 2 else (HEDGE_ROUNDED_ROWS if rounded else (HEDGE_TALL_ROWS if p.get("tall", false) else HEDGE_BOX_ROWS))
 		# Mats at every other station on each side, each row offset from the last;
 		# LOD1 keeps every row, with fewer, larger mats along it.
 		for flank: float in [1.0, -1.0]:
@@ -4196,8 +4219,14 @@ func material(key: String) -> Material:
 		"hedge_foliage":
 			# No edge fade: walking along a hedge sees its mats at a grazing angle.
 			made = _foliage("shrub_foliage_atlas.png", Color(0.9, 0.92, 0.88), Color(0.08, 0.1, 0.04), Vector2(2048.0, 1024.0), 0.12, 0.82)
+		"bright_hedge_foliage":
+			made = _foliage("shrub_foliage_atlas.png", Color(2.0, 2.05, 1.0), Color(0.16, 0.2, 0.05), Vector2(2048.0, 1024.0), 0.12, 0.82)
+		"agave_foliage":
+			made = _crown_foliage("agave_leaf.png", Color(0.76, 0.8, 0.62), Color(0.08, 0.1, 0.04), Vector2(256.0, 1024.0), 0.12, 0.82, SHRUB_EDGE_FADE)
 		"hedge_leaves":
 			made = _bark("hedge_surface.png", Color(0.84, 0.9, 0.76))
+		"bright_hedge_leaves":
+			made = _bark("hedge_surface.png", Color(1.7, 1.75, 0.9))
 		"glossy_hedge_leaves":
 			made = _bark("glossy_hedge_surface.png", Color(0.82, 0.84, 0.84))
 			made.set_shader_parameter("specular", 0.15)

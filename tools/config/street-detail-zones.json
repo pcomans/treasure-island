@@ -5,7 +5,7 @@
     "Zone scatter for procedural street detail. Coordinates are world metres: +X east, +Z south (the game's frame).",
     "Zone shapes and scatter densities are production inference for the ferry-arrival pilot, not survey data.",
     "A canopy rule (pattern canopy) plants the crowns of a group of data/street_detail/tree_crowns.json, read from the dated aerial: at each crown a species of its mix whose crown fits within fit (a fraction of the crown), its trunk moved up to nudge_m where the crown's centre cannot take one; in_lots lets a trunk stand in a parking lot, in its mulch pit. A hedge rule (kind hedge, pattern hedge_lines) lays the same file's hedge lines where their site is clear. visible_surfaces limits a planted rule to the ground the eye sees (the street ground's grass tops read as its concrete to surfaces). height_m limits a planted rule to visible ground between two heights (a basin's bank or floor).",
-    "A field rule (pattern field) sows plants by a density field that reads the site (street-planting-generation.mjs): nothing it plants is listed by position. A planters rule (pattern planters) plants the soil of the stock tanks the set pieces stand, each row naming its tank.",
+    "A field rule (pattern field) sows plants by a density field that reads the site (street-planting-generation.mjs): nothing it plants is listed by position. A field rule's building_buffer_m brings foundation planting closer to a wall than the shared buffer, as under a deep eave. A planters rule (pattern planters) plants the soil of the stock tanks the set pieces stand, each row naming its tank.",
     "Step 0 scatter emits placement slots only; later steps assign assets per slot kind. The runtime builds nothing from slots yet.",
     "Furniture rules place the vertical street objects of the pilot zones (tools/lib/street-furniture-generation.mjs) where OSM leaves gaps: kerb (along the curbs of named kerbed roads), signalized_crossings and near_signals (at OSM crossings with signals), junctions (named-street corners), all_way_stops (the other approaches of an OSM stop=all junction), drive_entries (traffic turning into a kerbed service drive from a named road) and lot_edge (around a parking lot). Each is production inference with its dated photo evidence; prop is the kit prop the runtime builds and params its settings.",
     "Exclusions are the shared mask for every street-detail source. These values size walk, camera and doorway clearance. spawn_forward keeps the first walk clear: a corridor from the ferry spawn straight along its facing direction.",
@@ -1634,6 +1634,529 @@
      "basis": "production_inference",
      "rule": "Weeds and dry stalks grown over each other in a thick uneven band behind the sidewalk, reading the road: green and dead grass, stems and a few rank shrubs, no two of a size.",
      "evidence": "Street View Mar 2025, 1349 Gateview Ave (heading 250): tall green weeds, dry stalks and bright shrubs behind the chain-link fence."
+    }
+   ]
+  },
+  {
+   "id": "aracely_cafe_site",
+   "name": "Aracely Cafe hedge and entry beds",
+   "pilot": false,
+   "reason": "The tall hedge round the patio is the first thing seen of the cafe from 13th Street, and the entry path runs between massed beds; the beds are sown by rule inside their traced outlines.",
+   "reference": "Street View Mar 2025 panos aTtd, 4BjM and the 13th Street end; Aug 2018 panorama at the entry; Aug 2026 visitor photo; undated aerial 01-satellite-b33.",
+   "shape": {
+    "type": "polygon",
+    "points_xz": [[-296, -446], [-250, -450], [-250, -420], [-296, -412]]
+   },
+   "scatter": [
+    {
+     "id": "thirteenth_street_hedge",
+     "kind": "hedge",
+     "pattern": "hedge_lines",
+     "group": "thirteenth_street",
+     "prop": "clipped_hedge",
+     "variant": 2,
+     "basis": "production_inference",
+     "rule": "A bright yellow-green hedge about twice a person's height along the sidewalk, round its east end and back up the entry path.",
+     "evidence": "Street View Mar 2025 at the 13th Street end (panos aTtd and 4BjM): the hedge fills the left of the entrance view; a person beside it reaches half its height. The aerial shows its strip along the street."
+    },
+    {
+     "id": "entry_west_rosettes",
+     "kind": "planting_slot",
+     "pattern": "field",
+     "within_xz": [[-274.4, -436.4], [-274.6, -437.9], [-270.9, -439.9], [-268.9, -438.6], [-267.9, -437.0], [-268.6, -433.6], [-270.9, -431.6]],
+     "building_buffer_m": 0.3,
+     "surfaces": ["land_ground", "major_area_landuse"],
+     "per_m2": 0.9,
+     "spacing": [0.8, 1.2],
+     "field": {
+      "drift_m": 3.0,
+      "clump_m": 1.2,
+      "drift_cover": 0.7,
+      "lone": 0.4
+     },
+     "mix": [
+      {
+       "prop": "nz_flax",
+       "variants": [3, 3],
+       "scale": [0.9, 1.2],
+       "at": [0.0, 1.0],
+       "share": 4
+      },
+      {
+       "prop": "nz_flax",
+       "variants": [0, 0],
+       "scale": [0.85, 1.0],
+       "at": [0.3, 1.0],
+       "share": 1
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Agave rosettes in small groups through the grasses, with a few dark phormium.",
+     "evidence": "Street View Mar 2025 panos aTtd and 4BjM; Aug 2018 panorama at the entry; Aug 2026 visitor photo of the patio: grasses, strap-leaved rosettes, low flowers and dark mounds massed either side of the entry path."
+    },
+    {
+     "id": "entry_west_grasses",
+     "kind": "planting_slot",
+     "pattern": "field",
+     "within_xz": [[-274.4, -436.4], [-274.6, -437.9], [-270.9, -439.9], [-268.9, -438.6], [-267.9, -437.0], [-268.6, -433.6], [-270.9, -431.6]],
+     "building_buffer_m": 0.3,
+     "surfaces": ["land_ground", "major_area_landuse"],
+     "per_m2": 0.8,
+     "spacing": [0.6, 1.1],
+     "field": {
+      "drift_m": 3.6,
+      "clump_m": 1.5,
+      "drift_cover": 0.85,
+      "lone": 0.55
+     },
+     "mix": [
+      {
+       "prop": "pacific_reedgrass",
+       "variants": [1, 3],
+       "scale": [0.95, 1.25],
+       "at": [0.0, 1.0],
+       "share": 5
+      },
+      {
+       "prop": "bronze_clump_grass",
+       "variants": [1, 2],
+       "scale": [0.95, 1.2],
+       "at": [0.0, 0.7],
+       "share": 2
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Fountains of grass massed in drifts across the bed.",
+     "evidence": "Street View Mar 2025 panos aTtd and 4BjM; Aug 2018 panorama at the entry; Aug 2026 visitor photo of the patio: grasses, strap-leaved rosettes, low flowers and dark mounds massed either side of the entry path."
+    },
+    {
+     "id": "entry_west_flowers",
+     "kind": "grass_clump",
+     "pattern": "field",
+     "within_xz": [[-274.4, -436.4], [-274.6, -437.9], [-270.9, -439.9], [-268.9, -438.6], [-267.9, -437.0], [-268.6, -433.6], [-270.9, -431.6]],
+     "building_buffer_m": 0.3,
+     "surfaces": ["land_ground", "major_area_landuse"],
+     "per_m2": 2.0,
+     "spacing": [0.3, 0.6],
+     "field": {
+      "drift_m": 2.6,
+      "clump_m": 1.0,
+      "drift_cover": 0.75,
+      "lone": 0.4
+     },
+     "mix": [
+      {
+       "prop": "seaside_daisy",
+       "variants": [0, 2],
+       "scale": [0.9, 1.2],
+       "at": [0.0, 1.0],
+       "share": 3
+      },
+      {
+       "prop": "seep_monkeyflower",
+       "variants": [0, 2],
+       "scale": [0.9, 1.2],
+       "at": [0.2, 1.0],
+       "share": 2
+      },
+      {
+       "prop": "sea_thrift",
+       "variants": [0, 2],
+       "scale": [0.9, 1.2],
+       "at": [0.0, 0.7],
+       "share": 2
+      },
+      {
+       "prop": "white_umbel_perennial",
+       "variants": [0, 2],
+       "scale": [0.9, 1.15],
+       "at": [0.3, 1.0],
+       "share": 1
+      },
+      {
+       "prop": "shrubby_sage",
+       "variants": [0, 1],
+       "scale": [0.85, 1.1],
+       "at": [0.4, 1.0],
+       "share": 2
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Low flowers and grey-green mounds filling the bed's front and the gaps between the grasses.",
+     "evidence": "Street View Mar 2025 panos aTtd and 4BjM; Aug 2018 panorama at the entry; Aug 2026 visitor photo of the patio: grasses, strap-leaved rosettes, low flowers and dark mounds massed either side of the entry path."
+    },
+    {
+     "id": "entry_east_rosettes",
+     "kind": "planting_slot",
+     "pattern": "field",
+     "within_xz": [[-268.2, -441.8], [-265.6, -443.4], [-264.0, -446.6], [-258.6, -444.6], [-256.0, -440.0], [-257.6, -437.6], [-261.4, -436.4], [-264.0, -435.0], [-265.6, -436.2], [-267.4, -439.0]],
+     "building_buffer_m": 0.3,
+     "surfaces": ["land_ground", "major_area_landuse"],
+     "per_m2": 0.9,
+     "spacing": [0.8, 1.2],
+     "field": {
+      "drift_m": 3.0,
+      "clump_m": 1.2,
+      "drift_cover": 0.7,
+      "lone": 0.4
+     },
+     "mix": [
+      {
+       "prop": "nz_flax",
+       "variants": [3, 3],
+       "scale": [0.9, 1.2],
+       "at": [0.0, 1.0],
+       "share": 4
+      },
+      {
+       "prop": "nz_flax",
+       "variants": [0, 0],
+       "scale": [0.85, 1.0],
+       "at": [0.3, 1.0],
+       "share": 1
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Agave rosettes in small groups through the grasses, with a few dark phormium.",
+     "evidence": "Street View Mar 2025 panos aTtd and 4BjM; Aug 2018 panorama at the entry; Aug 2026 visitor photo of the patio: grasses, strap-leaved rosettes, low flowers and dark mounds massed either side of the entry path."
+    },
+    {
+     "id": "entry_east_grasses",
+     "kind": "planting_slot",
+     "pattern": "field",
+     "within_xz": [[-268.2, -441.8], [-265.6, -443.4], [-264.0, -446.6], [-258.6, -444.6], [-256.0, -440.0], [-257.6, -437.6], [-261.4, -436.4], [-264.0, -435.0], [-265.6, -436.2], [-267.4, -439.0]],
+     "building_buffer_m": 0.3,
+     "surfaces": ["land_ground", "major_area_landuse"],
+     "per_m2": 0.8,
+     "spacing": [0.6, 1.1],
+     "field": {
+      "drift_m": 3.6,
+      "clump_m": 1.5,
+      "drift_cover": 0.85,
+      "lone": 0.55
+     },
+     "mix": [
+      {
+       "prop": "pacific_reedgrass",
+       "variants": [1, 3],
+       "scale": [0.95, 1.25],
+       "at": [0.0, 1.0],
+       "share": 5
+      },
+      {
+       "prop": "bronze_clump_grass",
+       "variants": [1, 2],
+       "scale": [0.95, 1.2],
+       "at": [0.0, 0.7],
+       "share": 2
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Fountains of grass massed in drifts across the bed.",
+     "evidence": "Street View Mar 2025 panos aTtd and 4BjM; Aug 2018 panorama at the entry; Aug 2026 visitor photo of the patio: grasses, strap-leaved rosettes, low flowers and dark mounds massed either side of the entry path."
+    },
+    {
+     "id": "entry_east_flowers",
+     "kind": "grass_clump",
+     "pattern": "field",
+     "within_xz": [[-268.2, -441.8], [-265.6, -443.4], [-264.0, -446.6], [-258.6, -444.6], [-256.0, -440.0], [-257.6, -437.6], [-261.4, -436.4], [-264.0, -435.0], [-265.6, -436.2], [-267.4, -439.0]],
+     "building_buffer_m": 0.3,
+     "surfaces": ["land_ground", "major_area_landuse"],
+     "per_m2": 2.0,
+     "spacing": [0.3, 0.6],
+     "field": {
+      "drift_m": 2.6,
+      "clump_m": 1.0,
+      "drift_cover": 0.75,
+      "lone": 0.4
+     },
+     "mix": [
+      {
+       "prop": "seaside_daisy",
+       "variants": [0, 2],
+       "scale": [0.9, 1.2],
+       "at": [0.0, 1.0],
+       "share": 3
+      },
+      {
+       "prop": "seep_monkeyflower",
+       "variants": [0, 2],
+       "scale": [0.9, 1.2],
+       "at": [0.2, 1.0],
+       "share": 2
+      },
+      {
+       "prop": "sea_thrift",
+       "variants": [0, 2],
+       "scale": [0.9, 1.2],
+       "at": [0.0, 0.7],
+       "share": 2
+      },
+      {
+       "prop": "white_umbel_perennial",
+       "variants": [0, 2],
+       "scale": [0.9, 1.15],
+       "at": [0.3, 1.0],
+       "share": 1
+      },
+      {
+       "prop": "shrubby_sage",
+       "variants": [0, 1],
+       "scale": [0.85, 1.1],
+       "at": [0.4, 1.0],
+       "share": 2
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Low flowers and grey-green mounds filling the bed's front and the gaps between the grasses.",
+     "evidence": "Street View Mar 2025 panos aTtd and 4BjM; Aug 2018 panorama at the entry; Aug 2026 visitor photo of the patio: grasses, strap-leaved rosettes, low flowers and dark mounds massed either side of the entry path."
+    }
+   ]
+  },
+  {
+   "id": "school_frontage_beds",
+   "name": "Foundation shrubs on the 13th Street frontage",
+   "pilot": false,
+   "reason": "The school's frontage has shrubs in loose runs under its eaves, sown here by rule along the photographed bays.",
+   "reference": "Street View Mar 2025, pano 6UrJ.",
+   "shape": {
+    "type": "polygon",
+    "points_xz": [[-262, -462], [-226, -480], [-214, -462], [-246, -444]]
+   },
+   "scatter": [
+    {
+     "id": "frontage_e11_shrubs",
+     "kind": "planting_slot",
+     "pattern": "field",
+     "within_xz": [[-256.0, -455.6], [-246.9, -460.3], [-246.0, -458.6], [-255.1, -453.9]],
+     "building_buffer_m": 0.2,
+     "surfaces": ["land_ground", "major_area_landuse"],
+     "per_m2": 1.7,
+     "spacing": [0.5, 0.85],
+     "field": {
+      "drift_m": 5.0,
+      "clump_m": 2.0,
+      "drift_cover": 0.9,
+      "lone": 0.45
+     },
+     "mix": [
+      {
+       "prop": "pittosporum_tobira",
+       "variants": [0, 1],
+       "scale": [0.8, 1.05],
+       "at": [0.3, 1.0],
+       "share": 4
+      },
+      {
+       "prop": "indian_hawthorn",
+       "variants": [0, 0],
+       "scale": [0.8, 0.95],
+       "at": [0.5, 1.0],
+       "share": 2
+      },
+      {
+       "prop": "shrubby_sage",
+       "variants": [1, 2],
+       "scale": [0.95, 1.2],
+       "at": [0.0, 0.7],
+       "share": 2
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Foundation shrubs in loose runs under the eaves.",
+     "evidence": "Street View Mar 2025, pano 6UrJ: dark mounds, a pale leggy shrub and clipped rounded shrubs under the eaves of the 13th Street frontage."
+    },
+    {
+     "id": "frontage_e13_shrubs",
+     "kind": "planting_slot",
+     "pattern": "field",
+     "within_xz": [[-237.4, -458.6], [-233.2, -460.9], [-232.4, -459.4], [-236.6, -457.1]],
+     "building_buffer_m": 0.2,
+     "surfaces": ["land_ground", "major_area_landuse"],
+     "per_m2": 1.7,
+     "spacing": [0.5, 0.85],
+     "field": {
+      "drift_m": 5.0,
+      "clump_m": 2.0,
+      "drift_cover": 0.9,
+      "lone": 0.45
+     },
+     "mix": [
+      {
+       "prop": "pittosporum_tobira",
+       "variants": [0, 1],
+       "scale": [0.8, 1.05],
+       "at": [0.3, 1.0],
+       "share": 4
+      },
+      {
+       "prop": "indian_hawthorn",
+       "variants": [0, 0],
+       "scale": [0.8, 0.95],
+       "at": [0.5, 1.0],
+       "share": 2
+      },
+      {
+       "prop": "shrubby_sage",
+       "variants": [1, 2],
+       "scale": [0.95, 1.2],
+       "at": [0.0, 0.7],
+       "share": 2
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Foundation shrubs in loose runs under the eaves.",
+     "evidence": "Street View Mar 2025, pano 6UrJ: dark mounds, a pale leggy shrub and clipped rounded shrubs under the eaves of the 13th Street frontage."
+    },
+    {
+     "id": "frontage_e15_shrubs",
+     "kind": "planting_slot",
+     "pattern": "field",
+     "within_xz": [[-235.0, -466.8], [-222.1, -473.6], [-221.2, -472.0], [-234.2, -465.2]],
+     "building_buffer_m": 0.2,
+     "surfaces": ["land_ground", "major_area_landuse"],
+     "per_m2": 1.7,
+     "spacing": [0.5, 0.85],
+     "field": {
+      "drift_m": 5.0,
+      "clump_m": 2.0,
+      "drift_cover": 0.9,
+      "lone": 0.45
+     },
+     "mix": [
+      {
+       "prop": "pittosporum_tobira",
+       "variants": [0, 1],
+       "scale": [0.8, 1.05],
+       "at": [0.3, 1.0],
+       "share": 4
+      },
+      {
+       "prop": "indian_hawthorn",
+       "variants": [0, 0],
+       "scale": [0.8, 0.95],
+       "at": [0.5, 1.0],
+       "share": 2
+      },
+      {
+       "prop": "shrubby_sage",
+       "variants": [1, 2],
+       "scale": [0.95, 1.2],
+       "at": [0.0, 0.7],
+       "share": 2
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Foundation shrubs in loose runs under the eaves.",
+     "evidence": "Street View Mar 2025, pano 6UrJ: dark mounds, a pale leggy shrub and clipped rounded shrubs under the eaves of the 13th Street frontage."
+    }
+   ]
+  },
+  {
+   "id": "school_east_wing_beds",
+   "name": "Shrub band and lawn hedges at the school's east wing",
+   "pilot": false,
+   "reason": "The east wing's windows stand behind a band of clipped shrubs, and low hedges edge its lawn.",
+   "reference": "Street View Mar 2025, pano gWJc.",
+   "shape": {
+    "type": "polygon",
+    "points_xz": [[-217, -476], [-199, -494], [-182, -470], [-204, -458]]
+   },
+   "scatter": [
+    {
+     "id": "school_lawn_hedges",
+     "kind": "hedge",
+     "pattern": "hedge_lines",
+     "group": "school_lawn",
+     "prop": "clipped_hedge",
+     "variant": 1,
+     "basis": "production_inference",
+     "rule": "Low clipped hedges down the two sides of the east wing's lawn.",
+     "evidence": "Street View Mar 2025, pano gWJc: a clipped hedge from the sidewalk to each end of the wing."
+    },
+    {
+     "id": "east_e19_shrubs",
+     "kind": "planting_slot",
+     "pattern": "field",
+     "within_xz": [[-214.2, -471.1], [-204.8, -476.1], [-204.3, -475.1], [-213.6, -470.1]],
+     "building_buffer_m": 0.2,
+     "surfaces": ["land_ground", "major_area_landuse"],
+     "per_m2": 2.4,
+     "spacing": [0.42, 0.65],
+     "field": {
+      "drift_m": 3.0,
+      "clump_m": 1.6,
+      "drift_cover": 0.95,
+      "lone": 0.8
+     },
+     "mix": [
+      {
+       "prop": "red_tip_shrub",
+       "variants": [0, 1],
+       "scale": [0.95, 1.2],
+       "at": [0.0, 1.0],
+       "share": 4
+      },
+      {
+       "prop": "pittosporum_tobira",
+       "variants": [0, 0],
+       "scale": [0.8, 0.95],
+       "at": [0.0, 1.0],
+       "share": 3
+      },
+      {
+       "prop": "indian_hawthorn",
+       "variants": [0, 0],
+       "scale": [0.8, 0.9],
+       "at": [0.4, 1.0],
+       "share": 2
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "A continuous band of clipped shrubs under the windows, maroon, green and olive in turn.",
+     "evidence": "Street View Mar 2025, pano gWJc: a band of clipped maroon, green and yellow shrubs under the east wing's windows behind a low curb."
+    },
+    {
+     "id": "east_e21_shrubs",
+     "kind": "planting_slot",
+     "pattern": "field",
+     "within_xz": [[-206.3, -482.3], [-198.9, -486.3], [-198.3, -485.2], [-205.7, -481.2]],
+     "building_buffer_m": 0.2,
+     "surfaces": ["land_ground", "major_area_landuse"],
+     "per_m2": 2.4,
+     "spacing": [0.42, 0.65],
+     "field": {
+      "drift_m": 3.0,
+      "clump_m": 1.6,
+      "drift_cover": 0.95,
+      "lone": 0.8
+     },
+     "mix": [
+      {
+       "prop": "red_tip_shrub",
+       "variants": [0, 1],
+       "scale": [0.95, 1.2],
+       "at": [0.0, 1.0],
+       "share": 4
+      },
+      {
+       "prop": "pittosporum_tobira",
+       "variants": [0, 0],
+       "scale": [0.8, 0.95],
+       "at": [0.0, 1.0],
+       "share": 3
+      },
+      {
+       "prop": "indian_hawthorn",
+       "variants": [0, 0],
+       "scale": [0.8, 0.9],
+       "at": [0.4, 1.0],
+       "share": 2
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "A continuous band of clipped shrubs under the windows, maroon, green and olive in turn.",
+     "evidence": "Street View Mar 2025, pano gWJc: a band of clipped maroon, green and yellow shrubs under the east wing's windows behind a low curb."
     }
    ]
   }
