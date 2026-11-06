@@ -18,7 +18,17 @@ import { footprintPiece, placeStreetClutter, STREET_CLUTTER_FOOTPRINTS, STREET_C
 import { GATE_LEAF_HALF_M, placeStreetFences, validateFenceRules } from "./street-fence-generation.mjs";
 import { settleYardProp, YARD_KIT_KEYS, yardKindRadius, yardMaxSink, yardPropFootprint, yardPropRests } from "./street-yard-kit.mjs";
 import { isYardRow, isYardZone, placeStreetYards, validateYardRules, yardRowPieces } from "./street-yard-generation.mjs";
-import { placeStreetFurniture, settleOnFeet, STREET_FURNITURE_FEET, STREET_FURNITURE_PROPS, streetFurnitureFootprint, validateFurnitureRules } from "./street-furniture-generation.mjs";
+import {
+  placeStreetFurniture,
+  settleOnFeet,
+  settlePad,
+  STREET_FURNITURE_FEET,
+  STREET_FURNITURE_PADS,
+  STREET_FURNITURE_PROPS,
+  streetFurnitureFootprint,
+  validateFurnitureRules,
+  validateIslandFurniture,
+} from "./street-furniture-generation.mjs";
 import { STREET_GROUND_RULES_PATH } from "./street-ground-generation.mjs";
 import {
   PAVING_CLEAR_M,
@@ -46,7 +56,9 @@ import {
 import {
   BOUNDARY_ATTACHED_SOURCE_KEYS,
   PLAYABLE_BOUNDARY_SOURCE_KEY,
+  PLAYER_CAPSULE_RADIUS_M,
   ROAD_SURFACE_BIASES_M,
+  ROAD_WIDTHS_M,
   SHARED_COASTLINE_SOURCE_KEY,
   SOURCE_CONTRACT,
   compareSourceKeys,
@@ -139,8 +151,12 @@ export const STREET_DETAIL_KINDS = Object.freeze({
   bollard: pointKind("furniture", 0.15, "host_barrier"),
   bus_stop: pointKind("furniture", 1.5, "faces_road"),
   chair: pointKind("furniture", 0.45, "seeded"),
+  // An EV charging bay (a photographed set piece): its pad, pedestals and bollards.
+  charging_station: pointKind("furniture", 0.8, "seeded"),
   clutter_slot: pointKind("clutter", 0.4, "seeded"),
   crossing: pointKind(STREET_DETAIL_GROUND_LAYER, 0, "crossing"),
+  // A front-load dumpster (the clutter kit's); a row carries its rectangle as footprint_m.
+  dumpster: pointKind("clutter", 0.8, "seeded"),
   fence: lineKind("fences", 0.05),
   fire_hydrant: pointKind("furniture", 0.25, "faces_road"),
   gate: pointKind("fences", 0.1, "host_barrier"),
@@ -156,10 +172,15 @@ export const STREET_DETAIL_KINDS = Object.freeze({
   // the radius is its half width for whoever reads only the kind.
   parked_car: pointKind("clutter", 1.0, "seeded"),
   picnic_table: pointKind("furniture", 1.0, "seeded"),
+  // A planter standing on the ground (the clutter kit's stock tank on its
+  // pallet); a row carries its rectangle as footprint_m.
+  planter: pointKind("clutter", 0.5, "seeded"),
   planting_slot: pointKind("vegetation", 0.8, "seeded"),
   post_box: pointKind("furniture", 0.35, "faces_road"),
-  power_line: lineKind("clutter", 0, true),
-  power_pole: pointKind("clutter", 0.2, "host_power_line"),
+  // The overhead distribution lines and their wooden poles stand with the other
+  // vertical street objects (tools/lib/street-furniture-generation.mjs).
+  power_line: lineKind("furniture", 0, true),
+  power_pole: pointKind("furniture", 0.2, "host_power_line"),
   retaining_wall: lineKind("fences", 0.2),
   // A small park building outside the OSM inventory (Cityside Park's pump
   // station): its footprint is its own rectangle (footprint_m on the row).
@@ -230,6 +251,13 @@ const LAND_EDGE_EPSILON_M = 0.01;
 const PROP_KERB_CLEAR_M = 0.3;
 const PROP_RAMP_CLEAR_M = 0.9;
 const PLAYER_WIDTH_M = 0.7;
+// Street props keep a player's width clear of what they stand beside, except these:
+// the stock tanks stand in a tight row against the chain-link, as photographed, so
+// their plan capsules (a little longer than the pallets) may overlap each other and
+// a fence run this much (m). Anything else stays a player's width away. The
+// clearance flood still checks what that shuts in.
+const PROPS_STANDING_TIGHT = Object.freeze(["stock_tank_planter"]);
+const TIGHT_PROP_GAP_M = -0.3;
 const SAFE_ID = /^[a-z0-9_]+$/u;
 
 function osmPointKind(tags) {
@@ -574,7 +602,14 @@ export function loadStreetDetailZones(projectRoot) {
       ruleIds.add(rule.id);
     }
   }
+  // Island-wide clutter rules (the street-clutter rollout): not tied to a zone
+  // shape, each names its own lots or streets.
+  if (config.clutter != null) {
+    validateClutterRules({ id: "island", clutter: config.clutter }, STREET_DETAIL_KINDS);
+    for (const rule of config.clutter) invariant(!zoneIds.has(rule.id), `Street detail island clutter rule ${rule.id} shares an id with a zone`);
+  }
   validateFencedApproaches(config.fenced_approaches);
+  validateIslandFurniture(config.island_furniture, STREET_DETAIL_KINDS);
   return config;
 }
 
@@ -642,6 +677,147 @@ export function loadStreetDetailSetPieces(projectRoot) {
     }
   }
   return document;
+}
+
+// The building fit test (game/tests/shared/building_fit.gd) walks the stock
+// player up to every scored unit from each side of its box. The test and this
+// generator read the walk-up's lane geometry from WALK_UP_INPUT: lanes square to
+// the side (offsets across it, shares of the box's width), starts at margins
+// beyond the box. The test closes a lane whose start or corridor a street-detail
+// solid occupies, and walks the first lane open by all its rules. The island-wide
+// items are placed as the evidence says; then each scored side keeps at least
+// WALK_UP_FREE_LANES of the lanes its site leaves open free of street solids,
+// barring the island clutter in the lanes that need the fewest moves where fewer
+// are free. The test also closes lanes on the unit's own stoops and steps, which
+// this generator can't see, so a lane it counts as free can still be shut. Where a
+// lot's or bays' cars can move without losing a car (another stall or bay takes
+// them), a side keeps all but WALK_UP_OCCUPIED_LANES of its lanes free too. The
+// guarantee covers island clutter only: fixed solids and the site can still leave
+// a side short, and the audit's walk_up_short lists every such side.
+export const WALK_UP_INPUT = "tools/config/walk-up-lanes.json";
+const WALK_UP_FREE_LANES = 2;
+const WALK_UP_OCCUPIED_LANES = 2;
+// A solid occupies a lane when it comes this close to the lane's corridor (from
+// its first start to the unit's wall): the capsule's sweep, and room for the
+// footprint standing in for the test's walls (m).
+const WALK_UP_KEEP_CLEAR_M = 0.9;
+// Lanes are sampled every this much for the unit's wall (m), and corridors
+// indexed in cells this size (m).
+const WALK_UP_STEP_M = 0.1;
+const WALK_UP_CELL_M = 16;
+// The test's sides: north (Godot's forward, -z), south, west and east.
+const WALK_UP_SIDES = Object.freeze([["north", [0, -1]], ["south", [0, 1]], ["west", [-1, 0]], ["east", [1, 0]]]);
+
+// The anchor source keys of the catalog's scored units, unless demolished.
+export function loadStreetDetailScoredUnits(projectRoot) {
+  const catalog = readJson(projectRoot, STREET_DETAIL_INPUTS.stair_catalog);
+  invariant(Array.isArray(catalog.units), "Building catalog units are missing");
+  return [...new Set(catalog.units
+    .filter((unit) => unit.claim_status?.reference_recognizable !== "demolished")
+    .map((unit) => unit.anchor_source_key))].sort(compareSourceKeys);
+}
+
+// The walk-up's lane geometry: {lanes_of_width, start_margins_m, far_beyond_m}.
+export function loadWalkUpLanes(projectRoot) {
+  const lanes = readJson(projectRoot, WALK_UP_INPUT);
+  invariant(Array.isArray(lanes.lanes_of_width) && lanes.lanes_of_width.length > 0 && lanes.lanes_of_width.every((value) => isFiniteNumber(value) && Math.abs(value) <= 0.5),
+    `${WALK_UP_INPUT} lanes_of_width must list shares of the width within [-0.5, 0.5]`);
+  invariant(Array.isArray(lanes.start_margins_m) && lanes.start_margins_m.length > 0 && lanes.start_margins_m.every((value) => isFiniteNumber(value) && value > 0),
+    `${WALK_UP_INPUT} start_margins_m must list positive margins`);
+  invariant(isFiniteNumber(lanes.far_beyond_m) && lanes.far_beyond_m > 0, `${WALK_UP_INPUT} far_beyond_m must be positive`);
+  return lanes;
+}
+
+// Each scored side's lanes, in the test's order: [{source_key, side, corridors}].
+// A corridor runs from the lane's first start to where the lane first meets the
+// unit's footprint, or is null where the site closes the lane: it meets no wall of
+// the unit, or its start is off the land, or it starts in or runs through another
+// building. The footprint's bounds stand in for the test's box of the unit's walls.
+export function walkUpLanes({ objects, scoredKeys, lanes, onLand, buildings }) {
+  const scored = new Set(scoredKeys);
+  const footprints = new Map();
+  for (const object of objects) {
+    if (!object.roles.includes("building") || !scored.has(object.row.source_key)) continue;
+    footprints.set(object.row.source_key, [...(footprints.get(object.row.source_key) ?? []), ...object.geometry]);
+  }
+  const margin = lanes.start_margins_m[0];
+  const sides = [];
+  for (const [sourceKey, geometry] of [...footprints.entries()].sort(([left], [right]) => compareSourceKeys(left, right))) {
+    const box = [Infinity, -Infinity, Infinity, -Infinity];
+    for (const polygon of geometry) {
+      for (const [east, north] of polygon[0]) {
+        box[0] = Math.min(box[0], east);
+        box[1] = Math.max(box[1], east);
+        box[2] = Math.min(box[2], -north);
+        box[3] = Math.max(box[3], -north);
+      }
+    }
+    const center = [(box[0] + box[1]) / 2, (box[2] + box[3]) / 2];
+    const size = [box[1] - box[0], box[3] - box[2]];
+    const inUnit = (xz) => pointInMultiPolygon(toEastNorth(xz), geometry, true);
+    const inOtherBuilding = (xz) => {
+      const near = buildings.nearest(xz, PLAYER_CAPSULE_RADIUS_M);
+      return near.key !== null && near.key !== sourceKey && near.distance < PLAYER_CAPSULE_RADIUS_M;
+    };
+    for (const [sideName, side] of WALK_UP_SIDES) {
+      const across = [side[1], -side[0]];
+      const halfDepth = (Math.abs(side[0]) * size[0] + Math.abs(side[1]) * size[1]) / 2;
+      const halfWidth = (Math.abs(side[1]) * size[0] + Math.abs(side[0]) * size[1]) / 2;
+      const corridors = lanes.lanes_of_width.map((lane) => {
+        const laneCenter = [center[0] + across[0] * halfWidth * 2 * lane, center[1] + across[1] * halfWidth * 2 * lane];
+        const start = [laneCenter[0] + side[0] * (halfDepth + margin), laneCenter[1] + side[1] * (halfDepth + margin)];
+        const far = [laneCenter[0] - side[0] * (halfDepth + lanes.far_beyond_m), laneCenter[1] - side[1] * (halfDepth + lanes.far_beyond_m)];
+        const along = (to, distance) => {
+          const length = Math.hypot(to[0] - start[0], to[1] - start[1]);
+          return [start[0] + ((to[0] - start[0]) * distance) / length, start[1] + ((to[1] - start[1]) * distance) / length];
+        };
+        let wall = null;
+        const length = Math.hypot(far[0] - start[0], far[1] - start[1]);
+        for (let step = 0; step * WALK_UP_STEP_M <= length && wall === null; step += 1) {
+          const point = along(far, step * WALK_UP_STEP_M);
+          if (inUnit(point)) wall = point;
+        }
+        if (wall === null || !onLand(start, PLAYER_CAPSULE_RADIUS_M)) return null;
+        const run = Math.hypot(wall[0] - start[0], wall[1] - start[1]);
+        for (let step = 0; step * WALK_UP_STEP_M < run - PLAYER_CAPSULE_RADIUS_M; step += 1) {
+          if (inOtherBuilding(along(wall, step * WALK_UP_STEP_M))) return null;
+        }
+        return [start, wall];
+      });
+      sides.push({ source_key: sourceKey, side: sideName, corridors });
+    }
+  }
+  return sides;
+}
+
+// The lanes each row occupies: occupiedLanes(row) gives [{side, lane}] (indices
+// into sides and their corridors) for every open corridor one of the row's pieces
+// comes within WALK_UP_KEEP_CLEAR_M of.
+export function walkUpOccupancy(sides) {
+  const cells = new Map();
+  const cell = (value) => Math.floor(value / WALK_UP_CELL_M);
+  sides.forEach((entry, side) => entry.corridors.forEach((corridor, lane) => {
+    if (corridor === null) return;
+    const [[x0, z0], [x1, z1]] = corridor;
+    for (let i = cell(Math.min(x0, x1) - WALK_UP_KEEP_CLEAR_M); i <= cell(Math.max(x0, x1) + WALK_UP_KEEP_CLEAR_M); i += 1) {
+      for (let j = cell(Math.min(z0, z1) - WALK_UP_KEEP_CLEAR_M); j <= cell(Math.max(z0, z1) + WALK_UP_KEEP_CLEAR_M); j += 1) cells.set(`${i},${j}`, [...(cells.get(`${i},${j}`) ?? []), { side, lane, corridor }]);
+    }
+  }));
+  return (row) => {
+    const hits = new Map();
+    for (const piece of streetDetailPieces(row)) {
+      const xs = piece.points.map((point) => point[0]);
+      const zs = piece.points.map((point) => point[1]);
+      for (let i = cell(Math.min(...xs) - piece.radius); i <= cell(Math.max(...xs) + piece.radius); i += 1) {
+        for (let j = cell(Math.min(...zs) - piece.radius); j <= cell(Math.max(...zs) + piece.radius); j += 1) {
+          for (const entry of cells.get(`${i},${j}`) ?? []) {
+            if (!hits.has(`${entry.side}/${entry.lane}`) && planDistance(piece.points, entry.corridor) < piece.radius + WALK_UP_KEEP_CLEAR_M) hits.set(`${entry.side}/${entry.lane}`, { side: entry.side, lane: entry.lane });
+          }
+        }
+      }
+    }
+    return [...hits.values()];
+  };
 }
 
 // Every catalog stair flight, accepted or not: the stairs exist either way,
@@ -831,6 +1007,8 @@ export function streetDetailPieces(row) {
 export function generateStreetDetail({
   projectRoot,
   boundary,
+  // The playable boundary with its piers (the manifest's), for the shut-in check.
+  playableBoundary = boundary,
   playableObjects,
   chunks,
   terrainSupportAt,
@@ -917,6 +1095,8 @@ export function generateStreetDetail({
 
   const landEdgeDistance = (xz) => distanceToMultiPolygonEdges(toEastNorth(xz), boundary);
   const onLand = (xz, margin) => pointInMultiPolygon(toEastNorth(xz), boundary, false) && landEdgeDistance(xz) >= margin;
+  // The scored units' walk-up lanes, of which each side keeps WALK_UP_FREE_LANES free.
+  const walkUpSides = walkUpLanes({ objects, scoredKeys: loadStreetDetailScoredUnits(projectRoot), lanes: loadWalkUpLanes(projectRoot), onLand, buildings });
   const grounded = (xz) => {
     const support = terrainSupportAt(chunks, xz[0], -xz[1]);
     return { y: support.elevation_m, support };
@@ -1205,7 +1385,7 @@ export function generateStreetDetail({
     // Low plants (grass clumps, planting slots) have no collision; drift planting may overlap them.
     const lowPlant = row.layer === "vegetation" && (row.kind === "grass_clump" || row.kind === "planting_slot");
     streetDetailPieces(row).forEach((piece, index) => {
-      occupied.push({ id: row.fence ? `${row.id}#${piece.label ?? index}` : row.id, points: piece.points, radius_m: Math.max(piece.radius, pit), lowPlant, planted });
+      occupied.push({ id: row.fence ? `${row.id}#${piece.label ?? index}` : row.id, points: piece.points, radius_m: Math.max(piece.radius, pit), lowPlant, planted, tightNeighbour: row.fence != null || PROPS_STANDING_TIGHT.includes(row.prop) });
     });
   };
   rows.forEach(occupy);
@@ -1239,7 +1419,19 @@ export function generateStreetDetail({
     const across = (en[0] - walk.center[0]) * walk.across[0] + (en[1] - walk.center[1]) * walk.across[1];
     return along >= walk.span[0] - 1 && along <= walk.span[1] + 1 && Math.abs(across) <= ground.site.walk_width_m / 2 + 0.5;
   });
-  const propSiteViolation = (piece) => {
+  // The vehicle carriageways of the whole island (frozen road ribbons), with the
+  // street ground's widened lanes where a zone has them: the plan distance from
+  // an east/north point, 0 inside, Infinity beyond reach.
+  const vehicleRoads = polygonSet(roads.items.filter((item) => item.visual_class === "vehicle"));
+  const carriagewayDistance = (en, reach = 12) => Math.min(ground.site.carriagewayDistance(en, reach), vehicleRoads.nearest(toWorld(en), reach).distance);
+  // The paved paths (OSM footways and other pedestrian ways): the plan distance
+  // from an east/north point, 0 on a path, Infinity beyond reach.
+  const pedestrianWays = polygonSet(roads.items.filter((item) => item.visual_class === "pedestrian"));
+  const pathDistance = (en, reach = 6) => pedestrianWays.nearest(toWorld(en), reach).distance;
+  // withIsland: also keep off the carriageways beyond the street ground (the
+  // island-wide street furniture), ignoring the occupied items in ignore (the
+  // row being moved); set pieces keep the street ground's own check.
+  const propSiteViolation = (piece, withIsland = false, ignore = null, tight = false) => {
     const { radius } = piece;
     // The footprint's segment, sampled every half metre for the site tests.
     const samples = [];
@@ -1254,13 +1446,15 @@ export function generateStreetDetail({
       const building = buildings.nearest(xz, exclusions.wall_buffer_m + radius);
       if (building.distance < exclusions.wall_buffer_m + radius) return violation(building.distance === 0 ? "inside_building" : "wall_buffer", building.key);
       const en = toEastNorth(xz);
-      if (ground.site.carriagewayDistance(en) < PROP_KERB_CLEAR_M + radius) return violation("carriageway");
+      if ((withIsland ? carriagewayDistance(en) : ground.site.carriagewayDistance(en)) < PROP_KERB_CLEAR_M + radius) return violation("carriageway");
       if (ground.site.rampDistance(en) < PROP_RAMP_CLEAR_M + radius) return violation("curb_ramp");
       if (crosswalkAt(en)) return violation("crosswalk");
     }
     for (const item of occupied) {
+      if (ignore?.has(item.id)) continue;
       const distance = polylinePolylineDistance(piece.points, item.points);
-      if (distance < item.radius_m + radius + PLAYER_WIDTH_M) return { reason: "overlap", source_id: item.id, observed_m: round3(distance), required_m: round3(item.radius_m + radius + PLAYER_WIDTH_M) };
+      const gap = tight && item.tightNeighbour ? TIGHT_PROP_GAP_M : PLAYER_WIDTH_M;
+      if (distance < item.radius_m + radius + gap) return { reason: "overlap", source_id: item.id, observed_m: round3(distance), required_m: round3(item.radius_m + radius + gap) };
     }
     return null;
   };
@@ -1303,7 +1497,7 @@ export function generateStreetDetail({
     const piece = footprint
       ? footprintPiece(xz, normalizedYaw(entry.yaw), footprint)
       : { points: [xz], radius: STREET_DETAIL_KINDS[entry.kind].footprint_radius_m };
-    const violation = entry.prop === undefined || tree ? siteViolation(entry.kind, xz, exclusions.wall_buffer_m) : propSiteViolation(piece);
+    const violation = entry.prop === undefined || tree ? siteViolation(entry.kind, xz, exclusions.wall_buffer_m) : propSiteViolation(piece, false, null, PROPS_STANDING_TIGHT.includes(entry.prop));
     invariant(!violation, `Street detail set piece ${entry.id} fails the exclusion mask: ${JSON.stringify(violation)}`);
     const { y, support } = grounded(xz);
     const surface = surfaceAt(xz);
@@ -1319,6 +1513,13 @@ export function generateStreetDetail({
       const rest = settleOnFeet(feet, xz, normalizedYaw(entry.yaw), y + surface.bias_m, groundAt);
       invariant(!rest.problem, `Street detail set piece ${entry.id} cannot stand on its feet: ${rest.problem}`);
       params = { ...entry.params, ...rest };
+    }
+    // A furniture prop on a level pad (a charger bay) rises to the highest
+    // ground under its pad, its skirt hiding the low side.
+    if (entry.prop !== undefined && STREET_FURNITURE_PADS.includes(entry.prop)) {
+      const pad = settlePad(footprint, xz, normalizedYaw(entry.yaw), groundAt, y + surface.bias_m);
+      invariant(!pad.problem, `Street detail set piece ${entry.id} cannot rest level on its pad: ${pad.problem}`);
+      params = { ...params, lift: pad.lift };
     }
     // A yard prop settles on the ground under its plan unless the set piece
     // gives its rest (a barge floats).
@@ -1815,6 +2016,39 @@ export function generateStreetDetail({
   // (d) Street furniture, after everything above so it works around it: kit
   // props for the pilot zones' OSM rows (stop signs move to their curbs) and the
   // zones' furniture rules (tools/lib/street-furniture-generation.mjs).
+  // The island-wide rules (island_furniture) need every vehicle road (parking
+  // aisles aside), each with its raw centre line in the east/north frame (one
+  // point per OSM node) and the offset of its edge from it, the wider side then
+  // each: the street ground's curb or widened carriageway, else the frozen
+  // ribbon's half width.
+  const kerbRoads = new Map(ground.site.kerb_roads.map((road) => [road.source_key, road]));
+  const parkingLanes = new Map(ground.site.parking_lanes.map((lane) => [lane.source_key, lane]));
+  // The street ground lists the curbless roads too: a road is kerbed if a
+  // stretch of either side has a curb (walk or verge), not by being listed.
+  const hasCurb = (road) => road !== undefined && [...road.sides.left, ...road.sides.right].some(([, , kind]) => kind !== "none");
+  const islandRoads = objects
+    .filter((object) => object.roles.includes("roads_paths") && object.road_visual_class === "vehicle" && object.row.osm_type === "way" && object.tags.service !== "parking_aisle")
+    .sort((left, right) => compareSourceKeys(left.row.source_key, right.row.source_key))
+    .map((object) => {
+      const key = object.row.source_key;
+      const way = rawOsm.ways.get(key.slice(1));
+      invariant(way, `Street furniture needs OSM way ${key}, which the raw extract lacks`);
+      const kerbRoad = kerbRoads.get(key);
+      const edge = kerbRoad ?? parkingLanes.get(key);
+      const ribbonHalf = ROAD_WIDTHS_M[object.tags.highway] / 2;
+      return {
+        source_key: key,
+        name: object.tags.name ?? null,
+        highway: object.tags.highway,
+        service: object.tags.service ?? null,
+        refs: way.node_refs,
+        line: way.node_refs.map((ref) => projectLonLat(rawOsm.nodes.get(ref).coordinate)),
+        kerb_offset_m: edge?.kerb_offset_m ?? ribbonHalf,
+        kerb_offset_left_m: edge?.kerb_offset_left_m ?? ribbonHalf,
+        kerb_offset_right_m: edge?.kerb_offset_right_m ?? ribbonHalf,
+        kerbed: hasCurb(kerbRoad),
+      };
+    });
   const furniture = placeStreetFurniture({
     kinds: STREET_DETAIL_KINDS,
     rows,
@@ -1829,6 +2063,13 @@ export function generateStreetDetail({
     onLand,
     grounded,
     surfaceAt,
+    island: config.island_furniture,
+    islandRoads,
+    carriagewayDistance,
+    pieceViolation: (piece, ignore) => propSiteViolation(piece, true, ignore),
+    groundAt,
+    pathDistance,
+    footprintPiece,
   });
   rows.push(...furniture.rows);
   // (b2) The planting scatter: trees and grass round the furniture placed above.
@@ -1856,9 +2097,21 @@ export function generateStreetDetail({
 
   // (e) Street clutter, last: the parked cars of the zones' clutter rules
   // (tools/lib/street-clutter-generation.mjs) along the parking lanes and in
-  // the painted lot stalls, clear of everything placed above (the furniture
-  // rules have already claimed their footprints).
-  const clutter = placeStreetClutter({
+  // the lots' stalls, clear of everything placed above (the furniture rules
+  // have already claimed their footprints) and of the OSM building entrances.
+  const parkingLots = new Map(objects
+    .filter((object) => object.roles.includes("major_area") && object.tags.amenity === "parking")
+    .sort((left, right) => compareSourceKeys(left.row.source_key, right.row.source_key))
+    .map((object) => [object.row.source_key, { source_key: object.row.source_key, geometry: object.geometry }]));
+  // A lot's drives: its OSM parking aisles, and the plain service roads (an
+  // internal drive such as Avenue A through its lot) that run through lots.
+  const parkingAisles = objects
+    .filter((object) => object.roles.includes("roads_paths") && object.row.osm_type === "way" && object.tags.highway === "service" && (object.tags.service == null || object.tags.service === "parking_aisle"))
+    .sort((left, right) => compareSourceKeys(left.row.source_key, right.row.source_key))
+    .map((object) => ({ source_key: object.row.source_key, line: rawWay(object.row.source_key).points.map(toEastNorth), half_width_m: ROAD_WIDTHS_M[object.tags.highway] / 2, parking_aisle: object.tags.service === "parking_aisle" }));
+  const entrances = sourceKeys.filter((key) => key[0] === "n" && properSources.get(key).metadata.tags.entrance != null)
+    .map((key) => toWorld(projectLonLat(properSources.get(key).features.find((feature) => feature.type === "Point").coordinates)));
+  const clutterInputs = {
     kinds: STREET_DETAIL_KINDS,
     rows,
     occupied,
@@ -1874,7 +2127,129 @@ export function generateStreetDetail({
     grounded,
     surfaceAt,
     chunks,
-  });
+    parkingLots,
+    parkingAisles,
+    roads,
+    entrances,
+    stallLines: { length_m: config.ground.lines.stall_length_m, spacing_m: config.ground.lines.stall_spacing_m },
+    islandRules: config.clutter ?? [],
+  };
+  let clutter = placeStreetClutter(clutterInputs);
+  // (e2) The island-wide rules place their cars and cans as the evidence says.
+  // Then a row's place (stall, curb place, bay or can) is barred and the clutter
+  // placed again, so the row moves to its rule's next place and the counts hold
+  // while places last, when:
+  //   - a scored side keeps too few of the walk-up lanes its site leaves open free
+  //     of street solids: the island rows in the lanes that need the fewest moves
+  //     (the test's order on ties) are barred, until WALK_UP_FREE_LANES are free,
+  //     or all but WALK_UP_OCCUPIED_LANES where only cars that keep their count
+  //     move. Other solids (furniture at its node, fences, trunks, the pilot
+  //     zones' clutter) stay, so a lane one occupies stays occupied.
+  //   - the row shuts walkable ground in: the clearance check's flood
+  //     (shutInPockets) over each fence and yard region an island row stands in
+  //     bars the row most of whose grown footprint borders the shut-in cells.
+  //     Pockets no island row borders are left to the clearance check to report.
+  const barred = new Set();
+  const moves = [];
+  const walkUpMoves = [];
+  const isIslandRow = (row) => row.source_id.startsWith("island:");
+  // A lot's or bays' car moves to another stall or bay, and its count holds.
+  const movingRules = new Set((config.clutter ?? []).filter((rule) => ["lot_occupancy", "bay_occupancy"].includes(rule.pattern)).map((rule) => rule.id));
+  const keepsItsCount = (row) => movingRules.has(row.id.split(":")[2]);
+  let walkUpShort = [];
+  if (clutter.rows.some(isIslandRow)) {
+    const roofs = roofTriangles([...chunks.values()].flatMap((chunk) => chunk.records));
+    const onIsland = (point) => pointInMultiPolygon(toEastNorth(point), playableBoundary, false);
+    const carPoint = (row) => [row.position_m[0], row.position_m[2]];
+    // Whether a point lies within POCKET_MARGIN_M of a point list's bounds (a
+    // loop: a pocket's cut can hold more cells than a spread call takes).
+    const near = (points, point) => {
+      let [x0, x1, z0, z1] = [Infinity, -Infinity, Infinity, -Infinity];
+      for (const [x, z] of points) {
+        x0 = Math.min(x0, x);
+        x1 = Math.max(x1, x);
+        z0 = Math.min(z0, z);
+        z1 = Math.max(z1, z);
+      }
+      return point[0] >= x0 - POCKET_MARGIN_M && point[0] <= x1 + POCKET_MARGIN_M && point[1] >= z0 - POCKET_MARGIN_M && point[1] <= z1 + POCKET_MARGIN_M;
+    };
+    const allRegions = pocketRegions(rows, config.zones.filter(isYardZone));
+    const occupiedLanes = walkUpOccupancy(walkUpSides);
+    // The lanes the solids no bar moves occupy.
+    const fixed = new Set(rows.filter(isStreetSolid).flatMap((row) => occupiedLanes(row).map(({ side, lane }) => `${side}/${lane}`)));
+    // The island rows' places in the last round: only the regions near a row that
+    // moved since can shut anything new in, and the flood is the slow part.
+    // tools/check_street_detail_clearance.mjs floods every region of the finished
+    // world in the suite: it is the full backstop for this shortcut, so keep it.
+    let lastPlaces = new Map();
+    for (let round = 0; round < 60; round += 1) {
+      const islandCars = clutter.rows.filter(isIslandRow);
+      const places = new Map(islandCars.map((row) => [row.id, carPoint(row)]));
+      const moved = [...places].filter(([id, point]) => String(lastPlaces.get(id)) !== String(point)).map(([, point]) => point)
+        .concat([...lastPlaces].filter(([id, point]) => String(places.get(id)) !== String(point)).map(([, point]) => point));
+      lastPlaces = places;
+      let barredMore = false;
+      const occupants = new Map();
+      const held = new Set(fixed);
+      for (const row of clutter.rows) {
+        if (!isStreetSolid(row)) continue;
+        for (const { side, lane } of occupiedLanes(row)) {
+          if (!isIslandRow(row)) held.add(`${side}/${lane}`);
+          else occupants.set(`${side}/${lane}`, [...(occupants.get(`${side}/${lane}`) ?? []), row]);
+        }
+      }
+      const sidesWithCars = new Set([...occupants.keys()].map((key) => Number(key.split("/")[0])));
+      for (const side of [...sidesWithCars].sort((left, right) => left - right)) {
+        const open = walkUpSides[side].corridors.flatMap((corridor, lane) => (corridor === null ? [] : [{ key: `${side}/${lane}`, lane }]));
+        let free = open.filter(({ key }) => !occupants.has(key) && !held.has(key)).length;
+        const wanted = Math.max(WALK_UP_FREE_LANES, open.length - WALK_UP_OCCUPIED_LANES);
+        if (free >= wanted) continue;
+        // The lanes only island rows occupy, fewest rows first (the test's order on ties).
+        const movable = open.map(({ key, lane }) => ({ key, lane, cars: occupants.get(key) ?? [] }))
+          .filter(({ key, cars }) => !held.has(key) && cars.length > 0)
+          .sort((left, right) => left.cars.length - right.cars.length || left.lane - right.lane);
+        for (const { lane, cars } of movable) {
+          if (free >= wanted) break;
+          if (free >= WALK_UP_FREE_LANES && !cars.every(keepsItsCount)) continue;
+          for (const row of cars) {
+            if (barred.has(row.id)) continue;
+            barred.add(row.id);
+            walkUpMoves.push({ id: row.id, source_key: walkUpSides[side].source_key, side: walkUpSides[side].side, lane });
+            barredMore = true;
+          }
+          free += 1;
+        }
+      }
+      const regions = allRegions.filter((region) => moved.some((point) => near(region.points, point)));
+      const failing = shutInPockets({ regions, roofs, solids: streetSolids([...rows, ...clutter.rows]), onIsland }).regions;
+      for (const pocket of failing) {
+        // The island row bordering most shut-in cells (its grown pieces within a cell of them).
+        let best = null;
+        for (const row of islandCars) {
+          if (!near(pocket.cut, carPoint(row))) continue;
+          const pieces = streetDetailPieces(row);
+          const border = pocket.cut.filter((cell) => pieces.some((piece) => planDistance([cell], piece.points) <= piece.radius + PLAYER_CAPSULE_RADIUS_M + POCKET_CELL_M)).length;
+          if (border > 0 && (!best || border > best.border || (border === best.border && row.id < best.row.id))) best = { row, border };
+        }
+        if (!best || barred.has(best.row.id)) continue;
+        barred.add(best.row.id);
+        moves.push({ id: best.row.id, region: pocket.id, shut_m2: round3(pocket.shut_m2) });
+        barredMore = true;
+      }
+      if (!barredMore) break;
+      clutter = placeStreetClutter({ ...clutterInputs, barredIds: barred });
+    }
+    const takenLanes = new Set([...rows, ...clutter.rows].filter(isStreetSolid).flatMap((row) => occupiedLanes(row).map(({ side, lane }) => `${side}/${lane}`)));
+    walkUpShort = walkUpSides.flatMap(({ source_key: sourceKey, side: sideName, corridors }, side) => {
+      const open = corridors.flatMap((corridor, lane) => (corridor === null ? [] : [lane]));
+      const free = open.filter((lane) => !takenLanes.has(`${side}/${lane}`)).length;
+      return free < WALK_UP_FREE_LANES ? [{ source_key: sourceKey, side: sideName, open: open.length, free }] : [];
+    });
+  }
+  clutter.audit.shut_in_moves = moves;
+  clutter.audit.walk_up_moves = walkUpMoves;
+  // Every scored side with fewer than WALK_UP_FREE_LANES free lanes, whatever holds them.
+  clutter.audit.walk_up_short = walkUpShort;
   rows.push(...clutter.rows);
   for (const summary of zoneSummaries) {
     const zone = config.zones.find((candidate) => candidate.id === summary.id);
@@ -1935,7 +2310,10 @@ export function generateStreetDetail({
       planted: "a vegetation row's prop_params: the kit variant and uniform scale, and its rest on the visible ground (settlePlant in tools/lib/street-vegetation-generation.mjs): lift_m takes the foot from y + bias_m to the lowest visible surface round it, foot_spread_m is how much higher the rest of that ground lies (the trunk runs on below the foot); a tree whose foot reaches paving stands in a round mulch pit well_m across on the plane of that paving (well_lift_m its height over the foot at the trunk, well_slope its rise per metre along +X and +Z), which other items keep clear of",
       standing_prop: "a furniture set piece on legs (an Adirondack chair) carries its rest on the visible ground under its feet in prop_params (settleOnFeet in tools/lib/street-furniture-generation.mjs): pitch raises its front and roll its left side (radians, together at most 0.15 rad from upright), lift takes its origin from y + bias_m to that rest, and leg_drops_m, where the ground folds under it, lengthens (+) or shortens (-) each leg in the kit's order (front-left, front-right, back-left, back-right; metres, in 5 mm steps)",
       prop_feet: "per kit prop on legs, the flat bottom of each foot {x, z, half_x, half_z} in the prop's frame (front -Z, right +X) in the kit's leg order: the feet a standing prop settles on, which the kit's legs must stand on",
-      source_position_m: "a stop sign's OSM node position, kept when the sign moves to the curb of its approach",
+      source_position_m: "an OSM item's node position, kept when it moves: a stop sign to the curb of its approach, a bus stop's shelter beside its road, or a pole, hydrant, cabinet, lamp or bus stop flag mapped on the frozen carriageway to its edge (placement says which)",
+      pad: "a furniture prop on a level concrete pad (STREET_FURNITURE_PADS in tools/lib/street-furniture-generation.mjs: a bus shelter, a transformer, a charger bay) rises to the highest visible ground under its pad: prop_params.lift is that rise over y + bias_m, and the pad's skirt (PAD_SKIRT_M) hides its low side",
+      utility_pole: "a power pole's prop_params: riser (the line goes underground there), arm2_yaw (a second crossarm, turned about the pole relative to its yaw, where another line or a spur turns off or two circuits run), lamp ({yaw relative to the pole, arm_m, height_m, head}: a street light from the island rule pole_fixtures or a photograph), wood (dark: a creosote shaft, DARK_POLE_SHARE of the OSM poles by a hash of the id) and, on a photographed set-piece pole, wires_to (the built poles its spur wires run to, each within MAX_SPUR_M)",
+      power_wires: "an OSM power line's wires: prop_params.poles lists the utility pole rows along it in order (null where a vertex has no built pole; photographed set-piece poles join where they stand), and circuits its circuit count; the runtime hangs wires between each two consecutive built poles",
       fence: "fence rows: the kit type and why (type_basis), height and collision half thickness, the stretches cut open along points_m (openings, metres along the line, with what opens them) and the solid runs left (posts on the ground: points_m, terrain_supports, surface_bias_m); a fence row with a prop is built (game/scripts/world/street_fence_kit.gd)",
       fenced_approaches: "scored-building sides a built fence closes, which the building fit may skip (game/tests/shared/building_fit.gd)",
       yard: "the rows of a zone's yard rules (tools/lib/street-yard-generation.mjs): clutter rows of a yard kit prop (tools/lib/street-yard-kit.mjs) with its plan rectangle as footprint_m and its rest on the visible ground in prop_params (pitch raises the -Z end and roll the left side, radians; lift takes the origin from y + bias_m to the rest); the zone summary lists each rule's placed count",
@@ -1951,8 +2329,9 @@ export function generateStreetDetail({
       street_ground: { path: STREET_GROUND_RULES_PATH, sha256: sha256File(resolve(projectRoot, STREET_GROUND_RULES_PATH)) },
       set_pieces: { path: STREET_DETAIL_INPUTS.set_pieces, sha256: sha256File(resolve(projectRoot, STREET_DETAIL_INPUTS.set_pieces)) },
       tree_crowns: { path: STREET_DETAIL_INPUTS.tree_crowns, sha256: sha256File(resolve(projectRoot, STREET_DETAIL_INPUTS.tree_crowns)) },
-      // Only the stairs are read; acceptance edits to the catalog do not change this output.
-      stair_catalog: { path: STREET_DETAIL_INPUTS.stair_catalog, field: "units[].stairs", flights: stairFlights.length },
+      walk_up_lanes: { path: WALK_UP_INPUT, sha256: sha256File(resolve(projectRoot, WALK_UP_INPUT)) },
+      // Only the stairs, the anchor keys and the demolished status are read; other acceptance edits to the catalog do not change this output.
+      stair_catalog: { path: STREET_DETAIL_INPUTS.stair_catalog, field: "units[].stairs, units[].anchor_source_key, units[].claim_status.reference_recognizable", flights: stairFlights.length },
     },
     exclusions,
     exclusion_inputs: {
@@ -1989,4 +2368,186 @@ export function generateStreetDetail({
     rows: packed.rows,
     planting_rows: packed.planting_rows,
   };
+}
+
+// ---------------------------------------------------------------- shut-in pockets
+// Walkable ground the street detail shuts in, shared by the street-detail
+// clearance check (tools/check_street_detail_clearance.mjs) and the generator,
+// which moves an island-wide rule's parked car that would shut ground in to
+// another stall.
+//
+// Around each built fence (its runs and open gate leaves, plus a margin) and over
+// each yard polygon, a grid marks what the stock capsule's centre cannot reach:
+// buildings (their roof triangles), built fence runs and street props grown by
+// the capsule radius, and everything off the island. Free ground the street
+// solids cut off is shut in: cells that reached the grid's edge before the
+// street solids stood and no longer do, and any piece split off ground the
+// buildings and the shore alone already enclose (a courtyard: the enclosure
+// itself is not the street detail's doing).
+export const POCKET_CELL_M = 0.2;
+export const POCKET_MARGIN_M = 20;
+
+// The regions flooded: around each built fence's runs and gate leaves, and over
+// each yard zone's polygon. A built fence's row has runs or open gate leaves (a
+// gate-only row, as between two container walls, has leaves but no run).
+export function pocketRegions(rows, yardZones) {
+  const fences = rows.filter((row) => row.status === "placed" && row.fence && row.prop != null && (row.fence.runs.length > 0 || (row.fence.gates?.length ?? 0) > 0));
+  return [
+    ...fences.map((fence) => ({ id: fence.id, points: streetDetailPieces(fence).flatMap((piece) => piece.points) })),
+    ...yardZones.map((zone) => ({ id: `yard ${zone.id}`, points: zone.shape.points_xz })),
+  ];
+}
+
+// Whether a placed row is built with collision: built fences, street props,
+// parked cars and tree trunks (the vegetation props without a trunk have none,
+// and neither have the overhead power lines' wires).
+export function isStreetSolid(row) {
+  if (STREET_DETAIL_KINDS[row.kind].overhead) return false;
+  return row.status === "placed" && row.prop != null && (row.fence != null || ["furniture", "clutter"].includes(row.layer) || (row.layer === "vegetation" && STREET_VEGETATION_PROPS[row.prop]?.trunk === true));
+}
+
+// The plan pieces of every street solid, grown by the capsule radius: [{id, points, radius}].
+export function streetSolids(rows) {
+  const solids = [];
+  for (const row of rows) {
+    if (!isStreetSolid(row)) continue;
+    for (const piece of streetDetailPieces(row)) solids.push({ id: row.id, points: piece.points, radius: piece.radius + PLAYER_CAPSULE_RADIUS_M });
+  }
+  return solids;
+}
+
+// The roof triangles ([[x, z] x 3]) of the building records of the given chunk records.
+export function roofTriangles(records) {
+  const roofs = [];
+  for (const record of records) {
+    if (!["building_roof", "building_part_roof"].includes(record.feature_kind)) continue;
+    for (let index = 0; index < record.indices.length; index += 3) {
+      roofs.push([0, 1, 2].map((corner) => [record.vertices[record.indices[index + corner] * 3], record.vertices[record.indices[index + corner] * 3 + 2]]));
+    }
+  }
+  return roofs;
+}
+
+// Floods each region; returns {cells, regions: [{id, shut_cells, shut_m2, example, cut}]} for every
+// region whose shut-in ground reaches a capsule's footprint (a single stray cell
+// is grid noise in a corner; a capsule's footprint is not). cut lists the world
+// [x, z] centres of the shut-in cells. onIsland(point) says whether a world
+// point is on the playable land.
+export function shutInPockets({ regions, roofs, solids, onIsland }) {
+  const results = [];
+  let cells = 0;
+  for (const region of regions) {
+    const all = region.points;
+    const x0 = Math.min(...all.map((point) => point[0])) - POCKET_MARGIN_M;
+    const z0 = Math.min(...all.map((point) => point[1])) - POCKET_MARGIN_M;
+    const width = Math.ceil((Math.max(...all.map((point) => point[0])) + POCKET_MARGIN_M - x0) / POCKET_CELL_M);
+    const depth = Math.ceil((Math.max(...all.map((point) => point[1])) + POCKET_MARGIN_M - z0) / POCKET_CELL_M);
+    const blocked = new Uint8Array(width * depth);
+    const centre = (i, j) => [x0 + (i + 0.5) * POCKET_CELL_M, z0 + (j + 0.5) * POCKET_CELL_M];
+    const mark = (minX, maxX, minZ, maxZ, test) => {
+      const i0 = Math.max(0, Math.floor((minX - x0) / POCKET_CELL_M));
+      const i1 = Math.min(width - 1, Math.floor((maxX - x0) / POCKET_CELL_M));
+      const j0 = Math.max(0, Math.floor((minZ - z0) / POCKET_CELL_M));
+      const j1 = Math.min(depth - 1, Math.floor((maxZ - z0) / POCKET_CELL_M));
+      for (let j = j0; j <= j1; j += 1) for (let i = i0; i <= i1; i += 1) if (!blocked[j * width + i] && test(centre(i, j))) blocked[j * width + i] = 1;
+    };
+    for (let j = 0; j < depth; j += 1) for (let i = 0; i < width; i += 1) if (!onIsland(centre(i, j))) blocked[j * width + i] = 1;
+    for (const triangle of roofs) {
+      const xs = triangle.map((point) => point[0]);
+      const zs = triangle.map((point) => point[1]);
+      // Grown by the capsule radius: a centre this close to a wall cannot stand there.
+      const grow = PLAYER_CAPSULE_RADIUS_M;
+      mark(Math.min(...xs) - grow, Math.max(...xs) + grow, Math.min(...zs) - grow, Math.max(...zs) + grow, (point) => planDistance([point], [...triangle, triangle[0]]) <= grow || insideTriangle(point, triangle));
+    }
+    // The free cells' connected pieces: ids[cell] is its piece (-1 when blocked),
+    // edge[piece] whether the piece reaches the grid's edge.
+    const pieces = () => {
+      const ids = new Int32Array(width * depth).fill(-1);
+      const sizes = [];
+      const edge = [];
+      const queue = new Int32Array(width * depth);
+      for (let seed = 0; seed < ids.length; seed += 1) {
+        if (blocked[seed] || ids[seed] !== -1) continue;
+        const id = sizes.length;
+        let size = 0;
+        let touches = false;
+        let tail = 0;
+        queue[tail++] = seed;
+        ids[seed] = id;
+        for (let head = 0; head < tail; head += 1) {
+          const index = queue[head];
+          size += 1;
+          const i = index % width;
+          const j = (index - i) / width;
+          if (i === 0 || j === 0 || i === width - 1 || j === depth - 1) touches = true;
+          for (const next of [i > 0 ? index - 1 : -1, i < width - 1 ? index + 1 : -1, j > 0 ? index - width : -1, j < depth - 1 ? index + width : -1]) {
+            if (next < 0 || blocked[next] || ids[next] !== -1) continue;
+            ids[next] = id;
+            queue[tail++] = next;
+          }
+        }
+        sizes.push(size);
+        edge.push(touches);
+      }
+      return { ids, sizes, edge };
+    };
+    // What the street detail shuts in is walkable ground it cuts off: free
+    // ground that reached the grid's edge before the street solids stood and no
+    // longer does, or a piece split off ground the buildings and the shore alone
+    // already enclose (a courtyard; the enclosure itself is not the street
+    // detail's doing, so its largest remaining piece does not count).
+    const before = pieces();
+    for (const solid of solids) {
+      const xs = solid.points.map((point) => point[0]);
+      const zs = solid.points.map((point) => point[1]);
+      mark(Math.min(...xs) - solid.radius, Math.max(...xs) + solid.radius, Math.min(...zs) - solid.radius, Math.max(...zs) + solid.radius, (point) => planDistance([point], solid.points) <= solid.radius);
+    }
+    const after = pieces();
+    // Street solids only block cells, so each piece after lies inside one piece before.
+    const origin = new Int32Array(after.sizes.length).fill(-1);
+    for (let index = 0; index < after.ids.length; index += 1) {
+      const id = after.ids[index];
+      if (id < 0 || origin[id] !== -1) continue;
+      origin[id] = before.ids[index];
+    }
+    const firstCell = new Int32Array(after.sizes.length).fill(-1);
+    for (let index = 0; index < after.ids.length; index += 1) {
+      const id = after.ids[index];
+      if (id >= 0 && firstCell[id] === -1) firstCell[id] = index;
+    }
+    const enclosed = new Map();
+    const cut = [];
+    for (let id = 0; id < after.sizes.length; id += 1) {
+      if (after.edge[id]) continue;
+      if (before.edge[origin[id]]) cut.push(id);
+      else enclosed.set(origin[id], [...(enclosed.get(origin[id]) ?? []), id]);
+    }
+    for (const split of enclosed.values()) {
+      split.sort((a, b) => after.sizes[b] - after.sizes[a]);
+      cut.push(...split.slice(1));
+    }
+    cells += width * depth;
+    let shut = 0;
+    let example = null;
+    for (const id of cut) {
+      shut += after.sizes[id];
+      example ??= centre(firstCell[id] % width, Math.floor(firstCell[id] / width));
+    }
+    const cutIds = new Set(cut);
+    const cutCells = [];
+    for (let index = 0; index < after.ids.length; index += 1) {
+      if (after.ids[index] >= 0 && cutIds.has(after.ids[index])) cutCells.push(centre(index % width, Math.floor(index / width)));
+    }
+    const footprintCells = Math.ceil((Math.PI * PLAYER_CAPSULE_RADIUS_M ** 2) / POCKET_CELL_M ** 2);
+    if (shut >= footprintCells) results.push({ id: region.id, shut_cells: shut, shut_m2: shut * POCKET_CELL_M ** 2, example, cut: cutCells });
+  }
+  return { cells, regions: results };
+}
+
+function insideTriangle(point, [a, b, c]) {
+  const sign = (p, q, r) => (p[0] - r[0]) * (q[1] - r[1]) - (q[0] - r[0]) * (p[1] - r[1]);
+  const d1 = sign(point, a, b);
+  const d2 = sign(point, b, c);
+  const d3 = sign(point, c, a);
+  return !((d1 < 0 || d2 < 0 || d3 < 0) && (d1 > 0 || d2 > 0 || d3 > 0));
 }

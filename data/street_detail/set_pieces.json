@@ -1551,6 +1551,287 @@
     {"id": "job_corps_eucalyptus_back", "kind": "tree", "prop": "eucalyptus_mature", "params": {"variant": 0, "scale": 1.25}, "xz": [100.0, 547.5], "yaw": 1.1, "reason": "The aerial's big canopy reaches east of the pair; from the photo's angle this trunk hides behind them. Species unresolved; the photographed form.", "reference": "Owner photos, Nov 2026, across the Job Corps south lot, read with the May 2026 aerial: camera about (18, 514), heading 111, from the anchor, the lot's lamp and two dark crowns; a tree's bearing comes from the photo and its distance from where its foot meets the lot"},
     {"id": "job_corps_weeping_lot_north", "kind": "tree", "prop": "weeping_broadleaf", "params": {"variant": 0, "scale": 1.25}, "xz": [52.6, 519.5], "yaw": 1.1, "reason": "The dense dark weeping dome at the island's east end, its foot level with the lamp's in the photo, in front of the eucalypts. Species unresolved; the photographed form.", "reference": "Owner photos, Nov 2026, across the Job Corps south lot, read with the May 2026 aerial: camera about (18, 514), heading 111, from the anchor, the lot's lamp and two dark crowns; a tree's bearing comes from the photo and its distance from where its foot meets the lot"},
     {"id": "job_corps_weeping_lot_south", "kind": "tree", "prop": "weeping_broadleaf", "params": {"variant": 1, "scale": 1.25}, "xz": [68.0, 548.0], "yaw": -2.8, "reason": "The open weeping tree with its dark trunk showing, right of the pair. Species unresolved; the photographed form.", "reference": "Owner photos, Nov 2026, across the Job Corps south lot, read with the May 2026 aerial: camera about (18, 514), heading 111, from the anchor, the lot's lamp and two dark crowns; a tree's bearing comes from the photo and its distance from where its foot meets the lot"},
-    {"id": "job_corps_weeping_lot_west", "kind": "tree", "prop": "weeping_broadleaf", "params": {"variant": 1, "scale": 1.2}, "xz": [26.5, 537.5], "yaw": 0.6, "reason": "The near dark weeping tree at the photo's right edge. Species unresolved; the photographed form.", "reference": "Owner photos, Nov 2026, across the Job Corps south lot, read with the May 2026 aerial: camera about (18, 514), heading 111, from the anchor, the lot's lamp and two dark crowns; a tree's bearing comes from the photo and its distance from where its foot meets the lot"}
+    {"id": "job_corps_weeping_lot_west", "kind": "tree", "prop": "weeping_broadleaf", "params": {"variant": 1, "scale": 1.2}, "xz": [26.5, 537.5], "yaw": 0.6, "reason": "The near dark weeping tree at the photo's right edge. Species unresolved; the photographed form.", "reference": "Owner photos, Nov 2026, across the Job Corps south lot, read with the May 2026 aerial: camera about (18, 514), heading 111, from the anchor, the lot's lamp and two dark crowns; a tree's bearing comes from the photo and its distance from where its foot meets the lot"},
+    {
+      "id": "owner_lot_island_lamp",
+      "kind": "street_lamp",
+      "prop": "lamp_cobra",
+      "params": {
+        "height_m": 8.8,
+        "arm_m": 2.4,
+        "head": "cobra",
+        "bend_m": 0.3
+      },
+      "xz": [
+        -359.3,
+        134.1
+      ],
+      "yaw": 1.0472,
+      "reason": "The galvanised pole with a cobra head on the small concrete island at the lot's west end, its near-straight arm upswept from a tight knee at the pole top, reaching west-north-west; it stands on the street ground's lamp island beside the litter can, at the island's north-east end as in the photo (production inference).",
+      "reference": "street-clutter-rollout-20261105/owner-lot-notes.md (owner-priority Mersea lot, OSM w28356874); Street View pano TKhppKcV_DAxZRV9LsEh2A (Sep 2025, camera x -365.5, z 142.7), heading 10 (lot-w-north; street-objects-rollout refs lot-tkhpp-h010-f75)"
+    },
+    {
+      "id": "owner_lot_line_pole",
+      "kind": "power_pole",
+      "prop": "utility_pole",
+      "params": {
+        "line": "w1249294081"
+      },
+      "xz": [
+        -352.85,
+        125.85
+      ],
+      "yaw": 1.8865,
+      "reason": "A wooden utility pole with a crossarm behind the lot's west island, under the OSM line w1249294081 between its poles n11611626249 and n11611626250, which OSM lacks; it joins that line's wires. On the line at the bearing both Sep 2025 views give, about 37 degrees from the camera (production inference).",
+      "reference": "street-clutter-rollout-20261105/owner-lot-notes.md (owner-priority Mersea lot, OSM w28356874); Street View pano TKhppKcV_DAxZRV9LsEh2A (Sep 2025), heading 10 (lot-w-north)"
+    },
+    {
+      "id": "owner_lot_strip_pole",
+      "kind": "power_pole",
+      "prop": "utility_pole",
+      "params": {
+        "wood": "dark",
+        "wires_to": [
+          "osm:n11611626250"
+        ],
+        "lamp": {
+          "yaw": -2.0498,
+          "arm_m": 2.3,
+          "height_m": 8.4,
+          "head": "cobra"
+        }
+      },
+      "xz": [
+        -360.8,
+        173.2
+      ],
+      "yaw": 0.479,
+      "reason": "The dark creosote wooden utility pole on the west side of the lot's Avenue A strip, which OSM lacks: a crossarm whose wires run north-north-west to the OSM line's pole n11611626250 (a spur OSM also lacks), and a cobra light on a curved arm reaching east over the drive at about 8.4 m. Both views agree on its place (bearing 170.5 degrees, 30.7 m from the TKhpp camera; bearing 313.6 degrees, 45.8 m from the LtXS camera, from the post foot's depression below the 2.5 m camera, f 518 px for 75y); heights from the same views (production inference). The wires that run on south to a far pole are left out: that pole's place is too uncertain.",
+      "reference": "street-clutter-rollout-20261105/owner-lot-notes.md (owner-priority Mersea lot, OSM w28356874); Street View pano TKhppKcV_DAxZRV9LsEh2A (Sep 2025, camera x -365.5, z 142.7), heading 190 (street-objects-rollout refs lot-tkhpp-h190-f75); pano LtXShSEN6YyhB4uQoFoS-A (Sep 2025, camera x -328.1, z 205.1), heading 330 (refs lot-ltxs-h330-f75)"
+    },
+    {
+      "id": "owner_lot_towaway_sign",
+      "kind": "street_sign",
+      "prop": "post_sign",
+      "params": {
+        "sign": "tow_away"
+      },
+      "xz": [
+        -349.6,
+        145.45
+      ],
+      "yaw": 1.3963,
+      "reason": "A tow-away / no-parking sign on its own post in front of the chain-link field fence east of the tour-bus stalls, facing the lot: a portrait face about 0.6 by 0.9 m with its top at the fence's top rail, banded red, black with yellow lettering, red, then white with small print. Its print is unreadable, so the face is an original generic tow-away sign with that banding (production inference). Placed on the bearing both views agree on (about 100 degrees from the camera), just on the lot side of the field fence the fences layer draws.",
+      "reference": "street-clutter-rollout-20261105/owner-lot-notes.md (owner-priority Mersea lot, OSM w28356874); Street View pano TKhppKcV_DAxZRV9LsEh2A (Sep 2025, camera x -365.5, z 142.7), headings 70 and 110 (street-objects-rollout refs lot-tkhpp-h070-f75, lot-tkhpp-h110-f75)"
+    },
+    {
+      "id": "owner_lot_ev_chargers",
+      "kind": "charging_station",
+      "prop": "ev_charger_bay",
+      "params": {},
+      "xz": [
+        -359.4,
+        108.7
+      ],
+      "yaw": -0.769,
+      "reason": "The ChargePoint charging station of the owner's Google Maps place: two charger pedestals (one hooded) with coiled cables on a narrow concrete pad ringed by rust-orange steel bollards, a service meter post at its east end by the lamp pole, between the stall rows at the north-west of the lot, its long axis square to the view from the drive (production inference); the twin-arm lot light (OSM n11230361247) stands about 5 m beyond its east end.",
+      "reference": "street-clutter-rollout-20261105/owner-lot-notes.md (owner-priority Mersea lot, OSM w28356874); Street View pano ExXe8Y9HtxQppbFix_QBDA (Sep 2025, camera x -375.1, z 124.8), headings 35, 40 and 42 (street-objects-rollout refs lot-exxe-h035-z25, lot-exxe-h040-f75, lot-exxe-h042-z12)"
+    },
+    {
+      "id": "owner_lot_mersea_sign",
+      "kind": "street_sign",
+      "prop": "monument_sign",
+      "params": {},
+      "xz": [
+        -370.33,
+        119.44
+      ],
+      "yaw": 2.467,
+      "reason": "The low green Mersea monument sign in the planted island at the lot entrance from Avenue A, facing the drive: a painted panel about 1.05 x 0.72 m between two white posts, its foot about 0.3 m up. The face is an original generic sign (the name and Treasure Island / San Francisco in plain white lettering with a small star), not the restaurant's logo; size, place and facing from the photo's bearing and depression at the 2.5 m camera, f 518 px for 75y (production inference), nudged 0.8 m off the frozen Avenue A ribbon, which runs where the photo's island splits the drive. The island's planting and curb are the ground and vegetation layers'.",
+      "reference": "street-clutter-rollout-20261105/owner-lot-notes.md (owner-priority Mersea lot, OSM w28356874); Street View pano ExXe8Y9HtxQppbFix_QBDA (Sep 2025, camera x -375.1, z 124.8), heading 40 (street-objects-rollout refs lot-exxe-h040-f75)"
+    },
+    {
+      "id": "mersea_lot_dumpster_1",
+      "kind": "dumpster",
+      "prop": "dumpster",
+      "params": {
+        "paint": "light_grey",
+        "lid": "dark_grey"
+      },
+      "xz": [
+        -358.8,
+        136.5
+      ],
+      "yaw": 1.45,
+      "reason": "Three grey two-yard front-load dumpsters on casters stand east of Avenue A at the west end of the Mersea lot, beside the island with the litter can; this is the nearest of them, at the island's curb and off the TOUR BUS PARKING stencil.",
+      "reference": "mersea-lot Street View pano TKhppKcV_DAxZRV9LsEh2A (Avenue A inside the Mersea lot, 699 Ave of the Palms, Sep 2025; camera at x -365.5, z 142.7), headings 70 and 10; positions and facings production inference from the two views"
+    },
+    {
+      "id": "mersea_lot_dumpster_2",
+      "kind": "dumpster",
+      "prop": "dumpster",
+      "params": {
+        "paint": "grey",
+        "lid": "green"
+      },
+      "xz": [
+        -356.45,
+        134.45
+      ],
+      "yaw": 2.546,
+      "reason": "The second grey front-load dumpster, green-lidded, in the corner of the chain-link on the Avenue A side, its front toward the avenue (Sep 2025 h070 and h010: in front of the fence, behind the nearest dumpster).",
+      "reference": "mersea-lot Street View pano TKhppKcV_DAxZRV9LsEh2A (Avenue A inside the Mersea lot, 699 Ave of the Palms, Sep 2025; camera at x -365.5, z 142.7), headings 70 and 10; positions and facings production inference from the two views"
+    },
+    {
+      "id": "mersea_lot_dumpster_3",
+      "kind": "dumpster",
+      "prop": "dumpster",
+      "params": {
+        "paint": "light_grey",
+        "lid": "dark_grey"
+      },
+      "xz": [
+        -354.9,
+        137.7
+      ],
+      "yaw": 2.425,
+      "reason": "The third grey front-load dumpster, a few metres further along the chain-link from the second, its labelled front toward Avenue A (Sep 2025 h070 and h010: in front of the fence, as the second).",
+      "reference": "mersea-lot Street View pano TKhppKcV_DAxZRV9LsEh2A (Avenue A inside the Mersea lot, 699 Ave of the Palms, Sep 2025; camera at x -365.5, z 142.7), headings 70 and 10; positions and facings production inference from the two views"
+    },
+    {
+      "id": "mersea_lot_basket",
+      "kind": "waste_basket",
+      "prop": "waste_basket",
+      "params": {
+        "style": "black_slat"
+      },
+      "xz": [
+        -360.82,
+        135.51
+      ],
+      "yaw": 0.0,
+      "reason": "A black steel-slat litter can stands on the small island at the west end of the Mersea lot, beside the dumpsters.",
+      "reference": "mersea-lot Street View pano TKhppKcV_DAxZRV9LsEh2A (Avenue A inside the Mersea lot, 699 Ave of the Palms, Sep 2025; camera at x -365.5, z 142.7), headings 70 and 10; positions and facings production inference from the two views"
+    },
+    {
+      "id": "mersea_lot_planter_1",
+      "kind": "planter",
+      "prop": "stock_tank_planter",
+      "params": {
+        "paint": "beige"
+      },
+      "xz": [
+        -327.3,
+        187.92
+      ],
+      "yaw": 0.4775,
+      "reason": "One of the eight galvanised stock-tank planters on pallets in a row along the chain-link at the east edge of the Mersea lot's Avenue A strip; their plants (a dark red New Zealand flax and dull green shrubs) have no match in the vegetation kit, so the soil is bare.",
+      "reference": "Street View Sep 2025 inside the Mersea lot: pano UmL4Ss_-CFTPXI4O98FkOA (x -346.4, z 179.1) heading 340 and pano LtXShSEN6YyhB4uQoFoS-A (x -328.1, z 205.1) heading 330: a row of eight galvanised oval stock tanks on pallets along the chain-link at the strip's east edge; positions from the 2026-05-26 aerial (level 19), where their dark plants stand against the fence from about z 172 to 187 (the street props' player-width margins; gaps either shut or clearly open), position production inference"
+    },
+    {
+      "id": "mersea_lot_planter_2",
+      "kind": "planter",
+      "prop": "stock_tank_planter",
+      "params": {
+        "paint": "beige"
+      },
+      "xz": [
+        -328.56,
+        185.48
+      ],
+      "yaw": 0.4775,
+      "reason": "One of the eight galvanised stock-tank planters on pallets in a row along the chain-link at the east edge of the Mersea lot's Avenue A strip; their plants (a dark red New Zealand flax and dull green shrubs) have no match in the vegetation kit, so the soil is bare.",
+      "reference": "Street View Sep 2025 inside the Mersea lot: pano UmL4Ss_-CFTPXI4O98FkOA (x -346.4, z 179.1) heading 340 and pano LtXShSEN6YyhB4uQoFoS-A (x -328.1, z 205.1) heading 330: a row of eight galvanised oval stock tanks on pallets along the chain-link at the strip's east edge; positions from the 2026-05-26 aerial (level 19), where their dark plants stand against the fence from about z 172 to 187 (the street props' player-width margins; gaps either shut or clearly open), position production inference"
+    },
+    {
+      "id": "mersea_lot_planter_3",
+      "kind": "planter",
+      "prop": "stock_tank_planter",
+      "params": {
+        "paint": "beige"
+      },
+      "xz": [
+        -329.83,
+        183.04
+      ],
+      "yaw": 0.4775,
+      "reason": "One of the eight galvanised stock-tank planters on pallets in a row along the chain-link at the east edge of the Mersea lot's Avenue A strip; their plants (a dark red New Zealand flax and dull green shrubs) have no match in the vegetation kit, so the soil is bare.",
+      "reference": "Street View Sep 2025 inside the Mersea lot: pano UmL4Ss_-CFTPXI4O98FkOA (x -346.4, z 179.1) heading 340 and pano LtXShSEN6YyhB4uQoFoS-A (x -328.1, z 205.1) heading 330: a row of eight galvanised oval stock tanks on pallets along the chain-link at the strip's east edge; positions from the 2026-05-26 aerial (level 19), where their dark plants stand against the fence from about z 172 to 187 (the street props' player-width margins; gaps either shut or clearly open), position production inference"
+    },
+    {
+      "id": "mersea_lot_planter_4",
+      "kind": "planter",
+      "prop": "stock_tank_planter",
+      "params": {
+        "paint": "beige"
+      },
+      "xz": [
+        -331.09,
+        180.59
+      ],
+      "yaw": 0.4775,
+      "reason": "One of the eight galvanised stock-tank planters on pallets in a row along the chain-link at the east edge of the Mersea lot's Avenue A strip; their plants (a dark red New Zealand flax and dull green shrubs) have no match in the vegetation kit, so the soil is bare.",
+      "reference": "Street View Sep 2025 inside the Mersea lot: pano UmL4Ss_-CFTPXI4O98FkOA (x -346.4, z 179.1) heading 340 and pano LtXShSEN6YyhB4uQoFoS-A (x -328.1, z 205.1) heading 330: a row of eight galvanised oval stock tanks on pallets along the chain-link at the strip's east edge; positions from the 2026-05-26 aerial (level 19), where their dark plants stand against the fence from about z 172 to 187 (the street props' player-width margins; gaps either shut or clearly open), position production inference"
+    },
+    {
+      "id": "mersea_lot_planter_5",
+      "kind": "planter",
+      "prop": "stock_tank_planter",
+      "params": {
+        "paint": "beige"
+      },
+      "xz": [
+        -332.35,
+        178.15
+      ],
+      "yaw": 0.4775,
+      "reason": "One of the eight galvanised stock-tank planters on pallets in a row along the chain-link at the east edge of the Mersea lot's Avenue A strip; their plants (a dark red New Zealand flax and dull green shrubs) have no match in the vegetation kit, so the soil is bare.",
+      "reference": "Street View Sep 2025 inside the Mersea lot: pano UmL4Ss_-CFTPXI4O98FkOA (x -346.4, z 179.1) heading 340 and pano LtXShSEN6YyhB4uQoFoS-A (x -328.1, z 205.1) heading 330: a row of eight galvanised oval stock tanks on pallets along the chain-link at the strip's east edge; positions from the 2026-05-26 aerial (level 19), where their dark plants stand against the fence from about z 172 to 187 (the street props' player-width margins; gaps either shut or clearly open), position production inference"
+    },
+    {
+      "id": "mersea_lot_planter_6",
+      "kind": "planter",
+      "prop": "stock_tank_planter",
+      "params": {
+        "paint": "beige"
+      },
+      "xz": [
+        -333.62,
+        175.71
+      ],
+      "yaw": 0.4775,
+      "reason": "One of the eight galvanised stock-tank planters on pallets in a row along the chain-link at the east edge of the Mersea lot's Avenue A strip; their plants (a dark red New Zealand flax and dull green shrubs) have no match in the vegetation kit, so the soil is bare.",
+      "reference": "Street View Sep 2025 inside the Mersea lot: pano UmL4Ss_-CFTPXI4O98FkOA (x -346.4, z 179.1) heading 340 and pano LtXShSEN6YyhB4uQoFoS-A (x -328.1, z 205.1) heading 330: a row of eight galvanised oval stock tanks on pallets along the chain-link at the strip's east edge; positions from the 2026-05-26 aerial (level 19), where their dark plants stand against the fence from about z 172 to 187 (the street props' player-width margins; gaps either shut or clearly open), position production inference"
+    },
+    {
+      "id": "mersea_lot_planter_7",
+      "kind": "planter",
+      "prop": "stock_tank_planter",
+      "params": {
+        "paint": "beige"
+      },
+      "xz": [
+        -334.88,
+        173.27
+      ],
+      "yaw": 0.4775,
+      "reason": "One of the eight galvanised stock-tank planters on pallets in a row along the chain-link at the east edge of the Mersea lot's Avenue A strip; their plants (a dark red New Zealand flax and dull green shrubs) have no match in the vegetation kit, so the soil is bare.",
+      "reference": "Street View Sep 2025 inside the Mersea lot: pano UmL4Ss_-CFTPXI4O98FkOA (x -346.4, z 179.1) heading 340 and pano LtXShSEN6YyhB4uQoFoS-A (x -328.1, z 205.1) heading 330: a row of eight galvanised oval stock tanks on pallets along the chain-link at the strip's east edge; positions from the 2026-05-26 aerial (level 19), where their dark plants stand against the fence from about z 172 to 187 (the street props' player-width margins; gaps either shut or clearly open), position production inference"
+    },
+    {
+      "id": "mersea_lot_planter_8",
+      "kind": "planter",
+      "prop": "stock_tank_planter",
+      "params": {
+        "paint": "beige"
+      },
+      "xz": [
+        -336.15,
+        170.82
+      ],
+      "yaw": 0.4775,
+      "reason": "One of the eight galvanised stock-tank planters on pallets in a row along the chain-link at the east edge of the Mersea lot's Avenue A strip; their plants (a dark red New Zealand flax and dull green shrubs) have no match in the vegetation kit, so the soil is bare.",
+      "reference": "Street View Sep 2025 inside the Mersea lot: pano UmL4Ss_-CFTPXI4O98FkOA (x -346.4, z 179.1) heading 340 and pano LtXShSEN6YyhB4uQoFoS-A (x -328.1, z 205.1) heading 330: a row of eight galvanised oval stock tanks on pallets along the chain-link at the strip's east edge; positions from the 2026-05-26 aerial (level 19), where their dark plants stand against the fence from about z 172 to 187 (the street props' player-width margins; gaps either shut or clearly open), position production inference"
+    }
   ]
 }

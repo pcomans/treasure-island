@@ -1052,8 +1052,8 @@
         "w8921121": {
           "right": [
             [
-              60,
-              110
+              116,
+              148
             ]
           ]
         }
@@ -1911,14 +1911,33 @@
               156.582
             ],
             [
-              -327.855,
-              197.425
+              -342.805,
+              171.18
             ]
           ],
           "side": "left",
-          "count": 17,
+          "count": 6,
           "depth_m": 5.5,
-          "stall_width_m": 2.7,
+          "stall_width_m": 2.8,
+          "angle_deg": 90,
+          "style": "faded"
+        },
+        {
+          "id": "strip_east_tanks",
+          "line_xz": [
+            [
+              -343.326,
+              171.477
+            ],
+            [
+              -328.972,
+              196.676
+            ]
+          ],
+          "side": "left",
+          "count": 10,
+          "depth_m": 4.0,
+          "stall_width_m": 2.9,
           "angle_deg": 90,
           "style": "faded"
         },

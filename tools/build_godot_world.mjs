@@ -2167,6 +2167,7 @@ function main() {
     const streetDetail = generateStreetDetail({
       projectRoot,
       boundary,
+      playableBoundary: playableBoundaryWithPiers(boundary, loaded.rawOsm),
       playableObjects,
       chunks,
       terrainSupportAt: terrainSupportFromChunks,

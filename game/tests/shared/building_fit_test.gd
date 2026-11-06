@@ -37,7 +37,9 @@ extends SceneTree
 ## the route's ends may lie, for street ground near it (curbs, crossings).
 ## Optional --spray FILE: {"source":"KEY", "player_xz":[x,z], "target_xyz":[x,y,z]},
 ## optionally "expect":"receiver_rejection" to aim through a non-receiver solid
-## (a street prop in front of the wall) and require the spray to be refused.
+## (a street prop in front of the wall) and require the spray to be refused,
+## with "blocker":"street_furniture" (a body's feature_kind) requiring that the
+## first solid the spray ray meets is of that kind.
 ## Optional --adjacent-source KEY: complete recorded nonreceiver roof/support
 ## mesh-to-native coverage for a neighboring POI, before ordinary building checks.
 ## Requires the existing recorded contact_mesh_paths producer; no wall exemption.

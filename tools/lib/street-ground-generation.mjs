@@ -168,6 +168,8 @@ const ISLAND_FOOT_M = 0;
 // is this wide overall (the villages' narrower walks).
 const TRANSVERSE_LINE_M = 0.3;
 const LINES_WALK_WIDTH_M = 3.2;
+// Half-metre samples of clear road that end a stop line's search up its approach (8 m).
+const STOP_LINE_CLEAR_RUN_STEPS = 16;
 // Road classes in order of which owns the sidewalk panel frame where reaches overlap.
 const FRAME_ROAD_RANK = Object.freeze(["trunk", "primary", "secondary", "tertiary", "unclassified", "residential", "service"]);
 const SAFE_ID = /^[a-z0-9_]+$/u;
@@ -2317,14 +2319,17 @@ export function generateStreetGround({
     // approach until it is clear of every crossing road and crosswalk.
     const stopBox = boxOfPoints([near.point]);
     const crossingRoads = partsIndex(`roads crossing ${host.row.source_key}`, vehicles
-      .filter((other) => !sameStreet(other, host) && boxesOverlap(boxOfMulti(other.geometry), stopBox, 25))
+      .filter((other) => !sameStreet(other, host) && (host.tags.name == null || other.tags.name !== host.tags.name) &&
+        boxesOverlap(boxOfMulti(other.geometry), stopBox, 25))
       .map((other) => other.geometry));
     const barCorners = (center) => [-1, 1].flatMap((side) => [-1, 1].map((end) =>
       add(add(center, scale(travel, end * lines.stop_bar_width_m)), scale(right, side > 0 ? half - 0.1 : 0.15))));
     // The driver meets STOP, the stop line, then any crosswalk, then the
-    // junction: put the line just upstream of the last blocked sample within 16 m.
+    // junction: put the line just upstream of the last blocked sample within
+    // 16 m. A clear stretch of road ends the search: a driveway further up the
+    // approach is not part of the junction.
     let lastBlocked = -1;
-    for (let step = 0; step <= 32; step += 1) {
+    for (let step = 0; step <= 32 && step - lastBlocked <= STOP_LINE_CLEAR_RUN_STEPS; step += 1) {
       const sample = add(near.point, scale(travel, -0.5 * step));
       if (barCorners(sample).some((corner) => crossingRoads.contains(corner) || keepoutIndex.contains(corner))) lastBlocked = step;
     }

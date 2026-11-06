@@ -34,7 +34,10 @@ extends SceneTree
 ##   A still view (focused or street) may add "frame_time_frames": N (10-3000) to
 ##   hold its camera for N more frames with vsync and the frame cap off and print
 ##   their frame time as a FRAME_TIME line (pass --rendering-method
-##   gl_compatibility --rendering-driver opengl3 for the web renderer).
+##   gl_compatibility --rendering-driver opengl3 for the web renderer). With
+##   "frame_time_layer": "clutter" (a street-detail layer that is on) the frames
+##   are timed with that layer drawn and hidden, in three alternating blocks each
+##   so a drift in the machine's load falls on both: one FRAME_TIME line per state.
 ## --views-batch FILE: only the focused views of several buildings in one world load,
 ## [{"source": "KEY", "plan": "views.json"}, ...], each plan a --views file for its
 ## source, saved to OUT/KEY/detail-NAME.png. Fixed-pose views only (no closeup,
@@ -620,7 +623,7 @@ func _shoot_view(view: Dictionary, target: Vector3, path: String) -> String:
 	await physics_frame
 	error = await _h.save_screenshot(path)
 	if error == "" and view.has("frame_time_frames"):
-		error = await _frame_time(view.frame_time_frames, path.get_file().get_basename())
+		error = await _frame_time(view.frame_time_frames, path.get_file().get_basename(), str(view.get("frame_time_layer", "")))
 	if free != null:
 		free.queue_free()
 		_h.player.get_camera().make_current()
@@ -630,9 +633,15 @@ func _shoot_view(view: Dictionary, target: Vector3, path: String) -> String:
 ## Holds the view's camera for `frames` more drawn frames, with vsync and the
 ## frame cap off, and prints the wall time between them as a FRAME_TIME line
 ## (mean, median, 95th percentile and the mean's fps). Returns an error, or "".
-func _frame_time(frames: Variant, label: String) -> String:
+func _frame_time(frames: Variant, label: String, layer := "") -> String:
 	if not _numbers([frames], 1) or float(frames) != floorf(float(frames)) or float(frames) < 10.0 or float(frames) > 3000.0:
 		return "frame_time_frames must be a whole number from 10 to 3000"
+	if layer != "":
+		if not layer in WorldLoader.STREET_DETAIL_LAYERS:
+			return "frame_time_layer must be a street-detail layer: %s" % layer
+		# Only while the layer is on (the street-detail-on pass); off, time it plainly.
+		if layer in _h.world.get_street_detail_layers():
+			return await _frame_time_layer(int(frames), label, layer)
 	var uncapped := _uncap_frames()
 	# Let the change and any first-use work settle before timing.
 	var stats := _frame_stats(await _frame_times(int(frames), 30))
@@ -641,6 +650,39 @@ func _frame_time(frames: Variant, label: String) -> String:
 		label, stats.frames, stats.mean, stats.median, stats.p95,
 		1000.0 / stats.mean, RenderingServer.get_current_rendering_method(), RenderingServer.get_video_adapter_name(),
 	])
+	return ""
+
+
+## Times `frames` drawn frames with a street-detail layer drawn and as many with
+## it hidden (its collision stays), in three alternating blocks each, and prints
+## one FRAME_TIME line per state with the last frame's draw calls and primitives.
+func _frame_time_layer(frames: int, label: String, layer: String) -> String:
+	var node := _h.world.street_detail_layer(layer)
+	var visible := node.visible
+	var uncapped := _uncap_frames()
+	var blocks := 3
+	var per_block := maxi(10, frames / blocks)
+	# Packed arrays are values in GDScript: one local per state.
+	var shown_times := PackedFloat64Array()
+	var hidden_times := PackedFloat64Array()
+	var info := {}
+	for block in blocks * 2:
+		var state := "shown" if block % 2 == 0 else "hidden"
+		node.visible = visible and state == "shown"
+		var times := await _frame_times(per_block, 20)
+		if state == "shown":
+			shown_times.append_array(times)
+		else:
+			hidden_times.append_array(times)
+		info[state] = [RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME), RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_PRIMITIVES_IN_FRAME)]
+	node.visible = visible
+	_restore_frames(uncapped)
+	for state: String in ["shown", "hidden"]:
+		var stats := _frame_stats(shown_times if state == "shown" else hidden_times)
+		print("FRAME_TIME %s layer=%s state=%s frames=%d mean_ms=%.2f median_ms=%.2f p95_ms=%.2f mean_fps=%.1f draw_calls=%d primitives=%d method=%s adapter=%s" % [
+			label, layer, state, stats.frames, stats.mean, stats.median, stats.p95, 1000.0 / stats.mean, info[state][0], info[state][1],
+			RenderingServer.get_current_rendering_method(), RenderingServer.get_video_adapter_name(),
+		])
 	return ""
 
 

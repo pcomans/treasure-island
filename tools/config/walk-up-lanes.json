@@ -1,0 +1,9 @@
+{
+  "notes": [
+    "The building fit test's walk-up geometry. game/tests/shared/building_fit.gd walks by it, and tools/lib/street-detail-generation.mjs reads it to keep walk-up lanes free of island-wide clutter on each side of a scored building.",
+    "From each side of the building's box the test tries a start on each lane in turn (an offset across the side, as a share of the box's width along the side), at each margin beyond the box in turn. It walks the first open start to the wall its lane crosses, looking for that wall up to far_beyond_m past the box's middle."
+  ],
+  "lanes_of_width": [0.0, -0.25, 0.25, -0.125, 0.125],
+  "start_margins_m": [5.0, 2.0, 10.0],
+  "far_beyond_m": 2.0
+}
