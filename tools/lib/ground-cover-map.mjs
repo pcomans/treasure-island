@@ -21,7 +21,8 @@
 // road or wall; cells with no generated ground (the shoreline's shoulder, the
 // water) keep none. A no_fill rule isn't passed on that way, or a band beside a
 // road would spread across every park lawn and yard nearest it: its weight stays
-// on its own ground and the paving just beside it. The map
+// on its own ground and reaches only the street-kerb and paving cells just beside
+// it, which take in the kerb verges no rule drew on. The map
 // is drawn from the generated world's records, so it follows the drawn
 // buildings and roads; tools/build_ground_cover_map.mjs writes it, and so does
 // tools/build_godot_world.mjs each time it writes the committed generated/world;
@@ -48,8 +49,9 @@ export const GROUND_COVER_NEAR_KINDS = Object.freeze(["building", "vehicle_road"
 export const GROUND_COVER_SURFACES = Object.freeze(["land_ground", "major_area_amenity", "major_area_landuse", "major_area_leisure", "street_kerb_verge", "terrain_riprap", "terrain_sand", "terrain_wetland"]);
 const SAFE_ID = /^[a-z0-9_]+$/u;
 const RULE_FIELDS = Object.freeze(["basis", "channel", "evidence", "feather_m", "id", "inside_sources", "near", "no_fill", "reason", "surfaces", "weight", "within_sources", "within_xz"]);
-// How far (m) a no_fill rule's weight reaches over the paving beside its ground: the
-// map's filtering would otherwise fade it out before the pavement edge.
+// How far (m) a no_fill rule's weight reaches over the paving beside its ground, and
+// over the unruled grass verges the street_kerb mask also holds: the map's filtering
+// would otherwise fade it out before the pavement edge.
 const NO_FILL_PAVING_REACH_M = 6;
 
 function isFiniteNumber(value) {

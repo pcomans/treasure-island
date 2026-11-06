@@ -24302,9 +24302,17 @@ Comparing every record against the base commit found a change the author hadn't 
 - **What did not work well:** the edge views were all at roads, so none covered a protected lawn, and the Job Corps views were planned but never captured.
 - **What to change next time:** for any island-wide map rule, diff the map per surface before review and shoot one ground view on each protected lawn.
 
+### batch-code-review
+
+(Relayed by the coordinator; added by batch-20261106.)
+
+- **What worked well:** diffing records by key and redrawing the map per surface answered the owner-rule and `no_fill` questions directly.
+- **What did not work well:** with no engine allowed, engine-side claims stayed inferred, and the suite result wasn't available.
+- **What to change next time:** give the reviewer the suite result for the reviewed commit, plus the author's per-surface diff.
+
 ### batch-20261106 — 2026-11-06 — fast drop on C, 4th Street lot trees and stalls, worn grass edges, bake safety, clipping fixes
 
-(Written before the suite, for the commit it runs on; the suite's result is in the hand-back to ROOT.)
+(The suite's result on `d445887a` is in the hand-back to ROOT; only comments, notes and docs changed after it.)
 
 - What worked well: Measuring the May 2026 aerial by distance from paving took one short script and under a second a run, and gave the two wear rules numbers instead of an impression. A one-second scratch run replaced my assumption about a script error inside a typed static (null) with the fact (an empty Dictionary) before it went into the bake's check. A negative bake with an injected problem proved the exit code end to end, and a mutation run proved the new merge fixtures fail without their guards. perf-2's R03 bake (same code as dae432a8) and its dump and compare scripts saved a baseline bake and a new proof tool; the proof came back exact on all 1,960,331 building triangles.
 - What did not work well: Three of the first five generator runs (6 minutes each) were spent on things I could have read first: the palm 5 mm inside a road's exclusion margin, stall rows clashing on the car row ids, and two crowns lost because a mulch pit can't stand on stall paint. I then spent a search on stall pitches and sides to dodge the id clash, which is a workaround, so it is logged rather than hidden. The first wear weight came from reasoning over thresholds and read as a dry kerb with green behind it; only the close-up showed that. My first shots plan stopped at a camera over a roof, which lost two views. The fifth item reached me after I had committed and started the suite, so I stopped that suite at the island test, about 8 minutes in, with every earlier stage passed; those minutes bought nothing. Worst: my wear rules leaked through the map's nearest-ruled fill onto the Cityside event lawn and I shipped that to review, because I judged the rule from road-side views and the overviews and never diffed the map by surface. The fill's header comment says what it does; I read it and still didn't connect it to a band.

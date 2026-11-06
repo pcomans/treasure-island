@@ -155,8 +155,9 @@ Not needed to ship, and not done:
 - Merged surfaces keep tangents that nothing reads on about 86% of vertices (about 15 MB raw, estimated from the census), and 1.87 million vertices are still unindexed triangle soup.
 - 1,852 hidden meshes stay in the bake.
 
-Follow-up from the code review (non-blocking at `e51de21d`):
+Follow-ups from the code reviews (non-blocking at `e51de21d` and `d445887a`):
 
+- **Top follow-up:** the bake's check compares each built mesh with its group, not with what was removed, so a script error inside `_add_part` could drop a part and still exit 0 (`tools/merge_baked_buildings.gd:86-87`, `:265`). The fix is about five lines: total each taken surface's indices in `merge()`.
 - `headless_bake_merge_contract.gd` has no fixtures for some kept cases: unsupported channels, per-instance settings, and parts with children or a script.
 
 ## Deferred by the owner
@@ -181,7 +182,8 @@ Follow-up from the code review (non-blocking at `e51de21d`):
   - The draped-area layer check in `tools/validate_godot_world.mjs` sums each pair's overlap over the chunk-clipped triangles, so slivers along a shared edge could add up to a false failure.
   - The yard-kit floor check tests floor vertices on the sides of the plan rectangle, not the mesh's actual open edges.
   - Yard props rest on a 3 m sample grid, which can miss ditches narrower than 3 m.
-  - A lot's car rows are named by aisle, side and distance along the row (`cell` in `tools/lib/street-clutter-generation.mjs`), not by the row, so rows of one lot on the same side with the same pitch share ids, and cars in both fail the build's unique row ids check. The 4th Street lot's sides and pitches keep the rows its cars use apart. Adding the row to the id would reshuffle the Mersea lot's cars.
+  - A lot's car rows are named by aisle, side and distance along the row (`cell` in `tools/lib/street-clutter-generation.mjs`), not by the row, so rows of one lot on the same side with the same pitch share ids, and cars in both fail the build's unique row ids check. The 4th Street lot's stall widths and sides are arranged to avoid the clash. Adding the row to the id would reshuffle the Mersea lot's cars.
+  - In `tools/lib/ground-cover-map.mjs:493`, `drawn[cell] = 1` also runs for `no_fill` rules, so a `no_fill` rule that is the only rule on a verge would cut that verge off from the ground behind it. It doesn't happen today.
   - `tools/render_naip_generated_vegetation_comparison.mjs` is broken: it reads `generated/world/vegetation.json`, which no longer exists. Fix or remove it with its outputs in `source_assets/vegetation/naip_2022/`.
   - `tools/render_world_coverage_evidence.mjs` fails on an unknown demolished status.
 - **Street objects generator** (findings at `f4a6f827`, line numbers of that commit):
@@ -208,6 +210,7 @@ Follow-up from the code review (non-blocking at `e51de21d`):
   - `building_shots.gd`'s `MOVE_ACTIONS` duplicates the action list in `world_harness.gd`'s `release_input`; share one list.
   - `tools/godot` starts Weston without `--idle-time=0`, so a rendered run stalls after 300 s idle. Keep render plans under 280 s until it's fixed.
 - **Player:**
+  - Holding C over the water or riprap repeats the shore lift about every 0.6 s, with a "Recovered" message each time (`game/scripts/player/player_controller.gd:134`, `game/scripts/player/recovery_controller.gd:7`, `:69`). Jittery only.
   - The chest avatar's `WALK_SPEED` (4.0) is a copy of `player_controller.walk_speed_mps`; couple them.
   - The shore lift could use `to.y = maxf(from.y, floor + lift)`, and its "Recovered" toast wording could say what happened.
 - **Mersea mural mesh** (`game/scripts/world/facades/mersea_model.gd`):
