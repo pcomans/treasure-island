@@ -70,7 +70,8 @@ export const STREET_GROUND_FEATURE_KINDS = Object.freeze(["street_kerb", "street
 // yard gravel (beige-grey, or the pale grey of a fresh aggregate pad), grey
 // concrete rubble, black plastic sheeting over earth, plain poured concrete,
 // pale graded sand, dark excavated soil and shallow murky ponds. promenade_* are
-// the Mersea promenade's worn old asphalt and fresh seal.
+// the Mersea promenade's worn old asphalt, fresh seal, decomposed granite, bark
+// mulch and crushed rock.
 export const PARK_SURFACE_MATERIALS = Object.freeze({
   park_asphalt: "park-asphalt",
   park_concrete: "park-concrete",
@@ -82,6 +83,9 @@ export const PARK_SURFACE_MATERIALS = Object.freeze({
   park_plaza_lens: "park-plaza-lens",
   park_plaza_zigzag: "park-plaza-zigzag",
   promenade_asphalt: "promenade-asphalt",
+  promenade_dg: "promenade-dg",
+  promenade_mulch: "promenade-mulch",
+  promenade_rock: "promenade-rock",
   promenade_seal: "promenade-seal",
   black_plastic: "black-plastic",
   rubble_grey: "rubble-grey",

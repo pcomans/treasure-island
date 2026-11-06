@@ -168,7 +168,7 @@ const COTTAGE_WHITE := Color(0.93, 0.93, 0.9)
 const COTTAGE_GROOVE := Color(0.7, 0.7, 0.67)
 const COTTAGE_DOOR := Color(0.64, 0.74, 0.76)
 const COTTAGE_GLASS := Color(0.07, 0.09, 0.12)
-const COTTAGE_SHINGLE := Color(0.4, 0.33, 0.28)
+const COTTAGE_SHINGLE := Color(0.27, 0.225, 0.19)
 ## The rounded stones of the cobble pile at the ditch's road end.
 const COBBLE_TONES := [Color(0.8, 0.74, 0.64), Color(0.66, 0.56, 0.45), Color(0.6, 0.58, 0.55), Color(0.46, 0.37, 0.3), Color(0.72, 0.68, 0.62)]
 ## The promenade's dark baulks: their tarred sides, a little more worn tops and sawn
@@ -1307,18 +1307,18 @@ func _pump_station(b: Builder) -> void:
 func _cobble_pile(b: Builder, length_m: float) -> void:
 	var random := RandomNumberGenerator.new()
 	random.seed = 4173
-	for index in int(length_m * 26.0):
+	for index in int(length_m * 70.0):
 		var along := random.randf_range(-0.5, 0.5)
 		var edge := 1.0 - absf(along) * 1.7
 		var across := random.randfn(0.0, 0.34) * edge
-		var radius := random.randf_range(0.06, 0.15)
+		var radius := random.randf_range(0.04, 0.095)
 		var stack := 0.05 + maxf(0.0, 0.12 * (edge - absf(across) * 2.0)) * random.randf()
 		var center := Vector3(along * length_m, stack, across)
 		var direction := Vector3(random.randf_range(-1.0, 1.0), random.randf_range(-0.2, 0.2), random.randf_range(-1.0, 1.0)).normalized()
 		var half := direction * radius * random.randf_range(0.9, 1.35)
 		var tone: Color = COBBLE_TONES[random.randi_range(0, COBBLE_TONES.size() - 1)]
 		var shade := random.randf_range(0.86, 1.08)
-		b.tube(PackedVector3Array([center - half, center - half * 0.55, center, center + half * 0.55, center + half]), PackedFloat32Array([0.012, radius * 0.72, radius * 0.9, radius * 0.72, 0.012]), 6, Color(tone.r * shade, tone.g * shade, tone.b * shade), CELL_WHITE, false, false)
+		b.tube(PackedVector3Array([center - half, center - half * 0.55, center, center + half * 0.55, center + half]), PackedFloat32Array([0.012, radius * 0.72, radius * 0.9, radius * 0.72, 0.012]), 7, Color(tone.r * shade, tone.g * shade, tone.b * shade), CELL_WHITE, false, false)
 
 
 ## The white gabled restroom cottage on the Mersea promenade (not in the frozen OSM

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dm4r5h2k9wqtz"
-path="res://.godot/imported/marsh_map.png-c1959aab5ad2b199622f5a0518554930.ctex"
+uid="uid://dm4r5h2lawqt0"
+path="res://.godot/imported/marsh_map.png-58ed5550059c597dbaa285c6469a50c6.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://game/resources/textures/world/ground_cover/marsh_map.png"
-dest_files=["res://.godot/imported/marsh_map.png-c1959aab5ad2b199622f5a0518554930.ctex"]
+dest_files=["res://.godot/imported/marsh_map.png-58ed5550059c597dbaa285c6469a50c6.ctex"]
 
 [params]
 

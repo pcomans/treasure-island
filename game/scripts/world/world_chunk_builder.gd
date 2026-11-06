@@ -114,9 +114,14 @@ const STREET_GROUND_SURFACES := {
 	# The Johnson St lot's new, dark asphalt (the same tiles, darkened and a little warmer).
 	"yard_asphalt_fresh": {"albedo": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"), "uv_scale": 4.76, "roughness": 1.0, "tint": Color(0.76, 0.74, 0.73)},
 	# The Mersea promenade (owner video IMG_0960, 2026-11-06): the old road's worn,
-	# warm pale asphalt and the fresh dark seal at its south end, on the same tiles.
-	"promenade_asphalt": {"albedo": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"), "uv_scale": 4.76, "roughness": 1.0, "tint": Color(0.9, 0.85, 0.79)},
-	"promenade_seal": {"albedo": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"), "uv_scale": 4.76, "roughness": 1.0, "tint": Color(0.74, 0.67, 0.62)},
+	# warm pale asphalt and the fresh dark seal at its south end, on the same tiles,
+	# and its verges: buff decomposed granite, warm bark mulch and dark crushed rock,
+	# the park's textures at the tones the footage shows beside the asphalt.
+	"promenade_asphalt": {"albedo": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"), "uv_scale": 4.76, "roughness": 1.0, "tint": Color(0.9, 0.84, 0.76)},
+	"promenade_seal": {"albedo": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"), "uv_scale": 4.76, "roughness": 1.0, "tint": Color(0.76, 0.68, 0.61)},
+	"promenade_dg": {"albedo": preload("res://game/resources/textures/world/street/park_dg.png"), "uv_scale": 5.0, "roughness": 1.0, "tint": Color(0.56, 0.5, 0.42)},
+	"promenade_mulch": {"albedo": preload("res://game/resources/textures/world/vegetation/park_mulch.png"), "uv_scale": 5.0, "roughness": 1.0, "tint": Color(0.86, 0.72, 0.56)},
+	"promenade_rock": {"albedo": preload("res://game/resources/textures/world/vegetation/park_gravel.png"), "uv_scale": 5.0, "roughness": 0.95, "tint": Color(0.5, 0.47, 0.42)},
 	"yard_gravel": {"albedo": preload("res://game/resources/textures/world/vegetation/park_gravel.png"), "uv_scale": 5.0, "roughness": 0.97, "tint": Color(1.22, 1.2, 1.15)},
 	"yard_gravel_pale": {"albedo": preload("res://game/resources/textures/world/street/yard_gravel_pale.png"), "uv_scale": 5.0, "roughness": 0.97, "tint": Color(0.91, 0.87, 0.75)},
 	# The Johnson St lot's shoulder: the same fine aggregate at the greys of the
