@@ -258,6 +258,8 @@ export const MAX_SPUR_M = 60;
 const DARK_POLE_SHARE = 0.2;
 const darkPole = (id) => createHash("sha256").update(`pole_wood|${id}`, "utf8").digest().readUInt32BE(0) / 0xffffffff < DARK_POLE_SHARE;
 const SAFE_ID = /^[a-z0-9_]+$/u;
+// Fields a rule may leave out: photographed exceptions.
+const OPTIONAL_RULE_FIELDS = Object.freeze({ street_lamps: ["except_cells"], junction_names: ["on_posts"] });
 const RULE_FIELDS = Object.freeze({
   kerb: ["source_keys", "sides", "spacing_m", "phase_m", "setback_m", "slide_m"],
   signalized_crossings: ["setback_m", "beyond_m"],
@@ -376,7 +378,7 @@ export function validateFurnitureRules(zone, kinds, island = false) {
     ids.add(rule.id);
     const patterns = island ? ISLAND_PATTERNS : ZONE_PATTERNS;
     invariant(patterns.includes(rule.pattern), `${label} pattern must be one of ${patterns.join(", ")}`);
-    const allowed = [...COMMON_FIELDS, ...RULE_FIELDS[rule.pattern]].sort();
+    const allowed = [...COMMON_FIELDS, ...RULE_FIELDS[rule.pattern], ...(OPTIONAL_RULE_FIELDS[rule.pattern] ?? [])].sort();
     const present = Object.keys(rule).sort();
     invariant(present.every((key) => allowed.includes(key)), `${label} has fields outside ${allowed.join(", ")}`);
     invariant(RULE_FIELDS[rule.pattern].every((key) => key in rule), `${label} needs ${RULE_FIELDS[rule.pattern].join(", ")}`);
@@ -405,6 +407,25 @@ export function validateFurnitureRules(zone, kinds, island = false) {
           && typeof entry.evidence === "string" && entry.evidence.trim() !== "", `${label} on_lamps entries are {node: "n<node>", near_xz: [x, z], evidence}`);
       }
     }
+    if ("except_cells" in rule) {
+      // Stations of a lamp rule the dated photos show empty, by their rule cell
+      // (<way>_<side>_<station>), each with its evidence.
+      invariant(Array.isArray(rule.except_cells), `${label} except_cells must be a list`);
+      for (const entry of rule.except_cells) {
+        invariant(JSON.stringify(Object.keys(entry ?? {}).sort()) === JSON.stringify(["cell", "evidence"]) && /^w\d+_(left|right)_\d{3}$/u.test(entry.cell)
+          && typeof entry.evidence === "string" && entry.evidence.trim() !== "", `${label} except_cells entries are {cell: "w<way>_<side>_<station>", evidence}`);
+      }
+    }
+    if ("on_posts" in rule) {
+      // Junctions whose own name post the dated photos show at a known corner:
+      // the post stands at near_xz (world x, z), or the first clear spot beside it.
+      invariant(Array.isArray(rule.on_posts), `${label} on_posts must be a list`);
+      for (const entry of rule.on_posts) {
+        invariant(JSON.stringify(Object.keys(entry ?? {}).sort()) === JSON.stringify(["evidence", "near_xz", "node"]) && /^n\d+$/u.test(entry.node)
+          && Array.isArray(entry.near_xz) && entry.near_xz.length === 2 && entry.near_xz.every(isFiniteNumber)
+          && typeof entry.evidence === "string" && entry.evidence.trim() !== "", `${label} on_posts entries are {node: "n<node>", near_xz: [x, z], evidence}`);
+      }
+    }
     if ("on_stops" in rule) {
       // The stop signs the dated photos show carrying name blades, by their rule
       // cell (n<junction>_w<approach way>_<a|b>), each with its evidence.
@@ -430,10 +451,16 @@ export function validateFurnitureRules(zone, kinds, island = false) {
 // The island-wide block: {notes, rules} with the island patterns.
 export function validateIslandFurniture(island, kinds) {
   invariant(island != null && typeof island === "object" && !Array.isArray(island), "Street detail island_furniture must be an object");
-  invariant(JSON.stringify(Object.keys(island).sort()) === JSON.stringify(["notes", "rules"]), "Street detail island_furniture must have exactly {notes, rules}");
+  invariant(JSON.stringify(Object.keys(island).sort()) === JSON.stringify(["notes", "rules", "shelter_anchors"]), "Street detail island_furniture must define exactly notes, rules and shelter_anchors");
   invariant(Array.isArray(island.notes) && island.notes.every((note) => typeof note === "string"), "Street detail island_furniture needs notes");
   invariant(Array.isArray(island.rules), "Street detail island_furniture rules must be a list");
   validateFurnitureRules({ id: "island", furniture: island.rules }, kinds, true);
+  // Shelters a dated photo places: the OSM stop's shelter is tried first along_m
+  // along the road from the node and gap_m past the curb.
+  for (const [key, anchor] of Object.entries(island.shelter_anchors ?? {})) {
+    invariant(/^osm:n\d+$/u.test(key) && JSON.stringify(Object.keys(anchor ?? {}).sort()) === JSON.stringify(["along_m", "evidence", "gap_m"]) && isFiniteNumber(anchor.along_m)
+      && isFiniteNumber(anchor.gap_m) && anchor.gap_m > 0 && typeof anchor.evidence === "string" && anchor.evidence.trim() !== "", `Street detail shelter anchor ${key} is {along_m, gap_m, evidence}`);
+  }
 }
 
 // Resolves the street furniture. Mutates the OSM rows it gives props (moves
@@ -501,7 +528,7 @@ export function placeStreetFurniture({
     if (carriagewayDistance(en) < KERB_CLEAR_M + radius) return "carriageway";
     if (site.rampDistance(en) < RAMP_CLEAR_M + radius) return "curb_ramp";
     if (options.raised && !site.raised(en)) return "off_sidewalk";
-    if (options.radius === undefined && offRest(xz)) return "off_rest";
+    if (!options.pad && offRest(xz)) return "off_rest";
     for (const item of occupied) {
       if (options.ignore?.has(item.id)) continue;
       // A line item (a fence run) counts by its segments, not only its vertices.
@@ -664,7 +691,7 @@ export function placeStreetFurniture({
         const foot = pointAlong(best.road.line, best.near.along + slide).point;
         for (const extra of STEP_OFF_EXTRA_M) {
           const xz = round2(toWorld(add(foot, scale(away, best.road.kerb_offset_m + KERB_CLEAR_M + radius + extra))));
-          const problem = reject(row.kind, xz, { ignore: new Set([row.id]), radius });
+          const problem = reject(row.kind, xz, { ignore: new Set([row.id]), radius, pad: row.footprint_m !== undefined });
           if (problem) {
             count(audit.rejected_by_reason, `step_off:${row.kind}:${problem}`);
             continue;
@@ -713,34 +740,34 @@ export function placeStreetFurniture({
     if (!best || best.gap > 25) return fail();
     const side = cross(best.near.tangent, sub(en, best.near.point)) >= 0 ? 1 : -1;
     const footprint = STREET_FURNITURE_FOOTPRINTS.bus_shelter;
-    for (const slide of SHELTER_SLIDES_M) {
+    const anchor = island?.shelter_anchors?.[row.id];
+    const spots = [...(anchor ? [[anchor.along_m, anchor.gap_m]] : []), ...SHELTER_SLIDES_M.flatMap((slide) => SHELTER_GAPS_M.map((gap) => [slide, gap]))];
+    for (const [slide, gap] of spots) {
       const at = best.near.along + slide;
       if (at < 0 || at > polylineLength(best.road.line)) continue;
       const along = pointAlong(best.road.line, at);
       const away = scale(leftOf(along.tangent), side);
-      for (const gap of SHELTER_GAPS_M) {
-        const xz = round2(toWorld(add(along.point, scale(away, best.road.kerb_offset_m + gap + footprint.z_m / 2))));
-        const yaw = yawToward(scale(away, -1));
-        const violation = pieceViolation(footprintPiece(xz, yaw, footprint), new Set([row.id]));
-        if (violation) {
-          count(audit.rejected_by_reason, `bus_shelter:${violation.reason}`);
-          count(reasons, violation.source_id ? `${violation.reason}:${violation.source_id}` : violation.reason);
-          continue;
-        }
-        const pad = settlePad(footprint, xz, yaw, groundAt, baseAt(xz));
-        if (pad.problem) {
-          count(audit.rejected_by_reason, `bus_shelter:${pad.problem}`);
-          count(reasons, pad.problem);
-          continue;
-        }
-        row.yaw_radians = yaw;
-        row.yaw_source = `faces_road:${best.road.source_key}`;
-        row.footprint_m = { ...footprint };
-        row.pad_lift = pad.lift;
-        moveRow(row, xz, `shelter beside ${best.road.source_key}, its open front to the road (production_inference)`);
-        audit.shelters += 1;
-        return true;
+      const xz = round2(toWorld(add(along.point, scale(away, best.road.kerb_offset_m + gap + footprint.z_m / 2))));
+      const yaw = yawToward(scale(away, -1));
+      const violation = pieceViolation(footprintPiece(xz, yaw, footprint), new Set([row.id]));
+      if (violation) {
+        count(audit.rejected_by_reason, `bus_shelter:${violation.reason}`);
+        count(reasons, violation.source_id ? `${violation.reason}:${violation.source_id}` : violation.reason);
+        continue;
       }
+      const pad = settlePad(footprint, xz, yaw, groundAt, baseAt(xz));
+      if (pad.problem) {
+        count(audit.rejected_by_reason, `bus_shelter:${pad.problem}`);
+        count(reasons, pad.problem);
+        continue;
+      }
+      row.yaw_radians = yaw;
+      row.yaw_source = `faces_road:${best.road.source_key}`;
+      row.footprint_m = { ...footprint };
+      row.pad_lift = pad.lift;
+      moveRow(row, xz, `shelter beside ${best.road.source_key}, its open front to the road (production_inference)`);
+      audit.shelters += 1;
+      return true;
     }
     return fail();
   };
@@ -861,6 +888,10 @@ export function placeStreetFurniture({
       }
       if (choice.prop === "bus_stop_sign" && stepOffCarriageway(row, 0.3)) {
         audit.osm_unbuilt.push({ id: row.id, kind: row.kind, reason: "on the carriageway, no clear spot beside it" });
+        continue;
+      }
+      if (choice.prop === "bus_stop_sign" && stepOffSlope(row)) {
+        audit.osm_unbuilt.push({ id: row.id, kind: row.kind, reason: "on sloped ground with no level spot beside it" });
         continue;
       }
     } else if (ISLAND_STREET_OBJECT_KINDS.includes(row.kind)) {
@@ -1245,8 +1276,16 @@ export function placeStreetFurniture({
   // A street-name assembly at the corner of a junction: the corner between two
   // streets first (widest first), the straight side of a T last. Returns the
   // row, or null when no corner is clear.
-  const nameCorner = (zone, rule, contains, junction, avoid = []) => {
+  const nameCorner = (zone, rule, contains, junction, avoid = [], nearXz = null) => {
     const arms = junction.arms.map((arm) => ({ ...arm, angle: Math.atan2(arm.direction[1], arm.direction[0]) })).sort((left, right) => left.angle - right.angle);
+    if (nearXz) {
+      // A photographed corner: the spot itself, else the first clear one in rings round it.
+      const spots = [toEastNorth(nearXz), ...[0.5, 1, 1.5].flatMap((ring) => Array.from({ length: 8 }, (_, step) => add(toEastNorth(nearXz), [ring * Math.cos((step * Math.PI) / 4), ring * Math.sin((step * Math.PI) / 4)])))];
+      const en = firstClear(rule, contains, spots, {});
+      invariant(en, `Street furniture rule ${rule.id}: no clear spot near on_posts ${junction.ref}`);
+      const front = unit(sub(junction.center, en));
+      return addRow(zone, rule, `n${junction.ref}`, en, front, { blades: bladesFor(arms, yawToward(front)) });
+    }
     const corners = arms.map((arm, index) => {
       const next = arms[(index + 1) % arms.length];
       let gap = next.angle - arm.angle;
@@ -1446,6 +1485,8 @@ export function placeStreetFurniture({
       // Lamps along the named streets, on the street ground where a zone builds
       // it, else beside the frozen road ribbon: from phase_m at a spacing, or
       // (anchor "junctions") at the street corners and evenly between them.
+      // A station in except_cells stays empty, as its dated photo shows.
+      const exceptCells = new Set((rule.except_cells ?? []).map((entry) => entry.cell));
       for (const chain of streetChains(rule.streets)) {
         const total = polylineLength(chain.line);
         const stations = rule.anchor === "junctions" ? junctionStations(chain, rule.spacing_m) : [];
@@ -1453,6 +1494,11 @@ export function placeStreetFurniture({
         for (const sideName of rule.sides) {
           const side = sideName === "left" ? 1 : -1;
           stations.forEach(({ s, corner }, station) => {
+            const cell = `${chain.key}_${sideName}_${String(station).padStart(3, "0")}`;
+            if (exceptCells.delete(cell)) {
+              count(audit.rejected_by_reason, `${rule.id}:photographed_exception`);
+              return;
+            }
             const deltas = slides(rule.slide_m).filter((delta) => s + delta >= 0 && s + delta <= total);
             const candidates = deltas.map((delta) => {
               const along = pointAlong(chain.line, s + delta);
@@ -1462,10 +1508,11 @@ export function placeStreetFurniture({
             const en = firstClear(rule, contains, candidates, { raisedAt: groundBuiltNear, spacing_m: corner ? 2 * LAMP_CORNER_CLEAR_M : rule.spacing_m, own });
             if (!en) return;
             const near = closestOnPolyline(chain.line, en);
-            addRow(zone, rule, `${chain.key}_${sideName}_${String(station).padStart(3, "0")}`, en, unit(sub(near.point, en)));
+            addRow(zone, rule, cell, en, unit(sub(near.point, en)));
           });
         }
       }
+      invariant(exceptCells.size === 0, `Street furniture rule ${rule.id}: except_cells ${[...exceptCells].join(", ")} name no station`);
     } else if (rule.pattern === "pole_fixtures") {
       // Street lights on the utility poles beside a named street: a pole whose
       // centre stands within max_gap_m of the street's edge carries a lamp arm
@@ -1533,6 +1580,7 @@ export function placeStreetFurniture({
       // photos mostly show bare.
       const onStops = new Map(rule.on_stops.map((entry) => [entry.stop, false]));
       const onLamps = new Map(rule.on_lamps.map((entry) => [entry.node.slice(1), entry]));
+      const onPosts = new Map((rule.on_posts ?? []).map((entry) => [entry.node.slice(1), entry]));
       for (const junction of islandJunctions) {
         if (!contains(toWorld(junction.center)) || !once(`junction:${junction.ref}`)) continue;
         const lampEntry = onLamps.get(junction.ref);
@@ -1560,8 +1608,10 @@ export function placeStreetFurniture({
           count(audit.rules, `${zone.id}/${rule.id}`);
           continue;
         }
-        nameCorner(zone, rule, contains, junction, signs.map((entry) => entry.row));
+        nameCorner(zone, rule, contains, junction, signs.map((entry) => entry.row), onPosts.get(junction.ref)?.near_xz ?? null);
+        onPosts.delete(junction.ref);
       }
+      invariant(onPosts.size === 0, `Street furniture rule ${rule.id}: on_posts ${[...onPosts.values()].map((entry) => entry.node).join(", ")} name no unfurnished junction`);
       const unused = [...onStops.entries()].filter(([, used]) => !used).map(([stop]) => stop);
       invariant(unused.length === 0, `Street furniture rule ${rule.id}: on_stops ${unused.join(", ")} name no rule stop sign at an unfurnished junction`);
       invariant(onLamps.size === 0, `Street furniture rule ${rule.id}: on_lamps ${[...onLamps.values()].map((entry) => entry.node).join(", ")} name no unfurnished junction`);
@@ -1601,11 +1651,8 @@ export function placeStreetFurniture({
             const heads = arm >= MAST_THREE_HEADS_M ? 3 : arm >= MAST_TWO_HEADS_M ? 2 : 1;
             const crossing = host ? kerbLines.filter((road) => road.name && road.name !== host.name && closestOnPolyline(road.line, walk.center).distance < 15)
               .sort((left, right) => closestOnPolyline(left.line, walk.center).distance - closestOnPolyline(right.line, walk.center).distance)[0] : null;
-            const litPole = rows.some((row) => row.prop === "utility_pole" && row.status === "placed" && row.prop_params?.lamp
-              && length(sub(toEastNorth([row.position_m[0], row.position_m[2]]), en)) < MAST_LIT_POLE_M);
             addRow(zone, rule, `${cell}_${landing.sign > 0 ? "b" : "a"}`, en, scale(landing.outward, -1), {
               arm_m: arm, head_m: roundCoordinate(arm - 0.4), heads, ...(crossing ? { name: abbreviateStreetName(crossing.name) } : {}),
-              ...(litPole ? { lamp: false } : {}),
             });
           }
         } else {
@@ -1704,6 +1751,13 @@ export function placeStreetFurniture({
   const islandZone = { id: "island" };
   const onIsland = (xz) => onLand(xz, 0);
   for (const islandRule of island?.rules ?? []) runRule(islandZone, { ...islandRule, source_id: `island:${islandRule.id}` }, onIsland);
+  // A mast by a lit pole drops its own luminaire. This runs after every rule, so
+  // it does not depend on the pole lamps' rule coming before the masts'.
+  const litPoles = rows.filter((row) => row.prop === "utility_pole" && row.status === "placed" && row.prop_params?.lamp);
+  for (const mast of ruleRows.filter((row) => row.prop === "signal_mast")) {
+    const near = litPoles.some((pole) => Math.hypot(pole.position_m[0] - mast.position_m[0], pole.position_m[2] - mast.position_m[2]) < MAST_LIT_POLE_M);
+    if (near) mast.prop_params = { ...mast.prop_params, lamp: false };
+  }
   audit.osm_unbuilt.sort((left, right) => (left.id < right.id ? -1 : left.id > right.id ? 1 : 0));
   return { rows: ruleRows, audit };
 }

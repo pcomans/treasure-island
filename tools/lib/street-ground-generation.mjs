@@ -168,7 +168,7 @@ const ISLAND_FOOT_M = 0;
 // is this wide overall (the villages' narrower walks).
 const TRANSVERSE_LINE_M = 0.3;
 const LINES_WALK_WIDTH_M = 3.2;
-// Half-metre samples of clear road that end a stop line's search up its approach (8 m).
+// Half-metre samples of clear road that end a stop line's search for crossing roads (8 m).
 const STOP_LINE_CLEAR_RUN_STEPS = 16;
 // Road classes in order of which owns the sidewalk panel frame where reaches overlap.
 const FRAME_ROAD_RANK = Object.freeze(["trunk", "primary", "secondary", "tertiary", "unclassified", "residential", "service"]);
@@ -356,7 +356,8 @@ export function streetGroundSettings(config) {
 // the aerial) and list where cars park at the curb (parking, along-way metres
 // per side, for the parked cars). crossings gives a crossing node's paint
 // (or none), overriding its OSM tags; stops adds photographed stop lines OSM
-// lacks; bays are perpendicular parking bays paved off a street's edge; lots
+// lacks (own_line false: only the legend, a crosswalk's near line serving as the
+// stop line); bays are perpendicular parking bays paved off a street's edge; lots
 // paint a parking lot's stall rows, legends and raised islands.
 export const STREET_GROUND_RULES_PATH = "tools/config/street-ground.json";
 const STREET_GROUND_RULES_SCHEMA = "ti.street-ground-rules/1";
@@ -452,8 +453,9 @@ export function validateStreetGroundRules(rules) {
     invariant(/^n\d+$/u.test(key) && CROSSWALK_STYLES.includes(style), `Street ground crossing ${key} must be a node key with a style of ${CROSSWALK_STYLES.join(", ")}`);
   }
   for (const stop of rules.stops) {
-    exactKeys(stop, ["evidence", "node", "way"], "Street ground stop");
-    invariant(/^n\d+$/u.test(stop.node) && /^w\d+$/u.test(stop.way) && typeof stop.evidence === "string" && stop.evidence.trim() !== "", "Street ground stop needs a node, its approach way and evidence");
+    exactKeys(stop, ["evidence", "node", "way", ...("own_line" in (stop ?? {}) ? ["own_line"] : [])], "Street ground stop");
+    invariant(/^n\d+$/u.test(stop.node) && /^w\d+$/u.test(stop.way) && typeof stop.evidence === "string" && stop.evidence.trim() !== "" &&
+      (stop.own_line === undefined || typeof stop.own_line === "boolean"), "Street ground stop needs a node, its approach way and evidence");
   }
   // Crosswalks photographed where OSM maps no crossing: across a way at a distance along it.
   for (const walk of rules.crosswalks) {
@@ -2308,7 +2310,7 @@ export function generateStreetGround({
 
   // Stop bars and STOP legends where a stop controls an approach: at OSM
   // highway=stop nodes on vehicle roads, and the rules' photographed stops.
-  const placeStop = (nodeKey, host, position, forward) => {
+  const placeStop = (nodeKey, host, position, forward, ownLine = true) => {
     const near = closestOnPolyline(wayLine(host), position);
     const travel = scale(near.tangent, forward ? 1 : -1);
     const right = [travel[1], -travel[0]];
@@ -2326,16 +2328,18 @@ export function generateStreetGround({
       add(add(center, scale(travel, end * lines.stop_bar_width_m)), scale(right, side > 0 ? half - 0.1 : 0.15))));
     // The driver meets STOP, the stop line, then any crosswalk, then the
     // junction: put the line just upstream of the last blocked sample within
-    // 16 m. A clear stretch of road ends the search: a driveway further up the
-    // approach is not part of the junction.
+    // 16 m. A crosswalk counts anywhere in that reach; a crossing road only
+    // until a clear stretch ends the junction, as a driveway further up the
+    // approach is not part of it.
     let lastBlocked = -1;
-    for (let step = 0; step <= 32 && step - lastBlocked <= STOP_LINE_CLEAR_RUN_STEPS; step += 1) {
+    for (let step = 0; step <= 32; step += 1) {
       const sample = add(near.point, scale(travel, -0.5 * step));
-      if (barCorners(sample).some((corner) => crossingRoads.contains(corner) || keepoutIndex.contains(corner))) lastBlocked = step;
+      const inJunction = step - lastBlocked <= STOP_LINE_CLEAR_RUN_STEPS;
+      if (barCorners(sample).some((corner) => keepoutIndex.contains(corner) || (inJunction && crossingRoads.contains(corner)))) lastBlocked = step;
     }
     const barCenter = lastBlocked < 0 ? near.point : add(near.point, scale(travel, -(0.5 * lastBlocked + 1.1)));
     const bar = rectangle(barCenter, travel, right, -lines.stop_bar_width_m / 2, lines.stop_bar_width_m / 2, 0.15, half - 0.1);
-    paint(STREET_PAINT_KINDS.white, roadPaint("stop bar", bar), host.row.source_key, wear);
+    if (ownLine) paint(STREET_PAINT_KINDS.white, roadPaint("stop bar", bar), host.row.source_key, wear);
     const legendWidth = Math.min(half - 0.6, 2.4);
     const legendCenter = add(add(barCenter, scale(travel, -(lines.stop_bar_width_m / 2 + lines.stop_legend_gap_m + lines.stop_legend_length_m / 2))), scale(right, half / 2));
     const legend = roadPaint("stop legend", rectangle(legendCenter, travel, right, -lines.stop_legend_length_m / 2, lines.stop_legend_length_m / 2, -legendWidth / 2, legendWidth / 2));
@@ -2372,7 +2376,7 @@ export function generateStreetGround({
     const position = projectLonLat(node.coordinate);
     const forward = refs.at(-1) === stop.node.slice(1) ? true : refs[0] === stop.node.slice(1) ? false :
       closestOnPolyline(wayLine(host), position).along > polylineLength(wayLine(host)) / 2;
-    placeStop(stop.node, host, position, forward);
+    placeStop(stop.node, host, position, forward, stop.own_line ?? true);
     placedStops.add(`${stop.node}|${stop.way}`);
   }
 

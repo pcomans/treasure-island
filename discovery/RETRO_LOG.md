@@ -23915,3 +23915,22 @@ My "left only" came from a downscaled sheet and the author's native-resolution r
 - What worked well: numbered crowns drawn on full-resolution aerial tiles found dark roofs, a tank and bright trees the mask had missed in minutes, with no engine run. Replaying the ground shader's noises in Node gave the marsh's water and carpet shares before a render. Resecting the owner's Job Corps photo from four landmarks turned "a group near there" into a table of bearings. A second worktree let regeneration and validation go on while the suite and the engine held the first.
 - What did not work well: the ditch began as listed puddles and grid rules, and the owner had to say it looked hand placed before it became a field that reads the land; R15 to R19 tuned the wrong thing. I set the first ditch poses by eye, 28 degrees off, and labelled every pose matched. I reported 1,008 trees from an engine counter that also counted 52 shrubs. R20 died in 4 s on a misplaced brace in a dictionary, which cost a run from the budget.
 - What the team should change next time: for ground plants, start from a rule that reads the site and list only real individual trees. Check a counter against the data before reporting it. Parse the changed scripts headless before queuing a round. Solve a photo pose from two landmarks before the first capture.
+### visual-review-objects (2026-11-06, final combined check)
+
+(Relayed verbatim by the coordinator; added by street-objects-rollout-20261105.)
+
+- **Worked well:** commit-labelled panels, same-pose pairs and the nine new poses exposed merge effects quickly. Projecting data rows into tile coordinates turned "looks off" into named rows and metres.
+- **Didn't work well:** the merge moved a shelter 1.9 m and it dropped out of a matched pose, with no mention in the handoff. Two of the three moved stops had no pose at all. "Before" panels are missing on the new poses, so only the photo could show change there.
+- **Next time:** after a merge, diff furniture positions and list every object that moved more than 1 m with the poses that show it. Add a capture for each named moved object. Judge a wire fix for weight against the photo as well as continuity.
+
+### code-review-street-objects (2026-11-06, 4377e33f)
+
+(Relayed verbatim by the coordinator; added by street-objects-rollout-20261105.)
+
+code-review-street-objects: Logging the stop-line search inside a scratch build answered "can this misplace a bar elsewhere?" for all 19 bars in two 3.5-minute runs, and reading alone would not have.
+
+### street-objects-rollout-20261105 — 2026-11-06 — final review fixes
+
+- What worked well: working out bearings from the photo before the render put the tow-away sign, the shelter's flag, the island lamp and the line pole within a few pixels of the photos on the first engine run. A diff of placed positions against the reviewed commit gave a short list of what moved, including three Mersea cars I would not have looked for.
+- What did not work well: the 38 m Bruton spacing came from two stations I had misread, and a mast-top check showed 12 to 23 m. I handed off r3's merge without saying the shelter had moved. My `pgrep` wait loops matched themselves again and cost 11 minutes; this round I waited on the PID.
+- What the team should change next time: run the position diff before every hand-off, not only when asked. Check a measured spacing two ways, at the foot and at the mast top. When a review calls a curb plain or painted, settle it on a full-resolution crop, as at Avenue B's right curb, where the photo shows faded maroon.

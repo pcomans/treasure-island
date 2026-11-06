@@ -3,9 +3,10 @@
 // wire's radius, which the instance's custom data also carries (r). Far away a
 // wire would shrink below a pixel and break into dashes, so each ring vertex
 // moves out along its radial normal until the wire is min_pixels wide on
-// screen, and the wire fades by the share of that width the real wire would
-// cover (no fainter than min_alpha), as a thin line does against the sky: a
-// conductor 100 m off reads as a faint continuous line, not a dark rope.
+// screen, and the wire fades with the share of that width the real wire would
+// cover (fade_gain times it, squared, no fainter than min_alpha), as a thin line
+// does against the sky: dark and thin close to, a conductor 60 to 100 m off
+// almost gone, as in the dated photos, but still continuous.
 // The growth is worked out in world space: Forward+ hands the vertex function a
 // VERTEX already moved by the instance transform (MODEL_MATRIX the node's),
 // Compatibility may hand it the unit tube (MODEL_MATRIX node and instance), and
@@ -15,8 +16,9 @@ shader_type spatial;
 render_mode cull_disabled, depth_draw_opaque, unshaded;
 
 uniform vec4 albedo : source_color = vec4(0.07, 0.07, 0.075, 1.0);
-uniform float min_pixels = 1.5;
-uniform float min_alpha = 0.12;
+uniform float min_pixels = 1.1;
+uniform float min_alpha = 0.03;
+uniform float fade_gain = 2.0;
 varying float coverage;
 
 void vertex() {
@@ -39,5 +41,6 @@ void vertex() {
 
 void fragment() {
 	ALBEDO = albedo.rgb;
-	ALPHA = mix(min_alpha, 1.0, clamp(coverage, 0.0, 1.0));
+	float share = clamp(coverage * fade_gain, 0.0, 1.0);
+	ALPHA = max(min_alpha, share * share);
 }

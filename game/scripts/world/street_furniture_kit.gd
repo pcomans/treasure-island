@@ -736,12 +736,12 @@ func _mast_name_sign(result: Dictionary, text: String, arm: float, heads: Array[
 	result.labels.append({"text": text, "color": Color(0.96, 0.97, 0.95), "transform": placement * Transform3D(facing, Vector3(-0.022, 0, 0))})
 
 
-## A green name panel in the arm's plane (along Z), facing ±X, with a white
-## border and a short hanger up to the arm.
+## A green name panel in the arm's plane (along Z), facing -X with a white
+## border, its back bare grey sheet, and a short hanger up to the arm.
 func _mast_sign_panel(b: Builder, length: float) -> void:
 	b.box(Vector3.ZERO, Basis.IDENTITY, Vector3(0.03, 0.44, length), BLADE_WHITE, CELL_WHITE)
 	b.box(Vector3(-0.016, 0, 0), Basis.IDENTITY, Vector3(0.004, 0.38, length - 0.06), MAST_SIGN_GREEN, CELL_WHITE)
-	b.box(Vector3(0.016, 0, 0), Basis.IDENTITY, Vector3(0.004, 0.38, length - 0.06), MAST_SIGN_GREEN, CELL_WHITE)
+	b.box(Vector3(0.016, 0, 0), Basis.IDENTITY, Vector3(0.004, 0.44, length), GALVANIZED, CELL_METAL)
 	for side: float in [-1.0, 1.0]:
 		b.box(Vector3(0, 0.27, side * (length * 0.5 - 0.15)), Basis.IDENTITY, Vector3(0.03, 0.12, 0.03), GALVANIZED, CELL_METAL)
 
