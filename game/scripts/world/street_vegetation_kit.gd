@@ -4152,7 +4152,7 @@ func material(key: String) -> Material:
 			made.set_shader_parameter("alpha_cutoff", 0.4)
 			made.set_shader_parameter("desaturate", 0.45)
 		"perennial_dead":
-			made = _foliage("perennial_atlas.png", Color(0.42, 0.37, 0.32), Color(0.05, 0.05, 0.03), Vector2(2048.0, 1536.0), 0.08, 0.92)
+			made = _foliage("perennial_atlas.png", Color(0.7, 0.56, 0.42), Color(0.05, 0.05, 0.03), Vector2(2048.0, 1536.0), 0.08, 0.92)
 			made.set_shader_parameter("distance_fade", true)
 			made.set_shader_parameter("fade_length_m", LOW_FADE_M)
 			made.set_shader_parameter("desaturate", 0.7)

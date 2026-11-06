@@ -1111,3 +1111,7 @@ On 2026-11-06 a new shrub card with seed heads about 6 px across in a 512 px cel
 ## Project what a rule plants into the matched pose before a run
 
 Two rounds of ditch planting looked fine in plan and came back as a wall of stems and a hedge line, because a band by height is a straight row from the bank. Drawing each plant's base and top through the pose's camera over a flat ground takes seconds, and the share of the view's width it covers, with its longest unbroken run, says whether a row will show. A band that follows a contour needs its height to wander.
+
+## A shader tint marked source_color is sRGB, not a percentage
+
+On 2026-11-06 a dull shrub material took a tint of 0.42 as if it meant 42 % brightness. The foliage shader's `tint` is a `source_color`, so the engine converts it to linear and 0.42 multiplied the card by 0.147. The mound's shaded side came back at sRGB 22 and read as black blobs in two matched views, worse than the green it replaced. Before setting a tint, convert it to linear, multiply it by the card's linear mean, and compare the result with the neighbouring plants on the sunlit and the shaded side.
