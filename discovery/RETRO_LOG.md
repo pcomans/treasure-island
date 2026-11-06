@@ -24056,3 +24056,9 @@ code-review-street-objects: Logging the stop-line search inside a scratch build 
 (Relayed by the coordinator as far as the notes hold it, cut off there; the rest was in the reviewer's hand-back. Added by integrate-1-20261106.)
 
 - the baked and halfway pairs answered the view-blend question directly...
+
+### integrate-1-20261106 — 2026-11-06 — five rollouts on integrate/rollouts-1-20261106 (3 of 3 engine runs, 2 of 2 suites)
+
+- What worked well: Push-7's row diff, run after each regeneration against both parents, explained every world change: at the vegetation merge the only row changes were 59 palms, 70 rows gaining a zone id and one palm a new transformer pad displaced. `git merge-tree` showed the code conflicts while the before render held the tree. Rendering the before shots first, then giving slot A its own worktree and writing docs in a third, kept the suite's tree clean and took the after render and crest walks off the critical path: all 18 walks passed beside the first suite.
+- What did not work well: I queued the first suite without running the short contract tests on the merged tree, so a contradiction between two reviewed branches failed it in its first minute and took one of the two suites, plus the third engine run to check the fix. The notes needed more checking than I expected: "lamps 156 to 150" was already out of date at f4a6f827 (154), the named rule-stop list came from older inputs and gave more streets than a rerun on all 390 dated captures, and one line marked to fold was cut off in the note with no full text anywhere I could find.
+- What the team should change next time: After a merge, run import and the seconds-long headless tests before queuing a budgeted suite. Keep a list that feeds KNOWN_ISSUES next to the command that makes it, so the integrator can rerun it on the merged world. Copy a reviewer's retro in full into the note when it arrives, rather than an opening phrase.
