@@ -1103,3 +1103,11 @@ Each rollout passed its own suite, then the first suite on the merged rollouts (
 ## Caption an Esri aerial with the date of its zoom level
 
 Esri World Imagery serves a different capture at each zoom level. Over Treasure Island, levels 12 to 19 (about 0.24 m per pixel or coarser) are the Vantor capture of 2026-05-26, and level 20 (0.12 to 0.15 m) is 2025-08-29, checked with the service's identify call on 2026-11-05. In the clutter rollout a reviewer took the finer crop for the newer one and an August 2025 lot count reinforced that, until the metadata was checked: recounted on May 2026, the Mersea lot has 29 cars, not 36. Check the date for the exact level you use, caption each aerial with that date and its scale, and cite May 2026 only from level 19 or coarser. Resolution says nothing about date.
+
+## Measure a card at the mip the view uses
+
+On 2026-11-06 a new shrub card with seed heads about 6 px across in a 512 px cell passed by eye at full size. At 25 m (mip 3) the alpha test kept 2 % pale pixels where the old card kept 66 %, so pale shrubs read as a dark hedge across the owner's view. Box-filter the card down its mips, apply the shader's cutoff and boost, and read the kept coverage and mean colour before a render. Put fine detail in patches that survive: the next card's sprays of fine heads kept 59 % pale at the same mip.
+
+## Project what a rule plants into the matched pose before a run
+
+Two rounds of ditch planting looked fine in plan and came back as a wall of stems and a hedge line, because a band by height is a straight row from the bank. Drawing each plant's base and top through the pose's camera over a flat ground takes seconds, and the share of the view's width it covers, with its longest unbroken run, says whether a row will show. A band that follows a contour needs its height to wander.

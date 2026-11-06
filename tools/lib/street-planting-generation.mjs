@@ -35,7 +35,9 @@
 //     range. A plant keeps a factor times the summed half widths from every plant,
 //     spacing[0] where the field is full, spacing[1] where it is thin. The field
 //     may also read the land's slope (slope: [none, full], so a band keeps to a
-//     bank and off the flat), and groups {count, spread_m} sows tight groups: each
+//     bank and off the flat), wander {height_m, scale_m} lifts and drops the height
+//     it reads with a smooth noise, so a band by height never follows a contour,
+//     and groups {count, spread_m} sows tight groups: each
 //     candidate that survives is a group's centre, with plants fallen round it in
 //     a bell curve, most groups small and a few large, so real gaps lie between;
 //   - gaps: drifts and fill leave the bed bare where a smooth noise at gaps.scale_m
@@ -77,7 +79,7 @@ export const PLANT_WIDTHS_M = Object.freeze({
   california_buckwheat: Object.freeze([0.65, 0.95, 1.25]),
   california_sagebrush: Object.freeze([0.75, 1.1, 1.45, 1.0]),
   clipped_hedge: Object.freeze([1.0, 1.2]),
-  clump_grass: Object.freeze([0.92, 1.15, 1.0, 1.25, 1.0, 1.25]),
+  clump_grass: Object.freeze([0.92, 1.15, 1.0, 1.25, 1.0, 1.25, 1.0, 1.2]),
   conical_shrub: Object.freeze([2.0, 2.4]),
   dense_sedge: Object.freeze([0.55, 0.75, 0.95, 1.6, 2.5]),
   dune_tansy: Object.freeze([0.42, 0.62, 0.82]),
@@ -93,7 +95,7 @@ export const PLANT_WIDTHS_M = Object.freeze({
   pale_seeded_shrub: Object.freeze([0.7, 1.0, 1.1]),
   pittosporum_tobira: Object.freeze([1.5, 2.0, 2.5]),
   red_tip_shrub: Object.freeze([0.7, 0.9]),
-  rush: Object.freeze([0.45, 0.6, 0.75, 1.5, 0.75, 0.9]),
+  rush: Object.freeze([0.45, 0.6, 0.75, 1.5, 0.7, 0.85]),
   sea_thrift: Object.freeze([0.24, 0.32, 0.4, 1.1]),
   seaside_daisy: Object.freeze([0.55, 0.8, 1.05, 1.9]),
   seaside_woolly_sunflower: Object.freeze([0.8, 1.15, 1.5]),
@@ -149,7 +151,7 @@ export const PLANTING_RULE_FIELDS = Object.freeze({
 });
 const MIX_FIELDS = Object.freeze(["band_m", "max_slope", "prop", "scale", "share", "spill_m", "variants"]);
 const FIELD_MIX_FIELDS = Object.freeze(["at", "prop", "scale", "share", "variants"]);
-const FIELD_TERMS = Object.freeze(["axis", "clump_m", "drift_cover", "drift_m", "edge_m", "groups", "height_m", "lone", "ramps", "road_m", "slope"]);
+const FIELD_TERMS = Object.freeze(["axis", "clump_m", "drift_cover", "drift_m", "edge_m", "groups", "height_m", "lone", "ramps", "road_m", "slope", "wander"]);
 // A field plant's crown test: its rings, close enough to find a kerb's narrow top.
 const FIELD_PAVING_RINGS = Object.freeze([[0.25, 8], [0.5, 16], [0.75, 24], [1, 32]]);
 
@@ -221,6 +223,9 @@ function validateFieldRule(rule, label, checkProp, variantCount) {
   for (const band of ["edge_m", "road_m"]) {
     if (field[band] === undefined) continue;
     invariant(Array.isArray(field[band]) && field[band].length === 2 && field[band].every(isFiniteNumber) && field[band][0] >= 0 && field[band][1] > field[band][0], `${label} field ${band} must be [near, far] metres`);
+  }
+  if (field.wander !== undefined) {
+    invariant(exactKeys(field.wander, ["height_m", "scale_m"]) && isFiniteNumber(field.wander.height_m) && field.wander.height_m > 0 && isFiniteNumber(field.wander.scale_m) && field.wander.scale_m >= 1, `${label} field wander must be {height_m, scale_m}`);
   }
   if (field.slope !== undefined) {
     invariant(Array.isArray(field.slope) && field.slope.length === 2 && field.slope.every(isFiniteNumber) && field.slope[0] >= 0 && field.slope[1] > field.slope[0], `${label} field slope must be [none, full] rise per metre`);
@@ -734,6 +739,7 @@ function fieldDensity(rule, tag) {
   const clump = valueNoise(`${tag}|field-clump`);
   const warpX = valueNoise(`${tag}|field-warp-x`);
   const warpZ = valueNoise(`${tag}|field-warp-z`);
+  const wander = valueNoise(`${tag}|field-wander`);
   // The value noise's lattices turn away from the axes and from each other, and a
   // warp bends what is left of them, so no drift's edge runs straight.
   const turned = (x, z, angle) => [x * Math.cos(angle) - z * Math.sin(angle), x * Math.sin(angle) + z * Math.cos(angle)];
@@ -749,7 +755,8 @@ function fieldDensity(rule, tag) {
     let density = spec.lone + (1 - spec.lone) * clumped;
     if (spec.height_m) {
       const [riseFrom, riseTo, fallFrom, fallTo] = spec.height_m;
-      density *= smoothRamp(riseFrom, riseTo, site.height) * (1 - smoothRamp(fallFrom, fallTo, site.height));
+      const height = site.height + (spec.wander ? spec.wander.height_m * (2 * wander(ax, az, spec.wander.scale_m) - 1) : 0);
+      density *= smoothRamp(riseFrom, riseTo, height) * (1 - smoothRamp(fallFrom, fallTo, height));
     }
     if (spec.slope) density *= smoothRamp(spec.slope[0], spec.slope[1], site.slope);
     const lengthAlong = (from, to) => {

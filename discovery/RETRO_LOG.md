@@ -24161,3 +24161,9 @@ code-review-street-objects: Logging the stop-line search inside a scratch build 
 - **What worked well:** matched before/after sheets made regressions easy to rule out, and the OSM keys in the data let me name each patch in minutes.
 - **What did not work well:** the sheets show the wall at a few poses only, so "all the way round" rests on overviews. A real jetty looked like a stray object until I traced it.
 - **What to change next time:** add a short ring of wall poses to the gate sheet, and list new objects with their source keys next to the overviews.
+
+### vegetation-rollout-20261105 — 2026-11-06 — the procedural ditch and two visual rounds
+
+- What worked well: a field rule that reads height, slope, an axis and noise replaced every listed puddle and plant in the ditch, and a stick-figure and silhouette projection into the owner's poses showed rows and gaps in seconds with no engine. Measuring a card down its mip chain found why the pale shrubs turned into a dark hedge. Keeping a second worktree regenerated and validated the next change while an engine round ran.
+- What did not work well: I changed the shrub card, the stems and the stones together in R24 with no preview and got stone discs and a purple wall, then spent the budget's last planned run on my own fault. The new card's seed heads were too small to survive the mips, and I only saw it when ROOT called the shrubs a hedge. I left a sheet's before label saying R18 over R23 shots until the hand-off check.
+- What the team should change next time: before a run, project what a rule plants into the matched pose and measure new cards at the mip the pose uses. Change one visual layer per round when runs are nearly out. Let a sheet's labels come from the same arguments as its images.

@@ -243,7 +243,7 @@ void fragment() {
 			bank *= mix(0.78, 1.08, smoothstep(2.95, 3.9, h));
 			float gravel_w = 0.75 * smoothstep(3.3, 3.9, h) * smoothstep(0.5, 0.62, 0.5 * n_patch8 + 0.3 * n_small + 0.2 * n_tiny);
 			bank = mix(bank, bank_gravel * (0.8 + 0.4 * n_tiny), gravel_w);
-			float bank_w = 1.0 - smoothstep(3.95, 4.55, h);
+			float bank_w = 1.0 - smoothstep(4.7, 5.3, h);
 
 			// Mats a few metres to a few tens across, their edges soft and broken by
 			// finer noise, so red gives way to brown and olive without a line.
@@ -270,7 +270,7 @@ void fragment() {
 			}
 
 			ground = mix(ground, mix(bank, marsh, carpet), region * max(bank_w, carpet));
-			marsh_cover = region * carpet;
+			marsh_cover = region * max(bank_w, carpet);
 			rough = region * (1.0 - carpet) * bank_w;
 
 			vec2 along = vec2(0.643 * p.x + 0.766 * p.y, 0.643 * p.y - 0.766 * p.x);

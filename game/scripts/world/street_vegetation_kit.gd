@@ -171,6 +171,7 @@ const LOW_CELLS := {
 	"tansy_stalks": ["meadow", Rect2(0.5, 0.5, 0.25, 0.25)],
 	"buckwheat_stalks": ["meadow", Rect2(0.75, 0.5, 0.25, 0.25)],
 	"sagebrush_wands": ["meadow", Rect2(0.0, 0.75, 0.25, 0.25)],
+	"sagebrush_wands_dead": ["meadow_dead", Rect2(0.0, 0.75, 0.25, 0.25)],
 	"sage_stems": ["meadow", Rect2(0.25, 0.75, 0.25, 0.25)],
 	"litter": ["meadow", Rect2(0.5, 0.75, 0.25, 0.25)],
 	"seeded_stems": ["meadow", Rect2(0.75, 0.75, 0.25, 0.25)],
@@ -178,6 +179,7 @@ const LOW_CELLS := {
 	"thrift": ["perennial", Rect2(0.25, 0.0, 0.25, 1.0 / 3.0)],
 	"woolly": ["perennial", Rect2(0.5, 0.0, 0.25, 1.0 / 3.0)],
 	"sagebrush": ["perennial", Rect2(0.75, 0.0, 0.25, 1.0 / 3.0)],
+	"sagebrush_dead": ["perennial_dead", Rect2(0.75, 0.0, 0.25, 1.0 / 3.0)],
 	"yarrow": ["perennial", Rect2(0.0, 1.0 / 3.0, 0.25, 1.0 / 3.0)],
 	"buckwheat": ["perennial", Rect2(0.25, 1.0 / 3.0, 0.25, 1.0 / 3.0)],
 	"monkeyflower": ["perennial", Rect2(0.5, 1.0 / 3.0, 0.25, 1.0 / 3.0)],
@@ -306,6 +308,9 @@ const GRASSES := [
 	# Dead straw on the ditch bank by the Mersea lot (owner photos, Nov 2026): the straw clump, dull and dark.
 	{"seed": 35, "cell": "straw", "height": 0.7, "width": 1.0, "cards": 4, "material": "grass_dead"},
 	{"seed": 36, "cell": "straw", "height": 0.9, "width": 1.25, "cards": 5, "material": "grass_dead"},
+	# Rank weeds at 1349 Gateview (Street View Mar 2025): the green clump, dull.
+	{"seed": 37, "cell": "green", "height": 0.8, "width": 1.0, "cards": 4, "material": "grass_dull"},
+	{"seed": 38, "cell": "green", "height": 1.05, "width": 1.2, "cards": 5, "material": "grass_dull"},
 ]
 
 ## Cityside Park's young Sydney blue gums in the windrow plazas' double rows
@@ -502,9 +507,9 @@ const RUSHES := [
 	{"seed": 70, "lean": 0.04, "layers": [{"kind": "crossed", "cell": "rush", "cards": 5, "width": 0.75, "height": 1.0, "curl": 0.04, "splay_deg": 6.0, "flop_deg": 16.0, "flutter": 0.035}]},
 	# A drift of six clumps about 1.5 m across.
 	{"seed": 111, "drift": [[0.0, 0.0, 1, 1.0, 0.0], [0.45, 0.2, 0, 1.1, 1.2], [-0.42, 0.25, 2, 0.9, 2.4], [0.15, -0.48, 0, 1.0, 3.6], [-0.3, -0.4, 1, 0.95, 4.8], [0.55, -0.25, 0, 0.85, 5.9]]},
-	# Dead stems at the foot of the ditch bank by the Mersea lot (owner photos, Nov 2026): the rush's card, dry and dark.
-	{"seed": 114, "lean": 0.05, "layers": [{"kind": "crossed", "cell": "rush_dead", "cards": 4, "width": 0.75, "height": 0.95, "curl": 0.04, "splay_deg": 7.0, "flop_deg": 14.0, "flutter": 0.03}]},
-	{"seed": 115, "lean": 0.07, "layers": [{"kind": "crossed", "cell": "rush_dead", "cards": 5, "width": 0.9, "height": 1.2, "curl": 0.05, "splay_deg": 8.0, "flop_deg": 16.0, "flutter": 0.035}]},
+	# Dead stems at the foot of the ditch bank by the Mersea lot (owner photos, Nov 2026): the rush's card, dry and low.
+	{"seed": 114, "lean": 0.05, "layers": [{"kind": "crossed", "cell": "rush_dead", "cards": 3, "width": 0.7, "height": 0.6, "curl": 0.05, "splay_deg": 9.0, "flop_deg": 18.0, "flutter": 0.03}]},
+	{"seed": 115, "lean": 0.07, "layers": [{"kind": "crossed", "cell": "rush_dead", "cards": 4, "width": 0.85, "height": 0.8, "curl": 0.06, "splay_deg": 10.0, "flop_deg": 20.0, "flutter": 0.035}]},
 ]
 const BRONZE_GRASSES := [
 	# The copper clumps among the green ones in the stormwater meadow (ph08, Sep 2025).
@@ -581,9 +586,9 @@ const SAGEBRUSHES := [
 		{"kind": "cap", "cell": "sagebrush", "width": 0.95, "height": 1.0, "tint": Color(0.7, 0.76, 0.68)}]},
 	# A scruffy dull mound, the dark shrubs of the strip by the Mersea lot (Street View Sep 2025): form only.
 	{"seed": 116, "lean": 0.06, "layers": [{"kind": "litter", "cell": "litter", "radius": 0.6},
-		{"kind": "shell", "cell": "sagebrush", "cards": 7, "card": 0.52, "width": 0.85, "height": 0.6, "tint": Color(0.3, 0.33, 0.24)},
-		{"kind": "crossed", "cell": "sagebrush_wands", "cards": 4, "width": 1.0, "height": 0.85, "splay_deg": 10.0, "flop_deg": 24.0, "flutter": 0.045, "tint": Color(0.34, 0.33, 0.25)},
-		{"kind": "cap", "cell": "sagebrush", "width": 0.85, "height": 0.78, "tint": Color(0.27, 0.3, 0.21)}]},
+		{"kind": "shell", "cell": "sagebrush_dead", "cards": 7, "card": 0.52, "width": 0.85, "height": 0.6},
+		{"kind": "crossed", "cell": "sagebrush_wands_dead", "cards": 4, "width": 1.0, "height": 0.85, "splay_deg": 10.0, "flop_deg": 24.0, "flutter": 0.045},
+		{"kind": "cap", "cell": "sagebrush_dead", "width": 0.85, "height": 0.78}]},
 ]
 const SAGES := [
 	# Salvia sp. (iNat 334414817, 334414816, Jan 2026): upright, airy grey-green
@@ -4142,8 +4147,17 @@ func material(key: String) -> Material:
 			made = _foliage("grass_atlas.png", Color(0.52, 0.46, 0.4), Color(0.08, 0.07, 0.04), Vector2(1024.0, 512.0), 0.1, 0.9)
 			made.set_shader_parameter("alpha_cutoff", 0.4)
 			made.set_shader_parameter("desaturate", 0.5)
+		"grass_dull":
+			made = _foliage("grass_atlas.png", Color(0.62, 0.6, 0.48), Color(0.08, 0.09, 0.05), Vector2(1024.0, 512.0), 0.1, 0.9)
+			made.set_shader_parameter("alpha_cutoff", 0.4)
+			made.set_shader_parameter("desaturate", 0.45)
+		"perennial_dead":
+			made = _foliage("perennial_atlas.png", Color(0.42, 0.37, 0.32), Color(0.05, 0.05, 0.03), Vector2(2048.0, 1536.0), 0.08, 0.92)
+			made.set_shader_parameter("distance_fade", true)
+			made.set_shader_parameter("fade_length_m", LOW_FADE_M)
+			made.set_shader_parameter("desaturate", 0.7)
 		"meadow_dead":
-			made = _foliage("meadow_atlas.png", Color(0.6, 0.48, 0.4), Color(0.08, 0.07, 0.04), Vector2(2048.0, 2048.0), 0.1, 0.9)
+			made = _foliage("meadow_atlas.png", Color(0.68, 0.56, 0.46), Color(0.08, 0.07, 0.04), Vector2(2048.0, 2048.0), 0.1, 0.9)
 			made.set_shader_parameter("alpha_cutoff", 0.4)
 			made.set_shader_parameter("distance_fade", true)
 			made.set_shader_parameter("fade_length_m", LOW_FADE_M)

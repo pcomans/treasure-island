@@ -54,7 +54,7 @@ export const STREET_VEGETATION_PROPS = Object.freeze({
   california_sagebrush: vegetationProp(LOW_PLANT_KINDS, 4, 0.3, false),
   canary_date_palm: vegetationProp(["palm_slot", "tree"], 6, 0.7, true),
   clipped_hedge: vegetationProp(["hedge"], 2, 0.45, false),
-  clump_grass: vegetationProp(["grass_clump"], 6, 0.3, false),
+  clump_grass: vegetationProp(["grass_clump"], 8, 0.3, false),
   conical_shrub: vegetationProp(["planting_slot", "tree"], 2, 0.4, false),
   dense_sedge: vegetationProp(LOW_PLANT_KINDS, 5, 0.18, false),
   dune_tansy: vegetationProp(LOW_PLANT_KINDS, 3, 0.2, false),
