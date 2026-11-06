@@ -1233,7 +1233,7 @@
       {
        "prop": "rush",
        "variants": [4, 5],
-       "scale": [0.8, 1.0],
+       "scale": [0.8, 0.95],
        "at": [0.0, 1.0],
        "share": 2
       },
@@ -1293,26 +1293,26 @@
      "kind": "planting_slot",
      "pattern": "field",
      "surfaces": ["terrain_wetland", "land_ground"],
-     "per_m2": 0.09,
+     "per_m2": 0.13,
      "spacing": [0.45, 1.3],
      "field": {
       "axis": {
        "from_xz": [-267, 203],
-       "to_xz": [-314, 274],
-       "full_m": 7,
-       "zero_m": 24
+       "to_xz": [-312, 240],
+       "full_m": 6,
+       "zero_m": 17
       },
       "height_m": [2.75, 3.2, 4.35, 4.6],
       "ramps": [
        {
-        "from_xz": [-265.9, 201.3],
-        "to_xz": [-272.6, 211.3],
-        "low": 0.08,
+        "from_xz": [-266, 202],
+        "to_xz": [-270, 207],
+        "low": 0.1,
         "high": 1.0
        },
        {
-        "from_xz": [-314.2, 273.7],
-        "to_xz": [-292, 240.4],
+        "from_xz": [-318, 246],
+        "to_xz": [-296, 226],
         "low": 0.3,
         "high": 1.0
        },
@@ -1431,8 +1431,8 @@
      "kind": "grass_clump",
      "pattern": "field",
      "surfaces": ["terrain_wetland", "land_ground"],
-     "per_m2": 0.34,
-     "spacing": [0.32, 0.8],
+     "per_m2": 0.3,
+     "spacing": [0.35, 0.9],
      "field": {
       "axis": {
        "from_xz": [-295, 145],
@@ -1440,35 +1440,35 @@
        "full_m": 40,
        "zero_m": 56
       },
-      "height_m": [2.3, 2.6, 3.0, 3.3],
+      "height_m": [2.6, 2.75, 3.0, 3.15],
       "slope": [0.03, 0.055],
       "drift_m": 13,
       "clump_m": 3,
-      "drift_cover": 0.78,
-      "lone": 0.3,
+      "drift_cover": 0.6,
+      "lone": 0.14,
       "groups": {
-       "count": [2, 9],
-       "spread_m": [0.6, 1.5]
+       "count": [2, 8],
+       "spread_m": [0.5, 1.3]
       }
      },
      "mix": [
       {
        "prop": "rush",
        "variants": [4, 5],
-       "scale": [0.9, 1.25],
+       "scale": [0.8, 1.1],
        "at": [0.0, 1.0],
        "share": 4
       },
       {
        "prop": "pale_seeded_shrub",
        "variants": [1, 1],
-       "scale": [1.05, 1.25],
+       "scale": [1.0, 1.15],
        "at": [0.0, 1.0],
        "share": 1
       }
      ],
      "basis": "production_inference",
-     "rule": "A dark band of tall dead stems along the foot of the bank, where the slope meets the red floor.",
+     "rule": "A dark broken band of dead stems along the foot of the bank, where the slope meets the red floor.",
      "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea, from the lot's west corner at about (-266, 203): a dark band of tall dead stems along the bank's foot, the strongest line in the view."
     },
     {
@@ -1562,45 +1562,45 @@
      "kind": "grass_clump",
      "pattern": "field",
      "surfaces": ["land_ground", "major_area_landuse", "major_area_amenity", "major_area_leisure"],
-     "per_m2": 0.42,
-     "spacing": [0.3, 0.75],
+     "per_m2": 0.8,
+     "spacing": [0.26, 0.62],
      "field": {
-      "road_m": [1.5, 8.5],
-      "drift_m": 7,
-      "clump_m": 2,
-      "drift_cover": 0.6,
-      "lone": 0.3,
+      "road_m": [1.8, 7],
+      "drift_m": 6,
+      "clump_m": 1.8,
+      "drift_cover": 0.7,
+      "lone": 0.4,
       "groups": {
        "count": [1, 9],
-       "spread_m": [0.5, 1.7]
+       "spread_m": [0.4, 1.4]
       }
      },
      "mix": [
       {
        "prop": "clump_grass",
        "variants": [0, 1],
-       "scale": [0.8, 1.1],
+       "scale": [0.9, 1.25],
        "at": [0.0, 1.0],
-       "share": 3
+       "share": 5
       },
       {
        "prop": "clump_grass",
        "variants": [2, 5],
-       "scale": [0.85, 1.15],
+       "scale": [0.9, 1.25],
        "at": [0.0, 1.0],
-       "share": 4
+       "share": 5
       },
       {
        "prop": "pacific_reedgrass",
        "variants": [0, 2],
-       "scale": [0.85, 1.2],
+       "scale": [1.0, 1.25],
        "at": [0.0, 1.0],
-       "share": 2
+       "share": 3
       },
       {
        "prop": "rush",
        "variants": [4, 5],
-       "scale": [0.8, 1.1],
+       "scale": [0.85, 1.15],
        "at": [0.0, 1.0],
        "share": 3
       },
@@ -1612,17 +1612,10 @@
        "share": 3
       },
       {
-       "prop": "dune_tansy",
-       "variants": [0, 2],
-       "scale": [0.85, 1.2],
-       "at": [0.0, 1.0],
-       "share": 1
-      },
-      {
        "prop": "california_sagebrush",
-       "variants": [1, 2],
-       "scale": [0.85, 1.15],
-       "at": [0.45, 1.0],
+       "variants": [3, 3],
+       "scale": [0.9, 1.25],
+       "at": [0.5, 1.0],
        "share": 2
       }
      ],

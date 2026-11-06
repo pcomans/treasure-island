@@ -160,6 +160,7 @@ const LOW_CELLS := {
 	"reedgrass": ["meadow", Rect2(0.0, 0.0, 0.25, 0.25)],
 	"sedge": ["meadow", Rect2(0.25, 0.0, 0.25, 0.25)],
 	"rush": ["meadow", Rect2(0.5, 0.0, 0.25, 0.25)],
+	"rush_dead": ["meadow_dead", Rect2(0.5, 0.0, 0.25, 0.25)],
 	"bronze": ["meadow", Rect2(0.75, 0.0, 0.25, 0.25)],
 	"blue_eyed": ["meadow", Rect2(0.0, 0.25, 0.25, 0.25)],
 	"thrift_stalks": ["meadow", Rect2(0.25, 0.25, 0.25, 0.25)],
@@ -501,9 +502,9 @@ const RUSHES := [
 	{"seed": 70, "lean": 0.04, "layers": [{"kind": "crossed", "cell": "rush", "cards": 5, "width": 0.75, "height": 1.0, "curl": 0.04, "splay_deg": 6.0, "flop_deg": 16.0, "flutter": 0.035}]},
 	# A drift of six clumps about 1.5 m across.
 	{"seed": 111, "drift": [[0.0, 0.0, 1, 1.0, 0.0], [0.45, 0.2, 0, 1.1, 1.2], [-0.42, 0.25, 2, 0.9, 2.4], [0.15, -0.48, 0, 1.0, 3.6], [-0.3, -0.4, 1, 0.95, 4.8], [0.55, -0.25, 0, 0.85, 5.9]]},
-	# Tall dead stems at the foot of the ditch bank by the Mersea lot (owner photos, Nov 2026): the rush's card, dark and dry.
-	{"seed": 114, "lean": 0.05, "layers": [{"kind": "crossed", "cell": "rush", "cards": 5, "width": 0.85, "height": 1.25, "curl": 0.04, "splay_deg": 6.0, "flop_deg": 14.0, "flutter": 0.03, "tint": Color(0.45, 0.25, 0.62)}]},
-	{"seed": 115, "lean": 0.07, "layers": [{"kind": "crossed", "cell": "rush", "cards": 6, "width": 1.05, "height": 1.55, "curl": 0.05, "splay_deg": 7.0, "flop_deg": 16.0, "flutter": 0.035, "tint": Color(0.4, 0.22, 0.56)}]},
+	# Dead stems at the foot of the ditch bank by the Mersea lot (owner photos, Nov 2026): the rush's card, dry and dark.
+	{"seed": 114, "lean": 0.05, "layers": [{"kind": "crossed", "cell": "rush_dead", "cards": 4, "width": 0.75, "height": 0.95, "curl": 0.04, "splay_deg": 7.0, "flop_deg": 14.0, "flutter": 0.03}]},
+	{"seed": 115, "lean": 0.07, "layers": [{"kind": "crossed", "cell": "rush_dead", "cards": 5, "width": 0.9, "height": 1.2, "curl": 0.05, "splay_deg": 8.0, "flop_deg": 16.0, "flutter": 0.035}]},
 ]
 const BRONZE_GRASSES := [
 	# The copper clumps among the green ones in the stormwater meadow (ph08, Sep 2025).
@@ -4138,9 +4139,15 @@ func material(key: String) -> Material:
 			made = _foliage("grass_atlas.png", Color(0.92, 0.94, 0.86), Color(0.18, 0.2, 0.1), Vector2(1024.0, 512.0), 0.1, 0.9)
 			made.set_shader_parameter("alpha_cutoff", 0.4)
 		"grass_dead":
-			made = _foliage("grass_atlas.png", Color(0.6, 0.52, 0.44), Color(0.08, 0.07, 0.04), Vector2(1024.0, 512.0), 0.1, 0.9)
+			made = _foliage("grass_atlas.png", Color(0.52, 0.46, 0.4), Color(0.08, 0.07, 0.04), Vector2(1024.0, 512.0), 0.1, 0.9)
 			made.set_shader_parameter("alpha_cutoff", 0.4)
-			made.set_shader_parameter("desaturate", 0.35)
+			made.set_shader_parameter("desaturate", 0.5)
+		"meadow_dead":
+			made = _foliage("meadow_atlas.png", Color(0.6, 0.48, 0.4), Color(0.08, 0.07, 0.04), Vector2(2048.0, 2048.0), 0.1, 0.9)
+			made.set_shader_parameter("alpha_cutoff", 0.4)
+			made.set_shader_parameter("distance_fade", true)
+			made.set_shader_parameter("fade_length_m", LOW_FADE_M)
+			made.set_shader_parameter("desaturate", 0.75)
 		"meadow":
 			made = _foliage("meadow_atlas.png", Color(0.92, 0.94, 0.86), Color(0.18, 0.2, 0.1), Vector2(2048.0, 2048.0), 0.1, 0.9)
 			made.set_shader_parameter("alpha_cutoff", 0.4)

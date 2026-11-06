@@ -95,7 +95,7 @@ uniform vec3 bank_blade : source_color = vec3(0.298, 0.262, 0.212);
 uniform vec3 bank_straw : source_color = vec3(0.405, 0.365, 0.292);
 uniform vec3 bank_gravel : source_color = vec3(0.470, 0.435, 0.380);
 uniform vec3 bank_stone : source_color = vec3(0.740, 0.700, 0.620);
-uniform vec3 marsh_far_red : source_color = vec3(0.400, 0.250, 0.070);
+uniform vec3 marsh_far_red : source_color = vec3(0.370, 0.250, 0.100);
 uniform vec3 marsh_far_olive : source_color = vec3(0.330, 0.300, 0.110);
 uniform vec3 marsh_far_straw : source_color = vec3(0.500, 0.440, 0.270);
 uniform vec3 puddle_tint : source_color = vec3(0.20, 0.24, 0.28);
@@ -264,8 +264,8 @@ void fragment() {
 			// the ground round it.
 			if (far_off > 0.0) {
 				float far_mats = 0.6 * value_noise(p / 27.0 + vec2(17.3, 3.9)) + 0.4 * n_mid;
-				vec3 far_marsh = mix(marsh_far_red, marsh_far_olive, smoothstep(0.44, 0.6, far_mats));
-				far_marsh = mix(far_marsh, marsh_far_straw, smoothstep(0.52, 0.66, value_noise(p / 15.0 + vec2(51.1, 29.7))));
+				vec3 far_marsh = mix(marsh_far_red, marsh_far_olive, smoothstep(0.4, 0.64, far_mats));
+				far_marsh = mix(far_marsh, marsh_far_straw, smoothstep(0.48, 0.74, 0.7 * value_noise(p / 15.0 + vec2(51.1, 29.7)) + 0.3 * n_mid));
 				marsh = mix(marsh, far_marsh, far_off);
 				bank = mix(bank, ground, far_off);
 			}
@@ -274,25 +274,18 @@ void fragment() {
 			marsh_cover = region * carpet;
 			rough = region * (1.0 - carpet) * bank_w;
 
-			// Pale stones in loose scatters on the banks, few on the floor, thick in patches
-			// of broken rubble with a dark foot, all gone with distance.
-			if (fade < 1.0) {
-				float cover = region * max(bank_w, carpet) * (1.0 - fade);
-				float scatter = smoothstep(0.48, 0.64, 0.6 * value_noise(p / 15.0 + vec2(13.1, 29.3)) + 0.4 * n_mid) * mix(1.0, 0.2, carpet);
-				vec2 stone_cell = floor(p / 1.3);
-				vec2 inner = fract(p / 1.3) - 0.5;
-				vec2 place = (vec2(hash12(stone_cell + vec2(7.1, 2.3)), hash12(stone_cell + vec2(1.7, 13.7))) - 0.5) * 0.7;
-				float size = 0.03 + 0.08 * hash12(stone_cell + vec2(3.3, 9.1));
-				float stone = (1.0 - smoothstep(size * 0.7, size, length(inner - place))) * step(hash12(stone_cell + vec2(23.3, 5.9)), 0.7 * scatter);
-				ground = mix(ground, bank_stone * (0.75 + 0.5 * n_tiny), stone * cover);
-				float rubble = smoothstep(0.56, 0.68, 0.7 * n_patch8 + 0.3 * n_small) * (1.0 - carpet);
-				vec2 rock_cell = floor(p / 0.47);
-				vec2 rock_off = (fract(p / 0.47) - 0.5) - (vec2(hash12(rock_cell + vec2(11.3, 4.1)), hash12(rock_cell + vec2(2.9, 17.3))) - 0.5) * 0.5;
-				rock_off *= vec2(1.0, 1.0 + 0.8 * hash12(rock_cell + vec2(29.1, 8.3)));
-				float rock_size = 0.14 + 0.2 * hash12(rock_cell + vec2(5.7, 31.9));
-				float rock_keep = step(hash12(rock_cell + vec2(19.7, 23.3)), 0.8 * rubble) * cover;
-				ground *= 1.0 - 0.55 * (1.0 - smoothstep(rock_size, rock_size * 1.45, length(rock_off - vec2(0.09, 0.07)))) * rock_keep;
-				ground = mix(ground, bank_stone * (0.42 + 0.5 * hash12(rock_cell + vec2(13.9, 41.7))), (1.0 - smoothstep(rock_size * 0.82, rock_size, length(rock_off))) * rock_keep);
+			// Broken stone in patches: small uneven pieces with a dark foot, few on the
+			// floor, gone with distance.
+			float stones_near = (1.0 - smoothstep(14.0, 50.0, length(VERTEX))) * region * max(bank_w, carpet) * mix(1.0, 0.25, carpet);
+			if (stones_near > 0.0) {
+				vec2 lay = vec2(0.82 * p.x + 0.57 * p.y, 0.82 * p.y - 0.57 * p.x);
+				float stone_line = 0.93 - 0.2 * smoothstep(0.52, 0.7, 0.7 * n_patch8 + 0.3 * n_small);
+				float stone_level = 0.55 * value_noise(lay / 0.21 + vec2(11.3, 4.1)) + 0.45 * value_noise(lay / 0.085 + vec2(2.9, 17.3));
+				vec2 foot = lay + vec2(0.035, 0.03);
+				float foot_level = 0.55 * value_noise(foot / 0.21 + vec2(11.3, 4.1)) + 0.45 * value_noise(foot / 0.085 + vec2(2.9, 17.3));
+				ground *= 1.0 - 0.5 * smoothstep(stone_line - 0.03, stone_line + 0.02, foot_level) * stones_near;
+				float stone_tone = 0.3 + 0.5 * value_noise(lay / 0.7 + vec2(7.7, 1.9));
+				ground = mix(ground, bank_stone * stone_tone, smoothstep(stone_line, stone_line + 0.03, stone_level) * stones_near);
 			}
 
 			vec2 along = vec2(0.643 * p.x + 0.766 * p.y, 0.643 * p.y - 0.766 * p.x);

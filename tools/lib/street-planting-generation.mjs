@@ -93,7 +93,7 @@ export const PLANT_WIDTHS_M = Object.freeze({
   pale_seeded_shrub: Object.freeze([0.7, 1.0, 1.1]),
   pittosporum_tobira: Object.freeze([1.5, 2.0, 2.5]),
   red_tip_shrub: Object.freeze([0.7, 0.9]),
-  rush: Object.freeze([0.45, 0.6, 0.75, 1.5, 0.85, 1.05]),
+  rush: Object.freeze([0.45, 0.6, 0.75, 1.5, 0.75, 0.9]),
   sea_thrift: Object.freeze([0.24, 0.32, 0.4, 1.1]),
   seaside_daisy: Object.freeze([0.55, 0.8, 1.05, 1.9]),
   seaside_woolly_sunflower: Object.freeze([0.8, 1.15, 1.5]),
