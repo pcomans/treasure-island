@@ -35,6 +35,11 @@ import { invariant } from "./world-contract.mjs";
 export const GROUND_COVER_SCHEMA = "ti.ground-cover/1";
 export const GROUND_COVER_CONFIG_PATH = "tools/config/ground-cover.json";
 export const GROUND_COVER_MAP_PATH = "game/resources/textures/world/ground_cover/cover_map.png";
+// The marsh's plan for the ground shader: signed distance from the outline of the
+// terrain_wetland overlay, on the cover map's grid. Grey 0.5 lies on the outline,
+// and MARSH_MAP_RANGE_M inside it is white, as far outside it black.
+export const MARSH_MAP_PATH = "game/resources/textures/world/ground_cover/marsh_map.png";
+export const MARSH_MAP_RANGE_M = 32;
 // Map channels in RGBA order: the recipe family each one draws.
 export const GROUND_COVER_CHANNELS = Object.freeze(["lawn", "straw", "dry_field", "bare"]);
 // What a rule may measure distance from ("near"): generated record kinds.
@@ -504,6 +509,39 @@ export function drawGroundCoverMap(config, world) {
   return { grid, rgba, rules: summaries };
 }
 
+// The marsh map for a validated config and a loaded world: {grid, rgba}.
+export function drawMarshMap(config, world) {
+  const grid = groundCoverGrid(config);
+  const wet = new Uint8Array(grid.width * grid.height);
+  for (const record of world.records) {
+    if (record.material_key !== "terrain_wetland") continue;
+    const v = record.vertices;
+    const corner = (index) => [v[index * 3], v[index * 3 + 2]];
+    for (let offset = 0; offset < record.indices.length; offset += 3) {
+      rasterizeTriangle(grid, [corner(record.indices[offset]), corner(record.indices[offset + 1]), corner(record.indices[offset + 2])], (index) => {
+        wet[index] = 1;
+      });
+    }
+  }
+  invariant(wet.some((cell) => cell === 1), "The world has no terrain_wetland ground for the marsh map");
+  const toWet = distanceToMask(grid, wet);
+  const toDry = distanceToMask(grid, wet.map((cell) => 1 - cell));
+  const rgba = new Uint8Array(wet.length * 4);
+  for (let index = 0; index < wet.length; index += 1) {
+    const signed = Math.max(-MARSH_MAP_RANGE_M, Math.min(MARSH_MAP_RANGE_M, wet[index] ? toDry[index] : -toWet[index]));
+    const level = Math.round((0.5 + signed / (2 * MARSH_MAP_RANGE_M)) * 255);
+    rgba[index * 4] = level;
+    rgba[index * 4 + 1] = level;
+    rgba[index * 4 + 2] = level;
+    rgba[index * 4 + 3] = 255;
+  }
+  return { grid, rgba };
+}
+
+export function buildMarshMap({ projectRoot, worldRoot }) {
+  return drawMarshMap(loadGroundCoverConfig(projectRoot), loadGroundCoverWorld(worldRoot));
+}
+
 export function buildGroundCoverMap({ projectRoot, worldRoot }) {
   const config = loadGroundCoverConfig(projectRoot);
   return drawGroundCoverMap(config, loadGroundCoverWorld(worldRoot));
@@ -516,6 +554,8 @@ export function writeGroundCoverMap({ projectRoot, worldRoot, output = resolve(p
   const png = encodeGroundCoverPng(map.grid.width, map.grid.height, map.rgba);
   mkdirSync(dirname(output), { recursive: true });
   writeFileSync(output, png);
+  const marsh = buildMarshMap({ projectRoot, worldRoot });
+  writeFileSync(resolve(dirname(output), "marsh_map.png"), encodeGroundCoverPng(marsh.grid.width, marsh.grid.height, marsh.rgba));
   return { map, output, bytes: png.length };
 }
 

@@ -175,7 +175,8 @@ func _ground_cover_map_matches() -> bool:
 	var rect := Vector4(origin.x, origin.y, 1.0 / size.x, 1.0 / size.y)
 	for family: String in GROUND_COVER.FAMILIES:
 		var material := GROUND_COVER.material(family)
-		if not _require(material.get_shader_parameter("cover_map") == texture and material.get_shader_parameter("cover_map_rect") == rect, "%s ground cover does not read the ground-cover map." % family):
+		if not _require(material.get_shader_parameter("cover_map") == texture and material.get_shader_parameter("cover_map_rect") == rect, "%s ground cover does not read the ground-cover map." % family) \
+		or not _require(material.get_shader_parameter("marsh_map") == GROUND_COVER.MARSH_MAP and GROUND_COVER.MARSH_MAP != null, "%s ground cover does not read the marsh map." % family):
 			return false
 		for uniform: String in GROUND_COVER.COVER_MAP_RECIPES:
 			var recipe: Dictionary = GROUND_COVER.FAMILIES[GROUND_COVER.COVER_MAP_RECIPES[uniform]]

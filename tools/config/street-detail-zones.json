@@ -1278,254 +1278,361 @@
    ]
   },
   {
-   "id": "mersea_ditch",
-   "name": "The ditch next to Mersea",
-   "pilot": false,
-   "reason": "The seasonal wetland beside the owner's priority lot, in view of the city skyline. Its plants are sown by fields that read the land; its red floor, banks and puddles are the ground shader's (marsh_amount), so nothing here is listed by position.",
-   "reference": "Owner photos, Nov 2026 (three, from one spot at the lot's west corner, about (-266, 203)); OSM w1473022589 (natural=wetland); the land's own basin, 1.8 m at the floor and 4.3 m at the bank",
-   "shape": {
-    "type": "polygon",
-    "points_xz": [[-395, 100], [-235, 100], [-235, 225], [-285, 262], [-315, 325], [-400, 325]]
-   },
-   "scatter": [
-    {
-     "id": "bank_seeded_shrubs",
-     "kind": "planting_slot",
-     "pattern": "field",
-     "surfaces": ["terrain_wetland", "land_ground"],
-     "per_m2": 0.1,
-     "spacing": [0.7, 1.5],
-     "field": {
-      "axis": {
-       "from_xz": [-267, 203],
-       "to_xz": [-312, 240],
-       "full_m": 6,
-       "zero_m": 17
+    "id": "mersea_ditch",
+    "name": "The ditch next to Mersea",
+    "pilot": false,
+    "reason": "The seasonal wetland beside the owner's priority lot, in view of the city skyline. Its plants are sown by fields that read the land; its floor, banks and pools are the ground shader's (marsh_amount), so nothing here is listed by position.",
+    "reference": "Owner video IMG_0960, 2026-11-06, frames D1-D5 from the road end at about (-298, 241), and owner photos, Nov 2026, from the lot's west corner at about (-266, 203); OSM w1473022589 (natural=wetland); the land's own basin, 1.8 m at the floor and 4.3 m at the bank",
+    "shape": {
+     "type": "polygon",
+     "points_xz": [[-395, 100], [-235, 100], [-235, 225], [-285, 262], [-315, 325], [-400, 325]]
+    },
+    "scatter": [
+     {
+      "id": "bank_seeded_shrubs",
+      "kind": "planting_slot",
+      "pattern": "field",
+      "surfaces": [
+       "terrain_wetland",
+       "land_ground"
+      ],
+      "per_m2": 0.16,
+      "spacing": [0.7, 1.5],
+      "field": {
+       "axis": {
+        "from_xz": [-267, 203],
+        "to_xz": [-322, 247],
+        "full_m": 6,
+        "zero_m": 17
+       },
+       "height_m": [2.2, 2.6, 3.6, 4.2],
+       "ramps": [
+        {
+         "from_xz": [-266, 202],
+         "to_xz": [-270, 207],
+         "low": 0.1,
+         "high": 1.0
+        },
+        {
+         "from_xz": [-318, 246],
+         "to_xz": [-296, 226],
+         "low": 0.3,
+         "high": 1.0
+        },
+        {
+         "from_xz": [-261, 205],
+         "to_xz": [-266, 201.7],
+         "low": 0.0,
+         "high": 1.0
+        }
+       ],
+       "drift_m": 10,
+       "clump_m": 3,
+       "drift_cover": 0.5,
+       "lone": 0.06,
+       "groups": {
+        "count": [1, 7],
+        "spread_m": [1.0, 2.6]
+       },
+       "wander": {
+        "height_m": 0.3,
+        "scale_m": 21
+       }
       },
-      "height_m": [2.75, 3.2, 4.0, 4.25],
-      "ramps": [
+      "mix": [
        {
-        "from_xz": [-266, 202],
-        "to_xz": [-270, 207],
-        "low": 0.1,
-        "high": 1.0
+        "prop": "pale_seeded_shrub",
+        "variants": [2, 2],
+        "scale": [0.8, 1.1],
+        "at": [0.42, 1.0],
+        "share": 1
        },
        {
-        "from_xz": [-318, 246],
-        "to_xz": [-296, 226],
-        "low": 0.3,
-        "high": 1.0
-       },
-       {
-        "from_xz": [-261, 205],
-        "to_xz": [-266, 201.7],
-        "low": 0.0,
-        "high": 1.0
+        "prop": "pale_seeded_shrub",
+        "variants": [0, 1],
+        "scale": [0.8, 1.15],
+        "at": [0.0, 0.5],
+        "share": 1
        }
       ],
-      "drift_m": 10,
-      "clump_m": 3,
-      "drift_cover": 0.4,
-      "lone": 0.06,
-      "groups": {
-       "count": [1, 7],
-       "spread_m": [1.0, 2.6]
-      },
-      "wander": {
-       "height_m": 0.3,
-       "scale_m": 21
-      }
+      "basis": "production_inference",
+      "rule": "Along the top of the bank south-west of the lot's corner and round the road's end, thinning down the slope, to nothing at the lot's edge and toward the far end: loose groups with real gaps between them and a few lone plants; laden with cream seed where the field is full, bare at its edges.",
+      "evidence": "Owner video IMG_0960, 2026-11-06, frames D1-D5 from the road end at about (-298, 241), and owner photos, Nov 2026, from the lot's west corner at about (-266, 203): loose shrubs on red stems, laden with cream seed, thick along the water side of the curb and round the road's end, sparse to the north (species unconfirmed)."
      },
-     "mix": [
-      {
-       "prop": "pale_seeded_shrub",
-       "variants": [2, 2],
-       "scale": [0.8, 1.1],
-       "at": [0.42, 1.0],
-       "share": 1
+     {
+      "id": "bank_dead_stems",
+      "kind": "planting_slot",
+      "pattern": "field",
+      "surfaces": [
+       "terrain_wetland",
+       "land_ground"
+      ],
+      "per_m2": 0.03,
+      "spacing": [0.45, 1.2],
+      "field": {
+       "axis": {
+        "from_xz": [-295, 145],
+        "to_xz": [-345, 290],
+        "full_m": 40,
+        "zero_m": 56
+       },
+       "height_m": [2.75, 3.1, 3.7, 4.2],
+       "drift_m": 9,
+       "clump_m": 3,
+       "drift_cover": 0.4,
+       "lone": 0.1,
+       "groups": {
+        "count": [1, 7],
+        "spread_m": [0.6, 1.6]
+       }
       },
-      {
-       "prop": "pale_seeded_shrub",
-       "variants": [0, 1],
-       "scale": [0.8, 1.15],
-       "at": [0.0, 0.5],
-       "share": 1
-      }
-     ],
-     "basis": "production_inference",
-     "rule": "Along the top of the bank south-west of the lot's corner, thinning down the slope, to nothing at the lot's edge, north of the corner and toward the far end: loose groups with real gaps between them and a few lone plants; laden plants where the field is full, bare ones at its edges.",
-     "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea, from the lot's west corner at about (-266, 203): loose pale-seeded shrubs, thick on the bank south-west of the camera, sparse to its north (species unconfirmed)."
-    },
-    {
-     "id": "bank_dead_stems",
-     "kind": "planting_slot",
-     "pattern": "field",
-     "surfaces": ["terrain_wetland", "land_ground"],
-     "per_m2": 0.03,
-     "spacing": [0.45, 1.2],
-     "field": {
-      "axis": {
-       "from_xz": [-295, 145],
-       "to_xz": [-345, 290],
-       "full_m": 40,
-       "zero_m": 56
-      },
-      "height_m": [2.75, 3.1, 3.7, 4.2],
-      "drift_m": 9,
-      "clump_m": 3,
-      "drift_cover": 0.4,
-      "lone": 0.1,
-      "groups": {
-       "count": [1, 7],
-       "spread_m": [0.6, 1.6]
-      }
+      "mix": [
+       {
+        "prop": "pale_seeded_shrub",
+        "variants": [0, 1],
+        "scale": [0.85, 1.25],
+        "at": [0.0, 1.0],
+        "share": 1
+       }
+      ],
+      "basis": "production_inference",
+      "rule": "Dark dead stems with a few pale seed heads down the slope.",
+      "evidence": "Owner video IMG_0960, 2026-11-06, frames D1-D5 from the road end at about (-298, 241), and owner photos, Nov 2026, from the lot's west corner at about (-266, 203): dark dead stems and pale seed heads at the foot of the bank."
      },
-     "mix": [
-      {
-       "prop": "pale_seeded_shrub",
-       "variants": [0, 1],
-       "scale": [0.85, 1.25],
-       "at": [0.0, 1.0],
-       "share": 1
-      }
-     ],
-     "basis": "production_inference",
-     "rule": "Dark dead stems with a few pale seed heads down the slope.",
-     "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea, from the lot's west corner at about (-266, 203): dark dead stems and pale seed heads at the foot of the bank."
-    },
-    {
-     "id": "bank_straw_tufts",
-     "kind": "grass_clump",
-     "pattern": "field",
-     "surfaces": ["terrain_wetland", "land_ground"],
-     "per_m2": 0.06,
-     "spacing": [0.45, 1.2],
-     "field": {
-      "axis": {
-       "from_xz": [-295, 145],
-       "to_xz": [-345, 290],
-       "full_m": 40,
-       "zero_m": 56
+     {
+      "id": "bank_straw_tufts",
+      "kind": "grass_clump",
+      "pattern": "field",
+      "surfaces": [
+       "terrain_wetland",
+       "land_ground"
+      ],
+      "per_m2": 0.06,
+      "spacing": [0.45, 1.2],
+      "field": {
+       "axis": {
+        "from_xz": [-295, 145],
+        "to_xz": [-345, 290],
+        "full_m": 40,
+        "zero_m": 56
+       },
+       "height_m": [2.9, 3.25, 3.95, 4.2],
+       "drift_m": 7,
+       "clump_m": 2,
+       "drift_cover": 0.38,
+       "lone": 0.06,
+       "groups": {
+        "count": [1, 9],
+        "spread_m": [0.6, 1.8]
+       },
+       "wander": {
+        "height_m": 0.25,
+        "scale_m": 15
+       }
       },
-      "height_m": [2.9, 3.25, 3.95, 4.2],
-      "drift_m": 7,
-      "clump_m": 2,
-      "drift_cover": 0.38,
-      "lone": 0.06,
-      "groups": {
-       "count": [1, 9],
-       "spread_m": [0.6, 1.8]
-      },
-      "wander": {
-       "height_m": 0.25,
-       "scale_m": 15
-      }
+      "mix": [
+       {
+        "prop": "clump_grass",
+        "variants": [4, 5],
+        "scale": [0.8, 1.05],
+        "at": [0.0, 1.0],
+        "share": 1
+       }
+      ],
+      "basis": "production_inference",
+      "rule": "Dead straw on the banks, in drifts.",
+      "evidence": "Owner video IMG_0960, 2026-11-06, frames D1-D5 from the road end at about (-298, 241), and owner photos, Nov 2026, from the lot's west corner at about (-266, 203): dry straw grass on the slope."
      },
-     "mix": [
-      {
-       "prop": "clump_grass",
-       "variants": [4, 5],
-       "scale": [0.8, 1.05],
-       "at": [0.0, 1.0],
-       "share": 1
-      }
-     ],
-     "basis": "production_inference",
-     "rule": "Dull dead straw on the banks, in drifts.",
-     "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea, from the lot's west corner at about (-266, 203): dark dry straw grass on the slope."
-    },
-    {
-     "id": "bank_foot_stems",
-     "kind": "grass_clump",
-     "pattern": "field",
-     "surfaces": ["terrain_wetland", "land_ground"],
-     "per_m2": 0.08,
-     "spacing": [0.4, 1.0],
-     "field": {
-      "axis": {
-       "from_xz": [-295, 145],
-       "to_xz": [-345, 290],
-       "full_m": 40,
-       "zero_m": 56
+     {
+      "id": "bank_foot_stems",
+      "kind": "grass_clump",
+      "pattern": "field",
+      "surfaces": [
+       "terrain_wetland",
+       "land_ground"
+      ],
+      "per_m2": 0.08,
+      "spacing": [0.4, 1.0],
+      "field": {
+       "axis": {
+        "from_xz": [-295, 145],
+        "to_xz": [-345, 290],
+        "full_m": 40,
+        "zero_m": 56
+       },
+       "height_m": [2.0, 2.2, 2.7, 3.1],
+       "wander": {
+        "height_m": 0.4,
+        "scale_m": 17
+       },
+       "slope": [0.01, 0.03],
+       "drift_m": 12,
+       "clump_m": 2.5,
+       "drift_cover": 0.34,
+       "lone": 0.04,
+       "groups": {
+        "count": [2, 7],
+        "spread_m": [0.6, 1.5]
+       }
       },
-      "height_m": [2.4, 2.7, 3.0, 3.5],
-      "wander": {
-       "height_m": 0.4,
-       "scale_m": 17
-      },
-      "slope": [0.02, 0.05],
-      "drift_m": 12,
-      "clump_m": 2.5,
-      "drift_cover": 0.34,
-      "lone": 0.04,
-      "groups": {
-       "count": [2, 7],
-       "spread_m": [0.6, 1.5]
-      }
+      "mix": [
+       {
+        "prop": "rush",
+        "variants": [4, 5],
+        "scale": [0.8, 1.15],
+        "at": [0.0, 1.0],
+        "share": 5
+       },
+       {
+        "prop": "clump_grass",
+        "variants": [4, 5],
+        "scale": [0.8, 1.0],
+        "at": [0.0, 1.0],
+        "share": 3
+       },
+       {
+        "prop": "pale_seeded_shrub",
+        "variants": [0, 1],
+        "scale": [0.85, 1.05],
+        "at": [0.0, 1.0],
+        "share": 2
+       }
+      ],
+      "basis": "production_inference",
+      "rule": "Low broken patches of dead stems near the foot of the bank, where the slope meets the floor, wandering up and down the slope.",
+      "evidence": "Owner video IMG_0960, 2026-11-06, frames D1-D5 from the road end at about (-298, 241), and owner photos, Nov 2026, from the lot's west corner at about (-266, 203): dead stems in broken patches at the bank's foot."
      },
-     "mix": [
-      {
-       "prop": "rush",
-       "variants": [4, 5],
-       "scale": [0.8, 1.15],
-       "at": [0.0, 1.0],
-       "share": 5
+     {
+      "id": "floor_clumps",
+      "kind": "grass_clump",
+      "pattern": "field",
+      "surfaces": [
+       "terrain_wetland",
+       "land_ground"
+      ],
+      "per_m2": 0.1,
+      "spacing": [0.8, 1.6],
+      "field": {
+       "axis": {
+        "from_xz": [-295, 145],
+        "to_xz": [-345, 290],
+        "full_m": 40,
+        "zero_m": 56
+       },
+       "height_m": [1.7, 1.8, 2.4, 2.7],
+       "drift_m": 16,
+       "clump_m": 5,
+       "drift_cover": 0.24,
+       "lone": 0.012,
+       "groups": {
+        "count": [2, 8],
+        "spread_m": [0.7, 2.0]
+       }
       },
-      {
-       "prop": "clump_grass",
-       "variants": [4, 5],
-       "scale": [0.8, 1.0],
-       "at": [0.0, 1.0],
-       "share": 3
-      },
-      {
-       "prop": "pale_seeded_shrub",
-       "variants": [0, 1],
-       "scale": [0.85, 1.05],
-       "at": [0.0, 1.0],
-       "share": 2
-      }
-     ],
-     "basis": "production_inference",
-     "rule": "Low broken patches of dead stems near the foot of the bank, where the slope meets the red floor, wandering up and down the slope.",
-     "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea, from the lot's west corner at about (-266, 203): dark dead stems in broken patches at the bank's foot."
-    },
-    {
-     "id": "floor_clumps",
-     "kind": "grass_clump",
-     "pattern": "field",
-     "surfaces": ["terrain_wetland", "land_ground"],
-     "per_m2": 0.1,
-     "spacing": [0.8, 1.6],
-     "field": {
-      "axis": {
-       "from_xz": [-295, 145],
-       "to_xz": [-345, 290],
-       "full_m": 40,
-       "zero_m": 56
-      },
-      "height_m": [1.6, 1.7, 2.7, 3.0],
-      "drift_m": 16,
-      "clump_m": 5,
-      "drift_cover": 0.3,
-      "lone": 0.03
+      "mix": [
+       {
+        "prop": "california_buckwheat",
+        "variants": [0, 1],
+        "scale": [0.8, 1.05],
+        "at": [0.0, 1.0],
+        "share": 1
+       }
+      ],
+      "basis": "production_inference",
+      "rule": "Low grey-green shrublets on the floor, in close groups inside loose drifts, with open mat between.",
+      "evidence": "Owner video IMG_0960, 2026-11-06, frames D1-D5 from the road end at about (-298, 241), and owner photos, Nov 2026, from the lot's west corner at about (-266, 203): low grey-green shrublets in lenses across the upper floor, beside the green swards."
      },
-     "mix": [
-      {
-       "prop": "california_buckwheat",
-       "variants": [0, 1],
-       "scale": [0.8, 1.05],
-       "at": [0.0, 1.0],
-       "share": 1
-      }
-     ],
-     "basis": "production_inference",
-     "rule": "Scattered dark clumps on the marsh floor.",
-     "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea, from the lot's west corner at about (-266, 203): olive and dark clumps across the red floor."
-    }
-   ]
-  },
-  {
+     {
+      "id": "floor_stems",
+      "kind": "grass_clump",
+      "pattern": "field",
+      "surfaces": [
+       "terrain_wetland",
+       "land_ground"
+      ],
+      "per_m2": 0.16,
+      "spacing": [0.35, 0.9],
+      "field": {
+       "axis": {
+        "from_xz": [-295, 145],
+        "to_xz": [-345, 290],
+        "full_m": 40,
+        "zero_m": 56
+       },
+       "height_m": [1.6, 1.7, 2.35, 2.7],
+       "wander": {
+        "height_m": 0.2,
+        "scale_m": 13
+       },
+       "drift_m": 9,
+       "clump_m": 2.2,
+       "drift_cover": 0.34,
+       "lone": 0.05,
+       "groups": {
+        "count": [2, 9],
+        "spread_m": [0.5, 1.6]
+       }
+      },
+      "mix": [
+       {
+        "prop": "rush",
+        "variants": [4, 5],
+        "scale": [0.8, 1.1],
+        "at": [0.0, 1.0],
+        "share": 1
+       }
+      ],
+      "basis": "production_inference",
+      "rule": "Thin dead stems through the low floor and its pools, in loose clusters.",
+      "evidence": "Owner video IMG_0960, 2026-11-06, frames D1-D5 from the road end at about (-298, 241), and owner photos, Nov 2026, from the lot's west corner at about (-266, 203): thin dead stems standing through the mat and in the water."
+     },
+     {
+      "id": "bank_gold_grass",
+      "kind": "grass_clump",
+      "pattern": "field",
+      "surfaces": [
+       "terrain_wetland",
+       "land_ground"
+      ],
+      "per_m2": 0.09,
+      "spacing": [0.5, 1.1],
+      "field": {
+       "axis": {
+        "from_xz": [-262, 168],
+        "to_xz": [-288, 116],
+        "full_m": 9,
+        "zero_m": 24
+       },
+       "height_m": [2.1, 2.5, 3.7, 4.3],
+       "wander": {
+        "height_m": 0.3,
+        "scale_m": 17
+       },
+       "drift_m": 10,
+       "clump_m": 3,
+       "drift_cover": 0.5,
+       "lone": 0.06,
+       "groups": {
+        "count": [2, 9],
+        "spread_m": [0.7, 1.9]
+       }
+      },
+      "mix": [
+       {
+        "prop": "pacific_reedgrass",
+        "variants": [0, 2],
+        "scale": [1.0, 1.25],
+        "at": [0.0, 1.0],
+        "share": 1
+       }
+      ],
+      "basis": "production_inference",
+      "rule": "Taller gold grass in drifts on the north-east bank, by the lot's north end.",
+      "evidence": "Owner video IMG_0960, 2026-11-06, frames D1-D5 from the road end at about (-298, 241), and owner photos, Nov 2026, from the lot's west corner at about (-266, 203): a band of tall gold grass on the far bank, north of the lot's corner."
+     }
+    ]
+   },
+   {
    "id": "cultural_park_rows",
    "name": "Young trees in rows and beds round the chapel",
    "pilot": false,
@@ -1636,7 +1743,341 @@
      "evidence": "Street View Mar 2025, 1349 Gateview Ave (heading 250): tall green weeds, dry stalks and bright shrubs behind the chain-link fence."
     }
    ]
-  }
+  },
+   {
+    "id": "mersea_promenade",
+    "name": "The promenade in front of Mersea",
+    "pilot": true,
+    "ground": {
+     "kerbs": false,
+     "centerlines": {},
+     "lane_markings": false,
+     "planting": "none",
+     "parking_lanes": [],
+     "planting_behind_walk": [],
+     "plazas": [],
+     "parking_stalls": false,
+     "wear": {
+      "crack_per_100m2": 0.0,
+      "patch_per_100m2": 0.0,
+      "oil_per_100m2": 0.0,
+      "manhole_spacing_m": 0,
+      "drain_spacing_m": 0
+     },
+     "surfaces": {
+      "source_keys": [
+       "w1530613466"
+      ],
+      "lift_m": 0.1,
+      "layers": [
+       {
+        "id": "promenade_sea_gravel",
+        "material": "park_gravel",
+        "shape": {
+         "points_xz": [[-372.38, 290.95], [-380.2, 278.14], [-390.57, 261.03], [-401.2, 244.07], [-421.85, 209.79], [-436.63, 183.68], [-449.4, 159.89], [-456.36, 163.83], [-381.51, 296.12]],
+         "minus_sources": [
+          "w1222685424"
+         ]
+        },
+        "reason": "Crushed rock between the old road and the rock.",
+        "evidence": "Owner video IMG_0960, 2026-11-06 12:25-12:27 PST, and Friday Night Track.kml, walked along it; poses fitted to landmarks (frames B1-B9 of the study's contact sheet, kept outside Git). Frames B4-B9."
+       },
+       {
+        "id": "promenade_sea_mulch",
+        "material": "park_mulch",
+        "shape": {
+         "points_xz": [[-350.91, 323.61], [-361.38, 303.69], [-363.73, 305.02], [-372.38, 290.95], [-381.63, 293.89], [-361.44, 329.57]],
+         "minus_sources": [
+          "w1222685424"
+         ]
+        },
+        "reason": "Bark mulch where the old road was narrowed, with chairs and young planting on it.",
+        "evidence": "Owner video IMG_0960, 2026-11-06 12:25-12:27 PST, and Friday Night Track.kml, walked along it; poses fitted to landmarks (frames B1-B9 of the study's contact sheet, kept outside Git). Frames B1-B3."
+       },
+       {
+        "id": "promenade_land_mulch",
+        "material": "park_mulch",
+        "shape": {
+         "points_xz": [[-344.92, 318.16], [-355.11, 300.14], [-362.45, 285.34], [-368.88, 271.74], [-377.05, 255.68], [-381.31, 247.75], [-382.38, 244.22], [-380.93, 241.1], [-378.67, 239.82], [-371.54, 254.86], [-365.92, 270.07], [-351.85, 296.57], [-342.17, 314.08]]
+        },
+        "reason": "Bark mulch from the pavement to the fence on the marsh side, young planting on it.",
+        "evidence": "Owner video IMG_0960, 2026-11-06 12:25-12:27 PST, and Friday Night Track.kml, walked along it; poses fitted to landmarks (frames B1-B9 of the study's contact sheet, kept outside Git). Frames B2-B4."
+       },
+       {
+        "id": "promenade_dg_band",
+        "material": "park_dg",
+        "shape": {
+         "points_xz": [[-350.12, 323.17], [-361.2, 303.59], [-361.38, 303.69], [-351.52, 323.96]]
+        },
+        "reason": "A band of decomposed granite along the seal's seaward edge, wider toward the park.",
+        "evidence": "Owner video IMG_0960, 2026-11-06 12:25-12:27 PST, and Friday Night Track.kml, walked along it; poses fitted to landmarks (frames B1-B9 of the study's contact sheet, kept outside Git). Frames B1-B3."
+       },
+       {
+        "id": "promenade_lawn",
+        "material": "park_lawn",
+        "shape": {
+         "points_xz": [[-390.88, 233.06], [-408.45, 202.21], [-421.05, 181.76], [-401.82, 170.88], [-367.45, 168.67], [-343.81, 210.45], [-384.89, 233.69], [-389.24, 234.54]],
+         "minus_sources": [
+          "w1001544698",
+          "w1001544693"
+         ]
+        },
+        "reason": "The lawn between the road, the side drive and Mersea's tent.",
+        "evidence": "Owner video IMG_0960, 2026-11-06 12:25-12:27 PST, and Friday Night Track.kml, walked along it; poses fitted to landmarks (frames B1-B9 of the study's contact sheet, kept outside Git). Frames B6-B8."
+       }
+      ]
+     }
+    },
+    "reason": "The waterfront walk the owner calls the boardwalk (owner request, 2026-11-06): its soft edges either side of the pavement, its banner fence and its young planting. The pavement itself is the mersea_promenade lots of street-ground.json, a recorded exception to the OSM layout.",
+    "reference": "Owner video IMG_0960, 2026-11-06 12:25-12:27 PST, and Friday Night Track.kml, walked along it; poses fitted to landmarks (frames B1-B9 of the study's contact sheet, kept outside Git).",
+    "shape": {
+     "type": "polygon",
+     "points_xz": [[-362.69, 331.43], [-458.71, 161.71], [-436.08, 148.9], [-417.11, 178.38], [-401.44, 169.52], [-366.2, 166.82], [-339.35, 210.22], [-376.81, 239.46], [-369.68, 256.11], [-350.63, 295.88], [-338.32, 317.64]]
+    },
+    "scatter": [
+     {
+      "id": "promenade_trees_marsh_side",
+      "kind": "tree",
+      "pattern": "drifts",
+      "within_xz": [[-345.37, 318.18], [-356.2, 299.03], [-362.8, 285.53], [-369.23, 271.94], [-377.4, 255.88], [-374.26, 254.1], [-365.75, 269.97], [-351.67, 296.47], [-341.01, 315.72]],
+      "margin_m": 1.0,
+      "surfaces": [
+       "park_mulch"
+      ],
+      "drift_m": 6.5,
+      "count": [1, 1],
+      "spread": 1.0,
+      "spacing": {
+       "same": 1.0,
+       "other": 0.4
+      },
+      "gaps": {
+       "cover": 0.22,
+       "scale_m": 14.0
+      },
+      "mix": [
+       {
+        "prop": "island_oak_young",
+        "share": 1.0,
+        "variants": [0, 1],
+        "scale": [0.8, 1.0],
+        "band_m": [0.8, 99],
+        "max_slope": 0.6,
+        "spill_m": 0.0
+       }
+      ],
+      "basis": "production_inference",
+      "rule": "Young trees, one by one, at uneven spacing with long gaps.",
+      "evidence": "Owner video IMG_0960, 2026-11-06 12:25-12:27 PST, and Friday Night Track.kml, walked along it; poses fitted to landmarks (frames B1-B9 of the study's contact sheet, kept outside Git). Frames B1-B4 and the crops at t=254, t=270 and t=278: young staked trees a couple of metres tall and leafy young shrubs in the mulch, at uneven spacing with long gaps."
+     },
+     {
+      "id": "promenade_trees_sea_side",
+      "kind": "tree",
+      "pattern": "drifts",
+      "within_xz": [[-350.12, 323.17], [-372.43, 289.83], [-381.14, 294.76], [-361.44, 329.57]],
+      "margin_m": 1.0,
+      "surfaces": [
+       "park_mulch"
+      ],
+      "drift_m": 9.5,
+      "count": [1, 1],
+      "spread": 1.0,
+      "spacing": {
+       "same": 1.0,
+       "other": 0.4
+      },
+      "gaps": {
+       "cover": 0.22,
+       "scale_m": 14.0
+      },
+      "mix": [
+       {
+        "prop": "island_oak_young",
+        "share": 1.0,
+        "variants": [0, 1],
+        "scale": [0.8, 0.95],
+        "band_m": [0.8, 99],
+        "max_slope": 0.6,
+        "spill_m": 0.0
+       }
+      ],
+      "basis": "production_inference",
+      "rule": "Young trees, one by one, at uneven spacing with long gaps.",
+      "evidence": "Owner video IMG_0960, 2026-11-06 12:25-12:27 PST, and Friday Night Track.kml, walked along it; poses fitted to landmarks (frames B1-B9 of the study's contact sheet, kept outside Git). Frames B1-B4 and the crops at t=254, t=270 and t=278: young staked trees a couple of metres tall and leafy young shrubs in the mulch, at uneven spacing with long gaps."
+     },
+     {
+      "id": "promenade_shrubs",
+      "kind": "planting_slot",
+      "pattern": "drifts",
+      "within_xz": [[-345.37, 318.18], [-356.2, 299.03], [-362.8, 285.53], [-369.23, 271.94], [-377.4, 255.88], [-374.26, 254.1], [-365.75, 269.97], [-351.67, 296.47], [-341.01, 315.72]],
+      "margin_m": 1.0,
+      "surfaces": [
+       "park_mulch"
+      ],
+      "drift_m": 5.5,
+      "count": [1, 3],
+      "spread": 1.3,
+      "spacing": {
+       "same": 0.7,
+       "other": 0.45
+      },
+      "gaps": {
+       "cover": 0.3,
+       "scale_m": 9.0
+      },
+      "mix": [
+       {
+        "prop": "pittosporum_tobira",
+        "share": 1.0,
+        "variants": [0, 0],
+        "scale": [0.8, 1.0],
+        "band_m": [0.4, 99],
+        "max_slope": 0.6,
+        "spill_m": 0.1
+       }
+      ],
+      "basis": "production_inference",
+      "rule": "Leafy young shrubs in ones to threes between the trees, with bare mulch between them.",
+      "evidence": "Owner video IMG_0960, 2026-11-06 12:25-12:27 PST, and Friday Night Track.kml, walked along it; poses fitted to landmarks (frames B1-B9 of the study's contact sheet, kept outside Git). Frames B1-B4 and the crops at t=254, t=270 and t=278: young staked trees a couple of metres tall and leafy young shrubs in the mulch, at uneven spacing with long gaps."
+     }
+    ],
+    "fences": [
+     {
+      "id": "promenade_marsh_fence",
+      "kind": "fence",
+      "fence_type": "chain_link",
+      "pattern": "legs",
+      "legs": [
+       {
+        "xz": [-343.33, 312.43]
+       },
+       {
+        "xz": [-359.41, 283.61]
+       },
+       {
+        "xz": [-373.24, 257.54]
+       }
+      ],
+      "params": {
+       "inside": "right"
+      },
+      "basis": "production_inference",
+      "rule": "Galvanised chain-link along the marsh side of the promenade, from the park to just short of the restroom cottage, the banners tied to it.",
+      "evidence": "Owner video IMG_0960, 2026-11-06 12:25-12:27 PST, and Friday Night Track.kml, walked along it; poses fitted to landmarks (frames B1-B9 of the study's contact sheet, kept outside Git). Frames B2-B4 and the crops at t=254, t=270 and t=278: plain chain-link at the park end, then printed vinyl banners about 4.5 m wide tied along it: a slate panel pointing to Mersea and the ferry, charcoal, ochre, parchment, coral and painted scenes. The art is original (street_fence_banners.png), no photo pixels, no people.",
+      "banners": [
+       {
+        "at_m": 15,
+        "width_m": 4.5,
+        "height_m": 1.6,
+        "art": 0
+       },
+       {
+        "at_m": 19.6,
+        "width_m": 4.5,
+        "height_m": 1.6,
+        "art": 1
+       },
+       {
+        "at_m": 24.2,
+        "width_m": 4.5,
+        "height_m": 1.6,
+        "art": 2
+       },
+       {
+        "at_m": 28.8,
+        "width_m": 4.5,
+        "height_m": 1.6,
+        "art": 3
+       },
+       {
+        "at_m": 33.4,
+        "width_m": 4.5,
+        "height_m": 1.6,
+        "art": 4
+       },
+       {
+        "at_m": 40,
+        "width_m": 4.5,
+        "height_m": 1.6,
+        "art": 5
+       },
+       {
+        "at_m": 44.6,
+        "width_m": 4.5,
+        "height_m": 1.6,
+        "art": 7
+       },
+       {
+        "at_m": 49.2,
+        "width_m": 4.5,
+        "height_m": 1.6,
+        "art": 2
+       },
+       {
+        "at_m": 53.8,
+        "width_m": 4.5,
+        "height_m": 1.6,
+        "art": 7
+       },
+       {
+        "at_m": 58.4,
+        "width_m": 4.5,
+        "height_m": 1.6,
+        "art": 6
+       }
+      ]
+     },
+     {
+      "id": "old_fence_across_walk",
+      "kind": "fence",
+      "pattern": "osm_way",
+      "way": "w1212173468",
+      "from_m": 0,
+      "to_m": 26.21,
+      "fence_type": "none",
+      "params": {},
+      "basis": "production_inference",
+      "rule": "OSM's chain-link across the promenade is not there now: the walk runs through its line unbroken (owner, 2026-11-06: it stays unbuilt).",
+      "evidence": "Owner video IMG_0960, 2026-11-06 12:25-12:27 PST, and Friday Night Track.kml, walked along it; poses fitted to landmarks (frames B1-B9 of the study's contact sheet, kept outside Git). Frames B6-B9 look along the road through the fence's line with nothing across it, and the owner walked through it on the track."
+     }
+    ]
+   },
+   {
+    "id": "ditch_road_end",
+    "name": "The road end at the ditch",
+    "pilot": true,
+    "reason": "The red barriers along the ditch side of the road end, beside the Johnson St lot's tail (owner video, 2026-11-06).",
+    "reference": "Owner video IMG_0960, 2026-11-06, t=98-123: frames D1, D3 and D4.",
+    "shape": {
+     "type": "polygon",
+     "points_xz": [[-299, 232], [-311, 238], [-311, 244], [-299, 238]]
+    },
+    "scatter": [],
+    "yard": [
+     {
+      "id": "road_end_barriers",
+      "pattern": "pack",
+      "lines": [[-300.6, 235.4, -308.4, 239.8]],
+      "orient": "along",
+      "facing": "forward",
+      "items": [
+       {
+        "weight": 1,
+        "prop": "equipment",
+        "params": {
+         "variant": 7,
+         "paint": "red"
+        }
+       }
+      ],
+      "gap_m": [0.05, 0.1],
+      "fill": 1.0,
+      "basis": "production_inference",
+      "rule": "A short row of red water-filled barriers along the ditch side of the road end, beyond the cobbles.",
+      "evidence": "Owner video IMG_0960, 2026-11-06, t=98-123: frames D1, D3 and D4."
+     }
+    ]
+   }
   ],
   "island_furniture": {
     "notes": [

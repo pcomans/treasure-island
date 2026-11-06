@@ -107,6 +107,12 @@ From the reviews of the shoreline, street ground, street objects, parked cars, v
   - The gravel shoulder reads as a graded path.
   - Far stall lines break into dashes at low angles, in every lot compared (Johnson St, Clipper Cove strip, Mersea field).
   - From directly above, a pale chip shows at the inner tip of the strip beside the south-west hatch (seen in review, 2026-11-06).
+- **Mersea ditch and promenade** (owner video and track, 2026-11-06):
+  - The owner's "boardwalk" is the wide paved promenade, a recorded exception to the OSM layout like the Johnson St lot. Its close footage stops at about z 236, so north of there, to the fence corner seen from the walk, it is plain surface and paint. The row of stock tanks along the lawn, seen from a distance north of z 236, isn't placed.
+  - Shot list for the owner, to finish it: from about (-400, 236) north past the tent to Mersea's west side, looking both ways along the walk; the ditch's north end, from the 9th Street side.
+  - The rust-steel sculpture on the lawn by the promenade isn't built. An owner 3D scan exists: https://www.kiriengine.app/share/download/bc9ac0d2f54245a6ae13a65ba1849253
+  - Plants at the ditch and along the walk are described by form; their species are unconfirmed.
+  - OSM's chain-link w1212173468 across the walk isn't built, by rule: the footage runs through its line, and the owner walked through it.
 - **Parked cars:** Avenue I's review is held, so its cars are unjudged.
 - **Shoreline:**
   - Two small dark tips remain at the north slipway: one at the grass corner of the ramp's head, one at its water end.

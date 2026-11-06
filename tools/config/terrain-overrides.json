@@ -2295,6 +2295,62 @@
           "reason": "The black-plastic stockpile's crest, about 5 m over the yard, along its length between the mound and Avenue N: Esri World Imagery, Vantor capture 2026-05-26 (0.5 m island tile and large-clutter research tile z-ne-yard, 0.25 m)."
         }
       ]
+    },
+    {
+     "id": "mersea_ditch_promenade",
+     "name": "The ditch and the promenade in front of Mersea",
+     "basis": "production_inference",
+     "evidence": "Owner video IMG_0960, 2026-11-06 12:25-12:27 PST, and Friday Night Track.kml, walked along it; poses fitted to landmarks (frames B1-B9 of the study's contact sheet, kept outside Git). The road runs level in every frame, where the 32 m land grid sags 0.7 m under it near (-366, 293). The marsh floor lies flat under a defined bank in frames D1-D4: the water stands about 12 m from the road end, where the land grid's smeared slope still stood 0.7 m too high.",
+     "scope": {
+      "source_keys": [],
+      "add_xz": [
+       [[-358.51, 325.62], [-386.08, 276.88], [-367.37, 266.29], [-354.68, 286.68], [-339.8, 315.03]],
+       [[-378.53, 244.89], [-377.45, 251.85], [-356.79, 292.38], [-349.54, 307.14], [-344.71, 309.82], [-323.24, 287.28], [-322.71, 283.53], [-327.81, 258.57], [-326.2, 254], [-321.1, 245.69], [-272.26, 203.29], [-279.77, 178.86], [-279.77, 170.81], [-264.48, 155.52], [-265.02, 150.95], [-275.74, 142.61], [-289.16, 125.46], [-297.75, 109.63], [-303.65, 111.25], [-326.2, 121.71], [-343.91, 132.18], [-346.32, 135.13], [-326.74, 178.06], [-315.19, 200.6], [-317.61, 210.53], [-324.32, 220.73], [-336.13, 224.48], [-378.53, 244.89]]
+      ],
+      "exclude_ways": [],
+      "exclude_xz": [
+       {
+        "points_xz": [[-448, 128], [-352, 128], [-352, 256], [-448, 256]],
+        "reason": "Land cells beside the tent w1001544698 and Mersea: splitting them would re-cut a foundation."
+       },
+       {
+        "points_xz": [[-352, 160], [-320, 160], [-320, 224], [-352, 224]],
+        "reason": "Land cells beside the tent w1001544698 and Mersea: splitting them would re-cut a foundation."
+       }
+      ],
+      "edge_blend_m": 3
+     },
+     "grade": {
+      "grid_m": 1,
+      "iterations": 3000,
+      "relaxation": 1.9
+     },
+     "regions": [
+      {
+       "id": "walk",
+       "shape": {
+        "line_xz": [[-349.43, 319.33], [-354.84, 309.75], [-360.75, 299.31], [-366.66, 288.87], [-372.57, 278.42]],
+        "width_m": 15
+       },
+       "rule": {
+        "kind": "profile",
+        "elevations_m": [3.13, 3.12, 3.11, 3.1, 3.1]
+       },
+       "reason": "The road's crown, level along its length, with the riprap crest and the marsh edge left to the grade."
+      },
+      {
+       "id": "marsh_floor",
+       "shape": {
+        "points_xz": [[-371.25, 264], [-344, 264], [-344, 232], [-312, 232], [-312, 152], [-338.62, 152], [-344, 140.21], [-344, 132.29], [-343.91, 132.18], [-326.2, 121.71], [-303.65, 111.25], [-297.75, 109.63], [-289.16, 125.46], [-275.74, 142.61], [-265.02, 150.95], [-264.48, 155.52], [-279.77, 170.81], [-279.77, 178.86], [-272.26, 203.29], [-321.1, 245.69], [-326.2, 254], [-327.81, 258.57], [-322.71, 283.53], [-323.24, 287.28], [-344.71, 309.82], [-349.54, 307.14], [-356.79, 292.38]],
+        "buffer_m": -6
+       },
+       "rule": {
+        "kind": "level",
+        "elevation_m": 1.95
+       },
+       "reason": "The marsh's flat floor, 6 m in from its OSM outline, so a bank ramps down from the edge; the outline less the guarded land cells."
+      }
+     ]
     }
   ]
 }

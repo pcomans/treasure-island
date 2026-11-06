@@ -114,6 +114,7 @@ below use. Place #8 is two zones. The zones the tree push added are in
 | #15 SFFD training facility yard | `fire_training_yard` | 2 est. | Yards B (as #7): rubble pile, white work vehicles | 3: secondary items |
 | #16 Fenced Navy investigation lots | `navy_investigation_lots` | 2 est. | Yards B (as #7): the OSM barbed chain-link fence is its only content; the lots are grass and old slabs | 3: the old slabs, where a dated photo shows them |
 | Mersea lot | `mersea_lot`; w28356874 | 2 (visual-review-clutter-rollout) | Re-check PASS at `7ccf14c7`: 29 cars from the May 2026 aerial, stall rows, the strip along Avenue A, chain-link and pickets. The objects contribution is level 3 (visual-review-objects), the street ground's paint and wear 4. The tree push planted the planters | 3: the lot light's second arm, a longer planted lamp island. 4: the dumpsters' finish |
+| Mersea promenade | `mersea_promenade`; lots `mersea_promenade`, `mersea_promenade_seal` (a recorded exception to the OSM layout) | | The owner's "boardwalk", from the owner's video, 2026-11-06: one wide pavement with its paint, mulch, crushed-rock and lawn edges, banner fence, baulks and young planting; not yet reviewed | Rate; detail stops at about z 236 |
 | Johnson St lot | `johnson_lot`; no OSM area, the one recorded exception (outline from the 2026-05-26 aerial, level 19) | 2 (visual-review-clutter-rollout) | PASS at `03f645ae`: outline and pattern rule match the aerial, with the tail joint and shoulder band from the PASS WITH FIXES at `d38100ad` fixed | 3: pole, drainage gap, rock pile, aisle marks |
 | Avenue N seawall palm row | `avenue_n_seawall` | 2 (visual-review-veg-models) | 61 mature Canary palms between Avenue N and the riprap and 135 shrubs beside them, from Nov 2025 Street View and the dated aerials | 3: secondary items |
 
@@ -137,7 +138,7 @@ research areas.
 | Cultural Park | `cultural_park_rows`; w1428380762 | 2 (visual-review-veg-models) | 51 young trees in rows by its paths and in its dark beds, sown by a rule from the May 2026 aerial | 3: secondary items |
 | Industrial core, Z7 | `island_trees`: `ninth_street_row`, `sffd_frontage_pines`, `sffd_north_pines`; set pieces `sffd_frontage_palm_*` | 2 (visual-review-veg-models) | 62 trees at the aerial's crowns and three young date palms, from the Jul 2023 and Sep 2025 Street View on 9th Street | 3: secondary items |
 | Mersea strip | `mersea_median` | 2 (visual-review-veg-models) | 294 low plants on dark mulch, from the Sep 2025 Street View on 9th Street | 3: secondary items |
-| The ditch next to Mersea | `mersea_ditch`; w1473022589 | 2 (visual-review-veg-models) | 689 plants sown by fields that read the land, on the ground shader's red floor and banks; owner photos, Nov 2026 | 3: the bank's density at the owner's photo spot (with the Johnson St lot), the even bank-top line, the foreground where the stones were |
+| The ditch next to Mersea | `mersea_ditch`; w1473022589 | 2 (visual-review-veg-models, before this rework) | Reworked from the owner's video, 2026-11-06: a level floor and defined bank in the terrain, the ground shader's marsh from the wetland's outline (`marsh_map.png`), plants sown by fields that read the land, red barriers and cobble piles at the road end; the rework is not yet reviewed | Re-rate |
 | Ferry arrival and spawn | views `ferry-arrival-north`, `spawn` | 2 (visual-review-veg-models) | The trees as seen from the two arrival views; the plaza's own row is in the zones table | 3: secondary items |
 | Island overviews | the fixed overviews; `island_trees`: `island_canopy`, `fourth_street_lot_palms` | 2 (visual-review-veg-models) | The tree cover as a whole, with the rules no site above covers: 189 crowns of the May 2026 aerial across the island and 21 palms on the 4th Street lot | 3: secondary items |
 
@@ -298,8 +299,10 @@ the rows below are rated only where a record names the prop.
 | Long bench | Cityside set pieces | | Whole-park PASS only | Rate |
 | Long picnic table | Cityside set pieces | | Whole-park PASS only | Rate |
 | BBQ grill | Cityside set pieces | | Whole-park PASS only | Rate |
-| Log seat | Cityside set pieces | | Whole-park PASS only | Rate |
+| Log seat | Cityside set pieces; the `baulk` form on the Mersea promenade | | Whole-park PASS only; the baulk not yet reviewed | Rate |
 | Pump station | Cityside set piece | | Whole-park PASS only | Rate |
+| Restroom cottage | Mersea promenade set piece, a site structure outside the frozen inventory | | Modelled from the owner's video, 2026-11-06, on the sides it shows; not yet reviewed | Rate |
+| Cobble pile | the ditch's road end, two set pieces | | From the owner's video and photos, Nov 2026; not yet reviewed | Rate |
 
 ### Fence types
 
@@ -308,7 +311,7 @@ gate leaves and banners are parts of the same kit.
 
 | Asset | Where used | Level | Evidence | Next level |
 |---|---|---|---|---|
-| Chain-link | #8 north, #10, #13, #15; OSM fences at #2 and #6 | | Added with the yards; no type-specific verdict | Rate |
+| Chain-link | #8 north, #10, #13, #15; OSM fences at #2 and #6; the Mersea promenade, with printed banners (`street_fence_banners.png`) | | Added with the yards; no type-specific verdict | Rate |
 | Chain-link with barbed wire | #16 (OSM w109042225), the #2 pen (OSM w1252737752) | | No type-specific verdict | Rate |
 | Chain-link with windscreen | Trade Winds link (Cultural Park), #1, #2, #6, #9, #12 (orange safety mesh), #13 | 2 est. | Step 3 r2 and r5: screen tone sampled and fixed, no sparkle at distance (PASS). Orange mesh saturated and opaque after the kit review (`e556bc40`) | 3: posts, rails and ties close up |
 | Chain-link with privacy slats | #1, #2, #4, #8 south | | No type-specific verdict | Rate |

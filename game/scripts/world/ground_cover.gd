@@ -18,6 +18,8 @@ const DETAIL_ROUGHNESS := preload("res://game/resources/textures/world/polyhaven
 ## The ground-cover map (tools/build_ground_cover_map.mjs) and the world
 ## rectangle it covers: tools/config/ground-cover.json's map origin and size.
 const COVER_MAP := preload("res://game/resources/textures/world/ground_cover/cover_map.png")
+## The marsh's plan on the same grid: signed distance from the wetland's outline.
+const MARSH_MAP := preload("res://game/resources/textures/world/ground_cover/marsh_map.png")
 const COVER_MAP_ORIGIN := Vector2(-720.0, -960.0)
 const COVER_MAP_SIZE_M := Vector2(1440.0, 1920.0)
 ## The family each map channel draws, as the shader's recipe uniforms (RGBA order).
@@ -74,8 +76,8 @@ const FAMILIES := {
 	"dry_field": {"dry_threshold": 0.29, "bare_threshold": 0.635, "green_dryness": 0.5, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
 	"bare": {"dry_threshold": -1.0, "bare_threshold": 0.345, "green_dryness": 0.0, "patch_scale_m": 20.0, "bare_scale_m": 15.0},
 	# The seasonal marsh (natural=wetland) east of the Mersea lot. The shader draws
-	# its floor and banks from the land's height (marsh_amount), on this family and
-	# on the field round it alike.
+	# its floor and banks from the wetland's outline and the land's height
+	# (marsh_amount, marsh_map), on this family and on the field round it alike.
 	"red_marsh": {"dry_threshold": 2.0, "bare_threshold": 2.0, "green_dryness": 0.5, "patch_scale_m": 24.0, "bare_scale_m": 14.0, "marsh_amount": 1.0},
 	# The old sand courts (natural=sand) in the residential north: pale bare
 	# ground grown over with dry weeds, about 0 / 60 / 40 (2026-05-26 aerial:
@@ -200,6 +202,7 @@ static func material(family: String) -> ShaderMaterial:
 	made.set_shader_parameter("detail_normal", DETAIL_NORMAL)
 	made.set_shader_parameter("detail_roughness", DETAIL_ROUGHNESS)
 	made.set_shader_parameter("cover_map", COVER_MAP)
+	made.set_shader_parameter("marsh_map", MARSH_MAP)
 	made.set_shader_parameter("cover_map_rect", Vector4(COVER_MAP_ORIGIN.x, COVER_MAP_ORIGIN.y, 1.0 / COVER_MAP_SIZE_M.x, 1.0 / COVER_MAP_SIZE_M.y))
 	for uniform: String in COVER_MAP_RECIPES:
 		var recipe: Dictionary = FAMILIES[COVER_MAP_RECIPES[uniform]]

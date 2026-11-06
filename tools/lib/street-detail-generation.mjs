@@ -244,6 +244,8 @@ const UNPLANTABLE_MATERIALS = Object.freeze([
   "park_dg",
   "park_plaza_lens",
   "park_plaza_zigzag",
+  "promenade_asphalt",
+  "promenade_seal",
   "road_path",
   "road_path_concrete",
   "road_path_pedestrian",
@@ -268,9 +270,10 @@ const PLAYER_WIDTH_M = 0.7;
 // Street props keep a player's width clear of what they stand beside, except these:
 // the stock tanks stand in a tight row against the chain-link, as photographed, so
 // their plan capsules (a little longer than the pallets) may overlap each other and
-// a fence run this much (m). Anything else stays a player's width away. The
-// clearance flood still checks what that shuts in.
-const PROPS_STANDING_TIGHT = Object.freeze(["stock_tank_planter"]);
+// a fence run this much (m), and the promenade's timber baulks lie in short rows, end
+// to end. Anything else stays a player's width away. The clearance flood still
+// checks what that shuts in.
+const PROPS_STANDING_TIGHT = Object.freeze(["log_seat", "stock_tank_planter"]);
 const TIGHT_PROP_GAP_M = -0.3;
 const SAFE_ID = /^[a-z0-9_]+$/u;
 

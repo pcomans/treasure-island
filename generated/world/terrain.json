@@ -68,7 +68,7 @@
     "maximum_clearance_m": 0.081,
     "maximum_serialization_tolerance_m": 0.01,
     "minimum_clearance_m": 0.019,
-    "sample_points": 317569
+    "sample_points": 327418
   },
   "raster_bbox_wgs84": [
     -122.380001708984,
@@ -209,10 +209,10 @@
     "basis": "production_inference",
     "config": {
       "path": "tools/config/terrain-overrides.json",
-      "sha256": "86783b8b6fd6182dcc0bb7d7473b3e735f70a9ac7b2b28bd943dfccc3ec3baa9"
+      "sha256": "032b58eceacdf4d8fb2d5eef32084c36c9b342d8976df93afa672e1a35fe7c37"
     },
-    "corrected_cells": 193,
-    "leaves": 5176,
+    "corrected_cells": 209,
+    "leaves": 5633,
     "maximum_cut_m": 20.205,
     "maximum_raise_m": 8.018,
     "mesh": {
@@ -221,7 +221,7 @@
       "sample_m": 0.5,
       "tolerance_m": 0.08
     },
-    "neighbour_edge_vertices": 297,
+    "neighbour_edge_vertices": 333,
     "refined_cell_bounds_m": [
       [
         0,
@@ -512,6 +512,24 @@
         96
       ],
       [
+        -352,
+        96,
+        -320,
+        128
+      ],
+      [
+        -320,
+        96,
+        -288,
+        128
+      ],
+      [
+        -288,
+        96,
+        -256,
+        128
+      ],
+      [
         0,
         96,
         32,
@@ -570,6 +588,24 @@
         96,
         640,
         128
+      ],
+      [
+        -352,
+        128,
+        -320,
+        160
+      ],
+      [
+        -320,
+        128,
+        -288,
+        160
+      ],
+      [
+        -288,
+        128,
+        -256,
+        160
       ],
       [
         0,
@@ -650,6 +686,18 @@
         160
       ],
       [
+        -320,
+        160,
+        -288,
+        192
+      ],
+      [
+        -288,
+        160,
+        -256,
+        192
+      ],
+      [
         32,
         160,
         64,
@@ -708,6 +756,18 @@
         160,
         704,
         192
+      ],
+      [
+        -320,
+        192,
+        -288,
+        224
+      ],
+      [
+        -288,
+        192,
+        -256,
+        224
       ],
       [
         448,
@@ -750,6 +810,18 @@
         192,
         704,
         224
+      ],
+      [
+        -352,
+        224,
+        -320,
+        256
+      ],
+      [
+        -320,
+        224,
+        -288,
+        256
       ],
       [
         384,
@@ -792,6 +864,24 @@
         224,
         672,
         256
+      ],
+      [
+        -416,
+        256,
+        -384,
+        288
+      ],
+      [
+        -384,
+        256,
+        -352,
+        288
+      ],
+      [
+        -352,
+        256,
+        -320,
+        288
       ],
       [
         -320,
@@ -840,6 +930,12 @@
         256,
         512,
         288
+      ],
+      [
+        -384,
+        288,
+        -352,
+        320
       ],
       [
         -352,
@@ -1382,8 +1478,8 @@
         672
       ]
     ],
-    "refined_cells": 193,
-    "refined_triangles": 12246,
+    "refined_cells": 209,
+    "refined_triangles": 13312,
     "schema_version": "ti.terrain-overrides/1",
     "sites": [
       {
@@ -1530,6 +1626,27 @@
           }
         ],
         "scope_area_m2": 6820.2
+      },
+      {
+        "edge_blend_m": 3,
+        "grade": {
+          "final_sweep_change_m": 0,
+          "free_nodes": 4758,
+          "kind": "harmonic"
+        },
+        "id": "mersea_ditch_promenade",
+        "name": "The ditch and the promenade in front of Mersea",
+        "regions": [
+          {
+            "id": "walk",
+            "rule": "profile"
+          },
+          {
+            "id": "marsh_floor",
+            "rule": "level"
+          }
+        ],
+        "scope_area_m2": 9159.7
       }
     ]
   },

@@ -59,8 +59,10 @@ export const STREET_FENCE_GATED_TYPES = Object.freeze(["chain_link_slatted", "ch
 export const STREET_FENCE_GATE_HINGES = Object.freeze(["start", "end"]);
 // A banner tied to a chain-link fence: a plain white sheet, no text, centred
 // on the fence's height (Gate 5, Nov 2025: a contractor's banner on the green
-// screen).
+// screen), or with art a printed panel, that cell of street_fence_banners.png
+// (the Mersea promenade, IMG_0960, 2026-11-06).
 export const STREET_FENCE_BANNER_TYPES = Object.freeze(["chain_link_slatted", "chain_link", "chain_link_screened"]);
+export const STREET_FENCE_BANNER_ART_CELLS = 8;
 export const STREET_FENCE_INSIDE = Object.freeze(["left", "right", "center"]);
 // Along-fence sampling step (m) for openings, and the clear margin (m) an opening
 // keeps on both sides of a crossing road or path.
@@ -221,7 +223,8 @@ export function validateFenceRules(zone, kinds) {
       invariant(Array.isArray(rule.banners) && rule.banners.length > 0, `${label} banners must be a nonempty list`);
       const height = fenceHeight(rule.fence_type, rule.params);
       for (const banner of rule.banners) {
-        invariant(JSON.stringify(Object.keys(banner ?? {}).sort()) === JSON.stringify(["at_m", "height_m", "width_m"]), `${label}: a banner is exactly {at_m, width_m, height_m}`);
+        invariant(JSON.stringify(Object.keys(banner ?? {}).filter((key) => key !== "art").sort()) === JSON.stringify(["at_m", "height_m", "width_m"]), `${label}: a banner is exactly {at_m, width_m, height_m} and optionally art`);
+        invariant(banner.art === undefined || (Number.isInteger(banner.art) && banner.art >= 0 && banner.art < STREET_FENCE_BANNER_ART_CELLS), `${label}: a banner's art is a cell below ${STREET_FENCE_BANNER_ART_CELLS}`);
         invariant(isFiniteNumber(banner.at_m) && banner.at_m >= 0 && isFiniteNumber(banner.width_m) && banner.width_m >= 0.5 && banner.width_m <= 6
           && isFiniteNumber(banner.height_m) && banner.height_m >= 0.3 && banner.height_m <= height - 0.2, `${label}: a banner needs at_m >= 0, width_m 0.5..6 and height_m 0.3..${(height - 0.2).toFixed(2)}`);
       }
@@ -534,7 +537,7 @@ export function placeStreetFences({
         const from = roundCoordinate(Math.max(0, banner.at_m - banner.width_m / 2));
         const to = roundCoordinate(Math.min(total, banner.at_m + banner.width_m / 2));
         invariant(runs.some(([s0, s1]) => from >= s0 - 1e-6 && to <= s1 + 1e-6), `${label} banner ${index} (${from}..${to} m) does not hang on one solid run`);
-        return { from_m: from, to_m: to, height_m: banner.height_m, ...runRecord(ends(from, to), deck) };
+        return { from_m: from, to_m: to, height_m: banner.height_m, ...(banner.art === undefined ? {} : { art: banner.art }), ...runRecord(ends(from, to), deck) };
       });
     }
     return block;

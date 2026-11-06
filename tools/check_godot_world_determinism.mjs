@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 
 import { buildStreetClutterKitGlb, STREET_CLUTTER_KIT_PATH } from "./build_street_clutter_kit.mjs";
 import { buildStreetYardKitGlb, STREET_YARD_KIT_PATH } from "./build_street_yard_kit.mjs";
-import { buildGroundCoverMap, decodeGroundCoverPng, GROUND_COVER_MAP_PATH } from "./lib/ground-cover-map.mjs";
+import { buildGroundCoverMap, buildMarshMap, decodeGroundCoverPng, GROUND_COVER_MAP_PATH, MARSH_MAP_PATH } from "./lib/ground-cover-map.mjs";
 import { invariant, sha256File, stableJson } from "./lib/world-contract.mjs";
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
@@ -104,6 +104,13 @@ function main() {
       committedMap.width === coverMap.grid.width && committedMap.height === coverMap.grid.height
         && Buffer.from(committedMap.rgba).equals(Buffer.from(coverMap.rgba)),
       `Committed ${GROUND_COVER_MAP_PATH} differs from a fresh draw; redraw it with tools/build_ground_cover_map.mjs`,
+    );
+    const marshMap = buildMarshMap({ projectRoot, worldRoot: first });
+    const committedMarsh = decodeGroundCoverPng(readFileSync(resolve(projectRoot, MARSH_MAP_PATH)));
+    invariant(
+      committedMarsh.width === marshMap.grid.width && committedMarsh.height === marshMap.grid.height
+        && Buffer.from(committedMarsh.rgba).equals(Buffer.from(marshMap.rgba)),
+      `Committed ${MARSH_MAP_PATH} differs from a fresh draw; redraw it with tools/build_ground_cover_map.mjs`,
     );
     const streetDetailPath = "street_detail.json";
     invariant(firstInventory.some((file) => file.path === streetDetailPath), "Clean generation omitted street_detail.json");

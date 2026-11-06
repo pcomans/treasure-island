@@ -1147,3 +1147,19 @@ A geometry proof between two bakes showed 11,431 triangles with a different mate
 ## Don't gate on a short timed sample in a browser
 
 The web smoke's run-speed check took two position reads 550 ms apart (2026-11-06). The merged build read 24 m/s against a limit of 21 while the player's true speed was 20: Chrome stalls for about 330 ms twice during a run, on main too, and the first read landed either side of the physics catch-up burst. Main passed only by that order. A replacement timed between the stalls failed when one reached its window. Gate on something a stall barely moves, such as distance over a hold, and say what the limit means as a true speed. Before naming a cause, log frame timestamps into a preallocated array, which changes nothing, and compare with the known-good build. Prove a new check can still fail.
+
+## Read HDR phone footage through its transfer, and anchor colours to it
+
+The owner's iPhone video of the ditch (2026-11-06) is HLG in BT.2020 with Dolby Vision. A plain ffmpeg frame came out flat and grey; tone-mapped by hand it looked right, but the curve still lifted the darks: the same lot asphalt read (96,88,86) in a frame and about (65,65,68) in the owner's SDR photo. Check `color_transfer` with ffprobe before extracting a frame, and set a material from the ratio to something the game already draws (here the lot's asphalt), not from a frame's raw values.
+
+## Measure a colour complaint's hue and grain before changing the colour
+
+The owner called the ditch "too red", and the first reading blamed an over-red palette. At native resolution the real floor was the redder of the two: about half its pixels crimson and red, against 1 % in the game, with mean colours almost equal. The game's fault was a smooth orange stain with 2-3 times less fine contrast. A mean colour would have hidden that, and desaturating would have made it worse. Compare hue histograms and local contrast at full resolution, and report what a complaint really means before tuning.
+
+## Ray-cast a ground shader through the matched pose before spending a render
+
+Porting the marsh branch of the ground shader to a short Node script, over the land's height raster and through the frame's pose, took minutes and ran in two seconds. Its first picture showed what no palette could fix: on land heights alone the floor began 30 m from the camera where the real water stands 12 m away, because the 32 m land grid smears a real bank. That led to a level floor in the terrain and a signed-distance map of the OSM outline. For a procedural ground, preview the form through a real pose before the first engine run.
+
+## A zone's ground, fences and yard rules run only when it is a pilot zone
+
+The Mersea promenade zone (2026-11-06) passed every schema check with `pilot: false` and would have drawn nothing: `streetGroundSettings` skips a zone that isn't a pilot, and fence and yard rules run over the pilot shapes alone. The first sign was an OSM fence row still reserving ground after a rule had cut it. A fence row with no `prop` is data, not a built fence: it holds its footprint in placement while nothing stands in the game, so read `prop` before saying a fence is built or unbuilt. Turning a zone into a pilot also starts building the OSM fences that reach its polygon, so keep the polygon tight or cut them by rule.
