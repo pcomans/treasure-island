@@ -13707,13 +13707,14 @@
       },
       "human_dependency_ids": [],
       "identity": {
-        "address_completeness": null,
-        "address_evidence": false,
-        "canonical_name": null,
+        "address_completeness": "street_and_housenumber",
+        "address_evidence": true,
+        "canonical_name": "Building 33 F, former Treasure Island Elementary School (Aracely Cafe at the south tip)",
         "currentness_claimed": false,
-        "formatted_address": null,
-        "identity_confidence": "source_key_only",
-        "name_evidence": false
+        "formatted_address": "401 13th Street",
+        "identity_confidence": "reference_association",
+        "identity_note": "OSM relation 133351 carries no name or address. The match to Building 33 F rests on the map pins (OSM node 5271201109, Aracely Cafe, 401 13th Street; the Google Maps pin on this footprint's south tip), TIDA Lease No. 1,568 (Jan 2026: a portion of Building 33 F, the Former Treasure Island Elementary School, 401 13th Street; about 2,090 sq ft on its south side and about 3,000 sq ft of land to the south-west) and dated photos of the cafe on these walls.",
+        "name_evidence": true
       },
       "legacy_adapter_ids": [],
       "protected_scopes": [],
@@ -13721,8 +13722,36 @@
         "building:r133351:wall"
       ],
       "recognition_cues": [],
-      "reference_records": [],
-      "reference_state": "identity_or_reference_research_required",
+      "reference_records": [
+        {
+          "observation_id": "r133351-cafe-tip-2025-2026",
+          "observed_regions": [
+            "SSE and ENE walls of the south tip, edges e6-e9: entrance, mural wall, patio, glazed run"
+          ],
+          "pixels_packaged": false,
+          "source_locator": "Google Street View panos aTtd and 4BjM (Mar 2025) and Maps visitor photos of Aracely Cafe (Jan and Aug 2026), retained outside Git",
+          "supports": [
+            "sloped pale fascia over a dark soffit, sage entrance fins, dark storefront",
+            "floral mural wall, bench planters, gravel patio with umbrellas, arched white sign slabs"
+          ]
+        },
+        {
+          "observation_id": "r133351-frontage-ends-2025",
+          "observed_regions": [
+            "SSE frontage e11-e15",
+            "east end e19-e21",
+            "WSW gym box e4"
+          ],
+          "pixels_packaged": false,
+          "source_locator": "Google Street View panos 6UrJ, gWJc, zHJe and nCSx (Mar 2025), retained outside Git",
+          "supports": [
+            "columned walk, blue spandrels, projecting bay, porch and ribbon windows, roof units",
+            "dark brown framed east wing",
+            "slate gym box with its deep fascia"
+          ]
+        }
+      ],
+      "reference_state": "reference_ready",
       "source_records": [
         {
           "role": "standalone_building_footprint",

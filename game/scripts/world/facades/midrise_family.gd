@@ -3254,8 +3254,16 @@ static func _part_lights(ctx: Ctx, spec: Dictionary) -> void:
 		wire.quad(previous - thick, here - thick, here + thick, previous + thick, side)
 		wire.quad(previous - thick, here - thick, here + thick, previous + thick, -side)
 		if i < count:
+			# A small glass globe under its socket.
 			var q := Vector2(here.x, here.z)
-			_plan_box(bulbs, q - Vector2(0.024, 0.0), q + Vector2(0.024, 0.0), Vector2(0.0, 1.0), here.y - 0.09, here.y - 0.03, 0.024)
+			_plan_box(wire, q - Vector2(0.012, 0.0), q + Vector2(0.012, 0.0), Vector2(0.0, 1.0), here.y - 0.05, here.y, 0.012)
+			var globe := here + Vector3.DOWN * 0.085
+			var rim: Array[Vector3] = [Vector3(0.04, 0.0, 0.0), Vector3(0.0, 0.0, 0.04), Vector3(-0.04, 0.0, 0.0), Vector3(0.0, 0.0, -0.04)]
+			for k in 4:
+				var near := rim[k]
+				var far := rim[(k + 1) % 4]
+				bulbs.tri(globe + Vector3.UP * 0.04, globe + near, globe + far, near + far + Vector3.UP * 0.04)
+				bulbs.tri(globe + Vector3.DOWN * 0.04, globe + near, globe + far, near + far + Vector3.DOWN * 0.04)
 		previous = here
 
 
