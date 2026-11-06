@@ -58,7 +58,7 @@ const FAMILIES := {
 	# dirt shows in a few patches and along tracks, which these patches stand
 	# for (2026-11-05 visual review: evenly spread pale blobs read as desert
 	# camouflage from above).
-	"field": {"dry_threshold": 0.378, "bare_threshold": 0.69, "green_dryness": 0.35, "patch_scale_m": 32.0, "bare_scale_m": 21.0}, "marsh_amount": 1.0}
+	"field": {"dry_threshold": 0.378, "bare_threshold": 0.69, "green_dryness": 0.35, "patch_scale_m": 32.0, "bare_scale_m": 21.0, "marsh_amount": 1.0},
 	# Dry straw grass, about 11 / 89 / 0: the residential grounds and the
 	# Avenue N verge (map), the Job Corps campus, GAA Field B, the old Job
 	# Corps ballfield and the dry Avenue D medians. The aerial shows only a
