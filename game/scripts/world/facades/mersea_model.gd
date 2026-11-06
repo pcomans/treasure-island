@@ -685,8 +685,8 @@ static func build(records: Dictionary,land: Dictionary,mural_asset_path: String)
 		var g:=Node3D.new();g.position=Vector3(pt.x,BASES.w1308007114+HEIGHT,pt.y)-host.position;g.set_meta("mersea_role","roof");host.add_child(g)
 		box(g,Vector3(0,0.08,0),Vector3(1.0,0.16,1.0),mat("b9bdb5",0.7))
 		cyl(g,Vector3(0,0.32,0),0.30,0.5,mat("b6bcb5",0.75,0.3));cyl(g,Vector3(0,0.62,0),0.51,0.32,mat("c8cbc2",0.7,0.3),0.44)
-	for probe_name: String in REFLECTION_PROBES:
-		p.ready.connect(_settle_reflection.bind(p.get_node("MerseaSite_"+POI+"/"+probe_name)),CONNECT_ONE_SHOT)
+	# One connection: a second bind of the same method counts as the same one.
+	p.ready.connect(_settle_generated_reflections.bind(p),CONNECT_ONE_SHOT)
 	return p
 
 
@@ -990,6 +990,11 @@ static func resume_prebuilt_reflections(buildings: Node3D) -> void:
 		for probe: Node in buildings.find_children(probe_name, "ReflectionProbe", true, false):
 			probe.update_mode = ReflectionProbe.UPDATE_ALWAYS
 			_settle_reflection(probe, buildings)
+
+
+static func _settle_generated_reflections(assembly: Node3D) -> void:
+	for probe_name: String in REFLECTION_PROBES:
+		_settle_reflection(assembly.get_node("MerseaSite_"+POI+"/"+probe_name))
 
 
 ## Keeps a probe updating until the procedural images it captures exist, then lets
