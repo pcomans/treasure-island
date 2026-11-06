@@ -47,13 +47,18 @@ const CARRIED_CHANNELS: Array[int] = [Mesh.ARRAY_NORMAL, Mesh.ARRAY_TANGENT, Mes
 const UNSUPPORTED_CHANNELS: Array[int] = [Mesh.ARRAY_CUSTOM0, Mesh.ARRAY_CUSTOM1, Mesh.ARRAY_CUSTOM2, Mesh.ARRAY_CUSTOM3, Mesh.ARRAY_BONES, Mesh.ARRAY_WEIGHTS]
 
 
-## Merges in place under buildings. Returns the counts before and after, for the log.
+## Merges in place under buildings. Returns the counts before and after, for the log,
+## and in problems any merged mesh that came out short: the bake fails on those.
 static func merge(buildings: Node3D) -> Dictionary:
 	var leaves: Array[Node] = buildings.find_children("*", "MeshInstance3D", true, false)
 	var uses := {}
 	for node: MeshInstance3D in leaves:
 		if node.mesh != null:
 			uses[node.mesh] = int(uses.get(node.mesh, 0)) + 1
+	# A MultiMesh draws its mesh too, so taking surfaces out of it would change those instances.
+	for node: MultiMeshInstance3D in buildings.find_children("*", "MultiMeshInstance3D", true, false):
+		if node.multimesh != null and node.multimesh.mesh != null:
+			uses[node.multimesh.mesh] = int(uses.get(node.multimesh.mesh, 0)) + 1
 	var groups := {}
 	var signatures := {}
 	var materials := {}
@@ -92,14 +97,20 @@ static func merge(buildings: Node3D) -> Dictionary:
 		counts.surfaces_kept += mesh.get_surface_count()
 	var merged_meshes := 0
 	var merged_surfaces := 0
+	var problems := PackedStringArray()
 	for group: Dictionary in groups.values():
 		# A group stays empty when all its candidates' surfaces had to stay.
 		if not group.surfaces.is_empty():
-			merged_surfaces += _build_node(group, merged_meshes)
+			var built := _build_node(group, merged_meshes)
+			var problem := _build_problem(built, group)
+			if problem != "":
+				problems.append("BakedBatch%d under %s: %s" % [merged_meshes, (group.anchor as Node3D).get_path(), problem])
+			merged_surfaces += built.get_surface_count()
 			merged_meshes += 1
 	counts["meshes_after"] = counts.meshes_kept + merged_meshes
 	counts["surfaces_after"] = counts.surfaces_kept + merged_surfaces
 	counts["materials_after"] = materials.size()
+	counts["problems"] = problems
 	return counts
 
 
@@ -131,6 +142,10 @@ static func _may_merge(node: MeshInstance3D, uses: Dictionary, anchor: Node3D, t
 		return false
 	if node.mesh is ArrayMesh and (node.mesh as ArrayMesh).get_blend_shape_count() != 0:
 		return false
+	# Overrides are held by surface index, which taking surfaces out of the mesh would shift.
+	for surface in node.get_surface_override_material_count():
+		if node.get_surface_override_material(surface) != null:
+			return false
 	for key: String in INSTANCE_DEFAULTS:
 		if node.get(key) != INSTANCE_DEFAULTS[key]:
 			return false
@@ -227,7 +242,7 @@ static func _vertex_color(color: Color) -> Color:
 	return Color((roundf(color.r * 255.0) + 0.25) / 255.0, (roundf(color.g * 255.0) + 0.25) / 255.0, (roundf(color.b * 255.0) + 0.25) / 255.0)
 
 
-static func _build_node(group: Dictionary, index: int) -> int:
+static func _build_node(group: Dictionary, index: int) -> ArrayMesh:
 	var mesh := ArrayMesh.new()
 	for surface: Dictionary in group.surfaces.values():
 		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, _surface_arrays(surface))
@@ -242,7 +257,23 @@ static func _build_node(group: Dictionary, index: int) -> int:
 	# main.gd leaves these whole: their distance culling would drop an entire building.
 	node.set_meta("baked_merge", true)
 	(group.anchor as Node3D).add_child(node)
-	return mesh.get_surface_count()
+	return mesh
+
+
+## Why a built mesh doesn't hold all of its group, or "" when it does. A surface that won't
+## build only logs an engine error, and its source meshes are gone by then.
+static func _build_problem(mesh: ArrayMesh, group: Dictionary) -> String:
+	var surfaces: Array = group.surfaces.values()
+	if mesh.get_surface_count() != surfaces.size():
+		return "%d of %d surfaces built" % [mesh.get_surface_count(), surfaces.size()]
+	for surface in surfaces.size():
+		var wanted := 0
+		for part: Dictionary in surfaces[surface].parts:
+			var arrays: Array = part.arrays
+			wanted += (arrays[Mesh.ARRAY_INDEX] as PackedInt32Array).size() if arrays[Mesh.ARRAY_INDEX] != null else (arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array).size()
+		if mesh.surface_get_array_index_len(surface) != wanted:
+			return "surface %d has %d of %d indices" % [surface, mesh.surface_get_array_index_len(surface), wanted]
+	return ""
 
 
 static func _surface_arrays(surface: Dictionary) -> Array:

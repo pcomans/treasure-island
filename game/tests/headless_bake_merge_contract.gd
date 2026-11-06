@@ -78,7 +78,40 @@ func _run() -> void:
 	var mixed := _two_surface_part(_material(Color(0.2, 0.6, 0.3)), glass_material)
 	var mixed_glass := _triangles(mixed.mesh, 1)
 
-	Merge.merge(buildings)
+	# A surface override stays on its surface index, so that part stays whole.
+	var overridden := _two_surface_part(_material(Color(0.2, 0.6, 0.3)), glass_material)
+	var override_material := _material(Color.ORANGE)
+	overridden.set_surface_override_material(0, override_material)
+	# A mesh another part or a MultiMesh also draws must keep its surfaces.
+	var shared_part := _two_surface_part(_material(Color(0.2, 0.6, 0.3)), glass_material)
+	var twin := MeshInstance3D.new()
+	twin.mesh = shared_part.mesh
+	record.add_child(twin)
+	var instanced := _two_surface_part(_material(Color(0.2, 0.6, 0.3)), glass_material)
+	var drawn_by_multimesh := MultiMeshInstance3D.new()
+	drawn_by_multimesh.multimesh = MultiMesh.new()
+	drawn_by_multimesh.multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	drawn_by_multimesh.multimesh.mesh = instanced.mesh
+	drawn_by_multimesh.multimesh.instance_count = 1
+	record.add_child(drawn_by_multimesh)
+
+	var report := Merge.merge(buildings)
+	check((report.problems as PackedStringArray).is_empty(), "A clean merge must report no problems: %s" % report.problems)
+
+	check(is_instance_valid(overridden) and overridden.mesh.get_surface_count() == 2 and overridden.get_surface_override_material(0) == override_material, "A part with a surface override must stay whole")
+	check(is_instance_valid(shared_part) and is_instance_valid(twin) and twin.mesh.get_surface_count() == 2, "A mesh two parts draw must keep its surfaces")
+	check(is_instance_valid(instanced) and instanced.mesh.get_surface_count() == 2 and drawn_by_multimesh.multimesh.mesh == instanced.mesh, "A mesh a MultiMesh draws must keep its surfaces")
+
+	# A merged mesh that came out short must be caught, since its sources are gone by then.
+	var part_arrays: Array = instanced.mesh.surface_get_arrays(0)
+	var group := {"surfaces": {"a": {"parts": [{"arrays": part_arrays}]}, "b": {"parts": [{"arrays": part_arrays}]}}}
+	var built := ArrayMesh.new()
+	built.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, _indexed(part_arrays))
+	check(Merge._build_problem(built, group) != "", "A missing surface must be a problem")
+	built.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, _indexed(part_arrays))
+	check(Merge._build_problem(built, group) == "", "A complete mesh must not be a problem")
+	group.surfaces.a.parts.append({"arrays": part_arrays})
+	check(Merge._build_problem(built, group) != "", "A surface short of indices must be a problem")
 
 	check(not is_instance_valid(red) and not is_instance_valid(blue), "Parts that merged must leave the tree")
 	for index in kept.size():
@@ -167,6 +200,13 @@ func _two_surface_part(first: Material, second: Material) -> MeshInstance3D:
 	part.mesh = mesh
 	record.add_child(part)
 	return part
+
+
+## An unindexed triangle's arrays with an index buffer, as merged surfaces have.
+func _indexed(arrays: Array) -> Array:
+	var copy := arrays.duplicate()
+	copy[Mesh.ARRAY_INDEX] = PackedInt32Array([0, 1, 2])
+	return copy
 
 
 ## The batch directly under parent holding the given physical role ("" for none).
