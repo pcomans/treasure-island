@@ -1609,12 +1609,14 @@ export function generateStreetGround({
   const sidewalks = roads.filter((object) => object.road_visual_class === "pedestrian" && object.tags.footway === "sidewalk");
   const pedestrianIndex = partsIndex("pedestrian ways", roads.filter((object) => object.road_visual_class === "pedestrian").map((object) => object.geometry));
   const lots = objects.filter((object) => object.roles.includes("major_area") && object.tags.amenity === "parking" && nearPilot(object, 30));
-  // The lot OSM lacks stands on its traced outline, off the carriageway; its
-  // source key is the OSM way it meets, for the records' provenance.
+  // The lot OSM lacks stands on its traced outline, over the rounded end of the
+  // road it meets: the aerial's joint with the older pavement is straight, so the
+  // lot's sheet lies across that end. Its source key is the OSM way it meets, for
+  // the records' provenance.
   const exceptionLots = (rules?.lots ?? []).filter((lot) => lot.osm_exception !== undefined).map((lot) => {
     invariant(playableObjects.has(lot.source_key), `Street ground lot ${lot.id} names ${lot.source_key}, which is not an OSM object`);
     const ring = lot.osm_exception.outline_xz.map(([x, z]) => [x, -z]);
-    return { lot, object: { geometry: difference(`lot ${lot.id} off the carriageway`, [[ringArea(ring) > 0 ? ring : [...ring].reverse()]], [vehicleUnion]) } };
+    return { lot, object: { geometry: [[ringArea(ring) > 0 ? ring : [...ring].reverse()]] } };
   });
   const exceptionLotIndex = polygonIndex(union("exception lots", exceptionLots.map(({ object }) => object.geometry)));
   const lotUnion = union("parking lots", [...lots, ...exceptionLots.map(({ object }) => object)].map((object) => object.geometry));
