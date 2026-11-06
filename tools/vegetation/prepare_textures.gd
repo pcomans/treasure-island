@@ -101,7 +101,8 @@ const CELL_MARGIN := 8
 ## cap fills a clump's dense core from above without a flat rim of its own.
 const CAP_CELLS := ["tussock_top.png", "bronze_top.png"]
 ## Low-plant images graded toward the dated Cityside photos and November:
-## [tint, desaturation]. The generated sedge, tansy and monkeyflower came out
+## [tint, desaturation] and optionally a power on each channel, which darkens the
+## stems of a card and leaves its pale seed heads. The generated sedge, tansy and monkeyflower came out
 ## lime, the rush yellow-green, the bronze sedge orange rather than copper-tan,
 ## the sagebrush frosty, the dried flower heads too red; the litter is pulled
 ## down to dull debris.
@@ -112,8 +113,8 @@ const LOW_GRADES := {
 	"sagebrush_foliage.png": [Color(0.8, 0.86, 0.78), 0.0],
 	"sagebrush_side.png": [Color(0.74, 0.84, 0.72), 0.0],
 	"litter.png": [Color(0.64, 0.62, 0.6), 0.55],
-	"seeded_stems.png": [Color(0.86, 0.84, 0.78), 0.5],
-	"seeded_tufts.png": [Color(0.84, 0.8, 0.74), 0.42],
+	"seeded_stems.png": [Color(0.72, 0.68, 0.62), 0.5],
+	"seeded_tufts.png": [Color(1.0, 0.98, 0.93), 0.6, 1.4],
 	"woolly_stalks.png": [Color(0.78, 0.72, 0.66), 0.55],
 	"buckwheat_stalks.png": [Color(0.84, 0.74, 0.64), 0.7],
 	"buckwheat_foliage.png": [Color(0.8, 0.76, 0.68), 0.55],
@@ -274,7 +275,7 @@ func _pack_meadow(images: Dictionary, errors: Array[String]) -> void:
 		if name in ["reedgrass_clump.png", "sedge_tussock.png", "rush_clump.png", "seeded_stems.png"]:
 			_straw(cell)
 		if LOW_GRADES.has(name):
-			_grade(cell, LOW_GRADES[name][0], LOW_GRADES[name][1])
+			_grade(cell, LOW_GRADES[name][0], LOW_GRADES[name][1], LOW_GRADES[name][2] if LOW_GRADES[name].size() > 2 else 1.0)
 		atlas.blit_rect(cell, Rect2i(Vector2i.ZERO, cell.get_size()), Vector2i(512 * (index % 4) + CELL_MARGIN, 512 * (index / 4) + CELL_MARGIN))
 	_fill_transparent(atlas)
 	_save(atlas, OUT + "meadow_atlas.png", errors)
@@ -289,7 +290,7 @@ func _pack_perennial(images: Dictionary, errors: Array[String]) -> void:
 		var name: String = cells[index]
 		var cell := _keyed_fit(images[name], 512 - 2 * CELL_MARGIN, 512 - 2 * CELL_MARGIN, CYAN if name in ON_CYAN else MAGENTA)
 		if LOW_GRADES.has(name):
-			_grade(cell, LOW_GRADES[name][0], LOW_GRADES[name][1])
+			_grade(cell, LOW_GRADES[name][0], LOW_GRADES[name][1], LOW_GRADES[name][2] if LOW_GRADES[name].size() > 2 else 1.0)
 		if name in CAP_CELLS:
 			_radial_fade(cell, 0.14, 0.36)
 		atlas.blit_rect(cell, Rect2i(Vector2i.ZERO, cell.get_size()), Vector2i(512 * (index % 4) + CELL_MARGIN, 512 * (index / 4) + CELL_MARGIN))
@@ -579,7 +580,7 @@ func _radial_fade(image: Image, inner: float, outer: float) -> void:
 
 
 ## Multiplies visible colour by tint and pulls it toward grey by desaturate (0..1).
-func _grade(image: Image, tint: Color, desaturate: float) -> void:
+func _grade(image: Image, tint: Color, desaturate: float, power := 1.0) -> void:
 	image.convert(Image.FORMAT_RGBA8)
 	var data := image.get_data()
 	for i in range(0, data.size(), 4):
@@ -587,9 +588,9 @@ func _grade(image: Image, tint: Color, desaturate: float) -> void:
 		var g := data[i + 1] / 255.0
 		var b := data[i + 2] / 255.0
 		var grey := r * 0.3 + g * 0.59 + b * 0.11
-		data[i] = int(round(clampf(lerpf(r, grey, desaturate) * tint.r, 0.0, 1.0) * 255.0))
-		data[i + 1] = int(round(clampf(lerpf(g, grey, desaturate) * tint.g, 0.0, 1.0) * 255.0))
-		data[i + 2] = int(round(clampf(lerpf(b, grey, desaturate) * tint.b, 0.0, 1.0) * 255.0))
+		data[i] = int(round(clampf(pow(lerpf(r, grey, desaturate), power) * tint.r, 0.0, 1.0) * 255.0))
+		data[i + 1] = int(round(clampf(pow(lerpf(g, grey, desaturate), power) * tint.g, 0.0, 1.0) * 255.0))
+		data[i + 2] = int(round(clampf(pow(lerpf(b, grey, desaturate), power) * tint.b, 0.0, 1.0) * 255.0))
 	image.set_data(image.get_width(), image.get_height(), false, Image.FORMAT_RGBA8, data)
 
 

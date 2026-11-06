@@ -90,12 +90,15 @@ uniform vec3 rust_blade : source_color = vec3(0.275, 0.170, 0.085);
 uniform vec3 rust_straw : source_color = vec3(0.370, 0.290, 0.190);
 uniform vec3 marsh_brown : source_color = vec3(0.300, 0.225, 0.150);
 uniform vec3 marsh_olive : source_color = vec3(0.235, 0.205, 0.090);
-uniform vec3 bank_gap : source_color = vec3(0.280, 0.245, 0.205);
-uniform vec3 bank_blade : source_color = vec3(0.385, 0.340, 0.270);
-uniform vec3 bank_straw : source_color = vec3(0.520, 0.470, 0.370);
-uniform vec3 bank_gravel : source_color = vec3(0.560, 0.520, 0.450);
+uniform vec3 bank_gap : source_color = vec3(0.216, 0.188, 0.160);
+uniform vec3 bank_blade : source_color = vec3(0.298, 0.262, 0.212);
+uniform vec3 bank_straw : source_color = vec3(0.405, 0.365, 0.292);
+uniform vec3 bank_gravel : source_color = vec3(0.470, 0.435, 0.380);
 uniform vec3 bank_stone : source_color = vec3(0.740, 0.700, 0.620);
-uniform vec3 puddle_tint : source_color = vec3(0.30, 0.38, 0.50);
+uniform vec3 marsh_far_red : source_color = vec3(0.400, 0.250, 0.070);
+uniform vec3 marsh_far_olive : source_color = vec3(0.330, 0.300, 0.110);
+uniform vec3 marsh_far_straw : source_color = vec3(0.500, 0.440, 0.270);
+uniform vec3 puddle_tint : source_color = vec3(0.20, 0.24, 0.28);
 
 // A watered pitch's sprinkler grid: dry patches midway between the heads of a
 // grid_m square grid turned grid_angle radians from world +X, at grid_amount.
@@ -115,7 +118,7 @@ uniform float fade_end_m = 110.0;
 // Measured on the lossless (compress/mode=0) import; recompute if that changes.
 const vec3 LAYER_SHARE = vec3(0.6108, 0.3586, 0.0305);
 // The noise level above which water stands at marsh_floor_y.
-const float WATER_LEVEL = 0.54;
+const float WATER_LEVEL = 0.62;
 
 // The ground's height, for the marsh's standing water.
 varying float ground_y;
@@ -208,6 +211,7 @@ void fragment() {
 	vec3 ground = mix(green, dry, dry_w);
 	float pool = 0.0;
 	float marsh_cover = 0.0;
+	float rough = 0.0;
 	if (marsh_amount > 0.0) {
 		vec2 axis = marsh_axis.zw - marsh_axis.xy;
 		vec2 from_start = p - marsh_axis.xy;
@@ -223,11 +227,19 @@ void fragment() {
 			float n_tiny = mix(value_noise(p / 0.8 + vec2(29.9, 13.3)), 0.5, fade);
 			float n_wide = value_noise(p / 23.0 + vec2(71.3, 37.9));
 			float n_patch8 = value_noise(p / 8.0 + vec2(19.3, 83.1));
+			float far_off = smoothstep(150.0, 420.0, length(VERTEX));
 			float h = ground_y + 0.6 * (n_wide - 0.5) + 0.5 * (n_mid - 0.5) + 0.3 * (n_small - 0.5);
 
 			// Dull straw in dark and pale patches over crusted fill, gravel toward the top.
 			vec3 bank = cover_layer(bank_gap, bank_blade, bank_straw, m, 0.8, fade);
-			bank *= mix(0.6 + 0.8 * smoothstep(0.3, 0.7, 0.45 * n_mid + 0.3 * n_patch8 + 0.25 * n_tiny), 1.0, fade);
+			bank *= mix(0.5 + 1.0 * smoothstep(0.3, 0.7, 0.45 * n_mid + 0.3 * n_patch8 + 0.25 * n_tiny), 1.0, fade);
+			// Dead grass lies in strands, in patches that lie two ways.
+			if (fade < 1.0) {
+				vec2 lay_a = vec2(0.82 * p.x + 0.57 * p.y, 0.82 * p.y - 0.57 * p.x);
+				vec2 lay_b = vec2(0.26 * p.x - 0.97 * p.y, 0.26 * p.y + 0.97 * p.x);
+				float strand = mix(value_noise(lay_a / vec2(1.1, 0.16)), value_noise(lay_b / vec2(1.1, 0.16) + vec2(9.7, 3.1)), smoothstep(0.42, 0.58, n_patch8));
+				bank *= mix(0.62 + 0.76 * strand, 1.0, fade);
+			}
 			// The slope falls away dark to its foot, pale at the top.
 			bank *= mix(0.78, 1.08, smoothstep(2.95, 3.9, h));
 			float gravel_w = 0.75 * smoothstep(3.3, 3.9, h) * smoothstep(0.5, 0.62, 0.5 * n_patch8 + 0.3 * n_small + 0.2 * n_tiny);
@@ -247,8 +259,20 @@ void fragment() {
 			vec3 marsh = mix(mix(mix(red, brown, 0.7 * brown_w) * (1.0 - 0.35 * dark_w), olive, 0.85 * olive_w), bank, 0.5 * straw_w);
 			float carpet = 1.0 - smoothstep(2.8, 3.2, h);
 
+			// From far off the mats would average to a dark stain under the haze: they lift
+			// and warm to red-brown and olive, broken by straw, and the bank goes back to
+			// the ground round it.
+			if (far_off > 0.0) {
+				float far_mats = 0.6 * value_noise(p / 27.0 + vec2(17.3, 3.9)) + 0.4 * n_mid;
+				vec3 far_marsh = mix(marsh_far_red, marsh_far_olive, smoothstep(0.44, 0.6, far_mats));
+				far_marsh = mix(far_marsh, marsh_far_straw, smoothstep(0.52, 0.66, value_noise(p / 15.0 + vec2(51.1, 29.7))));
+				marsh = mix(marsh, far_marsh, far_off);
+				bank = mix(bank, ground, far_off);
+			}
+
 			ground = mix(ground, mix(bank, marsh, carpet), region * max(bank_w, carpet));
 			marsh_cover = region * carpet;
+			rough = region * (1.0 - carpet) * bank_w;
 
 			// Pale stones in loose scatters on the banks, few on the floor, thick in patches
 			// of broken rubble with a dark foot, all gone with distance.
@@ -272,11 +296,13 @@ void fragment() {
 			}
 
 			vec2 along = vec2(0.643 * p.x + 0.766 * p.y, 0.643 * p.y - 0.766 * p.x);
-			float water = 0.5 * value_noise(along / vec2(19.0, 6.0) + vec2(3.7, 19.1)) + 0.34 * value_noise(along / vec2(8.0, 3.0) + vec2(41.3, 7.9)) + 0.16 * n_small;
+			float water = 0.5 * value_noise(along / vec2(13.0, 4.5) + vec2(3.7, 19.1)) + 0.34 * value_noise(along / vec2(5.5, 2.4) + vec2(41.3, 7.9)) + 0.16 * n_small;
 			water -= WATER_LEVEL + 0.75 * (ground_y - marsh_floor_y);
-			water += 0.04 * (n_tiny - 0.5);
-			ground *= 1.0 - 0.5 * smoothstep(-0.09, 0.0, water) * region;
-			pool = smoothstep(0.0, 0.035, water) * region;
+			water += 0.08 * (n_tiny - 0.5) + 0.06 * (n_mid - 0.5);
+			ground *= 1.0 - 0.5 * smoothstep(-0.1, 0.0, water) * region * (1.0 - 0.7 * far_off);
+			// Plants and mud stand through the water's edge, so it never ends in a line.
+			float reeds = smoothstep(0.42, 0.62, 0.5 * n_tiny + 0.5 * n_small);
+			pool = smoothstep(0.0, 0.05, water) * (1.0 - reeds * (1.0 - smoothstep(0.04, 0.1, water))) * region * (1.0 - 0.75 * far_off);
 		}
 	}
 	if (mix_settings.y <= 1.0 + patch_softness) {
@@ -303,9 +329,9 @@ void fragment() {
 	// Matte, with a gentle normal fade, so distant ground does not turn paler
 	// than near ground through grazing-angle sky reflection or flatter normals;
 	// standing water alone holds the sky.
-	ROUGHNESS = mix(mix(clamp(texture(detail_roughness, uv_a).r, 0.85, 1.0), 1.0, fade), 0.05, pool);
-	SPECULAR = mix(0.2, 0.5, pool);
-	METALLIC = 0.45 * pool;
+	ROUGHNESS = mix(mix(clamp(texture(detail_roughness, uv_a).r, 0.85, 1.0), 1.0, fade), 0.14, pool);
+	SPECULAR = mix(0.2, 0.45, pool);
+	METALLIC = 0.25 * pool;
 	NORMAL_MAP = texture(detail_normal, uv_a).rgb;
-	NORMAL_MAP_DEPTH = normal_strength * (1.0 - 0.5 * fade) * (1.0 - pool);
+	NORMAL_MAP_DEPTH = normal_strength * (1.0 - 0.5 * fade) * (1.0 - pool) * (1.0 + 1.5 * rough);
 }

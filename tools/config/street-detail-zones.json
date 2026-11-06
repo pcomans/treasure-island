@@ -736,7 +736,8 @@
      "kind": "tree",
      "pattern": "along",
      "source_keys": ["w8921530"],
-     "offsets_m": [-8.0],
+     "offsets_m": [-10.75],
+     "give_m": 2.75,
      "spacing_m": 10,
      "jitter_m": 1.0,
      "acceptance": 0.95,
@@ -748,7 +749,7 @@
       "scale": [0.9, 1.15]
      },
      "basis": "production_inference",
-     "rule": "Mature Canary Island date palms (Phoenix canariensis: a thick trunk of diamond leaf scars 7.6-9.8 m tall under the trimmed knob and a full arching crown) stand in one row on the seawall side of Avenue N, about 5 m beyond the game's curb (8 m right of the OSM centre line) and about 10 m apart, from the bend near z 185 to the way's north end, with a few gaps where a palm is missing; the verge under them is dry straw (tools/config/ground-cover.json).",
+     "rule": "Mature Canary Island date palms (Phoenix canariensis: a thick trunk of diamond leaf scars 7.6-9.8 m tall under the trimmed knob and a full arching crown) stand in one row on the seawall side of Avenue N, about 8 m beyond the game's curb (10.75 m right of the OSM centre line, stepping back up to give_m where the riprap comes close, and clear of the power line) and about 10 m apart, from the bend near z 185 to the way's north end, with a few gaps where a palm is missing; the verge under them is dry straw (tools/config/ground-cover.json).",
      "evidence": "Google Street View Nov 2025, pano ttrmGi5rdijqAHRqMz7bsQ at 505 Avenue N (game about (572, -103)), headings 20 and 75 (inventory refs sv02, sv03): mature date palms in a row beyond the sidewalk on the seawall side; Wayback aerials 2026-05-26 (a19-east-avN-strip) and 2025-08-29 (a20-east-seawall-row): one row of palm crowns about 10 m apart between the road and the riprap, about 715 m from (400, -470) to (700, 180)"
     },
     {
@@ -1230,15 +1231,22 @@
        "share": 6
       },
       {
-       "prop": "pittosporum_tobira",
-       "variants": [0, 0],
-       "scale": [0.8, 0.9],
-       "at": [0.5, 1.0],
+       "prop": "rush",
+       "variants": [4, 5],
+       "scale": [0.8, 1.0],
+       "at": [0.0, 1.0],
+       "share": 2
+      },
+      {
+       "prop": "california_sagebrush",
+       "variants": [3, 3],
+       "scale": [0.85, 1.2],
+       "at": [0.42, 1.0],
        "share": 3
       }
      ],
      "basis": "production_inference",
-     "rule": "A scruffy strip of dead stems and dark shrubs on dark mulch, its density wandering along the strip.",
+     "rule": "A scruffy strip of bare dead stems and dull dark mounds on dark mulch, its density wandering along the strip.",
      "evidence": "Street View Sep 2025 on 9th St (pano zSYuqR9R0oyboW2wFZ-wEw, heading 150): dark shrubs under a metre tall and dead brown stems on bare dark mulch, in a continuous uneven strip."
     },
     {
@@ -1285,8 +1293,8 @@
      "kind": "planting_slot",
      "pattern": "field",
      "surfaces": ["terrain_wetland", "land_ground"],
-     "per_m2": 0.42,
-     "spacing": [0.75, 2.0],
+     "per_m2": 0.09,
+     "spacing": [0.45, 1.3],
      "field": {
       "axis": {
        "from_xz": [-267, 203],
@@ -1315,10 +1323,14 @@
         "high": 1.0
        }
       ],
-      "drift_m": 10,
-      "clump_m": 3,
-      "drift_cover": 0.55,
-      "lone": 0.12
+      "drift_m": 11,
+      "clump_m": 3.5,
+      "drift_cover": 0.5,
+      "lone": 0.08,
+      "groups": {
+       "count": [1, 11],
+       "spread_m": [0.8, 2.2]
+      }
      },
      "mix": [
       {
@@ -1337,7 +1349,7 @@
       }
      ],
      "basis": "production_inference",
-     "rule": "Thick along the top of the bank south-west of the lot's corner, thinning down the slope, to nothing at the lot's edge, north of the corner and toward the far end, in clusters with gaps and lone plants; laden plants where the field is full, bare ones at its edges.",
+     "rule": "Thick along the top of the bank south-west of the lot's corner, thinning down the slope, to nothing at the lot's edge, north of the corner and toward the far end: tight groups with real gaps between them and a few lone plants; laden plants where the field is full, bare ones at its edges.",
      "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea, from the lot's west corner at about (-266, 203): loose pale-seeded shrubs, thick on the bank south-west of the camera, sparse to its north (species unconfirmed)."
     },
     {
@@ -1345,8 +1357,8 @@
      "kind": "planting_slot",
      "pattern": "field",
      "surfaces": ["terrain_wetland", "land_ground"],
-     "per_m2": 0.08,
-     "spacing": [0.6, 1.5],
+     "per_m2": 0.03,
+     "spacing": [0.45, 1.2],
      "field": {
       "axis": {
        "from_xz": [-295, 145],
@@ -1358,7 +1370,11 @@
       "drift_m": 9,
       "clump_m": 3,
       "drift_cover": 0.4,
-      "lone": 0.1
+      "lone": 0.1,
+      "groups": {
+       "count": [1, 7],
+       "spread_m": [0.6, 1.6]
+      }
      },
      "mix": [
       {
@@ -1378,8 +1394,8 @@
      "kind": "grass_clump",
      "pattern": "field",
      "surfaces": ["terrain_wetland", "land_ground"],
-     "per_m2": 0.13,
-     "spacing": [0.55, 1.5],
+     "per_m2": 0.06,
+     "spacing": [0.45, 1.2],
      "field": {
       "axis": {
        "from_xz": [-295, 145],
@@ -1391,7 +1407,11 @@
       "drift_m": 7,
       "clump_m": 2,
       "drift_cover": 0.38,
-      "lone": 0.06
+      "lone": 0.06,
+      "groups": {
+       "count": [1, 9],
+       "spread_m": [0.6, 1.8]
+      }
      },
      "mix": [
       {
@@ -1407,12 +1427,12 @@
      "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea, from the lot's west corner at about (-266, 203): dark dry straw grass on the slope."
     },
     {
-     "id": "bank_foot_clumps",
+     "id": "bank_foot_stems",
      "kind": "grass_clump",
      "pattern": "field",
      "surfaces": ["terrain_wetland", "land_ground"],
-     "per_m2": 0.3,
-     "spacing": [0.6, 1.3],
+     "per_m2": 0.34,
+     "spacing": [0.32, 0.8],
      "field": {
       "axis": {
        "from_xz": [-295, 145],
@@ -1420,24 +1440,36 @@
        "full_m": 40,
        "zero_m": 56
       },
-      "height_m": [2.45, 2.75, 3.0, 3.3],
-      "drift_m": 7,
-      "clump_m": 2.2,
-      "drift_cover": 0.42,
-      "lone": 0.08
+      "height_m": [2.3, 2.6, 3.0, 3.3],
+      "slope": [0.03, 0.055],
+      "drift_m": 13,
+      "clump_m": 3,
+      "drift_cover": 0.78,
+      "lone": 0.3,
+      "groups": {
+       "count": [2, 9],
+       "spread_m": [0.6, 1.5]
+      }
      },
      "mix": [
       {
-       "prop": "california_buckwheat",
-       "variants": [0, 2],
-       "scale": [0.85, 1.2],
+       "prop": "rush",
+       "variants": [4, 5],
+       "scale": [0.9, 1.25],
+       "at": [0.0, 1.0],
+       "share": 4
+      },
+      {
+       "prop": "pale_seeded_shrub",
+       "variants": [1, 1],
+       "scale": [1.05, 1.25],
        "at": [0.0, 1.0],
        "share": 1
       }
      ],
      "basis": "production_inference",
-     "rule": "Dark olive clumps along the foot of the bank.",
-     "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea, from the lot's west corner at about (-266, 203): dark and olive clumps where the bank meets the floor."
+     "rule": "A dark band of tall dead stems along the foot of the bank, where the slope meets the red floor.",
+     "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea, from the lot's west corner at about (-266, 203): a dark band of tall dead stems along the bank's foot, the strongest line in the view."
     },
     {
      "id": "floor_clumps",
@@ -1527,30 +1559,48 @@
    "scatter": [
     {
      "id": "fence_thicket",
-     "kind": "planting_slot",
+     "kind": "grass_clump",
      "pattern": "field",
      "surfaces": ["land_ground", "major_area_landuse", "major_area_amenity", "major_area_leisure"],
-     "per_m2": 0.9,
-     "spacing": [0.55, 1.3],
+     "per_m2": 0.42,
+     "spacing": [0.3, 0.75],
      "field": {
-      "road_m": [1.5, 7],
+      "road_m": [1.5, 8.5],
       "drift_m": 7,
-      "clump_m": 2.5,
-      "drift_cover": 0.75,
-      "lone": 0.3
+      "clump_m": 2,
+      "drift_cover": 0.6,
+      "lone": 0.3,
+      "groups": {
+       "count": [1, 9],
+       "spread_m": [0.5, 1.7]
+      }
      },
      "mix": [
       {
-       "prop": "pacific_reedgrass",
-       "variants": [0, 2],
-       "scale": [0.9, 1.25],
+       "prop": "clump_grass",
+       "variants": [0, 1],
+       "scale": [0.8, 1.1],
+       "at": [0.0, 1.0],
+       "share": 3
+      },
+      {
+       "prop": "clump_grass",
+       "variants": [2, 5],
+       "scale": [0.85, 1.15],
        "at": [0.0, 1.0],
        "share": 4
       },
       {
-       "prop": "dune_tansy",
+       "prop": "pacific_reedgrass",
        "variants": [0, 2],
-       "scale": [0.9, 1.25],
+       "scale": [0.85, 1.2],
+       "at": [0.0, 1.0],
+       "share": 2
+      },
+      {
+       "prop": "rush",
+       "variants": [4, 5],
+       "scale": [0.8, 1.1],
        "at": [0.0, 1.0],
        "share": 3
       },
@@ -1559,18 +1609,25 @@
        "variants": [0, 1],
        "scale": [1.0, 1.25],
        "at": [0.0, 1.0],
-       "share": 2
+       "share": 3
       },
       {
-       "prop": "pittosporum_tobira",
-       "variants": [0, 0],
-       "scale": [0.8, 1.0],
-       "at": [0.72, 1.0],
+       "prop": "dune_tansy",
+       "variants": [0, 2],
+       "scale": [0.85, 1.2],
+       "at": [0.0, 1.0],
        "share": 1
+      },
+      {
+       "prop": "california_sagebrush",
+       "variants": [1, 2],
+       "scale": [0.85, 1.15],
+       "at": [0.45, 1.0],
+       "share": 2
       }
      ],
      "basis": "production_inference",
-     "rule": "Weeds and overgrown shrubs in a thick uneven band behind the sidewalk, reading the road.",
+     "rule": "Weeds and dry stalks grown over each other in a thick uneven band behind the sidewalk, reading the road: green and dead grass, stems and a few rank shrubs, no two of a size.",
      "evidence": "Street View Mar 2025, 1349 Gateview Ave (heading 250): tall green weeds, dry stalks and bright shrubs behind the chain-link fence."
     }
    ]

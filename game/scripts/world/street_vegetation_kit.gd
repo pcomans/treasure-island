@@ -501,6 +501,9 @@ const RUSHES := [
 	{"seed": 70, "lean": 0.04, "layers": [{"kind": "crossed", "cell": "rush", "cards": 5, "width": 0.75, "height": 1.0, "curl": 0.04, "splay_deg": 6.0, "flop_deg": 16.0, "flutter": 0.035}]},
 	# A drift of six clumps about 1.5 m across.
 	{"seed": 111, "drift": [[0.0, 0.0, 1, 1.0, 0.0], [0.45, 0.2, 0, 1.1, 1.2], [-0.42, 0.25, 2, 0.9, 2.4], [0.15, -0.48, 0, 1.0, 3.6], [-0.3, -0.4, 1, 0.95, 4.8], [0.55, -0.25, 0, 0.85, 5.9]]},
+	# Tall dead stems at the foot of the ditch bank by the Mersea lot (owner photos, Nov 2026): the rush's card, dark and dry.
+	{"seed": 114, "lean": 0.05, "layers": [{"kind": "crossed", "cell": "rush", "cards": 5, "width": 0.85, "height": 1.25, "curl": 0.04, "splay_deg": 6.0, "flop_deg": 14.0, "flutter": 0.03, "tint": Color(0.45, 0.25, 0.62)}]},
+	{"seed": 115, "lean": 0.07, "layers": [{"kind": "crossed", "cell": "rush", "cards": 6, "width": 1.05, "height": 1.55, "curl": 0.05, "splay_deg": 7.0, "flop_deg": 16.0, "flutter": 0.035, "tint": Color(0.4, 0.22, 0.56)}]},
 ]
 const BRONZE_GRASSES := [
 	# The copper clumps among the green ones in the stormwater meadow (ph08, Sep 2025).
@@ -575,6 +578,11 @@ const SAGEBRUSHES := [
 		{"kind": "shell", "cell": "sagebrush", "cards": 7, "card": 0.52, "width": 0.9, "height": 0.6, "tint": Color(0.72, 0.76, 0.7)},
 		{"kind": "crossed", "cell": "sagebrush_wands", "cards": 6, "width": 1.45, "height": 1.4, "splay_deg": 12.0, "flop_deg": 28.0, "flutter": 0.055},
 		{"kind": "cap", "cell": "sagebrush", "width": 0.95, "height": 1.0, "tint": Color(0.7, 0.76, 0.68)}]},
+	# A scruffy dull mound, the dark shrubs of the strip by the Mersea lot (Street View Sep 2025): form only.
+	{"seed": 116, "lean": 0.06, "layers": [{"kind": "litter", "cell": "litter", "radius": 0.6},
+		{"kind": "shell", "cell": "sagebrush", "cards": 7, "card": 0.52, "width": 0.85, "height": 0.6, "tint": Color(0.3, 0.33, 0.24)},
+		{"kind": "crossed", "cell": "sagebrush_wands", "cards": 4, "width": 1.0, "height": 0.85, "splay_deg": 10.0, "flop_deg": 24.0, "flutter": 0.045, "tint": Color(0.34, 0.33, 0.25)},
+		{"kind": "cap", "cell": "sagebrush", "width": 0.85, "height": 0.78, "tint": Color(0.27, 0.3, 0.21)}]},
 ]
 const SAGES := [
 	# Salvia sp. (iNat 334414817, 334414816, Jan 2026): upright, airy grey-green
@@ -4132,7 +4140,7 @@ func material(key: String) -> Material:
 		"grass_dead":
 			made = _foliage("grass_atlas.png", Color(0.6, 0.52, 0.44), Color(0.08, 0.07, 0.04), Vector2(1024.0, 512.0), 0.1, 0.9)
 			made.set_shader_parameter("alpha_cutoff", 0.4)
-			made.set_shader_parameter("desaturate", 0.65)
+			made.set_shader_parameter("desaturate", 0.35)
 		"meadow":
 			made = _foliage("meadow_atlas.png", Color(0.92, 0.94, 0.86), Color(0.18, 0.2, 0.1), Vector2(2048.0, 2048.0), 0.1, 0.9)
 			made.set_shader_parameter("alpha_cutoff", 0.4)

@@ -23934,3 +23934,11 @@ code-review-street-objects: Logging the stop-line search inside a scratch build 
 - What worked well: working out bearings from the photo before the render put the tow-away sign, the shelter's flag, the island lamp and the line pole within a few pixels of the photos on the first engine run. A diff of placed positions against the reviewed commit gave a short list of what moved, including three Mersea cars I would not have looked for.
 - What did not work well: the 38 m Bruton spacing came from two stations I had misread, and a mast-top check showed 12 to 23 m. I handed off r3's merge without saying the shelter had moved. My `pgrep` wait loops matched themselves again and cost 11 minutes; this round I waited on the PID.
 - What the team should change next time: run the position diff before every hand-off, not only when asked. Check a measured spacing two ways, at the foot and at the mast top. When a review calls a curb plain or painted, settle it on a full-resolution crop, as at Avenue B's right curb, where the photo shows faded maroon.
+
+### visual-review-veg-models — placement R23
+
+(Relayed verbatim by the coordinator; added by vegetation-rollout-20261105.)
+
+- What worked well: pose labels with their matching landmarks made the sheet trustworthy. Stating discounted faults saved re-reporting, and the switch frames at four distances showed that the jump belongs to the switch.
+- What did not work well: the wire clash arrived with the merge, and no check compares plant rows with wires. The bake check still disagrees with the world.
+- What to change next time: after any merge, run a simple clearance check between trees and poles or wires. Measure impostor tone in the world, at several bearings, before sign-off.

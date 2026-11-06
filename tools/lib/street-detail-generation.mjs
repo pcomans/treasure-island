@@ -212,6 +212,13 @@ const CANOPY_WALL_MARGIN_M = 2;
 // The directions tried round a crown whose centre cannot take a trunk.
 const CANOPY_NUDGE_STEP_M = 1.5;
 const CANOPY_NUDGE_DIRECTIONS = 12;
+// How far a tree's trunk stands from a power pole and from the wires between poles,
+// in plan (m), and the row kinds that have a trunk.
+export const TREE_POLE_CLEAR_M = 2.2;
+export const TREE_WIRE_CLEAR_M = 2.2;
+const TREE_KINDS = Object.freeze(["palm_slot", "tree"]);
+// A row's step back toward its line where its offset spot fails (give_m).
+const ROW_GIVE_STEP_M = 0.25;
 // Clipped hedges: how often a hedge line is sampled against its site (m), the
 // spacing of its points on the ground, and the shortest run worth planting.
 const HEDGE_SAMPLE_M = 0.5;
@@ -366,7 +373,7 @@ function segmentSegmentDistance(a, b, c, d) {
   return Math.min(pointSegmentDistance(a, c, d), pointSegmentDistance(b, c, d), pointSegmentDistance(c, a, b), pointSegmentDistance(d, a, b));
 }
 
-function polylineDistance(point, points) {
+export function polylineDistance(point, points) {
   if (points.length === 1) return Math.hypot(point[0] - points[0][0], point[1] - points[0][1]);
   let minimum = Infinity;
   for (let index = 1; index < points.length; index += 1) {
@@ -546,6 +553,7 @@ function validateScatterRule(rule, zoneId, ruleIds) {
     invariant(Array.isArray(rule.source_keys) && rule.source_keys.length > 0 && rule.source_keys.every((key) => /^w\d+$/u.test(key)), `${label} needs OSM way source_keys`);
   }
   if (rule.stagger_m != null) invariant(rule.pattern === "along" && isFiniteNumber(rule.stagger_m) && rule.stagger_m >= 0 && rule.stagger_m < rule.spacing_m, `${label}: stagger_m (shifting every other offset along the line) goes with along and stays below spacing`);
+  if (rule.give_m != null) invariant(rule.pattern === "along" && isFiniteNumber(rule.give_m) && rule.give_m > 0, `${label}: give_m goes with an along rule and must be positive`);
   if (rule.pattern === "along") {
     invariant(Array.isArray(rule.offsets_m) && rule.offsets_m.length > 0 && rule.offsets_m.every(isFiniteNumber), `${label} needs numeric offsets_m`);
     invariant(rule.sides == null && rule.reach_m == null, `${label}: along rules take offsets_m, not sides or reach_m`);
@@ -1577,6 +1585,22 @@ export function generateStreetDetail({
   // plants and the zone's other planted rows (no collision), which the zone's
   // planting state keeps apart by their crown widths instead; and each stands
   // where its bed is the visible ground (not under a walk drawn over the bed).
+  // A tree's trunk keeps clear of power poles and the wires between them. Poles and
+  // wires are placed by the time plants are (runScatter(true) follows the furniture).
+  const utilityLines = () => {
+    if (!utilityLines.cache) {
+      utilityLines.cache = {
+        poles: rows.filter((row) => row.prop === "utility_pole" && row.status === "placed").map((row) => [row.position_m[0], row.position_m[2]]),
+        wires: rows.filter((row) => row.prop === "power_wires").map((row) => row.points_m.map((point) => [point[0], point[2]])),
+      };
+    }
+    return utilityLines.cache;
+  };
+  const utilityProblem = (xz) => {
+    const { poles, wires } = utilityLines();
+    if (poles.some((pole) => Math.hypot(pole[0] - xz[0], pole[1] - xz[1]) < TREE_POLE_CLEAR_M)) return "pole_clearance";
+    return wires.some((line) => polylineDistance(xz, line) < TREE_WIRE_CLEAR_M) ? "wire_clearance" : null;
+  };
   const slopeAt = (xz) => {
     const step = 0.6;
     const at = (dx, dz) => groundAt([xz[0] + dx, xz[1] + dz])?.y;
@@ -1617,6 +1641,7 @@ export function generateStreetDetail({
       else if (buildings.nearest(xz, exclusions.building_buffer_m + radius).distance < exclusions.building_buffer_m + radius) problem = "building_buffer";
       else if (rule.pattern !== "field" && shorelineOverlays.nearest(xz, radius).distance < radius) problem = "shoreline_overlay";
       else if (rule.pattern !== "field" && !rule.surfaces.includes(surfaceAt(xz).material_key)) problem = "rule_surface";
+      else if (TREE_KINDS.includes(rule.kind) && utilityProblem(xz)) problem = utilityProblem(xz);
       else {
         const near = blockers.get(`${Math.floor(xz[0] / BLOCK_CELL_M)},${Math.floor(xz[1] / BLOCK_CELL_M)}`) ?? [];
         if (near.some((item) => polylineDistance(xz, item.points) < item.radius_m + radius)) problem = "overlap";
@@ -1664,6 +1689,7 @@ export function generateStreetDetail({
       inside: (xz) => contains(xz) && (!rule.within_xz || pointInRing(xz, rule.within_xz, true)),
       onGround: (xz) => rule.surfaces.includes(groundAt(xz)?.material_key),
       heightAt: (xz) => groundAt(xz)?.y,
+      slopeAt,
       edgeOk: (xz, [near, far]) => onLand(xz, near) && !onLand(xz, far),
       roadOk: (xz, [near, far]) => {
         const { distance } = plantRoads.nearest(xz, far);
@@ -1723,6 +1749,8 @@ export function generateStreetDetail({
       if (rule.within_xz && !pointInRing(xz, rule.within_xz, true)) return "outside_rule_area";
       const violation = siteViolation(rule.kind, xz, exclusions.building_buffer_m);
       if (violation) return violation.reason;
+      const utility = utilityProblem(xz);
+      if (utility) return utility;
       // in_lots: a trunk may stand in a parking lot, in its round mulch pit.
       const material = surfaceAt(xz).material_key;
       return UNPLANTABLE_MATERIALS.includes(material) && !(rule.in_lots && material === "major_area_paved") ? "unplantable_surface" : null;
@@ -1992,6 +2020,10 @@ export function generateStreetDetail({
             // A rule planted on what the eye sees may name an overlay's ground (a marsh).
             const violation = siteViolation(rule.kind, xz, exclusions.building_buffer_m, rule.visible_surfaces !== undefined);
             if (violation) return violation.reason;
+            if (TREE_KINDS.includes(rule.kind)) {
+              const utility = utilityProblem(xz);
+              if (utility) return utility;
+            }
             const material = surfaceAt(xz).material_key;
             if (rule.visible_surfaces) {
               if (!footSamples(xz, STREET_DETAIL_KINDS[rule.kind].footprint_radius_m).every((point) => rule.visible_surfaces.includes(groundAt(point)?.material_key))) return "rule_surface";
@@ -2007,9 +2039,28 @@ export function generateStreetDetail({
             // Jitter along the line, then step off it by the rule's offset (+ is left of the way direction).
             const target = Math.max(0, Math.min(candidate.along.length, candidate.along.distance + (unit(bytes, 4) * 2 - 1) * rule.jitter_m));
             if (candidate.along.side === undefined) {
-              const point = alongPoint(candidate.along.line, target, candidate.along.offset);
-              xz = [round3(point[0]), round3(point[1])];
-              problem = placementProblem(xz);
+              // give_m: a spot that fails its site checks, or where the plant can't
+              // settle on the ground, steps back toward the line.
+              const settleProblem = (spot) => {
+                if (!rule.give_m || !rule.prop) return null;
+                const { variant, scale } = drawVegetationVariant(seed, identity, rule.params);
+                return plantRow({ prop: rule.prop, kind: rule.kind, variant, scale, xz: spot, landY: grounded(spot).y, surface: surfaceAt(spot), groundAt }).problem ?? null;
+              };
+              const direction = Math.sign(candidate.along.offset);
+              for (let give = 0; give <= (rule.give_m ?? 0) + 1e-9; give += ROW_GIVE_STEP_M) {
+                const point = alongPoint(candidate.along.line, target, candidate.along.offset - direction * give);
+                const spot = [round3(point[0]), round3(point[1])];
+                const spotProblem = placementProblem(spot) ?? settleProblem(spot);
+                if (give === 0) {
+                  xz = spot;
+                  problem = spotProblem;
+                }
+                if (spotProblem === null) {
+                  xz = spot;
+                  problem = null;
+                  break;
+                }
+              }
             } else {
               // The first spot in the bed, from its middle outward, that clears the site checks.
               const sign = candidate.along.side === "left" ? 1 : -1;

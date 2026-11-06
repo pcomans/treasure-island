@@ -64,6 +64,9 @@ import {
 import {
   STREET_DETAIL_GROUND_LAYER,
   STREET_DETAIL_KINDS,
+  TREE_POLE_CLEAR_M,
+  TREE_WIRE_CLEAR_M,
+  polylineDistance,
   STREET_DETAIL_LAYERS,
   STREET_DETAIL_SCHEMA,
   STREET_DETAIL_SOURCES,
@@ -1222,6 +1225,21 @@ function validateStreetDetail(worldRoot, manifest, records) {
       invariant((row.kind === "fence") === (row.fence !== undefined), `${row.id}: every fence row, and only a fence row, carries a fence block`);
       if (row.fence !== undefined) validateFenceRow(row, grounded, inBoundary, groundAt);
       if (row.layer === "vegetation" && row.prop !== undefined) validateHedgeRow(row, groundAt);
+    }
+  }
+  // A tree's trunk stands clear of power poles and of the wires between them.
+  const treeRows = rows.filter((row) => ["palm_slot", "tree"].includes(row.kind) && row.status === "placed");
+  const placedPoles = rows.filter((row) => row.prop === "utility_pole" && row.status === "placed");
+  const wireLines = rows.filter((row) => row.prop === "power_wires").map((row) => row.points_m.map((point) => [point[0], point[2]]));
+  for (const row of treeRows) {
+    const xz = [row.position_m[0], row.position_m[2]];
+    for (const pole of placedPoles) {
+      const gap = Math.hypot(pole.position_m[0] - xz[0], pole.position_m[2] - xz[1]);
+      invariant(gap >= TREE_POLE_CLEAR_M, `${row.id} stands ${gap.toFixed(2)} m from pole ${pole.id}`);
+    }
+    for (const line of wireLines) {
+      const gap = polylineDistance(xz, line);
+      invariant(gap >= TREE_WIRE_CLEAR_M, `${row.id} stands ${gap.toFixed(2)} m from a power line`);
     }
   }
   // The power lines' wires: a power_wires row is a placed power line whose pole

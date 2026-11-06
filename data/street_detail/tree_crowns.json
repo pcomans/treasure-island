@@ -9,6 +9,7 @@
   "Pins: a crown within reach_m of a pin keeps the species a dated photo names; the crown's own position and width still come from the aerial."
  ],
  "pins": [
+  {"at_xz": [-303.0, -664.4], "reach_m": 2, "prop": "spreading_broadleaf", "variants": [0, 0], "evidence": "Street View Mar 2025, 1230 Gateview Ct (pano j3ugQSzJZtl9lpbb5i58bQ, heading 20): a small light tree left of the road."},
   {"at_xz": [-297.5, -411.0], "reach_m": 3, "prop": "monterey_pine", "variants": [2, 2], "evidence": "Street View Mar 2025, Keppler Court (pano zHJe3vjFyKW1aAgqgdeypw, heading 90): the big pine on the lawn."},
   {"at_xz": [-289.9, -437.7], "reach_m": 6, "prop": "monterey_pine", "variants": [1, 2], "evidence": "Street View Mar 2025, Keppler Court (pano zHJe3vjFyKW1aAgqgdeypw, heading 90): the flat-topped pine by the dark building."},
   {"at_xz": [-341.0, -416.0], "reach_m": 5, "prop": "monterey_pine", "variants": [1, 2], "evidence": "Street View Mar 2025 (pano lsha-qsuIu59GXEoDXvzAw, heading 245, species pass crops p5, p6): candles and long needles."},
@@ -695,7 +696,7 @@
    [-380.1, -563.8, 8],
    [-414.0, -564.6, 7],
    [-201.3, -726.1, 11],
-   [-303.0, -664.4, 10],
+   [-303.0, -664.4, 6.5],
    [-132.7, -751.9, 15],
    [-168.8, -665.6, 13],
    [-307.5, -726.8, 9],

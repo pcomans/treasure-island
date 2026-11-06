@@ -33,7 +33,11 @@
 //     them. The same value picks the plant: a mix entry grows where the field lies
 //     in its `at` range, and a plant's scale rises with the field through that
 //     range. A plant keeps a factor times the summed half widths from every plant,
-//     spacing[0] where the field is full, spacing[1] where it is thin;
+//     spacing[0] where the field is full, spacing[1] where it is thin. The field
+//     may also read the land's slope (slope: [none, full], so a band keeps to a
+//     bank and off the flat), and groups {count, spread_m} sows tight groups: each
+//     candidate that survives is a group's centre, with plants fallen round it in
+//     a bell curve, most groups small and a few large, so real gaps lie between;
 //   - gaps: drifts and fill leave the bed bare where a smooth noise at gaps.scale_m
 //     falls below gaps.cover, so small irregular patches of mulch show;
 //   - margin_m: a rule plants the bed within that distance outside its traced
@@ -71,7 +75,7 @@ export const PLANT_WIDTHS_M = Object.freeze({
   blue_eyed_grass: Object.freeze([0.22, 0.28, 0.34, 0.6]),
   bronze_clump_grass: Object.freeze([0.5, 0.62, 0.75, 1.6]),
   california_buckwheat: Object.freeze([0.65, 0.95, 1.25]),
-  california_sagebrush: Object.freeze([0.75, 1.1, 1.45]),
+  california_sagebrush: Object.freeze([0.75, 1.1, 1.45, 1.0]),
   clipped_hedge: Object.freeze([1.0, 1.2]),
   clump_grass: Object.freeze([0.92, 1.15, 1.0, 1.25, 1.0, 1.25]),
   conical_shrub: Object.freeze([2.0, 2.4]),
@@ -89,7 +93,7 @@ export const PLANT_WIDTHS_M = Object.freeze({
   pale_seeded_shrub: Object.freeze([0.7, 1.0, 1.1]),
   pittosporum_tobira: Object.freeze([1.5, 2.0, 2.5]),
   red_tip_shrub: Object.freeze([0.7, 0.9]),
-  rush: Object.freeze([0.45, 0.6, 0.75, 1.5]),
+  rush: Object.freeze([0.45, 0.6, 0.75, 1.5, 0.85, 1.05]),
   sea_thrift: Object.freeze([0.24, 0.32, 0.4, 1.1]),
   seaside_daisy: Object.freeze([0.55, 0.8, 1.05, 1.9]),
   seaside_woolly_sunflower: Object.freeze([0.8, 1.15, 1.5]),
@@ -145,7 +149,7 @@ export const PLANTING_RULE_FIELDS = Object.freeze({
 });
 const MIX_FIELDS = Object.freeze(["band_m", "max_slope", "prop", "scale", "share", "spill_m", "variants"]);
 const FIELD_MIX_FIELDS = Object.freeze(["at", "prop", "scale", "share", "variants"]);
-const FIELD_TERMS = Object.freeze(["axis", "clump_m", "drift_cover", "drift_m", "edge_m", "height_m", "lone", "ramps", "road_m"]);
+const FIELD_TERMS = Object.freeze(["axis", "clump_m", "drift_cover", "drift_m", "edge_m", "groups", "height_m", "lone", "ramps", "road_m", "slope"]);
 // A field plant's crown test: its rings, close enough to find a kerb's narrow top.
 const FIELD_PAVING_RINGS = Object.freeze([[0.25, 8], [0.5, 16], [0.75, 24], [1, 32]]);
 
@@ -217,6 +221,14 @@ function validateFieldRule(rule, label, checkProp, variantCount) {
   for (const band of ["edge_m", "road_m"]) {
     if (field[band] === undefined) continue;
     invariant(Array.isArray(field[band]) && field[band].length === 2 && field[band].every(isFiniteNumber) && field[band][0] >= 0 && field[band][1] > field[band][0], `${label} field ${band} must be [near, far] metres`);
+  }
+  if (field.slope !== undefined) {
+    invariant(Array.isArray(field.slope) && field.slope.length === 2 && field.slope.every(isFiniteNumber) && field.slope[0] >= 0 && field.slope[1] > field.slope[0], `${label} field slope must be [none, full] rise per metre`);
+  }
+  if (field.groups !== undefined) {
+    const { groups } = field;
+    invariant(exactKeys(groups, ["count", "spread_m"]) && Array.isArray(groups.count) && groups.count.length === 2 && groups.count.every(Number.isInteger) && groups.count[0] >= 1 && groups.count[1] >= groups.count[0]
+      && Array.isArray(groups.spread_m) && groups.spread_m.length === 2 && groups.spread_m.every(isFiniteNumber) && groups.spread_m[0] > 0 && groups.spread_m[1] >= groups.spread_m[0], `${label} field groups must be {count: [low, high], spread_m: [low, high]}`);
   }
   if (field.axis !== undefined) {
     const { axis } = field;
@@ -739,6 +751,7 @@ function fieldDensity(rule, tag) {
       const [riseFrom, riseTo, fallFrom, fallTo] = spec.height_m;
       density *= smoothRamp(riseFrom, riseTo, site.height) * (1 - smoothRamp(fallFrom, fallTo, site.height));
     }
+    if (spec.slope) density *= smoothRamp(spec.slope[0], spec.slope[1], site.slope);
     const lengthAlong = (from, to) => {
       const dx = to[0] - from[0];
       const dz = to[1] - from[1];
@@ -756,10 +769,10 @@ function fieldDensity(rule, tag) {
 
 // Places a field rule's plants. box {min_x, max_x, min_z, max_z} bounds them;
 // inside(xz) is the zone's and the rule's shape; onGround(xz) whether the visible
-// ground is one of the rule's surfaces; heightAt(xz) the land's height, edgeOk and
-// roadOk(xz, [near, far]) whether a point lies in those bands; paving and accept as
-// planDrifts. Returns {placed, rejected}.
-export function planField({ rule, zoneId, seed, box, inside, onGround, heightAt, edgeOk, roadOk, paving, state, accept }) {
+// ground is one of the rule's surfaces; heightAt(xz) the land's height, slopeAt(xz)
+// its slope, edgeOk and roadOk(xz, [near, far]) whether a point lies in those bands;
+// paving and accept as planDrifts. Returns {placed, rejected}.
+export function planField({ rule, zoneId, seed, box, inside, onGround, heightAt, slopeAt, edgeOk, roadOk, paving, state, accept }) {
   const tag = `${seed}|${zoneId}|${rule.id}`;
   const random = generator(`${tag}|field`);
   const density = fieldDensity(rule, tag);
@@ -769,24 +782,19 @@ export function planField({ rule, zoneId, seed, box, inside, onGround, heightAt,
     rejected[reason] = (rejected[reason] ?? 0) + 1;
   };
   const spec = rule.field;
-  const attempts = Math.ceil((box.max_x - box.min_x) * (box.max_z - box.min_z) * rule.per_m2);
+  // The field's value at a point the rule may plant, or null.
+  const fieldAt = (point) => {
+    if (!inside(point) || !onGround(point)) return null;
+    if (spec.edge_m && !edgeOk(point, spec.edge_m)) return null;
+    if (spec.road_m && !roadOk(point, spec.road_m)) return null;
+    return density(point[0], point[1], { height: spec.height_m ? heightAt(point) : undefined, slope: spec.slope ? slopeAt(point) : undefined });
+  };
   let placed = 0;
-  for (let attempt = 0; attempt < attempts; attempt += 1) {
-    const point = [box.min_x + random() * (box.max_x - box.min_x), box.min_z + random() * (box.max_z - box.min_z)];
-    const roll = random();
-    if (!inside(point) || !onGround(point)) continue;
-    if (spec.edge_m && !edgeOk(point, spec.edge_m)) continue;
-    if (spec.road_m && !roadOk(point, spec.road_m)) continue;
-    const here = density(point[0], point[1], { height: spec.height_m ? heightAt(point) : undefined });
-    if (roll >= here) {
-      reject("thin");
-      continue;
-    }
-    const identity = `f${String(attempt).padStart(6, "0")}`;
+  const plant = (point, here, identity) => {
     const allowed = rule.mix.filter((entry) => here >= entry.at[0] && here <= entry.at[1]);
     if (allowed.length === 0) {
       reject("no_entry");
-      continue;
+      return;
     }
     const entry = pickByShare(hashUnit(identity, 0), allowed);
     const [first, last] = entry.variants;
@@ -797,16 +805,48 @@ export function planField({ rule, zoneId, seed, box, inside, onGround, heightAt,
     const factor = rule.spacing[1] + (rule.spacing[0] - rule.spacing[1]) * here;
     if (!fits(state, entry.prop, half, point[0], point[1], factor, factor)) {
       reject("spacing");
-      continue;
+      return;
     }
     if (paving(point, half + PAVING_CLEAR_M, FIELD_PAVING_RINGS)) {
       reject("paving");
-      continue;
+      return;
     }
     const candidate = { xz: [roundCoordinate(point[0]), roundCoordinate(point[1])], prop: entry.prop, variant, scale, half, identity };
-    if (!accept(candidate)) continue;
+    if (!accept(candidate)) return;
     addPlant(state, candidate.prop, candidate.half, point[0], point[1]);
     placed += 1;
+  };
+  const attempts = Math.ceil((box.max_x - box.min_x) * (box.max_z - box.min_z) * rule.per_m2);
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    const point = [box.min_x + random() * (box.max_x - box.min_x), box.min_z + random() * (box.max_z - box.min_z)];
+    const roll = random();
+    const here = fieldAt(point);
+    if (here === null) continue;
+    if (roll >= here) {
+      reject("thin");
+      continue;
+    }
+    const identity = `f${String(attempt).padStart(6, "0")}`;
+    if (!spec.groups) {
+      plant(point, here, identity);
+      continue;
+    }
+    // A group: most small, a few large, its plants in a bell round its centre.
+    const [fewest, most] = spec.groups.count;
+    const count = fewest + Math.floor(hashUnit(identity, 3) ** 2 * (most - fewest + 1));
+    const spread = spec.groups.spread_m[0] + (spec.groups.spread_m[1] - spec.groups.spread_m[0]) * hashUnit(identity, 4);
+    for (let member = 0; member < count; member += 1) {
+      const memberId = `${identity}m${member}`;
+      const reach = member === 0 ? 0 : spread * Math.sqrt(-2 * Math.log(Math.max(1e-6, hashUnit(memberId, 5))));
+      const angle = hashUnit(memberId, 6) * Math.PI * 2;
+      const spot = [point[0] + Math.cos(angle) * reach, point[1] + Math.sin(angle) * reach];
+      const there = fieldAt(spot);
+      if (there === null || there <= 0) {
+        reject("off_field");
+        continue;
+      }
+      plant(spot, Math.max(there, here * 0.8), memberId);
+    }
   }
   return { placed, rejected };
 }
