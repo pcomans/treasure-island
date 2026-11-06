@@ -24229,3 +24229,43 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: Reading the test walkers before designing the merge found limits the runtime what-if never met. `retained_ground_contact` compares housing support meshes with their collider in exact face order, and `visible_roof_faces` reads role metadata from the tree, so a bake that regroups those meshes would fail `island_test.gd -- --use-prebuilt-world`. Having nothing in flight meant the 13:26 container restart cost no work.
 - What did not work well: The round ended with no fix, bake, render or measurement. The census, the vertex-colour probe and the run script are written but have never run, not even a parse check. `git worktree add -b <branch> <path> origin/main` also set the branch to track `origin/main`, so a plain `git push` would have aimed at main; I only saw that at the stop. I could not find how perf-1 paused world generation, because its scripts have no such step, and I should have asked when I first read that. After the restart the repo had no commit identity, so my first commit failed; my command carried on and pushed the branch without it, which did no harm only because the branch still equalled main.
 - What the team should change next time: Create work branches with `--no-track`, push them with an explicit refspec, and chain the push on the commit with `&&`. When a brief quotes a what-if figure, say which constraints that what-if skipped: perf-1's merged glass and object-space shaders and split nothing by role, so its 2,902 surfaces is a best case. A method a brief names, like pausing world generation, should come with its command.
+
+### bake-merge-code-review
+
+(Relayed verbatim by the coordinator; added by perf-2-bake-20261106.)
+
+- **What worked well:** reading each runtime and test consumer of the bake, then the author's logs, settled most risks without an engine run.
+- **What did not work well:** the geometry proof lives outside the commit, and the final suite was still running, so part of the verdict rests on output it couldn't re-derive.
+- **What to change next time:** have the bake itself fail on a broken merge.
+
+### bake-merge-visual-review
+
+(Relayed verbatim by the coordinator; added by perf-2-bake-20261106.)
+
+- **What worked well:** recomputing diffs from the originals and opening each pixel cluster at zoom separated real edge flips from noise; comparing the probe-only shots with head split merge from probe effects.
+- **What did not work well:** the first crop batch came out in false colour and had to be redone.
+- **What to change next time:** add a short walking or orbit sample at near-coplanar spots, plus a Mersea first-approach shot, because stills can't rule out shimmer or probe pop-in.
+
+### iPhone log triage
+
+(Relayed verbatim by the coordinator; added by perf-2-bake-20261106.)
+
+- **What worked well:** reading kernel termination lines first, then matching logged byte lengths to release files, identified the page despite private URLs.
+- **What did not work well:** Console has no JS output, and the 24-second window missed the start and the reload's outcome.
+- **What to change next time:** capture from before launch until the page settles, with Web Inspector attached.
+
+### palm-lot-check
+
+(Relayed verbatim by the coordinator; added by perf-2-bake-20261106.)
+
+- **What worked well:** retained captures and a coordinate scan answered the question without a browser or engine run.
+- **What did not work well:** the aerial's "star-shaped" reading was accepted as species evidence when dated street photos already existed.
+- **What to change next time:** check a species named from an aerial against a dated street view.
+
+### perf-2-bake-20261106 — 2026-11-06 — Mersea probe and the building merge in the bake, to main
+
+(Written before the push, for the commit being deployed; the deploy, live smoke and Mac CI results are in the hand-back to ROOT.)
+
+- What worked well: Reading the tests that walk the baked tree before writing the merge found the limit that shaped it, the ordered contact proof, and the offline census turned the what-if's best case into a real estimate before any engine run. Breaking the merge eleven ways against its new contract test, and feeding the geometry comparator synthetic defects, showed both could fail before they were trusted. A third configuration, the probe fix alone on the unmerged bake, split every look and timing difference between probe and merge, and proved the web glass change was the probe in one extra two-minute run. Freezing shader time made a rerun control nearly silent, so anything above it was real.
+- What did not work well: My first probe fix broke generated-world startup: binding one method twice is one connection, so the bar probe never settled. The bake exited 0 and only its log showed it; I saw it by reading the log, not from any check of mine. Two chains of mine ignored a failed step: a push ran after a failed commit, and a commit went through after a failed whitespace check, each harmless only by luck. A look mismatch in the first proof was an artefact of hashing embedded resource paths, and three poses on my family sheet were blocked by trees or a wall until I opened the sheet.
+- What the team should change next time: Run a generated-world launch as part of any change to code both world paths share, since a bake exiting 0 proves nothing about the path that doesn't run. Chain each step on the one before with `&&`. Open every sheet before sending it, and choose poses from the building's clear sides. Have the bake fail on a broken merge, the review's top follow-up.

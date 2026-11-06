@@ -124,7 +124,7 @@ From the reviews of the shoreline, street ground, street objects, parked cars, v
   - `california_sagebrush` and `california_buckwheat` stand in as forms at the ditch, the Mersea strip and the 1349 Gateview thicket. Their species are unconfirmed, so don't describe them as natives.
   - 36 trunks stand on yard pavement with no mulch pit, all on real crowns where checked.
   - The Keppler Court pine at (−292.8, −433.7) changed from variant 1 to 2 within its pin when the Johnson St lot landed: the lot dropped three crowns, and species hang on a crown's list index (see the cleanup item below).
-- **Performance:** the fixes are not in this release. The diagnosis is at `perf-1-20261106`, and the work is paused on the branch `perf/bake-merge-20261106`. Before these layers the spawn drew about 24,600 draw calls and 3.8 million primitives at 1440 × 900 (`6ba040d3`). The ground-cover shader now runs six noise calls per fragment.
+- **Performance:** the building merge in the bake and the Mersea probe fix landed on 2026-11-06. Against `c7db08fc` at 1600 × 900 on the AMD Radeon 780M: Forward+ spawn 37 → 14 ms, overview 33 → 13, street 13 → 6, jetpack 11 → 6, Mersea 21 → 5.5; real Chrome spawn 25 → 15 ms, overview 24 → 13, street 15 → 10, jetpack 10.6 → 7, ferry 5.0 → 5.4. On the web, merged buildings no longer take distance culling, so housing stays visible at overview: 3,373 draws and 1.72 million triangles there, up from 2,769 and 0.78 million. Applying the old culling to them would save about 5 ms at that view and lose those areas again. Shadow distance is unchanged, and the ground-cover shader runs six noise calls per fragment.
 
 ## Building merge in the bake: known gaps
 
@@ -141,7 +141,13 @@ Not needed to ship, and not done:
 - Housing support and retained ground meshes are left whole, because `StudyGeometry.retained_ground_contact` compares them with their collider face by face, in order: 2,668 of the 5,529 surfaces left. Combining only neighbouring surfaces inside a support mesh would keep that order and take its 2,211 surfaces to about 950.
 - Merged surfaces keep tangents that nothing reads on about 86% of vertices (about 15 MB raw, estimated from the census), and 1.87 million vertices are still unindexed triangle soup.
 - 1,852 hidden meshes stay in the bake.
-- `building_fit_test.gd --native-producer` and `--adjacent-source` compare authored meshes, so they apply to the generated world only, not with `--use-prebuilt-world`.
+
+Follow-ups from the code review (all non-blocking at `e51de21d`):
+
+- **Top follow-up:** `tools/prebuild_static_world.gd:37` prints the merge's result and ignores it, so a failed merge can exit 0 with buildings missing. The bake should fail on a broken merge.
+- `surface_remove` in the merge doesn't move a mesh's surface override materials, and its `uses` count doesn't see a mesh shared with a MultiMesh. Neither occurs in today's world: the census found no surface overrides and no mesh shared with a MultiMesh.
+- `building_fit_test.gd` still accepts `--use-prebuilt-world` with `--native-producer` or `--adjacent-source`, then false-fails: those compare authored meshes, which only the generated world still has.
+- `headless_bake_merge_contract.gd` has no fixtures for some kept cases: shared meshes, unsupported channels, per-instance settings, and parts with children or a script.
 
 ## Deferred by the owner
 
