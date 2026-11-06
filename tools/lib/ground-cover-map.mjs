@@ -37,8 +37,10 @@ export const GROUND_COVER_CONFIG_PATH = "tools/config/ground-cover.json";
 export const GROUND_COVER_MAP_PATH = "game/resources/textures/world/ground_cover/cover_map.png";
 // Map channels in RGBA order: the recipe family each one draws.
 export const GROUND_COVER_CHANNELS = Object.freeze(["lawn", "straw", "dry_field", "bare"]);
-// What a rule may measure distance from ("near"): generated record kinds.
-export const GROUND_COVER_NEAR_KINDS = Object.freeze(["building", "vehicle_road", "paved_area", "street_kerb"]);
+// What a rule may measure distance from ("near"): generated record kinds, and
+// off_wetland, the ground outside the wetland overlays (so a rule can draw a
+// wetland's edge over its outline).
+export const GROUND_COVER_NEAR_KINDS = Object.freeze(["building", "vehicle_road", "paved_area", "street_kerb", "off_wetland"]);
 // The ground the rules draw on: material keys of land, areas, the ground-cover
 // overlays and the street ground's planted kerb verges (street_kerb_verge, the
 // grass strips behind kerbs). Other drawn cells take the weights of the nearest
@@ -402,15 +404,18 @@ export function drawGroundCoverMap(config, world) {
     .sort((left, right) => left.rank - right.rank || left.record.object_key.localeCompare(right.record.object_key));
   const top = new Int32Array(cells).fill(-1);
   const nearMasks = Object.fromEntries(GROUND_COVER_NEAR_KINDS.map((kind) => [kind, new Uint8Array(cells)]));
+  nearMasks.off_wetland.fill(1);
   // The land's height under each cell, for the rules that draw by height.
   const landHeight = config.rules.some((rule) => rule.above_m) ? new Float32Array(cells).fill(-Infinity) : null;
   ground.forEach(({ record }, index) => {
     const kind = nearKind(record);
     const land = landHeight && record.feature_kind === "land_ground";
+    const wetland = record.material_key === "terrain_wetland";
     for (const triangle of recordTriangles(record)) {
       rasterizeTriangle(grid, triangle, (cell) => {
         top[cell] = index;
         if (kind) nearMasks[kind][cell] = 1;
+        if (wetland) nearMasks.off_wetland[cell] = 0;
         if (land) landHeight[cell] = triangleHeight(triangle, grid.centerX(cell % grid.width), grid.centerZ(Math.floor(cell / grid.width)));
       });
     }

@@ -80,7 +80,7 @@ uniform float rust_amount = 0.0;
 uniform vec3 rust_gap : source_color = vec3(0.200, 0.070, 0.030);
 uniform vec3 rust_blade : source_color = vec3(0.305, 0.146, 0.040);
 uniform vec3 rust_straw : source_color = vec3(0.390, 0.270, 0.160);
-uniform vec3 marsh_olive : source_color = vec3(0.235, 0.225, 0.095);
+uniform vec3 marsh_olive : source_color = vec3(0.235, 0.205, 0.090);
 
 // A watered pitch's sprinkler grid: dry patches midway between the heads of a
 // grid_m square grid turned grid_angle radians from world +X, at grid_amount.
@@ -183,15 +183,19 @@ void fragment() {
 	vec3 green = mix(lawn, dry, mix_settings.z);
 	vec3 ground = mix(green, dry, dry_w);
 	if (rust_amount > 0.0) {
-		float n_mid = value_noise(p / 3.4 + vec2(23.7, 11.1));
-		float olive_level = 0.55 * value_noise(p / 17.0 + vec2(7.3, 51.9)) + 0.25 * n_fine + 0.2 * n_mid;
-		float olive_w = smoothstep(0.50, 0.60, olive_level);
-		float straw_w = smoothstep(0.60, 0.70, 0.6 * value_noise(p / 9.0 + vec2(37.1, 3.3)) + 0.4 * n_mid);
+		// Mats of olive and of dark dead stems through the red, a few metres to a few
+		// tens across, and straw where it has dried; the finest term fades with distance.
+		float n_mid = value_noise(p / 5.7 + vec2(23.7, 11.1));
+		float n_small = mix(value_noise(p / 2.1 + vec2(3.3, 47.9)), 0.5, fade);
+		float mat_level = 0.4 * value_noise(p / 19.0 + vec2(7.3, 51.9)) + 0.33 * n_mid + 0.27 * n_small;
+		float olive_w = smoothstep(0.55, 0.60, mat_level);
+		float dark_w = 1.0 - smoothstep(0.38, 0.42, mat_level);
+		float straw_w = smoothstep(0.62, 0.72, 0.5 * value_noise(p / 9.0 + vec2(37.1, 3.3)) + 0.5 * n_mid);
 		vec3 red = cover_layer(rust_gap, rust_blade, rust_straw, m, 0.6, fade);
 		vec3 olive = marsh_olive * mix(0.72 + 0.56 * m.x, 1.0, fade);
-		vec3 marsh = mix(mix(red, olive, olive_w), dry, 0.8 * straw_w);
+		vec3 marsh = mix(mix(red * (1.0 - 0.45 * dark_w), olive, olive_w), dry, 0.55 * straw_w);
 		// The carpet's edge breaks up in patches where the map's recipes take over.
-		float carpet = smoothstep(0.15, 0.55, own + 0.5 * (n_blend - 0.5) + 0.3 * (n_mid - 0.5));
+		float carpet = smoothstep(0.15, 0.55, own + 0.5 * (n_blend - 0.5) + 0.35 * (n_mid - 0.5));
 		ground = mix(ground, marsh, rust_amount * carpet);
 	}
 	if (mix_settings.y <= 1.0 + patch_softness) {

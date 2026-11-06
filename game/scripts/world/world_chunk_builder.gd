@@ -108,7 +108,7 @@ const STREET_GROUND_SURFACES := {
 	"yard_pond": {"albedo": preload("res://game/resources/textures/world/street/yard_pond.png"), "uv_scale": 2.0, "roughness": 0.15},
 	# Still shallow puddles that hold the sky (the ditch beside the Mersea lot, owner
 	# photos, Nov 2026): the pond's murk darkened, nearly mirror-smooth.
-	"ditch_puddle": {"albedo": preload("res://game/resources/textures/world/street/yard_pond.png"), "uv_scale": 2.0, "roughness": 0.05, "metallic": 0.45, "tint": Color(0.40, 0.50, 0.62)},
+	"ditch_puddle": {"albedo": preload("res://game/resources/textures/world/street/yard_pond.png"), "uv_scale": 2.0, "roughness": 0.05, "metallic": 0.45, "tint": Color(0.30, 0.38, 0.50)},
 	"rubble_grey": {"albedo": preload("res://game/resources/textures/world/shoreline/riprap_albedo.png"), "uv_scale": 8.0, "roughness": 0.95, "tint": Color(1.12, 1.12, 1.1)},
 	"black_plastic": {"albedo": preload("res://game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg"), "uv_scale": 2.0, "roughness": 0.45, "tint": Color(0.3, 0.3, 0.32)},
 }
