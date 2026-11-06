@@ -24051,14 +24051,16 @@ code-review-street-objects: Logging the stop-line search inside a scratch build 
 
 - code-review-veg-models last delta: comparing alpha, covered RGB and simulated mips per cell showed the large transparent-fill change in `perennial_atlas.png` is close to invisible in Cityside, so check what a repack changes at the mips, not just how many pixels moved.
 
-### visual-review-veg-models — R04c db3e7eca
+### visual-review-vegetation (models R04c)
 
-(Relayed by the coordinator as far as the notes hold it, cut off there; the rest was in the reviewer's hand-back. Added by integrate-1-20261106.)
+(Relayed verbatim by the coordinator; added by integrate-1-20261106.)
 
-- the baked and halfway pairs answered the view-blend question directly...
+- **What worked well:** the baked and halfway pairs answered the view-blend question directly, and stating doubts ahead of the review focused it. The per-model colour targets closed the colour drift in one round.
+- **What did not work well:** the bake check and in-game frames disagree on impostor brightness, so neither number can be fully trusted. Panels from R04b sit under R04c labels, which took a diff to clear.
+- **What to change next time:** measure tone in the actual game frame as well as the bake scene, with a clean tree mask. Print which run produced each panel next to the current run, and say when it carried over.
 
 ### integrate-1-20261106 — 2026-11-06 — five rollouts on integrate/rollouts-1-20261106 (3 of 3 engine runs, 2 of 2 suites)
 
 - What worked well: Push-7's row diff, run after each regeneration against both parents, explained every world change: at the vegetation merge the only row changes were 59 palms, 70 rows gaining a zone id and one palm a new transformer pad displaced. `git merge-tree` showed the code conflicts while the before render held the tree. Rendering the before shots first, then giving slot A its own worktree and writing docs in a third, kept the suite's tree clean and took the after render and crest walks off the critical path: all 18 walks passed beside the first suite.
-- What did not work well: I queued the first suite without running the short contract tests on the merged tree, so a contradiction between two reviewed branches failed it in its first minute and took one of the two suites, plus the third engine run to check the fix. The notes needed more checking than I expected: "lamps 156 to 150" was already out of date at f4a6f827 (154), the named rule-stop list came from older inputs and gave more streets than a rerun on all 390 dated captures, and one line marked to fold was cut off in the note with no full text anywhere I could find.
+- What did not work well: I queued the first suite without running the short contract tests on the merged tree, so a contradiction between two reviewed branches failed it in its first minute and took one of the two suites, plus the third engine run to check the fix. The notes needed more checking than I expected: "lamps 156 to 150" was already out of date at f4a6f827 (154), the named rule-stop list came from older inputs and gave more streets than a rerun on all 390 dated captures, and one line marked to fold was cut off in the note, with its full text only in the session transcript, which ROOT pointed me to.
 - What the team should change next time: After a merge, run import and the seconds-long headless tests before queuing a budgeted suite. Keep a list that feeds KNOWN_ISSUES next to the command that makes it, so the integrator can rerun it on the merged world. Copy a reviewer's retro in full into the note when it arrives, rather than an opening phrase.
