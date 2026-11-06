@@ -1,6 +1,6 @@
 class_name StreetVegetationBuilder
 extends RefCounted
-## Builds the trees and low plants (grass clumps, perennials and shrubs) of
+## Builds the trees, shrubs and low plants (grass clumps, perennials and bed shrubs) of
 ## PlayableWorld/StreetDetail/Vegetation from the placed vegetation rows that
 ## carry a street-vegetation kit prop (tools/lib/street-vegetation-generation.mjs
 ## places them and settles each foot on the visible ground;
@@ -71,6 +71,7 @@ func build(document: Dictionary) -> Dictionary:
 	var hedges: Dictionary = {}
 	var prop_counts: Dictionary = {}
 	var trees := 0
+	var shrubs := 0
 	var grass := 0
 	var hedge_rows := 0
 	for row_value: Variant in document.get("rows", []):
@@ -139,6 +140,8 @@ func build(document: Dictionary) -> Dictionary:
 		prop_counts[prop] = int(prop_counts.get(prop, 0)) + 1
 		if is_grass:
 			grass += 1
+		elif KIT.is_shrub(prop):
+			shrubs += 1
 		else:
 			trees += 1
 	var multimeshes := 0
@@ -227,12 +230,14 @@ func build(document: Dictionary) -> Dictionary:
 		body.set_meta("street_detail_ids", ids)
 		root.add_child(body)
 	root.set_meta("trees", trees)
+	root.set_meta("shrubs", shrubs)
 	root.set_meta("grass_clumps", grass)
 	root.set_meta("prop_counts", prop_counts)
 	return {
 		"ok": true,
 		"node": root,
 		"trees": trees,
+		"shrubs": shrubs,
 		"grass_clumps": grass,
 		"hedges": hedge_rows,
 		"prop_counts": prop_counts,
@@ -311,6 +316,9 @@ func _add_hedge(hedges: Dictionary, row: Dictionary) -> String:
 	var from := 0.0
 	while from < total - 0.001:
 		var to := minf(from + piece, total)
+		# A tail too short to draw rides on this piece, which then keeps the hedge's end cap.
+		if total - to < KIT.HEDGE_MIN_PIECE_M:
+			to = total
 		var lengths := 0.0
 		var middle := points[0]
 		# The piece's middle, for its cell.

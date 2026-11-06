@@ -23673,6 +23673,8 @@ Carried by deploy-fix from the deploy agent's scratch log; text unchanged apart 
 - What the team should change next time: put crop and render in one frame, and measure mean colour and sizes against the brief in round one. Read native-pixel crops, not montages. Preview form offline before any engine run. Don't let a check report the value its own correction just set.
 - Job Corps delta (owner photos, Nov 2026): three rounds had tuned a slender eucalyptus to the owner's identification and a crop nobody could pin to the tree, declaring the form "typical" on no photo; one dated photo of the actual tree showed it was wrong. When a target's only crop is doubted, ask for the photo before modelling further. My offline preview flattered the first rebuild, because it ignored the shader's edge fade and mips, which cost a run. That run also stalled at Weston's 300 s, a limit already in LEARNINGS that I had not re-read when the plan grew; I first reported it as a slow run, until the capture times showed otherwise.
 
+- Job Corps form round: the final check found the eucalyptus a dense cedar and the weeping tree a garden willow, after three rounds on tone and pads. One number would have shown it at once: sky inside the crown outline, 6-18 % in the photos and 4 % in mine. Growing both trees from a skeleton (limbs, boughs to scattered ends, foliage only there) fixed in an afternoon of offline previews what tuning a closed shell never could, and a new hanging-mass card replaced the comb of strands. Next time: start a tree from its limbs, and measure its outline and sky against the photo before touching colour.
+
 ### visual-review-vegetation — models R02
 
 (Relayed verbatim by the coordinator; added by vegetation-models-20261105.)
@@ -23688,3 +23690,17 @@ Carried by deploy-fix from the deploy agent's scratch log; text unchanged apart 
 - What worked well: the contact sheet exposed shared faults at once, and the hand-over pairs and bake check answered R02's limits. Stating doubts in advance focused the review.
 - What did not work well: the sheets show one bearing per model, so a worst-case blend looked like a view bug and took a side check to clear. The bake check runs at unrotated poses, so it cannot test instance yaw.
 - What to change next time: add one hand-over pair at a bearing on a baked view and one halfway between. Add a yawed instance to the bake check. Measure foliage colour against crops in the check, since colour drifted in both directions across rounds.
+
+### code-review-veg-models
+
+(Relayed verbatim by the coordinator; added by vegetation-models-20261105.)
+
+- code-review-veg-models: reading each R05 hunk against the db3e7eca suite run showed the suite still covers existing plants, but 12 rebakes left 166 MiB of PNG history for 22.5 MiB net, so bake once per reviewed round and squash on merge.
+
+### visual-review-veg-models (final)
+
+(Relayed verbatim by the coordinator; added by vegetation-models-20261105.)
+
+- **What worked well:** the owner's photos at the top of the sheet, plus a group frame near the photo's view, made the form gaps obvious. Measuring frames against whole crowns fixed the tone.
+- **What did not work well:** three rounds went on tone and pads while the crown stayed closed. Sheets labelled by commit still needed a byte check to show that the pine was unchanged.
+- **What to change next time:** compare silhouette and limb structure with the photo before tuning colour. Mark carried-over models on each sheet, and give the group frame the photo's real spacing.

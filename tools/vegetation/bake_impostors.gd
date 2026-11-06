@@ -161,8 +161,9 @@ func _bake(kit: Kit, prop: String, variant: int) -> void:
 	print("BAKED %s %dx%d views=%d frame centre=%s size=%s" % [path, atlas.get_width(), atlas.get_height(), grid.x * grid.y, frame.center, size])
 
 
-## A transparent viewport of the frame's mesh (a palm's crown surface alone), its
-## camera as meta: lit flat, or shaded from above for an image that holds the crown's own shade.
+## A transparent viewport of the frame's mesh, its camera as meta: lit flat, or for
+## the rollout's models, shaded from above for an image that holds the crown's own
+## shade (a rollout palm's crown surface alone).
 func _bake_viewport(frame: Dictionary, pixels: Vector2i, shaded: bool) -> SubViewport:
 	var size: Vector2 = frame.size
 	var viewport := SubViewport.new()
@@ -202,7 +203,7 @@ func _bake_viewport(frame: Dictionary, pixels: Vector2i, shaded: bool) -> SubVie
 	var tree: Dictionary = frame.tree
 	var mesh: ArrayMesh = tree.lod0
 	var crown := int(tree.crown_surface)
-	if crown >= 0:
+	if shaded and crown >= 0:
 		var alone := ArrayMesh.new()
 		alone.add_surface_from_arrays(mesh.surface_get_primitive_type(crown), mesh.surface_get_arrays(crown))
 		alone.surface_set_material(0, mesh.surface_get_material(crown))

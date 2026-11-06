@@ -1005,6 +1005,10 @@ On 2026-11-05 the mature date palms' far level showed a hard black shape over th
 
 Vegetation rounds R02 and R03 (2026-11-05): levels forced at one 30 m pose looked matched, while at the real switch the impostor was 5-15 % narrower, because LOD1's grown cards swell the outline; and forcing a level clears the visibility ranges, so a forced frame cannot show whether a shadow survives the switch. Render each hand-over as a pair at its switch distance, and one unforced frame past it. An impostor that picks a baked view also needs one pair on a baked view and one halfway between two.
 
+## Build a big tree from its limbs and check its outline before its colour
+
+On 2026-11-05 two Job Corps trees went through three rounds of tone and foliage pads, and a final review still called them a dense cedar and a garden willow. The crowns were closed shells: pads over a dome hide any limb and let no sky through, and no grade can open them. Sky inside the crown outline read 6-18 % in the owner's photos and 4 % in the model; the same simple measure on height over width, set beside the photo, would have shown the fault in the first round. Grown from a skeleton instead (long limbs, boughs to scattered ends on an irregular shell, foliage only at the ends), the same budget gave a tall open crown with limbs and sky showing. Measure proportions and sky against the photo first, and only then colour. When a card's own shape is the fault, as a comb of parallel strands was, change the card, not its placement.
+
 ## Preview a form offline when the fault is the form
 
 After the 2026-11-05 review called the residential pine a round oak, a Godot script dumped the kit's meshes and a small Node rasterizer drew them with sun shadows from four sides, about 2 seconds a sheet with no engine slot. It showed five forms before one render: stacked masses that read as topiary, then boughs and plumes, then a wave of reach turning twice round the tree that made the crown an ellipse, narrow from two sides. Its light is not the game's, so it settles shape and outline, never colour; the mesh dump must not depend on loaded textures, which are null between a re-pack and its import.
