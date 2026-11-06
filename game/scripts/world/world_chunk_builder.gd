@@ -48,6 +48,9 @@ const GROUND_COVER := preload("res://game/scripts/world/ground_cover.gd")
 ## ground cover family the shoreline's shoulder continues past the outline
 ## (ShorelineBuilder.BAND_GROUND_FAMILY); the shoreline's cobbles are set in it.
 const SHORELINE_RIPRAP_OVERLAY := "terrain_riprap"
+## What is left of the flat breakwater overlay: land the aerial shows as stone
+## (the shoreline config's rock_grounds), drawn as the riprap's bare rock.
+const SHORELINE_ROCK_OVERLAY := "terrain_breakwater"
 ## Street ground (tools/lib/street-ground-generation.mjs): road paint is opaque
 ## with a cut-out for worn paint, asphalt wear is a blended decal; parking lanes
 ## reuse the road asphalt. Decal material key -> its shader and textures.
@@ -794,6 +797,8 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 		placeholder_material = _street_ground_material(str(record.material_key))
 	elif PARK_PAVING_MATERIALS.has(str(record.material_key)) and not uvs.is_empty():
 		placeholder_material = _park_paving_material(str(record.material_key))
+	elif str(record.material_key) == SHORELINE_ROCK_OVERLAY and not is_context:
+		placeholder_material = ShorelineBuilder.rock_ground_material()
 	elif ground_family == GROUND_COVER.PAVED:
 		placeholder_material = _material_for("major_area_court", "major_area", false)
 	elif ground_family != "":

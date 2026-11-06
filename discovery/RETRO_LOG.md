@@ -23852,3 +23852,81 @@ code-review-street-objects: Logging the stop-line search inside a scratch build 
 - What worked well: working out bearings from the photo before the render put the tow-away sign, the shelter's flag, the island lamp and the line pole within a few pixels of the photos on the first engine run. A diff of placed positions against the reviewed commit gave a short list of what moved, including three Mersea cars I would not have looked for.
 - What did not work well: the 38 m Bruton spacing came from two stations I had misread, and a mast-top check showed 12 to 23 m. I handed off r3's merge without saying the shelter had moved. My `pgrep` wait loops matched themselves again and cost 11 minutes; this round I waited on the PID.
 - What the team should change next time: run the position diff before every hand-off, not only when asked. Check a measured spacing two ways, at the foot and at the mast top. When a review calls a curb plain or painted, settle it on a full-resolution crop, as at Avenue B's right curb, where the photo shows faded maroon.
+
+### shoreline-refs-20261105 — 2026-11-05 — dated ground references for the shoreline rollout
+
+(Relayed by shoreline-rollout-20261105 from the reference helper's hand-off.)
+
+- What worked well: Opening official panoramas with the full `@lat,lon,3a,...!1s<pano>!2e0` URL form rendered every time after one black startup probe; the `tools/browser capture` wrapper's dated-panel and non-black guard kept every saved panorama usable; "See more dates" gave each official view its latest capture. About 28 minutes of browsing covered every shore group.
+- What did not work well: This checkout's `tools/browser` first lacked the capture command, so the launcher came from the shoreline worktree. Clicking a toast inside the viewer moved the panorama once. The guard doesn't cover Maps place photos (two were plain screenshots), and fenced or vegetated shores (the causeway, s1950, the north-east plant) hid the edge in every dated view.
+- What the team should change next time: Never click inside the viewer; dismiss overlays with keys. Look for shore-path contributor photospheres first on fenced shores. Keep the scratch failure frames with the captures.
+
+### visual-review-shoreline-rollout — 2026-11-05 — first look e4880a56
+
+(Relayed verbatim by the coordinator; added by shoreline-rollout-20261105.)
+
+- What worked: Cameras set from panorama coordinates got the heading, pitch and FOV right, so horizon checks took seconds. Having raised views next to ground views made it clear the problem is the crest profile, not the stone shape.
+- What didn't: Panorama lat/lon doesn't hold the crest distance. Four rows were unusable and several were about 2× too far, which hid the low-crest problem in the matched rows. The sheets were 300 px tall, too small to judge stones; I had to rebuild pairs from the full-resolution originals.
+- Change next time: Set matched cameras by the distance to the crest measured in the photo, not by the raw panorama point. Build review sheets at native resolution, or at least 1000 px wide per panel. Include at least one gameplay-height view along the shore per section before calling it a first look.
+
+### shoreline-rollout-20261105 — 2026-11-05 — riprap around the whole island from the 2026-11-02 pilot (first look HOLD, rework to r6)
+
+- What worked well: A harness that rebuilt only the shoreline (land facets, spawn and hard shapes cached from one world build) ran each generator change in about a minute, so most iterations needed no engine: crest height per metre of shore, plan coverage, side views of single cross-sections and plan plots over the aerial found the low crest (p50 0.27-0.38 m against the photos' 0.5-1 m), the slit's two lines and the s4708 jog before any render. One shared change, a raised core under the crest, fixed every segment at once. The packed format kept shoreline.json at 3.8 MB for 75k placements. Before renders at the new poses on a base worktree, while the tree kept changing, gave like-for-like rows. Thinning stones one by one in the vertex shader, from the main camera (MAIN_CAM_INV_VIEW_MATRIX, the same in the shadow pass), removed the fade line in both renderers without touching the batches. 9 of 18 engine runs and both suites were used (the first lost its Node checks to the missing packages below; they passed when run directly, and the second suite ran the final commit).
+- What did not work well: The r2 first look went out with a crest I had never measured from eye height: plan coverage of 0.9 looked fine in the plots, but the stones were bedded into a slope that fell away from the land edge. The matched cameras stood at the raw panorama points, so four rows were unusable. Two aerial tiles carried the 2026-05-26 date although their 0.15 m zoom draws the 2025-08-29 capture (ROOT caught it). Joining the segments across the s4708 jog opened a 6 cm step that only an eye-height view showed (r4). Logs placed on their two highest supports floated over gaps, and the plank's single fixed spot broke twice when the waterline rule thinned the stones under it. The first suite failed its three Node checks after every engine stage passed: the render worktree I ran it in had no node_modules, a lesson LEARNINGS already held.
+- What the team should change next time: Before a first look, measure what the reviewer will see from eye height: the crest's height above the ground per metre against the photos, and what a sight line through a gap hits. Place matched cameras at the photo's subject distance. Label every aerial export with the date of the zoom actually exported. Render one eye-height view of every seam a join or closure change creates. Give wood and other props a search over nearby spots instead of one fixed spot. Install the lockfile's packages in any worktree the moment it may run a suite.
+
+### visual-review-shoreline-rollout — r6 re-review
+
+(Relayed verbatim by the coordinator; added by shoreline-rollout-20261105.)
+
+- What worked: Sliding the matched cameras to the photo's first-stone distance made every row comparable, and the crest problem was easy to confirm as fixed. The before/after causeway row settled who owns the wall immediately. Having along-shore rows at gameplay height for each segment covered the ground-level read the first look had been missing.
+- What didn't: The 2896 px rows were still easier to judge from rebuilt photo-over-render pairs. The fitted poses (slipway, jetty) can't be checked against a photo vantage. The on-crest pose exposed a close-range core problem that no other view shows.
+- Change next time: For any treatment players can stand on, add one on-top view per asset early. Put per-segment material tone in the first pass, with sampled photo swatches, rather than one stone palette for the whole ring.
+
+### code-review-shoreline-rollout — 2b854166 PASS
+
+(Relayed verbatim by the coordinator; added by shoreline-rollout-20261105.)
+
+- What worked well: Reading the generator's header comment first settled the collision question quickly, because it says outright that nothing outside the outline collides. `git merge-tree --write-tree` against each parallel branch showed the real conflicts without needing a worktree. One validator run on the actual decoded document was enough evidence.
+- What did not work well: The brief described a "solid sloped mesh inside the outline" that doesn't exist, which cost time confirming that it doesn't. The 1.8k-line generator rewrite, generated data and RETRO/LEARNINGS edits all came in one diff, so the reviewable code had to be separated out by hand.
+- What the team should change next time: Briefs should state the collision split as the code actually implements it, or point to the header comment that describes it. When branches touch the same tuning tables (like ground-cover families), name the coupled values in the brief, because a clean auto-merge can still undo what the values were meant to do.
+
+### shoreline-rollout-20261105 — 2026-11-05 — polish round after the r6 PASS WITH FIXES, and the owner's "two walls" (6 of 6 engine runs, 1 suite)
+
+- What worked well: Measuring before rendering again paid off. A coverage-versus-distance curve from the actual stones showed exactly where thinning opened gaps, and a band-row detector over the fade strips then confirmed the fix in numbers: the band holds L 57-72 from 30 to 230 m, against 65 to 105 in r6. Scaling the owner's screenshot from two landmarks onto r-cityside predicted their step at x 1072, against 1080 in r6, and put a stone wall where main has none. That settled it before any new render: the "two walls" were one wall and a distance cut-off, not the pilot joint and not the live build. The harness and plan plots caught the over-dense chinking (151k placements, 5.4 MB) offline. One run with two trees supplied every "before" for the new views. STATUS.md and the pushed WIP meant the account cut-off cost nothing: the last render had finished on its own, and the work resumed from its receipt.
+- What did not work well: A shader that read `MAIN_CAM_INV_VIEW_MATRIX` in `fragment()` (it exists only in `vertex()`) spoiled a whole run. When I stopped that run by killing its outer timeout, the slot lock was released while the step's own Godot, its wrapper and Weston kept running, and I had to find and stop them by hand. My r5 note had called the fade fixed while the batch cull still cut the stones, and the re-review passed it; the owner caught it. On the slit I spent two renders packing more stones onto the sand before seeing that the ground itself was wrong: stones held to 15 cm above the land can only show as chips. Drawing the sliver as rock fixed it in one change. Subtracting that sliver from the draped band failed the boolean twice (the same self-intersection as round one), so it is laid over the band instead.
+- What the team should change next time: Fail a shots step on the first `SHADER ERROR` line (shots.sh now does). Stop a run from its innermost timeout and prove every owned PID is gone before trusting the released lock. When an asset thins instances in a shader, cull its batches only beyond the farthest instance's reach, and check a long raised view for a step before calling a fade fixed. When a screenshot arrives, match it to a known pose before assuming which build it shows. If OSM land is really something else, change what the ground is drawn as before adding props to it.
+
+### visual-review-shoreline-rollout — r7 delta
+
+(Relayed verbatim by the coordinator; added by shoreline-rollout-20261105.)
+
+- What worked: Projecting the step to a world point and checking it from a second distance answered the owner's question quickly. Simple waterline line fits caught what side-by-side viewing hides. The 3-column rows with main made the ferry check easy.
+- What didn't: I passed the r6 fade while the step was visible, because I looked at a tone-and-texture crop and never checked the waterline outline. I also let an unmeasured figure and two unopened views into a report. Fade evidence from one charcoal location was assumed to hold around the ring.
+- Change next time: Check silhouette as well as tone for any level-of-detail change, and test fades on the lightest and darkest segments. Reviewers should list the views actually opened, and label any number as measured or estimated.
+
+### code-review-shoreline-r7 — 86ca9672 PASS
+
+(Relayed by the coordinator; added by shoreline-rollout-20261105.)
+
+- Evaluating the shader's blend formula in Node against real placements at every joint took minutes and found the one step (short `sailing_west`) that reading the diff would not have shown; next time, clamp any blend length to the piece's own span.
+
+### shoreline-rollout-20261105 — 2026-11-05 — r8 after the r7 PASS WITH FIXES (3 of 4 engine runs, 1 suite)
+
+- What worked well: The reviewer's line fits turned "smaller, not gone" into a number, so I could reproduce it first (8.8 and 4.6 px) and then drive it down (2.3 px, under the noise). A plot of the real waterline against a straight chord showed in one run what no render had: a 1.5 m notch in the underlay at the owner's exact spot. A band-only tone tool (water to verge, wet foot left out) replaced a measure that had been picking up buildings, and gave near-flat figures on both the darkest and lightest stretches (L 62-68 and 74-83 from 60 to 180 m). Making the underlay matt fixed the pale foot and the far band's lost tone together, because both came from the same specular sheen. Drawing the sliver and bare faces in the riprap's own rock removed the slit's third band without a new material key.
+- What did not work well: My r7 note told the owner the step "moved with the camera" and was gone. Half of that was wrong: the notch was a fixed place in the world and the jog was still there, and I had measured tone but not outline. The ramp's concrete wing was my own invention from the r7 round, added to hide a gap instead of closing it; its removal exposed a second gap under the shoulder's cut, which only an eye-height crop showed. Step B of one run hit the 120 s startup limit on a busy machine and cost an extra run; the receipt showed exit 0 at the top level, and only the step line showed the failure.
+- What the team should change next time: Before telling the owner a visual problem is gone, measure the thing they pointed at, in the view they used. Don't hide a mesh gap with new geometry: find what opens it. Make the top-level exit of a multi-step render fail when any step fails.
+
+### visual-review-shoreline-rollout — r8 final delta
+
+(Relayed verbatim by the coordinator; added by shoreline-rollout-20261105.)
+
+- What worked: Running the author's own tools alongside my earlier script, including main as a noise baseline, turned "gone or shrunk" into a clear answer. Comparing r7 and r8 waterlines beyond the named spot found the Sailing Center jog.
+- What didn't: My r7 reasoning treated "looks continuous up close" as proof that nothing was built there, and that was wrong. Tool results also depend on the x range and window, so a quoted "largest offset" can hide a larger one outside the range.
+- Change next time: When an artifact is removed, re-check neighbouring joints for anything it was hiding. Report fit offsets with their range, and compare them against main.
+
+### shoreline-rollout-20261105 — 2026-11-05 — last two fixes after the r8 verdict (2 of 2 engine runs, no suite)
+
+- What worked well: A scan of the whole ring's waterline for sharp turns gave the complete list at once, so the 36-degree corner at s2362 could be fixed and seen to leave that list before any render. Running the same line fits on every far view next to main then separated real outline bends from new faults: r-sailing went from -19.7 px to -2.9 px over x 440-1400, against -21.9 on main.
+- What did not work well: The first run lightened the ramp's cut face but showed that tone alone would not carry it, so the foot stones took the last run. A short dark tip stays at the ramp's head corner, and no run was left to verify another change. I also ran a row-wise fit on the north tip's east shore before looking at it: that shore is a real S-curve, so straight-line windows only reported its curvature. The determinism run started on the first fix had to be killed when the second fix landed.
+- What the team should change next time: Run the ring scan on any change to the waterline before the first render, not after a reviewer finds a jog. Name what a fit range crosses (a pier gap, a jetty, a real curve) in the same line as its number. Start determinism only once a commit is the intended final one.
