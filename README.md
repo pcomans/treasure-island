@@ -130,7 +130,7 @@ mouse and look around. Esc releases the mouse and pauses; **Resume** captures it
 again and continues. Spray is omitted in the browser build by owner approval.
 F3 shows actual FPS.
 
-To deploy, push to `main`, check out a clean `main` and run:
+To deploy, as part of a [release](AGENTS.md#pushes-and-releases), push to `main`, check out a clean `main` and run:
 
 ```sh
 tools/deploy-web.sh             # build origin/main and deploy it to production
