@@ -24716,6 +24716,7 @@
       "heights": [],
       "logical_object_key": "road:w1370667322",
       "physical_object_keys": [
+        "roads-concrete:x_0__z_2",
         "roads:x_0__z_2"
       ],
       "representation": "direct",
@@ -38708,6 +38709,7 @@
       "heights": [],
       "logical_object_key": "terrain:w1222505177",
       "physical_object_keys": [
+        "boundary_context:w1222505177",
         "terrain:w1222505177:x_2__z_2"
       ],
       "representation": "direct",

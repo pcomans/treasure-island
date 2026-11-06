@@ -82,7 +82,7 @@
         "osm_levels": 1
       }
     },
-    "physical_objects": 969,
+    "physical_objects": 971,
     "playable_rows": 735,
     "source_rows": 739,
     "status_totals": {
@@ -95,6 +95,14 @@
   },
   "pavement_skin": {
     "materials": {
+      "concrete": {
+        "albedo_srgb_hex": "8a8579",
+        "material_key": "road_path_concrete",
+        "relative_luminance": 0.236,
+        "source_count": 1,
+        "source_tag_rule": "vehicle-class way with surface=concrete",
+        "surface_bias_m": 0.08
+      },
       "paved_area": {
         "albedo_srgb_hex": "707573",
         "material_key": "major_area_paved",
@@ -155,6 +163,8 @@
     "topology": {
       "base_record_count": 36,
       "base_source_count": 427,
+      "concrete_record_count": 1,
+      "concrete_sources_with_visible_skin": 1,
       "continuous_filled_base_union": true,
       "maximum_pedestrian_vehicle_overlap_m2": 0,
       "pedestrian_record_count": 28,
@@ -170,7 +180,7 @@
     "maximum_clearance_m": 0.081,
     "maximum_serialization_tolerance_m": 0.01,
     "minimum_clearance_m": 0.019,
-    "sample_points": 317422
+    "sample_points": 317569
   },
   "road_batch_quantization_audits": [
     {

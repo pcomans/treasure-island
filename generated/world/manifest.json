@@ -159,10 +159,10 @@
       "sha256": "f25d7e1b78e96b0d69bb9b66f12bc85e45af3b0c1dbfaeaf2a8263dbbb328742"
     },
     {
-      "bytes": 674131,
+      "bytes": 675880,
       "chunk_id": "x_0__z_2",
       "path": "chunks/x_0__z_2.json",
-      "sha256": "9a717e867277ab73cdb73d40cdddae0ae7295feb1107f31a49575af9891c80e6"
+      "sha256": "76cc77e9aafabb5ed1d5638709c15a8b0779c134b6354549169aa9b2b69b17e6"
     },
     {
       "bytes": 189198,
@@ -231,11 +231,11 @@
       "sha256": "123461d4ab833689a2d262ecec88a5b247360f3a9709c02ae733efebf5e014e1"
     }
   ],
-  "content_sha256": "5899d39d3f0fbd32c3ad1a0d5008706edc244276c24da44cc33f8c9d5ab7bdd6",
+  "content_sha256": "a96a199cb9926276919090ee8d45cdabcf6414b44f2c00a3b2a32ce7447c0a2c",
   "context": {
-    "bytes": 675130,
+    "bytes": 2068935,
     "path": "context.json",
-    "sha256": "4008473d014530211eba8e77e5b6f3ebe977c283a4750bacb57d6739b239a037"
+    "sha256": "9542e61740c8caae642dabe90d745ad5fed859d5507434de5d482ec91a68c889"
   },
   "coordinate_system": {
     "coordinate_rounding_m": 0.001,
@@ -265,9 +265,9 @@
     "unresolved_rows": 0
   },
   "coverage_ledger": {
-    "bytes": 156651,
+    "bytes": 156806,
     "path": "coverage-ledger.csv",
-    "sha256": "a1c1a4a10da2cb6920c5905bac4bdb447d736b384bc0873225aaebcfba3702f5"
+    "sha256": "6ffcf821f2879cf8c4183b30a22a7ed429603a4046e57693a2a0f44ab66cfffc"
   },
   "demolished_buildings": {
     "path": "tools/config/demolished-buildings.json",
@@ -434,9 +434,9 @@
       "sha256": "f25d7e1b78e96b0d69bb9b66f12bc85e45af3b0c1dbfaeaf2a8263dbbb328742"
     },
     {
-      "bytes": 674131,
+      "bytes": 675880,
       "path": "chunks/x_0__z_2.json",
-      "sha256": "9a717e867277ab73cdb73d40cdddae0ae7295feb1107f31a49575af9891c80e6"
+      "sha256": "76cc77e9aafabb5ed1d5638709c15a8b0779c134b6354549169aa9b2b69b17e6"
     },
     {
       "bytes": 189198,
@@ -494,29 +494,29 @@
       "sha256": "123461d4ab833689a2d262ecec88a5b247360f3a9709c02ae733efebf5e014e1"
     },
     {
-      "bytes": 675130,
+      "bytes": 2068935,
       "path": "context.json",
-      "sha256": "4008473d014530211eba8e77e5b6f3ebe977c283a4750bacb57d6739b239a037"
+      "sha256": "9542e61740c8caae642dabe90d745ad5fed859d5507434de5d482ec91a68c889"
     },
     {
-      "bytes": 156651,
+      "bytes": 156806,
       "path": "coverage-ledger.csv",
-      "sha256": "a1c1a4a10da2cb6920c5905bac4bdb447d736b384bc0873225aaebcfba3702f5"
+      "sha256": "6ffcf821f2879cf8c4183b30a22a7ed429603a4046e57693a2a0f44ab66cfffc"
     },
     {
-      "bytes": 81562,
+      "bytes": 81920,
       "path": "coverage-summary.json",
-      "sha256": "236fe9c04fd3b390795dbec7f1130e2309426594297c047c087deeb060f4a730"
+      "sha256": "e2382ba6ec547d3a33e1cae98f185e15c972b63c65bca04ecba705a8da8fd6b5"
     },
     {
-      "bytes": 1283948,
+      "bytes": 1284023,
       "path": "logical-objects.json",
-      "sha256": "be26ec17a7ee503010896b0360c953a72d082b4c32f5d65b8a6d7d6adcaebd82"
+      "sha256": "b3c0cd415a5e55678d8dce12fedc2eb0502f89e7249dc45310fc9b575443876e"
     },
     {
-      "bytes": 23820,
+      "bytes": 28504,
       "path": "qa/pavement-skin.json",
-      "sha256": "60c143462e20c6ca28ed5f096dd88997b5f8dc313c55e123f56edbfdad6b077d"
+      "sha256": "8ff6df496919177f65f1f399e8eadf69e49562145f6bdb00d905fe050557485c"
     },
     {
       "bytes": 3142,
@@ -529,14 +529,14 @@
       "sha256": "60c5cd355878ec004642fdc5a10b582405260103ead4d34a81139058c2cdb153"
     },
     {
-      "bytes": 3976668,
+      "bytes": 3976676,
       "path": "street_detail.json",
-      "sha256": "d90b8d6690f80aa254c314690c9b4bb69b5db3b82f9004a5dc618e6cbedb1153"
+      "sha256": "2e6dfcaf1fee63a79e7615d6b53f404240df5b0264de4636969cdeec3eebd614"
     },
     {
       "bytes": 21683,
       "path": "terrain.json",
-      "sha256": "50082f41d9d86d8a22984b74b1f68e08868a6f4afee77731369ce3cad79b3124"
+      "sha256": "56d8566ac0019c8f8247ed89b53bc44ed5d594096984912b9a71c1c773582524"
     }
   ],
   "generator": {
@@ -578,6 +578,7 @@
     "park_plaza_lens",
     "park_plaza_zigzag",
     "road_path",
+    "road_path_concrete",
     "road_path_pedestrian",
     "rubble_grey",
     "street_gutter",
@@ -1200,13 +1201,13 @@
     }
   },
   "street_detail": {
-    "bytes": 3976668,
+    "bytes": 3976676,
     "path": "street_detail.json",
-    "sha256": "d90b8d6690f80aa254c314690c9b4bb69b5db3b82f9004a5dc618e6cbedb1153"
+    "sha256": "2e6dfcaf1fee63a79e7615d6b53f404240df5b0264de4636969cdeec3eebd614"
   },
   "terrain": {
     "bytes": 21683,
     "path": "terrain.json",
-    "sha256": "50082f41d9d86d8a22984b74b1f68e08868a6f4afee77731369ce3cad79b3124"
+    "sha256": "56d8566ac0019c8f8247ed89b53bc44ed5d594096984912b9a71c1c773582524"
   }
 }

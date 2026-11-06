@@ -16,12 +16,15 @@ import { tmpdir } from "node:os";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import earcut from "earcut";
+
 import {
   BRIDGE_SOURCE_KEYS,
   BOUNDARY_ATTACHED_SOURCE_KEYS,
   CATEGORY_MEMBERSHIPS,
   CHUNK_SCHEMA,
   CHUNK_SIZE_M,
+  CONCRETE_ROAD_SURFACE,
   COORDINATE_ROUNDING_M,
   CONTEXT_SCHEMA,
   COVERAGE_HEADERS,
@@ -36,6 +39,7 @@ import {
   MATERIAL_KEYS,
   PLAYER_CAPSULE_RADIUS_M,
   PLAYABLE_BOUNDARY_SOURCE_KEY,
+  PIER_DECK_SOURCE_KEYS,
   PLAYABLE_PIER_EXTENSION_SOURCE_KEYS,
   ROAD_WIDTHS_M,
   ROAD_SURFACE_BIASES_M,
@@ -120,6 +124,7 @@ import {
   loadStreetDetailZones,
   streetDetailHardShapes,
 } from "./lib/street-detail-generation.mjs";
+import { EAST_SPAN_PALETTE_UV, eastSpanMesh } from "./lib/east-span-generation.mjs";
 import { generateStreetGround, loadStreetGroundRules } from "./lib/street-ground-generation.mjs";
 import {
   SHORELINE_OVERLAY_MATERIAL,
@@ -140,11 +145,22 @@ const TERRAIN_RASTER_EXPECTATIONS = Object.freeze({
   maximum_elevation_m: 104.756,
 });
 const FOUNDATION_BURIAL_MARGIN_M = 0.02;
+// The runtime leaves out every Bay Bridge context triangle west of this x (the
+// imported western-span model stands there; WorldChunkBuilder
+// WESTERN_BRIDGE_REPLACEMENT_MAX_X_M).
+const WESTERN_SPAN_RUNTIME_CUT_X_M = 500;
+// A pier's deck past the island outline is drawn when it covers more than this.
+// Smaller remainders are coastline digitizing slips: w1222505176's 5.5 m² lies
+// over the riprap, where the May 2026 aerial shows rocks and no deck.
+const PIER_DECK_MINIMUM_M2 = 20;
+// The fascia hanging from a pier deck's edges over the water.
+const PIER_DECK_SLAB_M = 0.6;
 const WATER_DATUM_M = 0;
 const FACET_CONTAINMENT_TOLERANCE_M = COORDINATE_ROUNDING_M * 2;
 const PAVEMENT_MATERIALS = Object.freeze({
   vehicle: Object.freeze({ material_key: "road_path", albedo_srgb_hex: "555b60" }),
   pedestrian: Object.freeze({ material_key: "road_path_pedestrian", albedo_srgb_hex: "8b918e" }),
+  concrete: Object.freeze({ material_key: "road_path_concrete", albedo_srgb_hex: "8a8579" }),
   paved_area: Object.freeze({ material_key: "major_area_paved", albedo_srgb_hex: "707573" }),
 });
 const TERRAIN_PINNED_SAMPLES = Object.freeze([
@@ -518,6 +534,14 @@ function buildPlayableObjects(ledger, boundary) {
       object.source_measure = multiPolygonArea(sourceGeometry);
       object.geometry = intersectMultiPolygons(sourceGeometry, boundary);
       object.clipped_measure = multiPolygonArea(object.geometry);
+      // A pier deck reaching out over the water past the island outline: its
+      // part on the island stays a playable overlay, and the rest is drawn as
+      // visual-only boundary-attached context (buildContext), as Pier 1 is.
+      // The walkable ferry pier has its own deck (pier canopy family).
+      if (tags.man_made === "pier" && !PLAYABLE_PIER_EXTENSION_SOURCE_KEYS.includes(row.source_key)) {
+        const beyond = differenceMultiPolygons(sourceGeometry, boundary);
+        if (multiPolygonArea(beyond) > PIER_DECK_MINIMUM_M2) object.pier_deck_beyond = beyond;
+      }
     }
 
     invariant(
@@ -1117,17 +1141,56 @@ function buildRoadChunks(store, objects) {
       }
     }
 
+    // Vehicle ways the frozen OSM tags surface=concrete (the Gate 5 driveway
+    // apron, poured concrete across the sidewalk in the dated Street View) draw
+    // a concrete skin over the base at the pedestrian skin's height; an asphalt
+    // vehicle road keeps precedence where it crosses. The pedestrian skin gives
+    // way to every vehicle way, so the two skins never overlap.
+    const concretePieces = vehiclePieces.filter((piece) => piece.object.tags.surface === CONCRETE_ROAD_SURFACE);
+    const asphaltUnion = classUnion(
+      vehiclePieces.filter((piece) => piece.object.tags.surface !== CONCRETE_ROAD_SURFACE),
+      "roads-asphalt",
+    );
+    const concreteVisible = differenceMultiPolygons(classUnion(concretePieces, "roads-concrete-source"), asphaltUnion);
+    let concreteObjectKey = null;
+    if (concreteVisible.length > 0 && multiPolygonArea(concreteVisible) > 1e-8) {
+      const concreteLabel = `roads-concrete/${entry.id}`;
+      const concreteMesh = coherentDrapedSurfaceMesh(
+        concreteVisible,
+        facets,
+        ROAD_SURFACE_BIASES_M.pedestrian,
+        concreteLabel,
+      );
+      concreteObjectKey = `roads-concrete:${entry.id}`;
+      const concreteRecord = meshRecord({
+        objectKey: concreteObjectKey,
+        featureKind: "road_path",
+        sourceKeys: concretePieces.map((piece) => piece.object.row.source_key).sort(),
+        materialKey: PAVEMENT_MATERIALS.concrete.material_key,
+        mesh: concreteMesh,
+      });
+      concreteRecord.surface_bias_m = ROAD_SURFACE_BIASES_M.pedestrian;
+      updateSurfaceConformanceAudit(store, concreteMesh, facets, ROAD_SURFACE_BIASES_M.pedestrian, concreteLabel);
+      store.ensure(entry.x, entry.z).records.push(concreteRecord);
+      for (const piece of concretePieces) {
+        piece.object.physical_object_keys.add(concreteObjectKey);
+        piece.object.chunk_ids.add(entry.id);
+      }
+    }
+
     const pedestrianSourceArea = multiPolygonArea(pedestrianUnion);
     const pedestrianVisibleArea = multiPolygonArea(pedestrianVisible);
     store.pavement_skin_audits.push({
       chunk_id: entry.id,
       base_object_key: objectKey,
       pedestrian_object_key: pedestrianObjectKey,
+      concrete_object_key: concreteObjectKey,
       source_counts: {
         all: new Set(sourceKeys).size,
         vehicle: new Set(vehiclePieces.map((piece) => piece.object.row.source_key)).size,
         pedestrian: new Set(pedestrianPieces.map((piece) => piece.object.row.source_key)).size,
         pedestrian_visible: new Set(visiblePedestrianPieces.map((piece) => piece.object.row.source_key)).size,
+        concrete: new Set(concretePieces.map((piece) => piece.object.row.source_key)).size,
       },
       plan_area_m2: {
         base_union: roundMeasure(multiPolygonArea(union)),
@@ -1136,6 +1199,7 @@ function buildRoadChunks(store, objects) {
         pedestrian_visible_after_precedence: roundMeasure(pedestrianVisibleArea),
         vehicle_precedence_removed: roundMeasure(pedestrianSourceArea - pedestrianVisibleArea),
         pedestrian_vehicle_overlap: roundMeasure(pedestrianVehicleOverlap),
+        concrete_visible_after_asphalt_precedence: roundMeasure(multiPolygonArea(concreteVisible)),
       },
     });
   }
@@ -1175,6 +1239,8 @@ function pavementSkinDocument(objects, batchAudits) {
   const pedestrianSourcesWithVisibleSkin = roads.filter((object) =>
     object.road_visual_class === "pedestrian" &&
     [...object.physical_object_keys].some((key) => key.startsWith("roads-pedestrian:")));
+  const concreteSources = roads.filter((object) =>
+    object.road_visual_class === "vehicle" && object.tags.surface === CONCRETE_ROAD_SURFACE);
   const pavedAreas = [...objects.values()].filter((object) =>
     object.roles.includes("major_area") && object.tags.amenity === "parking");
   invariant(pavedAreas.length === 17, `Expected 17 OSM parking areas, found ${pavedAreas.length}`);
@@ -1211,6 +1277,13 @@ function pavementSkinDocument(objects, batchAudits) {
         surface_bias_m: ROAD_SURFACE_BIASES_M.pedestrian,
         relative_luminance: roundMeasure(pedestrianLuminance),
       },
+      concrete: {
+        ...PAVEMENT_MATERIALS.concrete,
+        surface_bias_m: ROAD_SURFACE_BIASES_M.pedestrian,
+        source_tag_rule: `vehicle-class way with surface=${CONCRETE_ROAD_SURFACE}`,
+        source_count: concreteSources.length,
+        relative_luminance: roundMeasure(srgbHexRelativeLuminance(PAVEMENT_MATERIALS.concrete.albedo_srgb_hex)),
+      },
       paved_area: {
         ...PAVEMENT_MATERIALS.paved_area,
         source_tag_rule: "amenity=parking",
@@ -1226,6 +1299,9 @@ function pavementSkinDocument(objects, batchAudits) {
       pedestrian_source_count: classCounts.pedestrian,
       pedestrian_sources_with_visible_skin: pedestrianSourcesWithVisibleSkin.length,
       pedestrian_record_count: batchAudits.filter((audit) => audit.pedestrian_object_key != null).length,
+      concrete_record_count: batchAudits.filter((audit) => audit.concrete_object_key != null).length,
+      concrete_sources_with_visible_skin: concreteSources.filter((object) =>
+        [...object.physical_object_keys].some((key) => key.startsWith("roads-concrete:"))).length,
       vehicle_precedence_at_crossings: true,
       maximum_pedestrian_vehicle_overlap_m2: maximumOverlap,
       vertical_separation_m: roundMeasure(ROAD_SURFACE_BIASES_M.pedestrian - ROAD_SURFACE_BIASES_M.base),
@@ -1545,7 +1621,115 @@ function contextRecord(record, contextKind) {
   return { ...rest, context_kind: contextKind };
 }
 
-function buildContext(ledger, boundary, rawOsm, rawSources, playableObjects, terrain) {
+// A pier's deck past the island outline; its part on the island is a playable
+// overlay draped on the land. Along the seam on the outline the deck takes the
+// overlay's own edge, every vertex and height, so the two meet without a step
+// or gap; every other deck vertex continues the seam's height straight out
+// from the nearest point of the seam. A PIER_DECK_SLAB_M fascia hangs from the
+// edges over the water.
+function pierDeckMesh(object, boundary, chunks, label) {
+  invariant(
+    object.pier_deck_beyond.length === 1 && object.pier_deck_beyond[0].length === 1,
+    `${label} is not one simple deck outline`,
+  );
+  const overlayPoints = [...chunks.values()].flatMap((chunk) => chunk.records)
+    .filter((record) => object.physical_object_keys.has(record.object_key))
+    .flatMap((record) => Array.from({ length: record.vertices.length / 3 }, (_value, index) => ({
+      point: [record.vertices[index * 3], -record.vertices[index * 3 + 2]],
+      y: record.vertices[index * 3 + 1],
+    })));
+  invariant(overlayPoints.length > 0, `${label} has no playable overlay on the island`);
+  const near = COORDINATE_ROUNDING_M * 2;
+  const seamHeight = (point) => overlayPoints.find((overlay) =>
+    Math.hypot(overlay.point[0] - point[0], overlay.point[1] - point[1]) <= near)?.y ?? null;
+  // The deck outline with the overlay's vertices on its edges put in, in order.
+  const ring = object.pier_deck_beyond[0][0];
+  const outline = [];
+  for (let index = 0; index < ring.length; index += 1) {
+    const start = ring[index];
+    const end = ring[(index + 1) % ring.length];
+    const lengthSquared = (end[0] - start[0]) ** 2 + (end[1] - start[1]) ** 2;
+    outline.push({ point: start, y: seamHeight(start) });
+    outline.push(...overlayPoints
+      .filter((overlay) => pointToSegmentDistance(overlay.point, start, end) <= near)
+      .map((overlay) => ({
+        ...overlay,
+        t: ((overlay.point[0] - start[0]) * (end[0] - start[0]) + (overlay.point[1] - start[1]) * (end[1] - start[1])) / lengthSquared,
+      }))
+      .filter((overlay) => overlay.t * Math.sqrt(lengthSquared) > near && (1 - overlay.t) * Math.sqrt(lengthSquared) > near)
+      .sort((left, right) => left.t - right.t)
+      .filter((overlay, order, list) => order === 0 || (overlay.t - list[order - 1].t) * Math.sqrt(lengthSquared) > near)
+      .map(({ point, y }) => ({ point, y })));
+  }
+  // Seam edges: both ends on the overlay and the edge on the island outline.
+  const isSeam = (index) => {
+    const start = outline[index];
+    const end = outline[(index + 1) % outline.length];
+    const middle = [(start.point[0] + end.point[0]) / 2, (start.point[1] + end.point[1]) / 2];
+    return start.y != null && end.y != null && distanceToMultiPolygonEdges(middle, boundary) <= near;
+  };
+  const seams = outline.map((_value, index) => index).filter(isSeam);
+  invariant(seams.length > 0, `${label} meets no part of its overlay on the outline`);
+  for (const vertex of outline) {
+    if (vertex.y != null && seams.some((index) => outline[index] === vertex || outline[(index + 1) % outline.length] === vertex)) continue;
+    let best = null;
+    for (const index of seams) {
+      const start = outline[index];
+      const end = outline[(index + 1) % outline.length];
+      const lengthSquared = (end.point[0] - start.point[0]) ** 2 + (end.point[1] - start.point[1]) ** 2;
+      const t = Math.max(0, Math.min(1, ((vertex.point[0] - start.point[0]) * (end.point[0] - start.point[0]) +
+        (vertex.point[1] - start.point[1]) * (end.point[1] - start.point[1])) / lengthSquared));
+      const distance = Math.hypot(
+        vertex.point[0] - (start.point[0] + (end.point[0] - start.point[0]) * t),
+        vertex.point[1] - (start.point[1] + (end.point[1] - start.point[1]) * t),
+      );
+      if (best == null || distance < best.distance) best = { distance, y: start.y + (end.y - start.y) * t };
+    }
+    vertex.y = best.y;
+  }
+  const at = (vertex, drop = 0) => [vertex.point[0], vertex.y - drop, -vertex.point[1]].map(roundCoordinate);
+  const mesh = { vertices: [], normals: [], uvs: [], indices: [] };
+  const face = (corners, uvs, outward = null) => {
+    const ab = [corners[1][0] - corners[0][0], corners[1][1] - corners[0][1], corners[1][2] - corners[0][2]];
+    const ac = [corners[2][0] - corners[0][0], corners[2][1] - corners[0][1], corners[2][2] - corners[0][2]];
+    let normal = [ab[1] * ac[2] - ab[2] * ac[1], ab[2] * ac[0] - ab[0] * ac[2], ab[0] * ac[1] - ab[1] * ac[0]];
+    const area = Math.hypot(...normal) / 2;
+    if (area <= 1e-6) return;
+    normal = normal.map((value) => value / (2 * area));
+    // Counterclockwise around the face's outward side, as the contract stores triangles.
+    const flip = outward ? normal[0] * outward[0] + normal[2] * outward[2] < 0 : normal[1] < 0;
+    const ordered = flip ? [0, 2, 1] : [0, 1, 2];
+    const offset = mesh.vertices.length / 3;
+    for (const order of ordered) {
+      mesh.vertices.push(...corners[order]);
+      mesh.normals.push(...(flip ? normal.map((value) => -value) : normal).map(roundCoordinate));
+      mesh.uvs.push(...uvs[order].map(roundCoordinate));
+    }
+    mesh.indices.push(offset, offset + 1, offset + 2);
+  };
+  const triangles = earcut(outline.flatMap((vertex) => vertex.point), [], 2);
+  for (let index = 0; index < triangles.length; index += 3) {
+    const corners = [triangles[index], triangles[index + 1], triangles[index + 2]].map((corner) => outline[corner]);
+    face(corners.map((vertex) => at(vertex)), corners.map((vertex) => [vertex.point[0] / 10, -vertex.point[1] / 10]));
+  }
+  for (let index = 0; index < outline.length; index += 1) {
+    if (seams.includes(index)) continue;
+    const start = outline[index];
+    const end = outline[(index + 1) % outline.length];
+    const length = Math.hypot(end.point[0] - start.point[0], end.point[1] - start.point[1]);
+    if (length <= COORDINATE_ROUNDING_M) continue;
+    // The outline keeps the deck on its left: outward is to the right.
+    const outward = [(end.point[1] - start.point[1]) / length, 0, (end.point[0] - start.point[0]) / length];
+    const corners = [at(start, PIER_DECK_SLAB_M), at(end, PIER_DECK_SLAB_M), at(end), at(start)];
+    const uvs = [[0, 0], [length / 10, 0], [length / 10, PIER_DECK_SLAB_M / 10], [0, PIER_DECK_SLAB_M / 10]];
+    face([corners[0], corners[1], corners[2]], [uvs[0], uvs[1], uvs[2]], outward);
+    face([corners[0], corners[2], corners[3]], [uvs[0], uvs[2], uvs[3]], outward);
+  }
+  validateMesh(mesh, label);
+  return mesh;
+}
+
+function buildContext(ledger, boundary, rawOsm, rawSources, playableObjects, terrain, chunks) {
   const byKey = new Map(ledger.context.map((joined) => [joined.row.source_key, joined]));
   const ybi = byKey.get(YBI_SOURCE_KEY);
   invariant(ybi?.exported, "YBI area view is missing from raw export");
@@ -1576,7 +1760,23 @@ function buildContext(ledger, boundary, rawOsm, rawSources, playableObjects, ter
   const bridgeGeometry = differenceMultiPolygons(bridgeSourceGeometry, boundary);
   roundingAreaAudit(bridgeGeometry, "Bay Bridge context");
   invariant(bridgeGeometry.length > 0, "Bay Bridge context is empty after TI subtraction");
-  const bridgeMesh = topSurfaceMesh(bridgeGeometry, 12, "Bay Bridge context");
+  // The old western span keeps its flat sheet, which the runtime leaves out
+  // (everything west of x = 500 m, where the imported western-span model
+  // stands). The modern eastern span is built in three dimensions so that it
+  // reads from the shore (tools/lib/east-span-generation.mjs); its transition
+  // bents stop where the deck meets Yerba Buena Island's terrain.
+  const westSpanGeometry = differenceMultiPolygons(westGeometry, boundary);
+  invariant(
+    multiPolygonBounds(westSpanGeometry).max_x < WESTERN_SPAN_RUNTIME_CUT_X_M,
+    "The flat western span reaches past the runtime's western-span cut",
+  );
+  const eastSpanGeometry = eastSpanMesh(rawOsm, memberWayIds, (east, north) =>
+    pointInMultiPolygon([east, north], ybiSourceGeometry, true) ? terrain.sampleTerrainEastNorth(east, north) : null);
+  // The record's UVs pick the bay bridge palette's texels; the flat western
+  // sheet takes the light concrete one.
+  const westSpanSheet = topSurfaceMesh(westSpanGeometry, 12, "Bay Bridge western span context");
+  westSpanSheet.uvs = westSpanSheet.uvs.map((_value, index) => EAST_SPAN_PALETTE_UV.structure[index % 2]);
+  const bridgeMesh = mergeMeshes([westSpanSheet, eastSpanGeometry], "Bay Bridge context");
 
   const records = [
     contextRecord(meshRecord({
@@ -1615,7 +1815,28 @@ function buildContext(ledger, boundary, rawOsm, rawSources, playableObjects, ter
     }), "boundary_attached_visual");
     object.physical_object_keys.add(record.object_key);
     return record;
-  }).sort((left, right) => left.object_key.localeCompare(right.object_key));
+  });
+  const pierDeckKeys = [...playableObjects.values()]
+    .filter((object) => object.pier_deck_beyond)
+    .map((object) => object.row.source_key)
+    .sort();
+  invariant(
+    stableJson(pierDeckKeys) === stableJson(PIER_DECK_SOURCE_KEYS),
+    `Piers reaching past the island outline drift: ${pierDeckKeys.join(", ")}`,
+  );
+  for (const sourceKey of PIER_DECK_SOURCE_KEYS) {
+    const object = playableObjects.get(sourceKey);
+    const record = contextRecord(meshRecord({
+      objectKey: `boundary_context:${sourceKey}`,
+      featureKind: "context",
+      sourceKeys: [sourceKey],
+      materialKey: "context_boundary_pier",
+      mesh: pierDeckMesh(object, boundary, chunks, `${sourceKey}/pier-deck`),
+    }), "boundary_attached_visual");
+    object.physical_object_keys.add(record.object_key);
+    boundaryAttachedVisuals.push(record);
+  }
+  boundaryAttachedVisuals.sort((left, right) => left.object_key.localeCompare(right.object_key));
   const objects = new Map();
   for (const joined of ledger.context) {
     const isYbi = joined.row.source_key === YBI_SOURCE_KEY;
@@ -1915,6 +2136,8 @@ function coverageRows(allObjects, chunks, contextDocument) {
         ? "Represented by exact Treasure Island land edge; no YBI ribbon"
         : BOUNDARY_ATTACHED_SOURCE_KEYS.includes(object.row.source_key)
           ? "Exact-touch-only source polygon rendered as explicit non-colliding boundary-attached visual context"
+          : PIER_DECK_SOURCE_KEYS.includes(object.row.source_key)
+          ? "Pier deck past the island outline rendered as non-colliding boundary-attached visual context"
           : object.row.source_key === ISLE_HOUSE_PARENT_KEY || ISLE_HOUSE_PART_KEYS.includes(object.row.source_key)
           ? "Isle House parent residual and parts share an explicit non-overlapping composite"
           : BRIDGE_SOURCE_KEYS.includes(object.row.source_key)
@@ -2020,7 +2243,7 @@ function validateFinalState(coverage, objects, chunks, context, memberships) {
     invariant(record.context_kind === "boundary_attached_visual", `${record.object_key} unknown boundary context kind`);
     invariant(record.collision_kind === "none" && record.receiver_kind === "none", `${record.object_key} boundary context semantics leak`);
     invariant(
-      BOUNDARY_ATTACHED_SOURCE_KEYS.includes(record.source_keys[0]) && record.source_keys.length === 1,
+      [...BOUNDARY_ATTACHED_SOURCE_KEYS, ...PIER_DECK_SOURCE_KEYS].includes(record.source_keys[0]) && record.source_keys.length === 1,
       `${record.object_key} invalid boundary-attached source ownership`,
     );
     validateMesh(record, record.object_key);
@@ -2160,7 +2383,7 @@ function main() {
       playableObjects,
       rawOsm: loaded.rawOsm,
     });
-    const context = buildContext(joinedLedger, boundary, loaded.rawOsm, loaded.rawSources, playableObjects, terrain);
+    const context = buildContext(joinedLedger, boundary, loaded.rawOsm, loaded.rawSources, playableObjects, terrain, chunks);
     const allObjects = new Map([...playableObjects, ...demolishedObjects, ...context.objects]);
     const coverage = coverageRows(allObjects, chunks, context.document);
     coverage.sort((left, right) => sourceRows.findIndex((row) => row.source_key === left.source_key) -

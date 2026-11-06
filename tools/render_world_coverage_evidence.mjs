@@ -16,6 +16,8 @@ import { spawnSync } from "node:child_process";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { BOUNDARY_ATTACHED_SOURCE_KEYS, PIER_DECK_SOURCE_KEYS } from "./lib/world-contract.mjs";
+
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(scriptDirectory, "..");
 const DEFAULT_WORLD = resolve(projectRoot, "generated/world");
@@ -36,10 +38,9 @@ const EXPECTED_CONTEXT_KEYS = Object.freeze([
   "w1011568818",
   "w26767311",
 ]);
-const EXPECTED_BOUNDARY_ATTACHED_KEYS = Object.freeze([
-  "w319406837",
-  "w644986117",
-]);
+// Boundary-attached context records: the whole-source visuals and the decks of
+// the piers that reach past the island outline.
+const EXPECTED_BOUNDARY_ATTACHED_KEYS = Object.freeze([...BOUNDARY_ATTACHED_SOURCE_KEYS, ...PIER_DECK_SOURCE_KEYS].sort());
 const SVG_WIDTH = 1600;
 const SVG_HEIGHT = 1200;
 
@@ -304,7 +305,7 @@ function validateWorld(worldRoot) {
 
   const context = JSON.parse(readFileSync(resolve(worldRoot, manifest.context.path), "utf8"));
   invariant(context.schema_version === "ti.godot-world-context/2", "Context schema drift");
-  invariant(context.records.length === 2 && context.boundary_attached_visuals.length === 2, "Context record count drift");
+  invariant(context.records.length === 2 && context.boundary_attached_visuals.length === EXPECTED_BOUNDARY_ATTACHED_KEYS.length, "Context record count drift");
   const contextRecords = [...context.records, ...context.boundary_attached_visuals];
   for (const record of contextRecords) {
     validateRecord(record, record.object_key);

@@ -10,7 +10,7 @@ Only the 1K JPG diffuse, OpenGL normal, and roughness maps were selected. No arc
 | pedestrian paths | `concrete_pavement` | <https://polyhaven.com/a/concrete_pavement> |
 | parking and paved areas | `concrete_floor_03` | <https://polyhaven.com/a/concrete_floor_03> |
 | island ground-cover shader detail (every ground family) and Yerba Buena context | `sparse_grass` | <https://polyhaven.com/a/sparse_grass> |
-| exterior building walls | `plaster_grey_04` | <https://polyhaven.com/a/plaster_grey_04> |
+| exterior building walls; pier decks and marina grounds (diffuse only, over 20 m) | `plaster_grey_04` | <https://polyhaven.com/a/plaster_grey_04> |
 | flat building roofs | `bitumen` | <https://polyhaven.com/a/bitumen> |
 
 ## File inventory

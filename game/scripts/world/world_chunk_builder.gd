@@ -6,6 +6,11 @@ const PHYSICS_SPRAY_SURFACE := 1 << 2
 const RENDER_WORLD_VISIBLE := 1 << 0
 const RENDER_BUILDING_WALL := 1 << 1
 const WESTERN_BRIDGE_REPLACEMENT_MAX_X_M := 500.0
+## The modern eastern span (tools/lib/east-span-generation.mjs) colours each
+## face by its UV, which picks one texel of this palette, in order: light
+## concrete for the tower, columns, caps and cables; the girders' sides mid
+## grey; their undersides darker; the roadway on top road grey.
+const BAY_BRIDGE_PALETTE: Array[Color] = [Color("c4c1b9"), Color("8a8883"), Color("75736e"), Color("5d6164")]
 const POLYHAVEN_DEFAULT_NORMAL_STRENGTH := 0.2
 const HAWKINS_MASSING := preload("res://game/scripts/world/massing/hawkins_77_bruton_massing.gd")
 const BUILDING_3_MASSING := preload("res://game/scripts/world/massing/building_3_600_california_massing.gd")
@@ -111,6 +116,22 @@ const STREET_GROUND_SURFACES := {
 	"yard_pond": {"albedo": preload("res://game/resources/textures/world/street/yard_pond.png"), "uv_scale": 2.0, "roughness": 0.15},
 	"rubble_grey": {"albedo": preload("res://game/resources/textures/world/shoreline/riprap_albedo.png"), "uv_scale": 8.0, "roughness": 0.95, "tint": Color(1.12, 1.12, 1.1)},
 	"black_plastic": {"albedo": preload("res://game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg"), "uv_scale": 2.0, "roughness": 0.45, "tint": Color(0.3, 0.3, 0.32)},
+	# Poured concrete outside the street ground, on records whose UVs are the
+	# world in 10 m units. Pier decks (Pier 1 as context past the playable
+	# boundary, the other piers' overlays and decks) and a marina's paved
+	# grounds: weathered light-grey concrete, the Poly Haven grey plaster's
+	# mottling and stains spread over 20 m, tinted until a top-down sunlit
+	# render samples like the May 2026 aerial (decks about 196/193/180, the
+	# marina's grounds darker, about 178/176/165) and the dated Pier 1 Street
+	# View's light grey. Those marina grounds (w110183752) stay concrete, not
+	# ground cover: the aerial shows an old apron with slab joints, rectangular
+	# foundation outlines and tyre tracks. The concrete driveway skin (an OSM
+	# surface=concrete vehicle way, the Gate 5 apron in the Nov 2025 Street
+	# View): the sidewalk panels at 1.5 m, a shade under the sidewalks.
+	"context_boundary_pier": {"albedo": preload("res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_diff_1k.jpg"), "uv_scale": 0.5, "roughness": 0.92, "tint": Color(0.98, 1.0, 0.97)},
+	"terrain_pier": {"albedo": preload("res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_diff_1k.jpg"), "uv_scale": 0.5, "roughness": 0.92, "tint": Color(0.98, 1.0, 0.97)},
+	"terrain_marina": {"albedo": preload("res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_diff_1k.jpg"), "uv_scale": 0.5, "roughness": 0.92, "tint": Color(0.885, 0.91, 0.895)},
+	"road_path_concrete": {"albedo": preload("res://game/resources/textures/world/street/street_concrete_panels.png"), "uv_scale": 3.33, "roughness": 0.9, "tint": Color(0.96, 0.94, 0.86)},
 }
 ## A park's planted beds (park_mulch records): the vegetation kit's dark
 ## grey-brown shredded mulch in 2 m tiles of the world UV, blending to the
@@ -1032,6 +1053,13 @@ func _material_for(material_key: String, feature_kind: String, is_context: bool)
 		material.cull_mode = BaseMaterial3D.CULL_DISABLED
 	if feature_kind == "road_path" or material_key in ["street_parking", "major_area_paved"]:
 		material.roughness = 1.0
+	if material_key == "context_bay_bridge":
+		var palette := Image.create(BAY_BRIDGE_PALETTE.size(), 1, false, Image.FORMAT_RGB8)
+		for index in BAY_BRIDGE_PALETTE.size():
+			palette.set_pixel(index, 0, BAY_BRIDGE_PALETTE[index])
+		material.albedo_texture = ImageTexture.create_from_image(palette)
+		material.albedo_color = Color.WHITE
+		material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
 	_apply_polyhaven_textures(material, material_key)
 	_materials[cache_key] = material
 	return material
@@ -1130,7 +1158,9 @@ func _color_for(material_key: String, feature_kind: String, is_context: bool) ->
 		if feature_kind == "ybi":
 			return Color("66765c")
 		if feature_kind == "boundary_attached_visual":
-			return Color("718b8c") if "marina" in material_key else Color("a4947e")
+			# The marina basin (water, floats and boats). A pier deck draws its
+			# concrete (STREET_GROUND_SURFACES); without UVs, that concrete's mean.
+			return Color("718b8c") if "marina" in material_key else Color("908e7c")
 		return Color("bbb7af")
 	match feature_kind:
 		"land_ground":
@@ -1146,10 +1176,8 @@ func _color_for(material_key: String, feature_kind: String, is_context: bool) ->
 		"terrain_overlay":
 			if "sand" in material_key:
 				return Color("d7c78e")
-			if "wet" in material_key or "marina" in material_key:
+			if "wet" in material_key:
 				return Color("78a49a")
-			if "pier" in material_key:
-				return Color("8b8174")
 			if "breakwater" in material_key:
 				return Color("777a73")
 			return Color("8fb486")

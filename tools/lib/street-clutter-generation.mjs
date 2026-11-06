@@ -184,7 +184,7 @@ const NON_LOT_STALLS = Object.freeze(["bay", "shoulder"]);
 // material) a parked car's tyre may stand on.
 const VISIBLE_GROUND_KINDS = new Set(["land_ground", "major_area", "road_path", "street_kerb", "street_paint", "terrain_overlay"]);
 // The street ground drapes some lots with a yard pavement (asphalt or concrete).
-const WHEEL_SURFACES = new Set(["major_area_paved", "road_path", "street_gutter", "street_marking", "street_parking", "street_wear", "yard_asphalt", "yard_asphalt_pale", "yard_concrete"]);
+const WHEEL_SURFACES = new Set(["major_area_paved", "road_path", "road_path_concrete", "street_gutter", "street_marking", "street_parking", "street_wear", "yard_asphalt", "yard_asphalt_pale", "yard_concrete"]);
 const GROUND_CELL_M = 4;
 // A tyre's contact patch, sampled across its width (fractions) and along it (m).
 const PATCH_ACROSS = Object.freeze([-0.35, 0, 0.35]);
