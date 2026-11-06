@@ -207,6 +207,7 @@ void fragment() {
 	vec3 green = mix(lawn, dry, mix_settings.z);
 	vec3 ground = mix(green, dry, dry_w);
 	float pool = 0.0;
+	float marsh_cover = 0.0;
 	if (marsh_amount > 0.0) {
 		vec2 axis = marsh_axis.zw - marsh_axis.xy;
 		vec2 from_start = p - marsh_axis.xy;
@@ -227,6 +228,8 @@ void fragment() {
 			// Dull straw in dark and pale patches over crusted fill, gravel toward the top.
 			vec3 bank = cover_layer(bank_gap, bank_blade, bank_straw, m, 0.8, fade);
 			bank *= mix(0.6 + 0.8 * smoothstep(0.3, 0.7, 0.45 * n_mid + 0.3 * n_patch8 + 0.25 * n_tiny), 1.0, fade);
+			// The slope falls away dark to its foot, pale at the top.
+			bank *= mix(0.78, 1.08, smoothstep(2.95, 3.9, h));
 			float gravel_w = 0.75 * smoothstep(3.3, 3.9, h) * smoothstep(0.5, 0.62, 0.5 * n_patch8 + 0.3 * n_small + 0.2 * n_tiny);
 			bank = mix(bank, bank_gravel * (0.8 + 0.4 * n_tiny), gravel_w);
 			float bank_w = 1.0 - smoothstep(3.95, 4.55, h);
@@ -242,26 +245,37 @@ void fragment() {
 			vec3 brown = marsh_brown * mix(0.72 + 0.56 * m.x, 1.0, fade);
 			vec3 olive = marsh_olive * mix(0.72 + 0.56 * m.x, 1.0, fade);
 			vec3 marsh = mix(mix(mix(red, brown, 0.7 * brown_w) * (1.0 - 0.35 * dark_w), olive, 0.85 * olive_w), bank, 0.5 * straw_w);
-			float carpet = 1.0 - smoothstep(2.3, 2.85, h);
+			float carpet = 1.0 - smoothstep(2.8, 3.2, h);
 
 			ground = mix(ground, mix(bank, marsh, carpet), region * max(bank_w, carpet));
+			marsh_cover = region * carpet;
 
-			// Pale stones in loose scatters on the banks, few on the floor, gone with distance.
+			// Pale stones in loose scatters on the banks, few on the floor, and a few
+			// lumps of rubble with a dark foot, all gone with distance.
 			if (fade < 1.0) {
+				float cover = region * max(bank_w, carpet) * (1.0 - fade);
+				float scatter = smoothstep(0.48, 0.64, 0.6 * value_noise(p / 15.0 + vec2(13.1, 29.3)) + 0.4 * n_mid) * mix(1.0, 0.2, carpet);
 				vec2 stone_cell = floor(p / 1.3);
 				vec2 inner = fract(p / 1.3) - 0.5;
 				vec2 place = (vec2(hash12(stone_cell + vec2(7.1, 2.3)), hash12(stone_cell + vec2(1.7, 13.7))) - 0.5) * 0.7;
 				float size = 0.03 + 0.08 * hash12(stone_cell + vec2(3.3, 9.1));
-				float scatter = smoothstep(0.48, 0.64, 0.6 * value_noise(p / 15.0 + vec2(13.1, 29.3)) + 0.4 * n_mid) * mix(1.0, 0.2, carpet);
 				float stone = (1.0 - smoothstep(size * 0.7, size, length(inner - place))) * step(hash12(stone_cell + vec2(23.3, 5.9)), 0.7 * scatter);
-				ground = mix(ground, bank_stone * (0.75 + 0.5 * n_tiny), stone * (1.0 - fade) * region * max(bank_w, carpet));
+				ground = mix(ground, bank_stone * (0.75 + 0.5 * n_tiny), stone * cover);
+				vec2 rock_cell = floor(p / 3.1);
+				vec2 rock_at = (vec2(hash12(rock_cell + vec2(11.3, 4.1)), hash12(rock_cell + vec2(2.9, 17.3))) - 0.5) * 2.2;
+				vec2 rock_off = (fract(p / 3.1) - 0.5) * 3.1 - rock_at;
+				float rock_keep = step(hash12(rock_cell + vec2(19.7, 23.3)), 0.55 * scatter);
+				float rock_size = (0.1 + 0.2 * hash12(rock_cell + vec2(5.7, 31.9))) * (0.72 + 0.56 * value_noise(p / 0.3 + rock_cell));
+				ground *= 1.0 - 0.5 * (1.0 - smoothstep(rock_size, rock_size * 1.5, length(rock_off - vec2(0.05, 0.04)))) * rock_keep * cover;
+				ground = mix(ground, bank_stone * (0.62 + 0.5 * n_tiny), (1.0 - smoothstep(rock_size * 0.8, rock_size, length(rock_off))) * rock_keep * cover);
 			}
 
 			vec2 along = vec2(0.643 * p.x + 0.766 * p.y, 0.643 * p.y - 0.766 * p.x);
 			float water = 0.5 * value_noise(along / vec2(19.0, 6.0) + vec2(3.7, 19.1)) + 0.34 * value_noise(along / vec2(8.0, 3.0) + vec2(41.3, 7.9)) + 0.16 * n_small;
 			water -= WATER_LEVEL + 0.75 * (ground_y - marsh_floor_y);
-			ground *= 1.0 - 0.45 * smoothstep(-0.05, 0.0, water) * region;
-			pool = smoothstep(0.0, 0.012, water) * region;
+			water += 0.04 * (n_tiny - 0.5);
+			ground *= 1.0 - 0.5 * smoothstep(-0.09, 0.0, water) * region;
+			pool = smoothstep(0.0, 0.035, water) * region;
 		}
 	}
 	if (mix_settings.y <= 1.0 + patch_softness) {
@@ -272,7 +286,7 @@ void fragment() {
 		// The detail photo's grass tufts, kept crisp, grow on into a patch's edge
 		// and sparsely in its middle.
 		float inside = smoothstep(mix_settings.y, mix_settings.y + 0.12, bare);
-		bare_w *= 1.0 - smoothstep(0.35, 0.65, m.x) * mix(1.0, 0.3, inside) * (1.0 - fade);
+		bare_w *= (1.0 - smoothstep(0.35, 0.65, m.x) * mix(1.0, 0.3, inside) * (1.0 - fade)) * (1.0 - marsh_cover);
 		// soil_tone: the more of the ground is bare, the paler its soil, from the
 		// fields' dirt patches to wholly graded fill.
 		float soil_tone = mix(1.3, 1.0, smoothstep(0.35, 0.6, mix_settings.y));

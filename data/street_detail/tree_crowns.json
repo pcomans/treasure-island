@@ -5,6 +5,7 @@
   "Audited by eye against the same aerial: dark roofs, a tank, asphalt and bare ground the mask read as crowns are gone, and sparse and bright crowns it missed are added by hand (the mask finds dark canopy only), so a clump here is one or several trees as seen.",
   "Groups name the areas a street-detail canopy rule plants (tools/config/street-detail-zones.json); species are the rules' mixes, not read from the aerial. Round tanks, ponds and the zones planted by their own rules are left out. fourth_street_lot_palms is traced palm by palm.",
   "Hedges: lines 1.5 m out from the walls where dark foliage runs along them in the same aerial, 5 m or more long, about two runs in five kept (the rest of what the aerial shows there is yard shrubs) and opened every 7 m or so: the data does not place the unit entries, which a hedge must not cross.",
+  "fourth_street_lot_palms is traced by hand on the 2026-05-26 aerial (z19), one point per young palm's crown in the lot's islands; the mask misses palms that small. One residential hedge, the first line, [-282.2, -660.4] to [-281.8, -652] at the Mariner units, is traced by hand from Street View Mar 2025 (pano j3ugQSzJZtl9lpbb5i58bQ, heading 50, species pass crop h1) and the aerial; the rest are detected.",
   "Pins: a crown within reach_m of a pin keeps the species a dated photo names; the crown's own position and width still come from the aerial."
  ],
  "pins": [
