@@ -3,10 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b471vtns5jshn"
+path="res://.godot/imported/perennial_atlas.png-e77cd67fdd6679c9307a7627d11d09e6.ctex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
 source_file="res://game/resources/textures/world/vegetation/perennial_atlas.png"
+dest_files=["res://.godot/imported/perennial_atlas.png-e77cd67fdd6679c9307a7627d11d09e6.ctex"]
 
 [params]
 
