@@ -70,12 +70,15 @@ import {
 import {
   STREET_DETAIL_GROUND_LAYER,
   STREET_DETAIL_KINDS,
+  TREE_POLE_CLEAR_M,
+  TREE_WIRE_CLEAR_M,
+  polylineDistance,
   STREET_DETAIL_LAYERS,
   STREET_DETAIL_SCHEMA,
   STREET_DETAIL_SOURCES,
 } from "./lib/street-detail-generation.mjs";
 import { CAR_BODY_NAMES, CAR_FINISHES, CAR_PAINTS, MAX_TWIST_M, STREET_CLUTTER_PROPS, visibleGroundIndex } from "./lib/street-clutter-generation.mjs";
-import { carBodyGeometry } from "./lib/street-clutter-kit.mjs";
+import { STOCK_TANK_SIZE, STOCK_TANK_SOIL_M, carBodyGeometry } from "./lib/street-clutter-kit.mjs";
 import {
   fenceHeight, fenceParamsError, GATE_LEAF_LIFT_M, gateLeaves, STREET_FENCE_BANNER_TYPES, STREET_FENCE_GATE_HINGES, STREET_FENCE_GATE_STYLES, STREET_FENCE_GATED_TYPES, STREET_FENCE_INSIDE,
   STREET_FENCE_TYPES,
@@ -1013,12 +1016,23 @@ const CROWN_CHECK_RINGS = Object.freeze([[1 / 3, 8], [2 / 3, 16], [1, 32]]);
 // ground lower than the foot (it would float) and nowhere is it higher than the
 // trunk runs on below it (it would show a gap round a buried foot). A low plant
 // (no trunk) holds its whole crown off sidewalks, roads, paths and plazas.
-function validatePlantedRow(row, groundAt) {
+function validatePlantedRow(row, groundAt, rowsById) {
   const spec = STREET_VEGETATION_PROPS[row.prop];
   invariant(spec && spec.kinds.includes(row.kind) && row.status === "placed", `${row.id} prop ${row.prop} does not plant a placed ${row.kind} row`);
   const params = row.prop_params ?? {};
   invariant(Number.isInteger(params.variant) && params.variant >= 0 && params.variant < spec.variants, `${row.id} variant is invalid`);
   invariant(Number.isFinite(params.scale) && params.scale >= STREET_VEGETATION_SCALE_RANGE[0] && params.scale <= STREET_VEGETATION_SCALE_RANGE[1], `${row.id} scale is invalid`);
+  // A plant in a planter stands in the tank's soil, not on the ground.
+  if (row.planter !== undefined) {
+    const tank = rowsById.get(row.planter);
+    invariant(tank?.prop === "stock_tank_planter", `${row.id} planter ${row.planter} is not a stock tank`);
+    const [dx, dz] = [row.position_m[0] - tank.position_m[0], row.position_m[2] - tank.position_m[2]];
+    const [sin, cos] = [Math.sin(tank.yaw_radians), Math.cos(tank.yaw_radians)];
+    invariant(Math.abs(dx * sin + dz * cos) <= STOCK_TANK_SIZE.length_m / 2 && Math.abs(dx * cos - dz * sin) <= STOCK_TANK_SIZE.width_m / 2, `${row.id} stands outside its tank`);
+    const soil = tank.position_m[1] + tank.surface.bias_m + STOCK_TANK_SOIL_M;
+    invariant(Math.abs(row.position_m[1] + row.surface.bias_m + params.lift_m + params.stand_m - soil) <= 0.002, `${row.id} does not stand on its tank's soil`);
+    return;
+  }
   invariant(Number.isFinite(params.lift_m) && Number.isFinite(params.foot_spread_m) && Number.isFinite(params.well_m) && params.well_m >= 0, `${row.id} foot settling is invalid`);
   invariant(Number.isFinite(row.yaw_radians), `${row.id} needs a yaw`);
   const foot = row.position_m[1] + row.surface.bias_m + params.lift_m;
@@ -1183,6 +1197,7 @@ function validateStreetDetail(worldRoot, manifest, records) {
   const ids = rows.map((row) => row.id);
   invariant(new Set(ids).size === ids.length, "Street-detail row ids are not unique");
   invariant(ids.every((id, index) => index === 0 || ids[index - 1] < id), "Street-detail rows are not in code-point id order");
+  const rowsById = new Map(rows.map((row) => [row.id, row]));
   for (const row of rows) {
     const kind = STREET_DETAIL_KINDS[row.kind];
     invariant(kind && row.layer === kind.layer && row.geometry === kind.geometry, `${row.id} kind/layer/geometry mismatch`);
@@ -1214,7 +1229,7 @@ function validateStreetDetail(worldRoot, manifest, records) {
       // in the layer whose kit has it (furniture or clutter), or a planted
       // vegetation row (validatePlantedRow).
       if (row.prop !== undefined && row.layer === "vegetation") {
-        validatePlantedRow(row, groundAt);
+        validatePlantedRow(row, groundAt, rowsById);
       } else if (row.prop !== undefined) {
         const props = row.layer === "furniture" ? STREET_FURNITURE_PROPS : row.layer === "clutter" ? STREET_CLUTTER_PROPS : {};
         invariant(props[row.prop] === row.kind && row.status === "placed", `${row.id} prop ${row.prop} does not match a placed ${row.kind} ${row.layer} row`);
@@ -1268,6 +1283,22 @@ function validateStreetDetail(worldRoot, manifest, records) {
       });
       invariant((row.kind === "fence") === (row.fence !== undefined), `${row.id}: every fence row, and only a fence row, carries a fence block`);
       if (row.fence !== undefined) validateFenceRow(row, grounded, inBoundary, groundAt);
+      if (row.layer === "vegetation" && row.prop !== undefined) validateHedgeRow(row, groundAt);
+    }
+  }
+  // A tree's trunk stands clear of power poles and of the wires between them.
+  const treeRows = rows.filter((row) => ["palm_slot", "tree"].includes(row.kind) && row.status === "placed");
+  const placedPoles = rows.filter((row) => row.prop === "utility_pole" && row.status === "placed");
+  const wireLines = rows.filter((row) => row.prop === "power_wires").map((row) => row.points_m.map((point) => [point[0], point[2]]));
+  for (const row of treeRows) {
+    const xz = [row.position_m[0], row.position_m[2]];
+    for (const pole of placedPoles) {
+      const gap = Math.hypot(pole.position_m[0] - xz[0], pole.position_m[2] - xz[1]);
+      invariant(gap >= TREE_POLE_CLEAR_M, `${row.id} stands ${gap.toFixed(2)} m from pole ${pole.id}`);
+    }
+    for (const line of wireLines) {
+      const gap = polylineDistance(xz, line);
+      invariant(gap >= TREE_WIRE_CLEAR_M, `${row.id} stands ${gap.toFixed(2)} m from a power line`);
     }
   }
   // The power lines' wires: a power_wires row is a placed power line whose pole
@@ -1301,6 +1332,22 @@ function validateStreetDetail(worldRoot, manifest, records) {
   invariant(stableJson(document.counts.by_source) === stableJson(tally("source", STREET_DETAIL_SOURCES)), "Street-detail source counts differ from its rows");
   invariant(stableJson(document.counts.by_status) === stableJson(tally("status", ["excluded", "placed"])), "Street-detail status counts differ from its rows");
   return document;
+}
+
+// A planted hedge: a kit hedge prop of a placed hedge row, a variant, and the
+// visible ground's height under each of its points (ground_y_m), where the kit
+// lays it (street_vegetation_kit.gd hedge_into), within a centimetre and a half
+// of the visible ground there.
+function validateHedgeRow(row, groundAt) {
+  const spec = STREET_VEGETATION_PROPS[row.prop];
+  invariant(spec && spec.kinds.includes(row.kind) && row.kind === "hedge" && row.status === "placed", `${row.id} prop ${row.prop} does not plant a placed hedge`);
+  const params = row.prop_params ?? {};
+  invariant(Number.isInteger(params.variant) && params.variant >= 0 && params.variant < spec.variants, `${row.id} variant is invalid`);
+  invariant(Array.isArray(params.ground_y_m) && params.ground_y_m.length === row.points_m.length && params.ground_y_m.every(Number.isFinite), `${row.id} needs the visible ground's height under each point`);
+  row.points_m.forEach((point, index) => {
+    const ground = groundAt([point[0], point[2]]);
+    invariant(ground && Math.abs(ground.y - params.ground_y_m[index]) <= 0.015, `${row.id} point ${index} is ${ground ? `${(params.ground_y_m[index] - ground.y).toFixed(3)} m off` : "off"} the visible ground`);
+  });
 }
 
 // A fence row: its kit type, openings along the line and solid runs of grounded

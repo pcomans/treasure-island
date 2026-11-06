@@ -1694,6 +1694,7 @@
     {
       "id": "mersea_lot",
       "source_key": "w28356874",
+      "planted": [{"id": "ninth_street_strip", "points_xz": [[-392, 88], [-372, 78], [-345, 62], [-318, 52], [-312, 62], [-338, 80], [-362, 97], [-384, 106]], "evidence": "Street View Sep 2025 on 9th St (pano zSYuqR9R0oyboW2wFZ-wEw, heading 150): dark bare mulch under the strip's plants, on the curb band; the outline only selects that band."}],
       "evidence": "Owner-priority lot by Mersea (699 Avenue of the Palms). Aerial 2026-05-26 (0.25 m, traced in the lot's own frame along its north-west edge): four rows of 90-degree stalls square to 9th Street in the north field (the north-west row, a back-to-back pair, and the row along the south-east aisle). Google Street View Sep 2025 inside the lot (pano TKhpp at x -365.5, z 142.7, headings 70, 110, 190 and 10; panos UmL4 and LtXS up the Avenue A strip): TOUR BUS PARKING across three wide stalls along the strip's east fence, faded stall marks along both edges of the strip, blue accessible stalls by the event trailers at its west side, a small raised island holding a lamp and a litter can, a white left-turn arrow on the drive about 9.7 m ahead of the heading-10 camera. Stall counts and exact positions are production inference from the aerial. Fix round (2026-11-05): the Avenue A strip's rows sit about 5 m further out (May 2026 aerial: the east cars' centres about 10.4 m from the OSM centre line, noses at the planters; the west-edge car about 12.6 m out); the lamp island stands just off the OSM road ribbon (Sep 2025, heading 10); hatched zones at the field rows' ends and the outlined box at the west end from the aerial; the field's stall paint mostly worn (step 3) and the strip's nearly worn away (step 4, faded rows), the accessible stalls outlined in blue; long tar-sealed joints and patched strips along the Avenue A strip (Sep 2025 photos up the strip; none drawn in the north field, whose photos show cracks but no joints).",
       "paint_wear": 3,
       "surface": {
@@ -2129,6 +2130,8 @@
           "paint_wear": 2
         }
       ]
-    }
+    },
+    {"id": "keppler_court", "source_key": "w95934133", "evidence": "Street View Apr 2019, 1117 Keppler Ct (pano b6Gbr0M_gm59xek6WMNAkg, heading 175): a kerbed planted island at the head of the court's middle row of parked cars; 2026-05-26 aerial (z19): the same island and its planting at about (-510, -424). Its size is production inference. The court's stalls are not painted here.", "paint_wear": 2, "hatches": [], "legends": [], "rows": [], "islands": [{"id": "planted_island", "fill": "mulch", "points_xz": [[-513.95, -425.05], [-507.11, -422.81], [-508.05, -419.95], [-514.89, -422.19]]}]},
+    {"id": "job_corps_south_lot", "source_key": "w109022552", "evidence": "Owner photos, Nov 2026, across the lot toward the eucalyptus group: a pale cracked lot with faded stall lines; 2026-05-26 aerial (z19): pale pavement, the stall lines nearly gone. The stalls are not painted here.", "paint_wear": 3, "hatches": [], "legends": [], "rows": [], "islands": [], "surface": {"material": "yard_asphalt_pale", "evidence": "Owner photos, Nov 2026: pale, sun-bleached, cracked asphalt.", "wear": {"crack_per_100m2": 1.0, "oil_per_100m2": 0.1, "patch_per_100m2": 0.0}, "seams": [], "patch_strips": []}}
   ]
 }

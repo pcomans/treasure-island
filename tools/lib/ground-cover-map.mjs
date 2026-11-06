@@ -11,8 +11,8 @@
 // on the cells whose top drawn ground is a given OSM area or surface (every
 // rule names one, so a rule never reaches other records; a surface rule may be
 // narrowed to the surface drawn inside some areas, such as the kerb verges over
-// the residential grounds), inside a traced polygon, or near buildings, roads
-// and lots. Each names its dated aerial or photo evidence; widths, distances and
+// the residential grounds), inside a traced polygon, or near buildings, roads and
+// lots. Each names its dated aerial or photo evidence; widths, distances and
 // traced outlines are production inference, not survey data. Drawn cells off
 // the ruled ground (roads, paths, kerb tops and paint, roofs, lots, and kerb
 // verges no rule drew on) then take the weights of the nearest ruled cell: an
@@ -103,7 +103,8 @@ export function validateGroundCoverConfig(config) {
       validateRange(rule.near, `${label} near`);
       invariant(Array.isArray(rule.near.kinds) && rule.near.kinds.length > 0 && rule.near.kinds.every((kind) => GROUND_COVER_NEAR_KINDS.includes(kind)),
         `${label} near.kinds must list ${GROUND_COVER_NEAR_KINDS.join(", ")}`);
-      invariant(Object.keys(rule.near).sort().join(",") === "full_m,kinds,zero_m", `${label} near must be exactly {kinds, full_m, zero_m}`);
+      invariant(["full_m,kinds,zero_m", "full_m,kinds,wobble_m,zero_m"].includes(Object.keys(rule.near).sort().join(",")), `${label} near must be {kinds, full_m, zero_m} with an optional wobble_m`);
+      if (rule.near.wobble_m != null) invariant(isFiniteNumber(rule.near.wobble_m) && rule.near.wobble_m > 0 && rule.near.wobble_m <= rule.near.full_m, `${label} near wobble_m must be in (0, full_m]`);
     }
   }
   return config;
@@ -293,12 +294,32 @@ export function nearestMaskCell(grid, mask) {
   return nearest;
 }
 
+// Smooth noise in [0, 1] over a lattice of WOBBLE_SCALE_M, so a band's width wanders.
+const WOBBLE_SCALE_M = 26;
+function latticeUnit(i, j) {
+  let hash = Math.imul(i, 374761393) + Math.imul(j, 668265263);
+  hash = Math.imul(hash ^ (hash >>> 13), 1274126177);
+  return ((hash ^ (hash >>> 16)) >>> 0) / 4294967296;
+}
+
+function wobbleNoise(x, z) {
+  const u = x / WOBBLE_SCALE_M;
+  const v = z / WOBBLE_SCALE_M;
+  const i = Math.floor(u);
+  const j = Math.floor(v);
+  const fu = smoothstep(0, 1, u - i);
+  const fv = smoothstep(0, 1, v - j);
+  const top = latticeUnit(i, j) * (1 - fu) + latticeUnit(i + 1, j) * fu;
+  const bottom = latticeUnit(i, j + 1) * (1 - fu) + latticeUnit(i + 1, j + 1) * fu;
+  return top * (1 - fv) + bottom * fv;
+}
+
 function smoothstep(edge0, edge1, value) {
   const t = Math.min(1, Math.max(0, (value - edge0) / (edge1 - edge0)));
   return t * t * (3 - 2 * t);
 }
 
-// The plan triangles of a generated record (world x, z).
+// The plan triangles of a generated record: world x, z.
 function recordTriangles(record) {
   const triangles = [];
   for (let offset = 0; offset < record.indices.length; offset += 3) {
@@ -439,7 +460,14 @@ export function drawGroundCoverMap(config, world) {
     }
     if (rule.near) {
       const distance = nearDistance(rule.near.kinds);
-      for (let cell = 0; cell < cells; cell += 1) weight[cell] *= 1 - smoothstep(rule.near.full_m, rule.near.zero_m, distance[cell]);
+      const wobble = rule.near.wobble_m ?? 0;
+      for (let cell = 0; cell < cells; cell += 1) {
+        if (weight[cell] <= 0) continue;
+        const i = cell % grid.width;
+        const j = (cell - i) / grid.width;
+        const shift = wobble > 0 ? wobble * (2 * wobbleNoise(grid.centerX(i), grid.centerZ(j)) - 1) : 0;
+        weight[cell] *= 1 - smoothstep(rule.near.full_m, rule.near.zero_m, distance[cell] + shift);
+      }
     }
     // Over: the rule's recipe covers its weight of whatever lies under it.
     const channel = GROUND_COVER_CHANNELS.indexOf(rule.channel);

@@ -9,7 +9,11 @@
 //     the planted beds of parks such as Cityside Park;
 //   - set pieces (data/street_detail/set_pieces.json) where dated photos show
 //     particular trees: Building 1's date palms, tall fan palms and cypresses,
-//     the Waterfront Plaza's young cypresses.
+//     the Waterfront Plaza's young cypresses;
+//   - canopy rules, which plant the tree crowns read from the dated aerial
+//     (data/street_detail/tree_crowns.json) with a mix of species whose crowns
+//     fit: the island's housing, campus and industrial trees; hedge rules lay
+//     that file's hedges along the walls.
 // Only species photographed on Treasure Island are props. Each rule and set
 // piece names its dated evidence; positions, sizes and counts are production
 // inference, not survey data.
@@ -35,7 +39,10 @@ import { invariant, roundCoordinate } from "./world-contract.mjs";
 // blue_eyed_grass, seaside_daisy, sea_thrift, pacific_reedgrass, rush and
 // bronze_clump_grass (about 1-2.5 m across) and variant 4 of dense_sedge (twelve
 // tussocks, about 2.5 m); its plants' bases run 0.15 m into the ground, so a
-// drift row may lie on a bed sloping up to about 10 %.
+// drift row may lie on a bed sloping up to about 10 %. clipped_hedge is not
+// planted at a point: a hedge line row carries it with prop_params {variant,
+// ground_y_m}, the visible ground's height under each of the line's points
+// (the kit's hedge_into lays it there; its foot radius is half its depth).
 const vegetationProp = (kinds, variants, footM, trunk) => Object.freeze({ kinds: Object.freeze(kinds), variants, foot_m: footM, trunk });
 // Low plants stand in grass_clump rows (a 0.35 m footprint) or, spaced wider,
 // in planting_slot rows (0.8 m).
@@ -44,23 +51,36 @@ export const STREET_VEGETATION_PROPS = Object.freeze({
   blue_eyed_grass: vegetationProp(LOW_PLANT_KINDS, 4, 0.1, false),
   bronze_clump_grass: vegetationProp(LOW_PLANT_KINDS, 4, 0.18, false),
   california_buckwheat: vegetationProp(LOW_PLANT_KINDS, 3, 0.25, false),
-  california_sagebrush: vegetationProp(LOW_PLANT_KINDS, 3, 0.3, false),
-  canary_date_palm: vegetationProp(["palm_slot", "tree"], 4, 0.7, true),
-  clump_grass: vegetationProp(["grass_clump"], 4, 0.3, false),
+  california_sagebrush: vegetationProp(LOW_PLANT_KINDS, 4, 0.3, false),
+  canary_date_palm: vegetationProp(["palm_slot", "tree"], 6, 0.7, true),
+  clipped_hedge: vegetationProp(["hedge"], 2, 0.45, false),
+  clump_grass: vegetationProp(["grass_clump"], 8, 0.3, false),
+  conical_shrub: vegetationProp(["planting_slot", "tree"], 2, 0.4, false),
   dense_sedge: vegetationProp(LOW_PLANT_KINDS, 5, 0.18, false),
   dune_tansy: vegetationProp(LOW_PLANT_KINDS, 3, 0.2, false),
+  eucalyptus_mature: vegetationProp(["tree"], 2, 0.9, true),
+  indian_hawthorn: vegetationProp(["planting_slot"], 3, 0.6, false),
   island_oak_young: vegetationProp(["tree"], 3, 0.3, true),
   mexican_fan_palm: vegetationProp(["palm_slot", "tree"], 6, 0.45, true),
   monterey_cypress: vegetationProp(["tree"], 5, 0.8, true),
+  monterey_pine: vegetationProp(["tree"], 6, 0.6, true),
+  norfolk_island_pine: vegetationProp(["tree"], 2, 0.2, true),
+  nz_christmas_tree: vegetationProp(["tree"], 2, 0.5, true),
+  nz_flax: vegetationProp(LOW_PLANT_KINDS, 3, 0.25, false),
   pacific_reedgrass: vegetationProp(LOW_PLANT_KINDS, 4, 0.25, false),
-  rush: vegetationProp(LOW_PLANT_KINDS, 4, 0.2, false),
+  pittosporum_tobira: vegetationProp(["planting_slot"], 3, 0.5, false),
+  red_tip_shrub: vegetationProp(LOW_PLANT_KINDS, 2, 0.25, false),
+  rush: vegetationProp(LOW_PLANT_KINDS, 6, 0.2, false),
   sea_thrift: vegetationProp(LOW_PLANT_KINDS, 4, 0.12, false),
   seaside_daisy: vegetationProp(LOW_PLANT_KINDS, 4, 0.2, false),
   seaside_woolly_sunflower: vegetationProp(LOW_PLANT_KINDS, 3, 0.3, false),
   seep_monkeyflower: vegetationProp(LOW_PLANT_KINDS, 3, 0.15, false),
   shrubby_sage: vegetationProp(LOW_PLANT_KINDS, 3, 0.3, false),
+  spreading_broadleaf: vegetationProp(["tree"], 4, 0.7, true),
+  weeping_broadleaf: vegetationProp(["tree"], 2, 0.5, true),
   sydney_blue_gum_young: vegetationProp(["tree"], 3, 0.3, true),
   white_umbel_perennial: vegetationProp(LOW_PLANT_KINDS, 3, 0.15, false),
+  pale_seeded_shrub: vegetationProp(LOW_PLANT_KINDS, 3, 0.2, false),
 });
 // How far the kit runs a trunk on below its foot (street_vegetation_kit.gd BURY_M):
 // the visible ground round a foot may rise at most this far above it.
@@ -217,6 +237,96 @@ export function plantRow({ prop, kind, variant, scale, xz, landY, surface, groun
     params.well_slope = plane.slope.map((value) => Math.round(value * 1e5) / 1e5);
   }
   return { prop, prop_params: params };
+}
+
+// Tree crowns and hedges read from the dated aerial, by group: {groups: {group:
+// [[x, z, crown_m], ...]}, hedges: {group: [[[x, z], [x, z]], ...]}}.
+export const TREE_CROWNS_SCHEMA = "ti.tree-crowns/1";
+export function validateTreeCrowns(document) {
+  invariant(document?.schema_version === TREE_CROWNS_SCHEMA, "Tree crowns schema drift");
+  invariant(document.groups != null && typeof document.groups === "object" && !Array.isArray(document.groups), "Tree crowns need groups");
+  for (const [group, crowns] of Object.entries(document.groups)) {
+    invariant(Array.isArray(crowns) && crowns.length > 0 && crowns.every((crown) => Array.isArray(crown) && crown.length === 3 && crown.every(isFiniteNumber) && crown[2] > 0),
+      `Tree crown group ${group} must list [x, z, crown_m]`);
+  }
+  invariant(Array.isArray(document.pins), "Tree crowns need pins");
+  for (const [index, pin] of document.pins.entries()) {
+    const label = `Tree crown pin ${index}`;
+    invariant(JSON.stringify(Object.keys(pin).sort()) === JSON.stringify(PIN_FIELDS), `${label} must be exactly {${PIN_FIELDS.join(", ")}}`);
+    invariant(Array.isArray(pin.at_xz) && pin.at_xz.length === 2 && pin.at_xz.every(isFiniteNumber) && isFiniteNumber(pin.reach_m) && pin.reach_m > 0 && pin.reach_m <= 10, `${label} needs at_xz and a reach_m up to 10`);
+    invariant(typeof pin.evidence === "string" && pin.evidence.trim() !== "", `${label} needs its evidence`);
+    invariant(CANOPY_CROWNS_M[pin.prop] != null, `${label}: ${pin.prop} has no canopy crown widths`);
+    validateVegetationRuleParams(pin.prop, { variants: pin.variants, scale: [0.8, 1.25] }, label);
+    for (let variant = pin.variants[0]; variant <= pin.variants[1]; variant += 1) {
+      invariant(CANOPY_CROWNS_M[pin.prop][variant] != null, `${label}: ${pin.prop} variant ${variant} is not a canopy form`);
+    }
+  }
+  invariant(document.hedges != null && typeof document.hedges === "object" && !Array.isArray(document.hedges), "Tree crowns need hedges");
+  for (const [group, lines] of Object.entries(document.hedges)) {
+    invariant(Array.isArray(lines) && lines.length > 0 && lines.every((line) => Array.isArray(line) && line.length >= 2 && line.every((point) => Array.isArray(point) && point.length === 2 && point.every(isFiniteNumber))),
+      `Hedge group ${group} must list lines of [x, z] points`);
+  }
+  return document;
+}
+
+// The crown width (m) of each kit variant a canopy rule may plant (the kit's
+// spread or crown), null for a form no canopy rule draws.
+const CANOPY_CROWNS_M = Object.freeze({
+  canary_date_palm: Object.freeze([6.5, 7.0, 7.5, 8.0, 8.5, 9.0]),
+  mexican_fan_palm: Object.freeze([null, null, null, null, 5.0, 5.5]),
+  eucalyptus_mature: Object.freeze([15.0, 18.0]),
+  island_oak_young: Object.freeze([2.5, 2.0, 3.4]),
+  monterey_cypress: Object.freeze([17.0, 12.5, null, null, null]),
+  monterey_pine: Object.freeze([8.5, 10.0, 11.2, 7.2, 8.2, 8.6]),
+  nz_christmas_tree: Object.freeze([7.0, 8.0]),
+  spreading_broadleaf: Object.freeze([8.0, 10.0, 15.0, 17.5]),
+  weeping_broadleaf: Object.freeze([9.5, 11.2]),
+});
+// How much further from a crown's width than the closest variant another may be
+// and still take its turn, so a stand of one crown size isn't all one model.
+const CANOPY_VARIANT_SLACK = 0.25;
+const CANOPY_ENTRY_FIELDS = Object.freeze(["prop", "scale", "share", "variants"]);
+const PIN_FIELDS = Object.freeze(["at_xz", "evidence", "prop", "reach_m", "variants"]);
+
+// A canopy rule's mix: entries {prop, share, variants: [first, last], scale: [low, high]}.
+export function validateCanopyMix(mix, label) {
+  invariant(Array.isArray(mix) && mix.length > 0, `${label} needs a mix`);
+  mix.forEach((entry, index) => {
+    const entryLabel = `${label} mix ${index}`;
+    invariant(entry != null && JSON.stringify(Object.keys(entry).sort()) === JSON.stringify(CANOPY_ENTRY_FIELDS), `${entryLabel} must be exactly {prop, scale, share, variants}`);
+    invariant(CANOPY_CROWNS_M[entry.prop], `${entryLabel}: ${entry.prop} has no canopy crown widths`);
+    invariant(isFiniteNumber(entry.share) && entry.share > 0, `${entryLabel} share must be positive`);
+    validateVegetationRuleParams(entry.prop, { variants: entry.variants, scale: entry.scale }, entryLabel);
+    for (let variant = entry.variants[0]; variant <= entry.variants[1]; variant += 1) {
+      invariant(CANOPY_CROWNS_M[entry.prop][variant] != null, `${entryLabel}: ${entry.prop} variant ${variant} is not a canopy form`);
+    }
+  });
+}
+
+// The tree for a crown crownM wide: each entry's closest variant at the scale
+// that best fits the crown, among the entries that come within fit of its width
+// (a fraction) the rule's shares pick one by the row identity; failing that, the
+// entry that comes closest. Returns {prop, variant, scale}.
+export function drawCanopyTree(seed, identity, crownM, mix, fit) {
+  const options = mix.map((entry) => {
+    const forms = [];
+    for (let variant = entry.variants[0]; variant <= entry.variants[1]; variant += 1) {
+      const width = CANOPY_CROWNS_M[entry.prop][variant];
+      const scale = Math.min(entry.scale[1], Math.max(entry.scale[0], crownM / width));
+      forms.push({ prop: entry.prop, variant, scale, miss: Math.abs(width * scale - crownM) / crownM, share: entry.share });
+    }
+    const closest = Math.min(...forms.map((form) => form.miss));
+    const turns = forms.filter((form) => form.miss <= closest + CANOPY_VARIANT_SLACK);
+    return { ...turns[Math.floor(hashUnit(seed, `${identity}:${entry.prop}`, 2) * turns.length)], miss: closest };
+  });
+  const fitting = options.filter((option) => option.miss <= fit);
+  const pool = fitting.length > 0 ? fitting : [options.reduce((closest, option) => (option.miss < closest.miss ? option : closest))];
+  let pick = hashUnit(seed, identity, 3) * pool.reduce((sum, option) => sum + option.share, 0);
+  const chosen = pool.find((option) => {
+    pick -= option.share;
+    return pick <= 0;
+  }) ?? pool[pool.length - 1];
+  return { prop: chosen.prop, variant: chosen.variant, scale: roundCoordinate(chosen.scale) };
 }
 
 // Bed stations: for the along_beds scatter pattern, the offsets across a way

@@ -4,6 +4,8 @@
   "notes": [
     "Zone scatter for procedural street detail. Coordinates are world metres: +X east, +Z south (the game's frame).",
     "Zone shapes and scatter densities are production inference for the ferry-arrival pilot, not survey data.",
+    "A canopy rule (pattern canopy) plants the crowns of a group of data/street_detail/tree_crowns.json, read from the dated aerial: at each crown a species of its mix whose crown fits within fit (a fraction of the crown), its trunk moved up to nudge_m where the crown's centre cannot take one; in_lots lets a trunk stand in a parking lot, in its mulch pit. A hedge rule (kind hedge, pattern hedge_lines) lays the same file's hedge lines where their site is clear. visible_surfaces limits a planted rule to the ground the eye sees (the street ground's grass tops read as its concrete to surfaces). height_m limits a planted rule to visible ground between two heights (a basin's bank or floor).",
+    "A field rule (pattern field) sows plants by a density field that reads the site (street-planting-generation.mjs): nothing it plants is listed by position. A planters rule (pattern planters) plants the soil of the stock tanks the set pieces stand, each row naming its tank.",
     "Step 0 scatter emits placement slots only; later steps assign assets per slot kind. The runtime builds nothing from slots yet.",
     "Furniture rules place the vertical street objects of the pilot zones (tools/lib/street-furniture-generation.mjs) where OSM leaves gaps: kerb (along the curbs of named kerbed roads), signalized_crossings and near_signals (at OSM crossings with signals), junctions (named-street corners), all_way_stops (the other approaches of an OSM stop=all junction), drive_entries (traffic turning into a kerbed service drive from a named road) and lot_edge (around a parking lot). Each is production inference with its dated photo evidence; prop is the kit prop the runtime builds and params its settings.",
     "Exclusions are the shared mask for every street-detail source. These values size walk, camera and doorway clearance. spawn_forward keeps the first walk clear: a corridor from the ferry spawn straight along its facing direction.",
@@ -718,33 +720,923 @@
       ]
     },
     {
-      "id": "mersea_lot",
-      "name": "Mersea lot",
-      "pilot": true,
-      "reason": "The Mersea lot (699 Ave of the Palms, the owner's request, 2026-11-05): the chain-link along its field side and the black pickets on the Mersea side. Its cars, dumpsters, can and planters are the island rule's and set pieces.",
-      "reference": "OSM w28356874 (amenity=parking); Street View Sep 2025 inside the lot; Esri World Imagery, Vantor capture 2026-05-26",
-      "shape": {
-        "type": "polygon",
-        "points_xz": [[-392, 104], [-371, 104], [-361, 134], [-366, 150], [-392, 150]]
-      },
-      "scatter": [],
-      "fences": [
-        {"id": "field_fence", "kind": "fence", "fence_type": "chain_link", "pattern": "legs", "legs": [{"xz": [-294.1, 98.6]}, {"xz": [-355.6, 131.7]}, {"xz": [-319.9, 200.7]}], "params": {"inside": "left"}, "basis": "production_inference", "rule": "Plain galvanised chain-link, 6 ft, along the lot's edges against the field: from the east end of the painted field along its south side to the lot's inner corner, then down the east side of the Avenue A strip to its south end. No gate shows in the photos.", "evidence": "Street View, Sep 2025, inside the Mersea lot on Avenue A: pano TKhppKcV_DAxZRV9LsEh2A (x -365.5, z 142.7) headings 10, 70, 110, 265 and 315; pano UmL4Ss_-CFTPXI4O98FkOA (x -346.4, z 179.1) heading 340; pano LtXShSEN6YyhB4uQoFoS-A (x -328.1, z 205.1) heading 330; pano lNlDFKvsEUGs19LTkMB1gQ (x -379.9, z 115.6) heading 250; Esri World Imagery, Vantor capture 2026-05-26 (the fence lines along the lot's OSM edges): the fence behind the TOUR BUS stalls (TKhpp headings 70 and 110) and behind the planters along the strip (UmL4 340, LtXS 330); the lot's OSM edge w28356874 for its line."},
-        {"id": "mersea_pickets_north", "kind": "fence", "fence_type": "steel_picket", "pattern": "legs", "legs": [{"xz": [-386.7, 104.3]}, {"xz": [-381.45, 114.12]}], "params": {"inside": "right"}, "basis": "production_inference", "rule": "Black steel pickets about 4.5 ft high close Mersea's grounds (the mini golf, the agaves and the dining containers) off the lot along the west side of Avenue A, on the lot's OSM west edge; an opening at about x -381, z 115, where a crowd barrier stood in the fence line in Sep 2025, leads in from the lot. This rule is the stretch north of the opening, to the lot's corner by 9th Street.", "evidence": "Street View, Sep 2025, inside the Mersea lot on Avenue A: pano TKhppKcV_DAxZRV9LsEh2A (x -365.5, z 142.7) headings 10, 70, 110, 265 and 315; pano UmL4Ss_-CFTPXI4O98FkOA (x -346.4, z 179.1) heading 340; pano LtXShSEN6YyhB4uQoFoS-A (x -328.1, z 205.1) heading 330; pano lNlDFKvsEUGs19LTkMB1gQ (x -379.9, z 115.6) heading 250; Esri World Imagery, Vantor capture 2026-05-26 (the fence lines along the lot's OSM edges): the pickets along the drive with Mersea banners (TKhpp 315), the corner by the grey container (TKhpp 265), the opening with its crowd barrier (lNlD 250)."},
-        {"id": "mersea_pickets_south", "kind": "fence", "fence_type": "steel_picket", "pattern": "legs", "legs": [{"xz": [-380.5, 115.88]}, {"xz": [-368.5, 138.3]}, {"xz": [-369.4, 141.2]}, {"xz": [-375.0, 143.2]}], "params": {"inside": "right"}, "basis": "production_inference", "rule": "The same black steel pickets south of the opening, along the lot's west edge to the corner beside the Street View camera, then west to where a pair of grey storage containers (temporary, not placed) closes the line (TKhpp headings 265 and 315).", "evidence": "Street View, Sep 2025, inside the Mersea lot on Avenue A: pano TKhppKcV_DAxZRV9LsEh2A (x -365.5, z 142.7) headings 10, 70, 110, 265 and 315; pano UmL4Ss_-CFTPXI4O98FkOA (x -346.4, z 179.1) heading 340; pano LtXShSEN6YyhB4uQoFoS-A (x -328.1, z 205.1) heading 330; pano lNlDFKvsEUGs19LTkMB1gQ (x -379.9, z 115.6) heading 250; Esri World Imagery, Vantor capture 2026-05-26 (the fence lines along the lot's OSM edges): TKhpp headings 10, 265 and 315."}
-      ]
+   "id": "avenue_n_seawall",
+   "name": "Avenue N seawall palm row",
+   "pilot": false,
+   "reason": "The row of mature Canary Island date palms on the seawall side of Avenue N, between the road and the riprap (vegetation rollout R2).",
+   "reference": "OSM w8921530 (Avenue N); Google Street View Nov 2025 pano ttrmGi5rdijqAHRqMz7bsQ (505 Avenue N); Wayback aerials 2026-05-26 and 2025-08-29",
+   "shape": {
+    "type": "corridor",
+    "source_keys": ["w8921530"],
+    "half_width_m": 20
+   },
+   "scatter": [
+    {
+     "id": "seawall_canary_palms",
+     "kind": "tree",
+     "pattern": "along",
+     "source_keys": ["w8921530"],
+     "offsets_m": [-10.75],
+     "give_m": 2.75,
+     "spacing_m": 10,
+     "jitter_m": 1.0,
+     "acceptance": 0.95,
+     "surfaces": ["land_ground"],
+     "within_xz": [[683.7, 184.6], [697.7, 136.4], [675.5, 91.4], [652.5, 47], [629.2, 2.7], [605.5, -41.3], [581.8, -85.3], [558.7, -129.6], [535.5, -173.9], [512.3, -218.2], [489.1, -262.5], [465.7, -306.7], [442.3, -350.9], [418.9, -395.1], [395.5, -439.3], [387.2, -454.8], [400.5, -461.9], [408.7, -446.3], [432.2, -402.1], [455.6, -357.9], [479, -313.8], [502.4, -269.6], [525.6, -225.2], [548.8, -180.9], [571.9, -136.6], [595, -92.4], [618.7, -48.4], [642.4, -4.4], [665.8, 40.1], [688.8, 84.5], [712.4, 133.3], [697.9, 189.4]],
+     "prop": "canary_date_palm",
+     "params": {
+      "variants": [2, 3],
+      "scale": [0.9, 1.15]
+     },
+     "basis": "production_inference",
+     "rule": "Mature Canary Island date palms (Phoenix canariensis: a thick trunk of diamond leaf scars 7.6-9.8 m tall under the trimmed knob and a full arching crown) stand in one row on the seawall side of Avenue N, about 8 m beyond the game's curb (10.75 m right of the OSM centre line, stepping back up to give_m where the riprap comes close, and clear of the power line) and about 10 m apart, from the bend near z 185 to the way's north end, with a few gaps where a palm is missing; the verge under them is dry straw (tools/config/ground-cover.json).",
+     "evidence": "Google Street View Nov 2025, pano ttrmGi5rdijqAHRqMz7bsQ at 505 Avenue N (game about (572, -103)), headings 20 and 75 (inventory refs sv02, sv03): mature date palms in a row beyond the sidewalk on the seawall side; Wayback aerials 2026-05-26 (a19-east-avN-strip) and 2025-08-29 (a20-east-seawall-row): one row of palm crowns about 10 m apart between the road and the riprap, about 715 m from (400, -470) to (700, 180)"
     },
     {
-      "id": "avenue_n_seawall",
-      "name": "Avenue N seawall palm row",
-      "pilot": false,
-      "reason": "The row of mature Canary Island date palms on the seawall side of Avenue N, between the road and the riprap (vegetation rollout R2).",
-      "reference": "OSM w8921530 (Avenue N); Google Street View Nov 2025 pano ttrmGi5rdijqAHRqMz7bsQ (505 Avenue N); Wayback aerials 2026-05-26 and 2025-08-29",
-      "shape": {"type": "corridor", "source_keys": ["w8921530"], "half_width_m": 20},
-      "scatter": [
-        {"id": "seawall_canary_palms", "kind": "tree", "pattern": "along", "source_keys": ["w8921530"], "offsets_m": [-8.0], "spacing_m": 10, "jitter_m": 1.0, "acceptance": 0.95, "surfaces": ["land_ground"], "within_xz": [[683.7, 184.6], [697.7, 136.4], [675.5, 91.4], [652.5, 47], [629.2, 2.7], [605.5, -41.3], [581.8, -85.3], [558.7, -129.6], [535.5, -173.9], [512.3, -218.2], [489.1, -262.5], [465.7, -306.7], [442.3, -350.9], [418.9, -395.1], [395.5, -439.3], [387.2, -454.8], [400.5, -461.9], [408.7, -446.3], [432.2, -402.1], [455.6, -357.9], [479, -313.8], [502.4, -269.6], [525.6, -225.2], [548.8, -180.9], [571.9, -136.6], [595, -92.4], [618.7, -48.4], [642.4, -4.4], [665.8, 40.1], [688.8, 84.5], [712.4, 133.3], [697.9, 189.4]], "prop": "canary_date_palm", "params": {"variants": [2, 3], "scale": [0.9, 1.15]}, "basis": "production_inference", "rule": "Mature Canary Island date palms (Phoenix canariensis: a thick trunk of diamond leaf scars 7.6-9.8 m tall under the trimmed knob and a full arching crown) stand in one row on the seawall side of Avenue N, about 5 m beyond the game's curb (8 m right of the OSM centre line) and about 10 m apart, from the bend near z 185 to the way's north end, with a few gaps where a palm is missing; the verge under them is dry straw (tools/config/ground-cover.json).", "evidence": "Google Street View Nov 2025, pano ttrmGi5rdijqAHRqMz7bsQ at 505 Avenue N (game about (572, -103)), headings 20 and 75 (inventory refs sv02, sv03): mature date palms in a row beyond the sidewalk on the seawall side; Wayback aerials 2026-05-26 (a19-east-avN-strip) and 2025-08-29 (a20-east-seawall-row): one row of palm crowns about 10 m apart between the road and the riprap, about 715 m from (400, -470) to (700, 180)"}
-      ]
+     "id": "seawall_shrubs",
+     "kind": "planting_slot",
+     "pattern": "field",
+     "surfaces": ["land_ground"],
+     "per_m2": 0.11,
+     "spacing": [0.6, 1.4],
+     "field": {
+      "edge_m": [3, 15],
+      "road_m": [2.5, 14],
+      "drift_m": 14,
+      "clump_m": 4,
+      "drift_cover": 0.18,
+      "lone": 0.04
+     },
+     "mix": [
+      {
+       "prop": "indian_hawthorn",
+       "variants": [0, 2],
+       "scale": [0.85, 1.2],
+       "at": [0.3, 1.0],
+       "share": 4
+      },
+      {
+       "prop": "pittosporum_tobira",
+       "variants": [0, 1],
+       "scale": [0.85, 1.15],
+       "at": [0.0, 1.0],
+       "share": 4
+      },
+      {
+       "prop": "red_tip_shrub",
+       "variants": [0, 1],
+       "scale": [0.85, 1.1],
+       "at": [0.25, 1.0],
+       "share": 2
+      },
+      {
+       "prop": "conical_shrub",
+       "variants": [0, 1],
+       "scale": [0.85, 1.15],
+       "at": [0.55, 1.0],
+       "share": 1
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "The strip between Avenue N and the rocks: clusters of mixed shrubs with long gaps and a few lone plants.",
+     "evidence": "Street View Nov 2025, 505 Avenue N (pano ttrmGi5rdijqAHRqMz7bsQ; species pass crops s1-s3): a cluster of a pink hawthorn mound, glossy pittosporum, red tips and an upright conical shrub by the rocks."
     }
+   ]
+  },
+  {
+   "id": "mersea_lot",
+   "name": "Mersea lot",
+   "pilot": true,
+   "reason": "The Mersea lot (699 Ave of the Palms, the owner's request, 2026-11-05): the chain-link along its field side and the black pickets on the Mersea side. Its cars, dumpsters, can and planters are the island rule's and set pieces.",
+   "reference": "OSM w28356874 (amenity=parking); Street View Sep 2025 inside the lot; Esri World Imagery, Vantor capture 2026-05-26",
+   "shape": {
+    "type": "polygon",
+    "points_xz": [[-392, 104], [-371, 104], [-361, 134], [-366, 150], [-392, 150]]
+   },
+   "scatter": [],
+   "fences": [
+    {
+     "id": "field_fence",
+     "kind": "fence",
+     "fence_type": "chain_link",
+     "pattern": "legs",
+     "legs": [
+      {
+       "xz": [-294.1, 98.6]
+      },
+      {
+       "xz": [-355.6, 131.7]
+      },
+      {
+       "xz": [-319.9, 200.7]
+      }
+     ],
+     "params": {
+      "inside": "left"
+     },
+     "basis": "production_inference",
+     "rule": "Plain galvanised chain-link, 6 ft, along the lot's edges against the field: from the east end of the painted field along its south side to the lot's inner corner, then down the east side of the Avenue A strip to its south end. No gate shows in the photos.",
+     "evidence": "Street View, Sep 2025, inside the Mersea lot on Avenue A: pano TKhppKcV_DAxZRV9LsEh2A (x -365.5, z 142.7) headings 10, 70, 110, 265 and 315; pano UmL4Ss_-CFTPXI4O98FkOA (x -346.4, z 179.1) heading 340; pano LtXShSEN6YyhB4uQoFoS-A (x -328.1, z 205.1) heading 330; pano lNlDFKvsEUGs19LTkMB1gQ (x -379.9, z 115.6) heading 250; Esri World Imagery, Vantor capture 2026-05-26 (the fence lines along the lot's OSM edges): the fence behind the TOUR BUS stalls (TKhpp headings 70 and 110) and behind the planters along the strip (UmL4 340, LtXS 330); the lot's OSM edge w28356874 for its line."
+    },
+    {
+     "id": "mersea_pickets_north",
+     "kind": "fence",
+     "fence_type": "steel_picket",
+     "pattern": "legs",
+     "legs": [
+      {
+       "xz": [-386.7, 104.3]
+      },
+      {
+       "xz": [-381.45, 114.12]
+      }
+     ],
+     "params": {
+      "inside": "right"
+     },
+     "basis": "production_inference",
+     "rule": "Black steel pickets about 4.5 ft high close Mersea's grounds (the mini golf, the agaves and the dining containers) off the lot along the west side of Avenue A, on the lot's OSM west edge; an opening at about x -381, z 115, where a crowd barrier stood in the fence line in Sep 2025, leads in from the lot. This rule is the stretch north of the opening, to the lot's corner by 9th Street.",
+     "evidence": "Street View, Sep 2025, inside the Mersea lot on Avenue A: pano TKhppKcV_DAxZRV9LsEh2A (x -365.5, z 142.7) headings 10, 70, 110, 265 and 315; pano UmL4Ss_-CFTPXI4O98FkOA (x -346.4, z 179.1) heading 340; pano LtXShSEN6YyhB4uQoFoS-A (x -328.1, z 205.1) heading 330; pano lNlDFKvsEUGs19LTkMB1gQ (x -379.9, z 115.6) heading 250; Esri World Imagery, Vantor capture 2026-05-26 (the fence lines along the lot's OSM edges): the pickets along the drive with Mersea banners (TKhpp 315), the corner by the grey container (TKhpp 265), the opening with its crowd barrier (lNlD 250)."
+    },
+    {
+     "id": "mersea_pickets_south",
+     "kind": "fence",
+     "fence_type": "steel_picket",
+     "pattern": "legs",
+     "legs": [
+      {
+       "xz": [-380.5, 115.88]
+      },
+      {
+       "xz": [-368.5, 138.3]
+      },
+      {
+       "xz": [-369.4, 141.2]
+      },
+      {
+       "xz": [-375.0, 143.2]
+      }
+     ],
+     "params": {
+      "inside": "right"
+     },
+     "basis": "production_inference",
+     "rule": "The same black steel pickets south of the opening, along the lot's west edge to the corner beside the Street View camera, then west to where a pair of grey storage containers (temporary, not placed) closes the line (TKhpp headings 265 and 315).",
+     "evidence": "Street View, Sep 2025, inside the Mersea lot on Avenue A: pano TKhppKcV_DAxZRV9LsEh2A (x -365.5, z 142.7) headings 10, 70, 110, 265 and 315; pano UmL4Ss_-CFTPXI4O98FkOA (x -346.4, z 179.1) heading 340; pano LtXShSEN6YyhB4uQoFoS-A (x -328.1, z 205.1) heading 330; pano lNlDFKvsEUGs19LTkMB1gQ (x -379.9, z 115.6) heading 250; Esri World Imagery, Vantor capture 2026-05-26 (the fence lines along the lot's OSM edges): TKhpp headings 10, 265 and 315."
+    }
+   ]
+  },
+  {
+   "id": "island_trees",
+   "name": "The island's trees",
+   "pilot": false,
+   "reason": "The trees of the housing, the Job Corps campus and the industrial core, planted at the crowns of the dated aerial, so the groves, street rows and lone trees stand where they stand (vegetation rollout R4-R6).",
+   "reference": "Tree crowns read from the 2026-05-26 aerial (May 2026 z19 tiles; data/street_detail/tree_crowns.json); species pass 2026-11-05 (refs/species crops, Mar and Sep 2025 Street View)",
+   "shape": {
+    "type": "polygon",
+    "points_xz": [[-720, -960], [720, -960], [720, 960], [-720, 960]]
+   },
+   "scatter": [
+    {
+     "id": "residential_canopy",
+     "kind": "tree",
+     "pattern": "canopy",
+     "group": "residential",
+     "mix": [
+      {
+       "prop": "spreading_broadleaf",
+       "share": 39,
+       "variants": [0, 3],
+       "scale": [0.85, 1.2]
+      },
+      {
+       "prop": "monterey_pine",
+       "share": 21,
+       "variants": [0, 2],
+       "scale": [0.85, 1.25]
+      },
+      {
+       "prop": "monterey_cypress",
+       "share": 36,
+       "variants": [0, 1],
+       "scale": [0.85, 1.15]
+      },
+      {
+       "prop": "nz_christmas_tree",
+       "share": 8,
+       "variants": [0, 1],
+       "scale": [0.85, 1.25]
+      }
+     ],
+     "fit": 0.3,
+     "nudge_m": 6,
+     "basis": "production_inference",
+     "rule": "The housing's trees: the spreading broadleaf is the commonest big tree, then Monterey pines, wind-shaped cypresses and New Zealand Christmas trees, at about 45/25/15/10; each stands at a crown of the aerial its own crown fits, so these weights are higher for the forms few crowns fit.",
+     "evidence": "Species pass 2026-11-05: Gateview (c2, c3, b7) and Northpoint (b1-b4) broadleaves, Keppler pines (p5, p6, Mar 2025), Sturgeon Christmas tree (b5, b6, Mar 2025), Avenue B park cypresses (c4, c6, Sep 2025); starting shares 45/25/15/10, the rest set pieces. Crowns: 2026-05-26 aerial."
+    },
+    {
+     "id": "west_parcel_canopy",
+     "kind": "tree",
+     "pattern": "canopy",
+     "group": "west_parcel",
+     "mix": [
+      {
+       "prop": "spreading_broadleaf",
+       "share": 50,
+       "variants": [0, 3],
+       "scale": [0.85, 1.2]
+      },
+      {
+       "prop": "monterey_cypress",
+       "share": 30,
+       "variants": [0, 1],
+       "scale": [0.85, 1.15]
+      },
+      {
+       "prop": "monterey_pine",
+       "share": 20,
+       "variants": [0, 2],
+       "scale": [0.85, 1.25]
+      }
+     ],
+     "fit": 0.2,
+     "nudge_m": 6,
+     "basis": "production_inference",
+     "rule": "The old trees on the fenced west shore parcel, among its rough grass.",
+     "evidence": "Street View Mar 2025 sv22 (1349 Gateview Ave) and sv08 (1318 Gateview Ave): an old twisted broadleaf and dark wind-shaped trees behind the fence. Crowns: 2026-05-26 aerial."
+    },
+    {
+     "id": "job_corps_canopy",
+     "kind": "tree",
+     "pattern": "canopy",
+     "group": "job_corps",
+     "mix": [
+      {
+       "prop": "monterey_pine",
+       "share": 40,
+       "variants": [0, 5],
+       "scale": [0.85, 1.25]
+      },
+      {
+       "prop": "spreading_broadleaf",
+       "share": 40,
+       "variants": [0, 3],
+       "scale": [0.85, 1.2]
+      },
+      {
+       "prop": "monterey_cypress",
+       "share": 10,
+       "variants": [0, 1],
+       "scale": [0.85, 1.15]
+      }
+     ],
+     "fit": 0.2,
+     "nudge_m": 6,
+     "basis": "production_inference",
+     "rule": "The campus's groves and lot trees: pines and big dark domes at the aerial's crowns, the trees of its parking lots in mulch pits.",
+     "evidence": "2026-05-26 aerial (crowns) and the 2025 gallery photos (species pass c1, n2): large dark domes and pine forms round the dorms.",
+     "in_lots": true
+    },
+    {
+     "id": "ninth_street_row",
+     "kind": "tree",
+     "pattern": "canopy",
+     "group": "ninth_street_row",
+     "mix": [
+      {
+       "prop": "monterey_pine",
+       "share": 70,
+       "variants": [3, 5],
+       "scale": [0.85, 1.25]
+      },
+      {
+       "prop": "monterey_cypress",
+       "share": 30,
+       "variants": [0, 1],
+       "scale": [0.85, 1.15]
+      }
+     ],
+     "fit": 0.3,
+     "nudge_m": 6,
+     "basis": "production_inference",
+     "rule": "The dark wind-shaped row along 9th Street by the market.",
+     "evidence": "Street View Jul 2023 sv18 (9th St at Island Cove Market): a row of dark low-crowned wind-shaped trees. Crowns: 2026-05-26 aerial."
+    },
+    {
+     "id": "sffd_frontage_pines",
+     "kind": "tree",
+     "pattern": "canopy",
+     "group": "sffd_frontage",
+     "mix": [
+      {
+       "prop": "monterey_pine",
+       "share": 100,
+       "variants": [3, 5],
+       "scale": [0.85, 1.25]
+      }
+     ],
+     "fit": 0.4,
+     "nudge_m": 6,
+     "basis": "production_inference",
+     "rule": "The wind-pruned Monterey pines in a row along the SFFD frontage on Avenue M.",
+     "evidence": "Species pass p1-p4 and Street View Sep 2025 sv14, sv17 (751 9th St): low wide domes 6-9 m tall on 1.5-2.5 m trunks. Crowns: 2026-05-26 aerial."
+    },
+    {
+     "id": "sffd_north_pines",
+     "kind": "tree",
+     "pattern": "canopy",
+     "group": "sffd_north",
+     "mix": [
+      {
+       "prop": "monterey_pine",
+       "share": 80,
+       "variants": [3, 5],
+       "scale": [0.85, 1.25]
+      },
+      {
+       "prop": "monterey_cypress",
+       "share": 20,
+       "variants": [0, 1],
+       "scale": [0.85, 1.15]
+      }
+     ],
+     "fit": 0.4,
+     "nudge_m": 6,
+     "basis": "production_inference",
+     "rule": "The same wind-pruned pines along the north edge of the SFFD grounds.",
+     "evidence": "2026-05-26 aerial (crowns in a row along 10th Street); the species pass's SFFD pines."
+    },
+    {
+     "id": "island_canopy",
+     "kind": "tree",
+     "pattern": "canopy",
+     "group": "island",
+     "mix": [
+      {
+       "prop": "spreading_broadleaf",
+       "share": 40,
+       "variants": [0, 3],
+       "scale": [0.85, 1.2]
+      },
+      {
+       "prop": "monterey_pine",
+       "share": 35,
+       "variants": [0, 5],
+       "scale": [0.85, 1.25]
+      },
+      {
+       "prop": "monterey_cypress",
+       "share": 15,
+       "variants": [0, 1],
+       "scale": [0.85, 1.15]
+      },
+      {
+       "prop": "nz_christmas_tree",
+       "share": 10,
+       "variants": [0, 1],
+       "scale": [0.85, 1.25]
+      }
+     ],
+     "fit": 0.2,
+     "nudge_m": 6,
+     "basis": "production_inference",
+     "rule": "The remaining trees of the island's edges, lots and streets: the housing's mix without the rarer forms, at the aerial's crowns.",
+     "evidence": "2026-05-26 aerial (crowns); Street View Sep 2025 sv13 (14th St): a dense stand of broadleaf crowns; the species pass's common forms.",
+     "in_lots": true
+    },
+    {
+     "id": "fourth_street_lot_palms",
+     "kind": "tree",
+     "pattern": "canopy",
+     "group": "fourth_street_lot_palms",
+     "mix": [
+      {
+       "prop": "canary_date_palm",
+       "share": 1,
+       "variants": [0, 1],
+       "scale": [0.8, 1.0]
+      }
+     ],
+     "fit": 0.5,
+     "nudge_m": 3,
+     "in_lots": true,
+     "basis": "production_inference",
+     "rule": "Young date palms in the rows of the 4th Street lot's islands, traced palm by palm.",
+     "evidence": "2026-05-26 aerial (May 2026 z19 tiles): about 25 star-shaped young palm crowns in rows across the lot at x 200-260, z 135-228. The points are traced by hand on the 2026-05-26 aerial (z19), one per young palm crown."
+    },
+    {
+     "id": "residential_hedges",
+     "kind": "hedge",
+     "pattern": "hedge_lines",
+     "group": "residential",
+     "prop": "clipped_hedge",
+     "variant": 0,
+     "basis": "production_inference",
+     "rule": "Clipped small-leaved hedges 1.0-1.2 m tall on leggy stems along the housing's walls, in runs where the aerial shows dark foliage along them.",
+     "evidence": "Species pass h1 (Street View Mar 2025, 1230 Gateview Ct, pano j3ugQSzJZtl9lpbb5i58bQ); 2026-05-26 aerial (May 2026 z19 tiles) for the lines. One line at the Mariner units is traced by hand from Street View Mar 2025 (species pass crop h1); the rest are detected from the aerial."
+    },
+    {
+     "id": "job_corps_hedges",
+     "kind": "hedge",
+     "pattern": "hedge_lines",
+     "group": "job_corps",
+     "prop": "clipped_hedge",
+     "variant": 1,
+     "basis": "production_inference",
+     "rule": "Solid clipped hedges 1.2-1.5 m tall of small glossy dark leaves along the campus's foundations.",
+     "evidence": "Species pass h2 (2025 Job Corps gallery photo); 2026-05-26 aerial (May 2026 z19 tiles) for the lines."
+    },
+    {
+     "id": "keppler_island_shrubs",
+     "kind": "planting_slot",
+     "pattern": "field",
+     "within_xz": [[-516, -426], [-506, -423], [-507, -419], [-517, -422]],
+     "surfaces": ["street_kerb_planting"],
+     "per_m2": 4,
+     "spacing": [0.5, 0.6],
+     "field": {
+      "drift_m": 3,
+      "clump_m": 1,
+      "drift_cover": 0.9,
+      "lone": 0.9
+     },
+     "mix": [
+      {
+       "prop": "pittosporum_tobira",
+       "variants": [0, 0],
+       "scale": [0.8, 0.85],
+       "at": [0.0, 1.0],
+       "share": 1
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Clipped dark shrubs under the court island's two trees.",
+     "evidence": "Street View Apr 2019, 1117 Keppler Ct (pano b6Gbr0M_gm59xek6WMNAkg, heading 175): clipped dark green shrubs on the island; the island still planted in the May 2026 aerial."
+    },
+    {
+     "id": "planter_plants",
+     "kind": "planting_slot",
+     "pattern": "planters",
+     "per_tank": [3, 4],
+     "mix": [
+      {
+       "prop": "nz_flax",
+       "variants": [0, 2],
+       "scale": [0.8, 1.0],
+       "share": 3
+      },
+      {
+       "prop": "pittosporum_tobira",
+       "variants": [0, 0],
+       "scale": [0.8, 0.85],
+       "share": 1
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Each stock tank's soil holds a dark red flax or two and a dull green shrub, spaced along the tank.",
+     "evidence": "Street View Sep 2025 inside the Mersea lot (panos UmL4Ss_-CFTPXI4O98FkOA heading 340, LtXShSEN6YyhB4uQoFoS-A heading 330): dark red New Zealand flax and dull green shrubs in the galvanised tanks."
+    }
+   ]
+  },
+  {
+   "id": "mersea_median",
+   "name": "Shrub strip between 9th Street and the Mersea lot",
+   "pilot": false,
+   "reason": "The planted strip along 9th Street on the north-west edge of the Mersea lot's north field (vegetation rollout, ROOT item 2026-11-05).",
+   "reference": "Street View Sep 2025 9th St (pano zSYuqR9R0oyboW2wFZ-wEw); aerials 2025-08-29 (form) and 2026-05-26",
+   "shape": {
+    "type": "polygon",
+    "points_xz": [[-392, 88], [-372, 78], [-345, 62], [-318, 52], [-312, 62], [-338, 80], [-362, 97], [-384, 106]]
+   },
+   "scatter": [
+    {
+     "id": "strip_plants",
+     "kind": "planting_slot",
+     "pattern": "field",
+     "surfaces": ["park_mulch"],
+     "per_m2": 1.1,
+     "spacing": [0.45, 1.05],
+     "field": {
+      "drift_m": 7,
+      "clump_m": 2.2,
+      "drift_cover": 0.7,
+      "lone": 0.35
+     },
+     "mix": [
+      {
+       "prop": "pale_seeded_shrub",
+       "variants": [0, 1],
+       "scale": [1.0, 1.25],
+       "at": [0.0, 1.0],
+       "share": 6
+      },
+      {
+       "prop": "rush",
+       "variants": [4, 5],
+       "scale": [0.8, 0.95],
+       "at": [0.0, 1.0],
+       "share": 2
+      },
+      {
+       "prop": "california_sagebrush",
+       "variants": [3, 3],
+       "scale": [0.85, 1.2],
+       "at": [0.42, 1.0],
+       "share": 3
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "A scruffy strip of bare dead stems and dull dark mounds on dark mulch, its density wandering along the strip.",
+     "evidence": "Street View Sep 2025 on 9th St (pano zSYuqR9R0oyboW2wFZ-wEw, heading 150): dark shrubs under a metre tall and dead brown stems on bare dark mulch, in a continuous uneven strip."
+    },
+    {
+     "id": "strip_dead_straw",
+     "kind": "grass_clump",
+     "pattern": "field",
+     "surfaces": ["park_mulch"],
+     "per_m2": 0.22,
+     "spacing": [0.5, 1.1],
+     "field": {
+      "drift_m": 6,
+      "clump_m": 2,
+      "drift_cover": 0.5,
+      "lone": 0.2
+     },
+     "mix": [
+      {
+       "prop": "clump_grass",
+       "variants": [4, 5],
+       "scale": [0.8, 1.05],
+       "at": [0.0, 1.0],
+       "share": 1
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Dead brown stems and straw through the strip.",
+     "evidence": "Street View Sep 2025 on 9th St (pano zSYuqR9R0oyboW2wFZ-wEw, heading 150): dead brown stems on bare dark mulch between the shrubs."
+    }
+   ]
+  },
+  {
+   "id": "mersea_ditch",
+   "name": "The ditch next to Mersea",
+   "pilot": false,
+   "reason": "The seasonal wetland beside the owner's priority lot, in view of the city skyline. Its plants are sown by fields that read the land; its red floor, banks, puddles and stones are the ground shader's (marsh_amount), so nothing here is listed by position.",
+   "reference": "Owner photos, Nov 2026 (three, from one spot at the lot's west corner, about (-266, 203)); OSM w1473022589 (natural=wetland); the land's own basin, 1.8 m at the floor and 4.3 m at the bank",
+   "shape": {
+    "type": "polygon",
+    "points_xz": [[-395, 100], [-235, 100], [-235, 225], [-285, 262], [-315, 325], [-400, 325]]
+   },
+   "scatter": [
+    {
+     "id": "bank_seeded_shrubs",
+     "kind": "planting_slot",
+     "pattern": "field",
+     "surfaces": ["terrain_wetland", "land_ground"],
+     "per_m2": 0.1,
+     "spacing": [0.7, 1.5],
+     "field": {
+      "axis": {
+       "from_xz": [-267, 203],
+       "to_xz": [-312, 240],
+       "full_m": 6,
+       "zero_m": 17
+      },
+      "height_m": [2.75, 3.2, 4.0, 4.25],
+      "ramps": [
+       {
+        "from_xz": [-266, 202],
+        "to_xz": [-270, 207],
+        "low": 0.1,
+        "high": 1.0
+       },
+       {
+        "from_xz": [-318, 246],
+        "to_xz": [-296, 226],
+        "low": 0.3,
+        "high": 1.0
+       },
+       {
+        "from_xz": [-261, 205],
+        "to_xz": [-266, 201.7],
+        "low": 0.0,
+        "high": 1.0
+       }
+      ],
+      "drift_m": 10,
+      "clump_m": 3,
+      "drift_cover": 0.4,
+      "lone": 0.06,
+      "groups": {
+       "count": [1, 7],
+       "spread_m": [1.0, 2.6]
+      },
+      "wander": {
+       "height_m": 0.3,
+       "scale_m": 21
+      }
+     },
+     "mix": [
+      {
+       "prop": "pale_seeded_shrub",
+       "variants": [2, 2],
+       "scale": [0.8, 1.1],
+       "at": [0.42, 1.0],
+       "share": 1
+      },
+      {
+       "prop": "pale_seeded_shrub",
+       "variants": [0, 1],
+       "scale": [0.8, 1.15],
+       "at": [0.0, 0.5],
+       "share": 1
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Along the top of the bank south-west of the lot's corner, thinning down the slope, to nothing at the lot's edge, north of the corner and toward the far end: loose groups with real gaps between them and a few lone plants; laden plants where the field is full, bare ones at its edges.",
+     "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea, from the lot's west corner at about (-266, 203): loose pale-seeded shrubs, thick on the bank south-west of the camera, sparse to its north (species unconfirmed)."
+    },
+    {
+     "id": "bank_dead_stems",
+     "kind": "planting_slot",
+     "pattern": "field",
+     "surfaces": ["terrain_wetland", "land_ground"],
+     "per_m2": 0.03,
+     "spacing": [0.45, 1.2],
+     "field": {
+      "axis": {
+       "from_xz": [-295, 145],
+       "to_xz": [-345, 290],
+       "full_m": 40,
+       "zero_m": 56
+      },
+      "height_m": [2.75, 3.1, 3.7, 4.2],
+      "drift_m": 9,
+      "clump_m": 3,
+      "drift_cover": 0.4,
+      "lone": 0.1,
+      "groups": {
+       "count": [1, 7],
+       "spread_m": [0.6, 1.6]
+      }
+     },
+     "mix": [
+      {
+       "prop": "pale_seeded_shrub",
+       "variants": [0, 1],
+       "scale": [0.85, 1.25],
+       "at": [0.0, 1.0],
+       "share": 1
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Dark dead stems with a few pale seed heads down the slope.",
+     "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea, from the lot's west corner at about (-266, 203): dark dead stems and pale seed heads at the foot of the bank."
+    },
+    {
+     "id": "bank_straw_tufts",
+     "kind": "grass_clump",
+     "pattern": "field",
+     "surfaces": ["terrain_wetland", "land_ground"],
+     "per_m2": 0.06,
+     "spacing": [0.45, 1.2],
+     "field": {
+      "axis": {
+       "from_xz": [-295, 145],
+       "to_xz": [-345, 290],
+       "full_m": 40,
+       "zero_m": 56
+      },
+      "height_m": [2.9, 3.25, 3.95, 4.2],
+      "drift_m": 7,
+      "clump_m": 2,
+      "drift_cover": 0.38,
+      "lone": 0.06,
+      "groups": {
+       "count": [1, 9],
+       "spread_m": [0.6, 1.8]
+      },
+      "wander": {
+       "height_m": 0.25,
+       "scale_m": 15
+      }
+     },
+     "mix": [
+      {
+       "prop": "clump_grass",
+       "variants": [4, 5],
+       "scale": [0.8, 1.05],
+       "at": [0.0, 1.0],
+       "share": 1
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Dull dead straw on the banks, in drifts.",
+     "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea, from the lot's west corner at about (-266, 203): dark dry straw grass on the slope."
+    },
+    {
+     "id": "bank_foot_stems",
+     "kind": "grass_clump",
+     "pattern": "field",
+     "surfaces": ["terrain_wetland", "land_ground"],
+     "per_m2": 0.08,
+     "spacing": [0.4, 1.0],
+     "field": {
+      "axis": {
+       "from_xz": [-295, 145],
+       "to_xz": [-345, 290],
+       "full_m": 40,
+       "zero_m": 56
+      },
+      "height_m": [2.4, 2.7, 3.0, 3.5],
+      "wander": {
+       "height_m": 0.4,
+       "scale_m": 17
+      },
+      "slope": [0.02, 0.05],
+      "drift_m": 12,
+      "clump_m": 2.5,
+      "drift_cover": 0.34,
+      "lone": 0.04,
+      "groups": {
+       "count": [2, 7],
+       "spread_m": [0.6, 1.5]
+      }
+     },
+     "mix": [
+      {
+       "prop": "rush",
+       "variants": [4, 5],
+       "scale": [0.8, 1.15],
+       "at": [0.0, 1.0],
+       "share": 5
+      },
+      {
+       "prop": "clump_grass",
+       "variants": [4, 5],
+       "scale": [0.8, 1.0],
+       "at": [0.0, 1.0],
+       "share": 3
+      },
+      {
+       "prop": "pale_seeded_shrub",
+       "variants": [0, 1],
+       "scale": [0.85, 1.05],
+       "at": [0.0, 1.0],
+       "share": 2
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Low broken patches of dead stems near the foot of the bank, where the slope meets the red floor, wandering up and down the slope.",
+     "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea, from the lot's west corner at about (-266, 203): dark dead stems in broken patches at the bank's foot."
+    },
+    {
+     "id": "floor_clumps",
+     "kind": "grass_clump",
+     "pattern": "field",
+     "surfaces": ["terrain_wetland", "land_ground"],
+     "per_m2": 0.1,
+     "spacing": [0.8, 1.6],
+     "field": {
+      "axis": {
+       "from_xz": [-295, 145],
+       "to_xz": [-345, 290],
+       "full_m": 40,
+       "zero_m": 56
+      },
+      "height_m": [1.6, 1.7, 2.7, 3.0],
+      "drift_m": 16,
+      "clump_m": 5,
+      "drift_cover": 0.3,
+      "lone": 0.03
+     },
+     "mix": [
+      {
+       "prop": "california_buckwheat",
+       "variants": [0, 1],
+       "scale": [0.8, 1.05],
+       "at": [0.0, 1.0],
+       "share": 1
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Scattered dark clumps on the marsh floor.",
+     "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea, from the lot's west corner at about (-266, 203): olive and dark clumps across the red floor."
+    }
+   ]
+  },
+  {
+   "id": "cultural_park_rows",
+   "name": "Young trees in rows and beds round the chapel",
+   "pilot": false,
+   "reason": "The Cultural Park's small young trees stand in rows beside its paths and in its dark beds; a rule sows them from the paths, nothing is listed by position.",
+   "reference": "Wayback z19 aerial, capture 2026-05-26 (Vantor Vivid Advanced, World Imagery release 2026-10-29)",
+   "shape": {
+    "type": "polygon",
+    "points_xz": [[-165, 650], [-125, 590], [-75, 592], [-22, 640], [-40, 655], [-140, 708], [-152, 700]]
+   },
+   "scatter": [
+    {
+     "id": "path_rows",
+     "kind": "tree",
+     "pattern": "field",
+     "surfaces": ["major_area_amenity", "major_area_leisure", "major_area_landuse", "land_ground"],
+     "per_m2": 0.09,
+     "spacing": [3.0, 4.0],
+     "field": {
+      "road_m": [5, 10],
+      "drift_m": 30,
+      "clump_m": 9,
+      "drift_cover": 0.8,
+      "lone": 0.5
+     },
+     "mix": [
+      {
+       "prop": "island_oak_young",
+       "variants": [0, 2],
+       "scale": [0.8, 1.15],
+       "at": [0.0, 1.0],
+       "share": 1
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Small young trees about 8-12 m apart in loose rows 5-10 m from the park's paths, the rows broken where the noise thins them.",
+     "evidence": "Wayback z19 aerial, capture 2026-05-26: dots 2-4 m across in rows along the south and north-east paths and in the dark beds west and north-east of the chapel. Species unknown; the kit's small round young tree."
+    }
+   ]
+  },
+  {
+   "id": "gateview_west_thicket",
+   "name": "The weedy thicket by the fence at 1349 Gateview",
+   "pilot": false,
+   "reason": "The overgrown band behind the sidewalk north of 1349 Gateview Ave.",
+   "reference": "Street View Mar 2025, 1349 Gateview Ave (heading 250); aerial 2026-05-26: a dark green band along the road's west side",
+   "shape": {
+    "type": "polygon",
+    "points_xz": [[-592, -442], [-560, -442], [-560, -392], [-592, -392]]
+   },
+   "scatter": [
+    {
+     "id": "fence_thicket",
+     "kind": "grass_clump",
+     "pattern": "field",
+     "surfaces": ["land_ground", "major_area_landuse", "major_area_amenity", "major_area_leisure"],
+     "per_m2": 0.8,
+     "spacing": [0.26, 0.62],
+     "field": {
+      "road_m": [1.8, 7],
+      "drift_m": 6,
+      "clump_m": 1.8,
+      "drift_cover": 0.7,
+      "lone": 0.4,
+      "groups": {
+       "count": [1, 9],
+       "spread_m": [0.4, 1.4]
+      }
+     },
+     "mix": [
+      {
+       "prop": "clump_grass",
+       "variants": [6, 7],
+       "scale": [0.9, 1.25],
+       "at": [0.0, 1.0],
+       "share": 7
+      },
+      {
+       "prop": "clump_grass",
+       "variants": [4, 5],
+       "scale": [0.9, 1.2],
+       "at": [0.0, 1.0],
+       "share": 4
+      },
+      {
+       "prop": "rush",
+       "variants": [4, 5],
+       "scale": [0.9, 1.25],
+       "at": [0.0, 1.0],
+       "share": 3
+      },
+      {
+       "prop": "pale_seeded_shrub",
+       "variants": [0, 1],
+       "scale": [1.0, 1.25],
+       "at": [0.0, 1.0],
+       "share": 3
+      },
+      {
+       "prop": "california_sagebrush",
+       "variants": [3, 3],
+       "scale": [0.9, 1.25],
+       "at": [0.5, 1.0],
+       "share": 2
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Weeds and dry stalks grown over each other in a thick uneven band behind the sidewalk, reading the road: green and dead grass, stems and a few rank shrubs, no two of a size.",
+     "evidence": "Street View Mar 2025, 1349 Gateview Ave (heading 250): tall green weeds, dry stalks and bright shrubs behind the chain-link fence."
+    }
+   ]
+  }
   ],
   "island_furniture": {
     "notes": [
