@@ -41,6 +41,7 @@ These are on branches in progress, not yet on `main`.
   - **Mersea lot:** at Street View pano TKhpp heading 190 (Sep 2025) a white event tent renders as a solid grey building with a roll-up door and windows; at heading 330 a white tent with a hedge renders as a flat white box.
   - The Mersea venue's containers are green where the photo shows blue in front.
   - The Cravath Street building at heading 42 is a blank brown box where the photo shows a modern white and grey panelled facade.
+  - The green-teal roof of w34313544 is paler than the aerial's duller colour (seen in review, 2026-11-06).
 
 ## Clutter yards: accepted 2026-11-05 with known gaps
 
@@ -95,6 +96,7 @@ From the reviews of the shoreline, street ground, street objects, parked cars an
   - The "NO STOPPING ANY TIME" sign on the plaza mast isn't placed.
   - Finish: the Muni flag post has no perforations, and the EV bay needs more weathering (rusty bollards, bent posts).
   - Power lines: check them for shimmer in motion; the near wires are about 1 px wide.
+  - The overhead wire runs through the Avenue N palms until the tree push lands.
 - **Mersea lot and strip:**
   - The lot light (OSM n11230361247) has one arm where the photo shows two.
   - The lamp's island is too short and has no planting.
@@ -106,8 +108,11 @@ From the reviews of the shoreline, street ground, street objects, parked cars an
 - **Shoreline:**
   - Two small dark tips remain at the north slipway: one at the grass corner of the ramp's head, one at its water end.
   - The offshore wave wall (OSM w1011830371) and the jetty's marker post aren't built, and neither is the pale concrete pad near x −373, z −855 that the aerial shows.
+  - The north jetty's stone (OSM w26767328) and the riprap rim read darker than the aerial from overviews.
 - **East span of the Bay Bridge:** the west cable sags differently from the photos, the tower shaft has no slot, and the span has a single material.
-- **Ground tone:** one large dirt patch in the residential straw belt, and the lawn band along the residential kerbs is too even.
+- **Ground tone:**
+  - One large dirt patch lies in the residential straw belt, and the lawn band along the residential kerbs is too even.
+  - The football pitch (OSM w1252737754) has no line markings, so it reads as a blank dark slab; the aerial shows them.
 - **Performance:** not measured since these layers landed. Before them the spawn drew about 24,600 draw calls and 3.8 million primitives at 1440 × 900 (`6ba040d3`). The ground-cover shader now runs six noise calls per fragment, cost unmeasured. A performance pass on a quiet machine is planned.
 
 ## Deferred by the owner
