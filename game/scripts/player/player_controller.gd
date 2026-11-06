@@ -15,6 +15,9 @@ signal startup_grounded
 @export_range(0.5, 12.0, 0.25) var jetpack_ascent_speed_mps := 5.0
 @export_range(0.25, 6.0, 0.25) var jetpack_descent_speed_mps := 1.5
 @export_range(1.0, 30.0, 0.5) var jetpack_vertical_response_mps2 := 12.0
+## Holding the fast drop in the air: reached in about 0.6 s. The jetpack wins over it.
+@export_range(2.0, 40.0, 0.5) var fast_drop_speed_mps := 18.0
+@export_range(1.0, 60.0, 0.5) var fast_drop_response_mps2 := 30.0
 
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
 @onready var avatar_pivot: Node3D = $AvatarPivot
@@ -128,6 +131,8 @@ func _update_jetpack_velocity(delta: float) -> void:
 		velocity.y = move_toward(velocity.y, jetpack_ascent_speed_mps, jetpack_vertical_response_mps2 * delta)
 	elif is_on_floor() and velocity.y <= 0.0:
 		velocity.y = 0.0
+	elif Input.is_action_pressed("fast_drop"):
+		velocity.y = move_toward(velocity.y, -fast_drop_speed_mps, fast_drop_response_mps2 * delta)
 	else:
 		velocity.y = move_toward(velocity.y, -jetpack_descent_speed_mps, jetpack_vertical_response_mps2 * delta)
 
