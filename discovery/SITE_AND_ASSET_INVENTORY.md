@@ -310,8 +310,8 @@ the landing pier.
 | Monterey pine, wind-pruned (variants 3–5) | None yet: the vegetation rollout places them | 2 (visual-review-vegetation R03) | R03 PASS WITH FIXES: low domes on clear trunks (p2–p4) | 3: side-to-side impostor tone |
 | Spreading broadleaf (variants 0–3) | None yet: the vegetation rollout places them | 3 (visual-review-vegetation R03) | R03: layered pads, limbs with forks and bark relief. Species unresolved, so the photographed form (c2–c4, b1–b8) | 4: joined, darker cloud masses and scattered bronze, reworked after the verdict and not yet reviewed |
 | New Zealand Christmas tree | None yet: the vegetation rollout places them | 2 (visual-review-vegetation R03) | R03: pom-pom crown closed; stems were straight tubes stopping at the crown, reworked after the verdict and not yet reviewed | 3: stems and limbs running into the crown (b5), a lighter underside |
-| Mature eucalyptus | None yet: the vegetation rollout places them at the Job Corps entrance | | Unrated: rebuilt to the owner's Job Corps photos (Nov 2026) after the R03 review, which judged an earlier, slender form. Sizes estimated from a street light in the photo | A review of the rebuild |
-| Weeping tree | None yet: the vegetation rollout places them at the Job Corps entrance | | Unrated: new from the owner's Job Corps photos (Nov 2026). Species unresolved, so the photographed form | A review |
+| Mature eucalyptus | None yet: the vegetation rollout places them at the Job Corps entrance | 1 (visual-review-veg-models final) | Final check: tone and bark right, but beside the owner's Job Corps photos (Nov 2026) the crown read as a dense cedar. Crown rebuilt from its limbs after that verdict, not yet reviewed. Sizes estimated from a street light in the photo | 2: a review of the rebuild |
+| Weeping tree | None yet: the vegetation rollout places them at the Job Corps entrance | 0 (visual-review-veg-models final) | Final check: read as a garden willow beside the owner's photos. Rebuilt from offset hanging masses after that verdict, not yet reviewed. Species unresolved, so the photographed form | 1: a review of the rebuild |
 | Norfolk Island pine, young | None yet: the vegetation rollout places them | 3 (visual-review-vegetation R03) | R03 PASS: close tiers, pointed leader (n1) | 4 |
 | Canary Island date palm, mature (variants 4–5) | None yet: the vegetation rollout places them | 3 (visual-review-vegetation R03) | R03: shaggy trunk and drooping globe crown (sv01, sv02), far level rebaked from the crown alone | 4: crown tone and trunk pattern |
 | Indian hawthorn | None yet: the vegetation rollout places them | 3 (visual-review-vegetation R03) | R03: fine leathery mound with pale pink clusters (s1) | 4 |
@@ -320,6 +320,7 @@ the landing pier.
 | Conical shrub | None yet: the vegetation rollout places them | 3 (visual-review-vegetation R03) | R03: fine ogive with a soft point. Species unresolved (s3) | 4: impostor width |
 | New Zealand flax | None yet: the vegetation rollout places them, in planters | 2 (visual-review-vegetation R03) | R03: broad arching straps, but nearly black in sun; lifted after the verdict, not yet reviewed | 3 |
 | Clipped hedge (variants 0–1) | None yet: laid along a line by the vegetation rollout | 3 (visual-review-vegetation R03) | R03: rows of ragged leaf mats over a core, open stems on the residential hedge (h1), white flowers on the glossy one (h2) | 4: the residential far level |
+| Pale-seeded shrub (variants 0–1) | None yet: the vegetation rollout places it on the Mersea ditch bank | | Unrated: new from the owner's photos (Nov 2026). Species unconfirmed, so the photographed form: crossed cards in the low-plant family, one level | A review |
 
 ### Player
 

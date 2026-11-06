@@ -29,7 +29,7 @@ const SETS := {
 	"park_ground": ["park_mulch.png", "park_gravel.png"],
 	"pine": ["pine_crest.png", "pine_crest_candles.png", "pine_candle_row.png", "pine_bark.png"],
 	"broadleaf": ["broadleaf_clump.png", "broadleaf_bronze.png", "christmas_spray.png", "christmas_spray_flowers.png", "broadleaf_bark.png", "christmas_bark.png"],
-	"set_pieces": ["eucalyptus_spray.png", "weeping_curtain.png", "norfolk_branch_top.png", "norfolk_branch_side.png", "eucalyptus_shred_bark.png"],
+	"set_pieces": ["eucalyptus_spray.png", "weeping_mass.png", "norfolk_branch_top.png", "norfolk_branch_side.png", "eucalyptus_shred_bark.png"],
 	"shrubs": [
 		"hawthorn_spray.png", "pittosporum_broad.png", "red_tip_shoots.png", "conical_spray.png",
 		"hedge_mat.png", "glossy_mat.png", "hedge_stems_open.png", "phormium_leaf.png",
@@ -62,7 +62,7 @@ const ROLLOUT_GRADES := {
 	"christmas_spray.png": [Color(0.82, 0.84, 0.8), 0.38],
 	"christmas_spray_flowers.png": [Color(1.0, 0.76, 0.82), 0.3],
 	"eucalyptus_spray.png": [Color(0.65, 0.67, 0.69), 0.45],
-	"weeping_curtain.png": [Color(0.72, 0.72, 0.74), 0.3],
+	"weeping_mass.png": [Color(0.745, 0.74, 0.78), 0.3],
 	"norfolk_branch_top.png": [Color(0.98, 0.98, 0.92), 0.42],
 	"norfolk_branch_side.png": [Color(0.98, 0.98, 0.92), 0.42],
 	"hawthorn_spray.png": [Color(0.81, 0.81, 0.87), 0.36],
@@ -80,7 +80,7 @@ const MEADOW_CELLS := [
 	"reedgrass_clump.png", "sedge_tussock.png", "rush_clump.png", "bronze_grass.png",
 	"blue_eyed_grass.png", "thrift_stalks.png", "umbel_stalks.png", "buckwheat_side.png",
 	"woolly_stalks.png", "monkey_stalks.png", "tansy_stalks.png", "buckwheat_stalks.png",
-	"sagebrush_side.png", "sage_side.png", "litter.png",
+	"sagebrush_side.png", "sage_side.png", "litter.png", "seeded_stems.png",
 ]
 ## The perennial atlas's 512 x 512 cells in 2048 x 1536: face-on foliage
 ## clusters, and the top views the kit lays over clumps as caps.
@@ -111,6 +111,7 @@ const LOW_GRADES := {
 	"sagebrush_foliage.png": [Color(0.8, 0.86, 0.78), 0.0],
 	"sagebrush_side.png": [Color(0.74, 0.84, 0.72), 0.0],
 	"litter.png": [Color(0.64, 0.62, 0.6), 0.55],
+	"seeded_stems.png": [Color(0.86, 0.84, 0.78), 0.5],
 	"woolly_stalks.png": [Color(0.78, 0.72, 0.66), 0.55],
 	"buckwheat_stalks.png": [Color(0.84, 0.74, 0.64), 0.7],
 	"buckwheat_foliage.png": [Color(0.8, 0.76, 0.68), 0.55],
@@ -268,7 +269,7 @@ func _pack_meadow(images: Dictionary, errors: Array[String]) -> void:
 		var name: String = cells[index]
 		var cell := _keyed_fit(images[name], 512 - 2 * CELL_MARGIN, 512 - 2 * CELL_MARGIN, CYAN if name in ON_CYAN else MAGENTA)
 		# Clears the pink the magenta key leaves in pale blade tips (not the copper sedge's orange).
-		if name in ["reedgrass_clump.png", "sedge_tussock.png", "rush_clump.png"]:
+		if name in ["reedgrass_clump.png", "sedge_tussock.png", "rush_clump.png", "seeded_stems.png"]:
 			_straw(cell)
 		if LOW_GRADES.has(name):
 			_grade(cell, LOW_GRADES[name][0], LOW_GRADES[name][1])
@@ -362,16 +363,15 @@ func _pack_broadleaf(images: Dictionary, errors: Array[String]) -> void:
 	}, errors)
 
 
-## The set pieces' atlas, 1024 x 1024 (EUCALYPTUS_SPRAY, WEEPING_CURTAIN and NORFOLK_*
-## in the kit): the eucalyptus's hanging spray over the weeping tree's curtain in
+## The set pieces' atlas, 1024 x 1024 (EUCALYPTUS_SPRAY, WEEPING_MASS and NORFOLK_*
+## in the kit): the eucalyptus's hanging spray over the weeping tree's hanging mass in
 ## the left column, a Norfolk Island pine branch from above and from the side in the
 ## right; and the eucalyptus's tiled bark, its ribbons pale enough for the kit's
 ## vertex colours to warm them low on the trunk.
 func _pack_set_pieces(images: Dictionary, errors: Array[String]) -> void:
 	var atlas := Image.create_empty(1024, 1024, false, Image.FORMAT_RGBA8)
 	_pack_cell(atlas, images, "eucalyptus_spray.png", Rect2i(0, 0, 512, 512), CELL_MARGIN)
-	_pack_cell(atlas, images, "weeping_curtain.png", Rect2i(0, 512, 512, 512), CELL_MARGIN)
-	_ragged_top(atlas, Rect2i(0, 512, 512, 512), 80)
+	_pack_cell(atlas, images, "weeping_mass.png", Rect2i(0, 512, 512, 512), CELL_MARGIN)
 	_pack_cell(atlas, images, "norfolk_branch_top.png", Rect2i(512, 0, 512, 512), CELL_MARGIN)
 	_pack_cell(atlas, images, "norfolk_branch_side.png", Rect2i(512, 512, 512, 512), CELL_MARGIN)
 	_fill_transparent(atlas)
@@ -391,15 +391,6 @@ func _pack_shrubs(images: Dictionary, errors: Array[String]) -> void:
 		"hedge_surface.png": ["hedge_surface.png", Color(0.8, 0.84, 0.82), 0.42],
 		"glossy_hedge_flower_surface.png": ["glossy_hedge_surface.png", Color(0.88, 0.88, 0.98), 0.5, 1.2],
 	}, errors)
-
-
-## Clears an uneven strip off the top of cell, up to depth pixels, so a card of strands
-## running off its top edge doesn't end in a straight line.
-func _ragged_top(atlas: Image, cell: Rect2i, depth: int) -> void:
-	for x in cell.size.x:
-		var cut := int(depth * (0.5 + 0.3 * sin(x * 0.09) + 0.2 * sin(x * 0.23 + 1.0)))
-		for y in cut:
-			atlas.set_pixel(cell.position.x + x, cell.position.y + y, Color(0.0, 0.0, 0.0, 0.0))
 
 
 ## Keys a source on its background, crops it to the plant, stretches it to fill

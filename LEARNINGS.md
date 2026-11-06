@@ -1025,7 +1025,11 @@ On 2026-11-05 the mature date palms' far level showed a hard black shape over th
 
 ## Prove distance behaviour from frames at that distance, unforced
 
-Vegetation rounds R02 and R03 (2026-11-05): levels forced at one 30 m pose looked matched, while at the real switch the impostor was 5-15 % narrower, because LOD1's grown cards swell the outline; and forcing a level clears the visibility ranges, so a forced frame cannot show whether a shadow survives the switch. Render each hand-over as a pair at its switch distance, and one unforced frame past it. An impostor that picks a baked view also needs one pair on a baked view and one halfway between two.
+Vegetation rounds R02 and R03 (2026-11-05): levels forced at one 30 m pose looked matched, while at the real switch the impostor was 5-15 % narrower, because LOD1's grown cards swell the outline; and forcing a level clears the visibility ranges, so a forced frame cannot show whether a shadow survives the switch. Render each hand-over as a pair at its switch distance, and one unforced frame past it. An impostor that picks a baked view also needs one pair on a baked view and one halfway between two. When a LOD1 keeps fewer cards of each clump, grow them by the square root of the card ratio so leaf area holds: on the Job Corps trees (2026-11-06) a flat 1.5 filled the crown, 8-15 % more covered pixels than LOD0 at the switch, and the root halved that.
+
+## Build a big tree from its limbs and check its outline before its colour
+
+On 2026-11-05 two Job Corps trees went through three rounds of tone and foliage pads, and a final review still called them a dense cedar and a garden willow. The crowns were closed shells: pads over a dome hide any limb and let no sky through, and no grade can open them. Sky inside the crown outline read 6-18 % in the owner's photos and 4 % in the model; the same simple measure on height over width, set beside the photo, would have shown the fault in the first round. Grown from a skeleton instead (long limbs, boughs to scattered ends on an irregular shell, foliage only at the ends), the same budget gave a tall open crown with limbs and sky showing. Measure proportions and sky against the photo first, and only then colour. When a card's own shape is the fault, as a comb of parallel strands was, change the card, not its placement.
 
 ## Preview a form offline when the fault is the form
 
