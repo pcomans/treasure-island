@@ -83,16 +83,17 @@ const MEADOW_CELLS := [
 	"sagebrush_side.png", "sage_side.png", "litter.png", "seeded_stems.png",
 ]
 ## The perennial atlas's 512 x 512 cells in 2048 x 1536: face-on foliage
-## clusters, and the top views the kit lays over clumps as caps.
+## clusters, the top views the kit lays over clumps as caps, and in the last
+## cell, the meadow atlas being full, a seed-laden shrub's side view.
 const PERENNIAL_CELLS := [
 	"daisy_foliage.png", "thrift_cushion.png", "woolly_foliage.png", "sagebrush_foliage.png",
 	"yarrow_foliage.png", "buckwheat_foliage.png", "monkeyflower_foliage.png", "tansy_foliage.png",
-	"tussock_top.png", "bronze_top.png", "daisy_flowers.png",
+	"tussock_top.png", "bronze_top.png", "daisy_flowers.png", "seeded_tufts.png",
 ]
 const MAGENTA := Color(1.0, 0.0, 1.0)
 const CYAN := Color(0.0, 1.0, 1.0)
 ## Sources generated on cyan, so their pink, lilac and blue flowers survive the key.
-const ON_CYAN := ["blue_eyed_grass.png", "thrift_stalks.png", "daisy_flowers.png", "sage_side.png", "christmas_spray_flowers.png", "hawthorn_spray.png", "red_tip_shoots.png", "phormium_leaf.png"]
+const ON_CYAN := ["seeded_tufts.png", "blue_eyed_grass.png", "thrift_stalks.png", "daisy_flowers.png", "sage_side.png", "christmas_spray_flowers.png", "hawthorn_spray.png", "red_tip_shoots.png", "phormium_leaf.png"]
 ## Pixels a low-plant image keeps clear round its atlas cell's edge, so mipmaps
 ## don't pull a neighbouring cell's leaves into a card's outline.
 const CELL_MARGIN := 8
@@ -112,6 +113,7 @@ const LOW_GRADES := {
 	"sagebrush_side.png": [Color(0.74, 0.84, 0.72), 0.0],
 	"litter.png": [Color(0.64, 0.62, 0.6), 0.55],
 	"seeded_stems.png": [Color(0.86, 0.84, 0.78), 0.5],
+	"seeded_tufts.png": [Color(0.84, 0.8, 0.74), 0.42],
 	"woolly_stalks.png": [Color(0.78, 0.72, 0.66), 0.55],
 	"buckwheat_stalks.png": [Color(0.84, 0.74, 0.64), 0.7],
 	"buckwheat_foliage.png": [Color(0.8, 0.76, 0.68), 0.55],

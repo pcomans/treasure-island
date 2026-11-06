@@ -23750,7 +23750,7 @@ Carried by deploy-fix from the deploy agent's scratch log; text unchanged apart 
 - What the team should change next time: put crop and render in one frame, and measure mean colour and sizes against the brief in round one. Read native-pixel crops, not montages. Preview form offline before any engine run. Don't let a check report the value its own correction just set.
 - Job Corps delta (owner photos, Nov 2026): three rounds had tuned a slender eucalyptus to the owner's identification and a crop nobody could pin to the tree, declaring the form "typical" on no photo; one dated photo of the actual tree showed it was wrong. When a target's only crop is doubted, ask for the photo before modelling further. My offline preview flattered the first rebuild, because it ignored the shader's edge fade and mips, which cost a run. That run also stalled at Weston's 300 s, a limit already in LEARNINGS that I had not re-read when the plan grew; I first reported it as a slow run, until the capture times showed otherwise.
 
-- Job Corps form round: the final check found the eucalyptus a dense cedar and the weeping tree a garden willow, after three rounds on tone and pads. One number would have shown it at once: sky inside the crown outline, 6-18 % in the photos and 4 % in mine. Growing both trees from a skeleton (limbs, boughs to scattered ends, foliage only there) fixed in an afternoon of offline previews what tuning a closed shell never could, and a new hanging-mass card replaced the comb of strands. Next time: start a tree from its limbs, and measure its outline and sky against the photo before touching colour. Two of the four allowed slot D runs were enough: the first fixed the form, the second the black underside and a LOD1 that filled in. A seed sweep in the offline preview picked the dense tree's outline for free, and a mesh hash at the old render's commit settled what "carried over" means on the sheets without a byte check by the reviewer. The Mersea bank shrub took one render because the low-plant family and the meadow atlas's spare cell already existed; its first generated card's stems were too thin to survive mips, so check a card at its game size before packing.
+- Job Corps form round: the final check found the eucalyptus a dense cedar and the weeping tree a garden willow, after three rounds on tone and pads. One number would have shown it at once: sky inside the crown outline, 6-18 % in the photos and 4 % in mine. Growing both trees from a skeleton (limbs, boughs to scattered ends, foliage only there) fixed in an afternoon of offline previews what tuning a closed shell never could, and a new hanging-mass card replaced the comb of strands. Next time: start a tree from its limbs, and measure its outline and sky against the photo before touching colour. Two of the four allowed slot D runs were enough: the first fixed the form, the second the black underside and a LOD1 that filled in. A seed sweep in the offline preview picked the dense tree's outline for free, and a mesh hash at the old render's commit settled what "carried over" means on the sheets without a byte check by the reviewer. The Mersea bank shrub took one render because the low-plant family and the meadow atlas's spare cell already existed; its first generated card's stems were too thin to survive mips, so check a card at its game size before packing. Its seed-laden variant cost one run more than it needed: my test plan's 0.65 scale was under the kit's 0.8 minimum and the shots stopped before any frame. A plant-by-plant check of the plan through the kit's own row check, headless, would have caught it, and now runs before any plan with new plants. Its first dense card also overshot: four crossed cards stack a card's density, so a card that looks right alone reads as a solid cloud. Judge a card as the crossed plant it becomes.
 
 ### visual-review-vegetation — models R02
 
@@ -23786,11 +23786,20 @@ My "left only" came from a downscaled sheet and the author's native-resolution r
 
 - Sampling the real collision mesh showed that the alarming 0.23 m "steps" were seam artefacts and the true lips are about 6 cm, so a raw height scan needs filtering before anyone believes it, and it still doesn't replace a stock walk.
 
+### visual-review-veg-models (form round)
+
+(Relayed verbatim by the coordinator; added by vegetation-models-20261105.)
+
+- **What worked well:** a written form list against the owner's photos closed in one round. Banners and carried.txt removed the byte check I needed last time, and the group frame near the photo's view made the result easy to judge.
+- **What did not work well:** the shrub was shown only on lawn, so its colour against the bank could not be judged. The group frame's spacing also isn't yet tied to the site's placement.
+- **What to change next time:** show ground plants on the real ground or a matching test patch. Drive a set-piece group's test layout and its site placement from the same positions.
+
 ### code-review-veg-models
 
 (Relayed verbatim by the coordinator; added by vegetation-models-20261105.)
 
 - code-review-veg-models: reading each R05 hunk against the db3e7eca suite run showed the suite still covers existing plants, but 12 rebakes left 166 MiB of PNG history for 22.5 MiB net, so bake once per reviewed round and squash on merge.
+- code-review-veg-models delta: decoding atlases old against new showed the meadow repack left Cityside's alpha untouched, which code reading alone could not prove, so diff repacked shared atlases per cell whenever a spare cell is filled.
 
 ### visual-review-veg-models (final)
 

@@ -31,7 +31,9 @@ extends RefCounted
 ##                     confirmed, so the form is inference.
 ##   pale_seeded_shrub  the low open shrub of the Mersea ditch bank (owner photos,
 ##                     Nov 2026; species unconfirmed, so the photographed form):
-##                     thin dark stems under sparse pale seed heads.
+##                     bare thin dark stems under sparse seed heads (variants 0, 1),
+##                     or laden with cream seed on lighter stems (variant 2), which
+##                     is what reads along the bank from a distance.
 ## The island-wide rollout's trees, shrubs and hedges (vegetation species pass,
 ## 2026-11-05; dated Street View crops p1-p6, c2-c4, b1-b8, n1-n2, s1-s3, h1-h2
 ## kept with the vegetation-inventory work notes, outside Git):
@@ -180,6 +182,7 @@ const LOW_CELLS := {
 	"tussock_top": ["perennial", Rect2(0.0, 2.0 / 3.0, 0.25, 1.0 / 3.0)],
 	"bronze_top": ["perennial", Rect2(0.25, 2.0 / 3.0, 0.25, 1.0 / 3.0)],
 	"daisy_flowers": ["perennial", Rect2(0.5, 2.0 / 3.0, 0.25, 1.0 / 3.0)],
+	"seeded_tufts": ["perennial", Rect2(0.75, 2.0 / 3.0, 0.25, 1.0 / 3.0)],
 }
 ## The young trees' foliage atlas: a hanging spray of gum leaves, a cluster of oak leaves.
 const GUM_SPRAY := Rect2(0.0, 0.0, 0.5, 1.0)
@@ -631,6 +634,8 @@ const SEEDED_SHRUBS := [
 	# Thin dark stems in a loose vase, nearly bare, sparse pale seed heads near the tips.
 	{"seed": 131, "lean": 0.06, "layers": [{"kind": "crossed", "cell": "seeded_stems", "cards": 3, "width": 0.7, "height": 0.62, "splay_deg": 9.0, "flutter": 0.03, "shade_low": 0.7}]},
 	{"seed": 132, "lean": 0.1, "layers": [{"kind": "crossed", "cell": "seeded_stems", "cards": 4, "width": 1.0, "height": 1.15, "splay_deg": 9.0, "flop_deg": 16.0, "flutter": 0.035, "shade_low": 0.7}]},
+	# Laden with seed: loose cream clusters over the upper two thirds, grey to reddish-brown stems showing through.
+	{"seed": 133, "lean": 0.08, "layers": [{"kind": "crossed", "cell": "seeded_tufts", "cards": 4, "width": 1.1, "height": 1.15, "splay_deg": 9.0, "flop_deg": 14.0, "flutter": 0.035, "shade_low": 0.62}]},
 ]
 ## Low plants stand in grass_clump rows or, spaced wider, in planting_slot rows.
 const LOW_KINDS := ["grass_clump", "planting_slot"]
@@ -3085,7 +3090,7 @@ func _crown_clouds(rng: RandomNumberGenerator, center: Vector3, radii: Vector2, 
 	return clouds
 
 
-## Limbs from starts ({point, root, out, radius, and optionally its own rise}) out to
+## Limbs from starts ({point, root, out, radius}) out to
 ## clouds, added to branches: the clouds taken in turn round center, a share to each
 ## of limbs main limbs. Each starts narrow at root, on its stem's axis below the fork,
 ## so its open end stays inside the stem, climbs out of the fork (steeply when rise
@@ -3118,8 +3123,7 @@ func _cloud_limbs(rng: RandomNumberGenerator, branches: Array, clouds: Array[Dic
 		var joint := start.lerp(target, rng.randf_range(0.5, 0.62)) + side * 0.6
 		var r0 := float(from.radius) * rng.randf_range(0.82, 1.0)
 		var climb := joint.y - start.y
-		var limb_rise := float(from.get("rise", rise))
-		var main := _bezier(start, start + Vector3.UP * climb * lerpf(0.3, 0.8, limb_rise) + out * reach * lerpf(0.24, 0.06, limb_rise) + side * 0.5, joint - out * reach * 0.14 - Vector3.UP * climb * 0.1, joint, 6)
+		var main := _bezier(start, start + Vector3.UP * climb * lerpf(0.3, 0.8, rise) + out * reach * lerpf(0.24, 0.06, rise) + side * 0.5, joint - out * reach * 0.14 - Vector3.UP * climb * 0.1, joint, 6)
 		var main_radii := _taper(r0, r0 * 0.62, main.size(), 1.0)
 		main.insert(0, from.root)
 		main_radii.insert(0, r0 * 0.45)
