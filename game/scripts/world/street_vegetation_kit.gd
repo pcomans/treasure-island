@@ -3084,7 +3084,7 @@ func _crown_clouds(rng: RandomNumberGenerator, center: Vector3, radii: Vector2, 
 	return clouds
 
 
-## Limbs from starts ({point, root, out, radius, and optionally its own rise}) out to
+## Limbs from starts ({point, root, out, radius}) out to
 ## clouds, added to branches: the clouds taken in turn round center, a share to each
 ## of limbs main limbs. Each starts narrow at root, on its stem's axis below the fork,
 ## so its open end stays inside the stem, climbs out of the fork (steeply when rise
@@ -3117,8 +3117,7 @@ func _cloud_limbs(rng: RandomNumberGenerator, branches: Array, clouds: Array[Dic
 		var joint := start.lerp(target, rng.randf_range(0.5, 0.62)) + side * 0.6
 		var r0 := float(from.radius) * rng.randf_range(0.82, 1.0)
 		var climb := joint.y - start.y
-		var limb_rise := float(from.get("rise", rise))
-		var main := _bezier(start, start + Vector3.UP * climb * lerpf(0.3, 0.8, limb_rise) + out * reach * lerpf(0.24, 0.06, limb_rise) + side * 0.5, joint - out * reach * 0.14 - Vector3.UP * climb * 0.1, joint, 6)
+		var main := _bezier(start, start + Vector3.UP * climb * lerpf(0.3, 0.8, rise) + out * reach * lerpf(0.24, 0.06, rise) + side * 0.5, joint - out * reach * 0.14 - Vector3.UP * climb * 0.1, joint, 6)
 		var main_radii := _taper(r0, r0 * 0.62, main.size(), 1.0)
 		main.insert(0, from.root)
 		main_radii.insert(0, r0 * 0.45)
