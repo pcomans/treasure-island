@@ -174,10 +174,10 @@ func _prepare_initial_graphics() -> String:
 	STARTUP_MARKS.mark("graphics_prepare_begin")
 	if STARTUP_MARKS.enabled():
 		print("GRAPHICS_PREPARE visible=%s grounded=%s input=%s camera=%s renderer=%s" % [player.visible, player.is_on_floor(), player.is_processing_unhandled_input(), player.get_camera().global_position, RenderingServer.get_current_rendering_method()])
-	# Mersea's bar probe is the only startup reflection producer, and shared startup
-	# must not depend on one building: without it there is nothing to settle, and a
+	# Mersea's two probes are the only startup reflection producers, and shared startup
+	# must not depend on one building: without them there is nothing to settle, and a
 	# probe whose images failed keeps updating every frame (Mersea's own fallback).
-	var probes := world_root.buildings.find_children("MerseaBarReflection", "ReflectionProbe", true, false)
+	var probes := world_root.buildings.find_children("Mersea*Reflection", "ReflectionProbe", true, false)
 	if probes.is_empty():
 		STARTUP_MARKS.mark("graphics_no_reflection_probe")
 	for probe: ReflectionProbe in probes:
@@ -200,14 +200,14 @@ func _prepare_initial_graphics() -> String:
 		prepared_revision = _web_view_revision
 		# Pinned Godot 4.7.2 scheduling contract, NOT a public probe-ready query.
 		# Preserve Mersea's existing ALWAYS atlas setup and image-settling callback.
-		# Its final ONCE mode dirties the probe: viewport culling discovers it AFTER
+		# Their final ONCE mode dirties each probe: viewport culling discovers it AFTER
 		# render_probes, so start with a discovery draw at the grounded player camera.
 		await RenderingServer.frame_post_draw
 		STARTUP_MARKS.mark("graphics_probe_discovery_submitted")
 		# render_probes services one ONCE probe per draw. RD's existing ALWAYS atlas
 		# has 7 roughness mips: capture + 6 filtering steps. GLES3 caps its atlas at
-		# 8 mips: capture + at most 8 filtering steps. Cover each actual producer;
-		# the exterior ALWAYS probe finishes its capture/filter within each draw.
+		# 8 mips: capture + at most 8 filtering steps. Both Mersea probes end up ONCE
+		# and take turns, so cover each actual producer in sequence.
 		# This bound is scoped to the current Mersea setup, not a generic scheduler.
 		var capture_filter_draws := 9 if RenderingServer.get_current_rendering_method() == "gl_compatibility" else 7
 		for probe: ReflectionProbe in probes:

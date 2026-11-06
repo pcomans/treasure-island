@@ -2,6 +2,9 @@ extends RefCounted
 ## Mersea exterior family. Module dimensions and detailing are production inference.
 ## Source associations and reference limits: discovery/MERSEA_STUDY.md.
 
+## The two probes that settle on one capture; see _settle_reflection.
+const REFLECTION_PROBES: Array[String] = ["MerseaExteriorReflection", "MerseaBarReflection"]
+
 static var _materials: Dictionary = {}
 
 static func mat(c: String, metal: float = 0.0, rough: float = 0.7) -> StandardMaterial3D:
@@ -649,6 +652,7 @@ static func site(land: Dictionary) -> Node3D:
 	reflection.position=Vector3(-408.0,5.0,140.0);reflection.size=Vector3(30,10,30)
 	reflection.max_distance=30.0;reflection.box_projection=false;reflection.intensity=1.0
 	# Local glass/tagged-metal reflection only; preserve capture and source/spray masks.
+	# Updates until _settle_reflection has its images, then captures once.
 	reflection.update_mode=ReflectionProbe.UPDATE_ALWAYS
 	reflection.ambient_mode=ReflectionProbe.AMBIENT_DISABLED
 	reflection.cull_mask=3;reflection.reflection_mask=4
@@ -681,7 +685,8 @@ static func build(records: Dictionary,land: Dictionary,mural_asset_path: String)
 		var g:=Node3D.new();g.position=Vector3(pt.x,BASES.w1308007114+HEIGHT,pt.y)-host.position;g.set_meta("mersea_role","roof");host.add_child(g)
 		box(g,Vector3(0,0.08,0),Vector3(1.0,0.16,1.0),mat("b9bdb5",0.7))
 		cyl(g,Vector3(0,0.32,0),0.30,0.5,mat("b6bcb5",0.75,0.3));cyl(g,Vector3(0,0.62,0),0.51,0.32,mat("c8cbc2",0.7,0.3),0.44)
-	p.ready.connect(_settle_bar_reflection.bind(p.get_node("MerseaSite_"+POI+"/MerseaBarReflection")),CONNECT_ONE_SHOT)
+	for probe_name: String in REFLECTION_PROBES:
+		p.ready.connect(_settle_reflection.bind(p.get_node("MerseaSite_"+POI+"/"+probe_name)),CONNECT_ONE_SHOT)
 	return p
 
 
@@ -981,12 +986,16 @@ static func bar_golf_deck(p: Node3D,frame: Transform3D,land: Dictionary,top: flo
 
 
 static func resume_prebuilt_reflections(buildings: Node3D) -> void:
-	for probe: Node in buildings.find_children("MerseaBarReflection", "ReflectionProbe", true, false):
-		probe.update_mode = ReflectionProbe.UPDATE_ALWAYS
-		_settle_bar_reflection(probe, buildings)
+	for probe_name: String in REFLECTION_PROBES:
+		for probe: Node in buildings.find_children(probe_name, "ReflectionProbe", true, false):
+			probe.update_mode = ReflectionProbe.UPDATE_ALWAYS
+			_settle_reflection(probe, buildings)
 
 
-static func _settle_bar_reflection(probe: ReflectionProbe, material_root: Node = null) -> void:
+## Keeps a probe updating until the procedural images it captures exist, then lets
+## it capture once: nothing it sees moves, so a probe that kept updating would redraw
+## the scene around it every frame it is in view, however far away the player is.
+static func _settle_reflection(probe: ReflectionProbe, material_root: Node = null) -> void:
 	probe.set_meta("startup_reflection", "waiting_images")
 	# Keep startup rendering available while procedural images are generated.
 	# Completed draw opportunities are not a cubemap-ready query.
@@ -1015,17 +1024,17 @@ static func _settle_bar_reflection(probe: ReflectionProbe, material_root: Node =
 		if ready:break
 		if Time.get_ticks_msec()>deadline:
 			probe.set_meta("startup_reflection", "images_failed")
-			push_warning("Mersea bar reflection retained continuous updates: procedural images unavailable")
+			push_warning("Mersea reflection %s retained continuous updates: procedural images unavailable" % probe.name)
 			return
 		await probe.get_tree().process_frame
 	if not is_instance_valid(probe) or not probe.is_inside_tree():return
-	print("MERSEA_BAR_IMAGES_AVAILABLE rendered=%d textures=%d" % [Engine.get_frames_drawn(),textures.size()])
+	print("MERSEA_REFLECTION_IMAGES_AVAILABLE probe=%s rendered=%d textures=%d" % [probe.name,Engine.get_frames_drawn(),textures.size()])
 	for frame in range(8):
 		await RenderingServer.frame_post_draw
 		if not is_instance_valid(probe) or not probe.is_inside_tree():return
 	probe.update_mode=ReflectionProbe.UPDATE_ONCE
 	probe.set_meta("startup_reflection", "final_mode_set")
-	print("MERSEA_BAR_UPDATE_ONCE rendered=%d" % Engine.get_frames_drawn())
+	print("MERSEA_REFLECTION_UPDATE_ONCE probe=%s rendered=%d" % [probe.name,Engine.get_frames_drawn()])
 
 
 static func beveled_metal_border(p: Node3D,center: Vector3,size: Vector2,width: float,depth: float,material: Material) -> void:
