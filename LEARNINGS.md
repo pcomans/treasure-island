@@ -1143,4 +1143,3 @@ The bake merge moved each surface's base colour into vertex colours (2026-11-06)
 ## Compare embedded resources between bakes by content
 
 A geometry proof between two bakes showed 11,431 triangles with a different material, all on Mersea and Building 600. Their embedded noise textures get a new scene-unique `resource_path` in every bake, so a path comparison reported a change that wasn't there. Describe embedded resources by their stored properties.
-
