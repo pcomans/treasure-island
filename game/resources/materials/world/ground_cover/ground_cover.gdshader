@@ -250,8 +250,8 @@ void fragment() {
 			ground = mix(ground, mix(bank, marsh, carpet), region * max(bank_w, carpet));
 			marsh_cover = region * carpet;
 
-			// Pale stones in loose scatters on the banks, few on the floor, and a few
-			// lumps of rubble with a dark foot, all gone with distance.
+			// Pale stones in loose scatters on the banks, few on the floor, thick in patches
+			// of broken rubble with a dark foot, all gone with distance.
 			if (fade < 1.0) {
 				float cover = region * max(bank_w, carpet) * (1.0 - fade);
 				float scatter = smoothstep(0.48, 0.64, 0.6 * value_noise(p / 15.0 + vec2(13.1, 29.3)) + 0.4 * n_mid) * mix(1.0, 0.2, carpet);
@@ -261,13 +261,14 @@ void fragment() {
 				float size = 0.03 + 0.08 * hash12(stone_cell + vec2(3.3, 9.1));
 				float stone = (1.0 - smoothstep(size * 0.7, size, length(inner - place))) * step(hash12(stone_cell + vec2(23.3, 5.9)), 0.7 * scatter);
 				ground = mix(ground, bank_stone * (0.75 + 0.5 * n_tiny), stone * cover);
-				vec2 rock_cell = floor(p / 3.1);
-				vec2 rock_at = (vec2(hash12(rock_cell + vec2(11.3, 4.1)), hash12(rock_cell + vec2(2.9, 17.3))) - 0.5) * 2.2;
-				vec2 rock_off = (fract(p / 3.1) - 0.5) * 3.1 - rock_at;
-				float rock_keep = step(hash12(rock_cell + vec2(19.7, 23.3)), 0.55 * scatter);
-				float rock_size = (0.1 + 0.2 * hash12(rock_cell + vec2(5.7, 31.9))) * (0.72 + 0.56 * value_noise(p / 0.3 + rock_cell));
-				ground *= 1.0 - 0.5 * (1.0 - smoothstep(rock_size, rock_size * 1.5, length(rock_off - vec2(0.05, 0.04)))) * rock_keep * cover;
-				ground = mix(ground, bank_stone * (0.62 + 0.5 * n_tiny), (1.0 - smoothstep(rock_size * 0.8, rock_size, length(rock_off))) * rock_keep * cover);
+				float rubble = smoothstep(0.56, 0.68, 0.7 * n_patch8 + 0.3 * n_small) * (1.0 - carpet);
+				vec2 rock_cell = floor(p / 0.47);
+				vec2 rock_off = (fract(p / 0.47) - 0.5) - (vec2(hash12(rock_cell + vec2(11.3, 4.1)), hash12(rock_cell + vec2(2.9, 17.3))) - 0.5) * 0.5;
+				rock_off *= vec2(1.0, 1.0 + 0.8 * hash12(rock_cell + vec2(29.1, 8.3)));
+				float rock_size = 0.14 + 0.2 * hash12(rock_cell + vec2(5.7, 31.9));
+				float rock_keep = step(hash12(rock_cell + vec2(19.7, 23.3)), 0.8 * rubble) * cover;
+				ground *= 1.0 - 0.55 * (1.0 - smoothstep(rock_size, rock_size * 1.45, length(rock_off - vec2(0.09, 0.07)))) * rock_keep;
+				ground = mix(ground, bank_stone * (0.42 + 0.5 * hash12(rock_cell + vec2(13.9, 41.7))), (1.0 - smoothstep(rock_size * 0.82, rock_size, length(rock_off))) * rock_keep);
 			}
 
 			vec2 along = vec2(0.643 * p.x + 0.766 * p.y, 0.643 * p.y - 0.766 * p.x);
