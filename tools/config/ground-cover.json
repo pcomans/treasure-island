@@ -172,6 +172,37 @@
    "evidence": "2026-05-26 aerial, default land in 200 m boxes over x -200..400, z -400..-200: lawn 2-6 %, dry 10-30 %, bare 51-86 % of the open ground; vegetation inventory zone Z7 (x -160..380, z -460..-90)."
   },
   {
+   "id": "residential_paving_edge_wear",
+   "channel": "dry_field",
+   "surfaces": ["major_area_landuse", "street_kerb_verge"],
+   "inside_sources": ["r17241151"],
+   "near": {
+    "kinds": ["vehicle_road", "paved_area", "street_kerb"],
+    "full_m": 1.5,
+    "zero_m": 5.5,
+    "wobble_m": 1.2
+   },
+   "weight": 0.35,
+   "basis": "production_inference",
+   "reason": "The housing's grass wears thin for the first few metres beside its roads, lots and kerbs: dry patches in the lawns, a little bare ground in the straw, so the green doesn't run at full strength up to a sharp line. The paving and kerb lines themselves stay as they are.",
+   "evidence": "2026-05-26 aerial over r17241151 (May 2026 z19 tiles, 1 m cells by distance from roads, lots and kerb concrete; OSM and the imagery are offset 3-6 m, so the band's width is inference): of the open ground 25 % pale and 40 % green within 1 m, 19 % and 46 % at 2 m, 15 % and 50 % at 3 m, 11 % and 55 % at 5 m."
+  },
+  {
+   "id": "paving_edge_worn_shoulders",
+   "channel": "bare",
+   "surfaces": ["land_ground", "major_area_amenity"],
+   "near": {
+    "kinds": ["vehicle_road", "paved_area", "street_kerb"],
+    "full_m": 2,
+    "zero_m": 6,
+    "wobble_m": 1.5
+   },
+   "weight": 0.6,
+   "basis": "production_inference",
+   "reason": "Outside the housing the dry grass gives way to worn dirt in patches for a few metres beside roads and lots, where the shoulders are driven and walked on. The paving and kerb lines themselves stay as they are.",
+   "evidence": "Street View Sep 2025, 14th St (pano ZKVioIPPhmxWGqp_Ao5kMw, heading 250): bare hard dirt for several metres either side of the asphalt, the weeds starting beyond it. 2026-05-26 aerial (May 2026 z19 tiles, 1 m cells by distance from roads, lots and kerb concrete; OSM and the imagery are offset 3-6 m, so the band's width is inference): pale 52 % of the open land within 1 m against about 43 % past 3 m, and on the campus and SFFD areas 41 % within 1 m, 32 % at 2 m and about 20 % by 9 m."
+  },
+  {
    "id": "ymca_lawn_west_south",
    "channel": "lawn",
    "surfaces": ["land_ground"],
