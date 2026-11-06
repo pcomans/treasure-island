@@ -24218,6 +24218,12 @@ Comparing every record against the base commit found a change the author hadn't 
 - What did not work well: The worktree could not sit on `street/johnson-lot-20261106` as briefed, because the lot's own worktree has it checked out, so this one is a detached HEAD at the same commit and pushes by explicit refspec. The size condition had no number behind it. Vercel's docs give 100 MB for Hobby and AGENTS calls the project free hobby-tier, yet the last two deploys uploaded packs of 214 and 227.3 MiB, and no retro noticed the contradiction. The CLI reports the team on Pro, whose documented limit is 1 GB, which explains it.
 - What the team should change next time: Correct the plan in AGENTS and name the upload limit in the Web deploys section, so a size check has a number to compare with. When a brief names a branch for a fresh worktree, say whether another worktree holds it. The rule that this entry goes in the commit being deployed means it can't report the deploy; accept that or allow one RETRO commit afterwards.
 
+### docs-iphone-issue — 2026-11-06 — the iPhone known issue (docs only, no engine runs)
+
+- What worked well: The brief gave the file, the list, the facts and what to leave out, so the round was one read and one edit. Two cheap git reads confirmed that `9056ad03` exists and that `web/memory-20261106` isn't in `origin/main` before the entry said so.
+- What did not work well: The memory figures come from the brief alone. The Console log stays out of Git and I didn't see it, so I couldn't check them. The item has four facts and sits in a list of one-line items, so it's the longest bullet there, and the glass line's full stop had to become a semicolon.
+- What the team should change next time: When a known issue rests on a log that stays out of Git, say in the brief who read it, so the next reader knows how far to trust the numbers.
+
 ### perf-2-bake-20261106 — 2026-11-06 — stopped before any engine run for the release (0 of 6 engine runs, 0 of 1 suites)
 
 - What worked well: Reading the test walkers before designing the merge found limits the runtime what-if never met. `retained_ground_contact` compares housing support meshes with their collider in exact face order, and `visible_roof_faces` reads role metadata from the tree, so a bake that regroups those meshes would fail `island_test.gd -- --use-prebuilt-world`. Having nothing in flight meant the 13:26 container restart cost no work.

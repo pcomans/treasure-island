@@ -11,7 +11,8 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 - **Web build** (Godot's Compatibility renderer):
   - it looks about 15% brighter than desktop (seen in review, by 2026-11-05); parked by the owner;
   - it draws no decals, which the owner accepted, so spraying is off there and the Mersea mural is drawn as a mesh instead;
-  - glass looks paler and more reflective than on desktop (seen in review, by 2026-11-05).
+  - glass looks paler and more reflective than on desktop (seen in review, by 2026-11-05);
+  - it doesn't run on iPhone, which the owner accepted on 2026-11-06, so it isn't being worked on. Release `c7db08fc` fails on the owner's iPhone with Safari's "A problem repeatedly occurred"; the previous release, `9056ad03`, opened. The phone's Console log shows the cause: iOS killed the page's web content process at its 2,048 MB per-process limit (about 2.1 GB used), about 9 seconds after that process started and 7 seconds after the 291 MB pack arrived. A cut removing 71 MiB of unread data from the web pack (278 to 206 MiB) is committed but parked unmerged on the branch `web/memory-20261106`. It hasn't been run in a browser, and it probably isn't enough on its own.
 - **Mersea mural colour:** in the real mural the ground reads charcoal or navy through the corrugation, and the mural fills more of the wall height (seen in review, by 2026-11-05).
 - **Ferry plaza gravel:** the gravel "shards" on the dirt read as grey slate triangles up close (seen in review, 2026-11-03).
 
