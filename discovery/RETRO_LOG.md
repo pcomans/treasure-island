@@ -23691,6 +23691,14 @@ Carried by deploy-fix from the deploy agent's scratch log; text unchanged apart 
 - What did not work well: the sheets show one bearing per model, so a worst-case blend looked like a view bug and took a side check to clear. The bake check runs at unrotated poses, so it cannot test instance yaw.
 - What to change next time: add one hand-over pair at a bearing on a baked view and one halfway between. Add a yawed instance to the bake check. Measure foliage colour against crops in the check, since colour drifted in both directions across rounds.
 
+### visual-review-veg-models (form round)
+
+(Relayed verbatim by the coordinator; added by vegetation-models-20261105.)
+
+- **What worked well:** a written form list against the owner's photos closed in one round. Banners and carried.txt removed the byte check I needed last time, and the group frame near the photo's view made the result easy to judge.
+- **What did not work well:** the shrub was shown only on lawn, so its colour against the bank could not be judged. The group frame's spacing also isn't yet tied to the site's placement.
+- **What to change next time:** show ground plants on the real ground or a matching test patch. Drive a set-piece group's test layout and its site placement from the same positions.
+
 ### code-review-veg-models
 
 (Relayed verbatim by the coordinator; added by vegetation-models-20261105.)

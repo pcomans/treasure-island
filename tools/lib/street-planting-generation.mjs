@@ -73,7 +73,7 @@ export const PLANT_WIDTHS_M = Object.freeze({
   nz_christmas_tree: Object.freeze([3.0, 3.4]),
   nz_flax: Object.freeze([1.4, 1.7, 2.0]),
   pacific_reedgrass: Object.freeze([0.85, 1.05, 1.3, 2.2]),
-  pale_seeded_shrub: Object.freeze([0.7, 1.0]),
+  pale_seeded_shrub: Object.freeze([0.7, 1.0, 1.1]),
   pittosporum_tobira: Object.freeze([1.5, 2.0, 2.5]),
   red_tip_shrub: Object.freeze([0.7, 0.9]),
   rush: Object.freeze([0.45, 0.6, 0.75, 1.5]),

@@ -76,7 +76,7 @@ export const STREET_VEGETATION_PROPS = Object.freeze({
   weeping_broadleaf: vegetationProp(["tree"], 2, 0.5, true),
   sydney_blue_gum_young: vegetationProp(["tree"], 3, 0.3, true),
   white_umbel_perennial: vegetationProp(LOW_PLANT_KINDS, 3, 0.15, false),
-  pale_seeded_shrub: vegetationProp(LOW_PLANT_KINDS, 2, 0.2, false),
+  pale_seeded_shrub: vegetationProp(LOW_PLANT_KINDS, 3, 0.2, false),
 });
 // How far the kit runs a trunk on below its foot (street_vegetation_kit.gd BURY_M):
 // the visible ground round a foot may rise at most this far above it.
