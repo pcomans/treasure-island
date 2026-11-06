@@ -76,7 +76,7 @@ void fragment() {
 	float wear = texture(paint_wear, world_position.xz / paint_tile_m).r;
 	float wear_fine = texture(paint_wear, world_position.zx / (paint_tile_m * 0.43) + vec2(0.37, 0.71)).r;
 	float cell = mod(variant, legend_cells);
-	float wear_step = kind > 8.5 ? floor(variant / legend_cells + 0.001) : variant;
+	float wear_step = kind > 8.5 && kind < 9.5 ? floor(variant / legend_cells + 0.001) : variant;
 	float worn = clamp(wear_step / 3.0, 0.0, 4.0 / 3.0);
 	wear = mix(wear, min(wear, wear_fine) * 0.92, step(3.5, wear_step));
 	vec3 albedo = white_paint;

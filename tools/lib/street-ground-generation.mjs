@@ -1643,6 +1643,11 @@ export function generateStreetGround({
   const buildings = objects.filter((object) => (object.roles.includes("building") || object.roles.includes("building_part")) && nearPilot(object, 30));
   const buildingUnion = union("buildings", buildings.map((object) => object.geometry));
   const buildingIndex = polygonIndex(buildingUnion);
+  // The traced outline stays on the land and off the buildings.
+  for (const { lot, object } of exceptionLots) {
+    invariant(difference(`lot ${lot.id} off the land`, object.geometry, [land.geometry]).length === 0, `Street ground lot ${lot.id}'s outline leaves the land`);
+    invariant(intersect(`lot ${lot.id} on buildings`, object.geometry, buildingUnion).length === 0, `Street ground lot ${lot.id}'s outline crosses a building`);
+  }
   const buildingClearance = union("building clearance", buildings.flatMap((object) => [
     object.geometry,
     ...object.geometry.flatMap((polygon) => polygon.map((ring) => {
@@ -1979,7 +1984,8 @@ export function generateStreetGround({
           if (length(sub(b, a)) < 1e-6) return;
           const direction = unit(sub(b, a));
           const outward = [direction[1], -direction[0]];
-          if (!vehicleIndex.contains(add(add(a, scale(sub(b, a), 0.5)), scale(outward, 0.04)))) return;
+          const faced = add(add(a, scale(sub(b, a), 0.5)), scale(outward, 0.04));
+          if (!vehicleIndex.contains(faced) && !exceptionLotIndex.contains(faced)) return;
           // Inward from the curb edge, a little past its ends so corners close.
           curbTops.push(rectangle(a, direction, scale(outward, -1), -CURB_TOP_M, length(sub(b, a)) + CURB_TOP_M, -0.01, CURB_TOP_M));
         });
@@ -2112,29 +2118,35 @@ export function generateStreetGround({
       });
     }
   };
-  const runOf = { curb: kerb.support_run_m, island: kerb.support_run_m, flare: kerb.flare_run_m, back: kerb.back_slope_run_m, inner: 0 };
-  const footOf = { curb: 0, island: 0, flare: SKIRT_FOOT_M, back: SKIRT_FOOT_M, inner: 0 };
+  // lot_curb is an edge along the lot OSM lacks: a curb face, with no gutter or drain
+  // and with its ramp on the lot, invisible like an island's.
+  const runOf = { curb: kerb.support_run_m, island: kerb.support_run_m, lot_curb: kerb.support_run_m, flare: kerb.flare_run_m, back: kerb.back_slope_run_m, inner: 0 };
+  const footOf = { curb: 0, island: 0, lot_curb: 0, flare: SKIRT_FOOT_M, back: SKIRT_FOOT_M, inner: 0 };
   const classifyRaised = (a, b, outward) => {
     // A lot island's edge is a curb face all round, over the lot.
     if (islandUnion.length > 0 && islandIndex.contains(add(add(a, scale(sub(b, a), 0.5)), scale(outward, -0.04)))) return "island";
     let curb = 0;
+    let lotCurb = 0;
     let flare = 0;
     for (const fraction of [0.25, 0.5, 0.75]) {
       const probe = add(add(a, scale(sub(b, a), fraction)), scale(outward, 0.04));
-      if (vehicleIndex.contains(probe) || exceptionLotIndex.contains(probe)) curb += 1;
+      if (vehicleIndex.contains(probe)) curb += 1;
+      else if (exceptionLotIndex.contains(probe)) lotCurb += 1;
       else if (notchIndex.contains(probe)) flare += 1;
     }
-    return curb >= 2 ? "curb" : flare >= 2 ? "flare" : "back";
+    return curb >= 2 ? "curb" : curb + lotCurb >= 2 ? "lot_curb" : flare >= 2 ? "flare" : "back";
   };
   const classifyRamp = (a, b, outward) => {
     let curb = 0;
+    let lotCurb = 0;
     let inner = 0;
     for (const fraction of [0.25, 0.5, 0.75]) {
       const probe = add(add(a, scale(sub(b, a), fraction)), scale(outward, 0.04));
       if (vehicleIndex.contains(probe)) curb += 1;
+      else if (exceptionLotIndex.contains(probe)) lotCurb += 1;
       else if (raisedIndex.contains(probe)) inner += 1;
     }
-    return curb >= 2 ? "curb" : inner >= 2 ? "inner" : "back";
+    return curb >= 2 ? "curb" : curb + lotCurb >= 2 ? "lot_curb" : inner >= 2 ? "inner" : "back";
   };
   function emitSkirts(edges) {
     for (let index = 0; index < edges.length; index += 1) {
@@ -2146,7 +2158,7 @@ export function generateStreetGround({
       const bOut = add(edge.b, scale(edge.outward, run));
       skirtPieces.push({ kind: edge.kind, points: [edge.a, edge.b, bOut], heights: [edge.ha, edge.hb, foot], edge });
       skirtPieces.push({ kind: edge.kind, points: [edge.a, bOut, aOut], heights: [edge.ha, foot, foot], edge });
-      if (edge.kind === "curb" || edge.kind === "island") faces.push(edge);
+      if (edge.kind === "curb" || edge.kind === "island" || edge.kind === "lot_curb") faces.push(edge);
       // Round the corner to the next edge when the outline turns convex.
       const next = edges[(index + 1) % edges.length];
       const nextRun = runOf[next.kind];
@@ -2180,8 +2192,9 @@ export function generateStreetGround({
     const triangle = [[skirt.points]];
     if (Math.abs(ringArea(skirt.points)) < 1e-6) continue;
     const height = affineHeight(skirt.points, skirt.heights);
-    // A lot island's ramps lie on the lot: invisible support all round.
-    if (skirt.kind === "island") {
+    // A lot island's ramps lie on the lot, like those of an edge along the lot OSM
+    // lacks: invisible support all round.
+    if (skirt.kind === "island" || skirt.kind === "lot_curb") {
       addPiece("ramp", triangle, height, worldUv);
       continue;
     }
@@ -3256,7 +3269,7 @@ export function generateStreetGround({
         const along0 = length(sub(p0, edge.a));
         const along1 = length(sub(p1, edge.a));
         // A lot island's face runs down to the land, under the lot's surface.
-        const foot = edge.kind === "island" ? ISLAND_FOOT_M : ROAD_TOP_M;
+        const foot = edge.kind === "island" || edge.kind === "lot_curb" ? ISLAND_FOOT_M : ROAD_TOP_M;
         const corners = [
           [p0, foot, along0],
           [p1, foot, along1],
