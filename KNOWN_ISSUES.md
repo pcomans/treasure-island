@@ -104,6 +104,7 @@ From the reviews of the shoreline, street ground, street objects, parked cars, v
   - A short white mark at each stall's aisle end in the May 2026 aerial stays undrawn: it can't be read at 0.24 m. An owner photo in a stall row would settle it.
   - The gravel shoulder reads as a graded path.
   - Far stall lines break into dashes at low angles, in every lot compared (Johnson St, Clipper Cove strip, Mersea field).
+  - From directly above, a pale chip shows at the inner tip of the strip beside the south-west hatch (seen in review, 2026-11-06).
 - **Parked cars:** Avenue I's review is held, so its cars are unjudged.
 - **Shoreline:**
   - Two small dark tips remain at the north slipway: one at the grass corner of the ramp's head, one at its water end.
@@ -121,7 +122,8 @@ From the reviews of the shoreline, street ground, street objects, parked cars, v
   - Broadleaf impostors step about +21% at the 110 m switch. A separate round is queued.
   - `california_sagebrush` and `california_buckwheat` stand in as forms at the ditch, the Mersea strip and the 1349 Gateview thicket. Their species are unconfirmed, so don't describe them as natives.
   - 36 trunks stand on yard pavement with no mulch pit, all on real crowns where checked.
-- **Performance:** not measured since these layers landed. Before them the spawn drew about 24,600 draw calls and 3.8 million primitives at 1440 × 900 (`6ba040d3`). The ground-cover shader now runs six noise calls per fragment, cost unmeasured. A performance pass on a quiet machine is planned.
+  - The Keppler Court pine at (−292.8, −433.7) changed from variant 1 to 2 within its pin when the Johnson St lot landed: the lot dropped three crowns, and species hang on a crown's list index (see the cleanup item below).
+- **Performance:** the fixes are not in this release. The diagnosis is at `perf-1-20261106`, and the work is paused on the branch `perf/bake-merge-20261106`. Before these layers the spawn drew about 24,600 draw calls and 3.8 million primitives at 1440 × 900 (`6ba040d3`). The ground-cover shader now runs six noise calls per fragment.
 
 ## Deferred by the owner
 
@@ -148,13 +150,17 @@ From the reviews of the shoreline, street ground, street objects, parked cars, v
   - `on_posts` (`:1283`) has no distance limit.
   - The comment on `reject` (`:518`) doesn't mention `options.pad`.
   - In `tools/lib/street-ground-generation.mjs:2316-2324`, `own_line: false` overstates `counts.stop_bars` and needs no crosswalk.
-- **Street ground generator:** the storm drain walk (`tools/lib/street-ground-generation.mjs`) carries its distance across every curb face in turn, so a curb change anywhere moves drains island-wide. Restarting it for each band would keep such changes local, at the price of one island-wide move.
+- **Street ground generator** (`tools/lib/street-ground-generation.mjs`, line numbers at `03f645ae`):
+  - The storm drain walk carries its distance (`walked`) across every curb face in turn, so any curb edit moves drains island-wide: one 1.11 m curb edge moved about 80 % of them. Restarting it for each band, or phasing it per edge, would keep such changes local, at the price of one island-wide move.
+  - Restore the rule that a lot's `pattern` needs `osm_exception`. The `exactKeys` call at `:497` now allows either without the other.
+  - About 9.3 m² of sloped concrete chamfer remains around (−210, 165) at the Johnson St lot's road end.
 - **Shoreline and vegetation generators:**
   - The rock ground's tone comes from shader defaults, not the segment's tone.
   - In `tools/lib/shoreline-generation.mjs`, the "Side walls" comment (`:1692`) and the shoreline config's note are stale. So are the comments at `:43` and `:2299`, which still say the player is recovered at the outline (the shore lift replaced that).
   - The ramp foot's seed (code review's low, at `07a0f9e5`).
   - The ditch's axis lives in two places: `marsh_axis` in `game/resources/materials/world/ground_cover/ground_cover.gdshader:85` and the `mersea_ditch` rules in `tools/config/street-detail-zones.json`.
   - Canopy placement ignores walk-up lanes: the generated audit's `walk_up_short` grew from 32 to 37 sides. S4's island test still passes all 174.
+  - A canopy tree's species hangs on its crown's list index (`identity` in `tools/lib/street-detail-generation.mjs:1775`, at `03f645ae`), so dropping a crown reshuffles the species of the crowns after it. Hash on the crown's position instead.
 - **Tests:**
   - The startup test (`game/tests/headless_startup_configuration_contract.gd`) checks that a demolished building has a demolition record, but doesn't compare it with the evidence in `tools/config/demolished-buildings.json`.
   - `building_shots.gd`'s `_moving_view` turns off the player controller right after the last move, without waiting for the player to come to rest.
