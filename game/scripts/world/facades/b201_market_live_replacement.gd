@@ -49,7 +49,10 @@ static func build_chunk_plan(pair: Dictionary) -> Dictionary:
 	roof_root.set_meta("source_keys", [SOURCE])
 	roof_root.set_meta("derived_object_key", ROOF)
 	roof_root.set_meta("feature_kind", "building_roof")
-	return {"ok": true, "contains_target": true, "records": {WALL: _result(model), ROOF: _result(roof_root)}}
+	var lot := model.get_node(MODEL.LOT_NODE) as Node3D
+	model.remove_child(lot)
+	lot.transform = model.transform
+	return {"ok": true, "contains_target": true, "records": {WALL: _result(model), ROOF: _result(roof_root)}, "lot": _result(lot)}
 
 
 static func consume_record(record: Dictionary, plan: Dictionary) -> Dictionary:
@@ -65,12 +68,23 @@ static func plan_was_fully_consumed(plan: Dictionary) -> bool:
 	return plan.get("records", {}).is_empty()
 
 
+## The market lot, for the world's ground parent, where VisibleGround reads it; {} if
+## this chunk has none.
+static func take_lot(plan: Dictionary) -> Dictionary:
+	var lot: Dictionary = plan.get("lot", {})
+	plan.erase("lot")
+	return lot
+
+
 static func free_unconsumed(plan: Dictionary) -> void:
 	for result: Dictionary in plan.get("records", {}).values():
 		var node: Node = result.node
 		if not node.is_inside_tree():
 			node.free()
 	plan.get("records", {}).clear()
+	var lot: Dictionary = take_lot(plan)
+	if not lot.is_empty():
+		(lot.node as Node).free()
 
 
 ## The node plus the counts the world builder adds to its totals.

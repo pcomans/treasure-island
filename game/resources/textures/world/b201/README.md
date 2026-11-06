@@ -5,11 +5,18 @@ Original art for the City Building 201 / Island Cove Market model
 reference photo.
 
 - `stucco_paint`, `roof_membrane`, `lot_worn`, `apron_concrete`, `market_interior`,
-  `shop_posters`: generated with `tools/generate-texture`, resized.
-- `mural_nnw`: three generated mural sections blended into one wide image.
+  `shop_posters`: generated with `tools/generate-texture`, resized. `stucco_paint` has
+  its broad stains filtered out so the short tile does not show as a repeat.
+- `mural_nnw`: generated mural pieces at their natural aspect on a plain generated wall.
 - `banner`: the middle band of a generated sunset banner, faded.
-- `sign_sheet`, `sign_plain`: a generated faded metal tile with procedural streaks,
-  seam shading and painted lettering.
+- `sign_sheet`, `sign_plain`: a generated faded metal tile with procedural streaks;
+  `sign_sheet` also has seam lines and painted lettering.
 - `sign_atlas`: lettering and small signs drawn with ImageMagick (FreeSans), from the
-  text the photos show.
-- `grime_strip`: procedural run-off streaks with an alpha ramp.
+  text the photos show; the container plates and stencil are plain numbers and a generic
+  word, not the marks in the photos.
+- `grime_strip`: separate procedural run-off streaks in alpha over 44 m of wall, white so
+  each material tints it.
+
+Nothing here bakes in sun direction: no cast shadows or highlights, so the look holds
+under a moving sun. Painted scenes in the mural and banner are artwork. Relief on ribbed
+sheet and roll-up doors comes from normal maps built in the model.

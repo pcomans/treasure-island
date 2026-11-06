@@ -30,11 +30,16 @@ const NFPA_CELL := Rect2(0.0, 0.6875, 0.125, 0.25)
 const OPENINGS_PATH := "res://game/resources/facades/b201_unphotographed_openings.json"
 const D1_MATERIALS := "res://game/resources/materials/world/d1_current/"
 const TEX := "res://game/resources/textures/world/b201/"
-const ROLES := ["wall", "roof", "detail", "trim", "glow", "setting", "walk"]
+const LOT_NODE := "B201MarketLot"
+const ROLES := ["wall", "roof", "detail", "trim", "overlay", "setting", "walk", "lot"]
+const PHYSICS_WORLD_SOLID := 1 << 0
+const PHYSICS_SPRAY_SURFACE := 1 << 2
 
 ## The OSM outline as (w, u), in roof-record order; checked against the record.
 const PLAN: Array[Vector2] = [Vector2(0.0, 0.0), Vector2(0.0, 115.52), Vector2(68.23, 115.52), Vector2(68.23, 94.41), Vector2(65.12, 94.41), Vector2(65.12, 80.165), Vector2(67.9, 80.165), Vector2(67.9, 70.66), Vector2(71.98, 70.66), Vector2(71.98, 59.99), Vector2(86.75, 59.99), Vector2(86.75, 36.495), Vector2(84.075, 36.495), Vector2(84.075, 0.0)]
 const PLAN_TOLERANCE_M := 0.05
+const GRIME_TILE_M := 44.0
+const SLAT_PITCH_M := 0.11
 const U_S := 115.52
 const W_F := 86.75
 const W_E := 84.075
@@ -89,7 +94,7 @@ const Y_SIGN_TOP := 8.95
 const Y_SIGN_CAP := 9.22
 const Y_SOFFIT := 5.98
 const RIB_PITCH_M := 0.6
-const HIP_RIB_PITCH_M := 0.95
+const HIP_RIB_PITCH_M := 1.9
 const ORANGE_U0 := 8.2
 const STORE_U0 := 13.6
 const ENTRY_U1 := 15.3
@@ -112,24 +117,42 @@ const Y_BAND_LOW := 7.15
 const SIDEWALK_W := -7.4
 const SIDEWALK_U0 := -8.0
 const SIDEWALK_U1 := 30.0
-const LOT_W := -12.35
-const LOT_U0 := -57.0
+const LOT_N := -32.0
+const LOT_SPLIT_U := -6.0
 const LOT_U1 := 135.3
 const LOT_E := 86.9
+# The lot's west edge runs under Avenue H's parking strip, which slants across this frame.
+const LOT_EDGE_N := -13.14
+const LOT_EDGE_S := -14.13
+## Building 202's wall line, where the lot stops, as (w, u).
+const B202_EDGE: Array[Vector2] = [Vector2(-2.55, LOT_N), Vector2(-2.86, -25.14), Vector2(15.64, -25.35), Vector2(26.31, -15.66), Vector2(64.42, -15.03), Vector2(64.61, -26.17), Vector2(83.81, -25.85)]
 const BOLLARD_W := -5.9
 const BOLLARD_FIRST_U := 7.0
 const BOLLARD_PITCH_M := 2.05
 const BOLLARD_COUNT := 9
-# The lot lies just over the service road's 7.8 cm bias, hiding that ribbon.
-const LOT_LIFT := 0.09
+# The lot lies between the land and the roads and street paint drawn 7.8 cm over it,
+# so those meet it rather than being covered. Paint of its own sits on top of them.
+const LOT_LIFT := 0.06
+const PAINT_LIFT := 0.088
 const SIDEWALK_LIFT := 0.2
+# The container yard along Avenue I (refs 14, 22; Aug 2025 aerial).
+const YARD_FACE_W := 85.0
+const YARD_UPPER_W := 84.2
+const CONTAINER_WIDE := 2.44
+const CONTAINER_TALL := 2.59
+## Ground tier: [north edge u, length, paint, door number]. Upper: the same, then door face w.
+const YARD_LOW := [[60.25, 12.2, "container_grey", 1], [65.3, 12.2, "container_grey", 3], [71.75, 12.2, "container_grey", 7], [74.2, 6.06, "container_rust", 9], [79.7, 12.2, "container_rust", 15], [85.0, 12.2, "container_rust", 17], [87.6, 12.2, "container_grey", 0], [90.1, 12.2, "container_grey", 0], [93.2, 6.06, "container_grey", 0]]
+const YARD_HIGH := [[60.25, 11.2, "container_grey", 2, YARD_UPPER_W], [71.75, 12.2, "container_grey", 8, YARD_FACE_W], [79.7, 12.2, "container_rust", 16, YARD_FACE_W], [85.0, 6.06, "container_brown", 0, 78.6], [87.6, 12.2, "container_grey", 0, YARD_FACE_W], [90.1, 12.2, "container_grey", 0, YARD_FACE_W]]
+## Door numbers in the sign atlas: number -> cell.
+const DOOR_NUMBERS := {1: 0, 2: 1, 3: 2, 4: 3, 7: 4, 8: 5, 9: 6, 15: 7, 16: 8, 17: 9}
 
 ## Painted and plain surfaces: [[r, g, b] sRGB bytes, roughness, tile texture or "", tile metres].
 const PAINTS := {
 	"cream": [[218, 204, 170], 0.9, "stucco", 3.0],
 	"arcade": [[178, 170, 152], 0.92, "stucco", 3.0],
 	"tan": [[204, 182, 140], 0.9, "stucco", 3.0],
-	"white": [[250, 248, 242], 0.88, "stucco", 3.0],
+	# Past 255: the stucco tile darkens what it multiplies, and this wall stays bleached.
+	"white": [[281, 281, 275], 0.88, "stucco", 3.0],
 	"grey": [[188, 200, 204], 0.9, "stucco", 3.0],
 	"sky_blue": [[182, 200, 216], 0.9, "stucco", 3.0],
 	"upper_grey": [[176, 182, 190], 0.8, "stucco", 3.0],
@@ -141,7 +164,7 @@ const PAINTS := {
 	"maroon": [[126, 40, 50], 0.7, "", 1.0],
 	"trim_red": [[196, 152, 136], 0.75, "", 1.0],
 	"sign_rib": [[150, 134, 112], 0.65, "", 1.0],
-	"sign_hip_rib": [[206, 190, 168], 0.65, "", 1.0],
+	"sign_hip_rib": [[174, 160, 140], 0.65, "", 1.0],
 	"coping": [[226, 222, 208], 0.8, "", 1.0],
 	"coping_grey": [[176, 182, 182], 0.8, "", 1.0],
 	"soffit": [[134, 122, 108], 0.9, "", 1.0],
@@ -150,6 +173,7 @@ const PAINTS := {
 	"frame_black": [[30, 30, 32], 0.5, "", 1.0],
 	"frame_grey": [[124, 128, 130], 0.6, "", 1.0],
 	"grey_frame": [[168, 178, 182], 0.7, "", 1.0],
+	"rollup_frame": [[122, 128, 130], 0.7, "", 1.0],
 	"door_frame": [[48, 40, 36], 0.55, "", 1.0],
 	"door_white": [[226, 224, 216], 0.55, "", 1.0],
 	"door_dark": [[44, 52, 50], 0.6, "", 1.0],
@@ -159,11 +183,27 @@ const PAINTS := {
 	"container_red": [[172, 76, 64], 0.7, "ribs", 0.3],
 	"container_red_edge": [[146, 64, 54], 0.7, "", 1.0],
 	"container_tan": [[214, 192, 142], 0.75, "ribs", 0.3],
-	"container_grey": [[176, 182, 180], 0.7, "ribs", 0.3],
-	"container_grey_edge": [[150, 156, 154], 0.7, "", 1.0],
-	"container_brown": [[150, 92, 66], 0.75, "ribs", 0.3],
-	"container_brown_edge": [[122, 74, 54], 0.75, "", 1.0],
-	"tarp": [[104, 110, 112], 0.8, "", 1.0],
+	"container_grey": [[188, 190, 182], 0.7, "ribs", 0.3],
+	"container_grey_edge": [[190, 192, 184], 0.7, "", 1.0],
+	"container_grey_seam": [[162, 164, 156], 0.7, "", 1.0],
+	"container_grey_rod": [[150, 152, 146], 0.6, "", 1.0],
+	"container_rust": [[142, 84, 66], 0.75, "ribs", 0.3],
+	"container_rust_edge": [[150, 96, 72], 0.75, "", 1.0],
+	"container_rust_seam": [[116, 70, 56], 0.75, "", 1.0],
+	"container_rust_rod": [[186, 178, 162], 0.6, "", 1.0],
+	"container_brown": [[132, 90, 58], 0.75, "ribs", 0.3],
+	"container_brown_edge": [[136, 94, 62], 0.75, "", 1.0],
+	"container_brown_seam": [[108, 74, 50], 0.75, "", 1.0],
+	"container_brown_rod": [[110, 78, 54], 0.6, "", 1.0],
+	"container_casting": [[62, 56, 52], 0.7, "", 1.0],
+	"patch_primer": [[214, 214, 210], 0.8, "", 1.0],
+	"lock_red": [[196, 54, 48], 0.5, "", 1.0],
+	"tarp": [[166, 170, 176], 0.85, "", 1.0],
+	"cabin_white": [[226, 226, 220], 0.7, "", 1.0],
+	"plywood": [[196, 152, 98], 0.85, "", 1.0],
+	"wood_dark": [[92, 66, 52], 0.85, "", 1.0],
+	"trailer_white": [[232, 232, 228], 0.45, "", 1.0],
+	"trailer_skirt": [[150, 152, 150], 0.6, "", 1.0],
 	"container_tan_edge": [[196, 174, 126], 0.75, "", 1.0],
 	"fence_red": [[158, 66, 58], 0.8, "mesh", 0.16],
 	"fence_green": [[62, 112, 86], 0.8, "slats", 0.09],
@@ -186,7 +226,7 @@ const PAINTS := {
 	"vent_curb": [[176, 178, 176], 0.6, "", 1.0],
 	"vent_metal": [[170, 172, 172], 0.45, "", 1.0],
 	"vent_ball": [[176, 180, 184], 0.45, "ribs", 0.16],
-	"corrugated": [[204, 208, 206], 0.6, "ribs", 0.14],
+	"corrugated": [[212, 208, 198], 0.6, "ribs", 0.14],
 	"roof_white": [[236, 233, 224], 0.85, "membrane", 8.0],
 	"roof_dark": [[112, 110, 100], 0.92, "membrane", 8.0],
 	"roof_tan": [[190, 172, 142], 0.92, "membrane", 8.0],
@@ -197,10 +237,7 @@ const PAINTS := {
 	"paint_blue": [[52, 92, 150], 0.85, "", 1.0],
 	"interior_floor": [[60, 58, 54], 0.4, "", 1.0],
 	"tote": [[230, 230, 226], 0.7, "", 1.0],
-	"rental_white": [[238, 238, 234], 0.5, "", 1.0],
-	"rental_stripe": [[198, 72, 48], 0.55, "", 1.0],
-	"rental_inside": [[150, 134, 112], 0.8, "", 1.0],
-	"tyre": [[26, 26, 28], 0.9, "", 1.0],
+	"underbody": [[26, 26, 28], 0.9, "", 1.0],
 	"barrel": [[104, 76, 54], 0.75, "", 1.0],
 	"wood": [[126, 108, 84], 0.85, "", 1.0],
 }
@@ -214,6 +251,7 @@ var _surfs: Dictionary = {}
 var _materials: Dictionary = {}
 var _textures: Dictionary = {}
 var _walk_faces := PackedVector3Array()
+var _lot_footprint := PackedVector2Array()
 var _problems: Array[String] = []
 
 
@@ -353,7 +391,7 @@ func _keep_local_land(triangles: Array) -> void:
 			var p := corner - origin_world
 			var w := p.dot(axis_w)
 			var u := p.dot(axis_u)
-			if w > -45.0 and w < 125.0 and u > -45.0 and u < 160.0:
+			if w > -45.0 and w < 125.0 and u > -75.0 and u < 160.0:
 				near = true
 		if near:
 			_land.append(triangle)
@@ -741,11 +779,11 @@ func _canopy(u0: float, u1: float, fascia: String, outer: float) -> void:
 
 ## Rain run-off hanging from y1 down to y0, and the darker foot of a wall.
 func _grime_top(f: Face, s0: float, s1: float, y0: float, y1: float, d: float = 0.008, mat: String = "grime") -> void:
-	_art(f, mat, s0, s1, y0, y1, d, Rect2(0.0, 0.0, (s1 - s0) / 11.0, 1.0), "glow")
+	_art(f, mat, s0, s1, y0, y1, d, Rect2(s0 / GRIME_TILE_M, 0.0, (s1 - s0) / GRIME_TILE_M, 1.0), "overlay")
 
 
 func _grime_foot(f: Face, s0: float, s1: float, y0: float, y1: float, d: float = 0.008, mat: String = "grime") -> void:
-	_art(f, mat, s0, s1, y0, y1, d, Rect2(0.3, 1.0, (s1 - s0) / 11.0, -1.0), "glow")
+	_art(f, mat, s0, s1, y0, y1, d, Rect2(0.3 + s0 / GRIME_TILE_M, 1.0, (s1 - s0) / GRIME_TILE_M, -1.0), "overlay")
 
 
 # ---------------------------------------------------------------- market
@@ -831,7 +869,7 @@ func _sign_roof() -> void:
 	_plane("roof", "sign_sheet", [eave_n, eave_s, top_s, top_n], up_front, front_uv)
 	# Hips carry the same sheet without its lettering, so the two read as one metal.
 	var hip_uv := [Vector2(0, 1), Vector2(0.31, 1), Vector2(0.31, 0), Vector2(0.07, 0)]
-	_plane("roof", "sign_hip_n", [eave_n, back_n, back_top_n, top_n], Vector3(0, 0.4, -1), hip_uv)
+	_plane("roof", "sign_plain", [eave_n, back_n, back_top_n, top_n], Vector3(0, 0.4, -1), hip_uv)
 	_plane("roof", "sign_plain", [eave_s, back_s, back_top_s, top_s], Vector3(0, 0.4, 1), hip_uv)
 	_plane("roof", "trim_red", [back_n, back_s, back_top_s, back_top_n], Vector3.RIGHT)
 	# Standing seams up the slope and across the hips.
@@ -847,7 +885,7 @@ func _sign_roof() -> void:
 		var tw := clampf((w - SIGN_W_EAVE) / (SIGN_W_TOP - SIGN_W_EAVE), 0.0, 1.0)
 		var top_y := lerpf(Y_EAVE, Y_SIGN_TOP, tw)
 		_rib(_p(w, Y_EAVE, SIGN_U0), _p(w, top_y, lerpf(SIGN_U0, SIGN_TOP_U0, tw)), Vector3(0, 0.4, -1).normalized(), Vector3.RIGHT, "sign_hip_rib")
-		_rib(_p(w, Y_EAVE, SIGN_U1), _p(w, top_y, lerpf(SIGN_U1, SIGN_TOP_U1, tw)), Vector3(0, 0.4, 1).normalized(), Vector3.RIGHT)
+		_rib(_p(w, Y_EAVE, SIGN_U1), _p(w, top_y, lerpf(SIGN_U1, SIGN_TOP_U1, tw)), Vector3(0, 0.4, 1).normalized(), Vector3.RIGHT, "sign_hip_rib")
 		w += HIP_RIB_PITCH_M
 	# Faded terracotta cap along the top of the slope; its flat top is the aerial's red roof.
 	_box("roof", "trim_red", _p(SIGN_W_TOP - 0.08, Y_SIGN_TOP - 0.02, SIGN_TOP_U0 - 0.08), _p(SIGN_W_BACK + 0.04, Y_SIGN_CAP, SIGN_TOP_U1 + 0.08), 4)
@@ -863,8 +901,8 @@ func _sign_roof() -> void:
 	_art(cap, "sign_led", 14.3, 18.5, Y_SIGN_TOP - 0.02, Y_SIGN_CAP + 0.1, 0.05, Rect2(0.0, 0.0, 1.0, 0.25))
 	_oval(cap, 13.55, Y_SIGN_CAP - 0.04, 0.36, 0.2)
 	for u_lamp: float in [12.1, 19.6]:
-		_box("glow", "frame_grey", _p(SIGN_W_TOP - 0.3, Y_SIGN_TOP + 0.04, u_lamp - 0.19), _p(SIGN_W_TOP - 0.1, Y_SIGN_CAP + 0.06, u_lamp + 0.19))
-		_box("glow", "lamp", _p(SIGN_W_TOP - 0.31, Y_SIGN_TOP + 0.08, u_lamp - 0.15), _p(SIGN_W_TOP - 0.3, Y_SIGN_CAP + 0.03, u_lamp + 0.15))
+		_box("overlay", "frame_grey", _p(SIGN_W_TOP - 0.3, Y_SIGN_TOP + 0.04, u_lamp - 0.19), _p(SIGN_W_TOP - 0.1, Y_SIGN_CAP + 0.06, u_lamp + 0.19))
+		_box("overlay", "lamp", _p(SIGN_W_TOP - 0.31, Y_SIGN_TOP + 0.08, u_lamp - 0.15), _p(SIGN_W_TOP - 0.3, Y_SIGN_CAP + 0.03, u_lamp + 0.15))
 
 
 func _rib(a: Vector3, b: Vector3, out: Vector3, across: Vector3, mat: String = "sign_rib") -> void:
@@ -1031,12 +1069,44 @@ func _winery_patio() -> void:
 		_barrel(spot.x, spot.y)
 	for spot: Vector2 in [Vector2(52.9, 119.3), Vector2(55.3, 118.6)]:
 		_picnic_table(spot.x, spot.y)
-	# Coral shade sail slung from the canopy to a mast.
-	var a := _p(45.4, 7.02, SSE_CANOPY_U)
-	var b := _p(55.2, 7.12, SSE_CANOPY_U)
-	var c := _p(50.6, 6.2, 120.8)
-	_s("trim", "sail").add([a, b, c], Vector3.UP)
-	_cyl("detail", "frame_grey", _p(50.6, land_y(50.6, 120.9) - 0.1, 120.9), 0.04, 6.2 - land_y(50.6, 120.9) + 0.2, 6)
+	_shade_sail()
+
+
+## Coral shade sail: peak tied to the fascia, wings tied off to two flag poles (ref 13).
+func _shade_sail() -> void:
+	var peak := _p(49.2, 6.98, SSE_CANOPY_U + 0.05)
+	var left := _p(46.7, 6.32, 119.5)
+	var right := _p(54.0, 6.36, 120.1)
+	var rows := 5
+	var cols := 8
+	var grid: Array = []
+	for j in rows + 1:
+		var t := float(j) / rows
+		var row: Array = []
+		for i in cols + 1:
+			var s := float(i) / cols
+			var p: Vector3 = peak.lerp(left, t).lerp(peak.lerp(right, t), s)
+			row.append(p + Vector3.DOWN * (0.62 * sin(PI * s) * pow(t, 1.3) + 0.1 * sin(PI * t)))
+		grid.append(row)
+	var sail := _s("trim", "sail")
+	for j in rows:
+		for i in cols:
+			var a: Vector3 = grid[j][i]
+			var b: Vector3 = grid[j][i + 1]
+			var c: Vector3 = grid[j + 1][i + 1]
+			var d: Vector3 = grid[j + 1][i]
+			var up := (c - a).cross(d - b).normalized()
+			if up.y < 0.0:
+				up = -up
+			if j == 0:
+				sail.add_smooth([a, c, d], [up, up, up], up)
+			else:
+				sail.add_smooth([a, b, c, d], [up, up, up, up], up)
+	var ties := [[peak, _p(49.2, Y_SSE_FASCIA_LOW + 0.05, SSE_CANOPY_U)], [left, _p(45.7, 6.5, 120.4)], [right, _p(55.6, 6.55, 120.9)], [right, _p(59.9, 6.9, SSE_CANOPY_U - 0.2)]]
+	for tie: Array in ties:
+		_strut("frame_black", tie[0], tie[1], 0.008)
+	for pole: Vector2 in [Vector2(45.7, 120.4), Vector2(55.6, 120.9)]:
+		_cyl("detail", "frame_grey", _p(pole.x, land_y(pole.x, pole.y) - 0.1, pole.y), 0.03, 7.5 - land_y(pole.x, pole.y), 6)
 
 
 func _barrel(w: float, u: float) -> void:
@@ -1096,7 +1166,7 @@ func _build_ene_north() -> void:
 	var roll := Rect2(28.5, Y_FOOT, 4.3, g + 3.65 - Y_FOOT)
 	var door := Rect2(26.8, Y_FOOT, 1.1, g + 2.1 - Y_FOOT)
 	_wall(tall, "grey", 0.0, U_E, Y_FOOT, Y_BAND_LOW + 0.1, [roll, door])
-	_rollup(tall, "grey", roll.position.x, roll.end.x, roll.position.y, roll.end.y, "rollup_grey", "grey_frame")
+	_rollup(tall, "grey", roll.position.x, roll.end.x, roll.position.y, roll.end.y, "rollup_grey", "rollup_frame")
 	_door(tall, "grey", "door_black", door.position.x, door.end.x, door.position.y, door.end.y, "grey_frame")
 	for u: float in [3.3, 6.9, 10.2, 13.7, 17.1]:
 		_fb("trim", "grey", tall, u - 0.15, u + 0.15, Y_FOOT, Y_BAND_LOW, 0.0, 0.1)
@@ -1167,7 +1237,7 @@ func _build_nnw() -> void:
 	var g := land_y(81.0, -0.4)
 	var roll := Rect2(79.65, Y_FOOT, 3.55, g + 3.65 - Y_FOOT)
 	_wall(f, "grey", W_D, W_E, Y_FOOT, Y_BAND_LOW + 0.1, [roll])
-	_rollup(f, "grey", roll.position.x, roll.end.x, roll.position.y, roll.end.y, "rollup_grey", "grey_frame")
+	_rollup(f, "grey", roll.position.x, roll.end.x, roll.position.y, roll.end.y, "rollup_grey", "rollup_frame")
 	_fb("trim", "grey", f, 72.4, 72.7, Y_FOOT, Y_BAND_LOW, 0.0, 0.1)
 	_fb("trim", "grey", f, 76.1, 76.4, Y_FOOT, Y_BAND_LOW, 0.0, 0.1)
 	var band_face := Face.new(_p(0, 0, 0), Vector3.RIGHT, Vector3.FORWARD)
@@ -1197,9 +1267,6 @@ func _build_roof_gear() -> void:
 	# Rooftop units on the main block (ref 18, May 2026 aerial).
 	for spot: Vector2 in [Vector2(10.5, 13.0), Vector2(11.0, 16.2), Vector2(10.6, 19.8), Vector2(16.8, 11.6), Vector2(15.2, 21.8), Vector2(21.0, 5.6)]:
 		_rooftop_unit(spot.x, spot.y, Y_T2 - CAP_DROP)
-	# Small things that stop the white strips looking empty from above.
-	for spot: Vector3 in [Vector3(13.0, Y_T2 - CAP_DROP, 58.0), Vector3(18.0, Y_T2 - CAP_DROP, 84.0), Vector3(38.0, Y_T2 - CAP_DROP, 32.0), Vector3(55.0, Y_D - CAP_DROP, 24.0), Vector3(50.0, Y_D - CAP_DROP, 72.0), Vector3(61.0, Y_D - CAP_DROP, 104.0)]:
-		_box("detail", "frame_grey", _p(spot.x - 0.5, spot.y, spot.z - 0.5), _p(spot.x + 0.5, spot.y + 0.42, spot.z + 0.5))
 	# The dark roof court behind the low ENE block (May 2026 aerial).
 	_quad("trim", "roof_dark", _p(72.5, Y_F - CAP_DROP + 0.02, 44.0), _p(79.5, Y_F - CAP_DROP + 0.02, 44.0), _p(79.5, Y_F - CAP_DROP + 0.02, 57.0), _p(72.5, Y_F - CAP_DROP + 0.02, 57.0), Vector3.UP)
 
@@ -1211,9 +1278,15 @@ func _rooftop_unit(w: float, u: float, y: float) -> void:
 
 
 ## Large ventilator on a short curb, its ribbed ball tapering to a cap (refs 05, 18).
-func _turbine(w: float, y: float, u: float) -> void:
-	_lathe("detail", "vent_curb", _p(w, y, u), [Vector2(0.42, 0.0), Vector2(0.34, 0.1), Vector2(0.32, 0.5)], 14)
-	_lathe("detail", "vent_ball", _p(w, y + 0.5, u), [Vector2(0.34, 0.0), Vector2(0.5, 0.18), Vector2(0.54, 0.36), Vector2(0.46, 0.56), Vector2(0.14, 0.72), Vector2(0.0, 0.74)], 16)
+func _turbine(w: float, y: float, u: float, size: float) -> void:
+	var curb: Array = []
+	for p: Vector2 in [Vector2(0.46, 0.0), Vector2(0.37, 0.11), Vector2(0.35, 0.54)]:
+		curb.append(p * size)
+	var ball: Array = []
+	for p: Vector2 in [Vector2(0.37, 0.0), Vector2(0.55, 0.2), Vector2(0.6, 0.4), Vector2(0.51, 0.62), Vector2(0.15, 0.8), Vector2(0.0, 0.82)]:
+		ball.append(p * size)
+	_lathe("detail", "vent_curb", _p(w, y, u), curb, 14)
+	_lathe("detail", "vent_ball", _p(w, y + 0.54 * size, u), ball, 16)
 
 
 # ---------------------------------------------------------------- setting
@@ -1221,13 +1294,7 @@ func _turbine(w: float, y: float, u: float) -> void:
 ## Paved lot round the building, the market sidewalk, bollards, stall lines and the
 ## props the photos stand around it.
 func _build_setting() -> void:
-	# Lot: the aerial has no grass between Avenue H, Avenue I, 9th Street and the walls.
-	_drape("setting", "lot", LOT_W, 0.0, LOT_U0, U_S, LOT_LIFT, 4.0)
-	_drape("setting", "lot", 0.0, LOT_E, LOT_U0, 0.0, LOT_LIFT, 4.0)
-	_drape("setting", "lot", 68.0, LOT_E, 60.0, U_S, LOT_LIFT, 4.0)
-	_drape("setting", "lot", W_F, LOT_E, 36.5, 60.0, LOT_LIFT, 3.0)
-	_drape("setting", "lot", W_E, LOT_E, 0.0, 36.5, LOT_LIFT, 3.0)
-	_drape("setting", "apron", LOT_W, LOT_E, U_S, LOT_U1, LOT_LIFT, 4.0)
+	_build_lot()
 	# Sidewalk before the market, its low curb, and a walkable ramp over the curb.
 	_drape("walk", "sidewalk", SIDEWALK_W, SIGN_W_EAVE, SIDEWALK_U0, SIDEWALK_U1, SIDEWALK_LIFT, 1.5)
 	_drape("walk", "porch_floor", SIGN_W_EAVE, FRONT_W, SIDEWALK_U0, SIDEWALK_U1, SIDEWALK_LIFT, 1.5)
@@ -1256,28 +1323,22 @@ func _build_setting() -> void:
 		_bollard(BOLLARD_W, BOLLARD_FIRST_U + BOLLARD_PITCH_M * k)
 	_north_annex()
 	_red_wall()
-	# The big tan container and wire rack by Avenue H (refs 04, 05, 18).
-	var tan := _container(-14.9, -12.46, -34.3, -22.1, "container_tan")
-	var side := Face.new(_p(-14.9, 0, 0), Vector3.BACK, Vector3.LEFT)
-	_fb("trim", "door_grey", side, -32.6, -30.3, tan + 1.1, tan + 1.85, 0.0, 0.01)
-	_fb("trim", "door_grey", side, -25.6, -24.2, tan + 1.25, tan + 1.95, 0.0, 0.01)
-	_wire_rack(-16.0, -35.3)
-	# Stacked containers and tarps that hide the ENE middle walls (refs 11, 13, 14, 22).
-	for stack: Array in [[62.2, 2, "container_grey"], [67.6, 2, "container_grey"], [73.0, 2, "container_grey"], [78.2, 1, "container_brown"], [84.2, 2, "container_brown"], [90.6, 2, "container_grey"], [97.0, 2, "container_grey"]]:
-		_yard_stack(stack[0], stack[1], stack[2])
-	for tarp: Vector2 in [Vector2(64.7, 67.6), Vector2(70.1, 73.0)]:
-		var yt := land_y(85.2, tarp.x) + LOT_LIFT
-		_box("detail", "tarp", _p(85.1, yt, tarp.x), _p(85.25, yt + 2.3, tarp.y))
+	# The big tan container and wire rack on the pavement well back from the Avenue H edge
+	# line (refs 05, 18; Aug 2025 aerial), with its primer patches and worn stall lines.
+	var tan := _container(-9.4, -6.96, -26.0, -13.8, "container_tan")
+	var side := Face.new(_p(-9.4, 0, 0), Vector3.BACK, Vector3.LEFT)
+	for patch: Rect2 in [Rect2(-22.5, 1.02, 1.4, 0.61), Rect2(-16.7, 1.02, 1.3, 0.51), Rect2(-15.8, 0.64, 0.4, 0.38), Rect2(-14.2, 1.1, 0.25, 0.4)]:
+		_fb("trim", "patch_primer", side, patch.position.x, patch.end.x, tan + patch.position.y, tan + patch.end.y, 0.0, 0.012)
+	_grime_top(side, -26.0, -13.8, tan + 1.2, tan + 2.42, 0.014, "grime_rust")
+	_wire_rack(-8.6, -26.95, 1.45)
+	_line("paint_worn", Vector2(-9.45, -24.7), Vector2(-12.2, -23.2), 0.05)
+	_line("paint_worn", Vector2(-7.2, -29.15), Vector2(-12.6, -26.1), 0.05)
+	_yard()
 	# Green slatted bin enclosure on the 9th Street apron (refs 10, 12).
 	var pen := land_y(5.6, 131.6) + LOT_LIFT - 0.05
 	_box("detail", "fence_green", _p(3.0, pen, 129.6), _p(8.2, pen + 2.45, 133.6), 8)
 	_box("trim", "frame_grey", _p(2.95, pen + 2.42, 129.55), _p(8.25, pen + 2.48, 133.65))
 	_art(Face.new(_p(0, 0, 133.6), Vector3.RIGHT, Vector3.BACK), "sign_atlas", 4.2, 6.2, pen + 1.05, pen + 2.2, 0.02, Rect2(0.3125, 0.6875, 0.125, 0.15625))
-	# Rental van and cargo trailers on the apron (refs 10, 12); plain, no brand marks.
-	_rental_van(20.6, 121.0)
-	_rental_trailer(31.8, 121.6)
-	_rental_trailer(36.6, 121.3)
-	_rental_trailer(41.4, 121.8)
 	# Worn stall lines along the whole Avenue H front (refs 06, 09, 26), yellow ramp pads.
 	var stall := 0
 	var along := -3.0
@@ -1306,21 +1367,21 @@ func _north_annex() -> void:
 	_plane("detail", "corrugated", [_p(w0, low, u0), _p(w0, low, u1), _p(w0, high, u1)], Vector3.LEFT)
 	_plane("detail", "corrugated", [_p(w1, low, u0), _p(w1, low, u1), _p(w1, high, u1)], Vector3.RIGHT)
 	_plane("roof", "roof_annex", [_p(w0, low, u0), _p(w1, low, u0), _p(w1, high, u1), _p(w0, high, u1)], Vector3.UP)
-	# Rust-edged eave round the roof (ref 18).
-	_box("trim", "rust", _p(w0 - 0.22, low - 0.02, u0 - 0.22), _p(w1 + 0.22, low + 0.07, u0))
-	_plane("trim", "rust", [_p(w0 - 0.22, low - 0.02, u0 - 0.22), _p(w0 - 0.22, high - 0.02, u1), _p(w0 - 0.22, high + 0.07, u1), _p(w0 - 0.22, low + 0.07, u0 - 0.22)], Vector3.LEFT)
-	for spot: Vector2 in [Vector2(5.2, -3.1), Vector2(9.6, -5.6), Vector2(18.4, -2.6), Vector2(25.8, -5.2), Vector2(33.0, -3.6), Vector2(38.4, -6.0), Vector2(43.2, -3.2)]:
+	# Sheet-metal eave round the roof (ref 18).
+	_box("trim", "coping_grey", _p(w0 - 0.22, low - 0.02, u0 - 0.22), _p(w1 + 0.22, low + 0.07, u0))
+	_plane("trim", "coping_grey", [_p(w0 - 0.22, low - 0.02, u0 - 0.22), _p(w0 - 0.22, high - 0.02, u1), _p(w0 - 0.22, high + 0.07, u1), _p(w0 - 0.22, low + 0.07, u0 - 0.22)], Vector3.LEFT)
+	for spot: Vector3 in [Vector3(41.4, -3.6, 1.0), Vector3(31.3, -5.6, 1.0), Vector3(27.4, -3.0, 1.3), Vector3(16.3, -5.2, 1.0), Vector3(14.0, -2.8, 0.75), Vector3(5.2, -5.0, 1.0), Vector3(3.6, -2.6, 0.75)]:
 		var t := (spot.y - u0) / (u1 - u0)
-		_turbine(spot.x, lerpf(low, high, t) - 0.04, spot.y)
+		_turbine(spot.x, lerpf(low, high, t) - 0.04, spot.y, spot.z)
 	# Its wall lamp (ref 18).
-	_box("glow", "lamp", _p(w0 - 0.3, 6.1, -3.6), _p(w0 - 0.1, 6.32, -3.2))
+	_box("overlay", "lamp", _p(w0 - 0.3, 6.1, -3.6), _p(w0 - 0.1, 6.32, -3.2))
 
 
 ## Rust-red containers, the slatted fence and the small red shed that run north from
 ## the market along the OSM wall line (refs 06, 07).
 func _red_wall() -> void:
 	var front := -2.46
-	_container(front, -0.02, -25.5, -19.4, "container_red")
+	_container(front, -0.02, -24.9, -19.4, "container_red")
 	_container(front, -0.02, -19.4, -13.3, "container_red")
 	_container(front, -0.02, -13.3, -7.2, "container_red")
 	# Slatted fence on steel posts.
@@ -1348,100 +1409,303 @@ func _container(w0: float, w1: float, u0: float, u1: float, mat: String) -> floa
 	_box("trim", edge, _p(w0 - 0.05, y0, u1 - 0.12), _p(w0, y1, u1), 2)
 	_box("trim", edge, _p(w0 - 0.05, y1 - 0.14, u0), _p(w0, y1, u1), 2)
 	_box("trim", edge, _p(w0 - 0.05, y0, u0), _p(w0, y0 + 0.16, u1), 2)
+	# Fork pockets in the bottom rail, a metre or so apart at the middle of the long side.
+	if u1 - u0 > 8.0:
+		for pocket: float in [-1.2, 0.85]:
+			var mid := (u0 + u1) * 0.5 + pocket
+			_box("trim", "container_casting", _p(w0 - 0.052, y0 + 0.02, mid), _p(w0 - 0.05, y0 + 0.14, mid + 0.36), 2)
 	return y0
 
 
-## A cargo trailer parked nose-in, its rear doors open on a dark box (refs 10, 12).
-func _rental_trailer(w: float, u: float) -> void:
+## Lot and apron, cut from the land triangles themselves and lifted by LOT_LIFT: they
+## follow the land exactly, stop at Building 202 and pass under the roads and street
+## paint, which keep showing.
+func _build_lot() -> void:
+	# North of the market the pavement is the darker, cracked asphalt of refs 05 and 18.
+	var north := PackedVector2Array([Vector2(LOT_EDGE_N, LOT_N)])
+	north.append_array(PackedVector2Array(B202_EDGE))
+	north.append_array(PackedVector2Array([Vector2(LOT_E, B202_EDGE[-1].y), Vector2(LOT_E, 0.0), Vector2(0.0, 0.0), Vector2(0.0, LOT_SPLIT_U), Vector2(_lot_edge(LOT_SPLIT_U), LOT_SPLIT_U)]))
+	_cover("lot_north", north)
+	_cover("lot", PackedVector2Array([Vector2(_lot_edge(LOT_SPLIT_U), LOT_SPLIT_U), Vector2(0.0, LOT_SPLIT_U), Vector2(0.0, U_S), Vector2(_lot_edge(U_S), U_S)]))
+	_cover("lot", PackedVector2Array([Vector2(W_E, 0.0), Vector2(LOT_E, 0.0), Vector2(LOT_E, U_E), Vector2(W_E, U_E)]))
+	_cover("lot", PackedVector2Array([Vector2(W_F, U_E), Vector2(LOT_E, U_E), Vector2(LOT_E, U_F), Vector2(W_F, U_F)]))
+	_cover("lot", PackedVector2Array([Vector2(71.98, U_F), Vector2(LOT_E, U_F), Vector2(LOT_E, U_S), Vector2(68.23, U_S), Vector2(68.23, 94.41), Vector2(65.12, 94.41), Vector2(65.12, 80.165), Vector2(67.9, 80.165), Vector2(67.9, 70.66), Vector2(71.98, 70.66)]))
+	_cover("apron", PackedVector2Array([Vector2(_lot_edge(U_S), U_S), Vector2(LOT_E, U_S), Vector2(LOT_E, LOT_U1), Vector2(LOT_EDGE_S, LOT_U1)]))
+
+
+func _lot_edge(u: float) -> float:
+	return lerpf(LOT_EDGE_N, LOT_EDGE_S, (u - LOT_N) / (LOT_U1 - LOT_N))
+
+
+## The land inside a (w, u) outline, as lot surface. Fails if the land does not cover it.
+func _cover(mat: String, outline: PackedVector2Array) -> void:
+	var covered := 0.0
+	for triangle: Array in _land:
+		var corners: Array[Vector3] = []
+		var flat := PackedVector2Array()
+		for corner: Vector3 in triangle:
+			var p := corner - origin_world
+			corners.append(Vector3(p.dot(axis_w), corner.y, p.dot(axis_u)))
+			flat.append(Vector2(corners[-1].x, corners[-1].z))
+		for piece: PackedVector2Array in Geometry2D.intersect_polygons(flat, outline):
+			var ids := Geometry2D.triangulate_polygon(piece)
+			for i in range(0, ids.size(), 3):
+				var points: Array = []
+				for k in 3:
+					var q := piece[ids[i + k]]
+					points.append(_p(q.x, _land_plane(corners, q) + LOT_LIFT, q.y))
+				var a: Vector3 = points[0]
+				var b: Vector3 = points[1]
+				var c: Vector3 = points[2]
+				var area := absf((b - a).cross(c - a).y) * 0.5
+				if area < 0.0005:
+					continue
+				covered += area
+				_plane("lot", mat, points, Vector3.UP)
+				for point: Vector3 in points:
+					_lot_footprint.append(_world(point.x, point.z))
+	if absf(covered - _area(outline)) > 1.0:
+		_problems.append("B201 lot covers %.1f of %.1f m2." % [covered, _area(outline)])
+
+
+func _land_plane(c: Array[Vector3], q: Vector2) -> float:
+	var n := (c[1] - c[0]).cross(c[2] - c[0])
+	return c[0].y - (n.x * (q.x - c[0].x) + n.z * (q.y - c[0].z)) / n.y
+
+
+func _area(outline: PackedVector2Array) -> float:
+	var sum := 0.0
+	for i in outline.size():
+		var a := outline[i]
+		var b := outline[(i + 1) % outline.size()]
+		sum += a.x * b.y - b.x * a.y
+	return absf(sum) * 0.5
+
+
+## The containers, tarps and odds and ends that hide the ENE middle walls (Sep 2025
+## refs 14, 22; Aug 2025 aerial). Door numbers are plain plates; nothing is copied.
+func _yard() -> void:
+	var tops := {}
+	for row: Array in YARD_LOW:
+		var u0: float = row[0]
+		var length: float = row[1]
+		var y := land_y(YARD_FACE_W - length * 0.5, u0 + 1.22) + LOT_LIFT - 0.02
+		_shipping(YARD_FACE_W, u0, y, length, row[2], row[3])
+		tops[u0] = y + CONTAINER_TALL + 0.01
+	for row: Array in YARD_HIGH:
+		_shipping(row[4], row[0], tops[row[0]], row[1], row[2], row[3])
+	# A flat-ended grey box over the "3" stack (ref 14), and its door numbers.
+	var blank_u := 65.3
+	_box("detail", "container_grey", _p(YARD_UPPER_W - 11.2, tops[blank_u], blank_u), _p(YARD_UPPER_W, tops[blank_u] + CONTAINER_TALL, blank_u + CONTAINER_WIDE))
+	var blank := Face.new(_p(YARD_UPPER_W, 0, 0), Vector3.BACK, Vector3.RIGHT)
+	_fb("trim", "container_grey_edge", blank, blank_u, blank_u + CONTAINER_WIDE, tops[blank_u], tops[blank_u] + CONTAINER_TALL, 0.0, 0.02)
+	_door_number(blank, blank_u + 0.5, tops[blank_u] + 1.15, 2, 0.022)
+	var face := Face.new(_p(YARD_FACE_W, 0, 0), Vector3.BACK, Vector3.RIGHT)
+	_door_number(face, blank_u + 0.825, tops[blank_u] - 1.05, 3, 0.03)
+	var upper_door := Face.new(_p(YARD_UPPER_W, 0, 0), Vector3.BACK, Vector3.RIGHT)
+	_door_number(upper_door, 60.25 + 2.1, tops[60.25] + 0.65, 4, 0.03)
+	# Rust stack's long north side: a plain stencil on each tier (refs 14, 22).
+	var north := Face.new(_p(0, 0, 79.7), Vector3.RIGHT, Vector3.FORWARD)
+	for y: float in [tops[79.7] - CONTAINER_TALL, tops[79.7]]:
+		_art(north, "sign_atlas", YARD_FACE_W - 1.15, YARD_FACE_W - 0.72, y + 0.42, y + 2.25, 0.015, Rect2(0.75, 0.75, 0.03125, 0.25))
+	# Tarps on a wire between the stacks.
+	var ground := land_y(YARD_FACE_W, 66.0) + LOT_LIFT
+	_tarp(YARD_FACE_W - 0.1, 62.72, 65.28, ground, 2.3)
+	_tarp(YARD_FACE_W - 0.1, 67.76, 71.72, ground, 2.3)
+	# White site cabin behind the tarp, with its wall air conditioner (ref 14).
+	var cabin_y := land_y(76.0, 69.7) + LOT_LIFT
+	_box("detail", "cabin_white", _p(73.0, cabin_y, 67.9), _p(80.6, cabin_y + 3.5, 71.6))
+	_box("trim", "band_plain", _p(72.9, cabin_y + 3.5, 67.8), _p(80.7, cabin_y + 3.58, 71.7))
+	_box("trim", "frame_white", _p(80.6, cabin_y + 2.72, 70.3), _p(80.95, cabin_y + 3.12, 70.95), 1)
+	# Deck and bent conduit on the single rust box (ref 14).
+	var deck_y: float = tops[74.2]
+	_box("detail", "wood", _p(YARD_FACE_W - 5.9, deck_y, 74.25), _p(YARD_FACE_W - 0.1, deck_y + 0.14, 76.6))
+	for pipe: Array in [[80.6, 75.2, 2.2], [81.8, 75.6, 1.8], [83.0, 75.0, 2.5]]:
+		_bent_pipe(pipe[0], deck_y + 0.14, pipe[1], pipe[2])
+	_travel_trailer(82.6, 77.75)
+	var pallet_y := land_y(83.0, 78.0) + LOT_LIFT
+	for bar: Rect2 in [Rect2(81.6, 76.5, 3.0, 0.12), Rect2(81.6, 79.3, 3.0, 0.12), Rect2(81.6, 76.5, 0.12, 2.9), Rect2(84.48, 76.5, 0.12, 2.9), Rect2(83.0, 76.5, 0.12, 2.9)]:
+		_box("trim", "plywood", _p(bar.position.x, pallet_y, bar.position.y), _p(bar.end.x, pallet_y + 0.11, bar.end.y), 4)
+	_quad("trim", "plywood", _p(81.6, pallet_y + 0.06, 76.5), _p(84.6, pallet_y + 0.06, 76.5), _p(84.6, pallet_y + 0.06, 79.42), _p(81.6, pallet_y + 0.06, 79.42), Vector3.UP)
+	# Yellow tray on the "17" box and boards leaning on its long side (ref 22).
+	var tray: float = tops[85.0]
+	_box("detail", "yellow", _p(YARD_FACE_W - 5.0, tray, 85.2), _p(YARD_FACE_W - 0.6, tray + 0.42, 87.2))
+	var lean_y := land_y(80.0, 84.6) + LOT_LIFT
+	for board: Vector2 in [Vector2(79.0, 81.2), Vector2(80.3, 83.1)]:
+		_plane("trim", "wood_dark", [_p(board.x, lean_y, 84.3), _p(board.y, lean_y, 84.3), _p(board.y, lean_y + 1.1, 84.98), _p(board.x, lean_y + 1.1, 84.98)], Vector3(0, 0.5, -1))
+	# Dish on its mast and a lamp on the top corner (ref 14).
+	var mast_y: float = tops[60.25] + CONTAINER_TALL
+	_cyl("trim", "frame_grey", _p(YARD_UPPER_W - 4.0, mast_y, 61.6), 0.03, 1.15, 6)
+	_lathe("trim", "frame_white", _p(YARD_UPPER_W - 4.0, mast_y + 1.0, 61.6), [Vector2(0.0, 0.0), Vector2(0.2, 0.05), Vector2(0.34, 0.14)], 12)
+	_box("trim", "frame_white", _p(YARD_UPPER_W, mast_y - 0.34, 60.1), _p(YARD_UPPER_W + 0.14, mast_y - 0.16, 60.42))
+
+
+## One shipping container with its doors facing Avenue I. number 0 has no plate.
+func _shipping(face_w: float, u0: float, y0: float, length: float, paint: String, number: int) -> void:
+	var u1 := u0 + CONTAINER_WIDE
+	var top := y0 + CONTAINER_TALL
+	var mid := (u0 + u1) * 0.5
+	var edge := paint + "_edge"
+	var rod := paint + "_rod"
+	var seam := paint + "_seam"
+	_box("detail", paint, _p(face_w - length, y0, u0), _p(face_w, top, u1), 2)
+	# Solid door end, with posts, rails and the raised bands of the leaves.
+	var f := Face.new(_p(face_w, 0, 0), Vector3.BACK, Vector3.RIGHT)
+	_fb("detail", edge, f, u0, u1, y0, top, 0.0, 0.015)
+	_fb("trim", edge, f, u0, u0 + 0.11, y0, top, 0.015, 0.06)
+	_fb("trim", edge, f, u1 - 0.11, u1, y0, top, 0.015, 0.06)
+	_fb("trim", edge, f, u0 + 0.11, u1 - 0.11, top - 0.16, top, 0.015, 0.05)
+	_fb("trim", edge, f, u0 + 0.11, u1 - 0.11, y0, y0 + 0.2, 0.015, 0.05)
+	_fb("trim", "container_casting", f, mid - 0.01, mid + 0.01, y0 + 0.2, top - 0.16, 0.015, 0.02)
+	for band in 4:
+		var yb := y0 + 0.5 + band * 0.5
+		_fb("trim", seam, f, u0 + 0.16, mid - 0.04, yb, yb + 0.05, 0.015, 0.018)
+		_fb("trim", seam, f, mid + 0.04, u1 - 0.16, yb, yb + 0.05, 0.015, 0.018)
+	# Four lock rods with their keepers and handles.
+	for offset: float in [-0.62, -0.17, 0.17, 0.62]:
+		var s := mid + offset
+		_fb("trim", rod, f, s - 0.018, s + 0.018, y0 + 0.12, top - 0.1, 0.03, 0.06)
+		_fb("trim", rod, f, s - 0.05, s + 0.05, y0 + 0.1, y0 + 0.2, 0.03, 0.065)
+		_fb("trim", rod, f, s - 0.05, s + 0.05, top - 0.2, top - 0.1, 0.03, 0.065)
+		var towards := 0.32 if offset < 0.0 else -0.32
+		_fb("trim", rod, f, minf(s, s + towards), maxf(s, s + towards), y0 + 0.92, y0 + 0.96, 0.06, 0.075)
+	for corner: Vector2 in [Vector2(u0, y0), Vector2(u1 - 0.14, y0), Vector2(u0, top - 0.1), Vector2(u1 - 0.14, top - 0.1)]:
+		_fb("trim", seam, f, corner.x, corner.x + 0.14, corner.y, corner.y + 0.1, 0.03, 0.062)
+	if number != 0:
+		_door_number(f, mid - 0.395, y0 + 1.9, number, 0.03)
+	if number >= 15:
+		_art(f, "sign_atlas", u0 + 0.28, u0 + 0.56, y0 + 0.5, y0 + 0.92, 0.021, Rect2(0.84375, 0.75, 0.03125, 0.09375))
+		_art(f, "sign_atlas", mid - 0.58, mid - 0.2, y0 + 1.05, y0 + 1.65, 0.021, Rect2(0.78125, 0.75, 0.0625, 0.125))
+	elif paint == "container_grey" and number != 0:
+		_fb("trim", "lock_red", f, mid - 0.2, mid + 0.2, y0 + 0.86, y0 + 0.94, 0.08, 0.095)
+	_grime_top(f, u0 + 0.12, u1 - 0.12, y0 + 0.9, top - 0.17, 0.052, "grime_rust" if paint == "container_rust" else "grime_light")
+	var north := Face.new(_p(0, 0, u0), Vector3.RIGHT, Vector3.FORWARD)
+	_grime_top(north, face_w - length, face_w, y0 + 0.6, top - 0.1, 0.008, "grime_rust" if paint == "container_rust" else "grime_light")
+
+
+func _door_number(f: Face, s: float, y: float, number: int, d: float) -> void:
+	var cell := float(DOOR_NUMBERS[number])
+	_art(f, "sign_atlas", s - 0.17, s + 0.17, y - 0.17, y + 0.17, d, Rect2(0.4375 + cell * 0.03125, 0.75, 0.03125, 0.0625))
+
+
+## A plastic tarp strung between stacks: bellied, its corners pulled in (refs 14, 22).
+func _tarp(w: float, u0: float, u1: float, y0: float, height: float) -> void:
+	var across := 12
+	var up := 4
+	var grid: Array = []
+	for j in up + 1:
+		var t := float(j) / up
+		var row: Array = []
+		for i in across + 1:
+			var s := float(i) / across
+			var belly := sin(PI * s) * sin(PI * t)
+			var inset := 0.05 * cos(PI * t) * cos(PI * t)
+			var arch := 0.05 * sin(PI * s) * t
+			row.append(_p(w + 0.08 * belly + 0.008 * sin(s * 26.0 + t * 2.5), y0 + height * t + arch, lerpf(u0 + inset, u1 - inset, s)))
+		grid.append(row)
+	var sheet := _s("detail", "tarp")
+	for j in up:
+		for i in across:
+			var a: Vector3 = grid[j][i]
+			var b: Vector3 = grid[j][i + 1]
+			var c: Vector3 = grid[j + 1][i + 1]
+			var d: Vector3 = grid[j + 1][i]
+			sheet.add_smooth([a, b, c, d], [_tarp_normal(grid, i, j), _tarp_normal(grid, i + 1, j), _tarp_normal(grid, i + 1, j + 1), _tarp_normal(grid, i, j + 1)], Vector3.RIGHT)
+	for i in across:
+		_strut("frame_black", grid[up][i], grid[up][i + 1], 0.012)
+		_strut("frame_black", grid[0][i], grid[0][i + 1], 0.012)
+		if i % 2 == 1:
+			_strut("frame_black", grid[up][i], (grid[up][i] as Vector3) + Vector3(0.0, 0.09, 0.0), 0.006)
+	for j in up:
+		_strut("frame_black", grid[j][0], grid[j + 1][0], 0.012)
+		_strut("frame_black", grid[j][across], grid[j + 1][across], 0.012)
+
+
+func _tarp_normal(grid: Array, i: int, j: int) -> Vector3:
+	var row: Array = grid[j]
+	var along: Vector3 = (row[mini(i + 1, row.size() - 1)] as Vector3) - (row[maxi(i - 1, 0)] as Vector3)
+	var rise: Vector3 = (grid[mini(j + 1, grid.size() - 1)][i] as Vector3) - (grid[maxi(j - 1, 0)][i] as Vector3)
+	var n := along.cross(rise).normalized()
+	return n if n.x > 0.0 else -n
+
+
+## A length of bent conduit standing on the deck (ref 14).
+func _bent_pipe(w: float, y: float, u: float, height: float) -> void:
+	var points: Array[Vector3] = []
+	for k in 7:
+		var t := float(k) / 6.0
+		points.append(_p(w + 0.5 * t * t, y + height * sin(t * PI * 0.55), u + 0.12 * sin(t * 3.0)))
+	for k in 6:
+		_strut("frame_grey", points[k], points[k + 1], 0.018)
+
+
+## A small white travel trailer, nose to the road, in the gap between stacks (ref 14).
+func _travel_trailer(w: float, u: float) -> void:
 	var y := land_y(w, u) + LOT_LIFT
-	var half := 1.08
-	var length := 4.4
-	var floor_y := y + 0.56
-	var top := y + 2.42
-	_box("detail", "rental_white", _p(w - half, floor_y, u - length), _p(w + half, top - 0.1, u), 8)
-	_box("trim", "rental_white", _p(w - half + 0.08, top - 0.1, u - length + 0.08), _p(w + half - 0.08, top, u - 0.08), 4)
-	_quad("detail", "rental_inside", _p(w - half + 0.1, floor_y + 0.08, u + 0.005), _p(w + half - 0.1, floor_y + 0.08, u + 0.005), _p(w + half - 0.1, top - 0.18, u + 0.005), _p(w - half + 0.1, top - 0.18, u + 0.005), Vector3.BACK)
-	for rail: float in [0.5, 1.0]:
-		_box("trim", "wood", _p(w - half + 0.1, floor_y + rail, u + 0.005), _p(w + half - 0.1, floor_y + rail + 0.09, u + 0.02))
-	for sign_w: float in [-1.0, 1.0]:
-		var rim := w + sign_w * (half - 0.05)
-		_box("trim", "rental_white", _p(rim - 0.05, floor_y, u - 0.02), _p(rim + 0.05, top - 0.1, u + 0.03))
-		_box("trim", "rental_stripe", _p(w + sign_w * half - 0.012, floor_y + 0.42, u - length + 0.5), _p(w + sign_w * half + 0.012, floor_y + 1.02, u - 0.7))
-		_wheel(w + sign_w * (half - 0.14), y, u - length * 0.56)
-	# Dark underside between the wheels, down to the ground.
-	_box("detail", "tyre", _p(w - 0.75, y, u - length + 0.3), _p(w + 0.75, floor_y, u - 0.25))
-	_strut("frame_black", _p(w, y + 0.5, u - length), _p(w, y + 0.44, u - length - 1.4), 0.05)
-
-
-## A box van parked nose-out (refs 10, 12): a white box over a low cab.
-func _rental_van(w: float, u: float) -> void:
-	var y := land_y(w, u) + LOT_LIFT
-	var half := 1.15
-	var box_top := y + 3.25
-	var box_low := y + 0.95
-	_box("detail", "rental_white", _p(w - half, box_low, u - 5.2), _p(w + half, box_top, u))
-	_box("detail", "rental_white", _p(w - half + 0.1, y + 2.1, u), _p(w + half - 0.1, box_top - 0.08, u + 0.75))
-	_box("detail", "rental_stripe", _p(w - half - 0.012, box_low + 0.02, u + 0.02), _p(w + half + 0.012, box_low + 0.34, u - 5.2))
-	# Cab.
-	_box("detail", "rental_white", _p(w - 1.02, y + 0.6, u), _p(w + 1.02, y + 1.28, u + 1.95))
-	_plane("detail", "door_glass", [_p(w - 0.96, y + 1.28, u + 1.72), _p(w + 0.96, y + 1.28, u + 1.72), _p(w + 0.9, y + 2.1, u + 0.98), _p(w - 0.9, y + 2.1, u + 0.98)], Vector3(0, 0.6, 1))
-	for sign_w: float in [-1.0, 1.0]:
-		_plane("detail", "door_glass", [_p(w + sign_w * 1.02, y + 1.28, u + 1.72), _p(w + sign_w * 1.02, y + 1.28, u), _p(w + sign_w * 1.0, y + 2.1, u), _p(w + sign_w * 0.96, y + 2.1, u + 0.98)], Vector3(sign_w, 0, 0))
-		_wheel(w + sign_w * (half - 0.14), y, u + 1.15)
-		_wheel(w + sign_w * (half - 0.14), y, u - 3.7)
-	_box("detail", "rental_white", _p(w - 0.9, y + 2.08, u), _p(w + 0.9, y + 2.12, u + 1.0))
-	_box("trim", "frame_black", _p(w - 1.03, y + 0.42, u + 1.95), _p(w + 1.03, y + 0.72, u + 2.02))
-	_box("detail", "tyre", _p(w - 0.9, y, u - 5.0), _p(w + 0.9, y + 0.95, u + 1.0))
-
-
-## A wheel on a horizontal axle along w.
-func _wheel(w: float, y: float, u: float) -> void:
-	var radius := 0.36
-	var width := 0.13
-	var sides := 16
-	var c := y + radius
-	for k in sides:
-		var t0 := TAU * float(k) / sides
-		var t1 := TAU * float(k + 1) / sides
-		var a := Vector2(cos(t0), sin(t0)) * radius
-		var b := Vector2(cos(t1), sin(t1)) * radius
-		var out := Vector3(0, sin((t0 + t1) * 0.5), cos((t0 + t1) * 0.5))
-		_quad("detail", "tyre", _p(w - width, c + a.y, u + a.x), _p(w + width, c + a.y, u + a.x), _p(w + width, c + b.y, u + b.x), _p(w - width, c + b.y, u + b.x), out)
-		for end: float in [-1.0, 1.0]:
-			_s("detail", "tyre").add([_p(w + end * width, c, u), _p(w + end * width, c + a.y, u + a.x), _p(w + end * width, c + b.y, u + b.x)], Vector3(end, 0, 0))
-
-
-## Containers stacked end-on to Avenue I, their doors and lock bars facing the road.
-func _yard_stack(u0: float, tiers: int, mat: String) -> void:
-	var w0 := 73.2
-	var w1 := 85.3
-	var y0 := land_y(w1, u0) + LOT_LIFT - 0.02
-	for tier in tiers:
-		var y := y0 + tier * 2.6
-		_box("detail", mat, _p(w0, y, u0), _p(w1, y + 2.58, u0 + 2.44))
-		_box("trim", mat + "_edge", _p(w1, y, u0), _p(w1 + 0.05, y + 2.58, u0 + 0.1), 1)
-		_box("trim", mat + "_edge", _p(w1, y, u0 + 2.34), _p(w1 + 0.05, y + 2.58, u0 + 2.44), 1)
-		_box("trim", mat + "_edge", _p(w1, y + 2.44, u0), _p(w1 + 0.05, y + 2.58, u0 + 2.44), 1)
-		_box("trim", mat + "_edge", _p(w1, y, u0), _p(w1 + 0.05, y + 0.14, u0 + 2.44), 1)
-		for bar: float in [0.72, 1.72]:
-			_box("trim", "frame_grey", _p(w1 + 0.04, y + 0.14, u0 + bar), _p(w1 + 0.07, y + 2.44, u0 + bar + 0.05), 1)
+	var half := 1.04
+	var length := 5.2
+	var floor_y := y + 0.52
+	var top := y + 2.5
+	var section := [Vector2(-half, floor_y), Vector2(-half, top - 0.4), Vector2(-half + 0.14, top - 0.14), Vector2(-half + 0.4, top), Vector2(half - 0.4, top), Vector2(half - 0.14, top - 0.14), Vector2(half, top - 0.4), Vector2(half, floor_y)]
+	var cap: Array = []
+	for i in section.size():
+		var a: Vector2 = section[i]
+		cap.append(_p(w, a.y, u + a.x))
+		if i + 1 < section.size():
+			var b: Vector2 = section[i + 1]
+			var mid := (a + b) * 0.5
+			_plane("detail", "trailer_white", [_p(w - length, a.y, u + a.x), _p(w, a.y, u + a.x), _p(w, b.y, u + b.x), _p(w - length, b.y, u + b.x)], Vector3(0, mid.y - (floor_y + top) * 0.5, mid.x))
+	_plane("detail", "trailer_white", cap, Vector3.RIGHT)
+	var nose := Face.new(_p(w, 0, 0), Vector3.BACK, Vector3.RIGHT)
+	_fb("trim", "glass_dark", nose, u - 0.82, u + 0.82, floor_y + 0.86, floor_y + 1.42, 0.0, 0.015)
+	_fb("trim", "trailer_skirt", nose, u - half, u + half, floor_y, floor_y + 0.42, 0.0, 0.015)
+	_box("detail", "underbody", _p(w - length + 0.3, y, u - 0.8), _p(w - 0.2, floor_y, u + 0.8))
+	_strut("trailer_skirt", _p(w, floor_y + 0.1, u), _p(w + 1.25, floor_y - 0.02, u), 0.05)
+	_box("trim", "trailer_skirt", _p(w + 0.25, floor_y + 0.04, u - 0.32), _p(w + 0.8, floor_y + 0.38, u + 0.32))
+	_cyl("trim", "frame_black", _p(w + 1.15, y, u), 0.03, floor_y - y, 6)
 
 
 ## The white wire rack by the tan container (ref 05).
-func _wire_rack(w: float, u: float) -> void:
+func _wire_rack(w: float, u: float, turn: float) -> void:
 	var y := land_y(w, u) + LOT_LIFT
-	for corner: Vector2 in [Vector2(-0.5, -0.9), Vector2(0.5, -0.9), Vector2(-0.5, 0.9), Vector2(0.5, 0.9)]:
-		_cyl("detail", "frame_white", _p(w + corner.x, y, u + corner.y), 0.02, 1.9, 6)
+	var along := Vector3(sin(turn), 0.0, cos(turn))
+	var across := Vector3(cos(turn), 0.0, -sin(turn))
+	var corners: Array[Vector3] = []
+	for corner: Vector2 in [Vector2(-0.45, -0.9), Vector2(0.45, -0.9), Vector2(0.45, 0.9), Vector2(-0.45, 0.9)]:
+		corners.append(_p(w, y, u) + across * corner.x + along * corner.y)
+		_cyl("detail", "frame_white", corners[-1], 0.016, 1.85, 6)
 	for shelf in 4:
-		_box("trim", "frame_white", _p(w - 0.5, y + 0.3 + shelf * 0.5, u - 0.9), _p(w + 0.5, y + 0.33 + shelf * 0.5, u + 0.9))
+		var lift := Vector3.UP * (0.28 + shelf * 0.5)
+		for i in 4:
+			_strut("frame_white", corners[i] + lift, corners[(i + 1) % 4] + lift, 0.012)
+		for wire in 7:
+			var t := (float(wire) + 1.0) / 8.0
+			_strut("frame_white", corners[0].lerp(corners[3], t) + lift, corners[1].lerp(corners[2], t) + lift, 0.005)
 
 
 func _stripe(mat: String, w0: float, w1: float, u0: float, u1: float) -> void:
-	_drape("setting", mat, w0, w1, u0, u1, LOT_LIFT + 0.012, 2.0)
+	_drape("setting", mat, w0, w1, u0, u1, PAINT_LIFT, 2.0)
 
 
+## A painted line from a to b, both (w, u), on the land.
+func _line(mat: String, a: Vector2, b: Vector2, half: float) -> void:
+	var across := Vector2(b.y - a.y, a.x - b.x).normalized() * half
+	var pieces := ceili(a.distance_to(b) / 1.5)
+	for i in pieces:
+		var p := a.lerp(b, float(i) / pieces)
+		var q := a.lerp(b, float(i + 1) / pieces)
+		var corners: Array = []
+		for c: Vector2 in [p - across, q - across, q + across, p + across]:
+			corners.append(_p(c.x, land_y(c.x, c.y) + PAINT_LIFT, c.y))
+		_plane("setting", mat, corners, Vector3.UP)
+
+
+## A walkable face, wound clockwise from above so the stock player meets its top.
 func _walk_tri(a: Vector3, b: Vector3, c: Vector3) -> void:
-	_walk_faces.append_array(PackedVector3Array([a, c, b]))
+	if (b - a).cross(c - a).y > 0.0:
+		_walk_faces.append_array(PackedVector3Array([a, c, b]))
+	else:
+		_walk_faces.append_array(PackedVector3Array([a, b, c]))
 
 
 ## Concrete-filled guard post with a domed head and a dark band (refs 06, 25).
@@ -1481,15 +1745,15 @@ func _material(key: String) -> Material:
 	if PAINTS.has(key):
 		var paint: Array = PAINTS[key]
 		var rgb: Array = paint[0]
-		m.albedo_color = Color8(int(rgb[0]), int(rgb[1]), int(rgb[2]))
-		# The stucco tile darkens what it multiplies; the bleached white must stay white.
-		if key == "white":
-			m.albedo_color = Color(1.1, 1.1, 1.08)
+		m.albedo_color = Color(float(rgb[0]) / 255.0, float(rgb[1]) / 255.0, float(rgb[2]) / 255.0)
 		m.roughness = float(paint[1])
 		var tile := str(paint[2])
 		if not tile.is_empty():
 			if tile in ["ribs", "dots", "mesh", "slats", "speckle"]:
 				m.albedo_texture = _pattern_texture(tile)
+				if tile == "ribs":
+					m.normal_enabled = true
+					m.normal_texture = _relief_texture("ribs")
 			else:
 				m.albedo_texture = _texture(TEX + {"stucco": "stucco_paint.png", "membrane": "roof_membrane.png"}[tile])
 			m.uv1_scale = Vector3(1.0 / float(paint[3]), 1.0 / float(paint[3]), 1.0)
@@ -1497,18 +1761,19 @@ func _material(key: String) -> Material:
 	else:
 		match key:
 			"glass":
-				m.albedo_color = Color(0.075, 0.068, 0.07, 0.9)
+				# A warm body under a plain dielectric sheen: the sky's blue brings it to neutral.
+				m.albedo_color = Color(0.29, 0.255, 0.235, 0.9)
 				m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-				m.roughness = 0.34
-				m.metallic_specular = 0.3
+				m.roughness = 0.16
+				m.metallic_specular = 0.5
 			"interior":
 				m.albedo_texture = _texture(TEX + "market_interior.png")
 				m.albedo_color = Color(0.42, 0.42, 0.42)
 				m.roughness = 0.9
 			# Local ground: pale worn lot, broad apron, plain sidewalk concrete.
-			"lot":
+			"lot", "lot_north":
 				m.albedo_texture = _texture(TEX + "lot_worn.png")
-				m.albedo_color = Color(0.83, 0.82, 0.8)
+				m.albedo_color = Color(0.83, 0.82, 0.8) if key == "lot" else Color(0.66, 0.65, 0.635)
 				m.uv1_scale = Vector3(1.0 / 9.0, 1.0 / 9.0, 1.0)
 				m.roughness = 1.0
 			"apron":
@@ -1518,17 +1783,15 @@ func _material(key: String) -> Material:
 				m.roughness = 0.95
 			"sidewalk", "porch_floor":
 				m.albedo_texture = _texture(TEX + "apron_concrete.png")
-				m.albedo_color = Color(0.62, 0.6, 0.545) if key == "sidewalk" else Color(1.1, 1.06, 0.99)
+				m.albedo_color = Color(0.62, 0.6, 0.545) if key == "sidewalk" else Color(0.82, 0.79, 0.73)
 				m.uv1_scale = Vector3(1.0 / 6.0, 1.0 / 6.0, 1.0)
 				m.roughness = 0.92
 			"paint_worn":
 				m.albedo_color = Color(0.86, 0.85, 0.8, 0.55)
 				m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 				m.roughness = 0.9
-			"sign_sheet", "sign_plain", "sign_hip_n":
-				m.albedo_texture = _texture(TEX + ("sign_plain" if key == "sign_hip_n" else key) + ".png")
-				# The north hip never takes the sun: lifted so it reads as the same metal.
-				m.albedo_color = Color(1.3, 1.3, 1.28) if key == "sign_hip_n" else Color.WHITE
+			"sign_sheet", "sign_plain":
+				m.albedo_texture = _texture(TEX + key + ".png")
 				m.roughness = 0.72
 				m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
 			"sign_atlas", "sign_led", "sign_bright":
@@ -1546,9 +1809,9 @@ func _material(key: String) -> Material:
 			"banner":
 				m.albedo_texture = _texture(TEX + "banner.png")
 				m.roughness = 0.9
-			"grime", "grime_light":
+			"grime", "grime_light", "grime_rust":
 				m.albedo_texture = _texture(TEX + "grime_strip.png")
-				m.albedo_color = Color(1.0, 1.0, 1.0, 1.0 if key == "grime" else 0.4)
+				m.albedo_color = {"grime": Color(0.29, 0.26, 0.22, 1.0), "grime_light": Color(0.29, 0.26, 0.22, 0.45), "grime_rust": Color(0.4, 0.2, 0.11, 0.85)}[key]
 				m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 				m.roughness = 1.0
 			"posters":
@@ -1556,7 +1819,7 @@ func _material(key: String) -> Material:
 				m.albedo_color = Color(0.5, 0.48, 0.46)
 				m.roughness = 0.5
 			"sail":
-				m.albedo_color = Color8(196, 92, 66)
+				m.albedo_color = Color8(158, 72, 52)
 				m.cull_mode = BaseMaterial3D.CULL_DISABLED
 				m.roughness = 0.85
 			"lamp":
@@ -1566,8 +1829,10 @@ func _material(key: String) -> Material:
 				m.emission_energy_multiplier = 0.5
 			"rollup_grey", "rollup_white":
 				m.albedo_color = Color8(150, 154, 154) if key == "rollup_grey" else Color8(232, 230, 222)
-				m.albedo_texture = _slat_texture()
-				m.uv1_scale = Vector3(1.0, 1.0 / 0.32, 1.0)
+				m.albedo_texture = _pattern_texture("slat_rows")
+				m.normal_enabled = true
+				m.normal_texture = _relief_texture("slat_rows")
+				m.uv1_scale = Vector3(1.0, 1.0 / SLAT_PITCH_M, 1.0)
 				m.roughness = 0.6
 			_:
 				m.albedo_color = Color(1, 0, 1)
@@ -1580,7 +1845,7 @@ func _material(key: String) -> Material:
 func _pattern_texture(kind: String) -> ImageTexture:
 	if _textures.has(kind):
 		return _textures[kind]
-	var size := 64 if kind == "speckle" else 16
+	var size := 64 if kind == "speckle" else 32 if kind in ["ribs", "slat_rows"] else 16
 	var img := Image.create(size, size, false, Image.FORMAT_RGB8)
 	var noise := RandomNumberGenerator.new()
 	noise.seed = 201
@@ -1589,7 +1854,9 @@ func _pattern_texture(kind: String) -> ImageTexture:
 			var g := 1.0
 			match kind:
 				"ribs":
-					g = 0.72 + 0.28 * absf(sin(PI * float(x) / 16.0))
+					g = lerpf(0.9, 1.0, _sheet_height(x))
+				"slat_rows":
+					g = lerpf(0.66, 1.0, _sheet_height(y))
 				"dots":
 					g = 0.28 if Vector2(x - 8, y - 8).length() < 4.6 else 1.0
 				"mesh":
@@ -1605,19 +1872,35 @@ func _pattern_texture(kind: String) -> ImageTexture:
 	return texture
 
 
-## Horizontal slats of a roll-up door, as a small repeating strip.
-func _slat_texture() -> ImageTexture:
-	var img := Image.create(4, 32, false, Image.FORMAT_RGB8)
+## Sheet profile over 32 pixels, the same either side of a valley: crest 1, valley 0.
+func _sheet_height(x: int) -> float:
+	var c := absf(float(posmod(x, 32)) - 15.5)
+	return clampf((c - 4.0) / 5.0, 0.0, 1.0)
+
+
+## The sheet's relief as a normal map, so the light picks it out at any hour.
+func _relief_texture(kind: String) -> ImageTexture:
+	var key := kind + "_relief"
+	if _textures.has(key):
+		return _textures[key]
+	var img := Image.create(32, 32, false, Image.FORMAT_RGB8)
 	for y in 32:
-		var g := 0.62 if y < 3 else (0.82 if y < 6 else 1.0)
-		for x in 4:
-			img.set_pixel(x, y, Color(g, g, g))
-	img.generate_mipmaps()
-	return ImageTexture.create_from_image(img)
+		for x in 32:
+			var n := Vector3(0.0, 0.0, 1.0)
+			if kind == "ribs":
+				n.x = (_sheet_height(x - 1) - _sheet_height(x + 1)) * 1.0
+			else:
+				n.y = (_sheet_height(y + 1) - _sheet_height(y - 1)) * 1.6
+			n = n.normalized()
+			img.set_pixel(x, y, Color(n.x * 0.5 + 0.5, n.y * 0.5 + 0.5, n.z * 0.5 + 0.5))
+	img.generate_mipmaps(true)
+	var texture := ImageTexture.create_from_image(img)
+	_textures[key] = texture
+	return texture
 
 
 func _commit() -> void:
-	var names := {"wall": "WallMesh", "roof": "RoofMesh", "detail": "DetailMesh", "trim": "TrimMesh", "glow": "GlowMesh", "setting": "SettingMesh", "walk": "SidewalkMesh"}
+	var names := {"wall": "WallMesh", "roof": "RoofMesh", "detail": "DetailMesh", "trim": "TrimMesh", "overlay": "OverlayMesh", "setting": "SettingMesh", "walk": "SidewalkMesh", "lot": "LotMesh"}
 	var bodies := {"wall": "WallContact", "roof": "RoofContact", "detail": "DetailContact"}
 	var sidewalk := Node3D.new()
 	sidewalk.name = "MarketSidewalk"
@@ -1649,10 +1932,21 @@ func _commit() -> void:
 		inst.name = names[role]
 		inst.mesh = mesh
 		inst.layers = 2 if role == "wall" else 1
-		inst.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF if role in ["setting", "walk", "glow"] else GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+		inst.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF if role in ["setting", "walk", "overlay", "lot"] else GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 		_tag(inst, "building_wall" if role == "wall" else "none", ROOF_KEY if role == "roof" else WALL_KEY)
 		if role == "walk":
 			sidewalk.add_child(inst)
+		elif role == "lot":
+			# Ground, not building: the replacement moves it to the world's ground parent.
+			var lot := Node3D.new()
+			lot.name = LOT_NODE
+			lot.set_meta("feature_kind", "major_area")
+			lot.set_meta("source_keys", [SOURCE_KEY])
+			lot.set_meta("derived_object_key", "site:" + SOURCE_KEY + ":lot")
+			lot.set_meta(VisibleGround.FOOTPRINT_META, _lot_footprint)
+			lot.set_meta(VisibleGround.LIFT_META, LOT_LIFT)
+			lot.add_child(inst)
+			add_child(lot)
 		else:
 			add_child(inst)
 		if bodies.has(role):
@@ -1678,7 +1972,7 @@ func _commit() -> void:
 func _contact(body_name: String, faces: PackedVector3Array, receiver: String, key: String, spray: bool) -> StaticBody3D:
 	var body := StaticBody3D.new()
 	body.name = body_name
-	body.collision_layer = 1 | 4
+	body.collision_layer = PHYSICS_WORLD_SOLID | PHYSICS_SPRAY_SURFACE
 	body.collision_mask = 0
 	_tag(body, receiver, key)
 	if spray:

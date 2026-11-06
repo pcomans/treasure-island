@@ -546,6 +546,16 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 		_free_unconsumed_plans(rollback_plans)
 		chunk_root.free()
 		return {"ok": false, "code": "b201_market_unconsumed", "message": "Building 201 source pair was not fully consumed.", "source_keys": ["w34313545"]}
+	var b201_lot := B201_MARKET_LIVE_REPLACEMENT.take_lot(b201_market_plan)
+	if not b201_lot.is_empty():
+		var lot_proxy := Node3D.new()
+		lot_proxy.name = "%s__b201_market_lot" % str(chunk.chunk_id)
+		lot_proxy.add_child(b201_lot.node)
+		lot_proxy.set_meta("target_parent", category_parents["ground"])
+		chunk_root.add_child(lot_proxy)
+		report.mesh_instances += int(b201_lot.mesh_instances)
+		report.surfaces += int(b201_lot.surfaces)
+		report.triangles += int(b201_lot.triangles)
 	var chapel_consumed := NAVY_CHAPEL_187_LIVE_REPLACEMENT.plan_was_fully_consumed(chapel_plan)
 	var d5_1308_consumed := D5_1308_GATEVIEW_LIVE_REPLACEMENT.plan_was_fully_consumed(d5_1308_plan)
 	var d5_1394_consumed := D5_1394_GATEVIEW_LIVE_REPLACEMENT.plan_was_fully_consumed(d5_1394_plan)

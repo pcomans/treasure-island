@@ -24283,3 +24283,25 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: Rectifying the May 2026 aerial into the building's own frame, then fitting each photo's camera against the footprint, settled the tiers, the monitor strip and the sign roof's size before any render; the first engine run already overlaid the photos within a few pixels. A Node rasterizer on a headless mesh dump (no world load) caught missing materials, floating ribs and back faces between engine runs, and a Python replay of the fit's wall rays found the one bad sample, a bollard cap in a no-collision role. The review's numeric targets and stacked crops turned "clean toy" into a fixable list, and two renders plus a linear estimate were enough to land the ground tints.
 - What did not work well: Baseline r01 stopped at m11 because the fitted camera doubled as the player start, so the later baseline views were lost. I set the first lot and SSE apron from a guess and they came back almost white in r04; I should have applied the gain estimate before that run. I split the first roof-lettering, poster and interior work into the first render when the photos already showed dark daytime glass, so the review had to ask for it. One seconds-long headless parse ran outside the slot lock.
 - What the team should change next time: Keep player_xz separate from camera_xyz in every matched-view plan, since a fitted camera can land on a porch. Check the setting in the very first render, not only the building: bare grass under a good model made it read as a toy. Rectify the aerial before reading a brief's estimates; it corrected the market's width from 15 m to 19 m and showed which walls the OSM outline really follows.
+
+### b201-visual-review, round 2
+
+(Relayed by the coordinator; added by b201-art.)
+
+- **Worked:** photo-over-render stacks made checking each gap fast.
+- **Didn't:** stacks and pairs left out the two views where the problems sat.
+- **Change:** when something new is added to a side, add a matched view in the same round, and check new props against the road line in the render.
+
+### b201-code-review
+
+(Relayed by the coordinator; added by b201-art.)
+
+- **Worked:** putting wall runs, neighbours and street rows into the building's frame with small scripts found the B202 overlap and confirmed catalog indices.
+- **Didn't:** the fit test ran with street detail off and no spray, so the spray fault and neighbour effects never showed.
+- **Change:** when a study adds overlays or props outside its footprint, include one stock spray case and a neighbour fit in the author's check.
+
+### b201-art, round 3 — 2026-11-06 — review fixes, the yard and the moving-sun rule
+
+- What worked well: Two corners of the tan container on the Aug 2025 aerial gave the camera for refs 05 and 18 in a real traffic lane, and the render then lined up with the photo at once. Cutting the lot from the land triangles made its height exact, so roads and paint sit over it without any margin to tune, and it took far fewer triangles than the 4 m grid. Refs 14 and 22 turned out to be one pano, so one camera placed the whole yard.
+- What did not work well: I had swapped the headings of refs 05 and 18 and left that camera in the far parking strip, then placed the tan container through it, so it landed on the road. I lifted the lot over the service road to hide it, which is why the stepped shape appeared: the reviewers' "stray shape" was a road I had covered. I also let per-face colour lifts stand in for sun on the north hip and the porch.
+- What the team should change next time: Check a fitted camera against where it could really stand, a lane or a sidewalk, before placing anything through it. Don't cover world data to fix a look: show it and ask. Keep every per-face colour choice independent of today's sun.

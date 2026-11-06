@@ -147,13 +147,17 @@
       "content_classification": "active_target_specific_whole_building_replacement",
       "receiver_key": "building:w34313545:wall",
       "recognition_acceptance_authority": "physical_unit_claim_and_independent_acceptance_record",
-      "recognition_acceptance_status": "accepted",
+      "recognition_acceptance_status": "pending_independent_review_of_the_2026-11-06_study",
       "review_status": "pending_independent_review_of_the_2026-11-06_study",
       "review_status_scope": "whole_building_model_replacement_not_yet_reviewed",
       "runtime_adapter_path": "game/scripts/world/facades/b201_market_live_replacement.gd",
       "runtime_asset_paths": [
+        "game/resources/materials/world/d1_current/b201_service_leaf.tres",
+        "game/resources/materials/world/d1_current/shared_dark_glass.tres",
+        "game/resources/materials/world/d1_current/shared_pale_frame.tres",
+        "game/resources/textures/world/b201/",
         "game/scripts/world/facades/b201_market_model.gd",
-        "game/resources/textures/world/b201/"
+        "game/scripts/world/facades/d1_inferred_openings.gd"
       ],
       "runtime_config_path": "game/resources/facades/b201_unphotographed_openings.json",
       "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
@@ -1558,7 +1562,7 @@
       "legacy_adapter_ids": [],
       "protected_scopes": [
         {
-          "reason": "The ENE middle and south walls have no dated photo (stacked containers hide them): they keep their old inferred openings and take only the side's plain paint. Every other run and the roof were rebuilt from dated references in the 2026-11-06 study.",
+          "reason": "The ENE middle and south walls and the NNW wall between the annex and the east block have no dated photo: they keep their old inferred openings (runs 15-26 on the ENE, the door on runs 35-39 on the NNW) and take only the side's plain paint. Every other run and the roof were rebuilt from dated references in the 2026-11-06 study.",
           "receiver_key": "building:w34313545:wall",
           "run_indices": [
             15,
@@ -1572,7 +1576,12 @@
             23,
             24,
             25,
-            26
+            26,
+            35,
+            36,
+            37,
+            38,
+            39
           ]
         }
       ],
