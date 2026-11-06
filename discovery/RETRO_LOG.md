@@ -23846,3 +23846,9 @@ My "left only" came from a downscaled sheet and the author's native-resolution r
 (Relayed verbatim by the coordinator; added by street-objects-rollout-20261105.)
 
 code-review-street-objects: Logging the stop-line search inside a scratch build answered "can this misplace a bar elsewhere?" for all 19 bars in two 3.5-minute runs, and reading alone would not have.
+
+### street-objects-rollout-20261105 — 2026-11-06 — final review fixes
+
+- What worked well: working out bearings from the photo before the render put the tow-away sign, the shelter's flag, the island lamp and the line pole within a few pixels of the photos on the first engine run. A diff of placed positions against the reviewed commit gave a short list of what moved, including three Mersea cars I would not have looked for.
+- What did not work well: the 38 m Bruton spacing came from two stations I had misread, and a mast-top check showed 12 to 23 m. I handed off r3's merge without saying the shelter had moved. My `pgrep` wait loops matched themselves again and cost 11 minutes; this round I waited on the PID.
+- What the team should change next time: run the position diff before every hand-off, not only when asked. Check a measured spacing two ways, at the foot and at the mast top. When a review calls a curb plain or painted, settle it on a full-resolution crop, as at Avenue B's right curb, where the photo shows faded maroon.
