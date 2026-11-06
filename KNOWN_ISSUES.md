@@ -80,6 +80,7 @@ From the reviews of the shoreline, street ground, street objects, parked cars, v
   - Gateview Court (OSM w8916719): the curb ends at the court's corners read as short blocks.
   - The KEEP CLEAR legend at Trade Winds isn't painted.
   - Asphalt tone: photos show paler, sun-bleached roads than the game. Parked as a look pass.
+  - Inferred from `tools/clip_audit.mjs`, not seen in a render: `major_area_amenity` and `major_area_paved` lie 1 mm apart over 10.7 m² at (235.4, 223.8), on the 4th Street lot's south edge, so they could fight on depth there.
 - **Street objects:**
   - Signs stand off their photographed spots at Bayside Drive / Gateview Avenue, Gateview Court / Gateview Avenue and Northpoint Drive / Gateview Avenue.
   - In the matched view at 9th Street / Avenue B the stop sign is 8.3 m away; in the photo it is 4 to 5 m.
@@ -112,6 +113,11 @@ From the reviews of the shoreline, street ground, street objects, parked cars, v
   - Four traced crowns on its west and south edges (c0015, c0016, c0017, c0023) stay unplanted, as they were: their trunks' wells would reach off the paving. The islands would settle them.
   - The trees' species is unresolved. `spreading_broadleaf` stands in, denser and darker than the open yellowing crowns of the Sep 2025 photos.
   - Crowns c0005, c0006 and c0007 are date palms on the May 2026 aerial alone; no dated street photo shows them.
+  - Its trees stand in round mulch discs on open asphalt, where the real ones stand in planted islands, mostly long strips (seen in review, 2026-11-06).
+  - Its asphalt is dark and clean; the real surface is pale and weathered (seen in review, 2026-11-06).
+  - Its stall lines break up past about 50 m, as in the other lots (seen in review, 2026-11-06).
+  - The long side of the 655 building (OSM w34313513) reads blank in the lot views, where the photos show dark glazing (seen in review, 2026-11-06).
+  - Lot trees vary only through `spreading_broadleaf` variants 0 and 1. Variants 2 and 3 are the old wide forms, 12 to 14 m across at the kit's smallest scale against the photos' 6 to 8 m.
   - At its south-east corner the Sep 2025 photo at 351 Avenue H shows the Job Corps sign, its planting, a chain-link fence and the bus shelter about 8 m from the camera. None of the first three is built, and the shelter (OSM n1249019421) stands about 15 m east of that.
 - **Parked cars:** Avenue I's review is held, so its cars are unjudged.
 - **Shoreline:**

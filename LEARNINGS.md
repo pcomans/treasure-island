@@ -1130,6 +1130,10 @@ The same lot's outline followed the aerial's dark edge, but a photo put the arro
 
 The first lot was cut round a road's rounded end cap, and no sheet framed that join, so only the reviewer's raw top view caught it. The aerial's joint was straight. List each place a new surface meets existing ground in the first views file, from above and at gameplay height, and when a new surface counts as road, apply that everywhere the code asks what an edge faces.
 
+## Diff a shared map per surface after adding a rule
+
+The paving-edge wear rules (2026-11-06) named land and two area surfaces and drew a band about 5 m wide. The ground-cover map then gives every drawn cell off the ruled ground the weights of its nearest ruled cell, so the band spread up to 29 m across whatever had no rule of its own, in Voronoi patches. On roofs and yards that never shows, but Cityside's event lawn reads the map: 556 m² of it went tan, in a straight-edged wedge. None of my road-side views framed it and I missed it in the overviews; a per-surface diff of the map showed it at once. After adding a rule to any shared map, tally the changed cells by top surface and distance from the rule's own ground, and shoot one ground view on each protected lawn.
+
 ## Set a tint from two rendered samples
 
 The shoulder's gravel at tint 0.91 rendered 215 and at 0.40 rendered 105, far darker than the ratio predicts, because the renderer's tone curve steepens. Two renders of one material give the curve; fit it, then pick the tint.
