@@ -17,7 +17,7 @@ extends SceneTree
 # ground over it (as automated_route_qa.gd's checkpoints).
 const GROUND_FEATURE_KINDS := ["land_ground", "street_kerb", "street_kerb_support"]
 # 5 m inside the island outline (w26767313) north of the ferry pier, and the
-# walk straight out across it onto the west_ferry_pilot riprap
+# walk straight out across it onto the west segment's riprap
 # (generated/world/shoreline.json). The lane from 12 m out to 20 m in is clear
 # of buildings and street props.
 const START_XZ := Vector2(-108.33, 799.77)
