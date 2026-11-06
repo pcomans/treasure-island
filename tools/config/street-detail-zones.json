@@ -1112,18 +1112,36 @@
      "mix": [
       {
        "prop": "spreading_broadleaf",
-       "share": 2,
+       "share": 3,
        "variants": [0, 0],
        "scale": [0.8, 0.8]
       },
       {
        "prop": "spreading_broadleaf",
-       "share": 1,
+       "share": 3,
+       "variants": [0, 0],
+       "scale": [0.95, 0.95]
+      },
+      {
+       "prop": "spreading_broadleaf",
+       "share": 2,
+       "variants": [0, 0],
+       "scale": [1.1, 1.1]
+      },
+      {
+       "prop": "spreading_broadleaf",
+       "share": 3,
        "variants": [1, 1],
        "scale": [0.8, 0.8]
+      },
+      {
+       "prop": "spreading_broadleaf",
+       "share": 2,
+       "variants": [1, 1],
+       "scale": [0.95, 0.95]
       }
      ],
-     "fit": 0.5,
+     "fit": 0.7,
      "nudge_m": 3,
      "in_lots": true,
      "basis": "production_inference",

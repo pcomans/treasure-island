@@ -3,7 +3,7 @@
  "notes": [
   "Where the ground-cover shader (game/resources/materials/world/ground_cover/ground_cover.gdshader) draws a recipe over a record's own family: tools/lib/ground-cover-map.mjs draws these rules into the world map game/resources/textures/world/ground_cover/cover_map.png (rebuild it with tools/build_ground_cover_map.mjs after the world or this file changes). Coordinates are world metres: +X east, +Z south.",
   "Channels name the recipe families of game/scripts/world/ground_cover.gd: lawn (maintained lawn with some dry patches), straw (dry straw grass), dry_field (dry grass with much bare ground) and bare (bare fill soil with a little dry grass). A rule's weight covers what the rules before it drew (in order), so later rules win.",
-  "within_sources limits a rule to the cells whose top drawn ground is that OSM area; surfaces to the cells whose top drawn ground has that material key (land, areas, the ground-cover overlays or the street ground's planted kerb verges, street_kerb_verge); inside_sources narrows a surfaces rule to that surface where it is drawn inside the outline of those OSM areas; within_xz to a traced polygon whose edge fades over feather_m; near to within full_m of buildings, vehicle roads, lots or street kerbs, fading out by zero_m, the band's width wandering by up to wobble_m; weight scales the rule. Drawn cells off the ruled ground (roads, paths, kerb tops and paint, roofs, lots, and kerb verges no rule drew on) then take the weights of the nearest ruled cell, so an unruled verge matches the ground behind it.",
+  "within_sources limits a rule to the cells whose top drawn ground is that OSM area; surfaces to the cells whose top drawn ground has that material key (land, areas, the ground-cover overlays or the street ground's planted kerb verges, street_kerb_verge); inside_sources narrows a surfaces rule to that surface where it is drawn inside the outline of those OSM areas; within_xz to a traced polygon whose edge fades over feather_m; near to within full_m of buildings, vehicle roads, lots or street kerbs, fading out by zero_m, the band's width wandering by up to wobble_m; weight scales the rule. Drawn cells off the ruled ground (roads, paths, kerb tops and paint, roofs, lots, park lawns and kerb verges no rule drew on) then take the weights of the nearest ruled cell, so an unruled verge matches the ground behind it; no_fill keeps a rule out of that, but for the paving beside its ground, so a band stays a band.",
   "Look anchored to the 2026-05-26 aerial (Wayback release 2026-10-29, Vantor Vivid Advanced, 0.34 m, the late-spring dry fields), with the 2025-08-29 aerial and dated Street View as corroboration. Widths, distances and traced outlines are production inference, not survey data; OSM and the imagery are offset 3-6 m, so traced outlines follow the OSM buildings beside them."
  ],
  "map": {
@@ -183,6 +183,7 @@
     "wobble_m": 1.2
    },
    "weight": 0.35,
+   "no_fill": true,
    "basis": "production_inference",
    "reason": "The housing's grass wears thin for the first few metres beside its roads, lots and kerbs: dry patches in the lawns, a little bare ground in the straw, so the green doesn't run at full strength up to a sharp line. The paving and kerb lines themselves stay as they are.",
    "evidence": "2026-05-26 aerial over r17241151 (May 2026 z19 tiles, 1 m cells by distance from roads, lots and kerb concrete; OSM and the imagery are offset 3-6 m, so the band's width is inference): of the open ground 25 % pale and 40 % green within 1 m, 19 % and 46 % at 2 m, 15 % and 50 % at 3 m, 11 % and 55 % at 5 m."
@@ -198,6 +199,7 @@
     "wobble_m": 1.5
    },
    "weight": 0.6,
+   "no_fill": true,
    "basis": "production_inference",
    "reason": "Outside the housing the dry grass gives way to worn dirt in patches for a few metres beside roads and lots, where the shoulders are driven and walked on. The paving and kerb lines themselves stay as they are.",
    "evidence": "Street View Sep 2025, 14th St (pano ZKVioIPPhmxWGqp_Ao5kMw, heading 250): bare hard dirt for several metres either side of the asphalt, the weeds starting beyond it. 2026-05-26 aerial (May 2026 z19 tiles, 1 m cells by distance from roads, lots and kerb concrete; OSM and the imagery are offset 3-6 m, so the band's width is inference): pale 52 % of the open land within 1 m against about 43 % past 3 m, and on the campus and SFFD areas 41 % within 1 m, 32 % at 2 m and about 20 % by 9 m."

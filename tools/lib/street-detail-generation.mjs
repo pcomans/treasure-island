@@ -272,6 +272,10 @@ const PLAYER_WIDTH_M = 0.7;
 // clearance flood still checks what that shuts in.
 const PROPS_STANDING_TIGHT = Object.freeze(["stock_tank_planter"]);
 const TIGHT_PROP_GAP_M = -0.3;
+// A rigid street-furniture set piece stands at the height under its centre. The most
+// the visible ground may rise into it elsewhere under its plan (m): past this a step
+// runs under it and one end sinks.
+const SET_PIECE_MAX_SINK_M = 0.15;
 const SAFE_ID = /^[a-z0-9_]+$/u;
 
 function osmPointKind(tags) {
@@ -1547,6 +1551,11 @@ export function generateStreetDetail({
       invariant(!planted.problem, `Street detail set piece ${entry.id} cannot rest on the visible ground: ${planted.problem}`);
     }
     const feet = entry.prop === undefined ? undefined : STREET_FURNITURE_FEET[entry.prop];
+    // Props on feet or a pad settle below, and a site structure has its own foundation.
+    if (footprint && !feet && !STREET_FURNITURE_PADS.includes(entry.prop) && STREET_DETAIL_KINDS[entry.kind].layer === "furniture" && entry.kind !== "site_structure") {
+      const sink = settlePad(footprint, xz, normalizedYaw(entry.yaw), groundAt, y + surface.bias_m);
+      invariant(!sink.problem && sink.lift <= SET_PIECE_MAX_SINK_M, `Street detail set piece ${entry.id} sinks into the ground under its plan: ${JSON.stringify(sink)}`);
+    }
     if (feet) {
       const rest = settleOnFeet(feet, xz, normalizedYaw(entry.yaw), y + surface.bias_m, groundAt);
       invariant(!rest.problem, `Street detail set piece ${entry.id} cannot stand on its feet: ${rest.problem}`);

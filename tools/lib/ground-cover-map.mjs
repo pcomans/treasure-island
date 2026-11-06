@@ -19,7 +19,9 @@
 // unruled verge matches the ground behind it, and the texture's filtering and
 // mipmaps never blend a lawn or straw edge toward the record's own family at a
 // road or wall; cells with no generated ground (the shoreline's shoulder, the
-// water) keep none. The map
+// water) keep none. A no_fill rule isn't passed on that way, or a band beside a
+// road would spread across every park lawn and yard nearest it: its weight stays
+// on its own ground and the paving just beside it. The map
 // is drawn from the generated world's records, so it follows the drawn
 // buildings and roads; tools/build_ground_cover_map.mjs writes it, and so does
 // tools/build_godot_world.mjs each time it writes the committed generated/world;
@@ -45,7 +47,10 @@ export const GROUND_COVER_NEAR_KINDS = Object.freeze(["building", "vehicle_road"
 // cell of this ground, and so does a kerb verge no rule draws on.
 export const GROUND_COVER_SURFACES = Object.freeze(["land_ground", "major_area_amenity", "major_area_landuse", "major_area_leisure", "street_kerb_verge", "terrain_riprap", "terrain_sand", "terrain_wetland"]);
 const SAFE_ID = /^[a-z0-9_]+$/u;
-const RULE_FIELDS = Object.freeze(["basis", "channel", "evidence", "feather_m", "id", "inside_sources", "near", "reason", "surfaces", "weight", "within_sources", "within_xz"]);
+const RULE_FIELDS = Object.freeze(["basis", "channel", "evidence", "feather_m", "id", "inside_sources", "near", "no_fill", "reason", "surfaces", "weight", "within_sources", "within_xz"]);
+// How far (m) a no_fill rule's weight reaches over the paving beside its ground: the
+// map's filtering would otherwise fade it out before the pavement edge.
+const NO_FILL_PAVING_REACH_M = 6;
 
 function isFiniteNumber(value) {
   return typeof value === "number" && Number.isFinite(value);
@@ -80,6 +85,7 @@ export function validateGroundCoverConfig(config) {
     // The map is read by every ground-cover family, so each rule names the ground it may draw on.
     invariant(rule.within_sources != null || rule.surfaces != null, `${label} needs within_sources or surfaces`);
     if (rule.weight != null) invariant(isFiniteNumber(rule.weight) && rule.weight > 0 && rule.weight <= 1, `${label} weight must be in (0, 1]`);
+    if (rule.no_fill != null) invariant(rule.no_fill === true, `${label} no_fill can only be true`);
     if (rule.within_sources != null) {
       invariant(Array.isArray(rule.within_sources) && rule.within_sources.length > 0 && rule.within_sources.every((key) => /^[wr]\d+$/u.test(key)), `${label} within_sources must list OSM area keys`);
     }
@@ -423,6 +429,9 @@ export function drawGroundCoverMap(config, world) {
     return footprints.get(key);
   };
   const weights = GROUND_COVER_CHANNELS.map(() => new Float32Array(cells));
+  // The same without the no_fill rules: what a ruled cell passes on to the cells off
+  // the ruled ground.
+  const inherited = GROUND_COVER_CHANNELS.map(() => new Float32Array(cells));
   const drawn = new Uint8Array(cells);
   const summaries = [];
   for (const rule of config.rules) {
@@ -477,6 +486,10 @@ export function drawGroundCoverMap(config, world) {
       if (w <= 0) continue;
       for (const layer of weights) layer[cell] *= 1 - w;
       weights[channel][cell] += w;
+      if (!rule.no_fill) {
+        for (const layer of inherited) layer[cell] *= 1 - w;
+        inherited[channel][cell] += w;
+      }
       drawn[cell] = 1;
       if (w >= 0.5) covered += 1;
     }
@@ -494,7 +507,12 @@ export function drawGroundCoverMap(config, world) {
   const nearest = nearestMaskCell(grid, ruled);
   for (let cell = 0; cell < cells; cell += 1) {
     if (ruled[cell] || top[cell] < 0 || nearest[cell] < 0) continue;
-    for (const layer of weights) layer[cell] = layer[nearest[cell]];
+    const from = nearest[cell];
+    const reach = Math.hypot((cell % grid.width) - (from % grid.width), Math.floor(cell / grid.width) - Math.floor(from / grid.width)) * grid.cell;
+    const paving = nearMasks.vehicle_road[cell] || nearMasks.paved_area[cell] || nearMasks.street_kerb[cell];
+    weights.forEach((layer, channel) => {
+      layer[cell] = (paving && reach <= NO_FILL_PAVING_REACH_M ? layer : inherited[channel])[from];
+    });
   }
   const channels = GROUND_COVER_CHANNELS.length;
   const rgba = new Uint8Array(cells * channels);

@@ -59,12 +59,12 @@
         "timber": false
       },
       "xz": [
-        -95.9,
-        784.3
+        -91.8,
+        791.6
       ],
-      "yaw": 0.513,
-      "reason": "A pair of wedge benches at the edge of the paving south of the landing path, seats toward the path, kept clear of the ferry spawn and its walk to the crossing.",
-      "reference": "ferry-shelter 11-sv-road-sw (83 Treasure Island Rd, Sep 2025): pairs at the far edge of the paving; 17-sv-mar2025-canopy (Mar 2025)"
+      "yaw": -1.012,
+      "reason": "A pair of wedge benches lying on the lawn along its edge with the paving, south of the landing path and beside the lamp, seats toward the paving, kept clear of the ferry spawn and its walk to the crossing.",
+      "reference": "ferry-shelter 11-sv-road-sw (83 Treasure Island Rd, Sep 2025): pairs lying along the lawn edge either side of the lamp; 17-sv-mar2025-canopy (Mar 2025)"
     },
     {
       "id": "plaza_wedges_shore",
