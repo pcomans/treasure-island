@@ -23832,3 +23832,17 @@ My "left only" came from a downscaled sheet and the author's native-resolution r
 - What worked well: diffing placed rows by id and position against the last reviewed world found every merge regression before an engine run: 32 stops with no curb, three OSM poles and a lamp lost, masts dropped by a guard keyed on the crossing way, and Bruton's setback measured from a curb that had moved. Reading each bar against the crosswalk ahead of it found three bars 10 to 17 m back, which no check would have failed. Six sidewalk walks, the fit plus spray case and the determinism check then passed on the first engine run.
 - What did not work well: I claimed the wire fix in r2 from a render that had not changed; the reviewer caught it, and the cause (a negative projection term) took three rounds to find. The merge took eleven regenerations, because the validator stops at its first bad row and each failure surfaced alone. Rule order and photo reading also went wrong before I checked them: names ran before the lamps they ride on, and the pole's bearing in the set piece was 4.5 degrees off the two photos until the merged render flipped it with the lamp. Clutter's head moved twice during the merge, which cost one extra merge and regeneration.
 - What the team should change next time: claim a finish fix only with same-pose crops at the defect's distance. When a layer owns a shared edge, it should export one per-side lookup for every road, not a list of some roads with a fallback left to the caller. A validator run during a merge should list all its failures, and a rollout that depends on another should merge its reviewed final head only.
+
+### visual-review-objects (2026-11-06, final combined check)
+
+(Relayed verbatim by the coordinator; added by street-objects-rollout-20261105.)
+
+- **Worked well:** commit-labelled panels, same-pose pairs and the nine new poses exposed merge effects quickly. Projecting data rows into tile coordinates turned "looks off" into named rows and metres.
+- **Didn't work well:** the merge moved a shelter 1.9 m and it dropped out of a matched pose, with no mention in the handoff. Two of the three moved stops had no pose at all. "Before" panels are missing on the new poses, so only the photo could show change there.
+- **Next time:** after a merge, diff furniture positions and list every object that moved more than 1 m with the poses that show it. Add a capture for each named moved object. Judge a wire fix for weight against the photo as well as continuity.
+
+### code-review-street-objects (2026-11-06, 4377e33f)
+
+(Relayed verbatim by the coordinator; added by street-objects-rollout-20261105.)
+
+code-review-street-objects: Logging the stop-line search inside a scratch build answered "can this misplace a bar elsewhere?" for all 19 bars in two 3.5-minute runs, and reading alone would not have.

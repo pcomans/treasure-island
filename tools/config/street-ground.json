@@ -978,7 +978,7 @@
         "w28353434"
       ],
       "treatment": "village",
-      "evidence": "Google Street View Jul 2023 (contributor) and Nov 2025 at Gateview Avenue: curbs with red corners, STOP legend and stop line, a walk on the west side; OSM sidewalk along part of the west side. Red curb: left, Nov 2025 by 9th Street (heading 163), Mar 2025 at 1304 Avenue B (heading 333, the corner) and Nov 2025 at Gateview Avenue (heading 283, the corner); right, Mar 2025 at 1304 Avenue B, Jul 2023 toward 12th Street (heading 333) and Mar 2025 toward Sturgeon Street (heading 333, faded). Mar 2025 at 148 12th St (heading 238): red on the far (west) curb, south of the junction. Mar 2025 at 1400 Sturgeon St (heading 249): the far (west) curb is pale, cars parked along it, no red; Mar 2025 on the east branch (heading 153): grey curbs.",
+      "evidence": "Google Street View Jul 2023 (contributor) and Nov 2025 at Gateview Avenue: curbs with red corners, STOP legend and stop line, a walk on the west side; OSM sidewalk along part of the west side. Red curb: left, Nov 2025 by 9th Street (heading 163), Mar 2025 at 1304 Avenue B (heading 333, the corner) and Nov 2025 at Gateview Avenue (heading 283, the corner); right, Mar 2025 at 1304 Avenue B, Jul 2023 toward 12th Street (heading 333) and Mar 2025 toward Sturgeon Street (heading 333, faded). Mar 2025 at 148 12th St (heading 238): red on the far (west) curb, south of the junction. Mar 2025 at 1400 Sturgeon St (heading 249): the far (west) curb is pale, cars parked along it, no red; Mar 2025 on the east branch (heading 153): grey curbs. Nov 2025 by 9th Street (heading 163): two transverse crosswalk lines and a STOP legend on the approach.",
       "sides": {
         "w8921273": {
           "left": "walk"
@@ -1445,7 +1445,7 @@
     "n1249336073": "lines",
     "n10057579663": "continental",
     "n10057579696": "lines",
-    "n10057579699": "continental",
+    "n10057579699": "lines",
     "n10057579721": "continental",
     "n10057579913": "lines",
     "n10057579914": "lines",
@@ -1464,7 +1464,14 @@
       "evidence": "Google Street View Mar 2025 at 900 Avenue D (heading 152): two faded transverse bars across Avenue D about 10.7 and 19.4 m ahead of the camera (at 45.8 m along the way), the far one at the mouth of 11th Street; OSM maps no crossing there."
     }
   ],
-  "stops": [],
+  "stops": [
+    {
+      "node": "n65339126",
+      "way": "w8921273",
+      "own_line": false,
+      "evidence": "Google Street View Nov 2025 on Avenue B at 9th Street (heading 163): a STOP legend before two transverse crosswalk lines, the nearer of them the stop line; OSM maps no stop node here."
+    }
+  ],
   "stalls": [
     {
       "way": "w8921331",
@@ -1984,19 +1991,19 @@
           "id": "lamp_island",
           "points_xz": [
             [
-              -362.38,
+              -363.68,
               135.603
             ],
             [
-              -358.904,
+              -360.204,
               133.623
             ],
             [
-              -358.211,
+              -359.511,
               134.839
             ],
             [
-              -361.687,
+              -362.987,
               136.819
             ]
           ]
