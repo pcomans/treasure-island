@@ -40,7 +40,7 @@ const FIRE_TRAINING600_LIVE_REPLACEMENT := preload("res://game/scripts/world/fac
 const FIRE_STATION48_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/fire_station48_live_replacement.gd")
 const D5_1317_GATEVIEW_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/d5_1317_gateview_live_replacement.gd")
 const ISLE_HOUSE_FORM := preload("res://game/scripts/world/facades/isle_house_form.gd")
-const D1_B201_LIVE_ATTACHMENT := preload("res://game/scripts/world/facades/d1_b201_live_attachment.gd")
+const B201_MARKET_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/b201_market_live_replacement.gd")
 const D1_B225_LIVE_ATTACHMENT := preload("res://game/scripts/world/facades/d1_b225_live_attachment.gd")
 const PANEL_HALL_FACADE := preload("res://game/scripts/world/facades/panel_hall_facade.gd")
 const YMCA_ENTRY_SITE := preload("res://game/scripts/world/facades/ymca_entry_site.gd")
@@ -227,12 +227,6 @@ var _generic_roof_material: StandardMaterial3D
 func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 	var chunk_root := Node3D.new()
 	chunk_root.name = str(chunk.chunk_id).validate_node_name()
-	# Claim the target chunk before per-row dispatch so a malformed/missing B201
-	# wall cannot silently fall through to generic construction.
-	var b201_chunk_validation := D1_B201_LIVE_ATTACHMENT.validate_chunk_records(chunk)
-	if not bool(b201_chunk_validation.get("ok", false)):
-		chunk_root.free()
-		return b201_chunk_validation
 	# B225's production attachment is equally exact-target-only. Validate the
 	# complete wall/roof membership before any row from its chunk is staged so a
 	# missing, duplicate, moved, or malformed receiver can never fall back generic.
@@ -263,6 +257,10 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 	if not bool(fire_training600_pair.get("ok", false)):
 		chunk_root.free()
 		return fire_training600_pair
+	var b201_market_pair := B201_MARKET_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(b201_market_pair.get("ok", false)):
+		chunk_root.free()
+		return b201_market_pair
 	var fs48_pair := FIRE_STATION48_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
 	if not bool(fs48_pair.get("ok", false)):
 		chunk_root.free()
@@ -373,6 +371,12 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 		chunk_root.free()
 		return fire_training600_plan
 	rollback_plans.append({"adapter": FIRE_TRAINING600_LIVE_REPLACEMENT, "plan": fire_training600_plan})
+	var b201_market_plan := B201_MARKET_LIVE_REPLACEMENT.build_chunk_plan(b201_market_pair)
+	if not bool(b201_market_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return b201_market_plan
+	rollback_plans.append({"adapter": B201_MARKET_LIVE_REPLACEMENT, "plan": b201_market_plan})
 	var fs48_plan := FIRE_STATION48_LIVE_REPLACEMENT.build_chunk_plan(fs48_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
 	if not bool(fs48_plan.get("ok", false)):
 		_free_unconsumed_plans(rollback_plans)
@@ -513,6 +517,8 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 		var record_result: Dictionary
 		if FIRE_TRAINING600_LIVE_REPLACEMENT.claims_record(record):
 			record_result = FIRE_TRAINING600_LIVE_REPLACEMENT.consume_record(record, fire_training600_plan)
+		elif B201_MARKET_LIVE_REPLACEMENT.claims_record(record):
+			record_result = B201_MARKET_LIVE_REPLACEMENT.consume_record(record, b201_market_plan)
 		else:
 			record_result = _build_record(record, false, chapel_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan, northpoint_1232_plan, northpoint_1241_plan, mariner_1221_plan, northpoint_1240_plan, gateview_1397_plan, bayside_1226_plan)
 		if not record_result.ok:
@@ -536,6 +542,10 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 		_free_unconsumed_plans(rollback_plans)
 		chunk_root.free()
 		return {"ok": false, "code": "fire_training600_unconsumed", "message": "Building 600 source pair was not fully consumed.", "source_keys": ["w34313548"]}
+	if not B201_MARKET_LIVE_REPLACEMENT.plan_was_fully_consumed(b201_market_plan):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return {"ok": false, "code": "b201_market_unconsumed", "message": "Building 201 source pair was not fully consumed.", "source_keys": ["w34313545"]}
 	var chapel_consumed := NAVY_CHAPEL_187_LIVE_REPLACEMENT.plan_was_fully_consumed(chapel_plan)
 	var d5_1308_consumed := D5_1308_GATEVIEW_LIVE_REPLACEMENT.plan_was_fully_consumed(d5_1308_plan)
 	var d5_1394_consumed := D5_1394_GATEVIEW_LIVE_REPLACEMENT.plan_was_fully_consumed(d5_1394_plan)
@@ -755,11 +765,6 @@ func _build_record(record: Dictionary, is_context: bool, chapel_plan: Dictionary
 # Preserve the original source producer and pre-packing channel path unchanged.
 # The exact-pair adapter receives this callable, avoiding a builder preload cycle.
 func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
-	var b201_prepared: Dictionary = {}
-	if not is_context and D1_B201_LIVE_ATTACHMENT.claims_record(record):
-		b201_prepared = D1_B201_LIVE_ATTACHMENT.prepare(record)
-		if not bool(b201_prepared.get("ok", false)):
-			return b201_prepared
 	var b225_prepared: Dictionary = {}
 	if not is_context and D1_B225_LIVE_ATTACHMENT.claims_record(record):
 		b225_prepared = D1_B225_LIVE_ATTACHMENT.prepare(record)
@@ -775,11 +780,7 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 		normals.append(Vector3(float(record.normals[index]), float(record.normals[index + 1]), float(record.normals[index + 2])))
 	for index in range(0, record.uvs.size(), 2):
 		uvs.append(Vector2(float(record.uvs[index]), float(record.uvs[index + 1])))
-	if not b201_prepared.is_empty():
-		uvs = D1_B201_LIVE_ATTACHMENT.host_uvs(record, b201_prepared)
-		if uvs.size() != vertices.size():
-			return {"ok": false, "code": "d1_b201_live_host_uv", "message": "Prepared B201 host UVs did not cover the supplied wall.", "source_keys": record.source_keys}
-	elif not b225_prepared.is_empty():
+	if not b225_prepared.is_empty():
 		uvs = D1_B225_LIVE_ATTACHMENT.host_uvs(record, b225_prepared)
 		if uvs.size() != vertices.size():
 			return {"ok": false, "code": "d1_b225_live_host_uv", "message": "Prepared B225 host UVs did not cover the supplied wall.", "source_keys": record.source_keys}
@@ -852,9 +853,7 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 		placeholder_material = placeholder_material.duplicate() as Material
 		placeholder_material.next_pass = BUILDING_2_HERO_MODEL.frontage_material()
 	var surface_plan: Dictionary
-	if not b201_prepared.is_empty():
-		surface_plan = D1_B201_LIVE_ATTACHMENT.partition_host(record, indices, placeholder_material, b201_prepared)
-	elif not b225_prepared.is_empty():
+	if not b225_prepared.is_empty():
 		surface_plan = D1_B225_LIVE_ATTACHMENT.partition_host(record, indices, placeholder_material, b225_prepared)
 	elif not is_context:
 		surface_plan = ACCEPTED_MATERIAL_RUN_TRIALS.partition(record, indices, placeholder_material)
@@ -885,9 +884,7 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 			footprint.append(Vector2(vertices[index_value].x, vertices[index_value].z))
 		root.set_meta(VisibleGround.FOOTPRINT_META, footprint)
 		root.set_meta(VisibleGround.LIFT_META, float(record.surface_bias_m))
-	if not b201_prepared.is_empty() and surface_plan.has("metadata"):
-		root.set_meta("d1_b201_host_partition", (surface_plan.metadata as Dictionary).duplicate(true))
-	elif not b225_prepared.is_empty() and surface_plan.has("metadata"):
+	if not b225_prepared.is_empty() and surface_plan.has("metadata"):
 		root.set_meta("d1_b225_host_partition", (surface_plan.metadata as Dictionary).duplicate(true))
 	elif surface_plan.has("metadata"):
 		root.set_meta("accepted_material_run_trial", (surface_plan.metadata as Dictionary).duplicate(true))
@@ -968,19 +965,6 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 		mesh_instances += int(b225_result.mesh_instances)
 		surfaces += int(b225_result.surfaces)
 		triangle_count += int(b225_result.triangles)
-	# B201 retains its exact generic wall mesh/collider/spray receiver. Only the
-	# reviewed public runs receive a host-material partition; all added detail is
-	# non-coplanar render-only geometry, claimed and validated fail closed.
-	if not b201_prepared.is_empty():
-		var b201_result := D1_B201_LIVE_ATTACHMENT.build_prepared(record, b201_prepared)
-		if not bool(b201_result.get("ok", false)):
-			root.free()
-			return b201_result
-		root.add_child(b201_result.node as Node3D)
-		root.set_meta("d1_b201_live_attachment", (b201_result.metadata as Dictionary).duplicate(true))
-		mesh_instances += int(b201_result.mesh_instances)
-		surfaces += int(b201_result.surfaces)
-		triangle_count += int(b201_result.triangles)
 	return {
 		"ok": true,
 		"node": root,
