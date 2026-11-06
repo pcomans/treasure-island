@@ -279,6 +279,9 @@ func _apply_web_detail_distances() -> void:
 	# collision inventory, terrain and roads; distant small meshes can disappear.
 	for node in world_root.get_node("PlayableWorld/Buildings").find_children("*", "GeometryInstance3D", true, false):
 		var geometry := node as GeometryInstance3D
+		# The bake's merged meshes hold a building's walls and roofs, not small parts.
+		if geometry.has_meta("baked_merge"):
+			continue
 		var bounds := geometry.get_aabb()
 		var world_size := (geometry.global_transform * bounds).size
 		var longest := maxf(world_size.x, maxf(world_size.y, world_size.z))

@@ -1,6 +1,7 @@
 extends SceneTree
 
 const PREBUILT_WORLD := preload("res://game/scripts/world/prebuilt_world.gd")
+const MERGE_BUILDINGS := preload("res://tools/merge_baked_buildings.gd")
 ## Build the platform static scene from the same validated source generator as native play.
 ## The generated scene is a disposable build product, never a source-of-truth cache.
 var failed := false
@@ -32,6 +33,8 @@ func _run() -> void:
 		return
 	print("SOURCE_WORLD_MS ", world.runtime_evidence.load_duration_msec)
 	print("BAKE_STREET_DETAIL layers_on=", ",".join(PackedStringArray(world.get_street_detail_layers())), " rows=", world.runtime_evidence.street_detail_rows)
+	var merge_started := Time.get_ticks_msec()
+	print("BAKE_MERGE ", MERGE_BUILDINGS.merge(world.buildings), " ms=", Time.get_ticks_msec() - merge_started)
 	var packed := PREBUILT_WORLD.pack_world(world)
 	if packed == null:
 		quit(1)
