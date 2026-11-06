@@ -218,6 +218,8 @@ export const MATERIAL_KEYS = Object.freeze([
   "yard_gravel_pale",
   "yard_pond",
   "yard_sand_pale",
+  "yard_shoulder_band",
+  "yard_shoulder_gravel",
   "yard_soil_dark",
 ]);
 

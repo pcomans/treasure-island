@@ -90,6 +90,8 @@ export const PARK_SURFACE_MATERIALS = Object.freeze({
   yard_concrete: "yard-concrete",
   yard_pond: "yard-pond",
   yard_sand_pale: "yard-sand-pale",
+  yard_shoulder_band: "yard-shoulder-band",
+  yard_shoulder_gravel: "yard-shoulder-gravel",
   yard_soil_dark: "yard-soil-dark",
 });
 const RECORD_KINDS = Object.freeze({
@@ -564,8 +566,8 @@ const LOT_ARROW_WIDTH_M = 1;
 const LOT_SYMBOL_M = 1.5;
 // The shoulder's outer edge wanders, a step at a time, as spread gravel does; its
 // strips run on past a joint with the next edge, so no wedge opens between them.
-const SHOULDER_STEP_M = 2.5;
-const SHOULDER_WANDER_M = 0.3;
+const SHOULDER_STEP_M = 1.25;
+const SHOULDER_WANDER_M = 0.22;
 const SHOULDER_JOIN_M = 1;
 function expandLotPattern(lot) {
   if (lot?.osm_exception === undefined) return lot;

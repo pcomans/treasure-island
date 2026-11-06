@@ -918,7 +918,6 @@
       "opaque": false,
       "receiver_kind": "none",
       "source_keys": [
-        "w1212173434",
         "w1252737732",
         "w26767313",
         "w899364787"
@@ -937,7 +936,6 @@
       "opaque": false,
       "receiver_kind": "none",
       "source_keys": [
-        "w1212173434",
         "w26767313"
       ],
       "surface_bias_m": 0.09,

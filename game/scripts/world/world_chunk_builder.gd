@@ -83,7 +83,7 @@ const STREET_GROUND_SURFACES := {
 	"street_kerb_concrete": {"albedo": preload("res://game/resources/textures/world/street/street_concrete_panels.png"), "uv_scale": 0.5, "roughness": 0.9},
 	# The Johnson St lot's curb: the same panels, darkened to the weathered grey of
 	# the owner's November 2026 photographs (a tint under 1 stays clear of white).
-	"street_kerb_lot": {"albedo": preload("res://game/resources/textures/world/street/street_concrete_panels.png"), "uv_scale": 0.5, "roughness": 0.9, "tint": Color(0.38, 0.36, 0.34)},
+	"street_kerb_lot": {"albedo": preload("res://game/resources/textures/world/street/street_concrete_panels.png"), "uv_scale": 0.5, "roughness": 0.9, "tint": Color(0.62, 0.59, 0.56)},
 	"street_kerb_planting": {"albedo": preload("res://game/resources/textures/world/street/street_mulch.png"), "uv_scale": 1.0, "roughness": 1.0},
 	"street_plaza_pavers": {"albedo": preload("res://game/resources/textures/world/street/street_plaza_pavers.png"), "uv_scale": 1.0, "roughness": 0.85},
 	# Park ground (park_* records): grey pea gravel along the riprap (the
@@ -115,6 +115,10 @@ const STREET_GROUND_SURFACES := {
 	"yard_asphalt_fresh": {"albedo": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"), "uv_scale": 4.76, "roughness": 1.0, "tint": Color(0.76, 0.74, 0.73)},
 	"yard_gravel": {"albedo": preload("res://game/resources/textures/world/vegetation/park_gravel.png"), "uv_scale": 5.0, "roughness": 0.97, "tint": Color(1.22, 1.2, 1.15)},
 	"yard_gravel_pale": {"albedo": preload("res://game/resources/textures/world/street/yard_gravel_pale.png"), "uv_scale": 5.0, "roughness": 0.97, "tint": Color(0.91, 0.87, 0.75)},
+	# The Johnson St lot's shoulder: the same fine aggregate at the greys of the
+	# owner's November 2026 photographs, the gravel and the dark band against the curb.
+	"yard_shoulder_gravel": {"albedo": preload("res://game/resources/textures/world/street/yard_gravel_pale.png"), "uv_scale": 5.0, "roughness": 0.97, "tint": Color(0.40, 0.385, 0.325)},
+	"yard_shoulder_band": {"albedo": preload("res://game/resources/textures/world/street/yard_gravel_pale.png"), "uv_scale": 5.0, "roughness": 0.97, "tint": Color(0.22, 0.197, 0.18)},
 	"yard_concrete": {"albedo": preload("res://game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_diff_1k.jpg"), "uv_scale": 4.0, "roughness": 0.9, "tint": Color(1.18, 1.38, 1.46)},
 	"yard_sand_pale": {"albedo": preload("res://game/resources/textures/world/street/yard_sand_pale.png"), "uv_scale": 5.0, "roughness": 0.98, "tint": Color(0.77, 0.76, 0.65)},
 	"yard_soil_dark": {"albedo": preload("res://game/resources/textures/world/street/yard_soil_dark.png"), "uv_scale": 5.0, "roughness": 0.95},

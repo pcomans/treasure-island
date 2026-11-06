@@ -1694,7 +1694,7 @@
     {
       "id": "johnson_lot",
       "source_key": "w1212173434",
-      "evidence": "The new asphalt lot north-west of Johnson Street, between it and the Mersea ditch. Esri World Imagery, Vantor capture of 2026-05-26, map level 19 (0.24 m exports), read at full zoom: dark asphalt; a row along the street and two back-to-back rows on painted spines, all square to the street edge's bearing at about 2.75 m a stall and 5.4 m deep; a short row at 45 degrees; a pocket of four stalls on the north side; a short angled row in the tail towards Avenue of the Palms; accessible bays filled blue, in pairs round hatched aisles along the street; hatched row ends; parallel-stall ticks along the east edge; aisle arrows down the west aisle and along the north aisle, each with its head to the south or west; pale gravel behind the west and tail curbs. No cars on that date. Owner photographs of November 2026 from its west curb (ditch 1 to 3): the raised concrete curb, the dark asphalt, two of the arrows pointing south, the hatched row end, a dark band and pale gravel behind the curb, two cars far off along the Johnson St side. A short white mark at each stall's aisle end in the aerial stays unread and undrawn, and a tall camera pole in the photographs is not built. Sizes and ends are production inference from the aerial.",
+      "evidence": "The new asphalt lot north-west of Johnson Street, between it and the Mersea ditch. Esri World Imagery, Vantor capture of 2026-05-26, map level 19 (0.24 m exports), read at full zoom: dark asphalt; a row along the street and two back-to-back rows on painted spines, all square to the street edge's bearing at about 2.75 m a stall and 5.4 m deep; a short row at 45 degrees; a pocket of four stalls on the north side; a short angled row in the tail towards Avenue of the Palms; accessible bays filled blue, in pairs round hatched aisles along the street; hatched row ends; parallel-stall ticks along the east edge; aisle arrows down the west aisle and along the north aisle, each with its head to the south or west; pale gravel behind the west and tail curbs. No cars on that date. Owner photographs of November 2026 from its west curb (ditch 1 to 3): the raised concrete curb, the dark asphalt, two of the arrows pointing south, the hatched row end, a dark band and pale gravel behind the curb, two cars far off along the Johnson St side. A short white mark at each stall's aisle end in the aerial stays unread and undrawn, and a tall camera pole in the photographs is not built. The aerial's dark edge along the west and tail sides is the shoulder's dark band as well as the asphalt: the curb stands about 0.55 m inside it, from the photographed distance from curb to arrow. Sizes and ends are production inference from the aerial.",
       "paint_wear": 0,
       "osm_exception": {
         "reason": "OSM's frozen snapshot has no parking area here. The lot is the one recorded exception to taking the snapshot as the horizontal layout. source_key names the OSM sidewalk it meets, for the records' provenance. The outline is the only traced data; everything in the lot, and the gravel shoulder behind its curb, comes from the pattern.",
@@ -1754,32 +1754,32 @@
             163.67
           ],
           [
-            -276.32,
-            172.81
+            -275.73,
+            172.2
           ],
           [
-            -264.55,
-            199.06
+            -264.44,
+            198.93
           ],
           [
-            -262.77,
-            204.66
+            -262.04,
+            204.59
           ],
           [
-            -281.57,
-            222.34
+            -281.18,
+            222.73
           ],
           [
-            -297.44,
-            237.51
+            -297.11,
+            237.95
           ],
           [
-            -308.52,
-            243.7
+            -308.25,
+            244.18
           ],
           [
-            -312.63,
-            245.58
+            -312.4,
+            246.08
           ],
           [
             -309.76,
@@ -2153,8 +2153,8 @@
           {
             "st": [
               [
-                10.3,
-                19.6
+                10.4,
+                19.2
               ],
               [
                 17.4,
@@ -2162,7 +2162,7 @@
               ],
               [
                 15.0,
-                19.0
+                18.7
               ]
             ],
             "stripes": true
@@ -2192,7 +2192,7 @@
               ],
               [
                 57.0,
-                14.4
+                14.3
               ],
               [
                 44.9,
@@ -2301,9 +2301,9 @@
             17
           ],
           "band_m": 0.6,
-          "band_material": "yard_gravel",
+          "band_material": "yard_shoulder_band",
           "gravel_m": 2.5,
-          "gravel_material": "yard_gravel_pale"
+          "gravel_material": "yard_shoulder_gravel"
         }
       }
     },
