@@ -125,6 +125,23 @@ From the reviews of the shoreline, street ground, street objects, parked cars, v
   - The Keppler Court pine at (−292.8, −433.7) changed from variant 1 to 2 within its pin when the Johnson St lot landed: the lot dropped three crowns, and species hang on a crown's list index (see the cleanup item below).
 - **Performance:** the fixes are not in this release. The diagnosis is at `perf-1-20261106`, and the work is paused on the branch `perf/bake-merge-20261106`. Before these layers the spawn drew about 24,600 draw calls and 3.8 million primitives at 1440 × 900 (`6ba040d3`). The ground-cover shader now runs six noise calls per fragment.
 
+## Building merge in the bake: known gaps
+
+Exports and the web build load a baked world whose buildings are merged by `tools/merge_baked_buildings.gd`: the same triangles through far fewer draws, while the world generated at startup keeps its authored nodes. Compared at 72 fixed views on 2026-11-06 (shader time frozen):
+
+- About 3.7% of pixels on desktop differ by one 8-bit level, because a vertex colour stores 8 bits per channel where a material's colour is a float. Only about 0.025% differ by more.
+- Near-coplanar parts can tie differently on depth: a 1-pixel lip at the south porch of Chinook w95934105, and 8 pixels on a distant sign beyond Fire Station 48.
+- Long straight edges and wire chairs flip a few edge samples, from float rounding of at most 0.05 mm in the merged positions.
+- A shadow edge on the south side of Job Corps 368 (w34313521) lost a small notch; the cause is not established.
+- **Web only:** Mersea's glass changed, from the exterior probe going ONCE rather than from the merge: in Compatibility the panes now show soft reflections where they read as flat and dark. On desktop the same change is at most 2 levels on the glass.
+
+Not needed to ship, and not done:
+
+- Housing support and retained ground meshes are left whole, because `StudyGeometry.retained_ground_contact` compares them with their collider face by face, in order: 2,668 of the 5,529 surfaces left. Combining only neighbouring surfaces inside a support mesh would keep that order and take its 2,211 surfaces to about 950.
+- Merged surfaces keep tangents that nothing reads on about 86% of vertices (about 15 MB raw, estimated from the census), and 1.87 million vertices are still unindexed triangle soup.
+- 1,852 hidden meshes stay in the bake.
+- `building_fit_test.gd --native-producer` and `--adjacent-source` compare authored meshes, so they apply to the generated world only, not with `--use-prebuilt-world`.
+
 ## Deferred by the owner
 
 - Drivable cars: after the release.

@@ -1131,3 +1131,16 @@ The first lot was cut round a road's rounded end cap, and no sheet framed that j
 ## Set a tint from two rendered samples
 
 The shoulder's gravel at tint 0.91 rendered 215 and at 0.40 rendered 105, far darker than the ratio predicts, because the renderer's tone curve steepens. Two renders of one material give the curve; fit it, then pick the tint.
+
+## Binding the same method twice is one signal connection
+
+On 2026-11-06 Mersea's two reflection probes were settled with `ready.connect(_settle.bind(probe))` in a loop. Godot compares the method without its binds, so the second connect failed with "already connected" and that probe never settled, which would have stopped startup on the generated path. The bake still exited 0 and passed its reload check, and only its log showed the line. Connect once and loop inside the callback, and read a run's `^ERROR` lines even when it exits 0.
+
+## Carry material colour in vertices as sRGB bytes
+
+The bake merge moved each surface's base colour into vertex colours (2026-11-06). Linear values rendered far too dark in Compatibility (`#808080` came out at 70 where the material gave 143), so store sRGB and set `vertex_color_is_srgb`. A vertex colour stores 8 bits per channel and the engine truncates, so 0.5 becomes 127: round to the byte and aim a quarter step above it. Measured on 240 real material colours at the same pixels, the result differs from `albedo_color` by at most one level in both renderers.
+
+## Compare embedded resources between bakes by content
+
+A geometry proof between two bakes showed 11,431 triangles with a different material, all on Mersea and Building 600. Their embedded noise textures get a new scene-unique `resource_path` in every bake, so a path comparison reported a change that wasn't there. Describe embedded resources by their stored properties.
+

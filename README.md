@@ -91,6 +91,8 @@ loads.
 Desktop builds (this and `tools/build-linux.sh`) first bake the island with
 `tools/prebuild-static-world.sh native` and load that baked world at startup
 instead of generating it; `tools/test.sh` runs the whole-island check on it too.
+The bake merges each building's opaque surfaces into far fewer draws
+(`tools/merge_baked_buildings.gd`); the same triangles, packed differently.
 
 ## Controls
 
