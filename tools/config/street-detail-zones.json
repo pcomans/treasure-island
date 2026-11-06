@@ -1078,39 +1078,32 @@
      "id": "strip_plants",
      "kind": "planting_slot",
      "pattern": "field",
-     "surfaces": ["street_kerb_planting"],
-     "per_m2": 0.34,
-     "spacing": [0.55, 1.3],
+     "surfaces": ["park_mulch"],
+     "per_m2": 1.1,
+     "spacing": [0.45, 1.05],
      "field": {
-      "drift_m": 9,
-      "clump_m": 2.6,
-      "drift_cover": 0.62,
-      "lone": 0.3
+      "drift_m": 7,
+      "clump_m": 2.2,
+      "drift_cover": 0.7,
+      "lone": 0.35
      },
      "mix": [
       {
        "prop": "pale_seeded_shrub",
        "variants": [0, 1],
-       "scale": [0.9, 1.25],
+       "scale": [1.0, 1.25],
        "at": [0.0, 1.0],
-       "share": 5
-      },
-      {
-       "prop": "rush",
-       "variants": [0, 2],
-       "scale": [0.9, 1.2],
-       "at": [0.0, 1.0],
-       "share": 2
-      },
-      {
-       "prop": "red_tip_shrub",
-       "variants": [0, 1],
-       "scale": [0.8, 1.0],
-       "at": [0.35, 1.0],
-       "share": 2
+       "share": 4
       },
       {
        "prop": "pittosporum_tobira",
+       "variants": [0, 1],
+       "scale": [0.8, 1.0],
+       "at": [0.3, 1.0],
+       "share": 4
+      },
+      {
+       "prop": "indian_hawthorn",
        "variants": [0, 1],
        "scale": [0.8, 0.95],
        "at": [0.6, 1.0],
@@ -1127,22 +1120,28 @@
    "id": "mersea_ditch",
    "name": "The ditch next to Mersea",
    "pilot": false,
-   "reason": "The seasonal wetland beside the owner's priority lot, in view of the city skyline. Its plants are sown by fields that read the land; its red floor, puddles and stones are the ground shader's (red_marsh), so nothing here is listed by position.",
+   "reason": "The seasonal wetland beside the owner's priority lot, in view of the city skyline. Its plants are sown by fields that read the land; its red floor, banks, puddles and stones are the ground shader's (marsh_amount), so nothing here is listed by position.",
    "reference": "Owner photos, Nov 2026 (three, from one spot at the lot's west corner, about (-266, 203)); OSM w1473022589 (natural=wetland); the land's own basin, 1.8 m at the floor and 4.3 m at the bank",
    "shape": {
     "type": "polygon",
-    "points_xz": [[-385, 105], [-255, 105], [-255, 215], [-300, 262], [-325, 318], [-395, 318]]
+    "points_xz": [[-395, 100], [-235, 100], [-235, 225], [-285, 262], [-315, 325], [-400, 325]]
    },
    "scatter": [
     {
      "id": "bank_seeded_shrubs",
      "kind": "planting_slot",
      "pattern": "field",
-     "surfaces": ["terrain_wetland"],
-     "per_m2": 0.85,
-     "spacing": [0.7, 1.7],
+     "surfaces": ["terrain_wetland", "land_ground"],
+     "per_m2": 0.5,
+     "spacing": [0.7, 1.8],
      "field": {
-      "height_m": [2.25, 2.95, 5.0, 6.0],
+      "axis": {
+       "from_xz": [-295, 145],
+       "to_xz": [-345, 290],
+       "full_m": 40,
+       "zero_m": 56
+      },
+      "height_m": [2.5, 3.3, 4.1, 4.5],
       "ramps": [
        {
         "from_xz": [-335, 170],
@@ -1172,7 +1171,7 @@
       {
        "prop": "pale_seeded_shrub",
        "variants": [2, 2],
-       "scale": [0.85, 1.25],
+       "scale": [0.8, 1.1],
        "at": [0.42, 1.0],
        "share": 1
       },
@@ -1185,18 +1184,57 @@
       }
      ],
      "basis": "production_inference",
-     "rule": "Thick along the lot-side top of the bank, thinning down the slope, away from the lot and along it to both ends, in clusters with gaps and lone plants; laden plants where the field is full, bare ones at its edges.",
+     "rule": "Thick along the top of the bank by the lot, thinning down the slope, away from the lot and along it to both ends, in clusters with gaps and lone plants; laden plants where the field is full, bare ones at its edges.",
      "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea, from the lot's west corner at about (-266, 203): loose pale-seeded shrubs, thick on the bank south-west of the camera, sparse to its north (species unconfirmed)."
+    },
+    {
+     "id": "bank_dead_stems",
+     "kind": "planting_slot",
+     "pattern": "field",
+     "surfaces": ["terrain_wetland", "land_ground"],
+     "per_m2": 0.12,
+     "spacing": [0.6, 1.5],
+     "field": {
+      "axis": {
+       "from_xz": [-295, 145],
+       "to_xz": [-345, 290],
+       "full_m": 40,
+       "zero_m": 56
+      },
+      "height_m": [2.1, 2.6, 3.6, 4.2],
+      "drift_m": 9,
+      "clump_m": 3,
+      "drift_cover": 0.4,
+      "lone": 0.1
+     },
+     "mix": [
+      {
+       "prop": "pale_seeded_shrub",
+       "variants": [0, 1],
+       "scale": [0.85, 1.25],
+       "at": [0.0, 1.0],
+       "share": 1
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Dark dead stems with a few pale seed heads down the slope.",
+     "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea, from the lot's west corner at about (-266, 203): dark dead stems and pale seed heads at the foot of the bank."
     },
     {
      "id": "bank_straw_tufts",
      "kind": "grass_clump",
      "pattern": "field",
-     "surfaces": ["terrain_wetland"],
-     "per_m2": 0.7,
+     "surfaces": ["terrain_wetland", "land_ground"],
+     "per_m2": 0.32,
      "spacing": [0.6, 1.4],
      "field": {
-      "height_m": [2.2, 2.7, 5.0, 6.0],
+      "axis": {
+       "from_xz": [-295, 145],
+       "to_xz": [-345, 290],
+       "full_m": 40,
+       "zero_m": 56
+      },
+      "height_m": [2.2, 2.8, 4.2, 4.6],
       "drift_m": 8,
       "clump_m": 2.5,
       "drift_cover": 0.5,
@@ -1206,24 +1244,30 @@
       {
        "prop": "clump_grass",
        "variants": [4, 5],
-       "scale": [0.8, 1.1],
+       "scale": [0.8, 1.05],
        "at": [0.0, 1.0],
        "share": 1
       }
      ],
      "basis": "production_inference",
-     "rule": "Dark dead straw on the banks, in drifts.",
+     "rule": "Dull dead straw on the banks, in drifts.",
      "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea, from the lot's west corner at about (-266, 203): dark dry straw grass on the slope."
     },
     {
-     "id": "bank_foot_rushes",
+     "id": "bank_foot_clumps",
      "kind": "grass_clump",
      "pattern": "field",
-     "surfaces": ["terrain_wetland"],
-     "per_m2": 0.5,
+     "surfaces": ["terrain_wetland", "land_ground"],
+     "per_m2": 0.3,
      "spacing": [0.6, 1.3],
      "field": {
-      "height_m": [1.9, 2.15, 2.55, 2.95],
+      "axis": {
+       "from_xz": [-295, 145],
+       "to_xz": [-345, 290],
+       "full_m": 40,
+       "zero_m": 56
+      },
+      "height_m": [1.95, 2.2, 2.6, 3.0],
       "drift_m": 7,
       "clump_m": 2.2,
       "drift_cover": 0.42,
@@ -1231,36 +1275,42 @@
      },
      "mix": [
       {
-       "prop": "rush",
+       "prop": "california_buckwheat",
        "variants": [0, 2],
-       "scale": [0.8, 1.15],
+       "scale": [0.85, 1.2],
        "at": [0.0, 1.0],
        "share": 1
       }
      ],
      "basis": "production_inference",
-     "rule": "Dark clumps along the foot of the bank.",
-     "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea, from the lot's west corner at about (-266, 203): dark clumps where the bank meets the floor."
+     "rule": "Dark olive clumps along the foot of the bank.",
+     "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea, from the lot's west corner at about (-266, 203): dark and olive clumps where the bank meets the floor."
     },
     {
      "id": "floor_clumps",
      "kind": "grass_clump",
      "pattern": "field",
-     "surfaces": ["terrain_wetland"],
-     "per_m2": 0.2,
+     "surfaces": ["terrain_wetland", "land_ground"],
+     "per_m2": 0.14,
      "spacing": [0.8, 1.6],
      "field": {
-      "height_m": [1.5, 1.6, 2.0, 2.3],
+      "axis": {
+       "from_xz": [-295, 145],
+       "to_xz": [-345, 290],
+       "full_m": 40,
+       "zero_m": 56
+      },
+      "height_m": [1.6, 1.7, 2.1, 2.4],
       "drift_m": 16,
       "clump_m": 5,
-      "drift_cover": 0.25,
-      "lone": 0.02
+      "drift_cover": 0.3,
+      "lone": 0.03
      },
      "mix": [
       {
-       "prop": "rush",
-       "variants": [0, 2],
-       "scale": [0.8, 1.1],
+       "prop": "california_buckwheat",
+       "variants": [0, 1],
+       "scale": [0.8, 1.05],
        "at": [0.0, 1.0],
        "share": 1
       }
@@ -1345,25 +1395,25 @@
        "share": 3
       },
       {
-       "prop": "california_sagebrush",
+       "prop": "pale_seeded_shrub",
+       "variants": [0, 1],
+       "scale": [1.0, 1.25],
+       "at": [0.0, 1.0],
+       "share": 2
+      },
+      {
+       "prop": "dune_tansy",
        "variants": [0, 2],
        "scale": [0.9, 1.25],
-       "at": [0.2, 1.0],
+       "at": [0.0, 1.0],
        "share": 2
       },
       {
        "prop": "pittosporum_tobira",
        "variants": [0, 1],
-       "scale": [0.9, 1.2],
-       "at": [0.5, 1.0],
+       "scale": [0.9, 1.25],
+       "at": [0.55, 1.0],
        "share": 2
-      },
-      {
-       "prop": "conical_shrub",
-       "variants": [0, 1],
-       "scale": [0.85, 1.1],
-       "at": [0.75, 1.0],
-       "share": 1
       }
      ],
      "basis": "production_inference",

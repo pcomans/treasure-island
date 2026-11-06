@@ -12,11 +12,11 @@
   {"at_xz": [-289.9, -437.7], "reach_m": 6, "prop": "monterey_pine", "variants": [1, 2], "evidence": "Street View Mar 2025, Keppler Court (pano zHJe3vjFyKW1aAgqgdeypw, heading 90): the flat-topped pine by the dark building."},
   {"at_xz": [-341.0, -416.0], "reach_m": 5, "prop": "monterey_pine", "variants": [1, 2], "evidence": "Street View Mar 2025 (pano lsha-qsuIu59GXEoDXvzAw, heading 245, species pass crops p5, p6): candles and long needles."},
   {"at_xz": [-340.2, -405.0], "reach_m": 5, "prop": "monterey_pine", "variants": [1, 2], "evidence": "Street View Mar 2025 (pano lsha-qsuIu59GXEoDXvzAw, heading 245, species pass crops p5, p6): candles and long needles."},
-  {"at_xz": [-591.5, -304.6], "reach_m": 3, "prop": "mexican_fan_palm", "variants": [5, 5], "evidence": "Street View Mar 2025, 1318 Gateview Ave (pano uRl0jeIdSuHK96_NR4QjEg, heading 250): the tall old fan palm above the roof."},
-  {"at_xz": [-584.0, -306.1], "reach_m": 3, "prop": "spreading_broadleaf", "variants": [1, 1], "evidence": "Street View Mar 2025, 1318 Gateview Ave (pano uRl0jeIdSuHK96_NR4QjEg, heading 250): the yellow-green broadleaf behind the fence."},
+  {"at_xz": [-608.0, -299.0], "reach_m": 3, "prop": "mexican_fan_palm", "variants": [5, 5], "evidence": "Street View Mar 2025, 1318 Gateview Ave (pano uRl0jeIdSuHK96_NR4QjEg, heading 250): the tall old fan palm above the roof."},
+  {"at_xz": [-606.5, -306.5], "reach_m": 3, "prop": "spreading_broadleaf", "variants": [1, 2], "evidence": "Street View Mar 2025, 1318 Gateview Ave (pano uRl0jeIdSuHK96_NR4QjEg, heading 250): the yellow-green broadleaf behind the fence."},
   {"at_xz": [-587.5, -383.8], "reach_m": 3, "prop": "spreading_broadleaf", "variants": [3, 3], "evidence": "Street View Mar 2025, 1349 Gateview Ave (heading 250): an old leaning tree with a flat crown."},
   {"at_xz": [-606.5, -395.6], "reach_m": 3, "prop": "spreading_broadleaf", "variants": [2, 3], "evidence": "Street View Mar 2025, 1349 Gateview Ave (heading 250): the old twisted tree."},
-  {"at_xz": [-3.0, -675.5], "reach_m": 8, "prop": "spreading_broadleaf", "variants": [0, 1], "evidence": "Street View Sep 2025, 14th St (heading 250): a dense wall of dark broadleaves on the north side."}
+  {"at_xz": [-3.0, -675.5], "reach_m": 8, "prop": "spreading_broadleaf", "variants": [2, 3], "evidence": "Street View Sep 2025, 14th St (heading 250): a dense wall of dark broadleaves on the north side."}
  ],
  "groups": {
   "fourth_street_lot_palms": [
@@ -731,7 +731,9 @@
    [-580.6, -464.1, 6.5],
    [-588.0, -539.6, 8],
    [-580.6, -611.8, 10],
-   [-571.0, -621.4, 7]
+   [-571.0, -621.4, 7],
+   [-608.0, -299.0, 5.5],
+   [-606.5, -306.5, 13]
   ],
   "sffd_frontage": [
    [258.8, -370.2, 14.8],
@@ -825,7 +827,7 @@
  },
  "hedges": {
   "residential": [
-   [[-282.6, -668], [-282, -655]],
+   [[-282.2, -660.4], [-281.8, -652]],
    [[-193.7, -838.5], [-191.4, -846.2]],
    [[-265.2, -829.6], [-259.9, -832.3]],
    [[-175.4, -808.1], [-176.6, -813]],

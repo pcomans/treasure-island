@@ -300,9 +300,10 @@ const GRASSES := [
 	{"seed": 32, "cell": "green", "height": 0.92, "width": 1.15, "cards": 5},
 	{"seed": 33, "cell": "straw", "height": 0.62, "width": 1.0, "cards": 4},
 	{"seed": 34, "cell": "straw", "height": 0.82, "width": 1.25, "cards": 5},
-	# Dead straw on the ditch bank by the Mersea lot (owner photos, Nov 2026): the straw clump, darker and duller.
-	{"seed": 35, "cell": "straw", "height": 0.7, "width": 1.0, "cards": 4, "tone": Color(0.6, 0.53, 0.5)},
-	{"seed": 36, "cell": "straw", "height": 0.9, "width": 1.25, "cards": 5, "tone": Color(0.52, 0.46, 0.43)},
+	# Dead straw on the ditch bank by the Mersea lot (owner photos, Nov 2026): the straw clump
+	# darkened, its yellow taken out (a tone over the card's sRGB 173,160,86).
+	{"seed": 35, "cell": "straw", "height": 0.7, "width": 1.0, "cards": 4, "tone": Color(0.42, 0.36, 0.95)},
+	{"seed": 36, "cell": "straw", "height": 0.9, "width": 1.25, "cards": 5, "tone": Color(0.31, 0.27, 0.72)},
 ]
 
 ## Cityside Park's young Sydney blue gums in the windrow plazas' double rows

@@ -1438,13 +1438,13 @@ export function generateStreetDetail({
       audit.scatter.placed += 1;
       return true;
     };
-    const paving = (xz, reach) => pavingUnder(xz, reach, groundAt);
+    const paving = (xz, reach, rings) => pavingUnder(xz, reach, groundAt, rings);
     const state = plantingStates.get(zone.id);
     const plan = rule.pattern === "field" ? planField({
       rule,
       zoneId: zone.id,
       seed,
-      box: { min_x: bounds.min_x, max_x: bounds.max_x, min_z: bounds.min_y, max_z: bounds.max_y },
+      box: (({ min_x, min_y, max_x, max_y }) => ({ min_x, max_x, min_z: min_y, max_z: max_y }))(rule.within_xz ? boundsOf(rule.within_xz) : bounds),
       inside: (xz) => contains(xz) && (!rule.within_xz || pointInRing(xz, rule.within_xz, true)),
       onGround: (xz) => rule.surfaces.includes(groundAt(xz)?.material_key),
       heightAt: (xz) => groundAt(xz)?.y,

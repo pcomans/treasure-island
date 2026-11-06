@@ -155,6 +155,8 @@ const PAINT_OVERLAP_MIN_M2 = 1e-4;
 // A lot rule's own pavement lies at the yards' ground lift, a step over the road
 // paint; its other layers lie LOT_LAYER_STEPS over that.
 const LOT_SURFACE_LIFT_M = 0.09;
+// How far a lot's planted strip lies over its curb band's top (m).
+const LOT_STRIP_LIFT_M = 0.02;
 // A lot surface's wear (decals per 100 m2 of its pavement).
 const LOT_WEAR_FIELDS = Object.freeze(["crack_per_100m2", "oil_per_100m2", "patch_per_100m2"]);
 // A lot with its own pavement stacks its layers a draped step apart over it:
@@ -1902,6 +1904,17 @@ export function generateStreetGround({
   addPiece("parking", parkingSurface.flatMap((part) => difference("parking lanes off paths", [part], pedestrianIndex.near(boxOfPoints(part[0])))),
     constantHeight(ROAD_TOP_M), worldUv);
   addPiece("planting", intersect("planted tops", bandRaised, plantedTop), constantHeight(top), tiledUv(2));
+  // A lot's planted strip is the parks' dark bark mulch, just over the band's top.
+  for (const { lot } of lotRules) {
+    if (!lot.planted) continue;
+    const outlines = lot.planted.map((strip) => {
+      const ring = strip.points_xz.map(([x, z]) => [x, -z]);
+      return [[ringArea(ring) > 0 ? ring : ring.reverse()]];
+    });
+    addPiece("park_mulch", intersect(`lot ${lot.id} strip`, intersect("planted tops", bandRaised, plantedTop), union(`lot ${lot.id} strips`, outlines)),
+      constantHeight(top + LOT_STRIP_LIFT_M), worldUv, true);
+    sources.park_mulch.add(lot.source_key);
+  }
   addPiece("verge", lawnTop, constantHeight(top), worldUv);
   for (const part of paverParts) addFramed("plaza", intersect("plaza tops", bandRaised, part.region), part.plaza.paver_tile_m);
   for (const notch of notches) {

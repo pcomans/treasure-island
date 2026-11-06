@@ -26,8 +26,8 @@
 //     fall at random over the zone, per_m2 of them, with no lattice, so nothing
 //     lines up from any angle; each survives with the field's value there. The
 //     field is the land's height (a trapezoid, height_m), a band of distances from
-//     the land's edge or the nearest road (edge_m, road_m), ramps along axes across
-//     the site (ramps), and clusters from two octaves of rotated, warped noise: drift_cover
+//     the land's edge or the nearest road (edge_m, road_m), distance from a site's
+//     axis (axis), ramps across the site (ramps), and clusters from two octaves of rotated, warped noise: drift_cover
 //     of the ground lies in drifts about drift_m across with clumps about clump_m
 //     across inside them, and lone plants stand at lone of the density outside
 //     them. The same value picks the plant: a mix entry grows where the field lies
@@ -145,7 +145,9 @@ export const PLANTING_RULE_FIELDS = Object.freeze({
 });
 const MIX_FIELDS = Object.freeze(["band_m", "max_slope", "prop", "scale", "share", "spill_m", "variants"]);
 const FIELD_MIX_FIELDS = Object.freeze(["at", "prop", "scale", "share", "variants"]);
-const FIELD_TERMS = Object.freeze(["clump_m", "drift_cover", "drift_m", "edge_m", "height_m", "lone", "ramps", "road_m"]);
+const FIELD_TERMS = Object.freeze(["axis", "clump_m", "drift_cover", "drift_m", "edge_m", "height_m", "lone", "ramps", "road_m"]);
+// A field plant's crown test: its rings, close enough to find a kerb's narrow top.
+const FIELD_PAVING_RINGS = Object.freeze([[0.25, 8], [0.5, 16], [0.75, 24], [1, 32]]);
 
 function isFiniteNumber(value) {
   return typeof value === "number" && Number.isFinite(value);
@@ -215,6 +217,10 @@ function validateFieldRule(rule, label, checkProp, variantCount) {
   for (const band of ["edge_m", "road_m"]) {
     if (field[band] === undefined) continue;
     invariant(Array.isArray(field[band]) && field[band].length === 2 && field[band].every(isFiniteNumber) && field[band][0] >= 0 && field[band][1] > field[band][0], `${label} field ${band} must be [near, far] metres`);
+  }
+  if (field.axis !== undefined) {
+    const { axis } = field;
+    invariant(exactKeys(axis, ["from_xz", "full_m", "to_xz", "zero_m"]) && [axis.from_xz, axis.to_xz].every((point) => Array.isArray(point) && point.length === 2 && point.every(isFiniteNumber)) && isFiniteNumber(axis.full_m) && isFiniteNumber(axis.zero_m) && axis.full_m >= 0 && axis.zero_m > axis.full_m, `${label} field axis must be {from_xz, to_xz, full_m, zero_m}`);
   }
   for (const ramp of field.ramps ?? []) {
     invariant(exactKeys(ramp, ["from_xz", "high", "low", "to_xz"]) && [ramp.from_xz, ramp.to_xz].every((point) => Array.isArray(point) && point.length === 2 && point.every(isFiniteNumber)) && isFiniteNumber(ramp.low) && isFiniteNumber(ramp.high) && ramp.low >= 0 && ramp.high <= 1 && ramp.low <= ramp.high, `${label} field ramps must be {from_xz, to_xz, low, high}`);
@@ -733,12 +739,17 @@ function fieldDensity(rule, tag) {
       const [riseFrom, riseTo, fallFrom, fallTo] = spec.height_m;
       density *= smoothRamp(riseFrom, riseTo, site.height) * (1 - smoothRamp(fallFrom, fallTo, site.height));
     }
-    for (const { from_xz: from, to_xz: to, low, high } of spec.ramps ?? []) {
+    const lengthAlong = (from, to) => {
       const dx = to[0] - from[0];
       const dz = to[1] - from[1];
-      const t = Math.max(0, Math.min(1, ((x - from[0]) * dx + (z - from[1]) * dz) / Math.max(1e-9, dx * dx + dz * dz)));
-      density *= low + (high - low) * t;
+      return Math.max(0, Math.min(1, ((x - from[0]) * dx + (z - from[1]) * dz) / Math.max(1e-9, dx * dx + dz * dz)));
+    };
+    if (spec.axis) {
+      const { from_xz: from, to_xz: to, full_m: full, zero_m: zero } = spec.axis;
+      const t = lengthAlong(from, to);
+      density *= 1 - smoothRamp(full, zero, Math.hypot(x - from[0] - t * (to[0] - from[0]), z - from[1] - t * (to[1] - from[1])));
     }
+    for (const { from_xz: from, to_xz: to, low, high } of spec.ramps ?? []) density *= low + (high - low) * lengthAlong(from, to);
     return density;
   };
 }
@@ -788,7 +799,7 @@ export function planField({ rule, zoneId, seed, box, inside, onGround, heightAt,
       reject("spacing");
       continue;
     }
-    if (paving(point, half + PAVING_CLEAR_M)) {
+    if (paving(point, half + PAVING_CLEAR_M, FIELD_PAVING_RINGS)) {
       reject("paving");
       continue;
     }
