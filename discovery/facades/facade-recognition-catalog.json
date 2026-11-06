@@ -143,23 +143,19 @@
       "whole_building_recognizability_imported": false
     },
     {
-      "adapter_id": "active-adapter:d1-b201-live:building:w34313545:wall",
-      "content_classification": "active_target_specific_receiver_host_partition_plus_render_only_attachment",
+      "adapter_id": "active-adapter:b201-market-live:building:w34313545:wall",
+      "content_classification": "active_target_specific_whole_building_replacement",
       "receiver_key": "building:w34313545:wall",
       "recognition_acceptance_authority": "physical_unit_claim_and_independent_acceptance_record",
       "recognition_acceptance_status": "accepted",
-      "review_status": "independent_exact_current_live_pass",
-      "review_status_scope": "runtime_asset_original_detail_provenance_only_not_reference_recognition",
-      "runtime_adapter_path": "game/scripts/world/facades/d1_b201_live_attachment.gd",
+      "review_status": "pending_independent_review_of_the_2026-11-06_study",
+      "review_status_scope": "whole_building_model_replacement_not_yet_reviewed",
+      "runtime_adapter_path": "game/scripts/world/facades/b201_market_live_replacement.gd",
       "runtime_asset_paths": [
-        "game/resources/materials/world/d1_current/b201_green_hierarchy.tres",
-        "game/resources/materials/world/d1_current/b201_muted_rust_post.tres",
-        "game/resources/materials/world/d1_current/b201_service_leaf.tres",
-        "game/resources/materials/world/d1_current/b201_warm_wall.tres",
-        "game/resources/materials/world/d1_current/shared_dark_glass.tres",
-        "game/resources/materials/world/d1_current/shared_pale_frame.tres"
+        "game/scripts/world/facades/b201_market_model.gd",
+        "game/resources/textures/world/b201/"
       ],
-      "runtime_config_path": "game/resources/facades/d1_current/d1_b201_live_attachment.json",
+      "runtime_config_path": "game/resources/facades/b201_unphotographed_openings.json",
       "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
       "source_key": "w34313545",
       "whole_building_recognizability_imported": false
@@ -1562,14 +1558,9 @@
       "legacy_adapter_ids": [],
       "protected_scopes": [
         {
-          "reason": "Runs 10..39 and the roof are outside the independently reviewed WSW public chain; they retain generic/protected rendering with no invented module schedule.",
+          "reason": "The ENE middle and south walls have no dated photo (stacked containers hide them): they keep their old inferred openings and take only the side's plain paint. Every other run and the roof were rebuilt from dated references in the 2026-11-06 study.",
           "receiver_key": "building:w34313545:wall",
           "run_indices": [
-            10,
-            11,
-            12,
-            13,
-            14,
             15,
             16,
             17,
@@ -1581,20 +1572,7 @@
             23,
             24,
             25,
-            26,
-            27,
-            28,
-            29,
-            30,
-            31,
-            32,
-            33,
-            34,
-            35,
-            36,
-            37,
-            38,
-            39
+            26
           ]
         }
       ],
@@ -1604,34 +1582,47 @@
       "recognition_cues": [
         {
           "complete_motif": true,
-          "cue_id": "b201-green-bounded-upper-register",
+          "cue_id": "b201-market-sign-roof",
           "cue_kind": "unique_elevation",
           "evidence_class": "reference_observation",
           "receiver_key": "building:w34313545:wall",
           "reference_ids": [
-            "800I-SV02"
+            "800I-SV03",
+            "800I-PH01"
           ],
           "run_indices": [
             0,
             1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
+            2
           ]
         },
         {
           "complete_motif": true,
-          "cue_id": "b201-sparse-solid-lower-field",
+          "cue_id": "b201-stepped-tiers-and-monitor",
           "cue_kind": "unique_elevation",
           "evidence_class": "reference_observation",
           "receiver_key": "building:w34313545:wall",
           "reference_ids": [
-            "800I-SV02"
+            "800I-SV04",
+            "800I-SV05"
+          ],
+          "run_indices": [
+            10,
+            11,
+            12,
+            13,
+            14
+          ]
+        },
+        {
+          "complete_motif": true,
+          "cue_id": "b201-wsw-three-zone-front",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:w34313545:wall",
+          "reference_ids": [
+            "800I-SV02",
+            "800I-SV03"
           ],
           "run_indices": [
             0,
@@ -1656,8 +1647,62 @@
           "pixels_packaged": false,
           "source_locator": "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=37.825489,-122.3701307&heading=27&pitch=0&fov=75",
           "supports": [
-            "green-bounded broad dark upper-window register with pale frames",
-            "mostly solid light warm-gray lower field with sparse openings across the unusually long low mass"
+            "WSW long side as it stands in Sep 2025: market, rust middle and lime-green south zones, window pairs and louvres over the canopy"
+          ]
+        },
+        {
+          "observation_id": "800I-SV03",
+          "observed_regions": [
+            "Sep 2025 market end of the WSW side, from Avenue H"
+          ],
+          "pixels_packaged": false,
+          "source_locator": "Google Street View, 850 Avenue H, Sep 2025; retained in two-buildings-20261106/refs/island-cove 06, 07",
+          "supports": [
+            "sloped standing-seam sign roof with hipped ends, roof lettering and cap sign, storefront and kick panels, red container wall"
+          ]
+        },
+        {
+          "observation_id": "800I-PH01",
+          "observed_regions": [
+            "Apr 2026 close view of the market front (visitor photo); Jul 2023 owner's view"
+          ],
+          "pixels_packaged": false,
+          "source_locator": "Google Maps place photo, Apr 2026, and Street View pano CIHM, Jul 2023; retained in refs/island-cove 25, 02",
+          "supports": [
+            "sign roof proportions, bollards, porch and storefront"
+          ]
+        },
+        {
+          "observation_id": "800I-SV04",
+          "observed_regions": [
+            "Mar 2025 SSE side, from 9th Street"
+          ],
+          "pixels_packaged": false,
+          "source_locator": "Google Street View, 995 9th St, Mar 2025; retained in refs/island-cove 10-13",
+          "supports": [
+            "white stepped wall with raised centre, tall sash pairs, painted storage lettering, winery canopy and roll-up doors"
+          ]
+        },
+        {
+          "observation_id": "800I-SV05",
+          "observed_regions": [
+            "Sep 2025 NNW upper wall over the annex, from Avenue H; ENE north and NNW east, from Avenue I"
+          ],
+          "pixels_packaged": false,
+          "source_locator": "Google Street View, Sep 2025; retained in refs/island-cove 05, 15, 16, 18, 19, 20, 21",
+          "supports": [
+            "raised block with mural, corrugated annex with turbine vents, grey walls, black band and hooded entry"
+          ]
+        },
+        {
+          "observation_id": "800I-AE01",
+          "observed_regions": [
+            "May 2026 aerial, roof layout and front additions"
+          ],
+          "pixels_packaged": false,
+          "source_locator": "Esri World Imagery level 19, Vantor capture 2026-05-26 (0.24 m)",
+          "supports": [
+            "parallel white roof strips with the dark monitor strip, sign roof and canopy extents forward of the OSM line"
           ]
         }
       ],

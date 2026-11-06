@@ -30,7 +30,6 @@ const NFPA_CELL := Rect2(0.0, 0.6875, 0.125, 0.25)
 const OPENINGS_PATH := "res://game/resources/facades/b201_unphotographed_openings.json"
 const D1_MATERIALS := "res://game/resources/materials/world/d1_current/"
 const TEX := "res://game/resources/textures/world/b201/"
-const POLYHAVEN := "res://game/resources/textures/world/polyhaven/"
 const ROLES := ["wall", "roof", "detail", "trim", "glow", "setting", "walk"]
 
 ## The OSM outline as (w, u), in roof-record order; checked against the record.
@@ -138,10 +137,11 @@ const PAINTS := {
 	"plum": [[146, 118, 122], 0.92, "speckle", 0.9],
 	"tags": [[176, 172, 164], 0.9, "stucco", 2.0],
 	"rust": [[176, 124, 104], 0.8, "", 1.0],
-	"lime": [[92, 186, 44], 0.7, "", 1.0],
+	"lime": [[118, 206, 58], 0.7, "", 1.0],
 	"maroon": [[126, 40, 50], 0.7, "", 1.0],
 	"trim_red": [[196, 152, 136], 0.75, "", 1.0],
 	"sign_rib": [[150, 134, 112], 0.65, "", 1.0],
+	"sign_hip_rib": [[206, 190, 168], 0.65, "", 1.0],
 	"coping": [[226, 222, 208], 0.8, "", 1.0],
 	"coping_grey": [[176, 182, 182], 0.8, "", 1.0],
 	"soffit": [[134, 122, 108], 0.9, "", 1.0],
@@ -159,6 +159,11 @@ const PAINTS := {
 	"container_red": [[172, 76, 64], 0.7, "ribs", 0.3],
 	"container_red_edge": [[146, 64, 54], 0.7, "", 1.0],
 	"container_tan": [[214, 192, 142], 0.75, "ribs", 0.3],
+	"container_grey": [[176, 182, 180], 0.7, "ribs", 0.3],
+	"container_grey_edge": [[150, 156, 154], 0.7, "", 1.0],
+	"container_brown": [[150, 92, 66], 0.75, "ribs", 0.3],
+	"container_brown_edge": [[122, 74, 54], 0.75, "", 1.0],
+	"tarp": [[104, 110, 112], 0.8, "", 1.0],
 	"container_tan_edge": [[196, 174, 126], 0.75, "", 1.0],
 	"fence_red": [[158, 66, 58], 0.8, "mesh", 0.16],
 	"fence_green": [[62, 112, 86], 0.8, "slats", 0.09],
@@ -186,7 +191,7 @@ const PAINTS := {
 	"roof_dark": [[112, 110, 100], 0.92, "membrane", 8.0],
 	"roof_tan": [[190, 172, 142], 0.92, "membrane", 8.0],
 	"roof_annex": [[150, 142, 126], 0.92, "membrane", 6.0],
-	"bollard": [[176, 176, 170], 0.85, "", 1.0],
+	"bollard": [[150, 150, 146], 0.85, "", 1.0],
 	"curb": [[186, 184, 174], 0.9, "", 1.0],
 	"paint_yellow": [[226, 170, 40], 0.85, "", 1.0],
 	"paint_blue": [[52, 92, 150], 0.85, "", 1.0],
@@ -194,6 +199,7 @@ const PAINTS := {
 	"tote": [[230, 230, 226], 0.7, "", 1.0],
 	"rental_white": [[238, 238, 234], 0.5, "", 1.0],
 	"rental_stripe": [[198, 72, 48], 0.55, "", 1.0],
+	"rental_inside": [[150, 134, 112], 0.8, "", 1.0],
 	"tyre": [[26, 26, 28], 0.9, "", 1.0],
 	"barrel": [[104, 76, 54], 0.75, "", 1.0],
 	"wood": [[126, 108, 84], 0.85, "", 1.0],
@@ -802,7 +808,7 @@ func _store(f: Face, hole: Rect2, g0: float) -> void:
 	_fb("trim", "frame_black", f, entry_u - 0.05, entry_u + 0.05, g0, head, bay_d, -depth + 0.06)
 	# "OPEN" and the food posters high in the lights (refs 06, 25).
 	var sticker := -depth + 0.012
-	_art(f, "sign_atlas", entry_u + bay * 3.15, entry_u + bay * 3.85, head - 0.92, head - 0.5, sticker, Rect2(0.0, 0.5, 0.25, 0.125))
+	_art(f, "sign_bright", entry_u + bay * 3.15, entry_u + bay * 3.85, head - 0.92, head - 0.5, sticker, Rect2(0.0, 0.5, 0.25, 0.125))
 	for slot: Vector2i in [Vector2i(1, 2), Vector2i(2, 0), Vector2i(4, 1)]:
 		var centre := entry_u + bay * (float(slot.x) + 0.5)
 		_art(f, "posters", centre - 0.62, centre + 0.62, head - 0.98, head - 0.14, sticker, Rect2(float(slot.y) * 0.25 + 0.012, 0.3, 0.226, 0.34))
@@ -825,7 +831,7 @@ func _sign_roof() -> void:
 	_plane("roof", "sign_sheet", [eave_n, eave_s, top_s, top_n], up_front, front_uv)
 	# Hips carry the same sheet without its lettering, so the two read as one metal.
 	var hip_uv := [Vector2(0, 1), Vector2(0.31, 1), Vector2(0.31, 0), Vector2(0.07, 0)]
-	_plane("roof", "sign_plain", [eave_n, back_n, back_top_n, top_n], Vector3(0, 0.4, -1), hip_uv)
+	_plane("roof", "sign_hip_n", [eave_n, back_n, back_top_n, top_n], Vector3(0, 0.4, -1), hip_uv)
 	_plane("roof", "sign_plain", [eave_s, back_s, back_top_s, top_s], Vector3(0, 0.4, 1), hip_uv)
 	_plane("roof", "trim_red", [back_n, back_s, back_top_s, back_top_n], Vector3.RIGHT)
 	# Standing seams up the slope and across the hips.
@@ -840,7 +846,7 @@ func _sign_roof() -> void:
 	while w < SIGN_W_BACK:
 		var tw := clampf((w - SIGN_W_EAVE) / (SIGN_W_TOP - SIGN_W_EAVE), 0.0, 1.0)
 		var top_y := lerpf(Y_EAVE, Y_SIGN_TOP, tw)
-		_rib(_p(w, Y_EAVE, SIGN_U0), _p(w, top_y, lerpf(SIGN_U0, SIGN_TOP_U0, tw)), Vector3(0, 0.4, -1).normalized(), Vector3.RIGHT)
+		_rib(_p(w, Y_EAVE, SIGN_U0), _p(w, top_y, lerpf(SIGN_U0, SIGN_TOP_U0, tw)), Vector3(0, 0.4, -1).normalized(), Vector3.RIGHT, "sign_hip_rib")
 		_rib(_p(w, Y_EAVE, SIGN_U1), _p(w, top_y, lerpf(SIGN_U1, SIGN_TOP_U1, tw)), Vector3(0, 0.4, 1).normalized(), Vector3.RIGHT)
 		w += HIP_RIB_PITCH_M
 	# Faded terracotta cap along the top of the slope; its flat top is the aerial's red roof.
@@ -852,21 +858,21 @@ func _sign_roof() -> void:
 	_quad("detail", "soffit_pale", _p(SIGN_W_EAVE, Y_SOFFIT, SIGN_U0), _p(FRONT_W, Y_SOFFIT, SIGN_U0), _p(FRONT_W, Y_SOFFIT, SIGN_U1), _p(SIGN_W_EAVE, Y_SOFFIT, SIGN_U1), Vector3.DOWN)
 	# Address on the fascia; the unlit roof sign, oval and floodlights ride on the cap.
 	var fascia := Face.new(_p(SIGN_W_EAVE - 0.1, 0, 0), Vector3.BACK, Vector3.LEFT)
-	_art(fascia, "sign_atlas", 14.55, 16.75, Y_FASCIA_LOW + 0.05, Y_EAVE - 0.03, 0.012, Rect2(0.0, 0.625, 0.5, 0.0625))
+	_art(fascia, "sign_bright", 14.55, 16.75, Y_FASCIA_LOW + 0.03, Y_EAVE - 0.02, 0.012, Rect2(0.0, 0.625, 0.5, 0.0625))
 	var cap := Face.new(_p(SIGN_W_TOP - 0.08, 0, 0), Vector3.BACK, Vector3.LEFT)
 	_art(cap, "sign_led", 14.3, 18.5, Y_SIGN_TOP - 0.02, Y_SIGN_CAP + 0.1, 0.05, Rect2(0.0, 0.0, 1.0, 0.25))
 	_oval(cap, 13.55, Y_SIGN_CAP - 0.04, 0.36, 0.2)
 	for u_lamp: float in [12.1, 19.6]:
-		_box("glow", "frame_grey", _p(SIGN_W_TOP - 0.3, Y_SIGN_TOP + 0.04, u_lamp - 0.24), _p(SIGN_W_TOP - 0.1, Y_SIGN_CAP + 0.08, u_lamp + 0.24))
-		_box("glow", "lamp", _p(SIGN_W_TOP - 0.31, Y_SIGN_TOP + 0.07, u_lamp - 0.2), _p(SIGN_W_TOP - 0.3, Y_SIGN_CAP + 0.05, u_lamp + 0.2))
+		_box("glow", "frame_grey", _p(SIGN_W_TOP - 0.3, Y_SIGN_TOP + 0.04, u_lamp - 0.19), _p(SIGN_W_TOP - 0.1, Y_SIGN_CAP + 0.06, u_lamp + 0.19))
+		_box("glow", "lamp", _p(SIGN_W_TOP - 0.31, Y_SIGN_TOP + 0.08, u_lamp - 0.15), _p(SIGN_W_TOP - 0.3, Y_SIGN_CAP + 0.03, u_lamp + 0.15))
 
 
-func _rib(a: Vector3, b: Vector3, out: Vector3, across: Vector3) -> void:
+func _rib(a: Vector3, b: Vector3, out: Vector3, across: Vector3, mat: String = "sign_rib") -> void:
 	var half := across * 0.016
 	var lift := out * 0.035
-	_plane("trim", "sign_rib", [a - half, b - half, b - half + lift, a - half + lift], -across)
-	_plane("trim", "sign_rib", [a + half, b + half, b + half + lift, a + half + lift], across)
-	_plane("trim", "sign_rib", [a - half + lift, b - half + lift, b + half + lift, a + half + lift], out)
+	_plane("trim", mat, [a - half, b - half, b - half + lift, a - half + lift], -across)
+	_plane("trim", mat, [a + half, b + half, b + half + lift, a + half + lift], across)
+	_plane("trim", mat, [a - half + lift, b - half + lift, b + half + lift, a + half + lift], out)
 
 
 func _oval(f: Face, s: float, y: float, rs: float, ry: float) -> void:
@@ -1080,8 +1086,8 @@ func _build_ene_north() -> void:
 	_box("trim", "band_black", _p(W_F, Y_F - 0.2, U_E - 0.45), _p(W_F + 0.42, Y_F + 0.02, U_F))
 	_box("trim", "coping_grey", _p(W_F - 0.3, Y_F, U_E - 0.45), _p(W_F + 0.44, Y_F + 0.06, U_F))
 	_cyl("trim", "grey_frame", _p(W_F + 0.07, Y_FOOT, 38.8), 0.04, Y_F - 0.2 - Y_FOOT, 8)
-	_grime_top(low, U_E, U_F, 6.6, Y_F - 0.2)
-	_grime_foot(low, U_E, U_F, 3.2, 4.2)
+	_grime_top(low, U_E, U_F, 6.6, Y_F - 0.2, 0.008, "grime_light")
+	_grime_foot(low, U_E, U_F, 3.2, 4.2, 0.008, "grime_light")
 	var ret := Face.new(_p(0, 0, U_E), Vector3.RIGHT, Vector3.FORWARD)
 	_wall(ret, "grey", W_E, W_F, Y_FOOT, Y_F)
 	# Tall block under the black band, with its roll-up door and hooded entry.
@@ -1096,7 +1102,7 @@ func _build_ene_north() -> void:
 		_fb("trim", "grey", tall, u - 0.15, u + 0.15, Y_FOOT, Y_BAND_LOW, 0.0, 0.1)
 	_band(tall, 0.0, U_E, true, false)
 	_hood(tall, 20.2, 28.0)
-	_grime_foot(tall, 0.0, 26.5, 3.2, 4.2)
+	_grime_foot(tall, 0.0, 26.5, 3.2, 4.2, 0.008, "grime_light")
 
 
 ## The black ribbed band that leans out over the grey walls (refs 16, 19, 20).
@@ -1256,6 +1262,12 @@ func _build_setting() -> void:
 	_fb("trim", "door_grey", side, -32.6, -30.3, tan + 1.1, tan + 1.85, 0.0, 0.01)
 	_fb("trim", "door_grey", side, -25.6, -24.2, tan + 1.25, tan + 1.95, 0.0, 0.01)
 	_wire_rack(-16.0, -35.3)
+	# Stacked containers and tarps that hide the ENE middle walls (refs 11, 13, 14, 22).
+	for stack: Array in [[62.2, 2, "container_grey"], [67.6, 2, "container_grey"], [73.0, 2, "container_grey"], [78.2, 1, "container_brown"], [84.2, 2, "container_brown"], [90.6, 2, "container_grey"], [97.0, 2, "container_grey"]]:
+		_yard_stack(stack[0], stack[1], stack[2])
+	for tarp: Vector2 in [Vector2(64.7, 67.6), Vector2(70.1, 73.0)]:
+		var yt := land_y(85.2, tarp.x) + LOT_LIFT
+		_box("detail", "tarp", _p(85.1, yt, tarp.x), _p(85.25, yt + 2.3, tarp.y))
 	# Green slatted bin enclosure on the 9th Street apron (refs 10, 12).
 	var pen := land_y(5.6, 131.6) + LOT_LIFT - 0.05
 	_box("detail", "fence_green", _p(3.0, pen, 129.6), _p(8.2, pen + 2.45, 133.6), 8)
@@ -1348,7 +1360,9 @@ func _rental_trailer(w: float, u: float) -> void:
 	var top := y + 2.42
 	_box("detail", "rental_white", _p(w - half, floor_y, u - length), _p(w + half, top - 0.1, u), 8)
 	_box("trim", "rental_white", _p(w - half + 0.08, top - 0.1, u - length + 0.08), _p(w + half - 0.08, top, u - 0.08), 4)
-	_quad("detail", "door_black", _p(w - half + 0.1, floor_y + 0.08, u + 0.005), _p(w + half - 0.1, floor_y + 0.08, u + 0.005), _p(w + half - 0.1, top - 0.18, u + 0.005), _p(w - half + 0.1, top - 0.18, u + 0.005), Vector3.BACK)
+	_quad("detail", "rental_inside", _p(w - half + 0.1, floor_y + 0.08, u + 0.005), _p(w + half - 0.1, floor_y + 0.08, u + 0.005), _p(w + half - 0.1, top - 0.18, u + 0.005), _p(w - half + 0.1, top - 0.18, u + 0.005), Vector3.BACK)
+	for rail: float in [0.5, 1.0]:
+		_box("trim", "wood", _p(w - half + 0.1, floor_y + rail, u + 0.005), _p(w + half - 0.1, floor_y + rail + 0.09, u + 0.02))
 	for sign_w: float in [-1.0, 1.0]:
 		var rim := w + sign_w * (half - 0.05)
 		_box("trim", "rental_white", _p(rim - 0.05, floor_y, u - 0.02), _p(rim + 0.05, top - 0.1, u + 0.03))
@@ -1395,6 +1409,22 @@ func _wheel(w: float, y: float, u: float) -> void:
 		_quad("detail", "tyre", _p(w - width, c + a.y, u + a.x), _p(w + width, c + a.y, u + a.x), _p(w + width, c + b.y, u + b.x), _p(w - width, c + b.y, u + b.x), out)
 		for end: float in [-1.0, 1.0]:
 			_s("detail", "tyre").add([_p(w + end * width, c, u), _p(w + end * width, c + a.y, u + a.x), _p(w + end * width, c + b.y, u + b.x)], Vector3(end, 0, 0))
+
+
+## Containers stacked end-on to Avenue I, their doors and lock bars facing the road.
+func _yard_stack(u0: float, tiers: int, mat: String) -> void:
+	var w0 := 73.2
+	var w1 := 85.3
+	var y0 := land_y(w1, u0) + LOT_LIFT - 0.02
+	for tier in tiers:
+		var y := y0 + tier * 2.6
+		_box("detail", mat, _p(w0, y, u0), _p(w1, y + 2.58, u0 + 2.44))
+		_box("trim", mat + "_edge", _p(w1, y, u0), _p(w1 + 0.05, y + 2.58, u0 + 0.1), 1)
+		_box("trim", mat + "_edge", _p(w1, y, u0 + 2.34), _p(w1 + 0.05, y + 2.58, u0 + 2.44), 1)
+		_box("trim", mat + "_edge", _p(w1, y + 2.44, u0), _p(w1 + 0.05, y + 2.58, u0 + 2.44), 1)
+		_box("trim", mat + "_edge", _p(w1, y, u0), _p(w1 + 0.05, y + 0.14, u0 + 2.44), 1)
+		for bar: float in [0.72, 1.72]:
+			_box("trim", "frame_grey", _p(w1 + 0.04, y + 0.14, u0 + bar), _p(w1 + 0.07, y + 2.44, u0 + bar + 0.05), 1)
 
 
 ## The white wire rack by the tan container (ref 05).
@@ -1452,6 +1482,9 @@ func _material(key: String) -> Material:
 		var paint: Array = PAINTS[key]
 		var rgb: Array = paint[0]
 		m.albedo_color = Color8(int(rgb[0]), int(rgb[1]), int(rgb[2]))
+		# The stucco tile darkens what it multiplies; the bleached white must stay white.
+		if key == "white":
+			m.albedo_color = Color(1.1, 1.1, 1.08)
 		m.roughness = float(paint[1])
 		var tile := str(paint[2])
 		if not tile.is_empty():
@@ -1464,10 +1497,10 @@ func _material(key: String) -> Material:
 	else:
 		match key:
 			"glass":
-				m.albedo_color = Color(0.05, 0.05, 0.06, 0.86)
+				m.albedo_color = Color(0.075, 0.068, 0.07, 0.9)
 				m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-				m.roughness = 0.08
-				m.metallic_specular = 0.7
+				m.roughness = 0.34
+				m.metallic_specular = 0.3
 			"interior":
 				m.albedo_texture = _texture(TEX + "market_interior.png")
 				m.albedo_color = Color(0.42, 0.42, 0.42)
@@ -1485,22 +1518,28 @@ func _material(key: String) -> Material:
 				m.roughness = 0.95
 			"sidewalk", "porch_floor":
 				m.albedo_texture = _texture(TEX + "apron_concrete.png")
-				m.albedo_color = Color(0.62, 0.6, 0.545) if key == "sidewalk" else Color(0.98, 0.95, 0.9)
+				m.albedo_color = Color(0.62, 0.6, 0.545) if key == "sidewalk" else Color(1.1, 1.06, 0.99)
 				m.uv1_scale = Vector3(1.0 / 6.0, 1.0 / 6.0, 1.0)
 				m.roughness = 0.92
 			"paint_worn":
 				m.albedo_color = Color(0.86, 0.85, 0.8, 0.55)
 				m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 				m.roughness = 0.9
-			"sign_sheet", "sign_plain":
-				m.albedo_texture = _texture(TEX + key + ".png")
+			"sign_sheet", "sign_plain", "sign_hip_n":
+				m.albedo_texture = _texture(TEX + ("sign_plain" if key == "sign_hip_n" else key) + ".png")
+				# The north hip never takes the sun: lifted so it reads as the same metal.
+				m.albedo_color = Color(1.3, 1.3, 1.28) if key == "sign_hip_n" else Color.WHITE
 				m.roughness = 0.72
 				m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
-			"sign_atlas", "sign_led":
+			"sign_atlas", "sign_led", "sign_bright":
 				m.albedo_texture = _texture(TEX + "sign_atlas.png")
 				m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 				m.roughness = 0.7
 				m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+				if key == "sign_bright":
+					m.emission_enabled = true
+					m.emission_texture = m.albedo_texture
+					m.emission_energy_multiplier = 0.45
 			"mural":
 				m.albedo_texture = _texture(TEX + "mural_nnw.png")
 				m.roughness = 0.9
@@ -1524,7 +1563,7 @@ func _material(key: String) -> Material:
 				m.albedo_color = Color(0.95, 0.95, 0.9)
 				m.emission_enabled = true
 				m.emission = Color(1.0, 0.98, 0.9)
-				m.emission_energy_multiplier = 1.2
+				m.emission_energy_multiplier = 0.5
 			"rollup_grey", "rollup_white":
 				m.albedo_color = Color8(150, 154, 154) if key == "rollup_grey" else Color8(232, 230, 222)
 				m.albedo_texture = _slat_texture()
