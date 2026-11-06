@@ -21,7 +21,7 @@ extends RefCounted
 
 ## Metadata that says which building and role a mesh belongs to. A merged mesh carries
 ## its sources' values; meshes that differ in any of them don't merge.
-const IDENTITY_META: Array[StringName] = [&"source_keys", &"source_key", &"derived_object_key", &"family_role", &"physical_role", &"mersea_role"]
+const IDENTITY_META: Array[StringName] = [&"source_keys", &"source_key", &"derived_object_key", &"family_role", &"physical_role", &"mersea_role", &"visual_only"]
 ## The identity metadata that tree walks inherit downwards. A merged mesh hangs from the
 ## nearest ancestor holding any of these, so those walks read the same roles as before.
 const INHERITED_META: Array[StringName] = [&"source_keys", &"source_key", &"derived_object_key", &"family_role", &"physical_role"]
