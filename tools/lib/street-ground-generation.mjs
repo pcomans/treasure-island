@@ -86,7 +86,6 @@ export const PARK_SURFACE_MATERIALS = Object.freeze({
   yard_gravel_pale: "yard-gravel-pale",
   yard_concrete: "yard-concrete",
   yard_pond: "yard-pond",
-  ditch_puddle: "ditch-puddle",
   yard_sand_pale: "yard-sand-pale",
   yard_soil_dark: "yard-soil-dark",
 });
@@ -482,7 +481,7 @@ export function validateStreetGroundRules(rules) {
   const lotIds = new Set();
   for (const lot of rules.lots) {
     const label = `Street ground lot ${lot?.id}`;
-    exactKeys(lot, ["evidence", "hatches", "id", "islands", "legends", "paint_wear", "rows", "source_key", ...("surface" in (lot ?? {}) ? ["surface"] : [])], label);
+    exactKeys(lot, ["evidence", "hatches", "id", "islands", "legends", "paint_wear", "rows", "source_key", ...["planted", "surface"].filter((field) => field in (lot ?? {}))], label);
     invariant(Number.isInteger(lot.paint_wear) && lot.paint_wear >= 0 && lot.paint_wear < PAINT_WEAR_STEPS, `${label} paint_wear must be a wear step`);
     for (const hatch of lot.hatches) {
       exactKeys(hatch, ["id", "points_xz", "stripes"], `${label} hatch`);
@@ -518,6 +517,10 @@ export function validateStreetGroundRules(rules) {
         ["left", "right"].includes(row.side) && STALL_STYLES.includes(row.style) && Number.isInteger(row.count) && row.count >= 1 &&
         isFiniteNumber(row.depth_m) && row.depth_m >= 4 && row.depth_m <= 16 && isFiniteNumber(row.stall_width_m) && row.stall_width_m >= 2.2 && row.stall_width_m <= 5 &&
         isFiniteNumber(row.angle_deg) && row.angle_deg >= 45 && row.angle_deg <= 90, `${label} row ${row.id} is malformed`);
+    }
+    for (const strip of lot.planted ?? []) {
+      exactKeys(strip, ["evidence", "id", "points_xz"], `${label} planted strip`);
+      invariant(SAFE_ID.test(strip.id) && Array.isArray(strip.points_xz) && strip.points_xz.length >= 3 && strip.points_xz.every(isXZ) && typeof strip.evidence === "string" && strip.evidence !== "", `${label} planted strip ${strip.id} is malformed`);
     }
     for (const island of lot.islands) {
       exactKeys(island, ["id", "points_xz", ...("fill" in (island ?? {}) ? ["fill"] : [])], `${label} island`);
@@ -1550,9 +1553,10 @@ export function generateStreetGround({
   // Rule walks set back from the curb: the ground between, filled per treatment.
   const ruleFills = { mulch: [], lawn: [] };
   // A planted lot island: mulch inside its curb.
+  // A lot's planted strip: mulch on the curb band inside its outline.
   for (const { lot } of lotRules) {
-    for (const island of lot.islands.filter(({ fill }) => fill === "mulch")) {
-      const ring = island.points_xz.map(([x, z]) => [x, -z]);
+    for (const part of [...lot.islands.filter(({ fill }) => fill === "mulch"), ...(lot.planted ?? [])]) {
+      const ring = part.points_xz.map(([x, z]) => [x, -z]);
       ruleFills.mulch.push([[ringArea(ring) > 0 ? ring : ring.reverse()]]);
     }
   }

@@ -21,7 +21,20 @@
 //     about drift_m across with ragged edges (the nearest of a jittered lattice
 //     of seeds, each with a species by share, to a noise-displaced point), with
 //     MIX_RATIO of the plants drawn from the whole mix so the patches intermix;
-//   - gaps: both rules leave the bed bare where a smooth noise at gaps.scale_m
+//   - field: plants sown over ground that was never laid out as a bed (a ditch's
+//     bank, a scruffy strip), by a density field that reads the site. Candidates
+//     fall at random over the zone, per_m2 of them, with no lattice, so nothing
+//     lines up from any angle; each survives with the field's value there. The
+//     field is the land's height (a trapezoid, height_m), a band of distances from
+//     the land's edge or the nearest road (edge_m, road_m), ramps along axes across
+//     the site (ramps), and clusters from two octaves of rotated, warped noise: drift_cover
+//     of the ground lies in drifts about drift_m across with clumps about clump_m
+//     across inside them, and lone plants stand at lone of the density outside
+//     them. The same value picks the plant: a mix entry grows where the field lies
+//     in its `at` range, and a plant's scale rises with the field through that
+//     range. A plant keeps a factor times the summed half widths from every plant,
+//     spacing[0] where the field is full, spacing[1] where it is thin;
+//   - gaps: drifts and fill leave the bed bare where a smooth noise at gaps.scale_m
 //     falls below gaps.cover, so small irregular patches of mulch show;
 //   - margin_m: a rule plants the bed within that distance outside its traced
 //     polygon too, so zones traced to a few metres still reach the paths and
@@ -60,7 +73,7 @@ export const PLANT_WIDTHS_M = Object.freeze({
   california_buckwheat: Object.freeze([0.65, 0.95, 1.25]),
   california_sagebrush: Object.freeze([0.75, 1.1, 1.45]),
   clipped_hedge: Object.freeze([1.0, 1.2]),
-  clump_grass: Object.freeze([0.92, 1.15, 1.0, 1.25]),
+  clump_grass: Object.freeze([0.92, 1.15, 1.0, 1.25, 1.0, 1.25]),
   conical_shrub: Object.freeze([2.0, 2.4]),
   dense_sedge: Object.freeze([0.55, 0.75, 0.95, 1.6, 2.5]),
   dune_tansy: Object.freeze([0.42, 0.62, 0.82]),
@@ -128,8 +141,11 @@ const MIX_RATIO = 0.12;
 export const PLANTING_RULE_FIELDS = Object.freeze({
   drifts: Object.freeze(["basis", "count", "drift_m", "evidence", "gaps", "id", "kind", "margin_m", "mix", "pattern", "rule", "spacing", "spread", "surfaces", "within_xz"]),
   fill: Object.freeze(["basis", "clump_m", "cover", "drift_m", "evidence", "gaps", "id", "kind", "margin_m", "max_per_m2", "mix", "pattern", "rule", "spacing", "surfaces", "within_xz"]),
+  field: Object.freeze(["basis", "evidence", "field", "id", "kind", "mix", "pattern", "per_m2", "rule", "spacing", "surfaces"]),
 });
 const MIX_FIELDS = Object.freeze(["band_m", "max_slope", "prop", "scale", "share", "spill_m", "variants"]);
+const FIELD_MIX_FIELDS = Object.freeze(["at", "prop", "scale", "share", "variants"]);
+const FIELD_TERMS = Object.freeze(["clump_m", "drift_cover", "drift_m", "edge_m", "height_m", "lone", "ramps", "road_m"]);
 
 function isFiniteNumber(value) {
   return typeof value === "number" && Number.isFinite(value);
@@ -141,6 +157,10 @@ const exactKeys = (value, fields) => JSON.stringify(Object.keys(value ?? {}).sor
 // mix entry's prop, variants and scale against the street-vegetation kit, and
 // variantCount(prop) gives the kit's number of variants.
 export function validatePlantingRule(rule, label, checkProp, variantCount) {
+  if (rule.pattern === "field") {
+    validateFieldRule(rule, label, checkProp, variantCount);
+    return;
+  }
   const fields = PLANTING_RULE_FIELDS[rule.pattern];
   invariant(fields && exactKeys(rule, fields), `${label}: a ${rule.pattern} rule has exactly ${fields?.join(", ")}`);
   invariant(Array.isArray(rule.within_xz) && rule.within_xz.length >= 3 && rule.within_xz.every((point) => Array.isArray(point) && point.length === 2 && point.every(isFiniteNumber)), `${label} within_xz must be a polygon of 3+ [x, z] points`);
@@ -170,6 +190,45 @@ export function validatePlantingRule(rule, label, checkProp, variantCount) {
     invariant(Array.isArray(entry.band_m) && entry.band_m.length === 2 && entry.band_m.every(isFiniteNumber) && entry.band_m[0] >= 0 && entry.band_m[1] > entry.band_m[0], `${entryLabel} band_m must be [near, far] metres from the bed edge`);
     invariant(isFiniteNumber(entry.max_slope) && entry.max_slope > 0, `${entryLabel} max_slope must be positive (rise per metre)`);
     invariant(isFiniteNumber(entry.spill_m) && entry.spill_m >= 0 && entry.spill_m <= 0.6, `${entryLabel} spill_m must be in [0, 0.6]`);
+  }
+}
+
+// A field rule's own fields; its within_xz is optional (the zone's shape bounds it).
+function validateFieldRule(rule, label, checkProp, variantCount) {
+  const fields = [...PLANTING_RULE_FIELDS.field, ...("within_xz" in rule ? ["within_xz"] : [])];
+  invariant(exactKeys(rule, fields), `${label}: a field rule has exactly ${fields.join(", ")}`);
+  if (rule.within_xz !== undefined) {
+    invariant(Array.isArray(rule.within_xz) && rule.within_xz.length >= 3 && rule.within_xz.every((point) => Array.isArray(point) && point.length === 2 && point.every(isFiniteNumber)), `${label} within_xz must be a polygon of 3+ [x, z] points`);
+  }
+  invariant(Array.isArray(rule.surfaces) && rule.surfaces.length > 0 && rule.surfaces.every((key) => typeof key === "string" && key !== ""), `${label} surfaces must list materials`);
+  invariant(isFiniteNumber(rule.per_m2) && rule.per_m2 > 0 && rule.per_m2 <= 4, `${label} per_m2 must be in (0, 4]`);
+  invariant(Array.isArray(rule.spacing) && rule.spacing.length === 2 && rule.spacing.every((value) => isFiniteNumber(value) && value >= 0.2 && value <= 4) && rule.spacing[0] <= rule.spacing[1], `${label} spacing must be [full, thin] factors in [0.2, 4]`);
+  const field = rule.field;
+  invariant(field != null && Object.keys(field).every((key) => FIELD_TERMS.includes(key)), `${label} field may hold ${FIELD_TERMS.join(", ")}`);
+  invariant(isFiniteNumber(field.drift_m) && field.drift_m >= 1, `${label} field drift_m must be at least 1`);
+  invariant(isFiniteNumber(field.clump_m) && field.clump_m >= 0.5 && field.clump_m <= field.drift_m, `${label} field clump_m must be in [0.5, drift_m]`);
+  invariant(isFiniteNumber(field.drift_cover) && field.drift_cover > 0 && field.drift_cover < 1, `${label} field drift_cover must be in (0, 1)`);
+  invariant(isFiniteNumber(field.lone) && field.lone >= 0 && field.lone < 1, `${label} field lone must be in [0, 1)`);
+  if (field.height_m !== undefined) {
+    invariant(Array.isArray(field.height_m) && field.height_m.length === 4 && field.height_m.every(isFiniteNumber) && field.height_m.every((value, index, all) => index === 0 || value >= all[index - 1]), `${label} field height_m must be four rising heights`);
+  }
+  for (const band of ["edge_m", "road_m"]) {
+    if (field[band] === undefined) continue;
+    invariant(Array.isArray(field[band]) && field[band].length === 2 && field[band].every(isFiniteNumber) && field[band][0] >= 0 && field[band][1] > field[band][0], `${label} field ${band} must be [near, far] metres`);
+  }
+  for (const ramp of field.ramps ?? []) {
+    invariant(exactKeys(ramp, ["from_xz", "high", "low", "to_xz"]) && [ramp.from_xz, ramp.to_xz].every((point) => Array.isArray(point) && point.length === 2 && point.every(isFiniteNumber)) && isFiniteNumber(ramp.low) && isFiniteNumber(ramp.high) && ramp.low >= 0 && ramp.high <= 1 && ramp.low <= ramp.high, `${label} field ramps must be {from_xz, to_xz, low, high}`);
+  }
+  invariant(rule.basis === "production_inference", `${label} basis must be production_inference`);
+  for (const text of ["rule", "evidence"]) invariant(typeof rule[text] === "string" && rule[text].trim() !== "", `${label} needs ${text}`);
+  invariant(Array.isArray(rule.mix) && rule.mix.length > 0, `${label} needs a mix`);
+  for (const [index, entry] of rule.mix.entries()) {
+    const entryLabel = `${label} mix ${index} (${entry?.prop})`;
+    invariant(exactKeys(entry, FIELD_MIX_FIELDS), `${entryLabel} must have exactly ${FIELD_MIX_FIELDS.join(", ")}`);
+    checkProp(entry.prop, rule.kind, { variants: entry.variants, scale: entry.scale }, entryLabel);
+    invariant(PLANT_WIDTHS_M[entry.prop]?.length === variantCount(entry.prop), `${entryLabel} needs a crown width for each of the kit's variants (PLANT_WIDTHS_M)`);
+    invariant(isFiniteNumber(entry.share) && entry.share > 0, `${entryLabel} share must be positive`);
+    invariant(Array.isArray(entry.at) && entry.at.length === 2 && entry.at.every(isFiniteNumber) && entry.at[0] >= 0 && entry.at[1] <= 1 && entry.at[0] < entry.at[1], `${entryLabel} at must be a field range in [0, 1]`);
   }
 }
 
@@ -642,4 +701,101 @@ export function unpackPlantingRows(document) {
   rows.sort((left, right) => (left.id < right.id ? -1 : left.id > right.id ? 1 : 0));
   const { planting_rows: _packed, ...rest } = document;
   return { ...rest, rows };
+}
+
+const smoothRamp = (from, to, value) => {
+  const t = Math.max(0, Math.min(1, (value - from) / Math.max(1e-9, to - from)));
+  return t * t * (3 - 2 * t);
+};
+
+// The density of a field rule at a point, in [0, 1]: site is {height, edge, road},
+// each the site's reading there or undefined for a term the rule does not use.
+function fieldDensity(rule, tag) {
+  const spec = rule.field;
+  const drift = valueNoise(`${tag}|field-drift`);
+  const clump = valueNoise(`${tag}|field-clump`);
+  const warpX = valueNoise(`${tag}|field-warp-x`);
+  const warpZ = valueNoise(`${tag}|field-warp-z`);
+  // The value noise's lattices turn away from the axes and from each other, and a
+  // warp bends what is left of them, so no drift's edge runs straight.
+  const turned = (x, z, angle) => [x * Math.cos(angle) - z * Math.sin(angle), x * Math.sin(angle) + z * Math.cos(angle)];
+  const level = 0.5 + (0.5 - spec.drift_cover) * 0.55;
+  return (x, z, site) => {
+    const reach = 0.45 * spec.drift_m;
+    const wx = x + (warpX(x, z, spec.drift_m * 1.3) - 0.5) * 2 * reach;
+    const wz = z + (warpZ(x, z, spec.drift_m * 1.3) - 0.5) * 2 * reach;
+    const [ax, az] = turned(wx, wz, 0.61);
+    const [bx, bz] = turned(wx, wz, 1.27);
+    const noise = 0.62 * drift(ax, az, spec.drift_m) + 0.38 * clump(bx, bz, spec.clump_m);
+    const clumped = smoothRamp(level - 0.05, level + 0.09, noise);
+    let density = spec.lone + (1 - spec.lone) * clumped;
+    if (spec.height_m) {
+      const [riseFrom, riseTo, fallFrom, fallTo] = spec.height_m;
+      density *= smoothRamp(riseFrom, riseTo, site.height) * (1 - smoothRamp(fallFrom, fallTo, site.height));
+    }
+    for (const { from_xz: from, to_xz: to, low, high } of spec.ramps ?? []) {
+      const dx = to[0] - from[0];
+      const dz = to[1] - from[1];
+      const t = Math.max(0, Math.min(1, ((x - from[0]) * dx + (z - from[1]) * dz) / Math.max(1e-9, dx * dx + dz * dz)));
+      density *= low + (high - low) * t;
+    }
+    return density;
+  };
+}
+
+// Places a field rule's plants. box {min_x, max_x, min_z, max_z} bounds them;
+// inside(xz) is the zone's and the rule's shape; onGround(xz) whether the visible
+// ground is one of the rule's surfaces; heightAt(xz) the land's height, edgeOk and
+// roadOk(xz, [near, far]) whether a point lies in those bands; paving and accept as
+// planDrifts. Returns {placed, rejected}.
+export function planField({ rule, zoneId, seed, box, inside, onGround, heightAt, edgeOk, roadOk, paving, state, accept }) {
+  const tag = `${seed}|${zoneId}|${rule.id}`;
+  const random = generator(`${tag}|field`);
+  const density = fieldDensity(rule, tag);
+  const hashUnit = (text, slot = 0) => createHash("sha256").update(`${tag}|${text}`, "utf8").digest().readUInt32BE(slot * 4) / 0xffffffff;
+  const rejected = {};
+  const reject = (reason) => {
+    rejected[reason] = (rejected[reason] ?? 0) + 1;
+  };
+  const spec = rule.field;
+  const attempts = Math.ceil((box.max_x - box.min_x) * (box.max_z - box.min_z) * rule.per_m2);
+  let placed = 0;
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    const point = [box.min_x + random() * (box.max_x - box.min_x), box.min_z + random() * (box.max_z - box.min_z)];
+    const roll = random();
+    if (!inside(point) || !onGround(point)) continue;
+    if (spec.edge_m && !edgeOk(point, spec.edge_m)) continue;
+    if (spec.road_m && !roadOk(point, spec.road_m)) continue;
+    const here = density(point[0], point[1], { height: spec.height_m ? heightAt(point) : undefined });
+    if (roll >= here) {
+      reject("thin");
+      continue;
+    }
+    const identity = `f${String(attempt).padStart(6, "0")}`;
+    const allowed = rule.mix.filter((entry) => here >= entry.at[0] && here <= entry.at[1]);
+    if (allowed.length === 0) {
+      reject("no_entry");
+      continue;
+    }
+    const entry = pickByShare(hashUnit(identity, 0), allowed);
+    const [first, last] = entry.variants;
+    const variant = Math.min(last, first + Math.floor(hashUnit(identity, 1) * (last - first + 1)));
+    const grown = (here - entry.at[0]) / (entry.at[1] - entry.at[0]);
+    const scale = roundCoordinate(entry.scale[0] + (entry.scale[1] - entry.scale[0]) * (0.65 * grown + 0.35 * hashUnit(identity, 2)));
+    const half = (PLANT_WIDTHS_M[entry.prop][variant] * scale) / 2;
+    const factor = rule.spacing[1] + (rule.spacing[0] - rule.spacing[1]) * here;
+    if (!fits(state, entry.prop, half, point[0], point[1], factor, factor)) {
+      reject("spacing");
+      continue;
+    }
+    if (paving(point, half + PAVING_CLEAR_M)) {
+      reject("paving");
+      continue;
+    }
+    const candidate = { xz: [roundCoordinate(point[0]), roundCoordinate(point[1])], prop: entry.prop, variant, scale, half, identity };
+    if (!accept(candidate)) continue;
+    addPlant(state, candidate.prop, candidate.half, point[0], point[1]);
+    placed += 1;
+  }
+  return { placed, rejected };
 }

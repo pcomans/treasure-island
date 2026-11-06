@@ -26,6 +26,7 @@ import {
   packPlantingRows,
   pavingUnder,
   planDrifts,
+  planField,
   planFill,
   plantingState,
   validatePlantingRule,
@@ -180,7 +181,7 @@ export const STREET_DETAIL_KINDS = Object.freeze({
 
 const AMENITY_KINDS = Object.freeze(["bench", "bicycle_parking", "post_box", "waste_basket"]);
 // Scatter patterns that plant naturalistic beds (tools/lib/street-planting-generation.mjs).
-const PLANTING_PATTERNS = Object.freeze(["drifts", "fill"]);
+const PLANTING_PATTERNS = Object.freeze(["drifts", "field", "fill"]);
 // A canopy tree beside a wall: its crown at most CANOPY_WALL_SPREAD times its
 // trunk's distance from the wall plus CANOPY_WALL_MARGIN_M, so it reaches the wall
 // without standing through it.
@@ -1368,7 +1369,7 @@ export function generateStreetDetail({
     return Math.hypot((east - west) / (2 * step), (south - north) / (2 * step));
   };
   const plantingStates = new Map();
-  const placePlanting = (zone, rule, contains) => {
+  const placePlanting = (zone, rule, contains, bounds) => {
     if (!plantingStates.has(zone.id)) plantingStates.set(zone.id, plantingState());
     const radius = STREET_DETAIL_KINDS[rule.kind].footprint_radius_m;
     // The items a plant must clear, on a coarse grid of their reach.
@@ -1398,8 +1399,8 @@ export function generateStreetDetail({
       else if (!onLand(xz, exclusions.land_edge_buffer_m + radius * 0.5)) problem = "land_edge";
       else if (hardViolation(hardShapes, [xz], radius)) problem = hardViolation(hardShapes, [xz], radius).reason;
       else if (buildings.nearest(xz, exclusions.building_buffer_m + radius).distance < exclusions.building_buffer_m + radius) problem = "building_buffer";
-      else if (shorelineOverlays.nearest(xz, radius).distance < radius) problem = "shoreline_overlay";
-      else if (!rule.surfaces.includes(surfaceAt(xz).material_key)) problem = "rule_surface";
+      else if (rule.pattern !== "field" && shorelineOverlays.nearest(xz, radius).distance < radius) problem = "shoreline_overlay";
+      else if (rule.pattern !== "field" && !rule.surfaces.includes(surfaceAt(xz).material_key)) problem = "rule_surface";
       else {
         const near = blockers.get(`${Math.floor(xz[0] / BLOCK_CELL_M)},${Math.floor(xz[1] / BLOCK_CELL_M)}`) ?? [];
         if (near.some((item) => polylineDistance(xz, item.points) < item.radius_m + radius)) problem = "overlap";
@@ -1437,15 +1438,33 @@ export function generateStreetDetail({
       audit.scatter.placed += 1;
       return true;
     };
-    const plan = (rule.pattern === "drifts" ? planDrifts : planFill)({
+    const paving = (xz, reach) => pavingUnder(xz, reach, groundAt);
+    const state = plantingStates.get(zone.id);
+    const plan = rule.pattern === "field" ? planField({
+      rule,
+      zoneId: zone.id,
+      seed,
+      box: { min_x: bounds.min_x, max_x: bounds.max_x, min_z: bounds.min_y, max_z: bounds.max_y },
+      inside: (xz) => contains(xz) && (!rule.within_xz || pointInRing(xz, rule.within_xz, true)),
+      onGround: (xz) => rule.surfaces.includes(groundAt(xz)?.material_key),
+      heightAt: (xz) => groundAt(xz)?.y,
+      edgeOk: (xz, [near, far]) => onLand(xz, near) && !onLand(xz, far),
+      roadOk: (xz, [near, far]) => {
+        const { distance } = plantRoads.nearest(xz, far);
+        return distance >= near && distance <= far;
+      },
+      paving,
+      state,
+      accept,
+    }) : (rule.pattern === "drifts" ? planDrifts : planFill)({
       rule,
       zoneId: zone.id,
       seed,
       bed: (xz) => ground.site.parkBed([xz[0], -xz[1]], rule.surfaces),
       onBed: (xz) => ground.site.parkBedOn([xz[0], -xz[1]], rule.surfaces),
       slopeAt,
-      paving: (xz, radius) => pavingUnder(xz, radius, groundAt),
-      state: plantingStates.get(zone.id),
+      paving,
+      state,
       accept,
     });
     for (const [reason, number] of Object.entries(plan.rejected)) count(audit.scatter.rejected_by_reason, `planting_${reason}`, number);
@@ -1472,6 +1491,14 @@ export function generateStreetDetail({
   // fits; a trunk that cannot stand at the crown's centre moves up to nudge_m (the
   // aerial's positions are good to about that) to the nearest spot that can, and
   // a crown close to a wall comes down to a size that barely reaches it.
+  // A crown this close to a tree another rule planted, or to a set piece, is that
+  // tree or its shadow read a second time.
+  const CROWN_REREAD_ROW_M = 10;
+  const CROWN_REREAD_PIECE_M = 4;
+  const canopySources = new Set(config.zones.flatMap((zone) => (zone.scatter ?? []).filter((rule) => rule.pattern === "canopy").map((rule) => `zone:${zone.id}/${rule.id}`)));
+  const crownReread = (xz) => rows.some((row) => ["palm_slot", "tree"].includes(row.kind) && !canopySources.has(row.source_id)
+    && Math.hypot(row.position_m[0] - xz[0], row.position_m[2] - xz[1]) < (row.source === "scatter" ? CROWN_REREAD_ROW_M : CROWN_REREAD_PIECE_M));
+  const pinAt = (xz) => treeCrowns.pins.find((pin) => Math.hypot(pin.at_xz[0] - xz[0], pin.at_xz[1] - xz[1]) <= pin.reach_m);
   const placeCanopy = (zone, rule, contains) => {
     const crowns = treeCrowns.groups[rule.group];
     invariant(crowns, `Street detail rule ${zone.id}/${rule.id} names unknown crown group ${rule.group}`);
@@ -1489,6 +1516,10 @@ export function generateStreetDetail({
       const identity = `${zone.id}:${rule.id}:c${String(index).padStart(4, "0")}`;
       audit.scatter.candidates += 1;
       const centre = [round3(x), round3(z)];
+      if (crownReread(centre)) {
+        count(audit.scatter.rejected_by_reason, "crown_reread");
+        return;
+      }
       let spot = null;
       let problem = problemAt(centre);
       if (problem === null) spot = centre;
@@ -1505,7 +1536,9 @@ export function generateStreetDetail({
       }
       const wall = buildings.nearest(spot, crownM).distance;
       const crown = Math.min(crownM, CANOPY_WALL_SPREAD * wall + CANOPY_WALL_MARGIN_M);
-      const drawn = drawCanopyTree(seed, identity, crown, rule.mix, rule.fit);
+      // A crown a dated photo names keeps that photo's species.
+      const pin = pinAt(centre);
+      const drawn = pin ? drawCanopyTree(seed, identity, crown, [{ prop: pin.prop, share: 1, variants: pin.variants, scale: [0.8, 1.25] }], 1) : drawCanopyTree(seed, identity, crown, rule.mix, rule.fit);
       const surface = surfaceAt(spot);
       const { y, support } = grounded(spot);
       const planted = plantRow({ prop: drawn.prop, kind: rule.kind, variant: drawn.variant, scale: drawn.scale, xz: spot, landY: y, surface, groundAt });
@@ -1631,7 +1664,7 @@ export function generateStreetDetail({
           continue;
         }
         if (PLANTING_PATTERNS.includes(rule.pattern)) {
-          placePlanting(zone, rule, contains);
+          placePlanting(zone, rule, contains, bounds);
           continue;
         }
         const candidates = [];

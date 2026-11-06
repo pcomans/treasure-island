@@ -300,6 +300,9 @@ const GRASSES := [
 	{"seed": 32, "cell": "green", "height": 0.92, "width": 1.15, "cards": 5},
 	{"seed": 33, "cell": "straw", "height": 0.62, "width": 1.0, "cards": 4},
 	{"seed": 34, "cell": "straw", "height": 0.82, "width": 1.25, "cards": 5},
+	# Dead straw on the ditch bank by the Mersea lot (owner photos, Nov 2026): the straw clump, darker and duller.
+	{"seed": 35, "cell": "straw", "height": 0.7, "width": 1.0, "cards": 4, "tone": Color(0.6, 0.53, 0.5)},
+	{"seed": 36, "cell": "straw", "height": 0.9, "width": 1.25, "cards": 5, "tone": Color(0.52, 0.46, 0.43)},
 ]
 
 ## Cityside Park's young Sydney blue gums in the windrow plazas' double rows
@@ -3679,6 +3682,7 @@ func _build_grass(p: Dictionary) -> Dictionary:
 	var height := float(p.height)
 	var width := float(p.width)
 	var cards := int(p.cards)
+	var tone: Color = p.get("tone", Color.WHITE)
 	var mesh := ArrayMesh.new()
 	var leaves := Surf.new()
 	var phase := rng.randf() * PI
@@ -3699,7 +3703,7 @@ func _build_grass(p: Dictionary) -> Dictionary:
 				var outward := Vector3(position.x, 0.0, position.z)
 				var n := Vector3.UP * 0.65 + (outward.normalized() * 0.35 if outward.length() > 0.01 else Vector3.ZERO)
 				var shade := lerpf(0.58, 1.0, f)
-				leaves.add(position, n, cell.position + Vector2(float(i) / 2.0, 1.0 - f) * cell.size, Color(shade, shade, shade), Vector2(0.0, 0.05 * f * f))
+				leaves.add(position, n, cell.position + Vector2(float(i) / 2.0, 1.0 - f) * cell.size, tone * Color(shade, shade, shade), Vector2(0.0, 0.05 * f * f))
 		for j in 2:
 			for i in 2:
 				var a := base + j * 3 + i

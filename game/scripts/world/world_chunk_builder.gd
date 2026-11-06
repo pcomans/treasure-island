@@ -106,9 +106,6 @@ const STREET_GROUND_SURFACES := {
 	"yard_sand_pale": {"albedo": preload("res://game/resources/textures/world/street/yard_sand_pale.png"), "uv_scale": 5.0, "roughness": 0.98, "tint": Color(0.77, 0.76, 0.65)},
 	"yard_soil_dark": {"albedo": preload("res://game/resources/textures/world/street/yard_soil_dark.png"), "uv_scale": 5.0, "roughness": 0.95},
 	"yard_pond": {"albedo": preload("res://game/resources/textures/world/street/yard_pond.png"), "uv_scale": 2.0, "roughness": 0.15},
-	# Still shallow puddles that hold the sky (the ditch beside the Mersea lot, owner
-	# photos, Nov 2026): the pond's murk darkened, nearly mirror-smooth.
-	"ditch_puddle": {"albedo": preload("res://game/resources/textures/world/street/yard_pond.png"), "uv_scale": 2.0, "roughness": 0.05, "metallic": 0.45, "tint": Color(0.30, 0.38, 0.50)},
 	"rubble_grey": {"albedo": preload("res://game/resources/textures/world/shoreline/riprap_albedo.png"), "uv_scale": 8.0, "roughness": 0.95, "tint": Color(1.12, 1.12, 1.1)},
 	"black_plastic": {"albedo": preload("res://game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg"), "uv_scale": 2.0, "roughness": 0.45, "tint": Color(0.3, 0.3, 0.32)},
 }
@@ -983,7 +980,6 @@ func _street_ground_material(material_key: String) -> StandardMaterial3D:
 	material.albedo_texture = surface.albedo as Texture2D
 	material.albedo_color = surface.get("tint", Color.WHITE) as Color
 	material.roughness = float(surface.roughness)
-	material.metallic = float(surface.get("metallic", 0.0))
 	var uv_scale := float(surface.uv_scale)
 	material.uv1_scale = Vector3(uv_scale, uv_scale, 1.0)
 	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC

@@ -107,8 +107,8 @@
    "channel": "straw",
    "surfaces": ["land_ground", "terrain_wetland"],
    "above_m": {
-    "from_m": 2.75,
-    "to_m": 3.25
+    "from_m": 2.3,
+    "to_m": 3.0
    },
    "basis": "production_inference",
    "reason": "The basin's banks are dry straw grass above its red floor, following the land's own 1.8-4.3 m basin.",
@@ -141,16 +141,6 @@
    "basis": "production_inference",
    "reason": "Bare sandy gravel fill along the top of the bank by the lot's curb.",
    "evidence": "Owner photos, Nov 2026, from the lot's west curb at about (-266, 203): dry straw and bare sandy gravel fill on the slope down from the lot edge to the red marsh floor."
-  },
-  {
-   "id": "mersea_median_ground",
-   "channel": "bare",
-   "surfaces": ["street_kerb_verge"],
-   "within_xz": [[-392, 88], [-372, 78], [-345, 62], [-318, 52], [-312, 62], [-338, 80], [-362, 97], [-384, 106]],
-   "feather_m": 1,
-   "basis": "production_inference",
-   "reason": "Bare dark soil and mulch under the strip's shrubs, not grass.",
-   "evidence": "Street View Sep 2025 on 9th St (pano zSYuqR9R0oyboW2wFZ-wEw, heading 150)."
   },
   {
    "id": "job_corps_kerb_verges",

@@ -54,7 +54,7 @@ export const STREET_VEGETATION_PROPS = Object.freeze({
   california_sagebrush: vegetationProp(LOW_PLANT_KINDS, 3, 0.3, false),
   canary_date_palm: vegetationProp(["palm_slot", "tree"], 6, 0.7, true),
   clipped_hedge: vegetationProp(["hedge"], 2, 0.45, false),
-  clump_grass: vegetationProp(["grass_clump"], 4, 0.3, false),
+  clump_grass: vegetationProp(["grass_clump"], 6, 0.3, false),
   conical_shrub: vegetationProp(["planting_slot", "tree"], 2, 0.4, false),
   dense_sedge: vegetationProp(LOW_PLANT_KINDS, 5, 0.18, false),
   dune_tansy: vegetationProp(LOW_PLANT_KINDS, 3, 0.2, false),
@@ -249,6 +249,18 @@ export function validateTreeCrowns(document) {
     invariant(Array.isArray(crowns) && crowns.length > 0 && crowns.every((crown) => Array.isArray(crown) && crown.length === 3 && crown.every(isFiniteNumber) && crown[2] > 0),
       `Tree crown group ${group} must list [x, z, crown_m]`);
   }
+  invariant(Array.isArray(document.pins), "Tree crowns need pins");
+  for (const [index, pin] of document.pins.entries()) {
+    const label = `Tree crown pin ${index}`;
+    invariant(JSON.stringify(Object.keys(pin).sort()) === JSON.stringify(PIN_FIELDS), `${label} must be exactly {${PIN_FIELDS.join(", ")}}`);
+    invariant(Array.isArray(pin.at_xz) && pin.at_xz.length === 2 && pin.at_xz.every(isFiniteNumber) && isFiniteNumber(pin.reach_m) && pin.reach_m > 0 && pin.reach_m <= 10, `${label} needs at_xz and a reach_m up to 10`);
+    invariant(typeof pin.evidence === "string" && pin.evidence.trim() !== "", `${label} needs its evidence`);
+    invariant(CANOPY_CROWNS_M[pin.prop] != null, `${label}: ${pin.prop} has no canopy crown widths`);
+    validateVegetationRuleParams(pin.prop, { variants: pin.variants, scale: [0.8, 1.25] }, label);
+    for (let variant = pin.variants[0]; variant <= pin.variants[1]; variant += 1) {
+      invariant(CANOPY_CROWNS_M[pin.prop][variant] != null, `${label}: ${pin.prop} variant ${variant} is not a canopy form`);
+    }
+  }
   invariant(document.hedges != null && typeof document.hedges === "object" && !Array.isArray(document.hedges), "Tree crowns need hedges");
   for (const [group, lines] of Object.entries(document.hedges)) {
     invariant(Array.isArray(lines) && lines.length > 0 && lines.every((line) => Array.isArray(line) && line.length >= 2 && line.every((point) => Array.isArray(point) && point.length === 2 && point.every(isFiniteNumber))),
@@ -261,6 +273,7 @@ export function validateTreeCrowns(document) {
 // spread or crown), null for a form no canopy rule draws.
 const CANOPY_CROWNS_M = Object.freeze({
   canary_date_palm: Object.freeze([6.5, 7.0, 7.5, 8.0, 8.5, 9.0]),
+  mexican_fan_palm: Object.freeze([null, null, null, null, 5.0, 5.5]),
   eucalyptus_mature: Object.freeze([15.0, 18.0]),
   monterey_cypress: Object.freeze([17.0, 12.5, null, null, null]),
   monterey_pine: Object.freeze([8.5, 10.0, 11.2, 7.2, 8.2, 8.6]),
@@ -272,6 +285,7 @@ const CANOPY_CROWNS_M = Object.freeze({
 // and still take its turn, so a stand of one crown size isn't all one model.
 const CANOPY_VARIANT_SLACK = 0.25;
 const CANOPY_ENTRY_FIELDS = Object.freeze(["prop", "scale", "share", "variants"]);
+const PIN_FIELDS = Object.freeze(["at_xz", "evidence", "prop", "reach_m", "variants"]);
 
 // A canopy rule's mix: entries {prop, share, variants: [first, last], scale: [low, high]}.
 export function validateCanopyMix(mix, label) {
