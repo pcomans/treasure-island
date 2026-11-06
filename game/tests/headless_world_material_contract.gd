@@ -3,6 +3,8 @@ extends SceneTree
 const TEXTURE_ROOT := "res://game/resources/textures/world/polyhaven"
 const GROUND_COVER := preload("res://game/scripts/world/ground_cover.gd")
 const GROUND_COVER_SHADER_PATH := "res://game/resources/materials/world/ground_cover/ground_cover.gdshader"
+const GROUND_COVER_MAP_PATH := "res://game/resources/textures/world/ground_cover/cover_map.png"
+const GROUND_COVER_CONFIG_PATH := "res://tools/config/ground-cover.json"
 const COVERAGE_LEDGER_PATH := "res://generated/world/coverage-ledger.csv"
 const SHORELINE_SHADER_PATH := "res://game/resources/materials/world/shoreline/riprap.gdshader"
 const SHORELINE_ALBEDO_PATHS := {
@@ -24,15 +26,20 @@ const EXPECTED_MATERIALS := {
 ## key and the family it must use ("" keeps the builder's own material).
 const GROUND_ROUTES := [
 	["land_ground", "land_ground", "w26767313", "field"],
-	["major_area", "major_area_landuse", "r17241151", "residential"],
+	["major_area", "major_area_landuse", "r17241151", "field"],
 	["major_area", "major_area_landuse", "w1252737732", "bare"],
+	["major_area", "major_area_landuse", "w1252737754", "turf"],
+	["major_area", "major_area_landuse", "w1098437861", "straw"],
 	["major_area", "major_area_leisure", "w1428380753", "lawn"],
-	["major_area", "major_area_leisure", "w99060807", "sports"],
+	["major_area", "major_area_leisure", "w1428380754", "park_lawn"],
+	["major_area", "major_area_leisure", "w99060807", "watered_pitch"],
 	["major_area", "major_area_leisure", "w96665888", "paved"],
-	["major_area", "major_area_amenity", "w1252737750", "lawn"],
+	["major_area", "major_area_amenity", "w1252737750", "straw"],
 	["major_area", "major_area_amenity", "w1043836449", "field"],
 	["major_area", "major_area_paved", "w95934095", ""],
-	["terrain_overlay", "terrain_sand", "w109042224", ""],
+	["terrain_overlay", "terrain_sand", "w109042224", "sand_pad"],
+	["terrain_overlay", "terrain_wetland", "w1473022589", "marsh"],
+	["terrain_overlay", "terrain_breakwater", "w1222684027", ""],
 ]
 
 
@@ -47,13 +54,13 @@ func _initialize() -> void:
 	if not _runtime_tangents_are_present(builder):
 		quit(1)
 		return
-	if not _ground_families_match() or not _ground_routes_match(builder) or not _ground_overrides_name_generated_areas():
+	if not _ground_families_match() or not _ground_cover_map_matches() or not _ground_routes_match(builder) or not _ground_overrides_name_generated_areas():
 		quit(1)
 		return
 	if not _shoreline_material_matches(builder):
 		quit(1)
 		return
-	print("PASS: %d Poly Haven semantic materials retain official source dimensions and exact maps while using approved effective repeats, mipmapped filtering, and pinned subtle normals; land and area records use the shared ground-cover families; the shoreline slope and stones share one riprap shader with mipmapped textures, and its band and shoulder share the verge's ground cover" % EXPECTED_MATERIALS.size())
+	print("PASS: %d Poly Haven semantic materials retain official source dimensions and exact maps while using approved effective repeats, mipmapped filtering, and pinned subtle normals; land and area records use the shared ground-cover families, which read the ground-cover map over its configured rectangle; the shoreline slope and stones share one riprap shader with mipmapped textures, and its band and shoulder share the verge's ground cover" % EXPECTED_MATERIALS.size())
 	quit(0)
 
 
@@ -144,6 +151,35 @@ func _ground_families_match() -> bool:
 				return false
 		for parameter: String in GROUND_COVER.FAMILIES[family]:
 			if not _require(float_uniforms.has(parameter), "%s setting %s is not a float uniform of the ground-cover shader." % [family, parameter]):
+				return false
+	return true
+
+
+## Every family reads the committed ground-cover map (lossless, mipmapped)
+## over the rectangle tools/config/ground-cover.json draws it for, at one texel
+## per map cell, and draws each map channel with its recipe family's mix.
+func _ground_cover_map_matches() -> bool:
+	var config: Variant = JSON.parse_string(FileAccess.get_file_as_string(GROUND_COVER_CONFIG_PATH))
+	if not _require(config is Dictionary and config.get("map") is Dictionary, "Cannot read the ground-cover map rectangle from %s." % GROUND_COVER_CONFIG_PATH):
+		return false
+	var map: Dictionary = config.map
+	var origin := Vector2(float(map.origin_xz[0]), float(map.origin_xz[1]))
+	var size := Vector2(float(map.size_m[0]), float(map.size_m[1]))
+	if not _require(origin == GROUND_COVER.COVER_MAP_ORIGIN and size == GROUND_COVER.COVER_MAP_SIZE_M, "ground_cover.gd's map rectangle differs from %s." % GROUND_COVER_CONFIG_PATH):
+		return false
+	var texture := GROUND_COVER.COVER_MAP as Texture2D
+	var image := texture.get_image() if texture != null else null
+	if not _require(texture != null and texture.resource_path == GROUND_COVER_MAP_PATH and image != null and image.has_mipmaps(), "The ground-cover map is missing or lacks mipmaps.") \
+	or not _require(Vector2(image.get_width(), image.get_height()) * float(map.cell_m) == size, "The ground-cover map is not one texel per %s m cell of its rectangle." % map.cell_m):
+		return false
+	var rect := Vector4(origin.x, origin.y, 1.0 / size.x, 1.0 / size.y)
+	for family: String in GROUND_COVER.FAMILIES:
+		var material := GROUND_COVER.material(family)
+		if not _require(material.get_shader_parameter("cover_map") == texture and material.get_shader_parameter("cover_map_rect") == rect, "%s ground cover does not read the ground-cover map." % family):
+			return false
+		for uniform: String in GROUND_COVER.COVER_MAP_RECIPES:
+			var recipe: Dictionary = GROUND_COVER.FAMILIES[GROUND_COVER.COVER_MAP_RECIPES[uniform]]
+			if not _require(material.get_shader_parameter(uniform) == Vector3(recipe.dry_threshold, recipe.bare_threshold, recipe.green_dryness), "%s ground cover's %s is not its recipe family's mix." % [family, uniform]):
 				return false
 	return true
 

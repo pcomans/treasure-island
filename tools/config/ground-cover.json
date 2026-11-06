@@ -1,0 +1,206 @@
+{
+ "schema_version": "ti.ground-cover/1",
+ "notes": [
+  "Where the ground-cover shader (game/resources/materials/world/ground_cover/ground_cover.gdshader) draws a recipe over a record's own family: tools/lib/ground-cover-map.mjs draws these rules into the world map game/resources/textures/world/ground_cover/cover_map.png (rebuild it with tools/build_ground_cover_map.mjs after the world or this file changes). Coordinates are world metres: +X east, +Z south.",
+  "Channels name the recipe families of game/scripts/world/ground_cover.gd: lawn (maintained lawn with some dry patches), straw (dry straw grass), dry_field (dry grass with much bare ground) and bare (bare fill soil with a little dry grass). A rule's weight covers what the rules before it drew (in order), so later rules win.",
+  "within_sources limits a rule to the cells whose top drawn ground is that OSM area; surfaces to the cells whose top drawn ground has that material key (land, areas, the ground-cover overlays or the street ground's planted kerb verges, street_kerb_verge); inside_sources narrows a surfaces rule to that surface where it is drawn inside the outline of those OSM areas; within_xz to a traced polygon whose edge fades over feather_m; near to within full_m of buildings, vehicle roads, lots or street kerbs, fading out by zero_m; weight scales the rule. Drawn cells off the ruled ground (roads, paths, kerb tops and paint, roofs, lots, and kerb verges no rule drew on) then take the weights of the nearest ruled cell, so an unruled verge matches the ground behind it.",
+  "Look anchored to the 2026-05-26 aerial (Wayback release 2026-10-29, Vantor Vivid Advanced, 0.34 m, the late-spring dry fields), with the 2025-08-29 aerial and dated Street View as corroboration. Widths, distances and traced outlines are production inference, not survey data; OSM and the imagery are offset 3-6 m, so traced outlines follow the OSM buildings beside them."
+ ],
+ "map": {
+  "origin_xz": [-720, -960],
+  "size_m": [1440, 1920],
+  "cell_m": 2
+ },
+ "rules": [
+  {
+   "id": "residential_open_ground",
+   "channel": "straw",
+   "within_sources": ["r17241151"],
+   "basis": "production_inference",
+   "reason": "The residential grounds away from the streets and walls are dry straw grass in late spring, the shore belt beside the riprap included; the kerb and unit lawn rules below draw the lawns over it.",
+   "evidence": "2026-05-26 aerial over r17241151 (inventory heuristic classes, 1 m cells): more than 14 m from buildings, roads and lots the open ground is 85-97 % dry grass, 4-8 % lawn and 3-9 % bare, open-ground mean sRGB about (126,116,87); within 50 m of the outline 78-92 % dry. The 2025-08-29 aerial is drier still (Z1 lawn 4.8 % of the zone). Street View in Mar 2025 (sv05, 1236 Northpoint Dr) shows the same belt green after the winter rains; the game keeps the late-spring look of the 2026-10-17 ground-cover decision."
+  },
+  {
+   "id": "residential_kerb_lawn",
+   "channel": "lawn",
+   "within_sources": ["r17241151"],
+   "near": {
+    "kinds": ["vehicle_road", "paved_area", "street_kerb"],
+    "full_m": 5,
+    "zero_m": 10
+   },
+   "basis": "production_inference",
+   "reason": "The housing's streets and parking lots are lined with mown lawn: full within 5 m of the carriageway (its parking lanes included), the kerb and sidewalk or the lot edge (the kerb verges and front lawns), fading into the dry grounds by 10 m.",
+   "evidence": "2026-05-26 aerial over r17241151 (May 2026 z19 tiles), loose green share of the non-canopy ground (g > r + 4, g > b + 14) by distance to the vehicle roads: 51-67 % within 12 m in the Z1 loop (x -470..-150, z -740..-590), 40-44 % in Z2 (x -560..-300, z -300..40), falling to 16-25 % at 16-22 m in Z2; street trees (phase 2) cover another 13-42 % within 12 m. Crop z1-oval: solid green bands on both sides of the loop road. Street View Mar 2025 sv04 (1230 Gateview Ct), sv06 (1255 Bayside Dr) and sv08 (1318 Gateview Ave): mown green at the kerbs. With the unit lawns below, the residential ground draws about half lawn, against 30-48 % green plus 16-29 % canopy in the aerial."
+  },
+  {
+   "id": "residential_unit_lawn",
+   "channel": "lawn",
+   "within_sources": ["r17241151"],
+   "near": {
+    "kinds": ["building"],
+    "full_m": 2.5,
+    "zero_m": 8
+   },
+   "weight": 0.85,
+   "basis": "production_inference",
+   "reason": "A strip of mown lawn along the housing's walls (the unit fronts), full to 2.5 m and fading out by 8 m, so the green meets the walls rather than the straw; weight 0.85 leaves a few worn spots.",
+   "evidence": "2026-05-26 aerial over r17241151 (May 2026 z19 tiles): loose green 43-55 % of the non-canopy ground within 18 m of the buildings in the Z1 loop, highest at 2-4 m (48-55 %). Street View Mar 2025 sv06 (1255 Bayside Dr) and sv04: lawn up to the unit fronts. Phase 1 review: straw against the walls with green further out read backwards (views near-straw, z1-belt)."
+  },
+  {
+   "id": "residential_kerb_verges",
+   "channel": "lawn",
+   "surfaces": ["street_kerb_verge"],
+   "inside_sources": ["r17241151"],
+   "basis": "production_inference",
+   "reason": "The grass strips between the housing's kerbs and its sidewalks or fences (the street ground's planted kerb verges, drawn over the residential grounds) are mown lawn, like the kerb lawns beside them.",
+   "evidence": "Street View Mar 2025 sv04 (1230 Gateview Ct), sv06 (1255 Bayside Dr) and sv08 (1318 Gateview Ave): mown green between the kerb and the sidewalk or fence; 2026-05-26 aerial (May 2026 z19 tiles, crop z1-oval): solid green bands along both sides of the Villages loop road."
+  },
+  {
+   "id": "west_parcel_kerb_strip",
+   "channel": "lawn",
+   "within_sources": ["r17241152"],
+   "near": {
+    "kinds": ["street_kerb"],
+    "full_m": 2.5,
+    "zero_m": 4.5
+   },
+   "basis": "production_inference",
+   "reason": "The mown strip between the sidewalk and the fence of the west shore parcel, the one stretch of the housing streets whose kerb ground is not r17241151; about 3 m wide behind the street ground's kerb and sidewalk, so it draws only where those are built.",
+   "evidence": "Street View Mar 2025 sv08 (1318 Gateview Ave): mown green between the sidewalk and the windscreen fence. The 2026-05-26 aerial (May 2026 z19 tiles) does not resolve this shaded strip, so the March photo sets it."
+  },
+  {
+   "id": "residential_loop_lawn_west",
+   "channel": "lawn",
+   "within_sources": ["r17241151"],
+   "within_xz": [[-392, -668], [-370, -680], [-345, -686], [-336, -684], [-336, -642], [-392, -650]],
+   "feather_m": 6,
+   "basis": "production_inference",
+   "reason": "The open lawn inside the Northpoint loop, west of the two row houses, is mown green well beyond the band.",
+   "evidence": "2026-05-26 aerial (crop z1-oval, x -400..-170, z -720..-600): lawn 69 % of the open ground inside this outline."
+  },
+  {
+   "id": "residential_loop_lawn_east",
+   "channel": "lawn",
+   "within_sources": ["r17241151"],
+   "within_xz": [[-262, -684], [-228, -680], [-205, -670], [-200, -640], [-215, -628], [-262, -628]],
+   "feather_m": 6,
+   "weight": 0.6,
+   "basis": "production_inference",
+   "reason": "East of the row houses the loop's lawn is half green, half dry, round the old sand court.",
+   "evidence": "2026-05-26 aerial (crop z1-oval): lawn 50 %, dry 48 % of the open ground inside this outline."
+  },
+  {
+   "id": "residential_loop_lawn_northwest",
+   "channel": "lawn",
+   "within_sources": ["r17241151"],
+   "within_xz": [[-466, -718], [-434, -718], [-434, -690], [-466, -690]],
+   "feather_m": 6,
+   "basis": "production_inference",
+   "reason": "A mown lawn beside the loop road's west bend, beyond the band.",
+   "evidence": "2026-05-26 aerial: lawn 68 % of the open ground inside this outline."
+  },
+  {
+   "id": "job_corps_dorm_lawn_courtyard",
+   "channel": "lawn",
+   "within_sources": ["w1252737750"],
+   "within_xz": [[-1.5, 441.2], [21.8, 439.8], [40.4, 474.9], [21.6, 484.8]],
+   "feather_m": 3,
+   "basis": "production_inference",
+   "reason": "The Job Corps campus is dry grass but for the irrigated lawn between the west and middle wings of Dormitory 369; traced between the OSM wings.",
+   "evidence": "2026-05-26 aerial (crop jc-dorms, 5 m grid): lawn 82 % of the open ground between the wings; the rest of the campus is 79 % dry and 20 % bare (big north field)."
+  },
+  {
+   "id": "job_corps_dorm_lawn_west",
+   "channel": "lawn",
+   "within_sources": ["w1252737750"],
+   "within_xz": [[-13.1, 447.4], [8.2, 491.7], [1.0, 495.2], [-20.3, 450.9]],
+   "feather_m": 3,
+   "basis": "production_inference",
+   "reason": "The lawn strip along the west wing of Dormitory 369, 8 m wide along the OSM wall.",
+   "evidence": "2026-05-26 aerial (crop jc-dorms): lawn 84 % of the open ground in the strip."
+  },
+  {
+   "id": "marina_plaza_east_field",
+   "channel": "bare",
+   "within_sources": ["r19585233"],
+   "within_xz": [[28, 690], [132, 690], [136, 768], [40, 770], [25, 740]],
+   "feather_m": 4,
+   "basis": "production_inference",
+   "reason": "East of Building 1 the Marina Plaza area is a bare graded field, not a lawn.",
+   "evidence": "2026-05-26 aerial (crop south-parks, x -170..140, z 680..950): bare 86 % of the open ground inside this outline, pale (about 195,190,167)."
+  },
+  {
+   "id": "turf_pitch_apron",
+   "channel": "bare",
+   "within_sources": ["w1252737754"],
+   "within_xz": [[181.6, -206.6], [227.4, -113.4], [339.0, -172.7], [334.3, -181.5], [233.3, -127.8], [192.2, -212.2]],
+   "feather_m": 2,
+   "basis": "production_inference",
+   "reason": "The synthetic-turf pitch (family turf) has a pale paved apron about 12 m wide along its south-west side and 10 m along its south-east side, inside the OSM outline.",
+   "evidence": "2026-05-26 aerial (crop turf, x 140..320, z -280..-110): pale apron with benches along the two sides; the turf fills the rest of the outline."
+  },
+  {
+   "id": "industrial_core_dry_field",
+   "channel": "dry_field",
+   "surfaces": ["land_ground"],
+   "within_xz": [[-160, -460], [380, -460], [380, -90], [-160, -90]],
+   "feather_m": 20,
+   "basis": "production_inference",
+   "reason": "The industrial core's unbuilt land is dry grass with much bare ground and almost no green.",
+   "evidence": "2026-05-26 aerial, default land in 200 m boxes over x -200..400, z -400..-200: lawn 2-6 %, dry 10-30 %, bare 51-86 % of the open ground; vegetation inventory zone Z7 (x -160..380, z -460..-90)."
+  },
+  {
+   "id": "ymca_lawn_west_south",
+   "channel": "lawn",
+   "surfaces": ["land_ground"],
+   "within_xz": [[150, -311], [175, -323], [188, -317], [189, -302], [175, -280], [177, -270], [191, -271], [186, -260], [196, -257], [209, -270], [223, -263], [233, -264], [233, -259], [226, -252], [194, -234], [187, -234], [177, -247], [150, -299]],
+   "feather_m": 3,
+   "basis": "production_inference",
+   "reason": "The Treasure Island Community YMCA's mown lawns west and south of its building (OSM w34313547), round the palm and the trees; traced from the aerial, which sits on the OSM buildings here.",
+   "evidence": "2026-05-26 aerial (May 2026 z19 tiles): lawn 93 % of the open ground inside this outline (canopy 37 % of it)."
+  },
+  {
+   "id": "ymca_lawn_northeast",
+   "channel": "lawn",
+   "surfaces": ["land_ground"],
+   "within_xz": [[212, -340], [236, -357], [245, -345], [245, -334], [236, -322], [234, -314], [225, -313], [214, -330]],
+   "feather_m": 3,
+   "basis": "production_inference",
+   "reason": "The YMCA's lawn north-east of its building, by the parking lot.",
+   "evidence": "2026-05-26 aerial (May 2026 z19 tiles): lawn 89 % of the open ground inside this outline."
+  },
+  {
+   "id": "construction_parcel_nw_weeds",
+   "channel": "lawn",
+   "within_sources": ["w1252737734"],
+   "within_xz": [[372, -190], [384, -190], [389, -197], [395, -195], [391, -186], [381, -175], [378, -167], [372, -170], [368, -182]],
+   "feather_m": 3,
+   "weight": 0.75,
+   "basis": "production_inference",
+   "reason": "A green weedy corner at the north-west of the dry construction parcel w1252737734, beside the road; drawn as three quarters lawn, so its own dry grass shows through.",
+   "evidence": "2026-05-26 aerial (May 2026 z19 tiles): lawn 92 % of the open ground inside this outline, half of it dark weeds and shrubs (canopy class 50 %)."
+  },
+  {
+   "id": "avenue_n_seawall_verge",
+   "channel": "straw",
+   "surfaces": ["land_ground"],
+   "within_xz": [[678.8, 201.9], [695, 154.6], [684.6, 107], [661.7, 62.5], [638.6, 18.1], [614.9, -25.9], [591.2, -69.9], [567.9, -114.1], [544.7, -158.4], [521.5, -202.7], [498.4, -247.1], [475, -291.3], [451.6, -335.5], [428.2, -379.6], [404.8, -423.8], [388.1, -455.3], [412.9, -468.4], [429.5, -436.9], [453, -392.8], [476.4, -348.6], [499.8, -304.4], [523.2, -260], [546.4, -215.7], [569.5, -171.4], [592.7, -127.1], [615.9, -83.2], [639.6, -39.2], [663.3, 4.8], [686.5, 49.7], [709.5, 94.1], [721.5, 163.6], [705.3, 211]],
+   "feather_m": 4,
+   "basis": "production_inference",
+   "reason": "The verge between Avenue N and the seawall riprap, where the date palms stand, is dry straw (the strip 2-30 m right of OSM w8921530 from about z 200 to its north end).",
+   "evidence": "Street View Nov 2025 pano ttrmGi5rdijqAHRqMz7bsQ (505 Avenue N, refs sv02/sv03): straw verge with a few green tufts; aerials 2026-05-26 (a19-east-avN-strip) and 2025-08-29 (a20-east-seawall-row): brown verge under the palm row."
+  },
+  {
+   "id": "avenue_n_seawall_verge_tufts",
+   "channel": "lawn",
+   "surfaces": ["land_ground"],
+   "within_xz": [[678.8, 201.9], [695, 154.6], [684.6, 107], [661.7, 62.5], [638.6, 18.1], [614.9, -25.9], [591.2, -69.9], [567.9, -114.1], [544.7, -158.4], [521.5, -202.7], [498.4, -247.1], [475, -291.3], [451.6, -335.5], [428.2, -379.6], [404.8, -423.8], [388.1, -455.3], [412.9, -468.4], [429.5, -436.9], [453, -392.8], [476.4, -348.6], [499.8, -304.4], [523.2, -260], [546.4, -215.7], [569.5, -171.4], [592.7, -127.1], [615.9, -83.2], [639.6, -39.2], [663.3, 4.8], [686.5, 49.7], [709.5, 94.1], [721.5, 163.6], [705.3, 211]],
+   "feather_m": 4,
+   "weight": 0.35,
+   "basis": "production_inference",
+   "reason": "Green tufts and darker olive grass in the Avenue N verge's straw: a third of the lawn recipe over it turns the pale straw olive-brown with green patches, and leaves no bare ground.",
+   "evidence": "Street View Nov 2025 pano ttrmGi5rdijqAHRqMz7bsQ (505 Avenue N, refs sv02/sv03): darker olive-brown verge with green tufts, mulch round the shrubs; phase 1 review of the sv02 matched pose: the straw alone read as pale beach sand."
+  }
+ ]
+}

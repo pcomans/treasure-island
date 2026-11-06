@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 
 import { buildStreetClutterKitGlb, STREET_CLUTTER_KIT_PATH } from "./build_street_clutter_kit.mjs";
 import { buildStreetYardKitGlb, STREET_YARD_KIT_PATH } from "./build_street_yard_kit.mjs";
+import { buildGroundCoverMap, decodeGroundCoverPng, GROUND_COVER_MAP_PATH } from "./lib/ground-cover-map.mjs";
 import { invariant, sha256File, stableJson } from "./lib/world-contract.mjs";
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
@@ -94,6 +95,16 @@ function main() {
       yardKit.equals(readFileSync(resolve(projectRoot, STREET_YARD_KIT_PATH))),
       `Committed ${STREET_YARD_KIT_PATH} differs from a fresh build; rebuild it with tools/build_street_yard_kit.mjs`,
     );
+    // And the ground-cover map: its pixels are what the tool draws from this
+    // world and tools/config/ground-cover.json (compared decoded, so a zlib
+    // version cannot fail it).
+    const coverMap = buildGroundCoverMap({ projectRoot, worldRoot: first });
+    const committedMap = decodeGroundCoverPng(readFileSync(resolve(projectRoot, GROUND_COVER_MAP_PATH)));
+    invariant(
+      committedMap.width === coverMap.grid.width && committedMap.height === coverMap.grid.height
+        && Buffer.from(committedMap.rgba).equals(Buffer.from(coverMap.rgba)),
+      `Committed ${GROUND_COVER_MAP_PATH} differs from a fresh draw; redraw it with tools/build_ground_cover_map.mjs`,
+    );
     const streetDetailPath = "street_detail.json";
     invariant(firstInventory.some((file) => file.path === streetDetailPath), "Clean generation omitted street_detail.json");
     const manifest = JSON.parse(readFileSync(resolve(first, "manifest.json"), "utf8"));
@@ -103,6 +114,7 @@ function main() {
       files_compared: firstInventory.length,
       street_clutter_kit_bytes: kit.length,
       street_yard_kit_bytes: yardKit.length,
+      ground_cover_map_cells: coverMap.grid.width * coverMap.grid.height,
       content_sha256: manifest.content_sha256,
       street_detail_sha256: firstInventory.find((file) => file.path === streetDetailPath).sha256,
     }));
