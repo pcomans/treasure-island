@@ -15,6 +15,10 @@ func _export_begin(features: PackedStringArray, _is_debug: bool, _path: String, 
 			push_error("Missing static world: export through the platform build script")
 		else:
 			add_file(baked, FileAccess.get_file_as_bytes(baked), false)
+	# The web build runs only from its bake and never reads these, and a browser
+	# holds the whole pack in memory, so they stay out of web exports.
+	if "web" in features:
+		return
 	var paths: Array[String] = []
 	_collect_files(GENERATED_WORLD_ROOT, paths)
 	paths.sort()
