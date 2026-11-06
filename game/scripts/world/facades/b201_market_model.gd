@@ -118,7 +118,6 @@ const SIDEWALK_W := -7.4
 const SIDEWALK_U0 := -8.0
 const SIDEWALK_U1 := 30.0
 const LOT_N := -32.0
-const LOT_SPLIT_U := -6.0
 const LOT_U1 := 135.3
 const LOT_E := 86.9
 # The lot's west edge runs under Avenue H's parking strip, which slants across this frame.
@@ -133,6 +132,8 @@ const BOLLARD_COUNT := 9
 # The lot lies between the land and the roads and street paint drawn 7.8 cm over it,
 # so those meet it rather than being covered. Paint of its own sits on top of them.
 const LOT_LIFT := 0.06
+const STAIN_LIFT := 0.069
+const STAIN_TILE_M := 41.25
 const PAINT_LIFT := 0.088
 const SIDEWALK_LIFT := 0.2
 # The container yard along Avenue I (refs 14, 22; Aug 2025 aerial).
@@ -1337,7 +1338,7 @@ func _build_setting() -> void:
 	# Green slatted bin enclosure on the 9th Street apron (refs 10, 12).
 	var pen := land_y(5.6, 131.6) + LOT_LIFT - 0.05
 	_box("detail", "fence_green", _p(3.0, pen, 129.6), _p(8.2, pen + 2.45, 133.6), 8)
-	_box("trim", "frame_grey", _p(2.95, pen + 2.42, 129.55), _p(8.25, pen + 2.48, 133.65))
+	_box("detail", "frame_grey", _p(2.95, pen + 2.42, 129.55), _p(8.25, pen + 2.48, 133.65))
 	_art(Face.new(_p(0, 0, 133.6), Vector3.RIGHT, Vector3.BACK), "sign_atlas", 4.2, 6.2, pen + 1.05, pen + 2.2, 0.02, Rect2(0.3125, 0.6875, 0.125, 0.15625))
 	# Worn stall lines along the whole Avenue H front (refs 06, 09, 26), yellow ramp pads.
 	var stall := 0
@@ -1421,16 +1422,14 @@ func _container(w0: float, w1: float, u0: float, u1: float, mat: String) -> floa
 ## follow the land exactly, stop at Building 202 and pass under the roads and street
 ## paint, which keep showing.
 func _build_lot() -> void:
-	# North of the market the pavement is the darker, cracked asphalt of refs 05 and 18.
 	var north := PackedVector2Array([Vector2(LOT_EDGE_N, LOT_N)])
 	north.append_array(PackedVector2Array(B202_EDGE))
-	north.append_array(PackedVector2Array([Vector2(LOT_E, B202_EDGE[-1].y), Vector2(LOT_E, 0.0), Vector2(0.0, 0.0), Vector2(0.0, LOT_SPLIT_U), Vector2(_lot_edge(LOT_SPLIT_U), LOT_SPLIT_U)]))
-	_cover("lot_north", north)
-	_cover("lot", PackedVector2Array([Vector2(_lot_edge(LOT_SPLIT_U), LOT_SPLIT_U), Vector2(0.0, LOT_SPLIT_U), Vector2(0.0, U_S), Vector2(_lot_edge(U_S), U_S)]))
-	_cover("lot", PackedVector2Array([Vector2(W_E, 0.0), Vector2(LOT_E, 0.0), Vector2(LOT_E, U_E), Vector2(W_E, U_E)]))
-	_cover("lot", PackedVector2Array([Vector2(W_F, U_E), Vector2(LOT_E, U_E), Vector2(LOT_E, U_F), Vector2(W_F, U_F)]))
-	_cover("lot", PackedVector2Array([Vector2(71.98, U_F), Vector2(LOT_E, U_F), Vector2(LOT_E, U_S), Vector2(68.23, U_S), Vector2(68.23, 94.41), Vector2(65.12, 94.41), Vector2(65.12, 80.165), Vector2(67.9, 80.165), Vector2(67.9, 70.66), Vector2(71.98, 70.66)]))
-	_cover("apron", PackedVector2Array([Vector2(_lot_edge(U_S), U_S), Vector2(LOT_E, U_S), Vector2(LOT_E, LOT_U1), Vector2(LOT_EDGE_S, LOT_U1)]))
+	north.append_array(PackedVector2Array([Vector2(LOT_E, B202_EDGE[-1].y), Vector2(LOT_E, 0.0), Vector2(0.0, 0.0), Vector2(0.0, U_S), Vector2(_lot_edge(U_S), U_S)]))
+	var pieces := {"lot": [north, PackedVector2Array([Vector2(W_E, 0.0), Vector2(LOT_E, 0.0), Vector2(LOT_E, U_E), Vector2(W_E, U_E)]), PackedVector2Array([Vector2(W_F, U_E), Vector2(LOT_E, U_E), Vector2(LOT_E, U_F), Vector2(W_F, U_F)]), PackedVector2Array([Vector2(71.98, U_F), Vector2(LOT_E, U_F), Vector2(LOT_E, U_S), Vector2(68.23, U_S), Vector2(68.23, 94.41), Vector2(65.12, 94.41), Vector2(65.12, 80.165), Vector2(67.9, 80.165), Vector2(67.9, 70.66), Vector2(71.98, 70.66)])], "apron": [PackedVector2Array([Vector2(_lot_edge(U_S), U_S), Vector2(LOT_E, U_S), Vector2(LOT_E, LOT_U1), Vector2(LOT_EDGE_S, LOT_U1)])]}
+	for mat: String in pieces:
+		for outline: PackedVector2Array in pieces[mat]:
+			_cover(mat, outline, LOT_LIFT)
+			_cover("lot_stains", outline, STAIN_LIFT)
 
 
 func _lot_edge(u: float) -> float:
@@ -1438,7 +1437,7 @@ func _lot_edge(u: float) -> float:
 
 
 ## The land inside a (w, u) outline, as lot surface. Fails if the land does not cover it.
-func _cover(mat: String, outline: PackedVector2Array) -> void:
+func _cover(mat: String, outline: PackedVector2Array, lift: float) -> void:
 	var covered := 0.0
 	for triangle: Array in _land:
 		var corners: Array[Vector3] = []
@@ -1453,7 +1452,7 @@ func _cover(mat: String, outline: PackedVector2Array) -> void:
 				var points: Array = []
 				for k in 3:
 					var q := piece[ids[i + k]]
-					points.append(_p(q.x, _land_plane(corners, q) + LOT_LIFT, q.y))
+					points.append(_p(q.x, _land_plane(corners, q) + lift, q.y))
 				var a: Vector3 = points[0]
 				var b: Vector3 = points[1]
 				var c: Vector3 = points[2]
@@ -1461,9 +1460,11 @@ func _cover(mat: String, outline: PackedVector2Array) -> void:
 				if area < 0.0005:
 					continue
 				covered += area
-				_plane("lot", mat, points, Vector3.UP)
-				for point: Vector3 in points:
-					_lot_footprint.append(_world(point.x, point.z))
+				# Metres in plan, so tiles run on unbroken across the land's creases.
+				_plane("lot", mat, points, Vector3.UP, [Vector2(-a.x, -a.z), Vector2(-b.x, -b.z), Vector2(-c.x, -c.z)])
+				if lift == LOT_LIFT:
+					for point: Vector3 in points:
+						_lot_footprint.append(_world(point.x, point.z))
 	if absf(covered - _area(outline)) > 1.0:
 		_problems.append("B201 lot covers %.1f of %.1f m2." % [covered, _area(outline)])
 
@@ -1771,14 +1772,21 @@ func _material(key: String) -> Material:
 				m.albedo_color = Color(0.42, 0.42, 0.42)
 				m.roughness = 0.9
 			# Local ground: pale worn lot, broad apron, plain sidewalk concrete.
-			"lot", "lot_north":
+			"lot":
 				m.albedo_texture = _texture(TEX + "lot_worn.png")
-				m.albedo_color = Color(0.83, 0.82, 0.8) if key == "lot" else Color(0.66, 0.65, 0.635)
+				m.albedo_color = Color(0.7, 0.69, 0.67)
 				m.uv1_scale = Vector3(1.0 / 9.0, 1.0 / 9.0, 1.0)
 				m.roughness = 1.0
+			"lot_stains":
+				m.albedo_texture = _texture(TEX + "lot_stains.png")
+				m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+				m.uv1_scale = Vector3(1.0 / STAIN_TILE_M, 1.0 / STAIN_TILE_M, 1.0)
+				m.roughness = 1.0
+				m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+				m.render_priority = -1
 			"apron":
 				m.albedo_texture = _texture(TEX + "apron_concrete.png")
-				m.albedo_color = Color(0.64, 0.63, 0.6)
+				m.albedo_color = Color(0.53, 0.52, 0.5)
 				m.uv1_scale = Vector3(1.0 / 11.0, 1.0 / 11.0, 1.0)
 				m.roughness = 0.95
 			"sidewalk", "porch_floor":

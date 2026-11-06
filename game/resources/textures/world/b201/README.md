@@ -14,6 +14,8 @@ reference photo.
 - `sign_atlas`: lettering and small signs drawn with ImageMagick (FreeSans), from the
   text the photos show; the container plates and stencil are plain numbers and a generic
   word, not the marks in the photos.
+- `lot_stains`: procedural seal-coat patches, cracks, oil and rust dirt in alpha over
+  41.25 m (15 stalls), so the oil lines up with the stall row.
 - `grime_strip`: separate procedural run-off streaks in alpha over 44 m of wall, white so
   each material tints it.
 
