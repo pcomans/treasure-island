@@ -134,6 +134,7 @@ const STREET_GROUND_RECORDS = Object.freeze({
   "rubble-grey": ["street_paint", "rubble_grey", "none", false],
   "yard-asphalt": ["street_paint", "yard_asphalt", "none", false],
   "yard-asphalt-pale": ["street_paint", "yard_asphalt_pale", "none", false],
+  "yard-asphalt-fresh": ["street_paint", "yard_asphalt_fresh", "none", false],
   "yard-gravel": ["street_paint", "yard_gravel", "none", false],
   "yard-gravel-pale": ["street_paint", "yard_gravel_pale", "none", false],
   "yard-concrete": ["street_paint", "yard_concrete", "none", false],

@@ -1858,10 +1858,11 @@ export function generateStreetDetail({
   // (tools/lib/street-clutter-generation.mjs) along the parking lanes and in
   // the lots' stalls, clear of everything placed above (the furniture rules
   // have already claimed their footprints) and of the OSM building entrances.
-  const parkingLots = new Map(objects
+  const parkingLots = new Map([...objects
     .filter((object) => object.roles.includes("major_area") && object.tags.amenity === "parking")
     .sort((left, right) => compareSourceKeys(left.row.source_key, right.row.source_key))
-    .map((object) => [object.row.source_key, { source_key: object.row.source_key, geometry: object.geometry }]));
+    .map((object) => [object.row.source_key, { source_key: object.row.source_key, geometry: object.geometry }]),
+    ...ground.site.exception_lots.map((lot) => [lot.source_key, lot])]);
   // A lot's drives: its OSM parking aisles, and the plain service roads (an
   // internal drive such as Avenue A through its lot) that run through lots.
   const parkingAisles = objects

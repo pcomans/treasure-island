@@ -82,6 +82,7 @@ export const PARK_SURFACE_MATERIALS = Object.freeze({
   rubble_grey: "rubble-grey",
   yard_asphalt: "yard-asphalt",
   yard_asphalt_pale: "yard-asphalt-pale",
+  yard_asphalt_fresh: "yard-asphalt-fresh",
   yard_gravel: "yard-gravel",
   yard_gravel_pale: "yard-gravel-pale",
   yard_concrete: "yard-concrete",
@@ -367,7 +368,7 @@ const TREATMENT_FIELDS = Object.freeze(["bike_lanes", "centerline", "crosswalk",
 const BIKE_LANE_KINDS = Object.freeze(["none", "line", "green"]);
 const STREET_RULE_FIELDS = Object.freeze(["evidence", "id", "treatment", "ways"]);
 const STREET_RULE_OPTIONAL = Object.freeze(["parking", "red_curb", "set", "sides", "widen"]);
-const STALL_STYLES = Object.freeze(["plain", "faded", "accessible", "bus"]);
+const STALL_STYLES = Object.freeze(["plain", "faded", "accessible", "accessible_filled", "bus"]);
 
 function isXZ(point) {
   return Array.isArray(point) && point.length === 2 && point.every(isFiniteNumber);
@@ -483,9 +484,10 @@ export function validateStreetGroundRules(rules) {
       typeof bay.lines === "boolean" && typeof bay.evidence === "string" && bay.evidence.trim() !== "", `Street ground bay on ${bay.way} is malformed`);
   }
   const lotIds = new Set();
-  for (const lot of rules.lots) {
+  const lots = rules.lots.map(expandLotPattern);
+  for (const lot of lots) {
     const label = `Street ground lot ${lot?.id}`;
-    exactKeys(lot, ["evidence", "hatches", "id", "islands", "legends", "paint_wear", "rows", "source_key", ...("surface" in (lot ?? {}) ? ["surface"] : [])], label);
+    exactKeys(lot, ["evidence", "hatches", "id", "islands", "legends", "paint_wear", "rows", "source_key", ...("surface" in (lot ?? {}) ? ["surface"] : []), ...("osm_exception" in (lot ?? {}) ? ["osm_exception", "pattern"] : [])], label);
     invariant(Number.isInteger(lot.paint_wear) && lot.paint_wear >= 0 && lot.paint_wear < PAINT_WEAR_STEPS, `${label} paint_wear must be a wear step`);
     for (const hatch of lot.hatches) {
       exactKeys(hatch, ["id", "points_xz", "stripes"], `${label} hatch`);
@@ -533,7 +535,149 @@ export function validateStreetGroundRules(rules) {
         Number.isInteger(legend.paint_wear) && legend.paint_wear >= 0 && legend.paint_wear < PAINT_WEAR_STEPS, `${label} legend is malformed`);
     }
   }
-  return { ...rules, streets, wayOwner };
+  return { ...rules, lots, streets, wayOwner };
+}
+
+// The Johnson St lot, which OSM lacks: the one recorded exception to the snapshot
+// as the horizontal layout. osm_exception holds the reason, the approval, the aerial
+// with its date and zoom, and the traced outline, the only traced data. Everything
+// inside comes from the pattern, in the lot's own axes: s along the bearing from the
+// origin, t square to it, left of the bearing. A row's line runs along its aisle and
+// fills with as many stalls as fit at about the pattern's width. Accessible bays
+// reserve spans of their row, a hatched aisle between each pair; the rest of that
+// row fills round them. zones are the hatched and outlined areas; lines and ticks are
+// painted lines, ticks spaced along a line and square to it; arrows the aisles'
+// arrows, spaced the same way and pointing along it. curb_edges are the outline's
+// edges (by their first point) with a raised curb just inside them.
+const EXCEPTION_LOT_ID = "johnson_lot";
+const LOT_PATTERN_FIELDS = Object.freeze(["accessible", "arrows", "bearing_xz", "curb_edges", "depth_m", "lines", "origin_xz", "rows", "stall_width_m", "ticks", "zones"]);
+const LOT_CURB_WIDTH_M = 0.3;
+const LOT_LINE_WIDTH_M = 0.12;
+const LOT_MINIMUM_STALL_M = 2.2;
+const LOT_ARROW_LENGTH_M = 3;
+const LOT_ARROW_WIDTH_M = 1.1;
+function expandLotPattern(lot) {
+  if (lot?.osm_exception === undefined) return lot;
+  const label = `Street ground lot ${lot.id}`;
+  invariant(lot.id === EXCEPTION_LOT_ID, `${label}: only ${EXCEPTION_LOT_ID} is an exception to the OSM layout`);
+  const exception = lot.osm_exception;
+  exactKeys(exception, ["aerial", "approved", "outline_xz", "reason"], `${label} osm_exception`);
+  invariant(["aerial", "approved", "reason"].every((key) => typeof exception[key] === "string" && exception[key].trim() !== "") &&
+    Array.isArray(exception.outline_xz) && exception.outline_xz.length >= 3 && exception.outline_xz.every(isXZ), `${label} osm_exception needs its aerial, approval, reason and outline`);
+  const pattern = lot.pattern;
+  exactKeys(pattern, LOT_PATTERN_FIELDS, `${label} pattern`);
+  const outline = exception.outline_xz;
+  invariant(isXZ(pattern.origin_xz) && isXZ(pattern.bearing_xz) && Math.hypot(...pattern.bearing_xz) > 1e-6 && isFiniteNumber(pattern.stall_width_m) && isFiniteNumber(pattern.depth_m) &&
+    Array.isArray(pattern.curb_edges) && pattern.curb_edges.every((edge) => Number.isInteger(edge) && edge >= 0 && edge < outline.length), `${label} pattern is malformed`);
+  const size = Math.hypot(...pattern.bearing_xz);
+  const u = [pattern.bearing_xz[0] / size, pattern.bearing_xz[1] / size];
+  // Left of the bearing seen from above (x east, z south).
+  const v = [u[1], -u[0]];
+  const direction = ([s, t]) => [u[0] * s + v[0] * t, u[1] * s + v[1] * t];
+  const at = (st) => direction(st).map((offset, axis) => roundCoordinate(pattern.origin_xz[axis] + offset));
+  const rows = [];
+  const hatches = [];
+  const addStalls = (id, from, to, row, width, style) => {
+    const angle = row.angle_deg ?? 90;
+    const run = Math.hypot(to[0] - from[0], to[1] - from[1]) * Math.sin((angle * Math.PI) / 180);
+    const count = Math.round(run / width);
+    if (count === 0 || run / count < LOT_MINIMUM_STALL_M) return;
+    rows.push({ id, line_xz: [at(from), at(to)], side: row.side, count, depth_m: row.depth_m ?? pattern.depth_m, stall_width_m: roundCoordinate(run / count), angle_deg: angle, style });
+  };
+  const addZone = (id, points, stripes) => hatches.push({ id, points_xz: points.map(at), stripes });
+  const addLine = (id, from, to) => {
+    const run = Math.hypot(to[0] - from[0], to[1] - from[1]);
+    const half = [((from[1] - to[1]) / run) * (LOT_LINE_WIDTH_M / 2), ((to[0] - from[0]) / run) * (LOT_LINE_WIDTH_M / 2)];
+    addZone(id, [[from[0] + half[0], from[1] + half[1]], [to[0] + half[0], to[1] + half[1]], [to[0] - half[0], to[1] - half[1]], [from[0] - half[0], from[1] - half[1]]], false);
+  };
+  // Evenly along a marker's line (at its middle for a single one), with the line's direction.
+  const spaced = (marker) => {
+    const offset = [marker.to_st[0] - marker.from_st[0], marker.to_st[1] - marker.from_st[1]];
+    const run = Math.hypot(...offset);
+    const heading = [offset[0] / run, offset[1] / run];
+    return Array.from({ length: marker.count }, (_, index) => {
+      const fraction = marker.count === 1 ? 0.5 : index / (marker.count - 1);
+      return { point: [marker.from_st[0] + offset[0] * fraction, marker.from_st[1] + offset[1] * fraction], heading };
+    });
+  };
+  // The bays, and what they reserve of their row.
+  const bays = pattern.accessible;
+  exactKeys(bays, ["aisle_m", "hatched_s_m", "pairs_at_s_m", "row", "singles_at_s_m", "stall_width_m"], `${label} pattern accessible`);
+  const bayRow = pattern.rows.find((row) => row.id === bays.row);
+  invariant(bayRow && bayRow.from_st[1] === bayRow.to_st[1] && bayRow.to_st[0] > bayRow.from_st[0], `${label} accessible bays need a row along the bearing`);
+  const line = bayRow.from_st[1];
+  const head = line + (bayRow.side === "left" ? 1 : -1) * (bayRow.depth_m ?? pattern.depth_m);
+  const box = (from, to) => [[from, line], [to, line], [to, head], [from, head]];
+  const bay = (id, from) => addStalls(id, [from, line], [from + bays.stall_width_m, line], bayRow, bays.stall_width_m, "accessible_filled");
+  const spans = [];
+  bays.pairs_at_s_m.forEach((aisle, index) => {
+    bay(`accessible_${index}_a`, aisle - bays.stall_width_m);
+    bay(`accessible_${index}_b`, aisle + bays.aisle_m);
+    addZone(`accessible_${index}_aisle`, box(aisle, aisle + bays.aisle_m), true);
+    spans.push([aisle - bays.stall_width_m, aisle + bays.aisle_m + bays.stall_width_m]);
+  });
+  bays.singles_at_s_m.forEach((from, index) => {
+    bay(`accessible_single_${index}`, from);
+    spans.push([from, from + bays.stall_width_m]);
+  });
+  bays.hatched_s_m.forEach(([from, to], index) => {
+    addZone(`reserved_${index}`, box(from, to), true);
+    spans.push([from, to]);
+  });
+  spans.sort((left, right) => left[0] - right[0]);
+  for (const row of pattern.rows) {
+    exactKeys(row, ["from_st", "id", "side", "to_st", ...["angle_deg", "depth_m"].filter((key) => key in row)], `${label} pattern row ${row.id}`);
+    invariant(isXZ(row.from_st) && isXZ(row.to_st), `${label} pattern row ${row.id} needs its line`);
+    if (row !== bayRow) {
+      addStalls(row.id, row.from_st, row.to_st, row, pattern.stall_width_m, "plain");
+      continue;
+    }
+    let from = row.from_st[0];
+    [...spans, [row.to_st[0], row.to_st[0]]].forEach(([start, end], index) => {
+      if (start > from) addStalls(`${row.id}_${index}`, [from, line], [start, line], row, pattern.stall_width_m, "plain");
+      from = Math.max(from, end);
+    });
+  }
+  pattern.zones.forEach((zone, index) => {
+    exactKeys(zone, ["st", "stripes"], `${label} pattern zone ${index}`);
+    invariant(Array.isArray(zone.st) && zone.st.length >= 3 && zone.st.every(isXZ) && typeof zone.stripes === "boolean", `${label} pattern zone ${index} is malformed`);
+    addZone(`zone_${index}`, zone.st, zone.stripes);
+  });
+  pattern.lines.forEach((entry, index) => {
+    invariant(Array.isArray(entry) && entry.length === 2 && entry.every(isXZ), `${label} pattern line ${index} is malformed`);
+    addLine(`line_${index}`, entry[0], entry[1]);
+  });
+  pattern.ticks.forEach((tick, index) => {
+    exactKeys(tick, ["count", "from_st", "length_m", "to_st"], `${label} pattern tick ${index}`);
+    spaced(tick).forEach(({ point, heading }, step) => {
+      const half = [heading[1] * (tick.length_m / 2), -heading[0] * (tick.length_m / 2)];
+      addLine(`tick_${index}_${step}`, [point[0] - half[0], point[1] - half[1]], [point[0] + half[0], point[1] + half[1]]);
+    });
+  });
+  const legends = pattern.arrows.flatMap((arrow, index) => {
+    exactKeys(arrow, ["count", "from_st", "to_st"], `${label} pattern arrow ${index}`);
+    return spaced(arrow).map(({ point, heading }) => ({
+      cell: "arrow_straight", at_xz: at(point), facing_xz: direction(heading).map(roundCoordinate), length_m: LOT_ARROW_LENGTH_M, width_m: LOT_ARROW_WIDTH_M, paint_wear: lot.paint_wear,
+    }));
+  });
+  // The curb: a strip inside each curbed edge, run on past its ends to meet its
+  // neighbours (the generator clips the strips to the lot).
+  const doubledArea = outline.reduce((sum, a, index) => {
+    const b = outline[(index + 1) % outline.length];
+    return sum + a[0] * b[1] - b[0] * a[1];
+  }, 0);
+  const inward = doubledArea > 0 ? 1 : -1;
+  const islands = pattern.curb_edges.map((edge) => {
+    const a = outline[edge];
+    const b = outline[(edge + 1) % outline.length];
+    const run = Math.hypot(b[0] - a[0], b[1] - a[1]);
+    const heading = [((b[0] - a[0]) / run) * LOT_CURB_WIDTH_M, ((b[1] - a[1]) / run) * LOT_CURB_WIDTH_M];
+    const inside = [-heading[1] * inward, heading[0] * inward];
+    const start = [a[0] - heading[0], a[1] - heading[1]];
+    const end = [b[0] + heading[0], b[1] + heading[1]];
+    return { id: `curb_${edge}`, points_xz: [start, end, [end[0] + inside[0], end[1] + inside[1]], [start[0] + inside[0], start[1] + inside[1]]].map((point) => point.map(roundCoordinate)) };
+  });
+  return { ...lot, rows, hatches, islands, legends };
 }
 
 // ---------------------------------------------------------------- geometry
@@ -1451,17 +1595,28 @@ export function generateStreetGround({
   const sidewalks = roads.filter((object) => object.road_visual_class === "pedestrian" && object.tags.footway === "sidewalk");
   const pedestrianIndex = partsIndex("pedestrian ways", roads.filter((object) => object.road_visual_class === "pedestrian").map((object) => object.geometry));
   const lots = objects.filter((object) => object.roles.includes("major_area") && object.tags.amenity === "parking" && nearPilot(object, 30));
-  const lotUnion = union("parking lots", lots.map((object) => object.geometry));
+  // The lot OSM lacks stands on its traced outline, off the carriageway; its
+  // source key is the OSM way it meets, for the records' provenance.
+  const exceptionLots = (rules?.lots ?? []).filter((lot) => lot.osm_exception !== undefined).map((lot) => {
+    invariant(playableObjects.has(lot.source_key), `Street ground lot ${lot.id} names ${lot.source_key}, which is not an OSM object`);
+    const ring = lot.osm_exception.outline_xz.map(([x, z]) => [x, -z]);
+    return { lot, object: { geometry: difference(`lot ${lot.id} off the carriageway`, [[ringArea(ring) > 0 ? ring : [...ring].reverse()]], [vehicleUnion]) } };
+  });
+  const exceptionLotIndex = polygonIndex(union("exception lots", exceptionLots.map(({ object }) => object.geometry)));
+  const lotUnion = union("parking lots", [...lots, ...exceptionLots.map(({ object }) => object)].map((object) => object.geometry));
   const lotIndex = polygonIndex(lotUnion);
   // The rules' lots, and their raised islands (curbed all round, in the band).
   const lotRules = (rules?.lots ?? []).map((lot) => {
+    const exception = exceptionLots.find((entry) => entry.lot === lot);
+    if (exception) return exception;
     const object = playableObjects.get(lot.source_key);
     invariant(object && object.tags.amenity === "parking", `Street ground lot ${lot.id} names ${lot.source_key}, which is not an OSM parking area`);
     return { lot, object };
   });
-  const islandUnion = union("lot islands", lotRules.flatMap(({ lot }) => lot.islands.map((island) => {
+  const islandUnion = union("lot islands", lotRules.flatMap(({ lot, object }) => lot.islands.map((island) => {
     const ring = island.points_xz.map(([x, z]) => [x, -z]);
-    return [[ringArea(ring) > 0 ? ring : ring.reverse()]];
+    const shape = [[ringArea(ring) > 0 ? ring : ring.reverse()]];
+    return lot.osm_exception ? intersect(`lot ${lot.id} ${island.id}`, shape, object.geometry) : shape;
   })));
   const islandIndex = polygonIndex(islandUnion);
   const buildings = objects.filter((object) => (object.roles.includes("building") || object.roles.includes("building_part")) && nearPilot(object, 30));
@@ -1936,7 +2091,7 @@ export function generateStreetGround({
     let flare = 0;
     for (const fraction of [0.25, 0.5, 0.75]) {
       const probe = add(add(a, scale(sub(b, a), fraction)), scale(outward, 0.04));
-      if (vehicleIndex.contains(probe)) curb += 1;
+      if (vehicleIndex.contains(probe) || exceptionLotIndex.contains(probe)) curb += 1;
       else if (notchIndex.contains(probe)) flare += 1;
     }
     return curb >= 2 ? "curb" : flare >= 2 ? "flare" : "back";
@@ -2529,6 +2684,13 @@ export function generateStreetGround({
         const middle = add(entry, scale(axis, row.depth_m / 2));
         const footprint = rectangle(entry, axis, leftOf(axis), 0, row.depth_m, -row.stall_width_m / 2, row.stall_width_m / 2);
         if (islandUnion.length > 0 && intersect(`lot ${lot.id} stall on island`, footprint, islandUnion).length > 0) continue;
+        if (row.style === "accessible_filled") {
+          // Blue inside the white separators, the symbol toward the aisle.
+          const inset = lines.width_m / 2 + 0.01;
+          paintLot(STREET_PAINT_KINDS.blue, intersect(`lot ${lot.id} accessible fill`,
+            rectangle(entry, axis, leftOf(axis), inset, row.depth_m - inset, -row.stall_width_m / 2 + inset, row.stall_width_m / 2 - inset), object.geometry), Math.min(wear, 2));
+          legendPiece(STREET_LEGEND_CELLS.accessible, add(entry, scale(axis, 1)), scale(axis, -1), 1.6, 1.6, lot.source_key, lotTop, Math.min(wear, 2));
+        }
         if (row.style === "accessible") {
           // A blue outline inside the white separators and the symbol, on grey.
           paintLot(STREET_PAINT_KINDS.blue, intersect(`lot ${lot.id} accessible`,
@@ -3229,6 +3391,8 @@ export function generateStreetGround({
     stalls: stallSlots,
     // Inside an OSM parking lot near the pilot.
     inLot: (point) => lotIndex.contains(point),
+    // The lot OSM lacks, for the street clutter's parked cars.
+    exception_lots: exceptionLots.map(({ lot, object }) => ({ source_key: lot.source_key, geometry: object.geometry })),
   };
   return { records, summary, surfaceAt, site };
 }

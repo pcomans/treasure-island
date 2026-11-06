@@ -157,7 +157,7 @@ const SURFACE_RECORD_FIELDS := ["surface_bias_m"]
 ## surfaces so VisibleGround can stand visuals on them.
 const PARK_SURFACE_MATERIAL_PREFIX := "park_"
 ## The yards' shared zone ground surfaces, draped the same way.
-const YARD_SURFACE_MATERIALS := ["black_plastic", "rubble_grey", "yard_asphalt", "yard_asphalt_pale", "yard_concrete", "yard_gravel", "yard_gravel_pale", "yard_pond", "yard_sand_pale", "yard_soil_dark"]
+const YARD_SURFACE_MATERIALS := ["black_plastic", "rubble_grey", "yard_asphalt", "yard_asphalt_pale", "yard_asphalt_fresh", "yard_concrete", "yard_gravel", "yard_gravel_pale", "yard_pond", "yard_sand_pale", "yard_soil_dark"]
 const BUILDING_LEVEL_FIELDS := ["flat_base_elevation_m", "source_height_m", "top_elevation_m"]
 const BUILDING_WALL_FIELDS := ["exterior_foundation_segments", "shared_wall_segments"]
 const CONTEXT_RECORD_FIELDS := [
