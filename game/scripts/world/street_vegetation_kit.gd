@@ -29,6 +29,9 @@ extends RefCounted
 ##   white_umbel_perennial  a yarrow-like plant with flat white heads seen in a
 ##                     CMG photo of the strand garden; its species is not
 ##                     confirmed, so the form is inference.
+##   pale_seeded_shrub  the low open shrub of the Mersea ditch bank (owner photos,
+##                     Nov 2026; species unconfirmed, so the photographed form):
+##                     thin dark stems under sparse pale seed heads.
 ## The island-wide rollout's trees, shrubs and hedges (vegetation species pass,
 ## 2026-11-05; dated Street View crops p1-p6, c2-c4, b1-b8, n1-n2, s1-s3, h1-h2
 ## kept with the vegetation-inventory work notes, outside Git):
@@ -165,6 +168,7 @@ const LOW_CELLS := {
 	"sagebrush_wands": ["meadow", Rect2(0.0, 0.75, 0.25, 0.25)],
 	"sage_stems": ["meadow", Rect2(0.25, 0.75, 0.25, 0.25)],
 	"litter": ["meadow", Rect2(0.5, 0.75, 0.25, 0.25)],
+	"seeded_stems": ["meadow", Rect2(0.75, 0.75, 0.25, 0.25)],
 	"daisy": ["perennial", Rect2(0.0, 0.0, 0.25, 1.0 / 3.0)],
 	"thrift": ["perennial", Rect2(0.25, 0.0, 0.25, 1.0 / 3.0)],
 	"woolly": ["perennial", Rect2(0.5, 0.0, 0.25, 1.0 / 3.0)],
@@ -623,6 +627,11 @@ const WHITE_UMBELS := [
 	{"seed": 109, "lean": 0.1, "layers": [{"kind": "shell", "cell": "yarrow", "cards": 8, "card": 0.66, "width": 0.52, "height": 0.18, "flat": 0.4},
 		{"kind": "crossed", "cell": "umbel_stalks", "cards": 3, "width": 0.42, "height": 0.6, "base": 0.06, "splay_deg": 8.0, "flop_deg": 20.0, "flutter": 0.05}]},
 ]
+const SEEDED_SHRUBS := [
+	# Thin dark stems in a loose vase, nearly bare, sparse pale seed heads near the tips.
+	{"seed": 131, "lean": 0.06, "layers": [{"kind": "crossed", "cell": "seeded_stems", "cards": 3, "width": 0.7, "height": 0.62, "splay_deg": 9.0, "flutter": 0.03, "shade_low": 0.7}]},
+	{"seed": 132, "lean": 0.1, "layers": [{"kind": "crossed", "cell": "seeded_stems", "cards": 4, "width": 1.0, "height": 1.15, "splay_deg": 9.0, "flop_deg": 16.0, "flutter": 0.035, "shade_low": 0.7}]},
+]
 ## Low plants stand in grass_clump rows or, spaced wider, in planting_slot rows.
 const LOW_KINDS := ["grass_clump", "planting_slot"]
 ## Per prop: its variants, visibility ranges in metres (LOD0 until the first,
@@ -680,6 +689,7 @@ const PROPS := {
 	"seep_monkeyflower": {"kinds": LOW_KINDS, "variants": MONKEYFLOWERS, "ranges": [45.0], "foot_m": 0.15, "form": "low"},
 	"dune_tansy": {"kinds": LOW_KINDS, "variants": TANSIES, "ranges": [50.0], "foot_m": 0.2, "form": "low"},
 	"white_umbel_perennial": {"kinds": LOW_KINDS, "variants": WHITE_UMBELS, "ranges": [50.0], "foot_m": 0.15, "form": "low"},
+	"pale_seeded_shrub": {"kinds": LOW_KINDS, "variants": SEEDED_SHRUBS, "ranges": [65.0], "foot_m": 0.2, "form": "low", "shadow": true},
 }
 ## Below about this cosine of the angle between the view and a card, a rollout
 ## model's card fades out, so it never shows as a long streak across the crown; a

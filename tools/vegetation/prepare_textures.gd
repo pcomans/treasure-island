@@ -80,7 +80,7 @@ const MEADOW_CELLS := [
 	"reedgrass_clump.png", "sedge_tussock.png", "rush_clump.png", "bronze_grass.png",
 	"blue_eyed_grass.png", "thrift_stalks.png", "umbel_stalks.png", "buckwheat_side.png",
 	"woolly_stalks.png", "monkey_stalks.png", "tansy_stalks.png", "buckwheat_stalks.png",
-	"sagebrush_side.png", "sage_side.png", "litter.png",
+	"sagebrush_side.png", "sage_side.png", "litter.png", "seeded_stems.png",
 ]
 ## The perennial atlas's 512 x 512 cells in 2048 x 1536: face-on foliage
 ## clusters, and the top views the kit lays over clumps as caps.
@@ -111,6 +111,7 @@ const LOW_GRADES := {
 	"sagebrush_foliage.png": [Color(0.8, 0.86, 0.78), 0.0],
 	"sagebrush_side.png": [Color(0.74, 0.84, 0.72), 0.0],
 	"litter.png": [Color(0.64, 0.62, 0.6), 0.55],
+	"seeded_stems.png": [Color(0.86, 0.84, 0.78), 0.5],
 	"woolly_stalks.png": [Color(0.78, 0.72, 0.66), 0.55],
 	"buckwheat_stalks.png": [Color(0.84, 0.74, 0.64), 0.7],
 	"buckwheat_foliage.png": [Color(0.8, 0.76, 0.68), 0.55],
@@ -268,7 +269,7 @@ func _pack_meadow(images: Dictionary, errors: Array[String]) -> void:
 		var name: String = cells[index]
 		var cell := _keyed_fit(images[name], 512 - 2 * CELL_MARGIN, 512 - 2 * CELL_MARGIN, CYAN if name in ON_CYAN else MAGENTA)
 		# Clears the pink the magenta key leaves in pale blade tips (not the copper sedge's orange).
-		if name in ["reedgrass_clump.png", "sedge_tussock.png", "rush_clump.png"]:
+		if name in ["reedgrass_clump.png", "sedge_tussock.png", "rush_clump.png", "seeded_stems.png"]:
 			_straw(cell)
 		if LOW_GRADES.has(name):
 			_grade(cell, LOW_GRADES[name][0], LOW_GRADES[name][1])
