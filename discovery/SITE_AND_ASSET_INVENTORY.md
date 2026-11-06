@@ -73,9 +73,11 @@ below carry their reviews' levels. The street ground's review rated its street
 classes, which have no row here: village, new district and boulevard 3, the
 Mersea lot's paint and wear 4, the legends texture 4.
 
-**In progress.** Tree and shrub placement and the new tree models
-(`street/vegetation-rollout-20261105`, `veg/models-20261105`): the tree push fills
-in the vegetation rows.
+**Trees landed on 2026-11-06.** Tree and shrub placement and the new tree models
+reached `main` as one squashed commit (`d72368e8`, the tree of `641cd2cd`).
+[Trees and shrubs by site](#trees-and-shrubs-by-site) and the Avenue N row carry
+the final placement review's levels. The plant rows keep their recorded levels
+and now say where each plant stands.
 
 ## Sites
 
@@ -83,7 +85,8 @@ in the vegetation rows.
 
 Every zone in [`tools/config/street-detail-zones.json`](../tools/config/street-detail-zones.json).
 Yards carry their large-clutter research number (#1–#16), which the asset rows
-below use. Place #8 is two zones.
+below use. Place #8 is two zones. The zones the tree push added are in
+[their own table](#trees-and-shrubs-by-site).
 
 | Site | Zone / OSM | Level | Evidence | Next level |
 |---|---|---|---|---|
@@ -110,8 +113,33 @@ below use. Place #8 is two zones.
 | #14 505 Avenue N soil spread | `avenue_n_soil_spread` | 2 est. | Yards B (as #7): staggered windrows across the spread, OSM construction panels | 3: edges |
 | #15 SFFD training facility yard | `fire_training_yard` | 2 est. | Yards B (as #7): rubble pile, white work vehicles | 3: secondary items |
 | #16 Fenced Navy investigation lots | `navy_investigation_lots` | 2 est. | Yards B (as #7): the OSM barbed chain-link fence is its only content; the lots are grass and old slabs | 3: the old slabs, where a dated photo shows them |
-| Mersea lot | `mersea_lot`; w28356874 | 2 (visual-review-clutter-rollout) | Re-check PASS at `7ccf14c7`: 29 cars from the May 2026 aerial, stall rows, the strip along Avenue A, chain-link and pickets. The objects contribution is level 3 (visual-review-objects), the street ground's paint and wear 4 | 3: planted planters (the tree push), the lot light's second arm, a longer planted lamp island. 4: the dumpsters' finish |
-| Avenue N seawall palm row | `avenue_n_seawall` | 1 (visual-review-vegetation) | 59 mature Canary palms between Avenue N and the riprap, from Nov 2025 Street View and the dated aerials | 2: the shrubs beside them (the tree push) |
+| Mersea lot | `mersea_lot`; w28356874 | 2 (visual-review-clutter-rollout) | Re-check PASS at `7ccf14c7`: 29 cars from the May 2026 aerial, stall rows, the strip along Avenue A, chain-link and pickets. The objects contribution is level 3 (visual-review-objects), the street ground's paint and wear 4. The tree push planted the planters | 3: the lot light's second arm, a longer planted lamp island. 4: the dumpsters' finish |
+| Johnson St lot | `johnson_lot`; no OSM area, the one recorded exception (outline from the 2026-05-26 aerial, level 19) | 2 (visual-review-clutter-rollout) | PASS WITH FIXES at `d38100ad`: outline and pattern rule match the aerial. Tail joint and shoulder band since fixed | 3: pole, drainage gap, rock pile, aisle marks |
+| Avenue N seawall palm row | `avenue_n_seawall` | 2 (visual-review-veg-models) | 61 mature Canary palms between Avenue N and the riprap and 135 shrubs beside them, from Nov 2025 Street View and the dated aerials | 3: secondary items |
+
+### Trees and shrubs by site
+
+Levels from the final placement review (visual-review-veg-models, PASS WITH FIXES,
+on R26 `c7b4ae24` and R27 `641cd2cd`): level 2 is accepted on every rated row and
+level 3 is open. Its open items are in [KNOWN_ISSUES](../KNOWN_ISSUES.md). Counts
+are placed rows in the generated world. `island_trees` is one zone for the whole
+island, so its groups are rows here. Z1, Z2 and Z7 are the vegetation rollout's
+research areas.
+
+| Site | Zone / rule | Level | Evidence | Next level |
+|---|---|---|---|---|
+| Residential, Z1 north and Z2 south-west | `island_trees`: `residential_canopy`, `residential_hedges` | 2 (visual-review-veg-models) | 305 trees at the May 2026 aerial's crowns and 151 hedge lines; species from the Mar and Sep 2025 Street View pass | 3: secondary items |
+| Keppler Court | `island_trees`: `keppler_island_shrubs`; set pieces `keppler_island_tree_east`, `keppler_island_tree_west` | 2 (visual-review-veg-models) | The planted island: two small broadleaves and three pittosporum, from Apr 2019 Street View at 1117 Keppler Ct and the May 2026 aerial. Keppler's pines stand in the residential canopy | 3: secondary items |
+| West parcel | `island_trees`: `west_parcel_canopy` | 2 (visual-review-veg-models) | 39 trees at the aerial's crowns; the old twisted broadleaf and dark wind-shaped trees of the Mar 2025 Street View at 1349 and 1318 Gateview Ave | 3: secondary items |
+| 1349 Gateview thicket | `gateview_west_thicket` | | 493 plants sown by one rule, from the Mar 2025 Street View at 1349 Gateview Ave. The final review noted its mounds' hard outlines but gave the zone no level of its own | Rate |
+| Job Corps campus | `island_trees`: `job_corps_canopy`, `job_corps_hedges`; w1252737750 | 2 (visual-review-veg-models) | 92 trees at the aerial's crowns and 26 hedge lines, with the 2025 gallery photos | 3: secondary items |
+| Job Corps entrance group | set pieces `job_corps_eucalyptus_*`, `job_corps_weeping_lot_*` | 2 (visual-review-veg-models) | Four mature eucalypts and three weeping trees, set from the owner's Job Corps photos (Nov 2026) | 3: secondary items |
+| Cultural Park | `cultural_park_rows`; w1428380762 | 2 (visual-review-veg-models) | 51 young trees in rows by its paths and in its dark beds, sown by a rule from the May 2026 aerial | 3: secondary items |
+| Industrial core, Z7 | `island_trees`: `ninth_street_row`, `sffd_frontage_pines`, `sffd_north_pines`; set pieces `sffd_frontage_palm_*` | 2 (visual-review-veg-models) | 62 trees at the aerial's crowns and three young date palms, from the Jul 2023 and Sep 2025 Street View on 9th Street | 3: secondary items |
+| Mersea strip | `mersea_median` | 2 (visual-review-veg-models) | 294 low plants on dark mulch, from the Sep 2025 Street View on 9th Street | 3: secondary items |
+| The ditch next to Mersea | `mersea_ditch`; w1473022589 | 2 (visual-review-veg-models) | 689 plants sown by fields that read the land, on the ground shader's red floor and banks; owner photos, Nov 2026 | 3: the bank's density at the owner's photo spot (with the Johnson St lot), the even bank-top line, the foreground where the stones were |
+| Ferry arrival and spawn | views `ferry-arrival-north`, `spawn` | 2 (visual-review-veg-models) | The trees as seen from the two arrival views; the plaza's own row is in the zones table | 3: secondary items |
+| Island overviews | the fixed overviews; `island_trees`: `island_canopy`, `fourth_street_lot_palms` | 2 (visual-review-veg-models) | The tree cover as a whole, with the rules no site above covers: 189 crowns of the May 2026 aerial across the island and 21 palms on the 4th Street lot | 3: secondary items |
 
 ### OSM parks, plazas and pitches
 
@@ -126,7 +154,7 @@ Centres are world metres (x east, z south) from the generated world.
 | Waterfront Plaza | w1428380754 | (-107, 765) | see zone | Built as the `ferry_arrival_plaza` zone | (zone row) |
 | Cityside Park | w1428380753 | (-258, 466) | see zone | Built as the `cityside_park` zone | (zone row) |
 | Marina Plaza | r19585233 | (2, 740) | 0 code | Most of the Building 1 forecourt zone lies inside it; the rest is generic park ground | 1: its own surfaces and paths beyond the forecourt |
-| Cultural Park | w1428380762 | (-83, 625) | 0 code | Generic park ground; its Sep 2025 screened site fence is built by the Trade Winds zone | 1: surface and outline from dated photos |
+| Cultural Park | w1428380762 | (-83, 625) | see zone | Its young trees and beds are the `cultural_park_rows` zone; its Sep 2025 screened site fence is built by the Trade Winds zone | (zone row) |
 | Causeway Park | w1428380755 | (-47, 897) | 0 code | Generic park ground | 1 |
 | Clipper Cove | w1428380764 | (67, 818) | 0 code | Generic park ground | 1 |
 | Unnamed park | w775796578 | (-420, 55) | 0 code | Generic park ground | 1 |
@@ -233,7 +261,7 @@ the rows below are rated only where a record names the prop.
 | Traffic cone | set pieces: Avenue of the Palms, the #3 gate | | Step 4 PASS checked placement against the Nov 2025 photos only | Rate |
 | A-frame barricade | set pieces: Avenue of the Palms, the #3 gate | | Step 4 PASS, placement only | Rate |
 | Dumpster | Mersea lot set pieces | 3 est. | Mersea re-check at `7ccf14c7` leaves only its finish open, at level 4 | 4: finish |
-| Stock-tank planter | Mersea lot set pieces | 2 (visual-review-clutter-rollout) | Second look at `e1306ea4`: planters level 2, empty | 3: planted (the tree push) |
+| Stock-tank planter | Mersea lot set pieces | 2 (visual-review-clutter-rollout) | Second look at `e1306ea4`: planters level 2, empty. The tree push then planted them (20 New Zealand flax, 10 pittosporum); no level verdict since | 3: a review of the planted tanks |
 
 ### Street furniture and objects kit
 
@@ -311,14 +339,29 @@ All are used round the whole island: ten segments and seven closures.
 
 | Asset | Where used | Level | Evidence | Next level |
 |---|---|---|---|---|
-| Mexican fan palm | Avenue of the Palms (both curbs), Building 1 set pieces | 2 est. | Step 5 visual PASS: crown green sampled against ih02 (about 74/93/54 against 69/84/52), fronds stable in both renderers | 3: skirt and boot detail close up (the review asked for a web close-up) |
-| Canary Island date palm | Building 1 set pieces | 2 est. | Step 5 PASS: full arching crowns, knob texture graded (`947fff1f`, `39c13159`) | 3: leaf scars and knob close up |
-| Monterey cypress, old (variants 0–1) | Building 1 set pieces | 1 est. | Step 5 review: reads as an umbrella tree with a slim, straight single trunk and a light canopy, against the dark, dense multi-stem cypresses in the dated photos | 2: a dense dark canopy on several stems, with a root flare |
+| Mexican fan palm | Avenue of the Palms (both curbs), Building 1 set pieces, the row at the Avenue B and 9th Street park, one residential crown | 2 est. | Step 5 visual PASS: crown green sampled against ih02 (about 74/93/54 against 69/84/52), fronds stable in both renderers | 3: skirt and boot detail close up (the review asked for a web close-up) |
+| Canary Island date palm (variants 0–3) | Avenue N seawall (61), the 4th Street lot (21), the SFFD frontage (3), Building 1 set pieces | 2 est. | Step 5 PASS: full arching crowns, knob texture graded (`947fff1f`, `39c13159`) | 3: leaf scars and knob close up |
+| Monterey cypress, old (variants 0–1) | Building 1 set pieces, 66 crowns of `island_trees` | 1 est. | Step 5 review: reads as an umbrella tree with a slim, straight single trunk and a light canopy, against the dark, dense multi-stem cypresses in the dated photos | 2: a dense dark canopy on several stems, with a root flare |
 | Monterey cypress, young (variants 2–4) | ferry plaza set pieces, Cityside beds | 2 est. | Step 5 PASS (feathered to the ground, `947fff1f`); Cityside plant reviews | 3 |
 | Sydney blue gum, young | Cityside windrow plazas | 2 est. | Cityside plant reviews: crown reaching downwind, a narrow open silhouette at 40 m (`ce45ec4d`); delta PASS at `8d11df7f` | 3: spray and bark detail close up |
-| Island oak, young | Cityside beds | 2 est. | Cityside plant reviews: three distinct, filled crowns (`8d11df7f`, delta PASS). Its form is inference: no dated photo | A dated photo first, then 3 |
-| Clump grass | Avenue of the Palms mulch beds | 2 est. | Step 5 PASS | 3 |
-| Cityside low-plant kit (14 species: pacific reedgrass, dense sedge, rush, bronze clump grass, blue-eyed grass, seaside daisy, sea thrift, seaside woolly sunflower, California sagebrush, shrubby sage, California buckwheat, seep monkeyflower, dune tansy, white umbel perennial) | Cityside beds | 2 est. | Plant review R01 REWORK, R04 PASS WITH FIXES, R10 fixes, delta PASS at `8d11df7f`; whole-park PASS. The white umbel's species is unconfirmed, so its form is inference | 3: flower heads and leaf detail close up. Split a species into its own row when it is improved |
+| Island oak, young | Cityside beds, the Cultural Park rows (51), one west parcel crown | 2 est. | Cityside plant reviews: three distinct, filled crowns (`8d11df7f`, delta PASS). Its form is inference: no dated photo | A dated photo first, then 3 |
+| Clump grass | Avenue of the Palms mulch beds; variants 4–7 at the ditch, the Mersea strip and the 1349 Gateview thicket | 2 est. | Step 5 PASS | 3 |
+| Cityside low-plant kit (14 species: pacific reedgrass, dense sedge, rush, bronze clump grass, blue-eyed grass, seaside daisy, sea thrift, seaside woolly sunflower, California sagebrush, shrubby sage, California buckwheat, seep monkeyflower, dune tansy, white umbel perennial) | Cityside beds. Rush also at the ditch, the Mersea strip and the 1349 Gateview thicket. California sagebrush (strip, thicket) and California buckwheat (ditch) stand in there as forms, species unconfirmed: don't describe them as natives | 2 est. | Plant review R01 REWORK, R04 PASS WITH FIXES, R10 fixes, delta PASS at `8d11df7f`; whole-park PASS. The white umbel's species is unconfirmed, so its form is inference | 3: flower heads and leaf detail close up. Split a species into its own row when it is improved |
+| Monterey pine, residential (variants 0–2) | 140 crowns of `island_trees`, most in the housing | 2 (visual-review-vegetation R03) | R03 REWORK, crown only: a round oak-like dome at 40 m with even terraces against p5. Crown rebuilt from boughs and plumes after that verdict, not yet reviewed | 3: a broken, open crown; a reviewed verdict on the rebuild |
+| Monterey pine, wind-pruned (variants 3–5) | 135 crowns of `island_trees`: the island canopy (55), Job Corps (29), the SFFD north row (20) and frontage (19), 9th Street (12) | 2 (visual-review-vegetation R03) | R03 PASS WITH FIXES: low domes on clear trunks (p2–p4) | 3: side-to-side impostor tone |
+| Spreading broadleaf (variants 0–3) | 298 in `island_trees`: the housing (148), the island canopy (71), Job Corps (45), the west parcel (32), Keppler's island (2) | 3 (visual-review-vegetation R03) | R03: layered pads, limbs with forks and bark relief. Species unresolved, so the photographed form (c2–c4, b1–b8) | 4: joined, darker cloud masses and scattered bronze, reworked after the verdict and not yet reviewed |
+| New Zealand Christmas tree | 48 crowns of `island_trees`: the housing (32), the island canopy (16) | 2 (visual-review-vegetation R03) | R03: pom-pom crown closed; stems were straight tubes stopping at the crown, reworked after the verdict and not yet reviewed | 3: stems and limbs running into the crown (b5), a lighter underside |
+| Mature eucalyptus | Four at the Job Corps entrance | 2 (visual-review-veg-models form round) | Form round accepted at `1f4a5318`: rebuilt from its limbs against the owner's Job Corps photos (Nov 2026), tall and open with sky and pale limbs showing. Sizes estimated from a street light in the photo. Final placement review at `641cd2cd`: level 2, level 3 open | 3: finer clumps in place of the remaining pads |
+| Weeping tree | Three at the Job Corps entrance | 2 (visual-review-veg-models form round) | Form round accepted at `1f4a5318`: offset hanging masses, one dense dome and one open tree on a thick low fork. Species unresolved, so the photographed form. Final placement review at `641cd2cd`: level 2, level 3 open | 3: its tone, and more twigs in the open tree's top. At the next rebake set `lod1_grow = 1.0` on the bare-twig wisps, which take the default 1.3 and gain about 1.7x area at the switch |
+| Norfolk Island pine, young | One, in front of 1436 Chinook Court | 3 (visual-review-vegetation R03) | R03 PASS: close tiers, pointed leader (n1) | 4 |
+| Canary Island date palm, mature (variants 4–5) | Four in the row at the Avenue B and 9th Street park | 3 (visual-review-vegetation R03) | R03: shaggy trunk and drooping globe crown (sv01, sv02), far level rebaked from the crown alone | 4: crown tone and trunk pattern |
+| Indian hawthorn | Avenue N seawall (31) | 3 (visual-review-vegetation R03) | R03: fine leathery mound with pale pink clusters (s1) | 4 |
+| Pittosporum tobira | Avenue N seawall (68), the Mersea planters (10), Keppler's island (3) | 2 (visual-review-vegetation R03) | R03: too dark, fine hair rather than broad glossy leaves (s2). Reworked with broad leaves after the verdict, not yet reviewed | 3 |
+| Red-tipped shrub | Avenue N seawall (29) | 3 (visual-review-vegetation R03) | R03: slender, dull red at the shoot tips only. Species unresolved (s2) | 4 |
+| Conical shrub | Avenue N seawall (7) | 3 (visual-review-vegetation R03) | R03: fine ogive with a soft point. Species unresolved (s3) | 4: impostor width |
+| New Zealand flax | The Mersea planters (20) | 2 (visual-review-vegetation R03) | R03: broad arching straps, but nearly black in sun; lifted after the verdict, not yet reviewed | 3 |
+| Clipped hedge (variants 0–1) | 177 lines, 1,245 m: the housing (151, variant 0), Job Corps (26, variant 1) | 3 (visual-review-vegetation R03) | R03: rows of ragged leaf mats over a core, open stems on the residential hedge (h1), white flowers on the glossy one (h2) | 4: the residential far level |
+| Pale-seeded shrub (variants 0–2) | The ditch (195), the Mersea strip (150), the 1349 Gateview thicket (76) | 1 (visual-review-veg-models form round) | Accepted at `1f4a5318` as the bare form (variants 0, 1): crossed cards in the low-plant family, one level; dark twigs at 10–30 m where the bank reads pale in the owner's photos (Nov 2026). Species unconfirmed, so the photographed form. Variant 2, cream seed clusters on lighter stems, added after that verdict and not yet reviewed. Final placement review at `641cd2cd`: level 1 | 2: a review of variant 2 on straw ground |
 
 ### Player
 

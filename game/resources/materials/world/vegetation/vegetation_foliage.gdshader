@@ -9,6 +9,8 @@ render_mode cull_disabled, depth_draw_opaque;
 
 uniform sampler2D albedo_texture : source_color, filter_linear_mipmap_anisotropic, repeat_disable;
 uniform vec4 tint : source_color = vec4(1.0);
+// Pulls the albedo toward its luminance: dead grass from a living card's atlas.
+uniform float desaturate : hint_range(0.0, 1.0) = 0.0;
 uniform float alpha_cutoff : hint_range(0.05, 0.95) = 0.45;
 uniform float roughness : hint_range(0.0, 1.0) = 0.82;
 uniform float specular : hint_range(0.0, 1.0) = 0.3;
@@ -19,6 +21,11 @@ uniform vec2 texture_size = vec2(1024.0);
 // 6 % of the full-size coverage to mip 5), so only a small boost is needed to hold
 // thin tips; 0.25 filled the distant crowns into solid lobes.
 uniform float mip_alpha_boost : hint_range(0.0, 0.5) = 0.05;
+// A card seen at a low angle fades out as the cosine of the angle between the view
+// and the card itself (not its authored crown normal) falls through this, so it
+// can't show as a long streak across a crown; a cluster's crossed cards leave one
+// facing the viewer. 0 keeps every card.
+uniform float edge_fade : hint_range(0.0, 0.6) = 0.0;
 // Low plants (grasses, perennials, shrubs) dissolve away over fade_length_m
 // before their visibility range ends, which the kit stores in the vertex
 // colour's alpha in hundreds of metres, so a cell of them never pops out.
@@ -41,7 +48,8 @@ void fragment() {
 	// a little with the sampled mip level so their tips hold at a distance.
 	vec2 texel = UV * texture_size;
 	float lod = max(0.0, 0.5 * log2(max(dot(dFdx(texel), dFdx(texel)), dot(dFdy(texel), dFdy(texel)))));
-	ALBEDO = tex.rgb * tint.rgb * COLOR.rgb;
+	vec3 albedo = tex.rgb * tint.rgb * COLOR.rgb;
+	ALBEDO = mix(albedo, vec3(dot(albedo, vec3(0.2126, 0.7152, 0.0722))), desaturate);
 	ROUGHNESS = roughness;
 	SPECULAR = specular;
 	// The renderer flips NORMAL on back faces of double-sided materials;
@@ -51,6 +59,10 @@ void fragment() {
 	}
 	BACKLIGHT = translucency.rgb;
 	ALPHA = tex.a * (1.0 + lod * mip_alpha_boost);
+	if (edge_fade > 0.0) {
+		vec3 card = normalize(cross(dFdx(VERTEX), dFdy(VERTEX)));
+		ALPHA *= smoothstep(edge_fade * 0.6, edge_fade, abs(dot(card, VIEW)));
+	}
 	if (fade < 1.0) {
 		// Blocks of the card drop out one by one as the plant recedes.
 		float noise = fract(sin(dot(floor(UV * texture_size / 6.0), vec2(12.9898, 78.233))) * 43758.5453);

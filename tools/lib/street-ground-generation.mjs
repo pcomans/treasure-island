@@ -161,6 +161,8 @@ const PAINT_OVERLAP_MIN_M2 = 1e-4;
 // A lot rule's own pavement lies at the yards' ground lift, a step over the road
 // paint; its other layers lie LOT_LAYER_STEPS over that.
 const LOT_SURFACE_LIFT_M = 0.09;
+// How far a lot's planted strip lies over its curb band's top (m).
+const LOT_STRIP_LIFT_M = 0.02;
 // A lot surface's wear (decals per 100 m2 of its pavement).
 const LOT_WEAR_FIELDS = Object.freeze(["crack_per_100m2", "oil_per_100m2", "patch_per_100m2"]);
 // A lot with its own pavement stacks its layers a draped step apart over it:
@@ -492,7 +494,7 @@ export function validateStreetGroundRules(rules) {
   const lots = rules.lots.map(expandLotPattern);
   for (const lot of lots) {
     const label = `Street ground lot ${lot?.id}`;
-    exactKeys(lot, ["evidence", "hatches", "id", "islands", "legends", "paint_wear", "rows", "source_key", ...("surface" in (lot ?? {}) ? ["surface"] : []), ...("osm_exception" in (lot ?? {}) ? ["osm_exception", "pattern"] : [])], label);
+    exactKeys(lot, ["evidence", "hatches", "id", "islands", "legends", "paint_wear", "rows", "source_key", ...["osm_exception", "pattern", "planted", "surface"].filter((field) => field in (lot ?? {}))], label);
     invariant(Number.isInteger(lot.paint_wear) && lot.paint_wear >= 0 && lot.paint_wear < PAINT_WEAR_STEPS, `${label} paint_wear must be a wear step`);
     for (const hatch of lot.hatches) {
       exactKeys(hatch, ["id", "points_xz", "stripes"], `${label} hatch`);
@@ -529,8 +531,13 @@ export function validateStreetGroundRules(rules) {
         isFiniteNumber(row.depth_m) && row.depth_m >= 4 && row.depth_m <= 16 && isFiniteNumber(row.stall_width_m) && row.stall_width_m >= 2.2 && row.stall_width_m <= 5 &&
         isFiniteNumber(row.angle_deg) && row.angle_deg >= 45 && row.angle_deg <= 90, `${label} row ${row.id} is malformed`);
     }
+    for (const strip of lot.planted ?? []) {
+      exactKeys(strip, ["evidence", "id", "points_xz"], `${label} planted strip`);
+      invariant(SAFE_ID.test(strip.id) && Array.isArray(strip.points_xz) && strip.points_xz.length >= 3 && strip.points_xz.every(isXZ) && typeof strip.evidence === "string" && strip.evidence !== "", `${label} planted strip ${strip.id} is malformed`);
+    }
     for (const island of lot.islands) {
-      exactKeys(island, ["id", "points_xz"], `${label} island`);
+      exactKeys(island, ["id", "points_xz", ...("fill" in (island ?? {}) ? ["fill"] : [])], `${label} island`);
+      invariant(island.fill === undefined || island.fill === "mulch", `${label} island ${island.id} fill must be mulch`);
       invariant(SAFE_ID.test(island.id) && Array.isArray(island.points_xz) && island.points_xz.length >= 3 && island.points_xz.every(isXZ), `${label} island ${island.id} needs 3+ points`);
     }
     for (const legend of lot.legends) {
@@ -1732,6 +1739,14 @@ export function generateStreetGround({
   const ruleSidewalkParts = [];
   // Rule walks set back from the curb: the ground between, filled per treatment.
   const ruleFills = { mulch: [], lawn: [] };
+  // A planted lot island: mulch inside its curb.
+  // A lot's planted strip: mulch on the curb band inside its outline.
+  for (const { lot } of lotRules) {
+    for (const part of [...lot.islands.filter(({ fill }) => fill === "mulch"), ...(lot.planted ?? [])]) {
+      const ring = part.points_xz.map(([x, z]) => [x, -z]);
+      ruleFills.mulch.push([[ringArea(ring) > 0 ? ring : ring.reverse()]]);
+    }
+  }
   const wideGapParts = [];
   const wideGapWalks = [];
   // OSM sidewalks whose walk is photographed at the curb with the bed behind it.
@@ -2084,6 +2099,17 @@ export function generateStreetGround({
   addPiece("parking", parkingSurface.flatMap((part) => difference("parking lanes off paths", [part], pedestrianIndex.near(boxOfPoints(part[0])))),
     constantHeight(ROAD_TOP_M), worldUv);
   addPiece("planting", intersect("planted tops", bandRaised, plantedTop), constantHeight(top), tiledUv(2));
+  // A lot's planted strip is the parks' dark bark mulch, just over the band's top.
+  for (const { lot } of lotRules) {
+    if (!lot.planted) continue;
+    const outlines = lot.planted.map((strip) => {
+      const ring = strip.points_xz.map(([x, z]) => [x, -z]);
+      return [[ringArea(ring) > 0 ? ring : ring.reverse()]];
+    });
+    addPiece("park_mulch", intersect(`lot ${lot.id} strip`, intersect("planted tops", bandRaised, plantedTop), union(`lot ${lot.id} strips`, outlines)),
+      constantHeight(top + LOT_STRIP_LIFT_M), worldUv, true);
+    sources.park_mulch.add(lot.source_key);
+  }
   addPiece("verge", lawnTop, constantHeight(top), worldUv);
   for (const part of paverParts) addFramed("plaza", intersect("plaza tops", bandRaised, part.region), part.plaza.paver_tile_m);
   for (const notch of notches) {
