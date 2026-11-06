@@ -113,7 +113,7 @@ const LOW_GRADES := {
 	"sagebrush_side.png": [Color(0.74, 0.84, 0.72), 0.0],
 	"litter.png": [Color(0.64, 0.62, 0.6), 0.55],
 	"seeded_stems.png": [Color(0.86, 0.84, 0.78), 0.5],
-	"seeded_tufts.png": [Color(0.92, 0.9, 0.85), 0.42],
+	"seeded_tufts.png": [Color(0.84, 0.8, 0.74), 0.42],
 	"woolly_stalks.png": [Color(0.78, 0.72, 0.66), 0.55],
 	"buckwheat_stalks.png": [Color(0.84, 0.74, 0.64), 0.7],
 	"buckwheat_foliage.png": [Color(0.8, 0.76, 0.68), 0.55],

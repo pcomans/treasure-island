@@ -32,7 +32,7 @@ extends RefCounted
 ##   pale_seeded_shrub  the low open shrub of the Mersea ditch bank (owner photos,
 ##                     Nov 2026; species unconfirmed, so the photographed form):
 ##                     bare thin dark stems under sparse seed heads (variants 0, 1),
-##                     or thick with pale seed on lighter stems (variant 2), which
+##                     or laden with cream seed on lighter stems (variant 2), which
 ##                     is what reads along the bank from a distance.
 ## The island-wide rollout's trees, shrubs and hedges (vegetation species pass,
 ## 2026-11-05; dated Street View crops p1-p6, c2-c4, b1-b8, n1-n2, s1-s3, h1-h2
@@ -634,8 +634,8 @@ const SEEDED_SHRUBS := [
 	# Thin dark stems in a loose vase, nearly bare, sparse pale seed heads near the tips.
 	{"seed": 131, "lean": 0.06, "layers": [{"kind": "crossed", "cell": "seeded_stems", "cards": 3, "width": 0.7, "height": 0.62, "splay_deg": 9.0, "flutter": 0.03, "shade_low": 0.7}]},
 	{"seed": 132, "lean": 0.1, "layers": [{"kind": "crossed", "cell": "seeded_stems", "cards": 4, "width": 1.0, "height": 1.15, "splay_deg": 9.0, "flop_deg": 16.0, "flutter": 0.035, "shade_low": 0.7}]},
-	# Thick with seed: dense pale clusters over the upper two thirds, on grey to reddish-brown stems.
-	{"seed": 133, "lean": 0.08, "layers": [{"kind": "crossed", "cell": "seeded_tufts", "cards": 4, "width": 1.1, "height": 1.15, "splay_deg": 9.0, "flop_deg": 14.0, "flutter": 0.035, "shade_low": 0.8}]},
+	# Laden with seed: loose cream clusters over the upper two thirds, grey to reddish-brown stems showing through.
+	{"seed": 133, "lean": 0.08, "layers": [{"kind": "crossed", "cell": "seeded_tufts", "cards": 4, "width": 1.1, "height": 1.15, "splay_deg": 9.0, "flop_deg": 14.0, "flutter": 0.035, "shade_low": 0.62}]},
 ]
 ## Low plants stand in grass_clump rows or, spaced wider, in planting_slot rows.
 const LOW_KINDS := ["grass_clump", "planting_slot"]

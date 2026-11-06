@@ -320,7 +320,7 @@ the landing pier.
 | Conical shrub | None yet: the vegetation rollout places them | 3 (visual-review-vegetation R03) | R03: fine ogive with a soft point. Species unresolved (s3) | 4: impostor width |
 | New Zealand flax | None yet: the vegetation rollout places them, in planters | 2 (visual-review-vegetation R03) | R03: broad arching straps, but nearly black in sun; lifted after the verdict, not yet reviewed | 3 |
 | Clipped hedge (variants 0–1) | None yet: laid along a line by the vegetation rollout | 3 (visual-review-vegetation R03) | R03: rows of ragged leaf mats over a core, open stems on the residential hedge (h1), white flowers on the glossy one (h2) | 4: the residential far level |
-| Pale-seeded shrub (variants 0–2) | None yet: the vegetation rollout places it on the Mersea ditch bank | 1 (visual-review-veg-models form round) | Accepted at `1f4a5318` as the bare form (variants 0, 1): crossed cards in the low-plant family, one level; dark twigs at 10–30 m where the bank reads pale in the owner's photos (Nov 2026). Species unconfirmed, so the photographed form. Variant 2, thick with pale seed on lighter stems, added after that verdict and not yet reviewed | 2: a review of variant 2 on straw ground |
+| Pale-seeded shrub (variants 0–2) | None yet: the vegetation rollout places it on the Mersea ditch bank | 1 (visual-review-veg-models form round) | Accepted at `1f4a5318` as the bare form (variants 0, 1): crossed cards in the low-plant family, one level; dark twigs at 10–30 m where the bank reads pale in the owner's photos (Nov 2026). Species unconfirmed, so the photographed form. Variant 2, cream seed clusters on lighter stems, added after that verdict and not yet reviewed | 2: a review of variant 2 on straw ground |
 
 ### Player
 
