@@ -755,15 +755,15 @@
      "kind": "planting_slot",
      "pattern": "field",
      "surfaces": ["land_ground"],
-     "per_m2": 0.075,
-     "spacing": [0.75, 1.6],
+     "per_m2": 0.11,
+     "spacing": [0.6, 1.4],
      "field": {
       "edge_m": [3, 15],
       "road_m": [2.5, 14],
-      "drift_m": 18,
-      "clump_m": 5,
-      "drift_cover": 0.22,
-      "lone": 0.05
+      "drift_m": 14,
+      "clump_m": 4,
+      "drift_cover": 0.18,
+      "lone": 0.04
      },
      "mix": [
       {
@@ -1143,6 +1143,56 @@
      "basis": "production_inference",
      "rule": "Solid clipped hedges 1.2-1.5 m tall of small glossy dark leaves along the campus's foundations.",
      "evidence": "Species pass h2 (2025 Job Corps gallery photo); 2026-05-26 aerial (May 2026 z19 tiles) for the lines."
+    },
+    {
+     "id": "keppler_island_shrubs",
+     "kind": "planting_slot",
+     "pattern": "field",
+     "within_xz": [[-516, -426], [-506, -423], [-507, -419], [-517, -422]],
+     "surfaces": ["street_kerb_planting"],
+     "per_m2": 4,
+     "spacing": [0.5, 0.6],
+     "field": {
+      "drift_m": 3,
+      "clump_m": 1,
+      "drift_cover": 0.9,
+      "lone": 0.9
+     },
+     "mix": [
+      {
+       "prop": "pittosporum_tobira",
+       "variants": [0, 0],
+       "scale": [0.8, 0.85],
+       "at": [0.0, 1.0],
+       "share": 1
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Clipped dark shrubs under the court island's two trees.",
+     "evidence": "Street View Apr 2019, 1117 Keppler Ct (pano b6Gbr0M_gm59xek6WMNAkg, heading 175): clipped dark green shrubs on the island; the island still planted in the May 2026 aerial."
+    },
+    {
+     "id": "planter_plants",
+     "kind": "planting_slot",
+     "pattern": "planters",
+     "per_tank": [3, 4],
+     "mix": [
+      {
+       "prop": "nz_flax",
+       "variants": [0, 2],
+       "scale": [0.8, 1.0],
+       "share": 3
+      },
+      {
+       "prop": "pittosporum_tobira",
+       "variants": [0, 0],
+       "scale": [0.8, 0.85],
+       "share": 1
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Each stock tank's soil holds a dark red flax or two and a dull green shrub, spaced along the tank.",
+     "evidence": "Street View Sep 2025 inside the Mersea lot (panos UmL4Ss_-CFTPXI4O98FkOA heading 340, LtXShSEN6YyhB4uQoFoS-A heading 330): dark red New Zealand flax and dull green shrubs in the galvanised tanks."
     }
    ]
   },
@@ -1172,23 +1222,23 @@
      },
      "mix": [
       {
+       "prop": "california_buckwheat",
+       "variants": [1, 2],
+       "scale": [1.1, 1.25],
+       "at": [0.0, 1.0],
+       "share": 5
+      },
+      {
        "prop": "pale_seeded_shrub",
        "variants": [0, 1],
        "scale": [1.0, 1.25],
        "at": [0.0, 1.0],
-       "share": 4
+       "share": 3
       },
       {
        "prop": "pittosporum_tobira",
-       "variants": [0, 1],
-       "scale": [0.8, 1.0],
-       "at": [0.3, 1.0],
-       "share": 4
-      },
-      {
-       "prop": "indian_hawthorn",
-       "variants": [0, 1],
-       "scale": [0.8, 0.95],
+       "variants": [0, 0],
+       "scale": [0.8, 0.9],
        "at": [0.6, 1.0],
        "share": 1
       }
@@ -1215,8 +1265,8 @@
      "kind": "planting_slot",
      "pattern": "field",
      "surfaces": ["terrain_wetland", "land_ground"],
-     "per_m2": 0.5,
-     "spacing": [0.7, 1.8],
+     "per_m2": 0.3,
+     "spacing": [0.8, 2.0],
      "field": {
       "axis": {
        "from_xz": [-295, 145],
@@ -1224,7 +1274,7 @@
        "full_m": 40,
        "zero_m": 56
       },
-      "height_m": [2.5, 3.3, 4.1, 4.5],
+      "height_m": [2.6, 3.4, 4.15, 4.5],
       "ramps": [
        {
         "from_xz": [-335, 170],
@@ -1233,9 +1283,9 @@
         "high": 1.0
        },
        {
-        "from_xz": [-292, 132],
-        "to_xz": [-298, 212],
-        "low": 0.3,
+        "from_xz": [-282, 188],
+        "to_xz": [-302, 236],
+        "low": 0.15,
         "high": 1.0
        },
        {
@@ -1245,10 +1295,10 @@
         "high": 1.0
        }
       ],
-      "drift_m": 13,
-      "clump_m": 4,
-      "drift_cover": 0.55,
-      "lone": 0.12
+      "drift_m": 12,
+      "clump_m": 3.5,
+      "drift_cover": 0.45,
+      "lone": 0.1
      },
      "mix": [
       {
@@ -1275,7 +1325,7 @@
      "kind": "planting_slot",
      "pattern": "field",
      "surfaces": ["terrain_wetland", "land_ground"],
-     "per_m2": 0.12,
+     "per_m2": 0.07,
      "spacing": [0.6, 1.5],
      "field": {
       "axis": {
@@ -1308,7 +1358,7 @@
      "kind": "grass_clump",
      "pattern": "field",
      "surfaces": ["terrain_wetland", "land_ground"],
-     "per_m2": 0.32,
+     "per_m2": 0.26,
      "spacing": [0.6, 1.4],
      "field": {
       "axis": {

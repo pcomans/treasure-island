@@ -134,6 +134,8 @@ const SCALE_MIN := 0.8
 const SCALE_MAX := 1.25
 const MAX_FOOT_SPREAD_M := 0.25
 const MAX_LIFT_M := 0.6
+## How far above the ground a plant may stand in a planter's soil (stand_m).
+const MAX_STAND_M := 1.2
 
 # Atlas cells as UV rects; tools/vegetation/prepare_textures.gd writes this layout.
 const FAN_LIVE := Rect2(0.0, 0.0, 0.5, 0.5)
@@ -300,10 +302,9 @@ const GRASSES := [
 	{"seed": 32, "cell": "green", "height": 0.92, "width": 1.15, "cards": 5},
 	{"seed": 33, "cell": "straw", "height": 0.62, "width": 1.0, "cards": 4},
 	{"seed": 34, "cell": "straw", "height": 0.82, "width": 1.25, "cards": 5},
-	# Dead straw on the ditch bank by the Mersea lot (owner photos, Nov 2026): the straw clump
-	# darkened, its yellow taken out (a tone over the card's sRGB 173,160,86).
-	{"seed": 35, "cell": "straw", "height": 0.7, "width": 1.0, "cards": 4, "tone": Color(0.42, 0.36, 0.95)},
-	{"seed": 36, "cell": "straw", "height": 0.9, "width": 1.25, "cards": 5, "tone": Color(0.31, 0.27, 0.72)},
+	# Dead straw on the ditch bank by the Mersea lot (owner photos, Nov 2026): the straw clump, dull and dark.
+	{"seed": 35, "cell": "straw", "height": 0.7, "width": 1.0, "cards": 4, "material": "grass_dead"},
+	{"seed": 36, "cell": "straw", "height": 0.9, "width": 1.25, "cards": 5, "material": "grass_dead"},
 ]
 
 ## Cityside Park's young Sydney blue gums in the windrow plazas' double rows
@@ -815,6 +816,9 @@ static func params_error(prop: String, kind: String, params: Variant) -> String:
 		return "%s scale %s is out of range" % [prop, p.scale]
 	if absf(float(p.lift_m)) > MAX_LIFT_M or float(p.foot_spread_m) < 0.0 or float(p.foot_spread_m) > MAX_FOOT_SPREAD_M or float(p.well_m) < 0.0:
 		return "%s foot settling is out of range" % prop
+	var stand: Variant = p.get("stand_m", 0.0)
+	if not (stand is float or stand is int) or not is_finite(float(stand)) or float(stand) < 0.0 or float(stand) > MAX_STAND_M:
+		return "%s stand_m is out of range" % prop
 	if float(p.well_m) > 0.0:
 		var slope: Variant = p.get("well_slope", null)
 		var lift: Variant = p.get("well_lift_m", null)
@@ -3683,7 +3687,6 @@ func _build_grass(p: Dictionary) -> Dictionary:
 	var height := float(p.height)
 	var width := float(p.width)
 	var cards := int(p.cards)
-	var tone: Color = p.get("tone", Color.WHITE)
 	var mesh := ArrayMesh.new()
 	var leaves := Surf.new()
 	var phase := rng.randf() * PI
@@ -3704,12 +3707,12 @@ func _build_grass(p: Dictionary) -> Dictionary:
 				var outward := Vector3(position.x, 0.0, position.z)
 				var n := Vector3.UP * 0.65 + (outward.normalized() * 0.35 if outward.length() > 0.01 else Vector3.ZERO)
 				var shade := lerpf(0.58, 1.0, f)
-				leaves.add(position, n, cell.position + Vector2(float(i) / 2.0, 1.0 - f) * cell.size, tone * Color(shade, shade, shade), Vector2(0.0, 0.05 * f * f))
+				leaves.add(position, n, cell.position + Vector2(float(i) / 2.0, 1.0 - f) * cell.size, Color(shade, shade, shade), Vector2(0.0, 0.05 * f * f))
 		for j in 2:
 			for i in 2:
 				var a := base + j * 3 + i
 				leaves.quad(a, a + 1, a + 4, a + 3, normal)
-	leaves.commit(mesh, material("grass"))
+	leaves.commit(mesh, material(str(p.get("material", "grass"))))
 	return {"lod0": mesh, "lod1": mesh, "crown_surface": -1, "top_m": height, "capsules": []}
 
 
@@ -4126,6 +4129,10 @@ func material(key: String) -> Material:
 		"grass":
 			made = _foliage("grass_atlas.png", Color(0.92, 0.94, 0.86), Color(0.18, 0.2, 0.1), Vector2(1024.0, 512.0), 0.1, 0.9)
 			made.set_shader_parameter("alpha_cutoff", 0.4)
+		"grass_dead":
+			made = _foliage("grass_atlas.png", Color(0.7, 0.64, 0.66), Color(0.09, 0.08, 0.05), Vector2(1024.0, 512.0), 0.1, 0.9)
+			made.set_shader_parameter("alpha_cutoff", 0.4)
+			made.set_shader_parameter("desaturate", 0.8)
 		"meadow":
 			made = _foliage("meadow_atlas.png", Color(0.92, 0.94, 0.86), Color(0.18, 0.2, 0.1), Vector2(2048.0, 2048.0), 0.1, 0.9)
 			made.set_shader_parameter("alpha_cutoff", 0.4)

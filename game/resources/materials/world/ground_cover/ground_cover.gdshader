@@ -85,15 +85,15 @@ uniform float marsh_amount = 0.0;
 uniform vec4 marsh_axis = vec4(-295.0, 145.0, -345.0, 290.0);
 uniform vec2 marsh_radii = vec2(46.0, 66.0);
 uniform float marsh_floor_y = 1.78;
-uniform vec3 rust_gap : source_color = vec3(0.185, 0.095, 0.045);
-uniform vec3 rust_blade : source_color = vec3(0.285, 0.175, 0.065);
+uniform vec3 rust_gap : source_color = vec3(0.180, 0.100, 0.058);
+uniform vec3 rust_blade : source_color = vec3(0.275, 0.170, 0.085);
 uniform vec3 rust_straw : source_color = vec3(0.370, 0.290, 0.190);
 uniform vec3 marsh_brown : source_color = vec3(0.300, 0.225, 0.150);
 uniform vec3 marsh_olive : source_color = vec3(0.235, 0.205, 0.090);
-uniform vec3 bank_gap : source_color = vec3(0.335, 0.295, 0.245);
-uniform vec3 bank_blade : source_color = vec3(0.465, 0.410, 0.325);
-uniform vec3 bank_straw : source_color = vec3(0.620, 0.560, 0.440);
-uniform vec3 bank_gravel : source_color = vec3(0.640, 0.590, 0.510);
+uniform vec3 bank_gap : source_color = vec3(0.280, 0.245, 0.205);
+uniform vec3 bank_blade : source_color = vec3(0.385, 0.340, 0.270);
+uniform vec3 bank_straw : source_color = vec3(0.520, 0.470, 0.370);
+uniform vec3 bank_gravel : source_color = vec3(0.560, 0.520, 0.450);
 uniform vec3 bank_stone : source_color = vec3(0.740, 0.700, 0.620);
 uniform vec3 puddle_tint : source_color = vec3(0.30, 0.38, 0.50);
 
@@ -115,7 +115,7 @@ uniform float fade_end_m = 110.0;
 // Measured on the lossless (compress/mode=0) import; recompute if that changes.
 const vec3 LAYER_SHARE = vec3(0.6108, 0.3586, 0.0305);
 // The noise level above which water stands at marsh_floor_y.
-const float WATER_LEVEL = 0.56;
+const float WATER_LEVEL = 0.54;
 
 // The ground's height, for the marsh's standing water.
 varying float ground_y;
@@ -210,45 +210,51 @@ void fragment() {
 	if (marsh_amount > 0.0) {
 		vec2 axis = marsh_axis.zw - marsh_axis.xy;
 		vec2 from_start = p - marsh_axis.xy;
-		float along_axis = clamp(dot(from_start, axis) / dot(axis, axis), 0.0, 1.0);
-		float reach = length(from_start - axis * along_axis) + 26.0 * (value_noise(p / 29.0 + vec2(5.1, 77.7)) - 0.5);
-		float region = (1.0 - smoothstep(marsh_radii.x, marsh_radii.y, reach)) * smoothstep(1.2, 1.6, ground_y) * marsh_amount;
+		float off_axis = length(from_start - axis * clamp(dot(from_start, axis) / dot(axis, axis), 0.0, 1.0));
+		float region = 0.0;
+		if (off_axis < marsh_radii.y + 13.0) {
+			float reach = off_axis + 26.0 * (value_noise(p / 29.0 + vec2(5.1, 77.7)) - 0.5);
+			region = (1.0 - smoothstep(marsh_radii.x, marsh_radii.y, reach)) * smoothstep(1.2, 1.6, ground_y) * marsh_amount;
+		}
 		if (region > 0.0) {
 			float n_mid = value_noise(p / 5.7 + vec2(23.7, 11.1));
 			float n_small = mix(value_noise(p / 2.1 + vec2(3.3, 47.9)), 0.5, fade);
+			float n_tiny = mix(value_noise(p / 0.8 + vec2(29.9, 13.3)), 0.5, fade);
 			float n_wide = value_noise(p / 23.0 + vec2(71.3, 37.9));
 			float n_patch8 = value_noise(p / 8.0 + vec2(19.3, 83.1));
 			float h = ground_y + 0.6 * (n_wide - 0.5) + 0.5 * (n_mid - 0.5) + 0.3 * (n_small - 0.5);
 
+			// Dull straw in dark and pale patches over crusted fill, gravel toward the top.
 			vec3 bank = cover_layer(bank_gap, bank_blade, bank_straw, m, 0.8, fade);
-			bank *= mix(0.74 + 0.52 * smoothstep(0.34, 0.66, 0.6 * n_mid + 0.4 * n_patch8), 1.0, fade);
-			float gravel_w = 0.7 * smoothstep(3.4, 4.0, h) * smoothstep(0.52, 0.64, 0.55 * n_patch8 + 0.45 * n_small);
-			bank = mix(bank, bank_gravel * (0.86 + 0.28 * n_small), gravel_w);
+			bank *= mix(0.6 + 0.8 * smoothstep(0.3, 0.7, 0.45 * n_mid + 0.3 * n_patch8 + 0.25 * n_tiny), 1.0, fade);
+			float gravel_w = 0.75 * smoothstep(3.3, 3.9, h) * smoothstep(0.5, 0.62, 0.5 * n_patch8 + 0.3 * n_small + 0.2 * n_tiny);
+			bank = mix(bank, bank_gravel * (0.8 + 0.4 * n_tiny), gravel_w);
 			float bank_w = 1.0 - smoothstep(3.95, 4.55, h);
 
-			// Mats a few metres to a few tens across, every edge broken by finer noise.
-			float mat_level = 0.4 * value_noise(p / 19.0 + vec2(7.3, 51.9)) + 0.33 * n_mid + 0.27 * n_small;
-			float olive_w = smoothstep(0.54, 0.6, mat_level);
-			float dark_w = 1.0 - smoothstep(0.37, 0.43, mat_level);
-			float brown_w = smoothstep(0.5, 0.62, 0.55 * value_noise(p / 11.0 + vec2(61.3, 17.7)) + 0.45 * n_mid);
-			float straw_w = smoothstep(0.6, 0.72, 0.5 * value_noise(p / 9.0 + vec2(37.1, 3.3)) + 0.5 * n_small);
+			// Mats a few metres to a few tens across, their edges soft and broken by
+			// finer noise, so red gives way to brown and olive without a line.
+			float mat_level = 0.36 * value_noise(p / 19.0 + vec2(7.3, 51.9)) + 0.3 * n_mid + 0.22 * n_small + 0.12 * n_tiny;
+			float olive_w = smoothstep(0.51, 0.67, mat_level);
+			float dark_w = 1.0 - smoothstep(0.33, 0.47, mat_level);
+			float brown_w = smoothstep(0.44, 0.66, 0.5 * value_noise(p / 11.0 + vec2(61.3, 17.7)) + 0.3 * n_mid + 0.2 * n_tiny);
+			float straw_w = smoothstep(0.58, 0.74, 0.5 * value_noise(p / 9.0 + vec2(37.1, 3.3)) + 0.5 * n_small);
 			vec3 red = cover_layer(rust_gap, rust_blade, rust_straw, m, 0.6, fade);
 			vec3 brown = marsh_brown * mix(0.72 + 0.56 * m.x, 1.0, fade);
 			vec3 olive = marsh_olive * mix(0.72 + 0.56 * m.x, 1.0, fade);
-			vec3 marsh = mix(mix(mix(red, brown, 0.65 * brown_w) * (1.0 - 0.35 * dark_w), olive, olive_w), bank, 0.5 * straw_w);
+			vec3 marsh = mix(mix(mix(red, brown, 0.7 * brown_w) * (1.0 - 0.35 * dark_w), olive, 0.85 * olive_w), bank, 0.5 * straw_w);
 			float carpet = 1.0 - smoothstep(2.3, 2.85, h);
 
 			ground = mix(ground, mix(bank, marsh, carpet), region * max(bank_w, carpet));
 
-			// Pale stones in loose scatters, gone with distance.
+			// Pale stones in loose scatters on the banks, few on the floor, gone with distance.
 			if (fade < 1.0) {
 				vec2 stone_cell = floor(p / 1.3);
 				vec2 inner = fract(p / 1.3) - 0.5;
 				vec2 place = (vec2(hash12(stone_cell + vec2(7.1, 2.3)), hash12(stone_cell + vec2(1.7, 13.7))) - 0.5) * 0.7;
-				float size = 0.03 + 0.05 * hash12(stone_cell + vec2(3.3, 9.1));
-				float scatter = smoothstep(0.5, 0.66, 0.6 * value_noise(p / 15.0 + vec2(13.1, 29.3)) + 0.4 * n_mid);
-				float stone = (1.0 - smoothstep(size * 0.7, size, length(inner - place))) * step(hash12(stone_cell + vec2(23.3, 5.9)), 0.6 * scatter);
-				ground = mix(ground, bank_stone, stone * (1.0 - fade) * region * max(bank_w, carpet));
+				float size = 0.03 + 0.08 * hash12(stone_cell + vec2(3.3, 9.1));
+				float scatter = smoothstep(0.48, 0.64, 0.6 * value_noise(p / 15.0 + vec2(13.1, 29.3)) + 0.4 * n_mid) * mix(1.0, 0.2, carpet);
+				float stone = (1.0 - smoothstep(size * 0.7, size, length(inner - place))) * step(hash12(stone_cell + vec2(23.3, 5.9)), 0.7 * scatter);
+				ground = mix(ground, bank_stone * (0.75 + 0.5 * n_tiny), stone * (1.0 - fade) * region * max(bank_w, carpet));
 			}
 
 			vec2 along = vec2(0.643 * p.x + 0.766 * p.y, 0.643 * p.y - 0.766 * p.x);

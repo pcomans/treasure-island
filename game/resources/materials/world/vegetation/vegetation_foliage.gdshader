@@ -9,6 +9,8 @@ render_mode cull_disabled, depth_draw_opaque;
 
 uniform sampler2D albedo_texture : source_color, filter_linear_mipmap_anisotropic, repeat_disable;
 uniform vec4 tint : source_color = vec4(1.0);
+// Pulls the albedo toward its luminance: dead grass from a living card's atlas.
+uniform float desaturate : hint_range(0.0, 1.0) = 0.0;
 uniform float alpha_cutoff : hint_range(0.05, 0.95) = 0.45;
 uniform float roughness : hint_range(0.0, 1.0) = 0.82;
 uniform float specular : hint_range(0.0, 1.0) = 0.3;
@@ -46,7 +48,8 @@ void fragment() {
 	// a little with the sampled mip level so their tips hold at a distance.
 	vec2 texel = UV * texture_size;
 	float lod = max(0.0, 0.5 * log2(max(dot(dFdx(texel), dFdx(texel)), dot(dFdy(texel), dFdy(texel)))));
-	ALBEDO = tex.rgb * tint.rgb * COLOR.rgb;
+	vec3 albedo = tex.rgb * tint.rgb * COLOR.rgb;
+	ALBEDO = mix(albedo, vec3(dot(albedo, vec3(0.2126, 0.7152, 0.0722))), desaturate);
 	ROUGHNESS = roughness;
 	SPECULAR = specular;
 	// The renderer flips NORMAL on back faces of double-sided materials;

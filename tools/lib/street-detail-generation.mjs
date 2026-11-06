@@ -41,6 +41,7 @@ import {
   plantingState,
   validatePlantingRule,
 } from "./street-planting-generation.mjs";
+import { STOCK_TANK_SIZE, STOCK_TANK_SOIL_M } from "./street-clutter-kit.mjs";
 import {
   STREET_VEGETATION_PROPS,
   bedOffsets,
@@ -506,6 +507,20 @@ function validateScatterRule(rule, zoneId, ruleIds) {
     }, (prop) => STREET_VEGETATION_PROPS[prop]?.variants ?? 0);
     return;
   }
+  if (rule.pattern === "planters") {
+    // Plants in the soil of the stock tanks the set pieces stand.
+    invariant(kind.layer === "vegetation" && kind.geometry === "point", `${label}: planters rules plant vegetation`);
+    invariant(Array.isArray(rule.per_tank) && rule.per_tank.length === 2 && rule.per_tank.every(Number.isInteger) && rule.per_tank[0] >= 1 && rule.per_tank[1] >= rule.per_tank[0], `${label} per_tank must be [low, high] plants`);
+    invariant(Array.isArray(rule.mix) && rule.mix.length > 0, `${label} needs a mix`);
+    for (const entry of rule.mix) {
+      invariant(STREET_VEGETATION_PROPS[entry.prop]?.kinds.includes(rule.kind), `${label}: prop ${entry.prop} does not plant a ${rule.kind}`);
+      validateVegetationRuleParams(entry.prop, { variants: entry.variants, scale: entry.scale }, label);
+      invariant(isFiniteNumber(entry.share) && entry.share > 0, `${label} share must be positive`);
+    }
+    invariant(rule.basis === "production_inference", `${label} basis must be production_inference`);
+    for (const field of ["rule", "evidence"]) invariant(typeof rule[field] === "string" && rule[field].trim() !== "", `${label} needs ${field}`);
+    return;
+  }
   if (rule.pattern === "canopy") {
     // The tree crowns read from the dated aerial (data/street_detail/tree_crowns.json).
     invariant(rule.kind === "tree", `${label}: canopy rules plant trees`);
@@ -518,7 +533,7 @@ function validateScatterRule(rule, zoneId, ruleIds) {
     for (const field of ["rule", "evidence"]) invariant(typeof rule[field] === "string" && rule[field].trim() !== "", `${label} needs ${field}`);
     return;
   }
-  invariant(["grid", "along", "along_beds"].includes(rule.pattern), `${label} pattern must be grid, along, along_beds, canopy, drifts or fill`);
+  invariant(["grid", "along", "along_beds"].includes(rule.pattern), `${label} pattern must be grid, along, along_beds, canopy, drifts, field, fill or planters`);
   invariant(isFiniteNumber(rule.spacing_m) && rule.spacing_m > 0, `${label} spacing must be positive`);
   invariant(isFiniteNumber(rule.jitter_m) && rule.jitter_m >= 0 && rule.jitter_m < rule.spacing_m, `${label} jitter must be below spacing`);
   invariant(isFiniteNumber(rule.acceptance) && rule.acceptance > 0 && rule.acceptance <= 1, `${label} acceptance must be in (0, 1]`);
@@ -1770,6 +1785,56 @@ export function generateStreetDetail({
     });
     ruleSummaries.set(`${zone.id}/${rule.id}`, { id: rule.id, kind: rule.kind, pattern: rule.pattern, candidates: crowns.length, placed });
   };
+  // A planters rule: plants in the soil of every stock tank the set pieces stood,
+  // spaced along the tank, each named row keeping its tank (the row's planter).
+  const placePlanters = (zone, rule) => {
+    const tanks = rows.filter((row) => row.prop === "stock_tank_planter");
+    let placed = 0;
+    for (const tank of tanks) {
+      const tag = `${zone.id}:${rule.id}:${tank.id}`;
+      const bytes = hashBytes(seed, tag);
+      const count = rule.per_tank[0] + Math.floor(unit(bytes, 0) * (rule.per_tank[1] - rule.per_tank[0] + 1));
+      const usable = STOCK_TANK_SIZE.length_m - 0.5;
+      for (let index = 0; index < count; index += 1) {
+        const identity = `${tag}:t${index}`;
+        const draw = hashBytes(seed, identity);
+        const along = ((index + 0.5) / count - 0.5) * usable + (unit(draw, 0) - 0.5) * 0.25;
+        const across = (unit(draw, 4) - 0.5) * 0.24;
+        // A tank's long axis is its local Z.
+        const [sin, cos] = [Math.sin(tank.yaw_radians), Math.cos(tank.yaw_radians)];
+        const xz = [round3(tank.position_m[0] + sin * along + cos * across), round3(tank.position_m[2] + cos * along - sin * across)];
+        let pick = unit(draw, 8) * rule.mix.reduce((sum, entry) => sum + entry.share, 0);
+        const entry = rule.mix.find((candidate) => (pick -= candidate.share) <= 0) ?? rule.mix.at(-1);
+        const variant = entry.variants[0] + Math.floor(unit(draw, 12) * (entry.variants[1] - entry.variants[0] + 1));
+        const scale = roundCoordinate(entry.scale[0] + (entry.scale[1] - entry.scale[0]) * unit(draw, 16));
+        const surface = surfaceAt(xz);
+        const { y, support } = grounded(xz);
+        const soil = tank.position_m[1] + tank.surface.bias_m + STOCK_TANK_SOIL_M;
+        const row = {
+          id: `scatter:${identity}`,
+          source: "scatter",
+          source_id: `zone:${zone.id}/${rule.id}`,
+          kind: rule.kind,
+          layer: "vegetation",
+          geometry: "point",
+          position_m: [xz[0], y, xz[1]],
+          terrain_support: { object_key: support.object_key, triangle_index: support.triangle_index, elevation_m: support.elevation_m },
+          surface,
+          yaw_radians: normalizedYaw(unit(draw, 20) * Math.PI * 2 - Math.PI),
+          yaw_source: "seeded",
+          prop: entry.prop,
+          prop_params: { variant, scale, lift_m: 0, foot_spread_m: 0, well_m: 0, stand_m: roundCoordinate(soil - y - surface.bias_m) },
+          planter: tank.id,
+          status: "placed",
+          exclusion: null,
+        };
+        rows.push(row);
+        placed += 1;
+        audit.scatter.placed += 1;
+      }
+    }
+    ruleSummaries.set(`${zone.id}/${rule.id}`, { id: rule.id, kind: rule.kind, pattern: rule.pattern, candidates: tanks.length, placed });
+  };
   // A hedge rule: clipped hedges along the lines of a hedge group read from the
   // dated aerial. Each line is sampled against its site; its clear stretches
   // become hedge rows. Hedges have no collision, so they keep the gameplay mask for
@@ -1855,7 +1920,11 @@ export function generateStreetDetail({
   const runScatter = (planting) => {
     for (const { zone, contains, bounds } of zoneShapes) {
       for (const rule of zone.scatter) {
-        if ((rule.prop != null || rule.pattern === "canopy" || PLANTING_PATTERNS.includes(rule.pattern)) !== planting) continue;
+        if ((rule.prop != null || rule.pattern === "canopy" || rule.pattern === "planters" || PLANTING_PATTERNS.includes(rule.pattern)) !== planting) continue;
+        if (rule.pattern === "planters") {
+          placePlanters(zone, rule);
+          continue;
+        }
         if (rule.kind === "hedge") {
           placeHedges(zone, rule);
           continue;

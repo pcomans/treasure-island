@@ -275,6 +275,7 @@ const CANOPY_CROWNS_M = Object.freeze({
   canary_date_palm: Object.freeze([6.5, 7.0, 7.5, 8.0, 8.5, 9.0]),
   mexican_fan_palm: Object.freeze([null, null, null, null, 5.0, 5.5]),
   eucalyptus_mature: Object.freeze([15.0, 18.0]),
+  island_oak_young: Object.freeze([2.5, 2.0, 3.4]),
   monterey_cypress: Object.freeze([17.0, 12.5, null, null, null]),
   monterey_pine: Object.freeze([8.5, 10.0, 11.2, 7.2, 8.2, 8.6]),
   nz_christmas_tree: Object.freeze([7.0, 8.0]),

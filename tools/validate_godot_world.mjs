@@ -69,7 +69,7 @@ import {
   STREET_DETAIL_SOURCES,
 } from "./lib/street-detail-generation.mjs";
 import { CAR_BODY_NAMES, CAR_FINISHES, CAR_PAINTS, MAX_TWIST_M, STREET_CLUTTER_PROPS, visibleGroundIndex } from "./lib/street-clutter-generation.mjs";
-import { carBodyGeometry } from "./lib/street-clutter-kit.mjs";
+import { STOCK_TANK_SIZE, STOCK_TANK_SOIL_M, carBodyGeometry } from "./lib/street-clutter-kit.mjs";
 import {
   fenceHeight, fenceParamsError, GATE_LEAF_LIFT_M, gateLeaves, STREET_FENCE_BANNER_TYPES, STREET_FENCE_GATE_HINGES, STREET_FENCE_GATE_STYLES, STREET_FENCE_GATED_TYPES, STREET_FENCE_INSIDE,
   STREET_FENCE_TYPES,
@@ -954,12 +954,23 @@ const CROWN_CHECK_RINGS = Object.freeze([[1 / 3, 8], [2 / 3, 16], [1, 32]]);
 // ground lower than the foot (it would float) and nowhere is it higher than the
 // trunk runs on below it (it would show a gap round a buried foot). A low plant
 // (no trunk) holds its whole crown off sidewalks, roads, paths and plazas.
-function validatePlantedRow(row, groundAt) {
+function validatePlantedRow(row, groundAt, rowsById) {
   const spec = STREET_VEGETATION_PROPS[row.prop];
   invariant(spec && spec.kinds.includes(row.kind) && row.status === "placed", `${row.id} prop ${row.prop} does not plant a placed ${row.kind} row`);
   const params = row.prop_params ?? {};
   invariant(Number.isInteger(params.variant) && params.variant >= 0 && params.variant < spec.variants, `${row.id} variant is invalid`);
   invariant(Number.isFinite(params.scale) && params.scale >= STREET_VEGETATION_SCALE_RANGE[0] && params.scale <= STREET_VEGETATION_SCALE_RANGE[1], `${row.id} scale is invalid`);
+  // A plant in a planter stands in the tank's soil, not on the ground.
+  if (row.planter !== undefined) {
+    const tank = rowsById.get(row.planter);
+    invariant(tank?.prop === "stock_tank_planter", `${row.id} planter ${row.planter} is not a stock tank`);
+    const [dx, dz] = [row.position_m[0] - tank.position_m[0], row.position_m[2] - tank.position_m[2]];
+    const [sin, cos] = [Math.sin(tank.yaw_radians), Math.cos(tank.yaw_radians)];
+    invariant(Math.abs(dx * sin + dz * cos) <= STOCK_TANK_SIZE.length_m / 2 && Math.abs(dx * cos - dz * sin) <= STOCK_TANK_SIZE.width_m / 2, `${row.id} stands outside its tank`);
+    const soil = tank.position_m[1] + tank.surface.bias_m + STOCK_TANK_SOIL_M;
+    invariant(Math.abs(row.position_m[1] + row.surface.bias_m + params.lift_m + params.stand_m - soil) <= 0.002, `${row.id} does not stand on its tank's soil`);
+    return;
+  }
   invariant(Number.isFinite(params.lift_m) && Number.isFinite(params.foot_spread_m) && Number.isFinite(params.well_m) && params.well_m >= 0, `${row.id} foot settling is invalid`);
   invariant(Number.isFinite(row.yaw_radians), `${row.id} needs a yaw`);
   const foot = row.position_m[1] + row.surface.bias_m + params.lift_m;
@@ -1124,6 +1135,7 @@ function validateStreetDetail(worldRoot, manifest, records) {
   const ids = rows.map((row) => row.id);
   invariant(new Set(ids).size === ids.length, "Street-detail row ids are not unique");
   invariant(ids.every((id, index) => index === 0 || ids[index - 1] < id), "Street-detail rows are not in code-point id order");
+  const rowsById = new Map(rows.map((row) => [row.id, row]));
   for (const row of rows) {
     const kind = STREET_DETAIL_KINDS[row.kind];
     invariant(kind && row.layer === kind.layer && row.geometry === kind.geometry, `${row.id} kind/layer/geometry mismatch`);
@@ -1155,7 +1167,7 @@ function validateStreetDetail(worldRoot, manifest, records) {
       // in the layer whose kit has it (furniture or clutter), or a planted
       // vegetation row (validatePlantedRow).
       if (row.prop !== undefined && row.layer === "vegetation") {
-        validatePlantedRow(row, groundAt);
+        validatePlantedRow(row, groundAt, rowsById);
       } else if (row.prop !== undefined) {
         const props = row.layer === "furniture" ? STREET_FURNITURE_PROPS : row.layer === "clutter" ? STREET_CLUTTER_PROPS : {};
         invariant(props[row.prop] === row.kind && row.status === "placed", `${row.id} prop ${row.prop} does not match a placed ${row.kind} ${row.layer} row`);

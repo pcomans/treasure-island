@@ -12,11 +12,13 @@
   {"at_xz": [-289.9, -437.7], "reach_m": 6, "prop": "monterey_pine", "variants": [1, 2], "evidence": "Street View Mar 2025, Keppler Court (pano zHJe3vjFyKW1aAgqgdeypw, heading 90): the flat-topped pine by the dark building."},
   {"at_xz": [-341.0, -416.0], "reach_m": 5, "prop": "monterey_pine", "variants": [1, 2], "evidence": "Street View Mar 2025 (pano lsha-qsuIu59GXEoDXvzAw, heading 245, species pass crops p5, p6): candles and long needles."},
   {"at_xz": [-340.2, -405.0], "reach_m": 5, "prop": "monterey_pine", "variants": [1, 2], "evidence": "Street View Mar 2025 (pano lsha-qsuIu59GXEoDXvzAw, heading 245, species pass crops p5, p6): candles and long needles."},
-  {"at_xz": [-608.0, -299.0], "reach_m": 3, "prop": "mexican_fan_palm", "variants": [5, 5], "evidence": "Street View Mar 2025, 1318 Gateview Ave (pano uRl0jeIdSuHK96_NR4QjEg, heading 250): the tall old fan palm above the roof."},
-  {"at_xz": [-606.5, -306.5], "reach_m": 3, "prop": "spreading_broadleaf", "variants": [1, 2], "evidence": "Street View Mar 2025, 1318 Gateview Ave (pano uRl0jeIdSuHK96_NR4QjEg, heading 250): the yellow-green broadleaf behind the fence."},
   {"at_xz": [-587.5, -383.8], "reach_m": 3, "prop": "spreading_broadleaf", "variants": [3, 3], "evidence": "Street View Mar 2025, 1349 Gateview Ave (heading 250): an old leaning tree with a flat crown."},
   {"at_xz": [-606.5, -395.6], "reach_m": 3, "prop": "spreading_broadleaf", "variants": [2, 3], "evidence": "Street View Mar 2025, 1349 Gateview Ave (heading 250): the old twisted tree."},
-  {"at_xz": [-3.0, -675.5], "reach_m": 8, "prop": "spreading_broadleaf", "variants": [2, 3], "evidence": "Street View Sep 2025, 14th St (heading 250): a dense wall of dark broadleaves on the north side."}
+  {"at_xz": [-3.0, -675.5], "reach_m": 8, "prop": "spreading_broadleaf", "variants": [2, 3], "evidence": "Street View Sep 2025, 14th St (heading 250): a dense wall of dark broadleaves on the north side."},
+  {"at_xz": [-606, -307.5], "reach_m": 2, "prop": "mexican_fan_palm", "variants": [5, 5], "evidence": "Street View Mar 2025, 1318 Gateview Ave (pano uRl0jeIdSuHK96_NR4QjEg, heading 250): the tall old fan palm above the roof, at bearing 287 from the camera."},
+  {"at_xz": [-587, -305.5], "reach_m": 2, "prop": "spreading_broadleaf", "variants": [1, 2], "evidence": "Street View Mar 2025, 1318 Gateview Ave (heading 250): the yellow-green broadleaf behind the fence, at bearing 295 about 22 m off, the aerial's yard crown."},
+  {"at_xz": [-610.5, -299.5], "reach_m": 2, "prop": "spreading_broadleaf", "variants": [1, 1], "evidence": "Aerial 2026-05-26 (z19): the crown west of the building; Street View Mar 2025 (heading 250) shows nothing of it over the roof, so a mid-height tree."},
+  {"at_xz": [-577.4, -295.0], "reach_m": 2, "prop": "island_oak_young", "variants": [2, 2], "evidence": "Street View Mar 2025, 1318 Gateview Ave (heading 250): a low green mass just over the fence, not a tall tree."}
  ],
  "groups": {
   "fourth_street_lot_palms": [
@@ -732,8 +734,8 @@
    [-588.0, -539.6, 8],
    [-580.6, -611.8, 10],
    [-571.0, -621.4, 7],
-   [-608.0, -299.0, 5.5],
-   [-606.5, -306.5, 13]
+   [-606, -307.5, 5.5],
+   [-610.5, -299.5, 11]
   ],
   "sffd_frontage": [
    [258.8, -370.2, 14.8],
@@ -797,7 +799,6 @@
    [-593.7, -324.2, 9],
    [-668.2, -313.7, 9.4],
    [-665.2, -307.2, 7],
-   [-584.2, -306.2, 7.6],
    [-591.7, -304.7, 5.4],
    [-578.2, -295.2, 5.6],
    [-651.7, -293.7, 7],
@@ -822,7 +823,8 @@
    [-628.2, -214.2, 12],
    [-619.2, -213.7, 16.6],
    [-624.2, -206.2, 11.6],
-   [-606.5, -395.6, 10]
+   [-606.5, -395.6, 10],
+   [-587, -305.5, 12.5]
   ]
  },
  "hedges": {

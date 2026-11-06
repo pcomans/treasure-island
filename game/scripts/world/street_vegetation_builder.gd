@@ -101,7 +101,7 @@ func build(document: Dictionary) -> Dictionary:
 		var position: Array = row.position_m
 		var surface: Dictionary = row.get("surface", {})
 		# The foot rests at the lowest visible ground round it (lift_m from y + bias).
-		var foot := Vector3(float(position[0]), float(position[1]) + float(surface.get("bias_m", 0.0)) + float(params.lift_m), float(position[2]))
+		var foot := Vector3(float(position[0]), float(position[1]) + float(surface.get("bias_m", 0.0)) + float(params.lift_m) + float(params.get("stand_m", 0.0)), float(position[2]))
 		var yaw_value: Variant = row.get("yaw_radians", null)
 		var yaw := float(yaw_value) if yaw_value is float or yaw_value is int else 0.0
 		var placement := Transform3D(Basis(Vector3.UP, yaw).scaled(Vector3.ONE * scale), foot)
