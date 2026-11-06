@@ -1143,3 +1143,7 @@ The bake merge moved each surface's base colour into vertex colours (2026-11-06)
 ## Compare embedded resources between bakes by content
 
 A geometry proof between two bakes showed 11,431 triangles with a different material, all on Mersea and Building 600. Their embedded noise textures get a new scene-unique `resource_path` in every bake, so a path comparison reported a change that wasn't there. Describe embedded resources by their stored properties.
+
+## Don't gate on a short timed sample in a browser
+
+The web smoke's run-speed check took two position reads 550 ms apart (2026-11-06). The merged build read 24 m/s against a limit of 21 while the player's true speed was 20: Chrome stalls for about 330 ms twice during a run, on main too, and the first read landed either side of the physics catch-up burst. Main passed only by that order. A replacement timed between the stalls failed when one reached its window. Gate on something a stall barely moves, such as distance over a hold, and say what the limit means as a true speed. Before naming a cause, log frame timestamps into a preallocated array, which changes nothing, and compare with the known-good build. Prove a new check can still fail.

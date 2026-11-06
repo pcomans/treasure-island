@@ -13,6 +13,7 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
   - it draws no decals, which the owner accepted, so spraying is off there and the Mersea mural is drawn as a mesh instead;
   - glass looks paler and more reflective than on desktop (seen in review, by 2026-11-05);
   - it doesn't run on iPhone, which the owner accepted on 2026-11-06, so it isn't being worked on. Release `c7db08fc` fails on the owner's iPhone with Safari's "A problem repeatedly occurred"; the previous release, `9056ad03`, opened. The phone's Console log shows the cause: iOS killed the page's web content process at its 2,048 MB per-process limit (about 2.1 GB used), about 9 seconds after that process started and 7 seconds after the 291 MB pack arrived. A cut removing 71 MiB of unread data from the web pack (278 to 206 MiB) is committed but parked unmerged on the branch `web/memory-20261106`. It hasn't been run in a browser, and it probably isn't enough on its own.
+- **Browser stall while running:** in Chrome the frames stall for about 330 ms twice during a short run from spawn (about 0.6 s and 1.7 s after the keys go down), on both `c7db08fc` and the merged build, so the merge didn't cause it. Physics then catches up in a burst. It isn't there at idle (197 frames in 5 s at spawn). The cause is unknown, and it isn't confirmed for a real player: it was seen with synthetic key events in headed Chrome on Weston.
 - **Mersea mural colour:** in the real mural the ground reads charcoal or navy through the corrugation, and the mural fills more of the wall height (seen in review, by 2026-11-05).
 - **Ferry plaza gravel:** the gravel "shards" on the dirt read as grey slate triangles up close (seen in review, 2026-11-03).
 
@@ -159,6 +160,12 @@ Follow-ups from the code review (all non-blocking at `e51de21d`):
 
 ## Code and tooling cleanup (low priority)
 
+- **Web release smoke:** the run check gates on distance, not speed, since 2026-11-06 (the scripts are outside Git, last in `perf-2-bake-20261106/release/scripts`).
+  - Why it changed: two timed speed samples failed, both because of the browser stall above. The old `speedTest` took speed from two reads 550 ms apart. Its first read landed right after the stall, either side of the physics catch-up burst by chance, so `d44205d8` read 23.7 to 24.4 m/s in three failed smokes against a limit of 17 to 21, and an older build once read 23.5, while per-frame traces showed a true steady speed of 19.5 to 20.0. Its replacement sampled between the two stalls, then failed its proof at 12.57 m/s on `c7db08fc` when the second stall reached its window.
+  - The gate: total distance over `speedTest`'s unchanged hold must be 20.2 to 27.1 m. Stock settings give 20.90 m at a true 17 m/s and 25.46 m at 21; those are widened by the recorded spread at a true 20 m/s, 23.62 to 25.95 m over 13 smoke passes.
+  - What it means: at the nominal hold these limits admit a true speed of about 16.4 to 22.5 m/s, and 15.3 to 23.2 across the holds recorded. That is looser than 17 to 21 at both ends, by about 2 m/s at the top, so it catches a broken run rather than a slightly wrong one. Walk speed moves under 7 m. `headless_gameplay_contract.gd` and `run_speed_mps` still guard the exact value.
+  - Limit of the method: distance isn't fully independent of the stall. A stall that delays no timer costs about 3 m: traced runs at a true 20 m/s moved 20.4 to 21.7 m, just inside the lower limit.
+  - The 550 ms speed and a steady reading stay in the log as recorded readings, not gates.
 - **World generator and validator:**
   - The terrain-override slope guard (`tools/lib/terrain-overrides.mjs`) checks the triangles of the 0.5 m sample grid, not the simplified triangles it writes out.
   - An `osm_way` fence rule with `offset_m` places its gates by distance along the unshifted OSM line, so they drift at bends (`tools/lib/street-fence-generation.mjs`).
