@@ -1557,11 +1557,11 @@
         "line": "w1249294081"
       },
       "xz": [
-        -355.3,
-        126.6
+        -352.85,
+        125.85
       ],
       "yaw": 1.8865,
-      "reason": "A wooden utility pole with a crossarm behind the lot's west island, under the OSM line w1249294081 between its poles n11611626249 and n11611626250, which OSM lacks; it joins that line's wires. On the line at the photo's bearing (production inference).",
+      "reason": "A wooden utility pole with a crossarm behind the lot's west island, under the OSM line w1249294081 between its poles n11611626249 and n11611626250, which OSM lacks; it joins that line's wires. On the line at the bearing both Sep 2025 views give, about 37 degrees from the camera (production inference).",
       "reference": "street-clutter-rollout-20261105/owner-lot-notes.md (owner-priority Mersea lot, OSM w28356874); Street View pano TKhppKcV_DAxZRV9LsEh2A (Sep 2025), heading 10 (lot-w-north)"
     },
     {
