@@ -120,6 +120,7 @@ const EXPECTED_TERRAIN_STATISTICS = Object.freeze({
 // adds or reroutes a record kind fails here until it is reviewed into both.
 const STREET_GROUND_RECORDS = Object.freeze({
   "street-kerb": ["street_kerb", "street_kerb_concrete", "world_solid", true],
+  "street-lot-curb": ["street_kerb", "street_kerb_lot", "world_solid", true],
   "street-planting": ["street_kerb", "street_kerb_planting", "world_solid", true],
   "street-plaza": ["street_kerb", "street_plaza_pavers", "world_solid", true],
   "street-verge": ["street_kerb", "street_kerb_verge", "world_solid", true],

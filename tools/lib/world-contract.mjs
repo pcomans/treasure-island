@@ -196,6 +196,7 @@ export const MATERIAL_KEYS = Object.freeze([
   "rubble_grey",
   "street_gutter",
   "street_kerb_concrete",
+  "street_kerb_lot",
   "street_kerb_planting",
   "street_kerb_support",
   "street_kerb_verge",

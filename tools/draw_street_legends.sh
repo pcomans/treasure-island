@@ -10,7 +10,8 @@
 #   0 TOUR BUS PARKING, one spaced line across the bus stalls (painted about 10.5 m across, 1.2 m along)
 #   1 straight arrow, 2 left-turn arrow, 3 right-turn arrow (painted about 1.2 m across, 4.8 m along)
 #   4 the International Symbol of Access (painted about 1.5 m square)
-#   5-7 spare (black)
+#   5 short, wide aisle arrow (painted about 1 m across, 2 m along)
+#   6-7 spare (black)
 # Needs ImageMagick and the DejaVu Sans Bold font, both in the
 # devcontainer image; the output is the same byte for byte on every run.
 #   tools/draw_street_legends.sh [output.png]
@@ -36,5 +37,8 @@ convert -size 300x300 xc:black -fill white -stroke white \
   -draw 'polygon 132,92 168,92 172,168 236,168 236,196 150,196' \
   -fill none -strokewidth 26 -draw 'arc 60,140 220,300 300,600' \
   -fill white -stroke none -draw 'polygon 236,168 262,168 290,262 262,262' -resize '256x512!' "${work}/c4.png"
-for cell in 5 6 7; do convert -size 256x512 xc:black "${work}/c${cell}.png"; done
+# 5: the Johnson St lot's aisle arrow at 1 x 2 m (100 x 200 px): head and shaft of
+# about equal length, the shaft under half the head's width (Nov 2026 photograph).
+convert -size 100x200 xc:black -fill white -draw 'polygon 50,0 100,100 69,100 69,200 31,200 31,100 0,100' -resize '256x512!' "${work}/c5.png"
+for cell in 6 7; do convert -size 256x512 xc:black "${work}/c${cell}.png"; done
 convert "${work}"/c{0,1,2,3,4,5,6,7}.png +append -colorspace Gray -depth 8 -strip -define png:exclude-chunks=date,time "${out}"

@@ -11,7 +11,7 @@ render_mode depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx;
 // STREET_PAINT_KINDS and PAINT_VARIANT_STRIDE): kinds 0 white, 1 yellow, 2 red
 // lane, 3 green lane, 4 tactile pad, 5 STOP legend, 6 faded yellow, 7 red curb,
 // 8 accessible blue, 9 a legend of the atlas, 10 a lot's tar-sealed joint, 11 a
-// lot's patched strip. The variant is the paint's wear
+// lot's patched strip, 12 dark accessible blue. The variant is the paint's wear
 // step, 0 fresh, 3 mostly worn, 4 nearly worn away; for kind 9 it is the atlas cell plus
 // legend_cells times the wear step (STREET_LEGEND_ATLAS_CELLS). A legend's
 // fraction and UV.y are its local coordinates.
@@ -39,6 +39,8 @@ uniform vec3 faded_yellow : source_color = vec3(0.674, 0.566, 0.306);
 // fades toward.
 uniform vec3 curb_red : source_color = vec3(0.640, 0.230, 0.215);
 uniform vec3 accessible_blue : source_color = vec3(0.150, 0.330, 0.600);
+// The Johnson St lot's filled bays, near the asphalt's own tone (May 2026 aerial).
+uniform vec3 accessible_blue_dark : source_color = vec3(0.160, 0.260, 0.440);
 uniform vec3 worn_paint : source_color = vec3(0.560, 0.560, 0.540);
 // A parking lot's crack sealant and its patched strips (Sep 2025 photos of the
 // lot by Mersea: dark grey joints and darker grey asphalt patches on the pale
@@ -117,11 +119,15 @@ void fragment() {
 		albedo = sealant;
 		coverage = wear + 0.1;
 		rough = 0.6;
-	} else {
+	} else if (kind < 11.5) {
 		// A patched strip of darker asphalt, mottled, never cut through.
 		albedo = patch_asphalt * mix(0.88, 1.06, wear);
 		coverage = 1.0;
 		rough = 0.95;
+	} else {
+		// A filled accessible bay in the darker blue, mottled where worn.
+		albedo = accessible_blue_dark * mix(0.82, 1.0, wear);
+		coverage = 1.0 - worn * 0.35 * (1.0 - wear);
 	}
 	albedo = mix(albedo, worn_paint, worn * 0.45);
 	ALBEDO = albedo;
