@@ -24149,3 +24149,37 @@ code-review-street-objects: Logging the stop-line search inside a scratch build 
 - What worked well: breaking the ditch band up offline first held in the render: the stems are low and broken, the shrubs pale, the hard patch gone, and every step of R26 exited 0. Counting which poses can see a plant before a re-run cut run 16 to the two views that show the mound; no ditch view is within its 70 m range.
 - What did not work well: I dulled the strip's mound with a tint of 0.42 without noticing the tint is sRGB, so it came back black in both views ROOT asked me to soften, and that cost a sixteenth run. The value I first proposed from three pixel samples was too timid for the shaded side; measuring the mound's dark core and the card's linear mean moved it from (0.56, 0.5, 0.44) to (0.7, 0.56, 0.42).
 - What the team should change next time: work out a material change in linear from the card's own mean before a run, and read the shaded side as well as the lit top. A material-only fix needs only the poses that can see that plant.
+
+### visual-review-veg-models (placement final)
+
+(Relayed verbatim by the coordinator; added by integrate-2-20261106.)
+
+- **What worked well:** R26 and R27 shown side by side made a one-line tint change quick to judge. A clearance rule in the generator and validator closed a fault that eye checks would have kept missing. Stating doubts, such as the even line, focused the review.
+- **What did not work well:** several rounds went on bank colour while near-camera density at the owner's own photo spot got thinner. Removing stones left the foreground emptier. The switch question has no fresh frames, so it stays open by default.
+- **What to change next time:** check the owner's photo poses for density as well as colour, and keep a short list of open cross-branch items on every sheet, so none drops out between rounds.
+
+### code-review-vegetation — placement final
+
+(Relayed verbatim by the coordinator; added by integrate-2-20261106.)
+
+- code-review-vegetation: Simulating the new lot and regenerating showed in one run that field plants stop at paving and trees don't, which the code alone left uncertain, and checking the aerial stopped me calling 36 real trees misplaced.
+
+### perf-1-20261106
+
+(Relayed verbatim by the coordinator; added by integrate-2-20261106.)
+
+- **What worked well:** Kernel counters (`schedstat` and amdgpu `fdinfo`) settled CPU versus GPU on the first run. Paired on/off blocks survived other agents' load. Runtime what-ifs turned the likely fix into a measured one before anyone commits to it.
+- **What did not work well:** Holding all five locks didn't make the machine quiet, because world generators and headless runs don't take them; I briefly believed walking cost 10 ms when that was a generator. A long-standing note about a 39.5 FPS web cap went unquestioned until the browser's frame limit was turned off. My first merge test kept per-colour materials and undersold the fix.
+- **What the team should change next time:** Pause or lock world generation during performance sessions, log the top CPU processes per block, and retake the baseline in the last session.
+
+### vegetation-rollout-20261105 — 2026-11-06 — S4 at 641cd2cd (16 of 16 engine runs, 2 of 2 suites)
+
+(The author's note, from its STATUS.md; added by integrate-2-20261106.)
+
+- S4 PASSED at 641cd2cd (runs/S4-suite; ALL TESTS PASS 07:08:25Z, then 24 crest walks with street detail on, S4_WALKS_EXIT 0 at 07:21:42Z; 18 shoreline walks plus 6 at the palm nearest the wall, views/routes-palms.json, source w291193760). Engine took all 29,094 rows (4,137 + 24,957): pale_seeded_shrub 421, nz_flax 20, hedges 177 (1,245 m).
+
+### integrate-2-20261106 — 2026-11-06 — the tree push squashed onto main (no engine runs)
+
+- What worked well: comparing tree ids (`git write-tree` against `641cd2cd^{tree}`) proved the squash in one line, and comparing the two RETRO copies line by line showed they matched before anything was deleted. After the 13:26 container restart one command checked the index, squash state, locks and remote, and nothing was repeated. Checking the notes against the data paid again: S4's `dirty=1` was only the `node_modules` symlink, the ditch axis and `walk_up_short` matched, and the seawall row had gone from 59 palms to 61.
+- What did not work well: the brief named one stale KNOWN_ISSUES item, but this landing made four more statements false, and only a grep for "tree push" and a look at the config found them: the "being fixed" entry, the empty planters, Keppler's island and the Job Corps verges, whose new rule cites the very code review that raised the item. One relayed line, the last-delta review, was already in the log, so adding it as asked would have recreated the kind of duplicate this round removed. The final visual review isn't in any file I could read, so its levels rest on the relay, and the 1349 Gateview thicket, a new zone it gave no level, stays unrated. No commit identity was configured here, so both commits passed post-create's identity with `-c`.
+- What the team should change next time: when an item waits on a branch, name the branch in it, so the integrator can grep for it. Before relaying a reviewer's line, grep the log for it. Save a final review's levels in a file the integrator can read, with a level for every new zone.

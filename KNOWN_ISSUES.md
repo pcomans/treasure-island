@@ -4,12 +4,6 @@ This file lists the known issues and planned work for the game. It is kept curre
 
 Coordinates are world x, z in metres (z points south), as in `generated/world/`. Items marked "seen in review" are what a reviewer saw in screenshots, not measurements.
 
-## Being fixed now (before the release, about 2026-11-11)
-
-These are on branches in progress, not yet on `main`.
-
-- **Trees, shrubs and hedges island-wide:** tree placement and the tree models. Of the vegetation rollout, `main` has only the ground tone and the Avenue N palm row so far.
-
 ## Known issues on main (not scheduled)
 
 - A thin strip of water shows between the grass and the root of Pier 1 from the land side (seen in review, by 2026-11-05; still there on 2026-11-06).
@@ -70,7 +64,7 @@ From the yard reviews.
 
 ## Street detail rollouts: landed 2026-11-06 with known gaps
 
-From the reviews of the shoreline, street ground, street objects, parked cars and vegetation ground layers.
+From the reviews of the shoreline, street ground, street objects, parked cars, vegetation ground layers and tree placement.
 
 - **Stop signs placed by rule, for the owner to check.** The owner said to keep them and list them here. They follow the map's stop rules, but no dated photo lies within 30 m of the sign (checked on the merged world, 2026-11-06):
   - all-way stops: 11th Street (2), Avenue D (2), Avenue E (1);
@@ -96,15 +90,14 @@ From the reviews of the shoreline, street ground, street objects, parked cars an
   - The "NO STOPPING ANY TIME" sign on the plaza mast isn't placed.
   - Finish: the Muni flag post has no perforations, and the EV bay needs more weathering (rusty bollards, bent posts).
   - Power lines: check them for shimmer in motion; the near wires are about 1 px wide.
-  - The overhead wire runs through the Avenue N palms until the tree push lands.
 - **Mersea lot and strip:**
   - The lot light (OSM n11230361247) has one arm where the photo shows two.
   - The lamp's island is too short and has no planting.
   - The built east row stands 1 to 3 m farther from the east edge than the real cars, and one west car is 5.9 m along the row.
   - The dumpster group at heading 10 stands farther right than in the photo.
-  - The dumpsters have no finish yet. The planters are empty until the tree push plants them.
+  - The dumpsters have no finish yet.
   - The Sep 2025 photos of the strip show no cars; its row comes from the May 2026 aerial.
-- **Parked cars:** Keppler Court's planted central island is missing until the tree push. Avenue I's review is held, so its cars are unjudged.
+- **Parked cars:** Avenue I's review is held, so its cars are unjudged.
 - **Shoreline:**
   - Two small dark tips remain at the north slipway: one at the grass corner of the ramp's head, one at its water end.
   - The offshore wave wall (OSM w1011830371) and the jetty's marker post aren't built, and neither is the pale concrete pad near x −373, z −855 that the aerial shows.
@@ -113,6 +106,14 @@ From the reviews of the shoreline, street ground, street objects, parked cars an
 - **Ground tone:**
   - One large dirt patch lies in the residential straw belt, and the lawn band along the residential kerbs is too even.
   - The football pitch (OSM w1252737754) has no line markings, so it reads as a blank dark slab; the aerial shows them.
+- **Trees and shrubs:**
+  - The ditch's bank near the owner's photo spot is thinner than the photo; revisit it with the Johnson St lot.
+  - The bank-top shrub line at `ditch-bank-up` sits on one contour with even height.
+  - The ditch's foreground stones were removed, not fixed.
+  - The thicket mounds at 1349 Gateview have hard outlines.
+  - Broadleaf impostors step about +21% at the 110 m switch. A separate round is queued.
+  - `california_sagebrush` and `california_buckwheat` stand in as forms at the ditch, the Mersea strip and the 1349 Gateview thicket. Their species are unconfirmed, so don't describe them as natives.
+  - 36 trunks stand on yard pavement with no mulch pit, all on real crowns where checked.
 - **Performance:** not measured since these layers landed. Before them the spawn drew about 24,600 draw calls and 3.8 million primitives at 1440 × 900 (`6ba040d3`). The ground-cover shader now runs six noise calls per fragment, cost unmeasured. A performance pass on a quiet machine is planned.
 
 ## Deferred by the owner
@@ -144,7 +145,8 @@ From the reviews of the shoreline, street ground, street objects, parked cars an
   - The rock ground's tone comes from shader defaults, not the segment's tone.
   - In `tools/lib/shoreline-generation.mjs`, the "Side walls" comment (`:1692`) and the shoreline config's note are stale. So are the comments at `:43` and `:2299`, which still say the player is recovered at the outline (the shore lift replaced that).
   - The ramp foot's seed (code review's low, at `07a0f9e5`).
-  - The Job Corps kerb verges (3,506 m²) stay `field` beside straw: add a rule, or fix the comment that says otherwise.
+  - The ditch's axis lives in two places: `marsh_axis` in `game/resources/materials/world/ground_cover/ground_cover.gdshader:85` and the `mersea_ditch` rules in `tools/config/street-detail-zones.json`.
+  - Canopy placement ignores walk-up lanes: the generated audit's `walk_up_short` grew from 32 to 37 sides. S4's island test still passes all 174.
 - **Tests:**
   - The startup test (`game/tests/headless_startup_configuration_contract.gd`) checks that a demolished building has a demolition record, but doesn't compare it with the evidence in `tools/config/demolished-buildings.json`.
   - `building_shots.gd`'s `_moving_view` turns off the player controller right after the last move, without waiting for the player to come to rest.
