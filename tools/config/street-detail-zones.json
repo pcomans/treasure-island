@@ -5,6 +5,7 @@
     "Zone scatter for procedural street detail. Coordinates are world metres: +X east, +Z south (the game's frame).",
     "Zone shapes and scatter densities are production inference for the ferry-arrival pilot, not survey data.",
     "A canopy rule (pattern canopy) plants the crowns of a group of data/street_detail/tree_crowns.json, read from the dated aerial: at each crown a species of its mix whose crown fits within fit (a fraction of the crown), its trunk moved up to nudge_m where the crown's centre cannot take one; in_lots lets a trunk stand in a parking lot, in its mulch pit. A hedge rule (kind hedge, pattern hedge_lines) lays the same file's hedge lines where their site is clear. visible_surfaces limits a planted rule to the ground the eye sees (the street ground's grass tops read as its concrete to surfaces). height_m limits a planted rule to visible ground between two heights (a basin's bank or floor).",
+    "A field rule (pattern field) sows plants by a density field that reads the site (street-planting-generation.mjs): nothing it plants is listed by position. A planters rule (pattern planters) plants the soil of the stock tanks the set pieces stand, each row naming its tank.",
     "Step 0 scatter emits placement slots only; later steps assign assets per slot kind. The runtime builds nothing from slots yet.",
     "Furniture rules place the vertical street objects of the pilot zones (tools/lib/street-furniture-generation.mjs) where OSM leaves gaps: kerb (along the curbs of named kerbed roads), signalized_crossings and near_signals (at OSM crossings with signals), junctions (named-street corners), all_way_stops (the other approaches of an OSM stop=all junction), drive_entries (traffic turning into a kerbed service drive from a named road) and lot_edge (around a parking lot). Each is production inference with its dated photo evidence; prop is the kit prop the runtime builds and params its settings.",
     "Exclusions are the shared mask for every street-detail source. These values size walk, camera and doorway clearance. spawn_forward keeps the first walk clear: a corridor from the ferry spawn straight along its facing direction.",
@@ -1265,40 +1266,28 @@
      "kind": "planting_slot",
      "pattern": "field",
      "surfaces": ["terrain_wetland", "land_ground"],
-     "per_m2": 0.3,
-     "spacing": [0.8, 2.0],
+     "per_m2": 0.42,
+     "spacing": [0.75, 2.0],
      "field": {
       "axis": {
-       "from_xz": [-295, 145],
-       "to_xz": [-345, 290],
-       "full_m": 40,
-       "zero_m": 56
+       "from_xz": [-268, 205],
+       "to_xz": [-318, 262],
+       "full_m": 6,
+       "zero_m": 24
       },
-      "height_m": [2.6, 3.4, 4.15, 4.5],
+      "height_m": [2.3, 3.0, 4.3, 4.6],
       "ramps": [
        {
-        "from_xz": [-335, 170],
-        "to_xz": [-285, 195],
-        "low": 0.12,
-        "high": 1.0
-       },
-       {
-        "from_xz": [-282, 188],
-        "to_xz": [-302, 236],
-        "low": 0.15,
-        "high": 1.0
-       },
-       {
-        "from_xz": [-358, 292],
-        "to_xz": [-312, 236],
-        "low": 0.35,
+        "from_xz": [-325, 272],
+        "to_xz": [-284, 224],
+        "low": 0.3,
         "high": 1.0
        }
       ],
-      "drift_m": 12,
-      "clump_m": 3.5,
-      "drift_cover": 0.45,
-      "lone": 0.1
+      "drift_m": 10,
+      "clump_m": 3,
+      "drift_cover": 0.55,
+      "lone": 0.12
      },
      "mix": [
       {
@@ -1317,7 +1306,7 @@
       }
      ],
      "basis": "production_inference",
-     "rule": "Thick along the top of the bank by the lot, thinning down the slope, away from the lot and along it to both ends, in clusters with gaps and lone plants; laden plants where the field is full, bare ones at its edges.",
+     "rule": "Thick along the top of the bank by the lot's edge, thinning down the slope and along the bank toward both ends, in clusters with gaps and lone plants; laden plants where the field is full, bare ones at its edges.",
      "evidence": "Owner photos, Nov 2026, of the ditch next to Mersea, from the lot's west corner at about (-266, 203): loose pale-seeded shrubs, thick on the bank south-west of the camera, sparse to its north (species unconfirmed)."
     },
     {
@@ -1325,7 +1314,7 @@
      "kind": "planting_slot",
      "pattern": "field",
      "surfaces": ["terrain_wetland", "land_ground"],
-     "per_m2": 0.07,
+     "per_m2": 0.08,
      "spacing": [0.6, 1.5],
      "field": {
       "axis": {
@@ -1358,8 +1347,8 @@
      "kind": "grass_clump",
      "pattern": "field",
      "surfaces": ["terrain_wetland", "land_ground"],
-     "per_m2": 0.26,
-     "spacing": [0.6, 1.4],
+     "per_m2": 0.13,
+     "spacing": [0.55, 1.5],
      "field": {
       "axis": {
        "from_xz": [-295, 145],
@@ -1368,10 +1357,10 @@
        "zero_m": 56
       },
       "height_m": [2.2, 2.8, 4.2, 4.6],
-      "drift_m": 8,
-      "clump_m": 2.5,
-      "drift_cover": 0.5,
-      "lone": 0.15
+      "drift_m": 7,
+      "clump_m": 2,
+      "drift_cover": 0.38,
+      "lone": 0.06
      },
      "mix": [
       {
@@ -1525,6 +1514,13 @@
        "variants": [0, 2],
        "scale": [0.9, 1.25],
        "at": [0.0, 1.0],
+       "share": 4
+      },
+      {
+       "prop": "dune_tansy",
+       "variants": [0, 2],
+       "scale": [0.9, 1.25],
+       "at": [0.0, 1.0],
        "share": 3
       },
       {
@@ -1535,18 +1531,11 @@
        "share": 2
       },
       {
-       "prop": "dune_tansy",
-       "variants": [0, 2],
-       "scale": [0.9, 1.25],
-       "at": [0.0, 1.0],
-       "share": 2
-      },
-      {
        "prop": "pittosporum_tobira",
-       "variants": [0, 1],
-       "scale": [0.9, 1.25],
-       "at": [0.55, 1.0],
-       "share": 2
+       "variants": [0, 0],
+       "scale": [0.8, 1.0],
+       "at": [0.72, 1.0],
+       "share": 1
       }
      ],
      "basis": "production_inference",

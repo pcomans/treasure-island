@@ -4130,9 +4130,9 @@ func material(key: String) -> Material:
 			made = _foliage("grass_atlas.png", Color(0.92, 0.94, 0.86), Color(0.18, 0.2, 0.1), Vector2(1024.0, 512.0), 0.1, 0.9)
 			made.set_shader_parameter("alpha_cutoff", 0.4)
 		"grass_dead":
-			made = _foliage("grass_atlas.png", Color(0.7, 0.64, 0.66), Color(0.09, 0.08, 0.05), Vector2(1024.0, 512.0), 0.1, 0.9)
+			made = _foliage("grass_atlas.png", Color(0.6, 0.52, 0.44), Color(0.08, 0.07, 0.04), Vector2(1024.0, 512.0), 0.1, 0.9)
 			made.set_shader_parameter("alpha_cutoff", 0.4)
-			made.set_shader_parameter("desaturate", 0.8)
+			made.set_shader_parameter("desaturate", 0.65)
 		"meadow":
 			made = _foliage("meadow_atlas.png", Color(0.92, 0.94, 0.86), Color(0.18, 0.2, 0.1), Vector2(2048.0, 2048.0), 0.1, 0.9)
 			made.set_shader_parameter("alpha_cutoff", 0.4)

@@ -1709,7 +1709,7 @@ export function generateStreetDetail({
   // a crown close to a wall comes down to a size that barely reaches it.
   // A crown this close to a tree another rule planted, or to a set piece, is that
   // tree or its shadow read a second time.
-  const CROWN_REREAD_ROW_M = 10;
+  const CROWN_REREAD_ROW_M = 16;
   const CROWN_REREAD_PIECE_M = 4;
   const canopySources = new Set(config.zones.flatMap((zone) => (zone.scatter ?? []).filter((rule) => rule.pattern === "canopy").map((rule) => `zone:${zone.id}/${rule.id}`)));
   const crownReread = (xz) => rows.some((row) => ["palm_slot", "tree"].includes(row.kind) && !canopySources.has(row.source_id)
@@ -1748,6 +1748,10 @@ export function generateStreetDetail({
       }
       if (spot === null) {
         count(audit.scatter.rejected_by_reason, problem);
+        return;
+      }
+      if (crownReread(spot)) {
+        count(audit.scatter.rejected_by_reason, "crown_reread");
         return;
       }
       const wall = buildings.nearest(spot, crownM).distance;
