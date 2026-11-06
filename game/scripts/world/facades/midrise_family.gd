@@ -1978,7 +1978,7 @@ static func _door(ctx: Ctx, face: Face, spec: Dictionary, wall_mat: String, s0: 
 	if kind == "porch":
 		_rect(ctx.bucket("wall", str(door.get("back", "render"))), face, s0, s1, y0, y1, depth, out)
 		var dw := float(door.get("door_w", 1.8))
-		_glazing(ctx, face, {"mullions": [0.5], "transoms": [0.82]}, c - dw * 0.5, c + dw * 0.5, y0, minf(y1 - 0.2, y0 + 2.7), depth - 0.01)
+		_glazing(ctx, face, _merge({"mullions": [0.5], "transoms": [0.82]}, door.get("glazing", {})), c - dw * 0.5, c + dw * 0.5, y0, minf(y1 - 0.2, y0 + 2.7), depth - 0.01)
 		_pad(ctx, face, s0, s1, 0.0, depth, y0, 0.0)
 	elif kind == "lobby":
 		_glazing(ctx, face, _merge({"mullions": door.get("mullions", [0.25, 0.5, 0.75]), "transoms": door.get("transoms", [0.78])}, door.get("glazing", {})), s0, s1, y0, y1, depth)

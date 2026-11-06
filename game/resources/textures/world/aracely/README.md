@@ -8,3 +8,4 @@ Original interpretations for the cafe at the south tip of the former school ring
 | `aracely_script.png` | fascia sign | the one word Aracely as a monoline script with an underline swash | stroke thickened, trimmed, alpha taken from darkness |
 | `aracely_slab.png` | face of the arched sign slab on the plaza | the same script | set in the upper third of a white panel |
 | `aracely_interior.png` | the room seen through the storefront glass | dim cafe interior, slatted timber wall, warm pendant globes | cropped to the storefront's proportions |
+| `aracely_planting.png` | low planting in the beds by the entry path | seamless top-down low garden bed, mixed groundcover and grasses | resized, darkened and desaturated slightly |

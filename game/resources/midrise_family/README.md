@@ -2,7 +2,7 @@
 
 [midrise_family.gd](../../scripts/world/facades/midrise_family.gd) builds a flat-roofed courtyard apartment building over one frozen OSM footprint from a JSON config. Opt-in [outbuilding fields](#outbuilding-fields) also cover sheds, tanks and basins, trailers and pavilions. It shares the [housing family installer](../../scripts/world/facades/housing_family_live_attachment.gd): register an instance in [live_instances.json](../housing_family/live_instances.json) with `"family": "midrise"`. Its grammar follows the accepted Maceo May study next door: pale render, recessed glazing with dark frames, a darker base, glazed lobbies and loggias, as reusable bays rather than baked geometry.
 
-Instances: [w1272162518.json](w1272162518.json) (490 Avenue of the Palms) and [w1212173437.json](w1212173437.json) (Star View Court). Dimensions and cadence are production inference; since 2026-11-03 unphotographed sides get no inferred detail ([AGENTS](../../../AGENTS.md#facade-recognizability-policy)).
+Instances: [w1272162518.json](w1272162518.json) (490 Avenue of the Palms) and [w1212173437.json](w1212173437.json) (Star View Court), and with its [roof edges and parts](#roof-edges-and-parts) [r133351.json](r133351.json) (Building 33 F, Aracely Cafe). Dimensions and cadence are production inference; since 2026-11-03 unphotographed sides get no inferred detail ([AGENTS](../../../AGENTS.md#facade-recognizability-policy)).
 
 ## How it builds
 
@@ -69,6 +69,33 @@ All are opt-in; configs without them build as before. Materials are shared acros
 | feature `top_box` | Projecting box on an otherwise blank wall from `below` (default 0.15) under floor `storey` (default the top storey) up to the wall top, `project` (0.05–2 m, default 0.6) out from the wall, inset by `pier`, in `material` (default the scheme material), with one glazed band from its `window` (`sill`, `h`, `inset`, plus the usual glazing fields). It is `support`, so wall geometry stays inside the footprint. A width under 1 m or an out-of-range storey or projection fails the build. |
 
 Parts are emitted into the same role buckets: posts, rails, ladders, pergola beams, fascia and roof undersides are `support`, knee walls and infill are `wall`, ramps are `ground`.
+
+## Roof edges and parts
+
+All opt-in; configs without them build as before. Coordinates in an edge's frame are stations `s` along footprint edge `edge` and depths `d` inward of it (negative: outside the outline). Invalid input fails the build.
+
+| Field | Meaning |
+|---|---|
+| top-level `face_key` | `"overlap"` keys a face to an edge only where the face lies alongside that edge, not merely within 2.5 m of its infinite line, so the parallel jogs of a stepped frontage keep their own keys and stations. Default `"line"`. |
+| top-level `wall_ring` | `{"insets": {"<edge>": metres}}` moves those footprint edges inward (up to 2.5 m) before the blocks are clipped: the walls stand behind a roof edge that stays on the outline. Clips, stations and keys still refer to the footprint edges. |
+| top-level `eaves` | Roof edges over the set-back walls. Each entry takes consecutive footprint edges `edges` in ring order, heights `soffit` and `top` above the building floor, and a fascia section `profile` of `[in, y, material]` points from soffit to top (`in`: metres inward of the outline, so the section stays inside the footprint; a point's material paints the segment ending there). `roof_material` tops the strip back to the wall line (roof role), `soffit_material` and per-edge `soffit_edges` line it and `end_material` closes its ends (support role). Corners are mitred. Set `top` at or above the block's wall top. |
+| block `roof.fascia_edges` | `{"<edge>": material}`: on a pitched block, the fascia of the sides facing as that footprint edge does. |
+| ground window `lights` | Further windows in the same bay, each merged over the ground window spec (a clerestory over a window). |
+| door `glazing` | Lobby or porch door: extra glazing fields (`glass`, `frame`). |
+| palette `texture` | Image on the material. On a part `art` panel or slab face it is stretched over the panel; on other surfaces it tiles by world metres, `uv_scale` tiles per metre. `texture_alpha` blends it; `emission` lights it from itself. |
+
+Top-level `parts` adds pieces a scheme has no field for. Heights for `box`, `glazing` and `art` are `y` (above the building floor) or `g` (above the highest grade under the part); `foot: true` runs the bottom into the ground.
+
+| Part `kind` | Fields |
+|---|---|
+| `box` | `edge`, `s`, `d`, `material`, `role` (default support), `count`/`step` copies along the edge, `count_y`/`step_y` copies upward. |
+| `glazing` | A framed layer at depth `d` over `s`: `glass`, `frame`, `frame_w`, `bar_w`, `mullions`, `transoms` as for a window. Wall role. |
+| `art` | One image over `s` at depth `d` (a number, or `[bottom, top]` to lie on a sloped fascia), in a textured `material`. Wall role unless `role` says otherwise. |
+| `slab` | Free-standing sign at `at` [x, z]: `w`, `h`, `t`, `yaw` degrees, `arch`, `material`, `face_material` (one image across the front). Support role. |
+| `umbrella` | Patio umbrella at `at`: radius `r`, rim `h` above grade, `rise`, `sides`, `material`, `pole_material`. Support role. |
+| `fence` | Solid fence along `path`: `h`, `post_every`, `post_material`, and `style` `boards` (`board`, `gap`) or `ribs` (`rib`, `rib_material`). Support role. |
+| `pad` | Site paving over the simple polygon `poly`, `lift` above the frozen land. Visual only: like a road, it is drawn over the land the player walks on and has no collision. Keep `lift` clear of the area and road surfaces drawn there (0.02-0.05 and 0.08 m), and give overlapping pads their own lifts. |
+| `path` | A walk `w` wide along the polyline `line`, built as pads. |
 
 ## Roles
 
