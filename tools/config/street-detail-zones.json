@@ -752,13 +752,13 @@
      "mix": [
       {
        "prop": "spreading_broadleaf",
-       "share": 42,
+       "share": 39,
        "variants": [0, 3],
        "scale": [0.85, 1.2]
       },
       {
        "prop": "monterey_pine",
-       "share": 26,
+       "share": 21,
        "variants": [0, 2],
        "scale": [0.85, 1.25]
       },

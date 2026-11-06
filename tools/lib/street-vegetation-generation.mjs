@@ -267,6 +267,9 @@ const CANOPY_CROWNS_M = Object.freeze({
   spreading_broadleaf: Object.freeze([8.0, 10.0, 15.0, 17.5]),
   weeping_broadleaf: Object.freeze([12.0, 11.0]),
 });
+// How much further from a crown's width than the closest variant another may be
+// and still take its turn, so a stand of one crown size isn't all one model.
+const CANOPY_VARIANT_SLACK = 0.25;
 const CANOPY_ENTRY_FIELDS = Object.freeze(["prop", "scale", "share", "variants"]);
 
 // A canopy rule's mix: entries {prop, share, variants: [first, last], scale: [low, high]}.
@@ -290,16 +293,15 @@ export function validateCanopyMix(mix, label) {
 // entry that comes closest. Returns {prop, variant, scale}.
 export function drawCanopyTree(seed, identity, crownM, mix, fit) {
   const options = mix.map((entry) => {
-    let best = null;
+    const forms = [];
     for (let variant = entry.variants[0]; variant <= entry.variants[1]; variant += 1) {
       const width = CANOPY_CROWNS_M[entry.prop][variant];
       const scale = Math.min(entry.scale[1], Math.max(entry.scale[0], crownM / width));
-      const miss = Math.abs(width * scale - crownM) / crownM;
-      // Variants that fit equally well take turns, by the identity.
-      const tie = hashUnit(seed, `${identity}:${variant}`, 2) * 0.02;
-      if (!best || miss + tie < best.rank) best = { prop: entry.prop, variant, scale, miss, rank: miss + tie, share: entry.share };
+      forms.push({ prop: entry.prop, variant, scale, miss: Math.abs(width * scale - crownM) / crownM, share: entry.share });
     }
-    return best;
+    const closest = Math.min(...forms.map((form) => form.miss));
+    const turns = forms.filter((form) => form.miss <= closest + CANOPY_VARIANT_SLACK);
+    return { ...turns[Math.floor(hashUnit(seed, `${identity}:${entry.prop}`, 2) * turns.length)], miss: closest };
   });
   const fitting = options.filter((option) => option.miss <= fit);
   const pool = fitting.length > 0 ? fitting : [options.reduce((closest, option) => (option.miss < closest.miss ? option : closest))];
