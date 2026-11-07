@@ -24653,3 +24653,39 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: Independent three-way comparisons of the cover map and rows, plus the A/B with its negative control.
 - What did not work well: Evidence summaries cut row-detail fields.
 - What the team should change next time: Each release records cover-map cells matching no parent, and zones that touch.
+
+## look-pass (lighting round 1, 2026-11-07)
+
+- What worked well: measuring before choosing. A histogram of generated wall facings put about two thirds of wall area on one grid (65.8, 155.8, 245.8, 335.8 degrees), which showed the old 152-degree sun ran almost straight down the street grid and never touched west fronts. Projecting 2,864 OSM nodes onto generated wall vertices settled true north at 0.000000 degrees without a photo. A scratch wrapper extending `building_shots.gd` (kept outside Git) shot many lighting variants in one world load, and alternating-block timing held up while other slots loaded the GPU.
+- What did not work well: run 4 stalled at Weston's 300 s idle stop. LEARNINGS already had that lesson and my search for it used the wrong words, so one sun look and all four SSAO radius looks were lost and the run had to be stopped by PID. I also took azimuth 213 to a full after run before checking accepted walls: Building 2 went nearly white. Those walls had been colour-matched in shade under the old sun, which I only saw on the sheets. That cost the runs I wanted for a stock-driver after capture, so the final after and neutral shots come from one wrapper load using the stock functions. The first wall and asphalt patches missed their surfaces and the first table was wrong; placing patches on a grid fixed it.
+- What the team should change next time: before moving the sun, list which wall families were matched in sun and which in shade, and check one accepted cream wall from each in the first trial. Search LEARNINGS by symptom as well as by topic before a long render. Have `tools/godot` pass `--idle-time=0` so long captures stop being a hazard. Exact pixel comparison across runs needs a plant-free view or street detail off, because wind moves with engine time. Mersea's two reflection probes are captured at startup under the game look, so neutral shots of its panes still follow the game look; my plan had no view of them, so that is reasoned from the code, not measured.
+
+## look-pass (lighting round 2, 2026-11-07)
+
+- What worked well: an exposure-independent test settled the palette question. Sunlit wall against sunlit concrete in the same dated photo cleared Building 1 and singled out Building 2 and Hawkins, and git history then confirmed both had been tuned under an older sun. Reading a wall's real facing explained Hawkins: its SE face is about 130 degrees, not the 155.8 of the street grid, so no exposure could restore it. Setting material parameters at runtime in the scratch wrapper tested palette candidates without touching files, and the research calculator let me pick trial values from Godot's own ambient formula.
+- What did not work well: in round 1 I compared Building 2 with a cloud-lit photo and reported 219 against 166 as if the two were like for like. I also assumed Hawkins' loss was exposure until the balance grid disproved it. Taking the `ground_horizon_color` target straight into a trial exposed a hard band past the far edge of the water; the overview check caught it, and it cost a trial look. Run 13 hit my own 288 s limit in its last timing pair, so the SSAO quality timing needed another run.
+- What the team should change next time: before using a photo as a colour target, check whether the wall is in direct sun in that photo. Before moving the sun, take each hero wall's real facing rather than the street grid's. Before changing any sky colour, check what shows below the horizon past the water plane. Put timing last and budget it from the slowest view.
+
+## solar-light-research (real light at the chosen sun, 2026-11-07)
+
+- What worked well: measured AERONET and METAR data plus G173 checks replaced assumptions.
+- What did not work well: SPECTRL2's wall sky failed and was replaced by CIE sky integration.
+- What the team should change next time: start from Godot's source and the nearest AERONET site.
+
+## look-pass (lighting round 3, 2026-11-07)
+
+- What worked well: the reviewers' per-channel shade numbers pointed at fill colour, and when the fill didn't move asphalt, a check of the texture's real albedo (about 0.06) showed the shade was mostly sky reflection, not ambient. One scratch process swept the impostor lean per prop with the bake's own check, so a retune cost one run rather than one per value.
+- What did not work well: my crown tone table in round 2 included lawn pixels and read 0.93 where the eye saw near black; opening the sheet caught it, late. I deepened the sky in round 2 without seeing that road reflection would carry it into every shaded road. The first specular value also took away most of the roads' brightness, because reflection had been hiding a low albedo. Correction to commit e106556c's message: ambient energy went from 0.27 to 0.5, not from 0.6, and the sky share and exposure also changed (0.5 to 0.3, 1.25 to 1.18).
+- What the team should change next time: when a surface ignores a lighting change, work out what actually lights it before changing more settings. Check any measured crop on the pixels it covers before trusting the number.
+
+## look-visual-review (independent visual review of the look pass, 2026-11-07)
+
+- What worked well: same-photo ratios and patch sampling separated real regressions from cloud-versus-sun differences.
+- What did not work well: sheets hid both blockers at tile size.
+- What the team should change next time: add a shadow-side street view and shaded-asphalt pair, and check glazing whenever a wall family moves into sun.
+
+## look-code-review (independent code review of the look pass, 2026-11-07)
+
+- What worked well: working out the sun term from the shader's normal showed the impostor risk without an engine.
+- What did not work well: "settings only" hid that baked gains depend on those settings.
+- What the team should change next time: before moving the sun, search for anything calibrated under `main.tscn`.

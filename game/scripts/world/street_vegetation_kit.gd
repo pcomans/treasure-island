@@ -768,10 +768,11 @@ const IMPOSTOR_HIGH_GRID := Vector2i(2, 2)
 ## finds a dense crown much darker from its shaded side than a thin one, whose light
 ## comes through: a thin crown leans further, and the densest, the pine, least
 ## (impostor_sky_lean), or its far level stays too bright from the shaded side.
+## They depend on main.tscn's sun and ambient: after moving either, rerun the check.
 const IMPOSTOR_DOME := 2.0
-const IMPOSTOR_SKY_LEAN := 1.7
-const IMPOSTOR_PINE_SKY_LEAN := 1.1
-const IMPOSTOR_THIN_SKY_LEAN := 3.0
+const IMPOSTOR_SKY_LEAN := 3.1
+const IMPOSTOR_PINE_SKY_LEAN := 2.8
+const IMPOSTOR_THIN_SKY_LEAN := 3.7
 const PROPS := {
 	"mexican_fan_palm": {"kinds": ["palm_slot", "tree"], "variants": FAN_PALMS, "ranges": [35.0, 95.0, 900.0], "foot_m": 0.45, "form": "fan_palm"},
 	"canary_date_palm": {"kinds": ["palm_slot", "tree"], "variants": CANARY_PALMS, "ranges": [45.0, 110.0, 900.0], "foot_m": 0.7, "form": "canary_palm"},

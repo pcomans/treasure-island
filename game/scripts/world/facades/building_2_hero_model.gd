@@ -594,7 +594,7 @@ static func _sse_infill_material() -> ShaderMaterial:
 	# fixed shadow/AO tint. Geometry and the stock lighting provide the depth.
 	var material := WALL_MATERIAL.duplicate() as ShaderMaterial
 	material.resource_name = "building_2_sse_pale_infill_coating"
-	material.set_shader_parameter("cream_color", Color(0.91, 0.90, 0.86, 1.0))
+	material.set_shader_parameter("cream_color", Color(0.74, 0.75, 0.71, 1.0))
 	return material
 
 
@@ -1170,7 +1170,7 @@ static func _triangle(target: Dictionary, a: Vector3, b: Vector3, c: Vector3, no
 
 static func _materials() -> Dictionary:
 	return {
-		"field_glass": _window_glass_material("building_2_wsw_diffusing_glass", Color(0.82, 0.835, 0.79), 0.46, 1.0),
+		"field_glass": _window_glass_material("building_2_wsw_diffusing_glass", Color(0.42, 0.47, 0.44), 0.46, 1.0),
 		"field_band": _window_glass_material("building_2_wsw_dark_pane_band", Color(0.31, 0.36, 0.34), 0.25, 0.25),
 		"field_grid": _coated_frame_material("building_2_wsw_coated_steel_frames", Color(0.32, 0.36, 0.33)),
 		"wing_glass": _window_glass_material("building_2_side_glass", Color(0.64, 0.69, 0.65), 0.40, 0.75),

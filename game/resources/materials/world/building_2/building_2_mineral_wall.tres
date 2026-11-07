@@ -11,5 +11,5 @@ shader = ExtResource("1")
 shader_parameter/surface_color = ExtResource("2")
 shader_parameter/surface_normal = ExtResource("3")
 shader_parameter/surface_roughness = ExtResource("4")
-shader_parameter/cream_color = Color(0.92, 0.87, 0.76, 1)
+shader_parameter/cream_color = Color(0.75, 0.72, 0.63, 1)
 shader_parameter/tile_span_m = 1.5

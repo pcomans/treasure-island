@@ -42,9 +42,12 @@ extends SceneTree
 ## [{"source": "KEY", "plan": "views.json"}, ...], each plan a --views file for its
 ## source, saved to OUT/KEY/detail-NAME.png. Fixed-pose views only (no closeup,
 ## context or overhead shots; --island may be added); any bad entry fails the run.
-## --neutral-lighting: screenshots only. Switches the environment, sky and sun back
-##   to the neutral pre-2026-10-23 daylight (NEUTRAL_LIGHTING) for colour matching
-##   against reference photos. Gameplay always uses main.tscn's warm daylight.
+## --neutral-lighting: screenshots only. Swaps in the fixed neutral daylight below
+##   (NEUTRAL_ENVIRONMENT, NEUTRAL_SKY, NEUTRAL_SUN) for colour matching against
+##   reference photos: a complete environment, sky and sun of its own, with Mersea's
+##   reflection probes recaptured under them, so a change to main.tscn's lighting
+##   does not reach these shots. A change to a palette or material does, as it
+##   should. Gameplay always uses main.tscn.
 ## --street-detail off|on|both: street detail (vegetation, furniture, fences, clutter)
 ##   in every shot. Without it, close-ups and focused views are taken with street
 ##   detail off, and context, island and overhead views both ways. A view taken
@@ -99,20 +102,48 @@ const DEFAULT_STREET_DETAIL := {
 ## Input actions a street view's moves may hold.
 const MOVE_ACTIONS := ["move_forward", "move_back", "move_left", "move_right", "run", "jetpack"]
 
-## The neutral daylight in main.tscn before the 2026-10-23 warm-light change,
-## restored by --neutral-lighting as [target, property, value].
-const NEUTRAL_LIGHTING := [
-	["environment", "ambient_light_color", Color(0.64, 0.60, 0.53)],
-	["environment", "ambient_light_energy", 0.75],
-	["environment", "ambient_light_sky_contribution", 0.45],
-	["environment", "fog_light_color", Color(0.72, 0.80, 0.88)],
-	["environment", "fog_density", 0.00012],
-	["environment", "fog_aerial_perspective", 0.0],
-	["sky", "sky_top_color", Color(0.24, 0.44, 0.78)],
-	["sky", "sky_horizon_color", Color(0.72, 0.80, 0.88)],
-	["sky", "sky_curve", 0.09],
-	["sun", "light_color", Color(1.0, 0.97, 0.92)],
-]
+## The neutral daylight for colour matching: the sun angle, tonemapper and shadows
+## main.tscn had before the 2026-11-07 look pass (sun at azimuth 152, elevation 52),
+## with the ambient, fog, sky and sun colour from before the 2026-10-23 warm-light
+## change. These are whole settings, not overrides of main.tscn: a fresh Environment
+## has SSAO, SSIL, glow and colour adjustment off, so main.tscn's lighting cannot
+## reach these shots.
+const NEUTRAL_ENVIRONMENT := {
+	"background_mode": Environment.BG_SKY,
+	"background_color": Color(0.46, 0.69, 0.86),
+	"ambient_light_source": Environment.AMBIENT_SOURCE_SKY,
+	"reflected_light_source": Environment.REFLECTION_SOURCE_SKY,
+	"ambient_light_color": Color(0.64, 0.60, 0.53),
+	"ambient_light_energy": 0.75,
+	"ambient_light_sky_contribution": 0.45,
+	"tonemap_mode": Environment.TONE_MAPPER_FILMIC,
+	"fog_enabled": true,
+	"fog_light_color": Color(0.72, 0.80, 0.88),
+	"fog_light_energy": 0.85,
+	"fog_density": 0.00012,
+	"fog_aerial_perspective": 0.0,
+	"fog_sky_affect": 0.0,
+	"fog_height": 0.0,
+	"fog_height_density": 0.0,
+}
+const NEUTRAL_SKY := {
+	"sky_top_color": Color(0.24, 0.44, 0.78),
+	"sky_horizon_color": Color(0.72, 0.80, 0.88),
+	"sky_curve": 0.09,
+	"sky_energy_multiplier": 1.0,
+	"ground_bottom_color": Color(0.40, 0.40, 0.37),
+	"ground_horizon_color": Color(0.50, 0.68, 0.84),
+	"ground_curve": 0.3,
+	"ground_energy_multiplier": 1.0,
+}
+const NEUTRAL_SUN := {
+	"rotation_degrees": Vector3(-52.0, 28.0, 0.0),
+	"light_color": Color(1.0, 0.97, 0.92),
+	"light_energy": 1.1,
+	"shadow_enabled": true,
+	"shadow_blur": 0.5,
+	"directional_shadow_max_distance": 800.0,
+}
 
 var _h: WorldHarness
 var _errors: Array[String] = []
@@ -221,17 +252,30 @@ func _suffix(states: Array, state: String) -> String:
 	return "" if states.size() == 1 else "-street-" + state
 
 
-## Screenshot-only: the neutral daylight for colour matching. Waits for the sky
-## radiance map to update before any capture.
+## Screenshot-only: the neutral daylight for colour matching, in place of the game's
+## environment and sun. Mersea's probes captured the game's light at startup, so they
+## update again under this one. Waits for the sky radiance map and the probes before
+## any capture.
 func _use_neutral_lighting() -> void:
-	var environment := (_h.main.get_node("WorldEnvironment") as WorldEnvironment).environment
-	var targets := {"environment": environment, "sky": environment.sky.sky_material, "sun": _h.main.get_node("Sun")}
-	for entry: Array in NEUTRAL_LIGHTING:
-		(targets[entry[0]] as Object).set(entry[1] as String, entry[2])
+	var sky := Sky.new()
+	sky.sky_material = _with_settings(ProceduralSkyMaterial.new(), NEUTRAL_SKY)
+	var environment := _with_settings(Environment.new(), NEUTRAL_ENVIRONMENT) as Environment
+	environment.sky = sky
+	(_h.main.get_node("WorldEnvironment") as WorldEnvironment).environment = environment
+	(_h.main.get_node("Sun") as DirectionalLight3D).visible = false
+	_h.main.add_child(_with_settings(DirectionalLight3D.new(), NEUTRAL_SUN) as DirectionalLight3D)
+	for probe: ReflectionProbe in _h.world.buildings.find_children("Mersea*Reflection", "ReflectionProbe", true, false):
+		probe.update_mode = ReflectionProbe.UPDATE_ALWAYS
 	for _i in 30:
 		await process_frame
 	await RenderingServer.frame_post_draw
-	print("LIGHTING: neutral (pre-2026-10-23 daylight, screenshots only)")
+	print("LIGHTING: neutral (fixed colour-matching daylight, screenshots only)")
+
+
+func _with_settings(object: Object, settings: Dictionary) -> Object:
+	for property: String in settings:
+		object.set(property, settings[property])
+	return object
 
 
 func _focused_views(source: String, path: String, out: String, suffix: String) -> void:
