@@ -95,9 +95,9 @@ export const PLANT_WIDTHS_M = Object.freeze({
   pale_seeded_shrub: Object.freeze([0.7, 1.0, 1.1, 0.8, 1.05, 0.55]),
   marsh_fringe: Object.freeze([2.8, 2.2, 1.3]),
   marsh_stones: Object.freeze([0.6, 1.4, 0.5]),
-  marsh_stems: Object.freeze([0.42, 0.6]),
+  marsh_stems: Object.freeze([0.36, 0.5]),
   marsh_mat: Object.freeze([1.9, 1.3]),
-  marsh_brush: Object.freeze([3.0, 2.2]),
+  marsh_brush: Object.freeze([2.6, 1.9]),
   young_planting: Object.freeze([1.4, 1.7, 1.0, 1.3]),
   pittosporum_tobira: Object.freeze([1.5, 2.0, 2.5]),
   red_tip_shrub: Object.freeze([0.7, 0.9]),
@@ -134,7 +134,7 @@ const EDGE_CLEAR_M = 0.1;
 // piers), that no crown reaches over; so is any ground added later until it is
 // listed here.
 export const SPILL_GROUNDS = Object.freeze([
-  "land_ground", "major_area_amenity", "major_area_landuse", "major_area_leisure", "park_gravel", "park_lawn", "park_mulch", "promenade_mulch", "promenade_rock", "yard_shoulder_band", "yard_shoulder_gravel",
+  "land_ground", "major_area_amenity", "major_area_landuse", "major_area_leisure", "park_gravel", "park_lawn", "park_mulch", "promenade_mulch", "promenade_rock",
   "street_kerb_planting", "street_kerb_verge", "terrain_riprap", "terrain_sand", "terrain_wetland",
 ]);
 const SPILL = new Set(SPILL_GROUNDS);

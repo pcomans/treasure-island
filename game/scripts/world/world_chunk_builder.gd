@@ -117,7 +117,7 @@ const STREET_GROUND_SURFACES := {
 	# granite, grey-brown bark mulch and dark crushed rock, and the warm poured slab at
 	# its south end, low in specular so the sky's sheen doesn't wash them out at a
 	# walker's grazing angle. Its asphalt is PROMENADE_PAVEMENT's.
-	"promenade_dg": {"albedo": preload("res://game/resources/textures/world/street/park_dg.png"), "uv_scale": 5.0, "roughness": 1.0, "specular": 0.2, "tint": Color(0.5, 0.51, 0.53)},
+	"promenade_dg": {"albedo": preload("res://game/resources/textures/world/street/park_dg.png"), "uv_scale": 5.0, "roughness": 1.0, "specular": 0.2, "tint": Color(0.52, 0.545, 0.57)},
 	"promenade_mulch": {"albedo": preload("res://game/resources/textures/world/street/promenade_bark_mulch.png"), "uv_scale": 5.5, "roughness": 1.0, "specular": 0.2, "tint": Color(0.42, 0.405, 0.375)},
 	"promenade_rock": {"albedo": preload("res://game/resources/textures/world/vegetation/park_gravel.png"), "uv_scale": 5.0, "roughness": 0.95, "specular": 0.25, "tint": Color(0.62, 0.61, 0.57)},
 	"promenade_slab": {"albedo": preload("res://game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_diff_1k.jpg"), "uv_scale": 4.0, "roughness": 0.95, "specular": 0.25, "tint": Color(0.71, 0.69, 0.65)},

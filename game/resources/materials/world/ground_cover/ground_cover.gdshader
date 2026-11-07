@@ -95,19 +95,19 @@ uniform float marsh_amount = 0.0;
 uniform vec4 marsh_axis = vec4(-295.0, 145.0, -345.0, 290.0);
 uniform vec2 marsh_radii = vec2(46.0, 66.0);
 uniform float marsh_floor_y = 1.95;
-uniform vec3 marsh_wine : source_color = vec3(0.13, 0.075, 0.07);
-uniform vec3 marsh_crimson : source_color = vec3(0.27, 0.12, 0.11);
-uniform vec3 marsh_flare : source_color = vec3(0.34, 0.14, 0.13);
+uniform vec3 marsh_wine : source_color = vec3(0.15, 0.08, 0.07);
+uniform vec3 marsh_crimson : source_color = vec3(0.29, 0.125, 0.105);
+uniform vec3 marsh_flare : source_color = vec3(0.36, 0.15, 0.125);
 uniform vec3 marsh_ruddy : source_color = vec3(0.17, 0.135, 0.105);
 uniform vec3 marsh_straw : source_color = vec3(0.34, 0.275, 0.2);
 uniform vec3 marsh_green : source_color = vec3(0.12, 0.13, 0.075);
 uniform vec3 marsh_olive : source_color = vec3(0.235, 0.215, 0.125);
-uniform vec3 marsh_mud : source_color = vec3(0.31, 0.255, 0.195);
-uniform vec3 marsh_wet_mud : source_color = vec3(0.19, 0.155, 0.125);
+uniform vec3 marsh_mud : source_color = vec3(0.25, 0.2, 0.16);
+uniform vec3 marsh_wet_mud : source_color = vec3(0.16, 0.13, 0.105);
 uniform vec3 marsh_cobble : source_color = vec3(0.62, 0.58, 0.51);
-uniform vec3 bank_gap : source_color = vec3(0.1, 0.075, 0.06);
-uniform vec3 bank_blade : source_color = vec3(0.23, 0.18, 0.14);
-uniform vec3 bank_straw : source_color = vec3(0.37, 0.31, 0.235);
+uniform vec3 bank_gap : source_color = vec3(0.1, 0.08, 0.07);
+uniform vec3 bank_blade : source_color = vec3(0.29, 0.24, 0.2);
+uniform vec3 bank_straw : source_color = vec3(0.46, 0.4, 0.33);
 uniform vec3 bank_gravel : source_color = vec3(0.27, 0.26, 0.235);
 uniform vec3 marsh_far_red : source_color = vec3(0.26, 0.165, 0.14);
 uniform vec3 marsh_far_olive : source_color = vec3(0.26, 0.235, 0.135);
@@ -143,7 +143,7 @@ const float MARSH_TILE_M = 1.8;
 // The flopped grass's and the crushed rock's repeats, and the level of the red mat's drifts.
 const float BANK_TILE_M = 3.0;
 const float BANK_ROCK_TILE_M = 1.67;
-const float RED_LEVEL = 0.49;
+const float RED_LEVEL = 0.47;
 // marsh_map's reach either side of the outline (tools/lib/ground-cover-map.mjs).
 const float MARSH_MAP_RANGE_M = 32.0;
 
@@ -266,7 +266,7 @@ void fragment() {
 			float outline_m = (marsh_read.r - 0.5) * 2.0 * MARSH_MAP_RANGE_M;
 			float paved_m = marsh_read.g * MARSH_MAP_RANGE_M;
 			// A straw bank climbs to the lots' edges, so no lot's slab drops onto the mat.
-			float bank_rise = 1.0 - smoothstep(3.0, 11.0, paved_m + 7.0 * (n_mid - 0.5) + 4.0 * (n_small - 0.5));
+			float bank_rise = 1.0 - smoothstep(1.5, 9.5, paved_m + 7.0 * (n_mid - 0.5) + 4.0 * (n_small - 0.5));
 			float h_land = ground_y + 0.6 * (n_wide - 0.5) + 0.5 * (n_mid - 0.5) + 0.3 * (n_small - 0.5);
 			float h = h_land + 1.6 * bank_rise;
 
@@ -285,7 +285,7 @@ void fragment() {
 			bank *= mix(0.9, 1.06, smoothstep(2.6, 3.7, h));
 			// Crushed rock spills from the lots' shoulders over the slope's top, ragged into
 			// the grass, with patches of rubble showing through it lower down.
-			float rock_w = 1.0 - smoothstep(2.6, 4.2, paved_m + 2.4 * (n_small - 0.5) + 1.4 * (n_tiny - 0.5) + 1.2 * (flopped - 0.5));
+			float rock_w = 1.0 - smoothstep(0.3, 2.4, paved_m + 2.4 * (n_small - 0.5) + 1.4 * (n_tiny - 0.5) + 1.2 * (flopped - 0.5));
 			rock_w = max(rock_w, 0.85 * smoothstep(0.6, 0.66, 0.5 * n_patch8 + 0.3 * n_small + 0.2 * n_tiny) * smoothstep(2.9, 3.4, h_land));
 			bank = mix(bank, bank_gravel * (0.35 + 1.3 * texture(marsh_grain, p / BANK_ROCK_TILE_M).b), rock_w);
 			float bank_w = 1.0 - smoothstep(4.7, 5.3, h_land);
@@ -294,14 +294,14 @@ void fragment() {
 			// down to the grain, over dark litter, with lenses of straw and dull green.
 			vec2 along = vec2(0.643 * p.x + 0.766 * p.y, 0.643 * p.y - 0.766 * p.x);
 			float fine = 1.0 - smoothstep(60.0, 150.0, dist);
-			float drifts = 0.36 * value_noise(along / vec2(19.0, 8.0) + vec2(7.3, 51.9)) + 0.27 * value_noise(along / vec2(7.0, 3.6) + vec2(23.7, 11.1)) + 0.2 * value_noise(along / vec2(2.8, 1.6) + vec2(41.7, 17.3)) + 0.17 * mix(0.5, n_tiny, fine);
-			float red_edge = mix(0.02, 0.07, smoothstep(20.0, 120.0, dist));
-			float red_w = smoothstep(RED_LEVEL - red_edge, RED_LEVEL + red_edge, drifts + 0.16 * (grain.x - 0.5) * fine);
-			float straw_w = smoothstep(0.575, 0.62, 0.5 * value_noise(along / vec2(11.0, 3.4) + vec2(61.7, 43.9)) + 0.3 * n_mid + 0.2 * n_small + 0.1 * (grain.y - 0.5) * fine);
+			float drifts = 0.3 * value_noise(along / vec2(19.0, 8.0) + vec2(7.3, 51.9)) + 0.24 * value_noise(along / vec2(7.0, 3.6) + vec2(23.7, 11.1)) + 0.22 * value_noise(along / vec2(2.8, 1.6) + vec2(41.7, 17.3)) + 0.24 * mix(0.5, 0.6 * n_tiny + 0.4 * value_noise(p / 0.37 + vec2(37.3, 5.9)), fine);
+			float red_edge = mix(0.04, 0.09, smoothstep(20.0, 120.0, dist));
+			float red_w = smoothstep(RED_LEVEL - red_edge, RED_LEVEL + red_edge, drifts + 0.3 * (grain.x - 0.5) * fine);
+			float straw_w = smoothstep(0.6, 0.64, 0.5 * value_noise(along / vec2(11.0, 3.4) + vec2(61.7, 43.9)) + 0.3 * n_mid + 0.2 * n_small + 0.1 * (grain.y - 0.5) * fine);
 			float green_w = smoothstep(0.6, 0.64, 0.72 * value_noise(along / vec2(14.0, 4.6) + vec2(11.7, 23.1)) + 0.28 * n_small);
 			vec3 red = mix(marsh_wine, marsh_crimson, smoothstep(0.34, 0.62, grain.x));
 			red = mix(red, marsh_flare, 0.5 * smoothstep(0.66, 0.86, grain.x));
-			vec3 marsh = mix(marsh_ruddy, marsh_straw, 0.18 + 0.55 * smoothstep(0.5, 0.8, grain.y));
+			vec3 marsh = mix(marsh_ruddy, marsh_straw, 0.12 + 0.5 * smoothstep(0.5, 0.8, grain.y));
 			marsh = mix(marsh, mix(marsh_green, marsh_olive, smoothstep(0.34, 0.62, green_grain)), green_w);
 			marsh = mix(marsh, mix(marsh_ruddy, marsh_straw, smoothstep(0.34, 0.62, grain.y)), straw_w);
 			marsh = mix(marsh, red, red_w * (1.0 - 0.75 * max(straw_w, green_w)));
@@ -327,7 +327,7 @@ void fragment() {
 			water -= WATER_LEVEL + WATER_RISE_PER_M * max(0.0, ground_y - marsh_floor_y);
 			water += WATER_POOL * marsh_read.b - WATER_DRY * (1.0 - smoothstep(0.0, 0.2, marsh_read.b));
 			water += 0.2 * (n_tiny - 0.5) + 0.24 * (n_small - 0.5) + 0.12 * (n_mid - 0.5);
-			float flat_w = smoothstep(-0.1, -0.01, water + 0.12 * (grain.y - 0.5) + 0.1 * (n_small - 0.5));
+			float flat_w = smoothstep(-0.07, -0.01, water + 0.12 * (grain.y - 0.5) + 0.1 * (n_small - 0.5));
 			vec3 mud = mix(marsh_wet_mud, marsh_mud, smoothstep(0.32, 0.6, grain.y) * (1.0 - 0.5 * smoothstep(-0.05, 0.02, water)));
 			marsh = mix(marsh, mud, 0.92 * flat_w * (1.0 - far_off));
 

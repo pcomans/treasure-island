@@ -511,7 +511,7 @@ export function drawGroundCoverMap(config, world) {
 
 // The marsh map for a validated config and a loaded world: {grid, rgba}.
 // The lots whose edges the marsh keeps a straw bank from (the map's green channel).
-const MARSH_PAVED_MATERIALS = Object.freeze(["yard_asphalt", "yard_asphalt_fresh", "yard_asphalt_pale"]);
+const MARSH_PAVED_MATERIALS = Object.freeze(["yard_asphalt", "yard_asphalt_fresh", "yard_asphalt_pale", "yard_shoulder_band", "yard_shoulder_gravel"]);
 // How far inside a mapped pool its mask reaches full strength (m).
 const MARSH_POOL_RAMP_M = 3;
 

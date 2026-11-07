@@ -121,7 +121,7 @@ const LOW_GRADES := {
 	"young_tree_a.png": [Color(0.86, 0.86, 0.8), 0.2],
 	"young_tree_b.png": [Color(0.9, 0.92, 0.84), 0.2],
 	"young_shrub.png": [Color(0.8, 0.82, 0.74), 0.25],
-	"marsh_thin_stems.png": [Color(0.92, 0.86, 0.74), 0.3],
+	"marsh_thin_stems.png": [Color(0.82, 0.79, 0.76), 0.7],
 	"marsh_low_mat.png": [Color(0.84, 0.8, 0.74), 0.4],
 	"marsh_seeded_brush.png": [Color(0.84, 0.78, 0.7), 0.25],
 	"tall_fringe.png": [Color(0.86, 0.86, 0.72), 0.25],
@@ -321,11 +321,16 @@ func _pack_marsh(images: Dictionary, errors: Array[String]) -> void:
 	for name: String in cells:
 		var cell: Rect2i = cells[name]
 		var image := _keyed_fit(images[name], cell.size.x - 2 * CELL_MARGIN, cell.size.y - 2 * CELL_MARGIN, CYAN if name in ON_CYAN else MAGENTA)
-		if name not in ["marsh_seeded_shrub.png", "marsh_seeded_brush.png"]:
+		if name in ["marsh_low_mat.png", "tall_fringe.png"]:
 			_straw(image)
 		_grade(image, LOW_GRADES[name][0], LOW_GRADES[name][1])
-		if cell.size.x == 1024:
+		if name == "tall_fringe.png":
 			_fray_ends(image, 0.14)
+		elif cell.size.x == 1024:
+			# The mat and the brush are mounds, so overlapping cards run into one another.
+			_fray_ends(image, 0.5)
+		if name == "marsh_low_mat.png":
+			_fray_foot(image, 0.3)
 		atlas.blit_rect(image, Rect2i(Vector2i.ZERO, image.get_size()), cell.position + Vector2i(CELL_MARGIN, CELL_MARGIN))
 	_fill_transparent(atlas)
 	_save(atlas, OUT + "marsh_atlas.png", errors)
@@ -347,6 +352,23 @@ func _fray_ends(image: Image, fraction: float) -> void:
 			continue
 		var stands := pow(keep, 0.7) * (1.0 - 0.4 * (1.0 - keep) * random.randf())
 		for y in int(h * (1.0 - stands)):
+			for x in range(from_x, mini(w, from_x + sliver)):
+				data[(y * w + x) * 4 + 3] = 0
+	image.set_data(w, h, false, Image.FORMAT_RGBA8, data)
+
+
+## Lifts an image's bottom edge in upright slivers, each by its own share of fraction of the
+## height, so a card lying on the ground never shows a straight foot.
+func _fray_foot(image: Image, fraction: float) -> void:
+	var w := image.get_width()
+	var h := image.get_height()
+	var data := image.get_data()
+	var random := RandomNumberGenerator.new()
+	random.seed = 4178
+	var sliver := 3
+	for from_x in range(0, w, sliver):
+		var lift := random.randf() * random.randf() * fraction
+		for y in range(int(h * (1.0 - lift)), h):
 			for x in range(from_x, mini(w, from_x + sliver)):
 				data[(y * w + x) * 4 + 3] = 0
 	image.set_data(w, h, false, Image.FORMAT_RGBA8, data)
