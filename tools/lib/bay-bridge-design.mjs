@@ -25,6 +25,15 @@ export const BRIDGE_ROLES = Object.freeze({
   tunnel_void: 9, // dark tunnel interior behind the portals
 });
 
+// Occlusion levels, carried with the role in each vertex's UV x as
+// role + ROLE_STRIDE * level: how much sky a face sees for its place on the
+// structure (an open face 0, under an overhang 1, under the deck 2, a deck's
+// underside 3, a slot between tower legs 4). Geometry only, never the sun, so
+// the time of day stays free; the runtime builder darkens each level's albedo.
+export const ROLE_STRIDE = 16;
+export const OCCLUSION = Object.freeze({ open: 0, overhang: 1, under: 2, soffit: 3, slot: 4 });
+export const shade = (role, level) => role + ROLE_STRIDE * level;
+
 // Detail classes, carried in each vertex's UV y. Structure is drawn at every
 // distance; detail stops at DETAIL_END_M; wires are camera-facing ribbons
 // whose coverage falls with distance; far wires stand in for solid detail
@@ -83,25 +92,25 @@ export const SAS = Object.freeze({
 
 // Skyway (measured widths from the OSM deck outlines w1006027483 and
 // w1000066963; inferred spans and depths): 160 m spans from E2, 14 pier
-// pairs, haunched concrete box 5.5 m deep at midspan and 9.5 m at the piers.
+// pairs, haunched concrete box 5.5 m deep at midspan and 11 m at the piers.
 export const SKYWAY = Object.freeze({
   westbound_extent_m: Object.freeze([-13.5, 13.4]),
   eastbound_extent_m: Object.freeze([-18.6, 13.5]),
   span_m: 160,
   pier_pairs: 14,
   depth_midspan_m: 5.5,
-  depth_pier_m: 9.5,
+  depth_pier_m: 11.0,
 });
 
 // Deck-top elevation (m NAVD 88) of the eastern span by east coordinate,
-// inferred: about 52 m beside the tower (between the dated photographs' 47 m
-// and the earlier Pier 1 fit's 54 m), falling along the Skyway to the
-// Oakland touchdown. The snapshot ends at x 3805; the last point carries the
+// inferred: about 55 m beside the tower (the dated photographs give 47-56 m,
+// the earlier Pier 1 fit 54 m, the published 191 ft clearance more), falling
+// along the Skyway to the Oakland touchdown. The snapshot ends at x 3805; the last point carries the
 // deck on to a touchdown abutment so the bridge ends in the distance.
 export const EAST_DECK_PROFILE = Object.freeze([
-  Object.freeze([952, 53.0]),
-  Object.freeze([1098, 52.0]),
-  Object.freeze([1410, 49.5]),
+  Object.freeze([952, 55.5]),
+  Object.freeze([1098, 55.0]),
+  Object.freeze([1410, 52.5]),
   Object.freeze([3460, 21.0]),
   Object.freeze([3805, 13.0]),
   Object.freeze([4150, 5.5]),
@@ -146,9 +155,12 @@ export const WEST_SPAN = Object.freeze({
   truss_depth_m: 10.7,
   panel_m: 9.14,
   lower_deck_drop_m: 7.6,
-  // Inferred within the conflicting sources: the inner towers stand about
-  // 13 m taller than the outer ones (the one relation every source shares).
-  tower_top_m: Object.freeze({ w6: 141, w5: 153, w3: 153, w2: 141 }),
+  // Inferred within the conflicting sources: HAER's 458 and 502 ft read from the
+  // base plates 40 ft above low water (outer towers about 152 m, inner about 165 m
+  // above the water). The May 2025 profile from TI, through its solved camera
+  // (140 mm, 9.8 deg vertical; the YBI owner's fit), puts W6's top at about
+  // 153 +/- 8 m.
+  tower_top_m: Object.freeze({ w6: 152, w5: 165, w3: 165, w2: 152 }),
   center_anchorage_top_m: 88,
 });
 

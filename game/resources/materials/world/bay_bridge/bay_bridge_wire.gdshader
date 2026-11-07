@@ -3,13 +3,14 @@ shader_type spatial;
 // members; game/scripts/world/bay_bridge_builder.gd) as camera-facing strips. Each
 // vertex holds a point of the member's centre line (VERTEX), its direction (NORMAL),
 // which edge of the strip it is (UV.x, -1 or 1) and the member's true radius (UV.y).
-// The strip is never narrower than MIN_PIXELS on screen; its opacity is the share of
-// that width the member really covers, so a suspender far off fades to the faint line
-// a photograph shows instead of breaking into dashes. Colours arrive as sRGB vertex
-// colours. Lit like a cylinder across the strip.
+// The strip is never narrower than MIN_PIXELS on screen and fades out over its outer
+// pixel on each side, so it never breaks into dashes as it crosses the pixel grid;
+// its opacity keeps the ink the member really covers, so a suspender far off is the
+// faint line a photograph shows. Colours arrive as sRGB vertex colours. Lit like a
+// cylinder across the strip.
 render_mode skip_vertex_transform, cull_disabled, blend_mix, depth_draw_never, diffuse_lambert, specular_schlick_ggx;
 
-const float MIN_PIXELS = 1.3;
+const float MIN_PIXELS = 2.0;
 
 uniform float roughness_value = 0.5;
 uniform float specular_value = 0.4;
@@ -18,6 +19,7 @@ varying vec3 strip_side;
 varying vec3 to_camera;
 varying float across;
 varying float coverage;
+varying float half_pixels;
 
 void vertex() {
 	vec3 center = (MODELVIEW_MATRIX * vec4(VERTEX, 1.0)).xyz;
@@ -33,6 +35,7 @@ void vertex() {
 	float radius = UV.y;
 	float half_width = max(radius, 0.5 * MIN_PIXELS * pixel);
 	coverage = radius / half_width;
+	half_pixels = half_width / pixel;
 	across = UV.x;
 	strip_side = side;
 	VERTEX = center + side * UV.x * half_width;
@@ -49,5 +52,9 @@ void fragment() {
 	ALBEDO = srgb_to_linear(COLOR.rgb);
 	ROUGHNESS = roughness_value;
 	SPECULAR = specular_value;
-	ALPHA = clamp(coverage, 0.0, 1.0);
+	// Full inside, falling to nothing over the outer pixel: the strip then holds
+	// about (2 * half_pixels - 1) pixels of ink, scaled to the member's own width.
+	float edge = clamp((1.0 - abs(a)) * half_pixels, 0.0, 1.0);
+	float ink = clamp(2.0 * coverage * half_pixels / max(2.0 * half_pixels - 1.0, 1.0), 0.0, 1.0);
+	ALPHA = edge * ink;
 }

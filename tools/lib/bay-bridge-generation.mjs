@@ -20,15 +20,18 @@ import {
   BRIDGE_ROLES as R,
   EAST_DECK_PROFILE,
   MAIN_LINE_WAYS,
+  OCCLUSION as O,
   SAS,
   SKYWAY,
   YBITS,
+  shade,
 } from "./bay-bridge-design.mjs";
+import { buildWestSpan, westSpanFrame } from "./bay-bridge-west.mjs";
+import { buildYbiCrossing } from "./bay-bridge-ybi.mjs";
 import {
   BridgeMesh,
   add,
   extendLine,
-  hermite,
   joinLines,
   lerp,
   offsetPlan,
@@ -61,20 +64,25 @@ const SAS_EAST_HINGE_STATION_M = 428;
 const CONCRETE_BOX = Object.freeze({ tip: 0.35, root: 0.8, wing: 4.6, batter: 0.25 });
 // YBI transition: shallow reinforced-concrete frame 1 (spans 21.6-36.7 m), deeper
 // post-tensioned frame 2 (59.2-84.8 m).
-const YBITS_DEPTH = Object.freeze({ frame1: 2.4, frame2: 4.2, frame1Spans: 4 });
+const YBITS_DEPTH = Object.freeze({ frame1: 2.8, frame2: 5.0, frame1Spans: 4 });
 // The westbound deck holds the tunnel's upper-deck height from the portal to the
 // start of the YBI transition structure's W line.
 const UPPER_TRANSITION_TOP_M = 59.2;
+// The Skyway's haunch: depth from midspan to pier by |2t - 1| to this power, so it
+// flares deep close to each pier.
+const SKYWAY_HAUNCH_POWER = 2.6;
+// The steel box turns into the concrete one over this length at the east hinge.
+const SAS_TO_SKYWAY_M = 28;
 // Oakland touchdown: 55 m spans of a 3 m deep box east of the last Skyway pier.
 const TOUCHDOWN = Object.freeze({ span: 55, depth: 3.0 });
 // SAS tower: legs split by a cruciform gap, tapering from the OSM footprint at the
 // pile cap to the head; shear links bridge the gap; a head block and the saddle.
 const TOWER = Object.freeze({
-  baseY: 3.0,
+  baseY: 8.0,
   topAlong: 11.5,
   topAcross: 8.5,
   baseAcross: 13.0,
-  gap: 1.6,
+  gap: 2.6,
   chamfer: 0.3,
   headBottom: 151.5,
   headTop: 157.0,
@@ -83,18 +91,22 @@ const TOWER = Object.freeze({
   linkTop: 148,
   links: 20,
   linkHeight: 1.3,
-  pileCap: Object.freeze({ along: 26, across: 22, top: 3.0 }),
+  footing: Object.freeze({ along: 27, across: 23, top: 8.0 }),
 });
 // Main cables and suspenders: drawn a little thicker than real (0.78 m cable,
 // suspender pairs) so they hold at a kilometre. The suspenders anchor at the
 // outer edge of each box, the cable planes leaning in to the saddle.
 const CABLE = Object.freeze({ radius: 0.45, saddleY: 158.4, saddleOffset: SAS.saddle_offset_m, landingRise: 1.2, step: 5 });
 const SUSPENDER = Object.freeze({ radius: 0.11, towerClear: 12 });
+// The cable's bend round the west deck end at W2: radius, its fall (a fraction of
+// the radius per quarter turn) and its pieces.
+const KNUCKLE = Object.freeze({ radius: 5.5, drop: 1.2, segments: 5 });
 // Piers.
-const PILE_CAP_TOP_M = 2.2;
+const PILE_CAP_TOP_M = 3.4;
+const TIDAL_BAND_TOP_M = 1.4;
 const WATER_FOOTING_M = -2.0;
 const GROUND_BURY_M = 3.0;
-const SKYWAY_COLUMN = Object.freeze({ across: 7.5, along: 4.5, flareAcross: 10.5, flareAlong: 6.2, flareHeight: 5, cap: Object.freeze({ across: 13, along: 9.5 }) });
+const SKYWAY_COLUMN = Object.freeze({ across: 7.5, along: 4.5, flareAcross: 11, flareAlong: 6.6, flareHeight: 6, cap: Object.freeze({ across: 16, along: 12 }) });
 const YBITS_COLUMN = Object.freeze({ across: 4.6, along: 2.6, cap: Object.freeze({ across: 9, along: 3.6, depth: 1.6 }) });
 const TOUCHDOWN_COLUMN = Object.freeze({ across: 4.2, along: 2.4 });
 const END_PIER = Object.freeze({ capAlong: 8, capDepth: 4.5, columnAcross: 8, columnAlong: 6 });
@@ -169,24 +181,44 @@ const barrierLoop = (edge, side, cls = C.structure) => {
   };
 };
 
-// SAS steel box, deck top at v = 0, lateral -right..left; optional bike path
-// cantilever on the right (south) with its railing.
-function sasLoops(left, right, bike) {
+// Both girder families share one eight-point outline (deck top at v = 0, lateral
+// left..right), so a steel box can turn into a concrete one along a sweep:
+// top-left, its lower edge, a break on the left web, the left web's foot, the right
+// web's foot, the right break, the right edge's foot, top-right. The steel box's
+// breaks lie on its straight webs; the concrete box's are its wing roots.
+function steelBoxPoints(left, right) {
   const { depth, fascia, webInset } = SAS_BOX;
-  const loops = [{
-    points: [[left, 0], [left, -fascia], [left - webInset, -depth], [right + webInset, -depth], [right, -fascia], [right, 0]],
-    roles: [R.sas_white, R.sas_white, R.sas_white, R.sas_white, R.sas_white, R.roadway],
-    cls: C.structure,
-  }, barrierLoop(left, 1), barrierLoop(right, -1)];
-  if (bike > 0) loops.push(...bikeLoops(right, bike, R.sas_white));
-  return loops;
+  const mid = (fascia + depth) / 2;
+  return [[left, 0], [left, -fascia], [left - webInset / 2, -mid], [left - webInset, -depth],
+    [right + webInset, -depth], [right + webInset / 2, -mid], [right, -fascia], [right, 0]];
 }
 
-function bikeLoops(edge, width, underRole) {
+function concreteBoxPoints(left, right, depth) {
+  const { tip, root, wing, batter } = CONCRETE_BOX;
+  const webTopL = left - wing;
+  const webTopR = right + wing;
+  return [[left, 0], [left, -tip], [webTopL, -root], [webTopL - batter * (depth - root), -depth],
+    [webTopR + batter * (depth - root), -depth], [webTopR, -root], [right, -tip], [right, 0]];
+}
+
+// Occlusion per outline segment: edge faces under the barrier's overhang, webs and
+// wing undersides under the deck, the bottom a soffit.
+const STEEL_LEVELS = [O.overhang, O.under, O.under, O.soffit, O.under, O.under, O.overhang, O.open];
+const CONCRETE_LEVELS = [O.overhang, O.soffit, O.under, O.soffit, O.under, O.soffit, O.overhang, O.open];
+
+function boxLoop(points, material, levels) {
+  return {
+    points,
+    roles: levels.map((level, k) => (k === 7 ? R.roadway : shade(material, level))),
+    cls: C.structure,
+  };
+}
+
+function bikeLoops(edge, width, material) {
   const outer = edge - width;
   return [{
     points: [[edge, 0], [edge, -0.9], [outer, -0.45], [outer, 0]],
-    roles: [R.concrete, underRole, underRole, R.concrete],
+    roles: [R.concrete, shade(material, O.soffit), shade(material, O.overhang), R.concrete],
     cls: C.structure,
     skip: [0],
   }, {
@@ -197,20 +229,27 @@ function bikeLoops(edge, width, underRole) {
   }];
 }
 
+// SAS steel box, with the bike path cantilevered on the right (south) if any.
+function sasLoops(left, right, bike) {
+  const loops = [boxLoop(steelBoxPoints(left, right), R.sas_white, STEEL_LEVELS), barrierLoop(left, 1), barrierLoop(right, -1)];
+  if (bike > 0) loops.push(...bikeLoops(right, bike, R.sas_white));
+  return loops;
+}
+
 // Concrete box with cantilevered wings and battered webs, depth d.
 function concreteLoops(left, right, depth, bike) {
-  const { tip, root, wing, batter } = CONCRETE_BOX;
-  const webTopL = left - wing;
-  const webTopR = right + wing;
-  const webBotL = webTopL - batter * (depth - root);
-  const webBotR = webTopR + batter * (depth - root);
-  const loops = [{
-    points: [[left, 0], [left, -tip], [webTopL, -root], [webBotL, -depth], [webBotR, -depth], [webTopR, -root], [right, -tip], [right, 0]],
-    roles: [R.concrete, R.concrete, R.concrete, R.concrete, R.concrete, R.concrete, R.concrete, R.roadway],
-    cls: C.structure,
-  }, barrierLoop(left, 1), barrierLoop(right, -1)];
+  const loops = [boxLoop(concreteBoxPoints(left, right, depth), R.concrete, CONCRETE_LEVELS), barrierLoop(left, 1), barrierLoop(right, -1)];
   if (bike > 0) loops.push(...bikeLoops(right, bike, R.concrete));
   return loops;
+}
+
+// A loop set part way (t from 0 to 1) from one section to another of the same
+// structure, taking the second's roles from halfway.
+function morphLoops(from, to, t) {
+  return from.map((loop, index) => ({
+    ...(t < 0.5 ? loop : to[index]),
+    points: loop.points.map((point, k) => [lerp(point[0], to[index].points[k][0], t), lerp(point[1], to[index].points[k][1], t)]),
+  }));
 }
 
 // --- Profiles ----------------------------------------------------------------------
@@ -219,15 +258,19 @@ const eastProfile = smoothProfile(EAST_DECK_PROFILE, 220);
 
 // Deck top along a line by chainage: the shared east-span profile east of the SAS's
 // west hinge, the YBI transition's own grade west of it.
+// The transition structure holds each deck near its tunnel level over most of its
+// length and makes the change late (the dated Street View frames from TI show the
+// two decks a full girder apart over the island's east shore).
+const TRANSITION_EASE = 1.7;
+
 function lineProfile(line, hingeS, westTop, beginS, beginTop) {
-  const hingePoint = line.at(hingeS).point;
-  const hingeTop = eastProfile(hingePoint[0]);
-  const ahead = line.at(hingeS + 10).point;
-  const slope = (eastProfile(ahead[0]) - hingeTop) / 10;
-  const rise = hermite(beginS, beginTop, 0, hingeS, hingeTop, slope);
+  const hingeTop = eastProfile(line.at(hingeS).point[0]);
   return (s) => {
     if (s >= hingeS) return eastProfile(line.at(s).point[0]);
-    if (s >= beginS) return rise(s);
+    if (s >= beginS) {
+      const u = ((s - beginS) / (hingeS - beginS)) ** TRANSITION_EASE;
+      return lerp(beginTop, hingeTop, u * u * (3 - 2 * u));
+    }
     return lerp(westTop, beginTop, s / Math.max(1, beginS));
   };
 }
@@ -248,32 +291,29 @@ function stationsAlong(line, top, s0, s1, step, extra = []) {
 
 // --- Piers ---------------------------------------------------------------------------
 
-function groundOrFooting(groundAt, point) {
-  const ground = groundAt(point[0], point[1]);
-  return ground == null ? WATER_FOOTING_M : ground - GROUND_BURY_M;
-}
-
+// A pile cap at the water: a dark tidal band and a light cap above it, chamfered.
 function pileCap(mesh, center, axis, halfAlong, halfAcross) {
   const ring = planRectangle(center, axis, halfAlong, halfAcross, Math.min(halfAlong, halfAcross) * 0.35);
-  mesh.prism([{ ring, y: WATER_FOOTING_M - 1 }, { ring, y: 1.0 }], R.concrete_dark, C.structure, { capTop: false });
-  mesh.prism([{ ring, y: 1.0 }, { ring, y: PILE_CAP_TOP_M }], R.concrete, C.structure);
+  mesh.prism([{ ring, y: WATER_FOOTING_M - 1 }, { ring, y: TIDAL_BAND_TOP_M }], shade(R.concrete_dark, O.overhang), C.structure, { capTop: false });
+  mesh.prism([{ ring, y: TIDAL_BAND_TOP_M }, { ring, y: PILE_CAP_TOP_M }], shade(R.concrete, O.overhang), C.structure);
 }
 
-// A column from the ground (or a pile cap in the water) up to `top`, optionally
-// flaring over its last metres.
+// A column from the ground (or a pile cap in the water) up to `top`, under a deck,
+// optionally flaring over its last metres.
 function column(mesh, groundAt, center, axis, size, top, flare = null) {
   const ground = groundAt(center[0], center[1]);
   const inWater = ground == null;
-  if (inWater) pileCap(mesh, center, axis, (size.cap?.along ?? size.along + 4) / 2, (size.cap?.across ?? size.across + 4) / 2);
+  if (inWater) pileCap(mesh, center, axis, (size.cap?.along ?? size.along + 5) / 2, (size.cap?.across ?? size.across + 5) / 2);
   const base = inWater ? PILE_CAP_TOP_M - 0.05 : ground - GROUND_BURY_M;
   if (top - base < 1) return;
+  const role = shade(R.concrete, O.under);
   const chamfer = Math.min(size.along, size.across) * 0.18;
   const shaft = planRectangle(center, axis, size.along / 2, size.across / 2, chamfer);
   if (flare && top - flare.height > base + 2) {
     const head = planRectangle(center, axis, flare.along / 2, flare.across / 2, chamfer * 1.3);
-    mesh.prism([{ ring: shaft, y: base }, { ring: shaft, y: top - flare.height }, { ring: head, y: top }], R.concrete, C.structure);
+    mesh.prism([{ ring: shaft, y: base }, { ring: shaft, y: top - flare.height }, { ring: head, y: top }], role, C.structure);
   } else {
-    mesh.prism([{ ring: shaft, y: base }, { ring: shaft, y: top }], R.concrete, C.structure);
+    mesh.prism([{ ring: shaft, y: base }, { ring: shaft, y: top }], role, C.structure);
   }
 }
 
@@ -348,27 +388,31 @@ function buildEastSpan(mesh, { rawOsm, groundAt }, report) {
     const ybitsDepth = (s) => (s < frame2S - 15 ? YBITS_DEPTH.frame1 : s > frame2S + 15 ? YBITS_DEPTH.frame2 : lerp(YBITS_DEPTH.frame1, YBITS_DEPTH.frame2, (s - frame2S + 15) / 30));
     sweep(mesh, stationsAlong(line, top, deck.structureStartS, deck.hingeS, 6, [frame2S - 15, frame2S + 15]),
       (station) => concreteLoops(deck.ybits.left, deck.ybits.right, ybitsDepth(station.s), deck.ybits.bike));
-    // SAS steel box.
-    sweep(mesh, stationsAlong(line, top, deck.hingeS, deck.sasEndS, 10, [deck.w2S, deck.e2S]),
-      () => sasLoops(deck.sas.left, deck.sas.right, deck.sas.bike));
-    // Skyway: haunched between piers.
+    // Skyway: haunched between piers, flaring deep over each.
     const piers = deck.skywayPiers;
     const skywayDepth = (s) => {
       for (let k = 1; k < piers.length; k += 1) {
         if (s <= piers[k]) {
           const t = (s - piers[k - 1]) / (piers[k] - piers[k - 1]);
-          return lerp(SKYWAY.depth_midspan_m, SKYWAY.depth_pier_m, (2 * t - 1) ** 2);
+          return lerp(SKYWAY.depth_midspan_m, SKYWAY.depth_pier_m, Math.abs(2 * t - 1) ** SKYWAY_HAUNCH_POWER);
         }
       }
       return SKYWAY.depth_midspan_m;
     };
+    const skywaySection = (s) => concreteLoops(deck.concrete.left, deck.concrete.right, skywayDepth(s), deck.concrete.bike);
+    const sasSection = () => sasLoops(deck.sas.left, deck.sas.right, deck.sas.bike);
+    // SAS steel box, turning into the Skyway's concrete box over the east hinge.
+    const morph0 = deck.sasEndS - SAS_TO_SKYWAY_M / 2;
+    const morph1 = deck.sasEndS + SAS_TO_SKYWAY_M / 2;
+    sweep(mesh, stationsAlong(line, top, deck.hingeS, morph0, 10, [deck.w2S, deck.e2S]), sasSection);
+    sweep(mesh, stationsAlong(line, top, morph0, morph1, 4),
+      (station) => morphLoops(sasSection(), skywaySection(station.s), (station.s - morph0) / (morph1 - morph0)));
     const skywayEnd = deck.touchdownS;
     const haunchStations = [];
     for (let k = 1; k < piers.length; k += 1) {
-      for (const f of [0.08, 0.17, 0.28, 0.4, 0.5, 0.6, 0.72, 0.83, 0.92]) haunchStations.push(lerp(piers[k - 1], piers[k], f));
+      for (const f of [0.04, 0.09, 0.15, 0.22, 0.3, 0.4, 0.5, 0.6, 0.7, 0.78, 0.85, 0.91, 0.96]) haunchStations.push(lerp(piers[k - 1], piers[k], f));
     }
-    sweep(mesh, stationsAlong(line, top, deck.sasEndS, skywayEnd, 16, [...piers, ...haunchStations]),
-      (station) => concreteLoops(deck.concrete.left, deck.concrete.right, skywayDepth(station.s), deck.concrete.bike));
+    sweep(mesh, stationsAlong(line, top, morph1, skywayEnd, 16, [...piers, ...haunchStations]), (station) => skywaySection(station.s));
     // Oakland touchdown to the abutment.
     sweep(mesh, stationsAlong(line, top, skywayEnd, line.length, 18, deck.touchdownPiers),
       () => concreteLoops(deck.concrete.left, deck.concrete.right, TOUCHDOWN.depth, deck.concrete.bike));
@@ -392,11 +436,11 @@ function buildEastSpan(mesh, { rawOsm, groundAt }, report) {
     // Abutment at the touchdown.
     const end = line.at(line.length);
     const ring = planRectangle(add2(end.point, end.tangent, -1), end.tangent, 4, (deck.concrete.left - deck.concrete.right + deck.concrete.bike) / 2 + 1);
-    mesh.prism([{ ring, y: WATER_FOOTING_M }, { ring, y: top(line.length) + 0.3 }], R.concrete, C.structure);
+    mesh.prism([{ ring, y: WATER_FOOTING_M }, { ring, y: top(line.length) + 0.3 }], shade(R.concrete, O.overhang), C.structure);
   }
   buildTransitionBents(mesh, decks, groundAt, report);
 
-  buildSasTower(mesh, axis);
+  buildSasTower(mesh, axis, wb.top(chainageAtAxis(wb.line, 0, axis)));
   buildSasCrossbeams(mesh, axis, decks);
   buildSasEndPiers(mesh, axis, decks, groundAt);
   buildSasCables(mesh, axis, decks, report);
@@ -440,14 +484,14 @@ function buildTransitionBents(mesh, decks, groundAt, report) {
         const legs = [offsetPlan(otherPoint.point, otherPoint.tangent, halfOther), offsetPlan(otherPoint.point, otherPoint.tangent, -halfOther)];
         for (const leg of legs) column(mesh, groundAt, leg, otherPoint.tangent, { across: 2.4, along: 2.4 }, soffit - 1.4);
         const capY = soffit - 0.7;
-        mesh.beam(world(legs[0][0], legs[0][1], capY), world(legs[1][0], legs[1][1], capY), 2.6, 1.6, R.concrete, C.structure);
+        mesh.beam(world(legs[0][0], legs[0][1], capY), world(legs[1][0], legs[1][1], capY), 2.6, 1.6, shade(R.concrete, O.under), C.structure);
         report.ybits_bents += 1;
         continue;
       }
       if (near.distance < (other.ybits.left - other.ybits.right) / 2 + 1 && otherTop > soffit) continue;
       column(mesh, groundAt, point, tangent, YBITS_COLUMN, soffit - YBITS_COLUMN.cap.depth + 0.1);
       const cap = planRectangle(point, tangent, YBITS_COLUMN.cap.along / 2, YBITS_COLUMN.cap.across / 2, 0.5);
-      mesh.prism([{ ring: cap, y: soffit - YBITS_COLUMN.cap.depth }, { ring: cap, y: soffit + 0.1 }], R.concrete, C.structure);
+      mesh.prism([{ ring: cap, y: soffit - YBITS_COLUMN.cap.depth }, { ring: cap, y: soffit + 0.1 }], shade(R.concrete, O.under), C.structure);
       report.ybits_bents += 1;
     }
   }
@@ -455,7 +499,7 @@ function buildTransitionBents(mesh, decks, groundAt, report) {
 
 // The SAS tower: four tapering legs split by a cruciform gap, shear links across the
 // gap at 20 levels, a head block and the cable saddle; the pile cap at the water.
-function buildSasTower(mesh, axis) {
+function buildSasTower(mesh, axis, deckTop) {
   const center = axis.center;
   const { along, across } = axis;
   const baseAlong = SAS.tower_base_m.along;
@@ -463,12 +507,15 @@ function buildSasTower(mesh, axis) {
     const t = (y - TOWER.baseY) / (TOWER.headTop - TOWER.baseY);
     return { along: lerp(baseAlong, TOWER.topAlong, t) / 2, across: lerp(TOWER.baseAcross, TOWER.topAcross, t) / 2 };
   };
-  const cap = TOWER.pileCap;
-  const capRing = planRectangle(center, along, cap.along / 2, cap.across / 2, 3);
-  mesh.prism([{ ring: capRing, y: WATER_FOOTING_M - 1 }, { ring: capRing, y: 0.8 }], R.concrete_dark, C.structure, { capTop: false });
-  mesh.prism([{ ring: capRing, y: 0.8 }, { ring: capRing, y: cap.top }], R.concrete, C.structure);
+  // A white footing at the waterline, its foot dark from the tide.
+  const footing = TOWER.footing;
+  const footingRing = planRectangle(center, along, footing.along / 2, footing.across / 2, 3);
+  mesh.prism([{ ring: footingRing, y: WATER_FOOTING_M - 1 }, { ring: footingRing, y: TIDAL_BAND_TOP_M }], shade(R.concrete_dark, O.overhang), C.structure, { capTop: false });
+  mesh.prism([{ ring: footingRing, y: TIDAL_BAND_TOP_M }, { ring: footingRing, y: footing.top }], R.sas_white, C.structure);
   const g = TOWER.gap / 2;
   // One leg: the quadrant (sa, sc) of the tower section, its outer corner chamfered.
+  // Its two faces on the cruciform slot see little sky; below the decks the rest
+  // sees less than above them.
   const legRing = (y, sa, sc) => {
     const half = halfAt(y);
     const k = TOWER.chamfer * Math.min(half.along - g, half.across - g);
@@ -476,17 +523,25 @@ function buildSasTower(mesh, axis) {
     const ring = [at(g, g), at(half.along, g), at(half.along, half.across - k), at(half.along - k, half.across), at(g, half.across)];
     return sa * sc > 0 ? ring : [...ring].reverse();
   };
-  const levels = [TOWER.baseY, 52, 104, TOWER.headBottom];
+  const legRoles = (sa, sc, outer) => {
+    const slot = shade(R.sas_white, O.slot);
+    const face = shade(R.sas_white, outer);
+    const roles = [slot, face, face, face, slot];
+    return sa * sc > 0 ? roles : [roles[3], roles[2], roles[1], roles[0], roles[4]];
+  };
   for (const [sa, sc] of [[1, 1], [1, -1], [-1, 1], [-1, -1]]) {
-    mesh.prism(levels.map((y) => ({ ring: legRing(y, sa, sc), y })), R.sas_white, C.structure, { capTop: false });
+    mesh.prism([TOWER.baseY, deckTop].map((y) => ({ ring: legRing(y, sa, sc), y })), R.sas_white, C.structure, { capTop: false, roles: legRoles(sa, sc, O.under) });
+    mesh.prism([deckTop, 104, TOWER.headBottom].map((y) => ({ ring: legRing(y, sa, sc), y })), R.sas_white, C.structure, { capTop: false, roles: legRoles(sa, sc, O.open) });
   }
-  // Shear links: plates filling the gap, flush with the leg faces.
+  // Shear links: plates across the slot, flush with the leg faces, bright ticks
+  // on its dark line.
   for (let k = 0; k < TOWER.links; k += 1) {
     const y0 = lerp(TOWER.linkBottom, TOWER.linkTop, k / (TOWER.links - 1));
     const y1 = y0 + TOWER.linkHeight;
     const half = halfAt((y0 + y1) / 2);
-    mesh.prism([0, 1].map((m) => ({ ring: planRectangle(center, along, half.along - 0.05, g, 0), y: m ? y1 : y0 })), R.sas_white, C.detail, { capBottom: true });
-    mesh.prism([0, 1].map((m) => ({ ring: planRectangle(center, along, g, half.across - 0.05, 0), y: m ? y1 : y0 })), R.sas_white, C.detail, { capBottom: true });
+    const role = shade(R.sas_white, y1 < deckTop ? O.under : O.open);
+    mesh.prism([0, 1].map((m) => ({ ring: planRectangle(center, along, half.along - 0.05, g, 0), y: m ? y1 : y0 })), role, C.structure, { capBottom: true });
+    mesh.prism([0, 1].map((m) => ({ ring: planRectangle(center, along, g, half.across - 0.05, 0), y: m ? y1 : y0 })), role, C.structure, { capBottom: true });
   }
   // Head block and saddle.
   const headHalf = halfAt(TOWER.headBottom);
@@ -507,7 +562,7 @@ function buildSasCrossbeams(mesh, axis, decks) {
     const innerW = offsetPlan(pw.point, pw.tangent, wb.sas.right + SAS_BOX.webInset * 0.6);
     const innerE = offsetPlan(pe.point, pe.tangent, eb.sas.left - SAS_BOX.webInset * 0.6);
     const y = (wb.top(sw) + eb.top(se)) / 2 - 0.8 - 1.6;
-    mesh.beam(world(innerW[0], innerW[1], y), world(innerE[0], innerE[1], y), 3.6, 3.2, R.sas_white, C.detail);
+    mesh.beam(world(innerW[0], innerW[1], y), world(innerE[0], innerE[1], y), 3.6, 3.2, shade(R.sas_white, O.under), C.detail);
   }
 }
 
@@ -525,7 +580,7 @@ function buildSasEndPiers(mesh, axis, decks, groundAt) {
       offsetPlan(points[1].point, points[1].tangent, points[1].deck.sas.right + 1),
     ];
     mesh.beam(world(outer[0][0], outer[0][1], soffit - END_PIER.capDepth / 2 + 0.2), world(outer[1][0], outer[1][1], soffit - END_PIER.capDepth / 2 + 0.2),
-      END_PIER.capAlong, END_PIER.capDepth, R.concrete, C.structure);
+      END_PIER.capAlong, END_PIER.capDepth, shade(R.concrete, O.under), C.structure);
     for (const p of points) {
       column(mesh, groundAt, p.point, p.tangent, { across: END_PIER.columnAcross, along: END_PIER.columnAlong, cap: { across: 16, along: 13 } }, soffit - END_PIER.capDepth + 0.4);
     }
@@ -577,7 +632,19 @@ function buildSasCables(mesh, axis, decks, report) {
     for (let sigma = SAS.w2_station_m; sigma < 0; sigma += CABLE.step) points.push(cablePoint(sigma).world);
     for (let sigma = 0; sigma <= SAS.e2_station_m; sigma += CABLE.step) points.push(cablePoint(sigma).world);
     points.push(cablePoint(SAS.e2_station_m).world);
-    mesh.wirePath(points, CABLE.radius, R.sas_white);
+    // At W2 the cable bends down round the deck's end to its deviation saddle under
+    // the box (the "jacked deviation"): a knuckle at each outer corner.
+    const knuckle = [];
+    for (let k = 1; k <= KNUCKLE.segments; k += 1) {
+      const angle = (Math.PI / 2) * (k / KNUCKLE.segments);
+      const sigma = SAS.w2_station_m - KNUCKLE.radius * Math.sin(angle);
+      const plan = axis.plan(sigma, axis.lateral(westEdge.plan));
+      knuckle.push(world(plan[0], plan[1], westY - KNUCKLE.radius * (1 - Math.cos(angle)) * KNUCKLE.drop));
+    }
+    mesh.wirePath([...knuckle.reverse(), ...points], CABLE.radius, R.sas_white);
+    const housingTop = world(...axis.plan(SAS.w2_station_m - 2, axis.lateral(westEdge.plan)), westY + 0.6);
+    const housingFoot = world(...axis.plan(SAS.w2_station_m - 2, axis.lateral(westEdge.plan)), westY - SAS_BOX.depth - 1.2);
+    mesh.beam(housingTop, housingFoot, 3.2, 3.6, shade(R.sas_white, O.overhang), C.structure);
     report.cable_segments += points.length - 1;
     // Suspenders every 10 m, in the cable plane down to the deck edge.
     for (const direction of [-1, 1]) {
@@ -628,7 +695,9 @@ export function bayBridgeMesh({ rawOsm, groundAt }) {
     light_poles: 0,
     east_deck_m: 0,
   };
-  buildEastSpan(mesh, { rawOsm, groundAt }, report);
+  const { decks } = buildEastSpan(mesh, { rawOsm, groundAt }, report);
+  buildYbiCrossing(mesh, { rawOsm, groundAt, decks, westTop: westSpanFrame().top(0) }, report);
+  buildWestSpan(mesh, { groundAt }, report);
   invariant(mesh.indices.length > 0, "Bay Bridge mesh is empty");
   report.vertices = mesh.vertexCount;
   report.triangles = mesh.indices.length / 3;
