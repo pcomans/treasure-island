@@ -27,9 +27,9 @@ uniform vec3 axis_base = vec3(0.0);
 uniform float height_m = 21.03;
 uniform float steel_from_m = 6.0;
 uniform float min_pixels = 2.0;
-uniform float tip_pixels = 1.0;
+uniform float tip_pixels = 1.4;
 // Glass-fibre-reinforced concrete with a slight warm cast (the close photo).
-uniform vec3 concrete_color : source_color = vec3(0.58, 0.52, 0.44);
+uniform vec3 concrete_color : source_color = vec3(0.57, 0.525, 0.465);
 uniform vec3 steel_color : source_color = vec3(0.62, 0.64, 0.67);
 uniform float steel_metallic : hint_range(0.0, 1.0) = 0.55;
 uniform float steel_roughness : hint_range(0.0, 1.0) = 0.3;

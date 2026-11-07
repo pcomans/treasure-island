@@ -379,6 +379,25 @@ function ringSegments(multiPolygon) {
   return segments;
 }
 
+// The nearest point on a multipolygon's outline.
+function nearestOutlinePoint(point, multiPolygon) {
+  let best = null;
+  let bestDistance = Infinity;
+  for (const [a, b] of ringSegments(multiPolygon)) {
+    const dx = b[0] - a[0];
+    const dy = b[1] - a[1];
+    const length2 = dx * dx + dy * dy;
+    const t = length2 > 0 ? Math.max(0, Math.min(1, ((point[0] - a[0]) * dx + (point[1] - a[1]) * dy) / length2)) : 0;
+    const candidate = [a[0] + t * dx, a[1] + t * dy];
+    const distance = Math.hypot(point[0] - candidate[0], point[1] - candidate[1]);
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      best = candidate;
+    }
+  }
+  return best;
+}
+
 function distanceToMultiPolygon(point, multiPolygon) {
   if (pointInMultiPolygon(point, multiPolygon, true)) return 0;
   let best = Infinity;
@@ -1330,9 +1349,9 @@ export function buildYbiContext({ projectRoot, land, boundary, playableBoundary,
     for (const joined of members) addObject(joined, spec.object_key, [spec.object_key], null);
     surfaceReport[klass] = { sources: members.length, area_m2: round2(multiPolygonArea(geometry)) };
   }
-  // The summit reservoir, under every road and path: its water, and its concrete banks,
-  // the steep ground within bank_reach_m outside its mapped edge (the rest of that band
-  // claimed as its bare verge).
+  // The summit reservoir, under every road and path: its water on the level ground of
+  // its mapped area, and its concrete banks, the steep ground of that area and within
+  // bank_reach_m outside it (the rest of that band claimed as its bare verge).
   const basins = byCategory("context_ybi_water");
   if (basins.length > 0) {
     const basinArea = rawUnion(...areaGeometry(basins));
@@ -1340,20 +1359,23 @@ export function buildYbiContext({ projectRoot, land, boundary, playableBoundary,
     for (const polygon of basinArea) {
       for (const ring of polygon) edges.push(ribbon([...ring, ring[0]], 2 * config.basin.bank_reach_m, "context_ybi_water edge"));
     }
-    const parts = {
-      water: claim(basinArea),
-      lining: claim(rawIntersect(rawUnion(...edges), land)),
-    };
-    const steepBank = (entry) => {
+    const water = claim(basinArea);
+    const band = claim(rawIntersect(rawUnion(...edges), land));
+    const parts = { water, lining: rawUnion(water, band) };
+    const slopeOf = (entry) => {
       const [a, b, c] = entry.plan;
       const u = [b[0] - a[0], entry.y[1] - entry.y[0], b[1] - a[1]];
       const v = [c[0] - a[0], entry.y[2] - entry.y[0], c[1] - a[1]];
       const n = [u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0]];
-      return Math.hypot(n[0], n[2]) >= config.basin.bank_slope * Math.abs(n[1]);
+      return Math.hypot(n[0], n[2]) / Math.max(1e-9, Math.abs(n[1]));
+    };
+    const keep = {
+      water: (entry) => slopeOf(entry) <= config.basin.water_slope,
+      lining: (entry) => slopeOf(entry) >= config.basin.bank_slope,
     };
     const basinKeys = Object.values(YBI_BASIN_RECORDS).map((spec) => spec.object_key);
     for (const [part, spec] of Object.entries(YBI_BASIN_RECORDS)) {
-      const mesh = drapeMultiPolygon(parts[part], terrain, config.surfaces.bias_m, part === "lining" ? steepBank : null);
+      const mesh = drapeMultiPolygon(parts[part], terrain, config.surfaces.bias_m, keep[part]);
       invariant(mesh.indices.length > 0, `${spec.object_key} draped no triangles`);
       records.push({ object_key: spec.object_key, context_kind: "ybi_surface", material_key: spec.material_key, source_keys: basins.map((joined) => joined.row.source_key), mesh });
       surfaceReport[`basin_${part}`] = { sources: basins.length, area_m2: round2(multiPolygonArea(parts[part])) };
@@ -1399,8 +1421,19 @@ export function buildYbiContext({ projectRoot, land, boundary, playableBoundary,
     });
     spireMesh = built.mesh;
     if (structure.tree_clearance) {
-      invariant(config.vegetation.species[structure.tree_clearance.species], `${joined.row.source_key} tree clearance names no species`);
-      treeClearances.push({ center, radius: structure.tree_clearance.radius_m, top: base + structure.tree_clearance.top_above_base_m, species: structure.tree_clearance.species });
+      const clearance = structure.tree_clearance;
+      invariant(config.vegetation.species[clearance.species], `${joined.row.source_key} tree clearance names no species`);
+      // Treasure Island lies towards the nearest point of its playable outline.
+      const shore = nearestOutlinePoint(center, playableBoundary);
+      const towards = [shore[0] - center[0], shore[1] - center[1]];
+      treeClearances.push({
+        center,
+        radius: clearance.radius_m,
+        towards: towards.map((value) => value / Math.hypot(...towards)),
+        nearTop: base + clearance.near_top_above_base_m,
+        farTop: base + clearance.far_top_above_base_m,
+        species: clearance.species,
+      });
     }
     addObject(joined, YBI_BUILDINGS_KEY, massingKeys, footprint, height);
     const report = {
@@ -1667,11 +1700,15 @@ export function buildYbiContext({ projectRoot, land, boundary, playableBoundary,
     const center = groundAt(east, north);
     if (center == null || center - foot > 1.2) return false;
     if (center > veg.upper_slope_m && speciesName !== "garden_tree") scale *= veg.upper_slope_factor;
-    // Round a structure that keeps its silhouette, the crown stays under its set height;
-    // a species too tall for that stands as the clearance's low round crown instead.
+    // Round a structure that keeps its silhouette, the crown stays under its set height,
+    // lower on the side towards Treasure Island; a species too tall for that stands as
+    // the clearance's low round crown instead.
     for (const clearance of treeClearances) {
-      if (Math.hypot(east - clearance.center[0], north - clearance.center[1]) > clearance.radius) continue;
-      const allowed = (clearance.top - foot) / (nominalHeight(species.prop, variant) * Math.sqrt(stretch));
+      const offset = [east - clearance.center[0], north - clearance.center[1]];
+      if (Math.hypot(...offset) > clearance.radius) continue;
+      // A crown between it and Treasure Island shows higher against it from there.
+      const nearSide = offset[0] * clearance.towards[0] + offset[1] * clearance.towards[1] > 0;
+      const allowed = ((nearSide ? clearance.nearTop : clearance.farTop) - foot) / (nominalHeight(species.prop, variant) * Math.sqrt(stretch));
       if (allowed >= scale) continue;
       if (allowed >= 0.5) {
         scale = allowed;
