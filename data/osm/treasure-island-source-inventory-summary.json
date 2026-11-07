@@ -10,9 +10,18 @@
   "status": "source inventory only; no derived game geometry exists",
   "one_row_per_source_key": true,
   "counts": {
-    "total_unique_rows": 739,
+    "total_unique_rows": 1153,
     "playable_unique_rows": 735,
-    "context_unique_rows": 4,
+    "context_unique_rows": 418,
+    "ybi_context_category_memberships": {
+      "context_ybi_building": 89,
+      "context_ybi_building_part": 4,
+      "context_ybi_structure": 1,
+      "context_ybi_road": 239,
+      "context_ybi_paved_area": 29,
+      "context_ybi_wall": 51,
+      "context_ybi_water": 1
+    },
     "playable_category_memberships": {
       "land_boundary": 1,
       "terrain_shoreline": 22,
@@ -34,6 +43,7 @@
       "w1011568818",
       "r13543937",
       "r13543938"
-    ]
+    ],
+    "ybi_detail_rows_rule": "frozen ways and relations with a vertex strictly inside w26767311 less w26767313, not already ledger rows, in a context_ybi_* category; the Bay Bridge track is excluded"
   }
 }

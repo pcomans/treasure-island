@@ -3,8 +3,8 @@
     {
       "name": "source_rows",
       "result": "pass",
-      "threshold": 739,
-      "value": 739
+      "threshold": 1153,
+      "value": 1153
     },
     {
       "name": "playable_rows",
@@ -15,8 +15,8 @@
     {
       "name": "context_rows",
       "result": "pass",
-      "threshold": 4,
-      "value": 4
+      "threshold": 418,
+      "value": 418
     },
     {
       "name": "unresolved_rows",
