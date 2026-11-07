@@ -204,7 +204,8 @@ Follow-ups from the code review (all non-blocking at `e51de21d`):
   - the view pull in its shader assumes a perspective camera, with no orthographic branch;
   - the 0.23 m clip should share a constant with the bottom rail;
   - the `ROUGHNESS` comment says the sheet keeps its own finish, but the shader sets a constant.
+- **Mac publish step** (`.github/workflows/mac-build.yml`): when a re-run finds its tag, the step asks `gh api` whether that tag has a published release, with the call's error output hidden. So a passing failure of that call, such as a 502, reads as "no release" and prints the advice to delete the tag by hand, although the release exists. Deleting a live release's tag is reported to turn the release into a draft, so check the [releases page](https://github.com/pcomans/treasure-island/releases) before acting on that advice. The step itself changes nothing. The fix is one line: drop `2>/dev/null` on the inner `gh api`, so the real error shows in the log (found in review, 2026-11-07).
 - **Docs:**
   - README.md shows `building_fit_test.gd` run with `--headless`, which the test refuses.
-  - PLAYTEST.md and HUMAN.md should point to the Mac build that CI publishes.
+  - PLAYTEST.md should point to the Mac build that CI publishes.
   - AGENTS.md should state the decal policy: decals are used freely, and their absence on the web is acceptable.

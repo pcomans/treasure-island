@@ -24287,3 +24287,9 @@ Comparing every record against the base commit found a change the author hadn't 
 - What changed: a tag with no published release now gets its own error and no auto-repair, the refusal wording says HTTP 404 or 403, and the notices say the newer run publishes if it passes. The fake can now apply a write and drop the reply: 89 of 89 checks over 19 cases, and five deliberate breakages caught.
 - What did not work well: I read this exact gh path when I first read its source (the clean-up after a failed publish), judged a lost reply too unlikely to matter, and left it out of the fake and the hand-off, while my workflow comment said nothing changes a published release. The reviewer found what I had seen and dropped.
 - What the team should change next time: Put a known failure path in the hand-off even when no fix is planned, so the reviewer decides whether it matters rather than the author. Make edits in a separate worktree while a suite runs in yours; here the suite took its last lock during this fix, and its tree stayed frozen at the reviewed commit.
+
+### mac-releases-code-review — 2026-11-07 — review of the delta to a5fe66f8
+
+- What worked well: Adding the lost-reply case let the fix be tested from the exact broken state.
+- What did not work well: Hiding stderr repeated a fail-open pattern.
+- What the team should change next time: When a check's failure leads to advice for a person, keep the underlying error visible.
