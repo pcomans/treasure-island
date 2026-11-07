@@ -20,11 +20,15 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 ## Buildings
 
 - A building side with no dated photo of that side stays plain on purpose; no detail is invented for it. A new dated photo of such a side lets it be detailed.
+- **Owner shot list, Maceo May (OSM r19685981):** these walls have no dated photo, so they stay plain:
+  - the court's east, west and north walls, and its south wall below the top floors (an undated architect's photo shows the east wall, which doesn't count);
+  - the middle of the north wall along the lane to Star View Court, seen only at a grazing angle from each end.
+
+  A square-on walk down the lane, and the court walls if they can be reached, would let them be modelled.
 - Finish items (seen in review, by 2026-11-05):
   - the generic "noisy stone" placeholder texture is still on a few visible walls:
     - the Fire Station 48 NNW notch, kept by an earlier study decision; changing it needs an explicit decision;
     - the B225 WSW wall;
-    - the Maceo May SW corner;
     - the ends of 1317;
   - the Exposition roofs render tan or olive; photos show grey shingle;
   - the 901 Avenue B mansard skirt is too shallow: about 12° where about 30° is needed;
@@ -32,7 +36,6 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
     - a blank side faces Avenue of the Palms / Bruton;
     - the recessed rear entries have no steps;
     - the belfry slots should be mid-grey slats;
-  - Maceo May: the WSW ground-floor windows at its north end sit above a 2 m dip in the terrain, and its inner courtyard is untouched.
 - Mismatches the street reviews found against dated photos (seen in review, 2026-11-05):
   - **Mersea lot:** at Street View pano TKhpp heading 190 (Sep 2025) a white event tent renders as a solid grey building with a roll-up door and windows; at heading 330 a white tent with a hedge renders as a flat white box.
   - The Mersea venue's containers are green where the photo shows blue in front.

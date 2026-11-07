@@ -2321,6 +2321,24 @@
               -179.35,
               365.41
             ]
+          ],
+          [
+            [
+              -203.05,
+              314.63
+            ],
+            [
+              -183.03,
+              353.81
+            ],
+            [
+              -191.04,
+              357.91
+            ],
+            [
+              -211.06,
+              318.72
+            ]
           ]
         ],
         "exclude_xz": [],
@@ -2362,6 +2380,35 @@
           },
           "min_leaf_m": 2,
           "reason": "The paseo reads flat along Maceo May in the dated photos, level with the ground floors at both of its ends."
+        },
+        {
+          "id": "foot_of_490_south_east",
+          "shape": {
+            "points_xz": [
+              [
+                -192.32,
+                313.64
+              ],
+              [
+                -176.85,
+                343.92
+              ],
+              [
+                -186.65,
+                348.92
+              ],
+              [
+                -202.12,
+                318.64
+              ]
+            ]
+          },
+          "rule": {
+            "kind": "level",
+            "elevation_m": 4.33
+          },
+          "min_leaf_m": 2,
+          "reason": "The level carries past the south-east corner of 490 Avenue of the Palms, so its side door stands on flat ground as in the dated photos and the fade into the open lot starts beyond it."
         }
       ]
     }
