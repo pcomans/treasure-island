@@ -95,7 +95,7 @@ const STREET_GROUND_SURFACES := {
 	# garden paths in 3 m poured panels (one UV unit a panel, warm buff
 	# concrete), and the pink-painted concrete stripes under the Canopy of Sky
 	# (ph05, Sep 2025). The beds' mulch is PARK_BED below.
-	"park_asphalt": {"albedo": preload("res://game/resources/textures/world/street/park_asphalt.png"), "uv_scale": 5.0, "roughness": 0.92},
+	"park_asphalt": {"albedo": preload("res://game/resources/textures/world/street/park_asphalt.png"), "uv_scale": 5.0, "roughness": 0.92, "specular": ASPHALT_SPECULAR},
 	"park_paint_pink": {"albedo": preload("res://game/resources/textures/world/street/street_paint_wear.png"), "uv_scale": 5.0, "roughness": 0.85, "tint": Color(0.86, 0.55, 0.58)},
 	"park_gravel": {"albedo": preload("res://game/resources/textures/world/vegetation/park_gravel.png"), "uv_scale": 5.0, "roughness": 0.95},
 	"park_concrete": {"albedo": preload("res://game/resources/textures/world/street/street_concrete_panels.png"), "uv_scale": 0.5, "roughness": 0.9, "tint": Color(1.0, 0.96, 0.9)},
@@ -121,10 +121,10 @@ const STREET_GROUND_SURFACES := {
 	# poured concrete (the Poly Haven floor concrete greyed, 2.5 m tiles), and
 	# generated pale graded sand (tinted the same way), dark excavated soil (2 m
 	# tiles) and shallow murky green-grey ponds (5 m tiles, wet).
-	"yard_asphalt": {"albedo": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"), "uv_scale": 4.76, "roughness": 1.0, "tint": Color(1.15, 1.16, 1.16)},
-	"yard_asphalt_pale": {"albedo": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"), "uv_scale": 4.76, "roughness": 1.0, "tint": Color(1.66, 1.65, 1.59)},
+	"yard_asphalt": {"albedo": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"), "uv_scale": 4.76, "roughness": 1.0, "specular": ASPHALT_SPECULAR, "tint": Color(1.15, 1.16, 1.16)},
+	"yard_asphalt_pale": {"albedo": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"), "uv_scale": 4.76, "roughness": 1.0, "specular": ASPHALT_SPECULAR, "tint": Color(1.66, 1.65, 1.59)},
 	# The Johnson St lot's new, dark asphalt (the same tiles, darkened and a little warmer).
-	"yard_asphalt_fresh": {"albedo": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"), "uv_scale": 4.76, "roughness": 1.0, "tint": Color(0.84, 0.82, 0.81)},
+	"yard_asphalt_fresh": {"albedo": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"), "uv_scale": 4.76, "roughness": 1.0, "specular": ASPHALT_SPECULAR, "tint": Color(0.84, 0.82, 0.81)},
 	# The Mersea promenade's verges (owner video IMG_0960, 2026-11-06): buff decomposed
 	# granite, grey-brown bark mulch and dark crushed rock, and the warm poured slab at
 	# its south end, low in specular so the sky's sheen doesn't wash them out at a
@@ -1025,8 +1025,6 @@ func _street_ground_material(material_key: String) -> StandardMaterial3D:
 	material.resource_name = material_key
 	material.albedo_texture = surface.albedo as Texture2D
 	material.albedo_color = surface.get("tint", Color.WHITE) as Color
-	if "asphalt" in material_key:
-		material.metallic_specular = ASPHALT_SPECULAR
 	material.roughness = float(surface.roughness)
 	material.metallic_specular = float(surface.get("specular", 0.5))
 	var uv_scale := float(surface.uv_scale)
@@ -1093,6 +1091,8 @@ func _material_for(material_key: String, feature_kind: String, is_context: bool)
 		material.cull_mode = BaseMaterial3D.CULL_DISABLED
 	if feature_kind == "road_path" or material_key in ["street_parking", "major_area_paved"]:
 		material.roughness = 1.0
+	# Asphalt only: pedestrian concrete keeps the default specular.
+	if material_key in ["road_path", "street_parking", "major_area_paved"]:
 		material.metallic_specular = ASPHALT_SPECULAR
 	if material_key == "context_bay_bridge":
 		var palette := Image.create(BAY_BRIDGE_PALETTE.size(), 1, false, Image.FORMAT_RGB8)

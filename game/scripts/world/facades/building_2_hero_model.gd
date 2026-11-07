@@ -512,9 +512,9 @@ static func _emit_wing_bays(t: Dictionary, wall: Dictionary, runs: Array, bay_co
 
 
 ## April2017 and HABS2003 A3: full-height broad bodies and narrow ribs
-## stand forward of connecting pale infill, with upper/lower glazing behind it.
+## stand forward of connecting grey infill, with upper/lower glazing behind it.
 ## Reuse the B2 closed aperture family, now as one complete two-storey unit.
-## All dimensions and the modest cream/white coating distinction are reversible
+## All dimensions and the modest cream/grey coating distinction are reversible
 ## production inference, not surveyed depths or a reconstruction of hidden work.
 static func _emit_sse_assembly(t: Dictionary, chain: Array, bay_count: int, service_bays: Array) -> int:
 	var length := _chain_length(chain)
@@ -593,7 +593,7 @@ static func _sse_infill_material() -> ShaderMaterial:
 	# A coating-color variant of the existing mapped mineral family, not a
 	# fixed shadow/AO tint. Geometry and the stock lighting provide the depth.
 	var material := WALL_MATERIAL.duplicate() as ShaderMaterial
-	material.resource_name = "building_2_sse_pale_infill_coating"
+	material.resource_name = "building_2_sse_grey_infill_coating"
 	material.set_shader_parameter("cream_color", Color(0.74, 0.75, 0.71, 1.0))
 	return material
 
