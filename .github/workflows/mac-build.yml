@@ -22,9 +22,10 @@
 #   APPSTORE_API_KEY_P8_BASE64    role): its Key ID, the Issuer ID shown above the
 #                                 key list, and the downloaded AuthKey_<id>.p8,
 #                                 base64: `base64 -i AuthKey_<id>.p8 | pbcopy`
-# Without MACOS_CERTIFICATE_P12_BASE64 the build stays ad-hoc signed and is not
-# notarized (a warning says so) and still publishes. With it, every other secret
-# is required and any signing or notarization failure fails the run. The publish
+# With none of these secrets set, the build stays ad-hoc signed and is not
+# notarized (a warning says so) and still publishes. With any of them set, all six
+# are required (a missing one fails the run, as with a misnamed certificate
+# secret) and any signing or notarization failure fails the run. The publish
 # job uses GITHUB_TOKEN.
 name: Mac build
 
@@ -155,15 +156,20 @@ jobs:
           APPSTORE_API_KEY_P8_BASE64: ${{ secrets.APPSTORE_API_KEY_P8_BASE64 }}
         # Reports only which secrets are set, never their values.
         run: |
-          if [ -z "${MACOS_CERTIFICATE_P12_BASE64}" ]; then
-            echo "::warning::MACOS_CERTIFICATE_P12_BASE64 is not set, so this build stays ad-hoc signed and is NOT notarized. Add the secrets listed at the top of mac-build.yml to sign and notarize it."
+          missing=""
+          present=""
+          for name in MACOS_CERTIFICATE_P12_BASE64 MACOS_CERTIFICATE_PASSWORD APPLE_TEAM_ID APPSTORE_API_KEY_ID APPSTORE_API_ISSUER_ID APPSTORE_API_KEY_P8_BASE64; do
+            if [ -n "${!name}" ]; then present="${present} ${name}"; else missing="${missing} ${name}"; fi
+          done
+          if [ -z "${present}" ]; then
+            echo "::warning::No signing secrets are set, so this build stays ad-hoc signed and is NOT notarized. Add the secrets listed at the top of mac-build.yml to sign and notarize it."
             echo "sign=false" >> "${GITHUB_OUTPUT}"
             exit 0
           fi
-          missing=""
-          for name in MACOS_CERTIFICATE_PASSWORD APPLE_TEAM_ID APPSTORE_API_KEY_ID APPSTORE_API_ISSUER_ID APPSTORE_API_KEY_P8_BASE64; do
-            [ -n "${!name}" ] || missing="${missing} ${name}"
-          done
+          if [ -z "${MACOS_CERTIFICATE_P12_BASE64}" ]; then
+            echo "::error::Some signing secrets are set (${present# }) but MACOS_CERTIFICATE_P12_BASE64 is not. The certificate secret is probably misnamed; check its exact name. Refusing to publish an unsigned build while signing is half configured."
+            exit 1
+          fi
           if [ -n "${missing}" ]; then
             echo "::error::MACOS_CERTIFICATE_P12_BASE64 is set, so the build must be signed and notarized, but these secrets are missing:${missing}"
             exit 1
@@ -230,7 +236,7 @@ jobs:
 
           identities="$(security find-identity -v -p codesigning "${KEYCHAIN}" | grep "Developer ID Application: .*(${APPLE_TEAM_ID})" || true)"
           if [ "$(grep -c . <<< "${identities}")" -ne 1 ]; then
-            echo "::error::Expected exactly one valid \"Developer ID Application\" identity for APPLE_TEAM_ID in the certificate; found $(grep -c . <<< "${identities}"). Check that the .p12 holds that certificate with its private key."
+            echo "::error::Expected exactly one valid \"Developer ID Application\" identity for APPLE_TEAM_ID in the certificate; found $(grep -c . <<< "${identities}"). Check that the .p12 holds that certificate with its private key, and that macOS can reach its issuer: a missing \"Developer ID Certification Authority (G2)\" intermediate certificate also leaves the identity invalid."
             security find-identity -v -p codesigning "${KEYCHAIN}" | tail -1
             exit 1
           fi
