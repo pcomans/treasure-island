@@ -1435,6 +1435,26 @@ static func _facade(ctx: Ctx, face: Face) -> void:
 			_ladder(ctx, face, bay)
 		elif str(bay.kind) == "top_box":
 			_top_box(ctx, face, bay)
+	for plaque: Dictionary in face.scheme.get("plaques", []):
+		_plaque(ctx, face, plaque)
+
+
+## Opt-in plaque: a flat panel `t` off the wall, `bottom` to `top` above the block's
+## floor, its texture filling it once and reading left to right from outside.
+static func _plaque(ctx: Ctx, face: Face, plaque: Dictionary) -> void:
+	var s0 := _local_station(ctx, face, float(plaque.get("from", 0.0)))
+	var s1 := _local_station(ctx, face, float(plaque.get("to", 0.0)))
+	var y0 := face.block.floors[0] + float(plaque.get("bottom", 0.0))
+	var y1 := face.block.floors[0] + float(plaque.get("top", 0.0))
+	var depth := -float(plaque.get("t", 0.03))
+	var bucket := ctx.bucket("support", str(plaque.get("material", "metal")))
+	var first := bucket.uvs.size()
+	_rect(bucket, face, s0, s1, y0, y1, depth, face.out3())
+	var centre := face.point((s0 + s1) * 0.5, y1, depth)
+	var right := (-face.out3()).cross(Vector3.UP).normalized()
+	for i in range(first, bucket.uvs.size()):
+		var p := bucket.vertices[i]
+		bucket.uvs[i] = Vector2((p - centre).dot(right) / absf(s1 - s0) + 0.5, (y1 - p.y) / (y1 - y0))
 
 
 ## Wall surface of one bay strip with rectangular holes and material zones.
@@ -1650,7 +1670,9 @@ static func _assembly(ctx: Ctx, face: Face, bay: Dictionary, o: Dictionary) -> v
 					mullions.append(float(m) / float(count))
 				glazing = _merge(spec, {"mullions": mullions})
 			_glazing(ctx, face, glazing, s0, s1, y0, y1, depth)
+			_panels(ctx, face, spec, s0, s1, y0, y1, depth)
 			_hood(ctx, face, spec, s0, s1, y1)
+			_window_box(ctx, face, spec, s0, s1, y0, y1)
 		"grid":
 			# Shared facade_assembly units on the grid opening (frames, mullions,
 			# transoms, lower fields, spandrels across joined storeys).
@@ -1673,6 +1695,15 @@ static func _assembly(ctx: Ctx, face: Face, bay: Dictionary, o: Dictionary) -> v
 			var out := face.out3()
 			for r: Dictionary in assembly.rects:
 				_rect(ctx.bucket("wall", str(r.material)), face, float(r.u0), float(r.u1), float(r.y0), float(r.y1), -float(r.d1), out)
+			# Opt-in opaque panels in each storey's light, as fractions [u0, u1, y0, y1, material].
+			var bottom := y0
+			var bands: Array = (o.get("extras", {}) as Dictionary).get("spandrels", [])
+			for storey: int in bands.size() + 1:
+				var top := float(bands[storey][0]) if storey < bands.size() else y1
+				_panels(ctx, face, unit, s0, s1, bottom, top, depth)
+				if storey < bands.size():
+					bottom = float(bands[storey][1])
+			_window_box(ctx, face, unit, s0, s1, y0, y1)
 		"patio":
 			var depth := float(spec.get("depth", 0.18))
 			_reveals(ctx, face, wall_mat, s0, s1, y0, y1, depth, true)
@@ -1714,6 +1745,31 @@ static func _assembly(ctx: Ctx, face: Face, bay: Dictionary, o: Dictionary) -> v
 			while y < y1 - 0.05:
 				_rect(slats, face, s0, s1, y, y + 0.045, 0.06, out)
 				y += 0.12
+
+
+## Opt-in opaque panels (`panels`) in a light, as fractions [u0, u1, y0, y1, material].
+static func _panels(ctx: Ctx, face: Face, spec: Dictionary, s0: float, s1: float, y0: float, y1: float, depth: float) -> void:
+	for panel: Array in spec.get("panels", []):
+		_rect(ctx.bucket("wall", str(panel[4])), face, lerpf(s0, s1, float(panel[0])), lerpf(s0, s1, float(panel[1])), lerpf(y0, y1, float(panel[2])), lerpf(y0, y1, float(panel[3])), depth - 0.005, face.out3())
+
+
+## Opt-in window box (window or grid_unit `box`): a frame `t` thick round the opening,
+## standing `project` out from the wall, with its inner faces running back to the wall
+## plane. Support role, so it stays clear of the spray receiver.
+static func _window_box(ctx: Ctx, face: Face, spec: Dictionary, s0: float, s1: float, y0: float, y1: float) -> void:
+	var box: Dictionary = spec.get("box", {})
+	if box.is_empty():
+		return
+	var project := float(box.get("project", 0.3))
+	var t := float(box.get("t", 0.12))
+	if not (_in_range(project, 0.05, 1.0) and _in_range(t, 0.03, 0.5)):
+		ctx.errors.append("window box needs project 0.05-1 and t 0.03-0.5 m")
+		return
+	var bucket := ctx.bucket("support", str(box.get("material", "metal")))
+	_box(bucket, face, s0 - t, s0, y0 - t, y1 + t, -project, 0.02, false)
+	_box(bucket, face, s1, s1 + t, y0 - t, y1 + t, -project, 0.02, false)
+	_box(bucket, face, s0, s1, y1, y1 + t, -project, 0.02, false)
+	_box(bucket, face, s0, s1, y0 - t, y0, -project, 0.02, false)
 
 
 ## Opt-in box hood over a window head (window `hood`): a box `depth` out from the
@@ -1948,6 +2004,7 @@ static func _door(ctx: Ctx, face: Face, spec: Dictionary, wall_mat: String, s0: 
 		_pad(ctx, face, s0, s1, 0.0, depth, y0, 0.0)
 	elif kind == "lobby":
 		_glazing(ctx, face, {"mullions": door.get("mullions", [0.25, 0.5, 0.75]), "transoms": door.get("transoms", [0.78])}, s0, s1, y0, y1, depth)
+		_panels(ctx, face, door, s0, s1, y0, y1, depth)
 	else:
 		var leaf_top := minf(y1, y0 + float(door.get("leaf_h", 2.4)))
 		_rect(ctx.bucket("wall", str(door.get("material", "door"))), face, s0, s1, y0, leaf_top, depth, out)
@@ -2826,6 +2883,8 @@ static func _make_materials(ctx: Ctx) -> void:
 			ctx.errors.append("palette %s needs rgb" % key)
 			return
 		var cache_key := "%s|%s|%s|%s|%s|%s|%s" % [key, rgb[0], rgb[1], rgb[2], entry.get("alpha", 1.0), entry.get("roughness", 0.9), entry.get("metallic", 0.0)]
+		if entry.has("texture"):
+			cache_key += "|%s|%s|%s" % [entry.texture, entry.get("tile_m", [1.0, 1.0]), entry.get("offset_m", [0.0, 0.0])]
 		if not _material_cache.has(cache_key):
 			var material := StandardMaterial3D.new()
 			material.resource_name = "Midrise_" + key
@@ -2835,6 +2894,17 @@ static func _make_materials(ctx: Ctx) -> void:
 			if float(entry.get("alpha", 1.0)) < 1.0:
 				material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 				material.cull_mode = BaseMaterial3D.CULL_BACK
+			# Opt-in tile: the wall and roof UVs are metres, so tile_m is its size on the wall.
+			if entry.has("texture"):
+				var tile: Array = entry.get("tile_m", [1.0, 1.0])
+				var texture: Texture2D = load(str(entry.texture))
+				if texture == null or tile.size() != 2 or float(tile[0]) <= 0.0 or float(tile[1]) <= 0.0:
+					ctx.errors.append("palette %s needs a texture and a positive tile_m" % key)
+					return
+				material.albedo_texture = texture
+				material.uv1_scale = Vector3(1.0 / float(tile[0]), 1.0 / float(tile[1]), 1.0)
+				var offset: Array = entry.get("offset_m", [0.0, 0.0])
+				material.uv1_offset = Vector3(float(offset[0]) / float(tile[0]), float(offset[1]) / float(tile[1]), 0.0)
 			_material_cache[cache_key] = material
 		ctx.materials[key] = _material_cache[cache_key]
 

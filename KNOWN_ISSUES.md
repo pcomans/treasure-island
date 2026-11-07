@@ -21,7 +21,7 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 
 - A building side with no dated photo of that side stays plain on purpose; no detail is invented for it. A new dated photo of such a side lets it be detailed.
 - **Owner shot list, Maceo May (OSM r19685981):** these walls have no dated photo, so they stay plain:
-  - the court's east, west and north walls, and its south wall below the top floors (an undated architect's photo shows the east wall, which doesn't count);
+  - the court's west and north walls, its east wall below the top two window rows, and its south wall below the upper floors (an undated architect's photo shows the east wall, which doesn't count);
   - the middle of the north wall along the lane to Star View Court, seen only at a grazing angle from each end.
 
   A square-on walk down the lane, and the court walls if they can be reached, would let them be modelled.
@@ -39,7 +39,6 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 - Mismatches the street reviews found against dated photos (seen in review, 2026-11-05):
   - **Mersea lot:** at Street View pano TKhpp heading 190 (Sep 2025) a white event tent renders as a solid grey building with a roll-up door and windows; at heading 330 a white tent with a hedge renders as a flat white box.
   - The Mersea venue's containers are green where the photo shows blue in front.
-  - The Cravath Street building at heading 42 is a blank brown box where the photo shows a modern white and grey panelled facade.
   - The green-teal roof of w34313544 is paler than the aerial's duller colour (seen in review, 2026-11-06).
 
 ## Clutter yards: accepted 2026-11-05 with known gaps

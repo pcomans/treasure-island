@@ -96,6 +96,15 @@ const STREET_GROUND_SURFACES := {
 	"park_gravel": {"albedo": preload("res://game/resources/textures/world/vegetation/park_gravel.png"), "uv_scale": 5.0, "roughness": 0.95},
 	"park_concrete": {"albedo": preload("res://game/resources/textures/world/street/street_concrete_panels.png"), "uv_scale": 0.5, "roughness": 0.9, "tint": Color(1.0, 0.96, 0.9)},
 	"park_dg": {"albedo": preload("res://game/resources/textures/world/street/park_dg.png"), "uv_scale": 5.0, "roughness": 1.0},
+	# Garden Walk (owner photos Nov 2026), UV in metres: pale exposed-aggregate
+	# paving in 5 m scored bays, the walk's poured concrete in 2.5 m panels with
+	# the joint across the tile's middle, so a walk 2.5 m wide has none down it,
+	# and the dark red brick band in courses that follow its line; the yellow
+	# tactile strips, the curb-ramp pads' domes in 0.5 m tiles of the world UV.
+	"park_aggregate": {"albedo": preload("res://game/resources/textures/world/street/paseo_aggregate.png"), "uv_scale": 0.2, "roughness": 0.95, "tint": Color(0.8, 0.8, 0.78)},
+	"park_walk": {"albedo": preload("res://game/resources/textures/world/street/paseo_walk.png"), "uv_scale": 0.4, "roughness": 0.9},
+	"park_brick": {"albedo": preload("res://game/resources/textures/world/street/paseo_brick.png"), "uv_scale": 1.0, "roughness": 0.85, "tint": Color(0.72, 0.68, 0.68)},
+	"park_tactile": {"albedo": preload("res://game/resources/textures/world/street/street_tactile.png"), "uv_scale": 20.0, "roughness": 0.8},
 	# The yards' shared ground (yard surfaces of street-detail-zones.json, May 2026
 	# aerial): worn asphalt as the parking lots draw it (2.1 m Poly Haven tiles,
 	# the lots' tint), the older lots' pale, sun-bleached asphalt (the same tiles,

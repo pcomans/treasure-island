@@ -48,6 +48,16 @@ ImageMagick; both tile seamlessly over 2 m (world UV):
 | `park_dg.png` | decomposed-granite paths through the beds | seamless tan decomposed granite path surface |
 | `park_asphalt.png` | the park's new dark asphalt paths, cycle track and lawn ring | seamless new dark charcoal asphalt with fine grey aggregate, no markings |
 
+## Garden Walk paving
+
+Generated 2026-11-07 with `tools/generate-texture` (text prompts only; no photograph was given to the generator or copied) and packed with ImageMagick; the untouched sources are kept outside Git with the Maceo May study.
+
+| File | Use | Source prompt (short) |
+|---|---|---|
+| `paseo_aggregate.png` | Garden Walk's pale exposed-aggregate paving: the source resized and tiled 4 x 4 into one 5 m bay, with a saw-cut joint drawn on two edges | seamless pale exposed aggregate concrete paving, fine rounded white, cream and light grey pebbles |
+| `paseo_walk.png` | the poured concrete walks beside it: one 2.5 m panel, the saw-cut joint drawn across the tile's middle so it falls on a walk's edges | seamless pale cool grey poured concrete slab with a very fine light broom finish |
+| `paseo_brick.png` | the dark red brick band along it, turned so the joints run across the band (1 m tile) | seamless dark oxblood red clay brick pavers in a soldier course |
+
 ## Street furniture
 
 `street_furniture_atlas.png` (1024 x 1024, sixteen 256 px cells) is the one texture of
@@ -75,7 +85,9 @@ names are not in the atlas: the kit writes them with `Label3D` from the OSM name
 | (0, 2) | weathered wood of the utility poles and their crossarms (packed lightened and greyed, ImageMagick -modulate 150,40, toward the dated photos' weathered poles; the kit darkens a creosote minority by vertex colour) | seamless weathered creosote wooden utility pole surface, vertical grain and checks |
 | (1, 2) | the tow-away sign at the owner's lot fence (regenerated 2026-11-05 with the Sep 2025 photos' banding; its print is unreadable there, so the text is generic) | original generic private-lot tow-away sign: red NO PARKING block, black band with yellow TOW-AWAY, red ZONE block, white panel of small black print and a dark blue bottom line |
 | (2, 2) | the owner lot's Mersea monument sign face (2026-11-05; an original generic face: plain lettering, no logo) | original generic low monument sign face: dark green panel, thin white border, small TREASURE ISLAND, large MERSEA in a simple geometric sans-serif, a small six-pointed star, small SAN FRANCISCO |
-| (3, 2), row 3 | plain white, spare | (filled by the packing script) |
+| (3, 2) | Garden Walk's DO NOT ENTER sign (2026-11-07) | United States DO NOT ENTER regulatory sign R5-1, flat front view |
+| (0, 3) | the EXCEPT plaque under it (2026-11-07; 3:4, stretched square into the cell) | white supplementary plaque, EXCEPT, a bicycle symbol, AND EMERGENCY VEHICLES |
+| row 3, the rest | plain white, spare | (filled by the packing script) |
 
 ## Street fences
 

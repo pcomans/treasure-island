@@ -82,6 +82,17 @@ All are opt-in; configs without them build as before.
 | target `holes_tiled` | With `holes`: no block owns the courtyard ring. A low deck block fills the court and the wings round it are blocks of their own heights, so the court walls are ordinary `court` faces above the deck. |
 | top-level `round_columns` | Round columns, each `{"xz": [x, z], "r": 0.1-1, "top": 0.5-12, "material": "concrete", "sides": 16}`, from below grade to `top` above the building floor. Support role, so they stop the player. |
 
+## Material and opening fields
+
+All are opt-in; configs without them build as before.
+
+| Field | Meaning |
+|---|---|
+| palette `texture`, `tile_m`, `offset_m` | A tiling albedo under `rgb` as a multiplier. The wall and roof UVs are metres, so `tile_m` `[u, v]` is the tile's size on the wall; `offset_m` slides it, to put a panel joint at a chosen height. |
+| window or `grid_unit` `box` | `{"project": 0.05-1, "t": 0.03-0.5, "material": ...}`: a frame `t` thick round the opening, standing `project` out from the wall, with its inner faces running back to the wall plane. Support role, so it stays clear of the spray receiver. |
+| scheme `plaques` | Flat panels on a face, each `{"from": s, "to": s, "bottom": m, "top": m, "t": 0.03, "material": ...}`, heights above the block's floor: a building's name. Support role. A palette `alpha` under 1 lets a texture's own alpha show the wall behind. |
+| window, `grid_unit` or lobby door `panels` | Opaque panels in a light, each `[u0, u1, y0, y1, material]` as fractions of the light: a louvre over a window, a spandrel between two panes. A grid unit repeats them in each joined storey. |
+
 ## Roles
 
 Facade planes, reveals, glazing and doors are `wall` (spray receivers); roofs and the deck are `roof`; landings and aprons are `ground`; parapets, railings, canopies, slabs and roof items are `support`. The installer turns each role into one source-owned contact body. Check an instance in the real island with `game/tests/shared/building_shots.gd` and `building_fit_test.gd -- --native-producer housing-get-faces`.

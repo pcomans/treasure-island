@@ -244,6 +244,10 @@ const UNPLANTABLE_MATERIALS = Object.freeze([
   "park_dg",
   "park_plaza_lens",
   "park_plaza_zigzag",
+  "park_aggregate",
+  "park_brick",
+  "park_tactile",
+  "park_walk",
   "road_path",
   "road_path_concrete",
   "road_path_pedestrian",
@@ -585,6 +589,9 @@ function validateScatterRule(rule, zoneId, ruleIds) {
   }
   if (rule.within_xz != null) {
     invariant(Array.isArray(rule.within_xz) && rule.within_xz.length >= 3 && rule.within_xz.every(isXZ), `${label} within_xz must be a polygon of 3+ [x, z] points`);
+  }
+  if (rule.wall_beds != null) {
+    invariant(Array.isArray(rule.wall_beds) && rule.wall_beds.length > 0 && rule.wall_beds.every((key) => /^[wr]\d+$/u.test(key)) && rule.within_xz != null, `${label} wall_beds must list OSM building keys, with a within_xz traced to their walls`);
   }
   if (rule.prop != null) {
     invariant(kind.layer === "vegetation" && STREET_VEGETATION_PROPS[rule.prop]?.kinds.includes(rule.kind), `${label}: prop ${rule.prop} does not plant a ${rule.kind}`);
@@ -1060,9 +1067,20 @@ export function generateStreetDetail({
   const groundAt = visibleGroundIndex(chunks);
 
   const objects = [...playableObjects.values()];
-  const buildings = polygonSet(objects
+  const buildingItems = objects
     .filter((object) => object.roles.includes("building") || object.roles.includes("building_part"))
-    .map((object) => ({ key: object.row.source_key, geometry: object.geometry })));
+    .map((object) => ({ key: object.row.source_key, geometry: object.geometry }));
+  const buildings = polygonSet(buildingItems);
+  // A rule's wall_beds: the buildings its bed stands against. Its plants keep the
+  // buffer from every other building; its within_xz, traced to the photographed
+  // wall, keeps them off these, inside an OSM ring whose ground storey is set back.
+  const buildingsBeside = new Map();
+  const buildingsFor = (rule) => {
+    if (!rule.wall_beds) return buildings;
+    const key = rule.wall_beds.join(",");
+    if (!buildingsBeside.has(key)) buildingsBeside.set(key, polygonSet(buildingItems.filter((item) => !rule.wall_beds.includes(item.key))));
+    return buildingsBeside.get(key);
+  };
   const roads = polygonSet(objects
     .filter((object) => object.roles.includes("roads_paths"))
     .map((object) => ({
@@ -1498,13 +1516,13 @@ export function generateStreetDetail({
   };
 
   // Site checks shared by scatter and set pieces, after the gameplay mask.
-  const siteViolation = (kindName, xz, buildingBuffer, onOverlay = false) => {
+  const siteViolation = (kindName, xz, buildingBuffer, onOverlay = false, sited = buildings) => {
     const kind = STREET_DETAIL_KINDS[kindName];
     const radius = kind.footprint_radius_m;
     if (!onLand(xz, exclusions.land_edge_buffer_m + radius)) return { reason: "land_edge", source_id: PLAYABLE_BOUNDARY_SOURCE_KEY, observed_m: 0, required_m: exclusions.land_edge_buffer_m };
     const hard = hardViolation(hardShapes, [xz], radius);
     if (hard) return hard;
-    const building = buildings.nearest(xz, buildingBuffer + radius);
+    const building = sited.nearest(xz, buildingBuffer + radius);
     if (building.distance < buildingBuffer + radius) {
       return { reason: building.distance === 0 ? "inside_building" : "building_buffer", source_id: building.key, observed_m: round3(Math.max(0, building.distance - radius)), required_m: buildingBuffer };
     }
@@ -1653,7 +1671,7 @@ export function generateStreetDetail({
       if (!contains(xz)) problem = "outside_zone";
       else if (!onLand(xz, exclusions.land_edge_buffer_m + radius * 0.5)) problem = "land_edge";
       else if (hardViolation(hardShapes, [xz], radius)) problem = hardViolation(hardShapes, [xz], radius).reason;
-      else if (buildings.nearest(xz, exclusions.building_buffer_m + radius).distance < exclusions.building_buffer_m + radius) problem = "building_buffer";
+      else if (buildingsFor(rule).nearest(xz, exclusions.building_buffer_m + radius).distance < exclusions.building_buffer_m + radius) problem = "building_buffer";
       else if (rule.pattern !== "field" && shorelineOverlays.nearest(xz, radius).distance < radius) problem = "shoreline_overlay";
       else if (rule.pattern !== "field" && !rule.surfaces.includes(surfaceAt(xz).material_key)) problem = "rule_surface";
       else if (TREE_KINDS.includes(rule.kind) && utilityProblem(xz)) problem = utilityProblem(xz);
@@ -2033,7 +2051,7 @@ export function generateStreetDetail({
               if (y === undefined || y < rule.height_m[0] || y > rule.height_m[1]) return "outside_rule_height";
             }
             // A rule planted on what the eye sees may name an overlay's ground (a marsh).
-            const violation = siteViolation(rule.kind, xz, exclusions.building_buffer_m, rule.visible_surfaces !== undefined);
+            const violation = siteViolation(rule.kind, xz, exclusions.building_buffer_m, rule.visible_surfaces !== undefined, buildingsFor(rule));
             if (violation) return violation.reason;
             if (TREE_KINDS.includes(rule.kind)) {
               const utility = utilityProblem(xz);

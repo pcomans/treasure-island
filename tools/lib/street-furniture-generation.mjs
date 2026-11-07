@@ -42,6 +42,7 @@ export const STREET_FURNITURE_PROPS = Object.freeze({
   bench_park: "bench",
   bench_wedge: "bench",
   bike_rack: "bicycle_parking",
+  bollard_steel: "bollard",
   bus_shelter: "bus_stop",
   bus_stop_sign: "bus_stop",
   canopy_of_sky: "artwork",
@@ -50,6 +51,7 @@ export const STREET_FURNITURE_PROPS = Object.freeze({
   hydrant: "fire_hydrant",
   lamp_cobra: "street_lamp",
   lamp_disc: "street_lamp",
+  lamp_fork: "street_lamp",
   lamp_lot: "street_lamp",
   lamp_plaza: "street_lamp",
   log_seat: "bench",
@@ -133,12 +135,12 @@ const LEG_DROP_STEP_M = 0.005;
 // footprint's clearance stadium.
 export const MAX_REST_TILT_RAD = 0.15;
 export const STREET_FURNITURE_PATTERNS = Object.freeze([
-  "kerb", "signalized_crossings", "near_signals", "junctions", "all_way_stops", "drive_entries", "lot_edge",
+  "kerb", "line", "signalized_crossings", "near_signals", "junctions", "all_way_stops", "drive_entries", "lot_edge",
   "pole_fixtures", "street_lamps", "junction_stops", "junction_names", "hydrant_style",
 ]);
 // The patterns of the island-wide block: they need no zone of their own.
 const ISLAND_PATTERNS = Object.freeze(["pole_fixtures", "street_lamps", "junction_stops", "junction_names", "hydrant_style", "all_way_stops", "signalized_crossings", "near_signals"]);
-const ZONE_PATTERNS = Object.freeze(["kerb", "signalized_crossings", "near_signals", "junctions", "all_way_stops", "drive_entries", "lot_edge"]);
+const ZONE_PATTERNS = Object.freeze(["kerb", "line", "signalized_crossings", "near_signals", "junctions", "all_way_stops", "drive_entries", "lot_edge"]);
 // Default props for OSM rows; kinds without one stay unbuilt.
 // A bench OSM tags backless is the park's backless bench on its plinth.
 const OSM_PROPS = Object.freeze({
@@ -262,6 +264,7 @@ const SAFE_ID = /^[a-z0-9_]+$/u;
 const OPTIONAL_RULE_FIELDS = Object.freeze({ street_lamps: ["except_cells"], junction_names: ["on_posts"] });
 const RULE_FIELDS = Object.freeze({
   kerb: ["source_keys", "sides", "spacing_m", "phase_m", "setback_m", "slide_m"],
+  line: ["line_xz", "offsets_m", "spacing_m", "phase_m", "slide_m"],
   signalized_crossings: ["setback_m", "beyond_m"],
   near_signals: ["back_m", "along_m"],
   junctions: ["setback_m"],
@@ -391,6 +394,11 @@ export function validateFurnitureRules(zone, kinds, island = false) {
     }
     for (const field of ["phase_m", "slide_m", "along_m", "clear_m"]) {
       if (field in rule) invariant(isFiniteNumber(rule[field]) && rule[field] >= 0, `${label} ${field} must be non-negative`);
+    }
+    if ("line_xz" in rule) {
+      // Stations along a traced line (world x, z), off a way the curbs do not follow.
+      invariant(Array.isArray(rule.line_xz) && rule.line_xz.length >= 2 && rule.line_xz.every((point) => Array.isArray(point) && point.length === 2 && point.every(isFiniteNumber)), `${label} line_xz must be 2+ [x, z] points`);
+      invariant(Array.isArray(rule.offsets_m) && rule.offsets_m.length > 0 && rule.offsets_m.every(isFiniteNumber), `${label} offsets_m must list a station's items, in metres along the line`);
     }
     if ("source_keys" in rule) invariant(Array.isArray(rule.source_keys) && rule.source_keys.length > 0 && rule.source_keys.every((key) => /^w\d+$/u.test(key)), `${label} needs OSM way source_keys`);
     if ("sides" in rule) invariant(Array.isArray(rule.sides) && rule.sides.length > 0 && rule.sides.every((side) => ["left", "right"].includes(side)), `${label} sides are left and/or right`);
@@ -1480,6 +1488,19 @@ export function placeStreetFurniture({
             addRow(zone, rule, `${chain.key}_${sideName}_${String(station).padStart(3, "0")}`, en, unit(sub(near.point, en)));
           }
         }
+      }
+    } else if (rule.pattern === "line") {
+      // Stations along a traced line: an item at each of offsets_m from a station,
+      // its front to the left of the line (a lamp and the bollards beside it).
+      const line = rule.line_xz.map((xz) => toEastNorth(xz));
+      const total = polylineLength(line);
+      for (let station = 0, s = rule.phase_m; s <= total; station += 1, s += rule.spacing_m) {
+        rule.offsets_m.forEach((offset, index) => {
+          const at = s + offset;
+          const candidates = slides(rule.slide_m).filter((delta) => at + delta >= 0 && at + delta <= total).map((delta) => pointAlong(line, at + delta).point);
+          const en = firstClear(rule, contains, candidates, {});
+          if (en) addRow(zone, rule, `${String(station).padStart(3, "0")}_${index}`, en, leftOf(pointAlong(line, Math.min(total, Math.max(0, at))).tangent));
+        });
       }
     } else if (rule.pattern === "street_lamps") {
       // Lamps along the named streets, on the street ground where a zone builds

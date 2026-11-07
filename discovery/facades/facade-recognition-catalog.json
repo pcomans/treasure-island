@@ -13963,7 +13963,7 @@
       "legacy_adapter_ids": [],
       "protected_scopes": [
         {
-          "reason": "Frozen OSM relation ring and identity stay. Heights follow dated photos as production inference (owner request 2026-11-05, ROOT 2026-11-07) and replace the generated 18 m mass: about 5.9 m low wing, 11.5 m west wing, 20.5 m east wing, 21 m tower above the floor. The court walls and the middle of the NNW lane wall have no dated photo and carry no windows.",
+          "reason": "Frozen OSM relation ring and identity stay. Heights follow dated photos as production inference (owner request 2026-11-05, ROOT 2026-11-07) and replace the generated 18 m mass: about 5.9 m low wing, 11.5 m west wing, 20.5 m east wing, 21 m tower above the floor. The top two window rows of the court's east wall and the upper floors of its south wall follow the Jun 2026 frames wsw05 and wsw06; the rest of the court walls and the middle of the NNW lane wall have no dated photo and carry no windows.",
           "receiver_key": "building:r19685981:wall",
           "run_indices": []
         }

@@ -65,7 +65,8 @@ import {
 export const STREET_GROUND_FEATURE_KINDS = Object.freeze(["street_kerb", "street_kerb_support", "street_paint"]);
 // Record kinds in emission order: [object key prefix, feature kind, material, collision, opaque].
 // Zone ground surfaces (a zone's ground.surfaces): material key -> record key
-// prefix. The park_* ones are Cityside Park's; the rest are the yards' shared
+// prefix. The park_* ones are the parks', Garden Walk's among them (aggregate, brick, tactile
+// strips and its walk); the rest are the yards' shared
 // ground (tools/lib/street-yard-generation.mjs): worn yard asphalt, compacted
 // yard gravel (beige-grey, or the pale grey of a fresh aggregate pad), grey
 // concrete rubble, black plastic sheeting over earth, plain poured concrete,
@@ -80,6 +81,10 @@ export const PARK_SURFACE_MATERIALS = Object.freeze({
   park_paint_pink: "park-paint-pink",
   park_plaza_lens: "park-plaza-lens",
   park_plaza_zigzag: "park-plaza-zigzag",
+  park_aggregate: "park-aggregate",
+  park_brick: "park-brick",
+  park_tactile: "park-tactile",
+  park_walk: "park-walk",
   black_plastic: "black-plastic",
   rubble_grey: "rubble-grey",
   yard_asphalt: "yard-asphalt",
@@ -2930,19 +2935,20 @@ export function generateStreetGround({
     const { layer, polygon, lift } = entry;
     for (const key of entry.sources) sources[layer.material].add(key);
     const height = constantHeight(lift);
-    const path = layer.material === "park_concrete" ? layerLine(layer) : null;
+    const path = ["park_concrete", "park_walk", "park_brick"].includes(layer.material) ? layerLine(layer) : null;
     if (layer.frame) {
       // Plaza paint laid out in metres along the plaza's axis.
       const origin = [layer.frame.origin_xz[0], -layer.frame.origin_xz[1]];
       const axis = unit([layer.frame.axis_xz[0], -layer.frame.axis_xz[1]]);
       addPiece(layer.material, polygon, height, (point) => [dot(sub(point, origin), axis), cross(axis, sub(point, origin))], true);
     } else if (path) {
-      // Concrete paths in poured panels that follow the path's bends.
+      // Concrete paths in poured panels, and brick bands in courses, that follow
+      // the path's bends: a park path's UV in panels, the others' in metres.
       for (const cell of gridCells(boxOfMulti(polygon), PATH_FRAME_CELL_M)) {
         const piece = intersect(`park ${layer.id} cell`, polygon, cell);
         if (multiArea(piece) < 1e-6) continue;
         const box = boxOfMulti(piece);
-        addPiece(layer.material, piece, height, roadFrameUv(path.line, [(box.min_x + box.max_x) / 2, (box.min_y + box.max_y) / 2], kerb.panel_m * 2), true);
+        addPiece(layer.material, piece, height, roadFrameUv(path.line, [(box.min_x + box.max_x) / 2, (box.min_y + box.max_y) / 2], layer.material === "park_concrete" ? kerb.panel_m * 2 : 1), true);
       }
     } else {
       // Concrete elsewhere in panels on the world grid; other ground in world UV.
