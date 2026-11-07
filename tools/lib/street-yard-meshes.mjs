@@ -874,12 +874,17 @@ function buildBermEnd(variant, dir, lod) {
 // Plan sizes as the registry's (x by z at scale 1) and heights. Rubble is
 // broken concrete over its own fines (3rd St, Mar 2025); a tarp pile is black
 // sheeting folded over a mound, its hem loose on the ground and held by
-// tyres (Avenue N, Nov 2025).
+// tyres (Avenue N, Nov 2025). Dumped soil is a few truckloads tipped together
+// (merged: the rubble pile's mounds, with saddles between their tops), darker
+// and lumpier than stockpiled soil and with no loose pieces (the wastewater
+// plant site, 2025-26); seed shifts its shapes off the rubble pile's, whose
+// name is as long.
 export const PILE_SPECS = Object.freeze({
   gravel: { x: 8, z: 8, h: 3, part: "gravel", rough: 0.05 },
   rubble: { x: 12, z: 12, h: 4.5, part: "rubble", rough: 0.16, lumps: 0.18, chunks: [260, 60] },
   soil: { x: 12, z: 12, h: 4, part: "earth", rough: 0.1 },
   tarp: { x: 6, z: 8, h: 2.2, part: "tarp", rough: 0.04, flat: true, folds: 0.24 },
+  dumped: { x: 12, z: 12, h: 3.6, part: "earth_dark", rough: 0.18, lumps: 0.24, merged: true, seed: 5 },
 });
 // A heap's surface stands no steeper than its angle of repose, about 39
 // degrees (a slope of PILE_REPOSE), so the floor it is walked on (heap floors,
@@ -1069,9 +1074,11 @@ function softened(height, hx, hz) {
 function buildPile(material, shape, lod) {
   const spec = PILE_SPECS[material];
   const out = new YardBuilder(lod);
-  const segments = lod === 0 ? (spec.folds ? 60 : spec.chunks ? 40 : 28) : 12;
-  const rings = lod === 0 ? (spec.chunks ? 14 : 9) : 4;
-  const seed = 31 * (shape + 1) + material.length;
+  // Several loads merged (rubble, dumped soil) need the finer grid for their saddles and lumps.
+  const merged = spec.chunks !== undefined || spec.merged === true;
+  const segments = lod === 0 ? (spec.folds ? 60 : merged ? 40 : 28) : 12;
+  const rings = lod === 0 ? (merged ? 14 : 9) : 4;
+  const seed = 31 * (shape + 1) + material.length + (spec.seed ?? 0);
   // Folds: rounded ridges of a sheet draped over the mound, running down to
   // the hem.
   const fold = (a) => (spec.folds ? 0.6 * Math.cos(3.5 * a + seed) ** 6 + 0.4 * Math.cos(5.5 * a + 2.1 * seed) ** 8 : 0);
@@ -1099,8 +1106,8 @@ function buildPile(material, shape, lod) {
     }
     return top * Math.pow(Math.max(0, 1 - rho ** 6), 0.5);
   };
-  // Rubble is truckloads dumped together: stockpiles on the same mounds,
-  // merged, so its crest has several tops and saddles between them.
+  // Rubble and dumped soil are truckloads dumped together: stockpiles on the
+  // same mounds, merged, so the crest has several tops and saddles between them.
   const dumped = (rho, a) => {
     const x = rho * Math.cos(a);
     const z = rho * Math.sin(a);
@@ -1113,7 +1120,7 @@ function buildPile(material, shape, lod) {
     // A tarp drapes over its mounds; a stockpile is a cone with a rounded
     // crown (no point for a foot to catch on). Settled (below), its sides
     // stand at most at the angle of repose.
-    const base = spec.flat ? draped(rho, a) : spec.chunks ? dumped(rho, a) : Math.max(0, stockpile(rho));
+    const base = spec.flat ? draped(rho, a) : merged ? dumped(rho, a) : Math.max(0, stockpile(rho));
     // Bumps (and a rubble pile's lumps of a metre or so) in plan coordinates.
     const r = nominal * outline(a) * rho;
     const px = r * Math.cos(a);
