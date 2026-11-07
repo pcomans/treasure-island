@@ -27,7 +27,9 @@ extends SceneTree
 ##   "turn_deg": 0}, ...] to drive the stock player with its real input actions
 ##   from where it settled, facing the target (turn_deg turns the camera, and so
 ##   the walk, over that step), saving a frame every "every" physics ticks
-##   (default 2) as street-NAME-000.png, ... Run with --fixed-fps 60 so the frames
+##   (default 2) as street-NAME-000.png, ...; a step with "frames": false saves
+##   none, such as the jetpack climb before a filmed fast-drop landing (a step
+##   holding "fast_drop"). Run with --fixed-fps 60 so the frames
 ##   are evenly spaced in game time. A free camera (camera_xyz) follows the player,
 ##   keeping its offset and looking at the player. Each tick prints a MOVE_TICK
 ##   line, with the avatar's describe() when it has one.
@@ -114,7 +116,7 @@ const DEFAULT_STREET_DETAIL := {
 }
 
 ## Input actions a street view's moves may hold.
-const MOVE_ACTIONS := ["move_forward", "move_back", "move_left", "move_right", "run", "jetpack"]
+const MOVE_ACTIONS := ["move_forward", "move_back", "move_left", "move_right", "run", "jetpack", "fast_drop"]
 
 ## The neutral daylight for colour matching: the sun angle, tonemapper and shadows
 ## main.tscn had before the 2026-11-07 look pass (sun at azimuth 152, elevation 52),
@@ -930,8 +932,8 @@ func _moving_view(view: Dictionary, target: Vector3, prefix: String) -> String:
 	for step: Variant in view.moves:
 		if not step is Dictionary or not step.get("hold") is Array or not _numbers([step.get("ticks")], 1) \
 		or float(step.ticks) != floorf(float(step.ticks)) or float(step.ticks) < 1.0 \
-		or (step.has("turn_deg") and not _numbers([step.get("turn_deg")], 1)):
-			return "each move needs hold (a list of actions), whole positive ticks and an optional numeric turn_deg"
+		or (step.has("turn_deg") and not _numbers([step.get("turn_deg")], 1)) or (step.has("frames") and not step.frames is bool):
+			return "each move needs hold (a list of actions), whole positive ticks, an optional numeric turn_deg and an optional true or false frames"
 		for action: Variant in step.hold:
 			if not action in MOVE_ACTIONS:
 				return "moves may hold only " + ", ".join(PackedStringArray(MOVE_ACTIONS))
@@ -963,7 +965,7 @@ func _moving_view(view: Dictionary, target: Vector3, prefix: String) -> String:
 			# Resume after this tick's physics has moved the player.
 			await process_frame
 			var saved := "-"
-			if tick % int(every) == 0:
+			if tick % int(every) == 0 and step.get("frames", true):
 				if free != null:
 					free.global_position = player.global_position + camera_offset
 					free.look_at(capsule.global_position, Vector3.UP)

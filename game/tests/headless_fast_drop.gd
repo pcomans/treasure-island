@@ -6,7 +6,10 @@ extends SceneTree
 ##   2. on the ground C holds the player still, keeps the capsule's height and leaves
 ##      a walk exactly as it is: there is no crouch;
 ##   3. Space beats C, in the air and leaving the ground;
-##   4. letting go of C in the air eases back to the jetpack's slow descent.
+##   4. letting go of C in the air eases back to the jetpack's slow descent;
+##   5. each of those fast-drop landings kicks up the dust poof once, at the feet,
+##      as the player touches down; a slow landing kicks up none, and nothing else
+##      here does (C on the ground, a walk with it, Space with it).
 ## Physics only (run with --headless), in the real generated world.
 
 # Each spot's first solid below the sky; min_y keeps the roof a roof.
@@ -25,6 +28,14 @@ const REACH_SPEED_TICKS := 40
 const LANDING_TOLERANCE_M := 0.05
 # A landing moves nothing sideways; these spots are near level.
 const LANDING_DRIFT_M := 0.25
+# The poof stands on the drawn ground: the surface itself, or a road, path or
+# area drawn up to 0.08 m above the land collision the capsule stands on.
+const POOF_ABOVE_M := Vector2(-0.02, 0.12)
+const POOF_AWAY_M := 0.3
+# The slow landing starts this high: about 2 s at the slow descent.
+const SLOW_DROP_HEIGHT_M := 3.0
+
+var _poofs: Array[Vector3] = []
 
 var _failure := ""
 var _finished := false
@@ -53,12 +64,22 @@ func _run() -> void:
 	paused = false
 	_release()
 	player.recovered.connect(func(_cause: String, _from_position: Vector3) -> void: _recoveries += 1)
+	var poof := player.get_node_or_null("AvatarPivot/ChestAvatar/LandingPoof") as LandingPoof
+	if not _require(poof != null, "The player character has no landing poof."):
+		_finish(main)
+		return
+	poof.poofed.connect(func(at: Vector3) -> void: _poofs.append(at))
 
-	# 1. Drops onto the land, a road and a roof.
+	# 1. Drops onto the land, a road and a roof, each kicking up one poof (5).
 	for spot: Dictionary in SPOTS:
-		if not await _drop(player, spot):
+		if not await _drop(player, spot, poof):
 			_finish(main)
 			return
+	# 5. A slow landing, as after the jetpack or walking off a ledge, kicks up none.
+	_poofs.clear()
+	if not await _slow_landing(player, SPOTS[1]):
+		_finish(main)
+		return
 
 	# 2. On the ground C does nothing.
 	var road: Dictionary = SPOTS[1]
@@ -119,12 +140,16 @@ func _run() -> void:
 	or not _require(_recoveries == 0, "The fast drop needed %d recoveries." % _recoveries):
 		_finish(main)
 		return
-	print("PASS: C drops the stock player fast onto land, road and roof without passing through, does nothing on the ground, and Space beats it")
+	if not _require(_poofs.is_empty(), "A poof came from something other than a fast-drop landing: at %s." % [_poofs]):
+		_finish(main)
+		return
+	print("PASS: C drops the stock player fast onto land, road and roof without passing through, kicking up the dust poof as it lands, does nothing on the ground, and Space beats it; a slow landing kicks up no poof")
 	_finish(main)
 
 
-## Drops the player from above a spot with C held, then holds it on the landing.
-func _drop(player: PlayerController, spot: Dictionary) -> bool:
+## Drops the player from above a spot with C held, then holds it on the landing:
+## the landing kicks up one poof at the feet, as the player touches down.
+func _drop(player: PlayerController, spot: Dictionary, poof: LandingPoof) -> bool:
 	var hit := _first_solid(player, spot.xz)
 	if not _require(not hit.is_empty() and (hit.position as Vector3).y >= float(spot.min_y), "%s: nothing solid at the height expected: %s." % [spot.name, hit]) \
 	or not _require(not bool(spot.ground) or _is_ground(hit), "%s: the first solid is not the ground: %s." % [spot.name, hit]):
@@ -133,6 +158,7 @@ func _drop(player: PlayerController, spot: Dictionary) -> bool:
 	if not await _settle(player, surface + Vector3.UP * DROP_HEIGHT_M, false):
 		return false
 	var start := player.global_position
+	_poofs.clear()
 	Input.action_press("fast_drop")
 	var ticks := 0
 	var peak := 0.0
@@ -154,15 +180,48 @@ func _drop(player: PlayerController, spot: Dictionary) -> bool:
 	or not _require(lowest >= surface.y - LANDING_TOLERANCE_M, "%s: the player went through the surface at %.3f: reached %.3f." % [spot.name, surface.y, lowest]):
 		return false
 	var landed := player.global_position
+	# The avatar reacts in the landing tick itself, after the controller has moved.
+	if not _require(_poofs.size() == 1 and poof.emitting, "%s: the landing kicked up %d poofs (emitting %s), not one as it touched down." % [spot.name, _poofs.size(), poof.emitting]):
+		return false
+	var at := _poofs[0]
+	print("POOF %s at %s, %.3f m above the capsule's foot, %.3f m from it" % [spot.name, at, at.y - landed.y, Vector2(at.x - landed.x, at.z - landed.z).length()])
+	if not _require(at.y - landed.y >= POOF_ABOVE_M.x and at.y - landed.y <= POOF_ABOVE_M.y and Vector2(at.x - landed.x, at.z - landed.z).length() <= POOF_AWAY_M, "%s: the poof is not at the feet: %s against %s." % [spot.name, at, landed]):
+		return false
 	for _tick in 30:
 		await physics_frame
 		if not _require(player.is_on_floor() and absf(player.global_position.y - landed.y) < 0.01, "%s: the landing did not hold: %s against %s." % [spot.name, player.global_position, landed]):
 			return false
 	_release()
+	if not _require(_poofs.size() == 1, "%s: standing on with C held kicked up another poof." % spot.name):
+		return false
 	var drift := Vector2(landed.x - start.x, landed.z - start.z).length()
 	return _require(absf(landed.y - surface.y) <= LANDING_TOLERANCE_M, "%s: landed at %.3f, not on the surface at %.3f." % [spot.name, landed.y, surface.y]) \
 		and _require(drift <= LANDING_DRIFT_M, "%s: the landing moved the player %.3f m sideways." % [spot.name, drift]) \
 		and _require(_recoveries == 0, "%s: the drop needed a recovery." % spot.name)
+
+
+## Lets the player come down from above a spot at the slow descent, holding
+## nothing: it lands, and no poof comes.
+func _slow_landing(player: PlayerController, spot: Dictionary) -> bool:
+	var hit := _first_solid(player, spot.xz)
+	if not _require(not hit.is_empty(), "%s: nothing solid for the slow landing." % spot.name):
+		return false
+	if not await _settle(player, (hit.position as Vector3) + Vector3.UP * SLOW_DROP_HEIGHT_M, false):
+		return false
+	var ticks := 0
+	var fastest := 0.0
+	while ticks < MAX_DROP_TICKS:
+		await physics_frame
+		ticks += 1
+		fastest = maxf(fastest, -player.velocity.y)
+		if ticks > 2 and player.is_on_floor():
+			break
+	for _tick in 30:
+		await physics_frame
+	print("SLOW_LANDING %s: %d ticks, fastest %.3f m/s, poofs %d" % [spot.name, ticks, fastest, _poofs.size()])
+	return _require(player.is_on_floor(), "%s: no slow landing within %d ticks; at %s." % [spot.name, MAX_DROP_TICKS, player.global_position]) \
+		and _require(is_equal_approx(fastest, player.jetpack_descent_speed_mps), "%s: the slow landing came down at %.3f m/s." % [spot.name, fastest]) \
+		and _require(_poofs.is_empty(), "%s: a slow landing kicked up a poof at %s." % [spot.name, _poofs])
 
 
 ## The displacement of a 60-tick walk from at, along direction.
