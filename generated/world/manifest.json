@@ -231,11 +231,11 @@
       "sha256": "123461d4ab833689a2d262ecec88a5b247360f3a9709c02ae733efebf5e014e1"
     }
   ],
-  "content_sha256": "43eaa168c827de6b9a6aaff23a688ff5a23009749fd27be37ef6c6e0f591a8ff",
+  "content_sha256": "b760fd9823b589911d35f6d89e7fa9cf931264eff8476993d5a28a31a72a47d2",
   "context": {
-    "bytes": 2068935,
+    "bytes": 4571226,
     "path": "context.json",
-    "sha256": "9542e61740c8caae642dabe90d745ad5fed859d5507434de5d482ec91a68c889"
+    "sha256": "1ea1ba947b1e5274d5bc429cba5355ec16a3e54915f4df4c7cc2c1bb608398f5"
   },
   "coordinate_system": {
     "coordinate_rounding_m": 0.001,
@@ -258,16 +258,16 @@
       "terrain_shoreline": 22
     },
     "chunks": 38,
-    "context_rows": 4,
+    "context_rows": 418,
     "duplicate_source_keys": 0,
     "playable_rows": 735,
-    "source_rows": 739,
+    "source_rows": 1153,
     "unresolved_rows": 0
   },
   "coverage_ledger": {
-    "bytes": 156826,
+    "bytes": 286169,
     "path": "coverage-ledger.csv",
-    "sha256": "3a13de74cbb858923ac9e630ffda37c919368bc3a60e3a777df9e86390873e97"
+    "sha256": "754b4b22666d446a029c8288d3e3a32059ad2e7d144a8ccaeb9c06a23adfa4db"
   },
   "demolished_buildings": {
     "path": "tools/config/demolished-buildings.json",
@@ -494,24 +494,24 @@
       "sha256": "123461d4ab833689a2d262ecec88a5b247360f3a9709c02ae733efebf5e014e1"
     },
     {
-      "bytes": 2068935,
+      "bytes": 4571226,
       "path": "context.json",
-      "sha256": "9542e61740c8caae642dabe90d745ad5fed859d5507434de5d482ec91a68c889"
+      "sha256": "1ea1ba947b1e5274d5bc429cba5355ec16a3e54915f4df4c7cc2c1bb608398f5"
     },
     {
-      "bytes": 156826,
+      "bytes": 286169,
       "path": "coverage-ledger.csv",
-      "sha256": "3a13de74cbb858923ac9e630ffda37c919368bc3a60e3a777df9e86390873e97"
+      "sha256": "754b4b22666d446a029c8288d3e3a32059ad2e7d144a8ccaeb9c06a23adfa4db"
     },
     {
-      "bytes": 81921,
+      "bytes": 83630,
       "path": "coverage-summary.json",
-      "sha256": "57b2f11d6c8594346f6cea3a4c1f8640afe9a2d95ee06a68ab5691140db586aa"
+      "sha256": "bfc6b17a5d4ad8e7a6038edec71bedc38b22b2bf135957215599bc8d85323ade"
     },
     {
-      "bytes": 1284023,
+      "bytes": 1624428,
       "path": "logical-objects.json",
-      "sha256": "b3c0cd415a5e55678d8dce12fedc2eb0502f89e7249dc45310fc9b575443876e"
+      "sha256": "0cfce0204274f9773b2c3f31ec52ca28242aa55566120c4e90a1a65f5431e199"
     },
     {
       "bytes": 28504,
@@ -519,9 +519,9 @@
       "sha256": "8ff6df496919177f65f1f399e8eadf69e49562145f6bdb00d905fe050557485c"
     },
     {
-      "bytes": 3142,
+      "bytes": 3148,
       "path": "qa/validation-report.json",
-      "sha256": "afe1d34d0c743c9a16f058b8613f4276bd44ee7bddc3cd062657dfe65304e7a9"
+      "sha256": "27b52d0d5dce524f646924d12416a3feb6dd538eb830079bc4e6badfdb4a43c9"
     },
     {
       "bytes": 4422232,
@@ -563,6 +563,18 @@
     "context_boundary_marina",
     "context_boundary_pier",
     "context_ybi",
+    "context_ybi_building_roof",
+    "context_ybi_building_wall",
+    "context_ybi_construction",
+    "context_ybi_facade_bristol",
+    "context_ybi_facade_cove",
+    "context_ybi_facade_meadow",
+    "context_ybi_path",
+    "context_ybi_paved",
+    "context_ybi_road",
+    "context_ybi_spire",
+    "context_ybi_wall",
+    "context_ybi_water",
     "land_ground",
     "major_area_amenity",
     "major_area_landuse",
@@ -1199,14 +1211,14 @@
       "sha256": "3b6f6af31a1c82de3fa51fcbc02fe7e3723fdb629c948ae6523ef46c157b4549"
     },
     "source_ledger": {
-      "bytes": 195590,
+      "bytes": 366721,
       "path": "data/osm/treasure-island-source-inventory.csv",
-      "sha256": "fdf57f37f5507a7cb9b64a7fc530eabb22e29f3742324d5347c0f6b1949cb4cb"
+      "sha256": "ecc1d3f0b73ab9902654f8f89253152443d8aaa2460c98467dfb863c76f98405"
     },
     "source_summary": {
-      "bytes": 1220,
+      "bytes": 1704,
       "path": "data/osm/treasure-island-source-inventory-summary.json",
-      "sha256": "49eb5c9fadd1b81b3fd687beb59cd9f917eb197069bcb993f5a0a3f2588d90d7"
+      "sha256": "13a53c85dfd5ccdb54ba65d5014dd60d704fd9b96a3885bced79843872d5421a"
     },
     "terrain_dem": {
       "bytes": 10160678,

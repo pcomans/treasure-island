@@ -17,6 +17,12 @@ const EXPECTED_MATERIALS := {
 	"major_area_paved": {"feature_kind": "major_area", "context": false, "asset": "clean_asphalt", "source_dimension_m": 2.1, "repeat_dimension_m": 2.1, "normal_strength": 0.2},
 	"major_area_court": {"feature_kind": "major_area", "context": false, "asset": "concrete_floor_03", "source_dimension_m": 2.5, "repeat_dimension_m": 2.5, "normal_strength": 0.2},
 	"context_ybi": {"feature_kind": "ybi", "context": true, "asset": "sparse_grass", "source_dimension_m": 2.0, "repeat_dimension_m": 5.0, "normal_strength": 0.2},
+	# Yerba Buena Island's L1 buildings and surfaces wear Treasure Island's own maps.
+	"context_ybi_building_wall": {"feature_kind": "ybi_building", "context": true, "asset": "plaster_grey_04", "source_dimension_m": 1.5, "repeat_dimension_m": 0.75, "normal_strength": 0.1},
+	"context_ybi_road": {"feature_kind": "ybi_surface", "context": true, "asset": "clean_asphalt", "source_dimension_m": 2.1, "repeat_dimension_m": 2.1, "normal_strength": 0.2},
+	"context_ybi_paved": {"feature_kind": "ybi_surface", "context": true, "asset": "clean_asphalt", "source_dimension_m": 2.1, "repeat_dimension_m": 2.1, "normal_strength": 0.2},
+	"context_ybi_path": {"feature_kind": "ybi_surface", "context": true, "asset": "concrete_pavement", "source_dimension_m": 1.8, "repeat_dimension_m": 1.8, "normal_strength": 0.2},
+	"context_ybi_construction": {"feature_kind": "ybi_surface", "context": true, "asset": "concrete_floor_03", "source_dimension_m": 2.5, "repeat_dimension_m": 2.5, "normal_strength": 0.2},
 	"building_wall": {"feature_kind": "building_wall", "context": false, "asset": "plaster_grey_04", "source_dimension_m": 1.5, "repeat_dimension_m": 0.75, "normal_strength": 0.1},
 	"building_part_wall": {"feature_kind": "building_part_wall", "context": false, "asset": "plaster_grey_04", "source_dimension_m": 1.5, "repeat_dimension_m": 0.75, "normal_strength": 0.1},
 	"building_roof": {"feature_kind": "building_roof", "context": false, "asset": "bitumen", "source_dimension_m": 20.0, "repeat_dimension_m": 10.0, "normal_strength": 0.2},
@@ -60,6 +66,9 @@ func _initialize() -> void:
 	if not _shoreline_material_matches(builder):
 		quit(1)
 		return
+	if not _ybi_ground_matches():
+		quit(1)
+		return
 	print("PASS: %d Poly Haven semantic materials retain official source dimensions and exact maps while using approved effective repeats, mipmapped filtering, and pinned subtle normals; land and area records use the shared ground-cover families, which read the ground-cover map over its configured rectangle; the shoreline slope and stones share one riprap shader with mipmapped textures, and its band and shoulder share the verge's ground cover" % EXPECTED_MATERIALS.size())
 	quit(0)
 
@@ -91,6 +100,47 @@ func _material_matches(material_key: String, material: StandardMaterial3D, expec
 		if not _require(image != null and image.has_mipmaps(), "%s texture lacks imported mipmaps: %s" % [material_key, texture.resource_path]):
 			return false
 	return true
+
+
+## YBI's terrain draws its ground-cover map with Treasure Island's straw, lawn and soil
+## palettes (one season for both islands), and a malformed map builds nothing.
+func _ybi_ground_matches() -> bool:
+	const YBI_GROUND := preload("res://game/scripts/world/ybi_ground.gd")
+	var pixels := PackedByteArray()
+	for value: int in [255, 0, 0, 0, 0, 255, 0, 0, 0, 0, 255, 0, 0, 0, 0, 255]:
+		pixels.append(value)
+	var cover := {
+		"schema_version": YBI_GROUND.SCHEMA,
+		"origin_xz": [-180.0, 920.0],
+		"cell_m": 2.0,
+		"width": 2,
+		"height": 2,
+		"channels": YBI_GROUND.CHANNELS,
+		"rgba_zlib_base64": Marshalls.raw_to_base64(pixels.compress(FileAccess.COMPRESSION_DEFLATE)),
+	}
+	var material: ShaderMaterial = YBI_GROUND.material(cover)
+	if not _require(material != null and material.shader == YBI_GROUND.SHADER, "YBI ground material did not build from a well-formed map."):
+		return false
+	var texture := material.get_shader_parameter("cover_map") as Texture2D
+	if not _require(texture != null and texture.get_image().has_mipmaps() and texture.get_width() == 2, "YBI ground-cover map is not a mipmapped texture of its grid."):
+		return false
+	var rect: Vector4 = material.get_shader_parameter("cover_map_rect")
+	if not _require(rect.is_equal_approx(Vector4(-180.0, 920.0, 0.25, 0.25)), "YBI ground-cover rectangle %s is not its grid's." % rect):
+		return false
+	var palette: Dictionary = YBI_GROUND.island_palette()
+	if not _require(palette.size() == YBI_GROUND.SHARED_PALETTE.size(), "Treasure Island's ground-cover shader no longer declares every shared palette colour."):
+		return false
+	for uniform: String in YBI_GROUND.SHARED_PALETTE:
+		var island: Color = palette[uniform]
+		if not _require(material.get_shader_parameter(uniform) == island and GROUND_COVER.SHADER.code.contains("uniform vec3 %s : source_color = vec3(%s, %s, %s);" % [uniform, _decimal(island.r), _decimal(island.g), _decimal(island.b)]), "YBI ground %s does not follow Treasure Island's." % uniform):
+			return false
+	cover.channels = ["dark_vegetation", "green"]
+	return _require(YBI_GROUND.material(cover) == null, "A malformed YBI ground-cover map still built a material.")
+
+
+## A shader literal's three decimals (the palette declarations write 0.233, not 0.2330).
+func _decimal(value: float) -> String:
+	return String.num(value, 3).pad_decimals(3)
 
 
 func _runtime_tangents_are_present(builder: WorldChunkBuilder) -> bool:

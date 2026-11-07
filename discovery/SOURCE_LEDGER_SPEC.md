@@ -11,8 +11,10 @@ The audited generator is `tools/build_source_inventory.mjs`. Its inputs and outp
 | Authoritative raw source | `data/osm/treasure-island-2026-08-27.osm` | `3b6f6af31a1c82de3fa51fcbc02fe7e3723fdb629c948ae6523ef46c157b4549` |
 | Exact extraction polygon | `data/osm/treasure-island-polygon.geojson` | `43adbe335e87f0d839b56c2f5933ae97d35d4f588ce93bd09923a98620dd2b63` |
 | Smart Treasure Island view | `data/osm/treasure-island-proper-2026-08-27.osm.pbf` | `13984ed8f70c9d5d39d4ba14f83c7307eb75428af7b07df5774df29bda4ccaf9` |
-| Source ledger | `data/osm/treasure-island-source-inventory.csv` | `fdf57f37f5507a7cb9b64a7fc530eabb22e29f3742324d5347c0f6b1949cb4cb` |
-| Machine-readable summary | `data/osm/treasure-island-source-inventory-summary.json` | `49eb5c9fadd1b81b3fd687beb59cd9f917eb197069bcb993f5a0a3f2588d90d7` |
+| Source ledger | `data/osm/treasure-island-source-inventory.csv` | `ecc1d3f0b73ab9902654f8f89253152443d8aaa2460c98467dfb863c76f98405` |
+| Machine-readable summary | `data/osm/treasure-island-source-inventory-summary.json` | `13a53c85dfd5ccdb54ba65d5014dd60d704fd9b96a3885bced79843872d5421a` |
+
+Since 2026-11-07 (the owner's Yerba Buena Island L1 direction) the ledger also holds YBI's detail context rows; see [Yerba Buena Island detail context rows](#yerba-buena-island-detail-context-rows). The 739 earlier rows are unchanged in content and order.
 
 The smart PBF is a reproducible view, not a replacement for the raw source. With the audited local Osmium version, this command reproduces it byte for byte, including its header bounds:
 
@@ -82,6 +84,26 @@ Access, fence, private, and construction tags do not remove an otherwise admitte
 - `w1011568818`, `r13543937`, and `r13543938` are the three explicit `context_bridge` rows. Along with YBI, these four rows are coarse context anchors and are excluded from the playable completeness denominator.
 
 The two bridge relations are `type=site`, so Osmium does not emit direct GeoJSON geometry for them. The generator correctly falls back to their original raw XML metadata and records their geometry family as `collection`; it does not invent a polygon. Recursive extraction proves that the bridge anchors resolve to `737` nodes, `24` ways, and `2` relations with zero missing references. Adding the YBI boundary produces `987` nodes, `25` ways, and `2` relations, also with zero missing references. Those referenced members support later simple context scenery but are deliberately not detailed context-ledger rows.
+
+## Yerba Buena Island detail context rows
+
+On 2026-11-07 the owner directed YBI's L1 scenery (buildings at simple massing, at-grade roads and paths, procedural vegetation; YBI stays non-playable and non-colliding). The ledger therefore adds YBI context rows by a closed rule over the same frozen raw snapshot, after the playable rows and the four anchors:
+
+- a way or relation from the raw export with at least one vertex strictly inside YBI's land (`w26767311` less the Treasure Island polygon `w26767313`);
+- not already a ledger row (playable roads that run on from the causeway keep their playable row, and their run past the outline is drawn as boundary-attached context);
+- in at least one category below (`ybiContextCategories` in `tools/lib/ybi-context-generation.mjs`).
+
+| Category | Rule | Rows |
+|---|---|---:|
+| `context_ybi_building` | `building=*` with a polygon view | 89 |
+| `context_ybi_building_part` | `building:part=*` with a polygon view | 4 |
+| `context_ybi_structure` | `tourism=artwork` with a `height` and a polygon view (the summit sculpture, Point of Infinity) | 1 |
+| `context_ybi_road` | a way with `highway` residential, tertiary(_link), unclassified, service, track, footway, path, steps, cycleway, pedestrian or construction, not `area=yes`, and not the Bay Bridge track | 239 |
+| `context_ybi_paved_area` | a polygon with `amenity=parking`, `highway=pedestrian` + `area=yes`, `tourism=viewpoint` + `surface=paved`, `leisure=pitch` or `leisure=sports_centre` | 29 |
+| `context_ybi_wall` | a way with `barrier=retaining_wall` or `barrier=wall` (not also a `leisure` or `landuse` area) with at least half its vertices on YBI's land | 51 |
+| `context_ybi_water` | `natural=water` with a polygon view (the summit reservoir) | 1 |
+
+The Bay Bridge track belongs to the bridge's own owner and is never a YBI row: `highway=motorway` and `motorway_link`, construction of either, and every `bridge`- or `tunnel`-tagged way. No row has two YBI categories, so the context total is `4 + 414 = 418` rows and the ledger `735 + 418 = 1,153` rows. All YBI rows are composite members of non-colliding YBI context records (buildings' walls and roofs; roads, paths, paved areas and construction roads; walls; the reservoir's water and lining); they never enter the playable denominator.
 
 ## Proven counts and union math
 

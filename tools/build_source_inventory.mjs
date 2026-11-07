@@ -20,6 +20,16 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { tmpdir } from "node:os";
 
+import { projectLonLat } from "./lib/coordinates.mjs";
+import {
+  differenceMultiPolygons,
+  geometryToMultiPolygon,
+  parseGeoJsonSeq as parseGeometrySeq,
+  pointInMultiPolygon,
+  selectGeometry,
+} from "./lib/osm-geometry.mjs";
+import { YBI_CATEGORIES, compareCodePoints, ybiContextCategories } from "./lib/ybi-context-generation.mjs";
+
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(scriptDirectory, "..");
 const properPath = resolve(
@@ -58,6 +68,7 @@ const CATEGORY_ORDER = [
   "building_part",
   "context_island",
   "context_bridge",
+  ...YBI_CATEGORIES,
 ];
 
 function fail(message) {
@@ -307,7 +318,9 @@ function noteFor(id, categories, scope) {
   if (categories.includes("building_part")) {
     notes.push("Resolve overlap with parent building without losing either source ID");
   }
-  if (scope === "context") {
+  if (scope === "context" && categories.some((category) => category.startsWith("context_ybi_"))) {
+    notes.push("Yerba Buena Island L1 context detail; non-playable, excluded from playable completeness denominator");
+  } else if (scope === "context") {
     notes.push("Non-playable context; excluded from playable completeness denominator");
   }
   return notes.join("; ");
@@ -375,9 +388,56 @@ function countMembership(rows, category) {
   return rows.filter((row) => row.categories.split("|").includes(category)).length;
 }
 
+// Yerba Buena Island's detail context rows (owner direction 2026-11-07, YBI L1
+// scenery): every frozen way or relation with a vertex strictly inside YBI's land
+// (w26767311 less the Treasure Island polygon) that is not already a ledger row and
+// meets a YBI context category (tools/lib/ybi-context-generation.mjs): buildings,
+// building parts, tall artworks, at-grade roads and paths (never the Bay Bridge
+// track: I-80, its ramps, or bridge- or tunnel-tagged ways), paved areas, and the
+// retaining walls and walls that stand mostly on YBI's land.
+const EXPECTED_YBI_CATEGORY_ROWS = {
+  context_ybi_building: 89,
+  context_ybi_building_part: 4,
+  context_ybi_structure: 1,
+  context_ybi_road: 239,
+  context_ybi_paved_area: 29,
+  context_ybi_wall: 51,
+  context_ybi_water: 1,
+};
+
+function ybiContextRows(rawGeoJsonSeq, admitted) {
+  const sources = parseGeometrySeq(rawGeoJsonSeq);
+  const boundary = JSON.parse(readFileSync(resolve(projectRoot, "data/osm/treasure-island-polygon.geojson"), "utf8"));
+  const land = differenceMultiPolygons(
+    geometryToMultiPolygon(selectGeometry(sources.get(YBI_BOUNDARY_ID), "area"), YBI_BOUNDARY_ID),
+    geometryToMultiPolygon(boundary.features[0].geometry, "Treasure Island boundary"),
+  );
+  const rows = [];
+  for (const source of [...sources.values()].sort((left, right) => compareCodePoints(left.source_key, right.source_key))) {
+    if (admitted.has(source.source_key)) continue;
+    const osmType = source.metadata.osm_type;
+    const hasArea = source.features.some((geometry) => geometry.type === "Polygon" || geometry.type === "MultiPolygon");
+    const categories = ybiContextCategories(source.metadata.tags, osmType, hasArea);
+    if (categories.length === 0) continue;
+    const points = source.features.flatMap((geometry) => {
+      if (geometry.type === "LineString") return geometry.coordinates;
+      if (geometry.type === "Polygon") return geometry.coordinates.flat();
+      if (geometry.type === "MultiPolygon") return geometry.coordinates.flat(2);
+      return [];
+    });
+    const inside = points.filter((point) => pointInMultiPolygon(projectLonLat(point), land, false)).length;
+    if (inside === 0) continue;
+    // A wall is YBI's only where most of it stands on YBI's land (not the bridge's parapets).
+    const kept = categories.filter((category) => category !== "context_ybi_wall" || inside * 2 >= points.length);
+    if (kept.length === 0) continue;
+    rows.push({ source_key: source.source_key, categories: kept });
+  }
+  return rows;
+}
+
 function assertExpectedCounts(rows) {
   const playable = rows.filter((row) => row.scope === "playable");
-  const context = rows.filter((row) => row.scope === "context");
+  const context = rows.filter((row) => row.scope === "context" && !row.categories.startsWith("context_ybi_"));
   const expected = {
     land_boundary: 1,
     terrain_shoreline: 22,
@@ -413,6 +473,11 @@ function assertExpectedCounts(rows) {
   if (context.length !== CONTEXT_IDS.size) {
     fail("Context inventory does not match the explicit context ID set");
   }
+  const ybi = rows.filter((row) => row.scope === "context" && row.categories.startsWith("context_ybi_"));
+  for (const [category, count] of Object.entries(EXPECTED_YBI_CATEGORY_ROWS)) {
+    const actual = countMembership(ybi, category);
+    if (actual !== count) fail(`Expected ${count} ${category} rows, found ${actual}`);
+  }
 }
 
 function main() {
@@ -440,6 +505,13 @@ function main() {
       rows.push(rowFor(source, "context", [category]));
     }
 
+    const admitted = new Set(rows.map((row) => row.source_key));
+    for (const { source_key: id, categories } of ybiContextRows(rawGeoJsonSeq, admitted)) {
+      const source = rawSources.get(id);
+      if (!source) fail(`YBI context source ${id} is absent from the raw export`);
+      rows.push(rowFor(source, "context", categories));
+    }
+
     rows.sort(compareRows);
     assertExpectedCounts(rows);
 
@@ -460,6 +532,9 @@ function main() {
         total_unique_rows: rows.length,
         playable_unique_rows: playableRows.length,
         context_unique_rows: contextRows.length,
+        ybi_context_category_memberships: Object.fromEntries(
+          YBI_CATEGORIES.map((category) => [category, countMembership(contextRows, category)]),
+        ),
         playable_category_memberships: Object.fromEntries(
           CATEGORY_ORDER.filter((category) => !category.startsWith("context_"))
             .map((category) => [category, countMembership(playableRows, category)]),
@@ -480,6 +555,7 @@ function main() {
         ybi_in_playable_scope: false,
         shared_coastline_requires_ti_clip_or_composite: SHARED_COASTLINE_ID,
         context_ids: [...CONTEXT_IDS.keys()],
+        ybi_detail_rows_rule: "frozen ways and relations with a vertex strictly inside w26767311 less w26767313, not already ledger rows, in a context_ybi_* category; the Bay Bridge track is excluded",
       },
     };
 
