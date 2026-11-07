@@ -7,10 +7,13 @@ extends Node3D
 
 const STARTUP_MARKS := preload("res://game/scripts/debug/startup_marks.gd")
 const TOUCH_CONTROLS := preload("res://game/scripts/ui/touch_controls.gd")
+const GROUND_DRESSING := preload("res://game/scripts/world/ground_dressing.gd")
 
 var _world_ready := false
 var _startup_failed := false
 var _touch_controls: TouchControls
+## The grass round the camera (ground_dressing.gd), null where it isn't drawn.
+var ground_dressing: GROUND_DRESSING
 var _web_blur_callback: JavaScriptObject
 var _web_visibility_callback: JavaScriptObject
 var _web_pointer_lock_callback: JavaScriptObject
@@ -136,6 +139,12 @@ func _on_world_ready(_report: Dictionary) -> void:
 	if not player.get_spray_controller().tag_instances.oldest_tag_removed.is_connected(world_root.get_runtime_evidence().record_tag_eviction):
 		player.get_spray_controller().tag_instances.oldest_tag_removed.connect(world_root.get_runtime_evidence().record_tag_eviction)
 	world_root.get_runtime_evidence().bind_runtime(player, world_root.get_boundary())
+	var dressing_level := GROUND_DRESSING.run_level()
+	if dressing_level != GROUND_DRESSING.OFF:
+		ground_dressing = GROUND_DRESSING.new()
+		ground_dressing.name = "GroundDressing"
+		add_child(ground_dressing)
+		ground_dressing.configure(world_root, player, dressing_level)
 	hud.show_loading("Preparing graphics…")
 	STARTUP_MARKS.mark("world_ready")
 	print("WORLD_READY")

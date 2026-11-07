@@ -1,5 +1,9 @@
 shader_type spatial;
+#ifdef GROUND_DRESSING_CAPTURE
+render_mode unshaded, depth_draw_opaque, cull_back;
+#else
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx;
+#endif
 
 // Island ground cover: maintained lawn, dry grass and bare soil from one set of
 // existing CC0 Poly Haven sparse_grass maps. Each family material only changes
@@ -177,6 +181,12 @@ vec3 cover_layer(vec3 gap, vec3 blade, vec3 straw, vec3 m, float grain_gain, flo
 	return mix(detail, mean, fade);
 }
 
+// game/scripts/world/ground_dressing.gd compiles this shader once more with
+// GROUND_DRESSING_CAPTURE defined, to read what the ground draws from above.
+#ifdef GROUND_DRESSING_CAPTURE
+#include "res://game/resources/materials/world/ground_cover/ground_dressing_capture.gdshaderinc"
+#endif
+
 void fragment() {
 	vec2 p = UV * 10.0;
 	// The family's own mix, with the map's recipes drawn over it.
@@ -211,6 +221,7 @@ void fragment() {
 	float pool = 0.0;
 	float marsh_cover = 0.0;
 	float rough = 0.0;
+	float bare_cover = 0.0;
 	if (marsh_amount > 0.0) {
 		vec2 axis = marsh_axis.zw - marsh_axis.xy;
 		vec2 from_start = p - marsh_axis.xy;
@@ -302,8 +313,12 @@ void fragment() {
 			soil *= mix(0.84 + 0.32 * value_noise(p / 3.7 + vec2(23.9, 47.3)), 1.0, fade);
 		}
 		ground = mix(ground, soil, bare_w);
+		bare_cover = bare_w;
 	}
 	ALBEDO = mix(ground * (0.94 + 0.12 * n_fine), puddle_tint, pool);
+#ifdef GROUND_DRESSING_CAPTURE
+	ALBEDO = ground_dressing_capture(ALBEDO, p, cover, own, ground_y, bare_cover, pool, marsh_cover - rough);
+#endif
 	// Matte, with a gentle normal fade, so distant ground does not turn paler
 	// than near ground through grazing-angle sky reflection or flatter normals;
 	// standing water alone holds the sky.
