@@ -220,7 +220,65 @@ func _initialize() -> void:
 		_fail("Sun rotation must follow its solar metadata: (-elevation, 180 - azimuth, 0).")
 		return
 	main.free()
-	print("PASS: gameplay inputs, 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, billboard contract, layer defaults, and procedural daylight")
+	call_deferred("_check_ferry_solidity")
+
+
+## The ferry terminal's scenery (game/scripts/world/ferry_terminal.gd) lies off the
+## walk route, but a jetpack landing on it must never fall through: in the loaded
+## world, straight down onto the float's deck, the breakwater, the docked boat and
+## the gangway, the first world-solid hit is the terminal's own body, which refuses
+## the spray (receiver_kind none).
+func _check_ferry_solidity() -> void:
+	create_timer(240.0, true, false, true).timeout.connect(func() -> void: _fail("The ferry solidity check timed out."))
+	var main := (load("res://game/scenes/main.tscn") as PackedScene).instantiate() as GameMain
+	main.capture_mouse_on_ready = false
+	var world := main.get_node("WorldRoot") as WorldLoader
+	var load_failures: Array[String] = []
+	world.world_failed.connect(func(code: String, message: String, _keys: Array) -> void: load_failures.append("%s: %s" % [code, message]))
+	root.add_child(main)
+	var started := Time.get_ticks_msec()
+	while not main.is_play_ready() and load_failures.is_empty() and Time.get_ticks_msec() - started < 180000:
+		await process_frame
+	if not load_failures.is_empty() or not main.is_play_ready():
+		_fail("The world did not reach play for the ferry solidity check: %s" % [load_failures])
+		return
+	for _frame in 2:
+		await physics_frame
+	var context: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world/context.json"))
+	var ferry: Dictionary = context.get("ferry_terminal", {}) if context is Dictionary else {}
+	var boat := world.ferry_context.find_child("SammyJ", true, false) as Node3D
+	if ferry.is_empty() or boat == null:
+		_fail("The ferry terminal's context section or its boat is missing.")
+		return
+	var corners: Array = ferry["float"].berth_side_xz + ferry["float"].far_side_xz
+	var float_middle := Vector2.ZERO
+	for corner: Array in corners:
+		float_middle += Vector2(float(corner[0]), float(corner[1])) / float(corners.size())
+	var line: Array = ferry.breakwater.line_xz
+	var targets := {
+		"float deck": float_middle,
+		"breakwater": (Vector2(line[0][0], line[0][1]) + Vector2(line[1][0], line[1][1])) * 0.5,
+		"boat": Vector2(boat.global_position.x, boat.global_position.z),
+		"gangway": (Vector2(ferry.gangway.top_xz[0], ferry.gangway.top_xz[1]) + Vector2(ferry.gangway.bottom_xz[0], ferry.gangway.bottom_xz[1])) * 0.5,
+	}
+	var space := main.get_world_3d().direct_space_state
+	var heights: Array[String] = []
+	for target: String in targets:
+		var xz: Vector2 = targets[target]
+		# Layer 1, the world-solid layer the stock player stands on.
+		var query := PhysicsRayQueryParameters3D.create(Vector3(xz.x, 40.0, xz.y), Vector3(xz.x, -20.0, xz.y), 1)
+		query.hit_back_faces = false
+		var hit := space.intersect_ray(query)
+		var body := hit.get("collider") as CollisionObject3D
+		if body == null or (body.collision_layer & 1) == 0 \
+		or str(body.get_meta("receiver_kind", "")) != "none" \
+		or not str(body.get_meta("derived_object_key", "")).begins_with("context:ferry-terminal") \
+		or (hit.position as Vector3).y <= EXPECTED_WATER_Y:
+			_fail("Straight down onto the ferry %s at %s the first world-solid hit must be the terminal's own non-receiver body above the water, not %s." % [target, xz, hit])
+			return
+		heights.append("%s %.2f m" % [target, (hit.position as Vector3).y])
+	main.queue_free()
+	print("PASS: gameplay inputs, 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, billboard contract, layer defaults, procedural daylight, and the ferry terminal solid from above (%s)" % ", ".join(heights))
 	quit(0)
 
 

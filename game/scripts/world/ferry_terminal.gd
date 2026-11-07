@@ -142,6 +142,8 @@ const RUB_GREY := Color(0.78, 0.79, 0.78, 1.0)
 const GLASS := Color(0.09, 0.11, 0.13, 0.5)
 const FRAME := Color(0.32, 0.33, 0.34, 1.0)
 const WHEELHOUSE_ORANGE := Color(0.9, 0.41, 0.13, 1.0)
+## The wheelhouse roof's crown inside its orange visor (owner aerial).
+const ROOF_GREY := Color(0.79, 0.8, 0.81, 1.0)
 const STAINLESS := Color(0.82, 0.83, 0.84, 1.0)
 const FENDER_BLUE := Color(0.08, 0.28, 0.7, 1.0)
 const VENT_GREY := Color(0.56, 0.57, 0.58, 1.0)
@@ -408,7 +410,7 @@ static func _float(b: RefCounted, body: StaticBody3D, d: Dock) -> void:
 	for edge: Array in [[far_z, d.gangway_z - 1.25 * d.berth], [d.gangway_z + 1.25 * d.berth, berth_z]]:
 		_pipe_rail(b, body, d.at(0.3, float(edge[0]), top), d.at(0.3, float(edge[1]), top), RAIL_HEIGHT_M, 1.6, RAIL_WHITE)
 	# Small white bollards over the open deck and on the outer landing, cleats at
-	# their berth edges, and the open deck's two utility boxes.
+	# their berth edges, and the open deck's two white utility boxes (owner aerial).
 	for spot: Vector2 in [Vector2(open_s - 2.0, 3.6), Vector2(open_s - 6.5, 3.6), Vector2(open_s - 11.0, 3.6), Vector2(d.length - 1.8, 3.6), Vector2(open_s - 2.0, -3.6), Vector2(open_s - 6.5, -3.6), Vector2(open_s - 11.0, -3.6), Vector2(d.length - 1.8, -3.6), Vector2(1.6, 4.6), Vector2(1.6, -4.6)]:
 		var foot := d.at(spot.x, spot.y, top)
 		b.tube(PackedVector3Array([foot, foot + Vector3.UP * 0.42]), PackedFloat32Array([0.12, 0.12]), 10, CAP_WHITE, CELL_WHITE, false, true)
@@ -416,7 +418,7 @@ static func _float(b: RefCounted, body: StaticBody3D, d: Dock) -> void:
 		b.box(d.at(cleat_s, d.berth * (hw - 0.3), top + 0.08), d.basis(), Vector3(0.36, 0.16, 0.12), STEEL_DARK, CELL_WHITE)
 	for box_spot: Vector2 in [Vector2(open_s - 3.6, -d.berth * 4.9), Vector2(5.5, -d.berth * 2.6)]:
 		var box_center := d.at(box_spot.x, box_spot.y, top + 0.45)
-		b.box(box_center, d.basis(), Vector3(0.9, 0.9, 0.6), STEEL_DARK, CELL_WHITE)
+		b.box(box_center, d.basis(), Vector3(0.9, 0.9, 0.6), CAP_WHITE, CELL_WHITE)
 		_box_shape(body, box_center, d.basis(), Vector3(0.9, 0.9, 0.6))
 	for buoy: Vector2 in [Vector2(open_s - 3.0, far_z), Vector2(1.8, far_z), Vector2(d.length - 2.0, berth_z)]:
 		var hub := d.at(buoy.x, buoy.y - signf(buoy.y) * 0.06, top + 0.68)
@@ -1088,7 +1090,7 @@ static func _upper_block(b: RefCounted, body: StaticBody3D) -> void:
 
 
 ## The orange wheelhouse on the forward block: its white-framed windscreen raked
-## forward under a white overhanging roof with a drip edge, wide white-framed side
+## forward under the roof's orange visor (a light grey crown), wide white-framed side
 ## windows and a small side door, two aft windows; the mast with its light bar,
 ## the Garmin radar dome and two whips (owner frames received 2026-11-07; Aug
 ## 2024, Jun 2025, Feb 2022).
@@ -1123,17 +1125,14 @@ static func _wheelhouse(b: RefCounted, body: StaticBody3D) -> void:
 			var xa := lerpf(fore_low, fore_high, (ya - y0) / (y1 - y0))
 			var xb := lerpf(fore_low, fore_high, (yb - y0) / (y1 - y0))
 			b.quad_face(Vector3(xa, ya, zb + grow) + lift, Vector3(xa, ya, za - grow) + lift, Vector3(xb, yb, za - grow) + lift, Vector3(xb, yb, zb + grow) + lift, color, screen)
-	# The roof: white, overhanging forward and to the sides, a dark drip edge under it.
-	var roof_center := Vector3((aft + fore_high) * 0.5 + 0.12, y1 + 0.08, 0.0)
-	var roof_size := Vector3(fore_high - aft + 0.55, 0.16, wz * 2.0 + 0.3)
-	b.box(roof_center, Basis.IDENTITY, roof_size, HULL_WHITE, CELL_WHITE)
-	b.box(roof_center + Vector3(0.0, -0.1, 0.0), Basis.IDENTITY, Vector3(roof_size.x - 0.06, 0.04, roof_size.z - 0.06), FRAME, CELL_WHITE)
+	# The roof: a light grey crown in an orange visor that rolls down round its edge.
+	var crown_y := _wheelhouse_roof(b, body, aft, fore_high, wz, y1)
 	# A small side door aft of the side windows (owner close-up); starboard mirrored.
 	for side: float in [-1.0, 1.0]:
 		b.quad_face(Vector3(0.18, y0 + 0.05, side * (wz + 0.012)), Vector3(0.48, y0 + 0.05, side * (wz + 0.012)), Vector3(0.48, y1 - 0.25, side * (wz + 0.012)), Vector3(0.18, y1 - 0.25, side * (wz + 0.012)), HULL_WHITE, Vector3(0.0, 0.0, side))
-	_box_shape(body, Vector3((aft + fore_high) * 0.5, (y0 + y1 + 0.16) * 0.5, 0.0), Basis.IDENTITY, Vector3(fore_high - aft, y1 + 0.16 - y0, wz * 2.0))
+	_box_shape(body, Vector3((aft + fore_high) * 0.5, (y0 + y1) * 0.5, 0.0), Basis.IDENTITY, Vector3(fore_high - aft, y1 - y0, wz * 2.0))
 	# Mast with its light bar, the radar dome and two whip antennas.
-	var mast := Vector3(1.4, y1 + 0.16, 0.0)
+	var mast := Vector3(1.4, crown_y, 0.0)
 	b.tube(PackedVector3Array([mast, mast + Vector3.UP * 0.75]), PackedFloat32Array([0.055, 0.045]), 8, HULL_WHITE, CELL_WHITE, false, false)
 	b.box(mast + Vector3.UP * 0.55, Basis.IDENTITY, Vector3(0.08, 0.06, 1.3), STAINLESS, CELL_WHITE)
 	for z: float in [-0.6, -0.2, 0.2, 0.6]:
@@ -1141,8 +1140,79 @@ static func _wheelhouse(b: RefCounted, body: StaticBody3D) -> void:
 	var dome := mast + Vector3.UP * 0.75
 	b.tube(PackedVector3Array([dome, dome + Vector3.UP * 0.2, dome + Vector3.UP * 0.27]), PackedFloat32Array([0.3, 0.3, 0.12]), 16, HULL_WHITE, CELL_WHITE, true, true)
 	for side: float in [-1.0, 1.0]:
-		var foot := Vector3(0.5, y1 + 0.16, side * 1.2)
+		var foot := Vector3(0.5, crown_y, side * 1.05)
 		b.tube(PackedVector3Array([foot, foot + Vector3(-0.15, 2.3, side * 0.18)]), PackedFloat32Array([0.022, 0.01]), 4, HULL_WHITE, CELL_WHITE, false, false)
+
+
+## The wheelhouse roof (owner aerial and low view received 2026-11-07; Jun 2025):
+## a light grey crown inside an orange visor whose edge rolls down all round,
+## deepest over the windscreen and swept round the front corners, with a short
+## lip and an orange soffit under the overhang. aft, fore and wz are the walls'
+## aft end, top front edge and half width, wall_top their top. Adds the roof's
+## convex collision and returns the crown's height.
+static func _wheelhouse_roof(b: RefCounted, body: StaticBody3D, aft: float, fore: float, wz: float, wall_top: float) -> float:
+	var drop := 0.24
+	var lip := 0.05
+	var soffit_y := wall_top - 0.01
+	var crown_y := soffit_y + lip + drop
+	# The outer edge in plan (x forward, z starboard, counter-clockwise): it
+	# overhangs the windscreen most and is rounded widely at the front corners.
+	var corners := PackedVector2Array([Vector2(aft - 0.08, -wz - 0.12), Vector2(fore + 0.3, -wz - 0.12), Vector2(fore + 0.3, wz + 0.12), Vector2(aft - 0.08, wz + 0.12)])
+	var outline: PackedVector2Array = BUILDER.rounded(corners, [0.35, 0.7, 0.7, 0.35], 6)
+	var count := outline.size()
+	var steps := 5
+	var uv := CELL_WHITE.get_center()
+	# Vertex rings: the visor's curve from the crown's edge (0) to its outer edge
+	# (steps), then the lip's foot (steps + 1); the crown and the soffit apart.
+	var rings: Array[Array] = []
+	for step in steps + 2:
+		rings.append([])
+	var crown := PackedInt32Array()
+	var soffit := PackedInt32Array()
+	var normals: Array[Vector3] = []
+	var hull := PackedVector3Array()
+	var crown_middle := Vector3.ZERO
+	var soffit_middle := Vector3.ZERO
+	for index in count:
+		var here := outline[index]
+		var before := here - outline[(index + count - 1) % count]
+		var after := outline[(index + 1) % count] - here
+		var flat := (Vector2(before.y, -before.x).normalized() + Vector2(after.y, -after.x).normalized()).normalized()
+		var n := Vector3(flat.x, 0.0, flat.y)
+		# How far the curve reaches in from the edge: most at the front, least aft.
+		var reach := lerpf(0.3, 0.45, flat.x) if flat.x > 0.0 else lerpf(0.3, 0.15, -flat.x)
+		var edge := Vector3(here.x, crown_y, here.y) - n * reach
+		for step in steps + 1:
+			var angle := PI * 0.5 * float(step) / float(steps)
+			var point := edge + n * reach * sin(angle) - Vector3.UP * drop * (1.0 - cos(angle))
+			var normal := (n * sin(angle) / reach + Vector3.UP * cos(angle) / drop).normalized()
+			rings[step].append(b.vertex(0, point, normal, uv, WHEELHOUSE_ORANGE))
+		var rim := Vector3(here.x, soffit_y, here.y)
+		rings[steps + 1].append(b.vertex(0, rim, n, uv, WHEELHOUSE_ORANGE))
+		crown.append(b.vertex(0, edge, Vector3.UP, uv, ROOF_GREY))
+		soffit.append(b.vertex(0, rim, Vector3.DOWN, uv, WHEELHOUSE_ORANGE))
+		normals.append(n)
+		hull.append(rim)
+		hull.append(edge)
+		crown_middle += edge / float(count)
+		soffit_middle += rim / float(count)
+	for step in steps + 1:
+		var near: Array = rings[step]
+		var far: Array = rings[step + 1]
+		var tilt := PI * 0.5 * (float(step) + 0.5) / float(steps) if step < steps else PI * 0.5
+		for index in count:
+			var next := (index + 1) % count
+			var outward := (normals[index] + normals[next]) * sin(tilt) + Vector3.UP * 2.0 * cos(tilt)
+			b.triangle(0, near[index], near[next], far[next], outward)
+			b.triangle(0, near[index], far[next], far[index], outward)
+	var crown_centre: int = b.vertex(0, crown_middle, Vector3.UP, uv, ROOF_GREY)
+	var soffit_centre: int = b.vertex(0, soffit_middle, Vector3.DOWN, uv, WHEELHOUSE_ORANGE)
+	for index in count:
+		var next := (index + 1) % count
+		b.triangle(0, crown_centre, crown[index], crown[next], Vector3.UP)
+		b.triangle(0, soffit_centre, soffit[index], soffit[next], Vector3.DOWN)
+	_convex_shape(body, hull)
+	return crown_y
 
 
 ## The open upper deck aft of the forward block: dense stainless rails of nine
