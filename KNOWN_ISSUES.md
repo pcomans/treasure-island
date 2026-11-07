@@ -35,6 +35,7 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 
 - From about 4.2 km up the water's outer ring lies down to water level, flat from about 4.65 km, so it can't wall in the camera near the far plane's height. From there the water ends about a kilometre out and sky shows below the horizon beyond it, at the far plane's limit.
 - Scenery in the last few percent of a view's depth, below eye height, stands behind the outer ring: the far end of the western span from the island overviews' 10 km far plane (water pass, 2026-11-07).
+- Seen from the jetpack toward the sun, the far sun path is a solid white patch: from 120 to 160 m up, its largest clipped area is about 2% of the frame (`glitter_limit` 2.0, `glitter_gain` 2.0, under the merged sun of 2026-11-07). The owner accepted it on 2026-11-07 as what real water does, so it stays as reviewed. At ground level the path is a broken sheen.
 - The SF skyline billboard fades into the hazy far water when seen from above its top: the billboard's colour and the scene's fog, outside the water pass (water pass, 2026-11-07).
 
 ## Buildings
