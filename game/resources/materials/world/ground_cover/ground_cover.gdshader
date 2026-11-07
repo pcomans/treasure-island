@@ -80,9 +80,10 @@ uniform vec3 turf_color : source_color = vec3(0.08, 0.17, 0.065);
 // drain into it. marsh_map's red holds the signed distance from the wetland's outline
 // (0.5 on it, MARSH_MAP_RANGE_M metres to white inside), its green the distance from the
 // lots' paving and its blue the floor's mapped low ground. Inside the frayed outline
-// lies the floor, a carpet of low succulents: crimson in drifts ragged at every scale,
-// over dark litter with lenses of straw and dull green (the whole about sRGB 88,62,49, its
-// reddest tenth 105,61,54 and its least red 65,55,39). Flopped dead grass climbs from it
+// lies the floor, a mat of low succulents: a stipple of crimson tips through warm litter,
+// thick in some drifts and thin in others, with lenses of straw and dull green. The footage
+// reads about sRGB 88,62,49 with R over 1.3 G in about 78% of its pixels, 1.45 G in 50%, 1.6 G
+// in 30% and 1.9 G in 8%: red by the mix, never a sheet. Flopped dead grass climbs from it
 // to crushed rock at the lots' edges. Water stands in the low ground alone, a shallow arm
 // with ragged edges and a little mud round it.
 uniform sampler2D marsh_map : hint_default_black, filter_linear, repeat_disable;
@@ -95,17 +96,17 @@ uniform float marsh_amount = 0.0;
 uniform vec4 marsh_axis = vec4(-295.0, 145.0, -345.0, 290.0);
 uniform vec2 marsh_radii = vec2(46.0, 66.0);
 uniform float marsh_floor_y = 1.95;
-uniform vec3 marsh_wine : source_color = vec3(0.15, 0.08, 0.07);
-uniform vec3 marsh_crimson : source_color = vec3(0.29, 0.125, 0.105);
-uniform vec3 marsh_flare : source_color = vec3(0.36, 0.15, 0.125);
-uniform vec3 marsh_ruddy : source_color = vec3(0.15, 0.125, 0.09);
-uniform vec3 marsh_straw : source_color = vec3(0.34, 0.275, 0.2);
+uniform vec3 marsh_wine : source_color = vec3(0.15, 0.085, 0.07);
+uniform vec3 marsh_crimson : source_color = vec3(0.27, 0.14, 0.115);
+uniform vec3 marsh_flare : source_color = vec3(0.33, 0.165, 0.13);
+uniform vec3 marsh_ruddy : source_color = vec3(0.185, 0.14, 0.1);
+uniform vec3 marsh_straw : source_color = vec3(0.36, 0.27, 0.19);
 uniform vec3 marsh_green : source_color = vec3(0.12, 0.13, 0.075);
 uniform vec3 marsh_olive : source_color = vec3(0.235, 0.215, 0.125);
 uniform vec3 marsh_mud : source_color = vec3(0.25, 0.2, 0.16);
 uniform vec3 marsh_wet_mud : source_color = vec3(0.16, 0.13, 0.105);
 uniform vec3 marsh_cobble : source_color = vec3(0.62, 0.58, 0.51);
-uniform vec3 bank_gap : source_color = vec3(0.085, 0.068, 0.06);
+uniform vec3 bank_gap : source_color = vec3(0.115, 0.092, 0.08);
 uniform vec3 bank_blade : source_color = vec3(0.255, 0.21, 0.18);
 uniform vec3 bank_straw : source_color = vec3(0.44, 0.385, 0.33);
 uniform vec3 bank_gravel : source_color = vec3(0.33, 0.32, 0.29);
@@ -140,10 +141,10 @@ const float WATER_RISE_PER_M = 2.0;
 const float WATER_POOL = 0.68;
 const float WATER_DRY = 0.3;
 const float MARSH_TILE_M = 1.8;
-// The flopped grass's and the crushed rock's repeats, and the level of the red mat's drifts.
+// The flopped grass's and the crushed rock's repeats, and the red grain's mean.
 const float BANK_TILE_M = 3.0;
 const float BANK_ROCK_TILE_M = 1.67;
-const float RED_LEVEL = 0.45;
+const float RED_GRAIN_MEAN = 0.455;
 // marsh_map's reach either side of the outline (tools/lib/ground-cover-map.mjs).
 const float MARSH_MAP_RANGE_M = 32.0;
 
@@ -274,7 +275,9 @@ void fragment() {
 
 			// The grain, read at two scales so its repeat never shows.
 			vec2 tile_uv = mat2(vec2(0.82, 0.57), vec2(-0.57, 0.82)) * p / MARSH_TILE_M;
-			vec2 grain = mix(texture(marsh_grain, tile_uv).rg, texture(marsh_grain, mat2(vec2(0.31, -0.95), vec2(0.95, 0.31)) * p / (MARSH_TILE_M * 2.9) + vec2(0.37, 0.71)).rg, 0.3);
+			vec2 grain_near = texture(marsh_grain, tile_uv).rg;
+			vec2 grain_mid = texture(marsh_grain, mat2(vec2(0.31, -0.95), vec2(0.95, 0.31)) * p / (MARSH_TILE_M * 2.9) + vec2(0.37, 0.71)).rg;
+			vec2 grain = mix(grain_near, grain_mid, 0.3);
 			float green_grain = texture(marsh_grain, vec2(tile_uv.y, -tile_uv.x) * 1.37 + vec2(0.21, 0.63)).r;
 
 			// The slopes: dead grass flopped in swathes over dark thatch, hollowed between
@@ -282,31 +285,33 @@ void fragment() {
 			float flopped = mix(texture(marsh_grain, mat2(vec2(0.96, 0.28), vec2(-0.28, 0.96)) * p / BANK_TILE_M).a, texture(marsh_grain, mat2(vec2(0.55, -0.83), vec2(0.83, 0.55)) * p / (BANK_TILE_M * 2.63) + vec2(0.13, 0.57)).a, 0.35);
 			vec3 bank = mix(mix(bank_gap, bank_blade, smoothstep(0.3, 0.52, flopped)), bank_straw, smoothstep(0.52, 0.74, flopped));
 			float hollow = smoothstep(0.5, 0.7, 0.6 * value_noise(p / 1.9 + vec2(67.1, 31.7)) + 0.4 * n_small);
-			bank *= (1.0 - 0.6 * hollow) * (0.86 + 0.28 * smoothstep(0.3, 0.7, 0.55 * n_mid + 0.45 * n_patch8));
+			bank *= (1.0 - 0.45 * hollow) * (0.86 + 0.28 * smoothstep(0.3, 0.7, 0.55 * n_mid + 0.45 * n_patch8));
 			// The slope falls away a little darker to its foot, pale at the top.
 			bank *= mix(0.9, 1.06, smoothstep(2.6, 3.7, h));
-			// Crushed rock spills from the lots' shoulders over the slope's top, ragged into
-			// the grass, with patches of rubble showing through it lower down.
+			// Crushed rock spills from the lots' shoulders over the slope's top, ragged into the grass.
 			float rock_w = 1.0 - smoothstep(0.2, 1.6, paved_m + 1.8 * (n_small - 0.5) + 1.2 * (n_tiny - 0.5) + 1.0 * (flopped - 0.5));
-			rock_w = max(rock_w, 0.85 * smoothstep(0.6, 0.66, 0.5 * n_patch8 + 0.3 * n_small + 0.2 * n_tiny) * smoothstep(2.9, 3.4, h_land));
 			bank = mix(bank, bank_gravel * (0.2 + 1.6 * smoothstep(0.15, 0.85, texture(marsh_grain, p / BANK_ROCK_TILE_M).b)), rock_w);
 			float bank_w = 1.0 - smoothstep(4.7, 5.3, h_land);
 
-			// The mat: crimson in drifts a few metres to a few tens long, ragged at every scale
-			// down to the grain, over dark litter, with lenses of straw and dull green.
+			// The mat: a stipple of crimson tips through warm litter, thick in some drifts and
+			// thin in others, never a sheet. The stipple is the red grain at four scales, each
+			// taking over as the finer ones average out, so it holds from a walker's feet to the
+			// far bank; stipple runs about -2 to 2.
 			vec2 along = vec2(0.643 * p.x + 0.766 * p.y, 0.643 * p.y - 0.766 * p.x);
-			float drifts = 0.3 * value_noise(along / vec2(19.0, 8.0) + vec2(7.3, 51.9)) + 0.24 * value_noise(along / vec2(7.0, 3.6) + vec2(23.7, 11.1)) + 0.22 * value_noise(along / vec2(2.8, 1.6) + vec2(41.7, 17.3)) + 0.24 * (0.6 * n_tiny + 0.4 * n_fine);
-			float red_edge = mix(0.04, 0.09, smoothstep(20.0, 120.0, dist));
-			float red_w = smoothstep(RED_LEVEL - red_edge, RED_LEVEL + red_edge, drifts + 0.3 * (grain.x - 0.5) * fine);
+			float fine_grain = 0.5 * texture(marsh_grain, mat2(vec2(0.6, 0.8), vec2(-0.8, 0.6)) * p / 19.0 + vec2(0.11, 0.83)).r;
+			float wide_grain = 0.5 * texture(marsh_grain, mat2(vec2(-0.38, 0.92), vec2(-0.92, -0.38)) * p / 61.0 + vec2(0.57, 0.29)).r;
+			float stipple = (0.3 * grain_near.x + 0.25 * grain_mid.x + 0.5 * fine_grain + 0.4 * wide_grain - RED_GRAIN_MEAN) * mix(12.0, 32.0, smoothstep(8.0, 90.0, dist));
+			float thick = smoothstep(0.34, 0.66, 0.55 * value_noise(along / vec2(19.0, 8.0) + vec2(7.3, 51.9)) + 0.45 * value_noise(along / vec2(7.0, 3.6) + vec2(23.7, 11.1)));
+			float red_w = smoothstep(-0.3, 0.3, stipple - mix(1.7, -0.5, thick));
 			float straw_w = smoothstep(0.57, 0.67, 0.42 * value_noise(along / vec2(11.0, 3.4) + vec2(61.7, 43.9)) + 0.22 * n_mid + 0.18 * n_small + 0.18 * n_tiny + 0.14 * (grain.y - 0.5) * fine);
-			float green_w = smoothstep(0.6, 0.64, 0.72 * value_noise(along / vec2(14.0, 4.6) + vec2(11.7, 23.1)) + 0.28 * n_small);
+			float green_w = smoothstep(0.61, 0.66, 0.6 * value_noise(along / vec2(14.0, 4.6) + vec2(11.7, 23.1)) + 0.22 * n_small + 0.18 * n_tiny);
 			vec3 red = mix(marsh_wine, marsh_crimson, smoothstep(0.34, 0.62, grain.x));
 			red = mix(red, marsh_flare, 0.5 * smoothstep(0.66, 0.86, grain.x));
-			vec3 marsh = mix(marsh_ruddy, marsh_straw, 0.08 + 0.55 * smoothstep(0.55, 0.85, grain.y));
+			vec3 marsh = mix(marsh_ruddy, marsh_straw, 0.1 + 0.5 * smoothstep(0.5, 0.8, grain.y));
 			marsh = mix(marsh, mix(marsh_green, marsh_olive, smoothstep(0.34, 0.62, green_grain)), green_w);
 			marsh = mix(marsh, mix(marsh_ruddy, marsh_straw, smoothstep(0.34, 0.62, grain.y)), straw_w);
-			marsh = mix(marsh, red, red_w * (1.0 - 0.75 * max(straw_w, green_w)));
-			marsh *= 0.66 + 0.68 * (0.55 * mix(0.5, value_noise(p / 0.9 + vec2(13.7, 77.1)), ragged) + 0.45 * n_small);
+			marsh = mix(marsh, red, red_w * (1.0 - 0.6 * max(straw_w, green_w)));
+			marsh *= 1.0 + 0.9 * (fine_grain + wide_grain - RED_GRAIN_MEAN) * mix(1.0, 2.2, smoothstep(20.0, 90.0, dist));
 			// The floor: inside the wetland's frayed outline, and any lower land round it.
 			float wet = smoothstep(-1.5, 3.0, outline_m + 7.0 * (n_mid - 0.5) + 5.0 * (n_wide - 0.5) + 2.5 * (n_small - 0.5)) * (1.0 - bank_rise);
 			float carpet = max(1.0 - smoothstep(2.45, 2.8, h), wet);

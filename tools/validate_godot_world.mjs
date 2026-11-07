@@ -53,6 +53,8 @@ import {
   SHORELINE_BOULDER_MATERIAL,
   SHORELINE_CLOSURE_KINDS,
   SHORELINE_COBBLE_MAX_TOP_M,
+  SHORELINE_INLAND_MAX_REACH_M,
+  SHORELINE_INLAND_MAX_TOP_M,
   SHORELINE_DRIFTWOOD_MATERIAL,
   SHORELINE_OUTSIDE_CLEARANCE_M,
   SHORELINE_OVERLAY_MATERIAL,
@@ -1434,7 +1436,9 @@ function validateFenceRow(row, grounded, inBoundary, groundAt) {
 // unit rotation with positive, and for a stone uniform, scale. Then each stone
 // is placed and checked against the island the player walks on: cobbles lie
 // wholly inside it and no higher than SHORELINE_COBBLE_MAX_TOP_M above the
-// land (the player walks over them, with no collision); every other stone and
+// land (the player walks over them, with no collision); an inland stone stands
+// inside it too, within SHORELINE_INLAND_MAX_REACH_M of it and no higher than
+// SHORELINE_INLAND_MAX_TOP_M above the land (its band has a body); every other stone and
 // log keeps SHORELINE_OUTSIDE_CLEARANCE_M clear of it on the water side, and
 // one that lies under a walkable pier (the playable boundary's pier
 // extensions) tops out at least 1 m below the land edge, under the deck.
@@ -1602,6 +1606,7 @@ function validateShoreline(worldRoot, manifest, records) {
         const distance = nearBoundary(x, z);
         if (batch.band === "cobble" || batch.band === "inland") {
           invariant(inside(x, z) && distance > 0.005, `Shoreline ${batch.band} stone in ${batch.id} at (${ox}, ${oz}) reaches the playable boundary`);
+          invariant(batch.band !== "inland" || distance <= SHORELINE_INLAND_MAX_REACH_M, `Shoreline inland stone in ${batch.id} at (${ox}, ${oz}) stands ${distance.toFixed(3)} m inside the island edge`);
         } else {
           invariant(!inside(x, z) && distance >= SHORELINE_OUTSIDE_CLEARANCE_M - 0.005, `Shoreline ${batch.band} stone in ${batch.id} at (${ox}, ${oz}) comes within ${distance.toFixed(3)} m of the island edge`);
           underPier ||= walkable(x, z);
@@ -1610,6 +1615,9 @@ function validateShoreline(worldRoot, manifest, records) {
       if (batch.band === "cobble") {
         const land = landAt(ox, oz);
         invariant(land != null && top <= land + SHORELINE_COBBLE_MAX_TOP_M + 1e-6, `Shoreline cobble in ${batch.id} at (${ox}, ${oz}) rises ${(top - land).toFixed(3)} m above the land`);
+      } else if (batch.band === "inland") {
+        const land = landAt(ox, oz);
+        invariant(land != null && top <= land + SHORELINE_INLAND_MAX_TOP_M + 1e-6, `Shoreline inland stone in ${batch.id} at (${ox}, ${oz}) rises ${(top - land).toFixed(3)} m above the land`);
       } else if (underPier) {
         const land = edgeLandAt(ox, oz);
         invariant(land != null && top <= land - 1.0, `Shoreline ${batch.band} stone in ${batch.id} at (${ox}, ${oz}) under a walkable pier reaches ${top.toFixed(3)} m, within 1 m of the land edge`);

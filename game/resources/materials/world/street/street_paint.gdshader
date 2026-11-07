@@ -51,7 +51,7 @@ uniform vec3 patch_asphalt : source_color = vec3(0.360, 0.360, 0.365);
 // The Mersea promenade's old paint (owner video, Nov 2026): the crossing's bars rolled
 // thin over worn asphalt, about 165,160,156 under the tone map, its white lines gone to
 // about 150,142,130, and a double yellow worn to an ochre a shade off the road.
-uniform vec3 rolled_white : source_color = vec3(0.48, 0.465, 0.445);
+uniform vec3 rolled_white : source_color = vec3(0.5, 0.485, 0.46);
 uniform vec3 trace_white : source_color = vec3(0.36, 0.335, 0.3);
 uniform vec3 trace_yellow : source_color = vec3(0.275, 0.245, 0.185);
 // A tar-sealed crack in an old road (a sealant's wear step 1): dark and dull, so a

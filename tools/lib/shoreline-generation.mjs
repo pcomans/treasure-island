@@ -116,6 +116,10 @@ export const SHORELINE_RECORD_MATERIALS = Object.freeze({
 export const SHORELINE_CLOSURE_KINDS = Object.freeze(["none", "ramp", "wall"]);
 // Cobbles stand on walkable land with no collision: at most this far above it.
 export const SHORELINE_COBBLE_MAX_TOP_M = 0.15;
+// An inland stone bank's stones: how high over the land and how far from the outline they
+// may stand. Unlike the cobbles they are solid (shoreline_builder.gd gives the band a body).
+export const SHORELINE_INLAND_MAX_TOP_M = 0.8;
+export const SHORELINE_INLAND_MAX_REACH_M = 6.0;
 // Stones and logs outside keep at least this far beyond the outline.
 export const SHORELINE_OUTSIDE_CLEARANCE_M = 0.1;
 // A rock ground lies this far over the draped band it covers (three draped
@@ -432,6 +436,7 @@ export function shorelineSettings(config) {
     for (const key of ["fill", "reach_m"]) invariant(isFiniteNumber(bank[key]) && bank[key] > 0, `Shoreline inland stones ${bank.id} ${key} must be positive`);
     requireRange(bank.size_m, 0, `Shoreline inland stones ${bank.id} size_m`);
     requireRange(bank.top_m, 0, `Shoreline inland stones ${bank.id} top_m`);
+    invariant(bank.top_m[1] <= SHORELINE_INLAND_MAX_TOP_M, `Shoreline inland stones ${bank.id} may rise at most ${SHORELINE_INLAND_MAX_TOP_M} m`);
     for (const key of ["from_xz", "to_xz"]) invariant(Array.isArray(bank[key]) && bank[key].length === 2 && bank[key].every(isFiniteNumber), `Shoreline inland stones ${bank.id} ${key} must be [x, z]`);
     for (const field of ["reason", "reference"]) invariant(typeof bank[field] === "string" && bank[field].trim() !== "", `Shoreline inland stones ${bank.id} need ${field}`);
   }

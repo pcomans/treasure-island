@@ -117,14 +117,14 @@ const LOW_GRADES := {
 	"litter.png": [Color(0.64, 0.62, 0.6), 0.55],
 	"seeded_stems.png": [Color(1.0, 0.95, 0.9), 0.55, 0.75],
 	"seeded_tufts.png": [Color(0.86, 0.84, 0.8), 0.7],
-	"marsh_seeded_shrub.png": [Color(0.84, 0.77, 0.7), 0.25],
+	"marsh_seeded_shrub.png": [Color(0.7, 0.665, 0.63), 0.45],
 	"young_tree_a.png": [Color(0.86, 0.86, 0.8), 0.2],
 	"young_tree_b.png": [Color(0.9, 0.92, 0.84), 0.2],
 	"young_shrub.png": [Color(0.8, 0.82, 0.74), 0.25],
-	"marsh_thin_stems.png": [Color(0.82, 0.79, 0.76), 0.7],
-	"marsh_low_mat.png": [Color(0.84, 0.8, 0.74), 0.4],
-	"marsh_seeded_brush.png": [Color(0.82, 0.78, 0.72), 0.4],
-	"tall_fringe.png": [Color(0.86, 0.86, 0.72), 0.25],
+	"marsh_thin_stems.png": [Color(0.61, 0.577, 0.544), 0.7],
+	"marsh_low_mat.png": [Color(0.645, 0.6, 0.564), 0.4],
+	"marsh_seeded_brush.png": [Color(0.58, 0.56, 0.525), 0.45],
+	"tall_fringe.png": [Color(0.712, 0.702, 0.526), 0.25],
 	"woolly_stalks.png": [Color(0.78, 0.72, 0.66), 0.55],
 	"buckwheat_stalks.png": [Color(0.84, 0.74, 0.64), 0.7],
 	"buckwheat_foliage.png": [Color(0.8, 0.76, 0.68), 0.55],
@@ -324,10 +324,8 @@ func _pack_marsh(images: Dictionary, errors: Array[String]) -> void:
 		if name in ["marsh_low_mat.png", "tall_fringe.png"]:
 			_straw(image)
 		_grade(image, LOW_GRADES[name][0], LOW_GRADES[name][1])
-		if name == "tall_fringe.png":
-			_fray_ends(image, 0.14)
-		elif cell.size.x == 1024:
-			# The mat and the brush are mounds, so overlapping cards run into one another.
+		if cell.size.x == 1024:
+			# Wide cards are mounds, so overlapping cards run into one another.
 			_fray_ends(image, 0.3)
 		if name == "marsh_low_mat.png":
 			_fray_foot(image, 0.5)
