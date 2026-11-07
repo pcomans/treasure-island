@@ -1150,11 +1150,11 @@ The web smoke's run-speed check took two position reads 550 ms apart (2026-11-06
 
 ## List a zone's trees before the plants under them
 
-On 2026-11-07 all three tree rules of the new Garden Walk zone placed 0 of 8, twice, at 7 minutes a regeneration. Scatter rules run in the zone's order, and a tree's 0.8 m footprint overlaps the low plants already placed; the audit's rejection reasons are island-wide, so nothing named the cause. Put tree rules first in a zone's list, and after a regeneration read each rule's `placed` in `street_detail.json`'s `zones`, not the island totals. A tree in a bed narrower than its footprint also needs its rule's `surfaces` left out.
+On 2026-11-07 all three tree rules of the new Garden Walk zone placed 0 of 8, twice, at 7 minutes a regeneration. Scatter rules run in the zone's order, and a tree's 0.8 m footprint overlaps the low plants already placed; the audit's rejection reasons are island-wide, so nothing named the cause. Put tree rules first in a zone's list, and after a regeneration read each rule's `placed` in `street_detail.json`'s `zones`, not the island totals. A tree in a bed narrower than its footprint also needs its rule's `surfaces` left out. Trimming a zone's polygon can bite too: a way with under half its ribbon's vertices inside no longer counts as the park's own, so it bars plants as a road again, which is the likeliest reason two island trees vanished until the zone's end moved back.
 
 ## Check a new surface name against the loader before a run
 
-A surface material added to the generator's list passed generation and `validate_godot_world`, then failed the world load with a bare `record_schema` (2026-11-07): `generated_world_contract.gd` allows `surface_bias_m` only on `park_*` names and its yard list. Name a new draped surface `park_*`, or extend that list in the same change.
+A surface material added to the generator's list generated cleanly, then failed the world load with a bare `record_schema` (2026-11-07): `generated_world_contract.gd` allows `surface_bias_m` only on `park_*` names and its yard list. Name a new draped surface `park_*`, or extend that list in the same change.
 
 ## Move a fixed view's target when a wall moves
 
