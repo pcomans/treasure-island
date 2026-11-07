@@ -124,7 +124,8 @@ import {
   loadStreetDetailZones,
   streetDetailHardShapes,
 } from "./lib/street-detail-generation.mjs";
-import { EAST_SPAN_PALETTE_UV, eastSpanMesh } from "./lib/east-span-generation.mjs";
+import { bayBridgeMesh } from "./lib/bay-bridge-generation.mjs";
+import { meshGroundSampler } from "./lib/bay-bridge-kit.mjs";
 import { generateStreetGround, loadStreetGroundRules } from "./lib/street-ground-generation.mjs";
 import { writeGroundCoverMap } from "./lib/ground-cover-map.mjs";
 import { writeWaterShoreMap } from "./lib/water-shore-map.mjs";
@@ -153,10 +154,6 @@ const TERRAIN_RASTER_EXPECTATIONS = Object.freeze({
   maximum_elevation_m: 104.756,
 });
 const FOUNDATION_BURIAL_MARGIN_M = 0.02;
-// The runtime leaves out every Bay Bridge context triangle west of this x (the
-// imported western-span model stands there; WorldChunkBuilder
-// WESTERN_BRIDGE_REPLACEMENT_MAX_X_M).
-const WESTERN_SPAN_RUNTIME_CUT_X_M = 500;
 // A pier's deck past the island outline is drawn when it covers more than this.
 // Smaller remainders are coastline digitizing slips: w1222505176's 5.5 m² lies
 // over the riprap, where the May 2026 aerial shows rocks and no deck.
@@ -1823,23 +1820,10 @@ function buildContext(ledger, boundary, rawOsm, rawSources, playableObjects, ter
   const bridgeGeometry = differenceMultiPolygons(bridgeSourceGeometry, boundary);
   roundingAreaAudit(bridgeGeometry, "Bay Bridge context");
   invariant(bridgeGeometry.length > 0, "Bay Bridge context is empty after TI subtraction");
-  // The old western span keeps its flat sheet, which the runtime leaves out
-  // (everything west of x = 500 m, where the imported western-span model
-  // stands). The modern eastern span is built in three dimensions so that it
-  // reads from the shore (tools/lib/east-span-generation.mjs); its transition
-  // bents stop where the deck meets Yerba Buena Island's terrain.
-  const westSpanGeometry = differenceMultiPolygons(westGeometry, boundary);
-  invariant(
-    multiPolygonBounds(westSpanGeometry).max_x < WESTERN_SPAN_RUNTIME_CUT_X_M,
-    "The flat western span reaches past the runtime's western-span cut",
-  );
-  const eastSpanGeometry = eastSpanMesh(rawOsm, memberWayIds, (east, north) =>
-    pointInMultiPolygon([east, north], ybiSourceGeometry, true) ? terrain.sampleTerrainEastNorth(east, north) : null);
-  // The record's UVs pick the bay bridge palette's texels; the flat western
-  // sheet takes the light concrete one.
-  const westSpanSheet = topSurfaceMesh(westSpanGeometry, 12, "Bay Bridge western span context");
-  westSpanSheet.uvs = westSpanSheet.uvs.map((_value, index) => EAST_SPAN_PALETTE_UV.structure[index % 2]);
-  const bridgeMesh = mergeMeshes([westSpanSheet, eastSpanGeometry], "Bay Bridge context");
+  // The whole bridge (eastern span, Yerba Buena Island crossing, western span) in
+  // three dimensions from one generator (tools/lib/bay-bridge-generation.mjs), its
+  // piers and roads on YBI standing on the terrain drawn above.
+  const bridgeMesh = bayBridgeMesh({ rawOsm, groundAt: meshGroundSampler(ybiContext.terrainMesh) }).mesh;
 
   const records = [
     contextRecord(meshRecord({
