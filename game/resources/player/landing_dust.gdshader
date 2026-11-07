@@ -35,8 +35,8 @@ uniform bool ground_capture = false;
 uniform vec2 landing_xz = vec2(0.0);
 // From the ground's colour to its dust: the share of colour it keeps, and how far
 // it pales towards white, on the darkest ground and on the lightest.
-uniform float dust_saturation = 0.45;
-uniform vec2 dust_pale = vec2(0.32, 0.08);
+uniform float dust_saturation = 0.7;
+uniform vec2 dust_pale = vec2(0.4, 0.1);
 // 0 draws nothing: the start-up burst that compiles this shader early.
 uniform float strength = 1.0;
 // Height over width of the puff's body: below 1 it is wider than tall.

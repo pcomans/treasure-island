@@ -164,7 +164,7 @@ func _run() -> void:
 	if not _require(_poofs.is_empty(), "A poof came from something other than a fast-drop landing: at %s." % [_poofs]):
 		_finish(main)
 		return
-	print("PASS: C drops the stock player fast onto land, road and roof without passing through, kicking up the dust poof as it lands, does nothing on the ground, and Space beats it; a slow landing kicks up no poof")
+	print("PASS: C drops the stock player fast onto land, road and roof without passing through, kicking up the dust poof as it lands, does nothing on the ground, and Space beats it; no poof comes without a fast drop at touchdown (a slow landing, a late C, C let go or Space pressed just before it)")
 	_finish(main)
 
 
