@@ -9,19 +9,22 @@ const SPIRE_SHADER := preload("res://game/resources/materials/world/ybi/ybi_spir
 const FACADE_PREFIX := "context_ybi_facade_"
 const SPIRE_KEY := "context_ybi_spire"
 
-## Each photographed building's façade, from its dated photos (production inference for
-## the spacing): wall and band colours, storey height, the dark band within a storey,
-## bay width and the light pier's share of it, and the floors that carry bands.
+## Each photographed building's façade look, from its dated photos: wall and band
+## colours, the dark band within a storey, the light pier's share of a bay, the floors
+## that carry bands and the podium's form-board ribs per bay. The generator measures it
+## (UVs in bays and storeys: tools/lib/ybi-context-generation.mjs and its config hold the
+## storey height and each building's bay width). Bands on the faces no photo shows are
+## inferred.
 const FACADES := {
 	# The Bristol (w813225688): white render, charcoal window bays and balcony frames,
 	# six floors over a board-formed podium (Street View Nov 2025, ybi01b and ybi02).
-	"bristol": {"wall_color": Color(0.87, 0.86, 0.83), "band_color": Color(0.16, 0.17, 0.18), "storey_m": 3.2, "band_from": 0.28, "band_to": 0.86, "bay_m": 7.2, "pier_share": 0.24, "floors": 6.0},
+	"bristol": {"wall_color": Color(0.87, 0.86, 0.83), "band_color": Color(0.16, 0.17, 0.18), "band_from": 0.28, "band_to": 0.86, "pier_share": 0.24, "floors": 6.0, "ribs_per_bay": 16.0},
 	# The Cove townhouses at 299 Macalla Road (w1228080320): white walls, charcoal projecting
 	# window boxes, four floors (Street View Nov 2025, ybi03).
-	"cove": {"wall_color": Color(0.88, 0.88, 0.86), "band_color": Color(0.15, 0.16, 0.17), "storey_m": 3.2, "band_from": 0.22, "band_to": 0.85, "bay_m": 6.0, "pier_share": 0.55, "floors": 4.0},
+	"cove": {"wall_color": Color(0.88, 0.88, 0.86), "band_color": Color(0.15, 0.16, 0.17), "band_from": 0.22, "band_to": 0.85, "pier_share": 0.55, "floors": 4.0, "ribs_per_bay": 13.0},
 	# 36 Meadow Drive (w1228080322): white render with grey-brown panels over a pale brick
 	# base, four floors (Street View Sep 2025, ybi04).
-	"meadow": {"wall_color": Color(0.86, 0.85, 0.82), "band_color": Color(0.42, 0.38, 0.33), "storey_m": 3.2, "band_from": 0.3, "band_to": 0.78, "bay_m": 8.0, "pier_share": 0.5, "floors": 4.0},
+	"meadow": {"wall_color": Color(0.86, 0.85, 0.82), "band_color": Color(0.42, 0.38, 0.33), "band_from": 0.3, "band_to": 0.78, "pier_share": 0.5, "floors": 4.0, "ribs_per_bay": 18.0},
 }
 
 static var _facades: Dictionary = {}

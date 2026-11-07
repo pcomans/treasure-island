@@ -28,6 +28,7 @@ import {
   rectangleMultiPolygon,
   selectGeometry,
 } from "./osm-geometry.mjs";
+import { STREET_VEGETATION_PROPS } from "./street-vegetation-generation.mjs";
 import { invariant, roundCoordinate, sha256Bytes, stableJson } from "./world-contract.mjs";
 
 export const YBI_CONFIG_PATH = "tools/config/ybi-context.json";
@@ -264,6 +265,14 @@ export function loadYbiLandCover(projectRoot) {
 }
 
 // --- Small deterministic helpers --------------------------------------------------
+
+// A kit prop variant's nominal height (the street-vegetation kit's, mirrored in
+// STREET_VEGETATION_PROPS; the YBI builder checks the copy the document carries).
+function nominalHeight(prop, variant) {
+  const height = STREET_VEGETATION_PROPS[prop]?.heights_m?.[variant];
+  invariant(height > 0, `${prop} variant ${variant} has no nominal height`);
+  return height;
+}
 
 function hash32(...values) {
   let h = 0x811c9dc5;
@@ -633,7 +642,9 @@ function clipConvex(polygon, triangle) {
 // piece lies in one terrain triangle's plane, so the surface follows the drawn ground
 // exactly. The polygon is cut into the terrain's cells first (through 8-cell tiles), so
 // each cell's few pieces meet only that cell's triangles.
-function drapeMultiPolygon(multiPolygon, terrain, biasM) {
+// keep: an optional test of each terrain triangle (its plan corners and heights); the
+// drape covers only the triangles it keeps.
+function drapeMultiPolygon(multiPolygon, terrain, biasM, keep = null) {
   const mesh = emptyMesh();
   const vertex = vertexWriter(mesh, true);
   const up = [0, 1, 0];
@@ -659,6 +670,7 @@ function drapeMultiPolygon(multiPolygon, terrain, biasM) {
             const ccw = area2 > 0 ? triangle : [triangle[0], triangle[2], triangle[1]];
             for (const t of candidates) {
               const entry = terrain.triangles[t];
+              if (keep && !keep(entry)) continue;
               const clipped = clipConvex(ccw, entry.plan);
               if (clipped.length < 3) continue;
               const [a, b, c] = entry.plan;
@@ -779,8 +791,9 @@ function roofFunction(form, box, top, pitchDeg) {
 }
 
 // Walls from the roof line down into the ground, and the roof, of one footprint.
-// facade: {bay_m, base} for a photographed building's banded wall: UVs in metres, u
-// along each edge centred on its bays, v the height above the building's base.
+// facade: {bay_m, storey_m, base} for a photographed building's banded wall: UVs in
+// bays and storeys, u along each edge with its bays centred on it, v the storeys above
+// the building's base (ybi_facade.gdshader draws a band per storey and a pier per bay).
 function addMassing({ walls, roof, footprint, roofForm, groundAt, wallBottomCap, wallStepM, buryM, facade = null }) {
   const wallVertex = vertexWriter(walls);
   const roofVertex = vertexWriter(roof);
@@ -808,7 +821,7 @@ function addMassing({ walls, roof, footprint, roofForm, groundAt, wallBottomCap,
           const pb = bottom(p);
           const qb = bottom(q);
           const uvAt = (along, y) => facade
-            ? [along - (length % facade.bay_m) / 2, y - facade.base]
+            ? [(along - (length % facade.bay_m) / 2) / facade.bay_m, (y - facade.base) / facade.storey_m]
             : [along / 10, y / 10];
           const a = wallVertex([p[0], pb, -p[1]], outward, uvAt(along0, pb));
           const b = wallVertex([q[0], qb, -q[1]], outward, uvAt(along1, qb));
@@ -1224,7 +1237,7 @@ export function buildYbiContext({ projectRoot, land, boundary, playableBoundary,
       wallBottomCap: base,
       wallStepM: config.buildings.wall_step_m,
       buryM: config.buildings.wall_bury_m,
-      facade: facade ? { bay_m: facade.bay_m, base } : null,
+      facade: facade ? { bay_m: facade.bay_m, storey_m: config.buildings.storey_m, base } : null,
     });
     buildingFootprints.push(footprint);
     buildingBase.set(joined.row.source_key, { footprint, base, top, height: height.height_m });
@@ -1253,7 +1266,8 @@ export function buildYbiContext({ projectRoot, land, boundary, playableBoundary,
         roof: roofs,
         footprint,
         roofForm: { heightAt: () => top, faces: null },
-        groundAt: parent ? () => floor + 0.6 + 0.05 : groundAt,
+        // On a parent's roof the wall's foot (ground less the bury) stands 5 cm up.
+        groundAt: parent ? () => floor + config.buildings.wall_bury_m + 0.05 : groundAt,
         wallBottomCap: floor,
         wallStepM: config.buildings.wall_step_m,
         buryM: config.buildings.wall_bury_m,
@@ -1267,7 +1281,8 @@ export function buildYbiContext({ projectRoot, land, boundary, playableBoundary,
     const line = geometryToLine(selectGeometry(joined.exported, "line"), label);
     const width = config.surfaces.road_widths_m[joined.tags.highway];
     invariant(width > 0, `${label} highway=${joined.tags.highway} has no YBI width`);
-    return rawIntersect(ribbon(line, joined.tags.highway === "construction" && joined.tags.construction == null ? 4 : width, label), land);
+    const unspecifiedWorks = joined.tags.highway === "construction" && joined.tags.construction == null;
+    return rawIntersect(ribbon(line, unspecifiedWorks ? config.surfaces.unspecified_construction_width_m : width, label), land);
   };
   const drawn = [];
   const claim = (geometry) => {
@@ -1315,21 +1330,30 @@ export function buildYbiContext({ projectRoot, land, boundary, playableBoundary,
     for (const joined of members) addObject(joined, spec.object_key, [spec.object_key], null);
     surfaceReport[klass] = { sources: members.length, area_m2: round2(multiPolygonArea(geometry)) };
   }
-  // The summit reservoir, under every road and path: its pale concrete banks a band
-  // across its mapped edge, its water inside them.
+  // The summit reservoir, under every road and path: its water, and its concrete banks,
+  // the steep ground within bank_reach_m outside its mapped edge (the rest of that band
+  // claimed as its bare verge).
   const basins = byCategory("context_ybi_water");
   if (basins.length > 0) {
+    const basinArea = rawUnion(...areaGeometry(basins));
     const edges = [];
-    for (const polygon of rawUnion(...areaGeometry(basins))) {
-      for (const ring of polygon) edges.push(ribbon([...ring, ring[0]], config.basin.lining_m, "context_ybi_water edge"));
+    for (const polygon of basinArea) {
+      for (const ring of polygon) edges.push(ribbon([...ring, ring[0]], 2 * config.basin.bank_reach_m, "context_ybi_water edge"));
     }
     const parts = {
+      water: claim(basinArea),
       lining: claim(rawIntersect(rawUnion(...edges), land)),
-      water: claim(rawUnion(...areaGeometry(basins))),
+    };
+    const steepBank = (entry) => {
+      const [a, b, c] = entry.plan;
+      const u = [b[0] - a[0], entry.y[1] - entry.y[0], b[1] - a[1]];
+      const v = [c[0] - a[0], entry.y[2] - entry.y[0], c[1] - a[1]];
+      const n = [u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0]];
+      return Math.hypot(n[0], n[2]) >= config.basin.bank_slope * Math.abs(n[1]);
     };
     const basinKeys = Object.values(YBI_BASIN_RECORDS).map((spec) => spec.object_key);
     for (const [part, spec] of Object.entries(YBI_BASIN_RECORDS)) {
-      const mesh = drapeMultiPolygon(parts[part], terrain, config.surfaces.bias_m);
+      const mesh = drapeMultiPolygon(parts[part], terrain, config.surfaces.bias_m, part === "lining" ? steepBank : null);
       invariant(mesh.indices.length > 0, `${spec.object_key} draped no triangles`);
       records.push({ object_key: spec.object_key, context_kind: "ybi_surface", material_key: spec.material_key, source_keys: basins.map((joined) => joined.row.source_key), mesh });
       surfaceReport[`basin_${part}`] = { sources: basins.length, area_m2: round2(multiPolygonArea(parts[part])) };
@@ -1347,6 +1371,9 @@ export function buildYbiContext({ projectRoot, land, boundary, playableBoundary,
   }
   // The summit sculpture, on the drawn plaza where OSM's pedestrian area paves it.
   const structureReport = [];
+  // Round a structure that keeps its silhouette (structures[KEY].tree_clearance), trees
+  // keep their tops under a set height above its base.
+  const treeClearances = [];
   let spireMesh = null;
   for (const joined of byCategory("context_ybi_structure")) {
     const footprint = rawIntersect(geometryToMultiPolygon(selectGeometry(joined.exported, "area"), joined.row.source_key), land);
@@ -1371,6 +1398,10 @@ export function buildYbiContext({ projectRoot, land, boundary, playableBoundary,
       bed: structure.bed,
     });
     spireMesh = built.mesh;
+    if (structure.tree_clearance) {
+      invariant(config.vegetation.species[structure.tree_clearance.species], `${joined.row.source_key} tree clearance names no species`);
+      treeClearances.push({ center, radius: structure.tree_clearance.radius_m, top: base + structure.tree_clearance.top_above_base_m, species: structure.tree_clearance.species });
+    }
     addObject(joined, YBI_BUILDINGS_KEY, massingKeys, footprint, height);
     const report = {
       source_key: joined.row.source_key,
@@ -1397,12 +1428,14 @@ export function buildYbiContext({ projectRoot, land, boundary, playableBoundary,
   // Retaining walls and walls (OSM barriers), heights from the DEM's step across them.
   const wallSources = byCategory("context_ybi_wall");
   const wallReport = [];
+  const wallFootprints = [];
   if (wallSources.length > 0) {
     const wallMesh = emptyMesh();
     for (const joined of wallSources) {
       const line = rawLineOnLand(joined, land);
       if (line.length < 2) continue;
       const area = barrierWallMesh(wallMesh, line, dem.sampleTerrainEastNorth, groundAt, config.walls);
+      wallFootprints.push(ribbon(line, 2 * config.walls.thickness_m, joined.row.source_key));
       wallReport.push({ source_key: joined.row.source_key, face_m2: round2(area) });
       addObject(joined, YBI_WALLS_KEY, [YBI_WALLS_KEY], null);
     }
@@ -1483,7 +1516,9 @@ export function buildYbiContext({ projectRoot, land, boundary, playableBoundary,
   // scrub throws hardly any. Shadow within reach of a building or the bridge is theirs,
   // not a tree's. OSM's wood is tall and its scrub low.
   const depth = distanceToMask(grid, Uint8Array.from(canopyMask, (value) => (value ? 0 : 1)));
-  const structureShade = dilate(grid, Uint8Array.from(builtMask, (value, index) => (value || bridgeMask[index] || deckMask[index] ? 1 : 0)), veg.structure_shadow_m);
+  const wallMask = new Uint8Array(cells);
+  for (const footprint of wallFootprints) rasterizeMultiPolygon(grid, wallMask, footprint);
+  const structureShade = dilate(grid, Uint8Array.from(builtMask, (value, index) => (value || bridgeMask[index] || deckMask[index] || wallMask[index] || water[index] ? 1 : 0)), veg.structure_shadow_m);
   const shadowRaw = new Float32Array(cells);
   for (let index = 0; index < cells; index += 1) shadowRaw[index] = landMask[index] && !water[index] && !structureShade[index] ? at("shadow", index) : 0;
   const canopyNear = boxBlur(grid, Float32Array.from(canopyMask), 2);
@@ -1491,7 +1526,9 @@ export function buildYbiContext({ projectRoot, land, boundary, playableBoundary,
   const tall = new Float32Array(cells);
   for (let index = 0; index < cells; index += 1) {
     if (!canopyMask[index]) continue;
-    const shadowShare = canopyNear[index] > 0 ? shadowNear[index] / canopyNear[index] : 0;
+    // Per canopy cell round it, but never as if less than min_canopy_share of the
+    // window were canopy: a speck of crowns beside a dark patch is not a tall stand.
+    const shadowShare = shadowNear[index] / Math.max(canopyNear[index], veg.min_canopy_share);
     let t = smoothstep(veg.tall_shadow_share[0], veg.tall_shadow_share[1], shadowShare);
     if (woodOsm[index]) t = Math.max(t, 0.7);
     if (scrubOsm[index]) t = Math.min(t, 0.3);
@@ -1540,15 +1577,27 @@ export function buildYbiContext({ projectRoot, land, boundary, playableBoundary,
   }
 
   // --- Trees.
+  // The first zone whose rule holds: each rule is a list of alternatives (any may hold),
+  // each a set of conditions that must all hold (config vegetation.zones[].when).
+  const zoneConditions = {
+    in_osm_wood: (site, value) => site.inWood === value,
+    elevation_above_m: (site, value) => site.elevation > value,
+    elevation_below_m: (site, value) => site.elevation < value,
+    x_below: (site, value) => site.x < value,
+    z_below: (site, value) => site.z < value,
+    normal_x_below: (site, value) => site.normal != null && site.normal[0] < value,
+    normal_z_below: (site, value) => site.normal != null && site.normal[2] < value,
+    shore_within_m: (site, value) => site.shoreDistance <= value,
+  };
+  for (const zone of veg.zones) {
+    invariant(Array.isArray(zone.when) && zone.when.every((alternative) => Object.keys(alternative).every((name) => zoneConditions[name])), `YBI zone ${zone.id} has an unknown condition`);
+  }
   const zoneOf = (east, north, elevation, normal, inWood, shoreDistance) => {
-    const x = east;
-    const z = -north;
-    if (inWood) return "se_wood";
-    if (elevation > 66) return "summit";
-    if (x < 230 || (normal && normal[0] < -0.3 && x < 420)) return "west_bluffs";
-    if (elevation < 9 && shoreDistance <= 45 && z < 1250) return "cove_shore";
-    if (normal && normal[2] < -0.15 && z < 1450) return elevation > 35 ? "cove_upper" : "cove_lower";
-    return "default";
+    const site = { x: east, z: -north, elevation, normal, inWood, shoreDistance };
+    const zone = veg.zones.find((candidate) => candidate.when.length === 0
+      || candidate.when.some((alternative) => Object.entries(alternative).every(([name, value]) => zoneConditions[name](site, value))));
+    invariant(zone, "No YBI vegetation zone holds (the last must hold everywhere)");
+    return zone.id;
   };
   const zones = new Map(veg.zones.map((zone) => [zone.id, zone.mix]));
   // A tree takes the roll of the nearest patch seed (seeds jittered on a lattice), so
@@ -1593,6 +1642,8 @@ export function buildYbiContext({ projectRoot, land, boundary, playableBoundary,
   const instances = [];
   let deckCapped = 0;
   let deckSkipped = 0;
+  let clearanceCapped = 0;
+  let clearanceSkipped = 0;
   const placeTree = (speciesName, east, north, edgeFactor, seed, tallness = 1) => {
     const species = veg.species[speciesName];
     const variant = species.variants[Math.floor(hash32(east, north, seed, 11) * species.variants.length)];
@@ -1616,11 +1667,25 @@ export function buildYbiContext({ projectRoot, land, boundary, playableBoundary,
     const center = groundAt(east, north);
     if (center == null || center - foot > 1.2) return false;
     if (center > veg.upper_slope_m && speciesName !== "garden_tree") scale *= veg.upper_slope_factor;
+    // Round a structure that keeps its silhouette, the crown stays under its set height;
+    // a species too tall for that stands as the clearance's low round crown instead.
+    for (const clearance of treeClearances) {
+      if (Math.hypot(east - clearance.center[0], north - clearance.center[1]) > clearance.radius) continue;
+      const allowed = (clearance.top - foot) / (nominalHeight(species.prop, variant) * Math.sqrt(stretch));
+      if (allowed >= scale) continue;
+      if (allowed >= 0.5) {
+        scale = allowed;
+        clearanceCapped += 1;
+        continue;
+      }
+      if (speciesName !== clearance.species) return placeTree(clearance.species, east, north, edgeFactor, seed, tallness);
+      clearanceSkipped += 1;
+      return false;
+    }
     // Under a bridge deck the crown stays below it (the deck's reach: the crown's half width).
     const index = cellOf(east, north);
     if (index >= 0 && deckNear[index]) {
-      const nominal = veg.prop_heights_m[species.prop][variant] * Math.sqrt(stretch);
-      invariant(nominal > 0, `${species.prop} variant ${variant} has no nominal height`);
+      const nominal = nominalHeight(species.prop, variant) * Math.sqrt(stretch);
       const allowed = (track.deck_clear_top_m - foot) / nominal;
       if (allowed < scale) {
         if (allowed < 0.5) {
@@ -1664,7 +1729,8 @@ export function buildYbiContext({ projectRoot, land, boundary, playableBoundary,
   lattice(spacing, 1, (east, north) => {
     const index = cellOf(east, north);
     if (index < 0 || !grovesCells[index]) return;
-    if (fractalNoise(east, north, veg.gap_noise_scale_m, 29) < veg.gap_noise_cut && canopy[index] < 0.8) return;
+    // Clearings open where the canopy thins, but not in the tallest stands, which stand closed.
+    if (fractalNoise(east, north, veg.gap_noise_scale_m, 29) < veg.gap_noise_cut && canopy[index] < 0.8 && tall[index] < veg.tall_band[0]) return;
     const zone = zoneAt(east, north, index);
     if (zone == null) return;
     if (placeTree(pickSpecies(zone, east, north), east, north, groveEdge(index), 1, tall[index])) groves[label[index]].trees += 1;
@@ -1781,6 +1847,8 @@ export function buildYbiContext({ projectRoot, land, boundary, playableBoundary,
     instances: [],
     counts: { total: instances.length, species: Object.fromEntries(Object.entries(speciesCounts).sort(([l], [r]) => compareCodePoints(l, r))) },
   };
+  // The kit's nominal heights the deck clearance used, which the game checks against the kit.
+  vegetation.prop_heights_m = vegetation.props.map((prop) => STREET_VEGETATION_PROPS[prop].heights_m.map((_, variant) => nominalHeight(prop, variant)));
   // Each species' tone at a distance (the impostors' tint, YBI only).
   vegetation.tints = vegetation.props.map((prop) => {
     const tint = veg.tints[prop];
@@ -1884,6 +1952,7 @@ export function buildYbiContext({ projectRoot, land, boundary, playableBoundary,
       canopy_cells: { grove: grovesCells.reduce((a, b) => a + b, 0), small: smallCells.reduce((a, b) => a + b, 0), scrub: scrubCells.reduce((a, b) => a + b, 0), groves: groves.length },
       vegetation: vegetation.counts,
       deck: { capped: deckCapped, skipped: deckSkipped },
+      structure_clearance: { capped: clearanceCapped, skipped: clearanceSkipped },
       structures: structureReport,
       walls: { sources: wallReport.length, face_m2: round2(wallReport.reduce((sum, item) => sum + item.face_m2, 0)) },
     },

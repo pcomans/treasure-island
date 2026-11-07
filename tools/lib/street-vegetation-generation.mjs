@@ -3,7 +3,9 @@
 //
 // A vegetation row is built when it carries a prop of the street-vegetation kit
 // (game/scripts/world/street_vegetation_kit.gd, which keeps the same variant
-// counts and foot radii as STREET_VEGETATION_PROPS). Props come from:
+// counts and foot radii as STREET_VEGETATION_PROPS, and for the props Yerba Buena
+// Island places the same nominal heights; the YBI builder checks those against the
+// kit on load). Props come from:
 //   - zone scatter rules that name one (tools/config/street-detail-zones.json):
 //     the Avenue of the Palms fan palms, the grass clumps of the mulch beds and
 //     the planted beds of parks such as Cityside Park;
@@ -43,7 +45,13 @@ import { invariant, roundCoordinate } from "./world-contract.mjs";
 // planted at a point: a hedge line row carries it with prop_params {variant,
 // ground_y_m}, the visible ground's height under each of the line's points
 // (the kit's hedge_into lays it there; its foot radius is half its depth).
-const vegetationProp = (kinds, variants, footM, trunk) => Object.freeze({ kinds: Object.freeze(kinds), variants, foot_m: footM, trunk });
+// heightsM: the variants' nominal heights (the kit's "height"), for the props Yerba
+// Buena Island places (tools/lib/ybi-context-generation.mjs keeps their crowns under
+// the bridge decks).
+const vegetationProp = (kinds, variants, footM, trunk, heightsM = null) => {
+  invariant(heightsM == null || heightsM.length === variants, "A street vegetation prop needs one nominal height per variant");
+  return Object.freeze({ kinds: Object.freeze(kinds), variants, foot_m: footM, trunk, ...(heightsM ? { heights_m: Object.freeze(heightsM) } : {}) });
+};
 // Low plants stand in grass_clump rows (a 0.35 m footprint) or, spaced wider,
 // in planting_slot rows (0.8 m).
 const LOW_PLANT_KINDS = Object.freeze(["grass_clump", "planting_slot"]);
@@ -55,20 +63,20 @@ export const STREET_VEGETATION_PROPS = Object.freeze({
   canary_date_palm: vegetationProp(["palm_slot", "tree"], 7, 0.7, true),
   clipped_hedge: vegetationProp(["hedge"], 7, 0.45, false),
   clump_grass: vegetationProp(["grass_clump"], 8, 0.3, false),
-  conical_shrub: vegetationProp(["planting_slot", "tree"], 2, 0.4, false),
+  conical_shrub: vegetationProp(["planting_slot", "tree"], 2, 0.4, false, [3.0, 3.8]),
   dense_sedge: vegetationProp(LOW_PLANT_KINDS, 5, 0.18, false),
   dune_tansy: vegetationProp(LOW_PLANT_KINDS, 3, 0.2, false),
-  eucalyptus_mature: vegetationProp(["tree"], 2, 0.9, true),
-  indian_hawthorn: vegetationProp(["planting_slot"], 3, 0.6, false),
+  eucalyptus_mature: vegetationProp(["tree"], 2, 0.9, true, [22.0, 25.0]),
+  indian_hawthorn: vegetationProp(["planting_slot"], 3, 0.6, false, [1.2, 1.5, 1.8]),
   island_oak_young: vegetationProp(["tree"], 3, 0.3, true),
   mexican_fan_palm: vegetationProp(["palm_slot", "tree"], 6, 0.45, true),
-  monterey_cypress: vegetationProp(["tree"], 5, 0.8, true),
-  monterey_pine: vegetationProp(["tree"], 6, 0.6, true),
+  monterey_cypress: vegetationProp(["tree"], 5, 0.8, true, [13.0, 11.0, 4.6, 3.4, 2.6]),
+  monterey_pine: vegetationProp(["tree"], 6, 0.6, true, [10.0, 12.0, 13.6, 6.0, 6.8, 7.6]),
   norfolk_island_pine: vegetationProp(["tree"], 2, 0.2, true),
-  nz_christmas_tree: vegetationProp(["tree"], 2, 0.5, true),
+  nz_christmas_tree: vegetationProp(["tree"], 2, 0.5, true, [7.0, 8.5]),
   nz_flax: vegetationProp(LOW_PLANT_KINDS, 4, 0.25, false),
   pacific_reedgrass: vegetationProp(LOW_PLANT_KINDS, 4, 0.25, false),
-  pittosporum_tobira: vegetationProp(["planting_slot"], 5, 0.5, false),
+  pittosporum_tobira: vegetationProp(["planting_slot"], 5, 0.5, false, [1.0, 1.25, 1.5, 1.1, 0.7]),
   red_tip_shrub: vegetationProp(LOW_PLANT_KINDS, 2, 0.25, false),
   rush: vegetationProp(LOW_PLANT_KINDS, 6, 0.2, false),
   sea_thrift: vegetationProp(LOW_PLANT_KINDS, 4, 0.12, false),
@@ -76,7 +84,7 @@ export const STREET_VEGETATION_PROPS = Object.freeze({
   seaside_woolly_sunflower: vegetationProp(LOW_PLANT_KINDS, 3, 0.3, false),
   seep_monkeyflower: vegetationProp(LOW_PLANT_KINDS, 3, 0.15, false),
   shrubby_sage: vegetationProp(LOW_PLANT_KINDS, 3, 0.3, false),
-  spreading_broadleaf: vegetationProp(["tree"], 4, 0.7, true),
+  spreading_broadleaf: vegetationProp(["tree"], 4, 0.7, true, [7.5, 9.5, 11.0, 12.5]),
   weeping_broadleaf: vegetationProp(["tree"], 2, 0.5, true),
   sydney_blue_gum_young: vegetationProp(["tree"], 3, 0.3, true),
   white_umbel_perennial: vegetationProp(LOW_PLANT_KINDS, 3, 0.15, false),

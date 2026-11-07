@@ -70,6 +70,12 @@
    "segments": 28,
    "ring_power": 1.8,
    "skirt_m": 0.3,
+   "tree_clearance": {
+    "radius_m": 80,
+    "top_above_base_m": 0.0,
+    "species": "coast_live_oak",
+    "evidence": "Round the sculpture the crest stays low: from Treasure Island's west shore one low round crown stands left of it (the trees by the steps south-east of the plaza) and the plaza's parapet right of it, nothing reaching the steel ('Yerba Buena Island Profile - May 2025 01', 9yz, 2025-05-27); the close photo of the same day shows none taller than the cone, and the 2026-05-26 aerial shows only low shrubs and small trees within 80 m (the summit park and the crest north of its road loop). So within 80 m a crown keeps its top under the sculpture's foot, the plaza level, since a tree nearer Treasure Island than the sculpture shows higher against it from there; a species too tall for that stands as a low coast live oak (production inference)."
+   },
    "evidence": [
     "Form: the plaque at the sculpture (owner photo, 2026-11-07): 'Point of Infinity. Surface of Revolution with Constant Negative Curvature', x = cos u / cosh v, y = sin u / cosh v, z = v - tanh v (0 <= u < 2 pi, 0 <= v < infinity): a pseudosphere, radius 1 at its rim (v = 0, z = 0), narrowing to a point as z rises.",
     "Height 21.03 m (69 ft): KQED, A. Proehl, 'A New Piece of Public Art Makes a Point Above Yerba Buena Island', 2023-06-09 (updated 2024-01-11); Secret San Francisco, J. Ferrell, 2023-04-12; Wikipedia 'Point of Infinity' (checked 2026-11-07). OSM w1232537986 height=21.",
@@ -103,7 +109,8 @@
    "path": 2,
    "steps": 2
   },
-  "evidence": "Widths follow the Treasure Island road classes (tools/lib/world-contract.mjs ROAD_WIDTHS_M); steps as footways, links and construction roads as their aerial width. The on-grade Treasure Island Road works on the west shore (highway=construction, construction=tertiary) are drawn as the graded gravel the 2026-05-26 aerial shows."
+  "unspecified_construction_width_m": 4,
+  "evidence": "Widths follow the Treasure Island road classes (tools/lib/world-contract.mjs ROAD_WIDTHS_M); steps as footways, links and construction roads as their aerial width. The on-grade Treasure Island Road works on the west shore (highway=construction, construction=tertiary) are drawn as the graded gravel the 2026-05-26 aerial shows. A construction way that names no road class (highway=construction alone) is a 4 m graded track (unspecified_construction_width_m), as the aerial shows the west-side haul roads."
  },
  "bridge_track": {
   "exclude_margin_m": 6,
@@ -185,6 +192,11 @@
    {
     "id": "se_wood",
     "rule": "inside the OSM natural=wood multipolygon r15819529",
+    "when": [
+     {
+      "in_osm_wood": true
+     }
+    ],
     "mix": {
      "blue_gum": 0.78,
      "monterey_pine": 0.1,
@@ -194,6 +206,11 @@
    {
     "id": "summit",
     "rule": "ground above 66 m",
+    "when": [
+     {
+      "elevation_above_m": 66
+     }
+    ],
     "mix": {
      "blue_gum": 0.4,
      "monterey_pine": 0.34,
@@ -205,6 +222,15 @@
    {
     "id": "west_bluffs",
     "rule": "west of x 230, or west-facing ground (normal x below -0.3) west of x 420",
+    "when": [
+     {
+      "x_below": 230
+     },
+     {
+      "normal_x_below": -0.3,
+      "x_below": 420
+     }
+    ],
     "mix": {
      "blue_gum": 0.55,
      "monterey_cypress": 0.2,
@@ -215,6 +241,13 @@
    {
     "id": "cove_shore",
     "rule": "ground below 9 m within 45 m of the shore, north of z 1250",
+    "when": [
+     {
+      "elevation_below_m": 9,
+      "shore_within_m": 45,
+      "z_below": 1250
+     }
+    ],
     "mix": {
      "willow": 0.4,
      "blue_gum": 0.4,
@@ -224,6 +257,13 @@
    {
     "id": "cove_upper",
     "rule": "north-facing ground (normal z below -0.15) north of z 1450, above 35 m: the slope's top and middle",
+    "when": [
+     {
+      "normal_z_below": -0.15,
+      "z_below": 1450,
+      "elevation_above_m": 35
+     }
+    ],
     "mix": {
      "blue_gum": 0.36,
      "monterey_cypress": 0.2,
@@ -235,6 +275,12 @@
    {
     "id": "cove_lower",
     "rule": "north-facing ground (normal z below -0.15) north of z 1450, 35 m and below",
+    "when": [
+     {
+      "normal_z_below": -0.15,
+      "z_below": 1450
+     }
+    ],
     "mix": {
      "blue_gum": 0.8,
      "coast_live_oak": 0.1,
@@ -245,6 +291,7 @@
    {
     "id": "default",
     "rule": "everywhere else",
+    "when": [],
     "mix": {
      "blue_gum": 0.6,
      "monterey_pine": 0.12,
@@ -458,54 +505,6 @@
     ]
    }
   },
-  "prop_heights_m": {
-   "eucalyptus_mature": [
-    22.0,
-    25.0
-   ],
-   "monterey_cypress": [
-    13.0,
-    11.0,
-    4.6,
-    3.4,
-    2.6
-   ],
-   "monterey_pine": [
-    10.0,
-    12.0,
-    13.6,
-    6.0,
-    6.8,
-    7.6
-   ],
-   "spreading_broadleaf": [
-    7.5,
-    9.5,
-    11.0,
-    12.5
-   ],
-   "nz_christmas_tree": [
-    7.0,
-    8.5
-   ],
-   "conical_shrub": [
-    3.0,
-    3.8
-   ],
-   "indian_hawthorn": [
-    1.2,
-    1.5,
-    1.8
-   ],
-   "pittosporum_tobira": [
-    1.0,
-    1.25,
-    1.5,
-    1.1,
-    0.7
-   ]
-  },
-  "prop_heights_note": "Each variant's nominal height in the street-vegetation kit (game/scripts/world/street_vegetation_kit.gd), for the deck clearance.",
   "zones_evidence": "Clark 2017 by zone: on the Clipper Cove woodland blue gum is the most abundant tree, with Monterey cypress and acacia toward the slope's top and middle, coast live oak and toyon at its top and middle and arroyo willow low down (cove_upper and cove_lower split the slope at 35 m); the summit holds the island's biggest stand of Monterey pine; the west bluffs low, wind-sculpted coast live oaks with coastal scrub. The west bluffs' tall stands, the band between the west-side road works and Yerba Buena Road's summit loop, are blue gum (the 2025-05-27 photo from Treasure Island's west shore; the 2026-05-26 aerial's crowns and long shadows); the wind-sculpted oaks stand in their scrub as small trees.",
   "upper_slope_m": 45,
   "upper_slope_factor": 0.88,
@@ -515,13 +514,14 @@
    0.18
   ],
   "structure_shadow_m": 12,
+  "min_canopy_share": 0.3,
   "grove_tallness": 0.5,
   "small_tree_tallness": 0.2,
   "tallness_scale": [
    0.88,
    1.08
   ],
-  "tallness_evidence": "The 2026-05-26 aerial's deep shadow (data/ybi shadow layer) separates the island's tall groves from its low scrub: in the north cove woodland, the south and south-east slopes and the trees along the bridge 17-40 % of the canopy's surroundings lie in deep shadow, in the scrub of the west face, the summit park and the knob 2-10 % (round 2 debug, notes/shadow-debug.png). The Commons photo of 2025-05-27 and Street View Sep 2025 (sv02) show the same split: tall groves on the cove shore band and the south-east, open gold grass and low dark scrub on the west face and summit. The shadow counts in and round the canopy within 10 m, since a narrow band of tall trees throws its shadow onto the open ground beside it (the west-side band, which the canopy-only count took for scrub in round 2); shadow within structure_shadow_m of a building or the bridge is left out. Where the stand reads tallest (tall_band), its rim trees keep their full height: the west-side band of blue gums stands 25-35 m high along its whole width in the 2025-05-27 photo.",
+  "tallness_evidence": "The 2026-05-26 aerial's deep shadow (data/ybi shadow layer) separates the island's tall groves from its low scrub: in the north cove woodland, the south and south-east slopes and the trees along the bridge 17-40 % of the canopy's surroundings lie in deep shadow, in the scrub of the west face, the summit park and the knob 2-10 % (round 2 debug, notes/shadow-debug.png). The Commons photo of 2025-05-27 and Street View Sep 2025 (sv02) show the same split: tall groves on the cove shore band and the south-east, open gold grass and low dark scrub on the west face and summit. The shadow counts in and round the canopy within 10 m, since a narrow band of tall trees throws its shadow onto the open ground beside it (the west-side band, which the canopy-only count took for scrub in round 2); shadow within structure_shadow_m of a building or the bridge is left out. Where the stand reads tallest (tall_band), its rim trees keep their full height: the west-side band of blue gums stands 25-35 m high along its whole width in the 2025-05-27 photo. The shadow of a wall or of the summit reservoir's banks is left out like a building's, and the share is taken over at least min_canopy_share of the window, so a speck of crowns beside a dark wall or bank does not read as a tall stand (round 4: two crest blue gums by the summit plaza stood as high as the sculpture's tip from Treasure Island). The tallest stands (tall_band) also open no clearings: the west-side blue-gum band stands as a near-solid mass up to the bridge tower in the 2025-05-27 photo.",
   "understorey": {
    "spacing_m": 8.0,
    "edge_m": 14.0,
@@ -583,7 +583,8 @@
     0.54
    ]
   },
-  "tints_evidence": "The impostors' tone at a distance, YBI's own (Treasure Island's trees keep theirs): darker and warmer than the shared tint so the groves read as the dark olive masses of the 2025-05-27 photo (about sRGB 49,50,35 in its groves) through the game's haze, the blue gums a little greyer and lighter than the cypress and pine."
+  "tints_evidence": "The impostors' tone at a distance, YBI's own (Treasure Island's trees keep theirs): darker and warmer than the shared tint so the groves read as the dark olive masses of the 2025-05-27 photo (about sRGB 49,50,35 in its groves) through the game's haze, the blue gums a little greyer and lighter than the cypress and pine.",
+  "zones_note": "Zones apply in order, the first whose rule holds: when lists alternatives (any may hold), each a set of conditions that must all hold (in_osm_wood, elevation_above_m, elevation_below_m, x_below, z_below, normal_x_below, normal_z_below, shore_within_m; world x, z with z = -north, the terrain's unit normal); an empty list always holds."
  },
  "ground": {
   "cell_m": 2,
@@ -596,17 +597,17 @@
   "w813225688": {
    "style": "bristol",
    "bay_m": 7.2,
-   "evidence": "The Bristol: Street View Nov 2025 from Macalla Road, ybi01b (its north face: white piers between recessed charcoal window bays, a flat roof edge) and ybi02 (its north-east face: charcoal projecting balcony frames and glass rails on white render, six floors over a ribbed, board-formed concrete retaining wall). The banding's spacing is production inference from those photos."
+   "evidence": "The Bristol: Street View Nov 2025 from Macalla Road, ybi01b (its north face: white piers between recessed charcoal window bays, a flat roof edge) and ybi02 (its north-east face: charcoal projecting balcony frames and glass rails on white render, six floors over a ribbed, board-formed concrete retaining wall). The banding's spacing is production inference from those photos. The bands run on every face; those no photo shows are inferred (the owner, 2026-11-07: inferred detail on YBI is fine at its distance)."
   },
   "w1228080320": {
    "style": "cove",
    "bay_m": 6.0,
-   "evidence": "The Cove townhouse row at 299 Macalla Road: Street View Nov 2025, ybi03 (white render with charcoal projecting window boxes, three floors and a roof deck over a ground floor; footprint binding inferred from the camera)."
+   "evidence": "The Cove townhouse row at 299 Macalla Road: Street View Nov 2025, ybi03 (white render with charcoal projecting window boxes, three floors and a roof deck over a ground floor; footprint binding inferred from the camera). The bands run on every face; those no photo shows are inferred (the owner, 2026-11-07: inferred detail on YBI is fine at its distance)."
   },
   "w1228080322": {
    "style": "meadow",
    "bay_m": 8.0,
-   "evidence": "36 Meadow Drive: Street View Sep 2025, ybi04 (white render with grey-brown panels over a pale brick base, four floors; the nearer of the two 36 Meadow Drive ways)."
+   "evidence": "36 Meadow Drive: Street View Sep 2025, ybi04 (white render with grey-brown panels over a pale brick base, four floors; the nearer of the two 36 Meadow Drive ways). The bands run on every face; those no photo shows are inferred (the owner, 2026-11-07: inferred detail on YBI is fine at its distance)."
   }
  },
  "facades_note": "Only buildings with a dated photo carry a façade's coarse banding (window and floor bands, bays); every other YBI building stays neutral L1 with no invented detail.",
@@ -622,7 +623,8 @@
   "evidence": "OSM barrier=retaining_wall and barrier=wall ways on YBI's land. A retaining wall's height is the 2023 DEM's step across it (3 m either side) plus a coping, as the pale walls along Macalla Road (Street View Sep 2025 sv02, Mar 2025 sv03) and the board-formed wall under The Bristol (ybi02, Nov 2025) stand; a freestanding wall 1.2 m (production inference)."
  },
  "basin": {
-  "lining_m": 10.0,
-  "evidence": "The summit reservoir (OSM w1249412146, natural=water, water=basin) is concrete-lined: the 2026-05-26 aerial shows its green water inside pale banks, and from Treasure Island's west shore its south-east bank, about 15 m of steep concrete facing north-west, is the pale band below the summit in 'Yerba Buena Island Profile - May 2025 01' (9yz, 2025-05-27; the USGS 2023 DEM falls from 89 m on that side to the 71 m water). Lined across the mapped edge, 10 m wide (production inference); the DEM gives the banks their slope."
+  "bank_reach_m": 14.0,
+  "bank_slope": 0.6,
+  "evidence": "The summit reservoir (OSM w1249412146, natural=water, water=basin) is concrete-lined: the 2026-05-26 aerial shows its green water inside pale banks. From Treasure Island's west shore its south-east bank is the 'large exposed cut' below the summit in 'Yerba Buena Island Profile - May 2025 01' (9yz, 2025-05-27): a flat-topped, steep face of weathered dark grey concrete over a pale tan band (the USGS 2023 DEM falls from 89 m on that side to the 71 m water). The banks are the ground within 14 m outside the mapped edge that rises at least 0.6 m a metre (about 31 degrees), in the walls' weathered concrete; the rest of that band is bare verge (production inference)."
  }
 }

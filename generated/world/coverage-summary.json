@@ -3501,15 +3501,19 @@
   "ybi_context": {
     "buildings": 94,
     "canopy_cells": {
-      "grove": 28280,
-      "groves": 152,
-      "scrub": 24794,
-      "small": 2902
+      "grove": 27934,
+      "groves": 141,
+      "scrub": 25101,
+      "small": 2750
     },
     "continuation_visuals": 7,
     "deck": {
       "capped": 3,
       "skipped": 17
+    },
+    "structure_clearance": {
+      "capped": 0,
+      "skipped": 4
     },
     "structures": [
       {
@@ -3530,11 +3534,11 @@
     ],
     "surfaces": {
       "basin_lining": {
-        "area_m2": 1664,
+        "area_m2": 2544.73,
         "sources": 1
       },
       "basin_water": {
-        "area_m2": 646.14,
+        "area_m2": 1401.53,
         "sources": 1
       },
       "construction": {
@@ -3562,20 +3566,20 @@
     "vegetation": {
       "near": 66,
       "species": {
-        "acacia": 74,
-        "blue_gum": 1043,
+        "acacia": 73,
+        "blue_gum": 1030,
         "coast_live_oak": 76,
         "garden_tree": 41,
-        "monterey_cypress": 192,
-        "monterey_pine": 84,
-        "scrub": 2465,
-        "toyon": 73,
-        "understory_acacia": 748,
-        "understory_oak": 698,
+        "monterey_cypress": 189,
+        "monterey_pine": 83,
+        "scrub": 2499,
+        "toyon": 74,
+        "understory_acacia": 738,
+        "understory_oak": 689,
         "willow": 19,
         "wind_oak": 53
       },
-      "total": 5566
+      "total": 5564
     },
     "walls": {
       "face_m2": 9529.66,
