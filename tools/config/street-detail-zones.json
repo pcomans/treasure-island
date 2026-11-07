@@ -1296,7 +1296,7 @@
       "terrain_wetland",
       "land_ground"
      ],
-     "per_m2": 0.25,
+     "per_m2": 0.6,
      "spacing": [0.45, 0.9],
      "field": {
       "axis": {
@@ -1328,7 +1328,7 @@
       ],
       "drift_m": 14,
       "clump_m": 3,
-      "drift_cover": 0.3,
+      "drift_cover": 0.45,
       "lone": 0.08,
       "groups": {
        "count": [2, 5],

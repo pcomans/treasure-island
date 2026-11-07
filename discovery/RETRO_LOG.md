@@ -24299,3 +24299,21 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: Solving the owner's photo into a matched pose from known objects paid at once: its water traced onto the floor within a metre or two of the pool drawn from the D frames, its shrub band landed on the modelled toe, and the matched pair showed the bank was wrong in one look. Three new generated sources (flopped-grass tile, low mat, brush row) did more than the earlier rounds of tuning. Folding gravel and flopped grass into the grain's spare channels kept the sampler count at six.
 - What did not work well: I spent four rounds tuning the floor's mean toward a stipple before cropping the frames at full size, and read a uv_scale backwards (it is repeats per 10 m), which cost a render. Cards tuned at gameplay distance fell apart in a tele view and the other way round: wide crossed cards read as haystacks, single flat cards as sticks. I stopped a build to add two rules once I had seen them; I should have listed everything the photo shows before the first edit.
 - What the team should change next time: When a new reference arrives, make the matched pose first and list everything it shows against the current render before touching anything. Measure mixed surfaces by distribution. Give a low-density field rule a quick instance count before rendering: three of mine placed 14 to 22 plants.
+
+### mersea-visual-review — 2026-11-07 — round 2, the re-review of r13
+
+- What worked well: A red-coverage count turned "solid sheet" into a decision, and comparing neutral, Compatibility and main side by side surfaced black mats and fence domes.
+- What did not work well: The fence domes sit in a view no pair covers.
+- What the team should change next time: Add a matched pair for every walk view looking through the fence, and report red coverage by distribution.
+
+### mersea-code-review — 2026-11-07 — round 2, the re-check of `3530b035`
+
+- What worked well: Decoding the generated shoreline and comparing peak visible plants against Cityside turned two open questions into numbers.
+- What did not work well: `shoreline.json` passed in round one as a one-line diff that hid 14,000 moved stones.
+- What the team should change next time: Decode every packed generated file in a diff, and list changes to released ground in the hand-off.
+
+### mersea-ditch-art — 2026-11-07 — Phase 2 third round: red by distribution, solid rock, released ground
+
+- What worked well: Measuring the footage by share of pixels over a redness ratio replaced my reading of "red": nearly all of it is warm brown and a third is red, where my floor was a bimodal mix of olive and wine. Baking tints into the atlas fixed a renderer difference without touching the shared shader.
+- What did not work well: I widened a validator to make a band pass and never asked what it now allowed, so a thousand thigh-high stones stood on walkable land without collision. I changed a released lot's shoulder and a car's stall through side effects and didn't list either in the hand-off.
+- What the team should change next time: Treat a widened check as a decision to report, with its new limit. Diff generated rows against the base before every hand-off and list every change to released ground, including ones a new rule causes at a distance.
