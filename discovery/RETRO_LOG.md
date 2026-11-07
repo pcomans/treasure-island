@@ -24635,3 +24635,9 @@ Comparing every record against the base commit found a change the author hadn't 
 ### mac-releases, landing — 2026-11-07 — the first dated Mac release
 
 - What worked well: The first dated release, `mac-2026-11-07-fe8351e`, is confirmed working through the fixed link, and the re-run stop is confirmed on the real API.
+
+### release-20261107 — 2026-11-07 — combining the six branches for the release
+
+- What worked well: Regenerating after each merge that touched the world, then diffing rows against both parents, kept each conflict's effects separate. Comparing the surfaces themselves on a 0.5 m grid, three-way over the whole island in under 3 s of Node, settled what triangle diffs couldn't. A planted `texture_filter` difference proved the extended A/B can fail before its clean result was trusted.
+- What did not work well: My first triangle check counted a change both sides had made twice, and a string join in my README resolver repeated a sentence; only reading the output caught them. Git interleaved two branches' zones in one JSON array, so joining hunks in place would have split zones across each other.
+- What the team should change next time: Have a study that changes world sources commit its generated world, or name the world it was reviewed on: Maceo's existed only as uncommitted files in a worktree that could have been cleaned up.

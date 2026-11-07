@@ -1245,3 +1245,7 @@ A rule street stays its back slope's run plus 0.2 m clear of a pilot zone, so pa
 ## Check a raised neighbour's floor when terrain moves
 
 The same override lifted the ground 1.6 m above the floor of accepted neighbour 490, and the fit test and the family A/B could not see it: walls still met the ground and the build was unchanged. When an override reaches a neighbour's wall, compare its floor with the new ground along that wall, and read a dated photo of its base before choosing between tapering the ground and moving the floor.
+
+## After merging terrain edits, compare the surface, not its triangles
+
+The 2026-11-07 release merged two terrain sites, Mersea's and Garden Walk's. Against the parents 40 chunk records matched neither side, some by hundreds of triangles, and land cells near the Johnson St lot looked changed. The two edits never touch: the adaptive land mesh re-cuts cells where they near each other, so the same surface gets different triangles. Sampled at 0.5 m over the whole island (13.7 million points), the land and the top visible surface followed the one side that changed them, with no miss over 2 cm. When two sides edit terrain, rasterize land height, top visible height and top material in all four worlds and compare three-way before reading any triangle residual. It takes seconds. Count a change both sides made once, or the residuals double.
