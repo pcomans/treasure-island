@@ -42,7 +42,7 @@ const BAND_GROUND_FAMILY := "verge"
 const PHYSICS_STREET_PROP := 1 << 3
 const INLAND_BODY_STEP_M := 12.0
 const INLAND_BODY_SLOPE := 0.7
-const INLAND_BODY_DEPTH_M := 1.4
+const INLAND_BODY_DEPTH_M := 2.0
 const INLAND_BODY_TOP_SHARE := 0.7
 
 static var _riprap := {}
@@ -233,21 +233,22 @@ func build(document: Dictionary) -> Dictionary:
 
 ## The inland stones stand on walkable land, so their band is solid, in a few coarse
 ## shapes rather than one a stone: along its length, a wedge every INLAND_BODY_STEP_M that
-## climbs from the land to the stones' tops at the band's inner edge and runs level to its
-## outer edge. A walker climbs onto the rocks instead of wading through them, and goes on to
-## the shore as anywhere else. stones are their bounds in the world.
+## climbs from the land to the stones' tops at the band's inner edge and runs on to its outer
+## edge, its ends meeting its neighbours' so a foot finds no step. A walker climbs onto the
+## rocks instead of wading through them, and goes on to the shore as anywhere else. There is
+## one band: the config allows no more. stones are their bounds in the world.
 func _inland_body(stones: Array[AABB]) -> StaticBody3D:
-	var ends := [stones[0], stones[0]]
+	var extremes := [stones[0], stones[0]]
 	var middle := Vector2.ZERO
 	for stone: AABB in stones:
 		var at := stone.get_center()
 		middle += Vector2(at.x, at.z) / stones.size()
-		if at.z < (ends[0] as AABB).get_center().z:
-			ends[0] = stone
-		if at.z > (ends[1] as AABB).get_center().z:
-			ends[1] = stone
-	var first: Vector3 = (ends[0] as AABB).get_center()
-	var last: Vector3 = (ends[1] as AABB).get_center()
+		if at.z < (extremes[0] as AABB).get_center().z:
+			extremes[0] = stone
+		if at.z > (extremes[1] as AABB).get_center().z:
+			extremes[1] = stone
+	var first: Vector3 = (extremes[0] as AABB).get_center()
+	var last: Vector3 = (extremes[1] as AABB).get_center()
 	var along := Vector2(last.x - first.x, last.z - first.z).normalized()
 	# Inland: the side of the band toward the island's middle, the world's origin.
 	var inward := Vector2(along.y, -along.x)
@@ -260,11 +261,10 @@ func _inland_body(stones: Array[AABB]) -> StaticBody3D:
 		if not bins.has(key):
 			bins[key] = []
 		(bins[key] as Array).append(stone)
-	var body := StaticBody3D.new()
-	body.name = "InlandStones"
-	body.collision_layer = PHYSICS_STREET_PROP
-	body.collision_mask = 0
-	for key: int in bins:
+	var keys: Array = bins.keys()
+	keys.sort()
+	var rows: Array[Dictionary] = []
+	for key: int in keys:
 		var tops := PackedFloat32Array()
 		var near := -INF
 		var far := INF
@@ -275,14 +275,24 @@ func _inland_body(stones: Array[AABB]) -> StaticBody3D:
 			far = minf(far, Vector2(at.x, at.z).dot(inward) - reach)
 			tops.append(stone.end.y)
 		tops.sort()
-		var top := tops[int(tops.size() * INLAND_BODY_TOP_SHARE)]
-		var foot := top - INLAND_BODY_DEPTH_M
-		var toe := near + INLAND_BODY_DEPTH_M / INLAND_BODY_SLOPE
+		rows.append({"key": key, "top": tops[int(tops.size() * INLAND_BODY_TOP_SHARE)], "near": near, "far": far})
+	var body := StaticBody3D.new()
+	body.name = "InlandStones"
+	body.collision_layer = PHYSICS_STREET_PROP
+	body.collision_mask = 0
+	for index in rows.size():
+		var row: Dictionary = rows[index]
 		var points := PackedVector3Array()
-		# A little past each end, so neighbouring wedges leave no seam to catch a foot.
-		for along_m: float in [key * INLAND_BODY_STEP_M - 0.3, (key + 1) * INLAND_BODY_STEP_M + 0.3]:
+		for side in 2:
+			# Each end stands halfway to its neighbour's wedge.
+			var other: Dictionary = rows[clampi(index + side * 2 - 1, 0, rows.size() - 1)]
+			var top := (float(row.top) + float(other.top)) / 2.0
+			var near := (float(row.near) + float(other.near)) / 2.0
+			var far := (float(row.far) + float(other.far)) / 2.0
+			var foot := top - INLAND_BODY_DEPTH_M
+			var toe := near + INLAND_BODY_DEPTH_M / INLAND_BODY_SLOPE
 			for corner: Vector2 in [Vector2(far, foot), Vector2(far, top), Vector2(near, top), Vector2(toe, foot)]:
-				var plan := along * along_m + inward * corner.x
+				var plan := along * ((int(row.key) + side) * INLAND_BODY_STEP_M) + inward * corner.x
 				points.append(Vector3(plan.x, corner.y, plan.y))
 		var shape := ConvexPolygonShape3D.new()
 		shape.points = points

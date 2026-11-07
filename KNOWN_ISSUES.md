@@ -125,6 +125,8 @@ From the reviews of the shoreline, street ground, street objects, parked cars, v
   - In the Compatibility renderer vertex colours come out darker than in Forward+, so tinted cards and `shade_low` feet read dark on the web. The ditch's plants carry their tones in `marsh_atlas.png` to stay clear of it, except the dark scrub.
   - Mersea lot's cars: a planted low plant no longer takes a lot's stall, so two cars came back nearer the aerial's north-east gathering at about (-335, 78). A 0.44 m2 pocket by the field fence still bars the stall at (-330.8, 113.1), on the terrain the ditch re-meshed; its car moved 5 m along the row. That stall's cell name is shared with the stall at (-345.1, 204.4) (`island_lot_cars` cells aren't unique across the lot's rows), so the car at the Avenue A strip's west edge went 20 m along that edge to (-357.2, 183.4).
   - The ditch's water blocks stand level on a shoulder that falls 4% along them: their corners sit up to 0.11 m clear of the ground or 0.13 m into it.
+  - The promenade's rock bank has one coarse body (`shoreline_builder.gd`): it hovers up to 1.68 m over bare land at the ramp's start and north end, where the stones thin out.
+  - The marsh's straw flecks look like flat splats at 2x zoom.
   - `street_paint.gdshader`'s kinds 13-15 use up the 16-slot stride (`PAINT_VARIANT_STRIDE`): a new paint kind means widening it.
   - The marsh's floor level and the tile sizes are constants in both `ground_cover.gdshader` and the configs (`terrain-overrides.json`, `ground-cover-map.mjs`); change them together.
 - **Parked cars:** Avenue I's review is held, so its cars are unjudged.

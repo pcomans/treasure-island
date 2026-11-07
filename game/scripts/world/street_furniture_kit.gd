@@ -523,7 +523,8 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 		"cobble_pile":
 			# Small decor: the player walks through it.
 			var run := snappedf(clampf(_number(params, "length_m", 5.0), 1.0, 9.0), 0.1)
-			_piece(result, "cobble_pile_%.1f" % run, func(b: Builder) -> void: _cobble_pile(b, run))
+			var spread := snappedf(clampf(_number(params, "width_m", 1.0), 0.5, 2.5), 0.1)
+			_piece(result, "cobble_pile_%.1f_%.1f" % [run, spread], func(b: Builder) -> void: _cobble_pile(b, run, spread))
 		"slab_chair":
 			_piece(result, "slab_chair", func(b: Builder) -> void: _slab_chair(b), Transform3D.IDENTITY, _plastic)
 			_box_shape(result, Vector3(0.78, 0.6, 0.92), Vector3(0.0, 0.3, 0.0))
@@ -1331,13 +1332,13 @@ func _pump_station(b: Builder) -> void:
 ## A spread of rounded pale and brown cobbles along local X, thick in the middle and
 ## thin at its edges, two stones deep at most (IMG_0960 t=112, t=118; owner photos,
 ## Nov 2026). Its stones fall by a fixed seed, so every build draws the same pile.
-func _cobble_pile(b: Builder, length_m: float) -> void:
+func _cobble_pile(b: Builder, length_m: float, width_m: float) -> void:
 	var random := RandomNumberGenerator.new()
 	random.seed = 4173
-	for index in int(length_m * 48.0):
+	for index in int(length_m * width_m * 48.0):
 		var along := random.randf_range(-0.5, 0.5)
 		var edge := 1.0 - absf(along) * 1.7
-		var across := random.randfn(0.0, 0.28) * edge
+		var across := random.randfn(0.0, 0.28 * width_m) * edge
 		var radius := random.randf_range(0.04, 0.095)
 		var stack := 0.05 + maxf(0.0, 0.12 * (edge - absf(across) * 2.0)) * random.randf()
 		var center := Vector3(along * length_m, stack, across)

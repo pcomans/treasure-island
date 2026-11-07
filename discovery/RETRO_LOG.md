@@ -24317,3 +24317,15 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: Measuring the footage by share of pixels over a redness ratio replaced my reading of "red": nearly all of it is warm brown and a third is red, where my floor was a bimodal mix of olive and wine. Baking tints into the atlas fixed a renderer difference without touching the shared shader.
 - What did not work well: I widened a validator to make a band pass and never asked what it now allowed, so a thousand thigh-high stones stood on walkable land without collision. I changed a released lot's shoulder and a car's stall through side effects and didn't list either in the hand-off.
 - What the team should change next time: Treat a widened check as a decision to report, with its new limit. Diff generated rows against the base before every hand-off and list every change to released ground, including ones a new rule causes at a distance.
+
+### mersea-visual-review — 2026-11-07 — round 3, the narrow re-check of r16
+
+- What worked well: Comparing the same crop across before, r13 and r16 caught a kerb band the commit called softer.
+- What did not work well: A listing cut off by `head` nearly misreported Compatibility.
+- What the team should change next time: Every change to released ground should ship with before, previous and current crops and one measured ratio, and any aerial used for a car check should be in the set.
+
+### mersea-code-review — 2026-11-07 — round 3, the delta at `d89df708`
+
+- What worked well: Porting the wedge builder offline found the lip and hover, which no walk log shows.
+- What did not work well: All three rock walks took the same seaward line.
+- What the team should change next time: When a new collider stands in for visible geometry, measure it against what's drawn and walk it in both directions.

@@ -2117,10 +2117,11 @@
      "kind": "site_structure",
      "prop": "cobble_pile",
      "params": {
-      "length_m": 6.0
+      "length_m": 3.0,
+      "width_m": 1.6
      },
-     "xz": [-283.7, 223.1],
-     "yaw": 0.764,
+     "xz": [-283.1, 223.7],
+     "yaw": -0.851,
      "reason": "The cobble pile behind the Johnson St lot's west curb, at its drainage gap.",
      "reference": "Owner video IMG_0960, 2026-11-06, t=112 (D2) and t=118 (D4); owner photos, Nov 2026 (ditch 3)"
     },

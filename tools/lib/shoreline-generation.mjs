@@ -428,6 +428,8 @@ export function shorelineSettings(config) {
   // on the land itself: quarry stones within reach_m of the outline, between the
   // shore points nearest from_xz and to_xz, their tops top_m above the land.
   invariant(Array.isArray(config.inland_stones), "Shoreline inland_stones must be a list");
+  // shoreline_builder.gd draws one body along all the inland stones it finds.
+  invariant(config.inland_stones.length <= 1, "Shoreline inland_stones may name one bank");
   for (const bank of config.inland_stones) {
     exactKeys(bank, INLAND_STONE_FIELDS, `Shoreline inland stones ${bank?.id}`);
     invariant(typeof bank.id === "string" && SAFE_ID.test(bank.id) && !ids.has(bank.id), `Shoreline inland stones ${bank.id} need a unique lower_snake id`);
