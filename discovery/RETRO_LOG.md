@@ -24602,3 +24602,36 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: Reading `origin/main` rather than /workspaces/content mattered: AGENTS there has moved well past that checkout, and the three-slot wording had already become four slots A to D, so that item needed no edit. The RETRO note from the Johnson lot deploy gave the evidence for Pro and the 1 GB limit, so the plan wording could be checked without touching the Vercel account.
 - What did not work well: "Receiver" means two things. The skill's exact game receiver is the object that carries the art, while the drivers' layer/receiver checks are about spray. A grep for "spray" missed the second kind in CLAUDE and SKILL, and a grep for "receiver" returned dozens of unrelated texture lines, so each had to be read in context. The done lists also said `tools/test.sh` and merge per building, which the batched release replaces; the decision didn't say so directly, so I worded it as the one run on the combined head.
 - What the team should change next time: When a decision retires a gate, name the code that still enforces it. `building_fit_test.gd`'s native adapters still assert the spray layer on existing producers, which is fine for existing bodies but is where a new producer would first trip. Prefer "wall role" or "art host" over a bare "receiver" in new docs.
+
+### mersea-visual-review, final — 2026-11-07 — independent visual review of the Mersea ditch
+
+- What worked well: Top views settled off-the-kerb in one look.
+- What did not work well: The pile went round twice with no top view before review.
+- What the team should change next time: Send a top view with any set piece near a kerb or paint, the first time it moves.
+
+### mersea-code-review, final — 2026-11-07 — independent code review of the Mersea ditch
+
+- What worked well: Sampling the pile against the land mesh checked slope fit with no engine.
+- What the team should change next time: When a footprint grows, say in the commit note that rule-placed plants will thin under it.
+
+### maceo-visual-review, final — 2026-11-07 — independent visual review of Maceo May
+
+- What worked well: Side-by-side 490 and mouth sheets answered each hold directly.
+- What did not work well: Several 490 pairs reused one reference frame.
+- What the team should change next time: When a reference is reused, say which part of the frame it covers.
+
+### maceo-code-review, final — 2026-11-07 — independent code review of Maceo May
+
+- What worked well: Measuring curb offsets from main's records settled the Cravath margin without a render.
+- What did not work well: Hand-offs didn't say the A/B ignores texture fields.
+- What the team should change next time: Make the A/B compare every material property the family can set.
+
+### grass-research — 2026-11-07 — grass research
+
+- What worked well: Reading engine source found the prepass mismatch.
+- What did not work well: GDC primary material and PDFs were unreachable.
+- What the team should change next time: Get talk transcripts up front.
+
+### mac-releases, landing — 2026-11-07 — the first dated Mac release
+
+- What worked well: The first dated release, `mac-2026-11-07-fe8351e`, is confirmed working through the fixed link, and the re-run stop is confirmed on the real API.

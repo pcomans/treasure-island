@@ -14052,6 +14052,15 @@
           "review_id": "maceo-may-quality-candidate-2026-09-11-001",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "maceo-may-study-9701419f-2026-11-07",
+          "review_kind": "independent_reference_recognition",
+          "reviews": [
+            "maceo-visual-review",
+            "maceo-code-review"
+          ],
+          "status": "accept"
         }
       ],
       "anchor_source_key": "r19685981",

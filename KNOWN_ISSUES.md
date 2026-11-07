@@ -32,7 +32,7 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
   - the middle of the north wall along the lane to Star View Court, seen only at a grazing angle from each end.
 
   A square-on walk down the lane, and the court walls if they can be reached, would let them be modelled.
-- **490 Avenue of the Palms (OSM w1272162518):** only its east block's ground floor stands level with Garden Walk; the block's NNW end wall stays on the base floor with the wing beside it. Everything west of that still sits on the 2023 excavation (land 1.1-3.9 m, where Street View palms-wsw01, palms-n-corner02 and palms-nnw-end04 of Nov 2025 show flat ground about 4 m), so the podium's east end meets a bank and Johnson Street falls along the NNW end. The SSE end and the ENE wall also differ in detail from Street View wsw03 (Sep 2025) and owner photo n1 (Nov 2026).
+- **490 Avenue of the Palms (OSM w1272162518):** only its east block's ground floor stands level with Garden Walk; the block's NNW end wall stays on the base floor with the wing beside it. Everything west of that still sits on the 2023 excavation (land 1.1-3.9 m, where Street View palms-wsw01, palms-n-corner02 and palms-nnw-end04 of Nov 2025 show flat ground about 4 m), so the podium's east end meets a bank and Johnson Street falls along the NNW end. The SSE end and the ENE wall also differ in detail from Street View wsw03 (Sep 2025) and owner photo n1 (Nov 2026). Its NNW end has three large glazed bands and a white ground band over a dark upper band in Street View palms-nnw-end04 (Nov 2025), but the game has plain storeys.
 - **Star View Court (OSM w1212173437):** its walk side lacks the bed and the dark tile bays of owner photos n1 and n2 (Nov 2026), its stoops aren't modelled (n2: doors a few risers above the walk), and the bed along its north wall in Street View starview-nw01 (Nov 2025) is a concrete edge. A Star View pass is queued.
 - **Garden Walk (w1249412095):** Johnson Street's sidewalk still crosses the walk's north mouth, where Street View starview-nw01 (Nov 2025) shows the aggregate running to the curb, and the drive apron at Maceo May's Seven Seas portal is asphalt where Street View ss02 (Jun 2026) shows concrete.
 - Finish items (seen in review, by 2026-11-05):
@@ -155,6 +155,7 @@ From the reviews of the shoreline, street ground, street objects, parked cars, v
   - The marsh's straw flecks look like flat splats at 2x zoom.
   - `street_paint.gdshader`'s kinds 13-15 use up the 16-slot stride (`PAINT_VARIANT_STRIDE`): a new paint kind means widening it.
   - The marsh's floor level and the tile sizes are constants in both `ground_cover.gdshader` and the configs (`terrain-overrides.json`, `ground-cover-map.mjs`); change them together.
+  - The rock band's end-face note above and all the limits logged here stay.
 - **Parked cars:** Avenue I's review is held, so its cars are unjudged.
 - **Shoreline:**
   - Two small dark tips remain at the north slipway: one at the grass corner of the ramp's head, one at its water end.
