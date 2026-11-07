@@ -74,6 +74,17 @@ extends SceneTree
 ##   Any street view may instead time a whole street-detail layer of the world:
 ##   "measure_frames": N with "measure_layer": "vegetation" (or another layer)
 ##   shows and hides that layer the same way, in the pass where it is on.
+## Ground dressing (the grass of ground_dressing.gd; --ground-dressing LEVEL on the
+##   command line, else the project setting): a still view may add "dressing":
+##   "off", "low", "medium" or "high" to shoot at that density, "dressing_parts":
+##   {"cards": false, "grass": true, "stones": true} for what draws, "dressing_params":
+##   {"uniform": value, ...} to set grass uniforms (a list is a vector), all kept
+##   for the views after it, "dressing_maps": true to save the ground captures
+##   beside the shot, and "measure_dressing": N to time N frames at each of
+##   "measure_levels" (default all four), in three alternating blocks with vsync
+##   and the frame cap off, from the view's camera: one FRAME_TIME line per level
+##   with wall, render CPU and GPU times, and a DRESSING_CAPTURE line with what a
+##   new capture costs.
 
 const WorldHarness := preload("res://game/tests/shared/world_harness.gd")
 const GROUND_COVER := preload("res://game/scripts/world/ground_cover.gd")
@@ -657,6 +668,9 @@ func _shoot_view(view: Dictionary, target: Vector3, path: String) -> String:
 	var camera_error := _free_camera_error(view, target)
 	if camera_error != "":
 		return camera_error
+	var dressing_error := _apply_dressing(view)
+	if dressing_error != "":
+		return dressing_error
 	var error := await _h.settle_player(Vector2(view.player_xz[0], view.player_xz[1]))
 	if error != "":
 		return error
@@ -668,10 +682,119 @@ func _shoot_view(view: Dictionary, target: Vector3, path: String) -> String:
 	error = await _h.save_screenshot(path)
 	if error == "" and view.has("frame_time_frames"):
 		error = await _frame_time(view.frame_time_frames, path.get_file().get_basename(), str(view.get("frame_time_layer", "")))
+	if error == "" and view.get("dressing_maps", false):
+		error = _save_dressing_maps(path.get_basename())
+	if error == "" and view.has("measure_dressing"):
+		error = await _measure_dressing(view, path.get_file().get_basename())
 	if free != null:
 		free.queue_free()
 		_h.player.get_camera().make_current()
 	return error
+
+
+## Applies a view's "dressing" level and "dressing_params". Returns an error, or "".
+func _apply_dressing(view: Dictionary) -> String:
+	if not view.has("dressing") and not view.has("dressing_parts") and not view.has("dressing_params"):
+		return ""
+	var dressing := _h.main.ground_dressing
+	if dressing == null:
+		return "this run draws no ground dressing (Forward+ only, and not at --ground-dressing off)"
+	if view.has("dressing"):
+		var level := str(view.dressing)
+		if level != dressing.OFF and not dressing.LEVELS.has(level):
+			return "dressing must be off, low, medium or high"
+		dressing.set_level(level)
+	if view.has("dressing_parts"):
+		var parts: Dictionary = view.dressing_parts
+		dressing.set_parts(bool(parts.get("cards", false)), bool(parts.get("grass", true)), bool(parts.get("stones", true)))
+	var params: Dictionary = view.get("dressing_params", {})
+	for uniform: String in params:
+		var value: Variant = params[uniform]
+		if value is Array:
+			value = Vector2(value[0], value[1]) if value.size() == 2 else Vector3(value[0], value[1], value[2])
+		dressing.set_parameter(uniform, value)
+	return ""
+
+
+## Saves the ground dressing's captures as PREFIX-surface.png (red the height over
+## 16 m, green how thickly tufts stand, blue their height, alpha open ground) and
+## PREFIX-colour.png, printing the height at the window's centre.
+func _save_dressing_maps(prefix: String) -> String:
+	var dressing := _h.main.ground_dressing
+	if dressing == null:
+		return "this run draws no ground dressing"
+	var surface := dressing.surface_viewport.get_texture().get_image()
+	var centre := surface.get_pixel(surface.get_width() / 2, surface.get_height() / 2)
+	print("DRESSING_MAPS %s format=%d size=%s centre=%s" % [prefix.get_file(), surface.get_format(), surface.get_size(), centre])
+	var shown := Image.create_empty(surface.get_width(), surface.get_height(), false, Image.FORMAT_RGBA8)
+	for y in surface.get_height():
+		for x in surface.get_width():
+			var pixel := surface.get_pixel(x, y)
+			shown.set_pixel(x, y, Color(pixel.r / 16.0, pixel.g, pixel.b, 1.0).lerp(Color.MAGENTA, 1.0 - pixel.a))
+	var colour := dressing.colour_viewport.get_texture().get_image()
+	colour.convert(Image.FORMAT_RGBA8)
+	var error := shown.save_png(prefix + "-surface.png")
+	if error == OK:
+		error = colour.save_png(prefix + "-colour.png")
+	return "" if error == OK else "could not save the dressing maps (error %d)" % error
+
+
+## Times this view's camera at each dressing level, in alternating blocks. See the
+## header. Returns an error, or "".
+func _measure_dressing(view: Dictionary, label: String) -> String:
+	var dressing := _h.main.ground_dressing
+	if dressing == null:
+		return "this run draws no ground dressing"
+	var levels: Array = view.get("measure_levels", ["off", "low", "medium", "high"])
+	var frames := int(view.measure_dressing)
+	var kept: String = dressing.get_level()
+	var window := root.get_viewport_rid()
+	RenderingServer.viewport_set_measure_render_time(window, true)
+	var uncapped := _uncap_frames()
+	var rows := {}
+	for level: String in levels:
+		rows[level] = {"wall": [], "cpu": [], "gpu": []}
+	var blocks := 3
+	for block in blocks:
+		for level: String in levels:
+			dressing.set_level(level)
+			for _i in 20:
+				await RenderingServer.frame_post_draw
+			var row: Dictionary = rows[level]
+			var last := Time.get_ticks_usec()
+			for _i in maxi(10, frames / blocks):
+				await RenderingServer.frame_post_draw
+				var now := Time.get_ticks_usec()
+				(row.wall as Array).append(float(now - last) / 1000.0)
+				(row.cpu as Array).append(RenderingServer.viewport_get_measured_render_time_cpu(window) + RenderingServer.get_frame_setup_time_cpu())
+				(row.gpu as Array).append(RenderingServer.viewport_get_measured_render_time_gpu(window))
+				last = now
+			row.draws = RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME)
+			row.primitives = RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_PRIMITIVES_IN_FRAME)
+	for level: String in levels:
+		var row: Dictionary = rows[level]
+		var wall := _frame_stats(PackedFloat64Array(row.wall))
+		var cpu := _frame_stats(PackedFloat64Array(row.cpu))
+		var gpu := _frame_stats(PackedFloat64Array(row.gpu))
+		print("FRAME_TIME view=%s dressing=%s frames=%d wall_mean_ms=%.2f wall_median_ms=%.2f wall_p95_ms=%.2f cpu_median_ms=%.2f gpu_median_ms=%.2f gpu_p95_ms=%.2f draw_calls=%d primitives=%d renderer=%s/%s" % [label, level, wall.frames, wall.mean, wall.median, wall.p95, cpu.median, gpu.median, gpu.p95, row.draws, row.primitives, RenderingServer.get_current_rendering_method(), RenderingServer.get_video_adapter_name()])
+	dressing.set_level(kept)
+	if kept != dressing.OFF:
+		# A capture only draws when the camera has gone far enough, so draw them every
+		# frame for a moment to read their cost.
+		var captures := dressing.capture_viewports()
+		for viewport: SubViewport in captures:
+			RenderingServer.viewport_set_measure_render_time(viewport.get_viewport_rid(), true)
+			viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+		for _i in 30:
+			await RenderingServer.frame_post_draw
+		var cost := {}
+		for viewport: SubViewport in captures:
+			cost[viewport.name] = RenderingServer.viewport_get_measured_render_time_gpu(viewport.get_viewport_rid())
+			viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
+		print("DRESSING_CAPTURE view=%s gpu_ms=%s" % [label, cost])
+	RenderingServer.viewport_set_measure_render_time(window, false)
+	_restore_frames(uncapped)
+	return ""
 
 
 ## Holds the view's camera for `frames` more drawn frames, with vsync and the

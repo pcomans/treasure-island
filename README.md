@@ -44,6 +44,9 @@ tools/godot --headless --path . --script game/tests/<test>.gd  # a headless test
 
 ```sh
 # Screenshots for review: gameplay close-ups, the building in its surroundings, island overviews.
+# Grass and small stones are drawn round the camera; -- --ground-dressing off|low|medium|high
+# sets their density for a run (the project setting treasure_island/ground_dressing/density
+# otherwise). Web builds draw none.
 # Close-ups leave out street detail (trees, furniture, fences, clutter); surroundings and
 # overviews come both ways (NAME-street-on.png, NAME-street-off.png). --street-detail off|on|both overrides.
 tools/godot --path . --resolution 1600x900 --script game/tests/shared/building_shots.gd -- --source w291189336 --island --out /tmp/shots

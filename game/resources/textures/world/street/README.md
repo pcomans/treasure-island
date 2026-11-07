@@ -131,6 +131,12 @@ from 1254 to 512 px with ImageMagick; each tiles seamlessly (the sand and soil o
 | `yard_soil_dark.png` | yard_soil_dark: dark excavated soil in the pits of the 9th St / Avenue H site (May 2026 aerial) | seamless dark damp excavated construction soil, bucket scrape marks |
 | `yard_pond.png` | yard_pond: the shallow murky ponds on #11's pad (May 2026 aerial) | seamless murky green-grey shallow pond water from above, matte |
 
+The rubble mound's ground, generated 2026-11-07 the same way (one image, a text prompt only; no photograph was given to the generator or copied) and resized from 1254 to 768 px with ImageMagick; it tiles seamlessly over 3 m of world UV, and the ground dressing's stones on the mound wear it too:
+
+| File | Use | Source prompt (short) |
+|---|---|---|
+| `yard_rubble.png` | rubble_grey: the broken-concrete mound of the recycling yard on the east shore (May 2026 aerial; Street View Mar and Nov 2025) | seamless top-down heap of crushed and broken grey-white concrete demolition rubble, pieces of very mixed size from dusty fines and gravel to angular 30 cm chunks, no even pattern, flat diffuse light with no sun direction, pale grey with slight tan dust |
+
 ## Yard kit
 
 `street_pole_flag.png` (512 x 512) is the face of the yard kit's pole flag

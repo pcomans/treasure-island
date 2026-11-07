@@ -92,6 +92,7 @@ for test in \
   game/tests/headless_gameplay_contract.gd \
   game/tests/headless_touch_controls.gd \
   game/tests/headless_world_material_contract.gd \
+  game/tests/headless_ground_dressing_contract.gd \
   game/tests/headless_facade_meter_uv_adapter_contract.gd \
   game/tests/headless_building_study_geometry_contract.gd \
   game/tests/headless_bake_merge_contract.gd \
