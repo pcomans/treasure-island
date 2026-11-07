@@ -20,8 +20,7 @@ const DETAIL_ROUGHNESS := preload("res://game/resources/textures/world/polyhaven
 const COVER_MAP := preload("res://game/resources/textures/world/ground_cover/cover_map.png")
 ## The marsh's plan on the same grid: signed distance from the wetland's outline.
 const MARSH_MAP := preload("res://game/resources/textures/world/ground_cover/marsh_map.png")
-const MARSH_MAT_TILE := preload("res://game/resources/textures/world/ground_cover/marsh_mat.png")
-const BANK_THATCH_TILE := preload("res://game/resources/textures/world/ground_cover/bank_thatch.png")
+const MARSH_GRAIN := preload("res://game/resources/textures/world/ground_cover/marsh_grain.png")
 const COVER_MAP_ORIGIN := Vector2(-720.0, -960.0)
 const COVER_MAP_SIZE_M := Vector2(1440.0, 1920.0)
 ## The family each map channel draws, as the shader's recipe uniforms (RGBA order).
@@ -205,8 +204,7 @@ static func material(family: String) -> ShaderMaterial:
 	made.set_shader_parameter("detail_roughness", DETAIL_ROUGHNESS)
 	made.set_shader_parameter("cover_map", COVER_MAP)
 	made.set_shader_parameter("marsh_map", MARSH_MAP)
-	made.set_shader_parameter("marsh_mat_tile", MARSH_MAT_TILE)
-	made.set_shader_parameter("bank_thatch_tile", BANK_THATCH_TILE)
+	made.set_shader_parameter("marsh_grain", MARSH_GRAIN)
 	made.set_shader_parameter("cover_map_rect", Vector4(COVER_MAP_ORIGIN.x, COVER_MAP_ORIGIN.y, 1.0 / COVER_MAP_SIZE_M.x, 1.0 / COVER_MAP_SIZE_M.y))
 	for uniform: String in COVER_MAP_RECIPES:
 		var recipe: Dictionary = FAMILIES[COVER_MAP_RECIPES[uniform]]

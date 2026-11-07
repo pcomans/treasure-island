@@ -37,6 +37,7 @@ import { compareSourceKeys, invariant, roundCoordinate } from "./world-contract.
 // kind each one stands for.
 export const STREET_FURNITURE_PROPS = Object.freeze({
   adirondack_chair: "chair",
+  slab_chair: "chair",
   bbq_grill: "bbq",
   bench_long: "bench",
   bench_park: "bench",
@@ -62,6 +63,7 @@ export const STREET_FURNITURE_PROPS = Object.freeze({
   pump_station: "site_structure",
   restroom_cottage: "site_structure",
   galvanised_tub: "site_structure",
+  concrete_box: "site_structure",
   water_block: "site_structure",
   cobble_pile: "site_structure",
   signal_cabinet: "street_cabinet",
@@ -94,8 +96,10 @@ export const STREET_FURNITURE_FOOTPRINTS = Object.freeze({
   pump_station: Object.freeze({ x_m: 16.3, z_m: 11.2 }),
   // The cottage block with the enclosure on its +X end, as one plan rectangle round
   // the prop's origin (street_furniture_kit.gd COTTAGE_PLAN_CENTRE).
-  restroom_cottage: Object.freeze({ x_m: 9.1, z_m: 4.45 }),
+  restroom_cottage: Object.freeze({ x_m: 10.3, z_m: 4.45 }),
   galvanised_tub: Object.freeze({ x_m: 1.1, z_m: 1.1 }),
+  concrete_box: Object.freeze({ x_m: 0.8, z_m: 0.8 }),
+  slab_chair: Object.freeze({ x_m: 0.8, z_m: 0.92 }),
   water_block: Object.freeze({ x_m: 1.86, z_m: 0.5 }),
   transformer_pad: Object.freeze({ x_m: 1.5, z_m: 1.35 }),
   waste_basket: Object.freeze({ x_m: 0.6, z_m: 0.6 }),

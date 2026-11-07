@@ -1600,8 +1600,8 @@ function validateShoreline(worldRoot, manifest, records) {
         const z = oz + columns[0][2] * vx + columns[1][2] * vy + columns[2][2] * vz;
         top = Math.max(top, y);
         const distance = nearBoundary(x, z);
-        if (batch.band === "cobble") {
-          invariant(inside(x, z) && distance > 0.005, `Shoreline cobble in ${batch.id} at (${ox}, ${oz}) reaches the playable boundary`);
+        if (batch.band === "cobble" || batch.band === "inland") {
+          invariant(inside(x, z) && distance > 0.005, `Shoreline ${batch.band} stone in ${batch.id} at (${ox}, ${oz}) reaches the playable boundary`);
         } else {
           invariant(!inside(x, z) && distance >= SHORELINE_OUTSIDE_CLEARANCE_M - 0.005, `Shoreline ${batch.band} stone in ${batch.id} at (${ox}, ${oz}) comes within ${distance.toFixed(3)} m of the island edge`);
           underPier ||= walkable(x, z);

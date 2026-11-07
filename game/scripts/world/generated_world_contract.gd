@@ -33,7 +33,7 @@ const SHORELINE_SCHEMA := "ti.shoreline/4"
 ## land's, world x / 10 and z / 10) and the concrete closure faces.
 const SHORELINE_RECORD_KINDS := {"shoreline-face:": "shoreline_face", "shoreline-slope:": "shoreline_riprap", "shoreline-verge:": "shoreline_verge", "shoreline-wall:": "shoreline_wall"}
 const SHORELINE_VERGE_MATERIAL := "shoreline_verge"
-const SHORELINE_BANDS := ["cobble", "driftwood", "heap", "top"]
+const SHORELINE_BANDS := ["cobble", "driftwood", "heap", "inland", "top"]
 const SHORELINE_CLOSURE_KINDS := ["none", "ramp", "wall"]
 const SHORELINE_PROTOTYPE_MATERIALS := {"boulder": "shoreline_boulder", "log": "shoreline_driftwood", "plank": "shoreline_driftwood"}
 const SHORELINE_FIELDS := ["batches", "closures", "config", "generator", "lod", "overlay", "packing", "prototypes", "records", "schema_version", "seed", "segments", "visual_only", "water_y_m"]

@@ -46,8 +46,9 @@ ImageMagick; both tile seamlessly over 2 m (world UV):
 | File | Use | Source prompt (short) |
 |---|---|---|
 | `park_dg.png` | decomposed-granite paths through the beds | seamless tan decomposed granite path surface |
-| `promenade_aggregate.png` | the Mersea promenade's old road and fresh seal under `promenade_pavement.gdshader` (2.4 m tiles, owner video Nov 2026) | seamless very old sun-worn asphalt, the binder weathered away and small angular stones 5 to 15 mm across standing exposed in pale grey, tan and buff in a dark grey-brown matrix, soft even light (Codex through `tools/generate-texture`, Nov 2026) |
-| `promenade_bark_mulch.png` | the promenade's verges (1.8 m tiles, owner video Nov 2026) | seamless weathered coarse shredded wood-chip and bark mulch, mixed grey-brown, tan and dark brown chips, some bleached pale grey, soft even light (Codex through `tools/generate-texture`, Nov 2026) |
+| `promenade_aggregate.png` | the Mersea promenade's old road (1.15 m tiles) and fresh seal (0.62 m, flattened) under `promenade_pavement.gdshader`, from the owner's video, Nov 2026 | seamless very old sun-worn asphalt, the binder weathered away and small angular stones standing exposed in pale grey, tan and buff in a dark grey-brown matrix, soft even light (Codex through `tools/generate-texture`, Nov 2026) |
+| `promenade_bark_mulch.png` | the promenade's verges (1.2 m tiles, owner video Nov 2026) | seamless fine weathered wood-chip mulch, small thin chips bleached pale grey-brown and silver-grey with a few warmer tan chips, soft even light (Codex through `tools/generate-texture`, Nov 2026) |
+| `yard_shoulder_gravel.png` | the Johnson St lot's shoulder at the ditch (2.4 m tiles, owner video Nov 2026) | seamless crushed grey angular rock with sand, soft even light (Codex through `tools/generate-texture`, Nov 2026) |
 | `park_asphalt.png` | the park's new dark asphalt paths, cycle track and lawn ring | seamless new dark charcoal asphalt with fine grey aggregate, no markings |
 
 ## Street furniture

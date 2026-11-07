@@ -25,7 +25,7 @@ const SETS := {
 	"barks": ["fan_bark_grey.png", "canary_trunk_a.png", "canary_knob.png", "cypress_bark.png"],
 	"meadow": MEADOW_CELLS,
 	"perennial": PERENNIAL_CELLS,
-	"marsh": ["marsh_seeded_shrub.png", "marsh_thin_stems.png", "marsh_bank_grass.png"],
+	"marsh": ["marsh_tangle_a.png", "marsh_tangle_b.png", "tall_fringe.png", "marsh_seeded_shrub.png", "marsh_thin_stems.png"],
 	"young_planting": ["young_tree_a.png", "young_tree_b.png", "young_shrub.png"],
 	"young_trees": ["gum_leaves.png", "oak_leaves.png", "gum_bark.png", "oak_bark.png"],
 	"park_ground": ["park_mulch.png", "park_gravel.png"],
@@ -122,7 +122,9 @@ const LOW_GRADES := {
 	"young_tree_b.png": [Color(0.9, 0.92, 0.84), 0.2],
 	"young_shrub.png": [Color(0.8, 0.82, 0.74), 0.25],
 	"marsh_thin_stems.png": [Color(0.92, 0.86, 0.74), 0.3],
-	"marsh_bank_grass.png": [Color(0.86, 0.8, 0.7), 0.25],
+	"marsh_tangle_a.png": [Color(0.84, 0.8, 0.74), 0.4],
+	"marsh_tangle_b.png": [Color(0.84, 0.8, 0.74), 0.35],
+	"tall_fringe.png": [Color(0.86, 0.86, 0.72), 0.25],
 	"woolly_stalks.png": [Color(0.78, 0.72, 0.66), 0.55],
 	"buckwheat_stalks.png": [Color(0.84, 0.74, 0.64), 0.7],
 	"buckwheat_foliage.png": [Color(0.8, 0.76, 0.68), 0.55],
@@ -306,21 +308,45 @@ func _pack_perennial(images: Dictionary, errors: Array[String]) -> void:
 	_save(atlas, OUT + "perennial_atlas.png", errors)
 
 
-## The Mersea ditch's plants, 2048 x 1024: the seed-laden shrub on the left half, the
-## thin stems and the dry grass in the two tall cells on the right. Thin stems want
-## height, not width; the kit's card sizes set the plants' proportions.
+## The Mersea ditch's plants, 2048 x 1024: two wide tangles of dead grass and twigs along
+## the top row, the tall fringe, the seed-laden shrub and the thin stems below. The wide
+## cards' ends are frayed so a card never stops in a straight cut; the kit's card sizes
+## set the plants' proportions.
 func _pack_marsh(images: Dictionary, errors: Array[String]) -> void:
 	var atlas := Image.create_empty(2048, 1024, false, Image.FORMAT_RGBA8)
-	var cells := {"marsh_seeded_shrub.png": Rect2i(0, 0, 1024, 1024), "marsh_thin_stems.png": Rect2i(1024, 0, 512, 1024), "marsh_bank_grass.png": Rect2i(1536, 0, 512, 1024)}
+	var cells := {
+		"marsh_tangle_a.png": Rect2i(0, 0, 1024, 512), "marsh_tangle_b.png": Rect2i(1024, 0, 1024, 512),
+		"tall_fringe.png": Rect2i(0, 512, 1024, 512), "marsh_seeded_shrub.png": Rect2i(1024, 512, 512, 512), "marsh_thin_stems.png": Rect2i(1536, 512, 512, 512),
+	}
 	for name: String in cells:
 		var cell: Rect2i = cells[name]
 		var image := _keyed_fit(images[name], cell.size.x - 2 * CELL_MARGIN, cell.size.y - 2 * CELL_MARGIN, CYAN if name in ON_CYAN else MAGENTA)
 		if name != "marsh_seeded_shrub.png":
 			_straw(image)
 		_grade(image, LOW_GRADES[name][0], LOW_GRADES[name][1])
+		if cell.size.x == 1024:
+			_fray_ends(image, 0.14)
 		atlas.blit_rect(image, Rect2i(Vector2i.ZERO, image.get_size()), cell.position + Vector2i(CELL_MARGIN, CELL_MARGIN))
 	_fill_transparent(atlas)
 	_save(atlas, OUT + "marsh_atlas.png", errors)
+
+
+## Clears more and more upright slivers toward an image's left and right ends, over
+## fraction of its width, by a fixed seed, so a card's ends thin out into stray stalks.
+func _fray_ends(image: Image, fraction: float) -> void:
+	var w := image.get_width()
+	var data := image.get_data()
+	var random := RandomNumberGenerator.new()
+	random.seed = 4177
+	var sliver := 3
+	for from_x in range(0, w, sliver):
+		var keep := minf(1.0, minf(float(from_x), float(w - 1 - from_x)) / (fraction * w))
+		if random.randf() < keep * keep * 1.6:
+			continue
+		for y in image.get_height():
+			for x in range(from_x, mini(w, from_x + sliver)):
+				data[(y * w + x) * 4 + 3] = 0
+	image.set_data(w, image.get_height(), false, Image.FORMAT_RGBA8, data)
 
 
 ## The Mersea promenade's young planting, 1536 x 1024: two staked saplings and a low

@@ -125,7 +125,7 @@ const RECORD_KINDS = Object.freeze({
 // Johnson St lot; sealant and patch are a lot's tar-sealed joints and patched strips;
 // white_rolled, white_trace and yellow_trace are the Mersea promenade's thin rolled
 // bars and its old lines, worn nearly back to the road (wear step 0: they have their own).
-export const STREET_PAINT_KINDS = Object.freeze({ white: 0, yellow: 1, red: 2, green: 3, tactile: 4, stop_legend: 5, yellow_faded: 6, red_curb: 7, blue: 8, legend: 9, sealant: 10, patch: 11, blue_dark: 12 , white_rolled: 13, white_trace: 14, yellow_trace: 15 });
+export const STREET_PAINT_KINDS = Object.freeze({ white: 0, yellow: 1, red: 2, green: 3, tactile: 4, stop_legend: 5, yellow_faded: 6, red_curb: 7, blue: 8, legend: 9, sealant: 10, patch: 11, blue_dark: 12, white_rolled: 13, white_trace: 14, yellow_trace: 15 });
 export const PAINT_VARIANT_STRIDE = 16;
 export const PAINT_WEAR_STEPS = 5;
 export const STREET_LEGEND_CELLS = Object.freeze({ tour_bus_parking: 0, arrow_straight: 1, arrow_left: 2, arrow_right: 3, accessible: 4, arrow_short: 5, shared_path: 6 });
@@ -1646,10 +1646,10 @@ export function generateStreetGround({
   const sidewalks = roads.filter((object) => object.road_visual_class === "pedestrian" && object.tags.footway === "sidewalk");
   const pedestrianIndex = partsIndex("pedestrian ways", roads.filter((object) => object.road_visual_class === "pedestrian").map((object) => object.geometry));
   const lots = objects.filter((object) => object.roles.includes("major_area") && object.tags.amenity === "parking" && nearPilot(object, 30));
-  // The lot OSM lacks stands on its traced outline, over the rounded end of the
-  // road it meets: the aerial's joint with the older pavement is straight, so the
-  // lot's sheet lies across that end. Its source key is the OSM way it meets, for
-  // the records' provenance.
+  // A lot OSM lacks stands on its traced outline, over the rounded end of the road
+  // it meets: the aerial's joint with the older pavement is straight, so the lot's
+  // sheet lies across that end. Its source key is the OSM way it meets or follows,
+  // for the records' provenance.
   const exceptionLots = (rules?.lots ?? []).filter((lot) => lot.osm_exception !== undefined).map((lot) => {
     invariant(playableObjects.has(lot.source_key), `Street ground lot ${lot.id} names ${lot.source_key}, which is not an OSM object`);
     const ring = lot.osm_exception.outline_xz.map(([x, z]) => [x, -z]);
@@ -3539,7 +3539,8 @@ export function generateStreetGround({
     // Inside an OSM parking lot near the pilot.
     inLot: (point) => lotIndex.contains(point),
     // The lot OSM lacks, for the street clutter's parked cars.
-    exception_lots: exceptionLots.map(({ lot, object }) => ({ source_key: lot.source_key, geometry: object.geometry })),
+    // The lots that park cars: a promenade's exception lots have no pattern or rows.
+    exception_lots: exceptionLots.filter(({ lot }) => lot.pattern !== undefined || (lot.rows ?? []).length > 0).map(({ lot, object }) => ({ source_key: lot.source_key, geometry: object.geometry })),
   };
   return { records, summary, surfaceAt, site };
 }

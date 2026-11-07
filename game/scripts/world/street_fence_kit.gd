@@ -81,6 +81,7 @@ const GATED_TYPES := ["chain_link_slatted", "chain_link", "chain_link_screened"]
 const BANNER_COLOR := Color(0.9, 0.9, 0.88)
 ## The printed banners (tools/lib/street-fence-generation.mjs STREET_FENCE_BANNER_ART_CELLS).
 const BANNER_ART := preload("res://game/resources/textures/world/street/street_fence_banners.png")
+const BANNER_BACK_UV := Vector2(0.52, 0.52)
 const BANNER_ART_COLUMNS := 2
 const BANNER_ART_ROWS := 4
 const SCREEN_BACKLIGHT := Color(0.73, 0.73, 0.73)
@@ -539,6 +540,11 @@ func add_banner(cells: Dictionary, cell_size_m: float, type: String, params: Dic
 	var up := Vector3.UP
 	(cell.banner_art as Quads).quad([a + up * bottom, b + up * bottom, b + up * (bottom + height_m), a + up * (bottom + height_m)],
 		[Vector2(u1, v1), Vector2(u0, v1), Vector2(u0, v0), Vector2(u1, v0)], normal)
+	# Its back is bare pale vinyl: a corner of the plain parchment cell, held a little behind.
+	var back := -outward * 0.02
+	var plain := BANNER_BACK_UV
+	(cell.banner_art as Quads).quad([b + back + up * bottom, a + back + up * bottom, a + back + up * (bottom + height_m), b + back + up * (bottom + height_m)],
+		[plain, plain, plain, plain], -normal)
 
 
 # ---------------------------------------------------------------- panels

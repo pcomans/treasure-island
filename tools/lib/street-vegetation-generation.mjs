@@ -82,7 +82,9 @@ export const STREET_VEGETATION_PROPS = Object.freeze({
   white_umbel_perennial: vegetationProp(LOW_PLANT_KINDS, 3, 0.15, false),
   pale_seeded_shrub: vegetationProp(LOW_PLANT_KINDS, 5, 0.2, false),
   marsh_stems: vegetationProp(LOW_PLANT_KINDS, 2, 0.15, false),
-  marsh_grass: vegetationProp(LOW_PLANT_KINDS, 3, 0.2, false),
+  marsh_tangle: vegetationProp(LOW_PLANT_KINDS, 3, 0.2, false),
+  marsh_fringe: vegetationProp(LOW_PLANT_KINDS, 2, 0.2, false),
+  marsh_stones: vegetationProp(LOW_PLANT_KINDS, 3, 0.15, false),
   young_planting: vegetationProp(LOW_PLANT_KINDS, 4, 0.2, false),
 });
 // How far the kit runs a trunk on below its foot (street_vegetation_kit.gd BURY_M):

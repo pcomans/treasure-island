@@ -510,36 +510,70 @@ export function drawGroundCoverMap(config, world) {
 }
 
 // The marsh map for a validated config and a loaded world: {grid, rgba}.
-export function drawMarshMap(config, world) {
+// The lots whose edges the marsh keeps a straw bank from (the map's green channel).
+const MARSH_PAVED_MATERIALS = Object.freeze(["yard_asphalt", "yard_asphalt_fresh", "yard_asphalt_pale"]);
+// How far inside a mapped pool its mask reaches full strength (m).
+const MARSH_POOL_RAMP_M = 5;
+
+// The marsh map: red the signed distance from the wetland's outline (0.5 on it, positive
+// inside), green the distance from the lots' paving, both up to MARSH_MAP_RANGE_M, and
+// blue how far inside the floor's low ground a cell lies (pools: rings [[x, z], ...]).
+export function drawMarshMap(config, world, pools = []) {
   const grid = groundCoverGrid(config);
   const wet = new Uint8Array(grid.width * grid.height);
+  const paved = new Uint8Array(grid.width * grid.height);
+  const low = new Uint8Array(grid.width * grid.height);
+  const fill = (mask, triangle) => rasterizeTriangle(grid, triangle, (index) => {
+    mask[index] = 1;
+  });
   for (const record of world.records) {
-    if (record.material_key !== "terrain_wetland") continue;
+    const mask = record.material_key === "terrain_wetland" ? wet : MARSH_PAVED_MATERIALS.includes(record.material_key) ? paved : null;
+    if (!mask) continue;
     const v = record.vertices;
     const corner = (index) => [v[index * 3], v[index * 3 + 2]];
     for (let offset = 0; offset < record.indices.length; offset += 3) {
-      rasterizeTriangle(grid, [corner(record.indices[offset]), corner(record.indices[offset + 1]), corner(record.indices[offset + 2])], (index) => {
-        wet[index] = 1;
-      });
+      fill(mask, [corner(record.indices[offset]), corner(record.indices[offset + 1]), corner(record.indices[offset + 2])]);
     }
   }
   invariant(wet.some((cell) => cell === 1), "The world has no terrain_wetland ground for the marsh map");
+  for (const ring of pools) {
+    // Each cell's centre, even-odd against the pool's ring.
+    for (let j = 0; j < grid.height; j += 1) {
+      for (let i = 0; i < grid.width; i += 1) {
+        const x = grid.centerX(i);
+        const z = grid.centerZ(j);
+        let inside = false;
+        for (let a = 0, b = ring.length - 1; a < ring.length; b = a, a += 1) {
+          if ((ring[a][1] > z) !== (ring[b][1] > z) && x < ((ring[b][0] - ring[a][0]) * (z - ring[a][1])) / (ring[b][1] - ring[a][1]) + ring[a][0]) inside = !inside;
+        }
+        if (inside) low[j * grid.width + i] = 1;
+      }
+    }
+  }
   const toWet = distanceToMask(grid, wet);
   const toDry = distanceToMask(grid, wet.map((cell) => 1 - cell));
+  const toPaved = paved.some((cell) => cell === 1) ? distanceToMask(grid, paved) : null;
+  const toHigh = low.some((cell) => cell === 1) ? distanceToMask(grid, low.map((cell) => 1 - cell)) : null;
   const rgba = new Uint8Array(wet.length * 4);
   for (let index = 0; index < wet.length; index += 1) {
     const signed = Math.max(-MARSH_MAP_RANGE_M, Math.min(MARSH_MAP_RANGE_M, wet[index] ? toDry[index] : -toWet[index]));
-    const level = Math.round((0.5 + signed / (2 * MARSH_MAP_RANGE_M)) * 255);
-    rgba[index * 4] = level;
-    rgba[index * 4 + 1] = level;
-    rgba[index * 4 + 2] = level;
+    rgba[index * 4] = Math.round((0.5 + signed / (2 * MARSH_MAP_RANGE_M)) * 255);
+    rgba[index * 4 + 1] = Math.round(Math.min(1, (toPaved ? toPaved[index] : MARSH_MAP_RANGE_M) / MARSH_MAP_RANGE_M) * 255);
+    rgba[index * 4 + 2] = Math.round(Math.min(1, (toHigh && low[index] ? toHigh[index] : 0) / MARSH_POOL_RAMP_M) * 255);
     rgba[index * 4 + 3] = 255;
   }
   return { grid, rgba };
 }
 
+// The floor's mapped low ground: the terrain overrides' sink regions of the ditch's site.
+function marshPools(projectRoot) {
+  const overrides = JSON.parse(readFileSync(resolve(projectRoot, "tools/config/terrain-overrides.json"), "utf8"));
+  const site = overrides.sites.find((candidate) => candidate.id === "mersea_ditch_promenade");
+  return (site?.regions ?? []).filter((region) => region.rule.kind === "sink").map((region) => region.shape.points_xz);
+}
+
 export function buildMarshMap({ projectRoot, worldRoot }) {
-  return drawMarshMap(loadGroundCoverConfig(projectRoot), loadGroundCoverWorld(worldRoot));
+  return drawMarshMap(loadGroundCoverConfig(projectRoot), loadGroundCoverWorld(worldRoot), marshPools(projectRoot));
 }
 
 export function buildGroundCoverMap({ projectRoot, worldRoot }) {

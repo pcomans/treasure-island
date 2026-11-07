@@ -1849,7 +1849,7 @@
       "size_m": 2.5
      },
      "xz": [-367.47, 299.21],
-     "yaw": 2.116,
+     "yaw": 2.176,
      "reason": "A dark squared timber baulk lying along the seaward edge of the road; they lie in short rows.",
      "reference": "Owner video IMG_0960, 2026-11-06: t=262 (B3), t=305 (B5), t=360 (B9)."
     },
@@ -1861,8 +1861,8 @@
       "form": "baulk",
       "size_m": 2.5
      },
-     "xz": [-369.15, 296.25],
-     "yaw": 2.026,
+     "xz": [-369.24, 296.3],
+     "yaw": 1.966,
      "reason": "A dark squared timber baulk lying along the seaward edge of the road; they lie in short rows.",
      "reference": "Owner video IMG_0960, 2026-11-06: t=262 (B3), t=305 (B5), t=360 (B9)."
     },
@@ -1888,7 +1888,7 @@
       "size_m": 2.4
      },
      "xz": [-390.93, 261.0],
-     "yaw": 2.106,
+     "yaw": 2.156,
      "reason": "A dark squared timber baulk lying along the seaward edge of the road; they lie in short rows.",
      "reference": "Owner video IMG_0960, 2026-11-06: t=262 (B3), t=305 (B5), t=360 (B9)."
     },
@@ -1900,8 +1900,8 @@
       "form": "baulk",
       "size_m": 2.4
      },
-     "xz": [-392.64, 258.18],
-     "yaw": 2.046,
+     "xz": [-392.73, 258.23],
+     "yaw": 1.976,
      "reason": "A dark squared timber baulk lying along the seaward edge of the road; they lie in short rows.",
      "reference": "Owner video IMG_0960, 2026-11-06: t=262 (B3), t=305 (B5), t=360 (B9)."
     },
@@ -1913,8 +1913,8 @@
       "form": "baulk",
       "size_m": 2.4
      },
-     "xz": [-394.35, 255.36],
-     "yaw": 2.136,
+     "xz": [-394.26, 255.31],
+     "yaw": 2.226,
      "reason": "A dark squared timber baulk lying along the seaward edge of the road; they lie in short rows.",
      "reference": "Owner video IMG_0960, 2026-11-06: t=262 (B3), t=305 (B5), t=360 (B9)."
     },
@@ -1927,48 +1927,48 @@
       "size_m": 2.4
      },
      "xz": [-396.15, 252.58],
-     "yaw": 2.066,
+     "yaw": 2.006,
      "reason": "A dark squared timber baulk lying along the seaward edge of the road; they lie in short rows.",
      "reference": "Owner video IMG_0960, 2026-11-06: t=262 (B3), t=305 (B5), t=360 (B9)."
     },
     {
      "id": "promenade_chair_1",
      "kind": "chair",
-     "prop": "adirondack_chair",
+     "prop": "slab_chair",
      "params": {},
      "xz": [-360.89, 314.9],
      "yaw": 2.12,
-     "reason": "Bright blue Adirondack chairs on the mulch, facing the water.",
+     "reason": "Plain cyan slab chairs on the mulch, facing the water.",
      "reference": "Owner video IMG_0960, 2026-11-06: t=240 (B1), t=248 (B2)."
     },
     {
      "id": "promenade_chair_2",
      "kind": "chair",
-     "prop": "adirondack_chair",
+     "prop": "slab_chair",
      "params": {},
      "xz": [-362.25, 312.1],
      "yaw": 1.67,
-     "reason": "Bright blue Adirondack chairs on the mulch, facing the water.",
+     "reason": "Plain cyan slab chairs on the mulch, facing the water.",
      "reference": "Owner video IMG_0960, 2026-11-06: t=240 (B1), t=248 (B2)."
     },
     {
      "id": "promenade_chair_3",
      "kind": "chair",
-     "prop": "adirondack_chair",
+     "prop": "slab_chair",
      "params": {},
      "xz": [-362.7, 310.29],
      "yaw": 2.02,
-     "reason": "Bright blue Adirondack chairs on the mulch, facing the water.",
+     "reason": "Plain cyan slab chairs on the mulch, facing the water.",
      "reference": "Owner video IMG_0960, 2026-11-06: t=240 (B1), t=248 (B2)."
     },
     {
      "id": "promenade_chair_4",
      "kind": "chair",
-     "prop": "adirondack_chair",
+     "prop": "slab_chair",
      "params": {},
      "xz": [-364.3, 307.87],
      "yaw": 2.27,
-     "reason": "Bright blue Adirondack chairs on the mulch, facing the water.",
+     "reason": "Plain cyan slab chairs on the mulch, facing the water.",
      "reference": "Owner video IMG_0960, 2026-11-06: t=240 (B1), t=248 (B2)."
     },
     {
@@ -2089,6 +2089,16 @@
      "yaw": 0.9,
      "reason": "The tall slim-trunked palm on the lawn by the road.",
      "reference": "Owner video IMG_0960, 2026-11-06: t=118 (D4), t=286 (B4), t=316, t=322 (B6), t=349 (B8); the rays agree within 4 m."
+    },
+    {
+     "id": "ditch_concrete_box",
+     "kind": "site_structure",
+     "prop": "concrete_box",
+     "params": {},
+     "xz": [-327.0, 223.5],
+     "yaw": 0.3,
+     "reason": "The small concrete box on the ditch's far bank.",
+     "reference": "Owner video IMG_0960, 2026-11-06, t=116 (D3)."
     },
     {
      "id": "ditch_cobbles_road_end",

@@ -24287,3 +24287,9 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: Same-scale crops of native renders against 4K frames, plus colour samples, exposed the flat stones and the mulch error.
 - What did not work well: There was no promenade before view and no overviews, and the pairs flatter distance reads while the worst defects sit at foot level.
 - What the team should change next time: Include a foot-level matched pair for each ground type and a before view for each surface.
+
+### mersea-code-review — 2026-11-07 — `1491eb6e`, the Mersea ditch and promenade
+
+- What worked well: Diffing the generated world row by row and rasterising land separated real damage from retriangulation.
+- What did not work well: The walk loop offered as cottage evidence stayed 1.7 m from every wall.
+- What the team should change next time: When a structure sits outside the fit test, walk into each side, and run one Compatibility launch for any `ground_cover.gdshader` change.

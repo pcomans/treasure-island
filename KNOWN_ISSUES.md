@@ -99,7 +99,7 @@ From the reviews of the shoreline, street ground, street objects, parked cars, v
   - The dumpster group at heading 10 stands farther right than in the photo.
   - The dumpsters have no finish yet.
   - The Sep 2025 photos of the strip show no cars; its row comes from the May 2026 aerial.
-- **Johnson St lot** (the one recorded exception to the OSM layout; L2 accepted, L3 open):
+- **Johnson St lot** (a recorded exception to the OSM layout, with the Mersea promenade; L2 accepted, L3 open):
   - The tall pole with a dome camera at its south-west curb (owner photo, ditch 1) isn't built.
   - Its west part sits up to about 1.2 m below its middle: the terrain slopes where the real lot looks flat. The terrain stays as it is.
   - The west curb's drainage gap and the rock pile behind it (owner photo, ditch 3) aren't built.
@@ -113,9 +113,11 @@ From the reviews of the shoreline, street ground, street objects, parked cars, v
   - The rust-steel sculpture on the lawn by the promenade isn't built. An owner 3D scan exists: https://www.kiriengine.app/share/download/bc9ac0d2f54245a6ae13a65ba1849253
   - Plants at the ditch and along the walk are described by form; their species are unconfirmed.
   - OSM's chain-link w1212173468 across the walk isn't built, by rule: the footage runs through its line, and the owner walked through it.
-  - The riprap's crest stands lower than the footage shows along the promenade, and Mersea's tent w1001544698 is plain massing where the footage shows its glazed end; both are accepted work, left unchanged by this study.
+  - Mersea's tent w1001544698 is plain massing where the footage shows its glazed end; it is accepted work, left unchanged by this study.
   - The land grid keeps a hump about 0.45 m high in the road near s 128 (about (-408, 216)): those cells sit beside the tent's footprint, and splitting them would re-cut a foundation.
   - The Johnson St lot's asphalt reads bluer than the footage's from the road end (frame D4).
+  - `street_paint.gdshader`'s kinds 13-15 use up the 16-slot stride (`PAINT_VARIANT_STRIDE`): a new paint kind means widening it.
+  - The marsh's floor level and the tile sizes are constants in both `ground_cover.gdshader` and the configs (`terrain-overrides.json`, `ground-cover-map.mjs`); change them together.
 - **Parked cars:** Avenue I's review is held, so its cars are unjudged.
 - **Shoreline:**
   - Two small dark tips remain at the north slipway: one at the grass corner of the ramp's head, one at its water end.

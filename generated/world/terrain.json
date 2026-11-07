@@ -68,7 +68,7 @@
     "maximum_clearance_m": 0.081,
     "maximum_serialization_tolerance_m": 0.01,
     "minimum_clearance_m": 0.019,
-    "sample_points": 327593
+    "sample_points": 329952
   },
   "raster_bbox_wgs84": [
     -122.380001708984,
@@ -209,10 +209,10 @@
     "basis": "production_inference",
     "config": {
       "path": "tools/config/terrain-overrides.json",
-      "sha256": "089ad096315440a7d6eb0ebf638672cce8ce3204b4743b0f6d75fd07045b0c80"
+      "sha256": "cb791ee43c96c2da637c774acfcd3c08b5efcc9d3ceca7b51b1db6924354c119"
     },
-    "corrected_cells": 209,
-    "leaves": 5648,
+    "corrected_cells": 213,
+    "leaves": 5766,
     "maximum_cut_m": 20.205,
     "maximum_raise_m": 8.018,
     "mesh": {
@@ -221,7 +221,7 @@
       "sample_m": 0.5,
       "tolerance_m": 0.08
     },
-    "neighbour_edge_vertices": 333,
+    "neighbour_edge_vertices": 345,
     "refined_cell_bounds_m": [
       [
         0,
@@ -590,6 +590,12 @@
         128
       ],
       [
+        -480,
+        128,
+        -448,
+        160
+      ],
+      [
         -352,
         128,
         -320,
@@ -684,6 +690,12 @@
         128,
         704,
         160
+      ],
+      [
+        -480,
+        160,
+        -448,
+        192
       ],
       [
         -320,
@@ -821,6 +833,12 @@
         -320,
         224,
         -288,
+        256
+      ],
+      [
+        -288,
+        224,
+        -256,
         256
       ],
       [
@@ -930,6 +948,12 @@
         256,
         512,
         288
+      ],
+      [
+        -416,
+        288,
+        -384,
+        320
       ],
       [
         -384,
@@ -1478,8 +1502,8 @@
         672
       ]
     ],
-    "refined_cells": 209,
-    "refined_triangles": 13342,
+    "refined_cells": 213,
+    "refined_triangles": 13508,
     "schema_version": "ti.terrain-overrides/1",
     "sites": [
       {
@@ -1631,7 +1655,7 @@
         "edge_blend_m": 3,
         "grade": {
           "final_sweep_change_m": 0,
-          "free_nodes": 4523,
+          "free_nodes": 4827,
           "kind": "harmonic"
         },
         "id": "mersea_ditch_promenade",
@@ -1644,6 +1668,14 @@
           {
             "id": "marsh_floor",
             "rule": "level"
+          },
+          {
+            "id": "marsh_bank_toe",
+            "rule": "level"
+          },
+          {
+            "id": "rock_rise",
+            "rule": "profile"
           },
           {
             "id": "marsh_pool_floor",
@@ -1662,7 +1694,7 @@
             "rule": "sink"
           }
         ],
-        "scope_area_m2": 9272.2
+        "scope_area_m2": 10076.5
       }
     ]
   },

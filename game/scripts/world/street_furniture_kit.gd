@@ -172,14 +172,17 @@ const TUB_STEEL := Color(0.5, 0.52, 0.54)
 const COTTAGE_GLASS := Color(0.07, 0.09, 0.12)
 ## The north-west end's tall window, which the footage shows holding the pale sky.
 const COTTAGE_GLASS_PALE := Color(0.5, 0.6, 0.6)
-const COTTAGE_SHINGLE := Color(0.15, 0.135, 0.125)
+const COTTAGE_SHINGLE := Color(0.235, 0.195, 0.155)
+const COTTAGE_BAY_DEPTH_M := 0.44
+const CHAIR_CYAN := Color(0.16, 0.58, 0.74)
+const CONCRETE_BOX_GREY := Color(0.62, 0.59, 0.53)
 ## The rounded stones of the cobble pile at the ditch's road end.
 const COBBLE_TONES := [Color(0.62, 0.57, 0.49), Color(0.5, 0.42, 0.34), Color(0.47, 0.45, 0.42), Color(0.34, 0.28, 0.23), Color(0.56, 0.52, 0.45)]
 ## The promenade's dark baulks: their tarred sides, a little more worn tops and sawn
 ## ends. Weathering only: the light on them comes from the sun, not these colours.
-const BAULK_SIDE := Color(0.105, 0.09, 0.08)
-const BAULK_TOP := Color(0.25, 0.235, 0.215)
-const BAULK_END := Color(0.17, 0.125, 0.1)
+const BAULK_SIDE := Color(0.15, 0.14, 0.13)
+const BAULK_TOP := Color(0.29, 0.275, 0.25)
+const BAULK_END := Color(0.2, 0.16, 0.135)
 
 ## Per prop: visibility range (m) and whether it casts a sun shadow. Tall poles
 ## keep their shadows and reach; small items fade out early for the web build.
@@ -207,8 +210,10 @@ const PROPS := {
 	"bbq_grill": {"range_m": 100.0, "shadow": true},
 	"log_seat": {"range_m": 110.0, "shadow": true},
 	"pump_station": {"range_m": 700.0, "shadow": true},
-	"restroom_cottage": {"range_m": 700.0, "shadow": true},
-	"cobble_pile": {"range_m": 120.0, "shadow": true},
+	"restroom_cottage": {"range_m": 400.0, "shadow": true},
+	"cobble_pile": {"range_m": 120.0, "shadow": false},
+	"slab_chair": {"range_m": 100.0, "shadow": true},
+	"concrete_box": {"range_m": 160.0, "shadow": true},
 	"galvanised_tub": {"range_m": 120.0, "shadow": true},
 	"water_block": {"range_m": 220.0, "shadow": true},
 	"utility_pole": {"range_m": 450.0, "shadow": true},
@@ -519,6 +524,12 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 			# Small decor: the player walks through it.
 			var run := snappedf(clampf(_number(params, "length_m", 5.0), 1.0, 9.0), 0.1)
 			_piece(result, "cobble_pile_%.1f" % run, func(b: Builder) -> void: _cobble_pile(b, run))
+		"slab_chair":
+			_piece(result, "slab_chair", func(b: Builder) -> void: _slab_chair(b), Transform3D.IDENTITY, _plastic)
+			_box_shape(result, Vector3(0.78, 0.6, 0.92), Vector3(0.0, 0.3, 0.0))
+		"concrete_box":
+			_piece(result, "concrete_box", func(b: Builder) -> void: _concrete_box(b))
+			_box_shape(result, Vector3(0.8, 0.72, 0.8), Vector3(0.0, 0.36, 0.0))
 		"water_block":
 			_piece(result, "water_block", func(b: Builder) -> void: _water_block(b), Transform3D.IDENTITY, _plastic)
 			_box_shape(result, Vector3(1.94, 0.85, 0.48), Vector3(0.0, 0.425, 0.0))
@@ -531,6 +542,7 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 			_piece(result, "restroom_cottage", func(b: Builder) -> void: _restroom_cottage(b), centre)
 			var block := COTTAGE_SIZE_M
 			_box_shape(result, block, Vector3(0.0, block.y * 0.5, 0.0) - COTTAGE_PLAN_CENTRE)
+			_box_shape(result, Vector3(COTTAGE_BAY_DEPTH_M, 2.3, 1.72), Vector3(-block.x * 0.5 - COTTAGE_BAY_DEPTH_M * 0.5, 1.15, 0.0) - COTTAGE_PLAN_CENTRE)
 			_box_shape(result, COTTAGE_ENCLOSURE_SIZE_M, COTTAGE_ENCLOSURE_FROM_M + COTTAGE_ENCLOSURE_SIZE_M * 0.5 - COTTAGE_PLAN_CENTRE)
 			# The roof as a prism, so a jetpack landing rests on its slopes.
 			var half := block * 0.5
@@ -1293,6 +1305,8 @@ func _log_seat(b: Builder, form: String, size: float) -> void:
 			b.box(Vector3(0, 0.475, 0), Basis.IDENTITY, Vector3(size - 0.02, 0.012, 0.6), BAULK_TOP, CELL_WHITE)
 			for side: float in [-1.0, 1.0]:
 				b.box(Vector3(side * (size * 0.5 + 0.002), 0.22, 0), Basis.IDENTITY, Vector3(0.006, 0.46, 0.58), BAULK_END, CELL_WHITE)
+				# The top edges, worn pale by feet and weather.
+				b.box(Vector3(0, 0.47, side * 0.3), Basis.IDENTITY, Vector3(size - 0.04, 0.03, 0.035), BAULK_TOP * 1.25, CELL_WHITE)
 		_:
 			b.tube(PackedVector3Array([Vector3(-size * 0.5, 0.27, 0), Vector3(0.0, 0.26, 0.02), Vector3(size * 0.5, 0.245, 0)]), PackedFloat32Array([0.31, 0.29, 0.27]), 14, DRIFTWOOD, CELL_WHITE, false, false)
 			b.disc(Vector3(-size * 0.5, 0.27, 0), Vector3.LEFT, 0.31, 14, END_GRAIN)
@@ -1320,7 +1334,7 @@ func _pump_station(b: Builder) -> void:
 func _cobble_pile(b: Builder, length_m: float) -> void:
 	var random := RandomNumberGenerator.new()
 	random.seed = 4173
-	for index in int(length_m * 70.0):
+	for index in int(length_m * 48.0):
 		var along := random.randf_range(-0.5, 0.5)
 		var edge := 1.0 - absf(along) * 1.7
 		var across := random.randfn(0.0, 0.28) * edge
@@ -1331,7 +1345,7 @@ func _cobble_pile(b: Builder, length_m: float) -> void:
 		var half := direction * radius * random.randf_range(0.9, 1.35)
 		var tone: Color = COBBLE_TONES[random.randi_range(0, COBBLE_TONES.size() - 1)]
 		var shade := random.randf_range(0.86, 1.08)
-		b.tube(PackedVector3Array([center - half, center - half * 0.55, center, center + half * 0.55, center + half]), PackedFloat32Array([0.012, radius * 0.72, radius * 0.9, radius * 0.72, 0.012]), 7, Color(tone.r * shade, tone.g * shade, tone.b * shade), CELL_WHITE, false, false)
+		b.tube(PackedVector3Array([center - half, center - half * 0.55, center, center + half * 0.55, center + half]), PackedFloat32Array([0.012, radius * 0.72, radius * 0.9, radius * 0.72, 0.012]), 5, Color(tone.r * shade, tone.g * shade, tone.b * shade), CELL_WHITE, false, false)
 
 
 ## A water-filled plastic road block along local X, the low rounded kind at the ditch's
@@ -1347,6 +1361,30 @@ func _water_block(b: Builder) -> void:
 			b.box(Vector3(side * 0.945, y, 0.0), Basis.IDENTITY, Vector3(0.07, 0.07, 0.32), WATER_BLOCK_RED, CELL_WHITE)
 	b.disc(Vector3(0.0, 0.853, 0.0), Vector3.UP, 0.11, 14, WATER_BLOCK_RED * 0.7)
 	b.disc(Vector3(0.0, 0.855, 0.0), Vector3.UP, 0.085, 14, Color(0.05, 0.03, 0.03))
+
+
+## The plain slab chairs on the Mersea promenade's mulch (IMG_0960, t=240-248): a broad
+## flat back and seat in solid moulded panels on board sides, front to local -Z. Simple
+## forms, a paler cyan than the park's slatted Adirondacks.
+func _slab_chair(b: Builder) -> void:
+	var seat_tilt := Basis(Vector3.RIGHT, deg_to_rad(9.0))
+	var back_tilt := Basis(Vector3.RIGHT, deg_to_rad(-28.0))
+	b.box(Vector3(0.0, 0.3, -0.04), seat_tilt, Vector3(0.66, 0.05, 0.74), CHAIR_CYAN, CELL_WHITE)
+	b.box(Vector3(0.0, 0.66, 0.42), back_tilt, Vector3(0.62, 0.98, 0.05), CHAIR_CYAN, CELL_WHITE)
+	for side: float in [-1.0, 1.0]:
+		var x := side * 0.345
+		b.box(Vector3(x, 0.27, -0.03), Basis.IDENTITY, Vector3(0.05, 0.54, 0.1), CHAIR_CYAN, CELL_WHITE)
+		b.box(Vector3(x, 0.2, 0.3), Basis.IDENTITY, Vector3(0.05, 0.4, 0.1), CHAIR_CYAN, CELL_WHITE)
+		b.box(Vector3(x, 0.2, -0.36), Basis.IDENTITY, Vector3(0.05, 0.4, 0.1), CHAIR_CYAN, CELL_WHITE)
+		b.box(Vector3(x, 0.32, -0.04), seat_tilt, Vector3(0.05, 0.1, 0.8), CHAIR_CYAN, CELL_WHITE)
+		b.box(Vector3(x + side * 0.03, 0.56, -0.08), Basis.IDENTITY, Vector3(0.12, 0.035, 0.66), CHAIR_CYAN * 1.05, CELL_WHITE)
+
+
+## The small concrete box standing on the ditch's far bank (IMG_0960, t=116): a pale cast
+## box with a lid a little proud of it.
+func _concrete_box(b: Builder) -> void:
+	b.box(Vector3(0.0, 0.3, 0.0), Basis.IDENTITY, Vector3(0.74, 0.76, 0.74), CONCRETE_BOX_GREY, CELL_WHITE)
+	b.box(Vector3(0.0, 0.7, 0.0), Basis.IDENTITY, Vector3(0.8, 0.05, 0.8), CONCRETE_BOX_GREY * 1.1, CELL_WHITE)
 
 
 ## A round ribbed galvanised tub on the lawn by the Mersea promenade, a clump of long
@@ -1399,7 +1437,7 @@ func _restroom_cottage(b: Builder) -> void:
 	_cottage_wall(b, Vector3(half.x, 0, 0), Vector3.RIGHT, size.z)
 	_cottage_wall(b, Vector3(-half.x, 0, 0), Vector3.LEFT, size.z)
 	for corner: Vector2 in [Vector2(-1, -1), Vector2(1, -1), Vector2(-1, 1), Vector2(1, 1)]:
-		b.box(Vector3(corner.x * half.x, eave * 0.5 - 0.15, corner.y * half.z), Basis.IDENTITY, Vector3(0.2, eave + 0.3, 0.2), COTTAGE_WHITE, CELL_WHITE)
+		b.box(Vector3(corner.x * half.x, eave * 0.5 - 0.15, corner.y * half.z), Basis.IDENTITY, Vector3(0.27, eave + 0.3, 0.27), COTTAGE_WHITE, CELL_WHITE)
 	# The gable ends: fish-scale shingles in a triangle over a scalloped frieze.
 	for side: float in [-1.0, 1.0]:
 		_cottage_gable(b, Vector3(side * half.x, 0, 0), Vector3.RIGHT * side, half.z + 0.05, COTTAGE_RIDGE_M)
@@ -1435,14 +1473,10 @@ func _restroom_cottage(b: Builder) -> void:
 	# The gable lights: north-west cross gable a tall window, the other an oval.
 	_cottage_window(b, Vector3(COTTAGE_GABLE_X_M, 3.2, -half.z - 0.09), Vector3.FORWARD, Vector2(0.32, 0.56), 1)
 	_cottage_oval(b, Vector3(-COTTAGE_GABLE_X_M, 3.22, -half.z - 0.09), Vector3.FORWARD, 0.17, 0.27)
-	# South-east end: a round light above a bay under its hood.
+	# South-east end: a round light above a three-sided bay under its small roof.
 	var end := -half.x
 	_cottage_oval(b, Vector3(end - 0.08, 3.25, 0.0), Vector3.LEFT, 0.21, 0.21)
-	b.box(Vector3(end - 0.26, 1.62, 0.0), Basis.IDENTITY, Vector3(0.52, 1.3, 1.5), COTTAGE_WHITE, CELL_WHITE)
-	_cottage_window(b, Vector3(end - 0.53, 1.66, 0.0), Vector3.LEFT, Vector2(0.4, 0.9), 1)
-	for side: float in [-1.0, 1.0]:
-		_cottage_window(b, Vector3(end - 0.53, 1.66, side * 0.5), Vector3.LEFT, Vector2(0.26, 0.9), 1)
-	_cottage_hood(b, Vector3(end - 0.3, 2.3, 0.0), 0.72, 1.0, 0.34)
+	_cottage_bay(b, end)
 	# North-west end: its square window in the gable, a hood and a tall window.
 	var start := half.x
 	_cottage_window(b, Vector3(start + 0.08, 3.18, 0.0), Vector3.RIGHT, Vector2(0.62, 0.58), 2)
@@ -1464,6 +1498,46 @@ func _restroom_cottage(b: Builder) -> void:
 		var across := float(step) / 10.0 * box.z
 		b.box(from + Vector3(box.x + 0.008, box.y * 0.5, across), Basis.IDENTITY, Vector3(0.02, box.y, 0.02), COTTAGE_GROOVE, CELL_WHITE)
 	b.box(from + Vector3(box.x + 0.03, 1.72, box.z * 0.62), Basis.IDENTITY, Vector3(0.06, 0.14, 0.1), Color(0.16, 0.16, 0.17), CELL_WHITE)
+
+
+## The three-sided bay on the wall at x = `wall`: a window in each face, a small shingled
+## roof over them and a plain soffit under, its sides canted back to the wall.
+func _cottage_bay(b: Builder, wall: float) -> void:
+	var depth := COTTAGE_BAY_DEPTH_M
+	var low := 0.98
+	var high := 2.3
+	var plan := [Vector2(wall, 0.84), Vector2(wall - depth, 0.5), Vector2(wall - depth, -0.5), Vector2(wall, -0.84)]
+	for index in 3:
+		var a: Vector2 = plan[index]
+		var c: Vector2 = plan[index + 1]
+		var out_2d := Vector2(c.y - a.y, a.x - c.x).normalized()
+		var out := Vector3(out_2d.x, 0.0, out_2d.y)
+		if out.x > 0.0:
+			out = -out
+		b.quad_face(Vector3(a.x, low, a.y), Vector3(c.x, low, c.y), Vector3(c.x, high, c.y), Vector3(a.x, high, a.y), COTTAGE_WHITE, out)
+		var middle := (a + c) * 0.5
+		var run := a.distance_to(c)
+		_cottage_window(b, Vector3(middle.x, 1.66, middle.y) + out * 0.015, out, Vector2(run - 0.2, 0.92), 1)
+	b.quad_face(Vector3(plan[0].x, low, plan[0].y), Vector3(plan[1].x, low, plan[1].y), Vector3(plan[2].x, low, plan[2].y), Vector3(plan[3].x, low, plan[3].y), COTTAGE_WHITE, Vector3.DOWN)
+	# A corner board down each angle, and a sill round the foot.
+	for index in [1, 2]:
+		b.box(Vector3(plan[index].x, (low + high) * 0.5, plan[index].y), Basis.IDENTITY, Vector3(0.09, high - low, 0.09), COTTAGE_WHITE, CELL_WHITE)
+	b.box(Vector3(wall - depth * 0.5, low + 0.02, 0.0), Basis.IDENTITY, Vector3(depth + 0.1, 0.06, 1.8), COTTAGE_WHITE, CELL_WHITE)
+	# The roof: a shingled slope over the face and one each side, up to the wall.
+	var eave := high + 0.03
+	var apex := high + 0.34
+	var over := 0.09
+	var front_a := Vector3(wall - depth - over, eave, 0.56)
+	var front_d := Vector3(wall - depth - over, eave, -0.56)
+	var wall_a := Vector3(wall, apex, 0.56)
+	var wall_d := Vector3(wall, apex, -0.56)
+	_cottage_shingles(b, front_a, front_d, wall_d, wall_a, Vector3(-0.34, depth, 0.0).normalized())
+	for side: float in [-1.0, 1.0]:
+		var foot := Vector3(wall, eave, side * 0.96)
+		var corner := front_a if side > 0.0 else front_d
+		var top := wall_a if side > 0.0 else wall_d
+		b.triangle_face(corner, foot, top, COTTAGE_SHINGLE, Vector3(-0.2, 0.7, side * 0.4))
+	b.box(Vector3(wall - depth - over, eave - 0.03, 0.0), Basis.IDENTITY, Vector3(0.05, 0.08, 1.2), COTTAGE_WHITE, CELL_WHITE)
 
 
 ## A wall of the cottage facing `out` from `foot`: a grooved backing, lapped
@@ -1517,7 +1591,7 @@ func _cottage_gable(b: Builder, foot: Vector3, out: Vector3, half_m: float, apex
 		var run := Vector3.UP * height - across * edge * half_m
 		var middle := base + across * edge * half_m + run * 0.5 + out * 0.08
 		var rake := Basis(run.normalized().cross(out), run.normalized(), out)
-		b.box(middle, rake, Vector3(0.15, run.length() + 0.1, 0.05), COTTAGE_WHITE, CELL_WHITE)
+		b.box(middle, rake, Vector3(0.21, run.length() + 0.12, 0.06), COTTAGE_WHITE, CELL_WHITE)
 
 
 ## A shingled quad a, b, c, d facing `outward`, in courses of mottled tabs.
@@ -1543,7 +1617,7 @@ func _cottage_shingles(b: Builder, a: Vector3, d: Vector3, c: Vector3, e: Vector
 ## with a round sign.
 func _cottage_door(b: Builder, foot: Vector3, out: Vector3) -> void:
 	var basis := Basis(Vector3.UP.cross(out), Vector3.UP, out)
-	b.box(foot + Vector3.UP * 1.09 + out * 0.04, basis, Vector3(1.08, 2.26, 0.05), COTTAGE_WHITE, CELL_WHITE)
+	b.box(foot + Vector3.UP * 1.12 + out * 0.04, basis, Vector3(1.2, 2.32, 0.06), COTTAGE_WHITE, CELL_WHITE)
 	b.box(foot + Vector3.UP * 1.04 + out * 0.07, basis, Vector3(0.9, 2.08, 0.03), COTTAGE_DOOR, CELL_WHITE)
 	var across := Vector3.UP.cross(out)
 	var sign_at := foot + Vector3.UP * 1.6 + out * 0.09

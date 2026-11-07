@@ -51,9 +51,9 @@ uniform vec3 patch_asphalt : source_color = vec3(0.360, 0.360, 0.365);
 // The Mersea promenade's old paint (owner video, Nov 2026): the crossing's bars rolled
 // thin over worn asphalt, about 165,160,156 under the tone map, its white lines gone to
 // about 150,142,130, and a double yellow worn to an ochre a shade off the road.
-uniform vec3 rolled_white : source_color = vec3(0.44, 0.425, 0.405);
+uniform vec3 rolled_white : source_color = vec3(0.52, 0.505, 0.48);
 uniform vec3 trace_white : source_color = vec3(0.4, 0.37, 0.33);
-uniform vec3 trace_yellow : source_color = vec3(0.3, 0.262, 0.2);
+uniform vec3 trace_yellow : source_color = vec3(0.275, 0.247, 0.2);
 // A tar-sealed crack in an old road (a sealant's wear step 1): dark and dull, so a
 // walker's low view doesn't catch the sky in it.
 uniform vec3 crack_tar : source_color = vec3(0.16, 0.145, 0.13);
@@ -148,7 +148,7 @@ void fragment() {
 		rough = 0.95;
 		// Wear step 1: an old road's dark oval patch, in the crack tar's tone.
 		if (wear_step > 0.5) {
-			albedo = crack_tar * mix(1.0, 1.3, wear_fine);
+			albedo = crack_tar * mix(1.5, 1.8, wear_fine);
 			worn = 0.0;
 		}
 	} else if (kind < 12.5) {
@@ -167,7 +167,7 @@ void fragment() {
 	} else {
 		// A double yellow nearly gone: an ochre stain with the road showing through.
 		albedo = trace_yellow * mix(0.85, 1.05, wear_fine);
-		coverage = smoothstep(0.2, 0.7, mix(wear, wear_fine, 0.6));
+		coverage = smoothstep(0.3, 0.76, mix(wear, wear_fine, 0.6));
 	}
 	albedo = mix(albedo, worn_paint, worn * 0.45);
 	ALBEDO = albedo;
