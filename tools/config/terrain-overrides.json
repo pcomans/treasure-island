@@ -2295,6 +2295,75 @@
           "reason": "The black-plastic stockpile's crest, about 5 m over the yard, along its length between the mound and Avenue N: Esri World Imagery, Vantor capture 2026-05-26 (0.5 m island tile and large-clutter research tile z-ne-yard, 0.25 m)."
         }
       ]
+    },
+    {
+      "id": "garden_walk_maceo_may",
+      "name": "Garden Walk beside Maceo May",
+      "basis": "production_inference",
+      "evidence": "The frozen 2023 USGS raster still holds the excavation for 490 Avenue of the Palms, whose east flank drops the land along the Maceo May WSW wall from about 4.4 m to about 2.0 m. Owner photos of Nov 2026 (o1, o3, o4: the paseo level along the wall and at the lane mouth) and Google Street View (55 Cravath St, Sep 2025, camera x -159, z 392, heading 355; Ave of the Palms, Jun 2026, camera x -240, z 373, heading 70) show the finished paseo flat, level with the ground floors. The paseo between the two buildings is levelled to the grade of its two ends (about 4.3 m), reaching under each building's wall so the correction is whole at the wall foot, and fades out inside both footprints and into the open lot to the south-west. Owner-directed correction, approved by ROOT 2026-11-07 for this study.",
+      "scope": {
+        "source_keys": [],
+        "add_xz": [
+          [
+            [
+              -213.02,
+              299.51
+            ],
+            [
+              -180.96,
+              283.13
+            ],
+            [
+              -147.29,
+              349.03
+            ],
+            [
+              -179.35,
+              365.41
+            ]
+          ]
+        ],
+        "exclude_xz": [],
+        "exclude_ways": [],
+        "edge_blend_m": 6.0
+      },
+      "grade": {
+        "grid_m": 2,
+        "iterations": 3000,
+        "relaxation": 1.9
+      },
+      "regions": [
+        {
+          "id": "paseo",
+          "shape": {
+            "line_xz": [
+              [
+                -191.57,
+                297.53
+              ],
+              [
+                -178.38,
+                323.36
+              ],
+              [
+                -165.18,
+                349.18
+              ]
+            ],
+            "width_m": 20.0
+          },
+          "rule": {
+            "kind": "profile",
+            "elevations_m": [
+              4.4,
+              4.33,
+              4.27
+            ]
+          },
+          "min_leaf_m": 2,
+          "reason": "The paseo reads flat along Maceo May in the dated photos, level with the ground floors at both of its ends."
+        }
+      ]
     }
   ]
 }

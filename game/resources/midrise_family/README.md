@@ -1,8 +1,8 @@
 # Modern mid-rise family
 
-[midrise_family.gd](../../scripts/world/facades/midrise_family.gd) builds a flat-roofed courtyard apartment building over one frozen OSM footprint from a JSON config. Opt-in [outbuilding fields](#outbuilding-fields) also cover sheds, tanks and basins, trailers and pavilions. It shares the [housing family installer](../../scripts/world/facades/housing_family_live_attachment.gd): register an instance in [live_instances.json](../housing_family/live_instances.json) with `"family": "midrise"`. Its grammar follows the accepted Maceo May study next door: pale render, recessed glazing with dark frames, a darker base, glazed lobbies and loggias, as reusable bays rather than baked geometry.
+[midrise_family.gd](../../scripts/world/facades/midrise_family.gd) builds a flat-roofed courtyard apartment building over one frozen OSM footprint from a JSON config. Opt-in [outbuilding fields](#outbuilding-fields) also cover sheds, tanks and basins, trailers and pavilions. It shares the [housing family installer](../../scripts/world/facades/housing_family_live_attachment.gd): register an instance in [live_instances.json](../housing_family/live_instances.json) with `"family": "midrise"`. Its grammar began with the Maceo May study: pale render, recessed glazing with dark frames, a darker base, glazed lobbies and loggias, as reusable bays rather than baked geometry.
 
-Instances: [w1272162518.json](w1272162518.json) (490 Avenue of the Palms) and [w1212173437.json](w1212173437.json) (Star View Court). Dimensions and cadence are production inference; since 2026-11-03 unphotographed sides get no inferred detail ([AGENTS](../../../AGENTS.md#facade-recognizability-policy)).
+Instances: [w1272162518.json](w1272162518.json) (490 Avenue of the Palms), [w1212173437.json](w1212173437.json) (Star View Court) and [r19685981.json](r19685981.json) (Maceo May, whose [plan fields](#plan-fields) cover wings of different heights round a court, a curved wing and overhanging upper floors). Dimensions and cadence are production inference; since 2026-11-03 unphotographed sides get no inferred detail ([AGENTS](../../../AGENTS.md#facade-recognizability-policy)).
 
 ## How it builds
 
@@ -69,6 +69,18 @@ All are opt-in; configs without them build as before. Materials are shared acros
 | feature `top_box` | Projecting box on an otherwise blank wall from `below` (default 0.15) under floor `storey` (default the top storey) up to the wall top, `project` (0.05–2 m, default 0.6) out from the wall, inset by `pier`, in `material` (default the scheme material), with one glazed band from its `window` (`sill`, `h`, `inset`, plus the usual glazing fields). It is `support`, so wall geometry stays inside the footprint. A width under 1 m or an out-of-range storey or projection fails the build. |
 
 Parts are emitted into the same role buckets: posts, rails, ladders, pergola beams, fascia and roof undersides are `support`, knee walls and infill are `wall`, ramps are `ground`.
+
+## Plan fields
+
+All are opt-in; configs without them build as before.
+
+| Field | Meaning |
+|---|---|
+| block `outline_xz` | The block's plan as world `[x, z]` points instead of a clip of the footprint, for curved or notched plans. Every point lies inside the footprint or within 5 mm of it. Neighbouring blocks hide each other's walls only along edges that share a line within 2 mm, so give them the same points. |
+| block `stacked` | The block floats from `floor_raise` up, free of the tiling: it may overlap the block under it and is left out of the overlap and area checks. Its walls start at its floor and it gets a `soffit` (palette key, default `soffit`) on its underside, so upper floors can overhang a smaller ground storey. A neighbour's wall behind it is hidden only from that floor up. |
+| face key `p<i>` | Names outline edge `i` of a block in `faces`, ahead of `e<k>`, `court`, `return` and `default`, so each facet of a curved plan can take its own scheme. |
+| target `holes_tiled` | With `holes`: no block owns the courtyard ring. A low deck block fills the court and the wings round it are blocks of their own heights, so the court walls are ordinary `court` faces above the deck. |
+| top-level `round_columns` | Round columns, each `{"xz": [x, z], "r": 0.1-1, "top": 0.5-12, "material": "concrete", "sides": 16}`, from below grade to `top` above the building floor. Support role, so they stop the player. |
 
 ## Roles
 

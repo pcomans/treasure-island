@@ -18,6 +18,9 @@ extends RefCounted
 ## anchor) cover sheds, tanks, trailers and pavilions; configs without them build
 ## as before.
 ## Dimensions, cadence and unseen sides are production inference.
+## Opt-in plan fields (block `outline_xz`, `stacked`, faces keyed `p<i>`, target
+## `holes_tiled`, top-level `round_columns`) cover buildings whose wings differ in
+## height round a court, curved plans and upper floors that overhang the ground storey.
 ## Opt-in scheme `grid` (shared facade_grid format, columns in footprint-edge stations
 ## on e<k> faces) places the windows of every bay from a photo-derived grid, built as
 ## shared facade_assembly units; schemes without it build exactly as before.
@@ -121,6 +124,8 @@ class Block:
 	var planes: Array = []
 	## Courtyard holes inside this block (flat blocks only).
 	var holes: Array[PackedVector2Array] = []
+	## Opt-in: floats from its floor up over its plan, free of the tiling (see "stacked").
+	var stacked := false
 
 
 ## One exposed block edge with its facade scheme and station mapping.
@@ -268,6 +273,8 @@ static func _build_all(ctx: Ctx, wall: Dictionary, roof: Dictionary, chunks: Arr
 		_apron(ctx, apron)
 	for stair: Variant in ctx.cfg.get("ext_stairs", []):
 		_ext_stair(ctx, stair)
+	for column: Variant in ctx.cfg.get("round_columns", []):
+		_round_column(ctx, column)
 
 
 # ------------------------------------------------------------------ footprint
@@ -446,6 +453,10 @@ static func _make_blocks(ctx: Ctx) -> void:
 			return
 		ids[block.id] = true
 		var poly := ring.duplicate()
+		if item.has("outline_xz"):
+			poly = _outline(ctx, block, item.outline_xz, ring)
+			if poly.is_empty():
+				return
 		for clip: Dictionary in item.get("clip", []):
 			for plane: Array in _planes(ctx, clip):
 				poly = _clip(poly, plane[0], plane[1])
@@ -453,7 +464,9 @@ static func _make_blocks(ctx: Ctx) -> void:
 			ctx.errors.append("block %s clips to nothing" % block.id)
 			return
 		block.poly = poly
-		total += absf(_area(poly))
+		block.stacked = bool(item.get("stacked", false))
+		if not block.stacked:
+			total += absf(_area(poly))
 		var raise := float(item.get("floor_raise", 0.0))
 		if not _in_range(raise, 0.0, 10.0):
 			ctx.errors.append("block %s floor_raise must be 0-10 m" % block.id)
@@ -511,8 +524,12 @@ static func _make_blocks(ctx: Ctx) -> void:
 		ctx.errors.append("blocks overlap or exceed the footprint (%.3f > %.3f m2)" % [total, footprint_area])
 		return
 	# A hole (courtyard) lies wholly inside one flat block, which builds its walls,
-	# parapets and roof around it.
-	for hole: PackedVector2Array in ctx.holes:
+	# parapets and roof around it. Opt-in target.holes_tiled: a low deck block fills
+	# the court and the wings round it are blocks of their own heights, so no block owns it.
+	var owned_holes: Array[PackedVector2Array] = ctx.holes
+	if bool((ctx.cfg.target as Dictionary).get("holes_tiled", false)):
+		owned_holes = []
+	for hole: PackedVector2Array in owned_holes:
 		var owner: Block = null
 		for block: Block in ctx.blocks:
 			var inside := 0
@@ -535,6 +552,8 @@ static func _make_blocks(ctx: Ctx) -> void:
 		owner.holes.append(hole)
 	for i in ctx.blocks.size():
 		for j in range(i + 1, ctx.blocks.size()):
+			if (ctx.blocks[i] as Block).stacked or (ctx.blocks[j] as Block).stacked:
+				continue
 			for piece: PackedVector2Array in Geometry2D.intersect_polygons((ctx.blocks[i] as Block).poly, (ctx.blocks[j] as Block).poly):
 				if absf(_area(piece)) > 0.01:
 					ctx.errors.append("blocks %s and %s overlap" % [(ctx.blocks[i] as Block).id, (ctx.blocks[j] as Block).id])
@@ -570,6 +589,32 @@ static func _planes(ctx: Ctx, clip: Dictionary) -> Array:
 			normal = -normal
 		planes.append([p0, normal])
 	return planes
+
+
+## Opt-in explicit block plan ("outline_xz": world [x, z] points) in the ring's winding,
+## every point inside the footprint or within 5 mm of it. Empty on error.
+static func _outline(ctx: Ctx, block: Block, value: Variant, ring: PackedVector2Array) -> PackedVector2Array:
+	var poly := PackedVector2Array()
+	if value is Array and (value as Array).size() >= 3:
+		for point: Variant in value:
+			if not point is Array or (point as Array).size() != 2:
+				poly.clear()
+				break
+			var p := Vector2(float(point[0]), float(point[1]))
+			var near := Geometry2D.is_point_in_polygon(p, ring)
+			for i in ring.size():
+				if Geometry2D.get_closest_point_to_segment(p, ring[i], ring[(i + 1) % ring.size()]).distance_to(p) < 0.005:
+					near = true
+			if not p.is_finite() or not near:
+				poly.clear()
+				break
+			poly.append(p)
+	if poly.size() < 3:
+		ctx.errors.append("block %s outline_xz needs 3+ [x, z] points inside the footprint" % block.id)
+		return PackedVector2Array()
+	if (_area(poly) > 0.0) != (_area(ring) > 0.0):
+		poly.reverse()
+	return poly
 
 
 static func _clip(poly: PackedVector2Array, point: Vector2, normal: Vector2) -> PackedVector2Array:
@@ -792,7 +837,8 @@ static func _spans(ctx: Ctx, block: Block, i: int) -> Array:
 			if float(cover[0]) <= mid and mid <= float(cover[1]):
 				bands.append(cover)
 		bands.sort_custom(func(p: Array, q: Array) -> bool: return float(p[3]) < float(q[3]))
-		var bottom := -INF
+		# A stacked block starts at its own floor, so stacked neighbours hide each other.
+		var bottom := block.floors[0] if block.stacked else -INF
 		for band: Array in bands:
 			if float(band[3]) <= bottom + 0.000001:
 				bottom = maxf(bottom, float(band[2]))
@@ -806,9 +852,11 @@ static func _spans(ctx: Ctx, block: Block, i: int) -> Array:
 	return spans
 
 
-## Lowest level a block hides of a neighbour's wall: the deck underside of a flat
-## deck block (open beneath it), else the ground (-INF).
+## Lowest level a block hides of a neighbour's wall: a stacked block's floor, the deck
+## underside of a flat deck block (open beneath it), else the ground (-INF).
 static func _cover_floor(block: Block) -> float:
+	if block.stacked:
+		return block.floors[0]
 	var deck: Dictionary = block.cfg.get("deck", {})
 	if block.form != "flat" or deck.is_empty():
 		return -INF
@@ -851,7 +899,8 @@ static func _block_faces(ctx: Ctx, block: Block) -> void:
 			face.key = "e%d" % k
 			face.edge = k
 			break
-		var scheme_name := str(faces_cfg.get(face.key, faces_cfg.get("default", "")))
+		# Opt-in "p<i>" keys name one outline edge, for facets of a curved plan.
+		var scheme_name := str(faces_cfg.get("p%d" % i, faces_cfg.get(face.key, faces_cfg.get("default", ""))))
 		if not schemes.has(scheme_name):
 			ctx.errors.append("block %s face %s has no scheme" % [block.id, face.key])
 			return
@@ -1999,6 +2048,13 @@ static func _roof(ctx: Ctx, block: Block) -> void:
 				var q1: Vector2 = t[1]
 				var q2: Vector2 = t[2]
 				under.tri(Vector3(q0.x, under_y, q0.y), Vector3(q1.x, under_y, q1.y), Vector3(q2.x, under_y, q2.y), Vector3.DOWN)
+		if block.stacked:
+			var soffit := ctx.bucket("support", str(block.cfg.get("soffit", "soffit")))
+			for t: Array in tris:
+				var q0: Vector2 = t[0]
+				var q1: Vector2 = t[1]
+				var q2: Vector2 = t[2]
+				soffit.tri(Vector3(q0.x, block.floors[0], q0.y), Vector3(q1.x, block.floors[0], q1.y), Vector3(q2.x, block.floors[0], q2.y), Vector3.DOWN)
 		_parapets(ctx, block)
 		for hole: PackedVector2Array in block.holes:
 			_hole_parapets(ctx, block, hole)
@@ -2309,6 +2365,25 @@ static func _prism(ctx: Ctx, corners: Array, y0: float, y1: float, side_mat: Str
 		var c1: Vector2 = corners[i]
 		var c2: Vector2 = corners[i + 1]
 		top.tri(Vector3(c0.x, y1, c0.y), Vector3(c1.x, y1, c1.y), Vector3(c2.x, y1, c2.y), Vector3.UP)
+
+
+## Opt-in round column ("round_columns" entry): a prism of `sides` (default 16) round
+## plan point `xz`, radius `r` (0.1-1 m), from below grade to `top` metres above the
+## building floor, in `material` (default "concrete"). Support role, so it stops the player.
+static func _round_column(ctx: Ctx, spec: Variant) -> void:
+	var ok := spec is Dictionary and (spec as Dictionary).get("xz") is Array and ((spec as Dictionary).xz as Array).size() == 2
+	var r := float((spec as Dictionary).get("r", 0.0)) if ok else 0.0
+	var top := float((spec as Dictionary).get("top", 0.0)) if ok else 0.0
+	if not ok or not _in_range(r, 0.1, 1.0) or not _in_range(top, 0.5, 12.0):
+		ctx.errors.append("round column needs xz, r 0.1-1 m and top 0.5-12 m")
+		return
+	var c := Vector2(float(spec.xz[0]), float(spec.xz[1]))
+	var sides := maxi(8, int(spec.get("sides", 16)))
+	var ring: Array = []
+	for i in sides:
+		ring.append(c + Vector2(cos(TAU * float(i) / float(sides)), sin(TAU * float(i) / float(sides))) * r)
+	var material := str(spec.get("material", "concrete"))
+	_prism(ctx, ring, _ground_y(ctx, c) - BURY_M, ctx.floor_y + top, material, material)
 
 
 ## Walkable paving strip inside the footprint line where a block face is set back.
