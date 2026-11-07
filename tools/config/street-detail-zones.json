@@ -1553,10 +1553,10 @@
       "axis": {
        "from_xz": [-267, 203],
        "to_xz": [-322, 247],
-       "full_m": 3,
-       "zero_m": 6
+       "full_m": 1.5,
+       "zero_m": 3.5
       },
-      "height_m": [2.02, 2.16, 2.6, 3.0],
+      "height_m": [2.02, 2.16, 2.45, 2.75],
       "ramps": [
        {
         "from_xz": [-268, 203],
@@ -1584,14 +1584,14 @@
       {
        "prop": "marsh_brush",
        "variants": [0, 0],
-       "scale": [0.85, 1.15],
+       "scale": [0.8, 1.05],
        "at": [0.35, 1.0],
        "share": 6
       },
       {
        "prop": "marsh_brush",
        "variants": [1, 1],
-       "scale": [0.8, 1.1],
+       "scale": [0.8, 1.05],
        "at": [0.0, 0.7],
        "share": 6
       },
@@ -1802,13 +1802,6 @@
        "prop": "marsh_brush",
        "variants": [2, 2],
        "scale": [0.85, 1.2],
-       "at": [0.3, 1.0],
-       "share": 2
-      },
-      {
-       "prop": "marsh_brush",
-       "variants": [3, 3],
-       "scale": [0.85, 1.2],
        "at": [0.0, 1.0],
        "share": 1
       }
@@ -1825,14 +1818,14 @@
       "terrain_wetland",
       "land_ground"
      ],
-     "per_m2": 0.7,
-     "spacing": [0.35, 0.7],
+     "per_m2": 2.2,
+     "spacing": [0.3, 0.6],
      "field": {
       "axis": {
        "from_xz": [-372, 243],
        "to_xz": [-318, 214],
-       "full_m": 4,
-       "zero_m": 9
+       "full_m": 3,
+       "zero_m": 7
       },
       "height_m": [1.94, 2.0, 2.5, 2.85],
       "wander": {
@@ -1846,9 +1839,9 @@
      },
      "mix": [
       {
-       "prop": "marsh_brush",
-       "variants": [3, 3],
-       "scale": [0.8, 1.15],
+       "prop": "marsh_mat",
+       "variants": [2, 2],
+       "scale": [0.8, 1.2],
        "at": [0.0, 1.0],
        "share": 1
       }

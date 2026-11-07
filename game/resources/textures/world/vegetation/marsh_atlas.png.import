@@ -3,15 +3,10 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://2h6nkfgk47nr"
-path="res://.godot/imported/marsh_atlas.png-cf165cd50b4011bb14780fc25f600fd7.ctex"
-metadata={
-"vram_texture": false
-}
 
 [deps]
 
 source_file="res://game/resources/textures/world/vegetation/marsh_atlas.png"
-dest_files=["res://.godot/imported/marsh_atlas.png-cf165cd50b4011bb14780fc25f600fd7.ctex"]
 
 [params]
 

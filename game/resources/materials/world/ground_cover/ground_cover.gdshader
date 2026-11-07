@@ -109,9 +109,9 @@ uniform vec3 bank_gap : source_color = vec3(0.085, 0.068, 0.06);
 uniform vec3 bank_blade : source_color = vec3(0.255, 0.21, 0.18);
 uniform vec3 bank_straw : source_color = vec3(0.44, 0.385, 0.33);
 uniform vec3 bank_gravel : source_color = vec3(0.33, 0.32, 0.29);
-uniform vec3 marsh_far_red : source_color = vec3(0.26, 0.165, 0.14);
-uniform vec3 marsh_far_olive : source_color = vec3(0.26, 0.235, 0.135);
-uniform vec3 marsh_far_straw : source_color = vec3(0.42, 0.365, 0.265);
+uniform vec3 marsh_far_red : source_color = vec3(0.31, 0.2, 0.115);
+uniform vec3 marsh_far_olive : source_color = vec3(0.29, 0.26, 0.12);
+uniform vec3 marsh_far_straw : source_color = vec3(0.45, 0.39, 0.25);
 // Standing water's own colour: a neutral murk, so its blue is the sky it reflects.
 uniform vec3 puddle_tint : source_color = vec3(0.08, 0.085, 0.09);
 
@@ -287,7 +287,7 @@ void fragment() {
 			bank *= mix(0.9, 1.06, smoothstep(2.6, 3.7, h));
 			// Crushed rock spills from the lots' shoulders over the slope's top, ragged into
 			// the grass, with patches of rubble showing through it lower down.
-			float rock_w = 1.0 - smoothstep(0.5, 3.0, paved_m + 2.4 * (n_small - 0.5) + 1.4 * (n_tiny - 0.5) + 1.2 * (flopped - 0.5));
+			float rock_w = 1.0 - smoothstep(0.2, 1.6, paved_m + 1.8 * (n_small - 0.5) + 1.2 * (n_tiny - 0.5) + 1.0 * (flopped - 0.5));
 			rock_w = max(rock_w, 0.85 * smoothstep(0.6, 0.66, 0.5 * n_patch8 + 0.3 * n_small + 0.2 * n_tiny) * smoothstep(2.9, 3.4, h_land));
 			bank = mix(bank, bank_gravel * (0.2 + 1.6 * smoothstep(0.15, 0.85, texture(marsh_grain, p / BANK_ROCK_TILE_M).b)), rock_w);
 			float bank_w = 1.0 - smoothstep(4.7, 5.3, h_land);

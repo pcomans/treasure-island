@@ -123,7 +123,7 @@ const LOW_GRADES := {
 	"young_shrub.png": [Color(0.8, 0.82, 0.74), 0.25],
 	"marsh_thin_stems.png": [Color(0.82, 0.79, 0.76), 0.7],
 	"marsh_low_mat.png": [Color(0.84, 0.8, 0.74), 0.4],
-	"marsh_seeded_brush.png": [Color(0.84, 0.78, 0.7), 0.25],
+	"marsh_seeded_brush.png": [Color(0.82, 0.78, 0.72), 0.4],
 	"tall_fringe.png": [Color(0.86, 0.86, 0.72), 0.25],
 	"woolly_stalks.png": [Color(0.78, 0.72, 0.66), 0.55],
 	"buckwheat_stalks.png": [Color(0.84, 0.74, 0.64), 0.7],

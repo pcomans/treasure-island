@@ -679,7 +679,7 @@ const MARSH_SHRUB_TINT := Color(0.72, 0.66, 0.6)
 const MARSH_STEM_TINT := Color(0.52, 0.5, 0.48)
 const MARSH_MAT_TINT := Color(0.56, 0.53, 0.55)
 const MARSH_BRUSH_TINT := Color(0.5, 0.49, 0.47)
-const MARSH_SCRUB_TINT := Color(0.28, 0.25, 0.23)
+const MARSH_SCRUB_TINT := Color(0.3, 0.27, 0.25)
 const SEEDED_SHRUBS := [
 	# Thin dark stems in a loose vase, nearly bare, sparse pale seed heads near the tips.
 	{"seed": 131, "lean": 0.06, "layers": [{"kind": "crossed", "cell": "seeded_stems", "cards": 3, "width": 0.7, "height": 0.62, "splay_deg": 9.0, "flutter": 0.03, "shade_low": 0.7}]},
@@ -703,15 +703,16 @@ const MARSH_STEMS := [
 const MARSH_MATS := [
 	{"seed": 138, "lean": 0.03, "hue": 0.1, "layers": [{"kind": "crossed", "cell": "marsh_mat", "cards": 2, "width": 1.0, "height": 0.36, "base": -0.03, "curl": 0.1, "splay_deg": 18.0, "flop_deg": 26.0, "flutter": 0.02, "shade_low": 0.7, "tint": MARSH_MAT_TINT}]},
 	{"seed": 139, "lean": 0.03, "hue": 0.1, "layers": [{"kind": "crossed", "cell": "marsh_mat", "cards": 2, "width": 0.7, "height": 0.26, "base": -0.03, "curl": 0.1, "splay_deg": 20.0, "flop_deg": 30.0, "flutter": 0.02, "shade_low": 0.7, "tint": MARSH_MAT_TINT}]},
+	# Old dark tussocks, in the low line across the far floor.
+	{"seed": 155, "lean": 0.03, "hue": 0.06, "layers": [{"kind": "crossed", "cell": "marsh_mat", "cards": 2, "width": 1.1, "height": 0.45, "base": -0.03, "curl": 0.1, "splay_deg": 14.0, "flop_deg": 20.0, "flutter": 0.02, "shade_low": 0.6, "tint": MARSH_SCRUB_TINT}]},
 ]
 ## The cream-seeded brush along the foot of the slope (owner photo, Nov 2026): wide cards of
 ## billowing seed over dark stems, sown so they run together into one ragged band.
 const MARSH_BRUSHES := [
-	{"seed": 140, "lean": 0.03, "hue": 0.08, "layers": [{"kind": "crossed", "cell": "marsh_brush", "cards": 3, "width": 2.6, "height": 1.3, "base": -0.1, "curl": 0.1, "splay_deg": 5.0, "flutter": 0.035, "shade_low": 0.32, "tint": MARSH_BRUSH_TINT}]},
-	{"seed": 151, "lean": 0.04, "hue": 0.08, "layers": [{"kind": "crossed", "cell": "marsh_brush", "cards": 2, "width": 1.9, "height": 0.98, "base": -0.08, "curl": 0.1, "splay_deg": 6.0, "flutter": 0.035, "shade_low": 0.32, "tint": MARSH_BRUSH_TINT}]},
-	# The same stems, old and dark: the low scrub along the fence and across the far floor.
+	{"seed": 140, "lean": 0.03, "hue": 0.08, "layers": [{"kind": "crossed", "cell": "marsh_brush", "cards": 3, "width": 2.2, "height": 1.1, "base": -0.1, "curl": 0.1, "splay_deg": 5.0, "flutter": 0.035, "shade_low": 0.32, "tint": MARSH_BRUSH_TINT}]},
+	{"seed": 151, "lean": 0.04, "hue": 0.08, "layers": [{"kind": "crossed", "cell": "marsh_brush", "cards": 2, "width": 1.7, "height": 0.85, "base": -0.08, "curl": 0.1, "splay_deg": 6.0, "flutter": 0.035, "shade_low": 0.32, "tint": MARSH_BRUSH_TINT}]},
+	# The same stems, old and dark: the low scrub along the fence.
 	{"seed": 154, "lean": 0.04, "hue": 0.06, "layers": [{"kind": "crossed", "cell": "marsh_brush", "cards": 2, "width": 2.2, "height": 1.05, "base": -0.08, "curl": 0.1, "splay_deg": 6.0, "flutter": 0.03, "shade_low": 0.4, "tint": MARSH_SCRUB_TINT}]},
-	{"seed": 155, "lean": 0.04, "hue": 0.06, "layers": [{"kind": "crossed", "cell": "marsh_brush", "cards": 2, "width": 2.4, "height": 0.5, "base": -0.06, "curl": 0.1, "splay_deg": 8.0, "flutter": 0.03, "shade_low": 0.4, "tint": MARSH_SCRUB_TINT}]},
 ]
 ## The tall yellow-green fringe that closes the view along the ditch's far banks.
 const MARSH_FRINGES := [
