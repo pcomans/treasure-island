@@ -24306,3 +24306,25 @@ Comparing every record against the base commit found a change the author hadn't 
 - What did not work well: I had swapped the headings of refs 05 and 18 and left that camera in the far parking strip, then placed the tan container through it, so it landed on the road. I lifted the lot over the service road to hide it, which is why the stepped shape appeared: the reviewers' "stray shape" was a road I had covered. I also let per-face colour lifts stand in for sun on the north hip and the porch.
 - What the team should change next time: Check a fitted camera against where it could really stand, a lane or a sidewalk, before placing anything through it. Don't cover world data to fix a look: show it and ask. Keep every per-face colour choice independent of today's sun.
 - Left open on the coordinator's call: the lot still carries the source key and a `:w34313545:` derived key, so the fit test and close-ups count it in the building's box. Untagging it would tighten the box and the close-ups, at the cost of one fit and one shots run.
+
+### b201-visual-review, final
+
+(Relayed by the coordinator; added by b201-art.)
+
+- **Worked:** three-way ribbons showed exactly what the lot change did, and new poses closed the yard question.
+- **Didn't:** the road band's weakest stretch wasn't in any ribbon.
+- **Change:** when a shared surface changes, check its whole length.
+
+### b201-code-review, final
+
+(Relayed by the coordinator; added by b201-art.)
+
+- **Worked:** rerunning frame-mapping scripts on new rows found the pole in minutes.
+- **Didn't:** street-detail-off fit runs can't see clashes between new props and street rows.
+- **Change:** check new solid props against `street_detail.json` rows or fit with street detail on.
+
+### b201-art, final — 2026-11-07 — last yard and catalog commit
+
+- What worked well: Mapping every `street_detail.json` row into the building's frame took one short script and listed all 16 rows on the site, so the pole fix came with a check of the rest.
+- What did not work well: The fit test passed with street detail on while a container swallowed a power pole, because a pole inside a container meets no check. I had placed that row from the aerial without reading the street rows.
+- What the team should change next time: When placing solid props, list the street rows inside them first. A fit pass doesn't show that a prop and a street row don't overlap.

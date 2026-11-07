@@ -147,9 +147,9 @@
       "content_classification": "active_target_specific_whole_building_replacement",
       "receiver_key": "building:w34313545:wall",
       "recognition_acceptance_authority": "physical_unit_claim_and_independent_acceptance_record",
-      "recognition_acceptance_status": "pending_independent_review_of_the_2026-11-06_study",
-      "review_status": "pending_independent_review_of_the_2026-11-06_study",
-      "review_status_scope": "whole_building_model_replacement_not_yet_reviewed",
+      "recognition_acceptance_status": "accepted",
+      "review_status": "independent_exact_current_live_pass",
+      "review_status_scope": "whole_building_model_replacement_reviewed_2026-11-06",
       "runtime_adapter_path": "game/scripts/world/facades/b201_market_live_replacement.gd",
       "runtime_asset_paths": [
         "game/resources/materials/world/d1_current/b201_service_leaf.tres",
@@ -1540,6 +1540,15 @@
           "review_id": "d1-b201-live-attachment-2026-09-04",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
+        },
+        {
+          "review_id": "b201-market-study-2026-11-06",
+          "review_kind": "independent_reference_recognition",
+          "reviews": [
+            "b201-visual-review",
+            "b201-code-review"
+          ],
+          "status": "accept"
         }
       ],
       "anchor_source_key": "w34313545",
@@ -1562,7 +1571,7 @@
       "legacy_adapter_ids": [],
       "protected_scopes": [
         {
-          "reason": "The ENE middle and south walls and the NNW wall between the annex and the east block have no dated photo: they keep their old inferred openings (runs 15-26 on the ENE, the door on runs 35-39 on the NNW) and take only the side's plain paint. Every other run and the roof were rebuilt from dated references in the 2026-11-06 study.",
+          "reason": "The ENE middle and south walls and the NNW wall between the annex and the east block have no dated photo: they keep their old inferred openings (runs 15-24 on the ENE, the door on runs 35-39 on the NNW) and take only the side's plain paint. Every other run and the roof were rebuilt from dated references in the 2026-11-06 study.",
           "receiver_key": "building:w34313545:wall",
           "run_indices": [
             15,
@@ -1575,8 +1584,6 @@
             22,
             23,
             24,
-            25,
-            26,
             35,
             36,
             37,

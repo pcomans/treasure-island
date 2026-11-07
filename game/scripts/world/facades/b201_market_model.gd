@@ -134,6 +134,7 @@ const BOLLARD_COUNT := 9
 const LOT_LIFT := 0.06
 const STAIN_LIFT := 0.069
 const STAIN_TILE_M := 41.25
+const EDGE_WEAR_TILE_M := 14.0
 const PAINT_LIFT := 0.088
 const SIDEWALK_LIFT := 0.2
 # The container yard along Avenue I (refs 14, 22; Aug 2025 aerial).
@@ -142,7 +143,7 @@ const YARD_UPPER_W := 84.2
 const CONTAINER_WIDE := 2.44
 const CONTAINER_TALL := 2.59
 ## Ground tier: [north edge u, length, paint, door number]. Upper: the same, then door face w.
-const YARD_LOW := [[60.25, 12.2, "container_grey", 1], [65.3, 12.2, "container_grey", 3], [71.75, 12.2, "container_grey", 7], [74.2, 6.06, "container_rust", 9], [79.7, 12.2, "container_rust", 15], [85.0, 12.2, "container_rust", 17], [87.6, 12.2, "container_grey", 0], [90.1, 12.2, "container_grey", 0], [93.2, 6.06, "container_grey", 0]]
+const YARD_LOW := [[60.25, 12.2, "container_grey", 1], [65.3, 12.2, "container_grey", 3], [71.75, 12.2, "container_grey", 7], [74.2, 6.06, "container_rust", 9], [79.7, 12.2, "container_rust", 15], [85.0, 12.2, "container_rust", 17], [87.6, 12.2, "container_grey", 0], [90.1, 12.2, "container_grey", 0], [94.9, 6.06, "container_grey", 0]]
 const YARD_HIGH := [[60.25, 11.2, "container_grey", 2, YARD_UPPER_W], [71.75, 12.2, "container_grey", 8, YARD_FACE_W], [79.7, 12.2, "container_rust", 16, YARD_FACE_W], [85.0, 6.06, "container_brown", 0, 78.6], [87.6, 12.2, "container_grey", 0, YARD_FACE_W], [90.1, 12.2, "container_grey", 0, YARD_FACE_W]]
 ## Door numbers in the sign atlas: number -> cell.
 const DOOR_NUMBERS := {1: 0, 2: 1, 3: 2, 4: 3, 7: 4, 8: 5, 9: 6, 15: 7, 16: 8, 17: 9}
@@ -184,10 +185,10 @@ const PAINTS := {
 	"container_red": [[172, 76, 64], 0.7, "ribs", 0.3],
 	"container_red_edge": [[146, 64, 54], 0.7, "", 1.0],
 	"container_tan": [[214, 192, 142], 0.75, "ribs", 0.3],
-	"container_grey": [[188, 190, 182], 0.7, "ribs", 0.3],
-	"container_grey_edge": [[190, 192, 184], 0.7, "", 1.0],
-	"container_grey_seam": [[162, 164, 156], 0.7, "", 1.0],
-	"container_grey_rod": [[150, 152, 146], 0.6, "", 1.0],
+	"container_grey": [[136, 142, 142], 0.7, "ribs", 0.3],
+	"container_grey_edge": [[172, 178, 176], 0.7, "", 1.0],
+	"container_grey_seam": [[146, 150, 148], 0.7, "", 1.0],
+	"container_grey_rod": [[136, 138, 134], 0.6, "", 1.0],
 	"container_rust": [[142, 84, 66], 0.75, "ribs", 0.3],
 	"container_rust_edge": [[150, 96, 72], 0.75, "", 1.0],
 	"container_rust_seam": [[116, 70, 56], 0.75, "", 1.0],
@@ -199,7 +200,7 @@ const PAINTS := {
 	"container_casting": [[62, 56, 52], 0.7, "", 1.0],
 	"patch_primer": [[214, 214, 210], 0.8, "", 1.0],
 	"lock_red": [[196, 54, 48], 0.5, "", 1.0],
-	"tarp": [[166, 170, 176], 0.85, "", 1.0],
+	"tarp": [[120, 132, 140], 0.85, "", 1.0],
 	"cabin_white": [[226, 226, 220], 0.7, "", 1.0],
 	"plywood": [[196, 152, 98], 0.85, "", 1.0],
 	"wood_dark": [[92, 66, 52], 0.85, "", 1.0],
@@ -1296,6 +1297,8 @@ func _turbine(w: float, y: float, u: float, size: float) -> void:
 ## props the photos stand around it.
 func _build_setting() -> void:
 	_build_lot()
+	_edge_wear(120.72, -2.0, 69.0, 0.0)
+	_edge_wear(124.63, -2.0, 69.0, 0.37)
 	# Sidewalk before the market, its low curb, and a walkable ramp over the curb.
 	_drape("walk", "sidewalk", SIDEWALK_W, SIGN_W_EAVE, SIDEWALK_U0, SIDEWALK_U1, SIDEWALK_LIFT, 1.5)
 	_drape("walk", "porch_floor", SIGN_W_EAVE, FRONT_W, SIDEWALK_U0, SIDEWALK_U1, SIDEWALK_LIFT, 1.5)
@@ -1432,6 +1435,22 @@ func _build_lot() -> void:
 			_cover("lot_stains", outline, STAIN_LIFT)
 
 
+## Dust and wear along the service road's edge on the apron: a soft strip over the join
+## that breaks up its hard line. The road itself stays as it is.
+func _edge_wear(u: float, w0: float, w1: float, phase: float) -> void:
+	var half := 0.6
+	var w := w0
+	while w < w1 - 0.001:
+		var wn := minf(w + 4.0, w1)
+		var points: Array = []
+		for c: Vector2 in [Vector2(w, u - half), Vector2(wn, u - half), Vector2(wn, u + half), Vector2(w, u + half)]:
+			points.append(_p(c.x, land_y(c.x, c.y) + PAINT_LIFT, c.y))
+		var s0 := phase + w / EDGE_WEAR_TILE_M
+		var s1 := phase + wn / EDGE_WEAR_TILE_M
+		_plane("setting", "edge_wear", points, Vector3.UP, [Vector2(s0, 0.0), Vector2(s1, 0.0), Vector2(s1, 1.0), Vector2(s0, 1.0)])
+		w = wn
+
+
 func _lot_edge(u: float) -> float:
 	return lerpf(LOT_EDGE_N, LOT_EDGE_S, (u - LOT_N) / (LOT_U1 - LOT_N))
 
@@ -1511,8 +1530,8 @@ func _yard() -> void:
 		_art(north, "sign_atlas", YARD_FACE_W - 1.15, YARD_FACE_W - 0.72, y + 0.42, y + 2.25, 0.015, Rect2(0.75, 0.75, 0.03125, 0.25))
 	# Tarps on a wire between the stacks.
 	var ground := land_y(YARD_FACE_W, 66.0) + LOT_LIFT
-	_tarp(YARD_FACE_W - 0.1, 62.72, 65.28, ground, 2.3)
-	_tarp(YARD_FACE_W - 0.1, 67.76, 71.72, ground, 2.3)
+	_tarp(YARD_FACE_W - 0.1, 62.69, 65.3, ground, 2.3)
+	_tarp(YARD_FACE_W - 0.1, 67.74, 71.75, ground, 2.3)
 	# White site cabin behind the tarp, with its wall air conditioner (ref 14).
 	var cabin_y := land_y(76.0, 69.7) + LOT_LIFT
 	_box("detail", "cabin_white", _p(73.0, cabin_y, 67.9), _p(80.6, cabin_y + 3.5, 71.6))
@@ -1534,6 +1553,9 @@ func _yard() -> void:
 	var lean_y := land_y(80.0, 84.6) + LOT_LIFT
 	for board: Vector2 in [Vector2(79.0, 81.2), Vector2(80.3, 83.1)]:
 		_plane("trim", "wood_dark", [_p(board.x, lean_y, 84.3), _p(board.y, lean_y, 84.3), _p(board.y, lean_y + 1.1, 84.98), _p(board.x, lean_y + 1.1, 84.98)], Vector3(0, 0.5, -1))
+	# Notice on the plain grey wall past the last stack (ref 14).
+	var notice_y := land_y(85.2, U_F + 0.4) + 2.4
+	_art(Face.new(_p(0, 0, U_F), Vector3.RIGHT, Vector3.BACK), "sign_atlas", 85.0, 85.5, notice_y, notice_y + 0.6, 0.012, Rect2(0.1875, 0.6875, 0.0625, 0.125))
 	# Dish on its mast and a lamp on the top corner (ref 14).
 	var mast_y: float = tops[60.25] + CONTAINER_TALL
 	_cyl("trim", "frame_grey", _p(YARD_UPPER_W - 4.0, mast_y, 61.6), 0.03, 1.15, 6)
@@ -1580,8 +1602,9 @@ func _shipping(face_w: float, u0: float, y0: float, length: float, paint: String
 	elif paint == "container_grey" and number != 0:
 		_fb("trim", "lock_red", f, mid - 0.2, mid + 0.2, y0 + 0.86, y0 + 0.94, 0.08, 0.095)
 	_grime_top(f, u0 + 0.12, u1 - 0.12, y0 + 0.9, top - 0.17, 0.052, "grime_rust" if paint == "container_rust" else "grime_light")
-	var north := Face.new(_p(0, 0, u0), Vector3.RIGHT, Vector3.FORWARD)
-	_grime_top(north, face_w - length, face_w, y0 + 0.6, top - 0.1, 0.008, "grime_rust" if paint == "container_rust" else "grime_light")
+	var sides := [Face.new(_p(0, 0, u0), Vector3.RIGHT, Vector3.FORWARD), Face.new(_p(0, 0, u1), Vector3.RIGHT, Vector3.BACK)]
+	for side: Face in sides:
+		_grime_top(side, face_w - length, face_w, y0 + 0.6, top - 0.1, 0.008, "grime_rust" if paint == "container_rust" else "grime")
 
 
 func _door_number(f: Face, s: float, y: float, number: int, d: float) -> void:
@@ -1600,9 +1623,9 @@ func _tarp(w: float, u0: float, u1: float, y0: float, height: float) -> void:
 		for i in across + 1:
 			var s := float(i) / across
 			var belly := sin(PI * s) * sin(PI * t)
-			var inset := 0.05 * cos(PI * t) * cos(PI * t)
-			var arch := 0.05 * sin(PI * s) * t
-			row.append(_p(w + 0.08 * belly + 0.008 * sin(s * 26.0 + t * 2.5), y0 + height * t + arch, lerpf(u0 + inset, u1 - inset, s)))
+			var inset := 0.02 * cos(PI * t) * cos(PI * t)
+			var arch := 0.02 * sin(PI * s) * t
+			row.append(_p(w + 0.05 * belly + 0.006 * sin(s * 26.0 + t * 2.5), y0 + height * t + arch, lerpf(u0 + inset, u1 - inset, s)))
 		grid.append(row)
 	var sheet := _s("detail", "tarp")
 	for j in up:
@@ -1784,6 +1807,11 @@ func _material(key: String) -> Material:
 				m.roughness = 1.0
 				m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
 				m.render_priority = -1
+			"edge_wear":
+				m.albedo_texture = _texture(TEX + "edge_wear.png")
+				m.albedo_color = Color(0.43, 0.42, 0.4)
+				m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+				m.roughness = 1.0
 			"apron":
 				m.albedo_texture = _texture(TEX + "apron_concrete.png")
 				m.albedo_color = Color(0.53, 0.52, 0.5)

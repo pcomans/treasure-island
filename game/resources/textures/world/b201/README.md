@@ -16,6 +16,7 @@ reference photo.
   word, not the marks in the photos.
 - `lot_stains`: procedural seal-coat patches, cracks, oil and rust dirt in alpha over
   41.25 m (15 stalls), so the oil lines up with the stall row.
+- `edge_wear`: procedural ragged dust in alpha for the apron's road edge.
 - `grime_strip`: separate procedural run-off streaks in alpha over 44 m of wall, white so
   each material tints it.
 

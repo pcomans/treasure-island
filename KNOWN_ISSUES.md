@@ -20,6 +20,11 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 ## Buildings
 
 - A building side with no dated photo of that side stays plain on purpose; no detail is invented for it. A new dated photo of such a side lets it be detailed.
+- City Building 201 (w34313545), from the 2026-11-06 study:
+  - the OSM service road along the WSW and SSE sides shows as a darker band where the photos show one worn surface. This is deliberate: the road stays represented, and the lot is darkened to meet it;
+  - the lot mesh still carries the building's source key, so the fit test and close-ups count it in the building's box, which makes the box bigger than the building;
+  - the lot's cracks go soft in the closest ground views, because the stain tile is about 25 px per metre.
+  - OSM power pole n11545781132 stands about 0.5 m inside the frozen footprint at the ENE step, in the low block's corner.
 - Finish items (seen in review, by 2026-11-05):
   - the generic "noisy stone" placeholder texture is still on a few visible walls:
     - the Fire Station 48 NNW notch, kept by an earlier study decision; changing it needs an explicit decision;

@@ -115,29 +115,6 @@
         "height_m": 1.05,
         "end_margin_m": 1.35
       }
-    },
-    {
-      "side": "ENE step 4 return (SSE-facing)",
-      "runs": [
-        25,
-        26
-      ],
-      "glass_material": "shared_dark_glass",
-      "frame_material": "shared_pale_frame",
-      "windows": {
-        "widths_m": [
-          5.39,
-          5.39
-        ],
-        "panes": [
-          3,
-          3
-        ],
-        "gap_m": 0.88,
-        "center_y_m": 7.062,
-        "height_m": 1.05,
-        "end_margin_m": 1.35
-      }
     }
   ]
 }
