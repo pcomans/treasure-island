@@ -24596,3 +24596,9 @@ Comparing every record against the base commit found a change the author hadn't 
 - **What worked well:** rebuilding wall runs from the record settled the cue question exactly.
 - **What did not work well:** first tree positions ignored the `spacing/2` start and gave a false hit.
 - **What to change next time:** list the anchor, run map and views for every side a config edit touches in the hand-off.
+
+### docs-decisions-20261106 — 2026-11-06 — spray check, pushes and releases, time-of-day direction
+
+- What worked well: Reading `origin/main` rather than /workspaces/content mattered: AGENTS there has moved well past that checkout, and the three-slot wording had already become four slots A to D, so that item needed no edit. The RETRO note from the Johnson lot deploy gave the evidence for Pro and the 1 GB limit, so the plan wording could be checked without touching the Vercel account.
+- What did not work well: "Receiver" means two things. The skill's exact game receiver is the object that carries the art, while the drivers' layer/receiver checks are about spray. A grep for "spray" missed the second kind in CLAUDE and SKILL, and a grep for "receiver" returned dozens of unrelated texture lines, so each had to be read in context. The done lists also said `tools/test.sh` and merge per building, which the batched release replaces; the decision didn't say so directly, so I worded it as the one run on the combined head.
+- What the team should change next time: When a decision retires a gate, name the code that still enforces it. `building_fit_test.gd`'s native adapters still assert the spray layer on existing producers, which is fine for existing bodies but is where a new producer would first trip. Prefer "wall role" or "art host" over a bare "receiver" in new docs.

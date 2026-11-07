@@ -329,7 +329,7 @@ Study026 selected `codex exec --ephemeral` for an ad hoc visual review. Required
 
 ## Opaque decoration must preserve visible spray receivers
 
-Study032's nonreceiver fascia covered unchanged wall-layer2 boards; its revised soffit also hid a rear receiver band despite safe front clearance and unchanged collision. Remove broad overlays or preserve the existing visible receiver boundary. Preflight every affected front, rear and side receiver plane using thickness-inclusive transformed bounds and projected occlusion, not only collider/source identity. Mount raised lettering from actual mesh AABB bounds rather than a fixed font-dependent offset. When reference-supported construction should replace an old visible surface, author it as legitimate same-source wall geometry through the existing receiver/contact helper, then run fresh fit and stock spray; do not repeatedly undo useful architecture solely to preserve obsolete decorative coverage. Study036 used this route and passed complete114 fit/stairs plus one actual new-portal decal.
+No longer required (owner, 2026-11-06): spray is not a [building check](AGENTS.md#what-done-means-for-a-building), and a tag hidden behind decoration is accepted. History: Study032's nonreceiver fascia and soffit hid wall-layer2 receiver boards, and Study036 rebuilt that construction as same-source wall geometry. Still useful: mount raised lettering from actual mesh AABB bounds rather than a fixed font-dependent offset.
 
 ## Compare site axes and furniture groups directly
 
@@ -792,11 +792,7 @@ Compare those numbers with the model's geometry, and record both, before spendin
 
 ## Put every new opaque collision body on the spray layer
 
-Spray rays use only the spray layer (`1 << 2`). In two passes on 2026-10-22, a producer added solid bodies on `PHYSICS_WORLD_SOLID` only, so spray passed through them and tagged hidden receiver walls behind:
-- the Isle House massing volumes (fixed in 9f7fdeb);
-- the Hawkins stoop platforms and planters (fixed in the Hawkins review fix).
-
-Any new opaque collision body a producer adds (massing, stoops, rails, canopies) must be on `PHYSICS_WORLD_SOLID | 1 << 2`, with `receiver_kind` none, so that it occludes spray and refuses the tag. As a prevention check in fit, aim one spray at each new solid and expect a refusal (`receiver_rejection`).
+No longer required (owner, 2026-11-06): spray is not a [building check](AGENTS.md#what-done-means-for-a-building), and a tag hidden behind decoration is accepted. History: spray rays use only the spray layer (`1 << 2`), so on 2026-10-22 they passed through solid bodies added on `PHYSICS_WORLD_SOLID` only and tagged hidden walls behind: the Isle House massing volumes (fixed in 9f7fdeb) and the Hawkins stoop platforms and planters (fixed in the Hawkins review fix). New bodies need no spray layer and no refusal check.
 
 ## Distinguish engine tracing integration from the installed binary
 
