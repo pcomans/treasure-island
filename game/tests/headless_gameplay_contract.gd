@@ -183,6 +183,11 @@ func _initialize() -> void:
 	or daylight.ground_energy_multiplier <= 0.0:
 		_fail("Approved daylight needs an editable procedural sky with lit sky and ground hemispheres.")
 		return
+	var sun := main.get_node("Sun") as DirectionalLight3D
+	var solar := Vector3(-float(sun.get_meta("solar_elevation_deg")), 180.0 - float(sun.get_meta("solar_azimuth_deg")), 0.0)
+	if not sun.rotation_degrees.is_equal_approx(solar):
+		_fail("Sun rotation must follow its solar metadata: (-elevation, 180 - azimuth, 0).")
+		return
 	main.free()
 	print("PASS: gameplay inputs, 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack defaults, boundary cases, scene hierarchies, water visual-only contract, billboard contract, layer defaults, and procedural daylight")
 	quit(0)

@@ -44,9 +44,10 @@ extends SceneTree
 ## context or overhead shots; --island may be added); any bad entry fails the run.
 ## --neutral-lighting: screenshots only. Swaps in the fixed neutral daylight below
 ##   (NEUTRAL_ENVIRONMENT, NEUTRAL_SKY, NEUTRAL_SUN) for colour matching against
-##   reference photos: a complete environment, sky and sun of its own, so these
-##   shots stay the same whatever main.tscn's game look does. Gameplay always uses
-##   main.tscn.
+##   reference photos: a complete environment, sky and sun of its own, with Mersea's
+##   reflection probes recaptured under them, so a change to main.tscn's lighting
+##   does not reach these shots. A change to a palette or material does, as it
+##   should. Gameplay always uses main.tscn.
 ## --street-detail off|on|both: street detail (vegetation, furniture, fences, clutter)
 ##   in every shot. Without it, close-ups and focused views are taken with street
 ##   detail off, and context, island and overhead views both ways. A view taken
@@ -101,11 +102,12 @@ const DEFAULT_STREET_DETAIL := {
 ## Input actions a street view's moves may hold.
 const MOVE_ACTIONS := ["move_forward", "move_back", "move_left", "move_right", "run", "jetpack"]
 
-## The neutral daylight for colour matching: main.tscn's sun angle, tonemapper and
-## shadows as they stood on 2026-11-07, with the ambient, fog, sky and sun colour
-## from before the 2026-10-23 warm-light change. These are whole settings, not
-## overrides of main.tscn: a fresh Environment has SSAO, SSIL, glow and colour
-## adjustment off, so a later change to the game look cannot reach these shots.
+## The neutral daylight for colour matching: the sun angle, tonemapper and shadows
+## main.tscn had before the 2026-11-07 look pass (sun at azimuth 152, elevation 52),
+## with the ambient, fog, sky and sun colour from before the 2026-10-23 warm-light
+## change. These are whole settings, not overrides of main.tscn: a fresh Environment
+## has SSAO, SSIL, glow and colour adjustment off, so main.tscn's lighting cannot
+## reach these shots.
 const NEUTRAL_ENVIRONMENT := {
 	"background_mode": Environment.BG_SKY,
 	"background_color": Color(0.46, 0.69, 0.86),
@@ -251,7 +253,9 @@ func _suffix(states: Array, state: String) -> String:
 
 
 ## Screenshot-only: the neutral daylight for colour matching, in place of the game's
-## environment and sun. Waits for the sky radiance map to update before any capture.
+## environment and sun. Mersea's probes captured the game's light at startup, so they
+## update again under this one. Waits for the sky radiance map and the probes before
+## any capture.
 func _use_neutral_lighting() -> void:
 	var sky := Sky.new()
 	sky.sky_material = _with_settings(ProceduralSkyMaterial.new(), NEUTRAL_SKY)
@@ -260,6 +264,8 @@ func _use_neutral_lighting() -> void:
 	(_h.main.get_node("WorldEnvironment") as WorldEnvironment).environment = environment
 	(_h.main.get_node("Sun") as DirectionalLight3D).visible = false
 	_h.main.add_child(_with_settings(DirectionalLight3D.new(), NEUTRAL_SUN) as DirectionalLight3D)
+	for probe: ReflectionProbe in _h.world.buildings.find_children("Mersea*Reflection", "ReflectionProbe", true, false):
+		probe.update_mode = ReflectionProbe.UPDATE_ALWAYS
 	for _i in 30:
 		await process_frame
 	await RenderingServer.frame_post_draw

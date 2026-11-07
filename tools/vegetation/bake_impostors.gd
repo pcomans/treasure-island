@@ -415,8 +415,9 @@ func _lit_scene(tree: Dictionary, far_mesh: Mesh) -> Dictionary:
 
 ## The near level against the impostor from four sides at distance, at eye height:
 ## their mean linear colours, how much lower, narrower and thinner the impostor is,
-## and the near level's mean leaf colour from the sun side (the first side, about
-## 15 degrees off the sun's bearing); then their tone with the plant turned so
+## and the near level's mean leaf colour from the sun side (the first side, at
+## bearing 166.5, about 24 degrees off the sun's bearing, with the shaded side third);
+## then their tone with the plant turned so
 ## the camera falls halfway between two of its views (of views), as an instance can.
 func _compare(scene: Dictionary, near_key: String, distance: float, box: AABB, extent: float, views: int) -> Dictionary:
 	var camera: Camera3D = scene.camera

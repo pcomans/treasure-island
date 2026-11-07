@@ -12,6 +12,10 @@ const WESTERN_BRIDGE_REPLACEMENT_MAX_X_M := 500.0
 ## grey; their undersides darker; the roadway on top road grey.
 const BAY_BRIDGE_PALETTE: Array[Color] = [Color("c4c1b9"), Color("8a8883"), Color("75736e"), Color("5d6164")]
 const POLYHAVEN_DEFAULT_NORMAL_STRENGTH := 0.2
+## Asphalt's rough aggregate shades its own reflections, which the default specular
+## does not model: seen low along a road in shade, the sky reflection outweighs the
+## dark albedo and the surface reads navy.
+const ASPHALT_SPECULAR := 0.25
 const HAWKINS_MASSING := preload("res://game/scripts/world/massing/hawkins_77_bruton_massing.gd")
 const BUILDING_3_MASSING := preload("res://game/scripts/world/massing/building_3_600_california_massing.gd")
 const NAVY_CHAPEL_187_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/navy_chapel_187_live_replacement.gd")
@@ -109,10 +113,10 @@ const STREET_GROUND_SURFACES := {
 	# poured concrete (the Poly Haven floor concrete greyed, 2.5 m tiles), and
 	# generated pale graded sand (tinted the same way), dark excavated soil (2 m
 	# tiles) and shallow murky green-grey ponds (5 m tiles, wet).
-	"yard_asphalt": {"albedo": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"), "uv_scale": 4.76, "roughness": 1.0, "tint": Color(1.04, 1.05, 1.05)},
-	"yard_asphalt_pale": {"albedo": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"), "uv_scale": 4.76, "roughness": 1.0, "tint": Color(1.5, 1.49, 1.44)},
+	"yard_asphalt": {"albedo": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"), "uv_scale": 4.76, "roughness": 1.0, "tint": Color(1.15, 1.16, 1.16)},
+	"yard_asphalt_pale": {"albedo": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"), "uv_scale": 4.76, "roughness": 1.0, "tint": Color(1.66, 1.65, 1.59)},
 	# The Johnson St lot's new, dark asphalt (the same tiles, darkened and a little warmer).
-	"yard_asphalt_fresh": {"albedo": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"), "uv_scale": 4.76, "roughness": 1.0, "tint": Color(0.76, 0.74, 0.73)},
+	"yard_asphalt_fresh": {"albedo": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"), "uv_scale": 4.76, "roughness": 1.0, "tint": Color(0.84, 0.82, 0.81)},
 	"yard_gravel": {"albedo": preload("res://game/resources/textures/world/vegetation/park_gravel.png"), "uv_scale": 5.0, "roughness": 0.97, "tint": Color(1.22, 1.2, 1.15)},
 	"yard_gravel_pale": {"albedo": preload("res://game/resources/textures/world/street/yard_gravel_pale.png"), "uv_scale": 5.0, "roughness": 0.97, "tint": Color(0.91, 0.87, 0.75)},
 	# The Johnson St lot's shoulder: the same fine aggregate at the greys of the
@@ -1014,6 +1018,8 @@ func _street_ground_material(material_key: String) -> StandardMaterial3D:
 	material.resource_name = material_key
 	material.albedo_texture = surface.albedo as Texture2D
 	material.albedo_color = surface.get("tint", Color.WHITE) as Color
+	if "asphalt" in material_key:
+		material.metallic_specular = ASPHALT_SPECULAR
 	material.roughness = float(surface.roughness)
 	var uv_scale := float(surface.uv_scale)
 	material.uv1_scale = Vector3(uv_scale, uv_scale, 1.0)
@@ -1062,6 +1068,7 @@ func _material_for(material_key: String, feature_kind: String, is_context: bool)
 		material.cull_mode = BaseMaterial3D.CULL_DISABLED
 	if feature_kind == "road_path" or material_key in ["street_parking", "major_area_paved"]:
 		material.roughness = 1.0
+		material.metallic_specular = ASPHALT_SPECULAR
 	if material_key == "context_bay_bridge":
 		var palette := Image.create(BAY_BRIDGE_PALETTE.size(), 1, false, Image.FORMAT_RGB8)
 		for index in BAY_BRIDGE_PALETTE.size():
@@ -1103,7 +1110,7 @@ func _apply_polyhaven_textures(material: StandardMaterial3D, material_key: Strin
 func _polyhaven_tint_for(material_key: String, fallback: Color) -> Color:
 	match material_key:
 		"road_path", "street_parking", "major_area_paved":
-			return Color(0.94, 0.95, 0.95)
+			return Color(1.04, 1.05, 1.05)
 		"road_path_pedestrian":
 			return Color(1.12, 1.20, 1.28)
 		"major_area_court":
