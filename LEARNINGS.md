@@ -1159,3 +1159,7 @@ On 2026-11-07 `viewport_get_measured_render_time_gpu` read 0.0 for both ground c
 ## Send an engine run only after the step that prepares it has returned
 
 On 2026-11-07 a prep command and the engine run that needed it went out together as two parallel tool calls. The prep was refused (it held a force-push), and the run started anyway with no plan and no bake, and spent one of a fixed budget of runs on nothing. Wait for the prep's result, or chain the two with `&&` in one command. A second commit would have done what the amend and force-push were for.
+
+## Vary detail at the scale the gameplay camera resolves
+
+The first grass (2026-11-07) varied blade by blade. In close crops it looked right, but from the normal camera at spawn the owner saw softness, not grass: variation finer than a pixel at 10 m averages away. Tuft-to-tuft colour, a few much taller tufts and patches a metre or so across are what survive at gameplay distance. Judge detail from the stock camera before a close crop, and put the variation at the size that camera resolves. Any one new feature can overshoot just as fast: seed heads on every tuft read as a wheat field until they went on about one tuft in ten.

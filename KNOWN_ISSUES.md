@@ -23,7 +23,6 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 - No Metal run yet: every frame time so far is the Linux Radeon 780M. `high` is the default until a Mac test says otherwise.
 - A stone's contact shadow is a skirt on the stone's own mesh, not darkening in the ground shader, because the yard surfaces it lies on have no ground shader of their own to darken.
 - Ground that grows nothing near the camera still pays for its tufts' vertices (about 2.3 ms on the Radeon 780M at `high` over the bare sand pad at x 328, z 383): cells can't tell what the capture holds without a read back.
-- The `rubble_grey` mound at x 567, z 129 still reads as cobbles under the stones: its texture repeats large, even stones.
 
 ## Buildings
 

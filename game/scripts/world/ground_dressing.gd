@@ -9,7 +9,10 @@ extends Node3D
 ## thickly tufts stand and how tall they grow or how thickly stones lie, from the same
 ## cover map, family and patch logic that colour the ground. So the dressing follows
 ## any change to the map or the ground, its colour is the ground's, and its end can't
-## show. The worked yards' surfaces draw theirs by material (YARD_DRESS,
+## show. Grass is kept uneven by rule, nothing placed: the capture lays thin and long
+## patches and mottles the colour, and the blade shader varies each tuft's size, width
+## and colour, lets a few go to seed and grows tufts long against edges. The worked
+## yards' surfaces draw theirs by material (YARD_DRESS,
 ## ground_dressing_yard.gdshader). Paths, kerbs, paving, buildings and the feet of
 ## street props draw over the surface capture as a mask
 ## (ground_dressing_mask.gdshader), which stops grass cleanly at their edges.
@@ -48,8 +51,8 @@ const RENDER_PRIORITY_SETTING := "treasure_island/ground_dressing/render_priorit
 ## stone_ring_m the same for stones (0 for none).
 const LEVELS := {
 	"low": {"tufts_m2": 56.0, "ring_m": 72.0, "width_scale": 1.7, "stones_m2": 0.0, "stone_ring_m": 0.0},
-	"medium": {"tufts_m2": 100.0, "ring_m": 88.0, "width_scale": 1.27, "stones_m2": 7.0, "stone_ring_m": 26.0},
-	"high": {"tufts_m2": 160.0, "ring_m": 104.0, "width_scale": 1.0, "stones_m2": 12.0, "stone_ring_m": 32.0},
+	"medium": {"tufts_m2": 100.0, "ring_m": 88.0, "width_scale": 1.27, "stones_m2": 7.0, "stone_ring_m": 40.0},
+	"high": {"tufts_m2": 160.0, "ring_m": 104.0, "width_scale": 1.0, "stones_m2": 12.0, "stone_ring_m": 56.0},
 }
 
 ## Each ground-cover family's dressing: how thickly tufts stand (0-1), their height
@@ -79,7 +82,7 @@ const YARD_DRESS := {
 	"yard_gravel": Vector3(0.05, 0.14, 0.14),
 	"yard_gravel_pale": Vector3(0.05, 0.14, 0.14),
 	"yard_soil_dark": Vector3(0.08, 0.18, 0.3),
-	"rubble_grey": Vector3(0.0, 0.0, 0.5),
+	"rubble_grey": Vector3(0.0, 0.0, 0.7),
 }
 ## The tallest grass on a kerb verge, kept low whatever grows behind it.
 const KERB_HEIGHT_LIMIT_M := 0.09
@@ -91,7 +94,7 @@ const PROP_MASK_M := 1.0
 ## and it recentres when the camera has gone RECENTRE_M from its centre.
 const WINDOW_M := 256.0
 const SURFACE_PIXELS := 1024
-const COLOUR_PIXELS := 512
+const COLOUR_PIXELS := 1024
 const SNAP_M := 8.0
 const RECENTRE_M := 22.0
 ## Over the ground shader's fade_end_m, so it draws each layer's mean colour.
@@ -243,7 +246,8 @@ static func tile_point(index: int) -> Vector2:
 
 
 ## One tuft at unit height, as the blade shader reads it. Every level draws the same
-## first blades, so a cell changing mesh level keeps its tufts' shape.
+## first blades, so a cell changing mesh level keeps its tufts' shape. The first blade
+## is a long stem with a seed head, which the shader shows in long grass.
 static func tuft_mesh(blades: int, segments: int, material: Material) -> ArrayMesh:
 	var random := RandomNumberGenerator.new()
 	random.seed = TUFT_SEED
@@ -258,33 +262,39 @@ static func tuft_mesh(blades: int, segments: int, material: Material) -> ArrayMe
 		var root := Vector2(cos(angle), sin(angle)) * sqrt((float(blade) + 0.5) / float(TUFT_BLADES))
 		var lean_angle := angle + random.randf_range(-0.6, 0.6)
 		var lean_direction := Vector2(cos(lean_angle), sin(lean_angle))
-		var lean := random.randf_range(0.15, 0.6)
-		var length := 1.5 if blade == TUFT_BLADES - 1 else random.randf_range(0.7, 1.0)
+		var lean := random.randf_range(0.1, 0.95)
+		var length := random.randf_range(0.7, 1.0)
 		var side := lean_direction.orthogonal().rotated(random.randf_range(-0.7, 0.7))
-		var blade_width := random.randf_range(0.75, 1.25)
+		var blade_width := random.randf_range(0.45, 1.7)
 		var one_blade := random.randf()
 		if blade >= blades:
 			continue
+		var stem := blade == 0
+		if stem:
+			length = 1.6
+			lean = 0.25
+			blade_width = 0.9
 		var side_3d := Vector3(side.x, 0.0, side.y)
 		var first := vertices.size()
-		for row in segments + 1:
-			var t := float(row) / float(segments)
+		var rows := _blade_rows(segments, stem)
+		for row: Vector2 in rows:
+			var t := row.x
 			var point := _blade_point(t, lean_direction, lean, length)
 			var normal := side_3d.cross(_blade_point(minf(t + 0.05, 1.05), lean_direction, lean, length) - _blade_point(t - 0.05, lean_direction, lean, length)).normalized()
 			if normal.y < 0.0:
 				normal = -normal
 			var colour := Color(side.x * 0.5 + 0.5, side.y * 0.5 + 0.5, one_blade, float(blade) / float(TUFT_BLADES))
-			var half_widths := [0.0] if row == segments else [-1.0, 1.0]
+			var half_widths := [0.0] if row.y == 0.0 else [-row.y, row.y]
 			for half_width: float in half_widths:
 				vertices.append(point)
 				normals.append(normal)
-				uvs.append(Vector2(half_width * blade_width * (1.0 - t * t), t))
+				uvs.append(Vector2(half_width * blade_width, t))
 				roots.append(root)
 				colours.append(colour)
-		for row in segments - 1:
+		for row in rows.size() - 2:
 			var at := first + row * 2
 			indices.append_array(PackedInt32Array([at, at + 1, at + 2, at + 1, at + 3, at + 2]))
-		var last := first + (segments - 1) * 2
+		var last := first + (rows.size() - 2) * 2
 		indices.append_array(PackedInt32Array([last, last + 1, last + 2]))
 	var arrays: Array = []
 	arrays.resize(Mesh.ARRAY_MAX)
@@ -300,11 +310,26 @@ static func tuft_mesh(blades: int, segments: int, material: Material) -> ArrayMe
 	return mesh
 
 
+## A blade's rows, Vector2(t along it, half width), from root to a tip of no width. A
+## blade tapers; a stem runs thin up to its seed head.
+static func _blade_rows(segments: int, stem: bool) -> PackedVector2Array:
+	if stem and segments >= 3:
+		return PackedVector2Array([Vector2(0.0, 0.5), Vector2(0.4, 0.45), Vector2(0.68, 0.4), Vector2(0.76, 1.1), Vector2(0.88, 0.8), Vector2(1.0, 0.0)])
+	if stem and segments == 2:
+		return PackedVector2Array([Vector2(0.0, 0.5), Vector2(0.62, 0.42), Vector2(0.78, 1.0), Vector2(1.0, 0.0)])
+	var rows := PackedVector2Array()
+	for row in segments:
+		var t := float(row) / float(segments)
+		rows.append(Vector2(t, 1.0 - t * t))
+	rows.append(Vector2(1.0, 0.0))
+	return rows
+
+
 ## A blade's centre line at t of its length, at unit height: it rises, then leans.
 static func _blade_point(t: float, direction: Vector2, lean: float, length: float) -> Vector3:
 	var along := clampf(t, 0.0, 1.0)
 	var out := lean * pow(along, 1.8)
-	return Vector3(direction.x * out, length * (along - 0.22 * lean * along * along), direction.y * out)
+	return Vector3(direction.x * out, length * (along - 0.3 * lean * along * along), direction.y * out)
 
 
 ## One rock at unit radius, as the stone shader reads it: the faces of a jittered
@@ -338,7 +363,7 @@ static func stone_mesh(material: Material) -> ArrayMesh:
 		vertices.append_array(PackedVector3Array([a, b, c]))
 		normals.append_array(PackedVector3Array([normal, normal, normal]))
 		uvs.append_array(PackedVector2Array([Vector2.ZERO, Vector2.ZERO, Vector2.ZERO]))
-	const SKIRT_SIDES := 9
+	const SKIRT_SIDES := 6
 	for side in SKIRT_SIDES:
 		var from := float(side) / float(SKIRT_SIDES) * TAU
 		var to := float(side + 1) / float(SKIRT_SIDES) * TAU
@@ -501,10 +526,15 @@ func set_render_priority(priority: int) -> void:
 		(ring.material as ShaderMaterial).render_priority = priority
 
 
-## Sets a uniform of the grass, for tuning shots.
+## Sets a uniform of the grass and of the ground captures, for tuning shots.
 func set_parameter(uniform: String, value: Variant) -> void:
 	for ring: Dictionary in [_blades, _cards]:
 		(ring.material as ShaderMaterial).set_shader_parameter(uniform, value)
+	for pair: Array in _capture_materials.values():
+		for material: Material in pair:
+			if material is ShaderMaterial:
+				(material as ShaderMaterial).set_shader_parameter(uniform, value)
+	_window_centre = Vector2.INF
 
 
 ## The captures' viewports, to read their render times and images.

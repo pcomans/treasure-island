@@ -33,7 +33,9 @@ void vertex() {
 		vec4 surface = textureLod(ground_surface, map_uv, 0.0);
 		float amount = max(-surface.b, 0.0) * smoothstep(0.35, 0.75, surface.a) * in_window(map_uv);
 		float stand = clamp((share - rank) / (0.3 * share + 0.0001), 0.0, 1.0) * (1.0 - smoothstep(0.7 * ring_end_m, ring_end_m, dist));
-		float radius = mix(stone_radius_m.y, stone_radius_m.x, pow(1.0 - rank, 9.0)) * stand * (0.7 + 0.6 * h2.y);
+		// Rubble lies in pieces of every size, up to well over the stones in a field.
+		float rubble = smoothstep(0.6, 0.85, amount);
+		float radius = mix(stone_radius_m.y, stone_radius_m.x, pow(1.0 - rank, mix(9.0, 2.5, rubble))) * stand * (0.7 + 0.6 * h2.y) * (1.0 + 1.3 * rubble);
 		if (h2.x < amount && radius > 0.002) {
 			float yaw = h.z * TAU;
 			float cy = cos(yaw);
@@ -41,12 +43,20 @@ void vertex() {
 			// Most are rounded lumps; some are flat shards of concrete and brick.
 			float shard = step(0.82, h2.z);
 			vec3 stretch = mix(vec3(1.0, 0.7 + 0.4 * h.x, 0.75 + 0.4 * h.y), vec3(1.7, 0.3, 0.7), shard);
+			// It lies as it fell, tipped to one side.
+			float tip = (h2.y - 0.5) * 1.1;
+			float ct = cos(tip);
+			float st = sin(tip);
 			vec3 local = VERTEX * stretch;
+			local = vec3(local.x, ct * local.y - st * local.z, st * local.y + ct * local.z);
 			vec3 stone = vec3(cy * local.x - sy * local.z, local.y, sy * local.x + cy * local.z) * radius;
 			vec3 normal = NORMAL / stretch;
+			normal = vec3(normal.x, ct * normal.y - st * normal.z, st * normal.y + ct * normal.z);
 			normal = normalize(vec3(cy * normal.x - sy * normal.z, normal.y, sy * normal.x + cy * normal.z));
 			vec3 tone = ground_tone(map_uv);
 			if (UV.x > 0.5) {
+				// Rubble lies heaped on itself, with no ground for a skirt to lie on.
+				stone *= 1.0 - step(0.3, rubble);
 				stone.y = 0.012;
 				normal = vec3(0.0, 1.0, 0.0);
 				tint = tone * mix(1.0, skirt_shade, UV.y);
@@ -54,7 +64,9 @@ void vertex() {
 				// Stones lean grey beside the ground they lie on, lighter than it, since
 				// their sides turn from the sun.
 				float grey = dot(tone, vec3(0.2126, 0.7152, 0.0722));
-				tint = mix(tone, vec3(grey * 1.02, grey, grey * 0.94), 0.4) * (1.15 + stone_contrast * (h.x - 0.5)) * (1.0 + 0.1 * shard);
+				// Each broken face catches its own tone.
+				float face = fract(dot(NORMAL, vec3(12.9, 78.2, 37.7)));
+				tint = mix(tone, vec3(grey * 1.02, grey, grey * 0.94), 0.4) * (1.15 + 0.25 * rubble + stone_contrast * (h.x - 0.5)) * (1.0 + 0.1 * shard) * (0.86 + 0.28 * face);
 			}
 			out_vertex = vec3(at.x, surface.r, at.y) + stone - place;
 			out_normal = normal;

@@ -104,7 +104,7 @@ const STREET_GROUND_SURFACES := {
 	# grey of a fresh crushed-aggregate pad (its own generated texture, 2 m
 	# tiles, warmed and darkened until a top-down render samples like the May
 	# 2026 aerial; Gate 5's pad is the palest ground there), grey concrete
-	# rubble (the shoreline riprap, lighter, 1.25 m tiles), black plastic
+	# rubble (its own generated texture, 3 m tiles), black plastic
 	# sheeting over earth (the bitumen map darkened, with a sheen), plain
 	# poured concrete (the Poly Haven floor concrete greyed, 2.5 m tiles), and
 	# generated pale graded sand (tinted the same way), dark excavated soil (2 m
@@ -123,7 +123,7 @@ const STREET_GROUND_SURFACES := {
 	"yard_sand_pale": {"albedo": preload("res://game/resources/textures/world/street/yard_sand_pale.png"), "uv_scale": 5.0, "roughness": 0.98, "tint": Color(0.77, 0.76, 0.65)},
 	"yard_soil_dark": {"albedo": preload("res://game/resources/textures/world/street/yard_soil_dark.png"), "uv_scale": 5.0, "roughness": 0.95},
 	"yard_pond": {"albedo": preload("res://game/resources/textures/world/street/yard_pond.png"), "uv_scale": 2.0, "roughness": 0.15},
-	"rubble_grey": {"albedo": preload("res://game/resources/textures/world/shoreline/riprap_albedo.png"), "uv_scale": 8.0, "roughness": 0.95, "tint": Color(1.12, 1.12, 1.1)},
+	"rubble_grey": {"albedo": preload("res://game/resources/textures/world/street/yard_rubble.png"), "uv_scale": 3.33, "roughness": 0.95, "tint": Color(0.76, 0.74, 0.71)},
 	"black_plastic": {"albedo": preload("res://game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg"), "uv_scale": 2.0, "roughness": 0.45, "tint": Color(0.3, 0.3, 0.32)},
 	# Poured concrete outside the street ground, on records whose UVs are the
 	# world in 10 m units. Pier decks (Pier 1 as context past the playable

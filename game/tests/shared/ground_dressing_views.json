@@ -3,6 +3,33 @@
  "views": [
   {
    "player_xz": [
+    -104.364,
+    786.024
+   ],
+   "target_xyz": [
+    -100.8,
+    4.5,
+    756.2
+   ],
+   "name": "spawn-off",
+   "dressing": "off"
+  },
+  {
+   "player_xz": [
+    -104.364,
+    786.024
+   ],
+   "target_xyz": [
+    -100.8,
+    4.5,
+    756.2
+   ],
+   "name": "spawn-high",
+   "dressing": "high",
+   "measure_dressing": 120
+  },
+  {
+   "player_xz": [
     -306.0,
     -686.0
    ],
