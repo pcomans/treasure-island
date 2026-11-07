@@ -24641,3 +24641,15 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: Regenerating after each merge that touched the world, then diffing rows against both parents, kept each conflict's effects separate. Comparing the surfaces themselves on a 0.5 m grid, three-way over the whole island in under 3 s of Node, settled what triangle diffs couldn't. A planted `texture_filter` difference proved the extended A/B can fail before its clean result was trusted.
 - What did not work well: My first triangle check counted a change both sides had made twice, and a string join in my README resolver repeated a sentence; only reading the output caught them. Git interleaved two branches' zones in one JSON array, so joining hunks in place would have split zones across each other.
 - What the team should change next time: Have a study that changes world sources commit its generated world, or name the world it was reviewed on: Maceo's existed only as uncommitted files in a worktree that could have been cleaned up.
+
+### release-visual-review — 2026-11-07 — independent visual review of the release at 282eda34
+
+- What worked well: Diffing release originals against each branch's reviewed renders isolated merge effects quickly, and the merged cover map showed where the worn band ends.
+- What did not work well: No release view showed the worn band beside new paving.
+- What the team should change next time: Add a ground-level shot where two branches meet.
+
+### release-code-review — 2026-11-07 — independent code review of the release at 282eda34
+
+- What worked well: Independent three-way comparisons of the cover map and rows, plus the A/B with its negative control.
+- What did not work well: Evidence summaries cut row-detail fields.
+- What the team should change next time: Each release records cover-map cells matching no parent, and zones that touch.

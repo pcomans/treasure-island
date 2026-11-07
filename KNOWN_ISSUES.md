@@ -165,6 +165,8 @@ From the reviews of the shoreline, street ground, street objects, parked cars, v
 - **Ground tone:**
   - One large dirt patch lies in the residential straw belt, and the lawn band along the residential kerbs is too even.
   - The football pitch (OSM w1252737754) has no line markings, so it reads as a blank dark slab; the aerial shows them.
+  - South of Maceo May, at about x −196 to −146, z 278 to 300, the worn band may show as a dotted dirt line (unverified).
+  - The 2026-11-07 release's merge left 1,833 ground-cover map cells that match no parent branch, where the paving-edge wear meets the new Mersea, Garden Walk and Aracely paving. That combined look hasn't been seen up close.
 - **Trees and shrubs:**
   - The ditch's bank near the owner's photo spot is thinner than the photo; revisit it with the Johnson St lot.
   - The bank-top shrub line at `ditch-bank-up` sits on one contour with even height.
@@ -253,6 +255,8 @@ Follow-ups from the code reviews (non-blocking at `e51de21d` and `d445887a`):
   - a hairline sliver remains at the end of the SSE walk;
   - the sidewalk and ramp pads are set to the generated kerb's heights by hand, so recheck them whenever that kerb moves;
   - the lawn pads are a patch over the lawn recipe's dry spots until the ground cover has a per-area lawn channel.
+- **Mid-rise palette textures** (`game/scripts/world/facades/midrise_family.gd`, `_make_materials`): an entry's texture filter depends on its tiling field. A `tile_m` entry keeps the default filter and a `uv_scale` entry is filtered anisotropically, and an entry that gives both silently ignores `uv_scale`.
+- **Garden Walk's `north_mouth` paving** (`tools/config/street-detail-zones.json`): with `reach_m` 2.7 it reaches about 2.5 m inside the `mersea_ditch` outline, where field rules skip the surface check. Nothing is planted there today, but a future ditch rule could plant on the paving.
 - **Player:**
   - Holding C over the water or riprap repeats the shore lift about every 0.6 s, with a "Recovered" message each time (`game/scripts/player/player_controller.gd:134`, `game/scripts/player/recovery_controller.gd:7`, `:69`). Jittery only.
   - The chest avatar's `WALK_SPEED` (4.0) is a copy of `player_controller.walk_speed_mps`; couple them.
