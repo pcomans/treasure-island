@@ -3,7 +3,7 @@ import { readFileSync, statSync } from "node:fs";
 
 export const WORLD_SCHEMA = "ti.godot-world/2";
 export const CHUNK_SCHEMA = "ti.godot-world-chunk/2";
-export const CONTEXT_SCHEMA = "ti.godot-world-context/2";
+export const CONTEXT_SCHEMA = "ti.godot-world-context/3";
 export const GENERATOR_VERSION = "2.2.0";
 
 export const SOURCE_CONTRACT = Object.freeze({

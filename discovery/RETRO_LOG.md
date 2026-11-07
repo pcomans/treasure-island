@@ -24766,3 +24766,21 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: Before/after sheets next to full-size originals and the branch review sets made it quick to tell what the merge caused from what was already there.
 - What did not work well: No release capture showed a rubble mound up close or the rebaked palm and flax in the world, so those fixes could only be checked indirectly. Sheets were labelled 6fa1f445, not the head.
 - What the team should change next time: When a fix touches stones or impostors, add a close view of that subject to the release capture list, and label sheets with the release head.
+
+### ferry-research-20261107 — 2026-11-07 — Sammy J and ferry float references (relayed in the ferry brief)
+
+- What worked well: Reusing the 2026-10-23 dock note plus Commons, AIS and one SFCTA photo gave dated bow, stern and port coverage without a browser slot.
+- What did not work well: No starboard or overhead photo turned up, and Maps photos and YouTube went uninspected without a slot.
+- What the team should change next time: For every-side studies, assign the browser slot up front, or go straight to the owner shot list.
+
+### ferry-r3-visual-review — 2026-11-07 — independent early review of the ferry's round 3 (relayed by the coordinator)
+
+- What worked well: The sheet plus full-resolution PNGs and dated references in one folder made direct pixel comparison quick.
+- What did not work well: The "matched" poses were free cameras on different bearings, and there was no pier-head view, no motion sample, and the walk views were older.
+- What the team should change next time: Pose from the reference bearing, add the pier-head and a rocking clip, and re-run all views at the revision under review.
+
+### ferry-20261107 — 2026-11-07 — the Sammy J at the float, with the float, gangway, piles, dolphins and breakwater (7 rounds)
+
+- What worked well: One validated `ferry_terminal` context section (Node writer, Node validator, GDScript contract) carried every frozen OSM id the scenery needs, left the spawn untouched and kept the shore map unchanged, because the map reads only `records`. Rocking in the vertex shader, with periods that divide the one-hour TIME wrap, kept node transforms still for the baked world and the collision static. A `camera_fixed` free camera and the `floor_body`/`support` tick fields in building_shots.gd made the rocking clip and the roof landing checkable from the log. Fitting a pinhole camera to an owner frame's landmarks (the float's far corners and long edges, the bow, the horizon) showed which float layout the frame supports and gave a matched pose on its real bearing.
+- What did not work well: I built the float's end sections reversed (a short gangway section and a long outer landing) from a verbal description of the overhead frame, and only caught it against owner 3.png in the last budgeted round, which cost a seventh round. My earlier matched poses were free cameras on guessed bearings. An overhead pose almost straight above its target failed the driver's guard, and because one failed focused view aborts the rest, four gameplay views had to be rendered again. Deck-level touchdown views could not show support before the recovery lift (it fires on the first tick), so the float and breakwater collision rests on a private ray probe rather than a stock landing.
+- What the team should change next time: Lay out any deck or floor plan against an actual overhead or oblique photo in round 1, not a description. Fit matched poses to reference landmarks before the first render. Check a plan's poses against the driver's guards (no camera within about 2.6 degrees of vertical over its target) before launching a long render.

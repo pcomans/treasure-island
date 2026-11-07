@@ -104,6 +104,7 @@ func _initialize() -> void:
 		"ContextWorld/BayBridge",
 		"ContextWorld/WesternBayBridgeModel",
 		"ContextWorld/BoundaryAttachedVisuals",
+		"ContextWorld/FerryTerminal",
 		"ContextWorld/SanFranciscoBillboard",
 		"WorldBoundary",
 		"RuntimeEvidence",
