@@ -1296,8 +1296,8 @@
    }
   },
   "wood_back": {
-   "material": "shutter",
-   "parapet_material": "shutter",
+   "material": "wood_pale",
+   "parapet_material": "wood_pale",
    "module": 50.0,
    "upper": "blank",
    "ground": {

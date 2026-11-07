@@ -101,7 +101,7 @@ const STREET_GROUND_SURFACES := {
 	# the joint across the tile's middle, so a walk 2.5 m wide has none down it,
 	# and the dark red brick band in courses that follow its line; the yellow
 	# tactile strips, the curb-ramp pads' domes in 0.5 m tiles of the world UV.
-	"park_aggregate": {"albedo": preload("res://game/resources/textures/world/street/paseo_aggregate.png"), "uv_scale": 0.2, "roughness": 0.95, "tint": Color(0.8, 0.805, 0.8)},
+	"park_aggregate": {"albedo": preload("res://game/resources/textures/world/street/paseo_aggregate.png"), "uv_scale": 0.2, "roughness": 0.95, "tint": Color(0.785, 0.79, 0.795)},
 	"park_walk": {"albedo": preload("res://game/resources/textures/world/street/paseo_walk.png"), "uv_scale": 0.4, "roughness": 0.9, "tint": Color(0.735, 0.73, 0.715)},
 	"park_brick": {"albedo": preload("res://game/resources/textures/world/street/paseo_brick.png"), "uv_scale": 1.0, "roughness": 0.85, "tint": Color(0.92, 1.0, 0.86)},
 	"park_tactile": {"albedo": preload("res://game/resources/textures/world/street/street_tactile.png"), "uv_scale": 20.0, "roughness": 0.8},
